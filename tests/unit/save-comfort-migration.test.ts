@@ -76,7 +76,8 @@ describe('a release-29 save upgrades (CHK-024, D-285)', () => {
     // look rows (`fxLooks.ts`, all ON; `save-fx-looks.test.ts` proves them on the release-30/31a saves too).
     for (const [k, v] of Object.entries(before.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     for (const [k, v] of Object.entries(fixture.expect.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
-    expect(Object.keys(after.settings).filter((k) => !(k in before.settings)).sort()).toEqual(['fxLight', 'fxLiving', 'fxSpectacle', 'textSize']);
+    // ...plus D-293's one-time SFX balance marker (`saveSfxBalance.ts`); this save's 0.6 is kept above.
+    expect(Object.keys(after.settings).filter((k) => !(k in before.settings)).sort()).toEqual(['fxLight', 'fxLiving', 'fxSpectacle', 'sfxBalanceMigrated', 'textSize']);
     expect(after.settings.textSize).toBe(1);
   });
 

@@ -894,8 +894,20 @@ Sub-octave for impacts: `B1` 61.74, `D1` 36.71, `F#1` 46.25, `B0` 30.87.
 6. **Nothing shorter than 30 ms.** A 12 ms tick is an artefact, not a sound.
 7. **Duck, do not fight.** Music drops **3.5 dB** under dialogue, 120 ms attack,
    400 ms release. A master limiter sits after everything.
-8. **Loudness.** SFX peak 6 dB below the music's ceiling. If an effect has to be
-   loud to be noticed, it is in the wrong frequency range, not too quiet.
+8. **Loudness.** A battle hit lands level with the music's peaks: at the default
+   levels the effects bus sits level with the music bus (SFX 0.70 against music
+   0.70), so a hit's peak is about level with the score's peaks (measured +1 to
+   +2 dB) and its loudest 43 ms about 7 to 8 dB over the music's average. The
+   master limiter (-2 dBFS) stays out of the way: no gain reduction during a
+   fight at these levels. **D-293** (Bailey, 2026-09-29 ~23:00 EDT, verbatim:
+   "yes, all your recommendations", accepting the driver's recommendation of SFX
+   balance b, effects +6 dB against the D-210 default so a hit lands level with
+   the music's peaks). It replaces D-210's "SFX peak 6 dB below the music's
+   ceiling", under which the score masked the hits (a friend's playtest,
+   2026-09-29: "no sound effects on attacks so doesn't feel like I did much").
+   `docs/handoff/sfx-b.md`. Menu and status cues keep their own lower per-cue
+   gains; if an effect still has to be loud to be noticed, it is in the wrong
+   frequency range, not too quiet.
 
 ---
 

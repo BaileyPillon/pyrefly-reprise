@@ -19,7 +19,7 @@ import { TRACK_BLURBS, hasTrack, trackNames } from './tracks/index.ts';
 import { SFX, SFX_GROUPS, renderSfx, resolveSfx, sfxNames } from './sfx/index.ts';
 import { orderSfxForWarmup, warmSfxViaWorker } from './SfxWarmer.ts';
 import { renderHallImpulse } from './dsp/hall.ts';
-import { sfxBusGain, sfxMixFromUrl, type SfxMix } from './sfxMix.ts';
+import { SFX_DEFAULT_VOLUME, sfxBusGain, sfxMixFromUrl, type SfxMix } from './sfxMix.ts';
 import { cutFading, retireSlot, startSlotRamp, type MusicSlot } from './musicSlot.ts';
 import {
   hasPrerenderedSfx,
@@ -102,7 +102,7 @@ export class AudioManager {
   private masterVolume: number;
   private musicVolume: number;
   private sfxVolume: number;
-  /** `?sfxmix=` comparison trim (fb-0929-sfx); the default `a` is the shipped D-210 mix. */
+  /** `?sfxmix=` comparison trim (fb-0929-sfx); the default `b` is the shipped D-293 mix. */
   private readonly sfxMix: SfxMix = sfxMixFromUrl();
   private muted = false;
   private warmed = false;
@@ -120,8 +120,8 @@ export class AudioManager {
   constructor(options: AudioManagerOptions = {}) {
     this.masterVolume = options.masterVolume ?? 0.9;
     this.musicVolume = options.musicVolume ?? 0.7;
-    // Matches the save's new-profile default (D-210); the save pushes its own level at boot.
-    this.sfxVolume = options.sfxVolume ?? 0.35;
+    // Matches the save's new-profile default (D-293); the save pushes its own level at boot.
+    this.sfxVolume = options.sfxVolume ?? SFX_DEFAULT_VOLUME;
     this.baseUrl =
       options.baseUrl ??
       ((typeof import.meta.env !== 'undefined' && import.meta.env.BASE_URL) || '/');

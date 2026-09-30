@@ -1,0 +1,33 @@
+{
+  "_note": "D-293 (SFX balance b) save-compatibility fixture. Written by the release-31a build itself (main 52a431d0, bundle index-C_4T6wOX.js), served locally from its parked production gate dist (F:/pyrefly-parked/2026-09-29/rel31a-dist-gate, the focused-review build of that release, whose bundle name matches docs/deploys.log) on 2026-09-30: a fresh headless profile, then that build's own SaveStore methods (recordAttempt, recordClear, addPlayTime, flushPlayTime, markCoachSeen, setSettings, save), then localStorage read back verbatim. Non-default values on purpose. The SFX slider was never touched (the build's own default, 0.35, is what it stored), so D-293 must move it to 0.70. It has no sfxBalanceMigrated and no textSize: release 31a never wrote them.",
+  "release": "31a",
+  "mainSha": "52a431d0",
+  "bundle": "index-C_4T6wOX.js",
+  "expect": {
+    "cleared": [
+      "seymour-flux",
+      "ffx2-bahamut"
+    ],
+    "notCleared": [
+      "yojimbo-cavern"
+    ],
+    "bestTimeMs": {
+      "seymour-flux": 498210,
+      "ffx2-bahamut": 655400
+    },
+    "storedSfxVolume": 0.35,
+    "settings": {
+      "masterVolume": 0.45,
+      "musicVolume": 0.6,
+      "textSpeed": 0.75,
+      "ffx2Atb": "active",
+      "ffx2AtbSpeed": "fast",
+      "intentVisible": false,
+      "skipSeenCutscenes": true,
+      "lowEffects": true
+    }
+  },
+  "localStorage": {
+    "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1790742590439,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":true,\"bestTimeMs\":498210,\"bestTurns\":29,\"attempts\":2,\"playTimeMs\":0},\"ffx2-bahamut\":{\"id\":\"ffx2-bahamut\",\"cleared\":true,\"bestTimeMs\":655400,\"bestTurns\":44,\"attempts\":1,\"playTimeMs\":0},\"yojimbo-cavern\":{\"id\":\"yojimbo-cavern\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":1000}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.45,\"musicVolume\":0.6,\"sfxVolume\":0.35,\"textSpeed\":0.75,\"skipSeenCutscenes\":true,\"lowEffects\":true,\"guideVisible\":true,\"advisorVisible\":true,\"intentVisible\":false,\"ffx2Atb\":\"active\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"reduceMotion\":false,\"ffx2AtbSpeed\":\"fast\"},\"seenCoach\":[\"briefing\"],\"flags\":{}}"
+  }
+}

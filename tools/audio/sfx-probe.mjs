@@ -7,7 +7,7 @@
 // Then plays a chapter by real input: an Attack, a Skill/Special, a spell, an item, by clicks
 // (--input=mouse, 1600x900) or taps (--input=tap, 390x844); then auto-battle at normal speed
 // for hits taken and KOs.
-// usage: node tools/audio/sfx-probe.mjs --url=<url> --chapter=seymour-flux --input=mouse|tap
+// usage (limiter reduction + master peak metered since sfx-b): node tools/audio/sfx-probe.mjs --url=<url> --chapter=seymour-flux --input=mouse|tap
 //   [--label=x] [--out=file.json] [--auto=45] [--query=?sfxmix=b]
 import { writeFileSync } from 'node:fs';
 import * as pw from 'playwright';
@@ -40,6 +40,8 @@ const INIT = () => {
     if (d instanceof AudioNode && !firstDest.has(this)) firstDest.set(this, d);
     // The hall convolver feeds the SFX bus; the music bus feeds the duck bus (AudioManager.unlock).
     if (this instanceof ConvolverNode && d instanceof GainNode) tap('sfx', d);
+    // The master limiter (AudioManager.unlock): meter its output and read its gain reduction (sfx-b, D-293).
+    if (this instanceof DynamicsCompressorNode && !P.limiter) { P.limiter = this; tap('master', this); }
     return origConnect.call(this, d, ...r);
   };
   const origStart = AudioBufferSourceNode.prototype.start;
@@ -77,6 +79,7 @@ const INIT = () => {
     P.logLen = log.length;
     const s = { t: now() };
     for (const [k, v] of Object.entries(P.buses)) s[k] = level(v.an);
+    if (P.limiter) s.red = +P.limiter.reduction.toFixed(2);
     if (P.buses.sfx || P.buses.music) P.samples.push(s);
   }, 25);
   // The presenter plays events after the engine logs them; remember which event is on screen.
@@ -270,7 +273,9 @@ const hits = P.sfx.map((s) => {
   const musRms = pre.length ? +(10 * Math.log10(pre.reduce((a, x) => a + 10 ** ((x.music?.rms ?? -180) / 10), 0) / pre.length)).toFixed(1) : null;
   const musPk = pre.length ? Math.max(...pre.map((x) => x.music?.pk ?? -180)) : null;
   const ev = [...events].reverse().find((e) => e.t <= s.t + 30);
-  return { t: s.t, cue: nameOf(s), gain: s.gain, phase: s.after, lastLogged: ev ? `${ev.type}${ev.cmd ? ':' + ev.cmd : ''}${ev.ability ? ':' + ev.ability : ''}` : null, sfxPeakDb: sfxPk, sfxMaxRmsDb: sfxRms, musicRmsDb: musRms, musicPeakDb: musPk, sfxOverMusicDb: musRms === null ? null : +(sfxRms - musRms).toFixed(1) };
+  const red = Math.min(0, ...win.map((x) => x.red ?? 0));
+  const masterPk = Math.max(-180, ...win.map((x) => x.master?.pk ?? -180));
+  return { t: s.t, cue: nameOf(s), limiterReductionDb: red, masterPeakDb: masterPk, gain: s.gain, phase: s.after, lastLogged: ev ? `${ev.type}${ev.cmd ? ':' + ev.cmd : ''}${ev.ability ? ':' + ev.ability : ''}` : null, sfxPeakDb: sfxPk, sfxMaxRmsDb: sfxRms, musicRmsDb: musRms, musicPeakDb: musPk, sfxOverMusicDb: musRms === null ? null : +(sfxRms - musRms).toFixed(1) };
 });
 Object.assign(result, { errors, calls: P.calls, buses: P.buses, marks: P.log.filter((l) => l.mark), hits, events: events.length });
 writeFileSync(OUT, JSON.stringify(result, null, 1));
@@ -282,7 +287,17 @@ result.summary = {
   sfxRmsDbMean: avg(inBattle.map((h) => h.sfxMaxRmsDb)),
   musicRmsDbMean: avg(inBattle.map((h) => h.musicRmsDb).filter((x) => x !== null && x > -100)),
   musicPeakDbMean: avg(inBattle.map((h) => h.musicPeakDb).filter((x) => x !== null && x > -100)),
+  // The limiter (threshold -2 dBFS, ratio 20): deepest gain reduction and loudest master peak, all battle samples.
+  limiterMaxReductionDb: Math.min(0, ...P.samples.map((x) => x.red ?? 0)),
+  limiterSamplesUnder1Db: P.samples.filter((x) => (x.red ?? 0) < -1).length,
+  limiterSamples: P.samples.filter((x) => x.red !== undefined).length,
+  masterPeakDbMax: Math.max(-180, ...P.samples.map((x) => x.master?.pk ?? -180)),
 };
+// The same limiter readings from the first battle event on (the boot and title are not what is measured).
+const t0 = events[0]?.t ?? Infinity;
+const fight = P.samples.filter((x) => x.t >= t0);
+result.summary.fight = { samples: fight.length, limiterMaxReductionDb: Math.min(0, ...fight.map((x) => x.red ?? 0)), limiterSamplesUnder1Db: fight.filter((x) => (x.red ?? 0) < -1).length, masterPeakDbMax: Math.max(-180, ...fight.map((x) => x.master?.pk ?? -180)) };
+result.limiterEvents = P.samples.filter((x) => (x.red ?? 0) < -0.5).map((x) => ({ t: x.t, red: x.red, masterPk: x.master?.pk ?? null, inFight: x.t >= t0 }));
 writeFileSync(OUT, JSON.stringify(result, null, 1));
 const byPhase = {};
 for (const h of hits) { const k = `${h.phase ?? '?'} -> ${h.cue}`; (byPhase[k] ??= []).push(h.sfxOverMusicDb); }

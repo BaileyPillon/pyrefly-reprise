@@ -86,7 +86,7 @@ describe.each(FIXTURES)('a %s save upgrades with every look ON', (file, release)
     for (const [k, v] of Object.entries(before.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     for (const [k, v] of Object.entries(fixture.expect.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     const added = Object.keys(after.settings).filter((k) => !(k in before.settings)).sort();
-    expect(added).toEqual(['fxLight', 'fxLiving', 'fxSpectacle', 'textSize']);
+    expect(added).toEqual(['fxLight', 'fxLiving', 'fxSpectacle', 'sfxBalanceMigrated', 'textSize']);
     for (const f of LOOKS) expect(after.settings[f], f).toBe(true);
   });
 
