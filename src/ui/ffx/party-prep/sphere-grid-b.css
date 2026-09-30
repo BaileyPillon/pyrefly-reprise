@@ -1,0 +1,272 @@
+/*
+ * Sphere Grid option B on the desktop board (Bailey's pick D-295; FFX only),
+ * built to docs/concepts/fb-0929/sphere/option-b-layout.jpg at 1600x900.
+ *
+ * The prep stage is the 640x360 Ink & Gold board, so every length here is the
+ * target's 1600x900 value / 2.5, with that value in the comment. Every rule is
+ * keyed on `.prep[data-tab='sphere-grid']` (kept by `phonePrep.setTab` at every
+ * width) and sits in a `min-width: 600px` query, so the other tabs keep their
+ * layout and the phone page (`sphere-grid-b-phone.css`) starts clean.
+ *
+ * On this tab the grid takes most of the screen: the roster becomes a rail of
+ * portraits (the panel's own `.sgb-rail`, which uses the shell's
+ * `data-action="prep:member-N"`), the field party strip leaves this tab, and
+ * the ivory sheet stops being a slab: it becomes a transparent full-board
+ * layer the panel lays its pieces on.
+ */
+
+/*
+ * At every width. `#ui` is `pointer-events: none` (the whole overlay layer is,
+ * so the WebGL canvas under it keeps the cursor), and that inherits all the way
+ * down; the grid is a mouse and touch surface, so it turns them back on for its
+ * canvas and controls only. (Moved from party-prep.css with the old strip
+ * layout's rules, which option B replaced.)
+ */
+.ffxprep-sg__btn,
+.ffxprep-sg__canvas,
+.ffxprep-sg__canvas canvas {
+  pointer-events: auto;
+}
+.ffxprep-sg__btn {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  line-height: 1;
+  border-radius: 0;
+  cursor: pointer;
+}
+.ffxprep-sg__canvas {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #08101e;
+}
+.ffxprep-sg__canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  outline: none;
+}
+.ffxprep-sg__canvas canvas:focus-visible {
+  outline: 0.89px solid var(--ig-accent, #e3b94a);
+  outline-offset: -0.89px;
+}
+.sgb-card,
+.sgb-card button {
+  pointer-events: auto;
+}
+
+@media (min-width: 600px) {
+  .prep[data-tab='sphere-grid'] .prep__roster,
+  .prep[data-tab='sphere-grid'] .prep__slots {
+    display: none;
+  }
+  .prep[data-tab='sphere-grid'] .prep__tabs {
+    left: 76px; /* 190 */
+    top: 43.2px; /* 108 */
+    gap: 17.6px; /* 44 */
+  }
+  .prep[data-tab='sphere-grid'] .prep__tab {
+    font-size: 6.8px; /* 17 */
+    letter-spacing: 0.3em;
+    padding-bottom: 3.2px; /* 8 */
+    border-bottom-width: 1.2px; /* 3 */
+  }
+  /* Outranks the shell's own `:has()` raise for this tab (party-prep.css). */
+  .prep[data-tab='sphere-grid'] .prep__sheet:has(> .prep__sheet-inner > .prep__panel[data-panel='sphere-grid']:not([hidden])) {
+    left: 0;
+    top: 0;
+    width: 640px;
+    height: 360px;
+    min-height: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--ig-paper);
+    transform: none;
+    box-shadow: none;
+  }
+  .prep[data-tab='sphere-grid'] .prep__sheet-inner {
+    transform: none;
+    height: 100%;
+  }
+  .prep[data-tab='sphere-grid'] .prep__panel[data-panel='sphere-grid'] {
+    height: 100%;
+  }
+  .prep[data-tab='sphere-grid'] .prep__hint {
+    left: 9.6px; /* 24 */
+    top: 347.2px; /* 868 */
+  }
+  .prep[data-tab='sphere-grid'] .prep__start {
+    right: 14.4px; /* 36 */
+    top: 320px; /* 800 */
+    bottom: auto;
+    width: 132px; /* 330 */
+    height: 23.2px; /* 58 */
+    padding: 0;
+    justify-content: center;
+    font-size: 8.8px; /* 22 */
+    letter-spacing: 0.34em;
+    box-sizing: border-box;
+  }
+
+  .sgb.ffxprep-sg {
+    position: absolute;
+    inset: 0;
+    display: block;
+    gap: 0;
+  }
+
+  /* ------------------------------------------------------------ rail */
+  .sgb-rail {
+    position: absolute;
+    left: 17.6px; /* 44 */
+    top: 68px; /* 170 */
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* 10 */
+  }
+  .sgb-face {
+    position: relative;
+    width: 43.2px; /* 108 */
+    height: 28px; /* 70 */
+    box-sizing: border-box;
+    background: #141222;
+    border-left: 1.6px solid transparent; /* 4 */
+    transform: skewX(var(--ig-skew, -12deg));
+    overflow: hidden;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .sgb-face:hover:not(.sgb-face--sel) {
+    background: #221f36;
+  }
+  .sgb-face--sel {
+    background: var(--ig-paper);
+    border-left-color: var(--ig-gold);
+  }
+  .sgb-face__img {
+    position: absolute;
+    left: -1.6px; /* -4 */
+    top: 0;
+    width: 28px; /* 70 */
+    height: 28px;
+    overflow: hidden;
+    transform: skewX(var(--ig-skew-inverse, 12deg));
+  }
+  .sgb-face__init {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(244, 241, 232, 0.5);
+  }
+  .sgb-face__img img {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 8%;
+  }
+  .sgb-face__lv {
+    position: absolute;
+    right: 3.2px; /* 8 */
+    bottom: 2.4px; /* 6 */
+    transform: skewX(var(--ig-skew-inverse, 12deg));
+    font-family: var(--ig-font-numeral);
+    font-size: 6.8px; /* 17 */
+    font-weight: 700;
+    color: var(--ig-gold);
+  }
+  .sgb-face--sel .sgb-face__lv {
+    color: var(--ig-gold-on-paper);
+  }
+
+  /* ---------------------------------------------------------- header */
+  .sgb .ffxprep-sg__head {
+    position: absolute;
+    left: 72px; /* 180 */
+    top: 65.6px; /* 164 */
+    width: 416px; /* 1040 */
+    height: 17.6px; /* 44 */
+    display: flex;
+    align-items: center;
+    gap: 5.6px; /* 14 */
+    margin: 0;
+  }
+  .sgb-title {
+    display: flex;
+    align-items: baseline;
+    gap: 5.6px;
+  }
+  .sgb .ffxprep-sg__who {
+    font-family: var(--ig-font-serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 13.6px; /* 34 */
+    color: var(--ig-paper);
+  }
+  .sgb .ffxprep-sg__slv {
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 6.4px; /* 16 */
+    letter-spacing: 0.16em;
+    color: var(--ig-gold);
+  }
+  .sgb .ffxprep-sg__slv b,
+  .sgb-after i {
+    font-family: var(--ig-font-numeral);
+    font-size: 11.2px; /* 28 */
+    font-style: normal;
+    letter-spacing: 0;
+    color: var(--ig-paper);
+    margin-left: 2.4px;
+  }
+  .sgb-after i {
+    color: #f2c21e;
+    margin-left: 0;
+  }
+  .sgb-tools {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 5.6px; /* 14 */
+  }
+  .sgb .ffxprep-sg__btn {
+    height: 17.6px; /* 44 */
+    min-width: 17.6px;
+    box-sizing: border-box;
+    padding: 0 6.4px; /* 16 */
+    font-size: 6px; /* 15 */
+    letter-spacing: 0.18em;
+    color: var(--ig-paper);
+    background: transparent;
+    border: 0.8px solid rgba(244, 241, 232, 0.7); /* 2 */
+  }
+  .sgb .ffxprep-sg__btn:hover {
+    background: rgba(244, 241, 232, 0.1);
+  }
+  .sgb .ffxprep-sg__walk--on {
+    background: var(--ig-gold);
+    border-color: var(--ig-gold);
+    color: var(--ig-ink);
+  }
+  .sgb .ffxprep-sg__auto,
+  .sgb .ffxprep-sg__help {
+    color: var(--ig-gold);
+    border-color: var(--ig-gold);
+  }
+
+  /* ------------------------------------------------------------ grid */
+  .sgb .ffxprep-sg__slot {
+    position: absolute;
+    left: 72px; /* 180 */
+    top: 85.6px; /* 214 */
+    width: 416px; /* 1040 */
+    height: 227.6px; /* 569 */
+    outline: 0.8px solid rgba(227, 185, 74, 0.55); /* 2 */
+  }
+}

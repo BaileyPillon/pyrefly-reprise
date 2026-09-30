@@ -26,6 +26,14 @@
  * links), Enter (act) and Esc (leave walk mode) with `InputSnapshot.consume`
  * so the shell never also sees them and starts the battle. `F`/`R`
  * (PageUp/PageDown, L1/R1) zoom, always.
+ *
+ * Option B (Bailey's pick D-295, `docs/concepts/fb-0929/sphere/option-b-layout.jpg`
+ * and `option-b-phone.jpg`): the grid takes most of the screen beside a rail of
+ * portraits; a card names the selected node, what it gives, the sphere it takes
+ * and the whole walk's S.Lv, the walk is drawn on the grid, and one WALK AND
+ * ACTIVATE (the card's button, a second click or tap on the node, or Enter)
+ * does every step through the model's own calls (`sphereGridPreview.ts`). The
+ * phone gets its own stacked page (`sphere-grid-b-phone.css`). FFX only.
  */
 
 import type { FFXPartyBuild } from '../../../battle/common/types.ts';
@@ -35,26 +43,17 @@ import { audio } from '../../../audio/index.ts';
 import { SphereGridHelp } from './sphereGridHelp.ts';
 import { SphereGridView } from './SphereGridView.ts';
 import { SphereGridModel } from './sphereGridModel.ts';
-import { actionLine } from './sphereGridCaption.ts';
-import {
-  NODE_BY_ID,
-  SPHERE_FAMILIES,
-  nodeCostLabel,
-  nodeEffect,
-  sphereColor,
-  sphereLabel,
-  sphereTag,
-  type GridNode,
-} from './sphereGridData.ts';
+import { nextTarget } from './sphereGridAutoLearn.ts';
+import { NODE_BY_ID } from './sphereGridData.ts';
+import { previewNode, walkAndActivate, type NodePreview } from './sphereGridPreview.ts';
+import { cardHtml, pouchHtml, railHtml, routeTag, sphereGridMarkup } from './sphereGridSide.ts';
+import './sphere-grid-b.css';
+import './sphere-grid-b-card.css';
+import './sphere-grid-b-phone.css';
+import './sphere-grid-b-phone-card.css';
 
-function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-}
-
-/** AP to the next Sphere Level [battle/common/types.ts `SphereGridState.ap`]. */
-function apForLevel(sLv: number): number {
-  return Math.min(5 * (sLv + 1) + Math.floor(sLv ** 3 / 50), 22000);
-}
+/** The card's standing note under its button. */
+const CARD_NOTE = 'Enter or click again does the same.';
 
 const WALK_HINT_ON = 'WALKING — DIRECTIONS STEP  ·  ENTER ACTS  ·  ESC RELEASES';
 const WALK_HINT_OFF = 'WHEEL ZOOM  ·  DRAG PAN  ·  CLICK A NODE  ·  SHIFT WALKS';
@@ -73,90 +72,64 @@ export function makeSphereGridPanel(): PrepPanel {
 
   // ------------------------------------------------------------- rendering
 
-  /**
-   * The node the ivory row talks about: whatever the pointer is over, else
-   * wherever the keyboard cursor sits. The canvas tooltip resolves it the
-   * same way, so the two lines never describe two different nodes.
-   */
-  const focusNode = (): GridNode | null => view?.hoverNode ?? view?.cursorNode ?? null;
+  /** What the card says about the cursor node; recomputed on every redraw (a dry run through the model). */
+  let preview: NodePreview | null = null;
 
   const renderHeader = (): void => {
     const member = model?.memberBuild(memberId);
     if (!member) return;
     const sLv = member.sphereGrid.sLv;
-    const need = apForLevel(sLv);
-    const pct = need > 0 ? Math.max(0, Math.min(100, (member.sphereGrid.ap / need) * 100)) : 0;
     const who = q('.ffxprep-sg__who');
     if (who) who.textContent = member.name;
     const lv = q('.ffxprep-sg__slv-n');
     if (lv) lv.textContent = String(sLv);
-    const fill = q<HTMLElement>('.ffxprep-sg__ap-fill');
-    if (fill) fill.style.width = `${pct.toFixed(1)}%`;
-    const apn = q('.ffxprep-sg__ap-n');
-    if (apn) apn.textContent = `AP ${member.sphereGrid.ap} / ${need}`;
+    // "S.LV 30 -> 28": what the selected walk would leave, while it would spend any.
+    const after = q<HTMLElement>('.sgb-after');
+    const spends = preview !== null && preview.ok && preview.sLvCost > 0;
+    if (after) after.hidden = !spends;
+    const afterN = q('.sgb-after-n');
+    if (afterN && spends) afterN.textContent = String(preview!.sLvAfter);
     const toggle = q('.ffxprep-sg__walk');
     if (toggle) {
       toggle.textContent = walking ? 'WALKING' : 'WALK';
       toggle.classList.toggle('ffxprep-sg__walk--on', walking);
     }
-
-    // The shell prints `S.LV nn` on the roster row and only redraws the column
-    // when its own cursor moves, so spending a Sphere Level here would leave
-    // the row lying until the next Up/Down. This is the one line of the
-    // shell's DOM this panel touches, and only to keep the two in step —
-    // `.prep__member--sel` is by definition the member the panel is showing.
+    const rail = q('[data-role="sg-rail"]');
+    if (rail && build) rail.innerHTML = railHtml(build, memberId);
+    // The shell's roster row (hidden on this tab, shown again on the others) keeps step too.
     const rosterLv = document.querySelector<HTMLElement>('.prep__member--sel .prep__member-lv');
     if (rosterLv && rosterLv.textContent?.startsWith('S.LV')) rosterLv.textContent = `S.LV ${sLv}`;
   };
 
+  const renderCard = (): void => {
+    const el = q('[data-role="sg-card"]');
+    if (!el || !model) return;
+    el.innerHTML = cardHtml(preview, model.memberBuild(memberId)?.name ?? '', model, caption || CARD_NOTE);
+    el.classList.toggle('sgb-card--said', caption !== '');
+  };
+
   const renderPouch = (): void => {
     const strip = q('.ffxprep-sg__pouch');
-    if (!strip || !model) return;
-    const cursor = focusNode();
-    strip.innerHTML = SPHERE_FAMILIES.map((family) => {
-      const held = model!.spheresHeld(family);
-      const wanted = cursor?.sphere === family;
-      return `<span class="ffxprep-sg__sphere${held > 0 ? '' : ' ffxprep-sg__sphere--out'}${
-        wanted ? ' ffxprep-sg__sphere--wanted' : ''
-      }" title="${escapeHtml(sphereLabel(family))}">
-          <i style="background:${sphereColor(family)}"></i>${escapeHtml(sphereTag(family))}
-          <b>${held}</b>
-        </span>`;
-    }).join('');
+    if (!strip || !build) return;
+    strip.innerHTML = pouchHtml(build, view?.cursorNode?.sphere ?? null);
   };
 
-  const renderCaption = (): void => {
-    const el = q('.ffxprep-sg__caption');
-    if (!el) return;
-    const node = focusNode();
-    if (caption) {
-      el.innerHTML = `<b>${escapeHtml(caption)}</b>`;
-      return;
+  const refreshPreview = (): void => {
+    const node = view?.cursorNode ?? null;
+    preview = model && node && memberId ? previewNode(model, memberId, node.id) : null;
+    if (view) {
+      view.route = preview && preview.action !== 'none' ? { target: preview.nodeId, steps: preview.steps, tag: routeTag(preview) } : null;
+      view.render();
     }
-    if (!node || !model) {
-      el.textContent = 'Hover or walk to a node to read what it grants.';
-      return;
-    }
-    const grid = model.gridFor(memberId);
-    // The cost only matters while the node is still worth spending on; once it
-    // is activated the caption needs the room for what Enter does instead.
-    const spent = grid?.activated.has(node.id) === true || (node.kind === 'lock' && model.unlocked.has(node.id));
-    const cost = spent ? null : nodeCostLabel(node);
-    // Enter (and the second click) only ever acts on the *cursor* node, so a
-    // node the pointer is merely passing over says what a click would do
-    // instead of promising a key that would act somewhere else.
-    const atCursor = node.id === (view?.cursorNode?.id ?? -1);
-    const action = actionLine(model, memberId, node, atCursor);
-    el.innerHTML =
-      `<b>${escapeHtml(nodeEffect(node, node.kind === 'lock' && model.unlocked.has(node.id)))}</b>` +
-      (cost ? ` <span class="ffxprep-sg__cost">${escapeHtml(cost)}</span>` : '') +
-      ` <span class="ffxprep-sg__act">${escapeHtml(action)}</span>`;
   };
+
+  const renderCaption = (): void => renderCard();
 
   const renderAll = (): void => {
+    refreshPreview();
     renderHeader();
     renderPouch();
-    renderCaption();
+    renderCard();
   };
 
   // --------------------------------------------------------------- actions
@@ -174,29 +147,26 @@ export function makeSphereGridPanel(): PrepPanel {
   };
 
   /**
-   * One key, one obvious meaning: open an adjacent lock, activate the node
-   * you stand on, or step onto a linked node.
+   * One key, one obvious meaning (option B): walk every step to the node and
+   * act on it (activate it, or open the lock beside the walk), or walk there
+   * when there is nothing to activate. All through the model; all or nothing.
    */
   const act = (nodeId: number): void => {
     if (!model || !view) return;
-    const grid = model.gridFor(memberId);
-    const node = NODE_BY_ID.get(nodeId);
-    if (!grid || !node) return;
+    if (!NODE_BY_ID.has(nodeId) || !model.gridFor(memberId)) return;
     // Any move of the player's own settles an open AUTO-LEARN result as kept.
     help?.keep(false);
-    if (node.kind === 'lock' && !model.unlocked.has(node.id)) {
-      const r = model.activate(memberId, nodeId);
-      say(r.message, r.ok);
-      return;
-    }
-    if (nodeId === grid.position) {
-      const r = model.activate(memberId, nodeId);
-      say(r.message, r.ok);
-      return;
-    }
-    const r = model.moveTo(memberId, nodeId);
-    if (r.ok) view.centreOn(nodeId);
+    const r = walkAndActivate(model, memberId, nodeId);
+    if (r.ok && r.preview.steps.length) view.centreOn(model.gridFor(memberId)!.position);
     say(r.message, r.ok);
+  };
+
+  /** Put the cursor on the cheapest node worth taking, so the card opens on something to do (the target's opening view). */
+  const selectSuggested = (): void => {
+    if (!model || !view) return;
+    const path = nextTarget(model, memberId);
+    const id = path?.[path.length - 1];
+    if (id !== undefined) view.setCursor(id);
   };
 
   const showMember = (id: string): void => {
@@ -206,6 +176,7 @@ export function makeSphereGridPanel(): PrepPanel {
     memberId = id;
     caption = '';
     view.show(model, id);
+    selectSuggested();
     renderAll();
   };
 
@@ -228,41 +199,15 @@ export function makeSphereGridPanel(): PrepPanel {
     mount(container, ctx: PrepPanelContext) {
       root = container;
       build = ctx.chapter.buildRef.game === 'ffx' ? ctx.chapter.buildRef : null;
-      container.innerHTML = `
-        <div class="ffxprep-sg">
-          <div class="ffxprep-sg__head">
-            <span class="ffxprep-sg__who"></span>
-            <span class="ffxprep-sg__slv">S.LV <b class="ffxprep-sg__slv-n">0</b></span>
-            <span class="ffxprep-sg__ap"><i class="ffxprep-sg__ap-fill"></i></span>
-            <span class="ffxprep-sg__ap-n"></span>
-            <span class="ffxprep-sg__spacer"></span>
-            <button type="button" class="ffxprep-sg__btn ffxprep-sg__auto" data-sg="auto">AUTO-LEARN</button>
-            <button type="button" class="ffxprep-sg__btn ffxprep-sg__help" data-sg="help" aria-label="How the Sphere Grid works">?</button>
-            <button type="button" class="ffxprep-sg__btn ffxprep-sg__walk" data-sg="walk">WALK</button>
-            <button type="button" class="ffxprep-sg__btn" data-sg="out" aria-label="Zoom out">&minus;</button>
-            <button type="button" class="ffxprep-sg__btn" data-sg="in" aria-label="Zoom in">+</button>
-            <button type="button" class="ffxprep-sg__btn" data-sg="home">CENTRE</button>
-          </div>
-          <div class="ffxprep-sg__slot"></div>
-          <div class="ffxprep-sg__foot">
-            <div class="ffxprep-sg__caption"></div>
-            <div class="ffxprep-sg__pouch"></div>
-          </div>
-        </div>
-      `;
+      container.innerHTML = sphereGridMarkup();
 
       view = new SphereGridView();
       view.hint = WALK_HINT_OFF;
       container.querySelector('.ffxprep-sg__slot')?.appendChild(view.el);
       view.setHandlers({
-        onHover: () => {
-          renderPouch();
-          renderCaption();
-        },
         onSelect: () => {
           caption = '';
-          renderPouch();
-          renderCaption();
+          renderAll();
         },
         onAct: (id) => act(id),
       });
@@ -294,11 +239,15 @@ export function makeSphereGridPanel(): PrepPanel {
         else if (what === 'home') view.recentre();
         else if (what === 'walk') setWalking(!walking);
         else if (what === 'auto' || what === 'help') help?.press(what);
+        else if (what === 'go') {
+          const node = view.cursorNode;
+          if (node) act(node.id);
+        }
         // A focused <button> turns the next Enter into a second click on
         // itself, which would toggle WALK straight back off *and* let the
         // shell see the same Enter and start the battle. Drop focus instead.
         btn.blur();
-        if (what !== 'auto' && what !== 'help') audio.playSfx('cursor-move');
+        if (what !== 'auto' && what !== 'help' && what !== 'go') audio.playSfx('cursor-move');
         renderAll();
       });
     },

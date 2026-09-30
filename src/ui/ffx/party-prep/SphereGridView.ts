@@ -25,9 +25,7 @@
  * used.
  */
 
-import { artUrl } from '../../../engine/PaintedArt.ts';
 import {
-  BOUNDS,
   GRID_INK,
   LINKS,
   NODES,
@@ -40,32 +38,19 @@ import {
 import type { SphereGridModel } from './sphereGridModel.ts';
 import { tooltipLines } from './sphereGridCaption.ts';
 import { STRIP_H, drawHighlights, drawLockPlate, drawStrip } from './sphereGridDraw.ts';
+import { drawGround, drawRoute, drawRouteLabels, drawToken, drawTooltip, type RouteDraw } from './sphereGridPaint.ts';
 
 /** Zoom at which a node's label is worth drawing at all. */
 const LABEL_ZOOM = 0.28;
 /**
- * Opening zoom. Node spacing is ~43 grid units, so this puts neighbours ~19
- * authoring px (~48 device px at 1600x900) apart — close enough to read the
- * labels, wide enough that the canvas holds a recognisable stretch of the
- * grid rather than one node and two stubs of link.
+ * Opening zoom. Node spacing is ~43 grid units, so this puts neighbours ~25
+ * authoring px (~62 device px at 1600x900) apart. It was 0.45 on the old
+ * 835x225 strip; option B's grid is 1040x569 at 1600x900 and its target opens
+ * at 0.58 (the readout in option-b-layout.jpg), so the labels read at a glance.
  */
-export const DEFAULT_ZOOM = 0.45;
+export const DEFAULT_ZOOM = 0.58;
 const MIN_ZOOM = 0.06;
 const MAX_ZOOM = 1.8;
-
-/** Portraits, loaded once and shared by every mount of the tab. */
-const portraits = new Map<string, HTMLImageElement>();
-function portraitFor(id: string, onLoad: () => void): HTMLImageElement | null {
-  const cached = portraits.get(id);
-  if (cached) return cached.naturalWidth > 0 ? cached : null;
-  if (typeof Image === 'undefined') return null;
-  const img = new Image();
-  img.decoding = 'async';
-  img.addEventListener('load', onLoad, { once: true });
-  img.src = artUrl(`art/portraits/${id}.png`);
-  portraits.set(id, img);
-  return null;
-}
 
 export interface SphereGridViewHandlers {
   /** Pointer moved onto (or off) a node. */
@@ -116,6 +101,10 @@ export class SphereGridView {
   hint = 'WHEEL ZOOM  ·  DRAG PAN  ·  CLICK A NODE';
   /** Nodes AUTO-LEARN just activated: ringed, one tagged NEW (option C). The panel sets and clears it. */
   highlights: ReadonlySet<number> = new Set();
+  /** Option B: the walk to the selected node, drawn under the cursor ring. The panel sets and clears it. */
+  route: RouteDraw | null = null;
+  /** False on the phone page, which prints its legend and controls in the page (option B). */
+  private strip = true;
 
   constructor() {
     this.el = document.createElement('div');
@@ -197,8 +186,14 @@ export class SphereGridView {
    */
   private resize(): void {
     const rect = this.el.getBoundingClientRect();
-    const cssW = this.el.clientWidth || 334;
-    const cssH = this.el.clientHeight || 90;
+    // `--sg-unit` (option B's phone page): the page there is not a scaled
+    // 640x360 board, so one drawing unit is made that many CSS px to keep the
+    // grid's type and nodes at the size they have on the desktop.
+    const css = typeof getComputedStyle === 'function' ? getComputedStyle(this.el) : null;
+    const unit = Math.max(1, Number.parseFloat(css?.getPropertyValue('--sg-unit') ?? '') || 1);
+    this.strip = (css?.getPropertyValue('--sg-strip') ?? '').trim() !== '0';
+    const cssW = (this.el.clientWidth || 334) / unit;
+    const cssH = (this.el.clientHeight || 90) / unit;
     const dpr = typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1;
     // Under a hidden tab or a canvas-less test DOM the rect collapses to 0;
     // fall back to 1:1 rather than dividing by zero.
@@ -217,10 +212,15 @@ export class SphereGridView {
    * so centring on him exactly opened with half the canvas empty space; the
    * bias fills the frame with grid while keeping him near the middle.
    */
+  /** Height of the canvas's bottom strip, 0 where the page carries it instead. */
+  private get stripH(): number {
+    return this.strip ? STRIP_H : 0;
+  }
+
   centreOn(nodeId: number): void {
     const node = NODE_BY_ID.get(nodeId);
     if (!node) return;
-    const usableH = this.h - STRIP_H;
+    const usableH = this.h - this.stripH;
     const rx = this.w / (2 * this.zoom);
     const ry = usableH / (2 * this.zoom);
     let sumX = 0;
@@ -265,12 +265,12 @@ export class SphereGridView {
     if (node) {
       const px = this.pan.x + node.x * this.zoom;
       const py = this.pan.y + node.y * this.zoom;
-      if (px >= 0 && px <= this.w && py >= 0 && py <= this.h - STRIP_H) {
+      if (px >= 0 && px <= this.w && py >= 0 && py <= this.h - this.stripH) {
         this.zoomAbout(factor, px, py);
         return;
       }
     }
-    this.zoomAbout(factor, this.w / 2, (this.h - STRIP_H) / 2);
+    this.zoomAbout(factor, this.w / 2, (this.h - this.stripH) / 2);
   }
 
   /** Keep the cursor node on screen after a keyboard move. */
@@ -296,11 +296,10 @@ export class SphereGridView {
   moveCursor(dx: number, dy: number): boolean {
     const from = this.cursorNode;
     if (!from) return false;
-    // Only the character's own node and the nodes linked to it: those are the
-    // ones Enter can act on. Stepping on from the *cursor* let it wander two
-    // links out, where Enter answered "Not linked to this node" (fb-0929).
-    const home = this.model?.gridFor(this.memberId)?.position ?? from.id;
-    const candidates = [home, ...neighboursOf(home)].filter((id) => id !== from.id);
+    // Option B: Enter walks and activates wherever the cursor is, and the card
+    // says what that costs first, so the cursor steps on along links from
+    // itself (fb-0929 had kept it beside the character, where Enter could act).
+    const candidates = neighboursOf(from.id);
     let best: GridNode | null = null;
     let bestScore = -Infinity;
     for (const id of candidates) {
@@ -359,10 +358,10 @@ export class SphereGridView {
   }
 
   /** The node under a point in authoring px, or null. */
-  private nodeAt(px: number, py: number): GridNode | null {
+  private nodeAt(px: number, py: number, slop = 3): GridNode | null {
     const gx = (px - this.pan.x) / this.zoom;
     const gy = (py - this.pan.y) / this.zoom;
-    const grab = this.nodeRadius() / this.zoom + 3 / this.zoom;
+    const grab = this.nodeRadius() / this.zoom + slop / this.zoom;
     let best: GridNode | null = null;
     let bestD = grab;
     for (const node of NODES) {
@@ -421,7 +420,8 @@ export class SphereGridView {
       // node already under the cursor is the action (move onto it, activate
       // it, or open it), which is also what Enter does.
       const local = this.toLocal(e);
-      const hit = this.nodeAt(local.x, local.y);
+      // A fingertip is wider than a cursor: a touch gets a wider catch.
+      const hit = this.nodeAt(local.x, local.y, e.pointerType === 'touch' ? 8 : 3);
       if (!hit) return;
       if (hit.id === this.cursorId) this.handlers.onAct?.(hit.id);
       else this.setCursor(hit.id);
@@ -480,7 +480,7 @@ export class SphereGridView {
 
     ctx.setTransform(this.viewScale, 0, 0, this.viewScale, 0, 0);
     ctx.clearRect(0, 0, w, h);
-    this.drawGround(ctx, w, h);
+    drawGround(ctx, w, h, this.pan, this.zoom);
     if (!model) return;
 
     const grid = model.gridFor(this.memberId);
@@ -600,17 +600,25 @@ export class SphereGridView {
       }
     }
 
+    const at = (id: number): { x: number; y: number } | null => {
+      const n = NODE_BY_ID.get(id);
+      return n ? { x: sx(n), y: sy(n) } : null;
+    };
+    // ---- option B: the walk to the selected node, under the tokens
+    if (this.route) drawRoute(ctx, this.route, grid ? at(grid.position) : null, at, r);
+
     // ---- everybody's position chips, selected character last and largest
-    const others = model.all().filter((g) => g.memberId !== this.memberId);
-    for (const other of others) {
+    const redraw = (): void => this.render();
+    for (const other of model.all()) {
+      if (other.memberId === this.memberId) continue;
       const node = NODE_BY_ID.get(other.position);
       if (!node || !visible(node)) continue;
-      this.drawToken(ctx, sx(node), sy(node), Math.max(4, Math.min(8, r * 1.1)), other.memberId, other.tint, false);
+      drawToken(ctx, sx(node), sy(node), Math.max(4, Math.min(8, r * 1.1)), other.memberId, other.tint, false, redraw);
     }
     if (grid) {
       const node = NODE_BY_ID.get(grid.position);
       if (node && visible(node)) {
-        this.drawToken(ctx, sx(node), sy(node), Math.max(6, Math.min(11, r * 1.5)), grid.memberId, GRID_INK.travelledLink, true);
+        drawToken(ctx, sx(node), sy(node), Math.max(6, Math.min(11, r * 1.5)), grid.memberId, GRID_INK.travelledLink, true, redraw);
       }
     }
 
@@ -629,125 +637,17 @@ export class SphereGridView {
       ctx.setLineDash([]);
     }
 
-    const at = (id: number): { x: number; y: number } | null => {
-      const n = NODE_BY_ID.get(id);
-      return n ? { x: sx(n), y: sy(n) } : null;
-    };
+    if (this.route) drawRouteLabels(ctx, this.route, at, w, h, r);
     drawHighlights(ctx, this.highlights, at, w, h, r, this.clock, grid?.position ?? null);
-    this.drawTooltip(ctx, w, h, model);
-    drawStrip(ctx, w, h, this.zoom, this.hint);
-  }
-
-  private drawGround(ctx: CanvasRenderingContext2D, w: number, h: number): void {
-    ctx.fillStyle = GRID_INK.space;
-    ctx.fillRect(0, 0, w, h);
-    // Deterministic starfield, parallaxed with the pan so the field feels like
-    // a place you are moving through rather than a texture stuck to the glass.
-    ctx.fillStyle = GRID_INK.star;
-    const ox = (this.pan.x * 0.12) % 53;
-    const oy = (this.pan.y * 0.12) % 47;
-    for (let i = 0; i < 190; i++) {
-      const bx = (i * 61.7) % (w + 53);
-      const by = (i * 37.3 + ((i * 13) % 29)) % (h + 47);
-      ctx.globalAlpha = 0.35 + ((i * 7) % 10) / 14;
-      ctx.fillRect(Math.round(bx + ox) - 53, Math.round(by + oy) - 47, 0.9, 0.9);
+    // The tooltip follows the pointer; with no pointer on a node it names the
+    // node the character stands on (option B's picture), since the card beside
+    // the grid already describes the selected one.
+    const tipId = this.hoverId ?? grid?.position ?? null;
+    const tipNode = tipId === null ? null : NODE_BY_ID.get(tipId);
+    if (tipNode) {
+      const anchor = this.hoverId !== null && this.pointer ? this.pointer : { x: sx(tipNode), y: sy(tipNode) };
+      drawTooltip(ctx, w, h, tipNode, anchor, tooltipLines(model, this.memberId, tipNode), this.stripH);
     }
-    ctx.globalAlpha = 1;
-
-    // A faint horizon wash toward the grid's own centre of mass, so a fully
-    // zoomed-out view still has a foreground and a background.
-    const cx = this.pan.x + ((BOUNDS.minX + BOUNDS.maxX) / 2) * this.zoom;
-    const cy = this.pan.y + ((BOUNDS.minY + BOUNDS.maxY) / 2) * this.zoom;
-    const wash = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.9);
-    wash.addColorStop(0, 'rgba(70,96,150,0.20)');
-    wash.addColorStop(1, 'rgba(8,16,30,0)');
-    ctx.fillStyle = wash;
-    ctx.fillRect(0, 0, w, h);
-  }
-
-  /** A character's position marker: portrait chip in a ring [§5.4]. */
-  private drawToken(
-    ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    radius: number,
-    memberId: string,
-    ring: string,
-    selected: boolean,
-  ): void {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#1a1526';
-    ctx.fill();
-    ctx.save();
-    ctx.clip();
-    const img = portraitFor(memberId, () => this.render());
-    if (img) {
-      const side = Math.min(img.naturalWidth, img.naturalHeight);
-      const sxi = (img.naturalWidth - side) / 2;
-      const syi = (img.naturalHeight - side) * 0.08; // matches .prep__face's object-position
-      ctx.drawImage(img, sxi, syi, side, side, x - radius, y - radius, radius * 2, radius * 2);
-    } else {
-      ctx.fillStyle = ring;
-      ctx.font = `700 ${(radius * 1.1).toFixed(2)}px "Chakra Petch", sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(memberId.charAt(0).toUpperCase(), x, y + radius * 0.06);
-    }
-    ctx.restore();
-    ctx.lineWidth = selected ? Math.max(1, radius * 0.22) : Math.max(0.6, radius * 0.17);
-    ctx.strokeStyle = ring;
-    ctx.stroke();
-    if (selected) {
-      ctx.beginPath();
-      ctx.arc(x, y, radius + Math.max(1.2, radius * 0.3), 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(242,194,30,0.45)';
-      ctx.lineWidth = Math.max(0.6, radius * 0.14);
-      ctx.stroke();
-    }
-    ctx.restore();
-  }
-
-  /** Hover/selection tooltip: the node's effect and what it costs. */
-  private drawTooltip(ctx: CanvasRenderingContext2D, w: number, h: number, model: SphereGridModel): void {
-    const id = this.hoverId ?? this.cursorId;
-    const node = id === null ? null : NODE_BY_ID.get(id);
-    if (!node) return;
-    const anchor = this.hoverId !== null && this.pointer ? this.pointer : { x: this.pan.x + node.x * this.zoom, y: this.pan.y + node.y * this.zoom };
-
-    const { title, sub, cost: costLine, short } = tooltipLines(model, this.memberId, node);
-
-    const titleFont = '700 5px "Chakra Petch", sans-serif';
-    const bodyFont = '600 4.2px "Chakra Petch", sans-serif';
-    ctx.font = titleFont;
-    let bw = ctx.measureText(title).width;
-    ctx.font = bodyFont;
-    bw = Math.max(bw, ctx.measureText(sub).width, ctx.measureText(costLine).width);
-    const padX = 4;
-    const boxW = bw + padX * 2;
-    const boxH = 18.5;
-    let bx = anchor.x + 9;
-    let by = anchor.y - boxH - 6;
-    if (bx + boxW > w - 2) bx = anchor.x - boxW - 9;
-    if (bx < 2) bx = 2;
-    if (by < 2) by = anchor.y + 9;
-    if (by + boxH > h - STRIP_H - 2) by = h - STRIP_H - 2 - boxH;
-
-    ctx.fillStyle = 'rgba(11,10,18,0.92)';
-    ctx.fillRect(bx, by, boxW, boxH);
-    ctx.fillStyle = nodeColor(node);
-    ctx.fillRect(bx, by, 1.3, boxH);
-
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'alphabetic';
-    ctx.font = titleFont;
-    ctx.fillStyle = GRID_INK.paper;
-    ctx.fillText(title, bx + padX, by + 6.4);
-    ctx.font = bodyFont;
-    ctx.fillStyle = 'rgba(244,241,232,0.72)';
-    ctx.fillText(sub, bx + padX, by + 11.8);
-    ctx.fillStyle = short ? '#e0585e' : GRID_INK.reachableB;
-    ctx.fillText(costLine, bx + padX, by + 16.6);
+    if (this.strip) drawStrip(ctx, w, h, this.zoom, this.hint);
   }
 }
