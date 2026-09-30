@@ -42,6 +42,10 @@ import { dressphereLabel } from './dressphereIcons.ts';
 import { commandHelpText, groupHelpText } from './commandHelp.ts';
 import { withTargets } from './withTargets.ts';
 import { keepPlateDocked } from './plateRedock.ts';
+import { followedIndex, pageFold, scrollAffordance, syncFolds } from './CommandMenuScroll.ts';
+
+/** Kept here so importers of the menu still find it; the scroll rules live in `CommandMenuScroll.ts`. */
+export { scrollAffordance };
 
 const CATEGORY_LABELS: Record<string, string> = {
   attack: 'Attack',
@@ -58,32 +62,6 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 type Row = { leaf: AvailableCommand } | { group: string; items: AvailableCommand[] };
-
-/**
- * Whether there is a row above or below the fold of a scrolled command window.
- *
- * `.ffx2hud__command` is `max-height: 220px; overflow-y: auto`, so a long
- * submenu scrolls — but nothing on screen said so. Measured by the pass-2
- * critic at both 1280x720 and 2560x1440, in both chapters: `Item` is 227 px
- * against a 220 px box, so "Light Curtain" sits below the fold; chapter 5's
- * `Skill` is 360 px and its `White Magic` 440 px, sixteen rows with more than
- * half of them off-screen including Full-Cure and the Lv. 2 / Lv. 3 rows. A
- * player has no way to know they exist.
- *
- * Pure so the thresholds can be asserted without a layout engine: jsdom reports
- * every scroll metric as 0, and `0 > 0 + 1` would be a test of nothing. The
- * 1 px slack absorbs sub-pixel rounding on fractional device pixel ratios,
- * where `scrollHeight` and `clientHeight` differ by a fraction on a box that
- * does not actually scroll.
- */
-export function scrollAffordance(m: { scrollTop: number; scrollHeight: number; clientHeight: number }): {
-  above: boolean;
-  below: boolean;
-} {
-  const overflowing = m.scrollHeight > m.clientHeight + 1;
-  if (!overflowing) return { above: false, below: false };
-  return { above: m.scrollTop > 1, below: m.scrollTop + m.clientHeight < m.scrollHeight - 1 };
-}
 
 /**
  * Spherechange always costs the whole turn (§4.5), so — per the approved
@@ -313,6 +291,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       window.removeEventListener('keydown', onKey);
       pad.detach();
       deps.container.removeEventListener('click', onClick);
+      deps.container.removeEventListener('scroll', onScroll);
       deps.container.classList.remove('ffx2cmd--more-above', 'ffx2cmd--more-below');
       deps.container.innerHTML = '';
       deps.onHelp?.('', '');
@@ -421,39 +400,19 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
      * one implementation, no drift.
      */
     /**
-     * Keep the selection on screen and say so when the list runs past the box.
-     *
-     * Two halves of the same defect: the window scrolls, but the cursor was
-     * never scrolled with it (arrow down past the 7th Item row and the cursor
-     * left the frame), and nothing marked the fold. `--more-below` /
-     * `--more-above` drive the Ink & Gold fade and chevron in `ffx2-hud.css`.
-     *
-     * `scrollIntoView` is absent in jsdom, hence the guard; the classes are
-     * still correct there because {@link scrollAffordance} is measured, not
-     * assumed.
+     * Keep the selection on screen and say so when the list runs past the box:
+     * scroll the cursor into view, then bring the fold marks up to date
+     * (`CommandMenuScroll.ts`). `keepTop` is the scroll position a scroll-driven
+     * re-render must not lose (the innerHTML swap resets it).
+     * `scrollIntoView` is absent in jsdom, hence the guard.
      */
+    let keepTop: number | null = null;
     function markFold(): void {
       const box = deps.container;
+      if (keepTop !== null) box.scrollTop = keepTop;
       const cursor = box.querySelector<HTMLElement>('.ig-cmd--selected');
       if (cursor && typeof cursor.scrollIntoView === 'function') cursor.scrollIntoView({ block: 'nearest' });
-      const { above, below } = scrollAffordance(box);
-      box.classList.toggle('ffx2cmd--more-above', above);
-      box.classList.toggle('ffx2cmd--more-below', below);
-      for (const old of box.querySelectorAll('.ffx2cmd__fold')) old.remove();
-      // Sticky, so each mark rides the edge of the box rather than the end of
-      // the list: a `::before`/`::after` on the scroller scrolls with content.
-      for (const [on, where, glyph] of [
-        [above, 'up', '▴'],
-        [below, 'down', '▾'],
-      ] as Array<[boolean, string, string]>) {
-        if (!on) continue;
-        const mark = document.createElement('div');
-        mark.className = `ffx2cmd__fold ffx2cmd__fold--${where}`;
-        mark.setAttribute('aria-hidden', 'true');
-        mark.textContent = glyph;
-        if (where === 'up') box.prepend(mark);
-        else box.append(mark);
-      }
+      syncFolds(box);
     }
 
     function renderTop(fromCancel = false): void {
@@ -564,6 +523,8 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
     }
 
     const onClick = (e: MouseEvent): void => {
+      const fold = (e.target as HTMLElement).closest('.ffx2cmd__fold');
+      if (fold) return pageFold(deps.container, fold);
       const el = (e.target as HTMLElement).closest('[data-idx]');
       if (!el) return;
       const idx = Number(el.getAttribute('data-idx'));
@@ -580,6 +541,27 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
         const c = subItems[idx];
         if (c) chooseLeaf(c);
       }
+    };
+
+    /** Draw the current list again where it is scrolled: an arrow key moves one row, it does not re-seat the window. */
+    const rerender = (): void => {
+      keepTop = deps.container.scrollTop;
+      if (view === 'sub') renderSub(subCategory); else renderTop();
+      keepTop = null;
+    };
+
+    /**
+     * The box scrolled (wheel, OS scrollbar, finger, a fold click): the highlight
+     * follows it, so Enter and the help line are always about a row on screen.
+     */
+    const onScroll = (): void => {
+      if (view === 'target') return;
+      const idx = view === 'sub' ? subIdx : topIdx;
+      const rows = [...deps.container.querySelectorAll<HTMLElement>('.ig-cmd[data-idx]')];
+      const next = followedIndex(rows, deps.container, idx);
+      if (next === idx) return syncFolds(deps.container);
+      if (view === 'sub') subIdx = next; else topIdx = next;
+      rerender();
     };
 
     /** One abstract press, from the keyboard or the pad (PR-0219); true when the menu used it. */
@@ -609,8 +591,8 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       const step = button === 'up' || button === 'left' ? -1 : button === 'down' || button === 'right' ? 1 : 0;
       const list = view === 'top' ? topRows.length : view === 'sub' ? subItems.length : targetIds.length;
       if (!step || !list) return false;
-      if (view === 'top') { topIdx = (topIdx + step + list) % list; renderTop(); }
-      else if (view === 'sub') { subIdx = (subIdx + step + list) % list; renderSub(subCategory); }
+      if (view === 'top') { topIdx = (topIdx + step + list) % list; rerender(); }
+      else if (view === 'sub') { subIdx = (subIdx + step + list) % list; rerender(); }
       // The cursor steps through the ON-SCREEN order, left to right, so
       // "left" means left however the engine happened to list the fiends.
       else if (!groupMode) cursor.step(step);
@@ -629,6 +611,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
     const pad = new RawInputWatcher((b) => { if (live) press(b); }, { keyboard: false });
 
     deps.container.addEventListener('click', onClick);
+    deps.container.addEventListener('scroll', onScroll);
     window.addEventListener('keydown', onKey);
     pad.attach();
     renderTop();

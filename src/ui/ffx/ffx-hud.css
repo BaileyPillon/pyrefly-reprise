@@ -327,11 +327,17 @@
    Now the rows stand where an unscrolled list puts them; the up arrow sits on
    the breadcrumb's line (the crumb is left-aligned, the arrow centred), and
    the down arrow in the stage's bottom margin under the last row. */
+/* Feedback 2026-09-29: the triangles were inert (`pointer-events: none`) and are the
+   only sign a long list goes on, so a click on one did nothing. They are controls
+   now (`CommandMenuScroll.ts`: a click pages the list that way, the wheel scrolls a
+   row); the `::before` is an invisible hit area, so the look and the layout above
+   are unchanged. */
 .ffx-cmd-more {
   position: absolute; left: 50%; transform: translateX(-50%);
   color: var(--ig-gold-on-paper); font-size: 8px; line-height: 1;
-  pointer-events: none;
+  pointer-events: auto; cursor: pointer;
 }
+.ffx-cmd-more::before { content: ''; position: absolute; inset: -6px -24px; }
 .ffx-cmd-more--up { bottom: calc(100% + 3.56px); }
 .ffx-cmd-more--down { top: calc(100% + 3.56px); }
 /* R31 (FFX only): the phone page buttons (phone-hud.css) never show on a desktop. */

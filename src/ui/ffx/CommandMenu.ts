@@ -22,7 +22,8 @@ import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
 import { TargetCursor, type TargetEntry } from './TargetCursor.ts';
-import { canPage, pageStartFor, pagerHtml, pagerNeedsStack, selectionAfterPage } from './CommandMenuPaging.ts';
+import { pagerHtml, pagerNeedsStack } from './CommandMenuPaging.ts';
+import { windowMove, wireListScroll } from './CommandMenuScroll.ts';
 import { badgeHtml, CURSOR_SVG, escapeHtml, groupHelp, subRowVM, topRowVM, type RowVM } from './commandMenuRows.ts';
 
 export { buildTopRows, computeMenuWindow, resolveTargetMode, switchTargetId } from './CommandMenuLogic.ts';
@@ -176,7 +177,11 @@ export class CommandMenu {
     this.pagerEl = document.createElement('div');
     this.pagerEl.className = 'ffx-cmd-pager';
     this.pagerEl.hidden = true;
-    this.pagerEl.addEventListener('click', (e) => this.onPagerClick(e));
+    wireListScroll(this.stackEl, this.pagerEl, {
+      window: () => this.lastWindow,
+      move: (start) => this.moveWindow(start),
+      open: () => !!this.resolve && this.state !== 'target',
+    });
     // Clicking a reticle (any candidate, not only the keyboard-highlighted
     // one) selects it and confirms through the exact same path Enter does —
     // mouse and keyboard can never resolve a different Command this way.
@@ -752,22 +757,17 @@ export class CommandMenu {
   }
 
   /**
-   * A tap on a page button (R31, D-286): move the window one page and carry the
-   * selection along so the help slab follows. **Nothing is confirmed** and no
-   * row is chosen here; this never reaches `chooseSub` / `chooseTop`.
+   * Scroll the window to start at `target` (wheel, gold triangles, phone page
+   * buttons; `CommandMenuScroll.ts`) and carry the highlight with it so the help
+   * slab follows. **Nothing is confirmed**; this never reaches `chooseSub` /
+   * `chooseTop`.
    */
-  private onPagerClick(e: Event): void {
-    const btn = (e.target as HTMLElement | null)?.closest<HTMLButtonElement>('button[data-page]');
-    if (!btn || btn.disabled || !this.resolve || this.state === 'target') return;
-    const dir = btn.dataset['page'] === '-1' ? -1 : 1;
-    const from = { start: this.lastWindow.start, end: this.lastWindow.end };
-    const total = this.lastWindow.total;
-    if (!canPage(from, total, dir)) return;
-    const start = pageStartFor(total, from.start, MAX_VISIBLE_ROWS, dir);
-    const to = { start, end: start + MAX_VISIBLE_ROWS };
-    this.pageStart = start;
-    if (this.state === 'sub') this.subIndex = selectionAfterPage(this.subIndex, from, to);
-    else this.topIndex = selectionAfterPage(this.topIndex, from, to);
+  private moveWindow(target: number): void {
+    const move = windowMove(this.lastWindow, target, this.state === 'sub' ? this.subIndex : this.topIndex);
+    if (!move) return;
+    this.pageStart = move.start;
+    if (this.state === 'sub') this.subIndex = move.selected;
+    else this.topIndex = move.selected;
     this.renderStack();
     this.updateHelpAndPreview();
   }
