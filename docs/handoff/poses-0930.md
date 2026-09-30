@@ -145,3 +145,65 @@ module is reachable). Changed files are all under 400 lines. No CONTRACTS file t
 2. Three paintings were drawn much larger than their idles (Auron's slouch, Yuna Gunner's kneel, Paine Songstress's
    hurt), so their heads read about 1.2 to 2x the idle's at the size the body needs. Keep, or re-render those three
    at the idle's proportions?
+
+## CHECK (independent, 2026-09-30, not the builder)
+
+Verdict: **one blocker in the install package (Auron critical), the code passes.** Branch `poses-0930` at 329eb535,
+production build of the branch to `D:/Tools/pyrefly-scratch/check-poses-0930/dist` (a scratch folder, not the shared
+`dist/`), vite preview on 8881 (stopped by PID), headless Chromium on the GPU. The staged package was served by route
+interception and the manifest was extended in flight. Nothing was written under `D:/Final Fantasy/public/art`: the
+manifest is still Sep 29 08:25, there is no `sleep.png`, `critical.png` or `ffx2-bahamut/splash.png` there, and
+`approved-hashes.json` is unchanged. Scripts, JSON records and shots are in `D:/Tools/pyrefly-scratch/check-poses-0930/`
+(`check.mjs`, `splash.mjs`, `probe.mjs`, `out/`).
+
+Game case: both games for the rest poses, each game with its own threshold. The Songstress and Bahamut paintings are
+FFX-2 only.
+
+**What holds**
+- Picks: all 21 PNGs match hashes.json. Each sidecar's `candidateOf` is the pick Bailey approved (Yuna 56/3, Auron 20/4,
+  Wakka 45/6, Lulu 62/42, Rikku 12/10, Tidus c3/c3, Yuna Gunner 31/6, Paine Warrior 36/16, Rikku Thief c3/c1,
+  Songstress A1-attack-19/H1-hurt-121, Bahamut B10-flare-55-core). Every source's sha matches the candidate, and
+  every PNG is the candidate byte for byte except Auron critical (edited). There is no Kimahri file.
+  `node install.mjs` (a dry run) lists exactly 42 files (21 PNGs and 21 sidecars) and the set `bailey:2026-09-30-poses`,
+  and writes nothing.
+- Rules checked against `research/status-display.md` §2/§3 and the HUDs. FFX: critical below 50 % (`FFX_HP_YELLOW_BELOW`,
+  ffx-combat-core V8). FFX-2: below 0.33 (`hpClass`, §4.9 / §6.1). Sleep takes precedence over low HP. Petrify (both
+  games) and Stop (FFX-2) hold the current painting. Stop in FFX is not a hold (FFX has no Stop status).
+- In the browser, every approved rest painting was shown in its own game: 7 FFX art ids in Chapter I and 6 FFX-2 art
+  ids in Chapter IV, each through 10 moments, 130 checks per device. The moments were: full HP; exactly at the
+  threshold (idle); one HP below (critical); sleep with low HP (sleep); sleep at full HP; petrify set while asleep
+  (hold); low HP; Stop (hold in FFX-2, none in FFX); clean. Desktop 1600x900: 130/130. Phone 390x844: 129/130. The
+  one miss was the FFX-2 at-threshold moment. A probe on the same slot gives 607/1839 = idle and 606 = critical,
+  repeated. The miss came from an enemy ATB hit landing during the staging (the painting follows the HUD sync, the
+  same as the digits), not from the rule. STAGED: statuses and HP were written into the engine state, followed by
+  `presenter.syncHud`; each figure was dressed with `stage.setArt` on one slot. The real switches and real-key
+  attacks are in the builder's proof.
+- Fallbacks: Kimahri, Yuna Songstress, Rikku Gunner and Paine Songstress (for sleep and critical) keep `idle.png` in
+  every moment. A bare run (package not served) keeps today's idle for all 13 art ids, with 0 responses of 400 or
+  more.
+- The Songstress `attack` resolves to `paine-songstress/attack.png` and `hurt` to `hurt.png`. In the bare run both
+  fall back to idle.
+- Mega Flare splash (staged with `fx.actionOpen`): `ffx2-bahamut/splash.png` renders at 1656x1656 at opacity 0.98 on
+  desktop and phone. In the bare run the page makes no request for it and there is no image (slab only).
+- Every run had 0 page errors, 0 console errors and 0 responses of 400 or more.
+- `tsc --noEmit` is clean. The targeted tests pass (rest-poses 14, bahamut-splash 3, pose-install-0930: 2 skips,
+  expected before the install). The full suite ran once: 694 passed, 1 failed. The failure is the
+  `strategy-ffx2-bahamut` "heal-only route" timeout (44 s under load). Run alone, the file passes 19/19 and that test
+  takes 8.3 s. It is an engine test this branch does not touch.
+- Changed files: withStatusLooks 317→324, PartyStatusWindow 93→99, BattlePresenterArt 278→284, battleSpectacle
+  153→159. All are under 400 lines, and none was over 400 before.
+- `git merge-tree main poses-0930` is clean (fast-forward from 9299b319). Nothing under `src/battle` changed.
+
+**Blocker**
+- B1: Auron critical (cand-4) still has a white wedge of the render backdrop, about 7,000 px, between the scabbard and
+  the rear leg at x≈360–470, y≈650–820 of the 832x1116 PNG. It is visible in game as a pale sliver between his legs
+  (`out/zoom2.jpg`, `out/auron-crit-w.jpg`). The trapped-white clear stopped at row 820 (the report says "below row
+  820"), so the claim that the trapped white backdrop was removed holds only below that row. Fix: extend the
+  trapped-white pass upward (the connected near-white region, transparency only, no repaint), then update
+  hashes.json, the sidecar and prov records, and the rehearsal. Run the install only after that.
+
+**Minor**
+- Wakka critical (scale 1.05) stands 1.058 of his idle's height while hunched. In game his head reads about 10–20 %
+  larger than the idle's (`out/wakka-tidus.jpg`). A candidate for Question 2's re-scale list.
+- Lulu sleep (cand-62) has a small detached white object on the floor by her feet. It is byte for byte the approved
+  candidate, so it is recorded here and not changed.
