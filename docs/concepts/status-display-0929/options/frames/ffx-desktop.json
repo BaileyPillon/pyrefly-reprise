@@ -1,0 +1,239 @@
+{
+ "actors": {
+  "tidus": {
+   "x": 433,
+   "y": 445,
+   "w": 239,
+   "h": 347
+  },
+  "yuna": {
+   "x": 714,
+   "y": 434,
+   "w": 242,
+   "h": 315
+  },
+  "kimahri": {
+   "x": 603,
+   "y": 386,
+   "w": 171,
+   "h": 261
+  },
+  "seymour-flux": {
+   "x": 984,
+   "y": 107,
+   "w": 237,
+   "h": 372
+  },
+  "mortiorchis": {
+   "x": 706,
+   "y": 184,
+   "w": 325,
+   "h": 247
+  }
+ },
+ "rows": {
+  "tidus": {
+   "row": {
+    "x": 1035,
+    "y": 646,
+    "w": 515,
+    "h": 69
+   },
+   "name": {
+    "x": 1141,
+    "y": 664,
+    "w": 54,
+    "h": 33
+   },
+   "hp": null,
+   "face": {
+    "x": 1054,
+    "y": 646,
+    "w": 69,
+    "h": 69
+   },
+   "statuses": null,
+   "gauge": {
+    "x": 1414,
+    "y": 676,
+    "w": 133,
+    "h": 9
+   },
+   "cls": "ig-stat ig-stat--acting"
+  },
+  "yuna": {
+   "row": {
+    "x": 1017,
+    "y": 723,
+    "w": 515,
+    "h": 69
+   },
+   "name": {
+    "x": 1123,
+    "y": 742,
+    "w": 50,
+    "h": 33
+   },
+   "hp": null,
+   "face": {
+    "x": 1036,
+    "y": 723,
+    "w": 69,
+    "h": 69
+   },
+   "statuses": {
+    "x": 1045,
+    "y": 775,
+    "w": 13,
+    "h": 13
+   },
+   "gauge": {
+    "x": 1398,
+    "y": 753,
+    "w": 133,
+    "h": 9
+   },
+   "cls": "ig-stat"
+  },
+  "kimahri": {
+   "row": {
+    "x": 999,
+    "y": 801,
+    "w": 515,
+    "h": 69
+   },
+   "name": {
+    "x": 1105,
+    "y": 819,
+    "w": 82,
+    "h": 33
+   },
+   "hp": null,
+   "face": {
+    "x": 1018,
+    "y": 801,
+    "w": 69,
+    "h": 69
+   },
+   "statuses": {
+    "x": 1027,
+    "y": 853,
+    "w": 48,
+    "h": 13
+   },
+   "gauge": {
+    "x": 1399,
+    "y": 831,
+    "w": 133,
+    "h": 9
+   },
+   "cls": "ig-stat ffx-stat--hurt ig-party-row--targeted"
+  }
+ },
+ "ctb": [
+  {
+   "x": 1480,
+   "y": 124,
+   "w": 71,
+   "h": 71,
+   "text": "",
+   "cls": "ig-ctb__tile ig-ctb__tile--now"
+  },
+  {
+   "x": 1491,
+   "y": 206,
+   "w": 51,
+   "h": 51,
+   "text": "",
+   "cls": "ig-ctb__tile ig-ctb__tile--enemy"
+  },
+  {
+   "x": 1482,
+   "y": 267,
+   "w": 51,
+   "h": 51,
+   "text": "",
+   "cls": "ig-ctb__tile ig-ctb__tile--enemy"
+  },
+  {
+   "x": 1473,
+   "y": 328,
+   "w": 51,
+   "h": 51,
+   "text": "",
+   "cls": "ig-ctb__tile ig-ctb__tile--targeted ig-c"
+  },
+  {
+   "x": 1464,
+   "y": 389,
+   "w": 51,
+   "h": 51,
+   "text": "",
+   "cls": "ig-ctb__tile"
+  },
+  {
+   "x": 1456,
+   "y": 450,
+   "w": 51,
+   "h": 51,
+   "text": "",
+   "cls": "ig-ctb__tile"
+  }
+ ],
+ "sensor": {
+  "x": 1087,
+  "y": 415,
+  "w": 144,
+  "h": 24,
+  "text": "I MORTIORCHIS"
+ },
+ "sensorName": null,
+ "sensorChips": null,
+ "targetPlate": {
+  "x": 639,
+  "y": 653,
+  "w": 96,
+  "h": 36,
+  "text": "Kimahri"
+ },
+ "help": {
+  "x": 70,
+  "y": 337,
+  "w": 410,
+  "h": 48,
+  "text": "Restores a moderate amount of HP to one ally."
+ },
+ "helpDesc": {
+  "x": 70,
+  "y": 337,
+  "w": 410,
+  "h": 48,
+  "text": "Restores a moderate amount of HP to one ally."
+ },
+ "tplate": null,
+ "aplate": null,
+ "bossHead": null,
+ "bossBar": null,
+ "cmd": {
+  "x": 76,
+  "y": 405,
+  "w": 469,
+  "h": 431,
+  "text": "POTION HI-POTION X-POTION MEGA-POTION PHOENIX DOWN MEGA PHOENIX ▼ ITEMS"
+ },
+ "ctlhint": null,
+ "pause": {
+  "x": 19,
+  "y": 18,
+  "w": 96,
+  "h": 24,
+  "text": "PAUSE"
+ },
+ "doom": [],
+ "atb": [],
+ "size": {
+  "W": 1600,
+  "H": 900
+ },
+ "errors": []
+}

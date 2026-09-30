@@ -1,0 +1,257 @@
+<title>Status Display Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,500;1,600&family=Rajdhani:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: an options board in the game's own Ink & Gold chrome. One strip per game, today's frame first, then O1-O3 left to right; FFX sections take gold, FFX-2 sections take pyre pink, as in the game. */
+:root {
+  --bg: #f4f1e8;
+  --surface: #ebe6d8;
+  --fg: #16141f;
+  --muted: #5b5666;
+  --rule: #d3ccbb;
+  --gold: #9a6f16;
+  --pink: #b8437e;
+  --harm: #c42f45;
+  --help: #1f8c72;
+  --frame: #0b0a12;
+  --display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --label: 'Rajdhani', 'Bahnschrift', 'Arial Narrow', sans-serif;
+  --body: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0a12; --surface: #15131f; --fg: #efeae0; --muted: #a39db0; --rule: #2a2636;
+    --gold: #e3b94a; --pink: #f7b6d9; --harm: #ff6b7d; --help: #49d8b4; --frame: #000;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b0a12; --surface: #15131f; --fg: #efeae0; --muted: #a39db0; --rule: #2a2636;
+  --gold: #e3b94a; --pink: #f7b6d9; --harm: #ff6b7d; --help: #49d8b4; --frame: #000;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 1rem/1.55 var(--body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; display: grid; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-style: italic; }
+h2 { font-size: clamp(1.6rem, 3.4vw, 2.2rem); font-style: italic; }
+h3 { font-size: 1.3rem; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font: 700 .8rem/1 var(--label); letter-spacing: .22em; text-transform: uppercase; color: var(--accent, var(--gold)); }
+header { display: grid; gap: 14px; }
+blockquote { margin: 0; padding-left: 14px; border-left: 3px solid var(--gold); font: italic 500 1.2rem/1.4 var(--display); max-width: 70ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px 22px; font: 600 .95rem/1.2 var(--label); letter-spacing: .06em; }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.dot { width: 16px; height: 16px; border-radius: 50%; border: 3px solid; }
+.dot--harm { border-color: var(--harm); } .dot--help { border-color: var(--help); }
+.options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.opt { background: var(--surface); padding: 18px 18px 20px; display: grid; gap: 10px; align-content: start; border-top: 3px solid var(--rule); }
+.opt--rec { border-top-color: var(--gold); }
+.opt h3 small { display: block; font: 700 .78rem/1.3 var(--label); letter-spacing: .2em; color: var(--muted); font-style: normal; text-transform: uppercase; margin-bottom: 4px; }
+.opt dl { margin: 0; display: grid; gap: 8px; }
+.opt dt { font: 700 .78rem/1 var(--label); letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.opt dd { margin: 0; font-size: .95rem; }
+.rec { font: 700 .78rem/1 var(--label); letter-spacing: .18em; text-transform: uppercase; color: var(--bg); background: var(--gold); padding: 5px 8px; justify-self: start; }
+.game { display: grid; gap: 20px; }
+.game--x2 { --accent: var(--pink); }
+.game--ffx { --accent: var(--gold); }
+.game > header { border-left: 4px solid var(--accent); padding-left: 14px; gap: 8px; }
+.scene { color: var(--muted); max-width: 90ch; }
+.strip { display: grid; gap: 14px; }
+.strip h3 { font: 700 .9rem/1 var(--label); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.grid4 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.grid4--phone { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+figure { margin: 0; display: grid; gap: 8px; align-content: start; min-width: 0; }
+figure a { display: block; background: var(--frame); line-height: 0; outline-offset: 3px; }
+figure a:focus-visible { outline: 2px solid var(--accent); }
+figure img { width: 100%; max-width: 100%; height: auto; display: block; }
+figcaption { font-size: .92rem; color: var(--muted); }
+figcaption b { display: block; font: 700 .95rem/1.2 var(--label); letter-spacing: .12em; text-transform: uppercase; color: var(--fg); margin-bottom: 2px; }
+figcaption b i { font-style: normal; color: var(--accent); }
+.tablebox { overflow-x: auto; border-top: 1px solid var(--rule); }
+table { border-collapse: collapse; min-width: 860px; font-size: .92rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--rule); }
+th { font: 700 .78rem/1.2 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+td:first-child { font-weight: 700; white-space: nowrap; }
+.nosrc { color: var(--muted); font-style: italic; }
+.notes { display: grid; gap: 10px; }
+.notes ol { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; max-width: 80ch; }
+footer { color: var(--muted); font-size: .88rem; display: grid; gap: 6px; border-top: 1px solid var(--rule); padding-top: 16px; }
+code { font-family: ui-monospace, Consolas, monospace; font-size: .85em; }
+@media (max-width: 900px) {
+  .options { grid-template-columns: minmax(0, 1fr); }
+  .grid4--phone { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .grid4 { grid-template-columns: minmax(0, 1fr); }
+  .grid4--phone { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Pyrefly Reprise · options round · 29 September 2026</span>
+    <h1>Status Display Options</h1>
+    <blockquote>“Kimahri probably had the zombie status effect but even if so the status effects in general not noticeable or obvious like in the actual ffx/ffx-2 games. I like how status effects are displayed in the games. That should be examples.”</blockquote>
+    <p>Three ways to show statuses, each drawn over our own battle frames for both games at 1600×900 and on a 390×844 phone. Nothing is built yet. Pick one, or mix them per game. Every option includes the one before it. All icons and effects are new drawings. The looks they copy come from sourced descriptions of the originals, never from retail art.</p>
+    <div class="legend" aria-label="Icon colour code">
+      <span><i class="dot dot--harm"></i>Red rim: hurts the unit that has it</span>
+      <span><i class="dot dot--help"></i>Teal rim: helps the unit that has it</span>
+    </div>
+  </header>
+
+  <section class="options" aria-label="The three options">
+    <article class="opt">
+      <h3><small>Option 1</small>As the originals</h3>
+      <dl>
+        <dt>What it is</dt><dd>Statuses live on the figure, the way each game draws them: Zombie's green glow and black smoke, Poison's green bubbles, Sleep's Z's, FFX-2's Silence speech bubble and darkened Curse. FFX-2's top help line lists the targeted unit's icons. The HP windows show no standing icons, as in both originals.</dd>
+        <dt>Faithful</dt><dd>As close as the sources allow. A look the sources do not describe gets nothing, such as FFX Slow, Shell and Reflect. O1 also drops today's FFX-2 text chips.</dd>
+        <dt>Cost</dt><dd>The largest piece: a new on-figure status layer for both games. The Sleep hunch and the low-HP slouch would need new paintings.</dd>
+      </dl>
+    </article>
+    <article class="opt">
+      <h3><small>Option 2</small>Originals + at a glance</h3>
+      <dl>
+        <dt>What it is</dt><dd>O1, plus a crisp icon row on every HP plate and for every enemy. FFX gets round medallions under the Overdrive gauge and beside turn-list names. FFX-2 gets square tags where today's chips sit, plus a STATUS tab on the boss bar with Doom's count.</dd>
+        <dt>Faithful</dt><dd>FFX never showed standing icons, so for FFX this is an addition. FFX-2 has an icon for every status, and this shows them in one more place.</dd>
+        <dt>Cost</dt><dd>O1, plus about 20 small glyphs and the plate, turn-list and boss rows. HUD work only; the FFX-2 chip code is replaced.</dd>
+      </dl>
+    </article>
+    <article class="opt opt--rec">
+      <span class="rec">Agents’ pick</span>
+      <h3><small>Option 3</small>Originals + guard rails</h3>
+      <dl>
+        <dt>What it is</dt><dd>O2, plus a warning when a status changes what an action does. Aiming a Hi-Potion at a Zombie shows “−1000 KO” in red, a ZOMBIE tag and a guide note on the cure. A one-line message appears when a status lands or wears off.</dd>
+        <dt>Faithful</dt><dd>Not in either original. Every rule a warning states is sourced, and a status with no sourced rule gets no warning.</dd>
+        <dt>Cost</dt><dd>O2, plus a forecast that reads the engine. It builds on the Hi-Potion fix branch once that lands.</dd>
+      </dl>
+    </article>
+  </section>
+
+  <section class="game game--ffx" aria-labelledby="ffx-h">
+    <header>
+      <span class="eyebrow">FFX · Chapter I</span>
+      <h2 id="ffx-h">Seymour Flux: a Hi-Potion aimed at a Zombie</h2>
+      <p class="scene">Tidus aims a Hi-Potion at Kimahri, who has Zombie, Poison and Protect at 840 of 2310 HP. Yuna has Slow; Seymour Flux has Shell and Reflect. Today nothing on screen says Kimahri is a Zombie.</p>
+    </header>
+    <div class="strip">
+      <h3>Desktop · 1600×900</h3>
+      <div class="grid4">
+        <figure><a href="options/frames/ffx-desktop-today.jpg"><img src="options/frames/ffx-desktop-today.jpg" alt="Today: the FFX battle with Hi-Potion aimed at Kimahri; no status is visible anywhere" loading="lazy" width="1600" height="900"></a><figcaption><b>Today</b>Nothing shows. Kimahri’s blue squares sit under his portrait, and the boss’s turn-list dots are covered.</figcaption></figure>
+        <figure><a href="options/o1-ffx-desktop.jpg"><img src="options/o1-ffx-desktop.jpg" alt="Option 1 FFX: Kimahri green and glowing with black smoke and green bubbles above his head" loading="lazy" width="1600" height="900"></a><figcaption><b><i>O1</i> As the originals</b>Kimahri glows green in black smoke, with Poison’s bubbles above. Slow, Shell and Reflect show nothing, because no source describes their FFX look.</figcaption></figure>
+        <figure><a href="options/o2-ffx-desktop.jpg"><img src="options/o2-ffx-desktop.jpg" alt="Option 2 FFX: icon medallions under the Overdrive gauges and beside turn-list names" loading="lazy" width="1600" height="900"></a><figcaption><b><i>O2</i> At a glance</b>Medallions under the Overdrive gauge and in the turn list. Seymour Flux’s Shell and Reflect show beside his name.</figcaption></figure>
+        <figure><a href="options/o3-ffx-desktop.jpg"><img src="options/o3-ffx-desktop.jpg" alt="Option 3 FFX: red −1000 KO forecast, ZOMBIE tag, red help line and a guide card" loading="lazy" width="1600" height="900"></a><figcaption><b><i>O3</i> Guard rails</b>“−1000 KO” over Kimahri, a ZOMBIE tag on the target and HURTS on the item. The guide names the cure.</figcaption></figure>
+      </div>
+    </div>
+    <div class="strip">
+      <h3>HP plates, close up</h3>
+      <div class="grid4">
+        <figure><a href="options/today-ffx-desktop-plates.jpg"><img src="options/today-ffx-desktop-plates.jpg" alt="Today's FFX HP plates with no visible status" loading="lazy" width="590" height="285"></a><figcaption><b>Today</b></figcaption></figure>
+        <figure><a href="options/o1-ffx-desktop-plates.jpg"><img src="options/o1-ffx-desktop-plates.jpg" alt="Option 1 FFX HP plates, unchanged" loading="lazy" width="590" height="285"></a><figcaption><b><i>O1</i></b>Plates stay clean, as in FFX.</figcaption></figure>
+        <figure><a href="options/o2-ffx-desktop-plates.jpg"><img src="options/o2-ffx-desktop-plates.jpg" alt="Option 2 FFX HP plates with Zombie, Poison, Protect and Slow medallions" loading="lazy" width="590" height="285"></a><figcaption><b><i>O2</i></b>Zombie, Poison and Protect on Kimahri; Slow on Yuna.</figcaption></figure>
+        <figure><a href="options/o3-ffx-desktop-plates.jpg"><img src="options/o3-ffx-desktop-plates.jpg" alt="Option 3 FFX HP plates, the same as option 2" loading="lazy" width="590" height="285"></a><figcaption><b><i>O3</i></b>Same as O2. The warnings live on the target.</figcaption></figure>
+      </div>
+    </div>
+    <div class="strip">
+      <h3>Phone · 390×844</h3>
+      <div class="grid4 grid4--phone">
+        <figure><a href="options/frames/ffx-phone-today.jpg"><img src="options/frames/ffx-phone-today.jpg" alt="Today on the phone: FFX targeting Kimahri" loading="lazy" width="390" height="844"></a><figcaption><b>Today</b></figcaption></figure>
+        <figure><a href="options/o1-ffx-phone.jpg"><img src="options/o1-ffx-phone.jpg" alt="Option 1 on the phone" loading="lazy" width="390" height="844"></a><figcaption><b><i>O1</i></b></figcaption></figure>
+        <figure><a href="options/o2-ffx-phone.jpg"><img src="options/o2-ffx-phone.jpg" alt="Option 2 on the phone: tabs above the cards and badges on the turn strip" loading="lazy" width="390" height="844"></a><figcaption><b><i>O2</i></b>Tabs above each card; badges on the turn strip.</figcaption></figure>
+        <figure><a href="options/o3-ffx-phone.jpg"><img src="options/o3-ffx-phone.jpg" alt="Option 3 on the phone: red warning in the target card and a red-outlined confirm button" loading="lazy" width="390" height="844"></a><figcaption><b><i>O3</i></b>The target card warns, and the confirm button turns red.</figcaption></figure>
+      </div>
+      <div class="grid4">
+        <figure><a href="options/today-ffx-phone-plates.jpg"><img src="options/today-ffx-phone-plates.jpg" alt="Today's phone cards" loading="lazy" width="780" height="200"></a><figcaption><b>Today, phone cards</b>One 7 px blue dot per status.</figcaption></figure>
+        <figure><a href="options/o2-ffx-phone-plates.jpg"><img src="options/o2-ffx-phone-plates.jpg" alt="Option 2 phone cards with status tabs" loading="lazy" width="780" height="200"></a><figcaption><b><i>O2 / O3</i>, phone cards</b></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="game game--x2" aria-labelledby="x2-h">
+    <header>
+      <span class="eyebrow">FFX-2 · Chapter IV</span>
+      <h2 id="x2-h">Bahamut: Paine attacks, the party is afflicted</h2>
+      <p class="scene">Paine (Haste, and the Curse the chapter gives her) aims Attack at Bahamut, who has Doom at 3. Rikku has Poison and Silence; Yuna is asleep. Today the girls’ chips read, but Bahamut’s statuses show nowhere.</p>
+    </header>
+    <div class="strip">
+      <h3>Desktop · 1600×900</h3>
+      <div class="grid4">
+        <figure><a href="options/frames/x2-desktop-today.jpg"><img src="options/frames/x2-desktop-today.jpg" alt="Today: FFX-2 battle with text chips on the party rows and nothing on Bahamut" loading="lazy" width="1600" height="900"></a><figcaption><b>Today</b>Text chips on the girls’ rows; nothing on the figures or on Bahamut.</figcaption></figure>
+        <figure><a href="options/o1-x2-desktop.jpg"><img src="options/o1-x2-desktop.jpg" alt="Option 1 FFX-2: Z's over Yuna, bubbles and a speech bubble over Rikku, a darkened Paine, Doom icon in the top help line" loading="lazy" width="1600" height="900"></a><figcaption><b><i>O1</i> As the originals</b>Z’s over Yuna. Bubbles and an ellipsis bubble over Rikku. Paine darkened, with her gauge red. Bahamut’s Doom icon in the top help line.</figcaption></figure>
+        <figure><a href="options/o2-x2-desktop.jpg"><img src="options/o2-x2-desktop.jpg" alt="Option 2 FFX-2: square status tags on each row and a STATUS tab under the boss bar" loading="lazy" width="1600" height="900"></a><figcaption><b><i>O2</i> At a glance</b>Square tags on every row, never clipped. A STATUS tab under Bahamut’s bar shows Doom 3.</figcaption></figure>
+        <figure><a href="options/o3-x2-desktop.jpg"><img src="options/o3-x2-desktop.jpg" alt="Option 3 FFX-2: DOOM 3 target tag, message line, ASLEEP caption and a guide card" loading="lazy" width="1600" height="900"></a><figcaption><b><i>O3</i> Guard rails</b>DOOM 3 on the target tag, “Yuna fell asleep.” and ASLEEP on her row. The guide explains what wakes her.</figcaption></figure>
+      </div>
+    </div>
+    <div class="strip">
+      <h3>HP plates, close up</h3>
+      <div class="grid4">
+        <figure><a href="options/today-x2-desktop-plates.jpg"><img src="options/today-x2-desktop-plates.jpg" alt="Today's FFX-2 rows with text chips" loading="lazy" width="480" height="260"></a><figcaption><b>Today</b></figcaption></figure>
+        <figure><a href="options/o1-x2-desktop-plates.jpg"><img src="options/o1-x2-desktop-plates.jpg" alt="Option 1 FFX-2 rows without chips" loading="lazy" width="480" height="260"></a><figcaption><b><i>O1</i></b>No standing icons, as in FFX-2. Today’s chips go.</figcaption></figure>
+        <figure><a href="options/o2-x2-desktop-plates.jpg"><img src="options/o2-x2-desktop-plates.jpg" alt="Option 2 FFX-2 rows with Sleep, Poison, Silence, Curse and Haste tags" loading="lazy" width="480" height="260"></a><figcaption><b><i>O2</i></b>Sleep; Poison and Silence; Curse and Haste.</figcaption></figure>
+        <figure><a href="options/o3-x2-desktop-plates.jpg"><img src="options/o3-x2-desktop-plates.jpg" alt="Option 3 FFX-2 rows with an ASLEEP caption on Yuna" loading="lazy" width="480" height="260"></a><figcaption><b><i>O3</i></b>Adds ASLEEP where it changes what Yuna can do.</figcaption></figure>
+      </div>
+    </div>
+    <div class="strip">
+      <h3>Phone · 390×844</h3>
+      <div class="grid4 grid4--phone">
+        <figure><a href="options/frames/x2-phone-today.jpg"><img src="options/frames/x2-phone-today.jpg" alt="Today on the phone: FFX-2" loading="lazy" width="390" height="844"></a><figcaption><b>Today</b></figcaption></figure>
+        <figure><a href="options/o1-x2-phone.jpg"><img src="options/o1-x2-phone.jpg" alt="Option 1 FFX-2 on the phone" loading="lazy" width="390" height="844"></a><figcaption><b><i>O1</i></b>Doom’s icon joins the target card, the phone’s help line.</figcaption></figure>
+        <figure><a href="options/o2-x2-phone.jpg"><img src="options/o2-x2-phone.jpg" alt="Option 2 FFX-2 on the phone" loading="lazy" width="390" height="844"></a><figcaption><b><i>O2</i></b></figcaption></figure>
+        <figure><a href="options/o3-x2-phone.jpg"><img src="options/o3-x2-phone.jpg" alt="Option 3 FFX-2 on the phone" loading="lazy" width="390" height="844"></a><figcaption><b><i>O3</i></b></figcaption></figure>
+      </div>
+      <div class="grid4">
+        <figure><a href="options/today-x2-phone-plates.jpg"><img src="options/today-x2-phone-plates.jpg" alt="Today's FFX-2 phone cards with text chips" loading="lazy" width="780" height="200"></a><figcaption><b>Today, phone cards</b></figcaption></figure>
+        <figure><a href="options/o2-x2-phone-plates.jpg"><img src="options/o2-x2-phone-plates.jpg" alt="Option 2 FFX-2 phone cards with status tabs" loading="lazy" width="780" height="200"></a><figcaption><b><i>O2 / O3</i>, phone cards</b></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="notes" aria-labelledby="cov-h">
+    <h2 id="cov-h">What each option would cover</h2>
+    <p>The mockups draw only the staged statuses; this table is the full scope. <span class="nosrc">No source</span> means the original has a look but nothing we could read describes it. O1 draws nothing for those until someone checks them in the Steam copy.</p>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Status</th><th>O1 · FFX</th><th>O1 · FFX-2</th><th>O2 adds</th><th>O3 adds</th></tr></thead>
+        <tbody>
+          <tr><td>Zombie</td><td>Green glowing body, black smoke</td><td>Not an FFX-2 status</td><td>Icon</td><td>Heal-as-damage forecast; Phoenix Down KOs; cure hint</td></tr>
+          <tr><td>Poison</td><td>Green bubbles</td><td>Green bubbles</td><td>Icon</td><td>Message line</td></tr>
+          <tr><td>Sleep</td><td>Z’s (the hunch needs art)</td><td>Z’s (the hunch needs art)</td><td>Icon</td><td>“Can’t act, a hit wakes”</td></tr>
+          <tr><td>Silence</td><td class="nosrc">No source (the party goes quiet)</td><td>Ellipsis speech bubble</td><td>Icon</td><td>Magic sealed; Echo Screen hint</td></tr>
+          <tr><td>Darkness</td><td class="nosrc">No source</td><td>Black cloud on the head</td><td>Icon</td><td>None</td></tr>
+          <tr><td>Confuse</td><td>Two spinning stars</td><td>Two spinning stars</td><td>Icon</td><td>Message line</td></tr>
+          <tr><td>Berserk</td><td>Red hue</td><td class="nosrc">No source</td><td>Icon</td><td>Message line</td></tr>
+          <tr><td>Curse</td><td>Murky brown hue</td><td>Darkened figure; Change blocked</td><td>Icon</td><td>Cure hint</td></tr>
+          <tr><td>Doom</td><td>Red count over the head (ours is white)</td><td>Icon in the help line</td><td>Icon with count</td><td>Count on the target tag</td></tr>
+          <tr><td>Slow / Haste</td><td>Turn order only</td><td>Gold / red gauge</td><td>Icon</td><td>Message line</td></tr>
+          <tr><td>Stop</td><td>Not an FFX status</td><td>Frozen figure; gauge gray or white (sources conflict)</td><td>Icon</td><td>Message line</td></tr>
+          <tr><td>Protect</td><td>Blue shield when a physical hit lands</td><td>Blue shield when a physical hit lands</td><td>Icon</td><td>None</td></tr>
+          <tr><td>Reflect</td><td class="nosrc">No source</td><td>Blue shield when a spell bounces</td><td>Icon</td><td>“A single-target spell will bounce”</td></tr>
+          <tr><td>Shell / Regen</td><td class="nosrc">No source</td><td>Icon in the help line</td><td>Icon</td><td>None</td></tr>
+          <tr><td>Auto-Life</td><td>Halo</td><td>Halo</td><td>Icon</td><td>Message line</td></tr>
+          <tr><td>Nul-element</td><td>Circling red, white, yellow or blue orb</td><td>Not FFX-2</td><td>Icon</td><td>None</td></tr>
+          <tr><td>Petrify</td><td>Stone (ours already)</td><td>Gray stone (ours already)</td><td>Icon</td><td>“A physical hit shatters”</td></tr>
+          <tr><td>Critical</td><td>Yellow HP (ours); slouch needs art</td><td>Yellow HP (ours); kneel needs art</td><td>None</td><td>None</td></tr>
+          <tr><td>Stat Up / Down</td><td>Not FFX</td><td>Icon only, no figure change</td><td>Icon with stacks</td><td>None</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="notes" aria-labelledby="ask-h">
+    <h2 id="ask-h">Questions for Bailey</h2>
+    <ol>
+      <li>Which option do you want, or which mix per game? For example, O1 for FFX and O3 for FFX-2.</li>
+      <li>O1 alone removes today’s FFX-2 text chips, because the original shows no standing icons. Is that acceptable?</li>
+      <li>The Sleep hunch and the low-HP slouch or kneel need new paintings. Should they be in scope?</li>
+      <li>Can we take over your screen to look up the undescribed FFX looks (Slow, Haste, Shell, Reflect, Regen, Silence, Darkness) and FFX-2’s Stop gauge colour in the Steam copy?</li>
+    </ol>
+  </section>
+
+  <footer>
+    <p>Our own frames come from a production build of main (1c313c17), with the statuses written into the live battle and today’s status marks hidden. Kimahri’s 840 HP and Bahamut’s Doom are staged for the picture.</p>
+    <p>Sources: <code>research/status-display.md</code> (Final Fantasy Wiki pages read in full by revision, a Steam community thread, and our combat-core research) and <code>research/ffx-combat-core.md</code> / <code>ffx2-combat-core.md</code> for every rule a warning states. Details: <code>docs/concepts/status-display-0929/README.md</code>.</p>
+  </footer>
+</div>
