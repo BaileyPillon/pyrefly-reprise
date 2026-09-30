@@ -27,7 +27,7 @@ other FFX-2 chain (V Vegnagun, LeBlanc, Fallen Aeons) carries HP, MP and items o
 opens a link in Stop there. A fresh battle never opens with Stop.
 
 **Proof** (headless Chromium, PYREFLY_BROWSER=gpu, 1600x900, own static servers on 5871/5872;
-scratch harness `.r33-tmp/stop-seam.mjs`, labelled setup hook: Stop in the engine's own record
+scratch harness `.r33-tmp/stop-seam.mjs` (all scratch parked at `F:/pyrefly-parked/2026-09-30/r33-fix-scratch/`), labelled setup hook: Stop in the engine's own record
 shape on Yuna at link 1's first open menu, enemies at 1 HP so the link ends and the next opens
 with Stop carried by the engine's own seam):
 
