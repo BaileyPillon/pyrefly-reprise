@@ -1,7 +1,16 @@
 import './cutsceneStage.css';
+import { loadArtManifest, manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import type { HideActorStep, SetPoseStep, ShowActorStep, StoryScript } from '../../story/dsl.ts';
-import { cutsceneFigure, figureBox, figuresIn, type CutsceneFigure, type FigureBox } from './cutsceneFigures.ts';
+import {
+  cutsceneFigure,
+  figureBox,
+  figuresIn,
+  type CutsceneFigure,
+  type FigureBox,
+  type PosePainting,
+  type StoryPose,
+} from './cutsceneFigures.ts';
 import { isStagedFx, spawnPyreflies, spawnSendingArc } from './cutsceneFx.ts';
 
 /**
@@ -91,7 +100,18 @@ export class CutsceneStage {
    * loading while the screen fades in rather than popping in late.
    */
   prepare(script: StoryScript): void {
-    for (const actor of figuresIn(script)) this.figureEl(actor);
+    const actors = figuresIn(script);
+    for (const actor of actors) this.figureEl(actor);
+    // Their story-pose paintings too (D-301), once the manifest says they are installed, so a kneel is not a pop-in.
+    void loadArtManifest().then(() => {
+      for (const actor of actors) {
+        const fig = cutsceneFigure(actor);
+        for (const pose of Object.keys(fig?.poses ?? {}) as StoryPose[]) {
+          const p = fig ? paintedPose(fig, pose) : undefined;
+          if (p) new Image().src = artUrl(p.art);
+        }
+      }
+    });
   }
 
   /** True when `actor` is standing on the stage now. */
@@ -130,18 +150,26 @@ export class CutsceneStage {
   }
 
   /**
-   * `setPose` for a figure that has no painting for it (`stagesUnpaintedPoses`, PR-0244): `kneel`
-   * lowers and dims the standing painting, `ko` lays it down. Any other pose stands it up again.
-   * Instant, like the runner's other zero-length steps; the CSS transition carries the move, and
-   * a figure posed before it is shown simply fades in already down. Every other figure: no-op.
+   * `setPose` on a staged figure. With its own painting for the pose (`poses`, D-301; installed, so
+   * the art manifest lists it) the figure shows that painting on its own feet line and centre: the
+   * kneel sinks where he stood, the fall's prone canvas lies there, and the old painting fades off
+   * over it. Without one, a figure with `stagesUnpaintedPoses` (PR-0244) has its standing painting
+   * lowered and dimmed for `kneel` and laid down for `ko`. Any other pose stands the idle up again.
+   * Instant, like the runner's other zero-length steps; a figure posed before it is shown simply
+   * fades in already down. Every other figure: no-op, as it always was.
    */
   setPose(step: SetPoseStep): void {
-    if (!cutsceneFigure(step.actor)?.stagesUnpaintedPoses) return;
+    const fig = cutsceneFigure(step.actor);
+    if (!fig) return;
+    const painting = paintedPose(fig, step.state);
+    if (!painting && !fig.stagesUnpaintedPoses && !this.figures.get(step.actor)?.classList.contains('is-painted-pose')) return;
     const el = this.figureEl(step.actor);
     if (!el) return;
     el.style.transitionDuration = `${POSE_MS}ms`;
-    el.classList.toggle('is-kneel', step.state === 'kneel');
-    el.classList.toggle('is-ko', step.state === 'ko');
+    this.paint(el, fig, painting);
+    const staged = !painting && fig.stagesUnpaintedPoses === true;
+    el.classList.toggle('is-kneel', staged && step.state === 'kneel');
+    el.classList.toggle('is-ko', staged && step.state === 'ko');
   }
 
   /**
@@ -250,6 +278,33 @@ export class CutsceneStage {
     this.timers.add(t);
   }
 
+  /**
+   * Put `painting` (or the idle, when undefined) on `el`, sized from its own sidecar numbers. A figure
+   * already on stage leaves a copy of the old painting over the new one that fades off (`POSE_MS`).
+   */
+  private paint(el: HTMLElement, fig: CutsceneFigure, painting: PosePainting | undefined): void {
+    const art = painting?.art ?? fig.art;
+    if (el.dataset['art'] === art) return;
+    if (el.classList.contains('is-on') && !this.opts.skipping?.()) {
+      const ghost = el.cloneNode(true) as HTMLElement;
+      ghost.classList.add('is-ghost');
+      delete ghost.dataset['actor'];
+      el.after(ghost);
+      this.later(() => (ghost.style.opacity = '0'), 20);
+      this.later(() => ghost.remove(), POSE_MS + 60);
+    }
+    el.dataset['art'] = art;
+    el.classList.toggle('is-painted-pose', painting !== undefined);
+    const { landscape: l, portrait: p } = fig;
+    const k = painting?.heightOfIdle ?? 1;
+    el.style.setProperty('--h-l', String(l.height * k));
+    el.style.setProperty('--h-p', String(p.height * k));
+    el.style.setProperty('--baseline', String(painting?.baseline ?? fig.baseline));
+    el.style.setProperty('--aspect', String(painting?.aspect ?? fig.aspect));
+    const img = el.querySelector('img');
+    if (img) img.src = artUrl(art);
+  }
+
   private figureEl(actor: string): HTMLElement | null {
     const existing = this.figures.get(actor);
     if (existing) return existing;
@@ -259,6 +314,7 @@ export class CutsceneStage {
     const el = doc.createElement('div');
     el.className = 'cutscene__figure';
     el.dataset['actor'] = actor;
+    el.dataset['art'] = fig.art;
     el.classList.toggle('is-unsent', fig.unsent === true);
     const { landscape: l, portrait: p } = fig;
     el.style.cssText =
@@ -275,4 +331,13 @@ export class CutsceneStage {
     this.figures.set(actor, el);
     return el;
   }
+}
+
+/**
+ * `fig`'s own painting for `pose`, only when the art manifest lists it (installed). No manifest yet, or not
+ * listed: undefined, so the figure keeps its staging and nothing is requested that is not there.
+ */
+export function paintedPose(fig: CutsceneFigure, pose: string): PosePainting | undefined {
+  const p = (fig.poses as Partial<Record<string, PosePainting>> | undefined)?.[pose];
+  return p && manifestKnowsAssetNow(artUrl(p.art)) === true ? p : undefined;
 }

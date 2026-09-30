@@ -326,11 +326,12 @@ async function held(actor: ActorHandle, b: Budget): Promise<void> {
 
 /**
  * Seymour falls and stays down: the KO state at his own station (the actor's
- * life layer drops the body, `PaintedActor.fall`), the plane rolled onto its
- * back (`lieDown`, he has no painted `ko`), a dark flash as a downed party
- * member gets, and no pyreflies. The roll races the departure's own budget.
+ * life layer drops the body, `PaintedActor.fall`), a dark flash as a downed party
+ * member gets, and no pyreflies. With no painted `ko` the plane is rolled onto its
+ * back (`lieDown`); with his approved fall painting (D-301, the prone canvas) the
+ * KO pose lies on the floor by itself, as a party member's does, and is not rolled.
  */
-async function body(ctx: EventCtx, actor: ActorHandle, b: Budget): Promise<void> {
+async function body(ctx: EventCtx, actor: ActorHandle, b: Budget, paintedKo = false): Promise<void> {
   const rig = bodyShot(ctx, actor);
   if (rig) {
     void ctx.stage.camera.release?.(ctx.moments.ms(BODY_RIG_MS));
@@ -340,7 +341,7 @@ async function body(ctx: EventCtx, actor: ActorHandle, b: Budget): Promise<void>
   actor.flash(0x4a5a78, 320, 0.7);
   actor.shake(0.12, 200);
   // With no painted `ko` (D-045 option A), the standing plane itself goes over.
-  await Promise.all([b.guard(actor.lieDown?.(BODY_LIE_MS)), b.sleep(BODY_MS)]);
+  await Promise.all([paintedKo ? undefined : b.guard(actor.lieDown?.(BODY_LIE_MS)), b.sleep(BODY_MS)]);
   await b.sleep(BODY_HOLD_MS);
 }
 
@@ -374,7 +375,7 @@ export async function depart(
     return 'stays';
   }
   if (kind === 'body') {
-    await body(ctx, actor, b);
+    await body(ctx, actor, b, ctx.stage.paints?.(id, 'ko') === true);
     return 'stays';
   }
   if (kind === 'falls-away') await fallsAway(actor, b);

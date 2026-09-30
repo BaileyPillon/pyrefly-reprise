@@ -2,7 +2,9 @@
  * The 2026-09-30 approved poses (D-298; Bailey, 2026-09-30 ~09:40 EDT: "all your recommendations, godspeed"):
  * Sleep and Low-HP ("critical") for the FFX cast (Yuna, Auron, Wakka, Lulu, Rikku, Tidus) and three FFX-2
  * dresspheres (Yuna Gunner, Paine Warrior, Rikku Thief), Paine's Songstress attack and hurt (FFX-2), and FFX-2
- * Bahamut's Mega Flare splash. Kimahri is held (D-299).
+ * Bahamut's Mega Flare splash. Kimahri was held (D-299). The day set joined the same install (D-301; Bailey,
+ * 2026-09-30 ~13:00 EDT, the same words): Seymour at Macalania kneel + fall (FFX), Isaaru kneel (FFX), Shuyin kneel
+ * (FFX-2), Kimahri sleep + critical (FFX).
  *
  * The files are installed by D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/install.mjs AFTER release 33
  * is live (public/art is gitignored and shared). So:
@@ -33,7 +35,14 @@ const SLOTS: Record<string, string[]> = {
   'rikku-thief': ['sleep', 'critical'],
   'paine-songstress': ['attack', 'hurt'],
   'ffx2-bahamut': ['splash'],
+  // the day set (D-301)
+  'seymour-macalania': ['kneel', 'ko'],
+  isaaru: ['kneel'],
+  shuyin: ['kneel'],
+  kimahri: ['sleep', 'critical'],
 };
+const DAY = new Set(['seymour-macalania/kneel', 'seymour-macalania/ko', 'isaaru/kneel', 'shuyin/kneel', 'kimahri/sleep', 'kimahri/critical']);
+const FFX = /^(yuna|auron|wakka|lulu|rikku|tidus|kimahri|seymour-macalania|isaaru)\//;
 const FILES = Object.entries(SLOTS).flatMap(([id, slots]) => slots.map((s) => `${id}/${s}`));
 const sha = (f: string): string => createHash('sha256').update(readFileSync(f)).digest('hex');
 const json = <T>(f: string): T => JSON.parse(readFileSync(f, 'utf8')) as T;
@@ -41,7 +50,7 @@ const json = <T>(f: string): T => JSON.parse(readFileSync(f, 'utf8')) as T;
 type Side = { width: number; height: number; baselineY: number; scale?: number; decision?: string; game?: string; facing?: string };
 
 describe.skipIf(!existsSync(path.join(PKG, 'hashes.json')))('the staged package (this disk)', () => {
-  it('holds exactly the 21 approved paintings, each with a sidecar and its candidate record', () => {
+  it('holds exactly the 27 approved paintings (21 of D-298, 6 of D-301), each with a sidecar and its candidate record', () => {
     const hashes = json<Record<string, string>>(path.join(PKG, 'hashes.json'));
     expect(Object.keys(hashes).sort()).toEqual(FILES.map((f) => `public/art/characters/${f}.png`).sort());
     for (const f of FILES) {
@@ -49,7 +58,7 @@ describe.skipIf(!existsSync(path.join(PKG, 'hashes.json')))('the staged package 
       expect(sha(png), f).toBe(hashes[`public/art/characters/${f}.png`]);
       expect(existsSync(path.join(PKG, 'characters', `${f}.prov.json`)), f).toBe(true);
       const side = json<Side>(path.join(PKG, 'characters', `${f}.json`));
-      expect(side.decision, f).toBe('D-298');
+      expect(side.decision, f).toBe(DAY.has(f) ? 'D-301' : 'D-298');
       expect(side.baselineY, f).toBeLessThanOrEqual(side.height);
     }
   });
@@ -63,7 +72,7 @@ describe.skipIf(!existsSync(path.join(PKG, 'hashes.json')))('the staged package 
       }
       expect(side.scale, f).toBeGreaterThanOrEqual(0.6);
       expect(side.scale, f).toBeLessThanOrEqual(1.3);
-      expect(side.game, f).toBe(/^(yuna|auron|wakka|lulu|rikku|tidus)\//.test(f) ? 'ffx' : 'ffx2');
+      expect(side.game, f).toBe(FFX.test(f) ? 'ffx' : 'ffx2');
     }
   });
 });
@@ -78,7 +87,7 @@ describe.skipIf(!installed)('the installed files (public/art is gitignored)', ()
     const set = raw.sets[SET];
     expect(set, SET).toBeDefined();
     expect(set!.words).toBe('all your recommendations, godspeed');
-    expect(set!.decision).toBe('D-298');
+    expect(set!.decision).toBe('D-298, D-301');
     const files = Object.keys(set!).filter((k) => k.startsWith('public/'));
     expect(files.sort()).toEqual(FILES.map((f) => `public/art/characters/${f}.png`).sort());
     for (const f of FILES) {

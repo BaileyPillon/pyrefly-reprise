@@ -241,6 +241,16 @@ describe('the pose map: sleep and critical fall back to idle for a figure withou
     expect(await pose('paine-songstress', 'attack')).toBe('attack');
     expect(await pose('paine-songstress', 'hurt')).toBe('hurt');
   });
+
+  it('D-301 (FFX only): once installed, Kimahri rests in his own sleep and critical, at the FFX line (below half)', async () => {
+    setArtManifest({ version: 1, generatedAt: 't', subjects: { kimahri: { states: ['idle', 'attack', 'critical', 'sleep'] } }, portraits: [], backdrops: [], pause: [], pause2x: [], title: [], title2x: [] } as never);
+    const pose = async (p: string) => /\/([a-z-]+)\.png$/.exec((await resolvePoseMap('kimahri', 'party'))[p]!)?.[1];
+    expect(await pose('sleep')).toBe('sleep');
+    expect(await pose('critical')).toBe('critical');
+    expect(restPoseOf('ffx', member({ id: 'kimahri', hp: 499 }))).toBe('critical');
+    expect(restPoseOf('ffx', member({ id: 'kimahri', hp: 500 }))).toBe('idle');
+    expect(restPoseOf('ffx', member({ id: 'kimahri', hp: 100, statuses: { sleep: {} } }))).toBe('sleep');
+  });
 });
 
 // ------------------------------------------------------------------ a real battle (rule 3)
