@@ -369,3 +369,58 @@ staged sidecars, installed and not installed, no manifest, posed before shown, t
 1. Seymour's fall in battle: keep the straight robe cut, feather it, or re-render the fall wider?
 2. On a wide screen Seymour kneels and falls a little right of where he stood, so the dialogue box never covers him.
    Keep, or would you rather he stays on his spot with part of him behind the box?
+
+## CHECK (DAY SET): independent, 2026-09-30, not the builder
+
+Verdict: **PASS, no blocker.** Branch `poses-day` at 3e02c815. Game case as written: Seymour at Macalania,
+Isaaru and Kimahri FFX only; Shuyin FFX-2 only; the presenter change (a painted KO is not rolled) only reaches
+the one enemy with a `body` departure (FFX Chapter VII).
+
+- **Package.** The 6 day PNGs in `D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/characters/` match the
+  approved candidates byte for byte (sha256): Seymour kneel cand-6 and ko cand-5, Isaaru kneel cand-9, Shuyin
+  kneel cand-7, Kimahri sleep cand-6 and critical cand-4. They also match `hashes.json`. Each has a sidecar
+  (decision D-301, game correct) and a `.prov.json`. The PNG sizes and baselines match the sidecars. The code
+  constants in `cutsceneFigures.ts` (aspect, baseline, `heightOfIdle` from the sidecar scale over the installed
+  idle heights 1191/1188/1136) match both. Ko cand-5 is not one of the double-rendered ko cand-7 to cand-11.
+  `install.mjs --dry-run`: 27 PNGs and 27 sidecars pass the hash check, 54 files would be copied, the set gets
+  locked with "D-298, D-301", and nothing is written. `tools/gen/manifest.mjs` lists any bare state name, so
+  `kneel` will appear in the manifest after the install.
+- **Nothing written to shared files.** Nothing under `D:/Final Fantasy/public/art` is newer than decisions.json,
+  and no `kneel`, `sleep` or `critical` file exists there for these four characters. `approved-hashes.json` is
+  unchanged (git clean).
+- **Production build of the branch** (my own `vite build` into a scratch folder, `vite preview` on port 8891, now
+  stopped). Headless Chromium, GPU mode. The package was served by request routing plus a manifest patch. Every
+  fight was played by the game's own `gotoChapter(auto: 'intended', speed: 'fast')`, so these runs are STAGED, not
+  real keys. In the Isaaru and Shuyin runs the party HP was also topped up. Each run: victory, 0 page errors,
+  0 console errors, 0 responses of 400 or more.
+  - Chapter VII at 1600x900 and 390x844. In the post plate Seymour shows the kneel painting. It stays through
+    "He went down on one knee." Then the ko painting crossfades in (ghost copy removed) and holds from "Then he
+    fell" to the end. In battle, Seymour dead reads pose `ko` from `ko.png`, `paints('ko')` is true, and
+    `lieRoll` is 0 (not rolled). The bare run keeps r17fix-ch7's staging: idle with `is-kneel`, then `is-ko`. In
+    battle the hurt plane is rolled (`lieRoll` 1), and no pose painting is requested.
+  - Chapter XIV at 1600x900. Isaaru shows `kneel.png` by his first line ("Keep that for the road ahead"). The
+    idle crossfades out after `camera`. The bare run shows the idle with no kneel request.
+  - Chapter V at 1600x900. Shuyin shows `kneel.png` from the first post frame with no ghost, until his exit. The
+    idle element from the later coda stays at opacity 0 (prepared, never shown).
+  - Chapter I, desktop and phone, STAGED Sleep and HP. Kimahri shows sleep with the Z's, and critical at 40%. At
+    60% he is back to idle. Bare: idle throughout.
+- **Dialogue and data.** The only script edits are a `setPose` in `ffx-isaaru.ts` and a swap of two steps in
+  `ffx2-vegnagun-shuyin.ts`. No line text or game data changed.
+- **Gates.** `tsc --noEmit` clean. Targeted tests: 7 files, 85 passed, 2 skipped (install-only). Full suite once:
+  696 files passed, 5 skipped, 0 failed. Orphans: 24, unchanged. Over 400 lines: `BattlePresenterStage.ts` (861)
+  and `ffx2-vegnagun-shuyin.ts` (481), both unchanged in line count. `git merge-tree main poses-day`: clean.
+
+Findings (none blocks):
+- **Major, already disclosed, new feature and not a regression.** Seymour's fall canvas cuts off his robe at the
+  right edge and his hair at the left edge (opaque pixels touch both canvas edges). In battle this shows as a hard
+  vertical line mid-field at the moment he dies. This is in the approved painting itself. The fix (feather the
+  edge, re-render wider, or accept it) is Bailey's call (Question 1 above).
+- **Minor.** On a wide screen the post-scene fall is placed at x 0.94, so about 29% of it runs off the right
+  edge. Only the head and shoulders read, small in the corner (Question 2 above).
+- **Minor.** `install.mjs --apply` copies the files (step 2) before it checks for a lock clash (step 4). If the
+  lock clashes, the copied files stay behind. They are the approved bytes, so the risk is low.
+- **Minor.** The PR-0244 comment in `seymour-anima-macalania.ts` ("no painting kneels or falls") now only
+  describes the fallback.
+
+Scratch left untracked (no deletes allowed): `.check-day-post-tmp.mjs`, `.check-day-kimahri-tmp.mjs`,
+`.check-day-dist-tmp/` (about 600 MB, safe to remove).
