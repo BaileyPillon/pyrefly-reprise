@@ -1,0 +1,150 @@
+{
+ "chapter": "isaaru-via-purifico",
+ "actor": "isaaru",
+ "game": "ffx",
+ "device": "phone",
+ "viewport": {
+  "width": 390,
+  "height": 844
+ },
+ "package": "served by request routing",
+ "firstFrame": {
+  "ms": 111396,
+  "art": "art/characters/isaaru/kneel.png",
+  "loaded": true,
+  "natural": "715x762",
+  "cls": [
+   "is-on",
+   "is-painted-pose"
+  ],
+  "box": {
+   "x": 88,
+   "y": 401,
+   "w": 215,
+   "h": 229,
+   "bottom": 629
+  },
+  "opacity": "1",
+  "ghosts": 1
+ },
+ "kneel": {
+  "line": "No. Please. Keep that for the road ahead.",
+  "figure": {
+   "art": "art/characters/isaaru/kneel.png",
+   "loaded": true,
+   "natural": "715x762",
+   "cls": [
+    "is-on",
+    "is-painted-pose"
+   ],
+   "box": {
+    "x": 88,
+    "y": 401,
+    "w": 215,
+    "h": 229,
+    "bottom": 629
+   },
+   "opacity": "1",
+   "ghosts": 0
+  }
+ },
+ "lines": [
+  {
+   "line": "No.",
+   "figure": {
+    "art": "art/characters/isaaru/kneel.png",
+    "loaded": true,
+    "natural": "715x762",
+    "cls": [
+     "is-on",
+     "is-painted-pose"
+    ],
+    "box": {
+     "x": 88,
+     "y": 401,
+     "w": 215,
+     "h": 229,
+     "bottom": 629
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  },
+  {
+   "line": "No. Please. Keep that for the road ahead.",
+   "figure": {
+    "art": "art/characters/isaaru/kneel.png",
+    "loaded": true,
+    "natural": "715x762",
+    "cls": [
+     "is-on",
+     "is-painted-pose"
+    ],
+    "box": {
+     "x": 88,
+     "y": 401,
+     "w": 215,
+     "h": 229,
+     "bottom": 629
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  },
+  {
+   "line": "Isaaru...",
+   "figure": {
+    "art": "art/characters/isaaru/kneel.png",
+    "loaded": true,
+    "natural": "715x762",
+    "cls": [
+     "is-on",
+     "is-painted-pose"
+    ],
+    "box": {
+     "x": 88,
+     "y": 401,
+     "w": 215,
+     "h": 229,
+     "bottom": 629
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  },
+  {
+   "line": "Yuna. We have to go.",
+   "figure": {
+    "art": "art/characters/isaaru/kneel.png",
+    "loaded": true,
+    "natural": "715x762",
+    "cls": [
+     "is-on",
+     "is-painted-pose"
+    ],
+    "box": {
+     "x": 88,
+     "y": 401,
+     "w": 215,
+     "h": 229,
+     "bottom": 629
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  }
+ ],
+ "notes": [
+  "STAGED: gotoChapter('isaaru-via-purifico', { auto: 'intended', speed: 'fast' }), seed 1; the pre scene advanced by Enter; party HP topped up between turns"
+ ],
+ "served": [
+  "isaaru/kneel.png",
+  "yuna/critical.json",
+  "yuna/critical.png",
+  "yuna/sleep.json",
+  "yuna/sleep.png"
+ ],
+ "errors": [],
+ "consoleErrors": [],
+ "http4xx": []
+}

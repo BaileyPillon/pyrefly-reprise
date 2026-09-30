@@ -24,3 +24,20 @@ first working version, so it is late. Disclosed here and in the handoff.
 
 Both games, each with its own threshold (FFX HP < 50 %, the SOS line; FFX-2 HP < 33 %) and its own look (FFX the
 slouch, FFX-2 the kneel), painted per character. The Bahamut splash and Paine's Songstress slots are FFX-2 only.
+
+## Day set (D-301, branch poses-day): paper preflight, written during the build (late, disclosed)
+
+`critic-plan --paths` on the six changed files: DEEP (the presenter's `body` departure and restage are shared).
+
+| Risk | Where | Check |
+|---|---|---|
+| A painted `ko` gets rolled onto its back as well (a prone canvas turned 90 degrees) | `BattlePresenterDepartures.body`, `BattlePresenterStage` restage | `lieDown` only without a painted `ko` (`stage.paints`); presenter test both ways; the Ch VII kill by keys reads `lieRoll 0`, `prone true` |
+| A kneel or fall 404s before the install | `CutsceneStage.setPose` | a painting is used only when the manifest lists it; bare browser run: no request, 0 responses of 400 or more |
+| PR-0244's staging lost for Seymour without the art | the same | `cutscene-story-poses.test.ts` both ways; `cutscene-stage.test.ts` unchanged and green |
+| Isaaru or Shuyin changes before the install | `stagesUnpaintedPoses` stays Seymour-only | test: without the manifest entry their element is byte-identical after `setPose` |
+| The painting lies behind the dialogue box | placement | browser frames at 1600x900 and 390x844; per-pose centre for Seymour (first proof caught the fall behind the box) |
+| Dialogue or game data changes | rules 6 | no line changed; Isaaru gains one `setPose` at his own "Isaaru kneels" beat, Shuyin's two steps swap order |
+| Files over 400 lines grow | rule 7 | `ffx2-vegnagun-shuyin.ts` (481) and `BattlePresenterStage.ts` (861) keep their line counts |
+
+Game case: Seymour at Macalania and Isaaru FFX only, Shuyin FFX-2 only, Kimahri (no code) FFX only; the cutscene
+port and the departure guard are shared plumbing.

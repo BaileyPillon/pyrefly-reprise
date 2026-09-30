@@ -266,3 +266,106 @@ Checked on 9a4a86e8 and the staged package, not the repair's own report.
 - install.mjs --dry-run: 42 files, 21 locked under set bailey:2026-09-30-poses, nothing written. public/art and approved-hashes.json in D:/Final Fantasy untouched.
 - Proof frames (ch1 rest, desktop 1600x900 and phone 390x844): Auron crouched in the critical painting, no pale sliver between legs; errors and consoleErrors empty in both JSON files.
 Result: B1 cleared. Not checked: pixel-level diff against the original cand-45/raw candidate (only the prior staged step).
+
+## DAY SET (D-301, branch `poses-day`, 2026-09-30)
+
+Bailey, 2026-09-30 ~13:00 EDT, verbatim: "all your recommendations, godspeed", answering the day art page
+https://claude.ai/artifact/JqXgAx8rXaHdLWxES73Fmt. Recorded as **D-301** in `docs/target/decisions.json` (main, commit
+cebdaa33; it answers the D-299 hold on Kimahri). Branch `poses-day` = `poses-0930` + a merge of `r17fix-ch7` (the
+PR-0244 staging for unpainted kneels) + the day-set work. **Not pushed, not merged, not deployed; nothing written under
+`public/art` or to `approved-hashes.json`.** Release 34 material, installed with the same package as D-298.
+
+### Game case (rule 14)
+
+- Seymour at Macalania kneel cand-6 and fall/KO cand-5: **FFX only** (Chapter VII post scene, and his battle KO).
+- Isaaru kneel cand-9: **FFX only** (Chapter XIV post scene).
+- Shuyin kneel cand-7: **FFX-2 only** (Chapter V post scene).
+- Kimahri sleep cand-6 and critical cand-4: **FFX only** (the rest-pose slots, FFX thresholds: below half HP, the
+  yellow digits). The changed method (img2img from a warp of his idle) is accepted.
+- The cutscene stage's pose-painting port and the departure guard are shared plumbing that only these figures use.
+
+### What is built
+
+1. **Story-pose paintings on the cutscene stage** (`CutsceneStage.setPose`, `cutsceneFigures.ts` `poses`). When a post
+   scene calls `setPose(actor, 'kneel' | 'ko')` and the art manifest lists `characters/<id>/<pose>.png`, the figure shows
+   that painting on its own feet line, sized from the sidecar (pixel height x the measured `scale`, over the idle's
+   pixel height: the battle's own rule), and the old painting fades off over it (700 ms). Not listed, or no manifest:
+   Seymour keeps r17fix-ch7's staging (lowered, then laid down), Isaaru and Shuyin stand as before. Any other pose
+   stands the idle up again. The kneel and fall paintings preload once the manifest says they exist.
+   - Seymour on a wide screen: the kneel sits at x 0.89 and the fall at 0.94 (portrait 0.6) instead of his standing
+     0.8. The first 1600x900 proof showed the fall lying almost wholly behind the dialogue box at 0.8
+     (`final-day/shots/ch7-1600x900-run1-at-x0.8-fall-behind-box.jpg`). The fall's robe, cut by its canvas's right edge
+     as rendered, now runs off the screen's edge, with his head near where he stood.
+   - Isaaru's post scene gained `setPose(isaaru, 'kneel')` at its own "Isaaru kneels" beat (the script already said he
+     kneels); Shuyin's `setPose` now comes before his `showActor`, so the kneel is up from the first frame (two lines
+     swapped, the file keeps 481 lines). No dialogue changed.
+2. **Seymour's battle KO uses his fall painting.** The `body` departure no longer rolls the plane onto its back
+   (`lieDown`) when the figure has its own `ko` painting: the prone canvas lies on the floor by itself, as a party
+   member's KO does (`PaintedRest`). The restage path likewise. Without the painting, unchanged (the roll).
+3. **Kimahri**: no code. The rest-pose slots already read any installed `sleep` / `critical` (test added: the pose
+   map and the FFX line for him).
+4. **Staged install** (`D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/`, README.md there): the 6 day PNGs
+   byte for byte, each with its sidecar (measured `scale`, `headTop` for Kimahri's two, `decision: D-301`) and
+   `.prov.json`; `hashes.json` now 27; `install.mjs` one set `bailey:2026-09-30-poses` (decision "D-298, D-301"),
+   idempotent, and it now **extends** a set a D-298-only run had locked. Dry run: 54 files, nothing written.
+   Rehearsed on scratch repo copies (`D:/Tools/pyrefly-scratch/poses-day-rehearsal/`): fresh 54 copied then 0;
+   pre-locked 21 extended to 27 then unchanged. Tools and measurements in the package's `work/day/`.
+
+| Painting | Scale | Rule |
+|---|---|---|
+| Seymour kneel | 1.13 | head match 1.0 would stand 0.53 of the idle; raised to the 0.60 stature floor |
+| Seymour fall (KO) | 0.82 | prone: head match 0.64 would lay him about two thirds of his height; torso match (crown to sash) used |
+| Isaaru kneel | 0.96 | head match 0.90 would stand 0.57; 0.60 floor |
+| Shuyin kneel | 1.04 | head match 0.95 would stand 0.55; 0.60 floor |
+| Kimahri sleep / critical | 1.0 | his idle's own pixel scale (a 1:1 warp of the idle) |
+
+### Proof
+
+Production build of `poses-day` into `D:/Tools/pyrefly-scratch/poses-day/dist` (`vite build --outDir`, no `prebuild`
+manifest step), vite preview on 8913 (stopped by PID), headless Chromium with `PYREFLY_BROWSER=gpu`, the package
+served by request routing. Scripts in `docs/concepts/poses-2026-09-30/final-day/src/`; JSON records and frames in
+`final-day/shots/`; target-vs-build sheets `final-day/*-target-vs-build.jpg`; key frames in `docs/screenshots/poses-day/`.
+
+| Moment | What the live page reported |
+|---|---|
+| Ch VII, 1600x900 and 390x844, **real keys from the title to the kill** (`ch7-day.mjs`, playFight, seed 1) | victory at both sizes (47 turns on desktop). At the kill Seymour's actor is pose `ko`, `seymour-macalania/ko.png`, `lieRoll 0`, `prone true`. The plate before the tally shows `kneel.png`. "He went down on one knee." shows `kneel.png` with `is-painted-pose`. "Then he fell, and he just stopped." shows `ko.png`, clear of the box |
+| Ch XIV (Isaaru), desktop and phone | "No. Please. Keep that for the road ahead." over `isaaru/kneel.png`. Bare run (package not served): `isaaru/idle.png`, and no request for the kneel |
+| Ch V (Shuyin), desktop and phone | `shuyin/kneel.png` from the first post-scene frame (no crossfade), through the lines |
+| Ch I (Kimahri), desktop and phone | STAGED Sleep: `kimahri/sleep.png` with the Z's on his head. STAGED 40 % HP: `kimahri/critical.png` (924/2310, yellow digits). After his own turn by keys, back to `critical` |
+
+STAGED, labelled in each JSON: Ch XIV and Ch V were reached with `gotoChapter(id, { auto: 'intended', speed: 'fast' })`
+(the fight played by the game's strategy, party HP topped up), post lines advanced by Enter; Kimahri's Sleep and HP
+written into the engine state before the presenter's own `syncHud`. **0 page errors, 0 console errors, 0 responses of
+400 or more in every run.**
+
+Distance from the target: the same paintings, byte for byte. Seymour's fall is seen head and shoulders on a wide
+screen (the rest of the body runs off the right edge by design) and whole on a phone; his kneel sits right of where he
+stood. In battle the fall's straight robe cut (the canvas edge) shows as a hard vertical line at the feet end.
+
+### Gates
+
+`npx tsc --noEmit` clean. New and changed tests: `tests/unit/cutscene-story-poses.test.ts` (9: the table against the
+staged sidecars, installed and not installed, no manifest, posed before shown, the three post scenes' step order),
+`presenter-departures.test.ts` (+1: a painted KO is not rolled), `rest-poses.test.ts` (+1: Kimahri),
+`engine/pose-install-0930.test.ts` (27 files, per-file decision). Full suite once: 695 files passed, 1 failed:
+`strategy-ffx2-bahamut` heal-only route timeout (18.6 s under load), the known load timeout; alone it passes 19/19.
+`node tools/orphans.mjs`: 24 (unchanged). Changed source files are under 400 lines, except `ffx2-vegnagun-shuyin.ts`
+(481) and `BattlePresenterStage.ts` (861), whose line counts did not change. No CONTRACTS file touched; nothing under
+`src/battle`. Paper preflight appended (late, disclosed) to `docs/plans/poses-0930-review.md`.
+
+### Open
+
+- Seymour's battle KO shows the fall canvas's straight robe cut at the feet end. Options for Bailey: accept; feather
+  that edge (the edge-feather table is per art id, so his idle would be feathered too); or a wider re-render.
+- The kneel scales sit on the 0.60 stature floor, so Seymour's kneeling head reads about 13 % larger than his standing
+  one (Isaaru about 7 %, Shuyin about 9 %).
+- Shuyin's kneel keeps the blade tip cut by its canvas's right edge (as rendered and approved).
+- Kimahri's own Attack pose was not caught by the 100 ms sampler in the low-HP run (the trail reads ready, then
+  critical); his rest painting is proven, and the action pose is his existing `attack.png`, untouched.
+- The install waits for release 33; run it once for both sets.
+
+### Questions for Bailey
+
+1. Seymour's fall in battle: keep the straight robe cut, feather it, or re-render the fall wider?
+2. On a wide screen Seymour kneels and falls a little right of where he stood, so the dialogue box never covers him.
+   Keep, or would you rather he stays on his spot with part of him behind the box?
