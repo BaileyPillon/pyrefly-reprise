@@ -77,6 +77,77 @@
 <h1>Pyrefly Reprise — the score</h1>
 <p class="sub">Twenty-five cues and 134 effects, rendered from sampled instruments and mixed in one hall. Nothing here quotes anything.</p>
 
+<!-- fb-0929-music:begin — see docs/handoff/fb-0929-music.md and docs/audio/candidates/fb-0929/manifest.json. -->
+<h2 style="margin-top:0">Music quality options (29 Sep)</h2>
+<p class="group-note">
+  <strong>Your friend said</strong> &ldquo;Music quality sounds kinda bad&rdquo;, and you agreed. <strong>I cannot hear any of this</strong>; here is what measures wrong in the music the game plays today, and three ways to fix it for you to judge by ear.
+</p>
+<p class="group-note">
+  <strong>What is wrong, by stage</strong> (Seymour Flux&rsquo;s battle cue and the FFX-2 aeon cue, full length):
+  <em>1. The AI (by far the biggest part).</em> The AI restyle&rsquo;s own audio decoder, with no restyling at all, turns the top of the mix into something closer to hiss
+  (the 4&ndash;10 kHz band measures 5 to 10 dB &ldquo;noisier&rdquo;, less like notes), makes attacks about twice as slow (4&ndash;5 ms to 10&ndash;12 ms), and scrambles left against right.
+  Changing its words, its strength or its seed does not move any of that, because it is the decoder, not the settings.
+  <em>2. The R1 remaster</em> fixed left and right, but its fix softens attacks a little more (to 15&ndash;16 ms), and it leaves the top dark on purpose.
+  <em>3. The MP3 encode</em> (about 120 kbps): it cuts everything above 16.6 kHz like a wall, and above 6 kHz its coding noise sits only 3 to 9 dB under the music (a fizz on cymbals and bright strings); it also leaks a little noise just before sharp attacks.
+  A higher-quality MP3 lowers that noise by about 10 dB and removes the wall.
+  Loudness and stereo width are fine now: all 26 cues sit close to a real orchestra recording on width (left/right correlation 0.65 to 0.84 against 0.70 to 0.75), and every cue plays at the same &minus;16 LUFS.
+</p>
+<p class="group-note">
+  <strong>Each clip is 45 seconds from the start of the battle loop, at the same loudness.</strong> Nothing in the game has changed.
+  <strong>0 Today</strong>: what ships (the R1 remaster at today&rsquo;s MP3 quality).
+  <strong>O1 &ldquo;better encode&rdquo;</strong>: the exact same music, a high-quality MP3 (V0). Fixes only stage 3: listen for less fizz on the top. Subtle by design.
+  <strong>O2 &ldquo;AI body, real top&rdquo;</strong>: keeps the AI sound you picked on 27 September below 4 kHz, and puts the sampled instruments&rsquo; own clean highs and attacks back above it (the same notes; the top is moved onto the AI&rsquo;s timing). Fixes stages 1 to 3 on the top. Risk: where the AI wandered from the notes, a hit can sound doubled; Seymour&rsquo;s AI take follows the notes more loosely than the aeon&rsquo;s.
+  <strong>O3 &ldquo;real samples, no AI&rdquo;</strong>: the free orchestral library (VSCO 2) playing the same notes in a hall, no AI at all, so none of the AI&rsquo;s faults. This is the kind of sound you heard as Direction A on 26 September and did not pick (&ldquo;7 is the only one that sounds good to me&rdquo;); it is back only because it has none of the AI&rsquo;s measured faults.
+</p>
+<article class="cue">
+  <h4>Chapter I: Seymour Flux (boss-seymour)</h4>
+  <p class="blurb">FFX. 132 bpm, C# minor.</p>
+  <p class="blurb" style="margin:8px 0 2px">0 Today: MP3 wall at 16.6 kHz, coding noise 7.5 dB under the music at 6&ndash;12 kHz; top &ldquo;noisiness&rdquo; &minus;8.8 dB; attacks 15 ms.</p>
+  <audio controls preload="none" src="candidates/fb-0929/boss-seymour-0-control-shipped-q5.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">O1 better encode: no wall; coding noise 17 dB under at 6&ndash;12 kHz; everything else identical to 0.</p>
+  <audio controls preload="none" src="candidates/fb-0929/boss-seymour-O1-encode-v0.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">O2 AI body, real top: top noisiness &minus;12.7 dB (the sampled render&rsquo;s own &minus;12.5; a real orchestra recording &minus;11.8); attacks 9.5 ms.</p>
+  <audio controls preload="none" src="candidates/fb-0929/boss-seymour-O2-rebuild-v0.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">O3 real samples, no AI: top noisiness &minus;9.8 dB, attacks 3 ms, wider stereo (correlation 0.53).</p>
+  <audio controls preload="none" src="candidates/fb-0929/boss-seymour-O3-sampled-v0.mp3"></audio>
+</article>
+<article class="cue">
+  <h4>Chapter IV: Bahamut, FFX-2 (boss-ffx2-aeon)</h4>
+  <p class="blurb">FFX-2. 160 bpm, Bb minor. Also plays in Chapters VI, XI and XIII.</p>
+  <p class="blurb" style="margin:8px 0 2px">0 Today: MP3 wall at 16.6 kHz, coding noise 8.7 dB under the music at 6&ndash;12 kHz; top noisiness &minus;7.1 dB; attacks 22 ms.</p>
+  <audio controls preload="none" src="candidates/fb-0929/boss-ffx2-aeon-0-control-shipped-q5.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">O1 better encode: no wall; coding noise 17.6 dB under at 6&ndash;12 kHz.</p>
+  <audio controls preload="none" src="candidates/fb-0929/boss-ffx2-aeon-O1-encode-v0.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">O2 AI body, real top: top noisiness &minus;15.8 dB; attacks 12.5 ms.</p>
+  <audio controls preload="none" src="candidates/fb-0929/boss-ffx2-aeon-O2-rebuild-v0.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">O3 real samples, no AI: top noisiness &minus;13.6 dB, attacks 4 ms. The electric bass, electric piano and synths are the old sampled voices (the free library has none).</p>
+  <audio controls preload="none" src="candidates/fb-0929/boss-ffx2-aeon-O3-sampled-v0.mp3"></audio>
+</article>
+<p class="group-note">
+  <strong>What each costs for the whole 26-cue score.</strong>
+  O1: about 7 minutes of computer time and an hour of agent work; the music grows from 39 MB to about 73 MB (the game loads one cue at a time).
+  O2: no graphics card needed; about half a day of agent work (the loop points and seams have to be rebuilt the way the shipped chain does them), then an ear check of each cue for doubled hits; same size as O1.
+  O3: about a day of agent work (25 instruments still need a seat in the sampled orchestra, and the choir has no free sampled equivalent), about a minute of computer time per cue; same size as O1; and it drops the AI sound you chose.
+  O1 can be combined with O2 or O3 (both sketches above already use O1&rsquo;s encode).
+</p>
+<div class="check">
+  <p class="score"><label>Which one for the whole score: 0 (keep today), O1, O2 or O3 <input type="text" size="4" data-fb0929="Pick"></label></p>
+  <p class="score"><label>Does O2 sound doubled or smeared anywhere? <input type="text" size="30" style="width:16em" data-fb0929="O2 doubled hits"></label></p>
+  <p class="score"><label>Anything else that still sounds bad? <input type="text" size="30" style="width:16em" data-fb0929="Still bad"></label></p>
+  <p><button type="button" id="fb0929-collect" style="font:inherit;padding:8px 16px;cursor:pointer;color:var(--paper);background:var(--gold);border:0;border-radius:6px">Collect my answers</button></p>
+  <textarea id="fb0929-out" rows="4" style="width:100%;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:10px" readonly placeholder="Your answers appear here."></textarea>
+</div>
+<script>
+  document.getElementById('fb0929-collect').addEventListener('click', function () {
+    var lines = ['Music quality options (29 Sep)'];
+    document.querySelectorAll('input[data-fb0929]').forEach(function (input) {
+      lines.push(input.getAttribute('data-fb0929') + ': ' + (input.value.trim() || '(blank)'));
+    });
+    document.getElementById('fb0929-out').value = lines.join(String.fromCharCode(10));
+  });
+</script>
+<!-- fb-0929-music:end -->
+
 <!-- soundtrack-r1-2026-09-29 — see docs/handoff/r31-soundtrack.md and docs/audio/soundtrack-r1-2026-09-29.json. -->
 <div class="guide">
   <p style="margin:0"><strong>Shipped: the whole score in R1 (2026-09-29).</strong> You said &ldquo;all your recommendations, full speed ahead&rdquo;, so the game now plays the Direction B cues through the R1 &ldquo;focus&rdquo; remaster: 23 cues, plus the Chapter VII scene cue already shipped that way. Every player on this page that points at the game&rsquo;s own files (<code>public/audio/music/</code>) now plays the R1 version; the Direction B and remaster sections below still play the files they were made with. Two cues keep today&rsquo;s sampled render because their R1 take missed a stereo gate: <code>boss-vegnagun</code> and <code>scene-bevelle-underground</code>. What an agent could check is measured in <code>docs/audio/soundtrack-r1-2026-09-29.json</code>; how it sounds is yours to judge (agents cannot hear).</p>
