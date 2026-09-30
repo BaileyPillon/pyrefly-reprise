@@ -16,7 +16,7 @@ import { CutsceneStage } from '../../src/app/screens/CutsceneStage.ts';
 import { CUTSCENE_FIGURES, cutsceneFigure, figureBox, figuresIn } from '../../src/app/screens/cutsceneFigures.ts';
 import { isStagedFx } from '../../src/app/screens/cutsceneFx.ts';
 import { CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
-import { fx, hideActor, showActor, type Step, type StoryScript } from '../../src/story/dsl.ts';
+import { fx, hideActor, setPose, showActor, type Step, type StoryScript } from '../../src/story/dsl.ts';
 import { CutsceneRunner, createNoopPorts } from '../../src/story/runner/CutsceneRunner.ts';
 import { yojimboCavernScripts } from '../../src/story/scripts/yojimbo-cavern.ts';
 
@@ -293,3 +293,58 @@ describe('Chapter IX post scene through the runner, on the stage', () => {
     expect(post.filter((s) => s.type === 'hideActor')).toEqual([hideActor('ginnem', 1600)]);
   });
 });
+
+describe('setPose on a figure with no kneel or KO painting (PR-0244)', () => {
+  let root: HTMLElement;
+  let stage: CutsceneStage;
+  beforeEach(() => {
+    vi.useFakeTimers();
+    root = document.createElement('div');
+    document.body.appendChild(root);
+    stage = new CutsceneStage(root);
+    stage.mount();
+  });
+  afterEach(() => {
+    stage.unmount();
+    root.remove();
+    vi.useRealTimers();
+  });
+  const el = (actor: string): HTMLElement | null => root.querySelector(`.cutscene__figure[data-actor="${actor}"]`);
+
+  it('only Seymour at Macalania (FFX only, Chapter VII) opts in', () => {
+    expect(Object.entries(CUTSCENE_FIGURES).filter(([, f]) => f.stagesUnpaintedPoses).map(([k]) => k)).toEqual(['seymour-macalania']);
+  });
+
+  it('lowers him for kneel, lays him down for ko, and stands him up again for anything else', () => {
+    void stage.showActor(showActor('seymour-macalania', { ms: 0 }));
+    const fig = el('seymour-macalania')!;
+    expect(fig.classList.contains('is-on')).toBe(true);
+    stage.setPose(setPose('seymour-macalania', 'kneel'));
+    expect(fig.classList.contains('is-kneel')).toBe(true);
+    expect(fig.classList.contains('is-ko')).toBe(false);
+    stage.setPose(setPose('seymour-macalania', 'ko'));
+    expect(fig.classList.contains('is-kneel')).toBe(false);
+    expect(fig.classList.contains('is-ko')).toBe(true);
+    stage.setPose(setPose('seymour-macalania', 'idle'));
+    expect(fig.classList.contains('is-kneel') || fig.classList.contains('is-ko')).toBe(false);
+  });
+
+  it('a figure posed before it is shown fades in already down', () => {
+    stage.setPose(setPose('seymour-macalania', 'kneel'));
+    const fig = el('seymour-macalania')!;
+    expect(fig.classList.contains('is-on')).toBe(false);
+    expect(fig.classList.contains('is-kneel')).toBe(true);
+    void stage.showActor(showActor('seymour-macalania', { ms: 0 }));
+    expect(fig.classList.contains('is-on')).toBe(true);
+    expect(fig.classList.contains('is-kneel')).toBe(true);
+  });
+
+  it('leaves every other figure, and anyone not staged, exactly as before', () => {
+    void stage.showActor(showActor('ginnem', { ms: 0 }));
+    stage.setPose(setPose('ginnem', 'kneel'));
+    stage.setPose(setPose('yuna', 'kneel'));
+    expect(el('ginnem')!.className).not.toMatch(/is-kneel|is-ko/);
+    expect(el('yuna')).toBeNull();
+  });
+});
+
