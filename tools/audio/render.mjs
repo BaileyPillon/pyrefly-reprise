@@ -48,7 +48,7 @@ const { renderSfxWith, sfxNames, getSfxDesign } = await import('../../src/audio/
 const { CATEGORY_RULES } = await import('../../src/audio/sfx/design.ts');
 const { pitchToFreq, effectiveJitterMs, performanceKey } = await import('../../src/audio/score.ts');
 const { tempoCurveOf, tempoWarnings } = await import('../../src/audio/tempo.ts');
-const { mergeIntoManifest, musicEntry, readManifest, scoreFingerprint } = await import('./manifest-io.mjs');
+const { mergeIntoManifest, musicEntry, readManifest, scoreFingerprint, AUDIO_BUDGET_BYTES } = await import('./manifest-io.mjs');
 const { Hall } = await import('../../src/audio/dsp/hall.ts');
 const presets = await import('../../src/audio/voices/presets/index.ts');
 const { voiceForPreset, availableLibs, missingLibs, LIBRARIES, libPath } = await import('./libs.mjs');
@@ -663,8 +663,10 @@ async function main() {
   log('');
   log(`manifest: ${Object.keys(manifest.music).length} cues${manifest.sfx ? ' + sfx sprite' : ''}`);
   log(`shipped audio total: ${(totalBytes / 1e6).toFixed(1)} MB`);
-  if (totalBytes > 60e6) {
-    console.error(`Shipped audio is ${(totalBytes / 1e6).toFixed(1)} MB, over the 60 MB budget.`);
+  if (totalBytes > AUDIO_BUDGET_BYTES) {
+    console.error(
+      `Shipped audio is ${(totalBytes / 1e6).toFixed(1)} MB, over the ${AUDIO_BUDGET_BYTES / 1e6} MB budget.`,
+    );
     process.exit(1);
   }
   if (failures > 0) {

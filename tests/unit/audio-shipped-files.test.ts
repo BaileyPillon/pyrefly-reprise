@@ -27,7 +27,7 @@ import { getTrack, trackNames } from '../../src/audio/tracks/index.ts';
 import { sfxNames } from '../../src/audio/sfx/index.ts';
 import { tempoCurveOf } from '../../src/audio/tempo.ts';
 // @ts-expect-error -- the render tooling is plain .mjs with no declarations.
-import { scoreFingerprint } from '../../tools/audio/manifest-io.mjs';
+import { AUDIO_BUDGET_BYTES, scoreFingerprint } from '../../tools/audio/manifest-io.mjs';
 
 const AUDIO_DIR = new URL('../../public/audio/', import.meta.url);
 const raw = JSON.parse(readFileSync(new URL('manifest.json', AUDIO_DIR), 'utf8'));
@@ -179,10 +179,10 @@ describe('the shipped audio manifest', () => {
     }
   });
 
-  it('stays inside the 60 MB shipping budget', () => {
+  it('stays inside the shipping budget (85 MB since D-292, music at LAME V0)', () => {
     const total =
       Object.values(manifest!.music).reduce((sum, entry) => sum + (entry.bytes ?? 0), 0) +
       (manifest!.sfx!.bytes ?? 0);
-    expect(total).toBeLessThan(60e6);
+    expect(total).toBeLessThan(AUDIO_BUDGET_BYTES);
   });
 });

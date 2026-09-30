@@ -62,8 +62,8 @@ def make_pipe(encode):
     return pipe
 
 
-def run(cue, encode, out, tp_max=None):
-    c = cue_entry(cue)
+def run(cue, encode, out, tp_max=None, entry=None):
+    c = entry or cue_entry(cue)
     sr = remaster.SR
     keep = int(round(c['loop']['end'] * sr)) + int(round(RUN_ON_S * sr))
     fd, cut = tempfile.mkstemp(suffix='.wav', dir=os.path.dirname(os.path.abspath(out)))
