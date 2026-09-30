@@ -50,3 +50,13 @@ pacing. No other test pinned the old default.
   to x1.3 of it; grep finds two that mention damage numerals (`hud-collision.spec.ts`, `intent-pause.spec.ts`); neither was run, so the deep/focused review should include them.
 - No in-game OPTIONS row for pacing (new pause row needs a mockup and Bailey's yes).
 - Nothing is canon-timed (needs frame-timed Steam footage, rule 6).
+
+## CHECK (independent, 2026-09-30)
+
+Verified on a fresh production build (BASE_PATH=/, vite preview, headless Chromium GPU, 1600x900, seed 3, 3 turns), default vs `?pace=current`:
+- Chapter I: wind-up x1.18, hit x1.16, numeral x1.31, enemy action x1.18 (steady table: 1.2/1.2/1.3).
+- Chapter IV: wind-up x1.09, hit x1.07, numeral x1.24, enemy action x1.09 (steady FFX-2: 1.1/1.25).
+- `__pyrefly.pace()`: no parameter = steady, `?pace=current` = current, `?pace=relaxed` = relaxed. Presets in src/engine/pace.ts are as documented; nothing under src/battle changed; pace.ts does not read reduced motion.
+- tsc clean; pace-option test 10/10; full suite once (testTimeout 120 s): 674 files passed, 5 skipped, 0 failed; orphans list unchanged (no new src modules); git merge-tree against origin/main (1a6fd3cc) has no conflicts.
+- Not re-checked: the per-event trace comparison (relied on the builder's trace plus the presentation-only unit test); Playwright e2e specs still owed by the release review.
+Blockers: none.
