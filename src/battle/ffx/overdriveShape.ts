@@ -14,6 +14,30 @@ import type { ResolveOptions } from './abilities.ts';
 import { FURY_MAX_CASTS, furyCastsFor, timingBonusFrom } from './overdrive.ts';
 import { resolveReelSpin } from './reels.ts';
 
+/** Keys that belong to the success row only: Blitz Ace's "Last Hit" finisher (row 274) [§5.3]. */
+const SUCCESS_ONLY_KEYS = ['finisherPower', 'finisherHits', 'finisherAppliesOnSuccessOnly'] as const;
+
+/**
+ * The sourced **(Fail)** or **(Immune)** row a Swordplay / Bushido record
+ * carries inline as `extra.failPower`/`failHits`(/`failRank`) or
+ * `extra.immunePower`/`immuneHits` [ffx-combat-core §5.3, §5.5, both tables
+ * `[verified: 2 sources]`]. Only DmgCon, hit count and (where the table gives
+ * one) rank change; everything else, `canMiss: false` included (hard rule 5),
+ * stays the success record's. A fail row drops the success-only finisher keys.
+ * `undefined` when the record carries no such row, so the caller keeps `def`.
+ * **FFX only**: FFX-2 has no Swordplay/Bushido.
+ */
+export function rowFromExtra(def: AbilityDef, row: 'fail' | 'immune'): AbilityDef | undefined {
+  const extra = def.extra ?? {};
+  const power = extra[`${row}Power`];
+  const hits = extra[`${row}Hits`];
+  if (typeof power !== 'number' || typeof hits !== 'number') return undefined;
+  const rank = extra[`${row}Rank`];
+  const rest: Record<string, unknown> = { ...extra };
+  if (row === 'fail') for (const k of SUCCESS_ONLY_KEYS) delete rest[k];
+  return { ...def, power, hits, rank: typeof rank === 'number' ? rank : def.rank, extra: rest };
+}
+
 /** Reshape an Overdrive by its minigame outcome [ffx-combat-core §5.3, §5.6, §5.7]. */
 export function shapeOverdrive(
   ctx: Ctx,
@@ -28,11 +52,11 @@ export function shapeOverdrive(
     const success = result.kind === 'tidus-timing' ? result.timing.success : result.sequence.success;
     if (!success) {
       const failId = def.extra?.['failAbilityId'];
-      const failDef = typeof failId === 'string' ? abilityOf(ctx, failId) : undefined;
+      const failDef = typeof failId === 'string' ? abilityOf(ctx, failId) : rowFromExtra(def, 'fail');
       if (failDef) return { def: failDef, options };
     } else if (result.kind === 'auron-sequence' && result.sequence.targetImmuneToRider === true) {
       const immuneId = def.extra?.['immuneAbilityId'];
-      const immuneDef = typeof immuneId === 'string' ? abilityOf(ctx, immuneId) : undefined;
+      const immuneDef = typeof immuneId === 'string' ? abilityOf(ctx, immuneId) : rowFromExtra(def, 'immune');
       if (immuneDef) return { def: immuneDef, options };
     }
     return { def, options };
