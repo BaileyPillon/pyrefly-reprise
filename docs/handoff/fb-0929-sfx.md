@@ -135,3 +135,13 @@ Checks: `npx tsc --noEmit` clean; the two new files plus `tests/unit/audio.test.
   which cue replaces which (the damage event already plays the element), so it is an option for
   Bailey, not built. FFX-2 data has no `sfxKey` at all.
 - The in-browser probe measures RMS and peak, not K-weighted LUFS; the LUFS column is arithmetic.
+
+## CHECK (independent, 2026-09-29, did not build it)
+
+Method: fresh `vite build` of the branch (preview :8300), `tools/audio/sfx-probe.mjs` by real mouse clicks at 1600x900, `PYREFLY_BROWSER=gpu`, Chapter I (FFX) and Chapter IV (FFX-2), against the live site (release 31a, which is the origin/main build; origin/main 1c313c17 only adds docs since). Raw runs: `D:/Tools/pyrefly-scratch/fb-0929/sfx/check/chk-*.json`.
+
+- Default (no switch): `audioDebug().sfxMix` = `{a, 1, 0.35}`; the same cue names and per-cue gains as live (`sword-slash-1` 0.8, `hit-1` 0.8, `magic-charge` 0.7, `boss-roar` 0.9, `status-applied` 0.5); action-start to damage about 350 ms on both; levels against the music within run noise (Ch I `hit-1` RMS +1.7 dB branch, +1.2 live; `sword-slash-1` +1.6 / +0.3). The only cue difference is the miss: branch `whiff` x5 (Ch I), live `cancel`. Ch IV: same cue set, no misses in either run, its `cancel` cues are turn-start menu sounds at vol 1, unchanged. No errors in any run. Fights differ run to run (real-time RNG), so counts are not compared.
+- Switch: `b` Ch I `hit-1` RMS +7.5 dB / peak +2.3 dB, `sword-slash-1` +7.2 / +1.6; `c` +11.9 / +5.8 and +9.9 / +5.2; bus 0.70 and 1.107. Matches the handoff table within 1 dB.
+- Defect fix: with `miss: 'cancel'` restored, `audio-miss-cue.test.ts` fails 2 of 2 (`expected ['cancel'] to deeply equal ['whiff']`); restored to `whiff`, tree clean, passes.
+- `npx tsc --noEmit` clean; `audio-miss-cue`, `audio-sfx-mix`, `audio` tests: 38 pass. `git diff origin/main HEAD` touches nothing under `src/battle` or `src/data`; src changes are only AudioManager (bus gain via `sfxBusGain`, debug field), the new `sfxMix.ts`, and the `miss` fallback. `git merge-tree` against origin/main: clean.
+- Verdict: no blockers.
