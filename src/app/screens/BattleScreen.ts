@@ -59,6 +59,7 @@ import { presenterGameDeps } from './BattleScreenGameDeps.ts';
 import { getChapterMeta } from '../../data/chapter-meta.ts';
 import { withdrawLineFrom } from './withdrawal.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
+import { setPaceGame } from '../../engine/pace.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -293,6 +294,7 @@ export class BattleScreen extends Screen {
     const ownsOverlays = registered.damageNumbers || this.hud === null;
     const ownsBanner = registered.messageBar || this.hud === null;
 
+    setPaceGame(chapter.game); // the pacing option's presets are per game (`pace.ts`); inert at 'current'
     this.presenter = new BattlePresenter({
       stage: this.stage,
       hud: this.hud,
@@ -907,6 +909,7 @@ export class BattleScreen extends Screen {
 
   override exit(): void {
     this.exited = true;
+    setPaceGame('other'); // a cutscene or the board after the fight is never paced (`pace.ts`)
     window.removeEventListener('keydown', this.onPauseKey);
     // Settle the card's promise so nothing stays parked on it; `runEncounter`
     // sees `exited` and does not start the fight.

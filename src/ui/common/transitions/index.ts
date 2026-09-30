@@ -15,7 +15,8 @@
  */
 
 import './transitions.css';
-import { playWipe } from '../../inkgold/wipe.ts';
+import { DEFAULT_DURATION_MS, playWipe } from '../../inkgold/wipe.ts';
+import { paceFactor, paceGameOf } from '../../../engine/pace.ts';
 import type { GameId } from '../../../battle/common/types.ts';
 
 export type { SwirlOptions } from './swirl.ts';
@@ -32,8 +33,10 @@ export function playResultsWipe(
   game: GameId,
   onCover?: () => void,
 ): Promise<void> {
+  const f = paceFactor('transition', paceGameOf(game)); // the pacing option (`src/engine/pace.ts`), 1 unless picked
   return playWipe(root, {
     direction: game === 'ffx2' ? 'rtl' : 'ltr',
+    ...(f === 1 ? {} : { durationMs: DEFAULT_DURATION_MS * f }),
     ...(onCover ? { onCover } : {}),
   });
 }

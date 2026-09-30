@@ -1,4 +1,5 @@
 import './damage-numbers.css';
+import { paceRate } from '../../engine/pace.ts';
 import {
   bouncePosition,
   BURST_GAP_MS,
@@ -506,7 +507,7 @@ export class DamageNumbers {
 
   /** Advance every numeral's motion/fade and drop the ones whose lifetime has ended. */
   update(dt: number): void {
-    const dtMs = dt * 1000;
+    const dtMs = dt * 1000 * paceRate('numeral'); // the pacing option (`pace.ts`): a numeral held longer, 1 unless picked
     this.nowMs += dtMs;
     const survivors: ActiveNumber[] = [];
     // One layout read per frame, shared by every numeral: the layer's own box

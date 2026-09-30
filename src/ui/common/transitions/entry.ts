@@ -27,6 +27,7 @@ import { implosionPlayer } from './implosion.ts';
 import { prefersReducedMotion } from './reduceMotion.ts';
 import { shatterPlayer } from './shatter.ts';
 import { playBattleSwirl } from './swirl.ts';
+import { paceFactor, paceGameOf } from '../../../engine/pace.ts';
 
 /** How the battle was reached. */
 export type EntrySituation = 'scene' | 'skipped' | 'retry';
@@ -108,7 +109,9 @@ export async function playBattleEntry(root: HTMLElement, opts: BattleEntryOption
     });
     return;
   }
-  await playEntry(root, player, opts);
+  // The pacing option (`src/engine/pace.ts`, 1 unless picked) stretches the entry, per game.
+  const f = paceFactor('transition', paceGameOf(opts.game));
+  await playEntry(root, f === 1 ? player : { ...player, introMs: player.introMs * f, outMs: player.outMs * f }, opts);
 }
 
 function readLow(): boolean {

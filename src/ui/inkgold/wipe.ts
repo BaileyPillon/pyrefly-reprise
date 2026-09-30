@@ -42,7 +42,7 @@ interface ResolvedWipeOptions {
 }
 
 /** Not specified by the spec; split evenly between the cover and clear halves. */
-const DEFAULT_DURATION_MS = 480;
+export const DEFAULT_DURATION_MS = 480;
 /** Spec "Motion & camera": every wipe is diagonal at 19deg. */
 const WIPE_ANGLE_DEG = 19;
 const DEFAULT_COLOR = '#f4f1e8'; // --ig-paper

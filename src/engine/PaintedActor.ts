@@ -49,6 +49,7 @@ import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
+import { paceRate } from './pace.ts';
 
 /** One painted pose: a URL now, a texture once it has loaded. */
 export type PoseMap = Record<string, string>;
@@ -1851,7 +1852,7 @@ export class PaintedActor extends Group {
 
   /** @param dt seconds. Must be called every frame. */
   update(dt: number): void {
-    this.tweens.update(dt);
+    this.tweens.update(dt * paceRate('action')); // the pacing option (`pace.ts`): one-shot moves only, never the idle
     for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0, this.bloomMasked);
     this.clock += dt;
 
