@@ -1,0 +1,36 @@
+{
+  "_note": "D-293 (SFX balance b) save-compatibility fixture. Written by the release-30 build itself (main 1475ff6b, bundle index-B0cfXTil.js), served locally from its parked production gate dist (F:/pyrefly-parked/2026-09-29/rel30-dist-gate, the focused-review build of that release, whose bundle name matches docs/deploys.log) on 2026-09-30: a fresh headless profile, then that build's own SaveStore methods (recordAttempt, recordClear, addPlayTime, flushPlayTime, markCoachSeen, setSettings, save), then localStorage read back verbatim. Non-default values on purpose. The player moved the SFX slider (0.45), so D-293 must keep it. It has no sfxBalanceMigrated and no textSize: release 30 never wrote them.",
+  "release": "30",
+  "mainSha": "1475ff6b",
+  "bundle": "index-B0cfXTil.js",
+  "expect": {
+    "cleared": [
+      "seymour-flux",
+      "ffx2-bahamut"
+    ],
+    "notCleared": [
+      "yojimbo-cavern"
+    ],
+    "bestTimeMs": {
+      "seymour-flux": 498210,
+      "ffx2-bahamut": 655400
+    },
+    "storedSfxVolume": 0.45,
+    "settings": {
+      "masterVolume": 0.6,
+      "musicVolume": 0.5,
+      "sfxVolume": 0.45,
+      "textSpeed": 1.5,
+      "ffx2Atb": "active",
+      "ffx2AtbSpeed": "slow",
+      "guideVisible": false,
+      "advisorVisible": false,
+      "reduceMotion": true,
+      "pausePanelsHidden": true,
+      "battleHelp": false
+    }
+  },
+  "localStorage": {
+    "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1790742589577,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":true,\"bestTimeMs\":498210,\"bestTurns\":29,\"attempts\":2,\"playTimeMs\":0},\"ffx2-bahamut\":{\"id\":\"ffx2-bahamut\",\"cleared\":true,\"bestTimeMs\":655400,\"bestTurns\":44,\"attempts\":1,\"playTimeMs\":0},\"yojimbo-cavern\":{\"id\":\"yojimbo-cavern\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":1000}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.6,\"musicVolume\":0.5,\"sfxVolume\":0.45,\"textSpeed\":1.5,\"skipSeenCutscenes\":false,\"lowEffects\":false,\"guideVisible\":false,\"advisorVisible\":false,\"intentVisible\":true,\"ffx2Atb\":\"active\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":true,\"battleHelp\":false,\"reduceMotion\":true,\"ffx2AtbSpeed\":\"slow\"},\"seenCoach\":[\"briefing\"],\"flags\":{}}"
+  }
+}

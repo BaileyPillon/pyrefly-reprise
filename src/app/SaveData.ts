@@ -12,6 +12,7 @@ import { migrateFfx2Atb } from './saveFfx2Atb.ts';
 import { migrateComfort, type TextSize } from './saveComfort.ts';
 import { applyComfort } from './applyComfort.ts';
 import { writeMerged } from './saveMerge.ts';
+import { migrateSfxBalance, SFX_DEFAULT_VOLUME } from './saveSfxBalance.ts';
 
 export const SAVE_VERSION = 1;
 export const SAVE_KEY = 'pyrefly-reprise:save:v1';
@@ -59,6 +60,7 @@ export interface Settings {
   masterVolume: number;
   musicVolume: number;
   sfxVolume: number;
+  sfxBalanceMigrated?: boolean; // set once D-293's one-time migration ran (`saveSfxBalance.ts`); absent = older
   /** Battle message speed multiplier; 1 = normal. */
   textSpeed: number;
   /** Skip cutscenes already seen. */
@@ -186,8 +188,7 @@ export function defaultSettings(): Settings {
   return {
     masterVolume: 0.8,
     musicVolume: 0.7,
-    // D-210 (PR-0203): new profiles only; effects ~6 dB under the music (round 13's arithmetic).
-    sfxVolume: 0.35,
+    sfxVolume: SFX_DEFAULT_VOLUME, sfxBalanceMigrated: true, // D-293 (refines D-210): balance b, 0.35 +6 dB
     textSpeed: 1,
     skipSeenCutscenes: false,
     lowEffects: false,
@@ -274,8 +275,7 @@ export function migrate(raw: Partial<SaveData> & { version?: number }): SaveData
   if (typeof settings.battleHelp !== 'boolean') settings.battleHelp = base.settings.battleHelp;
   migrateComfort(settings, base.settings);
   migrateFfx2Atb(settings, raw.settings);
-  // D-210 lowers the default for new profiles only: a save that never stored a level was playing at 0.9.
-  if (raw.settings && !Number.isFinite(raw.settings.sfxVolume)) settings.sfxVolume = 0.9;
+  migrateSfxBalance(settings, raw.settings); // D-293: an untouched 0.35 follows the new default, once
   const out: SaveData = {
     ...base,
     ...raw,

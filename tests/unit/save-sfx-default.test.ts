@@ -26,17 +26,19 @@ function memoryStorage(seed?: [string, string]) {
 
 const PRE_D210_SFX = 0.9;
 
-describe('D-210: a new profile gets the lower effects default', () => {
-  it('fresh defaults put the SFX bus about 6 dB under the music peak (0.35)', () => {
-    expect(defaultSettings().sfxVolume).toBe(0.35);
-    expect(defaultSave().settings.sfxVolume).toBe(0.35);
+describe('D-210, as refined by D-293: the new-profile effects default', () => {
+  it('fresh defaults are balance b (D-293): 0.70, the D-210 level 0.35 +6 dB (docs/handoff/sfx-b.md)', () => {
+    expect(defaultSettings().sfxVolume).toBe(0.7);
+    expect(defaultSave().settings.sfxVolume).toBe(0.7);
     const store = new SaveStore('test:sfx-fresh', memoryStorage());
-    expect(store.settings.sfxVolume).toBe(0.35);
-    // rule 8 arithmetic from round 13: music peak on its bus, SFX peak on its bus
+    expect(store.settings.sfxVolume).toBe(0.7);
+    // round 13's peaks (sprite -1.13 dBTP, music -1.06 dBTP on its bus): the SFX bus now sits level
+    // with the music bus, so an effect's sample peak is within 0.1 dB of the music's (THEMES.md rule 8, D-293).
     const db = (x: number): number => 20 * Math.log10(x);
     const music = -1.06 + db(defaultSettings().musicVolume);
     const sfx = -1.13 + db(defaultSettings().sfxVolume);
-    expect(music - sfx).toBeGreaterThanOrEqual(6);
+    expect(Math.abs(music - sfx)).toBeLessThan(0.1);
+    expect(db(defaultSettings().sfxVolume / 0.35)).toBeCloseTo(6.02, 1);
   });
 
   it('an existing save keeps its stored effects level, the old 0.9 default included', () => {

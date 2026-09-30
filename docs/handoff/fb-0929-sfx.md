@@ -1,5 +1,9 @@
 # fb-0929-sfx: "no sound effects on attacks"
 
+> **Superseded in part by D-293 (2026-09-30, `docs/handoff/sfx-b.md`):** Bailey picked option b, which is now
+> the default (new-profile SFX 0.70). `?sfxmix=` stays for comparison, re-based on it: `a` = the old D-210 level,
+> `b` (or no parameter) = shipped, `c` = +4 dB more. The tables below are the measurements that led to the pick.
+
 Track of the 2026-09-29 feedback round. Branch `fb-0929-sfx` (from `origin/main` 1c313c17).
 Nothing here is deployed.
 

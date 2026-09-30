@@ -75,7 +75,8 @@ describe('a release-29 save upgrades (CHK-024, D-285)', () => {
     // Every stored setting survives verbatim; the only addition is textSize.
     for (const [k, v] of Object.entries(before.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     for (const [k, v] of Object.entries(fixture.expect.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
-    expect(Object.keys(after.settings).filter((k) => !(k in before.settings))).toEqual(['textSize']);
+    // ...plus D-293's one-time SFX balance marker (`saveSfxBalance.ts`); this save's 0.6 is kept above.
+    expect(Object.keys(after.settings).filter((k) => !(k in before.settings)).sort()).toEqual(['sfxBalanceMigrated', 'textSize']);
     expect(after.settings.textSize).toBe(1);
   });
 
