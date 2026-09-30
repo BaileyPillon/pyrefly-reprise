@@ -1,0 +1,1212 @@
+{
+ "serverPid": 73044,
+ "chapters": [
+  {
+   "ch": "I",
+   "id": "seymour-flux",
+   "game": "FFX",
+   "scene": [
+    "scene-gagazet"
+   ],
+   "battle": [
+    "boss-seymour"
+   ]
+  },
+  {
+   "ch": "II",
+   "id": "yunalesca",
+   "game": "FFX",
+   "scene": [
+    "scene-zanarkand-dome"
+   ],
+   "battle": [
+    "boss-yunalesca"
+   ]
+  },
+  {
+   "ch": "III",
+   "id": "braskas-final-aeon",
+   "game": "FFX",
+   "scene": [
+    "scene-dreams-end"
+   ],
+   "battle": [
+    "boss-jecht",
+    "boss-yu-yevon"
+   ]
+  },
+  {
+   "ch": "IV",
+   "id": "ffx2-bahamut",
+   "game": "FFX-2",
+   "scene": [
+    "scene-bevelle-underground"
+   ],
+   "battle": [
+    "boss-ffx2-aeon"
+   ]
+  },
+  {
+   "ch": "V",
+   "id": "ffx2-vegnagun-shuyin",
+   "game": "FFX-2",
+   "scene": [
+    "scene-farplane"
+   ],
+   "battle": [
+    "boss-vegnagun",
+    "boss-shuyin"
+   ]
+  },
+  {
+   "ch": "VI",
+   "id": "ffx2-leblanc",
+   "game": "FFX-2",
+   "scene": [
+    "scene-bevelle-underground"
+   ],
+   "battle": [
+    "boss-ffx2-aeon"
+   ]
+  },
+  {
+   "ch": "VII",
+   "id": "seymour-anima-macalania",
+   "game": "FFX",
+   "scene": [
+    "scene-macalania-temple"
+   ],
+   "battle": [
+    "boss-seymour-macalania"
+   ]
+  },
+  {
+   "ch": "VIII",
+   "id": "evrae-airship",
+   "game": "FFX",
+   "scene": [
+    "scene-fahrenheit"
+   ],
+   "battle": [
+    "boss-evrae"
+   ]
+  },
+  {
+   "ch": "IX",
+   "id": "yojimbo-cavern",
+   "game": "FFX",
+   "scene": [
+    "scene-gagazet"
+   ],
+   "battle": [
+    "boss-yojimbo"
+   ]
+  },
+  {
+   "ch": "X",
+   "id": "seymour-natus",
+   "game": "FFX",
+   "scene": [
+    "scene-gagazet"
+   ],
+   "battle": [
+    "boss-seymour-macalania"
+   ]
+  },
+  {
+   "ch": "XI",
+   "id": "ffx2-fallen-aeons",
+   "game": "FFX-2",
+   "scene": [
+    "scene-farplane"
+   ],
+   "battle": [
+    "boss-ffx2-aeon"
+   ]
+  },
+  {
+   "ch": "XII",
+   "id": "seymour-omnis",
+   "game": "FFX",
+   "scene": [
+    "scene-dreams-end"
+   ],
+   "battle": [
+    "boss-seymour"
+   ]
+  },
+  {
+   "ch": "XIII",
+   "id": "ffx2-trema",
+   "game": "FFX-2",
+   "scene": [
+    "scene-bevelle-underground"
+   ],
+   "battle": [
+    "scene-bevelle-underground",
+    "boss-ffx2-aeon"
+   ]
+  },
+  {
+   "ch": "XIV",
+   "id": "isaaru-via-purifico",
+   "game": "FFX",
+   "scene": [
+    "scene-gagazet"
+   ],
+   "battle": [
+    "boss-yojimbo"
+   ]
+  },
+  {
+   "ch": "XV",
+   "id": "ffx2-den-of-woe",
+   "game": "FFX-2",
+   "scene": [
+    "scene-bevelle-underground"
+   ],
+   "battle": [
+    "boss-shuyin"
+   ]
+  },
+  {
+   "ch": "XVI",
+   "id": "ffx2-ixion-djose",
+   "game": "FFX-2",
+   "scene": [
+    "scene-bevelle-underground"
+   ],
+   "battle": [
+    "boss-ffx2-aeon"
+   ]
+  },
+  {
+   "ch": "XVII",
+   "id": "sin-fins-core",
+   "game": "FFX",
+   "scene": [
+    "scene-fahrenheit"
+   ],
+   "battle": [
+    "boss-evrae"
+   ]
+  },
+  {
+   "ch": "XVIII",
+   "id": "sin-face",
+   "game": "FFX",
+   "scene": [
+    "scene-fahrenheit"
+   ],
+   "battle": [
+    "boss-evrae"
+   ]
+  }
+ ],
+ "cues": {
+  "scene-gagazet": {
+   "file": "music/scene-gagazet.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 106.33333333333333,
+   "manifestSec": 106.3333
+  },
+  "boss-seymour": {
+   "file": "music/boss-seymour.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 101.66179138321995,
+   "manifestSec": 101.6618
+  },
+  "scene-zanarkand-dome": {
+   "file": "music/scene-zanarkand-dome.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 129.16519274376418,
+   "manifestSec": 129.1652
+  },
+  "boss-yunalesca": {
+   "file": "music/boss-yunalesca.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 103.90909297052154,
+   "manifestSec": 103.9091
+  },
+  "scene-dreams-end": {
+   "file": "music/scene-dreams-end.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 104.05263038548753,
+   "manifestSec": 104.0526
+  },
+  "boss-jecht": {
+   "file": "music/boss-jecht.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 110.12167800453514,
+   "manifestSec": 110.1217
+  },
+  "boss-yu-yevon": {
+   "file": "music/boss-yu-yevon.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 218.6,
+   "manifestSec": 218.6
+  },
+  "scene-bevelle-underground": {
+   "file": "music/scene-bevelle-underground.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 108.6,
+   "manifestSec": 108.6
+  },
+  "boss-ffx2-aeon": {
+   "file": "music/boss-ffx2-aeon.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 117,
+   "manifestSec": 117
+  },
+  "scene-farplane": {
+   "file": "music/scene-farplane.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 107.3478231292517,
+   "manifestSec": 107.3478
+  },
+  "boss-vegnagun": {
+   "file": "music/boss-vegnagun.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 94.42857142857143,
+   "manifestSec": 94.4286
+  },
+  "boss-shuyin": {
+   "file": "music/boss-shuyin.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 105.79698412698413,
+   "manifestSec": 105.797
+  },
+  "scene-macalania-temple": {
+   "file": "music/scene-macalania-temple.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 63,
+   "manifestSec": 63
+  },
+  "boss-seymour-macalania": {
+   "file": "music/boss-seymour-macalania.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 124.9047619047619,
+   "manifestSec": 124.9048
+  },
+  "scene-fahrenheit": {
+   "file": "music/scene-fahrenheit.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 76.84614512471656,
+   "manifestSec": 76.8461
+  },
+  "boss-evrae": {
+   "file": "music/boss-evrae.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 83,
+   "manifestSec": 83
+  },
+  "boss-yojimbo": {
+   "file": "music/boss-yojimbo.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 90.27272108843538,
+   "manifestSec": 90.2727
+  },
+  "battle-ffx": {
+   "file": "music/battle-ffx.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 79.8,
+   "manifestSec": 79.8
+  },
+  "boss-dread": {
+   "file": "music/boss-dread.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 88.33333333333333,
+   "manifestSec": 88.3333
+  },
+  "chapter-select": {
+   "file": "music/chapter-select.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 77.77263038548753,
+   "manifestSec": 77.7726
+  },
+  "ending-ffx": {
+   "file": "music/ending-ffx.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 125.65374149659864,
+   "manifestSec": 125.6537
+  },
+  "ending-ffx2": {
+   "file": "music/ending-ffx2.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 119.33165532879819,
+   "manifestSec": 119.3317
+  },
+  "pause": {
+   "file": "music/pause.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 49.9565306122449,
+   "manifestSec": 49.9565
+  },
+  "title": {
+   "file": "music/title.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 97.82689342403629,
+   "manifestSec": 97.8269
+  },
+  "victory-ffx": {
+   "file": "music/victory-ffx.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 75.14650793650793,
+   "manifestSec": 75.1465
+  },
+  "victory-ffx2": {
+   "file": "music/victory-ffx2.mp3",
+   "status": 200,
+   "bytes": 0,
+   "decodedSec": 70.5,
+   "manifestSec": 70.5
+  }
+ },
+ "live": [
+  {
+   "label": "title",
+   "screen": "title",
+   "playing": "title",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": false
+   },
+   "gain": {
+    "name": "title",
+    "gain": 0.0002362007217016071
+   },
+   "want": [
+    "title"
+   ],
+   "after4s": {
+    "playing": "title",
+    "source": "prerendered",
+    "gain": {
+     "name": "title",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/title.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/title.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx-chapter-I-battle",
+   "screen": "battle",
+   "playing": "boss-seymour",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-seymour",
+    "gain": 0.0001239450357388705
+   },
+   "want": [
+    "boss-seymour"
+   ],
+   "after4s": {
+    "playing": "boss-seymour",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-seymour",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-seymour.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-seymour.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx-chapter-II-battle",
+   "screen": "battle",
+   "playing": "boss-yunalesca",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-yunalesca",
+    "gain": 0.00109621521551162
+   },
+   "want": [
+    "boss-yunalesca"
+   ],
+   "after4s": {
+    "playing": "boss-yunalesca",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-yunalesca",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-yunalesca.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-yunalesca.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx-chapter-III-battle",
+   "screen": "battle",
+   "playing": "boss-jecht",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-jecht",
+    "gain": 0.00015845130837988108
+   },
+   "want": [
+    "boss-jecht",
+    "boss-yu-yevon"
+   ],
+   "after4s": {
+    "playing": "boss-jecht",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-jecht",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-jecht.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-jecht.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx2-chapter-IV-battle",
+   "screen": "battle",
+   "playing": "boss-ffx2-aeon",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-ffx2-aeon",
+    "gain": 0.0005579078570008278
+   },
+   "want": [
+    "boss-ffx2-aeon"
+   ],
+   "after4s": {
+    "playing": "boss-ffx2-aeon",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-ffx2-aeon",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx2-chapter-V-battle",
+   "screen": "battle",
+   "playing": "boss-vegnagun",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-vegnagun",
+    "gain": 0.003979798406362534
+   },
+   "want": [
+    "boss-vegnagun",
+    "boss-shuyin"
+   ],
+   "after4s": {
+    "playing": "boss-vegnagun",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-vegnagun",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-vegnagun.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-vegnagun.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx2-chapter-VI-battle",
+   "screen": "battle",
+   "playing": "boss-ffx2-aeon",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-ffx2-aeon",
+    "gain": 0.0005036777583882213
+   },
+   "want": [
+    "boss-ffx2-aeon"
+   ],
+   "after4s": {
+    "playing": "boss-ffx2-aeon",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-ffx2-aeon",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx-chapter-VII-battle",
+   "screen": "battle",
+   "playing": "boss-seymour-macalania",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-seymour-macalania",
+    "gain": 0.0006916650454513729
+   },
+   "want": [
+    "boss-seymour-macalania"
+   ],
+   "after4s": {
+    "playing": "boss-seymour-macalania",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-seymour-macalania",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-seymour-macalania.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-seymour-macalania.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx-chapter-VIII-battle",
+   "screen": "battle",
+   "playing": "boss-evrae",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-evrae",
+    "gain": 0.00012780931137967855
+   },
+   "want": [
+    "boss-evrae"
+   ],
+   "after4s": {
+    "playing": "boss-evrae",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-evrae",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-evrae.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-evrae.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx-chapter-IX-battle",
+   "screen": "battle",
+   "playing": "boss-yojimbo",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-yojimbo",
+    "gain": 0.00010962152009597048
+   },
+   "want": [
+    "boss-yojimbo"
+   ],
+   "after4s": {
+    "playing": "boss-yojimbo",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-yojimbo",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-yojimbo.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-yojimbo.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx-chapter-X-battle",
+   "screen": "battle",
+   "playing": "boss-seymour-macalania",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-seymour-macalania",
+    "gain": 0.000314563512802124
+   },
+   "want": [
+    "boss-seymour-macalania"
+   ],
+   "after4s": {
+    "playing": "boss-seymour-macalania",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-seymour-macalania",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-seymour-macalania.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-seymour-macalania.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-seymour-macalania.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx2-chapter-XI-battle",
+   "screen": "battle",
+   "playing": "boss-ffx2-aeon",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-ffx2-aeon",
+    "gain": 0.0014014012413099408
+   },
+   "want": [
+    "boss-ffx2-aeon"
+   ],
+   "after4s": {
+    "playing": "boss-ffx2-aeon",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-ffx2-aeon",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx-chapter-XII-battle",
+   "screen": "battle",
+   "playing": "boss-seymour",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-seymour",
+    "gain": 0.00020051772298756987
+   },
+   "want": [
+    "boss-seymour"
+   ],
+   "after4s": {
+    "playing": "boss-seymour",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-seymour",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-seymour.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-seymour.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-seymour.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx2-chapter-XIII-battle",
+   "screen": "battle",
+   "playing": "scene-bevelle-underground",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "scene-bevelle-underground",
+    "gain": 0.0004364111227914691
+   },
+   "want": [
+    "scene-bevelle-underground",
+    "boss-ffx2-aeon"
+   ],
+   "after4s": {
+    "playing": "scene-bevelle-underground",
+    "source": "prerendered",
+    "gain": {
+     "name": "scene-bevelle-underground",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/scene-bevelle-underground.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/scene-bevelle-underground.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx-chapter-XIV-battle",
+   "screen": "battle",
+   "playing": "boss-yojimbo",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-yojimbo",
+    "gain": 0.00040213786996901035
+   },
+   "want": [
+    "boss-yojimbo"
+   ],
+   "after4s": {
+    "playing": "boss-yojimbo",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-yojimbo",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-yojimbo.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-yojimbo.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-yojimbo.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx2-chapter-XV-battle",
+   "screen": "battle",
+   "playing": "boss-shuyin",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-shuyin",
+    "gain": 0.0003113358689006418
+   },
+   "want": [
+    "boss-shuyin"
+   ],
+   "after4s": {
+    "playing": "boss-shuyin",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-shuyin",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-shuyin.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-shuyin.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx2-chapter-XVI-battle",
+   "screen": "battle",
+   "playing": "boss-ffx2-aeon",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-ffx2-aeon",
+    "gain": 0.00022210711904335767
+   },
+   "want": [
+    "boss-ffx2-aeon"
+   ],
+   "after4s": {
+    "playing": "boss-ffx2-aeon",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-ffx2-aeon",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx-chapter-XVII-battle",
+   "screen": "battle",
+   "playing": "boss-evrae",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-evrae",
+    "gain": 0.0005036777583882213
+   },
+   "want": [
+    "boss-evrae"
+   ],
+   "after4s": {
+    "playing": "boss-evrae",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-evrae",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-evrae.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-evrae.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-evrae.mp3",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "label": "ffx-chapter-XVIII-battle",
+   "screen": "battle",
+   "playing": "boss-evrae",
+   "source": "prerendered",
+   "ready": true,
+   "manifest": {
+    "manifest": true,
+    "cues": 26,
+    "sprite": true,
+    "spriteDecoded": true
+   },
+   "gain": {
+    "name": "boss-evrae",
+    "gain": 0.00040213786996901035
+   },
+   "want": [
+    "boss-evrae"
+   ],
+   "after4s": {
+    "playing": "boss-evrae",
+    "source": "prerendered",
+    "gain": {
+     "name": "boss-evrae",
+     "gain": 1
+    }
+   },
+   "ok": true,
+   "net": [
+    {
+     "url": "audio/music/boss-evrae.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-evrae.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-evrae.mp3",
+     "status": 200
+    },
+    {
+     "url": "audio/music/boss-evrae.mp3",
+     "status": 200
+    }
+   ]
+  }
+ ],
+ "console": [],
+ "maxDecodedDiffSec": 0.000045124716550049015,
+ "summary": {
+  "chapterCues": 26,
+  "cueFailures": [],
+  "maxDecodedDiffSec": 0.000045124716550049015,
+  "live": [
+   "title: title prerendered ok",
+   "ffx-chapter-I-battle: boss-seymour prerendered ok",
+   "ffx-chapter-II-battle: boss-yunalesca prerendered ok",
+   "ffx-chapter-III-battle: boss-jecht prerendered ok",
+   "ffx2-chapter-IV-battle: boss-ffx2-aeon prerendered ok",
+   "ffx2-chapter-V-battle: boss-vegnagun prerendered ok",
+   "ffx2-chapter-VI-battle: boss-ffx2-aeon prerendered ok",
+   "ffx-chapter-VII-battle: boss-seymour-macalania prerendered ok",
+   "ffx-chapter-VIII-battle: boss-evrae prerendered ok",
+   "ffx-chapter-IX-battle: boss-yojimbo prerendered ok",
+   "ffx-chapter-X-battle: boss-seymour-macalania prerendered ok",
+   "ffx2-chapter-XI-battle: boss-ffx2-aeon prerendered ok",
+   "ffx-chapter-XII-battle: boss-seymour prerendered ok",
+   "ffx2-chapter-XIII-battle: scene-bevelle-underground prerendered ok",
+   "ffx-chapter-XIV-battle: boss-yojimbo prerendered ok",
+   "ffx2-chapter-XV-battle: boss-shuyin prerendered ok",
+   "ffx2-chapter-XVI-battle: boss-ffx2-aeon prerendered ok",
+   "ffx-chapter-XVII-battle: boss-evrae prerendered ok",
+   "ffx-chapter-XVIII-battle: boss-evrae prerendered ok"
+  ]
+ }
+}

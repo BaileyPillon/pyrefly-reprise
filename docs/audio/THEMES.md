@@ -579,6 +579,8 @@ actually matters — **the one thing the cue must leave behind**.
 
 **How each cue ships (2026-09-29, D-283).** Bailey: "all your recommendations, full speed ahead." The score above is unchanged; what plays is the sampled render of it restyled by Direction B (`docs/audio/direction-b-2026-09-27.md`) and then put through remaster R1 "focus" (`docs/audio/remaster-2026-09-29/README.md`, `tools/audio/remaster-score.mjs`). Every figure is a measurement of the shipped MP3 (`docs/audio/soundtrack-r1-2026-09-29.json`); nobody here heard it (rule 13). A cue that failed a gate keeps today's file. Re-rendering a cue with `tools/audio/render.mjs` would replace its R1 file with a plain sampled render: re-run `tools/audio/remaster-score.mjs` for it instead.
 
+**The encode (2026-09-30, D-292, music O1).** Bailey, 2026-09-29: "yes, all your recommendations". Every one of the 26 cues is now an MP3 at LAME V0 (`libmp3lame -q:a 0`), not the q5 (about 125 kbps) it shipped at on 09-29. Only the final encode changed: the music, loop points (to the sample), seam crossfade, 3 s run-on, -16 LUFS gain and score fingerprint are the ones above, and each cue's q5 twin from the same chain is byte-identical to the file that shipped (26 of 26), so the lossless twin is exactly what the encoder was given. 23 cues come from their Direction B master through R1 (`tools/audio/r1-encode.py`); `boss-vegnagun` and `scene-bevelle-underground`, which never passed the R1 stereo gate, keep today's sampled render and are encoded from its lossless twin (`tools/audio/render.mjs --wav`, which reproduces the shipped bytes at q5). Measured on the whole score (`docs/audio/music-o1-2026-09-30.json`; median over 26 cues, before then after): the encoder's lowpass wall of 41 dB at 16.6 kHz is gone (the steepest step above 10 kHz is 9 dB); coding noise against the lossless twin falls from -8.2 to -17.9 dB below the music at 6-12 kHz and from -3.3 to -13.6 dB at 12-16 kHz; noise before sharp attacks falls from -10.8 to -20.0 dB; whole-file signal over coding error rises from 26 to 37 dB. It does **not** change attack speed (the 10-90 % rise of the 2-8 kHz envelope stays within about 1.5 ms of the lossless twin's, 10-16 ms on four cues checked, and comes from the AI and R1 stages, not the encoder) or the AI's tonal character; nobody here heard it (rule 13). Cost: the music grows from 40.2 MB to 78.2 MB (x1.94; 80.9 MB with the sfx sprite), and the shipping budget in `tools/audio/manifest-io.mjs` (`AUDIO_BUDGET_BYTES`) is 85 MB instead of 60 MB. Re-encode with `tools/audio/music-o1-ship.py` (not `render.mjs`, which writes q5 again).
+
 | Cue | Game | Ships as | L/R corr | side/mid dB | mono-sum loss dB |
 |---|---|---|---|---|---|
 | `battle-ffx` | FFX | Direction B + R1 | 0.737 | -7.8 | -0.7 |
@@ -589,7 +591,7 @@ actually matters — **the one thing the cue must leave behind**.
 | `boss-seymour-macalania` | FFX | Direction B + R1 | 0.779 | -8.2 | -0.6 |
 | `boss-seymour` | FFX | Direction B + R1 | 0.773 | -8.3 | -0.6 |
 | `boss-shuyin` | FFX-2 | Direction B + R1 | 0.72 | -7.4 | -0.7 |
-| `boss-vegnagun` | FFX-2 | **today's sampled render, kept**: its R1 take measured L/R 0.553, side -5.3 dB, mono-sum loss -1.1 dB (gates 0.6-0.85, -10..-6, under 1 dB) | 0.83 | -10.3 | -0.4 |
+| `boss-vegnagun` | FFX-2 | **today's sampled render, kept (V0 encode since D-292)**: its R1 take measured L/R 0.553, side -5.3 dB, mono-sum loss -1.1 dB (gates 0.6-0.85, -10..-6, under 1 dB) | 0.83 | -10.3 | -0.4 |
 | `boss-yojimbo` | FFX | Direction B + R1 | 0.807 | -8.5 | -0.6 |
 | `boss-yu-yevon` | FFX | Direction B + R1 | 0.836 | -9.3 | -0.5 |
 | `boss-yunalesca` | FFX | Direction B + R1 | 0.766 | -8.5 | -0.6 |
@@ -597,7 +599,7 @@ actually matters — **the one thing the cue must leave behind**.
 | `ending-ffx2` | FFX-2 | Direction B + R1 | 0.771 | -8.2 | -0.6 |
 | `ending-ffx` | FFX | Direction B + R1 | 0.77 | -8.5 | -0.6 |
 | `pause` | both | Direction B + R1 | 0.753 | -8.2 | -0.6 |
-| `scene-bevelle-underground` | FFX-2 | **today's sampled render, kept**: its R1 take measured L/R 0.548, side -5.0 dB, mono-sum loss -1.2 dB | 0.835 | -10.5 | -0.4 |
+| `scene-bevelle-underground` | FFX-2 | **today's sampled render, kept (V0 encode since D-292)**: its R1 take measured L/R 0.548, side -5.0 dB, mono-sum loss -1.2 dB | 0.835 | -10.5 | -0.4 |
 | `scene-dreams-end` | FFX | Direction B + R1 | 0.797 | -8.5 | -0.6 |
 | `scene-fahrenheit` | FFX | Direction B + R1 | 0.788 | -8.7 | -0.5 |
 | `scene-farplane` | FFX-2 | Direction B + R1 | 0.82 | -8.6 | -0.6 |

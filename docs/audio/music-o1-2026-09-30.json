@@ -1,0 +1,2089 @@
+{
+ "what": "D-292 music O1: every shipped music cue re-encoded at LAME V0 (libmp3lame -q:a 0) from its lossless master, measured before (the shipped q5 file) and after. Measurement only: no agent can hear (AGENTS.md rule 13).",
+ "game": "both",
+ "decision": "Bailey, 2026-09-29: \"yes, all your recommendations\" (O1 for the whole score).",
+ "tools": [
+  "tools/audio/music-o1-ship.py",
+  "tools/audio/r1-encode.py",
+  "tools/audio/music-o1-measure.py",
+  "tools/audio/quality-measure.py",
+  "tools/audio/qa.mjs"
+ ],
+ "reproduction": "each cue's q5 twin (the same chain at the shipped -q:a 5) is byte-identical to the shipped file: 26 of 26",
+ "gates": {
+  "lufs": "-16 +/- 0.5 (tools/audio/qa.mjs decode)",
+  "truePeakMax": -1,
+  "seam": "qa.mjs seam step and flux <= 2x",
+  "qaStrictFindings": 0
+ },
+ "totals": {
+  "musicBytesBefore": 40236071,
+  "musicBytesAfter": 78216163,
+  "factor": 1.944,
+  "sfxBytes": 2709777,
+  "shippedBytesAfter": 80925940
+ },
+ "columns": {
+  "topEdge70Hz": "highest frequency where the long-term spectrum is within 70 dB of its maximum",
+  "lowpassCliff": "steepest drop above 10 kHz over 500 Hz: dB and where (the encoder wall)",
+  "nmrBandsDb": "coding error over signal per band 20-80/80-250/250-800/800-2.5k/2.5-6k/6-12k/12-16k/16k+ Hz, dB, against the lossless twin (lower is better; the 16k+ band is the lowpass itself)",
+  "preEchoDb": "coding error over signal in the 20 ms before the 40 strongest attacks (lower is better)",
+  "snrDb": "whole-file signal over coding error"
+ },
+ "cues": [
+  {
+   "cue": "battle-ffx",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "69018f03a1e02488aa19d3ef90623171084bc08f",
+   "before": {
+    "bytes": 1290870,
+    "lufs": -16.0,
+    "truePeakDb": -1.3,
+    "topEdge70Hz": 16807,
+    "lowpassCliff": {
+     "db": 29.5,
+     "hz": 16909
+    },
+    "hfFlatnessDb": -8.1,
+    "riseMs": 13.0,
+    "corr": 0.737,
+    "lra": 6.5,
+    "snrDb": 24.3,
+    "nmrBandsDb": [
+     -29.0,
+     -29.6,
+     -27.9,
+     -20.8,
+     -14.2,
+     -8.2,
+     -4.9,
+     -0.0
+    ],
+    "preEchoDb": -10.8,
+    "lostTopDb": 22.8,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.18,
+     "truePeakDb": -1.27,
+     "seamStep": 0.00755,
+     "seamAllowed": 0.02287,
+     "seamFluxRatio": 0.25,
+     "tilt": -7.9,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 2483481,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 18885,
+    "lowpassCliff": {
+     "db": 10.1,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -7.7,
+    "riseMs": 13.0,
+    "corr": 0.739,
+    "lra": 6.5,
+    "snrDb": 36.6,
+    "nmrBandsDb": [
+     -42.2,
+     -41.8,
+     -39.7,
+     -33.2,
+     -26.9,
+     -19.5,
+     -14.5,
+     -2.9
+    ],
+    "preEchoDb": -19.6,
+    "lostTopDb": 2.1,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.18,
+     "truePeakDb": -1.48,
+     "seamStep": 0.00631,
+     "seamAllowed": 0.02346,
+     "seamFluxRatio": 0.26,
+     "tilt": -8.0,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "boss-dread",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "1da5ef1113ede7f0d4f5fe72af30080c5ee00c3f",
+   "before": {
+    "bytes": 1347754,
+    "lufs": -16.0,
+    "truePeakDb": -1.2,
+    "topEdge70Hz": 16075,
+    "lowpassCliff": {
+     "db": 40.6,
+     "hz": 16607
+    },
+    "hfFlatnessDb": -7.7,
+    "riseMs": 13.5,
+    "corr": 0.782,
+    "lra": 6.4,
+    "snrDb": 26.5,
+    "nmrBandsDb": [
+     -31.9,
+     -30.9,
+     -29.1,
+     -21.9,
+     -14.0,
+     -7.9,
+     -2.8,
+     0.0
+    ],
+    "preEchoDb": -10.8,
+    "lostTopDb": 27.6,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.16,
+     "truePeakDb": -1.17,
+     "seamStep": 0.00163,
+     "seamAllowed": 0.00738,
+     "seamFluxRatio": 0.35,
+     "tilt": -9.5,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 2565132,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16328,
+    "lowpassCliff": {
+     "db": 12.6,
+     "hz": 16473
+    },
+    "hfFlatnessDb": -7.5,
+    "riseMs": 13.0,
+    "corr": 0.784,
+    "lra": 6.4,
+    "snrDb": 36.3,
+    "nmrBandsDb": [
+     -42.4,
+     -41.0,
+     -39.0,
+     -31.7,
+     -23.6,
+     -17.0,
+     -13.0,
+     -0.1
+    ],
+    "preEchoDb": -19.9,
+    "lostTopDb": 16.3,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.17,
+     "truePeakDb": -1.48,
+     "seamStep": 0.00177,
+     "seamAllowed": 0.00748,
+     "seamFluxRatio": 0.35,
+     "tilt": -9.5,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "boss-evrae",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "e1436fdb7d4fb714f6a59a798f6740d9c2e99521",
+   "before": {
+    "bytes": 1310350,
+    "lufs": -16.0,
+    "truePeakDb": -1.3,
+    "topEdge70Hz": 16656,
+    "lowpassCliff": {
+     "db": 45.0,
+     "hz": 16694
+    },
+    "hfFlatnessDb": -11.2,
+    "riseMs": 21.0,
+    "corr": 0.733,
+    "lra": 10.4,
+    "snrDb": 26.6,
+    "nmrBandsDb": [
+     -31.6,
+     -30.7,
+     -28.9,
+     -22.7,
+     -17.5,
+     -9.5,
+     -4.6,
+     0.0
+    ],
+    "preEchoDb": -9.7,
+    "lostTopDb": 23.4,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.18,
+     "truePeakDb": -1.29,
+     "seamStep": 0.00467,
+     "seamAllowed": 0.02168,
+     "seamFluxRatio": 0.67,
+     "tilt": -8.5,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 2512223,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16979,
+    "lowpassCliff": {
+     "db": 10.1,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -10.1,
+    "riseMs": 15.5,
+    "corr": 0.734,
+    "lra": 10.4,
+    "snrDb": 37.3,
+    "nmrBandsDb": [
+     -42.6,
+     -41.7,
+     -39.5,
+     -33.6,
+     -28.3,
+     -19.9,
+     -14.4,
+     -1.6
+    ],
+    "preEchoDb": -18.9,
+    "lostTopDb": 4.5,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.18,
+     "truePeakDb": -1.5,
+     "seamStep": 0.00245,
+     "seamAllowed": 0.02167,
+     "seamFluxRatio": 0.67,
+     "tilt": -8.4,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "boss-ffx2-aeon",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "0537a7a6702b91afaee1d12e1e791809491578c3",
+   "before": {
+    "bytes": 1837612,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16128,
+    "lowpassCliff": {
+     "db": 41.2,
+     "hz": 16602
+    },
+    "hfFlatnessDb": -7.7,
+    "riseMs": 18.0,
+    "corr": 0.699,
+    "lra": 5.2,
+    "snrDb": 27.4,
+    "nmrBandsDb": [
+     -32.6,
+     -31.4,
+     -28.9,
+     -23.4,
+     -14.5,
+     -8.7,
+     -3.7,
+     0.0
+    ],
+    "preEchoDb": -10.6,
+    "lostTopDb": 26.9,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.14,
+     "truePeakDb": -1.48,
+     "seamStep": 0.00174,
+     "seamAllowed": 0.04422,
+     "seamFluxRatio": 1.0,
+     "tilt": -8.1,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3468368,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16328,
+    "lowpassCliff": {
+     "db": 8.7,
+     "hz": 16451
+    },
+    "hfFlatnessDb": -7.6,
+    "riseMs": 14.5,
+    "corr": 0.7,
+    "lra": 5.2,
+    "snrDb": 37.0,
+    "nmrBandsDb": [
+     -42.7,
+     -41.4,
+     -38.5,
+     -33.1,
+     -23.8,
+     -17.7,
+     -13.4,
+     -0.3
+    ],
+    "preEchoDb": -19.7,
+    "lostTopDb": 10.7,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.15,
+     "truePeakDb": -1.46,
+     "seamStep": 0.00296,
+     "seamAllowed": 0.04417,
+     "seamFluxRatio": 1.01,
+     "tilt": -8.1,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "boss-jecht",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "e325b67ecbe2945a548f02ca5a0844747394e8a1",
+   "before": {
+    "bytes": 1785215,
+    "lufs": -16.0,
+    "truePeakDb": -1.3,
+    "topEdge70Hz": 15305,
+    "lowpassCliff": {
+     "db": 35.2,
+     "hz": 16564
+    },
+    "hfFlatnessDb": -10.6,
+    "riseMs": 20.5,
+    "corr": 0.823,
+    "lra": 5.4,
+    "snrDb": 25.6,
+    "nmrBandsDb": [
+     -30.6,
+     -31.7,
+     -28.7,
+     -23.1,
+     -16.7,
+     -9.6,
+     -3.3,
+     -0.0
+    ],
+    "preEchoDb": -11.6,
+    "lostTopDb": 28.1,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.13,
+     "truePeakDb": -1.28,
+     "seamStep": 0.04029,
+     "seamAllowed": 0.07776,
+     "seamFluxRatio": 0.32,
+     "tilt": -8.6,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3312113,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 15929,
+    "lowpassCliff": {
+     "db": 10.6,
+     "hz": 16473
+    },
+    "hfFlatnessDb": -10.3,
+    "riseMs": 15.0,
+    "corr": 0.826,
+    "lra": 5.4,
+    "snrDb": 34.8,
+    "nmrBandsDb": [
+     -40.4,
+     -41.1,
+     -37.9,
+     -32.3,
+     -25.8,
+     -18.2,
+     -13.1,
+     -0.1
+    ],
+    "preEchoDb": -20.3,
+    "lostTopDb": 14.3,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.14,
+     "truePeakDb": -1.49,
+     "seamStep": 0.02503,
+     "seamAllowed": 0.07147,
+     "seamFluxRatio": 0.31,
+     "tilt": -8.6,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "boss-seymour",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "674b8a9cd23d13b54caf4a50739a990eb827f4d3",
+   "before": {
+    "bytes": 1584132,
+    "lufs": -15.9,
+    "truePeakDb": -1.4,
+    "topEdge70Hz": 16543,
+    "lowpassCliff": {
+     "db": 43.8,
+     "hz": 16640
+    },
+    "hfFlatnessDb": -8.2,
+    "riseMs": 13.5,
+    "corr": 0.773,
+    "lra": 7.3,
+    "snrDb": 25.2,
+    "nmrBandsDb": [
+     -29.5,
+     -30.0,
+     -28.3,
+     -21.3,
+     -13.8,
+     -7.5,
+     -3.1,
+     0.0
+    ],
+    "preEchoDb": -11.4,
+    "lostTopDb": 25.7,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.07,
+     "truePeakDb": -1.42,
+     "seamStep": 0.01663,
+     "seamAllowed": 0.05418,
+     "seamFluxRatio": 0.86,
+     "tilt": -8.8,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 2960096,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16624,
+    "lowpassCliff": {
+     "db": 9.8,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -8.1,
+    "riseMs": 15.0,
+    "corr": 0.775,
+    "lra": 7.3,
+    "snrDb": 35.4,
+    "nmrBandsDb": [
+     -40.6,
+     -40.6,
+     -38.6,
+     -31.5,
+     -23.8,
+     -17.2,
+     -13.1,
+     -0.3
+    ],
+    "preEchoDb": -20.5,
+    "lostTopDb": 9.5,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.08,
+     "truePeakDb": -1.53,
+     "seamStep": 0.01252,
+     "seamAllowed": 0.05448,
+     "seamFluxRatio": 0.84,
+     "tilt": -8.9,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "boss-seymour-macalania",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "8bbce7de71a50ddd7988bca2604d37c8175c7a4b",
+   "before": {
+    "bytes": 2039515,
+    "lufs": -16.0,
+    "truePeakDb": -1.2,
+    "topEdge70Hz": 16817,
+    "lowpassCliff": {
+     "db": 28.8,
+     "hz": 17243
+    },
+    "hfFlatnessDb": -7.5,
+    "riseMs": 31.5,
+    "corr": 0.779,
+    "lra": 7.4,
+    "snrDb": 25.0,
+    "nmrBandsDb": [
+     -31.5,
+     -31.0,
+     -28.7,
+     -22.0,
+     -14.7,
+     -8.8,
+     -5.7,
+     -0.0
+    ],
+    "preEchoDb": -11.3,
+    "lostTopDb": 22.0,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.13,
+     "truePeakDb": -1.19,
+     "seamStep": 0.02813,
+     "seamAllowed": 0.07575,
+     "seamFluxRatio": 0.44,
+     "tilt": -6.9,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3851212,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 18766,
+    "lowpassCliff": {
+     "db": 9.6,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -7.2,
+    "riseMs": 31.0,
+    "corr": 0.781,
+    "lra": 7.4,
+    "snrDb": 36.3,
+    "nmrBandsDb": [
+     -42.9,
+     -42.1,
+     -40.0,
+     -33.5,
+     -26.2,
+     -19.8,
+     -15.0,
+     -2.7
+    ],
+    "preEchoDb": -20.6,
+    "lostTopDb": 2.5,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.14,
+     "truePeakDb": -1.45,
+     "seamStep": 0.02382,
+     "seamAllowed": 0.06931,
+     "seamFluxRatio": 0.45,
+     "tilt": -6.9,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "boss-shuyin",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "e914e048c01ac891e71a53761ee65417c236beac",
+   "before": {
+    "bytes": 1550987,
+    "lufs": -16.0,
+    "truePeakDb": -1.3,
+    "topEdge70Hz": 15902,
+    "lowpassCliff": {
+     "db": 38.6,
+     "hz": 16607
+    },
+    "hfFlatnessDb": -10.7,
+    "riseMs": 9.0,
+    "corr": 0.72,
+    "lra": 7.5,
+    "snrDb": 27.7,
+    "nmrBandsDb": [
+     -34.9,
+     -31.3,
+     -30.4,
+     -21.2,
+     -14.7,
+     -7.7,
+     -2.5,
+     -0.0
+    ],
+    "preEchoDb": -10.1,
+    "lostTopDb": 28.4,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.13,
+     "truePeakDb": -1.3,
+     "seamStep": 0.00746,
+     "seamAllowed": 0.02279,
+     "seamFluxRatio": 0.35,
+     "tilt": -10.7,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3078838,
+    "lufs": -16.0,
+    "truePeakDb": -1.4,
+    "topEdge70Hz": 16247,
+    "lowpassCliff": {
+     "db": 7.9,
+     "hz": 16451
+    },
+    "hfFlatnessDb": -10.6,
+    "riseMs": 10.0,
+    "corr": 0.721,
+    "lra": 7.5,
+    "snrDb": 37.6,
+    "nmrBandsDb": [
+     -45.4,
+     -41.5,
+     -40.1,
+     -31.2,
+     -24.6,
+     -17.1,
+     -13.0,
+     -0.3
+    ],
+    "preEchoDb": -17.8,
+    "lostTopDb": 10.4,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.13,
+     "truePeakDb": -1.43,
+     "seamStep": 0.00348,
+     "seamAllowed": 0.02362,
+     "seamFluxRatio": 0.36,
+     "tilt": -10.6,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "boss-vegnagun",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "84d97d0daae2e7d2359e07e70db0cf5ecbfab8c1",
+   "before": {
+    "bytes": 1825702,
+    "lufs": -15.9,
+    "truePeakDb": -1.2,
+    "topEdge70Hz": 16451,
+    "lowpassCliff": {
+     "db": 34.1,
+     "hz": 17270
+    },
+    "hfFlatnessDb": -8.2,
+    "riseMs": 4.0,
+    "corr": 0.83,
+    "lra": 5.5,
+    "snrDb": 31.8,
+    "nmrBandsDb": [
+     -39.5,
+     -33.6,
+     -28.8,
+     -21.4,
+     -13.2,
+     -7.9,
+     -2.1,
+     -0.0
+    ],
+    "preEchoDb": -8.1,
+    "lostTopDb": 17.2,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -15.98,
+     "truePeakDb": -1.19,
+     "seamStep": 0.03941,
+     "seamAllowed": 0.06883,
+     "seamFluxRatio": 1.0,
+     "tilt": -9.0,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3345784,
+    "lufs": -15.9,
+    "truePeakDb": -1.3,
+    "topEdge70Hz": 22050,
+    "lowpassCliff": {
+     "db": 1.0,
+     "hz": 16430
+    },
+    "hfFlatnessDb": -8.4,
+    "riseMs": 5.0,
+    "corr": 0.83,
+    "lra": 5.5,
+    "snrDb": 42.3,
+    "nmrBandsDb": [
+     -51.2,
+     -44.8,
+     -39.1,
+     -31.8,
+     -23.1,
+     -16.8,
+     -12.8,
+     -2.9
+    ],
+    "preEchoDb": -16.0,
+    "lostTopDb": 1.4,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -15.98,
+     "truePeakDb": -1.34,
+     "seamStep": 0.05826,
+     "seamAllowed": 0.0965,
+     "seamFluxRatio": 1.0,
+     "tilt": -9.0,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "boss-yojimbo",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "0904ce59eb4c30897d4569f894f7e60582412761",
+   "before": {
+    "bytes": 1357559,
+    "lufs": -16.0,
+    "truePeakDb": -1.4,
+    "topEdge70Hz": 16317,
+    "lowpassCliff": {
+     "db": 42.1,
+     "hz": 16602
+    },
+    "hfFlatnessDb": -10.8,
+    "riseMs": 11.0,
+    "corr": 0.807,
+    "lra": 6.0,
+    "snrDb": 26.3,
+    "nmrBandsDb": [
+     -31.3,
+     -30.9,
+     -29.5,
+     -22.2,
+     -13.4,
+     -7.5,
+     -3.2,
+     -0.0
+    ],
+    "preEchoDb": -11.5,
+    "lostTopDb": 27.7,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.16,
+     "truePeakDb": -1.37,
+     "seamStep": 0.00702,
+     "seamAllowed": 0.02765,
+     "seamFluxRatio": 0.36,
+     "tilt": -9.7,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 2626957,
+    "lufs": -16.0,
+    "truePeakDb": -1.4,
+    "topEdge70Hz": 16586,
+    "lowpassCliff": {
+     "db": 7.9,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -10.6,
+    "riseMs": 13.0,
+    "corr": 0.808,
+    "lra": 6.0,
+    "snrDb": 36.9,
+    "nmrBandsDb": [
+     -42.0,
+     -41.7,
+     -40.1,
+     -32.7,
+     -24.2,
+     -18.5,
+     -13.6,
+     -0.6
+    ],
+    "preEchoDb": -20.9,
+    "lostTopDb": 7.7,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.17,
+     "truePeakDb": -1.37,
+     "seamStep": 0.01013,
+     "seamAllowed": 0.02945,
+     "seamFluxRatio": 0.39,
+     "tilt": -9.7,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "boss-yu-yevon",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "3316b753008502532ec9776f4caf670b21fb5fc7",
+   "before": {
+    "bytes": 3231947,
+    "lufs": -16.0,
+    "truePeakDb": -1.4,
+    "topEdge70Hz": 15999,
+    "lowpassCliff": {
+     "db": 40.4,
+     "hz": 16607
+    },
+    "hfFlatnessDb": -6.0,
+    "riseMs": 7.5,
+    "corr": 0.836,
+    "lra": 7.6,
+    "snrDb": 28.2,
+    "nmrBandsDb": [
+     -32.2,
+     -31.6,
+     -29.3,
+     -26.7,
+     -14.9,
+     -7.9,
+     -2.6,
+     0.0
+    ],
+    "preEchoDb": -11.7,
+    "lostTopDb": 28.4,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.14,
+     "truePeakDb": -1.4,
+     "seamStep": 0.00143,
+     "seamAllowed": 0.02688,
+     "seamFluxRatio": 0.57,
+     "tilt": -9.4,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 6314200,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16328,
+    "lowpassCliff": {
+     "db": 9.9,
+     "hz": 16462
+    },
+    "hfFlatnessDb": -5.5,
+    "riseMs": 7.5,
+    "corr": 0.837,
+    "lra": 7.5,
+    "snrDb": 38.3,
+    "nmrBandsDb": [
+     -42.6,
+     -41.9,
+     -39.5,
+     -36.8,
+     -25.0,
+     -17.2,
+     -13.1,
+     -0.2
+    ],
+    "preEchoDb": -20.6,
+    "lostTopDb": 12.1,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.15,
+     "truePeakDb": -1.49,
+     "seamStep": 0.00666,
+     "seamAllowed": 0.02662,
+     "seamFluxRatio": 0.55,
+     "tilt": -9.4,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "boss-yunalesca",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "22aec968b90b67e0b390eb322fa6e1db15290f15",
+   "before": {
+    "bytes": 1561799,
+    "lufs": -16.0,
+    "truePeakDb": -1.3,
+    "topEdge70Hz": 16468,
+    "lowpassCliff": {
+     "db": 40.8,
+     "hz": 16651
+    },
+    "hfFlatnessDb": -7.4,
+    "riseMs": 27.5,
+    "corr": 0.766,
+    "lra": 8.3,
+    "snrDb": 26.1,
+    "nmrBandsDb": [
+     -29.8,
+     -30.3,
+     -28.3,
+     -21.7,
+     -13.4,
+     -7.5,
+     -3.2,
+     0.0
+    ],
+    "preEchoDb": -9.8,
+    "lostTopDb": 26.0,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.08,
+     "truePeakDb": -1.31,
+     "seamStep": 0.01498,
+     "seamAllowed": 0.06064,
+     "seamFluxRatio": 0.38,
+     "tilt": -9.2,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3040951,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16737,
+    "lowpassCliff": {
+     "db": 8.3,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -7.3,
+    "riseMs": 29.5,
+    "corr": 0.766,
+    "lra": 8.3,
+    "snrDb": 37.2,
+    "nmrBandsDb": [
+     -41.4,
+     -41.8,
+     -39.6,
+     -33.0,
+     -24.2,
+     -17.4,
+     -13.6,
+     -1.0
+    ],
+    "preEchoDb": -19.7,
+    "lostTopDb": 5.1,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.09,
+     "truePeakDb": -1.48,
+     "seamStep": 0.01146,
+     "seamAllowed": 0.05458,
+     "seamFluxRatio": 0.37,
+     "tilt": -9.3,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "chapter-select",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "7f3c1e5f7202d90b987aa7e6a54eb441033bdf07",
+   "before": {
+    "bytes": 1149713,
+    "lufs": -16.0,
+    "truePeakDb": -1.1,
+    "topEdge70Hz": 16494,
+    "lowpassCliff": {
+     "db": 38.3,
+     "hz": 16564
+    },
+    "hfFlatnessDb": -9.9,
+    "riseMs": 17.0,
+    "corr": 0.741,
+    "lra": 10.3,
+    "snrDb": 27.0,
+    "nmrBandsDb": [
+     -22.3,
+     -31.5,
+     -30.8,
+     -23.6,
+     -15.2,
+     -7.5,
+     -3.4,
+     0.0
+    ],
+    "preEchoDb": -11.7,
+    "lostTopDb": 26.0,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.12,
+     "truePeakDb": -1.13,
+     "seamStep": 0.00122,
+     "seamAllowed": 0.00347,
+     "seamFluxRatio": 0.02,
+     "tilt": -9.6,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 2313322,
+    "lufs": -16.0,
+    "truePeakDb": -1.4,
+    "topEdge70Hz": 16941,
+    "lowpassCliff": {
+     "db": 9.1,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -9.5,
+    "riseMs": 14.5,
+    "corr": 0.743,
+    "lra": 10.3,
+    "snrDb": 38.5,
+    "nmrBandsDb": [
+     -34.7,
+     -44.0,
+     -42.2,
+     -35.2,
+     -26.6,
+     -17.7,
+     -13.7,
+     -1.9
+    ],
+    "preEchoDb": -20.3,
+    "lostTopDb": 3.7,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.12,
+     "truePeakDb": -1.41,
+     "seamStep": 0.00068,
+     "seamAllowed": 0.00366,
+     "seamFluxRatio": 0.02,
+     "tilt": -9.6,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "ending-ffx",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "0fd196532af1a716355d28c31271e6c7d2337678",
+   "before": {
+    "bytes": 1879621,
+    "lufs": -15.9,
+    "truePeakDb": -1.6,
+    "topEdge70Hz": 16252,
+    "lowpassCliff": {
+     "db": 41.3,
+     "hz": 16607
+    },
+    "hfFlatnessDb": -11.1,
+    "riseMs": 19.0,
+    "corr": 0.77,
+    "lra": 10.7,
+    "snrDb": 25.9,
+    "nmrBandsDb": [
+     -29.2,
+     -31.5,
+     -29.9,
+     -22.5,
+     -15.9,
+     -8.4,
+     -2.9,
+     -0.0
+    ],
+    "preEchoDb": -10.4,
+    "lostTopDb": 27.9,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.09,
+     "truePeakDb": -1.58,
+     "seamStep": 0.02355,
+     "seamAllowed": 0.05504,
+     "seamFluxRatio": 0.83,
+     "tilt": -9.4,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3704799,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16451,
+    "lowpassCliff": {
+     "db": 9.3,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -10.7,
+    "riseMs": 20.5,
+    "corr": 0.772,
+    "lra": 10.7,
+    "snrDb": 36.0,
+    "nmrBandsDb": [
+     -39.8,
+     -41.8,
+     -40.1,
+     -32.7,
+     -25.9,
+     -17.9,
+     -13.3,
+     -0.2
+    ],
+    "preEchoDb": -19.4,
+    "lostTopDb": 11.7,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.11,
+     "truePeakDb": -1.5,
+     "seamStep": 0.01724,
+     "seamAllowed": 0.05596,
+     "seamFluxRatio": 0.83,
+     "tilt": -9.4,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "ending-ffx2",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "143857242d163b0bf85154ed26ccabdb76bdd300",
+   "before": {
+    "bytes": 1784233,
+    "lufs": -15.9,
+    "truePeakDb": -1.4,
+    "topEdge70Hz": 16538,
+    "lowpassCliff": {
+     "db": 44.9,
+     "hz": 16640
+    },
+    "hfFlatnessDb": -9.7,
+    "riseMs": 10.5,
+    "corr": 0.771,
+    "lra": 9.7,
+    "snrDb": 26.8,
+    "nmrBandsDb": [
+     -30.3,
+     -31.3,
+     -29.3,
+     -23.4,
+     -17.9,
+     -8.8,
+     -4.3,
+     0.0
+    ],
+    "preEchoDb": -5.6,
+    "lostTopDb": 25.0,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.11,
+     "truePeakDb": -1.4,
+     "seamStep": 0.00665,
+     "seamAllowed": 0.01946,
+     "seamFluxRatio": 0.34,
+     "tilt": -8.5,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3558668,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16780,
+    "lowpassCliff": {
+     "db": 8.0,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -9.1,
+    "riseMs": 15.5,
+    "corr": 0.772,
+    "lra": 9.7,
+    "snrDb": 37.9,
+    "nmrBandsDb": [
+     -41.7,
+     -42.5,
+     -40.5,
+     -34.6,
+     -28.8,
+     -19.0,
+     -14.3,
+     -1.3
+    ],
+    "preEchoDb": -11.5,
+    "lostTopDb": 4.9,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.12,
+     "truePeakDb": -1.46,
+     "seamStep": 0.00137,
+     "seamAllowed": 0.01874,
+     "seamFluxRatio": 0.34,
+     "tilt": -8.4,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "pause",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "f066ce403a28589ef7486ddd31b68cfc84e7a7b7",
+   "before": {
+    "bytes": 766112,
+    "lufs": -16.0,
+    "truePeakDb": -1.7,
+    "topEdge70Hz": 16468,
+    "lowpassCliff": {
+     "db": 43.6,
+     "hz": 16607
+    },
+    "hfFlatnessDb": -6.8,
+    "riseMs": 9.5,
+    "corr": 0.753,
+    "lra": 8.1,
+    "snrDb": 26.2,
+    "nmrBandsDb": [
+     -22.4,
+     -31.6,
+     -30.4,
+     -24.0,
+     -14.8,
+     -8.1,
+     -3.6,
+     0.0
+    ],
+    "preEchoDb": -12.0,
+    "lostTopDb": 27.3,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.15,
+     "truePeakDb": -1.66,
+     "seamStep": 0.00649,
+     "seamAllowed": 0.0169,
+     "seamFluxRatio": 0.23,
+     "tilt": -8.3,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 1478084,
+    "lufs": -16.0,
+    "truePeakDb": -1.6,
+    "topEdge70Hz": 16613,
+    "lowpassCliff": {
+     "db": 7.0,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -6.5,
+    "riseMs": 11.5,
+    "corr": 0.755,
+    "lra": 8.1,
+    "snrDb": 36.6,
+    "nmrBandsDb": [
+     -33.0,
+     -42.2,
+     -41.1,
+     -34.4,
+     -25.1,
+     -17.7,
+     -13.7,
+     -0.6
+    ],
+    "preEchoDb": -22.0,
+    "lostTopDb": 8.8,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.16,
+     "truePeakDb": -1.64,
+     "seamStep": 0.00517,
+     "seamAllowed": 0.01659,
+     "seamFluxRatio": 0.22,
+     "tilt": -8.4,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "scene-bevelle-underground",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "01ea1a1990983c1a64ce5435c29729eadb328f38",
+   "before": {
+    "bytes": 1503763,
+    "lufs": -16.1,
+    "truePeakDb": -1.2,
+    "topEdge70Hz": 14869,
+    "lowpassCliff": {
+     "db": 25.8,
+     "hz": 17243
+    },
+    "hfFlatnessDb": -14.0,
+    "riseMs": 5.0,
+    "corr": 0.835,
+    "lra": 6.5,
+    "snrDb": 32.0,
+    "nmrBandsDb": [
+     -38.5,
+     -33.0,
+     -29.4,
+     -20.8,
+     -14.8,
+     -8.6,
+     -3.8,
+     -0.0
+    ],
+    "preEchoDb": -10.3,
+    "lostTopDb": 25.7,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.19,
+     "truePeakDb": -1.22,
+     "seamStep": 0.01549,
+     "seamAllowed": 0.0243,
+     "seamFluxRatio": 0.97,
+     "tilt": -10.7,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 2966738,
+    "lufs": -16.1,
+    "truePeakDb": -1.4,
+    "topEdge70Hz": 15402,
+    "lowpassCliff": {
+     "db": 1.8,
+     "hz": 16629
+    },
+    "hfFlatnessDb": -12.4,
+    "riseMs": 5.0,
+    "corr": 0.836,
+    "lra": 6.5,
+    "snrDb": 43.1,
+    "nmrBandsDb": [
+     -50.5,
+     -44.9,
+     -40.5,
+     -31.7,
+     -24.8,
+     -18.2,
+     -14.8,
+     -1.6
+    ],
+    "preEchoDb": -20.2,
+    "lostTopDb": 2.8,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.2,
+     "truePeakDb": -1.35,
+     "seamStep": 0.0261,
+     "seamAllowed": 0.04144,
+     "seamFluxRatio": 0.97,
+     "tilt": -10.6,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "scene-dreams-end",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "f454bb934c10aed07fdc242a374dbc27e61388d9",
+   "before": {
+    "bytes": 1556596,
+    "lufs": -15.9,
+    "truePeakDb": -1.3,
+    "topEdge70Hz": 16521,
+    "lowpassCliff": {
+     "db": 42.9,
+     "hz": 16607
+    },
+    "hfFlatnessDb": -9.3,
+    "riseMs": 13.0,
+    "corr": 0.797,
+    "lra": 17.1,
+    "snrDb": 25.4,
+    "nmrBandsDb": [
+     -28.5,
+     -30.4,
+     -28.8,
+     -22.4,
+     -15.4,
+     -8.0,
+     -3.2,
+     0.0
+    ],
+    "preEchoDb": -11.2,
+    "lostTopDb": 27.5,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.09,
+     "truePeakDb": -1.33,
+     "seamStep": 0.00965,
+     "seamAllowed": 0.01793,
+     "seamFluxRatio": 0.17,
+     "tilt": -9.1,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3047441,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16645,
+    "lowpassCliff": {
+     "db": 9.2,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -9.2,
+    "riseMs": 22.5,
+    "corr": 0.799,
+    "lra": 17.1,
+    "snrDb": 35.5,
+    "nmrBandsDb": [
+     -39.2,
+     -40.9,
+     -39.1,
+     -32.6,
+     -25.5,
+     -17.6,
+     -13.4,
+     -0.4
+    ],
+    "preEchoDb": -20.3,
+    "lostTopDb": 9.8,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.1,
+     "truePeakDb": -1.48,
+     "seamStep": 0.00327,
+     "seamAllowed": 0.01882,
+     "seamFluxRatio": 0.17,
+     "tilt": -9.1,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "scene-fahrenheit",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "334bb22b41c6fb0cbb2e161d3f80a6d0aaaa71ba",
+   "before": {
+    "bytes": 1193323,
+    "lufs": -15.9,
+    "truePeakDb": -1.3,
+    "topEdge70Hz": 16747,
+    "lowpassCliff": {
+     "db": 47.6,
+     "hz": 16694
+    },
+    "hfFlatnessDb": -13.7,
+    "riseMs": 13.0,
+    "corr": 0.788,
+    "lra": 14.4,
+    "snrDb": 26.6,
+    "nmrBandsDb": [
+     -30.4,
+     -30.3,
+     -29.1,
+     -24.0,
+     -18.0,
+     -9.3,
+     -4.9,
+     0.0
+    ],
+    "preEchoDb": -12.4,
+    "lostTopDb": 24.4,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.13,
+     "truePeakDb": -1.28,
+     "seamStep": 0.00698,
+     "seamAllowed": 0.01011,
+     "seamFluxRatio": 0.43,
+     "tilt": -8.3,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 2383354,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 18621,
+    "lowpassCliff": {
+     "db": 8.8,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -12.5,
+    "riseMs": 18.5,
+    "corr": 0.789,
+    "lra": 14.4,
+    "snrDb": 39.2,
+    "nmrBandsDb": [
+     -43.0,
+     -42.7,
+     -41.5,
+     -36.9,
+     -30.6,
+     -20.9,
+     -15.0,
+     -3.1
+    ],
+    "preEchoDb": -22.2,
+    "lostTopDb": 2.2,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.14,
+     "truePeakDb": -1.48,
+     "seamStep": 0.00407,
+     "seamAllowed": 0.01034,
+     "seamFluxRatio": 0.43,
+     "tilt": -8.3,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "scene-farplane",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "1803fa3fddbbd6f0ab157635dbff060635720955",
+   "before": {
+    "bytes": 1658760,
+    "lufs": -16.0,
+    "truePeakDb": -1.7,
+    "topEdge70Hz": 16236,
+    "lowpassCliff": {
+     "db": 41.3,
+     "hz": 16607
+    },
+    "hfFlatnessDb": -12.2,
+    "riseMs": 8.5,
+    "corr": 0.82,
+    "lra": 3.2,
+    "snrDb": 26.0,
+    "nmrBandsDb": [
+     -31.1,
+     -30.2,
+     -29.4,
+     -21.2,
+     -15.2,
+     -8.1,
+     -2.0,
+     -0.0
+    ],
+    "preEchoDb": -12.5,
+    "lostTopDb": 28.2,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.13,
+     "truePeakDb": -1.73,
+     "seamStep": 0.01406,
+     "seamAllowed": 0.04328,
+     "seamFluxRatio": 0.66,
+     "tilt": -11.0,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3116618,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16489,
+    "lowpassCliff": {
+     "db": 9.3,
+     "hz": 16473
+    },
+    "hfFlatnessDb": -11.8,
+    "riseMs": 7.5,
+    "corr": 0.822,
+    "lra": 3.2,
+    "snrDb": 35.7,
+    "nmrBandsDb": [
+     -41.5,
+     -40.4,
+     -39.1,
+     -31.0,
+     -24.7,
+     -17.2,
+     -12.7,
+     -0.1
+    ],
+    "preEchoDb": -21.6,
+    "lostTopDb": 13.5,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.15,
+     "truePeakDb": -1.52,
+     "seamStep": 0.00933,
+     "seamAllowed": 0.04556,
+     "seamFluxRatio": 0.65,
+     "tilt": -10.8,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "scene-gagazet",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "0810df01c4f7e0d6daa1dccf4b5f7b5ed0a38962",
+   "before": {
+    "bytes": 1542704,
+    "lufs": -16.0,
+    "truePeakDb": -1.1,
+    "topEdge70Hz": 16134,
+    "lowpassCliff": {
+     "db": 42.5,
+     "hz": 16607
+    },
+    "hfFlatnessDb": -6.7,
+    "riseMs": 9.5,
+    "corr": 0.728,
+    "lra": 11.1,
+    "snrDb": 27.3,
+    "nmrBandsDb": [
+     -32.0,
+     -31.2,
+     -28.8,
+     -20.1,
+     -13.1,
+     -8.2,
+     -4.1,
+     -0.0
+    ],
+    "preEchoDb": -10.5,
+    "lostTopDb": 25.5,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.12,
+     "truePeakDb": -1.1,
+     "seamStep": 0.00095,
+     "seamAllowed": 0.01337,
+     "seamFluxRatio": 0.14,
+     "tilt": -10.0,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3100040,
+    "lufs": -16.0,
+    "truePeakDb": -1.4,
+    "topEdge70Hz": 16441,
+    "lowpassCliff": {
+     "db": 8.2,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -6.6,
+    "riseMs": 11.0,
+    "corr": 0.73,
+    "lra": 11.1,
+    "snrDb": 38.3,
+    "nmrBandsDb": [
+     -43.5,
+     -42.4,
+     -39.8,
+     -31.2,
+     -24.1,
+     -18.0,
+     -13.8,
+     -1.6
+    ],
+    "preEchoDb": -18.9,
+    "lostTopDb": 4.5,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.12,
+     "truePeakDb": -1.37,
+     "seamStep": 0.00181,
+     "seamAllowed": 0.01353,
+     "seamFluxRatio": 0.14,
+     "tilt": -10.0,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "scene-macalania-temple",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "ddf227a6f7df157c93310933c93ae43b6c5c5e83",
+   "before": {
+    "bytes": 1027316,
+    "lufs": -15.9,
+    "truePeakDb": -1.4,
+    "topEdge70Hz": 16150,
+    "lowpassCliff": {
+     "db": 41.5,
+     "hz": 16607
+    },
+    "hfFlatnessDb": -11.0,
+    "riseMs": 13.0,
+    "corr": 0.74,
+    "lra": 7.8,
+    "snrDb": 27.4,
+    "nmrBandsDb": [
+     -31.3,
+     -31.4,
+     -29.7,
+     -25.7,
+     -18.1,
+     -9.2,
+     -3.1,
+     0.0
+    ],
+    "preEchoDb": -12.7,
+    "lostTopDb": 28.8,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.11,
+     "truePeakDb": -1.39,
+     "seamStep": 0.02976,
+     "seamAllowed": 0.07952,
+     "seamFluxRatio": 1.0,
+     "tilt": -8.2,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 1909460,
+    "lufs": -15.9,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16478,
+    "lowpassCliff": {
+     "db": 9.5,
+     "hz": 16457
+    },
+    "hfFlatnessDb": -10.4,
+    "riseMs": 13.5,
+    "corr": 0.741,
+    "lra": 7.8,
+    "snrDb": 37.5,
+    "nmrBandsDb": [
+     -42.2,
+     -42.1,
+     -39.8,
+     -35.9,
+     -28.1,
+     -18.5,
+     -13.8,
+     -0.2
+    ],
+    "preEchoDb": -22.9,
+    "lostTopDb": 12.1,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.12,
+     "truePeakDb": -1.52,
+     "seamStep": 0.02082,
+     "seamAllowed": 0.07823,
+     "seamFluxRatio": 1.0,
+     "tilt": -8.2,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "scene-zanarkand-dome",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "36e8a91f098b299b71275f52b8acb6a936cbf788",
+   "before": {
+    "bytes": 1813040,
+    "lufs": -16.0,
+    "truePeakDb": -1.4,
+    "topEdge70Hz": 16430,
+    "lowpassCliff": {
+     "db": 37.6,
+     "hz": 16564
+    },
+    "hfFlatnessDb": -9.7,
+    "riseMs": 10.5,
+    "corr": 0.757,
+    "lra": 16.6,
+    "snrDb": 26.2,
+    "nmrBandsDb": [
+     -30.1,
+     -30.5,
+     -29.5,
+     -22.7,
+     -15.1,
+     -8.2,
+     -2.7,
+     0.0
+    ],
+    "preEchoDb": -11.5,
+    "lostTopDb": 27.2,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.15,
+     "truePeakDb": -1.42,
+     "seamStep": 0.01193,
+     "seamAllowed": 0.02666,
+     "seamFluxRatio": 0.53,
+     "tilt": -9.9,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 3762249,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16624,
+    "lowpassCliff": {
+     "db": 7.9,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -9.6,
+    "riseMs": 12.0,
+    "corr": 0.758,
+    "lra": 16.6,
+    "snrDb": 36.8,
+    "nmrBandsDb": [
+     -41.1,
+     -41.4,
+     -40.3,
+     -33.3,
+     -25.5,
+     -17.9,
+     -13.2,
+     -0.5
+    ],
+    "preEchoDb": -21.0,
+    "lostTopDb": 8.0,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.15,
+     "truePeakDb": -1.47,
+     "seamStep": 0.009,
+     "seamAllowed": 0.02616,
+     "seamFluxRatio": 0.52,
+     "tilt": -9.8,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "title",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "c5cd959f9e7eae53b3b3212a8238140d560dacf2",
+   "before": {
+    "bytes": 1355196,
+    "lufs": -15.9,
+    "truePeakDb": -1.3,
+    "topEdge70Hz": 16441,
+    "lowpassCliff": {
+     "db": 41.7,
+     "hz": 16694
+    },
+    "hfFlatnessDb": -9.7,
+    "riseMs": 10.0,
+    "corr": 0.788,
+    "lra": 14.8,
+    "snrDb": 26.4,
+    "nmrBandsDb": [
+     -24.3,
+     -31.2,
+     -29.7,
+     -22.8,
+     -14.5,
+     -8.7,
+     -3.2,
+     0.0
+    ],
+    "preEchoDb": -7.8,
+    "lostTopDb": 25.7,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.07,
+     "truePeakDb": -1.34,
+     "seamStep": 0.03132,
+     "seamAllowed": 0.06171,
+     "seamFluxRatio": 0.92,
+     "tilt": -9.7,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 2888145,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 16721,
+    "lowpassCliff": {
+     "db": 8.0,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -9.3,
+    "riseMs": 16.5,
+    "corr": 0.789,
+    "lra": 14.9,
+    "snrDb": 38.3,
+    "nmrBandsDb": [
+     -35.7,
+     -42.9,
+     -41.8,
+     -35.0,
+     -26.2,
+     -19.2,
+     -13.5,
+     -1.5
+    ],
+    "preEchoDb": -15.1,
+    "lostTopDb": 4.2,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.08,
+     "truePeakDb": -1.47,
+     "seamStep": 0.02854,
+     "seamAllowed": 0.06241,
+     "seamFluxRatio": 0.92,
+     "tilt": -9.6,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "victory-ffx",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "e60177fba47b1809f28ddbebacdb276705484fad",
+   "before": {
+    "bytes": 1133666,
+    "lufs": -16.0,
+    "truePeakDb": -1.3,
+    "topEdge70Hz": 16764,
+    "lowpassCliff": {
+     "db": 45.5,
+     "hz": 16694
+    },
+    "hfFlatnessDb": -10.3,
+    "riseMs": 22.5,
+    "corr": 0.815,
+    "lra": 9.4,
+    "snrDb": 26.2,
+    "nmrBandsDb": [
+     -31.5,
+     -29.6,
+     -29.0,
+     -23.8,
+     -17.2,
+     -8.4,
+     -4.1,
+     0.0
+    ],
+    "preEchoDb": -10.1,
+    "lostTopDb": 25.4,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.19,
+     "truePeakDb": -1.32,
+     "seamStep": 0.00367,
+     "seamAllowed": 0.04937,
+     "seamFluxRatio": 0.89,
+     "tilt": -8.8,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 2280936,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 18842,
+    "lowpassCliff": {
+     "db": 7.9,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -9.8,
+    "riseMs": 29.5,
+    "corr": 0.816,
+    "lra": 9.4,
+    "snrDb": 38.5,
+    "nmrBandsDb": [
+     -43.8,
+     -41.7,
+     -41.2,
+     -36.3,
+     -29.7,
+     -20.1,
+     -14.4,
+     -2.3
+    ],
+    "preEchoDb": -19.0,
+    "lostTopDb": 3.2,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.21,
+     "truePeakDb": -1.47,
+     "seamStep": 0.00565,
+     "seamAllowed": 0.04953,
+     "seamFluxRatio": 0.9,
+     "tilt": -8.8,
+     "failures": []
+    }
+   }
+  },
+  {
+   "cue": "victory-ffx2",
+   "q5ReproducesShipped": true,
+   "shippedSha1": "cdacd2ee9e4526fe262217ef7dc4a032e9247d6b",
+   "before": {
+    "bytes": 1148586,
+    "lufs": -16.0,
+    "truePeakDb": -1.3,
+    "topEdge70Hz": 16930,
+    "lowpassCliff": {
+     "db": 40.3,
+     "hz": 17270
+    },
+    "hfFlatnessDb": -4.8,
+    "riseMs": 23.5,
+    "corr": 0.654,
+    "lra": 4.5,
+    "snrDb": 27.5,
+    "nmrBandsDb": [
+     -33.2,
+     -31.2,
+     -29.2,
+     -21.8,
+     -13.4,
+     -7.3,
+     -5.2,
+     -0.1
+    ],
+    "preEchoDb": -5.7,
+    "lostTopDb": 13.9,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.05,
+     "truePeakDb": -1.26,
+     "seamStep": 0.01993,
+     "seamAllowed": 0.08385,
+     "seamFluxRatio": 0.3,
+     "tilt": -7.3,
+     "failures": []
+    }
+   },
+   "after": {
+    "bytes": 2146954,
+    "lufs": -16.0,
+    "truePeakDb": -1.5,
+    "topEdge70Hz": 19590,
+    "lowpassCliff": {
+     "db": 7.9,
+     "hz": 21447
+    },
+    "hfFlatnessDb": -4.7,
+    "riseMs": 23.5,
+    "corr": 0.655,
+    "lra": 4.5,
+    "snrDb": 38.1,
+    "nmrBandsDb": [
+     -45.4,
+     -42.5,
+     -39.6,
+     -32.8,
+     -23.9,
+     -16.9,
+     -13.9,
+     -4.7
+    ],
+    "preEchoDb": -11.8,
+    "lostTopDb": 0.4,
+    "lagSamples": 0,
+    "qa": {
+     "lufs": -16.06,
+     "truePeakDb": -1.48,
+     "seamStep": 0.03104,
+     "seamAllowed": 0.08056,
+     "seamFluxRatio": 0.29,
+     "tilt": -7.4,
+     "failures": []
+    }
+   }
+  }
+ ]
+}

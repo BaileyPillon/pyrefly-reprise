@@ -247,6 +247,15 @@ export async function updateManifest(outRoot, mutate) {
  */
 export const LOOP_DECIMALS = 6;
 
+/**
+ * The shipping budget for public/audio (music files + the sfx sprite), in bytes. Raised from 60 MB to
+ * 85 MB under D-292 (music O1): Bailey, 2026-09-29, "yes, all your recommendations", accepting the
+ * whole score re-encoded at LAME V0, which grows the music from 40.2 MB to 78.2 MB (the recommendation
+ * said "about 73 MB"; the measured total is 80.9 MB with the 2.7 MB sfx sprite). qa.mjs, render.mjs and
+ * tests/unit/audio-shipped-files.test.ts all read this one constant.
+ */
+export const AUDIO_BUDGET_BYTES = 85e6;
+
 export function secondsAtSample(sample, sampleRate) {
   return Number((sample / sampleRate).toFixed(LOOP_DECIMALS));
 }

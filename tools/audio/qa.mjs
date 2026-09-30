@@ -484,13 +484,21 @@ async function main() {
   for (const f of listed) {
     if (!disk.includes(f)) report.manifest.problems.push(`manifest lists a missing file: ${f}`);
   }
+  const { AUDIO_BUDGET_BYTES } = await import('./manifest-io.mjs');
+  const totalLine =
+    `total shipped audio: ${(report.totalBytes / 1e6).toFixed(2)} MB of the ${AUDIO_BUDGET_BYTES / 1e6} MB budget`;
+  if (report.totalBytes > AUDIO_BUDGET_BYTES) {
+    report.manifest.problems.push(
+      `shipped audio is ${(report.totalBytes / 1e6).toFixed(2)} MB, over the ${AUDIO_BUDGET_BYTES / 1e6} MB budget`,
+    );
+  }
   if (report.manifest.problems.length > 0) {
     log('');
     for (const p of report.manifest.problems) log(`manifest: ${p}`);
   }
 
   log('');
-  log(`total shipped audio: ${(report.totalBytes / 1e6).toFixed(2)} MB of the 60 MB budget`);
+  log(totalLine);
   const failed = report.cues.filter((c) => c.failures.length > 0);
   log(`${failed.length} cue(s) with findings; ${report.sfx?.failures.length ?? 0} sfx finding(s)`);
 

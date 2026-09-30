@@ -4,6 +4,7 @@
 // Game case (rule 14): BOTH (shared audio plumbing). Proves loading and routing only; nobody hears it (rule 13).
 // Run from the repo root after `npm run build` (serves dist/ with vite preview on :8801, stops it after):
 //   PYREFLY_BROWSER=gpu node tools/audio/r1-browser-proof.mjs [OUT.json] [SHOT_DIR]
+//   (PYREFLY_PROOF_ALL=1 also decodes all 26 manifest cues and plays every chapter's battle cue, D-292)
 import { spawn } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -40,6 +41,7 @@ try {
   // 1. Every cue a chapter plays (scene and battle), fetched and decoded by the page itself.
   const wanted = new Set();
   for (const r of rows) for (const c of [...r.scene, ...r.battle]) wanted.add(c);
+  if (process.env.PYREFLY_PROOF_ALL) for (const c of Object.keys(manifest.music)) wanted.add(c); // all 26 (D-292)
   const files = [...wanted].map((c) => ({ cue: c, file: manifest.music[c]?.file, duration: manifest.music[c]?.duration }));
   result.cues = await page.evaluate(async (list) => {
     const ctx = new AudioContext({ sampleRate: 44100 });
@@ -81,7 +83,11 @@ try {
     return row;
   };
   await sample('title', ['title']);
-  for (const [label, id] of [['ffx-chapter-I', 'seymour-flux'], ['ffx2-chapter-IV', 'ffx2-bahamut']]) {
+  // PYREFLY_PROOF_ALL=1 (music O1, D-292): play every chapter's battle cue, not only Chapter I and IV.
+  const picks = process.env.PYREFLY_PROOF_ALL
+    ? rows.map((r) => [`${r.game === 'FFX-2' ? 'ffx2' : 'ffx'}-chapter-${r.numeral}`, r.id])
+    : [['ffx-chapter-I', 'seymour-flux'], ['ffx2-chapter-IV', 'ffx2-bahamut']];
+  for (const [label, id] of picks) {
     const row = rows.find((r) => r.id === id);
     await page.evaluate((cid) => { window.__pyrefly.gotoChapter(cid, { skipCutscenes: true }); }, id);
     await sample(`${label}-battle`, row.battle);
@@ -94,7 +100,8 @@ try {
   spawn('taskkill', ['/PID', String(server.pid), '/T', '/F'], { stdio: 'ignore' });
 }
 const bad = Object.entries(result.cues).filter(([, v]) => v.status !== 200 || typeof v.decodedSec !== 'number' || Math.abs(v.decodedSec - v.manifestSec) > 0.1);
-result.summary = { chapterCues: Object.keys(result.cues).length, cueFailures: bad.map(([k]) => k), live: result.live.map((r) => `${r.label}: ${r.playing} ${r.source} ${r.ok ? 'ok' : 'FAIL'}`) };
+result.maxDecodedDiffSec = Math.max(...Object.values(result.cues).map((v) => (typeof v.decodedSec === 'number' ? Math.abs(v.decodedSec - v.manifestSec) : Infinity)));
+result.summary = { chapterCues: Object.keys(result.cues).length, cueFailures: bad.map(([k]) => k), maxDecodedDiffSec: result.maxDecodedDiffSec, live: result.live.map((r) => `${r.label}: ${r.playing} ${r.source} ${r.ok ? 'ok' : 'FAIL'}`) };
 mkdirSync(resolve(OUT, '..'), { recursive: true });
 writeFileSync(OUT, JSON.stringify(result, null, 1));
 console.log(JSON.stringify(result.summary, null, 1));
