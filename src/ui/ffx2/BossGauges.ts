@@ -27,6 +27,7 @@
  */
 
 import type { AnyCombatant, AtbSnapshot, BattleState, CombatantId } from '../../battle/common/types.ts';
+import { ffx2BossTabHtml } from '../common/statusRows.ts';
 
 /** §4.3's critical threshold, applied to the enemy numerals. */
 const CRITICAL = 0.33;
@@ -113,6 +114,7 @@ export function enemyGaugesHtml(
           ${trackHtml(pct(c.hp, c.stats.maxHp))}
           ${numeralsHtml(c, opts.revealed.has(c.id))}${pip}
         </div>
+        ${ffx2BossTabHtml(c)}
         ${own ? `<div class="ffx2boss__parts">${own}</div>` : ''}
       </div>`;
     })

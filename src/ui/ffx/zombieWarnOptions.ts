@@ -2,8 +2,9 @@
  * fb-0929 OPTIONS for Bailey, **both off** (AGENTS.md rules 9 and 10: they change the feel and the
  * look beyond the documented intent, so they are built, shown, and not shipped on). **FFX only.**
  *
- * The defect fix is separate and on (the Zombie pip is drawn and coloured, `statusPips.ts`; the
- * target plate says "Zombie: 1,000 damage", `zombieTargetNote.ts`). These two go further, for the
+ * The defect fix is separate and on (the Zombie icon leads the plate's row in the harm rim, status
+ * display O3, `ui/common/statusRows.ts`; the target plate's ZOMBIE tag carries "Zombie: 1,000
+ * damage", `zombieTargetNote.ts`). These two go further, for the
  * mouse player the friend was: a click on a target bracket or a turn-list tile selects **and
  * confirms** in one go, so a player who clicks Kimahri never sees the plate's note at all.
  *

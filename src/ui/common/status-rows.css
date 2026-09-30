@@ -1,0 +1,53 @@
+/* Status display O2 (Bailey's pick O3, 2026-09-29): the icon rows on the HUD's own plates
+   (`statusRows.ts`). Sizes are the approved mockups' (options/src/gen.mjs, at 1600x900) divided by
+   the stage's 2.5 on desktop, and taken as-is in viewport px on the phone. */
+
+/* ---- FFX party plate: medallions right-aligned under the Overdrive gauge (26 px, gap 4) ---- */
+.ffxhud .ffx-stat__statuses.sti-row {
+  left: auto; right: 0; bottom: 0.4px; top: auto;
+  --sti-size: 10.4px; gap: 1.6px; align-items: center; z-index: 1;
+}
+/* O3's caption under the name ("ASLEEP"; 12 px, the mockup's). */
+.ffxhud .ig-stat .stcap, .ffx2hud .ig-stat .stcap {
+  position: absolute; font: 700 4.9px / 1 'Chakra Petch', sans-serif; font-style: normal;
+  letter-spacing: 0.16em; color: #ff8a98; text-shadow: 0 0.4px 0.8px #000; white-space: nowrap; pointer-events: none;
+}
+.ffxhud .ig-stat .stcap { left: 42.4px; bottom: 1.6px; }
+
+/* ---- FFX turn list: medallions left of the name (24 px) ------------------------------------ */
+.ffxhud .ig-ctb__row .ffx-ctb-statuses.sti-row {
+  position: static; flex-direction: row; --sti-size: 9.6px; gap: 1.2px; margin-right: -2.4px;
+}
+
+/* ---- FFX-2 party row: square tags where the chips were (28 px, gap 4) ---------------------- */
+.ffx2hud .ffx2party__tags.sti-row { --sti-size: 11.2px; gap: 1.6px; margin: -1.2px 0 0 auto; flex: none; }
+.ffx2hud .ffx2party__status { overflow: visible; }
+.ffx2hud .ig-stat { position: relative; }
+.ffx2hud .ig-stat .stcap { left: 0; top: 13.2px; }
+
+/* ---- FFX-2 boss: the STATUS tab hanging under the bar ----------------------------------------- */
+.ststab {
+  position: absolute; left: 8.8px; top: calc(100% + 0.8px); z-index: 1;
+  display: inline-flex; align-items: center; gap: 2.4px; padding: 2px 4px;
+  background: rgba(11, 10, 18, 0.88); border-bottom: 0.8px solid var(--ig-accent, #f7b6d9);
+  font: 700 4.8px / 1 'Chakra Petch', sans-serif; letter-spacing: 0.2em; color: var(--ig-accent, #f7b6d9);
+  --sti-size: 9.6px; pointer-events: none;
+}
+
+/* ---- the phone (viewport px) ------------------------------------------------------------------ */
+/* FFX cards and FFX-2 cards: the icons ride as tabs on the card's top edge, right-aligned. */
+html[data-phone-battle='ffx'] .ffxhud .ffx-stat__statuses.sti-row {
+  left: auto; right: 4px; top: -9px; bottom: auto; --sti-size: 15px; gap: 2px;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ffx2party__status { position: absolute; right: 4px; top: -9px; margin: 0; }
+html[data-phone-battle='ffx2'] .ffx2hud .ffx2party__tags.sti-row { --sti-size: 16px; gap: 2px; margin: 0; }
+/* The phone cards carry no caption (the approved phone frames); the guide card says it. */
+html[data-phone-battle] .ig-stat .stcap { display: none; }
+/* FFX turn strip: small medallions on the tile's lower right corner (13 px). */
+html[data-phone-battle='ffx'] .ffxhud .ig-ctb__row { position: relative; }
+html[data-phone-battle='ffx'] .ffxhud .ig-ctb__row .ffx-ctb-statuses.sti-row {
+  position: absolute; right: -2px; bottom: -2px; --sti-size: 13px; gap: 1px; margin: 0; z-index: 2;
+}
+/* FFX-2 boss head: the icons sit in the head, before SCAN (17 px); the tab's label is dropped. */
+html[data-phone-battle='ffx2'] .ststab { top: 11px; left: auto; right: 86px; padding: 0; background: none; border: 0; --sti-size: 17px; }
+html[data-phone-battle='ffx2'] .ststab__label { display: none; }

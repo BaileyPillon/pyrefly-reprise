@@ -34,6 +34,9 @@ import { withOmnisGlow } from '../../engine/OmnisGlowLook.ts';
 import { withOmnisReadout } from '../../ui/ffx/OmnisReadout.ts';
 import { withSinHud } from '../../ui/ffx/SinHud.ts';
 import { Ff7BattleHud } from '../../ui/ff7/Ff7BattleHud.ts';
+import { withStatusLooks, type StatusField } from '../../ui/common/withStatusLooks.ts';
+import { isPhysicalAction } from '../../engine/EnemyActionPose.ts';
+import { abilityFactsFor } from './battleAbilityFacts.ts';
 
 // ---------------------------------------------------------------- engines
 
@@ -141,7 +144,7 @@ export function applyAtbConfig(engine: BattleEngine | null): void {
  * sources). The wrapper is transparent when coaching is off, already seen, or
  * suppressed with `?coach=off`, so every capture harness sees the bare HUD.
  */
-export function createHud(game: GameId, field?: () => OversoulField | null, engine?: BattleEngine | null): HudPort {
+export function createHud(game: GameId, field?: () => (OversoulField & StatusField) | null, engine?: BattleEngine | null): HudPort {
   // FF7 gets its own HUD: Bailey's option A made more faithful (docs/plans/ff7-hud-faithful-a-spec.md).
   // Never the FFX-2 HUD, never a coach, never the shared phone rail: it draws FF7's own phone band (FF7 only).
   // The Item list's counts come from the engine's bag (the HUD holds no numbers of its own).
@@ -156,7 +159,11 @@ export function createHud(game: GameId, field?: () => OversoulField | null, engi
   // `engine/OmnisDiscTap.ts`, `engine/OmnisGlowLook.ts`). The disc strip and the intent line are
   // `ui/ffx/OmnisReadout.ts`, on the FFX HUD above (the same Chapter XII gate). The Sin clock and the Fin
   // plate are `ui/ffx/SinHud.ts` (FFX only, Chapters XVII and XVIII; inert without Sin's flags).
-  const tapped = !field ? hud : game === 'ffx2' ? withOversoulLook(hud, field) : withOmnisGlow(withOmnisDiscs(hud, field), field);
+  // Status display O3 (Bailey's pick, 2026-09-29; both games, each its own table): the looks on the
+  // figures, the message line, the cure hint and the guard rails (`ui/common/withStatusLooks.ts`).
+  const facts = abilityFactsFor(game);
+  const looks = !field ? hud : withStatusLooks(hud, game, field, (id) => isPhysicalAction(facts(id)));
+  const tapped = !field ? looks : game === 'ffx2' ? withOversoulLook(looks, field) : withOmnisGlow(withOmnisDiscs(looks, field), field);
   return withCoach(game, tapped);
 }
 

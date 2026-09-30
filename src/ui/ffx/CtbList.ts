@@ -1,6 +1,6 @@
 import type { AnyCombatant, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import { aeonChipHtml, portraitChipHtml, resolvePortraitKey, tintFor, wirePortraitFallbacks } from './portraits.ts';
-import { STATUS_DOT_COLOR } from './statusPips.ts';
+import { ffxCtbIconsHtml } from '../common/statusRows.ts';
 
 /** Ink & Gold spec: "CTB queue ... Six rows visible" (presentation-ink-and-gold.md "Components"). */
 const VISIBLE_ROWS = 6;
@@ -63,7 +63,7 @@ export class CtbList {
   }
 
   render(preview: TurnPreview[], combatants: Record<CombatantId, AnyCombatant>): void {
-    const rows = preview.slice(0, VISIBLE_ROWS).map((row, i) => this.rowHtml(row, i, combatants));
+    const rows = preview.slice(0, VISIBLE_ROWS).map((row, i, all) => this.rowHtml(row, i, combatants, all.findIndex((r) => r.actorId === row.actorId) === i));
     this.el.innerHTML = rows.join('');
     wirePortraitFallbacks(this.el);
     this.fitNames();
@@ -104,7 +104,7 @@ export class CtbList {
     }
   }
 
-  private rowHtml(row: TurnPreview, i: number, combatants: Record<CombatantId, AnyCombatant>): string {
+  private rowHtml(row: TurnPreview, i: number, combatants: Record<CombatantId, AnyCombatant>, first: boolean): string {
     const current = i === 0;
     const combatant = combatants[row.actorId];
     const name = combatant?.name ?? row.actorId;
@@ -135,15 +135,12 @@ export class CtbList {
     const charge = row.chargeStage
       ? `<span class="ffx-ctb-charge" style="background:${CHARGE_DOT[row.chargeStage]}" title="Charging"></span>`
       : '';
-    const statuses = row.statusIcons.slice(0, 3);
-    const statusHtml = statuses.length
-      ? `<span class="ffx-ctb-statuses">${statuses
-          .map((s) => `<i style="background:${STATUS_DOT_COLOR[s] ?? '#8fa4bc'}" title="${escapeHtml(s)}"></i>`)
-          .join('')}</span>`
-      : '';
+    // Status display O2 (2026-09-29): medallions beside the name, on each unit's first row only
+    // (the approved mockup; the old single-colour dots are replaced). `ui/common/statusRows.ts`.
+    const statusHtml = first ? ffxCtbIconsHtml(combatant) : '';
     return `<div class="ig-ctb__row" style="transform:translateX(calc(var(--ig-ctb-step) * ${i}))" data-actor="${escapeHtml(row.actorId)}">
-      <span class="ig-ctb__name">${escapeHtml(name)}</span>
-      <span class="${tileCls}">${face}${tag}${od}${charge}${statusHtml}</span>
+      ${statusHtml}<span class="ig-ctb__name">${escapeHtml(name)}</span>
+      <span class="${tileCls}">${face}${tag}${od}${charge}</span>
     </div>`;
   }
 }

@@ -1,6 +1,6 @@
 import type { CombatantId } from '../../battle/common/types.ts';
 import { anchorChipToRow, clearChipOfSlab } from './targetChipClear.ts';
-import { clamp, dockPlate, escapeHtml, FLOWER_SVG, HAND_SVG, px, type PlateDock } from './targetCursorParts.ts';
+import { clamp, dockPlate, escapeHtml, FLOWER_SVG, HAND_SVG, noteHtml, px, type PlateDock } from './targetCursorParts.ts';
 import { pickTargetAt, sameSide } from './targetHitPick.ts';
 
 export type { PlateDock } from './targetCursorParts.ts';
@@ -450,9 +450,7 @@ export class TargetCursor {
     const tag = entry.tag
       ? `<span class="ffx-target__tag">${escapeHtml(entry.tag)}</span>`
       : '';
-    const note = entry.note
-      ? `<span class="ffx-target__note">${escapeHtml(entry.note)}</span>`
-      : '';
+    const note = noteHtml(entry.note); // status display O3: Zombie and Doom as red tags
     const dock = this.dockFor(entry, rect);
     return (
       `<div class="ffx-target__plate ffx-target__plate--${entry.kind} ffx-target__plate--${dock.side}" ` +

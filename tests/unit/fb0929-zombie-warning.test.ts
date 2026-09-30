@@ -81,17 +81,17 @@ afterEach(() => {
 });
 
 describe("Kimahri's party plate shows Zombie (FFX only)", () => {
-  it('the Zombie pip is drawn even with Mighty Guard\'s six statuses already on him', () => {
+  it("the Zombie icon is drawn even with Mighty Guard's six statuses already on him", () => {
     const { state } = zombieKimahriBoard();
     const k = state.combatants['kimahri']!;
     expect(Object.keys(k.statuses).length).toBeGreaterThan(6);
     const win = new PartyStatusWindow();
     win.render(['tidus', 'yuna', 'kimahri'], state.combatants as Record<CombatantId, FFXCombatant>, null);
-    const pips = [...win.el.querySelectorAll('[data-actor="kimahri"] .ffx-stat__statuses i')];
-    const zombie = pips.find((p) => /zombie/i.test(p.getAttribute('title') ?? ''));
-    expect(zombie, pips.map((p) => p.getAttribute('title')).join(',')).toBeTruthy();
-    // The documented chip colour (visual-bible "Status icons": Zombie skull #A8C48A), the same the CTB list uses.
-    expect((zombie as HTMLElement).style.background.replace(/\s/g, '')).toMatch(/#a8c48a|rgb\(168,196,138\)/i);
+    // Status display O3 (Bailey's pick, 2026-09-29) replaced the single-colour pips with round
+    // medallions, most alarming first: the Zombie leads the row, in the harm (red) rim.
+    const icons = [...win.el.querySelectorAll('[data-actor="kimahri"] .ffx-stat__statuses .sti')];
+    expect(icons[0]?.getAttribute('data-status'), icons.map((p) => p.getAttribute('data-status')).join(',')).toBe('zombie');
+    expect(icons[0]!.className).toMatch(/sti--harm/);
   });
 });
 
@@ -116,7 +116,9 @@ describe('aiming a restorative at a Zombie ally says what it will do (FFX only)'
       const plate = document.querySelector('.ffx-target__plate');
       if (plate) {
         const name = plate.querySelector('.ffx-target__name')?.textContent ?? '';
-        notes[name] = plate.querySelector('.ffx-target__note')?.textContent ?? '';
+        // Status display O3 draws a Zombie note as a red ZOMBIE tag; its words ride in the title.
+        const note = plate.querySelector('.ffx-target__note');
+        notes[name] = note?.getAttribute('title') ?? note?.textContent ?? '';
       }
       window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowRight' }));
     }
@@ -182,7 +184,8 @@ describe('fb-0929 options, off by default (FFX only)', () => {
     const { hud, pick } = openHiPotion();
     expect(menuOf(hud).tryConfirmTargetById('kimahri')).toBe(true);
     expect(await settled(pick)).toBe(false);
-    expect(document.querySelector('.ffx-target__plate .ffx-target__note')?.textContent).toMatch(/Zombie: 1,000 damage/);
+    // Status display O3: the plate's red ZOMBIE tag keeps the note's words in its title.
+    expect(document.querySelector('.ffx-target__plate .ffx-target__note')?.getAttribute('title')).toMatch(/Zombie: 1,000 damage/);
     menuOf(hud).tryConfirmTargetById('kimahri');
     expect(await settled(pick)).toBe(true);
     expect((await pick).targets).toEqual(['kimahri']);
