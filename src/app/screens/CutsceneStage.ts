@@ -297,6 +297,8 @@ export class CutsceneStage {
     el.classList.toggle('is-painted-pose', painting !== undefined);
     const { landscape: l, portrait: p } = fig;
     const k = painting?.heightOfIdle ?? 1;
+    el.style.setProperty('--x-l', String(painting?.landscapeX ?? l.x));
+    el.style.setProperty('--x-p', String(painting?.portraitX ?? p.x));
     el.style.setProperty('--h-l', String(l.height * k));
     el.style.setProperty('--h-p', String(p.height * k));
     el.style.setProperty('--baseline', String(painting?.baseline ?? fig.baseline));

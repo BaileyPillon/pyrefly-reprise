@@ -121,14 +121,17 @@ describe('CutsceneStage.setPose with and without the painting', () => {
     expect(fig.className).not.toMatch(/is-kneel|is-ko\b/);
     expect(Number(fig.style.getPropertyValue('--aspect'))).toBeCloseTo(ko.aspect, 6);
     expect(Number(fig.style.getPropertyValue('--h-l'))).toBeCloseTo(0.62 * ko.heightOfIdle, 6);
-    // the fall keeps his feet line and centre: the prone canvas lies where he stood
-    expect(fig.style.getPropertyValue('--x-l')).toBe('0.8');
+    // the fall keeps his feet line; its centre moves right of the box (the cut robe end runs off the screen's edge)
+    expect(fig.style.getPropertyValue('--x-l')).toBe('0.94');
+    expect(fig.style.getPropertyValue('--x-p')).toBe('0.6');
     expect(fig.style.getPropertyValue('--feet-l')).toBe('0.9');
+    expect(fig.style.getPropertyValue('--feet-p')).toBe('0.74');
 
     stage.setPose(setPose('seymour-macalania', 'idle'));
     expect(src('seymour-macalania')).toMatch(/seymour-macalania\/idle\.png$/);
     expect(fig.classList.contains('is-painted-pose')).toBe(false);
     expect(Number(fig.style.getPropertyValue('--h-l'))).toBeCloseTo(0.62, 6);
+    expect(fig.style.getPropertyValue('--x-l')).toBe('0.8');
   });
 
   it('not installed: Seymour keeps the PR-0244 staging on his standing painting; Isaaru and Shuyin stand as before', () => {
