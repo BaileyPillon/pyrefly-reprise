@@ -1,10 +1,12 @@
 /**
- * The battle **pacing switch** (fb-0929 pacing track): an OPTION for Bailey, default off.
+ * The battle **pacing switch** (fb-0929 pacing track). `'steady'` is the DEFAULT since
+ * 2026-09-29.
  *
- * Bailey, 2026-09-29, relaying a friend: "moves and transitions happen too fast". That is
- * taste, not a defect (AGENTS.md rules 9 and 10), so this module changes nothing unless a
- * preset other than `'current'` is picked, by `?pace=<name>` in the URL or
- * `window.__pyrefly.pace('<name>')` from the console. `'current'` is exactly the live build.
+ * Bailey, 2026-09-29, relaying a friend: "moves and transitions happen too fast". He picked
+ * `'steady'` as the default ("yes, all your recommendations"; the driver's recommendation was
+ * `steady`). No parameter now plays `'steady'`; `?pace=current` (or
+ * `window.__pyrefly.pace('current')`) gives the pre-2026-09-30 timing exactly (every factor 1),
+ * and `?pace=relaxed` stays. REDUCE MOTION never shortens these: no code here reads it.
  *
  * **Presentation only.** It scales how long the presenter waits, how fast actor tweens, hit
  * sparks and spell effects run, how long a damage numeral lives, and how long the battle
@@ -51,7 +53,10 @@ export const PACE_PRESETS: Readonly<Record<'ffx' | 'ffx2', Readonly<Record<PaceN
   },
 };
 
-let active: PaceName = 'current';
+/** The preset a fresh page plays with no `?pace=`: Bailey's pick, 2026-09-29. */
+export const DEFAULT_PACE: PaceName = 'steady';
+
+let active: PaceName = DEFAULT_PACE;
 let game: PaceGame = 'other';
 
 export function isPaceName(v: unknown): v is PaceName {

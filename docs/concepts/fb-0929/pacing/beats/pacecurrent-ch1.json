@@ -1,0 +1,133 @@
+{
+ "confirmToMove": {
+  "median": 19,
+  "n": 3,
+  "all": [
+   22,
+   12,
+   19
+  ]
+ },
+ "partyAction": {
+  "median": 783,
+  "n": 3,
+  "all": [
+   771,
+   2305,
+   783
+  ]
+ },
+ "enemyAction": {
+  "median": 1243,
+  "n": 6,
+  "all": [
+   1243,
+   2491,
+   1005,
+   2411,
+   1037,
+   692
+  ]
+ },
+ "windUp": {
+  "median": 235,
+  "n": 9,
+  "all": [
+   235,
+   221,
+   807,
+   387,
+   221,
+   813,
+   224,
+   811,
+   224
+  ]
+ },
+ "hit": {
+  "median": 351,
+  "n": 6,
+  "all": [
+   348,
+   350,
+   750,
+   349,
+   751,
+   351
+  ]
+ },
+ "actionEnd": {
+  "median": 210,
+  "n": 9,
+  "all": [
+   210,
+   200,
+   218,
+   203,
+   201,
+   215,
+   210,
+   215,
+   202
+  ]
+ },
+ "numeralLife": {
+  "median": 899,
+  "n": 7,
+  "all": [
+   896,
+   899,
+   900,
+   900,
+   901,
+   898,
+   492
+  ]
+ },
+ "menuGap": {
+  "median": 0,
+  "n": 4,
+  "all": [
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ "ko": {
+  "median": 634,
+  "n": 2,
+  "all": [
+   622,
+   634
+  ]
+ },
+ "victory": {
+  "median": null,
+  "n": 0,
+  "all": []
+ },
+ "turnStart": {
+  "median": 96,
+  "n": 10,
+  "all": [
+   93,
+   96,
+   99,
+   92,
+   98,
+   105,
+   91,
+   95,
+   93,
+   99
+  ]
+ },
+ "sceneToBattle": {
+  "lastKeyToBattleScreen": 338,
+  "entryOverlayMs": 1730
+ },
+ "battleStartToFirstMenu": 8763,
+ "endEventToResults": null,
+ "resultsWipeMs": 501
+}

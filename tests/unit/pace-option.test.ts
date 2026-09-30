@@ -1,10 +1,11 @@
 /**
- * The battle pacing OPTION (fb-0929; `src/engine/pace.ts`), pinned.
+ * The battle pacing switch (fb-0929; `src/engine/pace.ts`), pinned.
  *
- * Bailey's friend: "moves and transitions happen too fast". Taste, so an option for Bailey,
- * default off (AGENTS.md rules 9 and 10). What must hold:
+ * Bailey's friend: "moves and transitions happen too fast". Bailey picked `steady` as the default
+ * (2026-09-29, "yes, all your recommendations"). What must hold:
  *
- * 1. The default is `'current'`, and at `'current'` every multiplier is exactly 1 (the live build).
+ * 1. The default is `'steady'` (FFX actions x1.2 / numbers x1.3, FFX-2 x1.1 / x1.25), and
+ *    `'current'` (`?pace=current`) is the pre-2026-09-30 timing, every multiplier exactly 1.
  * 2. FFX and FFX-2 have their own presets (rule 14: CTB vs ATB); FF7 and anything else is never paced.
  * 3. It is presentation only: a real chapter played through the real presenter under
  *    `'relaxed'` emits the **same event log** as under `'current'` (the engine, the RNG, the
@@ -20,6 +21,7 @@ import type { HudPort } from '../../src/engine/HudPort.ts';
 import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
 import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts';
 import {
+  DEFAULT_PACE,
   PACE_NAMES,
   PACE_PRESETS,
   pace,
@@ -46,18 +48,36 @@ import { FakeAudio, FakeCutscenes, FakeDamageNumbers, FakeMessageBar, FakeStage 
 import { setCappedAutoPlay } from './helpers/presenterCap.ts';
 
 afterEach(() => {
-  setPace('current');
+  setPace(DEFAULT_PACE);
   setPaceGame('other');
 });
 
 describe('pace module', () => {
-  it("defaults to 'current', where every multiplier is exactly 1 for both games", () => {
-    expect(pace()).toBe('current');
+  it("defaults to 'steady' with Bailey's per-game multipliers, and never paces FF7", () => {
+    expect(DEFAULT_PACE).toBe('steady');
+    expect(pace()).toBe('steady'); // a fresh module, no ?pace=
+    expect(PACE_PRESETS.ffx.steady).toEqual({ action: 1.2, numeral: 1.3, transition: 1.2 });
+    expect(PACE_PRESETS.ffx2.steady).toEqual({ action: 1.1, numeral: 1.25, transition: 1.1 });
+    expect(paceFactor('action', 'ffx')).toBe(1.2);
+    expect(paceFactor('numeral', 'ffx2')).toBe(1.25);
+    expect(paceFactor('action', 'other')).toBe(1);
+    expect(paceFactor('numeral', 'other')).toBe(1);
+  });
+
+  it("keeps 'current' as the exact old timing: every multiplier is 1 for both games", () => {
+    setPace('current');
     for (const g of ['ffx', 'ffx2'] as const) {
       for (const k of ['action', 'numeral', 'transition'] as const) {
         expect(paceFactor(k, g)).toBe(1);
         expect(paceRate(k, g)).toBe(1);
       }
+    }
+  });
+
+  it('does not read REDUCE MOTION: the module has no such input and never shortens a beat', () => {
+    // Steady and relaxed only lengthen (>= 1); reduce motion cannot make anything faster here.
+    for (const g of ['ffx', 'ffx2'] as const) {
+      for (const v of Object.values(PACE_PRESETS[g][DEFAULT_PACE])) expect(v).toBeGreaterThanOrEqual(1);
     }
   });
 
@@ -86,7 +106,7 @@ describe('pace module', () => {
 
   it('refuses unknown names and reads ?pace= from a query string', () => {
     expect(setPace('ludicrous')).toBe(false);
-    expect(pace()).toBe('current');
+    expect(pace()).toBe(DEFAULT_PACE);
     expect(paceFromQuery('?coach=off&pace=relaxed')).toBe('relaxed');
     expect(paceFromQuery('?pace=fast')).toBeNull();
     expect(paceFromQuery('')).toBeNull();
@@ -166,13 +186,13 @@ async function playChapter(game: 'ffx' | 'ffx2', seed: number): Promise<{ log: B
 describe.each([
   { label: 'Chapter I, Seymour Flux (FFX, CTB)', game: 'ffx' as const },
   { label: 'Chapter IV, Bahamut (FFX-2, ATB)', game: 'ffx2' as const },
-])('relaxed pacing is presentation only: $label', ({ game }) => {
-  it('emits the identical event log and stretches each wait by the action factor or not at all', async () => {
+])('pacing is presentation only: $label', ({ game }) => {
+  it.each(['steady', 'relaxed'] as const)('%s emits the identical event log and stretches each wait by the action factor or not at all', async (name) => {
     setPace('current');
     const base = await playChapter(game, 20260929);
-    setPace('relaxed');
+    setPace(name);
     const slow = await playChapter(game, 20260929);
-    const f = PACE_PRESETS[game].relaxed.action;
+    const f = PACE_PRESETS[game][name].action;
 
     expect(base.log.length).toBeGreaterThan(20);
     expect(slow.log).toEqual(base.log); // engine, RNG, turn order, ATB: untouched
