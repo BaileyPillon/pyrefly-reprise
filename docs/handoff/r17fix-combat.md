@@ -85,3 +85,36 @@ to the next focused review.
   named list (D-284) and the file passes alone (33 of 33). No golden moved: every FFX golden and replay passed
   unchanged (successful Overdrives and the engine's auto-resolve are untouched), so none was re-pinned.
 - `node tools/orphans.mjs`: 24 orphaned, no new module added.
+
+## CHECK (independent, 2026-09-30, did not build it)
+
+Verdict: **both fixes hold; no blocker.** Branch `r17fix-combat` at 841845a0; `git merge-tree` against main clean.
+
+- **PR-0267 (FFX only), reproduced then gone.** The critic's forked-board repro (sin-face seed 1, Auron's first Dragon
+  Fang), with the acceptance assertions plus one extra row fed through the real UI `resolveAuronSequence` (wrong
+  press at 100 ms): on main's code it FAILS (wrong press 3.9 s left 3,617, UI wrong press 3,617, captured 335 ms
+  2,533, canon fail 2,432); on the branch it PASSES (every failure 2,432; successes 3,192 and 2,584 unchanged).
+  Source check: research/ffx-combat-core.md §5.5 defines failure as timer expiry and the bonus as finishing early,
+  so a zero bonus on failure follows the source.
+- **Tests fail without the fix.** The branch's `ffx-bushido-fail-bonus`, `sin-checkpoint` and
+  `sin-checkpoint-flow` tests, pointed at main's `src`, fail 6 checks (all 4 Bushido checks, "ships on", and the
+  "as shipped" link-3 retry); on the branch they pass, together with `fallen-aeons-flow-chain` and
+  `sin-fins-core-bench` (5 files, 50 passed, 2 skipped).
+- **PR-0268 (FFX only), in a production build.** A fresh `vite build` of the branch, headless GPU Chromium at
+  1600x900, Chapter XVII seed 3: links 1 and 2 by the debug API's `intended` line at skip speed, link 3 lost by the
+  `defend` line, then **RETRY by a real Enter key** on the defeat panel. The next screen is `battle` with no
+  party-prep, an empty log, Genais 20,000 and the Core 36,000, and the party exactly as it entered link 3
+  (Auron 3,522 of 6,492 carried, not refilled). Scene entry was by the debug API, not by real keys through both
+  Fins, so the critic's full real-key acceptance is still owed to the next focused review.
+- **Rules.** Rule 1: engine change is deterministic and touches no DOM or RNG. Rule 5: untouched. Rule 6: no number
+  tuned; Sin checkpoint is Bailey's D-284. Rule 7: `overdrive.ts` stays at 472 and `types.ts` at 2,676 (no growth).
+  Rule 14: both commits say FFX only, which is correct. Orphans: same list as main.
+- **tsc** clean. **Full suite once:** 692 files passed, 5 skipped, 1 failed: `strategy-ffx2-bahamut.test.ts`
+  "heal-only route" timed out at 15 s under full-suite load. It is FFX-2 and untouched by this branch, and it passes
+  alone (19/19), so it is load flake, not a regression.
+- **Pre-existing, not introduced (major, for the next batch):** the Bushido and Tidus **Fail rows are not wired**.
+  `overdrive-auron.ts` / `overdrive-tidus.ts` carry `extra.failPower` / `failHits` / `immunePower`, but nothing in
+  `src` reads them: `overdriveShape.ts` only looks for `failAbilityId` / `immuneAbilityId`, which no FFX ability sets.
+  Proof by running: on the forked board, success with 0.5 s left is 2,584 = 2,432 x 1.0625 exactly, which is the
+  §5.2 bonus alone, so a failure deals the success DmgCon (17), not the Fail row's 16 (§5.5). The handoff's "takes
+  the Fail row" is only true in name. A fix would change a combat outcome, so it needs its own issue and review.
