@@ -32,9 +32,10 @@
 .sthint b { color: #fff; font-weight: 700; }
 /* With the guide open it rides at the top of the guide's own panel. */
 .sthint--inguide { position: relative; left: auto; top: auto; width: auto; margin: 0 0 3px; border-left: 0; border-right: 0; border-bottom: 0.6px solid rgba(255, 79, 100, 0.55); background: rgba(40, 6, 14, 0.55); }
-/* The phone (viewport px): a card across the screen under the target card. */
+/* The phone (viewport px): a card across the screen, just above the party chips (the layout's
+   chips top is H - (--phud-chips + 62px)); under the target card at the target step (PR-0282). */
 .sthint--phone {
-  position: fixed; left: 8px; right: 8px; top: auto; bottom: 168px; width: auto; z-index: 40;
+  position: fixed; left: 8px; right: 8px; top: auto; bottom: calc(var(--phud-chips, 296px) + 68px); width: auto; z-index: 40;
   padding: 7px 10px; font-size: 11px; border-left: 3px solid var(--ig-spira-gold, #e3b94a); border-right: 0;
 }
 .sthint--ffx2.sthint--phone { border-left: 0; border-right: 3px solid var(--ig-accent, #f7b6d9); }

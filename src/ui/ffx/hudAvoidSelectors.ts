@@ -40,6 +40,14 @@ export const SIN_HUD_SELECTORS = ['.ffx-sinclock', '.ffx-sinhud__gaze', '.ffx-si
  */
 export const ADVISOR_PANEL_SELECTORS = [...OMNIS_READOUT_SELECTORS, ...SIN_HUD_SELECTORS] as const;
 
+/**
+ * Status O3's cure-hint card while it is up (PR-0282, both games' plumbing; only the FFX HUD's
+ * card could reach its slot): the move advisor's card treats it as an obstacle beside
+ * {@link ADVISOR_PANEL_SELECTORS}, so the card never prints beneath it with the guide folded
+ * (inside the open guide it is the guide's own panel already). A hidden card matches nothing.
+ */
+export const STATUS_HINT_SELECTOR = '.sthint:not([hidden])';
+
 /** Every one-chapter panel the floating FFX panels dodge (Chapter IX's gauge, Chapter XII's read-out, Sin's clock and Fin plate). */
 export const CHAPTER_PANEL_SELECTORS = [...ZANMATO_GAUGE_SELECTORS, ...OMNIS_READOUT_SELECTORS, ...SIN_HUD_SELECTORS] as const;
 

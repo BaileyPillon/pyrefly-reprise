@@ -296,8 +296,8 @@ export function withStatusLooks<T extends HudPort>(hud: T, game: StatusGame, fie
       const cards = el.querySelector<HTMLElement>('.ig-stat-list')?.getBoundingClientRect();
       if (intent.length) top = Math.max(...intent.map((b) => b.bottom)) + 6;
       else {
-        // Over the cards and over any chip parked on them (FFX-2's WAIT chip), never on it.
-        const floor = [cards, el.querySelector<HTMLElement>('.ffx2-atbmode:not([hidden])')?.getBoundingClientRect()]
+        // Over the cards, any chip parked on them (FFX-2's WAIT chip) and the cure hint docked above them.
+        const floor = [cards, el.querySelector<HTMLElement>('.ffx2-atbmode:not([hidden])')?.getBoundingClientRect(), hint.el.hidden ? undefined : hint.el.getBoundingClientRect()]
           .filter((b): b is DOMRect => !!b && b.height > 0).map((b) => b.top);
         top = floor.length ? Math.min(...floor) - h - 8 : hud.top + hud.height * 0.5;
       }
