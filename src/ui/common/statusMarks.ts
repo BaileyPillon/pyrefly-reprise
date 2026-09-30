@@ -64,7 +64,8 @@ export function wearsLooks(c: BattleState['combatants'][string] | undefined, res
 }
 
 const STAR = 'M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3l-6.1 3.3 1.4-6.8-5.1-4.7 6.9-.8z';
-const CLOUD = 'M14 40a12 12 0 0 1 2-23.8A17 17 0 0 1 48 11a14 14 0 0 1 12 26 10 10 0 0 1-6 3z';
+/** A four-bump cumulus (Darkness): flat base, round crowns, so it reads as a cloud at any size. */
+const CLOUD = 'M9 38a8 8 0 0 1-1-15.9A10 10 0 0 1 22.5 13a12 12 0 0 1 21.5 1.5A9.5 9.5 0 0 1 57 24a7.5 7.5 0 0 1-2 14z';
 const SHIELD = 'M30 3l24 9v17c0 16-11 27-24 33C17 56 6 45 6 29V12z';
 
 /** One mark's markup, positioned relative to the head point in the mockup's px (`* var(--k)`). */

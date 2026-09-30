@@ -67,7 +67,8 @@
 
 /* FFX: "✕ HURTS" on the aimed item's row (stage px). */
 .sthurts {
-  position: absolute; right: 9px; top: 50%; transform: translateY(-50%) skewX(-12deg);
+  /* The command row is already skewed: the pill takes its slant, and its text is set upright. */
+  position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
   display: inline-flex; gap: 1.6px; align-items: center; padding: 0.8px 3.6px;
   background: var(--st-harm); color: #fff; font: 700 4.8px / 1.2 'Chakra Petch', sans-serif; letter-spacing: 0.14em;
   box-shadow: 0 0.8px 3px rgba(0, 0, 0, 0.6); pointer-events: none;
@@ -81,7 +82,12 @@
   transform: skewX(-12deg); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); white-space: nowrap;
 }
 .sttag > span, .ffx-target__note--harm > span, .sthurts > span { display: inline-block; transform: skewX(12deg); }
-.ffx-target__note.ffx-target__note--harm { font-family: 'Chakra Petch', sans-serif; font-size: 14px; color: #fff; margin-left: 10px; }
+/* FFX's name plate is already skewed: the tag hangs outside it, to the right (the mockup's gap),
+   takes the plate's skew rather than adding its own, and its text is set upright again. */
+.ffx-target__plate .ffx-target__note.ffx-target__note--harm {
+  position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%);
+  font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-style: normal; color: #fff;
+}
 /* FFX-2's TARGET plate (plates layer, stage px). */
 .stplate { position: absolute; left: calc(100% + 4px); top: 50%; transform: translateY(-50%); display: flex; gap: 2px; }
 .stplate .sttag { font-size: 5.6px; padding: 0.8px 3.6px; transform: skewX(12deg); box-shadow: 0 0.8px 3px rgba(0, 0, 0, 0.6); }

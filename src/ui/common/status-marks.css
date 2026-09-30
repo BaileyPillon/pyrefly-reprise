@@ -109,14 +109,16 @@
 /* Darkness (FFX-2): a black cloud on the head. */
 .stm--cloud svg {
   position: absolute;
-  left: calc(-34px * var(--k));
-  top: calc(-34px * var(--k));
-  width: calc(68px * var(--k));
-  height: calc(47px * var(--k));
+  left: calc(-36px * var(--k));
+  top: calc(-44px * var(--k));
+  width: calc(72px * var(--k));
+  height: calc(50px * var(--k));
   overflow: visible;
+  /* A pale rim so a black cloud still reads against a night backdrop. */
+  filter: drop-shadow(0 0 calc(3px * var(--k)) rgba(170, 170, 200, 0.6));
   animation: stm-cloud 3s ease-in-out infinite alternate;
 }
-.stm--cloud path { fill: #121217; stroke: #4a4a58; stroke-width: 1.5; opacity: 0.92; }
+.stm--cloud path { fill: #121218; stroke: #a4a4bc; stroke-width: 2; stroke-linejoin: round; opacity: 0.95; }
 @keyframes stm-cloud { from { transform: translateX(calc(-3px * var(--k))); } to { transform: translateX(calc(3px * var(--k))); } }
 
 /* NulBlaze / NulFrost / NulShock / NulTide (FFX): an orb circling the body at chest height. */

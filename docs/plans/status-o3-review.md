@@ -71,3 +71,16 @@ the source tag on every row, and a test pins them.
 - Headless GPU captures of the two mockup moments at 1600x900 and 390x844, side by side with
   `options/o3-*.jpg`, into `docs/concepts/status-display-0929/final/`.
 - tsc, orphans, the full suite once.
+
+## As built (2026-09-30)
+
+- The tap and every piece named above were built; the handoff is `docs/handoff/status-o3.md`.
+- Captions narrowed to statuses that take the command away (the approved FFX-2 frame captions
+  Yuna's Sleep and not Rikku's Silence); FFX-2 Confuse has none (its source: "may use any
+  command she has").
+- The message line is mounted on the battle root above the targeting layer (the Bahamut reticle
+  covered it inside the HUD).
+- Risk 4 measured: 60 fps held; the layer's own script 0.19 ms/frame; layout reads cached.
+- Risk 2 checked in a unit test (Stop freezes, thaws inside an action and after a hit, releases).
+- Risk 3 held: every file this touched stayed within its size or shrank (`TargetCursor.ts`
+  531 -> 529); new files are under 320 lines.
