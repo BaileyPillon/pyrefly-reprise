@@ -200,14 +200,14 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     landscape: { x: 0.8, feet: 0.9, height: 0.62 },
     portrait: { x: 0.5, feet: 0.74, height: 0.46 },
     stagesUnpaintedPoses: true,
-    // D-301: the approved kneel (cand-6, 681 x 651, floor at 635, scale 1.13) and fall (cand-5, the prone canvas,
-    // 1216 x 457, floor at 441, scale 0.82). Without them installed, the staging above. On a wide screen both sit
+    // D-301: the approved kneel (cand-6, 681 x 651, floor at 635, scale 1.13) and fall (the prone canvas, reworked wider
+    // 2026-09-30 afternoon: 1858 x 471, floor at 455, scale 0.82; was cand-5, 1216 x 457, floor at 441). Without them installed, the staging above. On a wide screen both sit
     // right of his standing spot so the box does not cover them (at 0.8 the fall lay almost wholly behind it, 1600x900
     // proof); the fall's robe, cut off by its canvas's right edge, runs off the screen's edge instead (both
     // orientations), with his head near where he stood.
     poses: {
       kneel: { art: 'art/characters/seymour-macalania/kneel.png', aspect: 681 / 651, baseline: 635 / 651, heightOfIdle: (651 * 1.13) / 1191, landscapeX: 0.89 },
-      ko: { art: 'art/characters/seymour-macalania/ko.png', aspect: 1216 / 457, baseline: 441 / 457, heightOfIdle: (457 * 0.82) / 1191, landscapeX: 0.94, portraitX: 0.6 },
+      ko: { art: 'art/characters/seymour-macalania/ko.png', aspect: 1858 / 471, baseline: 455 / 471, heightOfIdle: (471 * 0.82) / 1191, landscapeX: 0.94, portraitX: 0.6 },
     },
   },
   /**
