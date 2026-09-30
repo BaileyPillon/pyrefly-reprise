@@ -95,3 +95,14 @@ FFX-2 is sourced as a faster ATB with simultaneous actions (`ffx-vs-ffx2-present
   victory path was not run (the pacing multiplies the same waits).
 - The entry-overlay row includes loading time and is noisy across runs.
 - A canon-timed preset needs frame-timed footage from the Steam copy (rule 6).
+
+## CHECK (independent, 2026-09-29; did not build it)
+
+Verdict: **no blockers.** Fresh production builds (`BASE_PATH=/`) of the branch (c19ce1f5) and of origin/main (1c313c17, a `git archive`, no worktree), served on ports 8310/8311, measured with `tools/pace-measure.mjs` by real keys, headless Chromium `PYREFLY_BROWSER=gpu`, 1600x900, seed 3, 3 turns. Raw output kept in `F:/pyrefly-parked/2026-09-29/pm/`.
+
+- **No switch = origin/main.** Medians, main vs branch: Ch I windUp 232/232 ms, hit 357/358, actionEnd 201/202, numeral life 903/886, partyAction 779/795, enemyAction 1238/1262, KO 623/627, first menu 8248/8294, wipe 484/483; Ch IV windUp 809/809, hit 360/361, numeral 909/898, partyAction 2581/2581, menuGap 617/631, first menu 6880/6883. Differences are run noise. The per-event traces (48 events Ch I, 53 Ch IV) have identical type sequences and the same party. Code read: every hook multiplies by `paceFactor`/`paceRate` = exactly 1 at `current`; entry and wipe take the untouched path when `f === 1`; no audio file is touched (cues and levels unchanged).
+- **The switch does what the handoff says** (branch, vs `current`): FFX Ch I relaxed windUp x1.37, hit x1.39, actionEnd x1.40, numeral life x1.60, enemyAction x1.36; steady numeral x1.30, windUp x1.19. FFX-2 Ch IV relaxed windUp x1.25, hit x1.26, numeral x1.50, steady numeral x1.25, windUp x1.10. Event type sequences under `relaxed` equal `current` in both chapters (48 and 53 events). Battle entry overlay grows (1311 to 1474 ms Ch I, 1402 to 1576 Ch IV; includes loading, noisy). Results wipe under a preset was not measured (no `--finish` run); the code path is a plain `durationMs` scale.
+- **Claimed defect fix:** none is claimed (the handoff says "Not a defect"), so no fail-without-fix test applies.
+- **Scope:** `git diff` against the merge base touches nothing under `src/battle` or `src/data`; the src changes are the 13 files the handoff names plus `src/engine/pace.ts`. Rules read: layering (pace.ts pure), contract note present, new file and edits under 400 lines, no `public/art`.
+- **Checks:** `npx tsc --noEmit` clean; `pace-option.test.ts` 6/6; 28 related presenter/damage-number/transition/entry test files, 317 tests, all pass; `git merge-tree` of merge-base, HEAD and origin/main has no conflicts (origin/main equals the merge base, so the branch fast-forwards).
+- Minor: the ATB-clock claim (a slower preset costs wall time, not ATB) is pinned by the unit test only; the real-key Ch IV run showed unchanged event sequences under `relaxed`, which agrees.
