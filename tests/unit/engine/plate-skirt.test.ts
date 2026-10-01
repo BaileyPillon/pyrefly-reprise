@@ -2,6 +2,7 @@ import { Group, Mesh, MeshBasicMaterial, PerspectiveCamera, PlaneGeometry, Textu
 import { describe, expect, it } from 'vitest';
 import { addPlateSkirt, plateTexture, skirtGeometry } from '../../../src/engine/PlateSkirt.ts';
 import { ROAD_BACKDROP, ROAD_RIGS } from '../../../src/scenes/road-to-the-farplane.ts';
+import type { CameraRig } from '../../../src/engine/BattleCamera.ts';
 
 /**
  * VP-1001-30 (FFX-2 only, Chapter XI): the Road to the Farplane's plate ended above the frame's
@@ -10,7 +11,8 @@ import { ROAD_BACKDROP, ROAD_RIGS } from '../../../src/scenes/road-to-the-farpla
 const PLATE_H = (ROAD_BACKDROP.width * 1536) / 2688;
 
 /** Where a rig's lowest ray meets the plate's plane, at a 16:9 frame. */
-function lowestHit(rig: { position: readonly number[]; lookAt: readonly number[]; fov?: number }): number {
+function lowestHit(r: CameraRig): number {
+  const rig = r as { position: readonly number[]; lookAt: readonly number[]; fov?: number };
   const cam = new PerspectiveCamera(rig.fov ?? 32, 16 / 9, 0.1, 500);
   cam.position.set(rig.position[0]!, rig.position[1]!, rig.position[2]!);
   cam.lookAt(new Vector3(rig.lookAt[0]!, rig.lookAt[1]!, rig.lookAt[2]!));
