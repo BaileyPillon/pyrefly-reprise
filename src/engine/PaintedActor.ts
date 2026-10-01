@@ -50,6 +50,7 @@ import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralA
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
+import { cutoutShadow } from './ShadowCutout.ts';
 
 /** One painted pose: a URL now, a texture once it has loaded. */
 export type PoseMap = Record<string, string>;
@@ -982,10 +983,7 @@ export class PaintedActor extends Group {
       1 / Math.max(1, tex.meta.height),
     );
     slot.mesh.visible = this.showFigure;
-    if (slot.depth) {
-      slot.depth.map = tex.texture;
-      slot.depth.needsUpdate = true;
-    }
+    if (slot.depth) cutoutShadow(slot.material, slot.depth, tex.texture, this.shadowAlphaTest); // VP-1001-31: figure-shaped
 
     // One pixel scale for the whole subject, taken from idle — so a landscape
     // KO render becomes a wide, low body instead of a standing figure's height
