@@ -261,3 +261,48 @@ covers both checks: press one wrong key mid-sequence, watch whether the chips go
 input 1 and the timer keeps running (Q1), then finish the sequence and read the result.
 Screenshots from the start of each prompt give the glyphs, the number of inputs (D2), the
 order (D3) and the starting timer value (D1).
+
+## Steam HD check 2026-10-01 (retry)
+
+**Scope: FFX only; docs only.** Same copy, save and keyboard driver as the first check
+(`D:/Tools/ffx-hd`, slot 106, SendInput). Screen grabs used the plain window-rect screen grab
+only; PrintWindow was not used. Run 07:19 to 07:35 EDT. Nothing was saved; no setting was
+left changed. Screenshots stay under `D:/Tools/ffx-hd/observe/2026-10-01/retry/`.
+
+**Result: blocked again before the title screen. No Bushido input was observed.** D1, D2,
+D3, D4 and Q1 stay open, and nothing here carries `[verified: Steam HD 2026-10-01]`. The
+earlier sections of this file stand as written.
+
+What was checked:
+- Before the start: ComfyUI queue empty, GPU 1.5 GB of 16 GB in use, no FFX.exe left from
+  the night. So the "ComfyUI holds the GPU" explanation from the first check is **ruled
+  out**: FFX.exe drew the same plain white window with the GPU idle.
+- While the window is white, FFX.exe uses **0 percent GPU** (nvidia-smi pmon) and about 0.06
+  of a CPU core. Its log still reaches the title maps (`titl00`, `titl02`) and prints
+  "Framerate = 29.97 fps". The game starts, but it draws nothing.
+- FFX-2.exe from the same folder, started a minute later, **drew normally**, with the Steam
+  FPS counter. So the problem only affects FFX.exe, and it has lasted from about 01:00 to
+  07:35 EDT.
+- Tried, all still white: a plain restart; minimising and restoring the window; the
+  graphics driver refresh (Win+Ctrl+Shift+B, sent twice; the second time a black screen
+  frame confirmed it fired); a byte copy of FFX.exe under a new name (a fresh exe path,
+  which rules out the per-exe NVIDIA shader cache, the Game Bar game entry and the per-exe
+  compatibility state); exclusive fullscreen for one start (window stayed 1024x576, then the
+  setting was restored byte-identical); starting through Explorer instead of the agent
+  shell.
+- Unchanged since the working start at 00:56: the game folder (only `OUTPUT.TXT` is
+  rewritten), the FFX saves (last written 2026-09-26), `GameSetting.ini` (byte-identical
+  to the copy taken before the first check). No display-driver or DWM event since 22:00.
+- Loaded in FFX.exe: d3d11, dxgi, nvwgf2um (NVIDIA driver 610.47), NVIDIA's capture hook
+  `nvspcap.dll` and the Steam overlay. No software renderer. A "SudoMaker Virtual Display
+  Adapter" (Apollo streaming, installed 2026-09-27) is present but not attached to the
+  desktop.
+
+What this means: something outside the game files has been in a bad state since the first
+start froze at about 00:59. That first start was also the one where PrintWindow was used.
+A graphics refresh does not clear it. An agent should not try the remaining fixes on its
+own. They are for Bailey to choose: a reboot (most likely to clear it); or turning off
+NVIDIA's overlay, Apollo or the virtual display adapter for one test start.
+
+Next try: after a reboot, with ComfyUI idle, load slot 106 and run the steps listed at the
+end of "Steam HD check 2026-10-01". Grab the screen sparingly, and never use PrintWindow.
