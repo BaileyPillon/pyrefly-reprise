@@ -1,0 +1,40 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-01T03:31:11Z",
+  "build": { "mainSha": "f302f163", "bundle": "DCYkAkI-", "artifactHash": "ff26ce51ad23c791dafd678f2b8f750c10479e19bb80d899e05753bcb800299f" },
+  "verdicts": { "deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed" },
+  "checks": [
+    { "id": "CHK-017", "result": "PASS", "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/f302f163.json --changed-from critic/artifacts/1a6fd3cc.json --full: result PASS, liveManifest match, 1014 compared, 0 mismatched, 0 missing, 0 wrong type. Served script assets/index-DCYkAkI-.js. First run of the same command reported one transient HTTP 503 on art/characters/sin-right-fin/idle-near.png; curl twice returned 200 with 1171399 bytes (the manifest size) and the immediate rerun was a full PASS. Zero console errors, zero 404 or >=400 responses, zero image responses typed text/html; prerendered music mp3 fetched (title, chapter-select, scene-gagazet, boss-seymour, pause, scene-bevelle-underground, boss-ffx2-aeon). Load to ready 0.6 to 3.4 s.",
+      "environment": "headless Playwright, PYREFLY_BROWSER=gpu, fresh context 1600x900, ?livesmoke=<ts>", "automated": true },
+    { "id": "CHK-016", "result": "PASS", "mandatory": true,
+      "evidence": "Each step asserted the screen name via window.__pyrefly.app.current.name before acting or capturing: title, chapter-select, board selectedId == target (seymour-flux, ffx2-bahamut), party-prep, battle with a command menu up (awaitingMenu or command DOM), pause, and back to battle. Chapter I FFX: command menu TALK/ATTACK/SPECIAL/WHITE MAGIC/ITEMS/FLEE, Auron coach card visible. Chapter IV FFX-2: White Magic/Change/Item rows. Screens in D:/pyrefly-scratch-f302/smoke2 (03-ch1-turn, 04-pause-options, 06-pause-hidden checked by eye). All real key presses; debug API read-only.",
+      "environment": "headless Playwright gpu", "automated": true },
+    { "id": "CHK-024", "result": "PASS", "mandatory": true,
+      "evidence": "Lightweight reload smoke: set CINEMA LIGHT to OFF with a real ArrowRight on the OPTIONS tab; save JSON settings.fxLight was false before and after page.reload; after reload, Chapter IV pause OPTIONS still showed CINEMA LIGHT OFF with LIVING PAINTINGS and BATTLE SPECTACLE ON; restored to ON afterwards. Progress (chapter clear) was not reachable in the lightweight pass, so only the setting plus coach/seenCoach state was exercised. The full upgrade matrix was not run.",
+      "environment": "headless Playwright gpu", "automated": true }
+  ],
+  "coverage": {
+    "tested": [
+      "Exact artifact: 1014 files byte-identical and content-typed against the live site (full)",
+      "Title to chapter select to Chapter I (FFX, seymour-flux) player turn and Chapter IV (FFX-2, ffx2-bahamut) player turn with real keys",
+      "First-run guide (Auron coach card, O2) visible at Chapter I first player turn on a fresh profile",
+      "Eye-candy D rows CINEMA LIGHT, LIVING PAINTINGS, BATTLE SPECTACLE present, default ON; CINEMA LIGHT toggled OFF and ON with real keys; survives reload and shows in FFX-2 pause",
+      "Chapter I cancel path (Special submenu then Escape) and positive path (Attack confirm); Escape and P pause and resume; H hides pause panels (tab bar height 43 to 0) and restores (back to 43)",
+      "Prerendered mp3 music and SFX sprite fetched over the network"
+    ],
+    "reused": [],
+    "notTested": [
+      "FFX-2 Stop freeze and the cure hint card (status O3): no status was induced",
+      "Sphere Grid A+C and B screens",
+      "Calm camera and steady pacing judged only as not-crashing; the feel, the visual look of each eye-candy look and the audio quality were not judged (agents cannot hear)",
+      "Chapter XV Stop-seam fix, other chapters, FF7 secret fight",
+      "Full CHK-024 upgrade matrix (old-schema saves) and chapter-clear progress persistence",
+      "Whether the procedural fallback is silent; audio assessed by network log only (no AudioManager debug surface exposed on window.__pyrefly.audio)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 14
+}
