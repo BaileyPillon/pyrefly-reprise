@@ -203,3 +203,105 @@ JPEG frames). The probe files are parked in `F:/pyrefly-parked/2026-09-30/r34fix
 No server is left running.
 
 Game case: **FFX only**, for the same reason as above.
+
+## od2 (2026-09-30): the Swordplay mis-press and the Blitz Ace finisher (FFX only)
+
+Branch `r34fix-od2`, cut from e942fe11. Not pushed, not deployed. Fixes the Check's majors 1
+and 3 (still-open item 1 above). Two commits, one per item.
+
+**1. A Swordplay mis-press restarts the sweep; only expiry fails** (3483de3b). Source,
+§5.3 rule 1 `[verified: 2 sources]`: "A miss is not a failure. If the player misses, the
+marker will return to its default position (far left of the meter) and start moving again."
+"Failure is timer expiry, not a bad press." Rule 3: "timer expiry selects the distinct weaker
+"fail" row".
+
+- `src/ui/ffx/minigames/TidusTiming.ts`: a press outside the gold zone puts the cursor back at
+  the far left and restarts the sweep; the timer keeps running ("a miss restarts the sweep but
+  not the timer"). Only a press in the zone resolves (a success). The timer's expiry always
+  sends `{success:false, timeRemainingMs:0}`. Before, a cursor that happened to sit in the zone
+  at expiry could even resolve a 0 ms success. The rule itself is pure, in `logic.ts`
+  (`pressTidusTiming`, `expireTidusTiming`). The look, the markup and REDUCE MOTION are
+  untouched, and so is the engine contract (`MinigameResult`).
+- `timingBonusFrom` (`src/battle/ffx/overdrive.ts`) pays 0 ms on a failed `tidus-timing`, as
+  PR-0267 does for Bushido, so a fail can never out-damage a success. The file stays at 472
+  lines.
+
+| Run (seed 1) | before | after |
+|---|---|---|
+| Engine, fixture board, Spiral Cut fail with 2 994 ms left | 529 | 353 (= expiry 353) |
+| Engine, same board, success with 200 ms / 0 ms left | 485 / 470 | 485 / 470 |
+| Real keys, Chapter II, Enter about 15 ms into the overlay | engine got `{false, 2985}`, Yunalesca took **1942** | the sweep restarts, the overlay stays open |
+| Real keys, Chapter II, that mis-press then Enter in the zone | n/a (already resolved) | `{true, 2502}`, **2449** (1729 x (1 + 2502/6000)) |
+| Real keys, Chapter II, that mis-press then nothing | n/a | `{false, 0}`, **1297** |
+| Real keys, Chapter II, no press | 1297 (the Check) | `{false, 0}`, **1297** |
+
+The browser runs used headless Playwright (`PYREFLY_BROWSER=gpu`) against a vite dev server
+on 5381, stopped by PID after each run. Setup went through `__pyrefly` (seed 1, Chapter II,
+cutscenes skipped, Tidus's gauge set to 100); everything else was real keys: the others
+Attack, then Tidus picks Overdrive and Spiral Cut. The "before" run swapped the two old files
+in for the run and put the new ones back.
+
+**2. Blitz Ace's success finisher** (9834cba2). Source, §5.3 table `[verified: 2 sources]`:
+rows "99 + 274 / 238", rank "7 (fail 6)", success "4 × 8, then a final 24 × 1 (row 274 "Last
+Hit")", fail "4 × 8". The 8 + 1 hit count is `[single source]` (§11 C14).
+
+- `overdriveShape.ts`: a new `finisherRow(def)` builds row 274 from
+  `extra.finisherPower`/`finisherHits`, with `canMiss: false` and everything else taken from
+  the success record. `shapeOverdrive` returns it as `finisher` on a success only. The fail row
+  still drops the finisher keys.
+- `execute.ts` resolves the finisher after the volley, inside the same action.
+- New `ResolveOptions.followUp` (`abilities.ts`, still 419 lines). With it, the finisher does
+  not re-pay a per-targeting gauge (Yojimbo, Anima, Isaaru's aeons) or Evrae's targeting
+  count. That matches the existing "once per action" comment.
+- The finisher shares the action's §5.2 timing bonus. That is a reading: §5.2 applies the
+  bonus to the Overdrive's damage, and no source singles out row 274.
+
+Engine, fixture board, seed 1:
+
+- Before: success 8 hits = 484, fail 8 hits = 484 (fail tick 60 against 70).
+- After: a success is the same 8 hits plus a Last Hit of 353, 837 in all. A fail is unchanged
+  at 484. With 1 100 ms left, a success is 1042 (Last Hit 441).
+- This is latent in play, because no shipped build unlocks Blitz Ace.
+
+**Tests**
+
+- `tests/unit/ffx-swordplay-miss-restart.test.ts` (new, jsdom, 12 tests):
+  - the pure press rule;
+  - the real overlay on a fake clock with real `keydown` events: miss -> restart -> expiry,
+    miss -> correct press, and a late miss restarting from the left;
+  - `timingBonusFrom` on a fail = 0;
+  - for every Swordplay row, a fail deals the same whatever the clock showed and never beats a
+    success.
+
+  8 of the 12 fail against e942fe11's overlay and `timingBonusFrom`.
+- `tests/unit/ffx-blitz-ace-finisher.test.ts` (new, 7 tests): success = 9 hits with the
+  finisher at about 6x a volley hit; fail = 8 hits, the same volley, strictly less; the bonus
+  scales the finisher; the other three rows have no finisher; one targeting count per action;
+  `finisherRow` itself. 4 of them fail without the fix.
+- `ffx-overdrive-fail-rows.test.ts`: the success hit count now adds `finisherHits`.
+- Goldens: nothing moved, and none were re-pinned (18/18). Auto-rolled Swordplay fails already
+  carry 0 ms, and no golden line casts Blitz Ace.
+
+**Gates:** `npx tsc --noEmit` is clean. The full `npx vitest run --testTimeout=60000` passes:
+696 files, 5 skipped, 10524 tests. `node tools/orphans.mjs` shows 24 orphans, unchanged.
+
+**Still open (not changed here; the sources do not settle them):**
+
+1. The Bushido wrong-press rule. `research/visual-bible.md` §3.11.2 says a wrong input ends the
+   attempt, while ffx-combat-core §5.5's authored rule is "a wrong press is ignored". Both are
+   unsourced, so this is Bailey's call.
+2. The Immune rows are still unreachable: nothing sets `targetImmuneToRider`, and the sources
+   do not say how immunity is decided.
+3. Whether a Fail row keeps its rider, and whether it can crit (unsourced).
+4. Seen in passing, not touched: `minigameParams` publishes `travelMs`/`zonePercent` (always
+   1400/22), but the overlay reads `zoneHalfWidth`/`speedPxPerSec`. So all four Swordplay
+   overlays play with the defaults (360 px bar, ±22 px zone, 340 px/s), and only the timer
+   varies per Overdrive. §5.3's per-Overdrive tuning table is `[estimate]` (authored), so this
+   is a design question, not a sourced defect. The cursor also ping-pongs at the right end;
+   §5.3 describes a left-to-right sweep and says nothing about the end of it.
+
+Scratch: probe JSON, browser JSON and JPEG frames in `D:/Tools/pyrefly-scratch/2026-09-30-rel35/od2/`.
+The probe test and the real-key script are parked in `F:/pyrefly-parked/2026-09-30/od2/`.
+No server is left running.
+
+Game case: **FFX only**, for the same reason as above.
