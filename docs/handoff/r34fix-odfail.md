@@ -1008,3 +1008,103 @@ was started.
 
 Game case: **FFX only**. Bushido is Auron's FFX Overdrive; FFX-2 has none, and no file under
 `src/battle/ffx2`, `src/ui/ffx2` or `src/data/ffx2` changed.
+
+## Check (od6), 2026-10-01: independent check of `r34fix-od6` at `8b106abf` (FFX only)
+
+**Verdict: no blocker.** The fix does what it says and is sourced: a failed Shooting Star, Banishing
+Blade or Dragon Fang now lands no rider. A success still lands it. Every damage number is unchanged,
+and no RNG draw moves when no Bushido fails. One major is disclosed below. It was not introduced by
+this change and is not a regression: Seymour Flux's "Delay attempt" Slowga counter still fires on a
+*failed* Dragon Fang.
+
+**Code read.** `rowFromExtra` builds the Fail row as the Immune row was already built:
+`statusEffects: []` and no `weak-delay`/`strong-delay` flag. `canMiss: false` (hard rule 5),
+`crit-eligible` (Q3b), power, hits and rank stay as before. The success record and the
+`failAbilityId` path are untouched. Swordplay records carry no status and only the `crit-eligible`
+flag, so Tidus's Fail rows do not change. Q3a in `research/ffx-overdrive-input-rules-2026-09-30.md` is
+`[verified: 5 sources]` and says what the code does.
+
+Bushido riders are all chance 254. `rollStatus` returns before `percentRoll` for those, and Delay never
+draws, so dropping a rider removes no draw.
+
+The file is 169 lines and imports no DOM and no `three`. The diff touches only
+`overdriveShape.ts`, the new test and this handoff.
+
+**Engine before/after (my own probe, not the builder's).** Every shipped FFX chapter where Auron has a
+Bushido, first-link board, seed 1. Auron's gauge was 100. Each row was fired at each foe, with a clean
+input (7 of 7) and a failed one (1 of 7). The "before" tree is `git archive 9f8e47e0 src`.
+
+- **Success:** the whole output is byte-identical before and after, on 38 rows covering chapters
+  I to XVIII with Auron. Damage, statuses, CTB and draw counts all match, rider included.
+- **Fail:** the only differences are the rider:
+  - **VII:** no Eject on the Guardians; no Breaks on the Guardians or on Seymour (before: all four, and
+    Magic/Armor/Mental); no Delay on the Guardians (2 -> 2 and 38 -> 38, before 2 -> 21 and 38 -> 57).
+  - **III:** no Delay on the Yu Pagodas.
+  - **VIII:** no Delay and no Power/Mental Break on Evrae.
+  - **X:** no Delay on Mortibody; no Breaks on Natus or Mortibody.
+  - **XII:** no Delay on the Mortiphasms.
+- **Damage and crits** are identical on every row, the same as the builder's numbers.
+- **Draw counts:** inside the action they are equal. The draw delta appears only where a Guardian is
+  no longer Ejected, stays on the field and fires `guardian-auto-potion` after `action-end`. That is
+  the expected consequence.
+
+**Cross-tree replays.** Every FFX chapter, seeds 1 and 7, with the shipped strategy, on both trees. The
+log digests compare as follows:
+
+- **(a)** No forced Overdrive (auto-rolled minigames): identical on all 22 runs.
+- **(b)** Every Bushido forced *clean*: identical on all 22 runs. This is the "no new draw" check.
+- **(c)** Every Bushido forced *failed*: only Chapter III differs, at both seeds. The failed Dragon Fang
+  no longer Delays the Yu Pagodas, so the fight diverges after it. The other ten chapters are identical.
+
+`ffx-engine-golden.test.ts` is 18/18 on its old values; no golden moved.
+
+**Tests.** The new test file was copied with its imports pointed at the 9f8e47e0 source and run there:
+10 of 15 fail, as claimed. The copy is parked in `F:/pyrefly-parked/2026-10-01/od6/check/`. On the
+branch, the new file, `ffx-bushido-immune-rows`, `ffx-bushido-fail-bonus` and `ffx-engine-golden` all
+pass. A gap the builder already noted: the Dragon Fang "log equals riderless log" test also passes on
+the old code, because Delay emits no event; the CTB test is the one that catches it.
+
+**Gates (re-run).**
+
+- `npx tsc --noEmit`: clean.
+- Full `npx vitest run --testTimeout=60000`: 700 files passed, 5 skipped; 10 577 tests passed, 40
+  skipped, 1 todo; exit 0.
+- `node tools/orphans.mjs`: 24 orphans, unchanged.
+
+**Real keys, headless.** Playwright from node (`PYREFLY_BROWSER=gpu`), Vite dev on 5511 from this
+worktree, stopped by PID; nothing was listening afterwards.
+
+- **Setup through `__pyrefly`:** seed 1, Chapter VII `seymour-anima-macalania`, cutscenes skipped,
+  Auron's gauge 100.
+- **Real keys from there:** the first menu Switches Auron in, the others Attack, then Auron picks
+  Overdrive > Banishing Blade > Guado Guardian A.
+- **Fail:** two correct glyphs, then a wrong one. The engine got `{success:false, 0, 0}`. Guardian A
+  took 1712 and only `critical` was added. **No Break landed.**
+- **Clean:** all seven glyphs. The engine got `{success:true, 7, 3297 ms}`. Guardian A took 2417 and
+  **all four Breaks landed.**
+- No page errors. JSON and JPEGs are in `D:/Tools/pyrefly-scratch/2026-10-01-rel34/od6/check/realkey/`.
+
+**Major (disclosed, not introduced, not a regression; Chapter I, FFX only).** The trigger:
+`engine-end.ts` hands `collectBossCounters` the command's original record (`commandAbility`), not the
+row that actually resolved. `ai/reactions.ts` then reads `def.flags` for `weak-delay`.
+
+So a **failed** Dragon Fang on Seymour Flux / Mortiorchis still draws the party-wide Slowga. My probe
+measured it on both trees: seed 1, Auron switched in, failed Dragon Fang, two Slowga counters before
+and after. Yet the resolved Fail row carries no Delay.
+
+`research/ffx-seymour-flux.md` §4.6 names the trigger "Dragon Fang's delay rider", and Q3a says a
+failed Dragon Fang has none. The sources do not say outright which record the game's counter checks.
+The Immune row has the same seam, and §4.6 implies that one *does* provoke the counter, because Flux
+is always Delay-immune. So the change needs a sourced decision, or a Steam HD check of a failed Dragon
+Fang on Seymour Flux, before anyone edits code. It was not changed here.
+
+The double Slowga (one per actor hit) also predates this change and is outside od6.
+
+Scratch: `D:/Tools/pyrefly-scratch/2026-10-01-rel34/od6/check/`, containing:
+
+- `probe.mjs`, `fail|ok-before|after.txt`
+- `replay.mjs`, `rp-*.txt`
+- `ch1.mjs` (the Flux probe)
+- `realkey-ch7.mjs`, `realkey/`
+- `tsc.txt`, `full-vitest.txt`, `orphans.txt`
+- `before/` (the 9f8e47e0 src)
