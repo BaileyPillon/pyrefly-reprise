@@ -104,3 +104,15 @@ describe('PR-0282: the cure hint follows BATTLE HELP and never covers a command 
     expect(host.querySelectorAll(sel).length).toBe(1);
   });
 });
+
+describe('round 18b: the cure hint reads at 14 px, keeps off the tap line, and outlives the guide fade', () => {
+  it('PR-0302: the stage card floors its type at 15 rendered px (14 after any rounding), the phone card is 14 px and follows TEXT SIZE', () => {
+    expect(CSS).toContain('.sthint { font-size: max(6px, calc(15px / var(--lb-scale, 1))); }');
+    expect(CSS).toContain('.sthint__head { font-size: max(4.8px, calc(15px / var(--lb-scale, 1))); }');
+    expect(CSS).toContain('.sthint--phone, .sthint--phone .sthint__head { font-size: 14.2px; }');
+    expect(CSS).toContain("html[data-phone-battle='ffx'][data-text-size] .sthint--phone");
+    expect(CSS).toContain("html[data-phone-battle='ffx2'][data-text-size-wide] .sthint--phone");
+    // The floors come after the sizes they lift (the same specificity: the later rule wins).
+    expect(CSS.indexOf('.sthint { font-size: max(')).toBeGreaterThan(CSS.indexOf('.sthint--phone .sthint__head { font-size: 9px'));
+  });
+});

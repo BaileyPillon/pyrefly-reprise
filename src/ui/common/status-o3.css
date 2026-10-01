@@ -41,6 +41,19 @@
 .sthint--ffx2.sthint--phone { border-left: 0; border-right: 3px solid var(--ig-accent, #f7b6d9); }
 .sthint--phone .sthint__head { font-size: 9px; margin-bottom: 4px; gap: 6px; }
 .sthint--phone .sthint__head i { padding: 1px 5px; }
+/* PR-0302 (CHK-003): nothing a player reads under 14 rendered px. The stage card floors its stage
+   px at 15 / the stage scale (`--lb-scale`), so it only grows where it was small (1280x960, the
+   1600x900 head); 15, not 14, because a rendered-size read scales by the box over its offsetHeight
+   (whole stage px), and a 9-px head can lose 5 % to that rounding. The phone card is 14.2 px (as
+   move-advisor.css), and follows TEXT SIZE as the rest of each game's phone HUD does (FFX:
+   data-text-size; FFX-2: data-text-size-wide, off until D-220 Q4). */
+.sthint { font-size: max(6px, calc(15px / var(--lb-scale, 1))); }
+.sthint__head { font-size: max(4.8px, calc(15px / var(--lb-scale, 1))); }
+.sthint--phone, .sthint--phone .sthint__head { font-size: 14.2px; }
+html[data-phone-battle='ffx'][data-text-size] .sthint--phone,
+html[data-phone-battle='ffx'][data-text-size] .sthint--phone .sthint__head,
+html[data-phone-battle='ffx2'][data-text-size-wide] .sthint--phone,
+html[data-phone-battle='ffx2'][data-text-size-wide] .sthint--phone .sthint__head { font-size: calc(14.2px * var(--pyr-ts, 1)); }
 
 /* ---- FFX: the Zombie forecast over the figure (viewport px) ------------------------------------ */
 .stfore-layer { position: absolute; inset: 0; pointer-events: none; z-index: 25; }
