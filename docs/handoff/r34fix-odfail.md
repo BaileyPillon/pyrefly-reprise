@@ -1035,7 +1035,8 @@ Bushido, first-link board, seed 1. Auron's gauge was 100. Each row was fired at 
 input (7 of 7) and a failed one (1 of 7). The "before" tree is `git archive 9f8e47e0 src`.
 
 - **Success:** the whole output is byte-identical before and after, on 38 rows covering chapters
-  I to XVIII with Auron. Damage, statuses, CTB and draw counts all match, rider included.
+  II, III, VII, VIII, IX, X, XII, XVII and XVIII. Chapter I gave Auron no turn on this board (he
+  starts in reserve), so it was probed separately with `ch1.mjs`, below. Damage, statuses, CTB and draw counts all match, rider included.
 - **Fail:** the only differences are the rider:
   - **VII:** no Eject on the Guardians; no Breaks on the Guardians or on Seymour (before: all four, and
     Magic/Armor/Mental); no Delay on the Guardians (2 -> 2 and 38 -> 38, before 2 -> 21 and 38 -> 57).
