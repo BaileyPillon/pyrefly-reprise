@@ -408,7 +408,7 @@ export class PaintedActor extends Group {
   private active = 0;
 
   private readonly poses = new Map<string, PaintedTexture>();
-  private readonly poseUrls: PoseMap = {};
+  readonly poseUrls: PoseMap = {};
   /**
    * Textures this actor loaded itself, and is therefore responsible for
    * freeing. Textures that arrived through {@link adoptPoses} are *borrowed* —

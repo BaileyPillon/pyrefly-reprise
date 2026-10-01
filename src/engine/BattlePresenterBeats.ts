@@ -13,6 +13,7 @@ import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresen
 import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import { victoryPoseOf } from './VictoryPose.ts';
+import { downWithoutKoPainting } from './KoFallback.ts';
 import { partyOffStage } from './SummonStaging.ts';
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
@@ -182,6 +183,7 @@ export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
   }
   // A KO'd party member stays on the field, down.
   actor?.setPose('ko');
+  downWithoutKoPainting(actor); // VP-1001-04: no KO painting, so the idle lies down
   actor?.flash(0x4a5a78, 320, 0.7);
   const down = ctx.deps.actionMotion; // FF7: laid down at once, not at the wipe-out
   if (down?.ko) void settled(ctx, down.ko(id, motionCtx(ctx)), MOTION_GUARD_MS);
@@ -269,7 +271,9 @@ export async function defeat(ctx: EventCtx): Promise<void> {
   ctx.moments.clear();
   ctx.stage.vfx.screenFlash('rgba(0,0,0,0.55)', 900);
   for (const id of ctx.stage.staged()) {
-    if (ctx.stage.sideOf(id) === 'party') ctx.stage.actor(id)?.setPose('ko');
+    if (ctx.stage.sideOf(id) !== 'party') continue;
+    ctx.stage.actor(id)?.setPose('ko');
+    downWithoutKoPainting(ctx.stage.actor(id));
   }
   await ctx.sleep(TIMING.defeat);
   const own = ctx.deps.actionMotion?.defeat; // FF7: G1's pan up over the fallen party
