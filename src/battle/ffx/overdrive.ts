@@ -446,13 +446,13 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
   }
 }
 
-/** The §5.2 timing bonus carried by a minigame outcome, or `null`. A failed Bushido never completed, so none (§5.5, PR-0267). */
+/** The §5.2 timing bonus carried by a minigame outcome, or `null`. A failed Swordplay or Bushido earns none (§5.3 rule 1, §5.5; PR-0267, od2). */
 export function timingBonusFrom(result: MinigameResult | undefined, def: AbilityDef): TimingBonus | null {
   if (!result) return null;
   const timerMs = timerMsFor(def);
   if (timerMs <= 0) return null;
   if (result.kind === 'tidus-timing') {
-    return { timeRemainingMs: result.timing.timeRemainingMs, timerMs: result.timing.timerMs || timerMs };
+    return { timeRemainingMs: result.timing.success ? result.timing.timeRemainingMs : 0, timerMs: result.timing.timerMs || timerMs };
   }
   if (result.kind === 'auron-sequence') {
     return { timeRemainingMs: result.sequence.success ? result.sequence.timeRemainingMs : 0, timerMs };

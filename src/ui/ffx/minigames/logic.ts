@@ -32,6 +32,36 @@ export function resolveTidusTiming(input: {
   return { success, timeRemainingMs: Math.max(0, input.timerMs - input.elapsedMs), timerMs: input.timerMs };
 }
 
+/**
+ * One Swordplay press, in the overlay's own clock. `research/ffx-combat-core.md`
+ * §5.3 rule 1 `[verified: 2 sources]`: "A miss is not a failure. If the player
+ * misses, the marker will return to its default position (far left of the
+ * meter) and start moving again. ... Failure is timer expiry, not a bad press."
+ * So a press outside the gold zone is a `miss` that restarts the sweep at
+ * `elapsedMs` (the timer keeps running: "a miss restarts the sweep but not the
+ * timer"); only a press in the zone resolves, and a press at or past the timer
+ * is the expiry fail. `sweepStartMs` is when the current sweep began.
+ */
+export function pressTidusTiming(input: {
+  elapsedMs: number;
+  sweepStartMs: number;
+  barWidth: number;
+  zoneHalfWidth: number;
+  speedPxPerSec: number;
+  timerMs: number;
+}): { kind: 'hit'; cursorPos: number; timing: TimingResult } | { kind: 'miss'; cursorPos: number; sweepStartMs: number } | { kind: 'expired'; timing: TimingResult } {
+  const { elapsedMs, timerMs } = input;
+  if (elapsedMs >= timerMs) return { kind: 'expired', timing: expireTidusTiming(timerMs) };
+  const cursorPos = tidusCursorPosition(elapsedMs - input.sweepStartMs, input.barWidth, input.speedPxPerSec);
+  const timing = resolveTidusTiming({ cursorPos, barWidth: input.barWidth, zoneHalfWidth: input.zoneHalfWidth, elapsedMs, timerMs });
+  return timing.success ? { kind: 'hit', cursorPos, timing } : { kind: 'miss', cursorPos, sweepStartMs: elapsedMs };
+}
+
+/** Swordplay's only failure: the timer ran out (§5.3 rules 1 and 3), so no time remains. */
+export function expireTidusTiming(timerMs: number): TimingResult {
+  return { success: false, timeRemainingMs: 0, timerMs };
+}
+
 /** research/visual-bible.md §3.11.0: `damage * (1 + timeRemaining / (timerMs * 2))`, as a display percentage. */
 export function timingBonusPercent(timeRemainingMs: number, timerMs: number): number {
   if (timerMs <= 0) return 0;

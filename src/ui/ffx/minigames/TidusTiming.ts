@@ -1,6 +1,6 @@
-import type { MinigameResult } from '../../../battle/common/types.ts';
+import type { MinigameResult, TimingResult } from '../../../battle/common/types.ts';
 import { RawInputWatcher } from '../rawInput.ts';
-import { resolveTidusTiming, tidusCursorPosition } from './logic.ts';
+import { expireTidusTiming, pressTidusTiming, tidusCursorPosition } from './logic.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
 import { num, str } from './params.ts';
 
@@ -14,6 +14,10 @@ import { num, str } from './params.ts';
  * hard-coded here. Pixel math stays internal (it feeds the pure resolver in
  * `logic.ts`); only the CSS custom properties driving `.ig-minigame__bar`
  * are percentages.
+ *
+ * A press outside the zone is not a failure: the cursor goes back to the far
+ * left and sweeps again, and only timer expiry fails [ffx-combat-core §5.3
+ * rule 1, `[verified: 2 sources]`; `pressTidusTiming`]. FFX only.
  */
 export function openTidusTiming(root: HTMLElement, params: Record<string, unknown>): Promise<MinigameResult> {
   const timerMs = num(params['timerMs'], 3000);
@@ -39,8 +43,17 @@ export function openTidusTiming(root: HTMLElement, params: Record<string, unknow
   return new Promise<MinigameResult>((resolve) => {
     let rafId = 0;
     let settled = false;
+    let sweepStartMs = 0;
     const watcher = new RawInputWatcher((b) => {
-      if (b === 'confirm') void finish();
+      if (b !== 'confirm' || settled) return;
+      const press = pressTidusTiming({ elapsedMs: overlay.elapsedMs(), sweepStartMs, barWidth, zoneHalfWidth, speedPxPerSec: speed, timerMs });
+      if (press.kind === 'miss') {
+        sweepStartMs = press.sweepStartMs; // the marker returns to the far left; the timer keeps running
+        setCursor(0);
+        return;
+      }
+      if (press.kind === 'hit') setCursor(press.cursorPos);
+      void finish(press.timing);
     });
 
     const setCursor = (pos: number): void => {
@@ -48,25 +61,21 @@ export function openTidusTiming(root: HTMLElement, params: Record<string, unknow
     };
 
     const animate = (): void => {
-      setCursor(tidusCursorPosition(overlay.elapsedMs(), barWidth, speed));
+      setCursor(tidusCursorPosition(overlay.elapsedMs() - sweepStartMs, barWidth, speed));
       rafId = requestAnimationFrame(animate);
     };
 
-    const finish = async (): Promise<void> => {
+    const finish = async (timing: TimingResult): Promise<void> => {
       if (settled) return;
       settled = true;
       cancelAnimationFrame(rafId);
       watcher.detach();
-      const elapsedMs = Math.min(overlay.elapsedMs(), timerMs);
-      const pos = tidusCursorPosition(elapsedMs, barWidth, speed);
-      setCursor(pos);
-      const timing = resolveTidusTiming({ cursorPos: pos, barWidth, zoneHalfWidth, elapsedMs, timerMs });
       await (timing.success ? overlay.flashSuccess() : overlay.flashFail());
       await overlay.close();
       resolve({ kind: 'tidus-timing', timing });
     };
 
-    overlay.startTimer(timerMs, () => void finish());
+    overlay.startTimer(timerMs, () => void finish(expireTidusTiming(timerMs)));
     watcher.attach();
     animate();
   });
