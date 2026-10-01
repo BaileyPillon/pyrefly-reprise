@@ -1,0 +1,459 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-01T09:05:39.094Z",
+ "build": {
+  "mainSha": "25faec70",
+  "bundle": "index-cJFxGdIo.js",
+  "candidateRoot": "D:/pyrefly-rel26c",
+  "dist": "dist-gate"
+ },
+ "targetVersion": "88d11541d8df76eca9ae7675959ffa4bad3254620bf81906c0445c4fa1c3ef80",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: Chapter I runs title to board again by real keys (victory, results, board, reload) and loses then retries by touch at 390x844; FFX-2 IV reaches its battle, pause, restart and quit; 0 console errors, 0 failed media.",
+  "Every owner-reported pause/flow defect in this batch is fixed on the candidate and still present on live f302f163 (same probe on both): pointer ESC RESUME closes the pause (live stays paused), TEXT SIZE 130 % re-caps the FFX list to 4 rows (live 6), REPLAY BRIEFING is on top (live under the pause tab), RESTART leaves no title root (live title+battle), QUIT TO TITLE mounts one title (live two).",
+  "PR-0264 aim-first is live in the candidate: every touch target confirm took aim then commit on the wanted figure, 0 mismatches.",
+  "No regression against live found; tsc clean, the 41 changed test files pass (427 tests), the full suite passes 10,756 of 10,757 with the one failure a 15 s timeout under load (strategy-ffx2-bahamut heal-only route, 19/19 pass alone in 8.7 s), audio QA strict passes at 88.49 / 90 MB, approved art 365/365 hash-identical. No major issue to disclose; the Overdrive rules, seam arc and poses are evidenced by tests and hashes, not by in-game play, and go to the deep review."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "PASS",
+   "reason": "Technical half: tools/audio/qa.mjs --strict exits 0 on the candidate (0 cues with findings, 0 sfx findings; music v2 cues at -16 LUFS, true peak <= -1.08 dBTP; sfxV2 sprite 100 cues, 4.89 MB, peak -1.12 dBTP); total shipped audio 88.49 MB of the 90 MB budget (D-306); in the real-key Chapter I run audioDebug reports the manifest (26 cues), sprite decoded, v2 sprite decoded (100 cues, game ffx), and victory-ffx playing at the results. Agents cannot hear: the listening half is CHK-B1.",
+   "where": "both games; audio",
+   "evidence": [
+    "critic/reviews/25faec70-focused/qa-strict.out",
+    "critic/reviews/25faec70-focused/route/seymour-flux-win-keys1600/audio-debug.jsonl"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "The credits panel and REPLAY BRIEFING own the window: the briefing layer covers 1600x900 / 2000x1012 / 390x844 fully and elementFromPoint at its centre is the briefing (z 90) over the pause, where live f302f163 shows the pause tab on top (PR-0284 fixed).",
+   "where": "FFX I and FFX-2 IV; pause",
+   "evidence": [
+    "critic/reviews/25faec70-focused/pause/ffx-1600/04-briefing-over-pause.jpg",
+    "critic/reviews/25faec70-focused/pause/ffx2-2000/run.json",
+    "critic/reviews/25faec70-focused/pause/live-ffx-1600/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "TEXT SIZE 130 % changed in the pause while Tidus's menu was open: on return the FFX command list re-capped from 6 rows to 4 (stack 501-836 px at 1600x900) where live stays at 6 rows (stack top 327) and runs over the help slab (PR-0266). Credits titles render at the panel font; phone stack bottom 794 < help top 812 at 130 %.",
+   "where": "FFX I battle (both games checked for absence: FFX-2 3 rows unchanged)",
+   "evidence": [
+    "critic/reviews/25faec70-focused/pause/ffx-1600/03-textsize-after.jpg",
+    "critic/reviews/25faec70-focused/pause/ffx-1600/run.json",
+    "critic/reviews/25faec70-focused/pause/live-ffx-1600/run.json",
+    "critic/reviews/25faec70-focused/pause/ffx-390-touch/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "Reused harness reading: in the real-key Chapter I win the advisor card named a row the actor could press on 70 of 73 picks; the three differences are one-item groups taken directly (Mega Flare, Energy Ray) and one Shiva pick not available; no target mismatches.",
+   "where": "FFX I",
+   "evidence": [
+    "critic/reviews/25faec70-focused/route/seymour-flux-win-keys1600/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-005",
+   "result": "UNVERIFIED",
+   "reason": "PR-0269 (advisor Giga-Graviton not read as lethal, partial) is covered by tests/unit/advisor-race.test.ts (passes) only; no broken-board browser state was set up for it in this pass.",
+   "where": "FFX advisor",
+   "evidence": [
+    "critic/reviews/25faec70-focused/vitest-changed.out"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "Credits panel closes with Esc and leaves the pause (creditsOpen false, screen pause) in both games; the briefing closes with Enter; no title root left behind after RESTART (0 title roots in 30 samples over 9 s; live: title+battle roots in 28 of 30); QUIT TO TITLE leaves exactly one title root (live: two).",
+   "where": "FFX I, FFX-2 IV; pause flow",
+   "evidence": [
+    "critic/reviews/25faec70-focused/pause/ffx-1600/run.json",
+    "critic/reviews/25faec70-focused/pause/ffx2-2000/run.json",
+    "critic/reviews/25faec70-focused/pause/ffx-390-touch/run.json",
+    "critic/reviews/25faec70-focused/pause/live-ffx-1600/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "Credits copy read in full (26 entries in Music, Sound effects, Type, Art and tools, licences and fan notice): no developer vocabulary; tests/unit/credits-attribution.test.ts passes.",
+   "where": "both; pause credits",
+   "evidence": [
+    "critic/reviews/25faec70-focused/pause/ffx-1600/run.json",
+    "critic/reviews/25faec70-focused/credits-o1-panel.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "At TEXT SIZE 130 % the re-capped FFX command list no longer reaches the acting character or help slab (capture); hint-card placement PR-0302/0303/0304 by status-o3-hint-place.test.ts.",
+   "where": "FFX I",
+   "evidence": [
+    "critic/reviews/25faec70-focused/pause/ffx-1600/03-textsize-after.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Credits titles and licences shown in full at 1600x900 and 390x844 (composites).",
+   "where": "both; credits",
+   "evidence": [
+    "critic/reviews/25faec70-focused/credits-o1-panel.jpg",
+    "critic/reviews/25faec70-focused/credits-o1-panel-390.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "PR-0264 aim-first on touch: in the 390x844 touch route every single-target confirm took exactly two taps (aim, then commit) on the wanted figure, 0 mismatches over 8 targeted picks; the aimed figure is highlighted before commit.",
+   "where": "FFX I phone",
+   "evidence": [
+    "critic/reviews/25faec70-focused/route/seymour-flux-win-tap390-touch/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-012",
+   "result": "NOT APPLICABLE",
+   "reason": "No fallback face introduced; poses installed are approved files (verify-approved 365 ok, 0 mismatched, 0 missing).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/25faec70-focused/verify-approved.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "The approved Sleep / Low-HP rest poses, kneel slots, Seymour painted KO, Bahamut splash and Paine Songstress attack/hurt were not captured in the running game in this pass (hash identity proved, tests/unit/rest-poses.test.ts, cutscene-story-poses, bahamut-splash, pose-install-0930 pass). In-game art judgement is owed to the deep review on the live build.",
+   "where": "both; art",
+   "evidence": [
+    "critic/reviews/25faec70-focused/verify-approved.json",
+    "critic/reviews/25faec70-focused/vitest-changed.out"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Every flow claim proved with real input: keys for Chapter I title to board again (win), mouse clicks on the pause (ESC RESUME, tabs, CREDITS, REPLAY BRIEFING, RESTART, QUIT), touch taps at 390x844 for the same and for targets. Debug API used only for setSeed(1) and reads.",
+   "where": "FFX I, FFX-2 IV",
+   "evidence": [
+    "critic/reviews/25faec70-focused/route/index.json",
+    "critic/reviews/25faec70-focused/pause/ffx-1600/run.json",
+    "critic/reviews/25faec70-focused/pause/ffx2-2000/run.json",
+    "critic/reviews/25faec70-focused/pause/ffx-390-touch/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "route-index.mjs over the route evidence: 26+ items, 0 unverified, 0 stale-root mismatches; the pause probe writes a capture only after reading the expected screen back (otherwise null + UNVERIFIED).",
+   "where": "all captures",
+   "evidence": [
+    "critic/reviews/25faec70-focused/route/index.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Focused review of the production candidate; live verification is the deploy's live review.",
+   "where": "n/a",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "No missing or 404 media in the real-key Chapter I run (notFound [], htmlImages []); the build's dist-filter left out 322 unshipped files.",
+   "where": "FFX I",
+   "evidence": [
+    "critic/reviews/25faec70-focused/route/seymour-flux-win-keys1600/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "qa.mjs decodes every shipped music cue and both SFX sprites; approved art 365 files hash-identical (approved 317, judge-locked 48).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/25faec70-focused/qa-strict.out",
+    "critic/reviews/25faec70-focused/verify-approved.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Shared pause/flow fixes checked in both games: pointer resume, credits, briefing over pause, restart and quit behave the same in FFX I (1600x900, 390x844 touch) and FFX-2 IV (2000x1012).",
+   "where": "FFX I, FFX-2 IV",
+   "evidence": [
+    "critic/reviews/25faec70-focused/pause/ffx-1600/run.json",
+    "critic/reviews/25faec70-focused/pause/ffx2-2000/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Game cases: pause/flow/credits/audio routing/aim-first = both (shared plumbing, CHK-020); TEXT SIZE re-cap PR-0266 = FFX only (FFX-2 list stays 3 rows at 130 %, present in FFX, absent in FFX-2); Swordplay/Bushido Fail and Immune rows, Tornado 3 s, Blitz Ace finisher, SIN_LINK3_CHECKPOINT = FFX only (src/battle/ffx, FFX-2 has no Swordplay/Bushido: research/ffx-combat-core.md §5.3/§5.5); PR-0300 seam arc = FFX-2 only (fx-c-seam-orbit.test.ts). Rest poses are game-specific by threshold (FFX < 50 % yellow, FFX-2 < 33 % gold) in rest-poses.test.ts.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/25faec70-focused/pause/ffx2-2000/run.json",
+    "critic/reviews/25faec70-focused/vitest-changed.out"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Chapter I by real keys: title, briefing, board, prep (Esc back), scene, battle, victory in 73 turns (seed 1), post scene, results, back to the board with Chapter I cleared, and the board after a reload; the touch route lost and RETRY reached the battle again; QUIT TO TITLE then Enter reaches the board.",
+   "where": "FFX I",
+   "evidence": [
+    "critic/reviews/25faec70-focused/route/seymour-flux-win-keys1600/run.json",
+    "critic/reviews/25faec70-focused/route/seymour-flux-win-tap390-touch/run.json",
+    "critic/reviews/25faec70-focused/pause/ffx-1600/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 9,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "UNVERIFIED",
+   "reason": "The new Overdrive input rules (Swordplay restart, Bushido reset, Fail/Immune rows) and the FFX-2 seam arc release run through the presenter only in unit tests (ui-ffx-minigames, ffx-swordplay-miss-restart, ffx-bushido-*, ffx-overdrive-*, fx-c-seam-orbit all pass); no Overdrive was played through the real overlay in this pass.",
+   "where": "FFX Overdrives; FFX-2 chains",
+   "evidence": [
+    "critic/reviews/25faec70-focused/vitest-changed.out"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "reason": "Agents cannot hear; Bailey's listening score for music v2 and the 98+2 SFX sprite stays owed (docs/audio/audition.html).",
+   "where": "both; audio",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "25faec70 / dist-gate built 04:40 2026-10-01 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-cJFxGdIo.js), vite preview 127.0.0.1:5617, headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  }
+ ],
+ "targets": {
+  "required": 1,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 1,
+  "waiting": 0,
+  "notes": "Credits O1 (picks-0930, D-305): CREDITS under ABOUT in the OPTIONS tab opens a scrolling panel with Esc BACK and Up/Down scroll, matched at 1600x900 and 390x844 (the column sits on the side away from the portrait, a responsive placement). Swordplay Overdrive overlay tile (presentation) touched by the overlay-title change: not captured, unverified.",
+  "composites": [
+   "critic/reviews/25faec70-focused/credits-o1-options.jpg",
+   "critic/reviews/25faec70-focused/credits-o1-panel.jpg",
+   "critic/reviews/25faec70-focused/credits-o1-panel-390.jpg"
+  ]
+ },
+ "issues": [
+  {
+   "id": "FR-34-01",
+   "severity": "polish",
+   "title": "FFX: the first Escape at the first command menu does not open the pause; the second does",
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "expected": "Esc opens the pause on the first press",
+   "observed": "At the first menu of Chapter I (1600x900 keys and 390x844) the first Escape left screen=battle; a second press opened the pause. FFX-2 IV opened on the first press. Same on live f302f163.",
+   "repro": "Fresh profile, Chapter I by keys, wait for Tidus's first menu, press Escape once",
+   "evidence": [
+    "critic/reviews/25faec70-focused/pause/ffx-1600/run.json",
+    "critic/reviews/25faec70-focused/pause/live-ffx-1600/run.json"
+   ],
+   "confidence": "high (3 runs, candidate and live)",
+   "requirement": "interface: reliable input",
+   "where": "not traced",
+   "fix": "Find which layer consumes the first Escape at the first FFX menu (suspected the coach/advisor focus) and let it pass through to the pause",
+   "acceptanceCheck": "pauseflow.mjs records no escape-not-opened-first-try in FFX",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FR-34-02",
+   "severity": "polish",
+   "title": "Harness: the phone route cannot reach a paged Items entry (Poison Fang) and falls back to Attack",
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "expected": "route.mjs --touch plays the advisor's Poison Fang from Items",
+   "observed": "Items opens on touch (POTION ... MEGA PHOENIX, 6 visible rows, same on live) but the harness never pages to Poison Fang and takes Attack; the touch run lost in 9 turns. A harness limitation, not shown to be a product defect.",
+   "repro": "route.mjs seymour-flux win --touch --size=390x844 --seed=1",
+   "evidence": [
+    "critic/reviews/25faec70-focused/route/seymour-flux-win-tap390-touch/run.json",
+    "critic/reviews/25faec70-focused/pause/items-cand/run.json",
+    "critic/reviews/25faec70-focused/pause/items-live/run.json"
+   ],
+   "confidence": "high",
+   "requirement": "review tooling",
+   "where": "critic/runner/lib/route-ui.mjs (row picker on the phone pager)",
+   "fix": "Page the phone item list (swipe or pager control) before falling back",
+   "acceptanceCheck": "the touch route takes Poison Fang when the advisor names it"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Chapter I end to end by real keys at 1600x900 (win, seed 1) and by touch at 390x844 (loss, retry)",
+   "Pause flow probe with mouse at 1600x900 (FFX I) and 2000x1012 (FFX-2 IV), touch at 390x844 (FFX I): ESC RESUME pointer, OPTIONS > ABOUT > CREDITS open/scroll/close, TEXT SIZE 130 % re-cap, REPLAY BRIEFING layering, RESTART ENCOUNTER roots, QUIT TO TITLE single title then board",
+   "Same probe on the live site f302f163 for the regression comparison",
+   "Items on touch, candidate and live",
+   "npx tsc --noEmit; vitest on the 41 changed test files; full npm test (1 timeout under load, passes alone: npm-test.out); tools/audio/qa.mjs --strict; verify-approved (approved + judge-locked); dist-gate third-party-licenses.md and the three.js notice in the bundle",
+   "Data audit: the only changed data values are SIN_LINK3_CHECKPOINT true (D-284, an adaptation, no source claimed) and Tornado timer 3000 ms (D-312, labelled estimate, GameFAQs KeyBlade999 + two guides); the Fail/Immune/finisher numbers were already in data and match research/ffx-combat-core.md §5.3 / §5.5 rows"
+  ],
+  "reused": [
+   {
+    "what": "Music overlap guarantees (one track audible)",
+    "from": "critic/reviews/52a431d0-focused.json",
+    "why": "AudioManager changed, so only partially reusable: routing re-read here (victory-ffx at results, v2 sprite decoded); overlap sampling not rerun"
+   }
+  ],
+  "notTested": [
+   "Overdrive overlays played by real input (Swordplay restart, Bushido reset, Fail/Immune rows, overlay titles, Blitz Ace finisher)",
+   "FFX-2 chain seam arc release (PR-0300) in the browser",
+   "SIN_LINK3_CHECKPOINT retry landing at link 3 in the browser (sin-checkpoint tests pass)",
+   "Rest poses, kneel slots, Seymour KO, Bahamut splash, Paine Songstress in the running game",
+   "Ch VII CONFIRM staging (PR-0244); cure-hint card placement in the browser (PR-0302/0303/0304)",
+   "Hi-Potion on a Zombie ally by touch in the browser (unit test pr0264-touch-tap-aim passes)",
+   "Desktop mouse single-click confirm unchanged (unit tested only)",
+   "Other 16 chapters; listening (CHK-B1)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live review of the deployed artifact, then the deep review owed on the live build (plan depth deep: combat core, presenter, audio routing, asset loader, global layout): play the Overdrives through their overlays, the FFX-2 seams, Sin link-3 checkpoint, and the new poses in game; carried deep obligation from f302f163.",
+ "elapsedMinutes": 58,
+ "browserMode": "gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), headless Playwright from node; no fallback needed"
+}
