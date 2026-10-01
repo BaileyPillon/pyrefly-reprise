@@ -440,3 +440,56 @@ and JPEG frames, params probe, full vitest log). The real-key script is parked i
 
 Game case: **FFX only**. Bushido is Auron's FFX Overdrive; FFX-2 has none, and no file under
 `src/battle/ffx2`, `src/ui/ffx2` or `src/data/ffx2` changed.
+
+## Check (od3) (2026-09-30): independent check of r34fix-od3 at 74475f46, FFX only
+
+Verdict: **no blocker, no new major.** The checker did not build od3 and tried to break it.
+
+**Source.** `research/ffx-overdrive-input-rules-2026-09-30.md` is the same blob as main 4850175b
+(ec56e897). Q1 reset-to-start is `[verified: 3 sources]`; GF-PF: "if an incorrect button is
+pressed, you must start the sequence over". The code and both docs say reset to input 1, the
+attempt continues, expiry is the only fail. The timer running on and the wrong press not counting
+as input 1 are labelled `[estimate]` everywhere, as the note requires.
+
+**Real keys, headless** (PYREFLY_BROWSER=gpu, vite on 5395, stopped by PID, nothing listening
+afterwards). Chapter II, seed 1, Auron's gauge set through `__pyrefly`, then Dragon Fang with keys
+read off the chips. The ring text was read before and after every press, and the timer never
+went back to 4.0:
+
+| Run | Chips after the wrong press | Ring | Engine got | Yunalesca took |
+|---|---|---|---|---|
+| 3 correct, wrong at 4, then the full sequence | `...W...`, then `.......` 300 ms later | 3.6 -> 3.5, ran on to 2.5 | `{true, 7, 2502}` | 2519 = 1919 x (1 + 2502/8000) |
+| 3 correct, wrong at 4, then nothing | `...W...` | ran on | `{false, 0, 0}` | 1807 (Fail row, no bonus) |
+| wrong, ok, wrong, wrong, ok, ok, wrong, then the full sequence | `W......`, `.W.....`, `W......`, `..W....`; the overlay stayed open | ran on | `{true, 7, 2482}` | 2514 |
+| 6 correct, wrong on the last input, then the full sequence | `......W` | 3.3 -> 3.2 | `{true, 7, 2433}` | 2502 |
+| 4 wrong presses, then nothing | `W......` each time | ran on | `{false, 0, 0}` | 1807 |
+
+Every success's bonus matches the time left at the last key on the page's own clock (to the ms),
+measured from the overlay opening, not from a reset. No page errors.
+
+**Gates, re-run here:** `npx tsc --noEmit` clean; full `npx vitest run --testTimeout=60000`:
+697 files passed, 5 skipped; 10535 tests passed, 40 skipped, 1 todo.
+
+**Rules.** Layering: the diff touches only `src/ui/ffx/minigames` (AuronSequence 98 lines, logic
+168), tests and docs; `src/battle/**`, `src/data/**` and `MinigameResult` are untouched, so the
+seeded engine is unchanged (the same Fail row, 1807, in every no-success run, before and after).
+`canMiss: false` still on all four Bushido records. Nothing under any FFX-2 path changed. Rule 7
+holds. The docs decide no open item: Tornado's timer (D1), the Immune rules (Q2), button orders
+and Tornado's rank (D3, D4) and Blitz Ace (D5) are only marked "Open" with their values unchanged.
+
+**Minor (docs wording, not changed here):**
+
+1. visual-bible §3.11.2 tags the lengths 8 / 7 / 7 / 6 `[verified: 4 sources]`; the note's D2
+   names GF-KB's Tornado 5 as a dissent (the line says so), so Tornado's length is strictly
+   four against one.
+2. ffx-combat-core §5.5's D3 marker says "HD guides give the NA/JP order"; per the note that is
+   GF-KB (HD) and AGS, which the note does not call an HD guide.
+
+**Carried (pre-existing, disclosed by the builder, not regressions):** every Bushido overlay plays
+the default 7 inputs ↑↓←→✕○△ titled "Dragon Fang" (the engine publishes no `sequence` or `name`;
+waits on D3); visual-bible's whole-row flash and the "next required" chip are not built.
+
+Scratch: `D:/Tools/pyrefly-scratch/2026-09-30-rel35/od3/check/` (tsc, vitest log, real-key JSON
+and JPEG frames). The check script is parked in `F:/pyrefly-parked/2026-09-30/od3/check/`.
+
+Game case: **FFX only** (Bushido is Auron's FFX Overdrive; FFX-2 has none).
