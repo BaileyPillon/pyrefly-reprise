@@ -14,7 +14,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { AbilityDef, BattleEvent, Command, Decision, MinigameResult } from '../../src/battle/common/types.ts';
+import type { AbilityDef, BattleEvent, Command, Decision, EnemyDef, MinigameResult } from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { rowFromExtra } from '../../src/battle/ffx/overdriveShape.ts';
 import { ABILITIES as AURON } from '../../src/data/ffx/abilities/overdrive-auron.ts';
@@ -25,7 +25,7 @@ type Who = 'tidus' | 'auron';
 type Outcome = { amounts: number[]; misses: number; tick: number };
 
 /** One Overdrive on a fixed seeded board (two 99 999 HP dummies), reporting what the engine did. */
-function fire(def: AbilityDef, who: Who, result: MinigameResult): Outcome {
+function fire(def: AbilityDef, who: Who, result: MinigameResult, foe: Partial<EnemyDef> = {}): Outcome {
   const reg = new FFXContentRegistry();
   reg.addAbilities([attackAbility(), def]);
   const engine = createFFXEngine({ content: reg });
@@ -44,7 +44,7 @@ function fire(def: AbilityDef, who: Who, result: MinigameResult): Outcome {
       enemies: {
         id: 'g',
         game: 'ffx',
-        enemies: [enemy({ id: 'dummy', hp: 99_999 }), enemy({ id: 'dummy2', slot: 1, hp: 99_999 })],
+        enemies: [enemy({ id: 'dummy', hp: 99_999, ...foe }), enemy({ id: 'dummy2', slot: 1, hp: 99_999, ...foe })],
       },
     }),
   );
@@ -71,10 +71,15 @@ const swordplay = (success: boolean): MinigameResult => ({
   kind: 'tidus-timing',
   timing: { success, timeRemainingMs: 0, timerMs: 3000 },
 });
-const bushido = (success: boolean, targetImmuneToRider?: boolean): MinigameResult => ({
+const bushido = (success: boolean): MinigameResult => ({
   kind: 'auron-sequence',
-  sequence: { success, correctInputs: success ? 7 : 2, timeRemainingMs: 0, ...(targetImmuneToRider ? { targetImmuneToRider } : {}) },
+  sequence: { success, correctInputs: success ? 7 : 2, timeRemainingMs: 0 },
 });
+/** A foe immune to every Bushido rider: Delay, Eject and all four Breaks (od5: the engine reads these itself). */
+const IMMUNE_TO_ALL: Partial<EnemyDef> = {
+  immunities: { eject: 255, 'power-break': 255, 'magic-break': 255, 'armor-break': 255, 'mental-break': 255 },
+  immunityFlags: ['immune-to-delay'],
+};
 
 const num = (def: AbilityDef, key: string): number => def.extra?.[key] as number;
 /** Hits per target on the fixture board: all-enemies reaches both dummies. */
@@ -122,16 +127,16 @@ describe('Bushido (Auron): Fail and Immune rows [§5.5]', () => {
   for (const def of Object.values(AURON).filter((d) => d.extra?.['immunePower'] !== undefined)) {
     it(`${def.name}: a clean sequence on a rider-immune target deals the Immune row (${num(def, 'immunePower')} DmgCon)`, () => {
       const ok = fire(def, 'auron', bushido(true));
-      const immune = fire(def, 'auron', bushido(true, true));
+      const immune = fire(def, 'auron', bushido(true), IMMUNE_TO_ALL);
       expect(immune.amounts).toHaveLength(num(def, 'immuneHits') * perTarget(def));
       expectScaled(immune, ok, num(def, 'immunePower') / def.power);
       expect(sum(immune.amounts)).toBeGreaterThan(sum(ok.amounts));
     });
   }
 
-  it('Tornado has no Immune row, so the immune flag leaves its 20 x 2 success alone; its fail is rank 6', () => {
+  it('Tornado has no Immune row, so an all-immune target leaves its 20 x 2 success alone; its fail is rank 6', () => {
     const def = AURON['tornado']!;
-    expect(fire(def, 'auron', bushido(true, true)).amounts).toEqual(fire(def, 'auron', bushido(true)).amounts);
+    expect(fire(def, 'auron', bushido(true), IMMUNE_TO_ALL).amounts).toEqual(fire(def, 'auron', bushido(true)).amounts);
     expect(fire(def, 'auron', bushido(false)).tick).toBeLessThan(fire(def, 'auron', bushido(true)).tick);
   });
 
