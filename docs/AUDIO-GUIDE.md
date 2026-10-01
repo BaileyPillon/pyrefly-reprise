@@ -238,6 +238,50 @@ or the note cache and the tests will disagree with themselves.
 `tests/unit/audio-story-cues.test.ts` checks every `sfx()` / `music()` a chapter
 script names; nothing yet checks the `sfxKey` fields on ability data.
 
+### The recorded set (SFX v2, D-302) and who plays what
+
+Bailey, 2026-09-30 ~14:25 EDT, "I'll go with all your recommendations": the new recorded, layered
+set with the **full hookup**. It ships as a **second sprite**, `public/audio/sfx/sprite-v2.mp3`
+(manifest key `sfxV2`, 100 cues, 190.3 s, 3.30 MB at `libmp3lame -q:a 3`), next to the first
+(`sprite.mp3`, untouched). The set itself is built outside the repo in
+`D:/Tools/pyrefly-scratch/audio-0930/sfx` (its README says what each cue is made of and measures it;
+two item-use cues were added for the hookup, `tools/recipes_item.py` there); `tools/audio/sfx-v2-sprite.py`
+packs its lossless cues into the sprite and the manifest. Agents never heard any of it (rule 13).
+
+| Who | Where | What it does |
+|---|---|---|
+| `src/audio/sfxV2/cues.ts` | table | every v2 cue as `v2:<name>`, its game (`ffx`, `ffx2`, `both`) and the first-bank cue that stands in until the v2 sprite has decoded; `twin(base, game)` gives FFX-2 the `-x2` twin and refuses the other game's cues (rule 14) |
+| `src/audio/sfxV2/voicing.ts` | `AudioManager.playSfx` | the chapter's game (`setSfxGame`, set for a whole chapter run by `app/sfxGame.ts` from `BattleScreenFlow.runChapter`) voices the menu set and the status bell wherever they are played: `cursor-move` is glass and bell in an FFX chapter, a soft FM tine in an FFX-2 one. The title, chapter select and every FF7 screen set no game and keep the first sprite exactly |
+| `src/audio/sfxV2/battleVoice.ts` | presenter | the battle mapping below, pure; fed by `app/screens/battleSfxVoice.ts` (engine state + ability data) through `PresenterDeps.sfxVoice`, asked by `engine/BattlePresenterSfx.ts` for every cue the beats play. No voice (FF7, tests) = exactly the old cues |
+| `src/audio/sfxV2/weapons.ts` | tables | FFX `weaponType` from the character data; FFX-2 by dressphere where its name or commands name a weapon (Gunner, Gun Mage: gun; Warrior "Swordplay": greatsword), else the girl's default-dressphere weapon (Yuna gun, Rikku daggers, Paine greatsword); FFX-2 enemies that roar as aeons (the research's aeon list) or as machina (Vegnagun and its parts) |
+| `src/audio/sfxV2/families.ts`, `statusCues.ts` | tables | FFX: the ability or item's own `sfxKey` (through `sfx/aliases.ts`) names the landing (Firaga lands as fire, a grenade as an explosion, Curaga as the full bloom); FFX-2 by element and damage type, plus Curaga / Full-Cure by id. Every status of both games has a cue (a `Record`, so a new status fails the type check) |
+| `BattleMoments.ts` | shots | the boss reveal plays the boss's own roar; the Overdrive shot opens with the Overdrive (FFX) or Special (FFX-2) stinger |
+| `src/audio/SfxSprites.ts` | `AudioManager` | loads both sprites, picks the slice, keeps the last 4,000 plays (`audioDebug().sfxLog`: asked, played, from where, volume) |
+
+**Battle mapping** (FFX cue; FFX-2 takes the `-x2` twin where the set has one):
+
+| Moment | Cue |
+|---|---|
+| a party member's attack (swing) / its hit | by weapon: `swing-sword`/`hit-sword` (Tidus), `-katana` (Auron), `-spear` (Kimahri), `-blitzball` (Wakka), `-staff` (Yuna), `-doll` (Lulu), `-claw` (Rikku); FFX-2 `shot-gun`/`hit-gun`, `swing-dagger`/`hit-dagger`, `swing-greatsword`/`hit-greatsword`; a Gunner's Overdrive-kind command (Trigger Happy) `gun-burst` |
+| an enemy's or aeon's attack / its blow | `swing-katana` (FFX) or `swing-greatsword` (FFX-2) / `hit-heavy-enemy` |
+| a cast / an item used (new) | `magic-charge` / `item-use` |
+| damage with an element | `fire` `ice` `thunder` `water` `holy` |
+| magical non-elemental, Flare-type, explosion, breath | the family's cue on the action's first blow (`flare`, `explosion`, `breath-attack`), `hit-1` after |
+| crit / miss / an item's damage / a tick with nothing on screen | `critical` / `whiff` / `hit-2` / `hit-2` at 0.6x |
+| heal / revive | `cure` (Curaga, Elixir: `cure-3`) on the first target, the status bell on the rest; Regen ticks `cure` at 0.6x / `phoenix-down` for an item, else `life` |
+| a status lands | haste, slow, protect, shell (Reflect too), poison, sleep, silence, stop by name; Defend/Guard/Sentinel `guard`; other positives `buff-generic`, other negatives `debuff-generic`; later statuses of the same action `status-applied` |
+| KO | party `ko-fall`; a fiend or unsent `dissolve-pyreflies` (both games: research/ffx-vs-ffx2-presentation.md line 132); a machina `machina-destroy`; an enemy that yields, falls away or stays `ko-fall` |
+| Overdrive / Special start, gauge full, summon, Dressphere change, Special Dress Up | `overdrive-stinger` / `special-stinger`, `overdrive-full`, `summon`, `spherechange`, `special-stinger` |
+| boss reveal and first charge / imminent / form change | FFX `boss-roar`, FFX-2 aeons `boss-roar-aeon`, Vegnagun `machina-roar` (other FFX-2 enemies keep today's cue) / `boss-overdrive-warning` / `boss-phase-shift` |
+| a counter (new) | `counter` |
+| victory, Overdrive minigames, story ambiences | unchanged (first sprite) |
+
+Levels stay on D-293 (bus 0.70 at the default slider); every v2 cue is mastered to the same class
+loudness as the first bank (ui -24, weapon -18, spell -15, flourish -14, ambience -22; impact -14.1).
+Proof and levels: `tools/audio/sfx-v2-proof.mjs` (a production build, headless, real keys and taps,
+then the intended route) and `tools/audio/sfx-v2-levels.py` (the fight re-mixed as AudioManager mixes
+it). Handoff: `docs/handoff/sfx-v2.md`.
+
 ### Which key for which ability family
 
 | family | keys |

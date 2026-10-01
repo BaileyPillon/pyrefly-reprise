@@ -52,12 +52,13 @@ describe('tidus-timing', () => {
 describe('auron-sequence', () => {
   const sequence = ['up', 'down', 'confirm'];
 
-  it('advances on a correct input and finishes without partial credit on a wrong one', () => {
+  it('advances on a correct input; a wrong one sends progress back to input 1 and the attempt continues', () => {
     const step1 = stepAuronSequence(sequence, 0, 'up');
     expect(step1).toEqual({ correctSoFar: 1, wrong: false, done: false });
 
+    // research/ffx-overdrive-input-rules-2026-09-30.md Q1 [verified: 3 sources]: start the sequence over.
     const wrong = stepAuronSequence(sequence, 1, 'left');
-    expect(wrong).toEqual({ correctSoFar: 1, wrong: true, done: true });
+    expect(wrong).toEqual({ correctSoFar: 0, wrong: true, done: false });
 
     const finalStep = stepAuronSequence(sequence, 2, 'confirm');
     expect(finalStep).toEqual({ correctSoFar: 3, wrong: false, done: true });
@@ -74,11 +75,9 @@ describe('auron-sequence', () => {
     expect(result.timeRemainingMs).toBe(0);
   });
 
-  it('carries targetImmuneToRider through only when supplied', () => {
-    const withFlag = resolveAuronSequence({ sequenceLength: 1, correctInputs: 1, elapsedMs: 0, timerMs: 1000, targetImmuneToRider: true });
-    expect(withFlag.targetImmuneToRider).toBe(true);
-    const without = resolveAuronSequence({ sequenceLength: 1, correctInputs: 1, elapsedMs: 0, timerMs: 1000 });
-    expect(without.targetImmuneToRider).toBeUndefined();
+  it('never reports targetImmuneToRider: the engine decides the Immune row per target (od5)', () => {
+    const result = resolveAuronSequence({ sequenceLength: 1, correctInputs: 1, elapsedMs: 0, timerMs: 1000 });
+    expect(result.targetImmuneToRider).toBeUndefined();
   });
 });
 

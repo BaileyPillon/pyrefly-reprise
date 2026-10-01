@@ -1,30 +1,24 @@
 /**
  * The pause menu, remade on the Until Dawn character screen.
  *
- * Bailey, 21 Sep 2026, shown `docs/concepts/pause-until-dawn/` with four
- * questions: *"B, yes, yes, yes"* — grade B "ours"; the text block sits on
- * whichever side of the painting is empty; the mocked meters are right; MUSIC
- * is its own tab. The approved target is the tile *"Pause remade on the Until
- * Dawn character screen"* in `docs/target/targets.json`; the six frames it
- * points at are what this screen is measured against, and
- * `docs/handoff/pause-remake.md` is how it was built.
- *
+ * Bailey, 21 Sep 2026, shown `docs/concepts/pause-until-dawn/` with four questions:
+ * *"B, yes, yes, yes"* — grade B "ours"; the text block sits on whichever side of the
+ * painting is empty; the mocked meters are right; MUSIC is its own tab. The approved
+ * target is the tile *"Pause remade on the Until Dawn character screen"* in
+ * `docs/target/targets.json`; `docs/handoff/pause-remake.md` is how it was built.
  * This half owns the lifecycle, the keyboard claim and what a press means.
  * `pause/PauseView.ts` owns everything on screen, `pause/PauseOverlays.ts`
- * photo mode and the replayed briefing.
- *
+ * photo mode, the replayed briefing and the credits panel (D-305).
  * An **overlay** (`App.pushOverlay`): the battle underneath keeps being drawn
  * and stops being ticked, and `BattleScreen` freezes the presenter — and the
  * FFX-2 Active ATB clock with it — through `PauseScreenOptions.onPause`.
- *
  * Two focus levels, and Esc means "up one": `tabs` (Left/Right cycle, Down or
  * Confirm enters a tab that has rows, Esc resumes) and `body` (Up/Down walk
- * the rows, Left/Right adjust, Esc goes back to the strip). `Q`/`E` and
- * `L1`/`R1` cycle from either.
- *
- * The screen takes a keyboard claim for as long as it lives, so a command menu
- * still listening on `window` underneath never sees a key. It is also the only
- * route to `H` and to the keys `pause/keys.ts` re-points.
+ * the rows, Left/Right adjust, Esc goes back to the strip); the credits panel
+ * is a third, and Esc there goes back to its CREDITS row. `Q`/`E` and `L1`/`R1`
+ * cycle from any. The keyboard claim, held while the screen lives, keeps a
+ * command menu underneath from seeing a key and is the only route to `H` and
+ * to the keys `pause/keys.ts` re-points.
  */
 
 import { getChapterMeta, type ChapterMeta } from '../../data/chapter-meta.ts';
@@ -115,6 +109,7 @@ export class PauseScreen extends Screen {
         if (on) this.view?.setBare(this.panelsHidden);
       },
       refresh: () => this.refresh(),
+      creditsClosed: () => this.focusRow('options', 'credits'),
     });
     // "The active party member first": the leading tab is the first member on
     // the field, and it is the one the menu opens on.
@@ -156,6 +151,7 @@ export class PauseScreen extends Screen {
       this.suppressed.clear();
       return;
     }
+    if (this.overlays?.creditsInput(input, (b) => this.took(input, b))) return this.suppressed.clear();
     if (this.took(input, 'l1')) this.cycle(-1);
     if (this.took(input, 'r1')) this.cycle(1);
 
@@ -197,10 +193,7 @@ export class PauseScreen extends Screen {
     }
     const rows = this.rows();
     if (rows.length === 0) return;
-    const at = Math.max(
-      0,
-      rows.findIndex((r) => r.id === this.at.rowId),
-    );
+    const at = Math.max(0, rows.findIndex((r) => r.id === this.at.rowId));
     if (input.justPressed('down')) this.moveRow(rows, at, 1);
     if (input.justPressed('up')) this.moveRow(rows, at, -1);
     if (input.justPressed('right')) this.activate(this.at.rowId, 1);
@@ -227,8 +220,12 @@ export class PauseScreen extends Screen {
     const rows = this.rows();
     if (rows.length === 0) return;
     const rowId = rows.some((r) => r.id === this.at.rowId) ? this.at.rowId : rows[0]!.id;
-    this.at = { ...this.at, focus: 'body', rowId };
     audio.playSfx('confirm');
+    this.focusRow(this.at.tabId, rowId!);
+  }
+
+  private focusRow(tabId: string, rowId: string): void {
+    this.at = { tabId, focus: 'body', rowId };
     this.refresh();
   }
 
@@ -245,6 +242,7 @@ export class PauseScreen extends Screen {
 
   /** Jump straight to a tab (a click, a touch, a `trigger`). */
   private selectTab(id: string): void {
+    this.overlays?.closeCredits(false);
     if (id === this.at.tabId || !this.view?.tabs.some((t) => t.id === id)) return;
     this.at = { tabId: id, focus: 'tabs', rowId: null };
     audio.playSfx('cursor-move');
@@ -257,7 +255,7 @@ export class PauseScreen extends Screen {
       this.togglePanels();
       return;
     }
-    if (action === 'cancel' && this.panelsHidden) {
+    if (action === 'cancel') { // PR-0265: a pointer RESUME closes outright, whatever has focus
       this.close();
       return;
     }
@@ -284,6 +282,7 @@ export class PauseScreen extends Screen {
         onChapterSelect: this.opts.onChapterSelect,
         onQuitToTitle: this.opts.onQuitToTitle,
         extraRows: this.opts.extraRows,
+        openCredits: () => this.overlays?.openCredits(),
       },
       id,
       dir, press,
@@ -293,10 +292,9 @@ export class PauseScreen extends Screen {
   private readonly onClaimedKey = (e: KeyboardEvent): void => {
     if (e.repeat || this.closing || this.overlays?.briefingUp) return;
     const { intent, suppress } = pauseKeyIntent(e.code, e.shiftKey);
-    // A key that means nothing here but still carries an abstract button —
-    // Shift, which `KEY_MAP` binds to `triangle`. Dropping it before anything
-    // else looks at it is what stops "hold Shift, press Tab" from hiding the
-    // whole chrome and leaving the Tab dead behind it (`pause/keys.ts`).
+    // A key that means nothing here but still carries an abstract button — Shift, which
+    // `KEY_MAP` binds to `triangle`. Dropping it first is what stops "hold Shift, press Tab"
+    // from hiding the whole chrome and leaving the Tab dead behind it (`pause/keys.ts`).
     if (intent === null) {
       if (suppress) this.suppressed.add(suppress);
       return;
@@ -378,6 +376,7 @@ export class PauseScreen extends Screen {
       rows: this.rows().map((r) => r.id),
       panelsHidden: this.panelsHidden,
       photo: this.overlays?.photoSnapshot() ?? null,
+      credits: this.overlays?.creditsSnapshot() ?? null,
       playTimeMs: this.app.save.playTime(this.opts.chapter.id),
       ...(this.view?.snapshot(this.at) ?? {}),
     };

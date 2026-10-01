@@ -292,7 +292,7 @@ export function chainRow(runs: readonly ChainReading[]): string {
 }
 
 // ---------------------------------------------------------------------------
-// Retries, with and without the link-3 checkpoint (SIN_LINK3_CHECKPOINT, an OFF switch)
+// Retries, with and without the link-3 checkpoint (SIN_LINK3_CHECKPOINT, ON as shipped since D-284)
 // ---------------------------------------------------------------------------
 
 export interface RetryReading {

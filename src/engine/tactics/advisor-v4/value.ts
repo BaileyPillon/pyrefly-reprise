@@ -21,6 +21,7 @@
  */
 
 import type { AnyCombatant, BattleState } from '../../../battle/common/types.ts';
+import { raceOf } from '../advisor-race.ts';
 
 export interface ValueWeights {
   /** What a won link is worth before the party's health is added (the rest of the way to 1). */
@@ -29,9 +30,14 @@ export interface ValueWeights {
   standing: number;
   /** Leaf: weight of the race (enemy HP taken minus party HP lost since the root). */
   race: number;
+  /**
+   * Terminal, **race boards only** (`../advisor-race.ts`, PR-0269): what a lost future is worth per
+   * unit of the chain's enemy HP it took off since the root. Everywhere else a defeat is 0, as before.
+   */
+  raceCredit?: number;
 }
 
-export const DEFAULT_WEIGHTS: ValueWeights = { victory: 0.9, standing: 0.35, race: 0.35 };
+export const DEFAULT_WEIGHTS: ValueWeights = { victory: 0.9, standing: 0.35, race: 0.35, raceCredit: 0.4 };
 
 const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
 
@@ -68,6 +74,25 @@ export function enemyHealth(s: Readonly<BattleState>): number {
 export function terminalValue(s: Readonly<BattleState>, outcome: string, w: ValueWeights): number {
   if (outcome !== 'victory') return 0;
   return w.victory + (1 - w.victory) * partyHealth(s);
+}
+
+/**
+ * **The race term** (PR-0269): on a race board (Overdrive Sin's clock, the Fins' chain;
+ * `../advisor-race.ts#raceOf`) a lost future is not all alike. One that ran the clock out with Sin
+ * nearly down, or wiped on the Core rather than the Left Fin, is worth `raceCredit` times the share
+ * of the chain's enemy HP it took off since the root, always below any won future (`victory`).
+ * Off a race board it is `terminalValue`'s 0, so every other chapter's search is unchanged.
+ */
+export function lostValue(
+  root: Readonly<BattleState>,
+  leaf: Readonly<BattleState>,
+  links: { rootAhead: number; leafAhead: number },
+  w: ValueWeights,
+): number {
+  if (!w.raceCredit || !raceOf(root)) return 0;
+  const start = enemyHealth(root) + links.rootAhead;
+  const taken = start - (enemyHealth(leaf) + links.leafAhead);
+  return start > 0 ? clamp01(Math.min(w.raceCredit, w.victory) * clamp01(taken / start)) : 0;
 }
 
 /**

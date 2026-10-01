@@ -24,6 +24,8 @@ export interface PauseActionHost {
   onChapterSelect?: (() => void) | undefined;
   onQuitToTitle?: (() => void) | undefined;
   extraRows?: ReadonlyArray<{ id: string; run: () => void }> | undefined;
+  /** CREDITS (D-305): open the credits panel. */
+  openCredits?: (() => void) | undefined;
 }
 
 /** @param dir which way Left / Right pushed; Confirm passes 1. @param press Confirm or a tap, not an arrow. */
@@ -51,6 +53,9 @@ export function activateRow(host: PauseActionHost, id: string | null, dir: 1 | -
       return;
     case 'quit':
       host.onQuitToTitle?.();
+      return;
+    case 'credits':
+      host.openCredits?.();
       return;
     default:
       host.extraRows?.find((e) => e.id === id)?.run();

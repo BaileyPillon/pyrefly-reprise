@@ -1,0 +1,152 @@
+{
+ "chapter": "ffx2-vegnagun-shuyin",
+ "actor": "shuyin",
+ "game": "ffx2",
+ "device": "desktop",
+ "viewport": {
+  "width": 1600,
+  "height": 900
+ },
+ "package": "served by request routing",
+ "firstFrame": {
+  "ms": 370922,
+  "art": "art/characters/shuyin/kneel.png",
+  "loaded": true,
+  "natural": "724x675",
+  "cls": [
+   "is-unsent",
+   "is-painted-pose",
+   "is-on"
+  ],
+  "box": {
+   "x": 1101,
+   "y": 484,
+   "w": 358,
+   "h": 334,
+   "bottom": 818
+  },
+  "opacity": "1",
+  "ghosts": 0
+ },
+ "kneel": {
+  "line": "Listen to me. She asked me to—",
+  "figure": {
+   "art": "art/characters/shuyin/kneel.png",
+   "loaded": true,
+   "natural": "724x675",
+   "cls": [
+    "is-unsent",
+    "is-painted-pose",
+    "is-on"
+   ],
+   "box": {
+    "x": 1101,
+    "y": 484,
+    "w": 358,
+    "h": 334,
+    "bottom": 818
+   },
+   "opacity": "1",
+   "ghosts": 0
+  }
+ },
+ "lines": [
+  {
+   "line": "Listen to",
+   "figure": {
+    "art": "art/characters/shuyin/kneel.png",
+    "loaded": true,
+    "natural": "724x675",
+    "cls": [
+     "is-unsent",
+     "is-painted-pose",
+     "is-on"
+    ],
+    "box": {
+     "x": 1101,
+     "y": 484,
+     "w": 358,
+     "h": 334,
+     "bottom": 818
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  },
+  {
+   "line": "Listen to me. She asked me to—",
+   "figure": {
+    "art": "art/characters/shuyin/kneel.png",
+    "loaded": true,
+    "natural": "724x675",
+    "cls": [
+     "is-unsent",
+     "is-painted-pose",
+     "is-on"
+    ],
+    "box": {
+     "x": 1101,
+     "y": 484,
+     "w": 358,
+     "h": 334,
+     "bottom": 818
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  },
+  {
+   "line": "You're not her. Don't.",
+   "figure": {
+    "art": "art/characters/shuyin/kneel.png",
+    "loaded": true,
+    "natural": "724x675",
+    "cls": [
+     "is-unsent",
+     "is-painted-pose",
+     "is-on"
+    ],
+    "box": {
+     "x": 1101,
+     "y": 484,
+     "w": 358,
+     "h": 334,
+     "bottom": 818
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  },
+  {
+   "line": "You waited too long.",
+   "figure": {
+    "art": "art/characters/shuyin/kneel.png",
+    "loaded": true,
+    "natural": "724x675",
+    "cls": [
+     "is-unsent",
+     "is-painted-pose",
+     "is-on"
+    ],
+    "box": {
+     "x": 1101,
+     "y": 484,
+     "w": 358,
+     "h": 334,
+     "bottom": 818
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  }
+ ],
+ "notes": [
+  "STAGED: gotoChapter('ffx2-vegnagun-shuyin', { auto: 'intended', speed: 'fast' }), seed 1; the pre scene advanced by Enter; party HP topped up between turns"
+ ],
+ "served": [
+  "shuyin/kneel.png"
+ ],
+ "errors": [],
+ "consoleErrors": [],
+ "http4xx": []
+}

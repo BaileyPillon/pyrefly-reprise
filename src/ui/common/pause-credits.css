@@ -1,0 +1,198 @@
+/*
+ * The credits panel and the OPTIONS tab's ABOUT heading (D-305: Bailey,
+ * 2026-09-30, option O1). Target: `docs/concepts/credits-2026-09-30/o1-*.jpg`.
+ *
+ * Its own file because `pause-screen.css` is past the 400-line house cap and
+ * must not grow. Same rules as that file: no boxes, no scrim, nothing below
+ * 14px on a desktop window or 12px on a phone, every length written as the
+ * viewport expression that equals the frame's pixel value at 1600x900.
+ *
+ * Both games: the group headings take `--pu-accent` (= `--ig-accent`), gold in
+ * FFX and pyre pink under `.ig--ffx2`, like every other accent on the pause.
+ */
+
+/* ------------------------------------------------ OPTIONS: ABOUT, CREDITS */
+
+/* ABOUT is a heading inside the THIS ENCOUNTER column, styled like its h3.
+   `.pause__col` in front: `pause-screen.css` loads after this file, and its
+   `.pause__col--wide .pause__k` key width would otherwise win the tie. */
+.pause__col .pause__row--sub {
+  height: auto;
+  margin-top: clamp(8px, 1.4vh, 16px);
+  padding-bottom: 2px;
+}
+
+.pause__col .pause__row--sub .pause__k {
+  width: auto;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  color: rgba(var(--pu-paper), 0.3);
+  overflow: visible;
+}
+
+.pause__col .pause__row--sub .pause__bar,
+.pause__col .pause__row--sub .pause__v { display: none; }
+
+/* ---------------------------------------------------- the panel swaps in */
+
+.pause--credits .pause__body,
+.pause--credits .pause__obj,
+.pause--credits .pause__prompts { visibility: hidden; }
+
+.pause__credits {
+  position: absolute;
+  left: var(--pu-gut);
+  right: var(--pu-gut);
+  /* The CREDITS heading sits at 138px of 900; the list ends above the prompts. */
+  top: clamp(104px, 15.3vh, 170px);
+  bottom: clamp(88px, 11.5vh, 130px);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.pause__credits-h {
+  margin: 0 0 clamp(9px, 1.7vh, 19px);
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.3);
+}
+
+.pause__credits-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  outline: none;
+}
+
+.pause__credits-scroll::-webkit-scrollbar { display: none; }
+
+/* A fade only on the edge that has more beyond it. */
+.pause__credits-layer--below .pause__credits-scroll {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 28px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 28px), transparent 100%);
+}
+
+.pause__credits-layer--above .pause__credits-scroll {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 100%);
+}
+
+.pause__credits-layer--above.pause__credits-layer--below .pause__credits-scroll {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 28px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 28px), transparent 100%);
+}
+
+.pause--mirror .pause__credits-h,
+.pause--mirror .pause__credits-scroll { text-align: right; }
+.pause--mirror .pause__credits-scroll { align-items: flex-end; }
+
+.pause__credits-group {
+  margin: clamp(18px, 2.9vh, 32px) 0 clamp(10px, 1.6vh, 18px);
+  font-size: var(--pu-fs-v);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--pu-accent);
+}
+
+.pause__credits-group:first-child { margin-top: 0; }
+
+.pause__credit {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: none;
+  max-width: clamp(320px, 30vw, 580px);
+  margin-bottom: clamp(12px, 1.9vh, 22px);
+}
+
+.pause--mirror .pause__credit { align-items: flex-end; }
+
+.pause__credit-t {
+  font-size: var(--pu-fs-v);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.94);
+}
+
+.pause__credit-by {
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(var(--pu-paper), 0.6);
+}
+
+.pause__credit-by b {
+  margin-left: 6px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.86);
+}
+
+.pause__credit-note {
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: var(--pu-fs);
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  color: rgba(var(--pu-paper), 0.42);
+  /* The Commons file pages and licence URIs are long unbroken words: wrap them, never widen the page. */
+  overflow-wrap: anywhere;
+}
+
+.pause__credits-licences {
+  flex: none;
+  margin: clamp(10px, 1.6vh, 18px) 0 0;
+}
+
+/* As wide as its text (one line at 1600x900, as the frame draws it), hairline included. */
+.pause__credits-notice {
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex: none;
+  margin: clamp(14px, 2.2vh, 24px) 0 0;
+  padding-top: clamp(12px, 1.8vh, 20px);
+  border-top: 1px solid rgba(var(--pu-paper), 0.14);
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: var(--pu-fs);
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  color: rgba(var(--pu-paper), 0.6);
+}
+
+/* The panel's own prompts: `.pause__back` / `.pause__hide` placement, one is not a button. */
+.pause__credits-layer .pause__credits-hint { cursor: default; }
+
+/* ----------------------------------------------------------------- phone */
+
+@media (max-width: 620px) {
+  /* ABOUT and CREDITS stay on screen: they are rows 6 and 7 of THIS ENCOUNTER,
+     past the phone's five-row budget (`pause-screen.css`), and the only way in. */
+  .pause__col[data-col='encounter'] > .pause__row--sub,
+  .pause__col[data-col='encounter'] > .pause__row[data-row='credits'] { display: flex; }
+
+  .pause__credits {
+    top: 92px;
+    bottom: 58px;
+  }
+
+  .pause--mirror .pause__credits-h,
+  .pause--mirror .pause__credits-scroll { text-align: left; }
+  .pause--mirror .pause__credits-scroll,
+  .pause--mirror .pause__credit { align-items: flex-start; }
+
+  .pause__credit { max-width: 100%; }
+  .pause__credits-notice { width: auto; align-self: stretch; }
+}

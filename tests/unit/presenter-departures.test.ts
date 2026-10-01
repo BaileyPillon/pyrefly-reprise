@@ -73,6 +73,20 @@ describe('departure kinds', () => {
     expect(stage.calls).toContain('pose=victory:yuna');
   });
 
+  it('with his approved fall painting (D-301, FFX only) Seymour lies in it: ko pose, not rolled, still stays', async () => {
+    const { stage, play } = setup(['seymour-macalania']);
+    // the stage has his own `ko` painting (installed and listed): the prone canvas lies on the floor by itself
+    (stage as unknown as { paints: (id: string, pose: string) => boolean }).paints = (id, pose) => id === 'seymour-macalania' && pose === 'ko';
+    await play([
+      { type: 'ko', targetId: 'seymour-macalania' },
+      { type: 'victory' } as Unsequenced<BattleEvent>,
+    ]);
+    expect(stage.calls).toContain('pose=ko:seymour-macalania');
+    expect(stage.calls).not.toContain('lieDown:seymour-macalania');
+    expect(stage.calls).not.toContain('remove:seymour-macalania');
+    expect(stage.staged()).toContain('seymour-macalania');
+  });
+
   it('Evrae falls: moved and faded out, never dissolved, then removed', async () => {
     const { stage, play } = setup(['evrae']);
     await play([{ type: 'ko', targetId: 'evrae' }]);

@@ -32,13 +32,9 @@
  */
 
 import type { CombatantId } from '../battle/common/types.ts';
-import type {
-  AudioPort,
-  BattleStage,
-  CameraPort,
-  MomentsPort,
-  PlaybackSpeed,
-} from './BattlePresenterPorts.ts';
+import type { AudioPort, BattleStage, CameraPort, MomentsPort, PlaybackSpeed } from './BattlePresenterPorts.ts';
+import { sfxGame, stingerFor } from '../audio/sfxV2/voicing.ts';
+import { roarFor } from '../audio/sfxV2/weapons.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { paceFactor } from './pace.ts';
 import { fittedPush } from './ShotFit.ts';
@@ -327,7 +323,8 @@ export class BattleMoments {
     if (this.skipping) return;
 
     const rig = this.rigFor(bossId);
-    this.cue('boss-roar', 0.9);
+    const g = sfxGame(); // D-302: the boss's own roar in a voiced chapter (`sfxV2/weapons.ts`), else today's
+    this.cue((g && roarFor(g, bossId)) || 'boss-roar', 0.9);
     const push = this.cam.push?.(fittedPush(this.deps.stage, this.cam, rig, MOMENT_PUSH.reveal), this.ms(MOMENT_TIMING.revealPush));
     const plate = bossName
       ? this.deps.moments?.nameSlab({
@@ -442,7 +439,7 @@ export class BattleMoments {
       return;
     }
     this.overdriveOpen = true;
-    this.cue('overdrive-full', 1);
+    this.cue(stingerFor(sfxGame()) ?? 'overdrive-full', 1); // D-302: the Overdrive / Special stinger
     const bars = this.deps.moments?.letterbox(true, this.ms(MOMENT_TIMING.odLetterbox));
     const shot = this.shots.fit(rig, MOMENT_PUSH.overdrive);
     void this.move(shot.rig, MOMENT_TIMING.actionIn);

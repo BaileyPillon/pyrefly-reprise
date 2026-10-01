@@ -5,6 +5,9 @@ import { pruneUnshipped } from './tools/dist-filter.mjs';
 /** The base a production build is served from. Also used by tools/screenshot.mjs. */
 export const PROD_BASE = process.env.BASE_PATH ?? '/pyrefly-reprise/';
 
+/** Where a build writes the licence texts of every bundled dependency (three.js's MIT notice among them). */
+export const THIRD_PARTY_LICENCES = 'third-party-licenses.md';
+
 /**
  * Base path:
  *   - dev (`vite`)                 -> '/'  so http://localhost:5173/ just works
@@ -48,6 +51,12 @@ export default defineConfig(({ command, isPreview }) => {
       assetsDir: 'assets',
       sourcemap: true,
       chunkSizeWarningLimit: 1200,
+      // The MIT licence of three.js (and of anything else bundled) asks its
+      // copyright and permission notice to travel with the code. The minifier
+      // drops every comment by default, so keep the `@license` headers in the
+      // bundle and ship the full licence texts beside it.
+      license: { fileName: THIRD_PARTY_LICENCES },
+      rolldownOptions: { output: { comments: { legal: true } } },
     },
     // Advisor v4's search runs in a module worker (`src/app/advisorV4/worker.ts`, `type: 'module'`);
     // ES output lets its import graph split like the page's.

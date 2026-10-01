@@ -7,8 +7,9 @@
  * real pieces: the real FFX engine (`BattleScreenWiring.createEngine`), the real `runEncounterChain` across the real
  * seams, and on RETRY `resumeSetup(resumeAt, seed)`, `group = resumeAt.group`, `startLink = resumeAt.link`,
  * `priorWon = resumeAt.won` (`BattleScreen.ts`). Only the presenter is a script of outcomes: what is under test is
- * where a retry lands and what it opens on, not who wins. `SIN_LINK3_CHECKPOINT` ships `false`; the ON formation is
- * `sinLink3Checkpoint(true)`, the switch's own shape, handed to the chain through `findGroup`.
+ * where a retry lands and what it opens on, not who wins. `SIN_LINK3_CHECKPOINT` ships `true` (D-284, PR-0268): the
+ * first block runs the shipped formation as the game finds it (`findEnemyGroup`); the ON and OFF shapes are the
+ * switch's own (`sinLink3Checkpoint`), handed to the chain through `findGroup`, so both positions stay pinned.
  */
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -31,6 +32,8 @@ import { SIN_GENAIS_CORE_GROUP_ID } from '../../../src/data/ffx/enemies/sin-fins
 
 const SIN = getChapter('sin-fins-core')!;
 const ON: EnemyGroupDef = { ...sinGenaisCoreGroup, ...sinLink3Checkpoint(true) };
+const { checkpointOnEntry: _shippedSwitch, ...withoutSwitch } = sinGenaisCoreGroup;
+const OFF: EnemyGroupDef = { ...withoutSwitch, ...sinLink3Checkpoint(false) };
 
 type Kind = 'victory' | 'defeat';
 
@@ -46,7 +49,8 @@ interface Attempt {
 const shown: string[] = [];
 const attempts: Attempt[] = [];
 let scripts: Kind[][] = [];
-let switchOn = true;
+/** 'shipped' = the formation as `findEnemyGroup` returns it; 'on' / 'off' = the switch's two shapes. */
+let switchOn: 'shipped' | 'on' | 'off' = 'on';
 /** Auron's HP in the opening setup: a value the carry has to keep, so a replay of the wrong state shows. */
 const AURON_OPENS_AT = 4321; // above half of his 6,492, so no SOS
 
@@ -88,7 +92,7 @@ class ChainBattle extends Screen implements FlowScreen<BattleScreenResult> {
       group,
       setup,
       seed: opts.seed ?? 1,
-      findGroup: async (id) => (id === SIN_GENAIS_CORE_GROUP_ID && switchOn ? ON : findEnemyGroup(id)),
+      findGroup: async (id) => (id !== SIN_GENAIS_CORE_GROUP_ID || switchOn === 'shipped' ? findEnemyGroup(id) : switchOn === 'on' ? ON : OFF),
       startLink: resume?.link ?? 1,
       priorWon: resume?.won ?? [],
       onLink: ({ links }) => rec.onLinks.push(links),
@@ -165,7 +169,7 @@ beforeEach(() => {
   attempts.length = 0;
   scripts = [];
   choices = [];
-  switchOn = true;
+  switchOn = 'on';
   document.body.innerHTML = '';
   resetFlowScreens();
   registerFlowScreens({
@@ -221,8 +225,8 @@ describe('Sin, link-3 checkpoint ON: RETRY after a loss at Genais and the Core l
     expect(shown.filter((s) => s === 'party-prep')).toHaveLength(2);
   });
 
-  it('with the switch OFF (as shipped) the same loss at link 3 retries from the Left Fin', async () => {
-    switchOn = false;
+  it('with the switch OFF the same loss at link 3 retries from the Left Fin', async () => {
+    switchOn = 'off';
     scripts = [['victory', 'victory', 'defeat'], ['defeat']];
     choices = ['retry', 'chapter-select'];
     await app.flow.runChapter(SIN.id, { skipCutscenes: true, speed: 'skip' });
@@ -230,5 +234,31 @@ describe('Sin, link-3 checkpoint ON: RETRY after a loss at Genais and the Core l
     expect(attempts[1]!.opts.resumeAt).toBeUndefined();
     expect(attempts[1]!.onLinks).toEqual([1]);
     expect(shown).toEqual(['party-prep', 'battle', 'results', 'party-prep', 'battle', 'results']);
+  });
+});
+
+describe('Sin as shipped (D-284, PR-0268): the formation the game finds carries the link-3 checkpoint', () => {
+  it('win both Fins, lose link 3, RETRY: the retry opens on Genais and the Core, not the Left Fin', async () => {
+    switchOn = 'shipped';
+    scripts = [['victory', 'victory', 'defeat'], ['defeat']];
+    choices = ['retry', 'chapter-select'];
+    await app.flow.runChapter(SIN.id, { skipCutscenes: true, speed: 'skip' });
+    const [first, retry] = attempts as [Attempt, Attempt];
+    expect(first.onLinks).toEqual([1, 2, 3]);
+    expect(retry.opts.resumeAt?.link).toBe(3);
+    expect(retry.onLinks).toEqual([3]);
+    expect(retry.fought).toEqual([first.fought[2]]);
+    expect(retry.auronHp).toEqual([first.auronHp[2]]);
+    expect(shown).toEqual(['party-prep', 'battle', 'results', 'battle', 'results']);
+  });
+
+  it('a loss at link 1 or link 2 still retries from the Left Fin, through prep', async () => {
+    switchOn = 'shipped';
+    scripts = [['defeat'], ['victory', 'defeat'], ['defeat']];
+    choices = ['retry', 'retry', 'chapter-select'];
+    await app.flow.runChapter(SIN.id, { skipCutscenes: true, speed: 'skip' });
+    expect(attempts.map((a) => a.opts.resumeAt)).toEqual([undefined, undefined, undefined]);
+    expect(attempts.map((a) => a.onLinks[0])).toEqual([1, 1, 1]);
+    expect(shown.filter((s) => s === 'party-prep')).toHaveLength(3);
   });
 });

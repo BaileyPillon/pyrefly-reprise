@@ -34,10 +34,10 @@
 import type { AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from '../ffx/cancelClaim.ts';
 import { RawInputWatcher, type UiButton } from '../ffx/rawInput.ts';
-// The target cursor is shared with FFX and wears its chrome: bracket, plate and ALL label are both games,
-// only the mark differs; `setChrome('ffx2')` keeps FFX's hand out of an X-2 fight (AGENTS.md rule 14).
+// The target cursor is shared with FFX and wears its chrome: bracket, plate and ALL label are both games, only the mark differs; `setChrome('ffx2')` keeps FFX's hand out of an X-2 fight (AGENTS.md rule 14).
 import { TargetCursor, type CursorSelection, type TargetEntry, type TargetRect } from '../ffx/TargetCursor.ts';
 import { resolveTargetMode } from '../ffx/CommandMenuLogic.ts';
+import { aimOnTap } from '../common/touchTapAim.ts';
 import { dressphereLabel } from './dressphereIcons.ts';
 import { commandHelpText, groupHelpText } from './commandHelp.ts';
 import { withTargets } from './withTargets.ts';
@@ -275,7 +275,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
     });
     cursor.setOnSelection((sel) => deps.onSelection?.(sel, sel ? targetIds.length : 0));
     cursor.setOnClick((id) => {
-      if (view === 'target' && pending) finish(pending, groupMode ? targetIds : [id]);
+      if (view === 'target' && pending && (groupMode || !aimOnTap(cursor, id))) finish(pending, groupMode ? targetIds : [id]); // PR-0264: a touch tap aims first
     });
     deps.targetLayer.append(cursor.el);
     keepPlateDocked(cursor, deps.panels, () => view === 'target');

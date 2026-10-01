@@ -199,12 +199,16 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
 
   post: [
     // The tally first. Then the chapter takes it all back.
-    // PR-0244: he stands on the plate from the first frame (his approved idle painting,
-    // `app/screens/cutsceneFigures.ts`), so the tally and the kill are not an empty temple.
-    showActor(SEYMOUR, { at: { slot: 1, side: 'enemy' }, ms: 600, facing: -1 }),
+    // PR-0244: he is on the plate from the first frame (his approved idle painting,
+    // `app/screens/cutsceneFigures.ts`), so the tally and the kill are not an empty temple. The
+    // battle has just laid him down, so the plate shows him already lowered, never upright (no
+    // painting kneels, `stagesUnpaintedPoses`). The plate before the tally is his 500 ms fade-in and
+    // nothing else (was a 600 ms fade and a 1400 ms beat: 1.7 s with no line, timed by the critic;
+    // the reaction-beat rule wants every `wait` >= 1200, so the beat goes rather than shrinks).
+    setPose(SEYMOUR, 'kneel'),
+    showActor(SEYMOUR, { at: { slot: 1, side: 'enemy' }, ms: 500, facing: -1 }),
     music(null, 900),
     camera('victory', 800),
-    beat(1400),
     results(),
 
     // `showResults()` (`src/app/screens/BattleScreenFlow.ts`) starts
@@ -216,15 +220,15 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
     // it again here, right as the scene resumes past the tally.
     music(null, 300),
     // The scene resumes past the tally on a fresh stage (`BattleScreenFlow` replays the post from
-    // the step after `results()`), so he is stood up again before the kneel (PR-0244).
+    // the step after `results()`), so he is put back on it, already down, before the kneel (PR-0244).
+    setPose(SEYMOUR, 'kneel'),
     showActor(SEYMOUR, { at: { slot: 1, side: 'enemy' }, ms: 400, facing: -1 }),
 
     // §9.7 beat 9 — he is properly dead. Flat, anticlimactic, no speech, no
     // pyreflies. Flux dissolves; this one just stops.
-    // PR-0244: no painting kneels or falls, so Tidus's narration carries the two silent
-    // beats (writing-bible §1.2: past tense, plain, one concrete detail), each held as long
-    // as the beat it replaces.
-    setPose(SEYMOUR, 'kneel'),
+    // PR-0244: no painting kneels or falls, so the stage lowers, then lays down, the standing one
+    // under Tidus's narration, which carries the two silent beats (writing-bible §1.2: past tense,
+    // plain, one concrete detail), each held as long as the beat it replaces.
     camera('idle', 1000),
     narrate('He went down on one knee. The hall was very quiet.', 1600),
     setPose(SEYMOUR, 'ko'),

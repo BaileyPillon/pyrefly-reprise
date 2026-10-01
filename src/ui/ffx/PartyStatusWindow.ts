@@ -4,6 +4,12 @@ import { captionHtml, ffxPlateIconsHtml } from '../common/statusRows.ts';
 import { zombieWarnOn } from './zombieWarnOptions.ts';
 
 /**
+ * FFX Critical (SOS): HP below half of max, where the digits turn yellow (research/ffx-combat-core.md V8 and
+ * section 4.2, "HP < 50 % of max"). The painted low-HP slouch (`ui/common/restPoses.ts`) reads the same number.
+ */
+export const FFX_HP_YELLOW_BELOW = 0.5;
+
+/**
  * Party status, restyled onto Ink & Gold's `.ig-stat-list`/`.ig-stat`
  * (`src/ui/inkgold/slabs.css`, spec "Components" > "Party status"): right
  * 52,54 @1440, rows cascading 16px right-to-left, acting row in gold with a
@@ -61,7 +67,7 @@ export class PartyStatusWindow {
       .join(' ');
     const odLabel = ready ? 'Overdrive' : 'OD';
 
-    const hpValueCls = ['ig-stat__value', !c.alive ? 'ffx-stat__value--ko' : hpFrac <= 0.125 ? 'ffx-stat__value--danger' : hpFrac < 0.5 ? 'ffx-stat__value--crit' : '']
+    const hpValueCls = ['ig-stat__value', !c.alive ? 'ffx-stat__value--ko' : hpFrac <= 0.125 ? 'ffx-stat__value--danger' : hpFrac < FFX_HP_YELLOW_BELOW ? 'ffx-stat__value--crit' : '']
       .filter(Boolean)
       .join(' ');
     const rowCls = ['ig-stat', acting ? 'ig-stat--acting' : '', !c.alive ? 'ffx-stat--ko' : '', hurt ? 'ffx-stat--hurt' : '']

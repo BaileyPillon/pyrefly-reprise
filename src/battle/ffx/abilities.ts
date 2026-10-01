@@ -50,6 +50,8 @@ export interface ResolveOptions {
   gilSpent?: number;
   /** Counters cost no turn and never chain further counters. */
   isCounter?: boolean;
+  followUp?: boolean; // a follow-up row of the same action (Blitz Ace's "Last Hit", §5.3): targets already counted
+  rowFor?: (target: FFXCombatant) => AbilityDef | undefined; // a per-target row (a Bushido Immune row, §5.5, od5)
   /**
    * Compute the **damage chain** with this combatant's stats instead of the
    * acting one's, while every other part of the action — the events, the
@@ -131,10 +133,9 @@ export function resolveAbility(
   let targets = resolveTargets(ctx, user, def, chosenTargets);
   if (targets.length === 0 && def.targeting !== 'self') return 0;
 
-  // An enemy whose Overdrive gauge fills on **being targeted** is paid here,
-  // once per action, before any hit resolves — a heal or a debuff counts.
-  // Inert unless `ActorRuntime.gaugePerTargeting` is set [overdrive.ts].
-  for (const t of targets) onTargeted(ctx, t, user);
+  // A gauge that fills on **being targeted** (a heal or a debuff counts) is paid here, once per action and
+  // not again for a follow-up row, before any hit resolves. Inert unless `gaugePerTargeting` is set [overdrive.ts].
+  if (options.followUp !== true) for (const t of targets) onTargeted(ctx, t, user);
 
   const totalHits = perHitRandom ? hitCount : hitCount * Math.max(1, targets.length);
   let hitIndex = 0;
@@ -181,6 +182,7 @@ export function resolveAbility(
         continue;
       }
 
+      const row = options.rowFor?.(target) ?? def; // this target's row: DmgCon and rider (od5); draws nothing
       // Critical roll.
       let crit = false;
       if (hasFlag(def, 'crit-eligible')) {
@@ -194,7 +196,7 @@ export function resolveAbility(
         // [ffx-seymour-flux §5.4] — see `ResolveOptions.statsUser`.
         user: options.statsUser ?? user,
         target,
-        def,
+        def: row,
         crit,
         varianceRoll,
         elements,
@@ -313,7 +315,7 @@ export function resolveAbility(
       }
 
       // Statuses, then removals, then delay — the decompile's order.
-      for (const app of statusApplications(user, def)) {
+      for (const app of statusApplications(user, row)) {
         // Death is `ko` in this contract (there is no separate death status),
         // and landing it must *kill* — HP to 0, a `ko` event, Auto-Life
         // consulted — not merely attach a marker to a living combatant. The
@@ -347,8 +349,8 @@ export function resolveAbility(
       if (hasFlag(def, 'removes-statuses') && def.removesStatuses.length > 0) {
         removeStatuses(ctx, target, def.removesStatuses, def.category === 'item' ? 'cured' : 'dispelled');
       }
-      if (hasFlag(def, 'weak-delay')) applyDelay(ctx, target.id, 'weak');
-      if (hasFlag(def, 'strong-delay')) applyDelay(ctx, target.id, 'strong');
+      if (hasFlag(row, 'weak-delay')) applyDelay(ctx, target.id, 'weak');
+      if (hasFlag(row, 'strong-delay')) applyDelay(ctx, target.id, 'strong');
 
       // Shatter a petrified target.
       if (hasFlag(def, 'shatter') && has(target, 'petrify')) {
@@ -375,10 +377,9 @@ export function resolveAbility(
       // for an instant kill, at the cost of the overkill AP" — was unreachable
       // and the tactic spent four turns finding that out.
       //
-      // Draws no RNG, so a seeded run is unchanged wherever it does not fire,
-      // and it cannot fire in any shipped chapter: every FFX enemy this
-      // project ships outside Macalania carries `petrify: 255`. FFX-2 runs its
-      // own engine and is untouched [AGENTS.md rule 14].
+      // Draws no RNG, so a seeded run is unchanged wherever it does not fire, and it cannot fire in
+      // any shipped chapter: every FFX enemy this project ships outside Macalania carries
+      // `petrify: 255`. FFX-2 runs its own engine and is untouched [AGENTS.md rule 14].
       if (target.side === 'enemy' && has(target, 'petrify') && onField(target)) {
         ejectActor(ctx, target, 'shatter');
       }
@@ -388,10 +389,9 @@ export function resolveAbility(
     }
   }
 
-  // Scan opens the info panel. It is emitted **after** the hits, so the whole
-  // of it is pure information: a reveal rolls nothing and therefore cannot move
-  // the seeded RNG by one draw [ffx-combat-core §9, `sensor.ts`]. The FFX data
-  // marks Scan with the `scan` status, which until now nothing read.
+  // Scan opens the info panel. It is emitted **after** the hits, so the whole of it is pure
+  // information: a reveal rolls nothing and therefore cannot move the seeded RNG by one draw
+  // [ffx-combat-core §9, `sensor.ts`]. The FFX data marks Scan with the `scan` status, which until now nothing read.
   const reveals = sensorKind(def);
   if (reveals) {
     for (const target of targets) revealTarget(ctx, user.id, target, reveals);

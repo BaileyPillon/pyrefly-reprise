@@ -2,7 +2,7 @@ import type { MinigameResult } from '../../../battle/common/types.ts';
 import { RawInputWatcher, type UiButton } from '../rawInput.ts';
 import { resolveAuronSequence, stepAuronSequence } from './logic.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
-import { arr, bool, num, str } from './params.ts';
+import { arr, num, str } from './params.ts';
 
 const GLYPH: Record<string, string> = {
   up: '↑',
@@ -16,18 +16,29 @@ const GLYPH: Record<string, string> = {
   r1: 'R1',
 };
 
+/** How long the missed chip keeps the wrong colour after a reset (the overlay's own 240 ms flash length). */
+const WRONG_MARK_MS = 240;
+
 /**
  * Auron — Bushido [visual-bible §3.11.2], restyled onto Ink & Gold's
  * `.ig-minigame__bar--sequence`/`__key` ("Other minigame overlays ... follow
  * the Swordplay slab pattern", `presentation-ink-and-gold.md` "Screens"):
- * enter a button sequence before a 4 000 ms timer expires. No partial
- * credit — a wrong input ends the attempt immediately.
+ * enter a button sequence before a 4 000 ms timer expires.
+ *
+ * A wrong press sends the progress back to input 1 and the attempt goes on:
+ * `research/ffx-overdrive-input-rules-2026-09-30.md` Q1 `[verified: 3
+ * sources]`, "if an incorrect button is pressed, you must start the sequence
+ * over" (GF-PF); `stepAuronSequence`. The missed chip flashes the existing
+ * `ffx-mg-key--wrong` colour while every chip returns to unlit, then the mark
+ * clears. The timer keeps running through the reset `[estimate]`: GF-HD calls
+ * it "a fixed amount of time" and no source describes the timer at the reset.
+ * Failure is only the timer running out, which resolves the Fail row with no
+ * bonus (PR-0267). FFX only.
  */
 export function openAuronSequence(root: HTMLElement, params: Record<string, unknown>): Promise<MinigameResult> {
   const timerMs = num(params['timerMs'], 4000);
   const sequence = arr<string>(params['sequence'], ['up', 'down', 'left', 'right', 'confirm', 'cancel', 'triangle']);
   const name = str(params['name'], 'Dragon Fang');
-  const targetImmuneToRider = params['targetImmuneToRider'] === undefined ? undefined : bool(params['targetImmuneToRider'], false);
 
   const overlay = new OverdriveOverlay();
   root.appendChild(overlay.el);
@@ -50,18 +61,22 @@ export function openAuronSequence(root: HTMLElement, params: Record<string, unkn
   return new Promise<MinigameResult>((resolve) => {
     let correctSoFar = 0;
     let settled = false;
+    let clearWrong = 0;
     const watcher = new RawInputWatcher((b: UiButton) => {
       if (settled) return;
+      window.clearTimeout(clearWrong);
       const step = stepAuronSequence(sequence, correctSoFar, b);
       const wrongAt = step.wrong ? correctSoFar : null;
-      correctSoFar = step.correctSoFar;
+      correctSoFar = step.correctSoFar; // 0 after a wrong press: start over; the timer keeps running [estimate]
       renderChips(correctSoFar, wrongAt);
+      if (wrongAt !== null) clearWrong = window.setTimeout(() => { if (!settled) renderChips(correctSoFar, null); }, WRONG_MARK_MS);
       if (step.done) void finish();
     });
 
     const finish = async (): Promise<void> => {
       if (settled) return;
       settled = true;
+      window.clearTimeout(clearWrong);
       watcher.detach();
       const elapsedMs = overlay.elapsedMs();
       const sequenceResult = resolveAuronSequence({
@@ -69,7 +84,6 @@ export function openAuronSequence(root: HTMLElement, params: Record<string, unkn
         correctInputs: correctSoFar,
         elapsedMs,
         timerMs,
-        ...(targetImmuneToRider !== undefined ? { targetImmuneToRider } : {}),
       });
       await (sequenceResult.success ? overlay.flashSuccess() : overlay.flashFail());
       await overlay.close();

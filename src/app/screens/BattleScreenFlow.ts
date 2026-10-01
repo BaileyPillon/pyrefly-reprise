@@ -29,7 +29,7 @@ import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlowStubs.ts';
 import { clearTimeMs } from '../../ui/common/resultsMath.ts';
 import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
-import { runBriefingIfDue } from './raiseBriefing.ts';
+import { runBriefingIfDue } from './raiseBriefing.ts'; import { sfxChapter } from '../sfxGame.ts';
 import { preloadBattle } from './battlePreload.ts';
 import { holdIdleLane } from '../imageWarm.ts';
 import { entryCardWait } from './entryCard.ts';
@@ -38,7 +38,7 @@ import { playBattleEntry } from '../../ui/common/transitions/entry.ts';
 import { boardWhenWarm } from './frontendWarm.ts';
 import { playResultsWipe } from '../../ui/common/transitions/index.ts';
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
-import { closeRun, openRun } from './pause/restartCarry.ts';
+import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
 import { drawRunSeed } from '../runSeed.ts';
 
@@ -301,8 +301,9 @@ export class GameFlow {
    * no menu to return to, so it reports the defeat and stops.
    */
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
-    const release = holdIdleLane(); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board
-    return this.playChapter(id, opts).finally(release);
+    const release = sfxChapter(id, holdIdleLane()); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice
+    // PR-0283: RESTART ENCOUNTER replays inside this run, and r34fix-quit: QUIT TO TITLE exits it (`runWithRestarts`), one owner each.
+    return runWithRestarts(this, (o) => this.playChapter(id, o), opts, () => { [this.handedOver, this.step] = [true, 'title']; return this.app.goto('title'); }).finally(release);
   }
 
   private async playChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
@@ -318,10 +319,9 @@ export class GameFlow {
     let { attempt, carry, opts: { seed } } = ({ opts } = openRun(this, id, opts)); // a fresh first seed (PR-0008)
     void preloadBattle(chapter, seed); // the battle's art loads behind prep and the scene (PR-0061)
 
-    // A run started from outside {@link start}'s own loop — `main.ts` when the
-    // board resolves, the debug API's `gotoChapter`, the pause menu's RESTART
-    // ENCOUNTER — **is** the new owner of the stack, and has to say so before
-    // {@link show} looks at `owned`.
+    // A run started from outside {@link start}'s own loop — `main.ts` when the board
+    // resolves, the debug API's `gotoChapter` — **is** the new owner of the stack,
+    // and has to say so before {@link show} looks at `owned`.
     //
     // `owned` still points at the *previous* run's screen (the board `main.ts`
     // `goto`s after a chapter is not a flow screen), so the first `show` saw

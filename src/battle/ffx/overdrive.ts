@@ -265,8 +265,8 @@ export function timerMsFor(def: AbilityDef): number {
   switch (def.minigame) {
     case 'tidus-timing':
       return TIMER_MS[def.id] ?? 3000;
-    case 'auron-sequence':
-      return 4000;
+    case 'auron-sequence': // Tornado 3 s [estimate, Bailey D-312: GF-KB, XU, AGS; input-rules note D1], the rest 4 s
+      return def.id === 'tornado' ? 3000 : 4000;
     case 'lulu-fury':
       return 4000;
     case 'wakka-reels':
@@ -310,10 +310,10 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
   const base: Record<string, unknown> = { abilityId: def.id, ...(timerMs > 0 ? { timerMs } : {}) };
   switch (def.minigame) {
     case 'tidus-timing':
-      Object.assign(base, { travelMs: 1400, zonePercent: 22 });
+      Object.assign(base, { travelMs: 1400, zonePercent: 22, name: def.name }); // the title is the Overdrive chosen, not a default (od4)
       break;
     case 'auron-sequence':
-      Object.assign(base, { inputs: 7 });
+      Object.assign(base, { inputs: 7, name: def.name }); // Shooting Star was titled "Dragon Fang" without it (od4)
       break;
     case 'wakka-reels':
       // The strip comes off the reel set the player picked — it was hard-coded
@@ -446,16 +446,16 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
   }
 }
 
-/** The §5.2 timing bonus carried by a minigame outcome, or `null`. */
+/** The §5.2 timing bonus carried by a minigame outcome, or `null`. A failed Swordplay or Bushido earns none (§5.3 rule 1, §5.5; PR-0267, od2). */
 export function timingBonusFrom(result: MinigameResult | undefined, def: AbilityDef): TimingBonus | null {
   if (!result) return null;
   const timerMs = timerMsFor(def);
   if (timerMs <= 0) return null;
   if (result.kind === 'tidus-timing') {
-    return { timeRemainingMs: result.timing.timeRemainingMs, timerMs: result.timing.timerMs || timerMs };
+    return { timeRemainingMs: result.timing.success ? result.timing.timeRemainingMs : 0, timerMs: result.timing.timerMs || timerMs };
   }
   if (result.kind === 'auron-sequence') {
-    return { timeRemainingMs: result.sequence.timeRemainingMs, timerMs };
+    return { timeRemainingMs: result.sequence.success ? result.sequence.timeRemainingMs : 0, timerMs };
   }
   if (result.kind === 'wakka-reels' || result.kind === 'ladyluck-reels') {
     return { timeRemainingMs: result.reels.timeRemainingMs, timerMs };

@@ -83,3 +83,51 @@ export function closeRun<T extends { outcome: string }>(
   else lastAborted.delete(flow);
   return outcome;
 }
+
+/** What RESTART ENCOUNTER runs: no prep menu, no pre-battle scene, the carry {@link openRun} picks up. */
+export const RESTART_RUN: Readonly<RunChapterOptions> = { skipPrep: true, skipCutscenes: true, restart: true };
+
+/** How many chapter runs each flow is inside right now. */
+const runsInFlight = new WeakMap<object, number>();
+
+/** True while `flow` is running a chapter, so a fight it put up can hand it a restart (PR-0283). */
+export function flowOwnsRun(flow: object | null | undefined): boolean {
+  return !!flow && (runsInFlight.get(flow) ?? 0) > 0;
+}
+
+/**
+ * Play a chapter run, and play it again in place for as long as it ends with
+ * RESTART ENCOUNTER (`restartRequested` on the battle's result).
+ *
+ * PR-0283 (both games): the pause row used to abort the fight and then start a
+ * **second** run beside the one that owned it. The owner (the title's flow loop,
+ * or `main.ts`'s board) carried on as if the chapter had ended and put the board
+ * up; the restart's battle replaced the board, the board's teardown answered
+ * "no chapter", and the loop sent the stack to the title while the restarted
+ * battle was being pushed, so the title root stayed mounted over the whole
+ * restarted fight. Restarting inside the run that owns the stack leaves one
+ * driver, and the board only comes back when the restarted fight is over.
+ *
+ * r34fix-quit (both games): QUIT TO TITLE works the same way. The pause menu used to
+ * call `goto('title')` itself once the flow had unwound, but by then the flow had
+ * put the board up, and the board's teardown ("no chapter") sent the title up a
+ * second time: two title roots, and after Enter the title under the board. A fight
+ * ended by QUIT TO TITLE sets `quitToTitle`, and `toTitle` (the owner's one
+ * navigation) runs here, with nothing put up in between.
+ */
+export async function runWithRestarts<R extends { restartRequested?: boolean; quitToTitle?: boolean }>(
+  flow: object,
+  play: (opts: RunChapterOptions) => Promise<R | null>,
+  opts: RunChapterOptions,
+  toTitle?: () => Promise<unknown>,
+): Promise<R | null> {
+  runsInFlight.set(flow, (runsInFlight.get(flow) ?? 0) + 1);
+  try {
+    let out = await play(opts);
+    while (out?.restartRequested === true) out = await play({ ...RESTART_RUN });
+    if (out?.quitToTitle === true) await toTitle?.();
+    return out;
+  } finally {
+    runsInFlight.set(flow, Math.max(0, (runsInFlight.get(flow) ?? 1) - 1));
+  }
+}

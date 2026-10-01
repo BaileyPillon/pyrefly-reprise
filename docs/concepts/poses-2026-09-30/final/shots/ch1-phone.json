@@ -1,0 +1,247 @@
+{
+ "otherTrail": [
+  "attack"
+ ],
+ "reduceMotion": false,
+ "plan": "ch1",
+ "device": "phone",
+ "chapter": "seymour-flux",
+ "game": "ffx",
+ "branch": "poses-0930",
+ "sha": "bedc2556",
+ "url": "http://127.0.0.1:8897/pyrefly-reprise/",
+ "viewport": {
+  "width": 390,
+  "height": 844
+ },
+ "shots": {
+  "rest": "docs/concepts/poses-2026-09-30/final/shots/ch1-phone-rest.jpg",
+  "other-attack": "docs/concepts/poses-2026-09-30/final/shots/ch1-phone-other-attack.jpg",
+  "attack": "docs/concepts/poses-2026-09-30/final/shots/ch1-phone-attack.jpg",
+  "after-attack": "docs/concepts/poses-2026-09-30/final/shots/ch1-phone-after-attack.jpg"
+ },
+ "at": {
+  "rest": {
+   "yuna": {
+    "art": "yuna",
+    "pose": "sleep",
+    "url": "art/characters/yuna/sleep.png",
+    "worldH": 1.254,
+    "hp": "1500/1500",
+    "statuses": [
+     "critical",
+     "sleep"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "auron": {
+    "art": "auron",
+    "pose": "critical",
+    "url": "art/characters/auron/critical.png",
+    "worldH": 1.093,
+    "hp": "1364/3410",
+    "statuses": [
+     "defend"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "wakka": {
+    "art": "wakka",
+    "pose": "ready",
+    "url": "art/characters/wakka/idle.png",
+    "worldH": 1.834,
+    "hp": "1012/2530",
+    "statuses": [],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "marksAnimations": 3
+  },
+  "other-attack": {
+   "yuna": {
+    "art": "yuna",
+    "pose": "sleep",
+    "url": "art/characters/yuna/sleep.png",
+    "worldH": 1.254,
+    "hp": "1500/1500",
+    "statuses": [
+     "critical",
+     "sleep"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "auron": {
+    "art": "auron",
+    "pose": "critical",
+    "url": "art/characters/auron/critical.png",
+    "worldH": 1.093,
+    "hp": "1364/3410",
+    "statuses": [
+     "defend"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "wakka": {
+    "art": "wakka",
+    "pose": "attack",
+    "url": "art/characters/wakka/attack.png",
+    "worldH": 1.851,
+    "hp": "1012/2530",
+    "statuses": [],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "marksAnimations": 3
+  },
+  "attack": {
+   "yuna": {
+    "art": "yuna",
+    "pose": "ko",
+    "url": "art/characters/yuna/ko.png",
+    "worldH": 1.401,
+    "hp": "0/1500",
+    "statuses": [
+     "zombie",
+     "ko"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "auron": {
+    "art": "auron",
+    "pose": "attack",
+    "url": "art/characters/auron/attack.png",
+    "worldH": 1.86,
+    "hp": "1364/3410",
+    "statuses": [
+     "critical"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "wakka": {
+    "art": "wakka",
+    "pose": "critical",
+    "url": "art/characters/wakka/critical.png",
+    "worldH": 1.94,
+    "hp": "1012/2530",
+    "statuses": [],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "marksAnimations": 0
+  },
+  "after-attack": {
+   "yuna": {
+    "art": "yuna",
+    "pose": "ko",
+    "url": "art/characters/yuna/ko.png",
+    "worldH": 1.401,
+    "hp": "0/1500",
+    "statuses": [
+     "zombie",
+     "ko"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "auron": {
+    "art": "auron",
+    "pose": "critical",
+    "url": "art/characters/auron/critical.png",
+    "worldH": 1.093,
+    "hp": "0/3410",
+    "statuses": [
+     "ko"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "wakka": {
+    "art": "wakka",
+    "pose": "critical",
+    "url": "art/characters/wakka/critical.png",
+    "worldH": 1.94,
+    "hp": "1012/2530",
+    "statuses": [],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "marksAnimations": 0
+  }
+ },
+ "trail": [
+  {
+   "t": 0,
+   "art": "auron",
+   "pose": "ready",
+   "url": "art/characters/auron/idle.png",
+   "worldH": 1.843,
+   "hp": "1364/3410",
+   "statuses": [
+    "critical"
+   ],
+   "paintsSleep": true,
+   "paintsCritical": true
+  },
+  {
+   "t": 100,
+   "art": "auron",
+   "pose": "attack",
+   "url": "art/characters/auron/attack.png",
+   "worldH": 1.86,
+   "hp": "1364/3410",
+   "statuses": [
+    "critical"
+   ],
+   "paintsSleep": true,
+   "paintsCritical": true
+  },
+  {
+   "t": 300,
+   "art": "auron",
+   "pose": "critical",
+   "url": "art/characters/auron/critical.png",
+   "worldH": 1.093,
+   "hp": "1364/3410",
+   "statuses": [
+    "critical"
+   ],
+   "paintsSleep": true,
+   "paintsCritical": true
+  }
+ ],
+ "notes": [
+  "STAGED: switch tidus -> auron by the engine's own Switch row: true",
+  "STAGED: switch kimahri -> wakka by the engine's own Switch row: true",
+  "STAGED: {\"yuna\":{\"sleep\":true},\"auron\":{\"hp\":0.4},\"wakka\":{\"hp\":0.4}} written into the engine state, then presenter.syncHud (the rest-pose tap reacts on its own; no setPose was called by this script)",
+  "wakka attacked by keys (Enter x3) to reach auron",
+  "auron Attack by real keys: Enter x2",
+  "all-rest: a member Attack by keys to reach an enemy turn; statuses and HP re-staged first"
+ ],
+ "served": [
+  "auron/critical.json",
+  "auron/critical.png",
+  "auron/sleep.json",
+  "auron/sleep.png",
+  "tidus/critical.json",
+  "tidus/critical.png",
+  "tidus/sleep.json",
+  "tidus/sleep.png",
+  "wakka/critical.json",
+  "wakka/critical.png",
+  "wakka/sleep.json",
+  "wakka/sleep.png",
+  "yuna/critical.json",
+  "yuna/critical.png",
+  "yuna/sleep.json",
+  "yuna/sleep.png"
+ ],
+ "errors": [],
+ "consoleErrors": [],
+ "http4xx": []
+}

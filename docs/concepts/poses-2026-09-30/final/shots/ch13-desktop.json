@@ -1,0 +1,349 @@
+{
+ "otherTrail": [
+  "attack"
+ ],
+ "reduceMotion": false,
+ "plan": "ch13",
+ "device": "desktop",
+ "chapter": "ffx2-trema",
+ "game": "ffx2",
+ "branch": "poses-0930",
+ "sha": "9299b319",
+ "url": "http://127.0.0.1:8731/pyrefly-reprise/",
+ "viewport": {
+  "width": 1600,
+  "height": 900
+ },
+ "shots": {
+  "rest": "docs/concepts/poses-2026-09-30/final/shots/ch13-desktop-rest.jpg",
+  "other-attack": "docs/concepts/poses-2026-09-30/final/shots/ch13-desktop-other-attack.jpg",
+  "attack": "docs/concepts/poses-2026-09-30/final/shots/ch13-desktop-attack.jpg",
+  "after-attack": "docs/concepts/poses-2026-09-30/final/shots/ch13-desktop-after-attack.jpg",
+  "all-rest": "docs/concepts/poses-2026-09-30/final/shots/ch13-desktop-all-rest.jpg",
+  "hurt": "docs/concepts/poses-2026-09-30/final/shots/ch13-desktop-hurt.jpg"
+ },
+ "at": {
+  "rest": {
+   "yuna": {
+    "art": "yuna-dark-knight",
+    "pose": "ready",
+    "url": "art/characters/yuna-dark-knight/idle.png",
+    "worldH": 1.774,
+    "hp": "5355/5355",
+    "statuses": [
+     "protect",
+     "shell"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "rikku": {
+    "art": "rikku-alchemist",
+    "pose": "idle",
+    "url": "art/characters/rikku-alchemist/idle.png",
+    "worldH": 1.774,
+    "hp": "5106/5106",
+    "statuses": [
+     "protect",
+     "shell"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "paine": {
+    "art": "paine-songstress",
+    "pose": "idle",
+    "url": "art/characters/paine-songstress/idle.png",
+    "worldH": 1.774,
+    "hp": "5355/5355",
+    "statuses": [
+     "protect",
+     "shell"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "marksAnimations": 0
+  },
+  "other-attack": {
+   "yuna": {
+    "art": "yuna-dark-knight",
+    "pose": "attack",
+    "url": "art/characters/yuna-dark-knight/attack.png",
+    "worldH": 1.805,
+    "hp": "3788/5355",
+    "statuses": [
+     "protect",
+     "shell",
+     "itchy"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "rikku": {
+    "art": "rikku-alchemist",
+    "pose": "idle",
+    "url": "art/characters/rikku-alchemist/idle.png",
+    "worldH": 1.774,
+    "hp": "5106/5106",
+    "statuses": [
+     "protect",
+     "shell"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "paine": {
+    "art": "paine-songstress",
+    "pose": "idle",
+    "url": "art/characters/paine-songstress/idle.png",
+    "worldH": 1.774,
+    "hp": "5355/5355",
+    "statuses": [
+     "protect",
+     "shell"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "marksAnimations": 0
+  },
+  "attack": {
+   "yuna": {
+    "art": "yuna-dark-knight",
+    "pose": "idle",
+    "url": "art/characters/yuna-dark-knight/idle.png",
+    "worldH": 1.774,
+    "hp": "5355/5355",
+    "statuses": [
+     "protect",
+     "shell",
+     "itchy"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "rikku": {
+    "art": "rikku-alchemist",
+    "pose": "idle",
+    "url": "art/characters/rikku-alchemist/idle.png",
+    "worldH": 1.774,
+    "hp": "5106/5106",
+    "statuses": [
+     "protect",
+     "shell"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "paine": {
+    "art": "paine-songstress",
+    "pose": "attack",
+    "url": "art/characters/paine-songstress/attack.png",
+    "worldH": 1.376,
+    "hp": "3744/5355",
+    "statuses": [
+     "protect",
+     "shell",
+     "itchy"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "marksAnimations": 0
+  },
+  "after-attack": {
+   "yuna": {
+    "art": "yuna-dark-knight",
+    "pose": "idle",
+    "url": "art/characters/yuna-dark-knight/idle.png",
+    "worldH": 1.774,
+    "hp": "5355/5355",
+    "statuses": [
+     "protect",
+     "shell",
+     "itchy"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "rikku": {
+    "art": "rikku-alchemist",
+    "pose": "idle",
+    "url": "art/characters/rikku-alchemist/idle.png",
+    "worldH": 1.774,
+    "hp": "5106/5106",
+    "statuses": [
+     "protect",
+     "shell"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "paine": {
+    "art": "paine-songstress",
+    "pose": "idle",
+    "url": "art/characters/paine-songstress/idle.png",
+    "worldH": 1.774,
+    "hp": "3744/5355",
+    "statuses": [
+     "protect",
+     "shell",
+     "itchy"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "marksAnimations": 0
+  },
+  "all-rest": {
+   "yuna": {
+    "art": "yuna-dark-knight",
+    "pose": "idle",
+    "url": "art/characters/yuna-dark-knight/idle.png",
+    "worldH": 1.774,
+    "hp": "5355/5355",
+    "statuses": [
+     "protect",
+     "shell",
+     "itchy"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "rikku": {
+    "art": "rikku-alchemist",
+    "pose": "idle",
+    "url": "art/characters/rikku-alchemist/idle.png",
+    "worldH": 1.774,
+    "hp": "5106/5106",
+    "statuses": [
+     "protect",
+     "shell"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "paine": {
+    "art": "paine-songstress",
+    "pose": "idle",
+    "url": "art/characters/paine-songstress/idle.png",
+    "worldH": 1.774,
+    "hp": "3744/5355",
+    "statuses": [
+     "protect",
+     "shell",
+     "itchy"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "marksAnimations": 0
+  },
+  "hurt": {
+   "yuna": {
+    "art": "yuna-dark-knight",
+    "pose": "idle",
+    "url": "art/characters/yuna-dark-knight/idle.png",
+    "worldH": 1.774,
+    "hp": "3693/5355",
+    "statuses": [
+     "protect",
+     "shell"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "rikku": {
+    "art": "rikku-alchemist",
+    "pose": "idle",
+    "url": "art/characters/rikku-alchemist/idle.png",
+    "worldH": 1.774,
+    "hp": "3867/5106",
+    "statuses": [
+     "protect",
+     "shell"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "paine": {
+    "art": "paine-songstress",
+    "pose": "hurt",
+    "url": "art/characters/paine-songstress/hurt.png",
+    "worldH": 1.057,
+    "hp": "2108/5355",
+    "statuses": [
+     "protect",
+     "shell",
+     "itchy"
+    ],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "marksAnimations": 1
+  }
+ },
+ "trail": [
+  {
+   "t": 0,
+   "art": "paine-songstress",
+   "pose": "ready",
+   "url": "art/characters/paine-songstress/idle.png",
+   "worldH": 1.774,
+   "hp": "5355/5355",
+   "statuses": [
+    "protect",
+    "shell"
+   ],
+   "paintsSleep": false,
+   "paintsCritical": false
+  },
+  {
+   "t": 100,
+   "art": "paine-songstress",
+   "pose": "attack",
+   "url": "art/characters/paine-songstress/attack.png",
+   "worldH": 1.376,
+   "hp": "3744/5355",
+   "statuses": [
+    "protect",
+    "shell",
+    "itchy"
+   ],
+   "paintsSleep": false,
+   "paintsCritical": false
+  },
+  {
+   "t": 300,
+   "art": "paine-songstress",
+   "pose": "idle",
+   "url": "art/characters/paine-songstress/idle.png",
+   "worldH": 1.774,
+   "hp": "3744/5355",
+   "statuses": [
+    "protect",
+    "shell",
+    "itchy"
+   ],
+   "paintsSleep": false,
+   "paintsCritical": false
+  }
+ ],
+ "notes": [
+  "STAGED: paine dressed as paine-songstress with stage.setArt (the chapter opens in paine-dark-knight)",
+  "STAGED: {\"paine\":{\"hp\":1}} written into the engine state, then presenter.syncHud (the rest-pose tap reacts on its own; no setPose was called by this script)",
+  "yuna attacked by keys (Enter x3) to reach paine",
+  "paine Attack by real keys: Enter x2",
+  "hurt: a real enemy action on the fight; the other turns resolved with Attack by engine row (never a Change); STAGED: party HP topped up above 60 % and Itchy lifted between turns, so the wait is not ended by a KO or a forced Change"
+ ],
+ "served": [
+  "paine-songstress/attack.json",
+  "paine-songstress/attack.png",
+  "paine-songstress/hurt.json",
+  "paine-songstress/hurt.png"
+ ],
+ "errors": [],
+ "consoleErrors": [],
+ "http4xx": []
+}

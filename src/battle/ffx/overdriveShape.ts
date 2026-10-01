@@ -14,13 +14,83 @@ import type { ResolveOptions } from './abilities.ts';
 import { FURY_MAX_CASTS, furyCastsFor, timingBonusFrom } from './overdrive.ts';
 import { resolveReelSpin } from './reels.ts';
 
-/** Reshape an Overdrive by its minigame outcome [ffx-combat-core §5.3, §5.6, §5.7]. */
+/** Keys that belong to the success row only: Blitz Ace's "Last Hit" finisher (row 274) [§5.3]. */
+const SUCCESS_ONLY_KEYS = ['finisherPower', 'finisherHits', 'finisherAppliesOnSuccessOnly'] as const;
+
+/**
+ * The sourced **(Fail)** or **(Immune)** row a Swordplay / Bushido record
+ * carries inline as `extra.failPower`/`failHits`(/`failRank`) or
+ * `extra.immunePower`/`immuneHits` [ffx-combat-core §5.3, §5.5, both tables
+ * `[verified: 2 sources]`]. Only DmgCon, hit count and (where the table gives
+ * one) rank change; everything else, `canMiss: false` (hard rule 5) and the
+ * `crit-eligible` flag included, stays the success record's. A fail row drops the
+ * success-only finisher keys. **Both rows drop the rider** (no status, no Delay):
+ * the Immune rows 270 to 273 (od5, research note Q2) and the Fail rows 266 to 269
+ * and 235 to 238 (od6, research note Q3a `[verified: 5 sources]`: "Effects only are
+ * applied when sequence is entered correctly"). The can-crit bit stays on both
+ * (Q3b). `undefined` when the record carries no such row, so the caller keeps `def`.
+ * **FFX only**: FFX-2 has no Swordplay/Bushido.
+ */
+export function rowFromExtra(def: AbilityDef, row: 'fail' | 'immune'): AbilityDef | undefined {
+  const extra = def.extra ?? {};
+  const power = extra[`${row}Power`];
+  const hits = extra[`${row}Hits`];
+  if (typeof power !== 'number' || typeof hits !== 'number') return undefined;
+  const rank = extra[`${row}Rank`];
+  const rest: Record<string, unknown> = { ...extra };
+  if (row === 'fail') for (const k of SUCCESS_ONLY_KEYS) delete rest[k];
+  // Neither the Fail rows (TRK 266 to 269, 235 to 238; Q3a) nor the Immune rows (270 to 273; Q2)
+  // carry a status or a Delay; a chance-254 rider never drew, so dropping it adds and removes no draw.
+  const flags = def.flags.filter((f) => !DELAY_FLAGS.includes(f));
+  return { ...def, power, hits, rank: typeof rank === 'number' ? rank : def.rank, extra: rest, statusEffects: [], flags };
+}
+
+const DELAY_FLAGS: readonly string[] = ['weak-delay', 'strong-delay'];
+
+/**
+ * Is `target` immune to **all** of `def`'s rider (od5)? A rider is the record's
+ * `statusEffects` plus a weak/strong Delay flag: Dragon Fang weak Delay, Shooting
+ * Star Eject, Banishing Blade all four Breaks (§5.5, research note Q2 item 1,
+ * `[verified: 3 sources]`). Immune = resistance 255 for a status, the
+ * `immune-to-delay` flag for Delay, read off the target's own data. **All four**
+ * Breaks for Banishing Blade and **per target** are our estimates, Bailey's picks
+ * [estimate, Bailey D-310, D-311; `research/ffx-overdrive-input-rules-2026-09-30.md`
+ * Q2 items 2 and 3]. A record with no rider (Tornado) is never immune. Reads only;
+ * no RNG draw. **FFX only.**
+ */
+export function immuneToRider(def: AbilityDef, target: FFXCombatant): boolean {
+  const delay = def.flags.some((f) => DELAY_FLAGS.includes(f));
+  if (def.statusEffects.length === 0 && !delay) return false;
+  if (delay && !target.immunityFlags.includes('immune-to-delay')) return false;
+  return def.statusEffects.every((s) => (target.immunities[s.status] ?? 0) >= 255);
+}
+
+/**
+ * Blitz Ace's **"Last Hit"**, row 274: `research/ffx-combat-core.md` §5.3 gives
+ * the success as "4 × 8, then a final 24 × 1 (row 274 "Last Hit")" and the fail
+ * as "4 × 8" (table `[verified: 2 sources]`; the 8 + 1 hit count is
+ * `[single source]`, §11 C14). Built from `extra.finisherPower`/`finisherHits`
+ * on the success record; `undefined` for every record without them. Everything
+ * else, `canMiss: false` included (hard rule 5), is the success record's.
+ * **FFX only.**
+ */
+export function finisherRow(def: AbilityDef): AbilityDef | undefined {
+  const extra = def.extra ?? {};
+  const power = extra['finisherPower'];
+  const hits = extra['finisherHits'];
+  if (typeof power !== 'number' || typeof hits !== 'number') return undefined;
+  const rest: Record<string, unknown> = { ...extra };
+  for (const k of SUCCESS_ONLY_KEYS) delete rest[k];
+  return { ...def, power, hits, extra: rest };
+}
+
+/** Reshape an Overdrive by its minigame outcome [ffx-combat-core §5.3, §5.6, §5.7]; `finisher` = a success-only follow-up row. */
 export function shapeOverdrive(
   ctx: Ctx,
   user: FFXCombatant,
   def: AbilityDef,
   result: MinigameResult | undefined,
-): { def: AbilityDef; options: ResolveOptions } {
+): { def: AbilityDef; options: ResolveOptions; finisher?: AbilityDef } {
   const options: ResolveOptions = { timing: timingBonusFrom(result, def) };
   if (!result) return { def, options };
 
@@ -28,14 +98,19 @@ export function shapeOverdrive(
     const success = result.kind === 'tidus-timing' ? result.timing.success : result.sequence.success;
     if (!success) {
       const failId = def.extra?.['failAbilityId'];
-      const failDef = typeof failId === 'string' ? abilityOf(ctx, failId) : undefined;
+      const failDef = typeof failId === 'string' ? abilityOf(ctx, failId) : rowFromExtra(def, 'fail');
       if (failDef) return { def: failDef, options };
-    } else if (result.kind === 'auron-sequence' && result.sequence.targetImmuneToRider === true) {
+    } else if (result.kind === 'auron-sequence') {
+      // A clean Bushido picks its (Immune) row **per target**, from that target's own immunities
+      // (od5, `immuneToRider`); the others take the success row and its rider. The engine decides:
+      // `sequence.targetImmuneToRider` is no longer read.
       const immuneId = def.extra?.['immuneAbilityId'];
-      const immuneDef = typeof immuneId === 'string' ? abilityOf(ctx, immuneId) : undefined;
-      if (immuneDef) return { def: immuneDef, options };
+      const immuneDef = typeof immuneId === 'string' ? abilityOf(ctx, immuneId) : rowFromExtra(def, 'immune');
+      if (immuneDef) options.rowFor = (target) => (immuneToRider(def, target) ? immuneDef : undefined);
     }
-    return { def, options };
+    // Only a success reaches here with the success row, so only a success gets the finisher.
+    const finisher = success ? finisherRow(def) : undefined;
+    return finisher ? { def, options, finisher } : { def, options };
   }
 
   if (result.kind === 'wakka-reels' || result.kind === 'ladyluck-reels') {

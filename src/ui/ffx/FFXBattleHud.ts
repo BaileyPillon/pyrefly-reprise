@@ -42,7 +42,7 @@ import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { withOverdriveFocus } from './overdriveFocus.ts';
 import { showOverdrivePlate } from './overdrivePlate.ts';
-import { INTENT_AVOID_SELECTORS, ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
+import { INTENT_AVOID_SELECTORS, ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR, chipObstacleEls, chipReserveOf, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey, unionOf } from './hudPlacementKeys.ts';
 import { doomNoteOf } from './DoomCounters.ts';
 import { zombieTargetNote } from './zombieTargetNote.ts';
@@ -1348,7 +1348,7 @@ export class FFXBattleHud implements HudPort {
       partyStatus:
         growToGrid(this.stageRect(this.partyStatus.el), 1) ?? { left: 403, top: 258, right: 617, bottom: 348 },
       guide: growToGrid(this.stageRect(this.el.querySelector<HTMLElement>('.sgd__panel')), 1),
-      sensor: growToGrid(this.stageRect(this.sensorPanel.el), 1),
+      sensor: growToGrid(this.stageRect(this.sensorPanel.el), 1), chipReserve: chipReserveOf(growToGrid(this.stageRect(this.advisor.el.querySelector<HTMLElement>('[data-role="move-advisor-toggle"]')), 1), ADVISOR_CHIP_GAP, this.el), // PR-0266
       intent: growToGrid(this.atRest(this.stageRect(this.intent.el.querySelector<HTMLElement>('.eint__panel'))), 4), // hung on the boss: where it rests
       intentChip: growToGrid(this.stageRect(this.intent.el.querySelector<HTMLElement>('.eint__toggle')), 4),
       ctb: growToGrid(this.stageRect(this.ctbList.el), 1),
@@ -1362,7 +1362,7 @@ export class FFXBattleHud implements HudPort {
       // Braska's Final Aeon: the only fighters the solver had ever been told
       // about were the party's.
       // Plus Yojimbo's Zanmato gauge and banner (FFX, Chapter IX only) and Omnis's disc strip and intent line (Chapter XII only): ink, as solid as a boss.
-      enemies: [...this.enemySpriteRects().map((r) => growToGrid(r, 4)!), ...[...this.zanmato.obstacleEls(), ...this.el.querySelectorAll<HTMLElement>([...ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR].join())].flatMap((e) => growToGrid(this.stageRect(e), 1) ?? [])],
+      enemies: [...this.enemySpriteRects().map((r) => growToGrid(r, 4)!), ...[...this.zanmato.obstacleEls(), ...chipObstacleEls(this.el), ...this.el.querySelectorAll<HTMLElement>([...ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR].join())].flatMap((e) => growToGrid(this.stageRect(e), 1) ?? [])],
     };
     const key = [
       this.advisorDecisionSeq,
@@ -1379,7 +1379,7 @@ export class FFXBattleHud implements HudPort {
       // number is not: a KO or a switch changes it, and both are worth a fresh
       // solve on the frame they land.
       input.sprites.length,
-      input.enemies.length,
+      input.enemies.length, input.chipReserve,
     ].join('|');
 
     const held = this.heldAdvisor;

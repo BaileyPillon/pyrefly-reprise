@@ -3,7 +3,7 @@
  * "I'll go with your recommendations for all"; `docs/target/decisions.json`
  * D-100).
  *
- * **Game case: FFX-2 in effect, and FFX only behind an OFF switch** [AGENTS.md
+ * **Game case: FFX-2, and FFX's Sin link 3 only (switch on, D-284)** [AGENTS.md
  * rule 14]. The only formations that carry `EnemyGroupDef.restoresPartyOnEntry`
  * are Chapter XI's Sisters and Anima links (the Save Sphere between the
  * platforms of the Road to the Farplane, FA2 = b, a sourced `[conflict]`:
@@ -11,8 +11,8 @@
  * (no Save Sphere) is set by FFX-2's Trema (TR5 = b) and Shuyin (D-217), and on
  * FFX's side by Sin's link 3 (`sinGenaisCoreGroup`) **only while
  * `SIN_LINK3_CHECKPOINT` is on** (`src/data/ffx/enemies/sin-genais-core.ts`;
- * shipped `false`, an adaptation offered to Bailey, not a sourced rule). With
- * that switch off no FFX chapter ever produces a checkpoint. The code is shared
+ * on since PR-0268, adopted by Bailey as D-284: an adaptation, not a sourced
+ * rule). No other FFX link ever produces a checkpoint. The code is shared
  * plumbing; with both flags absent everywhere else every other retry is
  * unchanged: it starts the chapter over from its first formation, as before.
  *

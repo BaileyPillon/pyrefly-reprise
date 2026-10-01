@@ -128,8 +128,8 @@ export const ffx2VegnagunShuyinScripts: ChapterScripts = {
     camera('idle', 900),
     // He is already there when the scene opens: the fight just ended on him
     // (PR-0133; the cutscene stage stands him from `cutsceneFigures.ts`).
+    setPose('shuyin', 'kneel'), // D-301: posed first, so an installed kneel painting is up from the first frame
     showActor('shuyin', { ms: 0, facing: -1 }),
-    setPose('shuyin', 'kneel'),
     beat(1600), // He refuses to look up.
     say('yuna-x2', 'Listen to me. She asked me to—'),
     say('shuyin', "You're not her. Don't."),

@@ -1,0 +1,79 @@
+{
+ "otherTrail": [],
+ "reduceMotion": false,
+ "plan": "ch1k-sleep",
+ "device": "phone",
+ "chapter": "seymour-flux",
+ "game": "ffx",
+ "branch": "poses-day",
+ "sha": "e9815c9c",
+ "url": "http://127.0.0.1:8913/pyrefly-reprise/",
+ "viewport": {
+  "width": 390,
+  "height": 844
+ },
+ "shots": {
+  "rest": "docs/concepts/poses-2026-09-30/final-day/shots/ch1k-sleep-phone-rest.jpg"
+ },
+ "at": {
+  "rest": {
+   "tidus": {
+    "art": "tidus",
+    "pose": "ready",
+    "url": "art/characters/tidus/idle.png",
+    "worldH": 1.844,
+    "hp": "2420/2420",
+    "statuses": [],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "yuna": {
+    "art": "yuna",
+    "pose": "idle",
+    "url": "art/characters/yuna/idle.png",
+    "worldH": 1.846,
+    "hp": "1500/1500",
+    "statuses": [
+     "critical",
+     "zombie"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "kimahri": {
+    "art": "kimahri",
+    "pose": "sleep",
+    "url": "art/characters/kimahri/sleep.png",
+    "worldH": 1.834,
+    "hp": "2310/2310",
+    "statuses": [
+     "sleep"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "marksAnimations": 10
+  }
+ },
+ "trail": [],
+ "notes": [
+  "STAGED: {\"kimahri\":{\"sleep\":true}} written into the engine state, then presenter.syncHud (the rest-pose tap reacts on its own; no setPose was called by this script)"
+ ],
+ "served": [
+  "kimahri/critical.json",
+  "kimahri/critical.png",
+  "kimahri/sleep.json",
+  "kimahri/sleep.png",
+  "tidus/critical.json",
+  "tidus/critical.png",
+  "tidus/sleep.json",
+  "tidus/sleep.png",
+  "yuna/critical.json",
+  "yuna/critical.png",
+  "yuna/sleep.json",
+  "yuna/sleep.png"
+ ],
+ "errors": [],
+ "consoleErrors": [],
+ "http4xx": []
+}

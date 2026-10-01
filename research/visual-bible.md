@@ -1840,7 +1840,7 @@ Blitz Ace's 30 ms window is two frames at 60 Hz. That is intentional — it is t
 
 #### 3.11.2 Auron — Bushido (button-sequence prompt)
 
-Mechanic `[verified: 2 sources]`: enter a button sequence before a **4 000 ms** timer expires; faster entry ⇒ larger remaining-time bonus; failure resolves the "(Fail)" row (`ffx-combat-core.md` §5.5). All four sequences are **7 inputs** long.
+Mechanic `[verified: 2 sources]`: enter a button sequence before a **4 000 ms** timer expires; faster entry ⇒ larger remaining-time bonus; failure resolves the "(Fail)" row (`ffx-combat-core.md` §5.5). Sequence lengths: Dragon Fang **8**, Shooting Star **7**, Banishing Blade **7**, Tornado **6** `[verified: 4 sources]` (FW-BU, GF-PF, XU, AGS; GF-KB lists Tornado with 5; see `research/ffx-overdrive-input-rules-2026-09-30.md` D2). The previous "all four sequences are 7 inputs" was wrong.
 
 | Element | Spec |
 |---|---|
@@ -1848,8 +1848,8 @@ Mechanic `[verified: 2 sources]`: enter a button sequence before a **4 000 ms** 
 | Chip (pending) | fill `#101828` at 88%, 1 px `#4E86C8` border, glyph `#C8D4E4` centred |
 | Chip (next required) | scales to **40 × 40** (grows 3 px in each direction, chips do **not** reflow), border becomes 2 px `#FFF0A8`, plus a 3 px `#F2C21E` outer glow at 50%, pulsing 100→78% on a 0.5 s sine |
 | Chip (entered correctly) | fill `#1E4A38`, border 1 px `#7EE8B0`, glyph `#7EE8B0`, and a 2-frame scale pop to 1.2 |
-| Chip (wrong input) | the **whole row** flashes `#C7343C` for 3 frames and the run ends immediately — Bushido has **no partial credit** |
-| Progress rule | the sequence advances **only on the correct input**; wrong inputs end the attempt, they do not merely stall it |
+| Chip (wrong input) | the **whole row** flashes `#C7343C` for 3 frames, then every chip returns to "pending" with chip 1 as "next required": the progress resets to input 1 and the attempt **continues** (no partial credit: a partial sequence earns nothing) |
+| Progress rule | the sequence advances **only on the correct input**; a wrong input sends it back to input 1 `[verified: 3 sources]`, the timer keeps running `[estimate]`, and the attempt ends only on the last correct input or at timer expiry (`research/ffx-overdrive-input-rules-2026-09-30.md` Q1; `ffx-combat-core.md` §5.5). The previous "wrong inputs end the attempt" was contradicted by those sources |
 | Glyph set | direction chips are 13 px arrow glyphs in `#C8D4E4`; face-button chips are the platform glyph (`✕ ○ □ △` / `A B X Y`) in the platform's colour band (`#4E86C8` / `#C7343C` / `#B048F0` / `#7EE8B0`) drawn as a 2 px ring, glyph letter inside in `#F4F1E8`; shoulder chips read `L1` / `R1` in 12 px `--font-numeral` |
 | Sequence source | `ffx-combat-core.md` §5.5 `[verified: 2 sources]` — Dragon Fang `↓ ← ↑ → L1 R1 ○ ✕` is 8 inputs in that table; render **8 chips at 30 × 30 with a 6 px gutter** for that one row (total 282 px) rather than shrinking the others |
 | Sub-header | `ENTER THE SEQUENCE` |

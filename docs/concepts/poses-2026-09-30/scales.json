@@ -1,0 +1,182 @@
+{
+ "yuna/sleep": {
+  "scale": 0.8,
+  "headMatch": 0.8,
+  "feature": "crown-to-chin and eye-to-chin beside the idle at 0.8 to 1.2",
+  "rule": "head match",
+  "stature": 0.675,
+  "poseOpaqueH": 881,
+  "idleOpaqueH": 1044
+ },
+ "yuna/critical": {
+  "scale": 1.0,
+  "headMatch": 1.0,
+  "feature": "crown-to-chin and iris size",
+  "rule": "head match",
+  "stature": 1.084,
+  "poseOpaqueH": 1132,
+  "idleOpaqueH": 1044
+ },
+ "auron/sleep": {
+  "scale": 1.0,
+  "headMatch": 1.0,
+  "feature": "head width across the hair and the sunglasses",
+  "rule": "head match",
+  "stature": 0.703,
+  "poseOpaqueH": 824,
+  "idleOpaqueH": 1172
+ },
+ "auron/critical": {
+  "scale": 0.64,
+  "headMatch": 0.45,
+  "feature": "brow-to-chin and lens width: a close-up render with a head about twice the idle's share",
+  "rule": "head match 0.45 would stand 0.43 of the idle; raised to the 0.60 stature floor",
+  "stature": 0.609,
+  "poseOpaqueH": 1116,
+  "idleOpaqueH": 1172
+ },
+ "wakka/sleep": {
+  "scale": 1.0,
+  "headMatch": 1.0,
+  "feature": "bandana top to chin",
+  "rule": "head match",
+  "stature": 0.966,
+  "poseOpaqueH": 1122,
+  "idleOpaqueH": 1162
+ },
+ "wakka/critical": {
+  "scale": 1.05,
+  "headMatch": 1.05,
+  "feature": "bandana top to chin",
+  "rule": "head match",
+  "stature": 1.058,
+  "poseOpaqueH": 1171,
+  "idleOpaqueH": 1162
+ },
+ "lulu/sleep": {
+  "scale": 0.8,
+  "headMatch": 0.8,
+  "feature": "hair width at the temples",
+  "rule": "head match",
+  "stature": 0.688,
+  "poseOpaqueH": 974,
+  "idleOpaqueH": 1133
+ },
+ "lulu/critical": {
+  "scale": 0.72,
+  "headMatch": 0.72,
+  "feature": "hair width at the temples",
+  "rule": "head match",
+  "stature": 0.737,
+  "poseOpaqueH": 1160,
+  "idleOpaqueH": 1133
+ },
+ "rikku/sleep": {
+  "scale": 0.8,
+  "headMatch": 0.8,
+  "feature": "headband to chin",
+  "rule": "head match",
+  "stature": 0.853,
+  "poseOpaqueH": 1160,
+  "idleOpaqueH": 1088
+ },
+ "rikku/critical": {
+  "scale": 0.8,
+  "headMatch": 0.8,
+  "feature": "headband to chin (0.85) and iris width (0.75), the mean",
+  "rule": "head match",
+  "stature": 0.828,
+  "poseOpaqueH": 1126,
+  "idleOpaqueH": 1088
+ },
+ "tidus/sleep": {
+  "scale": 1.0,
+  "headMatch": 1.0,
+  "feature": "hair mass height and width",
+  "rule": "head match",
+  "stature": 0.794,
+  "poseOpaqueH": 873,
+  "idleOpaqueH": 1100
+ },
+ "tidus/critical": {
+  "scale": 0.95,
+  "headMatch": 0.95,
+  "feature": "hair width",
+  "rule": "head match",
+  "stature": 1.0,
+  "poseOpaqueH": 1158,
+  "idleOpaqueH": 1100
+ },
+ "yuna-gunner/sleep": {
+  "scale": 1.0,
+  "headMatch": 1.0,
+  "feature": "hair top to chin and hair width",
+  "rule": "head match",
+  "stature": 0.732,
+  "poseOpaqueH": 851,
+  "idleOpaqueH": 1162
+ },
+ "yuna-gunner/critical": {
+  "scale": 0.99,
+  "headMatch": 0.9,
+  "feature": "hair top to chin",
+  "rule": "head match 0.9 would stand 0.55 of the idle; raised to the 0.60 stature floor",
+  "stature": 0.601,
+  "poseOpaqueH": 706,
+  "idleOpaqueH": 1162
+ },
+ "paine-warrior/sleep": {
+  "scale": 0.9,
+  "headMatch": 0.9,
+  "feature": "head width across the hair",
+  "rule": "head match",
+  "stature": 0.913,
+  "poseOpaqueH": 1165,
+  "idleOpaqueH": 1148
+ },
+ "paine-warrior/critical": {
+  "scale": 0.9,
+  "headMatch": 0.9,
+  "feature": "skull-to-chin (1.03) and eye-to-chin (0.75, mouth open), the mean",
+  "rule": "head match",
+  "stature": 0.761,
+  "poseOpaqueH": 971,
+  "idleOpaqueH": 1148
+ },
+ "rikku-thief/sleep": {
+  "scale": 1.05,
+  "headMatch": null,
+  "feature": null,
+  "rule": "body height (the Thief rule)",
+  "stature": 0.981,
+  "poseOpaqueH": 1102,
+  "idleOpaqueH": 1180
+ },
+ "rikku-thief/critical": {
+  "scale": 1.05,
+  "headMatch": null,
+  "feature": null,
+  "rule": "body height (the Thief rule)",
+  "stature": 0.671,
+  "poseOpaqueH": 754,
+  "idleOpaqueH": 1180
+ },
+ "paine-songstress/attack": {
+  "scale": 1.05,
+  "headMatch": 1.05,
+  "feature": "eye-to-chin (1.0) and face width (1.15), the mean",
+  "rule": "head match",
+  "stature": 0.768,
+  "poseOpaqueH": 850,
+  "idleOpaqueH": 1162
+ },
+ "paine-songstress/hurt": {
+  "scale": 0.66,
+  "headMatch": 0.57,
+  "feature": "eye-to-chin (0.6) and face width (0.53), the mean",
+  "rule": "head match 0.57 would stand 0.52 of the idle; raised to the 0.60 stature floor",
+  "stature": 0.603,
+  "poseOpaqueH": 1062,
+  "idleOpaqueH": 1162
+ }
+}

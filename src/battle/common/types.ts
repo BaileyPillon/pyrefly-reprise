@@ -1479,13 +1479,17 @@ export interface TimingResult {
 
 /** Result payload for `auron-sequence`. */
 export interface SequenceResult {
-  /** True when the whole sequence was entered before the 4 000 ms budget expired. */
+  /** True when the whole sequence was entered before the timer expired (4 000 ms; Tornado 3 000 ms since od5). */
   success: boolean;
   /** How many of the sequence's inputs landed. Range 0–8. */
   correctInputs: number;
-  /** `4000 - msElapsedWhenLastInputLanded`. Range 0–4 000. */
+  /** `timerMs - msElapsedWhenLastInputLanded` (4 000 ms; Tornado 3 000 ms since od5). Range 0 to the timer. */
   timeRemainingMs: number;
-  /** Set when the target is immune to the Overdrive's rider status, selecting the higher-DmgCon "immune" row. Tornado is always true (it has no rider). */
+  /**
+   * **Not read since od5 (2026-10-01); kept so the contract stays additive.** The FFX engine
+   * decides the higher-DmgCon "immune" row itself, per target, from each target's own
+   * immunities (`overdriveShape.ts` `immuneToRider`); Tornado has no rider and no immune row.
+   */
   targetImmuneToRider?: boolean;
 }
 
@@ -2660,7 +2664,7 @@ export interface EnemyGroupDef {
    * plan B13 = a]. Absent everywhere else.
    */
   victoryBonusAp?: number;
-  /** A chained link that is a retry checkpoint with no Save Sphere: FFX-2's Trema (TR5 b) and Shuyin (D-217); FFX, Sin's link 3 only behind the OFF switch `SIN_LINK3_CHECKPOINT` (CONTRACT-CHANGES). */
+  /** A chained link that is a retry checkpoint with no Save Sphere: FFX-2's Trema (TR5 b) and Shuyin (D-217); FFX, Sin's link 3 only, through the switch `SIN_LINK3_CHECKPOINT` (on since D-284; CONTRACT-CHANGES). */
   checkpointOnEntry?: boolean;
   /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema); FFX too, statuses only (Sin links 2 and 3; CONTRACT-CHANGES). */
   carriesPartyState?: boolean;

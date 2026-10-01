@@ -9,7 +9,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { Plugin, UserConfig } from 'vite';
 
 import { findUnshipped, isUnshippedPublicFile, pruneUnshipped } from '../../tools/dist-filter.mjs';
-import viteConfig from '../../vite.config.ts';
+import viteConfig, { THIRD_PARTY_LICENCES } from '../../vite.config.ts';
 
 let tmp: string | null = null;
 afterEach(() => {
@@ -86,5 +86,20 @@ describe('the production build applies it', () => {
     })) as UserConfig;
     const names = (config.plugins ?? []).flat().map((p) => (p as Plugin | null)?.name);
     expect(names).toContain('pyrefly-dist-filter');
+  });
+
+  // three.js is MIT: its copyright and permission notice must travel with the
+  // bundle. The minifier strips comments unless told otherwise (the live
+  // index-ChAAAZ-I.js carried no "Three.js Authors" at all).
+  it('keeps the bundled licence notices: @license headers in the code, full texts beside it', async () => {
+    const config = (await (viteConfig as (env: { command: 'build'; mode: string; isPreview: boolean }) => UserConfig | Promise<UserConfig>)({
+      command: 'build',
+      mode: 'production',
+      isPreview: false,
+    })) as UserConfig;
+    expect(config.build?.license).toEqual({ fileName: THIRD_PARTY_LICENCES });
+    expect(isUnshippedPublicFile(THIRD_PARTY_LICENCES)).toBe(false);
+    const output = config.build?.rolldownOptions?.output;
+    expect(Array.isArray(output) ? undefined : output?.comments).toMatchObject({ legal: true });
   });
 });

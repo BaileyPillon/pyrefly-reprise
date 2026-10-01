@@ -372,10 +372,10 @@ describe('macalania story — canon beats in order', () => {
     expect(captions.map((c) => c.auto)).toEqual([1600, 1800, 1400]);
     expect(captions.map((c) => c.text).join(' ')).toMatch(/knee[\s\S]*fell[\s\S]*knelt/);
     for (const c of captions) expect(c.text).not.toMatch(/\b(is|are|kneels|falls|begins)\b/);
-    // Seymour stands on the plate from the first frame until the Guado take the body.
+    // Seymour is on the plate from the first frame until the Guado take the body.
     const show = chapter.post.findIndex((s) => s.type === 'showActor' && s.actor === 'seymour-macalania');
     const hide = chapter.post.findIndex((s) => s.type === 'hideActor' && s.actor === 'seymour-macalania');
-    expect(show).toBe(0);
+    expect(show).toBeLessThanOrEqual(1);
     const results = chapter.post.findIndex((s) => s.type === 'results');
     expect(hide).toBeGreaterThan(results);
     // The post resumes after the tally on a fresh stage, so he is shown again before the first caption.
@@ -383,6 +383,34 @@ describe('macalania story — canon beats in order', () => {
     const firstCaption = chapter.post.findIndex((s) => s.type === 'narrate' && s.auto !== undefined);
     expect(again).toBeGreaterThan(results);
     expect(again).toBeLessThan(firstCaption);
+  });
+
+  it('PR-0244: Seymour is never upright on the plate under the kneel or the fall, and the silent plate before the tally is about a second', () => {
+    // Round 17 timed 1.7 s of plate with no line before the tally and the kneel / fall narrated over a
+    // standing painting. No painting kneels or falls, so every `showActor` is preceded by a
+    // `setPose(kneel)` (he fades in already down) and `ko` is set before the fall caption.
+    const S = 'seymour-macalania';
+    const results = chapter.post.findIndex((s) => s.type === 'results');
+    let pose: string | null = null; // the pose the stage holds for him when the next step runs
+    const upright: string[] = [];
+    chapter.post.forEach((s, i) => {
+      if (s.type === 'setPose' && s.actor === S) pose = s.state;
+      if (s.type === 'showActor' && s.actor === S && pose !== 'kneel' && pose !== 'ko') upright.push(`showActor at ${i} with pose ${pose}`);
+      if (s.type === 'narrate' && s.auto !== undefined && i > results && pose !== 'kneel' && pose !== 'ko') upright.push(`caption "${s.text}" with pose ${pose}`);
+      if (s.type === 'hideActor' && s.actor === S) pose = null;
+    });
+    expect(upright).toEqual([]);
+    const fall = chapter.post.findIndex((s) => s.type === 'narrate' && /fell/.test(s.text));
+    const ko = chapter.post.findIndex((s) => s.type === 'setPose' && s.actor === S && s.state === 'ko');
+    expect(ko).toBeGreaterThan(-1);
+    expect(ko).toBeLessThan(fall);
+    // Everything before the tally that takes time: fades and waits (`beat` is a `wait`). `camera` and `music` do not hold the plate.
+    let plateMs = 0;
+    for (const s of chapter.post.slice(0, results)) {
+      if (s.type === 'wait') plateMs += s.ms;
+      if (s.type === 'showActor') plateMs += s.ms ?? 300;
+    }
+    expect(plateMs).toBeLessThanOrEqual(1000);
   });
 
   it('ends on the chapter thesis: won cleanly, lost completely [§9.7]', () => {

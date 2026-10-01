@@ -1,4 +1,4 @@
-import { commandRowsCap } from '../common/hudTextSize.ts';
+import { commandRowsCap, withTextSizeWatch } from '../common/hudTextSize.ts';
 import type { AnyCombatant, AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import {
   buildTopRows,
@@ -16,12 +16,12 @@ import {
 } from './CommandMenuLogic.ts';
 import { ffxTargetMode } from './loneTarget.ts';
 import { noteWarnsZombieHarm, zombieWarnOn } from './zombieWarnOptions.ts';
+import { touchTapped } from '../common/touchTapAim.ts';
 import { commandHelpText } from './commandHelp.ts';
-import type { CursorChrome, CursorSelection, RectProjector, TargetRect } from './TargetCursor.ts';
 import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
-import { TargetCursor, type TargetEntry } from './TargetCursor.ts';
+import { TargetCursor, type CursorChrome, type CursorSelection, type RectProjector, type TargetEntry, type TargetRect } from './TargetCursor.ts';
 import { pagerHtml, pagerNeedsStack } from './CommandMenuPaging.ts';
 import { windowMove, wireListScroll } from './CommandMenuScroll.ts';
 import { badgeHtml, CURSOR_SVG, escapeHtml, groupHelp, subRowVM, topRowVM, type RowVM } from './commandMenuRows.ts';
@@ -252,7 +252,7 @@ export class CommandMenu {
     this.state = 'top';
     this.stackEl.hidden = false;
     this.watcher.attach();
-    this.unwireClicks = wireClicks(this.stackEl, (action) => this.onAction(action));
+    this.unwireClicks = withTextSizeWatch(wireClicks(this.stackEl, (action) => this.onAction(action)), () => this.state !== 'target' && this.renderStack()); // PR-0266
     this.renderStack();
     this.updateHelpAndPreview();
     return new Promise<Command>((resolve) => {
@@ -667,9 +667,9 @@ export class CommandMenu {
    */
   tryConfirmTargetById(id: CombatantId): boolean {
     if (this.state !== 'target') return false;
-    // Option "guard" (off; `zombieWarnOptions.ts`, fb-0929): a click that would hurt a Zombie ally aims first.
-    const aimFirst = zombieWarnOn('guard') && this.targetCursor.activeTargetId !== id && this.pendingCmd !== null
-      && noteWarnsZombieHarm(this.opts?.targetNoteOf?.(id, this.pendingCmd));
+    // A touch tap on a candidate not yet aimed only aims it (PR-0264, `touchTapAim.ts`); so does a click that would hurt a Zombie ally under option "guard" (off; fb-0929).
+    const aimFirst = this.targetCursor.activeTargetId !== id && this.pendingCmd !== null && ((touchTapped() && !this.groupTargets)
+      || (zombieWarnOn('guard') && noteWarnsZombieHarm(this.opts?.targetNoteOf?.(id, this.pendingCmd))));
     if (!this.targetCursor.setActiveById(id)) return false;
     if (aimFirst) {
       this.syncTargetSurfaces();
