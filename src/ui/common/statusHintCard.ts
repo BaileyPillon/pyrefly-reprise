@@ -16,6 +16,10 @@
  * at the command menu it docks just above the party chips, at the target step under the target
  * card (the mockup's order). On the desktop FFX HUD the move advisor's solver treats the card
  * as an obstacle (`hudAvoidSelectors.ts`), so the NEXT BEST MOVE card moves down, never under it.
+ *
+ * Round 18b. PR-0303 (FFX phone): under the target card only when it fits above the target step's
+ * "Tap another ally to switch" line; otherwise the command menu's slot above the party chips, so it
+ * never covers that line or CONFIRM.
  */
 
 import type { BattleState, CombatantId, StatusId } from '../../battle/common/types.ts';
@@ -99,7 +103,10 @@ export class StatusHintCard {
     const r = card && !card.hidden ? card.getBoundingClientRect() : null;
     let top = '';
     let bottom = '';
-    if (r && r.height > 0) {
+    // PR-0303: the first of the tap line and the Back / Confirm bar that is laid out bounds the slot.
+    const below = ['.phud-target__hint', '.phud-target__bar'].map((s) => host?.querySelector<HTMLElement>(s)?.getBoundingClientRect())
+      .find((b) => b !== undefined && b.height > 0);
+    if (r && r.height > 0 && (!below || r.bottom + 4 + this.el.getBoundingClientRect().height <= below.top - 4)) {
       top = `${Math.round(r.bottom + 4)}px`;
       bottom = 'auto';
     } else {

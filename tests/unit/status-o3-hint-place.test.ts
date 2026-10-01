@@ -115,4 +115,22 @@ describe('round 18b: the cure hint reads at 14 px, keeps off the tap line, and o
     // The floors come after the sizes they lift (the same specificity: the later rule wins).
     expect(CSS.indexOf('.sthint { font-size: max(')).toBeGreaterThan(CSS.indexOf('.sthint--phone .sthint__head { font-size: 9px'));
   });
+
+  it('PR-0303: at the phone target step a card that would reach the tap line docks above the party chips instead', () => {
+    Object.defineProperty(document.documentElement, 'clientHeight', { configurable: true, value: 844 });
+    const host = phoneHost(true);
+    const tap = document.createElement('p');
+    tap.className = 'phud-target__hint';
+    tap.getBoundingClientRect = () => rect(727, 17);
+    host.appendChild(tap);
+    const card = new StatusHintCard('ffx', () => true);
+    card.el.getBoundingClientRect = () => rect(0, 70);
+    card.update([HINT], true, host, null, true);
+    expect(card.el.style.top).toBe('');
+    expect(card.el.style.bottom).toBe('364px');
+    // A short card that fits between the target card (bottom 708) and the tap line stays under the card.
+    card.el.getBoundingClientRect = () => rect(0, 10);
+    card.update([HINT], true, host, null, true);
+    expect(card.el.style.top).toBe('712px');
+  });
 });
