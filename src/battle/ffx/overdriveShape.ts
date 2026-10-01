@@ -38,13 +38,32 @@ export function rowFromExtra(def: AbilityDef, row: 'fail' | 'immune'): AbilityDe
   return { ...def, power, hits, rank: typeof rank === 'number' ? rank : def.rank, extra: rest };
 }
 
-/** Reshape an Overdrive by its minigame outcome [ffx-combat-core §5.3, §5.6, §5.7]. */
+/**
+ * Blitz Ace's **"Last Hit"**, row 274: `research/ffx-combat-core.md` §5.3 gives
+ * the success as "4 × 8, then a final 24 × 1 (row 274 "Last Hit")" and the fail
+ * as "4 × 8" (table `[verified: 2 sources]`; the 8 + 1 hit count is
+ * `[single source]`, §11 C14). Built from `extra.finisherPower`/`finisherHits`
+ * on the success record; `undefined` for every record without them. Everything
+ * else, `canMiss: false` included (hard rule 5), is the success record's.
+ * **FFX only.**
+ */
+export function finisherRow(def: AbilityDef): AbilityDef | undefined {
+  const extra = def.extra ?? {};
+  const power = extra['finisherPower'];
+  const hits = extra['finisherHits'];
+  if (typeof power !== 'number' || typeof hits !== 'number') return undefined;
+  const rest: Record<string, unknown> = { ...extra };
+  for (const k of SUCCESS_ONLY_KEYS) delete rest[k];
+  return { ...def, power, hits, extra: rest };
+}
+
+/** Reshape an Overdrive by its minigame outcome [ffx-combat-core §5.3, §5.6, §5.7]; `finisher` = a success-only follow-up row. */
 export function shapeOverdrive(
   ctx: Ctx,
   user: FFXCombatant,
   def: AbilityDef,
   result: MinigameResult | undefined,
-): { def: AbilityDef; options: ResolveOptions } {
+): { def: AbilityDef; options: ResolveOptions; finisher?: AbilityDef } {
   const options: ResolveOptions = { timing: timingBonusFrom(result, def) };
   if (!result) return { def, options };
 
@@ -59,7 +78,9 @@ export function shapeOverdrive(
       const immuneDef = typeof immuneId === 'string' ? abilityOf(ctx, immuneId) : rowFromExtra(def, 'immune');
       if (immuneDef) return { def: immuneDef, options };
     }
-    return { def, options };
+    // Only a success reaches here with the success row, so only a success gets the finisher.
+    const finisher = success ? finisherRow(def) : undefined;
+    return finisher ? { def, options, finisher } : { def, options };
   }
 
   if (result.kind === 'wakka-reels' || result.kind === 'ladyluck-reels') {

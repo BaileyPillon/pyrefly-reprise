@@ -216,6 +216,7 @@ export function executeCommand(
   if (command.kind === 'ability' && isVolley(def)) return resolveVolley(ctx, actor, def);
 
   let options: ResolveOptions = {};
+  let finisher: AbilityDef | undefined;
 
   if (command.kind === 'overdrive') {
     const kind = def.minigame;
@@ -261,6 +262,7 @@ export function executeCommand(
     const shaped = shapeOverdrive(ctx, actor, def, extra);
     def = shaped.def;
     options = shaped.options;
+    finisher = shaped.finisher;
     ctx.rt.pendingMinigame = null;
     // The Mix selector survived the shaping, so no pair in the bag has a
     // recipe. `types.ts` names this case ("`null` when the pair has no recipe
@@ -318,7 +320,9 @@ export function executeCommand(
 
   if (command.kind === 'overdrive') spendOverdrive(ctx, actor);
 
-  const damageDealt = resolveAbility(ctx, actor, def, command.targets, options);
+  let damageDealt = resolveAbility(ctx, actor, def, command.targets, options);
+  // Blitz Ace's success-only "Last Hit" (row 274, 24 x 1) lands after the volley, in the same action [§5.3].
+  if (finisher) damageDealt += resolveAbility(ctx, actor, finisher, command.targets, { ...options, followUp: true });
   ctx.emit({ type: 'action-end', actorId: actor.id });
   // A row that orders another actor to act (Yojimbo -> Daigoro): inert unless `extra.ordersActor` is set [orders.ts].
   carryOutOrder(ctx, actor, def, (who, cmd) => executeCommand(ctx, who, cmd, true).damageDealt);
