@@ -14,6 +14,7 @@ import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePre
 import { poseForAction } from './EnemyActionPose.ts';
 import { victoryPoseOf } from './VictoryPose.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
+import { sendCompanions } from './SentCompanions.ts';
 import { partyOffStage } from './SummonStaging.ts';
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
@@ -176,7 +177,9 @@ export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
     if (off) await settled(ctx, off.call(ctx.deps.actionMotion, id, motionCtx(ctx)), MOMENT_GUARD_MS);
     else {
       fxDissolve(ctx, id);
-      await settled(ctx, actor?.dissolveTo(1, TIMING.ko, 0x9dffc4), TIMING.ko);
+      // VP-1001-28: a fused part (Mortiorchis under Seymour Flux) goes with him (`SentCompanions.ts`).
+      const parts = sendCompanions(ctx, id, TIMING.ko, 0x9dffc4, (other) => fxDissolve(ctx, other));
+      await Promise.all([settled(ctx, actor?.dissolveTo(1, TIMING.ko, 0x9dffc4), TIMING.ko), parts]);
     }
     ctx.stage.removeCombatant(id);
     return;
