@@ -1,0 +1,65 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-01T10:06:02Z",
+  "build": {
+    "mainSha": "25faec70",
+    "bundle": "cJFxGdIo",
+    "artifactHash": "59788b8b77f782e07555bc273f628b3d7a986bcec4e2ff4a5188966dda1b8421"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "verify-live --full --changed-from f302f163: liveManifest match, 1070 checked, 0 mismatched, 0 missing, 0 wrong type; served bundle index-cJFxGdIo.js; sprite-v2.mp3 and v2 music load; one stray 404 (/%23n) disclosed as LIVE-R34-01, polish"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "every capture asserted by screen name (title, chapter-select, party-prep, battle, pause, credits) and a player turn before action; Ch I seymour-flux and Ch IV ffx2-bahamut at 1600x900, Ch I at 390x844; the H assertion failed in the first script only because of a wrong probe, rechecked by screenshot"
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "TEXT SIZE 115% saved, survived reload, and showed in the Ch IV pause; progress survival not exercised (no encounter finished); full upgrade matrix not part of this pass"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact artifact full 1070 files",
+      "Ch I FFX and Ch IV FFX-2 at 1600x900",
+      "phone 390x844 Ch I turn, Attack tap, pause chip",
+      "pause Escape/P/H, TEXT SIZE 130%, CREDITS open/close, REPLAY BRIEFING entry, RESTART ENCOUNTER (both games), QUIT TO TITLE",
+      "music and sprite-v2.mp3 fetched, v2 cues decoded",
+      "TEXT SIZE reload persistence"
+    ],
+    "reused": [],
+    "notTested": [
+      "approved-pose appearance",
+      "listening to new music and SFX",
+      "phone aim-first second tap commit",
+      "full upgrade matrix",
+      "progress survival across reload",
+      "Stop freeze, Sphere Grid"
+    ]
+  },
+  "issues": [
+    {
+      "id": "LIVE-R34-01",
+      "severity": "polish",
+      "summary": "Image request to /pyrefly-reprise/%23n answers 404 in the Ch I window between first attack and RESTART ENCOUNTER (2 of 2 desktop runs); cause not traced",
+      "status": "open"
+    }
+  ],
+  "consoleErrors": 1,
+  "notFound": 1,
+  "elapsedMinutes": 25
+}
