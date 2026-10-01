@@ -35,7 +35,7 @@ import type { BattleScreenOptions, BattleScreenResult } from '../../src/app/scre
 import { flowOwnsRun, RESTART_RUN } from '../../src/app/screens/pause/restartCarry.ts';
 import { getChapter, type ChapterId } from '../../src/data/encounters.ts';
 
-type Ending = 'restart' | 'victory';
+type Ending = 'restart' | 'quit' | 'victory';
 
 const shown: string[] = [];
 const battles: BattleScreenOptions[] = [];
@@ -54,12 +54,13 @@ class ScriptedBattle extends Screen implements FlowScreen<BattleScreenResult> {
       ownedDuringFight.push(flowOwnsRun(app.flow));
       return {
         chapterId: opts.chapter.id,
-        outcome: end === 'restart' ? ('aborted' as const) : ('victory' as const),
+        outcome: end !== 'victory' ? ('aborted' as const) : ('victory' as const),
         result: end === 'victory' ? ({ turns: 9, elapsedMs: 0, elapsedTicks: 0 } as never) : null,
         elapsedMs: 5000,
         links: 1,
         preview: false,
         ...(end === 'restart' ? { restartRequested: true as const } : {}),
+        ...(end === 'quit' ? { quitToTitle: true as const } : {}),
       };
     });
   }
@@ -193,4 +194,38 @@ describe('PR-0283: RESTART ENCOUNTER is played by the run that owns the fight', 
     expect(flowOwnsRun(undefined)).toBe(false);
     expect(RESTART_RUN).toEqual({ skipPrep: true, skipCutscenes: true, restart: true });
   });
+});
+
+describe('r34fix-quit: QUIT TO TITLE is taken by the run that owns the fight, once', () => {
+  for (const id of ['seymour-flux', 'ffx2-bahamut'] as ChapterId[]) {
+    const game = getChapter(id)?.game;
+
+    it(`${game}: from the title's flow loop, one title and no board in between (${id})`, async () => {
+      registerFlowScreens({ chapterSelect: board([id]) });
+      endings = ['quit'];
+
+      await app.flow.start();
+
+      // Board -> prep -> scene -> fight -> QUIT TO TITLE: exactly one navigation, straight from the fight.
+      const fight = shown.indexOf('battle');
+      expect(shown.slice(fight + 1), 'only one goto, and no board put up first').toEqual(['goto:title']);
+      expect(app.went).toEqual(['title']);
+      expect(flowOwnsRun(app.flow)).toBe(false);
+    });
+
+    it(`${game}: after a restart first, QUIT TO TITLE is still one goto (${id})`, async () => {
+      registerFlowScreens({ chapterSelect: board([id]) });
+      endings = ['restart', 'quit'];
+      await app.flow.start();
+      expect(app.went).toEqual(['title']);
+      expect(shown.filter((s) => s === 'chapter-select')).toHaveLength(1);
+    });
+
+    it(`${game}: from a run the board started (main.ts), runChapter goes once and says so (${id})`, async () => {
+      endings = ['quit'];
+      const out = await app.flow.runChapter(id, { skipCutscenes: true });
+      expect(out?.quitToTitle).toBe(true);
+      expect(app.went).toEqual(['title']);
+    });
+  }
 });

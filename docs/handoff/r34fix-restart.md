@@ -191,3 +191,84 @@ Verdict: **both fixes hold, no regression found, no blocker.**
 
 **Minor:** `114c5b01` does not build on its own (disclosed by the builder). Only the pair with `2b46fab8` builds, which
 makes a bisect across it awkward. Nothing to change before the merge.
+
+## r34fix-quit: QUIT TO TITLE left two titles mounted (found by the check above; both games)
+
+Branch `r34fix-quit`, cut from `r34fix-restart`. Game case: **both** (shared pause and flow plumbing, CHK-020).
+
+**Cause (traced):** the same race as PR-0283. With a run owning the fight, `BattleScreen.requestExit('title')` aborted the
+fight and waited for the flow to unwind, and the flow put the board up (`chapterSelect`), so the pause then called
+`goto('title')` over the board. The board's teardown answered "no chapter", and the flow called `goto('title')` too. Two
+navigations to the title, from two owners: stack `["title","title"]`; after Enter, `["title","chapter-select"]`.
+
+**Fix:** a fight ended by QUIT TO TITLE inside a run now sets `quitToTitle` on its `BattleScreenResult` (as
+`restartRequested` does) and does not navigate itself. `runWithRestarts` (`pause/restartCarry.ts`) takes an optional
+`toTitle`, and `GameFlow.runChapter` passes it: the run that owns the stack makes the one `goto('title')`, with
+nothing put up in between, and marks the flow handed over so the title loop stands down. `main.ts`'s board handler
+skips its follow-up `goto('chapter-select')` when the run already went. A fight no run owns (a direct `goto('battle')`)
+still takes the old path in the screen. RESTART ENCOUNTER and CHAPTER SELECT are untouched. `BattleScreen.ts` stays 920
+lines and `BattleScreenFlow.ts` 525 (no growth).
+
+**Before (live code in the main tree, port 5531):** Ch IV by click at 1600x900, no restart: after QUIT TO TITLE stack
+`["title","title"]`, 2 visible PRESS ENTER; after Enter `["title","chapter-select"]`; starting a chapter
+`["title","battle"]`, PASS false (`quit/ev/restart-ffx2-bahamut-click-1600x900-before3`).
+
+**After**, real input, seed 1, headless Playwright on port 5530 (stopped), `quit/chk.mjs ... --then=title`
+(`D:/Tools/pyrefly-scratch/2026-10-01-rel34/quit/ev/`): after QUIT TO TITLE stack and roots `["title"]`, 1 PRESS ENTER,
+still so 4 s later; Enter gives `["chapter-select"]` with 0 title text; starting the chapter gives `["battle"]` only.
+All PASS, 0 page errors:
+- Ch IV (FFX-2) click 1600x900: without a restart (q1) and after a restart (q2).
+- Ch IV taps at 390x844: without (q3) and after a restart (q4).
+- Ch I (FFX) keys 1600x900: without (q5) and after a restart (q6); taps at 390x844 (q7).
+- RESTART ENCOUNTER (PR-0283) still correct: Ch I keys (q8) and Ch IV click (q9), `--then=restart`.
+
+**Tests:** `tests/unit/pause-restart-owner.test.ts` gains 6 tests (FFX `seymour-flux`, FFX-2 `ffx2-bahamut`): from the title's
+flow loop exactly one `goto('title')` and no board between; after a restart first; from a run `main.ts` started
+(`quitToTitle` on the result, one navigation).
+
+**Gates:** `npx tsc --noEmit` clean; the pause, flow and restart vitest files (11 files, 193 tests) pass; full suite
+result 710 files passed, 5 skipped, 10625 tests passed; `node tools/orphans.mjs` 24 orphans, all old.
+
+### Check of r34fix-quit (independent, at `ceecdbe2`; both games)
+
+Verdict: **PASS, no blocker, no major.** Real input, seed 1, headless Playwright (`PYREFLY_BROWSER=gpu`), one browser at
+a time; evidence in `D:/Tools/pyrefly-scratch/2026-10-01-rel34/quit-check/ev/`. Both servers stopped (5540, 5541).
+
+**Before, on the base `443e332e` (r34fix-restart):** served from this same tree on port 5541 by a scratch Vite config that
+loads the base copies of the four changed source files (no checkout). Reproduced in both games, with no restart first:
+- Ch IV (FFX-2) click at 1600x900: after QUIT TO TITLE, stack and roots `["title","title"]` with 2 visible PRESS ENTER.
+  After Enter, `["title","chapter-select"]`; starting the chapter gives `["title","battle"]`. PASS false (`...-BASE`).
+- Ch I (FFX) keys at 1600x900: the same three states. PASS false.
+
+**After, on `ceecdbe2` (port 5540):** QUIT TO TITLE gives stack and roots `["title"]` with 1 PRESS ENTER, still so 4 s
+later. Enter or a tap gives `["chapter-select"]` with no title text. Starting the chapter gives `["battle"]` only. Every
+run passed with 0 page errors:
+- Ch IV click 1600x900, without and after a restart (`FIX0`, `FIX1`).
+- Ch IV taps 390x844, without a restart (`FIXT0`).
+- Ch I keys 1600x900, without and after a restart (`FIX0`, `FIX1`).
+- Ch I taps 390x844, after a restart (`FIXT1`).
+
+**Break attempts, all held:**
+- Enter (Ch I keys) or a tap (Ch IV 390x844) the moment the title is current, about 30 ms after QUIT, while the run
+  could still be unwinding (`FAST`). This gives a single board, `["chapter-select"]`, and the next chapter starts as
+  `["battle"]`. The title loop did not stand still on a stale `running` flag.
+- The `main.ts` board path (`VIA`): pause, CHAPTER SELECT (a board the flow loop does not own), the chapter again, then
+  QUIT TO TITLE. Ch IV click 1600x900 and Ch I taps 390x844 both give one title, then a clean board and battle.
+
+**Regressions, none:**
+- RESTART ENCOUNTER twice: Ch IV taps 390x844, `["battle"]` throughout (`RR`).
+- CHAPTER SELECT after a restart: Ch I keys, `["chapter-select"]` (`SEL`).
+- REPLAY BRIEFING: the brief is on top, closes back to the pause, and the pause resumes to `["battle"]`. Checked in Ch I
+  keys, Ch IV taps and Ch IV click (`BR`).
+- Results, then board, then title, after a restarted fight won by the autopilot: `["results"]`, `["chapter-select"]`, then
+  board Esc to `["title"]` with 1 PRESS ENTER, then Enter to `["chapter-select"]`. Checked in Ch I keys and Ch IV click
+  (`RES`).
+
+**Gates:**
+- `npx tsc --noEmit` is clean.
+- The full `npx vitest run --testTimeout=60000` passes: 710 files and 10625 tests, with 5 files skipped.
+- `BattleScreen.ts` (920) and `BattleScreenFlow.ts` (525) are the same length as on the base.
+
+**Minor, not blocking:** to hold the line counts, the fix packs two statements onto single lines: the
+`[runRestarts, runQuits]` tuple in `requestExit`, two spreads on one line in `finish`, and the tuple assignment in
+`runChapter`'s `toTitle`. It reads densely, but it is correct.

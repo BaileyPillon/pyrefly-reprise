@@ -302,8 +302,8 @@ export class GameFlow {
    */
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
     const release = sfxChapter(id, holdIdleLane()); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice
-    // PR-0283: RESTART ENCOUNTER replays inside this run (`runWithRestarts`), never as a second run beside it.
-    return runWithRestarts(this, (o) => this.playChapter(id, o), opts).finally(release);
+    // PR-0283: RESTART ENCOUNTER replays inside this run, and r34fix-quit: QUIT TO TITLE exits it (`runWithRestarts`), one owner each.
+    return runWithRestarts(this, (o) => this.playChapter(id, o), opts, () => { [this.handedOver, this.step] = [true, 'title']; return this.app.goto('title'); }).finally(release);
   }
 
   private async playChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
