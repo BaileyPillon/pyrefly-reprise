@@ -210,3 +210,54 @@ tagged as above.
 Nothing in this file is game data to ship until the owning doc is updated through its own
 change (AGENTS.md rule 6). Every "our estimate" line is a recommendation awaiting the driver
 and Bailey.
+
+---
+
+## Steam HD check 2026-10-01
+
+**Scope: FFX only; docs only.** Bailey, 2026-10-01 ~00:55 EDT: "yes you can take over the
+screen for Steam." Copy: Steam HD Remaster at `D:/Tools/ffx-hd` (app 359870), FFX.exe started
+directly with the Steam client running, window 1280x720, keyboard driven by SendInput
+(`D:/Tools/ffx-hd/drive/drive_bushido.py`). Nothing was saved; no setting was left changed.
+Screenshots stay under `D:/Tools/ffx-hd/observe/2026-10-01/` (none in the repo).
+
+**Result: no Bushido input was observed. D1, D2, D3, D4 and Q1 stay open.** Nothing below
+carries `[verified: Steam HD 2026-10-01]`.
+
+What was observed (first launch, about 00:56 to 00:59 EDT):
+- Save used: slot 106, "Sin - Tower of the Dead", play time 37:03 (the last save of the
+  installed playthrough). Party Auron, Yuna, Tidus.
+- Main menu > Overdrive > Auron: Bushido known = **Dragon Fang, Shooting Star, Banishing
+  Blade**. **Tornado is not learned** in this save. Overdrive gauge shown full, mode Warrior.
+  So the latest save cannot answer the Tornado items (D1 Tornado timer, Tornado's length in
+  D2, D4). A save with all ten Jecht Spheres is needed for those.
+- Keyboard mapping as installed (from `GameSetting.ini` `ffxKeyBinding` and the key-name
+  table in FFX.exe): arrows = D-pad, C = confirm, X = cancel, V = Triangle (menu),
+  B = Start, PageUp / PageDown = page keys in lists. The Bushido prompt glyphs were never
+  reached, so whether the PC version shows PlayStation glyphs or key names is still unknown.
+
+Why it stopped:
+- About three minutes into the field (walking for a random encounter in the Tower of the
+  Dead) the game froze: a static frame, no response to any key, the process still
+  "Responding".
+- Every later FFX.exe start (more than ten tries, including through the official launcher,
+  borderless mode, VSync on, and after restarting the Steam client) showed a plain white
+  window. The game's log showed the title and attract demo loading at about 30 fps, so the
+  game logic ran, but nothing was presented (not even the Steam overlay's FPS counter). A
+  stack scan showed the render thread waiting inside the NVIDIA D3D11 driver
+  (`nvwgf2um.dll`) every time.
+- FFX-2.exe from the same folder rendered normally at the same time (checked twice), so it
+  is FFX.exe specific.
+- Probable cause (not proven): the overnight ComfyUI art run started at about 00:51 EDT and
+  kept the GPU at 70 to 99 percent with 10 to 15 GB of 16 GB in use. FFX.exe's render thread
+  seems to wait on the GPU and never gets the result while that load runs. FFX.exe worked
+  for its first few minutes, then stopped.
+- Time box: stopped at about 01:30 EDT instead of grinding.
+
+What a retry needs: run when ComfyUI is idle (no queue), start from slot 106 for Dragon Fang,
+Shooting Star and Banishing Blade (the gauge is already full; reloading without saving
+refills it for each test), and use a different save that has Tornado. One use per Overdrive
+covers both checks: press one wrong key mid-sequence, watch whether the chips go back to
+input 1 and the timer keeps running (Q1), then finish the sequence and read the result.
+Screenshots from the start of each prompt give the glyphs, the number of inputs (D2), the
+order (D3) and the starting timer value (D1).
