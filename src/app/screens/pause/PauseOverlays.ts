@@ -17,7 +17,6 @@ import type { Screen } from '../../Screen.ts';
 import type { Briefing } from '../../../ui/coach/Briefing.ts';
 import { makeBriefing } from '../raiseBriefing.ts';
 import { PhotoMode } from '../../../ui/common/PhotoMode.ts';
-import './pause-briefing.css';
 
 export interface PauseOverlayHost {
   app: App;
@@ -133,9 +132,10 @@ export class PauseOverlays {
    */
   async replayBriefing(): Promise<void> {
     if (this.briefingUp) return;
-    const briefing = makeBriefing(this.host.app);
-    // PR-0284 (both games): over the pause layer, not under it (`pause-briefing.css`).
-    briefing.el.classList.add('coach-brief--over-pause');
+    // PR-0284 (both games): inside the pause layer, not under it. `.pause` is fixed at
+    // z-index 999, the top of the codebase (`ui-pause-stack.test.ts`), and the briefing
+    // on `#ui` at its own 90 played unseen beneath it while it held the keyboard.
+    const briefing = makeBriefing(this.host.app, this.host.root() ?? undefined);
     this.briefing = briefing;
     try {
       await briefing.show();

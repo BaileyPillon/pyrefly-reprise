@@ -1,14 +1,17 @@
 // @vitest-environment jsdom
 /**
  * PR-0284 (critic round 18b, both games): REPLAY BRIEFING opened *under* the
- * pause UI. `.pause` is fixed at `z-index: 999`; the briefing mounts on `#ui`
- * at `coach.css`'s 90, so it played unseen while it held the keyboard, and
- * `elementFromPoint` over it found `DIV.pause__ui` at 0.5 s and 2 s.
+ * pause UI. `.pause` is fixed at `z-index: 999`, the top of the codebase
+ * (`ui-pause-stack.test.ts`); the briefing mounted on `#ui` at `coach.css`'s
+ * 90, so it played unseen while it held the keyboard, and `elementFromPoint`
+ * over it found `DIV.pause__ui` at 0.5 s and 2 s.
  *
- * jsdom does not lay out or stack, so the stacking itself is proven by real
- * input in the browser (docs/handoff/r34fix-restart.md); these pin the two
- * halves that make it: the replay carries the over-pause class, and that class
- * outranks the pause layer's `z-index` as the stylesheets stand.
+ * The replay now mounts inside the pause layer. jsdom does not lay out or
+ * stack, so the stacking is proven by real input in the browser
+ * (`docs/handoff/r34fix-restart.md`); these pin the halves that make it: the
+ * replay mounts in the pause's own layer, nothing inside that layer declares a
+ * `z-index` that could cover the briefing's 90, and the first-launch briefing
+ * still mounts on `#ui`.
  */
 
 import fs from 'node:fs';
@@ -17,14 +20,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { App } from '../../src/app/App.ts';
 import type { Screen } from '../../src/app/Screen.ts';
 import { PauseOverlays } from '../../src/app/screens/pause/PauseOverlays.ts';
-
-function zIndexOf(cssPath: string, selector: RegExp): number {
-  const css = fs.readFileSync(cssPath, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
-  const block = css.match(new RegExp(`${selector.source}\\s*\\{([^}]*)\\}`));
-  const z = block?.[1]?.match(/z-index:\s*(\d+)/);
-  if (!z) throw new Error(`no z-index for ${selector} in ${cssPath}`);
-  return Number(z[1]);
-}
+import { makeBriefing } from '../../src/app/screens/raiseBriefing.ts';
 
 let overlays: PauseOverlays | null = null;
 
@@ -34,23 +30,32 @@ afterEach(() => {
   document.body.innerHTML = '';
 });
 
-describe('PR-0284: the replayed briefing is drawn over the pause', () => {
-  it('REPLAY BRIEFING mounts the briefing with the over-pause layer', () => {
+function fakeApp(uiRoot: HTMLElement, onRelease: () => void): App {
+  return {
+    uiRoot,
+    save: { settings: { reduceMotion: true } },
+    input: { claimKeyboard: () => onRelease },
+    screens: [],
+  } as unknown as App;
+}
+
+describe('PR-0284: the replayed briefing is drawn inside the pause layer', () => {
+  it('REPLAY BRIEFING mounts in the pause stage, and a click takes it down', () => {
     const uiRoot = document.createElement('div');
+    const pause = document.createElement('div');
+    pause.className = 'pause';
+    const stage = document.createElement('div');
+    stage.className = 'pause__stage';
+    pause.appendChild(stage);
+    uiRoot.appendChild(pause);
     document.body.appendChild(uiRoot);
     let released = 0;
-    const app = {
-      uiRoot,
-      save: { settings: { reduceMotion: true } },
-      input: { claimKeyboard: () => () => void released++ },
-      screens: [],
-    } as unknown as App;
     let refreshed = 0;
     overlays = new PauseOverlays({
-      app,
+      app: fakeApp(uiRoot, () => void released++),
       self: {} as Screen,
       chrome: () => null,
-      root: () => null,
+      root: () => stage,
       setBaselineVisible: () => undefined,
       refresh: () => void refreshed++,
     });
@@ -58,7 +63,8 @@ describe('PR-0284: the replayed briefing is drawn over the pause', () => {
     const done = overlays.replayBriefing();
     const el = uiRoot.querySelector<HTMLElement>('.coach-brief');
     expect(el, 'the briefing is up').not.toBeNull();
-    expect(el!.classList.contains('coach-brief--over-pause')).toBe(true);
+    expect(el!.parentElement, 'inside the pause layer, not beside it on #ui').toBe(stage);
+    expect(stage.lastElementChild, 'last in the layer, so it paints over the pause chrome').toBe(el);
     expect(overlays.briefingUp).toBe(true);
 
     // A click anywhere on it takes it down (the critic's "a click or tap advances it").
@@ -71,11 +77,20 @@ describe('PR-0284: the replayed briefing is drawn over the pause', () => {
     });
   });
 
-  it('the over-pause layer outranks the pause layer; the first-launch briefing keeps its own tier', () => {
-    const pause = zIndexOf('src/ui/common/pause-screen.css', /\n\.pause/);
-    const over = zIndexOf('src/app/screens/pause/pause-briefing.css', /\.coach-brief\.coach-brief--over-pause/);
-    const base = zIndexOf('src/ui/coach/coach.css', /\n\.coach-brief/);
-    expect(over).toBeGreaterThan(pause);
-    expect(base, 'unchanged for the title -> board briefing').toBe(90);
+  it('nothing in the pause sheet but .pause itself declares a z-index, so the briefing (90) tops the pause chrome', () => {
+    const css = fs.readFileSync('src/ui/common/pause-screen.css', 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    const zs = [...css.matchAll(/z-index:\s*(-?\d+)/g)].map((m) => Number(m[1]));
+    expect(zs).toEqual([999]);
+    const coach = fs.readFileSync('src/ui/coach/coach.css', 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    expect(coach).toMatch(/\.coach-brief\s*\{[^}]*z-index:\s*90;/);
+  });
+
+  it('the first-launch briefing (title -> board) still mounts on #ui', () => {
+    const uiRoot = document.createElement('div');
+    document.body.appendChild(uiRoot);
+    const briefing = makeBriefing(fakeApp(uiRoot, () => undefined));
+    void briefing.show();
+    expect(briefing.el.parentElement).toBe(uiRoot);
+    briefing.skip();
   });
 });
