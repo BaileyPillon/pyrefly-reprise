@@ -14,9 +14,9 @@ import type { AlphaBox, PoseFrame } from './PaintedScale.ts';
 import { groundHullFromBottoms, type GroundHull } from './PaintedRest.ts';
 import { cachedPainting, paintingKey, type PreparedPainting } from './PaintedArtCache.ts';
 import { cleanMatte, type MatteOptions } from './PaintedMatte.ts';
+import { poseScaleFor } from './KoPoseScale.ts';
 
-// Matte cleanup lives in `./PaintedMatte.ts`; re-exported for existing callers.
-export { cleanMatte, type MatteOptions } from './PaintedMatte.ts';
+export { cleanMatte, type MatteOptions } from './PaintedMatte.ts'; // matte cleanup lives there; re-exported for existing callers
 
 // "Does this art exist?" is answered by `./ArtManifest.ts` — import it from
 // there. It is deliberately not re-exported here: this file is already well
@@ -173,13 +173,13 @@ export async function tryLoadMeta(imageUrl: string): Promise<PoseMeta | null> {
     if (!res.ok) return null;
     const raw = (await res.json()) as Partial<PoseMeta>;
     if (typeof raw.height !== 'number' || typeof raw.width !== 'number') return null;
-    const positive = (v: unknown): v is number =>
-      typeof v === 'number' && Number.isFinite(v) && v > 0;
+    const positive = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v) && v > 0;
+    const scale = poseScaleFor(imageUrl, positive(raw.scale) ? raw.scale : undefined); // VP-1001-05: src-side KO scales
     return {
       width: raw.width,
       height: raw.height,
       baselineY: typeof raw.baselineY === 'number' ? raw.baselineY : raw.height,
-      ...(positive(raw.scale) ? { scale: raw.scale } : {}),
+      ...(scale !== undefined ? { scale } : {}),
       ...(positive(raw.anchorY) ? { anchorY: raw.anchorY } : {}),
       ...(parseArtFacing(raw.facing) ? { facing: parseArtFacing(raw.facing)! } : {}),
       ...(raw.seed !== undefined ? { seed: raw.seed } : {}),
