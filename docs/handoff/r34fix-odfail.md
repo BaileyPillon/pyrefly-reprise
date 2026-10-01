@@ -305,3 +305,58 @@ The probe test and the real-key script are parked in `F:/pyrefly-parked/2026-09-
 No server is left running.
 
 Game case: **FFX only**, for the same reason as above.
+
+## Check (od2), independent, 2026-09-30
+
+Checked branch `r34fix-od2` at `eafebb60` in `D:/pyrefly-aeon-hp`; I did not build it. **No
+blocker.** FFX only (Swordplay, Blitz Ace and the CTB engine are FFX-only; the diff touches
+`src/battle/ffx/**`, `src/ui/ffx/minigames/**`, three FFX unit tests and this note, nothing else).
+
+**Against the source, `research/ffx-combat-core.md` §5.3 (`[verified: 2 sources]`):**
+- Rule 1, "A miss is not a failure." Real keys, headless Playwright (`PYREFLY_BROWSER=gpu`, Vite
+  dev on 5385, stopped by PID; Chapter II, seed 1, Spiral Cut, gauge set through `__pyrefly`):
+  every press outside the zone (an immediate one, one past the zone on the right, five in a
+  row) left the overlay open, put the cursor at 0 % and it was moving again 150 ms later
+  (about 14 %). The timer kept running: a miss at 906 ms then a zone press gave `{true, 1742}`.
+- Rule 3, "timer expiry selects the distinct weaker "fail" row". No press, and five misses then
+  nothing, both reached the engine as `{false, 0}` and dealt 1297 (the Fail row, no bonus).
+- Success + §5.2 bonus: a first-sweep zone press `{true, 2504}` dealt 2450; after one immediate
+  miss `{true, 2488}` dealt 2446; after a late miss `{true, 1742}` dealt 2231. Misses cost time,
+  as §5.3's "a miss restarts the sweep but not the timer" says.
+- Blitz Ace row "4 × 8, then a final 24 × 1 (row 274 "Last Hit")" / fail "4 × 8", rank 7 (fail 6).
+  Engine probe, same probe run on `e942fe11` and on `eafebb60` (copies of `src/` from `git
+  archive`), seed 1: before, success 8 hits = 484 and a fail with 1100 ms left 601 (the fail beat
+  the success); after, success 9 hits = 837 (1042 with 1100 ms left), fail 8 hits = 484 at any
+  time left, ticks 70 / 60. `canMiss: false` on the record and on `finisherRow`, 0 misses.
+
+**No input path lets a fail out-damage a success** (engine, after): all four Swordplay rows,
+seeds 1 to 40, Luck 20 and 255, one and three foes, fail with 0 / 1 / 1000 / timer-1 / timer ms
+left against success with 0 / 1 / timer ms left: the fail total never varies with the time
+left and is below every success in every case (0 exceptions). On `e942fe11` the same probe
+fails at the first row (the fail varied with the time left).
+
+**Other checks:** the same seed twice gives a byte-identical event log (all four rows, success
+and fail). No DOM or `three` in the changed `src/battle/ffx` files. Rule 7: `abilities.ts` 419
+and `overdrive.ts` 472 lines, both unchanged in size; `execute.ts` 359, `overdriveShape.ts` 139,
+`TidusTiming.ts` 82, `logic.ts` 160. No golden file changed. `npx tsc --noEmit` clean; full
+`npx vitest run --testTimeout=60000`: 696 files passed, 5 skipped, 10524 tests passed;
+`node tools/orphans.mjs`: 24 orphans, unchanged.
+
+**Disclosed, not introduced here:**
+1. (Major, pre-existing, not a regression.) §5.3 rule 2 is `[verified: 2 sources]` in its
+   qualitative form: "stronger Overdrive ⇒ narrower gold zone, faster marker". The overlay
+   ignores the published `travelMs`/`zonePercent` and plays all four rows with one zone (±22 px
+   of 360, about 12 %) and one speed (340 px/s); only the timer varies. The builder's item 4
+   calls this a design question; the numbers are `[estimate]`, but the ordering is sourced, so
+   I count it as a sourced gap. Not changed by this branch.
+2. (Minor, latent.) If the Blitz Ace target is KO'd during the volley, the finisher still lands
+   on it, as the rest of the volley already does for any multi-hit single-target action. The
+   sources do not say what happens; Blitz Ace cannot be unlocked in a shipped build.
+3. The finisher shares the action's §5.2 bonus. That is the builder's reading; §5.2 does not
+   single out row 274, and I found nothing against it.
+
+Scratch: `D:/Tools/pyrefly-scratch/2026-09-30-rel35/od2/check/` (probe outputs, real-key JSON and
+JPEG frames). The probe copies and the real-key script are parked in
+`F:/pyrefly-parked/2026-09-30/od2/check/`. No server is left running.
+
+Game case: **FFX only**.
