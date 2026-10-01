@@ -678,9 +678,13 @@ for Delay):
 | XVII | Cid | no | immune | ---- |
 | XVIII (DF, SS) | Overdrive Sin | immune | immune | II-- |
 
-Of the chapters that unlock Banishing Blade (VII, VIII, X), no enemy is immune to all four Breaks. Its
-Immune row therefore never fires in a shipped chapter; only the fixture test reaches it. The Seymour
-pattern, Power Break immune with the other Breaks still landing, is real data in Chapter VII.
+~~Of the chapters that unlock Banishing Blade (VII, VIII, X), no enemy is immune to all four Breaks. Its
+Immune row therefore never fires in a shipped chapter; only the fixture test reaches it.~~ **Corrected by
+Check (od5):** Anima (Chapter VII, `anima-macalania`, shipped in the group's `parts`, on the field once
+Seymour summons her) is immune to all four Breaks, Eject and Delay, and Chapter VII unlocks Banishing
+Blade, so a clean Banishing Blade on Anima takes the Immune row (30 DmgCon, no Break) in play. The table
+above leaves her out. The Seymour pattern, Power Break immune with the other Breaks still landing, is
+real data in Chapter VII.
 
 **Before/after, engine** (each chapter's first link, the real `setupForChapter` board, seed 1, a clean
 input with 0 ms left, one run per target; Dragon Fang hits all foes in one run). "Before" is the same
@@ -792,8 +796,9 @@ Against `25aa1966`'s three engine files, 7 of them fail. Other test changes:
    - The fix would be one line in `rowFromExtra` (drop the rider on the fail row, as the Immune row now
      does). It moves goldens wherever an auto-rolled fail hits a non-immune target. Not done: not in this
      brief.
-2. Banishing Blade's Immune row is unreachable in every shipped chapter: no BB chapter has an enemy immune
-   to all four Breaks. That is correct under D-310; noted so nobody looks for it in play.
+2. ~~Banishing Blade's Immune row is unreachable in every shipped chapter: no BB chapter has an enemy immune
+   to all four Breaks.~~ **Corrected by Check (od5):** it is reachable on Anima in Chapter VII (all four
+   Breaks at 255); see the Check below.
 
 Scratch:
 
@@ -805,3 +810,111 @@ Scratch:
 
 Game case: **FFX only**. Bushido is Auron's FFX Overdrive. FFX-2 has none, and no file under
 `src/battle/ffx2`, `src/ui/ffx2` or `src/data/ffx2` changed.
+
+## Check (od5), 2026-10-01: independent check of `r34fix-od5` at c50c845b (FFX only)
+
+Verdict: **no blocker.** The three picks are built as D-310, D-311 and D-312 say. One handoff claim was
+wrong and is corrected above (Anima). Everything was re-run here, not read off the builder's report.
+"Old" means `git archive 25aa1966` (src only) under the scratch folder, run side by side with the branch
+in the same vitest process. Nothing in the worktree was switched.
+
+**Immunity table, from live engine state.** I built each shipped FFX chapter's whole chain with
+`setupForChapter` and `setupForNextLink`, called `init`, and read every enemy-side combatant (parts
+included). I then called the branch's own `immuneToRider` for all four Bushido records. The result
+matches the builder's table for Seymour Flux and Mortiorchis, Yunalesca, BFA, the Pagodas, the Possessed
+aeons, Yu Yevon, the Guado Guardians, Seymour (Macalania: P255 and M50), Evrae (M255/A255), Yojimbo,
+Natus, Mortibody, Omnis, the Mortiphasms, both Fins, Genais, Sin's Core and Overdrive Sin. That covers
+every enemy in chapters I, II, III, VII, VIII, IX, X, XII, XVII and XVIII. What the table missed:
+
+- **Anima (VII) is immune to all four Breaks, Eject and Delay**, and VII unlocks Banishing Blade. So the
+  BB Immune row *is* reachable in play. This is correct under D-310. The handoff said otherwise and is
+  fixed above.
+- Daigoro (IX) is Delay-immune, and Yojimbo is also immune to Eject and all four Breaks. Neither matters,
+  because IX unlocks Dragon Fang only.
+
+**Old tree against new tree, fixture board** (`fx` dummies, seeds 1, 7 and 42, the Overdrive and then 40
+more decisions):
+
+- **No new RNG draw.** These fights give byte-identical logs (old = new, every event): Dragon Fang on
+  non-immune targets; Shooting Star and Banishing Blade on non-immune targets; Banishing Blade on a
+  Power-Break-only target and on Seymour's shipped immunities; and every failed input (DF on two
+  Delay-immune foes, SS on an Eject-immune foe, BB on an all-four-immune foe).
+- **Per target.** Dragon Fang with one Delay-immune foe and one plain foe: exactly one event differs,
+  the immune foe's damage 265 → 295 (19/17). The plain foe's 267 and its Delay are unchanged. With
+  both foes immune, two events differ (265 → 295 and 267 → 298).
+- **Banishing Blade.** Immune to all four: 436 → 467 (30/28) and no Break. Anima's shipped immunities
+  give the same. Partial immunity (Power only, or Seymour's data) takes the success row, 436, and
+  Magic, Armor and Mental Break land.
+- **Shooting Star, Eject-immune.** 374 → 420 (27/24) and no Eject. The rest of the log diverges only
+  because the foe dies sooner.
+- **Tornado.** On an all-immune foe with 0 ms left, the log is identical (no Immune row). With 1 500 ms
+  left: 369 → 388 per hit, which is base 311 × 1.1875 → × 1.25, the 4 s → 3 s bonus. Dragon Fang with
+  1 500 ms left is unchanged (still 4 s). The branch's unit test checks `timerMsFor` and
+  `minigameParams` (Tornado 3000, the rest 4000).
+
+**Shipped board, Chapter III link 1** (old vs new, clean Dragon Fang with 0 ms left): BFA 1011 → 1130.
+Yu Pagoda L stays 2386 and Yu Pagoda R stays 2463 in the same action, and every combatant's CTB after
+the action is identical. Shooting Star on Yu Pagoda L: 3328 → 3743.
+
+**Goldens.** Every FFX chapter at seeds 1 and 7 was replayed on both trees, with the first differing
+event found per link:
+
+- The four moved pinned digests are exactly the builder's: `yunalesca#1` and `#7`, `braskas-final-aeon#1`
+  link 2 and `#7` links 1 and 2.
+- Each first difference is an auto-rolled Shooting Star on an Eject-immune target: Yunalesca
+  4145 → 4662 and 5243 → 5899, Possessed Valefor 2677 → 3013 and 3006 → 3382, BFA 2781 → 3129.
+- The other 14 pinned digests and every outcome are identical.
+- **Not disclosed before:** `sin-face` (XVIII) is not pinned, and it moves too. Auron's auto-rolled
+  Dragon Fang on Overdrive Sin (Delay-immune) goes 2495 → 2788 (seed 1) and 3722 → 4160 (seed 7).
+  The outcomes are unchanged (defeat at seed 1, victory at seed 7). This is expected under D-311 and
+  is not a defect.
+
+**Real keys, headless.** Setup: `PYREFLY_BROWSER=gpu`, vite on 5491 (stopped by PID 12648, port
+verified free), Chapter II, seed 1. The gauge was set through `__pyrefly`; everything else went by keys.
+
+| Overdrive | Engine got | Damage | Without the §5.2 bonus | Status |
+|---|---|---|---|---|
+| Dragon Fang, clean | `{true, 7, 3325}` | 3036 | 2144.6 (19/17 of 1918) | none |
+| Shooting Star, clean | `{true, 7, 3343}` | 4323 | 3048.9 (27/24 of 2710) | none |
+| Shooting Star, 3 of 7, timer ran out | `{false, 3, 0}` | 2710 | the Fail row, 24 | none |
+| Dragon Fang, 3 of 7, timer ran out | `{false, 3, 0}` | 1807 | the Fail row, 16 (1918 × 16/17) | none |
+
+On the live Yunalesca, the in-page `immuneToRider` says "immune row" for both Overdrives. There were no
+page errors.
+
+**Rules.**
+
+- Rule 5: `rowFromExtra` keeps `canMiss: false`, and a test asserts it.
+- Rule 1: `src/battle` imports no DOM and no three. `overdriveShape.ts` imports types and `./state`,
+  `./abilities`, `./overdrive` and `./reels` only.
+- No FFX-2 file changed.
+- The commits name the FFX game case and end with the Co-Authored-By line.
+- The docs (§5.2, §5.5, CONTRACT-CHANGES) say only what D-310 to D-312 and research note Q2/D1 support,
+  tagged `[estimate, Bailey D-31x]`. D3, D4 and D5 stay open.
+
+**Gates (mine).**
+
+- `npx tsc --noEmit` is clean.
+- The 5 touched test files pass, 81 tests. The new file has 17 tests, not 16.
+- Full `npx vitest run --testTimeout=60000`: 699 files passed and 5 skipped; 10 562 tests passed, 40
+  skipped, 1 todo. Exit 0, with no `audio-manifest-io` failure this time.
+- `node tools/orphans.mjs`: 24, the same list.
+
+**Findings.**
+
+1. **Major, pre-existing, not a regression (the builder disclosed it): a failed Bushido still lands its
+   rider.** I measured it here on both trees, identically: a failed Shooting Star Ejects a non-immune
+   foe, and a failed Banishing Blade lands all four Breaks. Research Q3a (`[verified: 5 sources]`) says
+   the Fail rows carry no status. NOW.md's 2026-09-30 20:40 line ("already so") is wrong about this.
+2. **Minor, docs, fixed above:** Anima was missing from the immunity table, and the claim that the BB
+   Immune row was unreachable was wrong.
+3. **Minor, rule 7:** `src/battle/common/types.ts` grew 2 676 → 2 680 lines (comments only, on
+   `SequenceResult`). A one-line comment on `targetImmuneToRider` would keep it flat.
+4. **Minor, pre-existing:** the move advisor and the estimate path do not model the Fail and Immune
+   rows. Against a rider-immune boss, the advisor now under-predicts a clean Bushido by 7 to 12.5 per cent.
+5. **Known, pre-existing (D2/D3):** every Bushido overlay still plays the default 7-input sequence
+   (↑↓←→✕○△), Dragon Fang included.
+
+Evidence: `D:/Tools/pyrefly-scratch/2026-10-01-rel34/od5/check/`. It holds `immunity-table.txt`,
+`crosstree.txt`, `golden-crosstree.txt`, `shipped-per-target.txt`, `full-vitest.txt`, `realkey/` (JSON
+and JPEGs), the `*.probe.ts` probes, `realkey-check.mjs` and the `old/` source copy.
