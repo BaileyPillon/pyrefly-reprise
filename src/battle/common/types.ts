@@ -1479,13 +1479,17 @@ export interface TimingResult {
 
 /** Result payload for `auron-sequence`. */
 export interface SequenceResult {
-  /** True when the whole sequence was entered before the 4 000 ms budget expired. */
+  /** True when the whole sequence was entered before the timer expired (4 000 ms; Tornado 3 000 ms since od5). */
   success: boolean;
   /** How many of the sequence's inputs landed. Range 0–8. */
   correctInputs: number;
-  /** `4000 - msElapsedWhenLastInputLanded`. Range 0–4 000. */
+  /** `timerMs - msElapsedWhenLastInputLanded` (4 000 ms; Tornado 3 000 ms since od5). Range 0 to the timer. */
   timeRemainingMs: number;
-  /** Set when the target is immune to the Overdrive's rider status, selecting the higher-DmgCon "immune" row. Tornado is always true (it has no rider). */
+  /**
+   * **Not read since od5 (2026-10-01); kept so the contract stays additive.** The FFX engine
+   * decides the higher-DmgCon "immune" row itself, per target, from each target's own
+   * immunities (`overdriveShape.ts` `immuneToRider`); Tornado has no rider and no immune row.
+   */
   targetImmuneToRider?: boolean;
 }
 

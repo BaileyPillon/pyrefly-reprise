@@ -783,7 +783,7 @@ The previous revision's formula `damageInflicted × 10 / estimatedDamage × 3, c
 ### 5.2 Timed-input bonus (Tidus, Auron, Wakka)
 
 ```
-timerMs = {Tidus: 3000, Auron: 4000, Wakka: 20000}[overdriveUser]
+timerMs = {Tidus: 3000, Auron: 4000, Wakka: 20000}[overdriveUser]   // Auron's Tornado: 3000 [estimate, Bailey D-312], §5.5
 timeRemaining = min(timeRemaining, timerMs)
 damage += damage * timeRemaining // (timerMs * 2)      // up to +50%
 ```
@@ -833,9 +833,9 @@ Row 280, **rank 5**, costs the full gauge. Summons any owned aeon **with a full 
 
 ### 5.5 Auron — Bushido
 
-**UI and input rules.** A button sequence is displayed and must be entered before a **4 000 ms** timer expires. The faster it is completed, the larger the §5.2 remaining-time bonus. `[verified: 2 sources]`
+**UI and input rules.** A button sequence is displayed and must be entered before a **4 000 ms** timer expires (**Tornado: 3 000 ms**). The faster it is completed, the larger the §5.2 remaining-time bonus. `[verified: 2 sources]` for the 4 000 ms timer and the bonus.
 
-> Open: Tornado's timer (3 s in GF-KB, XU, AGS against one 4 000 ms here) is `[conflicting]`, unchanged here; see `research/ffx-overdrive-input-rules-2026-09-30.md` D1.
+**Tornado's timer is 3 000 ms** `[estimate, Bailey D-312]` (2026-10-01): GF-KB "Timer: 3 seconds", XU and AGS give 3 s; the tracker's `OD_TIMERS` has one Auron value, 4 000, so the sources are `[conflicting]` and GameFAQs decides it. Dragon Fang, Shooting Star and Banishing Blade stay at 4 000 ms. See `research/ffx-overdrive-input-rules-2026-09-30.md` D1. Wherever this section says 4 000 ms below, Tornado uses 3 000.
 
 The per-input rules the previous revision left open. The wrong-press rule is now **sourced** (2026-09-30, `research/ffx-overdrive-input-rules-2026-09-30.md` Q1); the other two stay **authored decisions**, because no source documents the rest of the input state machine:
 
@@ -843,13 +843,19 @@ The per-input rules the previous revision left open. The wrong-press rule is now
 |---|---|---|
 | Does a wrong button abort immediately? | **No — a wrong press sends the progress back to input 1** and the attempt continues; there is no other penalty. The attempt ends only on the last correct input or at timer expiry. The timer keeps running through the reset. The wrong press itself does not count as input 1. | Reset to input 1: `[verified: 3 sources]` (GF-PF "if an incorrect button is pressed, you must start the sequence over"; GF-HD; AF; see `research/ffx-overdrive-input-rules-2026-09-30.md` Q1). Timer running on through the reset: `[estimate]` (no source describes the timer at the reset). The wrong press not counting as input 1: `[estimate]`. The previous revision's "a wrong press is ignored" `[estimate]` is **contradicted** by those sources. |
 | Is there a per-button sub-window? | **No.** There is one global 4 000 ms budget for the whole sequence; individual inputs are untimed. | `[estimate]` Only one timer is ever shown. |
-| How does "faster = larger bonus" reach §5.2? | The sequence **completes early**; `timeRemaining = 4000 − msElapsedWhenLastInputLanded`, fed straight into the §5.2 term with `timerMs = 4000`. Completing in 1 500 ms yields `1 + ½ × (2500/4000)` = **×1.31**. | `[verified: 2 sources]` for the §5.2 formula; `[estimate]` for the completion-time reading |
+| How does "faster = larger bonus" reach §5.2? | The sequence **completes early**; `timeRemaining = 4000 − msElapsedWhenLastInputLanded`, fed straight into the §5.2 term with `timerMs = 4000` (Tornado: 3000, D-312). Completing in 1 500 ms yields `1 + ½ × (2500/4000)` = **×1.31**. | `[verified: 2 sources]` for the §5.2 formula; `[estimate]` for the completion-time reading |
 
 Failure (timer expiry) resolves the "(Fail)" row. A third "(Immune)" row exists for targets immune to the Overdrive's rider status, with a **higher** DmgCon compensating for the lost effect.
 
-> Open: when the Immune row applies (Banishing Blade "any" or "all four" Breaks, per target or per action) is unchanged here; see `research/ffx-overdrive-input-rules-2026-09-30.md` Q2.
+**When the Immune row applies** (2026-10-01; `research/ffx-overdrive-input-rules-2026-09-30.md` Q2):
 
-**Tornado is the special case.** Tornado has **no rider status**, so no target is ever "vulnerable" to it — the engine therefore always selects the *immune* row on success. That reconciles the decompile (rows 103 = 15, 269 = 15, 273 = 20) with Fandom's flat statement that a successful Tornado is "Physical, 20 (2 hits)" and a failed one is 15: **row 273 is Tornado's success row.** The previous revision's "success 15 × 2" was wrong. `[verified: 2 sources]` — recorded as §11 C15.
+* Only on a **successful** input, against a target immune to the rider; a failed input always resolves the Fail row. `[verified: 4 sources]` (GF-HD, GF-KB, AGS, FW-BU's "immune enemy" column). The Immune rows carry **no status and no Delay** (TRK rows 270 to 273).
+* "Immune" is read off the target's own data: resistance 255 to the rider status (Eject; the Breaks), the `immune_to_delay` flag for Dragon Fang's weak Delay.
+* **Banishing Blade: immune to all four Breaks.** With partial immunity the success row runs and every Break the target is not immune to still lands at chance 254 (Seymour at Macalania: Power Break immune, Magic, Armor and Mental Break land). `[estimate, Bailey D-310]`: GameFAQs is split (GF-B1 and GF-B2 "all four"; GF-KB "one or more", recorded as the dissent); the "all four" reading agrees with GG, XU, FW-SE and the data.
+* **Per target.** Each target of a multi-target Overdrive gets its own row, so a successful Dragon Fang deals 19 to a Delay-immune enemy and 17 plus the weak Delay to the others in the same action. `[estimate, Bailey D-311]`: no source states it; the GameFAQs wording is per target. A Steam HD test (Dragon Fang on a group with exactly one Delay-immune enemy) would settle it.
+* Tornado has no rider, so no target is ever immune to it and it has no Immune row (FW-BU "N/A"); its success row is row 273 (next paragraph).
+
+**Tornado is the special case.** Tornado has **no rider status**, so no target is ever "vulnerable" to it — in the decompile's terms the game always selects the *immune* row on success (our Tornado record carries row 273 as its success row and has no separate Immune row). That reconciles the decompile (rows 103 = 15, 269 = 15, 273 = 20) with Fandom's flat statement that a successful Tornado is "Physical, 20 (2 hits)" and a failed one is 15: **row 273 is Tornado's success row.** The previous revision's "success 15 × 2" was wrong. `[verified: 2 sources]` — recorded as §11 C15.
 
 | Overdrive | Rows (success / fail / immune) | Rank | Target | DmgCon × hits (**success**) | DmgCon × hits (fail) | Rider | Sequence (**baseline = International**) | Unlock |
 |---|---|---:|---|---|---|---|---|---|

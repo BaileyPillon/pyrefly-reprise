@@ -74,14 +74,20 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * in link 6 of seed 1 and once in link 6 of seed 7 and now deals 20 DmgCon instead of 26, which moves
  * exactly those links' digests (and seed 7's link 7, which starts from link 6's end state); every
  * outcome is still victory, and with the fail wiring stubbed out this file is 18/18 on the old values.
+ * Chapters II and III re-pinned 2026-10-01 by r34fix-od5 (FFX only): a clean Bushido now picks its
+ * (Immune) row per target from the target's own immunities (research §5.5; Bailey D-310/D-311). Every
+ * moved digest is an auto-rolled successful Shooting Star on an Eject-immune target now dealing 27
+ * DmgCon instead of 24: Yunalesca (seeds 1 and 7, link 1), Possessed Valefor (link 2 of both seeds)
+ * and Braska's Final Aeon (seed 7, link 1). Old and new trees replayed side by side; no other digest
+ * moved and every outcome is unchanged.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': 'd5fd8bf4:defeat',
   'seymour-flux#7': '420e8126:victory',
-  'yunalesca#1': '6d7a9a3f:victory',
-  'yunalesca#7': 'efc5c8cc:victory',
-  'braskas-final-aeon#1': 'ca3f7569:victory cc1d312c:victory 128fa095:victory d57abcc1:victory 4c3a1fd4:victory 2ec2be2f:victory 2e29d25c:victory',
-  'braskas-final-aeon#7': '922d7f55:victory 6583a70a:victory 918adb39:victory ad58d940:victory abbc417b:victory 9621c0d7:victory 3bcdda13:victory',
+  'yunalesca#1': 'b20edebb:victory',
+  'yunalesca#7': '2b4ba8df:victory',
+  'braskas-final-aeon#1': 'ca3f7569:victory e41be697:victory 128fa095:victory d57abcc1:victory 4c3a1fd4:victory 2ec2be2f:victory 2e29d25c:victory',
+  'braskas-final-aeon#7': 'c1e3482:victory 90fc8d41:victory 918adb39:victory ad58d940:victory abbc417b:victory 9621c0d7:victory 3bcdda13:victory',
   'seymour-anima-macalania#1': 'ca4a9a51:victory',
   'seymour-anima-macalania#7': 'd14d5e8a:victory',
   'evrae-airship#1': 'ebf9b7c4:victory',

@@ -80,8 +80,8 @@ describe('the overlay title follows abilityId (real engine request -> real overl
     expect(req.kind).toBe(def.minigame);
     expect(req.params['abilityId']).toBe(def.id);
     expect(req.params['name']).toBe(name);
-    // Unchanged by od4: Bushido 4 000 ms and 7 inputs; Swordplay its published timer.
-    if (who === 'auron') expect(req.params).toMatchObject({ timerMs: 4000, inputs: 7 });
+    // Unchanged by od4: Bushido 4 000 ms and 7 inputs; Swordplay its published timer. od5: Tornado 3 000 ms (D-312).
+    if (who === 'auron') expect(req.params).toMatchObject({ timerMs: def.id === 'tornado' ? 3000 : 4000, inputs: 7 });
     else expect(req.params).toMatchObject({ travelMs: 1400, zonePercent: 22 });
 
     const root = document.createElement('div');

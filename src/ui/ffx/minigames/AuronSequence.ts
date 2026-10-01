@@ -2,7 +2,7 @@ import type { MinigameResult } from '../../../battle/common/types.ts';
 import { RawInputWatcher, type UiButton } from '../rawInput.ts';
 import { resolveAuronSequence, stepAuronSequence } from './logic.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
-import { arr, bool, num, str } from './params.ts';
+import { arr, num, str } from './params.ts';
 
 const GLYPH: Record<string, string> = {
   up: '↑',
@@ -39,7 +39,6 @@ export function openAuronSequence(root: HTMLElement, params: Record<string, unkn
   const timerMs = num(params['timerMs'], 4000);
   const sequence = arr<string>(params['sequence'], ['up', 'down', 'left', 'right', 'confirm', 'cancel', 'triangle']);
   const name = str(params['name'], 'Dragon Fang');
-  const targetImmuneToRider = params['targetImmuneToRider'] === undefined ? undefined : bool(params['targetImmuneToRider'], false);
 
   const overlay = new OverdriveOverlay();
   root.appendChild(overlay.el);
@@ -85,7 +84,6 @@ export function openAuronSequence(root: HTMLElement, params: Record<string, unkn
         correctInputs: correctSoFar,
         elapsedMs,
         timerMs,
-        ...(targetImmuneToRider !== undefined ? { targetImmuneToRider } : {}),
       });
       await (sequenceResult.success ? overlay.flashSuccess() : overlay.flashFail());
       await overlay.close();

@@ -75,11 +75,9 @@ describe('auron-sequence', () => {
     expect(result.timeRemainingMs).toBe(0);
   });
 
-  it('carries targetImmuneToRider through only when supplied', () => {
-    const withFlag = resolveAuronSequence({ sequenceLength: 1, correctInputs: 1, elapsedMs: 0, timerMs: 1000, targetImmuneToRider: true });
-    expect(withFlag.targetImmuneToRider).toBe(true);
-    const without = resolveAuronSequence({ sequenceLength: 1, correctInputs: 1, elapsedMs: 0, timerMs: 1000 });
-    expect(without.targetImmuneToRider).toBeUndefined();
+  it('never reports targetImmuneToRider: the engine decides the Immune row per target (od5)', () => {
+    const result = resolveAuronSequence({ sequenceLength: 1, correctInputs: 1, elapsedMs: 0, timerMs: 1000 });
+    expect(result.targetImmuneToRider).toBeUndefined();
   });
 });
 

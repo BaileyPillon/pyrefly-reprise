@@ -4,7 +4,8 @@
  * Source: `research/ffx-combat-core.md` §5.5 (rank/DmgCon/hits) and §5.2
  * (timed-input bonus). All rows `[verified: 2 sources]`.
  *
- * Timed-input bonus (§5.2): `timerMs = 4000` for Auron; same runtime formula
+ * Timed-input bonus (§5.2): `timerMs = 4000` for Auron (Tornado 3000 since od5:
+ * [estimate, Bailey D-312], `timerMsFor` in `battle/ffx/overdrive.ts`); same runtime formula
  * as Tidus/Wakka, applied by the engine from the `auron-sequence` minigame
  * result. Marked here via `extra.timedInputBonus: true`.
  *

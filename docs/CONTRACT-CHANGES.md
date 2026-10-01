@@ -6,6 +6,23 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-01 — `SequenceResult` doc comments: Tornado's Bushido timer is 3 000 ms (od5, D-312)
+
+Branch `r34fix-od5`. Comments only, no type change. `timerMsFor` (`src/battle/ffx/overdrive.ts`) gives Tornado
+3 000 ms and the other three Bushido rows 4 000 ms, so `success` and `timeRemainingMs` are measured against that
+timer. Bailey's pick of 2026-10-01, our estimate (GF-KB, XU, AGS; `research/ffx-overdrive-input-rules-2026-09-30.md`
+D1). Latent: no shipped chapter unlocks Tornado. Game case: FFX only.
+
+## 2026-10-01 — `SequenceResult.targetImmuneToRider` is no longer read; the FFX engine picks the Bushido Immune row per target (od5, D-310/D-311)
+
+Branch `r34fix-od5`. Doc comments only in `types.ts`; no type is added, renamed or removed, so the change stays
+additive. A clean Bushido now chooses its (Immune) row **per target** from that target's own immunities
+(`src/battle/ffx/overdriveShape.ts` `immuneToRider`, a new optional `ResolveOptions.rowFor` in `abilities.ts`):
+resistance 255 to every rider status, `immune-to-delay` for Dragon Fang's weak Delay; Banishing Blade only when
+immune to all four Breaks. The flag is ignored; the Auron overlay's dead pass-through of it (nothing ever
+published it) is removed. Bailey's picks of 2026-10-01, our estimates
+(`research/ffx-overdrive-input-rules-2026-09-30.md` Q2). Game case: FFX only.
+
 ## 2026-09-30 — `EnemyGroupDef.checkpointOnEntry` doc comment: Sin's link 3 is a checkpoint as shipped (D-284, PR-0268)
 
 Branch `r17fix-combat`. Comment only, no type change. `SIN_LINK3_CHECKPOINT` (`src/data/ffx/enemies/sin-genais-core.ts`)
