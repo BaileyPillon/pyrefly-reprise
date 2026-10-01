@@ -557,3 +557,46 @@ same 24 as before (no new module). Dev server on 5371 stopped by PID.
 
 Game case: **FFX only** (Bushido and Swordplay are Auron's and Tidus's FFX Overdrives; FFX-2 has
 neither; `src/battle/ffx/` only).
+
+## Check (od4) (2026-09-30): independent check of `7735e43d`, FFX only
+
+Verdict: **no blocker, no major.** The change does what the builder reported.
+
+- **Diff.** `git diff f24d15c4 7735e43d -- src` is two lines in `minigameParams`
+  (`src/battle/ffx/overdrive.ts`): `name: def.name` added to the existing `tidus-timing` and
+  `auron-sequence` `Object.assign` calls. `timerMs`, `inputs: 7`, `travelMs: 1400`,
+  `zonePercent: 22`, `abilityId` and the sequences are untouched. The only other `minigame-request`
+  producer is `execute.ts:246`, which calls `minigameParams`. `name` comes from the ability record
+  (`overdrive-auron.ts`, `overdrive-tidus.ts`), so no new strings. `overdrive.ts` stays at 472 lines
+  (rule 7).
+- **Gates, re-run by me.** `npx tsc --noEmit` clean. Full `npx vitest run --testTimeout=60000`:
+  698 files passed, 5 skipped; 10545 tests passed, 40 skipped, 1 todo (same as the builder).
+  `node tools/orphans.mjs` output is identical to the builder's saved list (no new module).
+- **Headless, real keys, my own script** (dev server 5376, seed 1; gauges set through the live
+  battle state, then the menu keys Overdrive row, picker row, Enter). Every unlocked overlay I
+  could reach showed its own Overdrive's name:
+
+  | Chapter | Who | Picked | Overlay title | Subtitle |
+  |---|---|---|---|---|
+  | II yunalesca | Auron | Dragon Fang | Dragon Fang | BUSHIDO |
+  | II yunalesca | Tidus | Spiral Cut | Spiral Cut | SWORDPLAY |
+  | II yunalesca | Tidus | Slice & Dice | Slice & Dice | SWORDPLAY |
+  | II yunalesca | Auron | Shooting Star | Shooting Star | BUSHIDO |
+  | III braskas-final-aeon | Auron | Dragon Fang | Dragon Fang | BUSHIDO |
+  | III braskas-final-aeon | Auron | Shooting Star | Shooting Star | BUSHIDO |
+
+- **Not reached in a browser, covered by the unit test only** (the test drives the real engine's
+  `minigame-request` into the real overlay for all eight records, so it does cover them):
+  Banishing Blade, Tornado, Energy Rain, Blitz Ace. My script could not get Auron or Tidus to a
+  usable menu in Chapters I, VII and VIII within a sane time (Chapter VII opens on Rikku with Tidus
+  and Auron in reserve; Chapter III Tidus never came up in 40 turns); Chapters IX to XVIII were not
+  run. This is a limit of my driver, not a defect found. Energy Rain and Banishing Blade have no
+  browser frame yet.
+- **Unlock table.** I re-ran `src/data/encounters.ts` (builder's `unlocks.mjs`): the table above
+  matches each chapter's `buildRef` exactly. Tornado and Blitz Ace unlock nowhere.
+- **Housekeeping note.** The builder said its driver scripts were moved to
+  `F:/pyrefly-parked/2026-09-30/od4/`; that folder does not exist. The scripts that are in
+  `D:/Tools/pyrefly-scratch/2026-09-30-rel35/od4/` (`probe.mjs`, `unlocks.mjs`) are scratch only and
+  nothing under `src/` or `tests/` depends on them. Cosmetic.
+- My evidence: `D:/Tools/pyrefly-scratch/2026-09-30-rel35/od4/` (`check-vitest.txt`,
+  `check-titles.mjs`, `check/*.json`, `check/*.jpg`). Server on 5376 stopped by PID.
