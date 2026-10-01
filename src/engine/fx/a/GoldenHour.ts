@@ -230,6 +230,7 @@ export class GoldenHour {
     g['grainSize']!.value = 1.25;
     g['grainHighlights']!.value = 0.4;
     if (rm || eyeCandy.frozen) g['time']!.value = 0.5; // a still grain
+    if (L.grade) gradeFix(g, p, L.grade); // VP-1001-03: a room the defaults crush (the Den of Woe)
 
     // A4: backdrop depth of field; the tilt-shift softens less so the figures are not blurred twice
     const dof = d('dof');
@@ -311,4 +312,13 @@ export class GoldenHour {
     this.flare.dispose();
     this.lut?.dispose();
   }
+}
+
+/** A room's grade correction on top of its palette (VP-1001-03); `applyPalette` restores the palette's own values. */
+function gradeFix(g: Record<string, { value: unknown }>, p: { gain?: readonly number[]; lift?: readonly number[] }, fix: NonNullable<SceneLookA['grade']>): void {
+  const gain = p.gain ?? [1, 1, 1];
+  const lift = p.lift ?? [0, 0, 0];
+  (g['gain']!.value as Vector3).set(gain[0]! * fix.gain[0], gain[1]! * fix.gain[1], gain[2]! * fix.gain[2]);
+  (g['lift']!.value as Vector3).set(lift[0]! + fix.lift[0], lift[1]! + fix.lift[1], lift[2]! + fix.lift[2]);
+  g['shadowTintAmount']!.value = fix.shadowTintAmount;
 }
