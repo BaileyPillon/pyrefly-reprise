@@ -7,7 +7,7 @@ Both are **fixed**; both game cases are **both** (shared pause and flow plumbing
 | PR | Severity | Result | Commit |
 |---|---|---|---|
 | PR-0283 | major, both | fixed | `ddae31ba` |
-| PR-0284 | major, both | fixed | `e10a133a`, then `114c5b01` (mounted inside the pause layer) |
+| PR-0284 | major, both | fixed | `e10a133a`, then `114c5b01` + `2b46fab8` (mounted inside the pause layer; 114c5b01 alone removes the CSS but still imports it, so only the pair builds) |
 
 Probes are headless Playwright (`PYREFLY_BROWSER=gpu`) with real keys, mouse clicks and touch taps, seed 1, against
 a dev server on 5420 (stopped). Scripts and every run.json and frame are in
