@@ -306,3 +306,106 @@ NVIDIA's overlay, Apollo or the virtual display adapter for one test start.
 
 Next try: after a reboot, with ComfyUI idle, load slot 106 and run the steps listed at the
 end of "Steam HD check 2026-10-01". Grab the screen sparingly, and never use PrintWindow.
+
+## Steam HD check 2026-10-01 (retry 2)
+
+**Scope: FFX only; docs only.** Bailey, 2026-10-01 ~14:10 EDT: "try again... i havent
+restarted my pc" (and at ~00:55: "yes you can take over the screen for Steam."). Same copy,
+slot and keyboard driver as before. Run 14:17 to about 14:52 EDT. Screen grabs were a handful
+of window-rect grabs and tiny pixel patches; PrintWindow was not used. Nothing was saved. No
+registry value, Windows setting, service, driver or NVIDIA / Apollo setting was changed;
+`GameSetting.ini` was edited three times for tests and is byte-identical again (hash
+compared). Screenshots and traces stay under
+`D:/Tools/ffx-hd/observe/2026-10-01/retry2/` (one 238 MB trace parked on F:); none are in the repo.
+
+**Result: still a plain white window. No Bushido input was observed.** D1, D2, D3, D4 and Q1
+stay open, and nothing here carries `[verified: Steam HD 2026-10-01]`. The earlier sections
+of this file stand as written. This section only adds a sharper diagnosis.
+
+Display and GPU state (read only):
+- One real GPU, "NVIDIA GeForce RTX 5070 Ti" (driver 32.0.16.1047), one display attached to
+  the desktop: `\\.\DISPLAY1`, 2560x1440, primary, 120 dpi. The "SudoMaker Virtual Display
+  Adapter" (Apollo / SudoVDA, driver 1.10.9.289) is present and OK in Device Manager, but
+  none of its `\\.\DISPLAY5` to `14` entries is attached. The Apollo service and
+  `sunshine.exe` have run since 2026-09-27 18:41; the PC booted 2026-09-25 13:12. I found no
+  display, PnP or driver event between 00:00 and 03:00 today (only BITS start-type toggles
+  and a shadow-copy trim). I cannot see the state at 00:56 itself, so "unchanged since then"
+  means "no trace of a change".
+- A fresh process lists DXGI adapters as: 0 = the RTX 5070 Ti with the one output; 1 = a
+  second "RTX 5070 Ti" entry with no outputs (its DirectX registry key is dated 2026-09-27
+  22:21 UTC, the Apollo install evening); 2 = Microsoft Basic Render Driver.
+- FFX.exe's GPU memory (about 212 MB) sits on LUID 0x1c337, which is adapter 0 only. So the
+  hypothesis "adapter enumeration puts a virtual or idle adapter first" is **ruled out** for
+  the device FFX renders with.
+- `HKCU\...\UserGpuPreferences` has no FFX.exe entry (entries exist for SHProto.exe,
+  AlanWake2.exe, Acrobat.exe, 12M.exe; key last written 2026-09-22). The global setting
+  holds `SwapEffectUpgradeEnable=1` (Windows "Optimizations for windowed games" on) and
+  `AutoHDREnable=0`.
+- ComfyUI: queue empty, Torch VRAM 64 MB (no models loaded), 3.3 GB of 16 GB used by desktop
+  apps. `/free` was not needed and not sent.
+- The window is 1280x720 on the only monitor, visible, not cloaked. (A reading of 1024x576
+  taken early in this run came from a probe that was not DPI aware; it was an artifact, not
+  a game fault.)
+
+What differs between FFX.exe and FFX-2.exe, started from the same folder in the same minute:
+- A DXGI trace (ETW provider Microsoft-Windows-DXGI, 14 s each) shows FFX **does present**: 386
+  Present calls (sync interval 0), the same rate as FFX-2 (379). FFX-2's Present returns
+  S_OK every time. FFX's returns S_OK except DXGI_STATUS_OCCLUDED on 4 calls (two at +0.9 s,
+  two at +9.8 s, the same moments as the error lines below). Only
+  FFX logs DXGI error lines: "Failed to find an output for the swapchain" (E_FAIL, twice at
+  +0.4 s and twice at +9.8 s) plus "Non-zero return value" for the occluded statuses.
+  FFX-2 logs none.
+- Loaded modules: FFX-2 also loads `dcomp.dll` and `microsoft.internal.warppal.dll` (the
+  Windows flip-model / DirectComposition path); FFX loads neither. Both load d3d11, dxgi,
+  the 32-bit NVIDIA driver (`nvwgf2um.dll`), `nvspcap.dll` (NVIDIA capture hook) and the
+  Steam overlay. FFX-2 shows the Steam FPS counter; FFX never does.
+- Thread stacks: no FFX thread is inside d3d11 or dxgi, and its main thread sits in a normal
+  message wait; the NVIDIA threads are the usual compile-worker pool, the same as in FFX-2.
+  So the first check's "render thread stuck in the driver" reading is **not supported**.
+  FFX's GPU 3D engine is busy about 5 to 8 percent (earlier readings of 0 percent were
+  taken at other moments).
+- Windows keeps extra state only for FFX.exe: a GameConfigStore entry with Flags 529 and
+  `ExeParentDirectory=Final Fantasy FFX` (FFX-2.exe: Flags 17), and a Program Compatibility
+  Assistant store record that every FFX launch rewrites (none for FFX-2). Not touched.
+
+Tried this run, every start still white:
+- The official launcher: clicking FINAL FANTASY X starts `FFX.exe` with no arguments, so it
+  is the same as a direct start.
+- Process-only environment: `__COMPAT_LAYER` = `DISABLEDXMAXIMIZEDWINDOWEDMODE`, `WIN7RTM`,
+  `WIN8RTM DISABLEDXMAXIMIZEDWINDOWEDMODE`; `SteamNoOverlayUIDrawing=1` (the overlay DLL
+  still loaded).
+- `GameSetting.ini`, one change at a time, restored after each: `Resolution=1920*1080` (the
+  window did grow to 1920x1080, so the file is read), `Quality=VQ_HIGH`,
+  `ColorCorrection=Off`.
+- Start priority High and BelowNormal; CPU affinity limited to 8 and to 2 logical cores.
+- On a running white window: resize and resize back, minimise and restore, C / Enter / C,
+  Alt+Enter.
+- There is only one monitor, so there was nothing to move the window between.
+
+Diagnosis and most likely cause (inference; the trace shows the error, not the reason):
+DXGI cannot match FFX's swapchain to a display output. The game's windowed presents are
+accepted but never reach the desktop, the Steam overlay cannot draw on that swapchain, and
+the fullscreen setting cannot take effect either (it needs the same output lookup; last
+night's fullscreen test never left the window). FFX-2 gets through the windowed-present path
+that FFX does not. That points at the Windows graphics stack (driver, DWM, or the windowed
+present path, with the NVIDIA capture hook and Apollo's virtual display adapter as the other
+pieces that changed recently), not at the game files, the save, the GPU load or adapter
+order. It began with the first start's freeze at about 00:59, and no file I can see
+changed since.
+
+What Bailey would have to change (I changed none of it), in this order:
+1. **Reboot Windows**, then start FFX.exe once with ComfyUI idle. The PC has been up since
+   2026-09-25 and a driver refresh did not clear it; a reboot is the cheapest way to reset
+   the driver, DWM, the NVIDIA container and Apollo's display driver together.
+2. If it is still white after the reboot: Windows Settings > System > Display > Graphics,
+   add `D:\Tools\ffx-hd\FINAL FANTASY FFX&FFX-2 HD Remaster\FFX.exe`, Options, and tick
+   "Don't use optimizations for windowed games" (or turn the global "Optimizations for
+   windowed games" off for one test).
+3. If still white: turn off the NVIDIA App in-game overlay (the `nvspcap.dll` hook), or
+   remove the Apollo virtual display adapter, for one test start.
+
+A quick check after any of these, with no screenshot: start `FFX.exe`, wait 14 s, and read
+the average colour of a 40x40 patch at the centre of its client area. (255, 255, 255) means
+still white; anything else means it draws. Then follow "What a retry needs" in the first
+section (slot 106 for Dragon Fang, Shooting Star and Banishing Blade; a save with Tornado
+for the rest).
