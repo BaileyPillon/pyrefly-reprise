@@ -49,6 +49,7 @@ import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '..
 import { attachAdvisorV4 } from '../advisorV4/wiring.ts';
 import { PauseScreen } from './PauseScreen.ts';
 import { previewTurnOrder } from './pause/turnOrder.ts';
+import { flowOwnsRun } from './pause/restartCarry.ts';
 import { attachStageHook, type StageHook as AirshipBattleHook } from './BattleScreenStageHook.ts';
 import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
 import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
@@ -107,6 +108,7 @@ export interface BattleScreenResult {
   withdrawLine?: string;
   /** FF7: the party on their feet at the end; C1's EXP goes only to them (research/ff7-battle-core.md §11). */
   standing?: CombatantId[];
+  restartRequested?: true; // PR-0283: ended by RESTART ENCOUNTER; the run that owns the fight plays it again (`runWithRestarts`)
 }
 
 export class BattleScreen extends Screen {
@@ -616,39 +618,36 @@ export class BattleScreen extends Screen {
    * Leave the encounter for somewhere else.
    *
    * The flow in `BattleScreenFlow.runChapter` is parked on `battle.finished`,
-   * and whoever called it navigates *after* it resolves — `main.ts` sends an
-   * ended chapter back to chapter select. So this screen cannot simply call
-   * `goto()`: its own navigation would land first and be overwritten a tick
-   * later by the flow's.
-   *
-   * Instead it aborts, which is what makes the flow unwind, and then waits for
-   * the unwind to actually finish (this screen off the stack, the flow idle)
-   * before taking over. CHAPTER SELECT needs nothing at all afterwards — the
-   * flow's own follow-up is already exactly that — which is why it is the one
-   * intent with no branch below.
+   * and whoever called it navigates *after* it resolves (`main.ts` sends an
+   * ended chapter back to chapter select), so this screen cannot simply call
+   * `goto()`: the flow's navigation would land a tick later over its own. It
+   * aborts, which makes the flow unwind, and waits for the unwind to finish
+   * before taking over. CHAPTER SELECT needs nothing more: that is the flow's
+   * own follow-up. RESTART inside a run is the run's job (PR-0283, both games):
+   * the result says so and `runWithRestarts` plays the chapter again in place;
+   * only a fight no run owns (a direct `goto('battle')`) starts one here.
    */
   private requestExit(intent: 'restart' | 'chapter-select' | 'title'): void {
     if (this.exitIntent) return;
     this.exitIntent = intent;
     const app = this.app;
     const chapterId = this.opts.chapter.id;
+    const runRestarts = intent === 'restart' && flowOwnsRun(app.flow);
 
     void (async () => {
       await this.closePause();
       this.presenter?.abort();
       this.setPresenterPaused(false);
-      this.finish({ kind: 'aborted' });
-
-      // Let the flow finish unwinding. Bounded, so a flow that never settles
-      // costs one dropped menu action rather than a screen that never returns.
+      this.finish({ kind: 'aborted' }, runRestarts);
+      if (runRestarts) return;
+      // Bounded, so a flow that never settles costs one dropped menu action rather than a screen that never returns.
       for (let i = 0; i < 240 && app.current === this; i++) await app.nextFrame();
-
       if (intent === 'restart') void app.runChapter(chapterId, { skipPrep: true, skipCutscenes: true, restart: true });
       else if (intent === 'title') void app.goto('title');
     })();
   }
 
-  private finish(outcome: BattleOutcome): void {
+  private finish(outcome: BattleOutcome, restartRequested = false): void {
     const resolve = this.finishedResolve;
     if (!resolve) return;
     this.finishedResolve = null;
@@ -663,6 +662,7 @@ export class BattleScreen extends Screen {
       ...(this.checkpoint ? { checkpoint: this.checkpoint } : {}),
       ...(withdrawLine ? { withdrawLine } : {}),
       ...ff7Standing(this.engine?.state()),
+      ...(restartRequested ? { restartRequested: true as const } : {}),
     });
   }
 

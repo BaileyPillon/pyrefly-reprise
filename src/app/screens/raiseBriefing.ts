@@ -27,9 +27,9 @@ import { briefingWhenWarm } from './frontendWarm.ts';
  * pause menu behind it — the defect an adversarial pass found in the first
  * build, on all three of them.
  */
-export function makeBriefing(app: App): Briefing {
+export function makeBriefing(app: App, root: HTMLElement = app.uiRoot): Briefing {
   const options: BriefingOptions = {
-    root: app.uiRoot,
+    root, // the pause's replay passes its own layer (PR-0284, `PauseOverlays.replayBriefing`)
     reduceMotion: app.save?.settings?.reduceMotion ?? false,
   };
   if (canDriveInput(app)) {
