@@ -28,9 +28,14 @@
  */
 
 import type { EventCtx } from './BattlePresenterEvents.ts';
+import { fxOpening } from './fx/c/presenterHooks.ts';
 
-/** Run the opening moment `run`, ending it early on the player's first Confirm press. */
+/**
+ * Run the opening moment `run`, ending it early on the player's first Confirm press. Before it starts,
+ * eye-candy C lets go of the previous link's victory arc (PR-0300), so the opening frames from the rig.
+ */
 export async function playOpening(ctx: EventCtx, run: () => Promise<void>): Promise<void> {
+  fxOpening(ctx);
   const port = ctx.deps.moments;
   const press = ctx.speed() === 'skip' ? null : (port?.confirmPress?.() ?? null);
   if (!press) return run();
