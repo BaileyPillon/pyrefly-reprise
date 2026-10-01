@@ -493,3 +493,110 @@ Scratch: `D:/Tools/pyrefly-scratch/2026-09-30-rel35/od3/check/` (tsc, vitest log
 and JPEG frames). The check script is parked in `F:/pyrefly-parked/2026-09-30/od3/check/`.
 
 Game case: **FFX only** (Bushido is Auron's FFX Overdrive; FFX-2 has none).
+
+## od4 (2026-09-30): the Bushido and Swordplay overlays are titled with the chosen Overdrive (FFX only)
+
+Branch `r34fix-od4` from `f24d15c4`.
+
+**Defect.** `minigameParams` (`src/battle/ffx/overdrive.ts`) published `{ abilityId, timerMs: 4000,
+inputs: 7 }` for every Bushido row and `{ abilityId, timerMs, travelMs, zonePercent }` for every
+Swordplay row, with no `name`. `AuronSequence.ts` and `TidusTiming.ts` read `params.name` with the
+defaults "Dragon Fang" and "Slice & Dice", so every Bushido was titled "Dragon Fang" and every
+Swordplay "Slice & Dice".
+
+**Fix.** The same two `Object.assign` lines now add `name: def.name`: the ability record's own
+display name, the record `abilityId` names (`overdrive-auron.ts`, `overdrive-tidus.ts`). No new
+strings. Timers, input counts, travel and zone values, sequences and button orders are unchanged
+(the HD button order stays open: `research/ffx-overdrive-input-rules-2026-09-30.md` D1-D5).
+`overdrive.ts` stays at 472 lines (rule 7: did not grow). Wakka's overlay also reads `params.name`
+(default "Slots") and gets none; its subtitle already names the reel set. Not changed here.
+
+**Before/after, real keys, headless (dev server 5371, Chapter II `yunalesca`, seed 1; gauges
+filled through the live engine ctx, everything else by keys):**
+
+| Picked | Before: title | After: title | Request after |
+|---|---|---|---|
+| Auron, Dragon Fang | Dragon Fang | Dragon Fang | `dragon-fang`, name Dragon Fang, 4000 ms, 7 inputs |
+| Auron, Shooting Star | **Dragon Fang** | Shooting Star | `shooting-star`, name Shooting Star, 4000 ms, 7 inputs |
+| Tidus, Spiral Cut | **Slice & Dice** | Spiral Cut | `spiral-cut`, name Spiral Cut, 3000 ms |
+| Tidus, Slice & Dice | Slice & Dice | Slice & Dice | `slice-and-dice`, name Slice & Dice, 3000 ms |
+
+Subtitles unchanged ("BUSHIDO · ENTER THE SEQUENCE", "SWORDPLAY · CONFIRM IN THE GOLD ZONE"); no
+page errors. JSON and JPEG frames: `D:/Tools/pyrefly-scratch/2026-09-30-rel35/od4/`.
+
+**Which shipped chapters could show the wrong title** (each chapter's `buildRef`, read by running
+`src/data/encounters.ts`; nothing grants an Overdrive mid-battle):
+
+| Ch | Chapter | Tidus (Swordplay) | Auron (Bushido) |
+|---|---|---|---|
+| I | seymour-flux | Spiral Cut | Dragon Fang |
+| II | yunalesca | Spiral Cut, Slice & Dice | Dragon Fang, Shooting Star |
+| III | braskas-final-aeon | Spiral Cut, Slice & Dice, Energy Rain | Dragon Fang, Shooting Star |
+| VII | seymour-anima-macalania | Spiral Cut | Dragon Fang, Shooting Star, Banishing Blade |
+| VIII | evrae-airship | Spiral Cut, Slice & Dice | Dragon Fang, Shooting Star, Banishing Blade |
+| IX | yojimbo-cavern | Spiral Cut | Dragon Fang |
+| X | seymour-natus | Spiral Cut, Slice & Dice | Dragon Fang, Shooting Star, Banishing Blade |
+| XII | seymour-omnis | Spiral Cut, Slice & Dice, Energy Rain | Dragon Fang, Shooting Star |
+| XIV | isaaru-via-purifico | not in the party | not in the party |
+| XVII | sin-fins-core | Spiral Cut, Slice & Dice, Energy Rain | Dragon Fang, Shooting Star |
+| XVIII | sin-face | Spiral Cut, Slice & Dice, Energy Rain | Dragon Fang, Shooting Star |
+
+So the wrong title was visible to players: every Spiral Cut and Energy Rain read "Slice & Dice"
+(every FFX chapter with Tidus, Chapter I included), and every Shooting Star and Banishing Blade
+read "Dragon Fang" (all but I, IX and XIV). Tornado and Blitz Ace are unlocked in no chapter.
+
+**Tests.** `tests/unit/ffx-overdrive-overlay-title.test.ts` (new): the real engine (no
+auto-resolve) emits the `minigame-request` for each of the four Bushido and four Swordplay rows,
+its params open the real overlay (jsdom), and the title equals the record's name; `abilityId`,
+`timerMs: 4000` / `inputs: 7` (Bushido) and `travelMs` / `zonePercent` (Swordplay) are asserted
+unchanged. Without the fix 8 of its 10 tests fail; with it all pass.
+
+**Gates.** `npx tsc --noEmit` clean; full `npx vitest run --testTimeout=60000`: 698 files passed,
+5 skipped; 10545 tests passed, 40 skipped, 1 todo; `node tools/orphans.mjs`: 24 orphaned, the
+same 24 as before (no new module). Dev server on 5371 stopped by PID.
+
+Game case: **FFX only** (Bushido and Swordplay are Auron's and Tidus's FFX Overdrives; FFX-2 has
+neither; `src/battle/ffx/` only).
+
+## Check (od4) (2026-09-30): independent check of `7735e43d`, FFX only
+
+Verdict: **no blocker, no major.** The change does what the builder reported.
+
+- **Diff.** `git diff f24d15c4 7735e43d -- src` is two lines in `minigameParams`
+  (`src/battle/ffx/overdrive.ts`): `name: def.name` added to the existing `tidus-timing` and
+  `auron-sequence` `Object.assign` calls. `timerMs`, `inputs: 7`, `travelMs: 1400`,
+  `zonePercent: 22`, `abilityId` and the sequences are untouched. The only other `minigame-request`
+  producer is `execute.ts:246`, which calls `minigameParams`. `name` comes from the ability record
+  (`overdrive-auron.ts`, `overdrive-tidus.ts`), so no new strings. `overdrive.ts` stays at 472 lines
+  (rule 7).
+- **Gates, re-run by me.** `npx tsc --noEmit` clean. Full `npx vitest run --testTimeout=60000`:
+  698 files passed, 5 skipped; 10545 tests passed, 40 skipped, 1 todo (same as the builder).
+  `node tools/orphans.mjs` output is identical to the builder's saved list (no new module).
+- **Headless, real keys, my own script** (dev server 5376, seed 1; gauges set through the live
+  battle state, then the menu keys Overdrive row, picker row, Enter). Every unlocked overlay I
+  could reach showed its own Overdrive's name:
+
+  | Chapter | Who | Picked | Overlay title | Subtitle |
+  |---|---|---|---|---|
+  | II yunalesca | Auron | Dragon Fang | Dragon Fang | BUSHIDO |
+  | II yunalesca | Tidus | Spiral Cut | Spiral Cut | SWORDPLAY |
+  | II yunalesca | Tidus | Slice & Dice | Slice & Dice | SWORDPLAY |
+  | II yunalesca | Auron | Shooting Star | Shooting Star | BUSHIDO |
+  | III braskas-final-aeon | Auron | Dragon Fang | Dragon Fang | BUSHIDO |
+  | III braskas-final-aeon | Auron | Shooting Star | Shooting Star | BUSHIDO |
+
+- **Not reached in a browser, covered by the unit test only** (the test drives the real engine's
+  `minigame-request` into the real overlay for all eight records, so it does cover them):
+  Banishing Blade, Tornado, Energy Rain, Blitz Ace. My script could not get Auron or Tidus to a
+  usable menu in Chapters I, VII and VIII within a sane time (Chapter VII opens on Rikku with Tidus
+  and Auron in reserve; Chapter III Tidus never came up in 40 turns); Chapters IX to XVIII were not
+  run. This is a limit of my driver, not a defect found. Energy Rain and Banishing Blade have no
+  browser frame yet.
+- **Unlock table.** I re-ran `src/data/encounters.ts` (builder's `unlocks.mjs`): the table above
+  matches each chapter's `buildRef` exactly. Tornado and Blitz Ace unlock nowhere.
+- **Housekeeping note.** The builder said its driver scripts were moved to
+  `F:/pyrefly-parked/2026-09-30/od4/`; that folder does not exist. The scripts that are in
+  `D:/Tools/pyrefly-scratch/2026-09-30-rel35/od4/` (`probe.mjs`, `unlocks.mjs`) are scratch only and
+  nothing under `src/` or `tests/` depends on them. Cosmetic.
+- My evidence: `D:/Tools/pyrefly-scratch/2026-09-30-rel35/od4/` (`check-vitest.txt`,
+  `check-titles.mjs`, `check/*.json`, `check/*.jpg`). Server on 5376 stopped by PID.

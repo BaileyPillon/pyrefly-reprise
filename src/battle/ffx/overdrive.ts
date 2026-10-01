@@ -310,10 +310,10 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
   const base: Record<string, unknown> = { abilityId: def.id, ...(timerMs > 0 ? { timerMs } : {}) };
   switch (def.minigame) {
     case 'tidus-timing':
-      Object.assign(base, { travelMs: 1400, zonePercent: 22 });
+      Object.assign(base, { travelMs: 1400, zonePercent: 22, name: def.name }); // the title is the Overdrive chosen, not a default (od4)
       break;
     case 'auron-sequence':
-      Object.assign(base, { inputs: 7 });
+      Object.assign(base, { inputs: 7, name: def.name }); // Shooting Star was titled "Dragon Fang" without it (od4)
       break;
     case 'wakka-reels':
       // The strip comes off the reel set the player picked — it was hard-coded
