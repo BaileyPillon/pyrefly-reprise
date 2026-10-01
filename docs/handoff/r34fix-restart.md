@@ -228,3 +228,47 @@ flow loop exactly one `goto('title')` and no board between; after a restart firs
 
 **Gates:** `npx tsc --noEmit` clean; the pause, flow and restart vitest files (11 files, 193 tests) pass; full suite
 result 710 files passed, 5 skipped, 10625 tests passed; `node tools/orphans.mjs` 24 orphans, all old.
+
+### Check of r34fix-quit (independent, at `ceecdbe2`; both games)
+
+Verdict: **PASS, no blocker, no major.** Real input, seed 1, headless Playwright (`PYREFLY_BROWSER=gpu`), one browser at
+a time; evidence in `D:/Tools/pyrefly-scratch/2026-10-01-rel34/quit-check/ev/`. Both servers stopped (5540, 5541).
+
+**Before, on the base `443e332e` (r34fix-restart):** served from this same tree on port 5541 by a scratch Vite config that
+loads the base copies of the four changed source files (no checkout). Reproduced in both games, with no restart first:
+- Ch IV (FFX-2) click at 1600x900: after QUIT TO TITLE, stack and roots `["title","title"]` with 2 visible PRESS ENTER.
+  After Enter, `["title","chapter-select"]`; starting the chapter gives `["title","battle"]`. PASS false (`...-BASE`).
+- Ch I (FFX) keys at 1600x900: the same three states. PASS false.
+
+**After, on `ceecdbe2` (port 5540):** QUIT TO TITLE gives stack and roots `["title"]` with 1 PRESS ENTER, still so 4 s
+later. Enter or a tap gives `["chapter-select"]` with no title text. Starting the chapter gives `["battle"]` only. Every
+run passed with 0 page errors:
+- Ch IV click 1600x900, without and after a restart (`FIX0`, `FIX1`).
+- Ch IV taps 390x844, without a restart (`FIXT0`).
+- Ch I keys 1600x900, without and after a restart (`FIX0`, `FIX1`).
+- Ch I taps 390x844, after a restart (`FIXT1`).
+
+**Break attempts, all held:**
+- Enter (Ch I keys) or a tap (Ch IV 390x844) the moment the title is current, about 30 ms after QUIT, while the run
+  could still be unwinding (`FAST`). This gives a single board, `["chapter-select"]`, and the next chapter starts as
+  `["battle"]`. The title loop did not stand still on a stale `running` flag.
+- The `main.ts` board path (`VIA`): pause, CHAPTER SELECT (a board the flow loop does not own), the chapter again, then
+  QUIT TO TITLE. Ch IV click 1600x900 and Ch I taps 390x844 both give one title, then a clean board and battle.
+
+**Regressions, none:**
+- RESTART ENCOUNTER twice: Ch IV taps 390x844, `["battle"]` throughout (`RR`).
+- CHAPTER SELECT after a restart: Ch I keys, `["chapter-select"]` (`SEL`).
+- REPLAY BRIEFING: the brief is on top, closes back to the pause, and the pause resumes to `["battle"]`. Checked in Ch I
+  keys, Ch IV taps and Ch IV click (`BR`).
+- Results, then board, then title, after a restarted fight won by the autopilot: `["results"]`, `["chapter-select"]`, then
+  board Esc to `["title"]` with 1 PRESS ENTER, then Enter to `["chapter-select"]`. Checked in Ch I keys and Ch IV click
+  (`RES`).
+
+**Gates:**
+- `npx tsc --noEmit` is clean.
+- The full `npx vitest run --testTimeout=60000` passes: 710 files and 10625 tests, with 5 files skipped.
+- `BattleScreen.ts` (920) and `BattleScreenFlow.ts` (525) are the same length as on the base.
+
+**Minor, not blocking:** to hold the line counts, the fix packs two statements onto single lines: the
+`[runRestarts, runQuits]` tuple in `requestExit`, two spreads on one line in `finish`, and the tuple assignment in
+`runChapter`'s `toTitle`. It reads densely, but it is correct.
