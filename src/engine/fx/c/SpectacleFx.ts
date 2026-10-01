@@ -132,9 +132,9 @@ export class SpectacleFx implements FxStagePort {
     (u['uEdge']!.value as Vector3).set(...t.edge);
   }
 
-  enabled(): boolean {
-    return this.d.enabled();
-  }
+  enabled(): boolean { return this.d.enabled(); }
+  /** PR-0300: a new link's opening lets go of the last link's victory arc, which would else frame the next fight yawed. */
+  opening(): void { this.orbit = null; }
 
   // ------------------------------------------------------------- the port
 

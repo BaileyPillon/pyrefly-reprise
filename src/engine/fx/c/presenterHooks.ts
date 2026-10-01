@@ -40,6 +40,11 @@ export interface FxStagePort {
   dissolve?(id: CombatantId): void;
   /** The victory: `pose` chapters orbit, `hold` ones only push in (C9). Returns the ms the beat should hold for it. */
   victory?(kind: 'pose' | 'hold'): number;
+  /**
+   * An encounter's opening shot begins (the first link, and every later link of a chain). The victory arc
+   * of the link before it is held at its end until then; from here it is let go (PR-0300).
+   */
+  opening?(): void;
 }
 
 /** The FFX-2 boss Specials and FFX boss moves that get the splash; party Overdrives always do. */
@@ -106,6 +111,16 @@ export function fxDissolve(ctx: EventCtx, id: CombatantId): void {
 /** The victory camera (C9). Returns how long the beat should hold for it (0 without C). */
 export function fxVictory(ctx: EventCtx, kind: 'pose' | 'hold'): number {
   return ctx.speed() === 'normal' ? (port(ctx)?.victory?.(kind) ?? 0) : 0;
+}
+
+/**
+ * The opening shot of an encounter or of a chain's next link (PR-0300). Without it, the previous link's
+ * victory arc (12 degrees of yaw, a rise and a push about the old party centre) stayed on the camera, so a
+ * Chapter XV seam opened with the floor plate's right edge in frame and black beyond it. Any speed, and
+ * whether or not C is on right now (an arc held while the look was switched off must not come back).
+ */
+export function fxOpening(ctx: EventCtx): void {
+  (ctx.stage as { fx?: FxStagePort }).fx?.opening?.();
 }
 
 /**
