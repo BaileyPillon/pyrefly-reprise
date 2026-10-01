@@ -247,7 +247,10 @@ export class GoldenHour {
     if (this.glow.enabled) this.shafts(camera, L, tier, rm, shaftsOn, streakOn, swell);
 
     // A7: the rim from the key
-    if (eyeCandy.sub('a', 'rim') && d('rim') > 0) this.rim.apply(scene, this.rimColour, L.rim * d('rim'), 1 + (L.rimWidth - 1) * Math.min(1.5, d('rim')));
+    if (eyeCandy.sub('a', 'rim') && d('rim') > 0) {
+      this.r.renderer.getDrawingBufferSize(this.buf); // VP-1001-17: the width is held to screen pixels
+      this.rim.apply(scene, this.rimColour, L.rim * d('rim'), 1 + (L.rimWidth - 1) * Math.min(1.5, d('rim')), { camera, heightPx: this.buf.y });
+    }
     else this.rim.restore();
 
     // A8
