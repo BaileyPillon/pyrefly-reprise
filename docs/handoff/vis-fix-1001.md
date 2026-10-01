@@ -52,3 +52,48 @@ Side-by-side PNGs: `docs/screenshots/vis-fix-1001-*.png`.
 ## Game case summary (rule 14)
 
 FFX only: 16, 28. FFX-2 only: 03, 23, 30 (and 04 in practice). Both: 04 (plumbing), 05, 06, 17, 31, 38.
+
+## Check (independent, 2026-10-01; did not build this)
+
+Checked a0d5c5da against f302f163. Both were production builds (`vite build`), served by `vite preview`: the branch on 5330, f302f163's `D:/Tools/pyrefly-scratch/2026-09-30-visual/dist` on 5331, one at a time. Headless Playwright ran with `PYREFLY_BROWSER=gpu` and real keys from the title. Evidence is in `D:/Tools/pyrefly-scratch/2026-09-30-visual/check-visfix/`: `capture/` holds the new set, `pairs/` the side-by-sides and diffs, `shots/` the per-item frames and JSON, `scripts/` the drivers, and `logs/`. KO, revive, victory and spherechange beats are synthetic presenter events (presentation only), and they are labelled as such. One capture aid was injected and labelled: Tidus's gauge set to 100 for the Overdrive check.
+
+**Gates.** The following were re-run here:
+- `npx tsc --noEmit` is clean.
+- `npx vitest run --testTimeout=60000`: 704 files passed (5 skipped), 10526 tests passed.
+- `node tools/orphans.mjs`: 24 orphans, all pre-existing; none of the six new modules is among them.
+- `verify-approved.mjs`: 365 ok, 0 mismatched, 0 missing.
+- `git diff f302f163..a0d5c5da -- src/battle` is empty.
+- No SaveData, save schema or settings file is touched.
+- No new presenter module imports three or touches the DOM.
+- Every commit names its game case.
+- Rule 7: no src file over 400 lines grew. One test file did: `tests/unit/engine/actor-life.test.ts` went from 495 to 501 lines (minor).
+
+**Per item.** Reach, hold and staged lists were measured in-page per rAF. "Synthetic" means presenter events.
+
+| VP | Verdict | What I saw |
+|---|---|---|
+| 16 | fixed | Real keys in Ch I: Overdrive, then Spiral Cut. The f302f163 overlay read "Slice & Dice"; the branch reads "Spiral Cut" (`shots/fd-od-{base,fix}.json`, `od-overlay-fix.jpg`). |
+| 04 | fixed | Synthetic KO in Ch IV, VI, XIII and XVI. Rikku DK and AL, Paine Warrior and Yuna DK reach `lieRoll` 1, and a revive returns it to 0 (`shots/ko-*-fix.json`, `pairs/k-trema.jpg`). The laid idle reads as a rotated standing plank (Paine Warrior in Ch VI, Rikku DK's sword in IV). It has no dim or desaturation, which the fix hint asked for (polish). |
+| 05 | fixed in part | Ch I and III: Yuna, Kimahri and Auron KOs now sit near standing scale, and the phone KO stays clear of the party panel. Two subjects are not settled (`pairs/k-heads-flux.jpg`, `pairs/k-rbm-heads.jpg`): <br>- **Tidus is not in the table, and his KO head reads about 1.3x his standing head** (by eye). The handoff says "within 10 %", and the critic named Tidus in Ch I and VIII. <br>- Rikku Black Mage at 1.15 reads about 0.8x standing (by eye). That is much better than the sidecar's 0.75, but it contradicts the D-194 head-match note in its sidecar. Bailey or the critic should settle which measurement holds. |
+| 28 | fixed | Synthetic Flux KO then victory: by 1.3 s the staged list is `tidus,yuna,kimahri`. Real fight (seed 3, intended): neither Mortiorchis nor Flux is in the victory frames (`pairs/synthdeath-fix.jpg`, `pairs/fd-death-fix-s3.jpg`). That run had Mortiorchis already drained when Flux fell. |
+| 03 | partial | Ch XV now has a teal floor and round motes, with no four-point flares. The walls are still dark against the O-3 A frame (`pairs/r-den.jpg`). The cyan glow at the right edge is now a large soft half-disc, which is more prominent than before (polish). |
+| 31 | fixed | The depth material read `map false, alphaTest 0` on f302f163 in I, IV and XIII, and `map true, 0.4` here. Trema's slabs are now figure-shaped (`pairs/r-trema.jpg`). |
+| 30 | fixed | The violet band at 1600x900 is gone, and at 390x844 the floor reaches the canvas bottom. The mirrored skirt shows V-shaped crack reflections at the seam (polish, `pairs/r-fallen-seam.jpg`). |
+| 17 | fixed | Rim width in texels: Vegnagun 1.44, Bahamut 3.65 and Sin 2.15, against 4.32 on f302f163. The party and dense bosses stay at 4.32, so they are unchanged. The Vegnagun halo is gone (`pairs/r-veg.jpg`). Bahamut and other dark summons now read as darker silhouettes; the "black cut-out" half of the item stays open. |
+| 23 | fixed | Ch V bloom is now held to the hot light only, and Rikku's face reads. |
+| 06 | fixed in part | Reach at the target's recoil was 0.86, 0.69 and 0.86 of 1.4 on f302f163 (Ch VI, FFX-2). It is 1.4 every time on the branch, in Ch VI and in Ch I (FFX, including Seymour Flux's own swing). Recoil comes 64 to 118 ms after the apex in both builds; the branch now holds the pose until it. The critic's acceptance (apex to recoil 0 to 30 ms) is not met: the hit still lands where it did, and the attacker now holds a pose at full reach for about 0.1 s. Turn pacing is unchanged, but the attacker gets home about 80 ms later. REDUCE MOTION: hold 17 to 24 ms, no added wait. |
+| 38 | fixed | Synthetic KO of the whole party, then victory, in seven chapters: the fallen stay `down`/`ko` and only the revived member cheers. |
+
+**No regression elsewhere.** All 18 chapters were captured (idle and spell at 1600x900, Ch I and IV at 390x844) and compared with the 2026-09-30 capture (`pairs/*-pair.jpg`). Each difference falls into one of four groups:
+- **Explained by a fix.** The rim on low-density bosses and summons narrowed (17): Bahamut in IV and III, Vegnagun, Sin, Grothia, the Guado. Ch V bloom (23). Den grade (03). Figure-shaped shadows (31). Ch XI floor (30). Smaller KO paintings in the phone Ch I spell frame (05).
+- **Capture timing, not the branch.** HP values, ATB timing, which coach card is up, and which spell was first differ in V, VI, XI, XIII, XV and the Ch I and II spell frames. Repeated runs of the same build vary as much. A Ch I idle parameter dump on both builds matches, and its rim crops match too. The first Yojimbo spell looked warmer on f302f163, but f302f163 itself repeats it warm once and cool once.
+- **One consistent difference, at the same moment.** In Ch XVIII (Sin, the Face), the Fire frame on the branch is warmer and hazier: mean R 127 against 113, repeated twice on each build, with identical fx counters and clocks. The only render parameter that differs is Sin's rim width (2.15 against 4.32), so this comes from 17: the narrower rim unmasks more bright sky for the selective bloom (polish, disclosed).
+- **Nothing unexplained.** No new artefact appeared in any chapter.
+
+Frame times (rAF over 20 s, gpu, vsync 60):
+- **p50 and p95 match the 2026-09-30 table in every row.**
+- Ch I at 1600x900 needed three runs. Run 1 had one 1.5 s stall at idle and a 1.9 s one in the fight. Another agent's python process was holding the CPU at the time (279,000 CPU-seconds). Runs 2 and 3 were clean: idle had 0 frames over 33 ms; the fight had 2 over 33 ms, with a max of 83 to 100 ms (baseline: 3 over, max 99.9).
+- Ch IV is within the baseline numbers.
+- Phone at 4x: Ch I had 5 frames over 33 ms (baseline 12); Ch IV had 3 (baseline 4).
+
+**Other observations (not this branch).** On the Ch I seed-3 victory, "Mortiorchis USES MORTIBSORPTION" and the advisor card stay on screen through the victory frames. The engine logs `heal:mortiorchis` after Seymour Flux's KO.
