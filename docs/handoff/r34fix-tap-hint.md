@@ -132,3 +132,123 @@ Screenshot: `docs/screenshots/r34fix-tap-hint-3-x2-1600x900-solo-hint.png`.
 - The phone target card's red warning (`.stwarn`) is 13 px and the desktop slab is 6.8 stage
   px (about 17 at 1600x900, about 13.6 at 1280x960). Neither is in these PRs, so I left them.
 - The fb-0929 `guard` and `word` options are unchanged and still off.
+
+## Check (independent, 2026-10-01)
+
+I did not build this. I checked `r34fix-tap-hint` at `5bedfa52` against base `95e62e38`. Each
+base number below I reproduced myself on a `git archive` copy of `95e62e38`. Method: headless
+Playwright, `PYREFLY_BROWSER=gpu`, seed 1, real keys and taps, and the critic's own `sO3b.mjs`
+and `sA-firstrun.mjs`, plus my scripts `sTap.mjs`, `sX2solo.mjs` and `sX2tap2.mjs`. The dev
+servers were on ports 5411 (base) and 5410 (candidate), one at a time, and both are stopped.
+Evidence is in `D:/Tools/pyrefly-scratch/2026-10-01-rel34/chk-tap-hint/` (`ev-base*`, `ev-cand*`).
+
+**Verdict: one blocker.** The four fixes hold, but PR-0302 brings in a regression against base.
+
+### BLOCKER: on the FFX desktop, the guide panel now covers the first command row
+
+At 1280x720 and 1280x960 the larger in-guide hint makes the guide panel taller. Its MORE
+footer, and at TEXT SIZE 115 and 130 the panel itself, then lie over the first command row
+(TALK at Kimahri's Zombie menu, the first item row at the target step). Measured by
+`guideVsCmd` (overlap of `.sgd__stack` / `.sgd__panel` / `.sgd__more` with each `.ig-cmd`),
+Ch I, decision 3:
+
+| Size | Base | Candidate |
+|---|---|---|
+| 1280x720 | 0 | 3,649 px2: MORE over the top 14 px of TALK; a tap there lands on `sgd__more` |
+| 1280x960 | 0 | 3,649 px2: the same |
+| 1280x960 TEXT SIZE 115 | 0 | 7,374 px2: the panel reaches 43 px into TALK, and its centre point is `sgd__more` |
+| 1280x960 TEXT SIZE 130 | 0 | 9,490 px2: the TALK label is hidden under the guide |
+| 1600x900 TEXT SIZE 130 | 0 | 1,591 px2 (a 3-px sliver) |
+| 1920x1080 TEXT SIZE 130 | 0 | 350 px2 (a hairline) |
+| 1600x900, 2000x1012, FFX-2 1280x960 | 0 | 0 |
+
+Side by side: `ev-base2/o3-ffx-1280x960-ts130/10-menu-hint.png` (TALK clear) against
+`ev-cand2/o3-ffx-1280x960-ts130/10-menu-hint.png` (TALK under the panel). The critic's
+`maxCovered` stays 0 because it measures only the hint's own box against the rows, not the
+guide that holds it. The game case is FFX only (FFX-2 measured clear). This breaks the
+PR-0302 acceptance ("no overlap ... command rows") and the PR-0282 rule, and it is a
+regression against live in the changed area.
+
+### The four PRs, as I re-ran them
+
+- **PR-0264: fixed (FFX and FFX-2 by touch).**
+  - Base, 390x844, FFX: one tap on the dimmed Yuna took her from 750 HP to 0 (KO). There was
+    no forecast and no warning.
+  - Candidate, 390x844, FFX: the first tap aims her. The forecast "HI-POTION −1000 KO", the
+    `.stwarn` in the card and `stwarn-go` on "HI-POTION → YUNA" all show, and HP stays 750.
+    A second tap on the figure, or CONFIRM, uses the potion (HP 0, the engine's own result).
+    BACK leaves HP at 750.
+  - Pausing at the aimed step (tapping the pause chip) covers the hint. Resuming keeps the
+    aim and the HP.
+  - FFX-2, 390x844, Potion: the first tap on Rikku only aims her, and the second commits
+    (`yuna>rikku:Potion`).
+  - The desktop mouse is unchanged in both games: a click commits at once (FFX Hi-Potion on
+    Zombie Yuna: HP 0), as stated (askBailey 2).
+- **PR-0302: fixed for the hint itself.** Head / body px matched the builder at every size I
+  measured:
+  - 390x844, both games: 14.4 / 14.3.
+  - FFX TEXT SIZE 115 / 130: 16.6 / 16.4 and 18.9 / 18.4.
+  - 1280x960: 15.2 / 14.9.
+  - 1600x900: 14.2 / 15.2.
+  - 2000x1012: 14.9 / 17.1.
+  - 1280x720: 15.2 / 14.9.
+
+  The card fits its box everywhere. See the blocker above for the guide around it.
+- **PR-0303: fixed.**
+  - Base: 6,241 px2 over the tap line.
+  - Candidate: 0 over the tap line, CONFIRM, BACK, the target card, the forecast and the
+    warning, at TEXT SIZE 100, 115 and 130 and with REDUCE MOTION on.
+  - FFX-2 phone: 0. It keeps the under-card slot.
+  - The placement departure from O3 is still Bailey's call (askBailey 1).
+- **PR-0304: fixed.**
+  - Base, 1600x900: 2 of 9 sampled decisions, plus the ATTACK menu, had no visible hint.
+    Base, 2000x1012: 1 of 9.
+  - Candidate, sampled every 150 ms over about 2 minutes of play: at 1600x900, 1 of 244
+    open-decision samples had no hint (59 had the solo copy). At 2000x1012, 2 of 185. With
+    REDUCE MOTION on, 2 of 152.
+  - The gaps are single frames as the guide stack fades back in after the solo hides. I am
+    noting them, not filing them.
+  - The solo copy never met an acting figure's zone, the advisor, the command stack or the
+    boss bar. It touched the enemy-intent panel's left edge in 1 or 2 samples (up to 282
+    px2, under 3 px).
+  - It never shows with BATTLE HELP OFF.
+  - The pause covers it (`pause-with-solo.jpg`).
+
+### Neighbouring flows
+
+- **First-run O2 (FFX, 390x844 touch, fresh profile).** Steps 1 to 3 run as before.
+  - Ch I has two enemies, and ATTACK opens aimed at Mortiorchis, not Seymour Flux.
+  - A new player told "Tap ATTACK, then tap who it hits" who taps Seymour now only moves the
+    aim. A second tap attacks, where before one tap did.
+  - This matches the target hint ("Tap another enemy to switch"), but the first-run line
+    reads as one tap. It is an owner question (it extends askBailey 3).
+- **FFX-2 chain seams.** `sSeamStop.mjs ffx2-fallen-aeons`: 2 seams, 0 stalls, the fight
+  reached the results screen, and there were 0 console errors.
+- **BATTLE HELP OFF** (FFX and FFX-2 phone, FFX-2 desktop): no hint and no solo copy.
+- **REDUCE MOTION** (FFX phone, FFX-2 desktop): as with it off.
+- **TEXT SIZE 115 / 130:** see the tables. The only problem is the blocker.
+- **A transition note, not a regression.** On the FFX-2 phone, one sampler frame (about 200 ms)
+  had "Paine was cursed." over the newly docked hint before the line moved up.
+
+### Gates (re-run by me)
+
+- `npx tsc --noEmit`: clean.
+- Full `npx vitest run --testTimeout=60000`: 709 files passed (5 skipped), 10,619 tests passed.
+- `node tools/orphans.mjs`: 24 orphans, all old; `touchTapAim.ts` is reachable.
+- Rule 1: `git diff 95e62e38..5bedfa52 -- src/battle src/engine src/app` is empty, and
+  `SaveData.ts` and the settings schema are untouched.
+- Rule 7: `ffx/CommandMenu.ts` is 865 lines and `ffx2/CommandMenu.ts` 622, the same as base.
+  The new files and the touched files are under 400.
+- Rule 14: every commit names its game case.
+
+### Re-measured "noticed, not changed" items (still under 14 px, not in these PRs)
+
+- The FFX phone target card's `.stwarn` is 12.9 px.
+- The FFX desktop red slab is 13.6 px at 1280x960.
+
+### Also found (not product code)
+
+`critic/runner/lib/route-ui.mjs` `confirmTarget` on touch taps the wanted figure once and
+returns `confirmed: true`. After PR-0264 that tap only aims when the figure is not already
+aimed, so touch routes in the review runners will need a second tap or a CONFIRM tap. If they
+do not get one, a touch review can stall or misreport its picks.
