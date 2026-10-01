@@ -54,11 +54,12 @@ describe('ContactBeat', () => {
   });
 
   it('the hold is capped when no hit ever comes', async () => {
-    const ctx = { sleep: (ms: number) => wait(ms / 20) } as unknown as EventCtx; // a fast clock
+    let asked = 0;
+    // The cap is a ctx.sleep of CONTACT_HOLD_MAX_MS: a clock that has already run out settles the hold.
+    const ctx = { sleep: (ms: number) => ((asked = Math.max(asked, ms)), Promise.resolve()) } as unknown as EventCtx;
     const c = armContact(ctx, 'tidus');
     c.reached();
-    const t0 = Date.now();
     await c.hold;
-    expect(Date.now() - t0).toBeLessThan(CONTACT_HOLD_MAX_MS / 20 + 40);
+    expect(asked).toBe(CONTACT_HOLD_MAX_MS);
   });
 });
