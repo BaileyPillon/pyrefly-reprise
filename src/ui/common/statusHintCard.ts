@@ -19,7 +19,10 @@
  *
  * Round 18b. PR-0303 (FFX phone): under the target card only when it fits above the target step's
  * "Tap another ally to switch" line; otherwise the command menu's slot above the party chips, so it
- * never covers that line or CONFIRM.
+ * never covers that line or CONFIRM. PR-0304 (FFX-2 desktop, guide open): FFX-2's ATB plays actions
+ * while a menu is open, and A-15's fade (`ui/ffx2/actionFade.ts`) takes the guide's stack, and the
+ * hint in it, to opacity 0. While it is faded a solo copy stands in the hint's own stage slot (the
+ * guide-folded slot); the copy in the guide keeps its place, so the guide's fit never moves.
  */
 
 import type { BattleState, CombatantId, StatusId } from '../../battle/common/types.ts';
@@ -29,6 +32,8 @@ import { battleHelpOn } from '../coach/coachState.ts';
 
 /** Phone: the gap kept between the card and what it docks against, CSS px. */
 const PHONE_GAP = 6;
+/** FFX-2's A-15 fade class (`ui/ffx2/actionFade.ts` ACTION_FADE_CLASS; pinned by status-o3-hint-place.test.ts). */
+export const GUIDE_FADE_CLASS = 'ffx2-actfade';
 
 /** The hints a party carries now, most alarming status first, then party order. Pure. */
 export function partyHints(game: StatusGame, state: BattleState | null, partyIds?: readonly CombatantId[]): CureHint[] {
@@ -57,6 +62,8 @@ export function hintCardHtml(hints: readonly CureHint[], phone: boolean): string
 
 export class StatusHintCard {
   readonly el: HTMLElement;
+  /** PR-0304: the stand-in shown in the stage slot while the guide (and the hint in it) is faded. */
+  readonly solo: HTMLElement;
   private html = '';
 
   /** `help`: the player's BATTLE HELP switch (the save's `battleHelp`), read every frame. */
@@ -65,6 +72,10 @@ export class StatusHintCard {
     this.el.className = `sthint sthint--${game}`;
     this.el.dataset['role'] = 'status-hint';
     this.el.hidden = true;
+    this.solo = document.createElement('div');
+    this.solo.className = `sthint sthint--${game} sthint--solo`;
+    this.solo.dataset['role'] = 'status-hint-solo';
+    this.solo.hidden = true;
   }
 
   /**
@@ -91,6 +102,10 @@ export class StatusHintCard {
       if (this.el.parentElement !== stage) stage.appendChild(this.el);
       this.el.classList.remove('sthint--inguide');
     }
+    const solo = html !== '' && !!panel?.closest(`.${GUIDE_FADE_CLASS}`);
+    if (solo && this.solo.innerHTML !== html) this.solo.innerHTML = html;
+    if (solo && this.solo.parentElement !== stage) stage.appendChild(this.solo);
+    this.solo.hidden = !solo;
   }
 
   /**
@@ -120,5 +135,6 @@ export class StatusHintCard {
 
   dispose(): void {
     this.el.remove();
+    this.solo.remove();
   }
 }

@@ -13,7 +13,8 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
-import { StatusHintCard } from '../../src/ui/common/statusHintCard.ts';
+import { GUIDE_FADE_CLASS, StatusHintCard } from '../../src/ui/common/statusHintCard.ts';
+import { ACTION_FADE_CLASS } from '../../src/ui/ffx2/actionFade.ts';
 import { ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR } from '../../src/ui/ffx/hudAvoidSelectors.ts';
 import type { CureHint } from '../../src/ui/common/statusWords.ts';
 
@@ -132,5 +133,32 @@ describe('round 18b: the cure hint reads at 14 px, keeps off the tap line, and o
     card.el.getBoundingClientRect = () => rect(0, 10);
     card.update([HINT], true, host, null, true);
     expect(card.el.style.top).toBe('712px');
+  });
+
+  it('PR-0304: while the FFX-2 guide stack is faded, a solo copy stands in the stage slot; the guide copy stays put', () => {
+    expect(GUIDE_FADE_CLASS).toBe(ACTION_FADE_CLASS);
+    const stage = document.createElement('div');
+    const guide = document.createElement('div');
+    guide.className = 'sgd';
+    guide.innerHTML = '<div class="sgd__stack"><div class="sgd__panel"></div></div>';
+    stage.appendChild(guide);
+    document.body.appendChild(stage);
+    const card = new StatusHintCard('ffx2', () => true);
+    card.update([HINT], true, stage, guide, false);
+    expect(card.el.parentElement?.className).toBe('sgd__panel');
+    expect(card.solo.hidden).toBe(true);
+    guide.querySelector('.sgd__stack')!.classList.add(ACTION_FADE_CLASS);
+    card.update([HINT], true, stage, guide, false);
+    expect(card.el.parentElement?.className).toBe('sgd__panel');
+    expect(card.solo.hidden).toBe(false);
+    expect(card.solo.parentElement).toBe(stage);
+    expect(card.solo.textContent).toContain('Holy Water');
+    guide.querySelector('.sgd__stack')!.classList.remove(ACTION_FADE_CLASS);
+    card.update([HINT], true, stage, guide, false);
+    expect(card.solo.hidden).toBe(true);
+    // No decision open: neither shows.
+    guide.querySelector('.sgd__stack')!.classList.add(ACTION_FADE_CLASS);
+    card.update([HINT], false, stage, guide, false);
+    expect(card.solo.hidden).toBe(true);
   });
 });
