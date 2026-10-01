@@ -20,7 +20,7 @@ import type { App } from '../../src/app/App.ts';
 import { PauseScreen } from '../../src/app/screens/PauseScreen.ts';
 import { optionsColumns } from '../../src/app/screens/pause/panels.ts';
 import { CREDITS_CLOSE_ACTION, CREDITS_OPEN_CLASS, creditsHtml } from '../../src/app/screens/pause/creditsPanel.ts';
-import { CREDIT_GROUPS, FAN_NOTICE } from '../../src/app/credits/creditsData.ts';
+import { CREDIT_GROUPS, FAN_NOTICE, LICENCE_LINKS } from '../../src/app/credits/creditsData.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import type { BattleEngine } from '../../src/battle/common/types.ts';
 import { FFXEngine } from '../../src/battle/ffx/index.ts';
@@ -158,6 +158,7 @@ describe.each([
       expect(text).toContain(g.heading);
       for (const e of g.entries) expect(text).toContain(`${e.by} ${e.licence}`);
     }
+    expect(text).toContain(LICENCE_LINKS);
     expect(text).toContain(FAN_NOTICE);
     // Focus sits in the list, for a screen reader and a Tab key.
     expect(document.activeElement?.getAttribute('data-role')).toBe('credits-scroll');
@@ -217,6 +218,8 @@ describe('creditsHtml', () => {
     const html = creditsHtml();
     expect(html).toContain('pause__credit--req');
     expect(html).toContain('doi:10.5281/zenodo.20098848');
+    expect(html).toContain(LICENCE_LINKS);
+    expect(html.indexOf('pause__credits-licences')).toBeLessThan(html.indexOf('pause__credits-notice'));
     expect(html).not.toMatch(/<script/i);
   });
 });

@@ -19,7 +19,7 @@
  */
 
 import { escapeHtml } from '../../../ui/common/html.ts';
-import { CREDIT_GROUPS, FAN_NOTICE, type CreditEntry } from '../../credits/creditsData.ts';
+import { CREDIT_GROUPS, FAN_NOTICE, LICENCE_LINKS, type CreditEntry } from '../../credits/creditsData.ts';
 import '../../../ui/common/pause-credits.css';
 
 /** The root class that swaps the columns, objective and prompts for the panel. */
@@ -49,7 +49,8 @@ export function creditsHtml(): string {
     `<section class="pause__credits" role="dialog" aria-label="Credits">` +
     `<h3 class="pause__credits-h">Credits</h3>` +
     `<div class="pause__credits-scroll" data-role="credits-scroll" tabindex="-1">` +
-    `${groups}<p class="pause__credits-notice">${escapeHtml(FAN_NOTICE)}</p></div></section>` +
+    `${groups}<p class="pause__credit-note pause__credits-licences">${escapeHtml(LICENCE_LINKS)}</p>` +
+    `<p class="pause__credits-notice">${escapeHtml(FAN_NOTICE)}</p></div></section>` +
     `<div class="pause__back pause__credits-back" data-action="${CREDITS_CLOSE_ACTION}" role="button" tabindex="0">` +
     `<span class="pause__key">Esc</span>Back</div>` +
     `<div class="pause__hide pause__credits-hint" aria-hidden="true">Up / Down&nbsp;&nbsp;scroll</div>`

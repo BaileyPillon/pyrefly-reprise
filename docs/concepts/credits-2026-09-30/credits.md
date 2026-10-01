@@ -69,6 +69,21 @@ Verbatim required lines from `docs/audio/CREDITS.md` on `sfx-v2` (the three CC B
 `Bonfire ignition by Work With Sounds / Werstas (Wikimedia Commons) — CC BY 4.0`,
 `Glass breaking by Gravity Sound (Wikimedia Commons) — CC BY 4.0`, and `Impulse responses: Voxengo (Aleksey Vaneev)`.
 
+**Addition to the approved text (2026-09-30, after the independent check of audio-rel35).** Those verbatim lines give a
+name and a licence only. CC BY 4.0 section 3(a)(1) also asks a credit to say whether the work was modified, to link the
+material where reasonably practicable, and to give the licence's URI (CC BY 3.0 section 4 and CC Sampling Plus 1.0 ask
+the same). The in-game panel (`src/app/credits/creditsData.ts`) therefore prints, in each REQUIRED line's note:
+
+- the three recordings: `edited: cut, filtered and layered into our effects` (what `recipes.py` does to them: cut,
+  low-passed, mixed under other layers) and the Commons file page, for example
+  `commons.wikimedia.org/wiki/File:Nosferatu_thunderclap_-_Richard_Humphries.wav`;
+- Salamander: `played in our original music`; Sonatina: `samples processed and played in our original music and
+  effects`; DRSKit: `mixed into our original music`; Arvedi: `decoded to stereo, direct sound removed, used as the hall
+  of our original music`;
+
+and once, above the fan-work notice: `Licences: CC BY 4.0 creativecommons.org/licenses/by/4.0 · CC BY 3.0
+creativecommons.org/licenses/by/3.0 · CC Sampling Plus 1.0 creativecommons.org/licenses/sampling+/1.0`.
+
 Downloaded but **not used** by any shipped cue, so not credited: Kenney UI Audio and Digital Audio, rubberduck's
 creature and sci-fi packs, StarNinjas' sword pack beyond the one archive above, the Magic SFX Preview Pack (CC BY 3.0),
 eleven other Commons files. No retail game audio was used as a source or a reference.

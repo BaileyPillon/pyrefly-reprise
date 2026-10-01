@@ -147,6 +147,13 @@
   line-height: 1.35;
   letter-spacing: 0.02em;
   color: rgba(var(--pu-paper), 0.42);
+  /* The Commons file pages and licence URIs are long unbroken words: wrap them, never widen the page. */
+  overflow-wrap: anywhere;
+}
+
+.pause__credits-licences {
+  flex: none;
+  margin: clamp(10px, 1.6vh, 18px) 0 0;
 }
 
 /* As wide as its text (one line at 1600x900, as the frame draws it), hairline included. */

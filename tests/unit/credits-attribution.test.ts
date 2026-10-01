@@ -22,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { AUDIO_SOURCES, requiresAttribution } from '../../src/app/credits/audioSources.ts';
-import { ATTRIBUTION_REQUIRED_SOURCES, CREDIT_GROUPS, FAN_NOTICE } from '../../src/app/credits/creditsData.ts';
+import { ATTRIBUTION_REQUIRED_SOURCES, CREDIT_GROUPS, FAN_NOTICE, LICENCE_LINKS } from '../../src/app/credits/creditsData.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const CREDITS_MD = readFileSync(join(ROOT, 'docs', 'audio', 'CREDITS.md'), 'utf8');
@@ -138,5 +138,47 @@ describe('the credits panel data', () => {
     expect(CREDIT_GROUPS.map((g) => g.heading)).toEqual(['Music', 'Sound effects', 'Type', 'Art and tools']);
     const readme = readFileSync(join(ROOT, 'README.md'), 'utf8');
     expect(readme).toContain(FAN_NOTICE);
+  });
+});
+
+/**
+ * CC BY 4.0 section 3(a)(1) (and CC BY 3.0 section 4, CC Sampling Plus 1.0
+ * section 4) ask a credit for more than a name: whether the work was
+ * modified, a link to the material where one is reasonably practicable, and
+ * the licence's URI. The independent check of audio-rel35 found all three
+ * missing for the first CC BY 4.0 SFX to ship.
+ */
+describe('what the licences ask a REQUIRED line to carry', () => {
+  const required = entries.filter((e) => e.required);
+  const COMMONS_FILES: Record<string, string> = {
+    thunderclap: 'commons.wikimedia.org/wiki/File:Nosferatu_thunderclap_-_Richard_Humphries.wav',
+    bonfire: 'commons.wikimedia.org/wiki/File:WWS_Bonfireignition.ogg',
+    glass: 'commons.wikimedia.org/wiki/File:Glass_breaking_(Gravity_Sound).wav',
+  };
+
+  it.each(required.map((e) => [e.title, e] as const))('%s says it was modified or what it was used in', (_t, e) => {
+    expect(e.note ?? '', `${e.title}: no note saying the work was edited or used in our own work`).toMatch(
+      /edited|original music|decoded|processed/i,
+    );
+  });
+
+  it.each(Object.entries(COMMONS_FILES))('%s links its Commons file page, as CREDITS.md records it', (id, url) => {
+    const e = entries.find((x) => x.sources?.some((s) => s === id))!;
+    expect(e.note).toContain(url);
+    expect(e.note).toMatch(/edited: cut, filtered and layered/);
+    expect(CREDITS_MD).toContain(`https://${url}`);
+  });
+
+  it('gives the URI of every licence a REQUIRED line is under', () => {
+    const uri: Record<string, string> = {
+      'cc by 4.0': 'creativecommons.org/licenses/by/4.0',
+      'cc by 3.0': 'creativecommons.org/licenses/by/3.0',
+      'cc sampling plus 1.0': 'creativecommons.org/licenses/sampling+/1.0',
+    };
+    for (const e of required) {
+      const want = uri[norm(e.licence)];
+      expect(want, `${e.title}: no URI known for "${e.licence}"`).toBeDefined();
+      expect(LICENCE_LINKS).toContain(want!);
+    }
   });
 });
