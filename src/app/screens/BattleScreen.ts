@@ -108,7 +108,8 @@ export interface BattleScreenResult {
   withdrawLine?: string;
   /** FF7: the party on their feet at the end; C1's EXP goes only to them (research/ff7-battle-core.md §11). */
   standing?: CombatantId[];
-  restartRequested?: true; // PR-0283: ended by RESTART ENCOUNTER; the run that owns the fight plays it again (`runWithRestarts`)
+  restartRequested?: true; // PR-0283 RESTART ENCOUNTER: the owning run plays it again (`runWithRestarts`)
+  quitToTitle?: true; // r34fix-quit QUIT TO TITLE: the owning run goes to the title once (`GameFlow.runChapter`)
 }
 
 export class BattleScreen extends Screen {
@@ -623,23 +624,22 @@ export class BattleScreen extends Screen {
    * `goto()`: the flow's navigation would land a tick later over its own. It
    * aborts, which makes the flow unwind, and waits for the unwind to finish
    * before taking over. CHAPTER SELECT needs nothing more: that is the flow's
-   * own follow-up. RESTART inside a run is the run's job (PR-0283, both games):
-   * the result says so and `runWithRestarts` plays the chapter again in place;
-   * only a fight no run owns (a direct `goto('battle')`) starts one here.
+   * own follow-up. RESTART and QUIT TO TITLE inside a run are the run's job
+   * (PR-0283, r34fix-quit, both games): the result says so; a fight no run owns acts here.
    */
   private requestExit(intent: 'restart' | 'chapter-select' | 'title'): void {
     if (this.exitIntent) return;
     this.exitIntent = intent;
     const app = this.app;
     const chapterId = this.opts.chapter.id;
-    const runRestarts = intent === 'restart' && flowOwnsRun(app.flow);
+    const [runRestarts, runQuits] = [intent === 'restart' && flowOwnsRun(app.flow), intent === 'title' && flowOwnsRun(app.flow)];
 
     void (async () => {
       await this.closePause();
       this.presenter?.abort();
       this.setPresenterPaused(false);
-      this.finish({ kind: 'aborted' }, runRestarts);
-      if (runRestarts) return;
+      this.finish({ kind: 'aborted' }, runRestarts, runQuits);
+      if (runRestarts || runQuits) return;
       // Bounded, so a flow that never settles costs one dropped menu action rather than a screen that never returns.
       for (let i = 0; i < 240 && app.current === this; i++) await app.nextFrame();
       if (intent === 'restart') void app.runChapter(chapterId, { skipPrep: true, skipCutscenes: true, restart: true });
@@ -647,7 +647,7 @@ export class BattleScreen extends Screen {
     })();
   }
 
-  private finish(outcome: BattleOutcome, restartRequested = false): void {
+  private finish(outcome: BattleOutcome, restartRequested = false, quitToTitle = false): void {
     const resolve = this.finishedResolve;
     if (!resolve) return;
     this.finishedResolve = null;
@@ -662,7 +662,7 @@ export class BattleScreen extends Screen {
       ...(this.checkpoint ? { checkpoint: this.checkpoint } : {}),
       ...(withdrawLine ? { withdrawLine } : {}),
       ...ff7Standing(this.engine?.state()),
-      ...(restartRequested ? { restartRequested: true as const } : {}),
+      ...(restartRequested ? { restartRequested: true as const } : {}), ...(quitToTitle ? { quitToTitle: true as const } : {}),
     });
   }
 

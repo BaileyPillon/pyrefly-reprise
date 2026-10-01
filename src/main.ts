@@ -80,8 +80,8 @@ async function boot(): Promise<void> {
         await app.goto('title');
         return;
       }
-      await app.runChapter(id, {});
-      await app.goto('chapter-select');
+      const ran = await app.runChapter(id, {});
+      if (ran?.quitToTitle !== true) await app.goto('chapter-select'); // QUIT TO TITLE: the run already went (r34fix-quit)
     });
     return screen;
   });

@@ -191,3 +191,40 @@ Verdict: **both fixes hold, no regression found, no blocker.**
 
 **Minor:** `114c5b01` does not build on its own (disclosed by the builder). Only the pair with `2b46fab8` builds, which
 makes a bisect across it awkward. Nothing to change before the merge.
+
+## r34fix-quit: QUIT TO TITLE left two titles mounted (found by the check above; both games)
+
+Branch `r34fix-quit`, cut from `r34fix-restart`. Game case: **both** (shared pause and flow plumbing, CHK-020).
+
+**Cause (traced):** the same race as PR-0283. With a run owning the fight, `BattleScreen.requestExit('title')` aborted the
+fight and waited for the flow to unwind, and the flow put the board up (`chapterSelect`), so the pause then called
+`goto('title')` over the board. The board's teardown answered "no chapter", and the flow called `goto('title')` too. Two
+navigations to the title, from two owners: stack `["title","title"]`; after Enter, `["title","chapter-select"]`.
+
+**Fix:** a fight ended by QUIT TO TITLE inside a run now sets `quitToTitle` on its `BattleScreenResult` (as
+`restartRequested` does) and does not navigate itself. `runWithRestarts` (`pause/restartCarry.ts`) takes an optional
+`toTitle`, and `GameFlow.runChapter` passes it: the run that owns the stack makes the one `goto('title')`, with
+nothing put up in between, and marks the flow handed over so the title loop stands down. `main.ts`'s board handler
+skips its follow-up `goto('chapter-select')` when the run already went. A fight no run owns (a direct `goto('battle')`)
+still takes the old path in the screen. RESTART ENCOUNTER and CHAPTER SELECT are untouched. `BattleScreen.ts` stays 920
+lines and `BattleScreenFlow.ts` 525 (no growth).
+
+**Before (live code in the main tree, port 5531):** Ch IV by click at 1600x900, no restart: after QUIT TO TITLE stack
+`["title","title"]`, 2 visible PRESS ENTER; after Enter `["title","chapter-select"]`; starting a chapter
+`["title","battle"]`, PASS false (`quit/ev/restart-ffx2-bahamut-click-1600x900-before3`).
+
+**After**, real input, seed 1, headless Playwright on port 5530 (stopped), `quit/chk.mjs ... --then=title`
+(`D:/Tools/pyrefly-scratch/2026-10-01-rel34/quit/ev/`): after QUIT TO TITLE stack and roots `["title"]`, 1 PRESS ENTER,
+still so 4 s later; Enter gives `["chapter-select"]` with 0 title text; starting the chapter gives `["battle"]` only.
+All PASS, 0 page errors:
+- Ch IV (FFX-2) click 1600x900: without a restart (q1) and after a restart (q2).
+- Ch IV taps at 390x844: without (q3) and after a restart (q4).
+- Ch I (FFX) keys 1600x900: without (q5) and after a restart (q6); taps at 390x844 (q7).
+- RESTART ENCOUNTER (PR-0283) still correct: Ch I keys (q8) and Ch IV click (q9), `--then=restart`.
+
+**Tests:** `tests/unit/pause-restart-owner.test.ts` gains 6 tests (FFX `seymour-flux`, FFX-2 `ffx2-bahamut`): from the title's
+flow loop exactly one `goto('title')` and no board between; after a restart first; from a run `main.ts` started
+(`quitToTitle` on the result, one navigation).
+
+**Gates:** `npx tsc --noEmit` clean; the pause, flow and restart vitest files (11 files, 193 tests) pass; full suite
+result 710 files passed, 5 skipped, 10625 tests passed; `node tools/orphans.mjs` 24 orphans, all old.
