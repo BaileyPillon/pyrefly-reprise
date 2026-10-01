@@ -265,8 +265,8 @@ export function timerMsFor(def: AbilityDef): number {
   switch (def.minigame) {
     case 'tidus-timing':
       return TIMER_MS[def.id] ?? 3000;
-    case 'auron-sequence':
-      return 4000;
+    case 'auron-sequence': // Tornado 3 s [estimate, Bailey D-312: GF-KB, XU, AGS; input-rules note D1], the rest 4 s
+      return def.id === 'tornado' ? 3000 : 4000;
     case 'lulu-fury':
       return 4000;
     case 'wakka-reels':

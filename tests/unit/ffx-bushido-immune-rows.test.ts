@@ -17,6 +17,7 @@ import { describe, expect, it } from 'vitest';
 import type { AbilityDef, BattleEvent, Command, Decision, EnemyDef, MinigameResult, StatusId } from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { immuneToRider, rowFromExtra } from '../../src/battle/ffx/overdriveShape.ts';
+import { minigameParams, timerMsFor } from '../../src/battle/ffx/overdrive.ts';
 import { ABILITIES as AURON } from '../../src/data/ffx/abilities/overdrive-auron.ts';
 import { seymourAnimaMacalaniaGroup } from '../../src/data/ffx/enemies/seymour-anima-macalania.ts';
 import { attackAbility, enemy, fighter, member, party, setup } from './ffx-fixtures.test.ts';
@@ -164,6 +165,17 @@ describe('immuneToRider and the Immune row itself', () => {
     expect(rowFromExtra(AURON['dragon-fang']!, 'immune')).toMatchObject({ power: 19, statusEffects: [], canMiss: false });
     expect(rowFromExtra(AURON['dragon-fang']!, 'immune')!.flags).not.toContain('weak-delay');
     expect(rowFromExtra(AURON['banishing-blade']!, 'immune')).toMatchObject({ power: 30, statusEffects: [], canMiss: false });
+  });
+});
+
+describe('Tornado timer 3 s, the other three 4 s [estimate, Bailey D-312]', () => {
+  it('timerMsFor and the published minigame params', () => {
+    const user = fighter({ id: 'auron' });
+    for (const def of Object.values(AURON)) {
+      const want = def.id === 'tornado' ? 3000 : 4000;
+      expect(timerMsFor(def)).toBe(want);
+      expect(minigameParams({} as never, def, user)['timerMs']).toBe(want);
+    }
   });
 });
 
