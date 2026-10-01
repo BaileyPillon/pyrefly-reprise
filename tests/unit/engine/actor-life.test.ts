@@ -308,7 +308,7 @@ describe('nextLifeState', () => {
   it('passes every state through untouched from anywhere but the floor', () => {
     for (const from of states) {
       for (const to of states) {
-        if (from === 'down' && to === 'hurt') continue;
+        if (from === 'down' && (to === 'hurt' || to === 'victory')) continue;
         expect(nextLifeState(from, to)).toBe(to);
       }
     }
@@ -318,8 +318,13 @@ describe('nextLifeState', () => {
     expect(nextLifeState('down', 'hurt')).toBe('down');
   });
 
+  // VP-1001-38 (both games): a KO'd Auron stood up and cheered in Chapter I's victory frame.
+  it('will not let a body on the ground cheer at the victory', () => {
+    expect(nextLifeState('down', 'victory')).toBe('down');
+  });
+
   it('still lets a body on the ground be revived', () => {
-    for (const to of ['idle', 'ready', 'act', 'guard', 'victory'] as LifeState[]) {
+    for (const to of ['idle', 'ready', 'act', 'guard'] as LifeState[]) {
       expect(nextLifeState('down', to)).toBe(to);
     }
   });
@@ -435,7 +440,8 @@ describe('ActorLife', () => {
   });
 
   it('reaches every state it is asked for', () => {
-    const states: LifeState[] = ['idle', 'ready', 'act', 'guard', 'hurt', 'down', 'victory'];
+    // Down last: a body on the ground takes neither a flinch nor a cheer (VP-1001-38).
+    const states: LifeState[] = ['idle', 'ready', 'act', 'guard', 'hurt', 'victory', 'down'];
     const life = new ActorLife();
     for (const s of states) {
       life.set(s);
