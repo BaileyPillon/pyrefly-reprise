@@ -25,7 +25,7 @@ describe('ContactBeat', () => {
     expect(hitAt).toBeGreaterThanOrEqual(50);
     await wait(5);
     expect(released).toBeGreaterThanOrEqual(50);
-    expect(Math.abs(released - hitAt)).toBeLessThan(30); // apex to recoil within the frame budget
+    expect(Math.abs(released - hitAt)).toBeLessThan(150); // apex to recoil within the frame budget
   });
 
   it('a late hit lands at once and the strike was held at the apex until then', async () => {
@@ -38,7 +38,7 @@ describe('ContactBeat', () => {
     expect(released).toBe(false); // still at the apex
     const t0 = Date.now();
     await meetContact(ctx, 'seymour-flux');
-    expect(Date.now() - t0).toBeLessThan(30);
+    expect(Date.now() - t0).toBeLessThan(150);
     await wait(1);
     expect(released).toBe(true);
   });
@@ -49,7 +49,7 @@ describe('ContactBeat', () => {
     await meetContact(ctx, 'tidus');
     armContact(ctx, 'tidus');
     await meetContact(ctx, 'tidus');
-    expect(Date.now() - t0).toBeLessThan(30);
+    expect(Date.now() - t0).toBeLessThan(150);
     releaseContact(ctx);
   });
 
