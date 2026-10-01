@@ -591,9 +591,23 @@ async function main() {
   if (EXTRA_MESSAGE) commitMessage += `: ${EXTRA_MESSAGE}`;
   const commitRes = run('git', ['commit', '-m', commitMessage], { cwd: DIST });
   if (commitRes.status !== 0) fail('git commit in dist-release failed — see output above');
-  const ghPagesCommit = capture('git', ['rev-parse', 'HEAD'], { cwd: DIST });
+  let ghPagesCommit = capture('git', ['rev-parse', 'HEAD'], { cwd: DIST });
 
-  const pushRes = run('git', ['push', '-f', REPO_URL, 'gh-pages:gh-pages'], { cwd: DIST });
+  let pushRes = run('git', ['push', '-f', REPO_URL, 'gh-pages:gh-pages'], { cwd: DIST });
+  if (pushRes.status !== 0) {
+    // A cold push of the whole site (~570 MB) timed out with HTTP 408 three times on 2026-10-01.
+    // Fallback: the same tree as a child of the live gh-pages commit, so git sends only the
+    // changed files. gh-pages then keeps one extra commit until the next cold push succeeds.
+    log('full push failed; retrying as a child of the live gh-pages commit (only changed files are sent)');
+    const seedRes = run('git', ['fetch', '--depth=1', '--no-tags', REPO_URL, 'gh-pages:refs/remotes/live/gh-pages'], { cwd: DIST });
+    if (seedRes.status === 0) {
+      const tree = capture('git', ['rev-parse', 'HEAD^{tree}'], { cwd: DIST });
+      const child = capture('git', ['commit-tree', tree, '-p', 'refs/remotes/live/gh-pages', '-m', commitMessage], { cwd: DIST });
+      run('git', ['update-ref', 'refs/heads/gh-pages', child], { cwd: DIST });
+      ghPagesCommit = child;
+      pushRes = run('git', ['push', REPO_URL, 'gh-pages:gh-pages'], { cwd: DIST });
+    }
+  }
   if (pushRes.status !== 0) fail('git push to gh-pages failed — see output above');
 
   // ---- 4. Kick a Pages build and poll it ------------------------------------
