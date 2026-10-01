@@ -1535,6 +1535,146 @@
     "approved": "2026-09-29",
     "by": "driver (D-279, delegated)"
    }
+  },
+  "bailey:2026-09-30-poses": {
+   "words": "all your recommendations, godspeed",
+   "decision": "D-298, D-301",
+   "note": "Bailey, 2026-09-30 ~09:40 EDT, verbatim \"all your recommendations, godspeed\" (D-298 in docs/target/decisions.json), answering the morning art page https://claude.ai/artifact/T1dFHRNCsShJjmCPh7wPpm: the agents' recommended candidates, approved as a set. Installed: Sleep and Low-HP (\"critical\") paintings, FFX Yuna sleep c56 + critical c3, Auron sleep c20 + critical c4 (floor patch under the boots and the white backdrop wedge between the scabbard and the rear leg removed: pixels made transparent, no repaint), Wakka 45 + 6, Lulu 62 + 42, Rikku 12 + 10, Tidus (pilot) c3 + c3; FFX-2 Yuna Gunner 31 + 6, Paine Warrior 36 + 16, Rikku Thief (pilot) c3 + c1; FFX-2 Paine Songstress attack A1-attack-19 and hurt H1-hurt-121; FFX-2 Bahamut Mega Flare splash B10-flare-55-core (characters/ffx2-bahamut/splash.png, splash only). Kimahri held (D-299). Sources: D:/Tools/pyrefly-art-backup/candidates/2026-09-30-overnight/ and D:/Tools/pyrefly-scratch/picks-0930/poses/cand/ (copied into the package); every PNG is the candidate byte for byte except Auron critical. Sidecar scales re-measured against each installed idle (head match inside the stature gate; package work/scales.json). Every slot was empty; nothing replaced. Package and backup: D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/. Game: Sleep/Low-HP both games per character; Songstress and Bahamut FFX-2 only. DAY SET, D-301: Bailey, 2026-09-30 ~13:00 EDT, verbatim \"all your recommendations, godspeed\", answering the day art page https://claude.ai/artifact/JqXgAx8rXaHdLWxES73Fmt: Seymour at Macalania kneel cand-6 and fall/KO cand-5 (FFX, Chapter VII: the post scene's kneel and fall, and his battle KO), Isaaru kneel cand-9 (FFX, Chapter XIV post scene), Shuyin kneel cand-7 (FFX-2, Chapter V post scene), Kimahri sleep cand-6 and low-HP (critical) cand-4 (FFX, the changed method, answering D-299). Source: D:/Tools/pyrefly-art-backup/candidates/2026-09-30-day/; every day PNG is the candidate byte for byte; scales measured against each installed idle (package work/day/scales_day.json). Every slot was empty; nothing replaced.",
+   "public/art/characters/auron/critical.png": {
+    "sha256": "e03472b268104a5b59581a3eb9c886c80aac10c8223bd851cd51f21f5d2b2311",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/auron/sleep.png": {
+    "sha256": "4a8805c65b4230fe5bc91ad31f4012ac44090af3842c140a0e301d78b5727a66",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/ffx2-bahamut/splash.png": {
+    "sha256": "4354682273382192b85841348723e8a31d00749a6df7425e2f076d63718fd660",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/isaaru/kneel.png": {
+    "sha256": "48db5d9874ab49a856fb3ddf8537574879c5bccf2d54d3bf05c668ae12d98dc8",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/kimahri/critical.png": {
+    "sha256": "068fe6e49701969cf781378e45251bbe2825ae4df571e0413921fa9a8d632a76",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/kimahri/sleep.png": {
+    "sha256": "9b0f4ad0c840b1ef8aef806270a162454b9d8f97122a37736537db8c59ac07e0",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/lulu/critical.png": {
+    "sha256": "586b11ffab4339dab3d140a2fbeabbadb894ed08cf7c4472df9684c7ebf8de27",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/lulu/sleep.png": {
+    "sha256": "83787dad6e8f1446f1d66a6b970ed6b1b4915b874fe26b15f2377cfca7e0674a",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/paine-songstress/attack.png": {
+    "sha256": "99ddf3db584c9a9891ea55594082ba4056d7d966048c9891535b68da3c685eb4",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/paine-songstress/hurt.png": {
+    "sha256": "c8fcb8f5370fe77aea90b355e81df364366078acbcd3be4cd997365324d07ff8",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/paine-warrior/critical.png": {
+    "sha256": "a6f76d9a71035d14cd8c164a00af519290e5ce2b6a48db733178f0e8491948a4",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/paine-warrior/sleep.png": {
+    "sha256": "ca8053448ed3cd6d102d0b1e1fa962ce842061e18a13fdf6cfa167a0f6ce1c33",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/rikku/critical.png": {
+    "sha256": "429211ffa043e1c46596da46c9b0871455b3cd90b4e39ed53963c6b0e0be3eeb",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/rikku/sleep.png": {
+    "sha256": "cab78a3de17182c18bbe1a1226def5ddc6d60666d4e96b9ce653a7131128ccb7",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/rikku-thief/critical.png": {
+    "sha256": "0567783ac69ffb61e85fe2865da06326bc2888e3c676bfe2b00faf9c11a49565",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/rikku-thief/sleep.png": {
+    "sha256": "1134d988e2a2bec79bae5cd82fdfe5b30526239ae175f8351e78942410ee7f06",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/seymour-macalania/kneel.png": {
+    "sha256": "ea12023a8f7a2ca0be9cb1d74b21b3712fa45c14fdfd6a689d8a9e0999ed45ca",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/seymour-macalania/ko.png": {
+    "sha256": "46a76e254c173092cf214fd4d608e525027641e7c95b5f78c2e3d36afa9c5e37",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/shuyin/kneel.png": {
+    "sha256": "f6e10565a1ed1028365e2a07aa84acb3b15f096eba39fbc9b838977abe3fec4f",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/tidus/critical.png": {
+    "sha256": "f4d9657607e38caa09ad5b2a226dca92c6cd2d0f9107c292fc86442e3085a850",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/tidus/sleep.png": {
+    "sha256": "d55e3997d09afbdebf4ba577e149312fb939fc72d53c11ff793f56e029bc4fee",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/wakka/critical.png": {
+    "sha256": "7e7ee5374aba2f36b61384d49554c59f39776724f5fc80d620f0b15c0b17abb2",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/wakka/sleep.png": {
+    "sha256": "3838d88727027fed630239506db8c953c6a736f0dedafc79ec872fde99f0e042",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/yuna/critical.png": {
+    "sha256": "4f74ca07ca559d4833698f9aafdef5bb51d039d9aef4c96f6d62f2f2ed7f9365",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/yuna/sleep.png": {
+    "sha256": "68b429abe4e1d3a08ab64c3944f7ab0d534e7f2766126ef434c2008b6e19d34c",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/yuna-gunner/critical.png": {
+    "sha256": "bf0f6a115f00f6f9da22697d7b328d6af3ef5076b49d53298c19256ca0c4fdc6",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   },
+   "public/art/characters/yuna-gunner/sleep.png": {
+    "sha256": "caae8448253b964c849e02c1a91872e54a7cee5c671c964efda4d029285912b1",
+    "mtime": "2026-10-01T07:54:12.534Z",
+    "approved": "2026-09-30"
+   }
   }
  }
 }
