@@ -64,6 +64,16 @@ export function targetsUp(page) {
 
 export { slugOf };
 
+/** Is the target step still up (a cursor selection, or reticles in the DOM)? */
+const targetStepUp = async (page) => { const t = await targetsUp(page); return t.n > 0 || t.selecting; };
+
+/** Touch: tap the phone HUD's Confirm control when one is visible. Returns whether a tap was made. */
+async function tapConfirmBar(page, input) {
+  const go = page.locator('.phud-target__go').filter({ visible: true }).first();
+  if (!(await go.count())) return false;
+  return input.tap(go, 'confirm:bar');
+}
+
 /** The live formation as the resolver needs it: enemy ids in roster order and each one's display name. */
 function readRoster(page) {
   return page.evaluate(() => {
@@ -143,9 +153,27 @@ export function makeChooser(page, input, contexts) {
       const pick = (wanted && ids.find((x) => x.id === wanted)) || ids.find((x) => !x.dim) || ids[0];
       if (pick) {
         const mismatch = Boolean(wanted) && pick.id !== wanted;
-        if (await input.tap(page.locator(`[data-target-id="${pick.id}"]`).first(), `target:${pick.id}`)) return { confirmed: true, target: pick.id, wanted, mismatch, ...(!wanted && !group && ids.length >= 2 ? { unresolved: name ?? null } : {}) };
-        await input.press('Enter');
-        return { confirmed: true, target: 'key fallback (tap blocked)', wanted };
+        const extra = !wanted && !group && ids.length >= 2 ? { unresolved: name ?? null } : {};
+        const loc = page.locator(`[data-target-id="${pick.id}"]`).first();
+        if (!(await input.tap(loc, `target:${pick.id}`))) {
+          await input.press('Enter');
+          return { confirmed: true, target: 'key fallback (tap blocked)', wanted };
+        }
+        // PR-0264: a tap on a figure that is not aimed only AIMS it; a second tap on it, or CONFIRM, commits.
+        // Read the target step back instead of assuming the first tap committed.
+        await page.waitForTimeout(350);
+        let taps = 1;
+        if (await targetStepUp(page)) {
+          const aimed = await activeTargetId(page);
+          let second = false;
+          if (aimed === pick.id) second = await input.tap(loc, `target:${pick.id} (commit)`);
+          if (!second) second = aimed === pick.id && (await tapConfirmBar(page, input)); // the figure tap was blocked: CONFIRM commits the aimed one
+          if (!second) return { confirmed: false, target: aimed, wanted, mismatch: true, taps, reason: 'the tap did not aim the wanted figure, or the commit tap was blocked', ...extra };
+          taps = 2;
+          await page.waitForTimeout(350);
+          if (await targetStepUp(page)) return { confirmed: false, target: pick.id, wanted, mismatch, taps, reason: 'the target step stayed up after the commit tap', ...extra };
+        }
+        return { confirmed: true, target: pick.id, wanted, mismatch, taps, ...extra };
       }
       await input.press('Enter'); // a group cast has no reticle to tap
       return { confirmed: true, target: 'group' };
