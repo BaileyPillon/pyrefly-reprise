@@ -918,3 +918,93 @@ page errors.
 Evidence: `D:/Tools/pyrefly-scratch/2026-10-01-rel34/od5/check/`. It holds `immunity-table.txt`,
 `crosstree.txt`, `golden-crosstree.txt`, `shipped-per-target.txt`, `full-vitest.txt`, `realkey/` (JSON
 and JPEGs), the `*.probe.ts` probes, `realkey-check.mjs` and the `old/` source copy.
+
+## od6 (2026-10-01): a failed Bushido carries no rider (FFX only)
+
+Branch `r34fix-od6`, cut from `9f8e47e0` (r34fix-od5's tip) in `D:/pyrefly-aeon-hp`. Not pushed, not
+deployed. Fixes od5's disclosed major 1 and odfail's still-open item 3 (the rider half; the crit half is
+answered by Q3b and needs no change). Sourced defect, so no pick was needed.
+
+**The source.** `research/ffx-overdrive-input-rules-2026-09-30.md` Q3a, `[verified: 5 sources]`: GF-PF
+"Effects only are applied when sequence is entered correctly", GF-HD, GF-KB, AF, AGS, and the decoded
+TRK fail rows 266 to 269 and 235 to 238, which carry no status and no Delay/Eject flag while the success
+rows 100 to 102 do. `research/ffx-combat-core.md` §5.3 and §5.5 agree (the "(Fail)" rows have no rider).
+Q3b: every fail row keeps the can-crit bit (data + 1 source, our estimate), so crit is unchanged.
+
+**The fix.** `src/battle/ffx/overdriveShape.ts` `rowFromExtra`: the Fail row now drops the rider the same
+way the Immune row already did: `statusEffects: []` and no `weak-delay`/`strong-delay` flag. Power, hits,
+rank, `canMiss: false` (hard rule 5), `crit-eligible` and every other field stay the success record's.
+The success record is untouched, so a clean Bushido still lands its rider. The file is 169 lines. No data
+file changed. Swordplay's records have no rider, so Tidus is unaffected.
+
+**RNG.** No draw is added or removed inside the Overdrive. Every Bushido rider status is chance 254,
+which never draws (`rollStatus`), and Delay never draws. A probe that counted `SeededRng.next` calls
+inside the action confirms it: 2 draws (crit, damage) per target before and after. The only draw-count
+change in the probe is *after* the action: on the Chapter VII board a Guado Guardian that is no longer
+Ejected is still on the field and answers with its `guardian-auto-potion` counter, which rolls its own
+damage variance (one extra draw, after `action-end`). That is the fix's intended consequence, not a
+change of draw order in the engine.
+
+**Before/after, engine** (the real `setupForChapter` board, first link, seed 1, Auron's gauge full, a
+failed input `{success:false, 2 of 7, 0 ms}`, one run per target; Dragon Fang hits all foes in one run;
+"CTB" = the target's counter right after the action, which is where Delay shows):
+
+| Ch | Overdrive (failed) | Target | Damage | Before | After |
+|---|---|---|---|---|---|
+| VII | Shooting Star | Guado Guardian A / B | 1362 = | **Eject** lands, the Guardian leaves | no Eject; it stays and counters |
+| VII | Banishing Blade | Guado Guardian A / B | 1588 = | all four Breaks land | no Break |
+| VII | Banishing Blade | Seymour (Macalania) | 1588 = | Magic, Armor, Mental Break land | no Break |
+| VII | Dragon Fang | Guardian A / Seymour / Guardian B | 908 / 900 / 982 = | weak Delay: A CTB 2 → 21, B 38 → 57 (Seymour Delay-immune) | no Delay: 2 → 2, 38 → 38 |
+| III | Dragon Fang | Yu Pagoda L / R | 2246 / 2318 = | Delay: 0 → 10, 19 → 29 | none |
+| VIII | Dragon Fang | Evrae | 863 = | Delay: 20 → 35 | none |
+| VIII | Banishing Blade | Evrae | 1511 = | Power and Mental Break land | none |
+| X | Dragon Fang | Mortibody | 1378 = | Delay: 22 → 35 | none |
+| X | Banishing Blade | Natus / Mortibody | 3403 / 2336 = | Power Break / Power and Armor Break | none |
+| XII | Dragon Fang | Mortiphasm 1 to 4 | 0 = | Delay: +42 each | none |
+
+Every damage number is identical before and after (the Fail row's DmgCon was already wired in odfail).
+A **successful** input is byte-identical on every board in every shipped FFX chapter (I, II, III, VII,
+VIII, IX, X, XII): the same damage, statuses and CTB, rider included (for example Shooting Star still
+Ejects Guardian A, Banishing Blade still lands all four Breaks on it, Dragon Fang still Delays Guardian A
+2 → 21). "Before" ran the same probe on `git archive 9f8e47e0 src` beside the branch.
+
+**Goldens.** Nothing moved, so nothing was re-pinned: `ffx-engine-golden.test.ts` is 18/18 on the old
+values. Every FFX chapter (the nine pinned plus the unpinned `sin-fins-core` and `sin-face`), seeds 1
+and 7, was replayed on both trees: all 22 run digests are identical. The line fires 11 Bushido in all
+of them (Shooting Star on Yunalesca, Possessed Valefor and BFA; Dragon Fang on Genais + Sin's Core and
+Overdrive Sin). Every auto-rolled *failure* among them hits a target that is already immune to the rider
+(Overdrive Sin is Delay-immune, for example), so dropping the rider changes nothing there; no golden line
+fires a Bushido in Chapters VII, VIII or X, where the rider lands.
+
+**Tests.** `tests/unit/ffx-bushido-fail-no-rider.test.ts` (new, 15 tests incl. the fixture file's own
+check):
+
+- Dragon Fang: a fail pushes no foe back (CTB as for the record with the Delay removed); a success still
+  Delays both foes.
+- Shooting Star: a fail lands no Eject, a success does; the same on Guado Guardian A's shipped data.
+- Banishing Blade: a fail lands no Break, a success lands all four; Seymour (Macalania) shipped data: a
+  fail lands none of the three Breaks a success lands.
+- All four Bushido, seeds 1 and 7: the failed log equals the failed log of the same record with its rider
+  removed by hand (no new draw, no other change).
+- The success records still carry their riders.
+- `rowFromExtra(def, 'fail')` for each Bushido: the §5.5 Fail row (DF 16, SS 24, BB 28, Tornado 15, rank
+  6), no status, no Delay, `crit-eligible` kept, `canMiss: false`.
+
+Against `9f8e47e0`'s `overdriveShape.ts`, 10 of the 15 fail (the Dragon Fang log test passes on the old
+code because Delay emits no event; the CTB test catches it). The existing od5 and odfail tests pass
+unchanged.
+
+**Gates.** `npx tsc --noEmit` clean. Full `npx vitest run --testTimeout=60000`: 700 files passed, 5
+skipped; 10 577 tests passed, 40 skipped, 1 todo; exit 0. `node tools/orphans.mjs`: 24 orphans, the same
+as od5.
+
+**Still open, not changed here:** the move advisor and the estimate path still do not model the Fail
+and Immune rows (od5 Check minor 4).
+
+Scratch: `D:/Tools/pyrefly-scratch/2026-10-01-rel34/od6/` (`fail-before/after.txt`,
+`success-before/after.txt`, `drawdump.txt`, `golden-crosstree.txt`, `full-vitest.txt`, `orphans.txt`);
+the probes and the `before/` source copy are parked in `F:/pyrefly-parked/2026-10-01/od6/`. No server
+was started.
+
+Game case: **FFX only**. Bushido is Auron's FFX Overdrive; FFX-2 has none, and no file under
+`src/battle/ffx2`, `src/ui/ffx2` or `src/data/ffx2` changed.
