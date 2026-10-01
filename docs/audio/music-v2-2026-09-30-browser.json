@@ -1,0 +1,3338 @@
+{
+ "when": "2026-09-30T20:05:39.287Z",
+ "serverPid": 20164,
+ "base": "http://127.0.0.1:8853/pyrefly-reprise/",
+ "cues": {
+  "battle-ffx": {
+   "url": "audio/music/battle-ffx.mp3",
+   "status": 200,
+   "bytes": 2567311,
+   "frames": 3519180,
+   "manifestFrames": 3519180,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -72.5,
+   "click": {
+    "wrapStep": 0.02632,
+    "fileStep": 0.02631,
+    "localP99Step": 0.04343,
+    "wrapOverP99": 0.61,
+    "wrapErrorOverP99": 0.05
+   },
+   "level": {
+    "beforeWrapDb": -25.02,
+    "acrossWrapDb": 4.09,
+    "acrossFileDb": 4.09,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "boss-dread": {
+   "url": "audio/music/boss-dread.mp3",
+   "status": 200,
+   "bytes": 2615074,
+   "frames": 3895500,
+   "manifestFrames": 3895499,
+   "frameDiff": 1,
+   "runOnVsHeadDb": -30.8,
+   "click": {
+    "wrapStep": 0.02359,
+    "fileStep": 0.02345,
+    "localP99Step": 0.06682,
+    "wrapOverP99": 0.35,
+    "wrapErrorOverP99": 0.07
+   },
+   "level": {
+    "beforeWrapDb": -37.48,
+    "acrossWrapDb": 19.46,
+    "acrossFileDb": 19.46,
+    "loopAddedJumpDb": 0.01
+   }
+  },
+  "boss-evrae": {
+   "url": "audio/music/boss-evrae.mp3",
+   "status": 200,
+   "bytes": 2719357,
+   "frames": 3660300,
+   "manifestFrames": 3660300,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -31.5,
+   "click": {
+    "wrapStep": 0.32224,
+    "fileStep": 0.32244,
+    "localP99Step": 0.05983,
+    "wrapOverP99": 5.39,
+    "wrapErrorOverP99": 0.21
+   },
+   "level": {
+    "beforeWrapDb": -23.04,
+    "acrossWrapDb": 8.36,
+    "acrossFileDb": 8.36,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "boss-ffx2-aeon": {
+   "url": "audio/music/boss-ffx2-aeon.mp3",
+   "status": 200,
+   "bytes": 4069829,
+   "frames": 5159700,
+   "manifestFrames": 5159700,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -31.1,
+   "click": {
+    "wrapStep": 0.03531,
+    "fileStep": 0.03556,
+    "localP99Step": 0.05803,
+    "wrapOverP99": 0.61,
+    "wrapErrorOverP99": 0.27
+   },
+   "level": {
+    "beforeWrapDb": -26.04,
+    "acrossWrapDb": 10.17,
+    "acrossFileDb": 10.19,
+    "loopAddedJumpDb": -0.02
+   }
+  },
+  "boss-jecht": {
+   "url": "audio/music/boss-jecht.mp3",
+   "status": 200,
+   "bytes": 3534672,
+   "frames": 4856366,
+   "manifestFrames": 4856367,
+   "frameDiff": -1,
+   "runOnVsHeadDb": -31.9,
+   "click": {
+    "wrapStep": 0.01241,
+    "fileStep": 0.01361,
+    "localP99Step": 0.02645,
+    "wrapOverP99": 0.47,
+    "wrapErrorOverP99": 0.28
+   },
+   "level": {
+    "beforeWrapDb": -20.14,
+    "acrossWrapDb": 1.28,
+    "acrossFileDb": 1.3,
+    "loopAddedJumpDb": -0.02
+   }
+  },
+  "boss-seymour": {
+   "url": "audio/music/boss-seymour.mp3",
+   "status": 200,
+   "bytes": 3319277,
+   "frames": 4483285,
+   "manifestFrames": 4483285,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -31.7,
+   "click": {
+    "wrapStep": 0.0607,
+    "fileStep": 0.06215,
+    "localP99Step": 0.02127,
+    "wrapOverP99": 2.85,
+    "wrapErrorOverP99": 0.55
+   },
+   "level": {
+    "beforeWrapDb": -23.94,
+    "acrossWrapDb": 8.19,
+    "acrossFileDb": 8.19,
+    "loopAddedJumpDb": -0.01
+   }
+  },
+  "boss-seymour-macalania": {
+   "url": "audio/music/boss-seymour-macalania.mp3",
+   "status": 200,
+   "bytes": 3774749,
+   "frames": 5508300,
+   "manifestFrames": 5508302,
+   "frameDiff": -2,
+   "runOnVsHeadDb": -84.5,
+   "click": {
+    "wrapStep": 0.00781,
+    "fileStep": 0.00789,
+    "localP99Step": 0.05916,
+    "wrapOverP99": 0.13,
+    "wrapErrorOverP99": 0.01
+   },
+   "level": {
+    "beforeWrapDb": -41.16,
+    "acrossWrapDb": 19.35,
+    "acrossFileDb": 19.35,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "boss-shuyin": {
+   "url": "audio/music/boss-shuyin.mp3",
+   "status": 200,
+   "bytes": 3324154,
+   "frames": 4665648,
+   "manifestFrames": 4665648,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -42.2,
+   "click": {
+    "wrapStep": 0.00295,
+    "fileStep": 0.00277,
+    "localP99Step": 0.01184,
+    "wrapOverP99": 0.25,
+    "wrapErrorOverP99": 0.14
+   },
+   "level": {
+    "beforeWrapDb": -26.06,
+    "acrossWrapDb": 7.7,
+    "acrossFileDb": 7.71,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "boss-vegnagun": {
+   "url": "audio/music/boss-vegnagun.mp3",
+   "status": 200,
+   "bytes": 3065960,
+   "frames": 4164301,
+   "manifestFrames": 4164301,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -56.1,
+   "click": {
+    "wrapStep": 0.1419,
+    "fileStep": 0.1439,
+    "localP99Step": 0.1278,
+    "wrapOverP99": 1.11,
+    "wrapErrorOverP99": 0.07
+   },
+   "level": {
+    "beforeWrapDb": -25.35,
+    "acrossWrapDb": 4.91,
+    "acrossFileDb": 4.91,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "boss-yojimbo": {
+   "url": "audio/music/boss-yojimbo.mp3",
+   "status": 200,
+   "bytes": 2650013,
+   "frames": 3981027,
+   "manifestFrames": 3981026,
+   "frameDiff": 1,
+   "runOnVsHeadDb": -30.2,
+   "click": {
+    "wrapStep": 0.0448,
+    "fileStep": 0.04432,
+    "localP99Step": 0.04363,
+    "wrapOverP99": 1.03,
+    "wrapErrorOverP99": 0.22
+   },
+   "level": {
+    "beforeWrapDb": -23.34,
+    "acrossWrapDb": 8.07,
+    "acrossFileDb": 8.1,
+    "loopAddedJumpDb": -0.02
+   }
+  },
+  "boss-yu-yevon": {
+   "url": "audio/music/boss-yu-yevon.mp3",
+   "status": 200,
+   "bytes": 6419190,
+   "frames": 9640260,
+   "manifestFrames": 9640260,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -33.2,
+   "click": {
+    "wrapStep": 0.02387,
+    "fileStep": 0.0243,
+    "localP99Step": 0.07855,
+    "wrapOverP99": 0.3,
+    "wrapErrorOverP99": 0.01
+   },
+   "level": {
+    "beforeWrapDb": -21.93,
+    "acrossWrapDb": 1.73,
+    "acrossFileDb": 1.73,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "boss-yunalesca": {
+   "url": "audio/music/boss-yunalesca.mp3",
+   "status": 200,
+   "bytes": 3055321,
+   "frames": 4582391,
+   "manifestFrames": 4582391,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -32.6,
+   "click": {
+    "wrapStep": 0.0286,
+    "fileStep": 0.02983,
+    "localP99Step": 0.06626,
+    "wrapOverP99": 0.43,
+    "wrapErrorOverP99": 0.06
+   },
+   "level": {
+    "beforeWrapDb": -24.27,
+    "acrossWrapDb": 9.74,
+    "acrossFileDb": 9.75,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "chapter-select": {
+   "url": "audio/music/chapter-select.mp3",
+   "status": 200,
+   "bytes": 2313322,
+   "frames": 3429773,
+   "manifestFrames": 3429772,
+   "frameDiff": 1,
+   "runOnVsHeadDb": -37.5,
+   "click": {
+    "wrapStep": 0.00068,
+    "fileStep": 0.00078,
+    "localP99Step": 0.00551,
+    "wrapOverP99": 0.12,
+    "wrapErrorOverP99": 0.1
+   },
+   "level": {
+    "beforeWrapDb": -45.42,
+    "acrossWrapDb": 5.05,
+    "acrossFileDb": 5.06,
+    "loopAddedJumpDb": -0.01
+   }
+  },
+  "ending-ffx": {
+   "url": "audio/music/ending-ffx.mp3",
+   "status": 200,
+   "bytes": 3600003,
+   "frames": 5541330,
+   "manifestFrames": 5541328,
+   "frameDiff": 2,
+   "runOnVsHeadDb": -29.6,
+   "click": {
+    "wrapStep": 0.05449,
+    "fileStep": 0.0548,
+    "localP99Step": 0.01559,
+    "wrapOverP99": 3.49,
+    "wrapErrorOverP99": 0.21
+   },
+   "level": {
+    "beforeWrapDb": -48.6,
+    "acrossWrapDb": 22.9,
+    "acrossFileDb": 22.86,
+    "loopAddedJumpDb": 0.03
+   }
+  },
+  "ending-ffx2": {
+   "url": "audio/music/ending-ffx2.mp3",
+   "status": 200,
+   "bytes": 3583736,
+   "frames": 5262528,
+   "manifestFrames": 5262528,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -50.9,
+   "click": {
+    "wrapStep": 0.00166,
+    "fileStep": 0.00178,
+    "localP99Step": 0.01068,
+    "wrapOverP99": 0.16,
+    "wrapErrorOverP99": 0.03
+   },
+   "level": {
+    "beforeWrapDb": -34.52,
+    "acrossWrapDb": 16.66,
+    "acrossFileDb": 16.67,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "pause": {
+   "url": "audio/music/pause.mp3",
+   "status": 200,
+   "bytes": 1478084,
+   "frames": 2203083,
+   "manifestFrames": 2203082,
+   "frameDiff": 1,
+   "runOnVsHeadDb": -30.9,
+   "click": {
+    "wrapStep": 0.00517,
+    "fileStep": 0.00236,
+    "localP99Step": 0.01377,
+    "wrapOverP99": 0.38,
+    "wrapErrorOverP99": 0.49
+   },
+   "level": {
+    "beforeWrapDb": -27.37,
+    "acrossWrapDb": 1.05,
+    "acrossFileDb": 1.07,
+    "loopAddedJumpDb": -0.02
+   }
+  },
+  "scene-bevelle-underground": {
+   "url": "audio/music/scene-bevelle-underground.mp3",
+   "status": 200,
+   "bytes": 3211958,
+   "frames": 4789260,
+   "manifestFrames": 4789260,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -47.7,
+   "click": {
+    "wrapStep": 0.00255,
+    "fileStep": 0.00252,
+    "localP99Step": 0.16026,
+    "wrapOverP99": 0.02,
+    "wrapErrorOverP99": 0
+   },
+   "level": {
+    "beforeWrapDb": -30.28,
+    "acrossWrapDb": 18.69,
+    "acrossFileDb": 18.69,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "scene-dreams-end": {
+   "url": "audio/music/scene-dreams-end.mp3",
+   "status": 200,
+   "bytes": 3162331,
+   "frames": 4588721,
+   "manifestFrames": 4588720,
+   "frameDiff": 1,
+   "runOnVsHeadDb": -32.9,
+   "click": {
+    "wrapStep": 0.00577,
+    "fileStep": 0.0059,
+    "localP99Step": 0.01043,
+    "wrapOverP99": 0.55,
+    "wrapErrorOverP99": 0.25
+   },
+   "level": {
+    "beforeWrapDb": -51.89,
+    "acrossWrapDb": 23.52,
+    "acrossFileDb": 23.5,
+    "loopAddedJumpDb": 0.01
+   }
+  },
+  "scene-fahrenheit": {
+   "url": "audio/music/scene-fahrenheit.mp3",
+   "status": 200,
+   "bytes": 2408623,
+   "frames": 3388915,
+   "manifestFrames": 3388913,
+   "frameDiff": 2,
+   "runOnVsHeadDb": -35.1,
+   "click": {
+    "wrapStep": 0.0828,
+    "fileStep": 0.0818,
+    "localP99Step": 0.0135,
+    "wrapOverP99": 6.13,
+    "wrapErrorOverP99": 0.22
+   },
+   "level": {
+    "beforeWrapDb": -24.55,
+    "acrossWrapDb": 7.63,
+    "acrossFileDb": 7.66,
+    "loopAddedJumpDb": -0.02
+   }
+  },
+  "scene-farplane": {
+   "url": "audio/music/scene-farplane.mp3",
+   "status": 200,
+   "bytes": 3491121,
+   "frames": 4734038,
+   "manifestFrames": 4734038,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -37.1,
+   "click": {
+    "wrapStep": 0.00617,
+    "fileStep": 0.00644,
+    "localP99Step": 0.05278,
+    "wrapOverP99": 0.12,
+    "wrapErrorOverP99": 0.08
+   },
+   "level": {
+    "beforeWrapDb": -31.87,
+    "acrossWrapDb": 13.58,
+    "acrossFileDb": 13.5,
+    "loopAddedJumpDb": 0.08
+   }
+  },
+  "scene-gagazet": {
+   "url": "audio/music/scene-gagazet.mp3",
+   "status": 200,
+   "bytes": 3009651,
+   "frames": 4689300,
+   "manifestFrames": 4689299,
+   "frameDiff": 1,
+   "runOnVsHeadDb": -33.9,
+   "click": {
+    "wrapStep": 0.05478,
+    "fileStep": 0.05423,
+    "localP99Step": 0.01082,
+    "wrapOverP99": 5.06,
+    "wrapErrorOverP99": 0.08
+   },
+   "level": {
+    "beforeWrapDb": -24.03,
+    "acrossWrapDb": 7.12,
+    "acrossFileDb": 7.12,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "scene-macalania-temple": {
+   "url": "audio/music/scene-macalania-temple.mp3",
+   "status": 200,
+   "bytes": 1973838,
+   "frames": 2778300,
+   "manifestFrames": 2778300,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -33.5,
+   "click": {
+    "wrapStep": 0.07097,
+    "fileStep": 0.06797,
+    "localP99Step": 0.06295,
+    "wrapOverP99": 1.13,
+    "wrapErrorOverP99": 0.12
+   },
+   "level": {
+    "beforeWrapDb": -22.49,
+    "acrossWrapDb": 3.95,
+    "acrossFileDb": 3.92,
+    "loopAddedJumpDb": 0.03
+   }
+  },
+  "scene-zanarkand-dome": {
+   "url": "audio/music/scene-zanarkand-dome.mp3",
+   "status": 200,
+   "bytes": 3936592,
+   "frames": 5696185,
+   "manifestFrames": 5696185,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -38.5,
+   "click": {
+    "wrapStep": 0.06761,
+    "fileStep": 0.06776,
+    "localP99Step": 0.03033,
+    "wrapOverP99": 2.23,
+    "wrapErrorOverP99": 0.07
+   },
+   "level": {
+    "beforeWrapDb": -50.61,
+    "acrossWrapDb": 32.45,
+    "acrossFileDb": 32.45,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "title": {
+   "url": "audio/music/title.mp3",
+   "status": 200,
+   "bytes": 2888145,
+   "frames": 4314166,
+   "manifestFrames": 4314166,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -37.5,
+   "click": {
+    "wrapStep": 0.02854,
+    "fileStep": 0.02829,
+    "localP99Step": 0.0345,
+    "wrapOverP99": 0.83,
+    "wrapErrorOverP99": 0.07
+   },
+   "level": {
+    "beforeWrapDb": -32.4,
+    "acrossWrapDb": 14.33,
+    "acrossFileDb": 14.33,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "victory-ffx": {
+   "url": "audio/music/victory-ffx.mp3",
+   "status": 200,
+   "bytes": 2324004,
+   "frames": 3313961,
+   "manifestFrames": 3313961,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -66.4,
+   "click": {
+    "wrapStep": 0.06305,
+    "fileStep": 0.06348,
+    "localP99Step": 0.04446,
+    "wrapOverP99": 1.42,
+    "wrapErrorOverP99": 0.06
+   },
+   "level": {
+    "beforeWrapDb": -16.19,
+    "acrossWrapDb": 0.7,
+    "acrossFileDb": 0.69,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "victory-ffx2": {
+   "url": "audio/music/victory-ffx2.mp3",
+   "status": 200,
+   "bytes": 2396379,
+   "frames": 3109050,
+   "manifestFrames": 3109050,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -33.2,
+   "click": {
+    "wrapStep": 0.02268,
+    "fileStep": 0.02022,
+    "localP99Step": 0.05719,
+    "wrapOverP99": 0.4,
+    "wrapErrorOverP99": 0.39
+   },
+   "level": {
+    "beforeWrapDb": -20.08,
+    "acrossWrapDb": 6.14,
+    "acrossFileDb": 6.16,
+    "loopAddedJumpDb": -0.01
+   }
+  }
+ },
+ "old": {
+  "battle-ffx": {
+   "url": "__old-audio/battle-ffx.mp3",
+   "status": 200,
+   "bytes": 2483481,
+   "frames": 3519180,
+   "manifestFrames": 3519180,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -67.4,
+   "click": {
+    "wrapStep": 0.00631,
+    "fileStep": 0.00713,
+    "localP99Step": 0.01815,
+    "wrapOverP99": 0.35,
+    "wrapErrorOverP99": 0.12
+   },
+   "level": {
+    "beforeWrapDb": -24,
+    "acrossWrapDb": 0.63,
+    "acrossFileDb": 0.63,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "boss-dread": {
+   "url": "__old-audio/boss-dread.mp3",
+   "status": 200,
+   "bytes": 2565132,
+   "frames": 3895500,
+   "manifestFrames": 3895499,
+   "frameDiff": 1,
+   "runOnVsHeadDb": -31.6,
+   "click": {
+    "wrapStep": 0.00177,
+    "fileStep": 0.00064,
+    "localP99Step": 0.00803,
+    "wrapOverP99": 0.22,
+    "wrapErrorOverP99": 0.48
+   },
+   "level": {
+    "beforeWrapDb": -29.27,
+    "acrossWrapDb": 3.8,
+    "acrossFileDb": 3.79,
+    "loopAddedJumpDb": 0.01
+   }
+  },
+  "boss-evrae": {
+   "url": "__old-audio/boss-evrae.mp3",
+   "status": 200,
+   "bytes": 2512223,
+   "frames": 3660300,
+   "manifestFrames": 3660300,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -31.3,
+   "click": {
+    "wrapStep": 0.00245,
+    "fileStep": 0.00235,
+    "localP99Step": 0.02727,
+    "wrapOverP99": 0.09,
+    "wrapErrorOverP99": 0.2
+   },
+   "level": {
+    "beforeWrapDb": -24.9,
+    "acrossWrapDb": 6.82,
+    "acrossFileDb": 6.82,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "boss-ffx2-aeon": {
+   "url": "__old-audio/boss-ffx2-aeon.mp3",
+   "status": 200,
+   "bytes": 3468368,
+   "frames": 5159700,
+   "manifestFrames": 5159700,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -31.9,
+   "click": {
+    "wrapStep": 0.00296,
+    "fileStep": 0.00059,
+    "localP99Step": 0.01184,
+    "wrapOverP99": 0.25,
+    "wrapErrorOverP99": 0.51
+   },
+   "level": {
+    "beforeWrapDb": -19.42,
+    "acrossWrapDb": 3.48,
+    "acrossFileDb": 3.52,
+    "loopAddedJumpDb": -0.04
+   }
+  },
+  "boss-jecht": {
+   "url": "__old-audio/boss-jecht.mp3",
+   "status": 200,
+   "bytes": 3312113,
+   "frames": 4856366,
+   "manifestFrames": 4856367,
+   "frameDiff": -1,
+   "runOnVsHeadDb": -29.7,
+   "click": {
+    "wrapStep": 0.02503,
+    "fileStep": 0.01009,
+    "localP99Step": 0.05196,
+    "wrapOverP99": 0.48,
+    "wrapErrorOverP99": 0.47
+   },
+   "level": {
+    "beforeWrapDb": -14.93,
+    "acrossWrapDb": -4.83,
+    "acrossFileDb": -4.87,
+    "loopAddedJumpDb": 0.04
+   }
+  },
+  "boss-seymour": {
+   "url": "__old-audio/boss-seymour.mp3",
+   "status": 200,
+   "bytes": 2960096,
+   "frames": 4483285,
+   "manifestFrames": 4483285,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -29.9,
+   "click": {
+    "wrapStep": 0.01252,
+    "fileStep": 0.01409,
+    "localP99Step": 0.0305,
+    "wrapOverP99": 0.41,
+    "wrapErrorOverP99": 0.31
+   },
+   "level": {
+    "beforeWrapDb": -18.08,
+    "acrossWrapDb": 0.46,
+    "acrossFileDb": 0.49,
+    "loopAddedJumpDb": -0.03
+   }
+  },
+  "boss-seymour-macalania": {
+   "url": "__old-audio/boss-seymour-macalania.mp3",
+   "status": 200,
+   "bytes": 3851212,
+   "frames": 5508300,
+   "manifestFrames": 5508302,
+   "frameDiff": -2,
+   "runOnVsHeadDb": -72.7,
+   "click": {
+    "wrapStep": 0.02382,
+    "fileStep": 0.02354,
+    "localP99Step": 0.04796,
+    "wrapOverP99": 0.5,
+    "wrapErrorOverP99": 0.04
+   },
+   "level": {
+    "beforeWrapDb": -30.12,
+    "acrossWrapDb": 9.28,
+    "acrossFileDb": 9.28,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "boss-shuyin": {
+   "url": "__old-audio/boss-shuyin.mp3",
+   "status": 200,
+   "bytes": 3078838,
+   "frames": 4665647,
+   "manifestFrames": 4665648,
+   "frameDiff": -1,
+   "runOnVsHeadDb": -35.7,
+   "click": {
+    "wrapStep": 0.00348,
+    "fileStep": 0.00371,
+    "localP99Step": 0.01939,
+    "wrapOverP99": 0.18,
+    "wrapErrorOverP99": 0.24
+   },
+   "level": {
+    "beforeWrapDb": -24.14,
+    "acrossWrapDb": 1.3,
+    "acrossFileDb": 1.32,
+    "loopAddedJumpDb": -0.02
+   }
+  },
+  "boss-vegnagun": {
+   "url": "__old-audio/boss-vegnagun.mp3",
+   "status": 200,
+   "bytes": 3345784,
+   "frames": 4164300,
+   "manifestFrames": 4164301,
+   "frameDiff": -1,
+   "runOnVsHeadDb": -52.3,
+   "click": {
+    "wrapStep": 0.05826,
+    "fileStep": 0.05721,
+    "localP99Step": 0.01871,
+    "wrapOverP99": 3.11,
+    "wrapErrorOverP99": 0.08
+   },
+   "level": {
+    "beforeWrapDb": -29.03,
+    "acrossWrapDb": 20.2,
+    "acrossFileDb": 20.21,
+    "loopAddedJumpDb": -0.01
+   }
+  },
+  "boss-yojimbo": {
+   "url": "__old-audio/boss-yojimbo.mp3",
+   "status": 200,
+   "bytes": 2626957,
+   "frames": 3981027,
+   "manifestFrames": 3981026,
+   "frameDiff": 1,
+   "runOnVsHeadDb": -31.9,
+   "click": {
+    "wrapStep": 0.01013,
+    "fileStep": 0.00507,
+    "localP99Step": 0.02044,
+    "wrapOverP99": 0.5,
+    "wrapErrorOverP99": 0.3
+   },
+   "level": {
+    "beforeWrapDb": -25.07,
+    "acrossWrapDb": 1.58,
+    "acrossFileDb": 1.58,
+    "loopAddedJumpDb": 0.01
+   }
+  },
+  "boss-yu-yevon": {
+   "url": "__old-audio/boss-yu-yevon.mp3",
+   "status": 200,
+   "bytes": 6314200,
+   "frames": 9640260,
+   "manifestFrames": 9640260,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -36,
+   "click": {
+    "wrapStep": 0.00666,
+    "fileStep": 0.00553,
+    "localP99Step": 0.01077,
+    "wrapOverP99": 0.62,
+    "wrapErrorOverP99": 0.32
+   },
+   "level": {
+    "beforeWrapDb": -17.93,
+    "acrossWrapDb": -1.68,
+    "acrossFileDb": -1.71,
+    "loopAddedJumpDb": 0.03
+   }
+  },
+  "boss-yunalesca": {
+   "url": "__old-audio/boss-yunalesca.mp3",
+   "status": 200,
+   "bytes": 3040951,
+   "frames": 4582391,
+   "manifestFrames": 4582391,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -32.1,
+   "click": {
+    "wrapStep": 0.01146,
+    "fileStep": 0.00934,
+    "localP99Step": 0.03393,
+    "wrapOverP99": 0.34,
+    "wrapErrorOverP99": 0.23
+   },
+   "level": {
+    "beforeWrapDb": -21.52,
+    "acrossWrapDb": 3.42,
+    "acrossFileDb": 3.42,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "ending-ffx": {
+   "url": "__old-audio/ending-ffx.mp3",
+   "status": 200,
+   "bytes": 3704799,
+   "frames": 5541330,
+   "manifestFrames": 5541328,
+   "frameDiff": 2,
+   "runOnVsHeadDb": -31.5,
+   "click": {
+    "wrapStep": 0.01724,
+    "fileStep": 0.01715,
+    "localP99Step": 0.0343,
+    "wrapOverP99": 0.5,
+    "wrapErrorOverP99": 0.13
+   },
+   "level": {
+    "beforeWrapDb": -32.03,
+    "acrossWrapDb": 12.01,
+    "acrossFileDb": 11.98,
+    "loopAddedJumpDb": 0.02
+   }
+  },
+  "ending-ffx2": {
+   "url": "__old-audio/ending-ffx2.mp3",
+   "status": 200,
+   "bytes": 3558668,
+   "frames": 5262526,
+   "manifestFrames": 5262528,
+   "frameDiff": -2,
+   "runOnVsHeadDb": -36.5,
+   "click": {
+    "wrapStep": 0.00137,
+    "fileStep": 0.00192,
+    "localP99Step": 0.01277,
+    "wrapOverP99": 0.11,
+    "wrapErrorOverP99": 0.36
+   },
+   "level": {
+    "beforeWrapDb": -26.01,
+    "acrossWrapDb": 6.46,
+    "acrossFileDb": 6.46,
+    "loopAddedJumpDb": -0.01
+   }
+  },
+  "scene-bevelle-underground": {
+   "url": "__old-audio/scene-bevelle-underground.mp3",
+   "status": 200,
+   "bytes": 2966738,
+   "frames": 4789260,
+   "manifestFrames": 4789260,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -51.6,
+   "click": {
+    "wrapStep": 0.0261,
+    "fileStep": 0.02634,
+    "localP99Step": 0.0175,
+    "wrapOverP99": 1.49,
+    "wrapErrorOverP99": 0.04
+   },
+   "level": {
+    "beforeWrapDb": -28.93,
+    "acrossWrapDb": 20.15,
+    "acrossFileDb": 20.15,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "scene-dreams-end": {
+   "url": "__old-audio/scene-dreams-end.mp3",
+   "status": 200,
+   "bytes": 3047441,
+   "frames": 4588721,
+   "manifestFrames": 4588720,
+   "frameDiff": 1,
+   "runOnVsHeadDb": -30.7,
+   "click": {
+    "wrapStep": 0.00327,
+    "fileStep": 0.00533,
+    "localP99Step": 0.01945,
+    "wrapOverP99": 0.17,
+    "wrapErrorOverP99": 0.22
+   },
+   "level": {
+    "beforeWrapDb": -36.34,
+    "acrossWrapDb": 10.32,
+    "acrossFileDb": 10.34,
+    "loopAddedJumpDb": -0.02
+   }
+  },
+  "scene-fahrenheit": {
+   "url": "__old-audio/scene-fahrenheit.mp3",
+   "status": 200,
+   "bytes": 2383354,
+   "frames": 3388915,
+   "manifestFrames": 3388913,
+   "frameDiff": 2,
+   "runOnVsHeadDb": -32.9,
+   "click": {
+    "wrapStep": 0.00407,
+    "fileStep": 0.00293,
+    "localP99Step": 0.01061,
+    "wrapOverP99": 0.38,
+    "wrapErrorOverP99": 0.25
+   },
+   "level": {
+    "beforeWrapDb": -29.1,
+    "acrossWrapDb": 6.69,
+    "acrossFileDb": 6.66,
+    "loopAddedJumpDb": 0.03
+   }
+  },
+  "scene-farplane": {
+   "url": "__old-audio/scene-farplane.mp3",
+   "status": 200,
+   "bytes": 3116618,
+   "frames": 4734039,
+   "manifestFrames": 4734038,
+   "frameDiff": 1,
+   "runOnVsHeadDb": -29.8,
+   "click": {
+    "wrapStep": 0.00933,
+    "fileStep": 0.00577,
+    "localP99Step": 0.037,
+    "wrapOverP99": 0.25,
+    "wrapErrorOverP99": 0.34
+   },
+   "level": {
+    "beforeWrapDb": -18.53,
+    "acrossWrapDb": -1.37,
+    "acrossFileDb": -1.38,
+    "loopAddedJumpDb": 0.01
+   }
+  },
+  "scene-gagazet": {
+   "url": "__old-audio/scene-gagazet.mp3",
+   "status": 200,
+   "bytes": 3100040,
+   "frames": 4689300,
+   "manifestFrames": 4689299,
+   "frameDiff": 1,
+   "runOnVsHeadDb": -32.7,
+   "click": {
+    "wrapStep": 0.00181,
+    "fileStep": 0.00152,
+    "localP99Step": 0.00783,
+    "wrapOverP99": 0.23,
+    "wrapErrorOverP99": 0.33
+   },
+   "level": {
+    "beforeWrapDb": -26.93,
+    "acrossWrapDb": -3,
+    "acrossFileDb": -3.03,
+    "loopAddedJumpDb": 0.03
+   }
+  },
+  "scene-macalania-temple": {
+   "url": "__old-audio/scene-macalania-temple.mp3",
+   "status": 200,
+   "bytes": 1909460,
+   "frames": 2778300,
+   "manifestFrames": 2778300,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -33.6,
+   "click": {
+    "wrapStep": 0.02082,
+    "fileStep": 0.0193,
+    "localP99Step": 0.03565,
+    "wrapOverP99": 0.58,
+    "wrapErrorOverP99": 0.2
+   },
+   "level": {
+    "beforeWrapDb": -17.85,
+    "acrossWrapDb": 3.97,
+    "acrossFileDb": 3.98,
+    "loopAddedJumpDb": -0.01
+   }
+  },
+  "scene-zanarkand-dome": {
+   "url": "__old-audio/scene-zanarkand-dome.mp3",
+   "status": 200,
+   "bytes": 3762249,
+   "frames": 5696185,
+   "manifestFrames": 5696185,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -34,
+   "click": {
+    "wrapStep": 0.009,
+    "fileStep": 0.00836,
+    "localP99Step": 0.01502,
+    "wrapOverP99": 0.6,
+    "wrapErrorOverP99": 0.31
+   },
+   "level": {
+    "beforeWrapDb": -26.05,
+    "acrossWrapDb": 7.98,
+    "acrossFileDb": 7.98,
+    "loopAddedJumpDb": 0.01
+   }
+  },
+  "victory-ffx": {
+   "url": "__old-audio/victory-ffx.mp3",
+   "status": 200,
+   "bytes": 2280936,
+   "frames": 3313961,
+   "manifestFrames": 3313961,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -70.1,
+   "click": {
+    "wrapStep": 0.00565,
+    "fileStep": 0.00603,
+    "localP99Step": 0.0348,
+    "wrapOverP99": 0.16,
+    "wrapErrorOverP99": 0.04
+   },
+   "level": {
+    "beforeWrapDb": -20.39,
+    "acrossWrapDb": 1.43,
+    "acrossFileDb": 1.43,
+    "loopAddedJumpDb": 0
+   }
+  },
+  "victory-ffx2": {
+   "url": "__old-audio/victory-ffx2.mp3",
+   "status": 200,
+   "bytes": 2146954,
+   "frames": 3109050,
+   "manifestFrames": 3109050,
+   "frameDiff": 0,
+   "runOnVsHeadDb": -33.4,
+   "click": {
+    "wrapStep": 0.03104,
+    "fileStep": 0.02399,
+    "localP99Step": 0.05038,
+    "wrapOverP99": 0.62,
+    "wrapErrorOverP99": 0.31
+   },
+   "level": {
+    "beforeWrapDb": -15.8,
+    "acrossWrapDb": -1.84,
+    "acrossFileDb": -1.86,
+    "loopAddedJumpDb": 0.02
+   }
+  }
+ },
+ "live": [
+  {
+   "label": "title",
+   "want": [
+    "title"
+   ],
+   "screen": "title",
+   "playing": "title",
+   "source": "prerendered",
+   "gain": 0.0011838078498840332,
+   "ok": true
+  },
+  {
+   "label": "board",
+   "want": [
+    "chapter-select"
+   ],
+   "screen": "chapter-select",
+   "playing": "chapter-select",
+   "source": "prerendered",
+   "gain": 0.003980434965342283,
+   "ok": true
+  }
+ ],
+ "chapters": [
+  {
+   "ch": "I",
+   "id": "seymour-flux",
+   "game": "FFX",
+   "expect": {
+    "scene": [
+     "scene-gagazet"
+    ],
+    "battle": [
+     "boss-seymour"
+    ],
+    "victory": [
+     "victory-ffx"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 9,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 33792,
+     "screen": "cutscene",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 36848,
+     "screen": "battle",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 38838,
+     "screen": "battle",
+     "playing": "boss-seymour",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 42777,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 2,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 2,
+     "t": 33690,
+     "screen": "cutscene",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 36238,
+     "screen": "battle",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 38008,
+     "screen": "battle",
+     "playing": "boss-seymour",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 42178,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 3,
+     "t": 5,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 3,
+     "t": 33643,
+     "screen": "cutscene",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 36011,
+     "screen": "battle",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 37806,
+     "screen": "battle",
+     "playing": "boss-seymour",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 45976,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 3,
+     "t": 47545,
+     "screen": "results",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 49321,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    }
+   ],
+   "scene": [
+    "scene-gagazet"
+   ],
+   "battle": [
+    "scene-gagazet",
+    "boss-seymour"
+   ],
+   "results": [
+    "victory-ffx"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "defeat"
+    },
+    {
+     "seed": 2,
+     "outcome": "defeat"
+    },
+    {
+     "seed": 3,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 189756,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "II",
+   "id": "yunalesca",
+   "game": "FFX",
+   "expect": {
+    "scene": [
+     "scene-zanarkand-dome"
+    ],
+    "battle": [
+     "boss-yunalesca"
+    ],
+    "victory": [
+     "victory-ffx"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 3,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 528,
+     "screen": "cutscene",
+     "playing": "scene-zanarkand-dome",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3146,
+     "screen": "battle",
+     "playing": "scene-zanarkand-dome",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5154,
+     "screen": "battle",
+     "playing": "boss-yunalesca",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 21356,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 22929,
+     "screen": "results",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 24923,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    }
+   ],
+   "scene": [
+    "scene-zanarkand-dome"
+   ],
+   "battle": [
+    "scene-zanarkand-dome",
+    "boss-yunalesca"
+   ],
+   "results": [
+    "victory-ffx"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 66137,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "III",
+   "id": "braskas-final-aeon",
+   "game": "FFX",
+   "expect": {
+    "scene": [
+     "scene-dreams-end"
+    ],
+    "battle": [
+     "boss-jecht",
+     "boss-yu-yevon"
+    ],
+    "victory": [
+     "victory-ffx"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 5,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 510,
+     "screen": "cutscene",
+     "playing": "scene-dreams-end",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3301,
+     "screen": "battle",
+     "playing": "scene-dreams-end",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5290,
+     "screen": "battle",
+     "playing": "boss-jecht",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 20934,
+     "screen": "battle",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 21930,
+     "screen": "battle",
+     "playing": "boss-yu-yevon",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 44765,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 47651,
+     "screen": "results",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 49657,
+     "screen": "cutscene",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 50290,
+     "screen": "cutscene",
+     "playing": "ending-ffx",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-dreams-end",
+    "victory-ffx",
+    "ending-ffx"
+   ],
+   "battle": [
+    "scene-dreams-end",
+    "boss-jecht",
+    "boss-yu-yevon"
+   ],
+   "results": [
+    "victory-ffx"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 53308,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "IV",
+   "id": "ffx2-bahamut",
+   "game": "FFX-2",
+   "expect": {
+    "scene": [
+     "scene-bevelle-underground"
+    ],
+    "battle": [
+     "boss-ffx2-aeon"
+    ],
+    "victory": []
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 5,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 520,
+     "screen": "cutscene",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3615,
+     "screen": "battle",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5670,
+     "screen": "battle",
+     "playing": "boss-ffx2-aeon",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 25853,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 32689,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 38987,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    }
+   ],
+   "scene": [
+    "scene-bevelle-underground"
+   ],
+   "battle": [
+    "scene-bevelle-underground",
+    "boss-ffx2-aeon"
+   ],
+   "results": [],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 77405,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "V",
+   "id": "ffx2-vegnagun-shuyin",
+   "game": "FFX-2",
+   "expect": {
+    "scene": [
+     "scene-farplane"
+    ],
+    "battle": [
+     "boss-vegnagun",
+     "boss-shuyin"
+    ],
+    "victory": [
+     "victory-ffx2"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 3,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 513,
+     "screen": "cutscene",
+     "playing": "scene-farplane",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3160,
+     "screen": "battle",
+     "playing": "scene-farplane",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5242,
+     "screen": "battle",
+     "playing": "boss-vegnagun",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 39373,
+     "screen": "battle",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 39636,
+     "screen": "battle",
+     "playing": "boss-shuyin",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 51588,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 92098,
+     "screen": "results",
+     "playing": "victory-ffx2",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 93911,
+     "screen": "cutscene",
+     "playing": "victory-ffx2",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 95562,
+     "screen": "cutscene",
+     "playing": "ending-ffx2",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-farplane",
+    "victory-ffx2",
+    "ending-ffx2"
+   ],
+   "battle": [
+    "scene-farplane",
+    "boss-vegnagun",
+    "boss-shuyin"
+   ],
+   "results": [
+    "victory-ffx2"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 98656,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "VI",
+   "id": "ffx2-leblanc",
+   "game": "FFX-2",
+   "expect": {
+    "scene": [
+     "scene-bevelle-underground"
+    ],
+    "battle": [
+     "boss-ffx2-aeon"
+    ],
+    "victory": [
+     "victory-ffx2"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 529,
+     "screen": "cutscene",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3162,
+     "screen": "battle",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5147,
+     "screen": "battle",
+     "playing": "boss-ffx2-aeon",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 19796,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 21641,
+     "screen": "results",
+     "playing": "victory-ffx2",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 23405,
+     "screen": "cutscene",
+     "playing": "victory-ffx2",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-bevelle-underground",
+    "victory-ffx2"
+   ],
+   "battle": [
+    "scene-bevelle-underground",
+    "boss-ffx2-aeon"
+   ],
+   "results": [
+    "victory-ffx2"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 27203,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "VII",
+   "id": "seymour-anima-macalania",
+   "game": "FFX",
+   "expect": {
+    "scene": [
+     "scene-macalania-temple"
+    ],
+    "battle": [
+     "boss-seymour-macalania"
+    ],
+    "victory": [
+     "victory-ffx"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 257,
+     "screen": "cutscene",
+     "playing": "scene-macalania-temple",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3788,
+     "screen": "battle",
+     "playing": "scene-macalania-temple",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5778,
+     "screen": "battle",
+     "playing": "boss-seymour-macalania",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 13166,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 15539,
+     "screen": "results",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 17533,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    }
+   ],
+   "scene": [
+    "scene-macalania-temple"
+   ],
+   "battle": [
+    "scene-macalania-temple",
+    "boss-seymour-macalania"
+   ],
+   "results": [
+    "victory-ffx"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 58820,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "VIII",
+   "id": "evrae-airship",
+   "game": "FFX",
+   "expect": {
+    "scene": [
+     "scene-fahrenheit"
+    ],
+    "battle": [
+     "boss-evrae"
+    ],
+    "victory": [
+     "victory-ffx"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 530,
+     "screen": "cutscene",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3003,
+     "screen": "battle",
+     "playing": "boss-evrae",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 12126,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 13709,
+     "screen": "results",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 15737,
+     "screen": "cutscene",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-fahrenheit",
+    "victory-ffx"
+   ],
+   "battle": [
+    "boss-evrae"
+   ],
+   "results": [
+    "victory-ffx"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 19562,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "IX",
+   "id": "yojimbo-cavern",
+   "game": "FFX",
+   "expect": {
+    "scene": [
+     "scene-gagazet"
+    ],
+    "battle": [
+     "boss-yojimbo"
+    ],
+    "victory": [
+     "victory-ffx"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 516,
+     "screen": "cutscene",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3122,
+     "screen": "battle",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5086,
+     "screen": "battle",
+     "playing": "boss-yojimbo",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 14621,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 54952,
+     "screen": "cutscene",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 55219,
+     "screen": "results",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-gagazet"
+   ],
+   "battle": [
+    "scene-gagazet",
+    "boss-yojimbo"
+   ],
+   "results": [
+    "victory-ffx"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 58044,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "X",
+   "id": "seymour-natus",
+   "game": "FFX",
+   "expect": {
+    "scene": [
+     "scene-gagazet"
+    ],
+    "battle": [
+     "boss-seymour-macalania"
+    ],
+    "victory": [
+     "victory-ffx"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 530,
+     "screen": "cutscene",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3084,
+     "screen": "battle",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5064,
+     "screen": "battle",
+     "playing": "boss-seymour-macalania",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 8854,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 2,
+     "t": 5,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 533,
+     "screen": "cutscene",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 2967,
+     "screen": "battle",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 4740,
+     "screen": "battle",
+     "playing": "boss-seymour-macalania",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 9953,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 2,
+     "t": 26291,
+     "screen": "results",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-gagazet"
+   ],
+   "battle": [
+    "scene-gagazet",
+    "boss-seymour-macalania"
+   ],
+   "results": [
+    "victory-ffx"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "defeat"
+    },
+    {
+     "seed": 2,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 45041,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "XI",
+   "id": "ffx2-fallen-aeons",
+   "game": "FFX-2",
+   "expect": {
+    "scene": [
+     "scene-farplane"
+    ],
+    "battle": [
+     "boss-ffx2-aeon"
+    ],
+    "victory": [
+     "victory-ffx2"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 5,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 520,
+     "screen": "cutscene",
+     "playing": "scene-farplane",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3048,
+     "screen": "battle",
+     "playing": "scene-farplane",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5773,
+     "screen": "battle",
+     "playing": "boss-ffx2-aeon",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 37991,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 38253,
+     "screen": "cutscene",
+     "playing": "scene-farplane",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 40875,
+     "screen": "cutscene",
+     "playing": "victory-ffx2",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 41140,
+     "screen": "results",
+     "playing": "victory-ffx2",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 42926,
+     "screen": "cutscene",
+     "playing": "victory-ffx2",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-farplane",
+    "victory-ffx2"
+   ],
+   "battle": [
+    "scene-farplane",
+    "boss-ffx2-aeon"
+   ],
+   "results": [
+    "victory-ffx2"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 46530,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "XII",
+   "id": "seymour-omnis",
+   "game": "FFX",
+   "expect": {
+    "scene": [
+     "scene-dreams-end"
+    ],
+    "battle": [
+     "boss-seymour"
+    ],
+    "victory": [
+     "victory-ffx"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 516,
+     "screen": "cutscene",
+     "playing": "scene-dreams-end",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3140,
+     "screen": "battle",
+     "playing": "scene-dreams-end",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5957,
+     "screen": "battle",
+     "playing": "boss-seymour",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 25458,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 52839,
+     "screen": "cutscene",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 53100,
+     "screen": "results",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-dreams-end"
+   ],
+   "battle": [
+    "scene-dreams-end",
+    "boss-seymour"
+   ],
+   "results": [
+    "victory-ffx"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 55912,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "XIII",
+   "id": "ffx2-trema",
+   "game": "FFX-2",
+   "expect": {
+    "scene": [
+     "scene-bevelle-underground"
+    ],
+    "battle": [
+     "scene-bevelle-underground",
+     "boss-ffx2-aeon"
+    ],
+    "victory": [
+     "victory-ffx2"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 3,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 518,
+     "screen": "cutscene",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3092,
+     "screen": "battle",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 23019,
+     "screen": "battle",
+     "playing": "boss-ffx2-aeon",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 27627,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 2,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 530,
+     "screen": "cutscene",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 2982,
+     "screen": "battle",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 18998,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 3,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 530,
+     "screen": "cutscene",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 2956,
+     "screen": "battle",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 23351,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 4,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 4,
+     "t": 536,
+     "screen": "cutscene",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 4,
+     "t": 2951,
+     "screen": "battle",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 4,
+     "t": 19822,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    }
+   ],
+   "scene": [
+    "scene-bevelle-underground"
+   ],
+   "battle": [
+    "scene-bevelle-underground",
+    "boss-ffx2-aeon"
+   ],
+   "results": [],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "defeat"
+    },
+    {
+     "seed": 2,
+     "outcome": "defeat"
+    },
+    {
+     "seed": 3,
+     "outcome": "defeat"
+    },
+    {
+     "seed": 4,
+     "outcome": "defeat"
+    }
+   ],
+   "outcome": "defeat",
+   "ms": 118280,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": false
+   }
+  },
+  {
+   "ch": "XIV",
+   "id": "isaaru-via-purifico",
+   "game": "FFX",
+   "expect": {
+    "scene": [
+     "scene-gagazet"
+    ],
+    "battle": [
+     "boss-yojimbo"
+    ],
+    "victory": [
+     "victory-ffx"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 531,
+     "screen": "cutscene",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3053,
+     "screen": "battle",
+     "playing": "scene-gagazet",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5027,
+     "screen": "battle",
+     "playing": "boss-yojimbo",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 9592,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 35116,
+     "screen": "results",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-gagazet"
+   ],
+   "battle": [
+    "scene-gagazet",
+    "boss-yojimbo"
+   ],
+   "results": [
+    "victory-ffx"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 37945,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "XV",
+   "id": "ffx2-den-of-woe",
+   "game": "FFX-2",
+   "expect": {
+    "scene": [
+     "scene-bevelle-underground"
+    ],
+    "battle": [
+     "boss-shuyin"
+    ],
+    "victory": [
+     "victory-ffx2"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 5,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 529,
+     "screen": "cutscene",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3042,
+     "screen": "battle",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5749,
+     "screen": "battle",
+     "playing": "boss-shuyin",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 29577,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 33264,
+     "screen": "cutscene",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 34582,
+     "screen": "cutscene",
+     "playing": "victory-ffx2",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 34845,
+     "screen": "results",
+     "playing": "victory-ffx2",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 36873,
+     "screen": "cutscene",
+     "playing": "victory-ffx2",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-bevelle-underground",
+    "victory-ffx2"
+   ],
+   "battle": [
+    "scene-bevelle-underground",
+    "boss-shuyin"
+   ],
+   "results": [
+    "victory-ffx2"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 40661,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "XVI",
+   "id": "ffx2-ixion-djose",
+   "game": "FFX-2",
+   "expect": {
+    "scene": [
+     "scene-bevelle-underground"
+    ],
+    "battle": [
+     "boss-ffx2-aeon"
+    ],
+    "victory": [
+     "victory-ffx2"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 516,
+     "screen": "cutscene",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 3537,
+     "screen": "battle",
+     "playing": "scene-bevelle-underground",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 5729,
+     "screen": "battle",
+     "playing": "boss-ffx2-aeon",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 24504,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 24768,
+     "screen": "results",
+     "playing": "victory-ffx2",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 26546,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 1,
+     "t": 43617,
+     "screen": "cutscene",
+     "playing": "scene-farplane",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-bevelle-underground",
+    "scene-farplane"
+   ],
+   "battle": [
+    "scene-bevelle-underground",
+    "boss-ffx2-aeon"
+   ],
+   "results": [
+    "victory-ffx2"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 46599,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  },
+  {
+   "ch": "XVII",
+   "id": "sin-fins-core",
+   "game": "FFX",
+   "expect": {
+    "scene": [
+     "scene-fahrenheit"
+    ],
+    "battle": [
+     "boss-evrae"
+    ],
+    "victory": [
+     "victory-ffx"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 531,
+     "screen": "cutscene",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 2969,
+     "screen": "battle",
+     "playing": "boss-evrae",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 30795,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 2,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 266,
+     "screen": "cutscene",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 2997,
+     "screen": "battle",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 4981,
+     "screen": "battle",
+     "playing": "boss-evrae",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 54929,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 3,
+     "t": 5,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 264,
+     "screen": "cutscene",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 3088,
+     "screen": "battle",
+     "playing": "boss-evrae",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 58451,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 4,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 4,
+     "t": 267,
+     "screen": "cutscene",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 4,
+     "t": 3028,
+     "screen": "battle",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 4,
+     "t": 4801,
+     "screen": "battle",
+     "playing": "boss-evrae",
+     "source": "prerendered"
+    },
+    {
+     "seed": 4,
+     "t": 34632,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    }
+   ],
+   "scene": [
+    "scene-fahrenheit"
+   ],
+   "battle": [
+    "boss-evrae",
+    "scene-fahrenheit"
+   ],
+   "results": [],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "defeat"
+    },
+    {
+     "seed": 2,
+     "outcome": "escape"
+    },
+    {
+     "seed": 3,
+     "outcome": "escape"
+    },
+    {
+     "seed": 4,
+     "outcome": "defeat"
+    }
+   ],
+   "outcome": "defeat",
+   "ms": 207295,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": false
+   }
+  },
+  {
+   "ch": "XVIII",
+   "id": "sin-face",
+   "game": "FFX",
+   "expect": {
+    "scene": [
+     "scene-fahrenheit"
+    ],
+    "battle": [
+     "boss-evrae"
+    ],
+    "victory": [
+     "victory-ffx"
+    ]
+   },
+   "seen": [
+    {
+     "seed": 1,
+     "t": 5,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 531,
+     "screen": "cutscene",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 2828,
+     "screen": "battle",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 4778,
+     "screen": "battle",
+     "playing": "boss-evrae",
+     "source": "prerendered"
+    },
+    {
+     "seed": 1,
+     "t": 10911,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 2,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 266,
+     "screen": "cutscene",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 2911,
+     "screen": "battle",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 4688,
+     "screen": "battle",
+     "playing": "boss-evrae",
+     "source": "prerendered"
+    },
+    {
+     "seed": 2,
+     "t": 10944,
+     "screen": "results",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 3,
+     "t": 4,
+     "screen": "cutscene",
+     "playing": "title",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 263,
+     "screen": "cutscene",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 2919,
+     "screen": "battle",
+     "playing": "scene-fahrenheit",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 4694,
+     "screen": "battle",
+     "playing": "boss-evrae",
+     "source": "prerendered"
+    },
+    {
+     "seed": 3,
+     "t": 10153,
+     "screen": "cutscene",
+     "playing": null,
+     "source": null
+    },
+    {
+     "seed": 3,
+     "t": 27272,
+     "screen": "results",
+     "playing": "victory-ffx",
+     "source": "prerendered"
+    }
+   ],
+   "scene": [
+    "scene-fahrenheit"
+   ],
+   "battle": [
+    "scene-fahrenheit",
+    "boss-evrae"
+   ],
+   "results": [
+    "victory-ffx"
+   ],
+   "attempts": [
+    {
+     "seed": 1,
+     "outcome": "defeat"
+    },
+    {
+     "seed": 2,
+     "outcome": "defeat"
+    },
+    {
+     "seed": 3,
+     "outcome": "victory"
+    }
+   ],
+   "outcome": "victory",
+   "ms": 66207,
+   "ok": {
+    "scene": true,
+    "battle": true,
+    "results": true
+   }
+  }
+ ],
+ "console": [],
+ "pageErrors": [],
+ "failedRequests": [],
+ "summary": {
+  "cues": 26,
+  "not200": [],
+  "lengthOff": [],
+  "worstRunOnVsHeadDb": -29.6,
+  "worstWrapOverP99": 6.13,
+  "worstWrapErrorOverP99": 0.55,
+  "worstLoopAddedJumpDb": 0.08,
+  "clicks": [],
+  "stepAboveLocalP99": [
+   "boss-evrae wrap 0.32224 file 0.32244",
+   "boss-seymour wrap 0.0607 file 0.06215",
+   "boss-vegnagun wrap 0.1419 file 0.1439",
+   "boss-yojimbo wrap 0.0448 file 0.04432",
+   "ending-ffx wrap 0.05449 file 0.0548",
+   "scene-fahrenheit wrap 0.0828 file 0.0818",
+   "scene-gagazet wrap 0.05478 file 0.05423",
+   "scene-macalania-temple wrap 0.07097 file 0.06797",
+   "scene-zanarkand-dome wrap 0.06761 file 0.06776",
+   "victory-ffx wrap 0.06305 file 0.06348"
+  ],
+  "jumps": [],
+  "live": [
+   "title: title prerendered ok",
+   "board: chapter-select prerendered ok"
+  ],
+  "chaptersOk": 16,
+  "chapters": 18,
+  "chapterProblems": [
+   "XIII ffx2-trema {\"scene\":true,\"battle\":true,\"results\":false} outcome defeat",
+   "XVII sin-fins-core {\"scene\":true,\"battle\":true,\"results\":false} outcome defeat"
+  ],
+  "consoleErrors": 0,
+  "pageErrors": 0,
+  "failedRequests": 0,
+  "resultsNotReachedByAutoStrategy": [
+   "ffx2-trema",
+   "sin-fins-core"
+  ]
+ },
+ "supplement": {
+  "what": "Chapters XIII (ffx2-trema) and XVII (sin-fins-core) lost every seed 1-4 under the intended strategy at skip speed, so their results screen never played a victory cue. Re-run on the same build with PYREFLY_PROOF_ONLY and seeds 5-16: every attempt again ended in defeat or escape. The results cue is not reachable by the automated strategy in these two chapters; it is the same file (victory-ffx2, victory-ffx) that played at results in 14 other chapters, and tools/audio/themes-audit.mjs checks their music.victory wiring.",
+  "when": "2026-09-30T20:28:19.527Z",
+  "chapters": [
+   {
+    "ch": "XIII",
+    "id": "ffx2-trema",
+    "scene": [
+     "scene-bevelle-underground"
+    ],
+    "battle": [
+     "scene-bevelle-underground"
+    ],
+    "results": [],
+    "attempts": [
+     {
+      "seed": 5,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 6,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 7,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 8,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 9,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 10,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 11,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 12,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 13,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 14,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 15,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 16,
+      "outcome": "defeat"
+     }
+    ],
+    "ok": {
+     "scene": true,
+     "battle": false,
+     "results": false
+    }
+   },
+   {
+    "ch": "XVII",
+    "id": "sin-fins-core",
+    "scene": [
+     "scene-fahrenheit"
+    ],
+    "battle": [
+     "boss-evrae",
+     "scene-fahrenheit"
+    ],
+    "results": [],
+    "attempts": [
+     {
+      "seed": 5,
+      "outcome": "escape"
+     },
+     {
+      "seed": 6,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 7,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 8,
+      "outcome": "escape"
+     },
+     {
+      "seed": 9,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 10,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 11,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 12,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 13,
+      "outcome": "escape"
+     },
+     {
+      "seed": 14,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 15,
+      "outcome": "defeat"
+     },
+     {
+      "seed": 16,
+      "outcome": "defeat"
+     }
+    ],
+    "ok": {
+     "scene": true,
+     "battle": true,
+     "results": false
+    }
+   }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "failedRequests": []
+ }
+}

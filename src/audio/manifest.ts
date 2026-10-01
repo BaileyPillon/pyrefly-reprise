@@ -46,6 +46,8 @@ export interface AudioManifest {
   sampleRate: number;
   music: Record<string, MusicEntry>;
   sfx: SfxSprite | null;
+  /** The recorded set of D-302 (`sfxV2/cues.ts`), a second sprite; `null` keeps every cue on the first. */
+  sfxV2: SfxSprite | null;
 }
 
 export const EMPTY_MANIFEST: AudioManifest = {
@@ -53,6 +55,7 @@ export const EMPTY_MANIFEST: AudioManifest = {
   sampleRate: 44100,
   music: {},
   sfx: null,
+  sfxV2: null,
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -85,6 +88,7 @@ export function parseManifest(raw: unknown): AudioManifest {
     sampleRate: finitePositive(raw.sampleRate) ?? 44100,
     music,
     sfx: parseSprite(raw.sfx),
+    sfxV2: parseSprite(raw.sfxV2),
   };
 }
 

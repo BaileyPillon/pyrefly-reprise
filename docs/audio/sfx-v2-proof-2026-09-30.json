@@ -1,0 +1,769 @@
+{
+ "what": "SFX v2 (D-302) proof on a production build of branch sfx-v2: tools/audio/sfx-v2-proof.mjs (headless, PYREFLY_BROWSER=gpu) + tools/audio/sfx-v2-levels.py. Agents cannot hear: numbers only.",
+ "runs": {
+  "chapter-I real input then intended (seed 1)": {
+   "outcome": "defeat",
+   "steps": [
+    [
+     "boot",
+     true,
+     null
+    ],
+    [
+     "title -> chapter select (Enter)",
+     true,
+     null
+    ],
+    [
+     "board cursor on the chapter (arrows)",
+     true,
+     null
+    ],
+    [
+     "party prep",
+     true,
+     null
+    ],
+    [
+     "scene skipped -> battle (Enter held)",
+     true,
+     null
+    ],
+    [
+     "first command menu",
+     true,
+     null
+    ],
+    [
+     "pause opened and closed (P, Escape)",
+     true,
+     null
+    ],
+    [
+     "a submenu opened and cancelled (Enter, Escape)",
+     true,
+     null
+    ],
+    [
+     "real-input turns",
+     true,
+     "attack (tap)"
+    ],
+    [
+     "fight finished",
+     true,
+     "defeat"
+    ],
+    [
+     "no console errors",
+     true,
+     ""
+    ],
+    [
+     "no 404s",
+     true,
+     ""
+    ]
+   ],
+   "consoleErrors": 0,
+   "notFound": 0,
+   "plays": 156,
+   "checked_against_brief": 43,
+   "problems": [],
+   "first_bank_cues_in_battle": [],
+   "cues_by_event": {
+    "no event": {
+     "battle-start": 1,
+     "confirm": 1,
+     "v2:cursor-move": 3,
+     "v2:confirm": 1,
+     "wind-high-altitude": 1,
+     "kimahri-roar": 1,
+     "v2:boss-roar": 1,
+     "v2:menu-close": 1
+    },
+    "action-start:attack": {
+     "v2:menu-open": 1,
+     "v2:menu-page": 1,
+     "v2:cancel": 1,
+     "v2:swing-sword": 1
+    },
+    "damage": {
+     "v2:hit-sword": 1,
+     "v2:hit-heavy-enemy": 12,
+     "v2:hit-2": 10,
+     "v2:flare": 2,
+     "v2:hit-1": 1,
+     "v2:cure": 1,
+     "v2:status-applied": 1,
+     "v2:fire": 15
+    },
+    "action-start:ability": {
+     "v2:swing-katana": 9,
+     "v2:magic-charge": 19
+    },
+    "status-add": {
+     "v2:status-applied": 25,
+     "v2:protect": 4,
+     "v2:haste": 2,
+     "v2:poison": 1,
+     "v2:debuff-generic": 3
+    },
+    "ko": {
+     "v2:ko-fall": 5
+    },
+    "action-start:overdrive": {
+     "v2:overdrive-stinger": 3,
+     "v2:swing-spear": 1,
+     "v2:swing-katana": 2
+    },
+    "miss": {
+     "v2:whiff": 7
+    },
+    "action-start:item": {
+     "v2:item-use": 8
+    },
+    "revive": {
+     "v2:phoenix-down": 2
+    },
+    "action-start:summon": {
+     "v2:magic-charge": 3
+    },
+    "summon": {
+     "v2:summon": 3
+    },
+    "counter": {
+     "v2:counter": 1
+    },
+    "overdrive-gauge": {
+     "v2:overdrive-full": 1
+    }
+   },
+   "levels": {
+    "music_cues": [
+     "chapter-select",
+     "boss-seymour",
+     "pause",
+     "boss-seymour"
+    ],
+    "sfx_peak_minus_music_peak_db": 0.3100000023841858,
+    "sfx_loudest43ms_minus_music_avg_db": 9.4,
+    "mix_peak_dbfs_before_limiter": -4.809999942779541,
+    "limiter_active_share": 0.0,
+    "limiter_active_seconds": 0.0,
+    "synth_plays_not_mixed": 1,
+    "seconds_measured": 125.9,
+    "loudest_moments": [
+     {
+      "peak_dbfs": -4.81,
+      "cue": "v2:counter",
+      "event": "counter",
+      "t": 83.21
+     },
+     {
+      "peak_dbfs": -5.12,
+      "cue": "v2:item-use",
+      "event": "action-start",
+      "t": 48.1
+     },
+     {
+      "peak_dbfs": -5.12,
+      "cue": "v2:hit-2",
+      "event": "damage",
+      "t": 48.56
+     },
+     {
+      "peak_dbfs": -5.65,
+      "cue": "v2:fire",
+      "event": "damage",
+      "t": 111.91
+     },
+     {
+      "peak_dbfs": -5.65,
+      "cue": "v2:fire",
+      "event": "damage",
+      "t": 111.67
+     },
+     {
+      "peak_dbfs": -5.65,
+      "cue": "v2:fire",
+      "event": "damage",
+      "t": 111.43
+     },
+     {
+      "peak_dbfs": -5.66,
+      "cue": "v2:overdrive-stinger",
+      "event": "action-start",
+      "t": 34.15
+     },
+     {
+      "peak_dbfs": -5.88,
+      "cue": "v2:ko-fall",
+      "event": "ko",
+      "t": 136.22
+     }
+    ]
+   },
+   "levels_same_plays_as_first_bank_stand_ins": null
+  },
+  "chapter-I intended from the start (seed 3)": {
+   "outcome": "victory",
+   "steps": [
+    [
+     "boot",
+     true,
+     null
+    ],
+    [
+     "whole chapter by the intended route",
+     true,
+     "victory"
+    ],
+    [
+     "fight finished",
+     true,
+     "victory"
+    ],
+    [
+     "no console errors",
+     true,
+     ""
+    ],
+    [
+     "no 404s",
+     true,
+     ""
+    ]
+   ],
+   "consoleErrors": 0,
+   "notFound": 0,
+   "plays": 376,
+   "checked_against_brief": 75,
+   "problems": [],
+   "first_bank_cues_in_battle": [
+    "victory-fanfare"
+   ],
+   "cues_by_event": {
+    "no event": {
+     "v2:boss-roar": 1
+    },
+    "action-start:ability": {
+     "v2:swing-katana": 7,
+     "v2:magic-charge": 49
+    },
+    "damage": {
+     "v2:hit-heavy-enemy": 9,
+     "v2:hit-2": 20,
+     "v2:critical": 1,
+     "v2:hit-1": 57,
+     "v2:flare": 9,
+     "v2:cure-3": 8,
+     "v2:fire": 20,
+     "v2:hit-katana": 9,
+     "v2:status-applied": 14,
+     "v2:cure": 3,
+     "v2:thunder": 1,
+     "v2:ice": 1
+    },
+    "status-add": {
+     "v2:status-applied": 63,
+     "v2:protect": 7,
+     "v2:poison": 1,
+     "v2:haste": 5,
+     "v2:buff-generic": 5,
+     "v2:shell": 7,
+     "v2:slow": 1
+    },
+    "action-start:item": {
+     "v2:item-use": 19
+    },
+    "miss": {
+     "v2:whiff": 6
+    },
+    "action-start:overdrive": {
+     "v2:overdrive-stinger": 4,
+     "v2:swing-spear": 1,
+     "v2:swing-katana": 3
+    },
+    "action-start:summon": {
+     "v2:magic-charge": 5
+    },
+    "summon": {
+     "v2:summon": 5
+    },
+    "counter": {
+     "v2:counter": 9
+    },
+    "ko": {
+     "v2:ko-fall": 2,
+     "v2:dissolve-pyreflies": 3
+    },
+    "overdrive-gauge": {
+     "v2:overdrive-full": 4
+    },
+    "action-start:attack": {
+     "v2:swing-katana": 7
+    },
+    "charge": {
+     "v2:boss-roar": 1,
+     "v2:boss-overdrive-warning": 4
+    },
+    "heal": {
+     "v2:cure": 2,
+     "v2:counter": 1
+    },
+    "revive": {
+     "v2:phoenix-down": 1
+    },
+    "victory": {
+     "victory-fanfare": 1
+    }
+   },
+   "levels": {
+    "music_cues": [
+     "title",
+     "boss-seymour"
+    ],
+    "sfx_peak_minus_music_peak_db": 0.9700000286102295,
+    "sfx_loudest43ms_minus_music_avg_db": 9.6,
+    "mix_peak_dbfs_before_limiter": -3.640000104904175,
+    "limiter_active_share": 0.0,
+    "limiter_active_seconds": 0.0,
+    "synth_plays_not_mixed": 0,
+    "seconds_measured": 277.7,
+    "loudest_moments": [
+     {
+      "peak_dbfs": -3.64,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 264.28
+     },
+     {
+      "peak_dbfs": -3.64,
+      "cue": "v2:flare",
+      "event": "damage",
+      "t": 264.05
+     },
+     {
+      "peak_dbfs": -3.82,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 195.23
+     },
+     {
+      "peak_dbfs": -3.82,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 194.99
+     },
+     {
+      "peak_dbfs": -3.82,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 194.75
+     },
+     {
+      "peak_dbfs": -4.0,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 176.68
+     },
+     {
+      "peak_dbfs": -4.0,
+      "cue": "v2:flare",
+      "event": "damage",
+      "t": 176.44
+     },
+     {
+      "peak_dbfs": -4.02,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 265.33
+     }
+    ]
+   },
+   "levels_same_plays_as_first_bank_stand_ins": {
+    "sfx_peak_minus_music_peak_db": 2.430000066757202,
+    "sfx_loudest43ms_minus_music_avg_db": 12.82,
+    "mix_peak_dbfs_before_limiter": -3.5399999618530273,
+    "limiter_active_seconds": 0.0
+   }
+  },
+  "chapter-IV real input then intended (seed 1)": {
+   "outcome": "victory",
+   "steps": [
+    [
+     "boot",
+     true,
+     null
+    ],
+    [
+     "title -> chapter select (Enter)",
+     true,
+     null
+    ],
+    [
+     "board cursor on the chapter (arrows)",
+     true,
+     null
+    ],
+    [
+     "party prep",
+     true,
+     null
+    ],
+    [
+     "scene skipped -> battle (Enter held)",
+     true,
+     null
+    ],
+    [
+     "first command menu",
+     true,
+     null
+    ],
+    [
+     "pause opened and closed (P, Escape)",
+     true,
+     null
+    ],
+    [
+     "a submenu opened and cancelled (Enter, Escape)",
+     true,
+     null
+    ],
+    [
+     "real-input turns",
+     true,
+     "item (keys), attack (tap)"
+    ],
+    [
+     "fight finished",
+     true,
+     "victory"
+    ],
+    [
+     "no console errors",
+     true,
+     ""
+    ],
+    [
+     "no 404s",
+     true,
+     ""
+    ]
+   ],
+   "consoleErrors": 0,
+   "notFound": 0,
+   "plays": 217,
+   "checked_against_brief": 12,
+   "problems": [],
+   "first_bank_cues_in_battle": [],
+   "cues_by_event": {
+    "no event": {
+     "battle-start": 1,
+     "cursor-move": 11,
+     "confirm": 1,
+     "v2:cursor-move-x2": 3,
+     "v2:confirm-x2": 1,
+     "machina-groan": 1,
+     "v2:boss-roar-aeon": 1
+    },
+    "action-start:ability": {
+     "v2:magic-charge-x2": 61,
+     "v2:menu-open-x2": 1,
+     "v2:menu-page-x2": 1,
+     "v2:cancel-x2": 1,
+     "v2:hit-greatsword": 1
+    },
+    "status-add": {
+     "v2:debuff-generic-x2": 7,
+     "v2:status-applied": 15
+    },
+    "damage": {
+     "v2:hit-heavy-enemy": 6,
+     "v2:cure-x2": 15,
+     "v2:hit-2": 28,
+     "v2:hit-greatsword": 9,
+     "v2:flare-x2": 11,
+     "v2:hit-1": 14,
+     "v2:hit-dagger": 4
+    },
+    "action-start:item": {
+     "v2:item-use-x2": 2
+    },
+    "action-start:attack": {
+     "v2:swing-greatsword": 4,
+     "v2:magic-charge-x2": 1
+    },
+    "action-end": {
+     "v2:hit-2": 1
+    },
+    "charge": {
+     "v2:boss-roar-aeon": 7,
+     "v2:boss-overdrive-warning": 6
+    },
+    "miss": {
+     "v2:whiff": 2
+    },
+    "ko": {
+     "v2:dissolve-pyreflies": 1
+    }
+   },
+   "levels": {
+    "music_cues": [
+     "chapter-select",
+     "scene-bevelle-underground",
+     "boss-ffx2-aeon",
+     "pause",
+     "boss-ffx2-aeon"
+    ],
+    "sfx_peak_minus_music_peak_db": 1.190000057220459,
+    "sfx_loudest43ms_minus_music_avg_db": 9.02,
+    "mix_peak_dbfs_before_limiter": -2.369999885559082,
+    "limiter_active_share": 0.0,
+    "limiter_active_seconds": 0.0,
+    "synth_plays_not_mixed": 1,
+    "seconds_measured": 288.8,
+    "loudest_moments": [
+     {
+      "peak_dbfs": -2.37,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 277.97
+     },
+     {
+      "peak_dbfs": -2.37,
+      "cue": "v2:flare-x2",
+      "event": "damage",
+      "t": 277.76
+     },
+     {
+      "peak_dbfs": -3.56,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 158.17
+     },
+     {
+      "peak_dbfs": -3.56,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 157.95
+     },
+     {
+      "peak_dbfs": -3.56,
+      "cue": "v2:flare-x2",
+      "event": "damage",
+      "t": 157.73
+     },
+     {
+      "peak_dbfs": -4.07,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 278.19
+     },
+     {
+      "peak_dbfs": -4.22,
+      "cue": "v2:hit-greatsword",
+      "event": "damage",
+      "t": 65.35
+     },
+     {
+      "peak_dbfs": -4.78,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 49.33
+     }
+    ]
+   },
+   "levels_same_plays_as_first_bank_stand_ins": {
+    "sfx_peak_minus_music_peak_db": 0.9399999976158142,
+    "sfx_loudest43ms_minus_music_avg_db": 9.53,
+    "mix_peak_dbfs_before_limiter": -3.569999933242798,
+    "limiter_active_seconds": 0.0
+   }
+  },
+  "chapter-IV intended from the start (seed 1)": {
+   "outcome": "victory",
+   "steps": [
+    [
+     "boot",
+     true,
+     null
+    ],
+    [
+     "whole chapter by the intended route",
+     true,
+     "victory"
+    ],
+    [
+     "fight finished",
+     true,
+     "victory"
+    ],
+    [
+     "no console errors",
+     true,
+     ""
+    ],
+    [
+     "no 404s",
+     true,
+     ""
+    ]
+   ],
+   "consoleErrors": 0,
+   "notFound": 0,
+   "plays": 194,
+   "checked_against_brief": 8,
+   "problems": [],
+   "first_bank_cues_in_battle": [],
+   "cues_by_event": {
+    "no event": {
+     "v2:boss-roar-aeon": 1
+    },
+    "action-start:ability": {
+     "v2:magic-charge-x2": 64
+    },
+    "status-add": {
+     "v2:debuff-generic-x2": 6,
+     "v2:status-applied": 17
+    },
+    "damage": {
+     "v2:hit-heavy-enemy": 8,
+     "v2:hit-2": 36,
+     "v2:hit-greatsword": 8,
+     "v2:flare-x2": 7,
+     "v2:hit-1": 14,
+     "v2:cure-x2": 15,
+     "v2:hit-dagger": 1
+    },
+    "charge": {
+     "v2:boss-roar-aeon": 6,
+     "v2:boss-overdrive-warning": 6
+    },
+    "miss": {
+     "v2:whiff": 1
+    },
+    "action-start:attack": {
+     "v2:swing-greatsword": 3
+    },
+    "ko": {
+     "v2:dissolve-pyreflies": 1
+    }
+   },
+   "levels": {
+    "music_cues": [
+     "title",
+     "boss-ffx2-aeon"
+    ],
+    "sfx_peak_minus_music_peak_db": 0.8600000143051147,
+    "sfx_loudest43ms_minus_music_avg_db": 8.86,
+    "mix_peak_dbfs_before_limiter": -4.050000190734863,
+    "limiter_active_share": 0.0,
+    "limiter_active_seconds": 0.0,
+    "synth_plays_not_mixed": 0,
+    "seconds_measured": 300.5,
+    "loudest_moments": [
+     {
+      "peak_dbfs": -4.05,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 40
+     },
+     {
+      "peak_dbfs": -4.05,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 39.78
+     },
+     {
+      "peak_dbfs": -4.05,
+      "cue": "v2:flare-x2",
+      "event": "damage",
+      "t": 39.57
+     },
+     {
+      "peak_dbfs": -4.13,
+      "cue": "v2:hit-heavy-enemy",
+      "event": "damage",
+      "t": 277.66
+     },
+     {
+      "peak_dbfs": -4.22,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 54.22
+     },
+     {
+      "peak_dbfs": -4.22,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 54
+     },
+     {
+      "peak_dbfs": -4.22,
+      "cue": "v2:flare-x2",
+      "event": "damage",
+      "t": 53.79
+     },
+     {
+      "peak_dbfs": -4.51,
+      "cue": "v2:hit-1",
+      "event": "damage",
+      "t": 158.37
+     }
+    ]
+   },
+   "levels_same_plays_as_first_bank_stand_ins": null
+  }
+ },
+ "qa": [
+  "",
+  "sfxV2 sprite: 100 cues, 190.3s, 3.30 MB, peak -1.12 dBTP",
+  "",
+  "total shipped audio: 84.22 MB of the 85 MB budget",
+  "0 cue(s) with findings; 0 sfx finding(s)",
+  "wrote D:/Tools/pyrefly-scratch/sfx-v2-work/qa.json",
+  "exit 0"
+ ],
+ "encode_choice": {
+  "measured": {
+   "0": {
+    "len_diff": 0,
+    "lag": 0,
+    "snr_db": 37.1,
+    "noise_vs_signal_6-12k_db": -28.3,
+    "noise_vs_signal_12-16k_db": -18.3
+   },
+   "1": {
+    "len_diff": 0,
+    "lag": 0,
+    "snr_db": 34.5,
+    "noise_vs_signal_6-12k_db": -25.6,
+    "noise_vs_signal_12-16k_db": -16.3
+   },
+   "2": {
+    "len_diff": 0,
+    "lag": 0,
+    "snr_db": 31.9,
+    "noise_vs_signal_6-12k_db": -22.8,
+    "noise_vs_signal_12-16k_db": -13.7
+   },
+   "3": {
+    "len_diff": 0,
+    "lag": 0,
+    "snr_db": 30.5,
+    "noise_vs_signal_6-12k_db": -21.3,
+    "noise_vs_signal_12-16k_db": -12.4
+   }
+  },
+  "bytes": {
+   "q0 (V0)": 4891391,
+   "q1": 4216043,
+   "q2": 3642787,
+   "q3 (shipped)": 3296589
+  },
+  "budget": "85 MB total (tools/audio/manifest-io.mjs) and 3.5 MB per sprite (qa.mjs); q3 is the best encode that passes both"
+ }
+}

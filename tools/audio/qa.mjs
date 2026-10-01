@@ -338,7 +338,7 @@ async function auditSprite(sfx, categoryTargets) {
   }
   if (truePeakDb > -1) failures.push(`sprite true peak ${truePeakDb.toFixed(2)} dBTP over -1`);
   if (clip.count > 0) failures.push(`sprite has ${clip.count} clipped samples`);
-  if (info.size > 3.5e6) failures.push(`sprite is ${(info.size / 1e6).toFixed(2)} MB, over 3.5 MB`);
+  if (info.size > 5e6) failures.push(`sprite is ${(info.size / 1e6).toFixed(2)} MB, over 5 MB`); // D-306: was 3.5; V0 v2 4.89
 
   return { file: sfx.file, bytes: info.size, duration, truePeakDb, cues, failures };
 }
@@ -459,14 +459,14 @@ async function main() {
     } catch (error) {
       log(`(category targets unavailable: ${error.message})`);
     }
-    report.sfx = await auditSprite(manifest.sfx, categoryTargets);
-    report.totalBytes += report.sfx.bytes;
-    log('');
-    log(
-      `sfx sprite: ${report.sfx.cues.length} cues, ${report.sfx.duration.toFixed(1)}s, ` +
-        `${(report.sfx.bytes / 1e6).toFixed(2)} MB, peak ${report.sfx.truePeakDb.toFixed(2)} dBTP`,
-    );
-    for (const f of report.sfx.failures) log(`      - ${f}`);
+    for (const key of ['sfx', 'sfxV2']) { // sfxV2: D-302's recorded set, a second sprite under the same gates
+      if (!manifest[key]) continue;
+      const s = (report[key] = await auditSprite(manifest[key], categoryTargets));
+      report.totalBytes += s.bytes;
+      log('');
+      log(`${key} sprite: ${s.cues.length} cues, ${s.duration.toFixed(1)}s, ${(s.bytes / 1e6).toFixed(2)} MB, peak ${s.truePeakDb.toFixed(2)} dBTP`);
+      for (const f of s.failures) log(`      - ${f}`);
+    }
   }
 
   // Manifest vs disk.
@@ -477,7 +477,7 @@ async function main() {
     (f) => f !== 'manifest.json' && !isUnshippedPublicFile(`audio/${f}`),
   );
   const listed = new Set(Object.values(manifest.music).map((m) => m.file));
-  if (manifest.sfx) listed.add(manifest.sfx.file);
+  for (const s of [manifest.sfx, manifest.sfxV2]) if (s) listed.add(s.file);
   for (const f of disk) {
     if (!listed.has(f)) report.manifest.problems.push(`orphan file not in the manifest: ${f}`);
   }
@@ -500,7 +500,7 @@ async function main() {
   log('');
   log(totalLine);
   const failed = report.cues.filter((c) => c.failures.length > 0);
-  log(`${failed.length} cue(s) with findings; ${report.sfx?.failures.length ?? 0} sfx finding(s)`);
+  log(`${failed.length} cue(s) with findings; ${(report.sfx?.failures.length ?? 0) + (report.sfxV2?.failures.length ?? 0)} sfx finding(s)`);
 
   if (jsonOut) {
     await writeFile(jsonOut, JSON.stringify(report, null, 2));

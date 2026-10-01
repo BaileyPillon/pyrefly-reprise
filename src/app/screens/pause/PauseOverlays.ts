@@ -1,6 +1,6 @@
 /**
- * The two things that take the pause screen over: photo mode, and Auron's
- * briefing replayed.
+ * The things that take the pause screen over: photo mode, Auron's briefing
+ * replayed, and (D-305) the credits panel.
  *
  * Both were preserved verbatim through the Until Dawn remake
  * (`docs/concepts/pause-until-dawn/options.json` → `preservedFunctions`: *"F —
@@ -17,6 +17,8 @@ import type { Screen } from '../../Screen.ts';
 import type { Briefing } from '../../../ui/coach/Briefing.ts';
 import { makeBriefing } from '../raiseBriefing.ts';
 import { PhotoMode } from '../../../ui/common/PhotoMode.ts';
+import type { Button, InputSnapshot } from '../../Input.ts';
+import { CREDITS_CLOSE_ACTION, CreditsPanel } from './creditsPanel.ts';
 
 export interface PauseOverlayHost {
   app: App;
@@ -30,12 +32,15 @@ export interface PauseOverlayHost {
   setBaselineVisible: (on: boolean) => void;
   /** Redraw after the briefing: "never show this again" flips a row. */
   refresh: () => void;
+  /** The player backed out of the credits: put the cursor back on CREDITS. */
+  creditsClosed?: () => void;
 }
 
 export class PauseOverlays {
   private readonly host: PauseOverlayHost;
   private photo: PhotoMode | null = null;
   private briefing: Briefing | null = null;
+  private credits: CreditsPanel | null = null;
   /** Screen roots hidden for the duration of photo mode. */
   private hiddenUnder: HTMLElement[] = [];
 
@@ -142,7 +147,61 @@ export class PauseOverlays {
     }
   }
 
+  // ----------------------------------------------------------------- credits
+
+  /** The credits panel (D-305, option O1): up from OPTIONS → ABOUT → CREDITS. */
+  get creditsUp(): boolean {
+    return this.credits !== null;
+  }
+
+  openCredits(): void {
+    const root = this.host.root();
+    if (this.credits || !root) return;
+    this.credits = new CreditsPanel(root, () => this.host.app.save.settings.reduceMotion);
+  }
+
+  /**
+   * @param back the player backed out (Esc / X / Backspace, the pad's cancel or
+   * Start, the `Esc BACK` prompt): the cursor and the DOM focus return to the
+   * CREDITS row. A tab change closes it without that.
+   */
+  closeCredits(back = true): void {
+    if (!this.credits) return;
+    this.credits.dispose();
+    this.credits = null;
+    if (!back) return;
+    audio.playSfx('cancel');
+    this.host.creditsClosed?.();
+    this.host.root()?.querySelector<HTMLElement>('[data-row="credits"]')?.focus({ preventScroll: true });
+  }
+
+  /**
+   * One frame of input while the panel is up. True when the panel took the
+   * frame; false when it is not up, or when L1 / R1 closed it so the screen can
+   * go on to change tab.
+   */
+  creditsInput(input: InputSnapshot, took: (b: Button) => boolean): boolean {
+    if (!this.credits) return false;
+    if (took('l1') || took('r1')) {
+      this.closeCredits(false);
+      return false;
+    }
+    if (input.actions.includes(CREDITS_CLOSE_ACTION) || input.justPressed('cancel') || took('start')) {
+      this.closeCredits();
+      return true;
+    }
+    if (input.justPressed('down')) this.credits.scroll(1);
+    if (input.justPressed('up')) this.credits.scroll(-1);
+    return true;
+  }
+
+  creditsSnapshot(): Record<string, unknown> | null {
+    return this.credits?.snapshot() ?? null;
+  }
+
   dispose(): void {
+    this.credits?.dispose();
+    this.credits = null;
     this.photo?.dispose();
     this.photo = null;
     // A briefing left up would outlive the screen that owns its input.

@@ -21,13 +21,10 @@ import { orderSfxForWarmup, warmSfxViaWorker } from './SfxWarmer.ts';
 import { renderHallImpulse } from './dsp/hall.ts';
 import { SFX_DEFAULT_VOLUME, sfxBusGain, sfxMixFromUrl, type SfxMix } from './sfxMix.ts';
 import { cutFading, retireSlot, startSlotRamp, type MusicSlot } from './musicSlot.ts';
-import {
-  hasPrerenderedSfx,
-  parseManifest,
-  resolveAudioUrl,
-  sfxCue,
-  type AudioManifest,
-} from './manifest.ts';
+import { hasPrerenderedSfx, parseManifest, resolveAudioUrl, type AudioManifest } from './manifest.ts';
+import { SfxSprites } from './SfxSprites.ts';
+import { sfxGame, voiceKey } from './sfxV2/voicing.ts';
+import { isV2Key } from './sfxV2/cues.ts';
 
 export interface AudioManagerOptions {
   masterVolume?: number;
@@ -114,8 +111,8 @@ export class AudioManager {
   private synthOnly: boolean;
   private manifest: AudioManifest | null = null;
   private manifestLoad: Promise<void> | null = null;
-  private sfxSprite: AudioBuffer | null = null;
-  private spriteLoad: Promise<void> | null = null;
+  /** Both SFX sprites (the first bank and D-302's recorded set) and the play log (`SfxSprites.ts`). */
+  private readonly sprites = new SfxSprites();
 
   constructor(options: AudioManagerOptions = {}) {
     this.masterVolume = options.masterVolume ?? 0.9;
@@ -401,7 +398,7 @@ export class AudioManager {
   warmSfx(): void {
     if (this.warmed || !this.ctx) return;
     this.warmed = true;
-    void this.loadManifest().then(() => this.loadSfxSprite());
+    void this.loadManifest().then(() => this.ctx && this.sprites.load(this.ctx, this.manifest, this.baseUrl));
     const names = this.warmupList();
     const worker = this.loader.getWorker();
     if (!worker) {
@@ -470,50 +467,24 @@ export class AudioManager {
     return buffer;
   }
 
-  /**
-   * Fetch and decode the pre-rendered SFX sprite.
-   *
-   * One sprite rather than ~150 files: a hundred and fifty requests costs more
-   * than one two-megabyte download, and LAME's gapless header means a cue's
-   * stored offset into the decoded buffer is accurate enough to play with
-   * `start(when, offset, duration)`.
-   */
-  private loadSfxSprite(): Promise<void> {
-    if (this.spriteLoad) return this.spriteLoad;
-    const sprite = this.manifest?.sfx;
-    const ctx = this.ctx;
-    if (!sprite || !ctx || typeof fetch !== 'function') {
-      this.spriteLoad = Promise.resolve();
-      return this.spriteLoad;
-    }
-    this.spriteLoad = (async () => {
-      try {
-        const response = await fetch(resolveAudioUrl(this.baseUrl, sprite.file));
-        if (!response.ok) return;
-        this.sfxSprite = await ctx.decodeAudioData(await response.arrayBuffer());
-      } catch {
-        // Synthesised cues cover it.
-      }
-    })();
-    return this.spriteLoad;
-  }
-
   playSfx(name: string, options: PlaySfxOptions = {}): void {
+    // A chapter's game voices the menu set (`sfxV2/voicing.ts`); a `v2:` key is D-302's recorded set,
+    // which stands in with its first-bank cue until its sprite has decoded (`SfxSprites.pick`).
+    const voiced = voiceKey(name, sfxGame());
+    const v2 = isV2Key(voiced) ? this.sprites.pick(this.manifest, voiced) : { slice: null, fallback: null };
     // Aliases (an ability's authored `sfxKey`) resolve to the real cue, so the
     // buffer cache is keyed once per sound, not once per name for it.
-    const cue = resolveSfx(name);
+    const cue = v2.slice ? voiced : resolveSfx(v2.fallback ?? voiced);
     if (cue === undefined) throw new Error(`Unknown sfx "${name}"`);
     const ctx = this.ctx;
     if (!ctx || !this.sfxBus) return;
 
-    // Prefer the pre-rendered sprite when it has this cue AND it has already
-    // decoded. Never wait for it: a UI tick that arrives 200 ms late is worse
-    // than a synthesised one that arrives now, so a cue fired before the
-    // sprite lands simply uses the oscillator version.
-    const spriteCue =
-      this.sfxSprite && hasPrerenderedSfx(this.manifest, cue) ? sfxCue(this.manifest, cue) : null;
-    const buffer = spriteCue ? this.sfxSprite : this.getSfxBuffer(cue);
+    // Prefer a sprite when it has this cue AND it has already decoded. Never wait for it: a UI tick
+    // that arrives 200 ms late is worse than a synthesised one that arrives now.
+    const spriteCue = v2.slice ?? this.sprites.pick(this.manifest, cue).slice;
+    const buffer = spriteCue ? spriteCue.buffer : this.getSfxBuffer(cue);
     if (!buffer) return;
+    this.sprites.record({ t: ctx.currentTime + Math.max(0, options.delay ?? 0), asked: name, played: cue, via: v2.slice ? 'v2' : spriteCue ? 'sprite' : 'synth', volume: options.volume ?? 1 });
 
     const source = ctx.createBufferSource();
     source.buffer = buffer;
@@ -529,7 +500,7 @@ export class AudioManager {
     panner.connect(this.sfxDry ?? this.sfxBus);
     if (this.sfxSend) panner.connect(this.sfxSend);
     const when = ctx.currentTime + Math.max(0, options.delay ?? 0);
-    if (spriteCue) source.start(when, spriteCue.offset, spriteCue.duration);
+    if (spriteCue) source.start(when, spriteCue.cue.offset, spriteCue.cue.duration);
     else source.start(when);
     source.onended = () => {
       source.disconnect();
@@ -601,7 +572,9 @@ export class AudioManager {
      * `0.0001` seconds into a fade that was scheduled to take minutes.
      */
     music: { current: { name: string; gain: number } | null; fading: Array<{ name: string; gain: number }> };
-    prerendered: { manifest: boolean; cues: number; sprite: boolean; spriteDecoded: boolean };
+    prerendered: { manifest: boolean; cues: number; sprite: boolean; spriteDecoded: boolean; v2: { cues: number; decoded: boolean; game: string | null } };
+    /** The last plays: asked, played, from where (`SfxSprites.ts`); the hookup's proof without ears. */
+    sfxLog: SfxSprites['log'];
     tracks: Array<{ name: string; about: string; cached: boolean; source: string | null }>;
     sfx: Array<{ name: string; about: string; cached: boolean; prerendered: boolean }>;
   } {
@@ -620,7 +593,8 @@ export class AudioManager {
         manifest: this.manifest !== null,
         cues: this.manifest ? Object.keys(this.manifest.music).length : 0,
         sprite: !!this.manifest?.sfx,
-        spriteDecoded: this.sfxSprite !== null,
+        spriteDecoded: this.sprites.decoded.v1,
+        v2: { cues: Object.keys(this.manifest?.sfxV2?.cues ?? {}).length, decoded: this.sprites.decoded.v2, game: sfxGame() },
       },
       tracks: trackNames().map((name) => ({
         name,
@@ -637,6 +611,7 @@ export class AudioManager {
         cached: this.sfxCache.has(name),
         prerendered: hasPrerenderedSfx(this.manifest, name),
       })),
+      sfxLog: this.sprites.log.slice(),
     };
   }
 
@@ -644,8 +619,7 @@ export class AudioManager {
     this.stopMusic(0.05);
     this.loader.dispose();
     this.sfxCache.clear();
-    this.sfxSprite = null;
-    this.spriteLoad = null;
+    this.sprites.clear();
     this.manifestLoad = null;
     this.convolver?.disconnect();
     this.sfxSend?.disconnect();

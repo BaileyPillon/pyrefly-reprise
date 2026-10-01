@@ -577,38 +577,38 @@ actually matters — **the one thing the cue must leave behind**.
 | 25 | **`boss-yojimbo`** (new) | **No shared theme cell: its own line**, the sketch Bailey picked (O-6 A, 2026-09-24): a rising fifth that leans on the flat sixth and falls back, on **solo cello** over felt piano with no pulse; when a bowed-eighths pulse and taiko join, the violin takes it an octave up and the cello answers in roots and thirds; the line moved two steps up the mode on **one horn** ("the duty", this pass's guess); violin and cello in octaves (also a guess); the strain climbs in steps with horns; **the crack**: one tutti `Abmaj7` with the violin on Ab5, pulse and drums cut, then two beats of piano alone; control returns quieter and closes on `AMEN`, iv to i. In the game this fight plays Lulu's own theme: nothing here quotes or imitates it. **No dominant and no leading tone anywhere**; Aeolian, never Dorian | C minor | 132 | grief (cello) · pulse (violin) · the duty (horn) · octaves · strain · the crack · control, amen | Grief under control, and it cracks once |
 | 26 | **`scene-macalania-temple`** (new) | **No shared cell but `HYMN_HEAD`**, once, at 1.5x on one distant voice as the door of the Chamber of the Fayth glows (sketch A "The Frozen Temple", 2026-09-24; D-278: the driver's pick in remaster R1, not by ear). Quartal ice in high strings held a bar at a time, irregular glockenspiel drips (no two gaps the same), an alto flute that walks through the room without a pulse and never lands on the tonic, harp open fifths on `bVI - bVII - i`; at the door the ice warms once to Dmaj7 (the flat sixth) and Bm(add9), a struck chime on D. F# is the iv of the fight's C# minor, so the chapter moves scene to fight as a plagal step. No dominant, no organ, no chanted choir; it quotes no retail cue | F# minor | 56 | the empty room (intro) · the walk · the door · the ice again · loop to the walk | Ice pretending to be masonry, and something behind the door |
 
-**How each cue ships (2026-09-29, D-283).** Bailey: "all your recommendations, full speed ahead." The score above is unchanged; what plays is the sampled render of it restyled by Direction B (`docs/audio/direction-b-2026-09-27.md`) and then put through remaster R1 "focus" (`docs/audio/remaster-2026-09-29/README.md`, `tools/audio/remaster-score.mjs`). Every figure is a measurement of the shipped MP3 (`docs/audio/soundtrack-r1-2026-09-29.json`); nobody here heard it (rule 13). A cue that failed a gate keeps today's file. Re-rendering a cue with `tools/audio/render.mjs` would replace its R1 file with a plain sampled render: re-run `tools/audio/remaster-score.mjs` for it instead.
+**How each cue ships (2026-09-30, music v2).** Bailey, 2026-09-30: "I'll go with all your recommendations". The score above is unchanged; what plays is **route S** for every FFX cue (our score played by free sampled orchestra libraries in a measured concert hall, the Arvedi Auditorium impulse responses, mixed and mastered, **no AI**) and **route N2** for every FFX-2 cue (ACE-Step 1.5 at denoise 0.25-0.30 over our own route S band render of the score, band wording). Two FFX-2 cues, `boss-vegnagun` and `scene-farplane`, ship their route S render: no N2 take kept structure fidelity 0.80, the written pick rule. `title`, `pause` and `chapter-select` ("both") are unchanged (Direction B + R1). Gagazet keeps its solo cello (row 10) and the real-hall reverb as rendered. Every cue: LAME V0, -16 LUFS, true peak at or under -1 dBTP, the loop points of the cue before it to the sample, seam crossfade and 3 s run-on as the ship chain builds them. Every figure is a measurement of the shipped MP3 (`docs/audio/music-v2-2026-09-30.json`; the headless proof on a production build, `docs/audio/music-v2-2026-09-30-browser.json`); nobody here heard it (rule 13), and Bailey can veto any cue by ear. The renderers, pick rules and every iteration are in `D:/Tools/pyrefly-scratch/audio-v2/ffx` and `ffx2` (READMEs); the superseded files are in git (`git show 770823bc:public/audio/music/<cue>.mp3`). Handoff: `docs/handoff/music-v2.md`.
 
-**The encode (2026-09-30, D-292, music O1).** Bailey, 2026-09-29: "yes, all your recommendations". Every one of the 26 cues is now an MP3 at LAME V0 (`libmp3lame -q:a 0`), not the q5 (about 125 kbps) it shipped at on 09-29. Only the final encode changed: the music, loop points (to the sample), seam crossfade, 3 s run-on, -16 LUFS gain and score fingerprint are the ones above, and each cue's q5 twin from the same chain is byte-identical to the file that shipped (26 of 26), so the lossless twin is exactly what the encoder was given. 23 cues come from their Direction B master through R1 (`tools/audio/r1-encode.py`); `boss-vegnagun` and `scene-bevelle-underground`, which never passed the R1 stereo gate, keep today's sampled render and are encoded from its lossless twin (`tools/audio/render.mjs --wav`, which reproduces the shipped bytes at q5). Measured on the whole score (`docs/audio/music-o1-2026-09-30.json`; median over 26 cues, before then after): the encoder's lowpass wall of 41 dB at 16.6 kHz is gone (the steepest step above 10 kHz is 9 dB); coding noise against the lossless twin falls from -8.2 to -17.9 dB below the music at 6-12 kHz and from -3.3 to -13.6 dB at 12-16 kHz; noise before sharp attacks falls from -10.8 to -20.0 dB; whole-file signal over coding error rises from 26 to 37 dB. It does **not** change attack speed (the 10-90 % rise of the 2-8 kHz envelope stays within about 1.5 ms of the lossless twin's, 10-16 ms on four cues checked, and comes from the AI and R1 stages, not the encoder) or the AI's tonal character; nobody here heard it (rule 13). Cost: the music grows from 40.2 MB to 78.2 MB (x1.94; 80.9 MB with the sfx sprite), and the shipping budget in `tools/audio/manifest-io.mjs` (`AUDIO_BUDGET_BYTES`) is 85 MB instead of 60 MB. Re-encode with `tools/audio/music-o1-ship.py` (not `render.mjs`, which writes q5 again).
+**Before music v2 (history).** 2026-09-29 (D-283): every cue was the sampled render restyled by Direction B and put through remaster R1 "focus" (`docs/audio/soundtrack-r1-2026-09-29.json`), except `boss-vegnagun` and `scene-bevelle-underground`, which failed the R1 stereo gate and kept the plain sampled render. 2026-09-30 (D-292, music O1): the same music re-encoded at LAME V0 instead of q5 (`docs/audio/music-o1-2026-09-30.json`, `tools/audio/music-o1-ship.py`); the budget in `tools/audio/manifest-io.mjs` became 85 MB. Music v2 keeps V0: the music is now 80.9 MB, 83.6 MB with the sfx sprite, of the 85 MB budget.
 
 | Cue | Game | Ships as | L/R corr | side/mid dB | mono-sum loss dB |
 |---|---|---|---|---|---|
-| `battle-ffx` | FFX | Direction B + R1 | 0.737 | -7.8 | -0.7 |
-| `boss-dread` | FFX | Direction B + R1 | 0.782 | -8.3 | -0.6 |
-| `boss-evrae` | FFX | Direction B + R1 | 0.733 | -7.5 | -0.7 |
-| `boss-ffx2-aeon` | FFX-2 | Direction B + R1 | 0.699 | -6.9 | -0.8 |
-| `boss-jecht` | FFX | Direction B + R1 | 0.823 | -7.6 | -0.7 |
-| `boss-seymour-macalania` | FFX | Direction B + R1 | 0.779 | -8.2 | -0.6 |
-| `boss-seymour` | FFX | Direction B + R1 | 0.773 | -8.3 | -0.6 |
-| `boss-shuyin` | FFX-2 | Direction B + R1 | 0.72 | -7.4 | -0.7 |
-| `boss-vegnagun` | FFX-2 | **today's sampled render, kept (V0 encode since D-292)**: its R1 take measured L/R 0.553, side -5.3 dB, mono-sum loss -1.1 dB (gates 0.6-0.85, -10..-6, under 1 dB) | 0.83 | -10.3 | -0.4 |
-| `boss-yojimbo` | FFX | Direction B + R1 | 0.807 | -8.5 | -0.6 |
-| `boss-yu-yevon` | FFX | Direction B + R1 | 0.836 | -9.3 | -0.5 |
-| `boss-yunalesca` | FFX | Direction B + R1 | 0.766 | -8.5 | -0.6 |
+| `battle-ffx` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.71 | -7.5 | -0.7 |
+| `boss-dread` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
+| `boss-evrae` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.704 | -7.5 | -0.7 |
+| `boss-ffx2-aeon` | FFX-2 | **route N2** (ACE-Step 1.5 turbo, denoise 0.3, seed 505, 8 steps) | 0.643 | -6.6 | -0.9 |
+| `boss-jecht` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.718 | -7.5 | -0.7 |
+| `boss-seymour-macalania` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
+| `boss-seymour` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
+| `boss-shuyin` | FFX-2 | **route N2** (ACE-Step 1.5 xl, denoise 0.25, seed 505, 8 steps) | 0.65 | -6.7 | -0.8 |
+| `boss-vegnagun` | FFX-2 | **route S band render** (N2 fallback: no take kept structure fidelity 0.80) | 0.694 | -7.4 | -0.7 |
+| `boss-yojimbo` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.695 | -7.4 | -0.7 |
+| `boss-yu-yevon` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
+| `boss-yunalesca` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.728 | -7.5 | -0.7 |
 | `chapter-select` | both | Direction B + R1 | 0.741 | -8.2 | -0.6 |
-| `ending-ffx2` | FFX-2 | Direction B + R1 | 0.771 | -8.2 | -0.6 |
-| `ending-ffx` | FFX | Direction B + R1 | 0.77 | -8.5 | -0.6 |
+| `ending-ffx2` | FFX-2 | **route N2** (ACE-Step 1.5 turbo, denoise 0.25, seed 303, 8 steps) | 0.646 | -6.3 | -0.9 |
+| `ending-ffx` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
 | `pause` | both | Direction B + R1 | 0.753 | -8.2 | -0.6 |
-| `scene-bevelle-underground` | FFX-2 | **today's sampled render, kept (V0 encode since D-292)**: its R1 take measured L/R 0.548, side -5.0 dB, mono-sum loss -1.2 dB | 0.835 | -10.5 | -0.4 |
-| `scene-dreams-end` | FFX | Direction B + R1 | 0.797 | -8.5 | -0.6 |
-| `scene-fahrenheit` | FFX | Direction B + R1 | 0.788 | -8.7 | -0.5 |
-| `scene-farplane` | FFX-2 | Direction B + R1 | 0.82 | -8.6 | -0.6 |
-| `scene-gagazet` | FFX | Direction B + R1 | 0.728 | -7.3 | -0.7 |
-| `scene-macalania-temple` | FFX | Direction B + R1 (shipped 2026-09-29 under D-278, unchanged here) | 0.74 | -8.2 | -0.6 |
-| `scene-zanarkand-dome` | FFX | Direction B + R1 | 0.757 | -8.4 | -0.6 |
+| `scene-bevelle-underground` | FFX-2 | **route N2** (ACE-Step 1.5 turbo, denoise 0.3, seed 505, 8 steps) | 0.656 | -6.8 | -0.8 |
+| `scene-dreams-end` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
+| `scene-fahrenheit` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.705 | -7.5 | -0.7 |
+| `scene-farplane` | FFX-2 | **route S band render** (N2 fallback: no take kept structure fidelity 0.80) | 0.648 | -6.7 | -0.8 |
+| `scene-gagazet` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.708 | -7.5 | -0.7 |
+| `scene-macalania-temple` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.716 | -7.5 | -0.7 |
+| `scene-zanarkand-dome` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.7 | -7.5 | -0.7 |
 | `title` | both | Direction B + R1 | 0.788 | -8.6 | -0.6 |
-| `victory-ffx2` | FFX-2 | Direction B + R1 | 0.654 | -6.4 | -0.9 |
-| `victory-ffx` | FFX | Direction B + R1 | 0.815 | -9 | -0.5 |
+| `victory-ffx2` | FFX-2 | **route N2** (ACE-Step 1.5 xl, denoise 0.3, seed 404, 8 steps) | 0.795 | -9.2 | -0.5 |
+| `victory-ffx` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.705 | -7.5 | -0.7 |
 
 **Anti-fatigue rule.** `chapter-select` and `pause` are the two cues a player
 hears most, and neither is allowed the theme's heart: chapter-select loops bars

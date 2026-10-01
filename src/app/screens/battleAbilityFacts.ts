@@ -34,11 +34,17 @@ function facts(def: AbilityDef | undefined): AbilityFacts | undefined {
   return def ? { damageType: def.damageType, formula: def.formula } : undefined;
 }
 
-/** The lookup a chapter of `game` hands its presenter. */
-export function abilityFactsFor(game: GameId): (id: AbilityId) => AbilityFacts | undefined {
+/** The chapter's game's ability rows, by id, in the order its engine resolves them (also the SFX voice's, `battleSfxVoice.ts`). */
+export function abilityRowsFor(game: GameId): (id: AbilityId) => AbilityDef | undefined {
   // FF7 has no ability rows here (no attack paintings for its enemy): none, never FFX-2's (ff7-game-branch-audit).
   if (game === 'ff7') return () => undefined;
-  if (ffxFamily(game, 'abilityFactsFor') === 'ffx') return (id) => facts(ffxRows().get(id));
+  if (ffxFamily(game, 'abilityFactsFor') === 'ffx') return (id) => ffxRows().get(id);
   const rows = FFX2_ABILITIES as Readonly<Record<AbilityId, AbilityDef | undefined>>;
-  return (id) => facts(rows[id] ?? ffx2Fallback.get(id));
+  return (id) => rows[id] ?? ffx2Fallback.get(id);
+}
+
+/** The lookup a chapter of `game` hands its presenter. */
+export function abilityFactsFor(game: GameId): (id: AbilityId) => AbilityFacts | undefined {
+  const rows = abilityRowsFor(game);
+  return (id) => facts(rows(id));
 }
