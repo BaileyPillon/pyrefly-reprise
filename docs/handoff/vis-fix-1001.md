@@ -10,7 +10,7 @@ f302f163 production build served by `vite preview`, `shots/*-after*.jpg` / `*-fi
 the dev server, headless Playwright with `PYREFLY_BROWSER=gpu`; the capture scripts sit next to them).
 Side-by-side PNGs: `docs/screenshots/vis-fix-1001-*.png`.
 
-## Fixed (16 commits)
+## Fixed (11 defects, 16 code and test commits plus this handoff)
 
 | VP | Game | What changed | Proof |
 |---|---|---|---|
