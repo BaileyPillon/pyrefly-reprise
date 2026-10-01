@@ -31,6 +31,7 @@ import {
   defeat,
   formChange,
   ko,
+  missed,
   summon,
   turnStart,
   victory,
@@ -225,10 +226,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
     }
 
     case 'miss':
-      numeral(ctx, event.targetId, { kind: 'miss', text: reasonText(event.reason) });
-      cue(ctx, 'miss', { volume: 0.5 });
-      ctx.stage.actor(event.targetId)?.hop(0.18, 200);
-      return ctx.sleep(TIMING.miss);
+      return missed(ctx, event); // VP-1001-06: on the strike's apex
 
     case 'mp-damage':
       numeral(ctx, event.targetId, { kind: 'mp-damage', amount: event.amount });
@@ -422,7 +420,7 @@ export function poseForCommand(kind: string): string {
   }
 }
 
-function reasonText(reason: 'evaded' | 'nullified' | 'immune' | 'wrong-state'): string {
+export function reasonText(reason: 'evaded' | 'nullified' | 'immune' | 'wrong-state'): string {
   switch (reason) {
     case 'nullified':
       return 'NULLIFIED';

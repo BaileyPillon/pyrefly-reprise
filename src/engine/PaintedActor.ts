@@ -19,6 +19,7 @@ import {
 import {
   ActorLife,
   approach,
+  ATTACK_IMPACT,
   attackOffset,
   clampYawToCamera,
   facingForSide,
@@ -1104,21 +1105,13 @@ export class PaintedActor extends Group {
    * peak is still `distance` and the whole move still takes `ms`, so every
    * existing call site keeps its staging.
    */
-  lunge(distance = 0.9, ms = 320): Promise<void> {
-    const from = this.lungeOffset;
-    return this.tweens.toAsync(0, 1, {
-      durationMs: Math.max(1, ms),
-      easing: 'linear',
-      onUpdate: (t) => {
-        // Anything already in flight is folded out over the first beat, so a
-        // second lunge on top of a first does not snap back to zero.
-        const carry = from * Math.max(0, 1 - t / 0.26);
-        this.lungeOffset = distance * attackOffset(t) + carry;
-      },
-      onComplete: () => {
-        this.lungeOffset = 0;
-      },
-    });
+  lunge(distance = 0.9, ms = 320, contact?: { hold: Promise<unknown>; reached: () => void }): Promise<void> {
+    const from = this.lungeOffset; // anything in flight folds out over the first beat (no snap back to zero)
+    const leg = (a: number, b: number, d: number): Promise<void> => this.tweens.toAsync(a, b, { durationMs: Math.max(1, d), easing: 'linear',
+      onUpdate: (t) => void (this.lungeOffset = distance * attackOffset(t) + from * Math.max(0, 1 - t / 0.26)) });
+    // VP-1001-06 (`ContactBeat.ts`): with a contact, the strike holds at its apex until the blow lands.
+    const run = contact ? leg(0, ATTACK_IMPACT, ms * ATTACK_IMPACT).then(() => (contact.reached(), contact.hold)).then(() => leg(ATTACK_IMPACT, 1, ms * (1 - ATTACK_IMPACT))) : leg(0, 1, ms);
+    return run.then(() => void (this.lungeOffset = 0));
   }
 
   /**

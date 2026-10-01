@@ -15,6 +15,7 @@ import { poseForAction } from './EnemyActionPose.ts';
 import { victoryPoseOf } from './VictoryPose.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
+import { armContact, meetContact, releaseContact } from './ContactBeat.ts';
 import { partyOffStage } from './SummonStaging.ts';
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
@@ -22,6 +23,7 @@ import {
   cue,
   elementCue,
   numeral,
+  reasonText,
   settled,
   TIMING,
   type EventCtx,
@@ -66,7 +68,7 @@ export async function actionStart(
 
   if (pose === 'attack') {
     cue(ctx, 'attack', { volume: 0.8 });
-    if (!motion?.ownsWindUp?.(event)) void Promise.all([actor?.lunge(1.4, 440), actor?.squash(260, 0.45)]); // FF7: its painted keys
+    if (!motion?.ownsWindUp?.(event)) void Promise.all([actor?.lunge(1.4, 440, armContact(ctx, event.actorId)), actor?.squash(260, 0.45)]); // FF7: its painted keys
   } else if (pose === 'cast') {
     cue(ctx, 'cast', { volume: 0.7 });
     actor?.flash(0x9fd8ff, 560, 0.45);
@@ -75,6 +77,7 @@ export async function actionStart(
 }
 
 export async function actionEnd(ctx: EventCtx): Promise<void> {
+  releaseContact(ctx); // VP-1001-06: a strike still held at its apex goes home
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
   const motion = ctx.deps.actionMotion; // FF7: the run back home
   if (motion && ctx.actingId) await settled(ctx, motion.close(ctx.actingId, motionCtx(ctx)), MOTION_GUARD_MS);
@@ -113,12 +116,14 @@ export async function damage(
   }
 
   if (event.affinity === 'immune' || event.amount === 0) {
+    await meetContact(ctx, event.targetId); // VP-1001-06
     numeral(ctx, event.targetId, { kind: 'miss', text: event.affinity === 'immune' ? 'IMMUNE' : '0' });
     return ctx.sleep(TIMING.miss);
   }
 
   // The spell reaches the target before its numeral does (B1 spell effects).
   await awaitSpellLanding(ctx, event, false);
+  await meetContact(ctx, event.targetId); // VP-1001-06: the blow lands on the strike's apex
 
   // The cut to the target, on the frame the hit lands. Only the first hit of a
   // multi-hit action moves the camera (see `BattleMoments.impact`).
@@ -151,6 +156,15 @@ export async function damage(
 
   // Multi-hit actions run tight; a single blow gets room to land.
   await ctx.sleep(event.hitCount > 1 ? TIMING.perHit : TIMING.damage);
+}
+
+/** A miss, landing on the strike's apex like a hit (VP-1001-06). */
+export async function missed(ctx: EventCtx, event: Extract<BattleEvent, { type: 'miss' }>): Promise<void> {
+  await meetContact(ctx, event.targetId);
+  numeral(ctx, event.targetId, { kind: 'miss', text: reasonText(event.reason) });
+  cue(ctx, 'miss', { volume: 0.5 });
+  ctx.stage.actor(event.targetId)?.hop(0.18, 200);
+  await ctx.sleep(TIMING.miss);
 }
 
 export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
