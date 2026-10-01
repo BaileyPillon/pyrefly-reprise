@@ -1,0 +1,15 @@
+/*
+ * PR-0284 (critic round 18b; both games): REPLAY BRIEFING from the pause menu.
+ *
+ * `.pause` is a fixed layer at `z-index: 999` (`ui/common/pause-screen.css`),
+ * and the briefing mounts on `#ui` at `coach.css`'s `z-index: 90`, so the
+ * replay played unseen *under* the pause while it held the keyboard and the
+ * clicks went to the pause: one Esc took it down without it ever being seen.
+ * Replayed from the pause, the briefing sits one tier above that layer, and is
+ * fixed to the window the way the pause is, so it covers exactly what the
+ * pause covers. The first-launch briefing (title -> board) is untouched.
+ */
+.coach-brief.coach-brief--over-pause {
+  position: fixed;
+  z-index: 1000;
+}
