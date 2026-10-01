@@ -128,3 +128,56 @@ is x1.2), not only to FFX-2 seams; it is just most felt at a chain seam, where i
 `presenter-opening-skip.test.ts` pass; full `npx vitest run --testTimeout=60000`: 709 files passed,
 5 skipped (10,614 tests); `node tools/orphans.mjs`: 24 orphans, all pre-existing, none added.
 Dev server on 5440 stopped.
+
+## Check (independent, 2026-10-01)
+
+Checker's own harness, not the builder's: `D:/Tools/pyrefly-scratch/2026-10-01-rel34/seams-check/chk.mjs`
+(headless Playwright, `PYREFLY_BROWSER=gpu`, dev server of this worktree on 5450, real keys (Enter),
+the same labelled 1 HP injection; it measures the right **and** the left edge of every burst frame).
+Live 32 itself was measured from its parked dist (`F:/pyrefly-parked/2026-09-30/rel32-dist-gate`,
+bundle `ChAAAZ-I`), served statically on 5451. Both servers stopped.
+
+**PR-0300: fix confirmed at 1600x900; the 2000x1012 residue is live 32's own.**
+
+| Build | Chapter / size | Seeds, camera | Frames under 95 % | Worst |
+|---|---|---|---|---|
+| base 95e62e38 | XV 1600x900 | 1, default | 90 / 139 | 0.793 (reproduced) |
+| base 95e62e38 | XV 2000x1012 | 1, default | 74 / 116 | 0.762 |
+| f85a4053 | XV 1600x900 | 1, 2, default | 0 / 276 | 0.988 |
+| f85a4053 | XV 1600x900 | 1, 2, `cam=current` | 0 / 215 | 0.982 |
+| f85a4053 | XI, VI 1600x900 | 1, default | 0 / 253 | 1.000 |
+| f85a4053 | XV 2000x1012 | 1, 2, default | 29 / 166, first 0.83 s only | 0.939 |
+| f85a4053 | XV 2000x1012 | 1, 2, `cam=current` | 66 / 177, to 3.8 s | 0.936 |
+| **live 32 dist** | XV 2000x1012 | 1 | 10 / 99, to 3.2 s | 0.946 |
+| base, `fx=off&cam=current&pace=current` | XV 2000x1012 | 1 | 8 / 63 | 0.948 |
+
+So at 2000x1012 the round's 95 % line is not met on live 32 either (the plate deck of the scene XV
+borrows ends at about 95 % of a 1.98 frame). The candidate's worst is 0.7-1.0 % narrower than live's
+(CINEMA LIGHT's grade on the dim plate edge), and with the default calm camera it lasts 0.8 s instead
+of live's 3.2 s. Not a regression worth holding for; PR-0300's 2000x1012 clause stays open as the
+pre-existing scene item listed under "Still open". The left edge never moved (worst 0.013 on both builds).
+FFX chain (Braska's Final Aeon to Yu Yevon, 1600x900): five seams, no page errors; the metric dips
+(0.85-0.93) are dark clouds of the painting at the right edge, checked by eye, no band.
+
+**PR-0301: builder's numbers re-measured and confirmed** (XV 1600x900 seed 1, two seams each):
+live 32 dist 3.79 / 3.83 s opening, 11.71 / 11.77 s seam to menu; steady only (`cam=current`)
+4.15-4.19 s; calm only (`pace=current`) 5.53 / 5.52 s, 13.38 / 13.86 s; as shipped 6.02 / 6.02 s,
+14.18 / 14.40 s. XI: live 32 dist 3.93 / 3.83 s against 6.11 / 6.05 s (menu 13.4 / 14.3 against
+16.5 / 16.4 s). The +2.2 s comes from the two approved picks; it is Bailey's call (askBailey above).
+
+**Neighbouring flows on f85a4053 (XV seams, 1600x900, real keys), all 0 frames under 95 %, 0 page errors:**
+Confirm pressed 0.6 s into each seam opening ends it (opening 0.73 s, menu 8.8 / 9.1 s); pause
+(Escape) during a seam opening shows the pause screen ("battle 2 of 3") and resumes to battle;
+OS reduced motion; saved settings TEXT SIZE 130 %, BATTLE HELP OFF, REDUCE MOTION on (read back from
+the save); first-run flow with coaching on, Chapter I to results. FFX-2 seams in XV, XI, VI.
+
+**Gates:** `git diff 95e62e38..f85a4053 -- src/battle` empty (rule 1); SaveData and settings schema
+untouched; `npx tsc --noEmit` clean; the three touched test files pass (19 tests); full
+`vitest run --testTimeout=60000`: 708 passed, 5 skipped, 1 failed by timeout under machine load
+(`ffx2-ability-flags.test.ts`, which sets its own 30 s limit and does not touch this diff; it passes
+alone, 2 / 2 in 8 s); `node tools/orphans.mjs` 24, the same pre-existing list, none of the changed
+files; rule 7 holds (SpectacleFx.ts 399, presenterHooks.ts 140, OpeningSkip.ts 60, test 95); rule 14:
+both commits name the case (both games; seen in FFX-2).
+
+**Verdict:** no blocker. PR-0300 fixed at 1600x900 in both camera modes and both seeds; its 2000x1012
+clause is pre-existing on live 32 (disclose, scene lane). PR-0301 diagnosis confirmed; owner decision.
