@@ -115,3 +115,79 @@ Each run used a fresh profile (`fr.mjs`): Ch I at 1600x900 by keys, and Ch IV at
   first entry at the same moment.
 - Esc to open the pause also skips the first-run guide (`firstRunGuide.ts`: "Esc ... every step seen"). This is old
   behaviour and is not touched.
+
+## Check (independent, 2026-10-01)
+
+Checked `f8b2173e` against base `95e62e38` with headless Playwright (`PYREFLY_BROWSER=gpu`), real keys, mouse clicks
+and touch taps, seed 1, one dev server on 5430 (stopped). The base runs were done in this worktree with HEAD detached
+at `95e62e38`, and the worktree was then switched back to `r34fix-restart`. Scripts, `run.json` files and frames are in
+`D:/Tools/pyrefly-scratch/2026-10-01-rel34/restart-check/` (`chk.mjs`, `look.mjs`, `chain.mjs`, `entry.mjs`, `fr.mjs`).
+Verdict: **both fixes hold, no regression found, no blocker.**
+
+**PR-0283 (RESTART ENCOUNTER), both games: fixed.**
+- Reproduced on the base: Ch I by keys at 1600x900 and Ch IV by taps at 390x844 gave roots and stack
+  `["title","battle"]`, with PRESS ENTER / TAP TO BEGIN visible, at 2 s, 6 s, the first menu and after one turn.
+- On `f8b2173e`, every sample (2 s, 6 s, first menu, one turn) showed `["battle"]` and no title text, in each run:
+  - Ch I by keys at 1600x900, restarted twice in a row.
+  - Ch I by taps at 390x844 with TEXT SIZE 130 %, REDUCE MOTION on and BATTLE HELP OFF, restarted twice.
+  - Ch IV by taps at 390x844, then CHAPTER SELECT: `["chapter-select"]`.
+  - Ch IV by click and Ch I by keys at 1600x900, and Ch IV by taps at 390x844, each played on to the results panel:
+    `["results"]`. From the results, CHAPTER SELECT gave `["chapter-select"]` with no title text, both by click
+    (Ch I) and by tap (Ch IV). After the defeat panel, RETRY re-entered the fight with `["battle"]`.
+  - FFX-2 chain seam, Ch XI: autoplay was used only to get past Shiva, and the restart was done by real keys in the
+    Magus Sisters link. The fight re-entered the Sisters link (the FA3 = b checkpoint carry), with `["battle"]` at
+    2 s, 6 s and the first menu.
+- Approved looks, re-run with `fr.mjs` on a fresh profile (Ch I by keys at 1600x900):
+  - The first-launch briefing is on `#ui` at z-index 90 and on top.
+  - The board guide is armed, and guide step 3 appears on the first command menu.
+  - `cam()` reads `calm` in the first fight and in the restarted fight.
+
+**PR-0284 (REPLAY BRIEFING), both games: fixed.**
+- Reproduced on the base: Ch I by keys and Ch IV by click at 1600x900. At 0.5 s the briefing was under the pause at
+  all 5 sample points. In the Ch IV click run it still covered the screen unseen after the click, and three ESC RESUME
+  clicks left the pause up.
+- On `f8b2173e`, the briefing was on top at all 5 points at 0.5 s and 2 s, and closing it returned to the pause:
+  - Ch IV by taps at 390x844 with TEXT SIZE 130 %, REDUCE MOTION and BATTLE HELP OFF. No briefing text fell outside
+    the viewport.
+  - Ch I by keys at 1600x900 with the same comfort settings.
+  - Ch I by click at 1600x900.
+  - Then ESC RESUME by click or tap, or two Escs by keys, returned to the fight. By keys it takes two Escs: the first
+    goes from the row to the tabs and the second leaves the pause. The base behaves the same way.
+- First-launch briefing compared with the replay (`look.mjs`):
+  - Ch I at 1600x900 and Ch IV at 390x844 with TEXT SIZE 130 %.
+  - In both, all 13 text nodes have the same font, size, weight, case, spacing, colour and box.
+  - The two PNG frames 2 s in are pixel-identical (mean difference 0.0).
+
+**Gates, re-run:**
+- `npx tsc --noEmit` is clean.
+- Full `npx vitest run --testTimeout=60000`: 710 files passed and 5 skipped. 10,619 tests passed, 42 were skipped and
+  1 is a todo.
+- `node tools/orphans.mjs` reports 24 orphans, all old.
+- Rule 7: `BattleScreen.ts` is 920 lines and `BattleScreenFlow.ts` is 525, the same as on the base. The other touched
+  files are under 400 lines.
+- `git diff 95e62e38..f8b2173e -- src/battle` is empty. `SaveData.ts` and the settings schema are untouched.
+- Rule 14: every commit names its game case ("both games").
+
+**Builder's observations, re-measured once:**
+- The phone entry with the HUD area dark: Ch IV at 390x844, mean luminance of the bottom 45 % of the screen.
+  - First entry, timed from the battle screen going up: dark (7/255) from 0.9 s to 6.8 s, HUD lit at 7.1 s, first
+    menu at 8.6 s.
+  - Restarted entry, timed from the row tap, which includes about 1.6 s of the pause closing: dark from 2.2 s to
+    7.8 s, HUD lit at 8.1 s, first menu at 9.6 s.
+  - The dark period is the same, about 6 s, so the restart introduces nothing here. Whether the ordinary entry
+    should show a dark HUD band for 6 s on a phone is a separate taste question, not decided here.
+- Esc skips the first-run guide: this is by design (`firstRunGuide.ts`, steps 1 and 2 only). Not changed.
+
+**New finding, present on the base, not caused by this branch (major, both games):**
+- Pause, then QUIT TO TITLE, leaves two title roots: stack `["title","title"]`, with PRESS ENTER visible twice.
+- After Enter back to the board, the stack is `["title","chapter-select"]`, with the title still mounted under the
+  board.
+- Reproduced the same way on `95e62e38` and on `f8b2173e`, by click at 1600x900 in Ch IV, with and without a restart
+  first. The probe is `chk.mjs restart ffx2-bahamut click --then=title --norestart`.
+- Suspected cause (not traced): the same pattern as PR-0283. `requestExit('title')` waits for the flow to unwind and
+  then calls `goto('title')`. Meanwhile the title loop's board is torn down, answers "no chapter", and also calls
+  `goto('title')`.
+- Not fixed here, because it is outside this brief.
+
+**Minor:** `114c5b01` does not build on its own (disclosed by the builder). Only the pair with `2b46fab8` builds, which
+makes a bisect across it awkward. Nothing to change before the merge.
