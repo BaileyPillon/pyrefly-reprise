@@ -121,9 +121,10 @@ describe('CutsceneStage.setPose with and without the painting', () => {
     expect(fig.className).not.toMatch(/is-kneel|is-ko\b/);
     expect(Number(fig.style.getPropertyValue('--aspect'))).toBeCloseTo(ko.aspect, 6);
     expect(Number(fig.style.getPropertyValue('--h-l'))).toBeCloseTo(0.62 * ko.heightOfIdle, 6);
-    // the fall keeps his feet line; its centre moves right of the box (the cut robe end runs off the screen's edge)
+    // the fall keeps his feet line; its centre moves right of the box (only the robe tail runs off the screen's
+    // right edge; portrait 0.65 keeps the wide painting's hair tips inside the left edge at 390x844)
     expect(fig.style.getPropertyValue('--x-l')).toBe('0.94');
-    expect(fig.style.getPropertyValue('--x-p')).toBe('0.6');
+    expect(fig.style.getPropertyValue('--x-p')).toBe('0.65');
     expect(fig.style.getPropertyValue('--feet-l')).toBe('0.9');
     expect(fig.style.getPropertyValue('--feet-p')).toBe('0.74');
 
