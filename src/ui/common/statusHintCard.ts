@@ -16,6 +16,16 @@
  * at the command menu it docks just above the party chips, at the target step under the target
  * card (the mockup's order). On the desktop FFX HUD the move advisor's solver treats the card
  * as an obstacle (`hudAvoidSelectors.ts`), so the NEXT BEST MOVE card moves down, never under it.
+ *
+ * Round 18b. PR-0303 (FFX phone): under the target card only when it fits above the target step's
+ * "Tap another ally to switch" line; otherwise the command menu's slot above the party chips, so it
+ * never covers that line or CONFIRM. PR-0304 (FFX-2 desktop, guide open): FFX-2's ATB plays actions
+ * while a menu is open, and A-15's fade (`ui/ffx2/actionFade.ts`) takes the guide's stack, and the
+ * hint in it, to opacity 0. While it is faded a solo copy stands in the hint's own stage slot (the
+ * guide-folded slot); the copy in the guide keeps its place, so the guide's fit never moves.
+ * PR-0302 repair (desktop, guide open): where the 14-px floor makes the in-guide card push the
+ * guide's column over a command row (FFX at 1280 px wide), the card carries the rule's one-sentence
+ * form for that card ({@link guideOverCommands}); TEXT SIZE no longer multiplies the floor in the guide.
  */
 
 import type { BattleState, CombatantId, StatusId } from '../../battle/common/types.ts';
@@ -25,6 +35,8 @@ import { battleHelpOn } from '../coach/coachState.ts';
 
 /** Phone: the gap kept between the card and what it docks against, CSS px. */
 const PHONE_GAP = 6;
+/** FFX-2's A-15 fade class (`ui/ffx2/actionFade.ts` ACTION_FADE_CLASS; pinned by status-o3-hint-place.test.ts). */
+export const GUIDE_FADE_CLASS = 'ffx2-actfade';
 
 /** The hints a party carries now, most alarming status first, then party order. Pure. */
 export function partyHints(game: StatusGame, state: BattleState | null, partyIds?: readonly CombatantId[]): CureHint[] {
@@ -51,9 +63,46 @@ export function hintCardHtml(hints: readonly CureHint[], phone: boolean): string
   return `<div class="sthint__head">GUIDE <i>${first.label}</i></div><div class="sthint__body">${body}</div>`;
 }
 
+/** The clearance kept between the guide's column and the first command row under it, CSS px. */
+export const GUIDE_CMD_GAP = 0;
+
+/**
+ * PR-0302 repair: does the guide's column (its slab, which can run past the stack's max-height, and
+ * the MORE row) reach within {@link GUIDE_CMD_GAP} of a command row it sits over? Rendered rects,
+ * so TEXT SIZE's `scale` and the stage's letterbox scale are both counted. Every command row in the
+ * stage, open submenus included; a box with no layout (jsdom, hidden) never counts.
+ */
+export function guideOverCommands(guide: HTMLElement, stage: HTMLElement): boolean {
+  let left = Infinity;
+  let right = -Infinity;
+  let top = Infinity;
+  let bottom = -Infinity;
+  for (const el of guide.querySelectorAll<HTMLElement>('.sgd__stack, .sgd__panel, .sgd__more')) {
+    if (el.hidden) continue;
+    const r = el.getBoundingClientRect();
+    if (!(r.height > 0)) continue;
+    left = Math.min(left, r.left);
+    right = Math.max(right, r.right);
+    top = Math.min(top, r.top);
+    bottom = Math.max(bottom, r.bottom);
+  }
+  if (bottom === -Infinity) return false;
+  for (const row of stage.querySelectorAll<HTMLElement>('.ig-cmd')) {
+    const r = row.getBoundingClientRect();
+    if (!(r.height > 0) || r.right <= left || r.left >= right) continue;
+    if (r.bottom > top && r.top < bottom + GUIDE_CMD_GAP) return true;
+  }
+  return false;
+}
+
 export class StatusHintCard {
   readonly el: HTMLElement;
+  /** PR-0304: the stand-in shown in the stage slot while the guide (and the hint in it) is faded. */
+  readonly solo: HTMLElement;
   private html = '';
+  /** PR-0302 repair: the in-guide card is in its one-sentence form (see `update`), for `compactKey`. */
+  private compact = false;
+  private compactKey = '';
 
   /** `help`: the player's BATTLE HELP switch (the save's `battleHelp`), read every frame. */
   constructor(game: StatusGame, private readonly help: () => boolean = battleHelpOn) {
@@ -61,6 +110,10 @@ export class StatusHintCard {
     this.el.className = `sthint sthint--${game}`;
     this.el.dataset['role'] = 'status-hint';
     this.el.hidden = true;
+    this.solo = document.createElement('div');
+    this.solo.className = `sthint sthint--${game} sthint--solo`;
+    this.solo.dataset['role'] = 'status-hint-solo';
+    this.solo.hidden = true;
   }
 
   /**
@@ -68,25 +121,40 @@ export class StatusHintCard {
    * `open`: a decision is open. `phone`: the upright-phone layout is on.
    */
   update(hints: readonly CureHint[], open: boolean, stage: HTMLElement | null, guide: HTMLElement | null, phone: boolean): void {
-    const html = open && this.help() ? hintCardHtml(hints, phone) : '';
-    if (html !== this.html) {
-      this.html = html;
-      this.el.innerHTML = html;
-    }
-    this.el.hidden = html === '';
-    this.el.classList.toggle('sthint--phone', phone);
-    if (phone && html) this.dockPhone(stage);
-    if (!stage) return;
-    const panel = guide && !guide.hidden && !guide.classList.contains('sgd--off') && !phone
+    const full = open && this.help() ? hintCardHtml(hints, phone) : '';
+    const panel = stage && guide && !guide.hidden && !guide.classList.contains('sgd--off') && !phone
       ? guide.querySelector<HTMLElement>('.sgd__panel')
       : null;
+    // PR-0302 repair: a new card, a resize or another TEXT SIZE starts from the full rule again.
+    const key = panel && full ? `${full}|${innerWidth}x${innerHeight}|${document.documentElement.dataset['textSize'] ?? ''}` : '';
+    if (key !== this.compactKey) {
+      this.compactKey = key;
+      this.compact = false;
+    }
+    this.show(this.compact ? hintCardHtml(hints, true) : full);
+    this.el.classList.toggle('sthint--phone', phone);
+    if (phone && full) this.dockPhone(stage);
+    if (!stage) return;
     if (panel) {
       if (this.el.parentElement !== panel) panel.insertBefore(this.el, panel.firstChild);
       this.el.classList.add('sthint--inguide');
+      // The guide shows at least its first block whatever its chrome (StrategyGuide.refit), so a
+      // card grown by the 14-px floor pushes the guide's column down over the first command row
+      // at 1280 px wide. There the card carries the rule's one-sentence form (the phone card's).
+      // Measured before the frame paints, and kept for this card: one switch, never a flicker.
+      if (!this.compact && full && guideOverCommands(guide!, stage)) {
+        this.compact = true;
+        this.show(hintCardHtml(hints, true));
+      }
     } else {
       if (this.el.parentElement !== stage) stage.appendChild(this.el);
       this.el.classList.remove('sthint--inguide');
     }
+    const html = this.html;
+    const solo = html !== '' && !!panel?.closest(`.${GUIDE_FADE_CLASS}`);
+    if (solo && this.solo.innerHTML !== html) this.solo.innerHTML = html;
+    if (solo && this.solo.parentElement !== stage) stage.appendChild(this.solo);
+    this.solo.hidden = !solo;
   }
 
   /**
@@ -99,7 +167,10 @@ export class StatusHintCard {
     const r = card && !card.hidden ? card.getBoundingClientRect() : null;
     let top = '';
     let bottom = '';
-    if (r && r.height > 0) {
+    // PR-0303: the first of the tap line and the Back / Confirm bar that is laid out bounds the slot.
+    const below = ['.phud-target__hint', '.phud-target__bar'].map((s) => host?.querySelector<HTMLElement>(s)?.getBoundingClientRect())
+      .find((b) => b !== undefined && b.height > 0);
+    if (r && r.height > 0 && (!below || r.bottom + 4 + this.el.getBoundingClientRect().height <= below.top - 4)) {
       top = `${Math.round(r.bottom + 4)}px`;
       bottom = 'auto';
     } else {
@@ -111,7 +182,16 @@ export class StatusHintCard {
     if (this.el.style.bottom !== bottom) this.el.style.bottom = bottom;
   }
 
+  private show(html: string): void {
+    if (html !== this.html) {
+      this.html = html;
+      this.el.innerHTML = html;
+    }
+    this.el.hidden = html === '';
+  }
+
   dispose(): void {
     this.el.remove();
+    this.solo.remove();
   }
 }

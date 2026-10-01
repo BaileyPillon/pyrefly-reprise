@@ -198,6 +198,23 @@ describe('fb-0929 options, off by default (FFX only)', () => {
     expect(await settled(pick)).toBe(true);
   });
 
+  it('PR-0264, a touch tap (both options off): the first tap on the Zombie Kimahri aims and warns, the second confirms', async () => {
+    const { hud, pick } = openHiPotion();
+    const touch = (): void => {
+      const e = new Event('pointerdown');
+      Object.defineProperty(e, 'pointerType', { value: 'touch' });
+      window.dispatchEvent(e);
+    };
+    touch();
+    expect(menuOf(hud).tryConfirmTargetById('kimahri')).toBe(true);
+    expect(await settled(pick)).toBe(false);
+    expect(document.querySelector('.ffx-target__plate .ffx-target__note')?.getAttribute('title')).toMatch(/Zombie: 1,000 damage/);
+    touch();
+    menuOf(hud).tryConfirmTargetById('kimahri');
+    expect(await settled(pick)).toBe(true);
+    expect((await pick).targets).toEqual(['kimahri']);
+  });
+
   it('word on: the party plate spells Zombie out on Kimahri only', () => {
     window.history.replaceState({}, '', '/?zombiewarn=word');
     const { state } = zombieKimahriBoard();
