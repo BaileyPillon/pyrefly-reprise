@@ -835,15 +835,19 @@ Row 280, **rank 5**, costs the full gauge. Summons any owned aeon **with a full 
 
 **UI and input rules.** A button sequence is displayed and must be entered before a **4 000 ms** timer expires. The faster it is completed, the larger the §5.2 remaining-time bonus. `[verified: 2 sources]`
 
-The per-input rules the previous revision left open — **all three are authored decisions**, because no source documents the input state machine:
+> Open: Tornado's timer (3 s in GF-KB, XU, AGS against one 4 000 ms here) is `[conflicting]`, unchanged here; see `research/ffx-overdrive-input-rules-2026-09-30.md` D1.
+
+The per-input rules the previous revision left open. The wrong-press rule is now **sourced** (2026-09-30, `research/ffx-overdrive-input-rules-2026-09-30.md` Q1); the other two stay **authored decisions**, because no source documents the rest of the input state machine:
 
 | Question | **Shipping rule** | Basis |
 |---|---|---|
-| Does a wrong button abort immediately? | **No — a wrong press is ignored** and the expected input does not advance. | `[estimate]` Aborting on one mis-press would make an 8-input sequence on a 4 s timer punitively swingy, and the published failure condition is described only as the sequence being "unsuccessful" within the time limit. |
+| Does a wrong button abort immediately? | **No — a wrong press sends the progress back to input 1** and the attempt continues; there is no other penalty. The attempt ends only on the last correct input or at timer expiry. The timer keeps running through the reset. The wrong press itself does not count as input 1. | Reset to input 1: `[verified: 3 sources]` (GF-PF "if an incorrect button is pressed, you must start the sequence over"; GF-HD; AF; see `research/ffx-overdrive-input-rules-2026-09-30.md` Q1). Timer running on through the reset: `[estimate]` (no source describes the timer at the reset). The wrong press not counting as input 1: `[estimate]`. The previous revision's "a wrong press is ignored" `[estimate]` is **contradicted** by those sources. |
 | Is there a per-button sub-window? | **No.** There is one global 4 000 ms budget for the whole sequence; individual inputs are untimed. | `[estimate]` Only one timer is ever shown. |
 | How does "faster = larger bonus" reach §5.2? | The sequence **completes early**; `timeRemaining = 4000 − msElapsedWhenLastInputLanded`, fed straight into the §5.2 term with `timerMs = 4000`. Completing in 1 500 ms yields `1 + ½ × (2500/4000)` = **×1.31**. | `[verified: 2 sources]` for the §5.2 formula; `[estimate]` for the completion-time reading |
 
 Failure (timer expiry) resolves the "(Fail)" row. A third "(Immune)" row exists for targets immune to the Overdrive's rider status, with a **higher** DmgCon compensating for the lost effect.
+
+> Open: when the Immune row applies (Banishing Blade "any" or "all four" Breaks, per target or per action) is unchanged here; see `research/ffx-overdrive-input-rules-2026-09-30.md` Q2.
 
 **Tornado is the special case.** Tornado has **no rider status**, so no target is ever "vulnerable" to it — the engine therefore always selects the *immune* row on success. That reconciles the decompile (rows 103 = 15, 269 = 15, 273 = 20) with Fandom's flat statement that a successful Tornado is "Physical, 20 (2 hits)" and a failed one is 15: **row 273 is Tornado's success row.** The previous revision's "success 15 × 2" was wrong. `[verified: 2 sources]` — recorded as §11 C15.
 
@@ -855,6 +859,8 @@ Failure (timer expiry) resolves the "(Fail)" row. A third "(Immune)" row exists 
 | Tornado | 103 / 269 / **273 = success** | 7 (fail 6) | all enemies | **20 × 2** (row 273 — see note above) | 15 × 1 | — (no rider) | **○ → R1 ← L1 △** *(NA/JP: ✕ → R1 ← L1 △)* | 10 Jecht Spheres |
 
 `[verified: 2 sources]` (rows/DmgCon from the decompile; sequences, version splits, hit counts and unlocks from Fandom *Bushido (Final Fantasy X)*, cross-checked against Jegged + SuperCheats).
+
+> Open: the button orders (HD guides give the NA/JP order) and Tornado's rank (rank 6 in the row-273 decode, 7 in FW-RK) are `[conflicting]`, unchanged here; see `research/ffx-overdrive-input-rules-2026-09-30.md` D3 and D4 (Blitz Ace's hit count, §5.3, is D5).
 
 > **Correction:** the previous revision printed the **NA/JP** button sequences while declaring an International/HD baseline. The baseline sequences are the bolded ones above; see §0 V14–V16.
 

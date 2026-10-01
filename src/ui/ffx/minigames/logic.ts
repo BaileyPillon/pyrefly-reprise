@@ -71,8 +71,16 @@ export function timingBonusPercent(timeRemainingMs: number, timerMs: number): nu
 // ----------------------------------------------------------- Auron sequence
 
 /**
- * One step of Bushido's button sequence. Bushido has **no partial credit**: a
- * wrong input ends the attempt immediately [visual-bible §3.11.2].
+ * One step of Bushido's button sequence (FFX only).
+ *
+ * `research/ffx-overdrive-input-rules-2026-09-30.md` Q1, reset-to-start
+ * `[verified: 3 sources]` (GF-PF, GF-HD, AF): "if an incorrect button is
+ * pressed, you must start the sequence over" (GF-PF); "otherwise there is no
+ * penalty" (GF-HD). So a wrong press sends the progress back to input 1 and the
+ * attempt **continues**: it is never `done` on a wrong press. The attempt ends
+ * only on the last correct input or at timer expiry (the Fail row, no §5.2
+ * bonus: `resolveAuronSequence`, PR-0267). The wrong press itself does not count
+ * as input 1 even when it is that button `[estimate]`: no source says either way.
  */
 export function stepAuronSequence(
   sequence: readonly string[],
@@ -81,7 +89,7 @@ export function stepAuronSequence(
 ): { correctSoFar: number; wrong: boolean; done: boolean } {
   const expected = sequence[correctSoFar];
   if (expected === undefined) return { correctSoFar, wrong: false, done: true };
-  if (pressed !== expected) return { correctSoFar, wrong: true, done: true };
+  if (pressed !== expected) return { correctSoFar: 0, wrong: true, done: false };
   const next = correctSoFar + 1;
   return { correctSoFar: next, wrong: false, done: next >= sequence.length };
 }
