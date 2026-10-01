@@ -360,3 +360,83 @@ JPEG frames). The probe copies and the real-key script are parked in
 `F:/pyrefly-parked/2026-09-30/od2/check/`. No server is left running.
 
 Game case: **FFX only**.
+
+## od3 (2026-09-30): a wrong Bushido press resets to input 1 (FFX only)
+
+Branch `r34fix-od3`, cut from f699e828. Not pushed, not deployed. Settles od2's still-open item 1
+(and the odfail Check's major 2) now that a source exists. Two commits, one per item.
+
+**The source.** `research/ffx-overdrive-input-rules-2026-09-30.md` (copied unchanged from main
+4850175b, blob ec56e897, so the code and its source travel together), Q1, reset-to-start
+`[verified: 3 sources]`:
+
+- GF-PF: "if an incorrect button is pressed, you must start the sequence over"
+- GF-HD: "if you make a mistake, you must start over from the beginning"; "otherwise there is no penalty"
+- AF: "If you make a mistake you'll have to start over."
+
+The timer running on through the reset is `[estimate]` (GF-HD says "a fixed amount of time"; no
+source describes the timer at the reset). The wrong press itself not counting as input 1 is also
+`[estimate]`. Fail outcome `[verified: 3 sources]`: timer expiry resolves the Fail row, and
+PR-0267 (no bonus on a fail) stays.
+
+**1. Code** (457e6521).
+
+- `src/ui/ffx/minigames/logic.ts` `stepAuronSequence`: a wrong press returns
+  `{correctSoFar: 0, wrong: true, done: false}`; before it was `done: true` (the attempt ended).
+- `src/ui/ffx/minigames/AuronSequence.ts`: on a wrong press every chip returns to unlit and the
+  missed chip takes the existing `ffx-mg-key--wrong` colour for 240 ms (the overlay's own flash
+  length), then clears. No new art or CSS, no animation added, REDUCE MOTION untouched. Expiry is
+  the only fail: `{success:false, correctInputs: <progress>, timeRemainingMs: 0}`.
+- Engine contract (`MinigameResult`) and `src/battle/**` untouched. 98 and 168 lines.
+
+| Run | before (f699e828) | after |
+|---|---|---|
+| Pure, ↑↓← then a wrong ↓ | `{3, wrong, done}`, resolves `{false, 3, 0}` | `{0, wrong, not done}`; the full sequence after it completes, `{true, 7, 2800}` at 1 200 ms |
+| Real keys, 3 correct, wrong ↓ ~390 ms in | overlay resolved at once: engine got `{false, 3, 0}`, Yunalesca took **1807** (Fail row) | overlay stays open; chips go `...W...` then `.......` 300 ms later |
+| ... then the full correct sequence | n/a (already resolved) | engine got `{true, 7, 2611}` (page clock said 4000 − 1389 = 2611), **2545** (= 1919 × (1 + 2611/8000)) |
+| ... then nothing | n/a | `{false, 0, 0}` at expiry, **1807** (= no press) |
+| No press | `{false, 0, 0}`, 1807 | `{false, 0, 0}`, 1807 |
+
+Browser runs: headless Playwright (`PYREFLY_BROWSER=gpu`), vite dev on 5391, stopped by PID after
+each run. Setup through `__pyrefly` (seed 1, Chapter II, cutscenes skipped, Auron's gauge 100);
+everything else real keys: the others Attack, Auron picks Overdrive > Dragon Fang, then the keys
+read off the chips. Before = this branch at f699e828, after = 457e6521.
+
+**2. Docs** (a2c728c8). `research/ffx-combat-core.md` §5.5: the wrong-press row now says reset to
+input 1, with the tags above, and the old "ignored" `[estimate]` marked contradicted. One-line
+"Open" markers, values unchanged: Tornado's timer (D1), the Immune-row rules (Q2), button orders
+and Tornado's rank (D3, D4), Blitz Ace's hit count (D5, §5.3). `research/visual-bible.md`
+§3.11.2: not "the run ends" (row returns to pending, chip 1 next), and "all four sequences are 7
+inputs" corrected to 8 / 7 / 7 / 6 `[verified: 4 sources]` (D2).
+
+**Tests.** `tests/unit/ffx-bushido-wrong-press-reset.test.ts` (new, jsdom, 11 tests): the pure
+reset rule (mid-sequence, first input, wrong press equal to input 1, full sequence after a reset,
+expiry); the real overlay on a fake clock with real `keydown` events (wrong press does not
+resolve, chips unlit and the wrong mark clears; wrong press then the full sequence = success with
+3 000 ms left at 1 000 ms, measured from the opening; wrong press then nothing = `{false, 0, 0}`
+at the timer; several wrong presses); the engine (reset + expiry = the no-press Fail row; reset +
+completion beats a 0 ms success, which beats the fail). 8 of the 11 fail on f699e828.
+`ui-ffx-minigames.test.ts`'s wrong-press expectation follows the source.
+
+**Gates:** `npx tsc --noEmit` clean; full `npx vitest run --testTimeout=60000`: 697 files passed,
+5 skipped, 10535 tests passed; `node tools/orphans.mjs`: 24 orphans, unchanged. No golden moved.
+
+**Still open (not changed; the sources do not settle them or they wait for Bailey):**
+
+1. Tornado's timer (3 s vs 4 s), the button orders, Tornado's rank, the Immune-row rules, Blitz
+   Ace's hit count: see the note's D1, D3, D4, Q2, D5.
+2. (Major, pre-existing, not a regression; seen by running `minigameParams`.) The engine publishes
+   `{abilityId, timerMs: 4000, inputs: 7}` for all four Bushido rows and no `name` or `sequence`,
+   so every Bushido overlay is titled "Dragon Fang" and plays the overlay's default 7 inputs
+   ↑↓←→✕○△, not §5.5's per-Overdrive sequence (Dragon Fang is 8). Wiring the sourced sequences
+   waits on D3 (which order is the HD baseline).
+3. visual-bible §3.11.2 asks for the **whole row** to flash on a wrong press; the overlay marks
+   only the missed chip, with the existing colour (the brief said no new art). The "next
+   required" chip state is not built either.
+
+Scratch: `D:/Tools/pyrefly-scratch/2026-09-30-rel35/od3/` (pure probe before/after, real-key JSON
+and JPEG frames, params probe, full vitest log). The real-key script is parked in
+`F:/pyrefly-parked/2026-09-30/od3/`. No server is left running.
+
+Game case: **FFX only**. Bushido is Auron's FFX Overdrive; FFX-2 has none, and no file under
+`src/battle/ffx2`, `src/ui/ffx2` or `src/data/ffx2` changed.
