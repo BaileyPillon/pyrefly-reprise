@@ -13,7 +13,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
-import { GUIDE_FADE_CLASS, StatusHintCard } from '../../src/ui/common/statusHintCard.ts';
+import { GUIDE_FADE_CLASS, StatusHintCard, guideOverCommands } from '../../src/ui/common/statusHintCard.ts';
 import { ACTION_FADE_CLASS } from '../../src/ui/ffx2/actionFade.ts';
 import { ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR } from '../../src/ui/ffx/hudAvoidSelectors.ts';
 import type { CureHint } from '../../src/ui/common/statusWords.ts';
@@ -160,5 +160,77 @@ describe('round 18b: the cure hint reads at 14 px, keeps off the tap line, and o
     guide.querySelector('.sgd__stack')!.classList.add(ACTION_FADE_CLASS);
     card.update([HINT], false, stage, guide, false);
     expect(card.solo.hidden).toBe(true);
+  });
+});
+
+describe('PR-0302 repair: the larger in-guide card never pushes the FFX guide over a command row', () => {
+  const ZOMBIE: CureHint = { status: 'zombie', label: 'ZOMBIE', html: 'Healing turns into damage on a Zombie, and a <b>Phoenix Down</b> would KO her outright.', short: 'Healing hurts a Zombie.' };
+  /** A stage with the guide's column at 43..307 x 208..`guideBottom` and the TALK row at `rowTop`. */
+  function desktop(guideBottom: number, rowTop: number, rowLeft = 55): { stage: HTMLElement; guide: HTMLElement } {
+    const stage = document.createElement('div');
+    const guide = document.createElement('div');
+    guide.className = 'sgd';
+    guide.innerHTML = '<div class="sgd__stack"><div class="sgd__panel"></div><button class="sgd__more"></button></div>';
+    const [stack, panel, more] = ['.sgd__stack', '.sgd__panel', '.sgd__more'].map((s) => guide.querySelector<HTMLElement>(s)!);
+    stack!.getBoundingClientRect = () => rect(208, 142, 43, 264); // max-height: the slab runs past it
+    panel!.getBoundingClientRect = () => rect(208, guideBottom - 22 - 208, 43, 264);
+    more!.getBoundingClientRect = () => rect(guideBottom - 22, 22, 43, 264);
+    const row = document.createElement('div');
+    row.className = 'ig-cmd';
+    row.getBoundingClientRect = () => rect(rowTop, 46, rowLeft, 310);
+    stage.append(guide, row);
+    document.body.appendChild(stage);
+    return { stage, guide };
+  }
+
+  it('the check counts the slab and MORE past the stack, rows under the column only, and nothing without layout', () => {
+    expect(guideOverCommands(desktop(490, 476).guide, document.body)).toBe(true); // the blocker: MORE over TALK's top 14 px
+    document.body.innerHTML = '';
+    expect(guideOverCommands(desktop(448, 476).guide, document.body)).toBe(false); // base: clear
+    document.body.innerHTML = '';
+    expect(guideOverCommands(desktop(490, 476, 400).guide, document.body)).toBe(false); // a row beside the column
+    document.body.innerHTML = '';
+    const bare = document.createElement('div');
+    bare.innerHTML = '<div class="sgd__stack"><div class="sgd__panel"></div></div><div class="ig-cmd"></div>';
+    expect(guideOverCommands(bare, bare)).toBe(false); // jsdom: every box 0
+  });
+
+  it('over a row the card takes the one-sentence form (the solo copy too), clear of rows it keeps the full rule', () => {
+    const over = desktop(490, 476);
+    const card = new StatusHintCard('ffx', () => true);
+    card.update([ZOMBIE], true, over.stage, over.guide, false);
+    expect(card.el.parentElement?.className).toBe('sgd__panel');
+    expect(card.el.innerHTML).toContain('Healing hurts a Zombie.');
+    expect(card.el.innerHTML).not.toContain('Phoenix Down');
+    over.guide.querySelector('.sgd__stack')!.classList.add(GUIDE_FADE_CLASS);
+    card.update([ZOMBIE], true, over.stage, over.guide, false);
+    expect(card.solo.innerHTML).toContain('Healing hurts a Zombie.');
+    document.body.innerHTML = '';
+    const clear = desktop(448, 476);
+    const full = new StatusHintCard('ffx', () => true);
+    full.update([ZOMBIE], true, clear.stage, clear.guide, false);
+    expect(full.el.innerHTML).toContain('Phoenix Down');
+  });
+
+  it('the form holds for that card (no flicker) and a new card starts from the full rule again', () => {
+    const { stage, guide } = desktop(490, 476);
+    const card = new StatusHintCard('ffx', () => true);
+    card.update([ZOMBIE], true, stage, guide, false);
+    // Now the short card clears the row: it stays short for the same card.
+    guide.querySelector<HTMLElement>('.sgd__more')!.getBoundingClientRect = () => rect(426, 22, 43, 264);
+    guide.querySelector<HTMLElement>('.sgd__panel')!.getBoundingClientRect = () => rect(208, 218, 43, 264);
+    card.update([ZOMBIE], true, stage, guide, false);
+    expect(card.el.innerHTML).toContain('Healing hurts a Zombie.');
+    // The decision closes and the next card is measured afresh.
+    card.update([ZOMBIE], false, stage, guide, false);
+    expect(card.el.hidden).toBe(true);
+    card.update([HINT], true, stage, guide, false);
+    expect(card.el.innerHTML).toContain('Paine is cursed');
+  });
+
+  it('TEXT SIZE scales the guide column, so the in-guide floor is divided by it (no 15 x 1.3)', () => {
+    expect(CSS).toContain('html[data-text-size]:not([data-phone-battle]) .ffxhud__stage .sthint--inguide,');
+    expect(CSS).toContain('.ffx2hud__stage .sthint--inguide { font-size: max(6px, calc(15px / var(--lb-scale, 1) / var(--pyr-ts, 1))); }');
+    expect(CSS).toContain('.ffx2hud__stage .sthint--inguide .sthint__head { font-size: max(4.8px, calc(15px / var(--lb-scale, 1) / var(--pyr-ts, 1))); }');
   });
 });

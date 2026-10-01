@@ -252,3 +252,58 @@ regression against live in the changed area.
 returns `confirmed: true`. After PR-0264 that tap only aims when the figure is not already
 aimed, so touch routes in the review runners will need a second tap or a CONFIRM tap. If they
 do not get one, a touch review can stall or misreport its picks.
+
+## Repair (2026-10-01, the check's blocker)
+
+**Cause, measured on `1150fb8f`.** The FFX guide's rail is fixed (stage y 44 to 115, 71 grid px).
+`StrategyGuide.refit` counts the in-guide hint as chrome and always shows at least its first block.
+At 1280x960 and TEXT SIZE 130 the floored hint was 71 px tall, the whole rail, so the slab
+(130 px) and the MORE row ran down over TALK. TEXT SIZE also scales the guide's column, so the
+15-px floor was multiplied a second time: 19.7 rendered px where 15 was the goal.
+
+**Fix (one commit, no revert).** Two parts:
+
+1. `status-o3.css`: inside the guide, the floor is divided by `--pyr-ts`. The card reads
+   max(its O3 size x TEXT SIZE, 15 px). At 1600x900 and wider that is exactly base's in-guide card.
+2. `statusHintCard.ts` `guideOverCommands`: after the card is placed, and before the frame paints,
+   rendered rects check whether the guide's slab or MORE row reaches a command row under the
+   column. If so, the card carries the rule's one-sentence form, the form the phone card and
+   the second hint already use. It is held for that card, so it switches once and never flickers.
+   A new card, a resize or a TEXT SIZE change starts from the full rule again.
+   FFX-2 runs the same code but never trips it (measured).
+
+**Re-run of the check's cases** (critic `sO3b.mjs` with the checker's `guideVsCmd`, headless
+GPU, seed 1, port 5400, now stopped). Overlap of the guide with a command row, in px2. FFX is
+Ch I decision 3, and the target step after it.
+
+| Size | Base | Before repair | After (menu / target) | Hint head / body px | Form |
+|---|---|---|---|---|---|
+| 1280x720 | 0 | 3,649 | 0 / 0 | 15.2 / 15.2 | short |
+| 1280x960 | 0 | 3,649 | 0 / 0 | 15.2 / 15.2 | short |
+| 1280x960 TEXT SIZE 115 | 0 | 7,374 | 0 / 0 | 15.2 / 15.2 | short |
+| 1280x960 TEXT SIZE 130 | 0 | 9,490 | 0 / 0 | 15.8 / 15.8 | short |
+| 1600x900 TEXT SIZE 130 | 0 | 1,591 | 0 / 0 | 16.6 / 19.7 | full |
+| 1920x1080 TEXT SIZE 130 | 0 | 350 | 0 / 0 | 19.9 / 23.7 | full |
+| 1366x768 | | | 0 / 0 | 14.4 / 15.2 | short |
+| 1600x900, TEXT SIZE 115 | 0 | 0 | 0 / 0 | 14.2 / 15.2, 14.6 / 17.5 | full |
+| 2000x1012 | 0 | 0 | 0 / 0 | 14.9 / 17.1 | full |
+| FFX-2 1280x960, 1600x900 | 0 | 0 | 0 (also the ATTACK menu) | 15.2 / 14.8, 14.2 / 15.2 | full |
+| Phones (FFX, FFX TEXT SIZE 130, FFX-2) | | | tap line 0 | 14.4 / 14.3, 18.9 / 18.4, 14.4 / 14.3 | as before |
+
+The critic's `maxCovered` is 0 everywhere, every card fits its box, and there were 0 console
+errors. Screenshot: `docs/screenshots/r34fix-tap-hint-5-ffx-1280x960-ts130-guide-clear.png`
+(TALK clear). Evidence: `D:/Tools/pyrefly-scratch/2026-10-01-rel34/repair-tap-hint/`
+(`ev-before`, `ev-final`; `sum.cjs` prints the table).
+
+**Gates.** `npx tsc --noEmit` is clean. The full `vitest run --testTimeout=60000` passed: 709
+files (5 skipped) and 10,623 tests. Four new tests are in `status-o3-hint-place.test.ts`.
+Orphans: 24, all old. No engine file was touched, and every file is under 400 lines.
+
+**For Bailey (taste, not decided).** At 1280-wide desktops (and at 1600x900 / 1920x1080 only
+where the full rule would still reach a row), the in-guide Zombie card with the guide open reads
+"Healing hurts a Zombie. Holy Water or a Remedy cures it; Esuna does not." It drops the
+Phoenix Down clause. The target step's forecast and red warning still say a Phoenix Down
+KOs. The approved O3 frames are at 1600x900, where the full rule still shows.
+
+**Noticed, not changed (in base too).** The guide's slab (NEXT) already runs over the help
+slab's top line ("A one-off action this encounter offers") at 1280x960, in base as well.
