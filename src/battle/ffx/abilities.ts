@@ -50,6 +50,7 @@ export interface ResolveOptions {
   gilSpent?: number;
   /** Counters cost no turn and never chain further counters. */
   isCounter?: boolean;
+  followUp?: boolean; // a follow-up row of the same action (Blitz Ace's "Last Hit", §5.3): targets already counted
   /**
    * Compute the **damage chain** with this combatant's stats instead of the
    * acting one's, while every other part of the action — the events, the
@@ -131,10 +132,9 @@ export function resolveAbility(
   let targets = resolveTargets(ctx, user, def, chosenTargets);
   if (targets.length === 0 && def.targeting !== 'self') return 0;
 
-  // An enemy whose Overdrive gauge fills on **being targeted** is paid here,
-  // once per action, before any hit resolves — a heal or a debuff counts.
-  // Inert unless `ActorRuntime.gaugePerTargeting` is set [overdrive.ts].
-  for (const t of targets) onTargeted(ctx, t, user);
+  // A gauge that fills on **being targeted** (a heal or a debuff counts) is paid here, once per action and
+  // not again for a follow-up row, before any hit resolves. Inert unless `gaugePerTargeting` is set [overdrive.ts].
+  if (options.followUp !== true) for (const t of targets) onTargeted(ctx, t, user);
 
   const totalHits = perHitRandom ? hitCount : hitCount * Math.max(1, targets.length);
   let hitIndex = 0;

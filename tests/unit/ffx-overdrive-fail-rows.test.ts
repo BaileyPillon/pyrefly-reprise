@@ -92,7 +92,8 @@ describe('Swordplay (Tidus): timer expiry resolves the Fail row [§5.3]', () => 
     it(`${def.name}: fail = ${num(def, 'failPower')} DmgCon x ${num(def, 'failHits')}, success = ${def.power} x ${def.hits}`, () => {
       const ok = fire(def, 'tidus', swordplay(true));
       const bad = fire(def, 'tidus', swordplay(false));
-      expect(ok.amounts).toHaveLength(def.hits * perTarget(def));
+      // Blitz Ace's success ends with its 24 x 1 "Last Hit" (row 274, od2), so it lands hits + finisherHits.
+      expect(ok.amounts).toHaveLength((def.hits + ((def.extra?.['finisherHits'] as number | undefined) ?? 0)) * perTarget(def));
       expect(bad.amounts).toHaveLength(num(def, 'failHits') * perTarget(def));
       expect(ok.misses + bad.misses).toBe(0); // hard rule 5: an Overdrive never misses
       const perHitRatio = num(def, 'failPower') / def.power;
