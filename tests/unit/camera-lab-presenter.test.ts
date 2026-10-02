@@ -71,7 +71,7 @@ describe('camera lab beats from the real presenter (FFX-2, Active)', () => {
         menus++;
         const pick = commands.find((c) => c.enabled && c.command.kind !== 'item') ?? commands.find((c) => c.enabled)!;
         const target = pick.validTargets.find((t) => fake.sideOf(t) === 'enemy') ?? pick.validTargets[0];
-        const cmd: Command = { ...pick.command, targets: target ? [target] : [] };
+        const cmd = { ...pick.command, targets: target ? [target] : [] } as Command;
         const at = clock + 2500;
         return new Promise<Command>((resolve) => {
           const wait = (): void => void (clock >= at ? resolve(cmd) : setTimeout(wait, 0));

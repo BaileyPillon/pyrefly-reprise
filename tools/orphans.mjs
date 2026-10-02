@@ -14,7 +14,8 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 
 const ROOT = resolve('src');
-const ENTRIES = ['src/main.ts'];
+// `src/lab-entry.ts`: the camera lab bundle's entry (`lab.html`, branch camera-lab; a test harness).
+const ENTRIES = ['src/main.ts', 'src/lab-entry.ts'];
 
 function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {

@@ -122,8 +122,10 @@ export function shotForBeat(beat: GrammarBeat, ctx: GrammarContext, isEnemy?: (i
         return make(clair ? 'enemy-behind-party' : 'enemy-front', beat.actorId, victim, ctx);
       }
       const target = strikeTarget(beat.targets, ctx, isEnemy);
-      // An Overdrive is the party's big attack: the colossus angle on what it strikes.
-      if (beat.big) return make('colossus', target ?? ctx.bossId, beat.actorId, ctx, true);
+      const strikesFoe = beat.targets.length === 0 || beat.targets.some((t) => (isEnemy ? isEnemy(t) : true));
+      // An Overdrive is the party's big attack: the colossus angle on what it strikes (one on the
+      // party, Mighty Guard say, is shot low on its caster instead).
+      if (beat.big) return strikesFoe ? make('colossus', target ?? ctx.bossId, beat.actorId, ctx, true) : make('caster-low', beat.actorId, target, ctx);
       if (beat.pose === 'attack') return make('lunge-side', beat.actorId, target, ctx, true);
       if (beat.pose === 'cast') return make('caster-low', beat.actorId, target, ctx);
       if (beat.pose === 'item') return make('item-close', beat.actorId, target, ctx);

@@ -15,8 +15,6 @@
  * Headings are degrees from -z, positive toward +x.
  */
 
-import type { ShotRequest } from './LabTypes.ts';
-import type { ShotTuning } from './labChapters.ts';
 
 export interface V3 {
   x: number;
@@ -56,13 +54,16 @@ export interface LabStageView {
   band: number;
 }
 
-const DEG = Math.PI / 180;
+export const DEG = Math.PI / 180;
 
-const sub = (a: V3, b: V3): V3 => ({ x: a.x - b.x, y: a.y - b.y, z: a.z - b.z });
-const add = (a: V3, b: V3): V3 => ({ x: a.x + b.x, y: a.y + b.y, z: a.z + b.z });
-const scale = (a: V3, k: number): V3 => ({ x: a.x * k, y: a.y * k, z: a.z * k });
-const v3 = (x: number, y: number, z: number): V3 => ({ x, y, z });
-const arr = (v: V3): [number, number, number] => [round(v.x), round(v.y), round(v.z)];
+/** A lens within this many degrees of looking past a figure at its target sees its back (the rear painting). */
+export const REAR_WITHIN_DEG = 58;
+
+export const sub = (a: V3, b: V3): V3 => ({ x: a.x - b.x, y: a.y - b.y, z: a.z - b.z });
+export const add = (a: V3, b: V3): V3 => ({ x: a.x + b.x, y: a.y + b.y, z: a.z + b.z });
+export const scale = (a: V3, k: number): V3 => ({ x: a.x * k, y: a.y * k, z: a.z * k });
+export const v3 = (x: number, y: number, z: number): V3 => ({ x, y, z });
+export const arr = (v: V3): [number, number, number] => [round(v.x), round(v.y), round(v.z)];
 const round = (n: number): number => Math.round(n * 1000) / 1000;
 
 /** The direction from `a` to `b` on the floor, unit length (+x when they coincide). */
@@ -143,7 +144,7 @@ export function yawFor(cam: V3, p: V3, ndcX: number, fov: number, aspect: number
 }
 
 /** A look-at point `dist` ahead of `cam` on heading `yaw`, at height `lookH`. */
-function lookFrom(cam: V3, yaw: number, lookH: number, dist: number): V3 {
+export function lookFrom(cam: V3, yaw: number, lookH: number, dist: number): V3 {
   const d = dirOfHeading(yaw);
   return v3(cam.x + d.x * dist, lookH, cam.z + d.z * dist);
 }
@@ -173,10 +174,14 @@ function segDist(a: V3, b: V3, p: V3): { d: number; t: number } {
   return { d: Math.hypot(a.x + abx * t - p.x, a.z + abz * t - p.z), t };
 }
 
-/** True when a standing figure (other than `except`) blocks the lens's view of `subject`, or the lens stands in one. */
+/** True when a standing figure (other than `except`) in front of the lens blocks its view of `subject`, or the lens stands in one. */
 export function blocked(cam: V3, subject: V3, figures: readonly LabFigure[], except: ReadonlySet<string>): boolean {
+  const tx = subject.x - cam.x;
+  const tz = subject.z - cam.z;
   for (const f of figures) {
     if (except.has(f.id) || !f.standing) continue;
+    // A figure behind the lens is never in the frame.
+    if ((f.pos.x - cam.x) * tx + (f.pos.z - cam.z) * tz < 0) continue;
     const near = Math.hypot(f.pos.x - cam.x, f.pos.z - cam.z);
     if (near < (f.side === 'enemy' ? 2.2 : 1.05)) return true;
     const { d, t } = segDist(cam, subject, f.pos);
@@ -188,180 +193,48 @@ export function blocked(cam: V3, subject: V3, figures: readonly LabFigure[], exc
 /**
  * Front or rear painting for one figure, from where the lens stands against the way the
  * figure faces (toward `faceTarget`): rear when the lens looks past the figure at its target
- * (within 50 degrees), never for a figure that is down or has no rear painting.
+ * (within {@link REAR_WITHIN_DEG}), never for a figure that is down or has no rear painting.
  */
 export function viewFor(fig: LabFigure, cam: V3, faceTarget: V3 | null): 'front' | 'rear' {
   if (!fig.hasRear || !fig.standing || !faceTarget) return 'front';
   const look = floorDir(cam, fig.pos);
   const face = floorDir(fig.pos, faceTarget);
   const cos = look.x * face.x + look.z * face.z;
-  return cos > Math.cos(50 * DEG) ? 'rear' : 'front';
+  return cos > Math.cos(REAR_WITHIN_DEG * DEG) ? 'rear' : 'front';
 }
 
-// ------------------------------------------------------------------ the shots
-
-const fig = (view: LabStageView, id: string | null): LabFigure | null =>
-  (id ? view.figures.find((f) => f.id === id) : undefined) ?? null;
-
-/** The party's centre on the floor (standing members, or everyone when all are down). */
-export function partyCentre(view: LabStageView): V3 {
-  const party = view.figures.filter((f) => f.side !== 'enemy');
-  const use = party.some((f) => f.standing) ? party.filter((f) => f.standing) : party;
-  if (!use.length) return v3(0, 0, 0);
-  const s = use.reduce((acc, f) => add(acc, f.pos), v3(0, 0, 0));
-  return scale(s, 1 / use.length);
+/** A figure's box on screen through `rig` (ndc), as a standing card turned to the lens; null behind the lens. */
+export function screenBox(rig: LabRig, f: LabFigure, aspect: number): { x0: number; x1: number; y0: number; y1: number; depth: number } | null {
+  const pos = v3(...rig.position);
+  const fwd = floorDir(pos, v3(...rig.lookAt));
+  const right = v3(-fwd.z, 0, fwd.x);
+  const half = f.height * (f.side === 'enemy' ? 0.3 : 0.24);
+  const pts = [0, f.height].flatMap((h) => [-1, 1].map((k) => ndcOf(rig, v3(f.pos.x + right.x * half * k, f.pos.y + h, f.pos.z + right.z * half * k), aspect)));
+  if (pts.some((p) => p.depth < 0.2)) return null;
+  return {
+    x0: Math.min(...pts.map((p) => p.x)),
+    x1: Math.max(...pts.map((p) => p.x)),
+    y0: Math.min(...pts.map((p) => p.y)),
+    y1: Math.max(...pts.map((p) => p.y)),
+    depth: pts[0]!.depth,
+  };
 }
 
-function bossOf(view: LabStageView): LabFigure | null {
-  return fig(view, view.bossId) ?? view.figures.find((f) => f.side === 'enemy' && f.standing) ?? null;
-}
-
-/** Keep the rig inside the set and on the viewer's side of the party-to-boss line. */
-function legal(rig: LabRig, view: LabStageView): LabRig {
-  let out = clampToBand(rig, view.band);
-  const boss = bossOf(view);
-  if (boss) {
-    const o = partyCentre(view);
-    const cam = v3(...out.position);
-    if (!onViewerSide(cam, o, boss.pos, view.viewer)) out = clampToBand({ ...out, position: arr(reflectAcross(cam, o, boss.pos)) }, view.band);
+/** How much of `target`'s on-screen box (clipped to the frame) the nearer figures cover, 0..1. */
+export function coverOf(rig: LabRig, target: LabFigure, figures: readonly LabFigure[], except: ReadonlySet<string>, aspect: number): number {
+  const b = screenBox(rig, target, aspect);
+  if (!b) return 1;
+  const clip = { x0: Math.max(-1, b.x0), x1: Math.min(1, b.x1), y0: Math.max(-1, b.y0), y1: Math.min(1, b.y1) };
+  const area = Math.max(0, clip.x1 - clip.x0) * Math.max(0, clip.y1 - clip.y0);
+  const full = (b.x1 - b.x0) * (b.y1 - b.y0) || 1;
+  let covered = 1 - area / full; // off the frame counts as covered
+  for (const f of figures) {
+    if (f.id === target.id || except.has(f.id) || !f.standing) continue;
+    const o = screenBox(rig, f, aspect);
+    if (!o || o.depth >= b.depth) continue;
+    const w = Math.min(clip.x1, o.x1) - Math.max(clip.x0, o.x0);
+    const h = Math.min(clip.y1, o.y1) - Math.max(clip.y0, o.y0);
+    if (w > 0 && h > 0) covered += (w * h) / full;
   }
-  return out;
-}
-
-function rigOf(cam: V3, look: V3, fov: number): LabRig {
-  return { position: arr(cam), lookAt: arr(look), fov };
-}
-
-/** A shot over an actor's shoulder (hero, hero-close, caster-low, item-close), with candidates. */
-function shoulderShot(view: LabStageView, actor: LabFigure, toward: V3, t: ShotTuning['hero']): LabRig {
-  const { f, s } = lineFrame(actor.pos, toward, view.viewer);
-  const base = actor.hasRear ? t.angle : t.frontAngle;
-  const tries: Array<[number, number]> = [
-    [base, t.dist],
-    [base - 12, t.dist],
-    [base + 10, t.dist],
-    [base, t.dist * 1.18],
-    [base - 24, t.dist * 0.9],
-    [base + 18, t.dist * 1.1],
-  ];
-  const torso = v3(actor.pos.x, actor.pos.y + actor.height * 0.55, actor.pos.z);
-  const except = new Set([actor.id]);
-  let first: LabRig | null = null;
-  for (const [deg, dist] of tries) {
-    const cam = add(add(actor.pos, scale(f, -dist * Math.cos(deg * DEG))), scale(s, dist * Math.sin(deg * DEG)));
-    cam.y = t.camH;
-    let yaw = yawFor(cam, torso, t.wantX, t.fov, view.aspect);
-    let rig = rigOf(cam, lookFrom(cam, yaw, t.lookH, Math.max(4, Math.hypot(toward.x - cam.x, toward.z - cam.z) * 0.6)), t.fov);
-    // The boss readable on the right: if it fell off the frame, trade some of the actor's margin.
-    const tx = ndcOf(rig, v3(toward.x, toward.y + 1.6, toward.z), view.aspect).x;
-    if (tx > 0.86) {
-      yaw = yawFor(cam, torso, Math.max(-0.82, t.wantX - (tx - 0.8)), t.fov, view.aspect);
-      rig = rigOf(cam, lookFrom(cam, yaw, t.lookH, Math.max(4, Math.hypot(toward.x - cam.x, toward.z - cam.z) * 0.6)), t.fov);
-    }
-    rig = legal(rig, view);
-    first ??= rig;
-    const at = v3(...rig.position);
-    if (Math.abs(headingOf(floorDir(at, v3(...rig.lookAt)))) > view.band + 0.5) continue;
-    if (blocked(at, actor.pos, view.figures, except)) continue;
-    return rig;
-  }
-  return first ?? legal(rigOf(add(actor.pos, v3(0, t.camH, 3)), add(actor.pos, v3(0, t.lookH, -3)), t.fov), view);
-}
-
-/** A close view of an enemy from the party's side (`angle` toward the viewer's side), sized by its height. */
-function enemyShot(view: LabStageView, enemy: LabFigure, t: ShotTuning['target'], wantX = 0.05): LabRig {
-  const party = partyCentre(view);
-  const g = floorDir(enemy.pos, party);
-  const { s } = lineFrame(party, enemy.pos, view.viewer);
-  const dir = floorDir(v3(0, 0, 0), add(scale(g, Math.cos(t.angle * DEG)), scale(s, Math.sin(t.angle * DEG))));
-  const dist = Math.max(3.2, enemy.height * t.distPerHeight);
-  const cam = add(enemy.pos, scale(dir, dist));
-  cam.y = t.camH;
-  const aim = v3(enemy.pos.x, enemy.pos.y + enemy.height * t.lookPerHeight, enemy.pos.z);
-  const yaw = yawFor(cam, aim, wantX, t.fov, view.aspect);
-  return legal(rigOf(cam, lookFrom(cam, yaw, aim.y, dist), t.fov), view);
-}
-
-/** Solve one shot. `T` is the style's tuning for this chapter. */
-export function solveShot(req: ShotRequest, view: LabStageView, T: ShotTuning): LabRig {
-  const boss = bossOf(view);
-  const subject = fig(view, req.subject);
-  const other = fig(view, req.target);
-  const bossPos = boss?.pos ?? v3(0, 0, -6);
-  switch (req.kind) {
-    case 'hero':
-    case 'hero-close':
-    case 'caster-low':
-    case 'item-close': {
-      if (!subject) return view.idleRig;
-      const t = req.kind === 'hero' ? T.hero : req.kind === 'hero-close' ? T.heroClose : req.kind === 'caster-low' ? T.casterLow : T.itemClose;
-      const toward = subject.side === 'enemy' ? partyCentre(view) : (other && other.side === 'enemy' ? other.pos : bossPos);
-      return shoulderShot(view, subject, toward, t);
-    }
-    case 'party-shoulder':
-      return view.partyShoulder ? legal(view.partyShoulder, view) : view.idleRig;
-    case 'party-front':
-      return view.idleRig;
-    case 'target':
-    case 'enemy-front': {
-      const enemy = subject ?? boss;
-      if (!enemy) return view.idleRig;
-      return enemyShot(view, enemy, req.kind === 'target' ? T.target : T.enemyFront);
-    }
-    case 'impact-wide': {
-      if (subject && subject.side === 'enemy') return enemyShot(view, subject, T.impactWide, 0.05);
-      // On the party (a heal): high over their shoulders, toward the boss.
-      const o = partyCentre(view);
-      const { f, s } = lineFrame(o, bossPos, view.viewer);
-      const cam = add(add(o, scale(f, -T.partyWide.back)), scale(s, T.partyWide.side));
-      cam.y = T.partyWide.camH;
-      return legal(rigOf(cam, v3(o.x + f.x * 1.2, T.partyWide.lookH, o.z + f.z * 1.2), T.partyWide.fov), view);
-    }
-    case 'lunge-side': {
-      if (!subject) return view.idleRig;
-      const target = other?.pos ?? bossPos;
-      const mid = scale(add(subject.pos, target), 0.5);
-      const { f, s } = lineFrame(subject.pos, target, view.viewer);
-      const L = T.lungeSide;
-      const cam = add(add(mid, scale(f, -L.dist * Math.cos(L.angle * DEG))), scale(s, L.dist * Math.sin(L.angle * DEG)));
-      cam.y = L.camH;
-      return legal(rigOf(cam, v3(mid.x, L.lookH, mid.z), L.fov), view);
-    }
-    case 'enemy-behind-party': {
-      const enemy = subject ?? boss;
-      const o = partyCentre(view);
-      const ePos = enemy?.pos ?? bossPos;
-      const { f, s } = lineFrame(o, ePos, view.viewer);
-      const B = T.enemyBehindParty;
-      const cam = add(add(o, scale(f, -B.back)), scale(s, B.side));
-      cam.y = B.camH;
-      const aim = v3(ePos.x, ePos.y + (enemy?.height ?? 4) * B.lookPerHeight, ePos.z);
-      const yaw = yawFor(cam, aim, B.wantX, B.fov, view.aspect);
-      return legal(rigOf(cam, lookFrom(cam, yaw, aim.y * 0.85, Math.hypot(aim.x - cam.x, aim.z - cam.z)), B.fov), view);
-    }
-    case 'colossus': {
-      const enemy = subject && subject.side === 'enemy' ? subject : boss;
-      if (!enemy) return view.idleRig;
-      const party = partyCentre(view);
-      const g = floorDir(enemy.pos, party);
-      const { s } = lineFrame(party, enemy.pos, view.viewer);
-      const C = T.colossus;
-      const cam = add(add(enemy.pos, scale(g, enemy.height * C.towardPerHeight)), scale(s, enemy.height * C.sidePerHeight));
-      cam.y = C.camH;
-      const look = add(add(enemy.pos, scale(g, enemy.height * 0.15)), scale(s, -enemy.height * 0.28));
-      look.y = enemy.pos.y + enemy.height * C.lookPerHeight;
-      return legal(rigOf(cam, look, C.fov), view);
-    }
-    case 'victory': {
-      const hero = subject ?? view.figures.find((f) => f.side !== 'enemy' && f.standing) ?? null;
-      if (!hero) return view.idleRig;
-      const toViewer = floorDir(hero.pos, view.viewer);
-      const V = T.victory;
-      const cam = add(hero.pos, scale(toViewer, V.dist));
-      cam.y = V.camH;
-      const look = add(hero.pos, scale(toViewer, -0.6));
-      look.y = V.lookH;
-      return legal(rigOf(cam, look, V.fov), view);
-    }
-  }
+  return Math.min(1, covered);
 }

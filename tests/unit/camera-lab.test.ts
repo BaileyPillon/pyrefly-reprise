@@ -13,17 +13,17 @@ import { DEFAULT_LAB_SWITCHES, type LabBeat, type LabSwitches, type ShotRequest 
 import {
   blocked,
   clampToBand,
+  coverOf,
   headingOf,
   floorDir,
   ndcOf,
   onViewerSide,
-  partyCentre,
   reflectAcross,
-  solveShot,
   viewFor,
   type LabFigure,
   type LabStageView,
 } from '../../src/engine/lab/labGeometry.ts';
+import { partyCentre, solveShot } from '../../src/engine/lab/labShots.ts';
 import { LAB_CHAPTERS, STYLE_TUNING, isBigAbility } from '../../src/engine/lab/labChapters.ts';
 import { LabCamera } from '../../src/engine/lab/LabCamera.ts';
 import type { CameraPort } from '../../src/engine/BattlePresenterPorts.ts';
@@ -287,7 +287,10 @@ describe('camera lab geometry', () => {
           expect(blocked(cam, actor.pos, view.figures, new Set([actor.id])), `${actor.id} blocked`).toBe(false);
           expect(Math.abs(headingOf(floorDir(cam, { x: rig.lookAt[0], y: 0, z: rig.lookAt[2] })))).toBeLessThanOrEqual(view.band + 0.6);
           expect(viewFor(actor, cam, boss.pos), `${actor.id} painting`).toBe('rear');
+          expect(coverOf(rig, boss, view.figures, new Set([actor.id]), view.aspect), `${actor.id}: boss covered`).toBeLessThan(0.25);
         }
+        const behind = solveShot({ kind: 'enemy-behind-party', subject: boss.id, target: null, drift: false, slowOnHit: false }, view, STYLE_TUNING[style]);
+        expect(coverOf(behind, boss, view.figures, new Set(), view.aspect), 'enemy turn: boss covered').toBeLessThan(0.25);
       });
     }
 

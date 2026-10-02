@@ -98,12 +98,13 @@ export class MenuAtHero {
     const left = Math.min(vw - w - 8, Math.max(8, torsoX));
     const want: Rect = { x: left, y: top, w, h };
 
-    // Never over the boss or another party member (a little overlap at an edge is tolerated).
+    // Never over the boss or another party member: no more than a quarter of a figure, and never
+    // much of its head (the top fifth of its silhouette). An edge brushing past is tolerated.
     for (const id of this.ports.avoid(actorId)) {
       const r = this.ports.rect(id);
-      if (!r) continue;
-      const hit = overlap(want, r);
-      if (hit > Math.min(want.w * want.h, r.w * r.h) * 0.12) return this.panel(`would cover ${id}`);
+      if (!r || r.w <= 0 || r.h <= 0) continue;
+      const head: Rect = { x: r.x, y: r.y, w: r.w, h: r.h * 0.2 };
+      if (overlap(want, r) > r.w * r.h * 0.25 || overlap(want, head) > head.w * head.h * 0.2) return this.panel(`would cover ${id}`);
     }
 
     el.classList.add('lab-menu-at-hero');

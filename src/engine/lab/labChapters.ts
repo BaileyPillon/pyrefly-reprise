@@ -62,14 +62,15 @@ export interface ShotTuning {
 
 const SHARED: Omit<ShotTuning, 'hero' | 'heroClose'> = {
   casterLow: { angle: 58, frontAngle: 64, dist: 2.4, camH: 0.42, lookH: 1.45, fov: 42, wantX: -0.2 },
-  itemClose: { angle: 52, frontAngle: 62, dist: 1.9, camH: 1.45, lookH: 1.35, fov: 36, wantX: -0.22 },
+  itemClose: { angle: 52, frontAngle: 62, dist: 2.6, camH: 1.3, lookH: 1.0, fov: 38, wantX: -0.22 },
   target: { angle: 28, distPerHeight: 1.35, camH: 1.0, lookPerHeight: 0.55, fov: 34 },
   enemyFront: { angle: 35, distPerHeight: 1.6, camH: 1.6, lookPerHeight: 0.55, fov: 36 },
   impactWide: { angle: 24, distPerHeight: 2.3, camH: 2.2, lookPerHeight: 0.5, fov: 36 },
   partyWide: { back: 7, side: 1.6, camH: 3.1, lookH: 1.0, fov: 34 },
   // M4's side4: 15-17 units out on a 24-degree lens, so the lunge and the boss share the frame while the view stays on the set.
   lungeSide: { angle: 50, dist: 15, camH: 0.95, lookH: 1.45, fov: 24 },
-  enemyBehindParty: { back: 3.6, side: 0.9, camH: 0.75, lookPerHeight: 0.6, fov: 42, wantX: 0.12 },
+  // Clair Obscur's enemy turn: well behind the party (the heroes small), low, a lens sized to the boss.
+  enemyBehindParty: { back: 8, side: 0.9, camH: 0.8, lookPerHeight: 0.55, fov: 34, wantX: 0.1 },
   // M4's colo4: 5.2 units in front of the boss toward the party, 0.3 off the floor, 40-degree lens.
   colossus: { towardPerHeight: 1.27, sidePerHeight: 0.2, camH: 0.3, lookPerHeight: 0.63, fov: 40 },
   // M4's hero4: low (0.45), a few units in front, 34-degree lens.
