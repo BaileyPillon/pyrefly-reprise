@@ -49,7 +49,8 @@ describe('the advisor card keeps a strip on the deck when no designed box exists
   for (const [name, input] of [['XVII', XVII], ['XVIII', XVIII]] as const) {
     it(`${name}: the designed solver declines, the strip does not, and it is clear of every panel and fighter`, () => {
       expect(advisorZone(input)).toBeNull();
-      const zone = withStrip(input);
+      expect(withStrip(input)).toBeNull(); // not a Sin fight: the designed answer stands
+      const zone = withStrip(input, true);
       expect(zone).not.toBeNull();
       expect(zone!.kind).toBe('compact');
       expect(zone!.maxHeight).toBeGreaterThanOrEqual(STRIP_MIN_HEIGHT);
@@ -64,11 +65,11 @@ describe('the advisor card keeps a strip on the deck when no designed box exists
     const open: AdvisorZoneInput = { ...COMMON, intentChip: null, guide: null, enemies: [{ left: 420, top: 20, right: 560, bottom: 150 }] };
     const designed = advisorZone(open);
     expect(designed).not.toBeNull();
-    expect(withStrip(open)).toEqual(designed);
+    expect(withStrip(open, true)).toEqual(designed);
   });
 
   it('a screen with no clear ground at all still declines', () => {
     const full: AdvisorZoneInput = { ...XVII, enemies: [{ left: 0, top: 0, right: 640, bottom: 360 }] };
-    expect(withStrip(full)).toBeNull();
+    expect(withStrip(full, true)).toBeNull();
   });
 });

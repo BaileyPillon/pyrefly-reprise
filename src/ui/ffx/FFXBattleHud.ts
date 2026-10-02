@@ -1408,7 +1408,7 @@ export class FFXBattleHud implements HudPort {
     const panels = panelPresence(input);
     const stale = this.advisorFree;
     const holdFree = stale !== null && stale.seq === this.advisorDecisionSeq && stale.panels === panels;
-    const zone = holdFree ? null : advisorZone(input);
+    const zone = holdFree ? null : advisorZone(input, Object.keys(this.lastState?.flags ?? {}).some((k) => k.startsWith('sin.'))); // F3: the strip is for the Sin fights
     this.advisorFree = zone ? null : { seq: this.advisorDecisionSeq, panels };
     const solved: HeldAdvisorPlacement = {
       key,

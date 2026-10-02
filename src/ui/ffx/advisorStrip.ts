@@ -15,10 +15,9 @@
  * That band is too short for the designed card but not for its **tersest
  * density rung** (the name, the move and the board's note: 31 grid px of
  * content at 132 wide, `hudSafeZones.MIN_ADVISOR_HEIGHT`'s own table), so this
- * third pass tries the same solve with a lower height floor. It runs only when
- * both of `advisorZone`'s passes decline, which none of the other eight FFX
- * chapters ever reach (`tests/unit/ui-ffx-hud-safe-zones.test.ts` pins that),
- * so no chapter that has a card today changes.
+ * third pass tries the same solve with a lower height floor. It runs only in the
+ * Sin fights, and only when both of `advisorZone`'s passes decline, so no other
+ * chapter's card changes.
  */
 
 import {
@@ -39,10 +38,16 @@ import {
 /** The shortest card the strip pass will lay out, in grid px (the tersest rung needs 31). */
 export const STRIP_MIN_HEIGHT = 34;
 
-/** `advisorZone`, then the strip; `null` only when even a strip has no clear ground. */
-export function advisorZone(input: AdvisorZoneInput): AdvisorZone | null {
+/**
+ * `advisorZone`, then (only when `strip` is set) the strip; `null` when even a
+ * strip has no clear ground. The HUD sets `strip` in the two Sin fights alone
+ * (their state carries `sin.*` flags): a declined card elsewhere is a designed
+ * answer that tests pin (a read-out opened with E takes the band), so no other
+ * chapter's card can move.
+ */
+export function advisorZone(input: AdvisorZoneInput, strip = false): AdvisorZone | null {
   const designed = solveDesigned(input);
-  if (designed) return designed;
+  if (designed || !strip) return designed;
   const reserve = Math.max(ADVISOR_CHIP_RESERVE, input.chipReserve ?? 0);
   const box = solveBox(obstaclesOf(input), {
     minWidth: MIN_ADVISOR_WIDTH + SKEW * STRIP_MIN_HEIGHT,
