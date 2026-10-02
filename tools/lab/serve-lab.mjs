@@ -2,11 +2,13 @@
 /**
  * CAMERA LAB: a tiny static server for `dist-lab/` (a test harness; D-318).
  *
- *   node tools/lab/serve-lab.mjs [--port 5270] [--prefix /x/y/] [--csp] [--open]
+ *   node tools/lab/serve-lab.mjs [--port 5270] [--prefix /x/y/] [--csp] [--open] [--public <dir>]
  *
  * Serves the bundle under `--prefix` (default `/`), wrapping `index.html` (a fragment) in the same
  * document shell the artifact publisher adds. `--csp` sends the publisher's same-origin policy, so
  * a run here proves the page needs nothing else. `--open` opens the default browser at the lab.
+ * `--public <dir>` serves any file the bundle lacks from that folder (the launcher points it at the
+ * worktree's `public/`, so a reserve switched in or another dressphere still finds its painting).
  * Used by `play-camera-lab.cmd`; stops when its window closes (Ctrl+C).
  */
 import { createServer } from 'node:http';
@@ -24,6 +26,7 @@ const port = Number(arg('--port', '5270'));
 let prefix = arg('--prefix', '/');
 if (!prefix.endsWith('/')) prefix += '/';
 const csp = process.argv.includes('--csp');
+const publicDir = process.argv.includes('--public') ? resolve(arg('--public', 'public')) : null;
 const CSP =
   "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; worker-src 'self' blob:";
 const TYPES = {
@@ -49,8 +52,13 @@ const server = createServer((req, res) => {
   }
   let rel = decodeURIComponent(url.pathname.slice(prefix.length));
   if (rel === '' || rel.endsWith('/')) rel += 'index.html';
-  const file = normalize(join(root, rel));
-  if (!file.startsWith(root) || !existsSync(file) || !statSync(file).isFile()) {
+  let file = normalize(join(root, rel));
+  if (publicDir && rel !== 'index.html' && (!existsSync(file) || !statSync(file).isFile())) {
+    const alt = normalize(join(publicDir, rel));
+    if (alt.startsWith(publicDir) && existsSync(alt)) file = alt;
+  }
+  const inside = file.startsWith(root) || (publicDir !== null && file.startsWith(publicDir));
+  if (!inside || !existsSync(file) || !statSync(file).isFile()) {
     res.writeHead(404, { 'Content-Type': 'text/plain', ...headers });
     return void res.end('not found');
   }

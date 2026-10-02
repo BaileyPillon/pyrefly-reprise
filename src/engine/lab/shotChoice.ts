@@ -83,8 +83,9 @@ export function menuShot(actorId: string, level: 'top' | 'sub', ctx: GrammarCont
   return make(close ? 'hero-close' : 'hero', actorId, ctx.bossId, ctx);
 }
 
-/** The first enemy among `targets`, else the boss. */
+/** The boss when it is among `targets`, else the first enemy among them, else the boss. */
 function strikeTarget(targets: readonly string[], ctx: GrammarContext, isEnemy?: (id: string) => boolean): string | null {
+  if (ctx.bossId && targets.includes(ctx.bossId)) return ctx.bossId;
   const first = targets.find((t) => (isEnemy ? isEnemy(t) : true));
   return first ?? targets[0] ?? ctx.bossId;
 }

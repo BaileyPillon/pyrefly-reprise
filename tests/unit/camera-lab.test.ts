@@ -75,6 +75,13 @@ describe('camera lab grammar', () => {
     expect(kind(shotForBeat({ kind: 'after-action' }, ctx({ game: 'ffx2' })))).toBe('party-shoulder');
   });
 
+  it('a blow on several enemies is framed on the boss when the boss is among them', () => {
+    const big = shotForBeat({ kind: 'action', actorId: 'bahamut-aeon', side: 'aeon', pose: 'attack', targets: ['mortiorchis', 'boss'], big: true }, ctx());
+    expect(big !== 'keep' && big.kind === 'colossus' && big.subject).toBe('boss');
+    const hit = shotForBeat({ kind: 'action', actorId: 'tidus', side: 'party', pose: 'attack', targets: ['mortiorchis'], big: false }, ctx());
+    expect(hit !== 'keep' && hit.target).toBe('mortiorchis');
+  });
+
   it('names the boss specials', () => {
     expect(isBigAbility(LAB_CHAPTERS['ffx2-bahamut'], 'mega-flare', null)).toBe(true);
     expect(isBigAbility(LAB_CHAPTERS['ffx2-bahamut'], null, 'Mega Flare')).toBe(true);

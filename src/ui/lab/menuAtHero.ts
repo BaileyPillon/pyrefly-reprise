@@ -72,14 +72,17 @@ export class MenuAtHero {
     if (!actorId) return this.panel('no actor');
     const el = this.menuEl();
     const stage = this.stageEl();
-    const hero = this.ports.rect(actorId);
-    if (!el || !stage || !hero) return this.panel('no menu or hero');
+    const whole = this.ports.rect(actorId);
+    if (!el || !stage || !whole) return this.panel('no menu or hero');
     const host = stage.getBoundingClientRect();
     const scale = host.width / STAGE_W;
     if (!(scale > 0)) return this.panel('stage not laid out');
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    if (hero.x + hero.w < 0 || hero.x > vw || hero.y > vh) return this.panel('hero off the frame');
+    if (whole.x + whole.w < 0 || whole.x > vw || whole.y > vh) return this.panel('hero off the frame');
+    // The part of the hero on screen (a towering aeon runs off the top of the frame).
+    const top0 = Math.max(0, whole.y);
+    const hero: Rect = { x: whole.x, y: top0, w: whole.w, h: Math.min(vh, whole.y + whole.h) - top0 };
 
     // The boss side: toward the enemies' mean x on screen.
     const foes = this.ports.enemies().map((id) => this.ports.rect(id)).filter((r): r is Rect => !!r);
