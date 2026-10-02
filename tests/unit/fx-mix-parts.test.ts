@@ -11,33 +11,81 @@ import { ejectDefringe, injectDefringe, setMixPatch } from '../../src/engine/fx/
 import { patchDefringe } from '../../src/engine/fx/mix/defringe.ts';
 import { patchLiving } from '../../src/engine/fx/mix/livingShader.ts';
 import { chestRig } from '../../src/engine/fx/mix/breathRig.ts';
-import { twirlKeysOf, twirlSource, twirlTimes } from '../../src/engine/fx/mix/twirl.ts';
+import { keyRescale, twirlKeysOf, twirlPlan, twirlStepMs, twirlTimes, TWIRL_WEIGHT } from '../../src/engine/fx/mix/twirl.ts';
 import { cropRect, splashSource } from '../../src/engine/fx/mix/splash.ts';
 import { slabTop } from '../../src/engine/fx/mix/odBanner.ts';
 import { shotScore } from '../../src/engine/fx/mix/heldShots.ts';
 import type { Field } from '../../src/engine/fx/mix/clearance.ts';
 
 describe('the twirl-key slot (FFX-2 only)', () => {
-  it('finds no keys today, so a change plays today\'s flourish', () => {
+  it('finds no keys for a figure without them, so that change plays today\'s flourish', () => {
     expect(twirlKeysOf(['idle', 'attack', 'cast', 'hurt', 'ko', 'victory'])).toEqual([]);
-    expect(twirlSource('yuna-white-mage', 'yuna-gunner', () => ['idle', 'attack'])).toBeNull();
+    expect(twirlPlan('yuna-white-mage', 'yuna-gunner', () => ['idle', 'attack'])).toEqual([]);
   });
 
-  it('plays start, mid and end in that order, then others by name', () => {
-    expect(twirlKeysOf(['idle', 'twirl-end', 'twirl-mid', 'twirl-2', 'twirl-start', 'twirl-10'])).toEqual(['twirl-start', 'twirl-mid', 'twirl-end', 'twirl-2', 'twirl-10']);
+  it('orders a figure\'s keys start, going, mid, forming, end, then others by name', () => {
+    expect(twirlKeysOf(['idle', 'twirl-end', 'twirl-mid', 'twirl-2', 'twirl-forming', 'twirl-start', 'twirl-10', 'twirl-going'])).toEqual([
+      'twirl-start', 'twirl-going', 'twirl-mid', 'twirl-forming', 'twirl-end', 'twirl-2', 'twirl-10',
+    ]);
   });
 
-  it('looks under the new dressphere first, then the old one, then any figure of the same girl', () => {
-    const states: Record<string, string[]> = { 'yuna-gunner': ['idle'], 'yuna-songstress': ['idle', 'twirl-start'], 'paine-warrior': ['twirl-start'] };
-    const of = (id: string): string[] | null => states[id] ?? null;
-    expect(twirlSource('yuna-white-mage', 'yuna-gunner', of, Object.keys(states))).toEqual({ figure: 'yuna-songstress', keys: ['twirl-start'] });
-    expect(twirlSource('paine-gunner', 'paine-warrior', of, Object.keys(states))?.figure).toBe('paine-warrior');
+  // The installed layout (D-322, 2026-10-02): each dressphere holds the keys painted in it; the ribbons under Gunner.
+  const installed: Record<string, string[]> = {
+    'yuna-white-mage': ['idle', 'twirl-start', 'twirl-going', 'twirl-forming', 'twirl-end'],
+    'yuna-gunner': ['idle', 'twirl-start', 'twirl-going', 'twirl-mid', 'twirl-forming', 'twirl-end'],
+    'yuna-black-mage': ['idle', 'twirl-start', 'twirl-going', 'twirl-forming', 'twirl-end'],
+    'rikku-white-mage': ['idle', 'twirl-forming', 'twirl-end'],
+    'rikku-thief': ['idle', 'twirl-start', 'twirl-going'],
+    'rikku-gunner': ['idle', 'twirl-mid'],
+    'paine-warrior': ['idle', 'twirl-start'],
+  };
+  const of = (id: string): string[] | null => installed[id] ?? null;
+  const ids = Object.keys(installed);
+  const names = (plan: { figure: string; key: string }[]): string[] => plan.map((k) => `${k.figure}/${k.key}`);
+
+  it('plays the old dressphere\'s start and going, her ribbons, then the new one\'s forming and manifest (Chapter IV, Yuna)', () => {
+    expect(names(twirlPlan('yuna-white-mage', 'yuna-gunner', of, ids))).toEqual([
+      'yuna-white-mage/twirl-start', 'yuna-white-mage/twirl-going', 'yuna-gunner/twirl-mid', 'yuna-gunner/twirl-forming', 'yuna-gunner/twirl-end',
+    ]);
   });
 
-  it('fits inside today\'s 0.8 s beat (Active ATB: never added to it)', () => {
+  it('takes her ribbons from any figure of hers when neither dressphere holds them, never another girl\'s', () => {
+    expect(names(twirlPlan('yuna-white-mage', 'yuna-black-mage', of, ids))).toEqual([
+      'yuna-white-mage/twirl-start', 'yuna-white-mage/twirl-going', 'yuna-gunner/twirl-mid', 'yuna-black-mage/twirl-forming', 'yuna-black-mage/twirl-end',
+    ]);
+    expect(names(twirlPlan('paine-warrior', 'paine-gunner', of, ids))).toEqual(['paine-warrior/twirl-start']);
+  });
+
+  it('never plays the new dressphere\'s own start or the old one\'s manifest, and skips a part that is not painted', () => {
+    // Rikku Thief -> White Mage (Chapter VI): no start is painted in White Mage, no manifest in Thief.
+    expect(names(twirlPlan('rikku-thief', 'rikku-white-mage', of, ids))).toEqual([
+      'rikku-thief/twirl-start', 'rikku-thief/twirl-going', 'rikku-gunner/twirl-mid', 'rikku-white-mage/twirl-forming', 'rikku-white-mage/twirl-end',
+    ]);
+    expect(names(twirlPlan('rikku-white-mage', 'rikku-thief', of, ids))).toEqual(['rikku-gunner/twirl-mid']);
+  });
+
+  it('sizes a key painted for another dressphere by the two idles, so it stands as tall as it was painted', () => {
+    // Yuna White Mage's idle (baselineY 1167) against Gunner's (1178): the White Mage start shown on the Gunner figure.
+    expect(keyRescale({ baselineY: 1167 }, { baselineY: 1178 })).toBeCloseTo(1178 / 1167, 6);
+    expect(keyRescale({ baselineY: 1000, scale: 1.2 }, { baselineY: 1000, scale: 0.8 })).toBeCloseTo(1.5, 6);
+    expect(keyRescale({ baselineY: 900 }, { baselineY: 900 })).toBe(1);
+    expect(keyRescale(null, { baselineY: 900 })).toBe(1);
+  });
+
+  it('fits inside today\'s 0.8 s beat (Active ATB: never added to it), each part for its share of the step clock', () => {
     const t = twirlTimes(3);
     expect(t.at).toEqual([0, 213, 427]);
     expect(t.end).toBeLessThanOrEqual(800);
+    const five = twirlTimes(5, 800, ['twirl-start', 'twirl-going', 'twirl-mid', 'twirl-forming', 'twirl-end'].map((k) => TWIRL_WEIGHT[k]!));
+    expect(five.at).toEqual([0, 107, 213, 373, 480]);
+    expect(five.end).toBe(640);
+  });
+
+  it('a long frame (the new outfit uploading) slows the twirl instead of skipping a key', () => {
+    expect(twirlStepMs(1 / 60)).toBeCloseTo(16.667, 2);
+    expect(twirlStepMs(0.09)).toBeCloseTo(33.333, 2); // a 90 ms frame moves the clock two frames, not past the 107 ms start key
+    expect(twirlStepMs(0)).toBe(0); // __pyrefly.fx.freeze: the clock holds
+    expect(twirlStepMs(-1)).toBe(0);
   });
 });
 

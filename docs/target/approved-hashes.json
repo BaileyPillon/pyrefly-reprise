@@ -129,38 +129,87 @@
   },
   "cast:seymour-flux-body": {
    "public/art/characters/seymour-flux-body/attack.png": {
-    "sha256": "56edecc42c562fc8621cffd80dc8d00949b87f5960927d124bfc9000629584df",
-    "mtime": "2026-09-18T13:56:51.797Z"
+    "sha256": "e228d28b8f9784752390e03da99cef6ef56321bc587aa300a78557695de8b713",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-328; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "56edecc42c562fc8621cffd80dc8d00949b87f5960927d124bfc9000629584df",
+     "mtime": "2026-09-18T13:56:51.797Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/seymour-flux-body/attack.png"
+    }
    },
    "public/art/characters/seymour-flux-body/cast.png": {
-    "sha256": "72df28b0146a69f917e7332472fad641edb1c154bcad4a57e03d1131fd41975e",
-    "mtime": "2026-09-18T12:16:12.400Z"
+    "sha256": "8814e76ad6ca70fe6a1ee7a1154499f4ba7d94fde14f84d04247b3a4e19e6490",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-328; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "72df28b0146a69f917e7332472fad641edb1c154bcad4a57e03d1131fd41975e",
+     "mtime": "2026-09-18T12:16:12.400Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/seymour-flux-body/cast.png"
+    }
    },
    "public/art/characters/seymour-flux-body/hurt.png": {
-    "sha256": "3903699778b8906378d2c15f7ae2ba54215d1c05f57f87b8d2aa7c1b06d11672",
-    "mtime": "2026-09-18T13:56:51.943Z"
+    "sha256": "b385dea68d517581fa834b68c83d450bd3e54d7d50a3d87d8fe0f499d6ea0595",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-328; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "3903699778b8906378d2c15f7ae2ba54215d1c05f57f87b8d2aa7c1b06d11672",
+     "mtime": "2026-09-18T13:56:51.943Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/seymour-flux-body/hurt.png"
+    }
    },
    "public/art/characters/seymour-flux-body/idle.png": {
     "sha256": "b004f85c879f7260ef08086e723ed8f1e330441ddbf6959e7d4a08358f611088",
     "mtime": "2026-09-19T01:22:47.315Z"
    },
    "public/art/characters/seymour-flux-body/ko.png": {
-    "sha256": "c030313e2d5c7b2403c15a907326bdb0b97461196e1df5af7d9b7485525fe397",
-    "mtime": "2026-09-18T13:56:52.058Z"
+    "sha256": "8a89ef15cd08a84e63d224546d843496a51021a46dff7d6de8a8a0059018e05c",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-328; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "c030313e2d5c7b2403c15a907326bdb0b97461196e1df5af7d9b7485525fe397",
+     "mtime": "2026-09-18T13:56:52.058Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/seymour-flux-body/ko.png"
+    }
    }
   },
   "cast:yunalesca-1": {
    "public/art/characters/yunalesca-1/attack.png": {
-    "sha256": "4f3a7ec216b1f2a89e427aacb675610811a0eefa3e0edfd853678cfe1a602437",
-    "mtime": "2026-09-19T00:13:40.101Z"
+    "sha256": "8b8980f7b2fa8e542a62ec02119577afc5013c966b7792245a45b56ad2111905",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-326; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "4f3a7ec216b1f2a89e427aacb675610811a0eefa3e0edfd853678cfe1a602437",
+     "mtime": "2026-09-19T00:13:40.101Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/yunalesca-1/attack.png"
+    }
    },
    "public/art/characters/yunalesca-1/cast.png": {
-    "sha256": "7ec22faf8a70e3af21c05fd90e362fc6cd8118a4c7fc2ed97833c366e6e15292",
-    "mtime": "2026-09-19T00:13:42.433Z"
+    "sha256": "2962e6cafbb104ef6a5306ec62ae7d30a06623d72bdbadd8f9aa3f69353e1670",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-326; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "7ec22faf8a70e3af21c05fd90e362fc6cd8118a4c7fc2ed97833c366e6e15292",
+     "mtime": "2026-09-19T00:13:42.433Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/yunalesca-1/cast.png"
+    }
    },
    "public/art/characters/yunalesca-1/hurt.png": {
-    "sha256": "9de476075edbe36f03e14c0aec2d9594171544493e007ace0596d555719689c7",
-    "mtime": "2026-09-19T00:13:44.888Z"
+    "sha256": "001d578033ff308552ad4f3aa54be76fb053be82e59ea628ee6eaa7fb7a1148a",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-326; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "9de476075edbe36f03e14c0aec2d9594171544493e007ace0596d555719689c7",
+     "mtime": "2026-09-19T00:13:44.888Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/yunalesca-1/hurt.png"
+    }
    },
    "public/art/characters/yunalesca-1/idle.png": {
     "sha256": "4c91abb93387ccaeba0c5e549fd79332e7d2a5bcae5cb348bf2413077f47b94f",
@@ -173,12 +222,26 @@
   },
   "cast:braskas-final-aeon-1": {
    "public/art/characters/braskas-final-aeon-1/attack.png": {
-    "sha256": "72afb128edb43ce39c82135f0df0396799aae4ac6159a1c5d07e6e5dd5a39cb9",
-    "mtime": "2026-09-18T12:19:21.929Z"
+    "sha256": "309bd38e869c96d5f0a49776454bc5982901c43e56b22dab87a2ea0fbfce0c8e",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-327; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "72afb128edb43ce39c82135f0df0396799aae4ac6159a1c5d07e6e5dd5a39cb9",
+     "mtime": "2026-09-18T12:19:21.929Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/braskas-final-aeon-1/attack.png"
+    }
    },
    "public/art/characters/braskas-final-aeon-1/cast.png": {
-    "sha256": "4461a4893dd5eab19081863d2f60c07c4c884bf79683f6592aeb9ea37e170d54",
-    "mtime": "2026-09-18T12:19:22.026Z"
+    "sha256": "7ba2b065774197e7b5cb8a0d454b961b01b05d3dcc02dd191cb2f0f06ca2959b",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-327; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "4461a4893dd5eab19081863d2f60c07c4c884bf79683f6592aeb9ea37e170d54",
+     "mtime": "2026-09-18T12:19:22.026Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/braskas-final-aeon-1/cast.png"
+    }
    },
    "public/art/characters/braskas-final-aeon-1/hurt.png": {
     "sha256": "78dca3eff8b6656ef1930000d2cae71b6cf49b582e0ee6bc2f956a999e5c0b0d",
@@ -241,8 +304,15 @@
     "mtime": "2026-09-18T22:26:02.002Z"
    },
    "public/art/portraits/kimahri.png": {
-    "sha256": "63455b0789bc78e86003680322f43a04424525f1d1116086fa4b53c879dcd830",
-    "mtime": "2026-09-18T10:51:41.531Z"
+    "sha256": "aa2b057ddb1dd0a5787db5e396fc89b8f00607bfe15686bd0e04e2a636b2c250",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-324; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "63455b0789bc78e86003680322f43a04424525f1d1116086fa4b53c879dcd830",
+     "mtime": "2026-09-18T10:51:41.531Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/portraits/kimahri.png"
+    }
    },
    "public/art/portraits/wakka.png": {
     "sha256": "9cb7d22889e287a1029d4449ca2ec410ff9b8221d4c4ad281760306ecf71a80d",
@@ -335,12 +405,26 @@
     "mtime": "2026-09-18T23:49:06.301Z"
    },
    "public/art/pause/kimahri.2x.webp": {
-    "sha256": "7d044570546cf16b2d399b5e3f15c618cb134a907aec2ba5c3f22baebbf8821a",
-    "mtime": "2026-09-18T23:09:03.660Z"
+    "sha256": "976305519a058ef6755da508dfa48fa6c4b55ec8f4ee2b2df9035428937a64db",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-324; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "7d044570546cf16b2d399b5e3f15c618cb134a907aec2ba5c3f22baebbf8821a",
+     "mtime": "2026-09-18T23:09:03.660Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/pause/kimahri.2x.webp"
+    }
    },
    "public/art/pause/kimahri.png": {
-    "sha256": "bad11c1c89dfdbe926413ec7fc0411690432afeaba953aaa2805c457c9ebb405",
-    "mtime": "2026-09-18T23:09:03.672Z"
+    "sha256": "3d08d5aba0662676704a2d40d220716da1476b7ce7ba223ecbe8916360fb109c",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-324; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "bad11c1c89dfdbe926413ec7fc0411690432afeaba953aaa2805c457c9ebb405",
+     "mtime": "2026-09-18T23:09:03.672Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/pause/kimahri.png"
+    }
    },
    "public/art/pause/lulu.2x.webp": {
     "sha256": "a3f6e6c40fec90f4c0b4e64a6c41f29e1600499c4c0d98fac45c782ea9588388",
@@ -892,9 +976,16 @@
     "approved": "2026-09-24"
    },
    "public/art/characters/anima/attack.png": {
-    "sha256": "bb93942f126dbc9686ace1d7cafdcf94eb74017a53ccb3aea8702ed5647775bd",
-    "mtime": "2026-09-19T17:57:40.749Z",
-    "approved": "2026-09-24"
+    "sha256": "00f010033ed6a1c9f461dcf1b05e3e9374a63ec39cc5c9879024ca28acd9df70",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-327; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "bb93942f126dbc9686ace1d7cafdcf94eb74017a53ccb3aea8702ed5647775bd",
+     "mtime": "2026-09-19T17:57:40.749Z",
+     "approved": "2026-09-24",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/anima/attack.png"
+    }
    },
    "public/art/characters/anima/overdrive.png": {
     "sha256": "b619046beee12fcc92c8ecab7d41c7f8a126349f18dba7a9c199f236fb1d10a7",
@@ -1063,9 +1154,16 @@
     "approved": "2026-09-26"
    },
    "public/art/characters/trema/hurt.png": {
-    "sha256": "c6776df3f35a217f94321f4ddf71d9f8b803cdb7dfcc72b91b4e20b023e55fe5",
-    "mtime": "2026-09-27T02:06:04.379Z",
-    "approved": "2026-09-26"
+    "sha256": "6f4819d65277d8499f5c894d9731dfaf437882f6253f34f363ada102f934c557",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-327; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "c6776df3f35a217f94321f4ddf71d9f8b803cdb7dfcc72b91b4e20b023e55fe5",
+     "mtime": "2026-09-27T02:06:04.379Z",
+     "approved": "2026-09-26",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/trema/hurt.png"
+    }
    },
    "public/art/characters/logos/hurt.png": {
     "sha256": "44e6b283c68320b0e4600493e9bbc4969cdae68680c8e302bb162ec770fd3215",
@@ -1073,19 +1171,40 @@
     "approved": "2026-09-26"
    },
    "public/art/characters/leblanc/hurt.png": {
-    "sha256": "0af99e411ee90cefd26857ae4be07aea544905fdc7d8918b2838881868271bce",
-    "mtime": "2026-09-27T02:06:04.403Z",
-    "approved": "2026-09-26"
+    "sha256": "91e3f44e86e59dbf0d02cbe9c1c592ad51fd83008ef89c4f8e792a2d7f0e9f9e",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-327; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "0af99e411ee90cefd26857ae4be07aea544905fdc7d8918b2838881868271bce",
+     "mtime": "2026-09-27T02:06:04.403Z",
+     "approved": "2026-09-26",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/leblanc/hurt.png"
+    }
    },
    "public/art/characters/ormi/hurt.png": {
-    "sha256": "1180578d500d87189c373704029b8cf8e190eed8d8b33a1bc2aedc85d155af94",
-    "mtime": "2026-09-27T02:06:04.470Z",
-    "approved": "2026-09-26"
+    "sha256": "38b2116b13a7f7b77f454fe36d06caee98148afe75f07507dc4b5a1fe6aa07e1",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-327; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "1180578d500d87189c373704029b8cf8e190eed8d8b33a1bc2aedc85d155af94",
+     "mtime": "2026-09-27T02:06:04.470Z",
+     "approved": "2026-09-26",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/ormi/hurt.png"
+    }
    },
    "public/art/characters/ffx2-dr-goon/hurt.png": {
-    "sha256": "7749ea8fb2011de04222c5c64e3fd13ede6492286822f328ee18100aaeb98ae0",
-    "mtime": "2026-09-27T02:06:04.488Z",
-    "approved": "2026-09-26"
+    "sha256": "8a5151479e738b6b1ad38f9b31bdd2a03b65cecd82fbe875929a4201109c8e74",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-327; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "7749ea8fb2011de04222c5c64e3fd13ede6492286822f328ee18100aaeb98ae0",
+     "mtime": "2026-09-27T02:06:04.488Z",
+     "approved": "2026-09-26",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/ffx2-dr-goon/hurt.png"
+    }
    }
   },
   "bailey:2026-09-27-ff7": {
@@ -1561,14 +1680,28 @@
     "approved": "2026-09-30"
    },
    "public/art/characters/kimahri/critical.png": {
-    "sha256": "068fe6e49701969cf781378e45251bbe2825ae4df571e0413921fa9a8d632a76",
-    "mtime": "2026-10-01T07:54:12.534Z",
-    "approved": "2026-09-30"
+    "sha256": "a35f7c8e13ca4b622b0f068a7a4bb6b2357681a72cad24d2646edf14d1fe96fc",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-324; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "068fe6e49701969cf781378e45251bbe2825ae4df571e0413921fa9a8d632a76",
+     "mtime": "2026-10-01T07:54:12.534Z",
+     "approved": "2026-09-30",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/kimahri/critical.png"
+    }
    },
    "public/art/characters/kimahri/sleep.png": {
-    "sha256": "9b0f4ad0c840b1ef8aef806270a162454b9d8f97122a37736537db8c59ac07e0",
-    "mtime": "2026-10-01T07:54:12.534Z",
-    "approved": "2026-09-30"
+    "sha256": "29c80c17d4126bc3f0be85e6d19555c10831dda2e72040cecaf1c56dd884418f",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-324; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "9b0f4ad0c840b1ef8aef806270a162454b9d8f97122a37736537db8c59ac07e0",
+     "mtime": "2026-10-01T07:54:12.534Z",
+     "approved": "2026-09-30",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/kimahri/sleep.png"
+    }
    },
    "public/art/characters/lulu/critical.png": {
     "sha256": "586b11ffab4339dab3d140a2fbeabbadb894ed08cf7c4472df9684c7ebf8de27",
@@ -1861,14 +1994,28 @@
     "approved": "2026-10-01"
    },
    "public/art/characters/pterya/hurt.png": {
-    "sha256": "c21ec123a529c270a50127a570ea1e3c06da6b2752f51f98e804875807d191cc",
-    "mtime": "2026-10-02T01:08:54.277Z",
-    "approved": "2026-10-01"
+    "sha256": "a3673a5c2a4209238dfc0df21bc8bda43d195cc00f98be3e0b6eb687c37d5fc9",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-326; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "c21ec123a529c270a50127a570ea1e3c06da6b2752f51f98e804875807d191cc",
+     "mtime": "2026-10-02T01:08:54.277Z",
+     "approved": "2026-10-01",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/pterya/hurt.png"
+    }
    },
    "public/art/characters/pterya/idle@2x.png": {
-    "sha256": "48daf99fe6592930884a48ca5ac9685c60d414308afe24eb7b0e790cf885e812",
-    "mtime": "2026-10-02T01:08:54.277Z",
-    "approved": "2026-10-01"
+    "sha256": "2855f87ad5ed6dc6b713f2799990aa5999683549cf8323f1efc35cbec34f2162",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-325; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "48daf99fe6592930884a48ca5ac9685c60d414308afe24eb7b0e790cf885e812",
+     "mtime": "2026-10-02T01:08:54.277Z",
+     "approved": "2026-10-01",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/pterya/idle@2x.png"
+    }
    },
    "public/art/characters/rikku/follow.png": {
     "sha256": "4fefb6aa5d829d5674981a8cbdebe9a63abbac20ccfa88a2526ca8e5b7132c26",
@@ -2046,9 +2193,16 @@
     "approved": "2026-10-01"
    },
    "public/art/characters/valefor/hurt.png": {
-    "sha256": "c54f35f24a579b0494d74895e1bbd2ae510897017fe5210841bfd8dbc6424dcc",
-    "mtime": "2026-10-02T01:08:54.277Z",
-    "approved": "2026-10-01"
+    "sha256": "4aee1728368eaa1ae62d8f8c03996714a9b0f300c1bd97cd8a49d04372f36237",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-326; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "c54f35f24a579b0494d74895e1bbd2ae510897017fe5210841bfd8dbc6424dcc",
+     "mtime": "2026-10-02T01:08:54.277Z",
+     "approved": "2026-10-01",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/valefor/hurt.png"
+    }
    },
    "public/art/characters/vegnagun-body/hurt.png": {
     "sha256": "c5d2174df660fce71ead237287310b78a638b992907aaffc550703ebc8a1d458",
@@ -2066,9 +2220,16 @@
     "approved": "2026-10-01"
    },
    "public/art/characters/vegnagun-head/ko.png": {
-    "sha256": "cb28efa86e2d04108f021f252755b628747ecf492a898c3d8a50addd5ee4af44",
-    "mtime": "2026-10-02T01:08:54.277Z",
-    "approved": "2026-10-01"
+    "sha256": "87bcc804f8fc8bc54f26286b3cb803827cf02d3daaf57a1c9cd268d389ac0c82",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-326; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "cb28efa86e2d04108f021f252755b628747ecf492a898c3d8a50addd5ee4af44",
+     "mtime": "2026-10-02T01:08:54.277Z",
+     "approved": "2026-10-01",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/vegnagun-head/ko.png"
+    }
    },
    "public/art/characters/vegnagun-leg/hurt.png": {
     "sha256": "40538756be322e730621a03159fd0b500ca5e0b85958ca7fd21f95d184dd334e",
@@ -2191,14 +2352,636 @@
     "approved": "2026-10-01"
    },
    "public/art/characters/yunalesca-2/idle@2x.png": {
-    "sha256": "703ff1d8e4d24396a32a2a2ac8c31018aaa9715a4c67c46a5c341e74dbf314df",
-    "mtime": "2026-10-02T01:08:54.277Z",
-    "approved": "2026-10-01"
+    "sha256": "7453fc6e9f579b35514da6394a82a0899653621ac185bb879fde46892d19c0ae",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-325; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "703ff1d8e4d24396a32a2a2ac8c31018aaa9715a4c67c46a5c341e74dbf314df",
+     "mtime": "2026-10-02T01:08:54.277Z",
+     "approved": "2026-10-01",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/yunalesca-2/idle@2x.png"
+    }
    },
    "public/art/characters/yunalesca-3/idle@2x.png": {
     "sha256": "c8f175eb33d70192845141665391046e3ba89e580952948966f1de1f55f12946",
     "mtime": "2026-10-02T01:08:54.277Z",
     "approved": "2026-10-01"
+   }
+  },
+  "bailey:2026-10-02-art": {
+   "words": "All your recommendations",
+   "decision": "D-322, D-323, D-324, D-325, D-326, D-327, D-328",
+   "note": "Bailey, 2026-10-02 ~09:50 EDT, verbatim \"All your recommendations\" (D-319 to D-334 in docs/target/decisions.json), answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's recommendation); then \"I'll go with all your recommendations, full speed ahead. Godspeed.\" Installed in the page's order (section 7) and stopped at the 800 MB line (D-332; the scratch vite build of rel36 must stay under 800,000,000 bytes): (a) the cut-off fixes and the party keys: D-323 the seven party re-rolls (Kimahri wind-up and follow-through, Yuna FFX follow-through, Lulu wind-up, Yuna Dark Knight cast, item and victory), D-324 Kimahri's sourced single broken horn (candidate A) on all 12 of his paintings and the pause 2x master (they REPLACE approved paintings, backed up), D-326 the six pinned paintings that ran off their own canvas (Valefor hurt, Pterya hurt, Yunalesca form 1 attack, hurt and cast, Vegnagun head KO; backed up), and with them the cut-off fixes of D-325: Valefor's and Pterya's whole-wing idles and keys (Pterya's idle 2x master replaced to match its new canvas), Yu Yevon's size-matched idle and his three outpainted keys, Yunalesca form 2's outpainted idle (scale 1.1316, its 2x master replaced to match) and the attack made from it; (b) D-322 the dressphere twirl keys as twirl-start / twirl-going / twirl-mid / twirl-forming / twirl-end in the dressphere each is painted in (src/engine/fx/mix/twirl.ts on rel36), 69 of the 77: the 8 keys of a change back into Rikku's Dark Knight, Thief or Alchemist or Paine's Dark Knight wait; and, out of the page's order because they make the build 1.2 MB smaller (they replace paintings, so they cannot cross the line): D-327 the seven pinned paintings of another design (Braska's Final Aeon form 1 attack and cast, the hurts of LeBlanc, Ormi, Trema and the male Syndicate goon, Anima's attack) and D-328 Seymour Flux direction 1 (attack, cast, hurt, KO from his idle), all backed up. Waiting in the package held/ for the line: those 8 keys, D-325's other 40 boss keys and the 19 aeon extras (README.md). Every image is its candidate byte for byte. Package and backups: D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/ (README.md lists every file, the replaced ones, what waits and the in-battle checks; docs/handoff/r36-art.md on rel36). Game: per figure (sidecar game field).",
+   "public/art/characters/kimahri/attack.png": {
+    "sha256": "fc2915463695fe98664e1d7f840872d9809491567613498fbdfbfd12bd36e134",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/kimahri/cast.png": {
+    "sha256": "46b62d3972164031c987b3d68d4787678def50ffa5f13288e4e5cb6165439655",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/kimahri/critical.png": {
+    "sha256": "a35f7c8e13ca4b622b0f068a7a4bb6b2357681a72cad24d2646edf14d1fe96fc",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/kimahri/follow.png": {
+    "sha256": "d5fe6643e651ce2af2c496d60e6f7214a05d6b1c0cc1104754ee97a6bd2a4ba2",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/kimahri/hurt.png": {
+    "sha256": "785ee8df73aebe1d8e79dd26c9f0b3e51733a2fae96b459fa40d733f5fbd809c",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/kimahri/idle.png": {
+    "sha256": "49978b5df299461ce66202c2309d1339af98af693f1bd63525f9b7e36e7d160e",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/kimahri/item.png": {
+    "sha256": "da6d895aa23d70cb7f33881cebb31ca66f409be8c47b44e3ac55dbef4d75933b",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/kimahri/jump.png": {
+    "sha256": "84701cfeb65e8f3c1f396218e948339dd445b3dc49e47624da9ba5645a641d81",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/kimahri/ko.png": {
+    "sha256": "7a797ceacfad678b211d9524298f61aef79a32231f0506f3c377b622bf5cbeb8",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/kimahri/ready.png": {
+    "sha256": "4c62f0cb06f479a40aeffa857d49c21b99321304580ab9dd3a50d1f960f6506f",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/kimahri/sleep.png": {
+    "sha256": "29c80c17d4126bc3f0be85e6d19555c10831dda2e72040cecaf1c56dd884418f",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/kimahri/victory.png": {
+    "sha256": "3c3638e28b95831ba19c2a00b91ddb9afeac77b4325ef6cd73e4f2186a453f64",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/lulu/ready.png": {
+    "sha256": "7f0eb69e3cfbc7a6c9070593afd7b72d92495b6aa7f7b345e8ed7ca980a3c523",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-black-mage/twirl-end.png": {
+    "sha256": "0c92c504591e2dfd25f8d0abbe05ea3faddd51282bf7a4cb9e84fbe0943cc4f3",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-black-mage/twirl-forming.png": {
+    "sha256": "f301b258d8b50eb47c8542c3db4808a5cd07e4541d9a1b5810cd6a38b25799be",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-black-mage/twirl-going.png": {
+    "sha256": "20b0f18ad2b2fb0c1e599a40401bfab830b765b643b4ffb0765ba17c37735044",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-black-mage/twirl-start.png": {
+    "sha256": "03e1cdcde20217b823daf2df375633280658addca24104fb3bf1d641a297666a",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-dark-knight/twirl-going.png": {
+    "sha256": "2045e49bf62e556c10e76cc8d3a3e4e2804a7c8891a19ac97372eb5052961778",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-dark-knight/twirl-start.png": {
+    "sha256": "f9124e51595729e5c8d2b7c592c5a7fbe6bc151721f171df3d9cc83d84fff7fb",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-gunner/twirl-end.png": {
+    "sha256": "d381e14b484cbc21d9236446da30a160e8f1d7174313bbf6ed21874c3df4138a",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-gunner/twirl-forming.png": {
+    "sha256": "d15f39600222cec3eaec82b10dc3c1209fa12723b3c0e69734f3431df5d45fec",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-gunner/twirl-going.png": {
+    "sha256": "24565f6d40fa3f9d8676cd97ad5485b66fa1149246334f955515ef2278ace4c9",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-gunner/twirl-mid.png": {
+    "sha256": "a02f211ff2a59948aa3cebaac711effcf23e2a82c52eb01fe87d20cb5327d518",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-gunner/twirl-start.png": {
+    "sha256": "323ac9821c815922fc5fd8eba2ceac75c10f6a178961f947c091c53a50428ee9",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-songstress/twirl-end.png": {
+    "sha256": "1f10b248fe8c35b97ba06105fe641098844e5926a4842a1b4bae6019568b6370",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-songstress/twirl-forming.png": {
+    "sha256": "73c2ce3ebf298dbdc7c7ecdeef4e101ca66ac7d8ae4696e75e181a3c27a04f35",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-songstress/twirl-going.png": {
+    "sha256": "9d360ad71b783291f6b85e01182a910a327cf48477295309286163baae3364f4",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-songstress/twirl-start.png": {
+    "sha256": "f684b5fbb6aa9b2f6c5ff2c51772b85c910f59589cc4a5b76b7e9f49e35a5f8f",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-warrior/twirl-end.png": {
+    "sha256": "1a56c99c4a095ed1b29e908f1133916e3f6900ebc88b0eda8380d4a1a12816e3",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-warrior/twirl-forming.png": {
+    "sha256": "7ca64e6529ab1dd3a2b74f8611ed6566acd3faeda44ebd22d65be131f6b825c6",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-warrior/twirl-going.png": {
+    "sha256": "dc0693cf53783a0d2f154739e95b1121e1a5794f9df4735b3017500fc3a3032e",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-warrior/twirl-start.png": {
+    "sha256": "6d6c3852ef064f87edc2e22ba7ace2ca086734a0d1a3849f2fac90fae5686f9e",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-white-mage/twirl-end.png": {
+    "sha256": "e46060f777f2f6ce160b112c76522817e1affbdac33ab1fd52f65a7f2769e788",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-white-mage/twirl-forming.png": {
+    "sha256": "fa396f34a4e5a72b97964726e4f008b2b07e3deb3e5a88c1e55e6816c60a69c0",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-white-mage/twirl-going.png": {
+    "sha256": "f86146a0e633848a8e5b7c822bc449a893cde85043b51e52d940eaed459538e5",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-white-mage/twirl-start.png": {
+    "sha256": "84e9fa851817bc20cf551cee89aeea2759e7bf036fee4d7215514fb472f7efb3",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/pterya/attack.png": {
+    "sha256": "d168cea36fcf052a80617bb610766540b9fefb218ef84e0cad6d8f4afcfaf2d9",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/pterya/cast.png": {
+    "sha256": "bf082ecc8e3c937a9968e234f0e301c3e69fd252d68fb5112c83ab3d6166bfa5",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/pterya/hurt.png": {
+    "sha256": "a3673a5c2a4209238dfc0df21bc8bda43d195cc00f98be3e0b6eb687c37d5fc9",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/pterya/idle.png": {
+    "sha256": "182a2084a3ee0d35da0df17382a458771b61746450ab110b34eea129cc764ad2",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/pterya/idle@2x.png": {
+    "sha256": "2855f87ad5ed6dc6b713f2799990aa5999683549cf8323f1efc35cbec34f2162",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/pterya/ko.png": {
+    "sha256": "3f075d336057c3c14d49deadea109f5385ff5183e090542eecbdeb937485bd65",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-alchemist/twirl-going.png": {
+    "sha256": "7daca39c50f1e35b414a0c629514aaa5a1b4a71ac25aeed3c5bdb6b6246e6bc0",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-alchemist/twirl-start.png": {
+    "sha256": "017849aedd0c76f8dbb04b5ea809cc58dcfa94ff55830cae4b746fd38ee19366",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-black-mage/twirl-end.png": {
+    "sha256": "717b5538c723f282e4d245cec1865386c7426d9d5ee6f7d9c0fb60b95913f8dc",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-black-mage/twirl-forming.png": {
+    "sha256": "611c624fa0890355c5a120eb3d2659fc9a908382fce50b66e39e57dca6e7edc9",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-black-mage/twirl-going.png": {
+    "sha256": "456a61e62221756ce5aec8b6f72364b09455c309dd3286ac1cbc251e8f296763",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-black-mage/twirl-start.png": {
+    "sha256": "e779b3a5fccc9c8a6fc3ac12c9017cbd082a8043e04084fa4dbad8a68c21b4d1",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-dark-knight/twirl-going.png": {
+    "sha256": "748227f8ca0e4bd04c48e6bc9279d0edeea1dc71f8bfc33ac1226c99c9159683",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-dark-knight/twirl-start.png": {
+    "sha256": "cd3fe83254cfdf2bdb6048fa508118f89baa6db3aab8a8f7edd817e61dcaadbd",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-gunner/twirl-end.png": {
+    "sha256": "0ec1f05147ecbfb79609bc6ad6defa886029ded0b6cb6b7785df659872846ce9",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-gunner/twirl-forming.png": {
+    "sha256": "623ebcd4895e4ad47f7b7ac6df5c64a644ca8d08cdc62b80db43fee13985631f",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-gunner/twirl-going.png": {
+    "sha256": "2dca7e22632f7cbd679bbeaec82a8b137b2e450f89e1f489ed9d346228c73f22",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-gunner/twirl-mid.png": {
+    "sha256": "2b50ee21945e31bfa4e571b702ebe5d6405836c614c38c376298c89f5d1403ae",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-gunner/twirl-start.png": {
+    "sha256": "f4b5b80a53321322dc063ea42eac2492e6309f1a02459861f97a59c83939e835",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-songstress/twirl-end.png": {
+    "sha256": "5536bf594004ac3da668f51faf94a53218979eb6bf4f12218005fa177ac37e15",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-songstress/twirl-forming.png": {
+    "sha256": "b67b6ec64509ba41b1c77204bc7f2cf92b63deaedd9297f5b522c35b41ccc69e",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-songstress/twirl-going.png": {
+    "sha256": "c47de0e664a3795b6275763cd831e9298522ecbf5d92ea606b06895e1bca30de",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-songstress/twirl-start.png": {
+    "sha256": "1ccc76f6247b786f083a7d743dac7f967f07de4f1d90c2b22afee492554396a7",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-thief/twirl-going.png": {
+    "sha256": "eaa3f6a38b05bb1286f672aa3cffed2277a0e7d34b85acbcd05b08d5abed0bf3",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-thief/twirl-start.png": {
+    "sha256": "dc8afe15843c81bb09353b8f1b03069933271cfff8fa8d37ea1278050b50ec1e",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-white-mage/twirl-end.png": {
+    "sha256": "bf0d716ca8e7b4d8ef96e5a7d425f6569e1e0f2b6e250bea382926153bac74ea",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-white-mage/twirl-forming.png": {
+    "sha256": "d4100e2269b771ec67100751db1924943738f1cc665f810a4d189c32d5a52651",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/valefor/attack.png": {
+    "sha256": "12a939753572fea034d2eb50d9d51432ffc82b88c26dd92a15c9371f04af8c08",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/valefor/cast.png": {
+    "sha256": "cbf06e7b8ece3815c7568dea773f5e6b1ac2f0273e5a99ec938092aa7e8f600e",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/valefor/hurt.png": {
+    "sha256": "4aee1728368eaa1ae62d8f8c03996714a9b0f300c1bd97cd8a49d04372f36237",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/valefor/idle.png": {
+    "sha256": "25bd0dd33f7812c27cc517d1fb87bf8ca746634c7220d12ede5f3718dd366a5d",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/valefor/ko.png": {
+    "sha256": "e902fc7f384cd19f5a38593e24f7909d18c527d5788b1abd7a99151add827607",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/vegnagun-head/ko.png": {
+    "sha256": "87bcc804f8fc8bc54f26286b3cb803827cf02d3daaf57a1c9cd268d389ac0c82",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yu-yevon/attack.png": {
+    "sha256": "54e894ea655006d0f0872ca1873fd23113f6a6f13334ed82cc30f7ef577200f2",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yu-yevon/cast.png": {
+    "sha256": "1ec7e5fefd75b2622a5cb1e2c0c38112890fcdbfac588fc16d2565c5dc9edb55",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yu-yevon/hurt.png": {
+    "sha256": "cd2c64961ec95aa293d532bf47b63efc3f389714bf0f82315476e8a04d1b53ed",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yu-yevon/idle.png": {
+    "sha256": "c7a425ccd2de809906f9f364f12d73a742c35491ad468369f908e8eb984842b6",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna/follow.png": {
+    "sha256": "a51861243506745d249fe6e3489f06916deea7bbeef4a6c9873e33da7f6fa6f5",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-black-mage/twirl-end.png": {
+    "sha256": "2fe0588624332b4f932ffd7a134a739cd25014f3ad36711ad803177955424552",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-black-mage/twirl-forming.png": {
+    "sha256": "379680875bab99e9c9e19defcc8854c6d7f744a22746655cf468c038b1afe582",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-black-mage/twirl-going.png": {
+    "sha256": "edae56c21817f771d8f9546bcf2f1a46979596c4a570a4c36220fff5518ea9a2",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-black-mage/twirl-start.png": {
+    "sha256": "fa033410a127677318827e9d67529d925e7125f603669d8563075d53b514bf0a",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-dark-knight/cast.png": {
+    "sha256": "c2859937773460aa84560543de1794004324da6ad788a9f827a756e4223a7294",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-dark-knight/item.png": {
+    "sha256": "3ded70e817c241e06960223d14d3975cf9315f6efa2d236d8ff3c071cc1e287d",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-dark-knight/twirl-going.png": {
+    "sha256": "9372537bf023dc366140b937b0b340a1cd42372baac907359e172a3f07209d8e",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-dark-knight/twirl-start.png": {
+    "sha256": "43e702862f33e2aa303a4dde9c9ec075872ed100dc9acbc2b49a9a21f9903a8f",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-dark-knight/victory.png": {
+    "sha256": "6e1268444dfabbfd8c7dfebee3ec30a83c5a9498b85ab74753bcfa7d9b1a71a4",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-gunner/twirl-end.png": {
+    "sha256": "b0fa46e1e694872c677e6eeed070c4c8eb4c62e4106817aff7c68ca7307ed38c",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-gunner/twirl-forming.png": {
+    "sha256": "0ceea6616c86fac5c551015b14c5561c3e60357330ac7fa5c2ed573151a86006",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-gunner/twirl-going.png": {
+    "sha256": "e8813b2d74e008da73bea708bfb91bb73073c762ce578390860fb26cdc001dd8",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-gunner/twirl-mid.png": {
+    "sha256": "822505d8a615bf2efed562c25c4632b3cd817828cfb4514d3c8b4c26500ef891",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-gunner/twirl-start.png": {
+    "sha256": "7d468442eb54a78e8527581eccc14aac612aef87e791afec3c5fabce9f12ce01",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-songstress/twirl-end.png": {
+    "sha256": "51793b4966050c8ff350bbd51c7f3438651588300067025068cbc63459e4bb30",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-songstress/twirl-forming.png": {
+    "sha256": "b82427c10a894d5fa371c2c770fdd223da946bc02c2d8017cfdf8e9a8f892eb3",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-songstress/twirl-going.png": {
+    "sha256": "a454630d2907783cb4aa2e591fc2d6ea440334448273dec55c7d7e71b9d6b0ea",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-songstress/twirl-start.png": {
+    "sha256": "94c74833290522918f4d3d4a5440846651e8aa11e9d226099fdcd4276a0e9da6",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-warrior/twirl-end.png": {
+    "sha256": "9993172eecc45b90ff10b73bcf9af3e70b23308e522d3d4a9b9d9d00bad1aafc",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-warrior/twirl-forming.png": {
+    "sha256": "734cd2c56395927098a422d870333580c017b98715af4716ecee4c1de929063f",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-warrior/twirl-going.png": {
+    "sha256": "0b31d5a29644fdd4d4296ed40e783847647c3ec7eff530cfe67c24ccd6cfd1c7",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-warrior/twirl-start.png": {
+    "sha256": "0aa903bb78a576034e8df8528ec06d40027beead5855d7c99d05fc5960480b5f",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-white-mage/twirl-end.png": {
+    "sha256": "4993e0598e8a75adfb89559d7e28e5bde1e1b00b2ae677785bd47df3d8fa4fb1",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-white-mage/twirl-forming.png": {
+    "sha256": "111ad9d250002700f9979fc0285f4e8f4eb908e4c4cee439860d93373b739928",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-white-mage/twirl-going.png": {
+    "sha256": "909c906b4ecc66ba8e7ec406c0a63dd9ea4d9b36f1a4e4389e7f9ccd7450e7e4",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-white-mage/twirl-start.png": {
+    "sha256": "22dd9ee030713fa982fca82fc44729b660739b53883cefab7d78f1837e3ab017",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yunalesca-1/attack.png": {
+    "sha256": "8b8980f7b2fa8e542a62ec02119577afc5013c966b7792245a45b56ad2111905",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yunalesca-1/cast.png": {
+    "sha256": "2962e6cafbb104ef6a5306ec62ae7d30a06623d72bdbadd8f9aa3f69353e1670",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yunalesca-1/hurt.png": {
+    "sha256": "001d578033ff308552ad4f3aa54be76fb053be82e59ea628ee6eaa7fb7a1148a",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yunalesca-2/attack.png": {
+    "sha256": "3fdddd181ff15cdd10147de47893ec04509491de0a492c3c6184d4b048758ba3",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yunalesca-2/idle.png": {
+    "sha256": "ef65b7b9b37b051da976b4869533aff35a4bfa1e370d633d8c6d80a31f975aa9",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yunalesca-2/idle@2x.png": {
+    "sha256": "7453fc6e9f579b35514da6394a82a0899653621ac185bb879fde46892d19c0ae",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/pause/kimahri.2x.webp": {
+    "sha256": "976305519a058ef6755da508dfa48fa6c4b55ec8f4ee2b2df9035428937a64db",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/pause/kimahri.png": {
+    "sha256": "3d08d5aba0662676704a2d40d220716da1476b7ce7ba223ecbe8916360fb109c",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/portraits/kimahri.png": {
+    "sha256": "aa2b057ddb1dd0a5787db5e396fc89b8f00607bfe15686bd0e04e2a636b2c250",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/anima/attack.png": {
+    "sha256": "00f010033ed6a1c9f461dcf1b05e3e9374a63ec39cc5c9879024ca28acd9df70",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/braskas-final-aeon-1/attack.png": {
+    "sha256": "309bd38e869c96d5f0a49776454bc5982901c43e56b22dab87a2ea0fbfce0c8e",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/braskas-final-aeon-1/cast.png": {
+    "sha256": "7ba2b065774197e7b5cb8a0d454b961b01b05d3dcc02dd191cb2f0f06ca2959b",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/ffx2-dr-goon/hurt.png": {
+    "sha256": "8a5151479e738b6b1ad38f9b31bdd2a03b65cecd82fbe875929a4201109c8e74",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/leblanc/hurt.png": {
+    "sha256": "91e3f44e86e59dbf0d02cbe9c1c592ad51fd83008ef89c4f8e792a2d7f0e9f9e",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/ormi/hurt.png": {
+    "sha256": "38b2116b13a7f7b77f454fe36d06caee98148afe75f07507dc4b5a1fe6aa07e1",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/seymour-flux-body/attack.png": {
+    "sha256": "e228d28b8f9784752390e03da99cef6ef56321bc587aa300a78557695de8b713",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/seymour-flux-body/cast.png": {
+    "sha256": "8814e76ad6ca70fe6a1ee7a1154499f4ba7d94fde14f84d04247b3a4e19e6490",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/seymour-flux-body/hurt.png": {
+    "sha256": "b385dea68d517581fa834b68c83d450bd3e54d7d50a3d87d8fe0f499d6ea0595",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/seymour-flux-body/ko.png": {
+    "sha256": "8a89ef15cd08a84e63d224546d843496a51021a46dff7d6de8a8a0059018e05c",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/trema/hurt.png": {
+    "sha256": "6f4819d65277d8499f5c894d9731dfaf437882f6253f34f363ada102f934c557",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-dark-knight/twirl-end.png": {
+    "sha256": "cf833fc3d9a6249f0b212211abd2126b21d80335b213946ee813e6e3d4cbb0e8",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/yuna-dark-knight/twirl-forming.png": {
+    "sha256": "c3dca1b744ba7b32520529e86fa8179f1c0c71e37286a493f277a7c102795083",
+    "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
    }
   }
  }

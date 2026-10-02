@@ -16,7 +16,11 @@
  * - where the local art is present (it is gitignored), each PNG's hash equals
  *   the locked one, the manifest lists the state, and each sidecar carries the
  *   head-matched `scale` that `tryLoadMeta` passes through; Ormi's hurt faces
- *   right, like his idle (the flip).
+ *   right, like his idle (the flip);
+ * - 2026-10-02 (D-327, Bailey "All your recommendations"): the hurts of Trema,
+ *   Leblanc, Ormi and the goon showed another design than the idle and were
+ *   replaced by hurts painted from the idle; the 09-26 lock records what they
+ *   replaced (`supersedes`), and their sidecars carry the idle's scale and facing.
  *
  * Game case: Yojimbo is FFX only (Chapter IX); Trema (XIII), Logos, Leblanc,
  * Ormi and the goon (VI) are FFX-2 only.
@@ -43,6 +47,18 @@ const INSTALLED: Record<string, { scale: number; decision: string }> = {
   'leblanc/hurt': { scale: 1.0, decision: 'D-230' },
   'ormi/hurt': { scale: 1.0, decision: 'D-230' },
   'ffx2-dr-goon/hurt': { scale: 1.5, decision: 'D-230' },
+};
+
+/**
+ * The four 09-26 hurts replaced on 2026-10-02 (D-327, set `bailey:2026-10-02-art`): subject/slot -> the 09-26
+ * painting's sha256, kept in the lock's `supersedes` and in the package backup
+ * (D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/).
+ */
+const REPLACED_1002: Record<string, string> = {
+  'leblanc/hurt': '0af99e411ee90cefd26857ae4be07aea544905fdc7d8918b2838881868271bce',
+  'ormi/hurt': '1180578d500d87189c373704029b8cf8e190eed8d8b33a1bc2aedc85d155af94',
+  'trema/hurt': 'c6776df3f35a217f94321f4ddf71d9f8b803cdb7dfcc72b91b4e20b023e55fe5',
+  'ffx2-dr-goon/hurt': '7749ea8fb2011de04222c5c64e3fd13ede6492286822f328ee18100aaeb98ae0',
 };
 
 const STATES: Record<string, string[]> = {
@@ -134,6 +150,7 @@ describe.skipIf(!haveArt)('the installed files on this disk (public/art is gitig
       return new Response(readFileSync(file, 'utf8'), { status: 200 });
     }) as unknown as typeof fetch;
     for (const [key, want] of Object.entries(INSTALLED)) {
+      if (key in REPLACED_1002) continue; // superseded on 2026-10-02 (D-327): pinned below
       const side = JSON.parse(readFileSync(path.join(ART, 'characters', `${key}.json`), 'utf8')) as Record<string, unknown>;
       expect(side.scale, key).toBe(want.scale);
       expect(String(side.scaleNote), key).toMatch(/^Head match 2026-09-26/);
@@ -144,11 +161,38 @@ describe.skipIf(!haveArt)('the installed files on this disk (public/art is gitig
     }
   });
 
-  it("Ormi's hurt was mirrored to face right, like his idle", () => {
+  // D-327 (Bailey 2026-10-02, "All your recommendations"): four of these hurts showed another design than the
+  // boss's idle and were replaced by hurts painted from the idle itself (method W: at the idle's pixel scale, so
+  // `scale` 1, facing as the idle). The 09-26 lock keeps their old hash under `supersedes` (FFX-2 only).
+  it('the four hurts replaced on 2026-10-02 (D-327) take the idle design, scale and facing, and the 09-26 lock records what they replaced', async () => {
+    globalThis.fetch = vi.fn(async (input: RequestInfo | URL) => {
+      const rel = String(input).replace(/^.*\/art\//, '').split('?')[0] ?? '';
+      const file = path.join(ART, rel);
+      if (!existsSync(file)) return new Response('', { status: 404 });
+      return new Response(readFileSync(file, 'utf8'), { status: 200 });
+    }) as unknown as typeof fetch;
+    const set = lockedSet();
+    for (const key of Object.keys(REPLACED_1002)) {
+      const rec = set[fileOf(key)] as { sha256: string; replacedBy?: string; supersedes?: { sha256: string } };
+      expect(rec.replacedBy, key).toMatch(/^bailey:2026-10-02-art \(D-327/);
+      expect(rec.supersedes?.sha256, key).toBe(REPLACED_1002[key]);
+      const side = JSON.parse(readFileSync(path.join(ART, 'characters', `${key}.json`), 'utf8')) as Record<string, unknown>;
+      const idle = JSON.parse(readFileSync(path.join(ART, 'characters', `${key.split('/')[0]}/idle.json`), 'utf8')) as Record<string, unknown>;
+      expect(side.decision, key).toBe('D-327');
+      expect(side.scale, key).toBe(1);
+      expect(side.facing, key).toBe(idle.facing);
+      expect((side.replaces as { sha256: string }).sha256, key).toBe(REPLACED_1002[key]);
+      const meta = await tryLoadMeta(`/art/characters/${key}.png`);
+      expect(meta?.scale, key).toBe(1);
+    }
+  });
+
+  it("Ormi's hurt faces right, like his idle (the 09-26 one was mirrored at install; the 10-02 one is painted from the idle)", () => {
     const side = JSON.parse(readFileSync(path.join(ART, 'characters/ormi/hurt.json'), 'utf8')) as Record<string, unknown>;
     const idle = JSON.parse(readFileSync(path.join(ART, 'characters/ormi/idle.json'), 'utf8')) as Record<string, unknown>;
     expect(side.facing).toBe('right');
     expect(side.facing).toBe(idle.facing);
-    expect(String(side.flippedAtInstall)).toMatch(/mirror/);
+    if (side.decision === 'D-327') expect(String(side.candidateOf)).toMatch(/boss-keys-new\/ormi\/hurt\//);
+    else expect(String(side.flippedAtInstall)).toMatch(/mirror/);
   });
 });
