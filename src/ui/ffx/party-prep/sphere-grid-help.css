@@ -223,6 +223,31 @@
   cursor: default;
 }
 
+/* ---- F6: pointer or touch wording, and the keys the desktop buttons answer to */
+
+.sgx-touch {
+  display: none;
+}
+.ffxprep-sg__key {
+  margin-left: 0.7em;
+  padding: 0.25em 0.5em 0.2em;
+  font-size: 0.78em;
+  letter-spacing: 0.08em;
+  border: 1px solid currentColor;
+  opacity: 0.8;
+}
+@media (pointer: coarse) {
+  .sgx-pointer {
+    display: none;
+  }
+  .sgx-touch {
+    display: inline;
+  }
+  .ffxprep-sg__key {
+    display: none;
+  }
+}
+
 /* ---- C: the result (target .toast at 612,452, 850x138, over a .cover) */
 
 .sgx-cover {

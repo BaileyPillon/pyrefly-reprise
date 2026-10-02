@@ -14,6 +14,11 @@
  * 44 px. The tab's own phone layout is untouched (option B, the phone page,
  * is D-295, later).
  *
+ * Keys (F6 / PR-0292, FFX only; no existing binding changes): AUTO-LEARN is the
+ * `select` button (M or V, the pad's Select/Back) and `?` is H (or the `?` key,
+ * or the pad's X / Square, read straight off the pad: `Input.ts` has no abstract
+ * button left for it). Both are labelled on the desktop buttons.
+ *
  * "Seen" is the existing coaching list (`coachState.markSeen`, the save's
  * `seenCoach`), id {@link CARD_ID}: no new save field. Like every coaching
  * surface it is suppressed by `?coach=off` and by BATTLE HELP OFF.
@@ -58,6 +63,14 @@ export class SphereGridHelp {
   /** Which of the open card's two buttons Enter presses. */
   private choice = 0;
   private readonly hideWatch: MutationObserver | null = null;
+  /** `?` was pressed (H, `?`) since the last frame; read once by {@link takeHelpKey}. */
+  private helpKey = false;
+  private padHelpDown = false;
+  private padLabels = false;
+  private readonly onHelpKey = (e: KeyboardEvent): void => {
+    if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || this.deps.container.closest('[hidden]')) return; // another tab's H is not ours
+    if (e.code === 'KeyH' || e.key === '?') this.helpKey = true;
+  };
 
   constructor(private readonly deps: SphereGridHelpDeps) {
     const outer = this.outer();
@@ -68,6 +81,7 @@ export class SphereGridHelp {
       this.dock.addEventListener('click', this.onClick);
       outer.appendChild(this.dock);
     }
+    window.addEventListener('keydown', this.onHelpKey);
     // Leaving the tab settles an open result as KEPT, so its UNDO can never
     // roll back something another tab changed meanwhile.
     if (typeof MutationObserver === 'function') {
@@ -222,7 +236,40 @@ export class SphereGridHelp {
    * (default KEEP) and Esc (KEEP) until it is settled. Returns true when the
    * shell must not see this frame at all.
    */
+  /** The two desktop buttons name their key, or their pad button while a pad is connected. */
+  private labelKeys(pad: boolean): void {
+    if (this.padLabels === pad) return;
+    this.padLabels = pad;
+    for (const el of this.deps.container.querySelectorAll<HTMLElement>('.ffxprep-sg__key')) {
+      el.dataset['key'] ??= el.textContent ?? '';
+      el.textContent = pad ? (el.dataset['pad'] ?? '') : el.dataset['key'];
+    }
+  }
+
+  /** True once per press of the `?` key or the pad's X / Square (button 2). */
+  private takeHelpKey(): boolean {
+    const pad = typeof navigator !== 'undefined' ? [...(navigator.getGamepads?.() ?? [])].find((g) => g?.connected) : undefined;
+    this.labelKeys(pad !== undefined);
+    const down = pad?.buttons[2]?.pressed === true;
+    const edge = down && !this.padHelpDown;
+    this.padHelpDown = down;
+    const key = this.helpKey;
+    this.helpKey = false;
+    return key || edge;
+  }
+
   handleInput(input: InputSnapshot): boolean {
+    if (!this.card) {
+      // F6: the two buttons that had no route but the pointer (the open explainer is modal and takes no new press).
+      if (input.consume('select')) {
+        this.runAutoLearn();
+        return true;
+      }
+      if (this.takeHelpKey()) {
+        this.openCard();
+        return true;
+      }
+    }
     if (!this.card && !this.result) return false;
     const n = this.buttons().length;
     const left = input.consume('left');
@@ -252,6 +299,7 @@ export class SphereGridHelp {
   }
 
   destroy(): void {
+    window.removeEventListener('keydown', this.onHelpKey);
     this.hideWatch?.disconnect();
     this.card?.remove();
     this.result?.remove();
