@@ -91,6 +91,19 @@ mirrored (chiral subjects stay right).
   sub-path; the session publishes it. Fallback: `D:/pyrefly-camera-lab/play-camera-lab.cmd` (preview on port
   5270, opens the browser; Bailey closes it).
 
+## When the MAX mix lands on main (driver's heads-up, 2026-10-02 ~00:40 EDT)
+
+The MAX mix build (branch `mix-build`, c8e4cb09; with `eye-candy-page` 7a4bed7e; path to main: rel36, an
+independent check, a deep review before deploy) wraps the battle camera at runtime: per-chapter framing masters
+(`src/engine/.../framing.ts`), a lens shift that rides the camera's next move, colossus scale for Natus and FFX-2
+Bahamut (Chapter IV is a lab chapter), held Overdrive (FFX) and dressphere (FFX-2) shots that hand back when a menu
+opens, depth of field, fog, SMAA/defringe, all gated by `src/engine/fx/eyeCandyFlags.ts` and the EYE CANDY page.
+It adds none of the Clair Obscur / Persona grammar. When the driver reports it merged, rebase `camera-lab` onto
+it: in a lab battle the lab director owns the camera (framing masters and lens shift stand down while
+`?camera=lab` is on; depth of field, fog and SMAA stay), the Chapter IV rigs are re-fitted to the colossus-scale
+Bahamut, and the held Overdrive and dressphere shots count as the presenter's own authored moments the lab yields
+to.
+
 ## Budget and risks
 
 - Weekly 71 % used (rule 15: conserve band; Bailey's "keep working" stands). One Opus builder for the
