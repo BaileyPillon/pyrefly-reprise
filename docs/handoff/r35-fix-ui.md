@@ -133,7 +133,7 @@ FFX phone (the foot rule is shared with FFX-2, where it only wraps); item list F
 
 - `npx tsc --noEmit` clean.
 - Tests I added: `r35-ui-splash-hint`, `u3-status-line-merge`, `u4-command-help-sync`, `r35-ui-labels`, `r35-ui-panels`
-  (all green). The full `npx vitest run --testTimeout=60000` result is in the lane's reply.
+  (all green). Full `npx vitest run --testTimeout=60000` at the last code commit: **733 files passed, 5 skipped; 10,825 tests passed** (the first full run had one failure, `inkgold-scoping`, fixed in `41759c1f`).
 - `node tools/orphans.mjs`: the four existing orphans only (`placeholder-sprites`, `tidus`, `MessageBar`, `PartyPrep`);
   `statusLineBanner.ts` and `commandHelpSync.ts` are imported.
 - Rule 7: no file over 400 lines grew. `FFX2BattleHud.ts` 1,276 to 1,274, `FFXBattleHud.ts` 1,668 to 1,668; the
