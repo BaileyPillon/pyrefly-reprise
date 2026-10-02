@@ -19,6 +19,7 @@ import {
 import {
   ActorLife,
   approach,
+  ATTACK_IMPACT,
   attackOffset,
   clampYawToCamera,
   facingForSide,
@@ -50,6 +51,7 @@ import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralA
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
+import { cutoutShadow } from './ShadowCutout.ts';
 
 /** One painted pose: a URL now, a texture once it has loaded. */
 export type PoseMap = Record<string, string>;
@@ -408,7 +410,7 @@ export class PaintedActor extends Group {
   private active = 0;
 
   private readonly poses = new Map<string, PaintedTexture>();
-  private readonly poseUrls: PoseMap = {};
+  readonly poseUrls: PoseMap = {};
   /**
    * Textures this actor loaded itself, and is therefore responsible for
    * freeing. Textures that arrived through {@link adoptPoses} are *borrowed* —
@@ -982,10 +984,7 @@ export class PaintedActor extends Group {
       1 / Math.max(1, tex.meta.height),
     );
     slot.mesh.visible = this.showFigure;
-    if (slot.depth) {
-      slot.depth.map = tex.texture;
-      slot.depth.needsUpdate = true;
-    }
+    if (slot.depth) cutoutShadow(slot.material, slot.depth, tex.texture, this.shadowAlphaTest); // VP-1001-31: figure-shaped
 
     // One pixel scale for the whole subject, taken from idle — so a landscape
     // KO render becomes a wide, low body instead of a standing figure's height
@@ -1106,21 +1105,13 @@ export class PaintedActor extends Group {
    * peak is still `distance` and the whole move still takes `ms`, so every
    * existing call site keeps its staging.
    */
-  lunge(distance = 0.9, ms = 320): Promise<void> {
-    const from = this.lungeOffset;
-    return this.tweens.toAsync(0, 1, {
-      durationMs: Math.max(1, ms),
-      easing: 'linear',
-      onUpdate: (t) => {
-        // Anything already in flight is folded out over the first beat, so a
-        // second lunge on top of a first does not snap back to zero.
-        const carry = from * Math.max(0, 1 - t / 0.26);
-        this.lungeOffset = distance * attackOffset(t) + carry;
-      },
-      onComplete: () => {
-        this.lungeOffset = 0;
-      },
-    });
+  lunge(distance = 0.9, ms = 320, contact?: { hold: Promise<unknown>; reached: () => void }): Promise<void> {
+    const from = this.lungeOffset; // anything in flight folds out over the first beat (no snap back to zero)
+    const leg = (a: number, b: number, d: number): Promise<void> => this.tweens.toAsync(a, b, { durationMs: Math.max(1, d), easing: 'linear',
+      onUpdate: (t) => void (this.lungeOffset = distance * attackOffset(t) + from * Math.max(0, 1 - t / 0.26)) });
+    // VP-1001-06 (`ContactBeat.ts`): with a contact, the strike holds at its apex until the blow lands.
+    const run = contact ? leg(0, ATTACK_IMPACT, ms * ATTACK_IMPACT).then(() => (contact.reached(), contact.hold)).then(() => leg(ATTACK_IMPACT, 1, ms * (1 - ATTACK_IMPACT))) : leg(0, 1, ms);
+    return run.then(() => void (this.lungeOffset = 0));
   }
 
   /**

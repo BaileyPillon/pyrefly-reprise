@@ -31,6 +31,7 @@ import { bodyFacingOption, figureLightOf, poseScalingOf, stageCamera } from './S
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
 import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
+import { downWithoutKoPainting } from './KoFallback.ts';
 import { figureBloomMasked } from './BloomMask.ts';
 import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
 import * as SA from './StageAnchors.ts';
@@ -291,13 +292,12 @@ export class PaintedStage implements BattleStage {
     const pin = kind === 'enemy' ? this.opts.slots.enemySpots?.[c.id] : undefined;
     const spot = pin ?? spots[Math.min(c.slot, spots.length - 1)] ?? spots[0] ?? [0, 0, 0];
     actor.position.set(spot[0], spot[1], spot[2]);
-    // Already down when the field is staged: snap to it. `immediate` is what
-    // stops a party member who was KO'd before the battle opened from toppling
-    // over on frame one.
-    // Seymour's body (D-046) is the one enemy that stays down on the field.
+    // Already down when staged: snap to it (`immediate`: no topple on frame one). Seymour's
+    // body (D-046) is the one enemy that stays down; a figure with no KO painting lies down.
     if (!c.alive && (c.side === 'party' || departureKindOf(c.id) === 'body')) {
       actor.setPose('ko', { immediate: true });
-      if (c.side === 'enemy' && !paintedPoses(artId, poses, characterUrl).has('ko')) void actor.lieDown(0); // D-301: a painted fall lies by itself
+      if (c.side === 'party') downWithoutKoPainting(actor, 0); // VP-1001-04
+      else if (!paintedPoses(artId, poses, characterUrl).has('ko')) void actor.lieDown(0); // D-301: a painted fall lies by itself
     }
 
     this.opts.scene.add(actor);

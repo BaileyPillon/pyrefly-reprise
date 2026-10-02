@@ -255,8 +255,14 @@ describe('the departures (research §4.4 and §4.5; the O-2 A strip; docs/plans/
     const stage = new FakeStage(['tidus', 'yuna', 'kimahri', 'auron', 'wakka', 'lulu', 'rikku'], ['seymour-flux', 'mortiorchis']);
     await new BattlePresenter({ stage, sleep: noSleep }).play(events);
     const mine = stage.calls.filter((c) => c.endsWith(':mortiorchis'));
-    expect(mine.filter((c) => c === 'fade=1:mortiorchis')).toHaveLength(drains);
-    expect(mine.some((c) => c.startsWith('remove:'))).toBe(false);
-    expect((stage.actor('mortiorchis') as unknown as { alpha: number }).alpha).toBe(1);
+    // Every drain while Seymour Flux stands brings the mount back. VP-1001-28 (FFX only): when he is beaten
+    // the mount is sent with him (SentCompanions.ts, research §5 "one creature"), so a drain logged after his
+    // KO does not raise it again and the mount leaves the field only then.
+    const fluxKo = events.findIndex((e) => e.type === 'ko' && e.targetId === 'seymour-flux');
+    const drainsWhileHeStands = events.slice(0, fluxKo < 0 ? events.length : fluxKo).filter(isDrain).length;
+    expect(mine.filter((c) => c === 'fade=1:mortiorchis').length).toBeGreaterThanOrEqual(drainsWhileHeStands);
+    const removed = stage.calls.indexOf('remove:mortiorchis');
+    if (fluxKo < 0) expect(removed).toBe(-1);
+    else expect(removed).toBeGreaterThan(stage.calls.indexOf('dissolve=1:seymour-flux'));
   });
 });

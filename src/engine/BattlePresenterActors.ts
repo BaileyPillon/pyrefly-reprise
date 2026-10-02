@@ -342,7 +342,7 @@ export interface LivePosture {
  * names `idle`), and that is exactly the case this must not block.
  */
 export function nextLifeState(current: LifeState, wanted: LifeState): LifeState {
-  if (current === 'down' && wanted === 'hurt') return 'down';
+  if (current === 'down' && (wanted === 'hurt' || wanted === 'victory')) return 'down'; // VP-1001-38: the fallen do not cheer
   return wanted;
 }
 
