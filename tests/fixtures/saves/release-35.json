@@ -1,0 +1,39 @@
+{
+  "_note": "EYE CANDY page (D-317) save-compatibility fixture. Written by the release-35 build itself (main ef3f6bbf, bundle index-DiuZMSBm.js), served locally from its parked production dist (F:/pyrefly-parked/2026-10-02/rel26c-r35-deploy/dist-gate, the gate build of that release) on 2026-10-02: a fresh headless profile, then that build's own SaveStore methods through window.__pyrefly.app.save (recordAttempt, recordClear, addPlayTime, flushPlayTime, markCoachSeen, setSettings, save), then localStorage read back verbatim. Non-default values on purpose, with fxSpectacle OFF. It has the three looks and none of the nine parts (fxDof, fxFog, fxEdges, fxBreath, fxKo, fxFraming, fxHero, fxSphere, fxSplash): release 35 never wrote them.",
+  "release": 35,
+  "mainSha": "ef3f6bbf",
+  "bundle": "index-DiuZMSBm.js",
+  "expect": {
+    "cleared": [
+      "ffx2-bahamut"
+    ],
+    "notCleared": [
+      "seymour-flux"
+    ],
+    "bestTimeMs": {
+      "ffx2-bahamut": 640100
+    },
+    "settings": {
+      "masterVolume": 0.7,
+      "musicVolume": 0.3,
+      "sfxVolume": 0.5,
+      "textSpeed": 0.75,
+      "ffx2Atb": "active",
+      "ffx2AtbSpeed": "slow",
+      "guideVisible": false,
+      "advisorVisible": false,
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1.3,
+      "fxLight": true,
+      "fxLiving": true,
+      "fxSpectacle": false
+    },
+    "looksOff": [
+      "fxSpectacle"
+    ]
+  },
+  "localStorage": {
+    "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1790918956320,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":2,\"playTimeMs\":6000},\"ffx2-bahamut\":{\"id\":\"ffx2-bahamut\",\"cleared\":true,\"bestTimeMs\":640100,\"bestTurns\":38,\"attempts\":1,\"playTimeMs\":0}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.7,\"musicVolume\":0.3,\"sfxVolume\":0.5,\"sfxBalanceMigrated\":true,\"textSpeed\":0.75,\"skipSeenCutscenes\":false,\"lowEffects\":false,\"fxLight\":true,\"fxLiving\":true,\"fxSpectacle\":false,\"textSize\":1.3,\"guideVisible\":false,\"advisorVisible\":false,\"intentVisible\":true,\"ffx2Atb\":\"active\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"reduceMotion\":false,\"ffx2AtbSpeed\":\"slow\"},\"seenCoach\":[\"briefing\"],\"flags\":{}}"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "_note": "EYE CANDY page (D-317) save-compatibility fixture. Written by the release-33 build itself (main f302f163, bundle index-DCYkAkI-.js), served locally from its parked production dist (F:/pyrefly-parked/2026-09-30/rel26c-r33-deploy/dist-gate, the gate build of that release) on 2026-10-02: a fresh headless profile, then that build's own SaveStore methods through window.__pyrefly.app.save (recordAttempt, recordClear, addPlayTime, flushPlayTime, markCoachSeen, setSettings, save), then localStorage read back verbatim. Non-default values on purpose, with fxLiving OFF. It has the three looks and none of the nine parts (fxDof, fxFog, fxEdges, fxBreath, fxKo, fxFraming, fxHero, fxSphere, fxSplash): release 33 never wrote them.",
+  "release": 33,
+  "mainSha": "f302f163",
+  "bundle": "index-DCYkAkI-.js",
+  "expect": {
+    "cleared": [
+      "seymour-flux",
+      "ffx2-bahamut"
+    ],
+    "notCleared": [
+      "seymour-anima-macalania"
+    ],
+    "bestTimeMs": {
+      "seymour-flux": 498210,
+      "ffx2-bahamut": 712300
+    },
+    "settings": {
+      "masterVolume": 0.9,
+      "musicVolume": 0.5,
+      "sfxVolume": 0.2,
+      "textSpeed": 2,
+      "ffx2Atb": "active",
+      "guideVisible": false,
+      "reduceMotion": true,
+      "lowEffects": false,
+      "textSize": 1,
+      "fxLight": true,
+      "fxLiving": false,
+      "fxSpectacle": true
+    },
+    "looksOff": [
+      "fxLiving"
+    ]
+  },
+  "localStorage": {
+    "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1790918952859,\"chapters\":{\"seymour-anima-macalania\":{\"id\":\"seymour-anima-macalania\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":6000},\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":true,\"bestTimeMs\":498210,\"bestTurns\":29,\"attempts\":1,\"playTimeMs\":0},\"ffx2-bahamut\":{\"id\":\"ffx2-bahamut\",\"cleared\":true,\"bestTimeMs\":712300,\"bestTurns\":41,\"attempts\":1,\"playTimeMs\":0}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.9,\"musicVolume\":0.5,\"sfxVolume\":0.2,\"sfxBalanceMigrated\":true,\"textSpeed\":2,\"skipSeenCutscenes\":false,\"lowEffects\":false,\"fxLight\":true,\"fxLiving\":false,\"fxSpectacle\":true,\"textSize\":1,\"guideVisible\":false,\"advisorVisible\":true,\"intentVisible\":true,\"ffx2Atb\":\"active\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"reduceMotion\":true},\"seenCoach\":[\"briefing\"],\"flags\":{}}"
+  }
+}

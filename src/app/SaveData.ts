@@ -9,7 +9,7 @@
 import { audio } from '../audio/index.ts';
 import { ALL_COACH_IDS } from '../ui/coach/coachCopy.ts';
 import { migrateFfx2Atb } from './saveFfx2Atb.ts';
-import { defaultFxLooks, migrateComfort, type FxLookSettings, type TextSize } from './saveComfort.ts';
+import { defaultFxLooks, defaultFxParts, migrateComfort, type FxLookSettings, type FxPartSettings, type TextSize } from './saveComfort.ts';
 import { applyComfort } from './applyComfort.ts';
 import { writeMerged } from './saveMerge.ts';
 import { migrateSfxBalance, SFX_DEFAULT_VOLUME } from './saveSfxBalance.ts';
@@ -56,7 +56,7 @@ export interface ChapterRecord {
   playTimeMs: number;
 }
 
-export interface Settings extends FxLookSettings {
+export interface Settings extends FxLookSettings, FxPartSettings {
   masterVolume: number;
   musicVolume: number;
   sfxVolume: number;
@@ -191,7 +191,7 @@ export function defaultSettings(): Settings {
     sfxVolume: SFX_DEFAULT_VOLUME, sfxBalanceMigrated: true, // D-293 (refines D-210): balance b, 0.35 +6 dB
     textSpeed: 1,
     skipSeenCutscenes: false,
-    lowEffects: false, ...defaultFxLooks(), // eye-candy D's three look rows, all ON (`fxLooks.ts`)
+    lowEffects: false, ...defaultFxLooks(), ...defaultFxParts(), // eye-candy D's looks and D-317's parts, all ON
     textSize: 1,
     guideVisible: true,
     advisorVisible: true,
@@ -273,7 +273,7 @@ export function migrate(raw: Partial<SaveData> & { version?: number }): SaveData
   const settings: Settings = { ...base.settings, ...(raw.settings ?? {}) };
   if (!hadCoach && veteran) settings.battleHelp = false;
   if (typeof settings.battleHelp !== 'boolean') settings.battleHelp = base.settings.battleHelp;
-  migrateComfort(settings, base.settings);
+  migrateComfort(settings, base.settings, raw.settings); // + D-317: a missing part takes its look's value
   migrateFfx2Atb(settings, raw.settings);
   migrateSfxBalance(settings, raw.settings); // D-293: an untouched 0.35 follows the new default, once
   const out: SaveData = {

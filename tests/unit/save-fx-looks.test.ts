@@ -22,6 +22,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { SAVE_KEY, SAVE_VERSION, SaveStore, defaultSettings, migrate, type SaveData } from '../../src/app/SaveData.ts';
 import { applyComfort } from '../../src/app/applyComfort.ts';
 import { FX_LOOK_ROWS, fxLooksOf, migrateFxLooks } from '../../src/app/fxLooks.ts';
+import { FX_PARTS } from '../../src/app/fxParts.ts';
 import { EyeCandyState, eyeCandy, parseFxQuery } from '../../src/engine/fx/EyeCandy.ts';
 
 interface Fixture {
@@ -71,7 +72,7 @@ describe.each(FIXTURES)('a %s save upgrades with every look ON', (file, release)
     expect(parsed.version).toBe(SAVE_VERSION);
   });
 
-  it('keeps everything else it had, verbatim; the only additions are the looks and TEXT SIZE', () => {
+  it('keeps everything else it had, verbatim; the only additions are the looks, their parts and TEXT SIZE', () => {
     const before = JSON.parse(raw) as SaveData;
     const store = new SaveStore(SAVE_KEY, slotWith(raw));
     const after = store.snapshot();
@@ -86,8 +87,10 @@ describe.each(FIXTURES)('a %s save upgrades with every look ON', (file, release)
     for (const [k, v] of Object.entries(before.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     for (const [k, v] of Object.entries(fixture.expect.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     const added = Object.keys(after.settings).filter((k) => !(k in before.settings)).sort();
-    expect(added).toEqual(['fxLight', 'fxLiving', 'fxSpectacle', 'sfxBalanceMigrated', 'textSize']);
+    // D-317's nine parts arrive too (`fxParts.ts`): no look of these saves is OFF, so every part comes in ON.
+    expect(added).toEqual([...FX_PARTS.map((p) => p.field), 'fxLight', 'fxLiving', 'fxSpectacle', 'sfxBalanceMigrated', 'textSize'].sort());
     for (const f of LOOKS) expect(after.settings[f], f).toBe(true);
+    for (const p of FX_PARTS) expect(after.settings[p.field], p.field).toBe(true);
   });
 
   it('switches every look on at construction, and a row written OFF survives a reload', () => {
@@ -133,10 +136,10 @@ describe('the three fields', () => {
     const s: Record<string, unknown> = { fxLight: false, fxLiving: 'x' };
     migrateFxLooks(s);
     expect(s).toEqual({ fxLight: false, fxLiving: true, fxSpectacle: true });
-    expect(FX_LOOK_ROWS.map((r) => [r.field, r.opt])).toEqual([
-      ['fxLight', 'a'],
-      ['fxLiving', 'b'],
-      ['fxSpectacle', 'c'],
+    expect(FX_LOOK_ROWS.map((r) => [r.field, r.opt, r.key])).toEqual([
+      ['fxLight', 'a', 'cinemaLight'],
+      ['fxLiving', 'b', 'livingPaintings'],
+      ['fxSpectacle', 'c', 'battleSpectacle'],
     ]);
   });
 });
