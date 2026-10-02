@@ -30,6 +30,8 @@ export interface ArtManifestSubject {
   readonly portrait: boolean;
   /** Declared facing, from `idle.json` or the first state that declares one. */
   readonly facing?: ArtFacing;
+  /** States that also ship `<state>@2x.png`, the twice-resolution master (D-315; `ArtTier.ts`). */
+  readonly states2x?: readonly string[];
 }
 
 /** The whole of `public/art/manifest.json`. */
@@ -121,11 +123,8 @@ export function parseArtManifest(raw: unknown): ArtManifest | null {
     // `parseArtFacing` owns the vocabulary (and its aliases); the generator
     // only copies the sidecar's string through.
     const facing = parseArtFacing(entry.facing);
-    subjects[id] = {
-      states,
-      portrait: entry.portrait === true,
-      ...(facing ? { facing } : {}),
-    };
+    const hi = Array.isArray(entry.states2x) ? entry.states2x.filter((s): s is string => states.includes(s as string)) : [];
+    subjects[id] = { states, portrait: entry.portrait === true, ...(facing ? { facing } : {}), ...(hi.length ? { states2x: hi } : {}) };
   }
 
   const strings = (v: unknown): string[] =>
@@ -316,6 +315,7 @@ function judge(manifest: ArtManifest, url: string): boolean | null {
     // A dotted stem is a candidate or a `.raw` intermediate: not indexed, and
     // not ours to judge.
     if (state.includes('.')) return null;
+    if (state.endsWith('@2x')) return isPng && (manifest.subjects[subjectId]?.states2x ?? []).includes(state.slice(0, -3));
     return isPng && (manifest.subjects[subjectId]?.states ?? []).includes(state);
   }
   if (folder === undefined || key === undefined || key.includes('.')) return null;

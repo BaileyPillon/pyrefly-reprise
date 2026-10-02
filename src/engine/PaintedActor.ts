@@ -810,24 +810,19 @@ export class PaintedActor extends Group {
    */
   async loadPoses(poses: PoseMap, initial?: string): Promise<void> {
     const names = Object.keys(poses);
-    const loaded = await Promise.all(
-      names.map((n) =>
-        loadPainted(
-          poses[n]!,
-          this.placeholderFactory,
-          (c) => c.height * this.placeholderBaseline,
-          this.matte,
-          this.fitBaseline,
-        ),
-      ),
-    );
+    // One texture per file (r35, D-315): a pose that falls back to idle shares idle's texture
+    // instead of uploading the same pixels again, which a 2x master would make four times dearer.
+    const byUrl = new Map<string, Promise<PaintedTexture>>();
+    const load = (u: string): Promise<PaintedTexture> =>
+      byUrl.get(u) ?? byUrl.set(u, loadPainted(u, this.placeholderFactory, (c) => c.height * this.placeholderBaseline, this.matte, this.fitBaseline)).get(u)!;
+    const loaded = await Promise.all(names.map((n) => load(poses[n]!)));
+    const previous = names.map((n) => this.poses.get(n));
     names.forEach((n, i) => {
-      const next = loaded[i]!;
-      this.retire(this.poses.get(n));
-      this.poses.set(n, next);
-      this.owned.add(next.texture);
+      this.poses.set(n, loaded[i]!);
+      this.owned.add(loaded[i]!.texture);
       this.poseUrls[n] = poses[n]!;
     });
+    previous.forEach((p) => this.retire(p));
     this.pickReference();
     this.resize();
     const first = initial ?? (this.poses.has('idle') ? 'idle' : names[0]);

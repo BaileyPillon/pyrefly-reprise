@@ -18,6 +18,7 @@
  */
 import type { CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
+import { followThrough } from './KeyPoses.ts';
 
 /** What a lunge is handed: hold at the apex until `hold` settles; call `reached` at the apex. */
 export interface LungeContact {
@@ -57,7 +58,12 @@ export async function meetContact(ctx: EventCtx, targetId: CombatantId): Promise
   const p = pending.get(ctx);
   if (!p || p.attacker === targetId) return;
   await Promise.race([p.reached, ctx.sleep(CONTACT_WAIT_MAX_MS)]);
-  releaseContact(ctx);
+  if (pending.get(ctx) !== p) return;
+  // D-313: a painted follow-through goes up as the blow lands and holds at full reach for a beat.
+  pending.delete(ctx);
+  const beat = followThrough(ctx, p.attacker);
+  if (beat > 0) void ctx.sleep(beat).then(p.release);
+  else p.release();
 }
 
 /** Let any held strike finish (`actionEnd`, and every new contact). */
