@@ -164,3 +164,77 @@ FFX phone (the foot rule is shared with FFX-2, where it only wraps); item list F
 3. With the Zombie/Curse hint card in the guide, the guide now yields to the card (card alone) when it would otherwise
    run under the help slab. That is the approved O3 frame; say if you would rather keep the guide's NEXT block and let the
    card be shorter.
+
+## Check (independent, 2026-10-02)
+
+A second agent re-ran the branch at `430f3280` in the same worktree. It did not build this lane and tried to break it.
+Dev server on port 5661, stopped by PID afterwards. Headless Playwright, `PYREFLY_BROWSER=gpu`, seed 1, one browser at
+a time. Harness and logs are in `D:/Tools/pyrefly-scratch/2026-10-02-rel35/ui-check/`: a copy of `glib.mjs` repointed to
+5661, plus `u4chk.mjs`, `u1life.mjs`, `nb.mjs`, `sinfin.mjs`, `stline.mjs` and `u6res.mjs`, which are new and
+independent.
+
+**Gates (re-run):**
+- `tsc` clean.
+- `vitest run --testTimeout=60000`: 733 files passed (5 skipped); 10,825 tests passed (40 skipped, 1 todo).
+- `orphans`: the same four.
+- Rule 7: only `FFXBattleHud.ts` (1,668 to 1,668) and `FFX2BattleHud.ts` (1,276 to 1,274) are over 400, and neither grew.
+- `git diff c675f29b..430f3280 -- src/battle` is empty.
+- `SaveData.ts`, the settings schema, `public/` and `docs/target/` are untouched.
+- `verify-approved.mjs`: 469 ok, 0 mismatched, 0 missing.
+
+**Claims confirmed by running:**
+- **U1 natural Ch IV Mega Flare, 1600x900.** Seen at 94.8 s. Only the full-frame grain, vignette and `.pf-mom__vig` are in the band.
+- **U1 injected cut-ins** (Ch I Mega Flare, Ch XVIII Dragon Fang, Ch XVI Aerospark): no HUD panel in the band. Leftovers are one damage numeral in Ch I (153, opacity 0.42) and `+38` in Ch XVI.
+- **U1 lifecycle (new check).** In a natural Ch IV run:
+  - `fxc-splash-live` is on `<html>` only while the splash shows.
+  - The command window, intent card and guide drop to 0 during the splash and return to 1 within 0.54 s after it.
+  - On a second splash skipped with a real Enter, the class is gone at once and the panels return.
+- **U2.**
+  - FFX Ch I, 1600x900: no guide text under the red Zombie slab (`hits: []`).
+  - FFX-2 Ch IV phone: the Curse hint lists Holy Water, Esuna or a Remedy in 2 lines at 14.3 px and covers 0 command rows.
+- **U3.**
+  - Hastega reads as one line that grows to "Tidus, Yuna and Kimahri were hasted.".
+  - "Yuna became a Zombie." appears at 3,379 ms, the same frame as her mark.
+  - At 1280x960 the line sits at y 65 to 92, above the banner plate (top 98): 0 overlap, and nothing else is under it (crop checked).
+- **U4, real pause clicks** (the BATTLE HELP row clicked in the pause; no injected setting):
+  - 1600x900: help OFF hides the band on every frame after resume, text empty. Help ON brings it back and it follows the highlight. It tracked the row at four later decisions.
+  - 390x844: with help OFF the foot line reads "YUNA" with no stale sentence; with help ON the sentence returns.
+- **U5.**
+  - Ch XVI phone coach: y 142 to 302, clear of the intent card (60 to 130). This is the case the builder did not re-run.
+  - Ch XV: "Paine was stopped." is under the Glint card (0 px²).
+  - Ch VII Sensor: folds to its chip after a cancel; the chip still touches Guardian B (4,584 px², as the note says).
+- **U6.**
+  - Board: 0 clipped pips at 1600 and 2000, and the last pip ends on the strip edge (842/842, 947/947).
+  - FFX-2 Item header: stays sticky and visible after wheel scrolls.
+  - Phone confirm "ATTACK → GUADO GUARDIAN A": 270/270.
+  - Phone results caption on a native Ch XVII ending (no injection): two columns, 308/308, no neighbour overlap.
+  - Phone foot line in Ch I: no clip and no overlap with command rows while walking every row.
+
+**Findings:**
+1. **Status line drops a waiting line (regression against live, PLAUSIBLE, both games).**
+   - The new `StatusMessageLine` replaces any line still waiting with the newer one.
+   - The real class was fed the presenter's own spacing: `status-remove` sleeps `TIMING.status * 0.4` (88 ms), and `status-add` sleeps `TIMING.status` (220 ms).
+     - Three removals 88 ms apart (an Esuna or Remedy on Poison + Silence + Darkness) showed "no longer poisoned" and "can see again". The Silence line was never shown.
+     - Three adds 220 ms apart showed Poison and Darkness only.
+   - Live queued up to four lines. Reachable from the data: Braska's Final Aeon's "Curse" puts five line-bearing statuses (Curse, Poison, Sleep, Silence, Darkness) on one party member in one action, and Evrae's Stone Gaze puts two (Petrify, Slow).
+   - A 240 s intended run of Ch III did not draw that move, so this is not caught in a live battle.
+   - Suggested repair: keep a short FIFO of distinct waiting lines, each shown for at least `MIN_SHOW_MS`, instead of one replaceable slot.
+2. **Phone splash: the status hint card prints through the band** (FFX-2 Ch IV, 390x844; not a regression).
+   - `.sthint` stands alone on the phone stage, outside the faded `.sgd`.
+   - It sits at opacity 1 over the lower slab, 98 % inside the band (`ev/ffx2-bahamut-390x844-touch-chk/splash-chk.png`).
+   - It is not on the fade list.
+3. **Ch XVII phone Fin plate:** it still overlaps the enemy-move card in a transient way.
+   - Seen in 3 of 334 samples at 200 ms (worst 4,440 px²) when the card grows: `--sin-under` read 104 px while the card's bottom was at 116 px.
+   - Cause: the 250 ms throttle.
+   - Steady state is 0.
+4. **Title halo.** On FFX's ivory slab it is invisible. On FFX-2's pink slab it shows as a light outline at both sizes, because `--fxc-slab2` (#ffe3f1) is not the slab's middle colour (#f7b6d9). The note says "invisible on the slab".
+   - This is a paint change to the D-287 splash look.
+   - It is already askBailey 2; it stays undecided until Bailey answers.
+5. **FFX-2 phone coach.** Stepped off the intent strip, it now covers figures in Ch XVI: Ixion 16,720 px², and Yuna, Rikku and Paine 1,890 to 2,450 px² each. This is a trade-off of the U5 fix (the card is first-time only and fades).
+6. **Evidence label.** The third panel of `docs/screenshots/r35-fix-ui-3-phone-labels.png` shows an injected "· CLEARED" caption on a Defeat page, and the panel does not say it was injected.
+7. **Rule 14.** Commit `430f3280` (docs only) carries no game-case line.
+8. **Not verified here:**
+   - Ch VII arrival tags: no arrival in a 40 s phone watch. The pure `tagCentreX` and its tests stand.
+   - The FFX-2 phone White Magic list: its last row (DISPEL) touches the one-line foot by 90 px². The foot's one-line position is unchanged from the base, so this is not from this branch.
+
+**Verdict:** U1, U2, U4 and U6 hold as claimed. U3 holds for the cases it names, but it introduces finding 1. U5 holds at steady state (finding 3). No approved painting changed. Layering and the save-data class are clean.
