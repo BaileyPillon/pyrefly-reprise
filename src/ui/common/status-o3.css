@@ -129,3 +129,7 @@ html[data-phone-battle] .phud-card__text:has(> .stcard) > .phud-card__hp { grid-
 html[data-phone-battle] .ffx-target__note--harm { display: none; }
 .stcard { display: inline-flex; align-items: center; gap: 5px; margin-left: 6px; --sti-size: 20px; vertical-align: middle; }
 .stcard .sttag { font-size: 10px; padding: 1px 6px; }
+
+/* U2 (PR-0291, FFX only): the cure-hint card stands alone in the guide's slot when even its one-sentence form
+   leaves the guide's column over the help slab or a command row (`statusHintCard.ts`), as the approved O3 frame draws it. */
+.sgd--hint-alone .sgd__body, .sgd--hint-alone .sgd__more { display: none; }

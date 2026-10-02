@@ -48,6 +48,7 @@ import { solidPanelRects } from '../common/panel-rects.ts';
 import { BODY_HALF_WIDTH, boardRects, fighterBoxes, keyFeatureObstacles, slabPanels, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
 import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
+import { CommandHelp } from './commandHelpSync.ts';
 import { NodeEdgeMarkers } from './nodeEdgeMarkers.ts';
 import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, BAND_GRID_HEIGHT, type BandInput } from './commandHelpBand.ts';
 import { plateInputFromDom, TargetPlates, targetPlateText } from './TargetPlates.ts';
@@ -146,6 +147,7 @@ export class FFX2BattleHud implements HudPort {
   private commandEl!: HTMLElement;
   /** PR-0012: the highlighted row's help sentence, a top-of-screen band (D-040), `battleHelpOn()`-gated. */
   private commandInfoEl!: HTMLElement;
+  private help: CommandHelp | null = null;
   private minigameEl!: HTMLElement;
   /** FFX-2's Active/Wait chip, shown while a target cursor is live. */
   private activeWaitEl: HTMLElement | null = null;
@@ -379,6 +381,7 @@ export class FFX2BattleHud implements HudPort {
     this.partyEl = this.stage.querySelector('.ffx2hud__party') as HTMLElement;
     this.commandEl = this.stage.querySelector('.ffx2hud__command') as HTMLElement;
     this.commandInfoEl = this.stage.querySelector('.ffx2-cmd-info') as HTMLElement;
+    this.help = new CommandHelp(this.commandInfoEl, () => FFX2_COMMAND_HELP_PLACEMENT_RESOLVED && battleHelpOn(), () => this.placeCommandBand());
     this.minigameEl = this.stage.querySelector('.ffx2hud__minigame') as HTMLElement;
     // FFX-2 ONLY: the Active/Wait chip. FFX's CTB has no such Config entry.
     this.activeWaitEl = this.stage.querySelector('.ffx2-atbmode');
@@ -442,6 +445,7 @@ export class FFX2BattleHud implements HudPort {
     this.advisor.update(dt);
     this.intent.update(dt);
     this.actionFade.update();
+    this.help?.sync();
     // GAME-AWARE (rule 14): the same shared plumbing FFX got. Panels were
     // published only on an engine sync, so between two syncs the field's idea
     // of where the chrome sits went stale and `visibleInFrame` lied.
@@ -889,13 +893,7 @@ export class FFX2BattleHud implements HudPort {
    * nothing on this side of the game before this row.
    */
   private setCommandHelp(label: string, text: string): void {
-    const show = FFX2_COMMAND_HELP_PLACEMENT_RESOLVED && battleHelpOn() && text.length > 0;
-    this.commandInfoEl.hidden = !show;
-    if (show) {
-      this.placeCommandBand();
-      this.commandInfoEl.querySelector('[data-role="label"]')!.textContent = label;
-      this.commandInfoEl.querySelector('[data-role="text"]')!.textContent = text;
-    }
+    this.help?.set(label, text); // U4 (PR-0305): `commandHelpSync.ts` also re-applies it every frame
   }
 
   onEvent(event: BattleEvent): Promise<void> | void {

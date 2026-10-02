@@ -57,3 +57,12 @@
   flex: none;
   white-space: pre;
 }
+
+/* U6 (PR-0275, both games): the location wraps into more columns instead of ending in an ellipsis ("INSIDE SIN —
+   THE GARDEN C...", "DJOSE TEMPLE - CHAMBER OF THE I..."): `results-fit.css`'s one-line nowrap rule is the desktop
+   caption's, where the rotated page has 282 px; here the vertical box has the page's own height. */
+.rres--phone .rresp__caption .rres__cap-loc {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
