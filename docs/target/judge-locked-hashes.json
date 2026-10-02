@@ -36,14 +36,28 @@
     "approved": "2026-09-25"
    },
    "public/art/characters/pterya/idle.png": {
-    "sha256": "448f7f2a4181da13fa7934069421c139ee7ce6a8aaac6f881c1bd8695a2a20fa",
-    "mtime": "2026-09-25T04:15:22.941Z",
-    "approved": "2026-09-25"
+    "sha256": "182a2084a3ee0d35da0df17382a458771b61746450ab110b34eea129cc764ad2",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-325; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "448f7f2a4181da13fa7934069421c139ee7ce6a8aaac6f881c1bd8695a2a20fa",
+     "mtime": "2026-09-25T04:15:22.941Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/pterya/idle.png"
+    }
    },
    "public/art/characters/pterya/attack.png": {
-    "sha256": "d16c31ad216602845c1a010e87ffa84d1a8b781d8bd7975811d78275be7977ec",
-    "mtime": "2026-09-25T04:15:22.961Z",
-    "approved": "2026-09-25"
+    "sha256": "d168cea36fcf052a80617bb610766540b9fefb218ef84e0cad6d8f4afcfaf2d9",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-325; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "d16c31ad216602845c1a010e87ffa84d1a8b781d8bd7975811d78275be7977ec",
+     "mtime": "2026-09-25T04:15:22.961Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/pterya/attack.png"
+    }
    },
    "public/art/characters/pterya/overdrive.png": {
     "sha256": "0534de30bd83be8965cfec5a18f21100c75c3620515293ea51e327dfe28a8f20",
