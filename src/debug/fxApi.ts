@@ -50,7 +50,7 @@ export function installFxDebug(api: Record<string, unknown>, app: App): void {
       return out;
     },
   };
-  for (const k of ['a', 'b', 'c']) {
+  for (const k of ['a', 'b', 'c', 'mix']) { // mix: the MAX mix's parts (D-316; `fx/mix/MaxMix.ts`)
     Object.defineProperty(api['fx'], k, { get: () => fxDebugHooks[k]?.api ?? null, enumerable: true });
   }
 }

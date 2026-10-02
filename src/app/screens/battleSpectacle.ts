@@ -22,6 +22,7 @@ import { SpectaclePass } from '../../engine/fx/c/SpectaclePass.ts';
 import type { SpectacleFlags } from '../../engine/fx/c/SpectacleRules.ts';
 import { OverdriveSplashLayer } from '../../ui/common/transitions/OverdriveSplashLayer.ts';
 import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
+import { mixSplashArt, prepareMixSplash } from '../../engine/fx/mix/splash.ts'; // SPLASH ART (the MAX mix, D-316)
 import '../../ui/common/fx-c-foil.css';
 
 const ART = `${import.meta.env.BASE_URL}art/`;
@@ -93,7 +94,7 @@ export function attachSpectacle(o: {
     dial: (n) => eyeCandy.dial(n),
     sub: (id) => eyeCandy.sub('c', id) && (id !== 'splash' || eyeCandy.dial('splash') > 0),
     splash,
-    splashArt: (_id, art, kind) => splashArtFor(art, kind, game),
+    splashArt: (_id, art, kind) => mixSplashArt(art, game) ?? splashArtFor(art, kind, game),
     view: () => {
       const c = o.renderer.domElement;
       return { w: c.clientWidth || window.innerWidth, h: c.clientHeight || window.innerHeight, dpr: o.renderer.renderer.getPixelRatio() };
@@ -102,6 +103,7 @@ export function attachSpectacle(o: {
   o.stage.fx = fx;
   // The splash paintings for this battle's likely movers, so the first splash does not wait.
   for (const s of o.stage.snapshot()) {
+    prepareMixSplash(s.art, game);
     const url = splashArtFor(s.art, s.side === 'enemy' ? 'special' : 'overdrive', game);
     if (url) splash.preload(url);
   }
