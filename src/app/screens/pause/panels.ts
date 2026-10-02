@@ -21,7 +21,6 @@ import type { Settings } from '../../SaveData.ts';
 import type { EncounterProgress, ObjectiveStatus } from '../../../ui/common/chapterObjectives.ts';
 import { formatPlayTime } from '../../../ui/common/chapterObjectives.ts';
 import { optionRows } from '../PauseScreenPanels.ts';
-import { FX_LOOK_ROWS } from '../../fxLooks.ts';
 
 /** One row in a tab body. */
 export interface PanelRow {
@@ -97,7 +96,7 @@ export interface OptionsContext {
  * that end or restart this encounter, with a rule above the two that leave it.
  */
 export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
-  const settings: PanelRow[] = optionRows(ctx.settings).map((r) => ({
+  const settings: PanelRow[] = optionRows(ctx.settings, ctx.game).map((r) => ({
     id: r.id,
     label: r.label,
     value: r.value,
@@ -105,11 +104,9 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
     selectable: true,
   }));
   if (ctx.game === 'ff7') {
-    // FF7 draws no eye candy (`EyeCandy.ts` callers check the game), so its look rows would switch nothing.
-    for (const r of FX_LOOK_ROWS) {
-      const at = settings.findIndex((s) => s.id === r.field);
-      if (at >= 0) settings.splice(at, 1);
-    }
+    // FF7 draws no eye candy (`EyeCandy.ts` callers check the game), so its EYE CANDY page would switch nothing.
+    const at = settings.findIndex((s) => s.id === 'eyeCandy');
+    if (at >= 0) settings.splice(at, 1);
   }
   if (ctx.game !== 'ffx2') {
     // X-2 BATTLE (ACTIVE / WAIT) is FFX-2's Config ATB Mode (§1.5), read by

@@ -1,7 +1,8 @@
 /**
  * Eye-candy D's three looks as settings (Bailey, 2026-09-29 ~23:45 EDT: "Ok yes I picked D so all 3
  * together however in the settings I want to be able to turn each one off. Default will be on.
- * Please."). One OPTIONS row per look, default ON:
+ * Please."). One switch per look, default ON; since D-317 (2026-10-02) they live on the EYE CANDY page
+ * (`app/screens/pause/eyeCandyPage.ts`) as the masters of its nine parts (`fxParts.ts`):
  *
  * - `fxLight`, CINEMA LIGHT: option A, Golden-Hour Cinema (FFX's gold hour and FFX-2's pink hour are
  *   the same switch);
@@ -19,6 +20,7 @@
  */
 
 import type { FxOption } from '../engine/fx/EyeCandy.ts';
+import type { EyeCandyKey } from '../engine/fx/eyeCandyFlags.ts';
 
 export interface FxLookSettings {
   /** CINEMA LIGHT: eye-candy D's option A (the golden or pink hour). */
@@ -31,11 +33,14 @@ export interface FxLookSettings {
 
 export type FxLookField = keyof FxLookSettings;
 
-/** Each settings field and the option it switches, in row order. */
-export const FX_LOOK_ROWS: readonly { field: FxLookField; opt: FxOption; label: string }[] = [
-  { field: 'fxLight', opt: 'a', label: 'CINEMA LIGHT' },
-  { field: 'fxLiving', opt: 'b', label: 'LIVING PAINTINGS' },
-  { field: 'fxSpectacle', opt: 'c', label: 'BATTLE SPECTACLE' },
+/**
+ * Each settings field, the option it switches and its key on the `eyeCandyFlags.ts` seam, in row order.
+ * Since D-317 the three are the masters of the EYE CANDY page's nine parts (`fxParts.ts`).
+ */
+export const FX_LOOK_ROWS: readonly { field: FxLookField; opt: FxOption; key: EyeCandyKey; label: string }[] = [
+  { field: 'fxLight', opt: 'a', key: 'cinemaLight', label: 'CINEMA LIGHT' },
+  { field: 'fxLiving', opt: 'b', key: 'livingPaintings', label: 'LIVING PAINTINGS' },
+  { field: 'fxSpectacle', opt: 'c', key: 'battleSpectacle', label: 'BATTLE SPECTACLE' },
 ];
 
 /** Every look on: a new profile, and any save that never stored the fields. */
