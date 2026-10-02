@@ -109,5 +109,7 @@ Code: FFX-2 only (the spherechange; FFX has none). Art: per figure, as in the ta
    desktop while the idle draws at 2x, as release 35's keys do; their masters (about 150 MB) are not packaged.
 6. research/visual-bible.md 1.6's pixel-art note still asks for two horns (flagged by the art run); a one-line fix
    there would stop the drift coming back.
-7. The full suite here: 745 files passed, 1 failed, 5 skipped; the failure, `audio-manifest-io` "loses nothing when
-   four separate renders write at once", is load-sensitive (it passes 3 of 3 alone; no audio file touched here).
+7. Gates on rel36 at the hand-off: `tsc --noEmit` clean; the full `vitest run --testTimeout=60000` 746 files passed,
+   5 skipped (11,036 tests). One earlier full run had a load-sensitive failure in `audio-manifest-io` ("loses
+   nothing when four separate renders write at once"; it passes 3 of 3 alone, no audio file touched here).
+   `orphans`: 24, as before.
