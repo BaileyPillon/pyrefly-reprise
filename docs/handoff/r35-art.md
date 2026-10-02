@@ -143,7 +143,7 @@ save-data: focused before deploy, deep after.
 - Shipped `public/` after the dist filter: 730.3 MB (decimal), 2x masters 109.8 MiB; the filter ships `@2x.png`
   (and the unused `@2x.json` sidecars).
 - Neighbouring flows: Ch I on `auto: 'intended'` ends the same on base and candidate (defeat in 38 turns: the engine
-  is untouched). Chapter IX (Ixion, FFX-2) on auto at 390x844: victory, hooded White Mage victory painting shown.
+  is untouched). `ffx2-ixion-djose` (FFX-2) on auto at 390x844: victory, hooded White Mage victory painting shown.
   Auto (cast-only) pose timings in Ch IV match base to the millisecond range.
 
 **Found.**
