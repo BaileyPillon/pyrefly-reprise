@@ -30,8 +30,12 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const out = join(root, 'dist-lab');
 const artifact = process.argv.includes('--artifact');
-/** Left out of the private page: the music (synth fallback), the pause plates, the title art, other chapters' portraits. */
-const ARTIFACT_SKIP = [/^audio\/music\//, /^art\/pause\//, /^art\/title\//, /^art\/portraits\/(leblanc|ormi)\./];
+/**
+ * Left out of the private page (the manifests are trimmed to match, so nothing asks for them): the music
+ * (the synth plays), the pause plates, the title art, other chapters' portraits, and the Sleep poses (a
+ * sleeping figure shows its nearest painting): the page must stay under 250 files.
+ */
+const ARTIFACT_SKIP = [/^audio\/music\//, /^art\/pause\//, /^art\/title\//, /^art\/portraits\/(leblanc|ormi)\./, /^art\/characters\/[^/]+\/sleep\./];
 const LIMITS = { files: 250, bytes: 60 * 1024 * 1024, file: 15 * 1024 * 1024 };
 
 await build({
@@ -146,7 +150,7 @@ const biggest = files.reduce((m, f) => (f.bytes > m.bytes ? f : m), { path: '', 
 const mb = (n) => (n / 1024 / 1024).toFixed(2);
 const lines = [
   'Pyrefly Reprise camera lab: dist-lab/ (a test build, never the game; D-318)',
-  `built ${new Date().toISOString()} from branch camera-lab${artifact ? ' for the private page: paintings shrunk (characters and rear paintings 0.6, portraits 0.5, backdrops 0.8), music dropped (the synth fallback plays), pause plates and title art left out, manifests trimmed' : ' for the launcher (full resolution, music included)'}`,
+  `built ${new Date().toISOString()} from branch camera-lab${artifact ? ' for the private page: paintings shrunk (characters and rear paintings 0.6, portraits 0.5, backdrops 0.8), music dropped (the synth fallback plays), pause plates, title art and Sleep poses left out, manifests trimmed' : ' for the launcher (full resolution, music included)'}`,
   `files ${files.length + 1} (limit ${LIMITS.files}), total ${mb(total)} MB (limit 60 MB), largest ${biggest.path} ${mb(biggest.bytes)} MB (limit 15 MB)`,
   `copied ${copied} public files from tools/lab/lab-assets.txt${missing.length ? `; missing ${missing.length}: ${missing.join(', ')}` : ''}`,
   '',

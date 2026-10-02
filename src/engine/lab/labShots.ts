@@ -137,7 +137,9 @@ export function solveShot(req: ShotRequest, view: LabStageView, T: ShotTuning): 
     }
     case 'impact-wide': {
       if (subject && subject.side === 'enemy') return enemyShot(view, subject, T.impactWide, 0.05);
-      // On the party (a heal): high over their shoulders, toward the boss.
+      // On the party (a heal): high over their shoulders, toward the boss; today's wide master when
+      // one of them has no rear painting (the lens stays off a back it cannot show).
+      if (view.figures.some((f) => f.side !== 'enemy' && f.standing && !f.hasRear)) return view.idleRig;
       const o = partyCentre(view);
       const { f, s } = lineFrame(o, bossPos, view.viewer);
       const cam = add(add(o, scale(f, -T.partyWide.back)), scale(s, T.partyWide.side));

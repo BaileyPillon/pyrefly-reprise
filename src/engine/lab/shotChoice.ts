@@ -120,7 +120,8 @@ export function shotForBeat(beat: GrammarBeat, ctx: GrammarContext, isEnemy?: (i
       if (beat.side === 'enemy') {
         const victim = beat.targets[0] ?? null;
         if (beat.big) return make('colossus', beat.actorId, victim, ctx, true);
-        return make(clair ? 'enemy-behind-party' : 'enemy-front', beat.actorId, victim, ctx);
+        // Clair Obscur's enemy turn looks from behind the party: only when every one of them can show her back.
+        return make(clair && ctx.allPartyRear ? 'enemy-behind-party' : 'enemy-front', beat.actorId, victim, ctx);
       }
       const target = strikeTarget(beat.targets, ctx, isEnemy);
       const strikesFoe = beat.targets.length === 0 || beat.targets.some((t) => (isEnemy ? isEnemy(t) : true));

@@ -66,6 +66,8 @@ describe('camera lab grammar', () => {
     expect(kind(act('defend'))).toBe('keep');
     expect(kind(act('cast', 'enemy'))).toBe('enemy-front');
     expect(kind(shotForBeat({ kind: 'action', actorId: 'boss', side: 'enemy', pose: 'cast', targets: [], big: false }, ctx({ style: 'clair' })))).toBe('enemy-behind-party');
+    // Without rear paintings the lens stays off the party's backs.
+    expect(kind(shotForBeat({ kind: 'action', actorId: 'boss', side: 'enemy', pose: 'cast', targets: [], big: false }, ctx({ style: 'clair', allPartyRear: false })))).toBe('enemy-front');
     expect(kind(act('cast', 'enemy', true))).toBe('colossus');
     expect(kind(act('attack', 'party', true))).toBe('colossus');
     const clairHit = shotForBeat({ kind: 'action', actorId: 'tidus', side: 'party', pose: 'attack', targets: ['boss'], big: false }, ctx({ style: 'clair' }));
