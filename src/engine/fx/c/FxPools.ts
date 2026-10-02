@@ -180,7 +180,9 @@ const SEGMENT_FRAGMENT = /* glsl */ `
     float y = vUv.y;
     float core = exp(-y * y * 9.0);
     float glow = exp(-y * y * 2.2) * 0.5;
-    float along = mix(1.0, mix(0.22, 1.0, pow(vUv.x, 1.3)), vHead);
+    // max(): under MSAA an edge pixel is shaded at its centre, outside the quad, so vUv.x can dip
+    // below 0, and pow() of a negative base is NaN, which the bloom then spreads over the frame.
+    float along = mix(1.0, mix(0.22, 1.0, pow(max(vUv.x, 0.0), 1.3)), vHead);
     float cap = smoothstep(0.0, 0.06, vUv.x) * smoothstep(1.0, 0.94, vUv.x);
     float m = max(vColor.r, max(vColor.g, vColor.b));
     vec3 hot = mix(vColor, vec3(m), 0.55 * core);
@@ -282,7 +284,9 @@ const SPRITE_FRAGMENT = /* glsl */ `
       a = arms * 0.95 + exp(-r * r * 60.0) * 0.8;
     } else if (vShape < 2.5) {
       float w = mix(0.06, 0.022, vK);
-      a = exp(-pow((r - 0.86) / w, 2.0)) + exp(-pow((r - 0.86) / (w * 2.5), 2.0)) * 0.18;
+      float q1 = (r - 0.86) / w;
+      float q2 = q1 / 2.5;
+      a = exp(-q1 * q1) + exp(-q2 * q2) * 0.18; // squares, not pow(): pow of a negative base is NaN
     } else {
       float x = exp(-p.x * p.x * 6.0);
       float y = smoothstep(-1.0, -0.8, p.y) * (1.0 - smoothstep(-0.2, 1.0, p.y));

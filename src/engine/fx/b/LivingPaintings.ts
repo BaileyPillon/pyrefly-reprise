@@ -12,6 +12,7 @@ import { FloorReflection } from './FloorReflection.ts';
 import { Arcs } from './Arcs.ts';
 import { ROOMS } from './ambient/index.ts';
 import type { RoomSpec } from './ambient/room.ts';
+import { bindMaxMix, releaseMaxMix, updateMaxMix } from '../mix/MaxMix.ts'; // the MAX mix (D-316), every FFX and FFX-2 battle
 
 /**
  * Option B "Living Paintings" (eye-candy options round, 2026-09-29): the paintings breathe in 3D.
@@ -339,6 +340,7 @@ let pending: { a: LivingBind; room: RoomSpec; stop: () => void } | null = null;
  */
 export function bindLivingScene(a: LivingBind): void {
   releaseLivingScene();
+  bindMaxMix(a);
   const room = ROOMS[a.key];
   if (!room) return;
   const start = (): void => {
@@ -355,9 +357,11 @@ export function bindLivingScene(a: LivingBind): void {
 /** Every frame, after the rig has placed the camera and before the render. */
 export function updateLivingScene(dt: number): void {
   current?.update(dt);
+  updateMaxMix(dt);
 }
 
 export function releaseLivingScene(): void {
+  releaseMaxMix();
   pending?.stop();
   pending = null;
   current?.dispose();
