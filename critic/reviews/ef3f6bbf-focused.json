@@ -1,0 +1,418 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-02T04:58:06.578Z",
+ "build": {
+  "mainSha": "ef3f6bbf",
+  "bundle": "index-DiuZMSBm.js",
+  "candidate": "D:/pyrefly-rel26c/dist-gate"
+ },
+ "targetVersion": "88d11541d8df76eca9ae7675959ffa4bad3254620bf81906c0445c4fa1c3ef80",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect found: FFX Ch I and FFX-2 Ch IV played title to board by real keys to victory, 0 console errors, 0 missing files, every capture asserted.",
+  "No regression against live 25faec70 found in the tested flows: pause, Esc RESUME, options rows, results and board all behave as on release 34, and F1 (first Esc opens the pause in FFX) is now fixed.",
+  "FR-35-01 (major) is a missing new feature, not a defect in shipped code: the living pause portrait does not exist live either and is not in this build; it is disclosed, and the announcement must not claim it.",
+  "Approved art intact (469 ok, 0 mismatched, 0 missing, also inside dist-gate); the 2x tier ships on desktop only as designed."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "mandatory": true,
+   "reason": "The pause owns the window at 1600x900, 2000x1012 and 390x844: .pause__art box is the full viewport in all four probes (0,0,W,H); battle screen roots only under it, no title roots (route-index 72 items, 0 mismatches).",
+   "where": "both; pause",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/pause/ffx-1600/run.json",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx2-2000/run.json",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx-390-touch/run.json",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx2-390-touch/run.json"
+   ],
+   "mode": "automated",
+   "minutes": 2,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "mandatory": true,
+   "reason": "Pause OPTIONS rows, results and battle HUD read at actual size in the 1600 and 2000 captures; the 390x844 pause captures read; no new copy in this release below the floor seen. Effective font sizes not re-measured (no text CSS changed in the pause).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/pause/ffx-1600/02-options.png",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx2-2000/02-options.png",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx-390-touch/02-options.png"
+   ],
+   "mode": "manual",
+   "minutes": 3,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "reason": "Advisor v3 / the Sin advisor strip (F3) only exists in XVII and XVIII, not played in this pass; Ch I and Ch IV advisor cards were present and played (0 target mismatches).",
+   "where": "FFX XVII/XVIII",
+   "evidence": [],
+   "mode": "automated",
+   "minutes": 0,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "mandatory": true,
+   "reason": "Ch I and Ch IV played to victory by real keys; the results screen came up with no leftover banner or advisor card in 31-results (F5 path); Esc RESUME left no pause roots (4 probes).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/seymour-flux-win-keys1600/31-results.jpg",
+    "critic/reviews/ef3f6bbf-focused/route/ffx2-bahamut-win-keys2000/31-results.jpg"
+   ],
+   "mode": "manual",
+   "minutes": 2,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "mandatory": false,
+   "reason": "No developer vocabulary in the option rows, results or HUD captured.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/pause/ffx2-2000/run.json"
+   ],
+   "mode": "manual",
+   "minutes": 1,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "FAIL",
+   "mandatory": false,
+   "reason": "FFX Ch I 1600x900: the new lie-down KO figure of Yuna runs into the left edge of the party status panel (polish FR-35-02); FFX-2 Ch IV figures clear of panels.",
+   "where": "FFX Ch I mid-fight",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/seymour-flux-win-keys1600/23-midfight.jpg"
+   ],
+   "mode": "manual",
+   "minutes": 2,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "mandatory": false,
+   "reason": "Names shown in full in both runs (Seymour Flux, Mortiorchis, Bahamut, party).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/seymour-flux-win-keys1600/23-midfight.jpg",
+    "critic/reviews/ef3f6bbf-focused/route/ffx2-bahamut-win-keys2000/23-midfight.jpg"
+   ],
+   "mode": "manual",
+   "minutes": 1,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "mandatory": true,
+   "reason": "Selection obvious: the route reads the highlighted target id before every confirm, 0 target mismatches in both runs; pause tab underline visible.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/seymour-flux-win-keys1600/run.json",
+    "critic/reviews/ef3f6bbf-focused/route/ffx2-bahamut-win-keys2000/run.json"
+   ],
+   "mode": "automated",
+   "minutes": 1,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-012",
+   "result": "PASS",
+   "mandatory": false,
+   "reason": "No fallback faces: every pose requested in both runs returned 200 (notFound empty), the new ready/follow/hurt/ko/attack keys loaded by their own files.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/seymour-flux-win-keys1600/run.json",
+    "critic/reviews/ef3f6bbf-focused/route/ffx2-bahamut-win-keys2000/run.json",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx2-390-touch/run.json"
+   ],
+   "mode": "automated",
+   "minutes": 2,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "reason": "The new keys were seen only in sampled frames (hooded White Mage raise, KO lie-down); no rubric pass over all 49 party and 31 boss keys in game in this focused pass. Goes to the deep review.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/ffx2-bahamut-win-keys2000/23-midfight.jpg"
+   ],
+   "mode": "automated",
+   "minutes": 0,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "mandatory": true,
+   "reason": "Real keyboard (both chapters, title to board again), real mouse clicks (pause tabs, LIVING PAINTINGS row) and real touch taps (390x844 pause, both games). Debug API used only for setSeed and reads.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/seymour-flux-win-keys1600/run.json",
+    "critic/reviews/ef3f6bbf-focused/route/ffx2-bahamut-win-keys2000/run.json",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx-390-touch/run.json"
+   ],
+   "mode": "automated",
+   "minutes": 3,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "reason": "Every capture asserted: route-index.mjs over 72 entries, 0 unverified, 0 mismatches; pause probe writes UNVERIFIED on a wrong screen (none occurred).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/index.json"
+   ],
+   "mode": "automated",
+   "minutes": 1,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "mandatory": true,
+   "reason": "Production candidate, not deployed: the live check belongs to the live review.",
+   "where": "n/a",
+   "evidence": [],
+   "mode": "automated",
+   "minutes": 0,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "mandatory": false,
+   "reason": "Art URLs come from the manifest (states2x present for 16 subjects in dist-gate/art/manifest.json); 2x masters load only through pixelUrlFor at 2000x1012 (ffx2-bahamut/idle@2x.png) and never at 390x844 (1x only).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/ffx2-bahamut-win-keys2000/run.json",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx2-390-touch/run.json"
+   ],
+   "mode": "automated",
+   "minutes": 2,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "mandatory": true,
+   "reason": "Approved and judge-locked art intact: verify-approved (ROOT=candidate) 469 ok, 0 mismatched, 0 missing; the same 469 files hashed inside dist-gate: 0 mismatch, 0 missing. All media requested in both runs decoded (no console errors).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/verify-approved.json",
+    "critic/reviews/ef3f6bbf-focused/approved-in-dist-gate.out"
+   ],
+   "mode": "automated",
+   "minutes": 3,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "mandatory": true,
+   "reason": "Pause, LIVING PAINTINGS row, REDUCE MOTION and the 2x tier behave the same in FFX and FFX-2 (both probed at desktop and phone).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/pause/ffx-1600/run.json",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx2-2000/run.json"
+   ],
+   "mode": "automated",
+   "minutes": 1,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "mandatory": true,
+   "reason": "Game cases from the lane handoffs hold where tested: X-2 BATTLE / ATB SPEED rows only in FFX-2 pause; FFX party keys (tidus/auron ready, follow) only in Ch I, FFX-2 dresspheres (rikku-dark-knight, paine-warrior ready/follow; hooded White Mage) only in Ch IV; F1 first-Esc fix is FFX-only and FFX-2 still opens on the first press. Sin-only F3/F4 not tested here.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/pause/ffx-1600/run.json",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx2-2000/run.json",
+    "critic/reviews/ef3f6bbf-focused/route/seymour-flux-win-keys1600/run.json",
+    "critic/reviews/ef3f6bbf-focused/route/ffx2-bahamut-win-keys2000/run.json"
+   ],
+   "mode": "automated",
+   "minutes": 2,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "mandatory": true,
+   "reason": "FFX Ch I and FFX-2 Ch IV: title > board > prep > scene > battle > victory > post-scene > results > board, plus board after reload, by real keys (73 and 25 turns).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/seymour-flux-win-keys1600/run.json",
+    "critic/reviews/ef3f6bbf-focused/route/ffx2-bahamut-win-keys2000/run.json"
+   ],
+   "mode": "automated",
+   "minutes": 13,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "mandatory": false,
+   "reason": "Wind-up/follow-through keys and 2x masters reached through the real presenter path in real fights (requested by the game, not by the debug API).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/seymour-flux-win-keys1600/run.json",
+    "critic/reviews/ef3f6bbf-focused/route/ffx2-bahamut-win-keys2000/run.json"
+   ],
+   "mode": "automated",
+   "minutes": 1,
+   "artifact": "ef3f6bbf / dist-gate built 2026-10-02 by this critic with npx vite build --outDir dist-gate --emptyOutDir",
+   "targetVersion": "88d11541",
+   "environment": "D:/pyrefly-rel26c/dist-gate (index-DiuZMSBm.js), vite preview 127.0.0.1:5641 (PID 29336, stopped), headless Chromium PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti)"
+  }
+ ],
+ "targets": {
+  "required": 3,
+  "matched": 1,
+  "failing": 1,
+  "unverified": 1,
+  "waiting": 0,
+  "notes": "Matched: \"Pause remade on the Until Dawn character screen\" (FFX Ch I 1600x900 frame and FFX-2 Ch IV 2000x1012 frame (c)). Failing: \"Living portrait feel (both)\" (D-143, A2) - not built (FR-35-01). Unverified: the approved D-313/D-314 key art judged in game against its tiles (only sampled frames seen).",
+  "composites": [
+   "critic/reviews/ef3f6bbf-focused/pause-until-dawn-ffx-1600.jpg",
+   "critic/reviews/ef3f6bbf-focused/pause-until-dawn-ffx2-2000.jpg"
+  ]
+ },
+ "issues": [
+  {
+   "id": "FR-35-01",
+   "severity": "major",
+   "title": "Living portraits in the Until Dawn pause (D-021 / D-143 feel A2) are NOT in this candidate, although the release description lists them",
+   "game": "both",
+   "chapter": "all (pause)",
+   "expected": "Per the change description item (3): the pause portrait performs the A2 \"measured\" living portrait under LIVING PAINTINGS, static under REDUCE MOTION",
+   "observed": "The pause shows the same static plate as live with the pre-existing whole-plate CSS push-in and drift (pause-push, pause-drift; pause-screen.css unchanged since 25faec70). No canvas, no PortraitDriver: PortraitStage.attachDriver and setGaze have zero callers in src/. Toggling LIVING PAINTINGS by mouse switches battle option B only; the pause plate keeps drifting either way. REDUCE MOTION ON does make it fully still (1 distinct frame of 5). The lane r35-portraits (cbe8d0bd, docs only) concluded no pause plate has the face parts A2 needs and was not merged (git merge-base: not an ancestor of ef3f6bbf); targets.json \"Living portrait feel (both)\" reads delivery not-scheduled.",
+   "repro": "Any chapter, Esc, watch the face for 4 s; OPTIONS > LIVING PAINTINGS OFF/ON; compare with the A2 clip",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/pause/ffx-1600/run.json",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx2-2000/run.json",
+    "critic/reviews/ef3f6bbf-focused/pause/ffx-1600-reduce/run.json",
+    "critic/reviews/ef3f6bbf-focused/pause-until-dawn-ffx2-2000.jpg"
+   ],
+   "confidence": "high (code search, git ancestry and four in-game probes)",
+   "requirement": "D-021, D-143 (Bailey 2026-09-25); release announcement accuracy",
+   "where": "src/app/screens/pause/PortraitStage.ts (driver seam unused); docs/handoff/r35-portraits.md on branch r35-portraits",
+   "fix": "Do not announce living portraits for release 35; answer Bailey with the r35-portraits findings (face parts must be painted per plate, a gaze input chosen) and schedule the port separately",
+   "acceptanceCheck": "A pause probe shows a canvas-driven face performing A2 (eye lead, smile at 0.6 s, no worried brow) with LIVING PAINTINGS ON, the plain plate with it OFF, and stillness under REDUCE MOTION, in FFX and FFX-2",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FR-35-02",
+   "severity": "polish",
+   "title": "FFX Ch I: the new lie-down KO figure runs into the party status panel",
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "expected": "A KO'd figure lies clear of the party panel (CHK-008)",
+   "observed": "At 1600x900 the KO'd Yuna (head near x 850, feet near x 1040) reaches under the left edge of the party panel (x ~1030) in the mid-fight capture",
+   "repro": "route.mjs seymour-flux win --size=1600x900 --seed=1, 23-midfight",
+   "evidence": [
+    "critic/reviews/ef3f6bbf-focused/route/seymour-flux-win-keys1600/23-midfight.jpg"
+   ],
+   "confidence": "medium (one frame)",
+   "requirement": "visual: staging, panels measured against the painted actors",
+   "where": "not traced (vis-fix KO size/lie-down, KoPoseScale.ts suspected)",
+   "fix": "Clamp the lie-down KO figure's screen rect against the party panel safe zone, or anchor it from the head end",
+   "acceptanceCheck": "KO frames in Ch I at 1600x900 and 2000x1012 show 0 px of the figure under .ig-party",
+   "introducedByCandidate": true,
+   "regressionVsLive": "unknown"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "tsc --noEmit clean",
+   "26 changed vitest files, 221 tests pass",
+   "verify-approved on the candidate and the same hashes inside dist-gate",
+   "FFX Ch I win by keys 1600x900 (route)",
+   "FFX-2 Ch IV win by keys 2000x1012 (route)",
+   "pause probe: FFX 1600 mouse, FFX-2 2000 mouse, FFX 390x844 touch, FFX-2 390x844 touch, FFX 1600 reduced motion",
+   "2x tier: idle@2x at 2000x1012, 1x only at 390x844",
+   "F1 first-Esc in FFX and FFX-2"
+  ],
+  "reused": [
+   {
+    "what": "audio checks (CHK-001) and the listening score",
+    "from": "critic/reviews/25faec70-focused.json",
+    "why": "audio unchanged since release 34 (no src/audio or public/audio change in 25faec70..ef3f6bbf); agents cannot hear, CHK-B1 stays owed"
+   }
+  ],
+  "notTested": [
+   "Sin XVII/XVIII: F3 advisor strip, F4 dead Orders rows",
+   "F6 Sphere Grid M/H/pad routes and the phone explainer",
+   "F2 %23n request (Pages-only 404)",
+   "U1 splash layering in Overdrive cut-ins, U2-U6 per item",
+   "vis-fix items in Chapters V, XI, Den of Woe, Mortiorchis Flux dissolve",
+   "the other 16 chapters and their new boss keys",
+   "frame times and memory with the 2x masters",
+   "full npm test (not re-run; changed files only)",
+   "CHK-B1 listening"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live review of the deployed artifact, then the deep review on the live build (plan depth deep: presenter, asset loader, global layout, both HUDs; deepAfterDeploy true).",
+ "elapsedMinutes": 60,
+ "browserMode": "PYREFLY_BROWSER=gpu headless Chromium, ANGLE D3D11 RTX 5070 Ti; no fallback needed"
+}

@@ -1,61 +1,46 @@
 {
-  "mainSha": "25faec70",
-  "bundle": "cJFxGdIo",
-  "deployedAt": "2026-10-01T09:36:09.478Z",
+  "mainSha": "ef3f6bbf",
+  "bundle": "DiuZMSBm",
+  "deployedAt": "2026-10-02T05:02:50.138Z",
   "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
-  "artFiles": 754,
+  "artFiles": 956,
   "policyVersion": 2,
-  "artifactHash": "59788b8b77f782e07555bc273f628b3d7a986bcec4e2ff4a5188966dda1b8421",
+  "artifactHash": "87b5ed53e701a5f8b63b4c073c35b4753c3dccb52430998cc77baed9dfe72dd0",
   "review": "deep",
   "reasons": [
-    "public/audio/manifest.json: asset loader and manifests is a shared system",
-    "src/app/credits/audioSources.ts: unclassified product path is a shared system",
-    "src/app/credits/creditsData.ts: unclassified product path is a shared system",
-    "src/app/sfxGame.ts: unclassified product path is a shared system",
-    "src/audio/AudioManager.ts: audio routing is a shared system",
-    "src/audio/manifest.ts: asset loader and manifests is a shared system",
-    "src/battle/common/types.ts: shared combat core is a shared system",
-    "src/battle/ffx/abilities.ts: FFX CTB engine is a shared system",
-    "src/battle/ffx/execute.ts: FFX CTB engine is a shared system",
-    "src/battle/ffx/overdrive.ts: FFX CTB engine is a shared system",
-    "src/battle/ffx/overdriveShape.ts: FFX CTB engine is a shared system",
-    "src/engine/BattleMoments.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/ArtManifest.ts: asset loader and manifests is a shared system",
+    "src/engine/BattlePresenterActors.ts: battle presenter and lifecycle is a shared system",
     "src/engine/BattlePresenterArt.ts: battle presenter and lifecycle is a shared system",
     "src/engine/BattlePresenterArt.ts: asset loader and manifests is a shared system",
     "src/engine/BattlePresenterBeats.ts: battle presenter and lifecycle is a shared system",
-    "src/engine/BattlePresenterDepartures.ts: battle presenter and lifecycle is a shared system",
     "src/engine/BattlePresenterEvents.ts: battle presenter and lifecycle is a shared system",
     "src/engine/BattlePresenterPorts.ts: battle presenter and lifecycle is a shared system",
-    "src/engine/BattlePresenterSfx.ts: battle presenter and lifecycle is a shared system",
     "src/engine/BattlePresenterStage.ts: battle presenter and lifecycle is a shared system",
-    "src/main.ts: global layout, input and boot is a shared system",
-    "src/ui/common/hudTextSize.ts: global layout, input and boot is a shared system",
-    "src/ui/common/pause-credits.css: global layout, input and boot is a shared system",
-    "src/ui/common/restPoses.ts: global layout, input and boot is a shared system",
+    "src/engine/PaintedArt.ts: asset loader and manifests is a shared system",
+    "src/ui/coach/coachActorAvoid.ts: unclassified product path is a shared system",
+    "src/ui/coach/firstRunGuide.ts: unclassified product path is a shared system",
+    "src/ui/common/phone-battle.css: global layout, input and boot is a shared system",
+    "src/ui/common/results-fit.css: global layout, input and boot is a shared system",
     "src/ui/common/status-o3.css: global layout, input and boot is a shared system",
     "src/ui/common/statusHintCard.ts: global layout, input and boot is a shared system",
-    "src/ui/common/touchTapAim.ts: global layout, input and boot is a shared system",
+    "src/ui/common/statusLineBanner.ts: global layout, input and boot is a shared system",
+    "src/ui/common/statusMessageLine.ts: global layout, input and boot is a shared system",
+    "src/ui/common/statusWords.ts: global layout, input and boot is a shared system",
+    "src/ui/common/transitions/OverdriveSplashLayer.ts: global layout, input and boot is a shared system",
+    "src/ui/common/transitions/entryOverlay.ts: global layout, input and boot is a shared system",
+    "src/ui/common/transitions/overdrive-splash.css: global layout, input and boot is a shared system",
     "src/ui/common/withStatusLooks.ts: global layout, input and boot is a shared system",
-    "vite.config.ts: build configuration and dependencies is a shared system",
-    "public/third-party-licenses.md: unclassified product path is a shared system",
+    "tools/gen/manifest.mjs: asset loader and manifests is a shared system",
     "public/art/manifest.json: asset loader and manifests is a shared system"
   ],
   "systems": [
-    "FFX CTB engine",
     "FFX HUD",
-    "FFX game data",
     "FFX-2 HUD",
     "asset loader and manifests",
-    "audio routing",
     "battle presenter and lifecycle",
-    "build configuration and dependencies",
-    "cutscene scripts",
     "effects, lighting and sprites",
     "global layout, input and boot",
-    "move advisor and enemy intent",
-    "music and sound files",
     "painted artwork",
-    "shared combat core",
     "title, chapter select, prep, pause and results screens",
     "unclassified product path"
   ],
@@ -80,11 +65,9 @@
     "sin-face"
   ],
   "checks": [
-    "CHK-001",
     "CHK-002",
     "CHK-003",
     "CHK-004",
-    "CHK-005",
     "CHK-006",
     "CHK-007",
     "CHK-008",
@@ -101,27 +84,26 @@
     "CHK-020",
     "CHK-021",
     "CHK-022",
-    "CHK-023",
-    "CHK-B1"
+    "CHK-023"
   ],
   "liveArtifact": {
     "result": "PASS",
-    "checked": 130,
-    "at": "2026-10-01T09:36:09.478Z"
+    "checked": 258,
+    "at": "2026-10-02T05:02:50.138Z"
   },
   "obligations": [
     {
       "kind": "live",
-      "status": "done",
-      "requires": "exact-artifact verification and real-input smoke on the live URL",
-      "result": "PASS",
-      "settledBy": "critic/reviews/25faec70-live.json",
-      "settledAt": "2026-10-01T10:06:02Z"
+      "status": "pending",
+      "requires": "exact-artifact verification and real-input smoke on the live URL"
     },
     {
       "kind": "focused",
-      "status": "pending",
-      "requires": "acceptance of the changed area"
+      "status": "done",
+      "requires": "acceptance of the changed area",
+      "result": "FAIL",
+      "settledBy": "critic/reviews/ef3f6bbf-focused.json",
+      "settledAt": "2026-10-02T04:58:06.578Z"
     },
     {
       "kind": "deep",
@@ -159,14 +141,15 @@
         "1475ff6b",
         "52a431d0",
         "1a6fd3cc",
-        "f302f163"
+        "f302f163",
+        "25faec70"
       ]
     }
   ],
   "ownerOverride": {
     "words": "all your recommendations, godspeed",
-    "date": "2026-10-01T09:36:09.478Z",
-    "report": "critic/reviews/25faec70-focused.json",
+    "date": "2026-10-02T05:02:50.138Z",
+    "report": "critic/reviews/ef3f6bbf-focused.json",
     "changedArea": null
   }
 }
