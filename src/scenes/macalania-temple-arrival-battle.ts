@@ -98,6 +98,17 @@ export interface BoxLike {
   b: number;
 }
 
+/**
+ * U6 (PR-0276 sibling, FFX Chapter VII only): the x that keeps a tag's plate inside the window. The tags are
+ * centred on a point of the figure (`translate(-50%, -100%)`), so on the 390 px phone, with Seymour and Anima at
+ * the right of the arrival frame, 'Cannot be targeted' ran to x 425 and 'Anima' to 413 and were cut at the edge.
+ * Pure: `width` is the plate's content width.
+ */
+export function tagCentreX(x: number, width: number, viewW: number, margin = 6): number {
+  const half = width / 2 + margin;
+  return Math.min(Math.max(x, half), Math.max(half, viewW - half));
+}
+
 /** Build B's tags under `parent`. Browser only. */
 export function mountMacalaniaTags(parent: HTMLElement): MacalaniaTags {
   const root = document.createElement('div');
@@ -110,6 +121,10 @@ export function mountMacalaniaTags(parent: HTMLElement): MacalaniaTags {
   parent.appendChild(root);
   const reticle = root.querySelector<HTMLElement>('.mac-reticle')!;
   const [seymour, anima] = [...root.querySelectorAll<HTMLElement>('.mac-tag')] as [HTMLElement, HTMLElement];
+  const fitX = (tag: HTMLElement, x: number): number => {
+    const plate = tag.firstElementChild as HTMLElement | null;
+    return tagCentreX(x, plate ? plate.scrollWidth + 2 : 0, window.innerWidth);
+  };
   return {
     root,
     reticle,
@@ -127,10 +142,10 @@ export function mountMacalaniaTags(parent: HTMLElement): MacalaniaTags {
           width: `${s.r - s.l + pad * 2}px`,
           height: `${s.b - s.t + pad * 2}px`,
         });
-        Object.assign(seymour.style, { left: `${(s.l + s.r) / 2}px`, top: `${s.t - pad - 8}px` });
+        Object.assign(seymour.style, { left: `${fitX(seymour, (s.l + s.r) / 2)}px`, top: `${s.t - pad - 8}px` });
       }
       // Concept B: her name sits low on her left flank, under a gold rule.
-      if (a) Object.assign(anima.style, { left: `${a.l + (a.r - a.l) * 0.28}px`, top: `${a.t + (a.b - a.t) * 0.72}px` });
+      if (a) Object.assign(anima.style, { left: `${fitX(anima, a.l + (a.r - a.l) * 0.28)}px`, top: `${a.t + (a.b - a.t) * 0.72}px` });
     },
   };
 }
