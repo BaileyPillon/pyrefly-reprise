@@ -50,7 +50,6 @@ import { enemyObstacleRect } from './enemyObstacleRect.ts';
 import type { CursorSelection } from './TargetCursor.ts';
 import {
   advisorChipDock,
-  advisorZone,
   GAP,
   SPRITE_FOOT_MARGIN_RATIO,
   SPRITE_HALF_WIDTH_RATIO,
@@ -59,6 +58,7 @@ import {
   type AdvisorZone,
   type Rect,
 } from './hudSafeZones.ts';
+import { advisorZone } from './advisorStrip.ts';
 import { intentChipDockAt } from './intentChipDock.ts';
 
 export { intentChipDockAt } from './intentChipDock.ts';
@@ -637,6 +637,11 @@ export class FFXBattleHud implements HudPort {
       case 'action-end':
         this.telegraph.clearBorder();
         return;
+      case 'victory':
+      case 'defeat':
+        this.clearTransientOverlays(); // F5: the last action's banner and the held advice go with the fight
+        this.advisor.clearDecision();
+        return;
       default:
         return;
     }
@@ -1098,11 +1103,10 @@ export class FFXBattleHud implements HudPort {
    *   nothing ever hid again, so the last line of the previous actor's turn sat
    *   over the next actor's.
    *
-   * Called at the three moments a decision can end — a new `chooseCommand`
-   * (submit, and the actor changing with it), a `turn-start` for a different
-   * actor, and the battle state carrying a `result` — plus `unmount`. It is
-   * idempotent and touches nothing the player is currently reading: a live
-   * picker is always inside the `await` these callers sit on the other side of.
+   * Called when a decision ends — a new `chooseCommand`, a `turn-start` for a
+   * different actor, the state carrying a `result`, and (F5) the presented
+   * `victory` / `defeat` event, which the state's result runs ahead of — plus
+   * `unmount`. Idempotent; a live picker is always inside the `await` these sit past.
    */
   private clearTransientOverlays(): void {
     this.removeMinigameOverlays();
@@ -1179,9 +1183,7 @@ export class FFXBattleHud implements HudPort {
     this.advisor.el.dataset['zone'] = zone ? zone.kind : 'free';
 
     if (!zone) {
-      // **The card comes down, and the chip stays.**
-      //
-      // For one round this branch did the opposite: it cleared the inline box
+      // **The card comes down, and the chip stays.** For one round this branch did the opposite: it cleared the inline box
       // and handed the card back to `MoveAdvisor`'s own anchors, on the
       // reasoning that "a card in an imperfect place answers the question; a
       // card that is not there does not". The round-02 gate measured what
@@ -1190,13 +1192,10 @@ export class FFXBattleHud implements HudPort {
       // four viewports — and that is not an imperfect place, it is the fight
       // with a slab over it.
       //
-      // It is also a branch that should now be unreachable in the shipped
-      // chapters. `advisorZone` declines only when **no** rectangle on the
-      // frame holds even an 80px card clear of every panel and every fighter,
-      // and `tests/unit/ui-ffx-hud-safe-zones.test.ts` pins that all three
-      // chapters find a box at the full width. The chip is docked by the same
-      // solver, so what the player is left with is a real, readable `N BEST
-      // MOVE` affordance on clear ground rather than two words on Tidus.
+      // It should now be unreachable in the shipped chapters: `advisorZone`
+      // (`advisorStrip.ts`, F3: with its deck strip) declines only when **no**
+      // rectangle holds even a short card clear of every panel and fighter. The
+      // chip is docked by the same solver, a readable `N BEST MOVE` on clear ground.
       if (this.appliedAdvisorBox !== FREE_PLACEMENT) {
         this.appliedAdvisorBox = FREE_PLACEMENT;
         this.clearAdvisorBox(card, chip);
@@ -1409,7 +1408,7 @@ export class FFXBattleHud implements HudPort {
     const panels = panelPresence(input);
     const stale = this.advisorFree;
     const holdFree = stale !== null && stale.seq === this.advisorDecisionSeq && stale.panels === panels;
-    const zone = holdFree ? null : advisorZone(input);
+    const zone = holdFree ? null : advisorZone(input, Object.keys(this.lastState?.flags ?? {}).some((k) => k.startsWith('sin.'))); // F3: the strip is for the Sin fights
     this.advisorFree = zone ? null : { seq: this.advisorDecisionSeq, panels };
     const solved: HeldAdvisorPlacement = {
       key,

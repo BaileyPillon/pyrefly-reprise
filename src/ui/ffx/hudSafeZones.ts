@@ -343,7 +343,7 @@ export function advisorChipDock(input: AdvisorZoneInput): { left: number; bottom
 // ----------------------------------------------------------------- the solve
 
 /** Every rectangle a panel may not be drawn over, in one list. */
-function obstaclesOf(input: AdvisorZoneInput): Rect[] {
+export function obstaclesOf(input: AdvisorZoneInput): Rect[] {
   const out: Rect[] = [];
   for (const r of [
     input.cmdArea,

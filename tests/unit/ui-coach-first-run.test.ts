@@ -170,13 +170,13 @@ describe('step 3 is FFX\'s line in the guide\'s dress, and never blocks ATTACK',
     await expect(settled).resolves.toBe('confirmed');
   });
 
-  it('the player\'s own Esc skips the whole guide and takes the press back (no pause behind it)', async () => {
+  it('the player\'s own Esc skips the whole guide and leaves the press to the game, so the pause opens on it (FR-34-01)', async () => {
     const { line } = mountLine();
     const settled = line.show();
     window.dispatchEvent(key('Escape'));
     await expect(settled).resolves.toBe('cancelled');
     for (const id of FIRST_RUN_IDS) expect(hasSeen(id)).toBe(true);
-    expect(absorbed).toBe(1);
+    expect(absorbed).toBe(0);
     expect(firstRunActive()).toBe(false);
   });
 
