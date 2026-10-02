@@ -18,12 +18,20 @@ import { statusIconHtml } from './statusIcons.ts';
 import type { StatusGame } from './statusLooks.ts';
 import { escapeHtml, landsLine, leavesLine } from './statusWords.ts';
 
-/** How long one line stays, ms (the README's "about two seconds"). Shorter while others wait. */
+/** How long one line stays, ms (the README's "about two seconds"). Shorter while another waits. */
 export const LINE_MS = 2000;
-const LINE_MS_BUSY = 1300;
-/** Lines for the same status and direction arriving this close together are one line. */
-const MERGE_MS = 350;
-const MAX_QUEUE = 4;
+/**
+ * U3 (PR-0286, PR-0285; both games): a line a newer, different event is waiting behind gives way after this
+ * long, so the newer line shows within half a second of its own event instead of 1.6 to 2.5 s later
+ * (the queue was serial, two seconds a line). Long enough to read "Yuna became a Zombie.".
+ */
+export const MIN_SHOW_MS = 450;
+/**
+ * Lines for the same status and direction arriving this close to the last one are one line. The
+ * presenter plays a multi-target cast's events one target after another (about 0.4 s apart), so the old
+ * 350 ms window split one Hastega into three lines.
+ */
+export const MERGE_MS = 900;
 
 interface Line {
   status: StatusId;
@@ -31,6 +39,8 @@ interface Line {
   names: string[];
   reason: string;
   at: number;
+  /** The clock of the newest event folded into this line (the merge window runs from it). */
+  lastAt: number;
 }
 
 /** "Tidus", "Tidus and Yuna", "Tidus, Yuna and Kimahri". Pure. */
@@ -63,9 +73,11 @@ export function lineFor(event: BattleEvent, state: BattleState | null): { status
 
 export class StatusMessageLine {
   readonly el: HTMLElement;
-  private readonly queue: Line[] = [];
+  /** The one line waiting behind the current one: a newer different event replaces it (never a backlog). */
+  private pending: Line | null = null;
   private current: Line | null = null;
   private leftMs = 0;
+  private shownMs = 0;
   private clockMs = 0;
 
   constructor(private readonly game: StatusGame) {
@@ -80,15 +92,18 @@ export class StatusMessageLine {
     const got = lineFor(event, state);
     if (!got) return;
     // A status that lands and leaves inside one beat says nothing about the other half.
-    const last = this.queue[this.queue.length - 1] ?? (this.current && this.clockMs - this.current.at < MERGE_MS ? this.current : null);
-    if (last && last.status === got.status && last.lands === got.lands && this.clockMs - last.at < MERGE_MS && !last.names.includes(got.name)) {
-      last.names.push(got.name);
-      if (last === this.current) this.render();
+    const same = (l: Line | null): l is Line => !!l && l.status === got.status && l.lands === got.lands && this.clockMs - l.lastAt < MERGE_MS;
+    const into = same(this.pending) ? this.pending : same(this.current) ? this.current : null;
+    if (into) {
+      if (!into.names.includes(got.name)) into.names.push(got.name);
+      into.lastAt = this.clockMs;
+      if (into === this.current) this.render();
       return;
     }
-    this.queue.push({ status: got.status, lands: got.lands, names: [got.name], reason: got.reason, at: this.clockMs });
-    while (this.queue.length > MAX_QUEUE) this.queue.shift();
+    // A newer line replaces any line still waiting (it is stale), and takes the screen as soon as the current one has been readable.
+    this.pending = { status: got.status, lands: got.lands, names: [got.name], reason: got.reason, at: this.clockMs, lastAt: this.clockMs };
     if (!this.current) this.next();
+    else this.leftMs = Math.min(this.leftMs, Math.max(0, MIN_SHOW_MS - this.shownMs));
   }
 
   /** The line up now (tests, the debug snapshot). */
@@ -99,27 +114,31 @@ export class StatusMessageLine {
   update(dt: number): void {
     this.clockMs += dt * 1000;
     if (!this.current) return;
+    this.shownMs += dt * 1000;
     this.leftMs -= dt * 1000;
     if (this.leftMs <= 0) this.next();
   }
 
   /** Show a line now and hold it (captures of the mockup moment; never called in play). */
   hold(status: StatusId, names: string[], lands = true): void {
-    this.queue.length = 0;
-    this.current = { status, lands, names, reason: 'cured', at: this.clockMs };
+    this.pending = null;
+    this.current = { status, lands, names, reason: 'cured', at: this.clockMs, lastAt: this.clockMs };
+    this.shownMs = 0;
     this.leftMs = Number.POSITIVE_INFINITY;
     this.render();
   }
 
   clear(): void {
-    this.queue.length = 0;
+    this.pending = null;
     this.current = null;
     this.el.hidden = true;
   }
 
   private next(): void {
-    this.current = this.queue.shift() ?? null;
-    this.leftMs = this.queue.length > 0 ? LINE_MS_BUSY : LINE_MS;
+    this.current = this.pending;
+    this.pending = null;
+    this.shownMs = 0;
+    this.leftMs = LINE_MS;
     this.render();
   }
 

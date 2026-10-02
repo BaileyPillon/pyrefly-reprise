@@ -26,6 +26,7 @@ import type { ActingSignal, HudPort, TargetingPort } from '../../engine/HudPort.
 import { StatusMarks, type MarkField, type Point, type Rect } from './statusMarks.ts';
 import { StatusFigureTint, type TintFigure } from './statusFigureTint.ts';
 import { StatusMessageLine, lineTop, type Box } from './statusMessageLine.ts';
+import { bannerPlate, clearOfBanner } from './statusLineBanner.ts';
 import { StatusHintCard, partyHints } from './statusHintCard.ts';
 import { StatusTargetTags } from './statusTargetTags.ts';
 import { figureLookOf, type StatusGame } from './statusLooks.ts';
@@ -312,6 +313,7 @@ export function withStatusLooks<T extends HudPort>(hud: T, game: StatusGame, fie
       const avoid: Box[] = [...el.querySelectorAll<HTMLElement>(MSG_AVOID[game])].map((b) => b.getBoundingClientRect());
       top = lineTop(s.top + MSG_TOP[game] * scale, left, left + w, h, avoid, 4 * scale);
     }
+    top = clearOfBanner(top, left, w, h, bannerPlate(), host.top); // U3 (PR-0286): never over the dialogue banner
     const l = `${(left - host.left).toFixed(1)}px`;
     const t = `${(top - host.top).toFixed(1)}px`;
     if (message.el.style.left !== l) message.el.style.left = l;
