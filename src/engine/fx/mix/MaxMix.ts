@@ -7,7 +7,7 @@ import { releaseBreathRigs } from './breathRig.ts';
 import { Cinema, dofBand, type DofBand } from './cinema.ts';
 import { ejectDefringe, injectDefringe } from './patch.ts';
 import { Framing } from './framing.ts';
-import { aaKind, liveGates, MIX_PARTS, partOn, partsOn, type MixGame } from './gates.ts';
+import { aaKind, deviceCloses, deviceNote, fightFacts, liveGates, MIX_PARTS, partsOn, twirlKeysOn, type Device, type MixGame } from './gates.ts';
 import { cameraAt, centroid, figOf, type Actor, type Box } from './geometry.ts';
 import { followFlourish, HeldShots } from './heldShots.ts';
 import { battleCanvas, forgetMenuPanels, menuOpen, phoneBattle } from './hudPanels.ts';
@@ -77,6 +77,8 @@ class Mix {
   private plans = -1;
   private band: DofBand | null = null;
   private heldClass = false;
+  /** The lens shift the held shot on screen was framed against (held with it); null with no shot up. */
+  private heldLens: [number, number] | null = null;
   private cost = 0;
   private costN = 0;
 
@@ -114,13 +116,20 @@ class Mix {
     const master = this.framing.masterPose ?? this.framing.rigs?.base('idle') ?? null;
     const lens: [number, number] = parts.chapterFraming ? this.framing.lensNow() : [0, 0];
     const menu = menuOpen();
+    fightFacts.colossus = this.framing.report.colossusFight; // for the EYE CANDY page's device notes
     // The upright phone shows a slice of a wider field that the HUD slides between beats, so a held shot
     // framed for one slice crops its subject in the next (the judges: Yuna cut at the edge, her head
     // cropped in the close shot): on the phone the master holds through both moments.
-    const phone = phoneBattle();
-    const held = this.shots?.update(dt, { actors, master, lens, odOn: parts.overdriveShot && !phone, scOn: parts.dressphereShot && !phone, menu, ready: this.framing.ready && (this.framing.rigs?.introDone() ?? false) }) ?? null;
-    this.framing.applyLens(parts.chapterFraming);
-    if (this.game === 'ffx2' && parts.dressphereShot && !phone) followFlourish(actors, this.b.camera, battleCanvas());
+    const dev: Device = { tier, phone: phoneBattle(), colossus: fightFacts.colossus };
+    const odOn = parts.overdriveShot && !deviceCloses('overdriveShot', dev);
+    const scOn = parts.dressphereShot && !deviceCloses('dressphereShot', dev);
+    const held = this.shots?.update(dt, { actors, master, lens, odOn, scOn, menu, ready: this.framing.ready && (this.framing.rigs?.introDone() ?? false) }) ?? null;
+    // A held shot is one static cut, under REDUCE MOTION as ever: the lens shift stays where the shot was framed against
+    // it, so a move running underneath cannot drift it; it goes on with the cut back.
+    if (!held) this.heldLens = null;
+    else this.heldLens ??= [lens[0], lens[1]];
+    this.framing.applyLens(parts.chapterFraming, this.heldLens);
+    if (this.game === 'ffx2' && scOn) followFlourish(actors, this.b.camera, battleCanvas());
     if (!!held !== this.heldClass) {
       this.heldClass = !!held;
       document.documentElement.classList.toggle('mix-held', this.heldClass);
@@ -152,15 +161,15 @@ class Mix {
         f?.update({ dt, game: this.game, breath: parts.breathing, collapse: parts.koCollapse, rm, grid });
       }
     }
-    // FFX-2: the spherechange's twirl-key slot (part of DRESSPHERE SHOT); FFX: the Overdrive banner.
+    // FFX-2: the spherechange's twirl-key slot (part of DRESSPHERE SHOT, not under REDUCE MOTION: a twirl is
+    // motion); FFX: the Overdrive banner (it moves nothing in the scene, so it plays under REDUCE MOTION, and on
+    // the phone, where only the shot is closed).
     if (this.game === 'ffx2') {
-      this.twirl.on = parts.dressphereShot;
+      this.twirl.on = twirlKeysOn(liveGates(this.game));
       for (const a of actors) if (a.facing >= 0) this.twirl.watch(a);
       this.twirl.update(dt);
     } else {
-      // The banner rule moves nothing in the scene, so REDUCE MOTION keeps it (it drops only the hero shot).
-      const bannerOn = partOn('overdriveShot', { ...liveGates(this.game), reduceMotion: false });
-      this.banner.update(bannerOn, () => this.partyBoxes(actors));
+      this.banner.update(parts.overdriveShot, () => this.partyBoxes(actors));
     }
     this.cost += performance.now() - t0;
     this.costN++;
@@ -193,11 +202,20 @@ class Mix {
 
   snapshot(): Record<string, unknown> {
     const parts = partsOn(liveGates(this.game));
+    // What the device does to each part (the EYE CANDY page says the same: `OFF HERE` / `LESS HERE`).
+    const dev: Device = { tier: eyeCandy.tier, phone: phoneBattle(), colossus: this.framing.report.colossusFight };
+    const limits: Record<string, unknown> = {};
+    for (const p of MIX_PARTS) {
+      const n = deviceNote(p, dev);
+      if (n) limits[p] = n;
+    }
     return {
       game: this.game,
       parts,
       tier: eyeCandy.tier,
       reduceMotion: eyeCandy.reduceMotion,
+      device: dev,
+      limits,
       framing: { ...this.framing.report, master: this.framing.masterPose ? { pos: this.framing.masterPose.pos.toArray().map((x) => +x.toFixed(2)), look: this.framing.masterPose.look.toArray().map((x) => +x.toFixed(2)), fov: +this.framing.masterPose.fov.toFixed(1) } : null, lens: this.framing.lens, rig: this.framing.rigs?.stats() ?? null },
       shot: this.shots?.held?.kind ?? 'master',
       shots: this.shots ? { ...this.shots.stats, lastTry: this.shots.lastTry } : null,
@@ -224,6 +242,8 @@ class Mix {
     this.living.clear();
     for (const m of this.defringed) ejectDefringe(m);
     this.defringed.clear();
+    this.heldLens = null;
+    fightFacts.colossus = null;
     document.documentElement.classList.remove('mix-held');
   }
 }

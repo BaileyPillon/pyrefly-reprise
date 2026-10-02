@@ -127,13 +127,19 @@
   min-width: 0;
 }
 
+/*
+ * The column is the frame's width (the clamp) or, when a row needs more, as wide as its widest row: a device note
+ * (`ON · LESS HERE`, release 36) beside a long label would otherwise run past the column's edge on a window under
+ * 1480px wide, where the clamp is at its 290px floor. With no note nothing is wider than the clamp, so nothing moves.
+ */
 .pause__ec-col {
   flex: none;
-  width: clamp(290px, 21.5vw, 400px);
+  width: max-content;
+  min-width: clamp(290px, 21.5vw, 400px);
 }
 
 /* A row of the page is a pause row: label left, value at the column's far edge (THIS ENCOUNTER's style). */
-.pause__ec-col .pause__ec-row { flex: none; cursor: pointer; }
+.pause__ec-col .pause__ec-row { flex: none; cursor: pointer; column-gap: 14px; }
 .pause__ec-col .pause__ec-row .pause__k { width: auto; flex: 1 1 auto; text-align: left; overflow: visible; letter-spacing: 0.16em; }
 .pause__ec-col .pause__ec-row .pause__v { margin-left: auto; flex: none; }
 .pause__ec-col .pause__ec-row .pause__bar { display: none; }
@@ -211,6 +217,15 @@
   color: rgba(var(--pu-paper), 0.6);
 }
 
+/* The device's reason (release 36): why this switch is off or lighter on this screen, closing the body in the accent. */
+.pause__ec-help-b .pause__ec-help-d {
+  display: block;
+  margin-top: 4px;
+  font-style: normal;
+  color: var(--pu-accent);
+  opacity: 0.85;
+}
+
 .pause__ec-help-g {
   display: block;
   margin-top: 5px;
@@ -257,7 +272,7 @@
   .pause__ec-h b.pause__ec-rm { display: block; margin: 4px 0 0; }
 
   .pause__ec-cols { flex-direction: column; gap: 0; }
-  .pause__ec-col { width: 100%; }
+  .pause__ec-col { width: 100%; min-width: 0; }
 
   /* The page has the whole height, so its rows are touch size: 40px, not the 20px of a five-row window. */
   .pause__ec-col .pause__ec-row { height: 40px; }

@@ -7,7 +7,7 @@
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { eyeCandyOn, setEyeCandyProvider, type EyeCandyKey } from '../../src/engine/fx/eyeCandyFlags.ts';
-import { aaKind, LOOK_KEY, MIX_PARTS, PART_LOOK, partOn, partsOn, type GateEnv } from '../../src/engine/fx/mix/gates.ts';
+import { aaKind, deviceCloses, deviceNote, fightFacts, LOOK_KEY, MIX_PARTS, PART_LOOK, partOn, partsOn, twirlKeysOn, type Device, type GateEnv } from '../../src/engine/fx/mix/gates.ts';
 
 const env = (o: Partial<GateEnv> = {}): GateEnv => ({ game: 'ffx', tier: 'full', reduceMotion: false, look: () => true, on: () => true, ...o });
 
@@ -63,13 +63,22 @@ describe('partOn', () => {
     expect(Object.values(partsOn(env({ game: 'ffx2', on: () => false }))).some(Boolean)).toBe(false);
   });
 
-  it('REDUCE MOTION stills the breathing and drops both held shots; the KO collapse stays (it becomes a cut)', () => {
+  it('REDUCE MOTION stills the breathing; both held shots stay (the approved page: ON · CUT, one static cut in and one back) and so does the KO collapse (it becomes a cut)', () => {
     const p = partsOn(env({ reduceMotion: true }));
     expect(p.breathing).toBe(false);
-    expect(p.overdriveShot).toBe(false);
-    expect(partOn('dressphereShot', env({ game: 'ffx2', reduceMotion: true }))).toBe(false);
+    expect(p.overdriveShot).toBe(true);
+    expect(partOn('dressphereShot', env({ game: 'ffx2', reduceMotion: true }))).toBe(true);
+    expect(p.dressphereShot, 'the other game’s shot is still never played').toBe(false);
     expect(p.koCollapse).toBe(true);
     expect(p.chapterFraming && p.fog && p.depthOfField).toBe(true);
+  });
+
+  it('the FFX-2 twirl keys play with DRESSPHERE SHOT but never under REDUCE MOTION (a twirl is motion; the shot is the one cut)', () => {
+    expect(twirlKeysOn(env({ game: 'ffx2' }))).toBe(true);
+    expect(twirlKeysOn(env({ game: 'ffx2', reduceMotion: true }))).toBe(false);
+    expect(twirlKeysOn(env({ game: 'ffx' }))).toBe(false);
+    expect(twirlKeysOn(env({ game: 'ffx2', on: (k) => k !== 'dressphereShot' }))).toBe(false);
+    expect(twirlKeysOn(env({ game: 'ffx2', look: (o) => o !== 'c' }))).toBe(false);
   });
 
   it('the phone drops the bokeh; LOW EFFECTS also drops the fog and the post pass', () => {
@@ -79,5 +88,73 @@ describe('partOn', () => {
     expect([low.depthOfField, low.fog]).toEqual([false, false]);
     expect(low.smoothEdges).toBe(true); // the defringe stays
     expect([aaKind('full'), aaKind('phone'), aaKind('low')]).toEqual(['smaa', 'fxaa', null]);
+  });
+});
+
+/**
+ * Release 36: what the device does to each part, whatever the switches say. The EYE CANDY page reads `deviceNote` to
+ * show `ON · OFF HERE` / `ON · LESS HERE` (the saved value never changes) and the mix reads `deviceCloses` to hold the
+ * shots on a phone held upright, so the page and the mix cannot disagree. Game case: both (the shots are per game).
+ */
+describe('deviceNote', () => {
+  const dev = (tier: Device['tier'], phone = false): Device => ({ tier, phone });
+  const notes = (d: Device): Record<string, string> => Object.fromEntries(MIX_PARTS.flatMap((p) => { const n = deviceNote(p, d); return n ? [[p, `${n.limit}:${n.why}`]] : []; }));
+
+  it('a full-tier window closes and trims nothing', () => {
+    expect(notes(dev('full'))).toEqual({});
+  });
+
+  it('a phone screen (the tier) closes DEPTH OF FIELD only: the scene keeps its own band', () => {
+    expect(notes(dev('phone'))).toEqual({ depthOfField: 'off:phone' });
+  });
+
+  it('LOW EFFECTS closes DEPTH OF FIELD and FOG and leaves SMOOTH EDGES its defringe only', () => {
+    expect(notes(dev('low'))).toEqual({ depthOfField: 'off:low', fog: 'off:low', smoothEdges: 'less:low' });
+  });
+
+  it('a phone held upright closes both held shots and trims CHAPTER FRAMING (the menu clearance stays, the colossus master and BOSS SCALE go)', () => {
+    expect(notes(dev('phone', true))).toEqual({ depthOfField: 'off:phone', chapterFraming: 'less:phone', overdriveShot: 'off:phone', dressphereShot: 'off:phone' });
+    expect(notes(dev('full', true)), 'the layout alone, on any tier').toEqual({ chapterFraming: 'less:phone', overdriveShot: 'off:phone', dressphereShot: 'off:phone' });
+  });
+
+  it('CHAPTER FRAMING is trimmed on a phone only where there is a colossus to scale: a fight with none loses nothing (unknown reads as a colossus)', () => {
+    const phone = (colossus?: boolean | null): Device => ({ tier: 'phone', phone: true, ...(colossus === undefined ? {} : { colossus }) });
+    expect(deviceNote('chapterFraming', phone(true))).toEqual({ limit: 'less', why: 'phone' });
+    expect(deviceNote('chapterFraming', phone(false)), 'Chapter I: no colossus').toBeNull();
+    expect(deviceNote('chapterFraming', phone(null))).toEqual({ limit: 'less', why: 'phone' });
+    expect(deviceNote('chapterFraming', phone())).toEqual({ limit: 'less', why: 'phone' });
+    expect(deviceNote('chapterFraming', { tier: 'full', phone: false, colossus: true }), 'a window that allows it').toBeNull();
+    // the shots are closed on a phone whatever the boss
+    expect(deviceNote('overdriveShot', phone(false))).toEqual({ limit: 'off', why: 'phone' });
+    expect(deviceNote('dressphereShot', phone(false))).toEqual({ limit: 'off', why: 'phone' });
+  });
+
+  it('fightFacts starts unknown (no battle bound)', () => {
+    expect(fightFacts.colossus).toBeNull();
+  });
+
+  it('LOW EFFECTS on a phone held upright: the tier names LOW EFFECTS, the layout the phone', () => {
+    expect(notes(dev('low', true))).toEqual({ depthOfField: 'off:low', fog: 'off:low', smoothEdges: 'less:low', chapterFraming: 'less:phone', overdriveShot: 'off:phone', dressphereShot: 'off:phone' });
+  });
+
+  it('BREATHING, KO COLLAPSE and SPLASH ART are the same on every device (a coarser grid, or a static splash line, is not a part closed)', () => {
+    for (const tier of ['full', 'phone', 'low'] as const)
+      for (const phone of [false, true]) for (const p of ['breathing', 'koCollapse', 'splashArt'] as const) expect(deviceNote(p, dev(tier, phone)), `${p} ${tier} ${phone}`).toBeNull();
+  });
+
+  it('deviceCloses is `off` only: a part that is trimmed still plays', () => {
+    expect(deviceCloses('depthOfField', dev('phone'))).toBe(true);
+    expect(deviceCloses('smoothEdges', dev('low'))).toBe(false);
+    expect(deviceCloses('chapterFraming', dev('phone', true))).toBe(false);
+    expect(deviceCloses('overdriveShot', dev('phone', true))).toBe(true);
+  });
+
+  it('the tier gates in partOn are the same rule: a part is off in the mix exactly when the device closes it (the layout, which only the DOM knows, aside)', () => {
+    for (const tier of ['full', 'phone', 'low'] as const)
+      for (const part of MIX_PARTS) {
+        const game = part === 'dressphereShot' ? 'ffx2' : 'ffx';
+        const closed = deviceCloses(part, dev(tier));
+        expect(partOn(part, env({ game, tier })), `${part} on ${tier}`).toBe(!closed);
+      }
   });
 });

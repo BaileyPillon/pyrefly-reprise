@@ -31,6 +31,12 @@ import { Staging } from './staging.ts';
 export interface FramingReport {
   cls: MasterClass;
   colossus: boolean;
+  /**
+   * Does this fight get the colossus master and BOSS SCALE where the window allows it (a colossus boss that is not Vegnagun
+   * or Sin)? Known from the first decision whatever the switches say; the EYE CANDY page reads it to say whether a phone
+   * held upright costs CHAPTER FRAMING anything here. Null until the first decision.
+   */
+  colossusFight: boolean | null;
   plans: number;
   replans: number;
   todayPx: number;
@@ -82,7 +88,7 @@ export class Framing {
   private checks: number[] = [];
   private readonly limitOf = new Map<Actor, Limit | null>();
   private rule: PartyRule | null = null;
-  readonly report: FramingReport = { cls: 'field', colossus: false, plans: 0, replans: 0, todayPx: 0, floorPx: 0, scale: 0, fit: null, live: null, staging: {}, tries: [] };
+  readonly report: FramingReport = { cls: 'field', colossus: false, colossusFight: null, plans: 0, replans: 0, todayPx: 0, floorPx: 0, scale: 0, fit: null, live: null, staging: {}, tries: [] };
 
   constructor(bc: BattleCameraLike | null, private readonly cam: PerspectiveCamera, private readonly game: 'ffx' | 'ffx2') {
     this.rigs = bc ? new RigWatch(bc, cam) : null;
@@ -176,10 +182,13 @@ export class Framing {
     return this.lensShown;
   }
 
-  /** The master's lens shift on the camera (call after any held shot has been written). */
-  applyLens(on: boolean): void {
+  /**
+   * The master's lens shift on the camera (call after any held shot has been written). `hold`: the lens shift a
+   * held shot was framed against, which stays on screen for as long as the shot does (a shot is one static cut).
+   */
+  applyLens(on: boolean, hold: readonly [number, number] | null = null): void {
     const canvas = battleCanvas();
-    const lens = this.lensNow();
+    const lens = hold ?? this.lensNow();
     const want = on && this.wantOn && this.installed && (lens[0] !== 0 || lens[1] !== 0) && !!canvas;
     if (want && canvas) {
       const r = canvas.getBoundingClientRect();
@@ -208,9 +217,12 @@ export class Framing {
     if (!rigs || !canvas) return null;
     const base = rigs.base('idle');
     if (!base) return null;
+    const enemies = actors.filter((a) => a.facing < 0).map(subjectId);
+    const cls = classify(enemies);
     // Vegnagun's approved D-228 rig (field of view 40) and Sin's deck are authored colossus masters: the
     // fight keeps them exactly, clearance and all (the party stands whole and clear in them today).
-    const keep = keepsToday(actors.filter((a) => a.facing < 0).map(subjectId));
+    const keep = keepsToday(enemies);
+    this.report.colossusFight = cls === 'colossus' && !keep;
     if (!this.wantOn || keep) {
       // Nothing to check against: today's rig is the master.
       return { keep: true, pose: base, lens: [0, 0], plan: new Map(), today: base, rule: null, limitOf: new Map(), report: { tries: [keep && this.wantOn ? 'keeps today (D-228 / Sin)' : 'off'] } };
@@ -225,12 +237,10 @@ export class Framing {
     vis.forEach((a, i) => limitOf.set(a, limits[i] ?? null));
     const lims = limits.map((l, i) => (l ? `${todayFigs[i]!.id}:${l.inView.toFixed(2)}/${l.underHud.toFixed(2)}` : '')).filter(Boolean);
     const log = [`rule floor${Math.round(rule.floorPx)} ov${rule.overlapMax.toFixed(2)} bc${rule.bossCoverMax.toFixed(2)} ${lims.join(',')}`];
-    const enemies = actors.filter((a) => a.facing < 0).map(subjectId);
-    const cls = classify(enemies);
     // On an upright phone the scene fits its own rig to the slice (A-12) after the figures are staged, so a
     // grown boss would stand the whole rig back and shrink the party under its floor (the prototype's Evrae:
     // 105 -> 91 px): the phone keeps today's rig and its own fit, with the menu clearance on top.
-    const colossus = cls === 'colossus' && !keepsToday(enemies) && !phoneBattle();
+    const colossus = this.report.colossusFight === true && !phoneBattle();
     // The colossus master at full BOSS SCALE, then smaller steps, then today's rig itself, then today's rig
     // with the party stepped toward the enemies (out from under the command menu on the left): the first
     // that passes, else the least bad (today's rig is among the candidates, so the result is never worse).

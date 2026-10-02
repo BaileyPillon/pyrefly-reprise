@@ -25,7 +25,7 @@ DRESSPHERE SHOT and the twirl-key slot are FFX-2 only (the spherechange sequence
 No conflict. The only file both branches add is the seam, `src/engine/fx/eyeCandyFlags.ts`, the same git blob (`7c80d69b`) on both
 sides, so the second merge added nothing to it. Rule 7 holds (largest new file `framing.ts`, 372 lines; `SaveData.ts` stays at its
 573 and `PauseScreen.ts` at 399). Rule 2: the page lane's `docs/CONTRACT-CHANGES.md` entry came in with the merge; the mix lane
-touches no contract file. This release adds one test file, this note and the screenshots below; no game code changed.
+touches no contract file. This release adds one test file, this note and the screenshots below; no game code changed. (The fix commit on top, "Fixes after integration" at the end of this note, does change presentation code: the held shots under REDUCE MOTION, two help lines, and the device notes.)
 
 ## How the two halves connect
 
@@ -173,7 +173,7 @@ figures), breathing plays; the page still reads `11 of 11`, nothing is written, 
 
 ## Findings from the integration (new in release 36; nothing changed for any of them)
 
-1. **REDUCE MOTION: the page promises one cut, the mix plays none. Needs a product judgement.** The approved page
+1. **REDUCE MOTION: the page promises one cut, the mix plays none. Needs a product judgement.** *(Fixed in the commit on top: the build now matches the approved page; see "Fixes after integration".)* The approved page
    (`a3-page-reduce-motion-ffx-1600x900.jpg`; README section 1 gives OVERDRIVE SHOT and DRESSPHERE SHOT "one cut") reads `ON · CUT`
    for the two held shots under REDUCE MOTION, and their help lines say "REDUCE MOTION keeps one cut". The mix as built
    (`gates.ts`, `mix-build.md`: "REDUCE MOTION: no hero shot / no close shot") plays **no** held shot; measured in both games
@@ -186,11 +186,11 @@ figures), breathing plays; the page still reads `11 of 11`, nothing is written, 
    at once (the OFF plan replaced the chapter's), the plan returns after 1 action in Ch I and 4 in Ch IV. The player changed it in
    the pause, not at a menu, so committing the pending plan on the resume from the pause would remove the gap; that edits the mix's
    "no cut while a player is choosing" rule, so it is left for the driver.
-3. **The page does not know the tier.** On the phone tier DEPTH OF FIELD plays nothing (today's tilt-shift stays) and under LOW
+3. **The page does not know the tier.** *(Fixed in the commit on top: the page now shows `ON · OFF HERE` and `ON · LESS HERE`, and why; see "Fixes after integration".)* On the phone tier DEPTH OF FIELD plays nothing (today's tilt-shift stays) and under LOW
    EFFECTS DEPTH OF FIELD, FOG and the post pass are closed; the page shows them ON and flips them normally ("the switch stays",
    README section 1). Measured above: the seam and the saved switches never change with the tier. Wording only, unless Bailey wants
    the page to say so (as it does for REDUCE MOTION).
-4. **Two help lines describe the approved mock, not the build.** DRESSPHERE SHOT "full the first time, instant after": the held
+4. **Two help lines describe the approved mock, not the build.** *(Fixed in the commit on top.)* DRESSPHERE SHOT "full the first time, instant after": the held
    close shot plays on every spherechange (one per change in every run); only the painted twirl keys, none installed yet, have a
    first-time and a repeat mode. DEPTH OF FIELD "Off: today's even focus": with the part OFF the scene's own tilt-shift band stays
    (Ch I 0.4 / 0.16, Ch IV 0.54 / 0.15); the part only re-aims it.
@@ -249,3 +249,161 @@ From `docs/handoff/mix-build.md` (numbers are its own):
 `npm run dev`, any FFX or FFX-2 chapter, Escape, OPTIONS, EYE CANDY. Every switch is ON by default; flip one and the battle behind
 the pause changes when it resumes. `__pyrefly.fx.snapshot()` reports `flags` (the seam) and `mix` (the parts, the master, the held
 shot, the counters).
+
+## Fixes after integration (the driver's brief, 2026-10-02; one commit on top of `06e659d9`)
+
+Findings 1, 3 and 4 above, fixed so the build matches the approved page (`docs/concepts/eye-candy-settings-2026-10-02/`, D-317
+option A; `a3-page-reduce-motion-*` for the two shots). Branch `rel36`, worktree `D:/pyrefly-advisor-v3`. **Not deployed; `main`
+untouched; `SaveData.ts` and the settings schema untouched** (no save change, so the deploy plan above stands: deep before deploy).
+Rule 1: presentation only. Rule 7: the largest touched source file is `framing.ts`, 382 lines. No new module (orphans: the same 24).
+
+**Game case (rule 14).** REDUCE MOTION fix: both games, each its own shot (OVERDRIVE SHOT FFX only, the Overdrive input is FFX's;
+DRESSPHERE SHOT FFX-2 only, the spherechange is FFX-2's; the twirl-key slot is FFX-2 only). Help lines: DEPTH OF FIELD both games,
+DRESSPHERE SHOT FFX-2 only. Device notes: both games; the shot row is the game's own; CHAPTER FRAMING's note appears in a colossus
+fight only (Chapter IV's Bahamut here; Chapter I's Mortiorchis loses nothing and shows none). Decided from the code and
+`docs/handoff/mix-build.md` (the phone and tier rules), not from memory.
+
+### 1. REDUCE MOTION keeps one static cut to each held shot and one cut back
+
+What the approved page says (`ON · CUT`, "REDUCE MOTION keeps one cut") is now what plays.
+
+- `src/engine/fx/mix/gates.ts`: the two shots no longer close under REDUCE MOTION (`partOn`). A held shot already is one cut to
+  the shot and one cut back (`HeldShots` writes one constant pose each frame, no tween), so no shot code had to change; it is
+  held for its normal length (FFX: while the Overdrive input is up; FFX-2: at least 1.6 s once she is quiet, at most 3 s) and an
+  FFX-2 shot still never opens, and is handed back the frame, a girl's menu opens. New `twirlKeysOn`: the FFX-2 twirl keys (a
+  motion; none are installed yet) do not play under REDUCE MOTION, as `twirl.ts` always said. `MaxMix.ts`: the twirl slot asks
+  `twirlKeysOn`; the Overdrive banner rule reads the part itself (it never depended on REDUCE MOTION).
+- "No lens drift", made true by construction: while a shot is up, `MaxMix` holds the lens shift at the value the shot was framed
+  against (`Framing.applyLens(on, hold)`), so a camera move running underneath cannot drift it. It goes on with the cut back.
+
+**Proof** (headless Chromium on the real GPU, `PYREFLY_BROWSER=gpu`; the worktree's own dev server on port 5780, stopped; a fresh
+profile and battle per run; every rendered frame sampled by an in-page recorder that runs after the game's own frame: camera
+position, orientation, field of view, view offset, whether the mix holds a shot, and, independently, whether a command list is on
+screen). REDUCE MOTION turned on by the OPTIONS row with real keys (and once by the OS preference, with the row left OFF). The
+only injection, labelled, is the old one: Tidus's Overdrive gauge set to 100 before the first FFX menu. Chapter I (FFX,
+`seymour-flux`) through the real command menu and the real input; Chapter IV (FFX-2, `ffx2-bahamut`) through a girl's real menu
+(Change, a dressphere).
+
+| Run (1600x900) | held | camera inside the shot (position, turn, fov, lens shift) | cut in | cut back | other jumps, 6 frames before to 3 after | menu on a held frame |
+|---|---|---|---|---|---|---|
+| FFX Ch I, REDUCE MOTION (row) | 186 frames, 3077 ms (the input's length) | deviation 0, 0 deg, 0, `[-128, 36]` unchanged | 4.72 units, one frame | 3.79 units, one frame | none | 0 of 186 |
+| FFX Ch I, REDUCE MOTION (OS) | 186 frames, 3077 ms | 0, 0, 0, unchanged | 4.60 | 3.81 | none | 0 of 186 |
+| FFX-2 Ch IV, REDUCE MOTION (row) | 29 frames, 444 ms | 0, 0, 0, `[128, 0]` unchanged | 4.40 | 4.40 | none | 0 of 29 |
+| FFX-2 Ch IV, REDUCE MOTION (OS) | 29 frames, 450 ms | 0, 0, 0, unchanged | 4.37 | 4.37 | none | 0 of 29 |
+| FFX Ch I, normal motion (baseline) | 187 frames, 3094 ms | 0, 0, 0, unchanged | 4.94 | 5.04 | the presenter's own moves after the cut back | 0 of 187 |
+| FFX-2 Ch IV, normal motion (baseline) | 29 frames, 444 ms | 0, 0, 0, unchanged | 3.17 | 3.15 | none | 0 of 29 |
+
+Exactly two cuts under REDUCE MOTION in all four runs; the shot counters moved by one cut and one hand back each (`shots.od` or
+`shots.sc` +1, `handBacks` +1). 15 of 15 checks per REDUCE MOTION run, 10 of 10 per baseline, 0 console errors. The recording ran at
+16.7 ms a frame on average (longest gap 27 to 82 ms). In the same runs, everything else REDUCE MOTION does is unchanged: the page
+reads `REDUCE MOTION IS ON`, BREATHING `ON · STILL`, KO COLLAPSE and the shot `ON · CUT`, all twelve switches saved ON and the seam
+ON for all twelve; the mix reads BREATHING closed and the shot's part open; chest phase 0; the fog's drift constant; the KO a plain
+cut (`cuts` +1, no buckle); the FFX Overdrive banner rule moved the slab to 22 %; the FFX-2 twirl slot counted 0 changes (1 in the
+normal run: it is closed under REDUCE MOTION).
+
+Two things the FFX-2 runs show about the rule, not about REDUCE MOTION: the first spherechange of each run produced **no shot at
+all**, because a girl's menu was open on every recorded frame (327 of 327 and 304 of 304; Active ATB keeps one up): "never while a
+menu is open", observed. The shot that did play was handed back after 444 and 450 ms, the frame the next girl's menu opened; a
+full 1.6 s hold was not reachable in these fights (Bahamut's Curse seals a girl's Change: the later attempts read `ChangeCursed`), so
+the normal-length path is shown by FFX (the input's whole length) and by the unchanged code.
+
+### 2. The two help lines say what the build does
+
+| Switch | Was (the mockup) | Now |
+|---|---|---|
+| DRESSPHERE SHOT (FFX-2) | "A held close shot and painted keys on a dressphere change: full the first time, instant after. REDUCE MOTION keeps one cut." | "On a dressphere change the camera cuts to a held close shot of the girl, then cuts back. REDUCE MOTION keeps one cut." |
+| DEPTH OF FIELD (both) | "A soft focus band that melts the far and near edges, set for each chapter's camera. Off: today's even focus." | "Aims the soft focus band at your fighters, set for each chapter's camera. Off: the scene keeps its own band." |
+
+The held close shot plays on every spherechange; only the painted twirl keys (none installed) have a first-time and a repeat mode,
+so the line no longer mentions them. With DEPTH OF FIELD off, the scene's own tilt-shift band stays (Ch I 0.4 / 0.16, Ch IV
+0.54 / 0.15; measured again below); the part only re-aims it.
+
+### 3. The page says what the device does, and never writes it
+
+One rule, `deviceNote(part, device)` in `gates.ts`, read by both the page and the mix (the mix holds the shots on a phone through
+`deviceCloses`), so they cannot disagree. A row whose part is ON in the save and whose look is ON reads `ON · OFF HERE` (the
+device closes it) or `ON · LESS HERE` (it trims it), the help line closes with the reason in the accent, and the saved value, the
+count (`11 of 11 on`), ALL LOOKS and the OPTIONS row's `ALL ON` / `n OF 11` stay the saved state. A part turned OFF, or whose
+look is OFF, shows no note (it plays nothing anyway), as REDUCE MOTION's notes. On a row both apply to, the device wins (a shot
+closed on a phone is not "one cut"). `snapshot().eyeCandy` gains `device` and per-row `limit`; `__pyrefly.fx.mix.snapshot()` gains
+`device` and `limits`.
+
+| Device | Row note | Why line under the help |
+|---|---|---|
+| Phone tier (a screen under 600 px) or LOW EFFECTS: DEPTH OF FIELD | `ON · OFF HERE` | "Off on a phone screen." / "Off under LOW EFFECTS." |
+| LOW EFFECTS: FOG | `ON · OFF HERE` | "Off under LOW EFFECTS." |
+| LOW EFFECTS: SMOOTH EDGES (no SMAA or FXAA pass; the defringe stays) | `ON · LESS HERE` | "LOW EFFECTS keeps only the fringe fix, not the outline pass." |
+| A phone held upright: OVERDRIVE SHOT (FFX) / DRESSPHERE SHOT (FFX-2) | `ON · OFF HERE` | "Off on a phone held upright: it shows a slice of the picture, so the camera stays wide." |
+| A phone held upright, in a colossus fight: CHAPTER FRAMING (no colossus master or BOSS SCALE) | `ON · LESS HERE` | "On a phone held upright the bosses keep today's size; the rest still works." |
+
+BREATHING, KO COLLAPSE and SPLASH ART are the same on every device (a coarser grid or a static splash line is not a part closed),
+and the phone's FXAA is still a pass, so SMOOTH EDGES reads plain `ON` there. The colossus fact comes from the framing's own
+decision (`FramingReport.colossusFight`, known from the first decision whatever the switches say; `fightFacts` in `gates.ts`
+carries it to the page): Chapter I shows no CHAPTER FRAMING note on a phone because there is no boss to scale.
+
+**Fit** (measured on the live page, label text against value text per row, one line each, nothing past the row's edge):
+1600x900: the widest note is 133 px (`ON · LESS HERE`) in a 344 px row, the smallest label-to-value gap 41 px (45 px on DEPTH OF
+FIELD). 390x844: widest 114 px in a 350 px row, smallest gap 64 px (FFX-2; 83 px in FFX); the help block ends at y 786 above the prompts at 796; the list
+needs 0 px of scrolling with the longest reason up (570 px of rows in a 570 px box, as before). Narrower, which the brief did not
+name: the column is `clamp(290px, 21.5vw, 400px)`, so below 1480 px of width a note beside a long label ran 14 to 21 px past the
+column's edge; the column now grows to its widest row (`width: max-content` with the clamp as its minimum, `pause-eye-candy.css`;
+a 14 px gap between label and value), which moves nothing when there is no note (344 px at 1600x900 still). Checked on 1920x1080,
+1366x768, 1280x720, 1024x768, 360x640, 844x390: columns 400, 314, 313, 312, 320, 312 px, smallest gap 14 px or more; and in the
+mirrored pause (the chrome on the right), where the value sits on the left.
+
+**Proof that the notes are true** (`device-mix`, per game and device; page opened by real keys, battle measured): the page's notes
+equal the mix's own `limits` in every case, and each claim is measured on the real battle.
+
+| Device | Measured |
+|---|---|
+| LOW EFFECTS, 1600x900 | fog meshes 0; no SMAA or FXAA pass, the defringe on 10 figures (FFX) / 8 (FFX-2); DEPTH OF FIELD not re-aimed, the tilt-shift at the scene's own `[0.4, 0.16]` (FFX) / `[0.54, 0.15]` (FFX-2); FFX: the Overdrive hero shot plays (186 frames, the camera cut 4.8 units); FFX-2: the colossus master plays (`colossus` true) |
+| Phone 390x844 | fog 2 meshes, FXAA plus the defringe, DEPTH OF FIELD not re-aimed (same bands); FFX: through the real menu and input no hero shot (`shots.od` 0, no held frame); FFX-2 (Bahamut, a colossus): `colossusFight` true but no colossus master (`colossus` false), a real spherechange through the girl's menu and no close shot (`shots.sc` +0); FFX Ch I: `colossusFight` false, no limit on CHAPTER FRAMING |
+| Phone 390x844 with LOW EFFECTS | fog 0, no AA pass, the defringe stays, the same shot and framing results |
+
+By real input: the page by keys at 1600x900 (and for LOW EFFECTS, the OPTIONS row by keys); the 390x844 page opened by finger
+(the PAUSE chip tapped, the strip swiped, OPTIONS tapped, the list swiped, the EYE CANDY row tapped), the cursor walked by keys
+(a tap would flip the switch). Page checks: 28 of 28 per game (default, LOW EFFECTS, phone, phone with LOW EFFECTS: the notes, the
+twelve saved switches untouched, the count `11 of 11 on`, the seam all ON, the fit, each limited row's reason, the help block
+clear of the prompts); mix checks: 26 of 26 per game; narrow checks: 18 of 18 per game. 0 console errors.
+
+### Gates
+
+- `npx tsc --noEmit`: clean.
+- Targeted: `fx-mix-gates` (20 tests; the RM test now says the shots stay, new tests for `twirlKeysOn`, the whole `deviceNote` table
+  and the colossus rule; mutation-checked: putting the REDUCE MOTION clause back fails it), `eye-candy-mix-connection` (35: two new,
+  REDUCE MOTION leaves each game's shot playing, and what the page calls OFF HERE the mix does not play), `pause-eye-candy-page`
+  (36: the two help lines word for word, the device notes on a phone and under LOW EFFECTS, no note on an OFF part or an OFF look,
+  the device outranking REDUCE MOTION, every noted row has a reason, Chapter I's no-colossus case), `fx-mix-parts`,
+  `fx-parts-model`, `pause-comfort-rows`, `save-fx-parts`, `eyecandy-flags`: 173 passed.
+- Full `npx vitest run --testTimeout=60000`: **746 files passed, 5 skipped; 11,031 tests passed, 40 skipped, 1 todo, 0 failed**
+  (the 11,002 of the integration plus 29).
+- `node tools/orphans.mjs`: 1177 modules, 24 orphaned, the same list as before.
+- `node tools/critic-plan.mjs --paths` on the touched files: DEEP, focused before deploy and deep after, because of
+  `pause-eye-candy.css` ("global layout, input and boot"); the release's own plan (deep before deploy, `SaveData.ts`) is unchanged.
+
+### Rule 15: what is mine and not named by Bailey (ask before treating it as approved)
+
+- The two words, `OFF HERE` (the driver's example) and `LESS HERE` (mine, for the two trimmed cases: SMOOTH EDGES under LOW EFFECTS,
+  CHAPTER FRAMING on a phone in a colossus fight), and the five reason lines.
+- The count, ALL LOOKS and the OPTIONS row stay the saved state; the device is shown per row only.
+- The device outranks REDUCE MOTION on a row; the FFX-2 twirl keys do not play under REDUCE MOTION.
+- The column growing on narrow windows (a note beside a long label); at 1600x900 and on a phone nothing moved.
+
+### Not done, and proof history
+
+- Finding 2 (CHAPTER FRAMING takes effect in two steps when switched mid-fight) is untouched, as is finding 5.
+- No real phone GPU was measured (carried from the mix lane, item 6).
+- Proof history: `prove-dynamic.mjs` of the integration run marked an FFX-2 spherechange as done without checking that a dressphere
+  was picked; under Active ATB its walker can end in the target step with "Attack" selected. The new walker reads the command list
+  from the DOM, presses nothing outside a menu, and counts a change only on the engine's own `spherechange` event.
+  Under REDUCE MOTION the twirl slot's own counter stays 0 by design, so it cannot be the signal.
+
+### Screenshots (`docs/screenshots/`)
+
+- `rel36-fix-reduce-motion-ffx-shot-1600x900.png`, `rel36-fix-reduce-motion-ffx2-shot-1600x900.png`: the master, and the held shot
+  under REDUCE MOTION frozen on its first frame (`fx.freeze` for the still only; the camera proof above ran unfrozen).
+- `rel36-fix-device-low-effects-ffx-1600x900.png`: the page normally, and under LOW EFFECTS with the cursor on DEPTH OF FIELD.
+- `rel36-fix-device-phone-390x844.png`: the page on a phone, FFX on OVERDRIVE SHOT and FFX-2 on DRESSPHERE SHOT.
+
+Scripts and raw reports (agent scratch): `D:/Tools/pyrefly-scratch/2026-10-02-rel36-fix/` (`prove-rm.mjs`, `prove-device-page.mjs`,
+`prove-device-mix.mjs`, `prove-device-narrow.mjs`, `shots-rm.mjs`, `compose-fix.py`, `out/*.json`).

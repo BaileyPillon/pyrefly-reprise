@@ -32,8 +32,8 @@ look switched off stop its parts), REDUCE MOTION and the tier:
 | BREATHING (`breathing`) | LIVING PAINTINGS | grid 12x24 / 8x16 / 6x12 | still (off) | both, FFX-2 at 0.8x the period |
 | KO COLLAPSE (`koCollapse`) | LIVING PAINTINGS | all | a plain cut to the KO painting | both, 220 ms FFX / 170 ms FFX-2 |
 | CHAPTER FRAMING (`chapterFraming`) | BATTLE SPECTACLE | all (the phone keeps today's rig, see below) | unchanged (a static master) | both |
-| OVERDRIVE SHOT (`overdriveShot`) | BATTLE SPECTACLE | desktop (the phone holds the master) | no hero shot (the banner rule stays) | **FFX only** |
-| DRESSPHERE SHOT (`dressphereShot`) | BATTLE SPECTACLE | desktop (the phone holds the master) | no close shot | **FFX-2 only** |
+| OVERDRIVE SHOT (`overdriveShot`) | BATTLE SPECTACLE | desktop (the phone holds the master) | one static cut in and one back, as the approved page says (release 36; the mix built here played none); the banner rule stays | **FFX only** |
+| DRESSPHERE SHOT (`dressphereShot`) | BATTLE SPECTACLE | desktop (the phone holds the master) | one static cut in and one back (release 36; the mix built here played none); the twirl keys do not play | **FFX-2 only** |
 | SPLASH ART (`splashArt`) | BATTLE SPECTACLE | all | unchanged (today's splash is already calm under it) | both |
 
 ## What was ported, from where
@@ -158,7 +158,7 @@ where it sits; the first passing framing among the candidates (size, place on sc
 per input (3.3 to 3.8 ms). The four runs on the last builds: Tidus 393 to 394 px of 900, whole and clear of the slab
 and of every card (0.00 / 0.00), Yuna whole (0.06 under a card), Kimahri whole and clear; the cut back when the
 input ends. An earlier, narrower candidate set found no passing framing in one run of three, and the master held, as
-the rule says. Phone: off (the master holds). REDUCE MOTION: none.
+the rule says. Phone: off (the master holds). REDUCE MOTION: none as built here; **release 36: the same one static cut in and one back**.
 
 **The FFX-2 dressphere shot:** fires on a real spherechange through the girl's menu (Ch IV, Rikku or Yuna to
 Gunner). With the close-shot candidates as built (the girl at 68 % down to 40 % of the frame's height, five places
@@ -169,11 +169,11 @@ ms); an earlier Yuna run handed back after 1.6 s with her quiet. Held-shot frame
 the intent card over the coach card: 0; the next menu's party 309 to 322 px (today 297, floor 267). **The flourish
 follows its girl:** today's spherechange light, motes, ring and name plate are anchored once, before the cut, so in
 the first close shots they played over Yuna while Rikku changed; they now follow the girl through the camera on
-screen (`followFlourish`). Phone: off. REDUCE MOTION: no close shot (`shots.sc` 0), the flourish as today.
+screen (`followFlourish`). Phone: off. REDUCE MOTION: no close shot (`shots.sc` 0) as built here; **release 36: the same one static cut in and one back, no twirl keys**.
 
 ## REDUCE MOTION (headless `reducedMotion: 'reduce'`)
 
-No hero shot and no dressphere shot (`shots.od` / `shots.sc` 0); BREATHING still (chest 0, today's own figure
+**Superseded for the two held shots in release 36** (`docs/handoff/rel36.md`, "Fixes after integration"): the approved page reads `ON · CUT` for both, so each now plays as one static cut in and one cut back under REDUCE MOTION. As built on this branch: no hero shot and no dressphere shot (`shots.od` / `shots.sc` 0); BREATHING still (chest 0, today's own figure
 breathing as today); KO COLLAPSE is a plain cut (`cuts` 1, the KO painting on the next frame, no buckle); the fog
 holds still; the master and the banner rule unchanged.
 

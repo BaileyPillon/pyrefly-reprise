@@ -19,8 +19,10 @@ import type { App } from '../../src/app/App.ts';
 import { PauseScreen } from '../../src/app/screens/PauseScreen.ts';
 import { EYE_CANDY_CLOSE_ACTION, EYE_CANDY_OPEN_CLASS } from '../../src/app/screens/pause/eyeCandyPage.ts';
 import { applyComfort } from '../../src/app/applyComfort.ts';
-import { fxAllOnPatch } from '../../src/app/fxParts.ts';
+import { FX_SWITCH_FIELDS, fxAllOnPatch } from '../../src/app/fxParts.ts';
 import { eyeCandyOn } from '../../src/engine/fx/eyeCandyFlags.ts';
+import { eyeCandy } from '../../src/engine/fx/EyeCandy.ts';
+import { fightFacts } from '../../src/engine/fx/mix/gates.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { resetCoach } from '../../src/ui/coach/coachState.ts';
@@ -103,6 +105,18 @@ const s = (h: Harness): Record<string, unknown> => h.screen.snapshot();
 const head = (h: Harness): string => (page(h)?.querySelector('.pause__ec-h')?.textContent ?? '').trim();
 const help = (h: Harness): string[] =>
   [...h.root.querySelectorAll<HTMLElement>('[data-role="ec-help-desk"] span')].map((e) => (e.textContent ?? '').trim());
+/** The device's reason under the help line (empty when the focused row carries no device note). */
+const why = (h: Harness): string => (h.root.querySelector('[data-role="ec-help-desk"] .pause__ec-help-d')?.textContent ?? '').trim();
+/** The small note after a row's value (`CUT`, `STILL`, `OFF HERE`, `LESS HERE`) and its device limit, if any. */
+const note = (h: Harness, id: string): { text: string; limit: string | null } | null => {
+  const em = pageRow(h, id).querySelector('.pause__v em');
+  return em ? { text: (em.textContent ?? '').replace(/^\u00b7\s*/, '').trim(), limit: em.getAttribute('data-limit') } : null;
+};
+/** The device as a phone held upright shows it: the phone tier and the layout flag the battle HUD sets. */
+function phoneDevice(chapterId: string): void {
+  eyeCandy.setTier('phone');
+  document.documentElement.dataset['phoneBattle'] = chapterId === 'seymour-flux' ? 'ffx' : 'ffx2';
+}
 const pageIds = (h: Harness): string[] => [...page(h)!.querySelectorAll<HTMLElement>('.pause__ec-row')].map((r) => r.dataset['row'] ?? '');
 
 /** OPTIONS by the trigger, then real keys: Down into the list, Down to EYE CANDY, Enter. */
@@ -127,6 +141,9 @@ afterEach(() => {
   resetCoach();
   document.body.innerHTML = '';
   applyComfort({ reduceMotion: false, ...fxAllOnPatch() });
+  eyeCandy.setTier(null);
+  delete document.documentElement.dataset['phoneBattle'];
+  fightFacts.colossus = null;
 });
 
 describe.each([
@@ -297,6 +314,140 @@ describe.each([
     tap(h, '[data-tab="music"]');
     expect(page(h)).toBeNull();
     expect(s(h)['tab']).toBe('music');
+  });
+
+  it('the DEPTH OF FIELD and shot help lines say what the build does (they described the mockup)', () => {
+    const SHOT_HELP: Record<string, string> = {
+      fxHero: 'While you enter an Overdrive, the camera holds a close shot of the fighter, then cuts back. REDUCE MOTION keeps one cut.',
+      fxSphere: 'On a dressphere change the camera cuts to a held close shot of the girl, then cuts back. REDUCE MOTION keeps one cut.',
+    };
+    const h = mount(chapterId);
+    openByKeys(h);
+    walkTo(h, 'fxDof');
+    expect(help(h)[1]).toBe('Aims the soft focus band at your fighters, set for each chapter’s camera. Off: the scene keeps its own band.');
+    walkTo(h, mine);
+    expect(help(h)[1]).toBe(SHOT_HELP[mine]);
+    for (const id of ['fxDof', mine]) {
+      walkTo(h, id);
+      expect(help(h)[1], id).not.toMatch(/full the first time|instant after|painted keys|even focus/i);
+    }
+  });
+
+  it('REDUCE MOTION keeps the shot: ON · CUT, never OFF HERE, on the desktop device', () => {
+    const h = mount(chapterId);
+    h.store.setSettings({ reduceMotion: true });
+    openByKeys(h);
+    expect(note(h, mine)).toEqual({ text: 'CUT', limit: null });
+    expect(pageIds(h).filter((id) => note(h, id)?.limit)).toEqual([]);
+  });
+
+  it('the device is shown, never written: a phone held upright reads OFF HERE on DEPTH OF FIELD and the shot, LESS HERE on CHAPTER FRAMING, and the help line says why', () => {
+    phoneDevice(chapterId);
+    const h = mount(chapterId);
+    openByKeys(h);
+    expect(value(h, 'fxDof')).toBe('ON· OFF HERE');
+    expect(value(h, 'fxFraming')).toBe('ON· LESS HERE');
+    expect(value(h, mine)).toBe('ON· OFF HERE');
+    expect(note(h, mine)).toEqual({ text: 'OFF HERE', limit: 'off' });
+    expect(note(h, 'fxFraming')).toEqual({ text: 'LESS HERE', limit: 'less' });
+    // what the phone leaves alone reads plain ON
+    for (const id of ['fxLight', 'fxFog', 'fxEdges', 'fxLiving', 'fxBreath', 'fxKo', 'fxSpectacle', 'fxSplash']) expect(value(h, id), id).toBe('ON');
+    // the save, the count, the seam and the OPTIONS row never change with the device
+    expect(FX_SWITCH_FIELDS.filter((f) => h.store.settings[f] !== true), 'all twelve saved switches still ON').toEqual([]);
+    expect([h.store.settings.fxDof, h.store.settings.fxFraming, h.store.settings[mine]]).toEqual([true, true, true]);
+    expect(head(h)).toMatch(/^Eye candy\s*11 of 11 on$/i);
+    for (const k of ['depthOfField', 'chapterFraming', mine === 'fxHero' ? 'overdriveShot' : 'dressphereShot'] as const) expect(eyeCandyOn(k), k).toBe(true);
+    expect(s(h)['eyeCandy']).toMatchObject({ device: { tier: 'phone', phone: true }, rows: expect.arrayContaining([{ id: 'fxDof', own: true, on: true, limit: 'off' }, { id: 'fxFraming', own: true, on: true, limit: 'less' }]) });
+    // the reason closes the help body, in its own line
+    expect(why(h)).toBe('');
+    walkTo(h, 'fxDof');
+    expect(why(h)).toBe('Off on a phone screen.');
+    expect(help(h)[1]).toContain('Off: the scene keeps its own band.Off on a phone screen.');
+    walkTo(h, 'fxFraming');
+    expect(why(h)).toBe('On a phone held upright the bosses keep today’s size; the rest still works.');
+    walkTo(h, mine);
+    expect(why(h)).toBe('Off on a phone held upright: it shows a slice of the picture, so the camera stays wide.');
+    walkTo(h, 'fxFog');
+    expect(why(h), 'a row the device leaves alone has no reason line').toBe('');
+  });
+
+  it('a phone held upright in a fight with no colossus (Chapter I) costs CHAPTER FRAMING nothing: no note on it; the others stay', () => {
+    phoneDevice(chapterId);
+    fightFacts.colossus = false;
+    const h = mount(chapterId);
+    openByKeys(h);
+    expect(value(h, 'fxFraming')).toBe('ON');
+    expect(pageIds(h).filter((id) => note(h, id)?.limit)).toEqual(['fxDof', mine]);
+    walkTo(h, 'fxFraming');
+    expect(why(h)).toBe('');
+    // with a colossus the note is there
+    h.dispose();
+    live = null;
+    fightFacts.colossus = true;
+    const again = mount(chapterId);
+    openByKeys(again);
+    expect(value(again, 'fxFraming')).toBe('ON· LESS HERE');
+  });
+
+  it('LOW EFFECTS reads OFF HERE on DEPTH OF FIELD and FOG and LESS HERE on SMOOTH EDGES; the shot and the framing play (no phone layout)', () => {
+    eyeCandy.setTier('low');
+    const h = mount(chapterId);
+    openByKeys(h);
+    expect([value(h, 'fxDof'), value(h, 'fxFog'), value(h, 'fxEdges')]).toEqual(['ON· OFF HERE', 'ON· OFF HERE', 'ON· LESS HERE']);
+    expect([value(h, 'fxFraming'), value(h, mine), value(h, 'fxBreath'), value(h, 'fxKo'), value(h, 'fxSplash')]).toEqual(['ON', 'ON', 'ON', 'ON', 'ON']);
+    walkTo(h, 'fxDof');
+    expect(why(h)).toBe('Off under LOW EFFECTS.');
+    walkTo(h, 'fxFog');
+    expect(why(h)).toBe('Off under LOW EFFECTS.');
+    walkTo(h, 'fxEdges');
+    expect(why(h)).toBe('LOW EFFECTS keeps only the fringe fix, not the outline pass.');
+    expect(head(h)).toMatch(/11 of 11 on/i);
+  });
+
+  it('a screen under 600 px that is not held upright (the phone tier alone) closes DEPTH OF FIELD only', () => {
+    eyeCandy.setTier('phone');
+    const h = mount(chapterId);
+    openByKeys(h);
+    expect(pageIds(h).filter((id) => note(h, id)?.limit)).toEqual(['fxDof']);
+    expect(value(h, mine)).toBe('ON');
+  });
+
+  it('a part turned OFF, or whose look is OFF, shows no device note: it plays nothing anyway; and the device outranks REDUCE MOTION', () => {
+    phoneDevice(chapterId);
+    const h = mount(chapterId);
+    h.store.setSettings({ reduceMotion: true });
+    openByKeys(h);
+    expect(value(h, mine), 'a shot closed here is not one cut').toBe('ON· OFF HERE');
+    expect(value(h, 'fxBreath'), 'REDUCE MOTION still stills the breathing here').toBe('ON· STILL');
+    walkTo(h, 'fxDof');
+    key(h, 'Enter');
+    expect(value(h, 'fxDof')).toBe('OFF');
+    expect(why(h)).toBe('');
+    walkTo(h, 'fxSpectacle');
+    key(h, 'Enter');
+    expect(value(h, 'fxFraming')).toBe('ON');
+    expect(value(h, mine)).toBe('ON');
+    expect(pageRow(h, mine).classList.contains('pause__ec-row--dim')).toBe(true);
+    key(h, 'Enter');
+    expect(value(h, mine), 'the look back: the note is back').toBe('ON· OFF HERE');
+  });
+
+  it('every row that carries a device note has a reason to show (phone held upright, LOW EFFECTS, both)', () => {
+    for (const setup of [() => phoneDevice(chapterId), () => eyeCandy.setTier('low'), () => { phoneDevice(chapterId); eyeCandy.setTier('low'); }]) {
+      setup();
+      const h = mount(chapterId);
+      openByKeys(h);
+      const limited = pageIds(h).filter((id) => note(h, id)?.limit);
+      expect(limited.length).toBeGreaterThan(0);
+      for (const id of limited) {
+        walkTo(h, id);
+        expect(why(h).length, `${id} has a reason`).toBeGreaterThan(15);
+      }
+      h.dispose();
+      live = null;
+      eyeCandy.setTier(null);
+      delete document.documentElement.dataset['phoneBattle'];
+    }
   });
 
   it('REDUCE MOTION is shown, never written: a note in the heading and ON · STILL / ON · CUT on the parts it changes', () => {

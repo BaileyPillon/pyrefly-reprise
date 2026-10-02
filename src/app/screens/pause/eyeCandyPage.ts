@@ -13,7 +13,10 @@
  * Right is ALL ON and Confirm flips between ALL ON and not; a click or tap flips the row it lands on.
  * Every write goes through `SaveStore.setSettings`, so the looks and the `eyeCandyFlags.ts` seam follow
  * at once. A look turned off keeps its parts' own values, drawn dim (`fxParts.ts`). REDUCE MOTION is
- * shown, never written: a part it holds still or makes a cut reads `ON · STILL` or `ON · CUT`.
+ * shown, never written: a part it holds still or makes a cut reads `ON · STILL` or `ON · CUT`. So is the
+ * device (release 36): a part the tier or a phone held upright closes reads `ON · OFF HERE`, one it trims
+ * `ON · LESS HERE` (`deviceNote`, the rule the mix plays by), and the help line says why; the saved value,
+ * the count and the seam never change with the device.
  *
  * Game case: both; OVERDRIVE SHOT is listed only in an FFX chapter and DRESSPHERE SHOT only in an
  * FFX-2 chapter (11 switches each). The accents are the pause's own `--pu-accent`: gold under FFX,
@@ -25,7 +28,11 @@ import type { GameId } from '../../../battle/common/types.ts';
 import type { InputSnapshot } from '../../Input.ts';
 import type { SaveStore } from '../../SaveData.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
+import { eyeCandy } from '../../../engine/fx/EyeCandy.ts';
+import { deviceNote, fightFacts, type Device, type DeviceNote, type MixPart } from '../../../engine/fx/mix/gates.ts';
+import { phoneBattle } from '../../../engine/fx/mix/hudPanels.ts';
 import {
+  FX_PARTS,
   fxAllOffPatch,
   fxAllOnPatch,
   fxAllState,
@@ -54,7 +61,7 @@ export const EYE_CANDY_ALL = 'fxAll';
 const HELP: Readonly<Record<string, { body: string; rm?: 'STILL' | 'CUT' }>> = {
   fxAll: { body: 'ALL ON or ALL OFF in one press. Every look and part below still has its own switch.' },
   fxLight: { body: 'The golden hour in FFX, the pink hour in FFX-2: colour grade, glow and light shafts. The parts under it only work while it is ON.' },
-  fxDof: { body: 'A soft focus band that melts the far and near edges, set for each chapter’s camera. Off: today’s even focus.' },
+  fxDof: { body: 'Aims the soft focus band at your fighters, set for each chapter’s camera. Off: the scene keeps its own band.' },
   fxFog: { body: 'Thin haze between your party and the big enemies, so they look far away. Off: clear air.' },
   fxEdges: { body: 'Cleaner outlines on every fighter: no jagged steps and no pale fringe around the paint.' },
   fxLiving: { body: 'Scenery that moves: depth, weather, lamplight and a slow drift of the camera. The parts under it only work while it is ON.' },
@@ -63,9 +70,25 @@ const HELP: Readonly<Record<string, { body: string; rm?: 'STILL' | 'CUT' }>> = {
   fxSpectacle: { body: 'Impact frames, spell light and the splash cut-ins. The parts under it only work while it is ON.' },
   fxFraming: { body: 'A camera placed for each chapter: low and wide for the giants, clear of the menus. Off: today’s calm camera.' },
   fxHero: { body: 'While you enter an Overdrive, the camera holds a close shot of the fighter, then cuts back. REDUCE MOTION keeps one cut.', rm: 'CUT' },
-  fxSphere: { body: 'A held close shot and painted keys on a dressphere change: full the first time, instant after. REDUCE MOTION keeps one cut.', rm: 'CUT' },
+  fxSphere: { body: 'On a dressphere change the camera cuts to a held close shot of the girl, then cuts back. REDUCE MOTION keeps one cut.', rm: 'CUT' },
   fxSplash: { body: 'Painted art on the aeon and Special splash cut-ins. Off: today’s splash.' },
 };
+
+/** What the device does to a switch, in the row's word (`ON · OFF HERE`, `ON · LESS HERE`). */
+const LIMIT_WORD: Readonly<Record<DeviceNote['limit'], string>> = { off: 'OFF HERE', less: 'LESS HERE' };
+
+/** The same, with its reason, under the help line: per switch, then why (LOW EFFECTS, or a phone screen). */
+const DEVICE_WHY: Readonly<Record<string, Partial<Record<DeviceNote['why'], string>>>> = {
+  fxDof: { phone: 'Off on a phone screen.', low: 'Off under LOW EFFECTS.' },
+  fxFog: { low: 'Off under LOW EFFECTS.' },
+  fxEdges: { low: 'LOW EFFECTS keeps only the fringe fix, not the outline pass.' },
+  fxFraming: { phone: 'On a phone held upright the bosses keep today’s size; the rest still works.' },
+  fxHero: { phone: 'Off on a phone held upright: it shows a slice of the picture, so the camera stays wide.' },
+  fxSphere: { phone: 'Off on a phone held upright: it shows a slice of the picture, so the camera stays wide.' },
+};
+
+/** The device as the mix sees it: the live tier (LOW EFFECTS, or a small screen), the upright phone layout, and whether the fight has a colossus. */
+const liveDevice = (): Device => ({ tier: eyeCandy.tier, phone: phoneBattle(), colossus: fightFacts.colossus });
 
 const GAME_LINE: Readonly<Record<FxSwitchGame, string>> = { both: 'Both games.', ffx: 'FFX only.', ffx2: 'FFX-2 only.' };
 
@@ -75,6 +98,8 @@ export interface EyeCandyPageDeps {
   game: GameId;
   /** REDUCE MOTION as the fx read it (the OPTIONS row or the OS): shown on the page, never written. */
   reduceMotion: () => boolean;
+  /** The device as the mix sees it (tests inject one): shown on the page, never written. Default: the live one. */
+  device?: () => Device;
 }
 
 export class EyeCandyPage {
@@ -85,6 +110,8 @@ export class EyeCandyPage {
   /** The row ids in walking order: ALL LOOKS, then each look and its parts. */
   private readonly order: string[];
   private at: string = EYE_CANDY_ALL;
+  /** The device as of the last draw (`render` reads it afresh each time). */
+  private dev: Device = { tier: 'full', phone: false };
 
   /** @param root the pause view's root: the element the `pause--*` classes live on. */
   constructor(root: HTMLElement, deps: EyeCandyPageDeps) {
@@ -169,15 +196,26 @@ export class EyeCandyPage {
     );
   }
 
-  private rowHtml(id: string, label: string, value: string, cls: string[], aria: string, quiet = ''): string {
+  /** `quiet`: the small note after the value (`STILL`, `CUT`, `OFF HERE`, `LESS HERE`); `limit`: the device's, for the row's data attribute. */
+  private rowHtml(id: string, label: string, value: string, cls: string[], aria: string, quiet = '', limit = ''): string {
     const sel = id === this.at;
     if (sel) cls.push('pause__row--sel');
     return (
       `<div class="pause__row pause__row--word pause__row--cmd pause__ec-row ${cls.join(' ')}" data-row="${escapeHtml(id)}"` +
       ` data-action="${EYE_CANDY_ROW_ACTION}${escapeHtml(id)}" ${aria} tabindex="${sel ? 0 : -1}">` +
       `<span class="pause__k">${escapeHtml(label)}</span>` +
-      `<span class="pause__v">${escapeHtml(value)}${quiet ? `<em>&middot; ${escapeHtml(quiet)}</em>` : ''}</span></div>`
+      `<span class="pause__v">${escapeHtml(value)}${quiet ? `<em${limit ? ` data-limit="${limit}"` : ''}>&middot; ${escapeHtml(quiet)}</em>` : ''}</span></div>`
     );
+  }
+
+  /**
+   * What the device does to a part right now, when it would otherwise play: a part turned OFF, or whose look is
+   * OFF, plays nothing anyway and shows no note (as REDUCE MOTION's notes).
+   */
+  private limitOf(field: string): DeviceNote | null {
+    const part = FX_PARTS.find((p) => p.field === field);
+    if (!part || !fxSwitchOn(this.deps.save.settings, part.field)) return null;
+    return deviceNote(part.key as MixPart, this.dev);
   }
 
   private switchHtml(s: FxSwitchRow): string {
@@ -188,8 +226,10 @@ export class EyeCandyPage {
     if (!own) cls.push('pause__ec-row--off');
     if (dim) cls.push('pause__ec-row--dim');
     const rm = HELP[s.field]?.rm;
-    const quiet = rm && own && !dim && this.deps.reduceMotion() ? rm : '';
-    return this.rowHtml(s.field, s.label, own ? 'ON' : 'OFF', cls, `role="switch" aria-checked="${own}"`, quiet);
+    // The device outranks REDUCE MOTION: a shot closed on a phone is not "one cut", it is not there.
+    const limit = this.limitOf(s.field);
+    const quiet = limit ? LIMIT_WORD[limit.limit] : rm && own && !dim && this.deps.reduceMotion() ? rm : '';
+    return this.rowHtml(s.field, s.label, own ? 'ON' : 'OFF', cls, `role="switch" aria-checked="${own}"`, quiet, limit?.limit ?? '');
   }
 
   private allHtml(): string {
@@ -203,6 +243,7 @@ export class EyeCandyPage {
   /** Redraw the rows, the count and the help line from the live settings; the cursor keeps its place. */
   render(): void {
     const settings = this.deps.save.settings;
+    this.dev = (this.deps.device ?? liveDevice)();
     const looks = this.switches.filter((s) => s.kind === 'look');
     const group = (look: string): string => this.switches.filter((s) => s.look === look).map((s) => this.switchHtml(s)).join('');
     const col1 = this.layer.querySelector<HTMLElement>('[data-ec-col="1"]');
@@ -229,11 +270,21 @@ export class EyeCandyPage {
     const s = this.switches.find((r) => r.field === this.at);
     const title = s ? s.label : 'ALL LOOKS';
     const game = GAME_LINE[s ? s.game : 'both'];
+    // While the row carries a device note, its reason closes the body, in the accent (as REDUCE MOTION IS ON does).
+    const limit = this.limitOf(this.at);
+    const why = limit ? DEVICE_WHY[this.at]?.[limit.why] : undefined;
     for (const where of ['desk', 'phone']) {
       const el = this.layer.querySelector<HTMLElement>(`[data-role="ec-help-${where}"]`);
       if (!el) continue;
       el.querySelector('.pause__ec-help-t')!.textContent = title;
-      el.querySelector('.pause__ec-help-b')!.textContent = help.body;
+      const body = el.querySelector('.pause__ec-help-b')!;
+      body.textContent = help.body;
+      if (why) {
+        const em = document.createElement('em');
+        em.className = 'pause__ec-help-d';
+        em.textContent = why;
+        body.append(em);
+      }
       el.querySelector('.pause__ec-help-g')!.textContent = game;
     }
   }
@@ -256,8 +307,9 @@ export class EyeCandyPage {
       row: this.at,
       all: fxAllState(settings, this.deps.game),
       count: fxCount(settings, this.deps.game),
-      rows: this.switches.map((s) => ({ id: s.field, own: fxOwnValue(settings, s.field), on: fxSwitchOn(settings, s.field) })),
+      rows: this.switches.map((s) => ({ id: s.field, own: fxOwnValue(settings, s.field), on: fxSwitchOn(settings, s.field), limit: this.limitOf(s.field)?.limit ?? null })),
       reduceMotion: this.deps.reduceMotion(),
+      device: this.dev,
     };
   }
 

@@ -14,7 +14,7 @@ import { applyComfort } from '../../src/app/applyComfort.ts';
 import { FX_LOOK_ROWS, fxLooksOf } from '../../src/app/fxLooks.ts';
 import { FX_PARTS, fxAllOffPatch, fxAllOnPatch, fxSwitchesFor, type FxSwitchField } from '../../src/app/fxParts.ts';
 import { eyeCandyOn } from '../../src/engine/fx/eyeCandyFlags.ts';
-import { LOOK_KEY, MIX_PARTS, PART_LOOK, partsOn, type GateEnv, type MixGame, type MixPart } from '../../src/engine/fx/mix/gates.ts';
+import { deviceNote, LOOK_KEY, MIX_PARTS, PART_LOOK, partsOn, type GateEnv, type MixGame, type MixPart } from '../../src/engine/fx/mix/gates.ts';
 
 type Settings = Record<FxSwitchField, boolean>;
 
@@ -43,6 +43,8 @@ const allOn = (): Settings => ({ ...fxAllOnPatch() });
 const GAMES: readonly MixGame[] = ['ffx', 'ffx2'];
 /** The part the other game owns: the mix never plays it, whatever the switches say. */
 const OTHER_GAMES_SHOT: Record<MixGame, MixPart> = { ffx: 'dressphereShot', ffx2: 'overdriveShot' };
+/** The held shot each game plays. */
+const SHOT_OF: Record<MixGame, MixPart> = { ffx: 'overdriveShot', ffx2: 'dressphereShot' };
 
 /** The mix's gates as the game wires them (`liveGates`): the seam `applyComfort` installed, and the OPTIONS-row look path. */
 function envFor(game: MixGame, settings: Settings): GateEnv {
@@ -160,5 +162,25 @@ describe('a switch flipped on the page closes exactly its parts in the mix', () 
       expect(on.fog, game).toBe(true);
       for (const p of MIX_PARTS) expect(eyeCandyOn(p), p).toBe(true);
     }
+  });
+
+  it("REDUCE MOTION leaves each game's held shot playing, as the approved page says (ON · CUT: one static cut in, one cut back) and stills the breathing", () => {
+    for (const game of GAMES) {
+      const on = partsOn({ ...envFor(game, allOn()), reduceMotion: true });
+      expect(on[SHOT_OF[game]], game).toBe(true);
+      expect(on.koCollapse, game).toBe(true);
+      expect(on.breathing, game).toBe(false);
+    }
+  });
+
+  it("what the page says OFF HERE for a tier the mix does not play, and what it leaves plain or calls LESS HERE still plays (the phone layout is the DOM's, checked in the browser)", () => {
+    for (const game of GAMES)
+      for (const tier of ['full', 'phone', 'low'] as const) {
+        const on = partsOn({ ...envFor(game, allOn()), tier });
+        for (const part of gameParts(game)) {
+          const limit = deviceNote(part, { tier, phone: false })?.limit ?? null;
+          expect(on[part], `${game} ${tier} ${part}`).toBe(limit !== 'off');
+        }
+      }
   });
 });

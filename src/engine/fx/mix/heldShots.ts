@@ -20,7 +20,9 @@ import type { RigWatch } from './rigWatch.ts';
  * (the Overdrive input slab counts); every other figure either whole and clear or wholly out of frame
  * (Yuna under the turn rail, Kimahri under the party panel, Yuna cropped on the phone). Candidates vary
  * the size, the place on screen and the turn; when none passes there is no shot (the master holds).
- * REDUCE MOTION: no held shots (`gates.ts`).
+ * REDUCE MOTION keeps both (`gates.ts`, the approved page's `ON · CUT`): a held shot is already one static cut to the
+ * shot and one cut back, never a move, a zoom or a drift (`MaxMix` also holds the lens shift for as long as it is up),
+ * held for its normal length, and an FFX-2 shot still never opens, and never stays, while a girl's menu is open.
  */
 
 export type ShotKind = 'od' | 'sc';
