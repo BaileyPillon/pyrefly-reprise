@@ -42,9 +42,10 @@ describe('the splash fades the HUD panels that print through it (U1)', () => {
   });
 
   it('the stylesheet fades the turn order, cards, Sin clock, status smoke and CHARGING slab with opacity only', () => {
-    const rule = CSS.match(/html\.fxc-splash-live :is\(([^)]*)\)\s*\{([^}]*)\}/);
-    expect(rule).not.toBeNull();
-    const [, list, body] = rule!;
+    const rules = [...CSS.matchAll(/(html\.fxc-splash-live [^{]*)\{([^}]*)\}/g)];
+    expect(rules.length).toBeGreaterThanOrEqual(1);
+    const list = rules.map((r) => r[1]).join(', ');
+    const body = rules.map((r) => r[2]).join(' ');
     for (const sel of ['.ig-ctb', '.ffx-sensor', '.eint', '.sgd', '.mad', '.ffx-sinhud > *', '.ffx-zg', '.ffx2hud__command', '.stm-layer', '.pf-mom__slab', '.coach-mark']) {
       expect(list).toContain(sel);
     }

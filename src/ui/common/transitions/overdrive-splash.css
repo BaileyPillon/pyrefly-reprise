@@ -211,8 +211,9 @@
  * band's lower right); FFX's is closed during an action. The party rows and the numerals are not listed: the rows sit
  * clear of the band, and the numerals are what the splash hands over to.
  */
-html.fxc-splash-live :is(.sgd, .mad, .eint, .ig-ctb, .ffx-sensor, .ffx-omr, .ffx-zg, .ffx2hud__command, .ig-cutin__info, .coach-mark,
-  .ffx-sinhud > *, .stm-layer, .pf-mom__slab) {
+html.fxc-splash-live :is(.sgd, .mad, .eint, .ffx-sensor, .ffx-omr, .ffx-zg, .ffx2hud__command, .coach-mark,
+  .ffx-sinhud > *, .stm-layer, .pf-mom__slab),
+html.fxc-splash-live .ffxhud :is(.ig-ctb, .ig-cutin__info) {
   opacity: 0 !important;
   transition: opacity 60ms linear !important;
 }
