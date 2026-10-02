@@ -1,12 +1,5 @@
-import {
-  CanvasTexture,
-  ImageLoader,
-  LinearFilter,
-  LinearMipmapLinearFilter,
-  SRGBColorSpace,
-  Texture,
-  TextureLoader,
-} from 'three';
+import { CanvasTexture, ImageLoader, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace, Texture, TextureLoader } from 'three';
+import { pixelUrlFor } from './ArtTier.ts';
 import { loadArtManifest, manifestKnowsAsset } from './ArtManifest.ts';
 import { fetchWithOneRetry, retryPause } from './fetchRetry.ts';
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
@@ -241,7 +234,8 @@ async function preparePainting(
   matte?: MatteOptions,
   fit?: false | BaselineFitOptions,
 ): Promise<PreparedPainting | null> {
-  const [image, meta] = await Promise.all([tryLoadImage(url), tryLoadMeta(url)]);
+  const px = await pixelUrlFor(url); // D-315: a 2x device draws the 2x master's pixels; the 1x sidecar, name and key stay
+  const [image, meta] = await Promise.all([tryLoadImage(px).then((i) => i ?? (px === url ? null : tryLoadImage(url))), tryLoadMeta(url)]);
   if (!image) return null;
   const width = meta?.width ?? image.width ?? 1024;
   const height = meta?.height ?? image.height ?? 1024;

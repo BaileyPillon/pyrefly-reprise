@@ -65,6 +65,13 @@ const CHOSEN = /^([A-Za-z0-9][A-Za-z0-9_-]*)\.png$/;
 const VARIANT = /^([A-Za-z0-9][A-Za-z0-9_-]*)\.(.+)\.png$/;
 
 /**
+ * `<state>@2x.png` — the twice-resolution master of a chosen state (D-315). Listed per subject in
+ * `states2x`, and only when the 1x `<state>.png` is there too: the runtime (`src/engine/ArtTier.ts`)
+ * swaps the pixels on a 2x device and keeps the 1x sidecar and name, so a master alone is never used.
+ */
+const HI_RES = /^([A-Za-z0-9][A-Za-z0-9_-]*)@2x\.png$/;
+
+/**
  * A sidecar's `facing` is copied through as a trimmed, lower-cased string and
  * *interpreted* at runtime by `parseArtFacing` in `BattlePresenterActors.ts`,
  * which owns the alias table (`none`/`straight`/`camera` all mean `front`).
@@ -150,6 +157,7 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     const dir = join(charRoot, id);
     const states = [];
     const variants = new Set();
+    const hi = [];
 
     for (const entry of listDir(dir)) {
       if (!entry.isFile()) continue;
@@ -160,6 +168,11 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
           warnings.push(`${id}/${state}.png has no .json sidecar (the loader would 404 on it)`);
         }
         states.push(state);
+        continue;
+      }
+      const master = HI_RES.exec(entry.name);
+      if (master) {
+        hi.push(master[1]);
         continue;
       }
       const variant = VARIANT.exec(entry.name);
@@ -191,7 +204,8 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     }
 
     const portrait = existsSync(join(artRoot, 'portraits', `${id}.png`));
-    subjects[id] = { states, portrait, ...(facing ? { facing } : {}) };
+    const states2x = hi.filter((h) => states.includes(h)).sort();
+    subjects[id] = { states, portrait, ...(facing ? { facing } : {}), ...(states2x.length ? { states2x } : {}) };
   }
 
   const pause = chosenStems(join(artRoot, 'pause'));
