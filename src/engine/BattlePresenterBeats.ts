@@ -15,7 +15,8 @@ import { poseForAction } from './EnemyActionPose.ts';
 import { victoryPoseOf } from './VictoryPose.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
-import { armContact, meetContact, releaseContact } from './ContactBeat.ts';
+import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
+import { impactAtApex, windUpLeads } from './KeyPoses.ts';
 import { partyOffStage } from './SummonStaging.ts';
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
@@ -49,7 +50,8 @@ export async function actionStart(
   const pose = poseForAction(event, ctx.stage.sideOf(event.actorId), ctx.deps.abilityFacts, (p) =>
     ctx.stage.paints?.(event.actorId, p) === true,
   );
-  actor?.setPose(pose);
+  const windUp = !ctx.deps.actionMotion?.ownsWindUp?.(event) && windUpLeads(ctx, event.actorId, pose); // D-313: the wind-up painting, then the impact at the apex
+  actor?.setPose(windUp ? 'ready' : pose);
   const motion = ctx.deps.actionMotion; // FF7: the melee run to the target (none for FFX and FFX-2)
   if (motion) await settled(ctx, motion.open(event, motionCtx(ctx)), MOTION_GUARD_MS);
 
@@ -68,7 +70,8 @@ export async function actionStart(
 
   if (pose === 'attack') {
     cue(ctx, 'attack', { volume: 0.8 });
-    if (!motion?.ownsWindUp?.(event)) void Promise.all([actor?.lunge(1.4, 440, armContact(ctx, event.actorId)), actor?.squash(260, 0.45)]); // FF7: its painted keys
+    const contact = (): LungeContact => (windUp ? impactAtApex(ctx, event.actorId, armContact(ctx, event.actorId)) : armContact(ctx, event.actorId));
+    if (!motion?.ownsWindUp?.(event)) void Promise.all([actor?.lunge(1.4, 440, contact()), actor?.squash(260, 0.45)]); // FF7: its painted keys
   } else if (pose === 'cast') {
     cue(ctx, 'cast', { volume: 0.7 });
     actor?.flash(0x9fd8ff, 560, 0.45);
