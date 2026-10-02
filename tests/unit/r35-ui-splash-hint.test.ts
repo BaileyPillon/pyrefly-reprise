@@ -45,7 +45,7 @@ describe('the splash fades the HUD panels that print through it (U1)', () => {
     const rule = CSS.match(/html\.fxc-splash-live :is\(([^)]*)\)\s*\{([^}]*)\}/);
     expect(rule).not.toBeNull();
     const [, list, body] = rule!;
-    for (const sel of ['.ig-ctb', '.ffx-sensor', '.eint', '.sgd', '.mad', '.ffx-sinhud > *', '.stm-layer', '.pf-mom__slab', '.coach-mark']) {
+    for (const sel of ['.ig-ctb', '.ffx-sensor', '.eint', '.sgd', '.mad', '.ffx-sinhud > *', '.ffx-zg', '.ffx2hud__command', '.stm-layer', '.pf-mom__slab', '.coach-mark']) {
       expect(list).toContain(sel);
     }
     expect(body).toMatch(/opacity:\s*0\s*!important/);

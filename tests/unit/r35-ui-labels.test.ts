@@ -59,12 +59,12 @@ describe('phone labels wrap instead of ending in an ellipsis (PR-0246, PR-0288)'
 
 describe('FFX-2 item list header and the phone results caption (PR-0276, PR-0275)', () => {
   it('the command window header is sticky, with the up-fold mark under it', () => {
-    const css = read('src/ui/ffx2/ffx2-hud.css');
+    const css = read('src/ui/ffx2/command-window-header.css');
     expect(css.match(/\.ffx2cmd__title \{([^}]*)\}/)![1]).toMatch(/position:\s*sticky;\s*top:\s*0/);
     expect(css).toMatch(/\.ffx2hud__command:has\(\.ffx2cmd__title\) \.ffx2cmd__fold--up/);
   });
   it('the phone caption lets the location wrap into more columns', () => {
-    const css = read('src/ui/common/results-phone.css');
+    const css = read('src/ui/common/results-fit.css');
     const rule = css.match(/\.rres--phone \.rresp__caption \.rres__cap-loc \{([^}]*)\}/)![1]!;
     expect(rule).toMatch(/white-space:\s*normal/);
     expect(rule).toMatch(/text-overflow:\s*clip/);

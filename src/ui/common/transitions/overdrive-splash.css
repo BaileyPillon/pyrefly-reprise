@@ -207,22 +207,26 @@
  * title ("MEGA FLARE", "ENERGY RAY"), FFX-2's panels and CHARGING slab stayed opaque, and Sin's clock, the
  * Mouth Open card and the status smoke drew over Auron's Dragon Fang. `SPLASH_LIVE_CLASS` is on `<html>`
  * from `play()` to the end of the splash; the `!important`s beat the acting fade and the inline opacity the
- * status marks set per figure. The party rows, the command menu and the numerals are not listed: they sit
- * clear of the band at every size the acceptance names, and the numerals are what the splash hands over to.
+ * status marks set per figure. FFX-2's command window is listed too (Active ATB keeps it open, and it ran onto the
+ * band's lower right); FFX's is closed during an action. The party rows and the numerals are not listed: the rows sit
+ * clear of the band, and the numerals are what the splash hands over to.
  */
-html.fxc-splash-live :is(.sgd, .mad, .eint, .ig-ctb, .ffx-sensor, .ffx-omr, .ig-cutin__info, .coach-mark,
+html.fxc-splash-live :is(.sgd, .mad, .eint, .ig-ctb, .ffx-sensor, .ffx-omr, .ffx-zg, .ffx2hud__command, .ig-cutin__info, .coach-mark,
   .ffx-sinhud > *, .stm-layer, .pf-mom__slab) {
   opacity: 0 !important;
   transition: opacity 60ms linear !important;
 }
 
 /*
- * VP-1001-36 (both games; phone only): on the 390 px frame the painting covers most of the slab, so the
- * ink title sat on dark paint and read as a smudge. An ivory halo (the slab's own colour, so it is invisible
- * where the title is on the slab) holds the title's contrast against any painting under it. Paint only; the
- * title does not move and the painting is not touched.
+ * VP-1001-36 (both games): where the ink title meets the painting (the phone's 390 px frame, where the painting covers
+ * most of the slab; FFX-2's MEGA FLARE, whose last letter runs onto Bahamut's wing) it read as a smudge. A halo in the
+ * slab's own colour (invisible where the title is on the slab) holds the title's contrast against any painting under it;
+ * wider on the phone, where the title is 22 px. Paint only: the title does not move and the painting is not touched.
  */
+.fxc-splash__title {
+  -webkit-text-stroke: min(0.14em, 5px) var(--fxc-slab2);
+  paint-order: stroke fill;
+}
 html[data-phone-battle] .fxc-splash__title {
   -webkit-text-stroke: min(0.3em, 7px) var(--fxc-slab2);
-  paint-order: stroke fill;
 }

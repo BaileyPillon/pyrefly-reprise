@@ -10,6 +10,8 @@
  * is empty, so nothing reads a stale line.
  */
 
+import './command-window-header.css'; // U6: the window's sticky header (same window, same file's reader)
+
 export class CommandHelp {
   private label = '';
   private text = '';

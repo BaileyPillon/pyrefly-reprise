@@ -126,14 +126,6 @@
   text-transform: uppercase;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
-/* U6 (PR-0275, both games): the location wraps into more columns instead of ending in an ellipsis ("INSIDE SIN —
-   THE GARDEN C...", "DJOSE TEMPLE - CHAMBER OF THE I..."): `results-fit.css`'s one-line nowrap rule is the desktop
-   caption's, where the rotated page has 282 px; here the vertical box has the page's own height. */
-.rres--phone .rresp__caption .rres__cap-loc {
-  white-space: normal;
-  overflow: visible;
-  text-overflow: clip;
-}
 /* PR-0215: the ending takes the next column, whole, when the caption does not
    fit one ("INSIDE SIN · WITHDREW" was cut to "WIT"). */
 .rres--phone .rresp__caption .rres__cap-end {

@@ -643,19 +643,11 @@
   top: 0;
   margin-bottom: -8px;
 }
-.ffx2hud__command:has(.ffx2cmd__title) .ffx2cmd__fold--up {
-  top: 16px;
-}
 .ffx2cmd__fold--down {
   bottom: 0;
   margin-top: -8px;
 }
-/* U6 (PR-0276, FFX-2 only): the header rides the box's top edge, so a wheel scroll no longer takes "ITEM" out of
-   the window (it was cut 16 px above the box after one tick); the fold mark that rides the same edge sits under it. */
 .ffx2cmd__title {
-  position: sticky;
-  top: 0;
-  z-index: 3;
   margin-bottom: 4px;
   padding: 2px 8px;
   background: var(--ig-ink-panel);
