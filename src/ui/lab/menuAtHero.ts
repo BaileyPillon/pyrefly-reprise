@@ -90,28 +90,39 @@ export class MenuAtHero {
     const foeCx = foes.length ? foes.reduce((s, r) => s + r.x + r.w / 2, 0) / foes.length : vw;
     const right = foeCx >= heroCx;
 
-    // Measure the list where it is, then place it: beside the torso, its top at the chest.
+    // Measure the list where it is, then place it beside the torso, its top at the chest, or lower
+    // (the waist, the hip) when a floating fiend or a head would be under it at the chest.
     this.panel('measuring');
     const box = el.getBoundingClientRect();
     const w = box.width || 130 * scale;
     const h = box.height || 160 * scale;
     const gap = 14 * scale;
     const torsoX = right ? hero.x + hero.w * 0.78 + gap : hero.x + hero.w * 0.22 - gap - w;
-    const top = Math.min(vh - h - 8, Math.max(8, hero.y + hero.h * 0.28));
     const left = Math.min(vw - w - 8, Math.max(8, torsoX));
-    const want: Rect = { x: left, y: top, w, h };
-
-    // Never over the boss or another party member: no more than a quarter of a figure, and never
-    // much of its head (the top fifth of its silhouette). An edge brushing past is tolerated.
-    for (const id of this.ports.avoid(actorId)) {
-      const r = this.ports.rect(id);
-      if (!r || r.w <= 0 || r.h <= 0) continue;
-      const head: Rect = { x: r.x, y: r.y, w: r.w, h: r.h * 0.2 };
-      if (overlap(want, r) > r.w * r.h * 0.25 || overlap(want, head) > head.w * head.h * 0.2) return this.panel(`would cover ${id}`);
+    let want: Rect | null = null;
+    let blocker = '';
+    for (const at of [0.28, 0.45, 0.6]) {
+      const top = Math.min(vh - h - 8, Math.max(8, hero.y + hero.h * at));
+      const spot: Rect = { x: left, y: top, w, h };
+      // Never over the boss or another party member: no more than a quarter of a figure, and never
+      // much of its head (the top fifth of its silhouette). An edge brushing past is tolerated.
+      const hit = this.ports.avoid(actorId).find((id) => {
+        const r = this.ports.rect(id);
+        if (!r || r.w <= 0 || r.h <= 0) return false;
+        const head: Rect = { x: r.x, y: r.y, w: r.w, h: r.h * 0.2 };
+        return overlap(spot, r) > r.w * r.h * 0.25 || overlap(spot, head) > head.w * head.h * 0.2;
+      });
+      if (!hit) {
+        want = spot;
+        break;
+      }
+      blocker ||= hit;
     }
+    if (!want) return this.panel(`would cover ${blocker}`);
+    const { x: placeX, y: top } = want;
 
     el.classList.add('lab-menu-at-hero');
-    el.style.left = `${(left - host.left) / scale}px`;
+    el.style.left = `${(placeX - host.left) / scale}px`;
     el.style.top = `${(top - host.top) / scale}px`;
     el.style.right = 'auto';
     el.style.bottom = 'auto';
