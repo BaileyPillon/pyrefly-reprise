@@ -50,7 +50,6 @@ import { enemyObstacleRect } from './enemyObstacleRect.ts';
 import type { CursorSelection } from './TargetCursor.ts';
 import {
   advisorChipDock,
-  advisorZone,
   GAP,
   SPRITE_FOOT_MARGIN_RATIO,
   SPRITE_HALF_WIDTH_RATIO,
@@ -59,6 +58,7 @@ import {
   type AdvisorZone,
   type Rect,
 } from './hudSafeZones.ts';
+import { advisorZone } from './advisorStrip.ts';
 import { intentChipDockAt } from './intentChipDock.ts';
 
 export { intentChipDockAt } from './intentChipDock.ts';
