@@ -29,7 +29,9 @@ import {
 import { PaintedStage } from '../../engine/BattlePresenterStage.ts';
 import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
-import type { HudPort } from '../../engine/HudPort.ts';
+import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
+import { cameraLabForBattle } from '../../engine/lab/LabSession.ts';
+import type { CameraLabHandle } from '../../ui/lab/battleLab.ts';
 import { loadScene, type LoadedScene } from '../../scenes/index.ts';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
@@ -126,6 +128,8 @@ export class BattleScreen extends Screen {
   private cutscenes: MidBattleCutscenes | null = null;
   /** Letterbox bars, name slab and heartbeat vignette (`BattleMoments`). */
   private momentOverlay: MomentOverlay | null = null;
+  /** CAMERA LAB only (`?camera=lab`, a test harness): null in every other battle. */
+  private lab: CameraLabHandle | null = null;
   private setup: BattleSetup | null = null;
   private group: EnemyGroupDef | null = null;
   private checkpoint: ChainCheckpoint | null = null;
@@ -212,12 +216,16 @@ export class BattleScreen extends Screen {
     this.syncPixelScale();
     void warmShaders(this.app.renderer, scene.scene); // the diorama's programs compile while the figures load
 
+    // CAMERA LAB (`?camera=lab`; a test harness, D-318): loaded only for a lab battle, never otherwise.
+    const labMod = cameraLabForBattle(chapter.id) ? await import('../../ui/lab/battleLab.ts') : null;
+    if (this.exited) return this.releaseParts();
+
     // --- field -------------------------------------------------------------
     this.stage = new PaintedStage({
       scene: this.scene.scene,
       camera: this.app.renderer.camera,
       battleCamera: this.scene.battleCamera,
-      slots: this.scene.slots,
+      slots: labMod ? labMod.labSlots(chapter.id, this.scene.slots) : this.scene.slots, // the lab's formation, once, through the stage's own slots
       canvas: this.app.renderer.domElement,
       overlayRoot: this.root,
       // FF7: its own effects, Spectacle on A3 plus (battleSpellFx answers 'ff7' with battleFf7Fx.ts)
@@ -241,6 +249,13 @@ export class BattleScreen extends Screen {
     this.airship = await attachStageHook(chapter.game, this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8; FF7's rows
     if (this.exited) return this.releaseParts();
     this.spectacle = attachSpectacle({ game: chapter.game, renderer: this.app.renderer, scene: this.scene.scene, camera: this.app.renderer.camera, stage: this.stage, root: this.root });
+    if (labMod) {
+      this.lab = await labMod.attachCameraLab({
+        chapter, stage: this.stage, battleCamera: scene.battleCamera, camera: this.app.renderer.camera, canvas: this.app.renderer.domElement,
+        root: this.root, engine: this.engine, hud: () => this.hud, speed: () => this.presenter?.playbackSpeed ?? 'normal',
+      });
+      if (this.exited) return this.releaseParts();
+    }
 
     // --- HUD + ports -------------------------------------------------------
     this.hud = createHud(chapter.game, () => this.stage, this.engine); // the field (FFX-2 Oversoul look); the engine (FF7's item counts)
@@ -253,7 +268,8 @@ export class BattleScreen extends Screen {
       // is being selected" answerable — the HUD owns the bracket, the name
       // plate and the letter tag, the field owns the light, and they agree
       // because they share this one port (see `HudPort.TargetingPort`).
-      this.hud.setTargetingPort?.({
+      const labTargeting = (port: TargetingPort): TargetingPort => this.lab?.wrapTargeting(port) ?? port; // CAMERA LAB only
+      this.hud.setTargetingPort?.(labTargeting({
         rect: (id) => this.stage?.projectRect(id) ?? null,
         select: (sel) =>
           sel
@@ -263,7 +279,7 @@ export class BattleScreen extends Screen {
         visibility: (id) => this.stage?.visibility().get(id) ?? 1,
         setPanels: (panels) => this.stage?.setPanels(panels),
         keyFeatures: () => this.stage?.keyFeatureRects() ?? [],
-      });
+      }));
       // The enemy-intent slab needs the live engine, not just the state the HUD
       // is synced with: predicting a rotation means dry-running its AI script,
       // and the script's memory (Yunalesca's `priv0004`, the BFA log cursor)
@@ -300,7 +316,8 @@ export class BattleScreen extends Screen {
 
     setPaceGame(chapter.game); // the pacing option's presets are per game (`pace.ts`); inert at 'current'
     this.presenter = new BattlePresenter({
-      stage: this.stage,
+      stage: this.lab?.stage ?? this.stage, // CAMERA LAB: the field with the lab's camera
+      ...(this.lab ? { lab: this.lab.port } : {}),
       hud: this.hud,
       // The one clock `App` cannot freeze for the pause overlay. Everything
       // else in a battle is ticked from `update()`, which the loop stops
@@ -696,7 +713,8 @@ export class BattleScreen extends Screen {
     if (!this.preview && this.opts.chapter.experimental) addExperimentPlayTime(this.opts.chapter.id, dt * 1000);
     else if (!this.preview) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000);
 
-    const fieldDt = this.spectacle?.stageDt(dt) ?? dt; // option C's hit-stop holds the field, never the engine or the HUD
+    let fieldDt = this.spectacle?.stageDt(dt) ?? dt; // option C's hit-stop holds the field, never the engine or the HUD
+    if (this.lab) fieldDt = this.lab.fieldDt(fieldDt); // CAMERA LAB: Clair Obscur's slow-down on a hit
     this.scene?.update(fieldDt);
     updateLivingScene(fieldDt); // eye-candy option B: drift, weather, lamps (after the rig, before the render)
     // Settle the enemy lane against the camera, before the player's first
@@ -712,6 +730,7 @@ export class BattleScreen extends Screen {
     this.settleFormation(dt);
     this.airship?.sync(this.engine?.state());
     this.stage?.update(fieldDt);
+    this.lab?.update(dt); // CAMERA LAB: cuts, paintings, drift (after the field, before the render)
     this.spectacle?.update(dt);
     // The HUD ticks on the same clock as the field, so its damage numerals
     // stop dead with everything else when a capture calls `App.stop()`.
@@ -860,6 +879,7 @@ export class BattleScreen extends Screen {
       battle: battleStateSnapshot(state),
       /** The full ordered event log, which the e2e specs snapshot. */
       log: state?.log ?? [],
+      ...(this.lab ? { lab: this.lab.snapshot() } : {}),
     };
   }
 
@@ -899,6 +919,8 @@ export class BattleScreen extends Screen {
 
   /** Dispose what `enter()` built; also where an `enter()` overtaken by {@link exit} stops. */
   private releaseParts(): void {
+    this.lab?.dispose();
+    this.lab = null;
     this.hud?.unmount();
     this.hud = null;
     this.cutscenes?.dispose();

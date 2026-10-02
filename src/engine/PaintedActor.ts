@@ -458,6 +458,8 @@ export class PaintedActor extends Group {
   private viewAzimuth: number | null = null;
   /** False until the first `update`, which lands the yaw rather than easing it. */
   private yawPrimed = false;
+  /** CAMERA LAB only (`setViewPose`): a loaded pose shown in place of every standing pose; null = today's. */
+  private viewPose: string | null = null;
   private _alpha = 1;
   private baseBrightness: number;
   private readonly castsShadow: boolean;
@@ -972,7 +974,32 @@ export class PaintedActor extends Group {
     previous.texture.dispose();
   }
 
-  private applyPose(slotIndex: number, name: string, tex: PaintedTexture): void {
+  /**
+   * CAMERA LAB only (`?camera=lab`, `src/engine/lab/paintingViews.ts`; a test harness): show the
+   * painting loaded as pose `name` (a rear three-quarter view) in place of every standing pose,
+   * the life state kept (lean, lunge, flinch); a KO or prone pose keeps its own painting. `null`
+   * returns to today's paintings. Lands at once: the lab swaps only on a cut. Nothing else calls
+   * it, and unset it changes nothing.
+   */
+  setViewPose(name: string | null): void {
+    const next = name !== null && this.poses.has(name) ? name : null;
+    if (next === this.viewPose) return;
+    this.viewPose = next;
+    this.slots.forEach((slot, i) => {
+      const tex = this.poses.get(slot.pose);
+      if (tex) this.applyPose(i, slot.pose, tex);
+    });
+    this.syncOpacity();
+  }
+
+  /** The pose `setViewPose` is showing, or null. */
+  get viewPoseName(): string | null {
+    return this.viewPose;
+  }
+
+  private applyPose(slotIndex: number, name: string, own: PaintedTexture): void {
+    const view = this.viewPose !== null && own.meta.width <= own.meta.height * 1.15 && !/^(ko|dead)/.test(name) && lifeStateForPose(this.requested || name) !== 'down' ? this.poses.get(this.viewPose) : undefined;
+    const tex = view ?? own;
     const slot = this.slots[slotIndex]!;
     slot.pose = name;
     slot.meta = tex.meta;

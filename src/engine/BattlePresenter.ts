@@ -262,6 +262,7 @@ export class BattlePresenter {
           continue;
         }
         await this.callouts.settle(); // two beats never overlap
+        this.deps.lab?.beat({ kind: 'yield', reason: 'script' }); // CAMERA LAB only: a mid-battle scene keeps its own camera
         await playUnheld(this.ctx.stage.camera, () => this.runScript(event.name)); // a beat's camera cues play under an FFX-2 menu too
         this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });
         continue;
@@ -502,6 +503,7 @@ export class BattlePresenter {
     // PR-0005/PR-0061: the cut-in plays over the settle and the open menu, never in front of it.
     void this.cutIns.play(engine.state(), actorId);
     await settleForMenu(this.ctx); // PR-0094: the whole field in frame
+    this.deps.lab?.beat({ kind: 'menu-open', actorId }); // CAMERA LAB only (`?camera=lab`); absent everywhere else
     const previewRank = (cmd: AvailableCommand | null): TurnPreview[] | AtbSnapshot =>
       previewOf(engine, cmd?.command);
 
@@ -594,6 +596,7 @@ export class BattlePresenter {
       unfollow();
       this.ctx.stage.camera.hold?.(false);
       this.pendingMenu = null;
+      this.deps.lab?.beat({ kind: 'menu-close', actorId }); // CAMERA LAB only
     }
   }
 

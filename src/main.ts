@@ -15,6 +15,7 @@ import { installFxEnv } from './app/fxEnv.ts';
 import { installFxDebug } from './debug/fxApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
+import { cameraLabRequested } from './engine/lab/LabSession.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
 // Side-effect only: registers the FFX party-prep panel with PartyPrepScreen.
 import './ui/ffx/party-prep/index.ts';
@@ -141,7 +142,9 @@ async function boot(): Promise<void> {
   installFxEnv(); // eye-candy D reads REDUCE MOTION, LOW EFFECTS and the viewport every frame
   installFxDebug(installDebugApi(app) as unknown as Record<string, unknown>, app); // eye-candy options round: `__pyrefly.fx` (kept out of `debug/api.ts`)
 
-  await app.push(new TitleScreen());
+  // CAMERA LAB (`?camera=lab`, branch camera-lab; a test harness, D-318): its panel instead of the title.
+  if (cameraLabRequested()) await (await import('./ui/lab/bootCameraLab.ts')).bootCameraLab(app);
+  else await app.push(new TitleScreen());
   app.start();
 
   // Ready once a real frame has been drawn, so screenshots never catch a blank.

@@ -1,0 +1,37 @@
+{
+ "width": 1390,
+ "height": 2244,
+ "baselineY": 2194,
+ "baselineNote": "feet row; the last opaque row is 2228 (a weapon end)",
+ "headTopY": 350,
+ "figurePx": 1844,
+ "scale": 0.589,
+ "scaleNote": "PoseFrame.scale with the idle as the reference pose: idle figure 1087 px / this figure 1844 px. For the Hero Shoulder close-up the rig sizes it by eye; this number only makes it match the idle.",
+ "facingInImage": "away-right",
+ "view": "rear34-hi",
+ "hiRes": true,
+ "chiral": true,
+ "chiralityOk": true,
+ "seed": 270013,
+ "prompt": "1boy, tidus, final fantasy x, safe, solo, male focus, blonde hair, spiky hair, yellow hooded vest, white hood, sleeveless, asymmetrical clothes, blue pauldron, shoulder armor, black overalls, uneven legwear, fingerless gloves, brotherhood \\(sword\\), longsword, blue sword, blue blade, holding sword, fighting stance, sword resting on shoulder, (from behind:1.3), back view, facing away, looking ahead, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, (looking at viewer:1.2), looking back, facing viewer, front view, straight-on, symmetrical, portrait, two swords, dual wielding, second sword, sheath, cape",
+ "method": "RealESRGAN x4 -> lanczos to 2x -> img2img denoise 0.4, the pick's prompt and seed; then rembg isnet-anime",
+ "denoise": 0.4,
+ "upscaler": "RealESRGAN_x4plus.pth",
+ "canvas": {
+  "width": 1664,
+  "height": 2432
+ },
+ "cropBox": [
+  53,
+  40,
+  1443,
+  2284
+ ],
+ "flipped": false,
+ "source": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/tidus/hires/d04.png",
+ "from": "/mock-art/tidus/rear34.png (the same painting at 1x)",
+ "status": "CANDIDATE (options round 2026-09-27; not approved, not for public/art)",
+ "notes": "2x of the rear34 pick, refined at denoise 0.4 (crisper hair, straps, pauldron than a plain upscale). Figure 1844 px head to feet, so a mid-thigh crop (about 60 %) fills about 1100 px: 1:1 or smaller on a 1080 frame. Same chirality and residuals as rear34. baselineY is the back foot; the blade tip hangs 33 px lower.",
+ "generatedAt": "2026-09-27T06:47:58.560Z"
+}

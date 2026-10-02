@@ -33,6 +33,7 @@
 
 import type { CombatantId } from '../battle/common/types.ts';
 import type { AudioPort, BattleStage, CameraPort, MomentsPort, PlaybackSpeed } from './BattlePresenterPorts.ts';
+import type { LabCameraPort } from './lab/LabTypes.ts';
 import { sfxGame, stingerFor } from '../audio/sfxV2/voicing.ts';
 import { roarFor } from '../audio/sfxV2/weapons.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
@@ -107,6 +108,8 @@ export interface MomentDeps {
   sleep(ms: number): Promise<void>;
   /** Live playback speed — read per call, because it can change mid-battle. */
   speed(): PlaybackSpeed;
+  /** CAMERA LAB only (`?camera=lab`): the beats its director cuts on. Absent everywhere else. */
+  lab?: LabCameraPort | null;
 }
 
 /** A rig change shorter than this is indistinguishable from a cut. */
@@ -258,6 +261,7 @@ export class BattleMoments {
     bossId?: CombatantId | null;
     bossName?: string | null;
   } = {}): Promise<void> {
+    this.deps.lab?.beat({ kind: 'yield', reason: 'opening' });
     this.shots.headline = opts.bossId ?? this.shots.headline;
     this.shots.fitPhone();
     const intro = this.pick('intro', 'idle');
@@ -384,6 +388,7 @@ export class BattleMoments {
       this.rollOwed = false;
       return;
     }
+    this.deps.lab?.beat({ kind: 'impact', targetId, hitIndex: opts.hitIndex ?? 0, heavy: opts.heavy === true });
     if ((opts.hitIndex ?? 0) !== 0) return;
     this.shots.focus = this.shots.focus ?? this.shots.enemy(targetId);
     const rig = this.shots.fit(this.rigFor(targetId), MOMENT_PUSH.action).rig;
@@ -417,6 +422,7 @@ export class BattleMoments {
    * border it raises from the same `charge` event.
    */
   async actionClose(): Promise<void> {
+    this.deps.lab?.beat({ kind: 'action-end' });
     this.rollOwed = false;
     if (this.overdriveOpen) await this.overdriveEnd();
     if (this.telegraphOpen && this.actions > this.telegraphAtAction) await this.telegraphEnd();
@@ -473,6 +479,7 @@ export class BattleMoments {
    * Stage 2 — the attack lands next turn — pulses faster and pushes further.
    */
   async telegraph(enemyId: CombatantId, stage: 1 | 2, name?: string): Promise<void> {
+    this.deps.lab?.beat({ kind: 'telegraph', enemyId, stage, name: name ?? null });
     if (this.skipping) return;
     this.shots.focus = enemyId;
     this.onActionRig = true;
@@ -507,6 +514,7 @@ export class BattleMoments {
   async formChange(enemyId: CombatantId): Promise<void> {
     // A new form is a new fight: let its reveal plate play again.
     this.revealed.delete(enemyId);
+    this.deps.lab?.beat({ kind: 'yield', reason: 'form-change' });
     if (this.skipping) return;
     this.onActionRig = true;
     const rig = this.rigFor(enemyId);
@@ -525,6 +533,7 @@ export class BattleMoments {
 
   /** The party pose, on its own rig, under the fanfare. */
   async victory(): Promise<void> {
+    this.deps.lab?.beat({ kind: 'victory' });
     this.onActionRig = false;
     await this.telegraphEnd();
     await this.overdriveEnd();

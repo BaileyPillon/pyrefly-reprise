@@ -53,6 +53,11 @@ export async function actionStart(
     void ctx.deps.messageBar?.show(event.abilityName, 'ability');
   }
 
+  // CAMERA LAB only (`?camera=lab`): the action beat its director cuts on; absent everywhere else.
+  ctx.deps.lab?.beat({
+    kind: 'action', actorId: event.actorId, side: ctx.stage.sideOf(event.actorId) ?? null, pose, targets: event.targets ?? [],
+    commandKind: event.command.kind, abilityId: (event.command as { id?: string }).id ?? null, abilityName: event.abilityName ?? null,
+  });
   // The shot. An Overdrive earns its own rig — letterbox, name slab, held
   // push-in — and everything else gets the ordinary punch-in on the attacker.
   if (event.command.kind === 'overdrive') {
@@ -268,6 +273,7 @@ export async function victory(ctx: EventCtx): Promise<void> {
 }
 
 export async function defeat(ctx: EventCtx): Promise<void> {
+  ctx.deps.lab?.beat({ kind: 'yield', reason: 'defeat' }); // CAMERA LAB only
   ctx.moments.clear();
   ctx.stage.vfx.screenFlash('rgba(0,0,0,0.55)', 900);
   for (const id of ctx.stage.staged()) {

@@ -1,0 +1,37 @@
+{
+ "width": 1311,
+ "height": 2099,
+ "baselineY": 2083,
+ "baselineNote": "feet row",
+ "headTopY": 16,
+ "figurePx": 2067,
+ "scale": 0.556,
+ "scaleNote": "PoseFrame.scale with the idle as the reference pose: idle figure 1150 px / this figure 2067 px. For the Hero Shoulder close-up the rig sizes it by eye; this number only makes it match the idle.",
+ "facingInImage": "away",
+ "view": "rear34-hi",
+ "hiRes": true,
+ "chiral": false,
+ "chiralityOk": true,
+ "seed": 273012,
+ "prompt": "1girl, yuna \\(ff10-2\\), final fantasy x-2, safe, solo, white mage, brown hair, short hair, white hooded robe, hood up, pink hood lining, gold crescent moon emblem on hood, shin-length robe, red zigzag trim, red triangle pattern, wide sleeves, purple lace hem, white gloves, white boots, holding rod, short rod, ornate gold head, standing, holding rod, (white mage:1.3), (hood up:1.3), (white boots:1.2), (from behind:1.3), back view, facing away, looking ahead, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, (looking at viewer:1.2), looking back, facing viewer, front view, straight-on, symmetrical, portrait, red boots, high heels, slit, side slit, bare legs, trumpet, broom, long staff, obi, kimono, japanese clothes, flower sash, detached sleeves, sleeveless, bare shoulders, long skirt, pleated skirt, summoner, blue dress, yellow sleeve, ring staff, cape, wings, two rods, sword",
+ "method": "RealESRGAN x4 -> lanczos to 2x -> img2img denoise 0.4, the pick's prompt and seed; then rembg isnet-anime",
+ "denoise": 0.4,
+ "upscaler": "RealESRGAN_x4plus.pth",
+ "canvas": {
+  "width": 1664,
+  "height": 2432
+ },
+ "cropBox": [
+  298,
+  248,
+  1609,
+  2347
+ ],
+ "flipped": false,
+ "source": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/yuna-white-mage/hires/d04.png",
+ "from": "/mock-art/yuna-white-mage/rear34.png (the same painting at 1x)",
+ "status": "CANDIDATE (options round 2026-09-27; not approved, not for public/art)",
+ "notes": "2x of the rear34 pick, refined at denoise 0.4. Figure 2066 px head to feet; a mid-thigh crop fills about 1200 px. Same drift as rear34 (open back panel, plain ring rod head).",
+ "generatedAt": "2026-09-27T06:50:19.380Z"
+}

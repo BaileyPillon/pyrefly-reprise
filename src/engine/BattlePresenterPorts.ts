@@ -403,6 +403,12 @@ export interface PresenterDeps {
   sfxVoice?: import('./BattlePresenterSfx.ts').SfxVoice | null;
   /** A game's own motion around each action (FF7's melee run, `BattlePresenterMotion.ts`); none for FFX and FFX-2. */
   actionMotion?: import('./BattlePresenterMotion.ts').ActionMotionPort | null;
+  /**
+   * CAMERA LAB (`?camera=lab`, branch camera-lab; a test harness, D-318): the beats the lab's camera
+   * director cuts on (`src/engine/lab/`). Optional and additive: absent everywhere but a lab battle,
+   * so nothing calls it and playback is today's.
+   */
+  lab?: import('./lab/LabTypes.ts').LabCameraPort | null;
 }
 
 /** One line of the presenter's own trace, for the debug API and e2e. */

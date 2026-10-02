@@ -151,6 +151,7 @@ export function createEventCtx(
     hud: deps.hud ?? null,
     sleep,
     speed,
+    lab: deps.lab ?? null, // CAMERA LAB only (`?camera=lab`); null everywhere else
   });
   return { stage: deps.stage, deps, sleep, actingId: null, moments, speed, pendingArrivals: [] };
 }
@@ -358,6 +359,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return;
 
     case 'spherechange': {
+      ctx.deps.lab?.beat({ kind: 'art', id: event.who, artId: `${event.who}-${event.to}` }); // CAMERA LAB: her rear painting no longer applies
       const a = ctx.stage.actor(event.who);
       a?.flash(0xffffff, 420, 1);
       ctx.stage.vfx.screenFlash('#ffffff', 180);
@@ -371,6 +373,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
     // straight to the port — but it still has to obey the playback speed, or a
     // `'skip'` run sits on a 700 ms tween per event.
     case 'camera':
+      ctx.deps.lab?.beat({ kind: 'yield', reason: 'camera-event' }); // CAMERA LAB: a data file's own shot plays
       await ctx.moments.moveToRig(event.rig, event.ms ?? 700);
       return;
 

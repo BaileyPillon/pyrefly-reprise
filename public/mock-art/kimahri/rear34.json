@@ -1,0 +1,66 @@
+{
+ "width": 816,
+ "height": 1182,
+ "baselineY": 1156,
+ "baselineNote": "feet row; the last opaque row is 1165 (a weapon end, nearer the camera)",
+ "headTopY": 157,
+ "figurePx": 999,
+ "scale": 1.07,
+ "scaleNote": "PoseFrame.scale with the idle as the reference pose: idle figure (head top to feet) 1069 px / this figure 999 px, so the rear figure stands as tall as the idle.",
+ "facingInImage": "away-right",
+ "facingNote": "rear three-quarter: seen from behind and a little to the character's right; faces INTO the frame, turned toward screen-right",
+ "view": "rear34",
+ "chiral": true,
+ "chiralityOk": true,
+ "seed": 272011,
+ "prompt": "1other, kimahri ronso, final fantasy x, safe, solo, furry male, anthro, blue fur, blue lion beastman, very muscular, long white mane, white hair, pointy ears, pierced ears, gold earrings, broken horn, short blunt horn, gold shoulder armor, gold bracer, red waist sash, blue hakama trousers, barefoot, blue tail, white tail tip, one spear, plain brown wooden spear shaft, silver leaf shaped spearhead, holding spear, standing at rest, holding spear, upright spear, (from behind:1.3), back view, facing away, looking ahead, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, (looking at viewer:1.2), looking back, facing viewer, front view, straight-on, symmetrical, portrait, two horns, pair of horns, long horn, tall horn, curved horn, spiral horn, ram horns, bull horns, demon horns, antlers, horns on the sides of the head, unicorn horn, red horn, tree stump, tree trunk, log, wood grain, grass, outdoor scenery, second weapon, duplicate weapon, floating weapon, detached weapon, weapon standing on its own, ground shadow, cast shadow, sword, cape",
+ "method": "B: Animagine XL 4.0 Opt txt2img, rear phrasing, IP-Adapter Method F reference (idle square + head crop, concat), xinsir OpenPose SDXL rear skeleton (tools/zz-persp-art/skeletons.py), rembg isnet-anime",
+ "controlnet": {
+  "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+  "strength": 0.7,
+  "start": 0,
+  "end": 1,
+  "skeleton": "kimahri-v4.png (tools/zz-persp-art/skeletons.py)"
+ },
+ "ipadapter": {
+  "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "weight": 0.28,
+  "type": "ease in",
+  "start": 0.2,
+  "end": 0.6,
+  "scaling": "K+V",
+  "combine": "concat",
+  "images": [
+   "kimahri-square.png",
+   "kimahri-head.png"
+  ]
+ },
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "canvas": {
+  "width": 1024,
+  "height": 1216
+ },
+ "cropBox": [
+  30,
+  11,
+  846,
+  1193
+ ],
+ "post": "alpha clean-up after rembg: horn trimmed to a stub",
+ "flipped": false,
+ "source": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/kimahri/B4/cand-1.png",
+ "idle": {
+  "path": "/art/characters/kimahri/idle.png",
+  "width": 768,
+  "height": 1198,
+  "baselineY": 1182
+ },
+ "status": "CANDIDATE (options round 2026-09-27; not approved, not for public/art)",
+ "notes": "Spear upright in the RIGHT hand. POST: the render's long thin horn was trimmed by hand to a short jagged stub (alpha only, tools/zz-persp-art/post.py erase), so he has ONE broken horn. Head in profile toward screen-right (more than a sliver of cheek). Spearhead gold, not the idle's silver; tail tuft blue, not white. baselineY is the feet; the spear butt ends 9 px lower.",
+ "generatedAt": "2026-09-27T06:04:05.307Z"
+}

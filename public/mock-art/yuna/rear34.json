@@ -1,0 +1,66 @@
+{
+ "width": 614,
+ "height": 1203,
+ "baselineY": 1187,
+ "baselineNote": "feet row",
+ "headTopY": 141,
+ "figurePx": 1046,
+ "scale": 0.997,
+ "scaleNote": "PoseFrame.scale with the idle as the reference pose: idle figure (head top to feet) 1043 px / this figure 1046 px, so the rear figure stands as tall as the idle.",
+ "facingInImage": "away",
+ "facingNote": "rear three-quarter: seen from behind and a little to the character's right; faces INTO the frame, near-straight, only slightly toward screen-right",
+ "view": "rear34",
+ "chiral": true,
+ "chiralityOk": true,
+ "seed": 271013,
+ "prompt": "1girl, yuna \\(ff10\\), final fantasy x, safe, solo, brown hair, short hair, single braid, japanese clothes, black camisole, white sash, yellow obi, obi, purple hakama, long skirt, pleated skirt, floral print, detached sleeves, pink and white sleeves, black boots, holding staff, summoner staff, standing, holding staff, (from behind:1.3), back view, facing away, looking ahead, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, (looking at viewer:1.2), looking back, facing viewer, front view, straight-on, symmetrical, portrait, two staffs, second staff, sword, spear, wings, hood, hood up, cape, long hair, ponytail",
+ "method": "B: Animagine XL 4.0 Opt txt2img, rear phrasing, IP-Adapter Method F reference (idle square + head crop, concat), xinsir OpenPose SDXL rear skeleton (tools/zz-persp-art/skeletons.py), rembg isnet-anime",
+ "controlnet": {
+  "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+  "strength": 0.7,
+  "start": 0,
+  "end": 1,
+  "skeleton": "yuna-v4.png (tools/zz-persp-art/skeletons.py)"
+ },
+ "ipadapter": {
+  "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "weight": 0.28,
+  "type": "ease in",
+  "start": 0.2,
+  "end": 0.6,
+  "scaling": "K+V",
+  "combine": "concat",
+  "images": [
+   "yuna-square.png",
+   "yuna-head.png"
+  ]
+ },
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "canvas": {
+  "width": 832,
+  "height": 1216
+ },
+ "cropBox": [
+  60,
+  11,
+  674,
+  1214
+ ],
+ "post": null,
+ "flipped": false,
+ "source": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/yuna/B4/cand-3.png",
+ "idle": {
+  "path": "/art/characters/yuna/idle.png",
+  "width": 803,
+  "height": 1075,
+  "baselineY": 1060
+ },
+ "status": "CANDIDATE (options round 2026-09-27; not approved, not for public/art)",
+ "notes": "Staff held upright in the RIGHT hand, ring head up (the idle holds it low and diagonal in the right hand). Obi bow, detached pink sleeves, hakama print, bob all read. Near-straight back view, body only slightly toward screen-right; the left sleeve flies out to the left.",
+ "generatedAt": "2026-09-27T06:03:30.976Z"
+}
