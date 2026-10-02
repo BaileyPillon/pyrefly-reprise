@@ -48,7 +48,9 @@ const MSG_TOP: Record<StatusGame, number> = { ffx: 29.6, ffx2: 44.8 };
 /** Top-centre chrome the line keeps under, never over. */
 const MSG_AVOID: Record<StatusGame, string> = {
   ffx: '.ffx-tplate:not([hidden]), .ffx-telegraph--visible, .ffx-helpbar:not([hidden]), .ig-banner:not([hidden])',
-  ffx2: '.ffx2-tplate:not([hidden]), .ffx2-aplate:not([hidden]), .ffx2hud__telegraph:not([hidden]), .ffx2-cmd-info:not([hidden])',
+  // U5 (VP-1001-35, FFX-2 only): the enemy-intent card too, so "Paine was stopped." never prints over the ability name
+  // ("Glint", Chapter XV); the line steps below it. FFX's line sits under its own plate, clear of the card by layout.
+  ffx2: '.ffx2-tplate:not([hidden]), .ffx2-aplate:not([hidden]), .ffx2hud__telegraph:not([hidden]), .ffx2-cmd-info:not([hidden]), .eint__panel:not([hidden])',
 };
 
 /**

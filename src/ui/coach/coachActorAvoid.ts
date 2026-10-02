@@ -123,8 +123,11 @@ export class ActorRects {
  */
 export function keepMarkClear(game: GameId, mark: HTMLElement, host: HTMLElement, actors: ActorRects): void {
   if (mark.dataset['guide']) return; // the first-run guide places its own line (`firstRunGuide.ts`, O2)
-  if (game === 'ffx') keepMarkOffIntent(mark, host);
-  if (document.documentElement.dataset['phoneBattle']) return;
+  const phone = !!document.documentElement.dataset['phoneBattle'];
+  // U5 (PR-0237 sibling, FFX-2 phone): the phone's centred line (`coach.css`, top 8%) covered the intent strip at the
+  // top of the field (21,080 px2 at 390x844 in Chapters IV and XVI); FFX's own line was already stepped off it.
+  if (game === 'ffx' || phone) keepMarkOffIntent(mark, host);
+  if (phone) return;
   const now = mark.getBoundingClientRect();
   if (now.width === 0) return;
   const box = { left: now.left, top: now.top, right: now.right, bottom: now.bottom };

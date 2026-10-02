@@ -102,11 +102,11 @@
 /* The frame's (10, 68) is the phone HUD's enemy-move line in the running game, so the pill sits under it, at the
    Fin plate's height in Chapter XVII (C4-5; it was under the clock slab, over the party), and at the right, clear
    of the enemy-move line's second row when a long line wraps (it starts at the left). */
-.ffx-sinhud--phone .ffx-sinhud__gaze { left: auto; right: 10px; top: 100px; }
+.ffx-sinhud--phone .ffx-sinhud__gaze { left: auto; right: 10px; top: max(100px, var(--sin-under, 0px)); }
 
 /* The frame's top 70 is the phone HUD's enemy-move line (to about 94) in the running game: the plate sits under it. */
 .ffx-sinhud--phone .ffx-sinfin {
-  left: 10px; right: 10px; top: 100px; width: auto; min-width: 0; padding: 6px 12px 8px;
+  left: 10px; right: 10px; top: max(100px, var(--sin-under, 0px)); width: auto; min-width: 0; padding: 6px 12px 8px; /* U5: under the enemy-move card (SinHud.avoidIntent) */
 }
 .ffx-sinhud--phone .ffx-sinfin__name { font-size: 24px; }
 .ffx-sinhud--phone .ffx-sinfin__charge { margin-top: 5px; padding: 4px 8px 5px; font-size: 14px; letter-spacing: 0.08em; }

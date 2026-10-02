@@ -812,7 +812,7 @@ export class FFXBattleHud implements HudPort {
    * clock (`SensorPanel.update`).
    */
   private focusEnemyPlate(id: CombatantId | null): void {
-    if (!id) return;
+    if (!id) return void this.sensorPanel.aimEnded(); // U5: the plate the aim opened folds at once
     const c = this.lastState?.combatants[id];
     if (!c || c.side === 'party') return;
     const onPhone = !!this.el.ownerDocument.documentElement.dataset['phoneBattle'];
