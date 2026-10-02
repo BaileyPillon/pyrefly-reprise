@@ -67,3 +67,28 @@ Mortibody note (line 201) says it "fires even if the drain kills Seymour". No en
    pause and leave the guide up (which means reworking the label "Esc skip the guide" at that step)?
 2. F3: is a short strip card under the party acceptable at the Sin first menus, or would you rather give the card
    a real box there (moving the strategy guide)?
+
+## Check (independent, 2026-10-02, branch at 564c8c8d)
+
+Checked by a session that did not build the lane. A production build of 564c8c8d (served on 5680, stopped
+by PID afterwards); "before" is the live build (release 34) on Pages. Headless Chromium on the GPU, driven
+from node, with real keys, clicks or taps for every checked input (the debug API only navigates to the
+fight). Scripts and JPEG frames: `D:/Tools/pyrefly-scratch/2026-10-02-rel35/check-flow/`.
+
+| Item | Result |
+|---|---|
+| F1 | Confirmed. Live: Esc#1 at Ch I's first menu (guide line up) opens nothing, Esc#2 opens the pause. Branch: Esc#1 opens the pause, Esc#2 closes it, Esc#3 opens it again. Same when the line is ended by clicking its skip words (no command fires, the menu stays). FFX-2 Ch IV (`ffx2-bahamut`): first Esc opens the pause, unchanged. |
+| F2 | Confirmed. Live: RESTART ENCOUNTER requests `/pyrefly-reprise/%23n` and gets a 404. Branch: no `%23n` request on the first entry or on RESTART ENCOUNTER at 1600x900, 390x844 (pause by tap) and FFX-2 Ch IV; no 4xx and no console errors. The aborted `art/pause/*.png` request on RESTART is in live too. |
+| F3 | Confirmed. Live XVIII 1600x900: card declined (`data-zone` free). Branch: card shown (compact) at XVII 2000x1012 and 1600x900 and XVIII 1600x900, with the guide line up, after it is dismissed and after E; it overlaps no visible panel (command stack, party, guide, clock, plate, intent, coach line). Phone 390x844 keeps its own TIP strip (zone open), unchanged. Minor: at 1600x900 the strip card's last line ("IN WHITE MAGIC") sits flush on the card's bottom edge. |
+| F4 | Confirmed at 1600x900 and 390x844: XVII link 3 rows are Attack, Special, White Magic, Items, Overdrive, (Switch), Flee [disabled]; no PULL BACK / CLOSE IN. Arrow keys walk every row and skip only the greyed Flee. Link 1 and Evrae still open on Orders. |
+| F5 | Confirmed, and the missing acceptance step is now met: Ch I seed 3 played to a **victory by real keys** (65 turns, 394 s; the player follows the advisor card's top move with arrows and Enter, Attack when a switch is advised). From the presented victory on: 0 frames with the banner or the card. An earlier real-key run ended in a defeat: 0 frames with either after the presented defeat as well. |
+| F6 | Confirmed: M opens the AUTO-LEARN result, H and `?` open the explainer, pad Select and pad X do the same, labels read M / H and SELECT / X with a pad, Tab still toggles WALK, H and M on another prep tab do nothing there and leave nothing queued, E still starts the battle. Phone: TAP / pinch wording, buttons at y 700-800 inside 844. **Defect (new in this lane, not a regression vs live):** H pressed while the explainer is already open is remembered, so closing the card (Esc) re-opens it on the next frame (`onHelpKey` sets `helpKey` while the card is open, and `takeHelpKey` only runs once it is closed). Measured: H, H, Esc gives the card open for the next 1.2 s; H, Esc closes it. Fix: clear `helpKey` while a card is open (or ignore the keydown then). |
+
+Gates re-run: `tsc --noEmit` clean; full `vitest run --testTimeout=60000` 733 files passed, 5 skipped, 10816
+tests passed; `tools/orphans.mjs` 24, the same set, none from this lane; `verify-approved.mjs` 469 ok, 0
+mismatched, 0 missing; `git diff c675f29b..564c8c8d -- src/battle` empty; SaveData and the settings
+schema untouched; rule 7 holds (FFXBattleHud 1668 -> 1667, hudSafeZones 543 -> 543, every grown file under
+400). Rule 14: every fix commit names its game case; the handoff commit (docs only) does not.
+
+Notes: in `sphereGridHelp.ts` the new `labelKeys` / `takeHelpKey` were inserted between `handleInput`'s doc
+comment and `handleInput`, so that comment now sits on `labelKeys`.
