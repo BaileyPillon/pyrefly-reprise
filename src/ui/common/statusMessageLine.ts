@@ -32,6 +32,12 @@ export const MIN_SHOW_MS = 450;
  * 350 ms window split one Hastega into three lines.
  */
 export const MERGE_MS = 900;
+/**
+ * The most distinct lines that may wait behind the current one (a FIFO; each waiting line still shows for at
+ * least `MIN_SHOW_MS`). Braska's Final Aeon's "Curse" lands five line-bearing statuses in one action; past
+ * this many, the oldest waiting line gives way so the backlog never runs seconds behind the fight.
+ */
+export const MAX_WAITING = 5;
 
 interface Line {
   status: StatusId;
@@ -73,8 +79,8 @@ export function lineFor(event: BattleEvent, state: BattleState | null): { status
 
 export class StatusMessageLine {
   readonly el: HTMLElement;
-  /** The one line waiting behind the current one: a newer different event replaces it (never a backlog). */
-  private pending: Line | null = null;
+  /** Distinct lines waiting behind the current one, oldest first; each shows for at least MIN_SHOW_MS. */
+  private waiting: Line[] = [];
   private current: Line | null = null;
   private leftMs = 0;
   private shownMs = 0;
@@ -93,15 +99,16 @@ export class StatusMessageLine {
     if (!got) return;
     // A status that lands and leaves inside one beat says nothing about the other half.
     const same = (l: Line | null): l is Line => !!l && l.status === got.status && l.lands === got.lands && this.clockMs - l.lastAt < MERGE_MS;
-    const into = same(this.pending) ? this.pending : same(this.current) ? this.current : null;
+    const into = this.waiting.find(same) ?? (same(this.current) ? this.current : null);
     if (into) {
       if (!into.names.includes(got.name)) into.names.push(got.name);
       into.lastAt = this.clockMs;
       if (into === this.current) this.render();
       return;
     }
-    // A newer line replaces any line still waiting (it is stale), and takes the screen as soon as the current one has been readable.
-    this.pending = { status: got.status, lands: got.lands, names: [got.name], reason: got.reason, at: this.clockMs, lastAt: this.clockMs };
+    // A newer line waits its turn (no line is dropped, U3 repair); the current one gives way once it has been readable.
+    this.waiting.push({ status: got.status, lands: got.lands, names: [got.name], reason: got.reason, at: this.clockMs, lastAt: this.clockMs });
+    if (this.waiting.length > MAX_WAITING) this.waiting.shift();
     if (!this.current) this.next();
     else this.leftMs = Math.min(this.leftMs, Math.max(0, MIN_SHOW_MS - this.shownMs));
   }
@@ -121,7 +128,7 @@ export class StatusMessageLine {
 
   /** Show a line now and hold it (captures of the mockup moment; never called in play). */
   hold(status: StatusId, names: string[], lands = true): void {
-    this.pending = null;
+    this.waiting = [];
     this.current = { status, lands, names, reason: 'cured', at: this.clockMs, lastAt: this.clockMs };
     this.shownMs = 0;
     this.leftMs = Number.POSITIVE_INFINITY;
@@ -129,16 +136,16 @@ export class StatusMessageLine {
   }
 
   clear(): void {
-    this.pending = null;
+    this.waiting = [];
     this.current = null;
     this.el.hidden = true;
   }
 
   private next(): void {
-    this.current = this.pending;
-    this.pending = null;
+    this.current = this.waiting.shift() ?? null;
     this.shownMs = 0;
-    this.leftMs = LINE_MS;
+    // A line with more behind it holds only until it has been readable; the last one keeps its two seconds.
+    this.leftMs = this.waiting.length > 0 ? MIN_SHOW_MS : LINE_MS;
     this.render();
   }
 

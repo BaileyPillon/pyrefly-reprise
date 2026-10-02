@@ -238,3 +238,30 @@ independent.
    - The FFX-2 phone White Magic list: its last row (DISPEL) touches the one-line foot by 90 px². The foot's one-line position is unchanged from the base, so this is not from this branch.
 
 **Verdict:** U1, U2, U4 and U6 hold as claimed. U3 holds for the cases it names, but it introduces finding 1. U5 holds at steady state (finding 3). No approved painting changed. Layering and the save-data class are clean.
+
+## Repair (finding 1 of the Check: the status line dropped a waiting line)
+
+Game case: both (the shared message line; FFX and FFX-2 use the same class).
+
+- **Cause.** `StatusMessageLine` kept one replaceable waiting slot, so a third distinct line arriving while the
+  first was still up overwrote the second.
+- **Fix** (`src/ui/common/statusMessageLine.ts`). The slot is now a FIFO of distinct waiting lines (`MAX_WAITING`
+  = 5, enough for Braska's Final Aeon's five-status "Curse"; past that the oldest waiting line gives way). Each
+  line with more behind it shows for `MIN_SHOW_MS` (450 ms); the last keeps its full two seconds. A later target of
+  the same cast still folds into its waiting line (`MERGE_MS`). U3's half-second hand-off is unchanged.
+- **Before / after, re-run as the checker ran it** (the real class fed the presenter's spacing: 88 ms per
+  `status-remove`, 220 ms per `status-add`; `tests/unit/u3-status-line-merge.test.ts`):
+
+  | Case | Before (HEAD `a42629a5`) | After |
+  |---|---|---|
+  | Esuna on Poison + Silence + Darkness, 88 ms apart | "no longer poisoned", "can see again" (Silence never shown) | all three, in order |
+  | Three adds 220 ms apart | Poison and Darkness only | Poison, Silence, Darkness |
+  | Curse: Curse + Poison + Sleep + Silence + Darkness, 220 ms apart | lines dropped | all five, in order |
+  | Haste, Zombie, Sleep 100 ms apart | Zombie dropped | Zombie shows 450 ms, then Sleep |
+
+  The old test that asserted the drop now asserts the order. The before column ran the same test file against
+  the HEAD copy of the class (scratch parked in `F:/pyrefly-parked/2026-10-02/r35-fix-ui-repair/`).
+- **Not done:** no live battle drew Curse or Stone Gaze (the Check could not either); the check is the class
+  test at the presenter's own spacing, as the Check's was.
+- **Gates:** `tsc --noEmit` clean; full `vitest run --testTimeout=60000`: 733 files, 10,829 tests passed
+  (40 skipped, 1 todo).
