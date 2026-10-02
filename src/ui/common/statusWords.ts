@@ -149,12 +149,13 @@ const FFX2_HINTS: Partial<Record<StatusId, HintRow>> = {
   // §2.8 Silence: blocks White Magic, Black Magic and Arcana; "Cured by Echo Screen" (+ Esuna, Remedy).
   silence: {
     full: (n) => `<b>${n} is silenced:</b> no White Magic, Black Magic or Arcana. <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
-    short: (n) => `${n} is silenced: <b>Echo Screen</b> cures it.`,
+    // U2 (PR-0290, FFX-2 only): the phone card names the whole cure list the desktop card does, in one sentence.
+    short: (n) => `${n} is silenced: <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
   },
   // §2.8 Curse: cannot spherechange; cured by Holy Water, Remedy, Esuna.
   curse: {
     full: (n, p) => `<b>${n} is cursed</b> and ${p.they} cannot change dresspheres. <b>Holy Water</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
-    short: (n) => `${n} is cursed: <b>Holy Water</b> cures it.`,
+    short: (n) => `${n} is cursed: <b>Holy Water</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
   },
 };
 

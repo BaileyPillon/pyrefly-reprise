@@ -71,6 +71,11 @@ export const GUIDE_CMD_GAP = 0;
  * the MORE row) reach within {@link GUIDE_CMD_GAP} of a command row it sits over? Rendered rects,
  * so TEXT SIZE's `scale` and the stage's letterbox scale are both counted. Every command row in the
  * stage, open submenus included; a box with no layout (jsdom, hidden) never counts.
+ *
+ * U2 (PR-0291, FFX only): the command window's help slab (`.ffx-cmd-info`, the red Zombie warning
+ * while one is aimed) counts as a row. It sits between the guide and the stack, and the guide's
+ * first block shows whatever its chrome, so the full-size card pushed that block's NEXT line under
+ * the slab at 1600x900.
  */
 export function guideOverCommands(guide: HTMLElement, stage: HTMLElement): boolean {
   let left = Infinity;
@@ -87,7 +92,7 @@ export function guideOverCommands(guide: HTMLElement, stage: HTMLElement): boole
     bottom = Math.max(bottom, r.bottom);
   }
   if (bottom === -Infinity) return false;
-  for (const row of stage.querySelectorAll<HTMLElement>('.ig-cmd')) {
+  for (const row of stage.querySelectorAll<HTMLElement>('.ig-cmd, .ffx-cmd-info')) {
     const r = row.getBoundingClientRect();
     if (!(r.height > 0) || r.right <= left || r.left >= right) continue;
     if (r.bottom > top && r.top < bottom + GUIDE_CMD_GAP) return true;
@@ -103,6 +108,9 @@ export class StatusHintCard {
   /** PR-0302 repair: the in-guide card is in its one-sentence form (see `update`), for `compactKey`. */
   private compact = false;
   private compactKey = '';
+  /** U2: even the one-sentence card leaves the guide's column over a row or the help slab, so the card stands alone in it. */
+  private alone: HTMLElement | null = null;
+  private overFrames = 0;
 
   /** `help`: the player's BATTLE HELP switch (the save's `battleHelp`), read every frame. */
   constructor(game: StatusGame, private readonly help: () => boolean = battleHelpOn) {
@@ -130,6 +138,7 @@ export class StatusHintCard {
     if (key !== this.compactKey) {
       this.compactKey = key;
       this.compact = false;
+      this.stand(null);
     }
     this.show(this.compact ? hintCardHtml(hints, true) : full);
     this.el.classList.toggle('sthint--phone', phone);
@@ -146,7 +155,15 @@ export class StatusHintCard {
         this.compact = true;
         this.show(hintCardHtml(hints, true));
       }
+      // U2 (PR-0291, FFX only): the guide shows at least its first block whatever its chrome, so on a short rail the
+      // one-sentence card still left that block's NEXT line under the Zombie warning slab at 1600x900. Two frames in
+      // a row (the guide re-fits a frame after the card changes), and the card stands alone in the guide's slot, as the
+      // approved O3 frame draws it. Latched for this card; cleared when the card goes.
+      if (this.compact && !this.alone && full && guideOverCommands(guide!, stage)) {
+        if (++this.overFrames >= 2) this.stand(guide);
+      } else if (!this.compact || this.alone) this.overFrames = 0;
     } else {
+      this.stand(null);
       if (this.el.parentElement !== stage) stage.appendChild(this.el);
       this.el.classList.remove('sthint--inguide');
     }
@@ -182,6 +199,15 @@ export class StatusHintCard {
     if (this.el.style.bottom !== bottom) this.el.style.bottom = bottom;
   }
 
+  /** Put the card alone in `guide` (hiding its body and MORE row, `status-o3.css`), or give the guide back. */
+  private stand(guide: HTMLElement | null): void {
+    if (this.alone === guide) return;
+    this.alone?.classList.remove('sgd--hint-alone');
+    this.alone = guide;
+    guide?.classList.add('sgd--hint-alone');
+    this.overFrames = 0;
+  }
+
   private show(html: string): void {
     if (html !== this.html) {
       this.html = html;
@@ -191,6 +217,7 @@ export class StatusHintCard {
   }
 
   dispose(): void {
+    this.stand(null);
     this.el.remove();
     this.solo.remove();
   }
