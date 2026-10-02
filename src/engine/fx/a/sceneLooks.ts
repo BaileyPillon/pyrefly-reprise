@@ -73,6 +73,8 @@ export interface SceneLookA {
   dof: { rest: number; menu: number; action: number };
   /** A big spell or an Overdrive / Special lands: bloom and shafts swell by this much, then settle. */
   drama: { boost: number; seconds: number };
+  /** Optional per-room grade correction: the palette's gain times `gain` (RGB), plus `lift` on the black point, and the split-tone amount. */
+  grade?: { gain: [number, number, number]; lift: [number, number, number]; shadowTintAmount: number };
 }
 
 const FFX_BASE: Omit<SceneLookA, 'shafts'> = {
@@ -169,6 +171,35 @@ export const SCENE_LOOKS_A: Readonly<Record<string, SceneLookA>> = {
       { u: 0.845, v: 0.43, color: '#ffb45a', reach: 0.28, gain: 0.55, disc: 0, haze: 0.45 },
       { u: 0.71, v: 0.22, color: '#ffb45a', reach: 0.24, gain: 0.45, disc: 0, haze: 0.5 },
     ],
+  },
+  /**
+   * Ch V, FFX-2 (VP-1001-23): the Farplane plate is bright pastel paint edge to edge (luminance about
+   * 0.76 behind the party), which is why its own palette blooms only above 0.9 at half strength
+   * (`farplane.ts`). The FFX-2 default selective bloom (0.45, x1.5) spilled the sky over the girls,
+   * who are 16 to 19 % of the frame by the approved staging A: Rikku's face washed to pink-white. The
+   * bloom keeps to the hot light only, as the palette meant; nothing else changes.
+   */
+  farplane: {
+    ...FFX2_BASE,
+    shafts: [],
+    bloom: { threshold: 0.86, strength: 0.9, radius: 0.55 },
+  },
+  /**
+   * Ch XV, FFX-2 (VP-1001-03): the Den of Woe, back toward Bailey's O-3 A frame (a cold teal cave,
+   * walls readable, round pyrefly motes). The FFX-2 defaults crushed it: the four-point star streak
+   * turned the plate's round motes into star flares (the plate prompt excludes stars), and the full
+   * Pink Hour look and vignette pushed the teal shadows to a navy void. No streak, a light look, no
+   * extra vignette, and a bloom that only takes the motes.
+   */
+  'den-of-woe': {
+    ...FFX2_BASE,
+    shafts: [],
+    streak: { ...FFX2_BASE.streak, gain: 0 },
+    look: 0.35,
+    vignetteAdd: 0,
+    bloom: { threshold: 0.6, strength: 1.1, radius: 0.55 },
+    // The plate's teal floor and rock walls back (its painted floor reads ~0.16/0.39/0.47): lift, and less of the blue split tone.
+    grade: { gain: [1.8, 1.55, 1.35], lift: [0.02, 0.03, 0.036], shadowTintAmount: 0.04 },
   },
 };
 

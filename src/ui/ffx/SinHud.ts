@@ -182,6 +182,10 @@ export class SinHud {
     this.painted = '';
   }
 
+  /** `avoidIntent`'s last value and read time. */
+  private under = 0;
+  private underAt = 0;
+
   get layoutMode(): SinHudMode {
     return this.mode;
   }
@@ -236,6 +240,23 @@ export class SinHud {
       this.gazeEl.innerHTML = '';
     }
     this.finEl.innerHTML = this.fin ? finPlateHtml(this.fin) : '';
+  }
+
+  /**
+   * U5 (PR-0296, FFX phone only): the Fin plate and the Gaze pill sit under the enemy-move card wherever it ends. Their
+   * CSS top (100 px, the frame's) assumed a one-line card; in Chapter XVII the card ran to y 116 and the plate (to y 166)
+   * overlapped it by 5,920 px2 at 390x844. `--sin-under` is the card's bottom plus a gap, read four times a second.
+   */
+  avoidIntent(): void {
+    const now = performance.now();
+    if (this.mode !== 'phone' || !this.host || this.el.hidden || now - this.underAt < 250) return;
+    this.underAt = now;
+    const panel = this.host.querySelector<HTMLElement>('.eint__panel');
+    const r = panel && !panel.hidden ? panel.getBoundingClientRect() : null;
+    const under = r && r.height > 0 ? Math.ceil(r.bottom - this.host.getBoundingClientRect().top + 6) : 0;
+    if (under === this.under) return;
+    this.under = under;
+    this.el.style.setProperty('--sin-under', `${under}px`);
   }
 
   /** Re-parent and scale for the current layout. */
@@ -295,6 +316,11 @@ export function withSinHud<T extends FfxHudShape>(hud: T): T {
   hud.onEvent = (event: BattleEvent): Promise<void> | void => {
     if (live) sinHud.syncLive(live);
     return onEvent(event);
+  };
+  const update = hud.update?.bind(hud);
+  hud.update = (dt: number): void => {
+    sinHud.avoidIntent();
+    update?.(dt);
   };
   (hud as T & { sinHud?: SinHud }).sinHud = sinHud;
   return hud;

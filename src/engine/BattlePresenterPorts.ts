@@ -51,7 +51,7 @@ export interface ActorHandle {
   setPose(name: string, opts?: { immediate?: boolean; force?: boolean }): void;
   flash(colour?: number | string, ms?: number, peak?: number, floorCut?: number): void; // floorCut 0..1: less dark-texel lift (FF7)
   shake(amount?: number, ms?: number): void;
-  lunge(distance?: number, ms?: number): Promise<void>;
+  lunge(distance?: number, ms?: number, contact?: { hold: Promise<unknown>; reached: () => void }): Promise<void>; // contact: VP-1001-06
   recoil(ms?: number, distance?: number): Promise<void>;
   squash(ms?: number, amount?: number): Promise<void>;
   hop(height?: number, ms?: number): Promise<void>;

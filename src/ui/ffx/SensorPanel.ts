@@ -125,6 +125,8 @@ export class SensorPanel {
   private openMs = 0;
   /** The player opened this one: it stays until they close it or a new one arrives. */
   private pinned = false;
+  /** The plate is open because the player was aiming at its subject (not a Sensor reveal, not by hand). */
+  private byAim = false;
   private mounted = false;
 
   constructor() {
@@ -191,6 +193,7 @@ export class SensorPanel {
     if (isSensorImmune(target)) return;
     this.scanned.add(target.id);
     this.open(target, false);
+    this.byAim = false;
   }
 
   /**
@@ -209,6 +212,7 @@ export class SensorPanel {
       return;
     }
     this.open(target, false);
+    this.byAim = true;
     if (folded) {
       this.folded = true;
       this.openMs = 0;
@@ -253,12 +257,27 @@ export class SensorPanel {
     this.applyFolded();
   }
 
+  /**
+   * U5 (PR-0252 sibling, FFX only): the aim ended without a new subject (the picker was cancelled or confirmed). A plate
+   * the aim itself opened has done its job, so it folds to its one-line chip now instead of standing seven seconds over
+   * the enemy it described (Chapter VII, after a cancel: Guardian B's torso under the card at 1600x900). A Sensor reveal
+   * and a plate the player opened keep their own lifetimes.
+   */
+  aimEnded(): void {
+    if (!this.byAim || this.folded || this.pinned || !this.current) return;
+    this.byAim = false;
+    this.folded = true;
+    this.openMs = 0;
+    this.applyFolded();
+  }
+
   /** Off the field entirely: the battle is over, or the HUD is going away. */
   hide(): void {
     this.el.hidden = true;
     this.current = null;
     this.folded = false;
     this.pinned = false;
+    this.byAim = false;
     this.openMs = 0;
   }
 

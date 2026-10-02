@@ -202,6 +202,8 @@
   box-shadow: 0 0 0 1px rgba(11, 10, 18, 0.8), 0 calc(3 * var(--fe-k)) calc(6 * var(--fe-k)) rgba(0, 0, 0, 0.6);
 }
 .fe-card--cleared .fe-card__name { right: calc(52 * var(--fe-k)); }
+/* PR-0275: one step down for a long title, so it fits its line (cleared card included) with no ellipsis. */
+.fe-card__name--long { font-size: max(var(--fe-fs-floor), calc(18 * var(--fe-k))); }
 
 /* ----------------------------------------- the progress strip, flat pips */
 
@@ -246,7 +248,7 @@
   flex: 1 1 auto;
   display: flex;
   align-items: center;
-  gap: calc(5 * var(--fe-k));
+  gap: calc(2 * var(--fe-k)); /* PR-0275: the slack buys the numerals their room inside the slanted pips (below) */
   height: 100%;
 }
 .cs-strip__game {
@@ -266,12 +268,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  clip-path: polygon(calc(6 * var(--fe-k)) 0, 100% 0, calc(100% - 6 * var(--fe-k)) 100%, 0 100%);
+  /* PR-0275 (both games): the numerals filled their pip edge to edge and the slanted ends cut them ('XIV' read
+     'KIV'). A shallower slant and a side padding keep every glyph inside the parallelogram. */
+  padding: 0 calc(2.2 * var(--fe-k));
+  clip-path: polygon(calc(3.5 * var(--fe-k)) 0, 100% 0, calc(100% - 3.5 * var(--fe-k)) 100%, 0 100%);
   background: rgba(244, 241, 232, 0.16);
   font-family: var(--ig-font-display);
   font-weight: 700;
   font-size: max(var(--fe-fs-floor), calc(12 * var(--fe-k)));
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: rgba(244, 241, 232, 0.8);
 }
 .cs-pip.is-lit {

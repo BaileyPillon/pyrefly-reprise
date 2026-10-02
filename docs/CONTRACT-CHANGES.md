@@ -6,6 +6,15 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-01 — `PaintedActor.lunge` and the presenter port's `lunge` take an optional `contact`; `PaintedActor.poseUrls` is readable (both games; additive)
+
+Branch `vis-fix` (critic visual pass VP-1001-06 and -04). `lunge(distance?, ms?, contact?: { hold: Promise<unknown>; reached: () => void })`:
+with a contact the strike runs to its impact frame (`ATTACK_IMPACT`), calls `reached()`, holds at the apex until `hold`
+settles, then goes home (`src/engine/ContactBeat.ts` arms and releases it). Without one, the lunge is exactly the
+old single tween, so every other caller is unchanged. `PaintedActor.poseUrls` lost its `private` so
+`src/engine/KoFallback.ts` can tell a real `ko` painting from a fallback; it is still `readonly`. `SpriteActor` is
+unchanged (it is not staged in battle). Game case: both (shared plumbing).
+
 ## 2026-10-01 — `SequenceResult` doc comments: Tornado's Bushido timer is 3 000 ms (od5, D-312)
 
 Branch `r34fix-od5`. Comments only, no type change. `timerMsFor` (`src/battle/ffx/overdrive.ts`) gives Tornado

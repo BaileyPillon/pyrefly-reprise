@@ -1,12 +1,5 @@
-import {
-  CanvasTexture,
-  ImageLoader,
-  LinearFilter,
-  LinearMipmapLinearFilter,
-  SRGBColorSpace,
-  Texture,
-  TextureLoader,
-} from 'three';
+import { CanvasTexture, ImageLoader, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace, Texture, TextureLoader } from 'three';
+import { pixelUrlFor } from './ArtTier.ts';
 import { loadArtManifest, manifestKnowsAsset } from './ArtManifest.ts';
 import { fetchWithOneRetry, retryPause } from './fetchRetry.ts';
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
@@ -14,9 +7,9 @@ import type { AlphaBox, PoseFrame } from './PaintedScale.ts';
 import { groundHullFromBottoms, type GroundHull } from './PaintedRest.ts';
 import { cachedPainting, paintingKey, type PreparedPainting } from './PaintedArtCache.ts';
 import { cleanMatte, type MatteOptions } from './PaintedMatte.ts';
+import { poseScaleFor } from './KoPoseScale.ts';
 
-// Matte cleanup lives in `./PaintedMatte.ts`; re-exported for existing callers.
-export { cleanMatte, type MatteOptions } from './PaintedMatte.ts';
+export { cleanMatte, type MatteOptions } from './PaintedMatte.ts'; // matte cleanup lives there; re-exported for existing callers
 
 // "Does this art exist?" is answered by `./ArtManifest.ts` — import it from
 // there. It is deliberately not re-exported here: this file is already well
@@ -173,13 +166,13 @@ export async function tryLoadMeta(imageUrl: string): Promise<PoseMeta | null> {
     if (!res.ok) return null;
     const raw = (await res.json()) as Partial<PoseMeta>;
     if (typeof raw.height !== 'number' || typeof raw.width !== 'number') return null;
-    const positive = (v: unknown): v is number =>
-      typeof v === 'number' && Number.isFinite(v) && v > 0;
+    const positive = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v) && v > 0;
+    const scale = poseScaleFor(imageUrl, positive(raw.scale) ? raw.scale : undefined); // VP-1001-05: src-side KO scales
     return {
       width: raw.width,
       height: raw.height,
       baselineY: typeof raw.baselineY === 'number' ? raw.baselineY : raw.height,
-      ...(positive(raw.scale) ? { scale: raw.scale } : {}),
+      ...(scale !== undefined ? { scale } : {}),
       ...(positive(raw.anchorY) ? { anchorY: raw.anchorY } : {}),
       ...(parseArtFacing(raw.facing) ? { facing: parseArtFacing(raw.facing)! } : {}),
       ...(raw.seed !== undefined ? { seed: raw.seed } : {}),
@@ -241,7 +234,8 @@ async function preparePainting(
   matte?: MatteOptions,
   fit?: false | BaselineFitOptions,
 ): Promise<PreparedPainting | null> {
-  const [image, meta] = await Promise.all([tryLoadImage(url), tryLoadMeta(url)]);
+  const px = await pixelUrlFor(url); // D-315: a 2x device draws the 2x master's pixels; the 1x sidecar, name and key stay
+  const [image, meta] = await Promise.all([tryLoadImage(px).then((i) => i ?? (px === url ? null : tryLoadImage(url))), tryLoadMeta(url)]);
   if (!image) return null;
   const width = meta?.width ?? image.width ?? 1024;
   const height = meta?.height ?? image.height ?? 1024;

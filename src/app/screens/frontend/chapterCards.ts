@@ -96,9 +96,13 @@ export function proseHtml(tile: ChapterTile): string {
  *
  * A COMING card has no `data-action`: it can never be selected or started.
  */
+/** A title longer than this takes the smaller card-name size (`chapter-select-c.css`). */
+const LONG_TITLE = 22;
+
 export function cardHtml(tile: ChapterTile, index: number, selected: boolean, bestTimeMs: number | null = null): string {
   const num = `<span class="fe-card__num">${escapeHtml(tile.numeral ?? '')}</span>`;
-  const name = `<span class="fe-card__name">${escapeHtml(tile.title)}</span>`;
+  // PR-0275 (both games): a long title ("Sin: the Fins and the Core") steps down a size instead of ending in an ellipsis.
+  const name = `<span class="fe-card__name${tile.title.length > LONG_TITLE ? ' fe-card__name--long' : ''}">${escapeHtml(tile.title)}</span>`;
   const art = `<div class="fe-card__art">${plateArtHtml(tile, 'card')}</div><div class="fe-card__fade"></div>`;
   if (!tile.playable) {
     return `

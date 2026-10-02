@@ -28,6 +28,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { resetArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { resolvePoseMap } from '../../../src/engine/BattlePresenterArt.ts';
 import { tryLoadMeta } from '../../../src/engine/PaintedArt.ts';
+import { poseScaleFor } from '../../../src/engine/KoPoseScale.ts';
 
 const ROOT = path.resolve(__dirname, '../../..');
 const ART = path.join(ROOT, 'public/art');
@@ -191,7 +192,8 @@ describe.skipIf(!haveArt)('the installed files on this disk (public/art is gitig
       expect(String(side.scaleNote), p).toMatch(/^Head match 2026-09-26/);
       expect(side.decision, p).toBe('D-194');
       const meta = await tryLoadMeta(`/art/characters/${p}.png`);
-      expect(meta?.scale, p).toBe(SCALES[p]);
+      // VP-1001-05: a src-side KO table (KoPoseScale.ts) may correct a sidecar's KO scale; the sidecar itself is untouched.
+      expect(meta?.scale, p).toBe(poseScaleFor(`/art/characters/${p}.png`, SCALES[p]));
       expect(meta!.baselineY, p).toBeLessThanOrEqual(meta!.height);
     }
   });

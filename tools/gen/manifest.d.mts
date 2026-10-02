@@ -12,6 +12,8 @@ export interface ManifestSubject {
   states: string[];
   /** True when `portraits/<id>.png` exists. */
   portrait: boolean;
+  /** States that also ship `<state>@2x.png`, the twice-resolution master (D-315). */
+  states2x?: string[];
   /**
    * The sidecar's `facing`, lower-cased and otherwise untouched — the runtime's
    * `parseArtFacing` owns which spellings mean what.

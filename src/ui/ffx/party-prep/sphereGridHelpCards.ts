@@ -39,6 +39,14 @@ const PRONOUN: Record<string, string> = {
   rikku: 'her',
 };
 
+/**
+ * Pointer or touch wording (F6): the same swap the first-run guide uses
+ * (`.frg__pointer` / `.frg__touch`), flipped by `(pointer: coarse)` in the CSS.
+ */
+function pt(pointer: string, touch: string): string {
+  return `<span class="sgx-pointer">${pointer}</span><span class="sgx-touch">${touch}</span>`;
+}
+
 /** Card A: the first-time explainer. Buttons carry `data-sgx` = `got` / `show`. */
 export function explainerHtml(name: string): string {
   return `
@@ -69,13 +77,13 @@ export function explainerHtml(name: string): string {
               <p>Stand on a node and spend the sphere it asks for: <b>Power</b> for STR, DEF, HP &middot; <b>Mana</b> for MAG, MDEF, MP &middot; <b>Speed</b> for AGI, ACC, EVA &middot; <b>Ability</b> for abilities &middot; <b>Keys</b> for locks.</p>
             </div>
             <div class="sgx-step">
-              <h3><b>3</b>CLICK TWICE</h3>
+              <h3><b>3</b>${pt('CLICK', 'TAP')} TWICE</h3>
               <div class="sgx-viz" aria-hidden="true">
                 <i class="sgx-n sgx-n--sel" style="left:60px"></i>
-                <span class="sgx-t" style="left:100px;top:18px">CLICK: SELECT</span>
-                <span class="sgx-t" style="left:100px;top:40px">AGAIN / ENTER: DO IT</span>
+                <span class="sgx-t" style="left:100px;top:18px">${pt('CLICK', 'TAP')}: SELECT</span>
+                <span class="sgx-t" style="left:100px;top:40px">${pt('AGAIN / ENTER', 'AGAIN')}: DO IT</span>
               </div>
-              <p>Click a node to select it; click it again, or press Enter, to move there or activate it. Drag to pan, wheel to zoom.</p>
+              <p>${pt('Click a node to select it; click it again, or press Enter, to move there or activate it. Drag to pan, wheel to zoom.', 'Tap a node to select it; tap it again to move there or activate it. Drag to pan, pinch to zoom.')}</p>
             </div>
           </div>
           <div class="sgx-note">What you spend here goes into this chapter's fight. It is not saved: reloading the page starts the chapter's preset again.</div>

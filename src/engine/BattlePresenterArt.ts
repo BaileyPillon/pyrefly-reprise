@@ -36,6 +36,8 @@ export const PARTY_POSES = [
   // A figure without its own painting falls back to idle (below), which is today's look. `ui/common/restPoses.ts`.
   'sleep',
   'critical',
+  // The follow-through after an attack's hit (D-313, both games; `KeyPoses.ts`). Shown only when painted.
+  'follow',
 ] as const;
 
 /** Poses an enemy is painted in. Bosses rarely need the full party set. */
@@ -133,6 +135,7 @@ const POSE_FALLBACKS: Readonly<Record<string, readonly string[]>> = {
   victory: ['victory', 'idle'],
   sleep: ['sleep', 'idle'],
   critical: ['critical', 'idle'],
+  follow: ['follow', 'attack', 'ready', 'idle'],
 };
 
 /**

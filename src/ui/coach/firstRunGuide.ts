@@ -23,9 +23,11 @@
  *
  * Block the control it points at: every drawn piece but the slab is
  * `pointer-events: none`, and the slab sits beside the target. Esc (or the skip
- * words) ends the guide for good; the Esc that did it is taken back from the
- * game's input (`FirstRunHost.absorbInput`), so it does not also go BACK on the
- * board or prep, or open the pause in battle.
+ * words) ends the guide for good; on the board and prep the Esc that did it is
+ * taken back from the game's input (`FirstRunHost.absorbInput`), so it does not
+ * also go BACK. In battle it is NOT taken back (FR-34-01, FFX only): the first
+ * Esc at the first command menu skips the guide and opens the pause, as it does
+ * everywhere else, instead of needing a second press.
  *
  * Game case: steps 1 and 2 **both**; step 3 **FFX only** (a first battle in FFX-2
  * ends the guide at its start, since nothing drew Rikku's version).
@@ -80,10 +82,13 @@ export function resumeFirstRunGuide(h: FirstRunHost): void {
   if (hasSeen('firstrun-board') && !allDone()) armFirstRunGuide(h);
 }
 
-/** Esc, or the skip words: every step seen, everything down, the press taken back. */
-export function skipFirstRun(): void {
+/**
+ * Esc, or the skip words: every step seen, everything down, the press taken back
+ * unless `absorb` is false (in battle the Esc goes on to open the pause).
+ */
+export function skipFirstRun(absorb = true): void {
   for (const id of FIRST_RUN_IDS) markSeen(id);
-  host?.absorbInput();
+  if (absorb) host?.absorbInput();
   stopFirstRun();
 }
 
@@ -126,7 +131,8 @@ export function firstRunTurnGuide(): CoachGuide | null {
       });
     },
     ended(outcome: CoachMarkOutcome, skipped: boolean): void {
-      if (skipped) skipFirstRun();
+      // FR-34-01 (FFX only): in battle the Esc that skips is not taken back, so the pause opens on it.
+      if (skipped) skipFirstRun(false);
       else if (outcome === 'confirmed') markSeen('firstrun-battle');
       // A line the layer took down itself (a beat's card, auto-play) is not an
       // answer: the held line comes back dressed again, or a later boot ends it.

@@ -99,6 +99,15 @@
     flex-wrap: wrap;
     gap: 12px;
   }
+  /* F6: the buttons ride the bottom of the visible card, inside the first viewport, while the steps scroll above them. */
+  .sgx-layer--card.sgx-layer--phone .sgx-foot {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    margin-top: 12px;
+    padding: 10px 0 4px;
+    background: var(--ig-paper);
+  }
   .sgx-layer--phone .sgx-btn {
     min-height: 44px;
     font-size: 15px;

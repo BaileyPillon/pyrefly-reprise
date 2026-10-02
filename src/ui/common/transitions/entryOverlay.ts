@@ -96,8 +96,9 @@ function paintDomPictures(doc: Document, ctx: CanvasRenderingContext2D, w: numbe
           ctx.drawImage(el, r.left, r.top, r.width, r.height);
         }
       } else if (r.width * r.height >= w * h * 0.25) {
-        const m = /url\(["']?([^"')]+)["']?\)/.exec(cs.backgroundImage);
-        if (m) drawCover(doc, ctx, m[1]!, r, cs.backgroundSize);
+        const picture = firstCssUrl(cs.backgroundImage);
+        // A data: URL is a CSS texture (the grain overlays), never a backdrop painting: leave it out, as before.
+        if (picture && !picture.startsWith('data:')) drawCover(doc, ctx, picture, r, cs.backgroundSize);
       }
     } catch {
       /* a picture that cannot be drawn is left out */
@@ -105,6 +106,21 @@ function paintDomPictures(doc: Document, ctx: CanvasRenderingContext2D, w: numbe
       ctx.globalAlpha = 1;
     }
   }
+}
+
+/**
+ * The first `url(...)` of a computed `background-image`, read as CSS reads it:
+ * a quoted URL runs to its closing quote, whatever it contains. The old
+ * pattern stopped at the first `'` or `)`, so a noise texture written as
+ * `url("data:image/svg+xml,<svg ... filter='url(%23n)'>")` failed at the
+ * outer `url(` and then matched the INNER `url(%23n)`, and drawing that
+ * "picture" requested `/pyrefly-reprise/%23n`: a stray 404 on every entry
+ * (LIVE-R34-01 / F2; both games, shared transition). Null for `none`.
+ */
+export function firstCssUrl(value: string): string | null {
+  const m = /url\(\s*(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)'|([^)"'\s]*))\s*\)/.exec(value);
+  const url = m ? (m[1] ?? m[2] ?? m[3] ?? '') : '';
+  return url === '' ? null : url.replace(/\\(.)/g, '$1');
 }
 
 /** Draw an already-loaded backdrop image the way `background-size` lays it out (cover, contain or stretch). */

@@ -126,9 +126,13 @@ html[data-phone-battle] .phud-foot {
   font-size: 14px;
   line-height: 1.25;
   color: rgba(244, 241, 232, 0.72);
-  white-space: nowrap;
+  /* U6 (PR-0246, FFX; also FFX-2's foot line): a long row sentence ("A one-off action this encounter offers",
+     "Swap in a reserve member ...") wraps to a second line at 14 px instead of ending in an ellipsis. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
   pointer-events: none;
 }
 html[data-phone-battle] .phud-foot__who {
@@ -274,9 +278,11 @@ html[data-phone-battle] .phud-target__go {
   background: var(--ig-accent);
   color: var(--ig-ink);
   clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-  white-space: nowrap;
+  /* U6 (PR-0288, FFX): "ATTACK -> GUADO GUARDIAN A" was cut to "TTACK ..." at 390 px; two balanced lines inside the 52 px button. */
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* ------------------------------------------------- the guide, as a sheet */

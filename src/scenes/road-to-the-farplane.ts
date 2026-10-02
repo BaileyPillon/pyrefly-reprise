@@ -1,5 +1,6 @@
 import { Group, Vector3 } from 'three';
 import { Backdrop, type BackdropOptions } from '../engine/Backdrop.ts';
+import { addPlateSkirt, plateTexture } from '../engine/PlateSkirt.ts';
 import type { BattleCamera, CameraRig } from '../engine/BattleCamera.ts';
 import { LightRig, makeLightPool } from '../engine/Lighting.ts';
 import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts';
@@ -189,6 +190,19 @@ function plateOptions(url: string, links: boolean, low: boolean, cameraRef: [num
   };
 }
 
+/** How far under each plate its skirt reaches, world units (the phone's pulled-back links included). */
+const SKIRT_DEPTH = 8;
+
+/** A plate's skirt (`PlateSkirt.ts`), sized from its own painting; a no-op for a stand-in with no image. */
+function skirtUnder(b: Backdrop): () => void {
+  const map = plateTexture(b.group);
+  const img = map?.image as { width?: number; height?: number } | undefined;
+  if (!map || !img?.width || !img.height) return () => {};
+  const height = (ROAD_BACKDROP.width * img.height) / img.width;
+  const spec = { width: ROAD_BACKDROP.width, height, centreY: ROAD_BACKDROP.centreY, z: ROAD_BACKDROP.distance, depth: SKIRT_DEPTH };
+  return addPlateSkirt(b.group, map, spec);
+}
+
 /** **The Road to the Farplane**, as a {@link SceneFactory}. Owns no combatants. */
 export const buildRoadToTheFarplaneScene: SceneFactory = async (opts: SceneBuildOptions = {}): Promise<SceneBuild> => {
   const group = new Group();
@@ -206,6 +220,8 @@ export const buildRoadToTheFarplaneScene: SceneFactory = async (opts: SceneBuild
   const plateB = await Backdrop.create({ ...plateOptions(urlB, true, low, cameraRef), ground: false, fog: false, background: false });
   plateB.group.visible = false;
   group.add(plateB.group);
+  // VP-1001-30: the plates end above the frame's bottom edge at rest; carry their stone down (`PlateSkirt.ts`).
+  const skirts = [skirtUnder(backdrop), skirtUnder(plateB)];
 
   const lights = new LightRig({
     palette: backdrop.palette,
@@ -304,6 +320,7 @@ export const buildRoadToTheFarplaneScene: SceneFactory = async (opts: SceneBuild
       }
       motes.dispose();
       lights.dispose();
+      for (const dispose of skirts) dispose();
       plateB.dispose();
       backdrop.dispose();
       group.removeFromParent();
