@@ -1,0 +1,199 @@
+/*
+ * Scratch styles for the eye-candy settings mockups (2026-10-02). NOT product code.
+ *
+ * Everything below rides on the shipped pause stylesheet: the tokens (--pu-*), the row, key and value
+ * classes, the prompts. This file only adds what the three layouts need that the pause does not have yet:
+ *   - the EYE CANDY page (options A and C), modelled on the credits panel (pause-credits.css): it swaps
+ *     in for the two OPTIONS columns, on the same side of the painting, and leaves the tab strip, the
+ *     brand line and the painting where they were;
+ *   - the fold glyph, the child rows and the wider key cell of option B (in place);
+ *   - the quiet suffix for rows REDUCE MOTION overrides.
+ * Every length is the viewport expression that equals the frame's pixel value at 1600x900, floored,
+ * as pause-screen.css does. Nothing here goes below 14px on a desktop window or 12px on a phone.
+ */
+
+/* ------------------------------------------------------------- the page swaps in */
+
+.pause--ec .pause__body,
+.pause--ec .pause__prompts { visibility: hidden; }
+
+.ec-layer {
+  position: absolute;
+  left: var(--pu-gut);
+  right: var(--pu-gut);
+  top: var(--pu-top-body);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.ec-h {
+  margin: 0 0 clamp(9px, 1.7vh, 19px);
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.3);
+  white-space: nowrap;
+}
+
+.ec-h b.ec-h-rm { color: var(--pu-accent); opacity: 0.8; }
+.ec-h b {
+  margin-left: 1.6em;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: rgba(var(--pu-paper), 0.46);
+}
+
+.ec-scroll {
+  min-height: 0;
+  /* The cursor dot sits 13px left of its row: room for it inside the scroller, so nothing clips it. */
+  padding-left: 16px;
+  margin-left: -16px;
+}
+
+.ec-cols {
+  display: flex;
+  gap: clamp(22px, 3vw, 58px);
+  align-items: flex-start;
+}
+
+.ec-col {
+  display: flex;
+  flex-direction: column;
+  width: clamp(290px, 21.5vw, 400px);
+  min-width: 0;
+}
+
+/* A row of the page is a pause row: label left, value at the column's far edge (the THIS ENCOUNTER style). */
+.ec-row .pause__k { width: auto; flex: 1 1 auto; text-align: left; overflow: visible; letter-spacing: 0.16em; }
+.ec-row .pause__v { margin-left: auto; flex: none; }
+.ec-row .pause__bar { display: none; }
+
+/* A look: the accent, like the credits panel's group headings. Its parts sit under it, indented and quieter. */
+.ec-master { margin-top: clamp(8px, 1.5vh, 16px); }
+.ec-master:first-child { margin-top: 0; }
+.ec-master .pause__k { color: var(--pu-accent); letter-spacing: 0.22em; font-weight: 600; opacity: 0.92; }
+.ec-child { padding-left: clamp(16px, 1.3vw, 24px); }
+.ec-child .pause__k { color: rgba(var(--pu-paper), 0.58); }
+.ec-child .pause__k::before {
+  content: '';
+  display: inline-block;
+  width: 9px;
+  height: 1px;
+  margin-right: 10px;
+  vertical-align: middle;
+  background: rgba(var(--pu-paper), 0.3);
+}
+
+/* OFF reads as quiet; a part whose look is OFF keeps its own choice but is drawn dim. */
+.ec-off .pause__v { color: rgba(var(--pu-paper), 0.36); }
+.ec-dim .pause__k,
+.ec-dim .pause__v { opacity: 0.4; }
+.ec-row .pause__v em { margin-left: 0.7em; letter-spacing: 0.14em; color: rgba(var(--pu-paper), 0.42); }
+
+/* The cursor dot hangs 13px left of the column edge on every row, indented parts included. */
+.ec-row.pause__row--sel::before { left: 0; margin-left: -13px; }
+.ec-row.pause__row--sel .pause__k { color: rgba(var(--pu-paper), 0.97); }
+.ec-row.pause__row--sel .pause__v { color: rgba(var(--pu-paper), 0.97); }
+.ec-row.ec-master.pause__row--sel .pause__k { color: var(--pu-accent); opacity: 1; }
+
+.ec-rule { height: 1px; margin: clamp(8px, 1.4vh, 14px) 0; background: rgba(var(--pu-paper), 0.14); width: 100%; flex: none; }
+
+/* What the focused switch does: one short note, where the credits panel keeps its notes. */
+.ec-help {
+  margin-top: clamp(16px, 2.6vh, 28px);
+  max-width: clamp(290px, 21.5vw, 400px);
+}
+.ec-help-t {
+  display: block;
+  font-size: var(--pu-fs-v);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.94);
+}
+.ec-help-b {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: var(--pu-fs);
+  line-height: 1.38;
+  letter-spacing: 0.02em;
+  color: rgba(var(--pu-paper), 0.6);
+}
+.ec-help-g {
+  display: block;
+  margin-top: 5px;
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.34);
+}
+.ec-help--phone { display: none; }
+
+.ec-back { cursor: default; }
+
+/* ------------------------------------------------------------------ option B (in place) */
+
+/* No widening: every part name fits the shipped label cell (163px at 1600x900, 150px on a phone). */
+.ec-glyph {
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: calc(var(--pu-fs) + 3px);
+  line-height: 1;
+  font-weight: 700;
+  color: var(--pu-accent);
+  opacity: 0.92;
+}
+.pause__row--word.ec-head .pause__k { color: rgba(var(--pu-paper), 0.72); }
+.pause__row--word.ec-head.pause__row--sel .pause__k { color: rgba(var(--pu-paper), 0.97); }
+.pause__row--word.ec-sub .pause__k { color: rgba(var(--pu-paper), 0.42); }
+.pause__row--word.ec-sub .pause__bar { border-left: 1px solid rgba(var(--pu-paper), 0.2); height: 100%; background: none; }
+.pause__row--word.ec-sub.pause__row--sel .pause__k { color: rgba(var(--pu-paper), 0.97); }
+.pause__row--word.ec-dimrow .pause__k,
+.pause__row--word.ec-dimrow .pause__v { opacity: 0.38; }
+.pause__row--word .pause__v em { margin-left: 0.6em; letter-spacing: 0.1em; color: rgba(var(--pu-paper), 0.42); }
+
+/* ------------------------------------------------------------------ the phone */
+
+@media (max-width: 620px) {
+  .pause--ec .pause__obj { visibility: hidden; }
+
+  .ec-layer {
+    top: 92px;
+    bottom: 58px;
+  }
+
+  .ec-scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+  .ec-scroll::-webkit-scrollbar { display: none; }
+
+  /* The heading may carry a second note (REDUCE MOTION IS ON): it wraps under the title on a phone. */
+  .ec-h { white-space: normal; }
+  .ec-h b.ec-h-rm { display: block; margin: 4px 0 0; }
+
+  .ec-cols { flex-direction: column; gap: 0; }
+  .ec-col { width: 100%; }
+  /* A phone page has the whole height, so its rows are touch size: 40px, not the 20px of a five-row window. */
+  .ec-row { height: 40px; }
+  .ec-master { margin-top: 6px; }
+  .ec-child { padding-left: 18px; }
+  .ec-help--desk { display: none; }
+  .ec-help--phone {
+    display: block;
+    flex: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    max-width: none;
+    border-top: 1px solid rgba(var(--pu-paper), 0.14);
+  }
+  .ec-help-g { margin-top: 3px; }
+}
