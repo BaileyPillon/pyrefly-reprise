@@ -112,3 +112,57 @@ dresspheres, x2 aeons, Paragon, FFX-2 Bahamut, Vegnagun, Shuyin FFX-2 only.
    (darker skin, shorter hair) and Yuna Warrior's follow-through (red hair). They are Bailey's picks; re-roll?
 5. The wind-up shows from the moment the member's menu opens, so a player who then picks Cure or an item sees her
    wind up first (it was the idle before). Keep, or show `ready` only at an attack's start?
+
+## Check (independent, 2026-10-02, branch r35-art at 412831ab)
+
+Not built by the checker. Dev server on 5620 (this tree) and, for before/after, 5621: the same tree and art served
+with the six changed `src/engine` files at their base content (`c675f29b`, a load-hook vite config in scratch).
+Headless Playwright, PYREFLY_BROWSER=gpu, seed 1, real keys. Scripts and records:
+`D:/Tools/pyrefly-scratch/2026-10-02-rel35/check/`. Both servers stopped by PID.
+
+**Gates.** `tsc --noEmit` clean. Full vitest `--testTimeout=60000`: 729 files passed, 5 skipped (10810 tests).
+`orphans`: 24, all pre-existing. Rule 7 holds (PaintedActor 2017 -> 2012, PaintedArt 860 -> 854, ArtManifest
+388 -> 388; the rest under 400). `git diff c675f29b..412831ab -- src/battle` is empty; `SaveData.ts` and the settings
+schema untouched. `verify-approved.mjs`: 469 ok, 0 mismatched, 0 missing; `approved-hashes.json` in 400e97ff only adds
+lines; the package's `hashes.json` matches all 104 installed PNGs; the three replaced White Mage files were in no
+locked list. Every commit names its game case. `critic-plan --paths`: DEEP class (asset loader, presenter), not
+save-data: focused before deploy, deep after.
+
+**Confirmed by running.**
+- Attack keys, FFX: Ch I Tidus by Enter x2 at 1600x900 and 390x844: `ready -> attack (+305 ms) -> follow (+133 ms)
+  -> idle (+317 ms)`; Kimahri (no own keys) plays `attack -> idle` as before. Yunalesca: Tidus and Auron get the
+  follow-through, Yuna (no `follow`) does not. FFX-2: Ch IV Paine and Rikku `ready -> attack -> follow -> idle` at
+  1600x900, 1024x768 and 390x844.
+- REDUCE MOTION (prefers-reduced-motion): no wind-up lead, no follow-through, `attack -> idle` (Ch I and Ch IV).
+- FF7 (Guard Scorpion): Cloud and Barret's pose sequences are the same as base, step for step.
+- 2x tier: 1600x900 and 1280x720 at DPR 1, and 1024x768 at DPR 2, draw the 2048 px Bahamut master; 390x844 and
+  844x390 (touch, DPR 3) and 1024x768 at DPR 1 draw the 1024 px file and request no `@2x`. Blocking every `@2x`
+  request falls back to 1x with the same sidecar, baseline, content box, world position and screen rect (Bahamut,
+  Evrae); side by side the 2x master is the same figure, only sharper. Sin face, Sin fins, Yunalesca, Evrae: masters
+  load, no page errors, no 4xx.
+- Shipped `public/` after the dist filter: 730.3 MB (decimal), 2x masters 109.8 MiB; the filter ships `@2x.png`
+  (and the unused `@2x.json` sidecars).
+- Neighbouring flows: Ch I on `auto: 'intended'` ends the same on base and candidate (defeat in 38 turns: the engine
+  is untouched). Chapter IX (Ixion, FFX-2) on auto at 390x844: victory, hooded White Mage victory painting shown.
+  Auto (cast-only) pose timings in Ch IV match base to the millisecond range.
+
+**Found.**
+1. (major, pre-existing; exposure changed) Under the FFX-2 ATB two bursts can play at once (the enemy turn under an
+   open menu, and a submitted command); `actionEnd` returns `ctx.actingId` to idle, which the other burst's
+   `action-start` has already overwritten, so the wrong figure goes idle and the attacker stays on its key painting
+   until its next pose. Base shows it too (mashing Enter in Ch IV for 90 s: base Rikku held `attack` 11.7 s;
+   candidate Paine held `follow` 3.5 s; Ch IV turn 5 under steady input left Paine on `follow`). New in this
+   candidate: the stranded painting is now the follow-through for figures with one, and FFX-2 Bahamut (and the other
+   new D-314 attack keys under the ATB: Paragon, Shuyin) visibly hold their attack painting where live, with no
+   attack painting, showed the idle (forced back-to-back gauges: Bahamut on `attack` for over 5 s with the presenter
+   at `command:yuna`). The `action-end` event carries `actorId`; returning that actor (and clearing `actingId` only
+   when it matches) would fix both. Not fixed here (check only).
+2. (disclosure) D-315 named 52 masters; 24 ship and 28 wait in `held-2x/` under the size rule. Bailey's call
+   (question 3 above).
+3. (minor) Main's generator (before this branch is merged) rewrites the shared `public/art/manifest.json` without
+   `states2x`; until this branch's generator runs again the game silently draws 1x. The ArtTier header says
+   `setHiTier` serves "the debug API"; nothing exposes it there.
+
+**Verdict.** No regression in engine behaviour, the save class, approved paintings or the FF7 path; the claims in this
+note reproduce. Finding 1 is a pre-existing defect that the new keys make more visible (worst on FFX-2 Bahamut);
+whether that counts as a regression against live is the focused review's call.
