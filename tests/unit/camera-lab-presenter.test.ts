@@ -14,7 +14,6 @@ import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
 import type { HudPort } from '../../src/engine/HudPort.ts';
 import { LabDirectorCore } from '../../src/engine/lab/LabDirectorCore.ts';
 import { LabCamera } from '../../src/engine/lab/LabCamera.ts';
-import { LabStage } from '../../src/engine/lab/LabStage.ts';
 import { DEFAULT_LAB_SWITCHES, type LabBeat } from '../../src/engine/lab/LabTypes.ts';
 import { FakeAudio, FakeCutscenes, FakeDamageNumbers, FakeMessageBar, FakeStage } from './helpers/FakeStage.ts';
 import { ffx2Options } from './helpers/ffx2ChapterDrive.ts';
@@ -54,7 +53,9 @@ describe('camera lab beats from the real presenter (FFX-2, Active)', () => {
         drain();
       },
     };
-    const stage = new LabStage(fake, new LabCamera(fake.camera, { yielding: () => core.yielding }));
+    // As `battleLab.ts` does: the stage stays itself, its camera becomes the lab's.
+    Object.defineProperty(fake, 'camera', { value: new LabCamera(fake.camera, { yielding: () => core.yielding }) });
+    const stage = fake;
 
     // The menu answers after the ATB has run a while under it (fiends act meanwhile).
     let menus = 0;

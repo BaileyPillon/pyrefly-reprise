@@ -250,6 +250,7 @@ export class LabDirector {
       shot: this.core.current,
       rig: this.rig,
       beat: this.core.beatNumber,
+      counts: { ...this.core.counts },
       views: Object.fromEntries(this.actors().map((a) => [a.name, a.viewPoseName ?? 'front'])),
       log: this.core.log.slice(-12),
     };

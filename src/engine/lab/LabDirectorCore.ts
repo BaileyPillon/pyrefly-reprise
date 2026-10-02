@@ -92,6 +92,8 @@ export class LabDirectorCore {
   private slowBeat = -1;
   /** The last few decisions, for the debug snapshot and the tests. */
   readonly log: string[] = [];
+  /** Evidence for the captures: cuts made, and cuts made while a menu was open (FFX-2: only as one opens). */
+  readonly counts = { cuts: 0, cutsUnderOpenMenu: 0, cutsAsMenuOpened: 0 };
 
   constructor(o: LabDirectorCoreOptions) {
     this.o = o;
@@ -167,6 +169,9 @@ export class LabDirectorCore {
     this.lastCutAt = now;
     this.lastCutBeat = p.beat;
     this.cutsThisBeat++;
+    this.counts.cuts++;
+    if (this.menuOpen && p.menuOpening) this.counts.cutsAsMenuOpened++;
+    else if (this.menuOpen) this.counts.cutsUnderOpenMenu++;
     this.note(`cut ${p.shot.kind}:${p.shot.subject ?? '-'} (${p.why})`);
     return { shot: p.shot, beat: p.beat, why: p.why };
   }

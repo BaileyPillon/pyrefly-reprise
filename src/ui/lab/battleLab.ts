@@ -25,7 +25,6 @@ import { SPEED_SCALE } from '../../engine/BattlePresenterUtil.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
 import { battleComfort } from '../../app/screens/battleComfort.ts';
 import { LabDirector } from '../../engine/lab/LabDirector.ts';
-import { LabStage } from '../../engine/lab/LabStage.ts';
 import { labChapter } from '../../engine/lab/labChapters.ts';
 import { labSession } from '../../engine/lab/LabSession.ts';
 import type { LabCameraPort } from '../../engine/lab/LabTypes.ts';
@@ -43,7 +42,7 @@ export function labSlots(chapterId: string, slots: SceneSlots): SceneSlots {
 }
 
 export interface CameraLabHandle {
-  /** The field as the presenter should see it (the lab's camera). */
+  /** The field as the presenter should see it: the painted stage, its camera now the lab's. */
   readonly stage: BattleStage;
   readonly port: LabCameraPort;
   wrapTargeting(port: TargetingPort): TargetingPort;
@@ -101,7 +100,9 @@ export async function attachCameraLab(o: CameraLabOptions): Promise<CameraLabHan
   );
   console.info(`[camera-lab] ${ch.id}: rear paintings for ${loaded.join(', ') || 'nobody'}`);
 
-  const labStage = new LabStage(stage, director.wrapCamera(stage.camera));
+  // The presenter keeps the painted stage itself (summon staging and the eye-candy port key on it);
+  // only its camera becomes the lab's, which lets the presenter's own framing through while the lab yields.
+  Object.defineProperty(stage, 'camera', { value: director.wrapCamera(stage.camera), configurable: true, writable: true });
   const chip = new LabChip(o.root, ch.game);
   const menu = new MenuAtHero(o.root, ch.game, {
     rect: (id) => stage.projectRect(id),
@@ -129,7 +130,7 @@ export async function attachCameraLab(o: CameraLabOptions): Promise<CameraLabHan
   };
 
   return {
-    stage: labStage,
+    stage,
     port: director.port,
     wrapTargeting(port: TargetingPort): TargetingPort {
       return {
