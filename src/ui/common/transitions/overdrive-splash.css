@@ -199,3 +199,30 @@
 @keyframes fxc-flash { 0% { opacity: 0; } 20% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes fxc-fade { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes fxc-out { from { opacity: 1; } to { opacity: 0; } }
+
+/*
+ * The HUD panels that print through the band and its title step out for the splash's lifetime
+ * (VP-1001-32, VP-1001-33, VP-1001-36; both games; opacity only, nothing moves, D-291). They sit above the
+ * splash (it is the screen root's first child at z 0), so the FFX acting fade's 0.16 left a ghost across the
+ * title ("MEGA FLARE", "ENERGY RAY"), FFX-2's panels and CHARGING slab stayed opaque, and Sin's clock, the
+ * Mouth Open card and the status smoke drew over Auron's Dragon Fang. `SPLASH_LIVE_CLASS` is on `<html>`
+ * from `play()` to the end of the splash; the `!important`s beat the acting fade and the inline opacity the
+ * status marks set per figure. The party rows, the command menu and the numerals are not listed: they sit
+ * clear of the band at every size the acceptance names, and the numerals are what the splash hands over to.
+ */
+html.fxc-splash-live :is(.sgd, .mad, .eint, .ig-ctb, .ffx-sensor, .ffx-omr, .ig-cutin__info, .coach-mark,
+  .ffx-sinhud > *, .stm-layer, .pf-mom__slab) {
+  opacity: 0 !important;
+  transition: opacity 60ms linear !important;
+}
+
+/*
+ * VP-1001-36 (both games; phone only): on the 390 px frame the painting covers most of the slab, so the
+ * ink title sat on dark paint and read as a smudge. An ivory halo (the slab's own colour, so it is invisible
+ * where the title is on the slab) holds the title's contrast against any painting under it. Paint only; the
+ * title does not move and the painting is not touched.
+ */
+html[data-phone-battle] .fxc-splash__title {
+  -webkit-text-stroke: min(0.3em, 7px) var(--fxc-slab2);
+  paint-order: stroke fill;
+}

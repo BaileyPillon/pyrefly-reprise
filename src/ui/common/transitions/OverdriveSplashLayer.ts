@@ -19,6 +19,12 @@
 
 import './overdrive-splash.css';
 
+/**
+ * Set on `<html>` for exactly the splash's lifetime. `overdrive-splash.css` keys the HUD panels that
+ * would print through the band and its title on it (VP-1001-32, VP-1001-33, VP-1001-36; both games).
+ */
+export const SPLASH_LIVE_CLASS = 'fxc-splash-live';
+
 export interface SplashPlay {
   /** The painting's URL, or null for the slab and lines only. */
   art: string | null;
@@ -113,9 +119,11 @@ export class OverdriveSplashLayer {
     el.classList.remove('is-in', 'is-out');
     void el.offsetWidth;
     el.classList.add('is-on', 'is-in');
+    document.documentElement.classList.add(SPLASH_LIVE_CLASS);
     return new Promise<void>((resolve) => {
       this.finish = (): void => {
         this.finish = null;
+        document.documentElement.classList.remove(SPLASH_LIVE_CLASS);
         for (const t of this.timers) clearTimeout(t);
         this.timers = [];
         el.classList.remove('is-on', 'is-in', 'is-out');
