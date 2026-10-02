@@ -1,0 +1,65 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-02T06:05:00Z",
+  "build": { "mainSha": "ef3f6bbf", "bundle": "DiuZMSBm", "artifactHash": "87b5ed53e701a5f8b63b4c073c35b4753c3dccb52430998cc77baed9dfe72dd0" },
+  "verdicts": { "deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed" },
+  "checks": [
+    { "id": "CHK-017", "result": "PASS", "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/ef3f6bbf.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/25faec70.json --full: result PASS, artifactHash 87b5ed53e701a5f8b63b4c073c35b4753c3dccb52430998cc77baed9dfe72dd0 (equals the marker's), liveManifest match, 1272 compared (the whole manifest, 757,715,602 bytes), 0 mismatched, 0 missing, 0 wrong type, 0 errors. The live index.html is 3056 bytes (the manifest's size) and loads assets/index-DiuZMSBm.js; the stored manifest has decodeChecked true, 0 audio unverified, no problems. Smoke on the same URL, final runs desktop-run4 (388 requests, all 200) and phone-run6 (365 requests, all 200): 0 console errors, 0 page errors, 0 responses of 400 or more, 0 404s, 0 image responses typed text/html, 0 requests containing %23n; load to ready 658 ms desktop and 787 ms phone; ffx2-bahamut/idle@2x.png 200 image/png 6,087,973 B on desktop and no @2x request on the phone; every audio request 200 (9 distinct mp3 files). 41 (desktop) and 9 (phone) net::ERR_ABORTED image requests are client-side preload cancellations (board card art, pause plate png beside its 2x webp), no HTTP error.",
+      "environment": "node verify-live; headless Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti, Chromium 153), fresh context, ?livesmoke=<ts>", "automated": true },
+    { "id": "CHK-016", "result": "PASS", "mandatory": true,
+      "evidence": "Every capture was preceded by a state assertion through the read-only debug surface (window.__pyrefly.app.current.name, battle().snapshot().chapter and game, presenter pendingMenu, pause snapshot chapter and panelsHidden): desktop 18 assertions and phone 14, 0 mismatches; a mismatch would rename the file STATE-MISMATCH. Chapter I seymour-flux (game ffx) and Chapter IV ffx2-bahamut (game ffx2) were selected by the board's selectedId, title to chapter-select to party-prep to cutscene to battle to a command menu, by real Enter and arrow presses at 1600x900 and by real touch taps (title chip, briefing Skip, card, plate, START BATTLE, dialogue, command rows, target bar, PAUSE chip, Resume target) at 390x844, DPR 3, coarse pointer. Changed flows with real input: F1 (the first Esc at the Chapter I first menu with the Auron 3 of 3 guide line visible opened the pause; phone: the first PAUSE tap), the cancel path (submenu then Esc), Esc / P / H (panelsHidden false, true, false) / resume, F2 (Pause, Options, Restart encounter: a fresh first menu and no %23n request), U4 (BATTLE HELP off: .ffx2-cmd-info hidden with empty text after resume, restored). Pose trails read from the stage: Chapter I Tidus ready at the menu then attack, follow, idle (desktop and phone); Chapter IV Paine Warrior ready, attack, follow, idle (both), Rikku Dark Knight ready, attack, follow (desktop run 3), hooded White Mage Yuna cast (both), Bahamut attack, hurt (both) and cast (run 3); the ready, follow, cast, attack and hurt PNGs answered 200 image/png. Frames and per-turn trails are in D:/Tools/pyrefly-scratch/2026-10-02-r35-live/desktop-run4 and phone-run6, several viewed by eye. Debug API used read-only; nothing injected. Music: audioDebug showed prerendered sources (chapter-select, boss-seymour, boss-ffx2-aeon), not the synth fallback; nothing was listened to.",
+      "environment": "headless Playwright gpu, desktop 1600x900 keys and phone 390x844 touch", "automated": true },
+    { "id": "CHK-024", "result": "PASS", "mandatory": true,
+      "evidence": "Lightweight reload smoke. Desktop: CINEMA LIGHT toggled OFF with a real ArrowRight in the Chapter I pause; the save's settings object before and after page.reload is identical (fxLight false) and seenCoach (briefing, firstrun-board, firstrun-prep, ffx-turn-order, firstrun-battle, ffx-aeon) is unchanged; after the reload Chapter IV's Options row read CINEMA LIGHT OFF; restored to ON. Phone: the same toggle by a tap on its row survived the reload and read OFF in Chapter IV. Only the key pyrefly-reprise:save:v1 is in localStorage.",
+      "reason": "Lightweight check only: no chapter was cleared and the full upgrade matrix (older saves, truncated storage, reset flow) was not run, per RUBRIC section 5.",
+      "environment": "headless Playwright gpu", "automated": true }
+  ],
+  "coverage": {
+    "tested": [
+      "Exact artifact: 1272 of 1272 files byte-identical and content-typed against the live site (full, changed-from 25faec70)",
+      "Chapter I (FFX, seymour-flux) and Chapter IV (FFX-2, ffx2-bahamut) from the title to a player command menu: real keys at 1600x900 and real touch taps at 390x844 (DPR 3)",
+      "F1: the first Esc at the Chapter I first menu with the first-run guide line up opens the pause (desktop), the first PAUSE tap (phone); cancel path; Esc, P, H and resume; FFX-2 first Esc",
+      "F2: Restart encounter returns a fresh Chapter I menu with no %23n request in either run",
+      "U4: BATTLE HELP off hides the FFX-2 help band and empties its text; U2 and U3 text seen on screen (Curse hint, one status line)",
+      "D-313 party keys: Tidus ready, attack, follow; Paine Warrior and Rikku Dark Knight ready, attack, follow; hooded White Mage Yuna cast; all files 200 image/png",
+      "D-314 boss keys: Bahamut attack (new), hurt, cast; Mortiorchis hurt on the follow-through beat",
+      "D-315 2x tier: desktop loads ffx2-bahamut idle@2x (2048 px texture), the phone loads no @2x file in either chapter (1024 px texture)",
+      "Prerendered music playing (audioDebug source prerendered) in the board and in both battles, 9 mp3 files all 200",
+      "Setting (CINEMA LIGHT) and first-run progress survive a reload (desktop keys, phone taps)",
+      "Console and network sweep over two final runs: 0 console errors, 0 page errors, 0 responses of 400 or more, 0 mistyped images"
+    ],
+    "reused": [],
+    "notTested": [
+      "Sin XVII and XVIII (F3 advisor strip, F4 Orders rows), F6 (Sphere Grid keys, pad, phone explainer)",
+      "U1 splash layering (no Overdrive cut-in was reached), the FFX O3 zombie guide-slab, U3 queue and merge, U5 and U6 beyond the frames listed",
+      "The KO lie-down, lunge hold, figure-shaped shadows and rim cap by eye; Den of Woe, Chapters V and XI; the Mortiorchis dissolve; the other 16 chapters and their new keys",
+      "The living pause portraits (not in the build, FR-35-01)",
+      "A chapter clear and its progress across a reload; the full CHK-024 upgrade matrix",
+      "Frame time and memory with the 2x masters; a real phone, Safari, a controller; the sound itself (the debug surface and the network log were read, nothing was listened to)"
+    ]
+  },
+  "issues": [
+    { "id": "LV-35-01", "severity": "polish", "status": "open", "game": "FFX-2",
+      "title": "FFX-2 phone, Chapter IV first menu: the first-time coach's 'Gauges running' tab overlaps the enemy-intent card's last text line",
+      "expected": "U5: the first-time coach stands clear of the enemy-intent line on the phone",
+      "observed": "At 390x844 the pink tab (.coach-mark__running, x 28 y 94, 365x26 CSS px, 3 px past the right edge) sits 28 px above the coach card and covers 5,632 px2 of the intent card (.eint__panel x 10 y 60, 370x50) and 10 px of its second text line (the damage ranges); with a three-line intent card the last number is cut (130). The card itself is clear of the intent card; the lane's U5 measure covered the card box only. Fades with the coach within 9 s; first time only. The coach card also covers the front figures' upper bodies in that frame (the accepted U5 trade-off, finding 5 of the UI lane's check).",
+      "evidence": "phone-run6/30-ch4-phone-first-menu.jpg, phone-run4/30-ch4-phone-first-menu.jpg, probe-overlap/first-menu-1s.jpg, probe-overlap/panels.json (D:/Tools/pyrefly-scratch/2026-10-02-r35-live)",
+      "confidence": "measured on the live DOM in a read-only probe and seen in two full runs; whether it is better or worse than 25faec70 is not measured (the previous live build is gone)",
+      "suggestedFix": "Anchor the tab inside the coach card's box or move the card down by the tab's height on the phone; acceptance: 0 px2 between .coach-mark__running and .eint__panel at 390x844 in Chapter IV and XVI" },
+    { "id": "LV-35-02", "severity": "informational", "status": "noted",
+      "title": "net::ERR_ABORTED image requests (41 desktop, 9 phone)",
+      "observed": "All resource type image, no HTTP error: board card art cancelled when the cursor moves on, and the pause plate png cancelled where its 2x webp is used. Same class as the aborted art/pause request the flow lane recorded for release 34. Not counted as 404s." },
+    { "id": "LV-35-03", "severity": "polish", "status": "open", "game": "FFX-2",
+      "title": "Hooded Yuna White Mage: attack, hurt and ko are still the unhooded costume",
+      "expected": "one costume across the White Mage's keys now that cast, item and victory are hooded",
+      "observed": "idle, cast, item and victory are hooded; attack, hurt and ko are the unhooded Songstress painting, so she changes costume when she is hit or attacks. The three files are unchanged since 25faec70 (same sha256), so this is not a regression and the release 35 art lane did not touch them.",
+      "evidence": "desktop-run2/ch4-w2-boss-bahamut-attack.jpg (Bahamut's hit on her), art/yuna-wm-sheet.jpg and art/yuna-wm-sheet2.jpg (the live files side by side)",
+      "confidence": "seen by eye on live and on the live PNGs; an art note for Bailey rather than a release defect" }
+  ],
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 47,
+  "notes": "Final runs: desktop-run4 and phone-run6 from one smoke.mjs; desktop run 3 was also clean and is the source for Rikku Dark Knight and Bahamut cast. Earlier runs had harness defects of my own, none in the product: case-sensitive Restart encounter label and an early audio probe (desktop 1), a broken-image heuristic that counted the board's never-assigned lazy thumbnails (desktop 2), the briefing Skip timing, a tap on the already selected card that begins the chapter, a hidden duplicate prep:begin hint, a naive caster tap routine and a 'menu closed' test that ignored the next member's menu (phone 1 to 5). The desktop run 1 Chapter IV board frame, taken 150 ms after the cursor moved, showed placeholder portraits; frames after the images settled show the real ones and the network list shows those PNGs answering 200. The previous live build (25faec70) is no longer served, so nothing here is a measured comparison with it. Scratch, frames and logs: D:/Tools/pyrefly-scratch/2026-10-02-r35-live/. No server was started."
+}
