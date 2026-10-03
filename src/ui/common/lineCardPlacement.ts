@@ -83,6 +83,13 @@ export interface LineCardInput {
   soft?: readonly ScreenRect[];
   /** Room kept around the hard and preferred boxes, px. Defaults to {@link guardFor}. */
   guard?: number;
+  /**
+   * The desktop scales to try, in order. Defaults to {@link CARD_SCALE} then
+   * {@link SMALL_CARD_SCALE}; a beat Bailey wants small (D-247, Chapter III's
+   * opening) passes `[SMALL_CARD_SCALE]` so the 0.6 card is the only size.
+   * Ignored on a phone, whose card is one fixed size.
+   */
+  sizes?: readonly number[];
 }
 
 /**
@@ -195,7 +202,7 @@ export function pickLineCardPlace(input: LineCardInput): LineCardPick {
   const prefer = (input.prefer ?? []).map((r) => grow(r, g));
   const soft = input.soft ?? [];
   const phone = input.width <= PHONE_MAX_WIDTH;
-  const sizes = (phone ? [1] : [CARD_SCALE, SMALL_CARD_SCALE]).map((k) => lineCardSlots(input.width, input.height, k));
+  const sizes = (phone ? [1] : input.sizes ?? [CARD_SCALE, SMALL_CARD_SCALE]).map((k) => lineCardSlots(input.width, input.height, k));
   const least = (from: readonly LineCardPick[], cost: (p: LineCardPick) => number): LineCardPick | null => {
     let best: LineCardPick | null = null;
     let bestCost = Infinity;

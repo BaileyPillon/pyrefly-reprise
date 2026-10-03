@@ -44,6 +44,19 @@ export const STAT_MOD_IMMUNITY_5: StatusImmunities = {
   'luck-down': 255,
 };
 
+/**
+ * Just Acc/Eva/Luck Up AND Down, 255 each — the Bulwarks' block [§3.3, verified: 2 sources]: "Str/Mag/Def/MDef
+ * Up-Down all land", so Power Break and Magic Break land on a Bulwark where they do not on any other part.
+ */
+export const ACC_EVA_LUCK_MOD_IMMUNITY: StatusImmunities = {
+  'accu-up': 255,
+  'accu-down': 255,
+  'eva-up': 255,
+  'eva-down': 255,
+  'luck-up': 255,
+  'luck-down': 255,
+};
+
 /** Def/MDef Up AND Down, 255 each — i.e. Armor Break and Mental Break do NOT land. */
 export const DEF_MDEF_MOD_IMMUNITY: StatusImmunities = {
   'def-up': 255,

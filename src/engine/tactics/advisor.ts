@@ -650,7 +650,8 @@ export function describeAbility(
     parts.push(`${el.length > 0 ? `${statusLabel(el[0]!)} ` : ''}${kind} damage${scope}`.replace(/\s+/g, ' ').trim());
   }
   if (def.hits > 1) parts.push(`${def.hits} hits`);
-  if (def.minigame) parts.push('timed input');
+  // PR-0324: Ronso Rage is "no timed input; a picker only" (`types.ts#MinigameKind`), so it never claims one.
+  if (def.minigame && def.minigame !== 'kimahri-rage') parts.push('timed input');
   if (def.statusEffects.length > 0) {
     parts.push(`inflicts ${def.statusEffects.map((s) => statusLabel(s.status)).join(', ')}`);
   }

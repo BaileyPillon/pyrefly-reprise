@@ -80,6 +80,10 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * DmgCon instead of 24: Yunalesca (seeds 1 and 7, link 1), Possessed Valefor (link 2 of both seeds)
  * and Braska's Final Aeon (seed 7, link 1). Old and new trees replayed side by side; no other digest
  * moved and every outcome is unchanged.
+ * Chapter VII (Anima, Macalania) re-pinned 2026-10-03 by r37-small (PR-0258, FFX only): an overkill now doubles
+ * the killed enemy's item drops (research ffx-vs-ffx2-presentation §9; `results.ts#OVERKILL_DROP_MULTIPLIER`).
+ * The line overkills a Guado Guardian on both seeds, so the victory event's drops change and nothing else:
+ * with the multiplier stubbed to 1 this file is 18/18 on the old values, and the other 16 digests never moved.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': 'd5fd8bf4:defeat',
@@ -88,8 +92,8 @@ const GOLDEN: Record<string, string> = {
   'yunalesca#7': '2b4ba8df:victory',
   'braskas-final-aeon#1': 'ca3f7569:victory e41be697:victory 128fa095:victory d57abcc1:victory 4c3a1fd4:victory 2ec2be2f:victory 2e29d25c:victory',
   'braskas-final-aeon#7': 'c1e3482:victory 90fc8d41:victory 918adb39:victory ad58d940:victory abbc417b:victory 9621c0d7:victory 3bcdda13:victory',
-  'seymour-anima-macalania#1': 'ca4a9a51:victory',
-  'seymour-anima-macalania#7': 'd14d5e8a:victory',
+  'seymour-anima-macalania#1': 'fb27d3f2:victory',
+  'seymour-anima-macalania#7': 'ab704669:victory',
   'evrae-airship#1': 'ebf9b7c4:victory',
   'evrae-airship#7': '73022786:victory',
   'yojimbo-cavern#1': '354ac345:victory',

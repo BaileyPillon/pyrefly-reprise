@@ -22,7 +22,7 @@ import { fieldedLine, partyCombatantFor, type StoryGame } from '../../story/fiel
 export type { StoryGame } from '../../story/fieldedSpeakers.ts';
 import type { ScreenRect } from '../../engine/ScreenRects.ts';
 import type { BattleStage } from '../../engine/BattlePresenterPorts.ts';
-import { coveredArea, grow, guardFor, pickLineCardPlace, torsoOf, type LineCardInput, type LineCardPick } from '../../ui/common/lineCardPlacement.ts';
+import { SMALL_CARD_SCALE, coveredArea, grow, guardFor, pickLineCardPlace, torsoOf, type LineCardInput, type LineCardPick } from '../../ui/common/lineCardPlacement.ts';
 import '../../ui/common/line-card.css';
 
 /** The stage, plus the projected boxes a `PaintedStage` has (optional, so a test fake need not). */
@@ -41,8 +41,11 @@ export interface MidBeatLineCardOptions {
 }
 
 export interface MidBeatLineCard {
-  /** A beat starts: forget the last place, note who this beat may put on the card. */
-  beginBeat(script: StoryScript): void;
+  /**
+   * A beat starts: forget the last place, note who this beat may put on the card.
+   * `name` is the beat's script name; a name in {@link SMALL_CARD_BEATS} gets the 0.6 card.
+   */
+  beginBeat(script: StoryScript, name?: string): void;
   /** The beat is over: the box goes back to its own layout. */
   endBeat(): void;
   /** The dialogue port, with fielded speakers and the card placed before its first line. */
@@ -95,6 +98,22 @@ export function speakerCombatants(game: StoryGame, who: SpeakerId, staged: reado
   return staged.filter((id) => id === who || id.startsWith(`${who}-`) || id === base || id.startsWith(`${base}-`));
 }
 
+/**
+ * The beats whose line card is the smaller 0.6 one, always (D-247, FFX only:
+ * Bailey 2026-09-27, "I'll go with all of your recommendations").
+ *
+ * Chapter III's opening: its Talk beat ("Hey! You still in there?") plays at the
+ * opening camera, where no 0.7 slot is clear and the pick already fell back to
+ * 0.6 top-left (`lineCardPlacement.ts#SMALL_CARD_SCALE`; docs/handoff/iter2-b4.md,
+ * "Open after the repair"). This makes that size the beat's own rule instead of
+ * a fallback that depends on where the camera and the party happen to rest, so
+ * a settled or wider framing cannot swing it back to the full card. The default
+ * stays 0.7 everywhere else, and `--lc-scale` is still set only by `apply`.
+ * `bfa-talk` exists in one chapter (`story/scripts/braskas-final-aeon.ts`).
+ * Phones have one fixed card and ignore it.
+ */
+export const SMALL_CARD_BEATS: ReadonlySet<string> = new Set(['bfa-talk']);
+
 const CARD_CLASSES = ['dbox--card', 'dbox--band', 'dbox--settling'];
 
 /**
@@ -131,6 +150,7 @@ function largestShift(a: ReadonlyMap<string, ScreenRect>, b: ReadonlyMap<string,
 
 export function createMidBeatLineCard(opts: MidBeatLineCardOptions): MidBeatLineCard {
   let speakers: SpeakerId[] = [];
+  let smallCard = false;
   let placed = false;
   let settleLeftMs = 0;
   let stillMs = 0;
@@ -178,7 +198,7 @@ export function createMidBeatLineCard(opts: MidBeatLineCardOptions): MidBeatLine
         prefer.push(r);
       } else (speaking.has(id) ? hard : soft).push(r);
     }
-    return { width, height, hard, prefer, soft };
+    return { width, height, hard, prefer, soft, ...(smallCard ? { sizes: [SMALL_CARD_SCALE] } : {}) };
   };
 
   const apply = (pick: LineCardPick): void => {
@@ -230,8 +250,9 @@ export function createMidBeatLineCard(opts: MidBeatLineCardOptions): MidBeatLine
   };
 
   return {
-    beginBeat(script) {
+    beginBeat(script, name) {
       speakers = beatSpeakers(script);
+      smallCard = name !== undefined && SMALL_CARD_BEATS.has(name);
       placed = false;
       settleLeftMs = 0;
       lastPick = null;
