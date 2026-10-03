@@ -10,7 +10,7 @@
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
-import { CT_INSTANT, CT_MEDIUM, RT_NORMAL } from './helpers.ts';
+import { CT_INSTANT, CT_LONG, CT_MEDIUM, CT_SHORT, RT_NORMAL } from './helpers.ts';
 
 export const samuraiAbilities: AbilityDef[] = [
   {
@@ -133,6 +133,69 @@ export const samuraiAbilities: AbilityDef[] = [
     flags: ['crit-eligible', 'long-range'],
     ignoresDefense: true,
     messageTemplate: '{user} uses Fireworks',
+  },
+  {
+    // §3.9: 30 AP, 4 MP, "special damage to the target's MP; can crit". §2.9.1: power 8, `Str (vs MP)`.
+    id: 'x2-samurai-magicide',
+    name: 'Magicide',
+    game: 'ffx2',
+    category: 'skill',
+    mpCost: 4,
+    chargeTicks: CT_SHORT, // §1.3: "most Bushido" are Short `CT` [estimate]
+    recoveryTicks: RT_NORMAL,
+    power: 8,
+    formula: 'strength',
+    damageType: 'physical',
+    element: ['none'],
+    targeting: 'single-any',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [],
+    flags: ['crit-eligible'],
+    messageTemplate: '{user} uses Magicide',
+    extra: { mpOnly: true },
+  },
+  {
+    // §3.9: 100 AP, 32 MP, "instant-KO attempt on all enemies", long range. §2.9.1: Death, chance 80, no
+    // formula column — the ordinary Status 1 roll, unlike Zantetsu's Status 3 [§2.6a]. Bosses are immune.
+    id: 'x2-samurai-shin-zantetsu',
+    name: 'Shin-Zantetsu',
+    game: 'ffx2',
+    category: 'skill',
+    mpCost: 32,
+    chargeTicks: CT_LONG, // §1.3 names Shin-Zantetsu in the Long `CT` tier [estimate]
+    recoveryTicks: RT_NORMAL,
+    power: 0,
+    formula: 'none',
+    damageType: 'other',
+    element: ['none'],
+    targeting: 'all-enemies',
+    hits: 1,
+    statusEffects: [{ status: 'ko', chance: 80, duration: 0 }],
+    removesStatuses: [],
+    flags: ['long-range'],
+    messageTemplate: '{user} uses Shin-Zantetsu',
+  },
+  {
+    // §2.3, §3.9 [verified: 2 sources]: 40 AP, 16 MP, self — "heals 25% of max HP (halved by Shell) + cures
+    // Curse/Darkness/Pointless/Poison/Silence/Slow". 4/16 of max HP; `magical` is what lets Shell halve it.
+    id: 'x2-samurai-clean-slate',
+    name: 'Clean Slate',
+    game: 'ffx2',
+    category: 'skill',
+    mpCost: 16,
+    chargeTicks: CT_SHORT, // §1.3: "most Bushido" are Short `CT` [estimate]
+    recoveryTicks: RT_NORMAL,
+    power: 4,
+    formula: 'percent-total',
+    damageType: 'magical',
+    element: ['none'],
+    targeting: 'self',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: ['curse', 'darkness', 'pointless', 'poison', 'silence', 'slow'],
+    flags: ['heals', 'removes-statuses'],
+    messageTemplate: '{user} uses Clean Slate',
   },
   {
     id: 'x2-samurai-nonpareil',

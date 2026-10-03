@@ -183,6 +183,11 @@ export interface ActivePumpDeps {
   now: () => number;
   /** The presenter's own `play`, so an enemy turn animates exactly as it does elsewhere. */
   play: (events: BattleEvent[]) => Promise<PlayResult>;
+  /**
+   * True once something outside the menu needs the screen (FFX-2 Lady Luck's reels asking for their
+   * overlay out of the clock). The pump stops as `'invalidated'` and the menu is closed and re-offered.
+   */
+  interrupted?: () => boolean;
   /** Cheap gauge-only HUD refresh (never a full `sync`, which re-predicts intent). */
   syncGauges: (snapshot: AtbSnapshot) => void;
   /**
@@ -243,6 +248,7 @@ export async function runActivePump(deps: ActivePumpDeps): Promise<PumpStop> {
     // command and an invalidation racing in the same step can only ever end in
     // a refusal, never in a stolen turn.
     if (deps.settled()) return 'settled';
+    if (deps.interrupted?.()) return 'invalidated';
     if (!deps.engine.inputValid(deps.actorId)) return 'invalidated';
   }
 }

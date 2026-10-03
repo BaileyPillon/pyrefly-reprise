@@ -46,7 +46,7 @@ import { advanceGauge, msToTicks, ticksToMs } from './gauges.ts';
 import { buildCommands } from './targeting.ts';
 import { buildState } from './setup.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
-import { abilityFor, performCommand } from './execute.ts';
+import { abilityFor, performCommand, suspendedActor } from './execute.ts';
 import { actorOrder } from './results.ts';
 import {
   allTargetsGone,
@@ -77,6 +77,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     this.drafts = [];
     this.elapsedMs = this.options.carriedParty?.elapsedMs ?? 0;
     this.awaitingMinigame = null;
+    this.awaitingBy = null;
     this.inputOwner = null;
     this.held = null;
     this.acting.clear();
@@ -192,6 +193,11 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
   }
 
   submit(command: Command): BattleEvent[] {
+    // A timed input's answer goes to the girl who asked for it. Lady Luck's
+    // reels (Long CT) ask from `tick()`, after her gauge has emptied, so
+    // `nextActor()` would hand her spin to somebody else (FFX-2 only). It
+    // leaves any other girl's open menu alone.
+    const suspended = suspendedActor(this.units, this.awaitingMinigame, this.awaitingBy, command);
     // **Active ATB, the silent critical (`active.ts`).** A command belongs to
     // the girl whose menu was open and to nobody else. The clock runs while she
     // reads that menu, so by the time Confirm arrives she may have been KO'd,
@@ -207,11 +213,11 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     // Unreachable under Wait (nothing resolved while a menu was open), so this
     // is **FFX-2 only** — FFX is CTB and has no clock
     // (`research/ffx-vs-ffx2-presentation.md` §4.3).
-    if (this.inputOwner && !this.inputValid(this.inputOwner)) {
+    if (!suspended && this.inputOwner && !this.inputValid(this.inputOwner)) {
       this.inputOwner = null;
       return this.flush();
     }
-    const actor = this.nextActor();
+    const actor = suspended?.actor ?? this.nextActor();
     if (!actor) {
       this.inputOwner = null;
       return this.flush();
@@ -222,7 +228,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     if (actor.controller === 'player' && allTargetsGone(this.units, command, abilityFor(this.env(), command))) {
       return this.flush();
     }
-    this.inputOwner = null;
+    if (!suspended) this.inputOwner = null;
     // PR-0076: chained (§1.7) as she answered — hold it; it fires as her when
     // the window closes. Unreachable at zero decision time.
     if (actor.controller === 'player' && !this.awaitingMinigame && isActionLocked(actor)) {
@@ -231,7 +237,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     }
     const before = this.drafts.length;
     if (actor.controller === 'player' && !this.awaitingMinigame) this.beginTurn(actor);
-    performCommand(this.env(), actor, command, false, before);
+    performCommand(this.env(), actor, command, suspended?.charged ?? false, before);
     return this.flush();
   }
 
@@ -250,7 +256,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     const { log, ...rest } = this.battleState;
     const b = structuredClone({
       battleState: rest, units: this.units, gridNodes: this.gridNodes, drafts: this.drafts,
-      held: this.held, awaitingMinigame: this.awaitingMinigame,
+      held: this.held, awaitingMinigame: this.awaitingMinigame, awaitingBy: this.awaitingBy,
     });
     // `units` alias the state's combatants (`setup.ts`); one clone of both keeps that aliasing.
     f.battleState = { ...(b.battleState as Omit<BattleState, 'log'>), log: log.slice() } as BattleState;
@@ -259,6 +265,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     f.drafts = b.drafts;
     f.held = b.held;
     f.awaitingMinigame = b.awaitingMinigame;
+    f.awaitingBy = b.awaitingBy;
     f.abilities = this.abilities;
     f.dresspheres = this.dresspheres;
     f.grids = this.grids;
