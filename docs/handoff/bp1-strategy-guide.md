@@ -19,7 +19,11 @@ is run, read-only, every time the panel draws a NEXT line.
 
 ## Source rule (2026-10-03)
 
-Bailey, 2026-10-03: "from now on the guide follows the ffx/ffx-2 encounter guides from jegged" (D-350). NEXT, WATCH and RULES follow Jegged's FFX guide for chapters 1 to 3 and its FFX-2 guide for chapters 4 and 5, paraphrased in our own words and cited in `research/`, with adaptations to our setup labelled "our adaptation of Jegged"; changing `intendedStrategy` also moves the advisor's top pick, so it is measured before and after.
+Bailey, 2026-10-03: "from now on the guide follows the ffx/ffx-2 encounter guides from jegged" (D-350). NEXT, WATCH and RULES follow Jegged's FFX guide for chapters 1 to 3 and its FFX-2 guide for chapters 4 and 5, in our own words. The same afternoon Bailey added two corrections, and D-350 records all three: "The guide and next move advisor are completely separate entities" (~14:30 EDT) and "Do not say adapted from Jegged or cite worded that just sounds stupid" (~14:40 EDT). They come to three rules, which hold for both games:
+
+1. **The guide and the move advisor are separate.** The guide's NEXT has its own Jegged line; it is not the move advisor's pick. The move advisor, `intendedStrategy`, the tactic files and the benches are not touched.
+2. **The player never sees the source.** Guide text never names Jegged, never says "adapted", and never shows citation wording.
+3. **The sources live in the research files.** Jegged's pages are cited only in `research/jegged-encounter-guides-*.md`. Where the guide differs from Jegged, the difference is written down in this handoff, in plain words.
 
 ## 1. What it is
 
