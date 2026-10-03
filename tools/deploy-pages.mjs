@@ -26,7 +26,10 @@
  *                  section 10, "Owner override of the deploy gate"). An agent
  *                  never passes this flag on its own initiative.
  *
- * Pipeline: preflight -> `vite build` into dist-release/ -> hash and
+ * Pipeline: preflight -> `vite build` into dist-release/ (which derives the
+ * art's lossless WebP from the PNG masters, `tools/art-derive-lib.mjs`) -> prove
+ * every derived file decodes to its master's pixels and that no page names an
+ * art file the build left out (`tools/art-verify.mjs`) -> hash and
  * decode-check every shipped file into `artifact-manifest.json` -> plan the
  * review this change needs (tools/critic-plan.mjs) and apply the owner's
  * release gate: refuse when this commit has no validated focused or deep
@@ -68,6 +71,7 @@ import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import { auditArtReferences, formatAudit, verifyShippedArt } from './art-verify.mjs';
 import { MANIFEST_NAME, buildManifest, diffManifests, verifyLive } from './artifact-manifest.mjs';
 import { applyStoredReports } from './critic-clear.mjs';
 import { classifyPorcelain } from './deploy-classify.mjs';
@@ -521,6 +525,21 @@ async function main() {
   const artFileCount = countFiles(artCharactersDir);
   log(`build ok: index.html present, ${artFileCount} files under art/characters`);
   if (run(process.execPath, [join(ROOT, 'tools', 'fx-assets.mjs'), 'verify', '--dir', join(DIST, 'fx')]).status !== 0) fail('the build did not ship public/fx intact — see output above');
+
+  // Release 38 (r38-bytes): the painted art ships as lossless WebP derived from the PNG masters. Prove it from the files about to
+  // be published, not from the cache that made them: every shipped WebP decodes to its master's pixels (RGBA, sha256), the build
+  // holds exactly one of the PNG and its WebP, and no page, stylesheet or data file names an art file the build left out.
+  // The names the bundle builds at run time are covered by `node tools/art-play-audit.mjs --dir <this build>` (the focused review).
+  log('art: pixel identity of every shipped WebP against its master PNG, and every reference to the art');
+  const artIdentity = await verifyShippedArt({ distDir: DIST, publicDir: join(ROOT, 'public') });
+  log(`art identity ${artIdentity.ok ? 'PASS' : 'FAIL'}: ${artIdentity.checked} masters (${artIdentity.webp} shipped as WebP, ${artIdentity.png} as PNG, ${artIdentity.decoded} compared pixel for pixel) in ${(artIdentity.ms / 1000).toFixed(0)} s`);
+  if (!artIdentity.ok) {
+    for (const p of artIdentity.problems.slice(0, 25)) log(`  ${p}`);
+    fail(`${artIdentity.problems.length} shipped art file(s) are not their master's pixels or are missing (node tools/art-derive.mjs verify --dir dist-release); set PYREFLY_ART_WEBP=off to ship the PNGs as before`);
+  }
+  const artRefs = auditArtReferences(DIST);
+  for (const line of formatAudit(artRefs).split(/\r?\n/)) log(line);
+  if (!artRefs.ok) fail(`${artRefs.problems.length} reference(s) to an art file the build does not hold — see above`);
 
   const indexHtml = readFileSync(indexPath, 'utf8');
   const bundleMatch = indexHtml.match(/assets\/index-([\w-]+)\.js/);

@@ -12,6 +12,7 @@
  * Pure parsing, plus the one `fetch` / `Image` loader (DOM side, no `three`, no engine state, no RNG).
  */
 
+import { shippedArtUrl } from '../../../engine/ArtShipped.ts';
 import { artUrl } from '../../../engine/PaintedArt.ts';
 
 /** `[x, y, w, h]` in the pixels of one plate scale. */
@@ -131,7 +132,7 @@ export function loadPlateImages(root: string, plate: string, spec: PlateParts, s
           img.decoding = 'async';
           img.onload = () => resolve([name, img]);
           img.onerror = () => resolve(null);
-          img.src = `${root}/${plate}/${scale}/${name}.png`;
+          img.src = shippedArtUrl(`${root}/${plate}/${scale}/${name}.png`); // the file the site serves for this master (ArtShipped.ts)
         }),
     ),
   ).then((all) => (all.every((x) => x !== null) ? new Map(all as [string, HTMLImageElement][]) : null));

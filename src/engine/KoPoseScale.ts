@@ -1,3 +1,5 @@
+import { logicalArtUrl } from './ArtShipped.ts';
+
 /**
  * **KO paintings drawn at their standing figure's scale** (VP-1001-05, both games).
  *
@@ -44,7 +46,7 @@ const CHARACTER_POSE = /\/art\/characters\/([^/]+)\/([^/.?#]+)\.png(?:[?#].*)?$/
  * when it had none).
  */
 export function poseScaleFor(imageUrl: string, sidecarScale: number | undefined): number | undefined {
-  const m = CHARACTER_POSE.exec(imageUrl);
+  const m = CHARACTER_POSE.exec(logicalArtUrl(imageUrl)); // a derived `ko.webp` is the master's `ko.png` (ArtShipped.ts)
   if (m && m[2] === 'ko') {
     const fixed = KO_POSE_SCALE[m[1]!];
     if (fixed !== undefined) return fixed;
