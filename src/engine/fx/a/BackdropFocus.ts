@@ -29,12 +29,12 @@ export class BackdropFocus {
   patch(root: Object3D): number {
     let n = 0;
     root.traverse((o) => {
-      if (o.name !== 'backdrop-painting' && !o.name.startsWith('backdrop-layer-')) return;
+      if (o.name !== 'backdrop-painting' && !o.name.startsWith('backdrop-layer-') && !o.name.startsWith('backdrop-wing-')) return;
       const mat = (o as Object3D & { material?: Material }).material as (MeshBasicMaterial & { [PATCHED]?: boolean }) | undefined;
       if (!mat || mat[PATCHED] || !mat.map) return;
       mat[PATCHED] = true;
       // Layers sit nearer the camera than the painting, so they soften less.
-      const depth = o.name === 'backdrop-painting' ? 1 : 0.6;
+      const depth = o.name === 'backdrop-painting' || o.name.startsWith('backdrop-wing-') ? 1 : 0.6; // a wing is the painting's own edge strip
       const bias = this.bias;
       mat.onBeforeCompile = (shader) => {
         shader.uniforms['uFxBias'] = bias;

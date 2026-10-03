@@ -32,6 +32,7 @@ import { radialCanvas, rng } from '../engine/ProceduralArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import type { SceneSlots } from './index.ts';
+import { addPlateWings } from './plateWings.ts';
 import type {
   SceneBuild,
   SceneBuildOptions,
@@ -86,6 +87,16 @@ const CAMERA_REF: [number, number, number] = [0, 3.0, 9.6];
 const BACKDROP = { width: 78, distance: -50, centreY: -2.82 } as const;
 
 /**
+ * The plate's wings (PR-0300; FFX-2 only: Chapters IV and XIII stand here): the outer 23 % of the painting mirrored
+ * out 18 units each side. At 2000x1012 the enemy, action and Bahamut rigs put the plane's right edge at 93 to 96 %
+ * of the frame (86 to 88 % at 2.37) and the party rigs showed its left edge; the rigs themselves are unchanged.
+ */
+export const BEVELLE_PLATE_WINGS = { width: 18, reflect: 0.23 } as const;
+
+/** The plate's plane and the rig table, exported for `tests/unit/plate-wings.test.ts`. */
+export const BEVELLE_UNDERGROUND_BACKDROP = BACKDROP;
+
+/**
  * FFX battle framing: fov 32 (inside the 30–34 band), the party in a shallow
  * left-facing arc in the lower left, the boss right of centre and further back.
  *
@@ -133,6 +144,8 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
   bahamut: { position: [0.9, 1.15, 6.4], lookAt: [2.2, 1.65, -2.8], fov: 30, sway: 0.5 },
   victory: { position: [0.4, 2.2, 8.6], lookAt: [-0.5, 1.45, 0.9], fov: 32, sway: 1.2 },
 };
+
+export const BEVELLE_UNDERGROUND_RIGS = RIGS;
 
 /**
  * Three active slots in the FFX arc, front to back and staggered into the lower
@@ -1163,6 +1176,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
   } satisfies BackdropOptions;
 
   let backdrop = await Backdrop.create(backdropOptions);
+  addPlateWings(backdrop, BEVELLE_PLATE_WINGS);
   backdrop.applyTo(group);
 
   // ------------------------------------------------------------------ lights
@@ -2095,6 +2109,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
     watcher = watchAssets([url], () => {
       void (async (): Promise<void> => {
         const next = await Backdrop.create(backdropOptions);
+        addPlateWings(next, BEVELLE_PLATE_WINGS);
         const wasIn = backdrop.group.parent;
         backdrop.dispose();
         backdrop = next;
