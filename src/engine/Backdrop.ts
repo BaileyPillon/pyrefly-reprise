@@ -461,6 +461,12 @@ export class Backdrop {
     if (this.background) target.background = this.background;
   }
 
+  /** Put a mesh a scene built (a plate wing, `scenes/plateWings.ts`) under the stack; `dispose` frees its geometry and material. */
+  adopt(mesh: Mesh): void {
+    this.group.add(mesh);
+    this.layerMeshes.push(mesh);
+  }
+
   /** @param dt seconds */
   update(dt: number): void {
     this.clock += dt;

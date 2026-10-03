@@ -12,6 +12,7 @@ import {
   type StoryPose,
 } from './cutsceneFigures.ts';
 import { isStagedFx, spawnPyreflies, spawnSendingArc } from './cutsceneFx.ts';
+import { attachUnsentAura, type AuraHandle } from './cutsceneAura.ts';
 
 /**
  * The stage a `CutsceneScreen` draws on: the layers between its backdrop and
@@ -63,6 +64,7 @@ export class CutsceneStage {
   private veiledNow = false;
   private readonly figures = new Map<string, HTMLElement>();
   private readonly timers = new Set<number>();
+  private readonly auras: AuraHandle[] = [];
 
   constructor(
     private readonly root: HTMLElement,
@@ -90,6 +92,8 @@ export class CutsceneStage {
   unmount(): void {
     for (const t of this.timers) window.clearTimeout(t);
     this.timers.clear();
+    for (const a of this.auras) a.stop();
+    this.auras.length = 0;
     this.figures.clear();
     this.shakeEl.remove();
     this.flashEl.remove();
@@ -330,6 +334,7 @@ export class CutsceneStage {
     img.src = artUrl(fig.art);
     el.appendChild(img);
     this.figuresEl.appendChild(el);
+    if (fig.aura) this.auras.push(attachUnsentAura(el, fig.art));
     this.figures.set(actor, el);
     return el;
   }

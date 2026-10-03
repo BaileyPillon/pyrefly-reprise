@@ -168,6 +168,11 @@ export interface MomentsPort {
    */
   confirmPress?(): { pressed: Promise<void>; dispose(): void };
   /**
+   * True once when the player skipped the pre-scene, so the first opening runs as if Confirm were pressed at its start
+   * (PR-0061, `ui/common/transitions/openingHurry.ts`). Optional and additive: absent reads as false.
+   */
+  takeOpeningHurry?(): boolean;
+  /**
    * The player's reduce-motion setting (Settings.reduceMotion or the OS
    * preference), read by the DOM side so the presenter stays DOM-free.
    * Optional and additive (A-13): absent reads as "motion on".

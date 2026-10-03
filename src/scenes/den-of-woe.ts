@@ -7,6 +7,7 @@ import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
+import { addPlateWings } from './plateWings.ts';
 import type { SceneSlots } from './index.ts';
 
 // ---------------------------------------------------------------------------
@@ -111,6 +112,13 @@ export const DEN_OF_WOE_SLOTS: SceneSlots = {
   ...DEN_STAGING,
 };
 
+/**
+ * The plate's wings (PR-0300; FFX-2 only: this scene is Chapter XV's): the outer 20 % of the painting mirrored out
+ * 18 units each side, so the plate keeps filling the frame at 2000x1012 and wider. At the intro and enemy rigs the
+ * plane's own right edge sat at 94 % of a 1.98 frame (87 % at 2.37), and the party rigs showed the left edge.
+ */
+export const DEN_PLATE_WINGS = { width: 18, reflect: 0.2 } as const;
+
 /** The Bevelle Underground's cold grade (the approved FFX-2 underground), pulled toward the plate's blue. */
 export const DEN_OF_WOE_PALETTE: ScenePalette = {
   ...ScenePalettes.bevelleUnderground,
@@ -157,6 +165,7 @@ export const buildDenOfWoeScene: SceneFactory = async (opts: SceneBuildOptions =
 
   const options = plateOptions(url, low, cameraRef);
   let backdrop = await Backdrop.create(options);
+  addPlateWings(backdrop, DEN_PLATE_WINGS);
   backdrop.applyTo(group);
 
   const lights = new LightRig({
@@ -206,6 +215,7 @@ export const buildDenOfWoeScene: SceneFactory = async (opts: SceneBuildOptions =
     watcher = watchAssets([url], () => {
       void (async (): Promise<void> => {
         const next = await Backdrop.create(options);
+        addPlateWings(next, DEN_PLATE_WINGS);
         const wasIn = backdrop.group.parent;
         backdrop.dispose();
         backdrop = next;
