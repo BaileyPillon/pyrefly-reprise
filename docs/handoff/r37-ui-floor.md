@@ -186,3 +186,87 @@ For Bailey:
    for the camera owner, not part of this lane; the plate now survives either state.
 2. **TEXT SIZE 130 at the floor** was still not measured in the Sensor / CTB / banner labels of Chapters II, III and V (the matrix
    ran at 100 %; the dialogue card was probed at 115 and 130 %).
+
+## Re-check after the repair (independent critic, 2026-10-03, Sonnet sub-agent; did not build this lane)
+
+Checked tip `30bf3a7e`. Three builds side by side: the branch on port 6002, the merge base `d154486c` (a `git archive` copy) on
+6003, and `origin/main` `6b5ff02f` (a `git archive` copy, release 36 code) on 6001, all headless Playwright (`PYREFLY_BROWSER=gpu`,
+seed 1, `gotoChapter` with cutscenes skipped, real keys, real taps on the phone), one browser at a time; the three servers were
+stopped by PID. The walker is the one from the first check (every visible text node's effective px, clipped leaf text, text-on-text
+overlaps over 25% of the smaller box, off-window text). Matrix: 5 chapters (Ch I `seymour-flux`, Ch II `yunalesca`, Ch III
+`braskas-final-aeon` FFX; Ch IV `ffx2-bahamut`, Ch V `ffx2-vegnagun-shuyin` FFX-2) x 1024x768 / 1440x900 / 2000x1012 / 390x844 touch,
+steps first menu (coach up and down), seven submenus, Attack target, and every pause tab at 1024x768 and 390x844; TEXT SIZE 1.0 on
+all three builds, TEXT SIZE 1.15 (the "115" of the brief; the setting takes 1, 1.15, 1.3) on the branch and `origin/main` at 1024,
+1440, 390, and 1.3 on the branch. Scratch and frames: `D:/Tools/pyrefly-scratch/2026-10-03/r37-ui-floor-check/` (`chk2.mjs`,
+`chk3.mjs`, `analyze2.mjs`, `analyze3.mjs`, `coach1.mjs`, `coach2.mjs`, `ph4.mjs`, `out2/`, `out3/`).
+
+### Verdict per item
+
+| Item | Verdict | Measured |
+|---|---|---|
+| `npx tsc --noEmit`, orphans, layering | PASS | clean; the same four orphans (`placeholder-sprites`, `tidus`, `MessageBar`, `PartyPrep`); the presenter change is one optional port call, no DOM or `three`; `HudPort.syncQueued` has its `CONTRACT-CHANGES` entry |
+| targeted vitest | PASS | names pause, presenter, hud, ffx, cmd, lv35, ui-, coach, intent, phone, advisor, guide, text-size, line-card, dialogue, target, sensor, r37: 373 files passed, 4 skipped (377), 5,774 tests passed; the full suite is the integrator's |
+| game case in every commit | PASS | all eight branch commits name their case |
+| files under 400 lines | DISCLOSE | `CoachLayer.ts` 399 to 404 crosses the line; `BattlePresenter.ts` (698 to 717), `FFXBattleHud.ts`, `FFX2BattleHud.ts` and `pause-screen.css` were already over; every new file is under 400 |
+| 14 px floor, five chapters, four sizes, TEXT SIZE 1.0, menu + 7 submenus + Attack target (+ every pause tab at 4:3 and on the phone) | PASS | 20 of 20 runs: min 14.0, 0 text nodes under 14 px, 0 page errors. `origin/main` and the merge base read 5.5 to 13.5 px with 32 to 343 nodes under 14 in the same cells (min 5.6 at 1024 in Ch III and V) |
+| the same at TEXT SIZE 1.15 and 1.3 (1024, 1440, 390) | PASS for the floor | 15 of 15 runs at 1.15 and 15 of 15 at 1.3: min 14.0, 0 under 14; no new clipped leaf text against the merge base at 1.3 (phone Ch I and Ch V at 4:3 compared); see Blocker 3 for a clipped label |
+| pause at 4:3 (1024x768) | PASS | 8 tabs in each chapter, 0 under 14, 0 clipped; only the music list scrolled out of view reads off-window (same on `origin/main`) |
+| phone pause footer (Blocker 2 of the first check) | PASS | Ch III and Ch V two-line objectives: 0 text overlaps with ESC, "H PAINTING ONLY" or RESUME on every tab at 1.0, 1.15 and 1.3 (all five chapters, 15 runs); frame `out2/br-ffx2-vegnagun-shuyin-390x844-t-pause-chapter.png` read by eye, clear |
+| Ch II, III, V floor (Blocker 1 of the first check) | PASS | `.dbox__role`, `.dbox__text`, `.ig-ctb__tag`, `.ig-banner__chip`, `.ffx-sensor__unknown`, `.ffx-helpbar` all at 14 or more in the walker, all four sizes, TEXT SIZE 1.0 / 1.15 / 1.3 |
+| FFX target step at 1024 and 1440 (Blocker 3 of the first check) | PASS at TEXT SIZE 1.0; FAIL at 1.15 | Ch I and II, Attack target, 1.0: 0 new overlaps, 0 new off-window text, hand clear of "IN WHITE MAGIC" and "I YUNALESCA" (frame `out2/br-seymour-flux-1024x768-target.png` read by eye). At TEXT SIZE 1.15, 1024x768: see Blocker 3 |
+| phone Ch I target plate on the intent card (Blocker 4 of the first check) | PASS for the card, FAIL for the hand | 3 runs each: plate against the intent card 0 px2 on the branch (the merge base docks it at y 117 to 139, over the card's last line); but see Blocker 2 |
+| PR-0249 (FFX-2 enemy-move card off the girls) | PASS at 1440, 1600, 2000; DISCLOSE at 4:3 | card against the girls' boxes, px2, branch (merge base): 1600x900 menu, list, list-on-Shell, Cure all 0 (up to 19,887); Shell target step Rikku 314 + Paine 617 (16,654); 2000x1012 0 except the Shell step 255 + 278 (19,411); 1440x900 all 0 (up to 17,808). 1024x768: menu, list, list-on-Shell 0 (4.9k to 5.4k); the Shell and Cure target steps 24.7k and 25.7k px2 (Yuna 21.0k, Rikku 3.8k and 4.2k) against 23.7k and 24.1k on the merge base (Yuna 16.8k, Rikku 6.9k): the card has to sit on someone at 4:3, the total is about 4% worse, and the builder's "29.7k to 24.9k" for the merge base is not reproduced (23.7k here) |
+| PR-0104 (queued-command chip) | PASS | real keys 1600x900, Yuna White Magic > Shell > all allies: chip "Shell" first at 126 ms, 14 px, held until the charge ended (4,199 ms); none on the merge base; real tap 390x844: 138 ms, 14 px, inside the window |
+| LV-35-01 (phone coach badge) | PASS on the phone; the same change breaks desktop, Blocker 1 | Ch IV and Ch V 390x844: badge over the intent card 5,632 px2 on the merge base, 0 on the branch (12 px clear), steady over 12 samples; Ch I phone has no badge |
+| PR-0325 (selected Overdrive row) | PASS | FFX Kimahri OVERDRIVE sub list (Jump, Mighty Guard, White Wind): the selected row is `rgb(227,185,74)` and moves with the cursor, the others `rgb(11,10,18)`; FFX-2 CHANGE row `rgb(247,182,217)` selected, `rgb(11,10,18)` not |
+| PR-0302 / PR-0303 (cure hint) | PASS | injected Zombie (Ch I) and Curse (Ch IV): 14.2 px on the phone, 15 px at 1024x768, 0 px2 against the command rows, tip line, chips and advisor |
+| PR-0251 (4:3 HUD labels) | PASS at 1.0, FAIL at 1.15 | floor holds in all five chapters; see Blocker 3 |
+| other chapters (`seymour-anima-macalania`, `sin-fins-core`, `ffx2-ixion-djose`, `ff7-guard-scorpion`) at 1440x900 and 390x844, merge base against branch | PASS, with disclosures | no new overlap, clipped or off-window text except Blocker 1 in Ixion; FFX Ch VII and FFX-2 Ixion hold 14; FF7 reads the same as the merge base (16.5 px desktop; 63 nodes at 9.6 px on the phone on both builds: FF7 phone is not in scope, disclosed); the Sin core HUD still has 2 nodes at 12.6 and 13.5 px at 1440 (`.ffx-sinfin__calm`, `.ffx-sinfin__range--far`; the merge base had 15) |
+
+### Blockers
+
+1. **FFX-2 first-run coach card: its "Gauges running" badge is pushed off the top of the window and the card covers the help bar**
+   (regression against `origin/main` and the merge base; game case FFX-2 only; deterministic). On a fresh profile in Chapter IV
+   (`ffx2-bahamut`) the coach card sits at y 6 to 10 with its badge at y -20 to -24 (the badge is 26 px tall, so about 20 px is cut
+   off) at 1024x768 and at 1600x900; the same at 1440x900 in Ixion (`ffx2-ixion-djose`, off-window text "Gauges running"). The merge
+   base and `origin/main` put the card low (y 612 or 744) with the badge whole at both sizes (`coach1.mjs`, three builds, five sizes: the
+   branch is fine at 1280x960, 1366x768 and 1280x720). At 1024x768 the card also covers the help bar's text ("WHITE MAGIC"
+   cut to its first word; frame `out2/br-ffx2-bahamut-1024x768-menu.png` against `out3/base-ffx2-bahamut-1024x768-menu.png`). Cause
+   (not bisected to one commit): at 1600x900 the floor made the move-advisor card 364x160 at (773,675) where it was 491x108 at
+   (646,727), `markBox` now counts the 30 px badge above the line (a4e9a0b9), and the solver's result lands the line at the stage's
+   top with the badge hanging above it; `keepMarkOffIntent` and `CoachMark` clamp the line but not the badge. This is the first thing
+   a new player sees in the FFX-2 chapters, at the two most common desktop sizes. Fix: clamp the badge-inclusive box to the stage and
+   re-check at 1024x768, 1440x900 and 1600x900.
+2. **FFX phone Ch I Attack target step: the new plate placement hides the targeting hand** (regression; FFX only; 3 of 3 runs). The
+   repair's plate docking puts "Mortiorchis" at (17,219) 119x36, left of the reticle; the pointing hand `.ffx-target__hand` is at
+   (88,228) 44x30, so the plate covers it entirely (frame `out2/ph1-br-1.png`: no hand visible; the merge base shows the hand,
+   `out2/ph1-mb-1.png`, and its plate sits over the intent strip instead). Fix: dock the plate where the hand is not, or move the hand
+   with the plate (`FFXBattleHud.applySelection` plate docking, `handClear.ts`).
+3. **TEXT SIZE 1.15 at 1024x768, FFX Ch I and Ch II: the party row's "OD" label runs off the right edge of the window** (regression
+   against the merge base, which had none; FFX only; in the Attack target step and the submenus). The label box ends at x 1027 to
+   1028 on a 1024 px window and the "D" is cut (crop `out2/crop-od-ts115.png`); at 1.3 "OD" and "Overdrive" are off-window in both
+   chapters. The first check's Blocker 3 had the same label 2 px out at 1.0; the repair fixed 1.0 only. Ch III (FFX) and both FFX-2
+   chapters do not show it.
+
+### Disclosures (majors that are not regressions, or small)
+
+- PR-0249 at 4:3 target steps: the card still lands on Yuna (21k px2); see the table. At 1600x900 and 2000x1012 the Shell target
+  step keeps a residue of 0.3k to 0.6k px2 (a girl's head box).
+- The Ch V line card (Braska "FARPLANE" box) at 1440x900 covers the lower party rows as before; with the 14 px role tag its text now
+  touches the Paine row label (646 px2). The card position is unchanged.
+- At 1024x768 the Ch V White Magic list's last row is half cut under the party rows and scrolls (the list is half a row shorter at the
+  14 px floor); the Ch IV move card moves right to clear the girls and covers more of the enemy.
+- Phone pause options page: the settings block shows about 3 of its rows before it scrolls (4 before); TEXT SIZE and EYE CANDY are
+  one scroll away; no text overlaps in the visible region (the walker's `pause-options` overlaps are rows scrolled out of view).
+- The phone target camera's two resting states (the builder's For Bailey 1) were seen again on the merge base: plate y 117 and 138.
+- Not run: the full suite, TEXT SIZE 1.15 and 1.3 at 2000x1012, the chapters beyond the four spot-checked ones.
+- The Sin core HUD (Ch XII) keeps 2 nodes under 14 px at 1440x900; the FF7 phone keeps 63 nodes at 9.6 px (both outside the five
+  headline chapters and unchanged by this branch).
+
+### Verdict
+
+**Not ok to merge as is.** The floor itself is met everywhere asked for (five chapters, four sizes, TEXT SIZE 1.0 / 1.15 / 1.3, the 4:3
+pause, the phone pause), and the repair holds for the first check's five blockers at TEXT SIZE 1.0 (Ch II, III, V floor; phone pause
+footer; FFX 4:3 target collisions; PR-0249 at 4:3 no longer worse for Rikku in total; the phone plate off the intent card). Three
+regressions remain: the FFX-2 first-run coach badge clipped at 1024x768, 1440x900 and 1600x900 (Blocker 1, the most visible), the phone
+target hand hidden by the new plate (Blocker 2), and the "OD" label clipped at 4:3 at TEXT SIZE 1.15 and 1.3 (Blocker 3).
