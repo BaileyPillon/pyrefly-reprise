@@ -1,0 +1,10 @@
+# Pyrefly automated ear (tools/audio/ear). Install into a venv on D:, never globally:
+#   py -3.11 -m venv D:/Tools/venvs/audio-ear
+#   D:/Tools/venvs/audio-ear/Scripts/python -m pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+#   D:/Tools/venvs/audio-ear/Scripts/python -m pip install -r tools/audio/ear/requirements.txt
+# transformers is pinned below 5: see README (CLAP embeddings).
+audiobox_aesthetics==0.0.4
+transformers==4.49.0
+huggingface_hub==0.36.2
+numpy==2.4.6
+pyloudnorm==0.2.0
