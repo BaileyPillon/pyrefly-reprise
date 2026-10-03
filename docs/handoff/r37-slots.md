@@ -113,3 +113,53 @@ Bailey's pick).
 optional field), `BattlePresenter.ts` (one line), `KeyPoses.ts`; `tests/unit/engine/r37-key-slots.test.ts`; this note; the
 screenshots under `docs/screenshots/r37-slots/`. No shared contract in `docs/CONTRACTS.md` is touched (`EventCtx.menuOpen` is
 optional and presenter-internal), so no `CONTRACT-CHANGES` entry.
+
+## Check (independent, 2026-10-03, branch `r37-slots` at 8abf7d1c)
+
+Result: **OK, no blockers.** Done by a second agent from scratch (own scratch art, own scripts, own servers on 5860 to 5861, both
+stopped by PID). Nothing written under `public/art`; art on the pages was a scratch folder served by a dev-server middleware.
+
+| Gate | Result |
+|---|---|
+| `npx tsc --noEmit` | clean (exit 0) |
+| Full `npx vitest run --testTimeout=60000` (run alone, no browser open) | 752 files: **747 passed, 5 skipped, 0 failed**; 11,058 tests passed, 40 skipped, 1 todo. The three files that failed under load for the builder passed |
+| `node tools/orphans.mjs` | 24 orphaned (same as origin/main) |
+| Layering (rule 1) | `KeySlots.ts` imports only types and one constant; the diff adds no `three`, DOM, RNG or engine state to `src/engine/BattlePresenter*.ts` / `KeyPoses.ts` |
+| File size (rule 7) | `KeySlots.ts` is 153 lines (the file header says 146); `BattlePresenter.ts` (699) and `BattlePresenterEvents.ts` (426) were already over 400 on origin/main and grew by one and two lines |
+
+**No visible change without art (Ch I FFX and Ch IV FFX-2).** An origin/main copy (`git archive` into a scratch folder, same
+`public/art`) and the branch were driven by the same real keys in headless GPU Chromium, seed 1, with no `od-*` or `telegraph`
+painting anywhere (real art has none). Ch I: Tidus Overdrive Spiral Cut from the command menu, then Mortiorchis' charge (phase flag
+set through the debug state to reach it quickly); Ch IV: the first menus, Attack for Paine and Rikku, Bahamut's charge.
+- Ch I: main-a, main-b, branch-a, branch-b all give `tidus idle > ready > attack > follow > idle`, `mortiorchis idle > hurt > idle`,
+  and **byte-identical engine event logs** (42 events); zero requests for `od-*` or `telegraph`, no 404s, no console errors.
+- Ch IV: the pose lists differ only by ATB timing, as they do between two runs of main itself; no `od-*` or `telegraph` appears,
+  no requests for them, no errors. Frame composition in the paired screenshots is the same.
+- **Pixel diff is not a usable gate on its own:** the page animates in real time (grain, particles, idle motion), so two runs of
+  origin/main differ in 5 to 47 percent of pixels at identical moments, and branch against main falls inside that range. The
+  frames were compared by eye as well (`docs/screenshots/r37-slots/check/no-art-main-vs-branch.png`: top row Ch IV, bottom row Ch I,
+  main left, branch right). The exact-sequence equality is pinned by the unit tests.
+
+**The slots play with fixture art** (my own stand-ins: `critical`, `cast`, `attack`, `victory` paintings copied under the slot names):
+- Ch I: `tidus ready > od-spiral-cut > idle` (no `attack`, no `follow`), `mortiorchis idle > hurt > idle > telegraph > idle`.
+- Ch IV (Wait ATB): Paine `ready > od-attack > idle` at the apex; Bahamut `... idle > telegraph > idle`.
+- Active ATB: same Paine and Bahamut results where no menu was open.
+- BATTLE SPECTACLE off (`?fx=off`), art present: Tidus `ready > attack > follow > idle`, no `telegraph`: the gate holds
+  (the files are still requested, the same eager load every pose gets).
+
+**REDUCE MOTION** (real key run, crossfade read off the actor on the first frame the pose is seen): normal runs show the new
+painting at fade 0 to 0.03 (crossfading); with Reduce Motion on, `od-spiral-cut`, `telegraph` (Ch I) and `od-attack`, `telegraph`
+(Ch IV) all appear at fade 1, a single cut. In Ch IV with Reduce Motion the wind-up painting does not lead (existing `keysOn` rule),
+so the order is `attack > od-attack > idle`: one extra swap that is today's behaviour, not the slot's.
+
+**FFX-2 menu rule holds.** Same Ch IV run: Paine's first Attack (no menu open) `ready > od-attack > idle`; her later Attacks with a
+menu open at the time play today's `ready > attack > follow > idle` and never show the key painting. FFX is unaffected by menus.
+
+**Observations for the driver (none block):**
+1. The telegraph's menu rule is read once at the start of the beat, so a menu that opens during the beat leaves the painting up
+   (the Bahamut shot in `slots-with-standins.png` shows exactly that). Matches the builder's open question 2.
+2. `damage` calls `odApex(ctx, event.sourceId ?? ctx.actingId)`. A damage event with no source (a poison tick) arriving while an
+   FFX-2 action with an armed key is open would raise that key early. Only FFX-2, only with a painting installed, not seen in any run.
+3. Open questions 1 to 3 above stand and still need Bailey.
+
+Evidence: `docs/screenshots/r37-slots/check/` (`no-art-main-vs-branch.png`, `slots-with-standins.png`).
