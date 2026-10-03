@@ -161,3 +161,15 @@ Game case of this check: both. FFX rooms (Zanarkand, Dream's End, Garden of Pain
 - The real chapters were reached through the debug `gotoChapter`; real keys were used only for a command-menu Enter smoke. LOW EFFECTS was forced by `?fxtier=low`, not by the settings row.
 - Frame time was measured on two rooms only (Gagazet, Leblanc) at desktop size.
 - Release 35 live was not run; the merge-base build (d154486c) and a merge with origin/main c69de96a stand in.
+
+### Repair of the Farplane blocker (one cycle; FFX-2 Ch V only, plumbing is shared and off by default)
+- Fix: `PlateLayout.keepBands` (additive, default false). `DepthPlates.show` hides only the painting plane when it is set, so the scene's own
+  `backdrop-layer-*` bands stay drawn over the plates (they render at -80 and up, the plates at -90 to -81). `plateRooms.ts` sets it for the
+  Farplane alone (its two bands are translucent, 0.38 and 0.52); the other seven rooms have no bands that differ and are unchanged
+  (a unit test pins which room keeps them). The Farplane stays in `plateRooms.ts` with its colossus follow.
+- Re-measured in the real chapter (`ffx2-vegnagun-shuyin`, 1600x900, REDUCE MOTION, dials 0, frozen, two stable grabs agreeing under 0.05 mean,
+  scene in its colossus state: painting scale 1.8, lift 6): plates ON vs OFF mean **0.35**, 0.022 percent of values over 24, sky band 0.33
+  (was 3.36 and 7.5 percent). Control on the same page, bands hidden as before the fix: 3.77 mean, 3.17 percent over 24. ON again after toggling: 0.35.
+  Scripts and frames: `D:/Tools/pyrefly-scratch/2026-10-03/r37-fix/` (`m2.mjs`, `out/`).
+- Not measured: the drift extreme in this chapter. The colossus rig is not the idle rig, so the drift (and with it any doubling of a band
+  against a sliding plate) is cut there (focus weight 0 at every sample). A still frame at the pinned time shows no ghosting.

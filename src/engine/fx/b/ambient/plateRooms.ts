@@ -16,7 +16,7 @@ import type { RoomSpec } from './room.ts';
  *
  * Game case: each room is its own game's (FFX rooms drift at the tuned periods, FFX-2 rooms at 0.8 of them).
  */
-function platesRoom(key: string, game: 'ffx' | 'ffx2', distance: number, thresholds: number[], z?: number[], drift = 1): RoomSpec {
+function platesRoom(key: string, game: 'ffx' | 'ffx2', distance: number, thresholds: number[], z?: number[], drift = 1, keepBands = false): RoomSpec {
   const blur = 3;
   const zs = z ?? [distance + 10, distance + 22, distance + 34].slice(0, thresholds.length);
   return {
@@ -24,8 +24,8 @@ function platesRoom(key: string, game: 'ffx' | 'ffx2', distance: number, thresho
     game,
     platesOnly: true,
     drift,
-    plates: { thresholds, z: zs, soft: 0.015, blur, width: 2048 },
-    phonePlates: { thresholds: [thresholds[1]!], z: [zs[1]!], soft: 0.015, blur: 2, width: 1024 },
+    plates: { thresholds, z: zs, soft: 0.015, blur, width: 2048, keepBands },
+    phonePlates: { thresholds: [thresholds[1]!], z: [zs[1]!], soft: 0.015, blur: 2, width: 1024, keepBands },
     lamps: {},
     fields: [],
     haze: [],
@@ -39,8 +39,8 @@ export const ZANARKAND_DOME = platesRoom('zanarkand-dome', 'ffx', -56, [0.14, 0.
 export const DREAMS_END = platesRoom('dreams-end', 'ffx', -50, [0.03, 0.07, 0.12]);
 /** Chapter XII, the Garden of Pain (FFX; z -50). */
 export const GARDEN_OF_PAIN = platesRoom('garden-of-pain', 'ffx', -50, [0.05, 0.3, 0.68]);
-/** Chapter V, the heart of the Farplane (FFX-2; z -48). The plates follow the colossus links' scale and lift of the painting. */
-export const FARPLANE = platesRoom('farplane', 'ffx2', -48, [0.01, 0.07, 0.17]);
+/** Chapter V, the heart of the Farplane (FFX-2; z -48). The plates follow the colossus links' scale and lift of the painting, and the scene's two translucent band layers (0.38, 0.52) stay drawn over them (`keepBands`), so the resting frame is the live one. */
+export const FARPLANE = platesRoom('farplane', 'ffx2', -48, [0.01, 0.07, 0.17], undefined, 1, true);
 /** Chapter VI, Leblanc's last room (FFX-2; z -47). */
 export const LEBLANC_LAST_ROOM = platesRoom('leblanc-last-room', 'ffx2', -47, [0.1, 0.14, 0.26]);
 /** Chapter XIII, the Via Infinito (FFX-2; z -50). */

@@ -192,6 +192,13 @@ describe('A-7 plates-only rooms (game-aware)', () => {
     for (const r of only) expect(r.game).toBe(GAME[r.key]);
   });
 
+  it('keeps the band layers of the scene itself over the plates only in the Farplane (FFX-2 Ch V: its two bands are translucent, hiding them changed the resting frame)', () => {
+    for (const r of only) {
+      expect(!!r.plates.keepBands).toBe(r.key === 'farplane');
+      expect(!!r.phonePlates.keepBands).toBe(r.key === 'farplane');
+    }
+  });
+
   it('carries no lamps, weather, haze, arcs or lightning (what floats in a room is the canon table\'s call, A-6)', () => {
     for (const r of only) {
       expect(r.lamps).toEqual({});

@@ -26,8 +26,8 @@ import { cutPlates } from './plateMaths.ts';
  * becomes a file: the plates are built in memory from the loaded painting, and the painting file
  * is never touched.
  *
- * While the plates show, the painting plane and its band layers are hidden; switching option B
- * off puts them back exactly as they were.
+ * While the plates show, the painting plane and its band layers are hidden (a layout with `keepBands` keeps the
+ * scene's own band layers drawn over the plates); switching option B off puts them back exactly as they were.
  *
  * Game case: both (plumbing); the cut is each room's own.
  */
@@ -49,6 +49,12 @@ export interface PlateLayout {
    * floor reaches back to; painting rows beyond it stay on the upright plates.
    */
   floor?: { far: number };
+  /**
+   * Leave the scene's own `backdrop-layer-*` bands visible over the plates (they draw after the plates, render order -80 and up).
+   * Without it the bands are hidden with the painting plane, which changes the resting frame wherever a scene's bands are translucent
+   * (the Farplane's are 0.38 and 0.52): the plates alone are the bare painting, the live frame is the painting plus its bands.
+   */
+  keepBands?: boolean;
 }
 
 const FLOOR_VERT = /* glsl */ `
@@ -158,6 +164,7 @@ export class DepthPlates {
   private thresholds: number[] = [];
   private readonly hidden: Array<{ o: Object3D; was: boolean }> = [];
   private shown = false;
+  private keepBands = false;
   private paint: Mesh | null = null;
   /** Each upright plate's own scale (its `k`) and height at rest, for {@link follow}. */
   private readonly base: Array<{ k: number; y: number } | null> = [];
@@ -197,6 +204,7 @@ export class DepthPlates {
     const plates = cutPlates(paint, depth, w, h, { thresholds: layout.thresholds, soft: layout.soft, blur: layout.blur }, 0.999, rows);
     const zs = [g.distance, ...layout.z];
     const dp = new DepthPlates(group, g, zs, !!layout.floor);
+    dp.keepBands = !!layout.keepBands;
     dp.depth = depth;
     dp.dw = w;
     dp.dh = h;
@@ -284,7 +292,7 @@ export class DepthPlates {
     if (on) {
       this.hidden.length = 0;
       for (const o of this.group.children) {
-        if (o.name === 'backdrop-painting' || o.name.startsWith('backdrop-layer-')) {
+        if (o.name === 'backdrop-painting' || (!this.keepBands && o.name.startsWith('backdrop-layer-'))) {
           this.hidden.push({ o, was: o.visible });
           o.visible = false;
         }
