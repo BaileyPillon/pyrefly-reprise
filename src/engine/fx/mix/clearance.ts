@@ -1,4 +1,5 @@
 import { Vector3, type PerspectiveCamera } from 'three';
+import { DOWN_IN_VIEW_MIN, DOWN_UNDER_MAX } from './downed.ts';
 import { cameraAt, coverShare, figBox, type Box, type Fig, type Mask, type Pose } from './geometry.ts';
 
 /**
@@ -13,7 +14,11 @@ import { cameraAt, coverShare, figBox, type Box, type Fig, type Mask, type Pose 
  * - **party overlap**: no party member hides more of another than today plus 3 % (at least 12 % is
  *   allowed), the nearer figure covering the farther (Evrae: Tidus must not hide Wakka);
  * - **boss cover**: no enemy's painted box covers more of a party member than today plus 2 % (at least
- *   8 %): Paine never stands inside Bahamut's silhouette.
+ *   8 %): Paine never stands inside Bahamut's silhouette;
+ * - **downed footprint** (round 19, PR-0318): where each party member would LIE if she went down (`downed.ts`) should be
+ *   at least 80 % outside the panels and in view. A SOFT rule: it ranks the poses that pass the rules above (and the least
+ *   bad ones), but never fails one, so a colossus master is not given up for it (Bahamut's BOSS SCALE fell to 0.7 at
+ *   2560x1080 when it was a hard rule); the body itself is laid clear of the rows when she falls (`ProneLay`, `MaxMix`).
  *
  * `fitClear` searches from the master toward today's rig (blends), standing back along the view line,
  * and over a static lens shift (capped at 8 % of the frame), for the pose NEAREST the master that passes;
@@ -53,6 +58,10 @@ export interface Clear {
   bossCover: number;
   floorOk: boolean;
   overlapOk: boolean;
+  /** The worst downed footprint (the share under a panel and in view), or null when no member has one. */
+  down: { id: string; under: number; inView: number } | null;
+  /** The footprints' total excess over the limits (0 = every body clear): a soft rank, never part of `ok`. */
+  downExcess: number;
   figs: { id: string; enemy: boolean; inView: number; underHud: number }[];
 }
 
@@ -145,9 +154,25 @@ export function bossCoverOf(boxes: readonly Box[], figs: readonly Fig[]): number
   return worst;
 }
 
-/** How boxes, plus a static lens shift (+ = content right / down), keep every figure clear. */
-export function clearBoxes(boxes: readonly Box[], figs: readonly Fig[], camPos: Vector3, f: Field, lens: [number, number], limits: readonly (Limit | null)[], rule: PartyRule | null): Clear {
+/** A party member's downed footprint as a screen box under a camera (field px), or null (an enemy, no KO painting). */
+export function downBoxOf(g: Fig, cam: PerspectiveCamera, W: number, H: number): Box | null {
+  return g.down ? figBox({ ...g, quad: g.down }, cam, W, H) : null;
+}
+
+/** Every figure's downed footprint under a camera. */
+export function downsOf(cam: PerspectiveCamera, figs: readonly Fig[], f: Field): (Box | null)[] {
+  return figs.map((g) => downBoxOf(g, cam, f.W, f.H));
+}
+
+/**
+ * How boxes, plus a static lens shift (+ = content right / down), keep every figure clear. `downs` (aligned with
+ * `figs`) are the party's downed footprints under the same camera: each should be at most 20 % under a panel and at least
+ * 80 % in view; the excess is `downExcess`, a soft rank (see the module note), not part of `ok`.
+ */
+export function clearBoxes(boxes: readonly Box[], figs: readonly Fig[], camPos: Vector3, f: Field, lens: [number, number], limits: readonly (Limit | null)[], rule: PartyRule | null, downs: readonly (Box | null)[] = []): Clear {
   let worst = 0;
+  let downWorst: Clear['down'] = null;
+  let downExcess = 0;
   let px = 0;
   let n = 0;
   const rows: Clear['figs'] = [];
@@ -162,13 +187,19 @@ export function clearBoxes(boxes: readonly Box[], figs: readonly Fig[], camPos: 
       px += b.b - b.t;
       n++;
     }
+    const d0 = downs[i];
+    if (d0 && !g.enemy) {
+      const m2 = measure({ l: d0.l + lens[0], r: d0.r + lens[0], t: d0.t + lens[1], b: d0.b + lens[1] }, f);
+      downExcess += Math.max(0, m2.underHud - DOWN_UNDER_MAX) + Math.max(0, DOWN_IN_VIEW_MIN - m2.inView);
+      if (!downWorst || m2.underHud - m2.inView > downWorst.under - downWorst.inView) downWorst = { id: g.id, under: +m2.underHud.toFixed(2), inView: +m2.inView.toFixed(2) };
+    }
   });
   const partyPx = px / Math.max(1, n);
   const overlap = overlapOf(boxes, figs, camPos);
   const bossCover = bossCoverOf(boxes, figs);
   const floorOk = !rule || partyPx >= rule.floorPx - 0.5;
   const overlapOk = !rule || (overlap <= rule.overlapMax + 1e-6 && bossCover <= rule.bossCoverMax + 1e-6);
-  return { ok: worst <= 1e-6 && floorOk && overlapOk, worst, partyPx, overlap, bossCover, floorOk, overlapOk, figs: rows };
+  return { ok: worst <= 1e-6 && floorOk && overlapOk, worst, partyPx, overlap, bossCover, floorOk, overlapOk, down: downWorst, downExcess, figs: rows };
 }
 
 /**
@@ -234,11 +265,13 @@ export function fitClear(master: Pose, today: Pose, figs: readonly Fig[], f: Fie
     const fov = master.fov + (today.fov - master.fov) * bl;
     for (const k of BACKS) {
       const pose: Pose = { pos: look.clone().add(pos0.clone().sub(look).multiplyScalar(k)), look, fov };
-      const boxes = boxesOf(cameraAt(pose, f.W / f.H), figs, f);
+      const cam = cameraAt(pose, f.W / f.H);
+      const boxes = boxesOf(cam, figs, f);
+      const downs = downsOf(cam, figs, f);
       for (const sx of steps)
         for (const sy of stepsY) {
           const lens: [number, number] = [Math.round(sx * f.W), Math.round(sy * f.H)];
-          const cl = clearBoxes(boxes, figs, pose.pos, f, lens, limits, rule);
+          const cl = clearBoxes(boxes, figs, pose.pos, f, lens, limits, rule, downs);
           const deficit = Math.max(0, rule.floorPx - cl.partyPx);
           const excess = Math.max(0, cl.overlap - rule.overlapMax) + Math.max(0, cl.bossCover - rule.bossCoverMax);
           // Passing poses: the least change from the master (stand-back, blend toward today, shift).
@@ -249,8 +282,8 @@ export function fitClear(master: Pose, today: Pose, figs: readonly Fig[], f: Fie
             ex > 0
               ? -1e7 - ex * 1e5 - cl.worst * 1000 - deficit * 40 - excess * 3000
               : cl.ok
-                ? 1e6 - 300 * (k - 1) - 60 * bl - 0.15 * (Math.abs(lens[0]) + Math.abs(lens[1])) + 0.05 * cl.partyPx
-                : -cl.worst * 1000 - deficit * 40 - excess * 3000 + bl;
+                ? 1e6 - 300 * (k - 1) - 60 * bl - 0.15 * (Math.abs(lens[0]) + Math.abs(lens[1])) + 0.05 * cl.partyPx - 400 * cl.downExcess
+                : -cl.worst * 1000 - deficit * 40 - excess * 3000 + bl - 100 * cl.downExcess;
           if (!best || score > best.score) best = { pose, lens, clear: cl, blend: bl, back: k, score, gate: ex };
         }
     }

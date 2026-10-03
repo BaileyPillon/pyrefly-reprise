@@ -58,6 +58,7 @@ import {
 } from './BattlePresenterUtil.ts';
 import { headlineEnemy } from '../battle/common/headlineEnemy.ts';
 import { paceFactor } from './pace.ts';
+import { shotHoldMs } from './fx/shotHold.ts';
 import { applyEventToVitals, captureVitals, projectState, type VitalsMap } from './BattlePresenterVitals.ts';
 
 // Re-exported: the loop's public types live with the ports (`BattlePresenterPorts.ts`).
@@ -237,7 +238,11 @@ export class BattlePresenter {
     const run = this.playBurst(events);
     this.playing = run.then(() => undefined, () => undefined); // FF7's submit waits on it (`submit`)
     try {
-      return await run;
+      const res = await run;
+      // The MAX mix's DRESSPHERE SHOT runs its 1.6 s before the next menu or enemy action begins (fx/shotHold.ts; 0 with no shot up).
+      const held = res.ended || res.minigame ? 0 : shotHoldMs();
+      if (held > 0) await this.sleep(held);
+      return res;
     } finally {
       this.actingState.cancel(); // an action the burst stopped inside never ends on screen
     }

@@ -1,6 +1,6 @@
 import { Vector3, type PerspectiveCamera } from 'three';
 import { measure, type Field } from './clearance.ts';
-import { cameraAt, figBox, figOf, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
+import { cameraAt, figBox, figOf, stillActor, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
 import { battleCanvas, fieldOf, hudPanels } from './hudPanels.ts';
 import { closeShot, heroShot } from './masters.ts';
 import type { RigWatch } from './rigWatch.ts';
@@ -13,7 +13,10 @@ import type { RigWatch } from './rigWatch.ts';
  *   three-quarter shot of the actor at about half the frame height; the cut back when the input ends.
  * - DRESSPHERE SHOT (FFX-2 only, research 6.1): on a spherechange, a held close shot of the girl, at
  *   least 1.6 s and until she is quiet again (at most 3 s); never fired while a girl's menu is open, and
- *   handed back the frame a menu opens (Active ATB: the gauges run, so the player sees the master).
+ *   handed back the frame a menu opens. Round 19 (PR-0313, PR-0314): the presenter holds the next decision until the shot
+ *   has run its 1.6 s (`holdMs`, `shotHold.ts`: the next menu or enemy action begins right after a burst, so the shot could
+ *   not be predicted to hold, it is made to), it is not cut to while anyone else is acting, and it is handed back at the
+ *   first action-start of anyone but its subject (an enemy's hit landed inside it with the enemy off camera).
  *
  * Both shots are checked before they are cut to (the judges' must-fix list): the subject whole in the
  * part of the frame the viewport shows (the phone's slice included) and clear of the HUD as laid out
@@ -95,7 +98,9 @@ export class HeldShots {
   /** The best candidate of the last try (checks only). */
   lastTry = '';
   private readonly subjects = new Map<Actor, string>();
-  readonly stats = { od: 0, sc: 0, skipped: 0, handBacks: 0, writes: 0, searchMs: 0 };
+  readonly stats = { od: 0, sc: 0, skipped: 0, handBacks: 0, actionBacks: 0, writes: 0, searchMs: 0 };
+  /** Seconds a dressphere shot holds at least (D-316). */
+  static readonly MIN_HOLD = 1.6;
 
   constructor(private readonly game: 'ffx' | 'ffx2', private readonly rigs: RigWatch) {}
 
@@ -131,17 +136,44 @@ export class HeldShots {
     }
     // A menu opening hands a spherechange shot back at once (never a cut while a girl is choosing).
     if (this.held?.kind === 'sc' && (o.menu || !o.scOn)) this.handBack();
+    // Anyone but the subject starting an action (a lunge, a cast, a hit in flight) ends the shot: the actor and the target
+    // must both be readable (R19-FN-01).
+    if (this.held?.kind === 'sc' && this.actingElsewhere(o.actors, this.held.who)) {
+      this.stats.actionBacks++;
+      this.handBack();
+    }
     if (this.held?.kind === 'sc') {
       const age = this.time - this.held.since;
       const quiet = QUIET.has(this.held.who.pose ?? 'idle');
       if ((quiet && age >= 1.6) || age >= 3) this.handBack();
     }
-    if (!this.held && this.game === 'ffx2' && o.scOn && !o.menu && o.master && o.ready && changed.length) this.cut('sc', changed[0]!, o.actors, o.master, o.lens);
+    if (!this.held && this.game === 'ffx2' && o.scOn && !o.menu && o.master && o.ready && changed.length) {
+      const who = changed[0]!;
+      if (this.actingElsewhere(o.actors, who)) {
+        // Another actor is mid-action as she changes: the shot would show the wrong thing; the master holds.
+        this.stats.skipped++;
+        this.lastTry = `sc ${who.name} skipped: another actor is acting`;
+      } else this.cut('sc', who, o.actors, o.master, o.lens);
+    }
     if (this.held) {
       this.rigs.write(this.held.pose);
       this.stats.writes++;
     }
     return this.held;
+  }
+
+  /**
+   * How many ms of a held dressphere shot are still to run (0 with none up): the presenter waits that long after the burst, so the
+   * next menu or enemy action begins after the shot, not inside it (`shotHold.ts`, PR-0313 and PR-0314).
+   */
+  holdMs(): number {
+    const h = this.held;
+    return h?.kind === 'sc' ? Math.max(0, (HeldShots.MIN_HOLD - (this.time - h.since)) * 1000) : 0;
+  }
+
+  /** Does anyone other than `who` act now (an action's first frames: a lunge, run, cast or strike in flight)? */
+  private actingElsewhere(actors: readonly Actor[], who: Actor): boolean {
+    return actors.some((a) => a !== who && a.visible && (a.lifeState === 'act' || (a.facing < 0 && !stillActor(a))));
   }
 
   private handBack(): void {
