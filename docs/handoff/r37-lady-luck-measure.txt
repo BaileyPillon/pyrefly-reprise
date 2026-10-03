@@ -1,0 +1,11 @@
+# r37-lady-luck measurement, 200 seeds, same harness on origin/main c69de96a (before) and on r37-lady-luck (after)
+## before-shipped
+RESULT chapterV-farplane line=shipped-intended wins=188/200 lostAtLink={"2":11,"3":1} reelSpins=0
+RESULT via-infinito line=shipped-intended(chapter, action time off, Active, D=0) wins=0/200
+## after-shipped
+RESULT chapterV-farplane line=shipped-intended wins=188/200 lostAtLink={"2":11,"3":1} reelSpins=0
+RESULT via-infinito line=shipped-intended(chapter, action time off, Active, D=0) wins=0/200
+## before-reels
+RESULT chapterV-farplane line=reels(Paine=Lady Luck, Attack Reels) wins=0/200 lostAtLink={"1":57,"2":130,"3":10,"4":1,"5":2} reelSpins=6546
+## after-reels
+RESULT chapterV-farplane line=reels(Paine=Lady Luck, Attack Reels) wins=0/200 lostAtLink={"1":200} reelSpins=888
