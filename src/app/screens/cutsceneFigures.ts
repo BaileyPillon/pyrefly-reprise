@@ -44,6 +44,11 @@ export interface CutsceneFigure {
   /** An unsent figure drifts slightly and carries the cool pyrefly glow. */
   unsent?: boolean;
   /**
+   * The live glow on her outline (a breathing halo and a shell of motes, `cutsceneAura.ts`, plan A-9). Lady Ginnem
+   * only (FFX, the approved tile "Lady Ginnem, unsent"); every other unsent keeps the stage's CSS glow.
+   */
+  aura?: boolean;
+  /**
    * No painting kneels or falls, so `setPose(actor, 'kneel' | 'ko')` stages the standing one
    * instead of leaving it upright over words that say otherwise (PR-0244): `kneel` lowers and
    * dims it, `ko` lays it down on the floor, dimmer still, as the battle's KO pose does.
@@ -105,6 +110,7 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     landscape: { x: 0.8, feet: 0.9, height: 0.58 },
     portrait: { x: 0.5, feet: 0.74, height: 0.44 },
     unsent: true,
+    aura: true,
   },
   /**
    * Trema, unsent (FFX-2 only: Chapter XIII). His battle idle, the installed O-1 A painting

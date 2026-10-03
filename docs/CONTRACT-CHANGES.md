@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-03 — `SceneBuild` gains the optional `pixelScaled` (FFX only in use: Lady Ginnem's glow, A-9; additive)
+
+Branch `r37-scenes`. `SceneBuild` (`src/scenes/types.ts`) may now carry `pixelScaled?: ReadonlyArray<{ setPixelScale(v: number): void }>`:
+mote layers a scene draws that are not `ParticleField`s (the pyrefly emitter's shells). `fromSceneBuild` (`src/scenes/index.ts`)
+passes the render-height scale to them next to `particles`. Every scene that omits it is unchanged. Only
+`cavern-stolen-fayth` sets it (FFX Chapter IX). `CutsceneFigure` (`src/app/screens/cutsceneFigures.ts`) gains the optional `aura`
+(Lady Ginnem only). Game case: FFX only.
+
 ## 2026-10-02 — `Settings` gains the nine EYE CANDY parts; new seam `src/engine/fx/eyeCandyFlags.ts` (D-317; both games; additive)
 
 Branch `eye-candy-page` (from `ef3f6bbf`). Save-data class. `Settings` (`src/app/SaveData.ts`) now also extends

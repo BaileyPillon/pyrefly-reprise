@@ -44,6 +44,13 @@ export interface SceneBuild extends SceneStaging {
   readonly particles: ParticleField[];
 
   /**
+   * Optional: other mote layers a scene draws and owns (not {@link ParticleField}s: the pyrefly emitter's
+   * shells, Lady Ginnem's glow), which only need the render-height scale. The caller passes the same value it
+   * passes {@link particles}. Omitted by every scene that has none.
+   */
+  readonly pixelScaled?: ReadonlyArray<{ setPixelScale(v: number): void }>;
+
+  /**
    * Camera rigs this scene guarantees. A presenter may add more, but these
    * four always exist, so generic battle flow never has to know the location:
    *

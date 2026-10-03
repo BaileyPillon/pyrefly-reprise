@@ -9,6 +9,8 @@ import { CAVERN_WIDE_RIGS, cavernRigsFor, viewportAspect } from './cavern-stolen
 import type { SceneSlots } from './index.ts';
 import { SakuraArrival, sakuraArrivalAt, softDiscTexture, SAKURA_ARRIVAL_MS } from './cavern-stolen-fayth-arrival.ts';
 import { CAVERN_IDS, findFigure, victoryStruck, type StagedFigure } from './cavern-stolen-fayth-cast.ts';
+import { GinnemGlow } from './cavern-stolen-fayth-glow.ts';
+import { fxDebugHooks } from '../engine/fx/fxDebugHooks.ts';
 
 // ---------------------------------------------------------------------------
 // The Cavern of the Stolen Fayth, the last chamber (FFX)
@@ -227,6 +229,11 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
   void sakura.loadPainting();
   const particles = [sakura.petals];
 
+  // Lady Ginnem's live glow (A-9): a breathing halo and a shell of motes on her outline, behind the EYE CANDY seam.
+  const glow = new GinnemGlow();
+  group.add(glow.group);
+  fxDebugHooks['ginnemGlow'] = { snapshot: () => glow.snapshot() };
+
   // ------------------------------------------------------------- the pad
   const [px, py, pz] = platePoint(CAVERN_PLATE.pad.cx, CAVERN_PLATE.pad.cy);
   const padTex = softDiscTexture();
@@ -339,6 +346,7 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
     },
     lights,
     particles,
+    pixelScaled: [glow],
     rigs,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
@@ -352,10 +360,13 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
       sakura.update(dt);
       runArrival(dt, group.parent);
       runPad(dt, group.parent);
+      glow.update(dt, findFigure(group.parent, CAVERN_IDS.ginnem));
     },
     dispose(): void {
       watcher?.stop();
       sakura.dispose();
+      glow.dispose();
+      delete fxDebugHooks['ginnemGlow'];
       for (const p of pools) {
         p.geometry.dispose();
         (p.material as { dispose(): void }).dispose();
