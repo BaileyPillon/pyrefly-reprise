@@ -509,6 +509,36 @@ export class AudioManager {
     };
   }
 
+  /**
+   * PR-0326 (CHK-001 step 3): play `name` only from its pre-rendered sprite, never from the
+   * synthesised stand-in `playSfx` falls back to before the sprite has decoded.
+   *
+   * The title's press-start cue is usually the very press that unlocks audio, so the sprite is
+   * still being fetched and the cue used to be the arcade synth in every session. This waits for
+   * the decode, at most `waitMs`, and plays nothing when it does not arrive or the sprite lacks
+   * the cue. Where no sprite exists at all (no manifest: the synth-only build) the synth is the
+   * design, not a fallback, so the cue plays as before. Resolves `true` when a cue was played.
+   *
+   * Game case: shared plumbing (both). FF7 and the game-less screens use the same bank.
+   */
+  async playSfxFromSprite(name: string, options: PlaySfxOptions = {}, waitMs = 1200): Promise<boolean> {
+    if (!this.ctx) return false;
+    await this.loadManifest();
+    if (!this.manifest?.sfx) {
+      this.playSfx(name, options);
+      return true;
+    }
+    if (!this.sprites.decoded.v1) {
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      await Promise.race([this.sprites.whenFirstBankLoaded(), new Promise<void>((resolve) => { timer = setTimeout(resolve, waitMs); })]);
+      clearTimeout(timer);
+    }
+    const cue = resolveSfx(name);
+    if (cue === undefined || !this.sprites.pick(this.manifest, cue).slice) return false;
+    this.playSfx(name, options);
+    return true;
+  }
+
   // ---------------------------------------------------------------- mixer ---
 
   setMasterVolume(value: number): void {

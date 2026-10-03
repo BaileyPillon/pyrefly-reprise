@@ -1,0 +1,52 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-03T10:20:00Z",
+  "build": { "mainSha": "c69de96a", "bundle": "GO0eMOto", "artifactHash": "37273cfee71633f8c077b288adc56ae1f84b96149f2b85cd3500a5553eecaaaa" },
+  "verdicts": { "deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed" },
+  "checks": [
+    { "id": "CHK-017", "result": "PASS", "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/c69de96a.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/ef3f6bbf.json --full: result PASS, artifactHash 37273cfee71633f8c077b288adc56ae1f84b96149f2b85cd3500a5553eecaaaa (equals the marker's), liveManifest match, 1432 compared (the whole manifest, 798,872,755 bytes, .nojekyll included; 163 files added and 85 changed against ef3f6bbf), 0 mismatched, 0 missing, 0 wrong type, 0 errors. The stored manifest has decodeChecked true, 0 audio unverified, no problems; the live index.html is 3056 bytes (the manifest's size) and loads assets/index-GO0eMOto.js. Smoke on the same URL, final run desktop-run2 (417 requests): 0 console errors, 0 page errors, 0 responses of 400 or more, 0 404s, 0 image responses typed text/html, 0 requests containing %23n; load to ready 897 ms (under 5 s; the first run's 6,991 ms was taken while the 800 MB byte comparison was downloading on the same machine and is not the figure); every audio request returned a status below 400 (9 distinct mp3 files: title, chapter-select, scene-gagazet, boss-seymour, pause, scene-bevelle-underground, boss-ffx2-aeon and both SFX sprites). 33 net::ERR_ABORTED requests in the final run are client-side cancellations of image preloads (no HTTP status), not counted as 404s.",
+      "environment": "node verify-live; headless Playwright (bundled headless Chromium), PYREFLY_BROWSER=gpu, fresh context, 1600x900, ?livesmoke=<ts>", "automated": true },
+    { "id": "CHK-016", "result": "PASS", "mandatory": true,
+      "evidence": "Every capture in the final run was preceded by a state assertion through the read-only debug surface (window.__pyrefly.app.current.name, battle().snapshot().chapter and game and playback.awaitingMenu, the .pause--ec class, #ui > [data-screen] roots): 14 assertions, 0 mismatches (a mismatch renames the file STATE-MISMATCH-*). Chapter I seymour-flux (game ffx) and Chapter IV ffx2-bahamut (game ffx2) were selected by the board's selectedId and reached title to chapter-select to party-prep to cutscene skip to battle to an awaiting player menu by real Enter and arrow presses; each wait ended in a recorded assertion, none fell through. Changed flow with real input, positive and cancel paths: pause by Escape, OPTIONS by ArrowRight, the EYE CANDY row by ArrowDown, Enter opens the page; Chapter I (FFX): 12 rows (ALL LOOKS plus 11 switches) with OVERDRIVE SHOT present and DRESSPHERE SHOT absent, header 11 of 11 on, FOG flipped OFF by Enter (row OFF, header 10 of 11, save fxFog false, seam fog false, mix fog false), ON again by ArrowRight (11 of 11), ALL LOOKS Left gives ALL OFF (0 of 11, three looks false, every seam key false) and Right gives ALL ON (11 of 11), FOG left OFF for the reload step, Escape closes the page with the pause still up and the cursor back on the EYE CANDY row (cancel path); H hides then restores the pause panels (panelsHidden false, true, false); P resumes to the battle; Escape pause then Escape resume round trip; a submenu then Escape returns to the command list (battle cancel path). Chapter IV (FFX-2) after the reload: 12 rows with DRESSPHERE SHOT present and OVERDRIVE SHOT absent, FOG still OFF and the seam's fog false, DRESSPHERE SHOT flipped OFF (seam dressphereShot false) and back ON, FOG restored ON. A real dressphere change by keys (Change row selected by ArrowDown, Enter, ArrowDown in the sphere list, Enter: Yuna White Mage to Black Mage) raised html.mix-held, the held DRESSPHERE SHOT, about 0.5 s after the sphere was chosen. Frames and the per-key trace are in D:/Tools/pyrefly-scratch/2026-10-03/live36/desktop-run2 (report.json holds the assertions, the seam snapshots and the dress trace); eight frames were viewed by eye (title and EYE CANDY page ON from run 1; Chapter I first menu, ALL OFF, H hidden, Chapter IV first menu, the page after the reload and the frame after the change from the final run). The debug API was used read-only; nothing was injected. Music: audioDebug showed playing boss-ffx2-aeon with source prerendered (manifest true, 26 cues, sprite decoded, v2 100 cues decoded), not the synth fallback; nothing was listened to.",
+      "environment": "headless Playwright gpu, desktop 1600x900 keys", "automated": true },
+    { "id": "CHK-024", "result": "PASS", "mandatory": true,
+      "evidence": "Lightweight reload smoke on a fresh profile. In the Chapter I pause FOG was turned OFF with a real Enter on the EYE CANDY page; the save (pyrefly-reprise:save:v1) before and after page.reload held fxFog false and an identical seenCoach list (briefing, firstrun-board, firstrun-prep, ffx-turn-order, firstrun-battle, ffx-overdrive), the first-run progress made in the run. After the reload the Chapter IV OPTIONS row read EYE CANDY 10 OF 11, the page header 10 of 11 on, FOG OFF, and the seam's fog flag was false before FOG was turned back ON: the stored setting was applied at boot, not only stored. Defaults were restored (fxFog true, fxSphere true) before the run ended.",
+      "reason": "Lightweight check only: no chapter was cleared and the full upgrade matrix (a save written by the previous live build migrating forward, truncated storage, the reset flow) was not run, per RUBRIC section 5. Round 19b's 24-case save matrix on the candidate stays the save-data evidence.",
+      "environment": "headless Playwright gpu", "automated": true }
+  ],
+  "coverage": {
+    "tested": [
+      "Exact artifact: 1432 of 1432 files byte-identical and content-typed against the live site (full, changed-from ef3f6bbf); live hash equals the pending marker's and round 19b's candidate hash",
+      "Chapter I (FFX, seymour-flux) and Chapter IV (FFX-2, ffx2-bahamut) from the title to a player command menu by real keys at 1600x900, with state assertions before every capture",
+      "The EYE CANDY page (D-317) with real keys in both games: row count and the game-only switch (OVERDRIVE SHOT FFX, DRESSPHERE SHOT FFX-2), one part flipped off and on (page, header, save, seam, mix agree), ALL LOOKS ALL OFF and ALL ON, Escape back out to the OPTIONS row",
+      "A real dressphere change in Chapter IV raising the held DRESSPHERE SHOT (html.mix-held); the DRESSPHERE SHOT switch OFF and ON",
+      "Pause: Escape, P, H hide and restore, resume; the Chapter I battle cancel path",
+      "Setting and first-run progress survive a reload, and a stored OFF is applied to the seam at boot in the other game's chapter",
+      "Prerendered music playing (audioDebug source prerendered), 9 mp3 files fetched, none failing",
+      "Console and network sweep over the final run: 0 console errors, 0 page errors, 0 responses of 400 or more, 0 mistyped images, load to ready 897 ms"
+    ],
+    "reused": [],
+    "notTested": [
+      "Phone touch (390x844): the EYE CANDY page's tap-to-flip, the device notes ON · OFF HERE and ON · LESS HERE, and the phone layout; a real phone, Safari, a controller",
+      "The effects themselves live (tilt-shift, fog meshes, SMAA, the held Overdrive shot, CHAPTER FRAMING, BOSS SCALE): only the switches, the seam and the held-shot class were read, no frame difference was measured; round 19b measured them on the candidate",
+      "The other 16 chapters, a chapter clear and its progress across a reload, the full CHK-024 upgrade matrix, the Yunalesca plate, the advisor card under the colossus layout (PR-0330) and the other round 19b disclosed majors",
+      "OVERDRIVE SHOT with a real Overdrive in Chapter I; REDUCE MOTION notes on the page",
+      "Frame time and memory on the 799 MB build; the sound itself (agents cannot hear: the debug surface and the network log were read, nothing was listened to)"
+    ]
+  },
+  "issues": [
+    {
+      "id": "LV-36-01",
+      "severity": "informational",
+      "status": "noted",
+      "title": "net::ERR_ABORTED image requests (33 in the final desktop run)",
+      "observed": "No HTTP status on any of them: preloads of board card art cancelled when the cursor moves on, and the pause plate png cancelled where its webp is used (the class LV-35-02 recorded for release 35). Not counted as 404s; 0 responses of 400 or more."
+    }
+  ],
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 25,
+  "notes": "Final run: desktop-run2 from one smoke.mjs (D:/Tools/pyrefly-scratch/2026-10-03/live36/); it reran everything from a fresh context after the byte comparison had finished. Earlier runs had harness defects of my own, none in the product. Desktop run 1 asserted the title screen with a selector for a class the title no longer carries (it renamed the title frame STATE-MISMATCH although the frame is the title, viewed), ran while the 800 MB byte comparison was downloading (load to ready 6,991 ms, so not reported as the load figure), and its dressphere step found the Change row disabled on Chapter IV's first menu (Paine is cursed; the guide card says she cannot change dresspheres, so this is the game's rule, not a defect) and pressed Item instead. A probe (ONLY_CH4=1) traced every key and showed the row enabled on the next menu; the final run attacks until an enabled Change menu and then changes. No server was started; every browser was closed by its script. The live site had no other build to compare with, so nothing here is a measured comparison with live 35."
+}

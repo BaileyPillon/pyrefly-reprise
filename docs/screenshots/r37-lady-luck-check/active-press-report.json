@@ -1,0 +1,67 @@
+{
+  "mode": "active",
+  "scenario": "press",
+  "steps": [
+    "save blob present: none",
+    "ffx2Atb in save: active",
+    "first menu:  [{\"t\":\"Attack◂\",\"sel\":true},{\"t\":\"Skill◂\",\"sel\":false},{\"t\":\"Change◂\",\"sel\":false},{\"t\":\"Item◂\",\"sel\":false}]",
+    "Attack Reels confirmed on the default target: true after 2 tries",
+    "overlay opened: true; other menus seen open before it: 8 (left open)",
+    "stopped: [\"cherry\",\"red7\",\"sword\"]",
+    "menu returned after the spin: true ()"
+  ],
+  "timeline": [
+    {
+      "ms": 1,
+      "state": "menu:open"
+    },
+    {
+      "ms": 1662,
+      "state": "OVERLAY"
+    }
+  ],
+  "atbSetting": "active",
+  "reelsStarted": true,
+  "overlayOpened": true,
+  "otherMenuTitlesSeen": [
+    "menu:open"
+  ],
+  "menuVisibleUnderOverlay": false,
+  "stops": [
+    [
+      "red7",
+      "red7",
+      "cherry"
+    ],
+    [
+      "cherry",
+      "red7",
+      "cherry"
+    ],
+    [
+      "cherry",
+      "red7",
+      "sword"
+    ]
+  ],
+  "overlayGoneAfterAnswer": true,
+  "reelRequests": 1,
+  "messages": [
+    "Armor Break"
+  ],
+  "logTail": [
+    "{\"type\":\"miss\",\"targetId\":\"yuna\",\"sourceId\":\"vegnagun-tail\",\"reason\":\"evaded\",\"seq\":9}",
+    "{\"type\":\"damage\",\"targetId\":\"rikku\",\"sourceId\":\"vegnagun-tail\",\"amount\":1245,\"element\":\"none\",\"affinity\":\"normal\",\"crit\":false,\"hitIndex\":1,\"hitCount\":3,\"seq\":1",
+    "{\"type\":\"damage\",\"targetId\":\"paine\",\"sourceId\":\"vegnagun-tail\",\"amount\":1210,\"element\":\"none\",\"affinity\":\"normal\",\"crit\":false,\"hitIndex\":2,\"hitCount\":3,\"seq\":1",
+    "{\"type\":\"damage\",\"targetId\":\"rikku\",\"sourceId\":\"vegnagun-tail\",\"amount\":1669,\"element\":\"none\",\"affinity\":\"normal\",\"crit\":false,\"hitIndex\":0,\"hitCount\":1,\"seq\":2",
+    "{\"type\":\"damage\",\"targetId\":\"vegnagun-tail\",\"sourceId\":\"yuna\",\"amount\":336,\"element\":\"none\",\"affinity\":\"normal\",\"crit\":false,\"hitIndex\":0,\"hitCount\":1,\"seq\":32}",
+    "{\"type\":\"status-add\",\"targetId\":\"vegnagun-tail\",\"sourceId\":\"yuna\",\"status\":\"def-down\",\"instance\":{\"id\":\"def-down\",\"turnsRemaining\":null,\"ticksRemaining\":null,\"c"
+  ],
+  "menuReturned": true,
+  "menuTitleAfter": "",
+  "logGrowth": [
+    43,
+    50
+  ],
+  "consoleIssues": []
+}

@@ -373,7 +373,7 @@ export class Backdrop {
     const main = new Mesh(new PlaneGeometry(width, height), mainMat);
     main.position.set(0, centreY, distance);
     main.renderOrder = -90;
-    Object.assign(main, { name: 'backdrop-painting', userData: { fxRef: [camRef.x, camRef.y, camRef.z] } }); // fxRef: eye-candy option B registers its plates for this camera
+    Object.assign(main, { name: 'backdrop-painting', userData: { fxRef: [camRef.x, camRef.y, camRef.z], fxCentreY: centreY } }); // fxRef: eye-candy option B registers its plates for this camera
     backdrop.group.add(main);
     backdrop.layerMeshes.push(main);
 
@@ -459,6 +459,12 @@ export class Backdrop {
     if (!target) return;
     if (this.fog) target.fog = this.fog;
     if (this.background) target.background = this.background;
+  }
+
+  /** Put a mesh a scene built (a plate wing, `scenes/plateWings.ts`) under the stack; `dispose` frees its geometry and material. */
+  adopt(mesh: Mesh): void {
+    this.group.add(mesh);
+    this.layerMeshes.push(mesh);
   }
 
   /** @param dt seconds */

@@ -151,3 +151,37 @@ describe('#11 Charon costs the caster the battle [ffx2-combat-core §2.3, §3.12
     // A seeded 15-battle bench, not a unit test: ~5.2s alone, over vitest's 5000ms default under load.
   }, 30_000);
 });
+
+/**
+ * The guard round 02's critic asked for: **every ability flag the X-2 data
+ * declares is read by the X-2 engine**, or is on the list below with the reason
+ * it is not. The list is the honest state of the tree, not a waiver — each
+ * entry is a mechanic nobody has built, and removing one is the way to find
+ * out you have built it. A *new* unread flag goes red here at once, which is
+ * the whole class of #05, #06, #11 and the reels.
+ */
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+
+const UNREAD_ON_PURPOSE: Record<string, string> = {
+  'long-range': "its one sourced reader is the Nodes' reach rule [ffx2-vegnagun-shuyin §3.2], a Chapter 5 mechanic nobody has built",
+  'adds-equipment-crit': 'an FFX weapon rule; X-2 has no weapons and §2.5 has no equipment term in a crit',
+  'inherits-weapon-properties': 'an FFX weapon rule; X-2 has no weapons to inherit from',
+};
+
+describe('every X-2 ability flag has a reader in the X-2 engine', () => {
+  it('or is listed, with the reason', () => {
+    const engineDir = join(__dirname, '../../src/battle/ffx2');
+    const source = readdirSync(engineDir, { recursive: true })
+      .map(String)
+      .filter((f) => f.endsWith('.ts') && !f.endsWith('fixtures.ts'))
+      // The engine's own fallback ability tables *declare* flags too; a
+      // declaration is not a reader.
+      .map((f) => readFileSync(join(engineDir, f), 'utf8').replace(/flags:\s*\[[^\]]*\]/g, ''))
+      .join('\n');
+
+    const declared = new Set(Object.values(data.ABILITIES).flatMap((a) => a.flags as string[]));
+    const unread = [...declared].filter((flag) => !source.includes(`'${flag}'`)).sort();
+    expect(unread, 'an X-2 flag is declared in data and read by nothing').toEqual(Object.keys(UNREAD_ON_PURPOSE).sort());
+  });
+});

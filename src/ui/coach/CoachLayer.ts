@@ -26,6 +26,7 @@
  * | `ffx-turn-order` | the command menu opens for the first time | FFX |
  * | `ffx-overdrive` | an Overdrive row is first offered and enabled | FFX |
  * | `ffx-aeon` | a Summon row is first offered and enabled | FFX |
+ * | `ffx-omnis-disc` | the card's top row first turns a disc (`coachDisc.ts`) | FFX, Ch. XII |
  * | `ffx2-gauge` | the command menu opens for the first time | FFX-2 |
  * | `ffx2-dressphere` | the first `spherechange` event | FFX-2 |
  * | `ffx2-chain` | the first `chain` event above 1 | FFX-2 |
@@ -66,6 +67,7 @@ import { ffx2GaugeBody, marksFor, type CoachMark as CoachMarkDef, type CoachMark
 import { BeatHold, beatUp } from './coachHold.ts';
 import { ActorRects, keepMarkClear } from './coachActorAvoid.ts';
 import { ffx2CoachClock, markSeen, shouldShow } from './coachState.ts';
+import { DiscWatch } from './coachDisc.ts';
 import { firstRunBattleBegan, firstRunTurnGuide } from './firstRunGuide.ts'; // O2 (D-289): step 3 wears FFX's first line
 import type { IntentSource } from '../common/EnemyIntent.ts';
 
@@ -150,6 +152,7 @@ class CoachedHud implements HudPort {
   /** PR-0119: a mark waits while a mid-battle beat's card is up (`coachHold.ts`). */
   private readonly hold = new BeatHold(() => beatUp(this.layer));
   private readonly actors = new ActorRects(); // PR-0237: the fighters a line keeps off
+  private readonly disc = new DiscWatch(); // D-216: Chapter XII's disc line
 
   constructor(
     private readonly game: GameId,
@@ -177,7 +180,7 @@ class CoachedHud implements HudPort {
   }
 
   sync(state: BattleState, preview: TurnPreview[] | AtbSnapshot): void {
-    this.inner.sync(state, preview); this.actors.track(state);
+    this.inner.sync(state, preview); this.actors.track(state); this.disc.track(state);
   }
 
   syncVitals(state: BattleState): void {
@@ -310,25 +313,16 @@ class CoachedHud implements HudPort {
       void this.raise(this.withResolvedBody(mark));
       if (this.game === 'ffx2') this.liveOwner = actorId;
     }
-    return this.inner.chooseCommand(actorId, commands, previewRank);
+    const answer = this.inner.chooseCommand(actorId, commands, previewRank);
+    const disc = this.due(this.disc.markFor(this.game, this.inner, (id) => !shouldShow(id))); // the card's top row exists only now
+    if (disc) { markSeen(disc.id); void this.raise(disc); }
+    return answer;
   }
 
   /**
-   * `ffx2-gauge`'s only body used to read ("...don't wait for me, we all go
-   * at once!") — true of Active, backwards under Wait, where the whole point
-   * of the mode is that the player *can* wait. D-029 made Wait the default on
-   * 2026-09-23, and commit 21f6270 (earlier the same day) responded by
-   * skipping the mark entirely under Wait — hard rule 9 says not to invent
-   * wording here — and leaving it **unseen** so a save that started in Wait
-   * and was later switched to Active would still get taught the mechanic.
-   * Bailey has since approved a Wait body (one of three drafts offered,
-   * verbatim — `docs/target/decisions.json`), so the skip is gone: the mark
-   * now shows under **both** modes, reading whichever body is true at show
-   * time via `coachCopy.ts`'s `ffx2GaugeBody`, and is marked seen the first
-   * time it is shown, in whichever mode that was — there is no more "left
-   * unseen for a later mode switch" case, because both modes now have true
-   * words. (`ffx2-dressphere` / `ffx2-chain` are unaffected either way — they
-   * are reached only through `markForEvent`, never through this function.)
+   * `ffx2-gauge`'s body reads whichever clock is true at show time (`coachCopy.ts#ffx2GaugeBody`):
+   * Active's "we all go at once" is backwards under Wait. The mark shows under both modes (Bailey's
+   * Wait draft, D-029 follow-up 4) and is marked seen the first time it is shown, in either.
    */
   private withResolvedBody(mark: CoachMarkDef): CoachMarkDef {
     if (mark.id !== 'ffx2-gauge') return mark;

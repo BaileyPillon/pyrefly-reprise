@@ -48,7 +48,7 @@ import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { chainMultiplier } from './chain.ts';
 import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { critPercent, hitPercent } from './formulas.ts';
-import { rollTriggerHappy, rollReels } from './minigames.ts';
+import { rollTriggerHappy } from './minigames.ts';
 import { SeededRng } from '../common/rng.ts';
 import { aimedPick } from '../common/intentTargets.ts';
 
@@ -67,9 +67,10 @@ export type RollPolicy = 'min' | 'mid' | 'max';
  * [docs/CONTRACTS.md, "Do not share status logic between the two games"].
  *
  * The split is the same in both. **Magnitude** rolls — X-2's step-7 randomiser
- * (`int(240, 271)` [ffx2-combat-core §2.1]), a Trigger Happy shot count, a
- * reel's hits — take the policy's end, and that is the range the advisor
- * prints. **Branch** rolls — `int(0, 99)` for the hit check, the critical check
+ * (`int(240, 271)` [ffx2-combat-core §2.1]), a Trigger Happy shot count —
+ * take the policy's end, and that is the range the advisor prints. (Lady
+ * Luck's reels have no magnitude to sweep: a spin picks *which ability* fires,
+ * so a reel row previews as the wrapper it is, which deals nothing.) **Branch** rolls — `int(0, 99)` for the hit check, the critical check
  * and every status application — always take their median, so a preview shows
  * the *likely* outcome and the sweep never quietly turns "might crit" into a
  * higher top end.
@@ -200,7 +201,6 @@ function deepClone<T>(value: T): T {
 export function expectedMinigameHits(ability: AbilityDef, roll: RollPolicy): number | null {
   const rng = new RollPolicyRng(roll);
   if (ability.minigame === 'gunner-trigger') return rollTriggerHappy(rng);
-  if (ability.minigame === 'ladyluck-reels') return Math.max(1, rollReels(rng).hits ?? 1);
   return null;
 }
 

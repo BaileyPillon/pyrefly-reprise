@@ -43,6 +43,7 @@ import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
+import { HURRIED_CARD_HOLD_MS } from '../../ui/common/transitions/openingHurry.ts';
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
 import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '../../ui/common/EnemyIntent.ts';
@@ -89,6 +90,8 @@ export interface BattleScreenOptions {
   speed?: PlaybackSpeed;
   /** Open on this Save Sphere link instead of the first formation (FA3 = b). */
   resumeAt?: ChainCheckpoint;
+  /** The player skipped the pre-scene: the first opening runs hurried (PR-0061, `openingHurry.ts`). */
+  openingHurry?: boolean;
 }
 
 /** How the encounter ended, for the flow in `App.ts`. */
@@ -293,6 +296,7 @@ export class BattleScreen extends Screen {
     });
 
     this.momentOverlay = createMomentOverlay(this.root);
+    if (this.opts.openingHurry) this.momentOverlay.hurry.arm();
 
     const registered = uiPortsRegistered();
     const ownsOverlays = registered.damageNumbers || this.hud === null;
@@ -403,6 +407,7 @@ export class BattleScreen extends Screen {
       backdropKey: chapter.sceneKey,
       party,
       game: chapter.game,
+      ...(this.opts.openingHurry ? { holdMs: HURRIED_CARD_HOLD_MS } : {}),
     });
     this.battleStartBanner = banner;
     await banner.show();

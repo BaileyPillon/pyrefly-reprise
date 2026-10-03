@@ -6,6 +6,7 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+<<<<<<< HEAD
 ## 2026-10-03 — `HudPort.syncQueued` (optional): the HUD hears a command the moment it is submitted (PR-0104; FFX-2 only; additive)
 
 Branch `r37-ui-floor`. `src/engine/HudPort.ts` gains `syncQueued?(state: BattleState): void`, called by `BattlePresenter.submit` right
@@ -14,6 +15,49 @@ battle runs. It carries `AtbState.charging.commandRef`, so the FFX-2 HUD can nam
 confirm on (`src/ui/ffx2/QueuedChips.ts`); the full `sync` only arrived about 1.6 s later. A HUD without it is untouched; FFX's HUD
 and the FF7 HUD implement nothing. `CoachedHud` forwards it (the sixth wrapper hole of that kind). No shared contract file changed;
 recorded because the port is shared. Game case: FFX-2 only.
+=======
+## 2026-10-03 — FFX-2 Lady Luck's reels: a sourced pay table, the Dud, and a menu ability can carry a minigame outcome (FFX-2 only; additive)
+
+Branch `r37-lady-luck` (backlog key `BR-LADY-LUCK-REELS`; a port of `946918c69` onto `c69de96a`, not a merge). Critic round 02
+#05. One additive field in `src/battle/common/types.ts` and four changes to what the FFX-2 engine and presenter do. FFX is
+untouched. Reflect, which the old commit also carried, is **not** ported (its own item). Handoff:
+[r37-lady-luck](handoff/r37-lady-luck.md).
+
+**1. `AbilityCommand.extra?: MinigameResult` (additive).** FFX's timed inputs are Overdrives, so `extra` lived on
+`OverdriveCommand` alone. FFX-2's two timed inputs (Trigger Happy, Lady Luck's reels) are ordinary menu abilities and arrive
+as `kind: 'ability'`. `BattlePresenter.resolveMinigame` attached the overlay's result only to `'overdrive'`, and
+`ffx2/minigames.ts attachedResult` read it only off `'overdrive'`, so every X-2 minigame outcome a human produced (a Trigger
+Happy count included) was discarded and the engine rolled its own. Both now accept `'ability'`. Same protocol: omitted, the
+engine rolls a default from the seeded RNG.
+
+**2. `ReelResult` (doc only).** Documents Lady Luck's strip (`red7`, `bar`, `cherry` plus three per set) and that its order
+matters; `hits` is Wakka's Attack Reels only and Lady Luck never sets it.
+
+**3. A charged `minigame-request` is answered, by the unit that raised it.** The reels are the only X-2 timed input with a
+charge time, so the request comes out of `tick()`, not `submit()`. The presenter's `'waiting'` branch dropped it, the Active
+pump (`runActivePump`) dropped it under an open menu, and `FFX2Engine.submit` would have handed the answer to "whoever's gauge
+is full". The presenter now parks it (`deferredMinigame`), the pump gains an optional `interrupted` dep that closes the open
+menu, the overlay opens, and the engine resolves the command for the suspended actor (`suspendedActor`, `ExecEnv.setAwaiting(
+command, by?)`, engine-private). The presenter re-submits that actor's own command (`commandBy`), not `lastCommand`.
+
+**4. New events in the FFX-2 stream** (no new event types):
+- a reel action emits `message` (`kind: 'system'`) naming what the spin paid, the payload's name or `Dud!`, before the
+  payload's own events;
+- a **status-only** action (`formula: 'none'`) on a target immune to its status emits `miss` with `reason: 'immune'`; it used
+  to emit nothing at all. A rider on a damaging hit still stays quiet.
+
+**5. `AbilityDef.extra` keys the FFX-2 engine now reads:** `payTable` and `symbols` (reel wrappers; `symbols` is also what the
+overlay reads from `minigame-request.params`), and `noChain` (the Dud: nobody's attack, so it neither opens nor is multiplied
+by a Chain).
+
+## 2026-10-03 — `SceneBuild` gains the optional `pixelScaled` (FFX only in use: Lady Ginnem's glow, A-9; additive)
+
+Branch `r37-scenes`. `SceneBuild` (`src/scenes/types.ts`) may now carry `pixelScaled?: ReadonlyArray<{ setPixelScale(v: number): void }>`:
+mote layers a scene draws that are not `ParticleField`s (the pyrefly emitter's shells). `fromSceneBuild` (`src/scenes/index.ts`)
+passes the render-height scale to them next to `particles`. Every scene that omits it is unchanged. Only
+`cavern-stolen-fayth` sets it (FFX Chapter IX). `CutsceneFigure` (`src/app/screens/cutsceneFigures.ts`) gains the optional `aura`
+(Lady Ginnem only). Game case: FFX only.
+>>>>>>> origin/main
 
 ## 2026-10-02 — `Settings` gains the nine EYE CANDY parts; new seam `src/engine/fx/eyeCandyFlags.ts` (D-317; both games; additive)
 

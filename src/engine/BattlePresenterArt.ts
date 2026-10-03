@@ -40,8 +40,20 @@ export const PARTY_POSES = [
   'follow',
 ] as const;
 
-/** Poses an enemy is painted in. Bosses rarely need the full party set. */
-export const ENEMY_POSES = ['idle', 'attack', 'cast', 'hurt', 'ko'] as const;
+/**
+ * Poses an enemy is painted in. Bosses rarely need the full party set.
+ *
+ * `telegraph` (r37 slot, `KeySlots.ts`, both games): a boss's wind-up painting, shown only when it has its own.
+ * Without one it resolves to the idle's texture (the chain below), so nothing changes.
+ */
+export const ENEMY_POSES = ['idle', 'attack', 'cast', 'hurt', 'ko', 'telegraph'] as const;
+
+/**
+ * The key-pose slot a figure's own Overdrive or Special painting lives in: `od-<abilityId>.png` (r37 slot,
+ * `KeySlots.ts`). Which abilities a figure has paintings for is read from the art manifest, so these are
+ * added to the pose map only where they exist; there is no fallback chain (a move with no painting plays as before).
+ */
+export const OD_POSE_PREFIX = 'od-';
 
 /**
  * Combatant id -> art id, where the two differ.
@@ -136,6 +148,7 @@ const POSE_FALLBACKS: Readonly<Record<string, readonly string[]>> = {
   sleep: ['sleep', 'idle'],
   critical: ['critical', 'idle'],
   follow: ['follow', 'attack', 'ready', 'idle'],
+  telegraph: ['telegraph', 'idle'],
 };
 
 /**
@@ -247,6 +260,8 @@ export async function resolvePoseMap(
     const hit = chain.find((p) => found.get(p)) ?? pose;
     out[pose] = characterUrl(artId, hit);
   }
+  // r37 slot (both games): this figure's own Overdrive / Special paintings, `od-<abilityId>`, exactly as the manifest lists them.
+  if (set) for (const state of [...set].sort()) if (state.startsWith(OD_POSE_PREFIX)) out[state] = characterUrl(artId, state);
   // FF7 only (`ff7-` art ids): exactly the poses the manifest lists (B1's wind-up and follow-through, D1's
   // victory keys); a pose it lacks resolves by name on the actor to one that is loaded, so it shares that
   // pose's texture and sidecar (a second copy of idle.png with a subject `scale` was sized twice). FFX and

@@ -56,6 +56,7 @@ import { NodeEdgeMarkers } from './nodeEdgeMarkers.ts';
 import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, BAND_GRID_HEIGHT, type BandInput } from './commandHelpBand.ts';
 import { plateInputFromDom, TargetPlates, targetPlateText } from './TargetPlates.ts';
 import { BattleMessageBanner } from './battleMessage.ts';
+import { fightDecidedBy } from './fightDecided.ts';
 import { displayNameOf } from './displayName.ts';
 import { IntentOpeningHold } from './intentOpeningHold.ts';
 
@@ -740,8 +741,8 @@ export class FFX2BattleHud implements HudPort {
     // side takes the same precaution in `FFXBattleHud.sync`
     // (AGENTS.md rule 14: shared plumbing behind a defect, critic CHK-020).
     if (state.result) this.applySelection(null);
-    // ...and a decided battle keeps no command menu or reticle either: see `onEvent`'s victory case.
-    if (state.result && this.closeMenu) this.closeCommandMenu();
+    // ...and no command menu, reticle or banner either: `onEvent` swept at the last blow; an escape arrives only here.
+    if (state.result) this.endOfFight();
     this.lastState = state;
     this.queued.sync(state);
     this.guide.sync(state);
@@ -912,11 +913,10 @@ export class FFX2BattleHud implements HudPort {
 
   onEvent(event: BattleEvent): Promise<void> | void {
     this.actionFade.observe(event); // A-15: overlapping ATB actions (actionFade.ts)
-    // FFX-2 only: Active ATB can end the fight while a girl is choosing, and the presenter drops the menu only after
-    // the burst (`runActivePump` -> `abandon`), so the menu goes with the deciding KO (or victory/defeat, if first).
-    if (this.closeMenu && (event.type === 'victory' || event.type === 'defeat' || (event.type === 'ko' && this.lastState?.result))) {
-      this.closeCommandMenu();
-    }
+    // The last blow landed or the end beat starts (`fightDecided.ts`): no banner rides it, and no menu (Active ATB can
+    // end the fight while a girl is choosing; the presenter drops the menu only after the burst, `runActivePump`).
+    if (fightDecidedBy(event, this.lastState)) this.endOfFight();
+    else if (event.type === 'defeat' && this.closeMenu) this.closeCommandMenu(); // an escape keeps its line, not its menu
     switch (event.type) {
       case 'atb':
         this.lastSnapshot = event.snapshot;
@@ -1284,5 +1284,13 @@ export class FFX2BattleHud implements HudPort {
 
   private hold(ms: number): Promise<void> {
     return new Promise((resolve) => window.setTimeout(resolve, ms));
+  }
+
+  /** The fight is over on screen: the menu, the message line and the telegraph go, holds or not. Idempotent. */
+  private endOfFight(): void {
+    if (this.closeMenu) this.closeCommandMenu();
+    this.message.hide();
+    window.clearTimeout(this.telegraphHideTimer);
+    if (this.telegraphEl) this.telegraphEl.hidden = true;
   }
 }

@@ -38,7 +38,7 @@ import { aiContextFor, berserkTurnCommand, payStatusClocks, runAfterActionHooks 
 import { inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { evaluateTriggers, signalFromEvents } from './triggers.ts';
-import { abilityFor, performCommand, type ExecEnv } from './execute.ts';
+import { abilityFor, performCommand, type ExecEnv, type Suspension } from './execute.ts';
 import { actorOrder, battleOutcome, buildResult, emptyState } from './results.ts';
 import {
   allTargetsGone,
@@ -68,6 +68,8 @@ export class Ffx2EngineCore {
   protected drafts: EventDraft[] = [];
   protected elapsedMs = 0;
   protected awaitingMinigame: Command | null = null;
+  /** Who raised it: the reels ask from `tick()`, when her gauge is already empty (`execute.ts` {@link suspendedActor}). */
+  protected awaitingBy: Suspension | null = null;
   /**
    * Whose command menu is open right now. **Active ATB (`active.ts`).**
    *
@@ -232,8 +234,9 @@ export class Ffx2EngineCore {
       afterAction: (actor, startedAt) => this.afterAction(actor, startedAt),
       flushSignal: (startedAt, actor) => this.flushSignal(startedAt, actor),
       getAwaiting: () => this.awaitingMinigame,
-      setAwaiting: (command) => {
+      setAwaiting: (command, by) => {
         this.awaitingMinigame = command;
+        this.awaitingBy = command ? (by ?? null) : null;
       },
     };
   }

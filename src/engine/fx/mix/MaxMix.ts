@@ -5,12 +5,15 @@ import { setEyeCandyProvider, type EyeCandyKey } from '../eyeCandyFlags.ts';
 import { fxDebugHooks } from '../fxDebugHooks.ts';
 import { releaseBreathRigs } from './breathRig.ts';
 import { Cinema, dofBand, type DofBand } from './cinema.ts';
+import { setProneAvoid } from '../../ProneLay.ts';
+import { setShotHold } from '../shotHold.ts';
+import { panelsNdc } from './downed.ts';
 import { ejectDefringe, injectDefringe } from './patch.ts';
 import { Framing } from './framing.ts';
 import { aaKind, deviceCloses, deviceNote, fightFacts, liveGates, MIX_PARTS, partsOn, twirlKeysOn, type Device, type MixGame } from './gates.ts';
 import { cameraAt, centroid, figOf, type Actor, type Box } from './geometry.ts';
 import { followFlourish, HeldShots } from './heldShots.ts';
-import { battleCanvas, forgetMenuPanels, menuOpen, phoneBattle } from './hudPanels.ts';
+import { battleCanvas, forgetMenuPanels, hudPanels, menuOpen, phoneBattle } from './hudPanels.ts';
 import { LivingFigure } from './living.ts';
 import { OdBanner } from './odBanner.ts';
 import { releaseMixSplash } from './splash.ts';
@@ -49,9 +52,11 @@ const GRID: Record<'full' | 'phone' | 'low', [number, number]> = { full: [12, 24
  * While a held shot is up the HUD stays laid out on the master (D-291), so a card that hangs on a figure
  * at rest, or dodges the figures, would float over whoever the shot shows (the judges: "MORTIORCHIS
  * floats over Yuna's staff"; the Bahamut intent card jumping onto the coach card in the spherechange
- * shot): the Sensor card and the enemy-intent card step out for the shot and come back with the master.
+ * shot): the Sensor card and the enemy-intent card step out for the shot and come back with the master. So does
+ * FFX-2's first-time Rikku line, which fades on its own and sat across the dressphere shot (round 19, PR-0320;
+ * FFX-2 only, FFX's Auron line holds for a confirm and is not touched).
  */
-const HELD_CSS = 'html.mix-held .ffx-sensor,html.mix-held .eint{visibility:hidden !important}';
+const HELD_CSS = "html.mix-held .ffx-sensor,html.mix-held .eint,html.mix-held .coach-mark[data-game='ffx2']{visibility:hidden !important}";
 
 function heldStyle(): void {
   if (typeof document === 'undefined' || document.getElementById('mix-held-style')) return;
@@ -81,13 +86,23 @@ class Mix {
   private heldLens: [number, number] | null = null;
   private cost = 0;
   private costN = 0;
+  /** CHAPTER FRAMING plays (the downed body avoids the HUD's panels only then; with it off a KO lies as it always did). */
+  private framingOn = false;
+  /** Checks only: `false` lets a KO lie where it did before round 19 (blind to the HUD). */
+  private bodyAvoid = true;
 
   constructor(private readonly b: MixBind) {
     this.game = b.game === 'ffx2' ? 'ffx2' : 'ffx';
-    this.framing = new Framing((b.battleCamera as ConstructorParameters<typeof Framing>[0] | undefined) ?? null, b.camera, this.game);
+    this.framing = new Framing((b.battleCamera as ConstructorParameters<typeof Framing>[0] | undefined) ?? null, b.camera, this.game, b.scene);
     this.cinema = new Cinema(b.scene, () => ((globalThis as { __pyrefly?: { app?: { renderer?: Renderer } } }).__pyrefly?.app?.renderer ?? null));
     this.shots = this.framing.rigs ? new HeldShots(this.game, this.framing.rigs) : null;
     heldStyle();
+    setShotHold(() => this.shots?.holdMs() ?? 0); // the presenter holds the next decision until a dressphere shot has run its minimum
+    // A body that goes down lies clear of the status rows where it can (round 19, PR-0318; both games).
+    setProneAvoid(() => {
+      const canvas = this.framingOn && this.bodyAvoid ? battleCanvas() : null;
+      return canvas ? panelsNdc(hudPanels(canvas), canvas.getBoundingClientRect(), this.framing.lensNow()) : [];
+    });
   }
 
   private scan(): void {
@@ -111,6 +126,7 @@ class Mix {
     }
     const actors = this.actors;
     // CHAPTER FRAMING: the master, the staging, the menu clearance.
+    this.framingOn = parts.chapterFraming;
     this.framing.update(dt, actors, parts.chapterFraming);
     // The held shots (on today's rig too when CHAPTER FRAMING is off).
     const master = this.framing.masterPose ?? this.framing.rigs?.base('idle') ?? null;
@@ -166,6 +182,7 @@ class Mix {
     // the phone, where only the shot is closed).
     if (this.game === 'ffx2') {
       this.twirl.on = twirlKeysOn(liveGates(this.game));
+      this.twirl.eager = tier === 'full' && !dev.phone; // fetch the keys ahead only where bytes are cheap (else when her Change submenu opens)
       for (const a of actors) if (a.facing >= 0) this.twirl.watch(a);
       this.twirl.update(dt);
     } else {
@@ -228,12 +245,24 @@ class Mix {
     };
   }
 
+  /** Checks only: `false` leaves the planes as a pose crossfade has them under a twirl key (round 19's frames). */
+  setTwirlPin(on: boolean): void {
+    this.twirl.pinOn = on;
+  }
+
+  /** Checks only: `false` lays a downed body blind to the HUD's panels, as before round 19 (PR-0318). */
+  setBodyAvoid(on: boolean): void {
+    this.bodyAvoid = on;
+  }
+
   resetCost(): void {
     this.cost = 0;
     this.costN = 0;
   }
 
   dispose(): void {
+    setProneAvoid(null);
+    setShotHold(null);
     this.framing.dispose();
     this.cinema.dispose();
     this.banner.dispose();
@@ -287,5 +316,7 @@ fxDebugHooks['mix'] = {
     keys: () => [...MIX_PARTS],
     snapshot: () => current?.snapshot() ?? null,
     resetCost: () => current?.resetCost(),
+    twirlPin: (on: boolean) => current?.setTwirlPin(on),
+    bodyAvoid: (on: boolean) => current?.setBodyAvoid(on),
   },
 };

@@ -104,6 +104,15 @@ it: in a lab battle the lab director owns the camera (framing masters and lens s
 Bahamut, and the held Overdrive and dressphere shots count as the presenter's own authored moments the lab yields
 to.
 
+Update from the driver, 2026-10-03: release 36 is live (main c69de96a). Since the lab's base c19454eb, main gained
+the MAX mix (8aee1e69) and the r36fix in `src/engine/fx/mix/` (Yunalesca out of COLOSSUS; a plate gate in plate.ts
+and clearance.ts; stricter dressphere-shot rules in heldShots.ts; FFX-2 cards not fading with a menu open).
+FFX-2 Bahamut keeps the colossus framing; Natus, BFA and Evrae keep today's rig. Release 37 (`r37-mix-polish`,
+`r37-living-backdrops`, not merged on 2026-10-03) adds a `src/engine/fx/shotHold.ts` hook in
+`BattlePresenter.play`, the HUD-free-area footprint in hudPanels.ts/clearance.ts, and a plate defocus driven by
+camera drift (`DriftRig.ts`). The rebase must make the lab's Clair Obscur drift and that defocus agree, and let
+shotHold's held shots count as authored moments. The rebase waits for Bailey's verdict on the lab.
+
 ## Budget and risks
 
 - Weekly 71 % used (rule 15: conserve band; Bailey's "keep working" stands). One Opus builder for the

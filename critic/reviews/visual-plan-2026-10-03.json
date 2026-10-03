@@ -1,0 +1,73 @@
+{
+  "schema": "visual-plan/1",
+  "kind": "visual-plan",
+  "provisional": true,
+  "date": "2026-10-03",
+  "note": "Paper plan by the critic. Nothing built or installed. Gains are estimates from round 19b anchors, not measurements; sub-scores are not part of the weighted score. Candidate quality is taken from the READMEs' own flags (contact sheets not opened).",
+  "baseline": { "round": "19b", "build": "main c69de96a (release 36)", "previous": "round 19 (8aee1e69) and visual pass 2026-10-01 (release 33)" },
+  "areas": {
+    "characterModels": {
+      "score19b": 7.9, "score19": 7.9, "pass1001": 7.6,
+      "steps": [
+        { "id": "C1", "title": "Idles and full key sets for Yuna Thief, Rikku Warrior, Paine Thief (closes PR-0311)", "status": "pick", "game": "ffx2", "gain": 0.3, "needs": "Bailey picks each idle (rec cand-6 / cand-12 / cand-5); Rikku Warrior and Paine Thief costumes are unsourced estimates" },
+        { "id": "C2", "title": "Overdrive and Special apex keys (25 sets) into the built r37-slots od-<ability> slot", "status": "pick+built-slot", "game": "ffx for Overdrives, ffx2 for dresspheres", "gain": 0.2, "needs": "Bailey picks per move; skip flagged weak sets" },
+        { "id": "C3", "title": "56 dressphere gap keys on 21 figures plus the 8 held twirl keys", "status": "pick+held", "game": "ffx2", "gain": 0.1, "needs": "Bailey picks; 800 MB line (D-332)" }
+      ],
+      "sumGain": 0.6, "projected": "8.3 to 8.4",
+      "needsOptionsRound": ["Relight from normals (EC-1001-11)", "Costume source for Rikku Warrior and Paine Thief", "Per-figure key-light floor and 2x figures"],
+      "owedArt": ["D-333 Yuna Gunner wind-up re-roll", "D-334 hooded Yuna White Mage hurt and KO", "Rikku White Mage manifest", "Kimahri horn pass and Ronso Rage"]
+    },
+    "enemyModels": {
+      "score19b": 7.5, "score19": 7.6, "pass1001": 7.1,
+      "steps": [
+        { "id": "E1", "title": "Boss telegraph wind-up keys (14 bosses) into the built r37-slots telegraph slot", "status": "pick+built-slot", "game": "per boss, split by game", "gain": 0.3, "needs": "Bailey picks per boss" },
+        { "id": "E2", "title": "Install held boss keys (40 + 19 aeon extras, D-325) and 28 2x masters (D-332)", "status": "held", "game": "both", "gain": 0.2, "needs": "D-332 MB vs MiB; PR-0328 source maps yes" },
+        { "id": "E3", "title": "PR-0316 Bahamut bloom, PR-0317 Flux crown, PR-0319 (r37-mix-polish) plus Sin-parts and Omnis-kneel defeat keys", "status": "built+pick", "game": "both", "gain": 0.2, "needs": "merge, deep-round confirmation, Bailey picks defeat keys" }
+      ],
+      "sumGain": 0.7, "projected": "8.0 to 8.2",
+      "needsOptionsRound": ["Natus, Braska's Final Aeon and Evrae colossus master back with Sensor card steering (PR-0331)", "Enemy part motion for Vegnagun", "Enemy skill travel and impact effects (EC-1001-08)", "2x paintings above 45 percent of frame; Vegnagun Tail 4x (D-329 deferred)"]
+    },
+    "animation": {
+      "score19b": 6.9, "score19": 6.9, "pass1001": 6.2,
+      "steps": [
+        { "id": "A1", "title": "Merge r37-mix-polish: dressphere shot 1.6 s hold (PR-0313/0314, STALLED), KO clear of rows, twirl crossfade ghost (PR-0315, confirm)", "status": "built", "game": "ffx2 for shot and twirl, both for KO", "gain": 0.2, "needs": "integration, live deep round" },
+        { "id": "A2", "title": "Apex and telegraph slots with picked art (the moving-picture view of C2 and E1, counted once)", "status": "pick+built-slot", "game": "both, per game", "gain": 0.4, "needs": "Bailey picks" },
+        { "id": "A3", "title": "Painted follow-through and wind-up for gap figures, sourced Thief victories, held twirl keys", "status": "pick+held", "game": "ffx2", "gain": 0.2, "needs": "Bailey picks; 800 MB line" }
+      ],
+      "sumGain": 0.8, "projected": "7.4 to 7.6 (structural ceiling about 7.8 without a motion options round)",
+      "needsOptionsRound": ["Per-move Overdrive choreography (EC-1001-03, re-offer of a declined idea, needs its own yes)", "Stepped on-twos action keys", "Enemy part motion", "Per-game motion tempo (VP-1001-49)"]
+    },
+    "fidelity": {
+      "score19b": 8.1, "score19": 8.0, "pass1001": 7.9,
+      "steps": [
+        { "id": "F1", "title": "Install held 2x masters and adopted art to the line", "status": "held", "game": "both", "gain": 0.2, "needs": "D-332 and PR-0328 answers" },
+        { "id": "F2", "title": "Merge r37-living-backdrops (A-7) and r37-scenes (Ginnem glow A-9, plate wings PR-0300)", "status": "built", "game": "ffx and ffx2 each their own", "gain": 0.2, "needs": "integration; disclose the wing mirror seam and the Ch IV doubled lantern" },
+        { "id": "F3", "title": "PR-0316 bloom, PR-0317 crown, and the PR-0330 advisor card regression (not found fixed on any r37 branch)", "status": "built (0316, 0317) / owed (0330)", "game": "ffx2 (0316), ffx (0317, 0330)", "gain": 0.1, "needs": "PR-0330 first in the next batch" }
+      ],
+      "sumGain": 0.5, "projected": "8.4 to 8.6",
+      "needsOptionsRound": ["Relight from normals (EC-1001-11)"]
+    },
+    "camera": {
+      "score19b": 7.7, "score19": 7.6, "pass1001": 7.5,
+      "steps": [
+        { "id": "K1", "title": "Held shots finish properly: dressphere shot 1.6 s hold; Overdrive shot shows the picked apex painting", "status": "built+pick", "game": "ffx2 and ffx", "gain": 0.2, "needs": "merge; apex picks" },
+        { "id": "K2", "title": "Plate wings and backdrop defocus read as framing", "status": "built", "game": "both, per game", "gain": 0.1, "needs": "integration" },
+        { "id": "K3", "title": "Push-in fallback when the dressphere shot finds no clean frame (PR-0314 proposal)", "status": "pick (yes)", "game": "ffx2", "gain": 0.1, "needs": "Bailey's yes" }
+      ],
+      "sumGain": 0.4, "projected": "7.9 to 8.1",
+      "needsOptionsRound": [
+        "Re-stage Ch II, III, VIII so the party is clear of the boss (PR-0310, major) and decide the colossus master for Natus, BFA, Evrae (PR-0331): 2 to 4 first-menu stills; est. camera +0.4, enemy +0.2; the other half of the visual 9.0 floor",
+        "Authored per-chapter framings (EC-1001-05), an FFX-2 view of its own (EC-1001-13), phone lower third (EC-1001-14) with PR-0333",
+        "Clair Obscur / Persona camera grammar: camera-lab session owns it (D-318); not planned here"
+      ]
+    }
+  },
+  "gates": {
+    "visualCategory": "8.9 reaches the 9.0 floor only if PR-0311 (needs Bailey's idle pick) and PR-0310 (needs an options round) both close",
+    "budget": "D-332 (800 MB vs MiB) and PR-0328 (hidden source maps, about 22.8 MB) gate every art install",
+    "unverified": "Several r37-* lanes are built and checked but not merged or deployed; no gain counts until a deep round re-measures"
+  },
+  "morningOrder": ["D-332 and PR-0328", "three idle picks (C1)", "apex and telegraph picks", "PR-0310/PR-0331 stills, then the PR-0314 push-in yes"],
+  "projectedIfAllShip": { "characterModels": "8.3 to 8.4", "enemyModels": "8.0 to 8.2", "animation": "7.4 to 7.6", "fidelity": "8.4 to 8.6", "camera": "7.9 to 8.1" },
+  "projectedMergeOnly": { "characterModels": 7.9, "enemyModels": 7.6, "animation": 7.1, "fidelity": 8.3, "camera": 7.8 }
+}

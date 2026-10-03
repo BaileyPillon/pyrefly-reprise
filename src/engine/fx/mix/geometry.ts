@@ -1,4 +1,5 @@
 import { MathUtils, PerspectiveCamera, Vector3, type Object3D } from 'three';
+import { downQuadOf } from './downed.ts';
 
 /**
  * The MAX mix (D-316), CHAPTER FRAMING's geometry: figures as billboards, their screen boxes, and the
@@ -27,6 +28,8 @@ export interface Fig {
   quad?: Vector3[];
   /** The painting's alpha over its drawn quad, for the silhouette checks (bosses). */
   mask?: Mask;
+  /** Where this party member would lie if she went down (world quad on the floor, `downed.ts`); absent for enemies and with no KO painting. */
+  down?: Vector3[];
 }
 
 /** A painting's alpha, sampled over its content box: `at(fx, fy)` with fx, fy in 0..1 of the screen box (y down). */
@@ -139,7 +142,9 @@ export function figOf(a: Actor): Fig {
     const feet = new Vector3().addVectors(bl, br).multiplyScalar(0.5);
     const top = (tr.y + tl.y) / 2;
     const mask = enemy ? maskOf(a) : undefined;
-    return { feet, h: Math.max(0.2, top - feet.y), halfW: Math.max(0.1, bl.distanceTo(br) / 2), enemy, id: subjectId(a), quad: [bl.clone(), br.clone(), tr.clone(), tl.clone()], ...(mask ? { mask } : {}) };
+    const q = [bl.clone(), br.clone(), tr.clone(), tl.clone()];
+    const down = enemy ? undefined : downQuadOf(a, q);
+    return { feet, h: Math.max(0.2, top - feet.y), halfW: Math.max(0.1, bl.distanceTo(br) / 2), enemy, id: subjectId(a), quad: q, ...(mask ? { mask } : {}), ...(down ? { down } : {}) };
   }
   const size = a.poseSize ?? [a.worldHeight * 0.6, a.worldHeight];
   const s = Math.abs(a.scale.y || 1);

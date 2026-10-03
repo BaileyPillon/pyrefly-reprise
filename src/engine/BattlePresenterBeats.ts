@@ -17,6 +17,7 @@ import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
 import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
 import { impactAtApex, windUpLeads } from './KeyPoses.ts';
+import { armOdKey, endOdKey, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
 import { partyOffStage } from './SummonStaging.ts';
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
@@ -50,8 +51,10 @@ export async function actionStart(
   const pose = poseForAction(event, ctx.stage.sideOf(event.actorId), ctx.deps.abilityFacts, (p) =>
     ctx.stage.paints?.(event.actorId, p) === true,
   );
-  const windUp = !ctx.deps.actionMotion?.ownsWindUp?.(event) && windUpLeads(ctx, event.actorId, pose); // D-313: the wind-up painting, then the impact at the apex
-  actor?.setPose(windUp ? 'ready' : pose);
+  const od = armOdKey(ctx, event); // r37 slot: this move's own Overdrive / Special painting (null when it has none)
+  const windUp = !odOpensAction(od) && !ctx.deps.actionMotion?.ownsWindUp?.(event) && windUpLeads(ctx, event.actorId, pose); // D-313: the wind-up painting, then the impact at the apex
+  if (odOpensAction(od)) showOdOnOpen(ctx, od); // FFX: the held shot and the strike are on the key painting
+  else actor?.setPose(windUp ? 'ready' : pose);
   const motion = ctx.deps.actionMotion; // FF7: the melee run to the target (none for FFX and FFX-2)
   if (motion) await settled(ctx, motion.open(event, motionCtx(ctx)), MOTION_GUARD_MS);
 
@@ -82,6 +85,7 @@ export async function actionStart(
 }
 
 export async function actionEnd(ctx: EventCtx): Promise<void> {
+  endOdKey(ctx, ctx.actingId);
   releaseContact(ctx); // VP-1001-06: a strike still held at its apex goes home
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
   const motion = ctx.deps.actionMotion; // FF7: the run back home
@@ -109,6 +113,7 @@ export async function damage(
   // Rule 5: a `heals`-flagged action is negative damage, not a `heal` event.
   if (event.amount < 0) {
     await awaitSpellLanding(ctx, event, true);
+    odApex(ctx, event.sourceId ?? ctx.actingId); // r37 slot (FFX-2: the move's apex)
     target?.flash(0x9dffc4, 320, 0.6);
     numeral(ctx, event.targetId, {
       kind: 'heal',
@@ -122,6 +127,7 @@ export async function damage(
 
   if (event.affinity === 'immune' || event.amount === 0) {
     await meetContact(ctx, event.targetId); // VP-1001-06
+    odApex(ctx, event.sourceId ?? ctx.actingId);
     numeral(ctx, event.targetId, { kind: 'miss', text: event.affinity === 'immune' ? 'IMMUNE' : '0' });
     return ctx.sleep(TIMING.miss);
   }
@@ -129,6 +135,7 @@ export async function damage(
   // The spell reaches the target before its numeral does (B1 spell effects).
   await awaitSpellLanding(ctx, event, false);
   await meetContact(ctx, event.targetId); // VP-1001-06: the blow lands on the strike's apex
+  odApex(ctx, event.sourceId ?? ctx.actingId);
 
   // The cut to the target, on the frame the hit lands. Only the first hit of a
   // multi-hit action moves the camera (see `BattleMoments.impact`).
@@ -166,6 +173,7 @@ export async function damage(
 /** A miss, landing on the strike's apex like a hit (VP-1001-06). */
 export async function missed(ctx: EventCtx, event: Extract<BattleEvent, { type: 'miss' }>): Promise<void> {
   await meetContact(ctx, event.targetId);
+  odApex(ctx, event.sourceId);
   numeral(ctx, event.targetId, { kind: 'miss', text: reasonText(event.reason) });
   cue(ctx, 'miss', { volume: 0.5 });
   ctx.stage.actor(event.targetId)?.hop(0.18, 200);
@@ -262,12 +270,14 @@ export async function charge(
     ctx.stage.camera.shake(0.07, 520);
   }
   cue(ctx, 'charge', { volume: imminent ? 1 : 0.7 });
+  const telegraphDone = telegraphUp(ctx, event.enemyId); // r37 slot: the boss's own telegraph painting for this beat
   // Total Annihilation, Mega Flare, the Ultimate Jecht Shot, Terror of
   // Zanarkand: the HUD raises its banner from `onEvent`; the moment is the
   // slow zoom onto the boss and the heartbeat vignette pulse under it.
   void ctx.moments.telegraph(event.enemyId, imminent ? 2 : 1, event.name);
   await banner(ctx, event.name, 'telegraph');
   await ctx.sleep(TIMING.charge);
+  telegraphDone?.();
 }
 
 export async function victory(ctx: EventCtx): Promise<void> {

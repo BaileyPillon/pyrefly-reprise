@@ -14,10 +14,15 @@
 //     the row the advisor names (it was cancelled and replaced by Attack); an open
 //     overlay with nothing choosable is escaped and recorded (rec.escapes) instead
 //     of polled forever; a wrong-target confirm is recorded (rec.targetMismatches).
+//   - PR-0261 (round 19): the Bushido chips and the Swordplay zone on screen are played by real input
+//     (route-minigame.mjs; the old Enter after 3 s was 0 correct inputs); the outcome is derived from the
+//     final screen and the engine result, and a fight that never finished is 'stalled at link N, <phase>'.
 // Both games: shared critic plumbing.
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { playMinigame } from './route-minigame.mjs';
+import { deriveOutcome } from './route-pure.mjs';
 import { battleSeedRead, isAllDisabledOverlay, measureCardVsRows, readAdvice, readRows, targetsUp } from './route-ui.mjs';
 
 /**
@@ -58,6 +63,7 @@ export async function playFight(r) {
       if (sr.firstEnemyAction) { firstEnemy = sr.firstEnemyAction; rec.firstEnemyAction = firstEnemy; note('firstEnemyAction', firstEnemy); }
     }
     const s = await ss();
+    if (s?.links) rec.lastChain = { links: s.links, chainLength: s.chainLength ?? null, phase: s.playback?.phase ?? '', turn: turns, ms: Date.now() - tb };
     if (s?.links && s.links !== lastLinks) {
       rec.seams.push({ from: lastLinks, to: s.links, ms: Date.now() - tb, phase: s.playback?.phase });
       await seq(`seq-seam-${s.links}`, 8, 300, `chain seam ${lastLinks} -> ${s.links} (phase change)`);
@@ -73,7 +79,11 @@ export async function playFight(r) {
       enemySeq = true; await seq('seq-action-playing', 10, 180, `an action playing out (${ph})`);
     }
     // A chooser overlay that waits for the player (the Ronso Rage picker): confirm it, as a player would.
-    if (!s?.playback?.awaitingMenu && ph === 'hud:minigame-request') {
+    if (!s?.playback?.awaitingMenu && /minigame/.test(ph)) {
+      const shot = (kind, label) => snap(`${r.pref ?? ''}28-${kind}-overlay.png`, label, { screen: 'battle' });
+      if (await playMinigame({ page, input, rec, turn: turns, shot })) { rec.mgSince = null; continue; } // Bushido / Swordplay: typed as shown
+    }
+    if (!s?.playback?.awaitingMenu && ph === 'hud:minigame-request') { // any other overlay (reels, fury, Mix, a picker): the old Enter after 3 s
       rec.mgSince = rec.mgSince ?? Date.now();
       if (Date.now() - rec.mgSince > 3000) { rec.mgConfirms = (rec.mgConfirms ?? 0) + 1; note('minigameConfirm', { after: Date.now() - rec.mgSince }); await input.press('Enter'); rec.mgSince = null; }
     } else rec.mgSince = null;
@@ -262,7 +272,9 @@ export async function closeFight(r, { turns, ms, bestLog }) {
   rec.turns = turns; rec.fightMs = ms; rec.afterFight = await page.evaluate(() => window.__pyrefly.screen());
   let log = await page.evaluate(() => { try { return window.__pyrefly.battleLog() ?? []; } catch { return []; } });
   if (log.length < bestLog.length) log = bestLog;
-  rec.outcome = log.some((e) => e.type === 'victory') ? 'victory' : log.some((e) => e.type === 'defeat') ? 'defeat' : 'undecided';
+  const end = deriveOutcome({ screenAtEnd: rec.afterFight, log, seen: rec.lastChain });
+  rec.outcome = end.outcome; rec.outcomeFrom = end.from; rec.stalledAt = end.stalledAt ?? null;
+  if (end.outcome === 'stalled') rec.fails.push({ stalled: end.detail, from: end.from });
   rec.logKinds = {}; for (const e of log) rec.logKinds[e.type] = (rec.logKinds[e.type] ?? 0) + 1;
   fs.mkdirSync(path.join(evidence, dir), { recursive: true });
   fs.writeFileSync(path.join(evidence, dir, `${pref}battle-log.json`), JSON.stringify(log));

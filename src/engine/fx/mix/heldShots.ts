@@ -1,6 +1,6 @@
 import { Vector3, type PerspectiveCamera } from 'three';
 import { measure, type Field } from './clearance.ts';
-import { cameraAt, figBox, figOf, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
+import { cameraAt, figBox, figOf, stillActor, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
 import { battleCanvas, fieldOf, hudPanels } from './hudPanels.ts';
 import { closeShot, heroShot } from './masters.ts';
 import type { RigWatch } from './rigWatch.ts';
@@ -13,7 +13,10 @@ import type { RigWatch } from './rigWatch.ts';
  *   three-quarter shot of the actor at about half the frame height; the cut back when the input ends.
  * - DRESSPHERE SHOT (FFX-2 only, research 6.1): on a spherechange, a held close shot of the girl, at
  *   least 1.6 s and until she is quiet again (at most 3 s); never fired while a girl's menu is open, and
- *   handed back the frame a menu opens (Active ATB: the gauges run, so the player sees the master).
+ *   handed back the frame a menu opens. Round 19 (PR-0313, PR-0314): the presenter holds the next decision until the shot
+ *   has run its 1.6 s (`holdMs`, `shotHold.ts`: the next menu or enemy action begins right after a burst, so the shot could
+ *   not be predicted to hold, it is made to), it is not cut to while anyone else is acting, and it is handed back at the
+ *   first action-start of anyone but its subject (an enemy's hit landed inside it with the enemy off camera).
  *
  * Both shots are checked before they are cut to (the judges' must-fix list): the subject whole in the
  * part of the frame the viewport shows (the phone's slice included) and clear of the HUD as laid out
@@ -42,11 +45,31 @@ const QUIET = new Set(['idle', 'hurt', 'ko', 'critical', 'sleep', 'victory', 're
  * and clear, or wholly out of the shot (VP-1001-26; Yuna under the turn rail, Kimahri under the party
  * panel, Yuna cut at the phone's edge). Enemies may sit at the shot's edges: it is about the actor.
  */
-export function shotScore(subject: number, boxes: readonly Box[], f: Field, figs: readonly Fig[] = []): { ok: boolean; score: number } {
+export function shotScore(subject: number, boxes: readonly Box[], f: Field, figs: readonly Fig[] = [], strict = false): { ok: boolean; score: number } {
   let score = 0;
   let ok = true;
+  const viewH = f.view.b - f.view.t;
+  const subjectH = boxes[subject] ? boxes[subject]!.b - boxes[subject]!.t : 0;
   boxes.forEach((b0, i) => {
     if (i !== subject && figs[i]?.enemy) return;
+    if (strict) {
+      // The dressphere shot (round 19, PR-0309; FFX-2 only): a face is never under a panel (the enemy gauge rows ran across Yuna's
+      // face), a head is never cut by the frame's top for anyone in the shot, and the girl who changes is not dwarfed (no neighbour stands over a quarter taller on screen than she does: a nearer one in the foreground).
+      const head = { l: b0.l, r: b0.r, t: b0.t, b: b0.t + 0.28 * (b0.b - b0.t) };
+      const inShot = i === subject || measure(b0, f, figs[i]?.mask).inView > 0.03;
+      if (inShot && f.panels.length && measure(head, f).underHud > 1e-6 && measure(head, f).inView > 0.5) {
+        ok = false;
+        score -= 5;
+      }
+      if (inShot && b0.t < f.view.t + 0.01 * viewH) {
+        ok = false;
+        score -= 5;
+      }
+      if (i !== subject && inShot && b0.b - b0.t > 1.25 * subjectH && measure(b0, f).inView > 0.5) {
+        ok = false;
+        score -= 5;
+      }
+    }
     // A margin: the painting turns toward the new camera once the shot is up, so its drawn box widens.
     const mx = (b0.r - b0.l) * (i === subject ? 0.1 : 0.05);
     const my = (b0.b - b0.t) * 0.04;
@@ -75,7 +98,9 @@ export class HeldShots {
   /** The best candidate of the last try (checks only). */
   lastTry = '';
   private readonly subjects = new Map<Actor, string>();
-  readonly stats = { od: 0, sc: 0, skipped: 0, handBacks: 0, writes: 0, searchMs: 0 };
+  readonly stats = { od: 0, sc: 0, skipped: 0, handBacks: 0, actionBacks: 0, writes: 0, searchMs: 0 };
+  /** Seconds a dressphere shot holds at least (D-316). */
+  static readonly MIN_HOLD = 1.6;
 
   constructor(private readonly game: 'ffx' | 'ffx2', private readonly rigs: RigWatch) {}
 
@@ -111,17 +136,44 @@ export class HeldShots {
     }
     // A menu opening hands a spherechange shot back at once (never a cut while a girl is choosing).
     if (this.held?.kind === 'sc' && (o.menu || !o.scOn)) this.handBack();
+    // Anyone but the subject starting an action (a lunge, a cast, a hit in flight) ends the shot: the actor and the target
+    // must both be readable (R19-FN-01).
+    if (this.held?.kind === 'sc' && this.actingElsewhere(o.actors, this.held.who)) {
+      this.stats.actionBacks++;
+      this.handBack();
+    }
     if (this.held?.kind === 'sc') {
       const age = this.time - this.held.since;
       const quiet = QUIET.has(this.held.who.pose ?? 'idle');
       if ((quiet && age >= 1.6) || age >= 3) this.handBack();
     }
-    if (!this.held && this.game === 'ffx2' && o.scOn && !o.menu && o.master && o.ready && changed.length) this.cut('sc', changed[0]!, o.actors, o.master, o.lens);
+    if (!this.held && this.game === 'ffx2' && o.scOn && !o.menu && o.master && o.ready && changed.length) {
+      const who = changed[0]!;
+      if (this.actingElsewhere(o.actors, who)) {
+        // Another actor is mid-action as she changes: the shot would show the wrong thing; the master holds.
+        this.stats.skipped++;
+        this.lastTry = `sc ${who.name} skipped: another actor is acting`;
+      } else this.cut('sc', who, o.actors, o.master, o.lens);
+    }
     if (this.held) {
       this.rigs.write(this.held.pose);
       this.stats.writes++;
     }
     return this.held;
+  }
+
+  /**
+   * How many ms of a held dressphere shot are still to run (0 with none up): the presenter waits that long after the burst, so the
+   * next menu or enemy action begins after the shot, not inside it (`shotHold.ts`, PR-0313 and PR-0314).
+   */
+  holdMs(): number {
+    const h = this.held;
+    return h?.kind === 'sc' ? Math.max(0, (HeldShots.MIN_HOLD - (this.time - h.since)) * 1000) : 0;
+  }
+
+  /** Does anyone other than `who` act now (an action's first frames: a lunge, run, cast or strike in flight)? */
+  private actingElsewhere(actors: readonly Actor[], who: Actor): boolean {
+    return actors.some((a) => a !== who && a.visible && (a.lifeState === 'act' || (a.facing < 0 && !stillActor(a))));
   }
 
   private handBack(): void {
@@ -146,6 +198,13 @@ export class HeldShots {
     const figs: Fig[] = vis.map(figOf);
     const subject = vis.indexOf(who);
     if (subject < 0) return;
+    // A dressphere with no painting yet (Yuna's Thief is a placeholder mannequin, round 19 PR-0311) is never framed in close-up:
+    // the master holds.
+    if (kind === 'sc' && who.isPlaceholder === true) {
+      this.stats.skipped++;
+      this.lastTry = `sc ${who.name} skipped: placeholder art`;
+      return;
+    }
     const g = figs[subject]!;
     const aspect = field.W / field.H;
     // The visible slice's centre, in canvas fractions (the phone shows a slice of a wider field).
@@ -160,23 +219,23 @@ export class HeldShots {
     const ys = kind === 'od' ? [0.62, 0.68, 0.72, 0.56] : [0.5, 0.45, 0.55, 0.6];
     // The turn toward the actor's face first (B's 28 degrees), then the other side too: a member standing
     // beside the hero swings out of the shot instead of under the party rows.
-    const turns = kind === 'od' ? [28, 16, 40, 52, 4, -12, -24] : [0];
+    const turns = kind === 'od' ? [28, 16, 40, 52, 4, -12, -24] : [0, 12, -12, 24, -24];
     // Tried in order of preference; the first framing that passes is the shot (one search per beat).
     const t0 = performance.now();
     search: for (const turn of turns)
       for (const frac of fracs)
         for (const x of xs)
           for (const y of ys) {
-            const pose = kind === 'od' ? heroShot(master, g, who.facing, aspect, frac, [vx(x), vy(y)], turn) : closeShot(master, g, aspect, frac, [vx(x), vy(y)]);
+            const pose = kind === 'od' ? heroShot(master, g, who.facing, aspect, frac, [vx(x), vy(y)], turn) : closeShot(master, g, aspect, frac, [vx(x), vy(y)], turn);
             const cam = cameraAt(pose, aspect);
             const boxes = figs.map((f) => {
               const b = figBox(f, cam, field.W, field.H);
               return { l: b.l + lens[0], r: b.r + lens[0], t: b.t + lens[1], b: b.b + lens[1] };
             });
-            const s = shotScore(subject, boxes, field, figs);
+            const s = shotScore(subject, boxes, field, figs, kind === 'sc');
             if (!best || s.score > best.score || s.ok) {
               best = { pose, score: s.score, ok: s.ok };
-              this.lastTry = `${kind} f${frac} x${x} y${y} t${turn} ` + boxes.map((b, i) => `${figs[i]!.id}:${measure(b, field, figs[i]!.mask).inView.toFixed(2)}/${measure(b, field, figs[i]!.mask).underHud.toFixed(2)}`).join(' ');
+              this.lastTry = `${kind} ${who.name} f${frac} x${x} y${y} t${turn} ` + boxes.map((b, i) => `${figs[i]!.id}:${measure(b, field, figs[i]!.mask).inView.toFixed(2)}/${measure(b, field, figs[i]!.mask).underHud.toFixed(2)}`).join(' ');
             }
             if (s.ok) break search;
           }

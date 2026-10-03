@@ -400,7 +400,7 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
   return {
     async play(script: StoryScript, playOpts?: { midBattle?: boolean; name?: string }): Promise<void> {
       if (!shows.admit(playOpts?.name)) return;
-      card.beginBeat(script);
+      card.beginBeat(script, playOpts?.name);
       // Nothing to show when every line resolves instantly.
       box.el.hidden = mode === 'instant';
       // The HUD stays where it is; the scene behind the line just dims.

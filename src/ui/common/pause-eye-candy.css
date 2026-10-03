@@ -165,11 +165,15 @@
 
 .pause__ec-col .pause__ec-row--part .pause__k::after { display: none; margin: 0 0 0 10px; }
 
-/* OFF reads quiet; a part whose look is OFF keeps its own value and is drawn dim. */
-.pause__ec-col .pause__ec-row--off .pause__v { color: rgba(var(--pu-paper), 0.36); }
+/*
+ * OFF reads quiet; a part whose look is OFF keeps its own value, prints `ON · LOOK OFF` and is drawn dim.
+ * PR-0322 (round 19): the old 0.4 opacity and 0.36 grey read about 2:1 and 1.5:1 on the painting, so dim
+ * and OFF text is a flat paper tint now (0.52 and 0.5 on the dark ink), which measures 3:1 or better.
+ */
+.pause__ec-col .pause__ec-row--off .pause__v { color: rgba(var(--pu-paper), 0.5); }
 .pause__ec-col .pause__ec-row--dim .pause__k,
-.pause__ec-col .pause__ec-row--dim .pause__v { opacity: 0.4; }
-.pause__ec-col .pause__ec-row .pause__v em { margin-left: 0.7em; font-style: normal; letter-spacing: 0.14em; color: rgba(var(--pu-paper), 0.42); }
+.pause__ec-col .pause__ec-row--dim .pause__v { color: rgba(var(--pu-paper), 0.52); }
+.pause__ec-col .pause__ec-row .pause__v em { margin-left: 0.7em; font-style: normal; letter-spacing: 0.14em; color: rgba(var(--pu-paper), 0.55); }
 
 .pause__ec-col .pause__ec-row.pause__row--sel .pause__k,
 .pause__ec-col .pause__ec-row.pause__row--sel .pause__v { color: rgba(var(--pu-paper), 0.97); }

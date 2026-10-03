@@ -6,10 +6,12 @@ import { cameraAt, centroid, gapPx, partyPx, unionBox, UP, type Box, type Fig, t
  * (EC-1001-05), ported from option C's prototype (`candy-max-proto`, `fx/max/c/masters.ts`).
  *
  * The mix takes C's **colossus** masters only (JUDGE.md, the options page's "The mix I would take"):
- * Natus, Yojimbo, Braska's Final Aeon, Yunalesca, Evrae and Bahamut get a low camera at about half the
+ * Natus, Yojimbo, Braska's Final Aeon, Evrae and Bahamut get a low camera at about half the
  * party's height, aimed up at the boss's chest (at most 9 degrees), so the boss looms, and BOSS SCALE
  * brings it to 1.6 to 2.4 times the party on screen. Vegnagun keeps its approved D-228 rig (field of
- * view 40) and Sin its own deck camera (`keepsToday`). Every other fight keeps today's rig; all of them,
+ * view 40) and Sin its own deck camera (`keepsToday`). Yunalesca is not a colossus here (round 19, PR-0307): her
+ * master pulled the camera past the Zanarkand Dome plate's edge at every aspect, so Chapter II keeps today's rig. Every
+ * other fight keeps today's rig; all of them,
  * today's rig included, go through the menu clearance (`clearance.ts`).
  *
  * Every master stays within 12 degrees of today's azimuth and 0.7 to 1.45 times today's distance (the
@@ -22,7 +24,7 @@ import { cameraAt, centroid, gapPx, partyPx, unionBox, UP, type Box, type Fig, t
 
 export type MasterClass = 'colossus' | 'hero' | 'field';
 
-const COLOSSUS = /^(seymour-natus|yojimbo|braskas-final-aeon|yunalesca|evrae|bahamut|ffx2-bahamut|vegnagun|sin-|overdrive-sin)/;
+const COLOSSUS = /^(seymour-natus|yojimbo|braskas-final-aeon|evrae|bahamut|ffx2-bahamut|vegnagun|sin-|overdrive-sin)/;
 const HERO = /^(seymour-macalania|seymour-omnis|isaaru|trema|gippal)/;
 /** Bosses whose master is today's own: D-228 Vegnagun and Sin's deck are authored colossus masters already. */
 const KEEP = /^(vegnagun|sin-|overdrive-sin)/;
@@ -48,7 +50,6 @@ export function scaleTarget(id: string): number | null {
   if (/^(seymour-natus|braskas-final-aeon|yojimbo)/.test(id)) return 2.2;
   if (/^evrae/.test(id)) return 2.4;
   if (/^(bahamut|ffx2-bahamut)/.test(id)) return 2.0;
-  if (/^yunalesca/.test(id)) return 1.7;
   return null;
 }
 
@@ -178,9 +179,9 @@ export function heroShot(master: Pose, actor: Fig, facing: number, aspect: numbe
  * master's own side (never a dolly through the party), aimed so her centre sits at `at` (fractions of
  * the frame; on the phone, inside the visible slice).
  */
-export function closeShot(master: Pose, f: Fig, aspect: number, frac = 0.6, at: [number, number] = [0.5, 0.5]): Pose {
+export function closeShot(master: Pose, f: Fig, aspect: number, frac = 0.6, at: [number, number] = [0.5, 0.5], turnDeg = 0): Pose {
   const centre = f.feet.clone().setY(f.feet.y + f.h * 0.5);
-  const toCam = new Vector3().subVectors(master.pos, centre).setY(0).normalize();
+  const toCam = new Vector3().subVectors(master.pos, centre).setY(0).normalize().applyAxisAngle(UP, MathUtils.degToRad(turnDeg));
   const tanV = Math.tan(MathUtils.degToRad(master.fov / 2));
   const tanH = tanV * aspect;
   const dist = f.h / (2 * frac * tanV);

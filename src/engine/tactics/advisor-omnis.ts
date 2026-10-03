@@ -24,7 +24,7 @@
  */
 
 import type { BattleEvent, BattleState, Command } from '../../battle/common/types.ts';
-import type { SimOutcome } from '../../battle/ffx/simulate.ts';
+import { simulateFFXCommand, type SimOutcome } from '../../battle/ffx/simulate.ts';
 import {
   DISC_RING,
   type Element4,
@@ -85,4 +85,22 @@ export const DISC_GA_VALUE = 2_500;
 /** The score a disc turn adds to its row: {@link DISC_GA_VALUE} per -ga it takes away. */
 export function discTurnValue(turn: DiscTurn | null): number {
   return turn ? turn.gaLost * DISC_GA_VALUE : 0;
+}
+
+/**
+ * The disc turn the card's **top row** would make, or `null` (D-216 / D-248:
+ * the coach's Chapter XII line fires the first time this is non-null).
+ *
+ * It re-previews that one row on the engine's own simulator, the way the
+ * advisor scored it, and asks {@link discTurnOf} what it did. The Omnis board
+ * is checked first, so on every other fight this is a cheap `null` and runs no
+ * simulation.
+ */
+export function topRowDiscTurn(
+  state: Readonly<BattleState>,
+  view: { readonly actorId: string; readonly suggestions: readonly { readonly command: Command }[] } | null,
+): DiscTurn | null {
+  const top = view?.suggestions[0];
+  if (!view || !top || omnisDiscs(state).length !== MORTIPHASM_IDS.length) return null;
+  return discTurnOf(state, top.command, simulateFFXCommand(state, view.actorId, top.command, { roll: 'mid' }));
 }

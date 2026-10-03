@@ -315,7 +315,7 @@ Reading the tables: **Ramp** columns are `shadow / base / light` unless noted. E
 | Ankle guards | `#7B8290` / `#B6BDC8` | name verified |
 | Nose / inner ear / palms | `#2A2F4A` | `[estimate]` |
 
-**Broken horn — the single most important detail.** Draw the **left** horn as a full, curved 9 px spiral and the **right** as a **4 px jagged stump with a flat, chipped top**. The asymmetry must survive at 64 px; at smaller sizes, exaggerate the intact horn's length by 2 px rather than lose the contrast. Verified.
+**Broken horn — the single most important detail.** Kimahri has **one horn, broken**: a single **4 px jagged stump with a flat, chipped top** on the forehead, and no second horn (FF Wiki: "a broken horn on his forehead"; Bailey, D-324, 2026-10-02: the single broken horn on all twelve of his paintings, candidate A). The stump must stay readable at 64 px; at smaller sizes, exaggerate its chipped top by 1 px rather than lose it, and never add an intact horn beside it. Verified.
 
 **Spear.** 46 px haft (`#4E3418` / `#7E5626`) with a leaf-shaped 10 px head in `#A9B0BC` / `#E2E7EE` and a `#E3B94A` collar where head meets haft. Two blue feather-charms hang from the collar. `[estimate]`
 
@@ -325,7 +325,7 @@ Reading the tables: **Ramp** columns are `shadow / base / light` unless noted. E
 
 **Victory pose idea.** He plants the spear butt-first into the ground with a small dust puff, folds his arms, and gives a single slow nod — then touches the broken horn once, briefly, with two fingers.
 
-> **Silhouette.** The biggest and heaviest party shape by far: a hunched, wide-shouldered blue cat-man whose outline is dominated by a shaggy white mane erupting from the shoulders and neck, so his upper half reads as a fluffy irregular cloud sitting on a hard-edged muscular body. The head profile is unmistakable because it is **asymmetric** — one long curved horn, one blunt broken stump — and a tail loops out behind the legs. A long straight spear crosses the body diagonally. Squint read: shaggy cloud / lopsided horns / thick crouching body / tail loop / diagonal pole.
+> **Silhouette.** The biggest and heaviest party shape by far: a hunched, wide-shouldered blue cat-man whose outline is dominated by a shaggy white mane erupting from the shoulders and neck, so his upper half reads as a fluffy irregular cloud sitting on a hard-edged muscular body. The head profile is unmistakable: a single **blunt broken horn stump** on the forehead, the one horn he has, and a tail loops out behind the legs. A long straight spear crosses the body diagonally. Squint read: shaggy cloud / one broken stump / thick crouching body / tail loop / diagonal pole.
 
 ---
 
@@ -721,7 +721,7 @@ The CTB list on the right of the FFX battle screen shows **one icon per upcoming
 | Auron | black lens band across the eyes + red collar + grey high collar |
 | Wakka | solid orange coif wedge + blue headband line |
 | Lulu | four gold pins above the hairline + purple lips |
-| Kimahri | blue face + yellow slit eyes + **the broken horn stub**, cropped so both horns are visible |
+| Kimahri | blue face + yellow slit eyes + **the single broken horn stub**, cropped so the stub is visible |
 | Rikku | fan ponytail top-edge + green swirl eyes |
 | Yuna (Gunner) | pink hood point behind the neck + red braid crossing one shoulder |
 | Rikku (Thief) | top-knot bun + red/yellow scarf across the chest |

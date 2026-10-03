@@ -32,7 +32,7 @@ const NEIGHBOUR_RANGE = 4.5;
 /** The rig that frames the whole field between beats. */
 const RESTING_RIG = 'idle';
 
-interface NdcBox {
+export interface NdcBox {
   x0: number;
   y0: number;
   x1: number;
@@ -61,6 +61,18 @@ function ndcBox(actor: PaintedActor, cam: PerspectiveCamera): NdcBox {
 
 /** The visible frame, in NDC. */
 const FRAME: NdcBox = { x0: -1, y0: -1, x1: 1, y1: 1 };
+
+/**
+ * Screen areas a body should not lie behind (the HUD's status rows, in NDC of the frame the shot is judged in), read
+ * when a figure goes down. Set by the MAX mix (round 19, PR-0318: Chapter I's Yuna fell behind the Tidus row, nothing
+ * of her showing); null with no mix. Counts like a standing neighbour: an area covered is an area lost.
+ */
+let avoid: (() => readonly NdcBox[]) | null = null;
+
+/** Register (or clear, with null) the provider of screen areas a downed body should lie clear of. */
+export function setProneAvoid(fn: (() => readonly NdcBox[]) | null): void {
+  avoid = fn;
+}
 
 function overlap(a: NdcBox, b: NdcBox): number {
   const w = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0);
@@ -102,7 +114,8 @@ export function layProne(
       n.alpha > 0.05 &&
       n.position.distanceTo(target.position) < NEIGHBOUR_RANGE,
   );
-  const boxes = cams.map((cam) => standing.map((n) => ndcBox(n, cam)));
+  const panels = avoid?.() ?? [];
+  const boxes = cams.map((cam) => [...standing.map((n) => ndcBox(n, cam)), ...panels]);
   let best = { shift: 0, overlap: Infinity };
   for (const step of STEPS) {
     const shift = step * half * 0.9;

@@ -477,6 +477,10 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       subIdx = items.findIndex((c) => c.enabled);
       if (subIdx < 0) subIdx = 0;
       renderSub(label);
+      // The Change submenu names the outfits she can put on: the MAX mix's twirl keys fetch their painted keys ahead
+      // (`fx/mix/twirl.ts`, round 19 PR-0327; FFX-2 only). Presentation only; nothing listens in a build without the mix.
+      const to = items.flatMap((c) => (c.enabled && c.command.kind === 'spherechange' ? [c.command.extra.toDressphere] : []));
+      if (to.length) window.dispatchEvent(new CustomEvent('pyrefly:garment-grid', { detail: { girl: deps.actorName, to } }));
     }
 
     function chooseLeaf(c: AvailableCommand): void {

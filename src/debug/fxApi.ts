@@ -14,7 +14,7 @@
 import type { App } from '../app/App.ts';
 import { installFxEnv } from '../app/fxEnv.ts';
 import { eyeCandy, type FxDial, type FxOption, type FxTier } from '../engine/fx/EyeCandy.ts';
-import { livingStats } from '../engine/fx/b/LivingPaintings.ts';
+import { livingStats, pinLivingClock } from '../engine/fx/b/LivingPaintings.ts';
 import { fxDebugHooks } from '../engine/fx/fxDebugHooks.ts';
 import { fxShared } from '../engine/fx/fxShared.ts';
 
@@ -50,6 +50,7 @@ export function installFxDebug(api: Record<string, unknown>, app: App): void {
       return out;
     },
   };
+  fxDebugHooks['b'] = { snapshot: livingStats, api: { pin: pinLivingClock } }; // option B: `fx.b.pin(t)` holds the room's clock (a capture on one drift phase)
   for (const k of ['a', 'b', 'c', 'mix']) { // mix: the MAX mix's parts (D-316; `fx/mix/MaxMix.ts`)
     Object.defineProperty(api['fx'], k, { get: () => fxDebugHooks[k]?.api ?? null, enumerable: true });
   }

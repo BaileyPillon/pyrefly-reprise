@@ -68,10 +68,10 @@ const HELP: Readonly<Record<string, { body: string; rm?: 'STILL' | 'CUT' }>> = {
   fxBreath: { body: 'Fighters breathe at rest: shoulders rise and fall and nothing else moves. REDUCE MOTION holds them still.', rm: 'STILL' },
   fxKo: { body: 'A knocked-out fighter buckles and sinks before the KO painting shows. REDUCE MOTION makes it a cut.', rm: 'CUT' },
   fxSpectacle: { body: 'Impact frames, spell light and the splash cut-ins. The parts under it only work while it is ON.' },
-  fxFraming: { body: 'A camera placed for each chapter: low and wide for the giants, clear of the menus. Off: today’s calm camera.' },
+  fxFraming: { body: 'A camera placed for each chapter: low and wide for the giants, clear of the menus. Off: the standard battle camera.' },
   fxHero: { body: 'While you enter an Overdrive, the camera holds a close shot of the fighter, then cuts back. REDUCE MOTION keeps one cut.', rm: 'CUT' },
   fxSphere: { body: 'On a dressphere change the camera cuts to a held close shot of the girl, then cuts back. REDUCE MOTION keeps one cut.', rm: 'CUT' },
-  fxSplash: { body: 'Painted art on the aeon and Special splash cut-ins. Off: today’s splash.' },
+  fxSplash: { body: 'Painted art on the aeon and Special splash cut-ins. Off: the plain splash.' },
 };
 
 /** What the device does to a switch, in the row's word (`ON · OFF HERE`, `ON · LESS HERE`). */
@@ -82,7 +82,7 @@ const DEVICE_WHY: Readonly<Record<string, Partial<Record<DeviceNote['why'], stri
   fxDof: { phone: 'Off on a phone screen.', low: 'Off under LOW EFFECTS.' },
   fxFog: { low: 'Off under LOW EFFECTS.' },
   fxEdges: { low: 'LOW EFFECTS keeps only the fringe fix, not the outline pass.' },
-  fxFraming: { phone: 'On a phone held upright the bosses keep today’s size; the rest still works.' },
+  fxFraming: { phone: 'On a phone held upright the bosses keep their usual size; the rest still works.' },
   fxHero: { phone: 'Off on a phone held upright: it shows a slice of the picture, so the camera stays wide.' },
   fxSphere: { phone: 'Off on a phone held upright: it shows a slice of the picture, so the camera stays wide.' },
 };
@@ -228,7 +228,8 @@ export class EyeCandyPage {
     const rm = HELP[s.field]?.rm;
     // The device outranks REDUCE MOTION: a shot closed on a phone is not "one cut", it is not there.
     const limit = this.limitOf(s.field);
-    const quiet = limit ? LIMIT_WORD[limit.limit] : rm && own && !dim && this.deps.reduceMotion() ? rm : '';
+    // PR-0322: a part that is ON but whose look is OFF plays nothing, so its row says so instead of a bare ON.
+    const quiet = limit ? LIMIT_WORD[limit.limit] : dim && own ? 'LOOK OFF' : rm && own && !dim && this.deps.reduceMotion() ? rm : '';
     return this.rowHtml(s.field, s.label, own ? 'ON' : 'OFF', cls, `role="switch" aria-checked="${own}"`, quiet, limit?.limit ?? '');
   }
 
