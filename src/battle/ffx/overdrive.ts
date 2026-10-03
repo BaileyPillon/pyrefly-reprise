@@ -310,10 +310,10 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
   const base: Record<string, unknown> = { abilityId: def.id, ...(timerMs > 0 ? { timerMs } : {}) };
   switch (def.minigame) {
     case 'tidus-timing':
-      Object.assign(base, { travelMs: 1400, zonePercent: 22, name: def.name }); // the title is the Overdrive chosen, not a default (od4)
+      Object.assign(base, { travelMs: 1400, zonePercent: 22, name: def.name }); // title (od4); each tier's own pair is in extra.minigameParams (PR-0308)
       break;
     case 'auron-sequence':
-      Object.assign(base, { inputs: 7, name: def.name }); // Shooting Star was titled "Dragon Fang" without it (od4)
+      Object.assign(base, { name: def.name }); // the title is the Overdrive chosen (od4); its `sequence` comes from extra.minigameParams below (PR-0308)
       break;
     case 'wakka-reels':
       // The strip comes off the reel set the player picked — it was hard-coded
@@ -367,12 +367,12 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
       };
     }
     case 'auron-sequence': {
-      const success = ctx.rng.int(0, 99) < 75;
+      const success = ctx.rng.int(0, 99) < 75, seqLen = ((def.extra?.['minigameParams'] as { sequence?: unknown[] } | undefined)?.sequence ?? []).length || 7; // this Overdrive's own length (PR-0308)
       return {
         kind,
         sequence: {
           success,
-          correctInputs: success ? 7 : ctx.rng.int(0, 6),
+          correctInputs: success ? seqLen : ctx.rng.int(0, seqLen - 1),
           timeRemainingMs: success ? ctx.rng.int(0, timerMs) : 0,
         },
       };

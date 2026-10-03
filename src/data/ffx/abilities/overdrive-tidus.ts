@@ -42,6 +42,7 @@
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
+import { SWORDPLAY_TUNING } from '../overdrives/inputs.ts';
 
 export const ABILITIES: Record<string, AbilityDef> = {
   /**
@@ -72,6 +73,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'tidus-timing',
     extra: {
       timedInputBonus: true,
+      minigameParams: { ...SWORDPLAY_TUNING['spiral-cut']! }, // zone and speed: overdrives/inputs.ts (ordering sourced, values estimate)
       failPower: 24,
       failHits: 1,
       vfxKey: 'vfx-spiral-cut',
@@ -106,6 +108,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'tidus-timing',
     extra: {
       timedInputBonus: true,
+      minigameParams: { ...SWORDPLAY_TUNING['slice-and-dice']! }, // zone and speed: overdrives/inputs.ts (ordering sourced, values estimate)
       failPower: 8,
       failHits: 3,
       vfxKey: 'vfx-slice-and-dice',
@@ -140,6 +143,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'tidus-timing',
     extra: {
       timedInputBonus: true,
+      minigameParams: { ...SWORDPLAY_TUNING['energy-rain']! }, // zone and speed: overdrives/inputs.ts (ordering sourced, values estimate)
       failPower: 20,
       failHits: 1,
       vfxKey: 'vfx-energy-rain',
@@ -178,6 +182,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'tidus-timing',
     extra: {
       timedInputBonus: true,
+      minigameParams: { ...SWORDPLAY_TUNING['blitz-ace']! }, // zone and speed: overdrives/inputs.ts (ordering sourced, values estimate)
       failPower: 4,
       failHits: 8,
       failRank: 6, // rank on the fail branch; not asked for explicitly but preserves the research's "(fail rank 6)" note

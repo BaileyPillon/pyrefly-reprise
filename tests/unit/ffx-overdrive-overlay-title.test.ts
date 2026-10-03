@@ -8,9 +8,8 @@
  * Swordplay row, with no `name`, so the overlays fell back to their defaults:
  * real keys in Chapter II titled Shooting Star "Dragon Fang" and Spiral Cut
  * "Slice & Dice". After: the request carries `name: def.name` and the title
- * follows `abilityId` for every row. Timers, input counts and the button
- * order are unchanged (the HD order is still open:
- * `research/ffx-overdrive-input-rules-2026-09-30.md` D1-D5).
+ * follows `abilityId` for every row. (od4 left the input counts and the button
+ * order unchanged; r38 gives each Overdrive its own: `ffx-overdrive-inputs.test.ts`.)
  *
  * The request comes from the real engine (no auto-resolve, so it stops on the
  * `minigame-request`), and its params open the real overlay.
@@ -80,9 +79,10 @@ describe('the overlay title follows abilityId (real engine request -> real overl
     expect(req.kind).toBe(def.minigame);
     expect(req.params['abilityId']).toBe(def.id);
     expect(req.params['name']).toBe(name);
-    // Unchanged by od4: Bushido 4 000 ms and 7 inputs; Swordplay its published timer. od5: Tornado 3 000 ms (D-312).
-    if (who === 'auron') expect(req.params).toMatchObject({ timerMs: def.id === 'tornado' ? 3000 : 4000, inputs: 7 });
-    else expect(req.params).toMatchObject({ travelMs: 1400, zonePercent: 22 });
+    // Timers unchanged by od4: Bushido 4 000 ms, Swordplay its published timer. od5: Tornado 3 000 ms (D-312).
+    // r38 (PR-0308): the sequence and the zone are each Overdrive's own (ffx-overdrive-inputs.test.ts holds the values).
+    if (who === 'auron') expect(req.params).toMatchObject({ timerMs: def.id === 'tornado' ? 3000 : 4000, sequence: expect.any(Array) });
+    else expect(req.params).toMatchObject({ travelMs: expect.any(Number), zonePercent: expect.any(Number) });
 
     const root = document.createElement('div');
     document.body.appendChild(root);

@@ -409,3 +409,30 @@ the average colour of a 40x40 patch at the centre of its client area. (255, 255,
 still white; anything else means it draws. Then follow "What a retry needs" in the first
 section (slot 106 for Dragon Fang, Shooting Star and Banishing Blade; a save with Tornado
 for the rest).
+
+## Applied in release 38 (2026-10-03): D2 and D3, PR-0308
+
+**Scope: FFX only** (Bushido and Swordplay exist only in FFX). Code and data, not docs only:
+`src/data/ffx/overdrives/inputs.ts` carries the two tables below and its header carries the
+source notes; the abilities in `src/data/ffx/abilities/overdrive-{auron,tidus}.ts` publish
+them as `extra.minigameParams`, which `minigameParams` in `src/battle/ffx/overdrive.ts`
+already merged over its defaults; the two overlays now read them.
+
+* **D2, sequence length (sourced, `[verified: 4 sources]`).** Dragon Fang 8, Shooting Star 7,
+  Banishing Blade 7, Tornado 6. The overlay used to ignore `inputs: 7` and show its own
+  7-chip default for every Bushido. GF-KB's 5 for Tornado is the dissent, not shipped.
+* **D3, button order (our estimate).** Bailey, 2026-10-03: "all your recommendations" for
+  morning-page ask 13, which was "use the GameFAQs order ... I will mark it as our estimate
+  until the Steam copy is checked". The GameFAQs page (GF-KB) is not transcribed in this
+  note beyond what D3 records, so the order used is: Dragon Fang, the NA/JP order
+  (down, left, up, right, L1, R1, Circle, Cross); Shooting Star, GF-KB's own order as D3
+  records it (Triangle, Circle, Square, Circle, Left, Right, Cross); Banishing Blade, the one
+  order every source agrees on; Tornado, the NA/JP order (Cross, right, R1, left, L1,
+  Triangle). Still `[conflicting]`, still to settle in the Steam HD copy; changing one is a
+  one-line edit in `inputs.ts`. Shooting Star needs a Square button, which the HUD input
+  watcher did not have: `K` on the keyboard, pad button 2 (`src/ui/ffx/rawInput.ts`).
+* **Swordplay zone and speed.** Only the ordering is sourced (`ffx-combat-core.md` §5.3
+  rule 2, `[verified: 2 sources]`); the numbers are §5.3's own `[estimate]` shipping table
+  (Spiral Cut 22 % / 1 400 ms, Slice & Dice 16 % / 1 150 ms, Energy Rain 12 % / 900 ms,
+  Blitz Ace 9 % / 700 ms), now actually played. Before, every tier played the overlay's
+  44 px zone (12.2 %) at 340 px/s (1 059 ms a crossing). Blitz Ace's window is about 63 ms.
