@@ -63,3 +63,29 @@ Scripts and raw frames: `D:/Tools/pyrefly-scratch/2026-10-03/r38-pushin/` (`cap/
 3. **Two phone changes still get no shot** (Trema Paine: Yuna sits at the slice's edge; Ch IV Yuna's first change: her head is under the HUD in the slice). That is the rules working, not a gap in the build; relaxing "wholly in or out" for a neighbour at the slice's edge would crop her.
 4. **Pacing on the phone.** The phone now also waits the shot's remaining time after the burst (the r37 hold, about 1.1 s) when a push is up; before, it had none.
 5. **The settings help line** for DRESSPHERE SHOT and its phone reason were reworded to match (page text only; no setting changed).
+
+## Check (independent critic, 2026-10-03; branch r38-pushin at 9073651c, FFX-2 only)
+
+Verdict: **no blocker.** Everything below was run by the checker, not read from the report above. Own driver `D:/Tools/pyrefly-scratch/2026-10-03/r38-pushin-check/chk.mjs`
+(headless GPU Chromium, real keys from the title, `Change`, `ArrowRight`, `Enter` for each dressphere change, per-frame `fx.mix.snapshot()` log plus 9 screenshots per change; dev server on 6320, stopped by PID).
+Raw rows: `docs/screenshots/r38-pushin/check/matrix-check.txt`; frames beside it in `docs/screenshots/r38-pushin/check/` (master, mid-push, last held frame).
+
+- **Gates, re-run**: `npx tsc --noEmit` clean; `node tools/orphans.mjs` 24 (unchanged); `fx-mix*`, `pause-eye-candy-page` 140 tests pass; full `vitest run --testTimeout=60000 --maxWorkers=3`: 769 files passed, 5 skipped, 0 failed (11,284 tests, 41 skipped, 1 todo).
+  `pushIn.ts` has no DOM and no `three` beyond the maths (layering holds); `heldShots.ts` 351, `MaxMix.ts` 326, `pushIn.ts` 137 lines, all under 400. No `docs/CONTRACTS.md` file touched, so no CONTRACT-CHANGES entry owed.
+  Both commits name the game case (FFX-2 only); `critic-plan` agrees (deep class, focused before deploy, deep owed after deploy, not save-data). No game data is added (every number is a camera tuning value, not a sourced figure), so rule 6 has nothing to source.
+- **Trema, Paine (desktop)**: push at 1280x720 (held 1600 ms), 1600x900 (1683 ms) and 2000x1012 (1616 ms); the camera moves 2.04 units to the end framing (a gentle zoom, same fov), eased (first frame 0.18 to 0.22 units off the master: no cut). Yuna and Rikku kept the **full shot** at all three sizes (1616 to 1666 ms).
+  Baseline, live release 36 at 1600x900 with the same script: Paine **none** (full shot found no frame), so the push is what changes. Frames show Paine whole, face clear of every panel, no plate edge, name plate over her head.
+- **Ch IV (Bahamut), desktop**: all nine changes (three sizes by three) the **full shot**, 1600 to 1650 ms, push count 0: the full shot still wins where it passes.
+- **Phone 390x844 (touch)**: Ch IV 3 of 3 changes got a push (1600, 1667, 1684 ms); Trema 1 of 3 (Paine; the other two correctly none: Yuna's head under a panel at every candidate, and a neighbour only 0.89 in view). No full shot on the phone, no slide hand-back, frames whole and clear of the party rows and the top banner.
+  The builder's phone run split differently (turn order differs between runs): the count varies run to run, the rule outcome does not.
+- **REDUCE MOTION (Trema, 1600x900)**: Paine pushes twice (1717 and 1600 ms) and the camera is at the end framing on the first frame and never moves during the shot (distance start to end 0.000).
+- **Menus**: `menuInShot` false in all 27 changes (no shot or push while an FFX-2 command menu is awaited); unit tests cover the hand-back on a menu opening and no start while a menu is open.
+- Search cost: the fallback search takes 21 to 38 ms once, on the cut frame, on Trema desktop (0.4 to 11 ms on the phone); the full shot's search is 0 to 2.5 ms.
+
+### Disclose (not blockers)
+
+1. The push is subtle: about 1.22x on a desktop window (strongest the neighbours allow); some will read it as "barely a shot". Bigger costs a neighbour cropped. The builder's For Bailey 2 already says so.
+2. On the phone some changes still get no shot (rules working); the count varies by run.
+3. One-off 21 to 38 ms search hitch on the frame that starts a desktop push (a single frame at 60 fps).
+4. I did not provoke an enemy action starting inside a push (the hand-back is the full shot's shared path, proven in r37 and unit-tested here); not a new live proof.
+5. The name-plate exemption applies to the push only; the builder's For Bailey 1 (the full shot still counts the plate as a panel) stands as a question for Bailey.
