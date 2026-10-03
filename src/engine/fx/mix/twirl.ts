@@ -1,6 +1,6 @@
 import type { Object3D } from 'three';
 import { artManifest } from '../../ArtManifest.ts';
-import { artUrl, loadPainted, softSilhouette, tryLoadMeta, type PaintedTexture, type PoseMeta } from '../../PaintedArt.ts';
+import { artUrl, loadPainted, prewarmPainted, softSilhouette, tryLoadMeta, type PaintedTexture, type PoseMeta } from '../../PaintedArt.ts';
 
 /**
  * The MAX mix (D-316), the FFX-2 spherechange's painted TWIRL KEYS slot (B's no-render part; FFX-2 only,
@@ -28,6 +28,17 @@ import { artUrl, loadPainted, softSilhouette, tryLoadMeta, type PaintedTexture, 
  *
  * Part of DRESSPHERE SHOT (BATTLE SPECTACLE), so the switch that holds the close shot also holds the
  * keys. REDUCE MOTION: no keys (today's flourish, which is already a cut under it). Presentation only.
+ *
+ * Round 19 (PR-0315, PR-0327; FFX-2 only):
+ * - **one painting at a time.** A key is a cut to the next (`applyPose` on the showing plane), never a
+ *   crossfade; but a pose crossfade the presenter had already started (its 120 ms to the cast pose) kept
+ *   writing the two planes' opacities underneath, so for about 0.2 s the old outfit and a key showed at once, a
+ *   ghosted double. While a change plays, the showing plane is pinned at full and the other at none, every frame
+ *   (`pin`); `stats.ghost` is the most the other plane showed before the pin, a check's measure;
+ * - **keys ready, or no keys.** The keys are fetched and decoded ahead (`prewarm`, at idle, one at a time: the
+ *   party's own `twirl-start`, `-going` and `-mid` at battle start, the `-forming` and `-end` of the dressphere
+ *   each outfit in the Change submenu would put on, when it opens), and a change whose keys are not ready within `LATE_MS` plays today's
+ *   flourish instead of keys that land after the new outfit.
  */
 
 /** The five parts of a painted change, in playing order (D-322). */
@@ -110,11 +121,18 @@ export function twirlTimes(n: number, beatMs = 800, weights?: readonly number[])
   return { at, end: Math.round(span) };
 }
 
+/** The FFX-2 Change submenu (`ui/ffx2/CommandMenu.ts`) says which dressphere ids it offers (`{ girl, to }`). */
+export const GRID_EVENT = 'pyrefly:garment-grid';
+
+/** A change whose keys are not ready this soon plays today's flourish: keys after the new outfit read as a pop. */
+export const LATE_MS = 300;
+
 const STYLE_ID = 'mix-twirl-style';
 const STYLE = '.mix-twirl .ffx2sf__column{opacity:0 !important}';
 
 type Guts = Object3D & {
-  slots: { mesh: Object3D; pose: string }[];
+  slots: { mesh: Object3D; pose: string; fade: number }[];
+  syncOpacity(): void;
   active: number;
   poses: Map<string, PaintedTexture>;
   poseUrls: Record<string, string>;
@@ -139,7 +157,20 @@ export class TwirlSlot {
   private readonly idles = new Map<string, Promise<PoseMeta | null>>();
   private play: { a: Guts; keys: PaintedTexture[]; at: number[]; end: number; t: number } | null = null;
   on = false;
-  readonly stats = { changes: 0, played: 0, keysFound: 0, lastPlan: [] as string[] };
+  readonly stats = { changes: 0, played: 0, keysFound: 0, late: 0, prewarmed: 0, ghost: 0, ghostNow: 0, lastPlan: [] as string[] };
+  /** Checks only: `false` leaves the planes as the presenter's crossfade has them (what round 19 saw). */
+  pinOn = true;
+  private readonly flashes = new Map<Guts, Guts['flash']>();
+  private readonly warmed = new Set<string>();
+  private warming: Promise<void> = Promise.resolve();
+  private readonly onGrid = (e: Event): void => {
+    const d = (e as CustomEvent<{ girl?: string; to?: string[] }>).detail;
+    if (d?.girl && Array.isArray(d.to)) this.prewarmGrid(d.girl, d.to);
+  };
+
+  constructor() {
+    if (typeof window !== 'undefined') window.addEventListener(GRID_EVENT, this.onGrid);
+  }
 
   /** Wrap a party figure (once): its `loadPoses` (the change) and `flash` (the white flash it replaces). */
   watch(o: Object3D): void {
@@ -148,6 +179,7 @@ export class TwirlSlot {
     this.wrapped.add(a);
     const load = a.loadPoses;
     const flash = a.flash;
+    this.flashes.set(a, flash);
     const self = this;
     a.loadPoses = function (poses: Record<string, string>, initial?: string): Promise<void> {
       const from = subjectOf(a.poseUrls['idle']);
@@ -165,6 +197,46 @@ export class TwirlSlot {
       }
       flash.call(a, colour, ms, peak, floorCut);
     };
+    this.idle(() => this.prewarmFrom(a));
+  }
+
+  /** Run `fn` when the browser is idle (a short timeout where it has no idle callback). */
+  private idle(fn: () => void): void {
+    const ric = (globalThis as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+    if (typeof ric === 'function') ric(fn, { timeout: 4000 });
+    else window.setTimeout(fn, 2500);
+  }
+
+  /** Fetch and decode these keys one after another, at idle (PR-0327): the same cache `loadPainted` reads. */
+  prewarm(keys: readonly TwirlKey[]): void {
+    const m = artManifest();
+    if (!m || !this.on) return;
+    for (const k of keys) {
+      const url = artUrl(`art/characters/${k.figure}/${k.key}.png`);
+      if (this.warmed.has(url) || !(m.subjects[k.figure]?.states ?? []).includes(k.key)) continue;
+      this.warmed.add(url);
+      this.warming = this.warming.then(() => prewarmPainted(url)).then((ok) => void (ok && this.stats.prewarmed++), () => undefined);
+    }
+  }
+
+  /** At battle start: the keys this girl always needs, the dressphere she leaves and her `twirl-mid`. */
+  private prewarmFrom(a: Guts): void {
+    const m = artManifest();
+    const from = subjectOf(a.poseUrls['idle']);
+    if (!m || !from || !this.on) return;
+    this.prewarm(twirlPlan(from, '', (id) => m.subjects[id]?.states ?? null, Object.keys(m.subjects)));
+  }
+
+  /** The Change submenu opened for `girl`: the keys of the dressphere each reachable node would put on. */
+  prewarmGrid(girl: string, to: readonly string[]): void {
+    const m = artManifest();
+    if (!m || !girl) return;
+    const keys: TwirlKey[] = [];
+    for (const id of to) {
+      const fig = `${girl.toLowerCase()}-${id}`;
+      for (const key of ['twirl-forming', 'twirl-end']) keys.push({ figure: fig, key });
+    }
+    this.prewarm(keys);
   }
 
   /** Does this girl ship twirl keys under any of her figures? */
@@ -190,10 +262,21 @@ export class TwirlSlot {
     if (!plan.length) return; // today's flourish
     this.stats.keysFound++;
     const figs = [...new Set([to, ...plan.map((k) => k.figure)])];
-    const [loaded, idles] = await Promise.all([
+    const all = Promise.all([
       Promise.all(plan.map((k) => loadPainted(artUrl(`art/characters/${k.figure}/${k.key}.png`), () => softSilhouette('twirl')))),
       Promise.all(figs.map((f) => this.idleMeta(f))),
     ]);
+    let timer = 0;
+    const got = await Promise.race([all, new Promise<null>((res) => (timer = window.setTimeout(() => res(null), LATE_MS)))]);
+    window.clearTimeout(timer);
+    if (!got) {
+      // The keys are not here yet: today's flourish (the white flash the keys had replaced), and the keys are kept for the next change.
+      this.stats.late++;
+      void all.then(([ks]) => ks.forEach((k) => k.texture.dispose())).catch(() => undefined);
+      if (this.on) this.flashes.get(a)?.call(a, 0xffffff, 420, 1);
+      return;
+    }
+    const [loaded, idles] = got;
     const idleOf = (f: string): PoseMeta | null => idles[figs.indexOf(f)] ?? null;
     const keys: PaintedTexture[] = [];
     const parts: string[] = [];
@@ -230,12 +313,29 @@ export class TwirlSlot {
     let i = 0;
     while (i + 1 < p.at.length && p.t >= p.at[i + 1]!) i++;
     a.applyPose(a.active, slot.pose, p.keys[i]!);
+    this.pin(a);
+  }
+
+  /**
+   * One painting on screen (PR-0315): the plane showing a key at full, the other at none. A pose crossfade the
+   * presenter started a moment before the change keeps writing both planes' opacities each frame (its tween),
+   * and read as the old outfit and a key at once. The most the other plane showed is `stats.ghost`.
+   */
+  private pin(a: Guts): void {
+    const slot = a.slots[a.active];
+    if (!slot) return;
+    this.stats.ghostNow = 0;
+    for (const s of a.slots) if (s !== slot) this.stats.ghostNow = Math.round(s.fade * 100) / 100;
+    this.stats.ghost = Math.max(this.stats.ghost, this.stats.ghostNow);
+    if (!this.pinOn) return;
+    for (const s of a.slots) s.fade = s === slot ? 1 : 0;
+    a.syncOpacity();
   }
 
   private finish(): void {
     const p = this.play;
     this.play = null;
-    document.documentElement.classList.remove('mix-twirl');
+    if (typeof document !== 'undefined') document.documentElement.classList.remove('mix-twirl');
     if (!p) return;
     const slot = p.a.slots[p.a.active];
     const tex = slot ? (p.a.poses.get(slot.pose) ?? p.a.poses.get('idle')) : undefined;
@@ -244,6 +344,7 @@ export class TwirlSlot {
   }
 
   dispose(): void {
+    if (typeof window !== 'undefined') window.removeEventListener(GRID_EVENT, this.onGrid);
     this.finish();
     this.on = false; // the wrappers stay on the figures, inert
   }

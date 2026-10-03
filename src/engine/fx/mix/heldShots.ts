@@ -1,6 +1,7 @@
 import { Vector3, type PerspectiveCamera } from 'three';
 import { measure, type Field } from './clearance.ts';
-import { cameraAt, figBox, figOf, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
+import { AtbWatch } from './atbDue.ts';
+import { cameraAt, figBox, figOf, stillActor, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
 import { battleCanvas, fieldOf, hudPanels } from './hudPanels.ts';
 import { closeShot, heroShot } from './masters.ts';
 import type { RigWatch } from './rigWatch.ts';
@@ -13,7 +14,10 @@ import type { RigWatch } from './rigWatch.ts';
  *   three-quarter shot of the actor at about half the frame height; the cut back when the input ends.
  * - DRESSPHERE SHOT (FFX-2 only, research 6.1): on a spherechange, a held close shot of the girl, at
  *   least 1.6 s and until she is quiet again (at most 3 s); never fired while a girl's menu is open, and
- *   handed back the frame a menu opens (Active ATB: the gauges run, so the player sees the master).
+ *   handed back the frame a menu opens (Active ATB: the gauges run, so the player sees the master). Round 19
+ *   (PR-0313, PR-0314): it is not cut to unless it can hold its 1.6 s (another girl's menu is not due within it:
+ *   `atbDue.ts`) and nobody else is acting, and it is handed back at the first action-start of anyone but its
+ *   subject (an enemy's hit landed inside it with the enemy off camera).
  *
  * Both shots are checked before they are cut to (the judges' must-fix list): the subject whole in the
  * part of the frame the viewport shows (the phone's slice included) and clear of the HUD as laid out
@@ -95,13 +99,17 @@ export class HeldShots {
   /** The best candidate of the last try (checks only). */
   lastTry = '';
   private readonly subjects = new Map<Actor, string>();
-  readonly stats = { od: 0, sc: 0, skipped: 0, handBacks: 0, writes: 0, searchMs: 0 };
+  readonly stats = { od: 0, sc: 0, skipped: 0, handBacks: 0, actionBacks: 0, menuDue: 0, writes: 0, searchMs: 0 };
+  private readonly atb = new AtbWatch();
+  /** Seconds of hold a dressphere shot must be able to keep (D-316), and the margin on the menu estimate. */
+  static readonly MIN_HOLD = 1.6;
 
   constructor(private readonly game: 'ffx' | 'ffx2', private readonly rigs: RigWatch) {}
 
   /** Every frame, after the rig placed the camera. Returns the shot held this frame, or null (the master). */
   update(dt: number, o: { actors: readonly Actor[]; master: Pose | null; lens: [number, number]; odOn: boolean; scOn: boolean; menu: boolean; ready: boolean }): Held | null {
     this.time += dt;
+    if (this.game === 'ffx2') this.atb.sample(dt);
     const party = o.actors.filter((a) => a.facing >= 0 && a.visible);
     // A spherechange: a party figure's painted subject changed this frame.
     const changed: Actor[] = [];
@@ -131,17 +139,40 @@ export class HeldShots {
     }
     // A menu opening hands a spherechange shot back at once (never a cut while a girl is choosing).
     if (this.held?.kind === 'sc' && (o.menu || !o.scOn)) this.handBack();
+    // Anyone but the subject starting an action (a lunge, a cast, a hit in flight) ends the shot: the actor and the target
+    // must both be readable (R19-FN-01).
+    if (this.held?.kind === 'sc' && this.actingElsewhere(o.actors, this.held.who)) {
+      this.stats.actionBacks++;
+      this.handBack();
+    }
     if (this.held?.kind === 'sc') {
       const age = this.time - this.held.since;
       const quiet = QUIET.has(this.held.who.pose ?? 'idle');
       if ((quiet && age >= 1.6) || age >= 3) this.handBack();
     }
-    if (!this.held && this.game === 'ffx2' && o.scOn && !o.menu && o.master && o.ready && changed.length) this.cut('sc', changed[0]!, o.actors, o.master, o.lens);
+    if (!this.held && this.game === 'ffx2' && o.scOn && !o.menu && o.master && o.ready && changed.length) {
+      const who = changed[0]!;
+      const due = this.atb.secondsToMenu(who.name);
+      if (due < HeldShots.MIN_HOLD + 0.2) {
+        // A menu is due before the shot could hold its minimum: no cut (the master holds), never a half-second flick.
+        this.stats.skipped++;
+        this.stats.menuDue++;
+        this.lastTry = `sc ${who.name} skipped: a menu is due in ${due.toFixed(2)} s`;
+      } else if (this.actingElsewhere(o.actors, who)) {
+        this.stats.skipped++;
+        this.lastTry = `sc ${who.name} skipped: another actor is acting`;
+      } else this.cut('sc', who, o.actors, o.master, o.lens);
+    }
     if (this.held) {
       this.rigs.write(this.held.pose);
       this.stats.writes++;
     }
     return this.held;
+  }
+
+  /** Does anyone other than `who` act now (an action's first frames: a lunge, run, cast or strike in flight)? */
+  private actingElsewhere(actors: readonly Actor[], who: Actor): boolean {
+    return actors.some((a) => a !== who && a.visible && (a.lifeState === 'act' || (a.facing < 0 && !stillActor(a))));
   }
 
   private handBack(): void {
