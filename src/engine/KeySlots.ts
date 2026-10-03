@@ -33,6 +33,15 @@ export const FFX2_SUPPRESS_WHILE_MENU = true;
 /** The telegraph slot's pose name (`BattlePresenterArt.ENEMY_POSES`). */
 export const TELEGRAPH_POSE = 'telegraph';
 
+/** PREVIEW: ability ids that share one key painting, by family name (never the id itself). */
+export function odFamilyOf(abilityId: string): string[] {
+  if (/^mix-/.test(abilityId)) return ['mix'];
+  if (/^(fire|ice|water|thunder)-shot$/.test(abilityId)) return ['element-reels'];
+  if (/^[a-z]+-fury$/.test(abilityId)) return ['fury'];
+  if (/^x2-black-mage-(fire|blizzard|thunder|water)(a|ra|ga)?$/.test(abilityId)) return ['x2-black-mage-cast'];
+  return [];
+}
+
 /** The pose name of a move's key painting. */
 export function odPoseFor(abilityId: string): string {
   return `${OD_POSE_PREFIX}${abilityId}`;
@@ -83,8 +92,11 @@ export function armOdKey(ctx: EventCtx, event: Extract<BattleEvent, { type: 'act
   keys.get(ctx)?.delete(event.actorId);
   const id = event.abilityId ?? (event.command as { id?: string }).id;
   if (!id || !spectacleOn(ctx) || menuBlocks(ctx)) return null;
-  const pose = odPoseFor(id);
-  if (ctx.stage?.paints?.(event.actorId, pose) !== true) return null;
+  // PREVIEW (preview-picks): the move's own painting first, then its FAMILY painting (`od-mix`, `od-element-reels`,
+  // `od-fury`, `od-x2-black-mage-cast`): the engine resolves a Mix or a Reel result to a result ability id, so one
+  // file per family replaces 43 Mix copies, 4 Reel copies and 12 spell copies per mage.
+  const pose = [odPoseFor(id), ...odFamilyOf(id).map(odPoseFor)].find((p) => ctx.stage?.paints?.(event.actorId, p) === true);
+  if (!pose) return null;
   const key: OdKey = { actorId: event.actorId, pose, ffx2: isFfx2(ctx), shown: false };
   let m = keys.get(ctx);
   if (!m) keys.set(ctx, (m = new Map()));

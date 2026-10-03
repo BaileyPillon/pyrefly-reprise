@@ -17,6 +17,7 @@ import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
 import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
 import { impactAtApex, windUpLeads } from './KeyPoses.ts';
+import { previewTelegraphHold } from './PreviewTelegraph.ts'; // PREVIEW ONLY (preview-picks): off unless the page sets the flag
 import { armOdKey, endOdKey, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
 import { partyOffStage } from './SummonStaging.ts';
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
@@ -45,6 +46,7 @@ export async function actionStart(
 ): Promise<void> {
   ctx.actingId = event.actorId;
   beginSpellAction(ctx, event);
+  await previewTelegraphHold(ctx, event); // PREVIEW ONLY: the boss's wind-up painting before a headline move (off by default)
   const actor = ctx.stage.actor(event.actorId);
   // An enemy's physical ability draws its own attack painting (iter2
   // attack-pose, both games); everything else is `poseForCommand` as before.

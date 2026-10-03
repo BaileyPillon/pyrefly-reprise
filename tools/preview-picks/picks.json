@@ -1,0 +1,959 @@
+[
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "idle",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/idle/cand-6.png",
+  "scale": null,
+  "baselineY": 1160
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "ready",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/ready/cand-6.png",
+  "scale": 1.5,
+  "baselineY": 761
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "attack",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/attack/cand-4.png",
+  "scale": 1.3,
+  "baselineY": 827
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "follow",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/follow/cand-6.png",
+  "scale": 1.4,
+  "baselineY": 705
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "cast",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/cast/cand-3.png",
+  "scale": 1.4,
+  "baselineY": 1058
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "item",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/item/cand-2.png",
+  "scale": 1.45,
+  "baselineY": 841
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "hurt",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/hurt/cand-7.png",
+  "scale": 1.4,
+  "baselineY": 754
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "ko",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/ko/cand-1.png",
+  "scale": 1.4,
+  "baselineY": 383
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "victory",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/victory-back/cand-4.png",
+  "scale": 0.95,
+  "baselineY": 1134,
+  "note": "SOURCED victory (visual-bible 1.14: sheathes daggers on landing, hands behind her back); the art5-set waving victory is c3 in victory/"
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "twirl-start",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/twirl-start/cand-2.png",
+  "scale": 1.4,
+  "baselineY": 897
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "twirl-end",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/twirl-end/cand-2.png",
+  "scale": 1.2,
+  "baselineY": 1010
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "twirl-going",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/twirl-going/cand-3.png",
+  "scale": 1.4,
+  "baselineY": null,
+  "note": "ribbons wrap the legs as the skirt goes (transitional from start c2, trans3.py)"
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "yuna-thief",
+  "state": "twirl-forming",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/twirl-forming/cand-3.png",
+  "scale": 1.2,
+  "baselineY": null,
+  "note": "new outfit forming out of ribbons (transitional from end c2)"
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "idle",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/idle/cand-12.png",
+  "scale": null,
+  "baselineY": 1205
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "ready",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/ready/cand-6.png",
+  "scale": 1.05,
+  "baselineY": 918,
+  "note": "side-on sword-over-the-head coil (batch 7 pick c4 is a front-facing alternative; c9 another)"
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "attack",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/attack/cand-8.png",
+  "scale": 0.75,
+  "baselineY": 1182
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "follow",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/follow/cand-6.png",
+  "scale": 1.2,
+  "baselineY": 708
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "cast",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/cast/cand-6.png",
+  "scale": 1.15,
+  "baselineY": 1063
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "item",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/item/cand-7.png",
+  "scale": 1.2,
+  "baselineY": 894
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "hurt",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/hurt/cand-2.png",
+  "scale": 0.95,
+  "baselineY": 1067
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "ko",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/ko/cand-3.png",
+  "scale": 1.0,
+  "baselineY": 417
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "victory",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/victory/cand-6.png",
+  "scale": 1.1,
+  "baselineY": 904
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "twirl-start",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/twirl-start/cand-6.png",
+  "scale": 1.0,
+  "baselineY": 908
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "twirl-end",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/twirl-end/cand-4.png",
+  "scale": 1.1,
+  "baselineY": 910
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "twirl-going",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/twirl-going/cand-2.png",
+  "scale": 1.0,
+  "baselineY": null,
+  "note": "the trousers dissolve into yellow sparks and ribbons; the repaint below the cut line only knows her default skirt words, so c1/c3 show a green skirt",
+  "hold": true
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "rikku-warrior",
+  "state": "twirl-forming",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-warrior/twirl-forming/cand-3.png",
+  "scale": 1.1,
+  "baselineY": null,
+  "note": "pink ribbons on the legs under the finished jacket",
+  "hold": true
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "idle",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/idle/cand-5.png",
+  "scale": null,
+  "baselineY": 1165
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "ready",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/ready/cand-6.png",
+  "scale": 1.0,
+  "baselineY": 790
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "attack",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/attack/cand-6.png",
+  "scale": 0.9,
+  "baselineY": 842
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "follow",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/follow/cand-6.png",
+  "scale": 1.05,
+  "baselineY": 788
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "cast",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/cast/cand-6.png",
+  "scale": 1.15,
+  "baselineY": 1140
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "item",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/item/cand-5.png",
+  "scale": 0.95,
+  "baselineY": 942
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "hurt",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/hurt/cand-7.png",
+  "scale": 1.15,
+  "baselineY": 796
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "ko",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/ko/cand-1.png",
+  "scale": 1.0,
+  "baselineY": 375
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "victory",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/victory-fold/cand-1.png",
+  "scale": 1.1,
+  "baselineY": 873,
+  "note": "SOURCED victory (visual-bible 1.16: flicks her hair, arms folded, verified across Gunner, Warrior, Thief, Black Mage); art5 victory set is victory/"
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "twirl-start",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/twirl-start/cand-1.png",
+  "scale": 1.1,
+  "baselineY": 967
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "twirl-end",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/twirl-end/cand-1.png",
+  "scale": 1.1,
+  "baselineY": 988
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "twirl-going",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/twirl-going/cand-1.png",
+  "scale": 1.1,
+  "baselineY": null,
+  "note": "gold ribbons on the legs, skirt going (transitional from start c1)"
+ },
+ {
+  "set": "new-figure",
+  "game": "ffx2",
+  "artId": "paine-thief",
+  "state": "twirl-forming",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-thief/twirl-forming/cand-3.png",
+  "scale": 1.1,
+  "baselineY": null,
+  "note": "ribbons on the legs, top already formed (transitional from end c1)"
+ },
+ {
+  "set": "apex",
+  "game": "ffx",
+  "artId": "tidus",
+  "state": "od-slice-and-dice",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tidus-overdrives/slice-and-dice/cand-9.png",
+  "scale": 1.05,
+  "baselineY": 844,
+  "abilityIds": [
+   "slice-and-dice"
+  ],
+  "move": "slice-and-dice"
+ },
+ {
+  "set": "apex",
+  "game": "ffx",
+  "artId": "tidus",
+  "state": "od-energy-rain",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tidus-overdrives/energy-rain/cand-4.png",
+  "scale": 1.1,
+  "baselineY": 1216,
+  "abilityIds": [
+   "energy-rain"
+  ],
+  "move": "energy-rain"
+ },
+ {
+  "set": "apex",
+  "game": "ffx",
+  "artId": "wakka",
+  "state": "od-element-reels",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/wakka-overdrives/slots/cand-13.png",
+  "scale": 1.4,
+  "baselineY": 1095,
+  "abilityIds": [
+   "element-reels"
+  ],
+  "move": "slots"
+ },
+ {
+  "set": "apex",
+  "game": "ffx",
+  "artId": "lulu",
+  "state": "od-fury",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/lulu-fury/fury/cand-8.png",
+  "scale": 1.3,
+  "baselineY": 917,
+  "abilityIds": [
+   "fury"
+  ],
+  "move": "fury"
+ },
+ {
+  "set": "apex",
+  "game": "ffx",
+  "artId": "kimahri",
+  "state": "od-stone-breath",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/kimahri-rage/breath/cand-7.png",
+  "scale": 1.2,
+  "baselineY": 1074,
+  "abilityIds": [
+   "stone-breath"
+  ],
+  "move": "breath"
+ },
+ {
+  "set": "apex",
+  "game": "ffx",
+  "artId": "rikku",
+  "state": "od-mix",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-mix/mix/cand-6.png",
+  "scale": 1.2,
+  "baselineY": 913,
+  "abilityIds": [
+   "mix"
+  ],
+  "move": "mix"
+ },
+ {
+  "set": "apex",
+  "game": "ffx",
+  "artId": "yuna",
+  "state": "od-grand-summon",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-grand-summon/grand-summon/cand-5.png",
+  "scale": 1.1,
+  "baselineY": 987,
+  "abilityIds": [
+   "grand-summon"
+  ],
+  "move": "grand-summon"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "yuna-gunner",
+  "state": "od-x2-gunner-trigger-happy",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-gunner-trigger-happy/trigger-happy/cand-1.png",
+  "scale": 1.2,
+  "baselineY": 798,
+  "abilityIds": [
+   "x2-gunner-trigger-happy"
+  ],
+  "move": "trigger-happy"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "rikku-thief",
+  "state": "od-x2-thief-steal",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-thief-steal/steal/cand-11.png",
+  "scale": 1.3,
+  "baselineY": 805,
+  "abilityIds": [
+   "x2-thief-steal"
+  ],
+  "move": "steal"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "rikku-dark-knight",
+  "state": "od-x2-dark-knight-darkness",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-dark-knight-darkness/darkness/cand-1.png",
+  "scale": 1.15,
+  "baselineY": 1063,
+  "abilityIds": [
+   "x2-dark-knight-darkness"
+  ],
+  "move": "darkness"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "paine-warrior",
+  "state": "od-x2-warrior-sentinel",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-warrior-break/sentinel/cand-2.png",
+  "scale": 1.2,
+  "baselineY": 840,
+  "abilityIds": [
+   "x2-warrior-sentinel"
+  ],
+  "move": "sentinel"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "yuna-white-mage",
+  "state": "od-x2-white-mage-pray",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-white-mage-pray/pray/cand-1.png",
+  "scale": 1.3,
+  "baselineY": 870,
+  "abilityIds": [
+   "x2-white-mage-pray"
+  ],
+  "move": "pray"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "yuna-white-mage",
+  "state": "od-x2-white-mage-life",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-white-mage-pray/pray/cand-1.png",
+  "scale": 1.3,
+  "baselineY": 870,
+  "abilityIds": [
+   "x2-white-mage-life"
+  ],
+  "move": "pray"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "yuna-dark-knight",
+  "state": "od-x2-dark-knight-darkness",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-dark-knight-darkness/darkness/cand-4.png",
+  "scale": 1.5,
+  "baselineY": 1201,
+  "abilityIds": [
+   "x2-dark-knight-darkness"
+  ],
+  "move": "darkness"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "yuna-dark-knight",
+  "state": "od-x2-dark-knight-black-sky",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-dark-knight-darkness/darkness/cand-4.png",
+  "scale": 1.5,
+  "baselineY": 1201,
+  "abilityIds": [
+   "x2-dark-knight-black-sky"
+  ],
+  "move": "darkness"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "paine-dark-knight",
+  "state": "od-x2-dark-knight-darkness",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-dark-knight-darkness/darkness/cand-7.png",
+  "scale": 1.17,
+  "baselineY": 1198,
+  "abilityIds": [
+   "x2-dark-knight-darkness"
+  ],
+  "move": "darkness"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "rikku-alchemist",
+  "state": "od-x2-alchemist-mix",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-alchemist-mix/mix/cand-4.png",
+  "scale": 1.05,
+  "baselineY": 1027,
+  "abilityIds": [
+   "x2-alchemist-mix"
+  ],
+  "move": "mix"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "paine-samurai",
+  "state": "od-x2-samurai-zantetsu",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-samurai-bushido/slash/cand-1.png",
+  "scale": 1.15,
+  "baselineY": 966,
+  "abilityIds": [
+   "x2-samurai-zantetsu"
+  ],
+  "note": "ability ids NOT confirmed against the data: pick the move the painting reads as at install",
+  "move": "slash"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "yuna-warrior",
+  "state": "od-x2-warrior-power-break",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-warrior-break/break/cand-4.png",
+  "scale": 1.15,
+  "baselineY": 842,
+  "abilityIds": [
+   "x2-warrior-power-break"
+  ],
+  "note": "ability ids NOT confirmed against the data: pick the move the painting reads as at install",
+  "move": "break"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "yuna-warrior",
+  "state": "od-x2-warrior-armor-break",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-warrior-break/break/cand-4.png",
+  "scale": 1.15,
+  "baselineY": 842,
+  "abilityIds": [
+   "x2-warrior-armor-break"
+  ],
+  "note": "ability ids NOT confirmed against the data: pick the move the painting reads as at install",
+  "move": "break"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "rikku-berserker",
+  "state": "od-x2-berserker-berserk",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-berserker-rage/rage/cand-9.png",
+  "scale": 1.35,
+  "baselineY": 875,
+  "abilityIds": [
+   "x2-berserker-berserk"
+  ],
+  "note": "ability ids NOT confirmed against the data: pick the move the painting reads as at install",
+  "move": "rage"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "yuna-black-mage",
+  "state": "od-x2-black-mage-cast",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-black-mage-cast/cast/cand-10.png",
+  "scale": 1.2,
+  "baselineY": 1199,
+  "abilityIds": [
+   "x2-black-mage-cast"
+  ],
+  "move": "cast"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "rikku-black-mage",
+  "state": "od-x2-black-mage-cast",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-black-mage-cast/cast/cand-6.png",
+  "scale": 1.3,
+  "baselineY": 1189,
+  "abilityIds": [
+   "x2-black-mage-cast"
+  ],
+  "move": "cast"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "paine-black-mage",
+  "state": "od-x2-black-mage-cast",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-black-mage-cast/cast/cand-6.png",
+  "scale": 1.2,
+  "baselineY": 1203,
+  "abilityIds": [
+   "x2-black-mage-cast"
+  ],
+  "move": "cast"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "rikku-gunner",
+  "state": "od-x2-gunner-trigger-happy",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-gunner-trigger-happy/trigger-happy/cand-1.png",
+  "scale": 1.25,
+  "baselineY": 837,
+  "abilityIds": [
+   "x2-gunner-trigger-happy"
+  ],
+  "move": "trigger-happy"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "paine-gunner",
+  "state": "od-x2-gunner-trigger-happy",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/paine-gunner-trigger-happy/trigger-happy/cand-1.png",
+  "scale": 1.3,
+  "baselineY": 856,
+  "abilityIds": [
+   "x2-gunner-trigger-happy"
+  ],
+  "move": "trigger-happy"
+ },
+ {
+  "set": "apex",
+  "game": "ffx2",
+  "artId": "yuna-white-mage",
+  "state": "od-x2-white-mage-cure",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-white-mage-pray/pray/cand-1.png",
+  "scale": 1.3,
+  "baselineY": 870,
+  "abilityIds": [
+   "x2-white-mage-cure"
+  ],
+  "note": "PREVIEW STAND-IN (Pray is not learned in Ch IV)",
+  "previewOnly": true
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx",
+  "artId": "seymour-flux-body",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-seymour-flux-body/telegraph/cand-8.png",
+  "scale": 1.0,
+  "baselineY": 1050,
+  "note": "Seymour Flux (Chapter I): Lance of Atrophy telegraph",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx",
+  "artId": "yunalesca-1",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-yunalesca-1/telegraph/cand-5.png",
+  "scale": 1.0,
+  "baselineY": 1135,
+  "note": "Yunalesca, form 1 (Chapter II): Mega Death / Hellbiter telegraph",
+  "master2x": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-yunalesca-1/telegraph/masters-2x/cand-5@2x.png"
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx",
+  "artId": "braskas-final-aeon-2",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-bfa-2/telegraph/cand-5.png",
+  "scale": 1.0,
+  "baselineY": 783,
+  "note": "Braska's Final Aeon, form 2 (Chapter III): Ultimate Jecht Shot telegraph",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx",
+  "artId": "seymour-omnis",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-omnis/telegraph/cand-4.png",
+  "scale": 1.0,
+  "baselineY": 1260,
+  "note": "Seymour Omnis (Chapter XII): Ultima telegraph",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx",
+  "artId": "evrae",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-evrae/telegraph/cand-2.png",
+  "scale": 1.0,
+  "baselineY": 785,
+  "note": "Evrae (Chapter VIII): Poison Breath charge (Inhale) alternatives",
+  "master2x": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-evrae/telegraph/masters-2x/cand-2@2x.png"
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx2",
+  "artId": "ffx2-bahamut",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-ffx2-bahamut/telegraph/cand-1.png",
+  "scale": 1.0,
+  "baselineY": 936,
+  "note": "Bahamut, possessed (FFX-2, Chapter IV): Mega Flare charge telegraph",
+  "master2x": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-ffx2-bahamut/telegraph/masters-2x/cand-1@2x.png"
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx2",
+  "artId": "trema",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-trema/telegraph/cand-5.png",
+  "scale": 1.0,
+  "baselineY": 1061,
+  "note": "Trema (FFX-2, Chapter XIII): Meteor / Ultima telegraph",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx2",
+  "artId": "leblanc",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-leblanc/telegraph/cand-1.png",
+  "scale": 1.0,
+  "baselineY": 1082,
+  "note": "LeBlanc (FFX-2, Chapters VI and XI): Mach Fan telegraph",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx2",
+  "artId": "vegnagun-tail",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-vegnagun-tail/telegraph/cand-2.png",
+  "scale": 1.0,
+  "baselineY": 804,
+  "note": "Vegnagun, tail (FFX-2, Chapter V): Noli Me Tangere telegraph",
+  "master2x": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-vegnagun-tail/telegraph/masters-2x/cand-2@2x.png"
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx2",
+  "artId": "vegnagun-head",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-vegnagun-head/telegraph/cand-5.png",
+  "scale": 1.0,
+  "baselineY": null,
+  "note": "Vegnagun, head (FFX-2, Chapter V): cannon charge telegraph",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx2",
+  "artId": "shuyin",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-shuyin/telegraph/cand-5.png",
+  "scale": 1.0,
+  "baselineY": 1197,
+  "note": "Shuyin (FFX-2, Chapter V): Terror of Zanarkand / Run & Slash telegraph",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx",
+  "artId": "ixion",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-ixion/telegraph/cand-2.png",
+  "scale": 1.0,
+  "baselineY": 1045,
+  "note": "Ixion, possessed (Chapter III): Thor's Hammer telegraph",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx",
+  "artId": "ifrit",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-ifrit/telegraph/cand-2.png",
+  "scale": 1.0,
+  "baselineY": 932,
+  "note": "Ifrit, possessed (Chapter III): Hellfire telegraph",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx",
+  "artId": "valefor",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-valefor/telegraph/cand-2.png",
+  "scale": 1.0,
+  "baselineY": 884,
+  "note": "Valefor, possessed (Chapter III): Energy Blast telegraph",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx",
+  "artId": "bahamut",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-bahamut-ffx/telegraph/cand-1.png",
+  "scale": 1.0,
+  "baselineY": 908,
+  "note": "Bahamut, possessed (Chapter III): Mega Flare telegraph",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "game": "ffx",
+  "artId": "overdrive-sin",
+  "state": "telegraph",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-overdrive-sin/telegraph/cand-1.png",
+  "scale": 1.0,
+  "baselineY": null,
+  "note": "Overdrive Sin (Chapter XVIII): Giga-Graviton telegraph, a sixth stage",
+  "master2x": null
+ },
+ {
+  "set": "telegraph",
+  "hold": true,
+  "artId": "seymour-natus",
+  "state": "telegraph",
+  "game": "ffx",
+  "note": "HELD: waits for PR-0331 (his colossus master); the recommendation excludes it"
+ },
+ {
+  "set": "reroll",
+  "game": "ffx2",
+  "artId": "yuna-gunner",
+  "state": "ready",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03/yuna-gunner/windup/cand-11.png",
+  "scale": 1.4,
+  "baselineY": 958,
+  "note": "D-333 Gunner wind-up c1",
+  "replaces": true
+ },
+ {
+  "set": "reroll",
+  "game": "ffx2",
+  "artId": "yuna-warrior",
+  "state": "follow",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03/yuna-warrior/follow/cand-4.png",
+  "scale": 1.5,
+  "baselineY": 720,
+  "note": "D-333 Warrior follow-through c1",
+  "replaces": true
+ },
+ {
+  "set": "reroll",
+  "game": "ffx2",
+  "artId": "yuna-white-mage",
+  "state": "hurt",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03/yuna-white-mage/hurt/cand-9.png",
+  "scale": 1.6,
+  "baselineY": 736,
+  "note": "D-334 hooded White Mage hurt c1",
+  "replaces": true
+ },
+ {
+  "set": "reroll",
+  "game": "ffx2",
+  "artId": "yuna-white-mage",
+  "state": "ko",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03/yuna-white-mage/ko/cand-2.png",
+  "scale": 1.0,
+  "baselineY": 380,
+  "note": "D-334 KO c1; src/engine/KoPoseScale.ts yuna-white-mage 0.64 must go (body-length match)",
+  "replaces": true
+ },
+ {
+  "set": "reroll",
+  "game": "ffx2",
+  "artId": "yuna-white-mage",
+  "state": "attack",
+  "src": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03/yuna-white-mage/attack/cand-10.png",
+  "scale": 1.3,
+  "baselineY": 826,
+  "note": "D-334 attack c1 (unused today: the slot is new)",
+  "replaces": false
+ }
+]

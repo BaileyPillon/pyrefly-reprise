@@ -32,7 +32,7 @@ export const KO_POSE_SCALE: Readonly<Record<string, number>> = {
   // FFX-2 dressphere KOs (FFX-2 only).
   'yuna-gunner': 0.6,
   'yuna-black-mage': 0.66,
-  'yuna-white-mage': 0.64,
+  // preview-picks: D-334's hooded KO is a body-length match (sidecar scale 1.0), so the old head-match entry (0.64) is dropped here.
   'rikku-black-mage': 1.15,
 };
 
