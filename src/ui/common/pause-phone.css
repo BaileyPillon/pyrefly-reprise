@@ -15,3 +15,42 @@
     top: calc(var(--pu-top-body) - var(--pu-phone-lift, 0px));
   }
 }
+
+/*
+ * PR-0321 / PR-0302 / PR-0251 (r37-ui-floor, game case: both, shared pause
+ * plumbing): the phone pause now prints at the 14 px floor (`--pu-fs` 14,
+ * `--pu-fs-v` 15 in `pause-screen.css`; they were the authored 12 and 13 px
+ * exceptions CHK-003 fails). Two things stop fitting at that size, and neither
+ * may clip:
+ *   - the faint brand line ("PYREFLY REPRISE · FINAL FANTASY X", 0.4em
+ *     tracking) wrapped onto the tab strip, so it sits 6 px from the top,
+ *     tightens its tracking and takes two tight lines above the tabs;
+ *   - word rows (a status, a weapon, a place) and objectives hold an empty bar
+ *     cell. The bar's 110 px goes back to the text: the values of THE PARTY
+ *     print whole ("BAROQUE SWORD", not "BAROQUE SW...") and an objective
+ *     wraps in two lines instead of seven in a 92 px key.
+ */
+@media (max-width: 620px) {
+  .pause__brand {
+    top: 6px;
+    max-width: calc(100% - var(--pu-gut) * 2);
+    letter-spacing: 0.14em;
+    line-height: 1.1;
+  }
+
+  .pause__row--word .pause__bar,
+  .pause__row--obj .pause__bar {
+    width: 0;
+    margin: 0 -6px;
+  }
+
+  .pause__row--obj .pause__k {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+  }
+
+  .pause__row--obj .pause__v {
+    flex: none;
+  }
+}

@@ -814,15 +814,15 @@
 /* ===================================================================== */
 /* Phone, 390 x 844. The tab strip becomes one swipeable row and the      */
 /* columns stack under the face instead of beside it. The floor drops to  */
-/* 12px here and nowhere else: the paintings are landscape and the screen */
+/* 14px here too (PR-0321, was 12): the paintings are landscape, the screen */
 /* is portrait, so there is a quarter of the width to work with.          */
 /* ===================================================================== */
 
 @media (max-width: 620px) {
   .pause {
     --pu-gut: 20px;
-    --pu-fs: 12px;
-    --pu-fs-v: 13px;
+    --pu-fs: 14px;
+    --pu-fs-v: 15px;
     --pu-fs-on: 17px;
     --pu-fs-line: 20px;
     --pu-row: 20px;

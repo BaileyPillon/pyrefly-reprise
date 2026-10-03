@@ -1,0 +1,102 @@
+/*
+ * The 14 px floor for the stage-scaled battle HUD (CHK-003; PR-0251, PR-0321).
+ *
+ * Game case: both. The two shared rails (`.ig-ctb`, `.ig-stat`, `.sgd`) are
+ * scoped under `.ffxhud` or `.ffx2hud` below, each with the value that game's
+ * own sheet authors, so a rule here never lifts a size the other game left
+ * alone.
+ *
+ * Why it exists. The HUD is authored on a 640x360 grid and scaled by
+ * `min(w / 640, h / 360)` (`LetterboxStage.ts`; FFX-2 publishes the same number
+ * from `FFX2BattleHud.layout`). The authored sizes (5.6 grid px for a CTB name
+ * and so on) were chosen so the HUD reads 14 px at 1600x900 (scale 2.5). A 4:3
+ * window is width-limited: 1280x960 is scale 2.0 and 1024x768 is 1.6, so the
+ * same names print at 11.2 and 9 px (round 18/19 gap pass: min 9.3 px at
+ * 1280x960, 32 to 35 elements under 14).
+ *
+ * The cure is the one `chapter-panel.css` and `move-advisor.css` already use:
+ * `--hud-floor` is 14 px divided by the stage scale, and each label is
+ * `max(its authored size, --hud-floor)`. At 1600x900 and wider the floor is at
+ * or under the authored size, so nothing changes there; below 2.5 the
+ * labels grow only as far as they must.
+ *
+ * Not in this file, on purpose:
+ *   - the phone (`html[data-phone-battle]`): `--lb-scale` is forced to 1 there
+ *     and the phone sheets already author real px at 14 or more;
+ *   - labels that are already floored (`.ffx-tplate__*`, `.ffx-target__all`,
+ *     `--mad-fs-floor`, `--cp-fs-floor`).
+ *
+ * `--hud-floor` is 14.1 px, not 14: Chromium rounds a computed size at the
+ * scale to one decimal, and a probe that reads 13.99 is a fail.
+ */
+
+.lb-stage,
+.ffxhud__stage,
+.ffx2hud,
+.ffx2hud__stage,
+.sgd {
+  --hud-floor: calc(14.1px / var(--lb-scale, 1));
+}
+
+/* ------------------------------------------------------------- FFX (CTB) */
+
+html:not([data-phone-battle]) .ffxhud .ig-ctb__name {
+  font-size: max(var(--ffx-ctb-name-size, 5.6px), var(--hud-floor));
+  /* The plate grows leftwards (the column is right-aligned), so the cap grows with the type: 48 grid px at 5.6. */
+  max-width: max(48px, calc(var(--hud-floor) * 8.6));
+}
+
+html:not([data-phone-battle]) .ffxhud .ffx-cmd__chev { font-size: max(7.2px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud .ffx-cmd__badge { font-size: max(6.4px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud .ffx-cmd__badge i { font-size: max(4.8px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud .ffx-cmd__badge--ready { font-size: max(5.8px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud .ffx-cmd-more { font-size: max(8px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud .ffx-cmd-info .ig-cutin__info-desc { font-size: max(8px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud .ffx-cmd-breadcrumb { font-size: max(8px, var(--hud-floor)); }
+
+html:not([data-phone-battle]) .ffxhud .ig-stat__value small { font-size: max(6.6px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud .ffx-stat__od em { font-size: max(4.9px, var(--hud-floor)); }
+
+html:not([data-phone-battle]) .ffxhud .ffx-sensor__chip { font-size: max(6px, var(--hud-floor)); }
+/* Two chip columns make a third row (15 grid px) in a plate pinned at 166: it rises that much so it stays off the party rows. */
+html:not([data-phone-battle]) .ffxhud .ffx-sensor {
+  top: calc(166px + var(--ffx-sensor-dy, 0px) - clamp(0px, (var(--hud-floor) - 5.6px) * 20, 15px));
+}
+/* Three columns at 1600x900 as authored; two where the floored type no longer fits three ("THUNDER"). */
+html:not([data-phone-battle]) .ffxhud .ffx-sensor__chips {
+  grid-template-columns: repeat(auto-fit, minmax(calc(var(--hud-floor) * 4.2), 1fr));
+}
+html:not([data-phone-battle]) .ffxhud .ffx-sensor__toggle { font-size: max(4.9px, var(--hud-floor)); }
+
+/* ------------------------------------------------------------ FFX-2 only */
+
+html:not([data-phone-battle]) .ffx2hud .ffx2boss__hint { font-size: max(5.5px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffx2hud .ffx2stat__mono { font-size: max(7.5px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffx2hud .ffx2stat__job { font-size: max(5.5px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffx2hud .ig-stat__value small { font-size: max(5px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffx2hud .ffx2boss__num small { font-size: max(6px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffx2hud .ffx2cmd__title,
+html:not([data-phone-battle]) .ffx2hud .ffx2cmd__grants,
+html:not([data-phone-battle]) .ffx2hud .ffx2cmd__fold { font-size: max(7px, var(--hud-floor)); }
+
+/* The help band's own zoom (`--band-zoom`) already scales a bar variant, so its floor divides by it. */
+html:not([data-phone-battle]) .ffx2hud .ffx2-cmd-info__label { font-size: max(4.67px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffx2hud .ffx2-cmd-info__desc { font-size: max(6.33px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffx2hud .ffx2-cmd-info--bar .ffx2-cmd-info__label { font-size: max(4.67px, calc(var(--hud-floor) / var(--band-zoom, 1))); }
+html:not([data-phone-battle]) .ffx2hud .ffx2-cmd-info--bar .ffx2-cmd-info__desc { font-size: max(6.33px, calc(var(--hud-floor) / var(--band-zoom, 1))); }
+
+/* -------------------------------------------- the strategy guide (both) */
+
+html:not([data-phone-battle]) .sgd .sgd__panel,
+html:not([data-phone-battle]) .sgd .sgd__head,
+html:not([data-phone-battle]) .sgd .sgd__actor,
+html:not([data-phone-battle]) .sgd .sgd__timing,
+html:not([data-phone-battle]) .sgd .sgd__cite,
+html:not([data-phone-battle]) .sgd .sgd__phase-label,
+html:not([data-phone-battle]) .sgd .sgd__toggle,
+html:not([data-phone-battle]) .sgd .sgd__toggle b,
+html:not([data-phone-battle]) .sgd .sgd__toggle span { font-size: max(5.7px, var(--hud-floor)); }
+html:not([data-phone-battle]) .sgd .sgd__title { font-size: max(8px, var(--hud-floor)); }
+html:not([data-phone-battle]) .sgd .sgd__arrow { font-size: max(6px, var(--hud-floor)); }
+html:not([data-phone-battle]) .sgd .sgd__cmd { font-size: max(9px, var(--hud-floor)); }
+html:not([data-phone-battle]) .sgd .sgd__more { font-size: max(7px, var(--hud-floor)); }
