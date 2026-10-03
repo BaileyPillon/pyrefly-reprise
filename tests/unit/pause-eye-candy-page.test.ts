@@ -10,6 +10,8 @@
  * Game case: both. Run on Chapter I (FFX: OVERDRIVE SHOT, no DRESSPHERE SHOT) and Chapter IV (FFX-2: the
  * other way round).
  */
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { PerspectiveCamera } from 'three';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
@@ -195,7 +197,7 @@ describe.each([
     expect(h.store.settings.fxLiving).toBe(false);
     expect([h.store.settings.fxBreath, h.store.settings.fxKo]).toEqual([true, true]);
     expect(pageRow(h, 'fxBreath').classList.contains('pause__ec-row--dim')).toBe(true);
-    expect(value(h, 'fxBreath')).toBe('ON');
+    expect(value(h, 'fxBreath')).toBe('ON· LOOK OFF');
     expect([eyeCandyOn('livingPaintings'), eyeCandyOn('breathing'), eyeCandyOn('koCollapse')]).toEqual([false, false, false]);
     // The approved FFX-2 frame's state: FOG off and LIVING PAINTINGS off read 7 OF 11.
     expect(head(h)).toMatch(/7 of 11 on/i);
@@ -364,7 +366,7 @@ describe.each([
     expect(why(h)).toBe('Off on a phone screen.');
     expect(help(h)[1]).toContain('Off: the scene keeps its own band.Off on a phone screen.');
     walkTo(h, 'fxFraming');
-    expect(why(h)).toBe('On a phone held upright the bosses keep today’s size; the rest still works.');
+    expect(why(h)).toBe('On a phone held upright the bosses keep their usual size; the rest still works.');
     walkTo(h, mine);
     expect(why(h)).toBe('Off on a phone held upright: it shows a slice of the picture, so the camera stays wide.');
     walkTo(h, 'fxFog');
@@ -425,8 +427,8 @@ describe.each([
     expect(why(h)).toBe('');
     walkTo(h, 'fxSpectacle');
     key(h, 'Enter');
-    expect(value(h, 'fxFraming')).toBe('ON');
-    expect(value(h, mine)).toBe('ON');
+    expect(value(h, 'fxFraming')).toBe('ON· LOOK OFF');
+    expect(value(h, mine)).toBe('ON· LOOK OFF');
     expect(pageRow(h, mine).classList.contains('pause__ec-row--dim')).toBe(true);
     key(h, 'Enter');
     expect(value(h, mine), 'the look back: the note is back').toBe('ON· OFF HERE');
@@ -464,7 +466,42 @@ describe.each([
     // A part whose look is OFF shows no note: it does not play at all.
     walkTo(h, 'fxLiving');
     key(h, 'Enter');
-    expect(value(h, 'fxBreath')).toBe('ON');
+    expect(value(h, 'fxBreath')).toBe('ON· LOOK OFF');
+  });
+
+  it('PR-0322: after ALL OFF no part row claims a plain ON (it reads ON · LOOK OFF) and the dim text is not drawn at 0.4 opacity', () => {
+    const h = mount(chapterId);
+    openByKeys(h);
+    key(h, 'ArrowLeft'); // ALL LOOKS: Left is ALL OFF
+    expect(head(h)).toMatch(/0 of 11 on/i);
+    const parts = pageIds(h).filter((id) => pageRow(h, id).classList.contains('pause__ec-row--part'));
+    expect(parts.length).toBeGreaterThanOrEqual(8);
+    for (const id of parts) {
+      const own = h.store.settings[id as 'fxFog'] !== false;
+      expect(value(h, id), id).toBe(own ? 'ON· LOOK OFF' : 'OFF');
+    }
+    const css = readFileSync(join(process.cwd(), 'src/ui/common/pause-eye-candy.css'), 'utf8');
+    expect(css, 'dim text is a flat tint, not an opacity that sinks it to 2:1').not.toMatch(/--dim[^{]*\{\s*opacity/);
+    // The rule's own line: the selector, then the paper tint's alpha.
+    const alpha = (selector: string): number => {
+      const line = css.split(/\r?\n/).find((l) => l.includes(selector) && l.includes('rgba(var(--pu-paper)')) ?? '';
+      return Number(/rgba\(var\(--pu-paper\), ([0-9.]+)\)/.exec(line)?.[1] ?? 0);
+    };
+    expect(alpha('.pause__ec-row--dim .pause__v {'), 'dim value').toBeGreaterThanOrEqual(0.5);
+    expect(alpha('.pause__ec-row--off .pause__v {'), 'OFF value').toBeGreaterThanOrEqual(0.5);
+  });
+
+  it('PR-0323: no help line speaks relative to an earlier build ("today")', () => {
+    const h = mount(chapterId);
+    openByKeys(h);
+    for (const id of pageIds(h)) {
+      walkTo(h, id);
+      expect(help(h).join(' '), id).not.toMatch(/today/i);
+    }
+    walkTo(h, 'fxFraming');
+    expect(help(h)[1]).toContain('Off: the standard battle camera.');
+    walkTo(h, 'fxSplash');
+    expect(help(h)[1]).toContain('Off: the plain splash.');
   });
 });
 
