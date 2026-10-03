@@ -142,3 +142,53 @@ lines), `tests/unit/pause-remake.test.ts` (one test). Contracts: no shared contr
 - The brow lift (difference 1) and whether the press shaping (difference 3) reads right to Bailey's eye: the clips are in the
   scratch folder; audio does not apply.
 - The Clair Obscur / Persona camera grammar was not touched (camera-lab owns it).
+
+## Check (independent, 2026-10-03, commit 563117f6, Sonnet checker; both games)
+
+Scratch: `D:/Tools/pyrefly-scratch/2026-10-03/check/` (scripts, `faces/` 1:1 crops and sheets, `timing-*.json`, `perf.jsonl`). Headless
+Playwright, GPU mode, own port 5840, stopped. "Today's plate" baseline = the same page with `livingPause.ts` stubbed out by a route
+(main's `src` is identical to this branch minus the feature; a main dev server would not finish loading).
+
+**Gates (re-run, not taken from the report):** `npx tsc --noEmit` clean. Full `npx vitest run --testTimeout=120000`: 747 files passed,
+5 skipped, 0 failed (11,054 tests; the Bahamut timeout did not recur at 120 s). `node tools/orphans.mjs`: 24 orphaned of 1183, the same 24
+as `D:/Final Fantasy`. Rule 7: `PauseView.ts` 395, largest new file 296. `origin/portraits-live` = 563117f6.
+
+**Verified**
+- **A2 timing, all ten plates** (Ch I, 1600x900, every data-state change stamped from the layer's own t0): smile starts 0.611 to 0.624 s and
+  peaks at 1.00; blinks shut at 1.476 to 1.489 s and 6.076 to 6.09 s, 80 to 100 ms each (Kimahri, Paine 80 ms; the rest 100 ms); press starts
+  6.112 to 6.127 s; the glance moves the iris about 2 px aside between 2.0 and 5.2 s; no brow. Kimahri and both Rikkus move one eye; Auron's
+  iris never moves (0,0) and his lid blinks. One extra blink at 13.66 s (cycle 2, jittered) as designed. No page errors.
+- **Gaze by real input, Ch I, 1600x900 and 390x844:** E/Q across the tabs (Tidus (-7.6,-3.5), Yuna (-3.5,-2.5), Kimahri (-3.1,-1.9)), Down
+  through the OPTIONS rows (Kimahri's iris goes right, +4.7 to +6.3, as the rows sit to the right of his face), a mouse click on a row, a mouse
+  click on a tab, and touch taps on tabs and a row all move the look the right way. Mouse hover alone does not move the pause's highlight, so
+  the eyes do not follow hover (a UI property, not the driver). The CHAPTER plate has no face parts and stays static (gaze 0).
+- **Off states:** LIVING PAINTINGS off, `?fx=off`, REDUCE MOTION on (the setting) and REDUCE MOTION from the OS all give no driver, no twin and
+  no canvas; the `.pause__art` HTML is byte-identical to the stubbed main page in every case, and the plate PNGs match to within 3 LSB on
+  fewer than 175 pixels in the header band (grain), 0 on the plate. REDUCE MOTION on gives the identical PNG to main. Flipping REDUCE MOTION and
+  LIVING PAINTINGS live (also from the EYE CANDY page) removes and restores the twin within a second, four times, no errors.
+- **Regression walk** (all eight tabs, EYE CANDY page, CREDITS, MUSIC; desktop and phone): no page errors; the only warning is the
+  pre-existing three.js X3595 shader warning on the phone run. Twin count follows the plate (0 on CHAPTER). Open/close the pause eight times:
+  one twin, `screens` back to `battle` on close, no leaked twin. Twelve rapid E then twelve rapid Q: one twin, aligned. Missing manifest and
+  missing Tidus parts (404) leave the static plate, no throw, and the next plate (Yuna) still comes up.
+- **Frame time and heap (3 ON / 3 OFF per size, same machine, other agents running):** 1600x900 steady state p50 16.7, p95 16.7 to 16.8, p99
+  16.8 ON and OFF, max 16.8 to 33 ON (50 OFF once). The first 3 s after P carry 100 to 400 ms stalls in ON and OFF alike (pause open, not the
+  face). 390x844 the same. JS heap ON 51 to 54 MB against 47 MB OFF on desktop (**+4 to +7 MB**, the report's "no change" is generous), phone
+  49 to 51 vs 47 to 51. Phone tier loads the 1x parts (canvas 347x287) on a fresh phone-size load.
+
+**Found**
+1. **Major (visual, rest state): pale crescents and halos where the iris leaves the socket at 1:1** (DPR 2, 1344x768, clock frozen, ON vs the
+   plate underneath; `faces/<plate>-eye11.png`, `-eyes.jpg`). Worst: **Yuna X-2** (a pale-lavender crescent on the left of the blue eye and a
+   stepped lower edge at the resting look, about 880 px more than 50 luma lighter than the plate; the green far eye too), then **Wakka** (a
+   pale ring and lighter halo around both irises at rest; the iris looks repainted, not the plate's), **Rikku X-2** (dark ragged slivers on
+   the iris edge) and **Kimahri** (jagged light blocks at the inner corner of the near eye). Lulu has small dark nicks, Paine faint sclera
+   crescents, Tidus, Yuna and Rikku are clean, Auron has no eye movement. These are present at the resting look, not only at the extremes, which
+   is the "no white socket edges at rest" test; at DPR 1 they are half the size. Likely fixes: lower `gazeScale` for Yuna X-2 and Wakka (to
+   about 0.4) or clamp the resting look, and re-cut the Yuna X-2 and Wakka socket parts. Not a regression (live has no face), so disclosed, not a
+   blocker by `critic/RUBRIC.md`.
+2. **Minor:** the iris limit is applied before the fixation drift, so Tidus and Wakka (gazeScale 1.0) reach about 9.4 px (seen -9.14) against the
+   stated clean limit of 8.5.
+3. **Minor:** twin registration is within 1 px in 7 of 8 opens, but one open (machine loaded) held a 2.4 px offset between the twin and the
+   plate for the whole 4 s (the animation clock is copied once at build). Frame-by-frame after a member change it stays under 1 px.
+4. **Nit:** a live resize from desktop to phone width keeps the 2x parts (the scale is chosen when the plate mounts); real phones load 1x.
+5. Registration with the animations paused at the same time is exact: no changed pixel outside the canvas box and none in the 6 px ring at
+   the edge of the canvas in any of 70 plate-state pairs; blink frames on all ten plates show no seams or box edges.
