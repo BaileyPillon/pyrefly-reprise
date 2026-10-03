@@ -36,7 +36,7 @@ Elapsed review time / repeated work avoided: about 25 minutes, roughly 10 of the
 ## Observations
 
 - LV-36-01 (informational): 33 `net::ERR_ABORTED` image requests in the final run, none with an HTTP status: board card art cancelled when the cursor moves on, and the pause plate png cancelled where its webp is used. Same class as LV-35-02. Not counted as 404s.
-- Seen in frames, not graded: the Chapter I first menu in the final run showed Seymour's "Let it in." line over the left advisor panels while "Kimahri became a Zombie." was up (a taunt that happened before the menu); the first run's first menu, taken at the same state without the taunt, showed the guide, advisor and coach cards clear. A transient overlay, not filed.
+- Seen in frames, not graded: the Chapter I first menu in the final run showed Seymour's "Let it in." line over the left advisor panels while "Kimahri became a Zombie." was up (a taunt that happened before the menu); the first run's first menu, taken at the same state without the taunt, showed the guide, advisor and coach cards clear. The same class is already open in round 19b as PR-0291 (the Zombie warning slab over the Guide card) and PR-0286 (the status line over the dialogue banner); nothing new is filed from this pass.
 
 ## Harness note
 
