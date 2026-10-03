@@ -113,6 +113,22 @@ describe('buildManifest', () => {
     expect(m.problems).toHaveLength(2);
   });
 
+  it('alpha counts: a one-colour alpha mask with a shape is ok; a flat RGBA image, and a fully transparent one, are blank', async () => {
+    // One RGB value, alpha ramps across the width: the living-portrait eye windows are masks like this.
+    const alpha = Buffer.from(Array.from({ length: 8 * 8 }, (_, i) => [255, 255, 255, (i % 8) < 4 ? 0 : 255]).flat());
+    await sharp(alpha, { raw: { width: 8, height: 8, channels: 4 } }).png().toFile(join(dir, 'art', 'mask.png'));
+    await sharp({ create: { width: 8, height: 8, channels: 4, background: { r: 10, g: 20, b: 30, alpha: 1 } } }).png().toFile(join(dir, 'art', 'flat-rgba.png'));
+    await sharp({ create: { width: 8, height: 8, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } }).png().toFile(join(dir, 'art', 'clear.png'));
+    const m = await buildManifest(dir);
+    expect(m.files['art/mask.png']?.decode).toBe('ok');
+    expect(m.files['art/flat-rgba.png']?.decode).toBe('blank');
+    expect(m.files['art/clear.png']?.decode).toBe('blank');
+    expect([...m.problems].sort()).toEqual([
+      'art/clear.png: decodes to a single flat colour',
+      'art/flat-rgba.png: decodes to a single flat colour',
+    ]);
+  });
+
   it('a source map, or code that points at one, is a problem: none ships (PR-0328, D-335)', async () => {
     writeFileSync(join(dir, 'assets', 'index-Abc123.js.map'), '{"version":3}');
     writeFileSync(join(dir, 'assets', 'worker-Def456.js'), 'postMessage(1);\n//# sourceMappingURL=worker-Def456.js.map\n');
