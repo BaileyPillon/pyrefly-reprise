@@ -81,7 +81,7 @@ class Living {
     this.root.name = 'fx-b';
     this.root.visible = false;
     a.scene.add(this.root);
-    this.rig = new DriftRig(a, room.game);
+    this.rig = new DriftRig(a, room.game, room.drift);
     this.figures = room.platesOnly ? null : new Figures(a.scene, this.root, room.shadow);
     this.off = eyeCandy.onChange(() => this.sync());
     this.sync();
@@ -212,6 +212,7 @@ class Living {
     const low = tier === 'low';
     this.time = this.pinned ?? this.time + dt;
     const t = this.time;
+    this.plates?.follow();
     this.rig.holdSway(rm);
     this.rig.update(dt, t, rm, tier);
     this.focus?.update(this.rig.offset, this.rig.spec, this.plates?.visible ? focusDial(rm, tier) : 0);

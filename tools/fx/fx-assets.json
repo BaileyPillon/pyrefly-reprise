@@ -43,6 +43,16 @@
    "sha256": "aeecba61d25efd165e71f342db89e60754dfa8d6dfb6cdc333dc68a61aedf3b0"
   },
   {
+   "path": "farplane/depth.json",
+   "bytes": 703,
+   "sha256": "ea7368aca28c3ba760b82298b65f64fec6263da657cdfdcc40a38242d8e50536"
+  },
+  {
+   "path": "farplane/depth.png",
+   "bytes": 84059,
+   "sha256": "64ef10e3f3000ddb8cadbe25cce1055fe0ade288e155d8a08503b3ce3ebc8250"
+  },
+  {
    "path": "gagazet/depth.json",
    "bytes": 637,
    "sha256": "a8b534ad34aee1f93a2e963fbbc77b57c71cdd8a5da38228b0abfedf657a5818"
@@ -91,6 +101,16 @@
    "path": "via-infinito/depth.png",
    "bytes": 80387,
    "sha256": "c31264ec421d0adc748dc7d9423645bd6475b39bfe053a51d95055ad8ecc95f6"
+  },
+  {
+   "path": "via-purifico/depth.json",
+   "bytes": 707,
+   "sha256": "9394b6b3091037621e87e5bf2889ed0c46184aebeb860b039d2f8ac0b4e76857"
+  },
+  {
+   "path": "via-purifico/depth.png",
+   "bytes": 87195,
+   "sha256": "33eae69c09f459a5ce52d8ce7cccc01ad06aa27e181c54f75be707ded185867a"
   },
   {
    "path": "zanarkand-dome/depth.json",

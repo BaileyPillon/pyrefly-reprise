@@ -30,6 +30,12 @@ export interface RoomSpec {
    * `haze` stay empty and `shadow` is never read.
    */
   platesOnly?: true;
+  /**
+   * Multiplier on this room's camera drift (default 1; the defocus follows the scaled drift, so it still reaches its cap at the extreme).
+   * A room whose nearest plate is a large piece of the painting (Zanarkand's columns) shows the push-pull fill where that plate slides
+   * off what is behind it: a smaller drift keeps the hole small (the card's own risk note: the pan budget is capped per arena).
+   */
+  drift?: number;
   /** Floor reflection; the patch defaults to the room's own lit ground when there is one. */
   reflect?: Omit<ReflectSpec, 'center' | 'size'> & Partial<Pick<ReflectSpec, 'center' | 'size'>>;
   /** Electric arcs anchored on painting pixels (u right, v down), each on its own plate. */

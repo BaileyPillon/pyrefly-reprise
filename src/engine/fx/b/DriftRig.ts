@@ -31,8 +31,10 @@ export class DriftRig {
   private hasPrev = false;
   private swayBase: number | null = null;
 
-  constructor(private readonly host: DriftHost, game: 'ffx' | 'ffx2') {
-    this.spec = game === 'ffx2' ? DRIFT_FFX2 : DRIFT_FFX;
+  /** @param scale the room's own multiplier on the drift's amplitude (`RoomSpec.drift`) */
+  constructor(private readonly host: DriftHost, game: 'ffx' | 'ffx2', scale = 1) {
+    const base = game === 'ffx2' ? DRIFT_FFX2 : DRIFT_FFX;
+    this.spec = scale === 1 ? base : { ...base, lateral: base.lateral * scale, vertical: base.vertical * scale, dolly: base.dolly * scale };
   }
 
   /** Reduce motion zeroes the rig's idle sway while option B is on (main never did). */

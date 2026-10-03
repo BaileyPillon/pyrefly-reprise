@@ -11,19 +11,19 @@ import type { RoomSpec } from './room.ts';
  * r37-living-backdrops/cuts-sheet.jpg`); the plates stand 10, 22 and 34 units in front of the painting, so the nearest is at
  * least 12 units behind the fighters (Via Purifico, whose painting stands at -20 like Macalania's, takes Macalania's z, -16, -11.5, -6).
  *
- * Not here: the Farplane (V). `farplane-colossus.ts` grows and lifts the painting meshes (`COLOSSUS_BACKDROP`) during
- * the colossus links, and plates cut once at load would stay behind (seen at the drift extreme: the plate stack sits 230 px
- * off the painting). It needs the plates to follow that transform first.
+ * The Farplane (V) needed `DepthPlates.follow`: `farplane-colossus.ts` grows and lifts the painting meshes (`COLOSSUS_BACKDROP`)
+ * during the colossus links, and plates cut once at load stayed behind (230 px off the painting at the drift extreme).
  *
  * Game case: each room is its own game's (FFX rooms drift at the tuned periods, FFX-2 rooms at 0.8 of them).
  */
-function platesRoom(key: string, game: 'ffx' | 'ffx2', distance: number, thresholds: number[], z?: number[]): RoomSpec {
+function platesRoom(key: string, game: 'ffx' | 'ffx2', distance: number, thresholds: number[], z?: number[], drift = 1): RoomSpec {
   const blur = 3;
   const zs = z ?? [distance + 10, distance + 22, distance + 34].slice(0, thresholds.length);
   return {
     key,
     game,
     platesOnly: true,
+    drift,
     plates: { thresholds, z: zs, soft: 0.015, blur, width: 2048 },
     phonePlates: { thresholds: [thresholds[1]!], z: [zs[1]!], soft: 0.015, blur: 2, width: 1024 },
     lamps: {},
@@ -33,12 +33,14 @@ function platesRoom(key: string, game: 'ffx' | 'ffx2', distance: number, thresho
   };
 }
 
-/** Chapter II, Zanarkand Dome (FFX; painting at z -56). */
-export const ZANARKAND_DOME = platesRoom('zanarkand-dome', 'ffx', -56, [0.14, 0.2, 0.32]);
+/** Chapter II, Zanarkand Dome (FFX; painting at z -56). The top threshold sits above the right-hand column's whole run of depth (0.31 to 0.42), so no column is cut across and parts a seam at the drift extreme. */
+export const ZANARKAND_DOME = platesRoom('zanarkand-dome', 'ffx', -56, [0.14, 0.22, 0.44], undefined, 0.5);
 /** Chapter III, Dream's End (FFX; z -50). */
 export const DREAMS_END = platesRoom('dreams-end', 'ffx', -50, [0.03, 0.07, 0.12]);
 /** Chapter XII, the Garden of Pain (FFX; z -50). */
 export const GARDEN_OF_PAIN = platesRoom('garden-of-pain', 'ffx', -50, [0.05, 0.3, 0.68]);
+/** Chapter V, the heart of the Farplane (FFX-2; z -48). The plates follow the colossus links' scale and lift of the painting. */
+export const FARPLANE = platesRoom('farplane', 'ffx2', -48, [0.01, 0.07, 0.17]);
 /** Chapter VI, Leblanc's last room (FFX-2; z -47). */
 export const LEBLANC_LAST_ROOM = platesRoom('leblanc-last-room', 'ffx2', -47, [0.1, 0.14, 0.26]);
 /** Chapter XIII, the Via Infinito (FFX-2; z -50). */

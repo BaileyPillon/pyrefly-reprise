@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { Mesh, MeshBasicMaterial, PlaneGeometry, ShaderMaterial, Texture } from 'three';
 import { DRIFT_FFX, DRIFT_FFX2, driftAt } from '../../src/engine/fx/b/CameraDrift.ts';
-import { FOCUS_GAMMA, FOCUS_MAX_BIAS, driftExtent, focusAmounts, focusWeight, plateBiases } from '../../src/engine/fx/b/focusMaths.ts';
+import { FOCUS_GAMMA, FOCUS_MAX_BIAS, driftExtent, followTransform, focusAmounts, focusWeight, plateBiases } from '../../src/engine/fx/b/focusMaths.ts';
+import { DriftRig } from '../../src/engine/fx/b/DriftRig.ts';
 import { PlateFocus, focusDial } from '../../src/engine/fx/b/PlateFocus.ts';
 import { ROOMS } from '../../src/engine/fx/b/ambient/index.ts';
 import { roomPlays } from '../../src/engine/fx/b/ambient/room.ts';
@@ -182,10 +183,11 @@ describe('A-7 plates-only rooms (game-aware)', () => {
     'leblanc-last-room': 'ffx2',
     'via-infinito': 'ffx2',
     'den-of-woe': 'ffx2',
+    farplane: 'ffx2',
     'via-purifico': 'ffx',
   };
 
-  it('covers the far-backdrop rooms, each with its own game (Zanarkand, Dream\'s End, the Garden: FFX; Leblanc, Via Infinito, Den: FFX-2)', () => {
+  it('covers the far-backdrop rooms, each with its own game (Zanarkand, Dream\'s End, the Garden: FFX; Farplane, Leblanc, Via Infinito, Den: FFX-2)', () => {
     expect(only.map((r) => r.key).sort()).toEqual(Object.keys(GAME).sort());
     for (const r of only) expect(r.game).toBe(GAME[r.key]);
   });
@@ -214,6 +216,28 @@ describe('A-7 plates-only rooms (game-aware)', () => {
   });
 });
 
+describe('A-7 per-room drift scale', () => {
+  it('scales the drift amplitude, keeps its periods, and a room at 1 uses the tuned spec as is', () => {
+    const full = new DriftRig({ camera: {} as never, rigName: () => 'idle', battleCamera: {} as never }, 'ffx');
+    expect(full.spec).toBe(DRIFT_FFX);
+    const half = new DriftRig({ camera: {} as never, rigName: () => 'idle', battleCamera: {} as never }, 'ffx2', 0.5);
+    expect(half.spec.lateral).toBeCloseTo(DRIFT_FFX2.lateral * 0.5, 10);
+    expect(half.spec.periods).toEqual(DRIFT_FFX2.periods);
+  });
+
+  it('keeps every drift scale in (0, 1], and the defocus reaches its cap on the scaled drift', () => {
+    for (const r of Object.values(ROOMS)) {
+      const s = r.drift ?? 1;
+      expect(s).toBeGreaterThan(0);
+      expect(s).toBeLessThanOrEqual(1);
+    }
+    const half = { ...DRIFT_FFX, lateral: DRIFT_FFX.lateral * 0.5, vertical: DRIFT_FFX.vertical * 0.5, dolly: DRIFT_FFX.dolly * 0.5 };
+    let top = 0;
+    for (let t = 0; t < 400; t += 0.25) top = Math.max(top, driftExtent(driftAt(t, half, 1), half));
+    expect(top).toBeGreaterThan(0.95);
+  });
+});
+
 describe('A-7 flat fallback under LOW EFFECTS', () => {
   it('keeps a plates-only room flat on the low tier and leaves the older rooms on their own low tier', () => {
     expect(roomPlays(ROOMS['dreams-end']!, true, 'low')).toBe(false);
@@ -221,5 +245,37 @@ describe('A-7 flat fallback under LOW EFFECTS', () => {
     expect(roomPlays(ROOMS['dreams-end']!, true, 'phone')).toBe(true);
     expect(roomPlays(ROOMS['dreams-end']!, false, 'full')).toBe(false);
     expect(roomPlays(ROOMS['gagazet']!, true, 'low')).toBe(true);
+  });
+});
+
+describe('A-7 plates follow a scene that scales and lifts the painting (the Farplane colossus links)', () => {
+  // The reference camera at (0, 3.3, 11); the painting plane at z -48, centre y -2.8, 78 wide (the Farplane's numbers).
+  const cam = { x: 0, y: 3.3, z: 11 };
+  const Z = -48;
+  const CY = 3.2;
+  const point = (u: number, v: number, sx: number, sy: number, lift: number): { x: number; y: number } => ({ x: (u - 0.5) * 78 * sx, y: CY + lift + (0.5 - v) * 44 * sy });
+
+  it('is the plates own at rest', () => {
+    expect(followTransform(0.8, 1.5, 1, 1, 0)).toEqual({ sx: 0.8, sy: 0.8, y: 1.5 });
+  });
+
+  it('keeps a painting point and its plate point on one ray from the reference camera, at any scale and lift', () => {
+    for (const [sx, sy, lift] of [[1, 1, 0], [1.8, 1.8, 6], [1.3, 1.5, -2]] as const) {
+      for (const z of [-38, -26, -14]) {
+        const k = (cam.z - z) / (cam.z - Z);
+        const baseY = cam.y + (CY - cam.y) * k;
+        const t = followTransform(k, baseY, sx, sy, lift);
+        for (const [u, v] of [[0.1, 0.2], [0.5, 0.5], [0.9, 0.8]] as const) {
+          const p = point(u, v, sx, sy, lift); // on the painting plane, z = Z
+          // the plate's point for the same (u, v): its own mesh is 78 x 44 scaled by (t.sx, t.sy), centred at (cx, t.y)
+          const cx = cam.x * (1 - k);
+          const q = { x: cx + (u - 0.5) * 78 * t.sx, y: t.y + (0.5 - v) * 44 * t.sy };
+          // the ray from the camera through p crosses z at: cam + (p - cam) * (cam.z - z) / (cam.z - Z)
+          const r = { x: cam.x + (p.x - cam.x) * k, y: cam.y + (p.y - cam.y) * k };
+          expect(q.x).toBeCloseTo(r.x, 8);
+          expect(q.y).toBeCloseTo(r.y, 8);
+        }
+      }
+    }
   });
 });

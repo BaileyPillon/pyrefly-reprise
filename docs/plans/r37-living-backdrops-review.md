@@ -25,7 +25,7 @@ So this branch builds the two missing parts: **the plate defocus** and **plates 
 
 - Defocus: both. Shared plumbing; FFX drifts at the tuned periods and FFX-2 at 0.8 of them (ATB pace, B2's rule).
 - Rooms: each room is its own game's. FFX: Zanarkand Dome (II), Dream's End (III), the Garden of Pain (XII).
-  FFX-2: Leblanc's room (VI), the Via Infinito (XIII), the Den of Woe (XV).
+  FFX-2: the Farplane (V), Leblanc's room (VI), the Via Infinito (XIII), the Den of Woe (XV).
   Nothing is copied across games: no mirror of any painting, no shared recipe beyond the plate rule.
 
 ## Method
@@ -33,7 +33,7 @@ So this branch builds the two missing parts: **the plate defocus** and **plates 
 1. **Defocus is a sampling choice.** Each upright plate's own `map_fragment` samples with a mip bias
    (`PlateFocus.ts`, the method of option A4's `BackdropFocus`): no extra pass, no cut-out halo round the figures
    (visual-bible 6.4), no change to any painted pixel. Bias per plate = (inverse-distance difference to the focus
-   plate, to the mock's 0.85 power) x weight x the room's cap (2.2 mip levels, about 2 to 3 px at 1600 wide).
+   plate, to the mock's 0.85 power) x weight x the room's cap (3 mip levels, about 3 to 4 px at 1600 wide; the mock's own blur is about 2 to 5 px at 1920, picked by looking at dial 1, 1.5 and 2.2 against the mock).
 2. **The resting frame stays the approved painting.** The weight follows how far the drift has carried the camera
    off rest and is exactly 0 at rest, on every non-idle rig (the drift is cut there), under REDUCE MOTION (no drift)
    and under LOW EFFECTS. At weight 0 the shader samples as before (bias 0).
@@ -55,6 +55,8 @@ So this branch builds the two missing parts: **the plate defocus** and **plates 
 | the defocus is overdone | the cap is per room (`RoomSpec.focus.max`) and a side-by-side crop is in the handoff |
 | frame cost | a bias is a texture-LOD choice, not a pass; measured before and after on desktop |
 | a plate in front of a figure | plates draw before the figures and stand at least 12 units behind the back row (test) |
+| a scene that scales or lifts its painting after the plates are cut (the Farplane's colossus links: x1.8 and +6) | `DepthPlates.follow` carries each plate through the painting plane's scale and lift (`followTransform`: scale times k, lift times k, from the reference camera), pinned by a ray test, and a manual-move check in the real scene (plates ON matches the painting itself) |
+| a large near plate whose fill shows when it slides (Zanarkand's columns) | `RoomSpec.drift` scales that room's drift (0.5 for Zanarkand; the defocus follows the scaled drift) and its top threshold keeps the column in one plate |
 | a room whose scene swaps its backdrop or stands the painting near the camera | not listed: those rooms (Cavern IX, Highbridge X, Via Purifico XIV) place the painting 12 to 20 units out with a projected floor; they need their own `floor` recipe and are left for a later pass |
 
 ## Left out on purpose
@@ -62,6 +64,5 @@ So this branch builds the two missing parts: **the plate defocus** and **plates 
 - The mock's foreground snow bank in front of the party, defocused over the lowest rows: no plate stands in front of
   the figures anywhere in option B (plates draw before them), and a plate drawn after them would cover their feet.
   It needs a depth-ordering decision and a look Bailey should see first.
-- The Farplane (V): `farplane-colossus.ts` grows and lifts the painting meshes during the colossus links, which plates cut once at load do not follow (plate stack 230 px off the painting at the drift extreme).
 - Evrae's deck (a rolled painting with swapped plates), the Road to the Farplane (two plates swapped per link) and
   the three near-painting rooms above.

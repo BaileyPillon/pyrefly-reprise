@@ -23,8 +23,8 @@ import { smoothstep } from './plateMaths.ts';
 /** How fast the blur grows with distance from the focus (the mock's `abs(p - focus) ** 0.85`). */
 export const FOCUS_GAMMA = 0.85;
 
-/** The default cap, in mip levels, for the plate farthest from the focus at the drift's extreme. */
-export const FOCUS_MAX_BIAS = 2.2;
+/** The default cap (3 mip levels, about 3 to 4 px at 1600 wide; the mock's own blur is about 2 to 5 px), in mip levels, for the plate farthest from the focus at the drift's extreme. */
+export const FOCUS_MAX_BIAS = 3;
 
 /**
  * Each plate's circle of confusion as a share of the largest, 0 on the focus plate. A lens' blur
@@ -62,4 +62,14 @@ export function focusWeight(extent: number): number {
 export function plateBiases(amounts: readonly number[], weight: number, maxBias: number, dial = 1): number[] {
   const k = Math.max(0, weight) * Math.max(0, maxBias) * Math.max(0, dial);
   return amounts.map((a) => a * k);
+}
+
+/**
+ * A-7 / the Farplane: where a plate stands when a scene scales and lifts the painting plane it was cut from. The painting's
+ * plane (scale `sx`, `sy` about its own centre, plus `lift` up) and a plate at `k` of its distance from the reference camera
+ * line up from that camera only if the plate takes the same scale times `k` and `k` times the lift: a point of the painting
+ * lies on the camera's ray through the matching plate point, whatever `sx`, `sy` and `lift` are. At rest (1, 1, 0) it is the plate's own.
+ */
+export function followTransform(k: number, y: number, sx: number, sy: number, lift: number): { sx: number; sy: number; y: number } {
+  return { sx: k * sx, sy: k * sy, y: y + k * lift };
 }
