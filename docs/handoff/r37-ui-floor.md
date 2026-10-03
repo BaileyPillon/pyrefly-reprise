@@ -159,3 +159,30 @@ measured it (Ch I and IV, every size, also at TEXT SIZE 1.15), and LV-35-01, PR-
 verify. A fix batch would add the listed selectors (and the story box) to the floor, give the phone pause footer a taller
 reserve for a two-line objective, keep the 4:3 target step's hand, reticle and OD label off the larger labels, re-check the
 PR-0249 ranking at 4:3, and bisect the 20 px phone target-camera shift.
+
+## Repair cycle (2026-10-03, Sonnet sub-agent; one cycle, after the independent check above)
+
+Method: headless Playwright (`PYREFLY_BROWSER=gpu`, seed 1), ports 6002 (branch) and 6003 (a `git archive d154486c` copy of the merge
+base, parked afterwards at `F:/pyrefly-parked/2026-10-03/r37-ui-floor-merge-base-copy`), both stopped by PID. Scratch:
+`D:/Tools/pyrefly-scratch/2026-10-03/r37-ui-floor-check/` (`chk.mjs` floor walker, `fx-phone.mjs`, `g-*.mjs` probes, `ig-run.sh`) and
+`.../r37-ui-floor-fix/`. Frames: `docs/screenshots/r37-ui-floor/repair-*.jpg`. Game case per item below.
+
+| Blocker | Game case | Cause found | Fix | Proof after |
+|---|---|---|---|---|
+| 1 floor in Ch II, III, V | both (dbox, banner chip, phone); FFX only (CTB tag, Sensor lines) | the mid-battle line card is the dialogue box scaled 0.7 (`--lc-scale`), so its role tag and voice line printed at 5.5 to 12 px; the other labels were simply not in `hud-floor.css` | `line-card.css` (card: size / 0.7, band: 14.1 px, desktop only), `text-size.css` (same at 115 and 130 %, plus the phone bark that printed 9.2 px at 115), `hud-floor.css` (`.ffx-sensor__unknown/immune/failed`, `.ig-ctb__tag`, `.ig-banner__chip` per game), `phone-hud-parts.css` (`.ffx-helpbar` 14 px) | walker, all five chapters x 1024x768 / 1440x900 / 2000x1012 / 390x844 touch, menu + seven submenus + Attack target (+ every pause tab on the phone): min 14.0, **0 under 14** in all 20 runs, 0 page errors; the card in both places 14.1 px at 1024, 1440 (also 115 and 130 %) and 14 / 15 px on the phone at 100 and 115 %, text still inside its window; phone `.ffx-helpbar`, banner chip and CTB tag 14 px |
+| 2 phone pause footer | both (shared pause) | the 3-line caption (0.4em tracking at 14 px) plus a 2-line objective ran into ESC and "H PAINTING ONLY" | caption tracking 0.2em, and `phoneFit.ts` raises the objective by `--pu-phone-obj-lift` only as far as the footer needs (12 px air); short objectives stay at the approved 82vh | Ch III and Ch V 390x844, every tab: 0 overlaps with ESC and the legend (was 209 / 811 and 254 / 811 px2); frames `repair-pause-phone-ch3/ch5-*.jpg` |
+| 3 FFX target step 4:3 / 1440 | FFX only | (a) my own Sensor rise of 15 grid px also lifted the **folded** toggle into the hand's row; (b) the hand is docked to the enemy wherever it stands, and the floored cards are wider | folded card keeps its authored top; chips tighten 13 to 10.5 grid px as the type grows so the third row costs 7.5 not 15 and the card rises only that far; new `handClear.ts` moves the hand vertically the least that clears the advisor, Sensor and guide cards; "OD" steps in by half the floor growth | Ch I and Ch II at 1024x768 and 1440x900, Attack target step: "IN WHITE MAGIC" and "I YUNALESCA" whole, bracket clear of the Sensor name, 0 off-window text (the OD label was 2 px out); frame `repair-ffx-target-1024-ch1-ch2-after.jpg` |
+| 4 phone Ch I target plate on the intent card | FFX only | **not a regression**: the target camera is bimodal on the unchanged merge base too (enemy projected y 156 or 176 from one run to the next, 3 of 6 runs on each build); in the 156 state the plate docked above the enemy onto the intent strip, which `panelRects` never listed. The branch's CSS is not involved (removing it at run time changed nothing) | the phone plate now treats the intent strip as a panel (`FFXBattleHud.applySelection`, plate docking only, formation untouched; desktop card hangs on the boss and is not listed) | 6 more runs: both camera states, plate 0 px2 on the card (in the 156 state it docks below the enemy at y 373); frame `repair-phone-target-plate-before-after.jpg`. The camera's two states are **left as found** (see For Bailey) |
+| 5 PR-0249 at 1024x768 Shell / Cure | FFX-2 only | **not the party tier**: with the tier switched off the Shell step is the same. `placeSlab` only tries columns taken from obstacle edges; the floored cards moved the edges and the column that least covers Rikku (131) disappeared, so it took 177 | `placeSlab` (tiered only) also tries both walls and the chip-flush column (the `E HIDE` chip rides the slab's corner and is scored with it): more candidates can only improve the lexicographic minimum | 1024x768: menu, list, list-on-Shell 0; Shell step Rikku 9,046 (merge base) / 14,581 (before) to 3,712 px2, party total 29.7k / 35.2k to 24.9k; Cure step Rikku 7,461 / 7,687 to 3,942, total 29.4k / 29.5k to 26.1k; 1600x900 all five steps 0 px2; 2000x1012 menu, Shell list, Cure 0; the 2000x1012 White Magic list reads 3.7 to 3.8k px2 (the check saw 3,837 once) and the Shell step 256 + 565, both residues carried |
+
+Gates: `npx tsc --noEmit` clean; new `tests/unit/r37-floor-repair.test.ts` (12) and the existing `hud-floor-css`, `pause-phone-fit`,
+`ui-ffx2-intent-party-tier`; targeted run of 377 files (names containing pause, presenter, hud, ffx, cmd, lv35, ui-, coach, intent, phone,
+advisor, guide, text-size, line-card, dialogue, target, sensor, r37): 373 passed, 4 skipped, 5,774 tests passed, nothing failed;
+`node tools/orphans.mjs`: the same four; layering unchanged (no engine file touched).
+
+For Bailey:
+1. **The FFX phone target camera has two resting states** (enemy about 20 px apart) on the merge base and on this branch, chosen
+   by something that differs from run to run (not traced: not CSS, not the branch's presenter change). It is a framing question
+   for the camera owner, not part of this lane; the plate now survives either state.
+2. **TEXT SIZE 130 at the floor** was still not measured in the Sensor / CTB / banner labels of Chapters II, III and V (the matrix
+   ran at 100 %; the dialogue card was probed at 115 and 130 %).

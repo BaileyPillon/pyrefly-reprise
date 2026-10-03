@@ -38,6 +38,7 @@ import { AIM_FOLD_CLEAR, AIM_FOLD_FLOOR_TOP, chipLiftDy, foldWhileAiming } from 
 import { statusRowIds } from './fieldRows.ts';
 import { fitGroupLabel } from './groupLabelFit.ts';
 import { clipOffStack } from './bracketClip.ts';
+import { clearHandOfCards } from './handClear.ts';
 import { FfxTargetPlate } from './targetPlateFfx.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
@@ -362,6 +363,7 @@ export class FFXBattleHud implements HudPort {
     // PR-0178: the cursor's layer is clipped off the command rows, so brackets go behind them (`bracketClip.ts`).
     this.commandMenu.targetCursor.setAfterLayout((el) => {
       fitGroupLabel(el, this.el, this.panelRects());
+      clearHandOfCards(el, this.el); // r37-ui-floor: the hand steps off the advisor and Sensor cards
       clipOffStack(el, this.commandMenu.stackEl);
     });
 
@@ -869,7 +871,10 @@ export class FFXBattleHud implements HudPort {
     const panels = this.panelRects();
     // PR-0183: and off the party's faces (`plateFaces.ts`); the field's own
     // visibility sums below still get the panels alone.
-    this.commandMenu.setPanels([...panels, ...partyFaceRects(this.fieldPartyIds(), (id) => this.targeting?.rect(id) ?? null)]);
+    // r37-ui-floor, blocker 4 (FFX phone): the intent card is a fixed strip across the top there, so the plate
+    // docked above a high enemy landed on its third line. The desktop card hangs on the boss and is not listed.
+    const intentStrip = this.el.ownerDocument.documentElement.dataset['phoneBattle'] ? solidPanelRects([this.intent.el]) : [];
+    this.commandMenu.setPanels([...panels, ...intentStrip, ...partyFaceRects(this.fieldPartyIds(), (id) => this.targeting?.rect(id) ?? null)]);
     // The cursor drew itself before this call (the selection is published from
     // `TargetCursor.publish`, downstream of `reposition`), so the first frame
     // of a new aim would otherwise dock its plate against the *previous*

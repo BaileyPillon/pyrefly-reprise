@@ -162,9 +162,20 @@ export function placeSlab(
       above.add(t);
     }
   }
+  // r37-ui-floor, blocker 5 (FFX-2 only): the two walls (and, below, the chip's own flush column) are candidates
+  // too. The other columns come from obstacle edges, so when a card's width changes (the 14 px floor at 4:3) the
+  // column that least covers a girl can vanish: at 1024x768 the Shell step lost left 131 and took 177 over Rikku.
+  // More columns can only improve a lexicographic minimum, so the party tier gets no worse anywhere.
+  if (tiered) {
+    lefts.add(edge);
+    lefts.add(Math.max(edge, maxLeft));
+  }
   for (const o of obstacles) {
     lefts.add(clamp(edge, maxLeft, o.right + DODGE_GAP));
     lefts.add(clamp(edge, maxLeft, o.left - w - DODGE_GAP));
+    // The `E HIDE` chip rides the slab's top-right corner and is scored with it, so the slab may also stand
+    // with that chip, not its body, flush against an obstacle's right edge (its body is lower, clear of it).
+    if (tiered && chip) lefts.add(clamp(edge, maxLeft, o.right + DODGE_GAP - (w - chip.w)));
     // Downward only; see the doc comment.
     tops.add(clamp(floor, maxTop, Math.max(wanted, o.bottom + DODGE_GAP)));
     if (chip) tops.add(clamp(floor, maxTop, Math.max(wanted, o.bottom + DODGE_GAP + chip.h + chip.gap)));

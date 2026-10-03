@@ -54,3 +54,21 @@
     flex: none;
   }
 }
+
+/*
+ * r37-ui-floor, blocker 2 (game case: both, shared pause plumbing). At the 14 px
+ * floor the caption above an objective runs three lines in Chapters III and V
+ * ("CHAPTER V . HEART OF THE FARPLANE - BEFORE THE LAST NOTE . BATTLE 1 OF 5")
+ * and the objective two, so the block ran into ESC and "H PAINTING ONLY". The
+ * caption's tracking tightens (0.4em is the wide layout's) and `phoneFit.ts`
+ * raises the block by `--pu-phone-obj-lift`, only as far as the footer needs.
+ */
+@media (max-width: 620px) {
+  .pause .pause__eyebrow {
+    letter-spacing: 0.2em;
+    margin-bottom: 6px;
+  }
+  .pause .pause__obj {
+    top: calc(var(--pu-top-obj) - var(--pu-phone-obj-lift, 0px));
+  }
+}

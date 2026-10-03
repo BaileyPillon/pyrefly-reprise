@@ -44,6 +44,25 @@
   right: 3vw;
 }
 
+/*
+ * The 14 px floor on the mid-battle card (r37-ui-floor, blocker 1; CHK-003; game
+ * case: both). The card is the box scaled by `--lc-scale` (0.7), so the tag and the
+ * voice line printed at 5.5 to 10.6 px (1024x768 to 2000x1012). Each type size is
+ * the larger of its authored size and 14.1 px divided by the scale; the band is
+ * not scaled, so it only needs 14.1 px itself. Never on the phone, which has its own sizes. The speaker name (34 px) and the
+ * narration never fall under it.
+ */
+@media (min-width: 561px) {
+  html:not([data-phone-battle]) .dbox--card:not(.dbox--narrate) .dbox__role {
+    font-size: max(8px, 0.76vw, calc(14.1px / var(--lc-scale, 0.7)));
+  }
+  html:not([data-phone-battle]) .dbox--card:not(.dbox--narrate) .dbox__text {
+    font-size: max(13px, 1.67vw, calc(14.1px / var(--lc-scale, 0.7)));
+  }
+  html:not([data-phone-battle]) .dbox--band .dbox__role { font-size: max(8px, 0.76vw, 14.1px); }
+  html:not([data-phone-battle]) .dbox--band .dbox__text { font-size: max(13px, 1.67vw, 14.1px); }
+}
+
 @media (max-width: 560px) {
   /* The phone box is fixed px and full width already; only its height moves. */
   .dbox--card:not(.dbox--narrate) .dbox__win,

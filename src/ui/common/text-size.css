@@ -92,6 +92,23 @@ html[data-text-size]:not([data-text-size='100']) .chint--cutscene { font-size: c
   html[data-text-size]:not([data-text-size='100']) .chint--cutscene { font-size: calc(9px * var(--pyr-ts)); }
 }
 
+/* The phone's battle bark keeps its 14 px floor at 115 and 130 % (r37-ui-floor, blocker 1): the
+   rules above print the role tag at 8 px and the line at 12 px times the scale. */
+html[data-phone-battle][data-text-size]:not([data-text-size='100']) .dbox__text { font-size: calc(15px * var(--pyr-ts)); }
+html[data-phone-battle][data-text-size]:not([data-text-size='100']) .dbox__role { font-size: calc(14px * var(--pyr-ts)); }
+/* The desktop battle card keeps its floor at 115 and 130 % (`line-card.css`). */
+@media (min-width: 561px) {
+  html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .dbox--card:not(.dbox--narrate) .dbox__role {
+    font-size: max(calc(max(8px, 0.76vw) * var(--pyr-ts)), calc(14.1px / var(--lc-scale, 0.7)));
+  }
+  html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .dbox--card:not(.dbox--narrate) .dbox__text {
+    font-size: max(calc(max(13px, 1.67vw) * var(--pyr-ts)), calc(14.1px / var(--lc-scale, 0.7)));
+  }
+  html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .dbox--band .dbox__role {
+    font-size: max(calc(max(8px, 0.76vw) * var(--pyr-ts)), 14.1px);
+  }
+}
+
 /* The move advisor keeps the box `hudSafeZones.advisorZone` solves for it (clear of
    every panel and fighter, CHK-008); its type grows inside that box, and the card's
    own density ladder (`MoveAdvisor.fitCard`) fits the content to it. */

@@ -64,6 +64,10 @@ html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__failed {
 html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__toggle {
   display: none;
 }
+/* PR-0180 enemy-ability band: 12 px authored on the grid, a real 14 here (r37-ui-floor, blocker 1). */
+html[data-phone-battle='ffx'] .ffxhud .ffx-helpbar {
+  font-size: 14px;
+}
 
 /* ------------------------------------------------ transients, under the rail */
 html[data-phone-battle='ffx'] .ffxhud .ig-banner {

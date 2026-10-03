@@ -56,17 +56,34 @@ html:not([data-phone-battle]) .ffxhud .ffx-cmd-breadcrumb { font-size: max(8px, 
 
 html:not([data-phone-battle]) .ffxhud .ig-stat__value small { font-size: max(6.6px, var(--hud-floor)); }
 html:not([data-phone-battle]) .ffxhud .ffx-stat__od em { font-size: max(4.9px, var(--hud-floor)); }
+/* The floored word is wider and its tracking trails the last letter: it steps in from the row's edge so "OD" stays inside a 1024 px window (r37-ui-floor, blocker 3). */
+html:not([data-phone-battle]) .ffxhud .ffx-stat__od em { right: max(0px, calc((var(--hud-floor) - 4.9px) * 0.5)); }
 
 html:not([data-phone-battle]) .ffxhud .ffx-sensor__chip { font-size: max(6px, var(--hud-floor)); }
-/* Two chip columns make a third row (15 grid px) in a plate pinned at 166: it rises that much so it stays off the party rows. */
+/*
+ * Two chip columns make a third row. The chips keep their 13 grid px at 1600x900 and tighten to 10.5 as the floored
+ * type grows (`--sensor-chip-h`, 8.8 px type at 1024x768), so the third row costs 7.5 grid px, not 15, and the plate
+ * rises only that far to stay off the party rows (r37-ui-floor, blocker 3: the full 15 lifted the card's name into
+ * the enemy's bracket). A folded card has no chip rows and keeps its authored top, off the targeting hand.
+ */
 html:not([data-phone-battle]) .ffxhud .ffx-sensor {
-  top: calc(166px + var(--ffx-sensor-dy, 0px) - clamp(0px, (var(--hud-floor) - 5.6px) * 20, 15px));
+  --sensor-chip-h: clamp(10.5px, calc(13px - (var(--hud-floor) - 6px) * 0.9), 13px);
+}
+html:not([data-phone-battle]) .ffxhud .ffx-sensor__chip { height: var(--sensor-chip-h); }
+html:not([data-phone-battle]) .ffxhud .ffx-sensor:not(.ffx-sensor--folded) {
+  top: calc(166px + var(--ffx-sensor-dy, 0px) - clamp(0px, (var(--hud-floor) - 5.6px) * 20, calc(3 * var(--sensor-chip-h) + 4px - 28px)));
 }
 /* Three columns at 1600x900 as authored; two where the floored type no longer fits three ("THUNDER"). */
 html:not([data-phone-battle]) .ffxhud .ffx-sensor__chips {
   grid-template-columns: repeat(auto-fit, minmax(calc(var(--hud-floor) * 4.2), 1fr));
 }
 html:not([data-phone-battle]) .ffxhud .ffx-sensor__toggle { font-size: max(4.9px, var(--hud-floor)); }
+/* Chapters II, III and V (r37-ui-floor, blocker 1): the Sensor card's other lines and the CTB tile letter. */
+html:not([data-phone-battle]) .ffxhud .ffx-sensor__unknown { font-size: max(5px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud .ffx-sensor__immune { font-size: max(6px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud .ffx-sensor__failed { font-size: max(8px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud .ig-ctb__tag { font-size: max(5.33px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud .ig-banner__chip { font-size: max(6.22px, var(--hud-floor)); }
 
 /* ------------------------------------------------------------ FFX-2 only */
 
@@ -75,6 +92,8 @@ html:not([data-phone-battle]) .ffx2hud .ffx2stat__mono { font-size: max(7.5px, v
 html:not([data-phone-battle]) .ffx2hud .ffx2stat__job { font-size: max(5.5px, var(--hud-floor)); }
 html:not([data-phone-battle]) .ffx2hud .ig-stat__value small { font-size: max(5px, var(--hud-floor)); }
 html:not([data-phone-battle]) .ffx2hud .ffx2boss__num small { font-size: max(6px, var(--hud-floor)); }
+/* The banner's "speaks" chip (FFX-2: the battle message banner; FFX's own is below with its HUD). */
+html:not([data-phone-battle]) .ffx2hud .ig-banner__chip { font-size: max(6.22px, var(--hud-floor)); }
 html:not([data-phone-battle]) .ffx2hud .ffx2cmd__title,
 html:not([data-phone-battle]) .ffx2hud .ffx2cmd__grants,
 html:not([data-phone-battle]) .ffx2hud .ffx2cmd__fold { font-size: max(7px, var(--hud-floor)); }
