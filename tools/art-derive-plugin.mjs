@@ -16,7 +16,7 @@
  *     `transformIndexHtml`: Vite writes `imagesrcset` after the post hooks and a rewrite made there is lost (the reference
  *     audit, `tools/art-verify.mjs`, caught exactly that).
  *
- * `PYREFLY_ART_WEBP=off|partial|safe|all` picks what is derived (default all); `off` makes the plugin a no-op (the PNGs ship
+ * `PYREFLY_ART_WEBP=off|partial|safe|all` picks what is derived (default safe); `off` makes the plugin a no-op (the PNGs ship
  * as before): the switch for a live problem.
  *
  * Game case: both (shared build plumbing).

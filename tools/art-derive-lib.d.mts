@@ -5,6 +5,8 @@ export type ArtAlpha = 'opaque' | 'binary' | 'translucent';
 export type ArtKind = 'webp' | 'png' | 'copy';
 
 export const SCOPES: readonly ArtScope[];
+/** What ships when `PYREFLY_ART_WEBP` is unset: `safe`. */
+export const DEFAULT_SCOPE: ArtScope;
 export const SCOPE_ENV: 'PYREFLY_ART_WEBP';
 export const CACHE_ENV: 'PYREFLY_ART_CACHE';
 export const DEFAULT_CACHE: string;

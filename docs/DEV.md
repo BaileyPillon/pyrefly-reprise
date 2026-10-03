@@ -184,8 +184,9 @@ from a live build, open `assets/index-<hash>.js.map` from that commit's folder
 `public/art/**.png` stays the approved masters (hashes, backups and
 `verify-approved` unchanged). Every production build, by any route (`npm run
 build`, the deploy, a critic's `vite build --outDir dist-gate`), derives a
-lossless WebP for each master it makes smaller and ships that instead of the PNG
-(a master whose WebP is not smaller keeps its PNG, recompressed at maximum effort when that helps), through the
+lossless WebP for each master that a browser draws the same from it (the default, `safe`: the opaque and
+binary-alpha art, plus the 2x masters) and ships that instead of the PNG; the partly transparent art stays PNG, byte
+for byte (a master whose WebP is not smaller keeps its PNG, recompressed at maximum effort when that helps), through the
 `pyrefly-art-derive` plugin in `vite.config.ts` (`tools/art-derive-plugin.mjs`,
 library `tools/art-derive-lib.mjs`). The dev server and the unit suite still serve
 the PNGs. `artUrl` (`src/engine/PaintedArt.ts`) hands the browser the file that
@@ -197,7 +198,8 @@ once and cached by content hash in `PYREFLY_ART_CACHE` (default
 `D:/Tools/pyrefly-art-cache`; safe to delete, it refills): `node tools/art-derive.mjs
 warm --jobs 8` fills it ahead of a build, and a new painting adds seconds to the
 next build with nothing to remember. `PYREFLY_ART_WEBP=off|partial|safe|all`
-(default `all`) is the switch; `off` ships the PNGs exactly as before. The proofs,
+(default `safe`: the partly transparent art stays PNG, because a composited edge pixel of it can move by 1 in 255 from a
+WebP) is the switch; `off` ships the PNGs exactly as before. The proofs,
 each of which the deploy or a reviewer can re-run on a built folder:
 `node tools/art-derive.mjs verify --dir <build>` (every shipped WebP decodes to its
 master's RGBA, sha256, both sides decoded again from the files; the deploy runs it),

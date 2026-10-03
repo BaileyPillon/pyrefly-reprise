@@ -17,7 +17,7 @@
  *   node tools/art-derive.mjs audit  --dir <build output> [--baseline <an earlier build of the same sources>]
  *        the reference audit: nothing names an art file the build does not hold; exit 1 on any
  *
- * `PYREFLY_ART_WEBP=off|partial|safe|all` is the switch (default all): `off` ships the PNGs exactly as before; `partial` derives
+ * `PYREFLY_ART_WEBP=off|partial|safe|all` is the switch (default safe): `off` ships the PNGs exactly as before; `partial` derives
  * only the 2x masters and the backdrops (the first phase); `safe` everything but the art with partly transparent pixels that
  * the page may draw through the DOM (where a browser can premultiply a WebP and a PNG a hair differently: 1 in 255 on those
  * pixels); `all` everything. `PYREFLY_ART_CACHE` moves the cache (default

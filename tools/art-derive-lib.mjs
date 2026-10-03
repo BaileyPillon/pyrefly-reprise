@@ -17,7 +17,8 @@
  *
  * The command line is `tools/art-derive.mjs` (plan, warm, verify, audit); the Vite plugin is `tools/art-derive-plugin.mjs`.
  *
- * `PYREFLY_ART_WEBP=off|partial|safe|all` is the switch (default all; `inScope` says what each one derives): `off` ships the
+ * `PYREFLY_ART_WEBP=off|partial|safe|all` is the switch (default safe, set by the critic's check of 2026-10-03 because Bailey was
+ * promised that not a pixel changes; `inScope` says what each one derives): `off` ships the
  * PNGs exactly as before; `partial` the 2x masters and the backdrops (the first phase); `safe` everything a browser draws
  * identically from the WebP on every path; `all` everything. The cache key holds the encoder and library versions, so a changed
  * setting never reuses an old file. The tool never deletes: it copies, and `applyPlan` only removes the PNG it replaced from a
@@ -35,6 +36,8 @@ import process from 'node:process';
 import { isUnshippedPublicFile } from './dist-filter.mjs';
 
 export const SCOPES = Object.freeze(['off', 'partial', 'safe', 'all']);
+/** What ships when nothing is set: `safe` (D-351 promised that not a pixel changes; `all` can move a composited edge pixel by 1 in 255). */
+export const DEFAULT_SCOPE = 'safe';
 export const SCOPE_ENV = 'PYREFLY_ART_WEBP';
 export const CACHE_ENV = 'PYREFLY_ART_CACHE';
 export const DEFAULT_CACHE = 'D:/Tools/pyrefly-art-cache';
@@ -62,9 +65,9 @@ export function getSharp() {
   return sharpModule;
 }
 
-/** `all` (default), `safe`, `partial` or `off`, from the argument or `PYREFLY_ART_WEBP`. */
+/** `safe` (default), `all`, `partial` or `off`, from the argument or `PYREFLY_ART_WEBP`; unset or blank is {@link DEFAULT_SCOPE}. */
 export function resolveScope(value = process.env[SCOPE_ENV]) {
-  const v = String(value ?? 'all').trim().toLowerCase() || 'all';
+  const v = String(value ?? DEFAULT_SCOPE).trim().toLowerCase() || DEFAULT_SCOPE;
   if (!SCOPES.includes(v)) throw new Error(`${SCOPE_ENV}=${value}: expected one of ${SCOPES.join(', ')}`);
   return v;
 }
@@ -82,7 +85,8 @@ export const resolveCache = (value = process.env[CACHE_ENV]) => resolve(value ||
  *            textures (WebGL reads the straight RGBA back out, bit for bit). What stays PNG is the art with partly transparent
  *            pixels that the page may also draw through the DOM or a 2D canvas, where Chromium's WebP decoder premultiplies with
  *            different rounding than its PNG decoder and a pixel can differ by 1 in 255.
- *   all      every master (the default; the same decoded RGBA, and the same texture, bit for bit).
+ *   all      every master (not the default: the same decoded RGBA, and the same texture, bit for bit, but a composited edge pixel
+ *            of the partly transparent art can move by 1 in 255 through the DOM or a 2D canvas).
  */
 export function inScope(rel, scope, alpha = null) {
   if (scope === 'off') return false;

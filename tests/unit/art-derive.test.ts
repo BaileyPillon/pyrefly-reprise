@@ -9,6 +9,7 @@ import sharp from 'sharp';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import {
+  DEFAULT_SCOPE,
   alphaClassOf,
   applyPlan,
   chooseKind,
@@ -22,6 +23,7 @@ import {
   shippedList,
   webpName,
 } from '../../tools/art-derive-lib.mjs';
+import { pyreflyArtDerive } from '../../tools/art-derive-plugin.mjs';
 import { verifyShippedArt } from '../../tools/art-verify.mjs';
 import { grey16Png, makeBuild, makeStandardArt, makeWorld, noise, png, putFile, removeWorld, sprite, withChunk } from './helpers/artFixtures.ts';
 
@@ -38,8 +40,7 @@ const standardArt = (): Promise<void> => makeStandardArt(pub);
 
 describe('what is derived', () => {
   it('reads the switch and the phases', () => {
-    expect(resolveScope(undefined)).toBe('all');
-    expect(resolveScope('')).toBe('all');
+    expect(resolveScope('all')).toBe('all');
     expect(resolveScope('Partial')).toBe('partial');
     expect(resolveScope('SAFE')).toBe('safe');
     expect(resolveScope('off')).toBe('off');
@@ -60,6 +61,55 @@ describe('what is derived', () => {
     expect(inScope('art/characters/ixion/idle@2x.png', 'safe', 'translucent')).toBe(true);
     expect(inScope('art/characters/ixion/idle.png', 'safe', 'translucent')).toBe(false);
     expect(webpName('art/characters/tidus/idle@2x.png')).toBe('art/characters/tidus/idle@2x.webp');
+  });
+
+  describe('the default is safe (critic check of 2026-10-03: Bailey was promised that not a pixel changes)', () => {
+    const SWITCH = 'PYREFLY_ART_WEBP';
+    const saved = process.env[SWITCH];
+    beforeEach(() => {
+      delete process.env[SWITCH];
+    });
+    afterEach(() => {
+      if (saved === undefined) delete process.env[SWITCH];
+      else process.env[SWITCH] = saved;
+    });
+
+    it('is safe when the switch is unset, empty or blank', () => {
+      expect(DEFAULT_SCOPE).toBe('safe');
+      expect(resolveScope()).toBe('safe');
+      expect(resolveScope(undefined)).toBe('safe');
+      expect(resolveScope('')).toBe('safe');
+      expect(resolveScope('   ')).toBe('safe');
+    });
+
+    it('is still overridden by the environment, and a typo still stops the build', () => {
+      process.env[SWITCH] = 'all';
+      expect(resolveScope()).toBe('all');
+      process.env[SWITCH] = 'OFF';
+      expect(resolveScope()).toBe('off');
+      process.env[SWITCH] = 'half';
+      expect(() => resolveScope()).toThrow(/PYREFLY_ART_WEBP/);
+    });
+
+    it('plans safe when no scope is given: the partly transparent PNGs stay as they are, the rest is derived', async () => {
+      await standardArt();
+      const plan = await planArtDerivation({ publicDir: pub, cacheDir: cache, jobs: 2 });
+      expect(plan.scope).toBe('safe');
+      expect(Object.fromEntries(plan.entries.map((e) => [e.rel, e.kind]))).toEqual({
+        'art/backdrops/sky.png': 'webp',
+        'art/characters/hero/idle.png': 'copy',
+        'art/characters/hero/idle@2x.png': 'webp',
+        'art/pause/x.png': 'copy',
+        'art/portraits/grey.png': 'webp',
+      });
+    });
+
+    it('makes the Vite plugin safe too when it is given no options: no partly transparent 1x master is in the bundle list', async () => {
+      await standardArt();
+      const plugin = pyreflyArtDerive({ cacheDir: cache, jobs: 2 }) as unknown as { config(user: { root: string }): Promise<{ define: Record<string, string> }> };
+      const list = JSON.parse((await plugin.config({ root })).define['__PYREFLY_ART_WEBP__']!) as string[];
+      expect(list).toEqual(['art/backdrops/sky.png', 'art/characters/hero/idle@2x.png', 'art/portraits/grey.png']);
+    });
   });
 
   it('lists the art PNGs a build ships, and not the raw renders and numbered takes', async () => {

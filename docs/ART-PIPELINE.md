@@ -770,9 +770,11 @@ public/art/
 - **What a production build ships (release 38, "r38-bytes").** The PNGs in
   `public/art/` are the approved masters, and they stay exactly as installed:
   hashes, backups and `verify-approved` are of the PNGs. A production build
-  derives a lossless WebP for each art PNG it ships (same decoded pixels,
-  about a third fewer bytes) and ships that instead, so the live site holds
-  `art/characters/tidus/idle.webp` where `public/art` holds `idle.png`; the
+  derives a lossless WebP for each art PNG whose pixels a browser draws the
+  same from it (the default, `safe`: the opaque and binary-alpha art and the 2x
+  masters; same decoded pixels, about a quarter fewer bytes) and ships that
+  instead, so the live site holds `art/characters/tidus/idle.webp` where
+  `public/art` holds `idle.png`; the partly transparent art stays PNG; the
   dev server still serves the PNGs. There is nothing to do when installing art:
   the build encodes a new file once (a few seconds at maximum effort, cached by
   content hash) and a bulk install can warm the cache first with
