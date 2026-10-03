@@ -30,7 +30,7 @@ export const FX_OPTIONS: readonly FxOption[] = ['a', 'b', 'c'];
  * each effect's tuned strength, 1 = as tuned, 0 = none, clamped to 0..3. `all` scales every dial.
  * The README of each option says how far each one goes and where it starts to hurt.
  */
-export const FX_DIALS = ['all', 'bloom', 'shafts', 'haze', 'streaks', 'look', 'rim', 'grain', 'vignette', 'dof', 'halo', 'flare', 'drift', 'lamps', 'weather', 'shadow', 'reflect', 'sway', 'shake', 'sparks', 'impact', 'spells', 'hitstop', 'splash', 'heat', 'orbit'] as const;
+export const FX_DIALS = ['all', 'bloom', 'shafts', 'haze', 'streaks', 'look', 'rim', 'grain', 'vignette', 'dof', 'halo', 'flare', 'drift', 'lamps', 'weather', 'shadow', 'reflect', 'focus', 'sway', 'shake', 'sparks', 'impact', 'spells', 'hitstop', 'splash', 'heat', 'orbit'] as const;
 export type FxDial = (typeof FX_DIALS)[number];
 
 /** Parse `?fxdial=`; unknown names and non-numbers are ignored. */

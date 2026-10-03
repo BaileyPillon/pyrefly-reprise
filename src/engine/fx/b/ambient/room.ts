@@ -4,6 +4,7 @@ import type { QuadFieldSpec } from '../QuadField.ts';
 import type { HazeSpec } from '../Haze.ts';
 import type { ShadowSpec } from '../Figures.ts';
 import type { ReflectSpec } from '../FloorReflection.ts';
+import type { FocusSpec } from '../PlateFocus.ts';
 
 /**
  * Option B "Living Paintings": one room's recipe. Every number here is staging (ours), tuned by
@@ -21,6 +22,20 @@ export interface RoomSpec {
   fields: QuadFieldSpec[];
   haze: HazeSpec[];
   shadow: ShadowSpec;
+  /** A-7 plate defocus: which plate is in focus and the cap on the blur (defaults: the nearest upright plate, `FOCUS_MAX_BIAS`). */
+  focus?: FocusSpec;
+  /**
+   * A-7 plates-only room: the depth plates, the camera drift and the defocus, and nothing else (no lamps, weather, haze, cast
+   * shadows or sway; what may float in a room is the pyrefly canon table's call, not this room's). `lamps`, `fields` and
+   * `haze` stay empty and `shadow` is never read.
+   */
+  platesOnly?: true;
+  /**
+   * Multiplier on this room's camera drift (default 1; the defocus follows the scaled drift, so it still reaches its cap at the extreme).
+   * A room whose nearest plate is a large piece of the painting (Zanarkand's columns) shows the push-pull fill where that plate slides
+   * off what is behind it: a smaller drift keeps the hole small (the card's own risk note: the pan budget is capped per arena).
+   */
+  drift?: number;
   /** Floor reflection; the patch defaults to the room's own lit ground when there is one. */
   reflect?: Omit<ReflectSpec, 'center' | 'size'> & Partial<Pick<ReflectSpec, 'center' | 'size'>>;
   /** Electric arcs anchored on painting pixels (u right, v down), each on its own plate. */
@@ -37,3 +52,11 @@ export const between = (plate: number): number => -90 + plate * 3 + 2;
 export const OVER_GROUND = -45;
 /** Over the figures (near weather). */
 export const NEAR = 40;
+
+/**
+ * Does option B dress this room right now? A plates-only room (A-7) is flat under LOW EFFECTS: no plates, no drift, today's painting
+ * (the older rooms keep option B's own low tier: two plates, particles at 30 percent).
+ */
+export function roomPlays(room: Pick<RoomSpec, 'platesOnly'>, optionOn: boolean, tier: 'full' | 'phone' | 'low'): boolean {
+  return optionOn && !(room.platesOnly && tier === 'low');
+}

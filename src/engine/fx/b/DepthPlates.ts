@@ -13,6 +13,7 @@ import {
   type Group,
   type Object3D,
 } from 'three';
+import { followTransform } from './focusMaths.ts';
 import { cutPlates } from './plateMaths.ts';
 
 /**
@@ -25,8 +26,8 @@ import { cutPlates } from './plateMaths.ts';
  * becomes a file: the plates are built in memory from the loaded painting, and the painting file
  * is never touched.
  *
- * While the plates show, the painting plane and its band layers are hidden; switching option B
- * off puts them back exactly as they were.
+ * While the plates show, the painting plane and its band layers are hidden (a layout with `keepBands` keeps the
+ * scene's own band layers drawn over the plates); switching option B off puts them back exactly as they were.
  *
  * Game case: both (plumbing); the cut is each room's own.
  */
@@ -48,6 +49,12 @@ export interface PlateLayout {
    * floor reaches back to; painting rows beyond it stay on the upright plates.
    */
   floor?: { far: number };
+  /**
+   * Leave the scene's own `backdrop-layer-*` bands visible over the plates (they draw after the plates, render order -80 and up).
+   * Without it the bands are hidden with the painting plane, which changes the resting frame wherever a scene's bands are translucent
+   * (the Farplane's are 0.38 and 0.52): the plates alone are the bare painting, the live frame is the painting plus its bands.
+   */
+  keepBands?: boolean;
 }
 
 const FLOOR_VERT = /* glsl */ `
@@ -128,7 +135,8 @@ export function plateGeometry(group: Group): PlateGeometry | null {
   return {
     width: p.width,
     height: p.height,
-    centreY: main.position.y,
+    // The plane's own height, not where a scene has moved it since (the Farplane lifts it during the colossus links; `follow`).
+    centreY: (main.userData['fxCentreY'] as number | undefined) ?? main.position.y,
     distance: main.position.z,
     camRef: new Vector3(ref[0] - group.position.x, ref[1] - group.position.y, ref[2] - group.position.z),
   };
@@ -156,6 +164,10 @@ export class DepthPlates {
   private thresholds: number[] = [];
   private readonly hidden: Array<{ o: Object3D; was: boolean }> = [];
   private shown = false;
+  private keepBands = false;
+  private paint: Mesh | null = null;
+  /** Each upright plate's own scale (its `k`) and height at rest, for {@link follow}. */
+  private readonly base: Array<{ k: number; y: number } | null> = [];
 
   private constructor(group: Group, geometry: PlateGeometry, zs: number[], floored: boolean) {
     this.group = group;
@@ -192,10 +204,12 @@ export class DepthPlates {
     const plates = cutPlates(paint, depth, w, h, { thresholds: layout.thresholds, soft: layout.soft, blur: layout.blur }, 0.999, rows);
     const zs = [g.distance, ...layout.z];
     const dp = new DepthPlates(group, g, zs, !!layout.floor);
+    dp.keepBands = !!layout.keepBands;
     dp.depth = depth;
     dp.dw = w;
     dp.dh = h;
     dp.thresholds = layout.thresholds;
+    dp.paint = main ?? null;
     plates.forEach((plate, i) => {
       // Rows bottom-up for the GL upload (a data texture is never flipped by the driver).
       const flipped = new Uint8Array(w * h * 4);
@@ -209,6 +223,7 @@ export class DepthPlates {
       tex.needsUpdate = true;
       const onFloor = !!layout.floor && i === plates.length - 1;
       const mesh = onFloor ? DepthPlates.floorMesh(g, tex, layout.floor!.far, group) : DepthPlates.uprightMesh(g, tex, zs[i]!, i > 0);
+      dp.base.push(onFloor ? null : { k: mesh.scale.x, y: mesh.position.y });
       mesh.renderOrder = -90 + i * 3;
       mesh.name = `fx-b-plate-${i}`;
       mesh.visible = false;
@@ -251,6 +266,25 @@ export class DepthPlates {
     return mesh;
   }
 
+  /**
+   * Carry the plates through whatever a scene does to the (hidden) painting plane: its scale about its own centre and a lift.
+   * A plate standing at `k` of the painting's distance from the reference camera takes the same scale times `k` and `k` times
+   * the lift, so the stack still lands on the painting seen from that camera (the Farplane grows and lifts the painting 1.8 times
+   * and 6 units during the colossus links). At rest (scale 1, no lift) nothing moves.
+   */
+  follow(): void {
+    const main = this.paint;
+    if (!main || !this.shown) return;
+    const lift = main.position.y - this.geometry.centreY;
+    this.meshes.forEach((m, i) => {
+      const b = this.base[i];
+      if (!b) return;
+      const t = followTransform(b.k, b.y, main.scale.x, main.scale.y, lift);
+      m.scale.set(t.sx, t.sy, b.k);
+      m.position.y = t.y;
+    });
+  }
+
   /** Plates on (the painting plane and band layers hidden) or off (restored). */
   show(on: boolean): void {
     if (on === this.shown) return;
@@ -258,7 +292,7 @@ export class DepthPlates {
     if (on) {
       this.hidden.length = 0;
       for (const o of this.group.children) {
-        if (o.name === 'backdrop-painting' || o.name.startsWith('backdrop-layer-')) {
+        if (o.name === 'backdrop-painting' || (!this.keepBands && o.name.startsWith('backdrop-layer-'))) {
           this.hidden.push({ o, was: o.visible });
           o.visible = false;
         }

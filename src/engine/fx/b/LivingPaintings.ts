@@ -2,7 +2,8 @@ import { Group, Vector3, type PerspectiveCamera, type Scene } from 'three';
 import { artUrl } from '../../PaintedArt.ts';
 import type { BattleCamera } from '../../BattleCamera.ts';
 import { eyeCandy, type FxTier } from '../EyeCandy.ts';
-import { DRIFT_FFX, DRIFT_FFX2, DriftEnvelope, arcTurn, driftAt, easeWeight } from './CameraDrift.ts';
+import { DriftRig } from './DriftRig.ts';
+import { PlateFocus, focusDial } from './PlateFocus.ts'; // A-7: the plates' defocus, aimed at the party's plate
 import { DepthPlates, paintPoint } from './DepthPlates.ts';
 import { Lamps } from './Lamps.ts';
 import { QuadField } from './QuadField.ts';
@@ -11,6 +12,7 @@ import { Figures } from './Figures.ts';
 import { FloorReflection } from './FloorReflection.ts';
 import { Arcs } from './Arcs.ts';
 import { ROOMS } from './ambient/index.ts';
+import { roomPlays } from './ambient/room.ts';
 import type { RoomSpec } from './ambient/room.ts';
 import { bindMaxMix, releaseMaxMix, updateMaxMix } from '../mix/MaxMix.ts'; // the MAX mix (D-316), every FFX and FFX-2 battle
 
@@ -43,36 +45,35 @@ export interface LivingBind {
 }
 
 const TIER_PARTICLES: Record<FxTier, number> = { full: 1, phone: 0.55, low: 0.3 };
-const TIER_DRIFT: Record<FxTier, number> = { full: 1, phone: 0.6, low: 0.5 };
 
 class Living {
   private readonly a: LivingBind;
   private readonly room: RoomSpec;
   private readonly root = new Group();
-  private readonly env = new DriftEnvelope();
-  private readonly prevRaw = new Vector3();
-  private hasPrev = false;
+  private readonly rig: DriftRig;
   private built: FxTier | null = null;
   private building = false;
   private plates: DepthPlates | null = null;
+  private focus: PlateFocus | null = null;
+  /** Debug only (`__pyrefly.fx.b.pin`): holds the room's clock so a capture lands on one drift phase. */
+  pinned: number | null = null;
   private plateMs = 0;
   private lamps: Lamps[] = [];
   private fields: QuadField[] = [];
   private haze: Haze[] = [];
   private arcs: Arcs | null = null;
   private reflection: FloorReflection | null = null;
-  private readonly figures: Figures;
+  /** Null in a plates-only room (A-7): the room gets the plates, the drift and the defocus, and no cast shadows or sway. */
+  private readonly figures: Figures | null;
   private time = 0;
   /** The weather's clock: it stops under REDUCE MOTION, so the snow and steam hold still. */
   private weatherT = 0;
-  private swayBase: number | null = null;
   private strikeIn = 3;
   private strikeAge = 99;
   private strikes = 0;
   private seed = 11;
   private disposed = false;
   private readonly off: () => void;
-  private driftNow = 0;
 
   constructor(a: LivingBind, room: RoomSpec) {
     this.a = a;
@@ -80,13 +81,14 @@ class Living {
     this.root.name = 'fx-b';
     this.root.visible = false;
     a.scene.add(this.root);
-    this.figures = new Figures(a.scene, this.root, room.shadow);
+    this.rig = new DriftRig(a, room.game, room.drift);
+    this.figures = room.platesOnly ? null : new Figures(a.scene, this.root, room.shadow);
     this.off = eyeCandy.onChange(() => this.sync());
     this.sync();
   }
 
   private get on(): boolean {
-    return eyeCandy.enabled('b');
+    return roomPlays(this.room, eyeCandy.enabled('b'), eyeCandy.tier);
   }
 
   private backdropGroup(): Group | null {
@@ -102,8 +104,8 @@ class Living {
     this.plates?.show(on && eyeCandy.sub('b', 'plates'));
     for (const l of this.lamps) l.mesh.visible = on;
     if (!on) {
-      this.figures.setSway(false);
-      this.restoreSway();
+      this.figures?.setSway(false);
+      this.rig.restoreSway();
     }
   }
 
@@ -127,6 +129,7 @@ class Living {
     }
     const plates = this.plates;
     if (plates) {
+      this.focus = new PlateFocus(plates.meshes, plates.zs.map((z) => plates.geometry.camRef.z - z), plates.floored, room.focus);
       plates.meshes.forEach((m, i) => {
         if (plates.floored && i === plates.meshes.length - 1) return;
         if (room.lamps.warm || room.lamps.cool) this.lamps.push(new Lamps(m, plates.textures[i]!, room.lamps));
@@ -180,6 +183,8 @@ class Living {
   }
 
   private teardownParts(): void {
+    this.focus?.dispose();
+    this.focus = null;
     this.plates?.dispose();
     this.plates = null;
     for (const l of this.lamps) l.dispose();
@@ -199,31 +204,18 @@ class Living {
     return this.seed / 233280;
   }
 
-  /** Reduce motion zeroes the rig's idle sway while option B is on (main never did). */
-  private holdSway(zero: boolean): void {
-    const bc = this.a.battleCamera as unknown as { swayAmplitude: number };
-    if (zero) {
-      if (this.swayBase === null) this.swayBase = bc.swayAmplitude;
-      bc.swayAmplitude = 0;
-    } else this.restoreSway();
-  }
-
-  private restoreSway(): void {
-    if (this.swayBase === null) return;
-    (this.a.battleCamera as unknown as { swayAmplitude: number }).swayAmplitude = this.swayBase;
-    this.swayBase = null;
-  }
-
   update(dt: number): void {
     if (!this.on || this.disposed) return;
     if (this.built !== eyeCandy.tier && !this.building) void this.build(eyeCandy.tier);
     const tier = this.built ?? eyeCandy.tier;
     const rm = eyeCandy.reduceMotion;
     const low = tier === 'low';
-    this.time += dt;
+    this.time = this.pinned ?? this.time + dt;
     const t = this.time;
-    this.holdSway(rm);
-    this.drift(dt, rm, tier);
+    this.plates?.follow();
+    this.rig.holdSway(rm);
+    this.rig.update(dt, t, rm, tier);
+    this.focus?.update(this.rig.offset, this.rig.spec, this.plates?.visible ? focusDial(rm, tier) : 0);
 
     // REDUCE MOTION keeps the room's weather on screen, held still (D, 2026-09-29: "keep light and
     // weather still"); the drift, the sway, the arcs' crackle and the lightning flash stop.
@@ -248,36 +240,8 @@ class Living {
 
     const shadow = low || !eyeCandy.sub('b', 'shadow') ? 0 : eyeCandy.dial('shadow');
     const swayOn = !rm && !low && eyeCandy.sub('b', 'sway');
-    this.figures.setSway(swayOn);
-    this.figures.update(dt, t, shadow, 0.012 * eyeCandy.dial('sway'));
-  }
-
-  private drift(dt: number, rm: boolean, tier: FxTier): void {
-    const cam = this.a.camera;
-    let moving = false;
-    if (dt > 0) {
-      if (this.hasPrev) moving = cam.position.distanceTo(this.prevRaw) / dt > 0.25;
-      this.prevRaw.copy(cam.position);
-      this.hasPrev = true;
-    }
-    const bc = this.a.battleCamera;
-    const rig = this.a.rigName();
-    const allowed = !rm && rig === 'idle' && bc.pushAmount === 0 && bc.rollDeg === 0 && !moving && eyeCandy.sub('b', 'drift');
-    const w = easeWeight(this.env.update(dt, allowed)) * eyeCandy.dial('drift') * TIER_DRIFT[tier];
-    this.driftNow = w;
-    if (w <= 0) return;
-    const d = driftAt(this.time, this.room.game === 'ffx2' ? DRIFT_FFX2 : DRIFT_FFX, w);
-    const q = cam.quaternion;
-    const right = new Vector3(1, 0, 0).applyQuaternion(q);
-    const up = new Vector3(0, 1, 0).applyQuaternion(q);
-    const fwd = new Vector3(0, 0, -1).applyQuaternion(q);
-    cam.position.addScaledVector(right, d.x).addScaledVector(up, d.y).addScaledVector(fwd, d.z);
-    const look = bc.getRig(rig)?.lookAt;
-    const dist = look ? cam.position.distanceTo(look instanceof Vector3 ? look : new Vector3(...look)) : 11;
-    const turn = arcTurn(d.x, d.y, dist);
-    cam.rotateY(turn.yaw);
-    cam.rotateX(turn.pitch);
-    cam.updateMatrixWorld();
+    this.figures?.setSway(swayOn);
+    this.figures?.update(dt, t, shadow, 0.012 * eyeCandy.dial('sway'));
   }
 
   private lightning(dt: number, rm: boolean): void {
@@ -313,8 +277,9 @@ class Living {
       haze: this.haze.length,
       arcs: !!this.arcs,
       reflection: !!this.reflection,
-      figures: this.figures.count,
-      drift: Math.round(this.driftNow * 100) / 100,
+      figures: this.figures?.count ?? 0,
+      drift: Math.round(this.rig.now * 100) / 100,
+      focus: this.focus ? { plate: this.focus.focusPlate, amounts: this.focus.amounts.map((a) => Math.round(a * 100) / 100), ...this.focus.state } : null,
       strikes: this.strikes,
       time: Math.round(this.time * 100) / 100,
     };
@@ -323,8 +288,8 @@ class Living {
   dispose(): void {
     this.disposed = true;
     this.off();
-    this.restoreSway();
-    this.figures.dispose();
+    this.rig.restoreSway();
+    this.figures?.dispose();
     this.teardownParts();
     this.root.removeFromParent();
   }
@@ -366,6 +331,11 @@ export function releaseLivingScene(): void {
   pending = null;
   current?.dispose();
   current = null;
+}
+
+/** Debug only: hold option B's clock at `t` seconds (null releases it), and with it the drift phase. */
+export function pinLivingClock(t: number | null): void {
+  if (current) current.pinned = t;
 }
 
 /** `__pyrefly.fx.snapshot().b`. */
