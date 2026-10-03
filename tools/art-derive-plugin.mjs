@@ -2,9 +2,10 @@
  * The Vite plugin that puts `tools/art-derive.mjs` into every production build (release 38, "r38-bytes").
  *
  * A build by any route (`npm run build`, `tools/deploy-pages.mjs`'s `vite build --outDir dist-release`, a critic's
- * `vite build --outDir dist-gate`) therefore ships the same art: lossless WebP for each master PNG that it makes smaller, the
- * PNG recompressed where the WebP is not smaller, the masters in `public/art` untouched. The dev server and `vite preview` do
- * not load this plugin (`apply: 'build'`), so dev serves the PNGs and `ArtShipped.ts` maps every URL to itself.
+ * `vite build --outDir dist-gate`) therefore ships the same art: a lossless WebP for each master that every decoder draws the same
+ * from it (opaque, or alpha only 0 and 255 with no colour under alpha 0; the default scope `exact`), every other master as a PNG
+ * recompressed at maximum effort with its pixels proved identical, the masters in `public/art` untouched. The dev server and `vite
+ * preview` do not load this plugin (`apply: 'build'`), so dev serves the PNGs and `ArtShipped.ts` maps every URL to itself.
  *
  * Two hooks, in the order a build runs them:
  *   - `config`: plans the derivation BEFORE the bundler starts (encoding what the cache lacks, which is slow only once per
@@ -16,8 +17,8 @@
  *     `transformIndexHtml`: Vite writes `imagesrcset` after the post hooks and a rewrite made there is lost (the reference
  *     audit, `tools/art-verify.mjs`, caught exactly that).
  *
- * `PYREFLY_ART_WEBP=off|partial|safe|all` picks what is derived (default safe); `off` makes the plugin a no-op (the PNGs ship
- * as before): the switch for a live problem.
+ * `PYREFLY_ART_WEBP=off|partial|safe|exact|all` picks what is derived (default `exact`); `off` makes the plugin a no-op (the PNGs
+ * ship as before): the switch for a live problem.
  *
  * Game case: both (shared build plumbing).
  */

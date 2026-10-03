@@ -6,11 +6,14 @@ export interface ArtVerifyResult {
   webp: number;
   png: number;
   decoded: number;
+  /** Whether the decoder-independence test ran (on by default). */
+  exact: boolean;
   problems: string[];
   ms: number;
 }
 
-export function verifyShippedArt(options: { distDir: string; publicDir: string; jobs?: number }): Promise<ArtVerifyResult>;
+/** `exact` (default true): a shipped WebP must be of a master that is opaque, or only alpha 0 and 255 with no colour under alpha 0. */
+export function verifyShippedArt(options: { distDir: string; publicDir: string; jobs?: number; exact?: boolean }): Promise<ArtVerifyResult>;
 export function artNamesIn(text: string): string[];
 
 export interface ArtAuditResult {

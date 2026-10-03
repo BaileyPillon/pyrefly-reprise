@@ -42,8 +42,9 @@ describe('applying the plan to a build, and the gates over the result', () => {
     expect(record.version).toBe(1);
     expect(record.files.map((f) => f.path)).toEqual(plan.entries.map((e) => e.rel));
     expect(record.files.every((f) => f.kind === 'webp' && f.shipped?.endsWith('.webp'))).toBe(true);
-    const v = await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2 });
-    expect(v).toMatchObject({ ok: true, checked: 5, webp: 5, png: 0, decoded: 5, problems: [] });
+    // These fixtures are partly transparent: this test is about the gate's mechanics, the exactness test is in art-exact.test.ts.
+    const v = await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2, exact: false });
+    expect(v).toMatchObject({ ok: true, checked: 5, webp: 5, png: 0, decoded: 5, exact: false, problems: [] });
   });
 
   it('the gate fails a WebP that does not decode to the master, a missing file, a doubled file and a stale record', async () => {
@@ -59,7 +60,7 @@ describe('applying the plan to a build, and the gates over the result', () => {
     cpSync(join(pub, 'art/portraits/grey.png'), join(out, 'art/portraits/grey.png'));
     // 4. neither
     rmSync(join(out, 'art/pause/x.webp'));
-    const v = await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2 });
+    const v = await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2, exact: false });
     expect(v.ok).toBe(false);
     const text = v.problems.join('\n');
     expect(text).toMatch(/art\/backdrops\/sky\.png: the shipped WebP decodes to different pixels/);
@@ -76,9 +77,9 @@ describe('applying the plan to a build, and the gates over the result', () => {
     const file = join(out, DERIVED_REPORT);
     const record = JSON.parse(readFileSync(file, 'utf8')) as { files: Array<Record<string, unknown>> };
     writeFileSync(file, JSON.stringify({ ...record, files: [...record.files, { path: 'art/ghost.png', kind: 'copy', master: 1, bytes: 1 }] }));
-    expect((await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2 })).problems.join('\n')).toMatch(/art\/ghost\.png: art\/derived\.json lists a master that is not in public\/art/);
+    expect((await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2, exact: false })).problems.join('\n')).toMatch(/art\/ghost\.png: art\/derived\.json lists a master that is not in public\/art/);
     rmSync(file);
-    expect((await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2 })).problems.join('\n')).toMatch(/art\/derived\.json is missing from a build that ships 5 derived WebP/);
+    expect((await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2, exact: false })).problems.join('\n')).toMatch(/art\/derived\.json is missing from a build that ships 5 derived WebP/);
   });
 
   it('a build with the switch off passes the same gate with the PNGs byte for byte', async () => {

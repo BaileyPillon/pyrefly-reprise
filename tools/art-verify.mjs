@@ -3,9 +3,16 @@
  *
  * **verifyShippedArt: pixel identity.** For every art PNG in `public/`, the build output holds exactly one of the master PNG or
  * a lossless WebP of it, and the file it holds decodes to the master's pixels: the sha256 of the decoded 8-bit RGBA bytes
- * (and the width and height) are equal. A kept PNG must be the master's bytes or decode to the same pixels. Both sides are
- * decoded again here, from the files, never trusted from a cache or from `art/derived.json`; the record is checked against what
- * was found. This is the gate the deploy runs on the build it is about to publish.
+ * (all four channels, the colour under alpha 0 included, and the width and height) are equal. A kept PNG must be the master's bytes
+ * or decode to the same pixels, and a recompressed one must not carry a colour or orientation chunk its master lacks. Both sides
+ * are decoded again here, from the files, never trusted from a cache or from `art/derived.json`; the record is checked against
+ * what was found. This is the gate the deploy runs on the build it is about to publish.
+ *
+ * **Exactness (on by default; `exact: false` opts out).** Equal decoded pixels are not enough: a browser that premultiplies a decoded
+ * WebP and a decoded PNG differently draws them differently wherever alpha is not 255 (the independent check of 2026-10-03 found a
+ * 2x master up to 124 in 255 apart through the game's matte, and WebKit dropping the colour under alpha 0 of a WebP). A WebP may
+ * therefore ship only for a master that is opaque, or has only alpha 0 and 255 with nothing hidden under alpha 0
+ * (`decoderIndependent`, `art-image-facts.mjs`), judged from the decoded master, not from the record.
  *
  * **auditArtReferences: no reference to a file that is not there.** The art is reached by name from code, styles, pages and
  * data. After the derivation the PNG names of the derived files are no longer files, so the audit reads every shipped text
@@ -29,6 +36,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { extname, join, relative, sep } from 'node:path';
 
 import { DERIVED_REPORT, listMasterPngs, pixelsOf, pool, webpName } from './art-derive-lib.mjs';
+import { COLOUR_CHUNKS, decoderIndependent, pngChunkTypes } from './art-image-facts.mjs';
 
 const walk = (root) => {
   const out = [];
@@ -46,7 +54,7 @@ const walk = (root) => {
 const samePixels = (a, b) => a.hash === b.hash && a.width === b.width && a.height === b.height;
 
 /** The pixel-identity gate over a build output; see the file header. */
-export async function verifyShippedArt({ distDir, publicDir, jobs = 4 } = {}) {
+export async function verifyShippedArt({ distDir, publicDir, jobs = 4, exact = true } = {}) {
   const t0 = Date.now();
   const problems = [];
   const masters = listMasterPngs(publicDir);
@@ -69,10 +77,19 @@ export async function verifyShippedArt({ distDir, publicDir, jobs = 4 } = {}) {
     let master = null;
     if (hasWebp || !masterBytes.equals(shippedBytes)) {
       // Decode both: the proof is the pixels, not a hash of a file.
-      master = await pixelsOf(m.full);
+      master = await pixelsOf(m.full, { facts: hasWebp });
       const got = await pixelsOf(shipped);
       n.decoded++;
       if (!samePixels(master, got)) problems.push(`${m.rel}: the shipped ${hasWebp ? 'WebP' : 'PNG'} decodes to different pixels than the master (${got.width}x${got.height} ${got.hash.slice(0, 12)} against ${master.width}x${master.height} ${master.hash.slice(0, 12)})`);
+    }
+    if (hasWebp && exact && !decoderIndependent(master.alpha, master.hidden)) {
+      const why = master.alpha === 'translucent' ? 'has partly transparent pixels' : `keeps colour under ${master.hidden} fully transparent texel(s)`;
+      problems.push(`${m.rel}: shipped as a WebP, but the master ${why}, so a decoder that premultiplies draws the WebP and the PNG differently (a build with PYREFLY_ART_WEBP=exact ships it as a PNG)`);
+    }
+    if (hasPng && !masterBytes.equals(shippedBytes)) {
+      const had = new Set(pngChunkTypes(masterBytes));
+      const gained = pngChunkTypes(shippedBytes).filter((t) => COLOUR_CHUNKS.includes(t) && !had.has(t));
+      if (gained.length) problems.push(`${m.rel}: the recompressed PNG carries ${gained.join(', ')}, which the master does not`);
     }
     if (record) {
       if (!rec) problems.push(`${m.rel}: art/derived.json has no entry for it`);
@@ -83,6 +100,9 @@ export async function verifyShippedArt({ distDir, publicDir, jobs = 4 } = {}) {
           master ??= await pixelsOf(m.full);
           if (rec.rgba !== master.hash) problems.push(`${m.rel}: art/derived.json records pixels that are not the master's`);
         }
+        if (hasWebp && ((rec.alpha !== undefined && rec.alpha !== master.alpha) || (rec.hidden !== undefined && rec.hidden !== master.hidden))) {
+          problems.push(`${m.rel}: art/derived.json records ${rec.alpha}/${rec.hidden} for its transparency, the master is ${master.alpha}/${master.hidden}`);
+        }
       }
     }
   });
@@ -90,7 +110,7 @@ export async function verifyShippedArt({ distDir, publicDir, jobs = 4 } = {}) {
   const names = new Set(masters.map((m) => m.rel));
   for (const f of recorded.keys()) if (!names.has(f)) problems.push(`${f}: art/derived.json lists a master that is not in public/art`);
   problems.sort();
-  return { ok: problems.length === 0, checked: masters.length, webp: n.webp, png: n.png, decoded: n.decoded, problems, ms: Date.now() - t0 };
+  return { ok: problems.length === 0, checked: masters.length, webp: n.webp, png: n.png, decoded: n.decoded, exact, problems, ms: Date.now() - t0 };
 }
 
 const ART_NAME = String.raw`(?<![\w-])art\/[A-Za-z0-9_@.\-/]+?\.(?:png|webp)(?![\w])`;

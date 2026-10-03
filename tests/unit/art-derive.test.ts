@@ -11,8 +11,10 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   DEFAULT_SCOPE,
   alphaClassOf,
+  alphaInfoOf,
   applyPlan,
   chooseKind,
+  decoderIndependent,
   inScope,
   listMasterPngs,
   pixelsOf,
@@ -43,6 +45,7 @@ describe('what is derived', () => {
     expect(resolveScope('all')).toBe('all');
     expect(resolveScope('Partial')).toBe('partial');
     expect(resolveScope('SAFE')).toBe('safe');
+    expect(resolveScope(' Exact ')).toBe('exact');
     expect(resolveScope('off')).toBe('off');
     expect(() => resolveScope('half')).toThrow(/PYREFLY_ART_WEBP/);
     // Phase 1: the 2x masters and the backdrops, nothing else.
@@ -60,10 +63,18 @@ describe('what is derived', () => {
     expect(inScope('art/portraits/tidus.png', 'safe', null)).toBe(false);
     expect(inScope('art/characters/ixion/idle@2x.png', 'safe', 'translucent')).toBe(true);
     expect(inScope('art/characters/ixion/idle.png', 'safe', 'translucent')).toBe(false);
+    // `exact` decides by what is in the picture and by nothing else: no name, not even a 2x master, buys a WebP for a picture a decoder can draw differently.
+    expect(inScope('art/portraits/tidus.png', 'exact', 'opaque', 0)).toBe(true);
+    expect(inScope('art/portraits/tidus.png', 'exact', 'binary', 0)).toBe(true);
+    expect(inScope('art/portraits/tidus.png', 'exact', 'binary', 3)).toBe(false);
+    expect(inScope('art/portraits/tidus.png', 'exact', 'translucent', 0)).toBe(false);
+    expect(inScope('art/characters/ixion/idle@2x.png', 'exact', 'translucent', 0)).toBe(false);
+    expect(inScope('art/backdrops/gagazet.png', 'exact', null, null)).toBe(false);
+    expect(inScope('art/portraits/tidus.png', 'exact', 'binary', null)).toBe(false);
     expect(webpName('art/characters/tidus/idle@2x.png')).toBe('art/characters/tidus/idle@2x.webp');
   });
 
-  describe('the default is safe (critic check of 2026-10-03: Bailey was promised that not a pixel changes)', () => {
+  describe('the default is exact (independent check of 2026-10-03: a WebP only where every decoder draws it the same as the PNG)', () => {
     const SWITCH = 'PYREFLY_ART_WEBP';
     const saved = process.env[SWITCH];
     beforeEach(() => {
@@ -74,41 +85,43 @@ describe('what is derived', () => {
       else process.env[SWITCH] = saved;
     });
 
-    it('is safe when the switch is unset, empty or blank', () => {
-      expect(DEFAULT_SCOPE).toBe('safe');
-      expect(resolveScope()).toBe('safe');
-      expect(resolveScope(undefined)).toBe('safe');
-      expect(resolveScope('')).toBe('safe');
-      expect(resolveScope('   ')).toBe('safe');
+    it('is exact when the switch is unset, empty or blank', () => {
+      expect(DEFAULT_SCOPE).toBe('exact');
+      expect(resolveScope()).toBe('exact');
+      expect(resolveScope(undefined)).toBe('exact');
+      expect(resolveScope('')).toBe('exact');
+      expect(resolveScope('   ')).toBe('exact');
     });
 
     it('is still overridden by the environment, and a typo still stops the build', () => {
       process.env[SWITCH] = 'all';
       expect(resolveScope()).toBe('all');
+      process.env[SWITCH] = 'safe';
+      expect(resolveScope()).toBe('safe');
       process.env[SWITCH] = 'OFF';
       expect(resolveScope()).toBe('off');
       process.env[SWITCH] = 'half';
       expect(() => resolveScope()).toThrow(/PYREFLY_ART_WEBP/);
     });
 
-    it('plans safe when no scope is given: the partly transparent PNGs stay as they are, the rest is derived', async () => {
+    it('plans exact when no scope is given: a WebP only for the pictures every decoder draws the same, the partly transparent art recompressed as PNG', async () => {
       await standardArt();
       const plan = await planArtDerivation({ publicDir: pub, cacheDir: cache, jobs: 2 });
-      expect(plan.scope).toBe('safe');
+      expect(plan.scope).toBe('exact');
       expect(Object.fromEntries(plan.entries.map((e) => [e.rel, e.kind]))).toEqual({
-        'art/backdrops/sky.png': 'webp',
-        'art/characters/hero/idle.png': 'copy',
-        'art/characters/hero/idle@2x.png': 'webp',
-        'art/pause/x.png': 'copy',
-        'art/portraits/grey.png': 'webp',
+        'art/backdrops/sky.png': 'webp', // opaque
+        'art/characters/hero/idle.png': 'png', // partly transparent, with colour under alpha 0
+        'art/characters/hero/idle@2x.png': 'png', // a 2x master gets no exception
+        'art/pause/x.png': 'png',
+        'art/portraits/grey.png': 'webp', // opaque
       });
     });
 
-    it('makes the Vite plugin safe too when it is given no options: no partly transparent 1x master is in the bundle list', async () => {
+    it('makes the Vite plugin exact too when it is given no options: only opaque and clean binary-alpha masters are in the bundle list', async () => {
       await standardArt();
       const plugin = pyreflyArtDerive({ cacheDir: cache, jobs: 2 }) as unknown as { config(user: { root: string }): Promise<{ define: Record<string, string> }> };
       const list = JSON.parse((await plugin.config({ root })).define['__PYREFLY_ART_WEBP__']!) as string[];
-      expect(list).toEqual(['art/backdrops/sky.png', 'art/characters/hero/idle@2x.png', 'art/portraits/grey.png']);
+      expect(list).toEqual(['art/backdrops/sky.png', 'art/portraits/grey.png']);
     });
   });
 
@@ -136,6 +149,21 @@ describe('what a browser draws the same', () => {
     expect(alphaClassOf(Buffer.alloc(0))).toBe('opaque');
   });
 
+  it('counts the colour left under fully transparent pixels, which a decoder that premultiplies throws away', () => {
+    const px = (...rgba: number[][]) => Buffer.from(rgba.flat());
+    expect(alphaInfoOf(px([10, 20, 30, 255], [0, 0, 0, 0]))).toEqual({ alpha: 'binary', transparent: 1, hidden: 0 });
+    expect(alphaInfoOf(px([10, 20, 30, 255], [0, 0, 1, 0], [255, 0, 0, 0], [0, 0, 0, 0]))).toEqual({ alpha: 'binary', transparent: 3, hidden: 2 });
+    expect(alphaInfoOf(px([10, 20, 30, 255], [9, 9, 9, 128], [5, 5, 5, 0]))).toEqual({ alpha: 'translucent', transparent: 1, hidden: 1 });
+    expect(alphaInfoOf(px([1, 2, 3, 255]))).toEqual({ alpha: 'opaque', transparent: 0, hidden: 0 });
+    // Only opaque, or binary with nothing hidden, is drawn the same by every decoder; an unknown count is not a yes.
+    expect(decoderIndependent('opaque', 0)).toBe(true);
+    expect(decoderIndependent('binary', 0)).toBe(true);
+    expect(decoderIndependent('binary', 1)).toBe(false);
+    expect(decoderIndependent('translucent', 0)).toBe(false);
+    expect(decoderIndependent('binary', null)).toBe(false);
+    expect(decoderIndependent(null, null)).toBe(false);
+  });
+
   it('the safe phase derives the opaque and binary-alpha masters and the 2x masters, and keeps the translucent PNGs as they are', async () => {
     await standardArt();
     put('art/portraits/cutout.png', await png(Buffer.from(Array.from({ length: 24 * 24 * 4 }, (_, i) => (i % 4 === 3 ? ((i >> 2) % 2 ? 255 : 0) : (i * 7) & 255))), 24, 24, 4)); // binary alpha
@@ -151,7 +179,7 @@ describe('what a browser draws the same', () => {
     // Nothing was encoded for a master the phase leaves alone, and the alpha classes are remembered by hash.
     const again = await planArtDerivation({ publicDir: pub, cacheDir: cache, scope: 'safe', jobs: 2 });
     expect(again.counts).toEqual(plan.counts);
-    expect(readdirSync(join(cache, 'alpha'), { recursive: true }).filter((f) => String(f).endsWith('.txt'))).toHaveLength(6);
+    expect(readdirSync(join(cache, 'alpha'), { recursive: true }).filter((f) => String(f).endsWith('.json'))).toHaveLength(6);
   });
 });
 
@@ -225,7 +253,7 @@ describe('the derivation proves what it writes', () => {
     }
     const out = fakeBuild();
     applyPlan(out, plan);
-    const v = await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2 });
+    const v = await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2, exact: false }); // `all` ships partly transparent art as WebP, which the exactness test refuses
     expect(v.problems).toEqual([]);
     expect(v.ok).toBe(true);
   });

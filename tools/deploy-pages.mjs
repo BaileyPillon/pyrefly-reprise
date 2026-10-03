@@ -528,14 +528,14 @@ async function main() {
 
   // Release 38 (r38-bytes): the painted art ships as lossless WebP derived from the PNG masters. Prove it from the files about to
   // be published, not from the cache that made them: every shipped WebP decodes to its master's pixels (RGBA, sha256), the build
-  // holds exactly one of the PNG and its WebP, and no page, stylesheet or data file names an art file the build left out.
+  // holds exactly one of the PNG and its WebP, no page, stylesheet or data file names an art file the build left out, and every shipped WebP is of a master that every decoder draws the same (opaque, or alpha only 0 and 255 with no colour under alpha 0: verifyShippedArt's default `exact`).
   // The names the bundle builds at run time are covered by `node tools/art-play-audit.mjs --dir <this build>` (the focused review).
   log('art: pixel identity of every shipped WebP against its master PNG, and every reference to the art');
   const artIdentity = await verifyShippedArt({ distDir: DIST, publicDir: join(ROOT, 'public') });
   log(`art identity ${artIdentity.ok ? 'PASS' : 'FAIL'}: ${artIdentity.checked} masters (${artIdentity.webp} shipped as WebP, ${artIdentity.png} as PNG, ${artIdentity.decoded} compared pixel for pixel) in ${(artIdentity.ms / 1000).toFixed(0)} s`);
   if (!artIdentity.ok) {
     for (const p of artIdentity.problems.slice(0, 25)) log(`  ${p}`);
-    fail(`${artIdentity.problems.length} shipped art file(s) are not their master's pixels or are missing (node tools/art-derive.mjs verify --dir dist-release); set PYREFLY_ART_WEBP=off to ship the PNGs as before`);
+    fail(`${artIdentity.problems.length} shipped art file(s) are not their master's pixels, are missing, or are a WebP of art that a decoder could draw differently (node tools/art-derive.mjs verify --dir dist-release); the default PYREFLY_ART_WEBP=exact makes none of these, PYREFLY_ART_WEBP=off ships the PNGs as before`);
   }
   const artRefs = auditArtReferences(DIST);
   for (const line of formatAudit(artRefs).split(/\r?\n/)) log(line);

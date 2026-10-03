@@ -7,21 +7,23 @@
  * `public/art/**.png` never change; a build ships a lossless WebP for each master it makes smaller (the PNG recompressed
  * where it does not), every one proved to decode to the master's pixels.
  *
- *   node tools/art-derive.mjs plan   [--scope all|safe|partial|off] [--public public] [--cache <dir>] [--jobs N]
+ *   node tools/art-derive.mjs plan   [--scope exact|safe|all|partial|off] [--public public] [--cache <dir>] [--jobs N]
  *        what every art PNG becomes, encoding (and proving) whatever the cache lacks; prints the sizes
  *   node tools/art-derive.mjs warm   [same]
  *        plan with a larger worker pool (runs itself again with UV_THREADPOOL_SIZE = jobs): the first run on a cold cache
  *        encodes about 900 files at maximum effort, about 5 minutes for 54 of them at --jobs 6, roughly 30 for all
- *   node tools/art-derive.mjs verify --dir <build output> [--public public] [--jobs N]
- *        the pixel-identity gate: every shipped WebP (and kept PNG) decodes to its master's pixels; exit 1 on any difference
+ *   node tools/art-derive.mjs verify --dir <build output> [--public public] [--jobs N] [--allow-inexact]
+ *        the pixel-identity gate: every shipped WebP (and recompressed PNG) decodes to its master's pixels, and every WebP is of a master
+ *        that every decoder draws the same (opaque, or alpha only 0 and 255 with nothing under alpha 0); exit 1 on any difference.
+ *        `--allow-inexact` drops the second test, for a build made with PYREFLY_ART_WEBP=all|safe|partial that is being measured
  *   node tools/art-derive.mjs audit  --dir <build output> [--baseline <an earlier build of the same sources>]
  *        the reference audit: nothing names an art file the build does not hold; exit 1 on any
  *
- * `PYREFLY_ART_WEBP=off|partial|safe|all` is the switch (default safe): `off` ships the PNGs exactly as before; `partial` derives
- * only the 2x masters and the backdrops (the first phase); `safe` everything but the art with partly transparent pixels that
- * the page may draw through the DOM (where a browser can premultiply a WebP and a PNG a hair differently: 1 in 255 on those
- * pixels); `all` everything. `PYREFLY_ART_CACHE` moves the cache (default
- * `D:/Tools/pyrefly-art-cache`). The tool never deletes from `public/`.
+ * `PYREFLY_ART_WEBP=off|partial|safe|exact|all` is the switch (default `exact`): `off` ships the PNGs exactly as before; `exact` ships
+ * a WebP only for a master every decoder draws the same from it (opaque, or alpha only 0 and 255 with no colour under alpha 0:
+ * premultiplying is then the identity) and ships every other master as a PNG recompressed at maximum effort, each proved to decode to
+ * the master's RGBA in all four channels; `partial`, `safe` and `all` are not decoder independent and stay for measurement.
+ * `PYREFLY_ART_CACHE` moves the cache (default `D:/Tools/pyrefly-art-cache`). The tool never deletes from `public/`.
  *
  * Game case: both (shared build plumbing; no game content).
  */
@@ -63,8 +65,8 @@ async function main(argv) {
     if (!option(argv, '--dir')) throw new Error(`${command} needs --dir <build output>`);
     const dir = resolve(option(argv, '--dir'));
     if (command === 'verify') {
-      const r = await verifyShippedArt({ distDir: dir, publicDir, jobs });
-      console.log(`art-derive verify: ${r.ok ? 'PASS' : 'FAIL'}: ${r.checked} masters checked (${r.webp} WebP, ${r.png} PNG, ${r.decoded} pixel-compared), ${r.problems.length} problem(s), ${(r.ms / 1000).toFixed(0)} s`);
+      const r = await verifyShippedArt({ distDir: dir, publicDir, jobs, exact: !argv.includes('--allow-inexact') });
+      console.log(`art-derive verify${r.exact ? ' (exact)' : ' (--allow-inexact)'}: ${r.ok ? 'PASS' : 'FAIL'}: ${r.checked} masters checked (${r.webp} WebP, ${r.png} PNG, ${r.decoded} pixel-compared), ${r.problems.length} problem(s), ${(r.ms / 1000).toFixed(0)} s`);
       for (const p of r.problems) console.log(`  PROBLEM ${p}`);
       process.exitCode = r.ok ? 0 : 1;
     } else {

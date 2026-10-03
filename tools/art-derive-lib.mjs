@@ -2,51 +2,59 @@
  * Derived lossless WebP for the shipped painted art (release 38, "r38-bytes").
  *
  * Bailey, 2026-10-03: "I'll go with all your recommendations", adopting ask 1 of the visual options: make room under the
- * 800 MB line (D-332, D-344; the strict 800,000,000 bytes of shipped files) without changing a pixel. The measurement is
- * `D:/Tools/pyrefly-scratch/2026-10-03/visual-options/bytes/README.md`: lossless WebP is about 32 percent smaller than the PNG
- * masters with every decoded RGBA pixel identical; tighter PNG compression buys only about 4 percent.
+ * 800 MB line (D-332, D-344; the strict 800,000,000 bytes of shipped files) without changing a pixel, with "lossless WebP copies of
+ * the shipped art (the PNG originals in the project stay as they are, and a check proves every shipped copy matches its original
+ * pixel for pixel) ... tighter PNG compression". The measurement is
+ * `D:/Tools/pyrefly-scratch/2026-10-03/visual-options/bytes/README.md`: lossless WebP is about 32 percent smaller than the PNG masters
+ * with every decoded RGBA pixel identical.
  *
  * **The masters never change.** `public/art/**.png` stays what is approved, hashed (`docs/target/approved-hashes.json`) and
- * backed up (`D:/Tools/pyrefly-art-backup`). This tool only DERIVES: for every art PNG the build ships it writes a lossless
- * WebP into a content-addressed cache (`PYREFLY_ART_CACHE`, default `D:/Tools/pyrefly-art-cache`), and `applyPlan` copies the
- * result into a build's output folder, dropping the PNG there. A file whose WebP is not smaller keeps its PNG, recompressed at
- * maximum effort (pixel-identical) when that is smaller still. `art/derived.json` in the output records every mapping.
+ * backed up (`D:/Tools/pyrefly-art-backup`). This tool only DERIVES: for the art PNGs the build ships it writes a lossless WebP
+ * (or, for the PNGs that stay PNG, the same picture recompressed) into a content-addressed cache (`PYREFLY_ART_CACHE`, default
+ * `D:/Tools/pyrefly-art-cache`), and `applyPlan` (`art-derive-apply.mjs`) copies the result into a build's output folder, dropping
+ * the PNG there when a WebP replaced it. `art/derived.json` in the output records every mapping.
  *
- * Every derived file is proved at encode time (decoded RGBA of the WebP equals the master's, by sha256) and again, from the
+ * **What ships by default is `exact`** (the independent check of 2026-10-03 found that `safe` was not): a master ships as a WebP only
+ * if every decoder draws it the same from the WebP as from the PNG, which is when premultiplying alpha is the identity on all of its
+ * pixels: it is opaque, or its alpha is only 0 and 255 with no colour left under alpha 0 (`art-image-facts.mjs` says why). Every other
+ * master ships as a PNG, recompressed at maximum effort with the colour under alpha 0 kept, each proved to decode to the master's RGBA
+ * in all four channels. So the pixels are the same on every path and in every engine, not only in the Chromium that was measured.
+ *
+ * Every derived file is proved at encode time (decoded RGBA of the file equals the master's, by sha256) and again, from the
  * files themselves, by `verify` (`tools/art-verify.mjs`), which the deploy runs on the build it is about to publish.
  *
  * The command line is `tools/art-derive.mjs` (plan, warm, verify, audit); the Vite plugin is `tools/art-derive-plugin.mjs`.
  *
- * `PYREFLY_ART_WEBP=off|partial|safe|all` is the switch (default safe, set by the critic's check of 2026-10-03 because Bailey was
- * promised that not a pixel changes; `inScope` says what each one derives): `off` ships the
- * PNGs exactly as before; `partial` the 2x masters and the backdrops (the first phase); `safe` everything a browser draws
- * identically from the WebP on every path; `all` everything. The cache key holds the encoder and library versions, so a changed
- * setting never reuses an old file. The tool never deletes: it copies, and `applyPlan` only removes the PNG it replaced from a
- * BUILD OUTPUT folder (never from `public/`).
+ * `PYREFLY_ART_WEBP=off|partial|safe|exact|all` is the switch (default `exact`; `inScope` says what each one derives): `off` ships the
+ * PNGs exactly as before. `partial`, `safe` and `all` are not decoder independent (the deploy's gate refuses them) and stay for
+ * measurement. The cache key holds the encoder and library versions, so a changed setting never reuses an old file. The tool never
+ * deletes: it copies, and `applyPlan` only removes the PNG it replaced from a BUILD OUTPUT folder (never from `public/`).
  *
  * Game case: both (shared build plumbing; no game content).
  */
 import { createHash } from 'node:crypto';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, statSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { cpus } from 'node:os';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import process from 'node:process';
 
+import { DERIVED_REPORT, applyPlan, derivedReport, shippedList, webpName } from './art-derive-apply.mjs';
+import { ALPHA_CLASSES, alphaClassOf, alphaInfoOf, decoderIndependent, pngChunkTypes, stripAncillaryChunks } from './art-image-facts.mjs';
 import { isUnshippedPublicFile } from './dist-filter.mjs';
 
-export const SCOPES = Object.freeze(['off', 'partial', 'safe', 'all']);
-/** What ships when nothing is set: `safe` (D-351 promised that not a pixel changes; `all` can move a composited edge pixel by 1 in 255). */
-export const DEFAULT_SCOPE = 'safe';
+export { ALPHA_CLASSES, DERIVED_REPORT, alphaClassOf, alphaInfoOf, applyPlan, decoderIndependent, derivedReport, pngChunkTypes, shippedList, webpName };
+
+export const SCOPES = Object.freeze(['off', 'partial', 'safe', 'exact', 'all']);
+/** What ships when nothing is set: `exact` (a WebP only where every decoder draws it the same as the PNG; D-351 promised that not a pixel changes). */
+export const DEFAULT_SCOPE = 'exact';
 export const SCOPE_ENV = 'PYREFLY_ART_WEBP';
 export const CACHE_ENV = 'PYREFLY_ART_CACHE';
 export const DEFAULT_CACHE = 'D:/Tools/pyrefly-art-cache';
-/** Where `applyPlan` writes the record of what was derived (inside the build output, so it ships and is hashed). */
-export const DERIVED_REPORT = 'art/derived.json';
 /** libwebp lossless at its maximum search (`quality` 100 is the exhaustive one), `exact` keeps the colour under alpha 0. */
 export const ENCODER = Object.freeze({ id: 'webp-lossless-q100-e6-exact', options: Object.freeze({ lossless: true, quality: 100, effort: 6, exact: true }) });
-/** The PNG pass for a file whose WebP is not smaller: maximum effort, no palette (so no colour is lost). */
-const PNG_OPTIONS = Object.freeze({ compressionLevel: 9, adaptiveFiltering: true, palette: false });
+/** The PNG pass: maximum effort, adaptive filtering, no palette (so no colour is lost), and no metadata chunks (`stripAncillaryChunks`). */
+export const PNG_ENCODER = Object.freeze({ id: 'png-l9-adaptive-nopalette-nometa', options: Object.freeze({ compressionLevel: 9, adaptiveFiltering: true, palette: false }) });
 const WEBP_MAX_SIDE = 16383;
 const ART_2X = /^art\/characters\/[^/]+\/[^/]+@2x\.png$/;
 const PARTIAL = [ART_2X, /^art\/backdrops\/.+\.png$/];
@@ -65,7 +73,7 @@ export function getSharp() {
   return sharpModule;
 }
 
-/** `safe` (default), `all`, `partial` or `off`, from the argument or `PYREFLY_ART_WEBP`; unset or blank is {@link DEFAULT_SCOPE}. */
+/** `exact` (default), `safe`, `all`, `partial` or `off`, from the argument or `PYREFLY_ART_WEBP`; unset or blank is {@link DEFAULT_SCOPE}. */
 export function resolveScope(value = process.env[SCOPE_ENV]) {
   const v = String(value ?? DEFAULT_SCOPE).trim().toLowerCase() || DEFAULT_SCOPE;
   if (!SCOPES.includes(v)) throw new Error(`${SCOPE_ENV}=${value}: expected one of ${SCOPES.join(', ')}`);
@@ -75,40 +83,26 @@ export function resolveScope(value = process.env[SCOPE_ENV]) {
 export const resolveCache = (value = process.env[CACHE_ENV]) => resolve(value || DEFAULT_CACHE);
 
 /**
- * Is this master (`art/<...>.png`, forward slashes) derived under `scope`? `alpha` is `alphaClassOf` of its pixels, which only
- * `safe` reads.
+ * Is this master (`art/<...>.png`, forward slashes) derived as a WebP under `scope`? `alpha` is its transparency class and `hidden`
+ * the number of fully transparent texels that still carry colour (`alphaInfoOf` of its pixels), which `safe` and `exact` read.
  *
  *   off      nothing: every PNG ships as before.
- *   partial  the 2x masters and the backdrops (the first phase of release 38).
- *   safe     every master the browser draws the same from a WebP as from the PNG on any path: the opaque and the binary-alpha
- *            ones (premultiplying a pixel of alpha 0 or 255 is exact for every decoder), plus the 2x masters, which are only ever
- *            textures (WebGL reads the straight RGBA back out, bit for bit). What stays PNG is the art with partly transparent
- *            pixels that the page may also draw through the DOM or a 2D canvas, where Chromium's WebP decoder premultiplies with
- *            different rounding than its PNG decoder and a pixel can differ by 1 in 255.
- *   all      every master (not the default: the same decoded RGBA, and the same texture, bit for bit, but a composited edge pixel
- *            of the partly transparent art can move by 1 in 255 through the DOM or a 2D canvas).
+ *   partial  the 2x masters and the backdrops (the first phase of release 38; not exact).
+ *   safe     the opaque and binary-alpha masters and every 2x master (not exact, and not the default: the 2x masters are partly
+ *            transparent, and one of them is read back through the matte's 2D canvas, where the WebP and the PNG came out up to 124
+ *            in 255 apart; the colour under alpha 0 of a WebP is also lost in WebKit).
+ *   exact    the default: only the masters every decoder draws the same, opaque ones and binary-alpha ones with nothing hidden under
+ *            alpha 0 (`decoderIndependent`). Unknown facts are a no. Every other master stays a PNG.
+ *   all      every master (not exact: the same decoded RGBA and the same texture in Chromium, but a composited edge pixel of the
+ *            partly transparent art can move through the DOM or a 2D canvas).
  */
-export function inScope(rel, scope, alpha = null) {
+export function inScope(rel, scope, alpha = null, hidden = null) {
   if (scope === 'off') return false;
   if (scope === 'all') return true;
+  if (scope === 'exact') return decoderIndependent(alpha, hidden);
   if (scope === 'safe') return alpha === 'opaque' || alpha === 'binary' || ART_2X.test(rel);
   return PARTIAL.some((re) => re.test(rel));
 }
-
-/** `opaque` (every alpha 255), `binary` (only 0 and 255) or `translucent` (any other alpha), from raw 8-bit RGBA bytes. */
-export function alphaClassOf(rgba) {
-  let zero = false;
-  for (let i = 3; i < rgba.length; i += 4) {
-    const a = rgba[i];
-    if (a === 255) continue;
-    if (a !== 0) return 'translucent';
-    zero = true;
-  }
-  return zero ? 'binary' : 'opaque';
-}
-
-/** `art/a/b.png` -> `art/a/b.webp`. */
-export const webpName = (rel) => rel.replace(/\.png$/, '.webp');
 
 /**
  * Every art PNG a build ships, from `public/`: all `public/art/**.png` except what `dist-filter.mjs` never ships (raw renders,
@@ -132,22 +126,13 @@ export function listMasterPngs(publicDir) {
   return out.sort((a, b) => (a.rel < b.rel ? -1 : 1));
 }
 
-/** The chunk types of a PNG before its first IDAT: what could change colour (`iCCP`, `gAMA`, `cHRM`) is visible here. */
-export function pngChunkTypes(buf) {
-  const types = [];
-  for (let i = 8; i + 8 <= buf.length; ) {
-    const type = buf.toString('latin1', i + 4, i + 8);
-    if (type === 'IDAT') break;
-    types.push(type);
-    i += 12 + buf.readUInt32BE(i);
-  }
-  return types;
-}
-
-/** Decoded RGBA of an image (a Buffer or a path), as a size and the sha256 of the raw 8-bit RGBA bytes. */
-export async function pixelsOf(input) {
+/**
+ * Decoded RGBA of an image (a Buffer or a path), as a size and the sha256 of the raw 8-bit RGBA bytes: all four channels of every
+ * pixel, the colour under alpha 0 included. `{ facts: true }` adds its transparency facts (`alphaInfoOf`).
+ */
+export async function pixelsOf(input, { facts = false } = {}) {
   const { data, info } = await getSharp()(input).toColourspace('srgb').ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-  return { width: info.width, height: info.height, channels: info.channels, hash: sha256(data) };
+  return { width: info.width, height: info.height, channels: info.channels, hash: sha256(data), ...(facts ? alphaInfoOf(data) : {}) };
 }
 
 /** Why a master is kept as it is instead of derived (null: it can be derived). */
@@ -163,7 +148,7 @@ export async function refusalFor(png) {
 
 /**
  * What a master becomes, from the sizes of its candidates: the WebP when it is smaller than the master; else the PNG
- * recompressed at maximum effort (`recompressedBytes`, null when it was not tried) when that is smaller; else the master as it
+ * recompressed at maximum effort (`recompressedBytes`, null when it was not tried) when that is smaller still; else the master as it
  * is. A tie keeps the master, so no file ever ships larger than the one that is approved.
  */
 export function chooseKind(masterBytes, webpBytes, recompressedBytes = null) {
@@ -186,15 +171,19 @@ export async function pool(items, jobs, fn) {
   return out;
 }
 
-/** The cache folder's name: the encoder, and the library versions it ran on. */
-export const cacheTag = () => {
-  const v = getSharp().versions;
-  return `${ENCODER.id}-sharp${v.sharp}-webp${v.webp}`;
-};
+const versions = () => getSharp().versions;
+/** The WebP cache folder's name: the encoder, and the library versions it ran on. */
+export const cacheTag = () => `${ENCODER.id}-sharp${versions().sharp}-webp${versions().webp}`;
+/** The PNG cache folder's name: the PNG pass, and the libraries (libvips, libpng, zlib-ng) it ran on. */
+export const pngCacheTag = () => `${PNG_ENCODER.id}-sharp${versions().sharp}-vips${versions().vips}-png${versions().png}-zlib${versions()['zlib-ng'] ?? versions().zlib ?? 'x'}`;
 
 const cachePaths = (cacheDir, sha) => {
   const dir = join(cacheDir, cacheTag(), sha.slice(0, 2));
   return { dir, webp: join(dir, `${sha}.webp`), png: join(dir, `${sha}.png`), meta: join(dir, `${sha}.json`) };
+};
+const pngCachePaths = (cacheDir, sha) => {
+  const dir = join(cacheDir, pngCacheTag(), sha.slice(0, 2));
+  return { dir, png: join(dir, `${sha}.png`), meta: join(dir, `${sha}.json`) };
 };
 
 /** Write through a temporary name, so a second build sharing the cache never reads a half-written file. */
@@ -205,19 +194,33 @@ function writeAtomic(file, data) {
   renameSync(tmp, file);
 }
 
-/** The alpha class of a master (`alphaClassOf`), remembered by the master's hash, so it is read once however the encoder changes. */
-async function alphaFor(master, cacheDir) {
+/** The transparency facts of a master (`alphaInfoOf`), remembered by the master's hash, so they are read once however the encoder changes. */
+async function alphaInfoFor(master, cacheDir) {
   const png = readFileSync(master.full);
-  const file = join(cacheDir, 'alpha', sha256(png).slice(0, 2), `${sha256(png)}.txt`);
+  const sha = sha256(png);
+  const file = join(cacheDir, 'alpha', sha.slice(0, 2), `${sha}.json`);
   if (existsSync(file)) {
-    const known = readFileSync(file, 'utf8').trim();
-    if (['opaque', 'binary', 'translucent'].includes(known)) return known;
+    try {
+      const known = JSON.parse(readFileSync(file, 'utf8'));
+      if (known.v === 1 && ALPHA_CLASSES.includes(known.alpha) && Number.isInteger(known.hidden)) return known;
+    } catch {
+      /* unreadable: read the picture again */
+    }
   }
-  const { data } = await getSharp()(png).toColourspace('srgb').ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-  const klass = alphaClassOf(data);
-  writeAtomic(file, klass);
-  return klass;
+  const px = await pixelsOf(png, { facts: true });
+  const facts = { v: 1, alpha: px.alpha, transparent: px.transparent, hidden: px.hidden };
+  writeAtomic(file, JSON.stringify(facts));
+  return facts;
 }
+
+/** Throws unless `buf` decodes to exactly the master's picture: the size and every byte of all four channels (by sha256), colour under alpha 0 included. */
+export async function proveSame(rel, buf, what, master0) {
+  const d = await pixelsOf(buf);
+  if (d.hash !== master0.hash || d.width !== master0.width || d.height !== master0.height) throw new Error(`${rel}: the ${what} does not decode to the master's pixels; nothing was written`);
+}
+
+/** The PNG pass over a master's bytes: maximum effort, then the metadata chunks libvips adds dropped. The caller proves the pixels. */
+const encodePng = async (png) => stripAncillaryChunks(await getSharp()(png).png(PNG_ENCODER.options).toBuffer());
 
 /** One master's decision: `{ kind: 'webp' | 'png' | 'copy', shippedBytes, rgba, file }`, from the cache or freshly encoded and proved. */
 async function deriveOne(master, cacheDir) {
@@ -238,19 +241,13 @@ async function deriveOne(master, cacheDir) {
     writeAtomic(c.meta, JSON.stringify(meta));
     return { ...base, ...meta, file: null, cached: false };
   }
-  const prove = async (buf, what) => {
-    const d = await pixelsOf(buf);
-    if (d.hash !== master0.hash || d.width !== master0.width || d.height !== master0.height) {
-      throw new Error(`${master.rel}: the ${what} does not decode to the master's pixels; nothing was written`);
-    }
-  };
   const webp = await getSharp()(png).webp(ENCODER.options).toBuffer();
-  await prove(webp, 'lossless WebP');
+  await proveSame(master.rel, webp, 'lossless WebP', master0);
   let kind = chooseKind(png.length, webp.length);
   let again = null;
   if (kind === 'copy') {
-    again = await getSharp()(png).png(PNG_OPTIONS).toBuffer();
-    await prove(again, 'recompressed PNG');
+    again = await encodePng(png);
+    await proveSame(master.rel, again, 'recompressed PNG', master0);
     kind = chooseKind(png.length, webp.length, again.length);
   }
   const shipped = kind === 'webp' ? webp : kind === 'png' ? again : null;
@@ -262,16 +259,50 @@ async function deriveOne(master, cacheDir) {
 }
 
 /**
+ * A master that stays a PNG under `exact`: the same picture at maximum PNG effort, proved to decode to the master's RGBA in all four
+ * channels (the colour under alpha 0 included) before it is cached, and shipped only when it is smaller; else the master's own bytes.
+ * Returns what `deriveOne` does (`kind` is `png` or `copy`).
+ */
+async function recompressOne(master, cacheDir) {
+  const png = readFileSync(master.full);
+  const sha = sha256(png);
+  const c = pngCachePaths(cacheDir, sha);
+  const base = { rel: master.rel, masterBytes: png.length, masterSha256: sha };
+  const hit = existsSync(c.meta) ? JSON.parse(readFileSync(c.meta, 'utf8')) : null;
+  if (hit && hit.masterBytes === png.length) {
+    const file = hit.kind === 'png' ? c.png : null;
+    if (file === null || (existsSync(file) && statSync(file).size === hit.shippedBytes)) return { ...base, ...hit, file, cached: true };
+  }
+  const t0 = Date.now();
+  const refused = await refusalFor(png);
+  const master0 = await pixelsOf(png);
+  let meta = { masterBytes: png.length, kind: 'copy', shippedBytes: png.length, rgba: master0.hash, ...(refused ? { note: refused } : {}) };
+  let again = null;
+  if (!refused) {
+    again = await encodePng(png);
+    await proveSame(master.rel, again, 'recompressed PNG', master0);
+    if (again.length < png.length) meta = { masterBytes: png.length, kind: 'png', shippedBytes: again.length, rgba: master0.hash, ms: Date.now() - t0 };
+  }
+  if (meta.kind === 'png') writeAtomic(c.png, again);
+  writeAtomic(c.meta, JSON.stringify(meta));
+  return { ...base, ...meta, file: meta.kind === 'png' ? c.png : null, cached: false };
+}
+
+/**
  * The plan: what every art PNG of `publicDir` becomes in a build, encoding (and proving) what the cache lacks.
- * `entries[i]`: `{ rel, masterBytes, kind, shippedRel, shippedBytes, rgba, file }`; `kind` is `webp` (ships as `shippedRel`),
- * `png` (ships recompressed from `file`) or `copy` (ships as it is, out of scope or nothing smaller).
+ * `entries[i]`: `{ rel, masterBytes, kind, shippedRel, shippedBytes, rgba, file, alpha?, hidden? }`; `kind` is `webp` (ships as `shippedRel`),
+ * `png` (ships recompressed from `file`) or `copy` (ships as it is, out of scope or nothing smaller). Under `exact` every master that
+ * is not a WebP is recompressed (`png`), unless that is not smaller.
  */
 export async function planArtDerivation({ publicDir, cacheDir = resolveCache(), scope = resolveScope(), jobs = Math.min(4, Math.max(1, cpus().length >> 1)), log = () => {} } = {}) {
   const masters = listMasterPngs(publicDir);
-  // Only `safe` looks inside the pictures to decide; the other phases decide by name.
-  const alphas = scope === 'safe' ? await pool(masters, jobs, (m) => alphaFor(m, cacheDir)) : [];
-  const alphaOf = new Map(masters.map((m, i) => [m.rel, alphas[i] ?? null]));
-  const wanted = masters.filter((m) => inScope(m.rel, scope, alphaOf.get(m.rel)));
+  // Only `safe` and `exact` look inside the pictures to decide; the other phases decide by name.
+  const reads = scope === 'safe' || scope === 'exact';
+  const facts = reads ? await pool(masters, jobs, (m) => alphaInfoFor(m, cacheDir)) : [];
+  const factsOf = new Map(masters.map((m, i) => [m.rel, facts[i] ?? null]));
+  const wanted = masters.filter((m) => inScope(m.rel, scope, factsOf.get(m.rel)?.alpha ?? null, factsOf.get(m.rel)?.hidden ?? null));
+  const asWebp = new Set(wanted.map((m) => m.rel));
+  const rest = scope === 'exact' ? masters.filter((m) => !asWebp.has(m.rel)) : [];
   // A derived name that is already a file of its own (`art/pause/x.webp` beside `x.png`) would be silently replaced.
   for (const m of wanted) {
     const to = webpName(m.rel);
@@ -279,73 +310,28 @@ export async function planArtDerivation({ publicDir, cacheDir = resolveCache(), 
   }
   let done = 0;
   const t0 = Date.now();
-  const results = await pool(wanted, jobs, async (m) => {
-    const r = await deriveOne(m, cacheDir);
+  const run = (items, one) => pool(items, jobs, async (m) => {
+    const r = await one(m, cacheDir);
     done++;
-    if (!r.cached) log(`[art-derive] ${done}/${wanted.length} ${m.rel}: ${r.masterBytes} -> ${r.shippedBytes} (${r.kind}${r.note ? `, ${r.note}` : ''}) ${r.ms ?? 0} ms`);
-    else if (done % 200 === 0) log(`[art-derive] ${done}/${wanted.length} (from the cache)`);
+    if (!r.cached) log(`[art-derive] ${done}/${wanted.length + rest.length} ${m.rel}: ${r.masterBytes} -> ${r.shippedBytes} (${r.kind}${r.note ? `, ${r.note}` : ''}) ${r.ms ?? 0} ms`);
+    else if (done % 200 === 0) log(`[art-derive] ${done}/${wanted.length + rest.length} (from the cache)`);
     return r;
   });
+  const results = [...(await run(wanted, deriveOne)), ...(await run(rest, recompressOne))];
   const byRel = new Map(results.map((r) => [r.rel, r]));
   const entries = masters.map((m) => {
     const r = byRel.get(m.rel);
-    const alpha = alphaOf.get(m.rel) ?? null;
-    if (!r) return { rel: m.rel, masterBytes: m.bytes, kind: 'copy', shippedRel: m.rel, shippedBytes: m.bytes, rgba: null, file: null, ...(alpha ? { alpha } : {}) };
-    return { rel: m.rel, masterBytes: r.masterBytes, kind: r.kind, shippedRel: r.kind === 'webp' ? webpName(m.rel) : m.rel, shippedBytes: r.shippedBytes, rgba: r.rgba, file: r.file, ...(alpha ? { alpha } : {}), ...(r.note ? { note: r.note } : {}) };
+    const f = factsOf.get(m.rel);
+    const seen = f ? { alpha: f.alpha, hidden: f.hidden } : {};
+    if (!r) return { rel: m.rel, masterBytes: m.bytes, kind: 'copy', shippedRel: m.rel, shippedBytes: m.bytes, rgba: null, file: null, ...seen };
+    return { rel: m.rel, masterBytes: r.masterBytes, kind: r.kind, shippedRel: r.kind === 'webp' ? webpName(m.rel) : m.rel, shippedBytes: r.shippedBytes, rgba: r.rgba, file: r.file, ...seen, ...(r.note ? { note: r.note } : {}) };
   });
   const sum = (f) => entries.filter(f).reduce((n, e) => n + e.shippedBytes, 0);
   const masterBytes = entries.reduce((n, e) => n + e.masterBytes, 0);
   const total = sum(() => true);
   return {
-    scope, cacheDir, encoder: cacheTag(), entries, ms: Date.now() - t0,
+    scope, cacheDir, encoder: cacheTag(), ...(scope === 'exact' ? { pngEncoder: pngCacheTag() } : {}), entries, ms: Date.now() - t0,
     counts: { webp: entries.filter((e) => e.kind === 'webp').length, png: entries.filter((e) => e.kind === 'png').length, copy: entries.filter((e) => e.kind === 'copy').length },
     bytes: { masters: masterBytes, shipped: total, saved: masterBytes - total },
   };
-}
-
-/** The masters shipped as WebP, sorted: the list `ArtShipped.ts` reads as `__PYREFLY_ART_WEBP__`. */
-export const shippedList = (plan) => plan.entries.filter((e) => e.kind === 'webp').map((e) => e.rel).sort();
-
-/** The record shipped as `art/derived.json`: no clock, so a build of the same inputs is the same bytes. */
-export function derivedReport(plan) {
-  return {
-    version: 1, tool: 'tools/art-derive.mjs', encoder: plan.encoder, scope: plan.scope, counts: plan.counts, bytes: plan.bytes,
-    note: 'Every art PNG the build ships, and what it shipped as. kind webp: the master PNG is not shipped, `shipped` is its lossless WebP; `rgba` is the sha256 of the decoded 8-bit RGBA of the master, which the shipped file decodes to (proved at build and by tools/art-derive.mjs verify).',
-    files: plan.entries.map((e) => ({ path: e.rel, kind: e.kind, ...(e.kind === 'webp' ? { shipped: e.shippedRel } : {}), master: e.masterBytes, bytes: e.shippedBytes, ...(e.rgba ? { rgba: e.rgba } : {}), ...(e.alpha ? { alpha: e.alpha } : {}), ...(e.note ? { note: e.note } : {}) })),
-  };
-}
-
-/**
- * Put the plan into a build output: each derived WebP copied from the cache and its PNG removed from `outDir` (never from
- * `public/`), each recompressed PNG replacing its copy, and the record written. A master the build did not copy (no PNG at
- * `outDir/<rel>`) is left alone. Returns what was applied.
- */
-export function applyPlan(outDir, plan) {
-  const applied = { webp: 0, png: 0, skipped: [] };
-  for (const e of plan.entries) {
-    const dst = join(outDir, e.rel);
-    if (e.kind === 'copy') continue;
-    if (!existsSync(dst)) {
-      applied.skipped.push(e.rel);
-      continue;
-    }
-    if (e.kind === 'webp') {
-      const to = join(outDir, e.shippedRel);
-      mkdirSync(dirname(to), { recursive: true });
-      copyFileSync(e.file, to);
-      if (statSync(to).size !== e.shippedBytes) throw new Error(`${e.shippedRel}: the copy in the build is not the cached file`);
-      rmSync(dst, { force: true });
-      applied.webp++;
-    } else {
-      copyFileSync(e.file, dst);
-      applied.png++;
-    }
-  }
-  if (plan.entries.length === 0) return applied; // a checkout without the art (it is gitignored): nothing derived, nothing to record
-  const kept = new Set(applied.skipped);
-  const report = derivedReport({ ...plan, entries: plan.entries.filter((e) => !kept.has(e.rel)) });
-  const file = join(outDir, DERIVED_REPORT);
-  mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, `${JSON.stringify(report)}\n`);
-  return applied;
 }

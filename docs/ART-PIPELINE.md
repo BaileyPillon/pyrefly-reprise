@@ -770,15 +770,19 @@ public/art/
 - **What a production build ships (release 38, "r38-bytes").** The PNGs in
   `public/art/` are the approved masters, and they stay exactly as installed:
   hashes, backups and `verify-approved` are of the PNGs. A production build
-  derives a lossless WebP for each art PNG whose pixels a browser draws the
-  same from it (the default, `safe`: the opaque and binary-alpha art and the 2x
-  masters; same decoded pixels, about a quarter fewer bytes) and ships that
-  instead, so the live site holds `art/characters/tidus/idle.webp` where
-  `public/art` holds `idle.png`; the partly transparent art stays PNG; the
+  decides by the pixels of each one (the default, `exact`): a master that is
+  opaque, or whose alpha is only 0 and 255 with no colour left under alpha 0,
+  ships as a lossless WebP (the same decoded pixels, 27 to 31 percent fewer bytes,
+  and the same on every decoder, because premultiplying such a picture is the
+  identity), so the live site holds `art/characters/tidus/idle.webp` where
+  `public/art` holds `idle.png`; every other master, the 2x ones included, ships
+  as a PNG recompressed at maximum effort with its pixels proved identical. The
   dev server still serves the PNGs. There is nothing to do when installing art:
   the build encodes a new file once (a few seconds at maximum effort, cached by
   content hash) and a bulk install can warm the cache first with
-  `node tools/art-derive.mjs warm`. A deliberately one-colour image must be
+  `node tools/art-derive.mjs warm`. A painting cut out with soft edges, or with
+  colour left under its transparent pixels, ships as a PNG on purpose: a WebP of
+  it would not be the same on every engine. A deliberately one-colour image must be
   listed under both spellings in `critic/policy.json` `intentionalFlatImages`.
   Details: [handoff/r38-bytes.md](handoff/r38-bytes.md).
 

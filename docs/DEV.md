@@ -179,40 +179,43 @@ from a live build, open `assets/index-<hash>.js.map` from that commit's folder
 (DevTools "Add source map", or `source-map` in node). The release-36 maps were
 22,775,896 bytes of a site held to 800,000,000 (D-332).
 
-**The painted art ships as lossless WebP (release 38, "r38-bytes"; Bailey
-2026-10-03; both games, shared build plumbing; handoff `docs/handoff/r38-bytes.md`).**
-`public/art/**.png` stays the approved masters (hashes, backups and
-`verify-approved` unchanged). Every production build, by any route (`npm run
-build`, the deploy, a critic's `vite build --outDir dist-gate`), derives a
-lossless WebP for each master that a browser draws the same from it (the default, `safe`: the opaque and
-binary-alpha art, plus the 2x masters) and ships that instead of the PNG; the partly transparent art stays PNG, byte
-for byte (a master whose WebP is not smaller keeps its PNG, recompressed at maximum effort when that helps), through the
-`pyrefly-art-derive` plugin in `vite.config.ts` (`tools/art-derive-plugin.mjs`,
-library `tools/art-derive-lib.mjs`). The dev server and the unit suite still serve
-the PNGs. `artUrl` (`src/engine/PaintedArt.ts`) hands the browser the file that
-ships (`src/engine/ArtShipped.ts`, fed by the constant `__PYREFLY_ART_WEBP__` the
-build inserts), and the few functions that read an art URL apart take either form
-(`tests/unit/art-url-sources.test.ts` pins the two rules: build art URLs with
-`artUrl`, match them through `logicalArtUrl`). Encoding at maximum effort is slow
-once and cached by content hash in `PYREFLY_ART_CACHE` (default
-`D:/Tools/pyrefly-art-cache`; safe to delete, it refills): `node tools/art-derive.mjs
-warm --jobs 8` fills it ahead of a build, and a new painting adds seconds to the
-next build with nothing to remember. `PYREFLY_ART_WEBP=off|partial|safe|all`
-(default `safe`: the partly transparent art stays PNG, because a composited edge pixel of it can move by 1 in 255 from a
-WebP) is the switch; `off` ships the PNGs exactly as before. The proofs,
-each of which the deploy or a reviewer can re-run on a built folder:
-`node tools/art-derive.mjs verify --dir <build>` (every shipped WebP decodes to its
-master's RGBA, sha256, both sides decoded again from the files; the deploy runs it),
+**The painted art ships as lossless WebP where that changes no pixel on any decoder (release 38,
+"r38-bytes"; Bailey 2026-10-03; both games, shared build plumbing; handoff `docs/handoff/r38-bytes.md`).**
+`public/art/**.png` stays the approved masters (hashes, backups and `verify-approved` unchanged). Every
+production build, by any route (`npm run build`, the deploy, a critic's `vite build --outDir dist-gate`),
+decides by the pixels of each master (the default, `exact`): a master that is opaque, or whose alpha is only 0
+and 255 with no colour left under alpha 0, ships as a lossless WebP (premultiplying such a picture is the
+identity, so a lossless WebP and its PNG are the same on every path in every engine); every other master, the 2x
+ones included, ships as a PNG recompressed at maximum effort, its decoded RGBA (colour under alpha 0 included)
+proved identical before it is cached, and its own bytes where that is not smaller. Why: a browser may premultiply a
+decoded image, and for a pixel of partial alpha that differs from decoder to decoder (the independent check of
+2026-10-03 found Yunalesca's 2x master up to 124 in 255 apart once the matte reads it back through a 2D canvas),
+and WebKit drops the colour under alpha 0 of a WebP. It is done by the `pyrefly-art-derive` plugin in
+`vite.config.ts` (`tools/art-derive-plugin.mjs`, library `tools/art-derive-lib.mjs`, what is in a picture
+`tools/art-image-facts.mjs`). The dev server and the unit suite still serve the PNGs. `artUrl`
+(`src/engine/PaintedArt.ts`) hands the browser the file that ships (`src/engine/ArtShipped.ts`, fed by the
+constant `__PYREFLY_ART_WEBP__` the build inserts), and the few functions that read an art URL apart take either
+form (`tests/unit/art-url-sources.test.ts` pins the two rules: build art URLs with `artUrl`, match them through
+`logicalArtUrl`). Encoding at maximum effort is slow once and cached by content hash in `PYREFLY_ART_CACHE`
+(default `D:/Tools/pyrefly-art-cache`; safe to delete, it refills): `node tools/art-derive.mjs warm --jobs 8`
+fills it ahead of a build, and a new painting adds seconds to the next build with nothing to remember (a new
+painting with soft edges ships as a recompressed PNG, a clean cut-out as a WebP; nothing to decide).
+`PYREFLY_ART_WEBP=off|partial|safe|exact|all` (default `exact`) is the switch; `off` ships the PNGs exactly as
+before; `partial`, `safe` and `all` are not decoder independent, so the deploy's pixel gate refuses them and
+they stay for measurement. The proofs, each of which the deploy or a reviewer can re-run on a built folder:
+`node tools/art-derive.mjs verify --dir <build>` (every shipped file decodes to its master's RGBA in all four
+channels, sha256, both sides decoded again from the files, and every shipped WebP is of a master that is opaque or
+clean binary alpha, judged from the master; the deploy runs it),
 `node tools/art-derive.mjs audit --dir <build> [--baseline <earlier build>]` (no page,
 stylesheet or data file names an art file the build left out; the deploy runs it),
 `node tools/art-play-audit.mjs --dir <build>` (a headless Chromium plays the title,
 chapter select, every chapter's opening and the pause screen and fails on any
 missing file, console error or art warning) and `node tools/art-browser-identity.mjs
---dir <build>` (the same pixels as Chromium decodes them, as a WebGL texture and on
-a 2D canvas); what it costs is `node tools/art-decode-cost.mjs --dir <build>` (decode time
+--dir <build> --screen-exact` (the same pixels as Chromium decodes them, as a WebGL texture and on
+a 2D canvas, over black and over white, with no file exempt); what it costs is `node tools/art-decode-cost.mjs --dir <build>` (decode time
 of the WebP against the PNG) and `node tools/art-load-timing.mjs --before <url> --after <url>`
 (the battle's first load against a PNG build). The build writes `art/derived.json` (every
-mapping, with the master's pixel hash) beside the art.
+mapping, with the master's pixel hash and transparency) beside the art.
 
 **Every live build must be evaluated by the critic — no exceptions — and the
 depth of the review follows what changed** (critic policy v2, approved by
