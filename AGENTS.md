@@ -30,6 +30,7 @@ Jules, ...). `CLAUDE.md` only imports it. Keep it short; details live in `docs/`
 | What each live build still owes the critic, and which issues have stalled | `npm run critic:status` |
 | Which review a change needs, and why | `node tools/critic-plan.mjs` (`--paths a,b` to ask about files) |
 | Settle a review obligation with a report | `node tools/critic-clear.mjs --report <report.json>` (never delete a marker) |
+| Prove a build's art: derived WebP equals the PNG masters, nothing names a missing file | `node tools/art-derive.mjs verify --dir <build>` and `audit --dir <build>`; `node tools/art-play-audit.mjs --dir <build>` plays it in headless Chromium |
 | Release | `npm run deploy` (read "Release" first) |
 
 Everything else (ports, base path, the screenshot flags, the `window.__pyrefly`
@@ -49,7 +50,7 @@ debug API that plays a chapter to an outcome from the console) is in
 | `src/app/screens` | Title, chapter select, party prep, pause, results | |
 | `src/story` | Cutscene DSL and scripts | `research/writing-bible.md` |
 | `src/audio`, `public/audio`, `tools/audio` | Prerendered sampled music + SFX, synth fallback | [AUDIO-GUIDE](docs/AUDIO-GUIDE.md), [THEMES](docs/audio/THEMES.md) |
-| `public/art/` | Painted PNGs. **Gitignored on main**, local only, backed up to `D:\Tools\pyrefly-art-backup` | |
+| `public/art/` | Painted PNGs, the approved masters. **Gitignored on main**, local only, backed up to `D:\Tools\pyrefly-art-backup`. A production build ships a lossless WebP derived from each (`tools/art-derive-lib.mjs`, `src/engine/ArtShipped.ts`; masters, hashes and dev are unchanged): build art URLs with `artUrl`, read them back with `logicalArtUrl` | [r38-bytes](docs/handoff/r38-bytes.md) |
 | `critic/` | `RUBRIC.md` (policy v2: verdicts, schedule, one score, gates), `policy.json` (the same rules as data, enforced by `tools/critic-*.mjs`), `CHECKS.md` (CHK-001 to CHK-024, B1 to B4), `runner/` (the review workflows), `pending/` `cleared/` `reviews/` `rounds/` `artifacts/` `ledger.json` (obligations and evidence) | `RUBRIC.md` §4 and §10 before any release |
 | `docs/handoff/<track>.md` | One file per finished or in-flight track | the one for your area |
 | `docs/PRODUCT-BRIEF.md` | North star, the priority order when goals collide, what "finished" means, what is out of scope (draft until Bailey approves it) | before proposing or planning anything |

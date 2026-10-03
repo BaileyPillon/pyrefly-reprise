@@ -767,6 +767,18 @@ public/art/
   <the keeper's seed>`) to place the chosen render under `public/art/`. The
   redirect is loud on stderr and the sidecar records `candidateOf` when it
   fires, so a chosen render's origin is never a mystery.
+- **What a production build ships (release 38, "r38-bytes").** The PNGs in
+  `public/art/` are the approved masters, and they stay exactly as installed:
+  hashes, backups and `verify-approved` are of the PNGs. A production build
+  derives a lossless WebP for each art PNG it ships (same decoded pixels,
+  about a third fewer bytes) and ships that instead, so the live site holds
+  `art/characters/tidus/idle.webp` where `public/art` holds `idle.png`; the
+  dev server still serves the PNGs. There is nothing to do when installing art:
+  the build encodes a new file once (a few seconds at maximum effort, cached by
+  content hash) and a bulk install can warm the cache first with
+  `node tools/art-derive.mjs warm`. A deliberately one-colour image must be
+  listed under both spellings in `critic/policy.json` `intentionalFlatImages`.
+  Details: [handoff/r38-bytes.md](handoff/r38-bytes.md).
 
 ---
 
