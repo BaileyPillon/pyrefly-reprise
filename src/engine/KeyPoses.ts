@@ -19,6 +19,7 @@
 import type { CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import type { LungeContact } from './ContactBeat.ts';
+import { odApex, odKeyHolds } from './KeySlots.ts';
 
 /** How long the follow-through holds at full reach before the strike goes home, ms at timeScale 1. */
 export const FOLLOW_BEAT_MS = 180;
@@ -43,7 +44,8 @@ export function impactAtApex(ctx: EventCtx, actorId: CombatantId, contact: Lunge
     hold: contact.hold,
     reached: () => {
       contact.reached();
-      if (ctx.actingId === actorId) ctx.stage.actor(actorId)?.setPose('attack');
+      // r37 slot (FFX-2): a move with its own key painting puts that up at the apex instead of the impact painting.
+      if (ctx.actingId === actorId && !odApex(ctx, actorId)) ctx.stage.actor(actorId)?.setPose('attack');
     },
   };
 }
@@ -54,6 +56,7 @@ export function impactAtApex(ctx: EventCtx, actorId: CombatantId, contact: Lunge
  */
 export function followThrough(ctx: EventCtx, attackerId: CombatantId): number {
   if (!keysOn(ctx) || ctx.stage?.paints?.(attackerId, 'follow') !== true) return 0;
+  if (odKeyHolds(ctx, attackerId)) return 0; // r37 slot: the move's own key painting stays up
   ctx.stage.actor(attackerId)?.setPose('follow');
   return FOLLOW_BEAT_MS;
 }
