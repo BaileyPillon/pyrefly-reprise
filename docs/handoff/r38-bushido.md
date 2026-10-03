@@ -23,11 +23,14 @@ behaviour is unchanged.
    what research/ already transcribes (D3).
 3. **Square button.** Shooting Star needs one and the HUD input watcher had none: keyboard `K`, pad button 2.
    The overlay draws it as a square chip; the route harness key table maps it to `k`.
-4. **Swordplay zone and speed per tier.** The overlay now reads `zonePercent` and `travelMs`
-   (`swordplayGeometry` in `src/ui/ffx/minigames/logic.ts`); the abilities publish each tier's pair. The
-   ordering (narrower, faster, shorter timer as the Overdrive gets stronger) is sourced; the numbers are
-   `ffx-combat-core.md` §5.3's own `[estimate]` shipping table (22 % / 1 400 ms, 16 % / 1 150, 12 % / 900,
-   9 % / 700). Before, every tier played a 12.2 % zone at 1 059 ms a crossing.
+4. **Swordplay zone and speed per tier: wiring only, numbers owed (repair cycle).** The overlay reads
+   `zonePercent` and `travelMs` (`swordplayGeometry` in `src/ui/ffx/minigames/logic.ts`); the abilities publish each
+   tier's pair from `SWORDPLAY_TUNING`. The ordering (narrower, faster, shorter timer as the Overdrive gets stronger) is
+   sourced and the timers already carried it; the zone and speed numbers are NOT sourced (`ffx-combat-core.md` §5.3's
+   table is `[estimate]`, and ask 13 was the button order only). So every tier holds today's pair, `zonePercent` 12.22,
+   `travelMs` 1 059 (22 px half width and 340 px/s on the 360 px meter): live Swordplay plays exactly as before.
+   The first cut of this branch shipped the §5.3 estimates (22/1 400, 16/1 150, 12/900, 9/700); the independent check
+   flagged that as a blocker and it is reverted in data (commit message names it).
 5. `rollDefaultMinigame` (AI, auto-battle) reports a full run as the Overdrive's own length, not 7.
 
 ## Proof
@@ -43,8 +46,7 @@ behaviour is unchanged.
   every Overdrive unlocked for Tidus and Auron at each menu; the rest are real key presses through the menu and
   the PR-0261 route harness's `playMinigame`): Dragon Fang showed **8 chips** (down, left, up, right, L1, R1,
   Circle, Cross) and the engine received `correctInputs: 8, success`; Shooting Star (with the Square chip, key K)
-  7 of 7; Banishing Blade 7 of 7; Tornado 6 of 6; Spiral Cut zone 22 % (39 to 61), hit; Blitz Ace zone 9 %
-  (45.5 to 54.5), the harness missed twice and the timer failed it (see For Bailey). Records:
+  7 of 7; Banishing Blade 7 of 7; Tornado 6 of 6; (first cut, before the repair) Spiral Cut zone 22 %, Blitz Ace zone 9 %: superseded by the repair proof below. Records:
   `docs/screenshots/r38-bushido/proof-run-*.json`; overlay frames `*-overlay.png` beside them.
 
 ## critic-plan class
@@ -59,9 +61,10 @@ preflight: `docs/plans/r38-bushido-review.md`.
 - **The Bushido button orders are our estimate.** Shooting Star's is the one GameFAQs guide (KeyBlade999) and
   matches no other source; if it is a typo in the guide the Steam copy will show it. One line each in
   `src/data/ffx/overdrives/inputs.ts`.
-- **Blitz Ace got harder** (about 63 ms window against about 129 ms today); Spiral Cut and Slice & Dice got easier
-  (about 308 and 184 ms). These Swordplay numbers are the research note's estimates, not facts; you asked for
-  only the button order, so say if you would rather keep Swordplay as it was or soften Blitz Ace.
+- **Swordplay is unchanged for the player.** The per-tier zone and speed wiring is in, but every tier holds today's
+  12.22 % zone at 1 059 ms because the sourced ordering has no published numbers. Say yes to the §5.3 estimates
+  (22 % / 1 400 ms down to 9 % / 700 ms; Blitz Ace's window would drop from about 129 ms to about 63 ms) or give
+  numbers, and it is a four-row edit in `src/data/ffx/overdrives/inputs.ts`.
 - Shooting Star adds a Square key (K) the game never had; there is no on-screen hint for it beyond the chip.
 - Not done: the Steam HD check that would settle the orders (two earlier tries never got past a white window).
 
@@ -144,3 +147,10 @@ FFX-2 behaviour is unchanged.
 - The worktree has three tracked edits that are not this lane's (`src/engine/tactics/evrae-quiet.ts`, `sin-common.ts`,
   `sin-fins-core.ts`). I did not touch or stage them; my browser runs served the working tree including them, with no
   effect on the overlays.
+
+## Repair cycle (after the independent check)
+
+Blocker: unsourced Swordplay zone and speed. Fix: every `SWORDPLAY_TUNING` row is `{ travelMs: 1059, zonePercent: 12.22 }`
+(today's play), `swordplayGeometry` wiring and the Bushido work kept; the engine's base `tidus-timing` params and the
+research note say the same. Game case: FFX only. critic-plan class unchanged (DEEP, not save-data). Proof: see
+`docs/screenshots/r38-bushido/repair-*.json`.

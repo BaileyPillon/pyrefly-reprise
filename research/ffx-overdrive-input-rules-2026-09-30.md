@@ -431,8 +431,11 @@ already merged over its defaults; the two overlays now read them.
   Triangle). Still `[conflicting]`, still to settle in the Steam HD copy; changing one is a
   one-line edit in `inputs.ts`. Shooting Star needs a Square button, which the HUD input
   watcher did not have: `K` on the keyboard, pad button 2 (`src/ui/ffx/rawInput.ts`).
-* **Swordplay zone and speed.** Only the ordering is sourced (`ffx-combat-core.md` §5.3
-  rule 2, `[verified: 2 sources]`); the numbers are §5.3's own `[estimate]` shipping table
-  (Spiral Cut 22 % / 1 400 ms, Slice & Dice 16 % / 1 150 ms, Energy Rain 12 % / 900 ms,
-  Blitz Ace 9 % / 700 ms), now actually played. Before, every tier played the overlay's
-  44 px zone (12.2 %) at 340 px/s (1 059 ms a crossing). Blitz Ace's window is about 63 ms.
+* **Swordplay zone and speed: the ordering is sourced, the numbers are still owed.** Only the
+  ordering is sourced (`ffx-combat-core.md` §5.3 rule 2, `[verified: 2 sources]`); the table there
+  is tagged `[estimate]` (Spiral Cut 22 % / 1 400 ms, Slice & Dice 16 % / 1 150 ms, Energy Rain
+  12 % / 900 ms, Blitz Ace 9 % / 700 ms) and Bailey's ask 13 covered the button order only, so
+  none of it ships (AGENTS.md rule 6). Repair cycle, independent check blocker: every tier keeps
+  what the overlay played before (a 44 px zone, 12.22 % of the meter, at 340 px/s, 1 059 ms a
+  crossing). The per-tier wiring stays, so sourced values (or Bailey's yes to the estimates) are a
+  four-row edit in `inputs.ts`.

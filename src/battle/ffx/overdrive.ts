@@ -310,7 +310,7 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
   const base: Record<string, unknown> = { abilityId: def.id, ...(timerMs > 0 ? { timerMs } : {}) };
   switch (def.minigame) {
     case 'tidus-timing':
-      Object.assign(base, { travelMs: 1400, zonePercent: 22, name: def.name }); // title (od4); each tier's own pair is in extra.minigameParams (PR-0308)
+      Object.assign(base, { travelMs: 1059, zonePercent: 12.22, name: def.name }); // title (od4); each tier's own pair is in extra.minigameParams (PR-0308)
       break;
     case 'auron-sequence':
       Object.assign(base, { name: def.name }); // the title is the Overdrive chosen (od4); its `sequence` comes from extra.minigameParams below (PR-0308)

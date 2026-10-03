@@ -9,7 +9,7 @@
  * Sourced: the sequence LENGTHS 8 / 7 / 7 / 6 (`research/ffx-overdrive-input-rules-2026-09-30.md` D2,
  * `[verified: 4 sources]`) and the Swordplay ORDERING (zone narrower, marker faster, timer shorter as the
  * Overdrive gets stronger, `ffx-combat-core.md` §5.3 rule 2). The button ORDER is our estimate (the GameFAQs
- * order, Bailey 2026-10-03; D3) and the Swordplay numbers are §5.3's `[estimate]` shipping table.
+ * order, Bailey 2026-10-03; D3) and the Swordplay zone and speed numbers are unsourced, so every tier keeps today's pair (12.22 %, 1 059 ms).
  *
  * The request comes from the real engine, its params open the real overlay, and the sequence is typed with
  * real `keydown` events (the same `RawInputWatcher` the game uses).
@@ -85,22 +85,29 @@ describe('Bushido data: the sourced lengths, per Overdrive', () => {
   });
 });
 
-describe('Swordplay data: the sourced ordering (zone narrows, marker speeds up, timer shortens)', () => {
-  it('each tier is harder than the one before it on every axis the sources name', () => {
+describe('Swordplay data: the ordering is sourced, the zone and speed numbers are still owed', () => {
+  it('the timer shortens with the tier (the sourced ordering, already shipped); zone and speed never get easier', () => {
     for (let i = 1; i < SWORDPLAY_IDS.length; i++) {
       const prev = SWORDPLAY_TUNING[SWORDPLAY_IDS[i - 1]!]!;
       const cur = SWORDPLAY_TUNING[SWORDPLAY_IDS[i]!]!;
-      expect(cur.zonePercent).toBeLessThan(prev.zonePercent);
-      expect(cur.travelMs).toBeLessThan(prev.travelMs);
+      expect(cur.zonePercent).toBeLessThanOrEqual(prev.zonePercent);
+      expect(cur.travelMs).toBeLessThanOrEqual(prev.travelMs);
       expect(timerMsFor(TIDUS[SWORDPLAY_IDS[i]!]!)).toBeLessThanOrEqual(timerMsFor(TIDUS[SWORDPLAY_IDS[i - 1]!]!));
     }
   });
 
-  it('Spiral Cut keeps the pair the engine always published (22 %, 1 400 ms)', () => {
-    expect(SWORDPLAY_TUNING['spiral-cut']).toEqual({ travelMs: 1400, zonePercent: 22 });
+  it('no unsourced zone or speed ships: every tier plays what the game played before release 38 (12.22 %, 1 059 ms)', () => {
+    for (const id of SWORDPLAY_IDS) expect(SWORDPLAY_TUNING[id]).toEqual({ travelMs: 1059, zonePercent: 12.22 });
+  });
+
+  it('that pair is the old overlay default: a 22 px half width and 340 px/s on a 360 px meter', () => {
+    const g = swordplayGeometry({ ...SWORDPLAY_TUNING['blitz-ace']! }, 360);
+    expect(g.zoneHalfWidth).toBeCloseTo(22, 2);
+    expect(g.speedPxPerSec).toBeCloseTo(340, 0);
   });
 
   it('swordplayGeometry turns percent and travel time into the overlay\'s pixels, and keeps the old defaults', () => {
+    // the wiring is kept for when per-tier values are sourced: any pair converts, not only today's
     expect(swordplayGeometry({ zonePercent: 22, travelMs: 1400 }, 360)).toEqual({ zoneHalfWidth: 39.6, speedPxPerSec: 360 / 1.4 });
     expect(swordplayGeometry({ zonePercent: 9, travelMs: 700 }, 360).zoneHalfWidth).toBeCloseTo(16.2, 6);
     expect(swordplayGeometry({}, 360)).toEqual({ zoneHalfWidth: 22, speedPxPerSec: 340 });

@@ -41,16 +41,21 @@
  * The tokens are the game's own `UiButton` names (`src/ui/ffx/rawInput.ts`):
  * `confirm` is Cross, `cancel` is Circle.
  *
- * ## Swordplay: the ORDERING is sourced, the numbers are authored estimates
+ * ## Swordplay: the ORDERING is sourced, the NUMBERS are still owed
  *
  * "Zone width, marker speed and timer length all scale with the Overdrive's
  * strength: stronger Overdrive, narrower zone, faster marker, shorter timer"
  * `[verified: 2 sources]` (`research/ffx-combat-core.md` §5.3 rule 2). No source
- * publishes the values: the table below is §5.3's own "shipping parameters"
- * table, tagged `[estimate]` there ("tune freely; they are not facts"), chosen
- * to reproduce the published ordering. The timers (3000, 3000, 2600, 2200 ms)
- * already shipped (`TIMER_MS` in `battle/ffx/overdrive.ts`) and are not repeated.
- * Spiral Cut's pair is what the engine already published for every tier.
+ * publishes the values; §5.3's own "shipping parameters" table is tagged
+ * `[estimate]` ("tune freely; they are not facts"), and Bailey's ask (13) was the
+ * button order only, so this file ships NO estimated zone or speed. Every tier
+ * keeps the pair the game played before release 38: a 22 px half-width zone on a
+ * 360 px meter is 12.22 % of it, and a 340 px/s marker crosses it in 1 059 ms.
+ * The per-tier wiring (`swordplayGeometry`, the abilities' `minigameParams`) stays,
+ * so when the zone and speed per tier are sourced (or Bailey says yes to §5.3's
+ * estimates: 22 % / 1 400 ms, 16 % / 1 150, 12 % / 900, 9 % / 700) it is a
+ * four-row data edit here. The timers (3000, 3000, 2600, 2200 ms) already shipped
+ * (`TIMER_MS` in `battle/ffx/overdrive.ts`) and carry the sourced ordering today.
  */
 
 /** A Bushido input, in the overlay's own button names. */
@@ -68,7 +73,7 @@ export const BUSHIDO_SEQUENCES: Readonly<Record<string, readonly BushidoInput[]>
   tornado: ['confirm', 'right', 'r1', 'left', 'l1', 'triangle'],
 };
 
-/** One Swordplay tier's marker and zone. `[estimate]`: ffx-combat-core §5.3 "shipping parameters"; only the ordering is sourced. */
+/** One Swordplay tier's marker and zone. The ordering across tiers is sourced; the values are NOT yet (see the file header), so every tier holds today's pair. */
 export interface SwordplayTuning {
   /** Time for the marker to cross the meter once, left to right, in ms. */
   travelMs: number;
@@ -76,9 +81,12 @@ export interface SwordplayTuning {
   zonePercent: number;
 }
 
+/** What every tier played before release 38 (22 px half width and 340 px/s on a 360 px meter), until per-tier values are sourced. */
+const TODAY: SwordplayTuning = { travelMs: 1059, zonePercent: 12.22 };
+
 export const SWORDPLAY_TUNING: Readonly<Record<string, SwordplayTuning>> = {
-  'spiral-cut': { travelMs: 1400, zonePercent: 22 },
-  'slice-and-dice': { travelMs: 1150, zonePercent: 16 },
-  'energy-rain': { travelMs: 900, zonePercent: 12 },
-  'blitz-ace': { travelMs: 700, zonePercent: 9 },
+  'spiral-cut': { ...TODAY },
+  'slice-and-dice': { ...TODAY },
+  'energy-rain': { ...TODAY },
+  'blitz-ace': { ...TODAY },
 };
