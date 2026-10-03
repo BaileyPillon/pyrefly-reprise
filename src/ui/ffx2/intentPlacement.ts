@@ -53,6 +53,11 @@ export interface SlabRect {
    * to stay off the chrome, never the other way round.
    */
   soft?: boolean;
+  /**
+   * A soft box that is one of the player's own party (PR-0249, FFX-2 only). Under `tiered` the slab covers the
+   * boss's painting before it covers a girl: chrome first, then the party, then the rest of the soft boxes.
+   */
+  party?: boolean;
 }
 
 /** The dodge step's own hard-coded clearance, mirrored from `EnemyIntent.layout`. */
@@ -110,7 +115,8 @@ export interface SlabPlacement {
  *
  * **`opts.tiered`** (the intent slab; FFX-2 only): obstacles marked `soft`
  * (the fighters) rank below the chrome. The winner covers the least chrome
- * first, then the least fighter, then is nearest. Without it every square pixel
+ * first, then the least of the party (`party`, PR-0249), then the least other
+ * fighter, then is nearest. Without it every square pixel
  * counted the same, so a tall slab (Trema's, 375x321 at 1600x900) that could
  * not clear both took 2,835 px² of the command stack over a larger slice of
  * Trema's own robe, and printed across ATTACK.
@@ -145,6 +151,17 @@ export function placeSlab(
 
   const lefts = new Set<number>([clamp(edge, maxLeft, natural.left)]);
   const tops = new Set<number>([clamp(floor, maxTop, wanted)]);
+  // PR-0249: the one place the slab may rise above its natural row is to clear a girl's head
+  // (tiered mode only): the spot flush above her box, never above the chip headroom.
+  const above = new Set<number>();
+  for (const o of obstacles) {
+    if (!tiered || !o.soft || !o.party) continue;
+    const t = clamp(floor, maxTop, o.top - h - DODGE_GAP);
+    if (t < wanted - 0.5) {
+      tops.add(t);
+      above.add(t);
+    }
+  }
   for (const o of obstacles) {
     lefts.add(clamp(edge, maxLeft, o.right + DODGE_GAP));
     lefts.add(clamp(edge, maxLeft, o.left - w - DODGE_GAP));
@@ -156,27 +173,37 @@ export function placeSlab(
   let best: SlabPlacement | null = null;
   let bestScore = Infinity;
   let bestHard = Infinity;
+  let bestParty = Infinity;
   let bestCover = Infinity;
   for (const left of lefts) {
     for (const top of tops) {
-      if (top < wanted - 0.5) continue;
+      if (top < wanted - 0.5 && !above.has(top)) continue;
       const box = { left, top, right: left + w, bottom: top + h };
       const cap = chip ? { left: box.right - chip.w, top: top - chip.gap - chip.h, right: box.right, bottom: top - chip.gap } : null;
       let cover = 0;
       let hard = 0;
+      let party = 0;
       for (const o of obstacles) {
         const a = overlapArea(box, o) + (cap ? overlapArea(cap, o) : 0);
         cover += a;
         if (!tiered || !o.soft) hard += a;
+        else if (o.party) party += a;
       }
       // Untiered, every obstacle is chrome, so `hard === cover` and this is the old rule.
       const score = Math.abs(left - natural.left) + VERTICAL_COST * Math.abs(top - natural.top);
       const better =
-        hard !== bestHard ? hard < bestHard : cover !== bestCover ? cover < bestCover : score < bestScore;
+        hard !== bestHard
+          ? hard < bestHard
+          : party !== bestParty
+            ? party < bestParty
+            : cover !== bestCover
+              ? cover < bestCover
+              : score < bestScore;
       if (!better) continue;
       best = { left, top, free: cover === 0 };
       bestScore = score;
       bestHard = hard;
+      bestParty = party;
       bestCover = cover;
     }
   }
