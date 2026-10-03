@@ -128,6 +128,7 @@ export class BattlePresenter {
       (ms) => this.sleep(ms),
       () => this.speed,
     );
+    this.ctx.menuOpen = () => this.pendingMenu !== null; // r37 slots: FFX-2 key paintings stand aside for a menu
     this.actingState = new ActingState(() => this.deps.hud);
     this.cutIns = new TurnCutInBeat({
       moments: deps.moments ?? null,

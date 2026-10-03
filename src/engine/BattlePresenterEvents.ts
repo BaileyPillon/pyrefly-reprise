@@ -136,6 +136,8 @@ export interface EventCtx {
   acting?: ActingAction | undefined;
   /** PR-0061(a): still before the first command menu (`OpeningCallouts.ts`). */
   opening?: boolean;
+  /** A HUD command menu is open right now (`BattlePresenter`); `KeySlots.ts` keeps its FFX-2 key paintings off while one is. */
+  menuOpen?: () => boolean;
 }
 
 export function createEventCtx(
