@@ -17,6 +17,10 @@ is run, read-only, every time the panel draws a NEXT line.
 
 ---
 
+## Source rule (2026-10-03)
+
+Bailey, 2026-10-03: "from now on the guide follows the ffx/ffx-2 encounter guides from jegged" (D-350). NEXT, WATCH and RULES follow Jegged's FFX guide for chapters 1 to 3 and its FFX-2 guide for chapters 4 and 5, paraphrased in our own words and cited in `research/`, with adaptations to our setup labelled "our adaptation of Jegged"; changing `intendedStrategy` also moves the advisor's top pick, so it is measured before and after.
+
 ## 1. What it is
 
 A side slab on the **left** edge of the battle HUD, inside the same 640x360
