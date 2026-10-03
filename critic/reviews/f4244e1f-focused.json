@@ -1,0 +1,491 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-03T23:33:00.960Z",
+ "build": {
+  "mainSha": "f4244e1f",
+  "fullSha": "f4244e1f2c606781046d46259614399b51a6a85e",
+  "bundle": "index-DhiL5vEz.js",
+  "candidate": "D:/pyrefly-rel371/dist-gate",
+  "previousLive": "cd9dbbb0 (release 37, bundle BGBDEn_P, artifactHash 766d9587007f584b)",
+  "bytes": 798330509,
+  "files": 1715,
+  "artifactHash": "505e9ad6cc077616f8bf173e66912e428e47e9b2a5480554de32354919be9b24"
+ },
+ "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: 28 candidate Trigger Happy windows (FFX-2 Ch IV and V; keyboard, pad, touch, mouse; 1600x900, 2000x1012, 390x844) and 7 candidate Chapter IX runs entered the fight by real keys and reached the slab or the first menu; 0 console or page errors, 0 responses of 400 or more, 0 undecodable media; the engine is untouched (the four Ch IV and V autopilot digests are byte-identical to live).",
+  "Both round-20 acceptance checks pass on the candidate and fail on live. FOC37-02: candidate keyboard R x3 = 3, pad R1 x3 = 3, 390x844 touch x3 = 3, mouse x3 = 3, Enter x3 = 0 (as before), the overlay names the input; live pad 0, touch 0 (the intent card covers the slab), Enter 0, keyboard 3. PR-0341: Yojimbo, Daigoro and Ginnem drawn in the first 3 frames after awaitingMenu in 6 of 6 runs; live 0 of 2.",
+  "No regression at major or critical severity against live release 37: the keyboard route, the played-through Chapter IX opening (arrival peak 8.7 s before the menu, live 8.7 s) and the engine (4 of 4 digests) are unchanged. FOC371-01 (major) replaces live's late mid-turn arrival, which round 20 filed as the open defects PR-0341 and PR-0342, with no arrival on a hurried opening; it is tagged introducedByCandidate true and regressionVsLive false, so the release DISCLOSES it for Bailey's decision and it does not block.",
+  "Gates re-run on the candidate: tsc clean; 25 changed-area test files, 297 tests pass; orphans 24; verify-approved 634 ok, 0 mismatched, 0 missing; audio qa --strict 0 findings (88.49 of 90 MB); vite build, 0 .map files, no sourceMappingURL; artifact check 0 problems after policy; manifest diff against release 37 is index.html and the index JS and CSS only (+1,438 bytes), about 798,570,277 bytes shipped, 1,429,723 under 800,000,000."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "NOT APPLICABLE",
+   "reason": "No full-screen layer was added or changed: the six-file source delta is the Trigger Happy slab (a HUD slab), the Cavern scene's arrival wait and a one-line scene flag; pause, title, chapter select, results and their art are byte-identical to release 37. Spot checks anyway: Esc from the first menu opens the pause with .pause exactly the viewport (1600x900 and 2000x1012) and a second Esc returns to the same menu (awaitingMenu true).",
+   "where": "both; Ch IV and V",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-key-0p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-key-0p-2000x1012/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "FAIL",
+   "reason": "Slab text at the three focused layouts (effective px = font size times the transforms): 390x844 MASH TAP 5.33 and 0 HITS 5.78; 1600x900 MASH R 13.33 (under 14) and 0 HITS 14.45; 2000x1012 MASH R 14.98 and 0 HITS 16.25 (pass). The title is 16.89 px on the phone. The sizes are the ones MASH R1 always had (live reads the same), so this is not a regression, but the wording is now the only instruction a touch player gets. FOC371-03.",
+   "where": "FFX-2 Ch IV and V",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-touch-3p-390x844/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-key-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-key-3p-2000x1012/run.json",
+    "critic/reviews/f4244e1f-focused/composites/th-phone-live-vs-candidate.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "The slab stops taking pointer events when its window ends and is removed from the DOM 1861 to 2195 ms after it opened in 15 measured candidate windows (the 1.8 s window plus the 300 ms linger). Only the window-end exit was driven in a browser; cancel() and the pause exits are covered by tests/unit/ui-ffx2-trigger-happy-input.test.ts (23 tests, run here), not by a browser run.",
+   "where": "FFX-2 Ch IV and V",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-key-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-pad-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-touch-3p-390x844/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-mouse-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-enter-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-key-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-pad-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-touch-3p-390x844/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-key-3p-2000x1012/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "Every slab text read in the runs is player copy: \"Trigger Happy\", \"MASH R\", \"MASH R1\", \"MASH TAP\", \"MASH CLICK\", \"N HITS\". No ids, file stems, section marks or debug words. The Cavern change adds no copy.",
+   "where": "FFX-2 Ch IV and V; FFX Ch IX",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-key-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-pad-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-touch-3p-390x844/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-mouse-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-enter-3p-1600x900/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "The slab covers no party member at 1600x900, 2000x1012 or 390x844 (slab bottom y 319 / 358 / 127, the top of the party quads y 541 / 455 / 320); it covers part of the boss quad's top-left corner for about 2 s (Vegnagun 7 percent of the quad at 1600 and 13 at 390, mostly empty; at 2000x1012 its right end covers 15 percent of Bahamut's quad including a stretch of his left wing). Named overlaps, all deliberate and transient: the slab over the guide card on desktop (86 percent of the panel and 100 percent of its chip at 2000x1012) and over the intent card on the phone (87 percent), FOC371-04. The reverse overlap is a finding: on desktop the intent card still paints over the slab (FOC371-02).",
+   "where": "FFX-2 Ch IV and V",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-key-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-key-3p-2000x1012/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-touch-3p-390x844/run.json",
+    "critic/reviews/f4244e1f-focused/composites/th-desktop-live-vs-candidate-1600x900.jpg",
+    "critic/reviews/f4244e1f-focused/composites/th-intent-card-over-slab-1600x900-desktop.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 8,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Every text leaf of the slab is inside it and unclipped at the three layouts (scrollWidth within clientWidth, inside the slab rect, inside the viewport): \"Trigger Happy\", the key word and the hit counter, in all four wordings.",
+   "where": "FFX-2 Ch IV and V",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-key-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-key-3p-2000x1012/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-touch-3p-390x844/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "NOT APPLICABLE",
+   "reason": "Targeting is untouched (no change under src/ui/common targeting, the highlight or the reticles; none of the six files). The harness confirmed the lit target of Skill > Trigger Happy in every run without finding anything to report.",
+   "where": "both",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "reason": "Ch IX at 1600x900 and 2000x1012, seed 1, hurried opening: Ginnem, Yojimbo and Daigoro are drawn (alpha at least 0.95, visible, material opacity at least 0.9) in the first 3 rAF frames after the first command menu in 6 of 6 runs (aligned to the menu on screen and to the engine's awaitingMenu), never below alpha 0.95 once staged. Live release 37: 0 of 2 (Yojimbo hidden until +5.5 s and +5.7 s, Daigoro until +5.0 s and +5.2 s after the menu).",
+   "where": "FFX Ch IX",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/pr0341/cand-1600x900-run1/run.json",
+    "critic/reviews/f4244e1f-focused/pr0341/cand-1600x900-run2/run.json",
+    "critic/reviews/f4244e1f-focused/pr0341/cand-1600x900-run3/run.json",
+    "critic/reviews/f4244e1f-focused/pr0341/cand-2000x1012-run1/run.json",
+    "critic/reviews/f4244e1f-focused/pr0341/cand-2000x1012-run2/run.json",
+    "critic/reviews/f4244e1f-focused/pr0341/cand-2000x1012-run3/run.json",
+    "critic/reviews/f4244e1f-focused/pr0341/live-1600x900-run1/run.json",
+    "critic/reviews/f4244e1f-focused/pr0341/live-2000x1012-run1/run.json",
+    "critic/reviews/f4244e1f-focused/composites/pr0341-hurried-first-menu-1600x900-live-vs-candidate.jpg",
+    "critic/reviews/f4244e1f-focused/composites/pr0341-hurried-first-menu-2000x1012-live-vs-candidate.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 6,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "reason": "No art changed: the artifact manifest differs from release 37's only in index.html and the index JS and CSS bundles (1,712 of 1,715 shipped files byte-identical, art and audio included); node D:/Tools/pyrefly-lora/tools/verify-approved.mjs with ROOT at the candidate: 634 ok, 0 mismatched, 0 missing (586 approved, 48 judge-locked).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/gates/manifest-diff.json",
+    "critic/reviews/f4244e1f-focused/gates/verify-approved-rel371.log"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real events on the production candidate, FFX-2 Ch V seed 1 (Yuna Gunner, Skill > Trigger Happy): keyboard R x3 gave 3 hits; emulated pad R1 x3 gave 3; 390x844 touch taps x3 gave 3; mouse clicks x3 gave 3; Enter x3 gave 0 (not the bound button, as before). Ch IV: key 3, pad 3, touch 3. 12 presses: key 12, pad 12, touch 12. The overlay names the input in use (MASH R, MASH R1, MASH TAP, MASH CLICK after the first click). Live release 37 for comparison: key 3, pad 0, touch 0, Enter 0, and its overlay reads MASH R1 for every input. The pad is the critic's shim and the phone is an emulated touch context: a physical controller, a physical phone and Safari are not covered.",
+   "where": "FFX-2 Ch IV and V",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-key-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-pad-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-touch-3p-390x844/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-mouse-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-enter-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-key-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-pad-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-touch-3p-390x844/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-key-3p-2000x1012/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand12-ffx2-vegnagun-shuyin-key-12p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand12-ffx2-vegnagun-shuyin-pad-12p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand12-ffx2-vegnagun-shuyin-touch-12p-390x844/run.json",
+    "critic/reviews/f4244e1f-focused/th/live-ffx2-vegnagun-shuyin-key-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/live-ffx2-vegnagun-shuyin-pad-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/live-ffx2-vegnagun-shuyin-touch-3p-390x844/run.json",
+    "critic/reviews/f4244e1f-focused/th/live-ffx2-vegnagun-shuyin-enter-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/composites/th-phone-live-vs-candidate.jpg",
+    "critic/reviews/f4244e1f-focused/composites/th-desktop-live-vs-candidate-1600x900.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 20,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every browser capture asserts before it records: waits throw (waitScreen, waitMenu, the slab selector) and each run file keeps the engine's own screen, phase, seed and renderer; the Trigger Happy hits are read from the engine log, not from a screenshot. Two harness failures (Ch IV pad stuck in the White Magic submenu; live Ch V keyboard where the dressphere change did not take on the first Enter) failed fast with ASSERT-FAIL, were fixed in the harness and rerun; none of their captures is used. The Cavern probe aligns to the command menu on screen and to awaitingMenu. 0 console or page errors and 0 responses of 400 or more across 33 runs.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/harness/hlib.mjs",
+    "critic/reviews/f4244e1f-focused/harness/th.mjs",
+    "critic/reviews/f4244e1f-focused/harness/pr0341.mjs",
+    "critic/reviews/f4244e1f-focused/harness/digest.mjs"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "A candidate review before the deploy. The artifact identity is recorded instead: dist-gate artifactHash 505e9ad6cc077616, 1,715 files; against release 37's stored manifest only index.html, the index JS and the index CSS differ (+1,438 bytes); the live site still serves release 37 (bundle BGBDEn_P, artifactHash 766d9587007f584b, identical to critic/artifacts/cd9dbbb0.json). Live verification of this exact artifact is the next obligation.",
+   "where": "delivery",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/gates/manifest-diff.json",
+    "critic/reviews/f4244e1f-focused/gates/manifest-rel371-dist-gate.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "node tools/artifact-manifest.mjs build --dir dist-gate decoded every shipped image and audio file: 967 ok, 0 failed, 0 audio left unverified. The 2 files it flags as one flat colour are Paine's right-eye catchlight layers (art/portrait-parts/paine/1x and 2x/eyeR-catch.png), both listed under intentionalFlatImages in critic/policy.json: 0 problems after policy.",
+   "where": "delivery",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/gates/artifact-build.log",
+    "critic/reviews/f4244e1f-focused/gates/manifest-rel371-dist-gate.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Parity is not in question: Trigger Happy is the Gunner's FFX-2 ability with no FFX counterpart, and the Cavern is FFX only. The one shared line (BattleScreen marks a hurried scene) is inert elsewhere: FFX-2 Ch IV and V and FFX Ch IX take hurried openings to a working first menu with 0 errors, and the Ch IV and V autopilot digests are byte-identical to live.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/gates/critic-plan.json",
+    "critic/reviews/f4244e1f-focused/digest/cand-ffx2-bahamut-intended-s1/run.json",
+    "critic/reviews/f4244e1f-focused/digest/cand-ffx2-bahamut-intended-s2/run.json",
+    "critic/reviews/f4244e1f-focused/digest/cand-ffx2-vegnagun-shuyin-intended-s1/run.json",
+    "critic/reviews/f4244e1f-focused/digest/cand-ffx2-vegnagun-shuyin-intended-s2/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Written cases: FOC37-02 FFX-2 only and PR-0341 FFX only, in docs/handoff/r37-hotfix.md and in commits d8b18561 and 61bb53ca, argued from research/ffx2-combat-core.md 3.1 (Trigger Happy) and the Cavern's FFX-only comment. Presence: the slab with its three routes is in FFX-2 Ch IV and V; the Cavern fix is in FFX Ch IX (6 of 6 runs). Absence: 6 Ch IX first menus carry 0 .ffx2-trigger, 0 FFX-2 HUD and 0 FFX-2 command nodes; FFX-2 has no Cavern. No other chapter's behaviour moved (autopilot digests identical).",
+   "where": "FFX-2 Ch IV, V; FFX Ch IX",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/pr0341/cand-1600x900-run1/run.json",
+    "critic/reviews/f4244e1f-focused/pr0341/cand-1600x900-run2/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-key-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-pad-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-touch-3p-390x844/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "f4244e1f / dist-gate index-DhiL5vEz.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel371 f4244e1f, dist-gate (bundle index-DhiL5vEz.js, 1,715 files, 798,330,509 bytes, 0 .map files, no sourceMappingURL), vite preview 127.0.0.1:6741 (PID 27360, stopped at the end); headless Playwright Chromium launched from node, PYREFLY_BROWSER=gpu (ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11); no black canvas, no fallback); pad = the critic's standard-mapping gamepad shim (critic/runner/lib/route-evidence.mjs), touch = hasTouch + isMobile emulation; live comparison on https://baileypillon.github.io/pyrefly-reprise/ (release 37, cd9dbbb0, artifactHash 766d9587007f584b)"
+  }
+ ],
+ "targets": {
+  "required": 1,
+  "matched": 0,
+  "failing": 1,
+  "unverified": 0,
+  "waiting": 0,
+  "detail": "Tile \"The cold chamber, Cavern of the Stolen Fayth (FFX)\": the cold look A passes; reaction.mustChange 2 (the arrival plays at the start of the fight) passes on a played-through opening and fails on a hurried one (FOC371-01). No other approved tile is touched: no art, audio or layout file changed."
+ },
+ "issues": [
+  {
+   "id": "FOC371-01",
+   "severity": "major",
+   "title": "A hurried opening never plays Bailey's approved night-sakura arrival: Chapter IX starts with Daigoro and Yojimbo already standing, and the blue tree, night veil and petals never appear",
+   "game": "FFX only",
+   "chapter": "yojimbo-cavern (Chapter IX, Cavern of the Stolen Fayth)",
+   "expected": "docs/target/targets.json tile \"The cold chamber, Cavern of the Stolen Fayth (FFX)\", reaction.mustChange, Bailey 2026-09-24 (\"All your recommendations\", O-4 / D-072): the promised night-sakura arrival (docs/concepts/chapters/yojimbo/chamber/sheet-arrival.jpg) plays at the start of the fight over this chamber, not merely as a later-available overlay. A player who skips the pre-battle scene (the hurried opening, PR-0061) reaches the fight too; Yojimbo and Daigoro must be drawn at the first menu (PR-0341) and the approved arrival should not be lost to get that.",
+   "observed": "Candidate, hurried opening (Enter held through the scene), 6 of 6 runs at 1600x900 and 2000x1012: Ginnem, Yojimbo and Daigoro are drawn on every frame from staging (alpha never below 0.95), and the arrival's own meshes (sakura-arrival veil, tree, glow, petals) peak at opacity 0 over 935 to 956 frames; the frames from battle start to 11 s after the menu show no tree (composites/pr0341-candidate-hurried-frames.jpg). Candidate with the scene tapped through (opening not hurried): the arrival plays as designed, tree opacity 1.0, peak 8.7 s BEFORE the first menu, Yojimbo and Daigoro hidden until it (Yojimbo hidden 11.8 to 8.6 s before the menu), the same as live tapped (peak 8.7 s before; hidden 11.5 to 8.6 s before): the played-through opening is unchanged and matches the approved arrival (composites chamber-arrival-target-vs-candidate-tapped-opening.jpg). Live release 37, hurried (2 of 2 runs): Yojimbo and Daigoro are missing until +5.5 / +5.0 s after the first menu (1600x900) and +5.7 / +5.2 s (2000x1012), when the tree peaks (opacity 1.0 at +5.4 s): the arrival plays mid first turn, which round 20 filed as PR-0341 (major) and PR-0342 (polish, \"a foreign blue tree\"). Release 36 played the arrival for every opening. So 37.1 cures the missing figures by never playing the arrival on a hurried opening. docs/handoff/r37-hotfix.md and the paper preflight say so (\"the arrival is not played\", \"the arrival stops playing for a first-time player\") but name no owner decision for it and do not mention the tile's mustChange.",
+   "repro": "Fresh profile, PYREFLY_BROWSER=gpu, seed 1, real keys: title, chapter select (arrow keys) to yojimbo-cavern, prep Enter, hold Enter through the scene, first menu. critic/reviews/f4244e1f-focused/harness/pr0341.mjs --base=<url> --label=cand --size=1600x900 --run=1 (add --tap for the played-through opening).",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/pr0341/cand-1600x900-run1/run.json",
+    "critic/reviews/f4244e1f-focused/pr0341/cand-1600x900-run2/run.json",
+    "critic/reviews/f4244e1f-focused/pr0341/cand-tap-1600x900-run1/run.json",
+    "critic/reviews/f4244e1f-focused/pr0341/live-1600x900-run1/run.json",
+    "critic/reviews/f4244e1f-focused/composites/pr0341-candidate-hurried-frames.jpg",
+    "critic/reviews/f4244e1f-focused/composites/pr0341-live-hurried-frames.jpg",
+    "critic/reviews/f4244e1f-focused/composites/pr0341-candidate-tapped-opening-frames.jpg",
+    "critic/reviews/f4244e1f-focused/composites/pr0341-hurried-plus6s-1600x900-live-vs-candidate.jpg",
+    "critic/reviews/f4244e1f-focused/chamber-arrival-target-vs-candidate-tapped-opening.jpg",
+    "critic/reviews/f4244e1f-focused/chamber-tile-vs-candidate-hurried-first-menu.jpg"
+   ],
+   "confidence": "high for what is measured (6 hurried runs, 1 tapped, live 2 hurried and 1 tapped); whether a hurried player should lose the arrival is Bailey's decision, and his recorded words say it should play",
+   "requirement": "targets.json chamber tile reaction.mustChange (RUBRIC section 7: acceptance cases come from mustChange); AGENTS.md hard rules 9 and 10 (a visible change to an approved moment needs Bailey's yes)",
+   "where": "src/scenes/cavern-stolen-fayth-arrival.ts ArrivalWait.stage(true) rests, so runArrival never starts the arrival; src/scenes/openingMark.ts; the mark set in src/app/screens/BattleScreen.ts (traced from the diff)",
+   "fix": "Smallest: on a hurried opening still run the arrival beats (night, tree, petals) from the first menu but never hold Yojimbo and Daigoro at alpha 0 (keep them on their spots, or step Yojimbo out as before). Or ask Bailey whether a hurried player skips the arrival and record the answer on the tile. Either way re-scope PR-0342: its text calls the tree a foreign painting, but the tree is the approved arrival, and closing PR-0342 by removing the arrival is not what Bailey asked.",
+   "acceptanceCheck": "Hurried and tapped-through openings of Chapter IX both show the arrival (an arrival mesh opacity above 0.2 on some frame within 8 s of battle start) with Yojimbo, Daigoro and Ginnem drawn in the first 3 frames after awaitingMenu, in 3 of 3 runs at 1600x900 and 2000x1012; or Bailey's recorded yes to skipping it on a hurried opening.",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false,
+   "status": "open"
+  },
+  {
+   "id": "FOC371-02",
+   "severity": "polish",
+   "title": "On desktop the enemy-intent card is still painted above the Trigger Happy slab: in Chapter V at 1600x900 it hid the ring, the hit counter and half the bar in 2 of 4 windows",
+   "game": "FFX-2 only",
+   "chapter": "ffx2-vegnagun-shuyin (the card follows Vegnagun's pose); Ch IV at 2000x1012 never overlapped (4 of 4 windows)",
+   "expected": "docs/handoff/r37-hotfix.md and the minigames.css comment: the slab is above the enemy-intent slab (2), the guide (3), the advisor (4) and the phone guide chip (12), \"all in the same stacking context\", so it is readable and tappable for the whole window.",
+   "observed": "True on the 390x844 phone (the slab is topmost at its left, centre and right in 4 of 4 windows, although the card covers 70 to 94 percent of its rect), not on desktop. The slab (z-index 15) sits in .ffx2hud__stage, which has a transform and is therefore its own stacking context; the intent layer .eint (z-index 2) is a sibling of that stage under #ui, so it paints above the whole stage. With the card parked over the slab, elementsFromPoint lists h4.eint__head eint__head--random > div.eint__body > div.eint__panel eint__panel--detached > div.ig-minigame__head > div.ig ig--ffx2 ig-minigame ffx2-trigger (card first, slab after); live has the same structure with the slab at z-index auto and pointer-events none, so the slab is not even hit-tested there (h4.eint__head eint__head--random > div.eint__body > div.eint__panel eint__panel--detached > canvas > div: the card, then the canvas). Natural frames: Chapter V seed 1 at 1600x900, windows 3 and 4 of 4 (and the 12-press pad window): the card (x 477 to 852, y 184 to 400) covers 34 percent of the slab, hiding the ring and the hit counter, and a click on the covered part lands on the card. The guide card is inside the stage, so the slab does beat it. Not new and not a regression: live is the same or worse (its slab is under the guide card too); 37.1 fixed the guide card and the phone only.",
+   "repro": "Fresh profile, seed 1, FFX-2 Ch V, Yuna Gunner, Skill > Trigger Happy four times at 1600x900 and read the intent card rect and document.elementFromPoint over the slab: critic/reviews/f4244e1f-focused/harness/th.mjs --route=key --presses=0 --plan=layout,layout,layout,layout (--stack for the stacking chain and the forced overlap).",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/composites/th-intent-card-over-slab-1600x900-desktop.jpg",
+    "critic/reviews/f4244e1f-focused/th/cand-rep-ffx2-vegnagun-shuyin-key-0p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-stack-ffx2-vegnagun-shuyin-key-0p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/live-stack-ffx2-vegnagun-shuyin-key-0p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand12-ffx2-vegnagun-shuyin-pad-12p-1600x900/window1-after-presses.jpg",
+    "critic/reviews/f4244e1f-focused/th/cand-rep-ffx2-vegnagun-shuyin-touch-0p-390x844/run.json"
+   ],
+   "confidence": "high (stacking chain read from the DOM, forced overlap and two natural frames)",
+   "requirement": "CHK-008 (panels against panels; the slab is the thing a player must read) and the change's own stated purpose",
+   "where": "src/ui/ffx2/minigames.css `.ffx2-trigger { z-index: 15 }` against .ffx2hud__stage (transform) and .eint / .mad (z-index 2 and 4 under #ui)",
+   "fix": "Mount the slab in a layer above .eint and .mad (a child of #ui with z-index above 4), or lift .eint and .mad into the stage, or drop the transform from .ffx2hud__stage; then re-check elementsFromPoint on desktop and phone.",
+   "acceptanceCheck": "Ch V seed 1 at 1600x900, 6 of 6 Trigger Happy windows with the intent card parked over the slab: elementFromPoint at the slab's left, centre and right is the slab; same at 2000x1012 and 390x844.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false,
+   "status": "open"
+  },
+  {
+   "id": "FOC371-03",
+   "severity": "polish",
+   "title": "Trigger Happy's instruction and counter are under the 14 px legibility floor on a phone and at 1600x900 (MASH TAP 5.33 px and 0 HITS 5.78 px at 390x844; MASH R 13.33 px at 1600x900)",
+   "game": "FFX-2 only",
+   "chapter": "ffx2-bahamut, ffx2-vegnagun-shuyin (every Gunner use)",
+   "expected": "CHK-003: nothing a player must read falls below 14 effective px; the touch player's only instruction is the key word.",
+   "observed": "Effective sizes read from the DOM at the three layouts: 390x844 MASH TAP 5.33, 0 HITS 5.78, title 16.89; 1600x900 MASH R 13.33, 0 HITS 14.45; 2000x1012 MASH R 14.98, 0 HITS 16.25. The sizes are the ones MASH R1 always had (live reads the same), so not a regression; what is new is that TAP, CLICK and R1 are now true instructions and on a phone the label is 37 x 6 px.",
+   "repro": "harness/th.mjs --route=touch --size=390x844 --plan=layout; read run.json windows[0].legibility.",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-touch-3p-390x844/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-vegnagun-shuyin-key-3p-1600x900/run.json",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-key-3p-2000x1012/run.json",
+    "critic/reviews/f4244e1f-focused/composites/th-phone-live-vs-candidate.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-003, RUBRIC section 5 (effective text size)",
+   "where": "src/ui/ffx2/minigames.css and the shared .ig-minigame__subtitle / __bonus sizes (the builder's handoff names the phone size as a left item)",
+   "fix": "Raise .ffx2-trigger .ig-minigame__subtitle and __bonus to at least 14 effective px at every size (on the phone give the slab a second line), after Bailey has seen it.",
+   "acceptanceCheck": "At 390x844, 1600x900 and 2000x1012 every text leaf of the slab is at least 14 effective px and unclipped.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false,
+   "status": "open"
+  },
+  {
+   "id": "FOC371-04",
+   "severity": "suggestion",
+   "title": "The slab now covers the guide card (desktop) and the enemy-intent card (phone) for the 1.8 to 2.6 s the window is open",
+   "game": "FFX-2 only",
+   "chapter": "ffx2-bahamut, ffx2-vegnagun-shuyin",
+   "expected": "A deliberate choice the builder disclosed (\"Bailey's call if he prefers the other\"); FFX hides its guide card for its overlays instead.",
+   "observed": "At 2000x1012 the slab covers 86 percent of the guide panel and 100 percent of its chip; at 1600x900 it cuts the guide's header; at 390x844 it covers 87 percent of the intent card. Live drew the slab under both. The covered cards carry nothing the player needs during the window.",
+   "repro": "th.mjs layout windows at the three sizes.",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/composites/th-desktop-live-vs-candidate-1600x900.jpg",
+    "critic/reviews/f4244e1f-focused/composites/th-phone-live-vs-candidate.jpg",
+    "critic/reviews/f4244e1f-focused/th/cand-ffx2-bahamut-key-3p-2000x1012/run.json"
+   ],
+   "confidence": "high",
+   "requirement": "Bailey's call (visible change)",
+   "where": "src/ui/ffx2/minigames.css",
+   "fix": "None needed; show Bailey. Alternative: hide the guide card while a minigame is open, as FFX does.",
+   "acceptanceCheck": "Bailey's recorded preference.",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false,
+   "status": "open"
+  },
+  {
+   "id": "FOC371-05",
+   "severity": "suggestion",
+   "title": "The shared fx backup was overwritten by the r38-bytes branch, so node tools/fx-assets.mjs restore (and ensure) refuses on the release tree",
+   "game": "both",
+   "chapter": "n/a (release cut)",
+   "expected": "D:/Tools/pyrefly-art-backup/fx matches tools/fx/fx-assets.json of the tree being released.",
+   "observed": "node tools/fx-assets.mjs restore in D:/pyrefly-rel371 prints FAIL (8): bevelle-underground, djose-chamber-provisional, gagazet and macalania-temple depth.json and depth.png differ from the f4244e1f list. The backup copies were written today at 15:16 and match the r38-bytes branch's list (gagazet/depth.png 118,208 bytes there, 1,058,487 in main's list). D:/pyrefly-rel371/public/fx was therefore copied from the main tree's public/fx instead, which verifies PASS against the candidate's list (node tools/fx-assets.mjs verify). The backup itself was not touched. The deploy builds from public/fx, so nothing shipped is affected; a later ensure or restore on main would fail or restore the r38-bytes files.",
+   "repro": "cd D:/pyrefly-rel371; node tools/fx-assets.mjs restore",
+   "evidence": [
+    "critic/reviews/f4244e1f-focused/gates/critic-plan.json"
+   ],
+   "confidence": "high",
+   "requirement": "AGENTS.md rule 8 / tools/fx-assets.mjs contract",
+   "where": "D:/Tools/pyrefly-art-backup/fx (outside the repo)",
+   "fix": "Run node tools/fx-assets.mjs backup from the tree being released (it refuses unless public/fx matches the list) once r38-bytes is merged or abandoned; until then do not run restore or ensure on main.",
+   "acceptanceCheck": "node tools/fx-assets.mjs restore passes in a fresh release worktree.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false,
+   "status": "open"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "npx tsc --noEmit (exit 0, tsc 7.0.2)",
+   "25 changed-area test files, 297 tests pass (ui-ffx2-trigger-happy-input 23, cavern-hurried-arrival 10, the Cavern, opening-hurry, presenter-opening, BattleScreen and intent suites)",
+   "node tools/orphans.mjs: 24 orphaned",
+   "verify-approved with ROOT = the candidate: 634 / 0 / 0",
+   "node tools/audio/qa.mjs --strict: 0 findings, 88.49 of 90 MB",
+   "production build of f4244e1f and the artifact check, manifest diff against release 37",
+   "FOC37-02: FFX-2 Ch V seed 1 keyboard, pad, touch (390x844), mouse and Enter at 3 presses; Ch IV keyboard, pad and touch; 12-press mashes (key, pad, touch); layout windows at 1600x900, 2000x1012 and 390x844; live release 37 for the same Ch V routes",
+   "PR-0341: FFX Ch IX seed 1, hurried opening x6 (3 at 1600x900, 3 at 2000x1012), tapped-through x1, live hurried x2 and tapped x1, every rAF frame of actor alpha, visibility, opacity and projected box plus the arrival's meshes, timed frames",
+   "autopilot digests, Ch IV and V, seeds 1 and 2, candidate against live (4 of 4 byte-identical)",
+   "stacking-context chains and a forced-overlap probe of the slab, the intent card and the guide (candidate and live), 4 repeated windows at three layouts",
+   "pause round trip (Esc, Esc) at 1600x900 and 2000x1012"
+  ],
+  "reused": [
+   {
+    "what": "Full vitest suite (770 files, 11,306 tests, 0 failed) and the orphans, verify-approved and audio qa runs on main f4244e1f",
+    "from": "docs/handoff/NOW.md 18:25 entry (the integrator)",
+    "why": "git diff --stat cd9dbbb0 f4244e1f -- src public index.html package.json vite.config.ts shows only the six source files; this review re-ran tsc, the 25 test files that touch them, orphans, verify-approved (ROOT at the candidate) and audio qa itself, so the full suite is reused only for files nothing in the diff reaches."
+   },
+   {
+    "what": "Every area the six files do not reach (all other chapters, pause, results, save, audio, art)",
+    "from": "critic/rounds/round-20.json (deep, release 37) and critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused.json",
+    "why": "The manifest shows 1,712 of 1,715 shipped files byte-identical to release 37 and the source diff is six files; the deep review of 37.1 is still owed (plan deepAfterDeploy)."
+   }
+  ],
+  "notTested": [
+   "A physical gamepad, a physical phone and Safari or Firefox: the pad is the critic's shim, touch is emulated, the browser is Chromium only (RUBRIC section 2: UNVERIFIED, not a pass)",
+   "The route-less fallback (an input with no route takes the release-36 roll) and the cancel() and pause exits of the slab: unit tests only, no browser run",
+   "Other Gunner chapters (VI to XVIII with Trigger Happy), Lady Luck's reels (untouched, FOC37-01 stays open), the advisor card over the slab",
+   "Chapter IX after a defeat (retry) and a chained link, and the Cavern at 390x844 (phone)",
+   "The deep review of every affected chapter (owed after the deploy)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of this exact artifact after the deploy (CHK-017, artifactHash 505e9ad6cc077616), then the deep review release 37.1 owes (plan: deepAfterDeploy, 36 substantial checkpoints since the last deep review). Before the next Cavern change: Bailey's answer on FOC371-01 (does a hurried opening play the arrival?). The deep review should repeat FOC371-02 over more Gunner chapters and add a physical pad and phone.",
+ "elapsedMinutes": 78
+}
