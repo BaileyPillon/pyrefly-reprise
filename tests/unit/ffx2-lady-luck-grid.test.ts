@@ -33,6 +33,7 @@ const WITH: Record<string, Record<string, string>> = {
   'ffx2-fallen-aeons': { yuna: 'gunner', rikku: 'gunner', paine: 'gunner' }, // Chapter 5, the Road to the Farplane
   'ffx2-den-of-woe': { yuna: 'gunner', rikku: 'gunner', paine: 'gunner' }, // Chapter 5, optional
   'ffx2-trema': { yuna: 'white-mage', rikku: 'gunner', paine: 'warrior' }, // Chapter 5, the Via Infinito (shipped kit)
+  'ffx2-ixion-djose': { yuna: 'gunner', rikku: 'gunner', paine: 'lady-luck' }, // the end of Chapter 3
 };
 /** Chapter 2 story points: earlier than Lady Luck's earliest pickup (Chapter 3). */
 const WITHOUT = ['ffx2-bahamut', 'ffx2-leblanc'];
