@@ -6,6 +6,11 @@ the Visual Options page (recorded as D-351, on `main` from 4b7adea6): make room 
 changing a pixel, so the adopted art waiting for room can ship. The measurement behind it is
 `D:/Tools/pyrefly-scratch/2026-10-03/visual-options/bytes/README.md`.
 
+> **Critic check, 2026-10-03 (head 85c71746): FAIL on one blocker, and `safe` is now the default.** The numbers in "Result", "Gates" and
+> "Bytes and headroom" below are the builder's, for `PYREFLY_ART_WEBP=all` unless they say `safe`. What a build ships when nothing is set is
+> `safe` now: 627,108,618 bytes, headroom 172,651,047 once the deploy's manifest is counted. Read "Check" at the end first: it holds the verdict
+> per item, the blocker (`yunalesca-3/idle@2x` on a desktop), its fix, and one risk in other engines.
+
 ## Result
 
 - **Bytes.** A full production build ships **576,019,006 bytes against 798,329,071 before: 222,310,065 fewer (27.85 percent)**, and the
@@ -45,7 +50,7 @@ the build output only.
 | Cost | `tools/art-load-timing.mjs`, `tools/art-decode-cost.mjs` | The battle's first load before and after (desktop, a throttled phone, a 50 Mbit/s line) and the decode time of the WebP against the PNG. |
 | Depth maps | `tools/fx/depth8.py`, `tools/fx/fx-assets.json` | Four 16-bit depth maps to 8 bits with `d >> 8`. |
 
-Switch: `PYREFLY_ART_WEBP=off|partial|safe|all` (default `all`). `off`: every PNG ships as before. `partial`: the 24 `@2x` masters
+Switch: `PYREFLY_ART_WEBP=off|partial|safe|all` (default `safe` since the critic's check of 2026-10-03; the builder's default was `all`). `off`: every PNG ships as before. `partial`: the 24 `@2x` masters
 and the 30 backdrops (phase 1). `safe`: every master the browser draws the same from a WebP on every path (see "The one thing to
 decide"). `all`: every art PNG.
 
@@ -212,6 +217,9 @@ PYREFLY_BROWSER=gpu node tools/art-load-timing.mjs --before <url of a PNG build>
 
 ## The one thing to decide, and what else the driver should know
 
+*Decided on 2026-10-03: the driver ships `safe`, and `safe` is the default now (see "Check" at the end, which also finds that `safe` as built is
+not yet exact for one `@2x` master). The builder's text follows as written.*
+
 **Ship `all` (the default, as adopted) or `safe`?** The finding, from `tools/art-browser-identity.mjs`: for all 897 masters the
 decoded RGBA is identical and the picture Chromium hands to WebGL as a texture is identical (the whole 3D battle). For 523 of them
 (the 63 opaque and the 460 whose alpha is only 0 and 255) it is identical on every path, the DOM and 2D canvases included, because
@@ -251,3 +259,118 @@ Smaller things:
   `public/art` are as they were, and nothing was written through `public/art`. Servers on 6500 to 6505 were all started by me and
   stopped by PID.
 
+
+## Check (critic, 2026-10-03): `safe` as the shipping mode
+
+A Sonnet critic that did not build this lane checked branch head 85c71746 as the driver asked: the shipping mode is `safe`, `all` only as a
+note. Everything below was run, not read. Scripts, logs and JSON reports are in
+`D:/Tools/pyrefly-scratch/2026-10-03/r38-bytes-check/` (`scripts/`, `logs/`, `*.json`; the scratch builds were parked to
+`F:/pyrefly-parked/2026-10-03/r38-bytes-check/`). Builds went to scratch folders, never `dist/`; every server on ports 6700 to 6709 was started
+by the critic and stopped by PID; nothing was deployed and `deploy-pages.mjs` was not run in any form.
+
+**Verdict: FAIL on one blocker (B1), with one risk for the driver to decide (B2). Every other item passes.** The default is now `safe` (commit
+"Make safe the default art scope", below). B1 costs one file, 2,077,508 bytes, and the fix has already been shown to work.
+
+| # | Item | Verdict | Numbers |
+|---|---|---|---|
+| 1 | Bytes of the `safe` build | PASS | 1,716 files, **627,108,618 bytes**; with the deploy's `artifact-manifest.json` (240,335 bytes) 627,348,953: **headroom 172,651,047** under 800,000,000. The PNG-only build is 1,715 files, 794,711,808. |
+| 2 | Pixel identity | decode PASS; on screen **FAIL (B1)** | below |
+| 3 | Reference audit | PASS | below |
+| 4 | Real play | PASS for files and errors; B1 shows in the differential | below |
+| 5 | Masters untouched | PASS | `git diff origin/main...HEAD` has no `public/art` and no `approved-hashes.json`; the blob is main's (c3b9f889); `verify-approved` 634 ok (586 approved, 48 judge-locked), 0 mismatched, 0 missing |
+| 6 | Depth maps | PASS | the 8-bit file equals `d >> 8` value for value in all four rooms; 0 differing pixels through the game's canvas path |
+| 7 | Deploy plumbing | PASS | below |
+| 8 | Code | PASS | below |
+| 9 | Load time | PASS, within the noise | Chapter I +314 ms, Chapter IV +96 ms (medians of 3); 22 percent fewer image bytes fetched; below |
+
+**2. Pixel identity.** From the files, the builder's `art-derive verify`: PASS (897 masters, 547 WebP and 350 PNG, 547 pixel-compared). My own
+scripts, not the builder's: sharp, raw RGBA byte for byte, **547 of 547** shipped WebP equal their master's decode and 350 of 350 kept PNG are
+the master's own bytes; a seeded random 40 (seed 38) 40 of 40; PIL with its own libwebp and libpng, a third decoder, 93 of 93 (the 40, all 24
+`@2x`, all 30 backdrops), its bytes equal to sharp's hashes. In Chromium 153 on the GPU: the builder's `art-browser-identity --screen-exact`
+PASS on 547 pairs in 83 s, 63 opaque and 460 binary-alpha exact on every path, the 24 `@2x` exact as WebGL textures and **not** exact on
+screen paths (up to 1 in 255), which the tool exempts. My own check, 21 shipped opaque or binary files and 5 `@2x`, plus 8 positive controls
+(translucent masters as the WebP `all` would ship, to prove the harness can see a 1 in 255 difference: it saw it in 8 of 8), over five paths (a
+2D canvas, composited over three colours, a WebGL texture, real `<img>` screenshots at 1:1 and at 0.5x): the 21 exact on every path; the 5
+`@2x` exact as textures with alpha exact. One correction to the builder's "never more than 1 step in 255": when the DOM scales a translucent WebP (0.5x)
+the difference reaches 2.
+
+**B1 (blocker): `art/characters/yunalesca-3/idle@2x` is not the same picture on a desktop.** The exemption "the 24 `@2x` are only ever
+textures" holds for 23 and fails for this one. On a hi-tier device (not a phone, and at least 1280 px wide or a pixel ratio above 1) the game
+loads the `@2x` master, and `PaintedArt.preparePainting` runs the default `auto` matte (`PaintedMatte.cleanMatte`) on it. For this painting
+the matte decides to clean, so its pixels go through a 2D canvas (`drawImage`, `getImageData`, `putImageData`) and become a `CanvasTexture`. On
+that route Chromium's WebP decoder premultiplies differently from its PNG decoder, the difference is magnified where alpha is low, and it is
+carried into the mip levels. Measured with the game's real `cleanMatte` and the real three.js (r186) on the GPU, the PNG source against the
+WebP source, with the sampling of `configurePaintedTexture`: **24,069 pixels differ by up to 124 in 255 at scale 0.5, 16,967 by up to 54 at
+0.35 (mean 1.8; a thin rim along the silhouette, visible only when the difference is amplified), 7,489 by up to 11 at 0.2.** In the real game
+(a hook on `putImageData` and on texture uploads, installed before the app boots; Yunalesca fought to results on a 1600x900 page) the cleaned
+canvas hashes `adee2707` on the PNG build and `1470abcc` on the safe build, the uploaded texture `3b6491cd` against `d2178d84`; the cleaned canvases of
+`yunalesca-1/ko` and `yunalesca-3/hurt`, which are binary-alpha WebP, are identical on both. For the other 23 `@2x` masters `cleanMatte` returns null
+(PNG and WebP source alike), the image itself reaches WebGL, and two of them rendered through the same pipeline at the same three scales give
+**0 differing pixels**. The tool's `@2x` exemption is how this passed.
+Fix, shown to work: keep `art/characters/yunalesca-3/idle@2x.png` as PNG. A scratch copy of the safe build with only that file as its PNG,
+played the same way, gives all five cleaned-canvas and canvas-texture hashes of the PNG build. It costs 2,077,508 bytes. Options, priced from
+`art/derived.json` against today's headroom of 172,651,047: S1 that one file, headroom 170,573,539; S2 every `@2x` stays PNG, +42,232,420, headroom
+130,418,627; S3 below. Whichever is chosen, `tools/art-browser-identity.mjs` should stop exempting `@2x` blindly: the exemption should hold only where
+the game's own `cleanMatte('auto')` returns null for the master, or the next install of 2x art can bring the same defect back
+(`scripts/matte-2x-check.mjs` in the scratch folder does exactly that, with the real function, for all 24).
+
+**B2 (risk to decide): the same files in another engine.** In Playwright's WebKit 26.6 (a Windows build, so not proof about Safari or iOS) the
+WebGL texture of a lossless WebP and of its PNG is the same where alpha is 255 or partial, but the colour under fully transparent texels is kept
+for the PNG and zeroed for the WebP (Chromium keeps it for both). That moves filtered edges: a near-white creature gets a black halo. It affects
+the shipped WebP that carry non-zero colour under alpha 0: the 24 `@2x` and **41 of the 460 binary-alpha masters** (the evrae idle poses, ixion
+overdrive, bahamut hurt, the FF7 figures among them), none of the 63 opaque; the kept PNG are unaffected. Firefox could not be tested: its
+Playwright binary will not run on this machine (permission denied). Real Safari and iOS were not tested. If the promise has to hold for phone
+Safari too, the rule that holds in any decoder is alpha only 0 or 255 and nothing hidden under alpha 0: S3, 482 WebP files, +48,897,651 bytes,
+headroom 123,753,396, which leaves no room for the held 2x masters as PNG (they would have to ship as WebP and pass B1's gate).
+
+**3. Reference audit.** The builder's audit PASS (724 text files, 0 dangling). Mine: every `art/<...>.(png|webp|json)` in all 732 text files of the
+build, 1,446 distinct names, 899 shipped files and 547 masters shipped as WebP, 0 dangling, and 0 in the PNG-only build; no page or stylesheet names
+a file that is not there. A file-by-file diff of the PNG-only build and the safe build: 1,166 byte-identical, 547 PNG replaced by their WebP, the only
+changed file `index.html` (the title preload now names `keyart.webp`), the bundle (a new hash name), `art/derived.json` added, nothing missing. The
+list the bundle carries (the folded `__PYREFLY_ART_WEBP__`: 547 names, sorted, distinct) run through the real `ArtShipped.ts`: all 897 masters map to a
+file the build holds (547 WebP, 350 PNG), the inverse and the sidecar name are right, query strings are kept, other URLs are untouched.
+
+**4. Real play.** Headless Chromium 153 on the GPU (`PYREFLY_BROWSER=gpu`), Playwright from node, the builder's `art-play-audit` on the safe build.
+**Desktop 22 of 22** (the title, chapter select with all 19 tiles, all 18 chapters and the FF7 fight to their first command menu with the pause screen and
+its four panels, two results screens): 3,337 image requests (2,674 WebP, 663 PNG), every one `200` with an image type, **0 HTTP errors, 0 console
+errors**; 19 scenarios reached the pause screen and its living-portrait parts were served (216 requests, 108 WebP and 108 PNG). **390x844 touch, CPU
+throttled 4x, 5 of 5** (the title and select, Chapter I, Chapter IV and their two results screens; 610 image requests, 0 errors); on the first run
+`results:ffx2-bahamut` hit the tool's 180 s cap while my other browser jobs held the CPU at 100 percent, and on its own it passed in 86 s. The pause
+screens of Chapter I and Chapter IV from the safe build look right, and differ from the PNG build only by animation (at most 4 in 255; the PNG build differs from a second run of itself by at most 3). My own hooked runs (`drawImage`, `putImageData` and `texImage2D` hooks, 1600x900), all 19 chapters on the PNG-only build and
+the safe build: to the first command menu, 0 console errors, 0 HTTP errors, 0 failed requests in both, 1,032 and 1,031 art files requested, the hash of every
+cleaned canvas and canvas texture equal, no console warning that the PNG build did not print. Fought to results by the `intended` strategy at skip speed (the same hooks, all 19 chapters, both builds): 0 console errors, 0 HTTP errors, 0 failed requests, 1,442 art files requested on each, and **exactly two differences in the whole game, both `yunalesca-3/idle@2x`** (B1): its cleaned canvas and that canvas as a texture. Nothing else that was played differs.
+
+**7. Deploy plumbing.** Read and run. `deploy-pages.mjs` runs `verifyShippedArt` and `auditArtReferences` on `dist-release` after the build and before
+the manifest, and stops on either. `tools/artifact-manifest.mjs` did not change; its blank-image test already reads alpha through sharp's `stats()`: on
+synthetic lossless WebP and PNG alike a one-colour alpha mask with a shape is `ok`, a flat opaque image and a fully transparent one are `blank`, a
+normal image is `ok` (`scripts/webp-blank-check.mjs`). `intentionalFlatImages` names Paine's two catchlight layers under both spellings: the manifest
+of the safe build lists exactly those two `.webp` and the deploy's filter leaves 0 problems; the manifest of the PNG-only build lists exactly the two
+`.png` and leaves 0. With the switch off: `verify` PASS (897 PNG, byte for byte), `audit` PASS. The unit tests that touch the plumbing pass
+(`deploy-pages-builds`, `deploy-dirty-classify`, `artifact-manifest`, `dist-filter`, `art-derive`, `art-verify`, `art-shipped`, `art-url-sources`: 152 tests).
+
+**8. Code.** `npx tsc --noEmit` clean; `node tools/orphans.mjs` 24 orphaned, as expected; every new file is under 400 lines (the largest, 347); four files
+that were already over 400 grew (`PaintedArt.ts` 854 to 860, `deploy-pages.mjs` 787 to 806, `portrait.ts` 760 to 761, `chapterPanel.ts` 498 to 502: rule 7
+was already broken there); no battle or presenter file changed and `ArtShipped.ts` has no imports and no DOM; no new `any` or ts-ignore; relative imports
+carry their extension; the game case is "both" in all three lane commits. Full suite, `vitest run --maxWorkers=3` (777 files, 810 s, with other sessions' test runs and my browsers on the machine): 771 files passed, 5 skipped, 1 failed, and that one is a load timeout: `strategy-ffx2-bahamut` "heal-only route (no Shell, no Breaks) clears Mega Flare", a simulation that takes 10 s alone against a 15 s limit; it passed on its own in 10.1 s (one earlier lone re-run, with browsers still running, timed out again). The rest: 11,316 tests passed, 41 skipped, 1 todo, which with that one is the builder's 11,313 plus the 4 new tests. Determinism: two safe builds, one with `PYREFLY_ART_WEBP=safe` and
+one with the variable unset, are byte-identical in all 1,716 files (627,108,618 bytes).
+
+**9. Load time.** Cold cache (a fresh browser context per run), first load to the first command menu, the builder's `art-load-timing` on a desktop 1600x900 page against a local `vite preview` of each build, 3 runs each, alternating, PNG-only build against the safe build, Chromium 153 on the GPU, other sessions holding the CPU near 50 percent: Chapter I 10,878 ms against 11,192 ms (medians; runs 11,431, 10,810, 10,878 against 11,028, 11,290, 11,192), **+314 ms**, inside the PNG build's own 620 ms spread; Chapter IV 11,765 ms against 11,861 ms (runs 11,765, 11,621, 11,819 against 11,861, 11,849, 11,941), **+96 ms**. The battle fetches 22 percent fewer image bytes (66.4 to 51.6 MB in Chapter I, 57.2 to 44.5 MB in Chapter IV), which a real network line turns into a gain; a local server pays only the decode. The estimate in D-351 was about 0.3 s slower; that is what `safe` costs.
+
+**Smaller things, not blocking.** D-351 also adopted "tighter PNG compression": the 350 PNG that `safe` keeps ship as the masters' own bytes, and
+maximum-effort recompression of them (decoded pixels proven identical, 40 of 40 sampled) would save about 2.7 percent, roughly 3.9 MB. `all`, for
+the record: 374 translucent masters would be WebP, the same decode and texture in Chromium and a move of 1 in 255 in composited edge pixels (2 when the DOM
+scales them), and B1's matte route would apply to every cleaned figure. Every identity result here is Chromium 153 on Windows. `critic/runner/*.js` still
+compare art by name: a reviewer of a safe candidate now meets 350 PNG and 547 WebP.
+
+**What to do next.** (1) Decide B1's fix (S1 is the cheap one: a named list in `inScope`, `safe` keeping `yunalesca-3/idle@2x.png` as PNG with the reason
+beside it, and a test that pins the list) and B2 (S3, or accept it and say so: every identity result here is Chromium, which is what this machine runs). (2) Make `art-browser-identity --screen-exact`
+exempt an `@2x` master only where the game's `cleanMatte('auto')` returns null for it. (3) Re-run on the fixed build, in this order, each against a scratch
+build and never `dist/`: `art-derive verify` and `audit`; `art-browser-identity --screen-exact`; the hooked Yunalesca run to results (the scratch `scripts/hook-play.mjs`,
+`hook-yunalesca-*.json` are the PNG-build reference: the five hashes must match); `art-play-audit` desktop and `--mobile`. (4) Until then the build should not
+be deployed as a "pixels unchanged" release.
+
+**Default switched to `safe`.** `resolveScope` (`tools/art-derive-lib.mjs`) now defaults to the new `DEFAULT_SCOPE = 'safe'`, declared in
+`art-derive-lib.d.mts`; the planner, the plugin and the CLI follow it. `tests/unit/art-derive.test.ts` pins it four ways (the resolver, an override from
+the environment with a typo still refused, the planner with no scope, the plugin with no options) and three of the four fail when the default is put back
+to `all` (checked). `AGENTS.md`, `docs/DEV.md` and `docs/ART-PIPELINE.md` no longer say that every master is derived. `PYREFLY_ART_WEBP=all` still ships
+everything. A build with the variable unset reports `scope safe: 547 lossless WebP, 0 recompressed PNG, 350 unchanged`.
