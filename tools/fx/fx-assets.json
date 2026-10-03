@@ -13,6 +13,16 @@
    "sha256": "1d0e9e1f8599a9adaf3c1bdcf5ff61ce3d128a491e182f90ceb3963c150a601f"
   },
   {
+   "path": "den-of-woe/depth.json",
+   "bytes": 705,
+   "sha256": "d7d756548c914ef87ca98b8d72f53a491a6ad46f8f0f0007b1267f6e02da4a4e"
+  },
+  {
+   "path": "den-of-woe/depth.png",
+   "bytes": 41978,
+   "sha256": "bbb2b253fea928e9858e804c139eb2c141e3222c5d28c2c60c4d30478914545f"
+  },
+  {
    "path": "djose-chamber-provisional/depth.json",
    "bytes": 655,
    "sha256": "2cd296374aaeed227db6a70ae8e9e2c4890d7ec67bf01cc8d3e93e0999e5d8de"
@@ -21,6 +31,16 @@
    "path": "djose-chamber-provisional/depth.png",
    "bytes": 932359,
    "sha256": "010c7ab1a91d885d8586b1a16eb4081d5ce56f37dc4a0f25f5ff396a28424a73"
+  },
+  {
+   "path": "dreams-end/depth.json",
+   "bytes": 705,
+   "sha256": "22e9e48feba20a2acc746f4f9e97afabb9df4a0a970dce08e8ce8114e34c6cf0"
+  },
+  {
+   "path": "dreams-end/depth.png",
+   "bytes": 43958,
+   "sha256": "aeecba61d25efd165e71f342db89e60754dfa8d6dfb6cdc333dc68a61aedf3b0"
   },
   {
    "path": "gagazet/depth.json",
@@ -33,6 +53,26 @@
    "sha256": "333ef05c03b0d859fca9376eaf724382365621ce6e98665929b593b0f7410eca"
   },
   {
+   "path": "garden-of-pain/depth.json",
+   "bytes": 709,
+   "sha256": "f60fb233da20e8269d4416c6e5160a941f03b73027b68aac5a0553f46a83f5ea"
+  },
+  {
+   "path": "garden-of-pain/depth.png",
+   "bytes": 61181,
+   "sha256": "d790f5e7160bbf8e4d83c46669282aeeb24cfe45dd9c02e1cd193c969498fbe3"
+  },
+  {
+   "path": "leblanc-last-room/depth.json",
+   "bytes": 712,
+   "sha256": "917792ddd621b3a64e1624a878a0fc03153a5e0fe672d610be4ca72d5be7c2f5"
+  },
+  {
+   "path": "leblanc-last-room/depth.png",
+   "bytes": 83599,
+   "sha256": "f0f7fed03a8936b65e4231fbd29c65de055698d22ded253d24bd6447a0cfac27"
+  },
+  {
    "path": "macalania-temple/depth.json",
    "bytes": 646,
    "sha256": "eff9a7d7b56c367271ea77e03df2d434bceec9e0f038b84852dc465f64a67e52"
@@ -41,6 +81,26 @@
    "path": "macalania-temple/depth.png",
    "bytes": 913800,
    "sha256": "1145f9d052c9daa993d6a3930db42f22df3cb92c57f0eacf3503935d45beeebd"
+  },
+  {
+   "path": "via-infinito/depth.json",
+   "bytes": 707,
+   "sha256": "88bf5f4dd1c23746ea9019a51b81c600974f121a6a278701683aca1befd11d9d"
+  },
+  {
+   "path": "via-infinito/depth.png",
+   "bytes": 80387,
+   "sha256": "c31264ec421d0adc748dc7d9423645bd6475b39bfe053a51d95055ad8ecc95f6"
+  },
+  {
+   "path": "zanarkand-dome/depth.json",
+   "bytes": 709,
+   "sha256": "39fe0df14467e1bcec88a9373d745facc25d3dbdef23fe892459c35bd2c4c223"
+  },
+  {
+   "path": "zanarkand-dome/depth.png",
+   "bytes": 117065,
+   "sha256": "4bbb73e1888c4c2db45ac6611d402986922c49dd9b169b8d7c86ca05134c1046"
   }
  ]
 }

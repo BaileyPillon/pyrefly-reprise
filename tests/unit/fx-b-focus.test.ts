@@ -4,6 +4,7 @@ import { DRIFT_FFX, DRIFT_FFX2, driftAt } from '../../src/engine/fx/b/CameraDrif
 import { FOCUS_GAMMA, FOCUS_MAX_BIAS, driftExtent, focusAmounts, focusWeight, plateBiases } from '../../src/engine/fx/b/focusMaths.ts';
 import { PlateFocus, focusDial } from '../../src/engine/fx/b/PlateFocus.ts';
 import { ROOMS } from '../../src/engine/fx/b/ambient/index.ts';
+import { roomPlays } from '../../src/engine/fx/b/ambient/room.ts';
 import { eyeCandy } from '../../src/engine/fx/EyeCandy.ts';
 import { setEyeCandyProvider } from '../../src/engine/fx/eyeCandyFlags.ts';
 
@@ -169,5 +170,56 @@ describe('plate defocus per room (game-aware)', () => {
       expect(max).toBeGreaterThanOrEqual(0);
       expect(max).toBeLessThanOrEqual(3);
     }
+  });
+});
+
+describe('A-7 plates-only rooms (game-aware)', () => {
+  const only = Object.values(ROOMS).filter((r) => r.platesOnly);
+  const GAME: Record<string, 'ffx' | 'ffx2'> = {
+    'zanarkand-dome': 'ffx',
+    'dreams-end': 'ffx',
+    'garden-of-pain': 'ffx',
+    'leblanc-last-room': 'ffx2',
+    'via-infinito': 'ffx2',
+    'den-of-woe': 'ffx2',
+    'via-purifico': 'ffx',
+  };
+
+  it('covers the far-backdrop rooms, each with its own game (Zanarkand, Dream\'s End, the Garden: FFX; Leblanc, Via Infinito, Den: FFX-2)', () => {
+    expect(only.map((r) => r.key).sort()).toEqual(Object.keys(GAME).sort());
+    for (const r of only) expect(r.game).toBe(GAME[r.key]);
+  });
+
+  it('carries no lamps, weather, haze, arcs or lightning (what floats in a room is the canon table\'s call, A-6)', () => {
+    for (const r of only) {
+      expect(r.lamps).toEqual({});
+      expect(r.fields).toEqual([]);
+      expect(r.haze).toEqual([]);
+      expect(r.arcs).toBeUndefined();
+      expect(r.lightning).toBeUndefined();
+      expect(r.lampDust).toBeUndefined();
+      expect(r.reflect).toBeUndefined();
+    }
+  });
+
+  it('stands every plate in front of the painting and at least 12 units behind the fighters\' back row', () => {
+    for (const r of only) {
+      for (const z of r.plates.z) {
+        expect(z).toBeGreaterThan(-60);
+        expect(z).toBeLessThanOrEqual(-6);
+      }
+      const zs = r.plates.z;
+      for (let i = 1; i < zs.length; i++) expect(zs[i]!).toBeGreaterThan(zs[i - 1]!);
+    }
+  });
+});
+
+describe('A-7 flat fallback under LOW EFFECTS', () => {
+  it('keeps a plates-only room flat on the low tier and leaves the older rooms on their own low tier', () => {
+    expect(roomPlays(ROOMS['dreams-end']!, true, 'low')).toBe(false);
+    expect(roomPlays(ROOMS['dreams-end']!, true, 'full')).toBe(true);
+    expect(roomPlays(ROOMS['dreams-end']!, true, 'phone')).toBe(true);
+    expect(roomPlays(ROOMS['dreams-end']!, false, 'full')).toBe(false);
+    expect(roomPlays(ROOMS['gagazet']!, true, 'low')).toBe(true);
   });
 });
