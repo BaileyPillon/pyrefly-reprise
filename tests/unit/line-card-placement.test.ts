@@ -24,7 +24,7 @@ import {
   pickLineCardPlace,
   torsoOf,
 } from '../../src/ui/common/lineCardPlacement.ts';
-import { SETTLE_MS, STILL_MS, beatSpeakers, createMidBeatLineCard, speakerCombatants } from '../../src/app/screens/midbeatLineCard.ts';
+import { SETTLE_MS, SMALL_CARD_BEATS, STILL_MS, beatSpeakers, createMidBeatLineCard, speakerCombatants } from '../../src/app/screens/midbeatLineCard.ts';
 import { say } from '../../src/story/dsl.ts';
 import type { DialoguePort } from '../../src/story/runner/CutsceneRunner.ts';
 import type { SayStep } from '../../src/story/dsl.ts';
@@ -194,6 +194,25 @@ describe('the adapter on the live box', () => {
     card.endBeat();
     expect(box.classList.contains('dbox--card')).toBe(false);
     expect(box.style.getPropertyValue('--lc-x')).toBe('');
+  });
+
+  it("D-247 (FFX): Chapter III's Talk beat always wears the 0.6 card, even where a 0.7 slot is clear; every other beat keeps 0.7", async () => {
+    expect([...SMALL_CARD_BEATS]).toEqual(['bfa-talk']);
+    // A wide empty frame: the 0.7 card fits top-left, so only the beat's own rule can make it 0.6.
+    const rects = new Map([['tidus', R(410, 620, 200, 230)]]);
+    const talk = setup(rects, { tidus: 'party' });
+    const beat = [say('tidus', 'Hey! You still in there?')];
+    talk.card.beginBeat(beat, 'bfa-talk');
+    await talk.guarded.say(beat[0]!);
+    expect(talk.box.dataset['place']).toBe('top-left');
+    expect(talk.box.style.getPropertyValue('--lc-scale')).toBe(String(SMALL_CARD_SCALE));
+    // The next beat in the same chapter is the ordinary card again.
+    talk.card.beginBeat(beat, 'bfa-sword');
+    await talk.guarded.say(beat[0]!);
+    expect(talk.box.style.getPropertyValue('--lc-scale')).toBe('0.7');
+    talk.card.beginBeat(beat); // no name (a pre-battle or test caller): the default
+    await talk.guarded.say(beat[0]!);
+    expect(talk.box.style.getPropertyValue('--lc-scale')).toBe('0.7');
   });
 
   it('while the camera settles the card is hidden and re-picked every frame; then it shows and stays', async () => {
