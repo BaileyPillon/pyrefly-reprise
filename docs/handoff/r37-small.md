@@ -154,7 +154,7 @@ The tiles are in `docs/target/targets.json` group `polish`; their pictures in `d
 `npx tsc --noEmit` clean. `node tools/orphans.mjs`: 24 orphans, as before (coachDisc.ts and fightDecided.ts are imported).
 Targeted suites green: coach (20 files), omnis advisor, line card (2), audio (3), EYE CANDY page (40), advisor, overkill and
 goldens, phone framing, FFX-2 HUD (43 files), Vegnagun, chapters (113 of 114, the one a 15 s timeout). Full suite once at the
-end with `--testTimeout=60000 --maxWorkers=4`: see the section below. One dev server (port 5930) was started and stopped by
+end with `--testTimeout=60000 --maxWorkers=4`: 752 files passed, 5 skipped (11,080 tests passed, 40 skipped, 1 todo), nothing failed. One dev server (port 5930) was started and stopped by
 PID; one headless Chromium at a time, GPU mode, never the browser pane.
 
 ## For Bailey (collected)
