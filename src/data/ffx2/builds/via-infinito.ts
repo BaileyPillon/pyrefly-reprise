@@ -46,9 +46,25 @@ const OWNED = [
   'gun-mage', 'alchemist', 'samurai', 'berserker', 'lady-luck', 'trainer', 'mascot',
 ];
 
-/** `current` first, then the rest: node 0 holds `current`, node 1 the next one (`setup.ts`). */
+/**
+ * Lady Luck's node, **4**: the last node of the five-node ring the shipped kit puts every girl on (Valiant
+ * Lustre, `./via-infinito-kit.ts`), so one link from node 0 and a Change away (Bailey, D-361, 2026-10-03;
+ * FFX-2 only; `research/ffx2-lady-luck-availability.md`: the Via Infinito opens in Chapter 5, and Lady Luck is
+ * a Chapter 3 or Chapter 5 pickup, shown for all three girls). Where she sits is ours `[estimate]`: no source says
+ * what a girl sets on her grid. Node 1, the first Change row, is not touched (Rikku's Gunner for Target MP, the
+ * guide's one Change, and the Dark Knights' Itchy answer both read it), and the dressphere that sat on node 4
+ * (Warrior on Yuna, Songstress on Rikku and Paine) is off the grid; the line names none of them. Two unshipped
+ * options do not reach her in one Change: `'tr11-a'`'s Rikku wears six-node First Steps (she stays on the grid, two
+ * links out), and `'nightmare-kit'` lays Rikku's new Dark Knight in front of her list, which pushes Lady Luck one
+ * node past the five-node ring.
+ */
+const LADY_LUCK_NODE = 4;
+
+/** `current` first, then the rest: node 0 holds `current`, node 1 the next one, node 4 Lady Luck (`setup.ts`). */
 function ownedWith(current: string, next: string, special: string): string[] {
-  return [current, next, ...OWNED.filter((d) => d !== current && d !== next), special];
+  const rest = OWNED.filter((d) => d !== current && d !== next && d !== 'lady-luck');
+  const before = LADY_LUCK_NODE - 2; // nodes 2 and 3 come from `rest`, in its order
+  return [current, next, ...rest.slice(0, before), 'lady-luck', ...rest.slice(before), special];
 }
 
 export const viaInfinitoBuild: FFX2PartyBuild = {

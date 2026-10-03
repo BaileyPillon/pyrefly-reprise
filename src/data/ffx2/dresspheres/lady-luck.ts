@@ -1,7 +1,11 @@
 /**
  * Lady Luck [ffx2-combat-core §3.12, §5.1a, §5.1b]. Luck/critical specialist,
- * long range; not owned at either build point (Ch. 3+ pickup) but included
- * for the roster.
+ * long range. A Chapter 3 or Chapter 5 pickup (Sphere Break against Shinra in
+ * Luca), so the Chapter 2 builds (`bevelle.ts`, `chateau.ts`) do not own her;
+ * since D-361 (Bailey, 2026-10-03) the Chapter 3 and Chapter 5 builds
+ * (`djose.ts`, `farplane.ts`, `via-infinito.ts`) set her on each girl's
+ * Garment Grid, one link from the worn dressphere
+ * (`research/ffx2-lady-luck-availability.md`).
  */
 
 import type { DressphereDef } from './types.ts';

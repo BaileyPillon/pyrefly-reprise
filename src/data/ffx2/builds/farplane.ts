@@ -13,6 +13,19 @@
  * Dark Knight here; Yuna keeps White Mage, matching §6.3's reference build
  * ("White Mage -> Gun Mage swap"). The chain is five battles with **no menu
  * between**, so the inventory below has to carry all of them [§6.8].
+ *
+ * **Lady Luck is on every girl's grid** (Bailey, D-361, 2026-10-03; FFX-2 only; sources:
+ * `research/ffx2-lady-luck-availability.md`): she is a Chapter 3 or Chapter 5 pickup (Sphere
+ * Break against Shinra in Luca), so a Chapter 5 party can own her, and the guides show her for
+ * all three girls (`[verified: 3 sources]`). The `owned` order is the node layout
+ * (`setup.ts#gridNodeContents`: the worn dressphere on node 0, then this list), and the sources
+ * do not say which dresspheres a girl has set on her grid, so where Lady Luck sits is ours
+ * `[estimate]`: **the last node of each ring**, which is one link from node 0 (a Change away) and
+ * is the second row of the Change menu. Node 1, the first row, is untouched on all three girls:
+ * the autopilot's Itchy answer takes the first row (`BattlePresenterStrategies.ts`,
+ * `overdriveOrAttack`), so the shipped line, Chapter XI's Anima and Chapter XV (the same preset)
+ * play exactly as before (digests identical, `docs/handoff/r38-lady-luck-grid.md`). The
+ * dressphere that sat on the last node is off the grid; the line names none of them.
  */
 
 import type { FFX2PartyBuild } from '../../../battle/common/types.ts';
@@ -30,9 +43,11 @@ export const farplaneBuild: FFX2PartyBuild = {
       // §6.4 "2-4 mastered dresspheres per girl" — Gunner/Thief/Warrior/Black Mage/White Mage/Songstress/
       // Dark Knight/Gun Mage/Alchemist/Samurai/Berserker/Lady Luck all realistically reachable by Ch.5, plus
       // her own special dressphere [§6.5].
+      // Tempered Will has 5 nodes: White Mage, Gunner, Thief, Warrior, **Lady Luck** (node 4, one link from White Mage);
+      // Black Mage, which sat on node 4, is off the grid.
       owned: [
-        'gunner', 'thief', 'warrior', 'black-mage', 'white-mage', 'songstress', 'dark-knight',
-        'gun-mage', 'alchemist', 'samurai', 'berserker', 'lady-luck', 'floral-fallal',
+        'gunner', 'thief', 'warrior', 'lady-luck', 'black-mage', 'white-mage', 'songstress', 'dark-knight',
+        'gun-mage', 'alchemist', 'samurai', 'berserker', 'floral-fallal',
       ],
       garmentGrid: {
         id: 'tempered-will', // Double HP, Double MP — doubles survivability against Vegnagun's all-magic moveset
@@ -67,9 +82,11 @@ export const farplaneBuild: FFX2PartyBuild = {
       portraitKey: 'rikku',
       level: 48,
       currentDressphere: 'dark-knight',
+      // Flash of Steel has 5 nodes: Dark Knight, Gunner, Thief, Warrior, **Lady Luck** (node 4, one link from Dark Knight);
+      // Black Mage, which sat on node 4, is off the grid.
       owned: [
-        'gunner', 'thief', 'warrior', 'black-mage', 'white-mage', 'songstress', 'dark-knight',
-        'gun-mage', 'alchemist', 'samurai', 'berserker', 'lady-luck', 'machina-maw',
+        'gunner', 'thief', 'warrior', 'lady-luck', 'black-mage', 'white-mage', 'songstress', 'dark-knight',
+        'gun-mage', 'alchemist', 'samurai', 'berserker', 'machina-maw',
       ],
       garmentGrid: {
         id: 'flash-of-steel', // Str +20, Mag +20 equip — scales Darkness's Str-based damage directly
@@ -106,9 +123,11 @@ export const farplaneBuild: FFX2PartyBuild = {
       portraitKey: 'paine',
       level: 50, // fastest EXP curve of the three
       currentDressphere: 'dark-knight',
+      // Pride of the Sword has 6 nodes: Dark Knight, Gunner, Thief, Warrior, Black Mage, **Lady Luck** (node 5, one link
+      // from Dark Knight); White Mage, which sat on node 5, is off the grid (Yuna is the line's healer, not Paine).
       owned: [
-        'gunner', 'thief', 'warrior', 'black-mage', 'white-mage', 'songstress', 'dark-knight',
-        'gun-mage', 'alchemist', 'samurai', 'berserker', 'lady-luck', 'full-throttle',
+        'gunner', 'thief', 'warrior', 'black-mage', 'lady-luck', 'white-mage', 'songstress', 'dark-knight',
+        'gun-mage', 'alchemist', 'samurai', 'berserker', 'full-throttle',
       ],
       garmentGrid: {
         id: 'pride-of-the-sword', // Str +15 per gate passed (up to +60), scales Darkness directly
