@@ -8,7 +8,7 @@ import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
 import { AirshipRangeDirector, attachAirshipRange } from './evrae-airship-director.ts';
-import { DECK, EVRAE_WORLD_HEIGHT, RANGE_STAGING, type RigNumbers } from './evrae-airship-range.ts';
+import { DECK, EVRAE_NEAR_SPOT_BEFORE_E1H, EVRAE_WORLD_HEIGHT, RANGE_STAGING, type RigNumbers } from './evrae-airship-range.ts';
 import { buildAirshipDeck } from './evrae-airship-sky.ts';
 import { applyDaylightFill, EVRAE_DAYLIGHT, showPlateAsPainted } from './evrae-airship-daylight.ts';
 
@@ -129,8 +129,8 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * spot; the stage should not draw him at all (handoff §7 finding F-1).
  */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [...RANGE_STAGING.near.evrae],
-  [...RANGE_STAGING.near.evrae],
+  [...EVRAE_NEAR_SPOT_BEFORE_E1H],
+  [...EVRAE_NEAR_SPOT_BEFORE_E1H],
 ];
 
 /** Index of each combatant's slot in {@link EVRAE_AIRSHIP_DECK_SLOTS}.enemy. */
@@ -148,8 +148,23 @@ export const EVRAE_AIRSHIP_ACTOR_HEIGHTS = {
   evrae: EVRAE_WORLD_HEIGHT,
 } as const;
 
-/** R13-03 (FFX only): the party held on its slots. Evrae is re-planted on its range spot by the director, so the shared relax step moved only the party, by a different amount each run. */
-const EVRAE_AIRSHIP_DECK_STAGING = { holdParty: true } as const;
+/**
+ * R13-03 (FFX only): the party held on its slots. The shared relax step used to move only the party, by a different amount each
+ * run, because the director re-plants Evrae on its range spot between calls.
+ *
+ * **E1-H (D-360, FFX only): Evrae and Cid are pinned on NEAR Evrae's spot** (`enemySpots`, the switch the Gagazet and Highbridge
+ * boss scenes use): the repainted idle needs its slot moved right by `EVRAE_E1H_SLOT_DX` for the head to stay where it was, and the shared
+ * relax step and the formation solver must not shove it off that spot (they spread Evrae and the invisible Cid, who share one slot).
+ * The pin is the director's own NEAR spot, so a range swap and the stage agree. The generic enemy slot table above keeps its
+ * pre-E1-H point: Chapters XVII and XVIII share this slot table and the pin names only `evrae` and `cid`, so nothing else moves.
+ */
+const EVRAE_AIRSHIP_DECK_STAGING = {
+  holdParty: true,
+  enemySpots: {
+    evrae: [...RANGE_STAGING.near.evrae] as [number, number, number],
+    cid: [...RANGE_STAGING.near.evrae] as [number, number, number],
+  },
+} as const;
 
 /** The published slots, same shape every other scene exports. */
 export const EVRAE_AIRSHIP_DECK_SLOTS: SceneSlots = {

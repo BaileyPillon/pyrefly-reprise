@@ -84,7 +84,11 @@ function box(cam: PerspectiveCamera, spot: readonly number[], w: number, h: numb
   };
 }
 
-const NEAR_W = H.evrae * (1171 / 784); // idle-near.json 1171x784
+const NEAR_W = H.evrae * (1136 / 784); // idle.json 1136x784 from E1-H (D-360); the approved idle was 1171x784
+/** The Ink & Gold turn rail's left edge at 16:9, as a fraction of the width: hudPanels read 1405 of 1600 px (0.878), 2026-10-03. */
+const TURN_RAIL = 0.878;
+/** The snout's offset from the plane's centre, world units: E1-H's idle has it at x 21.7 of 1136 px, the plane centred on the slot. */
+const HEAD_DX = ((21.7 - 568) * H.evrae) / 768;
 const FAR_W = farWorldWidth(H.evrae);
 const FAR_H = FAR_W * (477 / 1024); // idle-far.json 1024x477
 
@@ -123,10 +127,12 @@ describe('evrae-airship-deck: formation and marks', () => {
 });
 
 describe('evrae-airship-deck: framing, measured through a real camera', () => {
-  it('keeps NEAR Evrae inside the frame and left of the FFX HUD rail on NEAR’s idle rig', () => {
+  it('keeps NEAR Evrae inside the frame and left of the turn rail on NEAR’s idle rig', () => {
+    // E1-H (D-360): the lengthened neck puts the coil right of the party, ending 47 px before the Ink & Gold turn rail at 1600x900,
+    // so the old 0.79 planning rail no longer bounds it; the rail is the measured one (TURN_RAIL).
     const b = box(camFor(RANGE_STAGING.near.rigs.idle), RANGE_STAGING.near.evrae, NEAR_W, H.evrae);
     expect(b.l).toBeGreaterThan(0.3);
-    expect(b.r).toBeLessThan(FFX_HUD_RAIL);
+    expect(b.r).toBeLessThan(TURN_RAIL);
     expect(b.t).toBeGreaterThan(0.05);
   });
 
@@ -166,7 +172,7 @@ describe('evrae-airship-deck: framing, measured through a real camera', () => {
         expect(at(id).r, `${id} at ${aspect.toFixed(2)}`).toBeLessThan(0.5);
       }
       const near = RANGE_STAGING.near.evrae;
-      const head = new Vector3(near[0], near[1] + H.evrae * (1 - 175 / 784), near[2]).project(cam);
+      const head = new Vector3(near[0] + HEAD_DX, near[1] + H.evrae * (1 - 175 / 784), near[2]).project(cam);
       expect((head.x + 1) / 2).toBeGreaterThan(0.3);
       expect((head.x + 1) / 2).toBeLessThan(0.6);
       expect((1 - head.y) / 2).toBeLessThan(0.5);

@@ -84,7 +84,8 @@ export function missilesLeftOf(state: AirshipFlags | null | undefined): number {
  * paintings at native pixels** (2026-09-22, 3x/4x nearest-neighbour crops with
  * 10 px ticks, recorded in `docs/handoff/chapter-evrae-scene.md` §3):
  *
- * - `idle-near.png` (1171x784): snout (221.7, 210) to eye (281.7, 175), 69.5 px.
+ * - `idle-near.png` (1171x784): snout (221.7, 210) to eye (281.7, 175), 69.5 px. E1-H (D-360) cropped 200 px at its left and lengthened
+ *   the neck, so the E1-H idle (1136x784) has the same head at snout (21.7, 210) to eye (81.7, 175): the length is unchanged.
  * - `idle-far.png` (1024x477): snout (18.8, 97.5) to eye (72.5, 85.5), 55.1 px.
  *
  * One creature, so one head: at the same distance the FAR painting has to be
@@ -144,6 +145,45 @@ export const EVRAE_BASELINE_PX = { near: 768, far: 461 } as const;
  */
 export const EVRAE_WORLD_HEIGHT = 4.1;
 
+/**
+ * **E1-H (D-360, Bailey 2026-10-03 ~16:25 EDT, FFX only): NEAR Evrae's data spot before the repaint.** The deck's enemy slot table
+ * (the formation lane Chapters XVII and XVIII share through `EVRAE_AIRSHIP_DECK_SLOTS`) keeps this ground point; only Evrae's own
+ * spot moves ({@link EVRAE_NEAR_SPOT}).
+ */
+export const EVRAE_NEAR_SPOT_BEFORE_E1H: Spot = [2.3, -0.9, -4.7];
+
+/**
+ * **E1-H (D-360, FFX only): where the NEAR plane's centre actually stood in the running build before the repaint** (the `feet`
+ * x the mix reads, 2026-10-03, 1600x900, first menu, seed 1): 3.018, not the data spot's 2.3. Evrae's wide idle counts as a
+ * prone painting by its shape, so `ProneLay` slid its plane 0.72 world right of the actor along the floor (the 0.25-step slide
+ * that overlapped the party least on the idle rig) and the shared relax step and the formation solver were free to move the actor
+ * too. That resolved centre is the composition Bailey has seen, so it is the baseline the repaint's slot move is added to.
+ */
+export const EVRAE_NEAR_CENTRE_X_BEFORE_E1H = 3.018;
+
+/**
+ * **E1-H (D-360, FFX only): how far Evrae's NEAR slot moves right, in world units, for its head to stay where it was.**
+ * The repainted idle (`public/art/characters/evrae/idle.png`, `idle-near.png`, `idle@2x.png`) lost 200 px of canvas at the
+ * left and gained a 165 px neck pipe at the arch, and a painted plane is centred on its slot, so the slot moves right by
+ * `(200 + 165) / 2` canvas px times the world size of one canvas px (`EVRAE_WORLD_HEIGHT / EVRAE_BASELINE_PX.near` =
+ * 4.1 / 768): `((200 + 165) / 2) * (4.1 / 768)` = 0.97428, kept to four places. The head, the party, the camera and
+ * Evrae's scale are where they were; the coil stands right of the party. The value is only right with that art:
+ * `tests/unit/chapters/evrae-e1h-slot.test.ts` recomputes it and, when the installed idle is the E1-H canvas (1136 px
+ * wide), checks the spot against it. Evidence: `docs/handoff/r38-evrae.md`.
+ */
+export const EVRAE_E1H_SLOT_DX = 0.9743;
+
+/**
+ * NEAR Evrae's ground point from E1-H on: the resolved centre it had before ({@link EVRAE_NEAR_CENTRE_X_BEFORE_E1H}) plus
+ * {@link EVRAE_E1H_SLOT_DX}. Pinned (`SceneSlots.enemySpots`), so neither the prone slide nor the relax step moves it and the
+ * range director's own placement is the stage's.
+ */
+export const EVRAE_NEAR_SPOT: Spot = [
+  EVRAE_NEAR_CENTRE_X_BEFORE_E1H + EVRAE_E1H_SLOT_DX,
+  EVRAE_NEAR_SPOT_BEFORE_E1H[1],
+  EVRAE_NEAR_SPOT_BEFORE_E1H[2],
+];
+
 /** A camera rig as plain numbers (`CameraRig` without `Vector3`). */
 export interface RigNumbers {
   position: Spot;
@@ -178,7 +218,8 @@ export interface RangeStaging {
  */
 export const RANGE_STAGING: Readonly<Record<AirshipRange, RangeStaging>> = {
   near: {
-    evrae: [2.3, -0.9, -4.7],
+    /** NEAR Evrae's ground point ({@link EVRAE_NEAR_SPOT}, D-360): the deck pins it (`enemySpots`). */
+    evrae: [...EVRAE_NEAR_SPOT],
     rigs: {
       idle: { position: [-0.5, 1.45, 9.4], lookAt: [0.9, 1.75, -3.0], fov: 34 },
       action: { position: [-0.2, 1.4, 8.4], lookAt: [1.4, 1.8, -3.2], fov: 34, sway: 0.7 },
