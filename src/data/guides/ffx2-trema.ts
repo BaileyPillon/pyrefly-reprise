@@ -7,6 +7,11 @@
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14]. ATB, dresspheres, Spherechange, the stash.
  *
+ * The RULES and the NEXT line (`./lines/ffx2-trema.ts`) follow the FFX-2 encounter guide the project
+ * settled on (D-350, `research/jegged-encounter-guides-ffx2.md` §6), shape by shape; `cite` names the
+ * research section behind each mechanic and is never rendered. The `hints` below are the move
+ * advisor's borrowed sentences for the chapter tactic's pick: the panel does not read them.
+ *
  * ## True for every option
  *
  * Bailey's options for the fight (`docs/plans/trema-options-2026-09-25.md`: Oversoul Paragon,
@@ -31,6 +36,7 @@ import type { ChapterGuide, GuideHint, GuidePhase, GuideRule } from './types.ts'
 import { tremaBossIdsFor, type TremaShape } from '../trema-shape.ts';
 import { FFX2_TREMA_SHIPPED, shapeOfChapter } from '../chapter-trema-ship.ts';
 import { OVERSOUL_ESTIMATES } from '../ffx2/enemies/paragon-oversoul.ts';
+import { tremaLine } from './lines/ffx2-trema.ts';
 
 const NOTHING_STICKS: GuideRule = {
   text: 'Nothing sticks to Trema: every status, every stat change, Gravity and Reflect fail on him. Only damage moves him.',
@@ -43,8 +49,8 @@ const METEOR_LINES: GuideRule = {
   cite: 'ffx2-trema §4.2',
 };
 const DRAIN: GuideRule = {
-  text: 'His spells need MP: drained early, he cannot pay for Demi, Flare or Ultima. One source says this still holds under his Spellspring; it is disputed, so keep the party healed either way.',
-  short: 'Drain his MP early (one source)',
+  text: 'His spells need MP: drained early, he may not be able to pay for Demi, Flare or Ultima. Do not lean on it, though: keep the party healed either way.',
+  short: 'Drain his MP early, but keep healing',
   cite: 'ffx2-trema §5, §10 T-5',
 };
 const DARKNESS: GuideRule = {
@@ -59,7 +65,7 @@ const BIG_BANG: GuideRule = {
 };
 /** Oversoul Paragon (option 1, shipped), research §12.2: SinirothX's script, its behaviour verified by 3 sources. */
 const OVERSOUL_WAITS: GuideRule = {
-  text: 'This Paragon has oversouled: it does nothing until it is hit, then answers each hit. A spell comes back at whoever cast it; anything else draws its Attack, which often misses. Left alone for long, it strikes on its own, Big Bang among its moves, so keep hitting it.',
+  text: 'This Paragon has oversouled: it does nothing until it is hit, then answers each hit. Spend that quiet opening on a Stamina Tonic and buffs, because nothing is healed between Paragon and Trema. A spell comes back at whoever cast it; anything else draws its Attack, which often misses. Left alone for long, it strikes on its own, Big Bang among its moves, so keep hitting it.',
   short: 'Paragon waits, then answers every hit',
   cite: 'ffx2-trema §12.2',
 };
@@ -195,6 +201,7 @@ export function tremaGuideFor(shape: TremaShape): ChapterGuide {
     hints: hints(shape),
     watch: [],
     phases: phases(shape),
+    line: tremaLine(shape),
     // FOC16-06: the headline names the link that stands, "Paragon" first, then "Trema" (research §2).
     ...(shape.paragonLink && shape.paragonId ? { linkTitles: { [shape.paragonId]: 'Paragon' } } : {}),
   };

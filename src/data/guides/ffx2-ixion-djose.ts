@@ -17,9 +17,16 @@
  * is a conflict (IX-2), so the guide never names one.
  *
  * The Wait split's habit line leads the RULES under Wait (`./ffx2-wait-habit.ts`), as for every FFX-2 guide.
+ *
+ * The RULES and the NEXT line (`./lines/ffx2-ixion-djose.ts`) follow the FFX-2 encounter guide the
+ * project settled on (D-350, `research/jegged-encounter-guides-ffx2.md` §8); `cite` names the research
+ * section behind each mechanic and is never rendered. The page does not say how many Aerospark come in
+ * a row, because the research holds that as an open conflict (IX-5). The `HINTS` below are the move
+ * advisor's borrowed sentences for the chapter tactic's pick: the panel does not read them.
  */
 
 import type { ChapterGuide, GuideHint, GuidePhase, GuideRule } from './types.ts';
+import { FFX2_IXION_DJOSE_LINE } from './lines/ffx2-ixion-djose.ts';
 import { WAIT_SPLIT_HABIT_RULE } from './ffx2-wait-habit.ts';
 
 /** The chapter's one fighter (`src/data/ffx2/enemies/ixion-djose.ts`). */
@@ -37,8 +44,8 @@ const RULES: GuideRule[] = [
     cite: 'ffx2-ixion-djose §4.2',
   },
   {
-    text: "The moment you see Recharge, put Shell up and heal everyone high. Thor's Hammer is magic.",
-    short: 'After Recharge: Shell and heal',
+    text: "The moment you see Recharge, heal everyone high and put Shell up. Thor's Hammer is next, it hits all three, and it is magic.",
+    short: 'After Recharge: heal everyone, Shell up',
     cite: 'ffx2-ixion-djose §4.5',
   },
   {
@@ -77,6 +84,7 @@ export const FFX2_IXION_DJOSE_GUIDE: ChapterGuide = {
   watch: [],
   phases: PHASES,
   clockRules: { wait: WAIT_SPLIT_HABIT_RULE },
+  line: FFX2_IXION_DJOSE_LINE,
 };
 
 export default FFX2_IXION_DJOSE_GUIDE;

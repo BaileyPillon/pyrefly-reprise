@@ -29,11 +29,18 @@
  *
  * The Wait split's habit line leads the RULES under Wait (`./ffx2-wait-habit.ts`, decision sheet
  * 2026-09-25 item 3 with D-136's wording), as main ships it for the FFX-2 guides.
+ *
+ * The RULES, phase notes and the NEXT line (`./lines/ffx2-den-of-woe.ts`) follow the FFX-2 encounter
+ * guide the project settled on (D-350, `research/jegged-encounter-guides-ffx2.md` §7); `cite` names
+ * the research section behind each mechanic and is never rendered. The guide keeps Drill Shot at
+ * eight changes, as the build has it, though the sources split on eight and ten (G-5). The hints are
+ * the move advisor's borrowed sentences for the chapter tactic's pick: the panel does not read them.
  */
 
 import type { ChapterGuide, GuideHint, GuidePhase, GuideRule } from './types.ts';
 import { WAIT_SPLIT_HABIT_RULE } from './ffx2-wait-habit.ts';
 import { DEN_OF_WOE_HERO_DRINKS } from '../ffx2/builds/den-of-woe.ts';
+import { denOfWoeLine } from './lines/ffx2-den-of-woe.ts';
 
 /**
  * **M1 of the ship check: the Lightfall prep, DROPPED.** `false` is Bailey's pick, 2026-09-26 ("I pick
@@ -73,6 +80,11 @@ const RULES_BEFORE_LIGHTFALL: GuideRule[] = [
     text: 'Baralai counts every blow. At eight, the last girl to hit him loses three quarters of her max HP; keep her healed.',
     short: 'Baralai: at 8 hits, Drill Shot',
     cite: 'ffx2-gippal-den-of-woe §4.2',
+  },
+  {
+    text: "Gippal ends his cycle with Bullseye, which takes more than half of everyone's current HP at once and never kills. Heal after every one, and heal before the killing blow, because below a third his Mortar can come.",
+    short: 'Gippal: heal after every Bullseye',
+    cite: 'ffx2-gippal-den-of-woe §4.1',
   },
 ];
 
@@ -143,7 +155,7 @@ const PHASES: GuidePhase[] = [
     bossId: BARALAI,
     aboveHpFraction: 1 / 3,
     label: 'BARALAI',
-    note: 'Five steps, then round again: a strike, Glint, three blows, Looming Glacier, then Silence or Absorb.',
+    note: 'Five steps, then round again: a strike, Glint, three blows, Looming Glacier, then Silence or Absorb. He drains MP all fight, so lean on Darkness, which costs HP.',
     cite: 'ffx2-gippal-den-of-woe §4.2',
   },
   {
@@ -201,6 +213,7 @@ export function denOfWoeGuide(o: DenOfWoeGuideOptions): ChapterGuide {
     hints,
     watch: [],
     phases: PHASES,
+    line: denOfWoeLine(o),
     clockRules: { wait: WAIT_SPLIT_HABIT_RULE },
   };
 }

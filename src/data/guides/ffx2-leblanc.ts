@@ -5,6 +5,13 @@
  * **Game case: FFX-2 only** [AGENTS.md rule 14]. Nothing in this file exists
  * in FFX.
  *
+ * The FFX-2 encounter guide the project settled on (D-350,
+ * `research/jegged-encounter-guides-ffx2.md` §4) has nothing to follow for this fight: three fights
+ * it calls easy, no numbers, no moves, no order. So the RULES stay on this chapter's own research and
+ * the NEXT line (`./lines/ffx2-leblanc.ts`) is that research as a plan. `cite` is never rendered;
+ * the `hints` below are the move advisor's borrowed sentences for the chapter tactic's pick: the
+ * panel does not read them.
+ *
  * **Not registered.** `src/data/guides/index.ts` is integrator-only
  * [docs/plans/chapter-leblanc-review.md §8, track I] and its `GUIDES` array
  * carries a hard length assertion (`tests/unit/strategy-guide.test.ts`), the
@@ -28,6 +35,7 @@
  */
 
 import type { ChapterGuide } from './types.ts';
+import { FFX2_LEBLANC_LINE } from './lines/ffx2-leblanc.ts';
 import { WAIT_SPLIT_HABIT_RULE } from './ffx2-wait-habit.ts';
 
 export const FFX2_LEBLANC_GUIDE: ChapterGuide = {
@@ -152,6 +160,7 @@ export const FFX2_LEBLANC_GUIDE: ChapterGuide = {
 
   // Decision sheet 2026-09-25 item 3 (C): the Wait split's habit, first, under Wait's split only.
   clockRules: { wait: WAIT_SPLIT_HABIT_RULE },
+  line: FFX2_LEBLANC_LINE,
 };
 
 export default FFX2_LEBLANC_GUIDE;
