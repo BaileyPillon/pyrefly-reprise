@@ -113,6 +113,24 @@ describe('buildManifest', () => {
     expect(m.problems).toHaveLength(2);
   });
 
+  it('a source map, or code that points at one, is a problem: none ships (PR-0328, D-335)', async () => {
+    writeFileSync(join(dir, 'assets', 'index-Abc123.js.map'), '{"version":3}');
+    writeFileSync(join(dir, 'assets', 'worker-Def456.js'), 'postMessage(1);\n//# sourceMappingURL=worker-Def456.js.map\n');
+    writeFileSync(join(dir, 'assets', 'index-Abc123.css'), 'body{margin:0}\n/*# sourceMappingURL=index-Abc123.css.map */');
+    const m = await buildManifest(dir, { decode: false });
+    expect([...m.problems].sort()).toEqual([
+      'assets/index-Abc123.css: points at a source map, and none ships',
+      'assets/index-Abc123.js.map: a source map must not ship',
+      'assets/worker-Def456.js: points at a source map, and none ships',
+    ]);
+  });
+
+  it('a clean build, and code that only mentions the name, raise no source-map problem', async () => {
+    writeFileSync(join(dir, 'assets', 'chunk-Ghi789.js'), 'const note = "//# sourceMappingURL=" + name;');
+    const m = await buildManifest(dir, { decode: false });
+    expect(m.problems).toEqual([]);
+  });
+
   it('maps shipped media back to the repo paths the review planner classifies', () => {
     expect(shippedToRepoPaths(['art/tidus.png', 'audio/music/title.mp3', 'assets/index-Abc123.js', 'index.html']))
       .toEqual(['public/art/tidus.png', 'public/audio/music/title.mp3']);

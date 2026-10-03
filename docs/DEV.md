@@ -167,6 +167,18 @@ run, so `gh-pages` always ends up with exactly one commit. Requires the `gh`
 CLI (hardcoded at `D:/Tools/GitHubCLI/gh.exe`) authenticated against
 `BaileyPillon/pyrefly-reprise`.
 
+**No source map ships (PR-0328, D-335; Bailey 2026-10-03).** A plain
+`vite build` makes none. `tools/deploy-pages.mjs` builds with
+`PYREFLY_SOURCEMAP_DIR=D:/Tools/pyrefly-sourcemaps/<sha>` set (the home folder
+is `PYREFLY_SOURCEMAP_HOME` when you want another), which makes the bundler write
+them `hidden` (no `sourceMappingURL` comment in the code); the `pyrefly-dist-filter`
+plugin copies them into that folder and prunes them from the build. The deploy
+refuses a build that still holds a `.map` file or a `sourceMappingURL` comment,
+and `artifact-manifest.mjs` calls either a problem. To read a minified stack trace
+from a live build, open `assets/index-<hash>.js.map` from that commit's folder
+(DevTools "Add source map", or `source-map` in node). The release-36 maps were
+22,775,896 bytes of a site held to 800,000,000 (D-332).
+
 **Every live build must be evaluated by the critic — no exceptions — and the
 depth of the review follows what changed** (critic policy v2, approved by
 Bailey on 2026-09-20; `critic/RUBRIC.md` sections 4 and 10). The sequence is
