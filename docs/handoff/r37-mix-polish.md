@@ -34,9 +34,9 @@ preflight, `0e1cb3f5` the presenter hold (replaces the estimate), `59b74180` the
 
 ## Gates
 
-`npx tsc --noEmit` clean. Full `npx vitest run --testTimeout=60000 --maxWorkers=4` at `0e1cb3f5`: **752 files passed, 5 skipped, 0 failed** (11,077 tests passed,
-40 skipped, 1 todo). After `59b74180` the nine mix and connection files (124 tests) pass and tsc is clean; the full suite was not re-run for the one-line
-eager gate. `node tools/orphans.mjs`: 24 orphans, unchanged (`shotHold.ts`, `downed.ts`, `framingReport.ts` are reachable). New tests: `fx-mix-shot-hold`,
+`npx tsc --noEmit` clean. Full `npx vitest run --testTimeout=60000 --maxWorkers=4` at the last code commit `59b74180` (and again at the note's commit): **752 files passed, 5 skipped, 0 failed**
+(11,077 tests passed, 40 skipped, 1 todo).
+`node tools/orphans.mjs`: 24 orphans, unchanged (`shotHold.ts`, `downed.ts`, `framingReport.ts` are reachable). New tests: `fx-mix-shot-hold`,
 `fx-mix-twirl-pin`, `fx-mix-downed`. `framing.ts` is 377 lines, `twirl.ts` 363, `heldShots.ts` under 300.
 
 Captures: dev server on 5910 (stopped by PID), one headless Playwright browser at a time with `PYREFLY_BROWSER=gpu`, scripts and raw frames under
