@@ -251,9 +251,9 @@ describe('WATCH', () => {
     const view = buildGuideView(stateWithCharges([charge(1, 'Auto-Attack Mode', 2, 1)]), null);
     expect(view!.watch).toHaveLength(1);
     const w = view!.watch[0]!;
-    expect(w.payload).toBe('Total Annihilation');
+    expect(w.payload).toMatch(/^Total Annihilation/);
     expect(w.timing).toBe('in 2 turns');
-    expect(w.advice).toMatch(/Shell|Defend/);
+    expect(w.advice).toMatch(/Shell/);
     expect(w.cite).toMatch(/ffx-seymour-flux/);
     expect(w.stage).toBe(1);
   });

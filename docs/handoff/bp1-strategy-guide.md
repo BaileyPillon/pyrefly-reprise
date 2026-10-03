@@ -13,7 +13,9 @@ Nothing else was touched. `public/art/**`, `src/ui/common/DamageNumbers.ts`,
 `damageLadder.ts`, `damage-numbers.css`, `src/ui/ffx2/DamageLayer.ts`,
 `src/scenes/*`, `ffx-hud.css`, `src/ui/ffx2/*.css` and
 `src/engine/tactics/braskas-final-aeon.ts` were read only — the last of those
-is run, read-only, every time the panel draws a NEXT line.
+was run, read-only, every time the panel drew a NEXT line. **Since 2026-10-03 (r38) the
+panel runs no tactic at all**: NEXT comes from the guide's own line, see
+[r38-guide-jegged](r38-guide-jegged.md) and the notes marked *Superseded* below.
 
 ---
 
@@ -30,7 +32,9 @@ Bailey, 2026-10-03: "from now on the guide follows the ffx/ffx-2 encounter guide
 A side slab on the **left** edge of the battle HUD, inside the same 640x360
 letterboxed stage as the rest of the chrome, with three parts:
 
-* **NEXT** — the command the chapter's shipped tactic would pick for the
+* **NEXT** — *(Superseded 2026-10-03: the card now reads the guide's own line, with a plain
+  one-sentence reason and no citation; the paragraph below is the original design.)* the command
+  the chapter's shipped tactic would pick for the
   character who is deciding right now, the target it would aim at, and one
   cited sentence on why: *"Holy Water → Auron — Auron is a Zombie and the
   Mortiorchis answers with Full-Life; cured first it whiffs outright, left alone
@@ -38,8 +42,8 @@ letterboxed stage as the rest of the chrome, with three parts:
 * **WATCH** — whatever the boss is winding up while a `charge` event is live
   (*"Total Annihilation — in 2 turns — Get Shell up, or Defend"*), plus the
   chapter's phase/form note for the board that is on screen.
-* **RULES** — the three-to-five standing truths of the encounter, each carrying
-  the `research/*.md` section it comes from.
+* **RULES** — the three-to-five standing truths of the encounter. Each carries the
+  `research/*.md` section it comes from **in the data**; the panel no longer prints it (r38).
 
 `G`, the pad's spare face button, or the panel's own chip hides all of it and
 leaves a chip two words wide. The answer is remembered in
@@ -57,10 +61,16 @@ Three layers, and the boundaries are the whole design:
 | Layer | File(s) | Owns |
 |---|---|---|
 | Drawing | `src/ui/common/StrategyGuide.ts` + `.css` | DOM, layout, input, the preference |
-| Reasoning | `src/engine/tactics/guide.ts` | *which* command, *which* telegraph, *which* phase |
-| Words | `src/data/guides/*.ts` | every sentence the player reads, and its citation |
+| Reasoning | `src/engine/tactics/guide-line.ts` (r38; `guide.ts` still builds the written content and feeds the move advisor) | *which* command (the line), *which* telegraph, *which* phase |
+| Words | `src/data/guides/*.ts`, `src/data/guides/lines/*.ts` | every sentence the player reads; provenance stays in the data |
 
-### 2.1 NEXT is not a second strategy
+### 2.1 NEXT is not a second strategy *(Superseded 2026-10-03: it is, on purpose)*
+
+Bailey, 2026-10-03: "The guide and next move advisor are completely separate entities." The panel's NEXT now
+reads a line of its own (`src/data/guides/lines/<chapter>.ts`, evaluated by `src/engine/tactics/guide-line.ts`),
+which never runs a tactic, the advisor or `intendedStrategy`. `tests/unit/guide-line-separation.test.ts` is the
+new assertion, and `docs/handoff/r38-guide-jegged.md` has the before-and-after proof. The reasoning below is the
+original design and is kept for history.
 
 The panel makes one strong claim: *this is the command the chapter was designed
 to be beaten with.* That is only honest if the line it prints is the shipped
@@ -97,7 +107,7 @@ panel with no NEXT line — the battle is untouched either way.
 The HUD holds a `BattleState` (from `sync`), never the engine, so there is no
 live engine on this side of the wall to hand over by accident.
 
-### 2.3 Every sentence cites
+### 2.3 Every sentence cites *(in the data; the panel prints none since 2026-10-03)*
 
 `src/data/guides/types.ts` makes `cite` mandatory on every rule, hint, watch
 entry and phase note, in the corpus's own form (`ffx-seymour-flux §6 row 4`).

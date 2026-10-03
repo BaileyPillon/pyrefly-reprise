@@ -280,10 +280,11 @@ describe('what the slab says', () => {
     expect(text).toContain('Seymour Flux');
     expect(text).toContain('Total Annihilation');
     expect(text).toContain('in 2 turns');
-    // A RULES bullet and its citation.
+    // A RULES bullet, and no citation anywhere: the panel prints plain advice only (Bailey, 2026-10-03).
     expect(text).toMatch(/Mortiorchis/);
     expect(panelOf(stage).querySelectorAll('.sgd__rules li').length).toBeGreaterThanOrEqual(3);
-    expect(panelOf(stage).querySelectorAll('.sgd__cite').length).toBeGreaterThan(3);
+    expect(panelOf(stage).querySelectorAll('.sgd__cite').length).toBe(0);
+    expect(text).not.toMatch(/§|ffx-seymour|research\//);
   });
 
   it('says it is waiting rather than going blank between turns', () => {

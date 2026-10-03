@@ -135,16 +135,18 @@ describe('the rail ends on a whole block instead of slicing one (round-03 #36, r
     // to `ui-strategy-guide.test.ts`'s own case). Chrome (the slab's padding)
     // is 11, so the rail's text budget is 164; the content is taller than that,
     // so the MORE row shows and takes another 11, leaving 153 for whole blocks.
-    // Each block is 20 tall, so blocks end at 20, 40, 60 ... and the last one
-    // at or below 153 ends at 140, with its type stopping 2 px above that.
+    // Each block is 20 tall, so blocks end at 20, 40, 60 ... and the seventh would
+    // end at 140. That seventh block is the RULES heading, and a heading is never
+    // the last thing shown (its bullets would all be cut), so the cut drops it and
+    // ends on the sixth block, at 120, with its type stopping 2 px above that.
     const stub = stubGuideLayout(stage, { scale: 1, unitHeight: 20, glyphSlack: 2, bodyTop: 5, chrome: 11 });
     guide.update(0.016);
     expect(stub.units.length, 'the fixture guide got shorter than this case needs').toBeGreaterThan(8);
 
     const body = stage.querySelector<HTMLElement>('.sgd__body')!;
-    expect(Number.parseFloat(body.style.height)).toBeCloseTo(138, 1); // 140 - 2 of leading
-    expect(stub.units[6]!.classList.contains('sgd__u--out')).toBe(false); // ends at 140
-    expect(stub.units[7]!.classList.contains('sgd__u--out')).toBe(true); // would end at 160
+    expect(Number.parseFloat(body.style.height)).toBeCloseTo(118, 1); // 120 - 2 of leading
+    expect(stub.units[5]!.classList.contains('sgd__u--out')).toBe(false); // ends at 120
+    expect(stub.units[6]!.classList.contains('sgd__u--out')).toBe(true); // the RULES head: never the last block shown
     expect(stage.querySelector<HTMLElement>('[data-role="strategy-guide-more"]')!.hidden).toBe(false);
 
     guide.unmount();
@@ -163,7 +165,7 @@ describe('the rail ends on a whole block instead of slicing one (round-03 #36, r
     guide.update(0.016);
 
     const body = stage.querySelector<HTMLElement>('.sgd__body')!;
-    // 138 of text + 11 of slab chrome + 11 of MORE row = 165, inside the 175
+    // 118 of text + 11 of slab chrome + 11 of MORE row = 140, inside the 175
     // the anchors allow. The defect this pins is the old order — clamp the
     // text first, then paint an 11px chip over its foot.
     expect(Number.parseFloat(body.style.height) + 11 + 11).toBeLessThanOrEqual(175);
