@@ -82,6 +82,11 @@ export class SfxSprites {
     return { slice: cue ? { buffer: this.v1!, cue } : null, fallback: null };
   }
 
+  /** Settles when the sprite load that is running (or has run) has finished; at once when none has started. */
+  whenLoaded(): Promise<void> {
+    return this.loading ?? Promise.resolve();
+  }
+
   record(entry: SfxPlayRecord): void {
     this.log.push(entry);
     if (this.log.length > LOG_SIZE) this.log.splice(0, this.log.length - LOG_SIZE);
