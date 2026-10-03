@@ -31,6 +31,7 @@ import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { loadScene, type LoadedScene } from '../../scenes/index.ts';
+import { markOpeningHurried } from '../../scenes/openingMark.ts';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { demoReel, demoState } from './BattleScreenDemoReel.ts';
@@ -208,6 +209,7 @@ export class BattleScreen extends Screen {
     const scene = await loadScene(chapter.sceneKey, this.app.renderer.camera);
     if (this.exited) return void scene.dispose();
     this.scene = scene;
+    if (this.opts.openingHurry) markOpeningHurried(scene.scene); // PR-0341: a scene that stages its own arrival (Ch. IX) must not wait for an opening shot a hurried opening never shows
     this.app.renderer.applyPalette(this.scene.palette);
     bindEyeCandyScene({ key: scene.key, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
     bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera }); // eye-candy option B (`?fx=b`)

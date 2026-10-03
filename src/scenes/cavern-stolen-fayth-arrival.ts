@@ -102,6 +102,46 @@ export function sakuraArrivalAt(ms: number): SakuraArrivalFrame {
   };
 }
 
+/** What {@link ArrivalWait.step} says about this frame. */
+export type ArrivalWaitStep = 'hold' | 'go' | 'rest';
+
+/**
+ * Whether, and for how long, one fight's arrival waits for its opening (PR-0341; the scene's own clock, pure).
+ *
+ * The figures are staged while the battle-start card is up, so the arrival must not start then: it starts on the
+ * first rendered frame of the opening shot ({@link ArrivalWait.openingSeen}), or `fallbackMs` after the fight is
+ * staged when no opening ever shows (the skip speed). A **hurried** opening (the player skipped the scene,
+ * PR-0061) shows no shot at all: it collapses to the first command menu inside a tick, so the arrival is not waited
+ * for and not played either; Daigoro and Yojimbo are on the field, drawn, when the menu opens.
+ */
+export class ArrivalWait {
+  /** ms since the fight was staged while it waits; negative when nothing is (or is no longer) being waited for. */
+  private waitMs = -1;
+  private opened = false;
+
+  constructor(private readonly fallbackMs: number) {}
+
+  /** A fight's figures are on the field (first staging, or a retry). `hurried`: its opening is collapsed. */
+  stage(hurried: boolean): void {
+    this.waitMs = hurried ? -1 : 0;
+    this.opened = false;
+  }
+
+  /** A rendered frame had the camera on the opening shot. */
+  openingSeen(): void {
+    this.opened = true;
+  }
+
+  /** `hold`: they stay off the field; `go`: the arrival starts now; `rest`: nothing is waited for. */
+  step(dtMs: number): ArrivalWaitStep {
+    if (this.waitMs < 0) return 'rest';
+    this.waitMs += dtMs;
+    if (!this.opened && this.waitMs < this.fallbackMs) return 'hold';
+    this.waitMs = -1;
+    return 'go';
+  }
+}
+
 /** A vertical two-stop gradient on a small canvas. */
 function gradientTexture(top: number, bottom: number): CanvasTexture {
   const c = document.createElement('canvas');
