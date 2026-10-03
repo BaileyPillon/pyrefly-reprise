@@ -4,6 +4,7 @@ import type { QuadFieldSpec } from '../QuadField.ts';
 import type { HazeSpec } from '../Haze.ts';
 import type { ShadowSpec } from '../Figures.ts';
 import type { ReflectSpec } from '../FloorReflection.ts';
+import type { FocusSpec } from '../PlateFocus.ts';
 
 /**
  * Option B "Living Paintings": one room's recipe. Every number here is staging (ours), tuned by
@@ -21,6 +22,8 @@ export interface RoomSpec {
   fields: QuadFieldSpec[];
   haze: HazeSpec[];
   shadow: ShadowSpec;
+  /** A-7 plate defocus: which plate is in focus and the cap on the blur (defaults: the nearest upright plate, `FOCUS_MAX_BIAS`). */
+  focus?: FocusSpec;
   /** Floor reflection; the patch defaults to the room's own lit ground when there is one. */
   reflect?: Omit<ReflectSpec, 'center' | 'size'> & Partial<Pick<ReflectSpec, 'center' | 'size'>>;
   /** Electric arcs anchored on painting pixels (u right, v down), each on its own plate. */

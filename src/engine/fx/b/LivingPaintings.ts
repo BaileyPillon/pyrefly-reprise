@@ -2,7 +2,8 @@ import { Group, Vector3, type PerspectiveCamera, type Scene } from 'three';
 import { artUrl } from '../../PaintedArt.ts';
 import type { BattleCamera } from '../../BattleCamera.ts';
 import { eyeCandy, type FxTier } from '../EyeCandy.ts';
-import { DRIFT_FFX, DRIFT_FFX2, DriftEnvelope, arcTurn, driftAt, easeWeight } from './CameraDrift.ts';
+import { DRIFT_FFX, DRIFT_FFX2, DriftEnvelope, arcTurn, driftAt, easeWeight, type DriftOffset } from './CameraDrift.ts';
+import { PlateFocus, focusDial } from './PlateFocus.ts'; // A-7: the plates' defocus, aimed at the party's plate
 import { DepthPlates, paintPoint } from './DepthPlates.ts';
 import { Lamps } from './Lamps.ts';
 import { QuadField } from './QuadField.ts';
@@ -55,6 +56,10 @@ class Living {
   private built: FxTier | null = null;
   private building = false;
   private plates: DepthPlates | null = null;
+  private focus: PlateFocus | null = null;
+  private driftOff: DriftOffset | null = null;
+  /** Debug only (`__pyrefly.fx.b.pin`): holds the room's clock so a capture lands on one drift phase. */
+  pinned: number | null = null;
   private plateMs = 0;
   private lamps: Lamps[] = [];
   private fields: QuadField[] = [];
@@ -127,6 +132,7 @@ class Living {
     }
     const plates = this.plates;
     if (plates) {
+      this.focus = new PlateFocus(plates.meshes, plates.zs.map((z) => plates.geometry.camRef.z - z), plates.floored, room.focus);
       plates.meshes.forEach((m, i) => {
         if (plates.floored && i === plates.meshes.length - 1) return;
         if (room.lamps.warm || room.lamps.cool) this.lamps.push(new Lamps(m, plates.textures[i]!, room.lamps));
@@ -180,6 +186,8 @@ class Living {
   }
 
   private teardownParts(): void {
+    this.focus?.dispose();
+    this.focus = null;
     this.plates?.dispose();
     this.plates = null;
     for (const l of this.lamps) l.dispose();
@@ -220,10 +228,11 @@ class Living {
     const tier = this.built ?? eyeCandy.tier;
     const rm = eyeCandy.reduceMotion;
     const low = tier === 'low';
-    this.time += dt;
+    this.time = this.pinned ?? this.time + dt;
     const t = this.time;
     this.holdSway(rm);
     this.drift(dt, rm, tier);
+    this.focus?.update(this.driftOff, this.room.game === 'ffx2' ? DRIFT_FFX2 : DRIFT_FFX, this.plates?.visible ? focusDial(rm, tier) : 0);
 
     // REDUCE MOTION keeps the room's weather on screen, held still (D, 2026-09-29: "keep light and
     // weather still"); the drift, the sway, the arcs' crackle and the lightning flash stop.
@@ -265,8 +274,10 @@ class Living {
     const allowed = !rm && rig === 'idle' && bc.pushAmount === 0 && bc.rollDeg === 0 && !moving && eyeCandy.sub('b', 'drift');
     const w = easeWeight(this.env.update(dt, allowed)) * eyeCandy.dial('drift') * TIER_DRIFT[tier];
     this.driftNow = w;
+    this.driftOff = null;
     if (w <= 0) return;
     const d = driftAt(this.time, this.room.game === 'ffx2' ? DRIFT_FFX2 : DRIFT_FFX, w);
+    this.driftOff = d;
     const q = cam.quaternion;
     const right = new Vector3(1, 0, 0).applyQuaternion(q);
     const up = new Vector3(0, 1, 0).applyQuaternion(q);
@@ -315,6 +326,7 @@ class Living {
       reflection: !!this.reflection,
       figures: this.figures.count,
       drift: Math.round(this.driftNow * 100) / 100,
+      focus: this.focus ? { plate: this.focus.focusPlate, amounts: this.focus.amounts.map((a) => Math.round(a * 100) / 100), ...this.focus.state } : null,
       strikes: this.strikes,
       time: Math.round(this.time * 100) / 100,
     };
@@ -366,6 +378,11 @@ export function releaseLivingScene(): void {
   pending = null;
   current?.dispose();
   current = null;
+}
+
+/** Debug only: hold option B's clock at `t` seconds (null releases it), and with it the drift phase. */
+export function pinLivingClock(t: number | null): void {
+  if (current) current.pinned = t;
 }
 
 /** `__pyrefly.fx.snapshot().b`. */
