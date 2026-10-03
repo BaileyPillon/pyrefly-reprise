@@ -1,0 +1,19 @@
+{
+  "width": 2464,
+  "height": 2752,
+  "baselineY": 2752,
+  "masterOf": "idle.png",
+  "density": 2,
+  "loaderNote": "never read by the game: on a 2x device the loader draws these pixels with the 1x sidecar idle.json (src/engine/ArtTier.ts), so size, baseline, scale and facing are the 1x painting's",
+  "facing": "left",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-design-fixes/yunalesca-2-idle/masters-2x/op-yunalesca-2-idle-1-d66@2x.png",
+  "candidateSha256": "7453fc6e9f579b35514da6394a82a0899653621ac185bb879fde46892d19c0ae",
+  "replacesNote": "replaces the release 35 master of the old idle (D-315), which no longer matches the new 1x canvas",
+  "decision": "D-325",
+  "replaces": {
+    "sha256": "703ff1d8e4d24396a32a2a2ac8c31018aaa9715a4c67c46a5c341e74dbf314df",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/yunalesca-2/idle@2x.png"
+  }
+}

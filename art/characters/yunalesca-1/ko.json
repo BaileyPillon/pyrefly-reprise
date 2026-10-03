@@ -1,0 +1,37 @@
+{
+  "width": 981,
+  "height": 788,
+  "baselineY": 772,
+  "seed": 1301000,
+  "prompt": "1girl, yunalesca, final fantasy x, safe, solo, silver hair, very long hair, long silver hair spread out across the ground, yellow eyes, pale skin, blue headdress, ornate headdress, two long silver plumes zigzagging into an M shape, blue beads, yellow tassels, blue and black bikini top, gold chain, gold jewelry, gold bracelet, blue armband, green sash, black thong, barefoot, revealing clothes, navel, elegant, dying, collapsed on her side on the ground, limp and motionless, both eyes closed, head lying on the ground, arms fallen loose at her sides, legs together, her long silver hair spread out in a fan across the ground around her head, dissolving into pyreflies, (long silver hair spread out across the ground:1.35), (blue headdress with two long silver plumes:1.3), (lying limp and motionless:1.3), head to the left, feet to the right, lying on ground, on side, eyes closed, full body, from side, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, long dress, gown, covered shoulders, robe, cape, armor, blonde hair, white dress, skirt, wings, 2girls, multiple girls, disembodied head, shadow, ground, sand, floor, extra limbs, extra arms, extra hands, extra legs, extra feet, three legs, four legs, tangled limbs, butterfly, gold fan, feather fan, folding fan, leaf, leaves, fronds, frond, plumage, feathers, feathered, olive green, purple veil, magenta veil, blue spiked crown, spiked crown, tiara, cyan, turquoise, smiling, smirk, winking, one eye closed, seductive, pin-up, propped up on elbow, resting on arm, leaning on hand, posing, cropped, out of frame, short hair, bob cut, bald, bare head, no hair, nude, naked, topless, completely nude",
+  "cropBox": [
+    121,
+    24,
+    1102,
+    812
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "ko",
+  "composition": "prone",
+  "facing": "left",
+  "emphasis": "(long silver hair spread out across the ground:1.35), (blue headdress with two long silver plumes:1.3), (lying limp and motionless:1.3)",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "img2img": "tools/gen/refs/y1-plate-koA.png",
+  "denoise": 0.44,
+  "generatedAt": "2026-09-19T19:34:02.307Z",
+  "fixRound": "bosses-a fix round 11 (2026-09-19). Judge (score 5): limbs tangled so it read as extra limbs with a broken ankle join; the idle's layered blue/green cloth panels replaced by purple and olive leaf/feather fronds; headdress reduced to a small gold fan, losing the crown and plumes; torso very short against the leg length. Root cause was round 10's own prompt, which asked for an 'ornate gold and feathered headdress' and a 'magenta purple veil' - neither is in the idle, whose headdress is BLUE with two silver M-plumes. Identity block is now the idle's verbatim; leaf, fronds, plumage, feathers, olive green, purple veil, extra arms/hands/legs and tangled limbs are in --negAdd; (blue headdress with two long silver plumes:1.3) and (long silver hair spread out across the ground:1.35) in --emphasis. Same +75deg prone plate, denoise lowered 0.52 -> 0.44 (a first 0.48 batch was prone and clean but had repainted the hair mass away). Two arms, two legs, intact ankles, idle costume. op 38.7% vs the replaced file's 36.5%.",
+  "candidate": "y1-koB11.1",
+  "baselineNote": "Prone state: per ART-PIPELINE.md section 5 the ko pose is exempt from the dangling-prop rule - a downed figure has no feet baseline and the whole silhouette sits on the floor. qc.py reports DANGLE-134px for the trailing drape and the spread hair; baselineY is the lowest opaque pixel and that is correct here."
+}

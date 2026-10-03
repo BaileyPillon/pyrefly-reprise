@@ -1,0 +1,55 @@
+{
+  "width": 765,
+  "height": 913,
+  "baselineY": 897,
+  "scale": 0.8,
+  "scaleNote": "head match: read on gridded head crops beside this character's installed idle (the 2026-09-26 boss-pose method; heads.py and headscale.py in D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/work/), feature: crown-to-chin and eye-to-chin beside the idle at 0.8 to 1.2; stature at this scale 0.675 of the idle (gate: at least 0.60 for a bend, hunch, kneel or lunge)",
+  "facing": "right",
+  "seed": 51056,
+  "prompt": "standing, (sleeping:1.2), (closed eyes:1.3), (dozing off:1.1), (head tilted down:1.2), chin down, slight slouch, drooping shoulders, arms hanging down, relaxed, feet on ground, closed mouth, holding staff upright with both hands, leaning on the staff, holding one staff, profile, (looking down:1.1), (hunched over:1.1), golden ring staff head, 1girl, yuna \\(ff10\\), final fantasy x, brown hair, short hair, single braid, heterochromia, blue eye, green eye, japanese clothes, black camisole, white sash, yellow obi, obi, purple hakama, long skirt, pleated skirt, floral print, detached sleeves, pink and white sleeves, black boots, summoner staff, staff with a golden ring ornament at the top, solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, lying, lying down, sitting, kneeling, bed, pillow, blanket, zzz, speech bubble, text, open eyes, looking at viewer, smile, grin, arms up, jumping, floating, (from behind:1.2), facing away, bowing, bent over, (bending forward:1.2), touching toes, scenery, architecture, indoors, pillar, building, detailed background, short hair only, long hair, blonde hair, trousers, (facing left:1.2), looking back, turned away, extra person, second figure, two staffs, extra staff, giant staff head, flowers, petals",
+  "cropBox": [
+    45,
+    298,
+    810,
+    1211
+  ],
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "sleep",
+  "composition": "full",
+  "headTop": [
+    0.66,
+    0.064
+  ],
+  "headTopNote": "the top of the painted head as fractions [across, down] of the opaque box (alpha > 16); the status marks (the Z marks, bubbles, stars) sit there while this painting is up (src/ui/common/restPoses.ts); read by eye, work/heads_top.py",
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "skeleton": "D:\\Tools\\pyrefly-scratch\\art-0930\\sleep-lowhp\\skel\\sleep-b.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-art-backup/candidates/2026-09-30-overnight/sleep-lowhp-refs/yuna-idle-square.png",
+      "D:/Tools/pyrefly-art-backup/candidates/2026-09-30-overnight/sleep-lowhp-refs/yuna-head.png"
+    ]
+  },
+  "sources": "look: research/status-display.md section 2 (FFX Sleep: \"they appear hunched over and have Z's emerge from their head\", FF Wiki Sleep (Final Fantasy X status) rev 4030962) and section 3 (FFX-2 Sleep: \"Their battle model will hunch over and Z's appear above their head\", W-X2S rev 4028042 + W-page, 2 sources); the Z's are the status layer's overlay, never painted; identity from the installed idle and its sidecar; the IP-Adapter saw only our own idle and head crop; no retail image used as input, reference or IP-Adapter (rule 8)",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-09-30 ~09:40 EDT (\"all your recommendations, godspeed\", D-298), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-09-30-poses\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-30-overnight/sleep-lowhp-yuna/sleep/cand-56.png",
+  "candidateSha256": "68b429abe4e1d3a08ab64c3944f7ab0d534e7f2766126ef434c2008b6e19d34c",
+  "generatedAt": "2026-09-30T08:28:29.932Z",
+  "decision": "D-298"
+}

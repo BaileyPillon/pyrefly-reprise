@@ -1,0 +1,41 @@
+{
+  "subject": "Lulu",
+  "mood": "cool composed poise",
+  "seed": 20264701,
+  "prompt": "1girl, lulu \\(ff10\\), final fantasy x, safe, solo, black hair, elaborate braided updo, black beads in hair, crimson red eyes, dark lipstick, pale skin, black belt dress, thick fur collar, blue bead earring, mature female, macalania woods behind her, glowing blue crystal trees, cold blue-green light, soft bokeh background, head and shoulders, three-quarter view, looking to the side, cool composed poise, eyes open and level, faint knowing smirk, clean upper lip, both eyes fully drawn and unobstructed, (clear crimson red eyes, both eyes fully visible:1.25), (black beaded braids falling clear of her face:1.25), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, moustache, dark stroke above the lip, smudge on the face, mark above the mouth, hair across the eye, hair over the eye, strands crossing the face, malformed iris, misshapen pupil, half-closed eyes, pink hair, blonde hair, two-tone hair, heart pupils, star pupils, spiral pupils, warm amber bokeh, candlelight",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(clear crimson red eyes, both eyes fully visible:1.25), (black beaded braids falling clear of her face:1.25)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "ref": "public/art/characters/lulu/idle.png",
+  "refWeight": 0.5,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T23:38:31.243Z",
+  "focal": {
+    "x": 0.6,
+    "y": 0.34
+  },
+  "fixPass": "round 8 (2026-09-18)",
+  "batch": "r8 A v1",
+  "master": {
+    "file": "lulu.2x.webp",
+    "width": 2688,
+    "height": 1536,
+    "route": "RealESRGAN_x4plus x4 -> lanczos 0.5",
+    "webpQuality": 88,
+    "note": "PNG is this master downscaled to 1344x768; both are one image."
+  }
+}

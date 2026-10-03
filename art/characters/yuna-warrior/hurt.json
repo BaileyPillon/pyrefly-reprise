@@ -1,0 +1,60 @@
+{
+  "width": 754,
+  "height": 789,
+  "baselineY": 773,
+  "scale": 1.06,
+  "scaleNote": "Head match 2026-09-26 (D-194 install; method of the 09-25 repair: iris-centroid eye spacing and a checked eye-line-to-chin point, idle/pose, read against which one the head turn or tilt shortens, then checked by eye beside the idle head; evidence docs/concepts/art5/installed-0926/). head thrown back: eye line to chin 1.03 and eye spacing 1.09 (one eye winked shut, lid centre); mean; face width agrees.",
+  "seed": 37137,
+  "prompt": "1girl, solo, (recoiling:1.2), knocked back, (leaning back:1.2), head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, arm outstretched, feet on ground, (single weapon:1.2), one hand holding longsword, sword lowered, (leaning back:1.2), (recoiling:1.2), head thrown back, staggering backward, sword held low at her side, yuna \\(ff10-2\\), final fantasy x-2, warrior, brown hair, short hair, (heterochromia:1.1), blue eye, green eye, earrings, (red hood down:1.2), hood down, red collar, white top, (detached pink kimono sleeves:1.2), wide sleeves, orange obi, obi flower, blue waist cloth, (long blue skirt:1.2), dark blue leggings, tan boots, (cyan longsword:1.2), gold crossguard, three-quarter view, looking at viewer, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, glowing sword, fire, flames, fire trail, swirl, lightning, dark aura, splash, extra sword, multiple swords, floating sword, cast shadow, drop shadow, pedestal, platform, rock, from behind, facing away, smile, smirk, grin, happy, laughing, bent over, bowing, from behind, jumping, midair, flip, legs up, knee up, arms up, weapon raised, close-up, upper body, cowboy shot, oversized sword, giant sword, two swords, broken sword, upside-down sword, armor, helmet, wings, dual wielding, two weapons, two swords, greatsword, huge sword, spear, polearm, staff, second sword, gun, blonde hair, hood up, hooded, wearing hood, red eyes, short skirt, miniskirt, yellow sword, hood cape, wings, pink cape, flowing ribbon, giant sash, sword over shoulder, extra legs, three legs, two swords, standing straight",
+  "cropBox": [
+    66,
+    406,
+    820,
+    1195
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "hurt",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.9,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/art5/round2/skeletons/yuna-warrior/hurt.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "yuna-warrior-idle-square.png",
+      "yuna-warrior-head.png"
+    ],
+    "forced": true
+  },
+  "status": "APPROVED: Bailey 2026-09-26 ~07:00 EDT, \"I’ll go with all your recommendations\" (D-194: install the judge-PASS pose-round-2 picks shown in docs/concepts/art5/round2/round2-ready.jpg; a pick approves only the pose as shown); installed 2026-09-26, locked in docs/target/approved-hashes.json set bailey:2026-09-26-poses",
+  "judge": "docs/concepts/art5/round2/judge2.json#yuna-warrior/hurt (7.19)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-warrior/hurt/cand-7.png",
+  "sha256": "d1f522154217b8022168d3fa8d1382b64287456e70b259ca3c6ca55c517ab42b",
+  "generatedAt": "2026-09-26T04:35:18.896Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-warrior/hurt/cand-7.png",
+  "decision": "D-194"
+}

@@ -1,0 +1,36 @@
+{
+  "width": 832,
+  "height": 1212,
+  "baselineY": 1196,
+  "seed": 1221001,
+  "prompt": "1girl, yunalesca, final fantasy x, safe, solo, monster girl, upper body of a pale woman rising from a huge writhing clump of dark violet tentacles, no legs, her hips dissolving into thick matte violet tendrils, tendrils like coarse matted hair, root mass, silver hair, very long hair, yellow eyes, pale skin, blue headband headdress with two long silver plumes zigzagging into an M shape, blue beads, yellow tassels, blue and black bikini top, gold chain, gold bracelet, blue armband, green sash, revealing clothes, demonic, menacing, monster, summoning, both arms raised high above her head, hands open and empty, dark violet energy gathering between her open palms, a glowing magic circle behind her, the violet tendrils rearing up around her, head up, (both arms raised high, hands open:1.4), (blue headband headdress with two silver plumes:1.3), (casting a spell:1.25), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, long dress, gown, blonde hair, standing on ground, legs, thighs, bare legs, human legs, feet, sandals, shoes, skirt, armor, wings, scenery, floor, cropped, out of frame, white dress, glossy, shiny, latex, wet, rubber, ribbon, crown, spiked crown, tiara, feather fan, shadow, cast shadow, reflection, close-up, bust, portrait, face focus, ponytail, tied hair, hair bun, back view, looking over shoulder, pin-up, seductive, arched back, buttocks, ass, thigh focus, presenting, white glove, gloves, elbow gloves, feathered glove, feathers, tube top, red horns, horns, arms lowered, arms at sides, hands on hips",
+  "cropBox": [
+    0,
+    1,
+    832,
+    1213
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "cast",
+  "composition": "boss",
+  "facing": "left",
+  "emphasis": "(both arms raised high, hands open:1.4), (blue headband headdress with two silver plumes:1.3), (casting a spell:1.25)",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "img2img": "tools/gen/refs/y2-plate-flat11.png",
+  "denoise": 0.58,
+  "generatedAt": "2026-09-19T19:24:14.460Z",
+  "fixRound": "bosses-a fix round 11 (2026-09-19). Judge (score 6, facingOk FALSE): body and head angled toward frame-RIGHT, inherited from the idle; read as a generic tentacled succubus, blue bandana plus red horns instead of the canon crown; pin-up before spellcast. The IDLE was the cause, so the idle was mirrored with flip.py --set-facing left this round and this state re-rendered off a flat pose-plate of the MIRRORED idle - which is what carries the direction, per contract section 4 ('--ref does not carry facing'). Denoise 0.58 with (both arms raised high, hands open:1.4) and (casting a spell:1.25); red horns, pin-up, arched back, buttocks and thigh focus added to --negAdd. Now frame-left, upright, both hands raised palms out. op 66.1% vs idle 68.3%.",
+  "candidate": "y2-cast11.2"
+}

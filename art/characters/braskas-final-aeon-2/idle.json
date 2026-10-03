@@ -1,0 +1,34 @@
+{
+  "width": 982,
+  "height": 904,
+  "baselineY": 888,
+  "seed": 7100079,
+  "prompt": "solo, monster boy, giant monster, hulking, deformed, brown scales, scales covering his entire body, scaly reptilian skin, horns, dark armor plating on the chest and shoulders, fan of six bone spike blades erupting from his back, spiked shoulders, white hair, tufts of white hair, large red headband, glowing orange eyes, asymmetrical arms, huge oversized claw for a left hand, normal right arm holding a huge black sword, black greatsword, red markings on the blade, looming, menacing, wings of bone spikes fanned out behind him, huge black sword held ready, whole creature in frame, (brown scales:1.3), (large red headband:1.35), (huge black sword:1.3), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, human, pink skin, tan skin, smooth skin, fur, dragon head, quadruped, chromatic aberration, color fringing, spear, polearm, thin blade",
+  "cropBox": [
+    26,
+    47,
+    1008,
+    951
+  ],
+  "source": {
+    "width": 1024,
+    "height": 1024
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "boss",
+  "facing": "left",
+  "emphasis": "(brown scales:1.3), (large red headband:1.35), (huge black sword:1.3)",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "img2img": "tools/gen/refs/bfa1-plate-attack.png",
+  "denoise": 0.78,
+  "generatedAt": "2026-09-19T17:09:00.524Z"
+}

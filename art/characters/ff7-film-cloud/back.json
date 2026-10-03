@@ -1,0 +1,39 @@
+{
+ "width": 794,
+ "height": 1116,
+ "baselineY": 1108,
+ "facing": "right",
+ "mirrored": false,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/cloud/back/cut-y2.png",
+ "sourceSha256": "878a4ed474e163689bbf9c076fc306ad893cbce7cb1343bdaf71a60451e7594c",
+ "installSteps": [
+  {
+   "step": "demint-back",
+   "pixels": 39,
+   "what": "mint pixels on the back (screen-left) 4 px edge band -> ink"
+  },
+  {
+   "step": "resize",
+   "factor": 0.5,
+   "filter": "lanczos, premultiplied"
+  },
+  {
+   "step": "register",
+   "padLeft": 0,
+   "on": "feet (anchorX)",
+   "centreColumn": 397
+  }
+ ],
+ "installer": "docs/concepts/ff7-art-2026-09-27/film-set/scripts/install.py",
+ "subject": "ff7-film-cloud",
+ "state": "back",
+ "scaleToIdle": 0.99,
+ "scale": 0.99,
+ "seed": 752002,
+ "engine": "flux-2-klein-9b-kv-fp8 (edit mode, ReferenceLatent)",
+ "retailInput": "none (our own Film renders only; no IP-Adapter, no trace)",
+ "promptKey": "film-cloud-back",
+ "sha256": "cc172e58c83880f54ef5c4b293517f3a87ab28d514560b4d7fa3425fa2357fb0"
+}

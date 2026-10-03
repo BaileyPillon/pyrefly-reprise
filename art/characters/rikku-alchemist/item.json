@@ -1,0 +1,59 @@
+{
+  "width": 464,
+  "height": 934,
+  "baselineY": 918,
+  "scale": 1.15,
+  "scaleNote": "Head match corrected 2026-09-25 (repair of verifier V-1; was 1.46 from the judge note: Head match 2026-09-25 (decision sheet item 10): idle eye-line to chin 49.0 px vs this pose 33.6 px, points in docs/concepts/art5/judge/measure.json; read by eye off 2x gridded crops, about +/-5%.). Method: iris-centroid eye spacing and a checked eye-line-to-chin point, each as idle/pose, read against which one the head turn or tilt shortens: eye spacing 1.20; chin under the scarf; the verifier's eye-chin and headband readings give 1.14 and 1.10; 1.15 is within 5 percent of all three. Evidence: docs/concepts/art5/installed/rescale/.",
+  "seed": 25323,
+  "prompt": "1girl, solo, standing, holding flask, arm extended forward, hand on own hip, smile, looking at viewer, rikku \\(ff10-2\\), final fantasy x-2, blonde hair, messy hair, braids, green eyes, blue bandana, red scarf, yellow crop top, orange suspenders, white detached sleeves, orange gloves, bare midriff, green pleated skirt, brown belt pouches, orange leggings, long orange and yellow fabric strips, blue boots, green boot cuffs, holding potion flask, purple potion, three-quarter view, looking at viewer, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, glowing sword, fire, flames, fire trail, swirl, lightning, dark aura, splash, extra sword, two swords, multiple swords, floating sword, from behind, facing away, drinking, arm up, brown hair, short hair, black clothes, flames, fire",
+  "cropBox": [
+    215,
+    272,
+    679,
+    1206
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "item",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 464,
+    "height": 934
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/chapters/trema/poses/skeletons/flask/item.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "rikku-alchemist-idle-square.png",
+      "rikku-alchemist-head.png"
+    ],
+    "forced": true
+  },
+  "status": "APPROVED: Bailey 2026-09-25 ~12:45 EDT, \"I'll go with your recommendations for everything\" (install all 22 judge-passed poses); installed 2026-09-25, locked in docs/target/approved-hashes.json set bailey:2026-09-25-poses",
+  "judge": "docs/concepts/art5/judge/judge.json#rikku-alchemist/item (7.31)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu4/trema-poses/rikku-alchemist/item/r2/cand-3.png",
+  "sha256": "7ed0cd7b2616e2ede9dec2e4fd5fce5aa9e167da35dc9ae5def976e554063359",
+  "generatedAt": "2026-09-25T08:23:11.500Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-judge-poses/rikku-alchemist/item.png"
+}

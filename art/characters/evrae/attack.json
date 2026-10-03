@@ -1,0 +1,50 @@
+{
+  "width": 1170,
+  "height": 769,
+  "baselineY": 753,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "seed": 315128,
+  "prompt": "(lunging forward:1.2), attacking, aggressive, (roaring:1.1), open mouth, claws out, no humans, evrae \\(ff10\\), final fantasy x, safe, solo, monster, dragon, eastern dragon, sea serpent, wingless, one head, serpentine body, very long body, coiled body, dark teal scales, deep blue-green scales, navy shadows on the scales, pale tan underbelly, cream belly scales, segmented belly plates, crimson red dorsal spines, orange-tipped spines, serrated fins along the whole spine, red swept-back head crest, red jaw frills, orange eyes, sharp teeth, thin whiskers, orange flame-shaped tail fin, two clawed forelimbs, reptilian, long body looping behind in wide coils, hovering in midair, (dark teal scales:1.3), (pale tan underbelly:1.15), (crimson red dorsal spines:1.15), (from side:1.3), three-quarter view, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, calm, relaxed, standing still, blood, scenery, detailed background, floor, shadow, gradient background, human, rider, wings, fire, beam, two heads",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/evrae-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/evrae-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/evrae-attack-w3.png",
+    "denoise": 0.38
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (evrae-attack-w3, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (evrae-idle-square.png, evrae-head.png); no retail image used anywhere.",
+  "pose": "attack",
+  "registrationVsIdle": {
+    "dx": 2,
+    "dy": 14
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/evrae/attack/cand-4.png",
+  "candidateSha256": "bcfc5a98f9936c263e01e6a4c5921d628d71e112d223995d5f178c22d509b226",
+  "agentsNote": "new key in a pinned set (additive)",
+  "denoise": 0.38,
+  "generatedAt": "2026-10-02T08:10:00.569Z",
+  "decision": "D-325"
+}

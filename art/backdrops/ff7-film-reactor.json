@@ -1,0 +1,16 @@
+{
+ "width": 2304,
+ "height": 1296,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/core/p1b.full.png",
+ "sourceSha256": "79f32e7c7c8a441abac994915fa39ad5e988e4cd9e34bcab4d294bf47f35b371",
+ "installSteps": [
+  {
+   "step": "rgb",
+   "what": "alpha dropped (fully opaque)"
+  }
+ ],
+ "note": "the Film reactor core (hifi seed 733002, two glyph-like marks painted out); the backdrop of the FF7 Guard Scorpion scene",
+ "sha256": "401c01ded90618c90b0679c9a1ef248d4ea6bba3490da8b184c806c1b80c7753"
+}

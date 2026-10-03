@@ -1,0 +1,42 @@
+{
+  "width": 824,
+  "height": 1216,
+  "baselineY": 1215,
+  "seed": 993401,
+  "prompt": "1boy, auron \\(ff10\\), final fantasy x, safe, solo, male focus, black hair, short black hair, grey streak, slicked back hair, sunglasses, round eyewear, scar across eye, facial hair, stubble, mature male, red coat, long coat, haori, high collar, popped collar, one shoulder bare, empty sleeve, black gloves, gauntlet, shoulder pad, black pants, black slacks, plain black shoes, katana, holding sword, casting a spell, stepping forward onto his front foot toward the right edge of the frame, both shoes pointing to the right, chest and front of the coat visible to the viewer, right arm reaching out to the right, black gloved hand open with five fingers clearly separated and spread, glowing gold magic circle of yevon runes floating in the air at the right edge of the frame beyond his open hand, the hand held clear of the glow, katana held low in the other hand angled down and back to the left, left arm tucked inside the coat, empty left sleeve hanging loose and flat, head turned toward the viewer, chin up, face clear of the collar, sunglasses visible, vertical scar over his right eye, stern expression, black slacks and plain black shoes, (black hair:1.35), (vertical scar over his right eye:1.2), (plain black shoes:1.2), (open gloved hand with separated fingers:1.3), (from side:1.3), (stepping toward the right edge of the frame:1.2), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, from behind, back view, rear view, seen from behind, back of the coat, sword on the back, sheathed sword, scabbard on the back, brown hair, auburn hair, chestnut hair, light brown hair, white hair, silver hair, grey hair, blonde hair, striped shawl, festival clothes, tassels, sash ornaments, spear, polearm, staff, glowing hand, hand inside the glow, mitten, mittens, fused fingers, deformed hand, melted hand, black blob hand, boxing glove, claw, paw, missing hand, truncated arm, amputated arm, hand hidden, hidden hand, face hidden, face obscured, collar covering face, chin tucked, head down, looking down, vertical sword, sword in front of face, blade covering the face, standing still, idle pose, two swords, dual wielding, extra sword, second katana, floating weapon, full robe, monk robe, hakama, yellow shoes, blue boots, blue footwear, blue shoes, pointed boots, colored boots, white boots, grey pants, brown pants, two-tone pants, tan pants, khaki pants, sneakers, trainers, giant sword, oversized sword, greatsword, scimitar, cleaver, curved sword, eyeball, giant eye, eye symbol, face in the magic circle, mandala, aura, colored swirl, motion blur, speed lines, barrel, jar on back, jug, lantern",
+  "cropBox": [
+    8,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "cast-n",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/auron/idle.png",
+  "refWeight": 0.65,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T18:47:14.054Z",
+  "pickedFrom": "cast-n.1",
+  "round": "art3-party-a-fix5",
+  "restoredFrom": "D:/Tools/pyrefly-art-backup/20260918-1455/characters/auron/cast.png",
+  "restoreNote": "fix5: fix pass 4 replaced this frame-RIGHT render with f4caste.2, which the foot-band check shows is frame-LEFT. Facing is judged first (ART-PIPELINE 6.0) and Auron is chiral, so flip.py is banned. 23 fresh renders this pass (f5cast 8, f5castb 7, f5castc 8) produced one frame-right body, and it carried three weapons. This render is restored unchanged: frame-right, gold rune sigil present, black hair, black slacks and shoes. Known open: content reaches the last row (no transparent margin) and the blade is katana-thin."
+}

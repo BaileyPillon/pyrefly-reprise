@@ -1,0 +1,51 @@
+{
+  "width": 344,
+  "height": 1194,
+  "baselineY": 1178,
+  "facing": "left",
+  "seed": 29402,
+  "prompt": "1girl, solo, paine \\(ff10-2\\), final fantasy x-2, silver hair, white hair, short hair, layered hair, red eyes, pale skin, feminine, songstress, (white jacket:1.2), long sleeves, (high collar:1.1), turquoise lining, turquoise trim, turquoise glovelets, black studded straps, open jacket, (black bikini top:1.1), (white pants:1.3), tight pants, silver chains on thighs, (brown high heel boots:1.35), turquoise ruffles on boots, (teal microphone:1.1), standing, (from side:1.2), three-quarter view, body facing right, (looking at viewer:1.2), holding microphone at side, arm at side, hand in pocket, expressionless, serious, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, musical note, light rays, stage lights, confetti, splash, cast shadow, drop shadow, pedestal, platform, black jacket, leather jacket, (shorts:1.2), thighhighs, black pants, skirt, sword, weapon, skull, red belt, suspenders, blonde hair, brown hair, long hair, two microphones, black boots, blue boots, coattails, cape, long coat, masculine, smile, singing, arm up, facing viewer, straight-on",
+  "cropBox": [
+    265,
+    15,
+    609,
+    1209
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/refs/paine-warrior-head.png"
+    ]
+  },
+  "sources": "costume: research/visual-bible.md section 1.24 (FF Wiki Songstress revid 3972937, victory poses revid 3955034); identity: the shipped idle sidecars rikku-thief/idle.json and paine-warrior/idle.json; no retail image used as input, reference or IP-Adapter",
+  "game": "ffx2",
+  "status": "DRIVER PICK (D-281, delegated by Bailey 2026-09-28 \"Your pick (Recommended)\"; not Bailey's own approval), installed 2026-09-29, locked in docs/target/approved-hashes.json set \"driver:2026-09-29-songstress (D-281, delegated by Bailey)\"",
+  "look": "Option A, Cool stance: three-quarter, microphone low like her sword, hand in pocket; painted facing left, the engine mirrors it.",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-songstress/options/paine-A/cand-2.png",
+  "sha256": "c163b7191230cc80c446475e6ce721ca53363d08f2e1804a464d58a450c6d406",
+  "generatedAt": "2026-09-29T05:11:59.461Z",
+  "decision": "D-281"
+}

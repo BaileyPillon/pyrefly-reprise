@@ -1,0 +1,59 @@
+{
+  "width": 699,
+  "height": 860,
+  "baselineY": 844,
+  "scale": 0.98,
+  "scaleNote": "Head match corrected 2026-09-25 (repair of verifier V-1; was 1.35 from the judge note: Head match 2026-09-25 (decision sheet item 10): idle eye-line to chin 47.8 px vs this pose 35.5 px, points in docs/concepts/art5/judge/measure.json; read by eye off 2x gridded crops, about +/-5%.). Method: iris-centroid eye spacing and a checked eye-line-to-chin point, each as idle/pose, read against which one the head turn or tilt shortens: eye spacing 0.99 and eye line to chin 0.97 agree; the judge's chin point sat on the mouth. Evidence: docs/concepts/art5/installed/rescale/.",
+  "seed": 25223,
+  "prompt": "1girl, solo, standing, (holding potion bottle:1.2), small bottle, arm extended forward, (single weapon:1.2), one hand holding sword, sword pointing down, looking at object, closed mouth, paine \\(ff10-2\\), final fantasy x-2, dark knight, silver hair, (swept back hair:1.1), short hair, red eyes, pale skin, black plate armor, full armor, red trim, red high collar, black gauntlets, red sash, red cape, black armored boots, greatsword, silver blade edge, copper engraved blade, winged crossguard, red sword grip, three-quarter view, looking at viewer, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, glowing sword, fire, flames, fire trail, swirl, lightning, dark aura, splash, extra sword, two swords, multiple swords, floating sword, from behind, facing away, two-handed, drinking, sword raised, holding two weapons, oversized sword, giant sword, helmet, horns, horned helmet, blonde hair, brown hair, bare legs, revealing clothes, full face helmet, mask, wings, skirt, spiked hair, messy hair, silver armor, dual wielding, two weapons, spear, scythe, polearm, staff, second sword",
+  "cropBox": [
+    57,
+    354,
+    756,
+    1214
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "item",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 699,
+    "height": 860
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/chapters/trema/poses/skeletons/sword/item.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "paine-dark-knight-idle-square.png",
+      "paine-dark-knight-head.png"
+    ],
+    "forced": true
+  },
+  "status": "APPROVED: Bailey 2026-09-25 ~12:45 EDT, \"I'll go with your recommendations for everything\" (install all 22 judge-passed poses); installed 2026-09-25, locked in docs/target/approved-hashes.json set bailey:2026-09-25-poses",
+  "judge": "docs/concepts/art5/judge/judge.json#paine-dark-knight/item (7.06)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu4/trema-poses/paine-dark-knight/item/r3/cand-3.png",
+  "sha256": "6c0101b02347961eb1d35713f15ab8644907135aa03a0b519f5170ea303512a7",
+  "generatedAt": "2026-09-25T08:31:55.234Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-judge-poses/paine-dark-knight/item.png"
+}

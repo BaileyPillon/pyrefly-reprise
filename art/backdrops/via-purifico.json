@@ -1,0 +1,31 @@
+{
+  "width": 2688,
+  "height": 1536,
+  "status": "CANDIDATE",
+  "game": "FFX only",
+  "chapter": "Chapter XIV (provisional) Isaaru, Via Purifico beneath Bevelle",
+  "concept": "O-3 A red-lit stone, the hallway behind (render via-a); docs/concepts/chapters/isaaru/chamber/a-plate.jpg; picked by Bailey 2026-09-25 ~01:40 EDT, verbatim: \"I'll go with all your recommendations\"",
+  "method": "r3: the picked plate exactly as rendered (2688x1536, RealESRGAN x4 of the 1344x768 render); 0 pixels changed, 0 GPU",
+  "sources": "research/ffx-isaaru-bevelle.md section 7: the maze's last chamber at the end of a red-lit hallway [verified: 4]",
+  "knownDefects": [
+    "no low parapet with small square red lamps (the real room has one; none of the three option plates drew it)",
+    "a colonnade more than a square room (options README)"
+  ],
+  "seed": 922101,
+  "prompt": "no humans, scenery, no humans, scenery, final fantasy x, underground prison beneath a holy city, the last chamber of a stone maze, low eye-height view into a wide square stone chamber, walls of large dark grey stone blocks, a wide carved frieze band of rust red and dark bronze with repeating triangle and zigzag patterns running around the walls, low stone parapet walls along the sides with small square red glowing lamps set into them, a floor of large dark red-brown stone tiles with thin carved grooves, heavy dark red pillars at the corners, symmetrical composition, deep perspective, empty room, \\(a long narrow hallway lit by red lamps receding into darkness at the back centre:1.3\\), deep crimson lamp light, cold grey shadows, detailed background, painterly, cinematic lighting, wide shot, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, monster, furniture, window, sky, sunlight, grass, trees",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "judgeNotes": "self-judged at 1:1 and in a real 1600x900 engine frame; not independently judged; not approved",
+  "sha256": "60c446c9b2457d865dabab1412d1c3c695603beae77fe90eb9d7aba5082e7afa",
+  "installedAt": "2026-09-25T04:15:22.790379Z",
+  "readme": "docs/concepts/chapters/isaaru/INSTALLED.md"
+}

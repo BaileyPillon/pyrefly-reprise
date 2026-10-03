@@ -1,0 +1,34 @@
+{
+ "width": 620,
+ "height": 1120,
+ "baselineY": 1114,
+ "facing": "right",
+ "mirrored": false,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/barret/punch/cut-y2.png",
+ "sourceSha256": "69b32729b89c00d583789233430c42ba4676898dee02b33f4d1c09efe50defe4",
+ "installSteps": [
+  {
+   "step": "resize",
+   "factor": 0.5,
+   "filter": "lanczos, premultiplied"
+  },
+  {
+   "step": "register",
+   "padLeft": 0,
+   "on": "feet (anchorX)",
+   "centreColumn": 310
+  }
+ ],
+ "installer": "docs/concepts/ff7-art-2026-09-27/film-set/scripts/install.py",
+ "subject": "ff7-film-barret",
+ "state": "punch",
+ "scaleToIdle": 0.99,
+ "scale": 0.99,
+ "seed": 748006,
+ "engine": "flux-2-klein-9b-kv-fp8 (edit mode, ReferenceLatent)",
+ "retailInput": "none (our own Film renders only; no IP-Adapter, no trace)",
+ "promptKey": "film-barret-punch",
+ "sha256": "e9708f85e816c7cdbeeac81e936f75d535fa87f6ccacd257bc98e6ca3ee4a154"
+}

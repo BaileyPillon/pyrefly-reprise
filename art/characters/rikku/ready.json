@@ -1,0 +1,46 @@
+{
+  "width": 592,
+  "height": 1155,
+  "baselineY": 1139,
+  "scale": 1.05,
+  "scaleNote": "head match against the installed idle, from the overnight run (party-keys-method/picks.json); multiplies the idle pixel scale",
+  "facing": "right",
+  "seed": 67002,
+  "prompt": "(claw arm drawn back:1.3), gauntlet fist cocked back by her hip, crouching low, about to pounce, fierce grin, dynamic pose, (anticipation:1.1), (wind-up:1.2), about to strike, weight on the back foot, knees bent, focused eyes, determined expression, looking at the enemy, 1girl, rikku \\(ff10\\), final fantasy x, petite teenage girl, tan skin, blonde hair, high fan shaped ponytail, two thin braids with beads, orange feather hair ornaments, blue and green bobby pins, green eyes, swirl pupils, al bhed, orange sleeveless tank top, bare midriff, khaki arm warmers, red belt, green cargo short shorts, bare thighs, orange thigh pouch, two long blue ribbon straps hanging from the back, pink tinted goggles worn at her throat, one metal claw gauntlet on one hand with three short blades over the knuckles, blue and orange sneakers, solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, standing still, relaxed, arms at sides, sitting, lying, kneeling, jumping, floating, midair, (from behind:1.2), facing away, looking back, (facing left:1.2), turned away, scenery, architecture, indoors, detailed background, slash effect, motion lines, speed lines, afterimage, energy, aura, glow, sparks, extra weapon, floating weapon, (multiple swords:1.3), (extra sword:1.3), sword on the ground, ribbon, streamer, flowing scarf, (2boys:1.3), (2girls:1.3), clone, duplicate, two people, rainbow, hand fan, folding fan, wings, feathers, cape effect, backpack, bag on her back, swimsuit, bikini, long hair down, brown hair, blue eyes, long trousers, cargo trousers, baggy pants, long pants, white cloth across the midriff, sash, goggles over eyes, goggles on face, blades floating in the air, two claws, claw on both hands, fused fingers, mitten hands, sword, staff, extra weapon, floating weapon, wings, chibi, short legs, missing arm, 1boy",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\refs\\rikku-idle-square.png",
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\refs\\rikku-head.png"
+    ]
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "skeleton": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\skel\\windup-low.png"
+  },
+  "composition": "full",
+  "sources": "look: research/visual-bible.md per-character attack / cast / victory lines (ours where marked [estimate]); identity words from the shipped idle sidecar; IP-Adapter sees only our own shipped idle and its head crop; no retail image used anywhere",
+  "pose": "ready",
+  "key": "the wind-up key, installed as the figure's \"ready\" pose (shown while its command menu is open and from an attack's start to the lunge apex, src/engine/KeyPoses.ts)",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-313, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/rikku/windup/cand-2.png",
+  "candidateSha256": "67ecd532e81a7cec50de96b2c38a0c4fea7a12f9a5521cd3c3e99de6fe3229cf",
+  "agentsNote": "crouched, the claw cocked back, the other fist forward",
+  "generatedAt": "2026-10-01T05:18:15.589Z",
+  "decision": "D-313"
+}

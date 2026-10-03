@@ -1,0 +1,38 @@
+{
+  "width": 1216,
+  "height": 467,
+  "baselineY": 451,
+  "seed": 2070988862,
+  "prompt": "1girl, rikku \\(ff10\\), final fantasy x, safe, solo, one single armoured claw gauntlet worn on her right hand only with a curved silver blade over the knuckles, her left hand completely bare with five bare fingers and no glove, petite teenage girl, tan skin, natural skin tone, blonde hair, high fan shaped ponytail, two thin braids with beads, orange feather hair ornaments, green eyes, swirl pupils, al bhed, orange sleeveless crop tank top, bare midriff, pale green long arm warmers, red belt, green cargo short shorts, bare tan legs, orange thigh pouch, two long blue ribbon straps with tassels hanging from the back, blue headband with plain pink tinted goggles resting on top of her head, orange and white high top sneakers with blue laces, lying limp and unconscious on the ground on her side, her eyelids drawn as two smooth closed curved lines with no iris and no pupil visible anywhere on her face, her face completely relaxed, mouth slightly open, her blue headband and plain pink goggles pushed up on her forehead, her ponytail lying on the ground beside her head, one arm stretched out limp along the ground with the clawed gauntlet resting flat on the ground, both legs bent naturally at the knee with the near leg clearly in front of the far leg, her whole body well inside the frame, (tan skin:1.3), (one claw gauntlet only:1.25), (eyelids closed with no iris visible:1.5), (limp and unconscious:1.35), (whole body inside the frame:1.25), head to the right, feet to the left, lying on ground, on side, eyes closed, full body, from side, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, bending over, bent forward, leaning forward, bowing, hunched, back view, turned away, orange skin, orange legs, orange tights, red skin, colour cast, monochrome orange, tinted skin, orange arms, swimsuit, bikini, long hair down, brown hair, blue eyes, long trousers, capri pants, baggy pants, white cloth across the midriff, goggles over eyes, goggles over her face, lens over the eye, two claws, claw on both hands, second gauntlet, blades floating in the air, blades detached from the hand, wrist blades, fused fingers, mitten hands, sword, staff, extra weapon, duplicate weapon, two weapons, floating weapon, detached weapon, afterimage, double exposure, ghost image, motion blur, mirrored copy, ornate frame, gold frame, halo, mandala, background decoration, decorative border, circular frame, throne, banner, wings, fins, smoke, mist, multiple arms, chibi, short legs, missing arm, extra leg, extra thigh, ground shadow, cast shadow, colored background, scenery, lettering, writing on clothing, logo, hip drape, hazard stripes, cape, cloth streamer, open eye, open eyes, green iris, visible pupil, eye contact, awake, alert, grin, smiling, teeth, winking, one eye open",
+  "cropBox": [
+    0,
+    317,
+    1216,
+    784
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "g3ko",
+  "composition": "prone",
+  "facing": "right",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "ref": "public/art/characters/rikku/idle.png",
+  "refWeight": 0.65,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.3,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T23:02:52.210Z"
+}

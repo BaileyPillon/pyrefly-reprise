@@ -1,0 +1,34 @@
+{
+  "option": "c1",
+  "subject": "chamber",
+  "seed": 9114,
+  "prompt": "no humans, scenery, final fantasy x-2, djose temple, chamber of the fayth, \\(round chamber inside an ancient grey stone temple:1.2\\), \\(eye level view:1.1\\), \\(a wide flat floor of cracked grey flagstones filling the lower half of the picture:1.3\\), \\(a large dark ragged hole torn open in the middle of the floor:1.4\\), the broken stump of a round stone pedestal at the hole's edge, rubble and fallen stone blocks, \\(pale white mist rising out of the hole:1.2\\), massive carved stone walls and arches, \\(thin blue white lightning crackling over the stone walls:1.2\\), overcast storm light, cold slate blue and grey, faint violet shadows, abandoned, ominous, empty, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, statue, sculpture, sky, sun, trees, grass, water, river, fire, flames, orange light, red, snow, ice, window",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "output": {
+    "width": 2688,
+    "height": 1536
+  },
+  "status": "OPTION (provisional, awaiting Bailey's pick)",
+  "game": "FFX-2 only",
+  "source": "research/ffx2-ixion-djose.md 6.1 (chamber), 7.2 (abyss); written descriptions only",
+  "init": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ixion-scenes/init-c1-9101.png",
+  "denoise": 0.6,
+  "generatedAt": "2026-09-27T18:10:20",
+  "notApproved": true,
+  "installedAs": "backdrops/ffx2-djose-chamber-provisional",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ixion-scenes/chamber-c1.png",
+  "optionName": "C1 Storm-lit stone",
+  "recommendedBy": "docs/concepts/chapters/ixion-djose-2026-09-27/scenes/README.md (C1 with A1, the agent's recommendation, [estimate]; no independent judge pass is recorded there)",
+  "sha256": "0079929243723fd6286f13683810f84ce6dbaa417c628655dba4aad8f460c604",
+  "chapter": "ffx2-ixion-djose (Chapter XVI, FFX-2 only)"
+}

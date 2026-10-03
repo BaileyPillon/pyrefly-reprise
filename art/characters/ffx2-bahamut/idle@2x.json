@@ -1,0 +1,24 @@
+{
+  "width": 2048,
+  "height": 2048,
+  "baselineY": 2016,
+  "masterOf": "idle.png",
+  "density": 2,
+  "loaderNote": "never read by the game: on a 2x device the loader draws these pixels with the 1x sidecar idle.json (src/engine/ArtTier.ts), so size, baseline, scale and facing are the approved painting's",
+  "facing": "left",
+  "method": "RealESRGAN_x4plus then Lanczos to 2x; SDXL img2img per tile (Animagine XL 4.0 Opt, 28 steps, cfg 5, dpmpp_2m/karras); colour-matched (mean/std) to the plain upscale, feathered 96 px blend; the approved painting's own alpha (Lanczos 2x); diffusion RGB only where that alpha >= 250 eroded 7 px, the plain upscale in the edge band",
+  "denoise": 0.25,
+  "seed": 424242,
+  "game": "ffx2",
+  "gameNote": null,
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-315, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/ffx2-bahamut/cand-d035-dpm-protect.png",
+  "candidateSha256": "2bca48c7250218291d2e7ad301ef67ce57dacc6bc844cc4f92bc58c1f9747d18",
+  "approvedOneX": {
+    "path": "public/art/characters/ffx2-bahamut/idle.png",
+    "sha256": "b0cec4e1301997136a287cb0198c62bcf6abfb4790b94e3e805a2a7e33bcd5a4"
+  },
+  "provenance": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/ffx2-bahamut/cand-d035-dpm.prov.json",
+  "decision": "D-315",
+  "texelsPerDevicePxAt2x": 1.196
+}

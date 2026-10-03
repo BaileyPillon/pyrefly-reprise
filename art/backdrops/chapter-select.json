@@ -1,0 +1,16 @@
+{
+  "seed": 552201,
+  "prompt": "no humans, scenery, abstract, dark background, deep black background, scattered small glowing green orbs, pale green and white drifting lights, pyrefly motes, soft bokeh, evenly scattered small points of light, no large shapes, dim, low contrast, dark centre, glow concentrated near the top and edges, ethereal haze, soft focus, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, people, building, landscape, horizon, mountain, tree, large sphere, planet, moon, bright center, pink, magenta, red",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-15T23:00:53.910Z"
+}

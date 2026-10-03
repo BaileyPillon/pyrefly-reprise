@@ -1,0 +1,50 @@
+{
+  "width": 776,
+  "height": 1145,
+  "baselineY": 1129,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "seed": 215107,
+  "prompt": "(swinging her mantis scythe:1.2), slashing, aggressive, fierce glare, 1girl, solo, sandy \\(ff10\\), magus sisters, final fantasy x, aeon, safe, very tall and very slim woman, long legs, pale skin, face visible, dark red hair, red insect armour modelled on a praying mantis, crimson segmented armour plates, narrow red breastplate, red mantis crest on her head with two thin antennae, (a curved mantis scythe blade on each forearm:1.25), red armoured gauntlets and boots, (from side:1.3), three-quarter view, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, sword, gun, smile, blood, scenery, detailed background, floor, shadow, gradient background, slash effect, 1boy, multiple girls, smile",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.35,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/sandy-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/sandy-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/sandy-attack-w1.png",
+    "denoise": 0.42
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (sandy-attack-w1, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (sandy-idle-square.png, sandy-head.png); no retail image used anywhere.",
+  "pose": "attack",
+  "registrationVsIdle": {
+    "dx": -40,
+    "dy": 10
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/magus-sisters/sandy/attack/cand-1.png",
+  "candidateSha256": "42646e50005582e4a26b0403d70ac7032743ea16dd6c6f0ae441acd40ab14c66",
+  "agentsNote": "new key",
+  "denoise": 0.42,
+  "generatedAt": "2026-10-02T05:49:26.447Z",
+  "decision": "D-325"
+}

@@ -1,0 +1,19 @@
+{
+  "subject": "Leblanc",
+  "mood": "smug ringleader address, her henchmen blurred behind her",
+  "seed": 77002202,
+  "prompt": "1girl, leblanc \\(ff10-2\\), final fantasy x-2, safe, round face, purple eyes, short blonde hair, pinkish-purple furisode robe, tasselled collar, heart mark on chest, holding a red and silver fan raised near her chin, confident smirk, two blurred out of focus silhouettes of her large purple armored henchman and her tall helmeted henchman standing behind her in the dim background, Chateau basement treasure room, warm and magenta lighting, cinematic, looking at viewer, confident smirk, three-quarter view, fan near her chin, close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, crown, tiara, headdress, feathers, samurai helmet on her",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-21T22:09:59.857Z"
+}

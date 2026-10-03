@@ -1,0 +1,113 @@
+{
+  "width": 1212,
+  "height": 686,
+  "baselineY": 681,
+  "seed": 603731043,
+  "prompt": "no humans, robot, mecha, \\(mechanical scorpion:1.3\\), giant security robot, final fantasy vii, heavy and imposing boss, \\(huge bulky armored body:1.2\\), massive tall red armored shell, thick mechanical legs planted wide, segmented scorpion tail, \\(laser cannon at the tail tip:1.3\\), twin gun barrels under the head, head with one round sensor eye, grey disc on its back, red armor panels with dark grey steel joints and hydraulic pistons, detailed mechanical parts, \\(red armor:1.2\\), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1girl, 1boy, human, person, pilot, cockpit, humanoid, bipedal, arms, hands, holding weapon, gundam, real scorpion, insect, animal, building, floor, ground, rivets, grainy, flat colors, toy, stinger, blade, spike, claw, hook, sickle",
+  "cropBox": [
+    4,
+    146,
+    1216,
+    832
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle-a",
+  "composition": "boss",
+  "facing": "right",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "img2img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/round2-sketches/gs2-low.png",
+  "denoise": 0.8,
+  "lint": {
+    "stripped": [
+      {
+        "field": "tags",
+        "segment": "(big round glowing lens on the tail tip:1.2)",
+        "token": "glowing",
+        "reason": "effect"
+      }
+    ]
+  },
+  "cutout": {
+    "guard": {
+      "ok": true,
+      "reasons": [],
+      "measurements": {
+        "components": {
+          "componentCount": 1,
+          "largestPixels": 330815,
+          "secondPixels": 0,
+          "secondRatio": 0,
+          "touchesLargest": null
+        },
+        "nearWhite": {
+          "fraction": 0.0007375723591735562,
+          "largestRegionFraction": 0.0002992609162220576,
+          "detached": false,
+          "touchesEdge": false,
+          "allowanceUsed": 0.03
+        }
+      }
+    },
+    "strict": {
+      "minPixels": 24,
+      "components": 1,
+      "largest": 330815,
+      "detachedPieces": [],
+      "ok": true
+    }
+  },
+  "generatedAt": "2026-09-27T04:45:36.996Z",
+  "cleanup": {
+    "date": "2026-09-27",
+    "base": "guard-scorpion/round2/idle-a.2 (seed 603731043, img2img 0.80)",
+    "method": "masked latent inpaint (tools/gen/inpaint.mjs --latent, animagine-xl-4.0-opt) on a paintover of our own render, pasted back through its feathered mask (scripts/cleanup/paint.py chain); never mirrored; no retail input; no IP-Adapter",
+    "passes": [
+      {
+        "fault": "pseudo-glyphs removed from the black box on the back",
+        "render": "guard-scorpion/cleanup/idle-body-045.1.full.png",
+        "seed": 9701,
+        "denoise": 0.45,
+        "paint": "gs-idle-paint.png",
+        "mask": "gs-idle-mask.png",
+        "prompt": "no humans, robot, mecha, mechanical scorpion, giant red security robot, final fantasy vii, simple background, white background, plain dark armor panel, blank metal plate, plain panel, official art, cel shading, soft shading, muted colors, detailed, masterpiece, high score, great score, absurdres",
+        "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, text, letters, symbols, writing, logo, numbers, glyph, sign, label, kanji, characters, display screen, digits",
+        "clip": "655,240,740,300"
+      },
+      {
+        "fault": "pseudo-glyphs removed from the plate under the eye",
+        "render": "guard-scorpion/cleanup/idle-body-045.2.full.png",
+        "seed": 9702,
+        "denoise": 0.45,
+        "paint": "gs-idle-paint.png",
+        "mask": "gs-idle-mask.png",
+        "prompt": "no humans, robot, mecha, mechanical scorpion, giant red security robot, final fantasy vii, simple background, white background, plain dark armor panel, blank metal plate, plain panel, official art, cel shading, soft shading, muted colors, detailed, masterpiece, high score, great score, absurdres",
+        "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, text, letters, symbols, writing, logo, numbers, glyph, sign, label, kanji, characters, display screen, digits",
+        "clip": "935,555,1040,615"
+      }
+    ],
+    "recut": "rembg cut (comfy.mjs cutout, margin 16) + scripts/cleanup/defringe.py (2 passes)"
+  },
+  "fullFrame": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/guard-scorpion/cleanup/idle-clean.full.png",
+  "defringe": {
+    "fringeRemoved": 603,
+    "specksDropped": 2,
+    "edgeDecontaminated": 3186
+  },
+  "cutoutOk": true,
+  "status": "APPROVED: Bailey 2026-09-27 ~00:45 EDT, \"full speed ahead please. godspeed. ill go with all your recommendations. what is your question about barret?\" (D-240, accepting the driver's FF7 art recommendations; the final list after the cleanup round is docs/concepts/ff7-art-2026-09-27/round2/README.md \"Final install list\"). A pick approves only the art as shown. Installed 2026-09-27, locked in docs/target/approved-hashes.json set bailey:2026-09-27-ff7. Game: FF7 only.",
+  "decision": "D-240",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/guard-scorpion/cleanup/idle-c.1.png",
+  "sha256": "343ce516d95cf72572d3974edb84d8ac5e084b30be0a412d8982ec597a46bc19"
+}

@@ -1,0 +1,20 @@
+{
+  "width": 1785,
+  "height": 950,
+  "baselineY": 874,
+  "facing": "left",
+  "scale": 1.0,
+  "scaleNote": "a light state of the idle: the idle's own pixels and canvas, so the pose scale is 1 (the subject keeps the idle's calibration)",
+  "pose": "cast",
+  "registrationVsIdle": null,
+  "registrationNote": "its source's, on a canvas padded 60 px on every side (as the installed pterya paintings were made)",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-design-fixes/valefor-wing/cast/derived/pterya-from-cand-1.png",
+  "candidateSha256": "bf082ecc8e3c937a9968e234f0e301c3e69fd252d68fb5112c83ab3d6166bfa5",
+  "agentsNote": "Pterya from the whole-wing cast (light state, treated)",
+  "seed": null,
+  "denoise": null,
+  "generatedAt": null,
+  "decision": "D-325"
+}

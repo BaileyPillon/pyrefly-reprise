@@ -1,0 +1,52 @@
+{
+  "width": 864,
+  "height": 1229,
+  "baselineY": 1212,
+  "seed": 912102,
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "prompt": "character preset --pose idle --facing left --composition full; tags: 1boy, seymour guado, final fantasy x, solo, male focus, final mutated form, towering demonic sorcerer, pale grey blue skin, long straight light blue hair falling past his shoulders, purple eyes, dark veins on his face, bare chest with ridged ribs, dark indigo armored shoulders with curved horn spikes, clawed hands, (lower body is a long heavy dark indigo skirt of hanging tattered cloth strips, no legs visible:1.2), (1boy:1.3); poseTags: floating upright in midair, both arms spread wide at shoulder height, hem hanging straight down, looking at viewer, cold smile",
+  "recipe": "docs/concepts/chapters/omnis/recipes.json \"O-1 A omnis-a\"",
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "cropBox": [
+    -16,
+    -1,
+    848,
+    1228
+  ],
+  "pose": "idle",
+  "composition": "full",
+  "nonBiped": true,
+  "facing": "left",
+  "facingNote": "Judged on the pixels: torso three-quarter with the chest turned to screen-left and the face toward screen-left and the viewer; he faces the party when he stands on the right. Never mirror the discs with him (a mirror reverses the ring order).",
+  "hover": "Hovers (sourced: he hovers in front of four large discs); the lowest pixels are the hem tips, so baselineY is the hem; lift him in the scene (ours)",
+  "pickedFrom": "O-1 A, Bailey 2026-09-25 ~01:40 EDT, verbatim: \"I'll go with all your recommendations\" (docs/concepts/chapters/omnis/README.md, docs/plans/chapter-omnis-review.md)",
+  "concept": "docs/concepts/chapters/omnis/o1-omnis/a-frame.jpg",
+  "reference": "look-only reference pass 2026-09-25 (Bailey's yes to question 5): the wiki's Omnis concept art, the reels concept art and one HD battle screenshot were viewed in the built-in browser and not saved; see docs/concepts/chapters/omnis/INSTALLED.md",
+  "method": "r3 derive-from-concept (docs/plans/art-method-r3/METHOD-CHECK.md): the picked render omnis-a (seed 912102) own pixels; only the alpha was rebuilt",
+  "repairs": [
+    "alpha rebuilt from the raw render against its flat white ground (white connected to the border, plus enclosed white pockets of 40 px or more); RGB = the raw render exactly",
+    "the white pocket enclosed between the raised left arm, the hair and the shoulder strip is opened (it bloomed in the options frame)",
+    "the pale light-blue strips the options matte broke are whole again (22,145 px regained, 18,180 px of white ground dropped vs the options cut-out)",
+    "near-white fringe peeled (47 px), specks under 30 px dropped (2 px); one connected component; binary alpha; 16 px margin"
+  ],
+  "redGlow": "not painted: the glow before Dispel and Ultima is a live effect (tint plus halo, pulse and particles), as the options follow-up said",
+  "offCanon": "Our design, as picked (O-1 A). The look-only pass showed the game's Omnis as a lean blue-violet armoured figure with large crescent blade shapes above and below him and dangling legs under a long hanging robe; ours has spread clawed arms and no legs. Kept: Bailey picked A for its silhouette. Also ours: the red horn-claws on the shoulders and the red spiral on his shoulder (flagged at the options round). The outermost strips are cut by the render's own canvas at x 0 and x 831 (left 355 px, right 129 + 159 px of straight edge); the discs cover most of it at battle size; no outpaint was tried (Natus lesson: outpaints invent).",
+  "candidateSource": "D:/Tools/pyrefly-scratch/omnis-options/renders/omnis-a.raw.png",
+  "script": "D:/Tools/pyrefly-scratch/ch1215/omnis/omnis_idle.py",
+  "status": "CANDIDATE",
+  "game": "ffx",
+  "judgeNotes": "self-judged at 1:1 and in a 1600x900 engine frame; not independently judged; not approved (never in approved-hashes.json)",
+  "sha256": "91f67b3a27498c86195e1d352605623a78e350cbfa736c9077341d16767359f3",
+  "installedAt": "2026-09-25T04:23:19.275774Z"
+}

@@ -1,0 +1,24 @@
+{
+  "width": 945,
+  "height": 984,
+  "baselineY": 967,
+  "facing": "left",
+  "scale": 1.0,
+  "scaleNote": "a light state of the idle: the idle's own pixels and canvas, so the pose scale is 1 (the subject keeps the idle's calibration)",
+  "sources": "the installed idle (read only) with an additive glow at its eye, ribcage and jaw inside its own alpha (method/lightstate.py); no GPU, no repaint",
+  "pose": "cast",
+  "registrationVsIdle": {
+    "dx": 0,
+    "dy": 0
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/mortibody/cast/cand-1.png",
+  "candidateSha256": "97d19f455b6135f162fb2d992cd9f382af71160853aefc905791365310c172aa",
+  "agentsNote": "light state; the idle's sidecar numbers",
+  "seed": null,
+  "denoise": null,
+  "generatedAt": "2026-10-02",
+  "decision": "D-325"
+}

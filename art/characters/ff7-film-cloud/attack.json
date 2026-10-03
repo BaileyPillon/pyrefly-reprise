@@ -1,0 +1,40 @@
+{
+ "width": 1230,
+ "height": 947,
+ "baselineY": 938,
+ "facing": "right",
+ "mirrored": false,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/cloud/strike/cut-r.png",
+ "sourceSha256": "831102663f542c642f340a4a3c187e4049766b58a6919021644ad17314d8a5fc",
+ "installSteps": [
+  {
+   "step": "demint-back",
+   "pixels": 38,
+   "what": "mint pixels on the back (screen-left) 4 px edge band -> ink"
+  },
+  {
+   "step": "resize",
+   "factor": 0.5,
+   "filter": "lanczos, premultiplied"
+  },
+  {
+   "step": "register",
+   "padLeft": 0,
+   "on": "feet (anchorX)",
+   "centreColumn": 615
+  }
+ ],
+ "installer": "docs/concepts/ff7-art-2026-09-27/film-set/scripts/install.py",
+ "subject": "ff7-film-cloud",
+ "state": "attack",
+ "scaleToIdle": 1.02,
+ "scale": 1.02,
+ "note": "the attack key the house beats name: Cloud strike (B1 key 2) / Barret fire (B1 key 2)",
+ "seed": 743001,
+ "engine": "flux-2-klein-9b-kv-fp8 (edit mode, ReferenceLatent)",
+ "retailInput": "none (our own Film renders only; no IP-Adapter, no trace)",
+ "promptKey": "film-cloud-strike",
+ "sha256": "966a59dd5505a069bf841ecee196d51339d1cb76aad7747c633049a1cbe84032"
+}

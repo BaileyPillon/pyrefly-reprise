@@ -1,0 +1,26 @@
+{
+  "seed": 771205,
+  "prompt": "no humans, scenery, vast twilight sky over a calm sea, deep indigo to warm amber gradient at the horizon, a ruined temple city far away on the water, tall broken spires in silhouette, drifting motes of light, volumetric haze, moon low over the water, cinematic wide vista, dramatic scale, final fantasy x spira, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-19T12:09:45.807Z",
+  "id": "title/keyart",
+  "role": "title key art — the full-bleed painting the title screen splits into parallax planes",
+  "approvedEndState": "docs/concepts/polish/showpiece-frontend/after.png",
+  "approvedBy": "Bailey, 2026-09-19 (\"A front end that moves: parallax title and silhouette chapter cards\")",
+  "origin": "docs/concepts/polish/showpiece-frontend/_src/title-keyart.2.png — this project's own ComfyUI render, made for that mockup. Installed unaltered as keyart.2x.webp (2688x1536); keyart.png is the same file at the 1344x768 plate size.",
+  "planes": "far = the whole painting; near = the same file masked to the shore band (src/app/screens/frontend/frontend.css). No second file is generated.",
+  "focal": {
+    "x": 0.5,
+    "y": 0.46
+  }
+}

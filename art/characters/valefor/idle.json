@@ -1,0 +1,67 @@
+{
+  "width": 1665,
+  "height": 830,
+  "baselineY": 814,
+  "seed": 515007,
+  "prompt": "no humans, monster, solo, avian creature, aeon, final fantasy x, large feathered wing, (whole wing:1.2), wingtip, long primary feathers, feather tips, teal plumage, blue green feathers, pale yellow green flight feathers, golden tan coverts, wings half spread, from side, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, cropped wing, cut off, straight edge, frame, border, extra wings, multiple wings, extra heads, text",
+  "cropBox": [
+    159,
+    0,
+    1216,
+    830
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "facing": "left",
+  "facingPhrase": "(from side:1.15), three-quarter view, (looking at viewer:1.2)",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "generatedAt": "2026-10-02T08:39:54.414Z",
+  "outpaint": "canvas centre unchanged; the installed painting's pixels at [304, 0]",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/valefor-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/valefor-wing.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/valefor-wingtip-a.png",
+    "denoise": 0.62,
+    "mask": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/valefor-wingtip-a.mask.png",
+    "maskNode": "SetLatentNoiseMask (white = repaint)"
+  },
+  "sources": "Masked img2img of a crop of the installed Valefor idle (its own pixels, padded, with a rough tip made of its own last 96 px of feathers: prep_wing.py); IP-Adapter sees only our own images (valefor-idle-square.png, valefor-wing.png); no retail image used anywhere.",
+  "registrationVsIdle": null,
+  "registrationNote": "canvas centre unchanged; the installed painting's pixels at [304, 0]",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-design-fixes/valefor-wing/idle/wing-a-1-d62.png",
+  "candidateSha256": "25bd0dd33f7812c27cc517d1fb87bf8ca746634c7220d12ede5f3718dd366a5d",
+  "agentsNote": "PR-0212: the wing tip outpainted; canvas padded 304 px on both sides (centre and baseline unchanged); install with the whole-wing hurt and keys below, not alone",
+  "denoise": 0.62,
+  "decision": "D-325",
+  "replaces": {
+    "sha256": "7fec77b2d72138cdc2272e48a130aea7cb94e09e16dfba743732d3aacf8b2bfa",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/valefor/idle.png"
+  }
+}

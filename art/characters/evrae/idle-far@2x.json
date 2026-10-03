@@ -1,0 +1,24 @@
+{
+  "width": 2048,
+  "height": 954,
+  "baselineY": 922,
+  "masterOf": "idle-far.png",
+  "density": 2,
+  "loaderNote": "never read by the game: on a 2x device the loader draws these pixels with the 1x sidecar idle-far.json (src/engine/ArtTier.ts), so size, baseline, scale and facing are the approved painting's",
+  "facing": "left",
+  "method": "RealESRGAN_x4plus then Lanczos to 2x; SDXL img2img per tile (Animagine XL 4.0 Opt, 28 steps, cfg 5, dpmpp_2m/karras); colour-matched (mean/std) to the plain upscale, feathered 96 px blend; the approved painting's own alpha (Lanczos 2x); diffusion RGB only where that alpha >= 250 eroded 7 px, the plain upscale in the edge band",
+  "denoise": 0.3,
+  "seed": 424242,
+  "game": "ffx",
+  "gameNote": null,
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-315, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/evrae-idle-far/cand-d03-dpm.png",
+  "candidateSha256": "7e29bb11bda7652e21320bfaf2d31f719f2feb6ca801281f29b6884a0b5bc107",
+  "approvedOneX": {
+    "path": "public/art/characters/evrae/idle-far.png",
+    "sha256": "108a32522361529ff12baa11bb1a1f63c049402fc6b6260421d8cea5a0588f3e"
+  },
+  "provenance": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/evrae-idle-far/cand-d03-dpm.prov.json",
+  "decision": "D-315",
+  "texelsPerDevicePxAt2x": 0.893
+}

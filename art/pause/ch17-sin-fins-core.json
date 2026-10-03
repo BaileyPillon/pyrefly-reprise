@@ -1,0 +1,24 @@
+{
+  "subject": "The Left Fin over the Fahrenheit's rail at NEAR, its core charging (\"Core gathers energy.\")",
+  "mood": "the arm reaching over the deck, Gravija one turn away",
+  "composite": "compose.py's states over the picked painting fin-a-l-near-3: round 3's dressed deck layer, the NEAR shade, the charge glow",
+  "chapter": "Chapter XVII Sin: the Fins and the Core (sin-fins-core)",
+  "painting": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-a-l-near-3.full.png",
+  "focal": {
+    "x": 0.8,
+    "y": 0.35
+  },
+  "master": {
+    "file": "ch17-sin-fins-core.2x.webp",
+    "width": 2688,
+    "height": 1536,
+    "route": "the picked 2352x1344 painting -> lanczos 2688x1536",
+    "webpQuality": 88,
+    "note": "The PNG is the same composition at 1344x768 (lanczos)."
+  },
+  "origin": "Original art only (rule 8): our code-drawn sketches and our own paintings as the only image inputs, written sources only, no retail image as input, reference or IP-Adapter; no creature, game or franchise name in any prompt",
+  "retailInput": "none",
+  "status": "DRIVER PICK (D-279: Bailey delegated tonight's Sin picks to the driver, 2026-09-29, 'Your picks (Recommended)'). An agent's pick, NOT Bailey's approval; installed so the listing step can wire it",
+  "game": "FFX only (rule 14: links I to IV are fought from the Fahrenheit and on Sin's back; research/ffx-sin.md 0.3)",
+  "decision": "D-279"
+}

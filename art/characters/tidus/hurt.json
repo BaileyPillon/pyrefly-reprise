@@ -1,0 +1,40 @@
+{
+  "width": 651,
+  "height": 1216,
+  "baselineY": 1207,
+  "seed": 880201,
+  "prompt": "1boy, tidus, final fantasy x, safe, solo, male focus, blonde hair, spiky hair, blue eyes, yellow hooded vest, white hood, sleeveless, asymmetrical clothes, blue pauldron, shoulder armor, black overalls, uneven legwear, fingerless gloves, necklace, brotherhood \\(sword\\), longsword, blue sword, glowing blue blade, holding sword, staggering backwards, recoiling from a blow, head thrown back, grimacing in pain, off balance, one knee bent, sword lowered, (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, aura, energy ribbon, colored swirl, glowing ribbon, motion blur, speed lines",
+  "cropBox": [
+    135,
+    0,
+    786,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "hurt",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/tidus/idle.png",
+  "refWeight": 0.65,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T09:07:45.681Z",
+  "pickedFrom": "hurt-b.1",
+  "round": "art3-party-a"
+}

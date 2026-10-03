@@ -1,0 +1,60 @@
+{
+  "width": 1171,
+  "height": 874,
+  "baselineY": 858,
+  "pose": "hurt",
+  "composition": "boss",
+  "facing": "left",
+  "status": "CANDIDATE (not approved; no entry in docs/target/approved-hashes.json)",
+  "method": "r3-derive",
+  "methodNote": "idle-near's own pixels: the head and neck as one layer, thrown back (rotated 22 deg about the top of the neck arch and pulled 45 px back) and blended into the fixed body along the neck; the body layer never moves. No generated pixels. Canvas padded 90 px at the top for the raised head (baselineY moves with it); head length 69.7 px against idle's 69.5, so no pose scale.",
+  "derivedFrom": "public/art/characters/evrae/idle-near.png (sha256 4140ba740cd0fde65e91d7c730726294ac6dee7e53dcd18620251fb1f6e928af, judged 8)",
+  "identityAnchor": "docs/concepts/chapters/evrae/renders/evrae-b.png (picked concept B, teal-dominant)",
+  "derive": {
+    "padTop": 90,
+    "shift": [
+      45.0,
+      -10.0
+    ],
+    "snout": [
+      262.0,
+      83.0
+    ],
+    "eye": [
+      331.0,
+      73.0
+    ],
+    "headPx": 69.72087205421343,
+    "headPxIdle": 69.5,
+    "opaqueRatio": 0.9797869831571904,
+    "foldPx": 0,
+    "foldBox": null,
+    "angle": 22.0,
+    "pivot": [
+      520.0,
+      230.0
+    ],
+    "ramp": [
+      420.0,
+      600.0
+    ],
+    "jaw": 0.0,
+    "minJacobian": -4.460277519361355,
+    "regionShare": 0.6953020023802603
+  },
+  "contentBox": [
+    16,
+    43,
+    1154,
+    857
+  ],
+  "sha256": "f66990126b12904a9812a78bd91d1d358b2b07db4dced2f2154b9784f7767529",
+  "replaced": {
+    "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-23-evrae-r3/characters/evrae/hurt.png",
+    "judged": "docs/concepts/chapters/evrae/redo/cand/hurt/r3/hurt.3.png",
+    "score": 6
+  },
+  "candidateOf": "public/art/characters/evrae/hurt.png",
+  "notes": "docs/concepts/chapters/evrae/r3/r3.md",
+  "installedAt": "2026-09-23T17:17:20.751520Z"
+}

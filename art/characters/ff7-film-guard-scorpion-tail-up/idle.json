@@ -1,0 +1,35 @@
+{
+ "width": 1614,
+ "height": 1094,
+ "baselineY": 1082,
+ "facing": "left",
+ "mirrored": false,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/gs/raised/cut-p1s.png",
+ "sourceSha256": "b375828a8496c60023f33319f7103dc5a1f36657c2923248ba5f5d96e4dcf4e6",
+ "installSteps": [
+  {
+   "step": "resize",
+   "factor": 0.75,
+   "filter": "lanczos, premultiplied"
+  },
+  {
+   "step": "register",
+   "padLeft": 124,
+   "on": "rear foot pivot",
+   "centreColumn": 807
+  }
+ ],
+ "installer": "docs/concepts/ff7-art-2026-09-27/film-set/scripts/install.py",
+ "subject": "ff7-film-guard-scorpion-tail-up",
+ "state": "idle",
+ "scaleToIdle": 1,
+ "scale": 1.360377,
+ "scaleNote": "same machine and pixel scale as ff7-film-guard-scorpion/idle: the raised tail makes this idle 1442/1060 taller, so the subject scale keeps the body the tail-down size",
+ "seed": 761001,
+ "engine": "flux-2-klein-9b-kv-fp8 (edit mode, ReferenceLatent)",
+ "retailInput": "none (our own Film renders only; no IP-Adapter, no trace)",
+ "promptKey": "film-gs-raised",
+ "sha256": "9caeecfb93d77e69736845f48dde64dbf431f56411530ab4915cd7926db79214"
+}

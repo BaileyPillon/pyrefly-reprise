@@ -1,0 +1,30 @@
+{
+  "width": 558,
+  "height": 1212,
+  "baselineY": 1196,
+  "seed": 1946401287,
+  "prompt": "1girl, rikku \\(ff10-2\\), final fantasy x-2, safe, solo, blonde hair, long hair, braid, hair bun, green eyes, swirl pupils, blue bandana, hair beads, yellow bikini top, tan ruffled sleeves, brown fingerless gloves, red and yellow scarf, olive green miniskirt, yellow pouch belt, blue and white ankle boots, bare midriff, dual wielding, holding dagger, standing, hands on hips, leaning forward, looking at viewer, cheerful grin, straight-on, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background",
+  "cropBox": [
+    138,
+    3,
+    696,
+    1215
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-15T22:56:20.864Z"
+}

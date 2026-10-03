@@ -1,0 +1,50 @@
+{
+  "width": 1194,
+  "height": 741,
+  "baselineY": 725,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "right",
+  "seed": 642114,
+  "prompt": "(lying on the ground:1.2), (fallen:1.2), defeated, (closed eyes:1.2), limp, unconscious, 1boy, final fantasy x-2, safe, solo, male focus, a leblanc syndicate goon, a muscular adult man, wearing a skin-tight matte olive drab army green cloth bodysuit that covers him from neck to wrists and ankles, a pink heart emblem printed on the center of his chest, black gloves, black boots, (olive green bodysuit:1.3), (skin tight:1.2), (small pink heart emblem:1.05), short dark hair, a black domino eye mask over his eyes, (domino mask:1.3), (closed bodysuit:1.2), (from side:1.3), three-quarter view, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, standing, open eyes, smile, blood, injury, wound, scenery, detailed background, floor, shadow, gradient background, 1girl, multiple boys, smile, grin, yellow bodysuit, lime green, thin, skinny, sword, gun",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/ffx2-dr-goon-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/ffx2-dr-goon-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/ffx2-dr-goon-ko-w2.png",
+    "denoise": 0.44
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (ffx2-dr-goon-ko-w2, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (ffx2-dr-goon-idle-square.png, ffx2-dr-goon-head.png); no retail image used anywhere.",
+  "pose": "ko",
+  "registrationVsIdle": {
+    "dx": 328,
+    "dy": 449
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/ffx2-dr-goon/ko/cand-2.png",
+  "candidateSha256": "a70296ef4d3c6325e4ae109e7e1a1e6296ede120348a99b2582f3a2c6de97457",
+  "agentsNote": "new key (the goons dissolve): a fall toward his facing; painted facing right like the idle",
+  "denoise": 0.44,
+  "generatedAt": "2026-10-02T10:40:02.723Z",
+  "decision": "D-325"
+}

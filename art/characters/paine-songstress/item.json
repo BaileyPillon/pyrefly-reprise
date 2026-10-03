@@ -1,0 +1,59 @@
+{
+  "width": 434,
+  "height": 973,
+  "baselineY": 960,
+  "scale": 1.05,
+  "scaleNote": "Head match against this dressphere's own idle, read by eye beside the idle on one baseline at 1.0 / 1.15 / 1.3 (docs/concepts/songstress-2026-09-29/scale-check-*.jpg), checked against the feet-to-eye-line stature ratio (measure.py).",
+  "facing": "right",
+  "seed": 39591,
+  "prompt": "1girl, solo, standing, (holding potion bottle:1.2), small bottle, arm extended forward, hand on own hip, serious, looking at viewer, paine \\(ff10-2\\), final fantasy x-2, silver hair, white hair, short hair, (spiked hair:1.2), (hair slicked back:1.1), layered hair, red eyes, pale skin, feminine, songstress, (white jacket:1.2), long sleeves, (high collar:1.1), turquoise lining, turquoise trim, turquoise glovelets, black studded straps, open jacket, (black bikini top:1.1), (white pants:1.3), tight pants, silver chains on thighs, (brown high heel boots:1.35), turquoise ruffles on boots, (teal microphone:1.1), three-quarter view, looking at viewer, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, musical note, light rays, stage lights, confetti, splash, cast shadow, drop shadow, pedestal, platform, from behind, facing away, drinking, arm up, weapon, smile, black jacket, leather jacket, (shorts:1.2), thighhighs, black pants, skirt, sword, weapon, skull, red belt, suspenders, blonde hair, brown hair, long hair, two microphones, black boots, blue boots, coattails, cape, long coat, masculine, bob cut, (flat hair:1.1), (from behind:1.2), looking back, ass, back",
+  "cropBox": [
+    211,
+    243,
+    645,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "item",
+  "composition": "full",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.75,
+    "skeleton": "D:\\pyrefly-aeon-hp\\docs\\concepts\\art5\\skeletons\\flask\\item.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-songstress/refs/paine-songstress-idle-square.png",
+      "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-songstress/refs/paine-songstress-head.png"
+    ]
+  },
+  "sources": "costume: research/visual-bible.md section 1.24 (FF Wiki Songstress revid 3972937, victory poses revid 3955034); identity: the shipped idle sidecars rikku-thief/idle.json and paine-warrior/idle.json; no retail image used as input, reference or IP-Adapter",
+  "game": "ffx2",
+  "status": "DRIVER PICK (D-281, delegated by Bailey 2026-09-28 \"Your pick (Recommended)\"; not Bailey's own approval), installed 2026-09-29, locked in docs/target/approved-hashes.json set \"driver:2026-09-29-songstress (D-281, delegated by Bailey)\"",
+  "look": "PASS on the second try: bottle held out, hand on hip, tight white pants, brown heels.",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-songstress/poses/paine-songstress/item/cand-11.png",
+  "sha256": "ce42cfeba40c7b8aaef4b288f708c42589389e40c2266a37416cf80fccd2b08c",
+  "generatedAt": "2026-09-29T05:43:12.056Z",
+  "decision": "D-281"
+}

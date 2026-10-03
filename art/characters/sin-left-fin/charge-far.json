@@ -1,0 +1,70 @@
+{
+  "width": 1654,
+  "height": 590,
+  "baselineY": 573,
+  "cropBox": [
+    634,
+    258,
+    2288,
+    848
+  ],
+  "source": {
+    "width": 2352,
+    "height": 1344
+  },
+  "bleeds": [],
+  "frameFraction": {
+    "x0": 0.2764,
+    "y0": 0.2039,
+    "x1": 0.966,
+    "y1": 0.619
+  },
+  "facing": "front",
+  "facingNote": "Painted into its plate, so never mirrored: \"front\" is the one ArtFacing mirrorFor never flips. The Right Fin is its own painting (plan Q14).",
+  "pose": "charge-far",
+  "state": "charge-far",
+  "light": {
+    "kind": "charge",
+    "centre": [
+      1047.7,
+      225.8
+    ],
+    "radius": 47.0,
+    "method": "compose.py light state over the one painting (no new pixels painted)"
+  },
+  "staging": {
+    "range": "far",
+    "evraeSpot": [
+      6.4,
+      3.3,
+      -30.0
+    ],
+    "depthAlongView": 43.29,
+    "frameHeightWorld": 28.132,
+    "worldHeightAsPainted": 11.99,
+    "vsEvraeWorldHeight": 2.93
+  },
+  "seed": 290711,
+  "prompt": "A painterly anime fantasy background painting, a cinematic matte painting with visible brushwork, late afternoon turning to golden hour, a soft blue sky warming to orange at the horizon, warm low sunlight from the left. The view is from the grey steel foredeck of an ancient airship flying high in the sky: riveted steel deck plates with seams running to the pointed bow, a pale stencilled plate across the keel, a round gold dial set into the plating on the right, thin dark metal railings along both edges, and beyond the bow only a long drop. Ahead and below, a sea of soft clouds. Far away across the open sky, level with the ship, a colossal whale-like monster flies side-on, its long blunt head, half whale and half crocodile, craggy dark slate-grey rock scales, a ridge of short stone spikes along the snout and brow, a heavy brow over one small glowing amber eye, the long jaw shut with a row of pale fangs showing along it, pointing to the right, a long tail trailing into haze, its whole body of overlapping dark slate-grey scales and ridges of cracked stone, rough and craggy like an ancient weathered cliff. It is enormous even at this distance, and hazy blue with the air between. From its near flank its clawed arm of a living sea monster: a thick scaly forearm of overlapping dark slate-grey scales and ridges of cracked stone, rough and craggy like an ancient weathered cliff, with a broad ribbed fin of dark grey membrane along its back edge like the dorsal fin of a whale, and huge hooked black claws curled at the end of the arm. At the base of that arm or fin a small round violet glow. The deck is in full sunlight. It is entirely a living animal made of rock and scale: no metal, no gold, no machine parts, no pipes, no bolts, no poles, no buildings on it, no wings. No people.",
+  "engine": "z_image_turbo (zimg), masked repaint into its plate, RealESRGAN x4 + masked detail pass at 2352x1344",
+  "denoise": 0.7,
+  "detailPass": {
+    "size": [
+      2352,
+      1344
+    ],
+    "denoise": 0.28,
+    "seed": 290712,
+    "masked": true
+  },
+  "painting": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-a-l-far-2.full.png",
+  "cut": "SAM 2.1 small (tools/gen/rig-sam.py loader) prompted by install/cuts.json, cut by the repaint mask, holes filled, edge snapped by a guided filter, pulled in 2 px and defringed from its own pixels (install/cut.py)",
+  "origin": "Original art only (rule 8): our code-drawn sketches and our own paintings as the only image inputs, written sources only, no retail image as input, reference or IP-Adapter; no creature, game or franchise name in any prompt",
+  "retailInput": "none",
+  "status": "DRIVER PICK (D-279: Bailey delegated tonight's Sin picks to the driver, 2026-09-29, 'Your picks (Recommended)'). An agent's pick, NOT Bailey's approval; installed so the listing step can wire it",
+  "game": "FFX only (rule 14: links I to IV are fought from the Fahrenheit and on Sin's back; research/ffx-sin.md 0.3)",
+  "decision": "D-279",
+  "pickedFrom": "Fin option A (left), the clawed arm with a ribbed fin; NEAR fin-a-l-near-3, FAR fin-a-l-far-2 (make_frames.py PICKS)",
+  "optionsRound": "docs/concepts/chapters/sin-2026-09-29/README.md, options.html",
+  "production": "docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md"
+}

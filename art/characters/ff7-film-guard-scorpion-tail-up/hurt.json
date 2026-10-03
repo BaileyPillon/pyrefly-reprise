@@ -1,0 +1,36 @@
+{
+ "width": 1922,
+ "height": 1067,
+ "baselineY": 1054,
+ "facing": "left",
+ "mirrored": false,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/gs/recoil/cut-r12.png",
+ "sourceSha256": "67a76c643d6340ee7a0676565ce56899ea61924be6d33c83e2e13b048ceb8a3c",
+ "installSteps": [
+  {
+   "step": "resize",
+   "factor": 0.75,
+   "filter": "lanczos, premultiplied"
+  },
+  {
+   "step": "register",
+   "padLeft": 349,
+   "on": "rear foot pivot",
+   "centreColumn": 961
+  }
+ ],
+ "installer": "docs/concepts/ff7-art-2026-09-27/film-set/scripts/install.py",
+ "subject": "ff7-film-guard-scorpion-tail-up",
+ "state": "hurt",
+ "scaleToIdle": 1,
+ "anchorY": 963,
+ "anchorNote": "the rear foot (recoil.py pivotInOutput): the ground line, so the tilted machine keeps that foot planted",
+ "note": "the hit flinch; for Guard Scorpion the recoil (a 12-degree tilt of its own pick, anchorY on the rear foot)",
+ "seed": 761001,
+ "engine": "flux-2-klein-9b-kv-fp8 (edit mode, ReferenceLatent)",
+ "retailInput": "none (our own Film renders only; no IP-Adapter, no trace)",
+ "promptKey": "film-gs-raised",
+ "sha256": "2a6e7044fb5a0483d007ebd3fbf51cec58979c41775af3d215b56b5d9b4c48b0"
+}

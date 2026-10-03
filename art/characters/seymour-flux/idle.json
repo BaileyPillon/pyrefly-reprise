@@ -1,0 +1,26 @@
+{
+  "width": 832,
+  "height": 1214,
+  "baselineY": 1198,
+  "seed": 245412021,
+  "prompt": "1boy, seymour guado, final fantasy x, safe, solo, blue hair, long hair, pointed ears, pale skin, ornate robe, multiple arms, monstrous, seymour flux, floating, dark aura, menacing, floating, arms spread, looming, dark energy swirling, menacing smile, full body, standing on ground, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1214
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "generatedAt": "2026-09-15T17:54:54.832Z"
+}

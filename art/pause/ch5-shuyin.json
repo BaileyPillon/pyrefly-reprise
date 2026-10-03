@@ -1,0 +1,41 @@
+{
+  "subject": "Yuna (Songstress) (Ch.5 Vegnagun / Shuyin)",
+  "mood": "singing with closed eyes on the Farplane",
+  "seed": 20265002,
+  "prompt": "1girl, yuna \\(ff10-2\\), final fantasy x-2, safe, solo, short chestnut brown hair, short bob, songstress dressphere, blue and white ruffled top, teal feather earrings, orange obi sash, holding a handheld microphone to her mouth, a soft out of focus field of pale pink and white flowers below and behind her, drifting petals, pale violet and mint farplane sky, cool pastel light, soft bokeh background, head and shoulders, three-quarter view, both eyes closed, singing, mouth open in song, brows raised, serene grief, one hand on the microphone low at the bottom edge, a huge dark machine standing behind her and backlit against the sky, (both eyes closed, mouth open singing:1.25), (a colossal dark machina with riveted armour plates and rows of ribbed metal pipes standing behind her:1.25), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, eyes open, one eye open, winking, microphone stand, both hands, white claws, spikes beside the face, flower over her mouth, second face, dragon, wyvern, scales, hot pink, magenta sky, orange sky, warm light, cropped head",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(both eyes closed, mouth open singing:1.25), (a colossal dark machina with riveted armour plates and rows of ribbed metal pipes standing behind her:1.25)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "ref": "public/art/characters/yuna-songstress/idle.png",
+  "refWeight": 0.5,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T23:48:13.448Z",
+  "focal": {
+    "x": 0.5,
+    "y": 0.22
+  },
+  "fixPass": "round 8 (2026-09-18)",
+  "batch": "r8 B v2",
+  "master": {
+    "file": "ch5-shuyin.2x.webp",
+    "width": 2688,
+    "height": 1536,
+    "route": "RealESRGAN_x4plus x4 -> lanczos 0.5",
+    "webpQuality": 88,
+    "note": "PNG is this master downscaled to 1344x768; both are one image."
+  }
+}

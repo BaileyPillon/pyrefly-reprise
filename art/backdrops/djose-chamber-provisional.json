@@ -1,0 +1,35 @@
+{
+  "option": "c2v3",
+  "subject": "chamber",
+  "seed": 9241,
+  "prompt": "no humans, scenery, final fantasy x-2, djose temple, chamber of the fayth, (round chamber of ancient carved grey stone blocks:1.3), temple interior, curved stone walls with carved arches, (slightly high angle view:1.2), (a wide round stone floor filling the lower half of the picture:1.4), (a large dark hole in the middle of the floor:1.3), cracked flagstones, rubble, (machina work lamps on metal tripods:1.2), (black cables across the floor:1.1), metal crates by the walls, cold blue grey stone, warm amber lamp light, faint blue electric sparks, dust, trashed, abandoned, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, statue, sculpture, stained glass, window, gothic, chandelier, lantern, cathedral, church, sky, sun, trees, grass, water, fire, flames, snow, ice, robot, vehicle, warehouse, shelves, factory, corridor",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "output": {
+    "width": 2688,
+    "height": 1536
+  },
+  "status": "approved (bailey:2026-09-28-ixion-scenes, D-273)",
+  "game": "FFX-2 only",
+  "source": "research/ffx2-ixion-djose.md 6.1 (chamber), 7.2 (abyss); written descriptions only",
+  "init": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ixion-scenes/init-c2-9223.png",
+  "denoise": 0.55,
+  "generatedAt": "2026-09-27T18:18:20",
+  "notApproved": false,
+  "installedAs": "backdrops/djose-chamber-provisional",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ixion-scenes/chamber-c2.png",
+  "optionName": "C2 The Faction's lamps",
+  "recommendedBy": "docs/concepts/chapters/ixion-djose-2026-09-27/scenes/README.md; the scene round's second choice for the Chamber; judge PASS with a fault: in the round's composites Ixion's hooves sat over the pit's rim, fixed by moving his stage spot (src/scenes/djose-chamber.ts), not the art",
+  "sha256": "b5ea052fc689951acd5b27433b13b7e3953d8ccb64ce240e48460917f7d1deb1",
+  "chapter": "ffx2-ixion-djose (Chapter XVI, FFX-2 only)",
+  "approvedBy": "Bailey, 2026-09-28 ~07:00 EDT, verbatim \"all your recommendations\" answering item 4 of the driver brief"
+}

@@ -1,0 +1,35 @@
+{
+  "subject": "links I and II: the Fahrenheit's foredeck in late afternoon over the cloud sea, on the way to Bevelle (research/ffx-sin.md 9.1)",
+  "seed": 290101,
+  "prompt": "A painterly anime fantasy background painting, a cinematic matte painting with visible brushwork, late afternoon turning to golden hour, a soft blue sky warming to orange at the horizon, warm low sunlight from the left. The view is from the grey steel foredeck of an ancient airship flying high in the sky: riveted steel deck plates with seams running to the pointed bow, a pale stencilled plate across the keel, a round gold dial set into the plating on the right, thin dark metal railings along both edges, and beyond the bow only a long drop. Ahead and below, an endless sea of soft white and peach clouds; through gaps in the cloud, far, far below, the pale outskirts of a white city of blue roofs. Thin high clouds streak the open sky above. No creature, no tower, no people.",
+  "engine": "z_image_turbo (zimg): masked repaint into our own earlier plate",
+  "denoise": 0.74,
+  "detailPass": {
+    "size": [
+      2352,
+      1344
+    ],
+    "denoise": 0.28,
+    "seed": 290102,
+    "masked": true
+  },
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "master": {
+    "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/plates/flight-1.full.png",
+    "width": 2352,
+    "height": 1344
+  },
+  "route": "the picked 2352x1344 master (RealESRGAN x4 + masked detail pass) -> lanczos to 2688x1536",
+  "rolled": false,
+  "origin": "Original art only (rule 8): our code-drawn sketches and our own paintings as the only image inputs, written sources only, no retail image as input, reference or IP-Adapter; no creature, game or franchise name in any prompt",
+  "retailInput": "none",
+  "status": "DRIVER PICK (D-279: Bailey delegated tonight's Sin picks to the driver, 2026-09-29, 'Your picks (Recommended)'). An agent's pick, NOT Bailey's approval; installed so the listing step can wire it",
+  "game": "FFX only (rule 14: links I to IV are fought from the Fahrenheit and on Sin's back; research/ffx-sin.md 0.3)",
+  "decision": "D-279",
+  "pickedFrom": "flight-1: KEPT, the links I-II plate (sheet.json method section)",
+  "optionsRound": "docs/concepts/chapters/sin-2026-09-29/README.md",
+  "production": "docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md"
+}

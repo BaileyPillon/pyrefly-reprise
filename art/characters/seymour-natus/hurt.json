@@ -1,0 +1,48 @@
+{
+  "width": 708,
+  "height": 1133,
+  "baselineY": 1115,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "front",
+  "seed": 113142,
+  "prompt": "(flinching:1.2), recoiling from a blow, (pained expression:1.2), grimace, clenched teeth, head tilted back, leaning back, (gritted teeth:1.1), eyes narrowed, white bone ribcage pattern on the chest, purple scale pattern on the blade wings, 1boy, seymour guado, final fantasy x, solo, male focus, demonic transformed form, pale grey blue skin, light blue silver hair swept up into a tall spiked crest, purple eyes, dark veins on his face, bare chest and abdomen with ridged ribs, broad violet armored pauldrons, dark violet armored arms and legs, clawed hands, (long skirt of grey lavender blade-shaped feathers fanning down to a wide jagged hem:1.2), two large lavender scaled blade wings held in his hands, (1boy:1.3), full body, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, smile, grin, happy, calm, relaxed, blood, injury, wound, scratches, torn clothes, scenery, detailed background, floor, shadow, gradient background, 1girl, extra wings, feather spray, sparkles",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1001/refs/seymour-natus-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1001/refs/seymour-natus-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1001/inits/natus-hurt-w3.png",
+    "denoise": 0.38
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (natus-hurt-w3, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (seymour-natus-idle-square.png, seymour-natus-head.png); no retail image used anywhere.",
+  "pose": "hurt",
+  "registrationVsIdle": {
+    "dx": 14,
+    "dy": 27
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own installed idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-314, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/boss-poses/seymour-natus/hurt/cand-6.png",
+  "candidateSha256": "b2a1938d113d54a26350f8bf9d42d5bbf5b46050cb51e2e1897005cd3462f03f",
+  "generatedAt": "2026-10-01T05:09:03.540Z",
+  "decision": "D-314"
+}

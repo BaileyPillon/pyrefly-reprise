@@ -1,0 +1,59 @@
+{
+  "width": 804,
+  "height": 907,
+  "baselineY": 891,
+  "scale": 1.34,
+  "scaleNote": "Head match corrected 2026-09-25 (repair of verifier V-1; was 1.66 from the judge note: Head match 2026-09-25 (decision sheet item 11): idle eye-line to chin 59.0 px vs this pose 35.5 px, points in docs/concepts/art5/judge/measure.json; read by eye off 2x gridded crops, about +/-5%.). Method: iris-centroid eye spacing and a checked eye-line-to-chin point, each as idle/pose, read against which one the head turn or tilt shortens: eye spacing 1.21 and eye line to chin 1.48 straddle it (turned and lowered face); mean 1.34, which the verifier's eye spacing (1.34) also gives. Evidence: docs/concepts/art5/installed/rescale/.",
+  "seed": 25924,
+  "prompt": "1girl, solo, standing, (holding potion bottle:1.2), small bottle, arm extended forward, one hand holding staff, staff at side, looking at object, closed mouth, yuna \\(ff10-2\\), final fantasy x-2, black mage, brown hair, short hair, heterochromia, blue eye, green eye, (blue witch hat:1.2), pink flower on hat, white top, blue shawl, orange belt, blue corset, fishnet glove, long pink and lavender skirt, side slit, blue boots, holding staff, gold ring staff, teal tassel, three-quarter view, looking at viewer, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, glowing sword, fire, flames, fire trail, swirl, lightning, dark aura, splash, extra sword, multiple swords, floating sword, from behind, facing away, two-handed, drinking, sword, sword, gun, blonde hair, long hair, armor, two staffs",
+  "cropBox": [
+    0,
+    284,
+    804,
+    1191
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "item",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.75,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/art5/skeletons/sword/item.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "yuna-black-mage-idle-square.png",
+      "yuna-black-mage-head.png"
+    ],
+    "forced": true
+  },
+  "status": "APPROVED: Bailey 2026-09-25 ~12:45 EDT, \"I'll go with your recommendations for everything\" (install all 22 judge-passed poses); installed 2026-09-25, locked in docs/target/approved-hashes.json set bailey:2026-09-25-poses",
+  "judge": "docs/concepts/art5/judge/judge.json#yuna-black-mage/item (7.19)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/yuna-black-mage/item/cand-4.png",
+  "sha256": "cbd4f7c0889026731fbf34be10e1008afab139f5caca00cb44175b9431d423b5",
+  "generatedAt": "2026-09-25T09:52:02.758Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-judge-poses/yuna-black-mage/item.png"
+}

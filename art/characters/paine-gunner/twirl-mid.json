@@ -1,0 +1,53 @@
+{
+  "width": 790,
+  "height": 1216,
+  "baselineY": 1207,
+  "anchorY": 1207,
+  "anchorNote": "the foot line (method/sheets.py baseline_of: the figure box, or for a transitional key its source key's feet); ribbons may hang below it, so it is set by hand instead of measured from alpha",
+  "scale": 1.23,
+  "scaleNote": "multiplies paine-gunner's idle pixel scale (the art run's 06:45 scale pass, method/sheets.py key_scale); the twirl slot resizes a key shown on another dressphere by the two idles (src/engine/fx/mix/twirl.ts keyRescale)",
+  "facing": "right",
+  "seed": 93110,
+  "prompt": "(spinning:1.2), twirling, (both arms raised above her head:1.3), (eyes closed:1.2), serene smile, standing on tiptoes, legs together, (a tall column of pink and gold satin ribbons spiraling around her:1.3), ribbons wrapped around her body, ribbon dress, shimmering ribbons, a few sparkles, (plain white background:1.3), 1girl, paine \\(ff10-2\\), final fantasy x-2, silver hair, white hair, short hair, layered hair, red eyes, pale skin, safe, solo, three-quarter view, body facing right, (looking at viewer:1.2), (face visible:1.1), full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, chibi, sketch, monochrome, 3d, realistic, cast shadow, drop shadow, pedestal, platform, nsfw, nude, naked, nipples, completely nude, underwear, panties, bra, lingerie, bondage, bdsm, cleavage, see-through, (revealing clothes:1.2), navel, midriff, armor, weapon, gun, sword, staff, rod, scenery, architecture, indoors, outdoors, detailed background, (pillar of light:1.3), (column of light:1.3), light beam, lens flare, (from behind:1.2), facing away, sitting, lying, kneeling, wings, feathers, clone, two people, confetti, obi, kimono, long skirt, skirt slit, (swirl:1.3), swirling, (smoke:1.2), flame, abstract shapes, background effects, (big bow:1.2), large bow, long gown, sparkles, particles, (dark background:1.3), black background, stage, spotlight, floor, (ribbons filling the whole picture:1.2), (halo:1.2), (glowing circle:1.3), light disc, (white glow:1.2), bright background, blonde hair, brown hair, long hair, 1boy",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-02-overnight\\method\\refs\\paine-gunner-head.png"
+    ]
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.8,
+    "end": 1,
+    "skeleton": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-02-overnight\\method\\skel\\sc-mid34.png"
+  },
+  "composition": "full",
+  "sources": "research/ffx-vs-ffx2-presentation.md section 6 (she twirls while the old outfit disappears and the new garment manifests; single source) and visual-bible.md 4.5.4 (the white column these keys replace, D-316); every pose, ribbon and light here is ours; identity words from the installed idle sidecars; IP-Adapter sees only our own installed idle and its head crop; no retail image used anywhere",
+  "pose": "twirl-mid",
+  "key": "RIBBONS AND LIGHT: the painted column that replaces today's white one (the girl's, played on every change)",
+  "girl": "paine",
+  "figure": "paine-gunner",
+  "candidateKey": "mid",
+  "transitionOf": null,
+  "game": "ffx2",
+  "gameNote": "FFX-2 only: the spherechange exists only in FFX-2 (research/ffx-vs-ffx2-presentation.md section 6.1)",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-322, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/spherechange-keys/paine/mid/cand-10.png",
+  "candidateSha256": "a02f211ff2a59948aa3cebaac711effcf23e2a82c52eb01fe87d20cb5327d518",
+  "agentsNote": "three-quarter: a tall ring of gold ribbons around her, white dress, arms raised",
+  "generatedAt": "2026-10-02T07:36:36.842Z",
+  "decision": "D-322"
+}

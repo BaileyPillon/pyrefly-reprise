@@ -1,0 +1,35 @@
+{
+  "width": 664,
+  "height": 1097,
+  "baselineY": 1081,
+  "seed": 800903,
+  "prompt": "1boy, jecht, final fantasy x, safe, solo, male focus, dark skin, deep tan skin, muscular male, long hair, messy hair, unkempt black hair, red eyes, red headband, bare chest, topless male, pectorals, abs, bold black tribal tattoo on his chest, black shorts, red sash tied at the waist, single spiked pauldron on his far shoulder, armored gauntlet on his far forearm, barefoot, stubble, weathered face, heavy jaw, laughing out loud with his head thrown back, one fist punched up to shoulder height, the other hand planted on his hip, chest out, weight on the back foot, triumphant, standing on the ground, whole body from head to bare feet in frame, (single spiked pauldron on his far shoulder:1.4), (bold black tribal tattoo on his bare chest:1.4), (full body, both feet visible:1.3), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, cape, scarf, flowing cloth, long ribbons, shirt, shoes, boots, two gauntlets, pale skin, young face, upper body, cowboy shot, waist up, close-up, portrait, floating limb, disembodied arm, detached hand, extra limbs, extra arms, extra legs, gold buckle, orange skin, red skin, glowing tattoo, body paint, flame pattern on the skin, cropped legs, cropped thighs, chromatic aberration, color fringing, pink fringe, magenta outline, chest strap, harness, sword, weapon, arms crossed",
+  "cropBox": [
+    30,
+    45,
+    694,
+    1142
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "victory",
+  "composition": "full",
+  "facing": "left",
+  "emphasis": "(single spiked pauldron on his far shoulder:1.4), (bold black tribal tattoo on his bare chest:1.4), (full body, both feet visible:1.3)",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-19T18:28:14.189Z",
+  "despeckled": true,
+  "despeckledAt": "2026-09-19T14:29:25",
+  "despeckledDropped": []
+}

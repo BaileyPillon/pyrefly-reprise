@@ -1,0 +1,62 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 770101,
+  "prompt": "1boy, seymour guado, final fantasy x, safe, solo, male focus, adult man, pale skin, very long light blue hair falling past his shoulders, heavy fringe over one side of his face, purple eyes, rounded human ear, dark blue robe, tall red collar, red chest tattoo, profile, looking to the side, stern expression, closed mouth, straight-on, portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, pointy ears, elf ears, horns, antlers, crown, helmet, hood, mask, beard, stubble, 1girl, female, lipstick, weapon, staff, hands",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "idle head-and-shoulders crop, IP-Adapter defaults 0.3 ease in 0.2-0.6",
+  "init": "idle crop init-A.png (RealESRGAN x4 -> 832x1216)",
+  "denoise": 0.45,
+  "cutout": {
+    "width": 832,
+    "height": 1062,
+    "baselineY": 1062,
+    "cropBox": [
+      0,
+      154,
+      832,
+      1216
+    ],
+    "contentBox": [
+      0,
+      170,
+      832,
+      1216
+    ],
+    "sourceWidth": 832,
+    "sourceHeight": 1216,
+    "model": "isnet-anime"
+  },
+  "repad": "rembg cut-out (16 px margin) re-padded to the full 832x1216 canvas, bottom-anchored",
+  "generatedAt": "2026-09-24",
+  "candidate": "seymour-macalania-a",
+  "pickedBy": "Bailey 2026-09-24 (\"All your recommendations\": Seymour Chapter VII portrait option A)",
+  "game": "ffx",
+  "speakerId": "seymour-macalania",
+  "sources": "research/ffx-seymour-anima-macalania.md 9.2; identity from public/art/characters/seymour-macalania/idle.png (img2img from its head-and-shoulders crop)",
+  "disclosed": "no visible facial veins (research: pronounced; the idle shows none at its size); heavier cel shadows than the softer approved portraits",
+  "backup": "D:/Tools/pyrefly-art-backup/approved/2026-09-24-seymour-macalania/ (render record and raw: D:/Tools/pyrefly-art-backup/candidates/2026-09-24-seymour-macalania-portrait/)"
+}

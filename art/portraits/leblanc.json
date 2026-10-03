@@ -1,0 +1,57 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 1041086450,
+  "prompt": "1girl, leblanc \\(ff10-2\\), final fantasy x-2, safe, solo, round face, large purple eyes, short blonde hair falling to the chin with side-swept bangs, a pinkish-purple furisode-style robe left open at the chest revealing a red heart-shaped syndicate mark on her sternum, the robe patterned all over in blue and white triangles and swirls, a high curved tasselled collar standing up around her neck, holding a red-and-silver folding fan, confident smirk, half-lidded eyes, \\(blue and white triangle pattern robe:1.2\\), \\(heart mark on chest:1.15\\), head and shoulders, confident smirk, fan held near her chin, straight-on, portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "refSkippedMonochrome": {
+    "attempted": "public/art/characters/leblanc/idle.png",
+    "top2Share": 0.4313421453275512
+  },
+  "cutout": {
+    "coverage": {
+      "widthFraction": 1,
+      "heightFraction": 1,
+      "checked": true,
+      "exceeds": true
+    },
+    "components": {
+      "componentCount": 1,
+      "largestPixels": 879861,
+      "secondPixels": 0,
+      "secondRatio": 0,
+      "touchesLargest": null
+    },
+    "nearWhite": {
+      "fraction": 0.010898312347063911,
+      "largestRegionFraction": 0.0041347440107016905,
+      "detached": false,
+      "touchesEdge": true,
+      "allowanceUsed": 0.045513002710011845
+    }
+  },
+  "generatedAt": "2026-09-21T21:55:48.087Z"
+}

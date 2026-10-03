@@ -1,0 +1,32 @@
+{
+  "width": 989,
+  "height": 966,
+  "baselineY": 950,
+  "seed": 285619841,
+  "prompt": "no humans, solo, single dragon, black dragon, dark grey armored scales, black armour plating, segmented mechanical wings, dark red wing membranes, large curved horns, spinal spikes, long tail, glowing blue eyes, bipedal dragon, aeon, final fantasy x, standing upright on two legs, body turned to the side, wings half folded against the back, head turned toward the viewer, imposing, one head, the whole dragon inside the frame, wingtips inside the frame, feet visible, (black armoured scales:1.35), (dark grey plating:1.2), (two wings only:1.25), (from side:1.15), three-quarter view, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, bright red, crimson body, neon, cyan, pink, white dragon, extra heads, second mouth, mouth on the chest, extra wings, four wings, six wings, extra limbs, rider, 1girl, 1boy, cropped, close-up, pedestal, rock, floor, ground, glowing background, light burst, backlight, white glow, glowing aura, magic circle",
+  "cropBox": [
+    19,
+    23,
+    1008,
+    989
+  ],
+  "source": {
+    "width": 1024,
+    "height": 1024
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idleB",
+  "composition": "boss",
+  "facing": "left",
+  "facingPhrase": "(from side:1.15), three-quarter view, (looking at viewer:1.2)",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "generatedAt": "2026-09-18T12:44:43.319Z"
+}

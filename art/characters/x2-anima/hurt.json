@@ -1,0 +1,18 @@
+{
+  "width": 890,
+  "height": 1230,
+  "baselineY": 1143,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "recipe": "derived from x2-anima/hurt by the house treatment (boss-poses/x2-anima/README.md), no GPU",
+  "pose": "hurt",
+  "registrationVsIdle": null,
+  "registrationNote": "offset (dx, dy) of this cut against its own installed idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-314, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/boss-poses/x2-anima/hurt/cand-1.png",
+  "candidateSha256": "975f043806a9c476f1c0d724c417a38e955e3c6e01e4c38e952b8ef98cf30f0a",
+  "generatedAt": null,
+  "decision": "D-314"
+}

@@ -1,0 +1,18 @@
+{
+ "what": "Relative depth of the approved painting, 1 = near (white), 0 = far. A derived greyscale layer for option B \"Living Paintings\"; never colour.",
+ "model": "depth-anything/Depth-Anything-V2-Small-hf",
+ "revision": "5426e4f0f36572d16453bbda7a8389317b1bef99",
+ "licence": "Apache-2.0 (Depth Anything V2 Small only)",
+ "input": [
+  1036,
+  588
+ ],
+ "output": [
+  1344,
+  768
+ ],
+ "edgeSnap": "guided filter r=6 eps=2e-3 on the painting luma",
+ "source": "public/art/backdrops/gagazet.png",
+ "sourceSha256": "eccdee786bc749d9b97dc675f319d6c641f5c4bfd0cdec98667fe70237e5c822",
+ "generator": "tools/fx/depth.py"
+}

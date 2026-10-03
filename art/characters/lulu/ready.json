@@ -1,0 +1,46 @@
+{
+  "width": 658,
+  "height": 1076,
+  "baselineY": 1060,
+  "scale": 1.2,
+  "scaleNote": "head match against the installed idle, from the overnight run (method/picks.json rr); multiplies the idle pixel scale",
+  "facing": "right",
+  "seed": 165762,
+  "prompt": "1girl, lulu \\(ff10\\), final fantasy x, safe, solo, (a white moogle plush doll held up in her raised hand:1.4), (the moogle has a round red pompom on a thin antenna on top of its head:1.35), cat-like ears, small closed smiling eyes, small purple bat wings, black sleeve, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, text, error, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, bow, ribbon, butterfly, stripes, rainbow, red eyes, (giant moogle:1.2), two dolls, floating doll, stick, staff, cane, 1boy",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.3,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-02-overnight\\method\\refs\\lulu-idle-square.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-02-overnight\\method\\rp\\lulu-windup24d\\pre-1024.png",
+    "mask": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-02-overnight\\method\\rp\\lulu-windup24d\\mask-1024.png",
+    "denoise": 0.85
+  },
+  "composition": "full",
+  "sources": "the adopted 2026-10-01 candidate render (ours) as the init and context; IP-Adapter (when used) sees only our own approved idle crops; no retail image used anywhere",
+  "pose": "ready",
+  "key": "the wind-up key, installed as the figure's \"ready\" pose (shown while its command menu is open and from an attack's start to the lunge apex, src/engine/KeyPoses.ts)",
+  "fix": "the adopted 2026-10-01 pick (cand-24) with its hooked stick replaced by the moogle doll held up in her raised hand; then (06:25) the doll repainted as her idle's moogle (red pompom on an antenna); plus fresh re-rolls with the doll lifted into clear space",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-323, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/party-key-rerolls/lulu/windup-repair-c24d/cand-2.png",
+  "candidateSha256": "7f0eb69e3cfbc7a6c9070593afd7b72d92495b6aa7f7b345e8ed7ca980a3c523",
+  "agentsNote": "the adopted wind-up with the moogle of her idle held up high: white, cat ears, closed smiling eyes, a round red pompom on a thin antenna",
+  "generatedAt": "2026-10-02T10:17:25.604Z",
+  "decision": "D-323"
+}

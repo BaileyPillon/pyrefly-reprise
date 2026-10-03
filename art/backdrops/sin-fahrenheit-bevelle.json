@@ -1,0 +1,35 @@
+{
+  "subject": "link IV: looking up past the hull at golden dusk, Bevelle small and far below (the Evrae layout; the engine rolls it 11.6 degrees and draws the deck)",
+  "seed": 290361,
+  "prompt": "A painterly anime fantasy background painting, a cinematic matte painting with visible brushwork, sunset, looking up past the dark steel hull of a huge ancient airship that crosses the sky on a diagonal, towards orange and pink sunset clouds. Down on the left, far, far below through a gap in the golden clouds, lies a vast white holy city of tiered towers, domes and blue roofs, lit warm by the low sun and hazy with distance, and one tall slender white tower with gold bands rising out of it. The city is tiny with distance, seen from high above, far below the ship and the clouds. No creature, no people.",
+  "engine": "z_image_turbo (zimg): masked repaint into our own earlier plate",
+  "denoise": 0.5,
+  "detailPass": {
+    "size": [
+      2352,
+      1344
+    ],
+    "denoise": 0.26,
+    "seed": 290362,
+    "masked": true
+  },
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "master": {
+    "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-a-8.full.png",
+    "width": 2352,
+    "height": 1344
+  },
+  "route": "the picked 2352x1344 master (RealESRGAN x4 + masked detail pass) -> lanczos to 2688x1536",
+  "rolled": false,
+  "origin": "Original art only (rule 8): our code-drawn sketches and our own paintings as the only image inputs, written sources only, no retail image as input, reference or IP-Adapter; no creature, game or franchise name in any prompt",
+  "retailInput": "none",
+  "status": "DRIVER PICK (D-279: Bailey delegated tonight's Sin picks to the driver, 2026-09-29, 'Your picks (Recommended)'). An agent's pick, NOT Bailey's approval; installed so the listing step can wire it",
+  "game": "FFX only (rule 14: links I to IV are fought from the Fahrenheit and on Sin's back; research/ffx-sin.md 0.3)",
+  "decision": "D-279",
+  "pickedFrom": "link IV backdrop option A, golden dusk, render bk-a-8 (the city v4 method check; README \"Passes\" 9-10)",
+  "optionsRound": "docs/concepts/chapters/sin-2026-09-29/README.md",
+  "production": "docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md"
+}

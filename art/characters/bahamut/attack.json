@@ -1,0 +1,43 @@
+{
+  "width": 1020,
+  "height": 976,
+  "baselineY": 960,
+  "seed": 194298753,
+  "prompt": "no humans, solo, single dragon, black dragon, dark grey armored scales, black armour plating, segmented mechanical wings, dark red wing membranes, large curved horns, spinal spikes, long tail, glowing blue eyes, bipedal dragon, aeon, final fantasy x, lunging forward, jaws open, claws reaching out, wings sweeping back, dynamic pose, one head, standing on two legs, plain empty white background, nothing behind the dragon, the whole dragon inside the frame, (black armoured scales:1.3), (one head:1.3), (two wings only:1.25), (from side:1.15), three-quarter view, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, bright red, crimson body, neon, cyan, pink, white dragon, extra heads, second head, second mouth, mouth on the chest, teeth on the body, extra wings, four wings, six wings, extra limbs, rider, 1girl, 1boy, cropped, close-up, spotlight, glowing orb, sun, moon, white circle, backlit, light behind the subject, pedestal, rock, floor, ground, glowing background, light burst, backlight, white glow, glowing aura, magic circle",
+  "cropBox": [
+    4,
+    28,
+    1024,
+    1004
+  ],
+  "source": {
+    "width": 1024,
+    "height": 1024
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "attackD",
+  "composition": "boss",
+  "facing": "left",
+  "facingPhrase": "(from side:1.15), three-quarter view, (looking at viewer:1.2)",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "ref": "public/art/characters/bahamut/idle.png",
+  "refWeight": 0.45,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.35,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T12:50:10.335Z",
+  "facingObserved": true,
+  "flipped": true,
+  "flippedAt": "2026-09-18T08:52:47.403176-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image."
+}

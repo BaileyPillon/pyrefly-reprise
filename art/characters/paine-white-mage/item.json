@@ -1,0 +1,46 @@
+{
+  "width": 719,
+  "height": 876,
+  "baselineY": 860,
+  "scale": 1.15,
+  "scaleNote": "head match against the installed idle, from the overnight run (party-keys-method/picks.json); multiplies the idle pixel scale",
+  "facing": "right",
+  "seed": 85601,
+  "prompt": "staff held in the other hand, standing, (holding a small potion bottle out in front of her:1.2), small glass bottle, looking at the bottle, feet on ground, 1girl, paine \\(ff10-2\\), final fantasy x-2, silver hair, short hair, red eyes, pale skin, white mage, white robe, hood up, hooded robe, purple trim, pink lining, yellow crescent moon, yellow circle pattern, wide sleeves, white gloves, white boots, holding staff, face visible, solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, sitting, lying, kneeling, jumping, floating, (from behind:1.2), facing away, (facing left:1.2), scenery, architecture, indoors, detailed background, drinking, two bottles, large bottle, extra weapon, floating weapon, rainbow, hand fan, folding fan, wings, feathers, cape effect, hood down, two staffs, 1boy",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\refs\\paine-white-mage-idle-square.png",
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\refs\\paine-white-mage-head.png"
+    ]
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "skeleton": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\skel\\item-out.png"
+  },
+  "composition": "full",
+  "sources": "look: research/visual-bible.md per-character attack / cast / victory lines (ours where marked [estimate]); identity words from the shipped idle sidecar; IP-Adapter sees only our own shipped idle and its head crop; no retail image used anywhere",
+  "pose": "item",
+  "key": "the item key",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-313, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/paine-white-mage/item/cand-1.png",
+  "candidateSha256": "f8da14196bddada76b378aa5d22f05ac0918960c17819535edddc5c2441dacd3",
+  "agentsNote": "bottle raised, hooded, staff in the other hand",
+  "generatedAt": "2026-10-01T09:02:47.301Z",
+  "decision": "D-313"
+}

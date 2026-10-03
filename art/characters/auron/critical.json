@@ -1,0 +1,56 @@
+{
+  "width": 832,
+  "height": 1116,
+  "baselineY": 1116,
+  "scale": 0.64,
+  "scaleNote": "head match 0.45 would stand 0.43 of the idle; raised to the 0.60 stature floor: read on gridded head crops beside this character's installed idle (the 2026-09-26 boss-pose method; heads.py and headscale.py in D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/work/), feature: brow-to-chin and lens width: a close-up render with a head about twice the idle's share; stature at this scale 0.609 of the idle (gate: at least 0.60 for a bend, hunch, kneel or lunge)",
+  "facing": "right",
+  "seed": 52504,
+  "prompt": "standing, (exhausted:1.3), (hand on own knee:1.2), leaning forward, tired, panting, open mouth, head tilted down, knees bent, legs apart, feet on ground, pained expression, furrowed brow, sweat, (katana point planted on the ground:1.2), holding katana, leaning on katana, 1boy, auron \\(ff10\\), final fantasy x, male focus, black hair, short hair, grey streak, sunglasses, round eyewear, scar across eye, facial hair, stubble, mature male, red coat, long coat, haori, one shoulder bare, empty sleeve, popped collar, high collar, black gloves, gauntlet, shoulder pad, jug, katana, only one arm out of the coat, the other arm tucked inside the coat, empty sleeve hanging loose and flat, jug at the hip, solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, smile, grin, happy, sleeping, lying, sitting, kneeling, on one knee, jumping, floating, arms up, (from behind:1.2), facing away, blood, injury, wound, bowing, (bent over:1.1), touching toes, steam, breath, scenery, architecture, indoors, pillar, building, detailed background, two swords, dual wielding, extra sword, second katana, sheathed sword, sword on the back, floating weapon, both arms out, two bare arms, arms spread, full robe, monk robe, yellow shoes, hakama",
+  "cropBox": [
+    0,
+    72,
+    832,
+    1188
+  ],
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "critical",
+  "composition": "full",
+  "headTop": [
+    0.858,
+    0.043
+  ],
+  "headTopNote": "the top of the painted head as fractions [across, down] of the opaque box (alpha > 16); the status marks (the Z marks, bubbles, stars) sit there while this painting is up (src/ui/common/restPoses.ts); read by eye, work/heads_top.py",
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "skeleton": "D:\\Tools\\pyrefly-scratch\\art-0930\\sleep-lowhp\\skel\\slouch-b-nofar.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-art-backup/candidates/2026-09-30-overnight/sleep-lowhp-refs/auron-idle-square.png",
+      "D:/Tools/pyrefly-art-backup/candidates/2026-09-30-overnight/sleep-lowhp-refs/auron-head.png"
+    ]
+  },
+  "sources": "look: research/status-display.md section 2 (FFX Critical: HP digits yellow and \"the character slouches in fatigue, taking an even more exhausted stance when they are under 25% of their HP\", W-XS rev 4030921) and section 3 (FFX-2 Critical: below a third of max HP \"They will appear tired and hunched over\", the girl \"visibly kneels\", W-X2S + research/ffx2-combat-core.md section 6.1, 2 sources); identity from the installed idle and its sidecar; the IP-Adapter saw only our own idle and head crop; no retail image used as input, reference or IP-Adapter (rule 8)",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-09-30 ~09:40 EDT (\"all your recommendations, godspeed\", D-298), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-09-30-poses\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-30-overnight/sleep-lowhp-auron/critical/cand-4.png",
+  "candidateSha256": "b1879268706cf4927b8e66702bfb5857e7658b81ea6840e24d8b42cfe6404728",
+  "edited": "floor patch under the boots and the white backdrop it trapped made transparent, then (repair 2026-09-30) the white backdrop wedge between the scabbard and the rear leg (7082 px, x 358-463, y 651-803) made transparent; no repaint (work/fix_auron_floor.py then work/fix_auron_wedge.py; reports work/auron-critical-c4-fixed.report.json and work/auron-critical-c4-wedge.report.json; diff mask work/auron-critical-c4-wedge.diffmask.png)",
+  "generatedAt": "2026-09-30T04:17:42.163Z",
+  "decision": "D-298"
+}

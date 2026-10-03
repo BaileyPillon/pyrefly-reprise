@@ -1,0 +1,1373 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-03T14:22:43.451Z",
+  "subjects": {
+    "anima": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "ko",
+        "overdrive"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "auron": {
+      "states": [
+        "attack",
+        "cast",
+        "critical",
+        "follow",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "portrait": true,
+      "facing": "right"
+    },
+    "bahamut": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "overdrive"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "baralai-shade": {
+      "states": [
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "braskas-final-aeon-1": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle"
+      ]
+    },
+    "braskas-final-aeon-2": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "cindy": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "daigoro": {
+      "states": [
+        "cast",
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "evrae": {
+      "states": [
+        "attack",
+        "breath-charge",
+        "hurt",
+        "idle",
+        "idle-far",
+        "idle-near",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle",
+        "idle-far"
+      ]
+    },
+    "ff7-barret": {
+      "states": [
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "ff7-cloud": {
+      "states": [
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "ff7-film-barret": {
+      "states": [
+        "aim",
+        "attack",
+        "hurt",
+        "idle",
+        "punch",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "ff7-film-cloud": {
+      "states": [
+        "attack",
+        "back",
+        "follow",
+        "hurt",
+        "idle",
+        "spin",
+        "victory",
+        "windup"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "ff7-film-guard-scorpion": {
+      "states": [
+        "hurt",
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "ff7-film-guard-scorpion-tail-up": {
+      "states": [
+        "hurt",
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "ff7-guard-scorpion": {
+      "states": [
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "ff7-guard-scorpion-tail-up": {
+      "states": [
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "ffx2-bahamut": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko",
+        "splash"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle"
+      ]
+    },
+    "ffx2-dr-goon": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "ffx2-fem-goon": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "ginnem": {
+      "states": [
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "gippal-shade": {
+      "states": [
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "grothia": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "overdrive"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle"
+      ]
+    },
+    "guado-guardian": {
+      "states": [
+        "cast",
+        "hurt",
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "ifrit": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "overdrive"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "isaaru": {
+      "states": [
+        "idle",
+        "kneel"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "ixion": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "ko",
+        "overdrive"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "jecht": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "ko",
+        "talk",
+        "victory"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "kimahri": {
+      "states": [
+        "attack",
+        "cast",
+        "critical",
+        "follow",
+        "hurt",
+        "idle",
+        "item",
+        "jump",
+        "ko",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "portrait": true,
+      "facing": "right"
+    },
+    "leblanc": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "lenne": {
+      "states": [
+        "idle"
+      ],
+      "portrait": true,
+      "facing": "right"
+    },
+    "logos": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "lulu": {
+      "states": [
+        "attack",
+        "cast",
+        "critical",
+        "follow",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "portrait": true,
+      "facing": "right"
+    },
+    "mindy": {
+      "states": [
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "mortibody": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "mortiorchis": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "mortiphasm": {
+      "states": [
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "front"
+    },
+    "mortiphasm-facing": {
+      "states": [
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "front"
+    },
+    "nooj-shade": {
+      "states": [
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "ormi": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle"
+      ],
+      "portrait": true,
+      "facing": "right"
+    },
+    "overdrive-sin": {
+      "states": [
+        "idle",
+        "stage-0",
+        "stage-1",
+        "stage-2",
+        "stage-3",
+        "stage-4"
+      ],
+      "portrait": true,
+      "facing": "front",
+      "states2x": [
+        "idle",
+        "stage-0",
+        "stage-1",
+        "stage-2",
+        "stage-3",
+        "stage-4"
+      ]
+    },
+    "paine-black-mage": {
+      "states": [
+        "attack",
+        "cast",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "paine-dark-knight": {
+      "states": [
+        "attack",
+        "cast",
+        "follow",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "paine-gunner": {
+      "states": [
+        "attack",
+        "idle",
+        "item",
+        "ready",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-mid",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "paine-samurai": {
+      "states": [
+        "cast",
+        "follow",
+        "idle",
+        "item",
+        "ready"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "paine-songstress": {
+      "states": [
+        "attack",
+        "cast",
+        "dance",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "paine-warrior": {
+      "states": [
+        "attack",
+        "cast",
+        "critical",
+        "follow",
+        "idle",
+        "item",
+        "ready",
+        "sleep",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "paine-white-mage": {
+      "states": [
+        "cast",
+        "idle",
+        "item",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "paragon": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle"
+      ]
+    },
+    "pterya": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko",
+        "overdrive"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle"
+      ]
+    },
+    "rikku": {
+      "states": [
+        "attack",
+        "cast",
+        "critical",
+        "follow",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "sleep",
+        "steal",
+        "victory"
+      ],
+      "portrait": true,
+      "facing": "right"
+    },
+    "rikku-alchemist": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "item",
+        "ready",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "rikku-berserker": {
+      "states": [
+        "cast",
+        "follow",
+        "idle",
+        "item",
+        "ready"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "rikku-black-mage": {
+      "states": [
+        "attack",
+        "cast",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "rikku-dark-knight": {
+      "states": [
+        "cast",
+        "follow",
+        "idle",
+        "item",
+        "ready",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "rikku-gunner": {
+      "states": [
+        "attack",
+        "cast",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-mid",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "rikku-songstress": {
+      "states": [
+        "attack",
+        "cast",
+        "dance",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "front"
+    },
+    "rikku-thief": {
+      "states": [
+        "cast",
+        "critical",
+        "follow",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "sleep",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "rikku-white-mage": {
+      "states": [
+        "attack",
+        "cast",
+        "idle",
+        "item",
+        "twirl-end",
+        "twirl-forming",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "sandy": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "seymour-flux": {
+      "states": [
+        "idle"
+      ],
+      "portrait": false
+    },
+    "seymour-flux-body": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "seymour-macalania": {
+      "states": [
+        "cast",
+        "hurt",
+        "idle",
+        "kneel",
+        "ko"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "seymour-natus": {
+      "states": [
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": true,
+      "facing": "front"
+    },
+    "seymour-natus-ring": {
+      "states": [
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "front"
+    },
+    "seymour-omnis": {
+      "states": [
+        "cast",
+        "hurt",
+        "idle"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "shiva": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "ko",
+        "overdrive"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "shuyin": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "kneel"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "sin-core": {
+      "states": [
+        "charge",
+        "idle"
+      ],
+      "portrait": true,
+      "facing": "front",
+      "states2x": [
+        "idle"
+      ]
+    },
+    "sin-left-fin": {
+      "states": [
+        "attack",
+        "charge-far",
+        "charge-near",
+        "idle",
+        "idle-far",
+        "idle-near"
+      ],
+      "portrait": false,
+      "facing": "front",
+      "states2x": [
+        "idle-far",
+        "idle-near"
+      ]
+    },
+    "sin-right-fin": {
+      "states": [
+        "attack",
+        "charge-far",
+        "charge-near",
+        "idle",
+        "idle-far",
+        "idle-near"
+      ],
+      "portrait": false,
+      "facing": "front",
+      "states2x": [
+        "idle-far",
+        "idle-near"
+      ]
+    },
+    "sinspawn-genais": {
+      "states": [
+        "attack",
+        "idle",
+        "shell"
+      ],
+      "portrait": true,
+      "facing": "front"
+    },
+    "spathi": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "overdrive"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle"
+      ]
+    },
+    "tidus": {
+      "states": [
+        "attack",
+        "cast",
+        "critical",
+        "follow",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "portrait": true,
+      "facing": "right"
+    },
+    "trema": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "valefor": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko",
+        "overdrive"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "vegnagun-body": {
+      "states": [
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "vegnagun-head": {
+      "states": [
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "vegnagun-leg": {
+      "states": [
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "vegnagun-tail": {
+      "states": [
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle"
+      ]
+    },
+    "wakka": {
+      "states": [
+        "attack",
+        "cast",
+        "critical",
+        "follow",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "portrait": true,
+      "facing": "right"
+    },
+    "x2-anima": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "ko",
+        "overdrive"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "x2-ixion": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko",
+        "overdrive"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle"
+      ]
+    },
+    "x2-shiva": {
+      "states": [
+        "attack",
+        "hurt",
+        "idle",
+        "ko",
+        "overdrive"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "yojimbo": {
+      "states": [
+        "attack",
+        "idle",
+        "overdrive"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "yojimbo-cavern": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "yu-pagoda": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left"
+    },
+    "yu-yevon": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": true,
+      "facing": "left"
+    },
+    "yuna": {
+      "states": [
+        "attack",
+        "cast",
+        "critical",
+        "follow",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "sleep",
+        "summon",
+        "victory"
+      ],
+      "portrait": true,
+      "facing": "right"
+    },
+    "yuna-black-mage": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "yuna-dark-knight": {
+      "states": [
+        "attack",
+        "cast",
+        "idle",
+        "item",
+        "ready",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "yuna-gunner": {
+      "states": [
+        "attack",
+        "cast",
+        "critical",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "ready",
+        "sleep",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-mid",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "yuna-songstress": {
+      "states": [
+        "attack",
+        "cast",
+        "dance",
+        "idle",
+        "item",
+        "ko",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "yuna-warrior": {
+      "states": [
+        "cast",
+        "follow",
+        "hurt",
+        "idle",
+        "item",
+        "ready",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "yuna-white-mage": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "item",
+        "ko",
+        "twirl-end",
+        "twirl-forming",
+        "twirl-going",
+        "twirl-start",
+        "victory"
+      ],
+      "portrait": false,
+      "facing": "right"
+    },
+    "yunalesca-1": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle"
+      ]
+    },
+    "yunalesca-2": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle"
+      ]
+    },
+    "yunalesca-3": {
+      "states": [
+        "attack",
+        "cast",
+        "hurt",
+        "idle",
+        "ko"
+      ],
+      "portrait": false,
+      "facing": "left",
+      "states2x": [
+        "idle"
+      ]
+    }
+  },
+  "portraits": [
+    "anima",
+    "auron",
+    "bahamut",
+    "baralai",
+    "braska",
+    "brother-x2",
+    "buddy",
+    "cid",
+    "fayth-boy",
+    "gippal",
+    "ifrit",
+    "isaaru",
+    "ixion",
+    "jecht",
+    "kimahri",
+    "leblanc",
+    "left-fin",
+    "lenne",
+    "logos",
+    "lulu",
+    "nooj",
+    "ormi",
+    "overdrive-sin",
+    "paine",
+    "right-fin",
+    "rikku",
+    "rikku-x2",
+    "seymour",
+    "seymour-macalania",
+    "seymour-natus",
+    "seymour-omnis",
+    "shiva",
+    "shuyin",
+    "sin-core",
+    "sinspawn-genais",
+    "tidus",
+    "trema",
+    "valefor",
+    "wakka",
+    "yojimbo",
+    "young-auron",
+    "yu-yevon",
+    "yuna",
+    "yuna-x2",
+    "yunalesca"
+  ],
+  "backdrops": [
+    "bevelle-highbridge",
+    "bevelle-underground",
+    "cavern-stolen-fayth",
+    "chapter-select",
+    "den-of-woe",
+    "djose-chamber-provisional",
+    "dreams-end",
+    "evrae-airship-deck",
+    "farplane",
+    "farplane-abyss-provisional",
+    "ff7-film-reactor",
+    "ff7-sector1-reactor",
+    "ffx2-abyss-provisional",
+    "ffx2-abyss-standin",
+    "ffx2-djose-chamber-provisional",
+    "ffx2-djose-chamber-standin",
+    "gagazet",
+    "garden-of-pain",
+    "leblanc-last-room",
+    "macalania-temple",
+    "road-to-the-farplane",
+    "road-to-the-farplane-links",
+    "sin-back",
+    "sin-fahrenheit-bevelle",
+    "sin-fahrenheit-flight",
+    "title",
+    "via-infinito",
+    "via-purifico",
+    "zanarkand-dome"
+  ],
+  "pause": [
+    "auron",
+    "ch1-seymour-flux",
+    "ch10-seymour-natus",
+    "ch11-ffx2-fallen-aeons",
+    "ch12-seymour-omnis",
+    "ch13-trema",
+    "ch14-isaaru-via-purifico",
+    "ch15-ffx2-den-of-woe",
+    "ch16-ffx2-ixion-djose-standin",
+    "ch17-sin-fins-core",
+    "ch18-sin-face",
+    "ch2-yunalesca",
+    "ch3-braskas-final-aeon",
+    "ch4-bahamut",
+    "ch4-ffx2-bahamut",
+    "ch5-ffx2-vegnagun-shuyin",
+    "ch5-shuyin",
+    "ch9-yojimbo",
+    "evrae-chapter-card",
+    "jecht",
+    "kimahri",
+    "leblanc",
+    "lulu",
+    "macalania",
+    "paine",
+    "rikku",
+    "rikku-ffx2",
+    "seymour",
+    "tidus",
+    "wakka",
+    "yuna",
+    "yuna-ffx2"
+  ],
+  "pause2x": [
+    "auron",
+    "ch1-seymour-flux",
+    "ch10-seymour-natus",
+    "ch11-ffx2-fallen-aeons",
+    "ch12-seymour-omnis",
+    "ch13-trema",
+    "ch14-isaaru-via-purifico",
+    "ch15-ffx2-den-of-woe",
+    "ch16-ffx2-ixion-djose-standin",
+    "ch17-sin-fins-core",
+    "ch18-sin-face",
+    "ch2-yunalesca",
+    "ch3-braskas-final-aeon",
+    "ch4-bahamut",
+    "ch4-ffx2-bahamut",
+    "ch5-ffx2-vegnagun-shuyin",
+    "ch5-shuyin",
+    "ch9-yojimbo",
+    "evrae-chapter-card",
+    "jecht",
+    "kimahri",
+    "lulu",
+    "macalania",
+    "paine",
+    "rikku",
+    "rikku-ffx2",
+    "seymour",
+    "tidus",
+    "wakka",
+    "yuna",
+    "yuna-ffx2"
+  ],
+  "title": [
+    "keyart"
+  ],
+  "title2x": [
+    "keyart"
+  ]
+}

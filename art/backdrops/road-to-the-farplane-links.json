@@ -1,0 +1,16 @@
+{
+  "status": "CANDIDATE",
+  "game": "FFX-2 only",
+  "concept": "O-3 B, the establishing shot between links: plate A plus two smaller copies of A's own island toward the spire; picked by Bailey 2026-09-24",
+  "derivedFrom": "public/art/backdrops/farplane.png (approved scene:farplane)",
+  "method": "r3: only the flower field was masked and repainted (SetLatentNoiseMask, denoise 0.75) over a rough guide and pasted back inside the feathered mask; 65 % of the pixels (every row above 827 of 1536) are the approved plate's exactly; B adds two scaled copies of A's island, no render",
+  "seed": 921103,
+  "denoise": 0.75,
+  "prompt": "no humans, scenery, final fantasy x-2, the road to the farplane, a huge round ancient stone platform floating in a bright glowing void, floating rock island with a jagged rocky underside, flat top of grey-violet carved stone with worn concentric ring engravings and cracks, abyss of luminous pink and lavender clouds all around and below, floating lights, spirit lights, pastel sky, dreamlike, ethereal afterlife, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, signature, watermark, blurry, 1girl, 1boy, character, people, person, human, flowers, flower field, grass, water, ocean, lake, reflection, buildings, railing, stairs, desert, sand, pedestal, stem, stalk, mushroom, table, ufo, spaceship, road, highway, tiles, horizon line",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "installedAt": "2026-09-24T19:06:26.958124Z"
+}

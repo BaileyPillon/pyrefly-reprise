@@ -1,0 +1,48 @@
+{
+  "width": 1215,
+  "height": 585,
+  "baselineY": 569,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "seed": 105128,
+  "prompt": "(collapsing:1.2), defeated, (closed eyes:1.2), head hanging down, slumped, limp, legs buckling, sinking to the ground, 1other, solo, no humans, monster, single unicorn, horse, quadruped, long golden horn, spiral horn, dark blue hide, dark blue skin, grey mane, grey tail, gold armour on the chest and back, gold bracers on front legs, aeon, final fantasy x, full body, (from side:1.15), three-quarter view, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, roaring, open eyes, standing tall, blood, injury, wound, scenery, detailed background, floor, shadow, gradient background, rider, human, saddle, two horns, wings",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1001/refs/ixion-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1001/refs/ixion-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1001/inits/ixion-ko-w1.png",
+    "denoise": 0.5
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (ixion-ko-w1, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (ixion-idle-square.png, ixion-head.png); no retail image used anywhere.",
+  "pose": "ko",
+  "registrationVsIdle": {
+    "dx": -24,
+    "dy": 216
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own installed idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-314, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/boss-poses/ixion-x2ixion/ko/cand-4.png",
+  "candidateSha256": "b70c2dc454172624321475468657793422bb979fc88be369b994d37321f5d179",
+  "generatedAt": "2026-10-01T06:36:17.249Z",
+  "decision": "D-314"
+}

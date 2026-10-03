@@ -1,0 +1,39 @@
+{
+  "width": 1121,
+  "height": 522,
+  "baselineY": 506,
+  "seed": 775002,
+  "prompt": "1boy, jecht, final fantasy x, safe, solo, male focus, dark skin, tan, black hair, long hair, messy hair, red headband, red eyes, chest tattoo, tribal tattoo, bare chest, muscular, black shorts, red sash, pauldron, gauntlet, barefoot, stubble, lying on ground, on side, eyes closed, unconscious, defeated, hands and fingers visible, bare feet, (black chest tattoo:1.25), head to the left, feet to the right, lying on ground, on side, eyes closed, full body, from side, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, deformed feet, fused toes, extra toes, missing hands, missing fingers, stump, amputee, grey shorts",
+  "cropBox": [
+    51,
+    154,
+    1172,
+    676
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "ko",
+  "composition": "prone",
+  "facing": "left",
+  "emphasis": "(black chest tattoo:1.25)",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "img2img": "tools/gen/_fix8/jpl-ko.png",
+  "denoise": 0.5,
+  "generatedAt": "2026-09-19T20:11:10.076Z",
+  "despeckled": true,
+  "despeckledAt": "2026-09-19T16:16:04",
+  "despeckledDropped": [
+    22
+  ]
+}

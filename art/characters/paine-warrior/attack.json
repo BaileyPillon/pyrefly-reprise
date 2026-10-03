@@ -1,0 +1,47 @@
+{
+  "width": 937,
+  "height": 840,
+  "baselineY": 824,
+  "scale": 1.15,
+  "scaleNote": "Head match 2026-09-26 (D-194 install; method of the 09-25 repair: iris-centroid eye spacing and a checked eye-line-to-chin point, idle/pose, read against which one the head turn or tilt shortens, then checked by eye beside the idle head; evidence docs/concepts/art5/installed-0926/). eye line to chin 1.15 (chin at the collar, low confidence); eye spacing 0.91 is deflated because the idle is turned further; the judge read 1.21.",
+  "seed": 36607,
+  "prompt": "1girl, solo, fighting stance, (lunging:1.2), leaning forward, legs apart, bent knees, (both arms extended forward:1.2), (clenched fists:1.2), hands together, serious, v-shaped eyebrows, closed mouth, paine \\(ff10-2\\), final fantasy x-2, silver hair, short hair, (swept back hair:1.3), (pompadour:0.9), (spiked hair crest:1.0), hair behind ears, hair flipped out at the nape, red eyes, pale skin, black choker, (black leather jacket:1.2), cropped jacket, off shoulder, white corset, black elbow gloves, red belt, skull belt buckle, black leather shorts, (black thighhighs:1.2), (black combat boots:1.3), (chunky boots:1.2), flat heels, (red buckle straps on boots:1.1), three-quarter view, looking at viewer, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, fire, flames, swirl, lightning, dark aura, splash, cast shadow, drop shadow, pedestal, platform, rock, from behind, facing away, sword, weapon, holding weapon, blade, katana, dagger, knife, staff, spear, polearm, scythe, axe, gun, sheath, scabbard, stick, pole, standing straight, smile, open hand, helmet, armor, cape, shoulder cape, blonde hair, brown hair, skirt, long hair, messy hair, bangs, ponytail, hair bun, headband, pointy ears, elf, bob cut, wings, red boots, red footwear, red jacket, blue jacket, high heels, high heel boots, stiletto heels, red legwear, red thighhighs, gradient legwear, knee pads",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "attack",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 937,
+    "height": 840
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "skeleton": "docs/concepts/art5/round2/skeletons/paine-warrior/attack.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "images": [
+      "paine-warrior-idle-nosword-square.png (pilot prep)",
+      "paine-warrior-head.png"
+    ]
+  },
+  "method": "sword-free body (body-7.png) with the idle painting's own sword composited into her hand (comp {\"grip\": [716.5, 593.5], \"tip\": [1021, 932], \"deg\": 48, \"scale\": 0.62, \"handR\": 26, \"maskR\": 49, \"twoHanded\": true, \"layer\": \"front\", \"source\": \"the idle's own sword, cut from public/art/characters/paine-warrior/idle.png (read only)\", \"cutout\": {\"width\": 937, \"height\": 840, \"baselineY\": 824, \"cropBox\": [87, 366, 1024, 1206], \"contentBox\": [103, 382, 1011, 1190], \"sourceWidth\": 1024, \"sourceHeight\": 1216, \"model\": \"isnet-anime\"}, \"guard\": {\"ok\": true, \"reasons\": []}}); docs/concepts/art5/round2/METHOD-CHECK.md, commit a3584d1d",
+  "status": "APPROVED: Bailey 2026-09-26 ~07:00 EDT, \"I’ll go with all your recommendations\" (D-194: install the judge-PASS pose-round-2 picks shown in docs/concepts/art5/round2/round2-ready.jpg; a pick approves only the pose as shown); installed 2026-09-26, locked in docs/target/approved-hashes.json set bailey:2026-09-26-poses",
+  "judge": "docs/concepts/art5/round2/judge2.json#paine-warrior/attack (7.12)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/attack/cand-7-comp.cut.png",
+  "sha256": "19079342ab7685542eba798cc105d34c1120417c69c8b4a72c28a923d13913d2",
+  "generatedAt": "2026-09-26T05:49:22.298Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/attack/cand-7-comp.cut.png",
+  "decision": "D-194"
+}

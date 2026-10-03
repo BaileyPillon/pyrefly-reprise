@@ -1,0 +1,37 @@
+{
+  "width": 823,
+  "height": 1099,
+  "baselineY": 1083,
+  "seed": 47412281,
+  "prompt": "1girl, yuna \\(ff10-2\\), final fantasy x-2, safe, solo, brown hair, short hair, heterochromia, blue eye, green eye, white tank top, pink trim, pink hood, blue denim shorts, orange obi, white sash, yellow armbands, black knee boots, dual wielding, holding gun, handgun, fingerless gloves, bare midriff, firing guns, both arms extended forward, dynamic pose, muzzle flash, straight-on, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background",
+  "cropBox": [
+    9,
+    106,
+    832,
+    1205
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "attack",
+  "composition": "full",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/yuna-gunner/idle.png",
+  "refWeight": 0.65,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-15T23:30:08.203Z"
+}

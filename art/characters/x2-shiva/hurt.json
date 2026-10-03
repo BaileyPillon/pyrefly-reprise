@@ -1,0 +1,18 @@
+{
+  "width": 730,
+  "height": 1182,
+  "baselineY": 1095,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "recipe": "derived from shiva-x2shiva/x2-hurt by the house treatment (boss-poses/shiva-x2shiva/README.md), no GPU",
+  "pose": "hurt",
+  "registrationVsIdle": null,
+  "registrationNote": "offset (dx, dy) of this cut against its own installed idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-314, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/boss-poses/shiva-x2shiva/x2-hurt/x2-from-cand-5.png",
+  "candidateSha256": "330a621a2c372ac0ace11e2d01d4121c0762cff7b34731dea3b9335233663894",
+  "generatedAt": null,
+  "decision": "D-314"
+}

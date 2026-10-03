@@ -1,0 +1,35 @@
+{
+ "width": 648,
+ "height": 966,
+ "baselineY": 962,
+ "facing": "right",
+ "mirrored": false,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/barret/squat/cut-t2.png",
+ "sourceSha256": "3749180bb3dc44d2884460b98d5228f19bef31a1cc36d46e0937ed605075d28d",
+ "installSteps": [
+  {
+   "step": "resize",
+   "factor": 0.5,
+   "filter": "lanczos, premultiplied"
+  },
+  {
+   "step": "register",
+   "padLeft": 76,
+   "on": "feet (anchorX)",
+   "centreColumn": 324
+  }
+ ],
+ "installer": "docs/concepts/ff7-art-2026-09-27/film-set/scripts/install.py",
+ "subject": "ff7-film-barret",
+ "state": "victory",
+ "scaleToIdle": 0.85,
+ "scale": 0.85,
+ "note": "the first victory key: Cloud fist pump / Barret squat (D1)",
+ "seed": 747004,
+ "engine": "flux-2-klein-9b-kv-fp8 (edit mode, ReferenceLatent)",
+ "retailInput": "none (our own Film renders only; no IP-Adapter, no trace)",
+ "promptKey": "film-barret-squat",
+ "sha256": "a06dc3c6f5c8a3da1b56fddcd35da82791c2de008e3bd1790866e34f42c3d1d9"
+}

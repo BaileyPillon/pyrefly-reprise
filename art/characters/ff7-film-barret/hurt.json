@@ -1,0 +1,35 @@
+{
+ "width": 562,
+ "height": 1117,
+ "baselineY": 1109,
+ "facing": "right",
+ "mirrored": false,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/barret/hurt/cut-y1.png",
+ "sourceSha256": "847f807a0e597072bef9fa5ca6864ce87a3fda0d4106b5d1f940317af8b7c894",
+ "installSteps": [
+  {
+   "step": "resize",
+   "factor": 0.5,
+   "filter": "lanczos, premultiplied"
+  },
+  {
+   "step": "register",
+   "padLeft": 0,
+   "on": "feet (anchorX)",
+   "centreColumn": 281
+  }
+ ],
+ "installer": "docs/concepts/ff7-art-2026-09-27/film-set/scripts/install.py",
+ "subject": "ff7-film-barret",
+ "state": "hurt",
+ "scaleToIdle": 0.99,
+ "scale": 0.99,
+ "note": "the hit flinch; for Guard Scorpion the recoil (a 12-degree tilt of its own pick, anchorY on the rear foot)",
+ "seed": 749003,
+ "engine": "flux-2-klein-9b-kv-fp8 (edit mode, ReferenceLatent)",
+ "retailInput": "none (our own Film renders only; no IP-Adapter, no trace)",
+ "promptKey": "film-barret-hurt",
+ "sha256": "48a56b688666c3fca35a59ac1e34a2d09f297eb5eca8e39cbac6a47532a68c04"
+}

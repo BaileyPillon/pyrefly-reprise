@@ -1,0 +1,19 @@
+{
+ "what": "Relative depth of the approved painting, 1 = near (white), 0 = far. A derived greyscale layer for option B \"Living Paintings\"; never colour.",
+ "model": "depth-anything/Depth-Anything-V2-Small-hf",
+ "revision": "5426e4f0f36572d16453bbda7a8389317b1bef99",
+ "licence": "Apache-2.0 (Depth Anything V2 Small only)",
+ "input": [
+  1036,
+  588
+ ],
+ "output": [
+  1344,
+  768
+ ],
+ "edgeSnap": "guided filter r=6 eps=2e-3 on the painting luma",
+ "source": "public/art/backdrops/leblanc-last-room.png",
+ "sourceSha256": "6e0e2174cb1bd5dfe8e33e0c8f7a8920894c3bf75531fd7d71eda2c363b9d387",
+ "generator": "tools/fx/depth.py, then tools/fx/depth8.py (round(depth16 / 257), the game reads 8 bits)",
+ "bits": 8
+}

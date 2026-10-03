@@ -1,0 +1,54 @@
+{
+  "width": 1145,
+  "height": 823,
+  "baselineY": 807,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "seed": 133128,
+  "prompt": "(recoiling from a blow:1.2), jolted, tail tip lifted, tail whipped back, dented plating, no humans, giant machine, one mechanical tail, single segmented tail, segmented insect abdomen, tapering armored tail, overlapping steel plates, dull blue grey steel plating, polished steel, grey armor, brass hydraulics, copper panels, brass ring joint, rivets, machina, colossal, ominous, isolated object, cannon housing on top, tapering to a spiked blade tip, (serrated golden blade edge with saw teeth:1.1), steel spear point, (one single segmented armored tail:1.5), (dull grey steel plating:1.3), (from side:1.3), three-quarter view, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, fire, explosion, smoke, sparks, blood, scenery, detailed background, floor, shadow, gradient background, 1girl, 1boy, human, animal, snake, creature, small, toy, insect head, mandibles, face, eyes, legs, whole insect, butterfly, moth, wings, tentacles, many cables, tubes, knot, tangle, rope, (green:1.2), neon green, glowing green body, cyan, teal, neon lights, red body, coiled snake, ground, rocks, grass, scenery",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/vegnagun-tail-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/vegnagun-tail-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/vegnagun-tail-hurt-w2.png",
+    "denoise": 0.3
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (vegnagun-tail-hurt-w2, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (vegnagun-tail-idle-square.png, vegnagun-tail-head.png); no retail image used anywhere.",
+  "pose": "hurt",
+  "registrationVsIdle": {
+    "dx": 52,
+    "dy": 0
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-design-fixes/vegnagun-tail/hurt/cand-4.png",
+  "candidateSha256": "9e6c5d43ab5564366e865c82355bfa07ab6dd2cef499819f7147537d2fb17b5c",
+  "agentsNote": "replaces the 09-18 hurt (another design, VP-1001-08)",
+  "denoise": 0.3,
+  "generatedAt": "2026-10-02T04:23:07.362Z",
+  "decision": "D-325",
+  "replaces": {
+    "sha256": "3be1aeeb9d6951432ded6fcaf1cf4e296e661aa271976ec8d1530bf70ea51169",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/vegnagun-tail/hurt.png"
+  }
+}

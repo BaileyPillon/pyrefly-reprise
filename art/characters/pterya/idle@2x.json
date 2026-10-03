@@ -1,0 +1,19 @@
+{
+  "width": 3570,
+  "height": 1900,
+  "baselineY": 1748,
+  "masterOf": "idle.png",
+  "density": 2,
+  "loaderNote": "never read by the game: on a 2x device the loader draws these pixels with the 1x sidecar idle.json (src/engine/ArtTier.ts), so size, baseline, scale and facing are the 1x painting's",
+  "facing": "left",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-design-fixes/valefor-wing/idle/derived/masters-2x/pterya-from-wing-a-1-d62@2x.png",
+  "candidateSha256": "2855f87ad5ed6dc6b713f2799990aa5999683549cf8323f1efc35cbec34f2162",
+  "replacesNote": "replaces the release 35 master of the old idle (D-315), which no longer matches the new 1x canvas",
+  "decision": "D-325",
+  "replaces": {
+    "sha256": "48daf99fe6592930884a48ca5ac9685c60d414308afe24eb7b0e790cf885e812",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/pterya/idle@2x.png"
+  }
+}

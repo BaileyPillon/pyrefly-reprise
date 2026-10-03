@@ -1,0 +1,42 @@
+{
+  "width": 419,
+  "height": 1151,
+  "baselineY": 1135,
+  "seed": 288341469,
+  "prompt": "1girl, rikku \\(ff10\\), final fantasy x, safe, solo, one single armoured claw gauntlet worn on her right hand only with a curved silver blade over the knuckles, her left hand completely bare with five bare fingers and no glove, petite teenage girl, tan skin, natural skin tone, blonde hair, high fan shaped ponytail, two thin braids with beads, orange feather hair ornaments, green eyes, swirl pupils, al bhed, orange sleeveless crop tank top, bare midriff, pale green long arm warmers, red belt, green cargo short shorts, bare tan legs, orange thigh pouch, two long blue ribbon straps with tassels hanging from the back, blue headband with plain pink tinted goggles resting on top of her head, orange and white high top sneakers with blue laces on both feet, standing upright and rocked backwards by a blow, her back arched away from the camera, her head snapped back with both eyes the same green and squeezed shut, mouth open in a gasp of pain, her bare arm flung out to the side with the fingers relaxed and evenly spaced, her gauntleted hand pulled in close across her stomach, one foot stepping back to catch her balance, both sneakers planted on the ground, shoulders raised, (tan skin:1.3), (bare tan legs:1.25), (one claw gauntlet only:1.25), (mouth open in pain:1.35), (eyes squeezed shut:1.3), (both sneakers on the ground:1.25), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, bending over, bent forward, leaning forward, bowing, hunched, back view, turned away, orange skin, orange legs, orange tights, orange pantyhose, red skin, colour cast, monochrome orange, tinted skin, orange arms, swimsuit, bikini, long hair down, brown hair, blue eyes, long trousers, capri pants, baggy pants, white cloth across the midriff, goggles over eyes, goggles over her face, lens over the eye, two claws, claw on both hands, second gauntlet, blades floating in the air, blades detached from the hand, wrist blades, fused fingers, mitten hands, oven mitt, sword, katana, scimitar, curved sword, long blade, machete, dagger, staff, extra weapon, duplicate weapon, two weapons, floating weapon, detached weapon, afterimage, double exposure, ghost image, motion blur, mirrored copy, ornate frame, gold frame, halo, mandala, background decoration, decorative border, circular frame, throne, banner, wings, fins, smoke, mist, multiple arms, chibi, short legs, missing arm, extra leg, extra thigh, ground shadow, cast shadow, colored background, scenery, lettering, writing on clothing, logo, hip drape, hazard stripes, cape, cloth streamer, heterochromia, odd eyes, one yellow eye, high kick, kicking, leg raised, knee lifted, elongated torso, long waist, calm expression, serene, smiling, barefoot, bare feet",
+  "cropBox": [
+    201,
+    15,
+    620,
+    1166
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "g3hurt",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/rikku/idle.png",
+  "refWeight": 0.72,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.3,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T23:04:45.455Z",
+  "facingObserved": true,
+  "flipped": true,
+  "flippedAt": "2026-09-18T19:07:11.809215-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image."
+}

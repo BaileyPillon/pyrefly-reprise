@@ -1,0 +1,59 @@
+{
+  "width": 1113,
+  "height": 525,
+  "baselineY": 509,
+  "scale": 1.31,
+  "scaleNote": "Head match 2026-09-25 (decision sheet item 11): idle eye-line to chin 85.1 px vs this pose 65.1 px, points in docs/concepts/art5/judge/measure.json; read by eye off 2x gridded crops, about +/-5%.",
+  "seed": 25843,
+  "prompt": "1girl, solo, lying, on side, on ground, full body, from side, head to the right, feet to the left, (closed eyes:1.3), unconscious, expressionless, closed mouth, dagger on ground, rikku \\(ff10-2\\), final fantasy x-2, blonde hair, messy hair, spiked hair, braids, blue bandana, red hair beads, green eyes, tan skin, red scarf, yellow bikini top, blue puffy detached sleeves, yellow ribbons, brown fingerless gloves, bare midriff, green pleated miniskirt, brown belt pouches, (bare legs:1.2), tan legs, blue and white boots, orange ribbons, two orange daggers, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, glowing sword, fire, flames, fire trail, swirl, lightning, dark aura, splash, extra sword, multiple swords, floating sword, sitting, standing, open eyes, looking at viewer, lying on back, smile, wink, sleeping, pillow, sword, long sword, armor, brown hair, short hair, black clothes, pants, leggings, pantyhose, tights, red legwear, orange legwear, long scarf, flowing scarf",
+  "cropBox": [
+    5,
+    128,
+    1118,
+    653
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "ko",
+  "composition": "prone",
+  "facing": "right",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/art5/skeletons/dual/ko.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "rikku-thief-idle-square.png",
+      "rikku-thief-head.png"
+    ],
+    "forced": true
+  },
+  "status": "APPROVED: Bailey 2026-09-25 ~12:45 EDT, \"I'll go with your recommendations for everything\" (install all 22 judge-passed poses); installed 2026-09-25, locked in docs/target/approved-hashes.json set bailey:2026-09-25-poses",
+  "judge": "docs/concepts/art5/judge/judge.json#rikku-thief/ko (7.31)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/ko/cand-3.png",
+  "sha256": "8d0b011167985a0abc2b73061f510e976b8e9def1070b411d12cc37de09e2444",
+  "generatedAt": "2026-09-25T09:11:34.579Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-judge-poses/rikku-thief/ko.png"
+}

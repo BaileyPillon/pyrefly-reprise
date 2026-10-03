@@ -1,0 +1,36 @@
+{
+  "width": 713,
+  "height": 632,
+  "baselineY": 616,
+  "seed": 901841,
+  "prompt": "no humans, ornate tiered pagoda finial, temple spire ornament, stacked square tiers, gold trim rings, hanging gold bells, yevon glyph medallion, carved stone, floating, glowing runes, toppled on its side, broken and crumbling, tiers split apart, runes dark, rubble, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, building, temple exterior, landscape, 1girl, 1boy, window, lit windows, house, boulder, rock, cliff, face, head, statue of a person, idol, bust",
+  "cropBox": [
+    246,
+    101,
+    959,
+    733
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "ko",
+  "composition": "boss",
+  "facing": "left",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "img2img": "tools/gen/_fix8/pl-ko.png",
+  "denoise": 0.55,
+  "generatedAt": "2026-09-19T20:05:23.239Z",
+  "despeckled": true,
+  "despeckledAt": "2026-09-19T16:06:02",
+  "despeckledDropped": []
+}
