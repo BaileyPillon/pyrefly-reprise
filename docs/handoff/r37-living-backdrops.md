@@ -111,3 +111,53 @@ is true of two parts, which this branch builds:
 - Tile 'Backdrops with a floor and a sky' (group 'Polish ideas: the 12 you picked'): delivery now **built, unmerged** on `r37-living-backdrops`
   (the plates and drift were already live via option B; the defocus and eight rooms are new). Reaction: nothing named by Bailey yet
   for the defocus strength; my guesses (cap 3, zero at rest, phone 0.8) belong under `inferred`.
+
+## Check (independent critic, 2026-10-03; tip 03af0863, nothing in `src/` touched by this check)
+
+Method: three production builds served by `vite preview` on ports 6010 (tip), 6011 (merge-base d154486c, the build this
+branch started from; live release 35 was not run, the merge-base is the stand-in), 6012 (the merge of the tip with
+origin/main c69de96a, from `git merge-tree`, which merges cleanly). Headless Playwright on the real GPU
+(`PYREFLY_BROWSER=gpu`), one browser at a time, the real chapters through `gotoChapter`, REDUCE MOTION by the
+browser's own `reducedMotion`, frozen frames with the HUD off, pixel diffs at 1600x900. Servers stopped by PID.
+Scratch and every capture: `D:/Tools/pyrefly-scratch/2026-10-03/r37-check/` (`out/`).
+
+Game case of this check: both. FFX rooms (Zanarkand, Dream's End, Garden of Pain, Via Purifico, Gagazet) and FFX-2 rooms
+(Farplane, Leblanc, Via Infinito via Trema, Den of Woe, Bahamut) were each run in their own game's chapter.
+
+| Item | Verdict | Evidence |
+|---|---|---|
+| Defocus is 0 at rest and only while drifting | PASS | Gagazet series: weight 0.013 on the first frame, 1.0 at each swing's extreme, 0.02 at the zero crossing (about a 12 s cycle); a rig move (`rig:intro`) cuts drift and weight to 0 within 150 ms; real Enter keys on the command menu raise no error |
+| REDUCE MOTION still | PASS | Gagazet and Leblanc, 20 samples over 10 s: drift 0, weight 0, bias 0 |
+| LOW EFFECTS | PASS | Gagazet keeps 2 plates, drift 0.5, focus 0; Leblanc (plates-only) is flat: no plates, drift 0 (forced tier `?fxtier=low`; the settings row itself was not toggled) |
+| `?fxsub=-focus` | PASS | drift 1, weight 0, bias 0 for 16 samples (Gagazet, Leblanc) |
+| Phone 390x844 | PASS | 2 plates, drift 0.6, bias = weight x 3 x 0.8 exactly (0.513 gives 1.231); screenshots clean |
+| Defocus reads, focus plate stays sharp | PASS | same-page ON vs `-focus` at the drift extreme: far sky/ridge mean change 1.7 (Gagazet) and 3.4 to 4.5 (Leblanc), the ground rows 0.5 and 0.0; crop shows soft far plates and a sharp near rock |
+| Resting frame unchanged, Gagazet (old room) | PASS | defocus ON vs the merge-base build at rest sits at the run-to-run noise floor (0.33 vs 0.47 mean in the backdrop region) |
+| Resting frame unchanged, new FFX rooms | PASS WITH DISCLOSURE | same-page plates ON vs OFF, drift off, frozen, ON vs ON again 0.000: Dream's End 0.33, Garden of Pain 0.23, Via Purifico 0.40, Zanarkand 1.73 (max 157, 0.9 percent of values over 24). Heat maps are thin edge lines only, like the four rooms on main; not bit-identical |
+| Resting frame unchanged, new FFX-2 rooms except the Farplane | PASS WITH DISCLOSURE | Leblanc 0.31, Trema (Via Infinito) 0.15, Den of Woe 0.30 mean, edge-only |
+| **Resting frame unchanged, the Farplane (Ch. V)** | **FAIL (blocker)** | plates ON vs OFF in the real chapter: mean 3.36, 7.5 percent of the sky band's values differ by more than 24 (about 10 to 25 times the other rooms). Hiding the scene's own `backdrop-layer-0/1` band layers (which plates do, `DepthPlates.show`) accounts for 2.6 of it: with the bands hidden and plates OFF the diff is 0.77. The follow itself is right (0.77, matches the painting under scale 1.8 and lift 6). Visible as a tone and mountain-silhouette change on the left of the frame (`out/v7.jpg`, `out/v8.jpg`). The brief and the handoff both say the Farplane's at-rest number was not claimed |
+| 8 new rooms present, none mirrored | PASS | every room reports 4 plates in its own chapter (Zanarkand, Dream's End, Garden of Pain, Via Purifico, Farplane, Leblanc, Via Infinito, Den of Woe); a mirrored plate would diff by tens of levels, none does; every plate mesh scale is positive |
+| Eight depth maps reach a production build | PASS | `node tools/fx-assets.mjs verify --dir <dist>/fx` PASS on a fresh `vite build` (24 files, 12 rooms); the repo copy and `D:/Tools/pyrefly-art-backup/fx` also verify PASS |
+| Extreme-drift edges (voids, seams) | PASS | contact sheet of all 8 rooms at the pinned extreme on the merged build: no void or invented paint visible; Zanarkand's left dark column and faint horizontal water seam are in the no-drift baseline too (not introduced) |
+| Farplane follow (`DepthPlates.follow`) | PASS | plates stack matches the painting under the colossus scale and lift (0.77 with bands hidden) |
+| Frame time | PASS | 1600x900 real GPU, vsync on: Gagazet and Leblanc, 4 alternating rounds plates ON (drift extreme, defocus live) vs OFF: p50 16.7, p95 16.8, p99 16.8 in every round, no dropped frames |
+| Regressions vs the build this branched from, and vs a merge with origin/main | PASS | merged build: same numbers in Zanarkand, Farplane, Leblanc, Dream's End, no page error; `git merge-tree` clean |
+| Layering | PASS | `focusMaths.ts` and `plateMaths` imports are pure (no DOM, no `three`); nothing under `src/battle/**` or `BattlePresenter*` changed |
+| Files under 400 lines | PASS WITH DISCLOSURE | every new or changed file is under 400 except `src/engine/Backdrop.ts` (495), which is 495 on origin/main too; this branch adds one property to an existing line |
+| Game case in every commit | PASS | all three commits carry it |
+| `npx tsc --noEmit` | PASS | clean |
+| Targeted vitest | PASS | `fx-b-focus` 22, `fx-b-living` 11, `eyecandy-flags` 10; plus 15 related files (fx, eye, backdrop, farplane, comfort, scene) 197 tests, all green; the full suite is the integrator's |
+| `node tools/orphans.mjs` | PASS | 24 orphaned, the same 24 as main |
+
+### Blockers
+1. **The Farplane's resting frame changes** (above). Remedy, either one: draw the scene's two band layers over the plates in a plates-only
+   room that has them (so ON equals the live painting), or take the Farplane out of `plateRooms.ts` until it has its own recipe.
+   Re-measure with a stable frame (wait until two grabs agree; the story caption animates) and the same in-page toggle.
+
+### Disclosures (not blockers)
+- Plates are not bit-identical at rest in any new room: a thin edge-only difference of 0.2 to 1.7 mean out of 255, up to 157 at a plate boundary.
+- The defocus pulses with the drift (0 to full over about 12 s), not constant; the approved frame has it on all the time (the builder's own point 1 for Bailey).
+- `Backdrop.ts` is over the 400-line house rule at 495, as on main.
+- The real chapters were reached through the debug `gotoChapter`; real keys were used only for a command-menu Enter smoke. LOW EFFECTS was forced by `?fxtier=low`, not by the settings row.
+- Frame time was measured on two rooms only (Gagazet, Leblanc) at desktop size.
+- Release 35 live was not run; the merge-base build (d154486c) and a merge with origin/main c69de96a stand in.
