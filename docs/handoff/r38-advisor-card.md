@@ -62,3 +62,26 @@ Verified, by running it:
 
 Minor, not blocking: Ch III at 1600x900 prints 10 lines with `scrollHeight` 70 against `clientHeight` 68 (padding only, nothing clipped). The first-menu card is occasionally still hidden at 3.5 s on both branch and live under load (seen once on each for Ch III 2000x1012; present at 3 of 3 re-runs of the branch). FFX-2 Vegnagun still covers the boss by about 22,000 to 26,000 px^2 on live and branch alike (builder already disclosed). The FFX-2 `CHIP_GRAZE` lets a girl's feet sit up to 4 grid px inside the chip's strip, so the chip may touch her feet; the measured tight-box overlap with the party is 0 px^2 in Ch IV, so it is not visible in the matrix.
 Not re-run: the full suite (the builder's one timeout, `strategy-ffx2-bahamut`, is load-related and unrelated to the diff).
+
+## Repair (one cycle, answering the check's blocker; FFX only, Chapter VII and the shared FFX solver)
+**Game case:** FFX only. `src/ui/ffx/advisorRoomy.ts` is the FFX HUD's solver; FFX-2 (`ffx2/advisorLane.ts`) is untouched by this repair.
+
+**Blocker:** FFX Ch VII (Seymour Omnis) lost the card's heading and effect line at 2000x1012 and clipped its last line at 1600x900, because `roomier()` took the 60-grid-px short full card whenever one fit.
+
+**Cause, measured:** the density ladder trims by *height*. Omnis's designed compact card is 85 wide and 98 (1600) / 104 (2000) tall and prints in full; the short full card the solver found is 157 x 62 (1600) / 132 x 66 (2000 in the check's run), below the 68 grid px the content measures (`scrollHeight` 68 at 1600, 98 at 2000 with the effect line). The area-ranked compact alternative (108 x 93 in the solver, 112 x 77 in the first repair try) trades height for width and prints less too. The inputs are the ones the HUD handed `advisorZone` on a real run (hook in `advisorStrip.ts`, removed before the commit), pinned in `tests/unit/ui-ffx-advisor-roomy.test.ts` as `OMNIS_1600` and `OMNIS_2000`.
+
+**Change (`advisorRoomy.ts` 145 -> 173 lines, no other source file):**
+1. `FULL_CARD_HEIGHT = 68` (measured: Omnis 68, Braska's Final Aeon 69-70) and `enoughHeight(designed) = min(designed.maxHeight, 68)`.
+2. The short full card is taken only if `short.maxHeight >= enoughHeight(designed)` and it is not narrower than the designed card. Ch III's short card is 69 tall (it printed ten lines against seven for its 97-wide compact card), so it stays fixed; Omnis's is 62/66, so Omnis keeps its designed card.
+3. The area-ranked compact card is taken only if it is wider **and** at least as tall as the designed one (Yojimbo: 100 x 98 against 80 x 75, still fixed). Omnis's 108 x 93 is shorter than 98, so it is refused.
+Result: Omnis is exactly where release 36 puts it (zone `compact/170.4/85.2/245/98`, 2000: same), so it prints what live prints. Margin note: Ch III clears the 68 bar by 1 grid px (69), measured at 1280x720, 1600x900 and 2000x1012.
+
+**Proof** (dev server of this branch, headless Playwright GPU, seed 1, real keys to the first menu; matrix 11 FFX chapters x 1600x900, 2000x1012, 1280x720 in `D:/Tools/pyrefly-scratch/2026-10-03/r38-advisor-card-repair/`, `branch2.jsonl`, `matrix.out.txt`; the solver is also re-run offline on every captured input):
+- Omnis 1600x900: 9 lines, `scrollHeight` 68 = `clientHeight` 68 (no clip), card 250 x 173 px, zone identical to live. Omnis 2000x1012: 11 lines with NEXT BEST MOVE and "It puts Cheer on the party; next, Mortiphasm Spells hits for about 4,400 in all", 98 = 98, card 289 x 277 px (live 298 x 275). Omnis 1280x720: designed card kept, 9 lines, 72/72.
+- Ch III: 10 lines at 1600x900 (445 x 173 px) and 2000x1012 (505 x 164 px, 10 lines), unchanged from the first repair; Ch IX: the roomy 100 x 98 slot kept at all three sizes (8 lines at 1600x900 and 2000x1012, 5 at 1280x720); Seymour/Anima (Macalania): its designed compact card, unchanged; Flux, Yunalesca, Natus, Isaaru, Evrae: the designed full card, solver output unchanged at all three sizes; Sin Face and Sin Fins: declined as before (the strip pass), unchanged.
+- Screenshots: `docs/screenshots/r38-advisor-card/repair-omnis-1600x900.jpg`, `repair-omnis-2000x1012.jpg`, `repair-ch3-1600x900.jpg`.
+- `tsc --noEmit` clean; `ui-ffx-advisor-roomy` 5 tests (1 new, 2 tightened); orphans 24; full suite `--maxWorkers=3`: 769 files pass, 5 skipped, 11,279 tests pass, no failures.
+
+**critic-plan class:** unchanged: DEEP for the tree (35 checkpoints since the last deep review, not this change); systems FFX HUD; not save-data class.
+
+**For Bailey:** nothing new to decide. Disclosure: the card's height need is content-dependent (59 to 98 grid px across the chapters), so 68 is the measured full-card height for the two chapters whose card the fallback touches, not a universal law; if a later chapter's fallback card loses lines, raise `FULL_CARD_HEIGHT` or measure the card in the HUD instead.

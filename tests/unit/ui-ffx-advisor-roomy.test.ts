@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { advisorZone as withStrip } from '../../src/ui/ffx/advisorStrip.ts';
-import { cardArea, roomier, roomiestCompactZone, shortFullZone, SHORT_ADVISOR_HEIGHT } from '../../src/ui/ffx/advisorRoomy.ts';
+import { FULL_CARD_HEIGHT, cardArea, roomier, roomiestCompactZone, shortFullZone } from '../../src/ui/ffx/advisorRoomy.ts';
 import {
   MIN_ADVISOR_WIDTH,
   SKEW,
@@ -109,6 +109,66 @@ const YOJIMBO_FIELD: AdvisorZoneInput = {
   ],
 };
 
+/**
+ * Repair of the r38 check (FFX only, Chapter VII, Seymour Omnis, hero framing): the same inputs the
+ * FFX HUD handed the solver at 1600x900 and 2000x1012, seed 1, first menu. The designed compact card
+ * (85 wide, 98 to 104 tall) printed 11 lines; the short full card the first repair took (157 x 62,
+ * 132 x 66) lost the heading and the effect line.
+ */
+const OMNIS_1600: AdvisorZoneInput = {
+  cmdArea: { left: 30, top: 177, right: 218, bottom: 335 },
+  cmdInfo: { left: 24, top: 121, right: 196, bottom: 154 },
+  partyStatus: { left: 402, top: 258, right: 617, bottom: 348 },
+  guide: { left: 21, top: 44, right: 154, bottom: 100 },
+  sensor: { left: 434, top: 166, right: 502, bottom: 176 },
+  chipReserve: 0,
+  intent: null,
+  intentChip: { left: 552, top: 36, right: 620, bottom: 52 },
+  ctb: { left: 547, top: 49, right: 621, bottom: 201 },
+  sprites: [
+    { left: 212, top: 196, right: 336, bottom: 344 },
+    { left: 292, top: 196, right: 416, bottom: 340 },
+    { left: 260, top: 180, right: 356, bottom: 292 },
+  ],
+  enemies: [
+    { left: 336, top: 88, right: 484, bottom: 260 },
+    { left: 284, top: 136, right: 372, bottom: 224 },
+    { left: 300, top: 204, right: 384, bottom: 292 },
+    { left: 440, top: 204, right: 524, bottom: 292 },
+    { left: 452, top: 136, right: 540, bottom: 224 },
+    { left: 272, top: 5, right: 464, bottom: 36 },
+    { left: 354, top: 35, right: 452, bottom: 44 },
+    { left: 429, top: 217, right: 622, bottom: 257 },
+  ],
+};
+
+const OMNIS_2000: AdvisorZoneInput = {
+  cmdArea: { left: 30, top: 177, right: 218, bottom: 335 },
+  cmdInfo: { left: 24, top: 121, right: 196, bottom: 154 },
+  partyStatus: { left: 402, top: 258, right: 617, bottom: 348 },
+  guide: { left: 21, top: 43, right: 154, bottom: 100 },
+  sensor: { left: 434, top: 165, right: 502, bottom: 176 },
+  chipReserve: 0,
+  intent: null,
+  intentChip: { left: 556, top: 36, right: 620, bottom: 52 },
+  ctb: { left: 547, top: 49, right: 621, bottom: 201 },
+  sprites: [
+    { left: 212, top: 196, right: 340, bottom: 344 },
+    { left: 292, top: 196, right: 420, bottom: 340 },
+    { left: 268, top: 180, right: 368, bottom: 292 },
+  ],
+  enemies: [
+    { left: 364, top: 88, right: 512, bottom: 260 },
+    { left: 316, top: 136, right: 400, bottom: 224 },
+    { left: 328, top: 204, right: 412, bottom: 292 },
+    { left: 468, top: 204, right: 552, bottom: 292 },
+    { left: 480, top: 136, right: 568, bottom: 224 },
+    { left: 272, top: 5, right: 464, bottom: 36 },
+    { left: 354, top: 35, right: 452, bottom: 44 },
+    { left: 429, top: 217, right: 622, bottom: 257 },
+  ],
+};
+
 const overlap = (a: Rect, b: Rect): boolean => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 
 /** The card's painted box (its layout box plus the shear's reach on both sides). */
@@ -129,7 +189,7 @@ describe('PR-0330: the advisor card keeps its detail lines under the colossus fr
     const zone = withStrip(BFA_COLOSSUS)!;
     expect(zone.kind).not.toBe('compact');
     expect(zone.width).toBeGreaterThanOrEqual(MIN_ADVISOR_WIDTH);
-    expect(zone.maxHeight).toBeGreaterThanOrEqual(SHORT_ADVISOR_HEIGHT);
+    expect(zone.maxHeight).toBeGreaterThanOrEqual(FULL_CARD_HEIGHT);
     expectClear(BFA_COLOSSUS, zone);
   });
 
@@ -159,5 +219,22 @@ describe('PR-0330: the advisor card keeps its detail lines under the colossus fr
     const full = advisorZone(BFA_FIELD)!;
     expect(roomier(BFA_FIELD, full)).toBe(full);
     expect(roomiestCompactZone({ ...BFA_COLOSSUS, enemies: [{ left: 0, top: 0, right: 640, bottom: 360 }] })).toBeNull();
+  });
+
+  it('Seymour Omnis: a short wide card that would print less than the designed compact card is refused', () => {
+    for (const input of [OMNIS_1600, OMNIS_2000]) {
+      const designed = advisorZone(input)!;
+      expect(designed.kind).toBe('compact');
+      // the short full card exists, but it is shorter than a full card needs: it is what lost the heading
+      const short = shortFullZone(input)!;
+      expect(short).not.toBeNull();
+      expect(short.maxHeight).toBeLessThan(FULL_CARD_HEIGHT);
+      // the area-ranked compact card is wider but shorter (112 x 77 against 85 x 98): refused too
+      const roomy = roomiestCompactZone(input)!;
+      expect(roomy.maxHeight).toBeLessThan(designed.maxHeight);
+      // so the card is exactly where the designed solver (live release 36) put it
+      expect(withStrip(input)).toEqual(designed);
+      expectClear(input, withStrip(input)!);
+    }
   });
 });

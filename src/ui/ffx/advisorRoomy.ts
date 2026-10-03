@@ -24,6 +24,18 @@
  * passes do. Nothing changes for a chapter whose designed pass already yields a full card, and a
  * declined card (the `E` read-out, the Sin fights) stays declined here.
  *
+ * **Neither may print less than the designed card did** (repair of the r38 check, Chapter VII,
+ * Seymour Omnis): the density ladder trims by *height*, so a wide card that is short loses the
+ * heading and the effect line, which the narrow, tall `compact` card kept. At 2000x1012 Omnis's
+ * compact card was 86 wide and 104 tall and printed 11 lines; the 132 x 66 short card printed 9.
+ * The short card is therefore taken only when it is at least {@link enoughHeight} tall: the
+ * height a full card measures (68 grid px, {@link FULL_CARD_HEIGHT}), or the designed card's own
+ * height when that is less. Chapter III's short card is 69 tall (it printed all ten lines, where
+ * its 97-wide compact card printed seven); Omnis's is 62 to 66, so it keeps its designed card. The
+ * area-ranked compact card is taken only when it is wider **and** at least as tall as the designed
+ * one (Yojimbo: 100 x 98 against 80 x 75); Omnis's alternative, 112 x 77 against 85 x 98, trades
+ * height for width and is refused.
+ *
  * Pure arithmetic on the 640x360 grid, tested in `tests/unit/ui-ffx-advisor-roomy.test.ts`.
  */
 
@@ -55,6 +67,19 @@ import {
  * 167-wide card with a reason line measured 63-69, so 60 keeps the ladder at its middle rungs.
  */
 export const SHORT_ADVISOR_HEIGHT = 60;
+
+/**
+ * The height, in grid px, at which the advisor card prints every line it has for a decision:
+ * measured on the FFX HUD at 1600x900 as `scrollHeight` 68 (Seymour Omnis, live card and short
+ * card alike) and 69 to 70 (Braska's Final Aeon). Below it the density ladder starts dropping
+ * the heading and the effect line.
+ */
+export const FULL_CARD_HEIGHT = 68;
+
+/** The height a replacement for `designed` must reach so that it prints at least as much. */
+export function enoughHeight(designed: AdvisorZone): number {
+  return Math.min(designed.maxHeight, FULL_CARD_HEIGHT);
+}
 
 /** The card a solved box holds, or `null`: the same arithmetic as `hudSafeZones.solveCard`. */
 function cardIn(box: Rect, minWidth: number, minHeight: number, reserve: number, input: AdvisorZoneInput): AdvisorZone | null {
@@ -133,13 +158,16 @@ export function roomiestCompactZone(input: AdvisorZoneInput): AdvisorZone | null
 
 /**
  * `designed` (the result of `hudSafeZones.advisorZone`) improved where it settled for `compact`:
- * the full-width short card if a clear box holds one, else the compact card with the most area.
+ * the full-width short card if a clear box holds one that is tall enough, else the compact card
+ * with the most area if it dominates `designed` (it must not print less than `designed`).
  * Any other answer, including `null`, is returned untouched.
  */
 export function roomier(input: AdvisorZoneInput, designed: AdvisorZone | null): AdvisorZone | null {
   if (!designed || designed.kind !== 'compact') return designed;
   const short = shortFullZone(input);
-  if (short) return short;
+  if (short && short.width >= designed.width && short.maxHeight >= enoughHeight(designed)) return short;
   const roomy = roomiestCompactZone(input);
-  return roomy && cardArea(roomy) > cardArea(designed) + 0.01 ? roomy : designed;
+  // The compact pass must be wider *and* at least as tall: a tall slot traded for a wide one prints less.
+  const dominates = roomy && roomy.width >= designed.width && roomy.maxHeight >= designed.maxHeight;
+  return roomy && dominates && cardArea(roomy) > cardArea(designed) + 0.01 ? roomy : designed;
 }
