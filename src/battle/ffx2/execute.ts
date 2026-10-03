@@ -34,6 +34,7 @@ import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { performSpherechange } from './spherechange.ts';
 import { resolveTheft } from './steal.ts';
 import { attachedResult, hitsFromOutcome, rollDefault } from './minigames.ts';
+import { shapeLadyLuckSpin } from './reels.ts';
 import { beginCharge, beginRecovery, chargeTicksFor, extraRecoveryTicks } from './gauges.ts';
 import { ATB_BASE_VALUE, ATB_DOUBLE_RECOVERY_VALUE } from './constants.ts';
 import { actionTimeTicks } from './action-time.ts';
@@ -60,7 +61,34 @@ export interface ExecEnv {
   flushSignal(startedAt: number, actor: Ffx2Unit): void;
   /** The command suspended on a timed-input overlay, if any. */
   getAwaiting(): Command | null;
-  setAwaiting(command: Command | null): void;
+  setAwaiting(command: Command | null, by?: Suspension): void;
+}
+
+/** Who raised a suspended timed input, and whether her charge bar had already run. */
+export interface Suspension {
+  actorId: CombatantId;
+  charged: boolean;
+}
+
+/**
+ * The unit a re-submitted timed input belongs to.
+ *
+ * `submit()` used to hand every command to "whoever's gauge is full". That is
+ * right for Trigger Happy, which has no charge time and so asks for its overlay
+ * inside the `submit()` that chose it. Lady Luck's reels are Long `CT`: their
+ * request comes out of `tick()` when the purple bar empties, by which point her
+ * gauge is back at zero, so the answer was either dropped (nobody ready) or
+ * resolved *by another girl*. The answer goes to whoever asked.
+ */
+export function suspendedActor(
+  units: readonly Ffx2Unit[],
+  awaiting: Command | null,
+  by: Suspension | null,
+  command: Command,
+): { actor: Ffx2Unit; charged: boolean } | null {
+  if (!awaiting || !by || !sameAction(awaiting, command)) return null;
+  const actor = units.find((u) => u.id === by.actorId && u.alive && !u.removed);
+  return actor ? { actor, charged: by.charged } : null;
 }
 
 /**
@@ -196,7 +224,7 @@ export function performCommand(
   }
 
   if (needsMinigame(env, actor, ability, command)) {
-    env.setAwaiting(command);
+    env.setAwaiting(command, { actorId: actor.id, charged: alreadyCharged });
     env.emit({
       type: 'minigame-request',
       who: actor.id,
@@ -226,26 +254,40 @@ export function performCommand(
     });
   }
 
+  const outcome = ability.minigame
+    ? (attachedResult(command) ?? rollDefault(ability.minigame, env.rng, ability))
+    : null;
+  const hits = hitsFromOutcome(outcome);
+
+  // Lady Luck's reel commands are wrappers that deal nothing: the spin names
+  // the ability that fires in their place, or the Dud. It is announced here
+  // because the wind-up was announced as "Attack Reels" a full charge bar ago
+  // and nothing else would say what the reels paid. [ffx2-combat-core §3.12]
+  const spin =
+    outcome?.kind === 'ladyluck-reels'
+      ? shapeLadyLuckSpin(ability, outcome.reels, env.abilities, env.units, actor, command.targets)
+      : null;
+  const fired = spin?.def ?? ability;
+  const targets = spin ? spin.targets : command.targets;
+  if (spin) {
+    env.emit({ type: 'message', text: spin.outcome.tier === 'dud' ? 'Dud!' : fired.name, kind: 'system' });
+  }
+
   // The Bulwark retaliation log reads this. [ffx2-vegnagun-shuyin §3.3]
-  if (actor.side === 'party') env.state.flags['lastAttackClass'] = attackClass(ability);
+  if (actor.side === 'party') env.state.flags['lastAttackClass'] = attackClass(fired);
   performed.set(actor, ability.id); // `AiScript.onPartyAction` (engine-internal, not state)
 
   // Step 15's halving is scoped to the *player's* Black/White Magic cast on
   // all — enemy party-wide moves are not halved. §2.1
   const multiTarget =
     actor.side === 'party' &&
-    (ability.category === 'blackmagic' || ability.category === 'whitemagic') &&
-    (ability.targeting === 'all-enemies' || ability.targeting === 'all-allies');
-
-  const outcome = ability.minigame
-    ? (attachedResult(command) ?? rollDefault(ability.minigame, env.rng))
-    : null;
-  const hits = hitsFromOutcome(outcome);
+    (fired.category === 'blackmagic' || fired.category === 'whitemagic') &&
+    (fired.targeting === 'all-enemies' || fired.targeting === 'all-allies');
 
   // Steal and Pilfer Gil are thefts, not hits (`steal.ts`); everything else resolves normally.
   const theft = { units: env.units, state: env.state, rng: env.rng, emit: (e: EventDraft) => env.emit(e), ...(env.items ? { items: env.items } : {}) };
-  if (!resolveTheft(theft, actor, ability, command.targets)) {
-    resolveAbility(env.resolveCtx(), actor, ability, command.targets, {
+  if (!resolveTheft(theft, actor, fired, targets)) {
+    resolveAbility(env.resolveCtx(), actor, fired, targets, {
       multiTarget,
       ...(hits !== null ? { hitsOverride: hits } : {}),
     });

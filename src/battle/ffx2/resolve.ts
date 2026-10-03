@@ -154,7 +154,13 @@ export function resolveAbility(
       // spelled exactly as `formulas.ts` spells it (`flags 'heals'` or the
       // `healing` formula), so the two cannot drift apart. Revives already
       // skipped this block above.
-      const restorative = ability.flags.includes('heals') || ability.formula === 'healing';
+      //
+      // `extra.noChain` is the same carve-out for the one damaging effect that is nobody's attack:
+      // Lady Luck's **Dud** is "75% of current HP" [ffx2-combat-core §2.3, §3.12], and a girl still
+      // inside the window of the boss's last hit took 75% x 1.45 (measured, Rikku 4,605 off 4,407),
+      // so a penalty the source says cannot kill, killed.
+      const restorative =
+        ability.flags.includes('heals') || ability.formula === 'healing' || ability.extra?.['noChain'] === true;
       // IC-1's switch (`constants.ts` IMMUNE_HITS_SKIP_CHAIN, ON since D-242 = GameFAQs' reading, our estimate, §10.1): on, the count is
       // peeked and only a non-immune result registers. `computeDamage` is pure, so the chain event
       // still precedes the damage event and a non-immune hit's log is unchanged.
