@@ -1,6 +1,7 @@
 import './strategy-guide.css';
 import type { AvailableCommand, BattleState, CombatantId, GameId } from '../../battle/common/types.ts';
-import { buildGuideView, type GuideDecision, type GuideView } from '../../engine/tactics/guide.ts';
+import type { GuideDecision } from '../../engine/tactics/guide.ts';
+import { buildGuideRail, type GuideRailView } from '../../engine/tactics/guide-line.ts';
 import type { QueuedCommand } from '../../engine/tactics/guide-inflight.ts';
 import { ffx2CoachClock } from '../coach/coachState.ts';
 import { readSetting, writeSetting } from '../../app/SaveData.ts';
@@ -13,15 +14,20 @@ import { escapeHtml } from './html.ts';
  *
  * Three parts, in the order a player needs them:
  *
- *  * **NEXT** — the command the chapter's shipped tactic would pick for the
- *    character who is deciding right now, its target, and one cited sentence on
- *    why. The recommendation is not written here: `src/engine/tactics/guide.ts`
- *    runs the real `intendedStrategy` read-only, so the panel and the
- *    auto-battler can never disagree.
+ *  * **NEXT** — the command the chapter's plan calls for from the character
+ *    who is deciding right now, its target, and one plain sentence on why. The
+ *    recommendation is not written here: `src/engine/tactics/guide-line.ts`
+ *    walks the chapter's own line (`src/data/guides/lines/`) and shows the
+ *    first step that can be played. The line is the guide's alone; the move
+ *    advisor's card is a separate panel with a separate reasoning.
  *  * **WATCH** — whatever the boss is winding up, while a `charge` is live
  *    ("Total Annihilation, in 2 turns"), plus the phase or form note.
- *  * **RULES** — the three-to-five standing truths of the encounter, each one
- *    carrying the `research/*.md` section it comes from.
+ *  * **RULES** — the three-to-five standing truths of the encounter.
+ *
+ * Everything printed is plain strategy-guide prose. No source, citation or
+ * section number is ever rendered (Bailey, 2026-10-03); the data keeps its
+ * provenance fields for maintainers, and `tests/unit/guide-line-words.test.ts`
+ * fails on any rendered string that names where advice came from.
  *
  * ## Optional means optional
  *
@@ -130,26 +136,30 @@ const COMPACT_HEIGHT = 200;
  *   dark painting is not an affordance; {@link StrategyGuide.moreEl} is.
  * * **A player on a pad cannot scroll.** So the panel gives text up in a fixed
  *   order until what is left fits, exactly as `MoveAdvisor.fitCard` does, and
- *   the order is decoration first: rule citations, then the rules' paragraphs,
- *   then the WATCH sentences, then rules past the third. **What is never given
- *   up is a half-sentence** — every rung hides whole elements, so nothing is
- *   ever cut through the middle of a word again.
+ *   the order is the elaboration first: the rules' paragraphs (each rule keeps
+ *   its one-line headline), then the WATCH sentences. (A rung that hid each
+ *   rule's citation used to come first, and one that hid the rules past the
+ *   third came last: no citation is printed any more, and the last rung hid
+ *   rules that no page of the rail could ever reach again, so the rail
+ *   paginates through every rule instead.) **What is never given up is a
+ *   half-sentence** — every rung hides whole elements, so nothing is ever cut
+ *   through the middle of a word again.
  *
  * NEXT — the command the player is being told to press, its target and its one
  * reason — survives every rung. It is the line the decision is about.
  *
- * **The ladder stops at four on purpose.** A fifth rung dropping the RULES
+ * **The ladder stops at two on purpose.** A further rung dropping the RULES
  * section outright was written and measured: at 1600x900 with an FFX command
  * menu open the rail is ~156 grid px and the ladder reached it in every state
  * of the browser pass, so the encounter's standing truths — "kill Seymour, not
  * the mount" — were gone from the panel for the whole of every decision, which
- * is when they matter. Past the fourth rung the rail **paginates** — whole
+ * is when they matter. Past the last rung the rail **paginates** — whole
  * blocks at a time, {@link StrategyGuide.pageDown} — and
  * {@link StrategyGuide.moreEl} says so. Round 02 #29 allows exactly that:
  * "scroll or paginate with a visible affordance; never *silently* cut a
  * sentence."
  */
-const FIT_RUNGS = 4;
+const FIT_RUNGS = 2;
 
 /** Height of the MORE affordance row, in grid px. Mirrors `.sgd__more`'s own. */
 const MORE_HEIGHT = 11;
@@ -433,9 +443,9 @@ export class StrategyGuide {
   }
 
   /** The view the panel would draw right now, for tests and the debug snapshot. */
-  view(): GuideView | null {
+  view(): GuideRailView | null {
     if (!this.lastState) return null;
-    return buildGuideView(this.lastState, this.withHeld(), ffx2CoachClock());
+    return buildGuideRail(this.lastState, this.withHeld(), ffx2CoachClock());
   }
 
   /** The open decision with the held command as it stands now (never throws: a bad read is none). */
@@ -452,7 +462,7 @@ export class StrategyGuide {
 
   private render(): void {
     if (!this.mounted) return;
-    const view = this.lastState ? buildGuideView(this.lastState, this.withHeld(), ffx2CoachClock()) : null;
+    const view = this.lastState ? buildGuideRail(this.lastState, this.withHeld(), ffx2CoachClock()) : null;
     // No written guide for this encounter: no panel and no chip, never a chip that opens an empty box.
     this.el.hidden = view === null;
     if (!view || !this.visible) return;
@@ -507,6 +517,13 @@ export class StrategyGuide {
    * why this is measured rather than a constant.
    */
   private layout(): void {
+    // The upright phone shows the guide as a scrolling sheet (`phone-battle.css`), not a rail between two
+    // chrome elements, so the desktop's anchors mean nothing there: fitting the content to them left one
+    // block (the title) in a sheet that had the whole screen to scroll. Nothing is fitted or paged on the phone.
+    if (onPhone()) {
+      this.layoutPhone();
+      return;
+    }
     const { anchors } = this.opts;
     const top = this.railTop();
 
@@ -708,6 +725,24 @@ export class StrategyGuide {
   }
 
   /**
+   * The phone's sheet: every block shown at full length (the paragraphs, not the one-line rules), the
+   * sheet itself scrolls. Undoes whatever a desktop fit left behind, so a window that is resized from a
+   * desktop to a phone, or back, starts again from the whole content.
+   */
+  private layoutPhone(): void {
+    this.el.classList.remove('sgd--compact');
+    this.fitRung = 0;
+    this.applyRung();
+    this.bodyEl.style.height = '';
+    for (const unit of this.allUnits()) unit.classList.remove(OUT_CLASS);
+    this.moreEl.hidden = true;
+    this.pageStart = 0;
+    this.nextPage = 0;
+    this.fitKey = '';
+    this.layoutToggle();
+  }
+
+  /**
    * One page down, wrapping back to the top at the foot.
    *
    * Pages by *block*, not by `scrollTop`, for the same reason the cut does: a
@@ -722,15 +757,21 @@ export class StrategyGuide {
   }
 }
 
+/** Is the upright phone layout on (`html[data-phone-battle]`, set only by `./phoneBattle.ts`)? */
+function onPhone(): boolean {
+  return typeof document !== 'undefined' && document.documentElement.dataset['phoneBattle'] !== undefined;
+}
+
 // --------------------------------------------------------------- templates
 
 /** Everything that can change what the panel says, in one string. */
-function signatureOf(view: GuideView): string {
+function signatureOf(view: GuideRailView): string {
   return [
     `${view.chapterId}:${view.rules.length}`, // a clock flip in the pause adds or drops the clock's rule
     view.next?.label ?? '',
     view.next?.targetId ?? '',
     view.next?.reason ?? '',
+    view.decisionOpen ? 'open' : 'idle',
     view.phase?.label ?? '',
     view.watch.map((w) => `${w.payload}:${w.timing}:${w.stage}`).join('|'),
   ].join('');
@@ -750,14 +791,14 @@ function sectionHead(label: string): string {
   return `<h4 class="sgd__head ${U}">${escapeHtml(label)}</h4>`;
 }
 
-function citeHtml(cite: string): string {
-  return cite ? `<p class="sgd__cite ${U}">${escapeHtml(cite)}</p>` : '';
-}
+/** NEXT's two empty states: no decision is open, and a decision is open that the plan has no step for. */
+export const GUIDE_WAITING_TEXT = 'Waiting for your turn.';
+export const GUIDE_NO_STEP_TEXT = 'Nothing in the plan for this turn.';
 
-function nextHtml(view: GuideView): string {
+function nextHtml(view: GuideRailView): string {
   const next = view.next;
   if (!next) {
-    return `${sectionHead('Next')}<p class="sgd__idle ${U}">Waiting for your turn.</p>`;
+    return `${sectionHead('Next')}<p class="sgd__idle ${U}">${view.decisionOpen ? GUIDE_NO_STEP_TEXT : GUIDE_WAITING_TEXT}</p>`;
   }
   const target = next.targetName
     ? `<span class="sgd__arrow">→</span><span class="sgd__target">${escapeHtml(next.targetName)}</span>`
@@ -767,11 +808,10 @@ function nextHtml(view: GuideView): string {
     `<p class="sgd__actor ${U}">${escapeHtml(next.actorName)}</p>`,
     `<p class="sgd__cmd ${U}"><span class="sgd__label">${escapeHtml(next.label)}</span>${target}</p>`,
     next.reason ? `<p class="sgd__why ${U}">${escapeHtml(next.reason)}.</p>` : '',
-    citeHtml(next.cite),
   ].join('');
 }
 
-function watchHtml(view: GuideView): string {
+function watchHtml(view: GuideRailView): string {
   if (view.watch.length === 0 && !view.phase) return '';
   const charges = view.watch
     .map(
@@ -780,13 +820,12 @@ function watchHtml(view: GuideView): string {
         `<p class="sgd__cmd ${U}"><span class="sgd__label">${escapeHtml(w.payload)}</span>` +
         `<span class="sgd__timing">${escapeHtml(w.timing)}</span></p>` +
         `<p class="sgd__why ${U}">${escapeHtml(w.advice)}.</p>` +
-        citeHtml(w.cite) +
         '</div>',
     )
     .join('');
   const phase = view.phase
     ? `<div class="sgd__phase"><p class="sgd__phase-label ${U}">${escapeHtml(view.phase.label)}</p>` +
-      `<p class="sgd__why ${U}">${escapeHtml(view.phase.note)}</p>${citeHtml(view.phase.cite)}</div>`
+      `<p class="sgd__why ${U}">${escapeHtml(view.phase.note)}</p></div>`
     : '';
   return `${sectionHead('Watch')}${charges}${phase}`;
 }
@@ -801,7 +840,7 @@ function watchHtml(view: GuideView): string {
  * measurement would leave the wrong form on screen. CSS switching costs one
  * class toggle and cannot fall out of step with the measurement that caused it.
  */
-function rulesHtml(view: GuideView): string {
+function rulesHtml(view: GuideRailView): string {
   if (view.rules.length === 0) return '';
   const items = view.rules
     .map(
@@ -809,14 +848,13 @@ function rulesHtml(view: GuideView): string {
         `<li class="${U}">` +
         `<span class="sgd__rule-full">${escapeHtml(r.text)}</span>` +
         `<span class="sgd__rule-short">${escapeHtml(r.short)}</span>` +
-        `<span class="sgd__cite">${escapeHtml(r.cite)}</span>` +
         '</li>',
     )
     .join('');
   return `${sectionHead('Rules')}<ul class="sgd__rules">${items}</ul>`;
 }
 
-function bodyHtml(view: GuideView): string {
+function bodyHtml(view: GuideRailView): string {
   return [
     `<p class="sgd__title ${U}">${escapeHtml(view.title)}</p>`,
     `<section class="sgd__sec sgd__sec--next">${nextHtml(view)}</section>`,

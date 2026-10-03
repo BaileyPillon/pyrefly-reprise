@@ -221,16 +221,6 @@
   font-style: italic;
 }
 
-/* Every claim the panel makes to the player names the research section it came
-   from (src/data/guides/types.ts). Quiet, but never absent. */
-.sgd__cite {
-  margin: 0.5px 0 0;
-  font-family: var(--ig-font-display);
-  font-size: 5.7px;
-  letter-spacing: 0.04em;
-  color: #7f8a99;
-}
-
 .sgd__charge {
   margin-bottom: 3px;
   padding-left: 4px;
@@ -290,11 +280,7 @@
   background: var(--ig-accent);
   transform: rotate(45deg);
 }
-.sgd__rules .sgd__cite {
-  display: block;
-}
-
-/* Roomy rail: the paragraph, with its citation. */
+/* Roomy rail: the paragraph. */
 .sgd__rule-short {
   display: none;
 }
@@ -303,11 +289,9 @@
 
 /* A rail shorter than COMPACT_HEIGHT (StrategyGuide.ts) — which is every rail
    with an FFX command menu open — swaps each rule's paragraph for its one-line
-   headline and drops the rules' citations. NEXT and WATCH are untouched: they
-   are what the player is reading at a decision, and they fit. The rule's
-   research section is still one `G`, one closed menu away. */
-.sgd--compact .sgd__rule-full,
-.sgd--compact .sgd__rules .sgd__cite {
+   headline. NEXT and WATCH are untouched: they are what the player is reading
+   at a decision, and they fit. The paragraph is one closed menu away. */
+.sgd--compact .sgd__rule-full {
   display: none;
 }
 .sgd--compact .sgd__rule-short {
@@ -324,15 +308,12 @@
    rung at a time, until what is left fits the height `layout()` measured
    (`StrategyGuide.fit`, and `FIT_RUNGS` for why the order is this one). Every
    rung hides **whole elements**, which is what makes "never cut a sentence"
-   true rather than aspirational. NEXT survives all five. */
-.sgd--fit1 .sgd__rules .sgd__cite { display: none; }
-.sgd--fit2 .sgd__rule-full { display: none; }
-.sgd--fit2 .sgd__rule-short { display: inline; }
-.sgd--fit2 .sgd__rules li { margin-bottom: 1.6px; }
-.sgd--fit3 .sgd__charge .sgd__why,
-.sgd--fit3 .sgd__phase .sgd__why,
-.sgd--fit3 .sgd__cite { display: none; }
-.sgd--fit4 .sgd__rules li:nth-child(n + 4) { display: none; }
+   true rather than aspirational. NEXT survives both. */
+.sgd--fit1 .sgd__rule-full { display: none; }
+.sgd--fit1 .sgd__rule-short { display: inline; }
+.sgd--fit1 .sgd__rules li { margin-bottom: 1.6px; }
+.sgd--fit2 .sgd__charge .sgd__why,
+.sgd--fit2 .sgd__phase .sgd__why { display: none; }
 
 /* The affordance the fade was not. Its own row in `.sgd__stack`'s column,
    directly under the slab and never over it; one click pages the rail down,
@@ -440,7 +421,7 @@
    ladder above sets on the same element.
 
    A `.sgd__u` is one block of text — the title, a section head, the command
-   line, a reason, a citation, a rule bullet. `StrategyGuide.layout()` hides
+   line, a reason, a rule bullet. `StrategyGuide.layout()` hides
    the ones that do not fit the rail **entirely** and then sets `.sgd__body`'s
    height to the bottom of the last one that does. Hiding whole blocks is what
    makes "a line is never sliced" structural: `overflow` has nothing left to
