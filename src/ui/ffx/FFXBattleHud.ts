@@ -1,3 +1,4 @@
+import '../common/cmd-od-selected.css';
 import '../common/hud-floor.css';
 import './ffx-hud.css';
 import { grownFromTopLeft } from '../common/hudTextSize.ts';

@@ -9,6 +9,7 @@ import '../inkgold/index.ts';
 // enemy track was the fill's `inset -1px 0 0 #fff` leading edge, a white tick
 // floating on a transparent bar. Load the tokens with the HUD that needs them.
 import '../common/hud-floor.css';
+import '../common/cmd-od-selected.css';
 import './theme.css';
 import './ffx2-hud.css';
 import { installInkGoldStyles } from '../inkgold/index.ts';
