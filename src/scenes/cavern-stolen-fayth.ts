@@ -7,9 +7,10 @@ import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
 import { CAVERN_WIDE_RIGS, cavernRigsFor, viewportAspect } from './cavern-stolen-fayth-rigs.ts';
 import type { SceneSlots } from './index.ts';
-import { SakuraArrival, sakuraArrivalAt, softDiscTexture, SAKURA_ARRIVAL_MS } from './cavern-stolen-fayth-arrival.ts';
+import { ArrivalWait, SakuraArrival, sakuraArrivalAt, softDiscTexture, SAKURA_ARRIVAL_MS } from './cavern-stolen-fayth-arrival.ts';
 import { CAVERN_IDS, findFigure, victoryStruck, type StagedFigure } from './cavern-stolen-fayth-cast.ts';
 import { GinnemGlow } from './cavern-stolen-fayth-glow.ts';
+import { takeOpeningHurried } from './openingMark.ts';
 import { fxDebugHooks } from '../engine/fx/fxDebugHooks.ts';
 
 // ---------------------------------------------------------------------------
@@ -262,14 +263,15 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
   // the stage is built, so "Yojimbo is staged" is too early. The opening cuts
   // to this scene's `intro` rig (`BattleMoments.battleStart`); the first frame
   // rendered from there starts it. With no opening (the skip speed) it starts
-  // {@link ARRIVAL_FALLBACK_MS} after he is staged.
+  // {@link ARRIVAL_FALLBACK_MS} after he is staged. A hurried opening (the player
+  // skipped the pre-scene, PR-0061) shows no opening shot at all, so it does not
+  // wait for one (`openingMark.ts`, PR-0341): they are on the field at the first menu.
   const intro = new Vector3(...(rigs.intro.position as [number, number, number]));
-  let introSeen = false;
+  const wait = new ArrivalWait(ARRIVAL_FALLBACK_MS);
   pools[0]!.frustumCulled = false; // the probe below must run on every frame
   pools[0]!.onBeforeRender = (_r, _s, camera): void => {
-    if (!introSeen && camera.position.distanceTo(intro) < 1.2) introSeen = true;
+    if (camera.position.distanceTo(intro) < 1.2) wait.openingSeen();
   };
-  let waitMs = -1;
   let arrivalMs = -1;
   let yojimbo: StagedFigure | null = null;
   const stepTo = new Vector3(...yojimboSpot);
@@ -279,26 +281,22 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
   const runArrival = (dt: number, root: StagedFigure['parent']): void => {
     const seen = findFigure(root, CAVERN_IDS.yojimbo);
     if (seen && seen !== yojimbo) {
-      // A new fight on this field (first staging, or a retry): wait for its opening.
+      // A new fight on this field (first staging, or a retry): wait for its opening, unless it is hurried.
       yojimbo = seen;
-      waitMs = 0;
+      wait.stage(takeOpeningHurried(root));
       arrivalMs = -1;
       padMs = -1;
-      introSeen = false;
     }
     const daigoro = findFigure(root, CAVERN_IDS.daigoro);
     if (!yojimbo) return;
-    if (waitMs >= 0) {
-      waitMs += dt * 1000;
-      if (!introSeen && waitMs < ARRIVAL_FALLBACK_MS) {
-        // Not yet summoned: neither of them is on the field.
-        daigoro?.setAlpha?.(0);
-        yojimbo.setAlpha?.(0);
-        return;
-      }
-      waitMs = -1;
-      arrivalMs = 0;
+    const step = wait.step(dt * 1000);
+    if (step === 'hold') {
+      // Not yet summoned: neither of them is on the field.
+      daigoro?.setAlpha?.(0);
+      yojimbo.setAlpha?.(0);
+      return;
     }
+    if (step === 'go') arrivalMs = 0;
     if (arrivalMs < 0) return;
     arrivalMs += dt * 1000;
     const f = sakuraArrivalAt(arrivalMs);
