@@ -6,7 +6,6 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
-<<<<<<< HEAD
 ## 2026-10-03 — `HudPort.syncQueued` (optional): the HUD hears a command the moment it is submitted (PR-0104; FFX-2 only; additive)
 
 Branch `r37-ui-floor`. `src/engine/HudPort.ts` gains `syncQueued?(state: BattleState): void`, called by `BattlePresenter.submit` right
@@ -15,7 +14,7 @@ battle runs. It carries `AtbState.charging.commandRef`, so the FFX-2 HUD can nam
 confirm on (`src/ui/ffx2/QueuedChips.ts`); the full `sync` only arrived about 1.6 s later. A HUD without it is untouched; FFX's HUD
 and the FF7 HUD implement nothing. `CoachedHud` forwards it (the sixth wrapper hole of that kind). No shared contract file changed;
 recorded because the port is shared. Game case: FFX-2 only.
-=======
+
 ## 2026-10-03 — FFX-2 Lady Luck's reels: a sourced pay table, the Dud, and a menu ability can carry a minigame outcome (FFX-2 only; additive)
 
 Branch `r37-lady-luck` (backlog key `BR-LADY-LUCK-REELS`; a port of `946918c69` onto `c69de96a`, not a merge). Critic round 02
@@ -57,7 +56,6 @@ mote layers a scene draws that are not `ParticleField`s (the pyrefly emitter's s
 passes the render-height scale to them next to `particles`. Every scene that omits it is unchanged. Only
 `cavern-stolen-fayth` sets it (FFX Chapter IX). `CutsceneFigure` (`src/app/screens/cutsceneFigures.ts`) gains the optional `aura`
 (Lady Ginnem only). Game case: FFX only.
->>>>>>> origin/main
 
 ## 2026-10-02 — `Settings` gains the nine EYE CANDY parts; new seam `src/engine/fx/eyeCandyFlags.ts` (D-317; both games; additive)
 
