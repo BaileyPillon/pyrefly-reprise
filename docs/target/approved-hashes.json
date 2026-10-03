@@ -2372,7 +2372,7 @@
   "bailey:2026-10-02-art": {
    "words": "All your recommendations",
    "decision": "D-322, D-323, D-324, D-325, D-326, D-327, D-328",
-   "note": "Bailey, 2026-10-02 ~09:50 EDT, verbatim \"All your recommendations\" (D-319 to D-334 in docs/target/decisions.json), answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's recommendation); then \"I'll go with all your recommendations, full speed ahead. Godspeed.\" Installed in the page's order (section 7) and stopped at the 800 MB line (D-332; the scratch vite build of rel36 must stay under 800,000,000 bytes): (a) the cut-off fixes and the party keys: D-323 the seven party re-rolls (Kimahri wind-up and follow-through, Yuna FFX follow-through, Lulu wind-up, Yuna Dark Knight cast, item and victory), D-324 Kimahri's sourced single broken horn (candidate A) on all 12 of his paintings and the pause 2x master (they REPLACE approved paintings, backed up), D-326 the six pinned paintings that ran off their own canvas (Valefor hurt, Pterya hurt, Yunalesca form 1 attack, hurt and cast, Vegnagun head KO; backed up), and with them the cut-off fixes of D-325: Valefor's and Pterya's whole-wing idles and keys (Pterya's idle 2x master replaced to match its new canvas), Yu Yevon's size-matched idle and his three outpainted keys, Yunalesca form 2's outpainted idle (scale 1.1316, its 2x master replaced to match) and the attack made from it; (b) D-322 the dressphere twirl keys as twirl-start / twirl-going / twirl-mid / twirl-forming / twirl-end in the dressphere each is painted in (src/engine/fx/mix/twirl.ts on rel36), 69 of the 77: the 8 keys of a change back into Rikku's Dark Knight, Thief or Alchemist or Paine's Dark Knight wait; and, out of the page's order because they make the build 1.2 MB smaller (they replace paintings, so they cannot cross the line): D-327 the seven pinned paintings of another design (Braska's Final Aeon form 1 attack and cast, the hurts of LeBlanc, Ormi, Trema and the male Syndicate goon, Anima's attack) and D-328 Seymour Flux direction 1 (attack, cast, hurt, KO from his idle), all backed up. Waiting in the package held/ for the line: those 8 keys, D-325's other 40 boss keys and the 19 aeon extras (README.md). Every image is its candidate byte for byte. Package and backups: D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/ (README.md lists every file, the replaced ones, what waits and the in-battle checks; docs/handoff/r36-art.md on rel36). Game: per figure (sidecar game field).",
+   "note": "Bailey, 2026-10-02 ~09:50 EDT, verbatim \"All your recommendations\" (D-319 to D-334 in docs/target/decisions.json), answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's recommendation); then \"I'll go with all your recommendations, full speed ahead. Godspeed.\" Installed in the page's order (section 7) and stopped at the 800 MB line (D-332; the scratch vite build of rel36 must stay under 800,000,000 bytes): (a) the cut-off fixes and the party keys: D-323 the seven party re-rolls (Kimahri wind-up and follow-through, Yuna FFX follow-through, Lulu wind-up, Yuna Dark Knight cast, item and victory), D-324 Kimahri's sourced single broken horn (candidate A) on all 12 of his paintings and the pause 2x master (they REPLACE approved paintings, backed up), D-326 the six pinned paintings that ran off their own canvas (Valefor hurt, Pterya hurt, Yunalesca form 1 attack, hurt and cast, Vegnagun head KO; backed up), and with them the cut-off fixes of D-325: Valefor's and Pterya's whole-wing idles and keys (Pterya's idle 2x master replaced to match its new canvas), Yu Yevon's size-matched idle and his three outpainted keys, Yunalesca form 2's outpainted idle (scale 1.1316, its 2x master replaced to match) and the attack made from it; (b) D-322 the dressphere twirl keys as twirl-start / twirl-going / twirl-mid / twirl-forming / twirl-end in the dressphere each is painted in (src/engine/fx/mix/twirl.ts on rel36), 69 of the 77: the 8 keys of a change back into Rikku's Dark Knight, Thief or Alchemist or Paine's Dark Knight wait; and, out of the page's order because they make the build 1.2 MB smaller (they replace paintings, so they cannot cross the line): D-327 the seven pinned paintings of another design (Braska's Final Aeon form 1 attack and cast, the hurts of LeBlanc, Ormi, Trema and the male Syndicate goon, Anima's attack) and D-328 Seymour Flux direction 1 (attack, cast, hurt, KO from his idle), all backed up. Second install, 2026-10-03 (art install for release 37, D-332: page order, stopped at the 800,000,000 line): the 8 held twirl keys (the forming and manifest of Rikku's Dark Knight, Thief and Alchemist and Paine's Dark Knight) and D-325's first 35 boss keys (Vegnagun tail hurt and KO, FFX-2 Bahamut hurt, KO and cast, LeBlanc / Logos / Ormi / Trema attacks, the Den of Woe shades' hurts and KOs, the Leblanc goons' keys, Sin's fins and Genais, Guado Guardian hurt, Evrae attack, Mortibody hurt and cast, the Magus Sisters' keys). Still waiting in the package held/: the light-state casts of Vegnagun's four parts and Shuyin (5) and the 19 aeon extras (README.md). Every image is its candidate byte for byte. Package and backups: D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/ (README.md lists every file, the replaced ones, what waits and the in-battle checks; docs/handoff/r36-art.md on rel36). Game: per figure (sidecar game field).",
    "public/art/characters/kimahri/attack.png": {
     "sha256": "fc2915463695fe98664e1d7f840872d9809491567613498fbdfbfd12bd36e134",
     "mtime": "2026-10-02T17:46:35.172Z",
@@ -2981,6 +2981,221 @@
    "public/art/characters/yuna-dark-knight/twirl-forming.png": {
     "sha256": "c3dca1b744ba7b32520529e86fa8179f1c0c71e37286a493f277a7c102795083",
     "mtime": "2026-10-02T18:17:11.017Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/baralai-shade/hurt.png": {
+    "sha256": "2858b7921fc6639e82763697e49fa7dc2543b0298580e4ca9ec9763c614043e6",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/baralai-shade/ko.png": {
+    "sha256": "3e6ed7a8d4e885c1bd117c00b6692a05be74b0ab0e3793893eea5e7e56fdcefe",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/cindy/attack.png": {
+    "sha256": "e04104fc42c7f6ce746fbdf8274d9657399d53d2cb638dd25819cee00c8d790a",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/cindy/hurt.png": {
+    "sha256": "e492ea80bbf9bb3064745bdb71d85404843a2be7aaaf2514f8eb6e66d6c4e381",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/cindy/ko.png": {
+    "sha256": "9f5d2aca101655b999557de14158f6dbd658394724bd805eb3c7d215241a0334",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/evrae/attack.png": {
+    "sha256": "bcfc5a98f9936c263e01e6a4c5921d628d71e112d223995d5f178c22d509b226",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/ffx2-bahamut/cast.png": {
+    "sha256": "7da8a1fbb63d87e61b6f94a357442f88e4e8b1a4afc8f296fc7daec6df288f8f",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/ffx2-bahamut/hurt.png": {
+    "sha256": "0088ea09d6668ae67edd3269b779be1bbe96531e267ec70e1a37ace5b7522810",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/ffx2-bahamut/ko.png": {
+    "sha256": "391e5c8fbd68d58a501c6a5d674ad7faec816cb8943e6a88a534d0f9dd2f9794",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/ffx2-dr-goon/attack.png": {
+    "sha256": "f08c6ae16a4fc4f66e82389cdad3166181573d570a794d732da3cf7de5667cb5",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/ffx2-dr-goon/ko.png": {
+    "sha256": "a70296ef4d3c6325e4ae109e7e1a1e6296ede120348a99b2582f3a2c6de97457",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/ffx2-fem-goon/attack.png": {
+    "sha256": "ac406cddfca14921af7c8ad0b645eafd658bb3b13881111befde1960c15a6b78",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/ffx2-fem-goon/hurt.png": {
+    "sha256": "8dce2e4829f5e5612385840909cdb37c18b4fdb8b71273f7a98176774fe3e5b1",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/ffx2-fem-goon/ko.png": {
+    "sha256": "9860ec460c43a7cebf0c1200bf2e9a7d0b3b25aa8d73556bd26defc6aad49db8",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/gippal-shade/hurt.png": {
+    "sha256": "4ac0f4d07455dbc683ba56b00571667c8ddf79d1c7d5f6743c9f758563d548f5",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/gippal-shade/ko.png": {
+    "sha256": "79fcd36c799530564d13e524fca606b3e61b746eb1d0607e7b16a6399bbc437f",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/guado-guardian/hurt.png": {
+    "sha256": "974c8d4412cb3e1c25c210c17553a8ea5a6874ec5e874406b1d403d937a17a40",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/leblanc/attack.png": {
+    "sha256": "147aad37f688f8fab08e023bbf165b66413b477e79dfaf9e05170586d0081474",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/logos/attack.png": {
+    "sha256": "b9961fc7d1254bc9e8e3f984d23ab6021d05ba55c8cfb3c3db11db0a12419cde",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/mindy/hurt.png": {
+    "sha256": "1c616017b08b06a09be4a922de0f63f703b5709c7b31705d724b1a76a2e6cb66",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/mindy/ko.png": {
+    "sha256": "64beeb7a5ecc1fd05a875731f6d4e348968812bdf3f72b48c03d0c76babf49c6",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/mortibody/cast.png": {
+    "sha256": "97d19f455b6135f162fb2d992cd9f382af71160853aefc905791365310c172aa",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/mortibody/hurt.png": {
+    "sha256": "88b68fdcb47d97ceb367d62986d0797edc65cfcbf9ba87c93216732bc6038efa",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/nooj-shade/hurt.png": {
+    "sha256": "7f98e313af0db50c1c072873ef7ccf57f92744035f4f12de2caaf1af11657c82",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/nooj-shade/ko.png": {
+    "sha256": "bb8e6bd1642b948adc873984da82dd81f1faf838a49f2649e77de742be7553a4",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/ormi/attack.png": {
+    "sha256": "6dfcc932984ef273520b46cb7100c8411d3eda7c43080af8971e2455a09246ba",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-dark-knight/twirl-end.png": {
+    "sha256": "460fe1f048c84324159f129b6ebf5bc3e8ec169e0141e306d7b152f2204dd0ea",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/paine-dark-knight/twirl-forming.png": {
+    "sha256": "20fbece03690056a1c04c545685cfef9303307fc1a0f7eeaafc203e3505ba24b",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-alchemist/twirl-end.png": {
+    "sha256": "c54e74c696cfba437f8ca240902f7d4fda2dbecb49b9b0588ebd2b95404f0039",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-alchemist/twirl-forming.png": {
+    "sha256": "6ef40775681af2f9a6b7a19200dc83c1a943d01c83a493544800fb9a2b0f7fda",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-dark-knight/twirl-end.png": {
+    "sha256": "4bde1a2fe9450b70093b58ab5eae581036c0e6ae83ca5dd720d5affd25381059",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-dark-knight/twirl-forming.png": {
+    "sha256": "99321107adeb163d03401c1dc3821bc280ba93a064860faf7ecbe022f4aa4a8c",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-thief/twirl-end.png": {
+    "sha256": "b9b9b919280ef0cb84b98bf158a3593d9e37c9b3f99271b645df26982cbf885d",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/rikku-thief/twirl-forming.png": {
+    "sha256": "4d2aa255cd09d67384ac0dca92cb25da7fd23323205a650740e7d4af3099ce6d",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/sandy/attack.png": {
+    "sha256": "42646e50005582e4a26b0403d70ac7032743ea16dd6c6f0ae441acd40ab14c66",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/sandy/hurt.png": {
+    "sha256": "6571aaaecc24f227ad050e56b63e4d858d3fab7da48304bdc748e53b42b260b5",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/sandy/ko.png": {
+    "sha256": "d17d847880a11e2a8489d8b491e543d95274b0f06b6445c8f93085b798c5d63b",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/sin-left-fin/attack.png": {
+    "sha256": "bd30473b253574bd7fe17634a4836fb9058dfb2656fd4c0e9bf3b236fdc54ef9",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/sin-right-fin/attack.png": {
+    "sha256": "fa64f30d2809f5852d74320769ddf98ace45f33e17b94e11eca096e085e522be",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/sinspawn-genais/attack.png": {
+    "sha256": "7dec173e3d319c4334469cfea69f46f76f0b9d6c8b0f0d048a87c8abac0948fa",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/trema/attack.png": {
+    "sha256": "a5fb96fc61a0fe3c3a4299e75fb44cd5e02a36bca9eb60f0d9de2a4fa3966683",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/vegnagun-tail/hurt.png": {
+    "sha256": "9e6c5d43ab5564366e865c82355bfa07ab6dd2cef499819f7147537d2fb17b5c",
+    "mtime": "2026-10-03T14:22:43.523Z",
+    "approved": "2026-10-02"
+   },
+   "public/art/characters/vegnagun-tail/ko.png": {
+    "sha256": "bd3a331af2bd597e0ec28367d499b854f2af875c809143a2c3d546611ce31fa9",
+    "mtime": "2026-10-03T14:22:43.523Z",
     "approved": "2026-10-02"
    }
   }
