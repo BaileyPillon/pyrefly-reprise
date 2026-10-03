@@ -53,6 +53,11 @@ function menuBlocks(ctx: EventCtx): boolean {
   return FFX2_SUPPRESS_WHILE_MENU && isFfx2(ctx) && ctx.menuOpen?.() === true;
 }
 
+/** opt-motion prototype: FFX-2 only, a command menu is open (the motion options play nothing over it). */
+export function menuBlocksMotion(ctx: EventCtx): boolean {
+  return isFfx2(ctx) && ctx.menuOpen?.() === true;
+}
+
 /** A single cut under REDUCE MOTION (no crossfade), the figure's usual crossfade otherwise. */
 function cutTo(ctx: EventCtx, actor: { setPose(name: string, opts?: { immediate?: boolean }): void }, pose: string): void {
   if (ctx.moments?.reducedMotion === true) actor.setPose(pose, { immediate: true });

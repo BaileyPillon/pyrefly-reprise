@@ -16,6 +16,9 @@ import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresent
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
 import type { BattleCamera } from './BattleCamera.ts';
 import { PaintedActor } from './PaintedActor.ts';
+import { ProjectileFx } from './motion/ProjectileFx.ts'; // opt-motion prototype (`?motion=M3`)
+import { ensureWarp, WARP_RIGS } from './motion/PuppetWarp.ts'; // opt-motion prototype (`?motion=M1` smear, `?motion=M2` enemy part motion)
+import { motionOn, motionRequested } from './motion/MotionMode.ts';
 import { edgeFeatherFor } from './ActorEdgeFeather.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
 import { HitEffects } from './VFX.ts';
@@ -119,6 +122,8 @@ export class PaintedStage implements BattleStage {
   private readonly opts: PaintedStageOptions;
   private readonly actors = new Map<CombatantId, StagedActor>();
   private readonly hits: HitEffects;
+  /** opt-motion prototype (`?motion=M3`): the projectiles in flight; made on the first launch. */
+  private projectiles: ProjectileFx | null = null;
   private readonly scratch = new Vector3();
   private readonly paintScratch = new Vector3();
   private readonly quad: [Vector3, Vector3, Vector3, Vector3] = [
@@ -302,6 +307,11 @@ export class PaintedStage implements BattleStage {
 
     this.opts.scene.add(actor);
     actor.still = () => this.opts.comfort?.().reduceMotion === true;
+    if (motionRequested()) { // opt-motion prototype: the warp (M2's pins, M1's smear) goes on only when the page asked for `?motion=`
+      const rig = WARP_RIGS[artId] ?? WARP_RIGS[c.id] ?? (c.spriteKey ? WARP_RIGS[c.spriteKey] : undefined);
+      const w = ensureWarp(actor, kind === 'enemy' ? (rig ?? []) : []);
+      (actor as unknown as { smear?: unknown }).smear = (dx: number, dy: number, ms: number, peak?: number): void => w.smearPulse(dx, dy, ms, peak);
+    }
     if (!anchor) this.pyreflies.stage(c.id, c.side, actor);
     // A-8: a tight dark ellipse under the feet; a hovering figure keeps none.
     if (!anchor && !actor.levitates) attachFootOcclusion(actor.shadow, contactShadowStyle(this.groundLuma));
@@ -663,7 +673,31 @@ export class PaintedStage implements BattleStage {
       screenFlash: (colour, ms) => this.screenFlash(colour, ms),
       land: (at, o) => this.spellFx.land(at, o),
       pendingLand: (at, action) => this.spellFx.pendingLand(at, action), // FF7: the numeral on the drawn strike
+      travel: (from, to, o) => this.travel(from, to, o), // opt-motion prototype (`?motion=M3`)
     };
+  }
+
+  // ------------------------------------------------------- opt-motion prototype
+
+  /** `?motion=M3`: launch a projectile from one figure to another; `ms` 0 with the option off. */
+  private travel(from: CombatantId, to: CombatantId, o: { abilityId?: string; element?: string; kind: 'orb' | 'tracer' | 'beam'; ms?: number }): { ms: number; landed: Promise<void> } {
+    const a = this.actors.get(from)?.actor;
+    const b = this.actors.get(to)?.actor;
+    if (!motionOn('M3') || !a || !b) return { ms: 0, landed: Promise.resolve() };
+    const dark = o.abilityId !== undefined && /darkness|dark-knight/.test(o.abilityId);
+    const look = dark ? 'dark' : this.spellFx.resolve({ ...(o.abilityId ? { abilityId: o.abilityId } : {}), ...(o.element ? { element: o.element } : {}), sourceId: from });
+    const start = a.centerPoint(new Vector3());
+    start.y += a.height * 0.1;
+    start.x += Math.sign(b.position.x - a.position.x || 1) * Math.max(0.4, a.height * 0.2);
+    const end = b.centerPoint(new Vector3());
+    this.projectiles ??= new ProjectileFx(this.opts.scene);
+    const ms = o.ms ?? 400;
+    return { ms, landed: this.projectiles.launch(start, end, { look, kind: o.kind, ms }, 0.55 + Math.min(0.5, b.height * 0.1)) };
+  }
+
+  /** `?motion=M1`: slide the whole camera, on top of whatever rig it is on (`BattleCamera.truck`). */
+  truck(dx: number, dy: number, dz: number, ms: number): Promise<void> {
+    return this.opts.battleCamera.truck(dx, dy, dz, ms);
   }
 
   // ------------------------------------------------------- anchored parts
@@ -744,6 +778,7 @@ export class PaintedStage implements BattleStage {
   update(dt: number): void {
     for (const id of this.actors.keys()) this.placeAnchored(id);
     for (const { actor } of this.actors.values()) actor.update(dt);
+    this.projectiles?.update(dt); // opt-motion prototype
     this.partRings.update(
       dt,
       (id) => {

@@ -17,7 +17,8 @@ import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
 import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
 import { impactAtApex, windUpLeads } from './KeyPoses.ts';
-import { armOdKey, endOdKey, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
+import { armOdKey, endOdKey, menuBlocksMotion, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
+import { launchProjectile } from './motion/ProjectileHook.ts'; // opt-motion prototype (`?motion=M3`): a spell or shot visibly travels; a no-op without the flag
 import { partyOffStage } from './SummonStaging.ts';
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
@@ -70,6 +71,8 @@ export async function actionStart(
     await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? []);
   }
   await fxActionOpen(ctx, event);
+  // opt-motion prototype (`?motion=M1`): the figure travels key to key to the strike point before the house strike.
+  if (motion?.strike && !(motion.suppressWhileMenu === true && menuBlocksMotion(ctx))) await settled(ctx, motion.strike(event, motionCtx(ctx), pose), MOTION_GUARD_MS);
 
   if (pose === 'attack') {
     cue(ctx, 'attack', { volume: 0.8 });
@@ -81,15 +84,18 @@ export async function actionStart(
   } else if (pose === 'item') {
     cue(ctx, 'item', { volume: 0.7 }); // D-302: the item-use sound (voiced chapters only)
   }
+  // opt-motion prototype (`?motion=M3`): the spell or shot leaves the caster.
+  launchProjectile(ctx, event, pose);
   await ctx.sleep(pose === 'attack' ? TIMING.windUp : TIMING.actionStart);
 }
 
-export async function actionEnd(ctx: EventCtx): Promise<void> {
+export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<void> {
   endOdKey(ctx, ctx.actingId);
   releaseContact(ctx); // VP-1001-06: a strike still held at its apex goes home
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
   const motion = ctx.deps.actionMotion; // FF7: the run back home
-  if (motion && ctx.actingId) await settled(ctx, motion.close(ctx.actingId, motionCtx(ctx)), MOTION_GUARD_MS);
+  const going = endedId ?? ctx.actingId; // opt-motion: the figure whose action ended (an ATB can have a second one open)
+  if (motion && going) await settled(ctx, motion.close(going, motionCtx(ctx)), MOTION_GUARD_MS);
   actor?.setPose('idle');
   ctx.actingId = null;
   endSpellAction(ctx);
@@ -101,7 +107,7 @@ export async function actionEnd(ctx: EventCtx): Promise<void> {
 
 /** The slice of the playback a game's motion may use. */
 function motionCtx(ctx: EventCtx): MotionCtx {
-  return { stage: ctx.stage, speed: ctx.speed(), sleep: (ms) => ctx.sleep(ms) };
+  return { stage: ctx.stage, speed: ctx.speed(), sleep: (ms) => ctx.sleep(ms), reducedMotion: ctx.moments?.reducedMotion === true };
 }
 
 export async function damage(

@@ -15,11 +15,19 @@ import type { PresenterDeps } from '../../engine/BattlePresenterPorts.ts';
 import { abilityFactsFor } from './battleAbilityFacts.ts';
 import { sfxVoiceFor } from './battleSfxVoice.ts';
 import { Ff7ActionMotion } from './BattleScreenFf7Motion.ts';
+import { TravelMotion } from './BattleScreenTravelMotion.ts'; // opt-motion prototype (`?motion=`), never on main
+import { installMotionDebug, motionRequested } from '../../engine/motion/MotionMode.ts';
 
 export function presenterGameDeps(game: GameId, build: unknown, state?: () => BattleState | null): Pick<PresenterDeps, 'abilityFacts' | 'actionMotion' | 'sfxVoice'> {
   const abilityFacts = abilityFactsFor(game);
   const sfxVoice = sfxVoiceFor(game, state); // D-302: FFX and FFX-2 each their own voice for the recorded set; FF7 none
   const ff7 = build as Partial<Ff7PartyBuild> | null | undefined;
-  if (game !== 'ff7' || ff7?.game !== 'ff7' || !Array.isArray(ff7.members)) return { abilityFacts, sfxVoice };
+  if (game !== 'ff7' || ff7?.game !== 'ff7' || !Array.isArray(ff7.members)) {
+    if ((game === 'ffx' || game === 'ffx2') && motionRequested()) {
+      installMotionDebug();
+      return { abilityFacts, sfxVoice, actionMotion: new TravelMotion(game, state) }; // opt-motion: only when the page asked for `?motion=`; inert while the option is off
+    }
+    return { abilityFacts, sfxVoice };
+  }
   return { abilityFacts, sfxVoice, actionMotion: Ff7ActionMotion.forBuild(ff7 as Ff7PartyBuild, state) }; // FF7: who stands at the win (D1)
 }

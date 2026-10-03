@@ -68,6 +68,8 @@ export interface ActorHandle {
   setStone?(amount: number): void;
   centerPoint(): Point3;
   headPoint(): Point3;
+  /** opt-motion prototype (`PuppetWarp`): a short smear along a screen direction (x right, y up). Optional. */
+  smear?(dirX: number, dirY: number, ms: number, peak?: number): void;
 }
 
 /**
@@ -225,6 +227,12 @@ export interface VfxPort {
    * for a wall-clock estimate that a slow frame outruns (repair item 6). Optional.
    */
   pendingLand?(at: CombatantId, action: number): number;
+  /**
+   * opt-motion prototype (`?motion=M3`, never on main): launch a visible projectile from `from` to `to`, drawn in
+   * the scene. `kind` is the look: `orb` (a spell), `tracer` (a shot), `beam` (a long dark line). Returns the
+   * flight time in ms (0 = nothing drawn) and a promise that settles when it has landed.
+   */
+  travel?(from: CombatantId, to: CombatantId, o: { abilityId?: string; element?: string; kind: 'orb' | 'tracer' | 'beam'; ms?: number }): { ms: number; landed: Promise<void> };
 }
 
 /** Rising damage/heal numerals. Supplied by `ui/common`, or the DOM fallback. */
@@ -352,6 +360,8 @@ export interface BattleStage {
    * enemy's physical ability on `cast`, as before.
    */
   paints?(id: CombatantId, pose: string): boolean;
+  /** opt-motion prototype (`?motion=M1`): slide the whole camera sideways/up/forward by this much over `ms`, and back with (0,0,0). */
+  truck?(dx: number, dy: number, dz: number, ms: number): Promise<void>;
 }
 
 /** The presenter's clock, handed to a staged arrival so it obeys speed and pause. */

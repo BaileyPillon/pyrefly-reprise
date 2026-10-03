@@ -21,6 +21,8 @@ export interface MotionCtx {
   readonly stage: BattleStage;
   readonly speed: PlaybackSpeed;
   sleep(ms: number): Promise<void>;
+  /** REDUCE MOTION is on (opt-motion prototype: a travel option plays nothing then). */
+  readonly reducedMotion?: boolean;
 }
 
 /** A game's motion around each action. Both calls may resolve at once (nothing to do). */
@@ -29,6 +31,13 @@ export interface ActionMotionPort {
   open(event: ActionStartEvent, ctx: MotionCtx): Promise<void> | void;
   /** At `action-end`, before the frame returns to neutral: e.g. run back home. */
   close(actorId: CombatantId, ctx: MotionCtx): Promise<void> | void;
+  /**
+   * opt-motion prototype (`?motion=M1`, never on main): after the action's shot has opened and before the house
+   * strike, e.g. travel to the target. `pose` is the pose the action drew.
+   */
+  strike?(event: ActionStartEvent, ctx: MotionCtx, pose: string): Promise<void> | void;
+  /** opt-motion prototype: keep this port's `strike` and `close` off while an FFX-2 command menu is open. */
+  readonly suppressWhileMenu?: boolean;
   /** True when this action's wind-up is the game's own (painted key poses): the house lunge and squash stay out. */
   ownsWindUp?(event: ActionStartEvent): boolean;
   /** The game's own victory moment in place of the house `victory` pose (FF7's D1 win poses and hold). */

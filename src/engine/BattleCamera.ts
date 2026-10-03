@@ -238,6 +238,18 @@ export class BattleCamera {
     return c;
   }
 
+  /** opt-motion prototype (`?motion=M1`): a truck, the whole camera slid by this much on top of the rig, tweened. */
+  private readonly truckV = new Vector3();
+  truck(dx = 0, dy = 0, dz = 0, ms = 400): Promise<void> {
+    const from = this.truckV.clone();
+    const to = new Vector3(dx, dy, dz);
+    if (ms <= 1) {
+      this.truckV.copy(to);
+      return Promise.resolve();
+    }
+    return this.fx.toAsync(0, 1, { durationMs: ms, easing: 'quadInOut', onUpdate: (k) => void this.truckV.lerpVectors(from, to, k) });
+  }
+
   /** Nudge the resting target without changing rig (recoil, focus pulls). */
   offsetTarget(dx: number, dy: number, dz: number): void {
     this.targetPos.add(this.scratch.set(dx, dy, dz));
@@ -383,14 +395,14 @@ export class BattleCamera {
     }
 
     this.camera.position.set(
-      this.curPos.x + ox + px,
-      this.curPos.y + oy + py,
-      this.curPos.z + oz + pz,
+      this.curPos.x + ox + px + this.truckV.x,
+      this.curPos.y + oy + py + this.truckV.y,
+      this.curPos.z + oz + pz + this.truckV.z,
     );
     this.camera.lookAt(
-      this.curLook.x + ox * 0.18,
-      this.curLook.y + oy * 0.18,
-      this.curLook.z,
+      this.curLook.x + ox * 0.18 + this.truckV.x,
+      this.curLook.y + oy * 0.18 + this.truckV.y,
+      this.curLook.z + this.truckV.z,
     );
     // Roll last: `lookAt` rebuilds the whole orientation from the up vector, so
     // anything applied before it is thrown away.

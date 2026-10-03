@@ -11,6 +11,7 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import { SPECIAL_HOLD_CAP_MS } from './spellfx/SpellFxSpecials.ts';
+import { awaitProjectile } from './motion/ProjectileHook.ts'; // opt-motion prototype (`?motion=M3`)
 
 /** The action whose effects are playing. */
 export interface ActingAction {
@@ -57,6 +58,8 @@ export function endSpellAction(ctx: EventCtx): void {
  */
 export async function awaitSpellLanding(ctx: EventCtx, event: Extract<BattleEvent, { type: 'damage' }>, heal: boolean): Promise<void> {
   const vfx = ctx.stage.vfx;
+  const flying = awaitProjectile(ctx, event.sourceId ?? ctx.acting?.actorId); // opt-motion: the spell arrives before it lands (nothing without `?motion=M3`)
+  if (flying) await flying;
   if (!vfx.land) return;
   const a = event.sourceId === undefined ? ctx.acting : byActor.get(ctx)?.get(event.sourceId);
   const ours = a !== undefined;

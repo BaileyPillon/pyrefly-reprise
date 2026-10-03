@@ -203,7 +203,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return actionStart(ctx, event);
 
     case 'action-end':
-      return actionEnd(ctx);
+      return actionEnd(ctx, event.actorId);
 
     case 'damage':
       return damage(ctx, event);
