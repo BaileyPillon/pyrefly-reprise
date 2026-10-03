@@ -16,7 +16,9 @@
 
 import type { AnyCombatant, AvailableCommand, BattleEngine, Command, CombatantId, FFXBattleEngine } from '../../battle/common/types.ts';
 import { AIRSHIP_ORDER, AIRSHIP_RANGE } from '../../battle/ffx/ai/evrae-rules.ts';
+import type { BattleState } from '../../battle/common/types.ts';
 import { aim, has, hpFraction, row } from './common.ts';
+import { hasteAlly, spareItem, stackingBuff } from './evrae-quiet.ts';
 
 /** §4 [verified: 4 sources]: Tidus and Rikku give Cid his orders, as at Evrae. */
 export const SIN_ORDER_OWNERS: readonly CombatantId[] = ['tidus', 'rikku'];
@@ -26,14 +28,24 @@ export const SIN_ORDER_OWNERS: readonly CombatantId[] = ['tidus', 'rikku'];
  * HP (§3.1, 75 % of current, cannot kill), and Smack or Ram on a party at a quarter is the loss Gestahl warns
  * about ("If you don't heal after a Gravija, this will be Game Over for you", §3.1).
  */
-export const SIN_HEAL_AT = 0.45;
+export const SIN_HEAL_AT = 0.4;
 
 /** AUTHORED: heal the party when two living actives are under this (Gravija and Thrashing hit everyone). */
-export const SIN_HEAL_PARTY_AT = 0.6;
+export const SIN_HEAL_PARTY_AT = 0.5;
 
-/** The party heals the preset carries, best first (Yuna's White Magic, then the bag; §7.3 item 5). */
-const PARTY_HEALS = ['Curaga', 'Pray', 'Al Bhed Potion'] as const;
+/**
+ * The party heals, best first: Yuna's White Magic only (§7.3 item 5). The bag's Al Bhed Potion is kept for the
+ * weakest member's last resort ({@link BAG_PARTY_HEAL}), not spent on a party that can still swing.
+ *
+ * **Race priorities (PR-0269, round 19; docs/handoff/r37-sin-advisor.md).** Both Sin chapters are races won by
+ * damage while the party's bag and MP last, so the care ladder is the bench's *sensible* line's
+ * (`tests/unit/helpers/sinFinsPolicies.ts#upkeep`): Curaga when two are under half, a single potion on the weakest
+ * under 40 %. The first version healed at 60 % and 45 % and spent Al Bhed Potions on a worn party: the card chain
+ * emptied the ten X-Potions and the MP in link 1 and walked into link 2 spent.
+ */
+const PARTY_HEALS = ['Curaga', 'Pray'] as const;
 const SINGLE_HEALS = ['Cura', 'X-Potion', 'Hi-Potion'] as const;
+const BAG_PARTY_HEAL = ['Al Bhed Potion'] as const;
 
 /** Cures by status, best first (§7.3 item 5: Softs for Petrify, Holy Water for Zombie, Esuna or Remedy for the rest). */
 const CURES: ReadonlyArray<readonly [status: string, labels: readonly string[]]> = [
@@ -93,7 +105,7 @@ export function sinCare(commands: AvailableCommand[], living: AnyCombatant[]): C
     if (r) return aim(r, weakest?.id);
   }
   if (weakest && hpFraction(weakest) < SIN_HEAL_AT) {
-    const r = row(commands, [...PARTY_HEALS, ...SINGLE_HEALS], weakest.id);
+    const r = row(commands, [...SINGLE_HEALS, ...BAG_PARTY_HEAL], weakest.id);
     if (r) return aim(r, weakest.id);
   }
   return null;
@@ -140,4 +152,25 @@ export function cidActsFirst(engine: BattleEngine, finId: CombatantId, pull: Com
   const fin = next.findIndex((t) => t.actorId === finId);
   if (cid < 0) return false;
   return fin < 0 || cid < fin;
+}
+
+/** How many times an action matching `pred` has started in this battle (the engine log is per link). */
+export function logCount(state: Readonly<BattleState>, pred: (e: { actorId: CombatantId; command: Command; abilityId?: string }) => boolean): number {
+  let n = 0;
+  for (const e of state.log) if (e.type === 'action-start' && pred(e)) n++;
+  return n;
+}
+
+/**
+ * A turn that has to be spent and has nothing to hit: the quiet ladder of `./evrae-quiet.ts` without its
+ * bag heals (`healFromBag` drinks a Hi-Potion for any scratch and an Al Bhed Potion for two members under
+ * 80 %, which is what emptied the bag on the Fins). A Cheer stack, a Haste, a spare Potion, then the engine's Defend.
+ */
+export function sinHarmless(commands: AvailableCommand[], living: AnyCombatant[]): Command | null {
+  if (living.length > 0) {
+    const buff = stackingBuff(commands, living) ?? hasteAlly(commands, living) ?? spareItem(commands, living);
+    if (buff) return buff;
+  }
+  const defend = commands.find((c) => c.enabled && c.command.kind === 'defend');
+  return defend ? defend.command : null;
 }
