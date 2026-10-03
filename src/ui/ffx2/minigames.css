@@ -8,6 +8,22 @@
  * state modifiers (hot pace, DUD warning colour).
  */
 
+/* FOC37-02 (FFX-2 only): Trigger Happy is pressed, so the slab has to be reachable.
+   - `.ffx2hud__minigame`, the layer it sits in, is `pointer-events: none` (the HUD's rule for everything drawn
+     there); the slab takes them back so a finger or a click on it is a press (TriggerHappy.ts `pointerdown`).
+   - Above the enemy-intent slab (2), the guide card (3), the advisor card (4) and the phone's guide chip (12),
+     all in the same stacking context (`#ui`): on a 390x844 phone the intent slab sat exactly on it, so it could
+     be neither read nor tapped. Below the phone's pause chip (40). The Lady Luck reels' slab is left as it was.
+   - `touch-action: manipulation` and no selection: a mash of taps must not zoom the page or select its words. */
+.ffx2-trigger {
+  pointer-events: auto;
+  z-index: 15;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
 .ffx2-trigger__bar {
   position: relative;
 }
