@@ -154,3 +154,27 @@ Blocker: unsourced Swordplay zone and speed. Fix: every `SWORDPLAY_TUNING` row i
 (today's play), `swordplayGeometry` wiring and the Bushido work kept; the engine's base `tidus-timing` params and the
 research note say the same. Game case: FFX only. critic-plan class unchanged (DEEP, not save-data). Proof: see
 `docs/screenshots/r38-bushido/repair-*.json`.
+
+## Re-check after the repair (independent critic, 2026-10-03, branch tip a1f97127; the builder's report was not used as evidence)
+
+**Game case: FFX only**, unchanged (the repair is one FFX data file plus tests and docs). **Verdict: the blocker is cleared; no blocker remains.**
+
+- `npx tsc --noEmit`: clean (exit 0). `node tools/orphans.mjs`: 24 (unchanged). Files: `overdrive.ts` 472 (same as at 3fb1de85, did not grow), `logic.ts` 194, `rawInput.ts` 227, `inputs.ts` 92, `AuronSequence.ts` 100, `TidusTiming.ts` 82. Layering: `overdrive.ts` and `inputs.ts` import no DOM or three.
+- Targeted (5 lane files): 91 tests pass. Full suite with `--maxWorkers=3 --testTimeout=90000`: 769 files passed, 5 skipped; 11,306 tests passed, 41 skipped, 1 todo; 0 failures.
+- Merge with `origin/main` b7a2c9f2: `git merge-tree` clean (no conflicts). The branch does not touch `docs/target/*.json`, `docs/handoff/NOW.md`, `dist/` or `public/art`.
+- Numbers against sources: Bushido lengths 8/7/7/6 (D2, 4 sources) and the order tables are unchanged from the first check. Swordplay: no source in `research/` publishes a zone width or marker speed (`ffx-combat-core.md` §5.3 table is `[estimate]`), so keeping today's pair on every tier is the sourced-or-unchanged answer to the brief. `SWORDPLAY_TUNING` is `{ travelMs: 1059, zonePercent: 12.22 }` on all four rows; the ordering test is non-strict, and a test pins that no unsourced value ships.
+- **Real keys, headless GPU Chromium, 1600x900, Yunalesca chapter, seed 1, Vite on port 6312 (stopped by PID afterwards).** Setup hook only: gauge 100 and every Overdrive unlocked; all menu steps and minigame inputs are real key presses (chips typed through `keysForChips`).
+  - Dragon Fang: 8 chips (down left up right L1 R1 circle cross), keys typed ArrowDown ArrowLeft ArrowUp ArrowRight f r x Enter, engine `correctInputs: 8`, success.
+  - Shooting Star: 7 chips including the square, keys q x k x ArrowLeft ArrowRight Enter, engine 7 of 7, success.
+  - Spiral Cut and Blitz Ace: zone starts 43.89 %, width 12.22 % on both, marker about 95 %/s on both; one Enter each, engine timing success (timers 3000 and 2200 ms).
+  - **Live release 36, same script:** Spiral Cut and Blitz Ace both show zone start 43.89 %, width 12.22 %, marker 96 to 98 %/s. So Swordplay on this branch plays the same as live (the 340 vs 339.9 px/s difference from `360 / 1.059` is 0.03 %, not perceivable). No console errors on either run.
+  - Records and frames: `D:/Tools/pyrefly-scratch/2026-10-03/r38-bushido-recheck/` (`re1-run.json`, `live-run.json`, `re1-*.png`, `live-*.png`).
+- Commit `a1f97127` carries the game case (FFX only), the critic-plan class (DEEP, not save-data) and the proof.
+
+### Disclose (carried from the first check, not blockers)
+- The GameFAQs order is reconstructed from research/ (D3 plus the NA/JP table); the GF-KB page was not read here (Cloudflare check). Labelled "our estimate" in the data, research note and handoff. Shooting Star's order matches no other source.
+- Square (K or pad button 2) has no on-screen hint beyond the chip.
+- `rollDefaultMinigame` (AI and auto-battle) draws `int(0, len - 1)` instead of `int(0, 6)`: a seeded auto-played Dragon Fang can differ from before; the suite passes.
+- The branch is based on main 3fb1de85, not the current tip b7a2c9f2 (the later commits are docs, critic records and the artifact manifest); the merge is clean.
+- The worktree carries three tracked edits that are not this lane's (`src/engine/tactics/evrae-quiet.ts`, `sin-common.ts`, `sin-fins-core.ts`; git reports only line-ending changes); not touched or staged.
+- Swordplay zone and speed per tier remain owed: Bailey's yes to the §5.3 estimates, or sourced numbers, makes it a four-row edit.
