@@ -129,3 +129,35 @@ seed, the worker-path results).
 2. **Whether to add Eye Drops or Esuna to the Sin preset** (research §7.3 item 5 says the chapter's players carry them for Sigh's
    Darkness): it would be a data change to the party's bag, so it needs your yes (AGENTS.md rules 6 and 10). Not built.
 3. The commit trailers say `Claude Sonnet 5.5`, the model that actually made them (the brief asked for Opus 5.5).
+
+## Check (independent critic, 2026-10-03; tip checked 144c546e; FFX only for the advisor, both for the harness)
+
+Everything below was run by the checker in `D:/pyrefly-r29-harness`, not read from the builder's report. Scratch and evidence:
+`D:/Tools/pyrefly-scratch/2026-10-03/r37-check/`. Port 6050 (dev server stopped by PID after the last run).
+
+**Verdict: no blocker.**
+
+| Item | Verdict | What was run |
+|---|---|---|
+| PR-0269 card chain, seeds 1-200 | PASS, reproduced exactly | A fresh chain driver (the bench's `runChain` and card line, same as `sin-fins-core-bench.test.ts#makeCard`) over seeds 1-200: **97/200 (48.5 %)**, links entered 200 -> 200 -> 188, and the per-seed outcomes match `xvii-card-after-seeds-1-200.jsonl` on all 200 seeds (0 differences) |
+| PR-0269 held-out seeds 201-400 | PASS, reproduced | **88/200 (44 %)**, as claimed |
+| Before, on origin/main's three tactic files (c69de96a), same driver, seeds 1-100 | PASS (the gain is real, not a driver change) | **4/100**, against the same driver on the branch's files (97/200 over 1-200); the three files were swapped in and restored from `HEAD` (only a CRLF warning remains in `git status`, no content diff: `git diff -w --ignore-cr-at-eol -- src` is empty) |
+| No boss or data number changed | PASS | `git diff c69de96a..HEAD -- src/data src/battle` is empty (0 lines); `src` changes are three files: `evrae-quiet.ts` (three `export` keywords), `sin-common.ts`, `sin-fins-core.ts` |
+| XVIII (sin-face) code unchanged | PASS | `sin-face.ts` imports only `foe` and `rangeOf` from `sin-common.ts`, neither edited; `SIN_HEAL_AT` and `SIN_HEAL_PARTY_AT` (the changed constants) have no importer outside `sin-common.ts`; Evrae's tactic imports only `benchReach` and `harmlessTurn` from `evrae-quiet.ts`, unchanged |
+| One real-key XVIII win | PASS | `route.mjs sin-face win --seed=1 --size=1600x900` (headless Chromium, `PYREFLY_BROWSER=gpu`): **victory**, 64 turns, 5.39 min, results, post scene, board, reload, 0 console errors, 0 fails. Bushido typed twice (Dragon Fang, Shooting Star): the engine received `success: true`, `correctInputs: 7` both times |
+| PR-0261 types Bushido and Swordplay | PASS | Real-key `sin-fins-core win` (XVII): **victory**, 280 turns, 20.9 min, 2 seams, 11 orders, 0 console errors, 0 fails. Bushido x2 (7 of 7, success), Swordplay x2 (Spiral Cut, Slice & Dice): the engine received `success: true` on both |
+| PR-0261 stalled routes recorded as stalled | PASS | `sin-face win --budget=20000`: outcome `stalled`, `stalledAt {link 1, play:action-start}`, exactly one `fails` entry (no duplicate), "the battle screen was still up when the route stopped playing" |
+| PR-0261 post-results scene watched, then tapped | PASS | XVIII: 6.1 s watch, `advancedWithoutInput: false`, 7 taps, 0 holds; XVII: 6.1 s, false, 6 taps, 0 holds |
+| Regression in the shared harness on the other game | PASS | `route.mjs ffx2-bahamut win`: **victory**, 47 turns, 6.9 min, 0 errors, 0 fails (the FFX-2 path never opens the Bushido or Swordplay reader) |
+| `npx tsc --noEmit` | PASS | clean |
+| Targeted vitest | PASS | 11 files, 207 passed, 3 skipped: `sin-tactic` (20 + 1 skipped), `critic-route-harness`, `tactics-lookup` (60), `sin-fins-core-bench`, `sin-bench`, `sin-engine`, `sin-core-engine`, `sin-fins-engine`, `sin-data`, `sin-carry`, `advisor-race`; plus the 17 files matching `evrae` or `tactics` (222 tests) |
+| `node tools/orphans.mjs` | PASS | 24 orphaned, the builder's and main's number (docs-only and unchanged paths) |
+| Layering, file size | PASS | every changed source file under 400 lines (largest 311, `route.mjs`; `sin-fins-core.ts` 238); no DOM, `three`, `Math.random` or `Date.now` in the tactics |
+| Game case in every commit | PASS | all four commits name it (PR-0261 both, overlays FFX only; PR-0269 FFX only; handoffs "docs only") |
+
+### Disclosures (none is a blocker; none is a regression against origin/main or live)
+
+1. **Swordplay hits are marginal on a loaded machine.** In the checker's XVII run the first Swordplay (Spiral Cut) took three Enters, all logged just outside the gold zone by the page's own marker read (0.8, 0.2 and 0.1 percentage points off the zone's edge), and the engine still recorded `success: true` (552 ms left of 3000); the second (Slice & Dice) hit on the first press inside the zone. So "the marker was inside the gold zone at the Enters" holds for one of the two plays, not both; the harness's `pressLog.inZone` can read a hair off the engine's own verdict, so treat `inZone` as an estimate and `engine.extra` as the truth. It still types the overlay and wins.
+2. The single `minigameConfirm` note (3.3 s) in the XVII run was Lulu's Fire Fury (turn 180 of the turn log), an overlay the harness deliberately leaves on the old Enter-after-3-s path, not a stray press on a Bushido or Swordplay overlay.
+3. Not re-measured by the checker: the XVIII 200-seed link-4 bench (its code is unchanged, see above), the worker-path (v3/v4) reads, and the full 750-file suite (the integrator runs it). The builder's own numbers for those stand unverified here.
+4. The builder's open items stand: the chapter still does not clear the 90 % bar as one chain (Genais's Sigh at link 3 is the largest remaining loss); Eye Drops or Esuna in the Sin preset is a data change that needs Bailey's yes; the per-seed numbers are bench readings (the real game plays through the worker path, 39/100 on v3 per the builder).
