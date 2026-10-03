@@ -1,0 +1,49 @@
+{
+  "mode": "wait",
+  "scenario": "timeout",
+  "steps": [
+    "save blob present: none",
+    "ffx2Atb in save: wait",
+    "first menu:  [{\"t\":\"Attack◂\",\"sel\":true},{\"t\":\"Skill◂\",\"sel\":false},{\"t\":\"Change◂\",\"sel\":false},{\"t\":\"Item◂\",\"sel\":false}]",
+    "Attack Reels confirmed on the default target: true after 2 tries",
+    "overlay opened: true; other menus seen open before it: 0 (answered 0)",
+    "overlay gone after 20012 ms with no key pressed",
+    "menu returned after the spin: true ()"
+  ],
+  "timeline": [
+    {
+      "ms": 1,
+      "state": "menu:-"
+    },
+    {
+      "ms": 1773,
+      "state": "OVERLAY"
+    }
+  ],
+  "atbSetting": "wait",
+  "reelsStarted": true,
+  "overlayOpened": true,
+  "otherMenuTitlesSeen": [
+    "menu:-"
+  ],
+  "menuVisibleUnderOverlay": false,
+  "overlayGoneAfterAnswer": true,
+  "reelRequests": 1,
+  "messages": [
+    "Power Break"
+  ],
+  "logTail": [
+    "{\"type\":\"miss\",\"targetId\":\"yuna\",\"sourceId\":\"vegnagun-tail\",\"reason\":\"evaded\",\"seq\":12}",
+    "{\"type\":\"damage\",\"targetId\":\"rikku\",\"sourceId\":\"vegnagun-tail\",\"amount\":1245,\"element\":\"none\",\"affinity\":\"normal\",\"crit\":false,\"hitIndex\":1,\"hitCount\":3,\"seq\":1",
+    "{\"type\":\"damage\",\"targetId\":\"paine\",\"sourceId\":\"vegnagun-tail\",\"amount\":1210,\"element\":\"none\",\"affinity\":\"normal\",\"crit\":false,\"hitIndex\":2,\"hitCount\":3,\"seq\":1",
+    "{\"type\":\"damage\",\"targetId\":\"vegnagun-tail\",\"sourceId\":\"yuna\",\"amount\":324,\"element\":\"none\",\"affinity\":\"normal\",\"crit\":false,\"hitIndex\":0,\"hitCount\":1,\"seq\":24}",
+    "{\"type\":\"miss\",\"targetId\":\"yuna\",\"sourceId\":\"vegnagun-tail\",\"reason\":\"evaded\",\"seq\":31}"
+  ],
+  "menuReturned": true,
+  "menuTitleAfter": "",
+  "logGrowth": [
+    34,
+    42
+  ],
+  "consoleIssues": []
+}

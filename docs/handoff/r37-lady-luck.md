@@ -113,3 +113,70 @@ before, so nobody had seen it in a real fight. Candidate for the visual pass, no
   reel overlay already says `DUD: -75% PARTY HP`. A human timing three Cherries gets Flare. If you want the unattended
   default to be kinder than uniform over six symbols, that is a new design rule (not in §3.12), so I did not build it.
 - Whether to do Reflect next (see Left 1).
+
+## Check (independent critic, 2026-10-03, on `f9736826`; the checker did not build this)
+
+**Game case: FFX-2 only** (a docs-only commit). Everything below was run by the checker, none of it read off the report above.
+Scratch (parked, untracked): `F:/pyrefly-parked/2026-10-03/r37-check/` (the oracle and Trigger Happy tests, the measure harness
+copy); raw output and the browser scripts in `D:/Tools/pyrefly-scratch/2026-10-03/r37check/`. Frames and page logs:
+`docs/screenshots/r37-lady-luck-check/`.
+
+**Verdict: no blocker. The focused pass can SHIP this; the majors below are disclosures.**
+
+| Item | Verdict | How it was checked |
+|---|---|---|
+| Every reel number against `research/ffx2-combat-core.md` 3.12 | PASS | An oracle typed by the checker from the §3.12 table (not copied from `src/data/ffx2/reels.ts`), then **all 216 stops on each of the two sets (432 spins) through the real engine** (`FFX2Engine`, `minigames: true`, the answer re-submitted as the presenter does): the `message` the engine emits is the table's ability (or `Dud!`) every time, **0 mismatches**, and no second payload is ever named. Covers three of a kind, pairs in slots 1+2 only (Red 7 and BAR pairs are Duds), a lone slot-1 Cherry, and a Cherry in slot 2 or 3 being a Dud. |
+| The Dud | PASS | 40 seeds, Attack Reels, a losing line: the whole party hit exactly once each (the spinner included), the boss never, **0 KOs**; damage over HP at the request: min 0.703, **median 0.750**, max 0.794 (120 hits). The spread is step 7's randomiser, as for every `percent-current` ability in the engine; §3.12 says "75% of current HP" and is silent on it (disclosure 4). |
+| Human path, Wait ATB (real keyboard, headless GPU Chromium, scratch vite on :6060) | PASS | Skill, Attack Reels, target, Enter at the overlay three times: one `minigame-request`, the overlay opened after the charge, the stops read from the page (`cherry, sword, bar`) paid **Armor Break** (the lone-Cherry tier, correct), the overlay closed, a menu came back, the battle went on, no console error or warning. With no key for 20 s the overlay times out, the spin still resolves (Power Break) and the battle goes on. |
+| Human path, **Active ATB** (save blob set to `ffx2Atb: active`, real keyboard) | PASS | Rikku's command menu was open while Yuna's reels charged; the overlay opened over it with **no command menu on screen under it**; three stops (`cherry, red7, sword`) paid Armor Break; the overlay closed; a command menu was re-offered; the log kept growing. Frames `active-01` to `active-03`. This is the `interrupted` pump path in a real page, not only the unit test (which triples the charge to force it). |
+| `AbilityCommand.extra` contract entry | PASS | `docs/CONTRACT-CHANGES.md` has it, newest first, additive, with five points (extra on `'ability'`, the `ReelResult` doc, the answer goes to the asker, the two new event behaviours, the `AbilityDef.extra` keys); `src/battle/common/types.ts` is listed in `docs/CONTRACTS.md`; the diff to it is one optional field plus doc text. |
+| Determinism under the seeded RNG | PASS | Five seeds, unattended Magic Reels, two engines each: byte-identical event logs. `fork()` taken at the `minigame-request` and both copies answered with the same three Staffs: identical logs, and both say `Auto-Life` (so `awaitingBy` survives the clone). The unattended roll still draws exactly three values. |
+| No FFX change | PASS | `git diff c69de96a..HEAD` touches nothing under `src/battle/ffx`, `src/data/ffx`, `src/ui` or `src/app`. The shared edits are `types.ts` (one optional field), `BattlePresenter.ts` and `BattlePresenterActive.ts` (a new optional dep; the parked request is only ever set by an FFX-2 `tick()`). The 406 test files that mention the presenter, minigames, reels or FFX-2 pass (below), FFX and FF7 presenter suites included. |
+| The 200-seed Chapter V measurement | PASS (reproduced exactly) | The builder's harness, run by the checker on a clean `git archive` of `c69de96a` (before) and on this branch (after), 200 seeds: Chapter V shipped line **188/200 and 188/200**, same losses (11 at link 2, 1 at link 3); Via Infinito shipped line **0/200 and 0/200**; a player who spams Attack Reels **0/200 before and after**, but 200/200 dead in link 1 after (888 spins) against 143 reaching link 2 or later before (6,546 spins). Moved on the shipped lines: 0.0 points. |
+| Regressions against `origin/main` in the chapters touched | PASS | **406 test files** (every one that mentions `BattlePresenter`, minigame, reels or ffx2), `--maxWorkers=4`: **402 passed, 4 skipped, 0 failed; 7,190 tests passed.** Not the full suite (the integrator runs it). |
+| `npx tsc --noEmit` | PASS | Exit 0. |
+| Targeted vitest | PASS | `ffx2-lady-luck-reels` (7), `-human` (2), `-active` (1), `ffx2-ability-flags` (3): 13 of 13. |
+| `node tools/orphans.mjs` | PASS | 24 orphaned, none new (24 on `c69de96a`). |
+| Layering | PASS | `src/battle/ffx2/reels.ts` and `minigames.ts` import only types and each other; `src/data/ffx2/reels.ts` imports battle types only; no DOM and no `three` under `src/battle/**`. |
+| Files under 400 lines | PASS with a disclosure | New files 161 and 119; `engine.ts` 371, `execute.ts` 300, `lady-luck.ts` 250, `samurai.ts` 286. **`BattlePresenter.ts` is 747 (was 698) and `types.ts` 2,693 (was 2,680)**: both were over before, and the branch grew them by 49 and 13 lines (the builder's Left 3). |
+| The game case in every commit | PASS | Both commits (`e670b43f`, `f9736826`) say FFX-2 only in the subject and the body. |
+
+### Blockers
+
+None.
+
+### Disclosures (none is a regression against live release 35 in the shipped play; none blocks)
+
+1. **MAJOR (visual, new surface): the reel overlay is partly hidden behind the battle guide.** At 1600x900 the overlay sits
+   top-left and the guide card (`G HIDE GUIDE`) is drawn **on top of it**: the first reel (`red7` in frame `active-02`) is
+   dimmed behind the guide and `DUD: -75% PARTY HP` is half covered. Slot 1 decides the Cherry tier, so the reel a player
+   most needs to read is the one under the card. The builder saw it (frame 02, "not mine") and left it. It is the overlay's
+   own z-order and a human could not reach it before, so it is not a regression; it is the first thing a player doing Lady
+   Luck will notice. Candidate for the visual pass: raise the overlay above the guide, or hide the guide while a minigame is
+   open.
+2. **MAJOR (scope, balance, FFX-2 only): a human's Trigger Happy count is now honoured.** The branch ends the same discard
+   for every FFX-2 timed input, not only the reels. Measured on `c69de96a` and on this branch with a Gunner Yuna: before,
+   the answers `hits: 3` and `hits: 12` both resolved as **14** hits (the engine's own roll); now they resolve as 3 and 12.
+   A Gunner player in Chapters 4 and 5 who mashes fewer than about 14 times in the 1.8 s window now does less than on the
+   live build; the shipped autopilot strategies are unaffected (`minigames: false`, or the presenter's bare re-submit). It is
+   the faithful rule (§3.1, one hit per press), is documented in CONTRACT-CHANGES point 1, and was not run in a browser by
+   anyone. Worth telling Bailey, since the item was named for the reels.
+3. **Escape does nothing at the reel overlay** (the overlay stays until the 20 s timer or the three presses).
+   `LadyLuckReels.ts` has never handled it and the branch did not change it; FFX-2's engine has no `backOutOfMinigame`, so the
+   run is committed once the charge bar has emptied. Not new, not a regression.
+4. The Dud lands between 70 % and 79 % of current HP, not a flat 75 % (the randomiser, as for every `percent-current`
+   ability); the builder's test allows exactly that range.
+5. Estimates the builder labelled and the checker did not try to source: the Long CT tier for the reels, the Shin-Zantetsu /
+   Magicide / Clean Slate CT tiers, Auto-Life's targeting, the re-aiming rule for a payload meant for the other side.
+6. The advisor previews a reel row as the wrapper it is (it deals nothing), because the spin picks the ability. No advisor
+   change was needed to ship, and none was made.
+7. An autopilot or the presenter's `auto` flag spins blind (uniform over six symbols, about 9 in 10 a Dud). No shipped
+   strategy opens a reel; this is the builder's Left 4, confirmed.
+8. Housekeeping: the builder's commits end `Co-Authored-By: Claude Sonnet 5.5`, not the Opus line some briefs name; harmless.
+
+### For Bailey
+
+- Lady Luck's pay table matches `research/ffx2-combat-core.md` §3.12 for all 432 stops, in a real fight with the keyboard,
+  under Wait and under Active; the shipped Chapter V line does not move (188/200 before and after).
+- Two things to look at before this ships widely: the **overlay under the guide card** (disclosure 1, a z-order fix for
+  the visual pass) and the **Trigger Happy side effect** (disclosure 2, faithful but a quiet change for Gunner players).
