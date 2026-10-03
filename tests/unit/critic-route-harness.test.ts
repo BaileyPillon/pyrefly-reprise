@@ -6,11 +6,12 @@
  * rules; these are their cases. Game case: shared critic tooling (both); the letter rule
  * is FFX only, from `src/battle/ffx/letterTags.ts`, which the first case runs alongside.
  */
+import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import { letterTagsOf } from '../../src/battle/ffx/letterTags.ts';
 import type { BattleState } from '../../src/battle/common/types.ts';
-import { dboxStep, isAllDisabledOverlay, letterTagMap, resolveTargetId, slugOf, type DboxMem, type DboxSample } from '../../critic/runner/lib/route-pure.mjs';
+import { BUSHIDO_KEYS, dboxStep, deriveOutcome, isAllDisabledOverlay, keysForChips, letterTagMap, minigameKindOf, resolveTargetId, slugOf, swordplayPressNow, type DboxMem, type DboxSample } from '../../critic/runner/lib/route-pure.mjs';
 
 const stateOf = (defs: [string, string][]): BattleState =>
   ({ enemyIds: defs.map(([id]) => id), combatants: Object.fromEntries(defs.map(([id, name]) => [id, { id, name }])) }) as unknown as BattleState;
@@ -94,5 +95,93 @@ describe('the dialogue recorder makes one entry per show (issue 4)', () => {
 
   it('a hidden box records nothing', () => {
     expect(run([null, null]).lines).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// PR-0261 (round 19, widened): the route types the Overdrive overlay it is shown and reads the end of a route from
+// the screen and the engine result, never from link 1's victory event. Game case: the overlays are FFX only
+// (Bushido is Auron's, Swordplay Tidus's); the outcome reader is shared by both games.
+// ---------------------------------------------------------------------------
+
+describe('which overlay is up (PR-0261)', () => {
+  it('names Bushido and Swordplay from the subtitle and leaves every other overlay to the old handling', () => {
+    expect(minigameKindOf('BUSHIDO · ENTER THE SEQUENCE')).toBe('bushido');
+    expect(minigameKindOf('SWORDPLAY · CONFIRM IN THE GOLD ZONE')).toBe('swordplay');
+    for (const other of ['BLITZ · STOP THE REELS', 'GRAND SUMMON', '', null, undefined]) expect(minigameKindOf(other as string)).toBeNull();
+  });
+});
+
+describe('Bushido: the chips shown are typed in order (PR-0261)', () => {
+  it('maps the nine glyphs the overlay draws to keys, and the circle is X, never Escape (Escape opens the pause)', () => {
+    const shown = ['↑', '↓', '←', '→', '✕', '○', '△'];
+    const { keys, unknown } = keysForChips(shown);
+    expect(keys).toEqual(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter', 'x', 'q']);
+    expect(unknown).toEqual([]);
+    expect(Object.values(BUSHIDO_KEYS)).not.toContain('Escape');
+    expect(keysForChips(['L1', 'R1']).keys).toEqual(['f', 'r']);
+  });
+
+  it('reports a glyph it has no key for instead of guessing one', () => {
+    expect(keysForChips(['↑', '?'])).toEqual({ keys: ['ArrowUp'], unknown: ['?'] });
+  });
+
+  it('every glyph of the overlay\'s own GLYPH table is in the key table (the two cannot drift apart)', () => {
+    const src = fs.readFileSync('src/ui/ffx/minigames/AuronSequence.ts', 'utf8');
+    const glyphs = [...src.slice(src.indexOf('const GLYPH'), src.indexOf('};', src.indexOf('const GLYPH'))).matchAll(/:\s*'([^']+)'/g)].map((m) => m[1]!);
+    expect(glyphs.length).toBeGreaterThanOrEqual(9);
+    for (const g of glyphs) expect(BUSHIDO_KEYS[g], g).toBeTruthy();
+  });
+});
+
+describe('Swordplay: press when the marker, carried by the key\'s travel time, is in the zone (PR-0261)', () => {
+  // The overlay's default bar: zone 12.2 % wide, centred (start 43.9 %), marker 340 px/s on a 360 px bar = 0.0944 %/ms.
+  const zone = [43.89, 12.22] as const;
+  it('presses with the marker inside the middle of the zone, not at its edge or outside it', () => {
+    expect(swordplayPressNow(50, 49, 10, zone[0], zone[1], 30)).toBe(true);
+    expect(swordplayPressNow(20, 19, 10, zone[0], zone[1], 30)).toBe(false);
+    expect(swordplayPressNow(44.3, 43.3, 10, zone[0], zone[1], 0)).toBe(false); // inside the zone but on its rim (outside the inner 70 %)
+  });
+
+  it('leads the marker: still short of the zone but arriving within the lead presses; past the zone and still going away does not', () => {
+    expect(swordplayPressNow(47.2, 46.2, 10, zone[0], zone[1], 30)).toBe(true); // carried 3 % forward to 50.2
+    expect(swordplayPressNow(60, 59, 10, zone[0], zone[1], 30)).toBe(false); // past the zone, heading out
+  });
+
+  it('never presses on a missing reading', () => {
+    expect(swordplayPressNow(NaN, 1, 10, zone[0], zone[1], 30)).toBe(false);
+    expect(swordplayPressNow(50, 49, 0, zone[0], zone[1], 30)).toBe(false);
+    expect(swordplayPressNow(50, 49, 10, NaN, zone[1], 30)).toBe(false);
+  });
+});
+
+describe('the end of a route is read from what the game shows (PR-0261)', () => {
+  const link1Won = [{ type: 'victory' }];
+  it('a chain stalled in link 2 is "stalled at link 2, moment:battle-start", not link 1\'s victory', () => {
+    const r = deriveOutcome({ screenAtEnd: 'battle', log: link1Won, seen: { links: 2, chainLength: 3, phase: 'moment:battle-start' } });
+    expect(r.outcome).toBe('stalled');
+    expect(r.detail).toBe('stalled at link 2, moment:battle-start');
+    expect(r.stalledAt).toEqual({ link: 2, phase: 'moment:battle-start' });
+  });
+
+  it('the results screen\'s own words win over any event', () => {
+    expect(deriveOutcome({ screenAtEnd: 'results', resultsText: 'CHAPTER III · CLEARED', log: [], seen: {} }).outcome).toBe('victory');
+    expect(deriveOutcome({ screenAtEnd: 'results', resultsText: 'Defeat · RETRY', log: link1Won, seen: { links: 1, chainLength: 3 } }).outcome).toBe('defeat');
+  });
+
+  it('a victory event counts only on the last link, and only once the battle screen was left', () => {
+    expect(deriveOutcome({ screenAtEnd: 'cutscene', log: link1Won, seen: { links: 3, chainLength: 3 } }).outcome).toBe('victory');
+    const early = deriveOutcome({ screenAtEnd: 'cutscene', log: link1Won, seen: { links: 1, chainLength: 3 } });
+    expect(early.outcome).toBe('undecided');
+    expect(deriveOutcome({ screenAtEnd: 'cutscene', log: link1Won, seen: { links: 1, chainLength: 3 }, final: true }).outcome).toBe('stalled');
+  });
+
+  it('a defeat event with the battle left is a defeat; one with the battle still up is a stall', () => {
+    expect(deriveOutcome({ screenAtEnd: 'results', log: [{ type: 'defeat' }], seen: { links: 2, chainLength: 3 } }).outcome).toBe('defeat');
+    expect(deriveOutcome({ screenAtEnd: 'battle', log: [{ type: 'defeat' }], seen: { links: 2, chainLength: 3, phase: 'hud:menu' } }).outcome).toBe('stalled');
+  });
+
+  it('a single-link chapter (no chain length) is its own last link', () => {
+    expect(deriveOutcome({ screenAtEnd: 'cutscene', log: link1Won, seen: { links: 1 } }).outcome).toBe('victory');
   });
 });

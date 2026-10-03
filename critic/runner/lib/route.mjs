@@ -25,6 +25,8 @@ import path from 'node:path';
 import { parseArgs, requireBase, requireEvidence } from './cli.mjs';
 import { makeIndexer } from './lib.mjs';
 import { playFight, closeFight } from './route-fight.mjs';
+import { deriveOutcome } from './route-pure.mjs';
+import { watchThenTap } from './route-scene.mjs';
 import { MODE, makeAudioLog, makeInput, makeSnap, openRoute, readDboxTimeline } from './route-evidence.mjs';
 import { battleSeedRead, makeChooser, measureCardVsRows, measureFoc, readRows, targetsUp } from './route-ui.mjs';
 
@@ -229,16 +231,19 @@ try {
     if ((await scr()) === 'cutscene') {
       await page.waitForTimeout(1200);
       await snap(`${pref}30-post-scene.png`, `post-battle scene after a ${rec.outcome}`, { screen: 'cutscene' });
-      for (let i = 0; i < 3 && (await scr()) === 'cutscene'; i++) { rec.post.lines.push(await txt('#ui', 300)); await input.press('Enter'); await page.waitForTimeout(1600); }
-      for (let i = 0; i < 14 && (await scr()) === 'cutscene'; i++) await input.hold('Enter', 4000);
+      // PR-0261: watch with NO input first (does the scene move by itself?), then tap line by line; the old 4 s hold fast-forwarded it
+      rec.post.scene = await watchThenTap({ page, input, scr });
+      rec.post.lines = rec.post.scene.lines;
+      note('postScene', { watch: rec.post.scene.watch, taps: rec.post.scene.taps, holds: rec.post.scene.holds, ended: rec.post.scene.ended });
     }
     for (let i = 0; i < 40 && !/results/.test((await scr()) ?? ''); i++) await page.waitForTimeout(500);
     rec.resultsScreen = await scr();
     if (/results/.test(rec.resultsScreen ?? '')) {
       await page.waitForTimeout(2500);
       rec.resultsText = await txt('#ui', 2000); await aud('results');
-      if (/Victory|· CLEARED/i.test(rec.resultsText)) rec.outcome = 'victory'; else if (/Defeat|· FELL/i.test(rec.resultsText)) rec.outcome = 'defeat';
-      rec.outcomeFrom = 'results screen text';
+      const read = deriveOutcome({ screenAtEnd: rec.resultsScreen, resultsText: rec.resultsText, seen: rec.lastChain });
+      if (read.outcome === 'victory' || read.outcome === 'defeat') { rec.outcome = read.outcome; rec.outcomeFrom = read.from; }
+      else { rec.fails.push({ resultsTextUnreadable: rec.resultsText.slice(0, 120) }); rec.outcomeFrom = `${rec.outcomeFrom ?? 'fight loop'} (the results text names neither Victory nor Defeat)`; }
       await snap(`${pref}31-results.png`, `results after a ${rec.outcome}`, { screen: rec.resultsScreen });
       if (rec.outcome !== 'victory') {
         await input.press('Enter'); await page.waitForTimeout(3000);
@@ -259,7 +264,11 @@ try {
         await input.press('Enter'); await page.waitForTimeout(2500);
         for (let i = 0; i < 40 && (await scr()) !== 'chapter-select'; i++) {
           const s = await scr(); rec.afterConfirm.push(s);
-          if (s === 'cutscene') { if (!rec.epilogueShot) { rec.epilogueShot = true; await snap('33-after-confirm-scene.png', 'the scene after CONFIRM on the victory results', { screen: 'cutscene' }); } await input.hold('Enter', 4000); continue; }
+          if (s === 'cutscene') {
+            if (!rec.epilogueShot) { rec.epilogueShot = true; await snap('33-after-confirm-scene.png', 'the scene after CONFIRM on the victory results', { screen: 'cutscene' }); }
+            (rec.afterConfirmScenes = rec.afterConfirmScenes ?? []).push(await watchThenTap({ page, input, scr })); // PR-0261: watched, then tapped, not held
+            continue;
+          }
           if (/results/.test(s ?? '')) { const t = await txt('#ui', 600); if (/CHAPTER SELECT/.test(t)) { await input.press('ArrowRight'); await page.waitForTimeout(300); } await input.press('Enter'); await page.waitForTimeout(2000); continue; }
           await input.press('Enter'); await page.waitForTimeout(1500);
         }
@@ -277,7 +286,13 @@ try {
         }
       }
     }
-    rec.attempts.push({ attempt, outcome: rec.outcome, seed: rec.seed, turns: rec.turns, firstEnemyAction: rec.firstEnemyAction, final: true });
+    if (!/results/.test(rec.resultsScreen ?? '')) { // PR-0261: no results screen: say where the route stopped, never keep link 1's victory
+      const last = await page.evaluate(() => { try { return window.__pyrefly.battleLog() ?? []; } catch { return []; } });
+      const end = deriveOutcome({ screenAtEnd: rec.resultsScreen ?? (await scr()), log: last, seen: rec.lastChain, final: true });
+      rec.outcome = end.outcome; rec.outcomeFrom = end.from; rec.stalledAt = end.stalledAt ?? null;
+      if (end.outcome === 'stalled') { rec.fails.push({ stalled: end.detail, from: end.from }); note('STALLED', end.detail); }
+    }
+    rec.attempts.push({ attempt, outcome: rec.outcome, seed: rec.seed, turns: rec.turns, firstEnemyAction: rec.firstEnemyAction, final: true, stalledAt: rec.stalledAt ?? null });
     break;
   }
 } catch (e) {
