@@ -177,6 +177,83 @@ describe('Chapter XVIII, the Face', () => {
 });
 
 // ---------------------------------------------------------------------------
+// PR-0269 (round 19): the race priorities of the bench's sensible line, FFX only. The card chain had won 6 of 200
+// (3 %) against the sensible line's 51 of 200 (25.5 %) because the tactic walked the ship in and out without a limit,
+// healed at 60 %, spent Al Bhed Potions on a quiet turn and never changed the front row on link 3.
+// ---------------------------------------------------------------------------
+
+const closeIn = { type: 'action-start', actorId: 'tidus', command: { kind: 'trigger', id: 'close-in', targets: [] }, targets: [] };
+/** The member a switch command brings in. */
+const inOf = (cmd: Command | null): string | undefined => (cmd as { extra?: { inId?: string } } | null)?.extra?.inId;
+const setHp = (engine: BattleEngine, id: string, frac: number): void => {
+  const c = engine.state().combatants[id] as { hp: number; stats: { maxHp: number } };
+  c.hp = Math.round(c.stats.maxHp * frac);
+};
+
+describe('PR-0269: the race priorities (Chapter XVII)', () => {
+  it('Close in is made at most twice a Fin, then the line stays and swings (the sensible line\'s MAX_TRIPS)', () => {
+    const first = at('sin-left-fin', 'tidus', { 'airship.range': 'far', 'airship.order': '' });
+    expect(sinFinsCore('tidus', first.d.commands, first.engine)).toMatchObject({ kind: 'trigger', id: 'close-in' });
+    const { engine, d } = at('sin-left-fin', 'tidus', { 'airship.range': 'far', 'airship.order': '' });
+    (engine.state().log as unknown[]).push({ ...closeIn, seq: 1001 }, { ...closeIn, seq: 1002 });
+    expect(sinFinsCore('tidus', d.commands, engine)).not.toMatchObject({ kind: 'trigger', id: 'close-in' });
+  });
+
+  it('after the trips, FAR is played as Tidus, Wakka and Lulu: Auron makes way for the reach (a switch, no turn)', () => {
+    const { engine, d } = at('sin-left-fin', 'auron', { 'airship.range': 'far', 'airship.order': '' });
+    (engine.state().log as unknown[]).push({ ...closeIn, seq: 1001 }, { ...closeIn, seq: 1002 });
+    const cmd = sinFinsCore('auron', d.commands, engine);
+    expect(cmd?.kind).toBe('switch');
+    expect(['wakka', 'lulu']).toContain(inOf(cmd));
+  });
+
+  it('while a trip is still owed, Yuna and Auron stay in front (they Break and keep the party up on the way in)', () => {
+    const { engine, d } = at('sin-left-fin', 'auron', { 'airship.range': 'far', 'airship.order': '' });
+    expect(sinFinsCore('auron', d.commands, engine)?.kind).not.toBe('switch');
+  });
+
+  it('a dry Auron drinks an Ether for his Break instead of Defending (the carried seam)', () => {
+    const { engine, d } = at('sin-left-fin', 'auron', { 'airship.range': 'near', 'airship.order': '' });
+    (engine.state().combatants['auron'] as { mp: number }).mp = 4;
+    // The engine disables Armor Break at 4 MP; the preset's bag has Ethers.
+    const rows = d.commands.map((c) => ({ ...c, enabled: c.enabled && !/Break$/.test(c.label) }));
+    const cmd = sinFinsCore('auron', rows, engine);
+    if (rows.some((c) => c.enabled && /Ether|Elixir/.test(c.label))) expect(label(rows, cmd)).toMatch(/Ether|Elixir/);
+  });
+
+  it('heals at the sensible line\'s lines: two members at 55 % get no Curaga, at 45 % they do; a lone 45 % gets none, a lone 35 % gets a potion', () => {
+    const turn = (fracs: Record<string, number>): string => {
+      const { engine, d } = at('sin-left-fin', 'yuna', { 'airship.range': 'far', 'airship.order': '' });
+      for (const [id, f] of Object.entries(fracs)) setHp(engine, id, f);
+      return label(d.commands, sinFinsCore('yuna', d.commands, engine));
+    };
+    expect(turn({ tidus: 0.55, auron: 0.55 })).not.toMatch(/Curaga|Pray|Potion|Cura/);
+    expect(turn({ tidus: 0.45, auron: 0.45 })).toMatch(/Curaga|Pray/);
+    expect(turn({ tidus: 0.45 })).not.toMatch(/Curaga|Pray|Potion|Cura/);
+    expect(turn({ tidus: 0.35 })).toMatch(/Cura|Potion/);
+  });
+
+  it('never an Al Bhed Potion for a worn party: it is the weakest member\'s last resort', () => {
+    const { engine, d } = at('sin-left-fin', 'tidus', { 'airship.range': 'far', 'airship.order': '' });
+    setHp(engine, 'yuna', 0.45);
+    setHp(engine, 'auron', 0.45);
+    expect(label(d.commands, sinFinsCore('tidus', d.commands, engine))).not.toBe('Al Bhed Potion');
+  });
+
+  it('link 3: while Genais is shelled the front row is Tidus, Yuna and Lulu (Fire answers the shell): Auron makes way', () => {
+    const { engine, d } = at('sin-genais-core', 'auron', { 'sin.genais.shelled': true });
+    const cmd = sinFinsCore('auron', d.commands, engine);
+    expect(cmd?.kind).toBe('switch');
+    expect(inOf(cmd)).toBe('lulu');
+  });
+
+  it('link 3: out of its shell Genais gets physicals from Tidus, Auron and Yuna (Lulu is not in front)', () => {
+    const { engine, d } = at('sin-genais-core', 'auron', { 'sin.genais.shelled': false });
+    expect(sinFinsCore('auron', d.commands, engine)?.kind).toBe('attack');
+  });
+});
+
+// ---------------------------------------------------------------------------
 // A measurement, not a gate (package B owns the bench): PYREFLY_SIN_MEASURE=1 prints the intended line's
 // first-try wins on the chapter's own setup. Skipped in `npm test`.
 // ---------------------------------------------------------------------------
