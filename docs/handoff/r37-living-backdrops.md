@@ -173,3 +173,38 @@ Game case of this check: both. FFX rooms (Zanarkand, Dream's End, Garden of Pain
   Scripts and frames: `D:/Tools/pyrefly-scratch/2026-10-03/r37-fix/` (`m2.mjs`, `out/`).
 - Not measured: the drift extreme in this chapter. The colossus rig is not the idle rig, so the drift (and with it any doubling of a band
   against a sliding plate) is cut there (focus weight 0 at every sample). A still frame at the pinned time shows no ghosting.
+
+### Re-check of the repair (independent critic, 2026-10-03; tip 9d09640f, nothing in `src/` touched by this check)
+
+Method: a fresh production build of the tip (`vite build`, outDir in scratch) served by `vite preview` on 6010, the merge-base build
+(d154486c) on 6011 as the stand-in for live release 35. Headless Playwright on the real GPU (`PYREFLY_BROWSER=gpu`), one browser at a
+time, the real chapters through `gotoChapter`, frozen stable frames (two grabs agreeing), HUD off, 1600x900. Servers stopped by PID.
+Scratch and captures: `D:/Tools/pyrefly-scratch/2026-10-03/r37-check2/` (scripts) and `r37-check/out/` (frames).
+Game case of this check: FFX-2 Ch V (the blocker and its fix); the other seven rooms were re-run in their own games to prove the
+shared `keepBands` plumbing changed nothing for them.
+
+| Item | Verdict | Evidence |
+|---|---|---|
+| Blocker: the Farplane's resting frame (plates ON vs OFF, real chapter, REDUCE MOTION, dials 0, frozen, same page) | PASS | mean 0.318 (was 3.36), 0.018 percent of values over 24 (was 7.5 percent of the sky band), max 57; ON vs ON again 0.000; heat map is thin edge lines on the colossus and the left ridges, no tone or silhouette change; in line with the other rooms (0.15 to 1.7) |
+| Farplane vs the merge-base build (no plates) | PASS WITH DISCLOSURE | 0.81 mean, but the same run against itself on another load reads 0.55 (embers and sprite phase differ between loads); the backdrop-only part is the plates' edge lines |
+| Farplane drift extreme (not measured by the builder; the chapter opens on the idle rig, drift 1, focus weight up to 1) | PASS | pinned at the extreme: plates ON with the bands over them shows parallax and the far ridge soft, no ghosting or double ridge, no void, no band seam (crop `farext-crop.jpg`, sheet `farext-sheet.jpg`) |
+| Other seven rooms unchanged by `keepBands` (default false) | PASS | ON vs OFF at rest: Leblanc 0.315, Dream's End 0.333, Via Purifico 0.398, Den of Woe 0.299 (same as the first check: 0.31, 0.33, 0.40, 0.30); ON vs ON 0.000 |
+| REDUCE MOTION, LOW EFFECTS, `?fxsub=-focus`, phone (Farplane) | PASS | reduce: 4 plates, drift 0, weight 0; low (`?fxtier=low`): flat, no plates, drift 0; `-focus`: drift 1, weight 0; phone 390x844: 2 plates, drift 0.6, picture clean |
+| Frame time (Farplane, vsync, 3 alternating rounds plates ON vs OFF) | PASS | p50 16.7, p95 16.7 to 16.8, p99 16.8 in every round, no dropped frames |
+| Eight depth maps in a production build | PASS | `node tools/fx-assets.mjs verify --dir <dist>/fx` PASS (24 files) on a fresh build |
+| No painting mirrored | PASS | unchanged by the repair; ON vs OFF diffs stay edge-only in every room (a mirrored plate would diff by tens of levels) |
+| Layering, file size | PASS | the repair touches `DepthPlates.ts` (329 lines), `plateRooms.ts` (51), `fx-b-focus.test.ts` (288), the handoff; no `src/battle/**` or `BattlePresenter*` change |
+| Game case in the repair commit | PASS | "FFX-2 only (Chapter V); keepBands is shared plumbing and no FFX room sets it" |
+| `npx tsc --noEmit` | PASS | clean |
+| Targeted vitest | PASS | `fx-b-focus` 23, `fx-b-living` 11, `eyecandy-flags` 10 (44 tests); the full suite is the integrator's |
+| `node tools/orphans.mjs` | PASS | 24 orphaned, unchanged |
+| Page errors and console errors across all runs | PASS | none |
+
+### Blockers
+None.
+
+### Disclosures (carried from the first check, none a regression)
+- Plates are not bit-identical at rest in any new room: a thin edge-only difference of 0.2 to 1.7 mean out of 255 (the Farplane now 0.32).
+- The defocus pulses with the drift (0 to full over about 12 s), not constant; the approved frame has it on all the time (the builder's point 1 for Bailey).
+- `src/engine/Backdrop.ts` is 495 lines, as on origin/main.
+- Real chapters were reached through the debug `gotoChapter`; LOW EFFECTS was forced by `?fxtier=low`, not the settings row; live release 35 was not run (the merge-base build stands in).
