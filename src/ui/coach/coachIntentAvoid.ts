@@ -28,15 +28,38 @@ const HARD_EXTRA: readonly string[] = ['.mad__card', ...CHAPTER_PANEL_SELECTORS]
 const SOFT: readonly string[] = INTENT_AVOID_SELECTORS.filter((s) => !SIDE.includes(s) && !HARD_EXTRA.includes(s));
 
 /**
+ * The box the line occupies on screen: its slab and the FFX-2 "Gauges running" badge that hangs
+ * 28 to 30 px above it (`coach.css` `.coach-mark__running`, `top: -28px`). The slab's own rect
+ * leaves the badge out, so on the phone the solver parked the slab 12 px under the intent card
+ * and the badge, which sits above the slab, printed over the card's last line by 10 to 16 px
+ * (LV-35-01, release 35 live check, FFX-2 Chapter IV at 390x844; game case: FFX-2 only, the
+ * badge is FFX-2's; FFX has none, so its box is the slab's).
+ */
+export function markBox(mark: HTMLElement): { left: number; top: number; right: number; bottom: number } {
+  const now = mark.getBoundingClientRect();
+  const box = { left: now.left, top: now.top, right: now.right, bottom: now.bottom };
+  const badge = mark.querySelector<HTMLElement>('.coach-mark__running');
+  if (badge) {
+    const b = badge.getBoundingClientRect();
+    if (b.width > 0 && b.height > 0) {
+      box.left = Math.min(box.left, b.left);
+      box.top = Math.min(box.top, b.top);
+      box.right = Math.max(box.right, b.right);
+      box.bottom = Math.max(box.bottom, b.bottom);
+    }
+  }
+  return box;
+}
+
+/**
  * Move `mark` (a `.coach-mark` in `host`) off the intent slab when it is on
  * it. Returns true when it moved. A no-op when there is no slab on screen or
- * the line already misses it.
+ * the line (badge included, {@link markBox}) already misses it.
  */
 export function keepMarkOffIntent(mark: HTMLElement, host: HTMLElement): boolean {
   const slab = rectsOf(host, INTENT_SLAB_SELECTORS);
   if (!slab.length) return false;
-  const now = mark.getBoundingClientRect();
-  const box = { left: now.left, top: now.top, right: now.right, bottom: now.bottom };
+  const box = markBox(mark);
   if (!slab.some((s) => overlaps(box, s))) return false;
   const stageRect = host.getBoundingClientRect();
   const stage = { left: stageRect.left, top: stageRect.top, right: stageRect.right, bottom: stageRect.bottom };
