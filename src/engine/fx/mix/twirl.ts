@@ -124,6 +124,9 @@ export function twirlTimes(n: number, beatMs = 800, weights?: readonly number[])
 /** The FFX-2 Change submenu (`ui/ffx2/CommandMenu.ts`) says which dressphere ids it offers (`{ girl, to }`). */
 export const GRID_EVENT = 'pyrefly:garment-grid';
 
+/** The pause between two prewarmed keys (ms): each decode is a burst of main-thread work, never two back to back. */
+const WARM_GAP_MS = 250;
+
 /** A change whose keys are not ready this soon plays today's flourish: keys after the new outfit read as a pop. */
 export const LATE_MS = 300;
 
@@ -215,7 +218,7 @@ export class TwirlSlot {
       const url = artUrl(`art/characters/${k.figure}/${k.key}.png`);
       if (this.warmed.has(url) || !(m.subjects[k.figure]?.states ?? []).includes(k.key)) continue;
       this.warmed.add(url);
-      this.warming = this.warming.then(() => prewarmPainted(url)).then((ok) => void (ok && this.stats.prewarmed++), () => undefined);
+      this.warming = this.warming.then(() => new Promise<void>((res) => window.setTimeout(res, WARM_GAP_MS))).then(() => prewarmPainted(url)).then((ok) => void (ok && this.stats.prewarmed++), () => undefined);
     }
   }
 

@@ -6,6 +6,7 @@ import { fxDebugHooks } from '../fxDebugHooks.ts';
 import { releaseBreathRigs } from './breathRig.ts';
 import { Cinema, dofBand, type DofBand } from './cinema.ts';
 import { setProneAvoid } from '../../ProneLay.ts';
+import { setShotHold } from '../shotHold.ts';
 import { panelsNdc } from './downed.ts';
 import { ejectDefringe, injectDefringe } from './patch.ts';
 import { Framing } from './framing.ts';
@@ -96,6 +97,7 @@ class Mix {
     this.cinema = new Cinema(b.scene, () => ((globalThis as { __pyrefly?: { app?: { renderer?: Renderer } } }).__pyrefly?.app?.renderer ?? null));
     this.shots = this.framing.rigs ? new HeldShots(this.game, this.framing.rigs) : null;
     heldStyle();
+    setShotHold(() => this.shots?.holdMs() ?? 0); // the presenter holds the next decision until a dressphere shot has run its minimum
     // A body that goes down lies clear of the status rows where it can (round 19, PR-0318; both games).
     setProneAvoid(() => {
       const canvas = this.framingOn && this.bodyAvoid ? battleCanvas() : null;
@@ -259,6 +261,7 @@ class Mix {
 
   dispose(): void {
     setProneAvoid(null);
+    setShotHold(null);
     this.framing.dispose();
     this.cinema.dispose();
     this.banner.dispose();

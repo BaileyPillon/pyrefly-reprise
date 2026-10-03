@@ -1,10 +1,12 @@
 /**
- * Round 19, PR-0313 and PR-0314 (FFX-2 only): the DRESSPHERE SHOT is not cut to when a menu is due before it could hold its
- * 1.6 s or when anyone else is acting, and it is handed back at the first action-start of anyone but its subject.
+ * Round 19, PR-0313 and PR-0314 (FFX-2 only): the DRESSPHERE SHOT runs its 1.6 s because the presenter holds the next decision
+ * for the time it still needs (`holdMs`, `shotHold.ts`), is not cut to while anyone else is acting, and is handed back at the
+ * first action-start of anyone but its subject.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { Vector3 } from 'three';
 import type { Actor, Pose } from '../../src/engine/fx/mix/geometry.ts';
+import { setShotHold, shotHoldMs } from '../../src/engine/fx/shotHold.ts';
 import { HeldShots } from '../../src/engine/fx/mix/heldShots.ts';
 import type { RigWatch } from '../../src/engine/fx/mix/rigWatch.ts';
 
@@ -54,19 +56,6 @@ describe('the DRESSPHERE SHOT is cut only where it can hold (PR-0313, PR-0314)',
     expect(s.update(1 / 60, o([rikku, actor('Paine')]))?.kind).toBe('sc');
   });
 
-  it("skips the cut (the master holds) when another girl's menu is due before 1.6 s", () => {
-    rows([{ name: 'Rikku', pct: 0 }, { name: 'Paine', pct: 100, ready: true }]);
-    const rikku = actor('Rikku', {}, 'art/characters/rikku-gunner/idle.png');
-    const paine = actor('Paine');
-    const s = new HeldShots('ffx2', rigs);
-    s.update(1 / 60, o([rikku, paine])); // learns who stands as what
-    set(rikku, 'poseUrls', { idle: 'art/characters/rikku-black-mage/idle.png' }); // the spherechange
-    expect(s.update(1 / 60, o([rikku, paine]))).toBeNull();
-    expect(s.stats.menuDue).toBe(1);
-    expect(s.stats.skipped).toBe(1);
-    expect(s.lastTry).toMatch(/menu is due/);
-  });
-
   it('skips it when an enemy is mid-action as she changes', () => {
     rows([{ name: 'Rikku', pct: 0 }, { name: 'Paine', pct: 10 }]);
     const rikku = actor('Rikku', {}, 'art/characters/rikku-gunner/idle.png');
@@ -76,5 +65,35 @@ describe('the DRESSPHERE SHOT is cut only where it can hold (PR-0313, PR-0314)',
     set(rikku, 'poseUrls', { idle: 'art/characters/rikku-black-mage/idle.png' });
     expect(s.update(1 / 60, o([rikku, ixion]))).toBeNull();
     expect(s.lastTry).toMatch(/another actor is acting/);
+  });
+});
+
+describe('the presenter holds the next decision until the shot has run its minimum (PR-0314)', () => {
+  it('holdMs is what is left of 1.6 s, 0 with no shot up and for the Overdrive shot', () => {
+    const rikku = actor('Rikku');
+    const s = new HeldShots('ffx2', rigs);
+    expect(s.holdMs()).toBe(0);
+    s.held = { kind: 'sc', pose, since: 0, who: rikku };
+    for (let i = 0; i < 30; i++) s.update(1 / 60, o([rikku])); // half a second in
+    expect(s.holdMs()).toBeGreaterThan(1050);
+    expect(s.holdMs()).toBeLessThan(1150);
+    for (let i = 0; i < 70; i++) s.update(1 / 60, o([rikku]));
+    expect(s.holdMs()).toBe(0);
+    s.held = { kind: 'od', pose, since: 0, who: rikku };
+    expect(s.holdMs()).toBe(0);
+  });
+
+  it("the seam answers 0 with no provider, a provider that throws or a nonsense number, and the provider's ms otherwise", () => {
+    setShotHold(null);
+    expect(shotHoldMs()).toBe(0);
+    setShotHold(() => {
+      throw new Error('x');
+    });
+    expect(shotHoldMs()).toBe(0);
+    setShotHold(() => NaN);
+    expect(shotHoldMs()).toBe(0);
+    setShotHold(() => 900);
+    expect(shotHoldMs()).toBe(900);
+    setShotHold(null);
   });
 });
