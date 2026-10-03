@@ -290,7 +290,7 @@ try {
       const last = await page.evaluate(() => { try { return window.__pyrefly.battleLog() ?? []; } catch { return []; } });
       const end = deriveOutcome({ screenAtEnd: rec.resultsScreen ?? (await scr()), log: last, seen: rec.lastChain, final: true });
       rec.outcome = end.outcome; rec.outcomeFrom = end.from; rec.stalledAt = end.stalledAt ?? null;
-      if (end.outcome === 'stalled') { rec.fails.push({ stalled: end.detail, from: end.from }); note('STALLED', end.detail); }
+      if (end.outcome === 'stalled') { if (!rec.fails.some((f) => f.stalled)) rec.fails.push({ stalled: end.detail, from: end.from }); note('STALLED', end.detail); }
     }
     rec.attempts.push({ attempt, outcome: rec.outcome, seed: rec.seed, turns: rec.turns, firstEnemyAction: rec.firstEnemyAction, final: true, stalledAt: rec.stalledAt ?? null });
     break;
