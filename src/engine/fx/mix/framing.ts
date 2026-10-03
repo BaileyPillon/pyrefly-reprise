@@ -1,9 +1,10 @@
 import type { Object3D, PerspectiveCamera } from 'three';
-import { boxesOf, bossCoverOf, clearBoxes, fitClear, limitsFor, overlapOf, type Clear, type Field, type Fit, type Gate, type Limit, type PartyRule } from './clearance.ts';
+import { boxesOf, bossCoverOf, clearBoxes, downsOf, fitClear, limitsFor, overlapOf, type Field, type Fit, type Gate, type Limit, type PartyRule } from './clearance.ts';
 import { cameraAt, figOf, stillActor, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
 import { advisorReserve, battleCanvas, fieldOf, hudFree, hudPanels, menuOpen, noteMenuPanels, phoneBattle, predictedPanels, rememberedMenuPanels, sensorSlab } from './hudPanels.ts';
 import { classify, keepsToday, master, scaleTarget, type MasterClass } from './masters.ts';
 import { colossusExcess, gateNote, plateExcess, plateMiss, plateOf, restGap, shifted } from './plate.ts';
+import type { FramingReport } from './framingReport.ts';
 import { RigWatch, type BattleCameraLike } from './rigWatch.ts';
 import { Staging } from './staging.ts';
 
@@ -29,28 +30,7 @@ import { Staging } from './staging.ts';
  * never the engine, the RNG or a timer. Game case: both (FFX-2's own wider lens is in `masters.ts`).
  */
 
-export interface FramingReport {
-  cls: MasterClass;
-  colossus: boolean;
-  /**
-   * Does this fight get the colossus master and BOSS SCALE where the window allows it (a colossus boss that is not Vegnagun
-   * or Sin)? Known from the first decision whatever the switches say; the EYE CANDY page reads it to say whether a phone
-   * held upright costs CHAPTER FRAMING anything here. Null until the first decision.
-   */
-  colossusFight: boolean | null;
-  plans: number;
-  replans: number;
-  todayPx: number;
-  floorPx: number;
-  scale: number;
-  fit: { ok: boolean; partyPx: number; overlap: number; bossCover: number; blend: number; back: number; lens: [number, number]; figs: Clear['figs']; gate: number } | null;
-  /** The plate the frame shows (share of the frame missing the painting; 0 = all painting): the chosen pose and today's rig; null with no plate. */
-  plate: { chosen: number; today: number; corners: number; todayCorners: number; restGap: number } | null;
-  live: { ok: boolean; partyPx: number; overlap: number; bossCover: number; figs: Clear['figs'] } | null;
-  staging: Record<string, { k: number; dx: number }>;
-  /** Each candidate the last plan tried (checks only). */
-  tries: string[];
-}
+export type { FramingReport } from './framingReport.ts';
 
 const FRACS = [1, 0.7, 0.45, 0.25, 0];
 
@@ -290,7 +270,7 @@ export class Framing {
       todayPx: Math.round(todayPx),
       floorPx: Math.round(rule.floorPx),
       scale: pick.frac,
-      fit: { ok: f.ok, partyPx: Math.round(f.partyPx), overlap: +f.overlap.toFixed(2), bossCover: +f.bossCover.toFixed(2), blend: pick.fit.blend, back: pick.fit.back, lens: pick.fit.lens, figs: f.figs, gate: +pick.fit.gate.toFixed(3) },
+      fit: { ok: f.ok, partyPx: Math.round(f.partyPx), overlap: +f.overlap.toFixed(2), bossCover: +f.bossCover.toFixed(2), blend: pick.fit.blend, back: pick.fit.back, lens: pick.fit.lens, figs: f.figs, gate: +pick.fit.gate.toFixed(3), down: f.down },
       plate: plate && plateToday ? { chosen: +plateMiss(plate, pick.fit.pose, field.W, field.H, pick.fit.lens).share.toFixed(3), today: +plateToday.share.toFixed(3), corners: plateMiss(plate, pick.fit.pose, field.W, field.H, pick.fit.lens).corners, todayCorners: plateToday.corners, restGap: pick.gap } : null,
       tries: log,
     };
@@ -367,8 +347,8 @@ export class Framing {
     this.cam.updateMatrixWorld();
     const { figs, vis } = this.visible(actors);
     const boxes = boxesOf(this.cam, figs, field);
-    const cl = clearBoxes(boxes, figs, this.cam.position, field, [0, 0], vis.map((a) => this.limitOf.get(a) ?? null), this.rule);
-    this.report.live = { ok: cl.ok, partyPx: Math.round(cl.partyPx), overlap: +cl.overlap.toFixed(2), bossCover: +cl.bossCover.toFixed(2), figs: cl.figs };
+    const cl = clearBoxes(boxes, figs, this.cam.position, field, [0, 0], vis.map((a) => this.limitOf.get(a) ?? null), this.rule, downsOf(this.cam, figs, field));
+    this.report.live = { ok: cl.ok, partyPx: Math.round(cl.partyPx), overlap: +cl.overlap.toFixed(2), bossCover: +cl.bossCover.toFixed(2), figs: cl.figs, down: cl.down };
     // A failure for the PARTY (under a panel, out of view, below the floor, hidden) re-plans with the panels
     // now known; the new master goes on screen once no menu is open (never a cut while choosing). A boss
     // part is held to today's rig by the plan itself; the live frame only reports it, so a colossus master
