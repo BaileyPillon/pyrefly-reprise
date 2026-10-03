@@ -182,6 +182,7 @@ class Mix {
     // the phone, where only the shot is closed).
     if (this.game === 'ffx2') {
       this.twirl.on = twirlKeysOn(liveGates(this.game));
+      this.twirl.eager = tier === 'full' && !dev.phone; // fetch the keys ahead only where bytes are cheap (else when her Change submenu opens)
       for (const a of actors) if (a.facing >= 0) this.twirl.watch(a);
       this.twirl.update(dt);
     } else {

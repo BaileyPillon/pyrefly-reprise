@@ -163,6 +163,12 @@ export class TwirlSlot {
   readonly stats = { changes: 0, played: 0, keysFound: 0, late: 0, prewarmed: 0, ghost: 0, ghostNow: 0, lastPlan: [] as string[] };
   /** Checks only: `false` leaves the planes as the presenter's crossfade has them (what round 19 saw). */
   pinOn = true;
+  /**
+   * Fetch ahead at battle start (the full tier on a desktop window). Off on the phone and under LOW EFFECTS, where the keys of
+   * a girl are fetched when her Change submenu opens instead: about 5 MB less for a fight in which nobody changes.
+   */
+  eager = true;
+  private readonly girls = new Map<string, Guts>();
   private readonly flashes = new Map<Guts, Guts['flash']>();
   private readonly warmed = new Set<string>();
   private warming: Promise<void> = Promise.resolve();
@@ -200,7 +206,8 @@ export class TwirlSlot {
       }
       flash.call(a, colour, ms, peak, floorCut);
     };
-    this.idle(() => this.prewarmFrom(a));
+    this.girls.set(girlOf(subjectOf(a.poseUrls['idle'])), a);
+    this.idle(() => (this.eager ? this.prewarmFrom(a) : undefined));
   }
 
   /** Run `fn` when the browser is idle (a short timeout where it has no idle callback). */
@@ -234,6 +241,8 @@ export class TwirlSlot {
   prewarmGrid(girl: string, to: readonly string[]): void {
     const m = artManifest();
     if (!m || !girl) return;
+    const mine = this.girls.get(girl.toLowerCase());
+    if (mine) this.prewarmFrom(mine); // the dressphere she leaves and her twirl-mid, first
     const keys: TwirlKey[] = [];
     for (const id of to) {
       const fig = `${girl.toLowerCase()}-${id}`;
