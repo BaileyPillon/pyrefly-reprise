@@ -5,6 +5,8 @@ import { advisorReserve, battleCanvas, fieldOf, hudFree, hudPanels, menuOpen, no
 import { classify, keepsToday, master, scaleTarget, type MasterClass } from './masters.ts';
 import { colossusExcess, gateNote, plateExcess, plateMiss, plateOf, restGap, shifted } from './plate.ts';
 import type { FramingReport } from './framingReport.ts';
+import { runStage, stageFlags } from './restage.ts';
+import { placeSensor, sensorTarget } from './sensorPlace.ts';
 import { RigWatch, type BattleCameraLike } from './rigWatch.ts';
 import { Staging } from './staging.ts';
 
@@ -41,6 +43,8 @@ interface Decision {
   pose: Pose;
   lens: [number, number];
   plan: Map<Actor, { k: number; dx: number }>;
+  /** The restage move (`restage.ts`, `?stage=`); empty with the flag off. */
+  shift: Map<Actor, { dx: number; dz: number }>;
   today: Pose;
   rule: PartyRule | null;
   limitOf: Map<Actor, Limit | null>;
@@ -96,7 +100,7 @@ export class Framing {
     const reserve = advisorReserve(this.game, window.innerWidth, window.innerHeight, phone);
     if (reserve) panels.push(reserve);
     const sensor = this.report.colossusFight ? sensorSlab(this.game, window.innerWidth, window.innerHeight, phone) : null;
-    if (sensor) panels.push(sensor);
+    if (sensor && !stageFlags().sensor) panels.push(sensor); // option N steers the card off the boss instead (sensorPlace.ts)
     return fieldOf(canvas, panels);
   }
 
@@ -121,7 +125,7 @@ export class Framing {
     // The plan measures the figures where they stand, so it is decided only when every one stands at its
     // place (a menu's lean included); it is put on screen only once no menu is open (no cut while choosing).
     if (ready && this.planWanted && this.time - this.sigAt >= 0.6 && this.calm(actors, false)) {
-      const d = this.decide(actors);
+      const d = this.solve(actors);
       if (d) {
         this.planWanted = false;
         this.pending = d;
@@ -196,7 +200,15 @@ export class Framing {
    * Decide the master (once the field has loaded): stage the figures, author the master, or keep today's.
    * The figures are left exactly as they were found; `commit` puts the decision on screen.
    */
-  private decide(actors: readonly Actor[]): Decision | null {
+  /** The plan, with the opt-restage prototype's smallest move when `?stage=A|B|C` asks for one (FFX desktop only). */
+  private solve(actors: readonly Actor[]): Decision | null {
+    const f = stageFlags();
+    const base = this.rigs?.base('idle');
+    if (!f.move || this.game !== 'ffx' || phoneBattle() || !base) return this.decide(actors, null);
+    return runStage(f, actors, base, (shift) => this.decide(actors, shift)) ?? this.decide(actors, null);
+  }
+
+  private decide(actors: readonly Actor[], shift: Map<Actor, { dx: number; dz: number }> | null): Decision | null {
     const rigs = this.rigs;
     const canvas = battleCanvas();
     if (!rigs || !canvas) return null;
@@ -210,10 +222,13 @@ export class Framing {
     this.report.colossusFight = cls === 'colossus' && !keep;
     if (!this.wantOn || keep) {
       // Nothing to check against: today's rig is the master.
-      return { keep: true, pose: base, lens: [0, 0], plan: new Map(), today: base, rule: null, limitOf: new Map(), report: { tries: [keep && this.wantOn ? 'keeps today (D-228 / Sin)' : 'off'] } };
+      return { keep: true, pose: base, lens: [0, 0], plan: new Map(), shift: new Map(), today: base, rule: null, limitOf: new Map(), report: { tries: [keep && this.wantOn ? 'keeps today (D-228 / Sin)' : 'off'] } };
     }
     const before = new Map([...this.staging.plan].map(([a, p]) => [a, { ...p }] as const));
+    const beforeShift = this.staging.shift;
     this.staging.release();
+    this.staging.shift = shift ?? new Map();
+    this.staging.apply(actors, true);
     const field = this.field(canvas);
     // Today: the figures as the stage left them, under today's rig, give the limits and the party rule.
     const { figs: todayFigs, vis } = this.visible(actors);
@@ -232,7 +247,7 @@ export class Framing {
     const today0 = { frac: -1, colossus: false, partyDx: 0 };
     const steps = [0.35, 0.7].map((partyDx) => ({ frac: -1, colossus: false, partyDx }));
     const tries = [...(colossus ? FRACS.map((frac) => ({ frac, colossus: true, partyDx: 0 })) : []), today0, ...steps];
-    let chosen: { fit: Fit; frac: number; gap: number; plan: Map<Actor, { k: number; dx: number }> } | null = null;
+    let chosen: { fit: Fit; frac: number; gap: number; plan: Map<Actor, { k: number; dx: number }>; sensorTo: Box | null } | null = null;
     // Fail closed (round 19): a pose that shows more of the plate's edge than today's rig (PR-0307) or, for a colossus
     // master, leaves a member inside a boss at rest (PR-0310) is held; today's rig is always a candidate that passes both.
     const plate = plateOf(this.scene);
@@ -252,15 +267,17 @@ export class Framing {
         this.staging.apply(actors, true);
       }
       const figs = this.visible(actors).figs;
-      const gate: Gate = (pose, lens, boxes) => plateExcess(plate, plateToday, pose, field.W, field.H, lens) + (t.colossus ? colossusExcess(boxes, figs, slab, field.W) : 0);
+      const gate: Gate = (pose, lens, boxes) => plateExcess(plate, plateToday, pose, field.W, field.H, lens) + (t.colossus ? colossusExcess(boxes, figs, stageFlags().sensor && slab ? (placeSensor(boxes, figs, field.panels, field.W, field.H, slab) ?? slab) : slab, field.W) : 0);
       const fit = fitClear(m, base, figs, field, true, limits, rule, gate);
       log.push(`${t.frac}:${fit.clear.ok && fit.gate === 0 ? 'ok' : 'x'}${fit.gate > 0 ? ' gate' + fit.gate.toFixed(3) + ' ' + gateNote(shifted(boxesOf(cameraAt(fit.pose, field.W / field.H), figs, field), fit.lens), figs, slab) : ''} w${fit.clear.worst.toFixed(2)} px${Math.round(fit.clear.partyPx)} ov${fit.clear.overlap.toFixed(2)} bc${fit.clear.bossCover.toFixed(2)} ${fit.clear.figs.filter((r) => r.underHud > 0.06 || r.inView < 0.97).map((r) => `${r.id}:${r.inView}/${r.underHud}`).join(',')}`);
-      if (!chosen || fit.score > chosen.fit.score) chosen = { fit, frac: t.frac, gap: Math.round(restGap(shifted(boxesOf(cameraAt(fit.pose, field.W / field.H), this.visible(actors).figs, field), fit.lens), this.visible(actors).figs)), plan: new Map([...this.staging.plan].map(([a, p]) => [a, { ...p }])) };
+      if (!chosen || fit.score > chosen.fit.score) chosen = { fit, frac: t.frac, gap: Math.round(restGap(shifted(boxesOf(cameraAt(fit.pose, field.W / field.H), this.visible(actors).figs, field), fit.lens), this.visible(actors).figs)), plan: new Map([...this.staging.plan].map(([a, p]) => [a, { ...p }])), sensorTo: stageFlags().sensor && slab && t.colossus ? sensorTarget(fit.pose, fit.lens, figs, field, slab, cr) : null };
       if (fit.clear.ok && fit.gate === 0) break;
     }
     const pick = chosen!;
     // The figures back as they were found (the search staged every candidate on them, within this frame).
+    const shiftUsed = this.staging.shift;
     this.staging.release();
+    this.staging.shift = beforeShift;
     for (const [a, p] of before) this.staging.plan.set(a, p);
     this.staging.apply(actors, this.wantOn);
     const f = pick.fit.clear;
@@ -273,8 +290,9 @@ export class Framing {
       fit: { ok: f.ok, partyPx: Math.round(f.partyPx), overlap: +f.overlap.toFixed(2), bossCover: +f.bossCover.toFixed(2), blend: pick.fit.blend, back: pick.fit.back, lens: pick.fit.lens, figs: f.figs, gate: +pick.fit.gate.toFixed(3), down: f.down },
       plate: plate && plateToday ? { chosen: +plateMiss(plate, pick.fit.pose, field.W, field.H, pick.fit.lens).share.toFixed(3), today: +plateToday.share.toFixed(3), corners: plateMiss(plate, pick.fit.pose, field.W, field.H, pick.fit.lens).corners, todayCorners: plateToday.corners, restGap: pick.gap } : null,
       tries: log,
+      sensorTo: pick.sensorTo,
     };
-    return { keep: false, pose: pick.fit.pose, lens: pick.fit.lens, plan: pick.plan, today: base, rule, limitOf, report };
+    return { keep: false, pose: pick.fit.pose, lens: pick.fit.lens, plan: pick.plan, shift: shiftUsed, today: base, rule, limitOf, report };
   }
 
   /** Put a decision on screen: the staging, the master as the resting rig (a cut if the camera rests on it), the lens. */
@@ -284,6 +302,7 @@ export class Framing {
     this.report.plans++;
     this.todayPose = d.today;
     this.staging.release();
+    this.staging.shift = d.shift;
     for (const [a, p] of d.plan) this.staging.plan.set(a, { ...p });
     this.staging.apply(actors, true);
     this.masterPose = d.pose;

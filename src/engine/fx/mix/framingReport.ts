@@ -20,7 +20,11 @@ export interface FramingReport {
   /** The plate the frame shows (share of the frame missing the painting; 0 = all painting): the chosen pose and today's rig; null with no plate. */
   plate: { chosen: number; today: number; corners: number; todayCorners: number; restGap: number } | null;
   live: { ok: boolean; partyPx: number; overlap: number; bossCover: number; figs: Clear['figs']; down: Clear['down'] } | null;
-  staging: Record<string, { k: number; dx: number }>;
+  staging: Record<string, { k: number; dx: number; sx?: number; sz?: number }>;
+  /** The opt-restage prototype's solve (`restage.ts`, `?stage=`); absent with the flag off. */
+  restage?: { move: string; goal: string; t: number; note: string; evals: { t: number; gap: number; clean: boolean; colossus: boolean; why?: string }[]; ms: number };
+  /** Option N (`sensorPlace.ts`): where the Sensor card is steered to (viewport px), or null when it stays at its pinned place. */
+  sensorTo?: { l: number; r: number; t: number; b: number } | null;
   /** Each candidate the last plan tried (checks only). */
   tries: string[];
 }

@@ -16,6 +16,8 @@ import { followFlourish, HeldShots } from './heldShots.ts';
 import { battleCanvas, forgetMenuPanels, hudPanels, menuOpen, phoneBattle } from './hudPanels.ts';
 import { LivingFigure } from './living.ts';
 import { OdBanner } from './odBanner.ts';
+import { setStageFlags, stageFlags } from './restage.ts';
+import { SensorSteer } from './sensorPlace.ts';
 import { releaseMixSplash } from './splash.ts';
 import { TwirlSlot } from './twirl.ts';
 
@@ -75,6 +77,8 @@ class Mix {
   private readonly shots: HeldShots | null;
   private readonly banner = new OdBanner();
   private readonly twirl = new TwirlSlot();
+  /** Opt-restage option N: the Sensor card steered off the boss (`?stage=N`). */
+  private readonly steer = new SensorSteer();
   private readonly living = new Map<Object3D, LivingFigure>();
   private readonly defringed = new Set<ShaderMaterial>();
   private actors: Actor[] = [];
@@ -128,6 +132,7 @@ class Mix {
     // CHAPTER FRAMING: the master, the staging, the menu clearance.
     this.framingOn = parts.chapterFraming;
     this.framing.update(dt, actors, parts.chapterFraming);
+    this.steer.update(stageFlags().sensor && parts.chapterFraming ? (this.framing.report.sensorTo ?? null) : null);
     // The held shots (on today's rig too when CHAPTER FRAMING is off).
     const master = this.framing.masterPose ?? this.framing.rigs?.base('idle') ?? null;
     const lens: [number, number] = parts.chapterFraming ? this.framing.lensNow() : [0, 0];
@@ -264,6 +269,7 @@ class Mix {
     setProneAvoid(null);
     setShotHold(null);
     this.framing.dispose();
+    this.steer.dispose();
     this.cinema.dispose();
     this.banner.dispose();
     this.twirl.dispose();
@@ -318,5 +324,7 @@ fxDebugHooks['mix'] = {
     resetCost: () => current?.resetCost(),
     twirlPin: (on: boolean) => current?.setTwirlPin(on),
     bodyAvoid: (on: boolean) => current?.setBodyAvoid(on),
+    /** Opt-restage prototype: `{ move: 'A'|'B'|'C'|null, sensor: boolean, goal: 'gap'|'colossus' }`, read at the next plan. */
+    stage: (f?: Parameters<typeof setStageFlags>[0]) => (f && setStageFlags(f), stageFlags()),
   },
 };

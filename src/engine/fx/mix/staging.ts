@@ -21,11 +21,21 @@ interface Rec {
   wroteK: number;
   dx: number;
   wroteX: number;
+  dz: number;
+  wroteZ: number;
+}
+
+/** A restage move (opt-restage prototype, `restage.ts`): world x and z added to a figure's place. */
+export interface Shift {
+  dx: number;
+  dz: number;
 }
 
 export class Staging {
   private readonly recs = new Map<Actor, Rec>();
   readonly plan = new Map<Actor, { k: number; dx: number }>();
+  /** The restage moves (`?stage=`, `restage.ts`), added on top of the plan; empty with the flag off. */
+  shift = new Map<Actor, Shift>();
 
   /**
    * Plan the scale per boss against the party's mean, seen from `camPos`. Colossi only ever grow;
@@ -74,7 +84,8 @@ export class Staging {
   apply(actors: readonly Actor[], on: boolean): void {
     for (const a of actors) {
       const p = this.plan.get(a);
-      this.write(a, on ? (p?.k ?? 1) : 1, on ? (p?.dx ?? 0) : 0);
+      const s = on ? this.shift.get(a) : undefined;
+      this.write(a, on ? (p?.k ?? 1) : 1, on ? (p?.dx ?? 0) + (s?.dx ?? 0) : 0, s?.dz ?? 0);
     }
   }
 
@@ -83,36 +94,42 @@ export class Staging {
     return this.recs.get(a)?.k ?? 1;
   }
 
-  private write(a: Actor, k: number, dx: number): void {
+  private write(a: Actor, k: number, dx: number, dz = 0): void {
     let r = this.recs.get(a);
     if (!r) {
-      if (k === 1 && dx === 0) return;
-      r = { k: 1, wroteK: a.scale.y, dx: 0, wroteX: a.position.x };
+      if (k === 1 && dx === 0 && dz === 0) return;
+      r = { k: 1, wroteK: a.scale.y, dx: 0, wroteX: a.position.x, dz: 0, wroteZ: a.position.z };
       this.recs.set(a, r);
     }
     // The stage moved or re-scaled it: start from its value.
     if (Math.abs(a.scale.y - r.wroteK) > 1e-6) r.k = 1;
     if (Math.abs(a.position.x - r.wroteX) > 1e-6) r.dx = 0;
+    if (Math.abs(a.position.z - r.wroteZ) > 1e-6) r.dz = 0;
     const baseK = a.scale.y / r.k;
     const baseX = a.position.x - r.dx;
     a.scale.set((a.scale.x / r.k) * k, baseK * k, (a.scale.z / r.k) * k);
     a.position.x = baseX + dx;
+    a.position.z = a.position.z - r.dz + dz;
     r.k = k;
     r.dx = dx;
+    r.dz = dz;
     r.wroteK = a.scale.y;
     r.wroteX = a.position.x;
+    r.wroteZ = a.position.z;
   }
 
   /** Put every figure back as the stage left it. */
   release(): void {
-    for (const a of this.recs.keys()) this.write(a, 1, 0);
+    for (const a of this.recs.keys()) this.write(a, 1, 0, 0);
     this.recs.clear();
     this.plan.clear();
+    this.shift = new Map();
   }
 
-  stats(): Record<string, { k: number; dx: number }> {
-    const out: Record<string, { k: number; dx: number }> = {};
+  stats(): Record<string, { k: number; dx: number; sx?: number; sz?: number }> {
+    const out: Record<string, { k: number; dx: number; sx?: number; sz?: number }> = {};
     for (const [a, p] of this.plan) out[subjectId(a)] = { k: Math.round(p.k * 100) / 100, dx: Math.round(p.dx * 100) / 100 };
+    for (const [a, s] of this.shift) out[subjectId(a)] = { ...(out[subjectId(a)] ?? { k: 1, dx: 0 }), sx: Math.round(s.dx * 100) / 100, sz: Math.round(s.dz * 100) / 100 };
     return out;
   }
 }
