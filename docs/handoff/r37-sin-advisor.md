@@ -73,7 +73,7 @@ Changes, each from the sensible line (the research §8 rows played as written):
 | XVII advisor card, link 1 -> 2 -> 3, seeds 1-200 | 190 -> 85 -> 6 (2026-09-29) | 200 -> 188 -> 97 |
 | XVII sensible line, whole chain, seeds 1-200 (re-run, unchanged) | 51/200 (25.5 %) | 51/200 (25.5 %) |
 | XVII card through the game's worker path (v3 drive, `critic/bench/advisor-v4/worker-path.test.ts`), seeds 1-100 | 4/100 (9/200 over 1-200) | **39/100** |
-| XVII card through the game's worker path (v4, mini), seeds 1-20 so far | 8/80 (r17fix) | 20/20 (the run was still going, see the log) |
+| XVII card through the game's worker path (v4, mini), seeds 1-23 (the run was stopped there: about 2 minutes a seed on the shared machine) | 8/80 (r17fix) | 23/23 (`bench/wp-sin-fins-core-v3-100-v4-23-partial.log`) |
 | XVIII link-4 bench (`sin-bench.test.ts`, `PYREFLY_SIN_BENCH=1`), advisor card, 200 seeds, S-1 13th turn | not re-measured before: the XVIII code is unchanged (36.5 % in r17fix) | **79/200 (39.5 %)** against sensible 67/200 (33.5 %) |
 | XVIII through the worker path, mini, seeds 1-100 (v3 / v4) | 73/200 (36.5 %) both (r17fix) | 38/100 / 35/100 (code unchanged) |
 
@@ -116,8 +116,8 @@ seed, the worker-path results).
   Chapter XIII Trema real-key win are not in this brief and were not touched.
 - **PR-0308** (Bushido and Swordplay ignore the Overdrive chosen; the button order is Bailey's call) is not touched: the harness now
   types whatever sequence the overlay shows, so it will follow PR-0308's per-Overdrive sequences without a change.
-- **The v4 card on XVII through the worker path** was still running at the end (`wp-sin-fins-core.log`: 20 of 20 won at seeds 1-20,
-  slow on a shared machine); the table above says so. Nothing relies on it.
+- **The v4 card on XVII through the worker path** was stopped at 23 seeds (all 23 won); a 100-seed read is owed if the critic wants it
+  (`V4W_CHAPTERS=sin-fins-core V4W_DRIVERS=v4 V4W_BUDGET=mini`, about 3 hours on this machine under load). Nothing relies on it.
 - **Genais's Sigh** (link 3) is the largest remaining loss: the bag has no Eye Drops or Esuna in the preset (research §7.3 item 5
   names them for Sigh's Darkness), so a cure line is a data question, not built.
 
