@@ -208,7 +208,12 @@ export interface Fit {
   blend: number;
   back: number;
   score: number;
+  /** The fail-closed gate's excess for this pose (`plate.ts`: the plate shown, the rest gap); 0 passes. */
+  gate: number;
 }
+
+/** A fail-closed gate on a candidate: the excess over what is allowed (0 passes), from the pose, lens and boxes (field px). */
+export type Gate = (pose: Pose, lens: [number, number], boxes: readonly Box[]) => number;
 
 const BLENDS = [0, 0.25, 0.5, 0.75, 1];
 const BACKS = [1, 1.04, 1.08, 1.16, 1.25, 1.35];
@@ -216,8 +221,9 @@ const BACKS = [1, 1.04, 1.08, 1.16, 1.25, 1.35];
 /**
  * The pose NEAREST the master that keeps every figure clear of the HUD, the party above its floor and
  * nobody hidden (or the least bad one): an approved composition changes only as much as the rule needs.
+ * `gate` (round 19, PR-0307 and PR-0310) fails closed: a pose it holds ranks under any that passes it.
  */
-export function fitClear(master: Pose, today: Pose, figs: readonly Fig[], f: Field, lensOn: boolean, limits: readonly (Limit | null)[], rule0: PartyRule): Fit {
+export function fitClear(master: Pose, today: Pose, figs: readonly Fig[], f: Field, lensOn: boolean, limits: readonly (Limit | null)[], rule0: PartyRule, gate?: Gate): Fit {
   const steps = lensOn ? [-0.08, -0.04, 0, 0.04, 0.08] : [0];
   const stepsY = lensOn ? [-0.04, 0, 0.04] : [0];
   const rule: PartyRule = { ...rule0, floorPx: rule0.floorPx * FLOOR_MARGIN };
@@ -237,10 +243,15 @@ export function fitClear(master: Pose, today: Pose, figs: readonly Fig[], f: Fie
           const excess = Math.max(0, cl.overlap - rule.overlapMax) + Math.max(0, cl.bossCover - rule.bossCoverMax);
           // Passing poses: the least change from the master (stand-back, blend toward today, shift).
           // Failing ones: the floor and the overlaps weigh most, then the share under a panel.
-          const score = cl.ok
-            ? 1e6 - 300 * (k - 1) - 60 * bl - 0.15 * (Math.abs(lens[0]) + Math.abs(lens[1])) + 0.05 * cl.partyPx
-            : -cl.worst * 1000 - deficit * 40 - excess * 3000 + bl;
-          if (!best || score > best.score) best = { pose, lens, clear: cl, blend: bl, back: k, score };
+          // A pose the gate holds (the plate's edge, a member inside a boss) ranks under every pose that passes it.
+          const ex = gate ? gate(pose, lens, boxes.map((b) => ({ l: b.l + lens[0], r: b.r + lens[0], t: b.t + lens[1], b: b.b + lens[1] }))) : 0;
+          const score =
+            ex > 0
+              ? -1e7 - ex * 1e5 - cl.worst * 1000 - deficit * 40 - excess * 3000
+              : cl.ok
+                ? 1e6 - 300 * (k - 1) - 60 * bl - 0.15 * (Math.abs(lens[0]) + Math.abs(lens[1])) + 0.05 * cl.partyPx
+                : -cl.worst * 1000 - deficit * 40 - excess * 3000 + bl;
+          if (!best || score > best.score) best = { pose, lens, clear: cl, blend: bl, back: k, score, gate: ex };
         }
     }
   }

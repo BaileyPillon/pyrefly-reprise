@@ -84,7 +84,7 @@ class Mix {
 
   constructor(private readonly b: MixBind) {
     this.game = b.game === 'ffx2' ? 'ffx2' : 'ffx';
-    this.framing = new Framing((b.battleCamera as ConstructorParameters<typeof Framing>[0] | undefined) ?? null, b.camera, this.game);
+    this.framing = new Framing((b.battleCamera as ConstructorParameters<typeof Framing>[0] | undefined) ?? null, b.camera, this.game, b.scene);
     this.cinema = new Cinema(b.scene, () => ((globalThis as { __pyrefly?: { app?: { renderer?: Renderer } } }).__pyrefly?.app?.renderer ?? null));
     this.shots = this.framing.rigs ? new HeldShots(this.game, this.framing.rigs) : null;
     heldStyle();
