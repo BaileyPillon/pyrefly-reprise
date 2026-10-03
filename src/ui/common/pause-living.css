@@ -1,0 +1,15 @@
+/*
+ * The living portrait's twin of a pause plate (`app/screens/pause/LivingPortraitDriver.ts`): a div that takes the plate's
+ * own class list and box (so the same grade, push-in, cross-fade and slide mask apply) and holds one small canvas of
+ * painted face parts at a percent position. It never takes the pointer, and the canvas fills its percent box exactly.
+ * Kept out of `pause-screen.css`, which is past the 400-line house rule. Game case: both (shared pause plumbing).
+ */
+.pause__plate[data-living] {
+  pointer-events: none;
+}
+
+.pause__plate[data-living] > canvas {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}

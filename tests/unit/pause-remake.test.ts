@@ -1034,14 +1034,15 @@ describe('the painting moves, until the player says not to', () => {
     expect((h.screen.snapshot()['portrait'] as Record<string, unknown>)['reduceMotion']).toBe(true);
   });
 
-  it('offers the living-portrait prototype a seam it can be dropped into', () => {
-    // docs/plans/pause-living-portraits.md — another agent's track. The layout
-    // must not have to change when the rig arrives.
+  it('offers the living portrait its seam: the driver is on by default and off under REDUCE MOTION', () => {
+    // The seam the living portrait (livingPause.ts, portraits-live) plugs into; the layout never had to change.
     const h = mount('seymour-flux');
     const portrait = h.screen.snapshot()['portrait'] as Record<string, unknown>;
     expect(portrait['gaze']).toEqual({ x: 0, y: 0 });
     expect(portrait['expression']).toBe('neutral');
-    expect(portrait['driver']).toBe(false);
+    expect(portrait['driver']).toBe(true);
     expect(typeof portrait['plate']).toBe('string');
+    const still = mount('seymour-flux', { reduceMotion: true });
+    expect((still.screen.snapshot()['portrait'] as Record<string, unknown>)['driver']).toBe(false);
   });
 });
