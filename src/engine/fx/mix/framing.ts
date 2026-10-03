@@ -6,7 +6,8 @@ import { classify, keepsToday, master, scaleTarget, type MasterClass } from './m
 import { colossusExcess, gateNote, plateExcess, plateMiss, plateOf, restGap, shifted } from './plate.ts';
 import type { FramingReport } from './framingReport.ts';
 import { RigWatch, type BattleCameraLike } from './rigWatch.ts';
-import { Staging } from './staging.ts';
+import { Staging, type Side } from './staging.ts';
+import { onPhone, readStand, standFor } from './stageTable.ts';
 
 /**
  * The MAX mix (D-316): CHAPTER FRAMING (BATTLE SPECTACLE's part; both games). The composed master per
@@ -26,8 +27,12 @@ import { Staging } from './staging.ts';
  * check, the camera on the master (Active ATB opens menus while an action plays; that frame is the
  * presenter's, and judging it re-planned Bahamut three times in a minute).
  *
+ * The chapter's slots (`stageTable.ts`, PR-0310; FFX only) ride with the plan, which measures the figures where the table put
+ * them. A chapter with a row is planned as soon as its figures stand still: a fast load opens the first menu before the usual
+ * 0.6 s wait ends, and a plan decided under an open menu is held until the player's first action.
+ *
  * Presentation only (rule 1): a figure's group scale and x offset, the camera's rigs and view offset;
- * never the engine, the RNG or a timer. Game case: both (FFX-2's own wider lens is in `masters.ts`).
+ * never the engine, the RNG or a timer. Game case: both (FFX-2's own wider lens is in `masters.ts`; the slots are FFX only).
  */
 
 export type { FramingReport } from './framingReport.ts';
@@ -41,6 +46,8 @@ interface Decision {
   pose: Pose;
   lens: [number, number];
   plan: Map<Actor, { k: number; dx: number }>;
+  /** The chapter's slots (`stageTable.ts`); null = the stage's own. */
+  side: Side | null;
   today: Pose;
   rule: PartyRule | null;
   limitOf: Map<Actor, Limit | null>;
@@ -65,13 +72,15 @@ export class Framing {
   /** A plan decided on a calm frame while a menu was open: committed the first frame no menu is open. */
   private pending: Decision | null = null;
   private sig = '';
+  /** The fight has a row in the staging table (read with the roster): it is planned at once. */
+  private staged = false;
   private sigAt = 0;
   private time = 0;
   private wasMenu = false;
   private checks: number[] = [];
   private readonly limitOf = new Map<Actor, Limit | null>();
   private rule: PartyRule | null = null;
-  readonly report: FramingReport = { cls: 'field', colossus: false, colossusFight: null, plans: 0, replans: 0, todayPx: 0, floorPx: 0, scale: 0, fit: null, plate: null, live: null, staging: {}, tries: [] };
+  readonly report: FramingReport = { cls: 'field', colossus: false, colossusFight: null, plans: 0, replans: 0, todayPx: 0, floorPx: 0, scale: 0, fit: null, plate: null, live: null, staging: {}, stand: null, tries: [] };
 
   constructor(bc: BattleCameraLike | null, private readonly cam: PerspectiveCamera, private readonly game: 'ffx' | 'ffx2', private readonly scene: Object3D | null = null) {
     this.rigs = bc ? new RigWatch(bc, cam) : null;
@@ -111,6 +120,7 @@ export class Framing {
     if (sig !== this.sig) {
       this.sig = sig;
       this.sigAt = this.time;
+      this.staged = standFor(this.game, actors.filter((a) => a.facing < 0).map(subjectId), onPhone()) !== null;
       // An arrival in the opening seconds (Mortiorchis, a second fiend) re-plans; later changes (a death,
       // a summon, a spherechange) keep the master: no cut on them, and the floor still holds.
       if (this.installed && this.time < 10) this.planWanted = true;
@@ -120,7 +130,7 @@ export class Framing {
     const ready = actors.some((a) => a.facing >= 0) && actors.some((a) => a.facing < 0) && actors.every((a) => a.isPlaceholder !== true);
     // The plan measures the figures where they stand, so it is decided only when every one stands at its
     // place (a menu's lean included); it is put on screen only once no menu is open (no cut while choosing).
-    if (ready && this.planWanted && this.time - this.sigAt >= 0.6 && this.calm(actors, false)) {
+    if (ready && this.planWanted && this.time - this.sigAt >= (this.staged ? 0 : 0.6) && this.calm(actors, false)) {
       const d = this.decide(actors);
       if (d) {
         this.planWanted = false;
@@ -210,12 +220,16 @@ export class Framing {
     this.report.colossusFight = cls === 'colossus' && !keep;
     if (!this.wantOn || keep) {
       // Nothing to check against: today's rig is the master.
-      return { keep: true, pose: base, lens: [0, 0], plan: new Map(), today: base, rule: null, limitOf: new Map(), report: { tries: [keep && this.wantOn ? 'keeps today (D-228 / Sin)' : 'off'] } };
+      return { keep: true, pose: base, lens: [0, 0], plan: new Map(), side: null, today: base, rule: null, limitOf: new Map(), report: { tries: [keep && this.wantOn ? 'keeps today (D-228 / Sin)' : 'off'] } };
     }
     const before = new Map([...this.staging.plan].map(([a, p]) => [a, { ...p }] as const));
+    const beforeSide = this.staging.side;
     this.staging.release();
     const field = this.field(canvas);
-    // Today: the figures as the stage left them, under today's rig, give the limits and the party rule.
+    const stand = readStand(this.game, actors, base, onPhone());
+    this.staging.side = stand.side;
+    this.staging.apply(actors, true); // the chapter's slots only (the plan is cleared): "today" below is the table's picture
+    // Today: the figures as the stage left them (in the chapter's slots), under today's rig, give the limits and the party rule.
     const { figs: todayFigs, vis } = this.visible(actors);
     const { limits, rule, todayPx } = limitsFor(todayFigs, base, field);
     const limitOf = new Map<Actor, Limit | null>();
@@ -230,7 +244,7 @@ export class Framing {
     // with the party stepped toward the enemies (out from under the command menu on the left): the first
     // that passes, else the least bad (today's rig is among the candidates, so the result is never worse).
     const today0 = { frac: -1, colossus: false, partyDx: 0 };
-    const steps = [0.35, 0.7].map((partyDx) => ({ frac: -1, colossus: false, partyDx }));
+    const steps = stand.side ? [] : [0.35, 0.7].map((partyDx) => ({ frac: -1, colossus: false, partyDx })); // a chapter's table places its own party: no step toward the fiends
     const tries = [...(colossus ? FRACS.map((frac) => ({ frac, colossus: true, partyDx: 0 })) : []), today0, ...steps];
     let chosen: { fit: Fit; frac: number; gap: number; plan: Map<Actor, { k: number; dx: number }> } | null = null;
     // Fail closed (round 19): a pose that shows more of the plate's edge than today's rig (PR-0307) or, for a colossus
@@ -261,6 +275,7 @@ export class Framing {
     const pick = chosen!;
     // The figures back as they were found (the search staged every candidate on them, within this frame).
     this.staging.release();
+    this.staging.side = beforeSide;
     for (const [a, p] of before) this.staging.plan.set(a, p);
     this.staging.apply(actors, this.wantOn);
     const f = pick.fit.clear;
@@ -272,9 +287,10 @@ export class Framing {
       scale: pick.frac,
       fit: { ok: f.ok, partyPx: Math.round(f.partyPx), overlap: +f.overlap.toFixed(2), bossCover: +f.bossCover.toFixed(2), blend: pick.fit.blend, back: pick.fit.back, lens: pick.fit.lens, figs: f.figs, gate: +pick.fit.gate.toFixed(3), down: f.down },
       plate: plate && plateToday ? { chosen: +plateMiss(plate, pick.fit.pose, field.W, field.H, pick.fit.lens).share.toFixed(3), today: +plateToday.share.toFixed(3), corners: plateMiss(plate, pick.fit.pose, field.W, field.H, pick.fit.lens).corners, todayCorners: plateToday.corners, restGap: pick.gap } : null,
+      stand: stand.report,
       tries: log,
     };
-    return { keep: false, pose: pick.fit.pose, lens: pick.fit.lens, plan: pick.plan, today: base, rule, limitOf, report };
+    return { keep: false, pose: pick.fit.pose, lens: pick.fit.lens, plan: pick.plan, side: stand.side, today: base, rule, limitOf, report };
   }
 
   /** Put a decision on screen: the staging, the master as the resting rig (a cut if the camera rests on it), the lens. */
@@ -284,6 +300,7 @@ export class Framing {
     this.report.plans++;
     this.todayPose = d.today;
     this.staging.release();
+    this.staging.side = d.side;
     for (const [a, p] of d.plan) this.staging.plan.set(a, { ...p });
     this.staging.apply(actors, true);
     this.masterPose = d.pose;
@@ -373,5 +390,6 @@ export class Framing {
     this.applyLens(false);
     this.rigs?.dispose();
     this.staging.release();
+    this.staging.side = null;
   }
 }
