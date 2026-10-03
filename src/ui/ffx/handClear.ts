@@ -32,7 +32,7 @@ const hits = (a: HandBox, b: HandBox): boolean => Math.min(a.right, b.right) > M
  * the lowest card it touches" and "up past the highest", re-checked against all cards; 0 when it already
  * clears, or when no shift within `limit` clears them (it is then left where the figure puts it).
  */
-export function clearHandShift(hand: HandBox, cards: readonly HandBox[], limit: number): number {
+export function clearHandShift(hand: HandBox, cards: readonly HandBox[], limit: number, range?: { top: number; bottom: number }): number {
   const touched = cards.filter((c) => hits(hand, c));
   if (!touched.length) return 0;
   const h = hand.bottom - hand.top;
@@ -40,16 +40,31 @@ export function clearHandShift(hand: HandBox, cards: readonly HandBox[], limit: 
   const up = Math.min(...touched.map((c) => c.top)) - GAP - h - hand.top;
   const clears = (dy: number): boolean => cards.every((c) => !hits({ ...hand, top: hand.top + dy, bottom: hand.bottom + dy }, c));
   const order = Math.abs(up) < down ? [up, down] : [down, up];
-  for (const dy of order) if (Math.abs(dy) <= limit && clears(dy)) return dy;
+  // `range`: the vertical extent of the figure the hand points at; the hand stays beside it (r37-ui-floor, third attempt: a Sensor card
+  // taller than the 3-hand-heights limit left the hand on it at TEXT SIZE 115, Chapter II 1440x900).
+  const inside = (dy: number): boolean => !range || (hand.top + dy >= range.top && hand.bottom + dy <= range.bottom);
+  for (const dy of order) if (Math.abs(dy) <= limit && inside(dy) && clears(dy)) return dy;
   return 0;
 }
 
-/** Nudge the cursor layer's hand (`.ffx-target__hand`, positioned by `top` in layer px) off the text cards. */
+/** The hand's bob carries it this far sideways (`ffx-hand-bob`); the box tested is widened by it so the answer does not flicker with the phase. */
+const BOB = 6;
+
+/**
+ * Nudge the cursor layer's hand (`.ffx-target__hand`, positioned by `top` in layer px) off the text cards.
+ *
+ * Idempotent, so it can run after every layout *and* every frame: the authored `top` is kept on the element
+ * (`data-base-top`) and each call measures from it, so a card that moves away lets the hand come back, and a card
+ * that moves under it pushes it off. (Run once after the cursor's layout it missed the Sensor card, which settles
+ * later: steered sideways, kept off the turn list, folded; at TEXT SIZE 115 and 130 the hand sat on its "HP ???" line.)
+ */
 export function clearHandOfCards(layer: HTMLElement, host: HTMLElement): void {
   const doc = layer.ownerDocument;
   if (doc.documentElement.dataset['phoneBattle']) return;
   const hand = layer.querySelector<HTMLElement>('.ffx-target__hand');
   if (!hand) return;
+  const base = hand.dataset['baseTop'] ?? (hand.dataset['baseTop'] = String(parseFloat(hand.style.top) || 0));
+  hand.style.top = `${base}px`;
   const hb = hand.getBoundingClientRect();
   if (hb.width <= 0 || hb.height <= 0) return;
   const cards: HandBox[] = [];
@@ -60,6 +75,8 @@ export function clearHandOfCards(layer: HTMLElement, host: HTMLElement): void {
       cards.push({ left: r.left, top: r.top, right: r.right, bottom: r.bottom });
     }
   }
-  const dy = clearHandShift({ left: hb.left, top: hb.top, right: hb.right, bottom: hb.bottom }, cards, hb.height * 3);
-  if (dy) hand.style.top = `${(parseFloat(hand.style.top) || 0) + dy}px`;
+  const fig = layer.querySelector<HTMLElement>('.ffx-target:not(.ffx-target--dim)')?.getBoundingClientRect();
+  const range = fig && fig.height > hb.height * 2 ? { top: fig.top, bottom: fig.bottom } : undefined;
+  const dy = clearHandShift({ left: hb.left - BOB, top: hb.top, right: hb.right + BOB, bottom: hb.bottom }, cards, range ? range.bottom - range.top : hb.height * 3, range);
+  if (dy) hand.style.top = `${(parseFloat(base) || 0) + dy}px`;
 }

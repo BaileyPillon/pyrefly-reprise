@@ -119,3 +119,19 @@ html:not([data-phone-battle]) .sgd .sgd__title { font-size: max(8px, var(--hud-f
 html:not([data-phone-battle]) .sgd .sgd__arrow { font-size: max(6px, var(--hud-floor)); }
 html:not([data-phone-battle]) .sgd .sgd__cmd { font-size: max(9px, var(--hud-floor)); }
 html:not([data-phone-battle]) .sgd .sgd__more { font-size: max(7px, var(--hud-floor)); }
+
+/* --------------------------------- the party list's aim nudge (FFX only) */
+
+/*
+ * While an enemy is aimed at, the party list dims and pulls in by 6 % of its width (`ffx-hud.css`, the approved
+ * "yields while aiming" frame). The list grows from its right edge with TEXT SIZE (`text-size.css`, `scale`), and the
+ * skewed rows let the "OD" word hang about 9.25 grid px past the list's right edge; the list's own right edge is
+ * 23.11 grid px inside the stage. A fixed 6 % was fine at 100 %, and at 115 and 130 % on a 1024 px window it carried
+ * the word off the screen ("OD" ended at x 1027), the second attempt's blocker 3. The nudge is now capped by the room
+ * the margin leaves after the growth, 2 grid px of air kept: (23.11 - 2) / scale - 9.25. The room is in stage grid
+ * px, so the cap holds at any window size (r37-ui-floor, third attempt; FFX only, FFX-2's list is left-anchored and
+ * TEXT SIZE does not reach its HUD).
+ */
+html:not([data-phone-battle]) .ffxhud--targeting-enemy .ig-stat-list {
+  transform: translateX(min(6%, max(0px, calc(21.1px / var(--pyr-ts, 1) - 9.25px))));
+}

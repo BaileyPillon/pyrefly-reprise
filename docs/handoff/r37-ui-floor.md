@@ -270,3 +270,37 @@ pause, the phone pause), and the repair holds for the first check's five blocker
 footer; FFX 4:3 target collisions; PR-0249 at 4:3 no longer worse for Rikku in total; the phone plate off the intent card). Three
 regressions remain: the FFX-2 first-run coach badge clipped at 1024x768, 1440x900 and 1600x900 (Blocker 1, the most visible), the phone
 target hand hidden by the new plate (Blocker 2), and the "OD" label clipped at 4:3 at TEXT SIZE 1.15 and 1.3 (Blocker 3).
+
+## Third attempt (2026-10-03, Sonnet sub-agent; after a written method check)
+
+Rule 15 (two failed attempts): the method check is `docs/plans/r37-ui-floor-method-check.md` (what each blocker is, why the
+two earlier fixes moved the problem, the binding constraint, the method, the measurement matrix). `origin/main` (`8d1e1605`,
+release 37 integration) was merged into the branch first (`dd3a0b3e`; the one conflict, `CONTRACT-CHANGES.md`, kept both
+entries; `ac560786` removes the markers a first resolution attempt left behind). Not merged into main, not deployed.
+
+Evidence scratch (headless Playwright, `PYREFLY_BROWSER=gpu`, seed 1, 6100 = branch, 6101 = a `git archive` copy of
+`origin/main`, both stopped by PID): `D:/Tools/pyrefly-scratch/2026-10-03/r37-ui-floor-3-tools/` (`chk3.mjs` walker, `matrix.sh`,
+`ph-target.mjs`, `dbox.mjs`, `od-diag.mjs`, `hand-diag.mjs`, `out/`). Pairs: `docs/screenshots/r37-ui-floor/third-*.jpg`.
+
+| Item | Game case | Cause | Fix | Proof (branch against origin/main, same cells) |
+|---|---|---|---|---|
+| FFX-2 first-run coach card cut (badge off the top, and off the right edge at 1440x900, which origin/main has too) | FFX-2 only (the badge); the clamp is both | `placeOffActors` solved the slab alone; the badge hangs 28 px above and runs 56 px wider | `coachActorAvoid.placeMarkOffActors` uses `markBox` (slab plus badge); new `keepMarkInStage` is the last word after every mover | Ch IV, Ixion, Ch V x 1024x768 / 1440x900 / 1600x900 / 2000x1012, fresh profile: 0 off-window text (origin/main: the badge at x 1468 on 1440 in Ch IV and Ixion); no cut at the top in any sample |
+| Phone Ch I target step: plate on the intent card, then on the hand | FFX only | the plate dock did not know the hand; its height estimate (34) is 2 px short of the page's (36) | `handBox` joins the dock's panels (`TargetCursor.dockFor`); the intent strip is grown 4 px | 390x844, 12 runs over both camera states: plate on the card 0 px2 (origin/main 119 to 2,618), hand always visible, 0 px2 against hand, party, stack; frame `third-phone-target-plate-*` |
+| OD label off the window at TEXT SIZE 1.15 / 1.3 on 1024 px | FFX only | the aim nudge `translateX(6%)` grows with TEXT SIZE; the OD word hangs 9.25 grid px past the list edge, 23.11 inside the stage | `hud-floor.css`: nudge `min(6%, (21.1px / text scale) - 9.25px)` in stage grid px | Ch I and II at 1024x768, TEXT SIZE 1.0 / 1.15 / 1.3, target step: 0 off-window text (before: OD ended at 1027 and 1033; now 1004 to 1020) |
+| Hand over the Sensor card ("HP ???", Ch II) at TEXT SIZE 1.15 / 1.3 (found in this pass) | FFX only | the card settles after the cursor's layout (steered sideways, kept off the turn list), so the one-off clear used a stale card; and the old 90 px limit could not clear a taller card | `clearHandOfCards` is idempotent (`data-base-top`) and runs every frame the hand is up; `clearHandShift` takes the figure's vertical range instead of a fixed limit | Ch I to III x 1024x768 / 1440x900 / 2000x1012 x TEXT SIZE 1.0 / 1.15 / 1.3 (27 cells): hand against Sensor, advisor, guide, intent strip 0 px2; frame `third-hand-sensor-*` |
+| 14 px floor, dialogue box role / text, phone pause objective against the footer | both | already fixed by the repair | not touched | 5 chapters x 390x844 / 1024x768 / 1440x900 / 2000x1012 x TEXT SIZE 1.0 / 1.15 / 1.3 (60 runs, menu, coach, seven submenus, target, every pause tab at 4:3 and on the phone): min 14.0, 0 under 14, 0 page errors. Dialogue role 14.1 and text 14.1 or more in Ch III and V (desktop, 115, 130 %; phone 14 / 15 at 100 %). Phone pause footer: 15 cells x 8 tabs, 0 text overlaps with ESC, RESUME, "H PAINTING ONLY". origin/main reads 4.8 to 13.5 px with 34 to 336 nodes under 14 in the same cells |
+
+Gates: `npx tsc --noEmit` clean; full suite (`--maxWorkers=4`, run once) 11,324 passed, 41 skipped, 1 todo, nothing failed; `tests/unit/r37-floor-third.test.ts` (12) with the existing coach, cursor, hud-floor, sensor-steer
+and `r37-floor-repair` files green; `node tools/orphans.mjs` the same four. Layering held (no engine file).
+
+Disclosures (not regressions, or timing noise):
+- The walker occasionally reads a frame with the pause screen open mid-walk (a stray Escape); those overlaps (the pause objective
+  over HUD text, "Auron" tab over the CTB tag) are not HUD defects and vanish on a re-run of the same cell.
+- The hand's tip touches the command stack's right edge by 200 to 300 px2 in Ch III at 1024x768, TEXT SIZE 1.15 in one of the
+  target camera's two resting states; origin/main shows 308 px2 in the same cell.
+- Ch IV / Ch V at 1024x768: the move card still lands on Yuna (PR-0249's 4:3 residue, disclosed before); the first-run line at
+  Ixion 1024x768 still sits over the party rows' left end (origin/main identical). Both want a layout, not a clamp.
+- Phone pause options page shows about 3 settings rows before it scrolls (disclosed in the re-check); the walker's `pause-options`
+  overlaps there are rows under the scroll fade.
+- Not run: TEXT SIZE 1.15 / 1.3 against origin/main beyond the cells above (the branch was compared with itself at 1.0 and
+  nothing new appeared); chapters other than I to V.

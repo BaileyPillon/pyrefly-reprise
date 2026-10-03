@@ -27,7 +27,7 @@ import type { BattleState, CombatantId, GameId } from '../../battle/common/types
 import type { TargetingPort } from '../../engine/HudPort.ts';
 import { CHAPTER_PANEL_SELECTORS, INTENT_AVOID_SELECTORS, rectsOf } from '../ffx/hudAvoidSelectors.ts';
 import { overlaps, type Rect } from './coachAvoid.ts';
-import { keepMarkOffIntent } from './coachIntentAvoid.ts';
+import { keepMarkInStage, keepMarkOffIntent, markBox } from './coachIntentAvoid.ts';
 
 /** The panels a coach line may never sit on, both games (solid children only, never an `inset: 0` wrapper). */
 export const COACH_PANEL_SELECTORS: readonly string[] = [
@@ -127,10 +127,16 @@ export function keepMarkClear(game: GameId, mark: HTMLElement, host: HTMLElement
   // U5 (PR-0237 sibling, FFX-2 phone): the phone's centred line (`coach.css`, top 8%) covered the intent strip at the
   // top of the field (21,080 px2 at 390x844 in Chapters IV and XVI); FFX's own line was already stepped off it.
   if (game === 'ffx' || phone) keepMarkOffIntent(mark, host);
-  if (phone) return;
-  const now = mark.getBoundingClientRect();
-  if (now.width === 0) return;
-  const box = { left: now.left, top: now.top, right: now.right, bottom: now.bottom };
+  if (!phone) placeMarkOffActors(mark, host, actors);
+  // r37-ui-floor, third attempt: whichever solver moved it, the line's whole box (badge included) ends inside the stage.
+  keepMarkInStage(mark, host);
+}
+
+/** Desktop: the least-covering, panel-clear place for the line's whole box (the FFX-2 badge hangs 28 px above it and runs wider). */
+function placeMarkOffActors(mark: HTMLElement, host: HTMLElement, actors: ActorRects): void {
+  if (mark.getBoundingClientRect().width === 0) return;
+  // Solved on the slab alone, the badge hung off the top and the right of the window (r37-ui-floor, blocker 1): the box is `markBox`.
+  const box = markBox(mark);
   const s = host.getBoundingClientRect();
   const moved = placeOffActors(box, actors.rects(), rectsOf(host.ownerDocument.body, COACH_PANEL_SELECTORS), { left: s.left, top: s.top, right: s.right, bottom: s.bottom });
   if (!moved) return;

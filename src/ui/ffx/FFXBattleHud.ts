@@ -695,6 +695,9 @@ export class FFXBattleHud implements HudPort {
     // height back and `placeAdvisor` should see that on the same frame.
     this.sensorPanel.update(dt);
     keepSensorOffCtb(this.sensorPanel.el, this.ctbList.el, this.hudScale()); // PR-0233: off the turn list's names
+    // r37-ui-floor, third attempt (FFX only): the Sensor card settles after the cursor's layout (steered sideways, kept off the turn list,
+    // folded), so the hand is cleared of it every frame the hand is up, against where the card is now (`handClear.ts`).
+    clearHandOfCards(this.commandMenu.targetCursor.el, this.el);
     this.guide.update(dt);
     this.advisor.update(dt);
     // After the advisor's own `layout()`, never before: `MoveAdvisor` measures
@@ -873,7 +876,8 @@ export class FFXBattleHud implements HudPort {
     // visibility sums below still get the panels alone.
     // r37-ui-floor, blocker 4 (FFX phone): the intent card is a fixed strip across the top there, so the plate
     // docked above a high enemy landed on its third line. The desktop card hangs on the boss and is not listed.
-    const intentStrip = this.el.ownerDocument.documentElement.dataset['phoneBattle'] ? solidPanelRects([this.intent.el]) : [];
+    // Its box is grown 4 px each way: the plate's real height is 36 px against the dock's 34 px estimate, so a plate docked flush read 1 to 2 px onto the strip's border.
+    const intentStrip = this.el.ownerDocument.documentElement.dataset['phoneBattle'] ? solidPanelRects([this.intent.el]).map((r) => ({ x: r.x - 4, y: r.y - 4, w: r.w + 8, h: r.h + 8 })) : [];
     this.commandMenu.setPanels([...panels, ...intentStrip, ...partyFaceRects(this.fieldPartyIds(), (id) => this.targeting?.rect(id) ?? null)]);
     // The cursor drew itself before this call (the selection is published from
     // `TargetCursor.publish`, downstream of `reposition`), so the first frame

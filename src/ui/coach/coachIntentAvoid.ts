@@ -74,3 +74,23 @@ export function keepMarkOffIntent(mark: HTMLElement, host: HTMLElement): boolean
   mark.style.left = `${left + moved.left - box.left}px`;
   return true;
 }
+
+/**
+ * Last word on where the line is (r37-ui-floor, third attempt; both games, FFX has no badge so its box is the slab).
+ * The solvers each work on a box and each can leave one edge outside the stage: the FFX-2 "Gauges running" badge hung
+ * 20 px off the top (a first-run line parked at the stage top) and off the right edge at 1440x900 (it runs 56 px wider
+ * than the slab; origin/main too). Whatever moved the line, shift it by the least that brings the whole box (badge
+ * included) back inside `host`; a box larger than the stage keeps its top-left.
+ */
+export function keepMarkInStage(mark: HTMLElement, host: HTMLElement): boolean {
+  const box = markBox(mark);
+  if (box.right - box.left <= 0) return false;
+  const s = host.getBoundingClientRect();
+  const dx = box.left < s.left ? s.left - box.left : box.right > s.right ? Math.max(s.right - box.right, s.left - box.left) : 0;
+  const dy = box.top < s.top ? s.top - box.top : box.bottom > s.bottom ? Math.max(s.bottom - box.bottom, s.top - box.top) : 0;
+  if (!dx && !dy) return false;
+  const style = getComputedStyle(mark);
+  if (dy) mark.style.top = `${(parseFloat(style.top) || 0) + dy}px`;
+  if (dx) mark.style.left = `${(parseFloat(style.left) || 0) + dx}px`;
+  return true;
+}
