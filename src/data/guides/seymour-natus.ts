@@ -16,6 +16,11 @@
  * Commands and the FFX status set; research §0.3: FFX-2 has no Natus, no
  * Mortibody and no Highbridge boss.
  *
+ * The RULES and the NEXT line (`./lines/seymour-natus.ts`) follow the FFX encounter guide the
+ * project settled on (D-350, `research/jegged-encounter-guides-ffx-b.md` §3); `cite` names the
+ * research section behind each mechanic and is never rendered. The `hints` below are the move
+ * advisor's borrowed sentences for the chapter tactic's pick: the panel does not read them.
+ *
  * Every number is the research's: HP 36,000, Defense 0 and Magic Defense 0
  * (§1.1), the thresholds below 24,000 and below 12,000 (§4.1 and the plan's
  * Review correction), Break then the Claw's 90 % shatter (§3, §5,
@@ -29,6 +34,7 @@
  */
 
 import type { ChapterGuide } from './types.ts';
+import { SEYMOUR_NATUS_LINE } from './lines/seymour-natus.ts';
 
 export const SEYMOUR_NATUS_GUIDE: ChapterGuide = {
   id: 'seymour-natus',
@@ -38,29 +44,29 @@ export const SEYMOUR_NATUS_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Natus has no Defense and no Magic Defense: every point lands in full. The wall is his 36,000 HP, and the fight changes each time a hit carries him lower.',
-      short: 'No Defense: the wall is his 36,000 HP',
-      cite: 'ffx-seymour-natus-highbridge §1.1, §4.1',
+      text: 'Haste only two members, never a third: a third Haste calls Desperado from Mortibody, about 500 to everyone, and it strips Shell, Protect, Reflect, Haste and Regen.',
+      short: 'Haste two members, never a third',
+      cite: 'ffx-seymour-natus-highbridge §3.2, §4.3, §6.3 row 7',
     },
     {
-      text: 'Below 24,000 he starts to Break, turning a guardian to stone, and Mortibody’s Claw shatters a stone guardian nine times in ten. A shattered guardian is gone for the rest of the battle. Soften the stone at once.',
+      text: 'Below 24,000 he starts to Break, turning a member to stone, and Mortibody’s Claw shatters a stone member nine times in ten. A shattered member is gone for the rest of the battle. Soften the stone at once, and Dispel his Protect when he puts it up.',
       short: 'Stone? Soft it before the Claw lands',
       cite: 'ffx-seymour-natus-highbridge §3, §4.1, §5',
     },
     {
-      text: 'Haste Tidus and Auron, never a third: a third Haste calls Desperado from Mortibody, about 500 to everyone, and it strips Shell, Protect, Reflect, Haste and Regen.',
-      short: 'Haste Tidus and Auron, never a third',
-      cite: 'ffx-seymour-natus-highbridge §3.2, §4.3, §6.3 row 7',
+      text: 'Below 12,000 he casts Flare, about 2,500 on one member, and Mortibody Curas him. Put Reflect on Natus and the Cura bounces onto your party instead; swap Rikku in for it.',
+      short: 'Last stretch: Reflect on Natus, not the party',
+      cite: 'ffx-seymour-natus-highbridge §3.3, §4.1, §6.3 row 5',
     },
     {
-      text: 'He Banishes an aeon after its first turn. Send one with a full gauge and let its Overdrive be that turn. Bahamut arrives full.',
-      short: 'An aeon gets one turn: make it an Overdrive',
+      text: 'He Banishes an aeon after its first turn, so aeons are mostly wasted here. The exception is a Grand Summon: its Overdrive lands before the Banish. Bahamut arrives with a full gauge.',
+      short: 'Aeons only as a Grand Summon Overdrive',
       cite: 'ffx-seymour-natus-highbridge §4.3, §6.3 row 3; B3',
     },
     {
-      text: 'Mortibody always comes back. Each time it falls it drains Natus for its own maximum HP, 4,000 first, then 3,000, 2,000 and 1,000.',
+      text: 'Mortibody always comes back. Each time it falls it drains Natus for its own maximum HP, 4,000 first, then 3,000, 2,000 and 1,000. Natus has no Defense and no Magic Defense, and Magic Break does nothing to either of them.',
       short: 'Felling Mortibody drains Natus',
-      cite: 'ffx-seymour-natus-highbridge §4.4',
+      cite: 'ffx-seymour-natus-highbridge §1.1, §4.4, §6.3',
     },
   ],
 
@@ -140,10 +146,11 @@ export const SEYMOUR_NATUS_GUIDE: ChapterGuide = {
     },
     {
       label: 'Below 12,000',
-      note: 'Natus casts Flare; Mortibody Curas him for about 1,200.',
+      note: 'Natus casts Flare, and Mortibody Curas him for about 1,200. Reflect on Natus turns that Cura onto your party.',
       cite: 'ffx-seymour-natus-highbridge §3.3, §4.1',
     },
   ],
+  line: SEYMOUR_NATUS_LINE,
 };
 
 export default SEYMOUR_NATUS_GUIDE;

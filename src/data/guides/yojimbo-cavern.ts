@@ -11,6 +11,12 @@
  * gauge and Ronso Rage Doom; research §0.3: "None of these facts transfers
  * across games". The FFX-2 Yojimbo (§8.2) is a different fight.
  *
+ * The FFX encounter guide the project settled on (D-350) has almost nothing for this fight: it
+ * is not hard, and Yuna's aeons are the fallback. The RULES keep this chapter's own research and
+ * say the aeon fallback (`research/jegged-encounter-guides-ffx-b.md` §2); the NEXT line is
+ * `./lines/yojimbo-cavern.ts`. `cite` is never rendered, and the `hints` below are the move
+ * advisor's borrowed sentences for the chapter tactic's pick: the panel does not read them.
+ *
  * **Kimahri arrives without Doom** (`CAVERN_DOOM_PREP = 'not-learned'`, P-1
  * of `docs/plans/yojimbo-faithfulness-2026-09-26.md`, Bailey 2026-09-26), so
  * the shipped guide is the race (§5.3 strategies 2-4) and names Doom nowhere:
@@ -27,6 +33,7 @@
  */
 
 import type { ChapterGuide, GuideHint, GuideRule } from './types.ts';
+import { YOJIMBO_CAVERN_LINE } from './lines/yojimbo-cavern.ts';
 import { CAVERN_DOOM_PREP } from '../ffx/builds/yojimbo-cavern.ts';
 
 /** Does the shipped Cavern party hold Doom? (P-1) */
@@ -75,8 +82,8 @@ export const YOJIMBO_CAVERN_GUIDE: ChapterGuide = {
       cite: 'ffx-yojimbo §2.1, §3.3, §5.3 row 4',
     },
     {
-      text: 'Once his gauge is high, put an aeon in front of him. Zanmato then hits the aeon, not the party.',
-      short: 'Gauge high: summon an aeon to take Zanmato',
+      text: "Bring Yuna's aeons when the fight turns against you, and always once his gauge is high: put an aeon in front of him and Zanmato hits the aeon, not the party.",
+      short: 'Aeons when it turns, and at a high gauge',
       cite: 'ffx-yojimbo §3.3, §5.3 row 3',
     },
     {
@@ -130,6 +137,7 @@ export const YOJIMBO_CAVERN_GUIDE: ChapterGuide = {
       cite: 'ffx-yojimbo §4.1',
     },
   ],
+  line: YOJIMBO_CAVERN_LINE,
 };
 
 export default YOJIMBO_CAVERN_GUIDE;

@@ -8,7 +8,11 @@
  * player is being told to press rather than for a name that only exists in the
  * research.
  *
- * **Game case: FFX only** [AGENTS.md rule 14].
+ * **Game case: FFX only** [AGENTS.md rule 14]. The RULES and WATCH and the NEXT line
+ * (`./lines/seymour-anima-macalania.ts`) follow the FFX encounter guide the project settled on
+ * (D-350, `research/jegged-encounter-guides-ffx-a.md` Chapter 7); `cite` names the research section
+ * behind each mechanic and is never rendered. The `hints` below are the move advisor's borrowed
+ * sentences for the chapter tactic's pick: the panel does not read them.
  *
  * Two sentences here are deliberately hedged, because the claims behind them
  * are **owner-approved assumptions, not canon**, and the guide is the one
@@ -22,6 +26,7 @@
  */
 
 import type { ChapterGuide } from './types.ts';
+import { SEYMOUR_ANIMA_MACALANIA_LINE } from './lines/seymour-anima-macalania.ts';
 
 export const SEYMOUR_ANIMA_MACALANIA_GUIDE: ChapterGuide = {
   id: 'seymour-anima-macalania',
@@ -30,29 +35,29 @@ export const SEYMOUR_ANIMA_MACALANIA_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Steal from each Guardian once. Until you do, every hit on one triggers a 1,000 HP Auto-Potion counter, and they hand Seymour another 1,000 whenever he drops below 4,800 — two turns of Steal removes more healing than most parties can out-damage.',
-      short: 'Steal from each Guardian — it kills their potions',
+      text: 'Steal from each Guardian, then drop them before Seymour. Until you do, every hit on a Guardian makes it drink a 1,000 HP potion, and they hand Seymour another 1,000 whenever he drops below 4,800. They also step in front of every physical hit aimed at him.',
+      short: 'Steal from each Guardian, then drop them',
       cite: 'ffx-seymour-anima-macalania §2.3, §7 row 1',
     },
     {
-      text: 'He cycles ice, lightning, water, fire, in that order, and it never varies. His own Scan text says so, which is the point: the matching Nul spell reduces a whole turn to nothing, and it costs 2 MP.',
-      short: 'Ice, lightning, water, fire — pre-cast the Nul',
+      text: 'His spells come in a fixed order: ice, lightning, water, fire, and it never varies. Pre-cast the matching Nul on a party member each turn, and a whole spell comes to nothing for 2 MP.',
+      short: 'Ice, lightning, water, fire: pre-cast the Nul',
       cite: 'ffx-seymour-anima-macalania §5.2, §7 row 5',
     },
     {
-      text: 'Pain carries a 100% Death rider, so on a party member it is not 500 damage, it is a kill — and on an aeon it is only the 500. That asymmetry is the whole of the middle act: summon, and keep something on the field Anima cannot delete.',
-      short: 'Pain kills people and only hurts aeons — summon',
-      cite: 'ffx-seymour-anima-macalania §4.3, §7 row 11',
+      text: 'Anima arrives the moment Seymour falls. Summon Shiva: Pain carries a 100% Death rider, so on a party member it is a kill, and on an aeon it is only 500. Talk to Seymour first, because Tidus, Yuna and Wakka each have a line that helps.',
+      short: 'Summon Shiva for Anima: Pain only hurts aeons',
+      cite: 'ffx-seymour-anima-macalania §4.3, §5.5, §7 row 11',
     },
     {
-      text: 'His HP bar is not a progress bar. Emptying it summons his aeon; beating his aeon gives him the whole bar back, stronger. Budget for roughly 27,000 damage, not 6,000.',
-      short: 'His bar comes back once — budget for 27,000',
-      cite: 'ffx-seymour-anima-macalania §5.2, §5.4',
+      text: 'Keep the aeon healed and fire its Overdrive while Anima is Boosted, because she takes half again as much. Her own Overdrive is close to a wipe, so keep everyone high on HP.',
+      short: 'Overdrive on a Boost turn; keep HP high',
+      cite: 'ffx-seymour-anima-macalania §3.4, §6.3, §7 rows 12 and 14',
     },
     {
-      text: 'Act one is the only stretch with turns to spare. Haste, Cheer and a stolen potion bought there are still on the board in act three, where two hits a turn land for roughly 1,700 each.',
-      short: 'Spend act one buying tempo, not damage',
-      cite: 'ffx-seymour-anima-macalania §6.4, §7 row 10',
+      text: 'Seymour comes back at full HP for the last act and casts twice a turn. Swap Auron in for Magic Break, which halves it, and keep the matching Nul up.',
+      short: "Last act: Auron's Magic Break, matching Nul",
+      cite: 'ffx-seymour-anima-macalania §1.3, §5.4, §7 rows 7 and 10',
     },
   ],
 
@@ -138,13 +143,13 @@ export const SEYMOUR_ANIMA_MACALANIA_GUIDE: ChapterGuide = {
     {
       name: 'Boost',
       payload: 'half again as much damage taken, until her next turn',
-      advice: 'This is the window — spend the biggest thing the party has before she acts again',
+      advice: 'This is the window: spend the biggest thing the party has before she acts again',
       cite: 'ffx-seymour-anima-macalania §3.4, §7 row 14',
     },
     {
       name: '#',
-      payload: 'Oblivion — sixteen hits across the field',
-      advice: 'Get Shield up. Her gauge is filling whether she acts or is targeted, and it is a race, not something to eat twice',
+      payload: 'Oblivion: sixteen hits across the field',
+      advice: 'Keep everyone high on HP, and put Shield up. Her gauge fills whether she acts or is targeted, so it is a race, not something to eat twice',
       cite: 'ffx-seymour-anima-macalania §3.4, §6.3',
     },
   ],
@@ -169,6 +174,7 @@ export const SEYMOUR_ANIMA_MACALANIA_GUIDE: ChapterGuide = {
       cite: 'ffx-seymour-anima-macalania §5.4, §12 C-14',
     },
   ],
+  line: SEYMOUR_ANIMA_MACALANIA_LINE,
 };
 
 export default SEYMOUR_ANIMA_MACALANIA_GUIDE;

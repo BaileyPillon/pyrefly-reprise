@@ -2,6 +2,14 @@
  * Chapter 3 — Braska's Final Aeon, the possessed aeons and Yu Yevon
  * [research/ffx-bfa-yu-yevon.md].
  *
+ * **Game case: FFX only** [AGENTS.md rule 14]. The RULES and phase notes and the NEXT line
+ * (`./lines/braskas-final-aeon.ts`) follow the FFX encounter guide the project settled on (D-350,
+ * `research/jegged-encounter-guides-ffx-a.md` Chapter 3) for the first link; the possessed aeons and
+ * Yu Yevon, which that guide barely covers, run on this chapter's own research. `cite` names the
+ * research section behind each mechanic and is never rendered. The `hints` below are the move
+ * advisor's borrowed sentences for the chapter tactic's pick
+ * (`src/engine/tactics/braskas-final-aeon.ts`): the panel does not read them.
+ *
  * A seven-battle chain that fields a **different boss in every link**, so this
  * guide registers all of them (same reason `src/engine/tactics/index.ts`
  * registers the one tactic under every chain id) and leans on `phases` keyed
@@ -9,6 +17,7 @@
  */
 
 import type { ChapterGuide } from './types.ts';
+import { BRASKAS_FINAL_AEON_LINE } from './lines/braskas-final-aeon.ts';
 
 export const BRASKAS_FINAL_AEON_GUIDE: ChapterGuide = {
   id: 'braskas-final-aeon',
@@ -30,28 +39,28 @@ export const BRASKAS_FINAL_AEON_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: "Talk is a panic button with two charges. It zeroes his Overdrive gauge and costs him his next turn — save both for form 2, where the Overdrive is Ultimate Jecht Shot or a limit-breaking Triumphant Grasp 2.",
-      short: 'Talk has two charges — spend both in form 2',
+      text: 'Cure Petrify at once, with a Soft or a Remedy. Jecht Beam petrifies at 100%, and the next physical hit shatters a petrified member for good. A shatter cannot be undone.',
+      short: 'Cure Petrify before the next physical hit',
       cite: 'ffx-bfa-yu-yevon §1.6',
     },
     {
-      text: 'Jecht Beam petrifies at 100%, and the next physical shatters the victim permanently — a shatter is not revivable. Carry a Soft, or a Remedy, and spend it before his next turn.',
-      short: 'Cure Petrify before the next physical shatters',
+      text: 'Keep Hastega, Protect and Regen up on the party. His Overdrive comes on his clock, and extra turns are how the party answers it.',
+      short: 'Keep Hastega, Protect and Regen up',
       cite: 'ffx-bfa-yu-yevon §1.6',
     },
     {
-      text: 'The Yu Pagodas feed his gauge 20% per Power Wave. With both alive he Overdrives about every other turn; killing or slowing them is what makes the two Talk charges enough.',
-      short: 'Suppress the Pagodas; they feed his Overdrive',
+      text: 'Talk empties his Overdrive gauge and costs him his next turn. It has two charges: save both for form 2, where the Overdrive is Ultimate Jecht Shot or a limit-breaking Triumphant Grasp 2.',
+      short: 'Talk has two charges: spend both in form 2',
       cite: 'ffx-bfa-yu-yevon §1.6',
     },
     {
-      text: 'Aeons are explicitly allowed here — he has a dedicated anti-aeon Overdrive precisely because the designers expected them. Shield cuts Jecht Bomber to a quarter.',
-      short: 'Aeons are allowed — Shield quarters Jecht Bomber',
-      cite: 'ffx-bfa-yu-yevon §1.6',
+      text: 'Two Yu Pagodas float beside him and feed his gauge 20% with every Power Wave. Each has 5,000 HP and returns a few turns after it falls. Leave them alone in form 1. In form 2 take them down together, because a lone survivor starts casting Curse and worse.',
+      short: 'Pagodas: down together in form 2, or leave',
+      cite: 'ffx-bfa-yu-yevon §1.4, §1.6',
     },
     {
-      text: 'Yu Yevon answers every damaging action with a 9,999 Curaga on himself, so do not hit him. Doom him with a Candle of Life, suppress the Pagodas, and let his own Gravija take 75% of his HP a cast.',
-      short: 'Never damage Yu Yevon. Doom him instead',
+      text: 'Yu Yevon cannot beat you, and every damaging action aimed at him is answered by a 9,999 Curaga on himself. Doom him with a Candle of Life, keep the Pagodas down, and let his own Gravija wear him down. If the fight drags, put Reflect on him.',
+      short: 'Yu Yevon: Doom him, never damage him',
       cite: 'ffx-bfa-yu-yevon §3.4.1, §3.5',
     },
   ],
@@ -146,7 +155,7 @@ export const BRASKAS_FINAL_AEON_GUIDE: ChapterGuide = {
       bossId: 'braskas-final-aeon',
       aboveHpFraction: 0.5,
       label: 'Jecht',
-      note: 'Left-Arm Strike by default, Jecht Beam about one turn in four (Petrify at 100%). The Overdrive is Triumphant Grasp: two hits and a Zombie.',
+      note: 'Left-Arm Strike by default, Jecht Beam about one turn in four (Petrify at 100%). The Overdrive is Triumphant Grasp: two hits and a Zombie. Armor Break and Mental Break make him easier to hurt, and the Pagodas can wait for form 2.',
       cite: 'ffx-bfa-yu-yevon §1.6',
     },
     {
@@ -169,4 +178,5 @@ export const BRASKAS_FINAL_AEON_GUIDE: ChapterGuide = {
       cite: 'ffx-bfa-yu-yevon §2.2',
     },
   ],
+  line: BRASKAS_FINAL_AEON_LINE,
 };

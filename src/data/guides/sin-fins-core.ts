@@ -7,15 +7,19 @@
  * **Game case: FFX only** [AGENTS.md rule 14; research/ffx-sin.md §0.3]: CTB, Cid's Trigger Command, the
  * airship range, Armor and Mental Break. Nothing here is true of FFX-2.
  *
- * **Estimates are labelled on the page, in plain words** (plan §3.4): the Negation chance is one guide's
- * formula built as named settings (S-12), and how Genais leaves its shell is our reading of the in-game Scan
- * text (S-2). The Fins opening far away is Gestahl's (S-8), the default.
+ * The RULES and the NEXT line (`./lines/sin-fins-core.ts`) follow the FFX encounter guide the project
+ * settled on (D-350, `research/jegged-encounter-guides-ffx-b.md` §6); `cite` names the research section
+ * behind each mechanic and is never rendered. The page does not state the Negation chance or how Genais
+ * leaves its shell, because the research holds both as single-source estimates (S-12, S-2). The Fins
+ * opening far away is Gestahl's (S-8), the default. The `hints` below are the move advisor's borrowed
+ * sentences for the chapter tactic's pick: the panel does not read them.
  *
  * Listed with its chapter on 2026-09-29 (D-279): the panel finds it by the four
  * boss ids once the chapter runs, through `./index.ts`'s `GUIDES`.
  */
 
 import type { ChapterGuide } from './types.ts';
+import { SIN_FINS_CORE_LINE } from './lines/sin-fins-core.ts';
 
 export const SIN_FINS_CORE_GUIDE: ChapterGuide = {
   id: 'sin-fins-core',
@@ -30,29 +34,29 @@ export const SIN_FINS_CORE_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Distance buys safety, not damage. Cid fires no missiles here, so FAR only keeps the Fin quiet and turns its Gravija aside; at FAR only Wakka and magic reach.',
-      short: 'FAR is safety, not damage',
-      cite: 'ffx-sin §4, §2.5 (S-19)',
+      text: 'The ship starts far, and nothing but Wakka and magic reaches the Fin from there, so order it in to Break. Close in, Armor Break, then pull back: the Fin attacks less often while Cid keeps the ship away.',
+      short: 'Close in to Break, then pull back',
+      cite: 'ffx-sin §4, §8 rows 1 and 3, §5.1.1',
     },
     {
-      text: 'When the core on the fin glows, Gravija follows on its next turn: three quarters of everyone\'s current HP. It cannot kill, but the next swing can. Pull back first, and only if Cid acts before the Fin does.',
+      text: 'Spend the time at range on Hastega and Cheer, up to five. The Fin\'s Negation strips good statuses and the Breaks, so cast them again whenever they are gone.',
+      short: 'At range: Cheer, Hastega, recast after Negation',
+      cite: 'ffx-sin §5.1.3, §8 rows 1 and 3',
+    },
+    {
+      text: 'When the core on the fin glows, Gravija follows on its next turn: three quarters of everyone\'s current HP. It cannot kill, but the next swing can. Pull the ship away at once, if Cid acts before the Fin does.',
       short: 'Core glows: pull back if Cid acts first',
       cite: 'ffx-sin §5.1.2, §3.1, §8 row 2',
     },
     {
-      text: 'Armor Break opens every link. Close in, Break, then pull back. Up close, Negation can wipe your buffs and the Breaks; more buffs make it likelier. That chance is one guide\'s formula, built as settings we can change, not a measured fact.',
-      short: 'Break up close, then pull back',
-      cite: 'ffx-sin §8 rows 1 and 3, §5.1.3, §10 S-12',
+      text: 'Genais guards the Core: while it lives, magic at the Core is absorbed and blades cannot reach it. Hit Genais with plain attacks, because a spell at it draws Waterga. Below half HP it shells up and cures itself, so Slow it to limit the cures, and put Fire into the shell.',
+      short: 'Genais first: plain attacks, Slow, then Fire',
+      cite: 'ffx-sin §5.3.1, §2.2, §8 row 4',
     },
     {
-      text: 'Genais guards the Core: while it lives, magic at the Core is absorbed and blades cannot reach it. Hit Genais with physicals until it shells (a spell draws Waterga), then Fire into the shell. How it leaves the shell is our reading of its Scan text: healed to 12,000, it comes out next turn.',
-      short: 'Genais first: physicals, then Fire',
-      cite: 'ffx-sin §5.3.1, §2.2, §8 row 4, §10 S-2',
-    },
-    {
-      text: 'Nothing heals between links. HP, MP and every status carry from the Left Fin to the Core, so heal before the kill, not after it.',
+      text: 'The Core is the same fight with no ship to move, so Gravija cannot be dodged. Nothing heals between links: HP, MP and every status carry from the Left Fin to the Core, so heal before the kill, not after it.',
       short: 'No rest between links: heal before the kill',
-      cite: 'ffx-sin §1.2',
+      cite: 'ffx-sin §1.2, §5.3',
     },
   ],
 
@@ -157,6 +161,7 @@ export const SIN_FINS_CORE_GUIDE: ChapterGuide = {
       cite: 'ffx-sin §5.3.2',
     },
   ],
+  line: SIN_FINS_CORE_LINE,
 };
 
 export default SIN_FINS_CORE_GUIDE;

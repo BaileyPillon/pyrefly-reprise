@@ -10,6 +10,11 @@
  * **Game case: FFX only** [AGENTS.md rule 14]. CTB, Nul spells, Armor Break, the party switch;
  * research §0.3: *X-2* has no Seymour fight.
  *
+ * The RULES and the NEXT line (`./lines/seymour-omnis.ts`) follow the FFX encounter guide the
+ * project settled on (D-350, `research/jegged-encounter-guides-ffx-b.md` §4); `cite` names the
+ * research section behind each mechanic and is never rendered. The `hints` below are the move
+ * advisor's borrowed sentences for the chapter tactic's pick: the panel does not read them.
+ *
  * Every number is the research's: HP 80,000 and Defense 180 (§1.1), the six and three attacks
  * and the 20,000 line (§4.4, verified: 4-5 sources), Ultima about 3,600 at this party's Magic
  * Defense and "keep HP above 4,000" (§3.3, §5 row 6), the affinity ladder (§4.2, verified: 5
@@ -18,6 +23,7 @@
  */
 
 import type { ChapterGuide } from './types.ts';
+import { SEYMOUR_OMNIS_LINE } from './lines/seymour-omnis.ts';
 
 export const SEYMOUR_OMNIS_GUIDE: ChapterGuide = {
   id: 'seymour-omnis',
@@ -27,19 +33,19 @@ export const SEYMOUR_OMNIS_GUIDE: ChapterGuide = {
 
   rules: [
     {
+      text: 'Open with Hastega, and cast it again after every Dispel. Armor Break him first, because at full Defense a sword barely scratches him, then Mental Break. Nul the colour he shows most. Aeons are safe here, because he never Banishes them.',
+      short: 'Hastega, Armor Break, Mental Break, then Nul',
+      cite: 'ffx-seymour-omnis §3.3, §5 rows 1, 3 and 9',
+    },
+    {
       text: 'Each disc casts its own colour at the party, one spell each. A colour on three or four discs comes out as -ga; on one or two, as -ra. The quarter facing him is the one that counts.',
       short: 'Each disc casts its colour; three of one is -ga',
       cite: 'ffx-seymour-omnis §4.1',
     },
     {
-      text: 'Only Wakka can reach a disc with a blow, and it turns the disc a quarter one way; a spell turns it the other way. A disc takes no damage and never falls.',
-      short: 'Wakka’s blow or a spell turns a disc',
+      text: 'Hit a disc to turn it: a blow turns it a quarter one way and a spell turns it the other way. Only Wakka reaches a disc with a blow, so swap him in. A disc takes no damage and never falls.',
+      short: 'Hit a disc to turn it: Wakka or a spell',
       cite: 'ffx-seymour-omnis §2, §4.3',
-    },
-    {
-      text: 'Armor Break him first: at full Defense a sword barely scratches him. Nul the colour he shows most, and cast Hastega again after every Dispel.',
-      short: 'Armor Break, Nul his colour, re-cast Hastega',
-      cite: 'ffx-seymour-omnis §3.3, §5 rows 1, 3 and 9',
     },
     {
       text: 'Six attacks on him and he glows red, three once he is below 20,000. Next turn he Dispels the party, the turn after he casts Ultima on everyone, then every disc changes colour. Heal everyone above 4,000 before Ultima; Shell does nothing against it.',
@@ -120,6 +126,7 @@ export const SEYMOUR_OMNIS_GUIDE: ChapterGuide = {
       cite: 'ffx-seymour-omnis §4.4',
     },
   ],
+  line: SEYMOUR_OMNIS_LINE,
 };
 
 export default SEYMOUR_OMNIS_GUIDE;

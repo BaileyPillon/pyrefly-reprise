@@ -1,13 +1,16 @@
 /**
  * Chapter 1 — Seymour Flux and the Mortiorchis [research/ffx-seymour-flux.md].
  *
- * Written against the tactic in `src/engine/tactics/seymour-flux.ts`: every
- * `labels` entry below is a row that file actually asks for, so a hint fires
- * for the command the player is being told to press rather than for a name
- * that only exists in the research.
+ * **Game case: FFX only** [AGENTS.md rule 14]. The RULES, WATCH and phase notes and the NEXT line
+ * (`./lines/seymour-flux.ts`) follow the FFX encounter guide the project settled on (D-350,
+ * `research/jegged-encounter-guides-ffx-a.md` Chapter 1); `cite` names the research section that
+ * backs each mechanic and is never rendered. The `hints` below are the move advisor's borrowed
+ * sentences for the chapter tactic's pick (`src/engine/tactics/seymour-flux.ts`): the panel does
+ * not read them, and they are left exactly as the advisor needs them.
  */
 
 import type { ChapterGuide } from './types.ts';
+import { SEYMOUR_FLUX_LINE } from './lines/seymour-flux.ts';
 
 export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
   id: 'seymour-flux',
@@ -16,32 +19,29 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Kill Seymour, not the mount. Mortiorchis has no death state — its max HP floors at 1,000 and it revives for ever, so every kill is a diminishing tap of HP drained out of Seymour and never a way to remove the adds.',
-      short: 'Kill Seymour, not the mount',
-      cite: 'ffx-seymour-flux §2.2, §6 row 17',
-    },
-    {
-      text: 'Poison him on turn one. 2% of 70,000 is 1,400 a turn, for ever; he never removes it and it does not trigger his HP-threshold reactions.',
-      short: 'Poison him on turn one — 1,400 a turn, for ever',
-      cite: 'ffx-seymour-flux §6 rows 5-6, §4.3',
-    },
-    {
-      // Rule 3 (PR-0007) and rule 4 (PR-0008) are known to be wrong against §4.1 / §4.2, but
-      // their new wordings wait on Bailey (decisions-2026-09-25 item 5: "the guide wordings,
-      // shown to you first"). The choices are in docs/plans/pr-0008-guide-wordings.md. FFX only.
-      text: 'Holy Water a Zombie before the mount acts. Lance of Atrophy sets Zombie, and the mount answers with Full-Life — on a living Zombie that is 100% of max HP as damage plus a guaranteed Death.',
-      short: 'Holy Water a Zombie before the mount acts',
+      text: "Cure a Zombie at once. Lance of Atrophy can turn someone into a Zombie, and the mount's Full-Life kills a Zombie outright. Holy Water or a Remedy clears it first, and the Full-Life does nothing.",
+      short: 'Holy Water the Zombie before the mount acts',
       cite: 'ffx-seymour-flux §6 row 4, §3.3',
     },
     {
-      text: 'Stand the party up before the hit, not after it. Dispel into Cross Cleave arrives with nothing in between, so the only defence is Protect, five Cheer stacks and full HP already being true.',
-      short: 'Buff before the Dispel, never after it',
-      cite: 'ffx-seymour-flux §4.2, §5.2, §5.5',
+      text: 'Poison him in the first turns and keep Hastega on the party. Poison takes 1,400 a turn off his 70,000 for the whole fight, and Haste gives you the extra turns to cure, heal and swing.',
+      short: 'Poison him early and keep Hastega up',
+      cite: 'ffx-seymour-flux §6 rows 5-6 and 10, §4.3',
     },
     {
-      text: 'Provoke, the four Breaks and Delay Attack are all dead rows here — both actors are immune, and a delay counters with party-wide Slowga.',
-      short: 'Provoke, Breaks and Delay are dead rows here',
-      cite: 'ffx-seymour-flux §6 rows 19-21',
+      text: 'When Seymour puts Reflect or Protect on himself, Dispel it. Strip the Reflect quickly and his next Flare bounces back onto him for about 1,734.',
+      short: 'Dispel his Reflect and Protect',
+      cite: 'ffx-seymour-flux §6 rows 8-9, §5.3',
+    },
+    {
+      text: "Total Annihilation is the killer, and it is announced. Below half HP the Mortiorchis enters Auto-Attack Mode, then says it is Ready To Annihilate, and the blast lands on its next turn. Put Shell on the party first (Kimahri's Mighty Guard does it in one turn). Or summon an aeon right after Seymour acts: it takes the whole blast, and he cannot banish it before then. Keep aeons for that, because he banishes them.",
+      short: 'Shell or Mighty Guard before Total Annihilation',
+      cite: 'ffx-seymour-flux §4.4.2, §5.2, §6 rows 13 and 15',
+    },
+    {
+      text: 'Kill Seymour, not the mount. The Mortiorchis has no death state: its max HP floors at 1,000 and it revives for ever, so every kill only drains a little HP out of Seymour.',
+      short: 'Kill Seymour, not the mount',
+      cite: 'ffx-seymour-flux §2.2, §6 row 17',
     },
   ],
 
@@ -116,14 +116,14 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
   watch: [
     {
       name: 'Auto-Attack Mode',
-      payload: 'Total Annihilation',
-      advice: 'Get Shell up, or Defend — it is ~3,300-4,145 of magic across the party and Shell halves it',
+      payload: 'Total Annihilation is charging',
+      advice: "Get Shell on the party now: Kimahri's Mighty Guard does it in one turn, and Shell halves roughly 3,300 to 4,145 of magic",
       cite: 'ffx-seymour-flux §5.2, §6 row 13',
     },
     {
       name: 'Ready To Annihilate',
       payload: 'Total Annihilation, next turn',
-      advice: 'Shell or Defend now, and top up anyone who would not survive ~4,300 — a summon stalls the ladder outright',
+      advice: 'Shell the party if it is not up, or summon an aeon right after Seymour acts and let it take the blast',
       cite: 'ffx-seymour-flux §4.4.2, §5.2',
     },
   ],
@@ -132,14 +132,16 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
     {
       aboveHpFraction: 0.5,
       label: 'Phase 1',
-      note: 'Lance of Atrophy into Full-Life, then Dispel into Cross Cleave with nothing in between — the physical phase.',
+      note: 'Lance of Atrophy into Full-Life, then a party-wide Dispel and Cross Cleave behind it. Cure the Zombie, keep Hastega up and top the party off.',
       cite: 'ffx-seymour-flux §4.2',
     },
     {
       belowHpFraction: 0.5,
       label: 'Phase 2',
-      note: 'Cross Cleave is gone; it is Flare and the Total Annihilation charge ladder from here, so Shell replaces Protect.',
+      note: 'Cross Cleave is gone. He casts Flare, and the Mortiorchis starts the Total Annihilation warning, so Shell replaces Protect from here.',
       cite: 'ffx-seymour-flux §4.4',
     },
   ],
+
+  line: SEYMOUR_FLUX_LINE,
 };
