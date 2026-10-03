@@ -71,7 +71,7 @@ import { fileURLToPath } from 'node:url';
 import { MANIFEST_NAME, buildManifest, diffManifests, verifyLive } from './artifact-manifest.mjs';
 import { applyStoredReports } from './critic-clear.mjs';
 import { classifyPorcelain } from './deploy-classify.mjs';
-import { findUnshipped } from './dist-filter.mjs';
+import { SOURCEMAP_DIR_ENV, findSourceMapReferences, findUnshipped } from './dist-filter.mjs';
 import {
   archiveMarker,
   buildPendingMarker,
@@ -87,6 +87,8 @@ import { loadPolicy, releasePolicy, validateReport } from './critic-policy.mjs';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist-release');
 const GH_EXE = 'D:/Tools/GitHubCLI/gh.exe';
+/** PR-0328 / D-335: the source maps of every deployed build, one folder per commit; none of them ship. */
+const SOURCEMAP_HOME = process.env.PYREFLY_SOURCEMAP_HOME ?? 'D:/Tools/pyrefly-sourcemaps';
 const REPO = 'BaileyPillon/pyrefly-reprise';
 const REPO_URL = `https://github.com/${REPO}.git`;
 const LIVE_URL = 'https://baileypillon.github.io/pyrefly-reprise/';
@@ -496,14 +498,20 @@ async function main() {
   log('building: node tools/gen/manifest.mjs, then node tools/fx-assets.mjs ensure (eye-candy D: public/fx is gitignored)');
   if (run(process.execPath, [join(ROOT, 'tools', 'gen', 'manifest.mjs')]).status !== 0) fail('art manifest generation failed — see output above');
   if (run(process.execPath, [join(ROOT, 'tools', 'fx-assets.mjs'), 'ensure']).status !== 0) fail('public/fx is missing or differs from tools/fx/fx-assets.json, and the backup could not restore it — see output above');
-  log('building: npx vite build --outDir dist-release --emptyOutDir');
-  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir']).status !== 0) {
+  // PR-0328 / D-335: no source map ships. The build keeps its maps, keyed by this commit, outside dist-release.
+  const sourceMapDir = join(SOURCEMAP_HOME, mainSha);
+  log(`building: npx vite build --outDir dist-release --emptyOutDir (source maps are kept in ${sourceMapDir}, none ship)`);
+  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir'], { env: { ...process.env, [SOURCEMAP_DIR_ENV]: sourceMapDir } }).status !== 0) {
     fail('vite build failed — see output above');
   }
 
   // PR-0100 / PR-0173: candidates, raw renders and numbered takes never ship (vite.config.ts prunes them).
   const unshipped = findUnshipped(DIST);
   if (unshipped.length) fail(`build still carries ${unshipped.length} unshipped file(s), e.g. ${unshipped.slice(0, 3).join(', ')}`);
+  // PR-0328: a leftover sourceMappingURL comment would make every browser ask the site for a map that is not there.
+  const mapRefs = findSourceMapReferences(DIST);
+  if (mapRefs.length) fail(`build still points at a source map from ${mapRefs.length} file(s), e.g. ${mapRefs.slice(0, 3).join(', ')}`);
+  log(existsSync(sourceMapDir) ? `source maps of ${mainSha} kept in ${sourceMapDir} (none ship)` : `WARNING: no source maps were kept for ${mainSha} (${sourceMapDir} does not exist); the build ships none either way`);
   const indexPath = join(DIST, 'index.html');
   const artCharactersDir = join(DIST, 'art', 'characters');
   if (!existsSync(indexPath)) fail(`build did not produce ${indexPath}`);
@@ -531,7 +539,7 @@ async function main() {
   const problems = manifest.problems.filter((p) => !flatOk.has(p.split(':')[0]));
   if (problems.length) {
     for (const p of problems) log(`  ${p}`);
-    fail(`${problems.length} shipped file(s) are empty, undecodable or blank — fix them, or list a deliberate flat image under "intentionalFlatImages" in critic/policy.json`);
+    fail(`${problems.length} shipped file(s) are empty, undecodable, blank or a source map — fix them, or list a deliberate flat image under "intentionalFlatImages" in critic/policy.json`);
   }
   if (manifest.audioUnverified) log(`WARNING: ${manifest.audioUnverified} audio file(s) could not be decode-checked (no ffprobe): CHK-019 stays UNVERIFIED for them`);
   writeFileSync(join(DIST, MANIFEST_NAME), `${JSON.stringify(manifest)}\n`);
