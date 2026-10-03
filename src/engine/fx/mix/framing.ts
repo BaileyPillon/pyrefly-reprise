@@ -1,8 +1,9 @@
-import type { PerspectiveCamera } from 'three';
-import { boxesOf, bossCoverOf, clearBoxes, fitClear, limitsFor, overlapOf, type Clear, type Field, type Fit, type Limit, type PartyRule } from './clearance.ts';
+import type { Object3D, PerspectiveCamera } from 'three';
+import { boxesOf, bossCoverOf, clearBoxes, fitClear, limitsFor, overlapOf, type Clear, type Field, type Fit, type Gate, type Limit, type PartyRule } from './clearance.ts';
 import { cameraAt, figOf, stillActor, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
-import { advisorReserve, battleCanvas, fieldOf, hudFree, hudPanels, menuOpen, noteMenuPanels, phoneBattle, predictedPanels, rememberedMenuPanels } from './hudPanels.ts';
+import { advisorReserve, battleCanvas, fieldOf, hudFree, hudPanels, menuOpen, noteMenuPanels, phoneBattle, predictedPanels, rememberedMenuPanels, sensorSlab } from './hudPanels.ts';
 import { classify, keepsToday, master, scaleTarget, type MasterClass } from './masters.ts';
+import { colossusExcess, gateNote, plateExcess, plateMiss, plateOf, restGap, shifted } from './plate.ts';
 import { RigWatch, type BattleCameraLike } from './rigWatch.ts';
 import { Staging } from './staging.ts';
 
@@ -42,7 +43,9 @@ export interface FramingReport {
   todayPx: number;
   floorPx: number;
   scale: number;
-  fit: { ok: boolean; partyPx: number; overlap: number; bossCover: number; blend: number; back: number; lens: [number, number]; figs: Clear['figs'] } | null;
+  fit: { ok: boolean; partyPx: number; overlap: number; bossCover: number; blend: number; back: number; lens: [number, number]; figs: Clear['figs']; gate: number } | null;
+  /** The plate the frame shows (share of the frame missing the painting; 0 = all painting): the chosen pose and today's rig; null with no plate. */
+  plate: { chosen: number; today: number; corners: number; todayCorners: number; restGap: number } | null;
   live: { ok: boolean; partyPx: number; overlap: number; bossCover: number; figs: Clear['figs'] } | null;
   staging: Record<string, { k: number; dx: number }>;
   /** Each candidate the last plan tried (checks only). */
@@ -88,9 +91,9 @@ export class Framing {
   private checks: number[] = [];
   private readonly limitOf = new Map<Actor, Limit | null>();
   private rule: PartyRule | null = null;
-  readonly report: FramingReport = { cls: 'field', colossus: false, colossusFight: null, plans: 0, replans: 0, todayPx: 0, floorPx: 0, scale: 0, fit: null, live: null, staging: {}, tries: [] };
+  readonly report: FramingReport = { cls: 'field', colossus: false, colossusFight: null, plans: 0, replans: 0, todayPx: 0, floorPx: 0, scale: 0, fit: null, plate: null, live: null, staging: {}, tries: [] };
 
-  constructor(bc: BattleCameraLike | null, private readonly cam: PerspectiveCamera, private readonly game: 'ffx' | 'ffx2') {
+  constructor(bc: BattleCameraLike | null, private readonly cam: PerspectiveCamera, private readonly game: 'ffx' | 'ffx2', private readonly scene: Object3D | null = null) {
     this.rigs = bc ? new RigWatch(bc, cam) : null;
   }
 
@@ -112,6 +115,8 @@ export class Framing {
     const panels = seen.length ? [...seen] : predictedPanels(this.game, window.innerWidth, window.innerHeight, phone);
     const reserve = advisorReserve(this.game, window.innerWidth, window.innerHeight, phone);
     if (reserve) panels.push(reserve);
+    const sensor = this.report.colossusFight ? sensorSlab(this.game, window.innerWidth, window.innerHeight, phone) : null;
+    if (sensor) panels.push(sensor);
     return fieldOf(canvas, panels);
   }
 
@@ -247,7 +252,14 @@ export class Framing {
     const today0 = { frac: -1, colossus: false, partyDx: 0 };
     const steps = [0.35, 0.7].map((partyDx) => ({ frac: -1, colossus: false, partyDx }));
     const tries = [...(colossus ? FRACS.map((frac) => ({ frac, colossus: true, partyDx: 0 })) : []), today0, ...steps];
-    let chosen: { fit: Fit; frac: number; plan: Map<Actor, { k: number; dx: number }> } | null = null;
+    let chosen: { fit: Fit; frac: number; gap: number; plan: Map<Actor, { k: number; dx: number }> } | null = null;
+    // Fail closed (round 19): a pose that shows more of the plate's edge than today's rig (PR-0307) or, for a colossus
+    // master, leaves a member inside a boss at rest (PR-0310) is held; today's rig is always a candidate that passes both.
+    const plate = plateOf(this.scene);
+    const plateToday = plate ? plateMiss(plate, base, field.W, field.H) : null;
+    const cr = canvas.getBoundingClientRect();
+    const sensor = this.report.colossusFight ? sensorSlab(this.game, window.innerWidth, window.innerHeight, phoneBattle()) : null;
+    const slab = sensor ? { l: sensor.l - cr.left, r: sensor.r - cr.left, t: sensor.t - cr.top, b: sensor.b - cr.top } : null;
     for (const t of tries) {
       this.staging.clearPlan();
       let m: Pose = base;
@@ -259,10 +271,12 @@ export class Framing {
         if (t.partyDx) for (const a of actors) if (a.facing >= 0) this.staging.plan.set(a, { k: 1, dx: t.partyDx });
         this.staging.apply(actors, true);
       }
-      const fit = fitClear(m, base, this.visible(actors).figs, field, true, limits, rule);
-      log.push(`${t.frac}:${fit.clear.ok ? 'ok' : 'x'} w${fit.clear.worst.toFixed(2)} px${Math.round(fit.clear.partyPx)} ov${fit.clear.overlap.toFixed(2)} bc${fit.clear.bossCover.toFixed(2)} ${fit.clear.figs.filter((r) => r.underHud > 0.06 || r.inView < 0.97).map((r) => `${r.id}:${r.inView}/${r.underHud}`).join(',')}`);
-      if (!chosen || fit.score > chosen.fit.score) chosen = { fit, frac: t.frac, plan: new Map([...this.staging.plan].map(([a, p]) => [a, { ...p }])) };
-      if (fit.clear.ok) break;
+      const figs = this.visible(actors).figs;
+      const gate: Gate = (pose, lens, boxes) => plateExcess(plate, plateToday, pose, field.W, field.H, lens) + (t.colossus ? colossusExcess(boxes, figs, slab, field.W) : 0);
+      const fit = fitClear(m, base, figs, field, true, limits, rule, gate);
+      log.push(`${t.frac}:${fit.clear.ok && fit.gate === 0 ? 'ok' : 'x'}${fit.gate > 0 ? ' gate' + fit.gate.toFixed(3) + ' ' + gateNote(shifted(boxesOf(cameraAt(fit.pose, field.W / field.H), figs, field), fit.lens), figs, slab) : ''} w${fit.clear.worst.toFixed(2)} px${Math.round(fit.clear.partyPx)} ov${fit.clear.overlap.toFixed(2)} bc${fit.clear.bossCover.toFixed(2)} ${fit.clear.figs.filter((r) => r.underHud > 0.06 || r.inView < 0.97).map((r) => `${r.id}:${r.inView}/${r.underHud}`).join(',')}`);
+      if (!chosen || fit.score > chosen.fit.score) chosen = { fit, frac: t.frac, gap: Math.round(restGap(shifted(boxesOf(cameraAt(fit.pose, field.W / field.H), this.visible(actors).figs, field), fit.lens), this.visible(actors).figs)), plan: new Map([...this.staging.plan].map(([a, p]) => [a, { ...p }])) };
+      if (fit.clear.ok && fit.gate === 0) break;
     }
     const pick = chosen!;
     // The figures back as they were found (the search staged every candidate on them, within this frame).
@@ -276,7 +290,8 @@ export class Framing {
       todayPx: Math.round(todayPx),
       floorPx: Math.round(rule.floorPx),
       scale: pick.frac,
-      fit: { ok: f.ok, partyPx: Math.round(f.partyPx), overlap: +f.overlap.toFixed(2), bossCover: +f.bossCover.toFixed(2), blend: pick.fit.blend, back: pick.fit.back, lens: pick.fit.lens, figs: f.figs },
+      fit: { ok: f.ok, partyPx: Math.round(f.partyPx), overlap: +f.overlap.toFixed(2), bossCover: +f.bossCover.toFixed(2), blend: pick.fit.blend, back: pick.fit.back, lens: pick.fit.lens, figs: f.figs, gate: +pick.fit.gate.toFixed(3) },
+      plate: plate && plateToday ? { chosen: +plateMiss(plate, pick.fit.pose, field.W, field.H, pick.fit.lens).share.toFixed(3), today: +plateToday.share.toFixed(3), corners: plateMiss(plate, pick.fit.pose, field.W, field.H, pick.fit.lens).corners, todayCorners: plateToday.corners, restGap: pick.gap } : null,
       tries: log,
     };
     return { keep: false, pose: pick.fit.pose, lens: pick.fit.lens, plan: pick.plan, today: base, rule, limitOf, report };

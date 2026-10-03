@@ -1,0 +1,190 @@
+{
+ "_about": "Plate coverage of every chapter still in COLOSSUS (masters.ts) at five aspects, read from real runs of r36fix by real keys to the first command menu (seed 1, headless GPU): chosen = share of the frame whose view ray runs past the painted plate under the pose CHAPTER FRAMING chose; today = the same for the chapter's own rig (live release 35); corners = frame corners past the plate. Regenerate with the capture in docs/handoff/r36fix.md.",
+ "chapters": {
+  "seymour-natus": {
+   "1600x900": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": -1
+   },
+   "1920x1080": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": -1
+   },
+   "2000x1012": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": -1
+   },
+   "2560x1440": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": -1
+   },
+   "2560x1080": {
+    "chosen": 0.094,
+    "today": 0.094,
+    "corners": 3,
+    "todayCorners": 3,
+    "scale": -1
+   }
+  },
+  "yojimbo-cavern": {
+   "1600x900": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": 0.25
+   },
+   "1920x1080": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": 0.25
+   },
+   "2000x1012": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": 0
+   },
+   "2560x1440": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": 0.25
+   },
+   "2560x1080": {
+    "chosen": 0.094,
+    "today": 0.094,
+    "corners": 3,
+    "todayCorners": 3,
+    "scale": 0
+   }
+  },
+  "braskas-final-aeon": {
+   "1600x900": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": -1
+   },
+   "1920x1080": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": -1
+   },
+   "2000x1012": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": -1
+   },
+   "2560x1440": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": -1
+   },
+   "2560x1080": {
+    "chosen": 0.103,
+    "today": 0.103,
+    "corners": 3,
+    "todayCorners": 3,
+    "scale": -1
+   }
+  },
+  "evrae-airship": {
+   "1600x900": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": -1
+   },
+   "1920x1080": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": -1
+   },
+   "2000x1012": {
+    "chosen": 0.009,
+    "today": 0.009,
+    "corners": 1,
+    "todayCorners": 1,
+    "scale": -1
+   },
+   "2560x1440": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": -1
+   },
+   "2560x1080": {
+    "chosen": 0.085,
+    "today": 0.085,
+    "corners": 2,
+    "todayCorners": 2,
+    "scale": -1
+   }
+  },
+  "ffx2-bahamut": {
+   "1600x900": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": 1
+   },
+   "1920x1080": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": 1
+   },
+   "2000x1012": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": 1
+   },
+   "2560x1440": {
+    "chosen": 0,
+    "today": 0,
+    "corners": 0,
+    "todayCorners": 0,
+    "scale": 1
+   },
+   "2560x1080": {
+    "chosen": 0.094,
+    "today": 0.128,
+    "corners": 3,
+    "todayCorners": 3,
+    "scale": 1
+   }
+  }
+ }
+}

@@ -108,6 +108,19 @@ export function advisorReserve(game: 'ffx' | 'ffx2', vw: number, vh: number, pho
   return game === 'ffx' ? { l: 0.26 * vw, t: 0.06 * vh, r: 0.62 * vw, b: 0.3 * vh } : { l: 0.48 * vw, t: 0.75 * vh, r: 0.71 * vw, b: 0.93 * vh };
 }
 
+/**
+ * FFX's Sensor card as laid out at rest (round 19, PR-0312): pinned on the 640x360 stage at grid 430,166, 119 x 88, in the lane the
+ * enemies stand in. The card opens on a reveal and folds itself, so the framing counts its place (not the DOM) for a colossus
+ * fight: under the larger boss it covered 34.5 % of Natus (2000x1012). FFX only; null on the phone and in FFX-2 (the boss strip).
+ */
+export function sensorSlab(game: 'ffx' | 'ffx2', vw: number, vh: number, phone: boolean): Box | null {
+  if (game !== 'ffx' || phone) return null;
+  const s = Math.min(vw / 640, vh / 360);
+  const ox = (vw - 640 * s) / 2;
+  const oy = (vh - 360 * s) / 2;
+  return { l: ox + 430 * s, r: ox + 549 * s, t: oy + 166 * s, b: oy + 254 * s };
+}
+
 /** The canvas's field: size, the viewport's slice of it, and viewport panels moved into field px. */
 export function fieldOf(canvas: HTMLElement, panels: readonly Box[]): { W: number; H: number; view: Box; panels: Box[] } {
   const r = canvas.getBoundingClientRect();
