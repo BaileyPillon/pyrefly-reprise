@@ -82,6 +82,15 @@ export interface HudPort {
    */
   syncVitals?(state: BattleState): void;
   /**
+   * Tell the HUD, **the moment a command is submitted and before its events play**, which command each girl has
+   * on her charge bar (`AtbState.charging.commandRef`). Optional and additive, **FFX-2 only** (PR-0104): under the
+   * ATB a confirmed spell charges for a couple of seconds while the next menu opens, and the full {@link sync}
+   * only arrives after the submit's events have played (about 1.6 s), so for that long nothing on screen named
+   * the command. A HUD that does not implement it keeps the old behaviour; FFX's CTB resolves a command before
+   * the next turn opens and implements nothing here. Must stay as cheap as {@link syncVitals}.
+   */
+  syncQueued?(state: BattleState): void;
+  /**
    * Re-render **only the ATB gauges** from a fresh snapshot.
    *
    * Optional and additive, and **FFX-2 only in practice**: it exists for the

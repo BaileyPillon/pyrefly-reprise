@@ -194,6 +194,11 @@ class CoachedHud implements HudPort {
     this.inner.syncGauges?.(snapshot);
   }
 
+  // PR-0104 (FFX-2 only), the same wrapper hole a sixth time: the chip naming a girl's charging command.
+  syncQueued(state: BattleState): void {
+    this.inner.syncQueued?.(state);
+  }
+
   closeCommandMenu(): void {
     this.inner.closeCommandMenu?.();
   }

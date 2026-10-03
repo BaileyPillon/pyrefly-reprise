@@ -278,6 +278,8 @@ export class BattlePresenter {
 
       this.phase = `play:${event.type}`;
       this.actingState.observe(event);
+      // PR-0104 (FFX-2 only): a charge that has run out is no longer queued once its action starts or ends on screen.
+      if ((event.type === 'action-start' || event.type === 'action-end') && this.queuedEngine) this.queuedHud(this.queuedEngine);
       if (event.type === 'victory' || event.type === 'defeat') await this.callouts.settle(); // the end waits for a callout on screen
       this.ctx.opening = this.callouts.isOpening;
       if (event.type === 'victory' || event.type === 'defeat') this.ctx.stage.camera.hold?.(false); // PR-0150: the end shot always plays
@@ -316,6 +318,7 @@ export class BattlePresenter {
     // first burst of a fight (and of every later link of a chain, which re-runs
     // on a fresh engine) happens before any `syncHud` in the loop below.
     this.seedVitals(engine);
+    this.queuedEngine = engine; // PR-0104: `queuedHud` reads it at each action's start and end
     // A-1 (FFX-2 only): an engine with an ATB clock gets the wait-camera fit rule (`ShotFit.ts`); FF7's ATB is not FFX-2's (CHK-B2-8).
     this.ctx.moments.shots.ffx2Framing = typeof (engine as { tick?: unknown }).tick === 'function' && engine.state().game !== 'ff7';
 
@@ -443,7 +446,9 @@ export class BattlePresenter {
     // FF7 resolves one action at a time (research/ff7-battle-core.md §2.6): a command confirmed while the pump
     // plays the boss's turn waits until that turn has finished on screen (repair item 3). FFX and FFX-2 as before.
     if (engine.state().game === 'ff7') await this.playing;
-    let res = await this.play(engine.submit(command));
+    const events = engine.submit(command);
+    this.queuedHud(engine); // PR-0104 (FFX-2 only): name the queued command now, not after its pose has played
+    let res = await this.play(events);
     this.syncHud(engine);
 
     // A minigame suspends the loop; the same command comes back with `extra`.
@@ -631,6 +636,20 @@ export class BattlePresenter {
       hud.syncGauges(snapshot);
     } catch (err) {
       console.warn('[presenter] HUD syncGauges threw', err);
+    }
+  }
+
+  /** The engine `run` is driving, for the HUD's queued-command chip (`HudPort.syncQueued`); null before `run`. */
+  private queuedEngine: BattleEngine | null = null;
+
+  /** `HudPort.syncQueued`: which command each girl has charging, right after the submit. Never throws into the loop. */
+  private queuedHud(engine: BattleEngine): void {
+    const hud = this.deps.hud;
+    if (!hud?.syncQueued) return;
+    try {
+      hud.syncQueued(engine.state());
+    } catch (err) {
+      console.warn('[presenter] HUD syncQueued threw', err);
     }
   }
 

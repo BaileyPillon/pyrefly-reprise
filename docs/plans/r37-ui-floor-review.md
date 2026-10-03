@@ -48,3 +48,16 @@ rule names FFX-2 classes and vice versa. FFX chapters are 1 to 3; FFX-2 chapters
 CHK-003 at 1280x960 and 390x844 in all five chapters (only I and IV were measured here); CHK-008 overlaps at 4:3 for
 the Sensor plate against the party rows and the CTB plates against the enemy sprite; TEXT SIZE 130 on the FFX
 desktop HUD with the floor (the grown guide column may meet the floored card).
+
+## 5. Addendum (same branch): the PR-0104 queued-command chip and the PR-0249 / PR-0325 / LV-35-01 repairs
+
+Added as built, 2026-10-03. `critic-plan --paths src/engine/BattlePresenter.ts,src/engine/HudPort.ts,...` says DEEP after deploy
+(battle presenter and lifecycle), not the save-data class. Method check: `docs/plans/pr-0104-method-check.md`.
+
+| Risk | Look | Result |
+|---|---|---|
+| The extra presenter call changes timing or order | `submit` calls `syncQueued` once after `engine.submit` and before `play`; `action-start`/`action-end` call it with a fresh `engine.state()`; presenter, playback, acting-signal, vitals and coach-layer tests | green; a unit test pins the order and the no-method case |
+| The chip covers a face or a menu | screenshots at 1600x900 and 390x844 (chip over the girl's head, beside the weapon, 14 px, inside the window) | clear in both; measured at 135 to 175 ms (desktop) and 153 to 166 ms (phone) after the confirm |
+| The chip outlives the command | the chip goes at the first `action-start`/`action-end` after the charge ends (0.7 s after the live state cleared it in one capture) | Wait mode holds the charge while the next menu is open, so the chip stays as long as the command is queued, which is the point |
+| Shared CSS: the selected Overdrive row (both games) | `html:not([data-phone-battle])` scoped; FFX OVERDRIVE list and FFX-2 CHANGE measured | selected row is filled in both; phone not measured |
+| Placement solver (PR-0249, FFX-2 only) | the party tier ranks below chrome; with no party flag the answer is the old one (unit test) | 0 px2 at the menu, the list and the Cure target step at both sizes; a mid-transition frame still read up to 3,660 px2 once |

@@ -1,0 +1,46 @@
+/*
+ * PR-0104 (FFX-2 only): the chip that names a girl's queued command from the confirm until the action starts
+ * (`QueuedChips.ts`). Real px on the unscaled overlay, never on the 640x360 grid, and at least 14 px at every
+ * viewport (CHK-003): the same pink slab, ink label and +12 degree slant as the coach's "Gauges running" badge.
+ */
+.ffx2-qchip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 4;
+  translate: -50% -100%;
+  padding: 4px 11px 5px;
+  background: var(--ig-accent, #f7b6d9);
+  color: var(--ig-ink, #0b0a12);
+  font-family: var(--ig-font-display, sans-serif);
+  font-weight: 700;
+  font-size: max(14px, 0.875vw);
+  line-height: 1.1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: skewX(var(--ig-skew, 12deg));
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.ffx2-qchip--in {
+  opacity: 1;
+}
+
+.ffx2-qchip > span {
+  display: inline-block;
+  transform: skewX(var(--ig-skew-inverse, -12deg));
+}
+
+html[data-reduce-motion] .ffx2-qchip {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ffx2-qchip {
+    transition: none;
+  }
+}

@@ -6,6 +6,15 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-03 — `HudPort.syncQueued` (optional): the HUD hears a command the moment it is submitted (PR-0104; FFX-2 only; additive)
+
+Branch `r37-ui-floor`. `src/engine/HudPort.ts` gains `syncQueued?(state: BattleState): void`, called by `BattlePresenter.submit` right
+after `engine.submit(...)` and before the submit's events play, and again at each `action-start` and `action-end` event while a
+battle runs. It carries `AtbState.charging.commandRef`, so the FFX-2 HUD can name a girl's queued command over her head from the
+confirm on (`src/ui/ffx2/QueuedChips.ts`); the full `sync` only arrived about 1.6 s later. A HUD without it is untouched; FFX's HUD
+and the FF7 HUD implement nothing. `CoachedHud` forwards it (the sixth wrapper hole of that kind). No shared contract file changed;
+recorded because the port is shared. Game case: FFX-2 only.
+
 ## 2026-10-02 — `Settings` gains the nine EYE CANDY parts; new seam `src/engine/fx/eyeCandyFlags.ts` (D-317; both games; additive)
 
 Branch `eye-candy-page` (from `ef3f6bbf`). Save-data class. `Settings` (`src/app/SaveData.ts`) now also extends
