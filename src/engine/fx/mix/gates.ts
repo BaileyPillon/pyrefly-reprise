@@ -85,7 +85,8 @@ export interface DeviceNote {
  * - DEPTH OF FIELD plays on the full tier only: the phone and LOW EFFECTS keep today's tilt-shift;
  * - FOG is off under LOW EFFECTS;
  * - SMOOTH EDGES keeps only the defringe under LOW EFFECTS (no SMAA or FXAA pass; the phone's FXAA is still a pass);
- * - on a phone held upright the held shots are off (a framing for one slice crops its subject in the next) and
+ * - on a phone held upright the held shots are off (a framing for one slice crops its subject in the next; FFX-2's DRESSPHERE SHOT
+ *   keeps its small push-in there, `pushIn.ts`, so it is `less`, not `off`) and
  *   CHAPTER FRAMING gives up the colossus master and BOSS SCALE (the phone keeps today's rig and its own fit,
  *   the menu clearance and the lens shift stay): `less` only in a colossus fight, where there is a boss to scale.
  */
@@ -100,8 +101,10 @@ export function deviceNote(part: MixPart, d: Device): DeviceNote | null {
     case 'chapterFraming':
       return d.phone && d.colossus !== false ? { limit: 'less', why: 'phone' } : null;
     case 'overdriveShot':
-    case 'dressphereShot':
       return d.phone ? { limit: 'off', why: 'phone' } : null;
+    case 'dressphereShot':
+      // FFX-2 only. The full close shot is off on a phone, but a small push-in (`pushIn.ts`, D-346) still plays there.
+      return d.phone ? { limit: 'less', why: 'phone' } : null;
     default:
       return null;
   }
