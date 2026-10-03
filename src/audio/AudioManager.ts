@@ -530,7 +530,7 @@ export class AudioManager {
     }
     if (!this.sprites.decoded.v1) {
       let timer: ReturnType<typeof setTimeout> | undefined;
-      await Promise.race([this.sprites.whenLoaded(), new Promise<void>((resolve) => { timer = setTimeout(resolve, waitMs); })]);
+      await Promise.race([this.sprites.whenFirstBankLoaded(), new Promise<void>((resolve) => { timer = setTimeout(resolve, waitMs); })]);
       clearTimeout(timer);
     }
     const cue = resolveSfx(name);

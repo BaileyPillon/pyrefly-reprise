@@ -41,6 +41,8 @@ export class SfxSprites {
   private v1: AudioBuffer | null = null;
   private v2: AudioBuffer | null = null;
   private loading: Promise<void> | null = null;
+  /** The first sprite's own load, which the first-bank cues (the title's press-start) wait on without waiting for the v2 set. */
+  private firstBank: Promise<void> | null = null;
   readonly log: SfxPlayRecord[] = [];
 
   /** Fetch and decode both sprites once; never throws (a sprite that fails leaves its fallback in charge). */
@@ -60,10 +62,8 @@ export class SfxSprites {
         // The fallback covers it.
       }
     };
-    this.loading = Promise.all([
-      one(manifest.sfx, (b) => (this.v1 = b)),
-      one(manifest.sfxV2, (b) => (this.v2 = b)),
-    ]).then(() => undefined);
+    this.firstBank = one(manifest.sfx, (b) => (this.v1 = b));
+    this.loading = Promise.all([this.firstBank, one(manifest.sfxV2, (b) => (this.v2 = b))]).then(() => undefined);
     return this.loading;
   }
 
@@ -82,9 +82,9 @@ export class SfxSprites {
     return { slice: cue ? { buffer: this.v1!, cue } : null, fallback: null };
   }
 
-  /** Settles when the sprite load that is running (or has run) has finished; at once when none has started. */
-  whenLoaded(): Promise<void> {
-    return this.loading ?? Promise.resolve();
+  /** Settles when the first sprite's load (not the v2 set's) has finished; at once when none has started. */
+  whenFirstBankLoaded(): Promise<void> {
+    return this.firstBank ?? Promise.resolve();
   }
 
   record(entry: SfxPlayRecord): void {
@@ -100,6 +100,7 @@ export class SfxSprites {
     this.v1 = null;
     this.v2 = null;
     this.loading = null;
+    this.firstBank = null;
     this.log.length = 0;
   }
 }

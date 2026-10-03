@@ -13,7 +13,7 @@ interface Inner {
   ctx: unknown;
   manifest: unknown;
   manifestLoad: Promise<void>;
-  sprites: { v1: unknown; loading: Promise<void> | null };
+  sprites: { v1: unknown; firstBank: Promise<void> | null };
 }
 
 const CUE = { offset: 1, duration: 0.5 };
@@ -44,7 +44,7 @@ describe('the press-start cue plays from its sprite or not at all (PR-0326)', ()
   it('a sprite that decodes within the wait plays the cue after the decode, never the synth before it', async () => {
     const { audio, inner, play } = manager({ sprite: false, manifest: manifestWith(true) });
     let finish: () => void = () => undefined;
-    inner.sprites.loading = new Promise<void>((resolve) => { finish = resolve; });
+    inner.sprites.firstBank = new Promise<void>((resolve) => { finish = resolve; });
     const result = audio.playSfxFromSprite('battle-start');
     await Promise.resolve();
     expect(play, 'nothing plays while the sprite is still decoding').not.toHaveBeenCalled();
@@ -56,7 +56,7 @@ describe('the press-start cue plays from its sprite or not at all (PR-0326)', ()
 
   it('a sprite that never decodes plays nothing at the cap, and so does a cue the sprite lacks', async () => {
     const slow = manager({ sprite: false, manifest: manifestWith(true) });
-    slow.inner.sprites.loading = new Promise<void>(() => undefined);
+    slow.inner.sprites.firstBank = new Promise<void>(() => undefined);
     expect(await slow.audio.playSfxFromSprite('battle-start', {}, 20)).toBe(false);
     expect(slow.play).not.toHaveBeenCalled();
 
