@@ -13,7 +13,7 @@
  * already dismisses (`BattleStartBanner`, 1.9 s at most). A first-time player
  * is meant to see all of it; a returning player should not have to.
  *
- * ## What a press does
+ * ## What a press does (and a skipped pre-scene)
  *
  * The same thing the cutscene skip does for a cutscene: it ends the beat.
  * The camera cuts to `idle` and any held push is let go, the reveal plate
@@ -37,10 +37,15 @@ import { fxOpening } from './fx/c/presenterHooks.ts';
 export async function playOpening(ctx: EventCtx, run: () => Promise<void>): Promise<void> {
   fxOpening(ctx);
   const port = ctx.deps.moments;
-  const press = ctx.speed() === 'skip' ? null : (port?.confirmPress?.() ?? null);
+  // A player who skipped the pre-scene has already pressed: the first opening runs as if Confirm came at its start.
+  const hurried = port?.takeOpeningHurry?.() === true;
+  const live = ctx.speed() === 'skip' ? null : (port?.confirmPress?.() ?? null);
+  const press = hurried && live ? { pressed: Promise.resolve(), dispose: live.dispose } : live;
   if (!press) return run();
 
   let skipped = false;
+  // Known before the opening starts, so its first beat (the party's slide-on) is already collapsed, not cut mid-move.
+  if (hurried) ctx.moments.hurry = true;
   const opening = run();
   void press.pressed.then(() => {
     if (skipped) return;

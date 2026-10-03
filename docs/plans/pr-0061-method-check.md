@@ -276,3 +276,61 @@ the sensor-under-push (class A: no approved beat is shortened, D-138 and D-206 h
 presenter unit test that the first menu can open while an opening callout is still on screen. The
 acceptance is CAL-005's form, per chapter, seed pinned. The round-11 figures above (with Confirm
 presses) stay the Confirm-path baseline.
+
+## Round-19 addendum (2026-10-03, branch `r37-scenes`): the number that moved is the hold-skip's, and the method is "the skip is the press"
+
+Written before the fourth attempt (the issue is STALLED, RUBRIC section 8). **Game case: both** (the opening card, the sweep and
+the flow's hand-off are shared presenter plumbing, CHK-020; chapters 1 to 3 and 7 are FFX, 4 and 5 FFX-2).
+
+### What the round measured, and why the earlier methods could not move it
+
+Round 19 (`critic/rounds/round-19.md` item 18): hold-skip to the first usable menu 11.4 to 12.4 s at the new defaults (steady
+pacing, calm camera), 2.7 s above `?pace=current&cam=current`; acceptance "under 3 s in I, IV and VII". The protocol
+(`critic/rounds/round-18/cap/gaps/sH-hold.mjs`): Enter **held** from the scene's first frame until the screen leaves the
+cutscene, then released; the clock runs from the scene's start to `awaitingMenu`.
+
+The three earlier methods all changed what a player who **presses** or **waits** gets:
+1. a Confirm press ends the sweep (`OpeningSkip.ts`): the protocol releases the key before the battle opens, so nobody presses;
+2. loading behind prep and the scene (`303d71ea`, `09e9710b`): the load share, measured warm and cold;
+3. opening callouts and sensor reads run under the fight (`OpeningCallouts.ts`, batch 2): the fight's leftover.
+None of them looked at the one fact the protocol hands over: **the player skipped the scene**. `OpeningSkip.ts` already states who
+the sweep is for ("a first-time player is meant to see all of it; a returning player should not have to"); a held Confirm that
+skipped the scene is that player, and the flow threw the fact away at the scene's door.
+
+### The split, measured (production build served Pages-style on its own port, GPU headless, 1600x900, fresh profile per run, the protocol above)
+
+Clock from the scene's start; `after scene` is from the screen leaving the cutscene. Base is `origin/main` c69de96a built from a
+clean archive; after is this branch. Scripts: `D:/Tools/pyrefly-scratch/2026-10-03/r37-scenes/hold.mjs` (scratch).
+
+| chapter | base, scene end / first menu / after scene | after, scene end / first menu / after scene |
+|---|---|---|
+| I Seymour Flux | 1.5 / 11.6 to 12.4 / 10.1 to 10.9 s | 1.5 / 3.9 to 4.2 / 2.4 to 2.6 s |
+| IV Bahamut | 1.1 / 13.0 to 13.3 / 11.9 to 12.2 s | 1.1 / 5.9 to 6.4 / 4.8 to 5.3 s |
+| VII Anima (Macalania) | 1.5 / 11.4 to 11.6 / 9.9 to 10.1 s | 1.5 / 4.5 to 4.6 / 3.0 s |
+
+Where the time goes after the change (phase timeline from the same run, Chapter I): scene end 1.5 s; **swirl or blur in, the battle's
+load, blur out: 2.1 to 2.3 s** (with REDUCE MOTION's cut entry the battle is up at 3.6 s, so the transition is not the cost, the load is);
+the card 0.3 to 1.0 s; the opening 0 s; the fight's first beats 0.2 s (Chapter I's sensor line). Chapter IV's remainder is Bahamut's own
+opening action with a status (1.5 s: the fight), Chapter VII's the card and one enemy beat.
+
+### What was changed (class A, both games; no approved beat removed)
+
+A player who hurried the pre-scene (held Confirm past the hold-to-skip time, skipped it from Escape or the pause menu, or has a seen
+scene auto-skipped) gets the Confirm press made for them, **once, at the start of the first link's opening**, and the battle-start card
+holds 0.7 s instead of 1.9 s (it still shows; a press still dismisses it). The camera cut to `idle`, the dropped name plate and the
+collapsed waits are exactly what a Confirm press already does. The fight, every chained link's opening (a seam keeps its authored opening,
+PR-0301 is Bailey's call), a scene played through, a retry and a run with no scene are unchanged: a scene played through by single taps
+still gets the full 6.6 s opening (measured).
+
+### What is still not met, and why it is not this lane
+
+"Under 3 s" cannot be reached by the opening at all: the scene's own 1.1 to 1.5 s plus the load's 2.1 to 2.3 s already make 3.2 to 3.8 s. The lever
+left is the load: `docs/plans/presentation-program-2026-09-26.md` A-3 names it (start `preloadBattle` on board focus or select, not
+only at prep, and warm the chapter on card focus; `ChapterSelectScreen.ts`, `battlePreload.ts`), and the pre-scene of a hold-skipping player is
+too short (1.1 to 1.5 s) to hide it. Not built here; it belongs to the lane that owns those files. The honest reading against the round's line:
+the hurried opening costs 0 to 0.3 s beyond the card; what remains is the load and, in IV and others, the fight's first action.
+
+### Alternatives not taken
+- Drop the card as well for a hurried player (saves 0.3 to 1.0 s): removes an approved screen, Bailey's call.
+- Shorten the entry transition: measured not to be the cost.
+- Change PR-0301's seam openings: Bailey's question, untouched.
