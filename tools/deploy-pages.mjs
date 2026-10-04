@@ -51,13 +51,17 @@
  * release gate: refuse when this commit has no validated focused or deep
  * report, when that report's ship verdict is HOLD, when a save-data change has
  * only a focused report, or when the deep-review debt is already at its cap
- * (critic/RUBRIC.md sections 3 and 4) -> re-init dist-release as a
- * throwaway single-commit `gh-pages` git repo and force-push it -> kick a
- * Pages build and poll every build recorded for the pushed commit until one
- * of them reports "built" (pagesOutcome) -> verify that the live URL serves
- * this exact artifact, byte for byte (tools/artifact-manifest.mjs) -> append a
- * line to docs/deploys.log -> leave a `critic/pending/<mainShortSha>.json`
- * marker listing the separate review obligations this build owes.
+ * (critic/RUBRIC.md sections 3 and 4) -> publish. On Cloudflare (the default):
+ * check the wrangler config, `wrangler deploy --dry-run`, `wrangler deploy` of the
+ * Worker, then verify workers.dev and the Custom Domain (tools/deploy-cloudflare.mjs).
+ * On GitHub (legacy): re-init dist-release as a throwaway single-commit `gh-pages`
+ * git repo and force-push it -> kick a Pages build and poll every build recorded
+ * for the pushed commit until one of them reports "built" (pagesOutcome) ->
+ * verify that the live URL serves this exact artifact, byte for byte
+ * (tools/artifact-manifest.mjs) -> append a line to docs/deploys.log -> leave a
+ * `critic/pending/<mainShortSha>.json` marker listing the separate review
+ * obligations this build owes. (A legacy GitHub deploy appends to
+ * docs/legacy-deploys.log instead and leaves no marker, ledger entry or manifest.)
  *
  * Owner's rules (critic/RUBRIC.md, policy v2, 2026-09-20): every deployed build
  * is evaluated, and the depth of the review follows what changed; and
@@ -69,8 +73,9 @@
  * tools/critic-clear.mjs, settles an obligation; a deep review still owed by
  * the build this one replaces moves to this build's marker.
  *
- * Safe to run repeatedly: dist-release's .git is deleted and recreated every
- * run, so gh-pages always ends up with exactly one commit.
+ * Safe to run repeatedly: on GitHub dist-release's .git is deleted and recreated every
+ * run, so gh-pages always ends up with exactly one commit; on Cloudflare wrangler skips the
+ * files Cloudflare already holds.
  */
 
 import { spawnSync } from 'node:child_process';
@@ -348,8 +353,10 @@ export function formatWhenLine(plan) {
   return `  when: ${when.join('; ')}`;
 }
 
-function printPlan(plan) {
-  log(`critic plan: ${plan.review.toUpperCase()} review; this build will owe ${plan.obligations.join(' + ')}`);
+function printPlan(plan, { legacy = false } = {}) {
+  log(legacy
+    ? `critic plan (for information: a legacy deploy records no obligation; the live build is ${HOSTS[DEFAULT_HOST].liveUrl}): ${plan.review.toUpperCase()} review, which this commit owes on the live host`
+    : `critic plan: ${plan.review.toUpperCase()} review; this build will owe ${plan.obligations.join(' + ')}`);
   for (const reason of plan.reasons) log(`  because: ${reason}`);
   log(formatWhenLine(plan));
   log(`  systems: ${plan.systems.join('; ') || 'none'} | chapters: ${plan.chapters.join(', ') || 'none'}`);
@@ -635,7 +642,7 @@ async function main() {
     // Tracked files only: the shipped art and audio are compared once the
     // build exists, so the real plan can only be deeper than this one.
     const dryPlan = planForRepo({ root: ROOT, claim: CLAIM, minimum: MINIMUM, extraPaths: dirtyShipped });
-    printPlan(dryPlan);
+    printPlan(dryPlan, { legacy: LEGACY });
     const dryGate = releaseGateFor(dryPlan, mainSha);
     if (dryGate.gate.action === 'fail') {
       log(`DRY RUN: would refuse to deploy — ${dryGate.gate.message}`);
@@ -752,7 +759,7 @@ async function main() {
     ? JSON.parse(readFileSync(previousManifestPath, 'utf8'))
     : null;
   const plan = planForRepo({ root: ROOT, manifest, previousManifest, claim: CLAIM, minimum: MINIMUM, extraPaths: dirtyShipped });
-  printPlan(plan);
+  printPlan(plan, { legacy: LEGACY });
   let ownerOverrideUsed = false;
   let ownerOverrideReportPath = null;
   let ownerOverrideChangedArea = null;

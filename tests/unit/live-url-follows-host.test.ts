@@ -86,6 +86,15 @@ describe('the probes read the constant instead of carrying a literal', () => {
   }
 });
 
+describe('the exact-artifact check verifies the live address unless told another', () => {
+  it('defaults verify-live\'s --url to LIVE_URL, so the old address is verified only on purpose', () => {
+    const text = read('tools/artifact-manifest.mjs');
+    expect(text).toContain("import { LIVE_URL } from './deploy-host.mjs';");
+    expect(text).toMatch(/opt\('--url', LIVE_URL\)/);
+    expect(text).toMatch(/--url <base url>\]/);
+  });
+});
+
 describe('nothing else hard-codes the old GitHub address', () => {
   // The one place that defines the old host (an explicit --host=github), and the one runner prompt that says, in words, which address is the old one.
   const ALLOWED = new Set(['tools/deploy-host.mjs', 'critic/runner/release.js']);
