@@ -74,19 +74,32 @@ read from the sources and not from memory (hard rule 6). Release 37 shipped her 
 
 The order of a girl's `owned` list is her node layout (`setup.ts#gridNodeContents`: the worn dressphere on node 0, then
 the list), and the grid is a ring (`garment-grids.ts`, itself an estimate), so a girl's worn dressphere has two
-neighbours: node 1 and the last node. Lady Luck is placed on **the last node**, a Change away, and **node 1, the first
-Change row, is left as it was**: the autopilot's answer to Itchy takes the first row, so this keeps every shipped line
-playing exactly as before (digests and win counts identical, handoff). The dressphere that sat on the last node is off
-that grid. Layouts (worn dressphere on node 0):
+neighbours: node 1 and the last node. **Node 1, the first Change row, is left as it was** in every chapter the
+autopilot reads (V, XI, XIII, XV): its answer to Itchy takes the first row, so this keeps every shipped line playing
+exactly as before (digests and win counts identical, handoff). Lady Luck takes the node of a dressphere the guide pages
+for that chapter do not ask for, and the dressphere that sat there is off that grid (still owned). The first build
+(`r38-lady-luck-grid`) put her on the last node everywhere it could; **r381-lady-luck** (Bailey's recommendation after
+the independent check) moved two placements so a girl keeps the dressphere a guide page names:
+
+- **V, XI, XV (one shared grid).** Paine keeps her White Mage on the last node and gives up Black Mage instead: the V
+  page (Jegged, "Heart of the Farplane", Core and Bulwarks, `research/jegged-encounter-guides-ffx2.md` section 3) says
+  that if Memento Mori is coming, swap a White Mage in for Shell just before it, and Paine's is the one grid where a Dark
+  Knight has a White Mage a Change away (Yuna is the White Mage and Rikku's ring never held one). Lady Luck takes Black
+  Mage's node 4 on her six-node ring, so Paine reaches her by two Changes (Dark Knight, White Mage, Lady Luck); Yuna and
+  Rikku are unchanged from the first build (Lady Luck on the last node of their five-node rings, one Change).
+- **XVI (Ixion at Djose).** Yuna and Rikku give up Gunner, not Black Mage, so Lady Luck takes node 1, the first Change
+  row: the XVI page says Water hurts him, and Watera and Waterga are the Black Mage's (`ffx2-ixion-djose.md` section 4).
+  Chapter XVI has no Itchy and no autopilot Change (zero spherechange events in 200 seeds), so node 1 is read by nothing.
+  Paine stays as built (node 1 of her four-node Stonehewn, Gunner off; the Warrior stays on her last node).
+- **XIII.** As built (Lady Luck on node 4 of the five-node Valiant Lustre ring; node 1 untouched).
+
+Layouts (worn dressphere on node 0):
 
 | Chapters | Yuna | Rikku | Paine |
 |---|---|---|---|
-| V, XI, XV (`farplane.ts`) | White Mage, Gunner, Thief, Warrior, **Lady Luck** (Black Mage off) | Dark Knight, Gunner, Thief, Warrior, **Lady Luck** (Black Mage off) | Dark Knight, Gunner, Thief, Warrior, Black Mage, **Lady Luck** (White Mage off) |
+| V, XI, XV (`farplane.ts`) | White Mage, Gunner, Thief, Warrior, **Lady Luck** (Black Mage off) | Dark Knight, Gunner, Thief, Warrior, **Lady Luck** (Black Mage off) | Dark Knight, Gunner, Thief, Warrior, **Lady Luck**, White Mage (Black Mage off; **was** Black Mage, Lady Luck with White Mage off) |
 | XIII, shipped kit (`via-infinito.ts`) | Dark Knight, White Mage, Gunner, Thief, **Lady Luck** (Warrior off) | Alchemist, Gunner, Thief, Warrior, **Lady Luck** (Songstress off) | Dark Knight, Warrior, Gunner, Thief, **Lady Luck** (Songstress off) |
-| XVI (`djose.ts`) | White Mage, Gunner, Thief, Warrior, **Lady Luck** (Black Mage off) | Dark Knight, Gunner, Thief, Warrior, **Lady Luck** (Black Mage off) | Dark Knight, **Lady Luck**, Thief, Warrior (Gunner off) |
-
-Paine at XVI is the one exception to "last node": her ring has four nodes and the last holds the Warrior whose four
-Breaks her build has learned (the guides' line), so Lady Luck takes node 1, which no line there reads.
+| XVI (`djose.ts`) | White Mage, **Lady Luck**, Thief, Warrior, Black Mage (Gunner off; **was** Lady Luck on node 4 with Black Mage off) | Dark Knight, **Lady Luck**, Thief, Warrior, Black Mage (Gunner off; **was** Black Mage off) | Dark Knight, **Lady Luck**, Thief, Warrior (Gunner off; unchanged) |
 
 ## 4. Not sourced, left alone
 

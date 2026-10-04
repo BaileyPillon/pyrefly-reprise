@@ -20,12 +20,21 @@
  * all three girls (`[verified: 3 sources]`). The `owned` order is the node layout
  * (`setup.ts#gridNodeContents`: the worn dressphere on node 0, then this list), and the sources
  * do not say which dresspheres a girl has set on her grid, so where Lady Luck sits is ours
- * `[estimate]`: **the last node of each ring**, which is one link from node 0 (a Change away) and
- * is the second row of the Change menu. Node 1, the first row, is untouched on all three girls:
- * the autopilot's Itchy answer takes the first row (`BattlePresenterStrategies.ts`,
- * `overdriveOrAttack`), so the shipped line, Chapter XI's Anima and Chapter XV (the same preset)
- * play exactly as before (digests identical, `docs/handoff/r38-lady-luck-grid.md`). The
- * dressphere that sat on the last node is off the grid; the line names none of them.
+ * `[estimate]`: Black Mage's node on each ring (the shipped line never changes to a Black Mage), and
+ * node 1, the first row of the Change menu, is untouched on all three girls: the autopilot's Itchy
+ * answer takes the first row (`BattlePresenterStrategies.ts`, `overdriveOrAttack`), so the shipped
+ * line, Chapter XI's Anima and Chapter XV (the same preset) play exactly as before (digests identical,
+ * `docs/handoff/r38-lady-luck-grid.md`, `docs/handoff/r381-lady-luck.md`).
+ *   - Yuna's and Rikku's five-node rings: Black Mage sat on node 4, the last node, so Lady Luck is one
+ *     link from node 0 (a Change away, the second row of the Change menu).
+ *   - Paine's six-node ring: Black Mage sat on node 4 and White Mage on node 5, the last node. White Mage
+ *     **stays** (r381-lady-luck, Bailey's recommendation after the independent check): the Chapter 5 guide
+ *     page (Jegged, Heart of the Farplane, Core and Bulwarks: "if Memento Mori is coming, swap a White
+ *     Mage in for Shell just before it", `research/jegged-encounter-guides-ffx2.md` section 3) names a
+ *     White Mage to switch to, and Paine's grid is the only one where a Dark Knight has one a Change away
+ *     (Yuna is the White Mage; Rikku's ring never held one). So Lady Luck takes Black Mage's node 4, and
+ *     Paine reaches her by two Changes (Dark Knight, White Mage, Lady Luck).
+ * The dressphere that sat on Lady Luck's node is off the grid, still owned; the line names none of them.
  */
 
 import type { FFX2PartyBuild } from '../../../battle/common/types.ts';
@@ -123,10 +132,12 @@ export const farplaneBuild: FFX2PartyBuild = {
       portraitKey: 'paine',
       level: 50, // fastest EXP curve of the three
       currentDressphere: 'dark-knight',
-      // Pride of the Sword has 6 nodes: Dark Knight, Gunner, Thief, Warrior, Black Mage, **Lady Luck** (node 5, one link
-      // from Dark Knight); White Mage, which sat on node 5, is off the grid (Yuna is the line's healer, not Paine).
+      // Pride of the Sword has 6 nodes: Dark Knight, Gunner, Thief, Warrior, **Lady Luck** (node 4), White Mage (node 5, one
+      // link from Dark Knight, where it always was); Black Mage, which sat on node 4, is off the grid. The guide page tells a
+      // Dark Knight to swap a White Mage in before Memento Mori, and Paine's is the grid that holds one a Change away, so it
+      // stays; Lady Luck is two Changes from Dark Knight here (header).
       owned: [
-        'gunner', 'thief', 'warrior', 'black-mage', 'lady-luck', 'white-mage', 'songstress', 'dark-knight',
+        'gunner', 'thief', 'warrior', 'lady-luck', 'white-mage', 'black-mage', 'songstress', 'dark-knight',
         'gun-mage', 'alchemist', 'samurai', 'berserker', 'full-throttle',
       ],
       garmentGrid: {

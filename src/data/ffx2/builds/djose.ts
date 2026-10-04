@@ -15,9 +15,13 @@
  *   (`research/ffx2-lady-luck-availability.md`), so the girls *could* own her here, **if Shinra was beaten**: the
  *   preset is the party that did. Not added, each labelled in §5: Berserker (only if the Lake Macalania mission
  *   was done), Trainer (only if Yuna answered Kimahri correctly in Chapter 2). Mascot: **no** (endgame).
- *   **Where Lady Luck sits is ours** `[estimate]` (no source says what a girl sets on her grid): the last node of
- *   Yuna's and Rikku's five-node rings (Black Mage's), one link from node 0, and node 1 of Paine's four-node
- *   Stonehewn, because her last node holds the Warrior whose four Breaks she has learned (the guides' line).
+ *   **Where Lady Luck sits is ours** `[estimate]` (no source says what a girl sets on her grid): node 1 of every
+ *   ring, the first row of the Change menu and Gunner's node (Gunner is off the grid, still owned; no line here uses
+ *   it). The Chapter XVI guide page says Water hurts him (Watera and Waterga are the Black Mage's, Liquid Steel the
+ *   Warrior's, `research/ffx2-ixion-djose.md` section 4), so Black Mage stays on the last node of Yuna's and Rikku's
+ *   five-node rings, one link from node 0, and the Warrior on the last node of Paine's four-node Stonehewn, whose four
+ *   Breaks she has learned (the guides' line). (r381-lady-luck, Bailey's recommendation after the independent check: the
+ *   first build took Black Mage's node from Yuna and Rikku.)
  * - **Dresspheres worn:** Yuna White Mage, Rikku and Paine Dark Knight: Split_Infinity's line ("two Dark
  *   Knights and a White Mage", research §4.5); every guide's party uses Dark Knight as the damage with a White
  *   Mage or Alchemist healing. This is the line the guides report, not a solved party: Darkness ignores his
@@ -36,21 +40,15 @@ import type { FFX2PartyBuild } from '../../../battle/common/types.ts';
 const OWNED_CORE = ['gunner', 'thief', 'warrior', 'black-mage', 'white-mage', 'songstress', 'dark-knight', 'gun-mage', 'alchemist', 'samurai'] as const;
 
 /**
- * `OWNED_CORE` plus Lady Luck laid at index `at`: the order is the node layout (`setup.ts#gridNodeContents`, the worn
- * dressphere on node 0 then this list), so index 3 puts her on node 4, the last node of the five-node rings Yuna and
- * Rikku wear here, one link from node 0. Black Mage, which sat there, is off the grid.
+ * `OWNED_CORE` with Lady Luck first and Gunner last: the order is the node layout (`setup.ts#gridNodeContents`, the worn
+ * dressphere on node 0 then this list), so Lady Luck takes node 1, the first Change row and Gunner's node, and Gunner is
+ * off the grid (still owned). Black Mage keeps node 4, the last node of the five-node rings Yuna and Rikku wear here (one
+ * link from node 0; the guide's Water spells need it), and on Paine's four-node Stonehewn (Dark Knight, Lady Luck, Thief,
+ * Warrior) the last node is the Warrior whose Breaks she has learned. Chapter XVI has no Itchy and so no autopilot Change:
+ * the first Change row is read by nothing here (the baseline run has no spherechange event in 200 seeds; measured again in
+ * r381-lady-luck, `docs/handoff/r381-lady-luck.md`).
  */
-function withLadyLuck(at: number): string[] {
-  return [...OWNED_CORE.slice(0, at), 'lady-luck', ...OWNED_CORE.slice(at)];
-}
-
-/**
- * Paine's layout on four-node Stonehewn: Dark Knight, **Lady Luck**, Thief, Warrior. Her last node (3) holds the
- * Warrior whose Breaks she has learned, so Lady Luck takes node 1 (Gunner's, which no line here uses) and the Warrior
- * stays one link from node 0 on the other side. Chapter XVI has no Itchy and so no autopilot Change: the first Change
- * row is read by nothing here (the baseline run has no spherechange event in 200 seeds).
- */
-const PAINE_OWNED: string[] = ['lady-luck', ...OWNED_CORE.filter((d) => d !== 'gunner'), 'gunner'];
+const LADY_FIRST: string[] = ['lady-luck', ...OWNED_CORE.filter((d) => d !== 'gunner'), 'gunner'];
 
 const DARK_KNIGHT = {
   learned: [
@@ -70,7 +68,7 @@ export const djoseBuild: FFX2PartyBuild = {
       portraitKey: 'yuna',
       level: 32, // [estimate] inside §5's band 30-36
       currentDressphere: 'white-mage',
-      owned: [...withLadyLuck(3), 'floral-fallal'], // Protection Halo, 5 nodes: White Mage, Gunner, Thief, Warrior, Lady Luck
+      owned: [...LADY_FIRST, 'floral-fallal'], // Protection Halo, 5 nodes: White Mage, Lady Luck, Thief, Warrior, Black Mage
       garmentGrid: { id: 'protection-halo', nodePosition: 0, passedGates: [], wornThisBattle: [] }, // Def +5, MDef +5 (Ch.1)
       abilitiesLearned: {
         // Chapter 2's White Mage (`./bevelle.ts`) plus Pray, Curaga and Life: a chapter of AP, [estimate].
@@ -92,7 +90,7 @@ export const djoseBuild: FFX2PartyBuild = {
       portraitKey: 'rikku',
       level: 33,
       currentDressphere: 'dark-knight',
-      owned: [...withLadyLuck(3), 'machina-maw'], // Hour of Need, 5 nodes: Dark Knight, Gunner, Thief, Warrior, Lady Luck
+      owned: [...LADY_FIRST, 'machina-maw'], // Hour of Need, 5 nodes: Dark Knight, Lady Luck, Thief, Warrior, Black Mage
       garmentGrid: { id: 'hour-of-need', nodePosition: 0, passedGates: [], wornThisBattle: [] }, // Def +10, MDef +10 (Ch.2)
       abilitiesLearned: { 'dark-knight': DARK_KNIGHT },
       accessories: ['muscle-belt', 'iron-bangle'], // Chapter 2's, [estimate]
@@ -104,7 +102,7 @@ export const djoseBuild: FFX2PartyBuild = {
       portraitKey: 'paine',
       level: 34,
       currentDressphere: 'dark-knight',
-      owned: [...PAINE_OWNED], // Stonehewn, 4 nodes: Dark Knight, Lady Luck, Thief, Warrior (see PAINE_OWNED)
+      owned: [...LADY_FIRST], // Stonehewn, 4 nodes: Dark Knight, Lady Luck, Thief, Warrior (see LADY_FIRST)
       garmentGrid: { id: 'stonehewn', nodePosition: 0, passedGates: [], wornThisBattle: [] }, // Def +10 (Ch.2)
       abilitiesLearned: {
         'dark-knight': DARK_KNIGHT,
