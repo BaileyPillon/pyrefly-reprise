@@ -13,6 +13,7 @@ import { CHAPTERS } from './data/encounters.ts';
 import { installDebugApi, markReady } from './debug/api.ts';
 import { installFxEnv } from './app/fxEnv.ts';
 import { installFxDebug } from './debug/fxApi.ts';
+import { installArtDebug } from './debug/artApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
@@ -139,7 +140,9 @@ async function boot(): Promise<void> {
   // fb-0929 pacing: `?pace=current|steady|relaxed`; no parameter = 'steady' (Bailey's pick, 2026-09-29; `src/engine/pace.ts`).
   setPace(paceFromQuery(window.location.search) ?? DEFAULT_PACE);
   installFxEnv(); // eye-candy D reads REDUCE MOTION, LOW EFFECTS and the viewport every frame
-  installFxDebug(installDebugApi(app) as unknown as Record<string, unknown>, app); // eye-candy options round: `__pyrefly.fx` (kept out of `debug/api.ts`)
+  const debugApi = installDebugApi(app) as unknown as Record<string, unknown>;
+  installFxDebug(debugApi, app); // eye-candy options round: `__pyrefly.fx` (kept out of `debug/api.ts`)
+  installArtDebug(debugApi, app); // release 39: `__pyrefly.art`, the art tiers and the anti-aliasing
 
   await app.push(new TitleScreen());
   app.start();

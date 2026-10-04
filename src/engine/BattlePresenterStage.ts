@@ -44,6 +44,7 @@ import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
 import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLumaOf } from './ContactShadow.ts';
 import { heldOffStage } from './SummonStaging.ts';
 import { paceRate } from './pace.ts';
+import { StageArt } from './StageArt.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -149,6 +150,8 @@ export class PaintedStage implements BattleStage {
   readonly lighting: PhaseLighting;
   /** A-8: the floor's luma, which sets how strong a contact shadow must be to read on it (`ContactShadow.ts`). */
   private readonly groundLuma: number | null;
+  /** Release 39: which master of each painting the figures draw from, measured against the camera that is looking at them (`StageArt.ts`). */
+  readonly art: StageArt;
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
@@ -182,6 +185,14 @@ export class PaintedStage implements BattleStage {
       ...(opts.reduceFlashes ? { reduceFlashes: opts.reduceFlashes } : {}),
     });
     this.vfx = this.makeVfxPort();
+    this.art = new StageArt({
+      actors: () => [...this.actors.values()].map((s) => s.actor),
+      party: () => [...this.actors.values()].filter((s) => s.kind === 'party').map((s) => s.actor),
+      camera: opts.camera,
+      canvas: opts.canvas,
+      battleCamera: opts.battleCamera,
+      ...(opts.spellFx?.game ? { game: opts.spellFx.game } : {}),
+    });
   }
 
   // ------------------------------------------------------------------ staging
@@ -770,6 +781,7 @@ export class PaintedStage implements BattleStage {
     const range = phaseForFlags(this.lastState?.flags);
     if (range) this.lighting.phase(range);
     this.lighting.update(dt);
+    this.art.update();
   }
 
   /** The pyreflies' state, for the debug snapshot and the capture script. */
@@ -818,6 +830,7 @@ export class PaintedStage implements BattleStage {
     this.spellFx.dispose();
     this.pyreflies.dispose();
     this.lighting.dispose();
+    this.art.dispose();
     disposeStoneShards(this.opts.scene);
     this.flashEl?.remove();
     this.flashEl = null;

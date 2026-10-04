@@ -40,7 +40,33 @@ export interface PreparedPainting {
  */
 export const PAINTING_CACHE_LIMIT = 96;
 
+/**
+ * And how many decoded megabytes (RGBA, no mips) they may add up to (release 39): a 2x master is four times a 1x painting and
+ * a chapter's thirty to forty paintings at 2x are about 500 MB of decoded pixels the browser may keep resident, so the count
+ * alone no longer bounds the memory. Oldest first out, never the one just made.
+ */
+export const PAINTING_CACHE_MB = 900;
+
 const cache = new Map<string, Promise<PreparedPainting | null>>();
+const decodedMB = new Map<string, number>();
+
+function sizeMB(p: PreparedPainting): number {
+  const s = p.source as { naturalWidth?: number; width?: number; height?: number; naturalHeight?: number };
+  return ((s.naturalWidth || s.width || 0) * (s.naturalHeight || s.height || 0) * 4) / (1024 * 1024);
+}
+
+/** Drop the oldest paintings until the count and the decoded size are both within their limits; `keep` is never dropped. */
+function trim(keep: string): void {
+  let total = 0;
+  for (const mb of decodedMB.values()) total += mb;
+  for (const key of cache.keys()) {
+    if (cache.size <= PAINTING_CACHE_LIMIT && total <= PAINTING_CACHE_MB) break;
+    if (key === keep) continue;
+    total -= decodedMB.get(key) ?? 0;
+    cache.delete(key);
+    decodedMB.delete(key);
+  }
+}
 
 /** The cache key: the URL plus the options that change the answer. */
 export function paintingKey(url: string, matte?: unknown, fit?: unknown): string {
@@ -71,6 +97,10 @@ export function cachedPainting(
   const made = make().then(
     (p) => {
       if (!p && cache.get(key) === made) cache.delete(key);
+      if (p && cache.get(key) === made) {
+        decodedMB.set(key, sizeMB(p));
+        trim(key);
+      }
       return p;
     },
     () => {
@@ -79,11 +109,7 @@ export function cachedPainting(
     },
   );
   cache.set(key, made);
-  while (cache.size > PAINTING_CACHE_LIMIT) {
-    const oldest = cache.keys().next().value;
-    if (oldest === undefined) break;
-    cache.delete(oldest);
-  }
+  trim(key);
   return made;
 }
 
@@ -100,4 +126,12 @@ export function paintingCacheSize(): number {
 /** Forget everything. Tests only. */
 export function clearPaintingCache(): void {
   cache.clear();
+  decodedMB.clear();
+}
+
+/** The decoded megabytes the cache holds (for the debug probe and the tests). */
+export function paintingCacheMB(): number {
+  let total = 0;
+  for (const mb of decodedMB.values()) total += mb;
+  return total;
 }

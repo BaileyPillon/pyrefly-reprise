@@ -790,6 +790,20 @@ public/art/
   loads every shipped image in WebKit and Chromium (the deploy runs it).
   Details: [handoff/r38-bytes.md](handoff/r38-bytes.md).
 
+**Masters (release 39, `r39-hires-engine`).** Beside an approved painting, `<state>@2x.png`, `@3x.png` and `@4x.png` are the same
+painting at that many times the size (same geometry, same silhouette); a backdrop has `<key>@2x.png`. They are *added* files:
+the approved 1x paintings are never replaced and `docs/target/approved-hashes.json` is untouched. The hi-res library
+(`D:/Tools/pyrefly-art-backup/hires`, `manifest.json`: RealESRGAN x4, then a low-denoise SDXL tile pass, the approved alpha redrawn as a
+smooth contour at scale, one record per asset with its source sha256 and QC numbers) is installed with
+`node tools/hires-install.mjs` (a dry run until `--apply`; hard links, `@3x` derived from `@4x`, backdrops stop at 2x, a master is
+installed only when the 1x file beside it still has the sha256 it was rendered from) and then `node tools/gen/manifest.mjs`, which lists
+them (`tiers`, `backdropTiers`); the game never asks for a master the manifest does not list, and a master that fails to load falls back
+to the next tier down. Which master a figure is drawn from is decided by magnification (`src/engine/ArtBudget.ts`, `ArtGovernor.ts`):
+the smallest one that keeps a texel under one screen pixel, inside the device class's ceiling (phone 2x, software 2x, integrated 2x,
+discrete GPU 4x) and texture budget, with no setting and no save key. `?arttier=phone|low|mid|high`, `?artscale=1..4` (pins every
+painting to one master) and `?aa=off|smaa|msaa` force a class, a scale or the anti-aliasing for captures; `__pyrefly.art` reads the
+governor, the rig table and the held-shot sizes. Handoff: [handoff/r39-hires-engine.md](handoff/r39-hires-engine.md).
+
 ---
 
 ## 6. Judging a batch

@@ -48,6 +48,8 @@ let gpu: string | null = null;
 let buffer = 0;
 let forced: DeviceClass | null | undefined;
 let cached: ArtBudget | null = null;
+let pinnedScale: number | null | undefined;
+let maxTexture = 16384;
 
 function fromAddress(): DeviceClass | null {
   try {
@@ -57,10 +59,37 @@ function fromAddress(): DeviceClass | null {
   }
 }
 
+/**
+ * Measurements only: pin every painting to one master (`?artscale=1..4` on the address, `setForcedArtScale` from code,
+ * `__pyrefly.art.force`). The governor stands down while a scale is pinned, so a capture holds what it asked for.
+ */
+export function forcedArtScale(): number | null {
+  if (pinnedScale !== undefined) return pinnedScale;
+  try {
+    const n = Number(new URLSearchParams(globalThis.location?.search ?? '').get('artscale'));
+    return Number.isInteger(n) && n >= 1 && n <= 4 ? n : null;
+  } catch {
+    return null;
+  }
+}
+
+export function setForcedArtScale(n: number | null | undefined): void {
+  pinnedScale = n;
+}
+
 /** `Renderer` hands over the GPU string (UNMASKED_RENDERER_WEBGL) once its context exists. */
 export function setGpuInfo(renderer: string | null): void {
   gpu = renderer;
   cached = null;
+}
+
+/** `Renderer` hands over the GPU's largest texture edge; a master is never asked for that would not fit it (`ArtGovernor`). */
+export function setMaxTextureSize(px: number): void {
+  if (px > 0) maxTexture = px;
+}
+
+export function maxTextureSize(): number {
+  return maxTexture;
 }
 
 /** `Renderer` keeps the drawing buffer's width (CSS px x pixel ratio) current. */

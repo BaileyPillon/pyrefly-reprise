@@ -10,7 +10,7 @@ import {
   type Camera,
 } from 'three';
 import { setPaintedAnisotropy } from './PaintedArt.ts';
-import { artBudget, setBufferWidth, setGpuInfo } from './ArtDevice.ts';
+import { artBudget, setBufferWidth, setGpuInfo, setMaxTextureSize } from './ArtDevice.ts';
 import { MsaaRenderPass, parseAaOverride, type AaMode } from './PostAa.ts';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -147,6 +147,7 @@ export class Renderer {
     this.renderer.shadowMap.type = PCFSoftShadowMap;
     setPaintedAnisotropy(this.renderer.capabilities.getMaxAnisotropy());
     // Release 39: the art budget follows the device (`ArtDevice.ts`): tell it which GPU this is, and keep the buffer width current in `resize`.
+    setMaxTextureSize(this.renderer.capabilities.maxTextureSize);
     try {
       const gl = this.renderer.getContext();
       const dbg = gl.getExtension('WEBGL_debug_renderer_info');

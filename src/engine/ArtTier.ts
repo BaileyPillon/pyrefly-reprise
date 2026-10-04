@@ -18,7 +18,7 @@
 import { logicalArtUrl, shippedArtUrl } from './ArtShipped.ts';
 import { artManifest, loadArtManifest } from './ArtManifest.ts';
 import { scalesOf } from './ArtManifestTiers.ts';
-import { artBudget, bufferWidth, type TierEnv } from './ArtDevice.ts';
+import { artBudget, bufferWidth, forcedArtScale, type TierEnv } from './ArtDevice.ts';
 import { backdropScaleFor, baseScale, pickScale } from './ArtBudget.ts';
 
 export { readTierEnv, type TierEnv } from './ArtDevice.ts';
@@ -94,6 +94,8 @@ export function baseScaleFor(url: string): number {
   const kind = tieredKind(url);
   if (!kind) return 1;
   if (decided === false) return 1;
+  const pin = forcedArtScale();
+  if (pin !== null) return pin;
   const b = artBudget();
   const want = kind === 'backdrop' ? backdropScaleFor(b, bufferWidth()) : baseScale(b, bufferWidth());
   return decided === true ? Math.max(2, want) : want;
@@ -109,7 +111,8 @@ export async function pixelUrlFor(url: string, wanted?: number): Promise<string>
   const available = await artScalesFor(url);
   if (!available || available.length === 0) return url;
   const b = artBudget();
-  const cap = kind === 'backdrop' ? Math.max(b.backdropScale, decided === true ? 2 : 1) : Math.max(b.maxScale, decided === true ? 2 : 1);
+  const pin = forcedArtScale();
+  const cap = pin !== null ? 4 : kind === 'backdrop' ? Math.max(b.backdropScale, decided === true ? 2 : 1) : Math.max(b.maxScale, decided === true ? 2 : 1);
   const scale = pickScale(wanted ?? baseScaleFor(url), available, cap);
   return (scale > 1 ? tierUrl(url, scale) : null) ?? url;
 }

@@ -1,3 +1,4 @@
+import { anticipateView } from '../../StageArt.ts';
 import type { Object3D, PerspectiveCamera } from 'three';
 import { boxesOf, bossCoverOf, clearBoxes, downsOf, fitClear, limitsFor, overlapOf, type Field, type Fit, type Gate, type Limit, type PartyRule } from './clearance.ts';
 import { cameraAt, figOf, stillActor, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
@@ -287,6 +288,7 @@ export class Framing {
     for (const [a, p] of d.plan) this.staging.plan.set(a, { ...p });
     this.staging.apply(actors, true);
     this.masterPose = d.pose;
+    anticipateView(d.pose); // release 39: the master the camera is about to rest on, so its figures' paintings are the right size when it lands
     this.lensFrom = this.lensApplied ? [...this.lensNow()] : [0, 0];
     this.lensShown = [this.lensFrom[0], this.lensFrom[1]];
     this.lensSeq = rigs.moveSeq;

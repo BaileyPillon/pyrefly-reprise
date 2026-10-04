@@ -20,6 +20,7 @@
  * `backdropTiers`) and the game never asks for one that is not listed.
  */
 import { createHash } from 'node:crypto';
+import { cpus } from 'node:os';
 import { copyFileSync, existsSync, linkSync, mkdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
@@ -100,25 +101,40 @@ export async function plan({ lib, art, only, scales, backdropMax = 2 }) {
   return { jobs, skipped };
 }
 
+/** Run `fn` over `items` with at most `n` in flight. */
+async function pool(items, n, fn) {
+  let next = 0;
+  const worker = async () => {
+    while (next < items.length) await fn(items[next++]);
+  };
+  await Promise.all(Array.from({ length: Math.max(1, n) }, worker));
+}
+
 async function apply(jobs, copy) {
   const sharp = (await import('sharp')).default;
+  sharp.cache(false);
+  sharp.concurrency(1); // the pool below owns the parallelism
   let n = 0;
-  for (const j of jobs) {
+  for (const j of jobs.filter((x) => x.kind === 'link')) {
     mkdirSync(dirname(j.to), { recursive: true });
-    if (j.kind === 'link') {
-      if (copy) copyFileSync(j.from, j.to);
-      else {
-        try {
-          linkSync(j.from, j.to);
-        } catch {
-          copyFileSync(j.from, j.to);
-        }
+    if (copy) copyFileSync(j.from, j.to);
+    else {
+      try {
+        linkSync(j.from, j.to);
+      } catch {
+        copyFileSync(j.from, j.to);
       }
-    } else {
-      await sharp(j.from).resize({ width: j.size[0], height: j.size[1], kernel: 'lanczos3', fit: 'fill' }).png({ compressionLevel: 9, effort: 7 }).toFile(j.to);
     }
     n++;
   }
+  // The 3x derivations are the slow part (a 13-megapixel resize and PNG each). The build recompresses every master anyway
+  // (`tools/art-derive.mjs`), so the installed file is written at a quick compression level.
+  const derive = jobs.filter((x) => x.kind === 'derive3');
+  await pool(derive, Math.min(4, Math.max(1, cpus().length >> 1)), async (j) => {
+    mkdirSync(dirname(j.to), { recursive: true });
+    await sharp(j.from).resize({ width: j.size[0], height: j.size[1], kernel: 'lanczos3', fit: 'fill' }).png({ compressionLevel: 6 }).toFile(j.to);
+    n++;
+  });
   return n;
 }
 

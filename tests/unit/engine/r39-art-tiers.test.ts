@@ -26,6 +26,7 @@ import {
 import { manifestKnowsAsset, parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { artScalesForNow, baseScaleFor, pixelUrlFor, scaleOfUrl, setHiTier, tierUrl, tieredKind } from '../../../src/engine/ArtTier.ts';
 import { artBudget, deviceClass, setArtTier, setBufferWidth, setGpuInfo } from '../../../src/engine/ArtDevice.ts';
+import { PAINTING_CACHE_MB, cachedPainting, clearPaintingCache, hasPainting, paintingCacheMB, type PreparedPainting } from '../../../src/engine/PaintedArtCache.ts';
 
 afterEach(() => {
   resetArtManifest();
@@ -292,5 +293,24 @@ describe('which file a painting is drawn from', () => {
     setHiTier(true);
     expect(baseScaleFor('/art/characters/tidus/ready.png')).toBe(2);
     expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png');
+  });
+});
+
+describe('the painting cache is bounded by decoded size as well as by count', () => {
+  const painting = (px: number): PreparedPainting => ({ source: { naturalWidth: px, naturalHeight: px } as unknown as HTMLImageElement, cleaned: false, meta: { width: 1, height: 1, baselineY: 1 }, scale: 4 });
+  afterEach(() => clearPaintingCache());
+  it('drops the oldest masters once the decoded pixels pass the limit, never the one just made', async () => {
+    clearPaintingCache();
+    const big = Math.round(Math.sqrt((PAINTING_CACHE_MB / 3.5) * 1024 * 1024 / 4)); // about 257 MB decoded each: four of them pass the limit
+    for (const k of ['a', 'b', 'c', 'd']) await cachedPainting(k, async () => painting(big));
+    expect(hasPainting('a')).toBe(false);
+    expect(hasPainting('d')).toBe(true);
+    expect(paintingCacheMB()).toBeLessThanOrEqual(PAINTING_CACHE_MB);
+  });
+  it('small paintings are not touched by it', async () => {
+    clearPaintingCache();
+    for (const k of ['a', 'b', 'c']) await cachedPainting(k, async () => painting(512));
+    expect([hasPainting('a'), hasPainting('b'), hasPainting('c')]).toEqual([true, true, true]);
+    expect(paintingCacheMB()).toBeCloseTo(3, 0);
   });
 });

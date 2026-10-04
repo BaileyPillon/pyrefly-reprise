@@ -254,6 +254,8 @@ interface PlaneSlot {
   meta: PoseMeta;
   /** What {@link computePoseScale} worked out for this slot's pose. */
   scale: PoseScale;
+  /** The painting this plane draws (release 39: `ArtGovernor` reads which master its texture holds). */
+  painted: PaintedTexture | null;
 }
 
 /** A pose that has not been sized yet: 1x1, upright, no footprint. */
@@ -785,6 +787,7 @@ export class PaintedActor extends Group {
       pose: '',
       meta: { width: 1, height: 1, baselineY: 1 },
       scale: UNSIZED,
+      painted: null,
     };
   }
 
@@ -887,6 +890,26 @@ export class PaintedActor extends Group {
     return this.slots[this.active]!.pose;
   }
 
+  /**
+   * Release 39 (`ArtGovernor.ts`): every real painting this actor holds, once each (a pose that fell back to idle shares idle's), and
+   * whether a plane is drawing it right now. A stand-in is left out: it has no master to swap in.
+   */
+  paintings(): Array<{ painted: PaintedTexture; mesh: Mesh; drawn: boolean }> {
+    const drawn = new Map<Texture, Mesh>();
+    for (const slot of this.slots) {
+      const p = slot.painted;
+      if (p && slot.mesh.visible && slot.fade > 0.02 && this._alpha > 0.02) drawn.set(p.texture, slot.mesh);
+    }
+    const out: Array<{ painted: PaintedTexture; mesh: Mesh; drawn: boolean }> = [];
+    const seen = new Set<Texture>();
+    for (const p of this.poses.values()) {
+      if (p.placeholder || seen.has(p.texture)) continue;
+      seen.add(p.texture);
+      out.push({ painted: p, mesh: drawn.get(p.texture) ?? this.slots[this.active]!.mesh, drawn: drawn.has(p.texture) });
+    }
+    return out;
+  }
+
   get poseNames(): string[] {
     return [...this.poses.keys()];
   }
@@ -972,6 +995,7 @@ export class PaintedActor extends Group {
   private applyPose(slotIndex: number, name: string, tex: PaintedTexture): void {
     const slot = this.slots[slotIndex]!;
     slot.pose = name;
+    slot.painted = tex;
     slot.meta = tex.meta;
     slot.material.uniforms['map']!.value = tex.texture;
     (slot.material.uniforms['texel']!.value as Vector2).set(
