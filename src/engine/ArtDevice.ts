@@ -77,6 +77,33 @@ export function setForcedArtScale(n: number | null | undefined): void {
   pinnedScale = n;
 }
 
+let linkOverride: boolean | null | undefined;
+
+/** Force the connection reading (tests, captures, `__pyrefly.art`); `null` goes back to the address and then the browser. */
+export function setSlowLink(v: boolean | null | undefined): void {
+  linkOverride = v;
+}
+
+/**
+ * True on a connection too slow to fetch the 2x masters ahead of the first menu (about 120 MB more than the approved set for a
+ * chapter at 1440p): the data-saver switch on, a 3G-or-slower effective type, or a measured downlink under 5 Mbit/s. Only Chromium
+ * reports `navigator.connection`; Safari and Firefox read as fast. `?artlink=slow|fast` forces it for captures. A slow link starts every
+ * painting at the approved file, as before release 39; the governor still upgrades whatever a close shot needs, in the background.
+ */
+export function slowLink(): boolean {
+  if (linkOverride !== undefined && linkOverride !== null) return linkOverride;
+  try {
+    const q = new URLSearchParams(globalThis.location?.search ?? '').get('artlink');
+    if (q === 'slow') return true;
+    if (q === 'fast') return false;
+  } catch {
+    /* no address: read the connection */
+  }
+  const c = (globalThis as { navigator?: { connection?: { saveData?: boolean; effectiveType?: string; downlink?: number } } }).navigator?.connection;
+  if (!c) return false;
+  return c.saveData === true || /^(slow-2g|2g|3g)$/.test(c.effectiveType ?? '') || (typeof c.downlink === 'number' && c.downlink > 0 && c.downlink < 5);
+}
+
 /** `Renderer` hands over the GPU string (UNMASKED_RENDERER_WEBGL) once its context exists. */
 export function setGpuInfo(renderer: string | null): void {
   gpu = renderer;

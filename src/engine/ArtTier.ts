@@ -18,7 +18,7 @@
 import { logicalArtUrl, shippedArtUrl } from './ArtShipped.ts';
 import { artManifest, loadArtManifest } from './ArtManifest.ts';
 import { scalesOf } from './ArtManifestTiers.ts';
-import { artBudget, bufferWidth, forcedArtScale, type TierEnv } from './ArtDevice.ts';
+import { artBudget, bufferWidth, forcedArtScale, slowLink, type TierEnv } from './ArtDevice.ts';
 import { backdropScaleFor, baseScale, pickScale } from './ArtBudget.ts';
 
 export { readTierEnv, type TierEnv } from './ArtDevice.ts';
@@ -97,7 +97,8 @@ export function baseScaleFor(url: string): number {
   const pin = forcedArtScale();
   if (pin !== null) return pin;
   const b = artBudget();
-  const want = kind === 'backdrop' ? backdropScaleFor(b, bufferWidth()) : baseScale(b, bufferWidth());
+  // A slow link (data-saver, 3G or under 5 Mbit/s) starts every painting at the approved file: the masters come when a shot needs them.
+  const want = slowLink() ? 1 : kind === 'backdrop' ? backdropScaleFor(b, bufferWidth()) : baseScale(b, bufferWidth());
   return decided === true ? Math.max(2, want) : want;
 }
 

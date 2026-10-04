@@ -26,7 +26,7 @@ import {
 } from '../../../src/engine/ArtBudget.ts';
 import { manifestKnowsAsset, parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { artScalesForNow, baseScaleFor, pixelUrlFor, scaleOfUrl, setHiTier, tierUrl, tieredKind } from '../../../src/engine/ArtTier.ts';
-import { artBudget, deviceClass, setArtTier, setBufferWidth, setForcedArtScale, setGpuInfo } from '../../../src/engine/ArtDevice.ts';
+import { artBudget, deviceClass, setArtTier, setBufferWidth, setForcedArtScale, setGpuInfo, setSlowLink, slowLink } from '../../../src/engine/ArtDevice.ts';
 import { PAINTING_CACHE_MB, cachedPainting, clearPaintingCache, hasPainting, paintingCacheMB, type PreparedPainting } from '../../../src/engine/PaintedArtCache.ts';
 
 afterEach(() => {
@@ -36,6 +36,7 @@ afterEach(() => {
   setArtTier(null);
   setGpuInfo(null);
   setBufferWidth(0);
+  setSlowLink(null);
 });
 
 const manifest = (subjects: Record<string, unknown>, extra: Record<string, unknown> = {}) =>
@@ -311,6 +312,43 @@ describe('which file a painting is drawn from', () => {
     setForcedArtScale(3);
     expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png'); // pinned to 3, no 3x: the 2x
     setForcedArtScale(null);
+  });
+  it('a slow link starts every painting at the approved file, and the governor still may ask for more', async () => {
+    setArtManifest(tidus());
+    setArtTier('high');
+    setBufferWidth(3840);
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png');
+    expect(await pixelUrlFor('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet@2x.png');
+    setSlowLink(true);
+    expect(baseScaleFor('/art/characters/tidus/ready.png')).toBe(1);
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready.png');
+    expect(await pixelUrlFor('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet.png');
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png', 2.95)).toBe('/art/characters/tidus/ready@3x.png'); // a close shot still gets its master
+    setSlowLink(false);
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png');
+  });
+  it('reads the connection: data-saver, 3G or under 5 Mbit/s is slow; no connection API reads as fast', () => {
+    const nav = (globalThis as { navigator?: unknown }).navigator;
+    const set = (connection: unknown) => Object.defineProperty(globalThis, 'navigator', { value: connection === undefined ? {} : { connection }, configurable: true });
+    try {
+      set(undefined);
+      expect(slowLink()).toBe(false);
+      set({ effectiveType: '4g', downlink: 10, saveData: false });
+      expect(slowLink()).toBe(false);
+      set({ effectiveType: '4g', downlink: 10, saveData: true });
+      expect(slowLink()).toBe(true);
+      set({ effectiveType: '3g', downlink: 1.4 });
+      expect(slowLink()).toBe(true);
+      set({ effectiveType: '4g', downlink: 2.5 });
+      expect(slowLink()).toBe(true);
+      set({ effectiveType: '4g', downlink: 0 }); // 0 means unknown
+      expect(slowLink()).toBe(false);
+      setSlowLink(false);
+      set({ effectiveType: '2g' });
+      expect(slowLink()).toBe(false); // a forced reading wins
+    } finally {
+      Object.defineProperty(globalThis, 'navigator', { value: nav, configurable: true, writable: true });
+    }
   });
   it('without a manifest the 1x painting is drawn, as it always was', async () => {
     setArtTier('high');
