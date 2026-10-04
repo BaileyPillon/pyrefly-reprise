@@ -31,7 +31,7 @@ export interface FxPartSettings {
   fxDof: boolean;
   /** FOG, a part of CINEMA LIGHT. */
   fxFog: boolean;
-  /** SMOOTH EDGES (SMAA on the figure layer and the defringe), a part of CINEMA LIGHT. */
+  /** SMOOTH EDGES (SMAA on the figure layer and the defringe), a part of CINEMA LIGHT. On a supersampled rung (release 39's F plus and F) the Lanczos-3 resolve is the anti-aliasing and no SMAA runs: the part then keeps the defringe. */
   fxEdges: boolean;
   /** BREATHING, a part of LIVING PAINTINGS. */
   fxBreath: boolean;
