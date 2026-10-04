@@ -35,10 +35,9 @@ html[data-reduce-motion] .bstart__art { animation: none; }
 html[data-reduce-motion] .bstart { transition: none; }
 html[data-reduce-motion] .bstart__load::before { animation: none; left: 0; width: 100%; opacity: 0.6; }
 
-/* dialogue-box.css, enemy-intent.css, strategy-guide.css, doom-counter.css */
+/* dialogue-box.css, enemy-intent.css, doom-counter.css */
 html[data-reduce-motion] .dbox--waiting .dbox__advance,
 html[data-reduce-motion] .eint__charge--s2,
-html[data-reduce-motion] .sgd__charge--s2,
 html[data-reduce-motion] .ffx-doom--tick { animation: none; }
 
 /* zanmato-gauge.css */

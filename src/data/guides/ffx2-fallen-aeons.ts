@@ -7,11 +7,6 @@
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14]. ATB, dresspheres, the aeons' action counter.
  *
- * The RULES and the NEXT line (`./lines/ffx2-fallen-aeons.ts`) follow the FFX-2 encounter guide the
- * project settled on (D-350, `research/jegged-encounter-guides-ffx2.md` §5); `cite` names the research
- * section behind each mechanic and is never rendered. The `hints` below are the move advisor's
- * borrowed sentences for the chapter tactic's pick: the panel does not read them.
- *
  * ## What it says, and on whose word
  *
  * - The numbers and behaviours are the research's: Shiva's Fire weakness and Ice absorption and
@@ -28,20 +23,19 @@
  */
 
 import type { ChapterGuide, GuideHint, GuidePhase, GuideRule } from './types.ts';
-import { FFX2_FALLEN_AEONS_LINE } from './lines/ffx2-fallen-aeons.ts';
 import { WAIT_SPLIT_HABIT_RULE } from './ffx2-wait-habit.ts';
 
 /** The five combatant ids, link by link (`src/engine/tactics/ffx2-fallen-aeons.ts` registers the same). */
 const IDS = { shiva: 'x2-shiva', sandy: 'sandy', cindy: 'cindy', mindy: 'mindy', anima: 'x2-anima' } as const;
 
 const SHIVA: GuideRule = {
-  text: 'Shiva: Fire hurts her and Ice heals her. Heavenly Strike halves a girl\'s HP and MP and can Stop her, and the faster her HP falls the more she uses Diamond Dust. The real danger is all three Stopped at once, so cure Stop with a Remedy at once.',
+  text: 'Shiva: Fire hurts her and Ice heals her. Heavenly Strike halves a girl\'s HP and MP and can Stop her; a Remedy cures Stop.',
   short: 'Shiva: a Remedy cures Stop, no Ice',
   cite: 'ffx2-fallen-aeons §3.1, §4.1',
 };
 const DELTA: GuideRule = {
-  text: 'Take Cindy first, and never spread the damage evenly. Delta Attack and White Highwind both need all three Sisters standing, and Delta Attack is gone for good once any one of them falls. Dispel the guard Cindy puts on her sisters.',
-  short: 'Cindy first; downing any sister ends Delta',
+  text: 'Delta Attack needs all three Sisters standing: bring any one of them down and it is gone for good. Dispel the guard Cindy puts on her sisters.',
+  short: 'Down one Sister and Delta Attack is gone',
   cite: 'ffx2-fallen-aeons §4.2',
 };
 const PAIN: GuideRule = {
@@ -123,7 +117,6 @@ export const FFX2_FALLEN_AEONS_GUIDE: ChapterGuide = {
     [IDS.anima]: 'Anima',
   },
   clockRules: { wait: WAIT_SPLIT_HABIT_RULE },
-  line: FFX2_FALLEN_AEONS_LINE,
 };
 
 export default FFX2_FALLEN_AEONS_GUIDE;

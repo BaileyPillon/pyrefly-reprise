@@ -34,6 +34,7 @@ import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
 import { StrategyGuide, fitWholeUnits } from '../../src/ui/common/StrategyGuide.ts';
 import { makeFakeBattleState } from '../../src/ui/ffx/testFixtures.ts';
+import { fakeBoard } from './helpers/guideDocStrings.ts';
 import { stubGuideLayout } from './helpers/guideLayoutStub.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -84,15 +85,14 @@ describe('fitWholeUnits', () => {
   });
 
   it('keeps the first block even when it overflows, rather than emptying the slab', () => {
-    // NEXT — the command the player is being told to press — survives every
-    // other rung of this panel's ladder; it survives this one too.
+    // A page always shows something, and an empty slab with a MORE chip under it would be the worse defect.
     const fit = fitWholeUnits([{ bottom: 300, glyphBottom: 298 }], 175);
     expect(fit.shown).toBe(1);
     expect(fit.height).toBe(298);
     expect(fit.clipped).toBe(false);
   });
 
-  it('never ends on an orphan section head whose section was cut away', () => {
+  it('never ends on an orphan head whose text was cut away', () => {
     const withHead = [
       { bottom: 40, glyphBottom: 38 },
       { bottom: 80, glyphBottom: 78, heading: true },
@@ -133,21 +133,49 @@ describe('the rail ends on a whole block instead of slicing one (round-03 #36, r
 
     // `available` here is 175 grid px (240 - 5 - 60, the identical anchor pair
     // to `ui-strategy-guide.test.ts`'s own case). Chrome (the slab's padding)
-    // is 11, so the rail's text budget is 164; the content is taller than that,
+    // is 11, so the rail's text budget is 164; the document is taller than that,
     // so the MORE row shows and takes another 11, leaving 153 for whole blocks.
-    // Each block is 20 tall, so blocks end at 20, 40, 60 ... and the seventh would
-    // end at 140. That seventh block is the RULES heading, and a heading is never
-    // the last thing shown (its bullets would all be cut), so the cut drops it and
-    // ends on the sixth block, at 120, with its type stopping 2 px above that.
+    // Each block is 20 tall, so blocks end at 20, 40, 60 ... and the seventh ends
+    // at 140: seven blocks fit, the eighth would end at 160, and the type of the
+    // seventh stops 2 px above its box.
     const stub = stubGuideLayout(stage, { scale: 1, unitHeight: 20, glyphSlack: 2, bodyTop: 5, chrome: 11 });
     guide.update(0.016);
-    expect(stub.units.length, 'the fixture guide got shorter than this case needs').toBeGreaterThan(8);
+    expect(stub.units.length, 'the fixture document got shorter than this case needs').toBeGreaterThan(14);
 
+    // The panel opens on Seymour Flux's header, so the preparation above it is out of the flow.
+    const first = stub.units.findIndex((u) => !u.classList.contains('sgd__u--out'));
+    expect(stub.units[first]!.classList.contains('sgd__doc-head')).toBe(true);
+    const shown = stub.units.filter((u) => !u.classList.contains('sgd__u--out'));
+    expect(shown).toHaveLength(7);
     const body = stage.querySelector<HTMLElement>('.sgd__body')!;
-    expect(Number.parseFloat(body.style.height)).toBeCloseTo(118, 1); // 120 - 2 of leading
-    expect(stub.units[5]!.classList.contains('sgd__u--out')).toBe(false); // ends at 120
-    expect(stub.units[6]!.classList.contains('sgd__u--out')).toBe(true); // the RULES head: never the last block shown
+    expect(Number.parseFloat(body.style.height)).toBeCloseTo(138, 1); // 140 - 2 of leading
+    expect(stub.units[first + 7]!.classList.contains('sgd__u--out')).toBe(true);
     expect(stage.querySelector<HTMLElement>('[data-role="strategy-guide-more"]')!.hidden).toBe(false);
+
+    guide.unmount();
+  });
+
+  it('never ends a page on a run-in line whose text would be cut away', () => {
+    const stage = document.createElement('div');
+    document.body.appendChild(stage);
+    const guide = new StrategyGuide({
+      game: 'ffx',
+      anchors: { below: () => boxed(20, 24), above: () => boxed(240, 80), top: 44, bottom: 34 },
+    });
+    guide.mount(stage);
+    // Evrae's page: header, description, HP, then the run-in line "The mechanics of the fight:".
+    guide.sync(fakeBoard('ffx', [{ id: 'evrae' }]));
+    // 38-grid-px blocks: header, description and HP end at 38, 76 and 114, and the run-in line at 152, which is inside
+    // the 153 budget, but a run-in line is never the last thing on a page, so the page ends on the HP line.
+    const stub = stubGuideLayout(stage, { scale: 1, unitHeight: 38, glyphSlack: 2, bodyTop: 5, chrome: 11 });
+    guide.update(0.016);
+
+    const first = stub.units.findIndex((u) => !u.classList.contains('sgd__u--out'));
+    const shown = stub.units.filter((u) => !u.classList.contains('sgd__u--out'));
+    expect(shown).toHaveLength(3);
+    expect(stub.units[first + 3]!.classList.contains('sgd__lead')).toBe(true);
+    expect(stub.units[first + 3]!.classList.contains('sgd__u--out')).toBe(true);
+    expect(Number.parseFloat(stage.querySelector<HTMLElement>('.sgd__body')!.style.height)).toBeCloseTo(112, 1); // 114 - 2
 
     guide.unmount();
   });
@@ -165,7 +193,7 @@ describe('the rail ends on a whole block instead of slicing one (round-03 #36, r
     guide.update(0.016);
 
     const body = stage.querySelector<HTMLElement>('.sgd__body')!;
-    // 118 of text + 11 of slab chrome + 11 of MORE row = 140, inside the 175
+    // 138 of text + 11 of slab chrome + 11 of MORE row = 160, inside the 175
     // the anchors allow. The defect this pins is the old order — clamp the
     // text first, then paint an 11px chip over its foot.
     expect(Number.parseFloat(body.style.height) + 11 + 11).toBeLessThanOrEqual(175);

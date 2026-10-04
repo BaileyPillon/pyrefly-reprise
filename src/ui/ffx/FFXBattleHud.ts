@@ -551,16 +551,12 @@ export class FFXBattleHud implements HudPort {
     const triggerOnly = commands.length > 0 && commands.every((c) => c.command.kind === 'trigger');
     if (triggerOnly) return this.triggerPrompt.open(commands, combatants);
 
-    // The guide's NEXT line explains *this* decision, so it opens and closes
-    // with the menu — including when the menu loses to a strategy that raced
-    // its promise, which is why the clear sits in a `finally`.
-    // The advisor's card explains the same decision and follows the same
-    // lifetime, so it opens and closes with the guide's NEXT line.
+    // The advisor's card explains this decision, so it opens and closes with the
+    // menu — including when the menu loses to a strategy that raced its promise,
+    // which is why the clear sits in a `finally`. The strategy guide is a
+    // document and does not follow the decision (it never reads the advisor).
     this.advisorDecisionSeq++;
-    if (this.lastState) {
-      this.guide.showDecision(actorId, commands, this.lastState);
-      this.advisor.showDecision(actorId, commands, this.lastState);
-    }
+    if (this.lastState) this.advisor.showDecision(actorId, commands, this.lastState);
     try {
       // Evrae only: the orders fold into one row (`AirshipOrders`); elsewhere `commands` as is.
       return await this.airship.choose(commands, this.lastState, (menuCommands) => this.commandMenu.open({
@@ -584,7 +580,6 @@ export class FFXBattleHud implements HudPort {
         targetNoteOf: (id, cmd) => zombieTargetNote(this.lastState, actorId, id, cmd) ?? this.targetNoteOf(id, cmd),
       }));
     } finally {
-      this.guide.clearDecision();
       this.advisor.clearDecision();
       this.advisorDecisionSeq++;
     }

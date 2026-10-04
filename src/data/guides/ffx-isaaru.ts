@@ -11,11 +11,6 @@
  * mirror lock, CTB and Shield; in FFX-2 Isaaru is a tour guide and nobody
  * summons (research §0.3).
  *
- * The RULES and the NEXT line (`./lines/ffx-isaaru.ts`) follow the FFX encounter guide the project
- * settled on (D-350, `research/jegged-encounter-guides-ffx-b.md` §5); `cite` names the research
- * section behind each mechanic and is never rendered. The `hints` below are the move advisor's
- * borrowed sentences for the chapter tactic's pick: the panel does not read them.
- *
  * Every fact is the research's, with its tag: only aeons can fight his aeons,
  * and never the same aeon (§1.2, `[verified: 2 sources]`); a KO'd aeon stays
  * down for the rest of the chain (§1.2, `[derived]`); no healing between the
@@ -28,7 +23,6 @@
  */
 
 import type { ChapterGuide } from './types.ts';
-import { ISAARU_LINE } from './lines/ffx-isaaru.ts';
 
 export const ISAARU_GUIDE: ChapterGuide = {
   id: 'isaaru-via-purifico',
@@ -40,29 +34,29 @@ export const ISAARU_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Only an aeon can fight his aeons, and never the same one: while he has Ifrit out, yours will not come. Yuna can summon, heal herself and use items, nothing else. Open each link with a Grand Summon, so the aeon arrives with its gauge full.',
-      short: 'Yuna alone: open each link with a Grand Summon',
-      cite: 'ffx-isaaru-bevelle §1.2, §5.4; B6 (our estimate for the greyed rows)',
-    },
-    {
-      text: 'Grothia is his Ifrit, with 8,000 HP. Grand Summon Bahamut and fire Mega Flare. He answers with Hellfire, more than any of your aeons can take, so put Shield up before his gauge fills: it quarters the blow.',
-      short: 'Grothia: Grand Summon Bahamut, Mega Flare',
-      cite: 'ffx-isaaru-bevelle §2.1, §4.1, §5.2, §5.3',
-    },
-    {
-      text: 'Pterya is his Valefor, with 12,000 HP, and the weak one. Send Bahamut again if he still has his Overdrive, otherwise Ixion. Bahamut takes her hits and fills his gauge doing it.',
-      short: 'Pterya: Bahamut again, otherwise Ixion',
-      cite: 'ffx-isaaru-bevelle §2.1, §5.2, §6.3',
-    },
-    {
-      text: 'Spathi is his Bahamut, with 20,000 HP, so Bahamut cannot come. Send Shiva, who is fast and the second strongest. He does not attack: he counts down from five, then Mega Flare hits the aeon on the field for more than it can take. Shield right before it, and keep to plain attacks to save MP.',
-      short: 'Spathi: Shiva, and Shield before the count ends',
-      cite: 'ffx-isaaru-bevelle §2.1, §4.3, §5.2, §5.3; I-5',
+      text: 'Only an aeon can fight his aeons, and never the same one: while he has Ifrit out, yours will not come. Yuna can summon, heal herself and use items, nothing else.',
+      short: 'Only aeons fight here, never the mirror of his',
+      cite: 'ffx-isaaru-bevelle §1.2; B6 (our estimate for the greyed rows)',
     },
     {
       text: 'Three aeons back to back with no healing between them. An aeon you lose stays down for the rest of the contest, and with none left to summon the contest is lost.',
       short: 'No healing between links; a fallen aeon stays down',
       cite: 'ffx-isaaru-bevelle §1.2',
+    },
+    {
+      text: 'Grothia opens with a full gauge, so his first move against an aeon is Hellfire, more than any of your aeons can take. Shield first: it quarters the blow.',
+      short: 'Grothia: Hellfire first. Shield before it lands',
+      cite: 'ffx-isaaru-bevelle §4.1, §5.2, §5.3',
+    },
+    {
+      text: 'Pterya is the weak one. Bahamut takes her hits and fills his gauge doing it.',
+      short: 'Pterya: let Bahamut take her hits',
+      cite: 'ffx-isaaru-bevelle §5.2, §6.3',
+    },
+    {
+      text: 'Spathi does not attack. He counts down from five, then Mega Flare hits the aeon on the field for more than it can take. Watch the turn order: Shield when the Flare will land before your next turn. Ifrit or Ixion, whichever has the fuller gauge, goes in first.',
+      short: 'Spathi: Shield before the count runs out',
+      cite: 'ffx-isaaru-bevelle §4.3, §5.2, §5.3; I-5',
     },
   ],
 
@@ -102,7 +96,6 @@ export const ISAARU_GUIDE: ChapterGuide = {
     { bossId: 'pterya', label: 'Link 2 of 3: Pterya', note: 'His Valefor. Attack or Sonic Wings, Energy Ray when her gauge fills.', cite: 'ffx-isaaru-bevelle §4.2' },
     { bossId: 'spathi', label: 'Link 3 of 3: Spathi', note: 'His Bahamut. Five, four, three, two, one, then Mega Flare, and again.', cite: 'ffx-isaaru-bevelle §4.3' },
   ],
-  line: ISAARU_LINE,
 };
 
 export default ISAARU_GUIDE;

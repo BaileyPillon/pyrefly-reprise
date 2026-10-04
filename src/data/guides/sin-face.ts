@@ -7,18 +7,13 @@
  * **Game case: FFX only** [AGENTS.md rule 14; research/ffx-sin.md §0.3]: a CTB turn clock that ends in a
  * scripted Game Over, the airship's pull, Armor Break, aeons. Nothing here is true of FFX-2.
  *
- * The RULES and the NEXT line (`./lines/sin-face.ts`) follow the FFX encounter guide the project
- * settled on (D-350, `research/jegged-encounter-guides-ffx-b.md` §7); `cite` names the research section
- * behind each mechanic and is never rendered. **The clock's length is our estimate** (S-1, D-266/D-280):
- * the research holds the 12th or the 13th turn, the chapter uses the 13th until the Steam check settles
- * it, and the page says "the 12th or 13th" rather than the guide's own longer count. The `hints` below
- * are the move advisor's borrowed sentences for the chapter tactic's pick: the panel does not read them.
+ * **The clock's length is our estimate, labelled on the page** (S-1, D-266/D-280): the sources say the 12th
+ * or the 13th turn, and the chapter uses the 13th until the Steam check settles it.
  *
  * Listed with its chapter on 2026-09-29 (D-279), through `./index.ts`'s `GUIDES`.
  */
 
 import type { ChapterGuide } from './types.ts';
-import { SIN_FACE_LINE } from './lines/sin-face.ts';
 
 export const SIN_FACE_GUIDE: ChapterGuide = {
   id: 'sin-face',
@@ -27,23 +22,23 @@ export const SIN_FACE_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: "Sin's turns are the clock. Three turns pulling the ship in, then the mouth opens, and when it is fully open Giga-Graviton ends the fight: no Auto-Life or aeon saves you. It lands on Sin's 12th or 13th turn, so beat it before the 12th.",
-      short: "Beat it before Sin's 12th turn",
+      text: "Sin's turns are the clock. Three turns pulling the ship in, then the mouth opens, and when it is fully open Giga-Graviton ends the fight: no Auto-Life or aeon saves you. We use the 13th turn; the sources say 12th or 13th, and that is our estimate.",
+      short: "Beat it before Sin's 13th turn (our estimate)",
       cite: 'ffx-sin §5.4, §3.4, §10 S-1',
     },
     {
-      text: 'While it is out of reach, only Wakka and magic hit it. Spend the first turns on Hastega and Cheer, and bring Wakka and Lulu in to deal the damage: those turns cost nothing the clock can take back.',
-      short: 'Out of reach: Hastega, Cheer, Wakka and Lulu',
+      text: 'During the three pulls only Wakka and magic reach. Bring Wakka and Lulu in, and spend the other turns on Hastega and Cheer: they cost nothing the clock can take back.',
+      short: 'The pulls: Wakka and Lulu in, Hastega, Cheer',
       cite: 'ffx-sin §5.4, §8 row 8',
     },
     {
-      text: "Armor Break it the moment it is in reach, and Mental Break it so Lulu's Firaga hits about half again as hard. Then everything at it: Overdrives too, since nothing is worth saving past the clock.",
-      short: 'Armor and Mental Break at once, then burst',
-      cite: 'ffx-sin §4.2, §8 rows 1 and 8',
+      text: 'Armor Break the moment it is in range, then everything at it: Overdrives too, since nothing is worth saving past the clock.',
+      short: 'Armor Break at once, then burst',
+      cite: 'ffx-sin §8 row 8',
     },
     {
-      text: 'Every sixth hit on it (every third from an aeon) draws Gaze, one status on the whole party at a 30% chance: Petrify, Confuse or Zombie. Carry the cures, and any Ward blocks it completely.',
-      short: 'Gaze answers hits; carry cures, Wards block it',
+      text: 'Every sixth hit on it (every third from an aeon) draws Gaze, one status on the whole party at a 30% chance: Petrify, Confuse or Zombie. Any Ward blocks it completely.',
+      short: 'Gaze answers hits; Wards block it',
       cite: 'ffx-sin §5.4, §8 row 9',
     },
   ],
@@ -115,7 +110,6 @@ export const SIN_FACE_GUIDE: ChapterGuide = {
       cite: 'ffx-sin §5.4',
     },
   ],
-  line: SIN_FACE_LINE,
 };
 
 export default SIN_FACE_GUIDE;

@@ -5,7 +5,7 @@
  * `phone-battle.css` opens the guide as a sheet behind the GUIDE chip, 15 px type, `overflow-y: auto`.
  * But `StrategyGuide.layout()` still solved the desktop rail against the desktop's anchors, which mean
  * nothing there: measured in headless Chromium at 390x844 the fit left **one block** (the title) in a
- * sheet that had the whole screen to scroll, so NEXT, WATCH and RULES were never reachable on a phone.
+ * sheet that had the whole screen to scroll, so most of the guide was never reachable on a phone.
  * On the phone the content is now all there, at full length, and the sheet scrolls.
  *
  * **Game case: both** [AGENTS.md rule 14]: the sheet is shared plumbing for both HUDs.
@@ -63,10 +63,12 @@ describe('the phone sheet', () => {
     expect(stage.querySelector('.sgd')!.className).not.toMatch(/sgd--compact|sgd--fit/);
     expect(stage.querySelector<HTMLElement>('[data-role="strategy-guide-more"]')!.hidden).toBe(true);
     expect(stage.querySelector<HTMLElement>('.sgd__body')!.style.height).toBe('');
-    // every written block is there to scroll to: the title, the NEXT head, the WATCH note and the rules
+    // every written block is there to scroll to: the boss's header, its stat lines, the advice and the loot lists
     const text = stage.textContent ?? '';
     expect(text).toContain('Seymour Flux');
-    expect(text).toMatch(/Kill Seymour, not the mount/);
+    expect(text).toContain('Boss Battle');
+    expect(text).toMatch(/Total Annihilation is the dangerous one/);
+    expect(text).toContain('Lv. 4 Key Sphere');
     guide.unmount();
   });
 

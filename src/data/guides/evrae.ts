@@ -10,16 +10,9 @@
  * §0.4 fences the whole encounter to FFX: the airship distance mechanic, the
  * Trigger Commands and the three-active/three-reserve bench "have no X-2
  * counterpart". Nothing here is true of FFX-2.
- *
- * The RULES and the NEXT line (`./lines/evrae.ts`) follow the FFX encounter guide the project
- * settled on (D-350, `research/jegged-encounter-guides-ffx-a.md` Chapter 8); `cite` names the
- * research section behind each mechanic and is never rendered. The `hints` below are the move
- * advisor's borrowed sentences for the chapter tactic's pick (`src/engine/tactics/evrae.ts`): the
- * panel does not read them.
  */
 
 import type { ChapterGuide } from './types.ts';
-import { EVRAE_LINE } from './lines/evrae.ts';
 
 export const EVRAE_GUIDE: ChapterGuide = {
   id: 'evrae-airship',
@@ -28,29 +21,29 @@ export const EVRAE_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Pull the ship back first. Cid can move the ship or fire the missiles, never both, and Evrae is weak at range, so let him work. One volley is about 2,400, and it costs the party no turn at all. Pull back again whenever the party needs to recover.',
-      short: 'Pull back first, and whenever you must recover',
+      text: 'Cid can move the ship or fire the missiles, never both — pull back the moment the fight opens. FAR is the only range Cid can fire from, and one volley (~2,400) outdamages a whole turn of party swings for no party turn at all.',
+      short: 'Pull back — Cid does more than you do',
       cite: 'ffx-evrae-airship §4.2, §7.4, §8 row 1',
     },
     {
-      text: 'Spend the time at range on buffs. Tidus Cheers up to five, which works at any distance, and Wakka keeps attacking, because his shots reach no matter how far the ship is.',
-      short: 'At range: Cheer to five; Wakka keeps swinging',
-      cite: 'ffx-evrae-airship §4.3, §8 row 3',
-    },
-    {
-      text: 'The Al Bhed Potion is the only heal in this party, and Rikku carries it. It is party-wide, heals exactly 1,000, and cures Poison, Silence and Petrify in the same cast. A petrified member is one Swooping Scythe from being gone for good.',
-      short: 'Al Bhed Potion heals and cures; use it early',
+      text: 'The Al Bhed Potion is the only heal in this party — no Yuna, no White Magic. Rank 2, party-wide, exactly 1,000, and it cures Poison, Silence and Petrify in the same cast. A petrified member is one Swooping Scythe from being gone for good.',
+      short: 'Al Bhed Potion is your only heal — use it early',
       cite: 'ffx-evrae-airship §6.4, §3.3 note 3, §8 row 2',
     },
     {
-      text: 'Slow it before its bar drops under a third. At that point it casts Haste on itself, and it casts it again every time you Slow it, which undoes the Slow. Reflect on it turns the same Haste onto your party instead.',
-      short: 'Slow it before it Hastes itself',
-      cite: 'ffx-evrae-airship §6.3, §6.5, §8 rows 5 and 11',
+      text: 'When Evrae inhales while the ship is FAR, do nothing that names it. Attacking now makes it Swoop in and breathe anyway — the dodge is refusing the bait, not landing a counter.',
+      short: 'Ship is FAR and it inhales — do not attack',
+      cite: 'ffx-evrae-airship §4.5, §8 row 8',
     },
     {
-      text: 'When Evrae inhales while the ship is far, do nothing that names it. Attacking makes it Swoop in and breathe anyway. The dodge is refusing the bait, and a turn spent on an ally is the play.',
-      short: 'Ship far and it inhales: do not attack',
-      cite: 'ffx-evrae-airship §4.5, §8 row 8',
+      text: 'Once its bar drops under a third, everything it does gets worse at once: it goes berserk, and if it is still un-Reflected its next big turn is a self-cast Haste. Reflect denies the Haste and turns it into a free Haste on your own party instead.',
+      short: 'Under 1/3 HP: get Reflect up before the Haste',
+      cite: 'ffx-evrae-airship §5.4, §6.5, §8 row 11',
+    },
+    {
+      text: 'Slow only helps while it can still be applied — cast it before Reflect goes up, never after, because Slow is reflectable and a Reflected Evrae bounces it onto the party that cast it.',
+      short: 'Slow before Reflect, never after',
+      cite: 'ffx-evrae-airship §6.3, §6.5, §8 row 5',
     },
   ],
 
@@ -155,7 +148,6 @@ export const EVRAE_GUIDE: ChapterGuide = {
       cite: 'ffx-evrae-airship §4.5, §5.4, §5.5',
     },
   ],
-  line: EVRAE_LINE,
 };
 
 export default EVRAE_GUIDE;

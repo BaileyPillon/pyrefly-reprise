@@ -1,13 +1,6 @@
 /**
  * Chapter 2 — Yunalesca, in the Zanarkand Dome [research/ffx-yunalesca.md §10].
  *
- * **Game case: FFX only** [AGENTS.md rule 14]. The RULES and phase notes and the NEXT line
- * (`./lines/yunalesca.ts`) follow the FFX encounter guide the project settled on (D-350,
- * `research/jegged-encounter-guides-ffx-a.md` Chapter 2); `cite` names the research section that
- * backs each mechanic and is never rendered. The `hints` below are the move advisor's borrowed
- * sentences for the chapter tactic's pick (`src/engine/tactics/yunalesca.ts`): the panel does not
- * read them.
- *
  * The one chapter where the obvious play is the losing one. §10.1 is
  * categorical: enter Form III with at least one active member **still
  * zombified**, because that character is the only thing that survives Mega
@@ -18,7 +11,6 @@
  */
 
 import type { ChapterGuide } from './types.ts';
-import { YUNALESCA_LINE } from './lines/yunalesca.ts';
 
 export const YUNALESCA_GUIDE: ChapterGuide = {
   id: 'yunalesca',
@@ -27,28 +19,28 @@ export const YUNALESCA_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Form I answers every blow: Blind for a physical hit, Silence for a spell. Put Reflect on the party, Yuna first so she cannot be Silenced, and the counters bounce back at her. Cure any Blind or Silence that lands with Eye Drops, an Echo Screen, Esuna or a Remedy.',
-      short: 'Reflect first; cure Blind and Silence',
-      cite: 'ffx-yunalesca §5.1, §10.4',
+      text: 'Keep one Zombie. Form III opens with Mega Death, and a zombified member is immune to it — cure all three and the active party is wiped from full health.',
+      short: 'Keep one Zombie alive for Mega Death',
+      cite: 'ffx-yunalesca §10.1',
     },
     {
-      text: 'Keep one Zombie in Forms II and III. Hellbiter turns the party into Zombies, and Mega Death at the start of Form III kills everyone who is not one. Never cure the last Zombie.',
-      short: 'Always keep at least one Zombie',
-      cite: 'ffx-yunalesca §10.1, §10.2',
-    },
-    {
-      text: 'Her Cura and Curaga hurt a Zombie, so heal a worn one the Holy Water way: cure it, heal it next turn, and let her next Hellbiter zombify it again.',
-      short: 'Holy Water a worn Zombie, then heal it',
+      text: 'Never cure the last Zombie while a Mega Death is due. Cure, heal, then let the next Hellbiter re-apply it.',
+      short: 'Never cure the last Zombie with Mega Death due',
       cite: 'ffx-yunalesca §10.2',
     },
     {
-      text: 'Dispel her Regen off your people. On a Zombie, Regen is damage rather than healing.',
-      short: 'Dispel her Regen off your party',
+      text: 'Dispel her Regen off your Zombies — healing damages a Zombie, so her Regen is a slow execution rather than a gift.',
+      short: 'Dispel her Regen off your Zombies',
       cite: 'ffx-yunalesca §10.5, §7.1',
     },
     {
-      text: 'Hold every aeon for Form III and fire its Overdrive on arrival. Her Mind Blast Curses an aeon on its first step, and a Cursed aeon cannot use an Overdrive.',
-      short: 'Aeons wait for Form III; Overdrive at once',
+      text: 'Form I is a Darkness fight: she counters every landed physical hit with Blind, and Darkness drops physical accuracy to base/10. Cure it or stop swinging.',
+      short: 'Form I answers every physical hit with Blind',
+      cite: 'ffx-yunalesca §5.1, ffx-combat-core §4.2',
+    },
+    {
+      text: 'Summon only in Form III, and Overdrive on arrival. Aeons postpone Mega Death rather than dying to it, but Mind Blast Curses them on step one and a Cursed aeon can never Overdrive.',
+      short: 'Summon only in Form III, Overdrive on arrival',
       cite: 'ffx-yunalesca §10.6',
     },
   ],
@@ -122,21 +114,20 @@ export const YUNALESCA_GUIDE: ChapterGuide = {
     {
       formIndex: 0,
       label: 'Form I',
-      note: 'She answers every blow: Blind for a physical hit, Silence for a spell, Sleep for anything else. Reflect on the party sends them back at her; cure whatever lands.',
-      cite: 'ffx-yunalesca §5.1, §10.4',
+      note: 'She counters every landed physical with Blind and every spell with Silence. Cure the counter or stop swinging; summoning here is a net loss, because Absorb heals her.',
+      cite: 'ffx-yunalesca §5.1, §10.6',
     },
     {
       formIndex: 1,
       label: 'Form II',
-      note: 'Hellbiter turns the party into Zombies and her cures hurt them. Keep at least one Zombie standing, and Dispel her Regen off your people.',
+      note: 'Hellbiter is party-wide Zombie. Let it land on somebody and leave them zombified — that member is the one who survives the Mega Death that opens Form III.',
       cite: 'ffx-yunalesca §5.2, §10.1',
     },
     {
       formIndex: 2,
       label: 'Form III',
-      note: 'Mega Death opens the form and comes back on her cycle, and only a Zombie lives through it. Keep a Zombie, and bring the aeons in now.',
+      note: 'Mega Death opens the form and recurs on her cycle. Only a Zombie survives it. Aeons postpone it and Overdrive on arrival, before Mind Blast Curses them.',
       cite: 'ffx-yunalesca §5.3, §10.6',
     },
   ],
-  line: YUNALESCA_LINE,
 };

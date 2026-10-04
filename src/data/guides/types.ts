@@ -24,7 +24,6 @@
  */
 
 import type { CombatantId, CommandKind, StatusId } from '../../battle/common/types.ts';
-import type { GuideLine } from './line-types.ts';
 
 /** When a {@link GuideHint} applies. Every field present must match. */
 export interface GuideHintMatch {
@@ -155,14 +154,7 @@ export interface ChapterGuide {
   bossIds: readonly CombatantId[];
   /** 3-5 bullets. The standing truths, not the turn-by-turn. */
   rules: readonly GuideRule[];
-  /**
-   * Explanations for the commands the chapter tactic picks. First match wins.
-   *
-   * **Read by the move advisor, not by the guide's own panel** (2026-10-03, "the guide and next move
-   * advisor are completely separate entities"): `src/engine/tactics/advisor.ts` borrows these
-   * sentences through `buildGuideView` for the tactic's pick. The panel's NEXT reads {@link line}
-   * and its own reasons instead, so changing the guide's wording never moves the advisor.
-   */
+  /** Explanations for the commands the tactic picks. First match wins. */
   hints: readonly GuideHint[];
   /** Telegraph answers, keyed by the `charge` event's state text. */
   watch: readonly GuideWatch[];
@@ -177,13 +169,6 @@ export interface ChapterGuide {
    * `guideTitle`). Both games may use it; only Chapter XIII does today.
    */
   linkTitles?: Readonly<Record<CombatantId, string>>;
-  /**
-   * The plan the panel's NEXT card reads: ordered steps, the first playable one is shown
-   * (`./line-types.ts`, evaluated by `src/engine/tactics/guide-line.ts`). Every shipped chapter
-   * has one (`tests/unit/guide-line.test.ts` pins that); the panel prints no NEXT for a chapter
-   * without.
-   */
-  line?: GuideLine;
   /**
    * **FFX-2 only.** A RULES bullet shown *first*, and only while the player's X-2 clock is
    * this one ({@link GuideClock}): a habit that is true of one clock and false of another

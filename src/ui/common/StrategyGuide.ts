@@ -1,61 +1,58 @@
 import './strategy-guide.css';
-import type { AvailableCommand, BattleState, CombatantId, GameId } from '../../battle/common/types.ts';
-import type { GuideDecision } from '../../engine/tactics/guide.ts';
-import { buildGuideRail, type GuideRailView } from '../../engine/tactics/guide-line.ts';
-import type { QueuedCommand } from '../../engine/tactics/guide-inflight.ts';
-import { ffx2CoachClock } from '../coach/coachState.ts';
+import type { BattleState, GameId } from '../../battle/common/types.ts';
 import { readSetting, writeSetting } from '../../app/SaveData.ts';
 import { GUIDE_HINT_ITEM } from './ControlsHint.ts';
 import { escapeHtml } from './html.ts';
+import { docForState, headingAt, startBlockIndex, type GuideDocView } from './guideDoc.ts';
+import { docHtml } from './guideDocHtml.ts';
+import { fitWholeUnits, linePitch, resetLines, showLines, type GuideFitUnit } from './guideFit.ts';
+
+// The page-fitting arithmetic lives in `./guideFit.ts`; these names stay importable from here.
+export { fitWholeUnits, type GuideFit, type GuideFitUnit } from './guideFit.ts';
 
 /**
- * The optional in-battle strategy guide: an Ink & Gold side slab that says what
- * the encounter was designed to be beaten with, and gets out of the way.
+ * The optional in-battle strategy guide: an Ink & Gold side slab that holds the written guide for
+ * the boss on the field, laid out as that guide is laid out.
  *
- * Three parts, in the order a player needs them:
+ * Bailey, 2026-10-03: "from now on the guide follows the ffx/ffx-2 encounter guides" and "Just match
+ * the original document please in terms of formatting and everything else". So the panel is **a
+ * document**, not a plan: the boss's header, its stat lines (the game's description line, HP, Steal,
+ * Drops; FFX-2's Enemy / HP / Steal / Drop table), then the advice in the order the guide gives it, as
+ * paragraphs, lists, lead-ins and sub-headings (`src/data/guides/docs/`, shapes in `../../data/guides/doc-types.ts`).
+ * Nothing in it is computed from the fight: it opens on the part of the document for the boss that is
+ * standing (`./guideDoc.ts`), and `MORE` turns the page. The move advisor is a separate panel with a
+ * separate reasoning and never reads this one.
  *
- *  * **NEXT** — the command the chapter's plan calls for from the character
- *    who is deciding right now, its target, and one plain sentence on why. The
- *    recommendation is not written here: `src/engine/tactics/guide-line.ts`
- *    walks the chapter's own line (`src/data/guides/lines/`) and shows the
- *    first step that can be played. The line is the guide's alone; the move
- *    advisor's card is a separate panel with a separate reasoning.
- *  * **WATCH** — whatever the boss is winding up, while a `charge` is live
- *    ("Total Annihilation, in 2 turns"), plus the phase or form note.
- *  * **RULES** — the three-to-five standing truths of the encounter.
- *
- * Everything printed is plain strategy-guide prose. No source, citation or
- * section number is ever rendered (Bailey, 2026-10-03); the data keeps its
- * provenance fields for maintainers, and `tests/unit/guide-line-words.test.ts`
- * fails on any rendered string that names where advice came from.
+ * Everything printed is plain strategy-guide prose, in our own words. No source, citation or
+ * section number is ever rendered (Bailey, 2026-10-03); `tests/unit/guide-doc-words.test.ts` fails on
+ * any rendered string that names where advice came from.
  *
  * ## Optional means optional
  *
- * `G`, the pad's spare face button, or the chip itself hides everything but a
- * chip the width of two words, and the answer is remembered in
- * `Settings.guideVisible` for every later battle. Default is on: a player who
- * has never met Yunalesca should be told that curing every Zombie is the losing
- * move *before* it wipes them, and a player who does not want to be told can
- * say so once.
+ * `G`, the pad's spare face button, or the chip itself hides everything but a chip the width of two
+ * words, and the answer is remembered in `Settings.guideVisible` for every later battle. Default is
+ * on.
  *
  * ## It never sits on the command menu
  *
- * The panel is a left rail inside the HUD's own 640x360 letterbox stage, so it
- * scales with the rest of the chrome. Its height is not a constant: the owner
- * hands it the element it must clear (`.ffx-cmd-area` in FFX, whose stack grows
- * upward from the bottom-left as a submenu fills), and {@link layout} caps the
- * panel at that element's top edge every frame. When the menu closes the rail
- * grows back. That is why this is a measured layout rather than a fixed box —
- * a fixed box either wastes two thirds of the rail or lands on the Items
- * submenu, and which one it does depends on the chapter.
+ * The panel is a left rail inside the HUD's own 640x360 letterbox stage, so it scales with the rest
+ * of the chrome. Its height is not a constant: the owner hands it the element it must clear
+ * (`.ffx-cmd-area` in FFX, whose stack grows upward from the bottom-left as a submenu fills), and
+ * {@link layout} caps the panel at that element's top edge every frame. When the menu closes the
+ * rail grows back. That is why this is a measured layout rather than a fixed box.
+ *
+ * ## A long document pages by whole blocks
+ *
+ * A page here is as many whole blocks as the rail holds ({@link StrategyGuide.refit}); `MORE` turns to
+ * the next page and wraps to the top at the foot, because a pad has no wheel. The phone shows the
+ * whole document as a scrolling sheet instead (`phone-battle.css`).
  *
  * ## Input, without touching `Input.ts`
  *
- * `src/app/Input.ts` maps a small set of abstract buttons and the battle screen
- * forwards none of them to the HUD, so the guide listens for itself: a `keydown`
- * on `KeyG` (the one key no existing binding claims) and a poll of standard
- * gamepad button 2, which `PAD_MAP` also leaves free. Both are edge-detected
- * and both stop at {@link unmount}.
+ * `src/app/Input.ts` maps a small set of abstract buttons and the battle screen forwards none of them
+ * to the HUD, so the guide listens for itself: a `keydown` on `KeyG` (the one key no existing binding
+ * claims) and a poll of standard gamepad button 2, which `PAD_MAP` also leaves free. Both are
+ * edge-detected and both stop at {@link unmount}.
  */
 
 /** Stage-relative geometry, in the 640x360 authoring grid's own pixels. */
@@ -77,11 +74,6 @@ export interface StrategyGuideOptions {
   /** Overridable for tests. */
   readVisible?: () => boolean;
   writeVisible?: (on: boolean) => void;
-  /**
-   * FFX-2: the engine's held (chain-locked) command, read at every render so NEXT never names a
-   * move already chosen (advisor v3, `engine/tactics/guide-inflight.ts`). FFX passes nothing.
-   */
-  held?: () => readonly QueuedCommand[];
 }
 
 /** The pad button the guide claims: standard index 2, unmapped by `Input.ts`. */
@@ -96,140 +88,18 @@ const CLEARANCE_GAP = 5;
 /**
  * How far above the rail's own top edge the `G GUIDE` chip sits, in grid px.
  *
- * It is a constant rather than a measurement because `layout()` runs before the
- * chip's first paint on the opening frame, and a zero height there would drop
- * the chip onto the banner for exactly the frame a screenshot is most likely to
- * catch. 11 is the gap the authored `top: 44` / chip `top: 44 - 11` pair in
- * `strategy-guide.css` already encodes.
+ * It is a constant rather than a measurement because `layout()` runs before the chip's first paint on
+ * the opening frame, and a zero height there would drop the chip onto the banner for exactly the frame
+ * a screenshot is most likely to catch. 11 is the gap the authored `top: 44` / chip `top: 44 - 11` pair
+ * in `strategy-guide.css` already encodes.
  */
 const CHIP_RISE = 11;
-
-/**
- * Rails shorter than this render RULES as one-liners (`.sgd--compact`).
- *
- * Measured, not guessed: with an FFX command menu open the rail is 156 grid px
- * and the panel's content is 370, of which the five rule paragraphs are 224.
- * The moment the player is actually reading this thing is the moment the menu
- * is open, so at that size the choice is not "paragraphs or headlines" but
- * "headlines or nothing" — everything below the fold needs a mouse wheel, which
- * a player on a pad does not have. In the short form the same five rules are
- * about 55px and the whole panel lands near the rail's height.
- *
- * The threshold is a constant rather than a measurement of the rendered
- * content on purpose: compacting shrinks `scrollHeight`, so a feedback loop on
- * overflow would oscillate between the two forms every frame.
- */
-const COMPACT_HEIGHT = 200;
-
-/**
- * The density ladder, when even the compact form does not fit the rail.
- *
- * Round 02 #29: "the strategy guide hard-clips mid-sentence with no scrollbar,
- * fade or affordance — '…beat the mount's Full-', 'Lance of Atrophy into
- * Full-Life, then Dispel into' … at submenu heights it renders bare headings
- * ('PHASE 1', 'RULES') with no body."
- *
- * The rail already scrolled and already faded its last few px, and neither
- * helped, for two reasons the fix has to answer separately:
- *
- * * **Nothing said there was more.** A fade at the foot of an ink panel on a
- *   dark painting is not an affordance; {@link StrategyGuide.moreEl} is.
- * * **A player on a pad cannot scroll.** So the panel gives text up in a fixed
- *   order until what is left fits, exactly as `MoveAdvisor.fitCard` does, and
- *   the order is the elaboration first: the rules' paragraphs (each rule keeps
- *   its one-line headline), then the WATCH sentences. (A rung that hid each
- *   rule's citation used to come first, and one that hid the rules past the
- *   third came last: no citation is printed any more, and the last rung hid
- *   rules that no page of the rail could ever reach again, so the rail
- *   paginates through every rule instead.) **What is never given up is a
- *   half-sentence** — every rung hides whole elements, so nothing is ever cut
- *   through the middle of a word again.
- *
- * NEXT — the command the player is being told to press, its target and its one
- * reason — survives every rung. It is the line the decision is about.
- *
- * **The ladder stops at two on purpose.** A further rung dropping the RULES
- * section outright was written and measured: at 1600x900 with an FFX command
- * menu open the rail is ~156 grid px and the ladder reached it in every state
- * of the browser pass, so the encounter's standing truths — "kill Seymour, not
- * the mount" — were gone from the panel for the whole of every decision, which
- * is when they matter. Past the last rung the rail **paginates** — whole
- * blocks at a time, {@link StrategyGuide.pageDown} — and
- * {@link StrategyGuide.moreEl} says so. Round 02 #29 allows exactly that:
- * "scroll or paginate with a visible affordance; never *silently* cut a
- * sentence."
- */
-const FIT_RUNGS = 2;
 
 /** Height of the MORE affordance row, in grid px. Mirrors `.sgd__more`'s own. */
 const MORE_HEIGHT = 11;
 
 /** The class that takes a block out of the body's flow entirely. */
 const OUT_CLASS = 'sgd__u--out';
-
-/**
- * One block of text in the body, measured in the stage's own **layout** units.
- *
- * Both numbers come from `offsetTop`/`offsetHeight` arithmetic, which a CSS
- * `transform` on an ancestor never touches — that is the whole point. Round 04
- * PR-0009 was twice fixed by converting *screen* measurements into grid units
- * and twice stayed broken; the fit decision below reads nothing a transform can
- * move.
- */
-export interface GuideFitUnit {
-  /** The block's own box bottom, relative to `.sgd__body`'s top edge. */
-  readonly bottom: number;
-  /**
-   * The bottom of this block's lowest **glyph**, same origin — always at or
-   * above {@link bottom}, because a line box carries half-leading and a block
-   * can carry padding under its last line. Ending the body here rather than at
-   * `bottom` is what makes the slab's edge land on the type instead of a few
-   * px of empty leading below it.
-   */
-  readonly glyphBottom: number;
-  /** A section head (`RULES`), which must never be the last thing shown. */
-  readonly heading?: boolean;
-}
-
-export interface GuideFit {
-  /** How many leading blocks stay; every later one is hidden outright. */
-  readonly shown: number;
-  /** The body's exact height: the last shown block's glyph bottom. */
-  readonly height: number;
-  /** At least one block had to go, so the MORE row is earned. */
-  readonly clipped: boolean;
-}
-
-/**
- * Keep the leading run of blocks that fits `limit` **entirely**, and end the
- * box on the last one's glyphs.
- *
- * Round 03 #36 and round 04 PR-0009: "…the CTB margin the Holy / Water rhythm
- * need[s to beat] the mount's Full-". Every previous answer clamped a
- * continuous height and hoped the boundary landed between two lines. This one
- * cannot slice, because the only heights it can return are block boundaries:
- * whatever `limit` is, the box ends where a block ended.
- *
- * Pure and exported so the rule is unit-testable without a layout engine —
- * the class's only job is to read the two numbers per block off the DOM.
- */
-export function fitWholeUnits(units: readonly GuideFitUnit[], limit: number): GuideFit {
-  if (units.length === 0) return { shown: 0, height: Math.max(0, limit), clipped: false };
-  let shown = 0;
-  for (const unit of units) {
-    if (unit.bottom > limit + 0.5) break;
-    shown++;
-  }
-  // Not even the first block fits: show it anyway and let the rail run a
-  // couple of px long. NEXT — the command the player is being told to press —
-  // survives every other rung of this panel's ladder; it survives this one too,
-  // and an empty slab with a MORE chip under it would be the worse defect.
-  if (shown === 0) return { shown: 1, height: units[0]!.glyphBottom, clipped: units.length > 1 };
-  // Never end on an orphan `RULES` head whose bullets were all cut away.
-  while (shown > 1 && shown < units.length && units[shown - 1]!.heading) shown--;
-  const last = units[shown - 1]!;
-  return { shown, height: Math.min(last.glyphBottom, last.bottom), clipped: shown < units.length };
-}
 
 export class StrategyGuide {
   readonly el: HTMLElement;
@@ -243,20 +113,26 @@ export class StrategyGuide {
   private mounted = false;
   private visible: boolean;
   private lastState: Readonly<BattleState> | null = null;
-  private decision: { actorId: CombatantId; commands: AvailableCommand[] } | null = null;
   private padWasDown = false;
   /** Signature of the last render, so a per-frame `sync` does not re-write the DOM. */
   private lastSignature = '';
-  /** The paging affordance; see {@link FIT_RUNGS}. */
+  /** The paging affordance; see {@link StrategyGuide.refit}. */
   private readonly moreEl: HTMLButtonElement;
   /** `(content, rail height, page)` the current fit was solved for. */
   private fitKey = '';
-  /** How much has been given up to make the content fit. 0 = nothing. */
-  private fitRung = 0;
-  /** Index of the first block of the page on screen. 0 = the top of the guide. */
+  /** Index of the first block of the page on screen. 0 = the top of the document. */
   private pageStart = 0;
   /** Index the next MORE click jumps to; 0 wraps back to the top. */
   private nextPage = 0;
+  /** Lines of the page's first unit that earlier pages already showed (a paragraph that carried over). */
+  private pageLine = 0;
+  /** Lines of the `nextPage` unit that this page already showed. */
+  private nextLine = 0;
+  /** The block the document opens on, and whether the phone's sheet still has to scroll to it. */
+  private startBlock = 0;
+  private phoneScrollPending = false;
+  /** What the panel is showing now (`view()`). */
+  private shown: GuideDocView | null = null;
 
   constructor(opts: StrategyGuideOptions) {
     this.opts = opts;
@@ -282,10 +158,9 @@ export class StrategyGuide {
     this.bodyEl = document.createElement('div');
     this.bodyEl.className = 'sgd__body';
 
-    // A pad cannot wheel a panel, so the affordance is also the control: one
-    // click pages down, and a click at the foot returns to the top. Hidden
-    // unless there is genuinely something below the fold. It is the column's
-    // second row, so it owns its height instead of covering the body's.
+    // A pad cannot wheel a panel, so the affordance is also the control: one click pages down, and a
+    // click at the foot returns to the top. Hidden unless there is genuinely something below the
+    // fold. It is the column's second row, so it owns its height instead of covering the body's.
     this.moreEl = document.createElement('button');
     this.moreEl.type = 'button';
     this.moreEl.className = 'sgd__more';
@@ -346,22 +221,20 @@ export class StrategyGuide {
   private applyVisible(): void {
     this.panelEl.hidden = !this.visible;
     this.el.classList.toggle('sgd--off', !this.visible);
-    // The chip keeps its measured anchor. Round 05 PR-0050: this used to clear
-    // the inline `top` and let the chip fall back to `.sgd__toggle`'s static
-    // `top: 44px`, on the theory that a stale measurement was worse than the
-    // authored default. In FFX the default happens to be right — the thing
-    // above the rail is the action banner, which ends at grid y 48. In FFX-2
-    // the thing above the rail is the boss gauge strip, which is taller, so the
-    // fallback printed `G GUIDE` across Bahamut's nameplate, HP bar and SCAN
-    // label. The anchor does not depend on the panel: it is the bottom edge of
-    // whatever chrome the owner named, which is laid out whether the guide is
-    // up or not, so it is re-read here and every frame in `update()`.
+    // The chip keeps its measured anchor. Round 05 PR-0050: this used to clear the inline `top` and let
+    // the chip fall back to `.sgd__toggle`'s static `top: 44px`, on the theory that a stale measurement
+    // was worse than the authored default. In FFX the default happens to be right — the thing above
+    // the rail is the action banner, which ends at grid y 48. In FFX-2 the thing above the rail is the
+    // boss gauge strip, which is taller, so the fallback printed `G GUIDE` across Bahamut's nameplate,
+    // HP bar and SCAN label. The anchor does not depend on the panel: it is the bottom edge of whatever
+    // chrome the owner named, which is laid out whether the guide is up or not, so it is re-read here
+    // and every frame in `update()`.
     if (!this.visible) {
       this.layoutToggle();
       this.stackEl.style.top = '';
       this.stackEl.style.maxHeight = '';
-      // The affordance belongs to the panel, not to the chip: with the guide
-      // off there is nothing below any fold.
+      // The affordance belongs to the panel, not to the chip: with the guide off there is nothing
+      // below any fold.
       this.moreEl.hidden = true;
       // The fit is solved against a rail height that no longer applies.
       this.fitKey = '';
@@ -376,10 +249,9 @@ export class StrategyGuide {
   /**
    * `KeyG`, edge-only.
    *
-   * Deliberately not routed through `src/app/Input.ts`: nothing in the battle
-   * screen forwards an `InputSnapshot` to the HUD, and adding a button to the
-   * shared map for one optional panel would put a global binding in a contract
-   * file that thirty agents import.
+   * Deliberately not routed through `src/app/Input.ts`: nothing in the battle screen forwards an
+   * `InputSnapshot` to the HUD, and adding a button to the shared map for one optional panel would put
+   * a global binding in a contract file that thirty agents import.
    */
   private readonly onKeyDown = (e: KeyboardEvent): void => {
     if (e.code !== 'KeyG' || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
@@ -400,10 +272,10 @@ export class StrategyGuide {
   update(_dt: number): void {
     this.pollPad();
     if (this.visible) this.layout();
-    // With the guide off there is no rail to solve, but the chip still has to
-    // follow the chrome it sits under: in FFX-2 the boss gauge strip grows and
-    // shrinks a block per living enemy, so a top measured once at the start of
-    // the battle is wrong by the time the first add dies (round 05 PR-0050).
+    // With the guide off there is no rail to solve, but the chip still has to follow the chrome it sits
+    // under: in FFX-2 the boss gauge strip grows and shrinks a block per living enemy, so a top
+    // measured once at the start of the battle is wrong by the time the first add dies (round 05
+    // PR-0050).
     else this.layoutToggle();
   }
 
@@ -422,79 +294,62 @@ export class StrategyGuide {
 
   // ------------------------------------------------------------------ data
 
-  /** New engine state. Refreshes WATCH and the phase note. */
+  /** New engine state: the boss on the field may have changed, and with it where the document opens. */
   sync(state: Readonly<BattleState>): void {
     this.lastState = state;
     this.render();
   }
 
-  /** A player decision opened: NEXT now has something to say. */
-  showDecision(actorId: CombatantId, commands: AvailableCommand[], state?: Readonly<BattleState>): void {
-    if (state) this.lastState = state;
-    this.decision = { actorId, commands };
-    this.render();
-  }
-
-  /** The decision was taken (or abandoned). */
-  clearDecision(): void {
-    if (!this.decision) return;
-    this.decision = null;
-    this.render();
-  }
-
-  /** The view the panel would draw right now, for tests and the debug snapshot. */
-  view(): GuideRailView | null {
-    if (!this.lastState) return null;
-    return buildGuideRail(this.lastState, this.withHeld(), ffx2CoachClock());
-  }
-
-  /** The open decision with the held command as it stands now (never throws: a bad read is none). */
-  private withHeld(): GuideDecision | null {
-    if (!this.decision || !this.opts.held) return this.decision;
-    try {
-      return { ...this.decision, held: this.opts.held() };
-    } catch {
-      return this.decision;
-    }
+  /** What the panel is showing right now, for tests and the debug snapshot. */
+  view(): GuideDocView | null {
+    return this.shown;
   }
 
   // -------------------------------------------------------------- rendering
 
   private render(): void {
     if (!this.mounted) return;
-    const view = this.lastState ? buildGuideRail(this.lastState, this.withHeld(), ffx2CoachClock()) : null;
+    const doc = this.lastState ? docForState(this.lastState) : null;
     // No written guide for this encounter: no panel and no chip, never a chip that opens an empty box.
-    this.el.hidden = view === null;
-    if (!view || !this.visible) return;
+    this.el.hidden = doc === null;
+    if (!doc || !this.lastState) {
+      this.shown = null;
+      return;
+    }
+    const start = startBlockIndex(doc, this.lastState);
+    this.shown = { chapterId: doc.id, title: headingAt(doc, start), start };
+    if (!this.visible) return;
 
-    const signature = signatureOf(view);
+    const signature = `${doc.id}:${start}`;
     if (signature === this.lastSignature) {
       this.layout();
       return;
     }
     this.lastSignature = signature;
-    this.bodyEl.innerHTML = bodyHtml(view);
-    // New text: back to page one, and re-solve the fit against it.
-    this.pageStart = 0;
+    this.bodyEl.innerHTML = docHtml(doc);
+    // New document, or a new fight in it: open on that fight's part and re-solve the fit against it.
+    this.startBlock = start;
+    this.phoneScrollPending = true;
+    const first = this.bodyEl.querySelector<HTMLElement>(`[data-block="${start}"]`);
+    this.pageStart = Math.max(0, first ? this.allUnits().indexOf(first) : 0);
+    this.pageLine = 0;
     this.fitKey = '';
     this.layout();
   }
 
   /**
-   * The rail's top edge, in stage-grid px: below whatever chrome the owner
-   * named, with room for the chip that rides above it.
+   * The rail's top edge, in stage-grid px: below whatever chrome the owner named, with room for the
+   * chip that rides above it.
    *
-   * The chip rides `CHIP_RISE` **above** the rail's top edge, so the rail has
-   * to leave room for it under whatever it is clearing — otherwise the chip
-   * itself lands on that anchor. In FFX the anchor is the action banner
-   * (`.ig-banner`, grid y 17.8..48) and the chip is 7.5px tall, which is
-   * exactly how `G GUIDE` ended up printed across the banner in Bailey's
-   * Chapter 1 capture. The fallback `anchors.top` already has the rise counted
-   * in (44, with the chip at 33), so only the measured branch adds it.
+   * The chip rides `CHIP_RISE` **above** the rail's top edge, so the rail has to leave room for it
+   * under whatever it is clearing — otherwise the chip itself lands on that anchor. In FFX the anchor
+   * is the action banner (`.ig-banner`, grid y 17.8..48) and the chip is 7.5px tall, which is exactly
+   * how `G GUIDE` ended up printed across the banner in Bailey's Chapter 1 capture. The fallback
+   * `anchors.top` already has the rise counted in (44, with the chip at 33), so only the measured
+   * branch adds it.
    *
-   * `offsetHeight > 0` is the gate, not merely "the element exists": chrome
-   * that is not laid out reports `offsetTop: 0` and would pull the rail to the
-   * top of the stage.
+   * `offsetHeight > 0` is the gate, not merely "the element exists": chrome that is not laid out
+   * reports `offsetTop: 0` and would pull the rail to the top of the stage.
    */
   private railTop(): number {
     const { anchors } = this.opts;
@@ -505,21 +360,20 @@ export class StrategyGuide {
   }
 
   /**
-   * Put the chip `CHIP_RISE` above the rail's top edge — the only geometry that
-   * still applies when the panel under it is hidden (round 05 PR-0050).
+   * Put the chip `CHIP_RISE` above the rail's top edge — the only geometry that still applies when the
+   * panel under it is hidden (round 05 PR-0050).
    */
   private layoutToggle(): void {
     this.toggleEl.style.top = `${Math.max(0, this.railTop() - CHIP_RISE).toFixed(2)}px`;
   }
 
   /**
-   * Cap the rail at whatever chrome it has to clear. See the class comment on
-   * why this is measured rather than a constant.
+   * Cap the rail at whatever chrome it has to clear. See the class comment on why this is measured
+   * rather than a constant.
    */
   private layout(): void {
     // The upright phone shows the guide as a scrolling sheet (`phone-battle.css`), not a rail between two
-    // chrome elements, so the desktop's anchors mean nothing there: fitting the content to them left one
-    // block (the title) in a sheet that had the whole screen to scroll. Nothing is fitted or paged on the phone.
+    // chrome elements, so the desktop's anchors mean nothing there. Nothing is fitted or paged on the phone.
     if (onPhone()) {
       this.layoutPhone();
       return;
@@ -527,15 +381,14 @@ export class StrategyGuide {
     const { anchors } = this.opts;
     const top = this.railTop();
 
-    // `offsetTop` is already stage-space: every anchor and the panel share the
-    // HUD stage as their offset parent.
+    // `offsetTop` is already stage-space: every anchor and the panel share the HUD stage as their offset
+    // parent.
     //
-    // `offsetHeight > 0` is the gate, not merely "the element exists". A hidden
-    // anchor (`.ffx2hud__command` is `hidden` whenever no menu is open, and
-    // `.ffxhud [hidden] { display: none }` applies to FFX's own chrome) reports
-    // `offsetTop: 0`, which would put the floor five pixels *above* the stage's
-    // top edge and collapse the rail to MIN_PANEL_HEIGHT for the whole battle.
-    // An anchor that is not laid out has no edge to clear, so fall back.
+    // `offsetHeight > 0` is the gate, not merely "the element exists". A hidden anchor
+    // (`.ffx2hud__command` is `hidden` whenever no menu is open, and `.ffxhud [hidden] { display: none }`
+    // applies to FFX's own chrome) reports `offsetTop: 0`, which would put the floor five pixels *above*
+    // the stage's top edge and collapse the rail to MIN_PANEL_HEIGHT for the whole battle. An anchor that
+    // is not laid out has no edge to clear, so fall back.
     const aboveEl = anchors.above?.() ?? null;
     const above = aboveEl && aboveEl.offsetHeight > 0 ? aboveEl : null;
     const floor = above ? above.offsetTop - CLEARANCE_GAP : 360 - anchors.bottom;
@@ -544,88 +397,142 @@ export class StrategyGuide {
     this.stackEl.style.top = `${top.toFixed(2)}px`;
     this.stackEl.style.maxHeight = `${available.toFixed(2)}px`;
     this.layoutToggle();
-    // Short rules while the menu is eating the rail; the paragraphs come back
-    // when it closes. See COMPACT_HEIGHT.
-    this.el.classList.toggle('sgd--compact', available < COMPACT_HEIGHT);
     this.refit(available);
   }
 
   /**
-   * Solve the column: density rung, then the whole-block cut, then MORE.
+   * Solve the column: the whole-block cut, a paragraph's first lines in what is left, then MORE.
    *
-   * Round 04 PR-0009, second pass. Two earlier fixes clamped a *continuous*
-   * height computed from `Range` rects and both left a line sliced live, the
-   * second one because the rects and the budget were in different units. This
-   * reads no screen pixels at all for the decision:
+   * Round 04 PR-0009, second pass. Two earlier fixes clamped a *continuous* height computed from `Range`
+   * rects and both left a line sliced live, the second one because the rects and the budget were in
+   * different units. This reads no screen pixels at all for the decision:
    *
-   *  1. every block that can be given up is given up, in {@link FIT_RUNGS}'s
-   *     order, while `.sgd__body`'s own `scrollHeight` — a layout number, in
-   *     stage-grid px, which no ancestor transform can move — exceeds the rail;
-   *  2. what is left is measured block by block off `offsetTop`/`offsetHeight`
-   *     and cut by {@link fitWholeUnits}: whole blocks only, so the box can
-   *     only ever end where a block ended;
-   *  3. the MORE row's own `MORE_HEIGHT` comes out of the budget **before** the
-   *     cut, not off the top of the finished box, because it is a row of the
-   *     column now rather than a chip laid over one.
+   *  1. every block before the page's first is taken out of the flow;
+   *  2. what is left is measured block by block off `offsetTop`/`offsetHeight` and cut by
+   *     {@link fitWholeUnits}: whole blocks only, so the box can only ever end where a block ended;
+   *  3. the MORE row's own `MORE_HEIGHT` comes out of the budget **before** the cut, not off the top of
+   *     the finished box, because it is a row of the column now rather than a chip laid over one;
+   *  4. a long document would waste a fifth of every page if only whole blocks could end it, so when the
+   *     next block is a paragraph or a list item (a *split* unit: one font size, one line pitch, no
+   *     padding) the page also takes as many of its first lines as the rest of the page holds, and the
+   *     next page opens on the line after. The cut is a whole number of line pitches, so it falls
+   *     between two lines, never through one; it never leaves a single line behind or ahead, and
+   *     never splits anything but plain text ({@link linePitch} is 0 wherever the pitch cannot be read).
    *
-   * Solved once per `(content, rail height, page)` and then held, for the
-   * reason `MoveAdvisor.fitCard` records: a fit keyed on anything that moves
-   * per frame drops and restores a whole sentence several times a second while
-   * the player is reading it.
+   * Solved once per `(content, rail height, page)` and then held, for the reason `MoveAdvisor.fitCard`
+   * records: a fit keyed on anything that moves per frame drops and restores a whole sentence several
+   * times a second while the player is reading it.
    *
-   * In jsdom every box measures 0. There is no layout to fit to, so this
-   * restores the full content and leaves — which is what the unit tests in
-   * `ui-strategy-guide.test.ts` are asserting about.
+   * In jsdom every box measures 0. There is no layout to fit to, so this restores the full content and
+   * leaves — which is what the unit tests in `ui-strategy-guide.test.ts` are asserting about.
    */
   private refit(available: number): void {
-    const key = `${this.lastSignature}|${Math.round(available)}|${this.pageStart}`;
+    // The key carries what else the panel holds (the status hint card, which rides at its top while a party member
+    // has a status with a sourced rule): it counts as chrome below, and it can arrive or go after the fit was
+    // solved, in a game whose rail does not move with the menu (FFX-2: the fence above the party never changes).
+    // Without it a body fitted to the whole rail grows a card on top of itself and the panel outgrows its rail.
+    const key = `${this.lastSignature}|${Math.round(available)}|${this.pageStart}|${this.pageLine}|${this.extraChrome()}`;
     if (key === this.fitKey) return;
 
-    // Clean slate. The fit only ever *removes* content, so it has to be solved
-    // against the whole of it rather than against last frame's leftovers.
+    // Clean slate. The fit only ever *removes* content, so it has to be solved against the whole of it
+    // rather than against last frame's leftovers.
     this.bodyEl.style.height = '';
-    this.fitRung = 0;
-    this.applyRung();
     const all = this.allUnits();
-    for (const unit of all) unit.classList.remove(OUT_CLASS);
+    for (const unit of all) {
+      unit.classList.remove(OUT_CLASS);
+      resetLines(unit);
+    }
 
     const chrome = this.panelEl.offsetHeight - this.bodyEl.offsetHeight;
     if (!(this.bodyEl.scrollHeight > 0) || !(chrome >= 0)) {
-      // No layout engine (jsdom) or nothing painted yet: show everything
-      // rather than clamp the body to a measured zero.
+      // No layout engine (jsdom) or nothing painted yet: show everything rather than clamp the body to
+      // a measured zero.
       this.moreEl.hidden = true;
       this.nextPage = 0;
+      this.nextLine = 0;
       return;
     }
     this.fitKey = key;
 
     const rail = Math.max(0, available - chrome);
-    while (this.fitRung < FIT_RUNGS && this.bodyEl.scrollHeight > rail + 0.5) {
-      this.fitRung++;
-      this.applyRung();
-    }
-
-    const visible = this.allUnits().filter((el) => el.offsetHeight > 0);
+    const visible = all.filter((el) => el.offsetHeight > 0);
     const start = Math.min(Math.max(0, this.pageStart), Math.max(0, visible.length - 1));
     for (let i = 0; i < start; i++) visible[i]!.classList.add(OUT_CLASS);
     const page = visible.slice(start);
 
+    // A paragraph that carried over from the last page opens this one on the line it stopped at.
+    const lead = page[0];
+    let carried = 0;
+    if (lead && this.pageLine > 0) {
+      const pitch = linePitch(lead);
+      const lines = pitch ? Math.round(lead.offsetHeight / pitch) : 0;
+      if (pitch && this.pageLine < lines) {
+        showLines(lead, this.pageLine, lines - this.pageLine, pitch);
+        carried = this.pageLine;
+      } else {
+        this.pageLine = 0;
+      }
+    }
+
     // MORE owns a row, so its height is spent before the cut, never after it.
     const overflowing = this.bodyEl.scrollHeight > rail + 0.5;
-    const reserve = overflowing || start > 0 ? MORE_HEIGHT : 0;
+    const reserve = overflowing || start > 0 || this.pageLine > 0 ? MORE_HEIGHT : 0;
     const budget = Math.max(0, rail - reserve);
 
     const bodyTop = this.bodyEl.offsetTop;
     const scale = this.stageScale();
     const bodyTopPx = this.bodyEl.getBoundingClientRect().top;
-    const fit = fitWholeUnits(
-      page.map((el) => this.measureUnit(el, bodyTop, scale, bodyTopPx)),
-      budget,
-    );
-    for (let i = fit.shown; i < page.length; i++) page[i]!.classList.add(OUT_CLASS);
-    this.bodyEl.style.height = `${Math.max(0, fit.height).toFixed(2)}px`;
-    this.moreEl.hidden = !(fit.clipped || start > 0);
-    this.nextPage = fit.clipped ? start + fit.shown : 0;
+    const units = page.map((el) => this.measureUnit(el, bodyTop, scale, bodyTopPx));
+
+    // First the cut as if no unit were a head, so a head that would end the page can keep its first lines of text
+    // with it; only when no paragraph can be split after it does the head rule drop it ({@link fitWholeUnits}).
+    const raw = fitWholeUnits(units.map((u) => ({ bottom: u.bottom, glyphBottom: u.glyphBottom })), budget);
+    // The unit that did not fit whole: the page's first when even that overflows, else the one after the cut.
+    const whole = raw.shown === 1 && units[0] !== undefined && units[0].bottom > budget + 0.5 ? 0 : raw.shown;
+    const cutEl = page[whole];
+    let height: number;
+    let shownWhole: number;
+    let nextUnit: number;
+    let nextLine = 0;
+    let clipped: boolean;
+    const pitch = cutEl && cutEl.classList.contains('sgd__split') && (raw.clipped || whole === 0) ? linePitch(cutEl) : 0;
+    const total = pitch ? Math.round(cutEl!.offsetHeight / pitch) : 0;
+    const top = pitch ? cutEl!.offsetTop - bodyTop : 0;
+    let n = pitch ? Math.floor((budget - top + 0.5) / pitch) : 0;
+    if (total - n === 1 && n > 2) n -= 1; // never leave a single line for the next page
+    if (pitch && n >= (whole === 0 ? 1 : 2) && n < total) {
+      const from = whole === 0 ? carried : 0;
+      showLines(cutEl!, from, n, pitch);
+      height = top + n * pitch;
+      shownWhole = whole;
+      nextUnit = start + whole;
+      nextLine = from + n;
+      clipped = true;
+    } else {
+      const fit = fitWholeUnits(units, budget);
+      height = fit.height;
+      shownWhole = fit.shown;
+      nextUnit = start + fit.shown;
+      clipped = fit.clipped;
+    }
+    const after = shownWhole + (nextLine > 0 ? 1 : 0);
+    for (let i = after; i < page.length; i++) page[i]!.classList.add(OUT_CLASS);
+    this.bodyEl.style.height = `${Math.max(0, height).toFixed(2)}px`;
+    this.moreEl.hidden = !(clipped || start > 0 || this.pageLine > 0);
+    this.nextPage = clipped ? nextUnit : 0;
+    this.nextLine = clipped ? nextLine : 0;
+  }
+
+  /**
+   * The height of everything in the panel except the body (the status hint card). Read from the cards
+   * themselves, not as `panel - body`, so fitting the body can never change it and re-key the fit.
+   */
+  private extraChrome(): number {
+    let height = 0;
+    for (const child of Array.from(this.panelEl.children)) {
+      if (child !== this.bodyEl) height += (child as HTMLElement).offsetHeight;
+    }
+    return Math.round(height);
   }
 
   /** Every block of text in the body, in reading order. */
@@ -636,21 +543,19 @@ export class StrategyGuide {
   /**
    * One block's box bottom and glyph bottom, relative to the body's own top.
    *
-   * The box bottom is pure layout arithmetic. The glyph bottom needs the
-   * rendered type, so it is read as **a proportion of this element's own
-   * rect** — numerator and denominator are both screen pixels of the *same*
-   * box, so whatever uniform scale the letterbox stage is applying cancels
-   * out exactly, at any ancestor depth and without the panel having to know
-   * which ancestor applies it. That is the lesson of the first two attempts:
-   * a measurement that has to be converted between coordinate systems is a
-   * measurement that can be converted wrongly.
+   * The box bottom is pure layout arithmetic. The glyph bottom needs the rendered type, so it is read
+   * as **a proportion of this element's own rect** — numerator and denominator are both screen pixels
+   * of the *same* box, so whatever uniform scale the letterbox stage is applying cancels out exactly,
+   * at any ancestor depth and without the panel having to know which ancestor applies it. That is the
+   * lesson of the first two attempts: a measurement that has to be converted between coordinate
+   * systems is a measurement that can be converted wrongly.
    *
-   * Falls back to the box bottom whenever the type cannot be measured — a few
-   * px of empty leading below the last line is not a defect, a sliced line is.
+   * Falls back to the box bottom whenever the type cannot be measured — a few px of empty leading below
+   * the last line is not a defect, a sliced line is.
    */
   private measureUnit(el: HTMLElement, bodyTop: number, scale: number, bodyTopPx: number): GuideFitUnit {
     const bottom = el.offsetTop - bodyTop + el.offsetHeight;
-    const heading = el.classList.contains('sgd__head');
+    const heading = el.classList.contains('sgd__kn');
     return { bottom, glyphBottom: this.glyphBottom(el, bottom, scale, bodyTopPx), heading };
   }
 
@@ -669,11 +574,10 @@ export class StrategyGuide {
       }
       if (!Number.isFinite(lowest)) return boxBottom;
       const exact = (lowest - bodyTopPx) / scale;
-      // Guard rails, in the block's own terms: the type cannot be lower than
-      // its box (plus a px for `offsetTop`/`offsetHeight`'s integer rounding)
-      // and it cannot be half a box higher. Anything outside that is not a
-      // measurement of this block's last line, so the box bottom stands — a
-      // little empty leading is not a defect, a sliced line is.
+      // Guard rails, in the block's own terms: the type cannot be lower than its box (plus a px for
+      // `offsetTop`/`offsetHeight`'s integer rounding) and it cannot be half a box higher. Anything
+      // outside that is not a measurement of this block's last line, so the box bottom stands — a little
+      // empty leading is not a defect, a sliced line is.
       if (!(exact > boxBottom - el.offsetHeight * 0.5) || exact > boxBottom + 1) return boxBottom;
       return exact;
     } catch {
@@ -684,24 +588,20 @@ export class StrategyGuide {
   /**
    * The letterbox stage's scale, measured **exactly**.
    *
-   * `FFXBattleHud.layout()` / `LetterboxStage.createStage()` scale an ancestor
-   * of this rail to fit the viewport, so every rect this file reads is in
-   * screen px while every length it writes is in stage-grid px. The previous
-   * attempt recovered the factor as `bodyRect.height / bodyEl.offsetHeight` —
-   * and `offsetHeight` is **rounded to a whole pixel**, so at 1280x720 that
-   * returns 1.9836 where the real factor is 2. Half a grid px of error there
-   * is a whole screen px at 2x and nearly four at 4K.
+   * `FFXBattleHud.layout()` / `LetterboxStage.createStage()` scale an ancestor of this rail to fit the
+   * viewport, so every rect this file reads is in screen px while every length it writes is in
+   * stage-grid px. The previous attempt recovered the factor as `bodyRect.height / bodyEl.offsetHeight`
+   * — and `offsetHeight` is **rounded to a whole pixel**, so at 1280x720 that returns 1.9836 where the
+   * real factor is 2. Half a grid px of error there is a whole screen px at 2x and nearly four at 4K.
    *
-   * A computed style is never rounded and never scaled: the slab's authored
-   * `padding` is exactly 5px + 6px whatever the stage is doing. The difference
-   * between the slab's rect height and its body's rect height is exactly that
-   * padding *after* the transform, and neither rect is rounded — so their
-   * ratio is the scale, to full precision, without the panel needing a
-   * reference to whichever ancestor applies it.
+   * A computed style is never rounded and never scaled: the slab's authored `padding` is exactly 5px +
+   * 6px whatever the stage is doing. The difference between the slab's rect height and its body's rect
+   * height is exactly that padding *after* the transform, and neither rect is rounded — so their ratio
+   * is the scale, to full precision, without the panel needing a reference to whichever ancestor
+   * applies it.
    *
-   * Returns 0 when it cannot be measured (jsdom, nothing painted yet, a slab
-   * authored with no padding); callers then keep the unrounded box bottoms and
-   * lose only a px of leading.
+   * Returns 0 when it cannot be measured (jsdom, nothing painted yet, a slab authored with no padding);
+   * callers then keep the unrounded box bottoms and lose only a px of leading.
    */
   private stageScale(): number {
     try {
@@ -720,38 +620,43 @@ export class StrategyGuide {
     }
   }
 
-  private applyRung(): void {
-    for (let r = 1; r <= FIT_RUNGS; r++) this.el.classList.toggle(`sgd--fit${r}`, this.fitRung >= r);
-  }
-
   /**
-   * The phone's sheet: every block shown at full length (the paragraphs, not the one-line rules), the
-   * sheet itself scrolls. Undoes whatever a desktop fit left behind, so a window that is resized from a
-   * desktop to a phone, or back, starts again from the whole content.
+   * The phone's sheet: every block shown at full length, the sheet itself scrolls, opened on the part
+   * of the document for the boss on the field. Undoes whatever a desktop fit left behind, so a window
+   * that is resized from a desktop to a phone, or back, starts again from the whole content.
    */
   private layoutPhone(): void {
-    this.el.classList.remove('sgd--compact');
-    this.fitRung = 0;
-    this.applyRung();
     this.bodyEl.style.height = '';
-    for (const unit of this.allUnits()) unit.classList.remove(OUT_CLASS);
+    for (const unit of this.allUnits()) {
+      unit.classList.remove(OUT_CLASS);
+      resetLines(unit);
+    }
     this.moreEl.hidden = true;
     this.pageStart = 0;
+    this.pageLine = 0;
     this.nextPage = 0;
+    this.nextLine = 0;
     this.fitKey = '';
     this.layoutToggle();
+    // Scroll once per new content, and only once the sheet is actually laid out (it is `display: none`
+    // until the player opens it, and a hidden sheet reports every offset as 0).
+    if (this.phoneScrollPending && this.panelEl.offsetHeight > 0) {
+      this.phoneScrollPending = false;
+      const target = this.bodyEl.querySelector<HTMLElement>(`[data-block="${this.startBlock}"]`);
+      if (target) this.panelEl.scrollTop = Math.max(0, target.offsetTop - this.panelEl.offsetTop - 6);
+    }
   }
 
   /**
    * One page down, wrapping back to the top at the foot.
    *
-   * Pages by *block*, not by `scrollTop`, for the same reason the cut does: a
-   * scrolled panel puts an arbitrary offset at its bottom edge and slices
-   * whatever line is there. The next page starts at the first block this one
-   * could not show.
+   * Pages by *block*, not by `scrollTop`, for the same reason the cut does: a scrolled panel puts an
+   * arbitrary offset at its bottom edge and slices whatever line is there. The next page starts at the
+   * first block this one could not show.
    */
   private pageDown(): void {
     this.pageStart = this.nextPage;
+    this.pageLine = this.nextLine;
     this.fitKey = '';
     this.layout();
   }
@@ -760,105 +665,4 @@ export class StrategyGuide {
 /** Is the upright phone layout on (`html[data-phone-battle]`, set only by `./phoneBattle.ts`)? */
 function onPhone(): boolean {
   return typeof document !== 'undefined' && document.documentElement.dataset['phoneBattle'] !== undefined;
-}
-
-// --------------------------------------------------------------- templates
-
-/** Everything that can change what the panel says, in one string. */
-function signatureOf(view: GuideRailView): string {
-  return [
-    `${view.chapterId}:${view.rules.length}`, // a clock flip in the pause adds or drops the clock's rule
-    view.next?.label ?? '',
-    view.next?.targetId ?? '',
-    view.next?.reason ?? '',
-    view.decisionOpen ? 'open' : 'idle',
-    view.phase?.label ?? '',
-    view.watch.map((w) => `${w.payload}:${w.timing}:${w.stage}`).join('|'),
-  ].join('');
-}
-
-/**
- * The marker class every block of text in the body carries.
- *
- * `StrategyGuide.refit` hides whole `.sgd__u` blocks rather than clamping a
- * height through the middle of one, so "a line is never sliced" is a property
- * of the markup: a block whose last glyph would fall outside the rail is not
- * drawn at all. Anything that prints type into the body needs this class.
- */
-const U = 'sgd__u';
-
-function sectionHead(label: string): string {
-  return `<h4 class="sgd__head ${U}">${escapeHtml(label)}</h4>`;
-}
-
-/** NEXT's two empty states: no decision is open, and a decision is open that the plan has no step for. */
-export const GUIDE_WAITING_TEXT = 'Waiting for your turn.';
-export const GUIDE_NO_STEP_TEXT = 'Nothing in the plan for this turn.';
-
-function nextHtml(view: GuideRailView): string {
-  const next = view.next;
-  if (!next) {
-    return `${sectionHead('Next')}<p class="sgd__idle ${U}">${view.decisionOpen ? GUIDE_NO_STEP_TEXT : GUIDE_WAITING_TEXT}</p>`;
-  }
-  const target = next.targetName
-    ? `<span class="sgd__arrow">→</span><span class="sgd__target">${escapeHtml(next.targetName)}</span>`
-    : '';
-  return [
-    sectionHead('Next'),
-    `<p class="sgd__actor ${U}">${escapeHtml(next.actorName)}</p>`,
-    `<p class="sgd__cmd ${U}"><span class="sgd__label">${escapeHtml(next.label)}</span>${target}</p>`,
-    next.reason ? `<p class="sgd__why ${U}">${escapeHtml(next.reason)}.</p>` : '',
-  ].join('');
-}
-
-function watchHtml(view: GuideRailView): string {
-  if (view.watch.length === 0 && !view.phase) return '';
-  const charges = view.watch
-    .map(
-      (w) =>
-        `<div class="sgd__charge sgd__charge--s${w.stage}">` +
-        `<p class="sgd__cmd ${U}"><span class="sgd__label">${escapeHtml(w.payload)}</span>` +
-        `<span class="sgd__timing">${escapeHtml(w.timing)}</span></p>` +
-        `<p class="sgd__why ${U}">${escapeHtml(w.advice)}.</p>` +
-        '</div>',
-    )
-    .join('');
-  const phase = view.phase
-    ? `<div class="sgd__phase"><p class="sgd__phase-label ${U}">${escapeHtml(view.phase.label)}</p>` +
-      `<p class="sgd__why ${U}">${escapeHtml(view.phase.note)}</p></div>`
-    : '';
-  return `${sectionHead('Watch')}${charges}${phase}`;
-}
-
-/**
- * Both forms of every rule, with the stylesheet choosing between them.
- *
- * Writing both into the DOM rather than re-rendering on the compact/roomy
- * switch is deliberate: {@link StrategyGuide.layout} runs every frame off a
- * measured anchor, so a render keyed on the measurement would rewrite this
- * list whenever a menu opened, and a `signatureOf` that ignored the
- * measurement would leave the wrong form on screen. CSS switching costs one
- * class toggle and cannot fall out of step with the measurement that caused it.
- */
-function rulesHtml(view: GuideRailView): string {
-  if (view.rules.length === 0) return '';
-  const items = view.rules
-    .map(
-      (r) =>
-        `<li class="${U}">` +
-        `<span class="sgd__rule-full">${escapeHtml(r.text)}</span>` +
-        `<span class="sgd__rule-short">${escapeHtml(r.short)}</span>` +
-        '</li>',
-    )
-    .join('');
-  return `${sectionHead('Rules')}<ul class="sgd__rules">${items}</ul>`;
-}
-
-function bodyHtml(view: GuideRailView): string {
-  return [
-    `<p class="sgd__title ${U}">${escapeHtml(view.title)}</p>`,
-    `<section class="sgd__sec sgd__sec--next">${nextHtml(view)}</section>`,
-    watchHtml(view) ? `<section class="sgd__sec sgd__sec--watch">${watchHtml(view)}</section>` : '',
-    rulesHtml(view) ? `<section class="sgd__sec sgd__sec--rules">${rulesHtml(view)}</section>` : '',
-  ].join('');
 }

@@ -6,16 +6,9 @@
  * Defense 160 entirely (§3.2). The hints below follow the corrected Break
  * ranking in §3.3 — **Magic Break first**, not Power Break — because the Breaks
  * turned out to be damage multipliers rather than stat edits (§1.5).
- *
- * **Game case: FFX-2 only** [AGENTS.md rule 14]. The RULES, WATCH and phase note and the NEXT line
- * (`./lines/ffx2-bahamut.ts`) follow the FFX-2 encounter guide the project settled on (D-350,
- * `research/jegged-encounter-guides-ffx2.md` §2); `cite` names the research section behind each
- * mechanic and is never rendered. The `hints` above are the move advisor's borrowed sentences for the
- * chapter tactic's pick (`src/engine/tactics/ffx2-bahamut.ts`): the panel does not read them.
  */
 
 import type { ChapterGuide } from './types.ts';
-import { FFX2_BAHAMUT_LINE } from './lines/ffx2-bahamut.ts';
 
 export const FFX2_BAHAMUT_GUIDE: ChapterGuide = {
   id: 'ffx2-bahamut',
@@ -24,29 +17,29 @@ export const FFX2_BAHAMUT_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Bahamut runs a fixed loop: a Curse or a plain hit first, two more physical hits, Impulse twice, a Countdown, then Mega Flare, and round again. Learn it and nothing in it is a surprise.',
-      short: 'Fixed loop: hits, Impulse x2, Countdown, Flare',
-      cite: 'ffx2-bahamut §2.1',
-    },
-    {
-      text: "The first Impulse is the warning: the Countdown and then Mega Flare follow it. Be fully healed before Mega Flare lands, because it hits all three. Impulse itself takes 37.5% of a girl's HP and, being a percentage, cannot kill.",
-      short: 'First Impulse: heal everyone to full',
-      cite: 'ffx2-bahamut §2.1, §2.2, §2.4',
-    },
-    {
-      text: 'Darkness is the damage route. The Dark Knight dressphere is waiting in this dungeon, so put a girl in it at once: Darkness ignores Defense 160, hits every enemy, costs HP rather than MP, and is free the moment the dressphere is picked up.',
+      text: 'Darkness is the damage route. It ignores Defense 160, hits every enemy, costs HP rather than MP, and is free the moment the dressphere is picked up.',
       short: 'Darkness is the damage route',
       cite: 'ffx2-bahamut §3.2',
     },
     {
-      text: 'Shell halves both Impulse and Mega Flare, the two magic hits in the loop, and turns a wipe into a survival. Magic Break lowers them further: five of them cap Mega Flare at x0.167.',
-      short: 'Shell halves Impulse and Mega Flare',
+      text: 'Magic Break is the strongest opening in the fight. Five casts cap Mega Flare at x0.167 and Impulse at 6.25% of current HP — it defuses the whole win condition.',
+      short: 'Five Magic Breaks defuse Mega Flare',
+      cite: 'ffx2-bahamut §3.3',
+    },
+    {
+      text: 'Shell before anything else if there is no Alchemist. Both Impulse and Mega Flare are magic, and Shell is the single action that turns a guaranteed wipe into a guaranteed survival.',
+      short: 'Shell first when there is no Alchemist',
       cite: 'ffx2-bahamut §2.4, §3.3',
     },
     {
       text: 'Physical attacks are the wrong route: Defense 160 floors them per hit, so Trigger Happy gains nothing from being multi-hit.',
       short: 'Physicals are floored by Defense 160',
       cite: 'ffx2-bahamut §3.3',
+    },
+    {
+      text: 'The countdown is five dead enemy actions. They are free party turns — bank healing and finish the Break ladder inside them.',
+      short: 'The countdown is five free party turns',
+      cite: 'ffx2-bahamut §2.2, §2.5',
     },
   ],
 
@@ -97,7 +90,7 @@ export const FFX2_BAHAMUT_GUIDE: ChapterGuide = {
     {
       name: '#',
       payload: 'Mega Flare',
-      advice: 'Five dead enemy actions, then it lands on everyone: heal all three to full and get Shell up before the number reaches zero',
+      advice: 'Five dead enemy actions, then it lands on everyone — get Shell up, cap Magic Break, and be at full HP on zero',
       cite: 'ffx2-bahamut §2.2, §2.4, §3.3',
     },
   ],
@@ -105,9 +98,8 @@ export const FFX2_BAHAMUT_GUIDE: ChapterGuide = {
   phases: [
     {
       label: 'The 12-action loop',
-      note: 'Curse or a plain hit, two more physicals, two Impulses, then five countdown turns and Mega Flare. The first Impulse is the tell that the Countdown is next; the countdown turns are free, so spend them on healing and buffs.',
+      note: 'Curse, three physicals, two Impulses, then five countdown turns and Mega Flare. The countdown turns are free; spend them on Breaks and healing.',
       cite: 'ffx2-bahamut §2.1, §2.2',
     },
   ],
-  line: FFX2_BAHAMUT_LINE,
 };

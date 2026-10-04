@@ -44,6 +44,16 @@ export interface GuideLayoutStubOptions {
    * where the real factor is 2.
    */
   readonly round?: boolean;
+  /**
+   * The text line pitch, in grid px, of the split units (`.sgd__split`: paragraphs and list items). Left
+   * unset, the units report no `line-height` (jsdom's `normal`), which `StrategyGuide` reads as "cannot
+   * be split", so only whole blocks are cut: the case every test but the line-boundary ones is about.
+   */
+  readonly lineHeight?: number;
+  /** Per-unit box heights in grid px, by position in the document; `unitHeight` for any not listed. */
+  readonly heights?: readonly number[];
+  /** Height of whatever else sits in the panel above the body (the status hint card), read live. */
+  readonly extraChrome?: () => number;
 }
 
 export interface GuideLayoutStub {
@@ -59,33 +69,47 @@ function define(el: object, key: string, value: unknown): void {
 }
 
 export function stubGuideLayout(stage: HTMLElement, options: GuideLayoutStubOptions): GuideLayoutStub {
-  const { scale, unitHeight, glyphSlack, bodyTop, chrome, round = false } = options;
+  const { scale, unitHeight, glyphSlack, bodyTop, chrome, round = false, lineHeight, heights = [], extraChrome = () => 0 } = options;
   const layout = (n: number): number => (round ? Math.round(n) : n);
   const panel = stage.querySelector<HTMLElement>('[data-role="strategy-guide-panel"]')!;
   const body = stage.querySelector<HTMLElement>('.sgd__body')!;
   const units = Array.from(body.querySelectorAll<HTMLElement>('.sgd__u'));
 
-  const natural = units.length * unitHeight;
+  // A block taken out of the flow (`sgd__u--out`, display: none) has no height and pushes nothing, so every
+  // box below is read live: a page that starts partway down the document is measured from its own top,
+  // exactly as the browser lays it out.
+  const gone = (el: HTMLElement): boolean => el.classList.contains('sgd__u--out');
+  // A unit shown by lines (`style.height` in px) is exactly that tall; otherwise its own natural height.
+  const heightOf = (el: HTMLElement): number => {
+    if (gone(el)) return 0;
+    const set = Number.parseFloat(el.style.height);
+    if (Number.isFinite(set)) return set;
+    return heights[units.indexOf(el)] ?? unitHeight;
+  };
+  if (lineHeight !== undefined) {
+    for (const el of units) if (el.classList.contains('sgd__split')) el.style.lineHeight = `${lineHeight}px`;
+  }
+  const natural = (): number => units.reduce((sum, u) => sum + heightOf(u), 0);
   define(body, 'offsetTop', layout(bodyTop));
-  define(body, 'offsetHeight', layout(natural));
-  define(body, 'scrollHeight', layout(natural));
-  define(panel, 'offsetHeight', layout(natural + chrome));
+  Object.defineProperty(body, 'offsetHeight', { configurable: true, get: () => layout(natural()) });
+  Object.defineProperty(body, 'scrollHeight', { configurable: true, get: () => layout(natural()) });
+  Object.defineProperty(panel, 'offsetHeight', { configurable: true, get: () => layout(natural() + chrome + extraChrome()) });
   // `stageScale()` recovers the letterbox factor from the slab's authored
   // padding (a computed style, never scaled and never rounded) against the two
   // rects (screen px). jsdom reports inline styles as computed ones, so
   // splitting `chrome` across the two paddings is enough to drive it.
   panel.style.paddingTop = `${chrome / 2}px`;
   panel.style.paddingBottom = `${chrome / 2}px`;
-  define(panel, 'getBoundingClientRect', () => rectAt((bodyTop - chrome / 2) * scale, (natural + chrome) * scale, scale));
-  define(body, 'getBoundingClientRect', () => rectAt(bodyTop * scale, natural * scale, scale));
+  define(panel, 'getBoundingClientRect', () => rectAt((bodyTop - chrome / 2) * scale, (natural() + chrome + extraChrome()) * scale, scale));
+  define(body, 'getBoundingClientRect', () => rectAt(bodyTop * scale, natural() * scale, scale));
 
   const bottoms: number[] = [];
   units.forEach((el, i) => {
-    const top = bodyTop + i * unitHeight;
+    const topOf = (): number => bodyTop + units.slice(0, i).reduce((sum, u) => sum + heightOf(u), 0);
     bottoms.push((i + 1) * unitHeight);
-    define(el, 'offsetTop', layout(top));
-    define(el, 'offsetHeight', layout(unitHeight));
-    define(el, 'getBoundingClientRect', () => rect(top * scale, unitHeight * scale, scale));
+    Object.defineProperty(el, 'offsetTop', { configurable: true, get: () => layout(topOf()) });
+    Object.defineProperty(el, 'offsetHeight', { configurable: true, get: () => layout(heightOf(el)) });
+    define(el, 'getBoundingClientRect', () => rect(topOf() * scale, heightOf(el) * scale, scale));
   });
 
   Range.prototype.getClientRects = function (this: Range) {

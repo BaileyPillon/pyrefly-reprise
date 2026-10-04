@@ -105,14 +105,13 @@ describe('the whole-block cut is the same at every letterbox scale (round 04 PR-
     guide.sync(makeFakeBattleState());
     // 20.4 px blocks: every `offsetTop` and `offsetHeight` rounds, the rects
     // do not. Budget is 153 (175 - 11 of slab chrome - 11 for the MORE row),
-    // so the seventh block would fit, but it is the RULES heading and a heading
-    // is never the last thing shown: the sixth block is the last one in, its
-    // type stopping at 6 x 20.4 - 2 = 120.4.
+    // so seven blocks fit (the eighth would end at 163.2) and the seventh is
+    // text, not a head: its type stops at 7 x 20.4 - 2 = 140.8.
     stubGuideLayout(stage, { scale: 2, unitHeight: 20.4, glyphSlack: 2, bodyTop: 5, chrome: 11, round: true });
     guide.update(0.016);
 
     const body = stage.querySelector<HTMLElement>('.sgd__body')!;
-    expect(Number.parseFloat(body.style.height)).toBeCloseTo(120.4, 2);
+    expect(Number.parseFloat(body.style.height)).toBeCloseTo(140.8, 2);
     guide.unmount();
   });
 
