@@ -17,8 +17,10 @@ import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
 import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
 import { impactAtApex, windUpLeads } from './KeyPoses.ts';
-import { armOdKey, endOdKey, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
+import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
 import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
+import { motionAllowed } from './motion/MotionGate.ts'; // r38-motion: BATTLE SPECTACLE's two motion looks share one gate
+import { landFlight, launchShot, planSkill, revealBlow, settleFlight } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL (both games); a no-op without a shot
 import { partyOffStage } from './SummonStaging.ts';
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
@@ -72,26 +74,32 @@ export async function actionStart(
     await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? []);
   }
   await fxActionOpen(ctx, event);
+  // RUN-IN (FFX-2 only, r38-motion): the girl runs to her target before the blow; the lunge below then only carries the strike (`lungeFor`).
+  if (motion?.strike && motionAllowed(ctx, 'runin')) await settled(ctx, motion.strike(event, motionCtx(ctx), pose), MOTION_GUARD_MS);
 
   if (pose === 'attack') {
     cue(ctx, 'attack', { volume: 0.8 });
     const contact = (): LungeContact => (windUp ? impactAtApex(ctx, event.actorId, armContact(ctx, event.actorId)) : armContact(ctx, event.actorId));
-    if (!motion?.ownsWindUp?.(event)) void Promise.all([actor?.lunge(1.4, 440, contact()), actor?.squash(260, 0.45)]); // FF7: its painted keys
+    if (!motion?.ownsWindUp?.(event)) void Promise.all([actor?.lunge(motion?.lungeFor?.(event.actorId) ?? 1.4, 440, contact()), actor?.squash(260, 0.45)]); // FF7: its painted keys
   } else if (pose === 'cast') {
     cue(ctx, 'cast', { volume: 0.7 });
     actor?.flash(0x9fd8ff, 560, 0.45);
   } else if (pose === 'item') {
     cue(ctx, 'item', { volume: 0.7 }); // D-302: the item-use sound (voiced chapters only)
   }
+  planSkill(ctx, event, pose); // SKILL TRAVEL (both games, r38-motion): which shot this action would send; it leaves at the first blow, not here
   await ctx.sleep(pose === 'attack' ? TIMING.windUp : TIMING.actionStart);
 }
 
-export async function actionEnd(ctx: EventCtx): Promise<void> {
+export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<void> {
+  const flying = settleFlight(ctx, endedId ?? ctx.actingId); // a shot still in the air lands before its action is over (only a status-only spell gets here airborne)
+  if (flying) await flying;
   endOdKey(ctx, ctx.actingId);
   releaseContact(ctx); // VP-1001-06: a strike still held at its apex goes home
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
-  const motion = ctx.deps.actionMotion; // FF7: the run back home
-  if (motion && ctx.actingId) await settled(ctx, motion.close(ctx.actingId, motionCtx(ctx)), MOTION_GUARD_MS);
+  const motion = ctx.deps.actionMotion; // FF7 and FFX-2: the run back home
+  const going = endedId ?? ctx.actingId; // the figure whose action ended: under FFX-2's ATB a second action can be open, so `actingId` may be hers or not
+  if (motion && going) await settled(ctx, motion.close(going, motionCtx(ctx)), MOTION_GUARD_MS);
   actor?.setPose('idle');
   ctx.actingId = null;
   endSpellAction(ctx);
@@ -103,7 +111,7 @@ export async function actionEnd(ctx: EventCtx): Promise<void> {
 
 /** The slice of the playback a game's motion may use. */
 function motionCtx(ctx: EventCtx): MotionCtx {
-  return { stage: ctx.stage, speed: ctx.speed(), sleep: (ms) => ctx.sleep(ms) };
+  return { stage: ctx.stage, speed: ctx.speed(), sleep: (ms) => ctx.sleep(ms), still: ctx.moments?.reducedMotion === true || menuBlocks(ctx) };
 }
 
 export async function damage(
@@ -111,12 +119,15 @@ export async function damage(
   event: Extract<BattleEvent, { type: 'damage' }>,
 ): Promise<void> {
   const target = ctx.stage.actor(event.targetId);
+  launchShot(ctx, event); // SKILL TRAVEL: the action's first blow on a foe sends its shot now, in step with the spell's own effect
 
   // Rule 5: a `heals`-flagged action is negative damage, not a `heal` event.
   if (event.amount < 0) {
     await awaitSpellLanding(ctx, event, true);
+    await shotLanded(ctx, event);
     odApex(ctx, event.sourceId ?? ctx.actingId); // r37 slot (FFX-2: the move's apex)
     target?.flash(0x9dffc4, 320, 0.6);
+    await revealBlow(ctx, event); // a held blow's numeral and HP row, now it has landed
     numeral(ctx, event.targetId, {
       kind: 'heal',
       amount: -event.amount,
@@ -128,14 +139,17 @@ export async function damage(
   }
 
   if (event.affinity === 'immune' || event.amount === 0) {
+    await shotLanded(ctx, event);
     await meetContact(ctx, event.targetId); // VP-1001-06
     odApex(ctx, event.sourceId ?? ctx.actingId);
+    await revealBlow(ctx, event);
     numeral(ctx, event.targetId, { kind: 'miss', text: event.affinity === 'immune' ? 'IMMUNE' : '0' });
     return ctx.sleep(TIMING.miss);
   }
 
   // The spell reaches the target before its numeral does (B1 spell effects).
   await awaitSpellLanding(ctx, event, false);
+  await shotLanded(ctx, event);
   await meetContact(ctx, event.targetId); // VP-1001-06: the blow lands on the strike's apex
   odApex(ctx, event.sourceId ?? ctx.actingId);
 
@@ -150,6 +164,7 @@ export async function damage(
   void target?.recoil(360, event.crit ? 0.34 : 0.22);
   cue(ctx, elementCue(event.element, event.crit), { volume: event.crit ? 1 : 0.8 });
 
+  await revealBlow(ctx, event); // SKILL TRAVEL: the HUD's numeral and the HP row, with the spell's landing and not before it
   numeral(ctx, event.targetId, {
     kind: 'damage',
     amount: event.amount,
@@ -172,10 +187,19 @@ export async function damage(
   await ctx.sleep(event.hitCount > 1 ? TIMING.perHit : TIMING.damage);
 }
 
+/** SKILL TRAVEL: what is left of the blow's shot after the spell's own wait (nothing without a shot, and rarely any with one). */
+async function shotLanded(ctx: EventCtx, event: Extract<BattleEvent, { type: 'damage' | 'miss' }>): Promise<void> {
+  const flying = landFlight(ctx, event);
+  if (flying) await flying;
+}
+
 /** A miss, landing on the strike's apex like a hit (VP-1001-06). */
 export async function missed(ctx: EventCtx, event: Extract<BattleEvent, { type: 'miss' }>): Promise<void> {
+  launchShot(ctx, event); // SKILL TRAVEL: a shot that misses still arrives before the word does
+  await shotLanded(ctx, event);
   await meetContact(ctx, event.targetId);
   odApex(ctx, event.sourceId);
+  await revealBlow(ctx, event);
   numeral(ctx, event.targetId, { kind: 'miss', text: reasonText(event.reason) });
   cue(ctx, 'miss', { volume: 0.5 });
   ctx.stage.actor(event.targetId)?.hop(0.18, 200);
