@@ -1,0 +1,61 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-04T15:44:45Z",
+  "build": {
+    "mainSha": "6461999e",
+    "bundle": "DHaa2xD1",
+    "artifactHash": "eca5b98a7062d26144f92c70ca484158778816d2abdc8262ae784b84cffe38dc"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/6461999e.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/f4244e1f.json (run in D:/pyrefly-rel38 at 4a401c13, 2026-10-04 15:30Z to 15:34Z) -> {result: PASS, artifactHash: eca5b98a7062d26144f92c70ca484158778816d2abdc8262ae784b84cffe38dc, liveManifest: match, checked: 1053, mismatched: [], missing: [], wrongType: [], errors: [], notes: []}. The served artifact-manifest.json was also fetched on its own: its artifactHash equals the stored one, it lists 1,933 files and 797,683,098 bytes, and every path and sha256 in it is identical to critic/artifacts/6461999e.json. The 1,053 files compared are the page, every assets/ file, the files added or changed since the previous build f4244e1f (697 added, 314 changed) and an even sample of the rest. --full was not added: this pass settles the live obligation only, and the deploy's own comparison had covered the same 1,053 files."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Chromium driven by Playwright from node, PYREFLY_BROWSER=gpu (real GPU, never SwiftShader; no black canvas, so no fallback was needed: mean luminance 41 to 109 on the 14 frames read), never Claude-in-Chrome or the built-in pane. Live URL with a cache-busting ?cb= query, a new browser and an empty profile per session, seed 1 pinned before the first key, REAL key presses (real touch taps for the phone), automated. Every chapter session asserts title, chapter-select, battle and an open command menu, and reads the chapter and game back from the battle's own state (a mismatch throws), before anything is measured or captured. 13 recorded sessions (1,600x900, 1,440x900, 2,560x1,080, 390x844 touch): 2,185 responses, 0 console errors, 0 page errors, 0 non-2xx, 0 failed requests. TITLE at 1600x900 and 390x844: tab title and description say Echoes of Spira, the old name is in no text or meta; Enter reached chapter-select (selected seymour-flux). CH I (FFX, seymour-flux, 1600x900): cancel path (Attack, target step up with 2 reticles, Escape, target step gone, command rows back) then the real turn (Attack, confirm; battle log 3 to 21; Kimahri's menu next); P paused, H hid and a second H restored the pause panels, the OPTIONS row masterVolume changed 0.8 to 0.7 by ArrowLeft, Escape twice resumed (the first leaves the options body), Escape from the open command menu paused again and one Escape resumed; music boss-seymour and the pause track both source prerendered (manifest 26 cues, 100 v2 SFX cues decoded). CH II (FFX, yunalesca): first menu by real keys, staged tidus, yuna, auron, yunalesca, command rows shown. CH IV (FFX-2, ffx2-bahamut): Yuna's menu, the advisor card's pick White Magic > Shell > the party confirmed, Paine's menu opened 3.4 s later (log 16 to 19). CH VIII (FFX, evrae-airship) first menu, measured with the r38-evrae re-check's own code on the live bundle: at 1600x900 the 2272x1568 @2x E1-H plate is the active figure, snout x 788, plan rest gap 1, nobody inside the coil (party painted pixels under the coil: Tidus 75 px = 0.39 percent, Wakka 0, Rikku 0), the coil 68.8 px from the turn rail's left edge (1404.8), 0 px inside the rail's rect, 0 under any drawn rail part (nearest row gap 44 px), 0 under HUD panels; at 1440x900 snout x 764, gap 1, party 0 px in all three, coil 25.4 px from the rail, 0 inside, 0 under drawn parts (nearest row gap 8 px); one real turn at 1600x900 (Tidus Attack, log 1 to 6, Rikku's menu next). CH IV and CH XV plates at 2560x1080 (FFX-2): every camera rig (8 and 9) has both painted wings in place (transparent meshes; bevelle-underground and den-of-woe left and right strips served 200) with the wing's outer edge beyond the frame on both sides in every rig (tightest margin 0.016 NDC, about 20 px, Ch XV party rig left), so no plate edge reaches the frame edge and no void shows; x4-brightened crops and column profiles of Ch IV's action rig show painted architecture, not a flat column. PHONE (390x844, touch and mobile emulation): Ch I turn by touch (row:Attack and target:mortiorchis, 2 real taps, 0 blocked; log 3 to 21; Kimahri's menu next) and the Ch VIII first menu (camera z 9.39, the authored rig). Frames under docs/screenshots/release-38-live/ (6 JPEGs)."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke on the Ch I session: one setting changed through the pause screen's own OPTIONS row (masterVolume 0.8 to 0.7, real ArrowLeft) and one piece of progress recorded (chapters.seymour-flux: attempts 1, playTimeMs 19248.9, cleared false) after the real turn; page.reload, window.__pyreflyReady, then pyrefly-reprise:save:v1 read back masterVolume 0.7 and an identical chapter record, and audioDebug().volumes.master read 0.7 (the mixer applied it).",
+      "reason": "The full upgrade matrix (fresh player, returning player, previous-build save fixture, invalid storage, reset flow) is not part of a live pass and was not run; this is the lightweight live check only (RUBRIC section 5)."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact identity: served manifest equals the stored one (1,933 files, same hash), 1,053 files byte-compared against the previous build's delta",
+      "title at 1600x900 and 390x844 (Echoes of Spira in the tab title and description, old name absent) and chapter select by real Enter",
+      "FFX Ch I one real turn with the cancel path; P, H, Escape pause, hide, restore and resume; one setting changed in the OPTIONS tab; prerendered music; reload persistence",
+      "FFX Ch II first menu by real keys",
+      "FFX-2 Ch IV one real turn (White Magic > Shell, next actor's menu)",
+      "FFX Ch VIII (Evrae E1-H) first menu at 1600x900 and 1440x900 measured (party, coil, turn rail, panels) and one real turn at 1600x900",
+      "FFX-2 painted plate wings at 2560x1080, Ch IV (8 camera rigs) and Ch XV (9 rigs)",
+      "phone: Ch I turn by touch, Ch VIII first menu",
+      "console, page-error, non-2xx and failed-request sweep over 13 sessions"
+    ],
+    "reused": [],
+    "notTested": [
+      "the full CHK-024 upgrade matrix",
+      "chapters III, V to VII, IX to XIV, XVI to XVIII, win, loss and retry paths, cutscene content beyond the held skip",
+      "the release-38 mechanics that need a close look at one action (skill travel and the FFX-2 run-in, Bushido, the Flux and Braska telegraph holds, the DRESSPHERE push-in, the 119 new paintings and Change flows, Chapter IX's arrival): those belong to the focused and deep reviews",
+      "Evrae at menu 3 and at window shapes other than 1600x900 and 1440x900; Safari and Firefox; audio by ear",
+      "a comparison with the live 37.1 build (not asked of this pass)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 14,
+  "notes": "LV-1 (informational, polish, disclosed by the r38-evrae lane): at Chapter VIII's SECOND menu at 1600x900 (Rikku's, after Tidus's real Attack) the visible coil is 3.6 px from the turn rail's left edge and 0 px inside its rect, but 23 visible coil pixels sit under a drawn rail part (a tag; nearest row gap -6 px), and 1.0 percent of Rikku's painted pixels fall under the coil's projected alpha. The first menu, which is what the lane claims, is clear (above). The handoff already discloses the menu-2 lens shift ('within 4 px of the rail at 1600x900'); the tag overlap and Rikku's share are new readings, not compared with live 37.1. LV-2 (method note, not a live defect): my first automated pass flagged one plate rig as failing a 'void' floor I chose myself (edge column luminance above 6; Ch IV action rig, left edge, read 5.1); a column profile (mean 4.8 to 6.4, standard deviation 2.9 to 5.6 over the first 64 columns, then structure) and a x4-brightened crop show a dark painted pillar, not a flat column, so the item is judged by the structural coverage test and the look, and the floor is dropped; two further sessions re-looked at that rig (also 0 console errors, 0 non-2xx). LV-3 (informational): the first SFX of a run (a confirm at t = 2.4 s in the audio log of the Ch I session) plays through the synth path before the SFX packs are decoded; every later cue read v2 or sprite. Two exploratory sessions of mine (pause-screen layout) before the smoke also logged 0 console errors and 0 non-2xx."
+}
