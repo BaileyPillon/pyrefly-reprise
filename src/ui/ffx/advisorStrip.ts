@@ -20,6 +20,7 @@
  * chapter's card changes.
  */
 
+import { roomier } from './advisorRoomy.ts';
 import {
   ADVISOR_CHIP_RESERVE,
   MAX_ADVISOR_HEIGHT,
@@ -46,7 +47,7 @@ export const STRIP_MIN_HEIGHT = 34;
  * chapter's card can move.
  */
 export function advisorZone(input: AdvisorZoneInput, strip = false): AdvisorZone | null {
-  const designed = solveDesigned(input);
+  const designed = roomier(input, solveDesigned(input)); // PR-0330: a compact answer is improved first
   if (designed || !strip) return designed;
   const reserve = Math.max(ADVISOR_CHIP_RESERVE, input.chipReserve ?? 0);
   const box = solveBox(obstaclesOf(input), {
