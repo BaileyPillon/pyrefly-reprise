@@ -175,9 +175,20 @@ describe('titleMarkup', () => {
 
   it('keeps the approved slab copy and the Press Enter chip as a real button', () => {
     expect(html).toContain('An unofficial fan tribute');
-    expect(html).toContain('Pyrefly');
-    expect(html).toContain('Reprise');
     expect(html).toContain('data-action="confirm"');
+  });
+
+  /**
+   * The wordmark is "Echoes of Spira" since 2026-10-04 (Bailey: "I'll go with Echoes of Spira"), stacked on two
+   * lines in the same slab type, so the whole name reads as it does on the page title. The old name must not
+   * come back, whole or split across the two lines.
+   */
+  it('stacks the wordmark as Echoes over of Spira, and carries nothing of the old name', () => {
+    const lines = [...html.matchAll(/<div class="fe-title__name">([^<]*)<\/div>/g)].map((m) => m[1]);
+    expect(lines).toEqual(['Echoes', 'of Spira']);
+    // Visible text only: an art URL under the `/pyrefly-reprise/` base path is an internal address, not the title.
+    const visibleText = html.replace(/<[^>]*>/g, ' ');
+    expect(visibleText).not.toMatch(/pyrefly|reprise/i);
   });
 
   it('shows the briefing chip only when onboarding is live', () => {

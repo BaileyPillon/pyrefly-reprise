@@ -14,6 +14,12 @@
  * `public/art`"; that brief was wrong for this one case, because the key art
  * is the approved picture. Hard rule 8 is about *retail* assets and this is
  * ours.
+ *
+ * The wordmark is "Echoes of Spira", stacked "Echoes" over "of Spira" (Bailey,
+ * 2026-10-04; the working title before it was "Pyrefly Reprise"). The approved
+ * picture above still shows the old name: the words differ from it by that
+ * decision, and the type, size and place are unchanged. A painted logo is a
+ * follow-up for Bailey (`docs/handoff/r38-rename.md`).
  */
 
 import { artUrl } from '../../../engine/PaintedArt.ts';
@@ -133,8 +139,8 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
     <div class="fe-title__slab">
       <div class="fe-title__grain"></div>
       <div class="fe-title__eyebrow">An unofficial fan tribute</div>
-      <div class="fe-title__name">Pyrefly</div>
-      <div class="fe-title__name">Reprise</div>
+      <div class="fe-title__name">Echoes</div>
+      <div class="fe-title__name">of Spira</div>
       <div class="fe-title__rule"></div>
       <span class="fe-title__chip" data-action="confirm" role="button" tabindex="0"><i></i
         ><span class="fe-title__chip-label fe-title__chip-label--key">Press Enter</span
