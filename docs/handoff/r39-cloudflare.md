@@ -1,5 +1,10 @@
 # r39-cloudflare: the Cloudflare hosting path
 
+> **Update 2026-10-04: the switch was prepared on branch `cf-switch`; read [cf-switch.md](cf-switch.md).** Cloudflare is the default
+> host, https://echoesofspira.com/ is the live address (a Workers Custom Domain), GitHub Pages is a legacy host with a "we've moved"
+> note, wrangler 4.147.0 is found without `PYREFLY_WRANGLER_BIN`, and the preview Worker has its own config. Section 6 below is
+> that switch checklist, done there; this file stays as the groundwork and the evidence.
+
 Prepared 2026-10-04 by a Sonnet sub-agent for the driver. Game case: **both** (delivery tooling,
 no gameplay, no game text; why: `docs/plans/r39-cloudflare-review.md`).
 
