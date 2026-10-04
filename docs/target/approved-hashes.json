@@ -35,32 +35,67 @@
   },
   "cast:tidus": {
    "public/art/characters/tidus/attack.png": {
-    "sha256": "232bb9f262cd338116bdf7fc8fb057ae49da447cb19981363b4bafc3f613607b",
-    "mtime": "2026-09-18T04:01:30.867Z"
+    "sha256": "75bde03cb2c5b7377632b814262cee95aaafc7ff5373b2fb7f939927f54d11b4",
+    "mtime": "2026-10-04T20:54:50.693Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "232bb9f262cd338116bdf7fc8fb057ae49da447cb19981363b4bafc3f613607b",
+     "mtime": "2026-09-18T04:01:30.867Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/tidus/attack.png"
+    }
    },
    "public/art/characters/tidus/cast.png": {
-    "sha256": "30a7089d0794a3259cb17c235cea9f2c8bd41ccfea768f469e4e76eafe238feb",
-    "mtime": "2026-09-18T09:14:35.244Z"
+    "sha256": "cf0b2115e292cdea6541f31f1c44750b869b686fae38e3ff53e9219a5eb2a49c",
+    "mtime": "2026-10-04T20:54:50.699Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "30a7089d0794a3259cb17c235cea9f2c8bd41ccfea768f469e4e76eafe238feb",
+     "mtime": "2026-09-18T09:14:35.244Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/tidus/cast.png"
+    }
    },
    "public/art/characters/tidus/hurt.png": {
-    "sha256": "4e7389001d452710a3021a82b0ce39013f4ad76eb75c3dd732ac04a991013668",
-    "mtime": "2026-09-18T09:14:35.279Z"
+    "sha256": "4e8e82c3b72de1a218a26d2aca242cfea778faace58b1bd66d234ea6aca7e5e5",
+    "mtime": "2026-10-04T20:54:50.722Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "4e7389001d452710a3021a82b0ce39013f4ad76eb75c3dd732ac04a991013668",
+     "mtime": "2026-09-18T09:14:35.279Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/tidus/hurt.png"
+    }
    },
    "public/art/characters/tidus/idle.png": {
     "sha256": "8a630b88b416a07dfa0e63a6a96ac6fd993c02c10d8c86d9d8c3f568ed110750",
     "mtime": "2026-09-18T03:54:30.300Z"
    },
    "public/art/characters/tidus/item.png": {
-    "sha256": "57841a4e8e77b93341e027c96ba135ba1b56e6bb73930f1ed516ec8825ef8363",
-    "mtime": "2026-09-18T09:14:35.262Z"
+    "sha256": "132d7f7697bc27e47d39ee37958ca9d5f7a4596ab0cfd4f21d69b8be02be7dae",
+    "mtime": "2026-10-04T20:54:50.729Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "57841a4e8e77b93341e027c96ba135ba1b56e6bb73930f1ed516ec8825ef8363",
+     "mtime": "2026-09-18T09:14:35.262Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/tidus/item.png"
+    }
    },
    "public/art/characters/tidus/ko.png": {
     "sha256": "a9addeb356d27080a24e68009861f2c6cd0539836848b47b68286e05bac74c28",
     "mtime": "2026-09-18T19:11:31.481Z"
    },
    "public/art/characters/tidus/victory.png": {
-    "sha256": "212be0b9222b0cd6c370499c58022ec2c89cb68834a632ccd7d888b31b6dca07",
-    "mtime": "2026-09-18T09:14:35.291Z"
+    "sha256": "3a7823beb13fcdc280ce46edb22fd2b9534a31946b746b1ddc83df7055ab3cd3",
+    "mtime": "2026-10-04T20:54:50.749Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "212be0b9222b0cd6c370499c58022ec2c89cb68834a632ccd7d888b31b6dca07",
+     "mtime": "2026-09-18T09:14:35.291Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/tidus/victory.png"
+    }
    }
   },
   "cast:yuna": {
@@ -1797,9 +1832,15 @@
     "approved": "2026-09-30"
    },
    "public/art/characters/tidus/critical.png": {
-    "sha256": "f4d9657607e38caa09ad5b2a226dca92c6cd2d0f9107c292fc86442e3085a850",
-    "mtime": "2026-10-01T07:54:12.534Z",
-    "approved": "2026-09-30"
+    "sha256": "672f798da91deae7d072b9714c42496b89bdd835074e3c26f820688133722b86",
+    "mtime": "2026-10-04T20:54:50.707Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "f4d9657607e38caa09ad5b2a226dca92c6cd2d0f9107c292fc86442e3085a850",
+     "mtime": "2026-10-01T07:54:12.534Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/tidus/critical.png"
+    }
    },
    "public/art/characters/tidus/sleep.png": {
     "sha256": "d55e3997d09afbdebf4ba577e149312fb939fc72d53c11ff793f56e029bc4fee",
@@ -1879,14 +1920,26 @@
     }
    },
    "public/art/characters/ffx2-bahamut/attack.png": {
-    "sha256": "79b5c5a13286e1228831396d08b0b6c582c547a5c86d3141a31d42cc4e0b595c",
-    "mtime": "2026-10-02T01:08:54.277Z",
-    "approved": "2026-10-01"
+    "sha256": "12f7b8dabb47bbce57b40763b104b8db4a58cb2425e2ed77addb74a73584396d",
+    "mtime": "2026-10-04T20:54:50.621Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "79b5c5a13286e1228831396d08b0b6c582c547a5c86d3141a31d42cc4e0b595c",
+     "mtime": "2026-10-02T01:08:54.277Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/ffx2-bahamut/attack.png"
+    }
    },
    "public/art/characters/ffx2-bahamut/idle@2x.png": {
-    "sha256": "2bca48c7250218291d2e7ad301ef67ce57dacc6bc844cc4f92bc58c1f9747d18",
-    "mtime": "2026-10-02T01:08:54.277Z",
-    "approved": "2026-10-01"
+    "sha256": "f5e3163c513443611921cf2203bf3f9e27746d8010baf449bd5332b37b75b753",
+    "mtime": "2026-10-04T20:54:50.654Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "2bca48c7250218291d2e7ad301ef67ce57dacc6bc844cc4f92bc58c1f9747d18",
+     "mtime": "2026-10-02T01:08:54.277Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/ffx2-bahamut/idle@2x.png"
+    }
    },
    "public/art/characters/grothia/hurt.png": {
     "sha256": "295ae8ef541bd862ddef541698be642be36c8c5c710f3dbab7d659688a412f0d",
@@ -2218,14 +2271,26 @@
     "approved": "2026-10-01"
    },
    "public/art/characters/tidus/follow.png": {
-    "sha256": "ca86aff184fe7e23f212a9094358655c758b016c22b9b679e8c50395a2c39bf0",
-    "mtime": "2026-10-02T01:08:54.277Z",
-    "approved": "2026-10-01"
+    "sha256": "f77b87944faac8ae0df226ff9dead540111184e07ade1bdebdc2582169caaffc",
+    "mtime": "2026-10-04T20:54:50.714Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "ca86aff184fe7e23f212a9094358655c758b016c22b9b679e8c50395a2c39bf0",
+     "mtime": "2026-10-02T01:08:54.277Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/tidus/follow.png"
+    }
    },
    "public/art/characters/tidus/ready.png": {
-    "sha256": "653805f6860c103800aeef551831329a136cec17144e054821e262c99f72b93f",
-    "mtime": "2026-10-02T01:08:54.277Z",
-    "approved": "2026-10-01"
+    "sha256": "0b651de8e4b720a5fdddeae3e1c2fef5a7ef3b4ddca94c5216218f6b0949df31",
+    "mtime": "2026-10-04T20:54:50.742Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "653805f6860c103800aeef551831329a136cec17144e054821e262c99f72b93f",
+     "mtime": "2026-10-02T01:08:54.277Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/tidus/ready.png"
+    }
    },
    "public/art/characters/valefor/hurt.png": {
     "sha256": "4aee1728368eaa1ae62d8f8c03996714a9b0f300c1bd97cd8a49d04372f36237",
@@ -3195,19 +3260,37 @@
     }
    },
    "public/art/characters/ffx2-bahamut/cast.png": {
-    "sha256": "7da8a1fbb63d87e61b6f94a357442f88e4e8b1a4afc8f296fc7daec6df288f8f",
-    "mtime": "2026-10-03T14:22:43.523Z",
-    "approved": "2026-10-02"
+    "sha256": "bf69b073fe32b2f86f7d09b1fe965e6568c74e2540ba2eaa43ce4ab8e6690b18",
+    "mtime": "2026-10-04T20:54:50.629Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "7da8a1fbb63d87e61b6f94a357442f88e4e8b1a4afc8f296fc7daec6df288f8f",
+     "mtime": "2026-10-03T14:22:43.523Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/ffx2-bahamut/cast.png"
+    }
    },
    "public/art/characters/ffx2-bahamut/hurt.png": {
-    "sha256": "0088ea09d6668ae67edd3269b779be1bbe96531e267ec70e1a37ace5b7522810",
-    "mtime": "2026-10-03T14:22:43.523Z",
-    "approved": "2026-10-02"
+    "sha256": "d0f497b4b778c42cc450094e519e6ddd2f04f285b10ce75bf18ea9825c08ee2a",
+    "mtime": "2026-10-04T20:54:50.637Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "0088ea09d6668ae67edd3269b779be1bbe96531e267ec70e1a37ace5b7522810",
+     "mtime": "2026-10-03T14:22:43.523Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/ffx2-bahamut/hurt.png"
+    }
    },
    "public/art/characters/ffx2-bahamut/ko.png": {
-    "sha256": "391e5c8fbd68d58a501c6a5d674ad7faec816cb8943e6a88a534d0f9dd2f9794",
-    "mtime": "2026-10-03T14:22:43.523Z",
-    "approved": "2026-10-02"
+    "sha256": "ac40ddc3fd0b3ca61cc41299fe11bf7fd5a785c36ae2d40af38a468730655026",
+    "mtime": "2026-10-04T20:54:50.664Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "391e5c8fbd68d58a501c6a5d674ad7faec816cb8943e6a88a534d0f9dd2f9794",
+     "mtime": "2026-10-03T14:22:43.523Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/ffx2-bahamut/ko.png"
+    }
    },
    "public/art/characters/ffx2-dr-goon/attack.png": {
     "sha256": "f08c6ae16a4fc4f66e82389cdad3166181573d570a794d732da3cf7de5667cb5",
@@ -3720,14 +3803,26 @@
     "approved": "2026-10-03"
    },
    "public/art/characters/ffx2-bahamut/telegraph.png": {
-    "sha256": "45e7d3e3ce1735de613200870ee334de35ba07990ed18bedac01c9ac8d37af8d",
-    "mtime": "2026-10-04T11:24:12.557Z",
-    "approved": "2026-10-03"
+    "sha256": "09efce83b76dabf97ed40ecd5f75196e31899870b8fd79560b0af62f9256c20e",
+    "mtime": "2026-10-04T20:54:50.671Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "45e7d3e3ce1735de613200870ee334de35ba07990ed18bedac01c9ac8d37af8d",
+     "mtime": "2026-10-04T11:24:12.557Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/ffx2-bahamut/telegraph.png"
+    }
    },
    "public/art/characters/ffx2-bahamut/telegraph@2x.png": {
-    "sha256": "9fa50af9efeefeab359da6bd77f42c5c35910c0fdbf88fe813ea78cec3635acd",
-    "mtime": "2026-10-04T11:24:12.557Z",
-    "approved": "2026-10-03"
+    "sha256": "ce3a5234a5a2324124477009f5590bd3fa200537421eab27811679f1a3f56cc0",
+    "mtime": "2026-10-04T20:54:50.681Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "9fa50af9efeefeab359da6bd77f42c5c35910c0fdbf88fe813ea78cec3635acd",
+     "mtime": "2026-10-04T11:24:12.557Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/ffx2-bahamut/telegraph@2x.png"
+    }
    },
    "public/art/characters/lulu/od-fury.png": {
     "sha256": "e13caa64aaa5060894691382f1ff02e63e098a7151cfcb8fbf4cc35e8f743e7a",
@@ -3805,9 +3900,15 @@
     "approved": "2026-10-03"
    },
    "public/art/characters/tidus/od-energy-rain.png": {
-    "sha256": "056f62f7c56219d743e3691137a3d810f9e79276a417267e5c3489e864268ea3",
-    "mtime": "2026-10-04T11:26:48.882Z",
-    "approved": "2026-10-03"
+    "sha256": "7bef180f80fcb49097f8989a410b63b748684a99b9efa4f877250897a921ffc0",
+    "mtime": "2026-10-04T20:54:50.734Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "056f62f7c56219d743e3691137a3d810f9e79276a417267e5c3489e864268ea3",
+     "mtime": "2026-10-04T11:26:48.882Z",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/tidus/od-energy-rain.png"
+    }
    },
    "public/art/characters/tidus/od-slice-and-dice.png": {
     "sha256": "6e4f0f7d54161e16d9c662f4b67d6d8110bb487acf553caba81e4d8e4a98280b",
@@ -3888,6 +3989,21 @@
     "sha256": "1b1e12977f49b7d66de69e43ac8fbdfa33536fa8df99b7b30a9a5afed3b47fa4",
     "mtime": "2026-10-04T13:16:07.369Z",
     "approved": "2026-10-03"
+   }
+  },
+  "bailey:2026-10-04-trapped-white": {
+   "decision": "D-380",
+   "words": "all your recommendations",
+   "note": "Bailey, 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\" (D-380, question j): the white background trapped inside the cut-outs of Tidus's hair spikes (FFX) and Bahamut's wings (FFX-2) is cleaned (alpha only: inside a listed region RGBA becomes (0,0,0,0), every other pixel is byte-identical; candidates, crops and the hashes in D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/). This set holds the paintings that had no record in any set before: ffx2-bahamut/idle.png. Installed on the r39-int branch (release 39 integration) only; the shared tree and main are untouched until that branch ships.",
+   "public/art/characters/ffx2-bahamut/idle.png": {
+    "sha256": "b9dc4b8fd821f41f1a67e046a8941136a4748867badcf0ec37eb37ba2311be6c",
+    "mtime": "2026-10-04T20:54:50.644Z",
+    "approved": "2026-10-04",
+    "replacedBy": "bailey:2026-10-04 (D-380, question j; Bailey 2026-10-04 ~13:20 EDT, verbatim \"all your recommendations\")",
+    "supersedes": {
+     "sha256": "b0cec4e1301997136a287cb0198c62bcf6abfb4790b94e3e805a2a7e33bcd5a4",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/ffx2-bahamut/idle.png"
+    }
    }
   }
  }
