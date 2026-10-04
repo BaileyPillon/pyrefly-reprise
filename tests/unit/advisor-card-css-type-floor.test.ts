@@ -79,10 +79,10 @@ describe('FOC-06: no move-advisor card row falls under 14 effective px, on deskt
     expect(bare.map((m) => m[0])).toEqual([]);
   });
 
-  it('names the two lowest-measured rows from the review directly', () => {
-    const badge = sizes.find((s) => s.selector.includes('.mad__badge'));
+  it('names the lowest-measured row from the review directly', () => {
+    // The review's other lowest row, the 'GUIDE'S PICK' badge (.mad__badge, 3.9px), is gone: D-359 removed the tag.
+    expect(sizes.find((s) => s.selector.includes('.mad__badge'))).toBeUndefined();
     const stat = sizes.find((s) => s.selector === '.mad__stat');
-    expect(badge?.px, "'GUIDE'S PICK' (.mad__badge)").toBe(3.9);
     expect(stat?.px, "the four stat chips (.mad__stat)").toBe(4.2);
   });
 

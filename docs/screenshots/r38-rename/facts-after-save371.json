@@ -1,0 +1,207 @@
+{
+  "label": "after",
+  "base": "http://127.0.0.1:6881/pyrefly-reprise/",
+  "browserMode": "gpu",
+  "at": "2026-10-04T04:45:07.978Z",
+  "runs": [
+    {
+      "viewport": "1600x900",
+      "phone": false,
+      "steps": {
+        "bootedToTitle": true,
+        "reachedChapterSelect": true
+      },
+      "files": [
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\after-title-save371-1600x900.png",
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\after-chapter-select-save371-1600x900.png"
+      ],
+      "title": {
+        "viewport": {
+          "w": 1600,
+          "h": 900,
+          "dpr": 1
+        },
+        "names": [
+          {
+            "text": "Echoes",
+            "fontSizePx": "84.4444px",
+            "lineHeightPx": 79.4,
+            "lines": 1,
+            "boxW": 374,
+            "textW": 199.3,
+            "scrollW": 374,
+            "clientW": 374,
+            "overflowsBox": false,
+            "rect": {
+              "x": 54.7,
+              "y": 309.1,
+              "w": 374,
+              "h": 79.4,
+              "right": 428.7,
+              "bottom": 388.4
+            }
+          },
+          {
+            "text": "of Spira",
+            "fontSizePx": "84.4444px",
+            "lineHeightPx": 79.4,
+            "lines": 1,
+            "boxW": 374,
+            "textW": 230.4,
+            "scrollW": 374,
+            "clientW": 374,
+            "overflowsBox": false,
+            "rect": {
+              "x": 34.5,
+              "y": 404,
+              "w": 374,
+              "h": 79.4,
+              "right": 408.5,
+              "bottom": 483.3
+            }
+          }
+        ],
+        "slab": {
+          "x": -98.2,
+          "y": 237.8,
+          "w": 607.6,
+          "h": 380.9,
+          "right": 509.4,
+          "bottom": 618.7
+        },
+        "chip": {
+          "x": 11.1,
+          "y": 531.1,
+          "w": 234.2,
+          "h": 45.3,
+          "right": 245.3,
+          "bottom": 576.4
+        },
+        "eyebrow": {
+          "text": "An unofficial fan tribute",
+          "rect": {
+            "x": 68.3,
+            "y": 275.5,
+            "w": 374,
+            "h": 18,
+            "right": 442.3,
+            "bottom": 293.5
+          }
+        },
+        "slabInsideViewport": true,
+        "chipInsideViewport": true,
+        "reveal": "decoded",
+        "documentTitle": "Echoes of Spira",
+        "metaDescription": "Echoes of Spira - an unofficial HD-2D fan tribute to Final Fantasy X and X-2.",
+        "visibleTextHasOldName": false,
+        "visibleTextHasNewName": true,
+        "oldNameSnippets": []
+      },
+      "chapterSelect": {
+        "documentTitle": "Echoes of Spira",
+        "metaDescription": "Echoes of Spira - an unofficial HD-2D fan tribute to Final Fantasy X and X-2.",
+        "visibleTextHasOldName": false,
+        "visibleTextHasNewName": false,
+        "oldNameSnippets": [],
+        "screen": "chapter-select",
+        "saveAfterLoad": {
+          "version": 1,
+          "chapters": {
+            "seymour-flux": {
+              "id": "seymour-flux",
+              "cleared": true,
+              "bestTimeMs": 498210,
+              "bestTurns": 29,
+              "attempts": 3,
+              "playTimeMs": 6000
+            },
+            "ffx2-bahamut": {
+              "id": "ffx2-bahamut",
+              "cleared": true,
+              "bestTimeMs": 640100,
+              "bestTurns": 38,
+              "attempts": 1,
+              "playTimeMs": 0
+            },
+            "yojimbo-cavern": {
+              "id": "yojimbo-cavern",
+              "cleared": true,
+              "bestTimeMs": 512340,
+              "bestTurns": 33,
+              "attempts": 2,
+              "playTimeMs": 3000
+            },
+            "ffx2-ixion-djose": {
+              "id": "ffx2-ixion-djose",
+              "cleared": false,
+              "bestTimeMs": null,
+              "bestTurns": null,
+              "attempts": 1,
+              "playTimeMs": 0
+            },
+            "sin-fins-core": {
+              "id": "sin-fins-core",
+              "cleared": false,
+              "bestTimeMs": null,
+              "bestTurns": null,
+              "attempts": 1,
+              "playTimeMs": 0
+            }
+          },
+          "settings": {
+            "masterVolume": 0.8,
+            "musicVolume": 0.45,
+            "sfxVolume": 0.55,
+            "sfxBalanceMigrated": true,
+            "textSpeed": 0.75,
+            "skipSeenCutscenes": false,
+            "lowEffects": false,
+            "fxLight": true,
+            "fxLiving": true,
+            "fxSpectacle": false,
+            "fxDof": true,
+            "fxFog": true,
+            "fxEdges": true,
+            "fxBreath": true,
+            "fxKo": true,
+            "fxFraming": true,
+            "fxHero": true,
+            "fxSphere": true,
+            "fxSplash": true,
+            "textSize": 1.15,
+            "guideVisible": false,
+            "advisorVisible": true,
+            "intentVisible": true,
+            "ffx2Atb": "active",
+            "ffx2AtbMigrated": true,
+            "pausePanelsHidden": false,
+            "battleHelp": true,
+            "reduceMotion": false,
+            "ffx2AtbSpeed": "slow"
+          },
+          "seenCoach": [
+            "briefing"
+          ]
+        },
+        "board": {
+          "selectedId": "seymour-flux",
+          "cleared": [
+            "seymour-flux",
+            "yojimbo-cavern",
+            "ffx2-bahamut"
+          ]
+        }
+      },
+      "console": {
+        "consoleErrors": [],
+        "consoleWarnings": [],
+        "pageErrors": [],
+        "requestFailed": [
+          "http://127.0.0.1:6881/pyrefly-reprise/art/backdrops/farplane.png :: net::ERR_ABORTED",
+          "http://127.0.0.1:6881/pyrefly-reprise/art/characters/vegnagun-body/idle.png :: net::ERR_ABORTED"
+        ],
+        "badResponses": []
+      }
+    }
+  ]
+}

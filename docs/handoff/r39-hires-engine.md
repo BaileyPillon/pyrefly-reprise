@@ -337,3 +337,31 @@ gates:   node tools/art-derive.mjs verify --dir <dist> ; node tools/art-derive.m
 builds:  D:/Tools/pyrefly-scratch/2026-10-04/hires-engine/dist-final3 is the final production build, dist-before the start build (node node_modules/vite/bin/vite.js preview --outDir <dir> --port 6925);
          the two earlier r39 builds are parked under F:/pyrefly-parked/2026-10-04/hires-engine/dist/
 ```
+
+## Merge with release 38 (branch `r39-int`, 2026-10-04)
+
+Integrator pass by a Sonnet sub-agent of the driver session, worktree `D:/pyrefly-r39-int` (sparse: no `docs/screenshots`; branch `r39-int` from this branch's tip d6810315).
+Bailey's words, 2026-10-04: "I need super high resolution now. DO NOT hold back. I want the visual fidelity to be amazing and absolutely beautiful. The critic will
+ensure this is the case." and "continue on until I reach my usage limit". Release 38 is live (main **4a401c13**, bundle DHaa2xD1, which contains 6461999e); this branch
+was cut from r38-bytes 61708db6, the first of release 38's merges, so the merge brings in the rest of release 38: r38-advisor-card, r38-polish, r38-bushido, r38-pushin,
+r38-keys, r38-rename, r38-restage, r38-motion, the art install, r38-keyart-fix, r38-evrae, r38-wings and the records (365 files, 24,095 insertions; nothing under `public/`).
+**Nothing here is deployed, nothing is merged into `main`, and no release was cut**: release 39 waits for Bailey's picks (masters format, the 3x tier, anti-aliasing,
+the close-up route) and for Cloudflare. Game case: both games, shared plumbing; the per-item cases of release 38's own lanes are unchanged (Evrae E1-H FFX only, the plate
+wings FFX-2 only, SKILL TRAVEL both, the run-in FFX-2 only, the slots FFX only).
+
+### The merge (`git merge --no-ff origin/main`): one conflict, seven files edited by both sides
+
+Both sides edited 7 files; git merged 6 by itself and I read each result. The seventh conflicted.
+
+| File | What each side did | Result |
+|---|---|---|
+| `src/engine/BattlePresenterStage.ts` | **CONFLICT.** This branch ended the constructor with `this.art = new StageArt({...})` (release 39: the master each figure draws, measured against the camera, `StageArt.ts`). `origin/main` ended it with `this.motion = new StageMotion({...})` and added the `smearWarmId()` method after it (r38-motion: SKILL TRAVEL and the FFX-2 run-in). Both appended at the same place, so the hunks collided. | **Both kept**, in that order: `this.art = ...`, then `this.motion = ...`, the constructor's closing brace, a blank line, `smearWarmId()`. A resolver script (`D:/Tools/pyrefly-scratch/2026-10-04/r39-int/resolve-stage.mjs`, CRLF kept, refusing any other shape) did it; the file is 904 lines (`git diff HEAD` on it is 30 lines, main's `StageMotion` block and `smearWarmId` only). Neither field depends on the other (`StageArt` reads `actors`, `camera`, `canvas`, `battleCamera`; `StageMotion` reads the scene, the quads and the comfort flags). |
+| `src/engine/fx/mix/framing.ts` | This branch: `import { anticipateView } from '../../StageArt.ts'` and one call after `this.masterPose = d.pose` in `commit` (the colossus master is planned once the figures are up). Main: the chapter's slots (`stageTable.ts`, `side` on `Decision`, `staging.hold`, `readStand`) in about 25 places. | Merged by git, no overlap. **The file is now 400 lines (main's was 398): zero headroom; the next change there must extract first** (r38's note said the same at 398). |
+| `src/main.ts` | This branch: `installArtDebug` (`__pyrefly.art`) next to `installFxDebug`. Main: the fatal screen's title, "Echoes of Spira" (r38-rename). | Merged by git; disjoint hunks. |
+| `src/app/screens/BattleScreen.ts` | This branch: `renderer: this.app.renderer.renderer` added to `bindLivingScene`'s argument (the plates are composed on the GPU). Main: `markOpeningHurried` and `markOpeningBegun` (FOC371-01, Chapter IX's arrival). | Merged by git; neighbouring lines, no overlap. The file is 929 lines (main's number). |
+| `src/engine/Backdrop.ts` | This branch: `bandPx` for the parallax bands, `groundPx` for the floor, the painting's texture freed with the backdrop. Main: `adoptTexture(tex)` (r38-wings). | Merged by git. They fit together: the painted wing strips are adopted by `adoptTexture`, the painting's own texture is in `ownedTextures` from `create`, and `dispose` frees both. 513 lines. |
+| `src/scenes/bevelle-underground.ts` | This branch: `deckCanvas(px)` drawn through a scale, `artBudget().deckPx` (FFX-2 only). Main: `BEVELLE_PLATE_WINGS.painted` and `await paintPlateWings(...)` after `addPlateWings` in both build paths (r38-wings, FFX-2 only). | Merged by git; disjoint hunks. The wings' geometry is world units from the plate mesh's own width and a constant `plateWidthPx: 2688` for the strip art, so a plate drawn from the 2x master (5376 px) leaves the wings where they were; the strips are 1x (716 px) beside a 2x plate, so they are the softer part of the frame at the edges (a look note for the critic, not a break). |
+| `docs/DEV.md` | Both added sections. | Merged by git. |
+
+`git diff --stat` of the merge against this branch: 365 files changed by main's side alone, none under `public/`. `npx tsc --noEmit`: clean (exit 0, empty output) on the merge with the conflict resolved.
+`docs/handoff/NOW.md` is main's committed text (this branch never touched it); the shared tree's own uncommitted edits to it are not part of any commit here.

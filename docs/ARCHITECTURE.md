@@ -1,6 +1,6 @@
-# Pyrefly Reprise — Architecture
+# Echoes of Spira (formerly Pyrefly Reprise) — Architecture
 
-Working title: **Pyrefly Reprise**. An unofficial HD-2D fan tribute that recreates five encounters from Final Fantasy X and X-2 with faithful combat.
+Working title: **Echoes of Spira** (formerly Pyrefly Reprise). An unofficial HD-2D fan tribute that recreates five encounters from Final Fantasy X and X-2 with faithful combat.
 
 ## Engine decision
 

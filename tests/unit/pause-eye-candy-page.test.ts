@@ -321,7 +321,7 @@ describe.each([
   it('the DEPTH OF FIELD and shot help lines say what the build does (they described the mockup)', () => {
     const SHOT_HELP: Record<string, string> = {
       fxHero: 'While you enter an Overdrive, the camera holds a close shot of the fighter, then cuts back. REDUCE MOTION keeps one cut.',
-      fxSphere: 'On a dressphere change the camera cuts to a held close shot of the girl, then cuts back. REDUCE MOTION keeps one cut.',
+      fxSphere: 'On a dressphere change the camera holds a close shot of the girl, or pushes in a little where no close shot is clear, then goes back. REDUCE MOTION keeps one cut.',
     };
     const h = mount(chapterId);
     openByKeys(h);
@@ -349,8 +349,9 @@ describe.each([
     openByKeys(h);
     expect(value(h, 'fxDof')).toBe('ON· OFF HERE');
     expect(value(h, 'fxFraming')).toBe('ON· LESS HERE');
-    expect(value(h, mine)).toBe('ON· OFF HERE');
-    expect(note(h, mine)).toEqual({ text: 'OFF HERE', limit: 'off' });
+    // FFX's OVERDRIVE SHOT is closed on the phone; FFX-2's DRESSPHERE SHOT keeps its small push-in (D-346)
+    expect(value(h, mine)).toBe(mine === 'fxHero' ? 'ON· OFF HERE' : 'ON· LESS HERE');
+    expect(note(h, mine)).toEqual(mine === 'fxHero' ? { text: 'OFF HERE', limit: 'off' } : { text: 'LESS HERE', limit: 'less' });
     expect(note(h, 'fxFraming')).toEqual({ text: 'LESS HERE', limit: 'less' });
     // what the phone leaves alone reads plain ON
     for (const id of ['fxLight', 'fxFog', 'fxEdges', 'fxLiving', 'fxBreath', 'fxKo', 'fxSpectacle', 'fxSplash']) expect(value(h, id), id).toBe('ON');
@@ -368,7 +369,7 @@ describe.each([
     walkTo(h, 'fxFraming');
     expect(why(h)).toBe('On a phone held upright the bosses keep their usual size; the rest still works.');
     walkTo(h, mine);
-    expect(why(h)).toBe('Off on a phone held upright: it shows a slice of the picture, so the camera stays wide.');
+    expect(why(h)).toBe(mine === 'fxHero' ? 'Off on a phone held upright: it shows a slice of the picture, so the camera stays wide.' : 'On a phone held upright there is no close shot (it shows a slice of the picture), only the small push-in.');
     walkTo(h, 'fxFog');
     expect(why(h), 'a row the device leaves alone has no reason line').toBe('');
   });
@@ -419,7 +420,8 @@ describe.each([
     const h = mount(chapterId);
     h.store.setSettings({ reduceMotion: true });
     openByKeys(h);
-    expect(value(h, mine), 'a shot closed here is not one cut').toBe('ON· OFF HERE');
+    const here = mine === 'fxHero' ? 'ON· OFF HERE' : 'ON· LESS HERE'; // FFX-2's shot keeps its push-in on the phone (D-346)
+    expect(value(h, mine), 'a shot closed here is not one cut').toBe(here);
     expect(value(h, 'fxBreath'), 'REDUCE MOTION still stills the breathing here').toBe('ON· STILL');
     walkTo(h, 'fxDof');
     key(h, 'Enter');
@@ -431,7 +433,7 @@ describe.each([
     expect(value(h, mine)).toBe('ON· LOOK OFF');
     expect(pageRow(h, mine).classList.contains('pause__ec-row--dim')).toBe(true);
     key(h, 'Enter');
-    expect(value(h, mine), 'the look back: the note is back').toBe('ON· OFF HERE');
+    expect(value(h, mine), 'the look back: the note is back').toBe(here);
   });
 
   it('every row that carries a device note has a reason to show (phone held upright, LOW EFFECTS, both)', () => {

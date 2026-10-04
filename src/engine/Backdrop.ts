@@ -474,6 +474,11 @@ export class Backdrop {
     this.layerMeshes.push(mesh);
   }
 
+  /** A texture a scene loaded for a mesh it adopted (a painted plate wing, release 38, D-343): `dispose` frees it with the rest. */
+  adoptTexture(tex: Texture): void {
+    this.ownedTextures.push(tex);
+  }
+
   /** @param dt seconds */
   update(dt: number): void {
     this.clock += dt;

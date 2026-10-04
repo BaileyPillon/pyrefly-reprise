@@ -1,0 +1,33 @@
+ffx2-trema-1280x720 c0 play:turn-start full held 1666 maxMove 4.04 first 4.04 end 0 fovD 0 menuInShot false | sc yuna f0.6 x0.5 y0.5 t0 yuna-warrior:1.00/0.00 rikku-alchemist:1.00/0.00 paine-dark-knight:1.00/0.00 paragon:0.74/0.00
+ffx2-trema-1280x720 c1 paine push held 1600 maxMove 2.185 first 0.179 end 2.037 fovD 0 menuInShot false | sc paine f0.52 x0.58 y0.5 t24 yuna-warrior:0.34/0.08 rikku-alchemist:1.00/0.04 paine-songstress:1.00/0.00 paragon:0.29/0.00 | push s0.18 a0.
+ffx2-trema-1280x720 c2 rikku full held 1633 maxMove 4.411 first 4.411 end 0 fovD 0 menuInShot false | sc rikku f0.52 x0.65 y0.5 t0 yuna-warrior:1.00/0.04 rikku-songstress:1.00/0.00 paine-songstress:1.00/0.00 paragon:0.61/0.00
+ffx2-trema-1280x720 done  3
+ffx2-trema-2000x1012 c0 idle full held 1616 maxMove 4.065 first 4.065 end 0 fovD 0 menuInShot false | sc yuna f0.6 x0.5 y0.5 t0 yuna-warrior:1.00/0.00 rikku-alchemist:1.00/0.00 paine-dark-knight:1.00/0.00 paragon:0.95/0.00
+ffx2-trema-2000x1012 c1 paine push held 1616 maxMove 2.192 first 0.222 end 2.037 fovD 0 menuInShot false | sc paine f0.4 x0.65 y0.5 t0 yuna-warrior:1.00/0.06 rikku-alchemist:1.00/0.00 paine-songstress:1.00/0.00 paragon:1.00/0.00 | push s0.18 a0.55
+ffx2-trema-2000x1012 c2 idle full held 1617 maxMove 4.412 first 4.412 end 0 fovD 0 menuInShot false | sc rikku f0.52 x0.65 y0.5 t0 yuna-warrior:1.00/0.04 rikku-songstress:1.00/0.02 paine-songstress:1.00/0.00 paragon:0.74/0.00
+ffx2-trema-2000x1012 done  3
+ffx2-trema-390x844-touch c0 idle none held 0 maxMove 0 first null end 0 fovD 0 menuInShot false | push s0.3 a0.55 pan0,0 fails at 0.5: head-under-panel:yuna-warrior  (dwarf cap 1.25); push s0.3 a0.55 pan0.05,0 fails at 0.5: head-under-pan
+ffx2-trema-390x844-touch c1 idle push held 1633 maxMove 3.488 first 0.097 end 3.404 fovD 0 menuInShot false | push s0.24 a0.55 pan0.1,0 ok (dwarf cap 1.60) (first tries: push s0.3 a0.55 pan0,0 fails at 0.5: neighbour:yuna-warrior in0.72 hud0.00  (dwa
+ffx2-trema-390x844-touch c2 rikku none held 0 maxMove 0 first null end 0 fovD 0 menuInShot false | push s0.3 a0.55 pan0,0 fails at 0.5: neighbour:yuna-warrior in0.89 hud0.00  (dwarf cap 1.38); push s0.3 a0.55 pan0.05,0 fails at 0.5: head-u
+ffx2-trema-390x844-touch done  3
+ffx2-bahamut-1280x720 c0 play:action-start full held 1650 maxMove 3.464 first 3.464 end 0 fovD 0 menuInShot false | sc yuna f0.6 x0.5 y0.5 t0 yuna-black-mage:1.00/0.00 rikku-dark-knight:1.00/0.00 paine-warrior:1.00/0.00 ffx2-bahamut:0.60/0.00
+ffx2-bahamut-1280x720 c1 rikku full held 1650 maxMove 3.98 first 3.98 end 0 fovD 0 menuInShot false | sc rikku f0.52 x0.58 y0.5 t0 yuna-black-mage:1.00/0.06 rikku-black-mage:1.00/0.00 paine-warrior:1.00/0.00 ffx2-bahamut:0.60/0.00
+ffx2-bahamut-1280x720 c2 yuna full held 1600 maxMove 3.899 first 3.899 end 0 fovD 0 menuInShot false | sc yuna f0.6 x0.5 y0.5 t0 yuna-white-mage:1.00/0.00 rikku-black-mage:1.00/0.00 paine-warrior:1.00/0.00 ffx2-bahamut:0.67/0.00
+ffx2-bahamut-1280x720 done  3
+ffx2-bahamut-1600x900 c0 play:action-start full held 1666 maxMove 3.476 first 3.476 end 0 fovD 0 menuInShot false | sc yuna f0.6 x0.5 y0.5 t0 yuna-black-mage:1.00/0.00 rikku-dark-knight:1.00/0.00 paine-warrior:1.00/0.00 ffx2-bahamut:0.37/0.00
+ffx2-bahamut-1600x900 c1 rikku full held 1617 maxMove 3.639 first 3.639 end 0 fovD 1 menuInShot false | sc rikku f0.52 x0.58 y0.5 t0 yuna-black-mage:1.00/0.06 rikku-black-mage:1.00/0.00 paine-warrior:1.00/0.00 ffx2-bahamut:0.60/0.00
+ffx2-bahamut-1600x900 c2 yuna full held 1600 maxMove 3.49 first 3.49 end 0 fovD 0 menuInShot false | sc yuna f0.6 x0.5 y0.5 t0 yuna-white-mage:1.00/0.00 rikku-black-mage:1.00/0.00 paine-warrior:1.00/0.00 ffx2-bahamut:0.53/0.00
+ffx2-bahamut-1600x900 done  3
+ffx2-bahamut-2000x1012 c0 play:damage full held 1600 maxMove 3.918 first 3.918 end 0 fovD 0 menuInShot false | sc yuna f0.6 x0.5 y0.5 t0 yuna-black-mage:1.00/0.00 rikku-dark-knight:1.00/0.04 paine-warrior:1.00/0.00 ffx2-bahamut:0.43/0.00
+ffx2-bahamut-2000x1012 c1 rikku full held 1600 maxMove 3.971 first 3.971 end 0 fovD 0 menuInShot false | sc rikku f0.52 x0.65 y0.5 t0 yuna-black-mage:1.00/0.06 rikku-black-mage:1.00/0.02 paine-warrior:1.00/0.00 ffx2-bahamut:0.60/0.00
+ffx2-bahamut-2000x1012 c2 yuna full held 1600 maxMove 3.381 first 3.381 end 0 fovD 1 menuInShot false | sc yuna f0.6 x0.5 y0.5 t0 yuna-white-mage:1.00/0.00 rikku-black-mage:1.00/0.00 paine-warrior:1.00/0.00 ffx2-bahamut:0.67/0.00
+ffx2-bahamut-2000x1012 done  3
+ffx2-bahamut-390x844-touch c0 play:action-start push held 1684 maxMove 3.483 first 0.178 end 3.419 fovD 0 menuInShot false | push s0.3 a0.55 pan0.1,0 ok (dwarf cap 1.25) (first tries: push s0.3 a0.55 pan0,0 fails at 0.5: subject:yuna-black-mage  (dwarf cap 1.2
+ffx2-bahamut-390x844-touch c1 rikku push held 1667 maxMove 3.084 first 0.162 end 3.023 fovD 0 menuInShot false | push s0.24 a0.55 pan0.1,0 ok (dwarf cap 1.42) (first tries: push s0.3 a0.55 pan0,0 fails at 0.5: neighbour:yuna-black-mage in0.77 hud0.00  (
+ffx2-bahamut-390x844-touch c2 yuna push held 1600 maxMove 3.392 first 0.128 end 3.418 fovD 0 menuInShot false | push s0.3 a0.55 pan0.05,0 ok (dwarf cap 1.25) (first tries: push s0.3 a0.55 pan0,0 fails at 1: subject:yuna-white-mage  (dwarf cap 1.25))
+ffx2-bahamut-390x844-touch done  3
+ffx2-trema-1600x900-rm c0 play:turn-start full held 1650 maxMove 3.894 first 3.894 end 0 fovD 0 menuInShot false | sc yuna f0.6 x0.5 y0.5 t0 yuna-warrior:1.00/0.00 rikku-alchemist:1.00/0.00 paine-dark-knight:1.00/0.00 paragon:0.74/0.00
+ffx2-trema-1600x900-rm c1 paine push held 1717 maxMove 2.037 first 2.037 end 0 fovD 0 menuInShot false | sc paine f0.52 x0.58 y0.5 t24 yuna-warrior:0.35/0.06 rikku-alchemist:1.00/0.04 paine-songstress:1.00/0.00 paragon:0.29/0.00 | push s0.18 a0.
+ffx2-trema-1600x900-rm c2 idle push held 1600 maxMove 2.038 first 2.038 end 0 fovD 0 menuInShot false | sc paine f0.6 x0.65 y0.5 t24 yuna-warrior:0.12/0.00 rikku-alchemist:1.00/0.17 paine-dark-knight:1.00/0.00 paragon:0.07/0.00 | push s0.18 a0.
+ffx2-trema-1600x900-rm done  3
+ALLDONE

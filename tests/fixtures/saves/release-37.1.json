@@ -1,0 +1,60 @@
+{
+  "_note": "Release 38 rename (Echoes of Spira) save-compatibility fixture. Written by the LIVE release-37.1 build itself (main f4244e1f, bundle index-DhiL5vEz.js) on 2026-10-04: a fresh headless profile on https://baileypillon.github.io/pyrefly-reprise/, then that build's own SaveStore methods through window.__pyrefly.app.save (recordAttempt, recordClear, addPlayTime, flushPlayTime, markCoachSeen, setSettings, save), then localStorage read back verbatim. Non-default values on purpose: three clears (an FFX chapter, an FFX-2 chapter and Chapter IX Yojimbo), two attempted chapters (FFX-2 Ixion and Sin's fins), volumes, text speed and size, FFX-2 ATB active and slow, the guide hidden, fxSpectacle OFF. Its only localStorage key is 'pyrefly-reprise:save:v1': the game was renamed on 2026-10-04 and that key must never change, or a player loses the save.",
+  "release": 37.1,
+  "mainSha": "f4244e1f",
+  "bundle": "index-DhiL5vEz.js",
+  "expect": {
+    "cleared": [
+      "seymour-flux",
+      "ffx2-bahamut",
+      "yojimbo-cavern"
+    ],
+    "notCleared": [
+      "ffx2-ixion-djose",
+      "sin-fins-core"
+    ],
+    "bestTimeMs": {
+      "seymour-flux": 498210,
+      "ffx2-bahamut": 640100,
+      "yojimbo-cavern": 512340
+    },
+    "bestTurns": {
+      "seymour-flux": 29,
+      "ffx2-bahamut": 38,
+      "yojimbo-cavern": 33
+    },
+    "attempts": {
+      "seymour-flux": 3,
+      "ffx2-bahamut": 1,
+      "yojimbo-cavern": 2,
+      "ffx2-ixion-djose": 1,
+      "sin-fins-core": 1
+    },
+    "playTimeMs": {
+      "seymour-flux": 6000,
+      "ffx2-bahamut": 0,
+      "yojimbo-cavern": 3000,
+      "ffx2-ixion-djose": 0,
+      "sin-fins-core": 0
+    },
+    "seenCoach": [
+      "briefing"
+    ],
+    "settings": {
+      "masterVolume": 0.8,
+      "musicVolume": 0.45,
+      "sfxVolume": 0.55,
+      "textSpeed": 0.75,
+      "ffx2Atb": "active",
+      "ffx2AtbSpeed": "slow",
+      "guideVisible": false,
+      "advisorVisible": true,
+      "reduceMotion": false,
+      "textSize": 1.15,
+      "fxSpectacle": false
+    }
+  },
+  "localStorage": {
+    "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1791088574533,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":true,\"bestTimeMs\":498210,\"bestTurns\":29,\"attempts\":3,\"playTimeMs\":6000},\"ffx2-bahamut\":{\"id\":\"ffx2-bahamut\",\"cleared\":true,\"bestTimeMs\":640100,\"bestTurns\":38,\"attempts\":1,\"playTimeMs\":0},\"yojimbo-cavern\":{\"id\":\"yojimbo-cavern\",\"cleared\":true,\"bestTimeMs\":512340,\"bestTurns\":33,\"attempts\":2,\"playTimeMs\":3000},\"ffx2-ixion-djose\":{\"id\":\"ffx2-ixion-djose\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":0},\"sin-fins-core\":{\"id\":\"sin-fins-core\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":0}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.8,\"musicVolume\":0.45,\"sfxVolume\":0.55,\"sfxBalanceMigrated\":true,\"textSpeed\":0.75,\"skipSeenCutscenes\":false,\"lowEffects\":false,\"fxLight\":true,\"fxLiving\":true,\"fxSpectacle\":false,\"fxDof\":true,\"fxFog\":true,\"fxEdges\":true,\"fxBreath\":true,\"fxKo\":true,\"fxFraming\":true,\"fxHero\":true,\"fxSphere\":true,\"fxSplash\":true,\"textSize\":1.15,\"guideVisible\":false,\"advisorVisible\":true,\"intentVisible\":true,\"ffx2Atb\":\"active\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"reduceMotion\":false,\"ffx2AtbSpeed\":\"slow\"},\"seenCoach\":[\"briefing\"],\"flags\":{}}"
+  }
+}

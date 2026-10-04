@@ -1,5 +1,7 @@
 # AGENTS.md — Pyrefly Reprise
 
+Player-facing title: Echoes of Spira since 2026-10-04 (Bailey); the repo, folders and internal names keep 'pyrefly'.
+
 An unofficial fan tribute that recreates five boss encounters from Final Fantasy X
 and X-2 as a painted 2.5D web game: TypeScript (strict, ESM) + Vite + Three.js,
 HTML/CSS HUDs, vitest + Playwright. Owner: Bailey. Windows 11, repo at

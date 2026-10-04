@@ -102,6 +102,69 @@ export function sakuraArrivalAt(ms: number): SakuraArrivalFrame {
   };
 }
 
+/** What {@link ArrivalWait.step} says about this frame. */
+export type ArrivalWaitStep = 'hold' | 'go' | 'rest';
+
+/**
+ * A hurried opening runs the arrival's own clock this many times faster (FOC371-01): the 5.8 s timeline plays in
+ * 2.9 s, Daigoro is on the field 0.4 s in and Yojimbo stands on his spot 0.65 s in, so both are drawn long before the
+ * first command menu, and the night and the tree are gone again by the time the first enemy acts.
+ */
+export const HURRIED_ARRIVAL_SPEED = 2;
+
+/**
+ * Whether, and for how long, one fight's arrival waits for its opening (PR-0341, FOC371-01; the scene's own clock,
+ * pure).
+ *
+ * The figures are staged before the battle-start card is gone, so the arrival must not start then: it starts on the
+ * first rendered frame of the opening shot ({@link ArrivalWait.openingSeen}), or `fallbackMs` after the fight is
+ * staged when no opening ever shows (the skip speed). A **hurried** opening (the player skipped the scene,
+ * PR-0061) shows no shot at all: it collapses to the first command menu inside a tick. Release 37.1 never played the
+ * arrival there, which took Bailey's approved night-sakura moment away from every player who skips the scene
+ * (FOC371-01; the chamber tile says it plays at the start of the fight). A hurried fight now waits for the battle
+ * screen's own "the card is gone" mark (`openingMark.ts`, passed in as {@link ArrivalWait.openingSeen}: the same
+ * moment a full opening puts the camera on its shot) and plays the arrival {@link HURRIED_ARRIVAL_SPEED} times
+ * faster; `hurriedFallbackMs` bounds the wait for a hurried fight whose mark never comes, so Yojimbo and Daigoro are
+ * never held off the field at the first menu (PR-0341). A full opening's timing is untouched.
+ */
+export class ArrivalWait {
+  /** ms since the fight was staged while it waits; negative when nothing is (or is no longer) being waited for. */
+  private waitMs = -1;
+  private opened = false;
+  private hurried = false;
+
+  constructor(
+    private readonly fallbackMs: number,
+    private readonly hurriedFallbackMs: number = fallbackMs,
+  ) {}
+
+  /** A fight's figures are on the field (first staging, or a retry). `hurried`: its opening is collapsed. */
+  stage(hurried: boolean): void {
+    this.waitMs = 0;
+    this.opened = false;
+    this.hurried = hurried;
+  }
+
+  /** The opening has begun: a rendered frame had the camera on the opening shot, or (hurried) the card is gone. */
+  openingSeen(): void {
+    this.opened = true;
+  }
+
+  /** How many times faster the arrival's own clock runs for this fight: 1 for a full opening. */
+  get speed(): number {
+    return this.hurried ? HURRIED_ARRIVAL_SPEED : 1;
+  }
+
+  /** `hold`: they stay off the field; `go`: the arrival starts now; `rest`: nothing is waited for. */
+  step(dtMs: number): ArrivalWaitStep {
+    if (this.waitMs < 0) return 'rest';
+    this.waitMs += dtMs;
+    if (!this.opened && this.waitMs < (this.hurried ? this.hurriedFallbackMs : this.fallbackMs)) return 'hold';
+    this.waitMs = -1;
+    return 'go';
+  }
+}
+
 /** A vertical two-stop gradient on a small canvas. */
 function gradientTexture(top: number, bottom: number): CanvasTexture {
   const c = document.createElement('canvas');

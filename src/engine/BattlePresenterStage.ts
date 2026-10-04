@@ -37,6 +37,7 @@ import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAn
 import * as SA from './StageAnchors.ts';
 import { stageSpellFx, type StageSpellFxOptions } from './spellfx/stageSpellFx.ts';
 import type { SpellFxLayer } from './spellfx/SpellFxLayer.ts';
+import { StageMotion } from './motion/StageMotion.ts'; // r38-motion RUN-IN's field: painted spans, camera truck, smear
 import { PyreflyStage } from './PyreflyStage.ts';
 import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
 import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
@@ -144,6 +145,8 @@ export class PaintedStage implements BattleStage {
   /** The B1 spell effects (option B); `impact` skips the bloom where they carry the hit. */
   readonly spellFx: SpellFxLayer;
   private readonly unhookSpellFx: () => void;
+  /** RUN-IN's field (r38-motion, FFX-2 only): where each painted shape stands, the camera truck, the smear. */
+  readonly motion: StageMotion;
   /** A-5 / A-6 / D-225: the dissolve's lights, the lens band and held motes (`PyreflyStage.ts`). */
   private readonly pyreflies: PyreflyStage;
   /** D-224 phase lighting: the presenter's `lighting` port (`BattlePresenterPhase.ts`). */
@@ -193,6 +196,28 @@ export class PaintedStage implements BattleStage {
       battleCamera: opts.battleCamera,
       ...(opts.spellFx?.game ? { game: opts.spellFx.game } : {}),
     });
+    this.motion = new StageMotion({
+      scene: opts.scene,
+      camera: opts.battleCamera,
+      quadOf: (id, out) => {
+        const s = this.actors.get(id);
+        if (!s) return null;
+        const q = s.anchor ? this.anchoredQuad(s) : s.actor.contentQuad(out);
+        if (q !== out) for (let i = 0; i < 4; i++) out[i]!.copy(q[i]!);
+        return out;
+      },
+      figure: (id) => this.actors.get(id)?.actor,
+      view: () => ({ w: opts.canvas.clientWidth || 1600, h: opts.canvas.clientHeight || 900 }),
+      lowEffects: () => opts.comfort?.().lowEffects === true,
+      warmFor: () => this.smearWarmId(),
+    });
+  }
+
+  /** FFX-2 only (RUN-IN is the one user of the smear): which party figure's painting builds the smear's program in the opening; none under REDUCE MOTION, which never runs. */
+  private smearWarmId(): CombatantId | undefined {
+    if (this.opts.spellFx?.game !== 'ffx2' || this.opts.comfort?.().reduceMotion === true) return undefined;
+    for (const [id, s] of this.actors) if (s.kind === 'party') return id;
+    return undefined;
   }
 
   // ------------------------------------------------------------------ staging
@@ -674,6 +699,9 @@ export class PaintedStage implements BattleStage {
       screenFlash: (colour, ms) => this.screenFlash(colour, ms),
       land: (at, o) => this.spellFx.land(at, o),
       pendingLand: (at, action) => this.spellFx.pendingLand(at, action), // FF7: the numeral on the drawn strike
+      markIn: (at, action) => this.spellFx.markIn(at, action), // r38-motion: a held numeral waits for the drawn strike
+      travel: (from, to, o) => this.spellFx.fly(from, to, o), // r38-motion SKILL TRAVEL: drawn in the spell layer's batch; ms 0 where it draws nothing
+      canTravel: (abilityId, from) => this.spellFx.canFly(abilityId, from),
     };
   }
 
@@ -755,6 +783,7 @@ export class PaintedStage implements BattleStage {
   update(dt: number): void {
     for (const id of this.actors.keys()) this.placeAnchored(id);
     for (const { actor } of this.actors.values()) actor.update(dt);
+    this.motion.update(dt); // RUN-IN: the camera truck and the smear's afterimages
     this.partRings.update(
       dt,
       (id) => {
@@ -824,6 +853,7 @@ export class PaintedStage implements BattleStage {
     this.arrivalCleanups.clear();
     for (const { actor } of this.actors.values()) actor.dispose();
     this.actors.clear();
+    this.motion.dispose();
     this.partRings.dispose();
     this.hits.dispose();
     this.unhookSpellFx();

@@ -8,6 +8,39 @@
  * state modifiers (hot pace, DUD warning colour).
  */
 
+/* FOC371-02 (FFX-2 only): the minigame layer is a grid layer BESIDE the HUD stage, not inside it (FFX2BattleHud.mount).
+   The stage's `transform` makes it a stacking context of its own, so a slab inside it could never out-rank the
+   enemy-intent slab (`.eint`, z-index 2, a sibling layer on the overlay): 37.1's `z-index: 15` on the slab was
+   trapped in that context, and on desktop the card painted over the ring, the hit counter and half the bar. Out
+   here the layer is a child of `.ffx2hud`, and the card, the guide (3), the advisor (4) and the phone's guide chip
+   (12) all share its stacking context, so it is above every one of them, on desktop and on the phone, while it is
+   open; below the pause chips (40 on the phone, 45 elsewhere) and the pause (999). It has the stage's box (640x360,
+   origin top-left) and the stage's transform (written by `FFX2BattleHud.layout()`, as for `.ffx2hud__plates`), so the
+   overlays keep their authored geometry; on the phone the stage's transform is dropped, and so is this layer's (phone-hud.css). The
+   layer's `pointer-events: none` and `inset: 0` come from ffx2-hud.css and are unchanged. */
+.ffx2hud > .ffx2hud__minigame {
+  inset: auto;
+  top: 0;
+  left: 0;
+  width: 640px;
+  height: 360px;
+  transform-origin: 0 0;
+  z-index: 15;
+}
+
+/* FOC37-02 (FFX-2 only): Trigger Happy is pressed, so the slab has to be reachable.
+   - `.ffx2hud__minigame`, the layer it sits in, is `pointer-events: none` (the HUD's rule for everything drawn
+     there); the slab takes them back so a finger or a click on it is a press (TriggerHappy.ts `pointerdown`).
+   - Its stacking is the layer's (above, see above); the slab has no z-index of its own.
+   - `touch-action: manipulation` and no selection: a mash of taps must not zoom the page or select its words. */
+.ffx2-trigger {
+  pointer-events: auto;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
 .ffx2-trigger__bar {
   position: relative;
 }
@@ -36,12 +69,50 @@
   transition: transform 0.08s ease-out;
 }
 
+/* FOC371-03 and FOC371-04 (FFX-2 only; CHK-003): nothing a player must read on these two overlays is under 14
+   effective px. They are authored on the 640x360 grid and scaled by the stage, so one flat px cannot clear every
+   window (the shell's subtitle is 5.33 grid px: 13.3 effective at 1600x900, 8.5 at 1024x768, and 5.3 on the phone,
+   which draws the grid 1:1). `--mg-fs-floor` is 14.2 effective px written in grid px, from the scale the HUD
+   publishes on `.ffx2hud` (`--lb-scale`, set by `FFX2BattleHud.layout`; 1 on the phone, phone-hud.css), and every
+   size on the two overlays is `max(authored, floor)`, the way move-advisor.css does it (`--mad-fs-floor`): a size
+   that was already big enough (the title; the symbols at 1600x900) does not move. */
+.ffx2-trigger,
+.ffx2-reels {
+  --mg-fs-floor: calc(14.2px / var(--lb-scale, 1));
+}
+.ffx2-trigger .ig-minigame__subtitle,
+.ffx2-reels .ig-minigame__subtitle {
+  font-size: max(5.33px, var(--mg-fs-floor));
+}
+.ffx2-trigger .ig-minigame__bonus {
+  font-size: max(5.78px, var(--mg-fs-floor));
+}
+
+/* In a window under 960x540 (stage scale under 1.5: a small window, the phone) the floor makes the Trigger Happy
+   instruction too wide for the one-line head the shell draws ("Trigger Happy  MASH CLICK  ring 16 HITS"), so it
+   takes its own line under the title and the counter, as the FFX Grand Summon picker does on the phone
+   (overdrive-minigames.css, FOC28-P02). The window decides, not the text, so the head never reflows while the
+   counter climbs from 9 to 10 hits. From 960x540 up the head is the one line it was: measured with the widest words
+   (MASH CLICK, 16 HITS) the line fits with 8 grid px to spare at scale 1.25, 20 at 1.4 and 36 at 1.6 (1024x768). */
+@media (max-width: 959px), (max-height: 539px) {
+  .ffx2-trigger .ig-minigame__head {
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+  .ffx2-trigger .ig-minigame__subtitle {
+    order: 3;
+    flex: 1 1 100%;
+  }
+}
+
 /* screens.css documents `.ig-minigame__bar--reel` as "extrapolated — not
    mocked" and doesn't give it its own height (the base `.ig-minigame__bar`'s
    11.56px is for the continuous timing bar, too short for a reel symbol) —
    this is the first real consumer, so it sets one. */
 .ffx2-reels .ig-minigame__bar--reel {
   height: 44px;
+  /* room for the "next to stop" arrow above the first reel, which grows with the floor on a small window (FOC371-03) */
+  margin-top: calc(max(10px, var(--mg-fs-floor)) + 2px);
 }
 
 /* Position anchor for the "next to stop" arrow marker below — the shared
@@ -49,20 +120,22 @@
    additive (no visual change of its own). */
 .ffx2-reels .ig-minigame__reel {
   position: relative;
+  font-size: max(8px, var(--mg-fs-floor));
 }
 .ffx2-reels__arrow {
   position: absolute;
-  top: -12px;
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
   color: var(--ig-accent);
-  font-size: 10px;
+  font-size: max(10px, var(--mg-fs-floor));
+  line-height: 1;
 }
 .ffx2-reels__warn {
   margin-top: 6px;
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: 8px;
+  font-size: max(8px, var(--mg-fs-floor));
   letter-spacing: 0.1em;
   color: #c7343c;
   text-align: center;

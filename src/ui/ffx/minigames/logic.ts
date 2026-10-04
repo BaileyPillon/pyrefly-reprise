@@ -20,6 +20,34 @@ export function tidusCursorPosition(elapsedMs: number, barWidth: number, speedPx
   return distance <= barWidth ? distance : 2 * barWidth - distance;
 }
 
+/**
+ * The zone and marker speed Swordplay plays with, in the overlay's pixels.
+ *
+ * The engine publishes each tier's own `zonePercent` (gold zone as a share of the
+ * meter) and `travelMs` (one left-to-right crossing) [`data/ffx/overdrives/
+ * inputs.ts`, PR-0308]; these used to be ignored, so every tier played the same
+ * 44 px zone at 340 px/s. The explicit pixel params (`zoneHalfWidth`,
+ * `speedPxPerSec`, the demo screen's) still win when given; with neither the old
+ * defaults (22 px half width, 340 px/s) apply.
+ */
+export function swordplayGeometry(
+  params: Record<string, unknown>,
+  barWidth: number,
+): { zoneHalfWidth: number; speedPxPerSec: number } {
+  const finite = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v) && v > 0;
+  const zoneHalfWidth = finite(params['zoneHalfWidth'])
+    ? params['zoneHalfWidth']
+    : finite(params['zonePercent'])
+      ? (params['zonePercent'] / 100) * (barWidth / 2)
+      : 22;
+  const speedPxPerSec = finite(params['speedPxPerSec'])
+    ? params['speedPxPerSec']
+    : finite(params['travelMs'])
+      ? barWidth / (params['travelMs'] / 1000)
+      : 340;
+  return { zoneHalfWidth, speedPxPerSec };
+}
+
 export function resolveTidusTiming(input: {
   cursorPos: number;
   barWidth: number;

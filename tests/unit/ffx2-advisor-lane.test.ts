@@ -146,3 +146,30 @@ describe('PR-0091: the card never crosses the party rows', () => {
     }
   });
 });
+
+/**
+ * PR-0330 (round 19b, FFX-2 only: Chapter IV, 1600x900 and 2000x1012): under the colossus framing
+ * Paine's feet stand 1 px inside the chip's strip of the full card, so the lane went `under` with a
+ * cap 2.6 px short of the card's full text, and the cap stuck for the decision. The figures are the
+ * rest-pose boxes read off a real run (stage px, lean included).
+ */
+describe('PR-0330: a graze of the chip strip does not cap the card', () => {
+  const COLOSSUS: LaneFigure[] = [
+    { left: 105, right: 187, foot: 309 },
+    { left: 185, right: 257.5, foot: 289 },
+    { left: 248, right: 312, foot: 272 },
+  ];
+  const base = { floor: 160, wall: 456.45, base: 334, chip: 11, cardHeight: 52, cap: null };
+
+  it('lets the card keep the lane past the second girl, with no cap', () => {
+    const lane = solveAdvisorLane({ ...base, figures: COLOSSUS });
+    expect(lane.mode).toBe('clear');
+    expect(lane.maxHeight).toBeNull();
+    expect(lane.after).toBeCloseTo(257.5, 5);
+  });
+
+  it('still counts a girl whose feet reach into the card itself', () => {
+    const lane = solveAdvisorLane({ ...base, figures: [COLOSSUS[0]!, COLOSSUS[1]!, { left: 248, right: 312, foot: 282 }] });
+    expect(lane.mode).not.toBe('clear');
+  });
+});

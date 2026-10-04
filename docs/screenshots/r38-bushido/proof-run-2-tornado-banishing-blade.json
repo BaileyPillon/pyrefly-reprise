@@ -1,0 +1,134 @@
+{
+ "plays": [
+  {
+   "want": [
+    "auron",
+    "Tornado"
+   ],
+   "geom": null,
+   "overlay": {
+    "up": true,
+    "title": "Tornado",
+    "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+    "chips": [
+     "✕",
+     "→",
+     "R1",
+     "←",
+     "L1",
+     "△"
+    ],
+    "bar": false,
+    "timer": "2.5"
+   },
+   "played": {
+    "turn": 3,
+    "kind": "bushido",
+    "title": "Tornado",
+    "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+    "chips": [
+     "✕",
+     "→",
+     "R1",
+     "←",
+     "L1",
+     "△"
+    ],
+    "keys": [
+     "Enter",
+     "ArrowRight",
+     "r",
+     "ArrowLeft",
+     "f",
+     "q"
+    ],
+    "unknownGlyphs": [],
+    "closed": true,
+    "ms": 1079,
+    "engine": {
+     "actor": "auron",
+     "ability": "Tornado",
+     "extra": {
+      "kind": "auron-sequence",
+      "sequence": {
+       "success": true,
+       "correctInputs": 6,
+       "timeRemainingMs": 1172.7999999523163
+      }
+     }
+    }
+   }
+  },
+  {
+   "want": [
+    "auron",
+    "Banishing Blade"
+   ],
+   "geom": null,
+   "overlay": {
+    "up": true,
+    "title": "Banishing Blade",
+    "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+    "chips": [
+     "↑",
+     "L1",
+     "↓",
+     "R1",
+     "→",
+     "←",
+     "△"
+    ],
+    "bar": false,
+    "timer": "3.5"
+   },
+   "played": {
+    "turn": 11,
+    "kind": "bushido",
+    "title": "Banishing Blade",
+    "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+    "chips": [
+     "↑",
+     "L1",
+     "↓",
+     "R1",
+     "→",
+     "←",
+     "△"
+    ],
+    "keys": [
+     "ArrowUp",
+     "f",
+     "ArrowDown",
+     "r",
+     "ArrowRight",
+     "ArrowLeft",
+     "q"
+    ],
+    "unknownGlyphs": [],
+    "closed": true,
+    "ms": 1192,
+    "engine": {
+     "actor": "auron",
+     "ability": "Banishing Blade",
+     "extra": {
+      "kind": "auron-sequence",
+      "sequence": {
+       "success": true,
+       "correctInputs": 7,
+       "timeRemainingMs": 2151.2000000476837
+      }
+     }
+    }
+   }
+  }
+ ],
+ "errors": [],
+ "log": [
+  "rows after Overdrive: [\"Dragon Fang\",\"Shooting Star\",\"Banishing Blade\",\"Tornado\"]",
+  "OVERLAY auron Tornado: title=Tornado subtitle=BUSHIDO · ENTER THE SEQUENCE chips=[\"✕\",\"→\",\"R1\",\"←\",\"L1\",\"△\"] (6) bar=false",
+  "PLAYED {\"keys\":[\"Enter\",\"ArrowRight\",\"r\",\"ArrowLeft\",\"f\",\"q\"],\"engine\":{\"actor\":\"auron\",\"ability\":\"Tornado\",\"extra\":{\"kind\":\"auron-sequence\",\"sequence\":{\"success\":true,\"correctInputs\":6,\"timeRemainingMs\":1172.7999999523163}}},\"closed\":true,\"ms\":1079}",
+  "rows after Overdrive: [\"Dragon Fang\",\"Shooting Star\",\"Banishing Blade\",\"Tornado\"]",
+  "OVERLAY auron Banishing Blade: title=Banishing Blade subtitle=BUSHIDO · ENTER THE SEQUENCE chips=[\"↑\",\"L1\",\"↓\",\"R1\",\"→\",\"←\",\"△\"] (7) bar=false",
+  "PLAYED {\"keys\":[\"ArrowUp\",\"f\",\"ArrowDown\",\"r\",\"ArrowRight\",\"ArrowLeft\",\"q\"],\"engine\":{\"actor\":\"auron\",\"ability\":\"Banishing Blade\",\"extra\":{\"kind\":\"auron-sequence\",\"sequence\":{\"success\":true,\"correctInputs\":7,\"timeRemainingMs\":2151.2000000476837}}},\"closed\":true,\"ms\":1192}"
+ ]
+}
