@@ -120,7 +120,7 @@ Every number is from headless Chromium on the real GPU (RTX 5070 Ti, ANGLE/D3D11
 "start" is the production build of the starting commit (r38-bytes 61708db6; its render path is origin/main's, the two differ only in the art plumbing), "live" is https://baileypillon.github.io/pyrefly-reprise/ (release 37.1), "r39" is a production build of this branch.
 A texel per pixel of 1.0 is one source pixel per screen pixel; the figure column is as drawn from the file that loaded (its scale in brackets). GPU megabytes are an exact tally of every `texStorage`, `texImage` and `renderbufferStorage` call.
 Art megabytes before 07:36 on 2026-10-04 were read from the page's resource timing at its default 250-entry buffer, which fills in a busy battle and hides the last requests: they can undercount by up to 3 percent (the later runs raise the buffer).
-The harness and every run's result.json, frames and logs are in `D:/Tools/pyrefly-scratch/2026-10-04/hires-engine/` (scratch; not durable).
+The harness and every run's result.json, frames and logs are in `D:/Tools/pyrefly-scratch/2026-10-04/hires-engine/` (scratch; not durable); a copy of the harness, the crops, the logs and these notes is parked at `F:/pyrefly-parked/2026-10-04/hires-engine/`. No download was made: the hi-res library was already on disk.
 
 ### A. The standard camera (idle rig): texels per pixel, memory, bytes
 
