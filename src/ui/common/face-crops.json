@@ -162,6 +162,7 @@
     "paine-white-mage": { "fx": 0.5266, "fy": 0.1501, "ipd": 0.0417, "px": [820, 1140] },
     "paine-samurai": { "fx": 0.5695, "fy": 0.1687, "ipd": 0.0781, "px": [640, 1129] },
     "paine-songstress": { "fx": 0.3844, "fy": 0.1281, "ipd": 0.111, "px": [344, 1194], "note": "the driver's Songstress pick (D-281), measured 2026-09-29 with the rig's probe: pupils at (115, 160) and (150, 146) in a three-quarter view; ipd is the true diagonal separation" },
+    "paine-thief": { "fx": 0.5052, "fy": 0.1467, "ipd": 0.0702, "px": [735, 1181], "note": "release 38 (D-336 idle, FFX-2 only), measured 2026-10-04 with the rig's probe and checked by iris colour: red pupils at about (346, 168) and (396, 178) in a slightly rolled head; ipd is the true diagonal separation" },
     "rikku-dark-knight": { "fx": 0.3997, "fy": 0.1514, "ipd": 0.0452, "px": [787, 1205], "note": "Chapter 4 and 5's Rikku; the machina arm fills the right half of the canvas" },
     "rikku-alchemist": { "fx": 0.4957, "fy": 0.1631, "ipd": 0.0808, "px": [541, 1194] },
     "rikku-berserker": { "fx": 0.5083, "fy": 0.1602, "ipd": 0.0966, "px": [555, 1215] },
@@ -170,12 +171,14 @@
     "rikku-thief": { "fx": 0.5324, "fy": 0.251, "ipd": 0.1197, "px": [558, 1212], "note": "the tallest hair in the game; her eyes are a quarter of the way down the file" },
     "rikku-white-mage": { "fx": 0.3355, "fy": 0.1714, "ipd": 0.069, "px": [626, 1213], "note": "she stands well left of centre" },
     "rikku-songstress": { "fx": 0.3632, "fy": 0.2104, "ipd": 0.1126, "px": [574, 1179], "note": "the driver's Songstress pick (D-281), measured 2026-09-29 with the rig's probe: pupils at (177, 241) and (240, 256); she leans in, head tilted; ipd is the true diagonal separation" },
+    "rikku-warrior": { "fx": 0.705, "fy": 0.1466, "ipd": 0.0846, "px": [648, 1214], "note": "release 38 (D-336 idle, FFX-2 only), measured 2026-10-04 with the rig's probe and checked by iris colour: green pupils at about (429, 179) and (484, 177); her head stands right of centre under tall hair" },
     "rikku": { "fx": 0.449, "fy": 0.1804, "ipd": 0.065, "px": [648, 1120] },
     "yuna-white-mage": { "fx": 0.6333, "fy": 0.1079, "ipd": 0.0861, "px": [581, 1183], "note": "Chapter 4 and 5's Yuna. Re-measured 2026-09-19 after the art fleet re-rolled and mirrored idle.png (758x1172 -> 581x1183; idle.json carries flipped: true) — the old row put her eye line on her collarbone. She stands right of centre inside a raised hood, so the rig's headCentreX 0.702 is the hood, not her face." },
     "yuna-black-mage": { "fx": 0.4412, "fy": 0.1777, "ipd": 0.0706, "px": [782, 1149] },
     "yuna-dark-knight": { "fx": 0.4851, "fy": 0.218, "ipd": 0.0787, "px": [549, 1195], "note": "the horned helm puts her eyes lowest of Yuna's set" },
     "yuna-gunner": { "fx": 0.52, "fy": 0.1124, "ipd": 0.1109, "px": [460, 1194] },
     "yuna-songstress": { "fx": 0.3713, "fy": 0.1061, "ipd": 0.0771, "px": [655, 1116] },
+    "yuna-thief": { "fx": 0.5137, "fy": 0.1172, "ipd": 0.0776, "px": [767, 1176], "note": "release 38 (D-336 idle, FFX-2 only), measured 2026-10-04 with the rig's probe and checked by iris colour: green pupil at about (364, 138), blue at (424, 137)" },
     "yuna-warrior": { "fx": 0.4942, "fy": 0.1005, "ipd": 0.0773, "px": [728, 1183] },
     "yuna": { "fx": 0.4975, "fy": 0.0989, "ipd": 0.0472, "px": [803, 1075] }
   }

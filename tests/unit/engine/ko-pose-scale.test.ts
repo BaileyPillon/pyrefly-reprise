@@ -28,6 +28,17 @@ describe('poseScaleFor', () => {
       expect(s, subject).toBeLessThan(1.6);
     }
   });
+
+  it('Yuna White Mage (FFX-2 only) is not listed: her D-341 re-roll KO is a body-length match drawn at its sidecar scale', () => {
+    // Release 38's art install replaced the close-up KO that the old 0.64 entry corrected; the new painting is 1,070 px long
+    // against a 1,151 px idle (0.93), so any entry here would shrink it. The sidecar has no scale: undefined, i.e. 1.0.
+    expect(KO_POSE_SCALE['yuna-white-mage']).toBeUndefined();
+    expect(poseScaleFor('/art/characters/yuna-white-mage/ko.png', undefined)).toBeUndefined();
+    expect(poseScaleFor('/art/characters/yuna-white-mage/ko.png', 0.9)).toBe(0.9);
+    // the other FFX-2 entries are untouched
+    expect(poseScaleFor('/art/characters/yuna-gunner/ko.png', undefined)).toBe(KO_POSE_SCALE['yuna-gunner']);
+    expect(poseScaleFor('/art/characters/yuna-black-mage/ko.png', undefined)).toBe(KO_POSE_SCALE['yuna-black-mage']);
+  });
 });
 
 describe('a downed FFX Yuna is drawn at her standing scale', () => {
