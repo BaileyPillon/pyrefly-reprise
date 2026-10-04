@@ -19,12 +19,18 @@
  * running when the gate has closed since (`MotionCtx.still`). Where she stops is `motion/StandOff.ts`: chosen from what
  * the picture shows and outside the target's painted shape, in every FFX-2 chapter. Presentation only: no engine state,
  * no RNG.
+ *
+ * Her place is hers while she is out (repair of the check's one major, `motion/PlaceOwner.ts`): the MAX mix's staging keeps a
+ * share of x in a figure's position and reads any x it did not write as the stage re-seating her, so a run, which is not a
+ * re-seat, left her home one share further along at every attack. `home` is the position she stands at when the run begins (share
+ * and all), the stop is exactly where the stand-off planned it, and the run home ends on `home` before the mix is given her back.
  */
 import type { BattleState, CombatantId } from '../../battle/common/types.ts';
 import { STANDARD_DRESSPHERES } from '../../data/ffx2/dresspheres/index.ts';
 import type { ActionMotionPort, ActionStartEvent, MotionCtx } from '../../engine/BattlePresenterMotion.ts';
 import { motionMs } from '../../engine/BattlePresenterMotion.ts';
 import type { Point3 } from '../../engine/BattlePresenterPorts.ts';
+import { ownPlace } from '../../engine/motion/PlaceOwner.ts';
 import { planRun, type RunWorld } from '../../engine/motion/StandOff.ts';
 import type { StageMotionPort } from '../../engine/motion/StageMotionPort.ts';
 
@@ -45,6 +51,8 @@ const SMEAR = { in: 0.9, home: 0.6 } as const;
 
 interface Run {
   home: Point3;
+  /** The figure whose place this run owns, handed back from this very object whatever the stage hands out later. */
+  figure: object;
 }
 
 /** One planned run, for the debug snapshot and the per-chapter stand-off pass (the last {@link NOTES_KEPT}). */
@@ -121,7 +129,8 @@ export class RunInMotion implements ActionMotionPort {
     const plan = w ? planRun(w) : null;
     if (!plan) return; // nothing to plan against (a figure off the field): the strike plays as it does today
     const ms = motionMs(runMs(plan.distance).in, ctx.speed);
-    this.runs.set(id, { home });
+    ownPlace(actor, true); // from here to the end of `close`, the MAX mix's staging leaves her x alone (see the header)
+    this.runs.set(id, { home, figure: actor });
     const box = (r: { x: number; y: number; w: number; h: number } | null): number[] | null => (r ? [r.x, r.y, r.w, r.h].map(Math.round) : null);
     this.notes.push({ actor: id, target: targetId, home, spot: plan.spot, distance: plan.distance, why: plan.why, girlRect: box(world.rect(id, { at: plan.spot, truck: plan.truck })), targetRect: box(world.rect(targetId, { truck: plan.truck })), at: typeof performance === 'undefined' ? 0 : performance.now() });
     if (this.notes.length > NOTES_KEPT) this.notes.shift();
@@ -139,16 +148,20 @@ export class RunInMotion implements ActionMotionPort {
     const run = this.runs.get(actorId);
     if (!run) return;
     this.runs.delete(actorId);
-    const actor = ctx.stage.actor(actorId);
-    const world = ctx.stage.motion;
-    if (!actor) return;
-    // Over a menu, under REDUCE MOTION, or if she was knocked out out there, she is simply home again: nothing plays.
-    const down = (actor as { pose?: string }).pose === 'ko';
-    const ms = ctx.still === true || down ? 1 : motionMs(runMs(Math.hypot(actor.position.x - run.home.x, actor.position.z - run.home.z)).home, ctx.speed);
-    actor.setPose('idle');
-    if (ms > 1) world?.smear(actorId, ms * 0.9, SMEAR.home);
-    void world?.truck(0, 0, 0, ms);
-    await Promise.all([actor.moveTo(run.home, ms), ...(ms > 1 ? [actor.hop(0.2, ms)] : [])]);
-    void world?.truck(0, 0, 0, 1); // never leave the frame off true
+    try {
+      const actor = ctx.stage.actor(actorId);
+      const world = ctx.stage.motion;
+      if (!actor) return;
+      // Over a menu, under REDUCE MOTION, or if she was knocked out out there, she is simply home again: nothing plays.
+      const down = (actor as { pose?: string }).pose === 'ko';
+      const ms = ctx.still === true || down ? 1 : motionMs(runMs(Math.hypot(actor.position.x - run.home.x, actor.position.z - run.home.z)).home, ctx.speed);
+      actor.setPose('idle');
+      if (ms > 1) world?.smear(actorId, ms * 0.9, SMEAR.home);
+      void world?.truck(0, 0, 0, ms);
+      await Promise.all([actor.moveTo(run.home, ms), ...(ms > 1 ? [actor.hop(0.2, ms)] : [])]);
+      void world?.truck(0, 0, 0, 1); // never leave the frame off true
+    } finally {
+      ownPlace(run.figure, false); // home (or gone): the mix's staging has her again, at the place it left her
+    }
   }
 }

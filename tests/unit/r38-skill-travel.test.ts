@@ -19,6 +19,7 @@ type Unsequenced<T> = T extends unknown ? Omit<T, 'seq'> : never;
 type Ev = Unsequenced<BattleEvent>;
 
 afterEach(() => {
+  eyeCandy.setTier(null);
   eyeCandy.setSub('skilltravel', true);
   eyeCandy.setSub('runin', true);
   setEyeCandyProvider(null);
@@ -264,6 +265,17 @@ describe('the FFX-2 menu rule: nothing plays over an open command menu', () => {
     expect(motionAllowed(bareCtx({ ffx2: true, menu: true }), 'runin')).toBe(false);
     expect(motionAllowed(bareCtx({ ffx2: true, menu: false }), 'skilltravel')).toBe(true);
     expect(motionAllowed(bareCtx({ ffx2: false, menu: true }), 'skilltravel')).toBe(true); // FFX has no ATB menus to speak of
+  });
+
+  it('closes both looks, in both games, under LOW EFFECTS (today\'s version, as BATTLE SPECTACLE\'s own `low` tier), and keeps them on the phone tier', () => {
+    for (const ffx2 of [false, true]) {
+      eyeCandy.setTier('low');
+      for (const look of ['skilltravel', 'runin'] as const) expect(motionAllowed(bareCtx({ ffx2, menu: false }), look), `low ${look} ffx2=${ffx2}`).toBe(false);
+      eyeCandy.setTier('phone');
+      for (const look of ['skilltravel', 'runin'] as const) expect(motionAllowed(bareCtx({ ffx2, menu: false }), look), `phone ${look} ffx2=${ffx2}`).toBe(true);
+      eyeCandy.setTier(null);
+      for (const look of ['skilltravel', 'runin'] as const) expect(motionAllowed(bareCtx({ ffx2, menu: false }), look), `full ${look} ffx2=${ffx2}`).toBe(true);
+    }
   });
 
   it('is asked at the release, so a menu that opens after action-start still stops the shot', () => {

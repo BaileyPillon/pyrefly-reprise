@@ -11,6 +11,11 @@
  *   ids below are sub-effects of option C for captures and comparisons only (`?fxsub=-skilltravel,-runin`, or
  *   `__pyrefly.fx.sub(id, false)`), never a player path and never saved.
  * - **REDUCE MOTION plays today's version**: nothing flies, nothing runs, no camera truck.
+ * - **LOW EFFECTS plays today's version** (r38-motion repair, decided from the project's own rule for BATTLE SPECTACLE on the
+ *   `low` tier: `fx/c/SpectacleRules.ts` draws only today's burst there, no spell layer, no colour cast, and the spell effects'
+ *   `low` tier keeps today's bloom and "draws nothing new"). SKILL TRAVEL was already closed there (the layer's `canFly`); a run
+ *   with no smear and no shot was the half-look left, a camera truck and 0.6 to 0.9 s more on every plain Attack for the player
+ *   who asked for the lighter game. One gate, so the two looks cannot drift apart. The phone tier keeps both (60 % trail).
  * - **Skip playback** shows no animation at all.
  * - **FFX-2 only: nothing plays over an open command menu** (`KeySlots.menuBlocks`, D-357: "keep the FFX-2 rule
  *   that nothing plays over an open command menu"). Under Active ATB a menu is often open, so those moves keep
@@ -30,6 +35,7 @@ export type MotionLook = 'skilltravel' | 'runin';
 export function motionAllowed(ctx: EventCtx, look: MotionLook): boolean {
   if (!spectacleOn(ctx) || !eyeCandyOn('battleSpectacle') || !eyeCandy.sub('c', look)) return false;
   if (ctx.moments?.reducedMotion === true) return false;
+  if (eyeCandy.tier === 'low') return false; // LOW EFFECTS (or a forced low tier in a capture): today's version
   if (ctx.speed() === 'skip') return false;
   return !menuBlocks(ctx);
 }

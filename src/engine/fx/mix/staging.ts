@@ -1,4 +1,5 @@
 import type { Vector3 } from 'three';
+import { placeOwned } from '../../motion/PlaceOwner.ts';
 import { figOf, subjectId, type Actor } from './geometry.ts';
 import { MULTIPART } from './masters.ts';
 
@@ -7,6 +8,8 @@ import { MULTIPART } from './masters.ts';
  * rest of the fight (ported from option C's prototype, `fx/max/c/staging.ts`). Presentation only (rule
  * 1): a figure's group scale and x offset, never the engine's state. Each write is tracked, so a re-seat
  * by the stage (a formation relax, an arrival) is respected and the mix's share is put back on top of it.
+ * A figure that is out on a run of its own (`motion/PlaceOwner.ts`, RUN-IN) is no re-seat: it is left alone, record
+ * and all, until it is home (r38-motion repair; before it, every run added the share to the girl's home once more).
  *
  * - BOSS SCALE (VP-1001-13, -43): a colossus grown about its feet so its on-screen height reaches the
  *   class target against the party's mean. Multi-part machines keep their drawn scale.
@@ -73,6 +76,7 @@ export class Staging {
   /** Every frame: write the plan (or nothing, for figures it does not name). */
   apply(actors: readonly Actor[], on: boolean): void {
     for (const a of actors) {
+      if (placeOwned(a)) continue; // out on a run: its x is hers (not a re-seat to read back), and the plan reaches it again when she is home
       const p = this.plan.get(a);
       this.write(a, on ? (p?.k ?? 1) : 1, on ? (p?.dx ?? 0) : 0);
     }
@@ -105,8 +109,13 @@ export class Staging {
 
   /** Put every figure back as the stage left it. */
   release(): void {
-    for (const a of this.recs.keys()) this.write(a, 1, 0);
-    this.recs.clear();
+    for (const a of [...this.recs.keys()]) {
+      // Out on a run: her position holds none of the share now, and she returns to the place that does. Keep the record, so the
+      // next write takes the old share off and puts the new plan's on, once.
+      if (placeOwned(a)) continue;
+      this.write(a, 1, 0);
+      this.recs.delete(a);
+    }
     this.plan.clear();
   }
 

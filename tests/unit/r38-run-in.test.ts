@@ -16,7 +16,10 @@ import { FakeActor, FakeStage } from './helpers/FakeStage.ts';
 type Unsequenced<T> = T extends unknown ? Omit<T, 'seq'> : never;
 type Ev = Unsequenced<BattleEvent>;
 
-afterEach(() => eyeCandy.setSub('runin', true));
+afterEach(() => {
+  eyeCandy.setSub('runin', true);
+  eyeCandy.setTier(null);
+});
 
 /** An actor that remembers where it was told to go and how far it was told to lunge. */
 class RunActor extends FakeActor {
@@ -171,8 +174,9 @@ describe('RunInMotion', () => {
 
 // ------------------------------------------------------------------ through the presenter
 
-function rig(o: { reduce?: boolean; ffx2?: boolean; withMotion?: boolean; sub?: boolean } = {}) {
+function rig(o: { reduce?: boolean; ffx2?: boolean; withMotion?: boolean; sub?: boolean; low?: boolean } = {}) {
   const f = field();
+  if (o.low === true) eyeCandy.setTier('low'); // LOW EFFECTS (the tier it resolves to)
   const motion = new RunInMotion(state({ paine: 'warrior', rikku: 'dark-knight', yuna: 'gunner' }));
   const moments: MomentsPort = { letterbox: async () => undefined, nameSlab: async () => undefined, vignette: () => undefined, clear: () => undefined, reduceMotion: () => o.reduce === true };
   const presenter = new BattlePresenter({ stage: f.stage, moments, sleep: async () => undefined, actionMotion: o.withMotion === false ? null : motion });
@@ -202,12 +206,14 @@ describe('through the presenter', () => {
     expect(r.actors['paine']!.lunges).toEqual([1.4]);
   });
 
-  it('plays today\'s attack under REDUCE MOTION, with the look switched off, and without the spectacle port', async () => {
-    for (const o of [{ reduce: true }, { sub: false }]) {
+  it('plays today\'s attack under REDUCE MOTION, under LOW EFFECTS, with the look switched off, and without the spectacle port', async () => {
+    for (const o of [{ reduce: true }, { low: true }, { sub: false }]) {
       const r = rig(o);
       await r.play([attack('paine'), hit('paine'), end('paine')]);
       expect(r.actors['paine']!.moves, JSON.stringify(o)).toEqual([]);
       expect(r.actors['paine']!.lunges).toEqual([1.4]);
+      expect(r.truck, JSON.stringify(o)).toEqual([]); // no camera truck either: today's frame
+      eyeCandy.setTier(null);
     }
     const bare = rig();
     delete (bare.stage as unknown as { fx?: unknown }).fx;
