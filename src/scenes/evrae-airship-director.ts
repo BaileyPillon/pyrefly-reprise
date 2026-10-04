@@ -32,7 +32,9 @@ import type { LightRig } from '../engine/Lighting.ts';
 import type { PaintedActor } from '../engine/PaintedActor.ts';
 import type { AirshipDeck } from './evrae-airship-sky.ts';
 import { FallVeil } from './evrae-airship-fall.ts';
-import { NEAR_ASPECT_REF, nearAspectFor } from './evrae-airship-aspect.ts';
+import { NEAR_RESTAND_MS, nearAspectFor } from './evrae-airship-aspect.ts';
+import { WindowShape, onPhone, viewportAspect } from './evrae-airship-window.ts';
+import { menuOpen } from '../engine/fx/mix/hudPanels.ts';
 import {
   EVRAE_BASELINE_PX,
   EVRAE_WORLD_HEIGHT,
@@ -45,18 +47,7 @@ import {
   type AirshipRange,
 } from './evrae-airship-range.ts';
 import { evraeSubject, phoneRig, rangeSubjectFor, stagingOf, type PhoneRigStaging, type RangeSubject } from './evrae-airship-subjects.ts';
-import { PHONE_BATTLE_QUERY } from '../ui/common/phoneBattle.ts';
 import { PHONE_FIT_KEY } from '../engine/ShotRules.ts';
-
-/** True when the phone battle HUD takes this window (read at each bind); false with no window (a test). */
-function onPhone(): boolean {
-  return typeof window !== 'undefined' && window.matchMedia?.(PHONE_BATTLE_QUERY).matches === true;
-}
-
-/** The window's aspect, width over height; 16:9 with no window (a test), the stage NEAR's rigs are authored for. */
-function viewportAspect(): number {
-  return typeof window !== 'undefined' && window.innerWidth > 0 && window.innerHeight > 0 ? window.innerWidth / window.innerHeight : NEAR_ASPECT_REF;
-}
 
 /** The combatant id and art folder of Chapter VIII's Evrae (the director's default subject). */
 const EVRAE_FOE = 'evrae';
@@ -102,11 +93,14 @@ export class AirshipRangeDirector {
   private phone = false;
   /**
    * How far NEAR's rigs stand back for the window's aspect, and how far Evrae stands left of its pin (`nearAspectFor`): Chapter
-   * VIII's Evrae only, on a desktop-shaped window (D-360 repair). Read once when Evrae binds, before the battle's opening and
-   * before the mix is attached, so the plan the mix makes and the first frame agree.
+   * VIII's Evrae only, on a desktop-shaped window (D-360 repair). Read when Evrae binds, before the battle's opening and before
+   * the mix is attached, so the plan the mix makes and the first frame agree, and again when the window changes shape and holds
+   * still ({@link restand}, `shape`).
    */
   private nearDolly = 1;
   private nearDx = 0;
+  /** Tells {@link update} the window changed shape after the bind; held for Chapter VIII's Evrae on a desktop window only. */
+  private shape: WindowShape | null = null;
   /** Chapter XVIII's phone rigs while no foe is bound (`SIN_FACE_PHONE`, C4-5); null elsewhere. */
   private face: Partial<Record<AirshipRange, PhoneRigStaging>> | null = null;
   private nearPoses: Record<string, string> | null = null;
@@ -164,6 +158,7 @@ export class AirshipRangeDirector {
     // the A-12 refit leaves the colossus out, as the camera has always framed the party alone there.
     const evraeFight = actor !== null && id === EVRAE_FOE;
     if (evraeFight) (actor.userData ??= {})[PHONE_FIT_KEY] = false; // `??=`: a test's partial stand-in has no userData
+    this.shape = WindowShape.follow(this.shape, evraeFight && !this.phone);
     const stand = evraeFight && !this.phone ? nearAspectFor(viewportAspect()) : { dolly: 1, dx: 0 };
     const dollyMoved = stand.dolly !== this.nearDolly;
     this.nearDolly = stand.dolly;
@@ -250,6 +245,7 @@ export class AirshipRangeDirector {
   /** @param dt seconds */
   update(dt: number): void {
     this.veil.update(dt, this.evrae, [...this.spotOf(this.range)], this.shiftMs >= 0);
+    if (this.shape?.settled(dt) && this.shiftMs < 0) this.restand();
     if (this.shiftMs < 0) return;
     this.shiftMs += dt * 1000;
     const s = rangeShiftAt(this.shiftMs);
@@ -282,13 +278,38 @@ export class AirshipRangeDirector {
     this.applyBlend(this.range, this.range, 1, 1);
   }
 
+  /**
+   * The window changed shape after the bind and held still (a fullscreen toggle, a dragged edge; the second check's M1): NEAR's
+   * stand-back and Evrae's trim follow it, with no range shift in flight (`update` calls it then). The rigs are registered at once
+   * and move nothing (Evrae's trim moves it 9 px at most), so it is safe under an open command menu: the mix sees the new base,
+   * plans on the calm frames the menu gives it and commits at the menu's close, and every later move onto `idle` lands on that.
+   * The camera itself is moved only between beats: one resting on `idle` (or returning to it) with no menu open settles onto the
+   * new rig (a cut under REDUCE MOTION); an open menu keeps its frame until the player acts (the cards that follow the camera would
+   * jump under their hand), and a camera on any other rig takes the new stand-back at its next return to `idle`.
+   */
+  private restand(): void {
+    this.shape?.read();
+    const stand = nearAspectFor(viewportAspect());
+    if (onPhone() || (stand.dolly === this.nearDolly && stand.dx === this.nearDx)) return;
+    this.nearDolly = stand.dolly;
+    this.nearDx = stand.dx;
+    if (this.range !== 'near') return; // FAR's rigs and spot are authored; the next swap back puts NEAR's new ones on
+    this.installRigs('near', false, false);
+    if (this.evrae && this.evrae.lifeState !== 'down') this.evrae.position.x = this.spotOf('near')[0];
+    const cam = this.camera;
+    if (cam?.rigName !== 'idle' || menuOpen()) return;
+    if (cam.swayOff()) cam.snapTo('idle');
+    else void cam.moveTo('idle', NEAR_RESTAND_MS, 'cubicInOut');
+  }
+
   /** Where the bound subject stands at `range`: its staged spot, and at NEAR the window's trim off the pin (`nearAspectFor`). */
   private spotOf(range: AirshipRange): readonly [number, number, number] {
     const { spot } = stagingOf(this.subject, range, this.phone);
     return range === 'near' && this.nearDx !== 0 ? [spot[0] + this.nearDx, spot[1], spot[2]] : spot;
   }
 
-  private installRigs(range: AirshipRange, snap: boolean): void {
+  /** Register `range`'s rigs and, unless `move` is false (a window that changed shape: {@link restand}), move the camera to its current one. */
+  private installRigs(range: AirshipRange, snap: boolean, move = true): void {
     const cam = this.camera;
     if (!cam) return;
     const rigs = RANGE_STAGING[range].rigs;
@@ -296,6 +317,7 @@ export class AirshipRangeDirector {
     const back = range === 'near' ? this.nearDolly : 1;
     const stand = back > 1 ? { ...staging, dolly: (staging?.dolly ?? 1) * back } : staging;
     for (const name of RANGE_RIGS) cam.addRig(name, phoneRig(rigs[name], stand));
+    if (!move) return;
     const current = cam.rigName;
     if (!(RANGE_RIGS as readonly string[]).includes(current)) return;
     if (snap) cam.snapTo(current);
@@ -309,7 +331,6 @@ export class AirshipRangeDirector {
     if (actor.lifeState === 'down') return;
     const subject = this.subject;
     const { nearScale } = stagingOf(subject, range, this.phone);
-    const spot = this.spotOf(range);
     const charge = this.charged ? this.chargeUrls[range] : undefined;
     if (range === 'far') {
       const far = characterUrl(subject.artId, 'idle-far');
@@ -332,6 +353,7 @@ export class AirshipRangeDirector {
       await actor.loadPoses(map, 'idle');
       actor.scale.setScalar(nearScale);
     }
+    const spot = this.spotOf(range); // read after the loads: a window that changed shape while they ran (`restand`) has moved NEAR's spot
     actor.position.set(spot[0], spot[1], spot[2]);
   }
 
@@ -349,6 +371,7 @@ export class AirshipRangeDirector {
   }
 
   dispose(): void {
+    this.shape = WindowShape.follow(this.shape, false);
     this.veil.dispose();
     this.swapToken++;
     this.camera = null;

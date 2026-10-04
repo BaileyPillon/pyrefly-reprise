@@ -76,6 +76,12 @@ export function nearDollyFor(aspect: number): number {
  */
 export const EVRAE_TRIM_PER_DOLLY = 0.25;
 
+/**
+ * How long a camera resting on `idle` takes to settle onto a new stand-back when the window changed shape mid-fight (the second
+ * check's M1), ms: the presenter's own return to `idle` (`MOMENT_TIMING.returnOut`), so it reads as one more return, not a new move.
+ */
+export const NEAR_RESTAND_MS = 620;
+
 /** NEAR's staging for a window: how far the rigs stand back, and how far (world x, negative = left) Evrae stands off its 16:9 pin. */
 export interface NearAspect {
   dolly: number;
