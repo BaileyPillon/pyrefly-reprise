@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="Echoes of Spira - an unofficial HD-2D fan tribute to Final Fantasy X and X-2." />
+    <title>Echoes of Spira</title>
+    <!-- A-16: the title plate, fetched before any script runs. The same candidates and sizes the
+         title's planes offer (src/app/screens/frontend/titleMarkup.ts), so the browser picks the
+         same file and the plane reuses this request. Each URL below starts with Vite's base
+         variable (the word BASE_URL between two percent signs), which the build fills in from the
+         base the site is served under: the GitHub Pages folder, the Cloudflare root, or the dev
+         root. A root-absolute art name is never written in this page: Vite puts the base on one
+         only when it finds that file in public/ while it builds, and a candidate it misses (the
+         2x master, a half-installed art tree) stays at the server root and is a 404 under the
+         GitHub Pages folder (tests/unit/art-url-base.test.ts). -->
+    <link rel="preload" as="image" fetchpriority="high" href="/pyrefly-reprise/art/title/keyart.webp"
+      imagesrcset="/pyrefly-reprise/art/title/keyart.webp 1344w, /pyrefly-reprise/art/title/keyart.2x.webp 2688w"
+      imagesizes="calc(1.11 * max(100vw, 1.750 * 100vh))" />
+    <style>:root{--font-display:"Chakra Petch", "Cinzel", "Trajan Pro", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;--font-text:"Exo 2", "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;--font-mono:"Silkscreen", "Cascadia Mono", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;--font-numbers:"Rajdhani", "Exo 2", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;--ink:#eaf2ff;--ink-dim:#9fb3cf;--accent:#7fe3d0;--bg:#04060b}*{box-sizing:border-box}html,body{background:var(--bg);width:100%;height:100%;color:var(--ink);font-family:var(--font-text);-webkit-font-smoothing:antialiased;text-rendering:optimizelegibility;overscroll-behavior:none;touch-action:none;margin:0;padding:0;overflow:hidden}#app{background:var(--bg);display:block;position:fixed;inset:0}#game{z-index:0;position:absolute;inset:0}#game>canvas{width:100%;height:100%;display:block}#ui{z-index:10;pointer-events:none;-webkit-user-select:none;user-select:none;position:absolute;inset:0}#ui [data-action],#ui button,#ui .ui-interactive{pointer-events:auto;cursor:pointer}#fade{z-index:20;opacity:1;pointer-events:none;background:#000;transition:opacity .45s;position:absolute;inset:0}#fade[data-state=clear]{opacity:0}#boot{font-family:var(--font-display);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dim);place-items:center;font-size:13px;display:grid;position:absolute;inset:0}@media (prefers-reduced-motion:reduce){#fade{transition-duration:1ms}}</style>
+    <script type="module" crossorigin src="/pyrefly-reprise/assets/index-DySQmN_B.js"></script>
+    <link rel="stylesheet" crossorigin href="/pyrefly-reprise/assets/index-BA1F8JfG.css">
+  </head>
+  <body>
+    <div id="app">
+      <div id="game"></div>
+      <div id="ui" aria-live="polite"></div>
+      <div id="fade" data-state="opaque"></div>
+      <div id="boot">Loading</div>
+    </div>
+    <noscript>
+      <p style="padding: 2rem; font-family: sans-serif">
+        Echoes of Spira needs JavaScript and WebGL 2.
+      </p>
+    </noscript>
+  </body>
+</html>

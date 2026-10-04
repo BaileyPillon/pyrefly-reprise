@@ -1,0 +1,54 @@
+{
+  "width": 852,
+  "height": 1264,
+  "baselineY": 1248,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "seed": 585114,
+  "prompt": "(lunging forward:1.2), attacking, head lowered, horns thrust forward, menacing, the single eye blazing, no humans, solo, monster, towering aeon, massive bulky figure, upper body bound in thick grey bandage wrappings and heavy iron chains, arms strapped against the sides, two long curved horns, one single glowing red eye, mouth sewn shut with black stitches, dark violet armoured lower body, ragged brown cloth skirt, final fantasy x, (from side:1.2), three-quarter view, body facing left, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, calm, relaxed, standing still, open mouth, blood, scenery, detailed background, floor, shadow, gradient background, human, open mouth, fangs, two eyes, extra limbs, wings, tail",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/anima-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/anima-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/anima-attack-w2.png",
+    "denoise": 0.4
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (anima-attack-w2, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (anima-idle-square.png, anima-head.png); no retail image used anywhere.",
+  "pose": "attack",
+  "registrationVsIdle": {
+    "dx": -152,
+    "dy": -60
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-327, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/ffx-aeons/anima/attack/cand-2.png",
+  "candidateSha256": "00f010033ed6a1c9f461dcf1b05e3e9374a63ec39cc5c9879024ca28acd9df70",
+  "agentsNote": "direction 1: an attack from the idle (the pinned attack is another design); the slot is pinned",
+  "denoise": 0.4,
+  "generatedAt": "2026-10-02T09:33:03.699Z",
+  "decision": "D-327",
+  "replaces": {
+    "sha256": "bb93942f126dbc9686ace1d7cafdcf94eb74017a53ccb3aea8702ed5647775bd",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/anima/attack.png"
+  }
+}

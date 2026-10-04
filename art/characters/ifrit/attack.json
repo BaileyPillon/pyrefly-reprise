@@ -1,0 +1,54 @@
+{
+  "width": 1013,
+  "height": 921,
+  "baselineY": 905,
+  "scale": 1,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "seed": 305135,
+  "prompt": "(lunging forward:1.2), attacking, aggressive, (roaring:1.1), open mouth, claws out, 1other, solo, monster, demon, humanoid beast, hunchback, bulky muscular body, broad shoulders, reddish brown skin, dark red brown hide, short orange red mane, two huge curved bone white horns sweeping back from the head, claws, fangs, yellow eyes, aeon, final fantasy x, full body, feet visible, (two huge curved horns:1.4), (reddish brown hide:1.25), (from side:1.15), three-quarter view, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, calm, relaxed, standing still, blood, scenery, detailed background, floor, shadow, gradient background, human, armour, fire, flames",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/ifrit-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/ifrit-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/ifrit-attack-w3.png",
+    "denoise": 0.44
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (ifrit-attack-w3, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (ifrit-idle-square.png, ifrit-head.png); no retail image used anywhere.",
+  "pose": "attack",
+  "registrationVsIdle": {
+    "dx": -101,
+    "dy": 75
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; staged in D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/ (held/), installed 2026-10-04 (art install for release 38) by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/ffx-aeons/ifrit/attack/cand-5.png",
+  "candidateSha256": "600cbd3be7652fad66af359c4299b8d55e5a1810475ca58b6bd540324042f81f",
+  "agentsNote": "replaces the drifted attack",
+  "denoise": 0.44,
+  "generatedAt": "2026-10-02T08:09:40.134Z",
+  "decision": "D-325",
+  "replaces": {
+    "sha256": "1b0c3babcea387531a27833b82b1b2dd0cd0b8d0d083d8e3b396915cd22acf5c",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/backup/replaced/characters/ifrit/attack.png"
+  }
+}

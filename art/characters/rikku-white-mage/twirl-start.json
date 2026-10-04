@@ -1,0 +1,52 @@
+{
+  "width": 615,
+  "height": 989,
+  "baselineY": 973,
+  "anchorY": 973,
+  "anchorNote": "the foot line (the candidate sidecar's own baselineY): ribbons may hang below it, so it is set by hand instead of measured from alpha, as the 2026-10-02 twirl keys do",
+  "scale": 1.45,
+  "scaleNote": "the day-pass proposal (candidates/2026-10-03-day/picks-day.json), a head match against the installed idle read by eye on the contact sheet; multiplies the idle pixel scale",
+  "facing": "right",
+  "seed": 117933,
+  "prompt": "(beginning to spin:1.2), twirling on the spot, weight on one foot, the other heel lifted behind her, (one arm raised high above her head with an open hand:1.2), the other arm swept out to the side with an open hand, (face turned toward the viewer:1.1), eyes half closed, determined, 1girl, rikku \\(ff10-2\\), final fantasy x-2, blonde hair, long hair, braid, hair bun, green eyes, blue bandana, red scarf, orange crop top, white detached sleeves with purple lining, green belt with a pouch, short white skirt with orange trim, white and blue boots, face visible, safe, solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, sitting, lying, kneeling, jumping, floating, midair, (from behind:1.2), facing away, looking back, (facing left:1.2), turned away, scenery, architecture, indoors, detailed background, extra weapon, floating weapon, (multiple swords:1.3), sword on the ground, ribbon, streamer, flowing scarf, clone, duplicate, two people, rainbow, wings, feathers, cape effect, cloth flying, billowing cloth, swirling effects, abstract shapes, petals, banner, flag, (giant weapon:1.2), plate, dish, tray, saucer, holding a plate, lantern, canister, floating object, (spear:1.2), (floating shield:1.3), round shield, emblem, floating mask, floating helmet, (dark armored figure behind her:1.3), armor stand, (second figure:1.3), two staffs, (wings:1.3), flame, fire, explosion, (burst:1.3), (2girls:1.4), second girl, (flowers:1.3), (background art:1.2), 1boy, hooded robe, hood up, long robe",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.9,
+    "type": "linear",
+    "start": 0,
+    "end": 1,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03-day\\dressphere-method\\refs\\rikku-white-mage-idle-square.png",
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03-day\\dressphere-method\\refs\\rikku-white-mage-head.png"
+    ]
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.7,
+    "end": 1,
+    "skeleton": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03-day\\dressphere-method\\skel\\sc-start.png"
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/rikku-white-mage/twirl-start/cand-3.raw.png",
+    "mask": null,
+    "denoise": 0.5
+  },
+  "composition": "full",
+  "sources": "research/visual-bible.md section 1.14 (the sourced Thief / Warrior dressphere descriptions, Yuna rows; the girl-specific variant for Rikku Warrior / Paine Thief is not sourced and is ours); identity words from the installed idle sidecars of the same girl; IP-Adapter sees only our own installed idles / head crops (and the candidate idle once chosen); OpenPose skeletons we drew; no retail image anywhere",
+  "key": "rikku-white-mage/twirl-start-restyle",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-03 ~14:42 EDT (\"I'll go with all your recommendations thank you <3\", D-356, answering the Visual Options page https://claude.ai/artifact/XFMV5qdNy97mWqg6NMYD8c), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-03-picks\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/rikku-white-mage/twirl-start-restyle/cand-33.png",
+  "candidateSha256": "67b441d2530c9110c1304d4ee862f7841d365fe88438cd45ce23ddc9416012e1",
+  "generatedAt": "2026-10-03T16:53:45.845Z",
+  "decision": "D-356"
+}

@@ -1,0 +1,40 @@
+{
+  "width": 779,
+  "height": 1061,
+  "baselineY": 1045,
+  "seed": 996004,
+  "prompt": "1boy, wakka \\(ff10\\), final fantasy x, safe, solo, male focus, orange hair, pompadour, blue headband, brown eyes, dark skin, tan, muscular, toned male, yellow vest, sleeveless, bare shoulders, bare arms, midriff, navel, exposed stomach, yellow shoulder pad, dark blue baggy pants, long trousers gathered at the ankle, brown wristband, sandals, dolphin necklace, reeling backwards from a heavy blow struck from the right edge of the frame, chest and front of the body turned toward the right, both sandalled feet pointing to the right, head snapped back, eyes screwed shut, teeth bared, mouth open in a shout of pain, one hand clutching his stomach, the other arm flung down and back behind him with the hand open and empty, both knees bent and buckling, both legs clearly separated, knee shin ankle and sandalled foot visible on each leg, staggering, off balance, empty hands, no ball, bare arms and bare shoulders with no sleeves, stomach bare between the vest and the trousers, whole figure well inside the frame, (sleeveless yellow vest:1.35), (bare midriff:1.25), (bare arms:1.2), (both legs fully visible:1.3), (screaming in pain:1.3), (dark blue baggy trousers:1.2), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, ball, sphere, blitzball, orb, globe, helmet, round object, t-shirt, tee shirt, shirt, sleeves, short sleeves, long sleeves, covered arms, covered midriff, covered stomach, tucked in shirt, jacket, closed jacket, shorts, short pants, knee length shorts, bare legs, pale blue trousers, light blue trousers, white trousers, throwing, throwing pose, arm cocked overhead, victory pose, cheering, celebrating, grin, grinning, smiling, smile, happy, laughing, confident, calm, arms raised, arm up, one leg, single leg, missing leg, legs merged, fused legs, one foot, missing foot, hidden legs, sitting, crouching, kneeling, aura, colored swirl, motion blur, speed lines, cut off feet, cropped legs",
+  "cropBox": [
+    45,
+    93,
+    824,
+    1154
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "hurt",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/wakka/idle.png",
+  "refWeight": 0.65,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T21:47:21.800Z",
+  "pickedFrom": "f5hurt.4",
+  "round": "art3-party-a-fix5"
+}

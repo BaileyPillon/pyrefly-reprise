@@ -1,0 +1,23 @@
+{
+  "width": 1386,
+  "height": 2330,
+  "baselineY": 2296,
+  "masterOf": "idle.png",
+  "density": 2,
+  "loaderNote": "never read by the game: on a 2x device the loader draws these pixels with the 1x sidecar idle.json (src/engine/ArtTier.ts), so size, baseline, scale and facing are the approved painting's",
+  "facing": "front",
+  "method": "RealESRGAN_x4plus then Lanczos to 2x; SDXL img2img per tile (Animagine XL 4.0 Opt, 28 steps, cfg 5, dpmpp_2m/karras); colour-matched (mean/std) to the plain upscale, feathered 96 px blend; the approved painting's own alpha (Lanczos 2x); diffusion RGB only where that alpha >= 250 eroded 7 px, the plain upscale in the edge band",
+  "denoise": 0.3,
+  "seed": 424242,
+  "game": "ffx",
+  "gameNote": "ffx",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-315, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; staged in D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/ (held-2x/), installed 2026-10-04 (art install for release 38) by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/seymour-natus/cand-d03-dpm-protect.png",
+  "candidateSha256": "887c0b0c116e628bdae903b0ddcb69daf1b3eacc88c478e2b20b854d4461e8de",
+  "approvedOneX": {
+    "path": "public/art/characters/seymour-natus/idle.png",
+    "sha256": "c53d22c1cea6ad918570f033d8236ef29e574f32be7127bb6856e53b6c6ddcc4"
+  },
+  "provenance": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/seymour-natus/cand-d03-dpm.prov.json",
+  "decision": "D-315"
+}

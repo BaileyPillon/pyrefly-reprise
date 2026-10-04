@@ -1,0 +1,30 @@
+{
+ "width": 804,
+ "height": 1191,
+ "baselineY": 1175,
+ "composition": "full",
+ "nonBiped": false,
+ "facing": "left",
+ "pose": "cast",
+ "status": "INSTALLED",
+ "method": "r3 derive-from-idle cast (commit 1b97cb55: hand turned up 50 deg and lifted 22 px, back locks bent outward, 8 deg lean toward the party), REPAIRED per judge 3 (D-045): masked repaint of the raised hand only (3,481 px; the old heavy outline inpainted away, a guide drawn in the idle's skin, lavender and ink with four fingers, a thumb and pointed nails, then Animagine XL 4.0 Opt img2img denoise 0.55, seed 8112 of 4, RealESRGAN crop to 1024); hair and lean untouched; MAD 0 against the r3 candidate outside the repair mask",
+ "derivedFrom": "public/art/characters/seymour-macalania/idle.png",
+ "idleSha256": "edb8a444172244a0ebdbb691dd9273e8bd6339fae28c151fc78f719cc34eb721",
+ "sha256": "6f40f101a6d5da45c48408fff4ed2c9636e163fda8a9a020cb762c0033f9f1e1",
+ "candidateOf": "public/art/characters/seymour-macalania/cast.png",
+ "judgeNotes": "self-judged only; not an independent judge; not approved; not installed",
+ "gates": {
+  "shares": {
+   "idleUnchanged": 0.6527,
+   "idleMoved": 0.3323,
+   "painted": 0.015
+  },
+  "idlePixelShare": 0.985,
+  "inventedColourShareOfPainted": 0,
+  "opaqueRatio": 1.0015,
+  "softAlphaPx": 0
+ },
+ "installedAt": "2026-09-24T05:56:29.675Z",
+ "judgeReport": "docs/concepts/chapters/macalania/r3-JUDGE-3.md (judge 4 re-judge, 2026-09-24: SEYMOUR-CAST PASS, GUARDIAN-CAST PASS, worst 7)",
+ "decision": "D-045 option A (Bailey, 2026-09-24)"
+}

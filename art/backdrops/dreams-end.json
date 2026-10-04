@@ -1,0 +1,16 @@
+{
+  "seed": 1714200512,
+  "prompt": "no humans, scenery, ruined blitzball stadium arena floating in a red void, circular arena floor, concentric tiers of broken ghost seating, colossal burning emblem in the sky, fire and embers rising, dark red sky, black clouds, floating debris, broken stadium struts drifting at odd angles, lit from below, ominous, dim red light, zanarkand ruins, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, aircraft, airplane, biplane, spaceship, letters, emblem text",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-15T22:50:01.421Z"
+}

@@ -1,0 +1,30 @@
+{
+ "width": 804,
+ "height": 1191,
+ "baselineY": 1175,
+ "composition": "full",
+ "nonBiped": false,
+ "facing": "left",
+ "pose": "hurt",
+ "status": "INSTALLED",
+ "method": "r3 derive-from-idle: the r3 idle's own pixels, upper body leaning back 9 deg about the hips with a smooth bend in the waist band (430..620); no generated pixels",
+ "derivedFrom": "public/art/characters/seymour-macalania/idle.png",
+ "idleSha256": "edb8a444172244a0ebdbb691dd9273e8bd6339fae28c151fc78f719cc34eb721",
+ "sha256": "5b16020259c5fea35385ec5ee4be78d65f49f4bd83c3add61cd418d733a8d441",
+ "candidateOf": "public/art/characters/seymour-macalania/hurt.png",
+ "judgeNotes": "self-judged only; not an independent judge; not approved; not installed",
+ "gates": {
+  "shares": {
+   "idleUnchanged": 0.6545,
+   "idleMoved": 0.3455,
+   "painted": 0
+  },
+  "idlePixelShare": 1,
+  "inventedColourShareOfPainted": 0,
+  "opaqueRatio": 0.9964,
+  "softAlphaPx": 0
+ },
+ "installedAt": "2026-09-24T05:56:29.675Z",
+ "judgeReport": "docs/concepts/chapters/macalania/r3-JUDGE-3.md (judge 3, 2026-09-24: hurt at bar 7, beats none narrowly)",
+ "decision": "D-045 option A (Bailey, 2026-09-24)"
+}

@@ -1,0 +1,24 @@
+{
+  "width": 777,
+  "height": 1175,
+  "baselineY": 1159,
+  "facing": "left",
+  "scale": 1,
+  "scaleNote": "a light state of the idle: the idle's own pixels and canvas, so the pose scale is 1 (the subject keeps the idle's calibration)",
+  "sources": "the installed idle (read only) with an additive glow at its own lamps, multiplied by its own alpha (method/lightstate.py), as Sin's Core charge state (D-279); no GPU, no repaint",
+  "pose": "cast",
+  "registrationVsIdle": {
+    "dx": 0,
+    "dy": 0
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; staged in D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/ (held/), installed 2026-10-04 (art install for release 38) by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/vegnagun-parts/vegnagun-leg/cast/cand-2.png",
+  "candidateSha256": "f9407f0184156cd4615ef51a0233cd3da138dd0d777cf9141d8648b282aae615",
+  "agentsNote": "light state; the idle's sidecar numbers",
+  "seed": null,
+  "denoise": null,
+  "generatedAt": "2026-10-02",
+  "decision": "D-325"
+}

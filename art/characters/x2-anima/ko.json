@@ -1,0 +1,18 @@
+{
+  "width": 825,
+  "height": 1223,
+  "baselineY": 1137,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "recipe": "derived from x2-anima/ko by the house treatment (boss-poses/x2-anima/README.md), no GPU",
+  "pose": "ko",
+  "registrationVsIdle": null,
+  "registrationNote": "offset (dx, dy) of this cut against its own installed idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-314, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/boss-poses/x2-anima/ko/cand-1.png",
+  "candidateSha256": "52a809a10db4ac614dc3d6b5b7b3f4042d24f81daa967d882477ff68fcb5d5ad",
+  "generatedAt": null,
+  "decision": "D-314"
+}

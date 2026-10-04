@@ -1,0 +1,19 @@
+{
+ "what": "Relative depth of the approved painting, 1 = near (white), 0 = far. A derived greyscale layer for option B \"Living Paintings\"; never colour.",
+ "model": "depth-anything/Depth-Anything-V2-Small-hf",
+ "revision": "5426e4f0f36572d16453bbda7a8389317b1bef99",
+ "licence": "Apache-2.0 (Depth Anything V2 Small only)",
+ "input": [
+  1036,
+  588
+ ],
+ "output": [
+  1344,
+  768
+ ],
+ "edgeSnap": "guided filter r=6 eps=2e-3 on the painting luma",
+ "source": "public/art/backdrops/bevelle-underground.png",
+ "sourceSha256": "7c5a3e60b3755e6790db615297633e6cf2b9d144bfb978c68738e31ad6baa924",
+ "generator": "tools/fx/depth.py, then tools/fx/depth8.py (depth16 >> 8, the high byte the game reads from the 16-bit file)",
+ "bits": 8
+}

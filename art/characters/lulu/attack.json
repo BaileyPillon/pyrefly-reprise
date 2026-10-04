@@ -1,0 +1,42 @@
+{
+  "width": 695,
+  "height": 1124,
+  "baselineY": 1108,
+  "seed": 1803166000,
+  "prompt": "1girl, lulu \\(ff10\\), final fantasy x, safe, solo, wide floor length skirt made of many stacked horizontal black leather belts with metal buckles, the belt skirt is solid black from waist to floor and covers her feet completely, black hair, braided updo with long braids, ornamented hair sticks, crimson red eyes, purple lipstick, pale skin, large breasts, black off the shoulder corset with a wide brown fur collar, long black detached sleeves, many blue and red beaded necklaces, purple scaled panel at the hip, one tiny white moogle doll no bigger than her hand with two black dot eyes, red cheeks and a red pom pom on a thin antenna, standing upright with her back straight, one arm extended straight out in front of her at chest height, the tiny white moogle doll held out in that open hand, her other hand resting on her hip, chin lowered, eyes narrowed, fierce determined expression, (wide brown fur collar:1.4), (stacked leather belt skirt:1.35), (tiny moogle doll:1.35), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, short skirt, miniskirt, ruffled skirt, feathered skirt, scaled hem, fishtail hem, mermaid dress, narrow dress, tight skirt, armored skirt, plated skirt, leg armor, greaves, trousers, leggings, bare legs, thighs, knees, white dress, cream dress, grey dress, brown dress, pale dress, blue corset, blue bodice, recolored dress, red ribbons, gold studs, scarlet skirt, two moogles, many moogles, moogle standing on the ground, moogle standing beside her, giant moogle, moogle as large as a person, life sized plush, teddy bear, featureless plush, blank plush, faceless doll, pillow, cushion, white blob, sack, wings, feathered wings, angel wings, feathers, beaded skirt, charm fringe, hanging tassels, fringed hem, orange hem, red hem, violet hem, gradient skirt, crinoline, hoop skirt, petticoat, shoes, boots, sandals, high heels, footwear, bare feet, toes, fused fingers, blob hand, mitten hands, malformed hand, hand merged with the doll, disembodied hand, floating hand, extra hand, extra arm, third arm, missing arm, missing hand, detached braids, floating braids, braids detached from the head, two weapons, extra weapon, duplicate weapon, floating weapon, detached weapon, afterimage, double exposure, ghost image, motion blur, mirrored copy, ornate frame, gold frame, halo, mandala, decorative border, circular frame, banner, throne, background decoration, ground shadow, cast shadow, hat, beret, red hair, streaked hair, red highlights, bending over, leaning forward, crouching, kneeling, folded arms, hugging the doll, white lace collar, lace ruffle, frilled collar, lace cuffs, bell sleeves, scalloped bodice, blue chevron pattern, zigzag pattern on the bodice, rabbit, deer",
+  "cropBox": [
+    74,
+    54,
+    769,
+    1178
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "attack",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/lulu/idle.png",
+  "refWeight": 0.8,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.32,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T21:47:36.136Z",
+  "facingObserved": true,
+  "flipped": true,
+  "flippedAt": "2026-09-18T19:04:16.919358-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image."
+}

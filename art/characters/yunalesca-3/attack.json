@@ -1,0 +1,36 @@
+{
+  "width": 1216,
+  "height": 832,
+  "baselineY": 832,
+  "seed": 1281002,
+  "prompt": "1girl, yunalesca, final fantasy x, safe, solo, medusa, monster girl, giant monster, small pale woman with silver hair and an ornate blue headdress at the top, yellow eyes, blue and black bikini top, bare midriff, her lower body a colossal mass of pale bone-white hair locks, a huge pale bone-white gorgon face low in the mass with two hollow glowing yellow eye sockets and a wide lipless mouth, dozens of thick pale hair locks radiating outward like a sunburst, pale bone white and desaturated lilac, looming over the viewer, monstrous, attacking, she thrusts one clawed hand forward to the left, the arm attached at her shoulder, the pale hair locks lashing forward, snarling, (huge bone-white gorgon face with hollow glowing yellow eye sockets:1.35), (one arm thrust forward from her shoulder:1.3), (hair locks lashing forward:1.25), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, snake head, serpent head, serpent, fangs, open maw, teeth, jaws, hydra, dragon, wyvern, scales, orange, salmon, red, coral, fish, gown, long dress, armor, dark background, black background, cropped, out of frame, close-up, portrait, bust, upper body, face focus, pixelated, blue crown, spiked crown, tiara, feather fan, floating jewelry, detached accessories, disembodied hand, floating hand, detached hand, severed hand, floating arm, detached arm, extra arm, extra hand, extra limbs, buttocks, ass, back view, looking over shoulder, pin-up, seductive, saturated colors, navy blue, deep blue, hot pink, magenta, purple mass, realistic face, photorealistic, human face in the mass, smooth blank mask, featureless mask",
+  "cropBox": [
+    0,
+    0,
+    1216,
+    832
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "attack",
+  "composition": "boss",
+  "facing": "left",
+  "emphasis": "(huge bone-white gorgon face with hollow glowing yellow eye sockets:1.35), (one arm thrust forward from her shoulder:1.3), (hair locks lashing forward:1.25)",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "img2img": "tools/gen/refs/y3-plate-flat.png",
+  "denoise": 0.45,
+  "generatedAt": "2026-09-19T19:31:41.663Z",
+  "fixRound": "bosses-a fix round 11 (2026-09-19). Judge (sheet score 6): the giant lower face changes identity every frame (a huge realistic anime face in attack), and a disembodied hand floats free at the upper-left unattached to any arm. The idle's face - a bone-white gorgon mask with two hollow glowing yellow sockets and a wide lipless mouth - is now written into the identity string AND carried in --emphasis as (huge bone-white gorgon face with hollow glowing yellow eye sockets:1.35), which handoff SSL1 establishes is the only channel an identity landmark survives a strong pose from. disembodied/floating/detached hand and arm, realistic face, photorealistic and smooth blank mask are in --negAdd, as are navy blue, hot pink and magenta for the palette drift. Same flat plate, denoise 0.45. op 74.5% vs idle 76.3%.",
+  "candidate": "y3-attack11.3"
+}

@@ -1,0 +1,19 @@
+{
+ "what": "Relative depth of the approved painting, 1 = near (white), 0 = far. A derived greyscale layer for option B \"Living Paintings\"; never colour.",
+ "model": "depth-anything/Depth-Anything-V2-Small-hf",
+ "revision": "5426e4f0f36572d16453bbda7a8389317b1bef99",
+ "licence": "Apache-2.0 (Depth Anything V2 Small only)",
+ "input": [
+  1036,
+  588
+ ],
+ "output": [
+  1344,
+  768
+ ],
+ "edgeSnap": "guided filter r=6 eps=2e-3 on the painting luma",
+ "source": "public/art/backdrops/farplane.png",
+ "sourceSha256": "ce6525e3c69dd098c6535bb831870965ca6f3156400bca483aa267cee416bbec",
+ "generator": "tools/fx/depth.py, then tools/fx/depth8.py (round(depth16 / 257), the game reads 8 bits)",
+ "bits": 8
+}

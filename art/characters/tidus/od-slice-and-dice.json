@@ -1,0 +1,46 @@
+{
+  "width": 780,
+  "height": 847,
+  "baselineY": 831,
+  "facing": "right",
+  "seed": 64176,
+  "prompt": "(slashing:1.2), sword swept up and across in one hand, holding one sword in one hand, other arm trailing back, dashing lunge, standing, legs apart, front knee bent, weight forward, determined face, looking at the enemy, (black baggy trousers:1.3),(dark brown boots:1.25),(black boots:1.2), 1boy, tidus, final fantasy x, male focus, blonde hair, spiky hair, blue eyes, yellow hooded vest, white hood, sleeveless, asymmetrical clothes, blue pauldron, shoulder armor, black overalls, uneven legwear, fingerless gloves, necklace, brotherhood \\(sword\\), longsword, blue sword, blue blade, (black overalls:1.25), (yellow hooded vest:1.15), (white hood at the neck:1.1), (blue shoulder pauldron:1.1), solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, scenery, architecture, indoors, detailed background, slash effect, motion lines, speed lines, afterimage, energy, aura, glow, sparks, fire, flame, lightning, ribbon, streamer, flowing scarf, (2boys:1.3), (2girls:1.3), clone, duplicate, two people, rainbow, hand fan, folding fan, wings, feathers, cape effect, (from behind:1.2), facing away, looking back, (facing left:1.2), turned away, swirling effects, energy swirl, abstract shapes, cloth flying, petals, sitting, lying, kneeling, two swords, dual wielding, extra sword, sheathed sword, sword on the back, 2girls, 1girl, female, red boots,red shoes,shorts,bare legs,bare shins,grey trousers,white shoes,orange boots",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.62,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03-day\\method-apex\\refs\\tidus-idle-square.png",
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03-day\\method-apex\\refs\\tidus-head.png"
+    ]
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "skeleton": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03-day\\method-apex\\skel\\cross-slash.png"
+  },
+  "composition": "full",
+  "sources": "look: research/visual-bible.md per-character attack / cast / victory lines (ours where marked [estimate]); identity words from the shipped idle sidecar; IP-Adapter sees only our own shipped idle and its head crop; no retail image used anywhere",
+  "pose": "slice-and-dice",
+  "key": "tidus-overdrives/slice-and-dice",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-03 ~14:42 EDT (\"I'll go with all your recommendations thank you <3\", D-356, answering the Visual Options page https://claude.ai/artifact/XFMV5qdNy97mWqg6NMYD8c), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-03-picks\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/tidus-overdrives/slice-and-dice/cand-76.png",
+  "candidateSha256": "6e4f0f7d54161e16d9c662f4b67d6d8110bb487acf553caba81e4d8e4a98280b",
+  "generatedAt": "2026-10-03T17:34:36.432Z",
+  "abilityIds": [
+    "slice-and-dice"
+  ],
+  "decision": "D-356"
+}

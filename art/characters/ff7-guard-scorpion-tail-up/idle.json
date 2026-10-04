@@ -1,0 +1,77 @@
+{
+  "cleanup": {
+    "date": "2026-09-27",
+    "base": "guard-scorpion/round2-repair/cut-raised-r.a.2 (idle-a.2 + tail inpaint seed 7202, 0.70)",
+    "method": "masked latent inpaint (tools/gen/inpaint.mjs --latent, animagine-xl-4.0-opt) on a paintover of our own render, pasted back through its feathered mask (scripts/cleanup/paint.py chain); never mirrored; no retail input; no IP-Adapter",
+    "passes": [
+      {
+        "fault": "the idle clean-up pasted onto the same body (box and plate), so idle and raised stay one machine",
+        "render": "guard-scorpion/cleanup/idle-clean.full.png",
+        "mask": "gs-idle-mask.png"
+      },
+      {
+        "fault": "pseudo-glyphs removed from five tail segments",
+        "render": "guard-scorpion/cleanup/raised-tail-045.2.full.png",
+        "seed": 9802,
+        "denoise": 0.45,
+        "paint": "gs-raised-paint.png",
+        "mask": "gs-raised-mask.png",
+        "prompt": "no humans, robot, mecha, mechanical scorpion, giant red security robot, final fantasy vii, segmented scorpion tail raised, red armor blocks, simple background, white background, plain red armor plates, plain armor, official art, cel shading, soft shading, muted colors, detailed, masterpiece, high score, great score, absurdres",
+        "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, text, letters, symbols, writing, logo, numbers, glyph, sign, label, kanji, characters, decal, digits"
+      }
+    ],
+    "recut": "rembg cut (comfy.mjs cutout, margin 16) + scripts/cleanup/defringe.py (2 passes)"
+  },
+  "fullFrame": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/guard-scorpion/cleanup/raised-clean.full.png",
+  "width": 1070,
+  "height": 753,
+  "cropBox": [
+    146,
+    79,
+    1216,
+    832
+  ],
+  "baselineY": 748,
+  "defringe": {
+    "fringeRemoved": 813,
+    "specksDropped": 1,
+    "edgeDecontaminated": 3367
+  },
+  "cutout": {
+    "guard": {
+      "ok": true,
+      "reasons": [],
+      "measurements": {
+        "components": {
+          "componentCount": 1,
+          "largestPixels": 336042,
+          "secondPixels": 0,
+          "secondRatio": 0,
+          "touchesLargest": null
+        },
+        "nearWhite": {
+          "fraction": 0.0024133888025901526,
+          "largestRegionFraction": 0.0003987596788496676,
+          "detached": false,
+          "touchesEdge": false,
+          "allowanceUsed": 0.03
+        }
+      }
+    },
+    "strict": {
+      "minPixels": 24,
+      "components": 1,
+      "largest": 336042,
+      "detachedPieces": [],
+      "ok": true
+    }
+  },
+  "cutoutOk": true,
+  "facing": "right",
+  "scale": 1.098385,
+  "scaleNote": "Same machine, same pixel scale as ff7-guard-scorpion/idle: both cut-outs come from one 1216x832 frame with the ground on source row 827 (idle cropBox [4,146,1216,832] + baselineY 681; raised cropBox [146,79,1216,832] + baselineY 748), so this idle is scaled by 748/681 to keep the body the size of the tail-down form. The plane centre sits 71 source px right of the idle's (crop centres 681 and 610); src/scenes/sector1-reactor-staging.ts shifts the figure by that much while this form is shown.",
+  "status": "APPROVED: Bailey 2026-09-27 ~00:45 EDT, \"full speed ahead please. godspeed. ill go with all your recommendations. what is your question about barret?\" (D-240, accepting the driver's FF7 art recommendations; the final list after the cleanup round is docs/concepts/ff7-art-2026-09-27/round2/README.md \"Final install list\"). A pick approves only the art as shown. Installed 2026-09-27, locked in docs/target/approved-hashes.json set bailey:2026-09-27-ff7. Game: FF7 only.",
+  "decision": "D-240",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/guard-scorpion/cleanup/raised-c.1.png",
+  "sha256": "dd7a70fbe5613ed4724bce9106f96f38eaee29ab43f07064cc3102439ee76456"
+}

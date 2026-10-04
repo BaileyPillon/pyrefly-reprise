@@ -1,0 +1,60 @@
+{
+  "width": 365,
+  "height": 1168,
+  "baselineY": 1152,
+  "scale": 1.1,
+  "scaleNote": "Head match 2026-09-26 (D-194 install; method of the 09-25 repair: iris-centroid eye spacing and a checked eye-line-to-chin point, idle/pose, read against which one the head turn or tilt shortens, then checked by eye beside the idle head; evidence docs/concepts/art5/installed-0926/). eye spacing 1.44 is a ceiling (three-quarter turn and tilt); the grin width gives 1.10 and the face width beside the idle 1.08 (1.22 drew her face visibly wider than the idle's); chin under the scarf.",
+  "seed": 36951,
+  "prompt": "1girl, solo, standing, (one hand holding staff:1.2), staff planted on ground, staff upright at side, hand on own hip, confident, grin, rikku \\(ff10-2\\), final fantasy x-2, blonde hair, messy hair, spiked hair, braids, blue bandana, green eyes, red scarf, orange bikini top, white detached sleeves, (white long coat:1.2), blue coat lining, bare midriff, green belt, white apron skirt, white boots, holding staff, (orange spade staff:1.1), three-quarter view, looking at viewer, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, glowing sword, fire, flames, fire trail, swirl, lightning, dark aura, splash, extra sword, multiple swords, floating sword, cast shadow, drop shadow, pedestal, platform, rock, from behind, facing away, sword, two-handed, staff over shoulder, floating staff, hood, witch hat, sword, gun, brown hair, short hair, two staffs, floating staff, whip, mace, bell, train, red zigzag, zigzag, capelet",
+  "cropBox": [
+    207,
+    24,
+    572,
+    1192
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "victory",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.75,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/art5/round2/skeletons/rikku-white-mage/victory.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "rikku-white-mage-idle-square.png",
+      "rikku-white-mage-head.png"
+    ],
+    "forced": true
+  },
+  "status": "APPROVED: Bailey 2026-09-26 ~07:00 EDT, \"I’ll go with all your recommendations\" (D-194: install the judge-PASS pose-round-2 picks shown in docs/concepts/art5/round2/round2-ready.jpg; a pick approves only the pose as shown); installed 2026-09-26, locked in docs/target/approved-hashes.json set bailey:2026-09-26-poses",
+  "judge": "docs/concepts/art5/round2/judge2.json#rikku-white-mage/victory (7.06)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-white-mage/victory/cand-1.png",
+  "sha256": "b3ffdac925dc221d8a7a5ce9ad60d820c353b6386aa2ad45b7c506a0c1f5e6b6",
+  "generatedAt": "2026-09-25T18:51:22.638Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-white-mage/victory/cand-1.png",
+  "decision": "D-194"
+}

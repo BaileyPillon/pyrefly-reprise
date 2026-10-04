@@ -1,0 +1,18 @@
+{
+  "width": 1124,
+  "height": 1024,
+  "baselineY": 946,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "recipe": "derived from isaaru-aeons/bahamut-spathi/spathi-hurt by the house treatment (boss-poses/isaaru-aeons/README.md), no GPU",
+  "pose": "hurt",
+  "registrationVsIdle": null,
+  "registrationNote": "offset (dx, dy) of this cut against its own installed idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-314, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/boss-poses/isaaru-aeons/bahamut-spathi/spathi-hurt/spathi-from-cand-4.png",
+  "candidateSha256": "d3c5673efec683d94d9a4c21a58a047d236015c640d1ae47c8231449016ea1d9",
+  "generatedAt": null,
+  "decision": "D-314"
+}

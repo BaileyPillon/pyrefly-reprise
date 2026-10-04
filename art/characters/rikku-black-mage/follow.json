@@ -1,0 +1,45 @@
+{
+  "width": 653,
+  "height": 1215,
+  "baselineY": 1200,
+  "scale": 1.35,
+  "scaleNote": "the day-pass proposal (candidates/2026-10-03-day/picks-day.json), a head match against the installed idle read by eye on the contact sheet; multiplies the idle pixel scale",
+  "facing": "right",
+  "seed": 115821,
+  "prompt": "(one arm stretched forward, hand open:1.2), (holding a staff upright in the other hand:1.1), standing, legs apart, front knee bent, weight forward, determined face, looking at the enemy, rikku \\(ff10-2\\), final fantasy x-2, black mage, blonde hair, long hair, braids, green eyes, (purple witch hat:1.2), wide brim hat, purple leotard, yellow and green tassels, fishnet sleeves, brown belts, belt pouches, thigh strap, pink leg warmers, black boots, holding staff, (orange staff:1.1), spear tip, solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, standing still, relaxed, arms at sides, sitting, lying, kneeling, jumping, floating, midair, (from behind:1.2), facing away, looking back, (facing left:1.2), turned away, scenery, architecture, indoors, detailed background, slash effect, motion lines, speed lines, afterimage, energy, aura, glow, sparks, extra weapon, floating weapon, (multiple swords:1.3), (extra sword:1.3), sword on the ground, ribbon, streamer, flowing scarf, (2boys:1.3), (2girls:1.3), clone, duplicate, two people, rainbow, hand fan, folding fan, wings, feathers, cape effect, swirling effects, energy swirl, flame, fire, abstract shapes, cloth flying, petals, bandana, sword, gun, brown hair, short hair, two staffs, magic, spell effect, feathers, leaves, plants, flowers, wings, aura, floral background, painted background, backdrop, long staff, huge staff, oversized staff, giant weapon",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03-day\\dressphere-method\\refs\\rikku-black-mage-idle-square.png",
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03-day\\dressphere-method\\refs\\rikku-black-mage-head.png"
+    ]
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.75,
+    "end": 1,
+    "skeleton": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03-day\\dressphere-method\\skel\\follow-reach-n.png"
+  },
+  "composition": "full",
+  "sources": "research/visual-bible.md section 1.14 (the sourced Thief / Warrior dressphere descriptions, Yuna rows; the girl-specific variant for Rikku Warrior / Paine Thief is not sourced and is ours); identity words from the installed idle sidecars of the same girl; IP-Adapter sees only our own installed idles / head crops (and the candidate idle once chosen); OpenPose skeletons we drew; no retail image anywhere",
+  "key": "rikku-black-mage/follow3",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-03 ~14:42 EDT (\"I'll go with all your recommendations thank you <3\", D-356, answering the Visual Options page https://claude.ai/artifact/XFMV5qdNy97mWqg6NMYD8c), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-03-picks\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/rikku-black-mage/follow3/cand-21.png",
+  "candidateSha256": "a6f2f0f651dffc86b1cff1b1bf372e96e418a7b6e9f783a0171c468f804b976d",
+  "generatedAt": "2026-10-03T16:31:30.945Z",
+  "decision": "D-356"
+}

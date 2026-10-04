@@ -1,0 +1,21 @@
+{
+  "seed": 383424147,
+  "prompt": "no humans, scenery, no humans, scenery, interior of a huge industrial mako reactor core chamber, a giant tubular reactor structure built into the back wall, thick pipes running down to a large valve, metal grated catwalk in the foreground, rusted steel, brownish tint, \\(green mako glow:1.2\\), steam, dim industrial lighting, final fantasy vii, dystopian industrial, detailed background, painterly, dramatic, cinematic lighting, wide shot, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, text, numbers, letters, logo, sign",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-27T04:03:26.758Z",
+  "status": "APPROVED: Bailey 2026-09-27 ~00:45 EDT, \"full speed ahead please. godspeed. ill go with all your recommendations. what is your question about barret?\" (D-240, accepting the driver's FF7 art recommendations; the final list after the cleanup round is docs/concepts/ff7-art-2026-09-27/round2/README.md \"Final install list\"). A pick approves only the art as shown. Installed 2026-09-27, locked in docs/target/approved-hashes.json set bailey:2026-09-27-ff7. Game: FF7 only.",
+  "decision": "D-240",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/reactor-core/core.1.png",
+  "sha256": "2d458b4c691e5c343592a1c7392c8e2c00d63dffc9ac0f559f84a22f441a266b",
+  "note": "round 1 reactor-core/core.1, unchanged; the backdrop of the FF7 Guard Scorpion scene (src/scenes/sector1-reactor.ts)"
+}

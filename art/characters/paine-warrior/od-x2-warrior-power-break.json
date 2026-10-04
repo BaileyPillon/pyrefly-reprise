@@ -1,0 +1,17 @@
+{
+  "width": 875,
+  "height": 842,
+  "baselineY": 826,
+  "scale": 1.15,
+  "scaleNote": "the day-pass proposal (candidates/2026-10-03-day/picks-day.json), a head match against the installed idle read by eye on the contact sheet; multiplies the idle pixel scale",
+  "facing": "right",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-03 ~14:42 EDT (\"I'll go with all your recommendations thank you <3\", D-356, answering the Visual Options page https://claude.ai/artifact/XFMV5qdNy97mWqg6NMYD8c), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-03-picks\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/paine-warrior-plant/cand-7.png",
+  "candidateSha256": "87ff28e2c69338ff5e8c0ff973449eeed475cdff777caccf2ae8af56ebe81bc4",
+  "agentsNote": "the plant (Power / Armor Break), a masked repaint of her installed attack key; the same painting is installed under both ability ids, as the Yuna Warrior apex set did",
+  "abilityIds": [
+    "x2-warrior-power-break"
+  ],
+  "decision": "D-356"
+}

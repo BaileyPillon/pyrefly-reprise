@@ -1,0 +1,80 @@
+{
+ "width": 1264,
+ "height": 784,
+ "baselineY": 767,
+ "scale": 1.0,
+ "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+ "facing": "left",
+ "seed": 315128,
+ "prompt": "(lunging forward:1.2), attacking, aggressive, (roaring:1.1), open mouth, claws out, no humans, evrae \\(ff10\\), final fantasy x, safe, solo, monster, dragon, eastern dragon, sea serpent, wingless, one head, serpentine body, very long body, coiled body, dark teal scales, deep blue-green scales, navy shadows on the scales, pale tan underbelly, cream belly scales, segmented belly plates, crimson red dorsal spines, orange-tipped spines, serrated fins along the whole spine, red swept-back head crest, red jaw frills, orange eyes, sharp teeth, thin whiskers, orange flame-shaped tail fin, two clawed forelimbs, reptilian, long body looping behind in wide coils, hovering in midair, (dark teal scales:1.3), (pale tan underbelly:1.15), (crimson red dorsal spines:1.15), (from side:1.3), three-quarter view, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, calm, relaxed, standing still, blood, scenery, detailed background, floor, shadow, gradient background, human, rider, wings, fire, beam, two heads",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "ipadapter": {
+  "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+  "weight": 0.6,
+  "type": "ease in",
+  "start": 0.2,
+  "end": 0.8,
+  "scaling": "K+V",
+  "combine": "concat",
+  "images": [
+   "D:/Tools/pyrefly-scratch/art-1002-boss/refs/evrae-idle-square.png",
+   "D:/Tools/pyrefly-scratch/art-1002-boss/refs/evrae-head.png"
+  ]
+ },
+ "img2img": {
+  "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/evrae-attack-w3.png",
+  "denoise": 0.38
+ },
+ "composition": "full",
+ "sources": "Method W: init = the installed painting's own pixels, warped (evrae-attack-w3, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (evrae-idle-square.png, evrae-head.png); no retail image used anywhere.",
+ "pose": "attack",
+ "registrationVsIdle": {
+  "dx": 0,
+  "dy": 0
+ },
+ "registrationNote": "the approved attack was registered to the idle at (2, 14) (silhouette IoU 0.9685 on the coil); this canvas already carries that offset, so it is registered to the E1-H idle at (0, 0) with a 64 px symmetric margin: the plane centres on the actor, so the attack's head (26 px left of the idle's crop) stays where the approved attack puts it",
+ "game": "ffx",
+ "status": "ADOPTED by Bailey 2026-10-03 ~16:25 EDT (\"I'll go with all your recommendations\", D-360: Evrae E1-H, the driver's recommendation: the neck arch lengthened about 165 px so the head stays and the coil sits right, tail loop dropped). Re-derived to the E1-H geometry by the r38-evrae lane as an install-ready package; the release 38 art install installs it and re-locks this file in docs/target/approved-hashes.json. Not installed by the r38-evrae branch.",
+ "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/evrae-restage/install-ready/art/characters/evrae/attack.png",
+ "candidateSha256": "dab9623ce8a509c4f412cb1d692dc8dacdebff84040cb8cb23a6093f078f3198",
+ "agentsNote": "new key in a pinned set (additive)",
+ "denoise": 0.38,
+ "generatedAt": "2026-10-02T08:10:00.569Z",
+ "decision": "D-325",
+ "e1h": {
+  "decision": "D-360",
+  "game": "ffx (Chapter VIII, evrae-airship); FFX only",
+  "date": "2026-10-03",
+  "branch": "r38-evrae",
+  "evidence": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/evrae-restage/README.md",
+  "slotDxWorld": 0.9743,
+  "method": "E1-H geometry on the approved attack (the approved pixels are unchanged outside the neck): aligned on the idle canvas by (2, 14), the tail loop dropped and its two cut ends tapered (the E1-H bands), the hidden strip below the deck line kept, the arch cut at x=448 and a 165 px flat pipe inserted, 136 px cropped at the left (the idle's 200 minus the 64 px margin) and 64 px of transparent canvas added at the right; the pipe repainted by a masked SDXL inpaint (Animagine XL 4.0 Opt, IP-Adapter 0.85 on the attack's own neck at 4x, seed 920023, denoise 0.66, small-scale prompt) and composed by frequency separation (the init's tone under the repaint's scale texture, sigma 24, texture 0.9)",
+  "replaces": {
+   "path": "public/art/characters/evrae/attack.png",
+   "bytes": 831490,
+   "sha256": "bcfc5a98f9936c263e01e6a4c5921d628d71e112d223995d5f178c22d509b226"
+  },
+  "canvas": {
+   "cropLeftPx": 136,
+   "marginPx": 64,
+   "pipePx": 165,
+   "xcut": 448
+  },
+  "registrationVsE1HIdle": {
+   "dx": -64,
+   "dy": 0
+  }
+ },
+ "contentBox": [
+  24,
+  30,
+  1184,
+  766
+ ]
+}

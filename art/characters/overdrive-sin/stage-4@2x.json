@@ -1,0 +1,24 @@
+{
+  "width": 2820,
+  "height": 1490,
+  "baselineY": 1356,
+  "masterOf": "stage-4.png",
+  "density": 2,
+  "loaderNote": "never read by the game: on a 2x device the loader draws these pixels with the 1x sidecar stage-4.json (src/engine/ArtTier.ts), so size, baseline, scale and facing are the approved painting's",
+  "facing": "front",
+  "method": "RealESRGAN_x4plus then Lanczos to 2x; SDXL img2img per tile (Animagine XL 4.0 Opt, 28 steps, cfg 5, dpmpp_2m/karras); colour-matched (mean/std) to the plain upscale, feathered 96 px blend; the approved painting's own alpha (Lanczos 2x); diffusion RGB only where that alpha >= 250 eroded 7 px, the plain upscale in the edge band",
+  "denoise": 0.35,
+  "seed": 424242,
+  "game": "ffx",
+  "gameNote": "FFX only (rule 14: links I to IV are fought from the Fahrenheit and on Sin's back; research/ffx-sin.md 0.3)",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-315, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/overdrive-sin-stage-4/cand-d035-dpm-protect.png",
+  "candidateSha256": "81a2a7533207eb26afbd2e1d539051c2191b1f83e956e8621ce8cba676f7fc61",
+  "approvedOneX": {
+    "path": "public/art/characters/overdrive-sin/stage-4.png",
+    "sha256": "757b98ff68d281c4fa7ab4741f511ead37024a93f1a023d01f7ac5206528b96a"
+  },
+  "provenance": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/overdrive-sin-stage-4/cand-d035-dpm.prov.json",
+  "decision": "D-315",
+  "texelsPerDevicePxAt2x": 0.62
+}

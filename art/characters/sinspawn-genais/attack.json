@@ -1,0 +1,35 @@
+{
+  "width": 861,
+  "height": 480,
+  "baselineY": 455,
+  "facing": "front",
+  "sizeNote": "the idle canvas (Z-Image on the idle's own canvas and alpha): its sidecar numbers, baselineY included (picks-boss-keys.json)",
+  "seed": 170128,
+  "prompt": "A painterly anime fantasy matte painting with visible brushwork, long warm light from the left. A monstrous shelled creature as big as a house rearing up to bite: a hunched beast under a massive ridged dome shell of dark craggy stone plates like a giant clam, open at the front, from which its thick grey-violet body leans out, a heavy crested head with a wide open maw of jagged white fangs and a pink tongue, small glaring red slit eyes under a heavy armoured brow, rough dark grey-violet hide. A grotesque, menacing fiend; not cute, not a frog, not a cartoon animal. No people. Seen against a plain flat grey background.",
+  "negative": "",
+  "model": "z_image_turbo_bf16_v2.safetensors (+ qwen_3_4b lumina2, ae VAE, ModelSamplingAuraFlow shift 3)",
+  "steps": 10,
+  "cfg": 1,
+  "sampler": "res_multistep",
+  "scheduler": "simple",
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/sinspawn-genais-attack-w2.png",
+    "denoise": 0.45
+  },
+  "composition": "boss",
+  "sources": "Method W on Z-Image Turbo: init = the installed painting's own pixels, warped on its own canvas (sinspawn-genais-attack-w2, method/inits.json + warp.py); creature words only (no creature, game or franchise name), as the Sin paintings' own prompts; no retail image anywhere.",
+  "pose": "attack",
+  "registrationVsIdle": {
+    "dx": 0,
+    "dy": 0
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-keys-new/sinspawn-genais/attack/cand-4.png",
+  "candidateSha256": "7dec173e3d319c4334469cfea69f46f76f0b9d6c8b0f0d048a87c8abac0948fa",
+  "agentsNote": "unshelled only; the idle's canvas; set baselineY to the idle's (455)",
+  "denoise": 0.45,
+  "generatedAt": "2026-10-02T04:59:38.553Z",
+  "decision": "D-325"
+}

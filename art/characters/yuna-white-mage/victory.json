@@ -1,0 +1,50 @@
+{
+  "width": 810,
+  "height": 951,
+  "baselineY": 935,
+  "scale": 1.15,
+  "scaleNote": "head match against the installed idle, from the overnight run (party-keys-method/picks.json); multiplies the idle pixel scale",
+  "facing": "right",
+  "seed": 70804,
+  "prompt": "holding the rod up in one hand, standing, (both arms raised high above her head:1.3), cheerful, happy smile, open mouth, a little bounce, feet on ground, 1girl, yuna \\(ff10-2\\), final fantasy x-2, white mage, brown hair, short hair, very long red braid, heterochromia, blue eye, green eye, white hooded robe, hood up, shin-length robe, purple trim, pink lining, yellow circle pattern, pink hood trim, yellow crescent moon pattern, wide sleeves, yellow flame pattern on cuffs, white gloves, white boots, holding rod, face visible, (white mage:1.4), (hood up:1.35), (purple trim:1.2), solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, sitting, lying, kneeling, jumping, floating, (from behind:1.2), facing away, (facing left:1.2), scenery, architecture, indoors, detailed background, crying, extra weapon, floating weapon, two swords, rainbow, hand fan, folding fan, wings, feathers, cape effect, obi, kimono, japanese clothes, sash, flower sash, detached sleeves, sleeveless, bare shoulders, long skirt, pleated skirt, summoner, blue dress, yellow sleeve, ring staff, hood down, 1boy",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\refs\\yuna-white-mage-idle-square.png",
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\refs\\yuna-white-mage-head.png"
+    ]
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "skeleton": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\skel\\victory-up.png"
+  },
+  "composition": "full",
+  "sources": "look: research/visual-bible.md per-character attack / cast / victory lines (ours where marked [estimate]); identity words from the shipped idle sidecar; IP-Adapter sees only our own shipped idle and its head crop; no retail image used anywhere",
+  "pose": "victory",
+  "key": "the victory key",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-313, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/yuna-white-mage/victory/cand-4.png",
+  "candidateSha256": "68aa7652a575c68dfa6010ade653d40be7246fd198e4bad9358d2ca144e70ed2",
+  "agentsNote": "both arms raised with the rod, hood up, delighted",
+  "generatedAt": "2026-10-01T07:03:36.167Z",
+  "decision": "D-313",
+  "replaces": {
+    "sha256": "86e61f9392bb05d2f85ef44b3a3e941c5db84e1977423b661a6831954d3798d7",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/backup/replaced/yuna-white-mage/victory.png"
+  }
+}

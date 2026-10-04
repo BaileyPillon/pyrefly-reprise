@@ -1,0 +1,42 @@
+{
+ "width": 2272,
+ "height": 1568,
+ "baselineY": 1536,
+ "masterOf": "idle.png",
+ "density": 2,
+ "loaderNote": "never read by the game: on a 2x device the loader draws these pixels with the 1x sidecar idle.json (src/engine/ArtTier.ts), so size, baseline, scale and facing are the approved painting's",
+ "facing": "left",
+ "method": "RealESRGAN_x4plus then Lanczos to 2x; SDXL img2img per tile (Animagine XL 4.0 Opt, 28 steps, cfg 5, dpmpp_2m/karras); colour-matched (mean/std) to the plain upscale, feathered 96 px blend; the approved painting's own alpha (Lanczos 2x); diffusion RGB only where that alpha >= 250 eroded 7 px, the plain upscale in the edge band | E1-H (D-360): the same operations as the 1x on this 2x master (crop 400 px, cut at x=896, a 330 px pipe), the pipe repainted by the masked SDXL inpaint cand-2 (Animagine XL 4.0 Opt, IP-Adapter on the arch's own scales); the 1x is the Lanczos of the repainted region",
+ "denoise": 0.25,
+ "seed": 424242,
+ "game": "ffx",
+ "gameNote": null,
+ "status": "ADOPTED by Bailey 2026-10-03 ~16:25 EDT (\"I'll go with all your recommendations\", D-360: Evrae E1-H, the driver's recommendation: the neck arch lengthened about 165 px so the head stays and the coil sits right, tail loop dropped). Re-derived to the E1-H geometry by the r38-evrae lane as an install-ready package; the release 38 art install installs it and re-locks this file in docs/target/approved-hashes.json. Not installed by the r38-evrae branch.",
+ "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/evrae-restage/e1-h-neck-lengthened/idle@2x.png",
+ "candidateSha256": "227b012652ba3a72841cbd88c863fe6034351714aee5584bf59199c16eb34407",
+ "approvedOneX": {
+  "path": "public/art/characters/evrae/idle.png",
+  "sha256": "4911670ae7afc54d64f1bf8e1d2224f68bb59467e1aa1100fd8d1608dd01f00b"
+ },
+ "provenance": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/evrae/cand-d035-dpm.prov.json",
+ "decision": "D-315",
+ "texelsPerDevicePxAt2x": 0.893,
+ "e1h": {
+  "decision": "D-360",
+  "game": "ffx (Chapter VIII, evrae-airship); FFX only",
+  "date": "2026-10-03",
+  "branch": "r38-evrae",
+  "evidence": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/evrae-restage/README.md",
+  "slotDxWorld": 0.9743,
+  "replaces": {
+   "path": "public/art/characters/evrae/idle@2x.png",
+   "bytes": 5438028,
+   "sha256": "7361b40ffa0536c66a5f6198c44c212cf346d07e0690a26dc047f5f7c1a97284"
+  },
+  "canvas": {
+   "cropLeftPx": 400,
+   "pipePx": 330,
+   "xcut": 896
+  }
+ }
+}

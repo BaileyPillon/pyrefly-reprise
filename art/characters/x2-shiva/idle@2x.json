@@ -1,0 +1,23 @@
+{
+  "width": 1428,
+  "height": 2574,
+  "baselineY": 2400,
+  "masterOf": "idle.png",
+  "density": 2,
+  "loaderNote": "never read by the game: on a 2x device the loader draws these pixels with the 1x sidecar idle.json (src/engine/ArtTier.ts), so size, baseline, scale and facing are the approved painting's",
+  "facing": "left",
+  "method": "RealESRGAN_x4plus then Lanczos to 2x; SDXL img2img per tile (Animagine XL 4.0 Opt, 28 steps, cfg 5, dpmpp_2m/karras); colour-matched (mean/std) to the plain upscale, feathered 96 px blend; the approved painting's own alpha (Lanczos 2x); diffusion RGB only where that alpha >= 250 eroded 7 px, the plain upscale in the edge band",
+  "denoise": 0.25,
+  "seed": 424242,
+  "game": "ffx2",
+  "gameNote": "FFX-2 only",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-315, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; staged in D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/ (held-2x/), installed 2026-10-04 (art install for release 38) by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/x2-shiva/cand-d035-dpm-protect.png",
+  "candidateSha256": "952fdf0ef245fdc3e6f7b506333d7944a266768e02f72c6e2b24a77e16b46157",
+  "approvedOneX": {
+    "path": "public/art/characters/x2-shiva/idle.png",
+    "sha256": "5a48ce74aee2eae908362749551a422c36e91c181002a6a122c2efb56318a219"
+  },
+  "provenance": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/x2-shiva/cand-d035-dpm.prov.json",
+  "decision": "D-315"
+}

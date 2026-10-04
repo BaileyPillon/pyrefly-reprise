@@ -1,0 +1,20 @@
+{
+  "width": 1095,
+  "height": 1138,
+  "baselineY": 1062,
+  "facing": "left",
+  "scale": 1,
+  "scaleNote": "a light state of the idle: the idle's own pixels and canvas, so the pose scale is 1 (the subject keeps the idle's calibration)",
+  "pose": "cast",
+  "registrationVsIdle": null,
+  "registrationNote": "its source's, on a canvas padded 60 px on every side (as the installed grothia paintings were made)",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; staged in D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/ (held/), installed 2026-10-04 (art install for release 38) by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/ffx-aeons/ifrit/cast/derived/grothia-from-cand-1.png",
+  "candidateSha256": "bd7106af2fb9c93a4707673289ebdc68c46d18df7b2c662cd4321e023624a704",
+  "agentsNote": "Isaaru's Grothia cast (light state, treated)",
+  "seed": null,
+  "denoise": null,
+  "generatedAt": null,
+  "decision": "D-325"
+}

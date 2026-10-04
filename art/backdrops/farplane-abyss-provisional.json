@@ -1,0 +1,79 @@
+{
+  "option": "a2",
+  "subject": "abyss",
+  "seed": 9411,
+  "prompt": "no humans, scenery, final fantasy x-2, farplane abyss, (bottomless misty abyss:1.3), eye level view, (a wide flat floating slab of pale stone in the foreground to stand on:1.35), (a narrow path of flat floating stepping stones leading away into the fog:1.3), deep dusk blue and teal fog, (pale white light glowing up from far below:1.2), dark floating rocks at the edges, (many tiny drifting glowing motes of light:1.1), ghostly, lonely, dreamlike, vast, empty, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, flowers, flower field, grass, pink, lavender, mountains, trees, water, ocean, waves, sunset, clouds, planet, bubbles, large spheres, moon, building, stairs, statue, fish, bird",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "output": {
+    "width": 2688,
+    "height": 1536
+  },
+  "status": "approved (bailey:2026-09-28-ixion-scenes, D-273)",
+  "game": "FFX-2 only",
+  "source": "research/ffx2-ixion-djose.md 6.1 (chamber), 7.2 (abyss); written descriptions only",
+  "init": null,
+  "denoise": 1,
+  "generatedAt": "2026-09-27T18:14:09",
+  "repair": {
+    "from": "abyss-a1.png",
+    "fromSha256": "77cf1cde508f9f1d55ccd89490ad0856f4ca1e6b26d55b9885250730ab2d3d49",
+    "why": "adversarial judge 2026-09-27: ghostly spike on the horizon centre (x ~1360, y 1300-1420), hard black floating rock at the left (x ~110-230, y 1270-1330), dark wedges in both bottom corners",
+    "method": "fix-a1/prep.py: row-wise pre-fill of the spike and rock from the fog beside them (21 px median reference), wedges pulled 55 % toward the neighbouring fog and blurred; three 1024x768 crops; tools/gen/inpaint.mjs --latent (VAEEncode + SetLatentNoiseMask) on each crop; fix-a1/composite.py pastes each pick back through its own feathered mask, so no pixel outside the masks changes",
+    "inpaints": {
+      "spike": {
+        "crop": [
+          872,
+          768,
+          1024,
+          768
+        ],
+        "seed": 9501,
+        "denoise": 0.5,
+        "pick": "inp-spike.1"
+      },
+      "left": {
+        "crop": [
+          0,
+          768,
+          1024,
+          768
+        ],
+        "seed": 9513,
+        "denoise": 0.45,
+        "pick": "inp-left.3"
+      },
+      "right": {
+        "crop": [
+          1664,
+          768,
+          1024,
+          768
+        ],
+        "seed": 9522,
+        "denoise": 0.45,
+        "pick": "inp-right.2"
+      }
+    },
+    "provenance": "each inp-<name>.<n>.json in fix-a1/ (prompt, negative, model, steps, cfg, sampler)",
+    "pixelsChanged": 151138,
+    "game": "FFX-2 only"
+  },
+  "notApproved": false,
+  "installedAs": "backdrops/farplane-abyss-provisional",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ixion-scenes/abyss-a1-fixed.png",
+  "optionName": "A1 White void (repaired)",
+  "recommendedBy": "docs/concepts/chapters/ixion-djose-2026-09-27/scenes/README.md; the round's recommended Abyss; judge PASS with faults (horizon spike, black rock, dark corner wedges) repaired by masked latent inpaints, see repair",
+  "sha256": "1518ea4e877cf11104ef320a58de12946deccd833804393e89f4cdfd7d866ce0",
+  "chapter": "ffx2-ixion-djose (Chapter XVI, FFX-2 only)",
+  "approvedBy": "Bailey, 2026-09-28 ~07:00 EDT, verbatim \"all your recommendations\" answering item 4 of the driver brief"
+}

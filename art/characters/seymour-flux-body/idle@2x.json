@@ -1,0 +1,23 @@
+{
+  "width": 1500,
+  "height": 2422,
+  "baselineY": 2392,
+  "masterOf": "idle.png",
+  "density": 2,
+  "loaderNote": "never read by the game: on a 2x device the loader draws these pixels with the 1x sidecar idle.json (src/engine/ArtTier.ts), so size, baseline, scale and facing are the approved painting's",
+  "facing": "left",
+  "method": "RealESRGAN_x4plus then Lanczos to 2x; SDXL img2img per tile (Animagine XL 4.0 Opt, 28 steps, cfg 5, dpmpp_2m/karras); colour-matched (mean/std) to the plain upscale, feathered 96 px blend; the approved painting's own alpha (Lanczos 2x); diffusion RGB only where that alpha >= 250 eroded 7 px, the plain upscale in the edge band",
+  "denoise": 0.25,
+  "seed": 424242,
+  "game": "ffx",
+  "gameNote": null,
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-315, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; staged in D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/ (held-2x/), installed 2026-10-04 (art install for release 38) by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/seymour-flux-body/cand-d035-dpm-protect.png",
+  "candidateSha256": "b3b3ff6e8d740a0f39e79a7391fde106704fa850016625d4a3e192f1f1a91250",
+  "approvedOneX": {
+    "path": "public/art/characters/seymour-flux-body/idle.png",
+    "sha256": "b004f85c879f7260ef08086e723ed8f1e330441ddbf6959e7d4a08358f611088"
+  },
+  "provenance": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/seymour-flux-body/cand-d035-dpm.prov.json",
+  "decision": "D-315"
+}

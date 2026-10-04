@@ -1,0 +1,38 @@
+{
+  "width": 475,
+  "height": 1069,
+  "baselineY": 1053,
+  "seed": 369452087,
+  "prompt": "1girl, rikku \\(ff10\\), final fantasy x, safe, solo, one single armoured claw gauntlet worn on her right hand only with a curved silver blade over the knuckles, her left hand completely bare with five bare fingers and no glove, petite teenage girl, tan skin, natural skin tone, blonde hair, high fan shaped ponytail, two thin braids with beads, orange feather hair ornaments, green eyes, swirl pupils, al bhed, orange sleeveless crop tank top, bare midriff, pale green long arm warmers, red belt, green cargo short shorts, bare tan legs, orange thigh pouch, two long blue ribbon straps with tassels hanging from the back, blue headband with plain pink tinted goggles resting on top of her head, orange and white high top sneakers with blue laces, standing upright with her torso clearly turned to the side, both feet planted flat on the ground and close together, her bare hand raised in front of her chest with the palm open and the fingers relaxed and slightly curved, a small round glowing blue magic circle of thin glowing runes floating in the air just beyond that open palm, her gauntleted arm relaxed at her side, face clearly visible, intent expression, (tan skin:1.3), (bare tan legs:1.25), (one claw gauntlet only:1.25), (torso turned to the side:1.3), (small round glowing blue magic circle of runes:1.4), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, bending over, bent forward, leaning forward, bowing, hunched, back view, turned away, orange skin, orange legs, orange tights, orange pantyhose, red skin, colour cast, monochrome orange, tinted skin, orange arms, swimsuit, bikini, long hair down, brown hair, blue eyes, long trousers, capri pants, baggy pants, white cloth across the midriff, goggles over eyes, goggles over her face, lens over the eye, two claws, claw on both hands, second gauntlet, blades floating in the air, blades detached from the hand, wrist blades, fused fingers, mitten hands, sword, staff, extra weapon, duplicate weapon, two weapons, floating weapon, detached weapon, afterimage, double exposure, ghost image, transparent duplicate, motion blur, mirrored copy, ornate frame, gold frame, halo, mandala, background decoration, decorative border, circular frame, throne, banner, wings, fins, smoke, mist, multiple arms, chibi, short legs, missing arm, extra leg, extra thigh, ground shadow, cast shadow, colored background, scenery, lettering, writing on clothing, logo, embroidered text, hip drape, hazard stripes, bows on the shoes, cape, cloth streamer, magic circle on the ground, glowing ring around her feet, glowing floor, standing on a disc, red gem, jewel, amulet, pendant, trinket, oversized hand, giant hand, stiff splayed fingers, wide lunging step, arm thrown across the chest",
+  "cropBox": [
+    228,
+    131,
+    703,
+    1200
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "g1cast",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/rikku/idle.png",
+  "refWeight": 0.72,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.3,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T22:47:20.640Z"
+}

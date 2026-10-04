@@ -1,0 +1,122 @@
+{
+  "cleanup": {
+    "date": "2026-09-27",
+    "base": "barret/round2-repair/idle-r2.1 (full frame hair2.1.full.png; v4-d.1 seed 160852785 + hair seed 8301)",
+    "method": "masked latent inpaint (tools/gen/inpaint.mjs --latent, animagine-xl-4.0-opt) on a paintover of our own render, pasted back through its feathered mask (scripts/cleanup/paint.py chain); never mirrored; no retail input; no IP-Adapter",
+    "passes": [
+      {
+        "fault": "hi-top fade: texture and soft edges",
+        "render": "barret/cleanup/hair-048.1.full.png",
+        "seed": 9121,
+        "denoise": 0.48,
+        "paint": "b-hair-paint.png",
+        "mask": "b-hair-mask.png",
+        "prompt": "1boy, barret wallace, final fantasy vii, dark-skinned male, muscular, simple background, white background, (high-top fade:1.3), tall flat-top black hair, (dense coarse tightly coiled hair:1.2), soft fuzzy hair edges, short faded sides, hair, official art, cel shading, soft shading, muted colors, detailed, masterpiece, high score, great score, absurdres",
+        "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, hat, cap, fez, helmet, flat black block, mohawk, spiked hair, straight hair, afro, dreadlocks, smooth hair"
+      },
+      {
+        "fault": "vest armholes: pale fleece removed (near shoulder)",
+        "render": "barret/cleanup/vest-d42.1.full.png",
+        "seed": 9251,
+        "denoise": 0.42,
+        "paint": "b-vest-paint.png",
+        "mask": "b-vest-mask.png",
+        "prompt": "1boy, dark-skinned male, muscular, simple background, white background, brown leather vest, sleeveless vest, plain stitched leather armhole edge, skull tattoo on shoulder, leather vest, clean edges, official art, cel shading, soft shading, muted colors, detailed, masterpiece, high score, great score, absurdres",
+        "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, fur trim, fleece, sheepskin, shearling, fur collar, fluffy, white trim, wool, fur lining, frayed, torn",
+        "clip": "440,270,672,445"
+      },
+      {
+        "fault": "vest armholes: pale fleece removed (far collar)",
+        "render": "barret/cleanup/vest-d42.2.full.png",
+        "seed": 9252,
+        "denoise": 0.42,
+        "paint": "b-vest-paint.png",
+        "mask": "b-vest-mask.png",
+        "prompt": "1boy, dark-skinned male, muscular, simple background, white background, brown leather vest, sleeveless vest, plain stitched leather armhole edge, skull tattoo on shoulder, leather vest, clean edges, official art, cel shading, soft shading, muted colors, detailed, masterpiece, high score, great score, absurdres",
+        "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, fur trim, fleece, sheepskin, shearling, fur collar, fluffy, white trim, wool, fur lining, frayed, torn",
+        "clip": "262,270,380,400"
+      },
+      {
+        "fault": "waist: diagonal strap and navel canister -> several metal bands (FF Wiki Barret Wallace revid 4042820)",
+        "render": "barret/cleanup/waist-058.3.full.png",
+        "seed": 9303,
+        "denoise": 0.58,
+        "paint": "b-waist-paint.png",
+        "mask": "b-waist-mask.png",
+        "prompt": "1boy, barret wallace, final fantasy vii, dark-skinned male, muscular, simple background, white background, (several metal bands around his waist:1.3), stacked steel rings around the waist, bare stomach, dark green pants, metal bands, waist, official art, cel shading, soft shading, muted colors, detailed, masterpiece, high score, great score, absurdres",
+        "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, belt buckle, leather belt, diagonal strap, sash, canister, pouch, holster, bandolier"
+      },
+      {
+        "fault": "boots: glossy highlights softened (boots only)",
+        "render": "barret/cleanup/finish-035.2.full.png",
+        "seed": 9402,
+        "denoise": 0.35,
+        "paint": "b-finish-paint.png",
+        "mask": "b-finish-mask.png",
+        "prompt": "1boy, barret wallace, final fantasy vii, dark-skinned male, muscular, simple background, white background, matte brown leather boots, brown skin, dark green pants, matte, soft shading, official art, cel shading, soft shading, muted colors, detailed, masterpiece, high score, great score, absurdres",
+        "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, glossy, shiny, specular highlights, patent leather, latex, wet, red skin, sunburn"
+      },
+      {
+        "fault": "far (right) upper arm: reddish sheen and rim streaks -> shadow-side skin",
+        "render": "barret/cleanup/arm-036.2.full.png",
+        "seed": 9422,
+        "denoise": 0.36,
+        "paint": "b-arm-paint.png",
+        "mask": "b-arm-mask.png",
+        "prompt": "1boy, barret wallace, final fantasy vii, dark-skinned male, muscular, simple background, white background, brown skin, muscular upper arm in shadow, skin, matte, official art, cel shading, soft shading, muted colors, detailed, masterpiece, high score, great score, absurdres",
+        "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, red skin, sunburn, glossy, shiny, specular highlights, rim light"
+      }
+    ],
+    "recut": "rembg cut (comfy.mjs cutout, margin 16) + scripts/cleanup/defringe.py (2 passes)"
+  },
+  "fullFrame": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/barret/cleanup/idle-c.1.full.png",
+  "width": 670,
+  "height": 1106,
+  "cropBox": [
+    27,
+    97,
+    697,
+    1203
+  ],
+  "baselineY": 1090,
+  "defringe": {
+    "fringeRemoved": 325,
+    "specksDropped": 0,
+    "edgeDecontaminated": 2503
+  },
+  "cutout": {
+    "guard": {
+      "ok": true,
+      "reasons": [],
+      "measurements": {
+        "components": {
+          "componentCount": 1,
+          "largestPixels": 311457,
+          "secondPixels": 0,
+          "secondRatio": 0,
+          "touchesLargest": null
+        },
+        "nearWhite": {
+          "fraction": 0.0013003400148335082,
+          "largestRegionFraction": 0.0006517753654597585,
+          "detached": false,
+          "touchesEdge": false,
+          "allowanceUsed": 0.03
+        }
+      }
+    },
+    "strict": {
+      "minPixels": 24,
+      "components": 1,
+      "largest": 311457,
+      "detachedPieces": [],
+      "ok": true
+    }
+  },
+  "cutoutOk": true,
+  "facing": "left",
+  "status": "APPROVED: Bailey 2026-09-27 ~00:45 EDT, \"full speed ahead please. godspeed. ill go with all your recommendations. what is your question about barret?\" (D-240, accepting the driver's FF7 art recommendations; the final list after the cleanup round is docs/concepts/ff7-art-2026-09-27/round2/README.md \"Final install list\"). A pick approves only the art as shown. Installed 2026-09-27, locked in docs/target/approved-hashes.json set bailey:2026-09-27-ff7. Game: FF7 only.",
+  "decision": "D-240",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/barret/cleanup/idle-c.1.png",
+  "sha256": "8d89f44f2357bd958fa000920ad1c7fb41d85cf264d7f35ecfbb82e5f6640f7d"
+}

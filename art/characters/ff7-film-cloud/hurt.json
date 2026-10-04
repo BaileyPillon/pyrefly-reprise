@@ -1,0 +1,40 @@
+{
+ "width": 824,
+ "height": 1114,
+ "baselineY": 1106,
+ "facing": "right",
+ "mirrored": false,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/cloud/hurt/cut-z2.png",
+ "sourceSha256": "1b33cacc34da7d03d9fcc838b1e5370b461eece82efe8eee108021e25ae54fb4",
+ "installSteps": [
+  {
+   "step": "demint-back",
+   "pixels": 13,
+   "what": "mint pixels on the back (screen-left) 4 px edge band -> ink"
+  },
+  {
+   "step": "resize",
+   "factor": 0.5,
+   "filter": "lanczos, premultiplied"
+  },
+  {
+   "step": "register",
+   "padLeft": 0,
+   "on": "feet (anchorX)",
+   "centreColumn": 412
+  }
+ ],
+ "installer": "docs/concepts/ff7-art-2026-09-27/film-set/scripts/install.py",
+ "subject": "ff7-film-cloud",
+ "state": "hurt",
+ "scaleToIdle": 0.99,
+ "scale": 0.99,
+ "note": "the hit flinch; for Guard Scorpion the recoil (a 12-degree tilt of its own pick, anchorY on the rear foot)",
+ "seed": 753003,
+ "engine": "flux-2-klein-9b-kv-fp8 (edit mode, ReferenceLatent)",
+ "retailInput": "none (our own Film renders only; no IP-Adapter, no trace)",
+ "promptKey": "film-cloud-hurt",
+ "sha256": "501c625450162e78d7fb91cf9b95f8bbae62aaf8b0378980b75d3b084752a474"
+}

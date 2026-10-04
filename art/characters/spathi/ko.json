@@ -1,0 +1,20 @@
+{
+  "width": 971,
+  "height": 863,
+  "baselineY": 787,
+  "scale": 1,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "pose": "ko",
+  "registrationVsIdle": null,
+  "registrationNote": "its source's, on a canvas padded 60 px on every side (as the installed spathi paintings were made)",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; staged in D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/ (held/), installed 2026-10-04 (art install for release 38) by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/ffx-aeons/bahamut/ko/derived/spathi-from-cand-2.png",
+  "candidateSha256": "82190ad31b742c7221ef8d08d5bb93ee4a3b64fb72c3c2da04d13bc3be58552f",
+  "agentsNote": "Isaaru's Spathi KO (new key), treated",
+  "seed": null,
+  "denoise": null,
+  "generatedAt": null,
+  "decision": "D-325"
+}

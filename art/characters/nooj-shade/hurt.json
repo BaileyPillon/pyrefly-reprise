@@ -1,0 +1,47 @@
+{
+  "width": 612,
+  "height": 1161,
+  "baselineY": 1074,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "seed": 170114,
+  "prompt": "(flinching:1.2), recoiling from a blow, (pained expression:1.2), grimace, clenched teeth, head tilted back, leaning back, 1boy, solo, nooj, final fantasy x-2, safe, male focus, adult man, very tall, angular face, brown hair, long hair in two loops and a long ponytail, red hair tie, blue eyes, blue-tinted glasses, red bodysuit, red and black belts across the chest and legs, purple sleeve with grey fur at the top on one shoulder, mechanical prosthetic left arm, machina metal arm, mechanical prosthetic left leg, purple boots, silver cane, (from side:1.3), three-quarter view, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, smile, grin, happy, calm, relaxed, blood, injury, wound, scratches, torn clothes, scenery, detailed background, floor, shadow, gradient background, 1girl, multiple boys, sword, gun, smile",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/nooj-shade-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/nooj-shade-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/nooj-shade-hurt-w2.png",
+    "denoise": 0.38
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (nooj-shade-hurt-w2, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (nooj-shade-idle-square.png, nooj-shade-head.png); no retail image used anywhere.",
+  "pose": "hurt",
+  "registrationVsIdle": null,
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-keys-new/den-of-woe-shades/nooj-shade/hurt/cand-2.png",
+  "candidateSha256": "7f98e313af0db50c1c072873ef7ccf57f92744035f4f12de2caaf1af11657c82",
+  "agentsNote": "option against Bailey's 2026-09-25 'idle only' decision for Nooj",
+  "denoise": 0.38,
+  "generatedAt": "2026-10-02T04:47:49.966Z",
+  "decision": "D-325"
+}

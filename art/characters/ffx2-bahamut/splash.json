@@ -1,0 +1,55 @@
+{
+  "width": 1656,
+  "height": 1656,
+  "baselineY": 1656,
+  "facing": "left",
+  "use": "splash only: the eye-candy D Spectacle cut-in for Mega Flare (splashArtFor, src/app/screens/battleSpectacle.ts); OverdriveSplashLayer shows it at bottom 4% / right 4%, height min(natural, 0.92 x viewport); never a field pose",
+  "seed": 94755,
+  "prompt": "no humans, dragon, black dragon, huge wings, red wings, mechanical wings, horns, spikes, armored scales, glowing violet eyes, glowing purple veins, corrupted, possessed, aeon, full body, (wings raised:1.2), wings spread upward, huge wingspan, (rearing up:1.2), standing on hind legs, (head back:1.1), (open mouth:1.2), roaring, sharp teeth, chest forward, claws spread, (from side:1.3), three-quarter view, body facing left, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, paint splatter, ink splash, colorful background, abstract background, rider, 1girl, 1boy, human, person, saddle, aura, energy, particles, smoke, sparks, magic circle, explosion, debris, floating objects, fire, flames, lightning, cast shadow, ground, rocks, scenery, facing viewer, front view, straight-on, symmetrical, from behind, facing away, facing right, wings folded, flying",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.55,
+    "type": "linear",
+    "start": 0.25,
+    "end": 0.85,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-scratch\\art-0930\\refs\\bahamut-idle-square.png",
+      "D:\\Tools\\pyrefly-scratch\\art-0930\\refs\\bahamut-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-09-30-overnight\\bahamut-splash\\flare\\raw\\cand-55.raw.png",
+    "denoise": 0.35
+  },
+  "finish": {
+    "edgeFadeSides": [
+      "b",
+      "t",
+      "l",
+      "r"
+    ],
+    "edgeFade": "11% alpha ramp on each side the figure is cut by the canvas",
+    "aura": "#7A2ED8 halo behind the figure, alpha cap 0.33 (house treatment of FFX-2 possessed aeons, Ixion look B)",
+    "pad": 60,
+    "megaFlareCore": {
+      "at": [
+        438,
+        318
+      ],
+      "radius": 50,
+      "colours": "#FFFFFF core -> #B8E4FF (research/visual-bible.md 1.13, [estimate])"
+    },
+    "detachedScrapsDropped": "components under 1.5% of the largest"
+  },
+  "sources": "look: research/visual-bible.md 1.13 and 1.17 (Mega Flare core #B8E4FF to #FFFFFF, [estimate]); identity from our installed ffx2-bahamut/idle.png only; no retail image used (rule 8)",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-09-30 ~09:40 EDT (\"all your recommendations, godspeed\", D-298), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-09-30-poses\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-30-overnight/bahamut-splash/final/B10-flare-55-core.png",
+  "candidateSha256": "4354682273382192b85841348723e8a31d00749a6df7425e2f076d63718fd660",
+  "decision": "D-298"
+}

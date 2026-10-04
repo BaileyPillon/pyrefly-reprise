@@ -1,0 +1,24 @@
+{
+  "width": 574,
+  "height": 1147,
+  "baselineY": 1131,
+  "facing": "left",
+  "scale": 1,
+  "scaleNote": "a light state of the idle: the idle's own pixels and canvas, so the pose scale is 1 (the subject keeps the idle's calibration)",
+  "sources": "the installed idle (read only) with an additive glow at its own hands or eye inside its own alpha (method/lightstate.py); no GPU, no repaint",
+  "pose": "cast",
+  "registrationVsIdle": {
+    "dx": 0,
+    "dy": 0
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; staged in D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/ (held/), installed 2026-10-04 (art install for release 38) by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/ffx-aeons/shiva/cast/cand-1.png",
+  "candidateSha256": "5dbb8e0aab852662e48a28ad20648d23308dd2df41cef0724dd9428c6e96cf7e",
+  "agentsNote": "light state; the idle's sidecar numbers",
+  "seed": null,
+  "denoise": null,
+  "generatedAt": "2026-10-02",
+  "decision": "D-325"
+}

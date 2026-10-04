@@ -1,0 +1,49 @@
+{
+  "width": 574,
+  "height": 1147,
+  "baselineY": 1131,
+  "seed": 732103583,
+  "prompt": "1girl, shiva \\(final fantasy\\), final fantasy x, safe, solo, pale blue skin, blue skin, long bright blue dreadlocks, blue dreadlocks, revealing outfit, ice crystals, slim, elegant, aeon, standing, one hand raised, looking at viewer, graceful, full body, feet visible, (from side:1.15), three-quarter view, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, white hair, blonde hair, brown hair, wings, nude, nsfw, 1boy, horns, fur, pedestal, rock, floor, ground, glowing background, light burst, backlight, white glow, glowing aura, magic circle",
+  "cropBox": [
+    205,
+    49,
+    779,
+    1196
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "boss",
+  "facing": "left",
+  "facingPhrase": "(from side:1.15), three-quarter view, (looking at viewer:1.2)",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-18T11:36:29.261Z",
+  "facingObserved": true,
+  "facingNote": "Rendered facing frame-right unmirrored - the one subject in this group the frame-left bias did not catch. The seed reproduces this file exactly.",
+  "despeckled": {
+    "at": "2026-09-18T08:35:56.570186-04:00",
+    "islandsFound": 5,
+    "islandsRemoved": 4,
+    "pixelsRemoved": 4473,
+    "minFraction": 0.02,
+    "sizeBefore": [
+      734,
+      1147
+    ],
+    "note": "Stray alpha islands (usually a painted cast shadow rembg kept) cleared by tools/gen/despeckle.py. The recorded seed reproduces the render, not this file."
+  },
+  "flipped": true,
+  "flippedAt": "2026-09-18T08:36:05.414438-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image."
+}

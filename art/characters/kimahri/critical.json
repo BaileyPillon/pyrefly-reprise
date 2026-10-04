@@ -1,0 +1,63 @@
+{
+  "width": 799,
+  "height": 1153,
+  "baselineY": 1137,
+  "scale": 1.0,
+  "scaleNote": "the idle pixel scale (img2img from a 1:1 warp of the installed idle); stature at this scale 0.961 of the idle",
+  "facing": "right",
+  "seed": 74504,
+  "prompt": "standing, (exhausted:1.2), (slouching:1.2), tired, closed mouth, clenched teeth, heavy eyelids, drooping shoulders, head tilted down, knees bent, legs apart, feet on ground, pained expression, furrowed brow, sweat, (leaning on spear:1.2), the single spear planted in the ground, both paws on the shaft, (blue horn:1.2), brown band around the horn base, (dark blue fur:1.2), 1other, kimahri ronso, final fantasy x, furry male, (anthro:1.2), (bipedal:1.2), standing on two legs, (dark blue fur:1.2), blue lion beastman, short muzzle, yellow eyes, slit pupils, one blue horn with a brown band on the forehead, one short broken horn stub, long white mane, white beard, pierced ears, very muscular, bare chest, white chest fur, gold shoulder straps, gold bracers, red waist sash, dark blue baggy trousers, blue tail, bare feet, one spear, plain brown wooden spear shaft, silver leaf shaped spearhead, solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, smile, grin, happy, sleeping, lying, sitting, kneeling, on one knee, jumping, floating, arms up, (from behind:1.2), facing away, blood, injury, wound, bowing, (bent over:1.1), touching toes, steam, breath, scenery, architecture, indoors, pillar, building, detailed background, human, human face, human skin, black hair, two spears, second weapon, extra weapon, floating weapon, detached weapon, staff, trident, ram horns, antlers, two long horns, black shirt, shirt, armor, quadruped, feral, on all fours, lion body, floor, rug, ground texture, flowing sash, long ribbons, flowing cloth, roaring, fangs bared, light blue fur, pale fur, orange trousers, gold helmet, gold headpiece, gold horn, visor, mask, (light blue fur:1.2), floating spear, broken spear, two spears",
+  "cropBox": [
+    31,
+    41,
+    830,
+    1194
+  ],
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "critical",
+  "composition": "full",
+  "headTop": [
+    0.814,
+    0.164
+  ],
+  "headTopNote": "the top of the painted head as fractions [across, down] of the opaque box (alpha > 16); the status marks (the Z marks, bubbles, stars) sit there while this painting is up (src/ui/common/restPoses.ts); read by eye, work/day/make_day.py",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "../refs/kimahri-face.png",
+      "../refs/kimahri-torso.png"
+    ]
+  },
+  "img2img": {
+    "init": "../kimahri/inits/low-w3.png",
+    "denoise": 0.58
+  },
+  "sources": "look: research/status-display.md section 2 (FFX Critical: \"the character slouches in fatigue, taking an even more exhausted stance when they are under 25% of their HP\", W-XS rev 4030921); the IP-Adapter and any init saw only our own idle, its crops and warps; no retail image used as input, reference or IP-Adapter (rule 8)",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-324, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/kimahri-broken-horn/other-paintings/critical/cand-1.png",
+  "candidateSha256": "a35f7c8e13ca4b622b0f068a7a4bb6b2357681a72cad24d2646edf14d1fe96fc",
+  "generatedAt": "2026-09-30T15:37:39.391Z",
+  "decision": "D-324",
+  "hornEdit": {
+    "what": "the long horn removed, one short stub with a broken end kept (D-324, candidate A of the 2026-10-02 run)"
+  },
+  "hornEditRecipe": null,
+  "sidecarNote": "geometry (size, baselineY, facing, cropBox, focal) is the approved painting's, unchanged: the edit changed only the horn",
+  "replaces": {
+    "sha256": "068fe6e49701969cf781378e45251bbe2825ae4df571e0413921fa9a8d632a76",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/kimahri/critical.png"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "status": "CANDIDATE",
+  "game": "FFX only",
+  "chapter": "Chapter XIV (provisional) Isaaru, Via Purifico beneath Bevelle",
+  "concept": "O-2 B (steady and sorrowful), render isaaru-pb2; docs/concepts/chapters/isaaru/portrait/b-dialogue.jpg; picked by Bailey 2026-09-25 ~01:40 EDT, verbatim: \"I'll go with all your recommendations\"",
+  "method": "r3: the picked render's own pixels; recolours only, brought to the O-1 A pick, 0 GPU (docs/concepts/chapters/isaaru/production/scripts/isaaru_portrait.py)",
+  "repairs": [
+    "the yellow-green upper lapels and inner V recoloured sea green, a*/b* from the portrait's own sea-green lower lapels",
+    "the green-tinted hair strands at both shoulders returned to his brown, from the portrait's own hair ramp",
+    "the blue hair tie made gold like O-1 A's, from the portrait's own bronze medallion ramp",
+    "the royal-navy coat pulled toward black as on the billboard (chroma x0.5, L x0.9)"
+  ],
+  "knownDefects": [
+    "painted from O-1 C's look (IP-Adapter ref isaaru-c2 at 0.4): the bronze lapel medallions and blue collar gem are not on the O-1 A billboard",
+    "the matte is the options run's cut-out, kept with --keepBad (a bust fills the canvas, as every portrait does)"
+  ],
+  "seed": 924202,
+  "prompt": "1boy, final fantasy x, safe, solo, male focus, adult man, young male summoner, gentle face, brown eyes, \\(dark brown hair\\), long hair tied back high in a small topknot with two loose side locks framing the face, dark navy robe coat with wide sea green lapels, tall sea green standing collar, white inner collar, upper body, head and shoulders, head turned in three-quarter view with the face toward the viewer, some space above the head, eyes lowered, sorrowful resolute expression, closed mouth, standing at ease, relaxed posture, weapon lowered or sheathed, (dark brown hair:1.3), (upper body:1.2), straight-on, portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, armor, sword, gun, hat, helmet, beard, old man, muscular, bare chest, cape, wings, background, scenery, 2boys, 1girl, female, glasses, suit, blazer, pocket, necktie, dress shoes, leather shoes, modern clothes, feminine, androgynous, smile, blonde hair, close-up, face paint, facial mark, white coat",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "D:/Tools/pyrefly-scratch/isaaru-options/renders/isaaru-c2.png",
+  "refWeight": 0.4,
+  "judgeNotes": "self-judged at 1:1 and in a real 1600x900 engine frame; not independently judged; not approved",
+  "sha256": "b5fbc12c65b404fa4f2260fc19d39f642a2d5b27a981bf3bb65b15e43e25a529",
+  "installedAt": "2026-09-25T04:15:22.790379Z",
+  "readme": "docs/concepts/chapters/isaaru/INSTALLED.md"
+}

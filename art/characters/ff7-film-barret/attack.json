@@ -1,0 +1,34 @@
+{
+ "width": 1282,
+ "height": 1130,
+ "baselineY": 1115,
+ "facing": "right",
+ "mirrored": false,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/barret/fire/cut-k.png",
+ "sourceSha256": "d3409574715a4af002e94f22cca9ac099c9d13ceeac13e4fc2fa736f478370bf",
+ "installSteps": [
+  {
+   "step": "resize",
+   "factor": 0.5,
+   "filter": "lanczos, premultiplied"
+  },
+  {
+   "step": "register",
+   "padLeft": 454,
+   "on": "feet (anchorX)",
+   "centreColumn": 641
+  }
+ ],
+ "installer": "docs/concepts/ff7-art-2026-09-27/film-set/scripts/install.py",
+ "subject": "ff7-film-barret",
+ "state": "attack",
+ "scaleToIdle": 1,
+ "note": "the attack key the house beats name: Cloud strike (B1 key 2) / Barret fire (B1 key 2)",
+ "seed": 746002,
+ "engine": "flux-2-klein-9b-kv-fp8 (edit mode, ReferenceLatent)",
+ "retailInput": "none (our own Film renders only; no IP-Adapter, no trace)",
+ "promptKey": "film-barret-fire",
+ "sha256": "2a04cc5b41c804ce27599b3bead63aa677275845d2d74436c79349495545979a"
+}

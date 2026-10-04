@@ -1,0 +1,36 @@
+{
+  "width": 1191,
+  "height": 802,
+  "baselineY": 786,
+  "seed": 1276202745,
+  "prompt": "1other, solo, no humans, monster, single unicorn, horse, quadruped, long golden horn, spiral horn, dark blue hide, dark blue skin, grey mane, grey tail, gold bracers on front legs, aeon, final fantasy x, standing, all four legs on the ground, head raised, looking at viewer, majestic, (from side:1.15), three-quarter view, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, rider, 1girl, 1boy, saddle, wings, human, purple mane, pink mane, unicorn girl, pedestal, rock, floor, ground, glowing background, light burst, backlight, white glow, glowing aura, magic circle",
+  "cropBox": [
+    22,
+    20,
+    1213,
+    822
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "boss",
+  "facing": "left",
+  "facingPhrase": "(from side:1.15), three-quarter view, (looking at viewer:1.2)",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "generatedAt": "2026-09-18T11:36:09.918Z",
+  "facingObserved": true,
+  "flipped": false,
+  "flippedAt": "2026-09-18T08:36:04.982213-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image."
+}

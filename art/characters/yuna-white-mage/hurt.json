@@ -1,0 +1,49 @@
+{
+  "width": 758,
+  "height": 752,
+  "baselineY": 736,
+  "scale": 1.6,
+  "scaleNote": "the install-ready package's proposal (D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/install-ready), a head match against the installed idle read by eye and held to about +-10 percent in the in-game lineup; multiplies the idle pixel scale",
+  "facing": "right",
+  "seed": 305009,
+  "prompt": "holding a thin golden rod in one hand, recoiling, leaning back, flinching, stumbling backward, eyes shut tight, pained expression, grimace, feet on ground, 1girl, yuna \\(ff10-2\\), final fantasy x-2, white mage, brown hair, short hair, heterochromia, green eye, purple eye, (white hooded robe, hood up:1.4), (long white robe down to the ankles:1.2), red zigzag trim on the sleeves and hem, purple lace hem, gold sash, white gloves, white boots, face visible, safe, solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, smiling, happy, standing still, relaxed, sitting, lying, kneeling, jumping, floating, (from behind:1.2), facing away, scenery, architecture, indoors, detailed background, slash effect, motion lines, speed lines, afterimage, energy, aura, glow, sparks, blood, extra weapon, floating weapon, ribbon, streamer, clone, duplicate, two people, wings, feathers, cape effect, hood down, (no hood:1.3), bare head, uncovered head, pink scarf, bare shoulders, sleeveless, detached sleeves, blue skirt, pleated skirt, blue dress, summoner, red hair, staff with a ring, crescent blade, spear, sword, 1boy, giant ring, huge ornament, oversized weapon, feather cape, wings",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.7,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03\\method\\refs\\yuna-white-mage-idle-square.png",
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03\\method\\refs\\yuna-white-mage-head.png"
+    ]
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "end": 1,
+    "skeleton": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03\\method\\skel\\dual-hurt.png"
+  },
+  "composition": "full",
+  "sources": "identity words describe our installed idle paintings as painted; look: research/visual-bible.md 1.14 where sourced, otherwise ours; IP-Adapter sees only our own installed idle and its head crop; no retail image used anywhere",
+  "key": "yuna-white-mage/hurt",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-03 ~12:00 EDT (\"all your recommendations, godspeed\", D-341 (D-334), answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-03-picks\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03/yuna-white-mage/hurt/cand-9.png",
+  "candidateSha256": "5fe8e4c3c8c7cd3a6d01d3830d226846c0f2c3c2d95f030230d03f59e9ab5490",
+  "generatedAt": "2026-10-03T04:51:30.936Z",
+  "decision": "D-341 (D-334)",
+  "replaces": {
+    "sha256": "f9581629c3277e3fa1a6286903fc56b27251b50d7d3d8ce7f6f6c6c16c6992b0",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/backup/replaced/characters/yuna-white-mage/hurt.png"
+  }
+}

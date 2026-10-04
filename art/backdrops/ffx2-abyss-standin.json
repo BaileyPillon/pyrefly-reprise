@@ -1,0 +1,14 @@
+{
+  "tag": "ffx2-abyss-standin.stand-in",
+  "status": "PROVISIONAL",
+  "notApproved": true,
+  "chapter": "ffx2-ixion-djose (Chapter XVI, FFX-2 only)",
+  "method": "no GPU: the Chapter 5 Farplane plate washed toward white fog (frames.py abyss())",
+  "sources": [
+    "backdrops/farplane.png"
+  ],
+  "concept": "docs/concepts/chapters/ixion-djose-2026-09-27/README.md (stand-in plates, concept A)",
+  "script": "docs/concepts/chapters/ixion-djose-2026-09-27/stand-ins/make_standins.py",
+  "sha256": "7fbd486077bbfe728bcb1a94858b835152a1bba09d587719454c99a00c78967f",
+  "generatedAt": "2026-09-27T22:09:40.569449+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "width": 460,
+  "height": 1194,
+  "baselineY": 1178,
+  "seed": 1454233335,
+  "prompt": "1girl, yuna \\(ff10-2\\), final fantasy x-2, safe, solo, brown hair, short hair, heterochromia, blue eye, green eye, very long braid, red braid, white tank top, pink trim, pink hood, blue denim shorts, brown belt, white sash, yellow armbands, black knee boots, dual wielding, holding gun, handgun, fingerless gloves, bare midriff, standing, guns lowered at her sides, looking at viewer, confident smirk, straight-on, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background",
+  "cropBox": [
+    181,
+    18,
+    641,
+    1212
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-15T22:53:02.458Z"
+}

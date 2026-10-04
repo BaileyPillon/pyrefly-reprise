@@ -1,0 +1,55 @@
+{
+  "width": 723,
+  "height": 738,
+  "baselineY": 722,
+  "scale": 0.99,
+  "scaleNote": "head match 0.9 would stand 0.55 of the idle; raised to the 0.60 stature floor: read on gridded head crops beside this character's installed idle (the 2026-09-26 boss-pose method; heads.py and headscale.py in D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/work/), feature: hair top to chin; stature at this scale 0.601 of the idle (gate: at least 0.60 for a bend, hunch, kneel or lunge)",
+  "facing": "right",
+  "seed": 56506,
+  "prompt": "(kneeling on one knee:1.3), on one knee, one knee up, (exhausted:1.3), tired, (hunched over:1.1), open mouth, panting, head down, looking down, pained expression, furrowed brow, sweat, hand on own knee, dual wielding, holding gun, handgun, one handgun in each hand, guns pointing down, 1girl, yuna \\(ff10-2\\), final fantasy x-2, brown hair, short hair, heterochromia, blue eye, green eye, very long braid, red braid, white tank top, pink trim, pink hood, blue denim shorts, brown belt, white sash, yellow armbands, black knee boots, fingerless gloves, bare midriff, solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, standing, sitting, lying, both knees on ground, seiza, smile, grin, happy, sleeping, jumping, floating, arms up, (from behind:1.2), facing away, blood, injury, wound, bowing, steam, breath, scenery, architecture, indoors, pillar, building, detailed background, long skirt, hakama, japanese clothes, rifle, extra gun, floating gun, blonde hair",
+  "cropBox": [
+    42,
+    448,
+    765,
+    1186
+  ],
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "critical",
+  "composition": "full",
+  "headTop": [
+    0.599,
+    0.013
+  ],
+  "headTopNote": "the top of the painted head as fractions [across, down] of the opaque box (alpha > 16); the status marks (the Z marks, bubbles, stars) sit there while this painting is up (src/ui/common/restPoses.ts); read by eye, work/heads_top.py",
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.75,
+    "skeleton": "D:\\Tools\\pyrefly-scratch\\art-0930\\sleep-lowhp\\skel\\kneel-b.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-art-backup/candidates/2026-09-30-overnight/sleep-lowhp-refs/yuna-gunner-idle-square.png",
+      "D:/Tools/pyrefly-art-backup/candidates/2026-09-30-overnight/sleep-lowhp-refs/yuna-gunner-head.png"
+    ]
+  },
+  "sources": "look: research/status-display.md section 2 (FFX Critical: HP digits yellow and \"the character slouches in fatigue, taking an even more exhausted stance when they are under 25% of their HP\", W-XS rev 4030921) and section 3 (FFX-2 Critical: below a third of max HP \"They will appear tired and hunched over\", the girl \"visibly kneels\", W-X2S + research/ffx2-combat-core.md section 6.1, 2 sources); identity from the installed idle and its sidecar; the IP-Adapter saw only our own idle and head crop; no retail image used as input, reference or IP-Adapter (rule 8)",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-09-30 ~09:40 EDT (\"all your recommendations, godspeed\", D-298), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-09-30-poses\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-30-overnight/sleep-lowhp-yuna-gunner/critical/cand-6.png",
+  "candidateSha256": "bf0f6a115f00f6f9da22697d7b328d6af3ef5076b49d53298c19256ca0c4fdc6",
+  "generatedAt": "2026-09-30T04:43:59.222Z",
+  "decision": "D-298"
+}

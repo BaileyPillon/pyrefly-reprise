@@ -1,0 +1,60 @@
+{
+  "width": 569,
+  "height": 836,
+  "baselineY": 820,
+  "scale": 1.15,
+  "scaleNote": "Body height 2026-09-26 (D-199 install; D-195 gate, docs/concepts/art5/JUDGE.md Question 1: the Thief is scaled by body height, not head match; scale = idle body / pose body, eye line = the iris-centroid midpoint, soles = the planted foot's alpha bottom; evidence docs/concepts/art5/installed-thief-0926/). Bent pose, unfolded eye-buckle-knee-sole: 773.8 px against the idle's 892.9 px, 1.154 (judge2.json thiefBodyGate 1.183 read the eye point about 20 px right of the iris midpoint). At this scale her head is 0.55 of the idle's (the gate is 0.45 to 0.85).",
+  "seed": 35841,
+  "prompt": "1girl, solo, (recoiling:1.2), knocked back, (leaning back:1.2), head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, arm outstretched, feet on ground, holding dagger in each hand, facing viewer, (one small dagger in each hand:1.1), rikku \\(ff10-2\\), final fantasy x-2, blonde hair, messy hair, spiked hair, braids, blue bandana, red hair beads, green eyes, tan skin, red scarf, yellow bikini top, (blue puffy detached sleeves:1.2), yellow ribbons, brown fingerless gloves, bare midriff, green pleated miniskirt, brown belt pouches, (bare legs:1.3), tan legs, blue and white boots, green soles, two small orange daggers, three-quarter view, looking at viewer, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, glowing sword, fire, flames, fire trail, swirl, lightning, dark aura, splash, extra sword, multiple swords, floating sword, cast shadow, drop shadow, pedestal, platform, rock, from behind, facing away, smile, smirk, grin, happy, laughing, bent over, bowing, from behind, jumping, midair, flip, legs up, knee up, arms up, weapon raised, close-up, upper body, cowboy shot, sword, long scarf, flowing scarf, sword, long sword, armor, brown hair, short hair, black clothes, pants, leggings, pantyhose, tights, red legwear, orange legwear, long scarf, flowing scarf, double-bladed weapon, polearm, staff, spear, long blade, flame blade, fire, fork, green sleeves, feathers, three blades, fan of blades, back, twisted torso, looking back, extra head, multiple heads",
+  "cropBox": [
+    116,
+    364,
+    685,
+    1200
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "hurt",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.9,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/art5/round2/skeletons/rikku-thief-c/hurt.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "rikku-thief-idle-square.png",
+      "rikku-thief-head.png"
+    ],
+    "forced": true
+  },
+  "status": "APPROVED: Bailey 2026-09-26 ~11:30 EDT, \"I’ll take all your recommendations\", answering the driver's question \"Rikku Thief: install item, hurt and victory? Yes, or no.\" after the sheet docs/concepts/art5/round2/sheet3-rikku-thief.jpg was sent to him (D-199; the D-195 body-height gate; a pick approves only the pose as shown); installed 2026-09-26, locked in docs/target/approved-hashes.json set bailey:2026-09-26-thief",
+  "judge": "docs/concepts/art5/round2/judge2.json#rikku-thief/hurt thiefBodyGate (7.06, round 2 try c cand-11)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-11.png",
+  "sha256": "60aef5ccc4556df084762fbcb5816bcbca3c5e55e811e7bebf882124916c7ee6",
+  "generatedAt": "2026-09-26T15:18:09.110Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-11.png",
+  "decision": "D-199"
+}

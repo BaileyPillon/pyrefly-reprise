@@ -1,0 +1,67 @@
+{
+  "width": 1100,
+  "height": 975,
+  "baselineY": 959,
+  "seed": 571114,
+  "prompt": "standing still, poised, legs planted on the ground, calm menace, idle stance, no humans, floating parasite, bloated segmented abdomen, pearl white dome, chitin plates, six long hooked legs, headless, purple and gold armor plates, dark violet, golden trim, single golden yevon glyph disc at the front, ominous, (from side:1.2), three-quarter view, body facing left, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, glowing claws, energy, light burst, lunging, recoiling, motion lines, scenery, detailed background, floor, shadow, gradient background, human, face, eyes, mouth, extra legs",
+  "cropBox": [
+    153,
+    297,
+    939,
+    1002
+  ],
+  "source": {
+    "width": 1024,
+    "height": 1024
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "facing": "left",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "generatedAt": "2026-10-02T09:22:07.692Z",
+  "scaleNote": "his idle in the action paintings' design and pixel scale (README: the installed idle was about 1.47x smaller in pixels, so he grew on every hit); its own baselineY, no scale, like every other pose of his",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/yu-yevon-d2-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/yu-yevon-d2-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/yu-yevon-d2-idle-w2.png",
+    "denoise": 0.34
+  },
+  "sources": "Method W: init = the installed painting's own pixels, warped (yu-yevon-d2-idle-w2, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (yu-yevon-d2-idle-square.png, yu-yevon-d2-head.png); no retail image used anywhere.",
+  "registrationVsIdle": {
+    "dx": 170,
+    "dy": 9
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-design-fixes/yu-yevon-legs/idle/cand-2.png",
+  "candidateSha256": "c7a425ccd2de809906f9f364f12d73a742c35491ad468369f908e8eb984842b6",
+  "agentsNote": "direction 2: an idle in his action paintings' design and pixel scale (the installed idle is about 1.47x smaller in pixels, so he pops on every hit); registration is against the outpainted hurt's canvas; the sidecar takes this painting's own baselineY",
+  "denoise": 0.34,
+  "decision": "D-325",
+  "replaces": {
+    "sha256": "387ea4e7766d8d9f2522c3c79ce6de2a486319f35355882d6b391fb4425e3beb",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/yu-yevon/idle.png"
+  }
+}

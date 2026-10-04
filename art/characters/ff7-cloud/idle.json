@@ -1,0 +1,104 @@
+{
+  "width": 617,
+  "height": 1141,
+  "baselineY": 1125,
+  "seed": 840006496,
+  "prompt": "1boy, cloud strife, final fantasy vii, safe, solo, male focus, spiky blonde hair, blue eyes, sleeveless dark indigo shirt, \\(single metal pauldron on his left shoulder only:1.2\\), bare right shoulder, two brown leather belts at the waist, dark indigo baggy pants, brown boots, brown gloves, gear-shaped metal armlet on the left forearm, wristband on the right wrist, buster sword, \\(huge broadsword:1.2\\), wide heavy blade, fighting stance, holding the huge broadsword in both hands, blade angled down in front, stoic expression, looking to the side, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away",
+  "cropBox": [
+    27,
+    58,
+    644,
+    1199
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "turn-a",
+  "composition": "full",
+  "facing": "left",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "img2img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/round2-sketches/cloud2t.png",
+  "denoise": 0.8,
+  "lint": {
+    "stripped": []
+  },
+  "cutout": {
+    "guard": {
+      "ok": true,
+      "reasons": [],
+      "measurements": {
+        "components": {
+          "componentCount": 1,
+          "largestPixels": 250026,
+          "secondPixels": 0,
+          "secondRatio": 0,
+          "touchesLargest": null
+        },
+        "nearWhite": {
+          "fraction": 0.0032356634909969364,
+          "largestRegionFraction": 0.0014638477598329775,
+          "detached": false,
+          "touchesEdge": false,
+          "allowanceUsed": 0.03
+        }
+      }
+    },
+    "strict": {
+      "minPixels": 24,
+      "components": 1,
+      "largest": 250026,
+      "detachedPieces": [],
+      "ok": true
+    }
+  },
+  "generatedAt": "2026-09-27T04:53:20.466Z",
+  "cleanup": {
+    "date": "2026-09-27",
+    "base": "cloud/round2/turn-a.2 (seed 840006496, img2img 0.80)",
+    "method": "masked latent inpaint (tools/gen/inpaint.mjs --latent, animagine-xl-4.0-opt) on a paintover of our own render, pasted back through its feathered mask (scripts/cleanup/paint.py chain); never mirrored; no retail input; no IP-Adapter",
+    "passes": [
+      {
+        "fault": "SOLDIER wristband on the RIGHT (far) wrist (FF Wiki Cloud Strife revid 4045701)",
+        "render": "cloud/cleanup/far-040.1.full.png",
+        "seed": 9511,
+        "denoise": 0.4,
+        "paint": "c-far-paint.png",
+        "mask": "c-far-mask.png",
+        "prompt": "1boy, cloud strife, final fantasy vii, spiky blonde hair, fair skin, brown gloves, simple background, white background, (white cloth wristband on the wrist:1.2), white fabric wrist band, wristband, official art, cel shading, soft shading, muted colors, detailed, masterpiece, high score, great score, absurdres",
+        "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, metal cuff, bracelet, armor, chain, silver, metallic"
+      },
+      {
+        "fault": "white wrap removed from the LEFT (near) forearm; gear armlet kept",
+        "render": "cloud/cleanup/near-042.1.full.png",
+        "seed": 9611,
+        "denoise": 0.42,
+        "paint": "c-near-paint.png",
+        "mask": "c-near-mask.png",
+        "prompt": "1boy, cloud strife, final fantasy vii, spiky blonde hair, fair skin, brown gloves, simple background, white background, bare forearm, gear-shaped metal armlet, bare forearm, skin, official art, cel shading, soft shading, muted colors, detailed, masterpiece, high score, great score, absurdres",
+        "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, multiple faces, extra eyes, extra mouth, asymmetrical eyes, heterochromia error, closed eyes error, cross-eyed, lazy eye, disfigured, deformed, wristband, bandage, wrap, white cloth, sleeve, sweatband"
+      }
+    ],
+    "recut": "rembg cut (comfy.mjs cutout, margin 16) + scripts/cleanup/defringe.py (2 passes)"
+  },
+  "fullFrame": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/cloud/cleanup/idle-c.1.full.png",
+  "defringe": {
+    "fringeRemoved": 214,
+    "specksDropped": 0,
+    "edgeDecontaminated": 1371
+  },
+  "cutoutOk": true,
+  "status": "APPROVED: Bailey 2026-09-27 ~00:45 EDT, \"full speed ahead please. godspeed. ill go with all your recommendations. what is your question about barret?\" (D-240, accepting the driver's FF7 art recommendations; the final list after the cleanup round is docs/concepts/ff7-art-2026-09-27/round2/README.md \"Final install list\"). A pick approves only the art as shown. Installed 2026-09-27, locked in docs/target/approved-hashes.json set bailey:2026-09-27-ff7. Game: FF7 only.",
+  "decision": "D-240",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/cloud/cleanup/idle-c.1.png",
+  "sha256": "932e475584e09e3b840f7a116d2d43988cc29287a3f69e8f8cbec14e49c5a901"
+}

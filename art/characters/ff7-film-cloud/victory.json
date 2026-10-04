@@ -1,0 +1,40 @@
+{
+ "width": 658,
+ "height": 1110,
+ "baselineY": 1102,
+ "facing": "right",
+ "mirrored": false,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/cloud/fistpump/cut-b2.png",
+ "sourceSha256": "aeece6c5117efebb2bf3476b547ba49f3dec4624f06834c4e60e002e7c3a4bf3",
+ "installSteps": [
+  {
+   "step": "demint-back",
+   "pixels": 23,
+   "what": "mint pixels on the back (screen-left) 4 px edge band -> ink"
+  },
+  {
+   "step": "resize",
+   "factor": 0.5,
+   "filter": "lanczos, premultiplied"
+  },
+  {
+   "step": "register",
+   "padLeft": 0,
+   "on": "feet (anchorX)",
+   "centreColumn": 329
+  }
+ ],
+ "installer": "docs/concepts/ff7-art-2026-09-27/film-set/scripts/install.py",
+ "subject": "ff7-film-cloud",
+ "state": "victory",
+ "scaleToIdle": 0.99,
+ "scale": 0.99,
+ "note": "the first victory key: Cloud fist pump / Barret squat (D1)",
+ "seed": 750002,
+ "engine": "flux-2-klein-9b-kv-fp8 (edit mode, ReferenceLatent)",
+ "retailInput": "none (our own Film renders only; no IP-Adapter, no trace)",
+ "promptKey": "film-cloud-fistpump",
+ "sha256": "350c8a9eaf64825339f9bd945f360681b71a6da10cb78e7f6c1a5b5f0db01485"
+}

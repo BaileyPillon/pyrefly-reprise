@@ -1,0 +1,104 @@
+{
+  "width": 611,
+  "height": 1214,
+  "baselineY": 1202,
+  "seed": 960106,
+  "prompt": "ormiX2, 1boy, solo, safe, fat man, short, stocky, thick arms, thick neck, bald, shaved head, topknot, hair tie, tassel, thick eyebrows, green eyes, scowl, purple armor, japanese armor, purple kimono, gold trim, gold collar, long sleeves, red sleeves, yellow sash, obi, teal pelvic curtain, purple hakama, long hakama, gold hem, sandals, zouri, toes, round shield, huge shield, red shield, gold rim, studded rim, heart emblem, legs apart, arm up, raised fist, clenched hand, fist raised overhead, shouting, open mouth, clenched teeth, v-shaped eyebrows, angry, shield on back, looking ahead, (arm up:1.2), (raised fist:1.15), (bald:1.2), (fat man:1.2), (purple armor:1.15), (purple hakama:1.2), (long hakama:1.15), (one round shield:1.15), (red heart emblem on shield:1.25), (from side:1.3), three-quarter view, body facing right, full body, feet visible, (white background:1.3), (simple background:1.2), official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, face paint, facial tattoo, forehead tattoo, multiple shields, two shields, dual wielding, kite shield, heater shield, pointed shield, square shield, muscular, muscular male, abs, tall, slim, thin, sword, katana, blade, spear, bare chest, topless male, long hair, spiked hair, helmet, feathers, shorts, leggings, tights, pants, trousers, orange clothes, rainbow, multicolored clothes, gradient background, (navel:1.3), (midriff:1.3), (two shields:1.3), heart on chest, heart on clothes, chibi, sketch, monochrome, 3d, realistic, arms crossed, holding shield, smile, sitting",
+  "cropBox": [
+    81,
+    2,
+    692,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "cast",
+  "composition": "full",
+  "facing": "right",
+  "facingObserved": true,
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "cutout": {
+    "width": 611,
+    "height": 1214,
+    "baselineY": 1202,
+    "cropBox": [
+      81,
+      2,
+      692,
+      1216
+    ],
+    "contentBox": [
+      97,
+      18,
+      676,
+      1204
+    ],
+    "sourceWidth": 832,
+    "sourceHeight": 1216,
+    "model": "isnet-anime",
+    "guard": {
+      "ok": true,
+      "reasons": []
+    }
+  },
+  "status": "CANDIDATE",
+  "candidateOf": "public/art/characters/ormi/cast.png",
+  "candidateSource": "D:/Tools/pyrefly-lora/ormi/poses/cast/cast.960106.png (backup: D:/Tools/pyrefly-art-backup/candidates/2026-09-23-leblanc-lora/ormi/picks/)",
+  "method": "lora+openpose",
+  "lora": {
+    "file": "ormi-x2.safetensors",
+    "step": 1500,
+    "strength": 0.8
+  },
+  "loraStep": 1500,
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "image": "docs/concepts/chapters/leblanc/lora/ormi/poses/skel-cast.png",
+    "strength": 0.6,
+    "start": 0,
+    "end": 0.8
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.3,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.6,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "public/art/characters/ormi/idle.png square-padded on white",
+      "public/art/characters/ormi/idle.png head crop 140,0,480,340"
+    ]
+  },
+  "edits": [],
+  "judge": {
+    "score": 7,
+    "worst": "costume: an invented heart clasp at the collar; the shield is carried at his side, not on his back",
+    "scores": {
+      "head": 8,
+      "face": 8,
+      "costume": 7,
+      "shield": 8,
+      "build": 8,
+      "style": 7,
+      "pose": 7
+    }
+  },
+  "round": "docs/concepts/chapters/leblanc/lora/ormi/poses/poses.md",
+  "sha256": "f0a88fc5dee3d100cb9626cf826ff254ed65d88f7ba3619d2327cc37e3212ee3",
+  "installedAt": "2026-09-23T08:24:18.458Z",
+  "reinstalledAt": "2026-09-23T17:46:25.952098Z",
+  "reinstallNote": "Option A (Bailey 2026-09-23, 'All recommendations on the three art decisions'): r1 cast.960106 restored as Ormi's one hero cast painting from D:/Tools/pyrefly-art-backup/candidates/2026-09-23-lora-r2/ormi/replaced/; the r2 cast it replaces is in D:/Tools/pyrefly-art-backup/candidates/2026-09-23-ch6-optionA/ormi/cast-r2-replaced/. FFX-2 only."
+}

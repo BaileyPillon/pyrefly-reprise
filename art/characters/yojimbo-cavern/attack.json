@@ -1,0 +1,144 @@
+{
+  "width": 947,
+  "height": 814,
+  "baselineY": 798,
+  "scale": 1.053,
+  "scaleNote": "Head match 2026-09-26 (D-229/D-230 install; the 2026-09-26 pose-install method, docs/concepts/art5/installed-0926/README.md; scale = idle pixels / pose pixels at the head; evidence docs/concepts/boss-poses-2026-09-26/installed/). Hat head-match: the idle's own jingasa is composited at 0.95 (cand-45.json composite.pieces hat.scale), so pose pixels x 1/0.95 = idle pixels; stature at that scale 0.78 of the idle (a lunge, gate at least 0.60).",
+  "cropBox": [
+    71,
+    567,
+    1018,
+    1381
+  ],
+  "source": {
+    "width": 1344,
+    "height": 1536
+  },
+  "pose": "attack",
+  "composition": "boss",
+  "facing": "left",
+  "canvas": {
+    "width": 1024,
+    "height": 1216
+  },
+  "seed": 926105,
+  "prompt": "1boy, solo, male focus, samurai, final fantasy x, wide shot, fighting stance, (lunging:1.2), leaning forward, legs apart, bent knees, (both arms extended forward:1.2), (clenched fists:1.2), hands together, both hands in front of chest, armored samurai, (bare head:1.2), short black hair, topknot, (gold menpo face mask:1.2), fanged gold mask, gold chest armor, gold shoulder armor, purple sleeves, purple gloves, black gauntlets, orange sash tied at waist, purple hakama, purple robe, geta sandals, dark blue tabi, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.1), full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, fire, flames, fire trail, swirl, lightning, dark aura, splash, cast shadow, drop shadow, pedestal, platform, rock, floor, scenery, facing viewer, front view, from behind, facing away, sword, katana, weapon, holding weapon, blade, dagger, knife, staff, spear, polearm, scythe, axe, gun, sheath, scabbard, sheathed sword, stick, pole, standing straight, open hand, arms at sides, hand on hip, hat, straw hat, headwear, jingasa, helmet, hood, kabuto, multiple boys, 2boys, dog, animal, bare face, bare arms, navy blue coat, cape, wings, horns, straw hat brim torn, blonde hair, long hair, ribbons, streamers, floating fabric, flowing cloth, swirling cloth, wind, cloth rings, oversized hat, umbrella, parasol, giant hat, red hat, orange hat, tall hat, traffic cone, pointed tall hat, hat with tassels, white mask, skull mask, skull, bone mask, hat band, round crown, sombrero, bare feet",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.9,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/boss-poses-2026-09-26/skeletons/yojimbo/attack.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "_refs/idle-nohat-square.png",
+      "_refs/head-nohat.png"
+    ],
+    "forced": true
+  },
+  "composite": {
+    "size": [
+      1344,
+      1536
+    ],
+    "pad": 160,
+    "pieces": [
+      {
+        "piece": "katana",
+        "at": [
+          236,
+          636
+        ],
+        "deg": 205,
+        "scale": 0.95,
+        "layer": "front",
+        "source": "blade + tsuba: public/art/characters/yojimbo-cavern/cast.png (installed, approved 2026-09-24); hilt: yojimbo-cavern/idle.png, turned 191.6 deg onto the cast grip line"
+      },
+      {
+        "disc": [
+          [
+            222,
+            640,
+            22
+          ]
+        ]
+      },
+      {
+        "piece": "hat",
+        "at": [
+          470,
+          570
+        ],
+        "deg": -84,
+        "scale": 0.95,
+        "layer": "front",
+        "source": "public/art/characters/yojimbo-cavern/idle.png (installed idle), cut by polygon, no repaint"
+      }
+    ],
+    "eraseBody": [
+      [
+        [
+          395,
+          582
+        ],
+        [
+          388,
+          480
+        ],
+        [
+          430,
+          440
+        ],
+        [
+          450,
+          378
+        ],
+        [
+          522,
+          378
+        ],
+        [
+          512,
+          470
+        ],
+        [
+          502,
+          530
+        ],
+        [
+          492,
+          580
+        ],
+        [
+          450,
+          592
+        ]
+      ]
+    ],
+    "method": "METHOD-CHECK-yojimbo-hurt.md option 1"
+  },
+  "identitySource": "read off public/art/characters/yojimbo-cavern/idle.png and its sidecar prompt (pose words stripped)",
+  "generatedAt": "2026-09-26T21:18:34.195Z",
+  "game": "FFX only (Ch IX, Cavern of the Stolen Fayth)",
+  "status": "APPROVED: Bailey 2026-09-26, \"i'll go with all your recommendations, i love it.\", answering the boss pose sheets docs/concepts/boss-poses-2026-09-26/ (D-229; a pick approves only the pose as shown); installed 2026-09-26, locked in docs/target/approved-hashes.json set bailey:2026-09-26-boss-poses",
+  "judge": "docs/concepts/boss-poses-2026-09-26/looks.json (maker look plus a second look by the same agent, art5 rubric; 7.69)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/yojimbo/attack-h/cand-45.png",
+  "sha256": "7a88b922e81de8c21544cabb26e705a55e75321242eae691d16dab88ef33d873",
+  "installedAt": "2026-09-27T02:06:04.000Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/yojimbo/attack-h/cand-45.png",
+  "decision": "D-229"
+}

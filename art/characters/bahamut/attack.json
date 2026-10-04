@@ -1,0 +1,54 @@
+{
+  "width": 912,
+  "height": 1007,
+  "baselineY": 991,
+  "scale": 1,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "seed": 307135,
+  "prompt": "(lunging forward:1.2), attacking, aggressive, (roaring:1.1), open mouth, claws out, no humans, solo, single dragon, black dragon, dark grey armored scales, black armour plating, segmented mechanical wings, dark red wing membranes, large curved horns, spinal spikes, long tail, glowing blue eyes, bipedal dragon, aeon, final fantasy x, one head, feet visible, (black armoured scales:1.35), (dark grey plating:1.2), (two wings only:1.25), (from side:1.15), three-quarter view, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, calm, relaxed, standing still, blood, scenery, detailed background, floor, shadow, gradient background, human, rider, fire, beam",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/bahamut-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/bahamut-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/bahamut-attack-w3.png",
+    "denoise": 0.44
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (bahamut-attack-w3, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (bahamut-idle-square.png, bahamut-head.png); no retail image used anywhere.",
+  "pose": "attack",
+  "registrationVsIdle": {
+    "dx": 5,
+    "dy": -39
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; staged in D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/ (held/), installed 2026-10-04 (art install for release 38) by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/ffx-aeons/bahamut/attack/cand-5.png",
+  "candidateSha256": "75f27572318a8f80f55dc231a83e5ab4a73c551f11a14f5f3c412db6a0ebb46d",
+  "agentsNote": "replaces the drifted attack",
+  "denoise": 0.44,
+  "generatedAt": "2026-10-02T07:36:21.833Z",
+  "decision": "D-325",
+  "replaces": {
+    "sha256": "2fb9945ab52e782e826a70f3c43a91b95a639011bd5f779526b5021c8c0e4754",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/backup/replaced/characters/bahamut/attack.png"
+  }
+}

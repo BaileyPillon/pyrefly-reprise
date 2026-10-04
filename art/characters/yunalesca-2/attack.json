@@ -1,0 +1,24 @@
+{
+  "width": 1191,
+  "height": 1346,
+  "baselineY": 1340,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "pose": "attack",
+  "registrationVsIdle": null,
+  "registrationNote": "as its 0.85 render (cand-2), divided by 0.85 (see the README)",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-design-fixes/yunalesca-2-attack/attack/full-density/cand-2.png",
+  "candidateSha256": "3fdddd181ff15cdd10147de47893ec04509491de0a492c3c6184d4b048758ba3",
+  "agentsNote": "direction 1 from the outpainted idle (the installed attack is another design: human legs); the pick at the idle's own density (downscaled from a 3x master of the 0.85 render), 2x tier beside it",
+  "seed": null,
+  "denoise": null,
+  "generatedAt": null,
+  "decision": "D-325",
+  "replaces": {
+    "sha256": "c52c734cb48239596d98eceb252f661bb8736e561500b3c9b8aa97a49c7d04d7",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/yunalesca-2/attack.png"
+  }
+}

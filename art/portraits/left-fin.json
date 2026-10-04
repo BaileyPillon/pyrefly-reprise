@@ -1,0 +1,33 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "cropBox": [
+    1725,
+    181,
+    2409,
+    1181
+  ],
+  "source": {
+    "width": 2352,
+    "height": 1344,
+    "file": "characters/sin-left-fin/idle-near.png (placed at its cropBox)"
+  },
+  "composition": "portrait",
+  "use": "the CTB turn-order chip (src/ui/ffx/portraits.ts: portraits/<enemy id>.png)",
+  "faceCrop": {
+    "fx": 0.5,
+    "fy": 0.62,
+    "ipd": 0.16,
+    "px": [
+      832,
+      1216
+    ],
+    "note": "Sin (D-279, driver's pick): crop of characters/sin-left-fin/idle-near.png; focus = the core (the weak spot, research 9.3); ipd is a human-equivalent proposal (like ixion, valefor), check at listing"
+  },
+  "origin": "Original art only (rule 8): our code-drawn sketches and our own paintings as the only image inputs, written sources only, no retail image as input, reference or IP-Adapter; no creature, game or franchise name in any prompt",
+  "retailInput": "none",
+  "status": "DRIVER PICK (D-279: Bailey delegated tonight's Sin picks to the driver, 2026-09-29, 'Your picks (Recommended)'). An agent's pick, NOT Bailey's approval; installed so the listing step can wire it",
+  "game": "FFX only (rule 14: links I to IV are fought from the Fahrenheit and on Sin's back; research/ffx-sin.md 0.3)",
+  "decision": "D-279"
+}

@@ -1,0 +1,60 @@
+{
+  "width": 1239,
+  "height": 409,
+  "baselineY": 393,
+  "scale": 0.82,
+  "scaleNote": "Head match 2026-09-26 (D-194 install; method of the 09-25 repair: iris-centroid eye spacing and a checked eye-line-to-chin point, idle/pose, read against which one the head turn or tilt shortens, then checked by eye beside the idle head; evidence docs/concepts/art5/installed-0926/). lying, face rotated upright for the reading: hair mass 0.80, eye line to chin 0.89, face width 0.73; about 0.82 (ko not gated by the judge).",
+  "seed": 36241,
+  "prompt": "1girl, solo, lying, on side, full body, (wide shot:1.1), small figure, from side, head to the right, feet to the left, (closed eyes:1.3), unconscious, expressionless, closed mouth, staff beside her, paine \\(ff10-2\\), final fantasy x-2, black mage, silver hair, short hair, red eyes, pale skin, (stern expression:1.1), mature female, (purple witch hat:1.2), red hat band, gold buckle, off-shoulder purple dress, pink capelet, black mesh sleeve, brown belt, long slit dress, purple and blue dress, black ankle boots, holding staff, (red and silver claw staff:1.1), simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, glowing sword, fire, flames, fire trail, swirl, lightning, dark aura, splash, extra sword, multiple swords, floating sword, cast shadow, drop shadow, pedestal, platform, rock, sitting, standing, open eyes, looking at viewer, lying on back, smile, wink, sleeping, pillow, propped up, floor, puddle, water, reflection, shadow, rainbow, streak, blood, debris, particles, close-up, portrait, upper body, staff standing upright, blonde hair, brown hair, armor, sword, gun, long hair, two staffs, chibi, round face, cute, red hat, blue hat, ribbon, bow, double-ended staff, floating staff, puffy dress",
+  "cropBox": [
+    52,
+    258,
+    1291,
+    667
+  ],
+  "source": {
+    "width": 1344,
+    "height": 768
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "ko",
+  "composition": "prone",
+  "facing": "right",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.75,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/art5/round2/skeletons/paine-black-mage/ko.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "paine-black-mage-idle-square.png",
+      "paine-black-mage-head.png"
+    ],
+    "forced": true
+  },
+  "status": "APPROVED: Bailey 2026-09-26 ~07:00 EDT, \"I’ll go with all your recommendations\" (D-194: install the judge-PASS pose-round-2 picks shown in docs/concepts/art5/round2/round2-ready.jpg; a pick approves only the pose as shown); installed 2026-09-26, locked in docs/target/approved-hashes.json set bailey:2026-09-26-poses",
+  "judge": "docs/concepts/art5/round2/judge2.json#paine-black-mage/ko (7.00)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-black-mage/ko/cand-1.png",
+  "sha256": "43125f4667b195a7a9a40250dfb9287c342574834675067c6f3438a99d55949b",
+  "generatedAt": "2026-09-25T18:28:02.877Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-black-mage/ko/cand-1.png",
+  "decision": "D-194"
+}

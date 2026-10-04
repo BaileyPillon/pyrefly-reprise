@@ -1,0 +1,64 @@
+{
+ "width": 1136,
+ "height": 874,
+ "baselineY": 858,
+ "pose": "hurt",
+ "composition": "boss",
+ "facing": "left",
+ "status": "ADOPTED by Bailey 2026-10-03 ~16:25 EDT (\"I'll go with all your recommendations\", D-360: Evrae E1-H, the driver's recommendation: the neck arch lengthened about 165 px so the head stays and the coil sits right, tail loop dropped). Re-derived to the E1-H geometry by the r38-evrae lane as an install-ready package; the release 38 art install installs it and re-locks this file in docs/target/approved-hashes.json. Not installed by the r38-evrae branch.",
+ "method": "r3-derive",
+ "methodNote": "the E1-H idle's own pixels: the head and neck as one layer, thrown back (rotated 22 deg about the top of the neck arch and pulled 45 px back, up 10 px) and blended into the fixed body along the neck; the body layer never moves. No generated pixels. The head and the first 230 columns of the neck match the approved hurt to within 5 of 14,399 painted pixels (at most 4 levels) (same displacement field, same pivot relative to the head: pivot (520, 140) of the approved idle's canvas = (320, 140) on this one, ramp 420..600 = 220..400, layer x < 400); the lengthened neck takes the bend. Canvas padded 90 px at the top for the raised head (baselineY 858). Head length 69.7 px against idle's 69.5, so no pose scale.",
+ "derivedFrom": "install-ready idle.png (sha256 4911670ae7afc54d64f1bf8e1d2224f68bb59467e1aa1100fd8d1608dd01f00b), the E1-H idle",
+ "identityAnchor": "docs/concepts/chapters/evrae/renders/evrae-b.png (picked concept B, teal-dominant)",
+ "derive": {
+  "script": "pose_derive.py (docs/concepts/chapters/evrae/r3/scripts, with the LAYERX and EVRAE_IDLE switches)",
+  "env": "PADTOP=90 SHIFTX=45 SHIFTY=-10 LAYERX=400 EVRAE_IDLE=<this idle.png>",
+  "args": "22 320 140 220 400 0",
+  "angle": 22.0,
+  "pivotOnIdleCanvas": [
+   320.0,
+   140.0
+  ],
+  "ramp": [
+   220.0,
+   400.0
+  ],
+  "padTop": 90,
+  "shift": [
+   45.0,
+   -10.0
+  ],
+  "jaw": 0.0,
+  "note": "the approved hurt is the same call on the approved idle with args 22 520 140 420 600 0 (reproduced to 0 differing pixels); the sidecar of the approved hurt recorded the pivot y with the pad added (230)"
+ },
+ "contentBox": [
+  0,
+  43,
+  1119,
+  857
+ ],
+ "replaced": {
+  "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-23-evrae-r3/characters/evrae/hurt.png",
+  "judged": "docs/concepts/chapters/evrae/redo/cand/hurt/r3/hurt.3.png",
+  "score": 6
+ },
+ "candidateOf": "public/art/characters/evrae/hurt.png",
+ "notes": "docs/concepts/chapters/evrae/r3/r3.md",
+ "e1h": {
+  "decision": "D-360",
+  "game": "ffx (Chapter VIII, evrae-airship); FFX only",
+  "date": "2026-10-03",
+  "branch": "r38-evrae",
+  "evidence": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/evrae-restage/README.md",
+  "slotDxWorld": 0.9743,
+  "replaces": {
+   "path": "public/art/characters/evrae/hurt.png",
+   "bytes": 798624,
+   "sha256": "f66990126b12904a9812a78bd91d1d358b2b07db4dced2f2154b9784f7767529"
+  },
+  "canvas": {
+   "cropLeftPx": 200,
+   "padTopPx": 90
+  }
+ }
+}

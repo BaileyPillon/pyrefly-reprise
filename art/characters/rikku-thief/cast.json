@@ -1,0 +1,46 @@
+{
+  "width": 596,
+  "height": 912,
+  "baselineY": 896,
+  "scale": 1.15,
+  "scaleNote": "head match against the installed idle, from the overnight run (party-keys-method/picks.json); multiplies the idle pixel scale",
+  "facing": "right",
+  "seed": 71403,
+  "prompt": "(reaching out to snatch:1.3), open hand reaching toward the enemy, a dagger held in the other hand, standing, leaning forward, sly grin, feet on ground, 1girl, rikku \\(ff10-2\\), final fantasy x-2, blonde hair, long hair, braid, hair bun, green eyes, swirl pupils, blue bandana, hair beads, yellow bikini top, tan ruffled sleeves, brown fingerless gloves, red and yellow scarf, olive green miniskirt, yellow pouch belt, blue and white ankle boots, bare midriff, dual wielding, holding dagger, solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, sitting, lying, kneeling, jumping, floating, (from behind:1.2), facing away, (facing left:1.2), scenery, architecture, indoors, detailed background, magic circle, energy, aura, glow, sparks, lightning, fire, extra weapon, floating weapon, rainbow, hand fan, folding fan, wings, feathers, cape effect, long pants, trousers, sword, staff, extra weapon, floating weapon, 1boy",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\refs\\rikku-thief-idle-square.png",
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\refs\\rikku-thief-head.png"
+    ]
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "skeleton": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-01-overnight\\party-keys-method\\skel\\item-out.png"
+  },
+  "composition": "full",
+  "sources": "look: research/visual-bible.md per-character attack / cast / victory lines (ours where marked [estimate]); identity words from the shipped idle sidecar; IP-Adapter sees only our own shipped idle and its head crop; no retail image used anywhere",
+  "pose": "cast",
+  "key": "the cast / channel key",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-313, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/rikku-thief/cast/cand-3.png",
+  "candidateSha256": "28b86aca845f51911e1ca4ece12024beb33f1511860e89b7e71cf567688a3825",
+  "agentsNote": "open hand reaching toward the enemy, a dagger in the other hand, leaning in",
+  "generatedAt": "2026-10-01T09:51:43.059Z",
+  "decision": "D-313"
+}

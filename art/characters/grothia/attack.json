@@ -1,0 +1,24 @@
+{
+  "width": 1133,
+  "height": 1041,
+  "baselineY": 965,
+  "scale": 1,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "pose": "attack",
+  "registrationVsIdle": null,
+  "registrationNote": "its source's, on a canvas padded 60 px on every side (as the installed grothia paintings were made)",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; staged in D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/ (held/), installed 2026-10-04 (art install for release 38) by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/ffx-aeons/ifrit/attack/derived/grothia-from-cand-5.png",
+  "candidateSha256": "4e6aa7aa1f33e48ff578c883a5f9172bd02c70ba10b8d4a8aaca6269b9de2595",
+  "agentsNote": "Isaaru's Grothia, the house treatment of the Ifrit pick; sidecar scale as the grothia idle's",
+  "seed": null,
+  "denoise": null,
+  "generatedAt": null,
+  "decision": "D-325",
+  "replaces": {
+    "sha256": "e7b9b00b366d2f4520f70bedad1276de852583559c2791cc4806f208d9727df4",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/backup/replaced/characters/grothia/attack.png"
+  }
+}

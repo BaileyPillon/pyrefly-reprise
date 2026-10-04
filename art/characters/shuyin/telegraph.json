@@ -1,0 +1,41 @@
+{
+  "width": 918,
+  "height": 1213,
+  "baselineY": 1197,
+  "facing": "left",
+  "seed": 806835,
+  "prompt": ", (sword drawn back behind him:1.2), winding up for a slash, glaring, shoulders hunched, crouching, 1boy, shuyin, final fantasy x-2, safe, solo, male focus, blonde hair, spiky hair, messy hair, blue eyes, pale skin, sleeveless jacket, green jacket, yellow trim, red and black detached sleeves, elbow gloves, black gloves, blue armlet, black shorts, yellow boots, holding sword, (glowing sword:1.2), light blue blade, black hilt, desaturated, cold colors, (from side:1.3), three-quarter view, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, scenery, detailed background, floor, shadow, gradient background, fire, explosion, beam, magic circle, light rays, glow aura, 1girl, multiple boys, two swords, red sword, hat, floating limb, missing leg",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1003-tele/refs/shuyin-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1003-tele/refs/shuyin-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1003-tele/inits/shuyin-tele-w3.png",
+    "denoise": 0.6
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (shuyin-tele-w3, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (shuyin-idle-square.png, shuyin-head.png); no retail image used anywhere.",
+  "key": "shuyin/telegraph",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-03 ~12:00 EDT (\"all your recommendations, godspeed\", D-340 (P6, D-352), answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-03-picks\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-shuyin/telegraph/cand-5.png",
+  "candidateSha256": "aa76ee9c29b4684a47249d3d52808629cf8f17e47b9a0753be2bd57c0fb58c61",
+  "generatedAt": "2026-10-03T06:10:14.867Z",
+  "decision": "D-340 (P6, D-352)"
+}

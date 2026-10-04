@@ -1,0 +1,24 @@
+{
+  "width": 992,
+  "height": 1404,
+  "baselineY": 1318,
+  "scale": 1,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "pose": "attack",
+  "registrationVsIdle": null,
+  "registrationNote": "its source's, on a canvas padded 70 px on every side (as the installed x2-anima paintings were made)",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; staged in D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/ (held/), installed 2026-10-04 (art install for release 38) by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-hurts/ffx-aeons/anima/attack/derived/x2-anima-from-cand-2.png",
+  "candidateSha256": "d1514633cfc16fefbd4009fac24fa54e891a3c4ce00c585c8aef3ed4e2117c1c",
+  "agentsNote": "x2-Anima's twin (the possessed treatment, possess_b.py); the x2 sidecar takes the installed x2 attack's pad (70 px)",
+  "seed": null,
+  "denoise": null,
+  "generatedAt": null,
+  "decision": "D-325",
+  "replaces": {
+    "sha256": "b84e67f3eca1bd61041d2b5ab3a6742a502211f40ccb1ea012f6efac22571d77",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/backup/replaced/characters/x2-anima/attack.png"
+  }
+}

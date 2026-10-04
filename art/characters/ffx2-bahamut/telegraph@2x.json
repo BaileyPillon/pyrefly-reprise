@@ -1,0 +1,22 @@
+{
+  "width": 2288,
+  "height": 1904,
+  "baselineY": 1872,
+  "masterOf": "telegraph.png",
+  "density": 2,
+  "loaderNote": "never read by the game: on a 2x device the loader draws these pixels with the 1x sidecar telegraph.json (src/engine/ArtTier.ts), so size, baseline, scale and facing are the approved painting's",
+  "facing": "left",
+  "method": "RealESRGAN_x4plus then Lanczos to 2x; SDXL img2img per 1024 px tile, overlap 256 (Animagine XL 4.0 Opt, 28 steps, cfg 5, dpmpp_2m/karras); feathered 128 px blend; colour-matched (mean/std) to the plain upscale; the candidate's own alpha (Lanczos 2x); diffusion RGB only where that alpha >= 250 eroded 14 px, the plain upscale in the edge band (last night's D-315 method)",
+  "denoise": 0.3,
+  "seed": 424242,
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-03 ~12:00 EDT (\"all your recommendations, godspeed\", D-340 (P6, D-352), answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-03-picks\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/tele-ffx2-bahamut/telegraph/masters-2x/cand-1@2x.png",
+  "candidateSha256": "9fa50af9efeefeab359da6bd77f42c5c35910c0fdbf88fe813ea78cec3635acd",
+  "approvedOneX": {
+    "path": "public/art/characters/ffx2-bahamut/telegraph.png",
+    "sha256": "45e7d3e3ce1735de613200870ee334de35ba07990ed18bedac01c9ac8d37af8d"
+  },
+  "generatedAt": "2026-10-03T06:48:39.863Z",
+  "decision": "D-340 (P6, D-352)"
+}

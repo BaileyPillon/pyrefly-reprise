@@ -1,0 +1,16 @@
+{
+  "width": 710,
+  "height": 1032,
+  "baselineY": 1016,
+  "anchorY": 1016,
+  "anchorNote": "the foot line (the candidate sidecar's own baselineY): ribbons may hang below it, so it is set by hand instead of measured from alpha, as the 2026-10-02 twirl keys do",
+  "scale": 1.2,
+  "scaleNote": "the install-ready package's proposal (D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/install-ready), a head match against the installed idle read by eye and held to about +-10 percent in the in-game lineup; multiplies the idle pixel scale",
+  "facing": "right",
+  "game": "ffx2",
+  "costumeNote": "costume SOURCED: research/visual-bible.md 1.14 (the Thief dressphere, Yuna row; 2 sources)",
+  "status": "APPROVED by Bailey 2026-10-03 ~12:00 EDT (\"all your recommendations, godspeed\", D-338, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-03-picks\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/twirl-forming/cand-3.png",
+  "candidateSha256": "67c524374fd513f9444ad5e69e287497207bf1f40e114cd250794369728df445",
+  "decision": "D-338"
+}

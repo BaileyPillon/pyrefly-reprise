@@ -1,0 +1,41 @@
+{
+  "tag": "hero.550003.a2",
+  "subject": "Seymour (human form, Macalania)",
+  "mood": "courteous and wrong: the serene host in his own temple",
+  "seed": 550003,
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "baseRender": "hero.550003 (the figure: the 2026-09-22 plate's own pixels, prompt and settings in the replaced sidecar, backed up beside it)",
+  "composite": "Option A: the figure inside an isnet-anime matte, the background repainted as the ice antechamber by a masked KSampler pass (SetLatentNoiseMask, denoise 0.62, seed 560102; scripts/prep_a.py, inpaint_mask.mjs, finish_a.py). A2: A with the hair pulled to the approved anchors' pale silver-lilac and the facial veins tinted to skin by numpy pixel operations only (scripts/a2.py); no render.",
+  "focal": {
+    "x": 0.45,
+    "y": 0.43
+  },
+  "master": {
+    "file": "macalania.2x.webp",
+    "width": 2688,
+    "height": 1536,
+    "route": "RealESRGAN_x4plus x4 -> lanczos 0.5",
+    "webpQuality": 88,
+    "note": "PNG is the picked option A2 byte for byte (the 1x the options round showed); the master is its upscale (scripts/master_a2.py)."
+  },
+  "status": "APPROVED (pause plate redo option A2, Bailey, 2026-09-25 ~18:30 EDT: \"All your recommendations\"; the recommendation was A2 if an independent judge passes it, otherwise A. Judge: docs/concepts/chapters/macalania/pause-plate-redo/JUDGE-A2.md, 7.4 PASS)",
+  "game": "FFX only",
+  "chapter": "Chapter VII Seymour and Anima, Macalania Temple (seymour-anima-macalania)",
+  "optionsRound": "docs/concepts/chapters/macalania/pause-plate-redo/README.md",
+  "replaces": {
+    "png": "68fa5225fc1acbb287ef4ea72f91efe688a5a85fd124e2afdc101c6a25fe5cfa",
+    "status": "CANDIDATE (production judge 6)",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-09-25-ch7-pause-plate/replaced/"
+  },
+  "pngSha256": "446b5b7e50c15dc4cbc5e5ea359adcdb3cb0fecf21669e3ff3ee37fba04eb11f"
+}

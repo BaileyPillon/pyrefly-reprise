@@ -1,0 +1,37 @@
+{
+  "width": 823,
+  "height": 1180,
+  "baselineY": 1164,
+  "seed": 773311,
+  "prompt": "1boy, solo, male focus, samurai, wide brimmed conical hat, pale bone coloured mask covering the whole face, long dark navy blue coat, dark indigo robe, japanese armor, holding a katana, stoic, aeon, final fantasy x, standing still, coat hanging straight, one hand resting on the sheathed katana at his hip, head turned toward the viewer, full body, feet visible, (dark navy blue coat:1.4), (muted dark colours:1.25), (bone white mask:1.2), (from side:1.15), three-quarter view, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, rainbow, multicolored, colorful clothing, striped robe, bright colours, pastel, red robe, green robe, yellow robe, dog, animal, 2boys, helmet, bare face, pedestal, rock, floor, ground, glowing background, backlight, white glow",
+  "cropBox": [
+    7,
+    19,
+    830,
+    1199
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idleB",
+  "composition": "boss",
+  "facing": "left",
+  "facingPhrase": "(from side:1.15), three-quarter view, (looking at viewer:1.2)",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-18T11:46:06.353Z",
+  "facingObserved": true,
+  "flipped": false,
+  "flippedAt": "2026-09-18T08:36:06.354541-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image.",
+  "chiralityNote": "Chirality RESOLVED in the art3 fix pass: contract v3 puts aeons on facing LEFT, which is this render's own as-rendered orientation, so the earlier right-facing mirror was undone. The sword hand is now as the checkpoint drew it; the file is unmirrored and the seed reproduces it."
+}

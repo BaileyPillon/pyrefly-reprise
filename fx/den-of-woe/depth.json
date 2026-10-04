@@ -1,0 +1,19 @@
+{
+ "what": "Relative depth of the approved painting, 1 = near (white), 0 = far. A derived greyscale layer for option B \"Living Paintings\"; never colour.",
+ "model": "depth-anything/Depth-Anything-V2-Small-hf",
+ "revision": "5426e4f0f36572d16453bbda7a8389317b1bef99",
+ "licence": "Apache-2.0 (Depth Anything V2 Small only)",
+ "input": [
+  1036,
+  588
+ ],
+ "output": [
+  1344,
+  768
+ ],
+ "edgeSnap": "guided filter r=6 eps=2e-3 on the painting luma",
+ "source": "public/art/backdrops/den-of-woe.png",
+ "sourceSha256": "96965cfad6dca7e12ce2004be2d643e07eea4c59b0beafd215d48b022e46c95e",
+ "generator": "tools/fx/depth.py, then tools/fx/depth8.py (round(depth16 / 257), the game reads 8 bits)",
+ "bits": 8
+}

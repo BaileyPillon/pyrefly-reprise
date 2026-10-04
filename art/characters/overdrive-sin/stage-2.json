@@ -1,0 +1,69 @@
+{
+  "width": 1410,
+  "height": 745,
+  "baselineY": 678,
+  "cropBox": [
+    942,
+    0,
+    2352,
+    745
+  ],
+  "source": {
+    "width": 2352,
+    "height": 1344
+  },
+  "bleeds": [
+    "top",
+    "right"
+  ],
+  "frameFraction": {
+    "x0": 0.4073,
+    "y0": 0.0,
+    "x1": 1.0,
+    "y1": 0.5052
+  },
+  "facing": "front",
+  "facingNote": "Painted into its plate, so never mirrored: \"front\" is the one ArtFacing mirrorFor never flips. The Right Fin is its own painting (plan Q14).",
+  "pose": "stage-2",
+  "state": "stage-2",
+  "light": null,
+  "rig": {
+    "jawTurnBackDeg": 13.0,
+    "mouthStage": 2
+  },
+  "staging": {
+    "range": "far",
+    "evraeSpot": [
+      6.4,
+      3.3,
+      -30.0
+    ],
+    "depthAlongView": 43.29,
+    "frameHeightWorld": 28.132,
+    "worldHeightAsPainted": 14.19,
+    "vsEvraeWorldHeight": 3.46
+  },
+  "seed": 930501,
+  "prompt": "A painterly anime fantasy background painting, a cinematic matte painting with visible brushwork, golden hour, a soft orange, pink and blue evening sky, warm low sunlight from the left. The view is from the grey steel foredeck of an ancient airship flying high in the sky: riveted steel deck plates with seams running to the pointed bow, a pale stencilled plate across the keel, a round gold dial set into the plating on the right, thin dark metal railings along both edges, and beyond the bow only a long drop. Far, far below lies a vast white holy city of tiered towers and blue roofs, hazy with distance. On the right, one slender white tower with gold bands rises out of the city up to the horizon line and no higher; its top is a round white drum ringed with gold, level with the far horizon, with a lot of open sky above it. Level with the ship, nose to nose with it, a colossal living sea monster props itself on that tower: a huge scaly arm reaches down from under its neck and its hooked black claws clamp over the round top of the white tower. Its long blunt whale-like head is seen in three-quarter view, turned to the left towards the ship. Its hide is rough and craggy like an ancient weathered cliff: overlapping dark slate-grey scales and ridges of cracked stone, all one dark grey from the snout to the neck, a ridge of short stone spikes along the top of the snout and the brow, a heavy brow over one small glowing amber eye, deep pleated grooves under the long lower jaw. The snout is the same dark grey rock as the rest. Two huge feathered wings rise from its shoulders behind the head, one on each side: long solid dark grey feathers with vivid purple tips. Its mouth is gaping fully open, the long lower jaw dropped far down from the hinge: rows of pale fangs along the upper and the lower jaw, and inside the mouth dark wet maroon flesh, a dark tongue lying flat inside the lower jaw, and a violet glow deep in the throat. It is entirely a living animal made of rock and scale: no metal, no gold, no machine parts, no pipes, no bolts, no poles, no buildings on it. No people.",
+  "engine": "z_image_turbo (zimg), masked repaint into its plate, RealESRGAN x4 + masked detail pass at 2352x1344",
+  "denoise": 0.62,
+  "detailPass": {
+    "size": [
+      2352,
+      1344
+    ],
+    "denoise": 0.3,
+    "seed": 930502,
+    "masked": true
+  },
+  "painting": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/head-c/b1-c2.png (round 3 sin/b1 -> fix/b1-final -> head C repairs b1-c1, b1-c1s, b1-c2)",
+  "cut": "head C's rig layers (candidates head-c/rig: L1 throat, L1b hinge, L2 jaw, L3 top, L2s shut seam) composed without L0 plate and L4 deck; edge defringed, pulled in 1 px",
+  "origin": "Original art only (rule 8): our code-drawn sketches and our own paintings as the only image inputs, written sources only, no retail image as input, reference or IP-Adapter; no creature, game or franchise name in any prompt",
+  "retailInput": "none",
+  "status": "DRIVER PICK (D-279: Bailey delegated tonight's Sin picks to the driver, 2026-09-29, 'Your picks (Recommended)'). An agent's pick, NOT Bailey's approval; installed so the listing step can wire it",
+  "game": "FFX only (rule 14: links I to IV are fought from the Fahrenheit and on Sin's back; research/ffx-sin.md 0.3)",
+  "decision": "D-279",
+  "pickedFrom": "Head option C repaired (round 3's layered jaw rig, five mouth stages; head/README.md)",
+  "optionsRound": "docs/concepts/chapters/sin-2026-09-29/README.md, options.html",
+  "production": "docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md"
+}

@@ -1,0 +1,50 @@
+{
+  "width": 679,
+  "height": 1170,
+  "baselineY": 1154,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "seed": 215114,
+  "prompt": "(aiming two revolvers forward:1.2), dual wielding, both arms extended, firing stance, serious, focused, 1boy, logos \\(ff10-2\\), final fantasy x-2, safe, solo, male focus, tall, slim, pale skin, black hair, short hair, (silver helmet:1.2), black trim, chin guard, purple ribbon, (blue robe:1.1), long coat, wide sleeves, kimono, emblem, (purple sash:1.1), dark blue hakama, ankle wraps, sandals, (dual wielding:1.2), two revolvers, (from side:1.3), three-quarter view, full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, sword, staff, smile, blood, scenery, detailed background, floor, shadow, gradient background, muzzle flash, 1girl, multiple boys, sword, rifle",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.6,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/logos-idle-square.png",
+      "D:/Tools/pyrefly-scratch/art-1002-boss/refs/logos-head.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/logos-attack-w2.png",
+    "denoise": 0.45
+  },
+  "composition": "full",
+  "sources": "Method W: init = the installed painting's own pixels, warped (logos-attack-w2, method/inits.json + warp.py). Identity words from the installed idle sidecar. IP-Adapter sees only our own images (logos-idle-square.png, logos-head.png); no retail image used anywhere.",
+  "pose": "attack",
+  "registrationVsIdle": {
+    "dx": -114,
+    "dy": -9
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-keys-new/logos/attack/cand-2.png",
+  "candidateSha256": "b9961fc7d1254bc9e8e3f984d23ab6021d05ba55c8cfb3c3db11db0a12419cde",
+  "agentsNote": "new key (Double Shot)",
+  "denoise": 0.45,
+  "generatedAt": "2026-10-02T05:45:23.637Z",
+  "decision": "D-325"
+}

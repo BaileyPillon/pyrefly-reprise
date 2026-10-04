@@ -1,0 +1,57 @@
+{
+ "width": 1136,
+ "height": 784,
+ "baselineY": 768,
+ "pose": "breath-charge",
+ "composition": "boss",
+ "facing": "left",
+ "status": "ADOPTED by Bailey 2026-10-03 ~16:25 EDT (\"I'll go with all your recommendations\", D-360: Evrae E1-H, the driver's recommendation: the neck arch lengthened about 165 px so the head stays and the coil sits right, tail loop dropped). Re-derived to the E1-H geometry by the r38-evrae lane as an install-ready package; the release 38 art install installs it and re-locks this file in docs/target/approved-hashes.json. Not installed by the r38-evrae branch.",
+ "method": "r3-derive (repair cycle)",
+ "methodNote": "idle-near's own pixels. The throat swells in place: only the neck's belly plates and the lowest 12 px of teal stretch down (up to 66 px, one smooth convex underside that merges into the arch's belly line); every dorsal scale above that is idle's pixels exactly. The sac outline is the belly edge plus the swell, drawn as binary alpha like the rest of the sprite; the rim's last 6 px take the colour 7 px further in (no pale fringe). The glow lights the belly plates themselves, so its top edge is their own painted seam, and it falls off along the neck (Gaussian, not a column). A small warm spill follows the seam's curve. The mouth glow is unchanged from cycle 1. No generated pixels. Glow colour orange is unsourced (research 12.2 names none). | E1-H (D-360): the same script on the E1-H idle with every x shifted by the 200 px crop (A=66, CX=240, X0=182, X1=328): the sac hangs from the same place under the head (the same distance from the jaw) and its right half now lies over the lengthened neck, which is level where the approved neck was already nearly level there. The approved call on the approved idle was reproduced to 0 differing pixels first.",
+ "derivedFrom": "install-ready idle.png (sha256 4911670ae7afc54d64f1bf8e1d2224f68bb59467e1aa1100fd8d1608dd01f00b), the E1-H idle",
+ "identityAnchor": "docs/concepts/chapters/evrae/renders/evrae-b.png (picked concept B, teal-dominant)",
+ "derive": {
+  "script": "docs/concepts/chapters/evrae/r3/scripts/breath_inplace.py (with an XOFF switch for the crop)",
+  "env": "XOFF=200 A=66 CX=240 X0=182 X1=328 EVRAE_IDLE=<this idle.png>",
+  "params": {
+   "A": 66.0,
+   "cx": 240.0,
+   "x0": 182.0,
+   "x1": 328.0,
+   "teal": 12.0,
+   "glow": 1.0
+  },
+  "note": "the glow colour is still unsourced (research 12.2 names none)"
+ },
+ "script": "docs/concepts/chapters/evrae/r3/scripts/breath_inplace.py (A=66 CX=440)",
+ "contentBox": [
+  0,
+  16,
+  1119,
+  767
+ ],
+ "replaced": {
+  "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-23-evrae-r3/cycle1/characters/evrae/breath-charge.png",
+  "sha256": "5353810008fa4fdc4d247b41ac4eba07adba4b4bc197411acaead5a356c3c9c7",
+  "judged": "docs/concepts/chapters/evrae/r3/JUDGE.md",
+  "score": 5
+ },
+ "candidateOf": "public/art/characters/evrae/breath-charge.png",
+ "notes": "docs/concepts/chapters/evrae/r3/r3.md",
+ "e1h": {
+  "decision": "D-360",
+  "game": "ffx (Chapter VIII, evrae-airship); FFX only",
+  "date": "2026-10-03",
+  "branch": "r38-evrae",
+  "evidence": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/evrae-restage/README.md",
+  "slotDxWorld": 0.9743,
+  "replaces": {
+   "path": "public/art/characters/evrae/breath-charge.png",
+   "bytes": 819666,
+   "sha256": "55ce9c754a263db5a1e1d4dc871b57e914d872632f6383012b76c50786375934"
+  },
+  "canvas": {
+   "cropLeftPx": 200
+  }
+ }
+}

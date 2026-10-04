@@ -1,0 +1,18 @@
+{
+  "width": 1177,
+  "height": 1021,
+  "baselineY": 935,
+  "scale": 1.0,
+  "scaleNote": "method W keeps the idle pixel scale (img2img from a warp of the installed idle); a derived figure is the house treatment of its base candidate at the same scale",
+  "facing": "left",
+  "recipe": "derived from ixion-x2ixion/x2-hurt by the house treatment (boss-poses/ixion-x2ixion/README.md), no GPU",
+  "pose": "hurt",
+  "registrationVsIdle": null,
+  "registrationNote": "offset (dx, dy) of this cut against its own installed idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-314, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/boss-poses/ixion-x2ixion/x2-hurt/x2-from-cand-3.png",
+  "candidateSha256": "07ebde15e1c6b1e26cfc0e4a5af915ad3a52d8a732dfaceec5ad1e46725b988c",
+  "generatedAt": null,
+  "decision": "D-314"
+}

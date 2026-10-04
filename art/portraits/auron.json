@@ -1,0 +1,41 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 971004,
+  "prompt": "1boy, auron \\(ff10\\), final fantasy x, safe, solo, male focus, black hair, short black hair, slicked back hair, low ponytail, black sunglasses, round eyewear, opaque black lenses, dark tinted lenses, scar across eye, closed eye, facial hair, stubble, goatee, mature male, red coat, haori, popped collar, high grey collar, black shirt, stern expression, head and shoulders, head turned in three-quarter view with the face toward the viewer, a deep vertical scar running down across one eye and through the eyebrow, that scarred eye permanently shut, the other eye amber and open above the lens, small round sunglasses with flat opaque black lenses that hide nothing but show no eye through them, hair black from root to tip with at most two or three thin grey strands at the temple, no bright highlights and no pale streaks in the hair, nothing worn in the hair, dark stubble and a short chin beard, the red haori collar standing up with a plain high grey collar of the black shirt beneath it, stern weathered expression, (deep vertical scar across his eye:1.45), (opaque black sunglass lenses:1.35), (black hair:1.4), (from side:1.15), three-quarter view, head turned to the right, face toward the viewer, looking at viewer, portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, no scar, unblemished face, smooth face, young man, smiling, bald, transparent lenses, clear lenses, translucent glasses, amber lenses, orange lenses, brown lenses, see-through glasses, eye visible through the lens, blue hair, blue highlights, blue streaks, blue fringe, coloured hair highlights, white hair, silver hair, grey hair, white streaks in hair, pale streaks, bleached hair, two-tone hair, blonde hair, brown hair, auburn hair, hair ornament, hair accessory, headpiece, hairpin, feather, wing ornament, gem on the head, jewellery in the hair, headband, sailor collar, serafuku, large flat collar, wide shoulder collar, blue collar, blue and white trim, blue stripe, white stripe, striped collar, banded collar, ribbon on the collar, scarf, neck ribbon, cravat, cornflower blue, pastel blue, salmon, orange coat, coral, peach, front view, straight-on, symmetrical",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "facingPhrase": "(from side:1.15), three-quarter view, head turned to the right, face toward the viewer, looking at viewer",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/auron/idle.png",
+  "refWeight": 0.45,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T22:26:02.274Z",
+  "pickedFrom": "f5por.4",
+  "round": "art3-party-a-fix5"
+}

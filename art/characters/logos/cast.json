@@ -1,0 +1,92 @@
+{
+  "width": 494,
+  "height": 1143,
+  "baselineY": 1127,
+  "seed": 99204,
+  "renderTag": "cast.99204.r2",
+  "prompt": "logosX2, 1boy, solo, full body, from side, profile, facing left, standing, legs apart, arm up, holding gun, gun pointed up, revolver beside face, other hand holding gun, gun pointed down, dual wielding, smirk, closed mouth, male focus, pale skin, black hair, short hair, silver helmet, visor, blue robe, long robe, open robe, gradient clothes, wide sleeves, black collar, black shoulder strap, white shoulder emblem, purple sash, dark blue hakama, hakama pants, ankle wraps, white bandages, black sandals, revolver, simple background, (white background:1.2), official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, hat, brim, hood, crest, helmet crest, fin, plume, feathers, horns, winged helmet, pauldrons, shoulder armor, shoulder pads, spikes, sword, katana, 1girl, long hair, single gun, one gun, cape, capelet, gold trim, yellow sash, chain, skirt, bare legs, thighs, grey background, blue background, gradient background, dark skin, tan, boots, closed shoes, sneakers, socks, glossy, shiny skin, oily skin, 3d, realistic, mesh, grille, crosshatch, net pattern, engraving, engraved helmet, lettering, text on helmet, helmet wings, slotted visor, cage, chin spike, hanging gun, dangling gun, finger in trigger guard, wooden grip, brown grip, double barrel, blank face, faceless, multiple ribbons, two ribbons, sash tail in front, gun to head, pointing gun at self, both arms down, aiming, third gun",
+  "cropBox": [
+    269,
+    36,
+    763,
+    1179
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "cast",
+  "composition": "full",
+  "facing": "left",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "lora": {
+    "file": "logos-x2-r2.safetensors",
+    "step": 2000,
+    "sha256": "9f19d81709b2763ebf63eb09f1129083d24ce69cc61652accafd77b70401d503",
+    "strength": 0.85
+  },
+  "loraStep": 2000,
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "image": "docs/concepts/chapters/leblanc/lora/logos/round2/cast-pose.png",
+    "strength": 0.6,
+    "start": 0,
+    "end": 0.8
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "images": [
+      "docs/concepts/chapters/leblanc/lora/logos/round2/refs/idle-square.png",
+      "docs/concepts/chapters/leblanc/lora/logos/round2/refs/idle-head.png"
+    ],
+    "weight": 0.3,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.6,
+    "combine": "concat",
+    "scaling": "K+V"
+  },
+  "status": "CANDIDATE",
+  "candidateOf": "docs/concepts/chapters/leblanc/lora/logos/round2/renders/cast.99204.r2.png",
+  "method": "lora-r2+openpose",
+  "selfScore": 7,
+  "bar": "self-judged at the bar (7); independent judge owed",
+  "cutout": {
+    "width": 494,
+    "height": 1143,
+    "baselineY": 1127,
+    "cropBox": [
+      269,
+      36,
+      763,
+      1179
+    ],
+    "contentBox": [
+      285,
+      52,
+      747,
+      1163
+    ],
+    "sourceWidth": 832,
+    "sourceHeight": 1216,
+    "model": "isnet-anime"
+  },
+  "cutoutGuard": {
+    "ok": true,
+    "reasons": []
+  },
+  "generatedAt": "2026-09-23T13:00:14.498Z",
+  "installedAt": "2026-09-23T13:28:18.358Z",
+  "scale": 1.03,
+  "scaleNote": "Set so the head (helmet diameter, round2/helmet.py: 151.7 px against idle 156.4 px at 1:1) matches idle on screen within 5 percent in a running battle: without scale 97.3 percent of idle (round2/ingame-noscale.json); with this scale 98.2 percent (round2/ingame-after.json, depth-normalised). 2026-09-23.",
+  "sha256": "47974fc74c5168cad53b21730cff3227eb9d091d7a78752994aedc0c31789f49"
+}

@@ -1,0 +1,58 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 200201,
+  "prompt": "1boy, brother \\(ff10-2\\), final fantasy x-2, al bhed, safe, solo, male focus, blond mohawk, shaved sides of head, green eyes, swirl pupils, multiple earrings, muscular, bare chest, heavily tattooed chest and arms, blue and red suspenders, head and shoulders, shouting, open mouth, wide eyes, straight-on, (blond mohawk:1.2), (tattooed chest:1.1), straight-on, portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, long hair, hat, headband, goggles, shirt, jacket, glasses, beard, weapon",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": null,
+  "cutout": {
+    "width": 832,
+    "height": 1216,
+    "baselineY": 1216,
+    "cropBox": [
+      0,
+      0,
+      832,
+      1216
+    ],
+    "contentBox": [
+      0,
+      0,
+      832,
+      1216
+    ],
+    "sourceWidth": 832,
+    "sourceHeight": 1216,
+    "model": "isnet-anime"
+  },
+  "generatedAt": "2026-09-23T17:09:36.900Z",
+  "candidate": "brother-a",
+  "pickedBy": "Bailey 2026-09-24 (\"I'll take all of your recommendations\": Brother A)",
+  "game": "ffx2",
+  "speakerId": "brother-x2",
+  "sources": "research/visual-bible.md 1.23.7 (FF Wiki Brother, single source)",
+  "cleanup": "detached braid alpha erased (uncleaned file in D:/Tools/pyrefly-lora/portraits/out/brother-a.uncleaned.png)"
+}

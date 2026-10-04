@@ -1,0 +1,15 @@
+{
+  "subject": "Ixion (FFX-2, look B)",
+  "status": "PROVISIONAL",
+  "notApproved": true,
+  "chapter": "ffx2-ixion-djose (Chapter XVI, FFX-2 only)",
+  "composition": "hero",
+  "composite": "make_hero_standin.py: characters/x2-ixion/idle.png (D-268, locked) over backdrops/ffx2-djose-chamber-standin.png blurred and darkened; no GPU",
+  "script": "docs/concepts/chapters/ixion-djose-2026-09-27/stand-ins/make_hero_standin.py",
+  "focal": {
+    "x": 0.6,
+    "y": 0.4
+  },
+  "sha256": "94f7d8debe1cdabf2ad59e8a5bea9632f53cd09423a742040c073da81f6f0b15",
+  "generatedAt": "2026-09-27T22:21:33.881813+00:00"
+}

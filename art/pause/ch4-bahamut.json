@@ -1,0 +1,40 @@
+{
+  "subject": "ch4-bahamut",
+  "mood": "",
+  "seed": 20263502,
+  "prompt": "1girl, yuna \\(ff10-2\\), final fantasy x-2, safe, solo, short brown hair, heterochromia, green eye, blue eye, gunner dressphere, white halter, pink hood down, blue half skirt, a black armoured dragon head with a crested skull at her shoulder, dark folded wings, bevelle underground machina corridor, teal cyan machina glow, deep shadow, soft bokeh background, three-quarter view, eyes downcast, brow drawn, mouth closed, sorrow and guilt, shoulders low, head and shoulders, hands out of frame, (eyes downcast, sorrowful guilty expression:1.3), (a black armoured dragon head with a crested skull at her shoulder:1.25), (teal cyan machina light:1.2), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, smile, smiling, grin, happy, pink sky, pastel clouds, warm light, sunset, blush, bloom",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(eyes downcast, sorrowful guilty expression:1.3), (a black armoured dragon head with a crested skull at her shoulder:1.25), (teal cyan machina light:1.2)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "ref": "public/art/characters/yuna-gunner/idle.png",
+  "refWeight": 0.5,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T22:58:13.556Z",
+  "batch": "ch4-b v2",
+  "focal": {
+    "x": 0.48,
+    "y": 0.42
+  },
+  "master": {
+    "file": "ch4-bahamut.2x.webp",
+    "width": 2688,
+    "height": 1536,
+    "route": "RealESRGAN_x4plus x4 -> lanczos 0.5",
+    "webpQuality": 88,
+    "note": "PNG is this master downscaled to 1344x768; both are one image."
+  }
+}

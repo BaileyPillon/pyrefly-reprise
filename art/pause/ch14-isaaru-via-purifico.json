@@ -1,0 +1,46 @@
+{
+  "subject": "Yuna against Isaaru's aeons",
+  "mood": "alone, and not stepping back",
+  "seed": 932203,
+  "prompt": "1girl, yuna \\(ff10\\), final fantasy x, safe, solo, dark chestnut brown hair, short bob, one thin plaited tail down her back, heterochromia, green eye, blue eye, white halter top with a high collar, yellow obi sash, long white and blue kimono sleeve, blue beaded earring, fair skin, underground stone chamber beneath a holy city, dark grey stone block walls, a rust red carved frieze, small square red glowing lamps in a row, deep crimson lamp light, cold grey shadows, a long dark hallway behind, soft bokeh background, she is on the left of the frame, dark empty space on the right, three-quarter view, facing right, looking ahead, determined, jaw set, eyes narrowed, mouth closed, head and shoulders, the high collar of her halter top and the yellow obi sash closing the bottom of the frame, arms and hands out of frame, nothing crossing her face, (determined stare, jaw set:1.25), (dark chestnut brown hair:1.3), (deep crimson red light, dark stone chamber:1.3), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, blonde hair, golden hair, dirty blonde, light hair, long hair, windswept hair, cleavage, bare chest, breasts, exposed chest, heart pupils, star pupils, spiral pupils, patterned pupils, glowing pupils, second face, two faces, face close behind her, hand near face, fingers in mouth, blush, pink hair tips, bloom, floating ribbon, abstract swoop, butterfly, insect, wings, fairy, city, buildings, city lights, skyscraper, window, sky, sunlight, trees, lantern festival, paper lanterns, fire, flames, smile, grin, crying, tears, open mouth, man, 1boy, monster, creature, statue, orange light, amber light, warm lantern light, candle, yellow light",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(determined stare, jaw set:1.25), (dark chestnut brown hair:1.3), (deep crimson red light, dark stone chamber:1.3)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "ref": "public/art/characters/yuna/idle.png",
+  "refWeight": 0.5,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-25T06:04:53.994Z",
+  "baseRender": "b-932203",
+  "composite": "compose.py: Grothia from its installed O-4 C idle, blurred for depth, behind Yuna's isnet-anime matte",
+  "focal": {
+    "x": 0.47,
+    "y": 0.4
+  },
+  "master": {
+    "file": "ch14-isaaru-via-purifico.2x.webp",
+    "width": 2688,
+    "height": 1536,
+    "route": "RealESRGAN_x4plus x4 -> lanczos 0.5",
+    "webpQuality": 88,
+    "note": "PNG is the picked option byte for byte (the 1x the options round showed); the master is its upscale."
+  },
+  "status": "APPROVED (hero plate option B, Bailey, 2026-09-25 ~10:20 EDT: \"I'll go with all your recommendations\")",
+  "game": "FFX only",
+  "chapter": "Chapter XIV Isaaru (isaaru-via-purifico)",
+  "optionsRound": "docs/concepts/chapters/isaaru/hero-plate/README.md",
+  "pngSha256": "1e2d6f56a1b1c6c0a1be389fc50af02097ed2fb385ac21c5406aa9f2197b16b4"
+}

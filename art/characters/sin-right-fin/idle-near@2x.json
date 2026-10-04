@@ -1,0 +1,24 @@
+{
+  "width": 1964,
+  "height": 1894,
+  "baselineY": 1860,
+  "masterOf": "idle-near.png",
+  "density": 2,
+  "loaderNote": "never read by the game: on a 2x device the loader draws these pixels with the 1x sidecar idle-near.json (src/engine/ArtTier.ts), so size, baseline, scale and facing are the approved painting's",
+  "facing": "front",
+  "method": "RealESRGAN_x4plus then Lanczos to 2x; SDXL img2img per tile (Animagine XL 4.0 Opt, 28 steps, cfg 5, dpmpp_2m/karras); colour-matched (mean/std) to the plain upscale, feathered 96 px blend; the approved painting's own alpha (Lanczos 2x); diffusion RGB only where that alpha >= 250 eroded 7 px, the plain upscale in the edge band",
+  "denoise": 0.25,
+  "seed": 424242,
+  "game": "ffx",
+  "gameNote": "FFX only (rule 14: links I to IV are fought from the Fahrenheit and on Sin's back; research/ffx-sin.md 0.3)",
+  "status": "APPROVED by Bailey 2026-10-01 ~14:10 EDT (\"all your recommendations\", D-315, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-01-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-01-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/sin-right-fin-idle-near/cand-d025-dpm.png",
+  "candidateSha256": "076f3a2d8245087ca20c254e6fba021c4e12bb24b80b8eaeabe834f5420d7922",
+  "approvedOneX": {
+    "path": "public/art/characters/sin-right-fin/idle-near.png",
+    "sha256": "09d3cfe309c7ca8304724b259161d8ec7801f374e3619d0830cf8c692f01ba89"
+  },
+  "provenance": "D:/Tools/pyrefly-art-backup/candidates/2026-10-01-overnight/fidelity/sin-right-fin-idle-near/cand-d025-dpm.prov.json",
+  "decision": "D-315",
+  "texelsPerDevicePxAt2x": "sibling of sin-left-fin"
+}

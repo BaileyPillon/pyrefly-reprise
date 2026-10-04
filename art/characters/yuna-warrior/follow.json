@@ -1,0 +1,49 @@
+{
+  "width": 717,
+  "height": 736,
+  "baselineY": 720,
+  "scale": 1.5,
+  "scaleNote": "the install-ready package's proposal (D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/install-ready), a head match against the installed idle read by eye and held to about +-10 percent in the in-game lineup; multiplies the idle pixel scale",
+  "facing": "right",
+  "seed": 304204,
+  "prompt": "(slashing:1.2), the broadsword swung forward and across in one hand, sword arm extended forward, standing, legs apart, front knee bent, weight forward, determined face, looking at the enemy, 1girl, yuna \\(ff10-2\\), final fantasy x-2, short hair, orange-brown hair, heterochromia, green eye, blue eye, warrior, red scarf collar, white halter top, white detached sleeves, orange sash, long blue skirt, navy leggings, tan orange boots, (huge cyan blue broadsword with a golden guard:1.2), safe, solo, three-quarter view, (from side:1.2), body facing right, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, swirl, sparkles, light rays, confetti, splash, cast shadow, drop shadow, pedestal, platform, 2girls, 2boys, multiple girls, multiple boys, standing still, relaxed, arms at sides, sitting, lying, kneeling, jumping, floating, midair, (from behind:1.2), facing away, looking back, (facing left:1.2), turned away, scenery, architecture, indoors, detailed background, slash effect, motion lines, speed lines, afterimage, energy, aura, glow, sparks, extra weapon, floating weapon, ribbon, streamer, flowing scarf, clone, duplicate, two people, rainbow, hand fan, folding fan, wings, feathers, cape effect, swirling effects, energy swirl, flame, fire, abstract shapes, cloth flying, petals, dark grey top, dark pants, katana, thin curved sword, red sword, scimitar, two swords, dual wielding, extra sword, sheathed sword, scabbard, blonde hair, 1boy, shoulder pads, red belt",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.7,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03\\method\\refs\\yuna-warrior-idle-square.png",
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03\\method\\refs\\yuna-warrior-head.png"
+    ]
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.85,
+    "end": 1,
+    "skeleton": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03\\method\\skel\\follow-sweep-n.png"
+  },
+  "composition": "full",
+  "sources": "identity words describe our installed idle paintings as painted; look: research/visual-bible.md 1.14 where sourced, otherwise ours; IP-Adapter sees only our own installed idle and its head crop; no retail image used anywhere",
+  "key": "yuna-warrior/follow",
+  "game": "ffx2",
+  "status": "APPROVED by Bailey 2026-10-03 ~12:00 EDT (\"all your recommendations, godspeed\", D-341 (D-333), answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-03-picks\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03/yuna-warrior/follow/cand-4.png",
+  "candidateSha256": "5dc11cb4f128d648ce6be6528265f103273218164f9f6dcb3a728e3c1a7e3852",
+  "generatedAt": "2026-10-03T04:58:45.466Z",
+  "decision": "D-341 (D-333)",
+  "replaces": {
+    "sha256": "543cdabd481b6b7eff65ca97821103a4ef40d40097b219e82552fff70e25386d",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/backup/replaced/characters/yuna-warrior/follow.png"
+  }
+}

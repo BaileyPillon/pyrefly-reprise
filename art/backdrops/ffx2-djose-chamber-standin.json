@@ -1,0 +1,15 @@
+{
+  "tag": "ffx2-djose-chamber-standin.stand-in",
+  "status": "PROVISIONAL",
+  "notApproved": true,
+  "chapter": "ffx2-ixion-djose (Chapter XVI, FFX-2 only)",
+  "method": "no GPU: Macalania Temple hall over the Den of Woe floor, recoloured storm grey, greybox hole",
+  "sources": [
+    "backdrops/macalania-temple.png",
+    "backdrops/den-of-woe.png"
+  ],
+  "concept": "docs/concepts/chapters/ixion-djose-2026-09-27/README.md (stand-in plates, concept A)",
+  "script": "docs/concepts/chapters/ixion-djose-2026-09-27/stand-ins/make_standins.py",
+  "sha256": "cd5c51c578cdf6ef74c8d798aa547be679170b718c2104c1780e219a43a4e583",
+  "generatedAt": "2026-09-27T22:09:36.658412+00:00"
+}

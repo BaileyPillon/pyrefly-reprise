@@ -1,0 +1,73 @@
+{
+  "width": 982,
+  "height": 947,
+  "baselineY": 930,
+  "cropBox": [
+    1370,
+    0,
+    2352,
+    947
+  ],
+  "source": {
+    "width": 2352,
+    "height": 1344
+  },
+  "bleeds": [
+    "top",
+    "right"
+  ],
+  "frameFraction": {
+    "x0": 0.5893,
+    "y0": 0.0,
+    "x1": 1.0,
+    "y1": 0.6927
+  },
+  "facing": "front",
+  "facingNote": "Painted into its plate, so never mirrored: \"front\" is the one ArtFacing mirrorFor never flips. The Right Fin is its own painting (plan Q14).",
+  "pose": "idle",
+  "state": "idle (= idle-near, as Evrae)",
+  "light": {
+    "kind": "dim",
+    "centre": [
+      609.0,
+      182.0
+    ],
+    "radius": 141.1,
+    "method": "compose.py light state over the one painting (no new pixels painted)"
+  },
+  "staging": {
+    "range": "near",
+    "evraeSpot": [
+      2.3,
+      -0.9,
+      -4.7
+    ],
+    "depthAlongView": 14.26,
+    "frameHeightWorld": 8.722,
+    "worldHeightAsPainted": 6.04,
+    "vsEvraeWorldHeight": 1.47
+  },
+  "seed": 290655,
+  "prompt": "A painterly anime fantasy background painting, a cinematic matte painting with visible brushwork, late afternoon turning to golden hour, a soft blue sky warming to orange at the horizon, warm low sunlight from the left. The view is from the grey steel foredeck of an ancient airship flying high in the sky: riveted steel deck plates with seams running to the pointed bow, a pale stencilled plate across the keel, a round gold dial set into the plating on the right, thin dark metal railings along both edges, and beyond the bow only a long drop. Ahead and below, a sea of soft clouds. Right beside the ship, so close it fills the upper right of the sky, the monster flies just above the ship on the right, its vast scaled flank overhead like a curving ceiling of scales, and from it reaches down one colossal clawed arm of a living sea monster, as big as a mountain: a thick scaly forearm of overlapping dark slate-grey scales and ridges of cracked stone, rough and craggy like an ancient weathered cliff, with a broad ribbed fin of dark grey membrane along its back edge like the dorsal fin of a whale, and huge hooked black claws curled at the end of the arm. Where the arm joins the monster's vast scaled flank, a round glowing core the size of a house is set deep into the flesh like a great pearl, shining a soft pale violet light. Its shadow falls across the deck. It is entirely a living animal made of rock and scale: no metal, no gold, no machine parts, no pipes, no bolts, no poles, no buildings on it. No people.",
+  "engine": "z_image_turbo (zimg), masked repaint into its plate, RealESRGAN x4 + masked detail pass at 2352x1344",
+  "denoise": 0.68,
+  "detailPass": {
+    "size": [
+      2352,
+      1344
+    ],
+    "denoise": 0.28,
+    "seed": 290656,
+    "masked": true
+  },
+  "painting": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-a-r-near-1.full.png",
+  "cut": "SAM 2.1 small (tools/gen/rig-sam.py loader) prompted by install/cuts.json, cut by the repaint mask, holes filled, edge snapped by a guided filter, pulled in 2 px and defringed from its own pixels (install/cut.py)",
+  "origin": "Original art only (rule 8): our code-drawn sketches and our own paintings as the only image inputs, written sources only, no retail image as input, reference or IP-Adapter; no creature, game or franchise name in any prompt",
+  "retailInput": "none",
+  "status": "DRIVER PICK (D-279: Bailey delegated tonight's Sin picks to the driver, 2026-09-29, 'Your picks (Recommended)'). An agent's pick, NOT Bailey's approval; installed so the listing step can wire it",
+  "game": "FFX only (rule 14: links I to IV are fought from the Fahrenheit and on Sin's back; research/ffx-sin.md 0.3)",
+  "decision": "D-279",
+  "pickedFrom": "Fin option A (right), the clawed arm with a ribbed fin; NEAR fin-a-r-near-1, FAR fin-a-r-far-2 (make_frames.py PICKS)",
+  "optionsRound": "docs/concepts/chapters/sin-2026-09-29/README.md, options.html",
+  "production": "docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md"
+}

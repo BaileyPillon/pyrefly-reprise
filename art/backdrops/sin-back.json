@@ -1,0 +1,35 @@
+{
+  "subject": "link III: on Sin's back at sunset, the ship small in the sky (research/ffx-sin.md 9.1, [single source])",
+  "seed": 290201,
+  "prompt": "A painterly anime fantasy background painting, a cinematic matte painting with visible brushwork, sunset, an orange, pink and violet sky, the sun low on the left, long warm light. The view is from on top of the back of a colossal flying monster, high above the clouds: the ground is a broad rolling expanse of huge overlapping dark slate-grey scales like weathered stone plates, rising towards a spine of tall stone spikes that runs away to the upper right; on the left the back drops away to a sea of clouds far below. A small airship flies in the sky far off on the left. No creature on the back, no people.",
+  "engine": "z_image_turbo (zimg): whole-frame img2img from our code-drawn sketch",
+  "denoise": 0.72,
+  "detailPass": {
+    "upscaler": "RealESRGAN_x4plus.pth",
+    "size": [
+      2352,
+      1344
+    ],
+    "denoise": 0.28,
+    "seed": 290202
+  },
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "master": {
+    "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/plates/back-1.full.png",
+    "width": 2352,
+    "height": 1344
+  },
+  "route": "the picked 2352x1344 master (RealESRGAN x4 + masked detail pass) -> lanczos to 2688x1536",
+  "rolled": false,
+  "origin": "Original art only (rule 8): our code-drawn sketches and our own paintings as the only image inputs, written sources only, no retail image as input, reference or IP-Adapter; no creature, game or franchise name in any prompt",
+  "retailInput": "none",
+  "status": "DRIVER PICK (D-279: Bailey delegated tonight's Sin picks to the driver, 2026-09-29, 'Your picks (Recommended)'). An agent's pick, NOT Bailey's approval; installed so the listing step can wire it",
+  "game": "FFX only (rule 14: links I to IV are fought from the Fahrenheit and on Sin's back; research/ffx-sin.md 0.3)",
+  "decision": "D-279",
+  "pickedFrom": "back-1: KEPT, the link III plate (sheet.json method section)",
+  "optionsRound": "docs/concepts/chapters/sin-2026-09-29/README.md",
+  "production": "docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md"
+}

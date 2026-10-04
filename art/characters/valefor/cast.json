@@ -1,0 +1,24 @@
+{
+  "width": 1665,
+  "height": 830,
+  "baselineY": 814,
+  "facing": "left",
+  "scale": 1.0,
+  "scaleNote": "a light state of the idle: the idle's own pixels and canvas, so the pose scale is 1 (the subject keeps the idle's calibration)",
+  "sources": "the whole-wing idle candidate (wing-a-1-d62) with an additive glow at its own mouth, eyes and chest inside its own alpha (method/lightstate.py); the lamps are tonight's Valefor cast lamps moved by the idle's pad; no GPU, no repaint",
+  "pose": "cast",
+  "registrationVsIdle": {
+    "dx": 0,
+    "dy": 0
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-design-fixes/valefor-wing/cast/cand-1.png",
+  "candidateSha256": "cbf06e7b8ece3815c7568dea773f5e6b1ac2f0273e5a99ec938092aa7e8f600e",
+  "agentsNote": "light state over the whole-wing idle; that idle's sidecar numbers",
+  "seed": null,
+  "denoise": null,
+  "generatedAt": "2026-10-02",
+  "decision": "D-325"
+}

@@ -1,0 +1,22 @@
+{
+  "width": 1194,
+  "height": 919,
+  "baselineY": 843,
+  "pose": "overdrive",
+  "facing": "left",
+  "facingObserved": true,
+  "status": "CANDIDATE",
+  "game": "FFX only",
+  "chapter": "Chapter XIV (provisional) Isaaru, Via Purifico beneath Bevelle",
+  "concept": "O-4 C \"his side\": a sea-green edge and a darker grade in his coat's colour; docs/concepts/chapters/isaaru/aeons/c-frame.jpg; picked by Bailey 2026-09-25 ~01:40 EDT, verbatim: \"I'll go with all your recommendations\"",
+  "method": "r3 derive: the valefor painting's own pixels; grade (saturation x0.8, multiply (200,212,232), contrast x1.08), inner sea-green rim, sea-green glow behind (alpha capped at 0.33, under the engine's 0.35 alpha measure, so it never moves the feet or the content box), 60 px transparent pad; line work and shapes identical; 0 GPU (docs/concepts/chapters/isaaru/production/scripts/isaaru_aeons.py)",
+  "derivedFrom": "public/art/characters/valefor/overdrive.png (D-089, read only; sha256 d20d9da3f7263a73f7b277f9697f24c74f9b7b17c27e871c421100c60497497c)",
+  "sourceSeed": 774857496,
+  "sourcePrompt": "no humans, monster, solo, single creature, avian creature, bird, two large feathered dragon wings, teal plumage, blue green feathers, olive green wing coverts, turquoise body, cream white underbelly, golden tan underwing membrane, small claw hooks at the wing joints, banded striped tail, flat finned tail tip, two small backswept head fins, long neck, short dark hooked beak, sharp talons, yellow eyes, aeon, final fantasy x, wings thrown wide open to their full span, chest thrust forward, long neck arched back, head raised, beak open wide, screaming, unleashing a blast, talons planted on the ground, one head, exactly two wings, one single scaly tail, zoomed out and seen from a distance, the whole wingspan well inside the frame, clear empty margin around every wingtip, nothing touching the frame edge, plain empty white background, nothing behind the bird, (short dark hooked beak:1.3), (teal and olive green plumage:1.25), (from side:1.15), three-quarter view, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "canon": "not canon: the sources give no visual difference between Isaaru's aeons and Yuna's (research/ffx-isaaru-bevelle.md section 10.2); the mark is ours (plan B18 = c)",
+  "ko": "no painting: the engine's pyrefly dissolve (plan B19, O-4 follow-up 1)",
+  "judgeNotes": "self-judged at 1:1 and in a real 1600x900 engine frame; not independently judged; not approved",
+  "sha256": "0534de30bd83be8965cfec5a18f21100c75c3620515293ea51e327dfe28a8f20",
+  "installedAt": "2026-09-25T04:15:22.790379Z",
+  "readme": "docs/concepts/chapters/isaaru/INSTALLED.md"
+}

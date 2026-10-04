@@ -1,0 +1,36 @@
+{
+  "width": 1216,
+  "height": 832,
+  "baselineY": 832,
+  "seed": 1391003,
+  "prompt": "1girl, yunalesca, final fantasy x, safe, solo, medusa, monster girl, giant monster, small pale woman with silver hair and an ornate blue headdress at the top, yellow eyes, blue and black bikini top, bare midriff, her lower body a colossal mass of pale bone-white hair locks, a huge pale bone-white gorgon face low in the mass with two hollow glowing yellow eye sockets and a wide lipless mouth, dozens of thick pale hair locks radiating outward like a sunburst, pale bone white and desaturated lilac, looming over the viewer, monstrous, struck, recoiling, her torso twisted away, head turned aside, one arm raised, grimacing in pain, the pale hair locks thrown back and scattering, damaged, (huge bone-white gorgon face with hollow glowing yellow eye sockets:1.35), (recoiling in pain:1.3), (hair locks thrown back:1.25), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, snake head, serpent head, serpent, fangs, open maw, teeth, jaws, hydra, dragon, wyvern, scales, orange, salmon, red, coral, fish, gown, long dress, armor, dark background, black background, cropped, out of frame, close-up, portrait, bust, upper body, face focus, pixelated, blue crown, spiked crown, tiara, feather fan, floating jewelry, detached accessories, disembodied hand, floating hand, detached hand, severed hand, floating arm, detached arm, extra arm, extra hand, extra limbs, buttocks, ass, back view, looking over shoulder, pin-up, seductive, saturated colors, navy blue, deep blue, hot pink, magenta, purple mass, realistic face, photorealistic, human face in the mass, smooth blank mask, featureless mask, calm, serene, composed, smiling",
+  "cropBox": [
+    0,
+    0,
+    1216,
+    832
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "hurt",
+  "composition": "boss",
+  "facing": "left",
+  "emphasis": "(huge bone-white gorgon face with hollow glowing yellow eye sockets:1.35), (recoiling in pain:1.3), (hair locks thrown back:1.25)",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "img2img": "tools/gen/refs/y3-plate-flat.png",
+  "denoise": 0.48,
+  "generatedAt": "2026-09-19T19:43:50.594Z",
+  "fixRound": "bosses-a fix round 11 (2026-09-19). Not flagged individually by the judge, but the sheet-level finding was that the giant lower face changes identity every frame. attack, cast and ko were re-rendered this round with the idle's gorgon face in --emphasis; hurt had to move with them or the set still strobes on swap. Same flat plate, denoise 0.48, (huge bone-white gorgon face with hollow glowing yellow eye sockets:1.35) leading --emphasis. Two hollow yellow sockets and a lipless mouth, pale bone and lilac, no floating hand. op 74.2% vs idle 76.3%.",
+  "candidate": "y3-hurt11.4"
+}

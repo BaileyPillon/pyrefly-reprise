@@ -1,0 +1,69 @@
+{
+  "mode": "img2img",
+  "init": "D:\\Tools\\pyrefly-scratch\\gpu2\\omnisportrait\\work\\a.init.png",
+  "tag": "q",
+  "mask": null,
+  "seed": 925514,
+  "denoise": 0.6,
+  "words": "1boy, seymour guado, final fantasy x, safe, solo, male focus, adult man, pale lavender grey skin, long straight light blue hair, purple eyes, (thin dark purple veins branching under his eyes and across his cheekbones:1.25), cold smile, closed mouth, bare muscular chest with ridged ribs, red spiral tattoo on his shoulder, dark indigo shoulder cowls shaped like huge curved horns rising beside his head, (a large red eye set in each dark shoulder cowl:1.1), small red spikes on the cowls, three-quarter view, looking at viewer, portrait, close-up, upper body, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, horns on head, antlers, forehead mark, crown, helmet, mask, beard, stubble, 1girl, female, lipstick, weapon, staff, hands, claws, wings, halo, gold, yellow, orange, red trim, orange trim, cape lining, cone spikes, studs, neon, floating objects",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "size": [
+    832,
+    1216
+  ],
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.3,
+    "type": "ease in",
+    "start": 0,
+    "end": 0.8,
+    "refs": [
+      "work/ref-crop.png"
+    ]
+  },
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "execSeconds": 13.469,
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "candidate": "docs/concepts/chapters/omnis/portrait-options option A (a.q4, sha 614b399f1c13)",
+  "candidateFile": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu2/seymour-omnis-portrait/option-a.png",
+  "pickedBy": "Bailey 2026-09-25 ~10:20 EDT (\"I'll go with all your recommendations\")",
+  "status": "APPROVED",
+  "game": "ffx",
+  "chapter": "FFX Chapter XII (speaker B17 on branch chapter-omnis-0925)",
+  "installFixes": {
+    "date": "2026-09-25",
+    "script": "D:/Tools/pyrefly-scratch/trema-go/art-installs/omnis/fix12.py",
+    "done": [
+      "1: the two specks (2 px and 1 px, 4-connected) at x 329-331, y 680-681 erased (the judge wrote them as (680, 329), y first)",
+      "2: the yellow-green on the blue shoulder band (box x 560-760, y 540-660; 1,126 px with hue 30-180 deg) hue-rotated to the band's own median blue (228.5 deg), saturation and value kept"
+    ],
+    "notDone": "3 (the judge's optional one): moving the veins toward the temples needs a masked repaint that would change the face Bailey saw on the sheet; left for Bailey to ask for"
+  },
+  "replaces": {
+    "sha256": "ce32e75a60317360b028863dc3b86eebe669106111446caa94109999f5c33c3c",
+    "status": "CANDIDATE",
+    "judgeNotes": "independent judge 2026-09-25: FAIL 5.9 on sha 55968b5d9a49; this repaired file is NOT yet re-judged and NOT approved (never in approved-hashes.json)",
+    "repair": {
+      "date": "2026-09-25",
+      "after": "independent judge FAIL 5.9 (docs/concepts/chapters/omnis/production/JUDGE.md), sha 55968b5d9a49 superseded",
+      "what": "one masked repair, no GPU: (1) the blown forehead oval and its orange rim (8,972 px mask) painted down to the surrounding skin by a harmonic fill that ignores dark neighbours (brow, lashes, hairline), flat as the cel-shaded skin around it; (2) the 229 px hair-crown pocket at (246-270, 159-175) closed from the raw render portrait.b3; (3) the edge fringe peeled (3,107 px) and 320 more edge px recoloured to the interior mean",
+      "measured": "forehead min-channel>235 px in x308-367 y212-299: 4,047 -> 0; judge edge halo 50.6 % -> 0.1 % (approved seymour-macalania 7.3 %); one alpha island, binary alpha; RGB equals the previous file outside the oval mask and the peeled edge",
+      "notFixed": "costume still off the O-1 A body (red and orange trim, cone spikes, no horned shoulders or red eye); the veins the prompt asked for are still missing",
+      "script": "docs/concepts/chapters/omnis/production/scripts/portrait_repair.py",
+      "o5Pair": "docs/concepts/chapters/omnis/o5-portrait/sheet.jpg: A = this file, B = round-2 render b1 (seed 925211), backup D:/Tools/pyrefly-art-backup/candidates/2026-09-25-omnis/portraits/seymour-omnis.o5-b.png"
+    },
+    "installedAt": "2026-09-25T05:12:12.235006Z"
+  },
+  "replacedFileBackup": "D:/Tools/pyrefly-art-backup/approved/2026-09-25-recommendations/replaced/seymour-omnis.png",
+  "sha256": "6d4fe6583771660e9251f170f15f893e72d6bba656eb63cdaa3b90716d3ef683",
+  "installedAt": "2026-09-25T14:38:43.278332+00:00"
+}

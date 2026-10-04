@@ -1,0 +1,108 @@
+{
+ "width": 1136,
+ "height": 784,
+ "baselineY": 768,
+ "seed": 822302,
+ "prompt": "no humans, evrae \\(ff10\\), final fantasy x, safe, solo, monster, dragon, eastern dragon, sea serpent, wingless, one head, serpentine body, very long body, coiled body, dark teal scales, deep blue-green scales, navy shadows on the scales, pale tan underbelly, cream belly scales, segmented belly plates, crimson red dorsal spines, orange-tipped spines, serrated fins along the whole spine, red swept-back head crest, red jaw frills, orange eyes, sharp teeth, thin whiskers, orange flame-shaped tail fin, two clawed forelimbs, reptilian, full body, entire body within the frame, head raised on the upper left, looking at viewer, open mouth, sharp teeth, long body looping behind in wide coils, tail tip visible, hovering in midair, (dark teal scales:1.3), (pale tan underbelly:1.15), (crimson red dorsal spines:1.15), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, orange scales, orange body, yellow scales, gold scales, green scales, lime green, red body, brown body, multiple heads, two heads, extra head, wings, bat, feathers, bird, insect, humanoid, person, human face, mammal, fur, sky, clouds, blue background, gradient background, out of frame",
+ "cropBox": null,
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "steps": 28,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "pose": "idle-near",
+ "composition": "boss",
+ "facing": "left",
+ "emphasis": "(dark teal scales:1.3), (pale tan underbelly:1.15), (crimson red dorsal spines:1.15)",
+ "canvas": {
+  "width": 1136,
+  "height": 784
+ },
+ "ref": "docs/concepts/chapters/evrae/redo/refs/evrae-b-square.png",
+ "refWeight": 0.45,
+ "refWeightType": "ease in",
+ "refScaling": "K+V",
+ "refStart": 0.2,
+ "refEnd": 0.6,
+ "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+ "img2img": "docs/concepts/chapters/evrae/redo/refs/evrae-b-init.png",
+ "denoise": 0.6,
+ "lint": {
+  "stripped": []
+ },
+ "parent": {
+  "note": "The E1-H idle is the approved idle (sha256 4140ba74...) moved by exact pixel operations (crop 200 px at the left, a 165 px pipe at x 448, the tail loop dropped); `canvas`, `cropBox`, `source` and `cutout` described that PARENT's generation and its 1171x784 canvas, not this file. They are kept here as the parent's record; this file's own geometry is `width`, `height`, `baselineY` and `canvas` below.",
+  "approvedCanvas": {
+   "width": 1171,
+   "height": 784
+  },
+  "canvas": {
+   "width": 1216,
+   "height": 832
+  },
+  "cropBox": [
+   22,
+   25,
+   1193,
+   809
+  ],
+  "source": {
+   "width": 1216,
+   "height": 832
+  },
+  "cutout": {
+   "coverage": {
+    "widthFraction": 0.9629934210526315,
+    "heightFraction": 0.9423076923076923,
+    "checked": false,
+    "exceeds": false
+   },
+   "components": {
+    "componentCount": 3,
+    "largestPixels": 450960,
+    "secondPixels": 5,
+    "secondRatio": 1.1087457867660103e-05,
+    "touchesLargest": true
+   },
+   "nearWhite": {
+    "fraction": 0.18896864307746208,
+    "largestRegionFraction": 0.12119236577237016,
+    "detached": false,
+    "touchesEdge": false,
+    "allowanceUsed": 1.1137875
+   }
+  }
+ },
+ "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/evrae-restage/e1-h-neck-lengthened/idle.png",
+ "generatedAt": "2026-09-22T20:17:37.391Z",
+ "status": "ADOPTED by Bailey 2026-10-03 ~16:25 EDT (\"I'll go with all your recommendations\", D-360: Evrae E1-H, the driver's recommendation: the neck arch lengthened about 165 px so the head stays and the coil sits right, tail loop dropped). Re-derived to the E1-H geometry by the r38-evrae lane as an install-ready package; the release 38 art install installs it and re-locks this file in docs/target/approved-hashes.json. Not installed by the r38-evrae branch.",
+ "redo": {
+  "date": "2026-09-22",
+  "candidate": "docs/concepts/chapters/evrae/redo/cand/idle-near/r4/idle-near.2.png",
+  "method": "img2img from refs/evrae-b-init.png (the picked concept B, stray second head removed) at denoise 0.6 + --ref refs/evrae-b-square.png --forceRef 0.45; unhole.py min area 100 cleared the enclosed white-background holes",
+  "identityAnchor": "docs/concepts/chapters/evrae/renders/evrae-b.png (picked concept B, teal-dominant)",
+  "notes": "docs/concepts/chapters/evrae/redo/redo.md"
+ },
+ "candidateNote": "E1-H (D-360): tail loop dropped, neck lengthened 165 px at x=448 of the approved idle, 200 px cropped at the left (1171 -> 1136 wide); the pipe repainted from cand-2 (masked SDXL inpaint, seed 910002, denoise 0.7); slot dx +0.9743 world",
+ "e1h": {
+  "decision": "D-360",
+  "game": "ffx (Chapter VIII, evrae-airship); FFX only",
+  "date": "2026-10-03",
+  "branch": "r38-evrae",
+  "evidence": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/evrae-restage/README.md",
+  "slotDxWorld": 0.9743,
+  "method": "the approved idle (sha256 4140ba74...) moved/extruded/cropped by pixel-exact operations (build_e1.py variant H, keepstrip on); only the 165 px pipe is generated (masked SDXL inpaint cand-2)",
+  "replaces": {
+   "path": "public/art/characters/evrae/idle-near.png",
+   "bytes": 803854,
+   "sha256": "4140ba740cd0fde65e91d7c730726294ac6dee7e53dcd18620251fb1f6e928af"
+  },
+  "canvas": {
+   "cropLeftPx": 200,
+   "pipePx": 165,
+   "xcut": 448
+  },
+  "sidecarFix": "2026-10-04 (r38-evrae repair): canvas is this file's own 1136x784, cropBox is null, and the parent's canvas, cropBox, source and cutout moved under `parent`; the engine reads only width, height, baselineY, scale, anchorY and facing, so nothing it reads changed"
+ }
+}

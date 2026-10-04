@@ -1,0 +1,37 @@
+{
+  "width": 767,
+  "height": 1176,
+  "baselineY": 1160,
+  "facing": "right",
+  "seed": 103006,
+  "prompt": "1girl, yuna \\(ff10-2\\), final fantasy x-2, brown hair, short hair, heterochromia, blue eye, green eye, thief, (white and red bikini top:1.2), bare midriff, blue and white ruffled sleeves, detached sleeves, red gloves, white and blue miniskirt, red straps, red knee-high socks, blue t-strap shoes, white ruffles on shoes, (teal dagger:1.1), silver-purple dagger, safe, solo, (dual wielding:1.1), holding dagger in each hand, standing, daggers lowered at her sides in reverse grip, looking at viewer, confident smirk, straight-on, full body, standing, feet visible, (red bikini top with white trim:1.2), (blue ruffled sleeves:1.2), (blue t-strap shoes:1.2), red socks, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, blonde hair, long hair, red braid, pink hood, sword, long sword, staff, armor, black clothes, pants, leggings, pantyhose, tights, long scarf, flowing scarf, 1boy, rifle, handgun, kimono, obi, sash, cape, cloak, wide sleeves, white sleeves, yellow belt, japanese clothes, long sleeves, red boots, knee boots, shawl, scarf",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.45,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-03-overnight\\dressphere-method\\refs\\yuna-gunner-head.png"
+    ]
+  },
+  "composition": "full",
+  "sources": "research/visual-bible.md section 1.14 (the sourced Thief / Warrior dressphere descriptions, Yuna rows; the girl-specific variant for Rikku Warrior / Paine Thief is not sourced and is ours); identity words from the installed idle sidecars of the same girl; IP-Adapter sees only our own installed idles / head crops (and the candidate idle once chosen); OpenPose skeletons we drew; no retail image anywhere",
+  "key": "yuna-thief/idle",
+  "game": "ffx2",
+  "costumeNote": "costume SOURCED: research/visual-bible.md 1.14 (the Thief dressphere, Yuna row; 2 sources)",
+  "status": "APPROVED by Bailey 2026-10-03 ~12:00 EDT (\"all your recommendations, godspeed\", D-336, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-03-picks\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-03-overnight/yuna-thief/idle/cand-6.png",
+  "candidateSha256": "7dc088e492ef022df9beb68f9a105f5185424405be4d23b5083f4bfed56b10d7",
+  "generatedAt": "2026-10-03T04:53:06.809Z",
+  "decision": "D-336"
+}

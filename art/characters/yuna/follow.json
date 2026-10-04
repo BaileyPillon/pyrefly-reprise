@@ -1,0 +1,46 @@
+{
+  "width": 815,
+  "height": 673,
+  "baselineY": 670,
+  "scale": 1.35,
+  "scaleNote": "head match against the installed idle, from the overnight run (method/picks.json rr); multiplies the idle pixel scale",
+  "facing": "right",
+  "seed": 162903,
+  "prompt": "no humans, (golden ring staff head:1.3), ornate gold filigree ring with white openings, a small blue jewel at its throat, gold metal, summoner staff, close-up, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, text, error, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, (blue ring:1.3), blue metal, (blue:1.1), silver, hand, fingers, face, person, 1girl",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "clipVision": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-02-overnight\\method\\refs\\yuna-staffhead.png"
+    ]
+  },
+  "img2img": {
+    "init": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-02-overnight\\method\\stf\\pre-1024.png",
+    "mask": "D:\\Tools\\pyrefly-art-backup\\candidates\\2026-10-02-overnight\\method\\stf\\mask-1024.png",
+    "denoise": 0.65
+  },
+  "composition": "full",
+  "sources": "the 2026-10-01 pick yuna/follow/cand-17 (ours) as the init; the IP-Adapter sees a crop of her own approved idle (public/art/characters/yuna/idle.png, read-only); no retail image used anywhere",
+  "pose": "follow",
+  "key": "the impact / follow-through key, installed as \"follow\" (shown when the hit lands, held at full reach for a beat, src/engine/KeyPoses.ts)",
+  "fix": "the adopted 2026-10-01 pick (cand-17) with only its blue staff ring repainted as her golden ring head; plus two fresh re-rolls with the sleeves held down and the golden ring head",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-323, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/party-key-rerolls/yuna/follow-staff-fix/cand-3.png",
+  "candidateSha256": "a51861243506745d249fe6e3489f06916deea7bbeef4a6c9873e33da7f6fa6f5",
+  "agentsNote": "golden ring head with blue jewel accents (closest to her idle's ornate head)",
+  "generatedAt": "2026-10-02T05:27:56.000Z",
+  "decision": "D-323"
+}

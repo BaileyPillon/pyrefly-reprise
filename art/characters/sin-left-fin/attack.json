@@ -1,0 +1,35 @@
+{
+  "width": 1030,
+  "height": 1036,
+  "baselineY": 1019,
+  "facing": "front",
+  "sizeNote": "the idle-near canvas (Z-Image on the idle's own canvas and alpha): its sidecar numbers, baselineY included (picks-boss-keys.json)",
+  "seed": 170135,
+  "prompt": "A painterly anime fantasy matte painting with visible brushwork, warm low sunlight from the left. One colossal clawed arm of a living sea monster, as big as a mountain, swinging down to strike: a thick scaly forearm of overlapping dark slate-grey scales and ridges of cracked stone, rough and craggy like an ancient weathered cliff, with a broad ribbed fin of dark grey membrane along its back edge like the dorsal fin of a whale, and huge hooked black claws. Where the arm joins the monster's flank, a round core is set deep into the flesh like a great pearl, faintly lit a soft pale violet. It is entirely a living animal made of rock and scale: no metal, no gold, no machine parts, no pipes, no bolts. No people. Seen against a plain flat grey sky.",
+  "negative": "",
+  "model": "z_image_turbo_bf16_v2.safetensors (+ qwen_3_4b lumina2, ae VAE, ModelSamplingAuraFlow shift 3)",
+  "steps": 10,
+  "cfg": 1,
+  "sampler": "res_multistep",
+  "scheduler": "simple",
+  "img2img": {
+    "init": "D:/Tools/pyrefly-scratch/art-1002-boss/inits/sin-left-fin-attack-w3.png",
+    "denoise": 0.38
+  },
+  "composition": "boss",
+  "sources": "Method W on Z-Image Turbo: init = the installed painting's own pixels, warped on its own canvas (sin-left-fin-attack-w3, method/inits.json + warp.py); creature words only (no creature, game or franchise name), as the Sin paintings' own prompts; no retail image anywhere.",
+  "pose": "attack",
+  "registrationVsIdle": {
+    "dx": 0,
+    "dy": 0
+  },
+  "registrationNote": "offset (dx, dy) of this cut against its own idle, from the candidate README; the game anchors the plane at the measured ground row and the canvas centre",
+  "game": "ffx",
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-325, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/boss-keys-new/sin-left-fin/attack/cand-5.png",
+  "candidateSha256": "bd30473b253574bd7fe17634a4836fb9058dfb2656fd4c0e9bf3b236fdc54ef9",
+  "agentsNote": "NEAR only; the idle's canvas; set baselineY to the idle's (1019) in the sidecar",
+  "denoise": 0.38,
+  "generatedAt": "2026-10-02T05:54:46.004Z",
+  "decision": "D-325"
+}

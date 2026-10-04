@@ -1,0 +1,34 @@
+{
+ "width": 944,
+ "height": 1172,
+ "baselineY": 1163,
+ "facing": "right",
+ "mirrored": false,
+ "status": "APPROVED: Bailey 2026-09-27 ~13:00 EDT, \"I'll go with all of your recommendations\" (D-259 art direction 3 Film with the back-edge rim fixed first; D-262 sides switched, never mirrored). The pick is the film-set repair round's recommended file (docs/concepts/ff7-art-2026-09-27/film-set/README.md). A pick approves only the art as shown. Game: FF7 only.",
+ "decision": "D-259",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/cloud/windup/cut-g.png",
+ "sourceSha256": "86dad6805bf0689cdbff5f6020af2eacd8a08b398ba49075b5d6109949c13adf",
+ "installSteps": [
+  {
+   "step": "resize",
+   "factor": 0.5,
+   "filter": "lanczos, premultiplied"
+  },
+  {
+   "step": "register",
+   "padLeft": 190,
+   "on": "feet (anchorX)",
+   "centreColumn": 472
+  }
+ ],
+ "installer": "docs/concepts/ff7-art-2026-09-27/film-set/scripts/install.py",
+ "subject": "ff7-film-cloud",
+ "state": "windup",
+ "scaleToIdle": 1.11,
+ "scale": 1.11,
+ "seed": 742006,
+ "engine": "flux-2-klein-9b-kv-fp8 (edit mode, ReferenceLatent)",
+ "retailInput": "none (our own Film renders only; no IP-Adapter, no trace)",
+ "promptKey": "film-cloud-windup",
+ "sha256": "e03c0e7e7e69ea5625e9defc5efeffecc769ca6223f2e7cc55d66c8a50d83100"
+}

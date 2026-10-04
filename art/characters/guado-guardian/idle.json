@@ -1,0 +1,42 @@
+{
+  "width": 826,
+  "height": 1153,
+  "baselineY": 1137,
+  "pose": "idle",
+  "composition": "full",
+  "nonBiped": false,
+  "facing": "left",
+  "status": "CANDIDATE",
+  "method": "r3 derive-from-concept (docs/plans/art-method-r3/METHOD-CHECK.md): the approved concept pick guardian-a.png's own pixels (raw render ComfyUI output pyrefly/guado-guardian-a2_idle_00001_.png, seed 501031, byte-identical to the concept inside its matte); cut-out and framing only, no repaint",
+  "concept": "docs/concepts/chapters/macalania/renders/guardian-a.png",
+  "conceptSeed": 501031,
+  "repairs": [],
+  "cutout": {
+    "width": 826,
+    "height": 1153,
+    "baselineY": 1137,
+    "contentBox": [
+      16,
+      16,
+      809,
+      1136
+    ],
+    "rawContentBox": [
+      18,
+      36,
+      811,
+      1156
+    ],
+    "sourceWidth": 832,
+    "sourceHeight": 1216,
+    "matte": "concept isnet-anime matte (binary) cross-checked with a SAM 2.1 small mask of the raw render (CPU); off-white hair tails and spike tips the isnet matte dropped grown back from the raw (1,756 px), white halo peeled (870 px), flat-white background trapped inside the spear's crescent blade removed (431 px); binary alpha (house convention). Scripts: docs/concepts/chapters/macalania/r3-guardian/scripts/ (sam_cut.py, cutout.py, frame.py)"
+  },
+  "sha256": "963b58eee9206443b108d4b9f1a3710beba382255529db3ec7c0fac3cbbb88ab",
+  "candidateOf": "public/art/characters/guado-guardian/idle.png",
+  "judgeNotes": "self-judged at 1:1 and in battle; not an independent judge; not approved (never in approved-hashes.json). No belt pouch: concept A has none (research 9.3 asks for one; see the r3-guardian README)",
+  "generatedAt": "2026-09-24T01:27:59Z",
+  "candidateSource": "D:/Tools/pyrefly-lora/guardian/r3/idle-r3.png",
+  "installedAt": "2026-09-24T03:29:42Z",
+  "replaced": "D:/Tools/pyrefly-art-backup/candidates/2026-09-23-ch7-r2/guado-guardian/replaced/idle.png (seed 520002, judged 6)",
+  "readme": "docs/concepts/chapters/macalania/r3-guardian/README.md"
+}

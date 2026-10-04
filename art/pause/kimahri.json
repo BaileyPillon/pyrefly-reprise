@@ -1,0 +1,54 @@
+{
+  "subject": "Kimahri",
+  "mood": "silent stoic resolve, broken horn",
+  "seed": 20261305,
+  "prompt": "1other, kimahri ronso, final fantasy x, safe, solo, anthro, blue lion man, broad furry snout, wide flat feline nose, whiskers, short blue fur, pale white mane, yellow eyes, bare face, simple leather harness on his chest, mount gagazet snowfield behind him, cold grey-blue light, falling snow, soft bokeh background, three-quarter view, looking at viewer, mouth closed, stoic, calm, jaw set, head and shoulders, (a blue lion man with a broad furry snout and whiskers:1.25), (one short broken horn stub:1.25), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, muzzle, muzzle cage, cage over the snout, grille, bridle, strap over the nose, gag, mask, face armor, helmet, two horns, long horn, tall horn, curved horn, intact horn, antlers, horn ornament, gold horn cap, human face, human nose, elf ears, blonde hair, gold ornament, cluttered",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(a blue lion man with a broad furry snout and whiskers:1.25), (one short broken horn stub:1.25)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "ref": "public/art/characters/kimahri/idle.png",
+  "refWeight": 0.55,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T17:07:23.255Z",
+  "fixPass": "round 5 (2026-09-18)",
+  "judgeFixes": "Feline Ronso head - broad furry snout, flat feline nose, whiskers, fur, no elf ears (was a blue-tinted human face); one horn only; blue fur with a white mane throughout",
+  "focal": {
+    "x": 0.42,
+    "y": 0.44
+  },
+  "master": {
+    "file": "kimahri.2x.webp",
+    "width": 2688,
+    "height": 1536,
+    "route": "RealESRGAN_x4plus x4 -> lanczos 0.5",
+    "webpQuality": 88,
+    "note": "The 2x master is the approved master with the edited region re-mastered by its own route (RealESRGAN x4 -> lanczos 0.5, method/pause2x.mjs) and pasted inside the edit mask; the PNG is the edited 1x painting (D-324)."
+  },
+  "hornEdit": {
+    "what": "the long horn removed, one short stub with a broken end kept (D-324, candidate A of the 2026-10-02 run)"
+  },
+  "hornEditRecipe": null,
+  "status": "APPROVED by Bailey 2026-10-02 ~09:50 EDT (\"All your recommendations\", D-324, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2), the agents' recommended candidate; installed by D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/install.mjs, locked in docs/target/approved-hashes.json set \"bailey:2026-10-02-art\"",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-10-02-overnight/kimahri-broken-horn/other-paintings/pause/cand-2.png",
+  "candidateSha256": "3d08d5aba0662676704a2d40d220716da1476b7ce7ba223ecbe8916360fb109c",
+  "decision": "D-324",
+  "sidecarNote": "geometry (size, baselineY, facing, cropBox, focal) is the approved painting's, unchanged: the edit changed only the horn",
+  "replaces": {
+    "sha256": "bad11c1c89dfdbe926413ec7fc0411690432afeaba953aaa2805c457c9ebb405",
+    "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/pause/kimahri.png"
+  }
+}
