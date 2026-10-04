@@ -71,6 +71,10 @@ if (dist && !existsSync(join(dist, 'index.html'))) {
 }
 const host = live ? live.hostname : String(args.host ?? OLD_HOST);
 const base = live ? live.pathname : String(args.base ?? OLD.pathname);
+if (!/^\/([\w.~%-]+\/)*$/.test(base)) {
+  console.error(`--base must be a folder like / or /pyrefly-reprise/, got ${JSON.stringify(base)}. From Git Bash a typed --base=/ is rewritten to a Windows path (MSYS): use MSYS_NO_PATHCONV=1, or PowerShell.`);
+  process.exit(2);
+}
 const startUrl = live ? live.href : `https://${host}${base}`;
 const expectShown = args.expect ? args.expect === 'shown' : host.toLowerCase() === OLD_HOST;
 const outDir = typeof args.out === 'string' ? resolve(args.out) : null;
@@ -84,15 +88,16 @@ if (outDir) mkdirSync(outDir, { recursive: true });
 async function installRoutes(context) {
   await context.route('**/*', async (route) => {
     const url = new URL(route.request().url());
-    if (url.origin === NEW_ORIGIN) {
-      return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: '<!doctype html><title>the new address (stub)</title><p>stub</p>' });
-    }
+    // The build comes first: with --host=echoesofspira.com the build IS the new address, and the stub must not shadow it.
     if (dist && url.origin === `https://${host}` && url.pathname.startsWith(base)) {
       let file = resolve(dist, decodeURIComponent(url.pathname.slice(base.length)));
       if (file !== dist && !file.startsWith(dist + sep)) return route.fulfill({ status: 403, body: 'outside the build' });
       if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
       if (!existsSync(file)) return route.fulfill({ status: 404, contentType: 'text/plain', body: `not in the build: ${url.pathname}` });
       return route.fulfill({ status: 200, contentType: MIME[extname(file).toLowerCase()] ?? 'application/octet-stream', body: readFileSync(file) });
+    }
+    if (url.origin === NEW_ORIGIN) {
+      return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: '<!doctype html><title>the new address (stub)</title><p>stub</p>' });
     }
     if (live && url.origin === live.origin) return route.continue();
     return route.abort('blockedbyclient');
