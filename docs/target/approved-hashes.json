@@ -641,24 +641,52 @@
     "mtime": "2026-09-23T16:36:03.868Z"
    },
    "public/art/characters/evrae/idle-near.png": {
-    "sha256": "4140ba740cd0fde65e91d7c730726294ac6dee7e53dcd18620251fb1f6e928af",
-    "mtime": "2026-09-22T20:39:50.756Z"
+    "sha256": "4911670ae7afc54d64f1bf8e1d2224f68bb59467e1aa1100fd8d1608dd01f00b",
+    "mtime": "2026-10-04T13:16:07.353Z",
+    "approved": "2026-10-03",
+    "replacedBy": "bailey:2026-10-03-evrae-e1h (D-360; Bailey 2026-10-03 ~16:25 EDT, verbatim \"I'll go with all your recommendations\")",
+    "supersedes": {
+     "sha256": "4140ba740cd0fde65e91d7c730726294ac6dee7e53dcd18620251fb1f6e928af",
+     "mtime": "2026-09-22T20:39:50.756Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-03-evrae-e1h/replaced/characters/evrae/idle-near.png"
+    }
    },
    "public/art/characters/evrae/idle-far.png": {
     "sha256": "108a32522361529ff12baa11bb1a1f63c049402fc6b6260421d8cea5a0588f3e",
     "mtime": "2026-09-22T20:39:50.796Z"
    },
    "public/art/characters/evrae/breath-charge.png": {
-    "sha256": "55ce9c754a263db5a1e1d4dc871b57e914d872632f6383012b76c50786375934",
-    "mtime": "2026-09-23T18:09:30.554Z"
+    "sha256": "1b1e12977f49b7d66de69e43ac8fbdfa33536fa8df99b7b30a9a5afed3b47fa4",
+    "mtime": "2026-10-04T13:16:07.369Z",
+    "approved": "2026-10-03",
+    "replacedBy": "bailey:2026-10-03-evrae-e1h (D-360; Bailey 2026-10-03 ~16:25 EDT, verbatim \"I'll go with all your recommendations\")",
+    "supersedes": {
+     "sha256": "55ce9c754a263db5a1e1d4dc871b57e914d872632f6383012b76c50786375934",
+     "mtime": "2026-09-23T18:09:30.554Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-03-evrae-e1h/replaced/characters/evrae/breath-charge.png"
+    }
    },
    "public/art/characters/evrae/hurt.png": {
-    "sha256": "f66990126b12904a9812a78bd91d1d358b2b07db4dced2f2154b9784f7767529",
-    "mtime": "2026-09-23T17:17:20.930Z"
+    "sha256": "02c22daaf1a0c359da8074a7034d28588bdffb4fc4d3c3582ec605c81f72c401",
+    "mtime": "2026-10-04T13:16:07.366Z",
+    "approved": "2026-10-03",
+    "replacedBy": "bailey:2026-10-03-evrae-e1h (D-360; Bailey 2026-10-03 ~16:25 EDT, verbatim \"I'll go with all your recommendations\")",
+    "supersedes": {
+     "sha256": "f66990126b12904a9812a78bd91d1d358b2b07db4dced2f2154b9784f7767529",
+     "mtime": "2026-09-23T17:17:20.930Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-03-evrae-e1h/replaced/characters/evrae/hurt.png"
+    }
    },
    "public/art/characters/evrae/idle.png": {
-    "sha256": "4140ba740cd0fde65e91d7c730726294ac6dee7e53dcd18620251fb1f6e928af",
-    "mtime": "2026-09-22T20:39:50.946Z"
+    "sha256": "4911670ae7afc54d64f1bf8e1d2224f68bb59467e1aa1100fd8d1608dd01f00b",
+    "mtime": "2026-10-04T13:16:07.350Z",
+    "approved": "2026-10-03",
+    "replacedBy": "bailey:2026-10-03-evrae-e1h (D-360; Bailey 2026-10-03 ~16:25 EDT, verbatim \"I'll go with all your recommendations\")",
+    "supersedes": {
+     "sha256": "4140ba740cd0fde65e91d7c730726294ac6dee7e53dcd18620251fb1f6e928af",
+     "mtime": "2026-09-22T20:39:50.946Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-03-evrae-e1h/replaced/characters/evrae/idle.png"
+    }
    }
   },
   "chapter:leblanc-goons:2026-09-24": {
@@ -1839,9 +1867,16 @@
     "approved": "2026-10-01"
    },
    "public/art/characters/evrae/idle@2x.png": {
-    "sha256": "7361b40ffa0536c66a5f6198c44c212cf346d07e0690a26dc047f5f7c1a97284",
-    "mtime": "2026-10-02T01:08:54.277Z",
-    "approved": "2026-10-01"
+    "sha256": "227b012652ba3a72841cbd88c863fe6034351714aee5584bf59199c16eb34407",
+    "mtime": "2026-10-04T13:16:07.357Z",
+    "approved": "2026-10-03",
+    "replacedBy": "bailey:2026-10-03-evrae-e1h (D-360; Bailey 2026-10-03 ~16:25 EDT, verbatim \"I'll go with all your recommendations\")",
+    "supersedes": {
+     "sha256": "7361b40ffa0536c66a5f6198c44c212cf346d07e0690a26dc047f5f7c1a97284",
+     "mtime": "2026-10-02T01:08:54.277Z",
+     "approved": "2026-10-01",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-03-evrae-e1h/replaced/characters/evrae/idle@2x.png"
+    }
    },
    "public/art/characters/ffx2-bahamut/attack.png": {
     "sha256": "79b5c5a13286e1228831396d08b0b6c582c547a5c86d3141a31d42cc4e0b595c",
@@ -3148,9 +3183,16 @@
     "approved": "2026-10-02"
    },
    "public/art/characters/evrae/attack.png": {
-    "sha256": "bcfc5a98f9936c263e01e6a4c5921d628d71e112d223995d5f178c22d509b226",
-    "mtime": "2026-10-03T14:22:43.523Z",
-    "approved": "2026-10-02"
+    "sha256": "dab9623ce8a509c4f412cb1d692dc8dacdebff84040cb8cb23a6093f078f3198",
+    "mtime": "2026-10-04T13:16:07.363Z",
+    "approved": "2026-10-03",
+    "replacedBy": "bailey:2026-10-03-evrae-e1h (D-360; Bailey 2026-10-03 ~16:25 EDT, verbatim \"I'll go with all your recommendations\")",
+    "supersedes": {
+     "sha256": "bcfc5a98f9936c263e01e6a4c5921d628d71e112d223995d5f178c22d509b226",
+     "mtime": "2026-10-03T14:22:43.523Z",
+     "approved": "2026-10-02",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-03-evrae-e1h/replaced/characters/evrae/attack.png"
+    }
    },
    "public/art/characters/ffx2-bahamut/cast.png": {
     "sha256": "7da8a1fbb63d87e61b6f94a357442f88e4e8b1a4afc8f296fc7daec6df288f8f",
@@ -3810,6 +3852,41 @@
    "public/art/backdrops/wings/den-of-woe-right.png": {
     "sha256": "4d1feb1902e39eb045cae399a96d619e131f753a5c1c3948d1864280ea658661",
     "mtime": "2026-10-04T11:33:40.909Z",
+    "approved": "2026-10-03"
+   }
+  },
+  "bailey:2026-10-03-evrae-e1h": {
+   "words": "I'll go with all your recommendations",
+   "decision": "D-360",
+   "note": "Bailey, 2026-10-03 ~16:25 EDT, in chat, answering the driver's recommendation, verbatim \"I'll go with all your recommendations\": option E1-H of the Evrae mockup round that D-353 asked for, Evrae's approved idle repainted with the neck arch lengthened about 165 px so the head stays and the coil sits right (tail loop dropped); party, camera and Evrae's scale unchanged. Installed 2026-10-04 in release 38 together with its code lane r38-evrae (RANGE_STAGING.near.evrae pinned, the aspect stand-back, the phone's refit leaving Evrae out), because the slot value assumes this canvas (package D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/evrae-restage/install-ready/, manifest.json; docs/handoff/r38-evrae.md): the six replaced paintings idle, idle-near (a byte twin of idle), idle@2x, attack, hurt and breath-charge, with their six sidecars; 8258316 bytes installed against 9514318 replaced (-1256002); the originals are backed up in D:/Tools/pyrefly-art-backup/approved/2026-10-03-evrae-e1h/replaced/characters/evrae/. idle-far, idle-far@2x and ko are untouched; the optional ko and the not-installed cast are not installed. FFX only, Chapter VIII (evrae-airship).",
+   "public/art/characters/evrae/idle.png": {
+    "sha256": "4911670ae7afc54d64f1bf8e1d2224f68bb59467e1aa1100fd8d1608dd01f00b",
+    "mtime": "2026-10-04T13:16:07.350Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/evrae/idle-near.png": {
+    "sha256": "4911670ae7afc54d64f1bf8e1d2224f68bb59467e1aa1100fd8d1608dd01f00b",
+    "mtime": "2026-10-04T13:16:07.353Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/evrae/idle@2x.png": {
+    "sha256": "227b012652ba3a72841cbd88c863fe6034351714aee5584bf59199c16eb34407",
+    "mtime": "2026-10-04T13:16:07.357Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/evrae/attack.png": {
+    "sha256": "dab9623ce8a509c4f412cb1d692dc8dacdebff84040cb8cb23a6093f078f3198",
+    "mtime": "2026-10-04T13:16:07.363Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/evrae/hurt.png": {
+    "sha256": "02c22daaf1a0c359da8074a7034d28588bdffb4fc4d3c3582ec605c81f72c401",
+    "mtime": "2026-10-04T13:16:07.366Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/evrae/breath-charge.png": {
+    "sha256": "1b1e12977f49b7d66de69e43ac8fbdfa33536fa8df99b7b30a9a5afed3b47fa4",
+    "mtime": "2026-10-04T13:16:07.369Z",
     "approved": "2026-10-03"
    }
   }
