@@ -808,7 +808,10 @@ backdrop and the poses the first menu draws (`idle*`, `ready`) start at the base
 procedural floors and the parallax bands follow the same device class (`ArtBudget.groundPx`, `deckPx`, `bandPx`, `floorDetail`: a floor
 is drawn on its design grid through a scale, so it is the same drawing at any resolution). Re-run the installer whenever the library
 grows (`node tools/hires-install.mjs --apply`, idempotent; `--redo3` re-derives every `@3x` after a change to `derive3`) and then the
-manifest. Handoff: [handoff/r39-hires-engine.md](handoff/r39-hires-engine.md).
+manifest. **Install only what a loader reads: `node tools/hires-install.mjs --apply --only characters/,backdrops/`.** The library also holds
+`pause/<name>@4x.png`, `portraits/<name>@2x.png` and `title/<name>@2x.png`, and the installer derives an `@3x` from every `@4x`; the manifest does not list
+them and nothing loads them, so a plain run puts about 1.4 GB of dead bytes into the payload (104 files; three of the pause `@3x` are over Cloudflare's
+25 MiB per-file limit as written). Found on 2026-10-04 by the `r39-int` merge. Handoff: [handoff/r39-hires-engine.md](handoff/r39-hires-engine.md).
 
 ---
 

@@ -365,3 +365,27 @@ Both sides edited 7 files; git merged 6 by itself and I read each result. The se
 
 `git diff --stat` of the merge against this branch: 365 files changed by main's side alone, none under `public/`. `npx tsc --noEmit`: clean (exit 0, empty output) on the merge with the conflict resolved.
 `docs/handoff/NOW.md` is main's committed text (this branch never touched it); the shared tree's own uncommitted edits to it are not part of any commit here.
+
+### The art install on the merged tree (the library has grown since this branch was measured)
+
+`D:/pyrefly-r39-int/public/art` is a **real folder** (never a junction): the shared tree's `public/art` as of main 4a401c13 (release 38's install and the Evrae E1-H paintings; robocopy `/E`,
+2,090 files, 936.6 MB) plus the hi-res masters, then `public/fx` restored from the backup (`fx-assets restore` 24 files, `verify` PASS). The library
+(`D:/Tools/pyrefly-art-backup/hires`, 760 assets: 201 refined, 553 base, 6 flagged; its batch is **paused** by the STOP file, which I did not touch) installs through
+`node tools/hires-install.mjs --apply` (the library's own `manifest.json` names the file at each path, so an asset the batch refined since this branch was measured installs as its
+refined master, and an asset it has not refined yet installs as its base master), then `node tools/gen/manifest.mjs`.
+
+| What | Result |
+|---|---|
+| The plain run | 1,914 files written in 4 min 18 s: **1,291 hard links** (no extra bytes) and **623 `@3x` derived** from the `@4x`; 11.63 GB as written. Skipped 64: 48 already installed (the approved pilot `@2x` masters stay), 10 `1x painting changed since the master was rendered` (all Evrae: the E1-H repaint changed the 1x files the library rendered from; Evrae keeps its approved E1-H `idle@2x` and no other master, a re-render of Evrae from the new paintings is owed), 6 flagged (`evrae/idle-far`, portraits `overdrive-sin`, `sin-core`, `sinspawn-genais`, `valefor`, pause `ch15-ffx2-den-of-woe`) |
+| **Parked, not kept (a finding)** | The plain run also installs the library's `pause/<name>@4x.png` (31), `portraits/<name>@2x.png` (41) and `title/<name>@2x.png` (1), and derives a `@3x` from each pause `@4x` (31): **104 files, 1,407 MB, which no loader reads** (the manifest and `ArtTier` know only `characters/<id>/<state>@Nx.png` and `backdrops/<id>@Nx.png`; the pause screen's retina plate is `<id>.2x.webp`). The Vite build copies `public/` whole, so they would ship as dead bytes, and **three pause `@3x` are over Cloudflare's 25 MiB per-file limit as written** (26.97, 26.42 and 26.33 MB). I moved all 104 (verified copy, then the name dropped; the 73 hard links' data stays in the library) to `F:/pyrefly-parked/2026-10-04/r39-int/unreferenced-masters/` (log `D:/Tools/pyrefly-scratch/2026-10-04/r39-int/park-unreferenced.json`). **Install only what a loader reads: `node tools/hires-install.mjs --apply --only characters/,backdrops/`** (a dry run of that on this tree says 0 to install; a plain dry run says 104). A caution is now in `docs/ART-PIPELINE.md`; making that the installer's default is a code change I did not make |
+| **Installed and kept** | **1,810 files, 10.16 GB as written** (the 592 `@3x` are the only new bytes on disk): `@2x` 626 files 1.656 GB (444 base, 182 refined; 597 characters 1.214 GB and 29 backdrops 441.9 MB), `@3x` 592 files 4.004 GB (396 base, 196 refined), `@4x` 592 files 4.497 GB (396 base, 196 refined). By asset: 660 library assets got files, **461 base and 199 refined**. Manifest: 101 subjects with `tiers` (592 poses at 3x and 4x, 647 at 2x counting the pilots), 29 `backdropTiers`, `pause2x` 31 and `title2x` 1 unchanged; `manifest.mjs --check` unchanged |
+| Approved art | `verify-approved.mjs` with `ROOT=D:/pyrefly-r39-int`: **759 ok (711 approved, 48 judge-locked), 0 mismatched, 0 missing**, the same 759 as the shared tree at main 4a401c13 (the Evrae E1-H set included); no 1x painting was touched (the installer only adds files) |
+
+### Gates on the merged tree (gate numbers; the build gates are in the next block)
+
+| Gate | Result |
+|---|---|
+| `npx tsc --noEmit` | clean after the merge and again at this tip (exit 0, empty output) |
+| Full suite `vitest run --testTimeout=60000 --maxWorkers=3` (log `D:/Tools/pyrefly-scratch/2026-10-04/r39-int/logs/full-suite.log`) | **802 files passed, 5 skipped (807); 11,818 tests passed, 46 skipped, 1 todo (11,865); 0 failed; exit 0; 601.8 s**, with the real `public/art` (the three art-dependent files pass here). None of the four known load timeouts (`strategy-ffx2-bahamut`, `sin-fins-core-bench`, `ui-pause-stack`, `critic-release-rules`) fired. Against release 38's tip (798 files, 11,754 tests): **+4 files and +64 tests**, all this branch's (`r39-art-governor`, `r39-art-tiers`, `r39-hires-install`, `r39-preload-masters`) |
+| `node tools/orphans.mjs` | 1,229 modules, 1,205 reachable, **24 orphaned**: the same 24 as release 38 (1,220 / 1,196 / 24); this branch's new modules (`ArtBudget`, `ArtDevice`, `ArtGovernor`, `ArtManifestTiers`, `ArtMeasure`, `PostAa`, `StageArt`, `PlateCompose`, `artApi`) are all reachable |
+| `node tools/audio/qa.mjs --strict` | exit 0, 0 cues and 0 sfx with findings; 88.49 MB of the 90 MB budget (unchanged) |
