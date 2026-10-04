@@ -1,6 +1,6 @@
 import type { MinigameResult, TimingResult } from '../../../battle/common/types.ts';
 import { RawInputWatcher } from '../rawInput.ts';
-import { expireTidusTiming, pressTidusTiming, tidusCursorPosition } from './logic.ts';
+import { expireTidusTiming, pressTidusTiming, swordplayGeometry, tidusCursorPosition } from './logic.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
 import { num, str } from './params.ts';
 
@@ -22,8 +22,8 @@ import { num, str } from './params.ts';
 export function openTidusTiming(root: HTMLElement, params: Record<string, unknown>): Promise<MinigameResult> {
   const timerMs = num(params['timerMs'], 3000);
   const barWidth = num(params['barWidth'], 360);
-  const zoneHalfWidth = num(params['zoneHalfWidth'], 22);
-  const speed = num(params['speedPxPerSec'], 340);
+  // The Overdrive's own zone and marker speed (`zonePercent`, `travelMs`: PR-0308); the pixel params are the demo's.
+  const { zoneHalfWidth, speedPxPerSec: speed } = swordplayGeometry(params, barWidth);
   const name = str(params['name'], 'Slice & Dice');
 
   const overlay = new OverdriveOverlay();

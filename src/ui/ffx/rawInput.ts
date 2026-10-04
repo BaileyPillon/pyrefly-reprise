@@ -9,7 +9,7 @@
  * Every menu and minigame overlay in `src/ui/ffx/` uses this one watcher so
  * keyboard, gamepad and mouse all reach the same handler.
  */
-export type UiButton = 'up' | 'down' | 'left' | 'right' | 'confirm' | 'cancel' | 'triangle' | 'l1' | 'r1';
+export type UiButton = 'up' | 'down' | 'left' | 'right' | 'confirm' | 'cancel' | 'triangle' | 'square' | 'l1' | 'r1';
 
 const KEY_MAP: Record<string, UiButton> = {
   ArrowUp: 'up',
@@ -30,6 +30,8 @@ const KEY_MAP: Record<string, UiButton> = {
   ShiftLeft: 'triangle',
   ShiftRight: 'triangle',
   KeyQ: 'triangle',
+  // Square: Bushido's Shooting Star asks for it (PR-0308). K is free: no screen or global handler reads it.
+  KeyK: 'square',
   KeyF: 'l1',
   PageUp: 'l1',
   KeyR: 'r1',
@@ -39,6 +41,7 @@ const KEY_MAP: Record<string, UiButton> = {
 const PAD_BUTTON_MAP: Record<number, UiButton> = {
   0: 'confirm',
   1: 'cancel',
+  2: 'square',
   3: 'triangle',
   4: 'l1',
   5: 'r1',
