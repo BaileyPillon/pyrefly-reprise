@@ -29,7 +29,7 @@ import { createLive, isTurnOrderPiece, renderAgilityControl, syncCardToLive } fr
 import type { StudioLive } from './live.ts';
 
 /** The unofficial fan tribute's own game, linked from every card. */
-const FIGHT_URL = 'https://baileypillon.github.io/pyrefly-reprise/';
+const FIGHT_URL = 'https://echoesofspira.com/';
 
 const ROMAN: Readonly<Record<number, string>> = { 1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'V' };
 
