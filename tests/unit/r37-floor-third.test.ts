@@ -89,9 +89,9 @@ describe('blocker 2: the plate dock treats the hand as a panel (FFX only)', () =
 
 describe('blocker 3: the party list aim nudge is capped by the room the margin leaves (FFX only)', () => {
   const css = readFileSync(join(SRC, 'ui', 'common', 'hud-floor.css'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
-  it('the cap is (23.11 - 2) / text scale - 9.25 grid px, never below 0, never above the approved 6 %', () => {
+  it('the cap is (23.11 - 2) / text scale - the OD hang, never below 0, never above the approved 6 %; the hang is measured at run time (r381-ui-floor), 9.25 grid px until it is', () => {
     expect(css).toMatch(
-      /html:not\(\[data-phone-battle\]\) \.ffxhud--targeting-enemy \.ig-stat-list \{\s*transform: translateX\(min\(6%, max\(0px, calc\(21\.1px \/ var\(--pyr-ts, 1\) - 9\.25px\)\)\)\);/,
+      /html:not\(\[data-phone-battle\]\) \.ffxhud--targeting-enemy \.ig-stat-list \{\s*transform: translateX\(min\(6%, max\(0px, calc\(21\.1px \/ var\(--pyr-ts, 1\) - var\(--ffx-od-hang, 9\.25px\)\)\)\)\);/,
     );
   });
   it('the cap arithmetic keeps the OD word inside a 1024 px window at 100, 115 and 130 %', () => {

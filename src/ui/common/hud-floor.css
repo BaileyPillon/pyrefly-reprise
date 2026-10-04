@@ -125,13 +125,21 @@ html:not([data-phone-battle]) .sgd .sgd__more { font-size: max(7px, var(--hud-fl
 /*
  * While an enemy is aimed at, the party list dims and pulls in by 6 % of its width (`ffx-hud.css`, the approved
  * "yields while aiming" frame). The list grows from its right edge with TEXT SIZE (`text-size.css`, `scale`), and the
- * skewed rows let the "OD" word hang about 9.25 grid px past the list's right edge; the list's own right edge is
- * 23.11 grid px inside the stage. A fixed 6 % was fine at 100 %, and at 115 and 130 % on a 1024 px window it carried
- * the word off the screen ("OD" ended at x 1027), the second attempt's blocker 3. The nudge is now capped by the room
- * the margin leaves after the growth, 2 grid px of air kept: (23.11 - 2) / scale - 9.25. The room is in stage grid
- * px, so the cap holds at any window size (r37-ui-floor, third attempt; FFX only, FFX-2's list is left-anchored and
- * TEXT SIZE does not reach its HUD).
+ * Overdrive bar (with its "OD" word) hangs past the list's right edge by as much as the row's content overflows the row;
+ * the list's own right edge is 23.11 grid px inside the stage. A fixed 6 % was fine at 100 %, and at 115 and 130 % on a
+ * 1024 px window it carried the word off the screen ("OD" ended at x 1027), the second attempt's blocker 3. The third
+ * attempt capped the nudge by a hang fixed at 9.25 grid px (true of Chapters I and II, whose numbers are short); in
+ * Chapter III (`6492/6492`) the bar hangs 16.2 and the "D" still ran past a 1024 px window at every TEXT SIZE (the
+ * independent check's blocker B1, the third failure of the class).
+ *
+ * The room is now measured at run time (r381-ui-floor, per the method check's section 4): `odHang.ts` publishes the widest
+ * hang of any row's bar or label as `--ffx-od-hang` (list px, from the rows' own rects, before the list takes the aim class
+ * and every frame it is aimed), and the nudge is held by what the margin leaves after the growth, 2 grid px of air kept:
+ * (23.11 - 2) / text scale - hang. 9.25 px stays as the value before the first reading. The room is in stage grid px, so
+ * the clamp holds at any window size; at 1600x900 and wider the hang is short (the floor does not grow the type there) and
+ * the approved 6 % is the lesser bound, as before. FFX only: FFX-2's list is left-anchored and TEXT SIZE does not reach
+ * its HUD.
  */
 html:not([data-phone-battle]) .ffxhud--targeting-enemy .ig-stat-list {
-  transform: translateX(min(6%, max(0px, calc(21.1px / var(--pyr-ts, 1) - 9.25px))));
+  transform: translateX(min(6%, max(0px, calc(21.1px / var(--pyr-ts, 1) - var(--ffx-od-hang, 9.25px)))));
 }

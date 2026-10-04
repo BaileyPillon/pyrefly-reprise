@@ -39,6 +39,7 @@ import { statusRowIds } from './fieldRows.ts';
 import { fitGroupLabel } from './groupLabelFit.ts';
 import { clipOffStack } from './bracketClip.ts';
 import { clearHandOfCards } from './handClear.ts';
+import { publishOdHang } from './odHang.ts';
 import { FfxTargetPlate } from './targetPlateFfx.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
@@ -698,6 +699,7 @@ export class FFXBattleHud implements HudPort {
     // r37-ui-floor, third attempt (FFX only): the Sensor card settles after the cursor's layout (steered sideways, kept off the turn list,
     // folded), so the hand is cleared of it every frame the hand is up, against where the card is now (`handClear.ts`).
     clearHandOfCards(this.commandMenu.targetCursor.el, this.el);
+    if (this.el.classList.contains('ffxhud--targeting-enemy')) publishOdHang(this.partyStatus.el, this.hudScale()); // r381-ui-floor: the rows re-render as HP changes
     this.guide.update(dt);
     this.advisor.update(dt);
     // After the advisor's own `layout()`, never before: `MoveAdvisor` measures
@@ -918,6 +920,8 @@ export class FFXBattleHud implements HudPort {
     }
 
     // The status panel's yield.
+    // r381-ui-floor (FFX only): the slide is clamped by the room the OD bar really leaves (`odHang.ts`), measured before the class lands.
+    publishOdHang(this.partyStatus.el, this.hudScale());
     this.el.classList.toggle('ffxhud--targeting-enemy', !!sel && kind === 'enemy');
 
     this.steerSensor(sel);
