@@ -10,9 +10,11 @@
  * - It runs on a first run only: armed after the briefing, resumed only when a
  *   started guide is unfinished, never for a finished one. The seen-state is the
  *   existing `seenCoach` list; the harness's "mark everything seen" covers it.
- * - It never blocks the control it points at: in guide mode a confirm on the menu
- *   is not swallowed, and only the player's own cancel counts as a skip (a line the
- *   layer takes down itself does not end the guide).
+ * - It never blocks the control it points at: a tap or a click on it acts on the first
+ *   press, and only the player's own cancel counts as a skip (a line the layer takes
+ *   down itself does not end the guide). A bare Enter or Cross only takes the card down
+ *   and does nothing else, even with the cursor on the ringed ATTACK (PR-0362, release 39:
+ *   the O2 exception that let it through was removed; `ui-coach-dismiss-press.test.ts`).
  * - Placement reproduces the mockup's anchors at 1600x900 and 390x844.
  *
  * Game case: steps 1 and 2 both games; step 3 FFX only (an FFX-2 first battle ends
@@ -150,18 +152,18 @@ describe('step 3 is FFX\'s line in the guide\'s dress, and never blocks ATTACK',
     expect(line.el.querySelector('.frg__quote')!.textContent).toBe('“He moves after you. Not before. Use it.”');
   });
 
-  it('a confirm on the menu is not swallowed in guide mode (the approved line alone swallows it, PR-0051)', async () => {
+  it('a bare Enter with the cursor on the ringed ATTACK only takes the card down: the press dies with it (PR-0362; it used to reach the menu, O2)', async () => {
     const { line } = mountLine();
     const settled = line.show();
     const enter = key('Enter');
     window.dispatchEvent(enter);
-    expect(enter.defaultPrevented).toBe(false);
+    expect(enter.defaultPrevented).toBe(true);
     await expect(settled).resolves.toBe('confirmed');
-    expect(hasSeen('firstrun-battle')).toBe(true);
-    expect(absorbed).toBe(0); // an answer, not a skip: the press is left to the menu
+    expect(hasSeen('firstrun-battle')).toBe(true); // the card was answered, so step 3 is done
+    expect(absorbed).toBe(0); // an answer, not a skip
   });
 
-  it('with the cursor elsewhere (Kimahri\'s first menu opens on TALK) the approved rule stands: a bare Enter only takes the line down', async () => {
+  it('with the cursor elsewhere (Kimahri\'s first menu opens on TALK) a bare Enter only takes the line down, as it always did', async () => {
     const { line } = mountLine(false);
     const settled = line.show();
     const enter = key('Enter');

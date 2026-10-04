@@ -151,6 +151,43 @@ function trackPointer(): void {
   window.addEventListener('pointerdown', (e) => noteDevice('pointer', e.pointerType || 'mouse'), true);
 }
 
+/**
+ * A pad press an overlay took down with it (PR-0362, FFX): the pad twin of a swallowed `keydown`.
+ *
+ * A key is evented, so an overlay's capture listener can stop the press before the menu behind it hears it
+ * (`CoachMark.onConfirmCapture`). The pad is polled, and every watcher polls it for itself, in the order they
+ * attached, so a capture listener has nothing to stop. Two things do the same job:
+ *
+ * - {@link reservePad}: while it stands, no watcher but `owner` hears that pad button. A coach line holds the
+ *   pad's Cross for itself while it is up, whichever of the two watchers happens to poll first.
+ * - {@link claimHeldPad}: the press that is down right now is nobody's any more until it is let go. The line
+ *   came down on it, and the menu behind must not take the same press.
+ */
+let padReserve: { button: UiButton; owner: RawInputWatcher } | null = null;
+const padClaims = new Set<UiButton>();
+
+/** Reserve a pad button for `owner`. Returns the release (a no-op once another reserve has replaced it). */
+export function reservePad(button: UiButton, owner: RawInputWatcher): () => void {
+  const mine = { button, owner };
+  padReserve = mine;
+  return () => {
+    if (padReserve === mine) padReserve = null;
+  };
+}
+
+/** The pad button is down now: nobody hears this press, until it is released. A no-op when no pad holds it. */
+export function claimHeldPad(button: UiButton): void {
+  for (const pad of navigator.getGamepads?.() ?? []) {
+    if (!pad) continue;
+    for (const [indexStr, b] of Object.entries(PAD_BUTTON_MAP)) {
+      if (b === button && pad.buttons[Number(indexStr)]?.pressed) {
+        padClaims.add(button);
+        return;
+      }
+    }
+  }
+}
+
 export interface RawInputWatcherOptions {
   /**
    * Keep reading input while every other watcher is muted.
@@ -191,6 +228,12 @@ export class RawInputWatcher {
   /** Is this watcher muted right now? */
   private get muted(): boolean {
     return suspended && !this.ignoreSuspend;
+  }
+
+  /** Does this watcher hear `button` from the pad right now? (not while it is claimed, or reserved for another watcher) */
+  private hearsPad(button: UiButton): boolean {
+    if (padClaims.has(button)) return false;
+    return !(padReserve && padReserve.button === button && padReserve.owner !== this);
   }
 
   attach(): void {
@@ -240,8 +283,11 @@ export class RawInputWatcher {
       if (Math.abs(y) > AXIS_DEADZONE) next.add(y < 0 ? 'up' : 'down');
     }
 
+    for (const button of padClaims) if (!next.has(button)) padClaims.delete(button); // let go: the claim ends with the press
     for (const button of next) {
       const wasHeld = this.padHeld.has(button);
+      // A press this watcher may not hear is still marked held below, so it never fires late once the claim lifts.
+      if (!this.hearsPad(button)) continue;
       if (!wasHeld) {
         noteDevice('gamepad');
         this.onButton(button, 'gamepad');

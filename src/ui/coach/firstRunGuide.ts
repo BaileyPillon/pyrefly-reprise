@@ -137,9 +137,6 @@ export function firstRunTurnGuide(): CoachGuide | null {
       // A line the layer took down itself (a beat's card, auto-play) is not an
       // answer: the held line comes back dressed again, or a later boot ends it.
     },
-    confirmReachesTarget(): boolean {
-      return attackRow(document.querySelector<HTMLElement>(SEL.line))?.classList.contains('ig-cmd--selected') === true;
-    },
   };
 }
 
