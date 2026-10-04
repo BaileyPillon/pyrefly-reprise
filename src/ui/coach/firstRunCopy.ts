@@ -59,6 +59,26 @@ export const FIRST_RUN_STEPS: readonly [FirstRunStep, FirstRunStep, FirstRunStep
   },
 ];
 
+/**
+ * Step 1's quote when the chapter on the plate is not Chapter I (judgment call M of critic round 21,
+ * PR-0289; Bailey 2026-10-04, "all your recommendations"). D-289's approved line, "Start with the first
+ * one.", stays exactly as it is whenever Chapter I is the selected chapter, which is where a first run
+ * begins; once the cursor moves to any other chapter "the first one" would point at a row that is not
+ * the plate's, so the card says "this one" instead. Text only: the card's place is unchanged.
+ */
+export const FIRST_RUN_BOARD_QUOTE_OTHER = '“Start with this one.”';
+
+/**
+ * Which quote step 1 wears for the chapter on the plate (`.fe-hero`'s `data-chapter-number`, the chapter's
+ * number in the registry: 1 is Chapter I). Chapter I, or a plate that does not say (no number), keeps the
+ * approved line; any other chapter says "this one". Both games: the board is shared.
+ */
+export function firstRunBoardQuote(chapterNumber: number | null | undefined): string {
+  const approved = FIRST_RUN_STEPS[0].quote ?? FIRST_RUN_BOARD_QUOTE_OTHER;
+  if (chapterNumber === null || chapterNumber === undefined || !Number.isFinite(chapterNumber)) return approved;
+  return chapterNumber === 1 ? approved : FIRST_RUN_BOARD_QUOTE_OTHER;
+}
+
 /** The eyebrow over every step: the speaker and the count. */
 export function firstRunEyebrow(n: 1 | 2 | 3): string {
   return `Auron · ${n} of 3`;
