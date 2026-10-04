@@ -84,9 +84,8 @@ describe('device class', () => {
     expect(mid!.textureMB).toBeGreaterThan(low!.textureMB);
     expect(low!.textureMB).toBeGreaterThan(phone!.textureMB);
     expect(high!.backdropScale).toBe(2);
-    expect(high!.aa).not.toBe('off');
-    expect(phone!.aa).toBe('off');
-    expect(low!.aa).toBe('off'); // a software renderer pays for every pass in CPU time
+    // the renderer's own post-grade SMAA is off on every class: it doubled the MAX mix's, and the sharpness ladder (`crisp/CrispConfig.ts`) decides the rest
+    for (const b of [phone!, low!, mid!, high!]) expect(b.aa).toBe('off');
     // a returned budget is the caller's own copy
     const a = budgetFor('high');
     a.maxScale = 1;

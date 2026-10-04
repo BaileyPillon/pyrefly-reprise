@@ -13,7 +13,11 @@ export type { AaMode } from './ArtBudget.ts';
  * alpha-cut edge of a painted figure and its alpha-derived rim light all stair-step from about 2 texels per pixel up. Two ways in,
  * measured against each other on the RTX 5070 Ti (`docs/handoff/r39-hires-engine.md`): SMAA cleans the polygon edges as well as MSAA
  * does and the figures' texture and rim edges better, for +0.05 ms (1440p) and +0.4 ms (4K) and 57 MB / 127 MB of GPU, where 4x MSAA
- * is +0.9 ms / +1.9 ms and 211 MB / 475 MB. So SMAA is the desktop default (`ArtBudget.aa`) and MSAA stays selectable (`?aa=msaa`):
+ * is +0.9 ms / +1.9 ms and 211 MB / 475 MB. So SMAA was the desktop default and MSAA stayed selectable (`?aa=msaa`).
+ *
+ * **Retired as a default (the sharpness ladder, `crisp/CrispConfig.ts`).** The crispness options round found the pass ran on top of the MAX mix's SMAA before the
+ * grade (a frame was softened twice) and that a supersampled scene resolved with Lanczos-3 holds twice the fine detail of either: `ArtBudget.aa` is `off` on
+ * every class now, and these stay as overrides for a capture (`?aa=smaa|msaa`, `__pyrefly.art.aa`; the SMAA pass is built only when asked for):
  *
  * - `msaa`: {@link MsaaRenderPass}, the scene drawn into its own multisampled half-float target and resolved into the composer's
  *   first buffer. Only that one target is multisampled (the composer's two ping-pong buffers stay single-sample: a full-screen

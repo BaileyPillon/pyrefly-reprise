@@ -54,7 +54,11 @@ export interface ArtBudget {
   bandPx: number;
   /** Design-grid scale of a procedural floor drawn once at load (the Fahrenheit's foredeck, `evrae-airship-sky.ts`): 1 is the 1024 x 2048 design. */
   deckDetail: number;
-  /** The anti-aliasing the device runs by default: SMAA on a desktop (measured against MSAA, `PostAa.ts`); `?aa=` and `Renderer.setAa` override it for captures. */
+  /**
+   * The renderer's own anti-aliasing after the grade, off on every class: release 39's SMAA there ran on top of the MAX mix's SMAA before the grade, so a
+   * frame was softened twice. What a frame does instead is the sharpness ladder's (`crisp/CrispConfig.ts`): a supersampled scene on a desktop GPU, the
+   * MAX mix's one SMAA below that, the phone's FXAA on a phone. `?aa=` and `Renderer.setAa` switch the pass on again for a capture (`PostAa.ts`).
+   */
   aa: AaMode;
   /** Samples of the multisampled scene target when `aa` is `msaa` (the hardware may clamp it). */
   msaaSamples: number;
@@ -93,8 +97,8 @@ export function classifyDevice(s: DeviceSample): DeviceClass {
 const BUDGETS: Readonly<Record<DeviceClass, ArtBudget>> = {
   phone: { cls: 'phone', maxScale: 2, backdropScale: 1, textureMB: 220, groundPx: 1024, deckPx: 512, bandPx: 1536, deckDetail: 1, aa: 'off', msaaSamples: 4 },
   low: { cls: 'low', maxScale: 2, backdropScale: 1, textureMB: 500, groundPx: 1024, deckPx: 512, bandPx: 1536, deckDetail: 1, aa: 'off', msaaSamples: 4 },
-  mid: { cls: 'mid', maxScale: 2, backdropScale: 1, textureMB: 900, groundPx: 2048, deckPx: 2048, bandPx: 2688, deckDetail: 2, aa: 'smaa', msaaSamples: 4 },
-  high: { cls: 'high', maxScale: 4, backdropScale: 2, textureMB: 2600, groundPx: 4096, deckPx: 4096, bandPx: 4096, deckDetail: 3, aa: 'smaa', msaaSamples: 4 },
+  mid: { cls: 'mid', maxScale: 2, backdropScale: 1, textureMB: 900, groundPx: 2048, deckPx: 2048, bandPx: 2688, deckDetail: 2, aa: 'off', msaaSamples: 4 },
+  high: { cls: 'high', maxScale: 4, backdropScale: 2, textureMB: 2600, groundPx: 4096, deckPx: 4096, bandPx: 4096, deckDetail: 3, aa: 'off', msaaSamples: 4 },
 };
 
 /**

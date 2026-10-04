@@ -93,9 +93,10 @@ export interface ScenePalette {
  * Owns the WebGL renderer, the default perspective camera and the HD-2D post
  * chain:
  *
- *   RenderPass -> UnrealBloomPass -> TiltShift(H) -> TiltShift(V) -> Grade
+ *   RenderPass (or the supersampled scene pass) -> UnrealBloomPass -> TiltShift(H) -> TiltShift(V) -> [the MAX mix's SMAA / FXAA] -> [sharpen] -> Grade
  *
- * Call {@link render} every frame with the scene and camera to draw.
+ * The scene pass, the sharpening and the anti-aliasing follow the sharpness ladder (`crisp/CrispRig.ts`). Call {@link render} every frame with
+ * the scene and camera to draw.
  */
 export class Renderer {
   readonly renderer: WebGLRenderer;
@@ -109,10 +110,14 @@ export class Renderer {
   readonly gradePass: ShaderPass;
 
   private readonly renderPass: RenderPass;
-  /** Release 39: the scene pass of an MSAA chain (disabled unless `aaMode` is `msaa`), and the SMAA pass after the grade (`PostAa.ts`). */
+  /**
+   * Release 39: the scene pass of an MSAA chain (disabled unless `aaMode` is `msaa`), and the SMAA pass after the grade (`PostAa.ts`); both are
+   * overrides for a capture (`?aa=`), off on every rung of the sharpness ladder (the MAX mix's own SMAA is the only one a frame needs, and a
+   * supersampled frame needs none), and the SMAA pass is built only when something asks for it.
+   */
   private readonly msaaPass: MsaaRenderPass;
-  private readonly smaaPass: SMAAPass;
-  /** The crispness options round's passes, texture registry and switchboard (`crisp/CrispRig.ts`); the defaults leave release 39's frame as it was. */
+  private smaaPass: SMAAPass | null = null;
+  /** The sharpness ladder's passes and switchboard (`crisp/CrispRig.ts`): the supersampled scene pass, the sharpening, the frame-time governor. */
   readonly crisp: CrispRig;
   private aa: AaMode = 'off';
   private readonly maxPixelRatio: number;
@@ -197,13 +202,11 @@ export class Renderer {
     this.gradePass = new ShaderPass(GradeShader);
     this.gradePass.renderToScreen = true; // the composer re-decides it each frame: the last enabled pass draws to the screen
     this.composer.addPass(this.gradePass);
-    this.smaaPass = new SMAAPass();
-    this.composer.addPass(this.smaaPass);
     this.setAa(parseAaOverride(new URLSearchParams(window.location?.search ?? '').get('aa')) ?? artBudget().aa);
     this.crisp = new CrispRig(
       this.renderer,
       this.composer,
-      { renderPass: this.renderPass, msaaPass: this.msaaPass, smaaPass: this.smaaPass, gradePass: this.gradePass, tiltH: this.tiltH, aaMode: () => this.aa, setAa: (m) => this.setAa(m) },
+      { renderPass: this.renderPass, msaaPass: this.msaaPass, gradePass: this.gradePass, tiltH: this.tiltH, aaMode: () => this.aa, setAa: (m) => this.setAa(m), ownSmaa: () => this.smaaPass },
       this.camera,
       window.location?.search ?? '',
     );
@@ -214,12 +217,18 @@ export class Renderer {
     window.addEventListener('resize', this.onWindowResize, { passive: true });
   }
 
-  /** Switch the anti-aliasing: `msaa` (a multisampled scene target), `smaa` (a pass after the grade) or `off`. Captures and the budget call it. */
+  /** Switch the anti-aliasing: `msaa` (a multisampled scene target), `smaa` (a pass after the grade, built the first time it is asked for) or `off`. Captures and the budget call it. */
   setAa(mode: AaMode): void {
     this.aa = mode;
     this.renderPass.enabled = mode !== 'msaa';
     this.msaaPass.enabled = mode === 'msaa';
-    this.smaaPass.enabled = mode === 'smaa';
+    if (mode === 'smaa') {
+      if (!this.smaaPass) {
+        this.smaaPass = new SMAAPass();
+        this.composer.addPass(this.smaaPass); // sized by the composer; last in the chain, after the grade
+      }
+      this.smaaPass.enabled = true;
+    } else if (this.smaaPass) this.smaaPass.enabled = false;
   }
 
   get aaMode(): AaMode {
@@ -339,6 +348,7 @@ export class Renderer {
     const invH = 1 / Math.max(1, height * dpr);
     (this.tiltH.uniforms['resolution']!.value as Vector2).set(invW, invH);
     (this.tiltV.uniforms['resolution']!.value as Vector2).set(invW, invH);
+    this.crisp.noteResize(); // the frame's cost changed with its size: the governor starts a fresh window
   }
 
   /** Draw one frame through the post chain. */
@@ -372,7 +382,7 @@ export class Renderer {
     this.fxA?.dispose();
     this.crisp.dispose();
     this.msaaPass.dispose();
-    this.smaaPass.dispose();
+    this.smaaPass?.dispose();
     this.composer.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();

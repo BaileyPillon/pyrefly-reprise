@@ -2,14 +2,14 @@ import { NoBlending, ShaderMaterial, type WebGLRenderTarget, type WebGLRenderer 
 import { FullScreenQuad, Pass } from 'three/addons/postprocessing/Pass.js';
 
 /**
- * Contrast adaptive sharpening, written for this game (the idea is AMD FidelityFX CAS's: a five-tap cross, a soft local minimum and
- * maximum, and a per-channel weight that shrinks where the neighbourhood has no headroom, so the dark ink lines and the blown
- * highlights are not pushed over the edge of the range). Crisper, never a different style: the strength is the one number, the
- * sharpening fades out with the tilt-shift band so the soft top and bottom of the frame stay soft, and the alpha (the bloom mask) is
- * passed through untouched.
+ * Contrast adaptive sharpening, written for this game (release 39, the sharpness ladder `CrispConfig.ts`; both games, shared plumbing).
+ * The idea is AMD FidelityFX CAS's: a five-tap cross, a soft local minimum and maximum, and a per-channel weight that shrinks where
+ * the neighbourhood has no headroom, so the dark ink lines and the blown highlights are not pushed over the edge of the range.
+ * Crisper, never a different style: the strength is the one number, the sharpening fades out with the tilt-shift band so the soft top
+ * and bottom of the frame stay soft, a noise floor leaves the painted grain and the soft far field alone, and the alpha (the bloom
+ * mask) is passed through untouched.
  *
- * Placed before the grade (`casAt: 'pre'`), the film grain is added after it and is not sharpened; placed after it (`'post'`) the
- * grain is sharpened with everything else (the page shows both).
+ * It sits right before the grade, so the film grain, which the grade adds, is not sharpened.
  *
  * Original shader code (AGENTS.md rule 8).
  */

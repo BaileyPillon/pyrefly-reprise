@@ -216,7 +216,7 @@ export class BattleScreen extends Screen {
     bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera, renderer: this.app.renderer.renderer }); // eye-candy option B (`?fx=b`)
     this.scene.hideOwnActors();
     this.syncPixelScale();
-    this.offSceneScale = onSceneScale(() => this.syncPixelScale()); // the crispness options round: a supersampled scene changes the point sprites' pixel grid
+    this.offSceneScale = onSceneScale(() => this.syncPixelScale()); // a supersampled scene (`crisp/CrispRig.ts`) changes the point sprites' pixel grid
     void warmShaders(this.app.renderer, scene.scene); // the diorama's programs compile while the figures load
 
     // --- field -------------------------------------------------------------

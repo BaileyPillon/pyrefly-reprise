@@ -145,8 +145,13 @@ export function twirlKeysOn(e: GateEnv): boolean {
   return partOn('dressphereShot', e) && !e.reduceMotion;
 }
 
-/** SMOOTH EDGES' post pass for a tier: SMAA on the full tier, FXAA on the phone, none under LOW EFFECTS. */
-export function aaKind(tier: FxTier): 'smaa' | 'fxaa' | null {
+/**
+ * SMOOTH EDGES' post pass for a tier: SMAA on the full tier, FXAA on the phone, none under LOW EFFECTS, and none on any tier while the scene is
+ * supersampled (`aaPre` false, the sharpness ladder's top two rungs: the Lanczos-3 resolve is the anti-aliasing there, and a second pass would
+ * only soften it, `crisp/CrispConfig.ts`).
+ */
+export function aaKind(tier: FxTier, aaPre = true): 'smaa' | 'fxaa' | null {
+  if (!aaPre) return null;
   return tier === 'full' ? 'smaa' : tier === 'phone' ? 'fxaa' : null;
 }
 

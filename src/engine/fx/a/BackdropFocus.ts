@@ -39,7 +39,7 @@ export class BackdropFocus {
       const bias = this.bias;
       mat.onBeforeCompile = (shader) => {
         shader.uniforms['uFxBias'] = bias;
-        shader.uniforms['uSsLod'] = ssLodCell; // the crispness options round: a supersampled scene reads finer levels, so the soft far field adds them back
+        shader.uniforms['uSsLod'] = ssLodCell; // a supersampled scene (`crisp/CrispRig.ts`) reads finer levels, so the soft far field adds them back
         shader.fragmentShader = shader.fragmentShader
           .replace('void main() {', `uniform float uFxBias;\nuniform float uSsLod;\nvoid main() {`)
           .replace(

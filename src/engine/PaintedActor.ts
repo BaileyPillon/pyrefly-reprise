@@ -49,7 +49,6 @@ import { LIE_FLAT_TILT, lieOffset } from './LieFlat.ts';
 import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
-import { crispBiasCell } from './crisp/CrispRig.ts';
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
 import { cutoutShadow } from './ShadowCutout.ts';
@@ -748,7 +747,6 @@ export class PaintedActor extends Group {
         // Per-slot, not shared: the contact ramp is a fixed *world* distance,
         // so its UV height depends on how tall this pose's plane ended up.
         contactBand: { value: 0.1 },
-        mipBias: crispBiasCell,
         ...this.u,
       },
       vertexShader: paintedVertexShader,

@@ -11,6 +11,7 @@ import { panelsNdc } from './downed.ts';
 import { ejectDefringe, injectDefringe } from './patch.ts';
 import { Framing } from './framing.ts';
 import { aaKind, deviceCloses, deviceNote, fightFacts, liveGates, MIX_PARTS, partsOn, twirlKeysOn, type Device, type MixGame } from './gates.ts';
+import { crispLive } from '../../crisp/crispLive.ts';
 import { cameraAt, centroid, figOf, type Actor, type Box } from './geometry.ts';
 import { followFlourish, HeldShots } from './heldShots.ts';
 import { battleCanvas, forgetMenuPanels, hudPanels, menuOpen, phoneBattle } from './hudPanels.ts';
@@ -156,7 +157,7 @@ class Mix {
     const shotBand = held && master ? dofBand(held.pose, this.shots!.subjectFigs(), W, H, 'hero') : null;
     this.cinema.dof(parts.depthOfField ? (shotBand ?? this.band) : null);
     // SMOOTH EDGES: the post pass per tier, and the defringe on every painted figure.
-    this.cinema.aa(parts.smoothEdges ? aaKind(tier) : null);
+    this.cinema.aa(parts.smoothEdges ? aaKind(tier, crispLive.aaPre) : null);
     this.defringe(actors, parts.smoothEdges);
     // BREATHING and KO COLLAPSE.
     if (parts.breathing || parts.koCollapse || this.living.size) {

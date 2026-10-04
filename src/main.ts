@@ -144,7 +144,7 @@ async function boot(): Promise<void> {
   const debugApi = installDebugApi(app) as unknown as Record<string, unknown>;
   installFxDebug(debugApi, app); // eye-candy options round: `__pyrefly.fx` (kept out of `debug/api.ts`)
   installArtDebug(debugApi, app); // release 39: `__pyrefly.art`, the art tiers and the anti-aliasing
-  installCrispDebug(debugApi, app); // the crispness options round: `__pyrefly.crisp` (scratch branch, never merged)
+  installCrispDebug(debugApi, app); // release 39: `__pyrefly.crisp`, the sharpness ladder's switch for captures
 
   await app.push(new TitleScreen());
   app.start();

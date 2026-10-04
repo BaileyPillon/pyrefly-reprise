@@ -147,6 +147,19 @@ export function deviceClass(): DeviceClass {
   return classifyDevice({ phone: env.phone, bufferWidth: bufferWidth(), gpu, memoryGB: typeof nav?.deviceMemory === 'number' ? nav.deviceMemory : null });
 }
 
+/**
+ * The class this GPU has when the phone layout is not counted: what a window that is narrow now and wide later still is. The sharpness ladder's governor
+ * starts from it (`crisp/CrispRig.ts`), so a desktop window opened narrow does not start on the phone's rung and stay there once it is widened; the phone layout
+ * itself is read live by {@link deviceClass}. A forced class (`?arttier=`, `setArtTier`) wins here too.
+ */
+export function hardwareClass(): DeviceClass {
+  if (forced) return forced;
+  const address = fromAddress();
+  if (address) return address;
+  const nav = (globalThis as { navigator?: { deviceMemory?: number } }).navigator;
+  return classifyDevice({ phone: false, bufferWidth: bufferWidth(), gpu, memoryGB: typeof nav?.deviceMemory === 'number' ? nav.deviceMemory : null });
+}
+
 /** This device's budget (decided on first use, again when the GPU string arrives or a class is forced). */
 export function artBudget(): ArtBudget {
   if (!cached) cached = budgetFor(deviceClass());

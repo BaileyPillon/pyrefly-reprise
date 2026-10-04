@@ -1,5 +1,7 @@
 # crisp-options: how crisp can the standard battle view look? (an options round on release 39; scratch)
 
+> **Picked and built (2026-10-04, Bailey: "I'll go with all of your recommendations"): "F plus" is now the production default** (2x supersample, Lanczos-3 before the bloom, both SMAA passes off, a light sharpen, plates at anisotropy 16, F and then A2 as automatic step-downs). What shipped, the numbers and the proof: [r39-looks](r39-looks.md). This note is the options round as it was, with its scratch scaffolding (the presets table, the Lanczos-prefiltered mips, `mipBias`, the texture registry, `__pyrefly.crisp.inspect/sums/flush`), none of which is in the tree any more.
+
 Date 2026-10-04. Branch `crisp-options`, made from `origin/r39-hires-engine` (296641de) in the worktree `D:/pyrefly-crisp`. **Never merged, never deployed.**
 Game case: **both games, shared plumbing** (the post chain is shared; Chapters I and VIII are FFX, Chapter IV is FFX-2). Bailey, 2026-10-04, verbatim:
 "I need super high resolution now. DO NOT hold back. I want the visual fidelity to be amazing and absolutely beautiful. The critic will ensure this is the case."
