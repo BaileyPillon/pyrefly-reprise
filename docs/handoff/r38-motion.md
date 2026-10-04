@@ -1,6 +1,6 @@
 # r38-motion: SKILL TRAVEL (both games) and RUN-IN (FFX-2 only), the production port of the Visual Options prototype
 
-**Branch:** `r38-motion` (from `origin/main` `4b7adea6`), pushed, **not merged, not deployed**. The code and tests are `033888ee`; this note and the stills are the commit after it (the branch head).
+**Branch:** `r38-motion` (from `origin/main` `4b7adea6`), pushed, **not merged, not deployed**. The code and tests are `033888ee`; this note and the stills are the commit after it; the independent check is `1aa4f67b` (FAIL on one major) and **its repair is `4135e9c8`** (the run no longer walks Chapter IV's party out of formation; the run is off under LOW EFFECTS): see "Repair" at the end. The branch head is the commit that records the repair.
 **Asked by Bailey** (2026-10-03 ~14:42 EDT, answering the Visual Options page: "I'll go with all your recommendations thank you <3"; D-354,
 ask 5): "M1 run-in for FFX-2 (sourced). M3 skill travel for both, once the damage numeral waits for the landing. M1 for FFX has no source, so
 it needs your yes. M2 part motion is a low priority." The recommendation he adopted: "Yes to M1 for FFX-2 and M3. Hold M1 for FFX. Skip M2."
@@ -301,3 +301,134 @@ Everything below was measured by running the builds (rule 3); none of it is the 
 ### Evidence
 
 Scratch folder above, one file per check: numerals `casts2.mjs` (`res2-*.json`, `log2-*.json`), pixels and stills `casts3.mjs` (`stills-*`), runs `runin.mjs` (`runin-*.json`, `frames-*`), pixel overlap `silhouette.mjs` (`silhouette-*`), menu rule `menu.mjs` (`menu-*.json`, `batchJ-*.log`), drift `drift.mjs`, `driftshot.mjs`, `trace2.mjs`, `mixprobe.mjs` (`drift-*.json`, `mixprobe-*.log`), whole fights `fight.mjs` and the end of a fight `endstate.mjs`, `lastblow.mjs`, `killshot.mjs` (`fight-*.json`, `killshot*-*.log`), fresh-session gaps `hitch2.mjs`, `netfirst.mjs`, planning cost and GPU resources `plancost.mjs`, `leak.mjs`, FF7 `batchH.log`, the merge `batchM.log`. Four stills are committed with this note: `docs/screenshots/r38-motion-check/drift-ch4-base-vs-branch.jpg`, `darkness-slash-vs-beam.jpg`, `phone-ch4-run.jpg` and `phone-ch5-run-clipped.jpg`. Servers started: branch 6840 (PID 69180), base 6841 (PID 12224), merged 6842 (PID 42656); stopped by PID at the end.
+
+## Repair (rule 15, one cycle, 2026-10-04, a Sonnet sub-agent; code `4135e9c8` on `r38-motion`, pushed, not merged, not deployed)
+
+**The CHECK's one major (Blocker 1) is repaired:** RUN-IN no longer walks Chapter IV's party out of formation, and the run is now off under LOW EFFECTS (CHECK Minor 6). Everything else the CHECK measured stands as it was.
+
+**Game case (rule 14):** the drift repair is **FFX-2 only in effect** (only RUN-IN owns a figure's place, and RUN-IN is FFX-2 only; `research/ffx2-combat-core.md` lines 264 and 266, unchanged). The one change in a shared file, the guard in the MAX mix's `Staging`, is shared plumbing (**both** games) and inert unless a figure is owned, which FFX never does (an FFX fight plays byte for byte as before; r38-restage's slots, which are FFX only, keep working: see "Merging"). The LOW EFFECTS gate is **both games** (SKILL TRAVEL, both games, was already off there; RUN-IN, FFX-2 only, now too), decided from BATTLE SPECTACLE's own low tier (`src/engine/fx/c/SpectacleRules.ts`, both games), not from memory.
+
+**critic-plan** (`node tools/critic-plan.mjs --paths <the changed files>`): DEEP, both games, the same obligations as before (a FOCUSED review of the production candidate before a deploy; live verification and the DEEP review on the live build after it); not the save-data class (no setting, no save key, no `SaveData.ts`). The paper preflight of this repair is the "Alternatives weighed" below, written before the fix was built.
+
+### Cause, as traced and reproduced
+
+`Staging.write` (`src/engine/fx/mix/staging.ts`) keeps the MAX mix's spacing share in each figure's own `position.x`, and tells a re-seat by the stage (an arrival, a formation relax) from its own write by comparing x with what it wrote last: any other x is the stage's new seat, so it sets its record of the share to 0, takes the figure's x as the base and writes `base + share`. `RunInMotion` took `home` from `actor.position` (a position that already holds the share) and moved out and back with `PaintedActor.moveTo`, which writes absolute positions every frame. Each frame of the run the staging read that as a re-seat and put the share on top of the tween, and the last frame of the run home (exactly `home`) got the share put on it as well: she ended every run at `home + share`, and the next run took that as its `home`. One share more per run, exactly the CHECK's trace (Rikku's share -0.071, Paine's +0.022; Yuna never runs; z never changes). It is the same class of problem as r38-restage's finding B2 (an absolute x tween read by `Staging.write` as a nudge or a re-seat). The trace was confirmed in the unit test below: on the old code, after the first Attack Paine is 0.022 and Rikku 0.071 off, and the visible stop is a share beyond the planned spot (Rikku out at x 1.944, planned 2.015).
+
+### Alternatives weighed (before building)
+
+1. **Move in seat coordinates** (subtract the share from every x the run writes and let the staging add it back). Right while the rule is "any foreign x is a re-seat"; under r38-restage's rule (an x-only move is a formation nudge) the share would simply not be added and she would end at the bare seat. Correct for one lane and wrong for the other: rejected.
+2. **Make the run an offset inside the actor** (like the lunge's `lungeOffset`), so the staging never sees it. Correct in principle, but everything that reads `actor.position` for her (the stand-off plan, the camera, the anchors, the shot's origin) would see her at home during the run, and it reaches into `PaintedActor`: too wide for a repair cycle.
+3. **Hold the framing's `commit` while a figure is out.** Covers the commit only: the per-frame `apply` and `release` stay unsafe.
+4. **Chosen: an explicit hand-over.** The figure says it is out (`ownPlace`), the staging leaves it alone and keeps its record, and takes it back when it is home. No guess from a position change, so it holds whatever the staging learns to treat as a re-seat; it is the direction r38-restage's B2 itself names ("let the relaxation hand its nudge to `Staging` instead of `Staging` guessing it from a position change").
+
+### The fix
+
+- `src/engine/motion/PlaceOwner.ts` (new, 31 lines, no `three`, no DOM): `ownPlace(figure, on)` and `placeOwned(figure)` over a `WeakSet`.
+- `RunInMotion` (`app/screens/BattleScreenRunIn.ts`) owns the girl's place from the moment a run is planned to the end of `close()` (released in a `finally`, from the very object it took, whatever the stage hands out later). `home` is the position she stands at, share and all; the stop is **exactly the planned spot** (it was a share beyond it); the run home ends on `home`.
+- `Staging.apply` skips an owned figure and `Staging.release` keeps its record (a re-plan committed while she is out takes the old share off and puts the new one on, once, when she is home). Nothing else in `Staging` changed (`write`, the planners, `stats`).
+- LOW EFFECTS: `motion/MotionGate.ts` closes both looks on the `low` tier (below).
+- No setting, no save key, no contract file (`docs/CONTRACTS.md` lists none of the touched files; `CONTRACT-CHANGES.md` unchanged). `npx tsc --noEmit` clean; `node tools/orphans.mjs`: 1211 modules, 24 orphaned, the same 24 (the new module is reachable); every touched file under 400 lines (the longest is 167).
+
+### Drift, before and after (Chapter IV, seed 1, Paine and Rikku taking turns with plain Attacks, 28 and 26 each, 1600x900, real GPU)
+
+Her resting x a moment before each Attack (the plan's own captured home is the same number, and z is constant on every build at -1.500 and 0.100); `drift.mjs` (the check's, one change: it waits for N Attacks **per girl**).
+
+| Build | Paine, x before each of 28 Attacks | Rikku, x before each of 26 Attacks |
+|---|---|---|
+| **the branch before the repair** (1aa4f67b, dev server of a pristine copy) | -0.748 -0.724 -0.701 -0.677 -0.654 -0.631 -0.607 -0.584 -0.560 -0.537 -0.513 -0.490 -0.466 -0.443 -0.420 -0.396 -0.373 -0.349 -0.326 -0.302 -0.279 -0.255 -0.232 -0.209 -0.185 -0.162 -0.138 -0.115 (then -0.091): **+0.0235 an Attack** (steps 0.023 to 0.024), 0.66 in all | -1.483 -1.556 -1.628 -1.701 -1.773 -1.846 -1.918 -1.991 -2.063 -2.136 -2.208 -2.281 -2.353 -2.426 -2.498 -2.571 -2.643 -2.716 -2.788 -2.861 -2.933 -3.005 -3.078 -3.150 -3.223 -3.295 (then -3.368): **-0.0725 an Attack** (steps -0.073 to -0.072), 1.9 in all; level with Yuna (-2.218) by the 11th Attack, past her from the 12th, and 1.2 world units beyond her at the end |
+| origin/main (77f0d157; its `src/` is the check's base a6b79313) | -0.754 on all 28 | -1.478 on all 26 |
+| the live site (release 37.1, `baileypillon.github.io/pyrefly-reprise/`) | -0.764 on all 28 | -1.469 on all 26 |
+| **the repaired branch** (4135e9c8, dev server of `git archive`) | **-0.746 on all 28** (and the same 1 s after each) | **-1.485 on all 26** (and the same 1 s after each) |
+
+Each build starts a hair apart (-0.746, -0.754, -0.764 for Paine): the mix decides its plan on a live frame (r38-restage's check saw the same on origin/main itself), but a session's number never moves except on the unrepaired branch. Yuna (a Gunner, no run) stays at -2.218 on all four and Bahamut at 1.611. The repaired build still runs: 55 runs planned over the 54 Attacks, the plan's captured home equal to the resting x every time, a whole Attack 1481 to 1620 ms (Paine, median 1496) and 1508 to 1554 ms (Rikku, median 1534), the CHECK's 1488 to 1535 ms.
+
+### The other six FFX-2 chapters (the repaired build, `drift.mjs`, seed 1, scaffolded HP)
+
+Every figure holds its place (her x before and after every Attack is one number per girl, and z never moves), every Attack still runs (the plan's captured home equals her resting x each time), and a whole Attack takes what the CHECK measured (Chapter IV 1488 to 1535 ms there, 1481 to 1620 here; Chapter V 1706 to 1769 ms there, 1693 to 1768 here). The positions are the CHECK's own: these chapters have no mix share (dx 0), held before the repair, and hold now.
+
+| FFX-2 chapter | the repaired build: Attacks, her x before and after every one, whole-Attack length | runs planned |
+|---|---|---|
+| IV Bahamut | Paine 28, x -0.746, 1481 to 1620 ms; Rikku 26, x -1.485, 1508 to 1554 ms | 55 |
+| V Vegnagun and Shuyin | Paine 6, x -0.330, 1726 to 1768 ms; Rikku 6, x -1.440, 1693 to 1720 ms | 12 |
+| VI Leblanc | Paine 6, x -0.900, 1488 to 1554 ms; Rikku 6, x -1.300, 1496 to 1636 ms | 13 |
+| Fallen aeons | Paine 7, x -0.330, 1437 to 1517 ms; Rikku 6, x -1.440, 1457 to 1528 ms | 14 |
+| Trema | Yuna 2, x -2.050, 1510 to 1517 ms; Paine 12, x -0.900, 1481 to 1601 ms | 14 |
+| Den of Woe | Paine 6, x -0.330, 1477 to 1502 ms; Rikku 6, x -1.440, 1501 to 1516 ms | 12 |
+| Ixion and Djose | Paine 6, x -0.330, 1587 to 1598 ms; Rikku 6, x -1.440, 1520 to 1533 ms | 12 |
+
+(Trema's Yuna rarely takes a plain Attack: the run waited for fourteen Attacks in all, `--sum`.) **FFX is untouched:** Chapter I, Tidus, 8 plain Attacks on the repaired build and on origin/main: x -1.310 on all 8 on both, no run, 930 to 946 ms against 934 to 955 ms, and every figure ends where it does on origin/main (Yuna 0.30, Kimahri -0.61, Seymour Flux 3.54).
+
+### The numerals and skill travel still read as the CHECK measured (`casts2.mjs`, the CHECK's scenarios, 3 casts each)
+
+| Cast | the repaired build | the CHECK's branch |
+|---|---|---|
+| FFX Ch I, Lulu, Thunder on Seymour Flux | orb 424, 434, 435 ms; the numeral on the frame after the spell's strike (16, 18 and 95 ms) and 85 to 87 ms after the shot lands; the HP rows with it; move 2035 to 2039 ms | +1 frame (+16 to +71 ms); +83 to +105 ms; 2020 to 2050 ms |
+| FFX-2 Ch IV, Rikku, Darkness on Bahamut | beam 186 to 200 ms; the numeral 1 ms after the landing, 4 to 5 frames (+62 to +85 ms) after the slash (the beam's 180 ms minimum); numerals 325, 462, 521; move 1998 to 3882 ms (ATB overlap) | 0 to +1 ms; +4 to +5 frames (+78 to +90 ms); 1957 to 3887 ms |
+| FFX-2 Ch VI, Yuna (Gunner), Attack on Ormi | tracer 132 to 152 ms; the numeral +1 to +6 ms after the landing and one frame (+25 to +28 ms) after the strike; numerals 61, 99, 102; move 883 to 917 ms | +1 to +3 ms; +1 to +2 frames (+20 to +34 ms); 871 to 883 ms |
+
+The engine log digest of each set equals origin/main's, the live site's and the unrepaired branch's (`001073e5fc2684ed` for Thunder, 33 events; `412f65fb2b245ce9` for Darkness, 93; `a2f5e6b1dd91ac4b` for the Gunner, 65): the same events in the same order, the same numerals. (The frame-based columns move by a frame or two with the machine's load; it was at 100 % CPU for all of this.)
+
+### Real key presses only (`keys-drift.mjs`: Enter and the arrows, Chapter IV, Wait mode, each girl answering her own command menu with a plain Attack, Yuna too; two runs per build)
+
+| Build | Paine | Rikku | runs planned |
+|---|---|---|---|
+| the repaired build, run 1 (198 s, 64 menus) | 15 Attacks: x -0.738 on the first 2, then -0.772 on the other 13 | 12 Attacks: x -1.470 on the first 2, then -1.410 on the other 10 | 27 |
+| the repaired build, run 2 (133 s, 43 menus) | 10 Attacks: -0.735 on 2, -0.639 on one, then -0.770 on the other 7 | 8 Attacks: -1.472 on 2, then -1.411 on the other 6 | 18 |
+| origin/main, run 1 (124 s, 43 menus) | 10 Attacks: -0.734 on 2, then -0.770 on the other 8 | 8 Attacks: -1.473 on 2, then -1.412 on the other 6 | 0 |
+| origin/main, run 2 (124 s, 43 menus) | 10 Attacks: -0.724 on 2, -0.734 on one, then -0.770 on the other 7 | 8 Attacks: -1.463 on 2, then -1.412 on the other 6 | 0 |
+
+The steps are **the MAX mix's own re-plans under the real open menus, measured**: CHAPTER FRAMING checks the live frame against the HUD panels at each menu's opening and re-plans, three times at most. `__pyrefly.fx.snapshot().mix.framing` (sampled as each menu was answered, run 2 of each build) goes plans 1, replans 0 at menu 1, then replans 1 at menu 2, plans 2 at menu 4 (origin/main's: Bahamut x1.20 and +0.49, the girls' shares Yuna -0.15, Rikku -0.05, Paine +0.05), plans 3 and replans 2 at menu 11, plans 4 and replans 3 at menu 12 with **an empty staging** (today's rig, the girls on their bare seats), at the same menus on origin/main (no run, no hand-over) and on the repaired build. Both end in the same figures: Paine -0.770, Rikku -1.411, Yuna -2.05, Bahamut 1.05. The odd single values are the third plan's own shares at rest (Paine's seat -0.772 plus its +0.13 on the repaired build, plus +0.04 on origin/main). Between plans her place is one number across every run: 13 runs and 10 runs after the last plan on the repaired build's first run. (A plan committed while a girl is out lands once, when she is home: that is the unit test's case; whether a commit fell inside a run in these sessions was not sampled.)
+
+### LOW EFFECTS in a browser (the saved setting `lowEffects`, Chapter IV, seed 1, `drift.mjs --settings`)
+
+| Build | runs planned | whole plain Attack | her x |
+|---|---|---|---|
+| the repaired build | **0** | Paine 773 to 784 ms (median 781), Rikku 769 to 797 ms (778) | -0.753 and -1.479, constant |
+| origin/main | 0 | Paine 769 to 786 ms (778), Rikku 765 to 784 ms (777) | -0.750 and -1.481, constant |
+| the branch before the repair | 15 (the run still played) | Paine 1406 to 1425 ms (1413), Rikku 1435 to 1452 ms (1442) | walking: -0.746 to -0.556, -1.485 to -1.849 |
+
+Under LOW EFFECTS the repaired build plays origin/main's attack to within a few milliseconds.
+
+### LOW EFFECTS: the run is off there (decision, and why)
+
+**Chosen: LOW EFFECTS plays today's attack** (the house lunge from where she stands: no run, no camera truck, no smear), by the shared motion gate (`motion/MotionGate.ts`: `eyeCandy.tier === 'low'` closes both looks, in both games). Why:
+
+1. **The project's own rule for BATTLE SPECTACLE's low tier is "today's version".** `fx/c/SpectacleRules.ts` gives the `low` tier a streak density of 0, no spell layer and no colour cast ("Low effects keeps today's burst only"); the spell effects' `low` tier "keeps today's bloom and draws nothing new" (`docs/handoff/iter2-spellfx-b.md`); CINEMA LIGHT's fog and depth of field close there and LIVING PAINTINGS keeps two plates. RUN-IN is a BATTLE SPECTACLE sub-look and was the one addition still running on that tier.
+2. **SKILL TRAVEL, the sibling look, was already closed there** (`SpellFxLayer.canFly` is false at `low`), and so was the smear: with the shot and the smear gone, the run was a half-look (a camera truck and a girl sliding across the field with no trail).
+3. **The cost lands on the player who asked for less.** The run adds 0.6 to 0.9 s to every plain Attack (CHECK Minor 6: 774 to 790 ms on origin/main against 1392 to 1418 ms with the run under LOW EFFECTS), for a setting that exists for slow machines and for the lighter game.
+4. **REDUCE MOTION already closed it** (the comfort path); LOW EFFECTS is the density path, and BATTLE SPECTACLE's additions go off on both. The phone tier keeps both looks (60 % trail), as the CHECK measured.
+
+No new setting, no save key. If Bailey would rather keep the run under LOW EFFECTS (it is a short run and a camera move, not a particle), that is the one line `if (eyeCandy.tier === 'low') return false;` in `motionAllowed`.
+
+### Merging with r38-restage (the other lane in `staging.ts`)
+
+`git merge-tree --write-tree` of `4135e9c8` with `origin/r38-restage` (24181cb1 and its check): **one textual conflict, `Staging.release()` in `src/engine/fx/mix/staging.ts`** (restage adds the fourth argument to `write`); `apply` merges clean. The resolution, tested: keep this branch's loop and pass `null`:
+
+```ts
+    for (const a of [...this.recs.keys()]) {
+      if (placeOwned(a)) continue; // (the comment as in this branch)
+      this.write(a, 1, 0, null);
+      this.recs.delete(a);
+    }
+```
+
+On that resolved tree, in scratch (`D:/Tools/pyrefly-scratch/2026-10-04/motion-repair/merged-src`, the real restage `Staging` and `stageTable.ts`): restage's own `fx-mix-stage-table.test.ts` passes (23, including its 4000-operation "matches the old write" test, so a fight with nothing owned is bit-identical to before), and so do `r38-run-in-staging` (6), `r38-place-owner` (9), `r38-run-in` (13) and `r38-skill-travel` (20); a table-active variant of the run-in test (party shifted -0.5 world x and +0.2 z, fiends +0.5 and -0.3, as restage's own test writes them; 30 Attacks by each girl and an alternating 30 rounds) holds every place within 0.001. An honest note on that case: with the table active and a run along her own lane (every planned stop today: `dz` is 0 in all 37 plans), restage's rule already reads the run's x-only writes as a formation nudge, so that case passes **without** the hold too (checked: the same variant with both hold lines removed passes). What the hold adds under a table is a stop with a change of depth (a z write is a re-seat there: the control in `r38-place-owner.test.ts` walks a girl 0.3 world units or more per run), and Chapter IV, which has no row and so no slots, is the case that failed. The branch also merges clean into the current `origin/main` (77f0d157; `git merge-tree`, no conflict).
+
+### Tests
+
+`npx tsc --noEmit` clean (exit 0). `node tools/orphans.mjs`: 1211 modules, 1187 reachable, **24 orphaned, the same 24** (`PlaceOwner.ts` is reached from `staging.ts` and `BattleScreenRunIn.ts`).
+
+- **`tests/unit/r38-run-in-staging.test.ts` (new, 6): fails on the old code.** The real `RunInMotion`, the real `Staging` and a `PaintedActor`-style tween actor (`moveTo` is its code) over the fake stage the other RUN-IN tests use, in the game's frame order, with Chapter IV's real shares (Paine +0.022, Rikku -0.071, Yuna -0.17, Bahamut x1.39 and +0.56): the control (no run: seat plus share, forever); 30 Attacks by Paine and 30 by Rikku, every figure's x, y and z within 0.001 of origin/main's after each one (the old code fails at Attack 1: Paine 0.022000, Rikku 0.071000); 30 rounds of Paine, Rikku and Yuna (a Gunner, no run); the stop is the planned spot; a re-plan that lands while she is out puts the new share on once. Run against the pristine copy of `1aa4f67b`: 5 of the 6 fail.
+- **`tests/unit/r38-place-owner.test.ts` (new, 9):** the ownership module; the real `Staging` (a foreign x is still a re-seat; an owned figure is left alone and the plan reaches it when it is given back; `release` keeps its record; a figure with no record); r38-restage's rule (`write` copied verbatim) with the hand-over, 30 runs on her own lane and 30 with a change of depth, and the two controls (a depth change without the hand-over walks her; with no slots at all, Chapter IV's case, even an x-only run does).
+- **LOW EFFECTS:** `r38-run-in.test.ts` (13) plays today's attack, with no run and no truck, under LOW EFFECTS, as under REDUCE MOTION and with the look switched off; `r38-skill-travel.test.ts` (20) shows the gate closing both looks, in both games, on the low tier and keeping them on the phone tier. Both fail on the old gate.
+- **The full suite, once, `vitest run --maxWorkers=3`:** 780 test files (774 passed, 1 failed, 5 skipped); 11,398 tests (11,355 passed, 1 failed, 41 skipped, 1 todo), 912 s with the machine at 100 % CPU from other agents. The one failure is the known load timeout: `strategy-ffx2-bahamut` "heal-only route (no Shell, no Breaks) clears Mega Flare" took 15,879 ms against the 15 s limit; **re-run alone it passes** (19 tests, 11.4 s). That is 11,340 + the 16 tests added here.
+
+### Still open (not touched by this repair)
+
+The CHECK's other minors stand as written: 1 (Darkness: the slash lands before the beam), 2 (every Dark Knight ability flies as a beam), 3 (the menu rule's reach, by design), 4 (HUD panels over the runner), 5 (the phone's left edge during the truck), 7 (the cost of attack-heavy play), 8 (the first-run hitch, to be judged on a quiet machine), 9 (not driven in a browser) and 10. **6 (LOW EFFECTS kept the run) is resolved here.** The build still owes what it owed: a FOCUSED review of the production candidate before any deploy, live verification and the DEEP review on the live build after it. The stand-off numbers of section 5 were measured on the planned stops; with this repair the visible stop is exactly the planned one (the unit test shows the old code leaving Rikku 0.071 world units off it, her share).
+
+Two disclosures. **(1)** The Co-Authored-By line on this repair's commits is `Claude Sonnet 5.5` (the model that wrote them and what the harness asked for); the brief said `Opus 5.5`, as it did for the build (see section 10). **(2)** My first dev-server start (two pristine copies served through the junctioned `node_modules`) made Vite re-optimize its dependency cache in `D:/Final Fantasy/node_modules/.vite/deps` at 01:40:35 (Vite reported "lockfile has changed"; my copies carried no lockfile); I stopped both servers within seconds and gave every later server its own `cacheDir`. The cache is complete and valid (content-hashed file names; only `_metadata.json`'s hashes changed), so other agents' servers keep working, but a dev page of theirs that was open at that moment may want one reload.
+
+### Evidence
+
+Scratch: `D:/Tools/pyrefly-scratch/2026-10-04/motion-repair/`. Scripts: the CHECK's `drift.mjs`, `casts2.mjs`, `scenarios.mjs`, `lib.mjs`, `lib2.mjs`, `driftshot.mjs` (copied; `drift.mjs` waits for N Attacks per girl, prints move lengths and the run count, takes `--settings`, `--tag` and `--sum`), and `keys-drift.mjs` (new: real Enter and arrow presses only). Logs: `drift-{before,base,live,after}-ch4.log`, `drift-after-{ch5,ch6,fallen,trema,den,ixion}.log`, `drift-{after,before,base}-ch4-low.log`, `keys-{after,base}-wait.log` and `keys-{after,base}-frame.log` (with the framing counters), `drift-{after,base}-ffx-ch1.log`, `casts-after-*.log` and `res2-after-*.json`, `suite-full.log`, the merge in `merged-src/`. Servers: pristine copy of `1aa4f67b` on 6910 (PID 24980), `origin/main` on 6911 (PID 49600), `git archive` of `4135e9c8` on 6912 (PID 44820), each with its own cache, no file watching; all three stopped by PID when the proofs were done (6911 and 6912 were started once more, PIDs 85860 and 86984, for the framing-counter run, and stopped by PID after it); the live site needed none. Headless Chromium on the real GPU (`PYREFLY_BROWSER=gpu`), one browser at a time, never Claude-in-Chrome or the built-in pane.

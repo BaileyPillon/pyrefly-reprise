@@ -133,10 +133,12 @@ describe('Staging and a figure that is out on a run', () => {
 });
 
 // ----------------------------------------------------------------------------------------------------------------------------------
-// r38-restage's slots. This is `Staging` as origin/r38-restage (24181cb1) has it, its `apply`, `write` and `release` copied verbatim
-// (the planners and `stats` left out), plus the one line this repair adds to `apply` and the three to `release`: the lanes are
-// compatible when the same hand-over keeps a run out of the formation rule. When r38-restage lands, drop this copy and give the real
-// `Staging` a `side` (`st.side = { party, enemy, boss: null }`) in the run-in test.
+// r38-restage's slots. This is `Staging` as origin/r38-restage (24181cb1) has it: `write` copied verbatim; `apply` as it is there minus
+// the boss gate (`side.boss` is null in these tests); `release` as the merge of the two lanes resolves it (this repair's loop, with
+// restage's `null` argument to `write`); the planners and `stats` left out. Plus this repair's hold line in `apply` and `release`
+// (`honourHold`; off for the controls). The lanes are compatible when the same hand-over keeps a run out of the formation rule. When
+// r38-restage lands, drop this copy and give the real `Staging` a `side` (`st.side = { party, enemy, boss: null }`) in the run-in test
+// (checked once in scratch against the real merged class: see `docs/handoff/r38-motion.md`, Repair).
 
 interface Shift {
   dx: number;
