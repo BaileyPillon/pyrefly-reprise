@@ -6,11 +6,15 @@
 import { Mesh, Object3D, PerspectiveCamera, PlaneGeometry, Texture } from 'three';
 import { describe, expect, it } from 'vitest';
 import { budgetFor } from '../../../src/engine/ArtBudget.ts';
-import { ArtGovernor, PERSIST_FRAMES, pixelsPer1xTexel, type GovernedActor, type GovernedPainting, type PixelSource } from '../../../src/engine/ArtGovernor.ts';
+import { ArtGovernor, PERSIST_MS, pixelsPer1xTexel, type GovernedActor, type GovernedPainting, type PixelSource } from '../../../src/engine/ArtGovernor.ts';
 import { StageArt, anticipateView } from '../../../src/engine/StageArt.ts';
 import { BattleCamera } from '../../../src/engine/BattleCamera.ts';
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { setArtTier, setForcedArtScale } from '../../../src/engine/ArtDevice.ts';
+
+/** One frame of a 60 Hz screen, ms; the governor's persistence is time, so the tests step a clock. */
+const FRAME_MS = 1000 / 60;
+const PERSIST_FRAMES = Math.ceil(PERSIST_MS / FRAME_MS);
 
 const META = { width: 673, height: 766, content: { x0: 40, x1: 640, y0: 30, y1: 740 } };
 
@@ -58,6 +62,7 @@ interface Rig {
   cam: { current: PerspectiveCamera };
   pinned: { on: boolean };
   fail: Set<number>;
+  clock: { t: number };
 }
 
 function rig(actors: GovernedActor[], opts: { z?: number; budgetMB?: number; cls?: 'high' | 'mid'; maxTexture?: number } = {}): Rig {
@@ -67,6 +72,7 @@ function rig(actors: GovernedActor[], opts: { z?: number; budgetMB?: number; cls
   const loads: Rig['loads'] = [];
   const pinned = { on: false };
   const fail = new Set<number>();
+  const clock = { t: 0 };
   const gov = new ArtGovernor({
     actors: () => actors,
     camera: () => cam.current,
@@ -80,13 +86,15 @@ function rig(actors: GovernedActor[], opts: { z?: number; budgetMB?: number; cls
       return { image, scale };
     },
     pinned: () => pinned.on,
+    now: () => clock.t,
     ...(opts.maxTexture ? { maxTexture: () => opts.maxTexture! } : {}),
   });
-  return { gov, loads, budget, cam, pinned, fail };
+  return { gov, loads, budget, cam, pinned, fail, clock };
 }
 
 const tick = async (r: Rig, frames: number): Promise<void> => {
   for (let i = 0; i < frames; i++) {
+    r.clock.t += FRAME_MS;
     r.gov.update();
     await Promise.resolve();
     await Promise.resolve();
@@ -159,6 +167,24 @@ describe('the governor', () => {
     expect(tex.userData['artScale']).toBeGreaterThanOrEqual(3);
     expect((tex.image as unknown as PixelSource).width).toBe(META.width * (tex.userData['artScale'] as number));
     expect(f.paintings[0]!.painted.scale).toBe(tex.userData['artScale']);
+  });
+
+  it('waits the same time on a 240 Hz screen as on a 60 Hz one: persistence is time, not frames', async () => {
+    const f = figure(1);
+    const r = rig([f.actor], { z: 9 });
+    r.cam.current = camera(2.2);
+    for (let i = 0; i < 40; i++) {
+      r.clock.t += 1000 / 240; // 167 ms of a 240 Hz screen: 40 frames, more than the 18 a 60 Hz screen needs
+      r.gov.update();
+      await Promise.resolve();
+    }
+    expect(r.loads).toEqual([]);
+    for (let i = 0; i < 40; i++) {
+      r.clock.t += 1000 / 240; // 333 ms in all
+      r.gov.update();
+      await Promise.resolve();
+    }
+    expect(r.loads.length).toBeGreaterThan(0);
   });
 
   it('a planned view loads at once and never waits', async () => {

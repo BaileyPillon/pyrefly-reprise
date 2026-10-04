@@ -37,6 +37,8 @@ export interface GovernorDeps {
   load: (url: string, scale: number) => Promise<{ image: PixelSource; scale: number } | null>;
   /** True under `?artscale=`: every painting is pinned to one master and nothing is measured. */
   pinned?: () => boolean;
+  /** The clock in ms (default `performance.now`); the tests step their own. */
+  now?: () => number;
   /** The GPU's largest texture edge in pixels: a master whose longer edge would pass it is never asked for. */
   maxTexture?: () => number;
 }

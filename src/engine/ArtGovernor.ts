@@ -42,7 +42,7 @@ interface Entry {
   /** The scale being loaded or waiting to be swapped in (0 = none). */
   loading: number;
   failed: Set<number>;
-  /** The frame the live camera first wanted a bigger master than it holds (-1 = it does not now). */
+  /** The time (ms) the live camera first wanted a bigger master than it holds (-1 = it does not now). */
   needSince: number;
 }
 
@@ -54,15 +54,17 @@ interface Need {
   px1x: number;
 }
 
-/** Frames a painting counts as "on screen" after it was last drawn, for eviction (0.75 s at 60). */
-export const SEEN_WINDOW = 45;
+/** How long (ms) a painting counts as "on screen" after it was last drawn, for eviction. */
+export const SEEN_WINDOW_MS = 750;
 const MAX_LOADS = 2;
 /**
- * Frames a live need must last before a master is fetched for it (0.3 s at 60): a punch or a shake bounces a figure to twice its
- * size for a third of a second, and a download that lands after it is bytes for nothing. A planned view (`anticipate`) is not asked to wait.
+ * How long (ms) a live need must last before a master is fetched for it: a punch or a shake bounces a figure to twice its size for a
+ * third of a second, and a download that lands after it is bytes for nothing. Time, not frames, so a 144 or 240 Hz screen waits as
+ * long as a 60 Hz one. A planned view (`anticipate`) is not asked to wait.
  */
-export const PERSIST_FRAMES = 18;
-const EVICT_EVERY = 20;
+export const PERSIST_MS = 300;
+/** How often (ms) the memory budget is checked besides after each swap. */
+const EVICT_EVERY_MS = 250;
 /** A little over the measured number: the plane's yaw and the camera's sway only shrink it, but the measure is taken a frame late. */
 const SAFETY = 1.04;
 
@@ -86,6 +88,9 @@ export class ArtGovernor {
   private readonly entries = new Map<Texture, Entry>();
   private readonly ready: Array<() => void> = [];
   private frame = 0;
+  /** The clock, ms, as of this frame's update. */
+  private t = 0;
+  private lastEvict = 0;
   private inflight = 0;
   private disposed = false;
   private upgrades = 0;
@@ -104,13 +109,17 @@ export class ArtGovernor {
   update(): void {
     if (this.disposed) return;
     this.frame++;
+    this.t = this.deps.now ? this.deps.now() : performance.now();
     if (this.deps.pinned?.()) return;
     const cam = this.deps.camera();
     cam.updateMatrixWorld();
     this.why = 'live';
     this.dispatch(this.collect(cam, false));
     this.ready.shift()?.();
-    if (this.frame % EVICT_EVERY === 0) this.evict();
+    if (this.t - this.lastEvict >= EVICT_EVERY_MS) {
+      this.lastEvict = this.t;
+      this.evict();
+    }
   }
 
   /**
@@ -174,7 +183,7 @@ export class ArtGovernor {
     const entries: GovernorStats['entries'] = [];
     for (const e of this.entries.values()) {
       resident += e.mb;
-      entries.push({ url: e.url, scale: e.scale, mb: Math.round(e.mb * 10) / 10, px1x: Math.round(e.px1x * 100) / 100, seen: this.frame - e.lastSeen <= SEEN_WINDOW });
+      entries.push({ url: e.url, scale: e.scale, mb: Math.round(e.mb * 10) / 10, px1x: Math.round(e.px1x * 100) / 100, seen: this.t - e.lastSeen <= SEEN_WINDOW_MS });
     }
     return {
       frame: this.frame,
@@ -236,7 +245,7 @@ export class ArtGovernor {
         g.mesh.updateWorldMatrix(true, false);
         const px = pixelsPer1xTexel(g.mesh.matrixWorld, cam, H, g.painted.meta) * SAFETY;
         if (!hypothetical) {
-          e.lastSeen = this.frame;
+          e.lastSeen = this.t;
           e.px1x = px;
           if (e.mb === 0) e.mb = textureMB(imageWidth(e.texture), imageHeight(e.texture));
         }
@@ -245,8 +254,8 @@ export class ArtGovernor {
         if (want > e.scale && want > e.loading) {
           if (hypothetical) needs.push({ entry: e, want, rank: 0, px1x: px });
           else {
-            if (e.needSince < 0) e.needSince = this.frame;
-            if (this.frame - e.needSince >= PERSIST_FRAMES) needs.push({ entry: e, want, rank: 0, px1x: px });
+            if (e.needSince < 0) e.needSince = this.t;
+            if (this.t - e.needSince >= PERSIST_MS) needs.push({ entry: e, want, rank: 0, px1x: px });
           }
         } else if (!hypothetical) e.needSince = -1;
       }
@@ -346,7 +355,7 @@ export class ArtGovernor {
       if (e.mb <= 0) continue;
       const key = String(i++);
       byKey.set(key, e);
-      residents.push({ key, scale: e.scale > e.baseScale ? e.scale : 1, mb: e.mb, lastSeen: e.lastSeen, visible: this.frame - e.lastSeen <= SEEN_WINDOW });
+      residents.push({ key, scale: e.scale > e.baseScale ? e.scale : 1, mb: e.mb, lastSeen: e.lastSeen, visible: this.t - e.lastSeen <= SEEN_WINDOW_MS });
     }
     for (const key of evictionOrder(residents, this.deps.budget().textureMB)) {
       const e = byKey.get(key)!;
