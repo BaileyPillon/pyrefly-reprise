@@ -40,6 +40,23 @@ describe('no document string names a source', () => {
   });
 });
 
+/**
+ * A pointer into a part of the guide it follows that this panel does not have ("the Overdrive section
+ * covers it", "the ... page under Tips and Tricks"): a dead end for the player, and the one kind of
+ * source naming `SOURCE_WORDS` cannot see. A reference to something above or below in the same
+ * document is fine and is not matched.
+ */
+const POINTS_ELSEWHERE = /\bsections?\b|\bpages?\b|tips and tricks/i;
+
+describe('no document string points at a part of a guide this panel does not have', () => {
+  for (const d of GUIDE_DOCS) {
+    it(`${d.id}`, () => {
+      const hits = docStrings(d).filter((s) => POINTS_ELSEWHERE.test(s));
+      expect(hits).toEqual([]);
+    });
+  }
+});
+
 describe('the mounted panel prints no source either', () => {
   const live: Array<{ unmount(): void }> = [];
   afterEach(() => {

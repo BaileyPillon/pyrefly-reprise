@@ -22,6 +22,9 @@ printed as the page gives it).
 section 10 below, and it supersedes what sections 1, 3, 6, 7 and 8 say about paging, the `MORE` row and the card inside the guide;
 those passages are marked.**
 
+**Check and fixes (2026-10-04):** section 11 is an independent critic's check of the lane (PASS, no blocker); section 12 records the fixes
+to its small findings (three dead pointers, the copyright margin, one number, two sentences of section 2).
+
 This is the **second pass** on the branch. The first pass (a plan, a computed NEXT card, win rates) is superseded by the fourth
 instruction: the panel is now the encounter guide's page for the boss, with that page's layout and that page's content, in our own
 words, and **nothing in it is computed**: no NEXT line, no WATCH logic, no fit steps, no rules of ours. The first pass's code
@@ -82,9 +85,10 @@ nothing from them is in the repo. FFX base `https://jegged.com/Games/Final-Fanta
   "The mechanics of the fight:" with three paragraphs, "The strategy:" with eight, Steal, Drops. Panel: the same 23 blocks. HP
   32,000 agrees. Kept though not doable: the Mighty G Mixes (the bag has no ingredients), the Stone and Poison Wards (the build
   ships one Stone Ward and no Poison Ward).
-- **IX. Yojimbo.** `Side-Quests/Cavern-of-the-Stolen-Fayth.html`. The page has **no boss card for this fight**: one paragraph and a
-  boxed hint (Kimahri's Ronso Rage) above, then the "Yojimbo" heading and two paragraphs. Panel: those 5 blocks and no stat box (the
-  page has none). **Number: the page says "approximately 30,000" HP, the panel says 33,000 (the game's).** What follows the fight on
+- **IX. Yojimbo.** `Side-Quests/Cavern-of-the-Stolen-Fayth.html`. The page has **no boss card for this fight and no heading named for
+  him**: one paragraph and a boxed hint (Kimahri's Ronso Rage) above, then two paragraphs about the fight. Panel: those 5 blocks, of
+  which the `Yojimbo` header band is the panel's own (it gives the sheet a place to open on), and no stat box (the page has none).
+  **Number: the page says "approximately 30,000" HP, the panel says 33,000 (the game's).** What follows the fight on
   the page (the contract, the price, the side rooms) is not in this game and is left out.
 - **X. Seymour Natus.** `Walkthrough/23-Via-Purifico.html`. Three paragraphs above; the card: In Game Description, HP, two
   paragraphs, "Phase 1", "Phase 2 (...)" and "Phase 3 (...)" lead-ins with their advice, "Some additional notes:", "Strategy:" (a
@@ -139,9 +143,14 @@ nothing from them is in the repo. FFX base `https://jegged.com/Games/Final-Fanta
   (common) and two (rare), and the game awards one Dark Matter each.** The page's
   "Judgment" is printed as the game's "Judgement". Kept though not doable: the Higher Power grid, the Mascot dressphere and the
   best accessories (not in this kit).
-- **XV. The Den of Woe.** `Walkthrough/Chapter-5/60-Mushroom-Rock-Road.html`. A boxed Blue Bullet note, a lead-in "Preparation:"
-  and two paragraphs above; Baralai, Gippal and Nooj, each with a paragraph, a move list, paragraphs and a table (the page also has
-  cards for Rikku and Paine, which this chapter does not fight). Panel: the same 29 blocks; opens on the shade on the field. All HP
+- **XV. The Den of Woe.** `Walkthrough/Chapter-5/60-Mushroom-Rock-Road.html`. A boxed Blue Bullet note and a lead-in "Preparation:"
+  above, with two preparation paragraphs on the page; the panel prints two, **but not the page's two**: the page's first (the party
+  fully healed, then Yuna alone in the first two fights, her support roles and a Gun Mage dressphere) is cut to its "fully healed"
+  clause, which opens the first printed paragraph (the first two fights are Rikku's and Paine's, which this chapter does not fight),
+  and the page's second (the loot to Steal or Mug, then the Salvation Promised grid) is split in two, its first sentence continuing
+  the first printed paragraph and its last sentence being the second. Then Baralai, Gippal and Nooj, each with a paragraph, a move
+  list, paragraphs and a table (the page also has cards for Rikku and Paine, which this chapter does not fight). Panel: 29 blocks in
+  that order, the preparation as just described; opens on the shade on the field. All HP
   agree (12,220; 14,800; 23,800). **Numbers: Baralai's Drill Shot fires after his HP has changed 10 times on the page, 8 times
   here.** The Garment Grid reward is left out. Kept though not doable: the Salvation Promised grid's Auto-Life, an Alchemist's Mix
   (the preset has neither).
@@ -867,3 +876,67 @@ differences in section 1, and that reading a long page while the FFX-2 clock run
 (`critic-clear` needs a report from the review workflows; `critic-plan` says live + focused + deep are owed). Not run: the repo's `hud-collision.spec.ts` for the other 16 chapters (my own first-menu coverage run covers all 18), the transitions of Vegnagun's five links and Yunalesca's forms in a real battle, a real gamepad, a real
 touch device, Firefox or Safari (the sheet has a `scrollbar-width` fallback that I did not exercise), the real game of the Steam copy. The servers I started (6950, 6951, 6952) are stopped; no dev server was started; nothing
 was deleted, deployed or merged.
+
+## 12. Fixes after the check (2026-10-04)
+
+Written by a Sonnet sub-agent of the driver session, on `r38-guide-jegged` after section 11's head (`6e1d2d90`). It fixes findings 1 to 3 of section 11
+and the short word-for-word lines of its section 2. **Game case: both** (AGENTS.md rule 14), decided per line from the chapter's own game: the FFX lines are in
+II, III, VIII, IX, X and XVIII (the FFX guide's pages), the FFX-2 lines in V, XI, XIII and XV (the FFX-2 guide's); the commits are split that way (FFX only,
+FFX-2 only, then the shared guard tests and this note). Text only: no code, no data, no layout, and no number changed except the one the numbers rule asks for
+(V line 87). Every document keeps its block and line count (all 18 dumps compared), its anchors, headings, stat labels, loot rows and order. Line numbers are
+section 11's (the document dump: one line per paragraph, list item or table row, a list's label with its items on one line).
+
+**What changed (21 lines in 10 documents; the new wording is in the files, the page's old wording is not repeated here).**
+
+| Chapter (game) | Line | Finding | Now |
+|---|---|---|---|
+| VIII (FFX) | 18 | a pointer to a part of the source guide the game does not have | the pointer sentence is gone; the paragraph ends on what Super Mighty G adds |
+| IX (FFX) | 2 | same, in the Ronso Rage hint | the pointer sentence is gone; the hint ends on how Kimahri learns the Doom Ronso Rage |
+| XIII (FFX-2) | 4 | a pointer that named a page of the source's own site (fixed first) | gone; the paragraph ends on the Omega Weapons' floors |
+| II (FFX) | 15 | lead-in, word for word | "More notes and tactics:" |
+| VIII (FFX) | 9 | lead-in, word for word | "How the fight works:" |
+| X (FFX) | 13, 16 | Phase 2 and Phase 3 lead-ins, word for word | "Phase 2 (when Natus drops under 24,000 HP)", "Phase 3 (when Natus drops under 12,000 HP)" |
+| XVIII (FFX) | 2 to 4 | the three armour-ability lines, word for word | "Stoneproof or Stone Ward", "Confuseproof or Confuse Ward", "Zombieproof or Zombie Ward" |
+| V (FFX-2) | 29 | attack-list line | "Flare, aimed at a single target" |
+| V (FFX-2) | 82 | attack-list line | "“Dispel”: strips the target of its buffs" |
+| XIII (FFX-2) | 16 | attack-list line | "Demi, in reply to any healing ability you use" |
+| XI (FFX-2) | 19 | attack-list line (the four -aga spells) | "One of Firaga, Blizzaga, Thundaga or Waterga" |
+| III (FFX) | 15 | one whole four-word closing sentence | "Then sit back and watch the ending cinematic!" |
+| XV (FFX-2) | 37 | the four-word closing question | "He hits hard, and Lightfall is tough to survive without some preparation. Here is how to get ready." |
+| V (FFX-2) | 69 | near-copy (seven-word run and the page's closing clause) | "“Pallida Mors”: magic damage of roughly 1,200 on one target, used only while the Head is untargetable" |
+| V (FFX-2) | 73 | near-copy | "“Acta Est Fabula”: revives both Redoubts at full HP" |
+| V (FFX-2) | 75 | near-copy | "“Lacrimosa”: a physical hit of about 100 on one target" |
+| V (FFX-2) | 83 | near-copy | "“Demi”: hits each target for 25% of its current HP" |
+| V (FFX-2) | 87 | the page's "above 1,500 HP" beside the game's range | "Each cast hits for roughly 1,490 to 1,685, so be ready to recover by keeping everyone above 1,685 HP, and keep a White Mage or Alchemist on hand." |
+
+V line 87 is the numbers rule (D-362, "print the game's number") applied to the one line the builder missed: the page's 1,500 is the top of the 700 to 1,500
+it observed from a buffed party; the game's own range is 1,490 to 1,685 (`research/ffx2-vegnagun-shuyin.md` section 3.4; `research/jegged-encounter-guides-ffx2.md` J-7 says
+"keep our figure and the page's logic"), so the line now states the range and its top as the floor to keep everyone above. The paragraph is 254 characters (the unit limit is 260).
+The three lines that lost a pointer sentence (VIII 18, IX 2, XIII 4) keep the rest of their text, which already stood within the check's six-word limit.
+
+**Section 2's two wrong sentences are corrected in place:** IX (the page has no heading named for Yojimbo; the `Yojimbo` header band is the panel's own) and XV
+(the page has two preparation paragraphs, the panel prints two that are not the page's two: what is cut and how the second is split is now said).
+
+**The proof.**
+- **Overlap with the pages** (the check's own script, `overlap.mjs`, on the dumps before and after): lines with a run of 5 or more shared words 151 to 141, of 6 or more 70 to 63,
+  of 7 or more 24 to 21, of 8 or more 11 to 9. Every line reworded now shares at most three consecutive words with its page (what is left is a number with its unit, a move's name, three spell names
+  that make a list of game terms, and "on one target"), apart from the untouched text beside them (III line 15's first sentence and V line 87's four percentages: five words; the hint box in IX keeps its title).
+  Lines that appear whole on their page, three words or more, outside headings, stat lines and table cells: **15 before, 4 after**; the four left are three-word labels or a move's name
+  (XIII line 27 and X line 19 are run-in labels, V line 46 a heading, V line 97 "Terror of Zanarkand"), which section 11 treats as headings and names.
+- **Wider net** (page, section, tips and tricks, see above/below, per the, the guide): the three dead pointers are the only hits that pointed outside the document; the "above" and "below" left
+  (V line 3, VIII line 11, XIII lines 8 and 18, I line 9, VII line 11) refer to text that is in the same document.
+- **Tests.** The 12 guide files pass, 248 tests (230 before): `guide-doc-words` 55 (37 before: 18 new, one per document, a guard that no document string points at a "section",
+  a "page" or "tips and tricks", the kind of source naming `SOURCE_WORDS` cannot see; section 11's alternative to rewording, kept as well as the rewording) and `guide-doc` 28, where the
+  Nemo test also pins "above 1,685 HP" and the absence of 1,500, as it already did for Yojimbo's 30,000 and Paragon's 200,000. `npx tsc --noEmit` is clean (TypeScript 7.0.2);
+  `node tools/orphans.mjs`: 1,227 modules, 24 orphaned, the same 24, none a guide file.
+- **Browser** (`D:/Tools/pyrefly-scratch/2026-10-04/guide-fix/check-chapters.mjs`; headless Chromium from node, `PYREFLY_BROWSER=gpu`, a code-only `vite build` of this tree served on
+  `127.0.0.1:6970`, a real battle per chapter through the debug API, the real wheel and real keys, 1600x900): Chapters V, VIII, IX and XIII each render the sheet (64, 23, 5 and 28
+  blocks) opening on the boss's header (gap 8.9, 10.9, 10.4 and 9.8 px), smallest type 14.25 px, 0 elements wider than the panel and no horizontal scroll, 0 hits for the words test's
+  pattern, **0 console errors and 0 failed requests**; every new line is in the sheet and no old wording is; the real wheel scrolls to each changed line in turn (44, 12, 1 and 9 notches),
+  `End` is the foot, `Home` the top, `G` puts the sheet away and back, and the panel is still whole afterwards. VIII's opening gap equals the pre-fix build's to the hundredth
+  (10.86 px, same scroll offset; the check read 9.6 at another moment), the sheet 7 layout px shorter. Crops of each changed line are in `shots-1600x900/` in that folder. The servers
+  (6970, and 6971 for the comparison with the pre-fix build) were stopped by PID.
+
+**Not done, and still Bailey's or the driver's:** finding 4 of section 11 (the move advisor's chip stands on the folded guide chip at 1280x720 in FFX Chapter I; identical on
+origin/main, not this lane's); the two omissions on unresolved conflicts (V's Protect-halves-Noli claim, XVI's four Aerospark casts); Natus's drop; D-364's word on the screenshots;
+the check's other "For Bailey" items. No deep, focused or live review obligation is settled by this note; nothing was merged to `main`, deployed or pushed anywhere but this branch.
