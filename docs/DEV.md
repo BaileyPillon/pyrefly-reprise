@@ -161,6 +161,28 @@ and are pinned by `tests/unit/deploy-dirty-classify.test.ts`.
 - `--dry-run` stops right after the dirty-tree check and prints how each dirty
   path was classified — useful for confirming the tree is only fleet noise.
 - `--message="text"` appends free text to the gh-pages commit message.
+- `--host=github|cloudflare` picks where to publish (default `github`, set by
+  `DEFAULT_HOST` in `tools/deploy-host.mjs`). **A production deploy goes only to the
+  default host**; `--host=cloudflare` without `--preview` is refused until Bailey says
+  switch (a dry run only prints the refusal). Every gate above runs for both hosts.
+- `--kind=workers|pages` (Cloudflare only) picks the Cloudflare product: Workers static assets
+  (the default) or Pages. Both are named `echoes-of-spira` (D-368, D-369).
+- `--preview` (Cloudflare only) publishes to the preview instead: the Worker `echoes-of-spira-preview`,
+  or the `preview` branch of the Pages project. The same gates (the release gate included), every
+  file compared byte for byte, logged in `docs/preview-deploys.log` (never `docs/deploys.log`), no
+  review obligation.
+- `--create-project` (Pages only) creates the project first when the account has none.
+- `--full-verify` (Cloudflare only) compares every file, not a sample.
+
+Cloudflare serves from the root, so its build runs with `BASE_PATH=/` (set by the script
+through Node's environment; from Git Bash a hand-typed `BASE_PATH=/` is rewritten to
+`/Program Files/Git/` by MSYS, so use `MSYS_NO_PATHCONV=1` or PowerShell). It also needs
+Node 22 or newer, `wrangler` (a pinned devDependency; `npm install`, never `npm ci`; or any copy,
+named by `PYREFLY_WRANGLER_BIN=<path to wrangler.js>`) and Bailey's own login (`npx wrangler
+login`; the script checks it first and never logs in). wrangler is always spawned with stdin
+closed, so no prompt can appear. Nothing is deployed to Cloudflare yet: read
+[handoff/r39-cloudflare.md](handoff/r39-cloudflare.md) for the evidence, the limits, the commands
+and the switch checklist.
 
 Safe to run repeatedly — `dist-release/.git` is deleted and recreated every
 run, so `gh-pages` always ends up with exactly one commit. Requires the `gh`
