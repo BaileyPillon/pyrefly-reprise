@@ -121,7 +121,7 @@ describe('the Trigger Happy head takes a second line in a small window and stays
   const css = stripComments(SHEET);
   const query = /@media\s*\(max-width:\s*(\d+)px\),\s*\(max-height:\s*(\d+)px\)\s*\{([\s\S]*?)\n\}/.exec(css);
 
-  it('is a window rule: under 960x540 (stage scale 1.5), which is every phone and no desktop window the game supports', () => {
+  it('is a window rule: under 960x540 (stage scale 1.5), which takes in every upright phone and keeps a 4:3 laptop on one line', () => {
     expect(query).not.toBeNull();
     expect(Number(query![1])).toBe(959);
     expect(Number(query![2])).toBe(539);
