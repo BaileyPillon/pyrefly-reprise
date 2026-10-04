@@ -50,6 +50,7 @@ import {
 import type { AtbSnapshot, BattleEvent, BattleState, TurnPreview } from '../battle/common/types.ts';
 import type { HudPort } from './HudPort.ts';
 import { ParticleField, ParticlePresets } from './Particles.ts';
+import { sceneScale } from './crisp/sceneScale.ts';
 
 /** The Omnis combatant and the state key its rules keep (`seymour-omnis-rules.ts`). */
 export const OMNIS_GLOW_ID = 'seymour-omnis';
@@ -266,7 +267,7 @@ export class OmnisGlowLook {
     );
     field.name = 'omnis-glow-embers';
     field.onBeforeRender = (renderer: WebGLRenderer): void => {
-      field.setPixelScale(Math.max(0.5, (renderer.domElement.height || 900) / 900));
+      field.setPixelScale(Math.max(0.5, ((renderer.domElement.height || 900) * sceneScale()) / 900));
     };
     this.figure.parent.add(field);
     this.embers = field;

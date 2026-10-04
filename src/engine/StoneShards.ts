@@ -35,6 +35,7 @@ import {
   type Object3D,
   type WebGLRenderer,
 } from 'three';
+import { sceneScale } from './crisp/sceneScale.ts';
 
 /** Chips (large, tumbling) plus grit (small, quick). */
 const CHIPS = 46;
@@ -206,7 +207,7 @@ class StonePool extends Points {
     this.advance(this.last ? (now - this.last) / 1000 : 0);
     this.last = now;
     // Pixels across one world unit at distance 1, so `aSize` stays in world units.
-    const px = renderer.getDrawingBufferSize(this.buf).y * 0.5 * camera.projectionMatrix.elements[5]!;
+    const px = renderer.getDrawingBufferSize(this.buf).y * sceneScale() * 0.5 * camera.projectionMatrix.elements[5]!;
     if (Number.isFinite(px) && px > 0) this.u['uPx']!.value = px;
   }
 
