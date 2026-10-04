@@ -18,6 +18,14 @@ import type { CombatantId } from '../battle/common/types.ts';
 import type { BattleStage, MomentsPort } from './BattlePresenterPorts.ts';
 import { ffx2Push, ffx2Shot, fittedPush } from './ShotFit.ts';
 
+/**
+ * `actor.userData[PHONE_FIT_KEY] = false`: a scene's mark on a figure the phone's A-12 refit leaves out ({@link ShotRules.fitPhone}).
+ * For a colossus the field is built around, not fitted to (Chapter VIII's Evrae, FFX only): its painting is narrower than a
+ * slice at some distance, and the refit would then stand the camera back to bring the whole coil in beside the party. Same
+ * channel as the scenes' other presenter hints (`StageArrivals`, the airship range director): a plain `userData` key.
+ */
+export const PHONE_FIT_KEY = 'phoneFit';
+
 export class ShotRules {
   /** A-1: set by the presenter for an engine with an ATB clock (FFX-2); FFX's CTB keeps its cuts. */
   ffx2Framing = false;
@@ -60,6 +68,8 @@ export class ShotRules {
       .staged()
       .map((id) => ({ actor: this.stage.actor(id), enemy: this.stage.sideOf(id) === 'enemy' }))
       .filter((s): s is { actor: NonNullable<typeof s.actor>; enemy: boolean } => s.actor !== undefined)
+      // A scene's own marker (`PHONE_FIT_KEY`): a colossus that fills the field by design stays out of the refit.
+      .filter(({ actor }) => (actor as { userData?: Record<string, unknown> }).userData?.[PHONE_FIT_KEY] !== false)
       // The party whole; an enemy whole too, unless it is a part wider than the slice (FrameFit).
       .map(({ actor, enemy }) => ({ actor, min: enemy ? 0.75 : 1 }));
     let top = 0;
