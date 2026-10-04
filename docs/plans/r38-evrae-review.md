@@ -46,3 +46,25 @@ measured: the head lands 0.68 world left of today's and the rest gap stays at -2
 
 ## Evidence that stays reusable
 The mockup round's frames, numbers and sheets (candidates/2026-10-03-day/evrae-restage/) for E1-H; its E1-H idle pair is this package's idle, byte for pixel (re-saved lossless).
+
+## Repair preflight (2026-10-04): the critic's check of `3b709a4f` FAILED on B1 and B2
+
+Written by the repair cycle (a Sonnet sub-agent of the driver) after the causes were measured (the checker's tables and the instrumented runs named below) and before the final proof run; the handoff's Repair section holds that proof. **Verdict: PROCEED.**
+
+**Game case (rule 14): FFX only.** Chapter VIII's Evrae. The new stage reads (`src/scenes/evrae-airship-aspect.ts`) are applied by the range director only when it binds Evrae's own fight (`id === 'evrae'` with an actor), never to Sin's Fins (Chapter XVII), never to Chapter XVIII's face (no foe bound), never on the phone, never by an FFX-2 chapter. The one shared-engine line, a filter in `ShotRules.fitPhone` for an actor whose `userData.phoneFit === false`, is inert for every other figure of both games: only Evrae's director sets it.
+
+**What the two blockers are made of (measured, not guessed).**
+- **B1:** a slot move cannot fix the narrow windows. On the 1600x900 masks of the checked build the whole figure may move 20 to 40 px left before it touches the party (Rikku's painted pixels under it: 0.01 % at 20 px, 1.4 % at 40, 7.5 % at 60, 19.5 % at 80); 16:10 needs about 80 px of room and 4:3 about 150. The lever left is the camera: below 16:9 the NEAR rigs stand back along their own view line until the coil stands where it does at 16:9 in the window's width (Hor+, sized for the coil's depth), the house answer to a frame too narrow for its fight (the phone's A-12 refit). The alternatives were measured: a widened field of view puts the plate's edge in the corner (0.9 % of the frame at 16:10, 3.4 % at 4:3, the mix's plate gate); a smaller Evrae changes the one scale D-360 fixes.
+- **B2:** the phone's A-12 refit includes every enemy narrower than the slice at the tried distance. The checked figure is 0.74 of the render wide against a slice room of 0.776, so it joined the fit and pulled the camera back until party and coil fitted one slice (k 1.43, z 14.78). The old figure measures 0.771 to 0.779, within 0.005 of the room: left out on the real site (z 9.40 in 7 of 7 loads at 390x844), in at origin/main built locally (z 12.91). The fix is a flag on the actor, read by the refit.
+- **ProneLay's +0.70 or -0.70:** an ordering race, not the base path or the seed (below, in the handoff): the choice is made once, on the first frame the wide idle is on screen, from whichever figures the concurrent staging has produced by then.
+
+**Acceptance cases** (the production build served under the live base path `/pyrefly-reprise/`, the package over `public/art` by a dev-only overlay, headless GPU Chromium, real keys, seeds 1 to 3, menus 1 to 3, against the real live site and origin/main):
+
+| Case | Target |
+|---|---|
+| B1 at 1280x800, 1440x900, 1680x1050, 1024x768, 1600x900, 2000x1012, 2560x1440, 2560x1080 | no visible coil pixel inside the turn rail's rect at menus 1 to 3 |
+| B2 at 390x844 and 360x780 | camera z 9.40 and the party as live's (Tidus 161 px at 390x844) |
+| Kept | rest gap 1 at the first menu, painted overlap about 1 % or less, poses, FAR swap, Chapters XVII and XVIII unchanged, package verifies |
+| ProneLay | the pinned placement identical on localhost at `/`, under `/pyrefly-reprise/`, and on the real live origin |
+
+**Risks.** The party is smaller below 16:9 (the price of the camera lever, reported with numbers; a smaller Evrae is the alternative for Bailey to pick). The MAX mix keeps its own lens policy (a 4 % shift of the width at one of the first menus): the trim and the stand-back margin are sized to leave the coil clear of it, and where they cannot (a few px at one size) the table says so. The repo's rest gap at menu 3 is a coarse 6x8 cell count against a KO'd Tidus's lying box and the figure's hidden strip below the deck line; any left shift moves it across its threshold while the visible painted overlap stays 0.0 %.
