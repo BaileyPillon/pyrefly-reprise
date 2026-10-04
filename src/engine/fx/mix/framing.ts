@@ -1,7 +1,7 @@
 import { anticipateView } from '../../StageArt.ts';
 import type { Object3D, PerspectiveCamera } from 'three';
 import { boxesOf, bossCoverOf, clearBoxes, downsOf, fitClear, limitsFor, overlapOf, type Field, type Fit, type Gate, type Limit, type PartyRule } from './clearance.ts';
-import { cameraAt, figOf, stillActor, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
+import { cameraAt, figOf, standBack, stillActor, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
 import { advisorReserve, battleCanvas, fieldOf, hudFree, hudPanels, menuOpen, noteMenuPanels, phoneBattle, predictedPanels, rememberedMenuPanels, sensorSlab } from './hudPanels.ts';
 import { classify, keepsToday, master, scaleTarget, type MasterClass } from './masters.ts';
 import { colossusExcess, gateNote, plateExcess, plateMiss, plateOf, restGap, shifted } from './plate.ts';
@@ -9,6 +9,7 @@ import type { FramingReport } from './framingReport.ts';
 import { RigWatch, type BattleCameraLike } from './rigWatch.ts';
 import { Staging, type Side } from './staging.ts';
 import { onPhone, readStand, standFor } from './stageTable.ts';
+import { c3, c3State } from './ch3Options.ts';
 
 /**
  * The MAX mix (D-316): CHAPTER FRAMING (BATTLE SPECTACLE's part; both games). The composed master per
@@ -127,6 +128,7 @@ export class Framing {
       // a summon, a spherechange) keep the master: no cut on them, and the floor still holds.
       if (this.installed && this.time < 10) this.planWanted = true;
     }
+    c3State.active = on && !onPhone() && actors.some((a) => a.facing < 0 && /^braskas-final-aeon/.test(subjectId(a)));
     this.staging.hold(actors, on && this.staged); // a chapter with a row stands its fiends itself: the formation relaxation leaves them alone from the first frame
     if (this.rigs?.baseChanged()) this.planWanted = true; // the scene re-registered its master (Evrae's range, the phone refit)
     const menu = menuOpen();
@@ -316,7 +318,7 @@ export class Framing {
     this.limitOf.clear();
     for (const [a, l] of d.limitOf) this.limitOf.set(a, l);
     const lensMoved = Math.abs(this.lens[0] - this.lensFrom[0]) + Math.abs(this.lens[1] - this.lensFrom[1]) > 0.5;
-    rigs.install(d.pose, !d.keep);
+    rigs.install(d.pose, !d.keep, c3State.active && c3.lens !== 1 ? standBack(d.pose, c3.lens) : d.pose);
     if (lensMoved && rigs.sinceInstall() >= 1) rigs.holdUntilMove(); // the rig itself unchanged: the lens waits for the camera too
     this.installed = true;
     Object.assign(this.report, d.report, { staging: this.staging.stats() });
