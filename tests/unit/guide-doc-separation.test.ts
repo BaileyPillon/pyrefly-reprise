@@ -69,7 +69,7 @@ describe('the advisor reads no document', () => {
   });
 
   it('the move advisor panel does not import the guide panel', () => {
-    for (const rel of ['src/ui/common/MoveAdvisor.ts', 'src/ui/common/advisorGuideBadge.ts', 'src/ui/common/advisorChipFollow.ts']) {
+    for (const rel of ['src/ui/common/MoveAdvisor.ts', 'src/ui/common/advisorChipFollow.ts', 'src/ui/ffx/advisorRoomy.ts']) {
       expect(imports(read(rel)).filter((s) => /StrategyGuide|guideDoc/.test(s)), rel).toEqual([]);
     }
   });
