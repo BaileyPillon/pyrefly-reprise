@@ -389,3 +389,59 @@ refined master, and an asset it has not refined yet installs as its base master)
 | Full suite `vitest run --testTimeout=60000 --maxWorkers=3` (log `D:/Tools/pyrefly-scratch/2026-10-04/r39-int/logs/full-suite.log`) | **802 files passed, 5 skipped (807); 11,818 tests passed, 46 skipped, 1 todo (11,865); 0 failed; exit 0; 601.8 s**, with the real `public/art` (the three art-dependent files pass here). None of the four known load timeouts (`strategy-ffx2-bahamut`, `sin-fins-core-bench`, `ui-pause-stack`, `critic-release-rules`) fired. Against release 38's tip (798 files, 11,754 tests): **+4 files and +64 tests**, all this branch's (`r39-art-governor`, `r39-art-tiers`, `r39-hires-install`, `r39-preload-masters`) |
 | `node tools/orphans.mjs` | 1,229 modules, 1,205 reachable, **24 orphaned**: the same 24 as release 38 (1,220 / 1,196 / 24); this branch's new modules (`ArtBudget`, `ArtDevice`, `ArtGovernor`, `ArtManifestTiers`, `ArtMeasure`, `PostAa`, `StageArt`, `PlateCompose`, `artApi`) are all reachable |
 | `node tools/audio/qa.mjs --strict` | exit 0, 0 cues and 0 sfx with findings; 88.49 MB of the 90 MB budget (unchanged) |
+### Build gates and measurements on the merged build (branch `r39-int`, 2026-10-04; both games, shared plumbing)
+
+Production build of the merged tree with the real art, into `D:/Tools/pyrefly-scratch/2026-10-04/r39-int/build` (vite 914 s, 0 source maps). The live build for comparison is
+release 38's artifact (main 6461999e, bundle DHaa2xD1, `D:/pyrefly-rel38/dist-release`, served under `/pyrefly-reprise/`). Both served by `harness/serve.mjs` on 7052 (live) and 7050
+(this build). Headless Chromium on the real GPU (`PYREFLY_BROWSER=gpu`), Playwright from node, never the browser pane.
+
+| Gate | Result |
+|---|---|
+| `fx-assets verify` | PASS |
+| `art-derive verify` (exact) | PASS: 2,815 masters (568 WebP, 2,247 PNG, 2,670 pixel-compared), 0 problems, 222 s |
+| `art-derive audit` | PASS: 832 text files, 582 literal art names in the bundle (14 shipped files, 568 derived masters, 0 dangling) |
+| `art-browser-load` | PASS: 2,815 art files + 44 other images, 2,859 of 2,859 loaded and decoded at the master's size in Chromium 153 and WebKit 26.6, 0 failed |
+| Cloudflare limits (`harness/cf-limits.mjs`; 25 MiB per file, 20,000 files free plan) | **3,742 files** (headroom 16,258); **largest file 19,059,770 bytes = 18.18 MiB** (`art/characters/x2-anima/overdrive@4x.png`), headroom 7.15 MB under 25 MiB (26,214,400); 0 files over the limit. No total-size limit on Cloudflare |
+| Bytes, counted as the deploy counts them (`harness/bytes-manifest.mjs`, repo `buildManifest`, rerun after the handoff kill, 1,400 s) | **9,129,027,809 bytes shipped** (9,128,484,395 of 3,742 files + `artifact-manifest.json` 543,414; 3,744 files with the manifest and `.nojekyll`), artifact hash 957ccbb2. Decode-checked, 0 audio unverified, 0 problems after the 4 listed flat images. **Over the 800,000,000-byte line (D-332, D-344) by 8,329,027,809 bytes (11.4 times the line); the exit is 1 on that alone.** Release 38's live build counted 798,696,333 |
+
+Bytes by tier (shipped files, MB = 1e6): 1x art 491.5 MB (571 WebP 311.8 + 416 PNG 176.2 + 815 json 3.5); **@2x 1,688.4 MB** (647 PNG 1,358.2 + 29 WebP backdrops 330.2); **@3x 2,664.6 MB** (592 PNG);
+**@4x 4,188.9 MB** (592 PNG); audio 88.5 MB (29 files); code and other 6.6 MB (51 files). By extension: PNG 2,259 files 8,388.9 MB, WebP 600 files 642.1 MB, mp3 28 files 88.5 MB, js 3 files 4.9 MB.
+
+Texels per pixel at 1440p (2560x1440, dpr 1, standard idle rig, high class, Chapter I = FFX, Chapter IV = FFX-2; `harness/capture.mjs --rigs idle --no-bench`, one run each; tag `tx-live`/`tx-new`).
+The in-page reading is "mag" = pixels one texel covers; **texels per pixel = 1 / mag** (more is sharper; below 1 the paint is stretched). Live 6461999e -> this build:
+
+| Item | Live: file, texels per pixel | This build: file, texels per pixel |
+|---|---|---|
+| Ch I backdrop plate (median) | 2048x1170, 0.58 | 2688x1536, 0.77 |
+| Ch I floor (median / p90) | 1024x1024, 0.40 / 0.28 | 4096x4096, 1.61 / 1.10 |
+| Ch I largest figure, Seymour Flux (0.40 of the frame height) | 1500x2422 (2x), 4.05 | 750x1211 (1x), 2.03 |
+| Ch I weakest figure, Tidus | 673x766, 1.62 | 1346x1532 (2x), 3.24 |
+| Ch IV backdrop plate (median) | 2048x1170, 0.65 | 2688x1536, 0.86 |
+| Ch IV deck floor (median / p90) | 512x512, 0.16 / 0.11 | 4096x4096, 1.27 / 0.85 |
+| Ch IV largest figure, Bahamut (0.62) | 2048x2048, 2.23 | 2048x2048, 2.24 |
+| Ch IV second Bahamut painting (0.57) | 1097x948, 1.12 | 2194x1896, 2.24 |
+| Ch IV weakest figure, Paine | 816x2360, 5.81 | 408x1180, 2.92 |
+
+Reading: the plates and floors, which were 0.16 to 0.66 texels per pixel (stretched), are now 0.77 to 1.61; the floors rose 4 to 8 times. Figures are held at about 2 to 4 texels per
+pixel: the governor brings the weak ones up (Tidus 1.62 -> 3.24, Bahamut's second painting 1.12 -> 2.24) and, past the budget's need, takes the over-supplied ones down (Seymour Flux
+4.05 -> 2.03, Mortiorchis 5.08 -> 2.54, Paine 5.81 -> 2.92; their 2x masters stay installed; this run did not test a closer shot). Plates and floors are the surfaces that were
+below one texel per pixel, and they remain the softest items (the plate is 0.77 to 0.87 at 1440p; the deck-reflection plane is a 512 px glow plane left alone on purpose).
+
+GPU memory after the first menu (the harness's exact allocation tally; deterministic, not a timing reading): Ch I 350.3 MB -> 502.8 MB (textures 322.1 -> 474.7); Ch IV 327.5 MB -> 509.7 MB (295.8 -> 478.0).
+Art bytes fetched by the cold first menu (2560x1440): Ch I 77.2 MB -> 105.2 MB; Ch IV 73.9 MB -> 90.9 MB. Cold first menu (walk from the title, one run each, **not a quiet-machine reading**: another
+lane was hashing and other agents were live): Ch I 18.5 s -> 19.1 s, Ch IV 15.7 s -> 14.9 s.
+
+Real-key turns on this build (`harness/turns.mjs`, one turn per chapter: Attack in Ch I and VIII, White Magic > Shell in Ch IV, then the next actor's menu; every one took the turn and opened the next menu):
+
+| Size | Console errors | Non-2xx responses | Aborted requests (`requestFailed`) |
+|---|---|---|---|
+| 1600x900, Ch I, IV, VIII | 0, 0, 0 | 0, 0, 0 | 1, 0, 0 |
+| 2560x1440, Ch I, IV, VIII | 0, 0, 0 | 0, 0, 0 | 0, 6, 0 |
+| 2560x1440 first-menu frames, Ch II, IX, XV (no turn) | 0, 0, 0 | 0, 0, 0 | 0, 8, 10 |
+
+The aborted requests are `net::ERR_ABORTED` on warm-up fetches of other chapters' paintings (backdrops and idle paintings the game starts early and cancels when the scene changes); **the live build does the
+same** (Ch I 1, Ch IV 19, Ch VIII 7, Ch IX 5, Ch XV 15 at 2560x1440 without a turn, 0 console errors, 0 non-2xx), so it is not a regression and no response was an error. The harness's own "noNon2xx" check counts them
+and so marks those rows; a reviewer should read the status codes (all 2xx). Art requested in Ch I at 2560x1440: 72 files at 1x and 46 at 2x, none at 3x or 4x (these flows never asked for a 3x or 4x master).
+Art requested at 1600x900: all 1x (the governor's need is met at 1x there).
+
+Frames (2560x1440, JPEG, the first command menu of each chapter, this build): `docs/screenshots/r39-int/ch1-seymour-flux-2560x1440-first-menu.jpg`, `ch2-yunalesca-...`, `ch4-ffx2-bahamut-...`, `ch8-evrae-airship-...`, `ch9-yojimbo-cavern-...`, `ch15-ffx2-den-of-woe-...` (same names).
