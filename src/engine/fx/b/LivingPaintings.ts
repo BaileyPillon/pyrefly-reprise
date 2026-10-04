@@ -76,6 +76,10 @@ class Living {
   private seed = 11;
   private disposed = false;
   private readonly off: () => void;
+  /** After a lost WebGL context comes back the plates (render targets, composed on the GPU) are blank: build them again. */
+  private readonly onRestore = (): void => {
+    this.built = null;
+  };
 
   constructor(a: LivingBind, room: RoomSpec) {
     this.a = a;
@@ -86,6 +90,7 @@ class Living {
     this.rig = new DriftRig(a, room.game, room.drift);
     this.figures = room.platesOnly ? null : new Figures(a.scene, this.root, room.shadow);
     this.off = eyeCandy.onChange(() => this.sync());
+    a.renderer?.domElement.addEventListener('webglcontextrestored', this.onRestore);
     this.sync();
   }
 
@@ -289,6 +294,7 @@ class Living {
 
   dispose(): void {
     this.disposed = true;
+    this.a.renderer?.domElement.removeEventListener('webglcontextrestored', this.onRestore);
     this.off();
     this.rig.restoreSway();
     this.figures?.dispose();

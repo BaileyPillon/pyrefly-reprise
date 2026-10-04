@@ -6,6 +6,7 @@
  *   node tools/hires-install.mjs                     dry run: what would be installed, skipped and derived, with bytes
  *   node tools/hires-install.mjs --apply             do it
  *   node tools/hires-install.mjs --only characters/tidus,backdrops/gagazet   a subset (prefix match on the asset id)
+ *   node tools/hires-install.mjs --redo3             re-derive every @3x (after a change to how it is derived)
  *   node tools/hires-install.mjs --lib <dir> --art <dir> --copy
  *
  * The library (`D:/Tools/pyrefly-art-backup/hires`, `manifest.json`) holds, per painting, `<name>@4x.png` and `<name>@2x.png`
@@ -38,7 +39,7 @@ export function oneXPath(art, outputPath) {
 }
 
 /** Plan every install; pure but for the file reads. Returns `{ jobs, skipped }`. */
-export async function plan({ lib, art, only, scales, backdropMax = 2 }) {
+export async function plan({ lib, art, only, scales, backdropMax = 2, redo3 = false }) {
   const sharp = (await import('sharp')).default;
   const manifest = JSON.parse(readFileSync(join(lib, 'manifest.json'), 'utf8'));
   const jobs = [];
@@ -94,7 +95,7 @@ export async function plan({ lib, art, only, scales, backdropMax = 2 }) {
       // @3x from @4x, when the library has the 4x and 3x is asked for and absent
       if (out.scale === 4 && scales.includes(3)) {
         const to3 = join(art, out.path.replace('@4x.png', '@3x.png'));
-        if (!existsSync(to3)) jobs.push({ kind: 'derive3', id: out.path.replace('@4x.png', '@3x.png'), from, to: to3, bytes: Math.round(out.bytes_png * 0.56), size: [w1 * 3, h1 * 3] });
+        if (redo3 || !existsSync(to3)) jobs.push({ kind: 'derive3', id: out.path.replace('@4x.png', '@3x.png'), from, to: to3, bytes: Math.round(out.bytes_png * 0.56), size: [w1 * 3, h1 * 3] });
       }
     }
   }
@@ -108,6 +109,46 @@ async function pool(items, n, fn) {
     while (next < items.length) await fn(items[next++]);
   };
   await Promise.all(Array.from({ length: Math.max(1, n) }, worker));
+}
+
+/**
+ * 4x -> 3x without losing the colour under the transparent pixels. A straight resize of an RGBA image premultiplies, so everything
+ * under alpha 0 comes back as one flat colour (a first version of this tool wrote (76,105,113) under every transparent pixel of a 3x
+ * master: a teal-grey halo wherever a texel is magnified); the 4x master keeps a ring of the figure's own colour under the transparent
+ * pixels beside its silhouette so bilinear and mip filtering never blend in black or grey. So the colour and the alpha are resized apart
+ * (Lanczos on each, straight), which keeps that ring, and joined again.
+ */
+export async function derive3(sharp, j) {
+  const [w, h] = j.size;
+  // Colour and alpha are split in plain buffers first: sharp applies `removeAlpha` after the resize, so on the file itself the resize would still premultiply.
+  const src = await sharp(j.from).raw().toBuffer({ resolveWithObject: true });
+  const { width: sw, height: sh } = src.info;
+  const rgb = Buffer.alloc(sw * sh * 3);
+  const alpha = Buffer.alloc(sw * sh);
+  for (let i = 0, k = 0, a = 0; a < sw * sh; a++, i += 4, k += 3) {
+    rgb[k] = src.data[i];
+    rgb[k + 1] = src.data[i + 1];
+    rgb[k + 2] = src.data[i + 2];
+    alpha[a] = src.data[i + 3];
+  }
+  const resize = (data, channels) => {
+    const img = sharp(data, { raw: { width: sw, height: sh, channels } }).resize({ width: w, height: h, kernel: 'lanczos3', fit: 'fill' });
+    // A one-channel raw buffer comes back as three grey channels unless the channel is taken out again.
+    return (channels === 1 ? img.extractChannel(0) : img).raw().toBuffer({ resolveWithObject: true }).then((r) => {
+      if (r.info.channels !== channels) throw new Error(`derive3: expected ${channels} channel(s), got ${r.info.channels}`);
+      return r.data;
+    });
+  };
+  const rgb3 = await resize(rgb, 3);
+  const alpha3 = await resize(alpha, 1);
+  const out = Buffer.alloc(w * h * 4);
+  for (let i = 0, k = 0, a = 0; a < w * h; a++, i += 4, k += 3) {
+    out[i] = rgb3[k];
+    out[i + 1] = rgb3[k + 1];
+    out[i + 2] = rgb3[k + 2];
+    out[i + 3] = alpha3[a];
+  }
+  await sharp(out, { raw: { width: w, height: h, channels: 4 } }).png({ compressionLevel: 6 }).toFile(j.to);
 }
 
 async function apply(jobs, copy) {
@@ -132,7 +173,7 @@ async function apply(jobs, copy) {
   const derive = jobs.filter((x) => x.kind === 'derive3');
   await pool(derive, Math.min(4, Math.max(1, cpus().length >> 1)), async (j) => {
     mkdirSync(dirname(j.to), { recursive: true });
-    await sharp(j.from).resize({ width: j.size[0], height: j.size[1], kernel: 'lanczos3', fit: 'fill' }).png({ compressionLevel: 6 }).toFile(j.to);
+    await derive3(sharp, j);
     n++;
   });
   return n;
@@ -147,7 +188,7 @@ async function main(argv) {
   const art = resolve(get('--art', join(ROOT, 'public', 'art')));
   const only = (get('--only', '') || '').split(',').filter(Boolean);
   const scales = (get('--scales', '2,3,4') || '').split(',').map(Number).filter((n) => n >= 2 && n <= 4);
-  const { jobs, skipped } = await plan({ lib, art, only, scales });
+  const { jobs, skipped } = await plan({ lib, art, only, scales, redo3: argv.includes('--redo3') });
   const bytes = jobs.reduce((s, j) => s + j.bytes, 0);
   const by = {};
   for (const j of jobs) by[j.kind] = (by[j.kind] ?? 0) + 1;
