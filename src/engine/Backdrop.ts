@@ -63,6 +63,12 @@ export interface ParallaxLayerSpec {
   feather?: number;
   /** Feather on the bottom edge. Defaults to 0 (the band runs off-frame). */
   featherBottom?: number;
+  /**
+   * Feather on the left and right ends, as a fraction of the layer's width (round 21, PR-0344). Defaults to 0: the layer ends
+   * square, which is right while its ends are outside the frame; at a window wider than the plate was solved for (21:9) they stand
+   * inside it, and a layer that stops at a vertical line steps the picture's brightness there (the plate wings' "seam").
+   */
+  featherSide?: number;
   /** World z for this layer. Closer to the camera than the main plane. */
   z: number;
   opacity?: number;
@@ -161,6 +167,19 @@ const DEFAULT_LAYERS: ParallaxLayerSpec[] = [
 /** Cap on the pixel width of a masked parallax layer; they are drawn small. */
 const LAYER_MAX_WIDTH = 1536;
 
+/**
+ * The alpha stops (offset along the layer's width, alpha) of a layer's side feather (`ParallaxLayerSpec.featherSide`, round 21,
+ * PR-0344): nothing for 0, else both ends fall away along a smoothstep over `side` of the width (capped at 0.45 so the two never
+ * meet), never a straight ramp that the eye finds as a line. Sorted by offset; pure.
+ */
+export function sideFeatherStops(side: number): Array<[number, number]> {
+  const s = Math.min(0.45, Math.max(0, Number.isFinite(side) ? side : 0));
+  if (!(s > 0)) return [];
+  const ease = (t: number): number => t * t * (3 - 2 * t);
+  const ts = [0, 0.25, 0.5, 0.75, 1];
+  return [...ts.map((t): [number, number] => [t * s, ease(t)]), ...[...ts].reverse().map((t): [number, number] => [1 - t * s, ease(t)])];
+}
+
 function maskBand(
   source: CanvasImageSource,
   srcW: number,
@@ -193,6 +212,13 @@ function maskBand(
   }
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, w, h);
+  const stops = sideFeatherStops(spec.featherSide ?? 0);
+  if (stops.length) {
+    const gx = ctx.createLinearGradient(0, 0, w, 0);
+    for (const [at, a] of stops) gx.addColorStop(at, `rgba(0,0,0,${a})`);
+    ctx.fillStyle = gx;
+    ctx.fillRect(0, 0, w, h);
+  }
   ctx.globalCompositeOperation = 'source-over';
   return c;
 }

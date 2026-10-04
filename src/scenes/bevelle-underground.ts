@@ -33,6 +33,8 @@ import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import type { SceneSlots } from './index.ts';
 import { addPlateWings, paintPlateWings } from './plateWings.ts';
+import { bracketScale } from './frameBracket.ts';
+import { viewportAspect } from './cavern-stolen-fayth-rigs.ts';
 import type {
   SceneBuild,
   SceneBuildOptions,
@@ -1138,10 +1140,10 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
      * makes the parallax legible instead of merely present.
      */
     layers: low
-      ? [{ from: 0.6, to: 0.9, feather: 0.1, featherBottom: 0.06, z: -20, opacity: 0.6 }]
+      ? [{ from: 0.6, to: 0.9, feather: 0.1, featherBottom: 0.06, featherSide: 0.06, z: -20, opacity: 0.6 }]
       : [
-          { from: 0.34, to: 0.64, feather: 0.09, featherBottom: 0.08, z: -32, opacity: 0.62 },
-          { from: 0.6, to: 0.9, feather: 0.1, featherBottom: 0.06, z: -20, opacity: 0.6 },
+          { from: 0.34, to: 0.64, feather: 0.09, featherBottom: 0.08, featherSide: 0.06, z: -32, opacity: 0.62 },
+          { from: 0.6, to: 0.9, feather: 0.1, featherBottom: 0.06, featherSide: 0.06, z: -20, opacity: 0.6 },
         ],
     /**
      * Where the palette is read from.
@@ -1971,6 +1973,8 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
    * simply outside the frustum and drew nothing at all.
    */
   const conduitLampMats: MeshBasicMaterial[] = [];
+  /** The window's width against 16:9, now (`frameBracket.ts`): the pipes and their lamps stand at the frame's edge at every width. */
+  let bracketNow = bracketScale(viewportAspect());
   /**
    * Seventeen and eighteen units, not eleven and twelve.
    *
@@ -1995,7 +1999,8 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
       texture: conduitTex,
       cap: false,
     });
-    conduit.position.set(x, 0, z);
+    conduit.position.set(x * bracketNow, 0, z);
+    conduit.userData['bracketX'] = { base: x, offset: 0 }; // moved outward with the window's width (`frameBracket.ts`, PR-0344)
     group.add(conduit);
     props.push(conduit);
 
@@ -2041,7 +2046,8 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
        * were cut with it and the bracket lost the one warm thing on it exactly
        * when it was widest and blackest.
        */
-      lamp.position.set(x + (x < 0 ? r * 1.5 : -r * 1.5), 1.9 + i * 2.2, z + r * 0.55);
+      lamp.position.set(x * bracketNow + (x < 0 ? r * 1.5 : -r * 1.5), 1.9 + i * 2.2, z + r * 0.55);
+      lamp.userData['bracketX'] = { base: x, offset: x < 0 ? r * 1.5 : -r * 1.5 };
       lamp.renderOrder = 4;
       lamp.name = 'conduit-lamp';
       group.add(lamp);
@@ -2149,6 +2155,17 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
       backdrop.update(dt);
       lights.update(dt);
       for (const p of particles) p.update(dt);
+
+      // The bracketing pipes stay at the frame's edge when the window is wider than 16:9 (PR-0344: they stood in the picture as a dark
+      // slab at 21:9); the window can be resized while a battle is up.
+      const bracket = bracketScale(viewportAspect());
+      if (bracket !== bracketNow) {
+        bracketNow = bracket;
+        for (const m of props) {
+          const b = m.userData['bracketX'] as { base: number; offset: number } | undefined;
+          if (b) m.position.x = b.base * bracket + b.offset;
+        }
+      }
 
       // Lamps. The product of two sines at incommensurate rates never repeats
       // on any audible period, so a "flickering" lamp never becomes a blinking
