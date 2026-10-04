@@ -18,39 +18,171 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 381, from 2026-09-15 to 2026-10-04 (ids A-0001 to A-0381), 173 of them linked to at least one decision (285 distinct decision ids).
+- **Rows:** 403, from 2026-09-15 to 2026-10-04 (ids A-0001 to A-0403), 193 of them linked to at least one decision (315 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
-| implementation | 101 |
-| art | 36 |
+| implementation | 107 |
+| art | 41 |
 | deploy | 46 |
-| review | 95 |
-| records | 19 |
-| infrastructure | 17 |
+| review | 97 |
+| records | 22 |
+| infrastructure | 19 |
 | account | 12 |
 | download | 10 |
-| maintenance | 14 |
-| process | 31 |
+| maintenance | 16 |
+| process | 33 |
 
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 84 |
+| October 2026 | 106 |
 
-- **By game:** 281 both, 49 n/a, 28 FFX, 23 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **By game:** 297 both, 54 n/a, 29 FFX, 23 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
 - **Deploys and releases:** 46 deploy rows: 43 lines of docs/deploys.log (37 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, and 1 Cloudflare preview. The log runs from round 2 checkpoint (2026-09-17) to release 38 (2026-10-04).
-- **Reviews:** 95 rows: 28 focused reviews (28 SHIP), 37 live checks (35 PASS, 1 FAIL, 1 UNVERIFIED), 18 deep rounds with a report (9 SHIP, 6 HOLD, 3 no verdict) and 12 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, round 21 in progress).
-- **Not finished or not shipped:** 15 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
+- **Reviews:** 97 rows: 28 focused reviews (28 SHIP), 37 live checks (35 PASS, 1 FAIL, 1 UNVERIFIED), 19 deep rounds with a report (10 SHIP, 6 HOLD, 3 no verdict) and 13 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
+- **Not finished or not shipped:** 22 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-04](#2026-10-04) (34) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-04](#2026-10-04) (56) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
 ### 2026-10-04
 
+- **A-0403** · `records` · n/a · **Both ledgers brought up to date with the afternoon and evening of 2026-10-04 (D-395 to D-417, A-0382 to A-0403)**
+  - What: A Sonnet sub-agent extended both central ledgers from NOW.md, the chat and the branches' handoffs: D-395 the actions ledger request and D-396 the privacy question; D-397 the switch to echoesofspira.com; D-398 to D-403 the six recommendations of his "I'll go with all of your recommendations. Godspeed." (sharpness F plus, Chapter III option 1, FFX Defend the original's way, keep the current masters, the noreply commit email, the private repository after release 39); D-404 to D-417 the 14 cards of the judgment-calls page, with an honest note on cards A to E that he has not listened, read, played or looked yet; D-389 now implemented (the domain is bought); D-282 superseded by D-284, D-375 by D-399, D-307 to D-309 adopted as kept, notes on D-376, D-378, D-381, D-385 and D-388; and the rows A-0382 to A-0403 here. The renderer's summary line no longer says round 21 is in progress.
+  - Who: driver session; a Sonnet sub-agent wrote it · Decisions: D-393, D-394, D-395
+  - Result: done
+  - Evidence: `docs/target/decisions.json` · `docs/target/actions.json` · `DECISIONS.md` · `ACTIONS.md`
+  - Reversible: yes, documentation
+- **A-0402** · `records` · both · **CHANGELOG.md backfilled for every build since the project began: 49 entries with pictures**
+  - What: Bailey: "Retroactively apply the changelog for all previous builds please since inception" and "wherever visual changes occurred you need to include pictures and screenshots". Parallel writers produced 49 entries, newest first, each build exactly once: the 43 logged deploys (docs/deploys.log), the four hand-built builds (Alpha 1, 2 and 3 and the 2026-09-17 11:14 build), the first Cloudflare preview and the project start. The main page holds every bullet as text with its FFX, FFX-2 or both tag, one picture and a link; a page per build under docs/changelog holds the full entry with every picture, before and after where both exist, and the marker "no screenshot from the time" where none exists (668 image links to 613 distinct files, 234 JPEG copies under docs/changelog/img, no old build re-rendered). At about 18:36 EDT the Alpha 1 and release 29 entries gained the Chapter III length that card I of the judgment page settled (about 27 minutes of fighting, seven links, a bench median of 137 turns).
+  - Who: Bailey and driver session; parallel Sonnet writers built it · Decisions: D-390, D-391, D-392, D-412
+  - Result: done
+  - Evidence: `CHANGELOG.md` · `docs/changelog` · `commit 105105c` · `commit 11a78ee`
+  - Reversible: yes, documentation
+- **A-0401** · `implementation` · both · **Lane r39-natus: Natus option N as a per-chapter table and the Lady Luck timed-reel options page (branch r39-natus)**
+  - What: Launched after his reply to the judgment-calls page: card F, Natus's big framing as a deterministic per-chapter table (about 270 px at 1600x900 with the Sensor card steered clear each time; Braska's Final Aeon, Evrae and Yunalesca unchanged) followed by a focused visual check, and card N, an options page of timed Lady Luck reels (two or three options made from the sources) for him to pick from. Nothing is built for timing until he picks, and release 39 ships her reels as built with the 26 percent pay rate stated.
+  - Who: r39-natus lane (Sonnet sub-agent) · Decisions: D-409, D-417
+  - Result: in progress (branch r39-natus) (game case: both (card F FFX only, card N FFX-2 only))
+  - Evidence: `branch r39-natus` · `docs/handoff/NOW.md (2026-10-04 ~18:40 entry)`
+  - Reversible: yes, branch only
+- **A-0400** · `implementation` · both · **Lane r39-judg: Swordplay estimates, TEXT SIZE in the FFX-2 HUD and pause, the settings rule and the first-run text (branch r39-judg)**
+  - What: Launched after his reply to the judgment-calls page, on top of r381-ui-floor: card J (four Swordplay rows in src/data/ffx/overdrives/inputs.ts take the estimated zones 22, 16, 12 and 9 percent and sweeps 1,400, 1,150, 900 and 700 ms, with a test pinning the ordering), card K (TEXT\_SIZE\_WIDE\_SCOPE on, the enemy-intent board and guide fixed at 130 percent in FFX-2, fresh 100, 115 and 130 percent frames; the row is relabelled instead if its focused check fails), card L (a look turned on with every part off switches its parts on, after confirming that no save-format change is needed) and card M (the first-run step 1 says "Start with this one." when another chapter is selected). A focused review comes before any deploy.
+  - Who: r39-judg lane (Sonnet sub-agent) · Decisions: D-413, D-414, D-415, D-416
+  - Result: in progress (branch r39-judg) (game case: both (card J FFX only))
+  - Evidence: `branch r39-judg` · `docs/handoff/NOW.md (2026-10-04 ~18:40 entry)`
+  - Reversible: yes, branch only
+- **A-0399** · `records` · both · **Round 21 judgment-calls page published for Bailey: 14 cards, A to E his to do and F to N with a recommendation**
+  - What: Round 21 left 15 human judgments open; the driver checked each against his decisions since round 20 and took out six already settled (party and boss slots in Chapters II, III and VIII; Lady Luck reachable; the Bushido order; the phone Overdrive path; Sin's link-3 retry; Evrae below 16:9), leaving 14 lettered cards. Cards A to E are his to do (about 35 minutes): the listening score, the story read, the FFX feel, the FFX-2 feel and taste. Cards F to N each carry a recommendation: F Natus option N at about 270 px, G confirm Trema and the Den, H Sin as measured, I Chapter III's length note, J the Swordplay estimates, K TEXT SIZE in the FFX-2 HUD and the pause, L a look turned on switches its parts on, M the first-run text, N Lady Luck's reels timed after a mockup. A table spells out what each recommendation changes, as D-394 requires; the reply line is "all your recommendations, and my listening score is \_\_". Published at about 18:28 EDT; his reply came at about 18:30 (D-404 to D-417).
+  - Who: driver session · Decisions: D-404, D-405, D-406, D-407, D-408, D-409, D-410, D-411, D-412, D-413, D-414, D-415, D-416, D-417
+  - Result: done (page published; his reply is D-404 to D-417)
+  - Evidence: `https://claude.ai/artifact/CoHSLgmjHoETdJWZfYmHFx` · `critic/scratch/judgments-r21 (git-ignored, not in the repo)` · `critic/rounds/round-21.md`
+  - Reversible: yes, a page
+- **A-0398** · `implementation` · both · **Lane r39-looks: the sharpness F plus look and the calmer Chapter III camera as production code (branch r39-looks)**
+  - What: Launched at about 18:15 EDT after his yes (D-398, D-399), on top of r39-hires-engine: F plus as release 39's production default (2x supersample with a Lanczos-3 resolve, both SMAA passes off, sharpening 0.3, plates anisotropy 16, a step-down to F by device class and frame time, phones keep today's frame with one SMAA) and Chapter III option 1 (a calm camera while a menu is open: drift 15 percent and 0.5 to the right, the boss at +2.6 / 0.95) as real game code. An independent check is owed.
+  - Who: r39-looks lane (Sonnet sub-agent) · Decisions: D-398, D-399
+  - Result: in progress (branch r39-looks); an independent check is owed (game case: both (Chapter III FFX))
+  - Evidence: `branch r39-looks` · `docs/handoff/NOW.md (2026-10-04 ~18:25 entry)`
+  - Reversible: yes, branch only
+- **A-0397** · `maintenance` · n/a · **Space parking: 26.6 GB of finished test builds and a superseded art copy moved from D: to F:**
+  - What: The release 39 repair lane reported D: at 99 percent full (18.5 GB free), so at about 18:16 EDT the driver moved three finished items with robocopy to F:/pyrefly-parked/2026-10-04/space/: the release 39 integration build (8.501 GB, 3,742 files), the release 39 check build (8.501 GB, 3,742 files) and the superseded release 39 lane's art copy from D:/pyrefly-r21-road/public/art (9.614 GB, 3,539 files). Every file copied (0 failed; robocopy's exit code 1 means a successful copy), the move finished at 18:17:47 and D: had 37 GB free afterwards. Nothing was deleted.
+  - Who: driver session
+  - Result: done
+  - Evidence: `F:/pyrefly-parked/2026-10-04/space/move.log (not in the repo)` · `docs/handoff/NOW.md (2026-10-04 ~18:40 entry)`
+  - Reversible: yes, move the folders back from F:
+- **A-0396** · `art` · both · **Release 39 fidelity repair (d7ac0cc): every hi-res master's rim and alpha rebuilt from the approved paintings, six backdrop masters held back**
+  - What: The repair lane answered the fidelity check (A-0388) on branch r39-int, pushed to r39-hires-engine. Master alpha and rim were rebuilt from the approved 1x alpha into a new library (hires-alpha-fixed): 1,278 masters (590 at 4x, 688 at 2x); median rim luminance bias -4.30 to +0.28, masters below -8: 123 to 0, edge specks 301,249 to 16,398, SSIM 0.9836 to 0.9906. Six backdrop masters that invent lines in rock or water are held back, so the game draws the approved paintings for Gagazet, the Garden of Pain, Via Purifico, the Road to the Farplane (and its links variant) and the unused title backdrop; re-renders are owed, plus 10 Evrae masters. tools/fx-assets.mjs verify now checks the room registry, so a build from a clean tree cannot lose its depth maps. The trapped-white clean-up was installed (A-0384). The lossless-WebP proof failed for figure masters (WebKit's decoder drops the colour under fully transparent pixels), so they stay PNG as D-376 requires: the build is 8.78 GB in 3,738 files, the largest 15.76 MiB. The invented micro-detail (Paragon rivets, Sin beads, a Vegnagun tail strand, a Yunalesca gem, Den of Woe glow dots that became beads) is listed for him on a comparison sheet; nothing was changed. Nothing is merged or deployed.
+  - Who: r39 repair lane (Sonnet sub-agent) and driver session · Decisions: D-376, D-379, D-380
+  - Result: on branch r39-hires-engine (d7ac0cc); not merged or deployed; ships with release 39
+  - Evidence: `commit d7ac0cc (branch r39-hires-engine)` · `docs/handoff/r39-hires-engine.md section Fidelity repair (on that branch)` · `docs/screenshots/r39-repair/micro-detail-for-bailey.jpg (on that branch)`
+  - Reversible: yes, branch only
+- **A-0395** · `process` · n/a · **Commit email switched to his GitHub noreply address for the repository**
+  - What: Part 1 of the privacy answer (D-396, D-402): by about 18:15 EDT the repository's own git configuration, which every worktree inherits, sets the commit author email to his GitHub noreply address, so new commits no longer carry his personal address; the first commit with it is d7ac0cc. Older commits keep the old address, because rewriting published history is his decision alone. Still open: tools/deploy-pages.mjs hard-codes the old address for its one-commit gh-pages pushes, to be fixed in the release 39 integration, and GitHub's own "keep my email addresses private" setting is a click only he can make.
+  - Who: driver session · Decisions: D-396, D-402
+  - Result: done for the repository's commits; the deploy tool's hard-coded address is still to fix
+  - Evidence: `repository git configuration (his GitHub noreply address); first commit with it d7ac0cc` · `docs/handoff/NOW.md (2026-10-04 ~18:25 entry)`
+  - Reversible: yes, the git setting can be changed again; commits already made keep their author
+- **A-0394** · `art` · both · **Crispness options round built and published as a page for Bailey (F plus recommended)**
+  - What: Because release 39's standard view was not visibly sharper (A-0388), a lane built the options on branch crisp-options and measured real frames at 1440p and 4K against live: A as built, B MSAA, C SMAA with sharpening, D supersampling 1.5x to 2x, E prefiltered mips with anisotropic filtering, F the best mix. Findings: release 39 draws SMAA twice (the MAX-mix pass before the grade and the renderer's pass after it), so one SMAA is +19 percent detail for free; a 3x supersample holds 2.0 times release 39's fine detail, so the screen and not the files is the limit; the plates' anisotropy of 8 never reached the GPU (now 16). Recommended F plus: 2x supersample with a Lanczos-3 resolve before the bloom, both SMAA off, sharpening 0.3 before the grade, plates anisotropy 16, a step-down to F by device class and frame time, phones keep today's frame: 100 percent of the ideal's detail (release 39 as built 50, live 64) for +2.0 ms at 1440p and +4.7 ms at 4K. The page https://claude.ai/artifact/92TaF8qxfW8HkcmoAssw3y was published by about 18:15 EDT; his pick of F plus is D-398.
+  - Who: options lane (Sonnet sub-agent); the driver published the page · Decisions: D-378, D-398
+  - Result: done (page published; his pick is D-398)
+  - Evidence: `https://claude.ai/artifact/92TaF8qxfW8HkcmoAssw3y` · `branch crisp-options (head 6fb25dc0)` · `docs/handoff/crisp-options.md (on that branch)`
+  - Reversible: yes, options only
+- **A-0393** · `implementation` · both · **Lane r39-uifix: the interface fix batch and the FFX Defend control (branch r39-uifix)**
+  - What: Launched at about 17:50 EDT: a touch path for the Bushido and Swordplay overlays so a phone player can answer them (PR-0360), a key name for every chip including the unnamed K (PR-0361), the Enter that dismisses the last first-turn coach card also confirming Attack (PR-0362) and the move-advisor card shrinking to a stub in five chapters (PR-0330). After his question of about 16:59 EDT about how to use Defend, the lane was asked to find the original input from GameFAQs and bring options; after his yes of about 18:13 EDT (D-400) it was told to build the original-style control beside the command window with a visible key tag and a touch target. The Defend control is FFX only; an independent check is owed.
+  - Who: r39-uifix lane (Sonnet sub-agent) · Decisions: D-387, D-400
+  - Result: in progress (branch r39-uifix); an independent check is owed
+  - Evidence: `branch r39-uifix` · `docs/handoff/NOW.md (2026-10-04 ~17:50 and ~18:25 entries)`
+  - Reversible: yes, branch only
+- **A-0392** · `implementation` · both · **Lane r39-visfix: the visual fix batch from round 21 (branch r39-visfix)**
+  - What: Launched at about 17:50 EDT after round 21, for the critic's character, enemy, animation, fidelity and camera issues: the hard white rectangle over the changing girl in every dressphere change (PR-0334), the dressphere shot absent in 6 of 7 captured changes (PR-0314), the run-in pan that cuts Yuna off at the frame edge (PR-0364), the Evrae ghost frame, the hidden Mortiphasm disc (PR-0365), the remaining Bahamut fringe, the wing seam (PR-0344) and the seam hand-back. Approved scope and bug fixes only: new looks still go through options first. It works in its own worktree (D:/pyrefly-r39-visfix) and an independent check is owed.
+  - Who: r39-visfix lane (Sonnet sub-agent) · Decisions: D-343, D-346, D-354, D-387
+  - Result: in progress (branch r39-visfix); an independent check is owed
+  - Evidence: `branch r39-visfix` · `docs/handoff/NOW.md (2026-10-04 ~17:50 entry)`
+  - Reversible: yes, branch only
+- **A-0391** · `review` · both · **Deep review round 21 of release 38 (6461999e): ship SHIP, changed area FAIL**
+  - What: The deep round on the live release 38 (main 6461999e, bundle DHaa2xD1) finished and was recorded at about 17:37 EDT. Verdicts: ship SHIP (no critical defect and no regression against 37.1), deployment PASS (the exact artifact verified live; 0 console errors and 0 non-2xx in 97 of 98 capture jobs), changed area FAIL (the advisor card keeps its lines only in Chapter III and FFX-2 Chapter IV, the dressphere push-in was never seen, the new overlays have no phone or key legend), milestone not assessed. Categories: combat 9.3, encounter 8.9, visual 8.9, feel 8.7, narrative 9.0, audio UNVERIFIED (no owner listening score), interface 8.3, onboarding 8.5, prep 9.1, delivery 8.7, so the weighted score stays provisional. Bailey's five visual sub-scores: character models 8.2, enemy models 7.8, animation 7.4, visual fidelity 8.2, camera perspective 7.9 (round 20: 8.0, 7.5, 7.1, 8.1, 7.9). The focused and deep obligations for 6461999e stay pending (coverage gaps: human-paced Trema and Den wins, a real phone and Safari, his judgments). It follows the capture hand-off row A-0368.
+  - Who: critic workflow (capture owner, six auditors, gap and confirm passes, chief; Sonnet agents) and driver session · Decisions: D-387
+  - Result: SHIP (changed area FAIL); deployment PASS; focused and deep still pending for 6461999e
+  - Evidence: `critic/rounds/round-21.json` · `critic/rounds/round-21.md` · `commit c3c4dab`
+  - Reversible: no, a review report
+- **A-0390** · `implementation` · both · **The switch to echoesofspira.com prepared on branch cf-switch (lane cf-switch)**
+  - What: After his "Yes I will go with your recommendation" (D-397) a Sonnet lane prepared the production move on branch cf-switch (worktree D:/pyrefly-cf-switch), from main merged with the preview branch: DEFAULT\_HOST flips to Cloudflare; the production Worker echoes-of-spira gets echoesofspira.com as its only route (workers.dev stays as a backup address) while the preview Worker has its own config so a preview can never move the domain; the deploy verifies echoesofspira.com byte for byte and looks at www; a GitHub deploy becomes a legacy deploy recorded in docs/legacy-deploys.log; the title screen's "we have moved" note shows only on the GitHub host; the pinned Cloudflare deploy tool is found from a permanent install; the critic's scripts and the tools read the address from one setting, pinned by a unit test. Its handoff holds the exact commands and the dashboard steps for www (a proxied record and a Redirect Rule). The driver runs the deploys: Cloudflare production first, the GitHub note after round 21 (finished at about 17:37). The branch was merged into main at 18:46 EDT (8136f2e), so the deploy runs from main's tip; no production deploy is recorded yet.
+  - Who: cf-switch lane (Sonnet sub-agent); the driver runs the deploys · Decisions: D-389, D-397
+  - Result: in progress: prepared on branch cf-switch and merged into main (8136f2ed); the production deploy is the driver's next step and is not recorded yet
+  - Evidence: `branch cf-switch` · `docs/handoff/cf-switch.md` · `commit 8136f2e (main)` · `docs/handoff/NOW.md (2026-10-04 ~17:40 and ~17:50 entries)`
+  - Reversible: yes, the merge into main can be reverted, and Cloudflare keeps earlier versions, so a bad release can be rolled back
+- **A-0389** · `infrastructure` · both · **echoesofspira.com bought by Bailey and Active in the game's Cloudflare account**
+  - What: The driver found the domain available at $10.46 a year (D-389) and Bailey approved the purchase again at about 17:08 EDT. The checkout in his browser needed his own registrant details and card, which an agent does not enter, so he completed it himself and wrote at about 17:29 EDT "Ok the purchase for the domain was made". At about 17:30 the driver confirmed in the Cloudflare dashboard: echoesofspira.com is Active, expires Oct 4, 2027, $10.46 a year at cost with auto-renew, in the same Cloudflare account as the Workers setup. Nothing is attached to it yet: the production Worker gets it as its custom domain, and www forwards to the apex, in the switch of D-397 (A-0390). No payment detail is recorded here. This row replaces the pending row A-0379.
+  - Who: Bailey (completed the checkout) and driver session (price check and confirmation) · Decisions: D-389, D-397
+  - Result: done (bought and Active; not yet attached to the Worker)
+  - Evidence: `docs/handoff/NOW.md (2026-10-04 ~17:40 entry)` · `docs/target/decisions.json D-389`
+  - Reversible: no, a domain purchase is non-refundable once made; auto-renew can be turned off in the dashboard
+- **A-0388** · `review` · both · **Independent fidelity check of the release 39 high-res build (296641d): mixed**
+  - What: The check lane of workflow wf\_adcde4ef-d00 compared the release 39 build (296641de: 9.13 GB of PNG masters, 3,742 files, the largest 18.18 MiB) with live release 38 and the approved paintings. Mixed: in the standard view it is not visibly sharper (the figures are drawn smaller than their masters, so masters add no detail, and SMAA costs about 21 percent of interior contrast), while 4K close-ups and 4K plates are clearly better. Against the approved paintings: the Gagazet 2x backdrop invents twig-like lines, the 4x matte rims are darker and ragged (22 of 279 below -8 luminance), a build from a clean tree silently loses the fx depth maps, and small details are invented (Paragon rivets, an Overdrive Sin bead, strands on Vegnagun's tail); 6.85 GB of the 9.13 GB is close-up-only tiers. The findings started the repair (A-0396) and the crispness options round (A-0394). The same workflow also finished the r381-ui-floor and r381-lady-luck checks, both PASS (A-0369).
+  - Who: independent check lane (Sonnet sub-agent) · Decisions: D-376, D-379
+  - Result: mixed (a repair and an options round followed)
+  - Evidence: `docs/handoff/NOW.md (2026-10-04 ~17:00 entry)` · `docs/handoff/r39-hires-engine.md section Fidelity repair (on branch r39-hires-engine)` · `D:/Tools/pyrefly-scratch/2026-10-04/r39-check (not in the repo)`
+  - Reversible: no, a review report
+- **A-0387** · `process` · n/a · **The decisions ledger started (DECISIONS.md rendered from docs/target/decisions.json, decisions-early.json and targets.json)**
+  - What: Bailey: "We separately need a central ledger for all decisions made since the projects inception please", then the spell-out rule (D-394). A Sonnet sub-agent built DECISIONS.md at the repo root, oldest first by day: 844 decisions at the first commit (394 registry rows, 245 items split out of bundled acceptances, 81 early rows backfilled into the new docs/target/decisions-early.json, 124 picture decisions from targets.json), every row with an area and a what-changed line, 26 bundled acceptances split into their own parts, and D-022 to D-028, lost uncommitted on 2026-09-21, restored from the session notes. tools/decisions-ledger.mjs renders it and --check fails when it is stale; tests/unit/decisions-ledger.test.ts refuses a blanket-yes row with no changed line, a malformed row, an email address, card digits or an account id.
+  - Who: Bailey and driver session; a Sonnet sub-agent built it · Decisions: D-393, D-394
+  - Result: done
+  - Evidence: `DECISIONS.md` · `docs/target/decisions-early.json` · `tools/decisions-ledger.mjs` · `tests/unit/decisions-ledger.test.ts` · `commit 6611e49`
+  - Reversible: yes, documentation and tooling
+- **A-0386** · `art` · FFX · **Chapter III "another way" options built and published as a page for Bailey (a calmer camera recommended)**
+  - What: The options round D-375 asked for: URL-switched levers on the scratch branch ch3-options-scratch (A-0375) were measured, a review corrected the first recommendation for the critic's CHK-011 visibility rule, and the page https://claude.ai/artifact/PbXCd1QncggoRWzxTy2fAa was published at about 16:30 EDT. It recommends option 1, a calmer camera while a menu is open, or leaving Chapter III as live, and option 4 only if he accepts a boss 32 to 35 percent hidden. His pick, option 1, came at about 18:13 EDT (D-399).
+  - Who: options lane and reviewer (Sonnet sub-agents); the driver published the page · Decisions: D-375, D-399
+  - Result: done (page published; his pick is D-399)
+  - Evidence: `https://claude.ai/artifact/PbXCd1QncggoRWzxTy2fAa` · `branch ch3-options-scratch (head f92da46c)` · `docs/handoff/NOW.md (2026-10-04 ~16:30 entry)`
+  - Reversible: yes, options only; nothing on the page is built until picked
+- **A-0385** · `art` · both · **RealESRGAN anime 6B pilot judged: keep the current high-res masters**
+  - What: After the model was downloaded (A-0371) a pilot ran it and a judge compared the result with the current masters at about 16:30 EDT: the anime model redraws structure and had 2 quality-control failures, so the verdict was keep the current masters; an optional subset of three assets (Yojimbo, FFX Bahamut, Rikku Dark Knight) would be used only with his yes. At about 18:13 EDT his blanket yes took the recommendation: keep the current masters and use no anime subset (D-401). The model stays on D: unused.
+  - Who: art lane and judge (Sonnet sub-agents) · Decisions: D-381, D-401
+  - Result: done: keep the current masters, no anime subset
+  - Evidence: `docs/handoff/NOW.md (2026-10-04 ~16:30 entry)` · `D:/Tools/pyrefly-art-backup/hires/DOWNLOADS.md (not in the repo)`
+  - Reversible: yes, nothing was installed from the pilot
+- **A-0384** · `art` · both · **Trapped-white clean-up for Tidus's hair spikes and Bahamut's wings: independent check PASS, then installed in the release 39 tree**
+  - What: The 17 alpha-only cleaned PNGs the scratch lane built (A-0375) passed an independent check at about 16:30 EDT (check PASS; install-ready under candidates/2026-10-04/trapped-white; 15 hi-res assets, 30 masters, to re-derive). The release 39 repair lane then installed them in the release 39 tree only: the originals are backed up (also copied to F:), 16 approved-hashes records were changed in place with a supersede record and Bahamut's idle painting went into a new set, the 30 masters were rebuilt from the cleaned 1x alpha, and verify-approved reads 760 ok (712 approved, 48 judge-locked), 0 mismatched, 0 missing. The critic check that D-380 asks for after the install is still owed. Tidus's hair spikes are FFX only, Bahamut's wings FFX-2 only.
+  - Who: trapped-white check lane and release 39 repair lane (Sonnet sub-agents) · Decisions: D-380
+  - Result: check PASS; installed on branch r39-hires-engine, not on main (it ships with release 39); the post-install critic check is owed
+  - Evidence: `D:/Tools/pyrefly-scratch/2026-10-04/trapped-white/CHECK.md (not in the repo)` · `commit 0996801 (the supersede records, branch r39-hires-engine)` · `docs/handoff/r39-hires-engine.md section D-380 (on that branch)`
+  - Reversible: yes, branch only; the originals are backed up in the candidates folder and on F:
+- **A-0383** · `maintenance` · n/a · **Second RAM pass (about 14:50): ComfyUI restarted fresh and another project's idle helper processes closed**
+  - What: Bailey: "you need to go ahead and free memory on the RAM for any unused processes please". ComfyUI's queue was empty (the hi-res refine batch is paused), so the driver unloaded its models through its API and then restarted it: the scheduled task's end command only stops the launcher, so the old python process was killed and the PyreflyComfyUI task started a new one (2.5 GB). Commit went from 133 to 113 GB, free RAM from 1.4 to about 9 to 11 GB and video memory from 11.9 to 5.5 GB. The five orphaned ComfyUI workers had already exited; processes with a live owner (running agents' shells, his browser and chat apps) were left alone. Bailey then told the driver to close the idle helper processes of another project of his: all 92 (19 process trees) were closed, taking commit from 113 to 104 GB (limit 122 GB) and free RAM to about 12 GB. A-0374 records the afternoon's earlier memory pass from another note; this row is the pass NOW.md records at about 14:50, with its own figures.
+  - Who: driver session, at Bailey's request
+  - Result: done
+  - Evidence: `docs/handoff/NOW.md (2026-10-04 ~14:50 entry)` · `driver script find-orphans.ps1 under D:/Tools/pyrefly-scratch/2026-10-04/memfree (not in the repo)`
+  - Reversible: no, processes were stopped; ComfyUI reloads its models on demand
+- **A-0382** · `infrastructure` · both · **Cloudflare workers.dev subdomain renamed to baileypillon, so the game's addresses match his GitHub name**
+  - What: At about 14:15 EDT Bailey asked ("just set it up for me please, you take control i want the subdomain to be baileypillon to match the github") and the driver changed the account's workers.dev subdomain in his Cloudflare dashboard, working in his Chrome browser: Workers & Pages, Account details, Subdomain, Change account subdomain, baileypillon, Update. The subdomain Cloudflare had assigned automatically (when he deployed a small test Worker in his dashboard at about 13:55) was replaced, so the game's Workers address is https://echoes-of-spira.baileypillon.workers.dev and the preview Worker's is https://echoes-of-spira-preview.baileypillon.workers.dev (A-0376). It was the one step D-382 had left to him.
+  - Who: driver session, in Bailey's Chrome at his request · Decisions: D-386
+  - Result: done
+  - Evidence: `docs/handoff/NOW.md (2026-10-04 ~14:15 entry)` · `docs/target/decisions.json D-386`
+  - Reversible: yes, the subdomain can be renamed again in the Cloudflare dashboard; addresses on the old name then stop working
 - **A-0381** · `process` · n/a · **This actions ledger started (ACTIONS.md and docs/target/actions.json)**
   - What: Bailey: "Make a separate central ledger for actions and implementations please since inception." One central ledger beside CHANGELOG.md (player-facing, per build) and DECISIONS.md (his decisions); this ledger records what was built and what was carried out since 2026-09-15. Built by a Sonnet sub-agent from git history, docs/deploys.log, the handoffs, critic/ and the driver's notes; tools/actions-ledger.mjs renders it and checks it is current.
   - Who: Bailey and driver session; a Sonnet sub-agent built it
