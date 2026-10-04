@@ -28,8 +28,9 @@ import { onPhone, readStand, standFor } from './stageTable.ts';
  * presenter's, and judging it re-planned Bahamut three times in a minute).
  *
  * The chapter's slots (`stageTable.ts`, PR-0310; FFX only) ride with the plan, which measures the figures where the table put
- * them. A chapter with a row is planned as soon as its figures stand still: a fast load opens the first menu before the usual
- * 0.6 s wait ends, and a plan decided under an open menu is held until the player's first action.
+ * them; its fiends are held against the formation relaxation from the first frame (`staging.ts`). A chapter with a row is planned as
+ * soon as its figures stand still: a fast load opens the first menu before the usual 0.6 s wait ends, and a plan decided under an
+ * open menu is held until the player's first action.
  *
  * Presentation only (rule 1): a figure's group scale and x offset, the camera's rigs and view offset;
  * never the engine, the RNG or a timer. Game case: both (FFX-2's own wider lens is in `masters.ts`; the slots are FFX only).
@@ -125,6 +126,7 @@ export class Framing {
       // a summon, a spherechange) keep the master: no cut on them, and the floor still holds.
       if (this.installed && this.time < 10) this.planWanted = true;
     }
+    this.staging.hold(actors, on && this.staged); // a chapter with a row stands its fiends itself: the formation relaxation leaves them alone from the first frame
     if (this.rigs?.baseChanged()) this.planWanted = true; // the scene re-registered its master (Evrae's range, the phone refit)
     const menu = menuOpen();
     const ready = actors.some((a) => a.facing >= 0) && actors.some((a) => a.facing < 0) && actors.every((a) => a.isPlaceholder !== true);
@@ -391,5 +393,6 @@ export class Framing {
     this.rigs?.dispose();
     this.staging.release();
     this.staging.side = null;
+    this.staging.hold([], false);
   }
 }

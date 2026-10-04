@@ -1,9 +1,11 @@
-# r38-restage: Chapters II and III staged from a per-chapter table (PR-0310); Natus option N left off
+# r38-restage: Chapter II staged from a per-chapter table, Chapter III written and switched off (PR-0310); Natus option N left off
 
 Branch `r38-restage` (worktree `D:/pyrefly-fixes-r28`), from `origin/main` b96b5f4d. `src/`, `public/` and `tools/` are identical between b96b5f4d,
 origin/main 3b1ed60f and live release 37 (main cd9dbbb0, bundle `BGBDEn_P`, read from the live page on 2026-10-03): every commit since release 37
 is docs. Not merged, not deployed, not reviewed. The decision is D-353, ask 4 of the Visual Options page (Bailey, 2026-10-03 ~14:42 EDT: "I'll go
 with all your recommendations thank you <3").
+
+**Status after the repair (2026-10-04): see "Repair" at the end. Chapter III is switched OFF (`CHAPTER_III_STAGED = false` in `stageTable.ts`); Chapter II ships alone.** The independent check failed Chapter III on two blockers (B1: its first menu was clear on seed 1 only; B2: a later arrival snapped into its slot) and passed Chapter II. B2 is repaired for every table fight (a later figure is in the mix's list the frame it is added, and a write to an axis the mix did not make is read as the stage's). B1's cause is traced and removed (the fiends the table stands are held against the formation relaxation, and Chapter III's row has a move per fiend), but the formation that clears the party on every seed is a bigger move than the approved picture (boss +3.0 right, not +1.45) and still touches during part of the camera's drift when Yuna is first, so by the brief's stop rule the Chapter III row stays off behind one line until Bailey has seen the stills. The readings below ("In one screen", "Proof", "The table", "What this costs") are the builder's first cut on seed 1 and stand for Chapter II; for Chapter III the Repair section's numbers replace them.
 
 **Game case: FFX only** (Chapter II Yunalesca, Chapter III Braska's Final Aeon). Why (rule 14): where FFX seats the party and the fiends on screen is
 `[absence]` in `research/battle-camera-perspectives.md` (no source says which side the FFX party stands on), our slot tables are our own layout
@@ -72,7 +74,7 @@ fiend's painted shape; it saturates at +1, so the painted columns say how far ap
 | chapter | party (right / toward) | fiends (right / toward) | what the numbers are |
 |---|---|---|---|
 | II Yunalesca | -0.10 / +0.04 | +0.75 / -0.47 | option C (both sides move), weighted to the fiends; one fixed move for all four sizes |
-| III Braska's Final Aeon | +0.35 / 0 | +1.45 / -0.95 | option B: the boss and both pagodas move as one formation; the party stands where the old plan's usual step put it, now on every run |
+| III Braska's Final Aeon (**switched off**: `CHAPTER_III_STAGED = false`; see Repair) | +0.35 / 0 | boss +3.0 / -0.95; left pagoda +0.7 / -2.4; right pagoda +2.0 / -2.4 (a move per fiend, held; was +1.45 / -0.95 for all three, re-spread by the relaxation: see Repair) | option B: every fiend right and back, the party where the old plan's usual step put it, now on every run |
 
 `right`: + is screen-right; `toward`: + is toward the camera (negative: away). A move reads from today's resting rig, so it means left / right / nearer / farther
 in any scene. One fixed move per chapter held at 1600x900, 2000x1012, 2560x1440 and 2560x1080 (the prototype solved a different move per size; no size
@@ -708,3 +710,294 @@ See "Code, gates and rules" below. Measured: nothing changes in FFX-2 Ch IV (abo
   `ch3-battle-opening-title-card-branch-over-live.jpg` (the table's move lands behind the title card; live's party step lands as it dissolves);
   `ch3-tidus-attack-live-vs-branch-1600x900.jpg` and `ch2-tidus-attack-live-vs-branch-1600x900.jpg` (D7);
   `ch2-form3-live-vs-branch-1600x900.jpg` (D4); `ch2-2560x1080-menu1-live-vs-branch.jpg` (D6, Yuna's staff ring).
+
+## Repair (one cycle, 2026-10-03 and 04; branch `r38-restage`): the CHECK's two blockers
+
+The independent check above failed Chapter III on **B1** (its first menu was clear on seed 1 only; on other seeds the formation relaxation re-spread the fiends and the right pagoda could end under the turn rail) and **B2** (a figure that
+arrives later snapped into its slot), and passed Chapter II. This section is the repair. The tables above ("In one screen", "Proof") are the builder's seed-1 readings of the first cut and stay as history; for Chapter III the readings
+below replace them. Chapter II's row, numbers and pin are untouched by the repair.
+
+**Game case (rule 14): FFX only** for what moves a figure (Chapter II's and Chapter III's rows, Chapter III's per-fiend moves). The sources are the ones in the header: where FFX seats the party and the fiends is `[absence]` in
+`research/battle-camera-perspectives.md`, our slot tables are `[ours]`, FFX has fixed formations and no positional rule (`research/ffx-vs-ffx2-presentation.md` section 9), so a move changes the picture and never a rule. **Shared plumbing, both
+games, measured to leave a fight with no row alone:** `roster.ts` (the mix sees a figure the frame it is added), `Staging.write`'s per-axis rule and `STAGE_HOLD_KEY` in `StageRelax`, a flag only a table fight sets (FFX-2 and the phone never read it).
+
+### Verdict
+
+- **Chapter III ships OFF; Chapter II ships alone.** `CHAPTER_III_STAGED` in `stageTable.ts` is `false`: one line turns Chapter III on, and the repaired row, its per-fiend moves, the hold and their tests stay in the branch. Switched off, Chapter III
+  plays as on live and as on origin/main (checked: `stand` null, no staging on the fiends, the same plan outcome, the boss within 6 px of origin/main's on seeds 1, 3 and 9, see "Proof"). The repair brief's stop rule decides it (if B1 cannot be made seed-proof without changing the approved scene further, leave the row off behind one line so Chapter II ships alone): **B1 can be made
+  seed-proof only by changing the scene further than the approved picture, and even then not for every frame of the camera's drift** (the next bullet). The picture is Bailey's to approve (rules 9 and 10): the stills and one number are under "For Bailey".
+- **B1: the cause is traced and removed; the formation that clears the party is not the approved one.** The formation relaxation moved the table's fiends 0.5 to 1.2 units depending on the camera's first seconds (traced below). Held, with a move written
+  down for each fiend, every figure stands at the same world place on every run (boss 5.042 / -8.91, left pagoda 2.002 / -7.54, right pagoda 5.362 / -8.623 on all 32 first menus below), and the party's painted overlap with any fiend at the
+  first menu is **0 px2 in 32 of 32 runs** (12 seeds at 1600x900 and at 2000x1012, 4 random seeds at 2560x1440 and at 2560x1080; live 696 to 11,590 px2 in every one of its 18; the check read the first cut at 106 to 4,370 px2 on 8 of 9 seeds). Getting there
+  took a bigger move than D-353's page showed: **the boss 3.0 right and 0.95 back (the page said 1.45 / 0.94)**; held rigid at +1.45 with the pagodas, the formation puts the pagodas in front of the boss's box (it reads 0.53 clear).
+  Three things keep it from shipping as a fix:
+  1. **Not every frame of the drift.** All 32 reads were taken 2.4 s after the menu opened, with the camera's idle drift at x +0.07 to +0.42, the half of its swing that favours the party. Over a whole 23 s drift cycle at 1600x900 a Yuna-first first menu
+     (seed 9) touches the boss's blade in **17 of 40 frames, at most 524 px2** (seed 11, Tidus first with Yuna hurt and her staff raised: 5 of 32, at most 48 px2; Tidus first, seed 1: 0 of 55; Auron first, seed 3: 0 of 33; live seed 9: 31 of 31, up to
+     2,744 px2). The same touch shows at the later Yuna menus: three of the four read touch (200, 55 and 378 px2, all with the camera at x -0.17 to -0.28; the fourth, at x +0.13, is clear). No number in the table clears it without a bigger cost: the boss
+     at +3.4 leaves 4 of 33 frames (at most 38 px2), at +3.8 none, with up to 36 and 47 percent of its painted pixels under the turn rail (+3.0: 23; live 0).
+  2. **Two readings are worse than live at +3.0:** the boss's back reaches the turn rail (5 to 24 percent of its painted pixels under the rail's panel column over the four sizes) and CHK-011 reads the boss 27 to 30 percent covered at three of the four sizes
+     (0.70 to 0.73 clear against the rule's 0.75; 0.75 to 0.77 at 2560x1080; live 0.81 to 0.86).
+  3. **The scene is a different picture:** the pagodas stand drawn in and 2.4 units further back (they draw 10 to 13 percent smaller, the boss 2 to 5), the left one 3.0 left of the boss and in front of it. Bailey has not seen it.
+- **B2 is repaired** (every table fight, both chapters). A Switch-in stands on its slot with the table's move on it from its first frame: Wakka after Yuna's SWITCH appears at x 0.57 (alpha 0.01 to 0.03) and never steps, in 4 of 4 samples (seeds 1 to 4; the
+  check saw a +0.35 step at alpha 0.56 to 1.0 in 5 of 8; live has no step of its own on a Switch-in). The auto-played Chapter III link 1 has 8 arrivals (Bahamut, Lulu, Ifrit, Ixion, Shiva, Valefor and the next link's Final Aeon and Valefor): **0 snapped** (the
+  check: 10 of 12 on the branch, 0 on live; live here: 1, the possessed Valefor's 0.27 re-spread). Two unit tests that slide a figure in fail on HEAD's `staging.ts` and pass now; `fx-mix-roster.test.ts` pins the list.
+- **Chapter II is unchanged and passes:** painted overlap **0 px2 in 16 of 16 first menus** (the 12 proof runs at four sizes, the two first menus of the later-menu runs, and two more on the final code with the switch off) and in 4 of 4 later menus, closest approach
+  23.2 to 40.9 px at the first menu and 7.1 to 19.2 at the later ones (the check: 0 px2 everywhere, 20 to 47 px).
+
+### The traced causes
+
+Traced, not read: a dev server on the branch, headless GPU Playwright from node (never the Chrome extension or the browser pane), the page's own module instances wrapped from outside (`import('/src/engine/BattlePresenterStage.ts')` and the mix's
+`framing.ts`, `staging.ts`; the source untouched): `PaintedStage.relaxFormation` (what it saw, what it moved, per call), `Framing.decide` and `commit`, `Staging.apply` (the roster it is handed) and `Staging.write`, and every animation frame's fiend, party and
+camera positions, the settle window and the menu. Scripts: `D:/Tools/pyrefly-scratch/2026-10-03/r38-restage-repair/cap/` (`trace.mjs`, `trace-switch.mjs`, `instr.mjs`, `tr-sum.mjs`; raw readings in `out/*trace*.json`; not in the repo).
+
+**B1: where the fiends end up depends on the camera's first seconds, not on the table.**
+
+- `BattleScreen.update` runs the mix (`updateLivingScene`, where CHAPTER FRAMING commits the table) and then `settleFormation`, which calls `PaintedStage.relaxFormation` -> `StageRelax.relaxField` on every frame inside a 5 s window
+  (`SETTLE_WINDOW_MS`, re-armed per link) in which the camera moved more than 0.02 or the field has not settled. The relaxation measures the projected rectangles of every staged figure against the camera of that frame and the HUD's declared panels, and pushes the
+  fiends along world x until their silhouettes stop crossing (`CLEAR_ENOUGH` 0.8) and until a targetable fiend is 78 percent clear of the panels (`PANEL_CLEAR`).
+- The table moved the pre-relaxation layout as one rigid formation (boss x 2.03 -> 3.49, pagodas 1.27 -> 2.73 and 3.33 -> 4.79). That is not a fixed point of the relaxation: the shifted pagodas stand in front of the boss's box (the boss reads 0.53 clear). The first
+  `relaxFormation` call, in the very frame of the commit (the HUD still hidden, no panels declared yet), moved boss +0.484 / +0.488 / +0.492, left pagoda -1.446 / -1.448 / -1.450 and right pagoda +1.111 / +1.110 / +1.109 on seeds 1 / 4 / 3: the same on every seed,
+  ending at boss 3.98, pagodas 1.29 and 5.90.
+- After that the relaxation keeps running on every frame the camera moves (the opening dolly, z 10.2 to 8.0, and the idle drift, which is a function of the clock, not the seed) until the window ends, now with 18 panels declared. On seeds 1 and 4 nothing moved
+  again. On seed 3 (Auron first) the boss read 0.77 clear under the pagodas and Yuna, and the right pagoda 33 to 45 percent under the rail's panels, and the two clauses fought for 900 ms: the panel clause nudged the right pagoda left by 0.5 and the separation clause
+  nudged it right by 0.2, the boss left by 0.14 to 0.29, the left pagoda left by 0.58, ending boss 3.02 (0.96 left of the first call's), left pagoda 0.18, right pagoda 5.11. Where it stops is where the camera and the panels were when the window shut: 0.5 to 1.2 units on
+  eight seeds of nine, the right pagoda shoved the other way on four first menus.
+- A held formation does not do that: with the fix the same trace has boss 3.973, pagodas 1.283 and 5.892 for the whole opening on seeds 3 and 4, and every `relaxFormation` call logs `moved {}`.
+
+**B2: the mix did not know the figure yet; and a second hazard in `Staging.write`.**
+
+- Traced on a Switch (Yuna's menu, SWITCH to Wakka, seed 1): the stage added Wakka at t = 28,791 ms, alpha 0.03, at the stage's slot (x 0.22); `MaxMix` kept its list of painted figures from a scan every 0.5 s, so the list took him at 28,954 ms (163 ms later);
+  `Staging.write` then made his record and added the slot, x 0.22 -> 0.57 in one frame at alpha 0.7. There is **no tween on his position at all**: the CHECK's reading ("an x-only arrival tween read as a nudge") is not what produced the snaps it measured; the
+  0.5 s scan latency is.
+- It is a real second hazard in `write`, though: an absolute write along x alone on a figure that carries slots was kept as the figure's new place with no slot (the old rule read it as a nudge by the relaxation: `movedX && !movedZ` with a slot standing), so a slide to the
+  stage's slot ended in the slot without ours until the figure was next re-seated. A unit test that slides a figure in fails on HEAD's `staging.ts` (the figure ends at 0.22, not 0.57) and passes now.
+
+### What changed (FFX only for the table; shared plumbing, both games, for the roster, the hold and the write rule)
+
+- `src/engine/StageRelax.ts`: a figure whose `userData` carries `STAGE_HOLD_KEY` (`'pyrefly:stage-hold'`) is `fixed` for the relaxation, exactly as a `pinned` fiend (`enemySpots`) or a figure-less part: never moved, never measured. Nothing sets the flag outside a table fight.
+- `src/engine/fx/mix/staging.ts` (206 lines): `Staging.hold(actors, on)` flags every fiend of the fight (never the party) and lets them go with the row; `Framing.update` calls it every frame from the first frame the mix sees the figures, so the relaxation (which runs in the
+  same frame, after the mix) never moves a fiend the table stands, also on a slow load where the plan commits later. `write` now reads every write to an axis that is not ours as the stage's (a spot, `add`) or a tween's, in the stage's own coordinates, and puts the slot on top of it
+  again, per axis (the old rule read an x-only write on a figure that carried slots as a relaxation nudge and kept it without the slots). The relaxation was the only writer that moves a figure by a step from where it stands; held figures are off its list. A fight with no row is
+  bit-identical to before (the 4,000-operation test against a copy of the old function still passes). `Side.enemyBy` and `shiftOf`: a fiend a row names (by its combatant id, else its painted id) has a move of its own.
+- `src/engine/fx/mix/roster.ts` (new, 54 lines) and `MaxMix.ts`: the mix's list of painted figures is marked stale the moment a figure is added to or leaves the scene (three's `childadded` / `childremoved`) and rescanned on the next update, which runs before the frame is
+  drawn; the 0.5 s timer stays as the net for a figure added deeper in the graph.
+- `src/engine/fx/mix/stageTable.ts` (184 lines): Chapter III's row has a move for the boss and one for each Yu Pagoda (`enemyBy`; the two pagodas paint one art, so it is the combatant id, `yu-pagoda-left` and `-right`, that tells them apart); **`CHAPTER_III_STAGED = false`** is the
+  one-line switch (`ALL_ROWS` is every row, `STAGE_TABLE` the ones that play, `setStageTable` is the tests' and checks' seam); the checks-only `&standf=<id>:<right>,<toward>;...` plays a move per fiend (`?stand=<4 numbers>&standf=...`). `framingReport.ts`: `stand.by` lists them.
+  `framing.ts` (398 lines, two under the limit: the next change there must extract first): one line (the hold call) and one in `dispose`.
+- Not changed: Chapter II's row (Yunalesca is already `enemySpots`-pinned, so the hold changes nothing for her), the party's move, FFX-2, the phone (`standFor` answers null there: no row, no hold), `StageRelax`'s behaviour for every fiend nothing holds, the engines, the save, the settings.
+  Chapter III's table row, `?stand=` and the tests read the same whether or not the switch plays it.
+
+### Chapter III's formation, written down (plays only when the switch is on)
+
+One move per fiend, in world units along the screen's axes from today's resting rig (`+` right / toward the camera), from the stage's own layout (`applyFormation`: boss 2.03 / -8, left pagoda 1.27 / -5.15, right pagoda 3.33 / -6.25; the same on every run now that nothing re-spreads it):
+
+| figure | move (right / toward) | world move (x / z) | stands at (x / z) | why |
+|---|---|---|---|---|
+| party (all three) | +0.35 / 0 | +0.35 / +0.005 | Tidus -1.12 / 1.605, Auron -0.45 / -0.995, Yuna 0.57 / 1.555 | unchanged from the first cut: where the old plan's usual step put them, clear of the command list |
+| Braska's Final Aeon | +3.0 / -0.95 | +3.012 / -0.910 | 5.042 / -8.910 | far enough right that Yuna's ready staff clears its blade at the first menu in the favourable half of the drift (at her later turns, and in the other half, it still brushes it) |
+| Yu Pagoda, left | +0.7 / -2.4 | +0.732 / -2.396 | 2.002 / -7.540 | stands off the party's heads (back) and, right up to the boss's box, off Yuna's raised staff (hurt pose: its tip was 0 to 8 px under the pagoda's base) |
+| Yu Pagoda, right | +2.0 / -2.4 | +2.032 / -2.373 | 5.362 / -8.623 | drawn in and back so it stays off the turn rail (0 to 12 percent of it under a panel; live up to 6 here) |
+
+How the numbers were found, not guessed: with the fiends held, the plan decides on the formation that will actually play, so every earlier tuning (made with the relaxation moving them after the plan) had to be redone. The first cut's settled seed-1 formation (boss +1.95, left pagoda 0.0, right pagoda +2.57)
+written down as it was gave a worse plan, not the old picture: the right pagoda at the rail edge made the plan give up the +64 px lens shift that keeps Tidus off the command list, and a member read 37 percent under it (live: up to 11). So the rail, the command list and the three first-menu poses had to be solved together. The search
+(`fsweep.mjs`, scratch) plays one formation per page through the product's own override -> `decide` -> `commit`, at the camera drift's two extreme phases, over Tidus first (seed 1), Auron first (seed 3) and Yuna first (seed 9); about 120 formations at 1600x900, the finalists end to end by real keys. The three levers that mattered:
+the boss's right move (Yuna-first clears at +2.9 or more at the favourable phase; at +2.7 the staff brushes the blade for 66 to 319 px2; each 0.1 more puts about 2.5 points more of the boss under the rail's column, 1.3 under its chips), the left pagoda's right move (0.7 is the largest that leaves the boss's box alone,
+and clears Yuna's raised staff; 0.9 starts to cover the boss) and the right pagoda's depth (2.4 back halves its share under the rail against 1.6). The search planned each formation at the phase it pinned; the shipped plan is made once and the drift then moves on, which is why the whole-cycle readings below are the ones that count.
+
+### Proof: Chapter III's first menu, per seed (branch with Chapter III switched on; headless GPU, real keys; live = release 37.1 on Pages)
+
+Real keys from the title to the first command menu, `__pyrefly.setSeed(n)` before the first key (CHK-015), read 2.4 s after the menu opens (`inpage2.measure`: painted overlap and closest approach from each figure's own pose texture; CHK-011's `targeting()` coverage; the share of a
+member's painted pixels under the HUD's panels). "Rest gap" is the product's own metric: plan = the gap the camera's plan decided on, frame = the live frame read (positive = nobody stands inside a fiend's painted shape; it saturates at +1). The first menu opens on Tidus in most seeds, on Auron in seed 3,
+on Yuna in seeds 9 and 218. Seeds 11 and 12 start with Yuna hurt (her low-HP idle: the staff raised, 30 px taller than her normal pose), which is where the left pagoda's base used to touch her.
+
+**One caveat on every table below: one frame, one drift phase.** The 32 reads were taken with the camera's idle drift at x +0.07 to +0.42 (the drift swings -0.47 to +0.54 over about 23 s). That is the favourable half for Yuna's ready staff; the whole-cycle readings are in "The drift cycle" below.
+
+**1600x900, seeds 1 to 12**
+
+| seed | first menu | live: overlap px2 | live: rest gap | branch: overlap px2 | branch: closest px | branch: rest gap (plan / frame) | right pagoda under panels, live / branch | boss clear (CHK-011), live / branch | a member under HUD, live / branch |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | tidus | 1171 | -62 / 1 | 0 | 48.1 | 14 / 27 | 0.06 / 0.03 | 0.82 / 0.72 | 0.11 / 0.05 |
+| 2 | tidus | 1977 | -43 / -41 | 0 | 49.5 | 14 / 29 | 0.01 / 0 | 0.86 / 0.7 | 0.03 / 0.05 |
+| 3 | auron | 4609 | -44 / -90 | 0 | 39.9 | 14 / 8 | 0.01 / 0.06 | 0.82 / 0.73 | 0.06 / 0.03 |
+| 4 | tidus | 1461 | -43 / -64 | 0 | 58.3 | 14 / 27 | 0.01 / 0.01 | 0.84 / 0.71 | 0.03 / 0.06 |
+| 5 | tidus | 2385 | -43 / -62 | 0 | 54.7 | 14 / 29 | 0.01 / 0.01 | 0.86 / 0.7 | 0.04 / 0.05 |
+| 6 | tidus | 3476 | -43 / -69 | 0 | 42 | 14 / 16 | 0.01 / 0 | 0.85 / 0.71 | 0.04 / 0.05 |
+| 7 | tidus | 2418 | -43 / -42 | 0 | 44.8 | 14 / 26 | 0.02 / 0.06 | 0.84 / 0.72 | 0.04 / 0.06 |
+| 8 | tidus | 2619 | -62 / -42 | 0 | 53.3 | 14 / 28 | 0 / 0.01 | 0.84 / 0.7 | 0.1 / 0.05 |
+| 9 | yuna | 4087 | -43 / -71 | 0 | 15 | 14 / 1 | 0 / 0 | 0.82 / 0.72 | 0.01 / 0.01 |
+| 10 | tidus | 696 | -44 / -41 | 0 | 47.7 | 14 / 26 | 0.01 / 0 | 0.82 / 0.7 | 0.05 / 0.05 |
+| 11 | tidus | 1516 | -43 / -88 | 0 | 21.1 | 14 / 1 | 0.01 / 0.07 | 0.84 / 0.73 | 0.02 / 0.02 |
+| 12 | tidus | 1600 | -44 / -91 | 0 | 25.8 | 14 / 1 | 0.01 / 0.07 | 0.84 / 0.72 | 0.03 / 0.03 |
+
+branch 12 runs: overlap 0 in 12, closest 15 to 58.3 px, right pagoda under panels up to 0.07, boss clear 0.7 to 0.73, a member under HUD up to 0.06; live 12 runs: overlap 696 to 4609 (median 2385), right pagoda under panels up to 0.06, boss clear 0.82 to 0.86, a member under HUD up to 0.11
+
+**2000x1012, seeds 1 to 12** (live read on two seeds only)
+
+| seed | first menu | live: overlap px2 | live: rest gap | branch: overlap px2 | branch: closest px | branch: rest gap (plan / frame) | right pagoda under panels, live / branch | boss clear (CHK-011), live / branch | a member under HUD, live / branch |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | tidus | 2856 | -49 / -47 | 0 | 60.8 | 16 / 27 | 0 / 0.05 | 0.84 / 0.7 | 0.09 / 0.05 |
+| 2 | tidus | n/a | n/a | 0 | 57.2 | 16 / 28 | n/a / 0.01 | n/a / 0.7 | n/a / 0.06 |
+| 3 | auron | 3168 | -51 / -90 | 0 | 40.6 | 16 / 12 | 0 / 0.07 | 0.82 / 0.72 | 0.08 / 0.06 |
+| 4 | tidus | n/a | n/a | 0 | 50.5 | 16 / 29 | n/a / 0.01 | n/a / 0.7 | n/a / 0.07 |
+| 5 | tidus | n/a | n/a | 0 | 59 | 16 / 30 | n/a / 0.01 | n/a / 0.7 | n/a / 0.05 |
+| 6 | tidus | n/a | n/a | 0 | 54.3 | 16 / 14 | n/a / 0.01 | n/a / 0.7 | n/a / 0.04 |
+| 7 | tidus | n/a | n/a | 0 | 54.7 | 16 / 32 | n/a / 0.08 | n/a / 0.71 | n/a / 0.07 |
+| 8 | tidus | n/a | n/a | 0 | 61.8 | 16 / 26 | n/a / 0.02 | n/a / 0.7 | n/a / 0.04 |
+| 9 | yuna | n/a | n/a | 0 | 15 | 16 / 1 | n/a / 0.02 | n/a / 0.72 | n/a / 0 |
+| 10 | tidus | n/a | n/a | 0 | 60.8 | 16 / 27 | n/a / 0.01 | n/a / 0.7 | n/a / 0.04 |
+| 11 | tidus | n/a | n/a | 0 | 33.6 | 16 / 1 | n/a / 0.1 | n/a / 0.71 | n/a / 0.02 |
+| 12 | tidus | n/a | n/a | 0 | 29.3 | 13 / 1 | n/a / 0.12 | n/a / 0.71 | n/a / 0.07 |
+
+branch 12 runs: overlap 0 in 12, closest 15 to 61.8 px, right pagoda under panels up to 0.12, boss clear 0.7 to 0.72, a member under HUD up to 0.07; live 2 runs: overlap 2856 to 3168 (median 3168), right pagoda under panels up to 0, boss clear 0.82 to 0.84, a member under HUD up to 0.09
+
+**2560x1440, four random seeds (934, 218, 165, 17)**
+
+| seed | first menu | live: overlap px2 | live: rest gap | branch: overlap px2 | branch: closest px | branch: rest gap (plan / frame) | right pagoda under panels, live / branch | boss clear (CHK-011), live / branch | a member under HUD, live / branch |
+|---|---|---|---|---|---|---|---|---|---|
+| 934 | tidus | 5590 | -70 / -65 | 0 | 88.7 | 23 / 50 | 0.01 / 0.02 | 0.83 / 0.71 | 0.04 / 0.05 |
+| 218 | yuna | 11590 | -69 / -126 | 0 | 30 | 23 / 9 | 0 / 0.06 | 0.81 / 0.72 | 0.01 / 0.01 |
+| 165 | tidus | n/a | n/a | 0 | 82 | 23 / 38 | n/a / 0.01 | n/a / 0.7 | n/a / 0.05 |
+| 17 | tidus | n/a | n/a | 0 | 85.9 | 23 / 39 | n/a / 0.01 | n/a / 0.7 | n/a / 0.04 |
+
+branch 4 runs: overlap 0 in 4, closest 30 to 88.7 px, right pagoda under panels up to 0.06, boss clear 0.7 to 0.72, a member under HUD up to 0.05; live 2 runs: overlap 5590 to 11590 (median 11590), right pagoda under panels up to 0.01, boss clear 0.81 to 0.83, a member under HUD up to 0.04
+
+**2560x1080, the same four seeds**
+
+| seed | first menu | live: overlap px2 | live: rest gap | branch: overlap px2 | branch: closest px | branch: rest gap (plan / frame) | right pagoda under panels, live / branch | boss clear (CHK-011), live / branch | a member under HUD, live / branch |
+|---|---|---|---|---|---|---|---|---|---|
+| 934 | tidus | 3377 | -54 / -50 | 0 | 58 | 10 / 36 | 0 / 0 | 0.82 / 0.76 | 0.39 / 0.38 |
+| 218 | yuna | 1909 | -54 / -88 | 0 | 20 | 10 / 4 | 0 / 0 | 0.82 / 0.77 | 0.22 / 0.36 |
+| 165 | tidus | n/a | n/a | 0 | 66.4 | 10 / 31 | n/a / 0 | n/a / 0.75 | n/a / 0.42 |
+| 17 | tidus | n/a | n/a | 0 | 67.9 | 10 / 39 | n/a / 0 | n/a / 0.75 | n/a / 0.4 |
+
+branch 4 runs: overlap 0 in 4, closest 20 to 67.9 px, right pagoda under panels up to 0, boss clear 0.75 to 0.77, a member under HUD up to 0.42; live 2 runs: overlap 1909 to 3377 (median 3377), right pagoda under panels up to 0, boss clear 0.82 to 0.82, a member under HUD up to 0.39
+
+Notes on the columns. The closest approach is the painted distance between a party member and any fiend part, in px of that size's frame: it swings by tens of px with the camera's drift (the party and the boss are at different depths, so a camera x between 0.07 and 0.38 moves one against the other) and with the member's pose,
+which is why the same formation reads 15 px when Yuna is first and 62 px when Tidus is. Live's plan gap is negative in all 18 of its runs (-43 to -70 px; 18 because one 2000x1012 run did not reach the board) and its frame reading is +1 in 1 of the 12 at 1600x900 (the check's two live states: the party stepped into the boss, or not). At 2560x1080 a member stands 36 to 42 percent under the command list on the branch and 39 percent on live (the same party move; it is the first menu of an
+ultrawide frame, not this repair). The right pagoda's share under a panel is at most 0.12 on the branch (live, same seeds: at most 0.06; the check's 62 live readings: at most 0.141; CHK-011's rule 0.25); the boss's CHK-011 clear share is the cost named under "What switching Chapter III on costs".
+
+### Chapter II (unchanged), first menus and later menus
+
+16 first menus: 6 seeds at 1600x900, 2 at each of 2000x1012, 2560x1440 and 2560x1080, the first menus of the two later-menu runs, and 2 more on the final code with the switch off: painted overlap **0 px2 in 16 of 16**, closest approach 23.2 to 29.9 px (1600x900), 27.7 to 29.1 (2000x1012), 35.5 to 40.9 (2560x1440), 30.1 to 32.2 (2560x1080), rest gap +1 plan and
+frame everywhere, a member under the HUD at most 0.05 (0.25 at 2560x1080; the check: 0.33 on both builds). Later menus, seeds 1 and 3 at 1600x900 (menus 2 and 3, where Yuna's ready staff is out): **0 px2 in 4 of 4**, closest 7.1 to 19.2 px. The check read 0 px2 at every Chapter II menu and 20 to 47 px at the first. The row, the pin (`enemySpots`) and
+`Staging.hold`'s effect on her (none: a pinned fiend is already fixed) are unchanged.
+
+### Arrivals and a Switch (B2), Chapter III link 1
+
+- **Switch (seeds 1 to 4, 1600x900, real keys: Yuna's menu, SWITCH, Wakka):** Wakka appears at x 0.57 (alpha 0.03, 0.01, 0.03, 0.03) and never steps. The check read a +0.35 step 129 to 416 ms later at alpha 0.56 to 1.0 in 5 of 8. Live (seed 1): the party's own step cut (-0.7 for all three) at 2.07 s, then Wakka appears at x 0.22, alpha 0, no step.
+- **Auto-played link 1** (`links2.mjs` then `arrivals.mjs`, seed 1): branch 8 arrivals, **0 snapped** (Bahamut, Lulu, Ifrit, the next link's Final Aeon, Ixion, Shiva, Valefor, the link's Valefor); live 8 arrivals, 1 snapped (the possessed Valefor, 0.27 at 289 ms; it is live's own re-spread).
+- **The link change** (link 1 to 2: the Final Aeon falls, Valefor is the boss): with the switch on the table lets go, `stand` null; link 2 reads 6,601 px2 against live's 7,291 (both touch: link 2 is not staged, D4). The largest single-frame step in the whole fight is a pagoda moving 2.39 units in depth when the table lets go (live: a pagoda moves 1.07 in x at the same moment).
+
+### Later menus (Chapter III with the switch on, seeds 1, 3 and 9 at 1600x900, menus 1 to 3)
+
+| seed | menu | who is up | painted overlap px2 | closest px | camera x | member under HUD | boss under the rail | boss clear (CHK-011) |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 1 | Tidus | 0 | 54.7 | +0.34 | 0.04 | 0.165 | 0.71 |
+| 1 | 2 | Auron | 0 | 21.2 | +0.06 | 0.10 | 0.142 | 0.72 |
+| 1 | 3 | Yuna | **200** | 0 | -0.28 | 0.01 | 0.065 | 0.73 |
+| 3 | 1 | Auron | 0 | 34.5 | +0.30 | 0.04 | 0.141 | 0.73 |
+| 3 | 2 | Yuna | **55** | 0 | -0.17 | 0.00 | 0.070 | 0.72 |
+| 3 | 3 | Yuna | **378** | 0 | -0.26 | 0.02 | 0.073 | 0.72 |
+| 9 | 1 | Yuna | 0 | 21 | +0.16 | 0.01 | 0.114 | 0.72 |
+| 9 | 2 | Auron | 0 | 25 | -0.33 | 0.12 | 0.049 | 0.74 |
+| 9 | 3 | Yuna | 0 | 16 | +0.13 | 0.02 | 0.134 | 0.69 |
+
+Menus 2 and 3 touch at 55 to 378 px2 in 3 of 6 (the first cut: 467 to 1,227 at menu 3; live at 1600x900, the check: menu 2 1,864 to 3,659, menu 3 2,074 to 5,101). Every touch is a Yuna turn with the camera at x -0.17 to -0.28: the drift again, not the seed. The camera is re-planned with the real panels from menu 2 (`replans`), which gives back a few px
+of the clearance the first plan had.
+
+### The other chapters and the phone (origin/main f3389dfc against the branch, 1600x900, first menu, real keys, seed 1; the branch's Chapter III row on or off changes none of them)
+
+| chapter | origin/main | branch |
+|---|---|---|
+| I Flux | plans 0 at the menu in 5 of 6 runs (the known plan-late race on a fast load; 1 run had the plan in), 0 px2 | plans 0 in 6 of 6, 0 px2 |
+| VIII Evrae | plan gap -283, 10,674 px2 (its own lane, D-360) | -284, 10,625 px2: identical outcome |
+| IX Yojimbo | plan gap 11, closest 14.4 px, 0 px2 | 9, 14 px, 0 px2 |
+| X Natus | closest 17.6 px, 0 px2 | 15.9 px, 0 px2 |
+| FFX-2 IV Bahamut | 6 runs, rest gap +1, 0 px2, closest 10 to 20.7 px | 6 runs, +1, 0 px2, 14.4 to 31.3 px, `stand` null |
+| phone 390x844, Chapters II and III, 2 runs each | `staging` empty, every figure at the same world place (Chapter III's pagodas differ by at most 0.1 between runs of one build) | `stand` null, `staging` empty, the same places |
+
+### The drift cycle (the frame is not still) and a lunge, Chapter III with the switch on, 1600x900
+
+The first menu, read every 0.6 to 0.7 s for 25 s (`drift.mjs`: camera drift, breathing and all; the whole 23 s cycle). "Touching" = any painted overlap between a party member and a fiend.
+
+| run | frames | touching | at most px2 | closest (min) px | boss under the rail (max) | boss CHK-011 clear (range) |
+|---|---|---|---|---|---|---|
+| seed 1, Tidus first | 55 | **0** | 0 | 19 | 0.26 | not kept |
+| seed 3, Auron first | 33 | **0** | 0 | 16.9 | 0.23 | 0.71 to 0.75 |
+| seed 9, Yuna first | 40 | **17** | **524** | 0 | 0.23 | 0.71 to 0.74 |
+| seed 11, Tidus first, Yuna hurt | 32 | **5** | 48 | 0 | 0.19 | 0.72 to 0.76 |
+| seed 9 with the boss at +3.4 (`?stand=`) | 33 | 4 | 38 | 0 | 0.36 | 0.64 to 0.72 |
+| seed 9 with the boss at +3.8 (`?stand=`) | 33 | **0** | 0 | 6.7 | 0.47 | 0.61 to 0.70 |
+| live, seed 1 | 54 | 54 | 3,743 | 0 | 0 | not kept |
+| live, seed 9 | 31 | 31 | 2,744 | 0 | 0 | 0.80 to 0.87 |
+
+On seed 9 the touch begins when the camera passes x -0.1 on its way left and ends when it is back past -0.1, about 10 s of the 23: the party and the boss stand at different depths, so a camera to the left slides Yuna's ready staff over the boss's blade. (The seed-9 run on the production bundle read 454 px2 for the same reason: its first read fell at camera x -0.41.)
+
+**Lunge** (Tidus's physical attack, seed 1): the lunge is a fixed 1.4 units and the boss now stands 3 units right, so at the apex he is **77.2 px short** of the boss (the first cut 42.6; live: he reaches it, 0 px). The hit effect and the number still land on the target.
+
+### What switching Chapter III on costs (and what it does not fix)
+
+1. **The boss stands further right than any number on Bailey's page.** D-353's page says "boss 1.45 right, 0.94 back"; the first cut's formation, after the relaxation had re-spread it on seed 1, had the boss about 1.95 right; the row has it **3.0 right, 0.95 back**. Why: with the fiends held, the plan measures the formation that will play, and Yuna's
+   ready staff clears the boss's blade at the first menu only from about +2.9. It is a bigger move than the page showed: **Bailey should see the stills before Chapter III goes out** (`docs/screenshots/r38-restage-repair/`, live left and the switched-on branch right, seeds 1, 3 and 9).
+2. **The boss's back reaches the turn rail.** Its painted pixels under the rail's panel column: 11 to 18 percent at 1600x900, 14 to 24 at 2000x1012, 15 to 19 at 2560x1440, 5 to 6 at 2560x1080 (up to 23 over the drift at 1600x900); under the rail's opaque chips and portrait tiles: 6 to 8.5, 7 to 12, 7 to 8, 1.5 to 4 percent. Live and the first cut: 0.
+3. **CHK-011 on the boss reads worse than live.** 18.6 to 20 percent of its box is covered by the right pagoda's box and 8 to 11 more is under panels (4 to 5 at 2560x1080): **0.70 to 0.73 clear** (0.75 to 0.77 at 2560x1080) against live's 0.81 to 0.86 and the first cut's 0.835 (live reads 0.72 to 0.74 on the boss in 5 of the check's 54
+   readings). By the check's own 25 percent rule the branch's boss fails at three of the four sizes on every first menu, by 2 to 5 points. What improved: the right pagoda (0 to 12 percent hidden; the first cut's up to 51) and the left pagoda (0 to 0.4 percent; live hides it 9 to 35 percent behind Auron).
+4. **A Yuna-first menu still brushes the boss for part of the drift, and Yuna's later turns do** (tables above): 17 of 40 frames at most 524 px2 on seed 9; 3 of 4 later Yuna turns at 55 to 378 px2. Tidus-first and Auron-first first menus are clear through the whole cycle (0 of 55, 0 of 33). Live touches in every frame.
+5. **The formation is compact, not the flanking spread.** The relaxation used to spread the pagodas to the boss's flanks (live: the left pagoda 2.6 to 3.3 left of the boss and the right one 2.2 right, by seed); held, the left pagoda stands 3.0 left of the boss and in front of it, the right one 0.3 beside it and 0.3 nearer. The first cut was not rigid either (its settled seed-1
+   formation: boss +1.95, left pagoda 0.0, right pagoda +2.57). Both pagodas stand 2.4 units further back than the stage put them, so they draw 10 to 13 percent smaller than live (box height 199 and 184 px against 221 and 211 on seed 1, 1600x900; the boss 334 against 343).
+6. **A lunge stops short:** Tidus's attack 77.2 px short of the boss at the apex (live reaches it).
+7. **One path puts a table fiend back on the stage's own layout:** switching CHAPTER FRAMING off in the middle of the fight (the EYE CANDY page). The slots go back as before, but the relaxation's 5 s window is long over, so the fiends stand where `applyFormation` put them (the pagodas in front of the boss). Before the repair the relaxed positions
+   survived the switch. Switched off before the battle starts, nothing is held and the relaxation runs as on live. The same let-go happens when the boss falls (the slots follow the chapter's boss): `links2` saw a pagoda step 2.39 units in depth in that frame.
+8. **Not a seed effect, not fixed:** the first menu's closest approach swings by tens of px with the camera's drift and with the member's pose (the drift table).
+
+**The one number, and what it buys** (`enemy.right` in Chapter III's row; seed 9, Yuna first, 1600x900 over the whole drift cycle unless noted):
+
+| boss right | what it does | boss under the rail (panel column) | boss CHK-011 clear | Yuna-first first menu, frames touching |
+|---|---|---|---|---|
+| live (no row) | the party stands in the boss at rest | 0 | 0.80 to 0.87 | 31 of 31, up to 2,744 px2 |
+| +1.95 (first cut's settled seed-1 formation, relaxation-dependent) | Yuna-first first menu 1,000 to 1,716 px2 | 0 | 0.835 | not measured |
+| +2.7 | Yuna-first first menu 66 to 319 px2 (one frame) | 9 (3 under the chips) | 0.73 to 0.77 | not measured |
+| **+3.0 (the row)** | first menu 0 px2 in the favourable half of the drift | 11 to 24 (6 to 12 under the chips) | 0.70 to 0.74 | **17 of 40, up to 524 px2** |
+| +3.4 | | up to 36 | 0.64 to 0.72 | 4 of 33, up to 38 px2 |
+| +3.8 | clear over the whole cycle (closest 6.7 px) | up to 47 | 0.61 to 0.70 | 0 of 33 |
+
+### How it was read (the harness is scratch, not in the repo)
+
+`D:/Tools/pyrefly-scratch/2026-10-03/r38-restage-repair/cap/`: `run.mjs` (real keys from the title to the first menu, `__pyrefly.setSeed(n)` before the first key, CHK-015; the in-page reading of `inpage2.mjs`: painted overlap and closest approach from the figures' own pose textures, CHK-011's `targeting()` coverage, HUD shares), `drift.mjs` (the
+first menu read every 0.6 to 0.7 s for a whole drift cycle), `switch.mjs`, `links2.mjs` + `arrivals.mjs`, `phone.mjs`, `others.mjs`, `trace.mjs` / `trace-switch.mjs` / `instr.mjs` (the traces), `fsweep.mjs` (the formation search: one real-keys walk, then each formation played in the same page through the product's own override -> `Framing.decide` -> `commit`, or only
+moved on the plan the shipped path made; `--pin=T` holds the drift's clock), `tables.mjs` / `docs-tables.mjs` (the tables above). Headless Chromium with the GPU (RTX 5070 Ti through ANGLE/D3D11), Playwright from node, `PYREFLY_BROWSER=gpu`; never the Chrome extension or the browser pane; one browser at a time; ports 6860 (this branch, dev server, HMR off), 6861 (a pristine `git archive` of
+origin/main f3389dfc, `src` and `public` only) and 6862 (`vite preview` of a production build of the final source with the switch on, 4 runs: seeds 1, 3, 11 read 0 px2 at 44.8, 32.5 and 18.1 px, seed 9 read 454 px2 at camera x -0.41, the drift's far end), all stopped by PID at the end. The live baseline is the Pages build (release 37.1). The final source (the switch off) was read on the dev
+servers (Chapter III against origin/main, seeds 1, 3 and 9; Chapter II, seeds 1 and 3; Chapter III on again through `?stand=`, seeds 1 and 9: 0 px2, closest 50.5 and 20 px).
+
+### Not measured
+
+A production build of the committed state (the switch off; the focused review of the production candidate owes it); the drift cycle at 2000x1012, 2560x1440 and 2560x1080 (1600x900 only); Chapter III's Overdrive lunges (Swordplay, Bushido) and links 3 and later; 1440x900 and 1280x720 for Chapter III (the check's disclosure stands: never clear at 1440x900); the alpha of a summoned aeon at arrival.
+
+### For Bailey
+
+1. **Chapter III is off in this branch. Decide with the stills in front of you** (`docs/screenshots/r38-restage-repair/ch3-seed{1,3,9}-first-menu-live-vs-branch-1600x900.jpg`: live on the left, the switched-on formation on the right). Holding the fiends put the formation exactly where the table says, and the table's earlier numbers (boss +1.45) were never the
+   formation that played on any seed: they were a starting point the relaxation then moved by 0.5 to 1.2 units depending on the camera. The numbers that clear the party at the first menu are bigger (boss +3.0 right, the pagodas drawn in and back). The picture is in the same family as option B (every fiend right and back, nobody toward the party) but it is not the page's picture.
+   Three ways to go:
+   - **(a) Leave Chapter III as on live.** Nothing to do. The party touches the boss at rest in every frame (live: 696 to 11,590 px2 at the first menu).
+   - **(b) Turn the row on as it is** (one line: `CHAPTER_III_STAGED` in `stageTable.ts`; or look first with `?stand=0.35,0,3,-0.95&standf=yu-pagoda-left:0.7,-2.4;yu-pagoda-right:2,-2.4` on a Chapter III fight) and accept the costs above: a Yuna-first menu still brushes the boss for about half the drift (at most 524 px2), the boss's back sits partly under the
+     turn rail, CHK-011 reads the boss below the rule at three sizes, a lunge stops short. The focused review will list the boss's CHK-011 and rail readings as regressions against live, which can hold the release (`critic/RUBRIC.md` section 3).
+   - **(c) Another route.** No table number clears Yuna-first over the whole drift without putting a third to a half of the boss under the rail, so anything further is a different mechanism (a calmer drift during this fight's menus, Yuna's ready staff lower, a wider lens for this chapter). Those are new ideas and need your yes before anything is built (rule 10).
+   I recommend (a) now and (c) as the next ask: (b) trades a touch on every frame for a smaller touch on some frames and costs the boss its visibility.
+2. **If (b), one number trades the boss against Yuna** (`enemy.right` in Chapter III's row; the table under "What switching Chapter III on costs"): +3.0 is the row's compromise; +3.4 and +3.8 buy Yuna-first clearance with up to 36 and 47 percent of the boss's back under the rail; +2.7 gives the boss back
+   most of its visibility (0.73 to 0.77) and leaves Yuna's staff in the blade for 66 to 319 px2 at her first menu.
+3. **Chapter II ships alone.** Nothing in this repair changes it. D1 of the check still wants your eyes: Chapter II is not literally option C (the party -0.10 / +0.04, not 0.5 left; the party's half puts a member 8 to 17 percent under the command list); the picture is `docs/screenshots/r38-restage/yunalesca-1600x900-menu1-live-vs-branch.jpg`.
+4. **The plan can still be late on a fast load** (unchanged: Chapter I and the chapters with no row; measured again above). Planning every chapter at once changes every first menu: it needs your yes (rule 10). **Natus option N stays off** (unchanged; it needs a Natus row and a mockup first).
+
+### Gates
+
+- **`npx tsc --noEmit`**: exit 0, empty log, the new files in the program (`roster.ts`, the two new tests), on the final source (the switch off).
+- **Targeted vitest**: `fx-mix-stage-table.test.ts` 27, `fx-mix-stage-hold.test.ts` 12, `fx-mix-roster.test.ts` 7: **46 of 46, none skipped** (Chapter III's row is read through `ALL_ROWS` and `setStageTable`, whether or not the switch plays it); the 20 other files that import the changed modules (the mix, `StageRelax`, the stage, the presenter, the
+  pause page, the panel rects): 258 of 258. The two arrival-slide tests in `fx-mix-stage-hold.test.ts` fail on HEAD's `staging.ts` (the old file, parked outside the repo) and pass now.
+- **Full suite, once, `--maxWorkers=3`**: 776 files, 769 passed, 5 skipped, 2 failed; 11,317 tests passed, 41 skipped, 1 todo, 2 failed (997 s). Both failures are load timeouts at the 15 s default, in files this branch does not touch: `strategy-ffx2-bahamut` "heal-only route" (22 s on its own) and `ui-pause-stack` "finds a real, non-trivial inventory";
+  run alone with `--testTimeout=90000` both files pass, 25 of 25.
+- **`node tools/orphans.mjs`**: 1,205 modules, 24 orphaned (the expected 24; `roster.ts` is reachable through `MaxMix.ts`; none under `src/engine/fx/mix`).
+- **`node tools/critic-plan.mjs --paths <the seven changed source files>`**: DEEP review (36 substantial checkpoints since the last deep review; systems: effects, lighting and sprites; games: both); before a deploy a focused review of the production candidate, after it live verification and the deep review on the live build. Not the save-data class. With Chapter III off the changed area
+  is Chapter II plus the shared plumbing, so the focused review should read B2 (a Switch-in and Chapter II's later forms) and the plan's timing in every chapter (the roster changes when the mix first sees a figure; the five other chapters and the phone read unchanged here).
+- **Source sizes** (rule 7, under 400 lines): `framing.ts` 398 (extract before the next change there), `MaxMix.ts` 311, `StageRelax.ts` 271, `staging.ts` 206, `stageTable.ts` 184, `roster.ts` 54, `framingReport.ts` 31; tests 382, 223 and 95.
+- **Layering and contracts**: presentation only (rule 1; `src/engine/fx/mix` and `StageRelax.ts`), nothing under `src/battle/**` or `BattlePresenter*.ts` changed, no save key and no setting; `docs/CONTRACTS.md` lists none of the changed files (rule 2: no entry needed).
+- **Not merged, not deployed.** One commit on `r38-restage` on top of the check's 60e5973e; `docs/handoff/NOW.md` untouched (the driver's). Game case in the commit: FFX only for the rows and moves, both for the shared plumbing (the roster, the hold flag, the write rule).

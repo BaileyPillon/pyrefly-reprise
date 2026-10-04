@@ -21,8 +21,11 @@ export interface FramingReport {
   plate: { chosen: number; today: number; corners: number; todayCorners: number; restGap: number } | null;
   live: { ok: boolean; partyPx: number; overlap: number; bossCover: number; figs: Clear['figs']; down: Clear['down'] } | null;
   staging: Record<string, { k: number; dx: number; sx?: number; sz?: number }>;
-  /** The chapter's slots now in force (`stageTable.ts`: the chapter and each side's move in world x and z), or null (today's own slots). */
-  stand: { chapter: string; party: [number, number]; enemy: [number, number] } | null;
+  /**
+   * The chapter's slots now in force (`stageTable.ts`: the chapter and each side's move in world x and z, and the move of each fiend a row names
+   * by its combatant id: `by`), or null (today's own slots).
+   */
+  stand: { chapter: string; party: [number, number]; enemy: [number, number]; by?: [string, number, number][] } | null;
   /** Each candidate the last plan tried (checks only). */
   tries: string[];
 }

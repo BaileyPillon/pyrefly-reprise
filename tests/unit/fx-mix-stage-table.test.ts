@@ -1,8 +1,8 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { Object3D, Vector3 } from 'three';
 import type { Actor, Pose } from '../../src/engine/fx/mix/geometry.ts';
 import { Staging, type Side } from '../../src/engine/fx/mix/staging.ts';
-import { onPhone, parseStand, readStand, setStandOverride, sideShift, standFor, STAGE_TABLE } from '../../src/engine/fx/mix/stageTable.ts';
+import { ALL_ROWS, CHAPTER_III_STAGED, onPhone, parseStand, readStand, setStageTable, setStandOverride, sideShift, standFor, STAGE_TABLE } from '../../src/engine/fx/mix/stageTable.ts';
 
 /**
  * The chapter's staging table (round 19b, PR-0310; FFX only; Bailey 2026-10-03: Chapter II option C, Chapter III option B):
@@ -26,9 +26,9 @@ afterEach(() => {
 
 describe('the table', () => {
   it('names an FFX boss in every row, with finite moves', () => {
-    expect(STAGE_TABLE.map((r) => r.chapter)).toEqual(['yunalesca', 'braskas-final-aeon']);
-    for (const r of STAGE_TABLE) {
-      for (const m of [r.party, r.enemy]) expect(Number.isFinite(m.right) && Number.isFinite(m.toward)).toBe(true);
+    expect(ALL_ROWS.map((r) => r.chapter)).toEqual(['yunalesca', 'braskas-final-aeon']);
+    for (const r of ALL_ROWS) {
+      for (const m of [r.party, r.enemy, ...(r.enemyBy ?? []).map((e) => e.move)]) expect(Number.isFinite(m.right) && Number.isFinite(m.toward)).toBe(true);
       // FFX-2's bosses never match, nor do the chapters that have no row (rule 14: FFX only; Evrae waits for its mockups).
       for (const id of ['ffx2-bahamut', 'ffx2-trema', 'ffx2-vegnagun', 'ffx2-leblanc', 'seymour-flux-body', 'evrae', 'seymour-natus', 'yojimbo']) expect(r.boss.test(id)).toBe(false);
     }
@@ -42,13 +42,46 @@ describe('the table', () => {
     expect(s.slots.enemy.toward).toBeLessThan(0);
   });
 
-  it('Chapter III is option B: every fiend right and back as one formation, the party where the old plan step put it', () => {
+  it("plays Chapter III only behind its one-line switch: off, Chapter II ships alone and Chapter III is the stage's own", () => {
+    expect(STAGE_TABLE.map((r) => r.chapter)).toEqual(CHAPTER_III_STAGED ? ['yunalesca', 'braskas-final-aeon'] : ['yunalesca']);
+    expect(standFor('ffx', ['yunalesca-1'], false)).not.toBeNull();
+    expect(standFor('ffx', ['braskas-final-aeon-1', 'yu-pagoda', 'yu-pagoda'], false) === null).toBe(!CHAPTER_III_STAGED);
+  });
+});
+
+describe("Chapter III's formation is written down, fiend by fiend (r38-restage repair, B1; read whether or not the switch plays it)", () => {
+  // The relaxation used to re-spread a rigid move to the camera of the moment; now the fiends are held and the table says where each stands.
+  beforeAll(() => setStageTable(ALL_ROWS));
+  afterAll(() => setStageTable(STAGE_TABLE));
+  const row = ALL_ROWS.find((r) => r.chapter === 'braskas-final-aeon')!;
+  const move = (re: string): { right: number; toward: number } => row.enemyBy!.find((e) => e.id.test(re))!.move;
+
+  it('is option B: every fiend right and back as one formation, the party where the old plan step put it', () => {
     const s = standFor('ffx', ['braskas-final-aeon-1', 'yu-pagoda', 'yu-pagoda'], false)!;
     expect(s.chapter).toBe('braskas-final-aeon');
     expect(s.slots.enemy.right).toBeGreaterThan(0.9);
     expect(s.slots.enemy.toward).toBeLessThan(-0.5);
     expect(s.slots.party.right).toBeGreaterThanOrEqual(0);
     expect(s.slots.party.right).toBeLessThanOrEqual(0.7); // never further toward the fiends than the plan's largest step
+  });
+
+  it('moves nobody toward the party, the boss furthest right, the right pagoda drawn in toward it (off the turn rail)', () => {
+    const left = move('yu-pagoda-left');
+    const right = move('yu-pagoda-right');
+    for (const m of [row.enemy, left, right]) expect(m.toward).toBeLessThan(0);
+    expect(row.enemy.right).toBeGreaterThan(right.right);
+    expect(right.right).toBeGreaterThan(left.right);
+    expect(right.right).toBeGreaterThan(0);
+  });
+  it("stands the left pagoda off the party's heads (further back than the boss's own move) and keeps it from the boss's side", () => {
+    expect(move('yu-pagoda-left').toward).toBeLessThan(row.enemy.toward);
+    expect(move('yu-pagoda-left').right).toBeLessThan(1);
+  });
+  it('is the same on every call (a table, not a solve): a seed never reaches it', () => {
+    const a = standFor('ffx', ['braskas-final-aeon-1', 'yu-pagoda', 'yu-pagoda'], false)!;
+    const b = standFor('ffx', ['braskas-final-aeon-1', 'yu-pagoda', 'yu-pagoda'], false)!;
+    expect(a.slots).toEqual(b.slots);
+    expect(a.slots.enemyBy).toBe(row.enemyBy);
   });
 });
 
@@ -179,20 +212,21 @@ describe('Staging writes the chapter\'s slots', () => {
     expect(p.position.x).toBeCloseTo(0.5, 6);
   });
 
-  it('keeps the slots on a fiend the formation relaxation nudges along x (it moves x alone, from where the fiend stands)', () => {
+  it('puts the slots on top of a write along x alone (a slide, a re-seat) and does not add them again per frame (r38-restage CHECK B2)', () => {
     const { st, e } = stage();
     st.side = side;
     st.apply([e], true);
     expect(e.position.x).toBeCloseTo(3.3, 6);
-    for (let i = 0; i < 12; i++) {
-      e.position.x += 0.016; // StageRelax.nudge: p.x = p.x + step, z untouched
-      st.apply([e], true);
-    }
-    // 12 nudges and 12 frames later: the slots are on it once, not once per nudge.
-    expect(e.position.x).toBeCloseTo(3.3 + 12 * 0.016, 6);
+    // The old write read this as a nudge by the formation relaxation (x alone, from where the fiend stands) and kept the figure where the
+    // write left it, without the slots. The relaxation now leaves a figure that carries them alone (`STAGE_HOLD_KEY`), so it is the stage's.
+    e.position.x = 2.9;
+    st.apply([e], true);
+    expect(e.position.x).toBeCloseTo(3.4, 6);
     expect(e.position.z).toBeCloseTo(-4.3, 6);
+    for (let i = 0; i < 12; i++) st.apply([e], true); // twelve more frames of nothing: the slots are on it once
+    expect(e.position.x).toBeCloseTo(3.4, 6);
     st.release();
-    expect(e.position.x).toBeCloseTo(2.8 + 12 * 0.016, 6); // the stage's own place, nudges kept
+    expect(e.position.x).toBeCloseTo(2.9, 6);
     expect(e.position.z).toBeCloseTo(-4, 6);
   });
 
