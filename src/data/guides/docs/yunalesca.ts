@@ -60,7 +60,7 @@ export const YUNALESCA_DOC: GuideDoc = {
       t: 'p',
       text: 'Her new spell is Mega Death, which KOs anyone who is not a Zombie. That is one more reason never to cure the last Zombie.',
     },
-    { t: 'lead', text: 'Additional notes and strategies:' },
+    { t: 'lead', text: 'More notes and tactics:' },
     {
       t: 'p',
       text: 'Holy hits her very hard, and Yuna is worth bringing for her Dispel and her healing. If Yuna knows Holy, have her blast away with it for a much easier fight.',

@@ -96,7 +96,7 @@ export const BRASKAS_FINAL_AEON_DOC: GuideDoc = {
     {
       t: 'p',
       at: ['yu-yevon'],
-      text: 'A final fight against Yu Yevon follows, and it cannot be lost. If it drags, have Yuna cast Reflect on him. Enjoy the final cinematic!',
+      text: 'A final fight against Yu Yevon follows, and it cannot be lost. If it drags, have Yuna cast Reflect on him. Then sit back and watch the ending cinematic!',
     },
   ],
 };

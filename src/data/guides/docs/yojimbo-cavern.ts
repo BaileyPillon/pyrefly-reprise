@@ -7,6 +7,9 @@
  * game itself prints (`research/jegged-encounter-guides-ffx-b.md` section 2 has the page and the
  * differences). The one number it gives is rounded (about 30,000); the game's own 33,000 is printed.
  * What follows the fight on that page (the contract, the price, the side rooms) is not in this game.
+ * The page has no heading named for the boss: the `Yojimbo` header band is this panel's own, so that
+ * the sheet has a place to open on. The hint's pointer to another part of the guide is left out (this
+ * panel has no such part).
  */
 
 import type { GuideDoc } from '../doc-types.ts';
@@ -24,7 +27,7 @@ export const YOJIMBO_CAVERN_DOC: GuideDoc = {
       t: 'hint',
       kind: 'hint',
       title: "Kimahri's Overdrive - Ronso Rage",
-      text: 'Use Lancet on a Ghost in this area and Kimahri can learn the Doom Ronso Rage. The Overdrive section covers Lancet and Ronso Rage in more detail.',
+      text: 'Use Lancet on a Ghost in this area and Kimahri can learn the Doom Ronso Rage.',
     },
     { t: 'head', at: ['yojimbo'], title: 'Yojimbo' },
     {

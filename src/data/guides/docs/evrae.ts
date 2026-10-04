@@ -4,6 +4,8 @@
  * **Game case: FFX only** (AGENTS.md rule 14). Follows the FFX encounter guide for this boss in our
  * own words and in its order (layout: `../doc-types.ts`); `research/jegged-encounter-guides-ffx-a.md`
  * Chapter 8 holds the page and every difference. HP, Steal and Drops are the numbers this game uses.
+ * The page's pointer to another part of its guide (for the Mix items) is left out: this panel has no
+ * such part, and a guide that points at nothing reads as a dead end.
  */
 
 import type { GuideDoc } from '../doc-types.ts';
@@ -41,7 +43,7 @@ export const EVRAE_DOC: GuideDoc = {
         'High Magic Defense and no elemental weakness. Repeated melee hits make it exhale Poison Breath. Have Cid move the ship away and he fires Guided Missiles.',
     },
     { t: 'field', label: 'HP', value: '32,000' },
-    { t: 'lead', text: 'The mechanics of the fight:' },
+    { t: 'lead', text: 'How the fight works:' },
     {
       t: 'p',
       text: 'Evrae is a flying wyrm, and the fight takes place outside the Fahrenheit as you approach Bevelle. Cid takes your orders: on his turn the ship either moves closer to Evrae or pulls farther away.',
@@ -70,7 +72,7 @@ export const EVRAE_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: "Mighty G puts Protect and Shell on everyone, cutting all of Evrae's damage; Super Mighty G also grants Haste and Regen. Rikku's Overdrive section lists the items needed.",
+      text: "Mighty G puts Protect and Shell on everyone, cutting all of Evrae's damage; Super Mighty G also grants Haste and Regen.",
     },
     {
       t: 'p',

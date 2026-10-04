@@ -54,7 +54,7 @@ export const SEYMOUR_NATUS_DOC: GuideDoc = {
       text: "Yuna's Nul spells (NulBlaze, NulShock, NulTide, NulFrost) could block that damage if cast between the two attacks, but fitting her turn there is tricky, even if it can be done.",
     },
     { t: 'p', text: 'Just keep attacking until the phase ends, once you have dealt 24,000 damage.' },
-    { t: 'lead', text: 'Phase 2 (once Natus is below 24,000 HP)' },
+    { t: 'lead', text: 'Phase 2 (when Natus drops under 24,000 HP)' },
     {
       t: 'p',
       text: 'Natus starts the phase by putting Protect on himself, which Dispel removes if you have it. He also begins casting Break on single characters, which petrifies them.',
@@ -63,7 +63,7 @@ export const SEYMOUR_NATUS_DOC: GuideDoc = {
       t: 'p',
       text: "Mortibody's Shattering Claw destroys a petrified character it hits, removing them for good, so use a Soft or Yuna's Esuna on Petrify immediately.",
     },
-    { t: 'lead', text: 'Phase 3 (once Natus is below 12,000 HP)' },
+    { t: 'lead', text: 'Phase 3 (when Natus drops under 12,000 HP)' },
     {
       t: 'p',
       text: 'Now Seymour casts Flare at party members for about 2,500 HP apiece, and Mortibody starts casting Cura on Natus, which makes the last 12,000 HP a slog.',

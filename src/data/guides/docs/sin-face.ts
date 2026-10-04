@@ -23,7 +23,7 @@ export const SIN_FACE_DOC: GuideDoc = {
     },
     {
       t: 'ul',
-      items: ['Stone Ward or Stoneproof', 'Confuse Ward or Confuseproof', 'Zombie Ward or Zombieproof'],
+      items: ['Stoneproof or Stone Ward', 'Confuseproof or Confuse Ward', 'Zombieproof or Zombie Ward'],
     },
     {
       t: 'p',
