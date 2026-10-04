@@ -14,8 +14,9 @@ Address: https://baileypillon.github.io/pyrefly-reprise/ (hand-built from the wo
   *The title screen of the first public build.*
 
 - **FFX:** Chapter I, Seymour Flux and Mortiorchis on Mt. Gagazet. Chapter II, Lady Yunalesca in three
-  forms in the Zanarkand Dome. Chapter III, Braska's Final Aeon, the possessed aeons and Yu Yevon at
-  Dream's End. Battles run on the Conditional Turn-Based rules.
+  forms in the Zanarkand Dome. Chapter III, at Dream's End, is Braska's Final Aeon, five possessed aeons
+  and then Yu Yevon, one link after another (measured on release 38: about 27 minutes of fighting,
+  seven links, a bench median of 137 turns). Battles run on the Conditional Turn-Based rules.
 
   ![Mt. Gagazet scene test](img/alpha-1/scene-gagazet.jpg)
   ![Zanarkand Dome scene test](img/alpha-1/scene-zanarkand-dome.jpg)
