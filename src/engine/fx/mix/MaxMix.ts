@@ -17,6 +17,7 @@ import { battleCanvas, forgetMenuPanels, hudPanels, menuOpen, phoneBattle } from
 import { LivingFigure } from './living.ts';
 import { plateOf } from './plate.ts';
 import { OdBanner } from './odBanner.ts';
+import { Roster } from './roster.ts';
 import { releaseMixSplash } from './splash.ts';
 import { TwirlSlot } from './twirl.ts';
 
@@ -78,8 +79,7 @@ class Mix {
   private readonly twirl = new TwirlSlot();
   private readonly living = new Map<Object3D, LivingFigure>();
   private readonly defringed = new Set<ShaderMaterial>();
-  private actors: Actor[] = [];
-  private scanIn = 0;
+  private readonly roster: Roster;
   private plans = -1;
   private band: DofBand | null = null;
   private heldClass = false;
@@ -94,6 +94,7 @@ class Mix {
 
   constructor(private readonly b: MixBind) {
     this.game = b.game === 'ffx2' ? 'ffx2' : 'ffx';
+    this.roster = new Roster(b.scene);
     this.framing = new Framing((b.battleCamera as ConstructorParameters<typeof Framing>[0] | undefined) ?? null, b.camera, this.game, b.scene);
     this.cinema = new Cinema(b.scene, () => ((globalThis as { __pyrefly?: { app?: { renderer?: Renderer } } }).__pyrefly?.app?.renderer ?? null));
     this.shots = this.framing.rigs ? new HeldShots(this.game, this.framing.rigs) : null;
@@ -106,26 +107,13 @@ class Mix {
     });
   }
 
-  private scan(): void {
-    const out: Actor[] = [];
-    this.b.scene.traverse((o: Object3D) => {
-      if ('worldHeight' in o && 'slots' in o && 'poseUrls' in o) out.push(o as unknown as Actor);
-    });
-    this.actors = out;
-  }
-
   update(dt: number): void {
     const t0 = performance.now();
     const parts = partsOn(liveGates(this.game));
     const tier = eyeCandy.tier;
     const rm = eyeCandy.reduceMotion;
     this.framing.rigs?.restore();
-    this.scanIn -= dt;
-    if (this.scanIn <= 0 || !this.actors.length) {
-      this.scanIn = 0.5;
-      this.scan();
-    }
-    const actors = this.actors;
+    const actors = this.roster.update(dt); // a figure that arrives mid-fight is in the list the frame it is drawn (`roster.ts`)
     // CHAPTER FRAMING: the master, the staging, the menu clearance.
     this.framingOn = parts.chapterFraming;
     this.framing.update(dt, actors, parts.chapterFraming);
@@ -268,6 +256,7 @@ class Mix {
     setProneAvoid(null);
     setShotHold(null);
     this.framing.dispose();
+    this.roster.dispose();
     this.cinema.dispose();
     this.banner.dispose();
     this.twirl.dispose();
