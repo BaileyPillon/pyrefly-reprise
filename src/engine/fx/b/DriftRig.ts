@@ -1,6 +1,8 @@
 import { Vector3, type PerspectiveCamera } from 'three';
 import type { BattleCamera } from '../../BattleCamera.ts';
 import { eyeCandy, type FxTier } from '../EyeCandy.ts';
+import { c3, c3Calm } from '../mix/ch3Options.ts';
+import { menuOpen } from '../mix/hudPanels.ts';
 import { DRIFT_FFX, DRIFT_FFX2, DriftEnvelope, arcTurn, driftAt, easeWeight, type DriftOffset, type DriftSpec } from './CameraDrift.ts';
 
 /**
@@ -69,6 +71,13 @@ export class DriftRig {
     this.offset = null;
     if (w <= 0) return;
     const d = driftAt(time, this.spec, w);
+    const calm = c3Calm(dt, menuOpen());
+    if (calm > 0 && c3.drift) {
+      const sc = 1 + (c3.drift[0] - 1) * calm;
+      d.x = d.x * sc + c3.drift[1] * calm * w;
+      d.y *= sc;
+      d.z *= sc;
+    }
     this.offset = d;
     const q = cam.quaternion;
     const right = new Vector3(1, 0, 0).applyQuaternion(q);
