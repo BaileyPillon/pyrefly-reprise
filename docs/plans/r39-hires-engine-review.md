@@ -38,6 +38,11 @@ figure's own (FFX figures, FFX-2 dresspheres, bosses by chapter): nothing is dra
   every backdrop is the 1x file. The standard camera at 1440p draws every figure at 0.25x to 0.95x (the rig table, `docs/handoff/r39-hires-engine.md`),
   so the figures are fine there; the camera lab's close shots (HERO CLOSE 2.4x to 3.0x) and 4K are what ask for more.
 - **Cache.** `PaintedArtCache` is bounded by count (96) only.
+- **Found by the all-chapters sweep (hiding each textured plane in turn on a frozen frame, `planecheck.mjs`).** The parallax bands
+  (`backdrop-layer-N`) were capped at 1536 px wide: in the scenes with no depth plates (Evrae's deck, Yojimbo's cavern, Natus, the Fallen
+  Aeons, Sin) they cover the lower half of the frame and were the softest thing in it (2.1x to 3.2x at 1440p, against the painting's 1.2x
+  to 1.4x). The Fahrenheit's foredeck (FFX only: Evrae, Sin's flight) was a 1024 x 2048 canvas, 3.9x at 1440p. And `Backdrop.dispose`
+  never freed the painting's own texture: every battle left 22 MB (84 MB from a 2x master) on the GPU.
 
 ## 3. What is built, and the alternatives that were weighed
 
@@ -54,7 +59,16 @@ figure's own (FFX figures, FFX-2 dresspheres, bosses by chapter): nothing is dra
    Measured, paired and interleaved: SMAA +0.05 ms / +0.4 ms at 1440p / 4K and 57 / 127 MB; MSAA +0.9 ms / +1.9 ms and 211 / 475 MB,
    and MSAA cannot touch a figure's texture edge or rim light. *Rejected:* multisampling both composer buffers (three times the memory
    for no benefit, a full-screen post pass has no edges); FXAA (blurs the painted detail more than SMAA); TAA (ghosts on the particles).
-4. **Tiers (2).** `ArtBudget` (pure) classes the device (phone / low / mid / high) from the GPU string and the phone layout and gives
+4. **Bands and the Fahrenheit's deck (1b follow-up).** `ArtBudget.bandPx` (1536 phone and low, 2688 mid, 4096 high) is the band cap;
+   the deck is drawn on its design grid through `floorDetail` (1 / 1 / 2 / 3, and 4 on a strong card at 4K). *Rejected:* cropping each band's
+   canvas to its rows (a third of the memory, but the planes, their feathers and the parallax placement were tuned on full-height
+   quads); drawing the bands at the master's full 5376 (176 MB for two layers, and they sit under the same camera as a painting that is
+   already sharper than a pixel).
+5. **A slow link (2 follow-up).** `ArtDevice.slowLink` (data-saver, 3G or slower, under 5 Mbit/s; Chromium reports it, the rest read
+   as fast) starts every painting at the approved file, because the 2x base load is 3x the bytes before the first menu. *Rejected:* a
+   settings row (no setting, no save key); two-phase loading (opening poses at 2x, the rest upgraded in the background after the first
+   menu: about 1.5 to 2 s of the measured first-menu cost, at the price of a background upgrade mechanism; listed as a decision for Bailey).
+6. **Tiers (2).** `ArtBudget` (pure) classes the device (phone / low / mid / high) from the GPU string and the phone layout and gives
    each class a budget; `ArtTier` names `@2x` to `@4x` masters; the manifest lists them (`tiers`, `backdropTiers`); `ArtGovernor` measures
    every drawn figure against the camera that is looking at it and swaps in the smallest master that keeps a texel under one pixel,
    in place, within the class's ceiling and texture budget, evicting the masters that are off screen first; `StageArt` plans ahead
@@ -70,13 +84,15 @@ figure's own (FFX figures, FFX-2 dresspheres, bosses by chapter): nothing is dra
 | A discrete GPU string that is not in the list reads as `mid` | `classifyGpu` falls to `unknown` -> `mid`: native plates, 2048 floors, SMAA, figures to 2x. Never a crash, only less |
 | The sRGB path of the GPU composite differs from the CPU plates | Same frame, plates on against the painting plane alone: mean difference 4.14 against 4.12 on the release 38 build (`platecheck.mjs`), the crops side by side |
 | Upload hitch when a 4x master is swapped in (50 MB) | One swap per frame, two loads in flight; the persistence rule (0.3 s) so a punch does not fetch; measured frame spikes in the handoff |
-| The governor chases a transient (a punch, a shake) | `PERSIST_FRAMES`; planned views are rigs at rest, never pushes |
+| The governor chases a transient (a punch, a shake) | `PERSIST_MS` (0.3 s, time not frames, so a 240 Hz screen waits as long as a 60 Hz one); planned views are rigs at rest, never pushes |
 | Memory growth over a long session | Eviction by `evictionOrder`; the painting cache is bounded by decoded megabytes as well as count; textures are disposed with their actors |
 | Missing or undecodable master | Falls back one tier at a time to the approved painting; a failed scale is not asked for again; no new 404 (the manifest lists what exists) |
 | The approved 1x paintings | Never replaced: masters are added files; `tools/hires-install.mjs` checks the 1x sha256 and never overwrites; `docs/target/approved-hashes.json` untouched |
-| WebGL context loss | Render-target plates are lost with the context like every other GPU resource; the existing recovery (page reload) is unchanged |
+| WebGL context loss | The composed plates are render targets and die with the context; `LivingPaintings` rebuilds them on `webglcontextrestored` (measured: lose and restore at 1080p and 1440p in Chapters I and IV, mean difference 0.1 level, no errors) |
 | The deck sparkles with a sharper bump map | The drawing is the same plate through a scale, no extra grain; the crops in the handoff; `?arttier=low` shows the old 512 deck |
 | Bytes | Masters ship as PNG under the exact scope (partly transparent), see the handoff's totals and the decision it asks Bailey for |
+| First load: the 2x base load is 3x the bytes before the first menu (59 MB to 177 MB, Chapter I at 1440p) | Measured in the handoff (first menu +4.5 s cold, GPU shared); `slowLink` keeps a slow connection at the approved set; the decision for Bailey names the two-phase alternative |
+| A battle leaves textures on the GPU | The one that did (the backdrop painting, pre-existing) is fixed and measured flat over six visits (`leak.mjs`: 148 MB at the chapter select after each) |
 
 ## 5. Measurement plan (all headless GPU Playwright from node, one browser at a time)
 

@@ -329,6 +329,20 @@ frames have rendered.
 | `waitBattleEnd()` | resolves when the running battle ends |
 | `cam(name?)` | camera comfort preset, read or set: `'current'` (default) \| `'calm'` \| `'steady'` \| `'originals'` (FFX only); also `?cam=<name>`. Options awaiting Bailey's pick, `docs/concepts/fb2-0929/camera/` |
 
+### Art resolution (release 39)
+
+The device class, the master a figure is drawn from and the anti-aliasing are automatic (no setting, no save key); these force them for
+captures and QA. Address parameters: `?arttier=phone|low|mid|high` (the device class), `?artscale=1..4` (pin every painting to one master;
+the governor stands down), `?aa=off|smaa|msaa`, `?artlink=slow|fast` (the connection reading). `ArtBudget.ts` holds the numbers per class.
+
+| Member | Meaning |
+|--------|---------|
+| `art.stats()` | the device class, its budget, the buffer width and the live stage's governor: masters resident, upgrades, evictions, `updateMs` (its own CPU per frame), the last decisions and what asked for each |
+| `art.rigs()` | every battle-camera rig, at rest and pushed in, with the magnification each drawn figure would have from it |
+| `art.shots()` | every painting the party holds with its painted height in approved texels (the held shots' sizes are arithmetic on it) |
+| `art.plan()` | run the stage's look-ahead (every rig, the held shots by size) now |
+| `art.tier(cls)` / `art.force(n)` / `art.aa(mode)` | the same as `?arttier=`, `?artscale=` and `?aa=`, from the console (`null` clears the first two) |
+
 ### Cutscenes and screenshots
 
 | Member | Meaning |

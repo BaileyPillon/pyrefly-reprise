@@ -106,8 +106,8 @@ describe('device class', () => {
     expect(floorDetail(low!, 3840, edge, 16384)).toBe(1);
     expect(floorDetail(mid!, 2560, edge, 16384)).toBe(2);
     expect(floorDetail(mid!, 3840, edge, 16384)).toBe(2); // a mid card does not get a third
-    expect(floorDetail(high!, 2560, edge, 16384)).toBe(2);
-    expect(floorDetail(high!, 3840, edge, 16384)).toBe(3); // 4K magnifies a low-angle floor half again as much
+    expect(floorDetail(high!, 2560, edge, 16384)).toBe(3); // the Fahrenheit's deck: 3.9x at 1440p from 1x, 1.3x from 3x
+    expect(floorDetail(high!, 3840, edge, 16384)).toBe(4); // 4K magnifies a low-angle floor half again as much
     expect(floorDetail(high!, 3840, edge, 4096)).toBe(2); // a 4096 texture limit: two at most
     expect(floorDetail(high!, 3840, edge, 2048)).toBe(1);
     expect(floorDetail(high!, 3840, 0, 16384)).toBeGreaterThanOrEqual(1);

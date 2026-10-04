@@ -209,7 +209,7 @@ export function buildAirshipDeck(opts: { low?: boolean } = {}): AirshipDeck {
   const textures: Texture[] = [];
 
   // ------------------------------------------------------------------ deck
-  const detail = floorDetail(artBudget(), bufferWidth(), 2048, maxTextureSize()); // 1 on a phone, 2 on a desktop, 3 on a strong card at 4K
+  const detail = floorDetail(artBudget(), bufferWidth(), 2048, maxTextureSize()); // 1 on a phone, 2 on a mid desktop, 3 on a strong card, 4 on a strong card at 4K
   const deckTex = paintedCanvasTexture(deckCanvas(detail));
   deckTex.wrapS = deckTex.wrapT = RepeatWrapping;
   const deckLen = DECK.nearZ - DECK.edgeZ;

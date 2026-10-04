@@ -94,12 +94,12 @@ const BUDGETS: Readonly<Record<DeviceClass, ArtBudget>> = {
   phone: { cls: 'phone', maxScale: 2, backdropScale: 1, textureMB: 220, groundPx: 1024, deckPx: 512, bandPx: 1536, deckDetail: 1, aa: 'off', msaaSamples: 4 },
   low: { cls: 'low', maxScale: 2, backdropScale: 1, textureMB: 500, groundPx: 1024, deckPx: 512, bandPx: 1536, deckDetail: 1, aa: 'off', msaaSamples: 4 },
   mid: { cls: 'mid', maxScale: 2, backdropScale: 1, textureMB: 900, groundPx: 2048, deckPx: 2048, bandPx: 2688, deckDetail: 2, aa: 'smaa', msaaSamples: 4 },
-  high: { cls: 'high', maxScale: 4, backdropScale: 2, textureMB: 2600, groundPx: 4096, deckPx: 4096, bandPx: 4096, deckDetail: 2, aa: 'smaa', msaaSamples: 4 },
+  high: { cls: 'high', maxScale: 4, backdropScale: 2, textureMB: 2600, groundPx: 4096, deckPx: 4096, bandPx: 4096, deckDetail: 3, aa: 'smaa', msaaSamples: 4 },
 };
 
 /**
- * The design-grid scale of a procedural floor at this buffer width: the budget's `deckDetail`, and one more on a high class under a
- * 4K buffer, where a floor seen at a low angle is magnified half again as much as at 1440p. Never past what the GPU can hold
+ * The design-grid scale of a procedural floor at this buffer width: the budget's `deckDetail` (1 / 1 / 2 / 3), and one more on a high class at 4K,
+ * where a floor seen at a low angle is magnified half again as much as at 1440p. Never past what the GPU can hold
  * (`maxTexture`, over the floor's longer design edge).
  */
 export function floorDetail(b: ArtBudget, bufferWidth: number, designEdge: number, maxTexture: number): number {

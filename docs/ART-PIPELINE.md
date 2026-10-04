@@ -802,7 +802,12 @@ to the next tier down. Which master a figure is drawn from is decided by magnifi
 the smallest one that keeps a texel under one screen pixel, inside the device class's ceiling (phone 2x, software 2x, integrated 2x,
 discrete GPU 4x) and texture budget, with no setting and no save key. `?arttier=phone|low|mid|high`, `?artscale=1..4` (pins every
 painting to one master) and `?aa=off|smaa|msaa` force a class, a scale or the anti-aliasing for captures; `__pyrefly.art` reads the
-governor, the rig table and the held-shot sizes. Handoff: [handoff/r39-hires-engine.md](handoff/r39-hires-engine.md).
+governor, the rig table and the held-shot sizes. `?artlink=slow|fast` forces the connection reading: on a slow link (data-saver, 3G or
+slower, under 5 Mbit/s: Chromium only) every painting starts at the approved file and the governor upgrades what a shot needs. The
+procedural floors and the parallax bands follow the same device class (`ArtBudget.groundPx`, `deckPx`, `bandPx`, `floorDetail`: a floor
+is drawn on its design grid through a scale, so it is the same drawing at any resolution). Re-run the installer whenever the library
+grows (`node tools/hires-install.mjs --apply`, idempotent; `--redo3` re-derives every `@3x` after a change to `derive3`) and then the
+manifest. Handoff: [handoff/r39-hires-engine.md](handoff/r39-hires-engine.md).
 
 ---
 
