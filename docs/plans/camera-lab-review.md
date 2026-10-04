@@ -113,6 +113,14 @@ FFX-2 Bahamut keeps the colossus framing; Natus, BFA and Evrae keep today's rig.
 camera drift (`DriftRig.ts`). The rebase must make the lab's Clair Obscur drift and that defocus agree, and let
 shotHold's held shots count as authored moments. The rebase waits for Bailey's verdict on the lab.
 
+Update, 2026-10-04: Bailey played the lab (Ch IV, Clair Obscur, today's paintings, menu at the hero, target cut on):
+he likes it but has not committed, and close-ups need much higher-resolution art (memory camera-lab-test-first;
+the driver runs the close-up quality round). Release 38 is live (main 4a401c13; `docs/handoff/release-38.md`):
+Staging.write per-axis ownership and STAGE_HOLD_KEY, the FFX-2 run-in with PlaceOwner in Ch IV and V, the dressphere
+push-in, and painted plate wings for Ch IV. The lab's Chapter IV formation must go through the new staging owner.
+Release 39 (the high-resolution tier engine) is merging. Rebase after release 39 lands and the quality round
+reports, so the lab shows the camera with the high-resolution art Bailey asked for.
+
 ## Budget and risks
 
 - Weekly 71 % used (rule 15: conserve band; Bailey's "keep working" stands). One Opus builder for the
