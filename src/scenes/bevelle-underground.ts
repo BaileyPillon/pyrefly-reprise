@@ -16,6 +16,7 @@ import {
   Vector3,
   type Material,
 } from 'three';
+import { artBudget } from '../engine/ArtDevice.ts';
 import { Backdrop, type BackdropOptions } from '../engine/Backdrop.ts';
 import type { CameraRig } from '../engine/BattleCamera.ts';
 import { makePillar } from '../engine/Diorama.ts';
@@ -387,9 +388,13 @@ function makeCanvas(w: number, h: number): HTMLCanvasElement {
  * panel so the deck is not one corduroy sheet), and the **rivets**, which are
  * what gives the specular lobe something to break on.
  */
-function deckCanvas(size = 512, seed = 41): HTMLCanvasElement {
-  const c = makeCanvas(size, size);
+function deckCanvas(px = 512, seed = 41): HTMLCanvasElement {
+  // Release 39: written on the 512 design grid and drawn through a scale, so the deck is the same plate at any canvas size
+  // (`px`: the device's deck budget, `ArtBudget.deckPx`); only the seams, slots and rivets get crisper.
+  const size = 512;
+  const c = makeCanvas(px, px);
   const ctx = c.getContext('2d')!;
+  ctx.scale(px / size, px / size);
   const rand = rng(seed);
 
   ctx.fillStyle = '#5b6880';
@@ -1229,7 +1234,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
    * it reaches the painting, which is what puts the seam on the painted gantry
    * wall rather than in mid-air.
    */
-  const deckTex = paintedCanvasTexture(deckCanvas(512, 41));
+  const deckTex = paintedCanvasTexture(deckCanvas(artBudget().deckPx, 41)); // 512 / 2048 / 4096 by device
   deckTex.wrapS = deckTex.wrapT = RepeatWrapping;
   /**
    * 3.25, not 3 — and the quarter matters more than the three.

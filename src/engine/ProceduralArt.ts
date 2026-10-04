@@ -937,9 +937,15 @@ export function cloudCanvas(size = 512, seed = 9): HTMLCanvasElement {
  * Painterly snow/stone ground. Mostly luminance: the scene tints it with the
  * colour sampled from the backdrop painting so the seam disappears.
  */
-export function groundCanvas(size = 1024, seed = 13): HTMLCanvasElement {
-  const c = makeCanvas(size, size);
+export function groundCanvas(px = 1024, seed = 13): HTMLCanvasElement {
+  // Release 39: every number below is written on the 1024 design grid; `px` is the canvas's own size (the device's ground budget,
+  // `ArtBudget.groundPx`), drawn through a scale so the snowfield is the same painting at any resolution, and the bigger canvases
+  // get one more octave of fine grain at their own pixel size (the magnification of a floor seen at a low angle is what it was for).
+  const size = 1024;
+  const k = px / size;
+  const c = makeCanvas(px, px);
   const ctx = c.getContext('2d')!;
+  ctx.scale(k, k);
   const rand = rng(seed);
   ctx.fillStyle = '#dfe7f2';
   ctx.fillRect(0, 0, size, size);
@@ -1016,6 +1022,15 @@ export function groundCanvas(size = 1024, seed = 13): HTMLCanvasElement {
     const y = rand() * size;
     ctx.fillStyle = rand() > 0.5 ? 'rgba(255,255,255,0.05)' : 'rgba(50,64,96,0.05)';
     ctx.fillRect(x, y, 2, 2);
+  }
+  if (k > 1) {
+    const fine = 2 / k; // two canvas pixels, in design units
+    for (let i = 0, n = Math.round(4200 * k * k); i < n; i++) {
+      const x = rand() * size;
+      const y = rand() * size;
+      ctx.fillStyle = rand() > 0.5 ? 'rgba(255,255,255,0.04)' : 'rgba(50,64,96,0.04)';
+      ctx.fillRect(x, y, fine, fine);
+    }
   }
   ctx.globalCompositeOperation = 'source-over';
   return c;

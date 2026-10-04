@@ -24,6 +24,7 @@ import {
   type PaintedTexture,
 } from './PaintedArt.ts';
 import { cloudCanvas, groundCanvas, paintGagazetBackdrop, radialCanvas } from './ProceduralArt.ts';
+import { artBudget } from './ArtDevice.ts';
 
 /** Colours read back out of the painting, so the 3D layer can match it. */
 export interface BackdropPalette {
@@ -299,7 +300,7 @@ export class Backdrop {
     if (opts.ground !== false) {
       const g = opts.ground ?? {};
       const size = g.size ?? 150;
-      const tex = paintedCanvasTexture(groundCanvas(1024, 13));
+      const tex = paintedCanvasTexture(groundCanvas(artBudget().groundPx, 13)); // 1024 / 2048 / 4096 by device: a floor is seen at a low angle, so its texels are the most magnified in the frame
       tex.wrapS = tex.wrapT = RepeatWrapping;
       tex.repeat.set(g.repeat ?? 11, g.repeat ?? 11);
       const tint = new Color(normaliseLuma(groundHex, g.luma ?? 0.42));
