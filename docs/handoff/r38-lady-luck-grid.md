@@ -166,3 +166,91 @@ Commits end with the Sonnet line the harness names (the brief named the Opus lin
 true model is credited). Scratch is under
 `D:/Tools/pyrefly-scratch/2026-10-03/lady-luck/` (harness output, the driver, the Vite config); the scratch tests are parked in
 `F:/pyrefly-parked/2026-10-03/lady-luck/`. The three servers I started (PIDs 81580, 40408, 80172, all on 6610) are stopped.
+
+## Check (independent critic, 2026-10-04, Sonnet sub-agent; did not build this lane)
+
+Checked tip `9111c402` (merge base `3b1ed60f`). `origin/main` is `77f0d157`: the code of release 37.1 (`f4244e1f`; its bundle,
+`index-DhiL5vEz.js`, has the live site's name) plus records, so the lane was checked **on `origin/main`**, not on its older base.
+Scratch merges, built at object level with `git merge-tree` in `D:/Tools/pyrefly-scratch/2026-10-04/checks-b/repo` (never pushed, no ref of
+the main repo touched), all clean: `ll` = main + this lane; `ll-polish` = `ll` + `origin/r38-polish` (`7020c47a`); `both` = `ll` +
+`origin/r37-ui-floor` (`58fae0f9`). Each was **built for production** (`vite build`, base `/pyrefly-reprise/`) and served by
+`serve.mjs` on 6940 to 6944 (main, ll, ll-polish, ui, both), and the **real live site** was driven the same way for the baseline; main and
+live are the same bundle. The Lady Luck paintings (picks Yuna c24, Rikku c5, Paine c20) came from a **dev-only overlay in the server**: it
+answers `art/characters/<girl>-lady-luck/*` from `install-ready/` and serves an `art/manifest.json` with the three subjects added;
+nothing was written under `public/art`. Browser: headless Playwright, `PYREFLY_BROWSER=gpu`, one browser at a time, keyboard only (the
+debug API started the chapter, `gotoChapter` with cutscenes skipped, seed 3, and read the battle log); never the Chrome tools or the
+browser pane. 79 browser runs with a report for this lane (`out/ll/*-report.json`: 43 on `ll`, 25 on `ll-polish`, 4 on `both`, 7 on the live site), plus about a dozen
+driver failures and trial runs (the driver is `ll-run.mjs`, the matrix `ll-batch.mjs`). Frames: `docs/screenshots/r38-lady-luck-grid/check-b/`.
+
+### Verdict per item
+
+| Item | Verdict | Measured |
+|---|---|---|
+| `npx tsc --noEmit` (TS 7.0.2) | PASS | exit 0 at this tip in its own worktree and on `both`; the sparse scratch trees `main`, `ll`, `ui` show the same 26 errors, all in `pause-living-portrait-*` tests whose `docs/concepts` imports the sparse checkout leaves out |
+| orphans | PASS | `node tools/orphans.mjs`: 24 orphaned on main, on the lane (1203 modules) and on `both` (1206 modules, 1182 reachable) |
+| layering | PASS | no file under `src/battle`, no `src/engine/BattlePresenter*`; the diff is three build files, a header comment, one CSS rule and tests |
+| files under 400 lines | PASS, disclosed | no new file crosses it (`farplane.ts` 162 to 181, `via-infinito.ts` 123 to 139, `djose.ts` 112 to 134, the two new tests 139 and 49); `ffx2-hud.css` was already over (1,181 to 1,191) |
+| game case | PASS | all five commits carry "Game case: FFX-2 only"; nothing under `src/battle/ffx`, `src/data/ffx` or the FFX HUD changed |
+| no save key | PASS | no `SaveData`, `localStorage`, settings or schema in the diff; `critic-plan` on this lane's paths: FOCUSED review before deploy, DEEP after (37 checkpoints owed), not the save-data class |
+| changed tests | PASS | `ffx2-lady-luck-grid`, `ui-ffx2-minigame-layer`, `advisor-menu`, `ixion-engine`: 57 tests green on `ll` and again on `ll-polish`; r38-polish's own seven files (102 tests) also green on that merge. The `advisor-menu` guard change reads the real window (`.ffx2cmd__arrow` marks a group, `buildTopRows` kind for FFX), so it narrows a rule for a real case and does not hide one |
+| ONE full suite | PASS | on `both` (main + both lanes): 781 files passed, 5 skipped (786); 11,373 tests passed, 41 skipped, 1 todo; 0 failed; 828 s, `--testTimeout=60000 --maxWorkers=3`; none of the three load-timeout files timed out, so nothing was re-run |
+| autopilot digests, 200-seed wins | PASS | the builder's harness (`zz-tmp-r38-measure.test.ts`, read first: shipped `intendedStrategy` over each chapter's own build and link chain, Wait, seeds 1 to 200, sha256 of every link's event log over seeds 1 to 20) run on main, on `ll` and on `both`: **all seven chapters identical** (IV 200/200 `bf9c550821654448`, V 188 `2ef4fc3acea4cf6d`, VI 198 `72f319f8870f5b70`, XI 174 `e62cd5f1b0420d0a` with 427 spherechanges, XIII 14 `004aed0c3e397d39` with 6,117, XV 111 `2398517e0816e3ac`, XVI 197 `21a5bd42ba86e91a`). The control (Lady Luck on node 1, never shipped) moves XI to `a77b91c3df2ace4d` (409) and XIII to `ec3122c9dbb23313` (5,470), so the harness does see the effect |
+| Lady Luck only where sourced | PASS | Change rows read by real keys for **all three girls**. V, XI, XV: Gunner, Lady Luck (Lady Luck second, node 1 untouched). XIII: White Mage / Gunner / Warrior, then Lady Luck. XVI: Gunner, Lady Luck for Yuna and Rikku; Paine's Lady Luck, Warrior (the builder's one exception, seen). IV: Yuna and Rikku Gunner, Black Mage; Paine's Change row is blocked by Curse in that fight, so her list was read from data instead (`owned` has no Lady Luck, before or after). VI: all three, none. The real live site offers her to nobody in V, XI, XIII, XV, XVI (15 reads). Side fact: `origin/main` already had `lady-luck` in `owned` for V, XI, XIII, XV at index 11, past the ring's nodes and so unreachable; the lane moves her onto a node. Only XVI changes its count (11 to 12, Paine 10 to 11), and party prep shows it (frame: the "also owned" chips wrap to a second line, nothing collides) |
+| her painting on the field | PASS (with the overlay) | all three girls changed in each of the five chapters (15 changes); 2,028 requests for `*-lady-luck` art in the 79 reports, every one HTTP 200 (Yuna 1,404, Rikku 364, Paine 260); frames read: V (the three in costume), XIII (Rikku, Yuna and Paine KO'd, both poses painted), XVI (Yuna, Paine), no grey placeholder figure; the battle log has each `spherechange ... to lady-luck`. The paintings are the overlay's, not the lane's |
+| both reels by real keys | PASS | Attack Reels and Magic Reels thrown in every chapter, Enter three times, each press stopping one reel, the engine's own `minigame-request` naming the set: V Yuna attack, Rikku magic; XI Rikku attack, Paine magic; XIII Paine attack, Yuna magic; XV Yuna attack and Yuna magic ("Dud!" followed); XVI Rikku attack, Yuna magic. Active ATB (chip "ACTIVE - ATB RUNNING", setting read back): V Rikku attack, overlay whole, "Dud!" and the party's gravity damage followed. Paine's magic at XV passed on `ll-polish`; on `ll` that one run saw her Change execute only late in the fight (log seq 1052, past the run's 330 s limit, so no reels were thrown; cause not traced; every other Change-then-reels run was prompt), not counted against the lane |
+| overlay whole above the guide and the intent card | **FAIL alone, PASS merged with r38-polish** | see the matrix and B1 below |
+| chapters without her offer none | PASS | IV and VI above; also on live, V to XVI none |
+| FOC37-01 (guide over reel 1 and the DUD line) | PASS for the guide, FAIL for the intent card | in 35 overlays on `ll` the guide was never above the overlay (under it, faded, or clear of it); the intent card was above reel 3 four times, all in XV |
+
+### The stacking matrix (Yuna's Attack Reels, one overlay per cell, probed three times while open: what paints above it)
+
+Probe: every element made hit-testable, `elementsFromPoint` at five points on the title, subtitle, three reels and the DUD line, listing what is above
+the overlay with painted content (faded cards discounted, effective opacity under 0.05).
+
+| Chapter | 1600x900 | 2000x1012 | 1024x768 | 390x844 phone |
+|---|---|---|---|---|
+| `ll` (this lane alone on main), V | whole | whole | whole | whole |
+| XI | whole | whole | whole | whole |
+| XIII | status line over reel 3 | status line | status line | whole |
+| XV | **intent card over reel 3 (3 of 3 runs, attack and magic)** | **intent card, later samples** | whole | whole |
+| XVI | whole | whole | whole | whole |
+| `ll-polish` (merged), V, XI, XVI | whole | whole | whole | whole |
+| XIII | status line | status line | status line | whole |
+| XV | **whole, intent card under it** | status line | whole | whole |
+
+### Blockers
+
+1. **B1 (alone only; fixed by the merge with r38-polish): the enemy-intent card paints over Lady Luck's third reel in Chapter XV.** At 1600x900 Baralai's
+   "Looming Glacier" card (`div.eint__panel`, opacity 1) lies across reel 3 and half hides its symbol (frame
+   `xv-lane-alone-intent-card-over-reel-3-1600x900.jpg`); the same in three runs (Attack, Attack, Magic) and again at 2000x1012 after a moment. The cause is the one
+   r38-polish's FOC371-02 names: `.ffx2hud__minigame { z-index: 5 }` is inside the HUD stage, whose `transform` makes it a stacking context, and the intent card is a
+   sibling layer outside it, so no z-index in the stage can beat it. The card only steps back (`.ffx2-actfade`) when it sits over the acting girl or her target; in V, XIII and XVI it had stepped back (opacity 0) at the probe, in XI it
+   did not reach the overlay, in XV it stays. The handoff reports XV as whole; its probe rightly discounts a card that has faded, and in my runs the card was visible at the probe every time, so timing is the likely difference. **On the scratch merge with
+   r38-polish (z 15, its own grid layer) the intent card and the guide were under the overlay in all 20 cells** (frame `xv-with-r38-polish-overlay-above-intent-card-1600x900.jpg`).
+   On the real live site the same card covers Trigger Happy's hit counter in Chapter VI at 1600x900 (frame `vi-live-site-trigger-happy-intent-card-over-counter-1600x900.jpg`), so
+   this is the existing defect, not new. **Ship this lane with r38-polish, never without it.**
+
+### Disclosures (not regressions, or small)
+
+- The one-line status message (`.stmsg`, z-index 40 by design, "over the targeting layer") paints over the top of reel 3 for its 2 seconds ("Rikku became Itchy." in XIII, 1600x900,
+  2000x1012 and 1024x768; XV at 2000x1012), alone and merged (frame `xiii-with-r38-polish-status-line-over-reel-3-1600x900.jpg`). The reel's symbol stays readable. Nobody asked
+  for this order to change; say so if the message should yield to a minigame.
+- On the merge with r38-polish this lane's rule and comment (z 5, "below the damage numerals (6)") are superseded: the effective z-index is 15 from `minigames.css`
+  (`.ffx2hud > .ffx2hud__minigame`), the lane's test `ui-ffx2-minigame-layer` still passes because it reads the older rule, and r38-polish's `ui-ffx2-minigame-stacking` pins the new order.
+  Harmless; one of the two rules could go.
+- Phone (390x844): the reel labels read 5.33 px (subtitle) and 8 px (reels, DUD line) on this lane alone, the builder's Finding 3 (CHK-003, existing for every FFX-2 minigame); on the merge
+  with r38-polish they read 14.2 px. Another reason to ship the two together.
+- A Lady Luck girl's top-level ATTACK is a group (Attack, Tantalize): plain Attack needs one more key, and the advisor chip reads "IN ATTACK" under "Attack". True and
+  consistent with the narrowed test, a little odd to read (the builder's Finding 2; frames of her menu seen).
+- Human options moved, as disclosed by the builder: a girl loses the dressphere that sat on the ring's last node (Black Mage, White Mage, Warrior or Songstress, by chapter).
+- Not run: phone input by real taps (the 390x844 runs used the keyboard under touch emulation with the phone layout, `data-phone-battle` set); Item Reels and Random Reels (not shipped);
+  each of Lady Luck's other poses frame by frame (all loaded, HTTP 200). In passing, not from this lane: a local server using the main tree's art manifest requests
+  `art/title/keyart.2x.webp` at the server root (no `/pyrefly-reprise/`) and gets a 404; the live manifest has no `title2x` entry today, so it does not show there yet.
+
+### Verdict
+
+**FAIL as a standalone branch (B1, one acceptance of the brief); PASS on the scratch merge with r38-polish for every item.** Everything the lane exists for holds: Lady Luck
+is offered exactly where the sources put her to all three girls, her paintings show, both reels work in all five chapters in Wait and Active, the autopilot digests and win counts are
+byte-identical, the full suite is green on the merge with the other lane. No code change is needed in this lane if it ships with r38-polish; deploying it without
+polish leaves the XV reels half under Baralai's card. The five static servers I started (ports 6940 to 6944, one build each) serve both lanes' checks and are stopped by PID when the checks end; scratch is under
+`D:/Tools/pyrefly-scratch/2026-10-04/checks-b/` (drivers, matrices, `out/`).
