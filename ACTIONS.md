@@ -18,16 +18,16 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 403, from 2026-09-15 to 2026-10-04 (ids A-0001 to A-0403), 193 of them linked to at least one decision (315 distinct decision ids).
+- **Rows:** 405, from 2026-09-15 to 2026-10-04 (ids A-0001 to A-0405), 195 of them linked to at least one decision (316 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
 | implementation | 107 |
 | art | 41 |
-| deploy | 46 |
+| deploy | 47 |
 | review | 97 |
 | records | 22 |
-| infrastructure | 19 |
+| infrastructure | 20 |
 | account | 12 |
 | download | 10 |
 | maintenance | 16 |
@@ -36,21 +36,33 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 106 |
+| October 2026 | 108 |
 
-- **By game:** 297 both, 54 n/a, 29 FFX, 23 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
-- **Deploys and releases:** 46 deploy rows: 43 lines of docs/deploys.log (37 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, and 1 Cloudflare preview. The log runs from round 2 checkpoint (2026-09-17) to release 38 (2026-10-04).
+- **By game:** 299 both, 54 n/a, 29 FFX, 23 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **Deploys and releases:** 47 deploy rows: 44 lines of docs/deploys.log (38 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, and 1 Cloudflare preview. The log runs from round 2 checkpoint (2026-09-17) to release 38 on echoesofspira.com (2026-10-04).
 - **Reviews:** 97 rows: 28 focused reviews (28 SHIP), 37 live checks (35 PASS, 1 FAIL, 1 UNVERIFIED), 19 deep rounds with a report (10 SHIP, 6 HOLD, 3 no verdict) and 13 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 22 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-04](#2026-10-04) (56) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-04](#2026-10-04) (58) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
 ### 2026-10-04
 
+- **A-0405** · `infrastructure` · both · **www.echoesofspira.com set to forward to echoesofspira.com (a placeholder record and a Redirect Rule in his Cloudflare dashboard)**
+  - What: While the production deploy uploaded (from about 18:46 EDT), the driver set up www forwarding in his Cloudflare dashboard, as the switch of D-397 and the cf-switch handoff planned and as he approved with that switch: a proxied placeholder address record for www (a redirect only applies to traffic that passes through Cloudflare, and the placeholder points nowhere) and a Redirect Rule that permanently forwards www visitors to https://echoesofspira.com, keeping any link details. The rule read Active at about 18:53 EDT and the deploy's check afterwards found www forwarding with a 301, so saves cannot split between the two addresses. Related and still open: Cloudflare's "Always Use HTTPS" zone setting (so plain http lands on the secure address) was recommended and asked of Bailey at about 19:07; it stays off until he says yes.
+  - Who: driver session, in Bailey's Cloudflare dashboard (approved as part of the switch) · Decisions: D-397
+  - Result: done (Redirect Rule Active; www answers with a 301)
+  - Evidence: `record commit dae5ed9 (www forwards with a 301)` · `docs/handoff/cf-switch.md section 3 (the dashboard steps)`
+  - Reversible: yes, delete the Redirect Rule and the placeholder record in the dashboard
+- **A-0404** · `deploy` · both · **Deploy 44 of docs/deploys.log (release 38 on echoesofspira.com): main 8136f2e, bundle X5kGUd9G, 1,402 art files**
+  - What: The first production deploy to Cloudflare: release 38, unchanged in the game, on the Worker echoes-of-spira at its custom domain https://echoesofspira.com, from main at 8136f2ed (the cf-switch work merged at 18:46 EDT, so the deploy tooling now defaults to Cloudflare). Before it ran the driver checked that the domain had no address records the deploy could silently replace. The deploy then compared all 1,932 files byte for byte on the custom domain and on workers.dev (artifact 4cd8518e); the driver checked the page itself (it loads in about a tenth of a second and the title reads "Echoes of Spira"), and www forwards to the apex with a 301 (A-0405). Logged 2026-10-04 22:49Z (18:49 Eastern) with host=cloudflare under Bailey's owner override; the upload and the comparison finished shortly before the record commit of about 19:07. The record added the CHANGELOG entry and its page, moved the marker of 6461999e to cleared and left 8136f2ed owing live, focused and deep reviews (the deep-review debt carried from earlier builds moved to it). Saves start fresh at the new address; the GitHub address keeps its own. This row was added after the update row A-0403 because the deploy landed while that update was being committed.
+  - Who: driver session (runs the deploys), on Bailey's Cloudflare account and domain · Decisions: D-388, D-389, D-397
+  - Result: shipped; status ok; under Bailey's owner override; live check, focused and deep review of 8136f2ed still owed
+  - Evidence: `docs/deploys.log line 44` · `record commit dae5ed9` · `docs/changelog/release-38-echoesofspira.md` · `critic/pending/8136f2ed.json`
+  - Reversible: yes, Cloudflare keeps earlier versions of the Worker, so it can be rolled back in seconds, and a later deploy replaces it
 - **A-0403** · `records` · n/a · **Both ledgers brought up to date with the afternoon and evening of 2026-10-04 (D-395 to D-417, A-0382 to A-0403)**
   - What: A Sonnet sub-agent extended both central ledgers from NOW.md, the chat and the branches' handoffs: D-395 the actions ledger request and D-396 the privacy question; D-397 the switch to echoesofspira.com; D-398 to D-403 the six recommendations of his "I'll go with all of your recommendations. Godspeed." (sharpness F plus, Chapter III option 1, FFX Defend the original's way, keep the current masters, the noreply commit email, the private repository after release 39); D-404 to D-417 the 14 cards of the judgment-calls page, with an honest note on cards A to E that he has not listened, read, played or looked yet; D-389 now implemented (the domain is bought); D-282 superseded by D-284, D-375 by D-399, D-307 to D-309 adopted as kept, notes on D-376, D-378, D-381, D-385 and D-388; and the rows A-0382 to A-0403 here. The renderer's summary line no longer says round 21 is in progress.
   - Who: driver session; a Sonnet sub-agent wrote it · Decisions: D-393, D-394, D-395
