@@ -78,6 +78,8 @@ export interface GovernorStats {
   residentMB: number;
   budgetMB: number;
   lastSwapMs: number;
+  /** The CPU time of `update()` itself, milliseconds per frame (an exponential mean): the cost of measuring. */
+  updateMs: number;
   entries: Array<{ url: string; scale: number; mb: number; px1x: number; seen: boolean }>;
   /** The last decisions to load a bigger master: what asked (`live`, `anticipated`, `size`, `sibling`), for which painting, at what magnification. */
   trace: Array<{ frame: number; why: string; url: string; from: number; want: number; px1x: number }>;
@@ -97,6 +99,7 @@ export class ArtGovernor {
   private downgrades = 0;
   private loadFailures = 0;
   private lastSwapMs = 0;
+  private updateMs = 0;
   private readonly trace: GovernorStats['trace'] = [];
   /** Who is asking right now (for the trace). */
   private why = 'live';
@@ -108,6 +111,12 @@ export class ArtGovernor {
   /** One frame: register what is there, measure what is drawn, start what is needed, apply one finished swap, evict when over budget. */
   update(): void {
     if (this.disposed) return;
+    const started = performance.now();
+    this.run();
+    this.updateMs += (performance.now() - started - this.updateMs) * 0.02;
+  }
+
+  private run(): void {
     this.frame++;
     this.t = this.deps.now ? this.deps.now() : performance.now();
     if (this.deps.pinned?.()) return;
@@ -195,6 +204,7 @@ export class ArtGovernor {
       residentMB: Math.round(resident * 10) / 10,
       budgetMB: this.deps.budget().textureMB,
       lastSwapMs: this.lastSwapMs,
+      updateMs: Math.round(this.updateMs * 1000) / 1000,
       entries,
       trace: [...this.trace],
     };
