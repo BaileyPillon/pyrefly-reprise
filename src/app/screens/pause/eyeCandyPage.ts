@@ -168,7 +168,7 @@ export class EyeCandyPage {
     if (id === EYE_CANDY_ALL) {
       const allOn = fxAllState(save.settings, this.deps.game) === 'ALL ON';
       save.setSettings((press ? !allOn : dir === 1) ? fxAllOnPatch() : fxAllOffPatch());
-    } else if (!isFxSwitchField(id) || !adjustSetting(save, id, dir, press)) {
+    } else if (!isFxSwitchField(id) || !adjustSetting(save, id, dir, press, this.deps.game)) {
       return;
     }
     audio.playSfx('cursor-move');

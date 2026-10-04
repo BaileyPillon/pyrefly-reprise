@@ -5,7 +5,13 @@
  * (`fxLooks.ts`), and the look is its master:
  *
  * - a look turned OFF stops its parts; each part keeps its own value (the page draws it dim);
- * - a part turned OFF stays OFF when its look comes back;
+ * - a part turned OFF stays OFF when its look comes back, with one exception (judgment call L of critic
+ *   round 21, PR-0329; Bailey 2026-10-04, "all your recommendations"): a look turned ON while EVERY part
+ *   under it is OFF switches its parts ON with it ({@link fxLookOnPatch}). That state was never a choice
+ *   about the parts (a save from before they existed, or a look the player switched off with every part
+ *   already off), and turning a look on is an explicit ask for that look. A look with at least one part on
+ *   keeps the player's choices, and a part the player turns off afterwards stays off. Same stored fields,
+ *   so no save-format change and `SAVE_VERSION` stays 1;
  * - a save written before the parts existed (releases 33 to 35 store the three looks and none of the
  *   parts) takes each new part from its look on upgrade, so a player who had a look OFF keeps the new
  *   parts OFF too ("players who had a look off keep the new parts off"). The rule fires only while a
@@ -129,6 +135,25 @@ export function fxSwitchOn(settings: SwitchValues, field: FxSwitchField): boolea
 export function fxStoppedByLook(settings: SwitchValues, field: FxSwitchField): boolean {
   const part = partOf(field);
   return !!part && !fxOwnValue(settings, part.look);
+}
+
+/**
+ * What turning `look` ON writes (judgment call L of critic round 21, PR-0329): the look itself, and, when every
+ * part of it that the page lists for `game` is OFF, all of its parts ON as well, so the look visibly comes back
+ * instead of switching on over parts that are all off. A look with at least one such part ON, or with none
+ * listed, writes only itself (the player's choices stay). `game` is the page the player is on, because a part of
+ * the other game is not in view (OVERDRIVE SHOT on FFX-2's page, DRESSPHERE SHOT on FFX's); without it every
+ * part of the look counts. A part of the look that the page does not list is switched on with the rest when the
+ * rule fires, so the look is whole in the other game too. Pure: the caller writes the patch.
+ */
+export function fxLookOnPatch(settings: SwitchValues, look: FxLookField, game?: GameId): Partial<FxLookSettings & FxPartSettings> {
+  const parts = FX_PARTS.filter((p) => p.look === look);
+  const listed = game === undefined ? parts : parts.filter((p) => fxSwitchesFor(game).some((r) => r.field === p.field));
+  const patch: Partial<FxLookSettings & FxPartSettings> = { [look]: true };
+  if (listed.length > 0 && listed.every((p) => !fxOwnValue(settings, p.field))) {
+    for (const p of parts) patch[p.field] = true;
+  }
+  return patch;
 }
 
 /** The settings field behind a seam key. */
