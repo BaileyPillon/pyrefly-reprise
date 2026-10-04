@@ -30,6 +30,24 @@ export const PHONE_AIR = 16;
 /** The CSS variable `pause-phone.css` subtracts from the body's top. */
 export const PHONE_LIFT_VAR = '--pu-phone-lift';
 
+/** The CSS variable `pause-phone.css` subtracts from the objective's top (r37-ui-floor, blocker 2). */
+export const PHONE_OBJ_LIFT_VAR = '--pu-phone-obj-lift';
+
+/** Air between the bottom of the objective and the ESC / H footer, CSS px. */
+export const PHONE_FOOT_AIR = 12;
+
+/**
+ * How far the objective must rise to clear the footer prompts. At the 14 px
+ * floor an objective of two lines under a three-line caption (Chapter V,
+ * "DESTROY ALL FOUR OF VEGNAGUN'S PARTS") runs into ESC and "H PAINTING ONLY";
+ * the block rises only as far as it must, so a short objective stays where the
+ * approved frame (f) puts it. Pure; `0` when it clears or cannot be measured.
+ */
+export function objLift(objBottom: number, footTop: number, air: number = PHONE_FOOT_AIR): number {
+  const over = objBottom - (footTop - air);
+  return over > 0 && Number.isFinite(over) ? over : 0;
+}
+
 /**
  * How far a body must rise to clear the objective, bounded by the tab strip.
  * Pure: the three boxes are CSS px in the same frame. `0` when it already
@@ -58,8 +76,20 @@ export function fitPhoneBody(root: HTMLElement): number {
   body.style.removeProperty(PHONE_LIFT_VAR);
   if (!phoneLayout(root)) return 0;
 
+  const objEl = root.querySelector<HTMLElement>('[data-role="obj"]');
+  objEl?.style.removeProperty(PHONE_OBJ_LIFT_VAR);
+  if (objEl) {
+    const o = objEl.getBoundingClientRect();
+    const feet = [...root.querySelectorAll<HTMLElement>('.pause__back, .pause__hide')]
+      .map((f) => f.getBoundingClientRect())
+      .filter((r) => r.height > 0);
+    const footTop = feet.length ? Math.min(...feet.map((r) => r.top)) : Infinity;
+    const up = o.height > 0 ? objLift(o.bottom, footTop) : 0;
+    if (up > 0) objEl.style.setProperty(PHONE_OBJ_LIFT_VAR, `${up.toFixed(1)}px`);
+  }
+
   const col = body.getBoundingClientRect();
-  const obj = root.querySelector<HTMLElement>('[data-role="obj"]')?.getBoundingClientRect();
+  const obj = objEl?.getBoundingClientRect();
   if (col.height <= 0 || !obj || obj.height <= 0) return 0;
   const tabs = root.querySelector<HTMLElement>('[data-role="tabs"]')?.getBoundingClientRect();
   const ceiling = tabs && tabs.height > 0 ? tabs.bottom : root.getBoundingClientRect().top;

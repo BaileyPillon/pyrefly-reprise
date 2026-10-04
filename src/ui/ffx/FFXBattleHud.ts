@@ -1,3 +1,5 @@
+import '../common/cmd-od-selected.css';
+import '../common/hud-floor.css';
 import './ffx-hud.css';
 import { grownFromTopLeft } from '../common/hudTextSize.ts';
 import type {
@@ -36,6 +38,8 @@ import { AIM_FOLD_CLEAR, AIM_FOLD_FLOOR_TOP, chipLiftDy, foldWhileAiming } from 
 import { statusRowIds } from './fieldRows.ts';
 import { fitGroupLabel } from './groupLabelFit.ts';
 import { clipOffStack } from './bracketClip.ts';
+import { clearHandOfCards } from './handClear.ts';
+import { publishOdHang } from './odHang.ts';
 import { FfxTargetPlate } from './targetPlateFfx.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
@@ -360,6 +364,7 @@ export class FFXBattleHud implements HudPort {
     // PR-0178: the cursor's layer is clipped off the command rows, so brackets go behind them (`bracketClip.ts`).
     this.commandMenu.targetCursor.setAfterLayout((el) => {
       fitGroupLabel(el, this.el, this.panelRects());
+      clearHandOfCards(el, this.el); // r37-ui-floor: the hand steps off the advisor and Sensor cards
       clipOffStack(el, this.commandMenu.stackEl);
     });
 
@@ -691,6 +696,10 @@ export class FFXBattleHud implements HudPort {
     // height back and `placeAdvisor` should see that on the same frame.
     this.sensorPanel.update(dt);
     keepSensorOffCtb(this.sensorPanel.el, this.ctbList.el, this.hudScale()); // PR-0233: off the turn list's names
+    // r37-ui-floor, third attempt (FFX only): the Sensor card settles after the cursor's layout (steered sideways, kept off the turn list,
+    // folded), so the hand is cleared of it every frame the hand is up, against where the card is now (`handClear.ts`).
+    clearHandOfCards(this.commandMenu.targetCursor.el, this.el);
+    if (this.el.classList.contains('ffxhud--targeting-enemy')) publishOdHang(this.partyStatus.el, this.hudScale()); // r381-ui-floor: the rows re-render as HP changes
     this.guide.update(dt);
     this.advisor.update(dt);
     // After the advisor's own `layout()`, never before: `MoveAdvisor` measures
@@ -867,7 +876,11 @@ export class FFXBattleHud implements HudPort {
     const panels = this.panelRects();
     // PR-0183: and off the party's faces (`plateFaces.ts`); the field's own
     // visibility sums below still get the panels alone.
-    this.commandMenu.setPanels([...panels, ...partyFaceRects(this.fieldPartyIds(), (id) => this.targeting?.rect(id) ?? null)]);
+    // r37-ui-floor, blocker 4 (FFX phone): the intent card is a fixed strip across the top there, so the plate
+    // docked above a high enemy landed on its third line. The desktop card hangs on the boss and is not listed.
+    // Its box is grown 4 px each way: the plate's real height is 36 px against the dock's 34 px estimate, so a plate docked flush read 1 to 2 px onto the strip's border.
+    const intentStrip = this.el.ownerDocument.documentElement.dataset['phoneBattle'] ? solidPanelRects([this.intent.el]).map((r) => ({ x: r.x - 4, y: r.y - 4, w: r.w + 8, h: r.h + 8 })) : [];
+    this.commandMenu.setPanels([...panels, ...intentStrip, ...partyFaceRects(this.fieldPartyIds(), (id) => this.targeting?.rect(id) ?? null)]);
     // The cursor drew itself before this call (the selection is published from
     // `TargetCursor.publish`, downstream of `reposition`), so the first frame
     // of a new aim would otherwise dock its plate against the *previous*
@@ -907,6 +920,8 @@ export class FFXBattleHud implements HudPort {
     }
 
     // The status panel's yield.
+    // r381-ui-floor (FFX only): the slide is clamped by the room the OD bar really leaves (`odHang.ts`), measured before the class lands.
+    publishOdHang(this.partyStatus.el, this.hudScale());
     this.el.classList.toggle('ffxhud--targeting-enemy', !!sel && kind === 'enemy');
 
     this.steerSensor(sel);

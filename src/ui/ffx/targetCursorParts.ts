@@ -138,3 +138,18 @@ export function noteHtml(note: string | undefined): string {
   if (!tag) return `<span class="ffx-target__note">${escapeHtml(note)}</span>`;
   return `<span class="ffx-target__note ffx-target__note--harm" title="${escapeHtml(note)}"><span>${tag}</span></span>`;
 }
+
+/** The pointing hand's width and height in px (`ffx-hud.css` `.ffx-target__hand`) and how far its bob carries it right. */
+const HAND_W = 44;
+const HAND_H = 30;
+const HAND_BOB = 6;
+
+/**
+ * The box the hand covers (FFX only), docked `gap` px left of the figure at 55 % of its height and bobbing 6 px
+ * towards it. The plate dock treats it as a panel: with the hand left out the phone's plate landed on top of it
+ * (r37-ui-floor, third attempt, phone Chapter I target step: the plate docked left of a high enemy, the hand was
+ * under it and the player saw no hand).
+ */
+export function handBox(rect: TargetRect, gap: number): TargetRect {
+  return { x: rect.x - gap - HAND_W, y: rect.y + rect.h * 0.55 - HAND_H / 2, w: HAND_W + HAND_BOB, h: HAND_H };
+}

@@ -8,6 +8,9 @@ import '../inkgold/index.ts';
 // and the chip-less status glyphs were: the *only* thing still painting on the
 // enemy track was the fill's `inset -1px 0 0 #fff` leading edge, a white tick
 // floating on a transparent bar. Load the tokens with the HUD that needs them.
+import '../common/hud-floor.css';
+import '../common/cmd-od-selected.css';
+import { QueuedChips } from './QueuedChips.ts';
 import './theme.css';
 import './ffx2-hud.css';
 import { installInkGoldStyles } from '../inkgold/index.ts';
@@ -306,6 +309,8 @@ export class FFX2BattleHud implements HudPort {
   constructor(opts: { engine?: InFlightSource | null } = {}) {
     this.inFlight = opts.engine ?? null;
   }
+  /** PR-0104 (FFX-2 only): the chip naming a girl's queued command from the confirm on (`QueuedChips.ts`). */
+  private readonly queued = new QueuedChips();
   /** §4.6's chain counter, drawn on the overlay (`ChainCounter.ts`). */
   private readonly chain = new ChainCounter({
     overlay: () => this.overlay,
@@ -411,6 +416,7 @@ export class FFX2BattleHud implements HudPort {
       project: (id, anchor) => (this.labelsAtRest() && this.layoutProject ? this.layoutProject : this.project)(id, anchor), // fb2-0929 option
       avoid: () => this.intentAvoidRects(),
     });
+    this.queued.mount(this.overlay, { project: (id, anchor) => (this.labelsAtRest() && this.layoutProject ? this.layoutProject : this.project)(id, anchor) });
     this.openingHold.start();
 
     this.mounted = true;
@@ -422,6 +428,7 @@ export class FFX2BattleHud implements HudPort {
     if (!this.mounted) return;
     window.removeEventListener('resize', this.onResize);
     this.chain.dispose();
+    this.queued.unmount();
     window.clearTimeout(this.telegraphHideTimer);
     window.clearTimeout(this.damageFlashTimer);
     this.damage.unmount();
@@ -452,6 +459,7 @@ export class FFX2BattleHud implements HudPort {
     this.guide.update(dt);
     this.advisor.update(dt);
     this.intent.update(dt);
+    this.queued.update();
     this.actionFade.update();
     this.help?.sync();
     // GAME-AWARE (rule 14): the same shared plumbing FFX got. Panels were
@@ -743,6 +751,7 @@ export class FFX2BattleHud implements HudPort {
     // ...and no command menu, reticle or banner either: `onEvent` swept at the last blow; an escape arrives only here.
     if (state.result) this.endOfFight();
     this.lastState = state;
+    this.queued.sync(state);
     this.guide.sync(state);
     this.advisor.sync(state);
     // Once per playback step, never per frame: a prediction deep-clones the
@@ -752,6 +761,11 @@ export class FFX2BattleHud implements HudPort {
     this.lastSnapshot = preview;
     this.renderParty(state, preview);
     this.renderEnemies(state, preview);
+  }
+
+  /** `HudPort.syncQueued` (PR-0104, FFX-2 only): the chip naming each girl's charging command, from the confirm on. */
+  syncQueued(state: BattleState): void {
+    this.queued.sync(state);
   }
 
   /**
