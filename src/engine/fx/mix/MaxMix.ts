@@ -15,6 +15,7 @@ import { cameraAt, centroid, figOf, type Actor, type Box } from './geometry.ts';
 import { followFlourish, HeldShots } from './heldShots.ts';
 import { battleCanvas, forgetMenuPanels, hudPanels, menuOpen, phoneBattle } from './hudPanels.ts';
 import { LivingFigure } from './living.ts';
+import { plateOf } from './plate.ts';
 import { OdBanner } from './odBanner.ts';
 import { releaseMixSplash } from './splash.ts';
 import { TwirlSlot } from './twirl.ts';
@@ -135,11 +136,12 @@ class Mix {
     fightFacts.colossus = this.framing.report.colossusFight; // for the EYE CANDY page's device notes
     // The upright phone shows a slice of a wider field that the HUD slides between beats, so a held shot
     // framed for one slice crops its subject in the next (the judges: Yuna cut at the edge, her head
-    // cropped in the close shot): on the phone the master holds through both moments.
+    // cropped in the close shot): on the phone the master holds through the Overdrive shot and the full close shot;
+    // FFX-2's dressphere change gets only the small push-in (`pushIn.ts`, D-346), handed back if the slice moves.
     const dev: Device = { tier, phone: phoneBattle(), colossus: fightFacts.colossus };
     const odOn = parts.overdriveShot && !deviceCloses('overdriveShot', dev);
-    const scOn = parts.dressphereShot && !deviceCloses('dressphereShot', dev);
-    const held = this.shots?.update(dt, { actors, master, lens, odOn, scOn, menu, ready: this.framing.ready && (this.framing.rigs?.introDone() ?? false) }) ?? null;
+    const scOn = parts.dressphereShot && !deviceCloses('dressphereShot', dev); // on the phone: the push-in fallback only (`pushIn.ts`)
+    const held = this.shots?.update(dt, { actors, master, lens, odOn, scOn, menu, ready: this.framing.ready && (this.framing.rigs?.introDone() ?? false), phone: dev.phone, rm, plate: () => plateOf(this.b.scene) }) ?? null;
     // A held shot is one static cut, under REDUCE MOTION as ever: the lens shift stays where the shot was framed against
     // it, so a move running underneath cannot drift it; it goes on with the cut back.
     if (!held) this.heldLens = null;
@@ -235,6 +237,8 @@ class Mix {
       limits,
       framing: { ...this.framing.report, master: this.framing.masterPose ? { pos: this.framing.masterPose.pos.toArray().map((x) => +x.toFixed(2)), look: this.framing.masterPose.look.toArray().map((x) => +x.toFixed(2)), fov: +this.framing.masterPose.fov.toFixed(1) } : null, lens: this.framing.lens, rig: this.framing.rigs?.stats() ?? null },
       shot: this.shots?.held?.kind ?? 'master',
+      push: !!this.shots?.held?.push,
+      camera: { pos: this.b.camera.position.toArray().map((x) => +x.toFixed(3)), fov: this.b.camera.fov },
       shots: this.shots ? { ...this.shots.stats, lastTry: this.shots.lastTry } : null,
       cinema: { ...this.cinema.stats, band: this.band },
       living: [...this.living.values()].map((f) => ({ name: f.a.name, ...f.last })),
