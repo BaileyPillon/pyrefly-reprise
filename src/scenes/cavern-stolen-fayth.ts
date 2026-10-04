@@ -10,7 +10,7 @@ import type { SceneSlots } from './index.ts';
 import { ArrivalWait, SakuraArrival, sakuraArrivalAt, softDiscTexture, SAKURA_ARRIVAL_MS } from './cavern-stolen-fayth-arrival.ts';
 import { CAVERN_IDS, findFigure, victoryStruck, type StagedFigure } from './cavern-stolen-fayth-cast.ts';
 import { GinnemGlow } from './cavern-stolen-fayth-glow.ts';
-import { takeOpeningHurried } from './openingMark.ts';
+import { takeOpeningBegun, takeOpeningHurried } from './openingMark.ts';
 import { fxDebugHooks } from '../engine/fx/fxDebugHooks.ts';
 
 // ---------------------------------------------------------------------------
@@ -159,6 +159,14 @@ export const CAVERN_STOLEN_FAYTH_PALETTE: ScenePalette = {
 /** With no opening shot to start on (the skip speed), the arrival starts this long after he is staged. */
 export const ARRIVAL_FALLBACK_MS = 9000;
 
+/**
+ * A hurried opening starts its compressed arrival when the battle screen says the card is gone; this bounds the wait
+ * should that mark never come, measured from staging, so the figures are never held off the field at the first menu
+ * (PR-0341). Measured on the production bundle, hurried, real keys: the card is gone 2.2 s after staging and the first
+ * menu opens 3.1 s after that (5.3 s after staging); the focused review measured 6.1 s, the hotfix 4.6 s at the shortest.
+ */
+export const HURRIED_ARRIVAL_FALLBACK_MS = 4000;
+
 /** The pad's light after the victory: fade in, then breathe. Ours; the sources only say it wakes. */
 export const PAD_GLOW = { color: 0xa8e6ff, fadeMs: 700, peak: 1.0, pulse: 0.15, pulseHz: 0.35 } as const;
 
@@ -264,15 +272,17 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
   // to this scene's `intro` rig (`BattleMoments.battleStart`); the first frame
   // rendered from there starts it. With no opening (the skip speed) it starts
   // {@link ARRIVAL_FALLBACK_MS} after he is staged. A hurried opening (the player
-  // skipped the pre-scene, PR-0061) shows no opening shot at all, so it does not
-  // wait for one (`openingMark.ts`, PR-0341): they are on the field at the first menu.
+  // skipped the pre-scene, PR-0061) shows no opening shot at all: it starts a
+  // compressed arrival when the battle screen says the card is gone
+  // (`openingMark.ts`, FOC371-01), and they are drawn long before the first menu (PR-0341).
   const intro = new Vector3(...(rigs.intro.position as [number, number, number]));
-  const wait = new ArrivalWait(ARRIVAL_FALLBACK_MS);
+  const wait = new ArrivalWait(ARRIVAL_FALLBACK_MS, HURRIED_ARRIVAL_FALLBACK_MS);
   pools[0]!.frustumCulled = false; // the probe below must run on every frame
   pools[0]!.onBeforeRender = (_r, _s, camera): void => {
     if (camera.position.distanceTo(intro) < 1.2) wait.openingSeen();
   };
   let arrivalMs = -1;
+  let hurried = false;
   let yojimbo: StagedFigure | null = null;
   const stepTo = new Vector3(...yojimboSpot);
   const stepFrom = stepTo.clone().add(new Vector3(0.9, 0, -0.9));
@@ -281,14 +291,16 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
   const runArrival = (dt: number, root: StagedFigure['parent']): void => {
     const seen = findFigure(root, CAVERN_IDS.yojimbo);
     if (seen && seen !== yojimbo) {
-      // A new fight on this field (first staging, or a retry): wait for its opening, unless it is hurried.
+      // A new fight on this field (first staging, or a retry): wait for its opening; a hurried one for the card to go.
       yojimbo = seen;
-      wait.stage(takeOpeningHurried(root));
+      hurried = takeOpeningHurried(root);
+      wait.stage(hurried);
       arrivalMs = -1;
       padMs = -1;
     }
     const daigoro = findFigure(root, CAVERN_IDS.daigoro);
     if (!yojimbo) return;
+    if (hurried && takeOpeningBegun(root)) wait.openingSeen(); // FOC371-01: the card is gone, the collapsed opening begins
     const step = wait.step(dt * 1000);
     if (step === 'hold') {
       // Not yet summoned: neither of them is on the field.
@@ -298,7 +310,7 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
     }
     if (step === 'go') arrivalMs = 0;
     if (arrivalMs < 0) return;
-    arrivalMs += dt * 1000;
+    arrivalMs += dt * 1000 * wait.speed; // the timeline's own milliseconds; a hurried opening runs it faster
     const f = sakuraArrivalAt(arrivalMs);
     sakura.apply(f);
     if (arrivalMs <= SAKURA_ARRIVAL_MS.yojimboIn[1] + 50) {

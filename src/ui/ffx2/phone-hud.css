@@ -16,7 +16,8 @@ html[data-phone-battle='ffx2'] .ffx2hud {
   --lb-scale: 1 !important;
 }
 html[data-phone-battle='ffx2'] .ffx2hud__stage,
-html[data-phone-battle='ffx2'] .ffx2hud__plates {
+html[data-phone-battle='ffx2'] .ffx2hud__plates,
+html[data-phone-battle='ffx2'] .ffx2hud__minigame {
   width: 100% !important;
   height: 100% !important;
   transform: none !important;

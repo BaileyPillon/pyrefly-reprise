@@ -31,7 +31,7 @@ import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { loadScene, type LoadedScene } from '../../scenes/index.ts';
-import { markOpeningHurried } from '../../scenes/openingMark.ts';
+import { markOpeningBegun, markOpeningHurried } from '../../scenes/openingMark.ts';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { demoReel, demoState } from './BattleScreenDemoReel.ts';
@@ -423,6 +423,8 @@ export class BattleScreen extends Screen {
     // Torn down while the card was up: `exit()` dismissed it (which is what
     // resumed this chain) and already resolved `finished` as aborted.
     if (this.exited) return;
+    // FOC371-01: the card is gone, so the opening begins now; a hurried one collapses inside a tick, and a scene that stages its own arrival (Ch. IX) starts a compressed one from this mark
+    if (this.opts.openingHurry && this.scene) markOpeningBegun(this.scene.scene);
     const presenter = this.presenter!;
     if (this.preview) {
       // No engine yet: play the canned reel so the scene is still alive.

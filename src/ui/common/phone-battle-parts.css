@@ -74,7 +74,6 @@ html[data-phone-battle] .mad__effect,
 html[data-phone-battle] .mad__why,
 html[data-phone-battle] .mad__warn,
 html[data-phone-battle] .mad__rank,
-html[data-phone-battle] .mad__badge,
 html[data-phone-battle] .mad__idle {
   display: none !important;
 }
