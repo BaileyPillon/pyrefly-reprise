@@ -43,6 +43,7 @@ import type { Chapter } from '../../data/encounters.ts';
 import { artIdFor, backdropUrl, portraitUrl, resolveArt } from '../../engine/BattlePresenterArt.ts';
 import { manifestKnowsAsset, pause2xUrlFor } from '../../engine/ArtManifest.ts';
 import { artUrl, prewarmPainted } from '../../engine/PaintedArt.ts';
+import { pixelUrlFor } from '../../engine/ArtTier.ts';
 import { pickHeroBackgroundUrl } from '../../ui/common/chapterPanel.ts';
 import { demoteWarm, warmImages, type WarmLane } from '../imageWarm.ts';
 import { plateIdFor } from './pause/plates.ts';
@@ -277,8 +278,9 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
     // Phase 4: every other pose, a few downloads ahead of the one-at-a-time decode.
     let next = 0;
     let done = 0;
+    // The file the painting will really be drawn from (release 39: the master of the device's base scale, not the approved file it is named after).
     const ahead = (): void => {
-      while (next < later.length && next < done + FETCH_WINDOW) void prefetch(later[next++]!, signal);
+      while (next < later.length && next < done + FETCH_WINDOW) void pixelUrlFor(later[next++]!).then((px) => prefetch(px, signal));
     };
     for (const url of later) {
       ahead();
