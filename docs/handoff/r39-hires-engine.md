@@ -9,7 +9,7 @@ fidelity to be amazing and absolutely beautiful. The critic will ensure this is 
 
 ## Result
 
-Branch `r39-hires-engine`, code tip **a7c660b4** (15 commits on `origin/r38-bytes` 61708db6, the last of them this note), pushed; nothing is merged and nothing is deployed. Every
+Branch `r39-hires-engine`, code tip **a7c660b4** (the commits on `origin/r38-bytes` 61708db6 listed below, then two docs commits), pushed; nothing is merged and nothing is deployed. Every
 priority of the brief is built, measured against the start build and the live site, and gated. Game case: both games, shared plumbing; the
 Fahrenheit's foredeck is FFX only (Evrae, Sin's flight) and the Bevelle deck FFX-2 only.
 
