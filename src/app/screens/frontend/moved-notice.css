@@ -1,0 +1,71 @@
+/*
+ * The "we've moved" note on the title of the OLD address (frontend/movedNotice.ts), both games: the title is the
+ * front door to FFX and FFX-2 alike, and the note exists only on baileypillon.github.io. A new file because
+ * frontend.css is another batch's, the way title-reveal.css is.
+ *
+ * It borrows the hint row's own language (`.fe-hint` in frontend.css): the ink chip, the gold left rule, Chakra Petch
+ * in tracked capitals, and the gold bold for the part to act on, every number a 1440x810 concept pixel times --fe-k.
+ * It sits on the strap's right margin (34), at the height the chapter board's top chip uses (22), so it lines up
+ * with the card instead of floating on it; the second line (what happens to saves) is the dimmer one.
+ */
+.fe-title__moved {
+  position: absolute;
+  right: calc(34 * var(--fe-k));
+  top: calc(22 * var(--fe-k));
+  z-index: 2;
+  display: block;
+  max-width: calc(100% - 68 * var(--fe-k));
+  box-sizing: border-box;
+  padding: calc(8 * var(--fe-k)) calc(18 * var(--fe-k)) calc(9 * var(--fe-k));
+  background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
+  border-left: calc(3 * var(--fe-k)) solid var(--ig-gold);
+  font-family: var(--ig-font-display);
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(244, 241, 232, 0.72);
+}
+.fe-title__moved b {
+  color: var(--ig-gold);
+  font-weight: 700;
+}
+.fe-title__moved-lead,
+.fe-title__moved-saves {
+  display: block;
+}
+.fe-title__moved-saves {
+  color: rgba(244, 241, 232, 0.6);
+}
+.fe-title__moved:hover b,
+.fe-title__moved:focus-visible b {
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+}
+
+/*
+ * The phone layout (frontend.css, same query): the 16:9 spread is re-laid, not shrunk. The chip spans the top and
+ * wraps to three lines at 390 wide (the type stays at the 14px floor), so it is held tight to the top edge and its
+ * lines are close: it must end clear of the slab, which starts at 120 on this layout.
+ */
+@media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  .fe-title__moved {
+    left: calc(14 * var(--fe-k));
+    right: calc(14 * var(--fe-k));
+    top: calc(8 * var(--fe-k));
+    max-width: none;
+    padding: calc(6 * var(--fe-k)) calc(14 * var(--fe-k)) calc(7 * var(--fe-k));
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+  }
+}
+
+/* A short phone (360x640): the slab starts higher still (120 times a smaller scale), so the three lines are packed a little closer. */
+@media ((max-width: 760px) or (max-aspect-ratio: 3 / 4)) and (max-height: 700px) {
+  .fe-title__moved {
+    top: calc(5 * var(--fe-k));
+    padding: calc(4 * var(--fe-k)) calc(12 * var(--fe-k)) calc(5 * var(--fe-k));
+    line-height: 1.3;
+  }
+}
