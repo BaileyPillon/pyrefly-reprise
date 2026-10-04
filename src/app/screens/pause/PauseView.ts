@@ -121,7 +121,7 @@ export class PauseView {
       <div class="pause__grain" aria-hidden="true"></div>
 
       <div class="pause__ui" data-role="ui">
-        <div class="pause__brand">Pyrefly Reprise &middot; ${escapeHtml(game)}</div>
+        <div class="pause__brand">Echoes of Spira &middot; ${escapeHtml(game)}</div>
         <nav class="pause__tabs" data-role="tabs" role="tablist" aria-label="Paused"></nav>
         <div class="pause__body" data-role="body"></div>
         <div class="pause__obj" data-role="obj"></div>
