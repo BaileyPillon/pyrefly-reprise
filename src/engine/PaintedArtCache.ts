@@ -28,6 +28,8 @@ export interface PreparedPainting {
   readonly cleaned: boolean;
   /** The sidecar plus the measured baseline, content box and ground hull. */
   readonly meta: PoseMeta;
+  /** Which master `source` is: 1 for the approved painting (also when absent), 2 to 4 for `<name>@<n>x.png` (release 39, `ArtTier.ts`). */
+  readonly scale?: number;
 }
 
 /**

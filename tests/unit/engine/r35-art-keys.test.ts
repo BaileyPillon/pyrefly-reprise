@@ -50,11 +50,13 @@ describe('2x tier: the device rule', () => {
 });
 
 describe('2x tier: URLs and the manifest gate', () => {
-  it('maps only a chosen character painting to its @2x file', () => {
+  it('maps a chosen character painting or a backdrop to its @2x file (release 39 widened the backdrops in)', () => {
     expect(hiResUrl('/pyrefly-reprise/art/characters/tidus/idle.png')).toBe('/pyrefly-reprise/art/characters/tidus/idle@2x.png');
     expect(hiResUrl('/art/characters/sin-left-fin/idle-far.png?v=1')).toBe('/art/characters/sin-left-fin/idle-far@2x.png?v=1');
     expect(hiResUrl('/art/characters/tidus/idle.2.png')).toBeNull();
-    expect(hiResUrl('/art/backdrops/gagazet.png')).toBeNull();
+    expect(hiResUrl('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet@2x.png');
+    expect(hiResUrl('/art/portraits/tidus.png')).toBeNull();
+    expect(hiResUrl('/art/pause/ch1.png')).toBeNull();
   });
   it('the manifest knows a master only when it lists it beside the 1x state', async () => {
     setArtManifest(manifest({ tidus: { states: ['idle', 'attack'], states2x: ['idle', 'ghost'] }, auron: { states: ['idle'] } }));

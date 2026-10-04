@@ -10,6 +10,7 @@ import {
   type Camera,
 } from 'three';
 import { setPaintedAnisotropy } from './PaintedArt.ts';
+import { setBufferWidth, setGpuInfo } from './ArtDevice.ts';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
@@ -139,6 +140,14 @@ export class Renderer {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = PCFSoftShadowMap;
     setPaintedAnisotropy(this.renderer.capabilities.getMaxAnisotropy());
+    // Release 39: the art budget follows the device (`ArtDevice.ts`): tell it which GPU this is, and keep the buffer width current in `resize`.
+    try {
+      const gl = this.renderer.getContext();
+      const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+      setGpuInfo(dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : null);
+    } catch {
+      setGpuInfo(null);
+    }
     this.renderer.domElement.setAttribute('data-role', 'game-canvas');
     container.appendChild(this.renderer.domElement);
 
@@ -283,6 +292,7 @@ export class Renderer {
 
     this.renderer.setPixelRatio(dpr);
     this.renderer.setSize(width, height, false);
+    setBufferWidth(width * dpr);
 
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();

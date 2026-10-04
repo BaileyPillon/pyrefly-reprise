@@ -174,6 +174,7 @@ function maskBand(
   c.width = w;
   c.height = h;
   const ctx = c.getContext('2d')!;
+  ctx.imageSmoothingQuality = 'high'; // the painting may be its 2x master (release 39): a plain bilinear read of 3.5x less would alias
   ctx.drawImage(source, 0, 0, w, h);
 
   ctx.globalCompositeOperation = 'destination-in';

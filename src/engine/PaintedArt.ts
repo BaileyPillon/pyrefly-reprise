@@ -1,5 +1,7 @@
 import { CanvasTexture, ImageLoader, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace, Texture, TextureLoader } from 'three';
-import { pixelUrlFor } from './ArtTier.ts';
+import { pixelUrlFor, scaleOfUrl } from './ArtTier.ts';
+import { artScalesFor } from './ArtManifest.ts';
+import { fallbackScale } from './ArtBudget.ts';
 import { shippedArtUrl } from './ArtShipped.ts';
 import { loadArtManifest, manifestKnowsAsset } from './ArtManifest.ts';
 import { fetchWithOneRetry, retryPause } from './fetchRetry.ts';
@@ -74,6 +76,8 @@ export interface PaintedTexture {
   placeholder: boolean;
   /** The URL that was asked for (even when it 404'd). */
   url: string;
+  /** Which master the pixels are: 1 = the approved painting, 2 to 4 = `<name>@<n>x.png` (release 39). Absent on a stand-in. */
+  scale?: number;
 }
 
 let maxAnisotropy = 8;
@@ -220,7 +224,8 @@ export async function loadPainted(
   const texture = prep.cleaned
     ? paintedCanvasTexture(prep.source as HTMLCanvasElement)
     : configurePaintedTexture(new Texture(prep.source));
-  return { texture, meta: { ...prep.meta }, placeholder: false, url };
+  texture.userData['artScale'] = prep.scale ?? 1; // `ArtGovernor` and the measurements read which master a texture holds
+  return { texture, meta: { ...prep.meta }, placeholder: false, url, scale: prep.scale ?? 1 };
 }
 
 /**
@@ -234,19 +239,53 @@ export async function prewarmPainted(url: string, matte?: MatteOptions, fit?: fa
   return (await cachedPainting(paintingKey(url, matte, fit), () => preparePainting(url, matte, fit))) !== null;
 }
 
+/**
+ * The decoded pixels of the master of `wanted` times (default: the device's base scale), falling back one master at a time to the
+ * approved painting when a file is missing or will not decode (release 39: a missing master is never a missing painting).
+ */
+export async function loadPixels(url: string, wanted?: number): Promise<{ image: HTMLImageElement; scale: number } | null> {
+  let px = await pixelUrlFor(url, wanted);
+  const available = (await artScalesFor(url)) ?? [];
+  for (let guard = 0; guard < 4; guard++) {
+    const scale = scaleOfUrl(px);
+    const image = await tryLoadImage(px);
+    if (image) return { image, scale };
+    if (scale === 1) return null;
+    px = await pixelUrlFor(url, fallbackScale(scale, available));
+  }
+  const image = await tryLoadImage(url);
+  return image ? { image, scale: 1 } : null;
+}
+
+/** A master drawn down to the approved painting's size: the pixels the alpha measurements are taken from (same geometry at every tier). */
+function atApprovedSize(image: HTMLImageElement, width: number, height: number): CanvasImageSource {
+  if (typeof document === 'undefined') return image;
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(width));
+  c.height = Math.max(1, Math.round(height));
+  const ctx = c.getContext('2d');
+  if (!ctx) return image;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(image, 0, 0, c.width, c.height);
+  return c;
+}
+
 /** The texture-free half of {@link loadPainted}, memoised by `PaintedArtCache.ts`. */
 async function preparePainting(
   url: string,
   matte?: MatteOptions,
   fit?: false | BaselineFitOptions,
 ): Promise<PreparedPainting | null> {
-  const px = await pixelUrlFor(url); // D-315: a 2x device draws the 2x master's pixels; the 1x sidecar, name and key stay
-  const [image, meta] = await Promise.all([tryLoadImage(px).then((i) => i ?? (px === url ? null : tryLoadImage(url))), tryLoadMeta(url)]);
-  if (!image) return null;
-  const width = meta?.width ?? image.width ?? 1024;
-  const height = meta?.height ?? image.height ?? 1024;
+  // D-315, release 39: the pixels come from the master the device's budget allows (`ArtTier.ts`); the 1x sidecar, name and key stay.
+  const [loaded, meta] = await Promise.all([loadPixels(url), tryLoadMeta(url)]);
+  if (!loaded) return null;
+  const { image, scale } = loaded;
+  const width = meta?.width ?? Math.round((image.width || 1024) / scale);
+  const height = meta?.height ?? Math.round((image.height || 1024) / scale);
   let pixels: HTMLImageElement | HTMLCanvasElement = image;
-  if (matte && matte.mode !== 'off') {
+  // A master's alpha is its own (redrawn smooth at scale from a painting that already passed this cleanup), so only the approved
+  // file is matte-checked: a flood fill over a 4x master would cost sixteen times as much for nothing.
+  if (scale === 1 && matte && matte.mode !== 'off') {
     const cleaned = cleanMatte(image, matte);
     if (cleaned) {
       console.warn(
@@ -261,12 +300,14 @@ async function preparePainting(
   // ground plane. One pass answers both questions: the feet, and the tight box
   // a target bracket is scaled from (measured even when baseline fitting is
   // off, since a hand baseline says nothing about the empty canvas around it).
+  // Measured on the painting at its approved size whichever master is loaded, so the plane, the feet and the bracket are the same at every tier.
   let baselineY = meta?.baselineY ?? height;
-  const measured = measureAlpha(pixels, width, height, fit === false ? {} : (fit ?? {}));
+  const measured = measureAlpha(scale > 1 ? atApprovedSize(image, width, height) : pixels, width, height, fit === false ? {} : (fit ?? {}));
   if (fit !== false && measured.baselineY !== null) baselineY = measured.baselineY;
   return {
     source: pixels,
     cleaned: pixels !== image,
+    scale,
     meta: {
       width,
       height,

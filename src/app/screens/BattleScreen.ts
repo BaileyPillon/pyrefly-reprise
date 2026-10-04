@@ -210,7 +210,7 @@ export class BattleScreen extends Screen {
     this.scene = scene;
     this.app.renderer.applyPalette(this.scene.palette);
     bindEyeCandyScene({ key: scene.key, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
-    bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera }); // eye-candy option B (`?fx=b`)
+    bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera, renderer: this.app.renderer.renderer }); // eye-candy option B (`?fx=b`)
     this.scene.hideOwnActors();
     this.syncPixelScale();
     void warmShaders(this.app.renderer, scene.scene); // the diorama's programs compile while the figures load

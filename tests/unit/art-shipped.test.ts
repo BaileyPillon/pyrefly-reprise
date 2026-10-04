@@ -157,7 +157,10 @@ describe('what reads an art URL apart sees the master, whichever form it is give
     setArtManifest(MANIFEST);
     expect(hiResUrl(artUrl('art/characters/tidus/idle.png'))).toMatch(/\/art\/characters\/tidus\/idle@2x\.webp$/);
     expect(hiResUrl(`${BASE}art/characters/tidus/idle.png`)).toBe(`${BASE}art/characters/tidus/idle@2x.webp`);
-    expect(hiResUrl(`${BASE}art/backdrops/gagazet.webp`)).toBeNull();
+    // Release 39: a backdrop has masters too (`backdrops/<key>@2x.png`); the other art folders do not.
+    expect(hiResUrl(`${BASE}art/backdrops/gagazet.webp`)).toBe(`${BASE}art/backdrops/gagazet@2x.png`);
+    expect(hiResUrl(`${BASE}art/portraits/tidus.png`)).toBeNull();
+    expect(hiResUrl(`${BASE}art/pause/ch1-seymour-flux.png`)).toBeNull();
     setShippedArt(['art/characters/tidus/idle.png']); // the 2x master stayed PNG
     expect(hiResUrl(`${BASE}art/characters/tidus/idle.webp`)).toBe(`${BASE}art/characters/tidus/idle@2x.png`);
   });

@@ -1,4 +1,4 @@
-import { Group, Vector3, type PerspectiveCamera, type Scene } from 'three';
+import { Group, Vector3, type PerspectiveCamera, type Scene, type WebGLRenderer } from 'three';
 import { artUrl } from '../../PaintedArt.ts';
 import type { BattleCamera } from '../../BattleCamera.ts';
 import { eyeCandy, type FxTier } from '../EyeCandy.ts';
@@ -42,6 +42,8 @@ export interface LivingBind {
   camera: PerspectiveCamera;
   rigName: () => string;
   battleCamera: BattleCamera;
+  /** The renderer the plates of a master-resolution painting are composed on (release 39); absent in unit tests. */
+  renderer?: WebGLRenderer;
 }
 
 const TIER_PARTICLES: Record<FxTier, number> = { full: 1, phone: 0.55, low: 0.3 };
@@ -117,7 +119,7 @@ class Living {
     const layout = tier === 'full' ? room.plates : room.phonePlates;
     const t0 = performance.now();
     try {
-      this.plates = group ? await DepthPlates.build(group, artUrl(`fx/${room.key}/depth.png`), layout) : null;
+      this.plates = group ? await DepthPlates.build(group, artUrl(`fx/${room.key}/depth.png`), layout, { renderer: this.a.renderer ?? null, native: tier === 'full' }) : null;
     } catch (err) {
       console.warn('[fx-b] depth plates unavailable', err);
       this.plates = null;
@@ -271,7 +273,7 @@ class Living {
       room: this.room.key,
       game: this.room.game,
       tier: this.built,
-      plates: this.plates ? { count: this.plates.meshes.length, coverage: this.plates.coverage, buildMs: this.plateMs, floored: this.plates.floored } : null,
+      plates: this.plates ? { count: this.plates.meshes.length, coverage: this.plates.coverage, buildMs: this.plateMs, floored: this.plates.floored, pixelWidth: this.plates.pixelWidth, workWidth: this.plates.workWidth, cutMs: this.plates.cutMs, composeMs: this.plates.composeMs } : null,
       lamps: this.lamps.length,
       fields: this.fields.map((f) => `${f.spec.shape}:${(f.mesh.geometry as { instanceCount?: number }).instanceCount ?? 0}`),
       haze: this.haze.length,
