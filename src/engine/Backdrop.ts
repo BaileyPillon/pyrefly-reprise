@@ -159,16 +159,19 @@ const DEFAULT_LAYERS: ParallaxLayerSpec[] = [
   { from: 0.79, to: 1.0, feather: 0.07, z: -12.5, opacity: 1 },
 ];
 
-/** Cap on the pixel width of a masked parallax layer; they are drawn small. */
-const LAYER_MAX_WIDTH = 1536;
-
+/**
+ * A masked parallax layer is a copy of the painting's rows nearer the camera, so it is drawn over the painting at the painting's own
+ * scale: its width cap is the device's (`ArtBudget.bandPx`: 1536 on a phone as before, the approved width on a mid desktop, 4096 on a
+ * strong one). At the old fixed 1536 it was the softest thing in a scene with no depth plates (2.1x to 3.2x magnified at 1440p
+ * against the painting's 1.2x to 1.4x), and it covers the lower half of the frame, where the party stands.
+ */
 function maskBand(
   source: CanvasImageSource,
   srcW: number,
   srcH: number,
   spec: ParallaxLayerSpec,
 ): HTMLCanvasElement {
-  const scale = Math.min(1, LAYER_MAX_WIDTH / srcW);
+  const scale = Math.min(1, artBudget().bandPx / srcW);
   const w = Math.max(2, Math.round(srcW * scale));
   const h = Math.max(2, Math.round(srcH * scale));
   const c = document.createElement('canvas');
@@ -361,7 +364,9 @@ export class Backdrop {
           : (fog?.color.clone() ?? new Color(horizon));
 
     const backdrop = new Backdrop(painting, palette, groundMesh, fog, background);
-    backdrop.ownedTextures.push(...extraTextures);
+    // The painting's own texture is this backdrop's (`loadPainted` makes a texture of its own every time), so it goes when the backdrop does:
+    // it never did, and every battle left its painting on the GPU (22 MB at the approved 2688 px, 84 MB from the 2x master).
+    backdrop.ownedTextures.push(painting.texture, ...extraTextures);
 
     // -------------------------------------------------------- main painting
     // The painting is already "final pixels" — tone-mapping it again crushes

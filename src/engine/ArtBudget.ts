@@ -46,6 +46,14 @@ export interface ArtBudget {
   groundPx: number;
   /** Deck tile edge, pixels (Chapter IV's machina deck; `bevelle-underground.ts`). */
   deckPx: number;
+  /**
+   * Width cap of the masked parallax bands that overlay a painting in a scene with no depth plates (`Backdrop.ts`). A band is a
+   * copy of the painting's lower rows drawn nearer the camera, so it must not be softer than the painting under it: it was capped at
+   * 1536, which magnified it 2.1x to 3.2x at 1440p beside the painting's 1.2x to 1.4x.
+   */
+  bandPx: number;
+  /** Design-grid scale of a procedural floor drawn once at load (the Fahrenheit's foredeck, `evrae-airship-sky.ts`): 1 is the 1024 x 2048 design. */
+  deckDetail: number;
   /** The anti-aliasing the device runs by default: SMAA on a desktop (measured against MSAA, `PostAa.ts`); `?aa=` and `Renderer.setAa` override it for captures. */
   aa: AaMode;
   /** Samples of the multisampled scene target when `aa` is `msaa` (the hardware may clamp it). */
@@ -83,11 +91,21 @@ export function classifyDevice(s: DeviceSample): DeviceClass {
 }
 
 const BUDGETS: Readonly<Record<DeviceClass, ArtBudget>> = {
-  phone: { cls: 'phone', maxScale: 2, backdropScale: 1, textureMB: 220, groundPx: 1024, deckPx: 512, aa: 'off', msaaSamples: 4 },
-  low: { cls: 'low', maxScale: 2, backdropScale: 1, textureMB: 500, groundPx: 1024, deckPx: 512, aa: 'off', msaaSamples: 4 },
-  mid: { cls: 'mid', maxScale: 2, backdropScale: 1, textureMB: 900, groundPx: 2048, deckPx: 2048, aa: 'smaa', msaaSamples: 4 },
-  high: { cls: 'high', maxScale: 4, backdropScale: 2, textureMB: 2600, groundPx: 4096, deckPx: 4096, aa: 'smaa', msaaSamples: 4 },
+  phone: { cls: 'phone', maxScale: 2, backdropScale: 1, textureMB: 220, groundPx: 1024, deckPx: 512, bandPx: 1536, deckDetail: 1, aa: 'off', msaaSamples: 4 },
+  low: { cls: 'low', maxScale: 2, backdropScale: 1, textureMB: 500, groundPx: 1024, deckPx: 512, bandPx: 1536, deckDetail: 1, aa: 'off', msaaSamples: 4 },
+  mid: { cls: 'mid', maxScale: 2, backdropScale: 1, textureMB: 900, groundPx: 2048, deckPx: 2048, bandPx: 2688, deckDetail: 2, aa: 'smaa', msaaSamples: 4 },
+  high: { cls: 'high', maxScale: 4, backdropScale: 2, textureMB: 2600, groundPx: 4096, deckPx: 4096, bandPx: 4096, deckDetail: 2, aa: 'smaa', msaaSamples: 4 },
 };
+
+/**
+ * The design-grid scale of a procedural floor at this buffer width: the budget's `deckDetail`, and one more on a high class under a
+ * 4K buffer, where a floor seen at a low angle is magnified half again as much as at 1440p. Never past what the GPU can hold
+ * (`maxTexture`, over the floor's longer design edge).
+ */
+export function floorDetail(b: ArtBudget, bufferWidth: number, designEdge: number, maxTexture: number): number {
+  const want = b.deckDetail + (b.cls === 'high' && bufferWidth >= 3200 ? 1 : 0);
+  return Math.max(1, Math.min(want, Math.floor(maxTexture / Math.max(1, designEdge))));
+}
 
 /** The budget of a device class (a fresh object, so a caller may adjust its own copy). */
 export function budgetFor(cls: DeviceClass): ArtBudget {

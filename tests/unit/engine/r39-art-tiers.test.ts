@@ -16,6 +16,7 @@ import {
   classifyGpu,
   evictionOrder,
   fallbackScale,
+  floorDetail,
   parseTierOverride,
   pickScale,
   requiredScale,
@@ -89,6 +90,26 @@ describe('device class', () => {
     const a = budgetFor('high');
     a.maxScale = 1;
     expect(budgetFor('high').maxScale).toBe(4);
+  });
+  it('the parallax bands are never softer than the painting under them on a desktop, and stay small on a phone', () => {
+    const [phone, low, mid, high] = (['phone', 'low', 'mid', 'high'] as const).map(budgetFor);
+    expect(phone!.bandPx).toBe(1536); // what every device had before release 39
+    expect(low!.bandPx).toBe(1536);
+    expect(mid!.bandPx).toBe(2688); // the approved painting's own width
+    expect(high!.bandPx).toBe(4096);
+  });
+  it('a procedural floor is drawn at a scale that follows the class and the buffer, and never past what the GPU can hold', () => {
+    const [phone, low, mid, high] = (['phone', 'low', 'mid', 'high'] as const).map(budgetFor);
+    const edge = 2048; // the Fahrenheit's foredeck: 1024 x 2048 at design size
+    expect(floorDetail(phone!, 2560, edge, 16384)).toBe(1);
+    expect(floorDetail(low!, 3840, edge, 16384)).toBe(1);
+    expect(floorDetail(mid!, 2560, edge, 16384)).toBe(2);
+    expect(floorDetail(mid!, 3840, edge, 16384)).toBe(2); // a mid card does not get a third
+    expect(floorDetail(high!, 2560, edge, 16384)).toBe(2);
+    expect(floorDetail(high!, 3840, edge, 16384)).toBe(3); // 4K magnifies a low-angle floor half again as much
+    expect(floorDetail(high!, 3840, edge, 4096)).toBe(2); // a 4096 texture limit: two at most
+    expect(floorDetail(high!, 3840, edge, 2048)).toBe(1);
+    expect(floorDetail(high!, 3840, 0, 16384)).toBeGreaterThanOrEqual(1);
   });
 });
 
