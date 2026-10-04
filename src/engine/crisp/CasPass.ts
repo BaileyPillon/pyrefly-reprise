@@ -24,7 +24,8 @@ const VERT = /* glsl */ `
 const FRAG = /* glsl */ `
   uniform sampler2D tDiffuse;
   uniform vec2 uTexel;
-  uniform float uSharp;     // 0..1
+  uniform float uAmount;    // 0..1: how much of the sharpening is applied (a gain on the weight, so 0 is none and the effect grows from there)
+  uniform float uSharp;     // 0..1: the filter's own shape, CAS's -1/8 (soft) to -1/5 (hard) lobe
   uniform float uFocus;     // tilt-shift centre, 0 = bottom
   uniform float uBand;      // tilt-shift half band
   uniform float uMask;      // 1 = fade with the tilt-shift band, 0 = everywhere
@@ -55,18 +56,18 @@ const FRAG = /* glsl */ `
     vec3 amp = clamp(min(mn, 2.0 - mx) / max(mx, vec3(1e-4)), 0.0, 1.0);
     amp = sqrt(amp);
 
-    // Strength: the negative lobe runs from -1/8 (soft) to -1/5 (hard), as the sharpening goes 0 -> 1.
-    float sharp = uSharp;
+    // Gates, all continuous: the tilt-shift band (the soft far field stays soft) and a noise floor on the cross range of the
+    // neighbourhood (the painted sky and the soft gradients sit under it, the figures' lines over it).
+    float gate = uAmount;
     if (uMask > 0.5) {
       float t = clamp((abs(vUv.y - uFocus) - uBand) / max(1.0 - uBand, 1e-4), 0.0, 1.0);
-      sharp *= 1.0 - smoothstep(0.0, 0.25, t);
+      gate *= 1.0 - smoothstep(0.0, 0.25, t);
     }
-    // A noise floor: the cross range of the neighbourhood. The painted sky and the soft far field sit under it, the figures' lines over it.
     vec3 rngV = mxC - mnC;
     float rng = max(max(rngV.r, rngV.g), rngV.b);
-    sharp *= uFloor > 0.0 ? smoothstep(uFloor, uFloor * 3.0, rng) : 1.0;
-    float peak = -1.0 / mix(8.0, 5.0, clamp(sharp, 0.0, 1.0));
-    vec3 w = amp * peak * step(1e-4, sharp);
+    gate *= uFloor > 0.0 ? smoothstep(uFloor, uFloor * 3.0, rng) : 1.0;
+    float peak = -1.0 / mix(8.0, 5.0, clamp(uSharp, 0.0, 1.0));
+    vec3 w = amp * peak * gate;
     vec3 rcp = 1.0 / (1.0 + 4.0 * w);
     vec3 outc = (b * w + d * w + f * w + h * w + e) * rcp;
     gl_FragColor = vec4(max(outc, vec3(0.0)), e4.a);
@@ -84,6 +85,7 @@ export class CasPass extends Pass {
       uniforms: {
         tDiffuse: { value: null },
         uTexel: { value: { x: 1 / 1600, y: 1 / 900 } },
+        uAmount: { value: 0 },
         uSharp: { value: 0.5 },
         uFocus: { value: 0.42 },
         uBand: { value: 0.16 },
@@ -99,8 +101,13 @@ export class CasPass extends Pass {
     this.quad = new FullScreenQuad(this.material);
   }
 
-  /** The strength 0..1. */
-  set sharpness(v: number) {
+  /** How much of the sharpening is applied, 0..1 (a gain on the filter's weight: 0 is none). */
+  set amount(v: number) {
+    this.material.uniforms['uAmount']!.value = v;
+  }
+
+  /** The filter's own shape, 0..1: CAS's weight runs from -1/8 (soft) to -1/5 (hard). */
+  set shape(v: number) {
     this.material.uniforms['uSharp']!.value = v;
   }
 

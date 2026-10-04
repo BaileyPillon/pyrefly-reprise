@@ -179,7 +179,8 @@ export class CrispRig {
     const focus = this.parts.tiltH.uniforms['focus']!.value as number;
     const band = this.parts.tiltH.uniforms['bandWidth']!.value as number;
     for (const p of [this.casPre, this.casPost]) {
-      p.sharpness = c.cas;
+      p.amount = c.cas;
+      p.shape = c.casSharp;
       p.floor = c.casFloor;
       p.followFocus(focus, band, true);
     }
@@ -191,6 +192,18 @@ export class CrispRig {
     const rows: string[] = [];
     for (const t of this.textures) rows.push(levels.map((l) => this.prefilter.checksum(t, l) ?? '-').join(' '));
     return rows;
+  }
+
+  /** Give back the buffers of every SMAA pass that is switched off (they come back by themselves when one is switched on again). */
+  releaseIdleSmaa(): number {
+    let n = 0;
+    for (const p of this.composer.passes) {
+      if (p instanceof SMAAPass && !p.enabled) {
+        p.dispose();
+        n++;
+      }
+    }
+    return n;
   }
 
   /** What the GPU holds for every texture the rig knows (anisotropy, filters, size): the check that a setting reaches GL. */

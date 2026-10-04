@@ -21,14 +21,16 @@ describe('crisp config', () => {
     expect(p.ss).toBe(2);
     expect(p.cas).toBe(0.4);
     expect(p.mips).toBe('lanczos');
+    expect(p.aniso).toBe(16);
     expect(p.aaPre).toBe(false);
     expect(p.aa).toBe('off');
   });
 
   it('clamps and ignores what is not a value', () => {
-    const p = parseCrisp('?ss=9&cas=-1&ssf=sharpest&mips=lots&aniso=99&mipbias=3&casfloor=7&aapre=0');
+    const p = parseCrisp('?ss=9&cas=-1&cassharp=4&ssf=sharpest&mips=lots&aniso=99&mipbias=3&casfloor=7&aapre=0');
     expect(p.ss).toBe(4);
     expect(p.cas).toBe(0);
+    expect(p.casSharp).toBe(1);
     expect(p.ssFilter).toBe(DEFAULT_CRISP.ssFilter);
     expect(p.mips).toBe('gpu');
     expect(p.aniso).toBe(16);
@@ -47,7 +49,7 @@ describe('crisp config', () => {
   });
 
   it('names every end state of the round, the ideal reference included', () => {
-    for (const k of ['a', 'a2', 'b', 'c1', 'c2', 'd15', 'd2', 'e', 'f0', 'f1', 'f2', 'ref3']) expect(CRISP_PRESETS[k], k).toBeDefined();
+    for (const k of ['a', 'a2', 'b', 'c1', 'c2', 'd15', 'd2', 'e', 'g0', 'g1', 'g2', 'f1', 'ref3']) expect(CRISP_PRESETS[k], k).toBeDefined();
     expect(CRISP_PRESETS['a']).toEqual({ aaPre: true, aa: 'smaa' }); // release 39 as built: two SMAA passes
     expect(CRISP_PRESETS['b']?.aa).toBe('msaa');
     expect(CRISP_PRESETS['ref3']?.ss).toBe(3);

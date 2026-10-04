@@ -8,8 +8,9 @@
  * - `aaPre`   : the pre-grade SMAA of the MAX mix's SMOOTH EDGES (`fx/mix/cinema.ts`); live release 38 has only this one.
  * - `aa`      : the renderer's own anti-aliasing (`off` | `smaa` after the grade | `msaa` scene target), `?aa=` as before.
  * - `ss`      : supersampling of the scene pass (1 = off), resolved with `ssFilter` before the bloom (`SsaaPass.ts`).
- * - `cas`     : contrast adaptive sharpening strength 0..1 (`CasPass.ts`), `casAt` before the grade (`pre`) or after (`post`),
- *               `casFloor` the local contrast below which nothing is sharpened (the painted grain and the soft far field).
+ * - `cas`     : contrast adaptive sharpening amount 0..1 (`CasPass.ts`), `casSharp` its shape 0..1 (the -1/8 to -1/5 lobe), `casAt` before
+ *               the grade (`pre`) or after (`post`), `casFloor` the local contrast below which nothing is sharpened (the painted grain,
+ *               the soft far field).
  * - `mips`    : `gpu` (the box-filtered chain the driver makes) or `lanczos` (prefiltered levels, `MipPrefilter.ts`).
  * - `aniso`   : an anisotropy floor for painted textures (0 = leave them as they are).
  * - `mipBias` : a negative bias of the figures' texture sampling (0 = none).
@@ -29,6 +30,7 @@ export interface CrispConfig {
   /** 0..1 of how much of the anti-ringing clamp the resolve applies. */
   ssRing: number;
   cas: number;
+  casSharp: number;
   casAt: 'pre' | 'post';
   casFloor: number;
   mips: 'gpu' | 'lanczos';
@@ -43,6 +45,7 @@ export const DEFAULT_CRISP: Readonly<CrispConfig> = {
   ssFilter: 'lanczos',
   ssRing: 0.5,
   cas: 0,
+  casSharp: 0.5,
   casAt: 'pre',
   casFloor: 0.05,
   mips: 'gpu',
@@ -58,27 +61,28 @@ export const CRISP_PRESETS: Readonly<Record<string, Partial<CrispConfig>>> = {
   a: { aaPre: true, aa: 'smaa' },
   a2: { aaPre: true, aa: 'off' },
   b: { aaPre: false, aa: 'msaa' },
-  c1: { aaPre: true, aa: 'off', cas: 0.35 },
-  c2: { aaPre: true, aa: 'off', cas: 0.7 },
-  c2post: { aaPre: true, aa: 'off', cas: 0.7, casAt: 'post' },
+  c1: { aaPre: true, aa: 'off', cas: 0.5 },
+  c2: { aaPre: true, aa: 'off', cas: 1, casSharp: 1 },
+  c2post: { aaPre: true, aa: 'off', cas: 1, casSharp: 1, casAt: 'post' },
   // the same two without the noise floor, to show what the floor protects (the painted grain and the soft far field)
-  c2nf: { aaPre: true, aa: 'off', cas: 0.7, casFloor: 0 },
-  c2postnf: { aaPre: true, aa: 'off', cas: 0.7, casAt: 'post', casFloor: 0 },
+  c2nf: { aaPre: true, aa: 'off', cas: 1, casSharp: 1, casFloor: 0 },
+  c2postnf: { aaPre: true, aa: 'off', cas: 1, casSharp: 1, casAt: 'post', casFloor: 0 },
   d15: { aaPre: false, aa: 'off', ss: 1.5 },
   d2: { aaPre: false, aa: 'off', ss: 2 },
   // the resolve filter's own comparison (supersampling 2x, one filter at a time), and the 3x reference every variant is measured against
   d2box: { aaPre: false, aa: 'off', ss: 2, ssFilter: 'box' },
   d2cat: { aaPre: false, aa: 'off', ss: 2, ssFilter: 'catmull' },
   d2mit: { aaPre: false, aa: 'off', ss: 2, ssFilter: 'mitchell' },
-  d2l3: { aaPre: false, aa: 'off', ss: 2, ssFilter: 'lanczos' },
-  d2r0: { aaPre: false, aa: 'off', ss: 2, ssRing: 0 },
-  d2r1: { aaPre: false, aa: 'off', ss: 2, ssRing: 1 },
+  d2l2: { aaPre: false, aa: 'off', ss: 2, ssFilter: 'lanczos2' },
   ref3: { aaPre: false, aa: 'off', ss: 3, ssFilter: 'lanczos', ssRing: 0.5 },
   e: { aaPre: true, aa: 'off', mips: 'lanczos', aniso: 16 },
   ebias: { aaPre: true, aa: 'off', mips: 'lanczos', aniso: 16, mipBias: -0.5 },
-  f0: { aaPre: false, aa: 'off', ss: 1.5, mips: 'lanczos', aniso: 16 },
-  f1: { aaPre: false, aa: 'off', ss: 1.5, cas: 0.2, mips: 'lanczos', aniso: 16 },
-  f2: { aaPre: false, aa: 'off', ss: 2, cas: 0.2, mips: 'lanczos', aniso: 16 },
+  // F: supersample, the sharpening amount that lands nearest the 3x reference (0.4 at 1.5x, 0.3 at 2x), the plates' anisotropy;
+  // f1 adds E's prefiltered mips to F (to show what they are worth)
+  g0: { aaPre: false, aa: 'off', ss: 1.5, aniso: 16 },
+  g1: { aaPre: false, aa: 'off', ss: 1.5, cas: 0.4, aniso: 16 },
+  g2: { aaPre: false, aa: 'off', ss: 2, cas: 0.3, aniso: 16 },
+  f1: { aaPre: false, aa: 'off', ss: 1.5, cas: 0.4, mips: 'lanczos', aniso: 16 },
 };
 
 const FILTERS: readonly CrispFilter[] = ['box', 'lanczos', 'lanczos2', 'catmull', 'mitchell'];
@@ -98,6 +102,7 @@ export function mergeCrisp(base: CrispConfig, patch: Partial<CrispConfig>): Cris
   if (patch.ssFilter && FILTERS.includes(patch.ssFilter)) out.ssFilter = patch.ssFilter;
   if (typeof patch.ssRing === 'number' && Number.isFinite(patch.ssRing)) out.ssRing = Math.min(1, Math.max(0, patch.ssRing));
   if (typeof patch.cas === 'number' && Number.isFinite(patch.cas)) out.cas = Math.min(1, Math.max(0, patch.cas));
+  if (typeof patch.casSharp === 'number' && Number.isFinite(patch.casSharp)) out.casSharp = Math.min(1, Math.max(0, patch.casSharp));
   if (patch.casAt === 'pre' || patch.casAt === 'post') out.casAt = patch.casAt;
   if (typeof patch.casFloor === 'number' && Number.isFinite(patch.casFloor)) out.casFloor = Math.min(0.5, Math.max(0, patch.casFloor));
   if (patch.mips === 'gpu' || patch.mips === 'lanczos') out.mips = patch.mips;
@@ -106,7 +111,7 @@ export function mergeCrisp(base: CrispConfig, patch: Partial<CrispConfig>): Cris
   return out;
 }
 
-/** Parse the address: `?crisp=<preset>` first, then single flags (`ss`, `ssf`, `ssring`, `cas`, `casat`, `casfloor`, `aapre`, `mips`, `aniso`, `mipbias`). */
+/** Parse the address: `?crisp=<preset>` first, then single flags (`ss`, `ssf`, `ssring`, `cas`, `cassharp`, `casat`, `casfloor`, `aapre`, `mips`, `aniso`, `mipbias`). */
 export function parseCrisp(search: string): CrispConfig {
   let cfg: CrispConfig = { ...DEFAULT_CRISP };
   let p: URLSearchParams;
@@ -126,6 +131,8 @@ export function parseCrisp(search: string): CrispConfig {
   if (ring !== null) patch.ssRing = ring;
   const cas = num(p.get('cas'), 0, 1);
   if (cas !== null) patch.cas = cas;
+  const shape = num(p.get('cassharp'), 0, 1);
+  if (shape !== null) patch.casSharp = shape;
   const floor = num(p.get('casfloor'), 0, 0.5);
   if (floor !== null) patch.casFloor = floor;
   const at = p.get('casat');

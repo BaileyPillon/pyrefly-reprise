@@ -20,6 +20,7 @@ export function installCrispDebug(api: Record<string, unknown>, app: App): void 
     report: () => app.renderer.crisp.report(),
     inspect: () => app.renderer.crisp.inspect(),
     sums: () => app.renderer.crisp.sums(),
+    releaseSmaa: () => app.renderer.crisp.releaseIdleSmaa(),
     presets: Object.keys(CRISP_PRESETS),
   };
 }
