@@ -20,6 +20,8 @@
  * the picture shows and outside the target's painted shape, in every FFX-2 chapter. Presentation only: no engine state,
  * no RNG.
  *
+ * Round 21 (PR-0364; FFX-2 only): the truck is fitted so no girl on her side leaves the frame (`motion/StandOff.ts` `fitTruck`).
+ *
  * Her place is hers while she is out (repair of the check's one major, `motion/PlaceOwner.ts`): the MAX mix's staging keeps a
  * share of x in a figure's position and reads any x it did not write as the stage re-seating her, so a run, which is not a
  * re-seat, left her home one share further along at every attack. `home` is the position she stands at when the run begins (share
@@ -85,6 +87,11 @@ function worldOf(world: StageMotionPort, ctx: MotionCtx, id: CombatantId, target
       .staged()
       .filter((o) => o !== id && o !== targetId)
       .map((o) => ({ z: ctx.stage.actor(o)?.position.z ?? 0, rect: (truck) => world.rect(o, { truck }) })),
+    // The girls on her side stay in the frame the truck follows her through (round 21, PR-0364: Yuna left it on Rikku's runs).
+    keep: ctx.stage
+      .staged()
+      .filter((o) => o !== id && ctx.stage.sideOf(o) === 'party')
+      .map((o) => ({ rect: (truck) => world.rect(o, { truck }) })),
     view: world.view(),
   };
 }

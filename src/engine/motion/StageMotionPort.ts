@@ -37,12 +37,16 @@ export interface StageMotionPort {
   /** The world bounds of `id`'s painted shape right now, or null when it is not on the field. */
   span(id: CombatantId): PaintedSpan | null;
   /**
-   * The screen rectangle `id`'s painted box covers on the shot the camera is settling on (its rest pose, not the move
-   * in flight), with the camera slid by `truck`; with `at`, as if its feet stood there instead. Null when it is not on the field.
+   * The screen rectangle `id`'s painted box covers on the shot the camera is settling on (its rest pose and the dolly the shot
+   * holds, not the move in flight), with the camera slid by `truck`; with `at`, as if its feet stood there instead. Null when it
+   * is not on the field.
    */
   rect(id: CombatantId, o?: { at?: Spot; truck?: Spot }): Rect | null;
-  /** The canvas's CSS size, for keeping a stop inside the frame. */
-  view(): { w: number; h: number };
+  /**
+   * The canvas's CSS size, for keeping a stop inside the frame; `l`, `r`, `t`, `b` are the part of it the window shows (canvas px;
+   * all four default to the whole canvas): the upright phone shows a slice of a wider field (round 21, PR-0364).
+   */
+  view(): { w: number; h: number; l?: number; r?: number; t?: number; b?: number };
   /**
    * Slide the whole camera by (dx, dy, dz) world units over `ms`, on top of whatever rig it is on; (0, 0, 0) slides
    * it back. One at a time: a new call settles and replaces the one in flight; `ms` of 1 or less is a cut.

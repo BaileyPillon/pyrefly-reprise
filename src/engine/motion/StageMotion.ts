@@ -31,8 +31,8 @@ export interface StageMotionOptions {
   quadOf(id: CombatantId, out: Quad): Quad | null;
   /** The figure's root, whose visible painted plane the smear copies. */
   figure(id: CombatantId): Object3D | undefined;
-  /** The canvas's CSS size. */
-  view(): { w: number; h: number };
+  /** The canvas's CSS size, and the part of it the window shows (see `StageMotionPort.view`). */
+  view(): { w: number; h: number; l?: number; r?: number; t?: number; b?: number };
   /** LOW EFFECTS: no smear. */
   lowEffects(): boolean;
   /** Whose painting to warm the smear's program with (see `warm`), or undefined when it is not wanted (not FFX-2, REDUCE MOTION). Read each frame until done. */
@@ -100,19 +100,20 @@ export class StageMotion implements StageMotionPort {
     return Number.isFinite(x0) && Number.isFinite(y0) ? { x0, x1, y0, y1, z } : null;
   }
 
-  view(): { w: number; h: number } {
+  view(): { w: number; h: number; l?: number; r?: number; t?: number; b?: number } {
     return this.o.view();
   }
 
   /**
-   * The painted box's four corners as screen points, on the camera's rest pose (the shot it is settling on) slid by `o.truck`,
-   * and as if the figure's feet stood at `o.at`; the bounds of the four. The same box `projectRect` hugs.
+   * The painted box's four corners as screen points, on the camera's rest pose (the shot it is settling on, with the dolly the shot
+   * holds: the action's push, round 21 PR-0364) slid by `o.truck`, and as if the figure's feet stood at `o.at`; the bounds of the
+   * four. The same box `projectRect` hugs.
    */
   rect(id: CombatantId, o: { at?: Spot; truck?: Spot } = {}): Rect | null {
     const q = this.o.quadOf(id, this.scratch);
     const fig = this.o.figure(id);
     if (!q || !fig) return null;
-    const cam = this.o.camera.restCamera();
+    const cam = this.o.camera.restCamera(true);
     if (o.truck) {
       cam.position.add(this.shift.set(o.truck.x, o.truck.y, o.truck.z));
       cam.updateMatrixWorld(true);

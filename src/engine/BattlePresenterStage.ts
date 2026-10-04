@@ -196,10 +196,27 @@ export class PaintedStage implements BattleStage {
         return out;
       },
       figure: (id) => this.actors.get(id)?.actor,
-      view: () => ({ w: opts.canvas.clientWidth || 1600, h: opts.canvas.clientHeight || 900 }),
+      view: () => this.motionView(),
       lowEffects: () => opts.comfort?.().lowEffects === true,
       warmFor: () => this.smearWarmId(),
     });
+  }
+
+  /**
+   * The canvas's size and the part of it the window shows, in canvas px (`StageMotionPort.view`): the upright phone shows a slice of a
+   * wider field, and a girl outside the slice is out of the frame the player has (round 21, PR-0364). Whole canvas where it cannot be read.
+   */
+  private motionView(): { w: number; h: number; l?: number; r?: number; t?: number; b?: number } {
+    const canvas = this.opts.canvas;
+    const w = canvas.clientWidth || 1600;
+    const h = canvas.clientHeight || 900;
+    const box = typeof canvas.getBoundingClientRect === 'function' ? canvas.getBoundingClientRect() : null;
+    if (!box || !(box.width > 0) || !(box.height > 0) || typeof window === 'undefined' || !(window.innerWidth > 0)) return { w, h };
+    const frac = (lo: number, hi: number): [number, number] => [Math.min(1, Math.max(0, lo)), Math.min(1, Math.max(0, hi))];
+    const [fl, fr] = frac(-box.left / box.width, (window.innerWidth - box.left) / box.width);
+    const [ft, fb] = frac(-box.top / box.height, (window.innerHeight - box.top) / box.height);
+    if (fr <= fl || fb <= ft) return { w, h };
+    return { w, h, l: fl * w, r: fr * w, t: ft * h, b: fb * h };
   }
 
   /** FFX-2 only (RUN-IN is the one user of the smear): which party figure's painting builds the smear's program in the opening; none under REDUCE MOTION, which never runs. */

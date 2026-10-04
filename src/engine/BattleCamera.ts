@@ -34,20 +34,11 @@ export interface BattleCameraOptions {
 const toVec = (v: [number, number, number] | Vector3): Vector3 =>
   v instanceof Vector3 ? v.clone() : new Vector3(v[0], v[1], v[2]);
 
-/**
- * Named camera rigs with smooth tweens between them, plus a permanent, very
- * gentle idle sway so nothing in frame is ever perfectly still.
- *
- * Every scene registers at least `idle`, `action` and `victory`.
- */
+/** Named camera rigs with smooth tweens between them, plus a very gentle idle sway. Every scene registers at least `idle`, `action` and `victory`. */
 export class BattleCamera {
   readonly camera: PerspectiveCamera;
   readonly tweens = new TweenGroup();
-  /**
-   * Punch / push / roll live in their own group: `moveTo`/`snapTo` `killAll()`
-   * {@link tweens}, and a *moment* is a rig change **and** a push at once
-   * (`BattleMoments`); one shared group let the rig move eat the push.
-   */
+  /** Punch / push / roll have their own group: `moveTo`/`snapTo` `killAll()` {@link tweens}, and a moment is a rig change and a push at once (`BattleMoments`). */
   private readonly fx = new TweenGroup();
 
   private readonly rigs = new Map<string, ResolvedRig>();
@@ -96,6 +87,8 @@ export class BattleCamera {
   swayOff: () => boolean = () => false;
   /** RUN-IN's truck, world units: added to the camera and its look-at on top of the rig. Zero unless `motion/StageMotion.ts` is tweening it. */
   readonly truck = new Vector3();
+  /** The fraction a held {@link push} is easing to (0 with none, and from the moment it is released): what a plan for the shot reads (`restCamera(true)`). */
+  private heldPush = 0;
 
   constructor(camera: PerspectiveCamera, opts: BattleCameraOptions = {}) {
     this.camera = camera;
@@ -228,11 +221,12 @@ export class BattleCamera {
    * panels that keep off the fighters against this, so a panel does not drift
    * or jump while the camera travels (`PaintedStage.projectAtRest`).
    */
-  restCamera(): PerspectiveCamera {
+  restCamera(withPush = false): PerspectiveCamera {
     const c = (this.restCam ??= new PerspectiveCamera());
     c.copy(this.camera, false);
     c.fov = this.restFov ?? this.camera.fov;
     c.position.copy(this.targetPos);
+    if (withPush) c.position.addScaledVector(this.scratch.subVectors(this.targetLook, this.targetPos), this.heldPush); // the held dolly (it keeps the aim: it slides along it)
     c.up.copy(this.camera.up);
     c.lookAt(this.targetLook);
     c.updateProjectionMatrix();
@@ -280,6 +274,7 @@ export class BattleCamera {
    * the slow zoom a telegraph and an Overdrive ride on (`punch` would bounce).
    */
   push(fraction = 0.1, ms = 900): Promise<void> {
+    this.heldPush = fraction;
     return this.fx.toAsync(this.punchAmount, fraction, {
       durationMs: Math.max(1, ms),
       easing: 'quadInOut',
@@ -291,6 +286,7 @@ export class BattleCamera {
 
   /** Ease a held {@link push} (and any roll) back to neutral. */
   release(ms = 420): Promise<void> {
+    this.heldPush = 0;
     if (ms <= 1) { this.fx.killAll(); this.punchAmount = 0; this.rollRad = 0; return Promise.resolve(); } // a cut kills a push still easing in (PR-0061)
     if (this.rollRad !== 0) void this.rollTo(0, ms);
     if (this.punchAmount === 0) return Promise.resolve();
@@ -305,6 +301,9 @@ export class BattleCamera {
 
   /** How far in the held dolly currently is, as a fraction. Read by tests. */
   get pushAmount(): number { return this.punchAmount; }
+
+  /** The fraction the held push is easing to (0 with none): {@link restCamera}'s `withPush`. */
+  get pushTarget(): number { return this.heldPush; }
 
   /** Current dutch roll, in degrees. */
   get rollDeg(): number { return (this.rollRad * 180) / Math.PI; }

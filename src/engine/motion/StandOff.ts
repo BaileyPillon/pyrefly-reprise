@@ -21,6 +21,12 @@
  * - **in frame**.
  * The fiend's painted width is read from its painting, never from a table, so Bahamut's spread wings, Ixion's body and
  * Vegnagun's colossus each get their own answer, and so will a chapter added later.
+ *
+ * Round 21 (PR-0364, PR-0347; FFX-2 only): the truck follows half of the run, and Yuna, who stands at the left of the frame, left
+ * it (Leblanc, 1600x900, Rikku's runs: Yuna 82 and 17 % in frame at the peak, her left edge at -33 and -157 px). A run's truck is
+ * now fitted ({@link fitTruck}): the whole follow when every girl on her side stays where the frame has her, cut back in steps until
+ * each is no more cropped at the frame's edges than she is at rest, and none at all when even the smallest follow would crop one.
+ * The stop itself is scored against the truck it will run under, so a stop that needs a truck the frame cannot give is not chosen.
  */
 import type { PaintedSpan, Rect, Spot } from './StageMotionPort.ts';
 
@@ -45,8 +51,13 @@ export interface RunWorld {
   targetRect(truck: Spot): Rect | null;
   /** Every other figure: its depth, and its painted box on screen with the camera slid by `truck`. */
   others: ReadonlyArray<{ z: number; rect(truck: Spot): Rect | null }>;
-  /** The canvas, CSS px. */
-  view: { w: number; h: number };
+  /**
+   * The girls on her side other than her: figures the truck must keep in the frame (round 21, PR-0364). Each one's painted box on
+   * screen with the camera slid by `truck`. Optional: with none given the truck is the whole follow, as it was before.
+   */
+  keep?: ReadonlyArray<{ rect(truck: Spot): Rect | null }>;
+  /** The canvas, CSS px, and the part of it the window shows (`l`, `r`, `t`, `b`; the whole canvas when absent). */
+  view: { w: number; h: number; l?: number; r?: number; t?: number; b?: number };
 }
 
 export interface RunPlan {
@@ -70,6 +81,44 @@ function covers(a: Rect, b: Rect): number {
   return w > 0 && h > 0 ? (w * h) / area(a) : 0;
 }
 
+/** The share of the frame's width a girl on her side may be left from its edge when the truck is on: 1.5 %, never more cropped than at rest. */
+export const KEEP_MARGIN = 0.015;
+
+/** The part of the canvas the window shows, canvas px (the whole canvas when the view does not say). */
+function frameOf(v: RunWorld['view']): { l: number; r: number; t: number; b: number } {
+  return { l: v.l ?? 0, r: v.r ?? v.w, t: v.t ?? 0, b: v.b ?? v.h };
+}
+
+/** The fractions of the follow tried, whole first; 0 is the frame as it stands. */
+const TRUCK_STEPS = [1, 0.8, 0.6, 0.4, 0.25, 0.12, 0] as const;
+
+/**
+ * The truck for a run to a stop `dx` along the ground: the whole follow ({@link TRUCK}) when every figure in `keep` stays where the
+ * frame has it at rest, else the largest fraction of it (and of its lift) for which none is more cropped at the left, right or
+ * bottom edge than at rest, else none. A figure already past an edge at rest is held to what it shows there, never made worse.
+ * Pure on its input.
+ */
+export function fitTruck(w: RunWorld, dx: number): Spot {
+  const full: Spot = { x: dx * TRUCK.follow, y: TRUCK.lift, z: 0 };
+  const keep = w.keep ?? [];
+  if (!keep.length) return full;
+  const { l, r: right, b: bottom } = frameOf(w.view);
+  const m = (right - l) * KEEP_MARGIN;
+  const rest = keep.map((k) => k.rect(ZERO));
+  const holds = (truck: Spot): boolean =>
+    keep.every((k, i) => {
+      const r0 = rest[i];
+      const r = k.rect(truck);
+      if (!r0 || !r) return true;
+      return r.x >= Math.min(r0.x, l + m) - 0.5 && r.x + r.w <= Math.max(r0.x + r0.w, right - m) + 0.5 && r.y + r.h <= Math.max(r0.y + r0.h, bottom) + 0.5;
+    });
+  for (const k of TRUCK_STEPS) {
+    const truck: Spot = { x: full.x * k, y: full.y * k, z: 0 };
+    if (holds(truck)) return truck;
+  }
+  return ZERO;
+}
+
 /**
  * Plan the run of a figure to a target. Null when nothing can be planned (the figure or target is off the field):
  * the strike then plays as it does today.
@@ -87,7 +136,8 @@ export function planRun(w: RunWorld): RunPlan | null {
   // The classic stand-off too: at the fiend's own depth, just outside its painted span.
   const edge = (dir > 0 ? target.x0 : target.x1) - dir * (half + STAND_OFF.gap);
   if (dir * (edge - home.x) > STAND_OFF.step) sideways.push(dir * (edge - home.x));
-  const frameX = w.view.w * 0.03;
+  const fr = frameOf(w.view);
+  const frameX = Math.max((fr.r - fr.l) * 0.03, 20); // 3 % of the frame, never under 20 px: her strike is wider than her idle (a slice of a phone is 390 px)
   let best: RunPlan | null = null;
   for (const t of [0, 0.2, 0.4, 0.6, 0.8, 1]) {
     const z = home.z + (zFar - home.z) * t;
@@ -95,7 +145,7 @@ export function planRun(w: RunWorld): RunPlan | null {
       const spot: Spot = { x: home.x + dir * d, y: home.y, z };
       // Hard: never in the fiend's depth slab and across its painted span.
       if (Math.abs(z - target.z) < STAND_OFF.slab && spot.x + half > target.x0 && spot.x - half < target.x1) continue;
-      const truck: Spot = { x: (spot.x - home.x) * TRUCK.follow, y: TRUCK.lift, z: 0 };
+      const truck = fitTruck(w, spot.x - home.x);
       const r = w.rectOf(spot, truck);
       const rStage = w.rectOf(spot, ZERO);
       if (!r || !rStage) continue;
@@ -109,7 +159,7 @@ export function planRun(w: RunWorld): RunPlan | null {
       const tr = w.targetRect(truck);
       const inFrontOfFeet = !tr || r.y + r.h >= tr.y + tr.h - 4;
       const buried = tr && !inFrontOfFeet ? covers(r, tr) : 0;
-      const inFrame = r.x >= frameX && r.x + r.w <= w.view.w - frameX && r.y >= 0 && r.y + r.h <= w.view.h;
+      const inFrame = r.x >= fr.l + frameX && r.x + r.w <= fr.r - frameX && r.y >= fr.t && r.y + r.h <= fr.b;
       const score =
         Math.min(Math.max(travelPx, 0), w.view.w * 0.28) / (w.view.w * 0.28) +
         0.9 * Math.min(scale, 1) -
