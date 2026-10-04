@@ -304,3 +304,77 @@ Disclosures (not regressions, or timing noise):
   overlaps there are rows under the scroll fade.
 - Not run: TEXT SIZE 1.15 / 1.3 against origin/main beyond the cells above (the branch was compared with itself at 1.0 and
   nothing new appeared); chapters other than I to V.
+
+## Check (independent critic, 2026-10-04, Sonnet sub-agent; did not build this lane)
+
+Checked tip `58fae0f9` (merge base `8d1e1605`, release 37 integration). `origin/main` is `77f0d157`: the code of release 37.1 (bundle `index-DhiL5vEz.js`, the live site's name) plus records, so
+the lane was checked **on `origin/main`**: scratch merge `ui` = main + this lane (clean at object level, `git merge-tree`, never pushed; `D:/Tools/pyrefly-scratch/2026-10-04/checks-b/repo`)
+and `both` = `ui` + `origin/r38-lady-luck-grid`. Each was built for production (`vite build`, base `/pyrefly-reprise/`) and served by `serve.mjs` (ports 6943 and 6944); the **real live site** and the main
+build (6940) were driven the same way as baselines. Browser: headless Playwright, `PYREFLY_BROWSER=gpu`, one browser at a time, real keys (a touch-emulated tap on the Attack row on the phone), a fresh
+profile every run, TEXT SIZE through the app's own setter and read back (`data-text-size` 100, 115, 130); the debug API only started the chapter (`gotoChapter`, cutscenes skipped, seed 1). Never the Chrome
+tools or the browser pane.
+
+Walker (`walk.mjs`): every visible text node's effective px (font size times every ancestor transform), clipped leaf text, text-on-text overlaps over 25 % of the smaller box, off-window text; steps first
+menu (coach up, then dismissed), seven submenus, the Attack target step, every pause tab at 1024x768 and on the phone. Probes beside it: `dbox.mjs` (the dialogue box), `hand.mjs` (the hand against the
+Sensor, advisor, guide and intent cards, 22 samples in the first 3 s of the target step, so the Sensor card is caught open), the phone plate against the intent card and the hand, the OD labels' right
+edges, the coach box (slab plus badge) against the window, the pause objective against the footer. Chapters I `seymour-flux`, II `yunalesca`, III `braskas-final-aeon` (its first row is Talk, which plays a story
+line: the walk steps off it, and `dbox.mjs` takes it for the lines), IV `ffx2-bahamut`, V `ffx2-vegnagun-shuyin`; sizes 390x844 touch, 1024x768, 1440x900, 2000x1012; TEXT SIZE 1.0, 1.15, 1.3: the 60 cells,
+the live site run in the same 60 beside them. Frames: `docs/screenshots/r37-ui-floor/check-b/` (live on the left, the lane on the right).
+
+### Verdict per item
+
+| Item | Verdict | Measured |
+|---|---|---|
+| `npx tsc --noEmit` (TS 7.0.2) | PASS | exit 0 at this tip in its own worktree and on `both`; the sparse scratch trees `main`, `ll`, `ui` show the same 26 errors, all in `pause-living-portrait-*` tests whose `docs/concepts` imports the sparse checkout leaves out |
+| orphans | PASS | `tools/orphans.mjs`: 24 on main, on this tip (1,205 modules, 1,181 reachable: `QueuedChips.ts` and `handClear.ts` are imported) and on `both` |
+| layering | PASS | the diff in `src/engine/BattlePresenter.ts` (+19) and `HudPort.ts` (+9) is one optional port call (`syncQueued`) and a field; no DOM, no `three`; the port has its `CONTRACT-CHANGES` entry; no conflict marker is left anywhere |
+| files under 400 lines | PASS, disclosed | no file crosses it: `CoachLayer.ts` 393 to 398 (the earlier check's "crosses 400" was against an older base); every new file is under 400 (`hud-floor.css` 137, `QueuedChips.ts` 132, `handClear.ts` 82). Files that were already over grew: `BattlePresenter.ts` 753 to 772, `FFX2BattleHud.ts` 1,282 to 1,296, `FFXBattleHud.ts` 1,667 to 1,678, `TargetCursor.ts` 529 to 536 |
+| game case | PASS | all eleven non-merge commits and the merge name their case (FFX only / FFX-2 only / both), each item split by game |
+| no save key | PASS | no `SaveData`, `localStorage`, settings or schema in the diff; `critic-plan` on this lane's paths: FOCUSED review before deploy, DEEP after, not the save-data class |
+| changed tests | PASS | `cmd-od-selected-css`, `hud-floor-css`, `lv35-coach-badge-intent`, `presenter-queued-hud`, `r37-floor-repair`, `r37-floor-third`, `ui-ffx2-intent-party-tier`, `ui-ffx2-queued-chip`: 46 tests green on `ui` |
+| ONE full suite | PASS | on `both` (main + both lanes): 781 files passed, 5 skipped (786); 11,373 tests passed, 41 skipped, 1 todo; 0 failed; 828 s, `--testTimeout=60000 --maxWorkers=3`; none of the three load-timeout files timed out |
+| 1. the 14 px floor, 60 cells | PASS | **60 of 60 cells: minimum 14.0 px and 0 text nodes under 14**, over 828 steps and 44,522 text nodes (TEXT SIZE 1.0: 20 cells, 276 steps; 1.15: 20, 276; 1.3: 20, 276): first menu with the coach up and down, seven submenus, the Attack target step, every pause tab at 1024x768 (120 tab steps, 0 under 14) and on the phone. The live site in the same cells: minimum 7.7 px and 3,524 nodes under 14 at TEXT SIZE 1.0 (3,524 at 1.15, 3,436 at 1.3), 10 to 317 per cell |
+| 2. dialogue box role and text | PASS | 24 runs (Chapter III through Talk and Chapter V at its first menu, four sizes, three TEXT SIZES): `.dbox__role` 14.1 px and `.dbox__text` 14.1 px at the least on desktop (1024x768 at every TEXT SIZE; up to 30 px above), nothing off the window or clipped. The phone at TEXT SIZE 1.0 reads role 14.0 and text 15.0 (the floor; the builder wrote "14 / 15 at 100 %"), 16.1 and 17.25 at 1.15, 18.2 and 19.5 at 1.3. The live site: role 4.8 to 10.6 px on desktop (1024x768: 4.8 and 5.6), 14 on the phone |
+| 3. phone pause objective clear of the footer | PASS | 390x844, five chapters x three TEXT SIZES x eight tabs = 120 tab probes: the objective's ink overlaps neither ESC, RESUME nor "H painting only" in any; clearance 8.4 px at the least (Chapter V, Yuna's tab, a six-line objective), 11.4 to 38.9 elsewhere |
+| 4. targeting hand off the Sensor card | PASS | `hand.mjs`, Chapters I to III x 1024x768 / 1440x900 / 2000x1012 x TEXT SIZE 1.0 / 1.15 / 1.3 = 27 cells x 22 samples (594 frames): the hand is drawn in all; the Sensor card is **open** in all 22 frames of the 18 Chapter I and II cells (folded in Chapter III's nine, D-249); the guide is up throughout and the advisor card in most frames; **0 px2 between the hand and the Sensor, advisor, guide and intent cards in every frame**. The live site in the same cells: the hand is on the advisor card in Chapter I (222 to 1,320 px2 in seven of nine cells) and on the Sensor card in Chapter II at TEXT SIZE 1.15 and 1.3 (321, 1,320, 1,139, 1,320 and 939 px2 in five of six cells) |
+| 5. phone enemy plate off the intent card | PASS | 390x844, Chapter I target step, **12 runs** on the lane: plate against the intent card 0 px2, against the hand 0, the hand drawn, in all 36 frames; both resting states of the phone camera seen (plate at y 367 to 368 in 6 runs, 386 to 388 in 6). The live site, 6 runs: the plate is on the card in all six (258 to 2,757 px2) |
+| 6. FFX-2 first-run coach card inside the stage | PASS | Chapter IV, Ixion at Djose and Chapter V x 1024x768 / 1440x900 / 1600x900 / 2000x1012 (12 cells, fresh profile, 5 samples each) and 390x844 (3 cells): slab and badge inside the window in every sample, no cut at the top. The live site: out of the window in five of those cells (Chapter IV at 1440x900: the badge at y -20 with its right edge at 1,492; Ixion at 1440x900: right edge 1,443, over the help bar by 17,775 px2; and the phone in all three chapters: right edge 393 on 390 and on the intent card by 5,671 to 5,702 px2); the lane: right edge 390, 0 px2 |
+| 7. OD label inside a 1024 px window at every TEXT SIZE | **FAIL (Chapter III)** | Chapters I and II hold: right edge 1,019.6 to 1,020.6 at TEXT SIZE 1.0, 1.15 and 1.3 (live 1,010.6 to 1,018.4). **Chapter III does not: 1,028.9 (1.0), 1,030.1 (1.15), 1,031.3 (1.3) on a 1,024 px window, the "D" cut by the window edge** (zoomed frame); the live site reads 1,018.6, 1,023.3 and 1,028 there, so at TEXT SIZE 1.0 and 1.15 this is a regression, and at 1.3 it was already out by 4 px and is 3 px worse. At 1440x900 the lane does fix Chapter III at 1.3 (live 1,445.7, lane 1,426.5) |
+| PR-0104 queued-command chip | PASS | real keys, Chapter IV, Yuna White Magic, Shell: the chip "Shell" first drawn 28 ms (1600x900) and 33 ms (1024x768) after the last confirm, 14 px, inside the window, still up at the end of the 4.8 s watched; no chip on the live site |
+| PR-0325 selected Overdrive-styled row | PASS on desktop | the selected FFX-2 CHANGE row: accent fill `rgb(247,182,217)` in 38 of 38 desktop rows (live and main: the unselected `rgb(11,10,18)` in all 36 and 4). The phone's 8 selected CHANGE rows keep the dark translucent fill, on the lane and on live alike (the builder noted the phone was not measured); Kimahri's OVERDRIVE row was not reachable in the walk |
+| the merge with r38-lady-luck-grid | PASS | `both`, Chapters IV and V x four sizes x TEXT SIZE 1.0 and 1.3 (16 cells): minimum 14.0, 0 under 14, and nothing new in text overlaps, off-window or clipped text against `ui` |
+| regressions at the approved 1600x900 | PASS, disclosed | main against the lane, five chapters (menus, submenus, target) and five pause cells: 0 new overlaps, off-window or clipped text. The floor does reach this size (main has 56 to 110 nodes under 14 there): 951 node moves of 1.5 px or more (counted per step) in the five chapters, no text node appeared or vanished; labels authored at 4.9 to 5.6 grid px grow to 14.1 px ("OD" from 12.3, the ready word "Overdrive" 13.8 px wider, SCAN, the job tags) and the party rows sit 2.5 px further left under the aim cap |
+
+### Blockers
+
+1. **B1 (item 7, Chapter III): the OD label runs past the right edge of a 1024 px window at the Attack target step, at every TEXT SIZE; a regression against the live site at 1.0 and 1.15.** Cells that fail:
+   Chapter III x 1024x768 x TEXT SIZE 1.0, 1.15 and 1.3, target step (and the submenu steps); frame `check-b/od-label-ch3-1024x768-textsize115-*`. Measured cause (`diag-od.mjs`): every party row's
+   content is wider than the row (`scrollWidth` 209 to 221 against a `clientWidth` of 198 grid px) and the OD bar is right-aligned to that overflow, so how far the label hangs past the list depends on the row's digits:
+   at 1024x768, TEXT SIZE 1.0, row 1 is 13.0 px past the row's right edge in Chapter I (bar at 1,023.7, row at 1,010.7) and **21.3 px in Chapter III** (1,032 against 1,010.7; the row carries 6492/6492 and 140/140).
+   The cap `min(6 %, 21.1 px / text scale - 9.25 px)` assumes one fixed hang of 9.25 grid px (tuned on Chapters I and II), which is true for their shorter numbers and false here; other chapters with wide numbers are likely to
+   behave like Chapter III (not run). **This is the third time this class has failed** (first check Blocker 3 at 4:3; re-check Blocker 3 at TEXT SIZE 1.15 and 1.3; now Chapter III): under
+   `docs/plans/r37-ui-floor-method-check.md` section 5 ("a fourth blocker of the same kind: the lane stops and goes to Bailey with the cells that fail and the layout that would fix them; no fifth repair cycle")
+   it stops here. What would fix it: measure the room instead of assuming it, as `clearHandOfCards` already measures its cards: clamp the list's translate at run time by what the rightmost OD label leaves in the window, or size the
+   rows' right edge so the content cannot overflow, in stage grid px.
+
+### Disclosures (not regressions, or small)
+
+- New against the live site at 1024x768 only (the 4:3 window is the pressure; 1440x900 and 2000x1012 show nothing new, at every TEXT SIZE): FFX-2 Chapter IV: 6 text overlaps of 465 to 531 px2 (a guide line,
+  "The Mega Flare countdown is an action co...", over the party row's "Yuna"; "Also" against "hide moves"); Chapter V: 7 of 130 to 171 px2 (a White Magic row's cost and numbers touching the party rows, the builder's
+  disclosed 4:3 residue). Small, the ink mostly clear.
+- Phone pause options page (390x844, every chapter and TEXT SIZE): the walker reports 7 to 12 more text overlaps than live (settings rows against the "This encounter" block, 175 to 1,769 px2) and one tab label off the window.
+  Frame `pause-options-phone-ch5-390x844-live-vs-lane.jpg`: the fourth settings row ("Text speed") now sits under the scroll fade where live shows it, so the rows the walker counts are under the fade and not on each other; the page shows three
+  settings rows before it scrolls, four on live (the earlier re-check's disclosure); the tab strip scrolls sideways, which is the off-window label.
+- Coach: in Ixion at 1600x900 and 2000x1012 the card sits on the intent card for the first 1.5 s and then jumps to the top of the stage (over the help bar by about 10,500 px2 at 1600x900); the live site does the same
+  (9,800 px2). FFX Chapters I and II at 2000x1012 with TEXT SIZE 1.15 and 1.3 have the coach over the help bar by 8,800 to 14,600 px2 on the lane and on the live site alike.
+- The aim nudge is 11.85 grid px at TEXT SIZE 1.0 (the cap), not the approved 6 % (12.85): a 1 px change to an approved look, invisible at a glance.
+- The hand-against-cards numbers are the first 3 s of the target step; the Sensor card folds itself after that on its own clock (`SensorPanel.update`), which is outside what was asked.
+- Not run: Kimahri's OVERDRIVE row (PR-0325 in FFX), the injected-status hints (PR-0302 and PR-0303: no code in this lane), PR-0249's card against the girls' boxes (the earlier checks measured it; this pass
+  did not touch it), 4K and 2560x1080 windows, a phone device (the phone runs are touch-emulated 390x844 Chromium).
+
+### Verdict
+
+**FAIL: one blocker (B1), item 7 in Chapter III; the other six items and every process check pass.** The floor itself is met everywhere asked for (60 of 60 cells, 0 nodes under 14 against 10,484 on the live site in the same cells), the dialogue
+box, the phone pause footer, the hand against the cards (0 px2 in 594 frames, up to 1,320 on live), the phone plate (12 of 12 clear against 6 of 6 on the card) and the coach card (inside in every sample, out in five live cells) all verify, and
+the merge with the other lane adds nothing. Per the method check's stopping rule the lane goes to Bailey with B1 rather than into a fifth repair cycle. The five static servers I started (ports 6940 to 6944) serve both lanes'
+checks and are stopped by PID when the checks end; scratch is `D:/Tools/pyrefly-scratch/2026-10-04/checks-b/` (`walk.mjs`, `hand.mjs`, `dbox.mjs`, `analyze.mjs`, `regress.mjs`, `diag-od.mjs`, `out/`).
