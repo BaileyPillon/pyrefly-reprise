@@ -19,6 +19,8 @@
  * pixels: it is opaque, or its alpha is only 0 and 255 with no colour left under alpha 0 (`art-image-facts.mjs` says why). Every other
  * master ships as a PNG, recompressed at maximum effort with the colour under alpha 0 kept, each proved to decode to the master's RGBA
  * in all four channels. So the pixels are the same on every path and in every engine, not only in the Chromium that was measured.
+ * **No WebP under `MIN_WEBP_BYTES` (64) ships**, in any scope: WebKit cannot load a 28-byte WebP (the re-check's B3, two fully
+ * transparent layers), so a master whose WebP would be that small ships as its PNG (`tools/art-browser-load.mjs` loads every file).
  *
  * Every derived file is proved at encode time (decoded RGBA of the file equals the master's, by sha256) and again, from the
  * files themselves, by `verify` (`tools/art-verify.mjs`), which the deploy runs on the build it is about to publish.
@@ -56,6 +58,13 @@ export const ENCODER = Object.freeze({ id: 'webp-lossless-q100-e6-exact', option
 /** The PNG pass: maximum effort, adaptive filtering, no palette (so no colour is lost), and no metadata chunks (`stripAncillaryChunks`). */
 export const PNG_ENCODER = Object.freeze({ id: 'png-l9-adaptive-nopalette-nometa', options: Object.freeze({ compressionLevel: 9, adaptiveFiltering: true, palette: false }) });
 const WEBP_MAX_SIDE = 16383;
+/**
+ * No WebP smaller than this ships; the master ships as its PNG instead (r38-bytes B3). Playwright's WebKit 26.6 rejects every WebP of 28
+ * bytes (`<img>` error, `decode()` and `createImageBitmap` throw) and loads every one of 30 or more, which fits a minimum-size check in
+ * the decoder; Paine's two fully transparent catchlight layers were that size, so her living pause portrait stayed static there. 30 is
+ * the measured edge, 64 leaves room for decoders nobody measured and costs nothing: the next smallest WebP of the build is 584 bytes.
+ */
+export const MIN_WEBP_BYTES = 64;
 const ART_2X = /^art\/characters\/[^/]+\/[^/]+@2x\.png$/;
 const PARTIAL = [ART_2X, /^art\/backdrops\/.+\.png$/];
 
@@ -147,12 +156,13 @@ export async function refusalFor(png) {
 }
 
 /**
- * What a master becomes, from the sizes of its candidates: the WebP when it is smaller than the master; else the PNG
- * recompressed at maximum effort (`recompressedBytes`, null when it was not tried) when that is smaller still; else the master as it
- * is. A tie keeps the master, so no file ever ships larger than the one that is approved.
+ * What a master becomes, from the sizes of its candidates: the WebP when it is smaller than the master and not under the
+ * {@link MIN_WEBP_BYTES} floor (a decoder may refuse a file that small); else the PNG recompressed at maximum effort
+ * (`recompressedBytes`, null when it was not tried) when that is smaller than the master; else the master as it is. A tie keeps
+ * the master, so no file ever ships larger than the one that is approved.
  */
 export function chooseKind(masterBytes, webpBytes, recompressedBytes = null) {
-  if (webpBytes < masterBytes) return 'webp';
+  if (webpBytes < masterBytes && webpBytes >= MIN_WEBP_BYTES) return 'webp';
   return recompressedBytes !== null && recompressedBytes < masterBytes ? 'png' : 'copy';
 }
 
@@ -229,7 +239,8 @@ async function deriveOne(master, cacheDir) {
   const c = cachePaths(cacheDir, sha);
   const base = { rel: master.rel, masterBytes: png.length, masterSha256: sha };
   const hit = existsSync(c.meta) ? JSON.parse(readFileSync(c.meta, 'utf8')) : null;
-  if (hit && hit.masterBytes === png.length) {
+  // A WebP under the floor never ships: an entry cached before the floor existed (kind webp, a few bytes) is decided again.
+  if (hit && hit.masterBytes === png.length && !(hit.kind === 'webp' && hit.shippedBytes < MIN_WEBP_BYTES)) {
     const file = hit.kind === 'webp' ? c.webp : hit.kind === 'png' ? c.png : null;
     if (file === null || (existsSync(file) && statSync(file).size === hit.shippedBytes)) return { ...base, ...hit, file, cached: true };
   }

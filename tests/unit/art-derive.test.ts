@@ -10,6 +10,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import {
   DEFAULT_SCOPE,
+  MIN_WEBP_BYTES,
   alphaClassOf,
   alphaInfoOf,
   applyPlan,
@@ -166,7 +167,9 @@ describe('what a browser draws the same', () => {
 
   it('the safe phase derives the opaque and binary-alpha masters and the 2x masters, and keeps the translucent PNGs as they are', async () => {
     await standardArt();
-    put('art/portraits/cutout.png', await png(Buffer.from(Array.from({ length: 24 * 24 * 4 }, (_, i) => (i % 4 === 3 ? ((i >> 2) % 2 ? 255 : 0) : (i * 7) & 255))), 24, 24, 4)); // binary alpha
+    const cut = sprite(48, 48); // binary alpha (a 24x24 pattern made a WebP of 62 bytes, under the floor, so this one is larger and less regular)
+    for (let i = 3; i < cut.length; i += 4) cut[i] = cut[i]! >= 128 ? 255 : 0;
+    put('art/portraits/cutout.png', await png(cut, 48, 48, 4));
     const plan = await planArtDerivation({ publicDir: pub, cacheDir: cache, scope: 'safe', jobs: 2 });
     expect(Object.fromEntries(plan.entries.map((e) => [e.rel, `${e.kind}:${e.alpha}`]))).toEqual({
       'art/backdrops/sky.png': 'webp:opaque',
@@ -238,6 +241,17 @@ describe('the derivation proves what it writes', () => {
     expect(chooseKind(1000, 1100, 940)).toBe('png');
     expect(chooseKind(1000, 1100, 1000)).toBe('copy');
     expect(chooseKind(1000, 1100, 1010)).toBe('copy');
+  });
+
+  it('never chooses a WebP under the floor, whatever the master: WebKit cannot load a 28-byte one (the re-check of 2026-10-03, B3)', () => {
+    expect(MIN_WEBP_BYTES).toBe(64); // the measured edge is 30 bytes; 64 is the margin
+    expect(chooseKind(95, 28)).toBe('copy'); // Paine's catchlight layer: a 28-byte WebP of a 95-byte master
+    expect(chooseKind(95, 28, 120)).toBe('copy'); // and the recompressed PNG is not smaller either: the master's own bytes ship
+    expect(chooseKind(300, 28, 250)).toBe('png'); // a smaller recompressed PNG ships instead
+    expect(chooseKind(1000, 63)).toBe('copy');
+    expect(chooseKind(1000, 63, 900)).toBe('png');
+    expect(chooseKind(1000, MIN_WEBP_BYTES)).toBe('webp'); // the floor itself is allowed
+    expect(chooseKind(1000, 700)).toBe('webp');
   });
 
   it('never ships a file larger than its master, whatever the encoder makes of it', async () => {

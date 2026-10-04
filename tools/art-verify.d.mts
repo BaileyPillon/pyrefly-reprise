@@ -12,7 +12,10 @@ export interface ArtVerifyResult {
   ms: number;
 }
 
-/** `exact` (default true): a shipped WebP must be of a master that is opaque, or only alpha 0 and 255 with no colour under alpha 0. */
+/**
+ * `exact` (default true): a shipped WebP must be of a master that is opaque, or only alpha 0 and 255 with no colour under alpha 0.
+ * Whatever `exact` says, a shipped WebP under `MIN_WEBP_BYTES` (64) is a problem: WebKit cannot load one that small.
+ */
 export function verifyShippedArt(options: { distDir: string; publicDir: string; jobs?: number; exact?: boolean }): Promise<ArtVerifyResult>;
 export function artNamesIn(text: string): string[];
 

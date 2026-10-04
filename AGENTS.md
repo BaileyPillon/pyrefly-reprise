@@ -30,7 +30,7 @@ Jules, ...). `CLAUDE.md` only imports it. Keep it short; details live in `docs/`
 | What each live build still owes the critic, and which issues have stalled | `npm run critic:status` |
 | Which review a change needs, and why | `node tools/critic-plan.mjs` (`--paths a,b` to ask about files) |
 | Settle a review obligation with a report | `node tools/critic-clear.mjs --report <report.json>` (never delete a marker) |
-| Prove a build's art: every derived file equals its PNG master, a WebP ships only where every decoder draws it the same, nothing names a missing file | `node tools/art-derive.mjs verify --dir <build>` and `audit --dir <build>`; `node tools/art-play-audit.mjs --dir <build>` plays it in headless Chromium; `node tools/art-browser-identity.mjs --dir <build> --screen-exact` compares them as the browser decodes them |
+| Prove a build's art: every derived file equals its PNG master, a WebP ships only where every decoder draws it the same and never under 64 bytes (WebKit cannot load one), nothing names a missing file, every shipped image loads in WebKit and Chromium | `node tools/art-derive.mjs verify --dir <build>` and `audit --dir <build>`; `node tools/art-browser-load.mjs --dir <build>` loads every shipped image in WebKit and Chromium (the deploy runs it, about 20 s); `node tools/art-play-audit.mjs --dir <build>` plays it in headless Chromium; `node tools/art-browser-identity.mjs --dir <build> --screen-exact` compares them as the browser decodes them |
 | Release | `npm run deploy` (read "Release" first) |
 
 Everything else (ports, base path, the screenshot flags, the `window.__pyrefly`

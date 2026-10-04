@@ -29,7 +29,9 @@
  * Pipeline: preflight -> `vite build` into dist-release/ (which derives the
  * art's lossless WebP from the PNG masters, `tools/art-derive-lib.mjs`) -> prove
  * every derived file decodes to its master's pixels and that no page names an
- * art file the build left out (`tools/art-verify.mjs`) -> hash and
+ * art file the build left out (`tools/art-verify.mjs`) -> load every shipped
+ * image in WebKit and in Chromium, at its master's size
+ * (`tools/art-browser-load.mjs`) -> hash and
  * decode-check every shipped file into `artifact-manifest.json` -> plan the
  * review this change needs (tools/critic-plan.mjs) and apply the owner's
  * release gate: refuse when this commit has no validated focused or deep
@@ -71,6 +73,7 @@ import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import { formatLoadReport, verifyArtLoads } from './art-browser-load.mjs';
 import { auditArtReferences, formatAudit, verifyShippedArt } from './art-verify.mjs';
 import { MANIFEST_NAME, buildManifest, diffManifests, verifyLive } from './artifact-manifest.mjs';
 import { applyStoredReports } from './critic-clear.mjs';
@@ -540,6 +543,13 @@ async function main() {
   const artRefs = auditArtReferences(DIST);
   for (const line of formatAudit(artRefs).split(/\r?\n/)) log(line);
   if (!artRefs.ok) fail(`${artRefs.problems.length} reference(s) to an art file the build does not hold — see above`);
+  // The re-check's B3 (r38-bytes): every image the build ships loads and decodes, at its master's size, in WebKit and in Chromium, and no
+  // portrait plate would stay static. A pick of 20 to 30 files cannot find two bad ones in 900, and a file the browser cannot decode still
+  // answers 200 and logs nothing, so this loads the whole set (tools/art-browser-load.mjs, about 20 seconds). An engine that cannot start fails it.
+  log('art: every shipped image loads in WebKit and in Chromium (tools/art-browser-load.mjs)');
+  const artLoad = await verifyArtLoads({ distDir: DIST, publicDir: join(ROOT, 'public') });
+  for (const line of formatLoadReport(artLoad).split(/\r?\n/)) log(line);
+  if (!artLoad.ok) fail(`${artLoad.problems.length} problem(s): a shipped image does not load, or not at its master's size, in WebKit or Chromium; a portrait plate would stay static; or an engine could not start (node tools/art-browser-load.mjs --dir dist-release; a missing browser needs "npx playwright install webkit chromium", a download, so ask first)`);
 
   const indexHtml = readFileSync(indexPath, 'utf8');
   const bundleMatch = indexHtml.match(/assets\/index-([\w-]+)\.js/);

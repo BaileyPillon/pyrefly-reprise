@@ -5,12 +5,12 @@
  * identical in all four channels. The gate (`verifyShippedArt`) refuses a WebP of anything else. Tiny synthetic images in a temporary
  * folder (`helpers/artFixtures.ts`). Both games: shared build plumbing.
  */
-import { readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { applyPlan, pixelsOf, planArtDerivation, pngChunkTypes, proveSame } from '../../tools/art-derive-lib.mjs';
+import { MIN_WEBP_BYTES, applyPlan, cacheTag, pixelsOf, planArtDerivation, pngChunkTypes, proveSame, sha256, shippedList } from '../../tools/art-derive-lib.mjs';
 import { pngChunks, stripAncillaryChunks } from '../../tools/art-image-facts.mjs';
 import { verifyShippedArt } from '../../tools/art-verify.mjs';
 import { chunk, makeBuild, makeWorld, noise, png, putFile, removeWorld, sprite, withChunk } from './helpers/artFixtures.ts';
@@ -36,7 +36,8 @@ function cutout(w: number, h: number, clean: boolean): Buffer {
 
 /** Five masters, one of each kind that matters: opaque, clean binary alpha, binary alpha with hidden colour, partly transparent, a partly transparent 2x. */
 async function exactArt(): Promise<void> {
-  putFile(pub, 'art/portraits/opaque.png', await png(Buffer.from(Array.from({ length: 96 * 54 * 3 }, (_, i) => Math.floor(((i / 3) % 96) * 2.5))), 96, 54, 3));
+  // A gradient with a ripple: a bare one encodes to a WebP of exactly the 64-byte floor, where one byte from a library update would turn it into a PNG.
+  putFile(pub, 'art/portraits/opaque.png', await png(Buffer.from(Array.from({ length: 96 * 54 * 3 }, (_, i) => (Math.floor(((i / 3) % 96) * 2.5) + ((i * 2654435761) >>> 28)) & 255)), 96, 54, 3));
   putFile(pub, 'art/characters/hero/clean.png', await png(cutout(64, 96, true), 64, 96, 4));
   putFile(pub, 'art/characters/hero/hidden.png', await png(cutout(64, 96, false), 64, 96, 4));
   putFile(pub, 'art/characters/hero/soft.png', await png(sprite(64, 96), 64, 96, 4));
@@ -219,5 +220,64 @@ describe('the gate refuses a WebP that a decoder could draw differently', () => 
     expect(text).toMatch(/soft\.png: the recompressed PNG carries gAMA, which the master does not/);
     expect(text).toMatch(/hidden\.png: the shipped PNG decodes to different pixels than the master/);
     rmSync(soft);
+  });
+});
+
+describe('the size floor: no WebP under 64 bytes ships (the re-check of 2026-10-03, B3)', () => {
+  const LAYER = 'art/portrait-parts/paine/1x/eyeR-catch.png';
+  /** Fully transparent like Paine's catchlight layers, every pixel (0,0,0,0): a lossless WebP of 28 bytes, which Playwright's WebKit cannot load. */
+  const blankLayer = () => png(Buffer.alloc(58 * 66 * 4), 58, 66, 4);
+  const webpOf = (master: Buffer) => sharp(master).webp({ lossless: true, quality: 100, effort: 6, exact: true }).toBuffer();
+
+  it.each(['exact', 'all'] as const)('ships a master whose WebP would be under the floor as its PNG under %s, and moves no other master', async (scope) => {
+    await exactArt();
+    putFile(pub, LAYER, await blankLayer());
+    expect((await webpOf(readFileSync(join(pub, LAYER)))).length, 'the precondition: this picture encodes under the floor').toBeLessThan(MIN_WEBP_BYTES);
+    const plan = await planArtDerivation({ publicDir: pub, cacheDir: cache, scope, jobs: 2 });
+    const layer = plan.entries.find((e) => e.rel === LAYER)!;
+    // Under `exact` the layer is in scope (binary alpha, nothing hidden) and is still not a WebP; `all` does not read the pictures' facts at all.
+    expect(layer).toMatchObject(scope === 'exact' ? { alpha: 'binary', hidden: 0, shippedRel: LAYER } : { shippedRel: LAYER });
+    expect(layer.kind).not.toBe('webp');
+    expect(layer.shippedBytes).toBeLessThanOrEqual(layer.masterBytes);
+    expect(shippedList(plan)).not.toContain(LAYER);
+    for (const e of plan.entries.filter((x) => x.rel !== LAYER && ['clean', 'opaque'].some((n) => x.rel.includes(n)))) expect(e.kind, e.rel).toBe('webp');
+    const out = makeBuild(pub, root);
+    applyPlan(out, plan);
+    expect(existsSync(join(out, LAYER)), 'the PNG ships').toBe(true);
+    expect(existsSync(join(out, LAYER.replace(/\.png$/, '.webp'))), 'and no WebP of it').toBe(false);
+    const v = await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2, exact: scope === 'exact' });
+    expect(v.problems).toEqual([]);
+  });
+
+  it('decides again an entry that an older cache holds as the tiny WebP, and rewrites it', async () => {
+    putFile(pub, LAYER, await blankLayer());
+    const master = readFileSync(join(pub, LAYER));
+    const first = await planArtDerivation({ publicDir: pub, cacheDir: cache, scope: 'exact', jobs: 1 });
+    expect(first.entries[0]!.kind).not.toBe('webp');
+    // What the cache held before the floor existed: kind webp, the 28-byte file beside it.
+    const sha = sha256(master);
+    const dir = join(cache, cacheTag(), sha.slice(0, 2));
+    const tiny = await webpOf(master);
+    writeFileSync(join(dir, `${sha}.webp`), tiny);
+    writeFileSync(join(dir, `${sha}.json`), JSON.stringify({ masterBytes: master.length, kind: 'webp', shippedBytes: tiny.length, rgba: first.entries[0]!.rgba }));
+    const again = await planArtDerivation({ publicDir: pub, cacheDir: cache, scope: 'exact', jobs: 1 });
+    expect(again.entries[0]).toMatchObject({ shippedRel: LAYER, shippedBytes: first.entries[0]!.shippedBytes });
+    expect(again.entries[0]!.kind).not.toBe('webp');
+    expect(JSON.parse(readFileSync(join(dir, `${sha}.json`), 'utf8')).kind, 'the cache entry is rewritten').not.toBe('webp');
+  });
+
+  it('is a problem for the gate when a build ships the tiny WebP anyway, with exactness on or off', async () => {
+    await exactArt();
+    putFile(pub, LAYER, await blankLayer());
+    const plan = await planArtDerivation({ publicDir: pub, cacheDir: cache, scope: 'exact', jobs: 2 });
+    const out = makeBuild(pub, root);
+    applyPlan(out, plan);
+    const tiny = await webpOf(readFileSync(join(pub, LAYER)));
+    rmSync(join(out, LAYER));
+    writeFileSync(join(out, LAYER.replace(/\.png$/, '.webp')), tiny);
+    for (const exact of [true, false]) {
+      const text = (await verifyShippedArt({ distDir: out, publicDir: pub, jobs: 2, exact })).problems.join('\n');
+      expect(text, `exact ${exact}`).toMatch(new RegExp(`${LAYER.replace(/[./]/g, '\\$&')}: the shipped WebP is only ${tiny.length} bytes, under the 64-byte floor`));
+    }
   });
 });

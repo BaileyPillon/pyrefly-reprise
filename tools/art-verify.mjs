@@ -14,6 +14,10 @@
  * therefore ship only for a master that is opaque, or has only alpha 0 and 255 with nothing hidden under alpha 0
  * (`decoderIndependent`, `art-image-facts.mjs`), judged from the decoded master, not from the record.
  *
+ * **Size floor (always on, `exact: false` too).** A shipped WebP under `MIN_WEBP_BYTES` (64) is a problem: Playwright's WebKit cannot
+ * load a 28-byte WebP, so two fully transparent layers left Paine's living pause portrait static there (the re-check's B3). Whether a
+ * file LOADS is proved in the engines themselves by `tools/art-browser-load.mjs`.
+ *
  * **auditArtReferences: no reference to a file that is not there.** The art is reached by name from code, styles, pages and
  * data. After the derivation the PNG names of the derived files are no longer files, so the audit reads every shipped text
  * file and sorts each `art/<...>.png` or `art/<...>.webp` it names:
@@ -35,7 +39,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { extname, join, relative, sep } from 'node:path';
 
-import { DERIVED_REPORT, listMasterPngs, pixelsOf, pool, webpName } from './art-derive-lib.mjs';
+import { DERIVED_REPORT, MIN_WEBP_BYTES, listMasterPngs, pixelsOf, pool, webpName } from './art-derive-lib.mjs';
 import { COLOUR_CHUNKS, decoderIndependent, pngChunkTypes } from './art-image-facts.mjs';
 
 const walk = (root) => {
@@ -85,6 +89,10 @@ export async function verifyShippedArt({ distDir, publicDir, jobs = 4, exact = t
     if (hasWebp && exact && !decoderIndependent(master.alpha, master.hidden)) {
       const why = master.alpha === 'translucent' ? 'has partly transparent pixels' : `keeps colour under ${master.hidden} fully transparent texel(s)`;
       problems.push(`${m.rel}: shipped as a WebP, but the master ${why}, so a decoder that premultiplies draws the WebP and the PNG differently (a build with PYREFLY_ART_WEBP=exact ships it as a PNG)`);
+    }
+    // Not an exactness rule, so it holds with `exact: false` too: a WebP this small does not load in WebKit (the re-check's B3).
+    if (hasWebp && shippedBytes.length < MIN_WEBP_BYTES) {
+      problems.push(`${m.rel}: the shipped WebP is only ${shippedBytes.length} bytes, under the ${MIN_WEBP_BYTES}-byte floor: WebKit cannot load a WebP that small (a build made with the floor ships the PNG)`);
     }
     if (hasPng && !masterBytes.equals(shippedBytes)) {
       const had = new Set(pngChunkTypes(masterBytes));

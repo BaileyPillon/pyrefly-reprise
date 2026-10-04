@@ -782,8 +782,12 @@ public/art/
   content hash) and a bulk install can warm the cache first with
   `node tools/art-derive.mjs warm`. A painting cut out with soft edges, or with
   colour left under its transparent pixels, ships as a PNG on purpose: a WebP of
-  it would not be the same on every engine. A deliberately one-colour image must be
-  listed under both spellings in `critic/policy.json` `intentionalFlatImages`.
+  it would not be the same on every engine. A deliberately one-colour image (Paine's
+  fully transparent catchlight layers) must be listed under its `.png` name in
+  `critic/policy.json` `intentionalFlatImages`, and it always ships as that PNG: the
+  WebP of a one-colour picture is 28 to 30 bytes, under the 64-byte floor, and
+  Playwright's WebKit cannot load a WebP that small. `tools/art-browser-load.mjs`
+  loads every shipped image in WebKit and Chromium (the deploy runs it).
   Details: [handoff/r38-bytes.md](handoff/r38-bytes.md).
 
 ---

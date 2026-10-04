@@ -99,8 +99,9 @@ export async function makeStandardArt(pub: string): Promise<void> {
   const put = (rel: string, data: Buffer | string) => putFile(pub, rel, data);
   put('art/characters/hero/idle.png', await png(sprite(64, 96), 64, 96, 4));
   put('art/characters/hero/idle@2x.png', await png(sprite(128, 192), 128, 192, 4));
-  put('art/backdrops/sky.png', await png(Buffer.from(Array.from({ length: 96 * 54 * 3 }, (_, i) => Math.floor(((i / 3) % 96) * 2.5))), 96, 54, 3));
-  put('art/portraits/grey.png', await png(Buffer.from(Array.from({ length: 40 * 40 }, (_, i) => ((i % 40) * 5 + Math.floor(i / 40) * 3) & 255)), 40, 40, 1));
+  // Gradients with a ripple: a bare gradient encodes to a lossless WebP of 46 to 64 bytes, which sits on the 64-byte floor (`MIN_WEBP_BYTES`) and would ship as a PNG.
+  put('art/backdrops/sky.png', await png(Buffer.from(Array.from({ length: 96 * 54 * 3 }, (_, i) => (Math.floor(((i / 3) % 96) * 2.5) + ((i * 2654435761) >>> 28)) & 255)), 96, 54, 3));
+  put('art/portraits/grey.png', await png(Buffer.from(Array.from({ length: 40 * 40 }, (_, i) => ((i % 40) * 5 + Math.floor(i / 40) * 3 + ((i * 2654435761) >>> 27)) & 255)), 40, 40, 1));
   put('art/characters/hero/idle.raw.png', Buffer.from('raw render'));
   put('art/characters/hero/idle.1.png', Buffer.from('numbered take'));
   put('art/pause/x.png', await png(sprite(60, 34), 60, 34, 4));

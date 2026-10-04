@@ -187,7 +187,10 @@ decides by the pixels of each master (the default, `exact`): a master that is op
 and 255 with no colour left under alpha 0, ships as a lossless WebP (premultiplying such a picture is the
 identity, so a lossless WebP and its PNG are the same on every path in every engine); every other master, the 2x
 ones included, ships as a PNG recompressed at maximum effort, its decoded RGBA (colour under alpha 0 included)
-proved identical before it is cached, and its own bytes where that is not smaller. Why: a browser may premultiply a
+proved identical before it is cached, and its own bytes where that is not smaller. A master whose WebP would be under 64
+bytes (a fully transparent layer is 28) ships as its PNG too, in every scope: Playwright's WebKit cannot load a WebP
+that small (the re-check's B3: Paine's two catchlight layers, so her living pause portrait stayed static there).
+Why: a browser may premultiply a
 decoded image, and for a pixel of partial alpha that differs from decoder to decoder (the independent check of
 2026-10-03 found Yunalesca's 2x master up to 124 in 255 apart once the matte reads it back through a 2D canvas),
 and WebKit drops the colour under alpha 0 of a WebP. It is done by the `pyrefly-art-derive` plugin in
@@ -205,9 +208,12 @@ before; `partial`, `safe` and `all` are not decoder independent, so the deploy's
 they stay for measurement. The proofs, each of which the deploy or a reviewer can re-run on a built folder:
 `node tools/art-derive.mjs verify --dir <build>` (every shipped file decodes to its master's RGBA in all four
 channels, sha256, both sides decoded again from the files, and every shipped WebP is of a master that is opaque or
-clean binary alpha, judged from the master; the deploy runs it),
+clean binary alpha, judged from the master, and none is under the 64-byte floor; the deploy runs it),
 `node tools/art-derive.mjs audit --dir <build> [--baseline <earlier build>]` (no page,
 stylesheet or data file names an art file the build left out; the deploy runs it),
+`node tools/art-browser-load.mjs --dir <build> [--engines chromium,webkit]` (every image the build ships, the whole set
+and no sample, loads and decodes at its master's size in Playwright's WebKit and Chromium, and every portrait plate
+stays living; an engine that cannot start fails it; Playwright from node, about 20 s; the deploy runs it),
 `node tools/art-play-audit.mjs --dir <build>` (a headless Chromium plays the title,
 chapter select, every chapter's opening and the pause screen and fails on any
 missing file, console error or art warning) and `node tools/art-browser-identity.mjs

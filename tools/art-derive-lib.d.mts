@@ -34,6 +34,9 @@ export function pixelsOf(input: Uint8Array | string, options?: { facts?: boolean
 export function refusalFor(png: Uint8Array): Promise<string | null>;
 /** Throws unless `buf` decodes to the master's picture (`master0` is `pixelsOf` of the master): size and all four channels of every pixel, by sha256. */
 export function proveSame(rel: string, buf: Uint8Array, what: string, master0: { width: number; height: number; hash: string }): Promise<void>;
+/** No WebP smaller than this ships (64): WebKit cannot load a 28-byte WebP, so such a master ships as its PNG. */
+export const MIN_WEBP_BYTES: number;
+/** `webp` when the WebP is smaller than the master and at least `MIN_WEBP_BYTES`; else `png` when the recompressed PNG is smaller than the master; else `copy`. */
 export function chooseKind(masterBytes: number, webpBytes: number, recompressedBytes?: number | null): ArtKind;
 export function pool<T, R>(items: readonly T[], jobs: number, fn: (item: T, index: number) => Promise<R>): Promise<R[]>;
 export function cacheTag(): string;
