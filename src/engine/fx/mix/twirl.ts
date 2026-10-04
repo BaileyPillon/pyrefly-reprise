@@ -1,6 +1,7 @@
 import type { Object3D } from 'three';
 import { artManifest } from '../../ArtManifest.ts';
 import { artUrl, loadPainted, prewarmPainted, softSilhouette, tryLoadMeta, type PaintedTexture, type PoseMeta } from '../../PaintedArt.ts';
+import { giveBackColumn, hideColumn, showColumn } from './twirlColumn.ts';
 
 /**
  * The MAX mix (D-316), the FFX-2 spherechange's painted TWIRL KEYS slot (B's no-render part; FFX-2 only,
@@ -39,6 +40,13 @@ import { artUrl, loadPainted, prewarmPainted, softSilhouette, tryLoadMeta, type 
  *   party's own `twirl-start`, `-going` and `-mid` at battle start, the `-forming` and `-end` of the dressphere
  *   each outfit in the Change submenu would put on, when it opens), and a change whose keys are not ready within `LATE_MS` plays today's
  *   flourish instead of keys that land after the new outfit.
+ *
+ * Round 21 (PR-0334; FFX-2 only):
+ * - **no white slab while the keys load.** The flourish's CSS white column opens on the change's first frame, the keys on their
+ *   first frame after the loads, so on a network the column stood at full white over her for hundreds of ms. The column is hidden
+ *   from the first frame (`twirlColumn.ts`) as soon as a plan exists and given back, replayed, only if the keys do not come;
+ * - **the scales a change reads are fetched ahead** with the keys (the idle sidecars of the outfit she leaves and of each outfit
+ *   the Change submenu offers), so a first change does not wait a round trip for them and miss `LATE_MS`.
  */
 
 /** The five parts of a painted change, in playing order (D-322). */
@@ -129,9 +137,6 @@ const WARM_GAP_MS = 250;
 
 /** A change whose keys are not ready this soon plays today's flourish: keys after the new outfit read as a pop. */
 export const LATE_MS = 300;
-
-const STYLE_ID = 'mix-twirl-style';
-const STYLE = '.mix-twirl .ffx2sf__column{opacity:0 !important}';
 
 type Guts = Object3D & {
   slots: { mesh: Object3D; pose: string; fade: number }[];
@@ -234,7 +239,11 @@ export class TwirlSlot {
     const m = artManifest();
     const from = subjectOf(a.poseUrls['idle']);
     if (!m || !from || !this.on) return;
-    this.prewarm(twirlPlan(from, '', (id) => m.subjects[id]?.states ?? null, Object.keys(m.subjects)));
+    const plan = twirlPlan(from, '', (id) => m.subjects[id]?.states ?? null, Object.keys(m.subjects));
+    this.prewarm(plan);
+    // The scales a change reads (each figure's idle sidecar, a few hundred bytes): fetched now, so the first change does not wait a
+    // round trip for them and miss `LATE_MS` (PR-0334: a late change plays the white flourish the keys replace).
+    for (const f of new Set([from, ...plan.map((k) => k.figure)])) void this.idleMeta(f);
   }
 
   /** The Change submenu opened for `girl`: the keys of the dressphere each reachable node would put on. */
@@ -246,6 +255,7 @@ export class TwirlSlot {
     const keys: TwirlKey[] = [];
     for (const id of to) {
       const fig = `${girl.toLowerCase()}-${id}`;
+      void this.idleMeta(fig); // the new outfit's scale, ahead of the change (see `prewarmFrom`)
       for (const key of ['twirl-forming', 'twirl-end']) keys.push({ figure: fig, key });
     }
     this.prewarm(keys);
@@ -273,6 +283,25 @@ export class TwirlSlot {
     const plan = m ? twirlPlan(from, to, (id) => m.subjects[id]?.states ?? null, Object.keys(m.subjects)) : [];
     if (!plan.length) return; // today's flourish
     this.stats.keysFound++;
+    // PR-0334 (round 21): the flourish's white column (a CSS light over the girl, drawn by the HUD) opens on the change's first frame,
+    // but the keys only show once they and the new outfit have loaded: a few hundred ms on a network, and the column stood at full
+    // white over her the whole time, a hard-edged slab in 7 of 7 changes. The keys replace it, so it is hidden from the first frame
+    // (synchronously, before anything is awaited); if the keys do not come it is given back, replayed from its start.
+    hideColumn();
+    const guard = window.setTimeout(() => {
+      if (!this.play) showColumn(); // a load that never ends must not hide a later change's column
+    }, 3000);
+    let played = false;
+    try {
+      played = await this.load(a, plan, to, done);
+    } finally {
+      window.clearTimeout(guard);
+      if (!played) giveBackColumn(a.name);
+    }
+  }
+
+  /** Fetch the plan's keys (and the idles' scales), then queue the play. True when a play is queued; false for today's flourish. */
+  private async load(a: Guts, plan: readonly TwirlKey[], to: string, done: Promise<void>): Promise<boolean> {
     const figs = [...new Set([to, ...plan.map((k) => k.figure)])];
     const all = Promise.all([
       Promise.all(plan.map((k) => loadPainted(artUrl(`art/characters/${k.figure}/${k.key}.png`), () => softSilhouette('twirl')))),
@@ -286,7 +315,7 @@ export class TwirlSlot {
       this.stats.late++;
       void all.then(([ks]) => ks.forEach((k) => k.texture.dispose())).catch(() => undefined);
       if (this.on) this.flashes.get(a)?.call(a, 0xffffff, 420, 1);
-      return;
+      return false;
     }
     const [loaded, idles] = got;
     const idleOf = (f: string): PoseMeta | null => idles[figs.indexOf(f)] ?? null;
@@ -299,19 +328,13 @@ export class TwirlSlot {
       keys.push(r === 1 ? k : { ...k, meta: { ...k.meta, scale: (k.meta.scale ?? 1) * r } });
       parts.push(own.key);
     });
-    if (!keys.length) return;
+    if (!keys.length) return false;
     await done;
     const { at, end } = twirlTimes(keys.length, undefined, parts.map((p) => TWIRL_WEIGHT[p] ?? 2));
     this.stats.lastPlan = plan.map((k) => `${k.figure}/${k.key}`);
     this.play = { a, keys, at, end, t: 0 };
     this.stats.played++;
-    if (!document.getElementById(STYLE_ID)) {
-      const st = document.createElement('style');
-      st.id = STYLE_ID;
-      st.textContent = STYLE;
-      document.head.appendChild(st);
-    }
-    document.documentElement.classList.add('mix-twirl');
+    return true;
   }
 
   /** Every frame (FFX-2): the key on screen for the change in play. */
@@ -347,7 +370,7 @@ export class TwirlSlot {
   private finish(): void {
     const p = this.play;
     this.play = null;
-    if (typeof document !== 'undefined') document.documentElement.classList.remove('mix-twirl');
+    showColumn();
     if (!p) return;
     const slot = p.a.slots[p.a.active];
     const tex = slot ? (p.a.poses.get(slot.pose) ?? p.a.poses.get('idle')) : undefined;
