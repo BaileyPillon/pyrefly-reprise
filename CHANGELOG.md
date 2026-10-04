@@ -340,7 +340,8 @@ Address: https://baileypillon.github.io/pyrefly-reprise/ (main 49005f73)
   music. The board now has 16 chapters.
 - **FFX:** Chapters II and III use the sourced Zanarkand and inside-Sin aeon stats, so no aeon is
   weaker later in the story. Chapter II plays easier, and Chapter III's possessed-aeon gauntlet runs
-  about 37 percent longer.
+  about 37 percent longer (the whole chapter, measured on release 38: about 27 minutes of fighting,
+  seven links, a bench median of 137 turns).
 - **FFX-2:** Chapter IV's pause portrait is the approved painting of Yuna and Bahamut again, in
   place of a darker re-render.
 - **FFX-2:** a gamepad now drives the command menu.
@@ -1257,8 +1258,9 @@ Address: https://baileypillon.github.io/pyrefly-reprise/ (hand-built from the wo
 - **Both:** the first public build, pushed by hand to GitHub Pages as an early alpha with all five
   planned chapters in place.
 - **FFX:** Chapter I, Seymour Flux and Mortiorchis on Mt. Gagazet. Chapter II, Lady Yunalesca in three
-  forms in the Zanarkand Dome. Chapter III, Braska's Final Aeon, the possessed aeons and Yu Yevon at
-  Dream's End. Battles run on the Conditional Turn-Based rules.
+  forms in the Zanarkand Dome. Chapter III, at Dream's End, is Braska's Final Aeon, five possessed aeons
+  and then Yu Yevon, one link after another (measured on release 38: about 27 minutes of fighting,
+  seven links, a bench median of 137 turns). Battles run on the Conditional Turn-Based rules.
 - **FFX-2:** Chapter IV, Bahamut in Bevelle Underground. Chapter V, Vegnagun and then Shuyin on the
   Farplane. Battles run on Active Time Battle gauges, with dresspheres, spherechange and chains.
 - **Both:** painted 2.5D from the start: a painted backdrop for each of the five scenes, painted title

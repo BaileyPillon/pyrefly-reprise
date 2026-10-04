@@ -18,7 +18,8 @@ Address: https://baileypillon.github.io/pyrefly-reprise/ (main 49005f73)
 
 - **FFX:** Chapters II and III use the sourced Zanarkand and inside-Sin aeon stats, so no aeon is
   weaker later in the story. Chapter II plays easier, and Chapter III's possessed-aeon gauntlet runs
-  about 37 percent longer.
+  about 37 percent longer (the whole chapter, measured on release 38: about 27 minutes of fighting,
+  seven links, a bench median of 137 turns).
 
   ![Bahamut at 3,218 HP in Chapter II](../screenshots/aeon-hp-2-3/ch02-2-bahamut-hp.jpg)
   ![Ifrit at 2,585 HP in Chapter III](../screenshots/aeon-hp-2-3/ch03-2-ifrit-hp.jpg)
