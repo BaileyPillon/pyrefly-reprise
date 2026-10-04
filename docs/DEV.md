@@ -1,4 +1,4 @@
-# Developing Pyrefly Reprise
+# Developing Echoes of Spira (formerly Pyrefly Reprise)
 
 Node 24, npm 11. Windows/macOS/Linux; every command below is run from the repo
 root. Read [ARCHITECTURE.md](ARCHITECTURE.md) first — the layering rule there is
