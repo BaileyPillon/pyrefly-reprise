@@ -7,13 +7,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { setArtManifest, parseArtManifest } from '../../src/engine/ArtManifest.ts';
 
+const disposed = vi.hoisted(() => [] as string[]);
 vi.mock('../../src/engine/PaintedArt.ts', () => ({
   artUrl: (p: string) => p,
   softSilhouette: () => null,
   prewarmPainted: () => Promise.resolve(true),
   // each figure's idle: a different pixel scale, so a key painted for one and shown on the other is resized
   tryLoadMeta: (url: string) => Promise.resolve({ baselineY: /rikku-thief/.test(url) ? 700 : /rikku-gunner/.test(url) ? 650 : 800, scale: 1, width: 600, height: 800 }),
-  loadPainted: (url: string) => Promise.resolve({ texture: { dispose: () => undefined }, meta: { width: 600, height: 800, baselineY: 700, scale: 1 }, placeholder: false, url }),
+  loadPainted: (url: string) => Promise.resolve({ texture: { dispose: () => void disposed.push(url) }, meta: { width: 600, height: 800, baselineY: 700, scale: 1 }, placeholder: false, url }),
 }));
 
 import { HOLD_MAX_MS, TwirlSlot, playAt, twirlTimes } from '../../src/engine/fx/mix/twirl.ts';
@@ -53,6 +54,7 @@ const flush = async (n = 16): Promise<void> => {
 };
 
 beforeEach(() => {
+  disposed.length = 0;
   document.documentElement.classList.remove(HIDE_CLASS);
   setArtManifest(parseArtManifest(MANIFEST));
 });
@@ -151,6 +153,29 @@ describe('the twirl starts before the new outfit has loaded (PR-0314)', () => {
     run(t, 640 + HOLD_MAX_MS + 300);
     expect(t.busy()).toBe(false);
     t.dispose();
+  });
+
+  it("a change that begins while another's keys are still playing takes over, and the first one's textures are released", async () => {
+    const d = defer();
+    const { a } = girl(d);
+    const t = new TwirlSlot();
+    t.on = true;
+    t.eager = false;
+    t.watch(a as unknown as Parameters<TwirlSlot['watch']>[0]);
+    void a.loadPoses({ idle: '/art/characters/rikku-white-mage/idle.png' });
+    await flush();
+    run(t, 100); // the first change's keys are on screen
+    expect(t.stats.played).toBe(1);
+    disposed.length = 0;
+    void a.loadPoses({ idle: '/art/characters/rikku-white-mage/idle.png' });
+    await flush();
+    expect(t.stats.played).toBe(2);
+    expect(disposed.length).toBe(5); // the first play's five keys went when the second took over, not at the end of the battle
+    expect(t.busy()).toBe(true); // and the second one is the play in progress
+    run(t, 100);
+    disposed.length = 0;
+    t.dispose();
+    expect(disposed.length).toBe(5); // the second one's, once
   });
 
   it('with the outfit already in (a cached change) it plays as it always did: the keys, then the outfit', async () => {

@@ -74,12 +74,23 @@ function hideWash(ms: number): void {
   window.setTimeout(() => (el.style.visibility = ''), ms);
 }
 
+/** A change's keys in play. `pre`: sized for the figure standing now (the outfit she leaves); `post`: sized for the new outfit's idle, which the stage uses once it has loaded. */
+interface Play {
+  a: Guts;
+  pre: PaintedTexture[];
+  post: PaintedTexture[];
+  at: number[];
+  end: number;
+  t: number;
+  ready: boolean;
+  held: number;
+}
+
 /** Watches the FFX-2 girls' figures; plays a change's keys when the manifest lists any. */
 export class TwirlSlot {
   private readonly wrapped = new Set<Guts>();
   private readonly idles = new Map<string, Promise<PoseMeta | null>>();
-  /** `pre`: the keys sized for the figure standing now (the outfit she leaves); `post`: sized for the new outfit's idle, which the stage uses once it has loaded. */
-  private play: { a: Guts; pre: PaintedTexture[]; post: PaintedTexture[]; at: number[]; end: number; t: number; ready: boolean; held: number } | null = null;
+  private play: Play | null = null;
   on = false;
   /** Figures whose change began since the mix last asked, and how many changes are loading (PR-0314: the held shot starts at the first frame, not the load's end). */
   private readonly began: Object3D[] = [];
@@ -272,7 +283,8 @@ export class TwirlSlot {
     if (!pre.length) return false;
     const { at, end } = twirlTimes(pre.length, undefined, parts.map((p) => TWIRL_WEIGHT[p] ?? 2));
     this.stats.lastPlan = plan.map((k) => `${k.figure}/${k.key}`);
-    const play = { a, pre, post, at, end, t: 0, ready: false, held: 0 };
+    const play: Play = { a, pre, post, at, end, t: 0, ready: false, held: 0 };
+    if (this.play) this.release(this.play); // a change that begins while another's keys are still playing takes over: the first one's textures go
     this.play = play;
     this.stats.played++;
     void done.then(() => void (play.ready = true), () => void (play.ready = true)); // the outfit is in (or will never be): the last key may let go
@@ -317,7 +329,11 @@ export class TwirlSlot {
     const p = this.play;
     this.play = null;
     showColumn();
-    if (!p) return;
+    if (p) this.release(p);
+  }
+
+  /** Put her own painting back on the showing plane and free the keys. */
+  private release(p: Play): void {
     const slot = p.a.slots[p.a.active];
     const tex = slot ? (p.a.poses.get(slot.pose) ?? p.a.poses.get('idle')) : undefined;
     if (slot && tex) p.a.applyPose(p.a.active, slot.pose, tex);
