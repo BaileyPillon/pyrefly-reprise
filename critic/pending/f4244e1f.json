@@ -1,0 +1,125 @@
+{
+  "mainSha": "f4244e1f",
+  "bundle": "DhiL5vEz",
+  "deployedAt": "2026-10-03T23:39:29.936Z",
+  "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+  "artFiles": 1194,
+  "policyVersion": 2,
+  "artifactHash": "505e9ad6cc077616f8bf173e66912e428e47e9b2a5480554de32354919be9b24",
+  "review": "deep",
+  "reasons": [
+    "36 substantial checkpoints since the last deep review"
+  ],
+  "systems": [
+    "FFX-2 HUD",
+    "effects, lighting and sprites",
+    "title, chapter select, prep, pause and results screens"
+  ],
+  "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon",
+    "ffx2-bahamut",
+    "ffx2-vegnagun-shuyin",
+    "ffx2-leblanc",
+    "seymour-anima-macalania",
+    "evrae-airship",
+    "yojimbo-cavern",
+    "seymour-natus",
+    "ffx2-fallen-aeons",
+    "seymour-omnis",
+    "ffx2-trema",
+    "isaaru-via-purifico",
+    "ffx2-den-of-woe",
+    "ffx2-ixion-djose",
+    "sin-fins-core",
+    "sin-face"
+  ],
+  "checks": [
+    "CHK-002",
+    "CHK-003",
+    "CHK-006",
+    "CHK-007",
+    "CHK-008",
+    "CHK-009",
+    "CHK-010",
+    "CHK-013",
+    "CHK-015",
+    "CHK-016",
+    "CHK-017",
+    "CHK-020",
+    "CHK-021"
+  ],
+  "liveArtifact": {
+    "result": "PASS",
+    "checked": 46,
+    "at": "2026-10-03T23:39:29.936Z"
+  },
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "done",
+      "requires": "exact-artifact verification and real-input smoke on the live URL",
+      "result": "PASS",
+      "settledBy": "critic/reviews/f4244e1f-live.json",
+      "settledAt": "2026-10-04T00:13:56.893Z"
+    },
+    {
+      "kind": "focused",
+      "status": "done",
+      "requires": "acceptance of the changed area",
+      "result": "FAIL",
+      "settledBy": "critic/reviews/f4244e1f-focused.json",
+      "settledAt": "2026-10-03T23:33:00.960Z"
+    },
+    {
+      "kind": "deep",
+      "status": "pending",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971",
+        "5ddfde3",
+        "5348c2e3",
+        "d9decadb",
+        "76f587c3",
+        "bcbdb483",
+        "dc2669ac",
+        "e3b8c2a3",
+        "a999d133",
+        "1c22066e",
+        "5be4babe",
+        "fc7f1a20",
+        "e45ed3c1",
+        "1a680e41",
+        "b975397b",
+        "43dca986",
+        "ce05b02c",
+        "d8837334",
+        "a44297ca",
+        "ff3884fb",
+        "bc4e70ee",
+        "79adc4ff",
+        "d89541b6",
+        "be1e964a",
+        "6ea8528f",
+        "49005f73",
+        "1475ff6b",
+        "52a431d0",
+        "1a6fd3cc",
+        "f302f163",
+        "25faec70",
+        "ef3f6bbf",
+        "c69de96a",
+        "cd9dbbb0"
+      ]
+    }
+  ],
+  "ownerOverride": {
+    "words": "all your recommendations, godspeed",
+    "date": "2026-10-03T23:39:29.936Z",
+    "report": "critic/reviews/f4244e1f-focused.json",
+    "changedArea": null
+  }
+}
