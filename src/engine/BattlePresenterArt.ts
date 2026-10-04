@@ -20,7 +20,6 @@
 import type { AnyCombatant, FFX2Combatant, FFXCombatant } from '../battle/common/types.ts';
 import { ART_INDEX_CACHE, artStatesFor } from './ArtManifest.ts';
 import { artUrl } from './PaintedArt.ts';
-import { c3 } from './fx/mix/ch3Options.ts';
 
 /** Poses a party member is painted in. */
 export const PARTY_POSES = [
@@ -124,9 +123,7 @@ export function backdropUrl(sceneKey: string): string {
 /** `{ pose: url }` for a whole figure, ready for `PaintedActor.loadPoses`. */
 export function poseMapFor(artId: string, kind: 'party' | 'enemy'): Record<string, string> {
   const poses = kind === 'party' ? PARTY_POSES : ENEMY_POSES;
-  const map = Object.fromEntries(poses.map((p) => [p, characterUrl(artId, p)]));
-  if (c3.pose && artId === 'yuna' && kind === 'party') map['ready'] = characterUrl(artId, c3.pose); // SCRATCH ch3-options
-  return map;
+  return Object.fromEntries(poses.map((p) => [p, characterUrl(artId, p)]));
 }
 
 /**
@@ -263,7 +260,6 @@ export async function resolvePoseMap(
     const hit = chain.find((p) => found.get(p)) ?? pose;
     out[pose] = characterUrl(artId, hit);
   }
-  if (c3.pose && artId === 'yuna' && kind === 'party') out['ready'] = characterUrl(artId, c3.pose); // SCRATCH ch3-options
   // r37 slot (both games): this figure's own Overdrive / Special paintings, `od-<abilityId>`, exactly as the manifest lists them.
   if (set) for (const state of [...set].sort()) if (state.startsWith(OD_POSE_PREFIX)) out[state] = characterUrl(artId, state);
   // FF7 only (`ff7-` art ids): exactly the poses the manifest lists (B1's wind-up and follow-through, D1's

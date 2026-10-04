@@ -12,6 +12,7 @@ import { ejectDefringe, injectDefringe } from './patch.ts';
 import { Framing } from './framing.ts';
 import { aaKind, deviceCloses, deviceNote, fightFacts, liveGates, MIX_PARTS, partsOn, twirlKeysOn, type Device, type MixGame } from './gates.ts';
 import { crispLive } from '../../crisp/crispLive.ts';
+import { menuCalm } from './menuCalm.ts';
 import { cameraAt, centroid, figOf, type Actor, type Box } from './geometry.ts';
 import { followFlourish, HeldShots } from './heldShots.ts';
 import { battleCanvas, forgetMenuPanels, hudPanels, menuOpen, phoneBattle } from './hudPanels.ts';
@@ -266,6 +267,7 @@ class Mix {
     for (const m of this.defringed) ejectDefringe(m);
     this.defringed.clear();
     this.heldLens = null;
+    menuCalm.reset(); // Chapter III's calm camera never carries into the next fight
     fightFacts.colossus = null;
     document.documentElement.classList.remove('mix-held');
   }

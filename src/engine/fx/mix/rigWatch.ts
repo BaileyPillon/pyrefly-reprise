@@ -109,7 +109,7 @@ export class RigWatch {
   }
 
   /** Register the master as the resting rig and re-author the close rigs from it; `on` false puts today's back. */
-  install(m: Pose, on: boolean, idle: Pose = m): void {
+  install(m: Pose, on: boolean): void {
     if (!this.installedOnce) {
       for (const name of this.bc.rigNames) {
         const r = this.bc.getRig(name);
@@ -122,7 +122,7 @@ export class RigWatch {
     const base = this.base('idle');
     for (const [name, r] of this.orig) {
       if (on && name === 'idle') {
-        this.bc.addRig('idle', { position: idle.pos.clone(), lookAt: idle.look.clone(), fov: idle.fov, ...(r.sway !== undefined ? { sway: r.sway } : {}) });
+        this.bc.addRig('idle', { position: m.pos.clone(), lookAt: m.look.clone(), fov: m.fov, ...(r.sway !== undefined ? { sway: r.sway } : {}) });
       } else if (on && base && CLOSE.includes(name)) {
         const fov = r.fov ?? this.cam.fov;
         this.bc.addRig(name, { position: m.pos.clone().add(v(r.position).sub(base.pos)), lookAt: v(r.lookAt), fov: fov + (m.fov - base.fov), ...(r.sway !== undefined ? { sway: r.sway } : {}) });
@@ -130,7 +130,7 @@ export class RigWatch {
         this.bc.addRig(name, r);
       }
     }
-    this.wroteIdle = on ? idle.pos.clone() : null;
+    this.wroteIdle = on ? m.pos.clone() : null;
     const now = this.bc.getRig('idle');
     if (!was || !now || (v(was.position).distanceTo(v(now.position)) < 1e-4 && v(was.lookAt).distanceTo(v(now.lookAt)) < 1e-4 && (was.fov ?? 0) === (now.fov ?? 0))) return;
     this.installedAt = performance.now();

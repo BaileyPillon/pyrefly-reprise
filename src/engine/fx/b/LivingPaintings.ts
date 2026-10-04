@@ -15,6 +15,7 @@ import { ROOMS } from './ambient/index.ts';
 import { roomPlays } from './ambient/room.ts';
 import type { RoomSpec } from './ambient/room.ts';
 import { bindMaxMix, releaseMaxMix, updateMaxMix } from '../mix/MaxMix.ts'; // the MAX mix (D-316), every FFX and FFX-2 battle
+import { menuCalm } from '../mix/menuCalm.ts';
 
 /**
  * Option B "Living Paintings" (eye-candy options round, 2026-09-29): the paintings breathe in 3D.
@@ -286,6 +287,8 @@ class Living {
       reflection: !!this.reflection,
       figures: this.figures?.count ?? 0,
       drift: Math.round(this.rig.now * 100) / 100,
+      calm: Math.round(menuCalm.weight * 100) / 100, // Chapter III's calmer menus (`mix/menuCalm.ts`): 0 = the full drift, 1 = fully calm
+      driftX: this.rig.offset ? Math.round(this.rig.offset.x * 1000) / 1000 : null,
       focus: this.focus ? { plate: this.focus.focusPlate, amounts: this.focus.amounts.map((a) => Math.round(a * 100) / 100), ...this.focus.state } : null,
       strikes: this.strikes,
       time: Math.round(this.time * 100) / 100,
