@@ -569,3 +569,30 @@ folder, so it should be promoted to `tools/` together with the fix, for instance
 **What to do next.** (1) Apply B3's fix (a floor of 30 bytes under `exact`, the same floor in the gate, a test) and rebuild; then re-run, on the new build only, `art-derive verify` (expect 480 WebP and 417 PNG), the WebKit whole-population pass
 (expect 0 load failures and 0 differing pixels) and `webkit-plates` (expect 20 of 20), and the `art-play-audit` scenario of Chapter IV (Paine); everything else above is unaffected by it. (2) The driver may instead accept B3 as a disclosed major (WebKit only, silent, FFX-2 only, real Safari unconfirmed), in which case
 this re-check has no other finding: B1 and B2 are fixed and verified in two engines, and the gate holds. (3) Until one of the two, the build should not be deployed as a "pixels unchanged" release.
+
+
+## Method check before the third try (AGENTS.md rule 15, 2026-10-03)
+
+This lane has now failed two independent checks: the first (head 85c71746) found **B1** (a `@2x` master drawn differently through the game's matte) and **B2** (WebKit drops the colour under
+fully transparent pixels of a WebP); the re-check (head 342a19a3) found **B3** (two 28-byte WebP that WebKit cannot load). Rule 15 asks for a written method check before a third attempt. Written first, before any code of this repair.
+
+**Why the earlier browser checks missed them.** Each one tested a sample, or a class with an exemption, in the one engine at hand, and argued the rest by reasoning:
+
+- **B1.** The Chromium identity tool compared pixels, but it exempted all 24 `@2x` masters as "only ever textures", a claim about code paths that nobody measured, and it tolerated one step in 255 on a
+  screen pixel. The play audits count HTTP statuses and console errors, not drawn pixels. The one `@2x` file the matte reads back through a 2D canvas was inside the exempt class.
+- **B2 and B3.** WebKit was never in the builder's loop at first; after B2 it was run on a pick: the builder's 24 files and the re-check's own 30 (20 WebP and 10 PNG), of 765 derived files. A pick of 24 from the
+  482 shipped WebP holds one of two bad files about 1 time in 10 (1 - (458 x 457) / (482 x 481) = 0.097), so a pick cannot be relied on to find two files in 765. And B3 leaves no trace for the other gates: a file the browser cannot decode
+  still answers `200` with `image/webp` and prints no console error, so the HTTP-status and error-count gates in `art-play-audit` pass it. Only the re-check's whole-population WebKit pass (765 files, 2 min 36 s) found it,
+  and a pass over everything was cheap enough to have been the first one.
+
+**The change of method.** The property that is promised ("every art file the build ships loads and decodes, at its master's size, in every engine we claim") is now tested on the whole set, with no sample and no exemption,
+and the cause is removed as a class instead of by name:
+
+1. `tools/art-browser-load.mjs` loads **every** art file of a build (each derived WebP, each recompressed PNG, each PNG that ships as it is, 897 in all, plus every other image the build ships) in Playwright's WebKit and
+   Chromium: `<img>` load and a full `decode()`, dimensions equal to the master's (read from its header), and every plate of the living portraits judged the way the game's loader judges it (all parts load, or the plate stays static).
+   It has no `--sample` option; a file that does not load, or loads at another size, fails the run by name, and an engine that cannot start is a failure, not a skip (unknown is a HOLD).
+2. A size floor on the WebP choice (`chooseKind`) and on the gate (`verifyShippedArt`): **no WebP under 64 bytes ships**; such a master ships as its PNG. WebKit's measured edge is 30 bytes (28 fails, 30 loads); 64 leaves room for
+   decoders not measured here, and costs nothing today (the next smallest WebP of the build is 584 bytes, so exactly the same two files move).
+3. Tests pin the floor in both places and the gate's whole-set rule; the WebKit run on the repaired build, and a negative control (the two 28-byte files put back, which must fail in WebKit and pass in Chromium), are recorded below.
+
+**Not covered, and said so.** Real Safari and iOS (Playwright's WebKit is a Windows build); Firefox (its Playwright binary will not start on this machine). The gate lists the engines it ran.
