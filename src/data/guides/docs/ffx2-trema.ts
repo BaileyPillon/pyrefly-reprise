@@ -6,7 +6,8 @@
  * `../doc-types.ts`); `research/jegged-encounter-guides-ffx2.md` section 6 holds the pages and every
  * difference. Enemy, HP, Steal and Drop are the numbers this game uses: the chapter ships Oversoul
  * Paragon, whose HP is 210,000 (the page's table gives the normal form's 200,000), and one Dark Matter
- * as each fight's drop. The page's Judgment is the game's Judgement.
+ * as each fight's drop. The page's Judgment is the game's Judgement. The page's pointer to another page
+ * of its site, after the floors of the Weapons, is left out: this panel has no such page.
  *
  * The panel opens at the top for Paragon and on Trema's page once Trema stands.
  */
@@ -34,7 +35,7 @@ export const FFX2_TREMA_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'Ultima Weapons turn up on floors 47 to 49 and Omega Weapons on floors 75 to 79. The Oversoul Enemies page under Tips and Tricks has more.',
+      text: 'Ultima Weapons turn up on floors 47 to 49 and Omega Weapons on floors 75 to 79.',
     },
     {
       t: 'p',
@@ -67,7 +68,7 @@ export const FFX2_TREMA_DOC: GuideDoc = {
       t: 'ul',
       items: [
         'An ordinary attack with no status effects',
-        'Demi, if you use healing abilities',
+        'Demi, in reply to any healing ability you use',
         '“Judgement”: magic damage to one party member',
         '“Genesis” and “Big Bang” if 20 seconds pass without an attack from you (same effects as above)',
       ],

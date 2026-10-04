@@ -114,7 +114,7 @@ export const FFX2_DEN_OF_WOE_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'He hits hard, and Lightfall is difficult to survive unless you are ready. How do you prepare?',
+      text: 'He hits hard, and Lightfall is tough to survive without some preparation. Here is how to get ready.',
     },
     {
       t: 'p',

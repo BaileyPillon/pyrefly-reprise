@@ -6,7 +6,8 @@
  * order (layout: `../doc-types.ts`); `research/jegged-encounter-guides-ffx2.md` section 3 holds the
  * pages and every difference. Enemy, HP, Steal and Drop are the numbers this game uses, and so is
  * Nemo Ante Mortem Beatus's damage (the page's observed 700 to 1,500 is a buffed spread; the game's
- * own figure is printed). The page's claim that Protect halves Noli Me Tangere is left out: in this
+ * own figure is printed, and the Head's "keep everyone above" line uses its top, 1,685, in place of
+ * the page's 1,500). The page's claim that Protect halves Noli Me Tangere is left out: in this
  * game Noli is a fixed hit that no buff touches (`research/ffx2-vegnagun-shuyin.md` section 3.1).
  * The Nodes' row is this game's too: 300,000 HP and the common Megalixir (the page's rare Hero Drink slot
  * has no rate in our data and is not awarded, `src/data/ffx2/enemies/vegnagun-leg.ts`).
@@ -97,7 +98,7 @@ export const FFX2_VEGNAGUN_SHUYIN_DOC: GuideDoc = {
     { t: 'lead', text: 'Green:' },
     { t: 'ul', items: ['Cura, Regen, Shell or Protect on the Leg'] },
     { t: 'lead', text: 'Yellow:' },
-    { t: 'ul', items: ['Firaga, Blizzaga, Thundaga or Waterga on all targets', 'Flare on one target'] },
+    { t: 'ul', items: ['Firaga, Blizzaga, Thundaga or Waterga on all targets', 'Flare, aimed at a single target'] },
     {
       t: 'p',
       text: 'Hitting the Nodes will not switch them off; it only changes their colour, and none is a good one for you: they either damage the party or heal the Leg. Put your effort into taking the Leg down fast.',
@@ -208,18 +209,18 @@ export const FFX2_VEGNAGUN_SHUYIN_DOC: GuideDoc = {
     {
       t: 'ul',
       items: [
-        '“Pallida Mors”: about 1,200 magic damage to one target, used only while the Head cannot be targeted',
+        '“Pallida Mors”: magic damage of roughly 1,200 on one target, used only while the Head is untargetable',
         '“Nemo Ante Mortem Beatus”: roughly 1,490 to 1,685 magic damage',
         '“Mors Certa”: 250 magic damage plus Silence, Darkness and Poison',
         '“Odi Et Amo”: 16 hits spread across the party, about 1,000 in all, and it can strip buffs such as Shell, Protect, Reflect, Regen, Haste and stat boosts',
-        '“Acta Est Fabula”: fully revives both Redoubts',
+        '“Acta Est Fabula”: revives both Redoubts at full HP',
       ],
     },
     { t: 'lead', text: 'Right Redoubt:' },
     {
       t: 'ul',
       items: [
-        '“Lacrimosa”: about 100 physical damage to one target',
+        '“Lacrimosa”: a physical hit of about 100 on one target',
         '“Blind”: inflicts Darkness',
         '“Break”: inflicts Petrification',
         '“Flare”: magic damage to one target',
@@ -231,8 +232,8 @@ export const FFX2_VEGNAGUN_SHUYIN_DOC: GuideDoc = {
       items: [
         '“Lacrimosa”: drains one target’s MP',
         '“Slow”: inflicts Slow',
-        '“Dispel”: removes buffs from the target',
-        '“Demi”: takes 25% of each target’s current HP',
+        '“Dispel”: strips the target of its buffs',
+        '“Demi”: hits each target for 25% of its current HP',
       ],
     },
     {
@@ -249,7 +250,7 @@ export const FFX2_VEGNAGUN_SHUYIN_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'The Head/Shuyin uses Nemo Ante Mortem Beatus, its strongest attack, four times, at 80%, 60%, 40% and 20% HP. Be ready to recover by keeping everyone above 1,500 HP, and keep a White Mage or Alchemist on hand.',
+      text: 'The Head/Shuyin uses Nemo Ante Mortem Beatus, its strongest attack, four times, at 80%, 60%, 40% and 20% HP. Each cast hits for roughly 1,490 to 1,685, so be ready to recover by keeping everyone above 1,685 HP, and keep a White Mage or Alchemist on hand.',
     },
     {
       t: 'loot',

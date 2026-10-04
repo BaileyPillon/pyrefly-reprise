@@ -58,7 +58,7 @@ export const FFX2_FALLEN_AEONS_DOC: GuideDoc = {
       t: 'ul',
       items: [
         '“Passado”: 15 hits, each 6.25% of current HP (it cannot kill)',
-        'Firaga, Blizzaga, Thundaga, Waterga',
+        'One of Firaga, Blizzaga, Thundaga or Waterga',
       ],
     },
     { t: 'lead', text: 'Cindy:' },

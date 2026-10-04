@@ -207,8 +207,12 @@ describe('every HP a document prints is one the game uses (AGENTS.md rule 6)', (
     // Natus: the game awards no drop (the item has no record yet); the page lists a Lv. 2 Key Sphere.
     const natus = doc('seymour-natus').blocks.find((b) => b.t === 'list' && b.label === 'Drops');
     expect(natus && natus.t === 'list' ? natus.items : []).toEqual(['None']);
-    // Nemo Ante Mortem Beatus: the game's own range, not the page's observed 700 to 1,500.
+    // Nemo Ante Mortem Beatus: the game's own range, not the page's observed 700 to 1,500, and the Head's
+    // "keep everyone above" line takes the top of that range (the page's 1,500 would leave a character at
+    // 1,501 HP short of the 1,685 top).
     expect(text('ffx2-vegnagun-shuyin')).toContain('roughly 1,490 to 1,685');
+    expect(text('ffx2-vegnagun-shuyin')).toContain('above 1,685 HP');
+    expect(text('ffx2-vegnagun-shuyin')).not.toContain('1,500');
   });
 
   it('leaves out the claims our research says the game contradicts', () => {
