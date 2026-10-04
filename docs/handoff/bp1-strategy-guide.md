@@ -14,14 +14,15 @@ Nothing else was touched. `public/art/**`, `src/ui/common/DamageNumbers.ts`,
 `src/scenes/*`, `ffx-hud.css`, `src/ui/ffx2/*.css` and
 `src/engine/tactics/braskas-final-aeon.ts` were read only — the last of those
 was run, read-only, every time the panel drew a NEXT line. **Since 2026-10-03 (r38) the
-panel runs no tactic at all**: NEXT comes from the guide's own line, see
-[r38-guide-jegged](r38-guide-jegged.md) and the notes marked *Superseded* below.
+panel runs no tactic and computes nothing**: each chapter shows the written encounter-guide page for
+its boss, as a document. See [r38-guide-jegged](r38-guide-jegged.md) and the notes marked *Superseded*
+below; the NEXT, WATCH and RULES sections this note describes no longer exist.
 
 ---
 
 ## Source rule (2026-10-03)
 
-Bailey, 2026-10-03: "from now on the guide follows the ffx/ffx-2 encounter guides from jegged" (D-350). NEXT, WATCH and RULES follow Jegged's FFX guide for chapters 1 to 3 and its FFX-2 guide for chapters 4 and 5, in our own words. The same afternoon Bailey added two corrections, and D-350 records all three: "The guide and next move advisor are completely separate entities" (~14:30 EDT) and "Do not say adapted from Jegged or cite worded that just sounds stupid" (~14:40 EDT). They come to three rules, which hold for both games:
+Bailey, 2026-10-03: "from now on the guide follows the ffx/ffx-2 encounter guides from jegged" (D-350). NEXT, WATCH and RULES follow Jegged's FFX guide for chapters 1 to 3 and its FFX-2 guide for chapters 4 and 5, in our own words. The same afternoon Bailey added two corrections, and D-350 records all three: "The guide and next move advisor are completely separate entities" (~14:30 EDT) and "Do not say adapted from Jegged or cite worded that just sounds stupid" (~14:40 EDT). They come to three rules, which hold for both games. *(Superseded in part, 2026-10-03 ~18:35 EDT, by Bailey's "Just match the original document please in terms of formatting and everything else": the panel is now that guide's page for each boss, with its layout and its content, and has no NEXT, WATCH or RULES. Rules 2 and 3 hold as written; rule 1 holds as "the panel and the move advisor read nothing of each other".)*
 
 1. **The guide and the move advisor are separate.** The guide's NEXT has its own Jegged line; it is not the move advisor's pick. The move advisor, `intendedStrategy`, the tactic files and the benches are not touched.
 2. **The player never sees the source.** Guide text never names Jegged, never says "adapted", and never shows citation wording.
@@ -32,17 +33,17 @@ Bailey, 2026-10-03: "from now on the guide follows the ffx/ffx-2 encounter guide
 A side slab on the **left** edge of the battle HUD, inside the same 640x360
 letterboxed stage as the rest of the chrome, with three parts:
 
-* **NEXT** — *(Superseded 2026-10-03: the card now reads the guide's own line, with a plain
-  one-sentence reason and no citation; the paragraph below is the original design.)* the command
+* **NEXT** — *(Superseded 2026-10-03: the panel has no NEXT; it prints the encounter guide's page for the
+  boss, see r38-guide-jegged. The paragraph below is the original design.)* the command
   the chapter's shipped tactic would pick for the
   character who is deciding right now, the target it would aim at, and one
   cited sentence on why: *"Holy Water → Auron — Auron is a Zombie and the
   Mortiorchis answers with Full-Life; cured first it whiffs outright, left alone
   it is 100% of max HP plus a Death. [ffx-seymour-flux §6 row 4, §3.3]"*
-* **WATCH** — whatever the boss is winding up while a `charge` event is live
+* **WATCH** — *(Superseded 2026-10-03: gone with NEXT; the page's own warnings are ordinary paragraphs.)* whatever the boss is winding up while a `charge` event is live
   (*"Total Annihilation — in 2 turns — Get Shell up, or Defend"*), plus the
   chapter's phase/form note for the board that is on screen.
-* **RULES** — the three-to-five standing truths of the encounter. Each carries the
+* **RULES** — *(Superseded 2026-10-03: gone; the page's advice is shown in its own order.)* the three-to-five standing truths of the encounter. Each carries the
   `research/*.md` section it comes from **in the data**; the panel no longer prints it (r38).
 
 `G`, the pad's spare face button, or the panel's own chip hides all of it and
@@ -61,16 +62,17 @@ Three layers, and the boundaries are the whole design:
 | Layer | File(s) | Owns |
 |---|---|---|
 | Drawing | `src/ui/common/StrategyGuide.ts` + `.css` | DOM, layout, input, the preference |
-| Reasoning | `src/engine/tactics/guide-line.ts` (r38; `guide.ts` still builds the written content and feeds the move advisor) | *which* command (the line), *which* telegraph, *which* phase |
-| Words | `src/data/guides/*.ts`, `src/data/guides/lines/*.ts` | every sentence the player reads; provenance stays in the data |
+| Reasoning | none since r38 (`guide.ts` still builds the written content and feeds the move advisor; the panel reads none of it) | *(Superseded: the panel computes no command, telegraph or phase)* |
+| Words | `src/data/guides/docs/*.ts` (the pages the panel shows); `src/data/guides/*.ts` stay as the advisor's written content | every sentence the player reads; the page each came from is named in its file header |
 
 ### 2.1 NEXT is not a second strategy *(Superseded 2026-10-03: it is, on purpose)*
 
-Bailey, 2026-10-03: "The guide and next move advisor are completely separate entities." The panel's NEXT now
-reads a line of its own (`src/data/guides/lines/<chapter>.ts`, evaluated by `src/engine/tactics/guide-line.ts`),
-which never runs a tactic, the advisor or `intendedStrategy`. `tests/unit/guide-line-separation.test.ts` is the
-new assertion, and `docs/handoff/r38-guide-jegged.md` has the before-and-after proof. The reasoning below is the
-original design and is kept for history.
+Bailey, 2026-10-03: "The guide and next move advisor are completely separate entities." The panel has no NEXT at
+all now: it shows the encounter guide's written page for the boss (`src/data/guides/docs/<chapter>.ts`), reads
+no tactic, no advisor and no `intendedStrategy`, and computes no command. (The first r38 pass gave NEXT a line of
+its own, `src/data/guides/lines/`, read by `src/engine/tactics/guide-line.ts`; that code is parked outside the repo.)
+`tests/unit/guide-doc-separation.test.ts` is the assertion, and `docs/handoff/r38-guide-jegged.md` has the
+before-and-after proof. The reasoning below is the original design and is kept for history.
 
 The panel makes one strong claim: *this is the command the chapter was designed
 to be beaten with.* That is only honest if the line it prints is the shipped

@@ -1,294 +1,346 @@
-# r38: the strategy guide follows Jegged, and is its own thing
+# r38: the strategy guide is the encounter guide's own page, as a document, and is its own thing
 
-**Branch** `r38-guide-jegged` (the four commits on top of `origin/main` 4b7adea6, then a merge of the newer origin/main). **Game case: both** (AGENTS.md rule 14), decided per chapter in section 4: the FFX
-chapters (I, II, III, VII, VIII, IX, X, XII, XIV, XVII, XVIII) follow Jegged's FFX guide, the FFX-2 chapters (IV, V, VI, XI, XIII,
-XV, XVI) follow its FFX-2 guide. Nothing is merged to `main` and nothing is deployed. Decision record: D-350, with the two
-corrections of the same afternoon, in `docs/target/decisions.json`. The sources are paraphrased and pointed at only in
-`research/jegged-encounter-guides-ffx-a.md`, `-ffx-b.md` and `-ffx2.md`.
+**Branch** `r38-guide-jegged`. **Game case: both** (AGENTS.md rule 14), decided per chapter in section 2: the FFX chapters (I, II,
+III, VII, VIII, IX, X, XII, XIV, XVII, XVIII) follow Jegged's FFX guide, the FFX-2 chapters (IV, V, VI, XI, XIII, XV, XVI) follow its
+FFX-2 guide; the panel, its paging and the phone sheet are shared plumbing and are proved on both games. Nothing is merged to
+`main` and nothing is deployed. Decision record: D-350 (the first instruction and its two corrections) in `docs/target/decisions.json`;
+the fourth instruction below came after it and is not yet recorded there. The pages are named only in the file headers under
+`src/data/guides/docs/`, in `research/jegged-encounter-guides-ffx-a.md`, `-ffx-b.md`, `-ffx2.md` and in this note; the player sees
+no source anywhere.
 
-Bailey, 2026-10-03, in order: "from now on the guide follows the ffx/ffx-2 encounter guides from jegged" (~13:50 EDT);
-"The guide and next move advisor are completely separate entities" (~14:30); "Do not say adapted from Jegged or cite worded
-that just sounds stupid" (~14:40).
+Bailey, 2026-10-03, in order: "from now on the guide follows the ffx/ffx-2 encounter guides from jegged" (~13:50 EDT); "The guide
+and next move advisor are completely separate entities" (~14:30); "Do not say adapted from Jegged or cite worded that just sounds
+stupid" (~14:40); "Just match the original document please in terms of formatting and everything else" (~18:35).
+
+## 0. Read this first
+
+This is the **second pass** on the branch. The first pass (a plan, a computed NEXT card, win rates) is superseded by the fourth
+instruction: the panel is now the encounter guide's page for the boss, with that page's layout and that page's content, in our own
+words, and **nothing in it is computed**: no NEXT line, no WATCH logic, no fit steps, no rules of ours. The first pass's code
+(`src/data/guides/lines/`, `line-types.ts`, `src/engine/tactics/guide-line*.ts`, their tests) is removed from the tree and parked
+outside the repo (`F:/pyrefly-parked/2026-10-03/guide-doc/`, with that pass's handoff as `docs/handoff/r38-guide-jegged.first-pass.md`);
+it is also in the branch's history before the commit that carries this note. Its win-rate measurement and its "for Bailey" list no
+longer apply and are not repeated here.
 
 ## 1. What changed, in one screen
 
-| | Before | Now |
+| | Before (origin/main, then the first pass) | Now |
 |---|---|---|
-| RULES, WATCH, phase notes | the project's own wording, each rule printed with a research citation | rewritten in the plan's order as a plain guide: no source, no citation, no "adapted" anywhere the player can see |
-| NEXT | the chapter's shipped tactic (`intendedStrategy`) run read-only, with one cited sentence | the guide's **own line** for the chapter (`src/data/guides/lines/<chapter>.ts`), read by `src/engine/tactics/guide-line.ts`; one plain sentence of reason |
-| The move advisor | borrowed the guide's sentences and its pick | untouched: it still reads `buildGuideView().next` and `recommendedCommand` exactly as before |
-| Panel fit | three-rung ladder, citations under every line | two rungs (rule paragraphs to one-liners, then the WATCH sentences), then MORE pages; the upright phone sheet scrolls everything instead of being fitted |
-| What the panel prints when nothing fits | the command with no reason | "Waiting for your turn." between turns; "Nothing in the plan for this turn." when a turn is open and no step can be played |
+| What the panel prints | RULES, WATCH and a NEXT card computed from the board (a tactic, then a line of our own) | the boss's page: header and tag, the stat lines that page prints, then its advice in its order: paragraphs, bullet and numbered lists, lead-ins, sub-headings, the boxed hint |
+| Data | `src/data/guides/<chapter>.ts` rules; first pass: `lines/` | `src/data/guides/docs/<chapter>.ts`: 18 plain-data documents (`doc-types.ts`); the 18 chapter files and `types.ts` are **byte-identical to origin/main** again (the advisor still reads them) |
+| Reasoning | `guide.ts`, later `guide-line.ts` | none; the panel reads no tactic, no advisor, no `intendedStrategy` |
+| Fit | a ladder of shorter wordings, citations under each line | whole blocks per page, and a paragraph may carry on to the next page **between two lines** (never through one, never one line alone); `MORE` turns the page and wraps |
+| Phone (390x844) | folded behind the GUIDE chip | unchanged chip; the sheet shows the whole document and opens scrolled to the boss's header |
+| HUDs | `showDecision`/`clearDecision` and a `held` option fed the panel | the three calls and the option are gone (the move advisor's own are untouched) |
 
-## 2. The separation, and the proof
+## 2. Document layout, chapter by chapter
 
-The panel (`src/ui/common/StrategyGuide.ts`) asks `buildGuideRail` (`guide-line.ts`) for what it shows. WATCH, the phase note and
-RULES still come from the written content (`guide.ts#buildGuideView(state, null, clock)`, which runs no tactic when no decision
-is passed); NEXT comes from the line. The line is plain data (`line-types.ts`): a list of steps, each a menu row to press, a
-condition, an aim and one sentence of reason. The evaluator shows the **first step that can be played right now** (it applies, the
-deciding character is offered a matching enabled row, someone legal can be aimed at), so "where the plan's next step cannot be
-played, show the nearest step that can" is simply the next one down. FFX-2's in-flight filter (a move another girl already has
-charging or held is skipped) works the same way. When no step plays, the evaluator's own last resort steps in: a swing at the
-boss, else an Overdrive or a spell, else a Change for an Itchy girl, else a quiet turn. Steps marked `support` are the ones no
-encounter guide spells out (the revive, the heal, the idle turn, a research-backed addition); everything else is the plan's own.
+**How a page maps.** Block kinds (`doc-types.ts`): `head` (the boss's name in the serif face plus its tag, "Boss Battle" or "Final
+Boss Battle"), `field` (a labelled stat line: "In Game Description:", "HP:"), `list` (a labelled Steal or Drops list), `loot` (FFX-2's
+Enemy / HP / Steal / Drop table, one box per enemy), `p`, `ul`, `ol`, `lead` (a bold lead-in line such as "The strategy:"), `h3` (a
+sub-heading), `hint` (the boxed note with its own title), `table` (the two-column Bulwark table). FFX pages print the description
+and HP before the advice and Steal and Drops after it; FFX-2 pages put the table last. Pictures on the pages are not reproduced.
+Preparation paragraphs that sit above a boss's card on the page sit above its header here too (document order is kept) and the panel
+opens at the header. The panel opens where the boss on the field is ("opens on" below); a later fight of the same chapter takes over.
 
-**No tactic, advisor or bench file changed.** `git diff origin/main --stat` lists nothing under `src/engine/tactics/` but the two
-new guide-only modules, `guide-line.ts` and `guide-line-board.ts`, and none of `advisor*.ts`, `BattlePresenterStrategies.ts`,
-`src/battle/**`, `src/data/ffx/**`, `src/data/ffx2/**` or any chapter bench. 735 tracked files under the tactics, the battle engines, the data and every bench are blob-identical to `origin/main` (`hash-compare.mjs`, scratch); `git diff origin/main --stat -- src/engine/tactics` lists only `guide-line.ts` (350 lines) and `guide-line-board.ts` (252 lines); the one test under the advisor's name that changed, `advisor-v3-final.test.ts`, tests the rail (section 9).
+For my own comparison I read all 15 pages again on 2026-10-03 in headless Chromium from node (their HTML and text, and element
+screenshots of the Flux and Bahamut cards), kept in `D:/Tools/pyrefly-scratch/2026-10-03/guide-doc/pages/` and `jegged-shots/`;
+nothing from them is in the repo. FFX base `https://jegged.com/Games/Final-Fantasy-X/`, FFX-2 base
+`https://jegged.com/Games/Final-Fantasy-X-2/`.
 
-**The advisor's outputs are byte-identical.** `advisor-digest.mjs` (scratch, `D:/Tools/pyrefly-scratch/2026-10-03/jegged/work/`)
-plays every chapter with the shipped `intendedStrategy` on seeds 1 to 5 (90 runs, 8,256 decisions) and hashes, at every decision,
-the whole advisor view (`buildAdvisorView`), the tactic's command (`recommendedCommand`) and the legacy guide NEXT the advisor
-borrows (`buildGuideView().next`). Overall digest on `origin/main`: `cc10c48f8757f72d07c44a7986c06e4b69b3d9d42e53cef6757dd8cb77ae425d`. On the branch: `cc10c48f8757f72d07c44a7986c06e4b69b3d9d42e53cef6757dd8cb77ae425d`. All 90
-per-run digests match and none errored. The advisor and golden test files (the vitest filters `advisor` and `golden`: 48 files, 413 tests (411 pass, 2 skipped), test for test; the one test whose name differs is the rail's held-command board in `advisor-v3-final.test.ts`, renamed because its board is now found with the guide's line instead of the tactic)
-give the same results before and after.
+### FFX only (every FFX chapter follows the FFX guide)
 
-**Structurally** (`tests/unit/guide-line-separation.test.ts`, 7 tests): the evaluator and its board import no tactic, no advisor and
-no auto-battle strategy; the chapter lines import no engine; the panel reads the rail and never `buildGuideView`; no advisor module
-imports the line; on a real Flux board the guide's NEXT is not always the tactic's pick, while `buildGuideView` and
-`recommendedCommand` still mirror `intendedStrategy` decision for decision.
+- **I. Seymour Flux.** Page `Walkthrough/26-Mt-Gagazet.html`. Card: three preparation paragraphs above (Wantz's Holy Water and
+  Zombie Ward, Phoenix Downs and the Overdrive gauges, Yuna's Dispel), then the header band, In Game Description, HP, twelve
+  paragraphs, Steal, Drops. Panel: the same 20 blocks in that order; the closing "Good luck!" is not printed. Opens on the header.
+  Numbers: none differ. Kept though this party cannot: Lulu's Bio (Lulu is benched), Defend (FFX's command window has no Defend row).
+- **II. Yunalesca.** `Walkthrough/28-Zanarkand-Ruins.html`. Three preparation paragraphs above (Berserk armour off, Darkness and
+  Silence, the Dark and Silence Ward armour), then the card: a short intro, In Game Description, the three phases each with its
+  own "Phase n: HP" line and advice, the lead-in "Additional notes and strategies:" with five paragraphs, Steal (common and rare),
+  Drops. Panel: the same 22 blocks; opens on the header for Form I, on Phase 2's line for Form II, Phase 3's for Form III. HP
+  24,000 / 48,000 / 60,000 agree. Name: the page's "Punch" is printed as the game's "Dispelling Slap". Kept though not doable: Holy
+  (Yuna has not learned it; the page's own wording is conditional).
+- **III. Braska's Final Aeon.** `Walkthrough/32-Inside-Sin.html`. One paragraph and the boxed "Using Powerful Items" above; one
+  card for the whole fight (no HP, Steal or Drops list on that page), a "Yu Pagodas" sub-heading with its advice, the advice for the
+  aeon, and a closing paragraph about Yu Yevon. Panel: the same 15 blocks, so the card prints no HP (the game's 60,000 and 120,000
+  stay unprinted because the page prints none); every possessed aeon opens on the same card, and **Yu Yevon opens on the closing
+  paragraph**. The Pagodas' 5,000 HP agree with the data.
+- **VII. Seymour and Anima.** `Walkthrough/18-Lake-Macalania.html`. One paragraph above (save, O'aka), then two cards: Seymour (In
+  Game Description, HP, three paragraphs, a numbered "two ways" list, two closing paragraphs) and Anima (HP, six paragraphs, Steal,
+  Drops). Panel: the same 20 blocks; opens on Seymour's card, and on Anima's while she stands. HP 6,000 and 18,000 agree. There is no
+  page for the third act, so Anima's closing tip is the last thing shown. Kept though not doable: Blizzara healing Shiva (needs
+  Lulu), Auron's Threaten (a swap-in; the Steal route is the other half of the same list).
+- **VIII. Evrae.** `Walkthrough/21-Airship.html`. Five preparation paragraphs above; the card: In Game Description, HP, the lead-in
+  "The mechanics of the fight:" with three paragraphs, "The strategy:" with eight, Steal, Drops. Panel: the same 23 blocks. HP
+  32,000 agrees. Kept though not doable: the Mighty G Mixes (the bag has no ingredients), the Stone and Poison Wards (the build
+  ships one Stone Ward and no Poison Ward).
+- **IX. Yojimbo.** `Side-Quests/Cavern-of-the-Stolen-Fayth.html`. The page has **no boss card for this fight**: one paragraph and a
+  boxed hint (Kimahri's Ronso Rage) above, then the "Yojimbo" heading and two paragraphs. Panel: those 5 blocks and no stat box (the
+  page has none). **Number: the page says "approximately 30,000" HP, the panel says 33,000 (the game's).** What follows the fight on
+  the page (the contract, the price, the side rooms) is not in this game and is left out.
+- **X. Seymour Natus.** `Walkthrough/23-Via-Purifico.html`. Three paragraphs above; the card: In Game Description, HP, two
+  paragraphs, "Phase 1", "Phase 2 (...)" and "Phase 3 (...)" lead-ins with their advice, "Some additional notes:", "Strategy:" (a
+  bullet list), Steal, Drops. Panel: the same 26 blocks. HP 36,000 agrees. **Numbers: Drops: the page lists a Lv. 2 Key Sphere, the
+  panel says "None" (the game awards no drop here; the item has no record yet).** Left out (the research says the game does
+  otherwise): a direct hit draws a counter-spell, Nul spells call Desperado, Magic Break works on Natus and Mortibody. Kept though
+  not doable: Reflect on Yuna (she has not learned it).
+- **XII. Seymour Omnis.** `Walkthrough/31-Sin.html`. A paragraph, a bullet list of the magic-guarding armour and a paragraph above;
+  the card: In Game Description, HP, eleven paragraphs, Steal, Drops. Panel: the same 19 blocks. HP 80,000 agrees. Left out: that
+  Yuna's Shell lessens Ultima (it is not a Magic-type hit here); the Shield command and Lulu's Focus stay.
+- **XIV. Isaaru's aeons.** `Walkthrough/23-Via-Purifico.html`. Two paragraphs above; one card with three parts, each with its own
+  "<aeon> (aka ...): HP" line (8,000, 12,000, 20,000, all agree). Panel: the same 18 blocks; opens on Grothia's part, Pterya's or
+  Spathi's, whichever aeon is on the field. **Numbers: Spathi counts down from 4 on the page, from 5 here.** Left out: that Ice
+  spells are Grothia's weakness (the research has it taking ordinary damage). Kept though not doable: Ixion healing himself with
+  Thundara and Shiva with Blizzara (the shipped aeons do not know them).
+- **XVII. Sin: the Fins and the Core.** `Walkthrough/31-Sin.html`. Two paragraphs above; Left Fin (HP, six paragraphs, Steal, Drops),
+  Right Fin (In Game Description, a line, Steal, Drops), Sinspawn Genais (In Game Description, HP, three paragraphs, Steal, Drops)
+  with the Core as a sub-heading of Genais's card, as it is on the page. Panel: the same 30 blocks; opens on the Left Fin, the Right
+  Fin or Genais as they stand, and on the Core's sub-heading once Genais has fallen. HP 65,000 and 20,000 agree (the Right Fin and
+  the Core print none because the page prints none). Drops: one each here (the page's second, doubled entry is not awarded).
+  Kept though not doable: Rikku's Luck (Rikku starts on the bench), the Silence Grenade (not in the bag).
+- **XVIII. Sin: the Face.** `Walkthrough/31-Sin.html`. A paragraph, a list of three wards and two paragraphs above; the card: In
+  Game Description, HP, six paragraphs, Steal, Drops. Panel: the same 15 blocks; the closing "Good luck!" is not printed. HP 140,000
+  agrees. **Numbers: the clock is "about sixteen turns" on the page, "about thirteen turns" here (`research/ffx-sin.md` S-1, our
+  estimate: the game ends the fight on the 13th).** Kept though not doable: Rikku's Luck and Mix (bench).
 
-Left alone on purpose: `src/engine/tactics/guide.ts` (the advisor's source) and every `hints` list in `src/data/guides/*.ts` (the
-advisor's borrowed sentences; the panel no longer reads them). `guide.ts` reads a boss's form from a field that is always empty on
-a real board, so its own phase pick never shows a Form II or III note; the rail picks its phase in `guide-line.ts` and reads
-`enemy.formIndex`, as every other reader does (Yunalesca's Form II and III notes now show). The legacy bug stays, because nothing
-player-facing reads that pick any more.
+### FFX-2 only (every FFX-2 chapter follows the FFX-2 guide)
 
-## 3. The wording proof
+- **IV. Bahamut.** `Walkthrough/Chapter-2/28-Bevelle.html`. Two paragraphs above (Dark Knight, Thief and Ribbon); the card: two
+  paragraphs, the seven-line attack list, three paragraphs, the table (8,400 HP, Mute Shock, Gris-Gris Bag, all agree). Panel: the
+  same 10 blocks. No numbers differ. Kept though not doable: the Thief's Steal for the Mute Shock.
+- **V. Vegnagun and Shuyin.** `Walkthrough/Chapter-5/63-Heart-of-the-Farplane.html`. Five cards, each with its paragraphs, lists
+  with lead-ins and its table (the Core's card also has the two-column Bulwark table). Panel: the same 64 blocks; opens on the link
+  that stands (Tail, Leg, Core, Head, Shuyin). All HP agree (34,200, 18,220, 300,000 for the Nodes, 33,040, 3,000, 38,420, 2,500,
+  23,850). **Numbers: Nemo Ante Mortem Beatus is "700 to 1,500" on the page, "roughly 1,490 to 1,685" here (the game's own range).
+  Left out: that Protect halves Noli Me Tangere, 1,250 to 625 (here Noli is a fixed hit no buff touches). Drops: the Nodes' page row
+  lists a rare Hero Drink; the game awards only the common Megalixir (the rare slot has no rate in our data: research section 11).**
+  Kept though not doable: the Dispel Tonic (not in the bag), the Warrior's Armor Break (no Warrior).
+- **VI. The Leblanc Syndicate.** `Walkthrough/Chapter-2/27-Guadosalam-Chateau-Leblanc.html`. **The page has no boss card for these
+  fights**: only the walkthrough's paragraphs under "Hidden Passageway" (each fight called easy) and a boxed hint (the Charm
+  Bangle). Panel: those 7 blocks and nothing more: no stat box, because there is none to mirror. The Garment Grid reward and the
+  trip back to the Celsius are left out (not in this game).
+- **XI. The Fallen Aeons.** `Walkthrough/Chapter-5/61-Road-to-the-Farplane-and-Farplane-Abyss.html`. One paragraph above; three
+  cards: Shiva (attack list and table), the Magus Sisters (one list per sister, five paragraphs, a three-row table), Anima. Panel:
+  the same 26 blocks; opens on the fight on the field. All HP agree (14,800; 10,330, 9,788, 12,240; 36,000). Drops: one each (the
+  page's second, rarer entries on the Shiva, Sandy and Cindy rows are not awarded). Kept though not doable: the Ribbon, a Fire spell
+  (Shiva's weakness), the Lady Luck's Four Dice, the Samurai's Spare Change (none in this kit).
+- **XIII. Paragon and Trema.** `Side-Quests/Via-Infinito/Boss-Battles.html`. The preparation (a paragraph, a boxed Oversoul note and
+  four paragraphs) above; Paragon (lists, table) and Trema (list, table). Panel: the same 28 blocks; opens at the top for Paragon and on
+  Trema's header once Trema stands. **Numbers: Paragon's table says 200,000 HP (the normal form), the panel 210,000 (the Oversoul
+  form this chapter ships); Paragon's drop cell lists a Supreme Gem (common) and a Dark Matter (rare), Trema's a Dark Matter
+  (common) and two (rare), and the game awards one Dark Matter each.** The page's
+  "Judgment" is printed as the game's "Judgement". Kept though not doable: the Higher Power grid, the Mascot dressphere and the
+  best accessories (not in this kit).
+- **XV. The Den of Woe.** `Walkthrough/Chapter-5/60-Mushroom-Rock-Road.html`. A boxed Blue Bullet note, a lead-in "Preparation:"
+  and two paragraphs above; Baralai, Gippal and Nooj, each with a paragraph, a move list, paragraphs and a table (the page also has
+  cards for Rikku and Paine, which this chapter does not fight). Panel: the same 29 blocks; opens on the shade on the field. All HP
+  agree (12,220; 14,800; 23,800). **Numbers: Baralai's Drill Shot fires after his HP has changed 10 times on the page, 8 times
+  here.** The Garment Grid reward is left out. Kept though not doable: the Salvation Promised grid's Auto-Life, an Alchemist's Mix
+  (the preset has neither).
+- **XVI. Ixion at Djose.** `Walkthrough/Chapter-3/40-Djose-Temple.html`. A paragraph above; the card: five paragraphs, the table
+  (12,380 HP, Sprint Shoes, Soul of Thamasa, all agree). Panel: the same 8 blocks. **Left out: the page's count of four Aerospark
+  casts in a row (here his cycle is a counter, `src/battle/ffx2/ai/ixion.ts`).** What follows the fight on the page (the Garment
+  Grid, the cutscene, the whistles) is left out. Kept though not doable: the Water spells and gems (the preset has none), a
+  Warrior's Break.
 
-`tests/unit/guide-line-words.test.ts` (23 tests) fails on `/jegged|adapt|source|cite|citation|§|research\//i` in 934 strings of
-written content (titles, link titles, every rule long and short under all three clocks, WATCH payloads and advice, phase labels
-and notes, and 228 NEXT reasons) in all 18 chapters, in the words the panel and the evaluator add themselves, and in the real text
-and attributes of the mounted panel on boards from the opening to the late game in every chapter. Result: no match. The citation
-markup (`.sgd__cite`) is gone; the data keeps `cite` on every rule and `from` on every line step for maintainers, and a test pins
-that they exist. Headless Chromium on the built game agrees (section 6): 0 citation nodes, 0 forbidden words in the visible text.
+**Every number that differs, in one list** (the panel prints the game's; `tests/unit/guide-doc.test.ts` pins each, and every HP a
+document prints is checked against the chapter's own enemies): IX Yojimbo HP 30,000 (page) to 33,000; X Natus's drop, a Lv. 2 Key
+Sphere, to None; XIV Spathi's count 4 to 5; XVIII Sin's clock sixteen turns to thirteen; V Nemo 700-1,500 to 1,490-1,685; XIII
+Paragon HP 200,000 to 210,000; XV Drill Shot 10 changes to 8. Drops the page lists and the game does not award (the panel prints the
+one the game does): V the Nodes' rare Hero Drink; XI the second, rarer entry on the Shiva, Sandy and Cindy rows; XIII Paragon's
+Supreme Gem (common) and Trema's second Dark Matter entry; XVII the doubled rare entry on the Left Fin, Right Fin, Genais and Core.
+The one count left out is XVI's four Aerospark casts. A scan of every card's numbers and number words against the panel text found
+no other difference (the scan lived in scratch and is not committed).
 
-## 4. Chapter by chapter
+**Chapters the guide does not cover, or covers in part.** All 18 have a page. Partial: III (the card has no stat box, Yu Yevon has one
+paragraph), VI (no boss card at all, only the walkthrough's paragraphs), IX (no boss card, one paragraph and a hint), VII (no page
+for the third act), XV (two cards, Rikku and Paine, that this chapter does not need). In each the panel shows the closest section
+and only the stats that page prints; none of ours are added.
 
-Each entry: where the plan is read (the research file and heading; the research file holds the page and our paraphrase and its
-own fit notes), what the panel's RULES and WATCH now say, what the NEXT line presses, and **where our chapter differs from
-what the plan assumes and what the guide says instead**. Differences are in plain words here and in the research notes only,
-never on screen. Win rates are in section 5.
+**"Kept though not doable"** lists advice the page gives that this chapter's kit cannot follow. It is printed as the page gives it
+(Bailey's instruction: nothing of ours), and each item is from the first pass's chapter notes, which read the kits in `src/data/**/builds`;
+they were not re-checked in this pass and no data changed.
 
-### FFX only (chapters I, II, III, VII, VIII, IX, X, XII, XIV, XVII, XVIII)
+## 3. The panel
 
-**I. Seymour Flux** (`jegged-encounter-guides-ffx-a.md`, Chapter 1). RULES in the plan's order: cure the Zombie before the
-mount acts; Poison early and keep Hastega up; Dispel his Reflect and Protect; Shell (Kimahri's Mighty Guard in one turn) or an
-aeon summoned right after Seymour acts for Total Annihilation; kill Seymour, not the mount. WATCH: both Total Annihilation
-warnings are now instructions. NEXT: Holy Water or Remedy on a Zombie, then Mighty Guard or Shell or an aeon on the warning,
-Dispel, Hastega or Haste, Poison Fang, an aeon only when two of the party are down, a revive, Kimahri's and Yuna's Talk, a heal
-under 70%, then a swing at Seymour himself. *Differs:* the plan has Lulu cast Bio, and Lulu is benched, so the guide uses
-Kimahri's Poison Fang (the same 1,400 a turn). Zombie Ward is already on the armour. FFX's command window has no Defend row,
-so the plan's "Defend as the blast lands" is not a step. **The plan treats aeons as a last resort (Seymour banishes them);
-the shipped tactic summons them early in both phases. That is the gap in the numbers.**
+- **Rail box.** `.sgd__stack` is the box the old rail had: left 21.33 and width 132 grid px, top below the banner, maximum
+  height from the same anchors (`railTop`, `layoutToggle` and `stageScale` are the same code as origin/main; `layout` differs
+  only by the phone branch and the removed compact-rules class). At 1600x900 (scale 2.5) the FFX rail is at most 330x177 px at
+  (53,110) (`maxHeight` 71 grid px; the Ch. I stack measured 173 px) and the FFX-2 rail at most 330x230 px at (53,220) in the
+  proof frame (measured stack 218 px; its limit is the fence above Yuna's head, which moves with the party). Nothing was
+  widened (the width is mirrored by FFX-2's `GUIDE_RAIL_RIGHT`, the advisor's lane solver, `text-size-wide.css` and their
+  tests). Text is 5.7 grid px (14.25 px at 1600x900, 15 px on the phone) at a line height of 1.32.
+- **What the rail covers, against origin/main.** The same spec (`tests/e2e/hud-collision.spec.ts`, CHK-008: every HUD panel
+  against every painted figure's quad, "face" being the upper third) ran on the final branch build and on a build of
+  origin/main (a6b79313), Chapters I, II, IV and V at 1280x720, 1600x900, 2000x1000 and 2560x1440, same seeds, six of the
+  nine states reached in each. The guide panel's overlap with figures:
 
-**II. Yunalesca** (`-ffx-a.md`, Chapter 2). RULES: Reflect on the party, Yuna first, for Form I and cure Blind and Silence;
-keep one Zombie in Forms II and III; Holy Water a worn Zombie, then heal it; Dispel her Regen; hold every aeon for Form III.
-Her Form I note keeps the Sleep counter. NEXT: Reflect (Yuna first), Eye Drops or Echo Screen or Esuna, Dispel Regen off a
-Zombie, Holy Water when two are Zombies and one is worn, Yuna's Reflect again when her Dispelling Slap has stripped it from
-all three, Hastega, then (support) the Form III aeon and its Overdrive, a revive, a heal, a swing. *Differs:* Yuna has not learned Holy, which the plan recommends, so no step
-names it. Dark and Silence Wards have no slot in the build, so the cures answer. The aeon rule is our own research's and the plan
-is silent on it. **The rail now shows her Form II and III notes (they never showed before: see section 2).**
+  | Chapter | Viewports | States where the guide touches a figure, branch / main | Overlap with figures (px, all states and viewports), branch / main | Guide box height at 1600x900, branch / main |
+  |---|---|---|---|---|
+  | I Flux (FFX) | 4 | 0 / 0 | 0 / 0 | 146 / 140 px |
+  | II Yunalesca (FFX) | 4 | 0 / 0 | 0 / 0 | 87 / 140 px |
+  | IV Bahamut (FFX-2) | 4 | 2 / 16 | 135 / 83,418 | 178 / 256 px |
+  | V Vegnagun (FFX-2) | 4 | 0 / 0 | 0 / 0 | 271 / 274 px |
 
-**III. Braska's Final Aeon** (`-ffx-a.md`, Chapter 3). RULES: cure Petrify at once; Hastega, Protect and Regen; Talk twice, both
-in form 2; the two Pagodas down together in form 2 or left alone; Yu Yevon cannot win, Doom him. NEXT: Soft, Remedy or Esuna
-on Petrify, Reflect and Candle of Life on Yu Yevon, Talk in form 2, Hastega, Haste, Protect, Regen, Mental Break, Armor Break,
-then (support) a revive and a heal, the fuller Pagoda in form 2 so they fall together, an Overdrive, a swing. *Differs:* the
-shipped tactic Slows both Pagodas and leaves them standing (four kill-both versions lost on the bench); the guide follows the
-plan. Power Wave strips Poison and every Break, so they last a turn or two. The possessed-aeon gauntlet is not in the plan: its
-rules stay on research alone.
+  (Per viewport, Chapter IV: 135 / 12,210 px at 1280x720, 0 / 7,818 at 1600x900, 0 / 44,234 at 2000x1000, 0 / 19,156 at 2560x1440.
+  The reports are in scratch, `chk-fixed/` and `chk-main/`.)
 
-**VII. Seymour and Anima** (`-ffx-a.md`, Chapter 7). RULES: Steal from each Guardian, then drop them before Seymour; his spells
-come ice, lightning, water, fire, so pre-cast the matching Nul; summon Shiva for Anima and Talk to Seymour first; Overdrive on a
-Boost turn; Auron's Magic Break and the matching Nul in the last act. NEXT: Shiva on act 2, Overdrive while Anima is Boosted,
-Shield on a countdown, Talk (act 1), Steal from each Guardian, the Nul for the cycle, Auron's Magic Break, then (support) a
-revive and a heal, then swings at the Guardians. *Differs:* Blizzara healing Shiva needs Lulu (no step); Threaten is the alternative to Steal and needs Auron, so it is
-a swap; the third act is past what the plan covers, and Magic Break plus the matching Nul stand.
+  A first run of this measurement found the guide **covering Yuna more than the old rail** in FFX-2 Chapter IV (19,402 px
+  against 7,818 at 1600x900), and the box was not the cause: the status hint card (the cure hint for a party member's status) rides at
+  the top of the guide's panel and counts as chrome in the fit, but the fit was keyed on the rail's height and the page, not on what else the panel held, and FFX-2's rail does not move
+  with the menu (its limit is the fence above the party). A card arriving after the fit therefore grew on top of a body that
+  already filled the rail, and at 1280x720 the panel ran 48 grid px past it (the old rail's shorter body ran 28 past: the same
+  latent bug).
+  The fit is now keyed on what else the panel holds as well (`StrategyGuide.extraChrome`; shared plumbing, both games; it showed
+  in FFX-2 in the measurement), pinned by a test in `guide-doc-render.test.ts`, and the table is the re-run. While a card is up
+  the body gets what is left of the rail, as that card's own header comment says it should (one block when the card is tall),
+  and the page comes back when the card goes.
+- **Paging.** Every block is a unit; a page is as many whole units as fit; a "keep with next" unit (a header, a lead-in, a table
+  head, a list label) never ends a page. A paragraph or list item of two or more lines may carry on to the next page: the box is an
+  exact multiple of the line pitch, so no line is cut, and a page never shows or leaves one line alone. Where the pitch cannot be
+  read (jsdom, `line-height: normal`) units stay whole. The arithmetic is in `src/ui/common/guideFit.ts`; `StrategyGuide.ts` is 668
+  lines (826 on origin/main), which is still over the 400-line convention (section 7, item 6).
+- **Phone.** The sheet (370x410 at (10,66) at 390x844) holds the whole document and scrolls; it opens scrolled to the boss's header
+  once laid out. `G`, the chip and the pause row work as before.
+- **Left unfixed, pre-existing:** the phone sheet is translucent, so faint HUD text ("2ND IN QUEUE ...") shows through behind
+  its header (also in the first pass's screenshots).
 
-**VIII. Evrae** (`-ffx-a.md`, Chapter 8). RULES: pull the ship back first and whenever the party must recover; Cheer to five at
-range while Wakka swings; the Al Bhed Potion is the heal and the cure; Slow it before a third of its bar; refuse the bait when it
-inhales at range. NEXT: Al Bhed Potion for Petrify and under 55%, Pull back, Cheer to five, Slow, a swing. *Differs:* the bag
-has no Mix ingredients for Mighty G, so the guide does not tell the player to Mix; the build ships one Stone Ward and no
-Poison Ward, so it does not tell the player to craft them.
+## 4. The separation, and the proof
 
-**IX. Yojimbo** (`jegged-encounter-guides-ffx-b.md`, section 2). RULES: bring Yuna's aeons when it turns against you and always
-at a high gauge. NEXT: (support) a revive and Yuna's Cura, an aeon at a gauge of 80 so Zanmato hits the aeon, an aeon when
-someone is down, Lulu's -ra spell, Kimahri's quiet item, a swing. *Differs:* the plan is one sentence ("bring aeons if it goes
-badly"); the reason for the gauge-80 aeon is the chapter research's. The shipped party has not learned Doom (the line names it
-only when `CAVERN_DOOM_PREP` says it is learned).
+- **No advisor, tactic, bench or battle file changed.** `git diff origin/main` lists nothing under `src/engine/tactics/`,
+  `src/battle/**` or the data folders except the new `src/data/guides/doc-types.ts` and `src/data/guides/docs/`; the 18
+  `src/data/guides/<chapter>.ts` and `types.ts` are identical to origin/main (content, ignoring line endings). The eight tactic and
+  bench files that `git status` lists as modified in this worktree (six under `src/engine/tactics/`, `isaaru-tactic-bench.test.ts`
+  and `fallenAeonsDrive.ts`) are byte-identical to origin/main by blob hash; the listing is a line-ending artefact and they are not
+  staged.
+- **The advisor's outputs are byte-identical.** `advisor-digest.mjs` (scratch, `D:/Tools/pyrefly-scratch/2026-10-03/jegged/work/`)
+  plays every chapter with the shipped `intendedStrategy` on seeds 1 to 5 (90 runs, 8,256 decisions, no error) and hashes, at every
+  decision, the whole advisor view, the tactic's command and the legacy guide NEXT the advisor borrows. Overall digest on
+  origin/main (an export of f4244e1f; the two commits since are critic records only): `cc10c48f8757f72d07c44a7986c06e4b69b3d9d42e53cef6757dd8cb77ae425d`.
+  On the final branch tree: `cc10c48f8757f72d07c44a7986c06e4b69b3d9d42e53cef6757dd8cb77ae425d`. All 90 per-run digests match.
+- **Structurally** (`tests/unit/guide-doc-separation.test.ts`, 28 tests): the panel, `guideDoc.ts`, `guideDocHtml.ts`,
+  `guideFit.ts` and the documents import no tactic, no advisor, no `BattlePresenter` and no `intendedStrategy`; the documents
+  import only their own types; no tactic, advisor or guide-data module imports a document; the move advisor panel does not import
+  the guide panel; the line data and evaluator are gone; the panel has no way to follow a decision or a held command.
+- **Test files that changed outside the panel's own:** `advisor-v3-final.test.ts` (the rail's two assertions and the
+  "FFX-2 HUD hands the rail the held command" test are removed because the rail takes no held command; the C2-B1 test is renamed
+  "not the NEXT the advisor borrows" and still checks `buildGuideView`; the advisor and golden filters run 48 files, 412 tests,
+  410 pass, 2 skipped, against 413 and 411 before: that one test), `guide-ffx2-wait-habit.test.ts` (its last test pinned the habit
+  line on the panel; it now pins that the panel prints the page and never that line; the data-level tests are unchanged),
+  `tests/e2e/ffx2-ixion.spec.ts` (comments only: `guideNext` finds no NEXT section and the spec already fell back to its own pick).
+  `strategy-guide.test.ts`, `isaaru-tactic-bench.test.ts` and `fallenAeonsDrive.ts` are identical to origin/main again.
 
-**X. Seymour Natus** (`-ffx-b.md`, section 3). RULES: Haste only two; Soften the stone below 24,000; Reflect on Natus (not the
-party) below 12,000; aeons only as a Grand Summon Overdrive; Mortibody drains Natus. NEXT: Soft or Esuna on Petrify, Dispel his
-Protect, Rikku for Reflect on Natus, Talk, Haste two, Lulu for an early Bio, a Grand Summon, an Overdrive, then (support) a
-revive and a heal. *Differs:* Yuna has not learned Reflect, so Rikku does it (a swap); Magic Break does nothing to either
-target, so no step names it; two of the plan's claims (a counter-spell on a direct attack, Nul calling Desperado) are single
-source and contradict the research, so they are not taught.
+## 5. The wording proof
 
-**XII. Seymour Omnis** (`-ffx-b.md`, section 4). RULES: Hastega, Armor Break, Mental Break and the Nul of the colour he shows
-most; hit a disc to turn it (Wakka, or a spell); heal above 4,000 before Ultima; aeons are safe. NEXT: a heal while he glows,
-Hastega, Armor Break, Mental Break, the Nul for three discs of one colour, Wakka for the discs, then support steps. *Differs:*
-"wear elemental armour" is the one Phantom Ring on Yuna. The plan says Shell helps against Ultima; the research says it does
-not, so the guide says it does not. Only Wakka turns a disc with a blow.
-
-**XIV. Isaaru** (`-ffx-b.md`, section 5). RULES: Yuna alone, so a Grand Summon opens every link; Grothia: Bahamut and Mega Flare,
-Shield before his Hellfire; Pterya: Bahamut again or Ixion; Spathi: Shiva, Shield before the count ends; no healing between
-links. NEXT: the same, step by step, with Shield on the gauge. *Differs:* the shipped aeons do not know Blizzara or Thundara,
-so no self-heal line; Ice is not Grothia's weakness; Spathi's count is five here (the plan says four), so the number on screen
-can differ by one turn.
-
-**XVII. Sin: the Fins and the Core** (`-ffx-b.md`, section 6). RULES: close in, Armor Break, pull back; Hastega and Cheer at
-range; pull away when the core glows if Cid acts first; Genais first (plain attacks, Slow, then Fire); the Core is the same
-fight with no ship to move; nothing heals between links. NEXT: Pull back on the glow, Close in, Armor Break, Pull back again,
-Wakka or Lulu in for Auron, Yuna and (once he has stacked) Tidus, Hastega, Cheer to five, Slow and plain attacks on Genais,
-Armor Break on the Core. The Armor Break step waits until Genais is gone, because Genais is immune to every Break (a line that
-kept casting it at Genais won 3 of 100 seeds; with the wait, 69 of 100). *Differs:* Rikku (Luck) starts on the bench, so
-stacking is Cheer alone; the Silence Grenade answer to Genais is not in the bag; the Negation chance is a single-source formula,
-so no step says how many buffs are safe.
-
-**XVIII. Sin: the Face** (`-ffx-b.md`, section 7). RULES: Sin's turns are the clock; out of reach, Hastega and Cheer while Wakka
-and Lulu deal the damage; Armor Break at once, then everything; Gaze answers hits, so carry cures. NEXT: cures for Petrify,
-Confuse and a worn Zombie, Hastega, Haste, Armor Break, (support) Mental Break, Auron for it, Cheer, Lulu's Firaga, Wakka and
-Lulu in at range, then an Overdrive. *Differs:* the clock. The plan says about sixteen turns; the research has the 12th or 13th
-(our estimate the 13th) and the guide keeps that. The plan names Armor Break only; the chapter research's own plan has both
-Breaks (three sources) and puts about half again on Lulu's Firaga, so Mental Break is a support step and a rule (without it the
-line won 0 of 100 seeds, with it 50 of 200). Rikku's Luck and Mix are on the bench.
-
-### FFX-2 only (chapters IV, V, VI, XI, XIII, XV, XVI)
-
-**IV. Bahamut** (`jegged-encounter-guides-ffx2.md`, section 2). RULES: the fixed loop; the first Impulse is the warning, so be
-fully healed before Mega Flare; Darkness is the damage; Shell halves Impulse and Mega Flare. NEXT: (support) a revive, a party
-heal once the countdown is live, (support) Shell, Darkness, a heal under half, (support) Pray, a swing. *Differs:* no Thief
-Steal for the Mute Shock; Shell and Magic Break are our research's and the plan is silent on them; the bag has no Mega-Potion.
-
-**V. Vegnagun and Shuyin** (`-ffx2.md`, section 3). RULES, link by link: the Tail (max HP is the defence), the Leg (ignore the
-Nodes, Dispel what they add), the Body (Bulwarks first, no buffs up front, Shell as the third Charge Core lands), the Head (keep
-a Redoubt down, heal above about 1,500 before each Nemo), Shuyin (a race, one healer free). NEXT: heal floors (1,500 for the
-Head, 1,323 for the Tail), Protect and Shell on the Leg, Dispel its Protect and Shell, Shell on Charge Core, Darkness, then
-(support) heals and Pray. *Differs:* the bag has no Dispel Tonic, so the White Mage's own Dispel; no Warrior, so no Armor Break
-on the Core; Ribbons and the elemental guards are not modelled. Protect against Noli Me Tangere (the plan says it halves it) is
-left out because the research disagrees.
-
-**VI. The Leblanc Syndicate** (`-ffx2.md`, section 4). The plan has nothing to follow for the fight (it calls each fight easy),
-so the guide stays on the chapter research and its NEXT line is the research read as a line: Logos, Ormi, Leblanc; Armor Break on
-Ormi; Dispel for the guard. Every step but the final swing is a support step.
-
-**XI. Fallen Aeons** (`-ffx2.md`, section 5). RULES: Shiva (Remedy for Stop, no Ice), Cindy first and never spread the damage,
-Pain stacks, Darkness from both Dark Knights in all three fights, the Save Sphere. NEXT: Change out of Itchy (Anima's Pain),
-Remedy for Stop, Silence and Darkness (Anima), a heal under half, Darkness, then the single-target swing at Cindy, Dispel, Shell,
-Pray. *Differs:* Darkness hits all
-three sisters at once, so the girls who cast it spread damage while the White Mage and any girl without Darkness make the swings
-at Cindy; the line casts Darkness first (a trial the other way round, the swing first, won 0 of 60 seeds, Darkness first 49 of
-60). No Fire (Shiva's weakness), no Ribbon, no Samurai shortcut, no Lady Luck dice, no Holy for Anima.
-
-**XIII. Trema** (`-ffx2.md`, section 6). RULES: use Paragon's quiet opening for a Stamina Tonic and buffs (nothing heals between
-Paragon and Trema); plain attacks on Paragon; against Trema one girl heals constantly, Protect and Shell stay up. NEXT: Change
-out of Itchy, a revive, the Tonic, Three Stars, Lunar and Light Curtain, a Megalixir or party heal, Remedy for Stop, Target MP,
-plain attacks on Paragon, Darkness on Trema, Pray, a swing. *Differs:* the Higher Power grid is not in the engine, so The End on
-Paine stands in for Break Damage Limit; the chapter is Oversoul Paragon by construction (the plan's strongest recommendation, with
-no player work); Mascots and the best accessories are not in the kit. The line follows the chapter's shape, so a Trema-alone
-chapter never names Paragon.
-
-**XV. The Den of Woe** (`-ffx2.md`, section 7). RULES: Dark Knights do the damage (Baralai drains MP, so Darkness); heal after
-every Bullseye of Gippal's and before the killing blow; Lightfall needs an answer for each girl it would kill. NEXT: Remedy for
-Baralai's Stop and Silence, Hero Drink before Lightfall, heals, Protect, Shell for Nooj, Darkness, Pray, a swing. *Differs:* the
-preset has no Alchemist and no Salvation Promised grid, so Invincible comes from a Hero Drink, one girl at a time, instead of a
-Dark Matter mix or Auto-Life; the steady-HP route against Lightfall was dropped on purpose (Bailey, 2026-09-26); Drill Shot is
-not counted because the sources split on how many changes it takes.
-
-**XVI. Ixion at Djose** (`-ffx2.md`, section 8). RULES: after Recharge, heal everyone and put Shell up, because the Hammer is next
-and it is magic. NEXT: (support) a revive, a heal on the Recharge tell, Shell, Darkness, heals, Protect, Pray. *Differs:* the
-plan's damage is water magic or Water gems, and the preset has neither (Darkness ignores his Defense); no Warrior for a Break; the
-plan says four Aerospark in a row, the research a counter model, so the guide does not print "four".
-
-## 5. Does the guide's line win?
-
-Information only, never a gate and never a reason to change a chapter. `tests/unit/guide-line-bench.test.ts` (`PYREFLY_MEASURE=1`,
-200 seeds a row; `GLINE_CHAPTERS` and `GLINE_DRIVERS` narrow a run; by default it is a one-seed smoke) plays every chapter from its
-first link through the app's own chapter setup and carry, FFX on the CTB engine and FFX-2 in Wait mode with no decision time (the
-bench speed of every FFX-2 bench), one try, no retries, three drivers on the same seeds 1 to 200:
-
-- **today** is the shipped `intendedStrategy`, the line the tactic and the advisor use;
-- **line** is the guide's line as the panel shows it (plan steps, support steps, last resort);
-- **plan** is the plan steps only. It leaves out the revive, the heal and the idle turn, so it is not a whole strategy (it can
-  stall); it is printed for completeness and is not a result.
-
-| Ch. | Game | Chapter | today | **line** | plan (not a strategy) | line against today | line loses at | idle turns a run |
-|---|---|---|---|---|---|---|---|---|
-| I | FFX | Seymour Flux | 112/200 (56.0%) | **0/200 (0.0%)** | 0/200 (0.0%) | clearly less | link 1: 200 | 0 |
-| II | FFX | Yunalesca | 199/200 (99.5%) | **0/200 (0.0%)** | 0/200 (0.0%) | clearly less | link 1: 200 | 0 |
-| III | FFX | Braska's Final Aeon | 194/200 (97.0%) | **0/200 (0.0%)** | 0/200 (0.0%) | clearly less | link 1: 200 | 0 |
-| IV | FFX-2 | Bahamut | 200/200 (100.0%) | **200/200 (100.0%)** | 163/200 (81.5%), 8 stalled | about equal | - | 0 |
-| V | FFX-2 | Vegnagun and Shuyin | 188/200 (94.0%) | **0/200 (0.0%)** | 0/200 (0.0%) | clearly less | link 1: 173, link 4: 5, link 3: 8, link 2: 8, link 5: 6 | 0 |
-| VI | FFX-2 | The Leblanc Syndicate | 198/200 (99.0%) | **199/200 (99.5%)** | 17/200 (8.5%) | about equal | link 3: 1 | 0 |
-| VII | FFX | Seymour and Anima | 189/200 (94.5%) | **103/200 (51.5%)** | 34/200 (17.0%) | clearly less | link 1: 97 | 0 |
-| VIII | FFX | Evrae | 193/200 (96.5%) | **185/200 (92.5%)** | 0/200 (0.0%) | a little less | link 1: 15 | 0 |
-| IX | FFX | Yojimbo | 171/200 (85.5%) | **121/200 (60.5%)** | 0/200 (0.0%) | clearly less | link 1: 79 | 0 |
-| X | FFX | Seymour Natus | 159/200 (79.5%) | **110/200 (55.0%)** | 0/200 (0.0%) | clearly less | link 1: 90 | 0 |
-| XI | FFX-2 | Fallen Aeons | 174/200 (87.0%) | **144/200 (72.0%)** | 48/200 (24.0%) | clearly less | link 2: 56 | 0.12 |
-| XII | FFX | Seymour Omnis | 127/200 (63.5%) | **89/200 (44.5%)** | 0/200 (0.0%) | clearly less | link 1: 111 | 0 |
-| XIII | FFX-2 | Trema | 14/200 (7.0%) | **8/200 (4.0%)** | 0/200 (0.0%) | both low | link 2: 23, link 1: 169 | 0.38 |
-| XIV | FFX | Isaaru | 173/200 (86.5%) | **200/200 (100.0%)** | 0/200 (0.0%) | more | - | 0 |
-| XV | FFX-2 | The Den of Woe | 111/200 (55.5%) | **16/200 (8.0%)** | 1/200 (0.5%) | clearly less | link 3: 127, link 2: 56, link 1: 1 | 0 |
-| XVI | FFX-2 | Ixion at Djose | 197/200 (98.5%) | **200/200 (100.0%)** | 187/200 (93.5%) | about equal | - | 0 |
-| XVII | FFX | Sin: Fins and Core | 113/200 (56.5%) | **152/200 (76.0%)** | 0/200 (0.0%) | more | link 3: 44, link 2: 4 | 30.57 |
-| XVIII | FFX | Sin: the Face | 67/200 (33.5%) | **50/200 (25.0%)** | 2/200 (1.0%) | a little less | link 1: 150 | 0 |
-
-**Reading it.** The guide's line wins as often as today's line (within two points) on 3 chapters (IV Bahamut, VI The Leblanc Syndicate, XVI Ixion at Djose) and more often on 2 (XIV Isaaru, XVII Sin: Fins and Core). It wins **clearly less** (more than ten points) on 10: I Seymour Flux, II Yunalesca, III Braska's Final Aeon, V Vegnagun and Shuyin, VII Seymour and Anima, IX Yojimbo, X Seymour Natus, XI Fallen Aeons, XII Seymour Omnis, XV The Den of Woe; a little less on VIII Evrae and XVIII Sin: the Face; and both lines are low on XIII Trema. Five chapters sit at zero or within a few percent of it: Flux, Yunalesca, Braska's Final Aeon, Vegnagun and the Den of Woe.
-
-**Why, from the research notes** (not from a tuning pass): in each near-zero chapter the shipped tactic does something the plan does not, and the chapter research says so.
-
-- **I Flux.** The plan treats aeons as a last resort, because Seymour banishes them; the tactic summons them early in both phases (a summon freezes the party's counters) and stacks Cheer.
-- **II Yunalesca.** The plan is silent on aeons; the tactic holds all five for Form III and fires their Overdrives on arrival (about 40,000 of Form III's 60,000), and will not kill Form II while anyone is unarmed (not a Zombie) when the next form's opening Mega Death lands.
-- **III Braska's Final Aeon.** The plan kills both Pagodas together; the tactic Slows them and leaves them standing (four kill-both versions lost on the bench), and the Breaks the plan recommends are stripped by every Power Wave.
-- **V Vegnagun.** The plan names Darkness and plain attacks; the tactic opens with Black Sky while MP lasts and keeps one dedicated healer.
-- **XV the Den.** Lightfall needs every girl above 5,000 HP or Invincible. The plan's three answers need gear the preset does not have, so the Hero Drink stands in for them, one girl at a time, and the line loses to Nooj (127 of 200) or Gippal (56).
-
-No single missing step explains a gap. Scratch trials (not committed) that added early aeons, or Cheer and Protect, to Flux, or a Black Sky opener to Vegnagun, left both at 0 of 100 seeds: the shipped tactics are tuned sequences, which is what "the guide and the advisor are separate" costs.
-
-**What the measurement caught in the lines themselves.** Four encoding errors surfaced while comparing each line's move list with the tactic's, and a scan for repeated no-progress turns, and each was fixed in the line (never in a tactic): the Fins' Armor Break was cast at Genais, which is immune to every Break (3 of 100 seeds won, 69 after the fix); the Fallen Aeons line swung at Cindy before it cast Darkness (0 of 60, then 49 of 60); revive and heal sat behind a swing that is always playable in Braska's second form and Macalania's first act, so nobody got up (Macalania 74 of 200 seeds, then 103); and Sin's face never cast Mental Break, which the chapter research's plan has and the encounter guide omits (0 of 100, then 25%). Anyone editing a line should run `GLINE_CHAPTERS=<id> PYREFLY_MEASURE=1` before and after.
-
-**What this is not.** Bench speed (no decision time in FFX-2), one try, no retries and no checkpoints, so the Road, the Den and Trema read higher or lower than their human-speed benches; a bot that presses the card's first suggestion at every decision, which no player does; seeds 1 to 200 of one harness. The "today" column is this harness's own reading and differs from some chapters' own benches, which wire their parties their own way: it reproduces Omnis (127 of 200) exactly, sits within ten of Natus (159 against 169) and Yojimbo (171 against 161), and reads higher than the Isaaru bench (173 against 125). It says how the card's advice performs when followed to the letter, nothing more.
+`tests/unit/guide-doc-words.test.ts` (37 tests) fails on `/jegged|adapt|source|cite|citation|§|research\/|docs\/|\.ts\b|\bD-\d{3}\b|\bPR-\d{4}\b|walkthrough guide|according to/i`
+in every string of every document (headers, tags, stat lines, list items, table cells, hint titles), and in the text, attributes and chip
+of the mounted panel for each of the 18 documents. Result: no match. `.sgd__cite` is gone. Headless Chromium on the built game agrees
+(section 6): 0 forbidden words in the visible text of all eight scenarios. The sentences are paraphrased: a word-run overlap check
+of every document against the saved pages leaves 19 lines that share a run of seven or more words with a page, and every one is a
+heading, a loot row or a list of game terms.
 
 ## 6. Proof in a browser
 
-Headless Chromium in GPU mode (`PYREFLY_BROWSER=gpu`), one browser, driven from node with real input (a tap on the GUIDE chip, real clicks on MORE, the G key), against the built game served from the scratch folder on port 6401 (stopped by PID afterwards); battle help is off in the seed save so the coach does not cover the rail. All four scenarios: 0 citation nodes, 0 console errors, 0 forbidden words in the visible text, nothing clipped.
+Headless Chromium in GPU mode (`PYREFLY_BROWSER=gpu`), one browser, driven from node with real input (a tap on the GUIDE chip on the
+phone, real clicks on `MORE`, the `G` key, the mouse wheel on the sheet), against the built game served from scratch on port 6402
+(stopped by its PID afterwards); battle help is off in the seed save so the coach does not cover the rail. All eight scenarios: 0
+console errors, 0 forbidden words, 0 elements wider than their box, nothing under 14 px, `G` hides the panel and `G` brings it back.
+From a save with the guide switched off, a real `G` opens it on the document (Ch. I and Ch. IV on the desktop: the boss's header
+and tag, `MORE` showing, no overflow, the chip reading "G hide guide").
 
-| Scenario | Rail box | Smallest effective type | Fit |
+| Scenario | Box | Smallest effective type | Reading it |
 |---|---|---|---|
-| Ch. I Flux, 1600x900 | 330x168 at (53,110) | 14.25 px | inside the viewport, no overflow; MORE by real click reaches title and NEXT, the reason and WATCH, and every rule |
-| Ch. I Flux, 390x844 (tap the GUIDE chip) | scrolling sheet 370x410 at (10,66) | 15 px | every block present at full length; the sheet scrolls (390 px of content past its edge), no element overflows |
-| Ch. IV Bahamut, 1600x900 | 330x211 at (53,220) | 14.25 px | same as Ch. I |
-| Ch. IV Bahamut, 390x844 | scrolling sheet 370x410 at (10,66) | 15 px | same as Ch. I |
+| Ch. I Flux, 1600x900 | rail 330x173 at (53,110) (max 177) | 14.25 px | opens on the header and the description; 6 pages by real clicks (the whole document is 14 pages); no vertical overflow |
+| Ch. I Flux, 390x844 | sheet 370x410 at (10,66), 1,391 px of content | 15 px | opens scrolled to the header (235 px); wheel reaches the end (981 px); nothing overflows sideways |
+| Ch. II Yunalesca, 1600x900 | rail 330x114 at (53,110) on the opening page, up to 174 | 14.25 px | opens at Form I's header; 6 pages (14 in all) |
+| Ch. II Yunalesca, 390x844 | sheet 370x410, 1,318 px | 15 px | opens at 215 px; end at 908 px |
+| Ch. IV Bahamut, 1600x900 | rail 330x218 at (53,220) (max 230) | 14.25 px | 6 pages by click (5 in all); the move advisor's card sits beside it |
+| Ch. IV Bahamut, 390x844 | sheet 370x410, 711 px | 15 px | opens at 152 px; end at 301 px |
+| Ch. V Vegnagun, 1600x900 | rail 330x298 at (53,220) | 14.25 px | opens on the Tail's page; 6 pages by click (the five-link document runs past 60) |
+| Ch. V Vegnagun, 390x844 | sheet 370x410, 4,816 px | 15 px | opens at 69 px (the Tail's header); end at 4,406 px |
 
-Screenshots, in `docs/screenshots/r38-guide-jegged/` (`ch1-flux` and `ch4-bahamut`, then `1600x900` or `390x844`): `-guide-on` for all four; on the phone `-guide-scrolled` (the same sheet scrolled to the rules); on the desktop `-guide-page2` to `-page5` (the MORE pages, reached by real clicks) and `-next-turn` (a later decision), cropped to the rail so the folder stays small. The off frames (the G key and the chip), the phone chip and next-turn frames and the full frames of the cropped ones are parked in `F:/pyrefly-parked/2026-10-03/`. The Ch. IV desktop frame also shows the move advisor's card beside the guide, which is the point of the separation: two panels with their own picks (section 7, item 2).
+**No line is cut on any rail page.** A second real-click run read every unit on every page of Chapters I, II, IV and V (72, 72, 39
+and 964 text lines, the last being the first 70 pages of the five-link document; 8, 4, 2 and 16 paragraphs carried over a page): every unit sits wholly inside the panel with at least 8.7 px
+to spare, and no line of a carried-over paragraph is cut. The only boxes flagged are headings and labels whose font box overhangs
+their own box by at most 2.5 px, inside the panel (`clip-check.mjs`, scratch).
+
+Screenshots, `docs/screenshots/r38-guide-jegged/doc/` (4.7 MB, 44 files; `ch1-flux`, `ch2-yunalesca`, `ch4-bahamut`,
+`ch5-vegnagun`, then `1600x900` or `390x844`): `-guide-on` for all eight (full frame on desktop, where the advisor card shows
+beside the guide); on the desktop `-guide-page2` to `-page6` (cropped to the rail), and for Ch. I and Ch. IV `-guide-off` (the
+chip alone) and `-guide-g-open` (after a real `G`; Ch. IV's frame has Bahamut's CHARGING banner crossing the foot of the rail,
+the HUD's own overlay); on the phone `-chip` (the folded state), `-guide-scrolled` and `-guide-end`. The first pass's fifteen PNGs of the removed NEXT card (8.2 MB, directly in
+`docs/screenshots/r38-guide-jegged/`) are parked under `F:/pyrefly-parked/2026-10-03/guide-doc/docs/screenshots/r38-guide-jegged/`
+and removed from this branch's tip; they stay in its history.
 
 ## 7. For Bailey to decide
 
-1. **Ship the line as it is, or fit it where it loses?** This is the one that matters. With the line as written, ten chapters win clearly less than today's line and five are at or near zero (section 5). Options: **(A)** ship as is: the guide is Jegged's, the advisor is the optimiser, and the gap is the price of "completely separate". **(B)** keep RULES and WATCH on Jegged and add the steps the chapter research documents to the five near-zero lines (Flux's early aeons, Yunalesca's Form III aeons and the unarmed wait, Braska's Slow on the Pagodas, Vegnagun's Black Sky, the Den's Hero Drink for every girl) as plain guide steps: each is one data edit in `lines/<chapter>.ts`, no tactic is touched, and I would measure every one before and after. **(C)** hide the NEXT card in those five chapters until (B). My recommendation is (B) for those five and (A) for the rest, because a card that loses every time is not one a player can follow; but it is where "follows Jegged" and "works" part ways, so it is yours.
-2. **The "GUIDE'S PICK" tag (D-359, adopted, not scheduled).** I did not touch it (it is advisor UI). Until it is removed it compares the advisor's pick with the tactic's NEXT (`buildGuideView`), which is no longer what the guide panel shows; the Ch. IV screenshot has the tag on the advisor card beside a guide that reads its own line.
-3. **FFX has no Defend row on its HUD** (`CommandMenuLogic.ts`), and the plan for Flux says Defend as Total Annihilation lands. The line leaves Defend out of every FFX chapter. If you want it, that is a HUD decision (the engine already offers it).
-4. **Two party-prep picks of yours decide whether the plan's own route is playable:** the Den's Lightfall prep (dropped 2026-09-26; the plan's three answers all need it) and Yojimbo's Doom (`CAVERN_DOOM_PREP`, shipped `'not-learned'`; `'preloaded'` is the plan's implied route and wins 200 of 200 on the research bench). Neither is changed here.
-5. **Idle turns.** In the Fins and Core the line has nothing to say on about 12% of decisions (Tidus and Auron at range with the Break already on); the card then reads "Nothing in the plan for this turn." rather than inventing a move.
-6. **Screenshot weight.** A full 1600x900 frame is about 2 MB (the repo's other screenshots average about 20 KB), so only the two desktop `-guide-on` frames are full; the other desktop frames are cropped to the rail and the folder is 7.9 MB. The full frames are parked outside the repo.
-7. **Left for a later pass, none of it needed now:** the `hints` lists in `src/data/guides/*.ts` are advisor-only text and could move next to the advisor; `guide.ts`'s form read is wrong and harmless (section 2).
+1. **How the desktop reads a long page.** The rail shows 6 lines a page in FFX and 8 to 12 in FFX-2, so Chapter I's page is 14
+   pages long, Yunalesca's 14, Bahamut's 5, and the five-link Vegnagun document runs past 60 (a player needs one link of it, a few
+   pages). The phone's scrolling sheet has no such cost. I did not widen or lengthen the rail: more height would reach into the
+   command menu below it, and more width into the advisor card and the party. Options, each one a mockup before any build:
+   **(A)** keep the rail as it is; **(B)** open a scrolling reading sheet like the phone's on the desktop too (`G` closes it), so the
+   page scrolls instead of paging; **(C)** a wider rail, shown against the advisor card and the figures first. I recommend (B);
+   none is built.
+2. **The Wait-split habit line** ("Pick a command at once. Until you do, the clock still runs.", approved 2026-09-25 for Chapters
+   V and VI) is not on the panel any more: the page has no such line and the instruction is nothing of ours. It still lives in the
+   guide data the advisor reads. Options: leave it out, or print it as a one-line note above the page for FFX-2 under Wait.
+3. **The "GUIDE'S PICK" tag (D-359, adopted, not scheduled)** is advisor UI and untouched. It compares the advisor's pick with the
+   tactic's NEXT (`buildGuideView`), a pick the guide panel no longer shows, so the tag's label is now misleading.
+4. **"Kept though not doable"** advice (section 2) reads as a promise the chapter's kit cannot keep (Lulu's Bio, Holy, the Mix
+   ingredients). The instruction is nothing of ours, so each stays as the page gives it; chapter-specific notes would be ours.
+5. **One drop each.** Where the page lists a rarer second drop the game does not award, the panel prints the one the game does.
+   Natus's "None" and the Nodes' Hero Drink are the two where the data itself is open (research section 11).
+6. **StrategyGuide.ts is 668 lines** (826 before); the 400-line convention (AGENTS.md rule 7) would take a further split of the
+   paging code into its own module. Not done, to keep the proven panel as it is.
+7. **Record the instruction.** The ~18:35 sentence is not yet in `docs/target/decisions.json` (D-350 holds the first three).
+8. **The cure-hint card and the guide share a small rail.** While a party member has a status with a sourced rule (Zombie, Sleep,
+   Silence, Curse) the hint card rides at the top of the guide's panel and the page gets what is left of the rail: on FFX-2
+   Chapter IV that is one block at a time (the old rail showed a longer body and let the panel run past the rail instead, section 3).
+   That is how the card's own header says it should work, so I kept it. If you would rather the page keep its room, the card can
+   stand outside the guide (it already leaves the guide and stands alone when it would otherwise cover a command row).
 
 ## 8. Gates
 
-- `npx tsc --noEmit`: clean. `node tools/orphans.mjs`: 24 orphaned modules, the same 24 as on `origin/main` (none of them new).
-- Full suite once on the final code, `--maxWorkers=3`: 778 files, 11,403 tests, 11,361 passed, 41 skipped, 0 failed. An earlier run
-  of the same suite had two failures: `advisor-v3-final.test.ts` (it pinned the rail to the tactic's pick; updated, see section 9) and `strategy-ffx2-bahamut.test.ts` (a 15-second timeout while another agent's suite shared the machine; it passes
-  alone in 13 seconds).
-- The new tests: `guide-line` 37, `guide-line-words` 23, `guide-line-separation` 7, `strategy-guide-phone-sheet` 3, and the
-  measurement `guide-line-bench` (18 chapters, a one-seed smoke by default).
-- Advisor digest and the advisor and golden test files before and after: section 2. Protected files by blob hash: section 2.
-- Servers started for the browser proof: one `vite preview` on port 6401, stopped by PID; nothing else left listening.
+- `npx tsc --noEmit` (run as `node .../typescript/bin/tsc --noEmit` from the worktree): clean; the e2e config too.
+  `node tools/orphans.mjs`: 24 orphaned modules, the same 24 as before (none in the guide's files).
+- Full unit suite, `--maxWorkers=3`. First run, just before the wait-habit test was updated: 781 files, 11,466 tests, 11,423 passed,
+  41 skipped, 1 todo, **1 failed**: `guide-ffx2-wait-habit.test.ts` (its panel test pinned the habit line; updated, the file passes,
+  9 of 9). Final run on the final tree (`full-suite-final.log`, scratch): 781 files, 11,467 tests, 11,424 passed, 41 skipped,
+  1 todo, **1 failed**: `strategy-ffx2-bahamut.test.ts`, "heal-only route", a 15-second timeout while other agents' work shared the
+  machine (the known load timeout, as in the first pass); it passes alone, 19 of 19 in 13.9 seconds. Every other file passed.
+- New tests: `guide-doc` 28, `guide-doc-start` 12, `guide-doc-words` 37, `guide-doc-separation` 28, `guide-doc-render` 12 (including the
+  carried-over-paragraph test and the hint-card re-fit test), `strategy-guide-phone-sheet` 3. Updated: `strategy-guide-fold`, `strategy-guide-scale` (a comment),
+  `ui-strategy-guide`, `advisor-v3-final`, `guide-ffx2-wait-habit`, `helpers/guideLayoutStub.ts`.
+- Advisor digest and the advisor and golden test files: section 4.
+- E2E (Playwright, against `vite preview` builds served from scratch): `hud-collision.spec.ts` for Chapters I, II, IV and V at four
+  viewports, on the branch and on origin/main: 16 of 16 pass on each (it is a measuring stick; the numbers are in section 3);
+  `advisor-zone.spec.ts` fails 12 of 12 on the branch with a TypeError in the spec's own page code (it reads
+  `__pyrefly.battle().hud.el`, which is undefined), and the one test run against the origin/main build fails with the identical
+  error, so it is already broken there; not touched, and it says nothing about this change.
+- Servers started: two `vite preview` servers, port 6402 (the branch build) and port 6403 (a build of origin/main for the
+  measurement), both stopped by their PIDs; nothing else left listening.
 
 ## 9. Files
 
-**New:** `src/data/guides/line-types.ts`; `src/data/guides/lines/` (the eighteen chapter lines and `kit.ts`); `src/engine/tactics/guide-line.ts` and `guide-line-board.ts`; `tests/unit/guide-line.test.ts`, `guide-line-words.test.ts`, `guide-line-separation.test.ts`, `guide-line-bench.test.ts`, `strategy-guide-phone-sheet.test.ts`, `helpers/guideLineDrive.ts`; `docs/screenshots/r38-guide-jegged/`.
+**New:** `src/data/guides/doc-types.ts`; `src/data/guides/docs/` (`index.ts` and the 18 documents); `src/ui/common/guideDoc.ts`,
+`guideDocHtml.ts`, `guideFit.ts`; `tests/unit/guide-doc.test.ts`, `guide-doc-start.test.ts`, `guide-doc-words.test.ts`,
+`guide-doc-separation.test.ts`, `guide-doc-render.test.ts`, `strategy-guide-phone-sheet.test.ts`, `helpers/guideDocStrings.ts`;
+`docs/screenshots/r38-guide-jegged/doc/`.
 
-**Changed:** the eighteen `src/data/guides/<chapter>.ts` (rules, watch, phases, the `line` field; hints untouched) and `types.ts` (an optional `line`); `src/ui/common/StrategyGuide.ts` and `strategy-guide.css` (the rail view, no citations, two fit rungs, the phone sheet); `tests/unit/strategy-guide-fold.test.ts`, `strategy-guide-scale.test.ts`, `strategy-guide.test.ts`, `ui-strategy-guide.test.ts` (expectations that pinned the citations and the old ladder) and `advisor-v3-final.test.ts` (its held-command boards are now found with the guide's line, not the tactic); `docs/handoff/bp1-strategy-guide.md` (the superseded parts marked).
+**Changed:** `src/ui/common/StrategyGuide.ts` and `strategy-guide.css` (the document panel, no NEXT, WATCH or RULES, no fit ladder,
+the fit keyed on the hint card's height),
+`comfort.css` (one rule), `src/ui/ffx/FFXBattleHud.ts` and `src/ui/ffx2/FFX2BattleHud.ts` (the removed calls and option); the
+tests named in section 8; `docs/handoff/bp1-strategy-guide.md` (the superseded parts marked again); this note.
 
-**Not touched (hash-identical to `origin/main`):** `src/engine/tactics/guide.ts`, every `advisor*.ts`, every chapter tactic including `braskas-final-aeon.ts`, `ffx-isaaru.ts`, `ffx2-fallen-aeons.ts`, `ffx2-vegnagun-shuyin.ts`, `seymour-flux.ts` and `sin-fins-core.ts`, `tests/unit/chapters/isaaru-tactic-bench.test.ts`, `tests/unit/helpers/fallenAeonsDrive.ts`, every bench, `src/battle/**`, the data. (The first run's tactic edits are parked in `F:/pyrefly-parked/2026-10-03/jegged-first-run-tactics.patch`.)
+**Removed, parked on `F:/pyrefly-parked/2026-10-03/guide-doc/` first:** `src/data/guides/line-types.ts`, `src/data/guides/lines/` (19
+files), `src/engine/tactics/guide-line.ts` and `guide-line-board.ts`, `tests/unit/guide-line.test.ts`, `guide-line-bench.test.ts`,
+`guide-line-separation.test.ts`, `guide-line-words.test.ts`, `tests/unit/helpers/guideLineDrive.ts`.
 
-**Scratch, outside the repo** (`D:/Tools/pyrefly-scratch/2026-10-03/jegged/work/`): `advisor-digest.mjs`, `line-bench.mjs`, `loops.mjs` (repeated no-progress turns), `usage.mjs` (which step presses how often), `labels.mjs` (the line's moves against the tactic's), `variant.mjs` (try an edited line without touching the repo), `trace.mjs`, `compact.mjs`, `held-board.mjs`, `guide-shots.mjs` (the browser proof), and the measurement logs.
+**Not touched (identical to origin/main):** `src/engine/tactics/**` (including `guide.ts`, every `advisor*.ts` and every chapter
+tactic), `src/battle/**`, `src/data/ffx/**`, `src/data/ffx2/**`, the 18 `src/data/guides/<chapter>.ts` and `types.ts`, every bench.
+
+**Scratch, outside the repo** (`D:/Tools/pyrefly-scratch/2026-10-03/guide-doc/`): the saved pages and card screenshots, `doc-shots.mjs`
+and `g-open.mjs` (the browser proof), `clip-check.mjs`, `probe-rail.mjs`, `probe-chk.mjs`, `ledger-scan.py`, `omit-scan.py`,
+`numword-scan.py`, `loot-compare.py`, `overlap.py` (the comparisons used to write the ledger above), `chk-compare.py` and
+`chk-table.py` with the CHK-008 reports (`chk-fixed/`, `chk-main/`, and `chk-keep/` with the first run, before the fit fix), the
+two builds (`dist-doc/`, `dist-main/`), the digests and the full-suite logs.
