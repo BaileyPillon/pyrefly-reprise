@@ -22,6 +22,7 @@
 
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
 import { logicalArtUrl } from './ArtShipped.ts';
+import { masterListed, parseTiers, withStates2x } from './ArtManifestTiers.ts';
 
 /** One subject's entry: what `public/art/characters/<id>/` actually holds. */
 export interface ArtManifestSubject {
@@ -33,11 +34,7 @@ export interface ArtManifestSubject {
   readonly facing?: ArtFacing;
   /** States that also ship `<state>@2x.png`, the twice-resolution master (D-315; `ArtTier.ts`). */
   readonly states2x?: readonly string[];
-  /**
-   * Every master a state ships beyond the approved 1x file: `{ idle: [2, 3, 4] }` means `idle@2x.png`, `idle@3x.png` and
-   * `idle@4x.png` are on disk (release 39, `ArtTier.ts`). Always a subset of {@link ArtManifestSubject.states}; `states2x` is
-   * the states that list 2 here, and an older manifest that only has `states2x` reads as `{ state: [2] }`.
-   */
+  /** Masters a state ships beyond 1x, `{ idle: [2, 4] }` (release 39, `ArtTier.ts`); `states2x` is the states listing 2, and an old manifest with only `states2x` reads as `[2]`. */
   readonly tiers?: Readonly<Record<string, readonly number[]>>;
 }
 
@@ -74,11 +71,7 @@ export interface ArtManifest {
   readonly title: readonly string[];
   /** Title plates that also ship `title/<id>.2x.webp`. Subset of `title`. */
   readonly title2x: readonly string[];
-  /**
-   * Backdrops that also ship `backdrops/<id>@2x.png`, the twice-resolution master of the 2688x1536 painting (release 39):
-   * `{ gagazet: [2] }`. A backdrop is drawn from the master the device's budget allows (`ArtBudget.backdropScaleFor`), and its
-   * depth plates are cut from the same pixels. Empty on an older manifest.
-   */
+  /** Masters a backdrop ships beyond 1x, `{ gagazet: [2] }`: its painting and depth plates are drawn from the one the budget allows (release 39). */
   readonly backdropTiers?: Readonly<Record<string, readonly number[]>>;
 }
 
@@ -113,18 +106,6 @@ export const ART_INDEX_CACHE: RequestCache = 'no-cache';
 let inFlight: Promise<ArtManifest | null> | null = null;
 let current: ArtManifest | null = null;
 
-/** `{ name: [2, 4] }` from untrusted JSON: scales 2 to 4 only, ascending, for names `known` accepts. */
-function parseTiers(raw: unknown, known: (name: string) => boolean): Record<string, number[]> {
-  const out: Record<string, number[]> = {};
-  if (!raw || typeof raw !== 'object') return out;
-  for (const [name, list] of Object.entries(raw as Record<string, unknown>)) {
-    if (!known(name) || !Array.isArray(list)) continue;
-    const scales = [...new Set(list.filter((n): n is number => typeof n === 'number' && Number.isInteger(n) && n >= 2 && n <= 4))].sort((a, b) => a - b);
-    if (scales.length) out[name] = scales;
-  }
-  return out;
-}
-
 /**
  * Coerce a parsed JSON blob into an {@link ArtManifest}, or `null`.
  *
@@ -149,27 +130,19 @@ export function parseArtManifest(raw: unknown): ArtManifest | null {
     // only copies the sidecar's string through.
     const facing = parseArtFacing(entry.facing);
     const hi = Array.isArray(entry.states2x) ? entry.states2x.filter((s): s is string => states.includes(s as string)) : [];
-    const tiers = parseTiers(entry.tiers, (state) => states.includes(state));
-    for (const state of hi) tiers[state] = [...new Set([2, ...(tiers[state] ?? [])])].sort((a, b) => a - b);
-    subjects[id] = {
-      states,
-      portrait: entry.portrait === true,
-      ...(facing ? { facing } : {}),
-      ...(hi.length ? { states2x: hi } : {}),
-      ...(Object.keys(tiers).length ? { tiers } : {}),
-    };
+    const tiers = withStates2x(parseTiers(entry.tiers, (state) => states.includes(state)), hi);
+    subjects[id] = { states, portrait: entry.portrait === true, ...(facing ? { facing } : {}), ...(hi.length ? { states2x: hi } : {}), ...(Object.keys(tiers).length ? { tiers } : {}) };
   }
 
   const strings = (v: unknown): string[] =>
     Array.isArray(v) ? v.filter((s): s is string => typeof s === 'string') : [];
 
-  const backdrops = strings(obj.backdrops);
   return {
     version: typeof obj.version === 'number' ? obj.version : 0,
     generatedAt: typeof obj.generatedAt === 'string' ? obj.generatedAt : '',
     subjects,
     portraits: strings(obj.portraits),
-    backdrops,
+    backdrops: strings(obj.backdrops),
     pause: strings(obj.pause),
     // A manifest written before the 2x contract existed simply has no opinion,
     // and an empty list is the safe one: the screen ships the 1x plate alone,
@@ -180,7 +153,7 @@ export function parseArtManifest(raw: unknown): ArtManifest | null {
     // plate-less gradient it shipped with rather than asking for a 404.
     title: strings(obj.title),
     title2x: strings(obj.title2x),
-    backdropTiers: parseTiers(obj.backdropTiers, (key) => backdrops.includes(key)),
+    backdropTiers: parseTiers(obj.backdropTiers, (key) => strings(obj.backdrops).includes(key)),
   };
 }
 
@@ -334,16 +307,6 @@ export function title2xUrlFor(url: string): string | null {
 const ART_ASSET =
   /(?:^|\/)art\/(?:characters\/([^/?#]+)\/([^/?#]+)|(portraits|backdrops|pause|title)\/([^/?#]+))\.([a-z0-9]+)(?:$|[?#])/i;
 
-/** `idle@3x` -> ['idle', '3']: the stem of a master and its scale. */
-const MASTER_NAME = /^(.+)@([2-4])x$/;
-
-/** The masters a subject's state ships beyond 1x, from `tiers` and (older manifests) `states2x`. */
-function masterScalesOf(subject: ArtManifestSubject | undefined, state: string): readonly number[] {
-  const list = subject?.tiers?.[state];
-  if (list && list.length) return list;
-  return subject?.states2x?.includes(state) ? [2] : [];
-}
-
 function judge(manifest: ArtManifest, url: string): boolean | null {
   // The master's name, whichever form the caller holds: a derived `.webp` (ArtShipped.ts) is the same painting as its PNG.
   const m = ART_ASSET.exec(logicalArtUrl(url));
@@ -363,15 +326,9 @@ function judge(manifest: ArtManifest, url: string): boolean | null {
     // A dotted stem is a candidate or a `.raw` intermediate: not indexed, and
     // not ours to judge.
     if (state.includes('.')) return null;
-    const hi = MASTER_NAME.exec(state);
-    if (hi) return isPng && masterScalesOf(manifest.subjects[subjectId], hi[1]!).includes(Number(hi[2]));
-    return isPng && (manifest.subjects[subjectId]?.states ?? []).includes(state);
+    return isPng && (masterListed(manifest, subjectId, state) ?? (manifest.subjects[subjectId]?.states ?? []).includes(state));
   }
   if (folder === undefined || key === undefined || key.includes('.')) return null;
-  if (folder === 'backdrops') {
-    const hiBackdrop = MASTER_NAME.exec(key);
-    if (hiBackdrop) return isPng && (manifest.backdropTiers?.[hiBackdrop[1]!] ?? []).includes(Number(hiBackdrop[2]));
-  }
   const list =
     folder === 'portraits'
       ? manifest.portraits
@@ -380,7 +337,7 @@ function judge(manifest: ArtManifest, url: string): boolean | null {
         : folder === 'title'
           ? manifest.title
           : manifest.pause;
-  return isPng && list.includes(key);
+  return isPng && ((folder === 'backdrops' ? masterListed(manifest, null, key) : null) ?? list.includes(key));
 }
 
 export async function manifestKnowsAsset(url: string): Promise<boolean | null> {
@@ -397,30 +354,6 @@ export async function manifestKnowsAsset(url: string): Promise<boolean | null> {
  */
 export function manifestKnowsAssetNow(url: string): boolean | null {
   return current ? judge(current, url) : null;
-}
-
-/** `art/characters/<id>/<state>.png` or `art/backdrops/<key>.png` read apart: what the manifest indexes masters by. */
-const TIERED_ASSET = /(?:^|\/)art\/(?:characters\/([^/?#]+)\/([^/?#.@]+)|backdrops\/([^/?#.@]+))\.png(?:$|[?#])/i;
-
-function scalesOf(manifest: ArtManifest, url: string): readonly number[] {
-  const m = TIERED_ASSET.exec(logicalArtUrl(url));
-  if (!m) return [];
-  if (m[1] !== undefined && m[2] !== undefined) return masterScalesOf(manifest.subjects[m[1]], m[2]);
-  return m[3] !== undefined ? (manifest.backdropTiers?.[m[3]] ?? []) : [];
-}
-
-/**
- * The masters on disk beyond 1x for a figure state or a backdrop (`[2, 4]`: `idle@2x.png` and `idle@4x.png` ship), `[]` when it
- * has none, `null` when there is no manifest to ask (the caller then draws the 1x painting, as it always did).
- */
-export async function artScalesFor(url: string): Promise<readonly number[] | null> {
-  const manifest = await loadArtManifest();
-  return manifest ? scalesOf(manifest, url) : null;
-}
-
-/** Sync twin of {@link artScalesFor}: `null` until the manifest has loaded. */
-export function artScalesForNow(url: string): readonly number[] | null {
-  return current ? scalesOf(current, url) : null;
 }
 
 /**

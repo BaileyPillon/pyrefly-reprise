@@ -1,6 +1,5 @@
 import { CanvasTexture, ImageLoader, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace, Texture, TextureLoader } from 'three';
-import { pixelUrlFor, scaleOfUrl } from './ArtTier.ts';
-import { artScalesFor } from './ArtManifest.ts';
+import { artScalesFor, pixelUrlFor, scaleOfUrl } from './ArtTier.ts';
 import { fallbackScale } from './ArtBudget.ts';
 import { shippedArtUrl } from './ArtShipped.ts';
 import { loadArtManifest, manifestKnowsAsset } from './ArtManifest.ts';

@@ -16,7 +16,8 @@
  * Decided from the device and the camera, with no setting and no save key (the brief: "automatic by device").
  */
 import { logicalArtUrl, shippedArtUrl } from './ArtShipped.ts';
-import { artScalesFor } from './ArtManifest.ts';
+import { artManifest, loadArtManifest } from './ArtManifest.ts';
+import { scalesOf } from './ArtManifestTiers.ts';
 import { artBudget, bufferWidth, type TierEnv } from './ArtDevice.ts';
 import { backdropScaleFor, baseScale, pickScale } from './ArtBudget.ts';
 
@@ -63,6 +64,18 @@ export function tierUrl(url: string, scale: number): string | null {
   const logical = logicalArtUrl(url);
   const m = CHARACTER_PNG.exec(logical) ?? BACKDROP_PNG.exec(logical);
   return m ? shippedArtUrl(`${logical.slice(0, m.index)}${m[1]}${m[2]}@${scale}x.png${m[3]}`) : null;
+}
+
+/** The masters on disk beyond 1x for a figure state or a backdrop (`[2, 4]`), `[]` for none, `null` with no manifest (draw the 1x painting). */
+export async function artScalesFor(url: string): Promise<readonly number[] | null> {
+  const manifest = await loadArtManifest();
+  return manifest ? scalesOf(manifest, url) : null;
+}
+
+/** Sync twin of {@link artScalesFor}: `null` until the manifest has loaded. */
+export function artScalesForNow(url: string): readonly number[] | null {
+  const manifest = artManifest();
+  return manifest ? scalesOf(manifest, url) : null;
 }
 
 /** Which master a URL names: `idle@3x.png` or `idle@3x.webp` is 3, anything else (the approved painting) is 1. */

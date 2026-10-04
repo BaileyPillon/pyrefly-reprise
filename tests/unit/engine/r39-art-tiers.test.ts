@@ -23,8 +23,8 @@ import {
   tierMove,
   type Resident,
 } from '../../../src/engine/ArtBudget.ts';
-import { artScalesForNow, manifestKnowsAsset, parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
-import { baseScaleFor, pixelUrlFor, scaleOfUrl, setHiTier, tierUrl, tieredKind } from '../../../src/engine/ArtTier.ts';
+import { manifestKnowsAsset, parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
+import { artScalesForNow, baseScaleFor, pixelUrlFor, scaleOfUrl, setHiTier, tierUrl, tieredKind } from '../../../src/engine/ArtTier.ts';
 import { artBudget, deviceClass, setArtTier, setBufferWidth, setGpuInfo } from '../../../src/engine/ArtDevice.ts';
 
 afterEach(() => {
