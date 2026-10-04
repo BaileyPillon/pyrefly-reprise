@@ -1,4 +1,6 @@
 import type { Object3D } from 'three';
+import type { PlaybackSpeed } from '../engine/BattlePresenterPorts.ts';
+import { SPEED_SCALE } from '../engine/BattlePresenterUtil.ts';
 
 /**
  * "This battle opens hurried" (PR-0061), handed from the battle screen to the scene (PR-0341), and "the opening begins
@@ -28,10 +30,53 @@ import type { Object3D } from 'three';
  */
 const KEY = 'openingHurried';
 const BEGUN = 'openingBegun';
+const PLAYBACK = 'openingPlayback';
 
-/** The battle screen: this battle's first opening runs hurried. */
-export function markOpeningHurried(scene: Object3D): void {
+/** What a hurried arrival asks of the presenter, live: how fast the fight plays now, and whether a command menu is up. */
+export interface OpeningPlayback {
+  speed: PlaybackSpeed;
+  menu: boolean;
+}
+
+/**
+ * `skip` collapses every wait to zero (`SPEED_SCALE.skip` is 0), so a hurried arrival's clock must finish in the first
+ * frame: one real millisecond is worth more of the arrival's own than its whole timeline (5.8 s).
+ */
+export const SKIP_PACE = 1e6;
+
+/**
+ * Once a command menu is up nothing plays behind it: the arrival's clock runs at least this fast, so even a whole 5.8 s
+ * timeline (twice this, with `HURRIED_ARRIVAL_SPEED`) is over in about 90 ms, a dissolve of a few frames, not a pop.
+ */
+export const MENU_PACE = 32;
+
+/**
+ * The battle screen: this battle's first opening runs hurried. `playback` reads the presenter live (a player can
+ * fast-forward mid-arrival, and the first menu opens at no fixed time), so the scene's compressed arrival follows it
+ * (FOC371-01 at fast and skip).
+ */
+export function markOpeningHurried(scene: Object3D, playback?: () => OpeningPlayback): void {
   scene.userData[KEY] = true;
+  if (playback) scene.userData[PLAYBACK] = playback;
+}
+
+/**
+ * A scene that stages a hurried arrival: how many times faster than its own compressed clock to run it right now, to
+ * match the presenter. The opening obeys the playback speed (every wait times `SPEED_SCALE`, fast 0.32, skip 0), and the
+ * first menu opens 0.6 to 1.7 s after the card at fast and 0.2 to 1.3 s after it at skip, while a compressed arrival that
+ * stayed on the wall clock was still on screen after that menu at fast (1.1 to 1.4 s of night and tree) and still bringing
+ * Yojimbo and Daigoro in at it at skip (r38-polish check, disclosure 1). So the clock runs at the reciprocal of the
+ * presenter's factor: 1 at normal speed, 3.125 at fast, and at skip the arrival ends in one frame (the figures simply
+ * there, as on 37.1). The gap to the menu varies too much for a speed alone to promise the arrival is over by then, so a
+ * menu that is up takes the pace to at least {@link MENU_PACE}. 1 when the screen sent nothing. Only a hurried fight
+ * asks: a full opening's clock is untouched.
+ */
+export function hurriedArrivalPace(scene: Object3D | null | undefined): number {
+  const read: unknown = scene?.userData[PLAYBACK];
+  const now = typeof read === 'function' ? (read as () => OpeningPlayback)() : null;
+  const scale = SPEED_SCALE[now?.speed ?? 'normal'] ?? 1;
+  const pace = scale > 0 ? 1 / scale : SKIP_PACE;
+  return now?.menu === true ? Math.max(pace, MENU_PACE) : pace;
 }
 
 /** A scene that stages its own arrival: was the opening about to be hurried? True once; the answer is used up. */

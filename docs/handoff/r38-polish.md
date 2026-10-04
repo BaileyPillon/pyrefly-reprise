@@ -332,3 +332,32 @@ None.
 4. `BattleScreen.ts` (+2) and `FFX2BattleHud.ts` (+8) were already over 400 lines and grew.
 5. `docs/target/decisions.json` D-359's `delivery` is still `not-scheduled` (the handoff's Left 1; the integrator sets it on the merge).
 6. The builder's commits end `Co-Authored-By: Claude Sonnet 5.5`, not the Opus line some briefs name; harmless. My commit does the same.
+
+## Integration (release 38, the integrator, FFX only): disclosure 1 is closed
+
+The check's disclosure 1 (the compressed arrival ran on the wall clock, so at `fast` it outlasted the first menu and at `skip` it was
+still bringing Yojimbo and Daigoro in at it) is fixed on `rel38-int`, not on this branch. **Game case: FFX only** (Chapter IX is FFX's
+Yojimbo chapter; the only reader of the new pace is the Cavern scene; the one shared line is the battle screen's mark, which no other
+scene reads). What it does: a hurried fight's arrival clock follows the presenter's own factor live (`openingMark.ts`
+`hurriedArrivalPace`: 1 at normal, 1 / 0.32 at fast, finished in one frame at skip), and a command menu that is up takes it to at least
+`MENU_PACE` (a whole arrival over in about 90 ms), because the first menu opens at no fixed time (0.56 to 1.65 s after the card at
+`fast`, 0.21 to 1.29 s at `skip`, in the runs below). The figures' last write is keyed to the frame that carries them to their last
+value (`from < yojimboIn[1]`) instead of a fixed 50 ms window a fast clock steps over. A full opening and normal speed are untouched.
+
+Measured the check's way (`arrival.mjs` of the r38-checks-a harness, headless GPU Chromium, real keys, seed 1, 1600x900, speed set through
+the debug API when the battle screen opens; code-only production builds served from one shared `public/`; raw runs and the harness copy in
+`D:/Tools/pyrefly-scratch/2026-10-04/rel38-int/` `out/arrival`, `out/menuwire`):
+
+| Build, hurried Chapter IX | Runs | Drawn in the first 3 frames after the menu | Arrival against the first menu | Yojimbo full after the card |
+|---|---|---|---|---|
+| this branch (polish), `fast` | 1 | no | visible until **1,087 ms after** the menu | 1,789 ms (137 ms after the menu) |
+| this branch (polish), `skip` | 1 | no | visible until 1,509 ms after the menu | 557 ms (345 ms after the menu) |
+| integrated, `fast` | 6 | 6 of 6 | visible 797 to 903 ms, over **339 to 711 ms before** the menu | 138 to 291 ms |
+| integrated, `skip` | 3 | 3 of 3 | none shown (tree peak 0; once 0.54 when the speed was set after the card was gone) | 43 to 290 ms |
+| integrated, normal | 3 | 3 of 3 | visible 2.52 to 2.54 s, over 580 to 666 ms before the menu | 542 to 550 ms (the check: 544 to 556) |
+| integrated, tapped (full opening) | 1 | yes | visible 5.02 s, over 4.66 s before the menu | 1,170 ms (the check: 1,160 to 1,170) |
+
+The menu coupling, read in the real game: the getter the battle screen puts on the scene reports `menu: true` from the exact frame
+`awaitingMenu` is true (0 ms offset, 0 frames early, 0 missed), and with a menu forced up while the arrival was at full strength (veil 0.72,
+tree 1.0) it was gone 65 to 70 ms later at normal speed (4 frames) and 49 ms later at `fast` (3 frames). 0 console errors, 0 404s in every
+run. Tests: `tests/unit/chapters/cavern-hurried-arrival.test.ts` (29).

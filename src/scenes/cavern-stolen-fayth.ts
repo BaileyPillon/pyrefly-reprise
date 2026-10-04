@@ -10,7 +10,7 @@ import type { SceneSlots } from './index.ts';
 import { ArrivalWait, SakuraArrival, sakuraArrivalAt, softDiscTexture, SAKURA_ARRIVAL_MS } from './cavern-stolen-fayth-arrival.ts';
 import { CAVERN_IDS, findFigure, victoryStruck, type StagedFigure } from './cavern-stolen-fayth-cast.ts';
 import { GinnemGlow } from './cavern-stolen-fayth-glow.ts';
-import { takeOpeningBegun, takeOpeningHurried } from './openingMark.ts';
+import { hurriedArrivalPace, takeOpeningBegun, takeOpeningHurried } from './openingMark.ts';
 import { fxDebugHooks } from '../engine/fx/fxDebugHooks.ts';
 
 // ---------------------------------------------------------------------------
@@ -310,10 +310,13 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
     }
     if (step === 'go') arrivalMs = 0;
     if (arrivalMs < 0) return;
-    arrivalMs += dt * 1000 * wait.speed; // the timeline's own milliseconds; a hurried opening runs it faster
+    const from = arrivalMs;
+    // The timeline's own milliseconds; a hurried opening runs it faster, fast and skip faster still (the presenter's factor), and a menu that is up faster again (FOC371-01).
+    arrivalMs += dt * 1000 * wait.speed * (hurried ? hurriedArrivalPace(root) : 1);
     const f = sakuraArrivalAt(arrivalMs);
     sakura.apply(f);
-    if (arrivalMs <= SAKURA_ARRIVAL_MS.yojimboIn[1] + 50) {
+    // They are the frame's to set until the frame that carries them to their last value: a fast clock steps over a fixed window.
+    if (from < SAKURA_ARRIVAL_MS.yojimboIn[1]) {
       daigoro?.setAlpha?.(f.daigoro);
       yojimbo.setAlpha?.(f.yojimbo);
       // He steps out from the tree onto his spot (`enemySpots`), and ends exactly on it.
