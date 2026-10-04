@@ -61,6 +61,14 @@ export class DeviceTracker {
     return this.state;
   }
 
+  /** Re-read the best guess (a menu opening again): what the player last pressed with, else the usual guess. */
+  refresh(): void {
+    const next = guessDevice();
+    if (next.device === this.state.device && next.pointerKind === this.state.pointerKind) return;
+    this.state = next;
+    this.onChange(this.state);
+  }
+
   /** A press arrived from `device`; a pointer press says which pointer (`pointerType`). */
   note(device: PlayerDevice, pointerKind?: string): void {
     const kind = device === 'pointer' ? pointerKind || this.state.pointerKind || 'mouse' : this.state.pointerKind;

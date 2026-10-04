@@ -18,6 +18,8 @@ import { ffxTargetMode } from './loneTarget.ts';
 import { noteWarnsZombieHarm, zombieWarnOn } from './zombieWarnOptions.ts';
 import { touchTapped } from '../common/touchTapAim.ts';
 import { commandHelpText } from './commandHelp.ts';
+import { DefendTag, defendCommandOf } from './defendControl.ts';
+import { DeviceTracker } from './minigames/overlayInput.ts';
 import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
@@ -111,6 +113,10 @@ export class CommandMenu {
   readonly breadcrumbEl: HTMLElement;
   /** The phone's page buttons (R31, D-286); shown by CSS on a phone only. */
   readonly pagerEl: HTMLElement;
+  /** The Defend tab (release 39): the HUD puts it in the command area, under the stack. Hidden unless Defend is on offer. */
+  get defendEl(): HTMLElement {
+    return this.defendTag.el;
+  }
   readonly targetCursor = new TargetCursor();
 
   private stateValue: 'top' | 'sub' | 'target' = 'top';
@@ -164,8 +170,19 @@ export class CommandMenu {
   private wrap: { wrapper: AvailableCommand; group: TopGroupRow; back: 'top' | 'sub'; backIndex: number } | null = null;
   private opts: CommandMenuOpenOptions | null = null;
   private resolve: ((cmd: Command) => void) | null = null;
-  private readonly watcher = new RawInputWatcher((b) => this.onButton(b));
+  private readonly watcher = new RawInputWatcher((b, source) => {
+    this.device.note(source);
+    this.onButton(b);
+  });
   private unwireClicks: (() => void) | null = null;
+  /**
+   * FFX's Defend (release 39, FFX only): the original's Triangle, named on a tab under the stack. The engine's own
+   * `defend` command, which {@link buildTopRows} leaves off the list on purpose; see `defendControl.ts`.
+   */
+  private readonly defendTag = new DefendTag(() => this.defend());
+  /** The input in use: the tab names the key, the pad's symbol or a tap for it. */
+  private readonly device = new DeviceTracker((d) => this.defendTag.setDevice(d));
+  private defendCmd: AvailableCommand | null = null;
 
   constructor() {
     this.stackEl = document.createElement('div');
@@ -186,6 +203,8 @@ export class CommandMenu {
     // one) selects it and confirms through the exact same path Enter does —
     // mouse and keyboard can never resolve a different Command this way.
     this.targetCursor.setOnClick((id) => this.tryConfirmTargetById(id));
+    // A finger or a mouse on the list or on the Defend tab: the tab's words follow (a key or a pad button says so itself, through the watcher).
+    for (const el of [this.stackEl, this.defendTag.el]) el.addEventListener('pointerdown', (e) => this.device.note('pointer', e.pointerType));
     // **The one place a selection is published from.**
     //
     // It used to be published by hand at each call site, and `confirmTarget()`
@@ -246,6 +265,8 @@ export class CommandMenu {
     this.wrap = null;
     this.opts = opts;
     this.rows = buildTopRows(opts.commands);
+    this.defendCmd = defendCommandOf(opts.commands);
+    this.device.refresh(); // the tab's words start from what the player last pressed with
     this.topIndex = firstEnabledIndex(this.rows);
     this.subIndex = 0;
     this.pageStart = null;
@@ -255,14 +276,33 @@ export class CommandMenu {
     this.unwireClicks = withTextSizeWatch(wireClicks(this.stackEl, (action) => this.onAction(action)), () => this.state !== 'target' && this.renderStack()); // PR-0266
     this.renderStack();
     this.updateHelpAndPreview();
-    return new Promise<Command>((resolve) => {
+    const decision = new Promise<Command>((resolve) => {
       this.resolve = resolve;
     });
+    this.syncDefendTag(); // after `resolve` exists: the tab shows only while a decision is open
+    return decision;
+  }
+
+  /**
+   * The Defend tab shows while a decision is open at the top level and the engine offers Defend: the original's
+   * Triangle works there, and a submenu or a target step is the player choosing something else. The words follow
+   * the input last used (`DeviceTracker`: a key, a pad button or a finger, and before any press the usual guess).
+   */
+  private syncDefendTag(): void {
+    this.defendTag.set(this.defendCmd, !!this.resolve && !this.suspended && this.state === 'top', this.device.current);
+  }
+
+  /** The Defend press, from Triangle (`Q` / `Shift` / the pad's Triangle) or a tap on the tab: the engine's own `defend` command. */
+  private defend(): void {
+    if (!this.resolve || this.suspended || this.state !== 'top' || !this.defendCmd) return;
+    this.resolveCommand(this.defendCmd);
   }
 
   private finish(command: Command): void {
     this.suspended = false;
     this.wrap = null;
+    this.defendCmd = null;
+    this.syncDefendTag();
     // No menu is open any more, so Esc is nobody's back button until the next
     // one opens. Without this a decision taken from a submenu would leave the
     // flag true and Esc dead for the rest of the battle.
@@ -298,6 +338,7 @@ export class CommandMenu {
   close(): void {
     this.suspended = false;
     this.wrap = null;
+    this.defendCmd = null;
     this.watcher.detach();
     this.unwireClicks?.();
     this.unwireClicks = null;
@@ -308,6 +349,7 @@ export class CommandMenu {
     this.pagerEl.hidden = true;
     this.opts?.setHelp('');
     this.resolve = null;
+    this.syncDefendTag();
   }
 
   /**
@@ -354,6 +396,7 @@ export class CommandMenu {
     this.breadcrumbEl.hidden = true;
     this.pagerEl.hidden = true;
     this.opts?.setHelp('');
+    this.syncDefendTag();
   }
 
   private resume(): boolean {
@@ -363,6 +406,7 @@ export class CommandMenu {
     this.breadcrumbEl.hidden = this.state !== 'sub';
     this.renderStack();
     this.updateHelpAndPreview();
+    this.syncDefendTag();
     return true;
   }
 
@@ -388,11 +432,17 @@ export class CommandMenu {
       this.moveTop(b === 'up' ? -1 : 1);
     } else if (b === 'confirm') {
       this.chooseTop(this.topIndex);
-    } else if (b === 'l1' || b === 'r1' || b === 'triangle') {
+    } else if (b === 'triangle') {
+      // Defend is the original's Triangle (`defendControl.ts`, `research/ffx-defend-input-2026-10-04.md`,
+      // `[verified: 4 GameFAQs sources]`): the engine's own `defend` command, not a row in the list. Triangle
+      // used to open the party swap here, which the sources give to L1 (the roster strip's triangle MARKER, an
+      // authored UI sprite in visual-bible §3.3, was read as the button).
+      this.defend();
+    } else if (b === 'l1' || b === 'r1') {
       // Party swap is its own affordance, not a verb in the list: L1/LB opens
-      // it in FFX [visual-bible §3.3, "The Switch flow", verified], and the
-      // roster strip's own marker is the triangle. Both jump straight to the
-      // Switch row's reserve list; the row itself stays for mouse players.
+      // it in FFX [visual-bible §3.3, "The Switch flow", verified]. Both jump
+      // straight to the Switch row's reserve list; the row itself stays for
+      // mouse players.
       this.openSwitchList();
     }
   }
@@ -552,6 +602,7 @@ export class CommandMenu {
     this.pendingCmd = cmd;
     this.preTargetState = this.state === 'sub' ? 'sub' : 'top';
     this.state = 'target';
+    this.syncDefendTag(); // a target step is the player choosing a target, not a moment to Defend
 
     if (resolution.mode === 'all') {
       // Hits everything: every target is ringed and flashes together under one
@@ -682,6 +733,7 @@ export class CommandMenu {
   // ------------------------------------------------------------------ render
 
   private renderStack(): void {
+    this.syncDefendTag();
     if (this.state === 'sub') {
       const group = this.currentGroup();
       if (group?.kind === 'group') {
