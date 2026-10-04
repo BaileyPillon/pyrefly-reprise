@@ -18,6 +18,7 @@ import { sendCompanions } from './SentCompanions.ts';
 import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
 import { impactAtApex, windUpLeads } from './KeyPoses.ts';
 import { armOdKey, endOdKey, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
+import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
 import { partyOffStage } from './SummonStaging.ts';
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
@@ -45,6 +46,7 @@ export async function actionStart(
 ): Promise<void> {
   ctx.actingId = event.actorId;
   beginSpellAction(ctx, event);
+  await telegraphHold(ctx, event); // r38 keys: Flux's Lance of Atrophy, Braska's Ultimate Jecht Shot (950 ms, only with the painting; else nothing happens)
   const actor = ctx.stage.actor(event.actorId);
   // An enemy's physical ability draws its own attack painting (iter2
   // attack-pose, both games); everything else is `poseForCommand` as before.

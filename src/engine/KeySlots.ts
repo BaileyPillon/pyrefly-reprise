@@ -5,7 +5,8 @@
  * swap, no changed wait and no changed framing.
  *
  * **1. The Overdrive / Special key pose** (`od-<abilityId>.png` in the acting figure's folder, with its sidecar,
- * e.g. `public/art/characters/tidus/od-swordplay.png`, `.../yuna-gunner/od-<special>.png`). When the acting
+ * e.g. `public/art/characters/tidus/od-swordplay.png`, `.../yuna-gunner/od-<special>.png`; a family of ids shares
+ * one, `lulu/od-fury.png`, see `odFamilyOf`). When the acting
  * figure has a painting for the move it chose, the presenter shows it at the move's apex:
  * - **FFX** (CTB): from the action's opening, so the held Overdrive shot (letterbox, name slab, push-in) and the
  *   whole strike are on it. No wind-up or impact painting leads, and no follow-through replaces it.
@@ -16,7 +17,9 @@
  *
  * **2. The boss telegraph** (`telegraph.png` in the boss's folder). The `charge` beat the presenter already plays
  * (the zoom, the heartbeat vignette, the banner) puts the painting up and holds it for that beat; added waits: none.
- * Outside an action it goes back to idle when the beat ends, inside one `action-end` does.
+ * Outside an action it goes back to idle when the beat ends, inside one `action-end` does. Bosses that never
+ * `charge` (Seymour Flux, Braska's Final Aeon) get it through `TelegraphHold.ts` (r38, FFX only): the painting is put
+ * up by `telegraphUp` at the headline move's `action-start` and held there for 950 ms, an added wait.
  *
  * Gates, shared: BATTLE SPECTACLE is on (`BattleStage.fx.enabled()`, the same port the splash and the hit-stops
  * use); FFX-2 only: not while a command menu is open ({@link FFX2_SUPPRESS_WHILE_MENU}, the brief's "never while
@@ -32,6 +35,19 @@ export const FFX2_SUPPRESS_WHILE_MENU = true;
 
 /** The telegraph slot's pose name (`BattlePresenterArt.ENEMY_POSES`). */
 export const TELEGRAPH_POSE = 'telegraph';
+
+/**
+ * Release 38 (FFX only; D-357): key paintings that stand for a FAMILY of ability ids, by family name, so one file
+ * serves the whole family (`od-fury.png`, `od-mix.png`) instead of one copy per id. The engine resolves a Fury or
+ * a Mix to its result id (`firaga-fury`, `mix-ultra-potion`), which is what the move's own key name would have to
+ * be. Never the id itself; a move's own `od-<id>` painting is tried first (`armOdKey`). Lulu's Fury is `<spell>-fury`
+ * (19 ids, `fire-fury` .. `ultima-fury`); Rikku's Mix is the 43 `mix-*` ids. Neither pattern matches an FFX-2 or FF7 id.
+ */
+export function odFamilyOf(abilityId: string): string[] {
+  if (/^[a-z]+-fury$/.test(abilityId)) return ['fury'];
+  if (/^mix-/.test(abilityId)) return ['mix'];
+  return [];
+}
 
 /** The pose name of a move's key painting. */
 export function odPoseFor(abilityId: string): string {
@@ -83,8 +99,9 @@ export function armOdKey(ctx: EventCtx, event: Extract<BattleEvent, { type: 'act
   keys.get(ctx)?.delete(event.actorId);
   const id = event.abilityId ?? (event.command as { id?: string }).id;
   if (!id || !spectacleOn(ctx) || menuBlocks(ctx)) return null;
-  const pose = odPoseFor(id);
-  if (ctx.stage?.paints?.(event.actorId, pose) !== true) return null;
+  // The move's own painting first, then its family's (`odFamilyOf`); the first the figure really paints.
+  const pose = [odPoseFor(id), ...odFamilyOf(id).map(odPoseFor)].find((p) => ctx.stage?.paints?.(event.actorId, p) === true);
+  if (!pose) return null;
   const key: OdKey = { actorId: event.actorId, pose, ffx2: isFfx2(ctx), shown: false };
   let m = keys.get(ctx);
   if (!m) keys.set(ctx, (m = new Map()));
