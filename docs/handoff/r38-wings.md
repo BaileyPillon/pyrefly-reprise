@@ -50,8 +50,10 @@ and keeps its approved hash.
 
 - **A faint join is still visible at some rigs, as it was with the mirrored wings.** The plate is drawn by the eye-candy B plates (`fx-b-plate-0..3`, depth
   slices at nearer z) in the default build; their own right and left edges move relative to the plate by parallax, and where a slice ends the full painted wing
-  beneath shows a tonal step and, at the enemy rig of the Den, a thin dark vertical line. Hide the slices and the plate/wing join is clean (probed in the page);
-  the mirrored wing showed the same line at the mirror axis. Slicing the wings the same way is not built and is an eye-candy option B change.
+  beneath shows a tonal step and, at the enemy rig of the Den, a thin dark vertical line. Probed in the page by hiding meshes: with the slices hidden the thin line is
+  gone, and the base plate (`fx-b-plate-0`, which carries only the far band; the nearer bands are the slices) then reads darker than its wings, because each wing
+  is the whole painting; so the step is the slices' composition against a whole-painting wing, not the painted strip's own 96 px blend. The mirrored wing showed
+  the same line at the mirror axis. Slicing the wings the same way is not built and is an eye-candy option B change.
 - The strips' left candidate for Bevelle (cand 3) keeps the left edge dark and restrained and the right (cand 1) finishes the cut-off lamp as machinery
   (the README's picks); the README's flaws list stands (soft lamp, ESRGAN crispness at the seam, the Den's extra glow orbs).
 - The four paintings are **local art** (`public/art` is not in git): this branch does nothing until the install the main handoff records is in the tree it
