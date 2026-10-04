@@ -156,9 +156,13 @@ describe('the real overlay shows and plays the Overdrive chosen', () => {
     document.body.appendChild(root);
     let result: MinigameResult | undefined;
     void openMinigame(root, req.kind, req.params).then((r) => (result = r));
-    const chips = [...root.querySelectorAll<HTMLElement>('.ig-minigame__bar--sequence .ig-minigame__key')].map((c) => c.textContent);
-    expect(chips).toEqual(BUSHIDO_SEQUENCES[id]!.map((b) => GLYPH[b]));
-    expect(chips.length).toBe(LENGTH[id]);
+    const chipEls = [...root.querySelectorAll<HTMLElement>('.ig-minigame__bar--sequence .ig-minigame__key')];
+    // PR-0361: on a keyboard a chip prints its key with the symbol beside it, so the chip's own button is `data-btn` and the
+    // PlayStation symbol is the small label (an arrow, which is its own symbol, has only the big one).
+    const symbols = chipEls.map((c) => c.querySelector('.ffx-mg-key__sub')?.textContent ?? c.querySelector('.ffx-mg-key__main')?.textContent);
+    expect(chipEls.map((c) => c.dataset['btn'])).toEqual([...BUSHIDO_SEQUENCES[id]!]);
+    expect(symbols).toEqual(BUSHIDO_SEQUENCES[id]!.map((b) => GLYPH[b]));
+    expect(chipEls.length).toBe(LENGTH[id]);
     for (const b of BUSHIDO_SEQUENCES[id]!) {
       press(b);
       await vi.advanceTimersByTimeAsync(100);

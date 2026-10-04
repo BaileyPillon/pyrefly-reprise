@@ -11,6 +11,12 @@
  */
 export type UiButton = 'up' | 'down' | 'left' | 'right' | 'confirm' | 'cancel' | 'triangle' | 'square' | 'l1' | 'r1';
 
+/** Where a press came from: the keyboard is evented, the pad is polled. */
+export type PressSource = 'keyboard' | 'gamepad';
+
+/** The three ways a player reaches the game, named as `app/Input.ts`'s `lastDevice` names them. */
+export type PlayerDevice = 'keyboard' | 'gamepad' | 'pointer';
+
 const KEY_MAP: Record<string, UiButton> = {
   ArrowUp: 'up',
   KeyW: 'up',
@@ -107,6 +113,44 @@ export function rawInputSuspended(): boolean {
   return suspended;
 }
 
+/**
+ * The input the player used last, as this module's own watchers and one window listener saw it, so an
+ * overlay that opens mid-turn (an Overdrive's minigame, PR-0361) can name the right controls on its
+ * first frame instead of guessing: the player reached it with a key, a pad button or a finger a moment ago.
+ *
+ * A **trusted** key only: the phone HUD's Confirm and Back buttons dispatch synthetic `keydown`s
+ * (`phoneBattleText.sendKey`), and those are a tap, not a key. A pointer press anywhere counts, and
+ * records what it was (`pointerType`: `mouse`, `touch`, `pen`). Null until the player has pressed anything.
+ */
+export interface SeenDevice {
+  device: PlayerDevice;
+  /** `PointerEvent.pointerType` for `pointer`, otherwise `''`. */
+  pointerKind: string;
+}
+let seenDevice: SeenDevice | null = null;
+let pointerTracked = false;
+
+function noteDevice(device: PlayerDevice, pointerKind = ''): void {
+  seenDevice = { device, pointerKind };
+}
+
+/** The device the player last pressed with, or null before the first press. */
+export function lastPlayerDevice(): SeenDevice | null {
+  return seenDevice;
+}
+
+/** Forget it (a unit test, or a fresh page). */
+export function forgetPlayerDevice(): void {
+  seenDevice = null;
+}
+
+/** One capture listener for the whole page, added by the first watcher that attaches. */
+function trackPointer(): void {
+  if (pointerTracked || typeof window === 'undefined') return;
+  pointerTracked = true;
+  window.addEventListener('pointerdown', (e) => noteDevice('pointer', e.pointerType || 'mouse'), true);
+}
+
 export interface RawInputWatcherOptions {
   /**
    * Keep reading input while every other watcher is muted.
@@ -136,7 +180,8 @@ export class RawInputWatcher {
   private readonly keyboard: boolean;
 
   constructor(
-    private readonly onButton: (button: UiButton) => void,
+    /** `source` is where the press came from (PR-0361: an overlay words itself for the device in use). */
+    private readonly onButton: (button: UiButton, source: PressSource) => void,
     opts: RawInputWatcherOptions = {},
   ) {
     this.ignoreSuspend = opts.ignoreSuspend === true;
@@ -151,6 +196,7 @@ export class RawInputWatcher {
   attach(): void {
     if (this.attached) return;
     this.attached = true;
+    trackPointer();
     if (this.keyboard) window.addEventListener('keydown', this.onKeyDown);
     this.rafId = requestAnimationFrame(this.pollGamepad);
   }
@@ -170,7 +216,8 @@ export class RawInputWatcher {
     if (!button) return;
     if (e.repeat && !DIRECTIONS.has(button)) return;
     if (e.code.startsWith('Arrow') || e.code === 'Space' || e.code === 'Tab') e.preventDefault();
-    this.onButton(button);
+    if (e.isTrusted) noteDevice('keyboard');
+    this.onButton(button, 'keyboard');
   };
 
   private readonly pollGamepad = (now: number): void => {
@@ -196,12 +243,13 @@ export class RawInputWatcher {
     for (const button of next) {
       const wasHeld = this.padHeld.has(button);
       if (!wasHeld) {
-        this.onButton(button);
+        noteDevice('gamepad');
+        this.onButton(button, 'gamepad');
         this.repeatAt.set(button, now + REPEAT_DELAY_MS);
       } else if (DIRECTIONS.has(button)) {
         const due = this.repeatAt.get(button) ?? Infinity;
         if (now >= due) {
-          this.onButton(button);
+          this.onButton(button, 'gamepad');
           this.repeatAt.set(button, now + REPEAT_INTERVAL_MS);
         }
       }

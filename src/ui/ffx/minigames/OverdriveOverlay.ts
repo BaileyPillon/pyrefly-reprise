@@ -35,6 +35,7 @@ export class OverdriveOverlay {
   private readonly ringTextEl: SVGTextElement;
   private readonly bonusEl: HTMLElement;
 
+  private mechanic = '';
   private timerMs = 0;
   private startedAt = 0;
   private rafId = 0;
@@ -77,11 +78,20 @@ export class OverdriveOverlay {
 
   open(opts: OverlayOpenOptions): void {
     this.titleEl.textContent = opts.title;
-    this.subtitleEl.textContent = `${opts.mechanic.toUpperCase()} · ${opts.instruction.toUpperCase()}`;
+    this.mechanic = opts.mechanic;
+    this.setInstruction(opts.instruction);
     this.showBonus = opts.showBonus ?? false;
     this.ringEl.hidden = opts.timerMs === undefined;
     this.bonusEl.hidden = !this.showBonus;
     requestAnimationFrame(() => this.el.classList.add('ffx-mg--open'));
+  }
+
+  /**
+   * Rewrites the subtitle's instruction half (`MECHANIC · INSTRUCTION`). Bushido and Swordplay word it for
+   * the input in use (`overlayInput.ts`, PR-0360/0361) and change it when the player switches device.
+   */
+  setInstruction(instruction: string): void {
+    this.subtitleEl.textContent = `${this.mechanic.toUpperCase()} · ${instruction.toUpperCase()}`;
   }
 
   /** Starts the depleting ring; calls `onExpire` once when time runs out. */
