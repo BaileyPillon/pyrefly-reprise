@@ -30,6 +30,7 @@ Jules, ...). `CLAUDE.md` only imports it. Keep it short; details live in `docs/`
 | What each live build still owes the critic, and which issues have stalled | `npm run critic:status` |
 | Which review a change needs, and why | `node tools/critic-plan.mjs` (`--paths a,b` to ask about files) |
 | Settle a review obligation with a report | `node tools/critic-clear.mjs --report <report.json>` (never delete a marker) |
+| Prove a build's art: every derived file equals its PNG master, a WebP ships only where every decoder draws it the same and never under 64 bytes (WebKit cannot load one), nothing names a missing file, every shipped image loads in WebKit and Chromium | `node tools/art-derive.mjs verify --dir <build>` and `audit --dir <build>`; `node tools/art-browser-load.mjs --dir <build>` loads every shipped image in WebKit and Chromium (the deploy runs it, about 20 s); `node tools/art-play-audit.mjs --dir <build>` plays it in headless Chromium; `node tools/art-browser-identity.mjs --dir <build> --screen-exact` compares them as the browser decodes them |
 | Release | `npm run deploy` (read "Release" first) |
 
 Everything else (ports, base path, the screenshot flags, the `window.__pyrefly`
@@ -49,7 +50,7 @@ debug API that plays a chapter to an outcome from the console) is in
 | `src/app/screens` | Title, chapter select, party prep, pause, results | |
 | `src/story` | Cutscene DSL and scripts | `research/writing-bible.md` |
 | `src/audio`, `public/audio`, `tools/audio` | Prerendered sampled music + SFX, synth fallback | [AUDIO-GUIDE](docs/AUDIO-GUIDE.md), [THEMES](docs/audio/THEMES.md) |
-| `public/art/` | Painted PNGs. **Gitignored on main**, local only, backed up to `D:\Tools\pyrefly-art-backup` | |
+| `public/art/` | Painted PNGs, the approved masters. **Gitignored on main**, local only, backed up to `D:\Tools\pyrefly-art-backup`. A production build ships a lossless WebP derived from each one that every decoder draws the same from it (the default `exact`: opaque art, and art whose alpha is only 0 and 255 with no colour left under alpha 0; every other master, the 2x ones included, ships as a PNG recompressed at maximum effort with its pixels proved identical) (`tools/art-derive-lib.mjs`, `src/engine/ArtShipped.ts`; masters, hashes and dev are unchanged): build art URLs with `artUrl`, read them back with `logicalArtUrl` | [r38-bytes](docs/handoff/r38-bytes.md) |
 | `critic/` | `RUBRIC.md` (policy v2: verdicts, schedule, one score, gates), `policy.json` (the same rules as data, enforced by `tools/critic-*.mjs`), `CHECKS.md` (CHK-001 to CHK-024, B1 to B4), `runner/` (the review workflows), `pending/` `cleared/` `reviews/` `rounds/` `artifacts/` `ledger.json` (obligations and evidence) | `RUBRIC.md` §4 and §10 before any release |
 | `docs/handoff/<track>.md` | One file per finished or in-flight track | the one for your area |
 | `docs/PRODUCT-BRIEF.md` | North star, the priority order when goals collide, what "finished" means, what is out of scope (draft until Bailey approves it) | before proposing or planning anything |

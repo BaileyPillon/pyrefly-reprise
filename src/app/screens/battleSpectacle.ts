@@ -22,10 +22,9 @@ import { SpectaclePass } from '../../engine/fx/c/SpectaclePass.ts';
 import type { SpectacleFlags } from '../../engine/fx/c/SpectacleRules.ts';
 import { OverdriveSplashLayer } from '../../ui/common/transitions/OverdriveSplashLayer.ts';
 import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
+import { artUrl } from '../../engine/PaintedArt.ts';
 import { mixSplashArt, prepareMixSplash } from '../../engine/fx/mix/splash.ts'; // SPLASH ART (the MAX mix, D-316)
 import '../../ui/common/fx-c-foil.css';
-
-const ART = `${import.meta.env.BASE_URL}art/`;
 
 /**
  * The approved painting each splash shows (spec section 2, "Approved art"): a party member's own
@@ -38,13 +37,13 @@ export function splashArtFor(art: string, kind: 'overdrive' | 'special', game: '
     // splash keeps the slab, lines and name only (no request for a file that is not there).
     if (art.includes('bahamut')) {
       if (kind !== 'special') return null;
-      const url = `${ART}characters/ffx2-bahamut/splash.png`;
+      const url = artUrl('art/characters/ffx2-bahamut/splash.png');
       return manifestKnowsAssetNow(url) === false ? null : url;
     }
-    if (art.includes('ixion')) return `${ART}characters/x2-ixion/overdrive.png`;
+    if (art.includes('ixion')) return artUrl('art/characters/x2-ixion/overdrive.png');
     return null; // FFX-2 party Specials: the slab, the lines and the name only (no approved splash painting yet)
   }
-  if (kind === 'overdrive' && FFX_PARTY.has(art)) return `${ART}characters/${art}/attack.png`;
+  if (kind === 'overdrive' && FFX_PARTY.has(art)) return artUrl(`art/characters/${art}/attack.png`);
   return null;
 }
 

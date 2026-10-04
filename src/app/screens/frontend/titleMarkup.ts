@@ -18,6 +18,7 @@
 
 import { artUrl } from '../../../engine/PaintedArt.ts';
 import { artManifest, loadArtManifest, title2xUrlFor } from '../../../engine/ArtManifest.ts';
+import { logicalArtUrl } from '../../../engine/ArtShipped.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
 
 /**
@@ -176,7 +177,7 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
  */
 function titleSrcsetNow(): string {
   const url = artUrl(TITLE_PLATE);
-  const retina = title2xUrlFor(url) ?? (artManifest() === null ? url.replace(/\.png(?=$|[?#])/i, '.2x.webp') : null);
+  const retina = title2xUrlFor(url) ?? (artManifest() === null ? logicalArtUrl(url).replace(/\.png(?=$|[?#])/i, '.2x.webp') : null);
   if (!retina) return '';
   return (
     `srcset="${escapeHtml(`${url} ${PLATE_1X_WIDTH}w, ${retina} ${PLATE_2X_WIDTH}w`)}" ` +

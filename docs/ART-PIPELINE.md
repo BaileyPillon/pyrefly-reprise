@@ -767,6 +767,28 @@ public/art/
   <the keeper's seed>`) to place the chosen render under `public/art/`. The
   redirect is loud on stderr and the sidecar records `candidateOf` when it
   fires, so a chosen render's origin is never a mystery.
+- **What a production build ships (release 38, "r38-bytes").** The PNGs in
+  `public/art/` are the approved masters, and they stay exactly as installed:
+  hashes, backups and `verify-approved` are of the PNGs. A production build
+  decides by the pixels of each one (the default, `exact`): a master that is
+  opaque, or whose alpha is only 0 and 255 with no colour left under alpha 0,
+  ships as a lossless WebP (the same decoded pixels, 27 to 31 percent fewer bytes,
+  and the same on every decoder, because premultiplying such a picture is the
+  identity), so the live site holds `art/characters/tidus/idle.webp` where
+  `public/art` holds `idle.png`; every other master, the 2x ones included, ships
+  as a PNG recompressed at maximum effort with its pixels proved identical. The
+  dev server still serves the PNGs. There is nothing to do when installing art:
+  the build encodes a new file once (a few seconds at maximum effort, cached by
+  content hash) and a bulk install can warm the cache first with
+  `node tools/art-derive.mjs warm`. A painting cut out with soft edges, or with
+  colour left under its transparent pixels, ships as a PNG on purpose: a WebP of
+  it would not be the same on every engine. A deliberately one-colour image (Paine's
+  fully transparent catchlight layers) must be listed under its `.png` name in
+  `critic/policy.json` `intentionalFlatImages`, and it always ships as that PNG: the
+  WebP of a one-colour picture is 28 to 30 bytes, under the 64-byte floor, and
+  Playwright's WebKit cannot load a WebP that small. `tools/art-browser-load.mjs`
+  loads every shipped image in WebKit and Chromium (the deploy runs it).
+  Details: [handoff/r38-bytes.md](handoff/r38-bytes.md).
 
 ---
 
