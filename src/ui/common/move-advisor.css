@@ -200,18 +200,8 @@
 .mad__where {
   display: none;
 }
-/* "CHAPTER LINE" — this row is the tactic the encounter was designed around,
-   not merely the best-scoring simulation. */
-.mad__badge {
-  padding: 0.6px 3px 0.8px;
-  font-family: var(--ig-font-display);
-  font-size: max(3.9px, var(--mad-fs-floor));
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ig-ink);
-  background: #e9d7a6;
-}
+/* D-359 (both games): there is no "Guide's pick" badge. The guide and the move advisor are separate, and the card
+   no longer says whose advice a row is. */
 
 /* --------------------------------------------------------------- the chips */
 

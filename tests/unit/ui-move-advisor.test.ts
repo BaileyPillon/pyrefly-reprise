@@ -530,8 +530,8 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
       expect(t, `density ${d}`).toContain('Lance of Atrophy');
     }
     // Critic round 09 PR-0126: the *lead*'s own "in <submenu>" chip used to
-    // vanish a rung early (density 5 folded the lead fully bare, dropping 27
-    // of 283 chapter 5 decisions' path chip). Round 13 (PR-0126, narrowed)
+    // vanish a rung early (the rung before the last folded the lead fully bare,
+    // dropping 27 of 283 chapter 5 decisions' path chip). Round 13 (PR-0126, narrowed)
     // found the phone-compact last rung still dropped it — 'TIP Wakka' for a
     // Switch, 'TIP Darkness → all enemies' with no menu named — and on
     // desktop, any card fitted into a narrow `hudSafeZones.ts` "compact" box
@@ -542,11 +542,12 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
     for (let d = 0 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
       expect(text(d), `density ${d}`).toContain('in White Magic');
     }
-    // The badge is decoration and still sheds one rung ahead of the wipe —
-    // but, unlike before, it no longer takes the menu chip down with it.
-    expect(text(4)).toContain('Guide’s pick');
-    expect(text(5)).not.toContain('Guide’s pick');
-    expect(text(5)).toContain('in White Magic');
+    // D-359: the lead was chosen by the chapter tactic (`source: 'tactic'`), and no rung prints a
+    // "Guide's pick" tag for it any more; the menu chip is still there at the rung before the wipe.
+    for (let d = 0 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
+      expect(text(d), `density ${d}`).not.toContain('Guide’s pick');
+    }
+    expect(text(MAX_DENSITY - 1 as Density)).toContain('in White Magic');
     // And at *every* rung, including the last-resort one, it still names both
     // moves and prints the note about the board.
     for (let d = 0 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
