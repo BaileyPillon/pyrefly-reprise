@@ -1,0 +1,18 @@
+// How the game is served on Cloudflare when the kind is "workers": Workers static assets, an assets-only
+// Worker with no script. Cloudflare's own Pages overview now tells new projects to start on Workers, and
+// wrangler 4.147.0 even converts a new Pages deploy started by an agent into a Workers one, so this is the
+// default (docs/handoff/r39-cloudflare.md has the evidence and the Pages alternative). Read only by
+// tools/deploy-cloudflare.mjs, which runs `wrangler deploy --config tools/cloudflare/wrangler.jsonc` on the
+// build that tools/deploy-pages.mjs --host=cloudflare put in dist-release/ (built with BASE_PATH=/).
+// An explicit --config is also what keeps wrangler from running its framework auto-configuration in this
+// Vite project. The preview deploy reuses this file and overrides only the Worker name. The name follows
+// the new title (decisions D-368 and D-369).
+{
+  "name": "echoes-of-spira",
+  "compatibility_date": "2026-10-04",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "../../dist-release"
+  }
+}
