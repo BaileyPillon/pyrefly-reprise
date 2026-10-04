@@ -116,7 +116,7 @@ function summaryLines(rows) {
   const foc = rev.filter((r) => /^Focused review/.test(r.title)), live = rev.filter((r) => /^Live check/.test(r.title)), deep = rev.filter((r) => /^Deep review round/.test(r.title));
   const rest = rev.length - foc.length - live.length - deep.length;
   const ship = ['SHIP', 'HOLD'], liveWords = ['PASS', 'FAIL', 'UNVERIFIED'];
-  L.push(`- **Reviews:** ${rev.length} rows: ${foc.length} focused reviews (${fmtTally(tally(foc.map((r) => reviewVerdict(r, ship))))}), ${live.length} live checks (${fmtTally(tally(live.map((r) => reviewVerdict(r, liveWords))))}), ${deep.length} deep rounds with a report (${fmtTally(tally(deep.map((r) => reviewVerdict(r, ship))))}) and ${rest} other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, round 21 in progress).`);
+  L.push(`- **Reviews:** ${rev.length} rows: ${foc.length} focused reviews (${fmtTally(tally(foc.map((r) => reviewVerdict(r, ship))))}), ${live.length} live checks (${fmtTally(tally(live.map((r) => reviewVerdict(r, liveWords))))}), ${deep.length} deep rounds with a report (${fmtTally(tally(deep.map((r) => reviewVerdict(r, ship))))}) and ${rest} other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).`);
   const open = rows.filter((r) => /^(on branch|on branches|parked|pending|in progress|failed)/i.test(r.result));
   L.push(`- **Not finished or not shipped:** ${open.length} rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.`);
   return L;

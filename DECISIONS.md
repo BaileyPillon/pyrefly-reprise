@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-844 decisions in all: 394 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 555 of the written decisions record a blanket yes.
+867 decisions in all: 417 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 579 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 783 |
-| proposed | 15 |
+| adopted | 808 |
+| proposed | 11 |
 | deferred | 4 |
 | rejected | 11 |
-| superseded | 31 |
-| **All** | **844** |
+| superseded | 33 |
+| **All** | **867** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 66 |
-| art | 195 |
-| visuals | 62 |
-| camera | 21 |
-| audio | 29 |
-| ui | 111 |
-| story | 14 |
-| chapters | 176 |
+| combat | 72 |
+| art | 197 |
+| visuals | 63 |
+| camera | 23 |
+| audio | 30 |
+| ui | 115 |
+| story | 15 |
+| chapters | 177 |
 | guide | 28 |
 | release | 31 |
-| hosting | 10 |
-| process | 65 |
+| hosting | 12 |
+| process | 68 |
 | critic | 18 |
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **844** |
+| **All** | **867** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 355 |
-| FFX only | 264 |
-| FFX-2 only | 208 |
+| both games | 368 |
+| FFX only | 271 |
+| FFX-2 only | 211 |
 | FF7 hidden experiment | 17 |
-| **All** | **844** |
+| **All** | **867** |
 
 ## Standing rules in force
 
@@ -87,6 +87,7 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **Downloads**: agents may download what the work needs from official or reputable sources only, onto D: where possible, never an untrusted executable, recording each download (name, source, size, sha256) in the handoff that uses it; spending money still needs Bailey's yes. Decision [D-370](#d-370) (2026-10-04, both games).
 - **Progress notes and a changelog**: send Bailey concise progress notes as work lands, and write a CHANGELOG.md entry (date, release, address, player-facing bullets tagged FFX, FFX-2 or both) for every build that goes live or to a preview, with a screenshot under every visual change. Decision [D-390](#d-390) (2026-10-04, both games).
 - **Spell out every blanket yes**: when Bailey says "all your recommendations" (or "godspeed", "yes to all"), state each recommendation as its own decision with what was decided and what changed as a result, in the reply right after and in docs/target/decisions.json; a row that only says "all your recommendations" is never enough. Decision [D-394](#d-394) (2026-10-04, both games).
+- **Public-repository privacy**: nothing committed to the repository carries an email address, card or payment details, an account id, a token or key, or his other personal projects (Claude accounts are named #1, #2 and #3); changed files are checked for the at sign, card-like digits and long hex ids before every commit, and rewriting published history is his decision alone. Decision [D-396](#d-396) (2026-10-04, both games).
 
 ## Waiting on Bailey's yes
 
@@ -102,10 +103,6 @@ Proposed, asked or drafted, with no yes on record. Nothing here is built.
 - [D-256](#d-256) — Accessibility Q4 and Q7 (OR-13): pictures first — still open
 - [D-258](#d-258) — Steam session part 2: the yes stands (D-205), but the time is still Bailey's to pick
 - [D-266](#d-266) — Open: Giga-Graviton on Sin's 12th or 13th turn (S-1) — needs a Steam check only Bailey can schedule (FFX only)
-- [D-282](#d-282) — Sin's difficulty, disclosed at listing: Chapter XVII's chain 25.5 % first try on the sensible line (3 % on the advisor card), Chapter XVIII 31 % on turn 13; the link-3 checkpoint is built OFF and is …
-- [D-307](#d-307) — OPEN: the battle-ffx and boss-vegnagun cues screen lower on the automated ear than the files they replace; does Bailey keep them by ear?
-- [D-308](#d-308) — OPEN: do FFX human bosses (Seymour, Yunalesca) roar with the big-cat boss-roar, or get a different sound?
-- [D-309](#d-309) — OPEN: when an Overdrive or Special lands, do the stinger and the attack swing overlap or take turns?
 
 Pictures with no target yet (nothing to look at, so no decision): Move advisor card (fight); Defeat screen (fight); Enemy next-move panel (fight); Every screen except pause (phone); One finished minute of play (whole).
 
@@ -2990,7 +2987,8 @@ Tuesday · 22 decisions
   - Source: docs/handoff/fb-0929-music.md; docs/handoff/fb2-0929-camera.md
 - <a id="d-282"></a>**D-282** — Sin's difficulty, disclosed at listing: Chapter XVII's chain 25.5 % first try on the sensible line (3 % on the advisor card), Chapter XVIII 31 % on turn 13; the link-3 checkpoint is built OFF and is Bailey's call (FFX only)
   - Bailey: no verbatim quote on record for this decision
-  - area combat · FFX · proposed · nothing to build
+  - What changed: Answered on 2026-10-04: the one thing this row asked, whether to turn the link-3 retry on, was answered by D-284 (the retry is on in the live game), and the rest, whether the odds themselves are right, by card H of the round 21 judgment-calls page (D-411: Sin stays as measured, no boss number changed). The row still read "proposed" until then, which is why the critic kept listing it as undecided. FFX only.
+  - area combat · FFX · superseded by [D-284](#d-284) · nothing to build
   - Source: docs/plans/sin-fins-core-bench.md; docs/plans/sin-link4-bench.md; and others
 - <a id="d-283"></a>**D-283** — The whole soundtrack is the Direction B cues in remaster R1
   - Bailey: “all your recommendations, full speed ahead. i still have full weekly usage on my other account so do not delay please.” (blanket yes)
@@ -3179,17 +3177,20 @@ Wednesday · 25 decisions
   - What changed: The shipped-audio budget is raised from 85 MB to 90 MB so the new sound-effect sprite (sprite-v2) ships at V0, the same encode quality as the music; the per-sprite size limit is raised only as far as V0 needs. Amends D-302. Both games.
   - area audio · both games · adopted · delivery in progress · at ~18:30 EDT · refines [D-302](#d-302)
   - Source: Bailey, 2026-09-30 ~18:30 EDT, answering the driver's two recommendations (credits option O1, audio budget 90 MB) with: "I'll go with all of your …
-- <a id="d-307"></a>**D-307** — OPEN: the battle-ffx and boss-vegnagun cues screen lower on the automated ear than the files they replace; does Bailey keep them by ear?
-  - Bailey: no verbatim quote on record for this decision
-  - area audio · both games · proposed · nothing to build
+- <a id="d-307"></a>**D-307** — The battle-ffx and boss-vegnagun cues, which screen lower on the automated ear than the files they replace, stay as shipped by default; he has not listened yet and can still say revert
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Kept as shipped by default under his blanket yes to card A of the round 21 judgment-calls page (D-404): the battle-ffx (FFX) and boss-vegnagun (FFX-2) cues stay as built; no audio file changes. He has not listened yet, so this is a default and not a verdict by ear; he can still say "revert" after listening (one file or one mapping).
+  - area audio · both games · adopted · nothing to build
   - Source: docs/handoff/music-v2.md; docs/plans/music-v2-review.md; and others
-- <a id="d-308"></a>**D-308** — OPEN: do FFX human bosses (Seymour, Yunalesca) roar with the big-cat boss-roar, or get a different sound?
-  - Bailey: no verbatim quote on record for this decision
-  - area audio · FFX · proposed · nothing to build
+- <a id="d-308"></a>**D-308** — FFX human bosses (Seymour, Yunalesca) keep the big-cat boss roar as shipped, by default; he has not listened yet and can still say revert
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Kept as shipped by default under his blanket yes to card A of the round 21 judgment-calls page (D-404): Seymour and Yunalesca keep the big-cat boss roar in the slot the old roar had; no audio file changes. He has not listened yet, so this is a default and not a verdict by ear; he can still say "revert" after listening (one file or one mapping).
+  - area audio · FFX · adopted · nothing to build
   - Source: docs/handoff/sfx-v2.md
-- <a id="d-309"></a>**D-309** — OPEN: when an Overdrive or Special lands, do the stinger and the attack swing overlap or take turns?
-  - Bailey: no verbatim quote on record for this decision
-  - area audio · both games · proposed · nothing to build
+- <a id="d-309"></a>**D-309** — When an Overdrive or Special lands, the stinger and the attack swing play together, as shipped, by default; he has not listened yet and can still say revert
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Kept as shipped by default under his blanket yes to card A of the round 21 judgment-calls page (D-404): an Overdrive or Special plays its stinger and the attack swing together, not one after the other; no audio file changes. He has not listened yet, so this is a default and not a verdict by ear; he can still say "revert" after listening (one file or one mapping).
+  - area audio · both games · adopted · nothing to build
   - Source: docs/handoff/sfx-v2.md
 - **Picture** (picks-0930) — Approved: Credits: a CREDITS row under ABOUT in the pause OPTIONS tab opens a scrolling panel (option O1)
   - Bailey: “I'll go with all of your recommendations please keep going” (blanket yes)
@@ -3585,7 +3586,7 @@ Saturday · 56 decisions
 
 ### 2026-10-04
 
-Sunday · 27 decisions
+Sunday · 50 decisions
 
 - <a id="d-368"></a>**D-368** — The player-facing working title becomes Echoes of Spira in release 38 (title screen, browser title, meta, chapter select, pause, credits, disclaimer); the repo, folders, internal identifiers and save keys keep 'pyrefly'; a painted logo is a later option for Bailey
   - Bailey: “I'll go with Echoes of Spira. The name change should take place immediate in our next build please.”
@@ -3625,7 +3626,7 @@ Sunday · 27 decisions
 - <a id="d-375"></a>**D-375** — Chapter III staging (question e): leave it as live (CHAPTER_III_STAGED stays off) and show "another way" options next; nothing built before his pick
   - Bailey: “all your recommendations” (blanket yes)
   - What changed: Chapter III's staging is left as live (CHAPTER_III_STAGED stays off), so the party still touches the boss at rest, and an "another way" options round is shown next (a calmer camera drift for this fight's menus, Yuna's staff lower, or a wider lens); nothing is built before his pick. FFX only.
-  - area camera · FFX · adopted · delivery not scheduled · at ~13:20 EDT
+  - area camera · FFX · superseded by [D-399](#d-399) · delivery not scheduled · at ~13:20 EDT
   - Source: Bailey, 2026-10-04 ~13:20 EDT, in chat, replying to the morning page (source D:/Tools/pyre …
 - <a id="d-376"></a>**D-376** — Release 39 masters (question f): ship them as lossless WebP instead of PNG, after a decoder-agreement proof; not the lossy q90 encode
   - Bailey: “all your recommendations” (blanket yes)
@@ -3640,7 +3641,7 @@ Sunday · 27 decisions
 - <a id="d-378"></a>**D-378** — Edge smoothing (question h): SMAA on desktop; MSAA stays selectable with ?aa=msaa
   - Bailey: “all your recommendations” (blanket yes)
   - What changed: Edge smoothing is SMAA on desktop, with MSAA still selectable through ?aa=msaa: frame cost at 1440p and 4K is 3.68 and 6.14 ms with no smoothing, 3.74 and 6.52 ms with SMAA and 4.60 and 8.03 ms with 4x MSAA; graphics memory is 573 and 790 MB, 630 and 917 MB (SMAA) and 784 and 1,265 MB (MSAA). Built on r39-hires-engine. Both games.
-  - area visuals · both games · adopted · delivery in progress · at ~13:20 EDT
+  - area visuals · both games · adopted · delivery in progress · at ~13:20 EDT · partly replaced by [D-398](#d-398)
   - Source: Bailey, 2026-10-04 ~13:20 EDT, in chat, replying to the morning page (source D:/Tools/pyre …
 - <a id="d-379"></a>**D-379** — Close-up route (question i): faithful 2x and 4x masters everywhere now; Klein plates only if the Camera Lab grammar is adopted later
   - Bailey: “all your recommendations” (blanket yes)
@@ -3655,7 +3656,7 @@ Sunday · 27 decisions
 - <a id="d-381"></a>**D-381** — Download (question k): RealESRGAN x4plus anime 6B (17 MB, official release) onto D:, recorded in a handoff
   - Bailey: “all your recommendations” (blanket yes)
   - What changed: The RealESRGAN x4plus anime 6B model (17 MB, official release) was downloaded to D: and recorded in hires/DOWNLOADS.md; the judge's verdict was to keep the current masters (the model redraws structure and had 2 quality-control failures), with an optional 3-asset subset (Yojimbo, FFX Bahamut, Rikku Dark Knight) only with his yes. Both games.
-  - area process · both games · adopted · delivery in progress · at ~13:20 EDT
+  - area process · both games · adopted · delivery implemented · at ~13:20 EDT
   - Source: critic/rounds/round-21/evidence/CAPTURE-DONE
 - <a id="d-382"></a>**D-382** — Hosting (question l): Cloudflare Workers static assets (not Pages), saves option S0, no custom domain; his one step is registering the workers.dev subdomain in his dashboard
   - Bailey: “all your recommendations” (blanket yes)
@@ -3675,7 +3676,7 @@ Sunday · 27 decisions
 - <a id="d-385"></a>**D-385** — Release 39 is the high-res release: the full set of 2x, 3x and 4x masters (including every 2x master parked for Lady Luck's room), as lossless WebP after the decoder-agreement proof, served from Cloudflare Workers static assets with saves S0 and no custom domain
   - Bailey: “for release 39 let's bring the high-res version back on Cloudflare.”
   - What changed: Release 39 is built on main after 38.1's parts, r39-hires-engine and r39-cloudflare (the deploy tool gained --host=cloudflare); it ships only after the proof and his answers f to l of 2026-10-04 (D-376 to D-382, all given). A Cloudflare preview of release 38 went live at 15:05 EDT to prove the path.
-  - area art · both games · adopted · delivery in progress · at ~13:40 EDT
+  - area art · both games · adopted · delivery in progress · at ~13:40 EDT · partly replaced by [D-397](#d-397)
   - Source: docs/handoff/NOW.md; docs/handoff/r39-cloudflare.md; and others
 - <a id="d-386"></a>**D-386** — The Cloudflare workers.dev subdomain is baileypillon, to match his GitHub name; the driver sets it up in his dashboard for him ("just set it up for me please, you take control")
   - Bailey: “i want the subdomain to be baileypillon to match the github”
@@ -3690,12 +3691,12 @@ Sunday · 27 decisions
 - <a id="d-388"></a>**D-388** — Release 39 ships on the Cloudflare site (https://echoes-of-spira.baileypillon.workers.dev), carrying everything; there is no separate GitHub 38.1, and the 800 MB size line no longer binds on Cloudflare
   - Bailey: “Get this release on the cloudflare site. We're unbounded now. We're free.”
   - What changed: Release 39 carries the strategy guide, the 14 px text floor with its Overdrive clamp, Lady Luck with every 2x master, the trapped-white fix, the full high-res tier set as lossless WebP, the held masters that were over the line (Rikku Dark Knight, the FFX-2 Anima), SMAA and the host default flipped to Cloudflare; GitHub Pages keeps release 38 plus a "we have moved" notice (saves S0). A Cloudflare preview of release 38 (https://echoes-of-spira-preview.baileypillon.workers.dev/) went live at 15:05 EDT, deployed with these words as the owner override; production on Cloudflare stays refused until the host default flips.
-  - area hosting · both games · adopted · delivery in progress · at ~14:30 EDT
+  - area hosting · both games · adopted · delivery in progress · at ~14:30 EDT · partly replaced by [D-397](#d-397)
   - Source: docs/handoff/NOW.md; docs/handoff/r39-cloudflare.md
 - <a id="d-389"></a>**D-389** — Check whether the domain echoesofspira.com is available and buy it if so, with his saved card, spending no more than $20
   - Bailey: “You check and buy it if available please. Use my card that ends in [redacted]. / But not more than $20 please”
-  - What changed: The domain is available at about $10.46 a year, under his $20 ceiling. The purchase is pending his registrant details, so nothing has been bought yet. If bought, it gives the game an address of its own, which D-382 had left out as optional (D-382 is partly replaced by this decision). His standing rule "ask before spending money" (E-005) is satisfied by this explicit yes and its ceiling.
-  - area hosting · both games · adopted · delivery in progress
+  - What changed: The domain echoesofspira.com is bought and Active (the Cloudflare Registrations page reads Active, expires Oct 4, 2027; $10.46 a year at cost with auto-renew, the first-year price quoted before any tax; the final total he paid is not recorded here), in the same Cloudflare account as the game's Workers setup. It was available at that price, under his $20 ceiling. He approved the purchase again at about 17:08 EDT after the price was shown ("You purchase it for me please you have my approval use the card that ends in [redacted]") and asked the driver to fill it out ("Fill it out for me and tell me the final total"); registering a domain needs his own details and card, which an agent does not enter, so he completed the checkout himself and wrote at about 17:29 EDT "Ok the purchase for the domain was made", and the driver confirmed it Active at about 17:30. It gives the game an address of its own, which D-382 had left out as optional (D-382 is partly replaced by this decision); D-397 makes it the permanent address, and the production Worker has had it as its custom domain since the deploy of about 18:49 EDT (A-0404 in ACTIONS.md). His standing rule "ask before spending money" (E-005) was satisfied by his explicit yes and the $20 ceiling.
+  - area hosting · both games · adopted · delivery implemented
   - Source: docs/handoff/NOW.md
 - <a id="d-390"></a>**D-390** — Write concise progress notes as work happens, and a changelog entry for every new build
   - Bailey: “Continue work but you need to write concise progress notes as it happens and a changelog for every new build”
@@ -3722,3 +3723,118 @@ Sunday · 27 decisions
   - What changed: The ledger was rebuilt on this rule: each blanket acceptance since 2026-09-18 is its own row with his blanket words as the quote, the decision stated in full and a "What changed" line; bundled acceptances (the chapter preflights, the eight-item and thirteen-item class batches and similar) are split into their own rows; where a recommendation could not be recovered the row says so. tests/unit/decisions-ledger.test.ts fails a blanket-yes row that has no "changed" line.
   - area process · both games · adopted · delivery implemented · at ~16:05 EDT
   - Source: tools/decisions-ledger.mjs; tests/unit/decisions-ledger.test.ts
+- <a id="d-395"></a>**D-395** — A central ledger of every action and implementation since the project began, beside the changelog and the decisions ledger
+  - Bailey: “Make a separate central ledger for actions and implementations please since inception”
+  - What changed: ACTIONS.md at the repo root now lists everything built or carried out since 2026-09-15 (implementations, art installs, deploys, reviews, records, infrastructure, account moves, downloads, maintenance and process changes), newest first, one row per sensible unit of work with who did it, which decisions it carried out, the result and the evidence. docs/target/actions.json holds the rows (one per line) and node tools/actions-ledger.mjs renders and checks it; it began with 381 rows (commit 3d49f79a) and later work is appended as new rows. tests/unit/actions-ledger.test.ts fails a malformed or stale ledger, and the validator refuses an email address, a long hex id or card digits because the repository is public.
+  - area process · both games · adopted · delivery implemented · at ~15:53 EDT
+  - Source: tools/actions-ledger.mjs; tests/unit/actions-ledger.test.ts
+- <a id="d-396"></a>**D-396** — Privacy of his personal details in the public repository matters, and he asked whether they could be encrypted so only he can decrypt them, or what other solution exists
+  - Bailey: “That privacy part is important… can’t you just encrypt it and allow me to decrypt it? Or what other novel solutions do you have?”
+  - What changed: The driver answered with three options and one extra step: (1) make the code repository private once release 39 is on Cloudflare, keeping the old GitHub address alive through a tiny public repository; (2) public-key encryption, where he keeps the private key and agents can only lock details, never read them back; (3) private copies of the full ledgers, with redacted text in the public files; and, whichever he picked, switch the repository to his GitHub noreply commit email, because his personal address was already the author email on about 2,270 public commits. Meanwhile the email addresses and the Cloudflare account id were removed from the handoff notes, both ledgers were written with personal details redacted, and their validators refuse an email address, a long hex id or card digits; no payment detail is recorded in the repository. He chose the recommendation, option 1 plus the noreply switch, at about 18:13 EDT (D-402, D-403); encryption and private copies were not chosen. Both games (repository records).
+  - area process · both games · adopted · delivery in progress · at ~15:55 EDT · see [D-402](#d-402), [D-403](#d-403)
+  - Source: docs/handoff/NOW.md; tools/actions-ledger.mjs; and others
+- <a id="d-397"></a>**D-397** — Switch the production host to Cloudflare now, with release 38: echoesofspira.com is the game's permanent address, www forwards to it, the GitHub address stays up with a "we have moved" note, and release 39 then updates echoesofspira.com in place
+  - Bailey: “Yes I will go with your recommendation” (blanket yes)
+  - What changed: Release 38, unchanged, goes on the game's main Cloudflare Worker (echoes-of-spira, not the preview) at https://echoesofspira.com, which becomes the permanent address; www.echoesofspira.com forwards to it through a Redirect Rule, so saves never split between two addresses. The deploy tooling defaults to Cloudflare from now on (a GitHub deploy becomes a legacy deploy with its own log), the critic's review scripts and the tools read the address from one setting, and the Cloudflare deploy tool is installed permanently at a fixed version instead of running from a temporary folder. The GitHub address keeps the game and its title screen gets a short "we have moved to echoesofspira.com" note; saves made there stay there (saves option S0, D-382). The driver ran the deploys itself, Cloudflare production first and the GitHub note only after round 21's confirm passes finished on the GitHub address (they finished at about 17:37 EDT). Done so far: lane cf-switch prepared it and its branch was merged into main at 18:46 EDT (8136f2ed); www forwarding was set up in his dashboard (a placeholder address record and a Redirect Rule, Active at about 18:53); and release 38 went live at https://echoesofspira.com (deploy 44, logged 18:49 EDT, bundle X5kGUd9G, all 1,932 files compared byte for byte on the custom domain and on workers.dev), recorded in dae5ed9e at about 19:07 with its CHANGELOG entry. Still to do: the "we have moved" note on the GitHub address (a legacy deploy, running at about 19:07) and the live check, focused review and deep review that 8136f2ed owes. Release 39 later updates echoesofspira.com in place, with no second move. Both games.
+  - area hosting · both games · adopted · delivery in progress · at ~17:31 EDT · see [D-382](#d-382), [D-385](#d-385), [D-388](#d-388), [D-389](#d-389)
+  - Source: docs/handoff/NOW.md; docs/handoff/r39-cloudflare.md; and others
+- <a id="d-398"></a>**D-398** — Sharpness: adopt F plus for release 39: draw the battle at 2x and scale it down with a Lanczos-3 filter, switch both SMAA passes off, add a light sharpening pass and anisotropic filtering 16 on the plates, step down to F (1.5x) by device class and frame time, and keep today's frame on phones
+  - Bailey: “I’ll go with all of your recommendations. Godspeed.” (blanket yes)
+  - What changed: Release 39's default look is sharpness F plus: the battle is drawn at 2x resolution and scaled down with a Lanczos-3 filter before the bloom; both SMAA passes are off (release 39 had been drawing SMAA twice, the MAX-mix pass before the grade and the renderer's own pass after it); a contrast-adaptive sharpening pass at 0.3 runs before the grade; and the plates' anisotropic filtering is 16 (the earlier 8 never reached the GPU). Slower computers step down automatically to F (1.5x with sharpening 0.4) by device class and measured frame time; the phone keeps today's frame with one SMAA; there is no bloom trim, so small lights glow 1 to 4 percent brighter, kept as eye candy. The crispness options page measured 100 percent of the ideal's detail for F plus (release 39 as built 50 percent, live 64 percent) for about +2.0 ms at 1440p and +4.7 ms at 4K (Chapter IV at 4K 15.0 ms on an RTX 5070 Ti). Lane r39-looks (branch r39-looks) builds it on top of r39-hires-engine. Both games.
+  - area visuals · both games · adopted · delivery in progress · at ~18:13 EDT · refines [D-378](#d-378)
+  - Source: docs/handoff/crisp-options.md; docs/handoff/NOW.md
+- <a id="d-399"></a>**D-399** — Chapter III staging: option 1, a calmer camera while a command menu is open and the boss further right and back, replaces leaving it as live
+  - Bailey: “I’ll go with all of your recommendations. Godspeed.” (blanket yes)
+  - What changed: Braska's Final Aeon's fight (Chapter III) gets a calm camera at menus as real game code: while a command menu is open the camera drift is cut to 15 percent and settles 0.5 to the right, and the boss's slot is +2.6 / 0.95 in the options page's numbers (right and back), so the party no longer stands inside the boss as it did on live. Costs he accepted: about 24 to 26 percent of the boss hidden behind the pagodas, at the critic's CHK-011 line; up to 15 percent of the boss under the turn-order rail; the two pagodas drawn 12 percent smaller; and Tidus's lunge stopping 147 px short. This replaces D-375's "leave as live" (CHAPTER_III_STAGED stays off); the other options, including option 4 (which would hide 32 to 35 percent of the boss), were not chosen. Lane r39-looks (branch r39-looks) builds it on top of r39-hires-engine. FFX only.
+  - area camera · FFX · adopted · delivery in progress · at ~18:13 EDT · replaces [D-375](#d-375)
+  - Source: docs/handoff/NOW.md
+- <a id="d-400"></a>**D-400** — Defend in the FFX chapters the original's way: a Defend control beside the command window with a visible tag naming its key and a tap target on phones, the key taken from GameFAQs
+  - Bailey: “I’ll go with all of your recommendations. Godspeed.” (blanket yes)
+  - What changed: In the FFX chapters Defend appears beside the command window, as it did in the original, with a visible "Defend" tag that names its key and a tap target on phones; the exact input is taken from GameFAQs. It answers his question of about 16:59 EDT, "How do I use defend? That’s not clear to me…". Lane r39-uifix (branch r39-uifix) builds it. FFX only: the control being matched is the FFX original's, and FFX-2 is not touched.
+  - area ui · FFX · adopted · delivery in progress · at ~18:13 EDT
+  - Source: docs/handoff/NOW.md
+- <a id="d-401"></a>**D-401** — Keep the current high-res masters; the anime upscaler (RealESRGAN x4plus anime 6B) is not used, not even for the three paintings where it looked better
+  - Bailey: “I’ll go with all of your recommendations. Godspeed.” (blanket yes)
+  - What changed: The release 39 masters stay as the current high-res library made them (faithful 2x and 4x masters, D-379); the anime 6B model downloaded for D-381 stays on D: unused. The pilot judge's verdict was keep: the anime model redraws structure and had 2 quality-control failures, and its optional 3-asset subset (Yojimbo, FFX Bahamut, Rikku Dark Knight) is declined. Nothing is built and no file changes. Both games.
+  - area art · both games · adopted · nothing to build · at ~18:13 EDT
+  - Source: docs/handoff/NOW.md
+- <a id="d-402"></a>**D-402** — The repository's commit email becomes his GitHub noreply address, so new commits stop exposing his personal address
+  - Bailey: “I’ll go with all of your recommendations. Godspeed.” (blanket yes)
+  - What changed: The repository's own git configuration, which every worktree inherits, now sets the commit author email to his GitHub noreply address; commits made from about 18:14 EDT carry it (the first is d7ac0ccf). Older commits keep the old address, because history is not rewritten. Still open: tools/deploy-pages.mjs hard-codes the old address for its one-commit gh-pages pushes, to be fixed in the release 39 integration; and GitHub's own "keep my email addresses private" setting, advised by the driver, is a click only he can make and is not confirmed here. Both games (repository tooling).
+  - area process · both games · adopted · delivery in progress · at ~18:13 EDT · see [D-396](#d-396)
+  - Source: docs/handoff/NOW.md
+- <a id="d-403"></a>**D-403** — Make the main repository private after release 39 is live on echoesofspira.com, and keep the old GitHub address alive through a small public repository that holds only the old site and its "we have moved" note; he may still veto it
+  - Bailey: “I’ll go with all of your recommendations. Godspeed.” (blanket yes)
+  - What changed: Scheduled, not done: once release 39 is live on echoesofspira.com the main repository (code, history and ledgers) goes private, which hides every past commit and its author email at once and lets the records keep full detail; the old GitHub address keeps working through a tiny public repository holding only the old release 38 site and the "we have moved" note. The game no longer needs a public repository because Cloudflare deploys from this PC. It will not happen before release 39 is live, and he may veto it first (the driver: "Say the word if you'd rather keep it public"). Not chosen: public-key encryption and private copies of the ledgers (D-396). Both games.
+  - area hosting · both games · adopted · delivery not scheduled · at ~18:13 EDT · see [D-396](#d-396), [D-397](#d-397)
+  - Source: docs/handoff/NOW.md
+- <a id="d-404"></a>**D-404** — Round 21 judgment card A (audio): the audio stays as shipped (the boss-vegnagun and battle-ffx cues of D-307, the big-cat roar of D-308, the Overdrive stinger and swing together of D-309); his 0-to-10 listening number is still owed
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Music v2 and sound effects v2 stay exactly as shipped: no audio file changes. D-307, D-308 and D-309 are recorded as kept by the default (each stays a one-file or one-mapping revert if he says "revert" after listening). He has not listened yet ("I’ll listen later I’m at work right now"), so his number from 0 to 10 for the music and sound together (two numbers if they differ a lot) is STILL OWED; when it comes it goes into docs/audio/OWNER-VERDICT.md word for word against release 38's cue set, the critic scores the audio category for the first time (CHK-B1, PR-0148) and the weighted score stops being provisional. Both games.
+  - area audio · both games · adopted · nothing to build · at ~18:30 EDT · see [D-307](#d-307), [D-308](#d-308), [D-309](#d-309)
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-405"></a>**D-405** — Round 21 judgment card B (story): the story stays as written, with no script changes; his 0-to-10 read of whether the lines sound like these people is still owed
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: No script changes: the Chapter I and Chapter VI lines, and every other shipped line, stay as written. He has not read or played them yet, so his number from 0 to 10 for "sounds like these people" and any line that rings false are STILL OWED; when they come the number is recorded and the CHK-B3 narrative line closes (until then the narrative score of 9.0 rests on an agent's read of the dialogue transcripts), and any line he quotes becomes a fix ticket. Both games.
+  - area story · both games · adopted · nothing to build · at ~18:30 EDT
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-406"></a>**D-406** — Round 21 judgment card C (FFX feel): Chapter I's entry pace, the held telegraph before a boss's heavy move and the living pause portraits stay as shipped; his "too slow, right or too fast" verdicts are still owed
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Nothing changes in the code: Chapter I's entry pace (about 10 to 12 seconds from the card to the first menu), the 950 ms telegraph hold before a heavy move (D-355; measured at about 1.1 seconds for Seymour Flux and 1.4 seconds for Braska's Final Aeon) and the living portraits on the pause screen (D-347, no brow lift) stay as shipped. He has not played it yet, so his verdicts ("too slow", "right" or "too fast" for each of the three) and his 0-to-10 "feels good to play" number are STILL OWED; when they come they are recorded as his CHK-B2 verdict for FFX (PR-0061, D-347's "look at the portraits live"), and a "too slow" or "too fast" becomes a measured change before anything is touched. FFX only: the entry pace and the hold are Chapter I's; the pause portraits are shared plumbing and stay as shipped in both games.
+  - area combat · FFX · adopted · nothing to build · at ~18:30 EDT
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-407"></a>**D-407** — Round 21 judgment card D (FFX-2 feel): the FFX-2 run-in stays as approved in D-354 and the dressphere shot is judged on release 39; his "too slow, right or too fast" verdict is still owed
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: No code change: the run-in, where a girl runs to the enemy, hits and runs home (a plain Attack takes 1.2 to 1.7 seconds, inside the 1.70 seconds D-354 allowed), stays as approved. The dressphere close-up and the 1.22 times push-in that covers a change with no clean frame (D-346) are judged on release 39, after lane r39-visfix changes when they play; that check is scheduled for then. He has not played Chapter VI yet, so his run-in verdict ("too slow", "right" or "too fast"; if too slow, whether the run home should snap back) is STILL OWED and is recorded as his CHK-B2 verdict for FFX-2 (PR-0368, later PR-0314). FFX-2 only: the run-in is FFX-2's (D-354 held it for FFX, which has no source for it).
+  - area combat · FFX-2 · adopted · nothing to build · at ~18:30 EDT
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-408"></a>**D-408** — Round 21 judgment card E (taste): keep the new paintings and the wordmark as shipped (Evrae E1-H, the painted plate wings, the three new dresspheres, the typeset Echoes of Spira wordmark); no painted-logo round starts; he has not looked yet
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Keep Evrae E1-H (D-360), the painted plate wings (D-343), the three new dressphere paintings (Yuna Thief, Rikku Warrior, Paine Thief) and the typeset wordmark (D-368); no painted-logo options round starts (it would be made only if he asks). The wing seam (PR-0344, being fixed by lane r39-visfix) and Paine Thief's unseen live look stay on the critic's list as notes. He has not looked at them yet, so this is the default, not his taste verdict: his keep-or-change for each group (naming only what he wants changed) is STILL OWED and is then recorded as the CHK-B3 taste verdict. Evrae is FFX; the wings, the dresspheres and Paine Thief are FFX-2; the wordmark is both.
+  - area art · both games · adopted · nothing to build · at ~18:30 EDT
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-409"></a>**D-409** — Round 21 judgment card F (Natus): option N, built as a per-chapter table so the Sensor card steers clear every time and Natus stands about twice as tall (about 270 px at 1600x900); Braska's Final Aeon, Evrae and Yunalesca keep today's framing
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Lane r39-natus (branch r39-natus) builds option N as a deterministic per-chapter table, the device Chapter II already uses, in place of the prototype that worked in 5 of 6 runs and blocked the main thread for about 2 seconds: the Sensor card is steered to an empty spot so Natus's big framing returns every time, about twice as tall (about 270 px at 1600x900 at best; the full round-19 framing stood about 470 px), then a focused visual check. The critic reads 270 px against its 300 px bar as accepted by him; if he wants 300 px or more he says so and options follow. Braska's Final Aeon keeps today's framing (Chapter III gets the calmer camera, D-399), Evrae keeps today's framing (D-360, D-374) and Yunalesca stays out of the big-framing set because her plate edge showed. Natus's telegraph key can then be wired (D-340 holds it until this settles) and PR-0331 closes. FFX only: Natus is Chapter X's.
+  - area camera · FFX · adopted · delivery in progress · at ~18:30 EDT · refines [D-353](#d-353)
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-410"></a>**D-410** — Round 21 judgment card G (Trema and the Den of Woe): the difficulty he chose is the intended difficulty (about 1 in 15 for Trema, about 1 in 6 on the first try and 3 in 4 within five for the Den); neither fight is tuned
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Recorded as intended, restating D-151 and D-191: no code, and no boss number changes. The benches agree (Trema whole chapter 6.5 percent, 13 of 200; the Oversoul Paragon link alone 14 percent; the Den first try 24 percent, within three tries 63.5 percent, within five 81 percent; the Den first try in Active mode 9 percent). Real keys have not won either chapter (Trema 0 of 25, the Den 1 of 18 in rounds 19 to 21). PR-0227, PR-0306 and PR-0353 close as intended difficulty; the critic still wants one recorded win per chapter through the results screen for the milestone, which is evidence work for it and not a decision for him. FFX-2 only: Trema is Chapter XIII's and the Den Chapter XV's.
+  - area combat · FFX-2 · adopted · nothing to build · at ~18:30 EDT · see [D-151](#d-151), [D-191](#d-191)
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-411"></a>**D-411** — Round 21 judgment card H (Sin): the difficulty stays as measured, Chapter XVII 48.5 percent first try on the advisor card and Chapter XVIII 39.5 percent; D-282 is answered by D-284 and no boss number changes
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Recorded: D-282 is answered by D-284 (the link-3 retry is on in the live game; D-282 now reads superseded) and the odds themselves stay as measured: no code, no boss number changed. Chapter XVII's three links win 48.5 percent first try on the in-game advisor card and 25.5 percent on a sensible line; Chapter XVIII's face wins 39.5 percent on the card and 33.5 percent on a sensible line; with the retry on, the sensible line wins 74.5 percent within five tries. Giga-Graviton's turn (the 13th) stays our estimate (D-280) until the Steam session of D-205; if Sin feels like a wall when he plays it, measured player-side options follow on his word. PR-0279 closes. FFX only: Sin is Chapter XVII and XVIII's.
+  - area combat · FFX · adopted · nothing to build · at ~18:30 EDT · answers [D-282](#d-282)
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-412"></a>**D-412** — Round 21 judgment card I (Chapter III): it keeps its seven links, and the release note and changelog state the measured length (about 27 minutes of fighting, a bench median of 137 turns)
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: No code: Chapter III stays Braska's Final Aeon, the five story-mandatory possessed aeons and then Yu Yevon, seven links (the sourced structure; a retry at link 2 and cutting aeons were not chosen). The release note and the changelog now say what was measured: about 27 minutes of fighting (30 with scenes and loading) for one real-key win of 195 commands, with a loss restarting at link 1, against a bench median of 137 turns. The changelog already says so (commit 11a78eee: the Alpha 1 and release 29 entries); release 39's note repeats it, which is why the delivery stays in progress. PR-0257 closes as intended. If a late loss hurts when he plays it, a retry at link 2 in the shape of Sin's is the follow-up, as measured options and his yes. FFX only: Chapter III is FFX's.
+  - area chapters · FFX · adopted · delivery in progress · at ~18:30 EDT
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-413"></a>**D-413** — Round 21 judgment card J (Swordplay): adopt the estimates for the four tiers, labelled our estimate: gold zones 22, 16, 12 and 9 percent and sweeps 1,400, 1,150, 900 and 700 ms, so stronger tiers are narrower and faster
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Four rows in src/data/ffx/overdrives/inputs.ts take the table for Spiral Cut, Slice and Dice, Energy Rain and Blitz Ace: gold zones 22, 16, 12 and 9 percent (today every tier draws 12.22 percent), sweeps 1,400, 1,150, 900 and 700 ms (today 1,059 ms), timers 3,000, 3,000, 2,600 and 2,200 ms; research/ffx-combat-core.md section 5.3 labels them our estimate, adopted by him, the way Tornado's timer is (D-312). Spiral Cut gets easier (the window 129 to 308 ms) and Blitz Ace harder (129 to 63 ms, still about three sweeps inside its timer); a unit test pins the ordering; focused review before deploy, deep review after. The Steam read of the four Swordplay tiers and the Bushido order (D-205, about 30 minutes) follows only when he says go and replaces the estimates; until then the Bushido order (D-348) keeps its "our estimate" label. Lane r39-judg (branch r39-judg) builds it. FFX only: Tidus's Swordplay.
+  - area combat · FFX · adopted · delivery in progress · at ~18:30 EDT
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-414"></a>**D-414** — Round 21 judgment card K (text size): TEXT SIZE reaches the FFX-2 battle HUD and the pause screens in both games (TEXT_SIZE_WIDE_SCOPE on), with relabelling the row as the fallback if the lane's focused check fails
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Lane r39-judg (branch r39-judg) turns TEXT_SIZE_WIDE_SCOPE on, fixes the enemy-intent board and the guide's placement at 130 percent in FFX-2 (the first cut opened the board over Yuna's feet, and the FFX-2 phone HUD is not scaled), and makes fresh 100, 115 and 130 percent frames of the FFX-2 HUD and the pause; the pause screens of both games grow too. If its focused check fails, the row is relabelled instead (for example "TEXT SIZE (FFX battles and dialogue)") and PR-0270 stays on the critic's list; on a pass PR-0270, a major open for four reviews, closes. Both games: the FFX-2 battle HUD is FFX-2's and the pause screens are shared.
+  - area ui · both games · adopted · delivery in progress · at ~18:30 EDT · refines [D-220](#d-220)
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-415"></a>**D-415** — Round 21 judgment card L (settings): a look turned ON while every part under it is OFF switches its parts ON; a part he then turns off stays off, and a look with at least one part on keeps his choices
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: One toggle rule in the settings code: turning a look on, when every part under it is off, switches those parts on (each can still be turned off and then stays off); a look with at least one part already on keeps his per-part choices, so D-317's memory holds for parts he chose. The lane confirms before it starts that no save-format change is needed (a save-data change would need its own deep review); a unit test and a focused review. Not chosen: keeping D-317 exactly (parts stay off) and always switching every part on (which loses his per-part choices). PR-0329, a suggestion, closes. Lane r39-judg (branch r39-judg) builds it. Both games.
+  - area ui · both games · adopted · delivery in progress · at ~18:30 EDT · refines [D-317](#d-317)
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-416"></a>**D-416** — Round 21 judgment card M (first run): step 1 keeps the approved line "Start with the first one." when Chapter I is selected and says "Start with this one." for any other chapter; the card's placement is unchanged
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: A text-only change in the first-run guide (Auron's step 1): the card says "Start with the first one." (his wording from D-289) when Chapter I is selected and "Start with this one." for any other chapter, because in the captured run Chapter IV was selected and the card pointed at the wrong row; the card's placement over chapter rows I to VII is unchanged; PR-0289, a polish item, closes. Lane r39-judg (branch r39-judg) builds it. Both games.
+  - area ui · both games · adopted · delivery in progress · at ~18:30 EDT · refines [D-289](#d-289)
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-417"></a>**D-417** — Round 21 judgment card N (Lady Luck): her reels are to be timed by the press, after a mockup; release 39 ships them as built (luck only) with the 26 percent pay rate stated, and nothing is built for timing until he picks
+  - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
+  - What changed: Release 39 ships Lady Luck's reels exactly as built (the press only stops a reel and the symbol is a random draw, so 160 of 216 stops, 74 percent, are a Dud, which takes 75 percent of every ally's current HP) with the 26 percent pay rate stated in the handoff and the release note. Lane r39-natus (branch r39-natus) makes an options page of timed reels (two or three options made from the sources: the player presses once per reel, and players line symbols up by pausing the game); nothing is built for timing until he picks one. Her other abilities and her ship schedule (D-373) are unaffected. This card answers PR-0349, a polish item with medium confidence; no category moves. FFX-2 only: Lady Luck is an FFX-2 dressphere.
+  - area combat · FFX-2 · adopted · delivery in progress · at ~18:30 EDT · refines [D-373](#d-373)
+  - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21

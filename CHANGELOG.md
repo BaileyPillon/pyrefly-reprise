@@ -1,13 +1,27 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 50 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 51 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows one picture from that build; "All pictures for this build" opens
 a page with every picture, before and after where both exist. Engineering detail lives in
 `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-04 · Old address: the "we've moved" note
+
+Address: https://baileypillon.github.io/pyrefly-reprise/ (main dae5ed9e)
+
+- **Both:** the old GitHub address now shows a note on its title screen: "Echoes of Spira has moved to
+  echoesofspira.com · Saves made here stay here". Clicking it opens echoesofspira.com. The game there
+  is still release 38, so saves made there keep working.
+
+![The old address's title card with the moved note](docs/changelog/img/legacy-moved-note/title-old-address-1600x900.jpg)
+
+*The old address's title card with the note at the top right.*
+
+All pictures for this build: [docs/changelog/legacy-moved-note.md](docs/changelog/legacy-moved-note.md)
 
 ## 2026-10-04 · Release 38 on echoesofspira.com
 
