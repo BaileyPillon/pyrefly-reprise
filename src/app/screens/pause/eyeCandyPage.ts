@@ -70,7 +70,7 @@ const HELP: Readonly<Record<string, { body: string; rm?: 'STILL' | 'CUT' }>> = {
   fxSpectacle: { body: 'Impact frames, spell light and the splash cut-ins. The parts under it only work while it is ON.' },
   fxFraming: { body: 'A camera placed for each chapter: low and wide for the giants, clear of the menus. Off: the standard battle camera.' },
   fxHero: { body: 'While you enter an Overdrive, the camera holds a close shot of the fighter, then cuts back. REDUCE MOTION keeps one cut.', rm: 'CUT' },
-  fxSphere: { body: 'On a dressphere change the camera cuts to a held close shot of the girl, then cuts back. REDUCE MOTION keeps one cut.', rm: 'CUT' },
+  fxSphere: { body: 'On a dressphere change the camera holds a close shot of the girl, or pushes in a little where no close shot is clear, then goes back. REDUCE MOTION keeps one cut.', rm: 'CUT' },
   fxSplash: { body: 'Painted art on the aeon and Special splash cut-ins. Off: the plain splash.' },
 };
 
@@ -84,7 +84,7 @@ const DEVICE_WHY: Readonly<Record<string, Partial<Record<DeviceNote['why'], stri
   fxEdges: { low: 'LOW EFFECTS keeps only the fringe fix, not the outline pass.' },
   fxFraming: { phone: 'On a phone held upright the bosses keep their usual size; the rest still works.' },
   fxHero: { phone: 'Off on a phone held upright: it shows a slice of the picture, so the camera stays wide.' },
-  fxSphere: { phone: 'Off on a phone held upright: it shows a slice of the picture, so the camera stays wide.' },
+  fxSphere: { phone: 'On a phone held upright there is no close shot (it shows a slice of the picture), only the small push-in.' },
 };
 
 /** The device as the mix sees it: the live tier (LOW EFFECTS, or a small screen), the upright phone layout, and whether the fight has a colossus. */

@@ -4,7 +4,6 @@ import { buildAdvisorView, type AdvisorOptions, type AdvisorView, type MoveSugge
 import { readSetting, writeSetting } from '../../app/SaveData.ts';
 import { ADVISOR_HINT_ITEM } from './ControlsHint.ts';
 import { escapeHtml } from './html.ts';
-import { guideAgrees, withGuideBadge } from './advisorGuideBadge.ts';
 import { followCard } from './advisorChipFollow.ts';
 
 /**
@@ -155,8 +154,6 @@ export class MoveAdvisor {
   private density: Density = 0;
   /** `signature@cap@width` the current density was measured for. */
   private fittedFor = '';
-  /** Whether the guide's NEXT, on the latest board, still names the tactic row (PR-0169). */
-  private guideAgrees = true;
   /** Re-applies "the chip goes where the card goes" (./advisorChipFollow.ts, PR-0130). */
   private readonly syncChip: () => void;
 
@@ -301,15 +298,6 @@ export class MoveAdvisor {
   /** New engine state. The card only speaks at a decision, so this just records it. */
   sync(state: Readonly<BattleState>): void {
     this.lastState = state;
-    // The advice is held, but the "Guide's pick" badge is a claim about the
-    // guide beside it, which re-reads every board: withdraw it the moment the
-    // two stop naming the same move (./advisorGuideBadge.ts, PR-0169).
-    if (!this.decision || !this.cached) return;
-    const agrees = guideAgrees(state, this.decision, this.cached);
-    if (agrees === this.guideAgrees) return;
-    this.guideAgrees = agrees;
-    this.lastSignature = '';
-    this.render();
   }
 
   /**
@@ -323,7 +311,6 @@ export class MoveAdvisor {
     if (state) this.lastState = state;
     this.decision = { actorId, commands };
     this.cached = this.compute();
-    this.guideAgrees = this.lastState ? guideAgrees(this.lastState, this.decision, this.cached) : true;
     this.render();
   }
 
@@ -393,7 +380,7 @@ export class MoveAdvisor {
       this.lastSignature = signature;
       this.density = 0;
       this.fittedFor = '';
-      this.cardEl.innerHTML = cardHtml(withGuideBadge(this.cached, this.guideAgrees), 0);
+      this.cardEl.innerHTML = cardHtml(this.cached, 0);
     }
     this.layout();
     this.fitCard();
@@ -453,7 +440,7 @@ export class MoveAdvisor {
     let density = this.density;
     while (density < MAX_DENSITY && this.cardEl.scrollHeight > cap + 1) {
       density = (density + 1) as Density;
-      this.cardEl.innerHTML = cardHtml(withGuideBadge(this.cached, this.guideAgrees), density);
+      this.cardEl.innerHTML = cardHtml(this.cached, density);
     }
     this.density = density;
   }
@@ -552,10 +539,9 @@ function num(n: number): string {
  * and "why" is the whole of Bailey's second question).
  *
  * Critic round 09, PR-0126: the lead used to lose its "in <submenu>" chip and
- * cost a rung early, at density 5 — the same rung that sheds only its badge
- * now — because `bare` folded the two together. Chapter 5's real route hit
- * that rung on 27 of 283 decisions. The menu path and cost survived every rung
- * but the last from that fix on.
+ * cost a rung early, the rung before the last, because `bare` folded the two
+ * together. Chapter 5's real route hit that rung on 27 of 283 decisions. The
+ * menu path and cost survived every rung but the last from that fix on.
  *
  * Critic round 13, PR-0126 narrowed: the last, phone-compact rung was still
  * the one place the chip vanished — "TIP Wakka" for a Switch, "TIP Darkness →
@@ -574,24 +560,29 @@ function num(n: number): string {
  * | 2 | + the lead's effect line, and the runner-up's secondary chips |
  * | 3 | + the runner-up's numbers, down to the submenu chip |
  * | 4 | + the lead's reason and its secondary chips |
- * | 5 | + the lead's badge |
- * | 6 (phone compact) | + the lead's warning and the title: named moves, their submenu, the actor, the board's note |
+ * | 5 (phone compact) | + the lead's warning and the title: named moves, their submenu, the actor, the board's note |
  *
- * Seven rungs rather than the four the first pass shipped, because the room
+ * Six rungs rather than the four the first pass shipped, because the room
  * the card is given is much smaller than the stylesheet's 104px suggests. The
  * FFX safe zone's pocket on Chapter 1 is about 112px *wide* at 1280x720 —
  * narrow enough that one sentence takes three lines — and on the turns where
  * the pocket does not fit at all the zone hands the card a **35px shelf**
  * above the party's heads, which is four lines of anything.
  *
- * Rung 6 is what makes "the card never hides its own bottom edge" true even
+ * Rung 5 is what makes "the card never hides its own bottom edge" true even
  * there: two moves named, where each lives, the note that answers the board,
  * and no prose. It is a last resort and it reads like one; the 35px shelf is
  * the real defect and it belongs to the HUD's `hudSafeZones.ts` — see
  * `docs/handoff/fix3-advisor.md`.
+ *
+ * D-359 (both games): there used to be a rung between 4 and the last one that
+ * shed the lead's "Guide's pick" badge. The badge is gone (the guide and the
+ * advisor are separate, so the card no longer says whose advice it is), and a
+ * rung that sheds nothing would only have repainted the same card, so the
+ * ladder lost it. Nothing on screen changes: that rung printed what rung 4 did.
  */
-export type Density = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-export const MAX_DENSITY: Density = 6;
+export type Density = 0 | 1 | 2 | 3 | 4 | 5;
+export const MAX_DENSITY: Density = 5;
 
 function statsHtml(s: MoveSuggestion, lead = '', trim = false): string {
   const chips: string[] = lead ? [lead] : [];
@@ -633,11 +624,13 @@ function statsHtml(s: MoveSuggestion, lead = '', trim = false): string {
  * One suggestion.
  *
  * Two things the card used to print are deliberately gone, both on Bailey's
- * report of the live build:
+ * words:
  *
- *  * **"chapter line"** is developer vocabulary. The player has never been told
- *    what a chapter line is; what they want to know is whose advice this is, so
- *    the badge says **Guide's pick** and means the same thing.
+ *  * **The "chapter line" / "Guide's pick" badge** is gone (D-359, both games:
+ *    "The guide and next move advisor are completely separate entities"). The
+ *    card never says whose advice a move is, and it never compares itself with
+ *    the guide beside it. `MoveSuggestion.source` stays in the advisor's data;
+ *    nothing on the card reads it.
  *  * **The research citation** ("ffx-seymour-flux §6 rows 5-6") is gone too.
  *    It is a note to the people building the game. The citations are still
  *    shown — in the strategy guide panel, which is the place a player opens to
@@ -657,15 +650,13 @@ function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Densi
   // the lead's reason goes before the runner-up's, and the last, phone-compact
   // rung takes cost, reason and warning down to a name, a target and — same as
   // every other rung — the path to the row (critic round 09 PR-0126: `bare`
-  // used to fire for the lead a rung early, at density 5, which is now only
-  // the badge's rung; critic round 13, PR-0126 narrowed: the last rung was
-  // still taking the menu chip down with everything else, on the phone tip and
-  // on any desktop card `hudSafeZones.ts` fits into a narrow "compact" box —
-  // the same density ladder, walked to the same last rung. CHK-004 "say
-  // where": the menu chip now survives it too, same as the runner-up's own bar
-  // line already did).
+  // used to fire for the lead a rung early; critic round 13, PR-0126 narrowed:
+  // the last rung was still taking the menu chip down with everything else, on
+  // the phone tip and on any desktop card `hudSafeZones.ts` fits into a narrow
+  // "compact" box — the same density ladder, walked to the same last rung.
+  // CHK-004 "say where": the menu chip now survives it too, same as the
+  // runner-up's own bar line already did).
   const bare = density >= MAX_DENSITY;
-  const badge = s.source === 'tactic' && density < 5 ? '<span class="mad__badge">Guide’s pick</span>' : '';
   const menu = s.menu ? `<span class="mad__stat">in ${escapeHtml(s.menu)}</span>` : '';
   // The same path, on the label line itself: the phone tip shows this line and
   // nothing else, so without it every phone tip read "TIP Darkness -> all
@@ -678,7 +669,7 @@ function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Densi
   const showReason = !bare && (alt || density < 4);
   return [
     `<article class="mad__move${alt ? ' mad__move--alt' : ''}">`,
-    `<p class="mad__line">${rankChip}<span class="mad__label">${escapeHtml(s.label)}</span>${target}${where}${badge}</p>`,
+    `<p class="mad__line">${rankChip}<span class="mad__label">${escapeHtml(s.label)}</span>${target}${where}</p>`,
     barStats ? (menu ? `<p class="mad__stats">${menu}</p>` : '') : statsHtml(s, menu, trimStats),
     showEffect && s.effect ? `<p class="mad__effect">${escapeHtml(s.effect)}</p>` : '',
     showReason && s.reason ? `<p class="mad__why">${escapeHtml(s.reason)}.</p>` : '',

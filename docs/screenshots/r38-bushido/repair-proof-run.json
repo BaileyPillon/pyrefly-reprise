@@ -1,0 +1,197 @@
+{
+ "plays": [
+  {
+   "want": [
+    "auron",
+    "Dragon Fang"
+   ],
+   "geom": null,
+   "overlay": {
+    "up": true,
+    "title": "Dragon Fang",
+    "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+    "chips": [
+     "↓",
+     "←",
+     "↑",
+     "→",
+     "L1",
+     "R1",
+     "○",
+     "✕"
+    ],
+    "bar": false,
+    "timer": "3.5"
+   },
+   "played": {
+    "turn": 3,
+    "kind": "bushido",
+    "title": "Dragon Fang",
+    "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+    "chips": [
+     "↓",
+     "←",
+     "↑",
+     "→",
+     "L1",
+     "R1",
+     "○",
+     "✕"
+    ],
+    "keys": [
+     "ArrowDown",
+     "ArrowLeft",
+     "ArrowUp",
+     "ArrowRight",
+     "f",
+     "r",
+     "x",
+     "Enter"
+    ],
+    "unknownGlyphs": [],
+    "closed": true,
+    "ms": 1307,
+    "engine": {
+     "actor": "auron",
+     "ability": "Dragon Fang",
+     "extra": {
+      "kind": "auron-sequence",
+      "sequence": {
+       "success": true,
+       "correctInputs": 8,
+       "timeRemainingMs": 1882.5
+      }
+     }
+    }
+   }
+  },
+  {
+   "want": [
+    "tidus",
+    "Spiral Cut"
+   ],
+   "geom": {
+    "zoneStart": "43.89%",
+    "zoneWidth": "12.220000000000002%"
+   },
+   "overlay": {
+    "up": true,
+    "title": "Spiral Cut",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "chips": [],
+    "bar": true,
+    "timer": "2.5"
+   },
+   "played": {
+    "turn": 4,
+    "kind": "swordplay",
+    "title": "Spiral Cut",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "attempts": [
+     {
+      "seenAt": 55.8,
+      "zone": [
+       43.9,
+       56.1
+      ]
+     },
+     "overlay closed"
+    ],
+    "pressLog": [
+     {
+      "key": "Enter",
+      "pos": 55.77,
+      "zoneStart": 43.89,
+      "zoneWidth": 12.220000000000002,
+      "inZone": true
+     }
+    ],
+    "closed": true,
+    "ms": 754,
+    "engine": {
+     "actor": "tidus",
+     "ability": "Spiral Cut",
+     "extra": {
+      "kind": "tidus-timing",
+      "timing": {
+       "success": true,
+       "timeRemainingMs": 1471.2999999523163,
+       "timerMs": 3000
+      }
+     }
+    }
+   }
+  },
+  {
+   "want": [
+    "tidus",
+    "Blitz Ace"
+   ],
+   "geom": {
+    "zoneStart": "43.89%",
+    "zoneWidth": "12.220000000000002%"
+   },
+   "overlay": {
+    "up": true,
+    "title": "Blitz Ace",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "chips": [],
+    "bar": true,
+    "timer": "1.7"
+   },
+   "played": {
+    "turn": 6,
+    "kind": "swordplay",
+    "title": "Blitz Ace",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "attempts": [
+     {
+      "seenAt": 56.2,
+      "zone": [
+       43.9,
+       56.1
+      ]
+     },
+     "overlay closed"
+    ],
+    "pressLog": [
+     {
+      "key": "Enter",
+      "pos": 56.23,
+      "zoneStart": 43.89,
+      "zoneWidth": 12.220000000000002,
+      "inZone": false
+     }
+    ],
+    "closed": true,
+    "ms": 788,
+    "engine": {
+     "actor": "tidus",
+     "ability": "Blitz Ace",
+     "extra": {
+      "kind": "tidus-timing",
+      "timing": {
+       "success": true,
+       "timeRemainingMs": 676.1999999284744,
+       "timerMs": 2200
+      }
+     }
+    }
+   }
+  }
+ ],
+ "errors": [],
+ "log": [
+  "rows after Overdrive: [\"Dragon Fang\",\"Shooting Star\",\"Banishing Blade\",\"Tornado\"]",
+  "OVERLAY auron Dragon Fang: title=Dragon Fang subtitle=BUSHIDO · ENTER THE SEQUENCE chips=[\"↓\",\"←\",\"↑\",\"→\",\"L1\",\"R1\",\"○\",\"✕\"] (8) bar=false",
+  "PLAYED {\"keys\":[\"ArrowDown\",\"ArrowLeft\",\"ArrowUp\",\"ArrowRight\",\"f\",\"r\",\"x\",\"Enter\"],\"engine\":{\"actor\":\"auron\",\"ability\":\"Dragon Fang\",\"extra\":{\"kind\":\"auron-sequence\",\"sequence\":{\"success\":true,\"correctInputs\":8,\"timeRemainingMs\":1882.5}}},\"closed\":true,\"ms\":1307}",
+  "rows after Overdrive: [\"Spiral Cut\",\"Slice & Dice\",\"Energy Rain\",\"Blitz Ace\"]",
+  "OVERLAY tidus Spiral Cut: title=Spiral Cut subtitle=SWORDPLAY · CONFIRM IN THE GOLD ZONE chips=[] (0) bar=true",
+  "swordplay zone {\"zoneStart\":\"43.89%\",\"zoneWidth\":\"12.220000000000002%\"}",
+  "PLAYED {\"attempts\":[{\"seenAt\":55.8,\"zone\":[43.9,56.1]},\"overlay closed\"],\"pressLog\":[{\"key\":\"Enter\",\"pos\":55.77,\"zoneStart\":43.89,\"zoneWidth\":12.220000000000002,\"inZone\":true}],\"engine\":{\"actor\":\"tidus\",\"ability\":\"Spiral Cut\",\"extra\":{\"kind\":\"tidus-timing\",\"timing\":{\"success\":true,\"timeRemainingMs\":1471.2999999523163,\"timerMs\":3000}}},\"closed\":true,\"ms\":754}",
+  "rows after Overdrive: [\"Spiral Cut\",\"Slice & Dice\",\"Energy Rain\",\"Blitz Ace\"]",
+  "OVERLAY tidus Blitz Ace: title=Blitz Ace subtitle=SWORDPLAY · CONFIRM IN THE GOLD ZONE chips=[] (0) bar=true",
+  "swordplay zone {\"zoneStart\":\"43.89%\",\"zoneWidth\":\"12.220000000000002%\"}",
+  "PLAYED {\"attempts\":[{\"seenAt\":56.2,\"zone\":[43.9,56.1]},\"overlay closed\"],\"pressLog\":[{\"key\":\"Enter\",\"pos\":56.23,\"zoneStart\":43.89,\"zoneWidth\":12.220000000000002,\"inZone\":false}],\"engine\":{\"actor\":\"tidus\",\"ability\":\"Blitz Ace\",\"extra\":{\"kind\":\"tidus-timing\",\"timing\":{\"success\":true,\"timeRemainingMs\":676.1999999284744,\"timerMs\":2200}}},\"closed\":true,\"ms\":788}"
+ ]
+}

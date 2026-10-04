@@ -17,6 +17,7 @@
  * load falls back to the 1x painting. The manifest lists the masters per subject (`states2x`,
  * `tools/gen/manifest.mjs`), so a figure without one is never asked for it.
  */
+import { logicalArtUrl, shippedArtUrl } from './ArtShipped.ts';
 import { manifestKnowsAsset } from './ArtManifest.ts';
 
 /** What the tier is decided from. */
@@ -77,10 +78,15 @@ export function setHiTier(value: boolean | null): void {
 
 const CHARACTER_PNG = /(\/art\/characters\/[^/?#]+\/)([A-Za-z0-9][A-Za-z0-9_-]*)\.png((?:[?#].*)?)$/;
 
-/** `.../characters/<id>/<state>.png` -> `.../<state>@2x.png`; null for anything else. */
+/**
+ * `.../characters/<id>/<state>.png` -> `.../<state>@2x.png`; null for anything else.
+ * Either form of the 1x URL is read (a derived `.webp` is its PNG's name, `ArtShipped.ts`), and the answer is the URL the
+ * site serves for the master, because the next thing done with it is to load it.
+ */
 export function hiResUrl(url: string): string | null {
-  const m = CHARACTER_PNG.exec(url);
-  return m ? `${url.slice(0, m.index)}${m[1]}${m[2]}@2x.png${m[3]}` : null;
+  const logical = logicalArtUrl(url);
+  const m = CHARACTER_PNG.exec(logical);
+  return m ? shippedArtUrl(`${logical.slice(0, m.index)}${m[1]}${m[2]}@2x.png${m[3]}`) : null;
 }
 
 /** The file whose pixels a painting at `url` is drawn from on this device: the 2x master when there is one. */

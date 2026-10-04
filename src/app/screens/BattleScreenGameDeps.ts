@@ -15,11 +15,13 @@ import type { PresenterDeps } from '../../engine/BattlePresenterPorts.ts';
 import { abilityFactsFor } from './battleAbilityFacts.ts';
 import { sfxVoiceFor } from './battleSfxVoice.ts';
 import { Ff7ActionMotion } from './BattleScreenFf7Motion.ts';
+import { RunInMotion } from './BattleScreenRunIn.ts';
 
 export function presenterGameDeps(game: GameId, build: unknown, state?: () => BattleState | null): Pick<PresenterDeps, 'abilityFacts' | 'actionMotion' | 'sfxVoice'> {
   const abilityFacts = abilityFactsFor(game);
   const sfxVoice = sfxVoiceFor(game, state); // D-302: FFX and FFX-2 each their own voice for the recorded set; FF7 none
   const ff7 = build as Partial<Ff7PartyBuild> | null | undefined;
+  if (game === 'ffx2') return { abilityFacts, sfxVoice, actionMotion: new RunInMotion(state) }; // r38-motion RUN-IN: FFX-2 only (sourced); inert without BATTLE SPECTACLE, under REDUCE MOTION, or over a menu
   if (game !== 'ff7' || ff7?.game !== 'ff7' || !Array.isArray(ff7.members)) return { abilityFacts, sfxVoice };
   return { abilityFacts, sfxVoice, actionMotion: Ff7ActionMotion.forBuild(ff7 as Ff7PartyBuild, state) }; // FF7: who stands at the win (D1)
 }

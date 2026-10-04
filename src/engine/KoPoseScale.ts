@@ -1,3 +1,5 @@
+import { logicalArtUrl } from './ArtShipped.ts';
+
 /**
  * **KO paintings drawn at their standing figure's scale** (VP-1001-05, both games).
  *
@@ -20,6 +22,10 @@
  *
  * Subjects whose KO already reads within 10 percent of the idle head (Tidus,
  * and the D-194 dressphere KOs with measured sidecar scales) are not listed.
+ *
+ * Yuna White Mage (FFX-2 only) was listed at 0.64 for her old close-up KO. Release 38's art install (D-334, D-341,
+ * 2026-10-04) replaced that painting with a body-length KO (1,070 px long against a 1,151 px idle, 0.93, drawn at
+ * the sidecar's own scale, which is none), so her entry is gone: left in, it would draw the new KO at 0.64.
  */
 export const KO_POSE_SCALE: Readonly<Record<string, number>> = {
   // FFX party (FFX only: these are FFX's own paintings).
@@ -32,7 +38,6 @@ export const KO_POSE_SCALE: Readonly<Record<string, number>> = {
   // FFX-2 dressphere KOs (FFX-2 only).
   'yuna-gunner': 0.6,
   'yuna-black-mage': 0.66,
-  'yuna-white-mage': 0.64,
   'rikku-black-mage': 1.15,
 };
 
@@ -44,7 +49,7 @@ const CHARACTER_POSE = /\/art\/characters\/([^/]+)\/([^/.?#]+)\.png(?:[?#].*)?$/
  * when it had none).
  */
 export function poseScaleFor(imageUrl: string, sidecarScale: number | undefined): number | undefined {
-  const m = CHARACTER_POSE.exec(imageUrl);
+  const m = CHARACTER_POSE.exec(logicalArtUrl(imageUrl)); // a derived `ko.webp` is the master's `ko.png` (ArtShipped.ts)
   if (m && m[2] === 'ko') {
     const fixed = KO_POSE_SCALE[m[1]!];
     if (fixed !== undefined) return fixed;

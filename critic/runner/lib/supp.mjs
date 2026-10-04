@@ -59,7 +59,6 @@ const readPick = () => page.evaluate(() => {
     label: m.querySelector('.mad__label')?.textContent?.trim() ?? null,
     target: m.querySelector('.mad__target')?.textContent?.trim() ?? null,
     menu: menuChip ? menuChip.replace(/^in /i, '').trim() : null,
-    badge: !!m.querySelector('.mad__badge'),
   };
 });
 

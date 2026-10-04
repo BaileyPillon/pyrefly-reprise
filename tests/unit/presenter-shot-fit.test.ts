@@ -7,6 +7,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { BattleMoments, MOMENT_PUSH } from '../../src/engine/BattleMoments.ts';
+import { PHONE_FIT_KEY } from '../../src/engine/ShotRules.ts';
 import { ffx2Shot, fittedPush, partySubjects, FFX2_BOSS_MIN, PARTY_MIN } from '../../src/engine/ShotFit.ts';
 import type { ActorHandle } from '../../src/engine/BattlePresenterPorts.ts';
 import { FakeStage, noSleep } from './helpers/FakeStage.ts';
@@ -123,6 +124,20 @@ describe('A-12: an upright phone keeps the fight on its refitted master (both ga
 
   it('refits the master to the slice at the battle start, for everyone on the field', async () => {
     const { moments, fitted } = phoneSetup(0.42);
+    await moments.battleStart({ partyIds: ['tidus', 'yuna'] });
+    expect(fitted).toEqual([{ rig: 'idle', slice: 0.42, n: 3 }]);
+  });
+
+  it('leaves out a figure its scene marked with PHONE_FIT_KEY (Chapter VIII\'s Evrae, FFX only) and fits the rest', async () => {
+    const { stage, moments, fitted } = phoneSetup(0.42);
+    (stage.actors.get('seymour-flux') as unknown as { userData?: Record<string, unknown> }).userData = { [PHONE_FIT_KEY]: false };
+    await moments.battleStart({ partyIds: ['tidus', 'yuna'] });
+    expect(fitted).toEqual([{ rig: 'idle', slice: 0.42, n: 2 }]);
+  });
+
+  it('keeps a figure whose mark is anything but false in the fit', async () => {
+    const { stage, moments, fitted } = phoneSetup(0.42);
+    (stage.actors.get('seymour-flux') as unknown as { userData?: Record<string, unknown> }).userData = { [PHONE_FIT_KEY]: true, other: false };
     await moments.battleStart({ partyIds: ['tidus', 'yuna'] });
     expect(fitted).toEqual([{ rig: 'idle', slice: 0.42, n: 3 }]);
   });

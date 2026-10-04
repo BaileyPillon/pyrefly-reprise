@@ -103,7 +103,7 @@ export function dboxStep(mem, cur, now, screen) {
  * The chip glyph `AuronSequence.ts` draws (its GLYPH map) -> the key a player presses for that
  * button (`src/ui/ffx/rawInput.ts` KEY_MAP). The circle is X, not Escape: Escape opens the pause.
  */
-export const BUSHIDO_KEYS = Object.freeze({ '↑': 'ArrowUp', '↓': 'ArrowDown', '←': 'ArrowLeft', '→': 'ArrowRight', '✕': 'Enter', '○': 'x', '△': 'q', L1: 'f', R1: 'r' });
+export const BUSHIDO_KEYS = Object.freeze({ '↑': 'ArrowUp', '↓': 'ArrowDown', '←': 'ArrowLeft', '→': 'ArrowRight', '✕': 'Enter', '○': 'x', '△': 'q', '□': 'k', L1: 'f', R1: 'r' });
 
 /** Which overlay the `.ig-minigame__subtitle` ("BUSHIDO · ENTER THE SEQUENCE") names, or null for the others (reels, fury, mix, pickers). */
 export function minigameKindOf(subtitle) {

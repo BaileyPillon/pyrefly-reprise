@@ -1,5 +1,6 @@
 import { CanvasTexture, ImageLoader, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace, Texture, TextureLoader } from 'three';
 import { pixelUrlFor } from './ArtTier.ts';
+import { shippedArtUrl } from './ArtShipped.ts';
 import { loadArtManifest, manifestKnowsAsset } from './ArtManifest.ts';
 import { fetchWithOneRetry, retryPause } from './fetchRetry.ts';
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
@@ -82,10 +83,15 @@ export function setPaintedAnisotropy(n: number): void {
   maxAnisotropy = Math.max(1, Math.min(16, Math.floor(n)));
 }
 
-/** Resolve a path under `public/` against the Vite base path. */
+/**
+ * Resolve a path under `public/` against the Vite base path, as the file the site really serves: a master PNG that the build
+ * ships as lossless WebP comes back as its `.webp` (`ArtShipped.ts`), so every `<img>`, CSS `url()` and loader that is handed
+ * this URL asks for a file that exists. Dev and tests serve the PNGs and get the PNG name. Code that reads an art URL back
+ * apart must ask `logicalArtUrl` for the master's name first.
+ */
 export function artUrl(path: string): string {
   const base = import.meta.env.BASE_URL || '/';
-  return `${base.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`;
+  return shippedArtUrl(`${base.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`);
 }
 
 /**

@@ -94,6 +94,8 @@ export class BattleCamera {
   private rollRad = 0;
   /** REDUCE MOTION stops the idle sway (D-285, `ComfortCamera.ts`); set by `PaintedStage`. */
   swayOff: () => boolean = () => false;
+  /** RUN-IN's truck, world units: added to the camera and its look-at on top of the rig. Zero unless `motion/StageMotion.ts` is tweening it. */
+  readonly truck = new Vector3();
 
   constructor(camera: PerspectiveCamera, opts: BattleCameraOptions = {}) {
     this.camera = camera;
@@ -382,16 +384,9 @@ export class BattleCamera {
       oy += Math.sin(this.shakePhase * 3.9 + 1.7) * this.shakeAmp * damp2 * 0.8;
     }
 
-    this.camera.position.set(
-      this.curPos.x + ox + px,
-      this.curPos.y + oy + py,
-      this.curPos.z + oz + pz,
-    );
-    this.camera.lookAt(
-      this.curLook.x + ox * 0.18,
-      this.curLook.y + oy * 0.18,
-      this.curLook.z,
-    );
+    const t = this.truck; // RUN-IN's truck, on top of the rig: the whole camera and its look-at slid together
+    this.camera.position.set(this.curPos.x + ox + px + t.x, this.curPos.y + oy + py + t.y, this.curPos.z + oz + pz + t.z);
+    this.camera.lookAt(this.curLook.x + ox * 0.18 + t.x, this.curLook.y + oy * 0.18 + t.y, this.curLook.z + t.z);
     // Roll last: `lookAt` rebuilds the whole orientation from the up vector, so
     // anything applied before it is thrown away.
     if (this.rollRad !== 0) this.camera.rotateZ(this.rollRad);

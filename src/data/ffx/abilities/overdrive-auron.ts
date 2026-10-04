@@ -29,6 +29,7 @@
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
+import { BUSHIDO_SEQUENCES } from '../overdrives/inputs.ts';
 
 export const ABILITIES: Record<string, AbilityDef> = {
   /**
@@ -60,6 +61,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'auron-sequence',
     extra: {
       timedInputBonus: true,
+      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['dragon-fang']!] }, // length verified, order our estimate: overdrives/inputs.ts
       failPower: 16,
       failHits: 1,
       immunePower: 19,
@@ -97,6 +99,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'auron-sequence',
     extra: {
       timedInputBonus: true,
+      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['shooting-star']!] }, // length verified, order our estimate: overdrives/inputs.ts
       failPower: 24,
       failHits: 1,
       immunePower: 27,
@@ -139,6 +142,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'auron-sequence',
     extra: {
       timedInputBonus: true,
+      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['banishing-blade']!] }, // length verified, order our estimate: overdrives/inputs.ts
       failPower: 28,
       failHits: 1,
       immunePower: 30,
@@ -176,6 +180,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'auron-sequence',
     extra: {
       timedInputBonus: true,
+      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['tornado']!] }, // length verified, order our estimate: overdrives/inputs.ts
       failPower: 15,
       failHits: 1,
       failRank: 6, // rank on the fail branch; preserves the research's "(fail 6)" note

@@ -21,6 +21,7 @@
  */
 
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
+import { logicalArtUrl } from './ArtShipped.ts';
 
 /** One subject's entry: what `public/art/characters/<id>/` actually holds. */
 export interface ArtManifestSubject {
@@ -239,7 +240,7 @@ export function hasPause2xArt(key: string): boolean | null {
  * the manifest that indexes it.
  */
 export function pauseStemOf(url: string): string | null {
-  const m = /(?:^|\/)art\/pause\/([A-Za-z0-9][A-Za-z0-9_-]*)\.png(?:$|[?#])/i.exec(url);
+  const m = /(?:^|\/)art\/pause\/([A-Za-z0-9][A-Za-z0-9_-]*)\.png(?:$|[?#])/i.exec(logicalArtUrl(url));
   return m?.[1] ?? null;
 }
 
@@ -250,7 +251,7 @@ export function pauseStemOf(url: string): string | null {
 export function pause2xUrlFor(url: string): string | null {
   const stem = pauseStemOf(url);
   if (stem === null || hasPause2xArt(stem) !== true) return null;
-  return url.replace(/\.png(?=$|[?#])/i, '.2x.webp');
+  return logicalArtUrl(url).replace(/\.png(?=$|[?#])/i, '.2x.webp');
 }
 
 /** Is `public/art/title/<key>.png` there? `null` when there is no manifest. */
@@ -265,7 +266,7 @@ export function hasTitle2xArt(key: string): boolean | null {
 
 /** The `title/<key>` stem a `public/art/title/...` URL names, or `null`. */
 export function titleStemOf(url: string): string | null {
-  const m = /(?:^|\/)art\/title\/([A-Za-z0-9][A-Za-z0-9_-]*)\.png(?:$|[?#])/i.exec(url);
+  const m = /(?:^|\/)art\/title\/([A-Za-z0-9][A-Za-z0-9_-]*)\.png(?:$|[?#])/i.exec(logicalArtUrl(url));
   return m?.[1] ?? null;
 }
 
@@ -281,7 +282,7 @@ export function titleStemOf(url: string): string | null {
 export function title2xUrlFor(url: string): string | null {
   const stem = titleStemOf(url);
   if (stem === null || hasTitle2xArt(stem) !== true) return null;
-  return url.replace(/\.png(?=$|[?#])/i, '.2x.webp');
+  return logicalArtUrl(url).replace(/\.png(?=$|[?#])/i, '.2x.webp');
 }
 
 /**
@@ -300,14 +301,17 @@ const ART_ASSET =
   /(?:^|\/)art\/(?:characters\/([^/?#]+)\/([^/?#]+)|(portraits|backdrops|pause|title)\/([^/?#]+))\.([a-z0-9]+)(?:$|[?#])/i;
 
 function judge(manifest: ArtManifest, url: string): boolean | null {
-  const m = ART_ASSET.exec(url);
+  // The master's name, whichever form the caller holds: a derived `.webp` (ArtShipped.ts) is the same painting as its PNG.
+  const m = ART_ASSET.exec(logicalArtUrl(url));
   if (!m) return null;
 
   const [, subjectId, state, folder, key, ext] = m;
   // The fleet ships PNG. A `.webp`/`.jpg` under an indexed folder is therefore
   // an *alternative encoding nobody produced* — a real `false`, which is what
-  // lets a candidate chain skip it instead of learning the hard way. A `.json`
-  // sidecar is not indexed and is judged by its PNG, so it stays `null`.
+  // lets a candidate chain skip it instead of learning the hard way. (The one
+  // `.webp` that is somebody's: the lossless copy a production build derives
+  // from a master; `logicalArtUrl` above has already given that its PNG name.)
+  // A `.json` sidecar is not indexed and is judged by its PNG, so it stays `null`.
   if ((ext ?? '').toLowerCase() === 'json') return null;
   const isPng = (ext ?? '').toLowerCase() === 'png';
 

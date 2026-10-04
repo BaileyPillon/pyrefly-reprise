@@ -50,9 +50,11 @@
   },
   "intentionalFlatImages": [
     "art/portrait-parts/paine/1x/eyeR-catch.png",
-    "art/portrait-parts/paine/2x/eyeR-catch.png"
+    "art/portrait-parts/paine/2x/eyeR-catch.png",
+    "art/portrait-parts/paine/1x/eyeR-catch.webp",
+    "art/portrait-parts/paine/2x/eyeR-catch.webp"
   ],
-  "intentionalFlatImagesNote": "Shipped images that are deliberately one flat colour (2026-10-03, release 37). Paine's right-eye catchlight layers are fully transparent: the source painting has no catchlight on that eye, so tools/portrait-parts.py copies an empty layer, and src/app/screens/pause/livingRender.ts draws it over nothing (no error, no visible change). Harmless; disclosed. An alpha MASK (one RGB value with an alpha shape, e.g. the eye windows) is not flat and needs no entry: tools/artifact-manifest.mjs counts alpha.",
+  "intentionalFlatImagesNote": "Shipped images that are deliberately one flat colour (2026-10-03, release 37; the .webp spellings added in release 38, where a build ships the same layers as lossless WebP derived from these PNG masters, tools/art-derive-lib.mjs). Paine's right-eye catchlight layers are fully transparent: the source painting has no catchlight on that eye, so tools/portrait-parts.py copies an empty layer, and src/app/screens/pause/livingRender.ts draws it over nothing (no error, no visible change). Harmless; disclosed. An alpha MASK (one RGB value with an alpha shape, e.g. the eye windows) is not flat and needs no entry: tools/artifact-manifest.mjs counts alpha.",
   "alwaysAtDeploy": ["CHK-016", "CHK-017"],
   "baseline": {
     "note": "Evidence baseline for dependency reuse under policy v2. Its A/B/C numbers are historical (rubric v1) and are never shown as a v2 score.",

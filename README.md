@@ -1,4 +1,4 @@
-# Pyrefly Reprise
+# Echoes of Spira (formerly Pyrefly Reprise)
 
 An unofficial HD-2D fan tribute that recreates five of the most memorable encounters from *Final Fantasy X* and *Final Fantasy X-2*: the Conditional Turn-Based battles, the Sphere Grid, dresspheres, Overdrives, and the scenes around each fight.
 

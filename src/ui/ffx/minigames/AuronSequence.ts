@@ -12,6 +12,7 @@ const GLYPH: Record<string, string> = {
   confirm: '✕',
   cancel: '○',
   triangle: '△',
+  square: '□',
   l1: 'L1',
   r1: 'R1',
 };
@@ -23,7 +24,10 @@ const WRONG_MARK_MS = 240;
  * Auron — Bushido [visual-bible §3.11.2], restyled onto Ink & Gold's
  * `.ig-minigame__bar--sequence`/`__key` ("Other minigame overlays ... follow
  * the Swordplay slab pattern", `presentation-ink-and-gold.md` "Screens"):
- * enter a button sequence before a 4 000 ms timer expires.
+ * enter a button sequence before a 4 000 ms timer expires. The sequence is the
+ * Overdrive's own: `params.sequence`, from the ability's `extra.minigameParams`
+ * (`data/ffx/overdrives/inputs.ts`, PR-0308: Dragon Fang 8 inputs, Shooting Star
+ * and Banishing Blade 7, Tornado 6); the 7-chip default is for demo screens only.
  *
  * A wrong press sends the progress back to input 1 and the attempt goes on:
  * `research/ffx-overdrive-input-rules-2026-09-30.md` Q1 `[verified: 3
