@@ -674,3 +674,196 @@ and `types.ts`, the 18 documents, `tools/` (`tools/hud-safe-area-check.mjs` stil
    box in two chapters, `FENCE_GAP` in `StrategyGuide.ts` is the one number (8 gives the old height and touches XI and XIII).
 7. **TEXT SIZE 130 percent: the card stands alone in FFX** (above), as it already did at 1280x720 at 100 percent. FFX-2's TEXT SIZE stays off
    (D-220 Q4) and was not touched.
+
+## 11. Check (critic, 2026-10-04)
+
+Written by a Sonnet sub-agent of the driver session that did not build this lane. Head checked: `e96ddc37` (`origin/r38-guide-jegged`), against `origin/main` `77f0d157` and the live site.
+**Game case: both** (AGENTS.md rule 14): the 11 FFX chapters were read against the FFX guide's pages only and the 7 FFX-2 chapters against the FFX-2 guide's pages only; the panel, the sheet and the
+card are shared plumbing and were run on both games. This is a lane check, not the focused-review report `critic-clear` takes (`node tools/critic-plan.mjs` on the lane's 36 shipped files says DEEP:
+live + focused + deep owed, as the preflight says).
+
+**Verdict: PASS. No blocker.** The panel is the encounter guide's page for the boss, as a document, in our own words; the sheet, its scrolling, the card's box, TEXT SIZE and the phone sheet work as the handoff says on both games; and the build covers no more than the live one anywhere I measured (it covers nothing, where the old rail covers Yuna in Chapter IV). Four small findings to fix, two judgment calls and a few disclosures for Bailey are at the end.
+
+| Item | Verdict | In one line |
+|---|---|---|
+| 1 Faithful to the page | PASS, with differences | all 18 chapters read paragraph by paragraph: header, stat lines and advice in the page's order, nothing of ours, no NEXT; seven small differences the handoff does not list, and two omissions on unresolved conflicts that are Bailey's to confirm |
+| 2 Copyright | PASS | the longest run of consecutive words in any prose sentence is six; 11 short lines (lead-ins, ability names, attack-list lines) are word for word, none longer than nine words |
+| 3 Wording | PASS, 3 findings | 0 hits in the rendered panels of all 18 chapters; three dead cross-references to sections of the source guide that the game does not have |
+| 4 Numbers | PASS | every difference in the handoff's list equals `src/data` and its research; Natus's drop equals the data but not the research (disclosed) |
+| 5 Separation | PASS | advisor digest identical to origin/main's on 90 of 90 runs (8,256 decisions); no tactic, advisor, battle or chapter-data file changed |
+| 6 Reading view | PASS (14 px not met at 1280x720, as live) | opens on the boss in all 18 chapters and in real battles; G, the wheel, [ ], Home and End, the pad, the chip, the card, TEXT SIZE and the phone as claimed; lane: 0 contact in 72 first-menu readings and in 48 CHK-008 states, origin/main: 84,327 px on Yuna in the CHK-008 states of Chapter IV; two anomalies, both explained and neither this lane's |
+| 7 Code | PASS | tsc clean, 24 orphans as before, 230 guide tests and the full suite (11,437 tests) pass; `StrategyGuide.ts` is 399 lines, a new test is 420 |
+
+**How it was run.** The 15 pages were read on 2026-10-04 (headless Chromium from node, all HTTP 200, no wall) and compared with the builder's copies of 10-03 (11 identical, three differ by a footer line,
+one by a walkthrough paragraph outside the Den of Woe's boss section). The lane worktree and `D:/Final Fantasy` (`src/` clean, so origin/main) were built code-only with `vite build` into scratch and served on
+`127.0.0.1:6950` (lane) and `:6951` (origin/main) under `/pyrefly-reprise/` with the shipped `public/` files as the fall-back; origin/main's JS and CSS bundles are byte for byte the live site's (sha256 of `index-DhiL5vEz.js` 8ec6ca7a... and of `index-B8jtRvzT.css` 41a13795..., fetched and hashed, nothing saved), so the baseline is the live code, and a third build of the pass-two tree `7c94814c` (`:6952`) stands for "the phone before pass three". Browser: headless Chromium, `PYREFLY_BROWSER=gpu` (RTX 5070 Ti), real keys,
+the real wheel, real clicks and taps and a synthetic pad, one browser at a time, the real live site for the phone and a subset of the coverage runs. Scripts and every report are in
+`D:/Tools/pyrefly-scratch/2026-10-04/guide-check/` (the document dumps there number the lines of a document in order, a list item or table row each; "line N" below means that). Nothing from the pages is in the repo.
+
+### 1. Faithful to the page (all 18 chapters read, not only the eight asked for)
+
+The pages and how they were read are above. Every chapter's document (`src/data/guides/docs/<chapter>.ts`) was set against its page paragraph by
+paragraph, then checked by script: list kind and item count (29 lists: bulleted or numbered as the page has them and the same number of items in 28; the 29th is Natus's Strategy list, one bullet shorter by the omission below; the pages' lists also carry small ability icons, which the sheet does not reproduce, as section 2 says), the page's numbers against the document's in both directions, order (no inversion that is not a page repeating
+itself), and the **rendered** sheet of all 18 chapters in the game against the document data (all 642 strings of the 18 documents are in their sheets, and nothing else is: 18 of 18). FFX chapters were read against the FFX guide's pages only and FFX-2 chapters against the FFX-2 guide's only; word-run overlap with the other
+game's pages is two coincidences of five and six words. No sheet carries a NEXT, WATCH, RULES or MORE label.
+
+An independent cross-check for omissions (`omissions.mjs`: every page paragraph of a boss's own section against the document lines, by shared content words) flags 82 of the 305 paragraphs; the ones that are not simply reworded are walkthrough narration (cutscenes, switches, treasure, routes), the Rikku and Paine fights of the Den of Woe, and the items in the table below.
+
+Header, stat lines, advice in the page's order, nothing of ours: **faithful in all 18**, with the following that the handoff does not say (none changes
+what the sheet teaches; the first three are the ones to look at):
+
+| Chapter | What differs from the page, not listed in section 2 |
+|---|---|
+| IX Yojimbo | The page has no boss card and no heading of that name; the sheet prints a `Yojimbo` header band (section 2 says the page has "the Yojimbo heading": it does not). The Magic Urns warning, the Shining Thorns hint and the price sentence are not printed (reasonable; not this chapter) |
+| XV Den of Woe | The page's first "Preparation:" paragraph (Yuna alone in the first two fights, support roles, a Gun Mage dressphere) is cut to its "fully healed" clause and its second paragraph is rearranged into two; section 2 says "two paragraphs above" as if mirrored |
+| V Vegnagun | "keep everyone above 1,500 HP" is the page's figure for its 700 to 1,500 Nemo range and stays beside the game's 1,490 to 1,685 (a character at 1,501 HP would not survive the top of it); the page's "Various Endings" hint (before Shuyin's card) is not printed |
+| III Braska | The boxed "Using Powerful Items" hint is printed after the preparation paragraph; on the page it is before it |
+| VII | The page's one-paragraph introduction to Anima (between the two cards) is not printed |
+| VIII Evrae | Two pairs of page paragraphs became one paragraph each (armour and proof/ward; last room and gates): five preparation paragraphs against seven |
+| XVII | The walkthrough sentence about choosing Sin on the NavMap is not printed |
+
+The panel also adapts one thing the page cannot do in a 132-grid-px rail, and says so: the FFX-2 four-column table is one stacked box per enemy
+(`HP`, `Steal`, `Drop`), and the two-column Bulwark table is stacked rows. Splitting a long paragraph in two (the 260-character unit rule) happens in
+most chapters and keeps the order.
+
+**Left out because our research says the game differs** (section 2 lists them; each was checked against `research/jegged-encounter-guides-ffx-b.md` §8 and
+`-ffx2.md` §9): Natus's counter-spell, Nul-calls-Desperado and Magic Break claims, Omnis's Shell against Ultima, Isaaru's Ice against Grothia are strong
+(decompile and several sources). **Two are not**: V's "Protect halves Noli Me Tangere" is J-1, which the research calls *Conflict, unresolved*, and XVI's
+"four Aerospark" is J-2, "do not print four" with Jegged as a second observer. D-362 covers numbers ("print the game's number"), D-367 covers advice
+the kit cannot follow ("print it as the page gives it"); neither says what to do with a claim the research has not settled, so those two omissions are
+Bailey's to confirm.
+
+### 2. Copyright
+
+`overlap.mjs`: the longest run of consecutive words each of the 514 document lines shares with the page it follows (and with all 15 pages). Runs of 5 or more:
+151 lines; 6 or more: 70; 7 or more: 24; 8 or more: 11. **Every run of 7 or more is a heading, a loot or table row, a list of game terms (items, statuses,
+spells) or a number with its unit**; the longest run in running prose is six words (II line 11, about healing spells and items hurting a Zombie; XIII line 8, about the Oversoul form being easier).
+No prose sentence shares more than six consecutive words with its page, and the paraphrases keep the page's facts and order, as D-362 asks.
+At paragraph level (`para-closeness.mjs`: the share of a paragraph's content-word pairs, stop words removed, found in the best-matching page paragraph) 221 paragraphs score: 182 (82 percent) are below 0.4, 24 are 0.4 to 0.5, 11 are 0.5 to 0.6 and **four are above 0.6, all one-sentence facts** (XV lines 29 and 43, XVII line 2, XIII line 6; the closest is 0.75).
+
+Copied or near-copied text found, all of it short (the whole list, by chapter and document line; the lines are in the repo, none is quoted here):
+- 11 lines that are word for word on the page and are not a heading, stat label or table cell: four run-in lead-ins (II line 15 and VIII line 9, four and five words; X lines 13 and 16, the Phase 2 and
+  Phase 3 lead-ins with their HP thresholds, nine words each), three armour-ability lines (XVIII lines 2 to 4, four words each) and four attack-list lines of the FFX-2 pages (V lines 29 and 82, XIII line 16,
+  XI line 19: a move and its target, the Dispel line, the Demi line, the four -aga spells; four to six words each).
+- One whole sentence of the page, four words, closing III line 15, and a four-word rhetorical question in XV line 37 that the page also asks (with one more word).
+- The attack lists of V (Head, Redoubts, Nodes), XIII and XV state each move the page's way, with the page's figure and sometimes its tail (V line 69 shares a seven-word run and the same closing clause;
+  V lines 73, 75 and 83 are within a few words of the page's line): facts in the page's order, no run over eight words.
+- The 29 bulleted and numbered lists and the table cells are the page's facts in the page's order, as they must be.
+
+I would not call any of this a copy of Jegged's prose; the lines above are the places a stricter reader could. Left for the driver: reword the four attack-list lines
+and the two lead-ins if "headings and stat labels may match" is read narrowly. Nothing of the page's prose is reproduced in this note.
+
+### 3. Wording
+
+`guide-doc-words.test.ts` passes (37 tests), and my own scan of the rendered panels of all 18 chapters at 1600x900 (the sheet's whole text, the chip and every
+`title`/`aria-label`) finds **0** hits for the test's pattern (`jegged|adapt|source|cite|citation|§|research/|docs/|.ts|D-nnn|PR-nnnn|walkthrough guide|according to`), 0 failed
+requests and 0 console errors; the shipped bundle holds no `jegged`, `Walkthrough/` or `gamefaqs`. Live prints source words in all four chapters measured on
+the phone (2 to 4 hits each); the lane prints none. The same scan with a wider net (page, section, tips and tricks, screenshot, see above/below, per the) finds
+three things the test's pattern cannot, all **cross-references to parts of the source guide the game does not have**:
+- VIII line 18, "Rikku's Overdrive section lists the items needed." (there is no such section in the panel);
+- IX line 2, "The Overdrive section covers Lancet and Ronso Rage in more detail.";
+- XIII line 4, "The Oversoul Enemies page under Tips and Tricks has more." This one points at a page of the source's own site by name, which is what "no source, no citation" is
+  meant to keep out; it is the one I would fix before the build ships (the others read as a dead pointer, not a source).
+The test's pattern does not catch them (`page`, `section` and `tips and tricks` are not in it); either reword the three lines or add the words to the pattern and the strings.
+
+### 4. Numbers
+
+`dump-data.mjs` reads every chapter's enemies, HP, forms, steal and drops from `src/data` (the real chain, link by link); every HP, Steal and Drops line of the 18
+documents equals it (the parts are in their link's file: the Nodes' 300,000 HP in `vegnagun-leg.ts`, the Bulwarks' 3,000 in `vegnagun-body.ts`, the Redoubts' 2,500 in `vegnagun-head.ts`). Two scripts
+list every number one side prints and the other does not (digits, percents, fractions, number words): the documents print **no number the page lacks** except the ones in the table below
+(two of those, Spathi's 5 and Drill Shot's 8, reuse a digit the page prints elsewhere, so a scan cannot find them: they are the handoff's own list), and the pages print none that the documents lack in the boss's own
+section except these, the Rikku and Paine fights of the Den of Woe (not this chapter), map legends, and two equivalents ("100%" in VIII, "removes the chance entirely"; "twice" in III, "two uses"). The handoff's list, each shown number against `src/data` and its source:
+
+| Chapter | Page says | Panel shows | `src/data` and research | Result |
+|---|---|---|---|---|
+| IX Yojimbo HP | about 30,000 | 33,000 | `yojimbo` `maxHp` 33,000; `ffx-yojimbo.md` section 2.1 (decompile, wiki, GameFAQs) | agree |
+| XIV Spathi's count | 4 to 1 | 5 to 1 | `SPATHI_COUNT_START = 5` (`battle/ffx/ai/isaaru-rules.ts`); `ffx-isaaru-bevelle.md` I-5 | agree |
+| XVIII Sin's clock | about sixteen turns | about thirteen turns | `GIGA_GRAVITON_TURN = 13` (`overdrive-sin-rules.ts`, our estimate, D-280); `ffx-sin.md` S-1 | agree (an estimate, not labelled as one on screen) |
+| V Nemo Ante Mortem Beatus | 700 to 1,500 | roughly 1,490 to 1,685 | power 30 magic, thresholds 0.8/0.6/0.4/0.2 (`shuyin-abilities.ts`); `ffx2-vegnagun-shuyin.md` section 3.4 and J-7 | agree |
+| XIII Paragon HP | 200,000 | 210,000 | `paragon-oversoul.ts` 210,000 (the form the chapter ships); `ffx2-trema.md` section 3.2 (4 sources) | agree |
+| XV Drill Shot | after 10 HP changes | after 8 | `DRILL_SHOT_AT = 8` (`battle/ffx2/ai/den-of-woe.ts`); `ffx2-gippal-den-of-woe.md` G-5 (8 in the Den, 10 at Bevelle) and J-3 (open: an in-game look would settle it) | agree |
+| XVI Aerospark | four in a row | not printed | counter model (`battle/ffx2/ai/ixion.ts`); research J-2 "do not print four" | agree (see section 1) |
+| X Natus's drop | Lv. 2 Key Sphere | None | `seymour-natus.ts` `drops: []`, with its comment that the item is sourced but has no item record | **matches the data, not the research** (`ffx-seymour-natus-highbridge.md` section 1.4: Lv. 2 Key Sphere x2, decompile plus two sources); handoff section 7 item 5 discloses it |
+| V Nodes' rare drop | Hero Drink | not printed | `vegnagun-leg.ts` drops only the common Megalixir (comment: no rate for the rare slot) | matches the data; disclosed |
+| the "one drop each" rows (XI Shiva, Sandy, Cindy; XIII Paragon, Trema; XVII Fins, Genais, Core) | a second, rarer entry | one | each equals the `drops` array of its enemy | agree |
+
+One more number is the document's own: V line 87, "keep everyone above 1,500 HP", is the page's figure and sits beside the game's range (section 1).
+
+### 5. Separation
+
+- **No tactic, advisor, battle or chapter-data file changed.** `git diff origin/main origin/r38-guide-jegged --name-status` is 20 modified, 87 added, 3 deleted; under `src/` the
+  changes are `src/ui/**` (the panel, its scroll, the card, the avoid lists, the two HUDs' guide calls) and `src/data/guides/doc-types.ts` and `docs/` (new). Nothing under
+  `src/engine`, `src/battle`, `src/app`, `src/data/ffx*`, the 18 `src/data/guides/<chapter>.ts` or `types.ts`. The two HUD diffs remove only the guide's `showDecision`,
+  `clearDecision` and `held` calls and leave the advisor's. The documents import only their types; `StrategyGuide.ts`, `guideDoc.ts`, `guideDocHtml.ts` and `guideScroll.ts` import no tactic, advisor,
+  presenter or `three`; only `guideDoc.ts` imports the documents (`docs/index.ts`), the others their types and `guideDoc.ts`.
+- **The advisor digest**, `advisor-digest.mjs` (the builder's, read first: it plays every chapter with `intendedStrategy` and hashes the advisor's whole view, the tactic's command and the legacy NEXT the advisor borrows),
+  run by me on the lane tree and on `D:/Final Fantasy` (`src/` clean, so it is origin/main `77f0d157`) with seeds 1 to 5 and the decision cap 700: **90 runs, 8,256 decisions, 0 errors,
+  overall `cc10c48f8757f72d07c44a7986c06e4b69b3d9d42e53cef6757dd8cb77ae425d` on both, all 90 per-run digests identical, and equal to the handoff's.** (With the script's default cap of 260 both give
+  `c71434722bd1c7b7aded8f197412b45e4630a9de4e72d49c30b979d6d91fb3ad`, 8,025 decisions; the cap, not the tree, is what makes the number differ.)
+- `guide-doc-separation.test.ts` passes (29 tests).
+
+### 6. Reading view (lane build, 6950; origin/main and the live site as the baseline)
+
+**Opens on the boss on the field.** All 18 chapters at 1600x900 at the first command menu: the sheet opens on the boss's header, with 7.9 to 12.5 screen px of empty
+gap above it and no half line of the block before (chapter, block counted from 0, gap: I #3 9.3, II #3 10.4, III #2 7.9, IV #2 10.3, V #1 8.9, VI #0 12.5, VII #1 10.1, VIII #5 9.6, IX #2 10.4,
+X #3 9.2, XI #1 8.9, XII #3 8.2, XIII #6 9.8, XIV #2 9.0, XV #4 8.1, XVI #1 10.2, XVII #2 9.0, XVIII #4 9.0); Chapters I, IV, V and XVII at 1280x720, 1600x900, 2000x1012 and 2560x1440 (16 scenarios)
+open on the header with 7.1 to 16.5 px of gap. Chapters whose preparation sits above the header (XIII opens at block 6) open on the header, as designed.
+
+**Real input, 16 scenarios, 15 of them complete** (`reading-view.mjs`: real wheel, real keys, real clicks; the sixteenth is anomaly (b) below): a wheel notch moves the text **100.0 screen px at 1280x720, 1600x900 and 2560x1440 and 101.2 at 2000x1012**
+(the handoff's figure); `]` moves 0.845 to 0.855 of the sheet and `[` comes back; `Home` is the top and `End` is the foot (the foot also reached by wheel notches alone in every
+complete scenario: 11, 5, 41 and 14 notches at 1280x720 for Chapters I, IV, V and XVII, 56 for V at 2000x1012); the arrow keys move the sheet 0 px; `G` puts the sheet away (the
+chip reads "G GUIDE") and `G` again brings it back on the same header at the same place in all 15; a click on the chip does the same in 14 of them (the other is anomaly (a) below).
+**The pad:** a synthetic gamepad (headless Chromium has none): the right stick pushed down for half a second moves the sheet 60 layout px in Chapter I (107 to 167) and 62 in Chapter IV
+(67 to 129), pushed up it comes back, half travel moves about half, inside the dead zone (0.2) and on the left stick it does not move at all, and the spare face button (the chip then reads
+"SQUARE GUIDE") puts the sheet away and brings it back on the header (top 107 and 67 again); 0 console errors.
+**Anomalies, both investigated.** (a) FFX Chapter I at 1280x720: after the chip folds the guide, the *next* click on the chip does nothing and the one after it works. It happens in the same way on the
+origin/main build (3 of 3 runs on each), so it is not this lane's. `elementsFromPoint` at the chip's centre (`chipdiag.mjs`, both builds, 50 ms to 3 s after the fold) names it: the move advisor's own chip (`button.mad__toggle`) stands exactly on the folded guide chip (81 by 21 px at (40,66)), so the first click goes to the advisor. It is a pre-existing overlap of two chips, and it shows only where the advisor sits there (FFX Chapter I at 1280x720; Chapter XVII at the same size is fine, and 1600x900 is fine in every chapter tried). (b) FFX-2 Chapter V at 2560x1440, 74 notches in, the guide's elements were gone from the page: the party had been wiped while I scrolled (the FFX-2 clock runs under the open menu, as the handoff says; no hold was built), the battle ended and the screen changed. Rerun twice with the screen and the party's HP logged: the foot is reached at notch 80 both times, the sheet intact, with the party at 0/0/0 HP. Not a fault of the sheet; it is the cost the handoff names, measured: Vegnagun's page is about 2,000 px, 80 notches at that size, and an unattended party does not last that long.
+**In real battles** (`transitions.mjs`: the intended strategy plays a chapter at fast speed; every 200 ms the page notes which enemies stand and which block of the sheet is at the top; each roster that stood for at least 0.6 s is checked against the block the document's own anchors name, worked out here from the document data): VII (Seymour and the Guardians, Seymour, Anima, Seymour again, battle over) 5 of 5; XI (Shiva, the three Sisters as they fall, Anima, and the gaps between) 8 of 8; XIV (Grothia, Pterya, Spathi, battle over) and XVII (Left Fin, Right Fin, Genais with the Core) every roster with a boss standing, and **four gaps between two links** (ten to twenty seconds with only Isaaru or Cid standing) where the sheet stays on the part of the boss that has just fallen and moves when the next one stands (XI's gaps, with nobody standing, return to the top of the document instead: both are harmless and neither is described in the handoff); II: Yunalesca stood as Form I for 197 s and the run was lost, so her second and third forms were not reached (`guide-doc-start.test.ts` pins their anchors); V was not run (time budget). 22 of the 26 rosters examined are exact; the other four are the gaps.
+**The repo's own e2e specs against my two builds.** `tests/e2e/guide-sheet.spec.ts` (the builder's: opens on the header and scrolls, a notch by what the wheel says, `[` `]` Home End, `G` and the chip, the card in its slot, FFX Chapter I and FFX-2 Chapter IV) on the lane: **12 of 12 pass** (3.6 min). `tests/e2e/hud-collision.spec.ts` (CHK-008): above. `tests/e2e/accessibility-a2.spec.ts`: **3 failed and 2 passed on the lane and the same 3 and 2 on origin/main**, all three failures the same clipped `▼` of the command menu's more-arrow at 130 percent (the handoff says so), none the guide.
+**The scroll bar** (`scrollbar-drag.mjs`, FFX Chapter I at 1600x900): a press on the thumb and a drag of 60 screen px down moved the sheet from 107 to 330 layout px; the bar is draggable.
+
+**Nothing covered more than live.** Coverage of the guide's column and of the sheet itself against every living painted figure (its face band, the upper third, counted apart) and every other HUD
+panel of both games, at the first command menu with every optional panel open (CHK-008 state 1), `coverage.mjs`: **72 runs on the lane (18 chapters x the four sizes) and 72 on origin/main, 0 failed; in every one of the 144 the guide's column, its sheet and its chip touched no painted figure (0 px, no face hit) and no other HUD panel (0 px), and stayed on screen**, so there is no cell where the lane covers more than origin/main. On the live site, Chapters I, II, IV and V at the four sizes (16 runs): the same, 0 contacts, and the same column and sheet sizes as the local origin/main build in 15 of the 16 cells (the sixteenth, FFX-2 Chapter IV at 2000x1012, is 188 high on live and 285 on the build: the old rail's height follows where the girls stand, as the handoff says). This is a tie, not a win: the old rail's contact with Yuna in Chapter IV (79 to 165 px at the first menu, the handoff's table) did not show in my one sample per cell. The check that does show the difference is the repo's own CHK-008 spec (`tests/e2e/hud-collision.spec.ts`, run against both builds, Chapters I and IV at 1280x720, 1600x900, 2000x1000 and 2560x1440, six of its nine states each: the first menu with every panel open, a submenu, that submenu cancelled, the target cursor, the numerals resolving, every optional panel off; 8 of 8 tests pass on each build): the lane's guide panel touches no figure in any of the 48 state readings (0 px, 0 face hits). **origin/main's old panel touches Yuna in 4 of the 6 states of Chapter IV at every size: 12,043 px at 1280x720, 8,966 at 1600x900, 46,020 at 2000x1000 and 17,298 at 2560x1440 (84,327 px and 16 face hits in all)**; Chapter I touches nothing on either build. Every other panel's overlap with the figures (the command stack over the party, the advisor card) stays within a few percent between the builds, the lane's lower in six of the eight cells and higher by 0.7 and 2.2 percent in the other two, which is formation noise (Chapter I: 48,267, 75,885, 111,460 and 193,862 px against 53,192, 75,393, 109,053 and 193,996; Chapter IV: 220,124, 375,059, 371,361 and 993,290 against 227,031, 437,351, 448,659 and 1,017,024): the change moved nothing else onto a figure. Face hits of every panel together: 81 on the lane, 100 on origin/main. The column's height at 1600x900, lane / origin/main: FFX 178 / 168 in all eleven chapters (the sheet fills the rail's whole box; the extra 10 px is empty sky); FFX-2: IV 173 / 168, V 260 / 302, VI 140 / 168, XI 188 / 211, XIII 213 / 211, XV and XVI 188 / 211.
+
+**Type and overflow.** The smallest type drawn in the sheet (computed font size times the stage's scale, over every text node of the sheet) is **11.4 px at 1280x720, 14.25 at 1600x900, 16.02 at 2000x1012 and 22.8 at 2560x1440** (all 18 chapters at 1600x900; Chapters I, IV, V, IX, XIII and XVII at the other three). The 14 px bar is met at 1600x900 and above and **not at 1280x720, where the live rail's type is the same 11.4 px** (measured on the live site, Chapters I and IV, at 1280x720 and 1600x900: 11.4 and 14.25): not a regression, disclosed (handoff 7.4), Bailey's call. No element of any sheet is wider than its box (0 in every run) and the sheet has no horizontal scroll.
+
+**The phone, 390x844 (touch, a real tap on the GUIDE chip), Chapters I, II, IV and V:** lane against the build before pass three (`7c94814c`, built here with its fonts), origin/main and the live site. With the sheet open **every measured field of the lane is identical to pass two's in all four chapters**: the stack (370x410 at (10,66)), the sheet (367x410 at (13,66)), every text unit's box and type (15 px, 19 for the title), the text, the opening place (235, 215, 152 and 69 px), where a 700 px wheel lands, the end of the document (1,391, 1,318, 711 and 4,816 px of content) and the chip; in the folded and closed states one computed property of the hidden sheet differs (`overflow-y`: auto against hidden), which nothing can see (the handoff says no difference at all). Against origin/main and the live site (identical to each other on the phone) the box, the chip ("GUIDE"), the type (15 px) and the behaviour (a tap opens, a swipe scrolls to the end, a tap closes) are the same; the content differs by design (470 to 492 px of old rules against the whole document), and the old sheet had 10 to 12 elements wider than its box where the new one has none. 0 console errors and 0 failed requests on the lane and on pass two; the old sheet prints source words in all four chapters (2 to 4 hits each), the new one none.
+
+**The hint card in its own box** (BATTLE HELP on). FFX Chapter I with a real Zombie (seed 3) and Chapter II with a labelled probe, at all four sizes: the card stands in `.sgd__slot`, the first row of `.sgd__stack`, not in the sheet (`closest('.sgd__panel')` is null), clear of it (0 px of overlap), inside the column and over no figure (0 px); the sheet keeps its place while the card comes and goes (scroll position equal before and after in every case but the 1280x720 ones, where the sheet has stepped aside and reads 0 while hidden, then returns to the same place, 134 to 134). Sizes: 330x85 at (53,110) at 1600x900, 371x94 at (160,124) at 2000x1012, 528x132 at (85,176) at 2560x1440, the sheet beside it 86, 98 and 142 px high against 178, 200 and 284 without a card; **at 1280x720 the card (264x100 at (43,88)) stands alone and the sheet steps aside while the status lasts**, as the approved frame draws it. Folded with `G`, the card stands at its approved place outside the slot ((42,62), (53,78), (160,88), (85,125)). **FFX-2 Chapter IV:** Bahamut's own Curse on Paine, no probe, is in its slot at 264x80 at (43,176), 330x85 at (53,220), 371x117 at (160,247) and 528x132 at (85,352), the sheet beside it 54, 81, 109 and 134 px, and a probe reproduces the card at 1600x900 and 2000x1012 (the repo's e2e stamps one in IV and passes). **At TEXT SIZE 115** the card is 304x83 (stands alone), 380x96 (sheet 74 beside it) and 427x107 (sheet 85) at the three sizes, **at 130** it is 343x88, 429x107 and 482x121 and stands alone at all three, which is the handoff's table to the pixel. **Not reproduced:** my probe put no card up in FFX-2 Chapter V (or in IV at 1280x720 and 2560x1440), so Chapter V's card rests on the builder's table; one of my reruns of the card run (2560x1440) ended when the browser's page crashed ("Target crashed" at `newPage`, a GPU or load fault of this machine, not the game).
+
+**TEXT SIZE 115 and 130** (FFX Chapter I and FFX-2 Chapter IV, 1280x720, 1600x900 and 2000x1012, lane and origin/main, the probes of `accessibility-a2.spec.ts`: overlap `ix > 2 && iy > 2`, off-screen, clipped text, over every panel of both HUDs): **0 overlaps, 0 off-screen, 0 clipped text in all 18 scenarios on the lane and in all 18 on origin/main**; a wheel notch moves the text 98.7 to 101.2 px at 115 and 130 percent. The lane's FFX column at 130 percent is 146, 182 and 205 px high at the three sizes against origin/main's 174, 218 and 245 (the old panel grew into the free room above the help slab; the sheet ends where it ends at 100 percent, by design); FFX-2's TEXT SIZE is off (D-220 Q4) and its column is the same at all three settings (138, 173, 194 px).
+
+### 7. Code
+
+- `node .../typescript/bin/tsc --noEmit` (TypeScript 7.0.2, 2,836 files) and `tsc -p tsconfig.e2e.json --noEmit`: clean.
+- `node tools/orphans.mjs`: 1,227 modules, 24 orphaned, the same 24 as before, none a guide file (`guideScroll.ts`, `guideDoc.ts`, `guideDocHtml.ts` and the documents are reached).
+- The guide's twelve unit files: **230 tests pass** (`ui-strategy-guide` 28, `strategy-guide-sheet` 25, `status-o3-hint-place` 20, `strategy-guide-chip-and-type` 8, `strategy-guide-phone-sheet` 1,
+  `guide-doc-render` 8, `guide-doc-separation` 29, `guide-doc` 28, `guide-doc-words` 37, `guide-doc-start` 12, `guide-ffx2-wait-habit` 9, `strategy-guide` 25).
+- **The full unit suite, once, `--maxWorkers=3`: 775 files passed, 5 skipped (780); 11,437 tests passed, 41 skipped, 1 todo; 503 s; exit 0; none of the three known load timeouts fired.**
+- Files under 400 lines: `StrategyGuide.ts` is **399** (one line of headroom); the new `tests/unit/strategy-guide-sheet.test.ts` is **420** (over the convention; `ui-strategy-guide.test.ts` is 542, was 527; `strategy-guide.css` is 413, was 456;
+  `FFXBattleHud.ts` and `FFX2BattleHud.ts` were already 1,662 and 1,275). Every other changed or added file is under 400 (the closest: `tests/e2e/ffx2-ixion.spec.ts` 398, `status-o3-hint-place.test.ts` 375).
+- Layering as above. Strict TypeScript and `.ts` imports as the house rules; the documents are plain data.
+- **The game case is in every commit** of the lane: `5cd6b3f9`, `62adc520`, `d1fcee61`, `4c0bb173`, `db4bf1c7` say "both", `7cee8ae2` "FFX only", `9edf5f69` "FFX-2 only".
+- The eight tactic and bench files `git status` shows modified in this worktree are CRLF noise (`git diff --ignore-cr-at-eol` is empty and the stripped hashes equal HEAD's); nobody else's change is in the tree.
+
+### Blockers, findings to fix, and what is disclosed
+
+**Blockers:** none. (Nothing I measured is worse than live; nothing is unknown on a critical. The 1280x720 type at 11.4 px and the chip overlap are live's too.)
+
+**Findings to fix before the build ships** (small, none of them a defect in how the sheet works):
+1. Three cross-references in the documents that point at parts of the source guide the game does not have (section 3): VIII line 18, IX line 2, XIII line 4 (the XIII one names a page of the source's own site: fix first).
+   Either reword the three strings or add `\bpage\b`, `section` and `tips and tricks` to the words test's pattern.
+2. The handoff's section 2 says the Yojimbo page has "the Yojimbo heading" (IX) and that XV has two preparation paragraphs "above" (section 1 of this check): correct the two sentences, or print what the page prints.
+3. V line 87 prints the page's "above 1,500 HP" beside the game's 1,490 to 1,685 Nemo range; it should say about 1,700 if the range is right (a sourced number to settle, not mine to change).
+4. At 1280x720 in FFX Chapter I the move advisor's chip (`.mad__toggle`) stands on the guide's chip once the guide is folded, so the first click goes to the advisor (pre-existing, identical on origin/main; the repo's e2e spec at 1600x900 does not see it).
+
+**For Bailey (already in section 7 of the handoff unless marked new):** the reading window is the rail's box (about 8 lines at 1600x900; 3 lines while a status card stands beside it); the FFX-2 sheet is
+shorter than the old rail where the old rail was long (at 1600x900, lane against origin/main in my samples: V 260 against 302, VI 140 against 168, XI, XV and XVI 188 against 211; IV 173 against 168 here, 230 in the handoff because the old rail followed where the girls stood; XIII 213 against 211); the type is 11.4 px at 1280x720, below the 14 px bar, as it was before; `[ ] Home End` and the right stick are named nowhere;
+the "GUIDE'S PICK" tag on the advisor is a stale label; **D-364 asks for his word on the screenshots before this ships** (`docs/screenshots/r38-guide-jegged/sheet/`, 8 files in git, not checked
+out in this sparse worktree), still open. New in this check: Natus's drop (None, against the research's Lv. 2 Key Sphere x2), the two omissions on unresolved conflicts (V Noli/Protect, XVI Aerospark), the other undisclosed
+differences in section 1, and that reading a long page while the FFX-2 clock runs can cost the party (the 2560x1440 run).
+
+**Disclosures about this check:** the attribution line of my commit follows the harness (Claude Sonnet 5.5), not the brief's Opus 5.5, because that is the model that wrote it. This is a lane check: it does not settle any obligation
+(`critic-clear` needs a report from the review workflows; `critic-plan` says live + focused + deep are owed). Not run: the repo's `hud-collision.spec.ts` for the other 16 chapters (my own first-menu coverage run covers all 18), the transitions of Vegnagun's five links and Yunalesca's forms in a real battle, a real gamepad, a real
+touch device, Firefox or Safari (the sheet has a `scrollbar-width` fallback that I did not exercise), the real game of the Steam copy. The servers I started (6950, 6951, 6952) are stopped; no dev server was started; nothing
+was deleted, deployed or merged.
