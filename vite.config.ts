@@ -1,5 +1,6 @@
 import { resolve } from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
+import { pyreflyArtDerive } from './tools/art-derive-plugin.mjs';
 import { SOURCEMAP_DIR_ENV, keepSourceMaps, pruneUnshipped } from './tools/dist-filter.mjs';
 
 /** The base a production build is served from. Also used by tools/screenshot.mjs. */
@@ -60,7 +61,9 @@ export default defineConfig(({ command, isPreview }) => {
 
   return {
     base,
-    plugins: [distFilter(sourceMapDir)],
+    // Release 38 (r38-bytes): a production build ships the painted art as lossless WebP, derived from the PNG masters, which
+    // stay in public/art untouched (`tools/art-derive.mjs`; `PYREFLY_ART_WEBP=off` ships the PNGs as before). Dev serves PNG.
+    plugins: [distFilter(sourceMapDir), pyreflyArtDerive()],
     build: {
       target: 'es2022',
       outDir: 'dist',

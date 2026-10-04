@@ -100,7 +100,15 @@ node critic/runner/lib/supp.mjs <mode> <chapterIndex> [w] [h] --base=<url> --evi
   (`injected: true` on every capture in this mode).
 - `win <idx> <w> <h> [budgetMs]` — plays the advisor's own recommendation
   with real arrow-key navigation and Enter, using `assertMenuRows` for row
-  reads and picks.
+  reads and picks. **Release 38 (D-359):** a pick no longer records `badge`.
+  `readPick` used to note whether the card printed the "Guide's pick" tag
+  (`.mad__badge`, `badge: true`); the tag is gone from the card in both games
+  because the guide and the advisor are separate, so no evidence file made
+  from release 38 on carries that field. Evidence from release 37.1 and
+  before has `badge: true` on the picks the tactic made. **An auditor who
+  compares picks across that boundary must read "no badge" as D-359, not as a
+  regression**; nothing in `critic/runner` ever keyed a verdict or a gate on
+  the field (checked in the independent check of `r38-polish`, 2026-10-04).
 
 ### `gap-audio.mjs` — mid-encounter music crossfade
 

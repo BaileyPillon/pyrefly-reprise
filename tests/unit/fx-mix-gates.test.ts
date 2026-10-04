@@ -112,9 +112,9 @@ describe('deviceNote', () => {
     expect(notes(dev('low'))).toEqual({ depthOfField: 'off:low', fog: 'off:low', smoothEdges: 'less:low' });
   });
 
-  it('a phone held upright closes both held shots and trims CHAPTER FRAMING (the menu clearance stays, the colossus master and BOSS SCALE go)', () => {
-    expect(notes(dev('phone', true))).toEqual({ depthOfField: 'off:phone', chapterFraming: 'less:phone', overdriveShot: 'off:phone', dressphereShot: 'off:phone' });
-    expect(notes(dev('full', true)), 'the layout alone, on any tier').toEqual({ chapterFraming: 'less:phone', overdriveShot: 'off:phone', dressphereShot: 'off:phone' });
+  it('a phone held upright closes the Overdrive shot, trims the dressphere shot to its push-in, and trims CHAPTER FRAMING (the menu clearance stays, the colossus master and BOSS SCALE go)', () => {
+    expect(notes(dev('phone', true))).toEqual({ depthOfField: 'off:phone', chapterFraming: 'less:phone', overdriveShot: 'off:phone', dressphereShot: 'less:phone' });
+    expect(notes(dev('full', true)), 'the layout alone, on any tier').toEqual({ chapterFraming: 'less:phone', overdriveShot: 'off:phone', dressphereShot: 'less:phone' });
   });
 
   it('CHAPTER FRAMING is trimmed on a phone only where there is a colossus to scale: a fight with none loses nothing (unknown reads as a colossus)', () => {
@@ -124,9 +124,9 @@ describe('deviceNote', () => {
     expect(deviceNote('chapterFraming', phone(null))).toEqual({ limit: 'less', why: 'phone' });
     expect(deviceNote('chapterFraming', phone())).toEqual({ limit: 'less', why: 'phone' });
     expect(deviceNote('chapterFraming', { tier: 'full', phone: false, colossus: true }), 'a window that allows it').toBeNull();
-    // the shots are closed on a phone whatever the boss
+    // the Overdrive shot is closed on a phone whatever the boss; the dressphere shot is trimmed to its push-in
     expect(deviceNote('overdriveShot', phone(false))).toEqual({ limit: 'off', why: 'phone' });
-    expect(deviceNote('dressphereShot', phone(false))).toEqual({ limit: 'off', why: 'phone' });
+    expect(deviceNote('dressphereShot', phone(false)), 'FFX-2: the full close shot is off, the push-in fallback still plays (D-346)').toEqual({ limit: 'less', why: 'phone' });
   });
 
   it('fightFacts starts unknown (no battle bound)', () => {
@@ -134,7 +134,7 @@ describe('deviceNote', () => {
   });
 
   it('LOW EFFECTS on a phone held upright: the tier names LOW EFFECTS, the layout the phone', () => {
-    expect(notes(dev('low', true))).toEqual({ depthOfField: 'off:low', fog: 'off:low', smoothEdges: 'less:low', chapterFraming: 'less:phone', overdriveShot: 'off:phone', dressphereShot: 'off:phone' });
+    expect(notes(dev('low', true))).toEqual({ depthOfField: 'off:low', fog: 'off:low', smoothEdges: 'less:low', chapterFraming: 'less:phone', overdriveShot: 'off:phone', dressphereShot: 'less:phone' });
   });
 
   it('BREATHING, KO COLLAPSE and SPLASH ART are the same on every device (a coarser grid, or a static splash line, is not a part closed)', () => {
@@ -147,6 +147,7 @@ describe('deviceNote', () => {
     expect(deviceCloses('smoothEdges', dev('low'))).toBe(false);
     expect(deviceCloses('chapterFraming', dev('phone', true))).toBe(false);
     expect(deviceCloses('overdriveShot', dev('phone', true))).toBe(true);
+    expect(deviceCloses('dressphereShot', dev('phone', true)), 'the push-in fallback still plays on a phone (D-346)').toBe(false);
   });
 
   it('the tier gates in partOn are the same rule: a part is off in the mix exactly when the device closes it (the layout, which only the DOM knows, aside)', () => {

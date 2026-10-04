@@ -113,8 +113,19 @@ describe('no aborted keyart request', () => {
   });
 
   it('index.html preloads the plate with the same candidates and sizes the planes offer', () => {
+    // The page names its art through Vite's BASE_URL variable, which a build fills in from the base the site is served under (a
+    // root-absolute name stays at the server root when Vite does not find the file in public/: tests/unit/art-url-base.test.ts).
+    // Filled in with this run's base, the preload must be exactly what the planes carry.
+    setArtManifest({ version: 1, generatedAt: '', subjects: {}, portraits: [], backdrops: [], pause: [], pause2x: [], title: ['keyart'], title2x: ['keyart'] });
     const html = read('index.html');
-    expect(html).toMatch(/<link rel="preload" as="image"[^>]*imagesrcset="\/art\/title\/keyart\.png 1344w, \/art\/title\/keyart\.2x\.webp 2688w"/);
+    const preload = /<link rel="preload" as="image"[^>]*>/.exec(html)?.[0] ?? '';
+    expect(preload).toContain('href="%BASE_URL%art/title/keyart.png"');
+    expect(preload).toContain('imagesrcset="%BASE_URL%art/title/keyart.png 1344w, %BASE_URL%art/title/keyart.2x.webp 2688w"');
+    const filled = preload.replaceAll('%BASE_URL%', import.meta.env.BASE_URL);
+    const plane = mount().querySelector('.fe-title__plane img');
+    expect(filled).toContain(`href="${plane?.getAttribute('src')}"`);
+    expect(filled).toContain(`imagesrcset="${plane?.getAttribute('srcset')}"`);
+    expect(filled).toContain(`imagesizes="${plane?.getAttribute('sizes')}"`);
     expect(html).toContain(`imagesizes="${titlePlateSizes()}"`);
   });
 });

@@ -68,7 +68,8 @@ function settle(slots: SceneSlots): number {
 describe('R13-03: the Fahrenheit deck holds its party (FFX only, Chapter VIII)', () => {
   it('publishes holdParty, with the active spots where live settled them', () => {
     expect(SLOTS.holdParty).toBe(true);
-    expect(SLOTS.enemySpots).toBeUndefined();
+    // E1-H (D-360, r38-evrae): Evrae and Cid are now pinned on NEAR Evrae's spot (tests/unit/chapters/evrae-e1h-slot.test.ts holds the rest).
+    expect(Object.keys(SLOTS.enemySpots ?? {}).sort()).toEqual(['cid', 'evrae']);
     // R13-04 option B (Bailey, 2026-09-25): the arc re-laid right of the FFX command stack, back row at the rail.
     // Exactly the sheet's spots (docs/concepts/layout/r13-04-evrae/, D-144): no agent's shift on top of the pick.
     expect(SLOTS.party).toEqual([

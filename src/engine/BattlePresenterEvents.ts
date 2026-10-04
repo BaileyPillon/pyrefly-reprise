@@ -138,6 +138,11 @@ export interface EventCtx {
   opening?: boolean;
   /** A HUD command menu is open right now (`BattlePresenter`); `KeySlots.ts` keeps its FFX-2 key paintings off while one is. */
   menuOpen?: () => boolean;
+  /**
+   * Show a blow to the HUD (its numeral) and move its HP rows: what the loop does before an event plays, done late
+   * for a blow whose spell or shot is still on its way (`motion/SkillTravel.ts`: SKILL TRAVEL). Set by `BattlePresenter`.
+   */
+  reveal?: (event: BattleEvent) => Promise<void>;
 }
 
 export function createEventCtx(
@@ -203,7 +208,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return actionStart(ctx, event);
 
     case 'action-end':
-      return actionEnd(ctx);
+      return actionEnd(ctx, event.actorId);
 
     case 'damage':
       return damage(ctx, event);

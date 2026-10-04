@@ -31,6 +31,7 @@ import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { loadScene, type LoadedScene } from '../../scenes/index.ts';
+import { markOpeningBegun, markOpeningHurried } from '../../scenes/openingMark.ts';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { demoReel, demoState } from './BattleScreenDemoReel.ts';
@@ -208,6 +209,7 @@ export class BattleScreen extends Screen {
     const scene = await loadScene(chapter.sceneKey, this.app.renderer.camera);
     if (this.exited) return void scene.dispose();
     this.scene = scene;
+    if (this.opts.openingHurry) markOpeningHurried(scene.scene, () => ({ speed: this.presenter?.playbackSpeed ?? 'normal', menu: this.presenter?.snapshot()['awaitingMenu'] === true })); // PR-0341: a scene that stages its own arrival (Ch. IX) must not wait for an opening shot a hurried opening never shows; FOC371-01: its compressed arrival follows fast and skip, and is over by the first menu
     this.app.renderer.applyPalette(this.scene.palette);
     bindEyeCandyScene({ key: scene.key, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
     bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera }); // eye-candy option B (`?fx=b`)
@@ -421,6 +423,8 @@ export class BattleScreen extends Screen {
     // Torn down while the card was up: `exit()` dismissed it (which is what
     // resumed this chain) and already resolved `finished` as aborted.
     if (this.exited) return;
+    // FOC371-01: the card is gone, so the opening begins now; a hurried one collapses inside a tick, and a scene that stages its own arrival (Ch. IX) starts a compressed one from this mark
+    if (this.opts.openingHurry && this.scene) markOpeningBegun(this.scene.scene);
     const presenter = this.presenter!;
     if (this.preview) {
       // No engine yet: play the canned reel so the scene is still alive.

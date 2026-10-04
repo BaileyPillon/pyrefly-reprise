@@ -26,7 +26,12 @@
  *                  section 10, "Owner override of the deploy gate"). An agent
  *                  never passes this flag on its own initiative.
  *
- * Pipeline: preflight -> `vite build` into dist-release/ -> hash and
+ * Pipeline: preflight -> `vite build` into dist-release/ (which derives the
+ * art's lossless WebP from the PNG masters, `tools/art-derive-lib.mjs`) -> prove
+ * every derived file decodes to its master's pixels and that no page names an
+ * art file the build left out (`tools/art-verify.mjs`) -> load every shipped
+ * image in WebKit and in Chromium, at its master's size
+ * (`tools/art-browser-load.mjs`) -> hash and
  * decode-check every shipped file into `artifact-manifest.json` -> plan the
  * review this change needs (tools/critic-plan.mjs) and apply the owner's
  * release gate: refuse when this commit has no validated focused or deep
@@ -68,6 +73,8 @@ import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import { formatLoadReport, verifyArtLoads } from './art-browser-load.mjs';
+import { auditArtReferences, formatAudit, verifyShippedArt } from './art-verify.mjs';
 import { MANIFEST_NAME, buildManifest, diffManifests, verifyLive } from './artifact-manifest.mjs';
 import { applyStoredReports } from './critic-clear.mjs';
 import { classifyPorcelain } from './deploy-classify.mjs';
@@ -521,6 +528,28 @@ async function main() {
   const artFileCount = countFiles(artCharactersDir);
   log(`build ok: index.html present, ${artFileCount} files under art/characters`);
   if (run(process.execPath, [join(ROOT, 'tools', 'fx-assets.mjs'), 'verify', '--dir', join(DIST, 'fx')]).status !== 0) fail('the build did not ship public/fx intact — see output above');
+
+  // Release 38 (r38-bytes): the painted art ships as lossless WebP derived from the PNG masters. Prove it from the files about to
+  // be published, not from the cache that made them: every shipped WebP decodes to its master's pixels (RGBA, sha256), the build
+  // holds exactly one of the PNG and its WebP, no page, stylesheet or data file names an art file the build left out, and every shipped WebP is of a master that every decoder draws the same (opaque, or alpha only 0 and 255 with no colour under alpha 0: verifyShippedArt's default `exact`).
+  // The names the bundle builds at run time are covered by `node tools/art-play-audit.mjs --dir <this build>` (the focused review).
+  log('art: pixel identity of every shipped WebP against its master PNG, and every reference to the art');
+  const artIdentity = await verifyShippedArt({ distDir: DIST, publicDir: join(ROOT, 'public') });
+  log(`art identity ${artIdentity.ok ? 'PASS' : 'FAIL'}: ${artIdentity.checked} masters (${artIdentity.webp} shipped as WebP, ${artIdentity.png} as PNG, ${artIdentity.decoded} compared pixel for pixel) in ${(artIdentity.ms / 1000).toFixed(0)} s`);
+  if (!artIdentity.ok) {
+    for (const p of artIdentity.problems.slice(0, 25)) log(`  ${p}`);
+    fail(`${artIdentity.problems.length} shipped art file(s) are not their master's pixels, are missing, or are a WebP of art that a decoder could draw differently (node tools/art-derive.mjs verify --dir dist-release); the default PYREFLY_ART_WEBP=exact makes none of these, PYREFLY_ART_WEBP=off ships the PNGs as before`);
+  }
+  const artRefs = auditArtReferences(DIST);
+  for (const line of formatAudit(artRefs).split(/\r?\n/)) log(line);
+  if (!artRefs.ok) fail(`${artRefs.problems.length} reference(s) to an art file the build does not hold — see above`);
+  // The re-check's B3 (r38-bytes): every image the build ships loads and decodes, at its master's size, in WebKit and in Chromium, and no
+  // portrait plate would stay static. A pick of 20 to 30 files cannot find two bad ones in 900, and a file the browser cannot decode still
+  // answers 200 and logs nothing, so this loads the whole set (tools/art-browser-load.mjs, about 20 seconds). An engine that cannot start fails it.
+  log('art: every shipped image loads in WebKit and in Chromium (tools/art-browser-load.mjs)');
+  const artLoad = await verifyArtLoads({ distDir: DIST, publicDir: join(ROOT, 'public') });
+  for (const line of formatLoadReport(artLoad).split(/\r?\n/)) log(line);
+  if (!artLoad.ok) fail(`${artLoad.problems.length} problem(s): a shipped image does not load, or not at its master's size, in WebKit or Chromium; a portrait plate would stay static; or an engine could not start (node tools/art-browser-load.mjs --dir dist-release; a missing browser needs "npx playwright install webkit chromium", a download, so ask first)`);
 
   const indexHtml = readFileSync(indexPath, 'utf8');
   const bundleMatch = indexHtml.match(/assets\/index-([\w-]+)\.js/);

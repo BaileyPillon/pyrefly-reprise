@@ -120,6 +120,7 @@ describe('Bushido: the chips shown are typed in order (PR-0261)', () => {
     expect(unknown).toEqual([]);
     expect(Object.values(BUSHIDO_KEYS)).not.toContain('Escape');
     expect(keysForChips(['L1', 'R1']).keys).toEqual(['f', 'r']);
+    expect(keysForChips(['□']).keys).toEqual(['k']); // Shooting Star's square (r38, PR-0308)
   });
 
   it('reports a glyph it has no key for instead of guessing one', () => {

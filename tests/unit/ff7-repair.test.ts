@@ -12,6 +12,7 @@ import { MathUtils, PerspectiveCamera, Vector3 } from 'three';
 
 import { Ff7ActionMotion, FF7_ENEMY_MOVES } from '../../src/app/screens/BattleScreenFf7Motion.ts';
 import { presenterGameDeps } from '../../src/app/screens/BattleScreenGameDeps.ts';
+import { RunInMotion } from '../../src/app/screens/BattleScreenRunIn.ts';
 import { createEngine } from '../../src/app/screens/BattleScreenWiring.ts';
 import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import type { BattleEvent, CombatantId } from '../../src/battle/common/types.ts';
@@ -186,10 +187,14 @@ describe("FF7's action motion (review items 4 and 5)", () => {
     expect(stage.mover('guard-scorpion').moves).toEqual([]);
   });
 
-  it('is built for FF7 only: FFX and FFX-2 deps carry no motion port', () => {
+  it('FF7 builds its own motion port, FFX carries none, and FFX-2 carries only the small RUN-IN one (r38-motion, FFX-2 only: sourced)', () => {
     expect(presenterGameDeps('ff7', sector1ReactorBuild).actionMotion).toBeInstanceOf(Ff7ActionMotion);
     expect(presenterGameDeps('ffx', { game: 'ffx', members: [] })).not.toHaveProperty('actionMotion');
-    expect(presenterGameDeps('ffx2', { game: 'ffx2', members: [] })).not.toHaveProperty('actionMotion');
+    const x2 = presenterGameDeps('ffx2', { game: 'ffx2', members: [] }).actionMotion;
+    expect(x2).toBeInstanceOf(RunInMotion);
+    expect(x2).not.toBeInstanceOf(Ff7ActionMotion);
+    // none of FF7's own wind-up, victory, defeat, death, KO or form-change members: FFX-2's other beats play as before
+    for (const k of ['ownsWindUp', 'victory', 'defeat', 'sendOff', 'ko', 'opaqueForms']) expect(x2, k).not.toHaveProperty(k);
   });
 
   it('the presenter opens the motion before the wind-up and closes it before the idle pose', async () => {
