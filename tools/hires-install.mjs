@@ -8,6 +8,12 @@
  *   node tools/hires-install.mjs --only characters/tidus,backdrops/gagazet   a subset (prefix match on the asset id)
  *   node tools/hires-install.mjs --redo3             re-derive every @3x (after a change to how it is derived)
  *   node tools/hires-install.mjs --lib <dir> --art <dir> --copy
+ *   node tools/hires-install.mjs --lib <fixed library> --replace-from <the library installed now> --park <dir> --only characters/,backdrops/
+ *                                                    upgrade: where `public/art` holds exactly the old library's file, put the new library's file in its
+ *                                                    place and derive the @3x again; what is replaced is recorded (and copied when it is not a link) under --park
+ *
+ * Held-back backdrops (`HELD_BACKDROPS`): a backdrop whose master draws line structure the approved painting does not have is never installed
+ * and, with --replace-from, is taken out of `public/art` again: the game then draws the approved painting. A re-render is owed for each.
  *
  * The library (`D:/Tools/pyrefly-art-backup/hires`, `manifest.json`) holds, per painting, `<name>@4x.png` and `<name>@2x.png`
  * (figures: 4x and its 2x reduction; wide-only assets and backdrops: the 2x). They are ADDED beside the approved 1x paintings, which
@@ -22,8 +28,8 @@
  */
 import { createHash } from 'node:crypto';
 import { cpus } from 'node:os';
-import { copyFileSync, existsSync, linkSync, mkdirSync, readFileSync, statSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { copyFileSync, existsSync, linkSync, mkdirSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
@@ -33,13 +39,45 @@ const DEFAULT_LIB = process.env.PYREFLY_HIRES_LIB ?? 'D:/Tools/pyrefly-art-backu
 const sha256 = (p) => createHash('sha256').update(readFileSync(p)).digest('hex');
 const mb = (n) => `${(n / 1048576).toFixed(1)} MB`;
 
+/**
+ * Backdrops whose 2x master is held back (release 39 repair, 2026-10-04). The independent fidelity check found that the master draws dark,
+ * hard line structure the approved painting does not have, and the repair looked at all 29 at 2x against the approved painting (bicubic up):
+ * Gagazet invents dark branching twig-like lines across the rock (the lowest SSIM of the set, 0.958); Garden of Pain, Via Purifico, the Road to
+ * the Farplane (and its links variant) and the title's water replace soft ripples and floor bands with ruled, ruler-straight dark stripes.
+ * Those six keep drawing the approved painting; a re-render of each from the approved painting is owed. Game case: per backdrop (Gagazet,
+ * Garden of Pain, Via Purifico: FFX; the Road to the Farplane: FFX-2; the title: the title screen, both games).
+ */
+export const HELD_BACKDROPS = Object.freeze({
+  gagazet: 'invented dark branching twig-like lines across the rock',
+  'garden-of-pain': 'ruled dark stripes where the approved painting has soft ripples',
+  'road-to-the-farplane': 'ruled dark stripes across the water',
+  'road-to-the-farplane-links': 'ruled dark stripes across the water',
+  title: 'ruled dark stripes across the water',
+  'via-purifico': 'ruled dark stripes across the floor',
+});
+
+/** The backdrop key of a library output path (`backdrops/gagazet@2x.png` -> `gagazet`), or null for anything else. */
+export function backdropKey(outputPath) {
+  const m = /^backdrops\/([^/]+)@[2-4]x\.png$/.exec(outputPath);
+  return m ? m[1] : null;
+}
+
+/** Is `a` the same file as `b`: one inode (a hard link) or the same bytes. */
+export function sameFile(a, b) {
+  if (!existsSync(a) || !existsSync(b)) return false;
+  const sa = statSync(a, { bigint: true });
+  const sb = statSync(b, { bigint: true });
+  if (sa.dev === sb.dev && sa.ino === sb.ino && sa.ino !== 0n) return true;
+  return sa.size === sb.size && sha256(a) === sha256(b);
+}
+
 /** The 1x painting of a library asset: `characters/tidus/idle@4x` or the record's `src` -> `<art>/characters/tidus/idle.png`. */
 export function oneXPath(art, outputPath) {
   return join(art, outputPath.replace(/@[2-4]x\.png$/, '.png'));
 }
 
 /** Plan every install; pure but for the file reads. Returns `{ jobs, skipped }`. */
-export async function plan({ lib, art, only, scales, backdropMax = 2, redo3 = false }) {
+export async function plan({ lib, art, only, scales, backdropMax = 2, redo3 = false, replaceFrom = null, held = HELD_BACKDROPS }) {
   const sharp = (await import('sharp')).default;
   const manifest = JSON.parse(readFileSync(join(lib, 'manifest.json'), 'utf8'));
   const jobs = [];
@@ -69,6 +107,13 @@ export async function plan({ lib, art, only, scales, backdropMax = 2, redo3 = fa
       if (out.path.startsWith('backdrops/') && out.scale > backdropMax) continue;
       const from = join(lib, out.path);
       const to = join(art, out.path);
+      const heldKey = backdropKey(out.path);
+      if (heldKey !== null && Object.hasOwn(held, heldKey)) {
+        // held back: never installed; an installed copy that is exactly the old library's file is taken out (parked) when upgrading
+        if (replaceFrom && existsSync(to) && sameFile(to, join(replaceFrom, out.path))) jobs.push({ kind: 'drop', id: out.path, from: null, to, bytes: 0 });
+        skipped.push({ id: out.path, why: `held back: ${held[heldKey]} (re-render owed)` });
+        continue;
+      }
       const one = oneXPath(art, out.path);
       if (!existsSync(from) || statSync(from).size !== out.bytes_png) {
         skipped.push({ id: out.path, why: 'library file missing or still being written' });
@@ -87,15 +132,22 @@ export async function plan({ lib, art, only, scales, backdropMax = 2, redo3 = fa
         skipped.push({ id: out.path, why: `size ${out.size.join('x')} is not ${out.scale} x ${w1}x${h1}` });
         continue;
       }
+      let upgraded = false;
       if (existsSync(to)) {
-        skipped.push({ id: out.path, why: 'already installed' });
+        if (replaceFrom && !sameFile(to, from) && sameFile(to, join(replaceFrom, out.path))) {
+          // exactly the old library's file: put the new library's file in its place
+          jobs.push({ kind: 'replace', id: out.path, from, to, bytes: out.bytes_png });
+          upgraded = true;
+        } else {
+          skipped.push({ id: out.path, why: replaceFrom && !sameFile(to, from) ? 'already installed (not the old library\'s file, so kept)' : 'already installed' });
+        }
       } else {
         jobs.push({ kind: 'link', id: out.path, from, to, bytes: out.bytes_png });
       }
-      // @3x from @4x, when the library has the 4x and 3x is asked for and absent
+      // @3x from @4x, when the library has the 4x and 3x is asked for and absent (or the 4x was just replaced, so the 3x is derived from the new one)
       if (out.scale === 4 && scales.includes(3)) {
         const to3 = join(art, out.path.replace('@4x.png', '@3x.png'));
-        if (redo3 || !existsSync(to3)) jobs.push({ kind: 'derive3', id: out.path.replace('@4x.png', '@3x.png'), from, to: to3, bytes: Math.round(out.bytes_png * 0.56), size: [w1 * 3, h1 * 3] });
+        if (redo3 || upgraded || !existsSync(to3)) jobs.push({ kind: 'derive3', id: out.path.replace('@4x.png', '@3x.png'), from, to: to3, bytes: Math.round(out.bytes_png * 0.56), size: [w1 * 3, h1 * 3] });
       }
     }
   }
@@ -151,21 +203,51 @@ export async function derive3(sharp, j) {
   await sharp(out, { raw: { width: w, height: h, channels: 4 } }).png({ compressionLevel: 6 }).toFile(j.to);
 }
 
-async function apply(jobs, copy) {
+/**
+ * Before an installed file is replaced or dropped: record it, and copy it when it is the only copy. A hard link of a library file
+ * (more than one link) keeps its data in the library, so only its name, size and links are written down; a derived file (one link,
+ * an @3x) is copied under `parkDir` first. Nothing is ever deleted without that record. Returns the record.
+ */
+export function park(to, art, parkDir) {
+  const st = statSync(to);
+  const rel = relative(art, to).split('\\').join('/');
+  const rec = { path: rel, bytes: st.size, links: st.nlink };
+  if (!parkDir) return rec;
+  if (st.nlink > 1) return { ...rec, note: 'a hard link of a library file; the data stays in that library' };
+  const dst = join(parkDir, rel);
+  mkdirSync(dirname(dst), { recursive: true });
+  copyFileSync(to, dst);
+  if (statSync(dst).size !== st.size) throw new Error(`park: ${dst} is not the size of ${to}`);
+  return { ...rec, parkedTo: dst };
+}
+
+const linkOrCopy = (from, to, copy) => {
+  mkdirSync(dirname(to), { recursive: true });
+  if (copy) copyFileSync(from, to);
+  else {
+    try {
+      linkSync(from, to);
+    } catch {
+      copyFileSync(from, to);
+    }
+  }
+};
+
+async function apply(jobs, copy, { art = null, parkDir = null } = {}) {
   const sharp = (await import('sharp')).default;
   sharp.cache(false);
   sharp.concurrency(1); // the pool below owns the parallelism
   let n = 0;
+  const parked = [];
   for (const j of jobs.filter((x) => x.kind === 'link')) {
-    mkdirSync(dirname(j.to), { recursive: true });
-    if (copy) copyFileSync(j.from, j.to);
-    else {
-      try {
-        linkSync(j.from, j.to);
-      } catch {
-        copyFileSync(j.from, j.to);
-      }
-    }
+    linkOrCopy(j.from, j.to, copy);
+    n++;
+  }
+  // an upgrade: the name goes (its data stays in the old library), then the new library's file takes it; a held-back master is only taken out
+  for (const j of jobs.filter((x) => x.kind === 'replace' || x.kind === 'drop')) {
+    parked.push({ ...park(j.to, art, parkDir), action: j.kind });
+    unlinkSync(j.to);
+    if (j.kind === 'replace') linkOrCopy(j.from, j.to, copy);
     n++;
   }
   // The 3x derivations are the slow part (a 13-megapixel resize and PNG each). The build recompresses every master anyway
@@ -173,9 +255,14 @@ async function apply(jobs, copy) {
   const derive = jobs.filter((x) => x.kind === 'derive3');
   await pool(derive, Math.min(4, Math.max(1, cpus().length >> 1)), async (j) => {
     mkdirSync(dirname(j.to), { recursive: true });
+    if (existsSync(j.to)) parked.push({ ...park(j.to, art, parkDir), action: 'derive3-again' });
     await derive3(sharp, j);
     n++;
   });
+  if (parkDir && parked.length) {
+    mkdirSync(parkDir, { recursive: true });
+    writeFileSync(join(parkDir, 'parked.json'), `${JSON.stringify({ at: new Date().toISOString(), art, count: parked.length, files: parked }, null, 1)}\n`);
+  }
   return n;
 }
 
@@ -188,7 +275,9 @@ async function main(argv) {
   const art = resolve(get('--art', join(ROOT, 'public', 'art')));
   const only = (get('--only', '') || '').split(',').filter(Boolean);
   const scales = (get('--scales', '2,3,4') || '').split(',').map(Number).filter((n) => n >= 2 && n <= 4);
-  const { jobs, skipped } = await plan({ lib, art, only, scales, redo3: argv.includes('--redo3') });
+  const replaceFrom = get('--replace-from', null) ? resolve(get('--replace-from', null)) : null;
+  const parkDir = get('--park', null) ? resolve(get('--park', null)) : null;
+  const { jobs, skipped } = await plan({ lib, art, only, scales, redo3: argv.includes('--redo3'), replaceFrom });
   const bytes = jobs.reduce((s, j) => s + j.bytes, 0);
   const by = {};
   for (const j of jobs) by[j.kind] = (by[j.kind] ?? 0) + 1;
@@ -201,7 +290,7 @@ async function main(argv) {
     console.log('  (nothing written; pass --apply)');
     return 0;
   }
-  const n = await apply(jobs, argv.includes('--copy'));
+  const n = await apply(jobs, argv.includes('--copy'), { art, parkDir });
   console.log(`hires-install: ${n} file(s) written under ${art}; run node tools/gen/manifest.mjs next`);
   return 0;
 }

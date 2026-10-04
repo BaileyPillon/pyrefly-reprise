@@ -4,13 +4,13 @@
  * must keep that ring (a first version premultiplied and wrote one flat teal under every transparent pixel), and the plan must install only
  * what is safe: a master whose 1x file is unchanged, at exactly the scale, never over an existing file.
  */
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, linkSync, mkdtempSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import { afterEach, describe, expect, it } from 'vitest';
-import { derive3, oneXPath, plan } from '../../tools/hires-install.mjs';
+import { HELD_BACKDROPS, backdropKey, derive3, oneXPath, park, plan, sameFile } from '../../tools/hires-install.mjs';
 
 const dirs: string[] = [];
 afterEach(() => {
@@ -153,5 +153,123 @@ describe('plan', () => {
     writeFileSync(join(art, 'characters', 'hero', 'idle@3x.png'), 'old');
     expect((await plan({ lib, art, only: ['characters/'], scales: [3, 4] })).jobs.map((j) => j.kind)).toEqual(['link']);
     expect((await plan({ lib, art, only: ['characters/'], scales: [3, 4], redo3: true })).jobs.map((j) => j.kind).sort()).toEqual(['derive3', 'link']);
+  });
+});
+
+describe('upgrade: the fixed library replaces what the old library installed (release 39 repair, both games, build plumbing)', () => {
+  const sha = (p: string): string => createHash('sha256').update(readFileSync(p)).digest('hex');
+  const png = (file: string, w: number, h: number, fill: number): Promise<unknown> => sharp(Buffer.alloc(w * h * 4, fill), { raw: { width: w, height: h, channels: 4 } }).png().toFile(file);
+
+  /** An old library, an art folder that installed it by hard links (plus a pilot 2x of its own and a derived 3x), and a fixed library beside the old one. */
+  async function world(): Promise<{ oldLib: string; newLib: string; art: string; parkDir: string }> {
+    const root = tmp();
+    const oldLib = join(root, 'old');
+    const newLib = join(root, 'new');
+    const art = join(root, 'art');
+    const parkDir = join(root, 'park');
+    for (const base of [oldLib, newLib]) for (const d of ['characters/hero', 'characters/pilot', 'backdrops']) mkdirSync(join(base, d), { recursive: true });
+    for (const d of ['characters/hero', 'characters/pilot', 'backdrops']) mkdirSync(join(art, d), { recursive: true });
+    await png(join(art, 'characters/hero/idle.png'), 10, 15, 1);
+    await png(join(art, 'characters/pilot/idle.png'), 10, 15, 1);
+    await png(join(art, 'backdrops/gagazet.png'), 8, 4, 1);
+    await png(join(art, 'backdrops/room.png'), 8, 4, 1);
+    const files: Array<[string, number, number, number]> = [
+      ['characters/hero/idle@4x.png', 40, 60, 10], ['characters/hero/idle@2x.png', 20, 30, 11],
+      ['characters/pilot/idle@4x.png', 40, 60, 12], ['characters/pilot/idle@2x.png', 20, 30, 13],
+      ['backdrops/gagazet@2x.png', 16, 8, 14], ['backdrops/room@2x.png', 16, 8, 15],
+    ];
+    for (const [f, w, h, fill] of files) {
+      await png(join(oldLib, f), w, h, fill);
+      await png(join(newLib, f), w, h, fill + 100); // the fixed library: same sizes, different pixels
+    }
+    const manifest = (lib: string) => ({
+      assets: Object.fromEntries([
+        ['characters/hero/idle', [['characters/hero/idle@4x.png', 4, [40, 60]], ['characters/hero/idle@2x.png', 2, [20, 30]]], join(art, 'characters/hero/idle.png')],
+        ['characters/pilot/idle', [['characters/pilot/idle@4x.png', 4, [40, 60]], ['characters/pilot/idle@2x.png', 2, [20, 30]]], join(art, 'characters/pilot/idle.png')],
+        ['backdrops/gagazet', [['backdrops/gagazet@2x.png', 2, [16, 8]]], join(art, 'backdrops/gagazet.png')],
+        ['backdrops/room', [['backdrops/room@2x.png', 2, [16, 8]]], join(art, 'backdrops/room.png')],
+      ].map(([id, outs, one]) => [id, {
+        id, status: 'ok', flags: [], source_sha256: sha(one as string),
+        outputs: (outs as Array<[string, number, [number, number]]>).map(([path, scale, size]) => ({ path, scale, bytes_png: statSync(join(lib, path)).size, size })),
+      }])),
+    });
+    writeFileSync(join(oldLib, 'manifest.json'), JSON.stringify(manifest(oldLib)));
+    writeFileSync(join(newLib, 'manifest.json'), JSON.stringify(manifest(newLib)));
+    // what the old install left: hard links of the old library, the pilot's own 2x (not the library's), and a derived 3x
+    for (const f of ['characters/hero/idle@4x.png', 'characters/hero/idle@2x.png', 'characters/pilot/idle@4x.png', 'backdrops/gagazet@2x.png', 'backdrops/room@2x.png']) linkSync(join(oldLib, f), join(art, f));
+    await png(join(art, 'characters/pilot/idle@2x.png'), 20, 30, 77); // an approved pilot master: never the library's
+    await png(join(art, 'characters/hero/idle@3x.png'), 30, 45, 5); // derived from the old 4x, one link
+    return { oldLib, newLib, art, parkDir };
+  }
+
+  it('knows the held-back backdrops and reads a key from a master path', () => {
+    expect(Object.keys(HELD_BACKDROPS).sort()).toEqual(['garden-of-pain', 'gagazet', 'road-to-the-farplane', 'road-to-the-farplane-links', 'title', 'via-purifico'].sort());
+    expect(backdropKey('backdrops/gagazet@2x.png')).toBe('gagazet');
+    expect(backdropKey('backdrops/road-to-the-farplane-links@2x.png')).toBe('road-to-the-farplane-links');
+    expect(backdropKey('characters/tidus/idle@4x.png')).toBeNull();
+  });
+
+  it('never installs a held-back backdrop, with or without an upgrade', async () => {
+    const { oldLib, newLib, art } = await world();
+    rmSync(join(art, 'backdrops/gagazet@2x.png'));
+    const fresh = await plan({ lib: oldLib, art, only: ['backdrops/'], scales: [2], held: { gagazet: 'invented lines' } });
+    expect(fresh.jobs).toEqual([]);
+    expect(fresh.skipped.find((x) => x.id === 'backdrops/gagazet@2x.png')?.why).toBe('held back: invented lines (re-render owed)');
+    const up = await plan({ lib: newLib, art, only: ['backdrops/'], scales: [2], replaceFrom: oldLib, held: { gagazet: 'invented lines' } });
+    expect(up.jobs.map((j) => `${j.kind}:${j.id}`)).toEqual(['replace:backdrops/room@2x.png']);
+  });
+
+  it('takes an installed held-back master out when upgrading, and only when it is the old library\'s own file', async () => {
+    const { oldLib, newLib, art } = await world();
+    const up = await plan({ lib: newLib, art, only: ['backdrops/'], scales: [2], replaceFrom: oldLib, held: { gagazet: 'invented lines' } });
+    expect(up.jobs.map((j) => `${j.kind}:${j.id}`).sort()).toEqual(['drop:backdrops/gagazet@2x.png', 'replace:backdrops/room@2x.png']);
+    rmSync(join(art, 'backdrops/gagazet@2x.png'));
+    await png(join(art, 'backdrops/gagazet@2x.png'), 16, 8, 99); // a different file under the same name: not ours to remove
+    const other = await plan({ lib: newLib, art, only: ['backdrops/'], scales: [2], replaceFrom: oldLib, held: { gagazet: 'invented lines' } });
+    expect(other.jobs.map((j) => j.kind)).not.toContain('drop');
+  });
+
+  it('replaces exactly the old library\'s files, keeps a pilot master, and derives the 3x again from the new 4x', async () => {
+    const { oldLib, newLib, art } = await world();
+    const r = await plan({ lib: newLib, art, only: ['characters/'], scales: [2, 3, 4], replaceFrom: oldLib });
+    const ids = r.jobs.map((j) => `${j.kind}:${j.id}`).sort();
+    expect(ids).toEqual([
+      'derive3:characters/hero/idle@3x.png',
+      'derive3:characters/pilot/idle@3x.png',
+      'replace:characters/hero/idle@2x.png',
+      'replace:characters/hero/idle@4x.png',
+      'replace:characters/pilot/idle@4x.png',
+    ]);
+    // the pilot's own 2x is not the old library's file: kept, and said so
+    expect(r.skipped.find((x) => x.id === 'characters/pilot/idle@2x.png')?.why).toMatch(/not the old library's file/);
+    // without --replace-from nothing installed is touched
+    const plain = await plan({ lib: newLib, art, only: ['characters/'], scales: [2, 3, 4] });
+    expect(plain.jobs.map((j) => `${j.kind}:${j.id}`)).toEqual(['derive3:characters/pilot/idle@3x.png']);
+  });
+
+  it('a file already the new library\'s is left alone (the upgrade is idempotent)', async () => {
+    const { oldLib, newLib, art } = await world();
+    for (const f of ['characters/hero/idle@4x.png', 'characters/hero/idle@2x.png', 'characters/pilot/idle@4x.png']) {
+      rmSync(join(art, f));
+      linkSync(join(newLib, f), join(art, f));
+    }
+    expect(sameFile(join(art, 'characters/hero/idle@4x.png'), join(newLib, 'characters/hero/idle@4x.png'))).toBe(true);
+    expect(sameFile(join(art, 'characters/hero/idle@4x.png'), join(oldLib, 'characters/hero/idle@4x.png'))).toBe(false);
+    const r = await plan({ lib: newLib, art, only: ['characters/hero'], scales: [2, 4], replaceFrom: oldLib });
+    expect(r.jobs).toEqual([]);
+    expect(r.skipped.map((x) => x.why)).toEqual(['already installed', 'already installed']);
+  });
+
+  it('parks what it replaces: a link is recorded (its data stays in the library), a derived file is copied first', async () => {
+    const { art, parkDir } = await world();
+    const link = park(join(art, 'characters/hero/idle@4x.png'), art, parkDir);
+    expect(link.links).toBeGreaterThan(1);
+    expect(link.note).toMatch(/stays in that library/);
+    expect(existsSync(join(parkDir, 'characters/hero/idle@4x.png'))).toBe(false);
+    const derived = park(join(art, 'characters/hero/idle@3x.png'), art, parkDir);
+    expect(derived.links).toBe(1);
+    expect(derived.parkedTo).toBe(join(parkDir, 'characters/hero/idle@3x.png'));
+    expect(sha(join(parkDir, 'characters/hero/idle@3x.png'))).toBe(sha(join(art, 'characters/hero/idle@3x.png')));
+    expect(park(join(art, 'characters/hero/idle@3x.png'), art, null)).toEqual({ path: 'characters/hero/idle@3x.png', bytes: statSync(join(art, 'characters/hero/idle@3x.png')).size, links: 1 });
   });
 });
