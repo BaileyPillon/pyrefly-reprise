@@ -334,4 +334,6 @@ http://127.0.0.1:6920/?arttier=high&artscale=2&aa=smaa&artlink=fast             
 window.__pyrefly.art.stats() / .rigs() / .shots() / .plan()
 harness: D:/Tools/pyrefly-scratch/2026-10-04/hires-engine/harness/   (capture, planecheck, aabench, govtest, closeup, rigs, shots, loadtimeline, tables, run-*.sh)
 gates:   node tools/art-derive.mjs verify --dir <dist> ; node tools/art-derive.mjs audit --dir <dist> ; node tools/art-browser-load.mjs --dir <dist>
+builds:  D:/Tools/pyrefly-scratch/2026-10-04/hires-engine/dist-final3 is the final production build, dist-before the start build (node node_modules/vite/bin/vite.js preview --outDir <dir> --port 6925);
+         the two earlier r39 builds are parked under F:/pyrefly-parked/2026-10-04/hires-engine/dist/
 ```
