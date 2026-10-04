@@ -1,0 +1,16 @@
+// The PREVIEW Worker: where `deploy-pages.mjs --host=cloudflare --preview` puts a candidate to look at, at
+// https://echoes-of-spira-preview.<account>.workers.dev/ and nowhere else (docs/handoff/cf-switch.md).
+// Same assets-only Worker as wrangler.jsonc, under its own name, with NO routes on purpose: a preview must never
+// be able to move the production Custom Domain (echoesofspira.com) onto itself. wrangler overrides an existing
+// Custom Domain without asking when it has no terminal, so the safe form is a preview config that cannot name one.
+// tools/deploy-wrangler.mjs checkWranglerConfig refuses a preview config that gains a route, and the production
+// config that loses its own. Nothing account-specific or secret belongs here: the repo is public.
+{
+  "name": "echoes-of-spira-preview",
+  "compatibility_date": "2026-10-04",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "../../dist-release"
+  }
+}

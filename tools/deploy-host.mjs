@@ -3,13 +3,22 @@
  *
  * `tools/deploy-pages.mjs` builds, hashes, gates and reviews a candidate the same way for every
  * host; only the build's base path, the publishing step and the address the live check reads
- * differ. GitHub Pages is the default and stays so until Bailey says otherwise: the switch is the
- * one constant DEFAULT_HOST below plus the checklist in docs/handoff/r39-cloudflare.md.
+ * differ.
+ *
+ * THE SWITCH (Bailey, 2026-10-04: "Yes I will go with your recommendation", to putting release 38 on
+ * echoesofspira.com as the production Cloudflare site): Cloudflare is the DEFAULT host and
+ * https://echoesofspira.com/ is the game's one permanent address (a Workers Custom Domain; the
+ * workers.dev address of the same Worker stays on as a backup, `www` forwards to the apex with a
+ * dashboard Redirect Rule). GitHub Pages is now the OLD address: it stays deployable with an explicit
+ * `--host=github`, as a LEGACY deploy that carries the "we've moved" note and records nothing the
+ * critic reads as "the live build" (see `parseHostArgs`). The record of the switch is
+ * docs/handoff/cf-switch.md; the earlier groundwork is docs/handoff/r39-cloudflare.md.
  *
  * Cloudflare has two kinds, chosen by `HOSTS.cloudflare.kind` or `--kind=` for one run:
  *   workers  Workers static assets, an assets-only Worker. Cloudflare's own Pages overview now tells
  *            new projects to start here, so it is the default (decision record: the handoff).
- *   pages    Cloudflare Pages by direct upload, the host named in decision D-369.
+ *   pages    Cloudflare Pages by direct upload, the host named in decision D-369. Not wired to the
+ *            custom domain: only the workers kind serves echoesofspira.com.
  * Both are named after the new title (D-368, D-369): echoes-of-spira.
  *
  * This file is the "where and what": the hosts, the flags, what a build and an upload must look like.
@@ -28,16 +37,28 @@ import { join } from 'node:path';
 
 const MIB = 1024 * 1024;
 
-/** Bailey switches this by word, in one commit (docs/handoff/r39-cloudflare.md, "The switch"). */
-export const DEFAULT_HOST = 'github';
+/**
+ * Switched to Cloudflare on 2026-10-04 (Bailey: "Yes I will go with your recommendation"). The
+ * default host is where a production deploy goes, whose address is "the live build" to the critic,
+ * and whose last `status=ok` line in docs/deploys.log `critic-plan` reads. Flipping it back is one
+ * line here, and the tripwire test `the default host` in tests/unit/deploy-host.test.ts.
+ */
+export const DEFAULT_HOST = 'cloudflare';
 
 export const HOSTS = Object.freeze({
   github: Object.freeze({
     name: 'github',
     label: 'GitHub Pages',
+    /** The OLD address since the switch: it serves the game with a "we've moved" note on the title screen, and saves made there stay there. */
     liveUrl: 'https://baileypillon.github.io/pyrefly-reprise/',
     /** vite.config.ts PROD_BASE: a project site is served from /<repo>/. */
     base: '/pyrefly-reprise/',
+    /**
+     * Not the default host any more, yet still deployable with an explicit `--host=github`: a LEGACY
+     * deploy, which runs every gate but records nothing the critic reads as the live build
+     * (docs/legacy-deploys.log instead of docs/deploys.log; no critic marker, ledger entry or artifact).
+     */
+    legacy: true,
   }),
   cloudflare: Object.freeze({
     name: 'cloudflare',
@@ -51,11 +72,24 @@ export const HOSTS = Object.freeze({
     pagesProject: 'echoes-of-spira',
     pagesProductionBranch: 'main',
     pagesPreviewBranch: 'preview',
+    /**
+     * Production: the Worker `echoes-of-spira`, its Custom Domain (`routes`) and its workers.dev backup address.
+     * Preview: a second Worker with NO routes. They are two files on purpose: a preview deployed with the
+     * production file would try to move echoesofspira.com onto the preview Worker (wrangler overrides an
+     * existing Custom Domain without asking when it runs without a terminal).
+     */
     wranglerConfig: 'tools/cloudflare/wrangler.jsonc',
-    /** Unknown until the first deploy prints it; the deploy reads it from wrangler's own output. */
-    liveUrl: null,
+    previewWranglerConfig: 'tools/cloudflare/wrangler.preview.jsonc',
+    /** The game's permanent address, bought by Bailey and Active in the same Cloudflare account as the Worker. Saves are tied to it. */
+    customDomain: 'echoesofspira.com',
+    /** `www` is not a second address: a zone Redirect Rule (dashboard, not wrangler) forwards it to the apex, so saves never split between two origins. */
+    wwwHost: 'www.echoesofspira.com',
+    liveUrl: 'https://echoesofspira.com/',
   }),
 });
+
+/** The address of the default host: where the game lives, and what every tool that needs "the live URL" reads. One constant, so nothing hard-codes it. */
+export const LIVE_URL = HOSTS[DEFAULT_HOST].liveUrl;
 
 /** The two Cloudflare products a build can go to, with the name used in messages. */
 export const CLOUDFLARE_KINDS = Object.freeze({
@@ -85,10 +119,18 @@ const PAGES_SKIPPED_ANYWHERE = Object.freeze(['.git', '.DS_Store', 'node_modules
 /** Cloudflare previews are logged here, never in deploys.log: critic-plan and critic-status read the last `status=ok` line there as the live build. */
 export const PREVIEW_LOG_NAME = 'preview-deploys.log';
 
+/** Legacy deploys (the old GitHub Pages address, since the switch) are logged here for the same reason. */
+export const LEGACY_LOG_NAME = 'legacy-deploys.log';
+
 /** The name of the Worker or Pages project a run deploys to. */
 export function siteNameFor(host, kind, preview) {
   if (kind === 'pages') return host.pagesProject;
   return preview ? host.previewWorkerName : host.workerName;
+}
+
+/** The wrangler config a Workers run uses, relative to the repo root: the preview Worker never reads the production file. */
+export function wranglerConfigFor(host, preview) {
+  return preview ? host.previewWranglerConfig : host.wranglerConfig;
 }
 
 /**
@@ -97,9 +139,14 @@ export function siteNameFor(host, kind, preview) {
  * the Pages project, instead of production), `--full-verify` (compare every file byte for byte,
  * which a preview always does) and, for Pages only, `--create-project`.
  *
- * A production deploy goes only to the default host: otherwise docs/deploys.log would mix hosts and
- * critic-plan's "last deployed build" would be wrong for the next deploy. A request for another host
- * without `--preview` still parses, with `refusal` set; a dry run only prints it, a real run fails.
+ * A production deploy goes to the default host, and only that one writes docs/deploys.log, a critic
+ * marker and a ledger entry: `critic-plan`'s "last deployed build" and the critic's "live build" are
+ * the default host's. Another host is allowed in two ways, each recorded elsewhere:
+ *   - `--preview` (Cloudflare only): the preview Worker, logged in docs/preview-deploys.log;
+ *   - a LEGACY host (GitHub Pages since the switch) named with `--host=`: the old address, logged
+ *     in docs/legacy-deploys.log, `legacy: true` in the result.
+ * Any other request for a non-default host without `--preview` still parses, with `refusal` set;
+ * a dry run only prints it, a real run fails.
  */
 export function parseHostArgs(args) {
   const raw = args.host;
@@ -129,17 +176,35 @@ export function parseHostArgs(args) {
     return { ok: false, error: '--create-project needs --kind=pages: a Worker is created by its first deploy, a Pages project has to exist first' };
   }
   const preview = args.preview === true;
-  const refusal = !preview && host.name !== DEFAULT_HOST
-    ? `${host.label} is not the default host (${HOSTS[DEFAULT_HOST].label}), and a production deploy goes only to the default host so that docs/deploys.log and the critic's "last deployed build" never mix hosts. Switching is Bailey's word: change DEFAULT_HOST in tools/deploy-host.mjs (docs/handoff/r39-cloudflare.md, "The switch"). To rehearse on ${host.label} first, add --preview`
-    : null;
+  const { legacy, refusal } = hostRequestRole(host, { preview });
   return {
-    ok: true, host, kind, preview, fullVerify: preview || args['full-verify'] === true, createProject: args['create-project'] === true, refusal,
+    ok: true, host, kind, preview, legacy, fullVerify: preview || args['full-verify'] === true, createProject: args['create-project'] === true, refusal,
   };
 }
 
-/** The extra environment `vite build` needs for this host: Cloudflare serves from the root, GitHub keeps vite's own default base. */
+/**
+ * What a request for this host means, given which host is the default: nothing special (the default host, or any
+ * preview), a LEGACY deploy (a non-default host flagged `legacy`, the old GitHub Pages address), or a refusal
+ * (a non-default host that is not legacy: its production deploy would mix hosts in docs/deploys.log).
+ */
+export function hostRequestRole(host, { preview = false, defaultHost = DEFAULT_HOST } = {}) {
+  if (preview || host.name === defaultHost) return { legacy: false, refusal: null };
+  if (host.legacy === true) return { legacy: true, refusal: null };
+  const home = HOSTS[defaultHost];
+  return {
+    legacy: false,
+    refusal: `${host.label} is not the default host (${home.label}), and a production deploy goes only to the default host so that docs/deploys.log and the critic's "last deployed build" never mix hosts. Switching is Bailey's word: change DEFAULT_HOST in tools/deploy-host.mjs (docs/handoff/cf-switch.md). To rehearse on ${host.label} first, add --preview`,
+  };
+}
+
+/**
+ * The extra environment `vite build` needs for this host. Both bases are set explicitly: Cloudflare serves from
+ * the root, and GitHub Pages from its project folder. A build for GitHub used to inherit vite's own default and
+ * whatever BASE_PATH the shell happened to carry, so a leftover BASE_PATH=/ from a Cloudflare rehearsal would
+ * have built the old address a blank page.
+ */
 export function hostBuildEnv(host) {
-  return host.name === 'cloudflare' ? { BASE_PATH: host.base } : {};
+  return { BASE_PATH: host.base };
 }
 
 /**
@@ -236,22 +301,45 @@ export function formatPreviewLogLine({ isoNow, mainSha, bundleHash, artFileCount
   return `${overrideUsed ? `${line}\toverride=owner` : line}\n`;
 }
 
+/**
+ * A `docs/legacy-deploys.log` line for a deploy to the old GitHub Pages address. `status=legacy` never
+ * matches the `status=ok` readers look for (critic-plan's "last deployed build", critic-status). The
+ * owner's override shows as in deploys.log, a trailing `override=owner`.
+ */
+export function formatLegacyLogLine({ isoNow, mainSha, bundleHash, artFileCount, host, url, overrideUsed = false }) {
+  const line = `${isoNow}\tmain=${mainSha}\tbundle=${bundleHash}\tartFiles=${artFileCount}\tstatus=legacy\thost=${host}\turl=${url}`;
+  return `${overrideUsed ? `${line}\toverride=owner` : line}\n`;
+}
+
 /** What a run on this host will do, printed at the top of every run and on --dry-run. */
-export function describeHostPlan(host, { kind = null, preview = false, fullVerify = false, createProject = false } = {}) {
+export function describeHostPlan(host, { kind = null, preview = false, fullVerify = false, createProject = false, legacy = false } = {}) {
   if (host.name === 'github') {
+    if (legacy) {
+      return [
+        `host: ${host.label}, LEGACY deployment to the OLD address ${host.liveUrl} (the default host is ${HOSTS[DEFAULT_HOST].label}, ${HOSTS[DEFAULT_HOST].liveUrl})`,
+        `  build: BASE_PATH=${host.base}; the title screen carries the "we've moved" note here and nowhere else; saves made on this address stay on it`,
+        `  publish: gh-pages force-pushed as one commit, a Pages build kicked and polled, then ${host.liveUrl} compared byte for byte`,
+        `  record: ${LEGACY_LOG_NAME} only; no critic obligation, no ledger entry, no stored artifact (the live build is ${HOSTS[DEFAULT_HOST].liveUrl})`,
+      ];
+    }
     return [`host: ${host.label}, live address ${host.liveUrl} (the default)`];
   }
   const site = siteNameFor(host, kind, preview);
   const publish = kind === 'pages'
     ? `wrangler pages deploy to branch ${preview ? host.pagesPreviewBranch : host.pagesProductionBranch} (Pages has no local dry run); the login is checked first${createProject ? '; the project is created first if missing (--create-project, with the hidden --force)' : '; the project must already exist'}`
     : 'wrangler deploy --dry-run (its own local check), then the real deploy; the login is checked first';
+  const config = wranglerConfigFor(host, preview);
+  const domain = !preview && kind !== 'pages' && host.customDomain
+    ? [`  address: Custom Domain ${host.customDomain} (the live address ${host.liveUrl}) plus the workers.dev backup address; verified byte for byte on both; ${host.wwwHost} must forward to it (a dashboard Redirect Rule, checked and reported, never changed here)`]
+    : [];
   return [
-    `host: ${CLOUDFLARE_KINDS[kind] ?? host.label}${preview ? ', PREVIEW deployment (never the canonical address)' : ', PRODUCTION'}`,
-    kind === 'pages' ? `  project: ${site}, branch ${preview ? host.pagesPreviewBranch : host.pagesProductionBranch}` : `  worker: ${site}, config ${host.wranglerConfig}`,
+    `host: ${CLOUDFLARE_KINDS[kind] ?? host.label}${preview ? ', PREVIEW deployment (never the canonical address)' : `, PRODUCTION${host.name === DEFAULT_HOST ? ' (the default host)' : ''}`}`,
+    kind === 'pages' ? `  project: ${site}, branch ${preview ? host.pagesPreviewBranch : host.pagesProductionBranch}` : `  worker: ${site}, config ${config}`,
+    ...domain,
     `  build: BASE_PATH=${host.base}, because the site is served from the root of its address`,
     `  upload gate: ${CLOUDFLARE_LIMITS.maxFileBytes / MIB} MiB per file, ${CLOUDFLARE_LIMITS.maxFiles} files; dist-release/.git is removed; the files uploaded must equal the artifact manifest`,
     `  publish: ${publish}`,
-    `  verify: ${fullVerify ? 'every file compared byte for byte' : 'the page, all code, every changed file and an even sample, byte for byte'}, against the address wrangler reports`,
+    `  verify: ${fullVerify ? 'every file compared byte for byte' : 'the page, all code, every changed file and an even sample, byte for byte'}, against the address wrangler reports${domain.length ? ` and ${host.liveUrl}` : ''}`,
     preview
       ? `  record: ${PREVIEW_LOG_NAME} only; no critic obligation, no ledger entry`
       : '  record: docs/deploys.log (host=cloudflare), critic marker, ledger, as for any live build',

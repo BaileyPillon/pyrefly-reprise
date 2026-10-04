@@ -6,7 +6,7 @@ An unofficial fan tribute that recreates five boss encounters from Final Fantasy
 and X-2 as a painted 2.5D web game: TypeScript (strict, ESM) + Vite + Three.js,
 HTML/CSS HUDs, vitest + Playwright. Owner: Bailey. Windows 11, repo at
 `D:\Final Fantasy` (the space in the path is real: quote it).
-Live: https://baileypillon.github.io/pyrefly-reprise/ · Repo: `BaileyPillon/pyrefly-reprise` (public).
+Live: https://echoesofspira.com (Cloudflare, since 2026-10-04: [cf-switch](docs/handoff/cf-switch.md)); the old address https://baileypillon.github.io/pyrefly-reprise/ stays up with a "we've moved" note, and saves made there stay there · Repo: `BaileyPillon/pyrefly-reprise` (public).
 
 This file is the entry point for **any** coding agent (Claude Code, Codex, Gemini,
 Jules, ...). `CLAUDE.md` only imports it. Keep it short; details live in `docs/`.
@@ -177,8 +177,10 @@ encounter through its real flow, every required target in `docs/target/targets.j
 matched, the exact artifact verified live). An old score never certifies a new build;
 rounds 02 and 03 are rubric v1 history.
 
-- `npm run deploy` builds locally (the art is only on this disk), force-pushes a
-  one-commit `gh-pages`, kicks the Pages build, appends to `docs/deploys.log`. It also
+- `npm run deploy` builds locally (the art is only on this disk), deploys the Worker
+  `echoes-of-spira` to Cloudflare (the default host; Custom Domain `echoesofspira.com`) and
+  appends to `docs/deploys.log`; `--host=github` publishes the old GitHub Pages address as a
+  legacy deploy (`docs/legacy-deploys.log`, no live-build record). It also
   hashes and decode-checks every shipped file (`artifact-manifest.json`), refuses a
   candidate with no validated focused or deep report for that commit, one whose ship
   verdict is HOLD, a save-data change with only a focused report, and the third deploy

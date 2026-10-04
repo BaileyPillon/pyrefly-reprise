@@ -20,7 +20,11 @@ export interface CloudflareDeps {
   removeFile?: (path: string) => void;
   list?: (dir: string, kind?: CloudflareKind) => { files: UploadFile[]; configFiles: string[] };
   verifyLive?: (manifest: ArtifactManifestLike, url: string, options: { changed: string[]; full: boolean }) => Promise<LiveCheck>;
-  fetchImpl?: (url: string, init?: Record<string, unknown>) => Promise<{ status: number; text(): Promise<string> }>;
+  fetchImpl?: (url: string, init?: Record<string, unknown>) => Promise<{
+    status: number;
+    text(): Promise<string>;
+    headers?: { get(name: string): string | null };
+  }>;
   env?: Record<string, string | undefined>;
   sleep?: (ms: number) => Promise<void>;
   tmpFile?: () => string;
@@ -54,14 +58,27 @@ export declare function prepareCloudflareUpload(input: {
   deps?: CloudflareDeps;
 }): UploadLimitsReport;
 
+/** What `www.<domain>` does: forwards to the apex (right), serves the game itself (saves would split), answers otherwise, or does not answer. */
+export interface WwwForwarding {
+  state: 'forwards' | 'serves-game' | 'other' | 'unreachable' | 'skipped';
+  detail: string;
+}
+
+/** Looks at the www host and logs a WARNING when it does not forward to the apex; never changes anything and never fails a deploy. */
+export declare function checkWwwForwarding(input?: { host?: DeployHost; deps?: CloudflareDeps }): Promise<WwwForwarding>;
+
 export interface CloudflarePublishResult {
   kind: CloudflareKind;
   /** The Worker or the Pages project that was deployed to. */
   siteName: string;
   versionId: string | null;
+  /** Every address verified byte for byte; a production Workers deploy has the canonical Custom Domain last. */
   urls: string[];
+  /** The canonical address for a production Workers deploy, else the address people use. */
   liveUrl: string;
   liveArtifact: LiveCheck;
+  /** A production Workers deploy only: what www does. Null otherwise. */
+  www: WwwForwarding | null;
 }
 
 export declare function publishToCloudflare(input: {

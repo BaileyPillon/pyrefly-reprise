@@ -1,0 +1,7 @@
+{
+  "what": "Where the pinned wrangler lives when the repo's node_modules does not hold it. The shared node_modules cannot take an install safely (even `npm install --dry-run` through a worktree junction rewrites its hidden lockfile, and a real install would re-extract every package in it), so wrangler is installed once, standalone, with `npm ci --ignore-scripts` from the lockfile in tools/cloudflare/wrangler-install/ (copy package.json and package-lock.json into dir, run it there). tools/deploy-wrangler.mjs resolveWranglerBin reads this file; PYREFLY_WRANGLER_BIN still overrides it. version must equal devDependencies.wrangler in package.json (a test pins that and the lockfile's integrity).",
+  "version": "4.147.0",
+  "dir": "D:/Tools/wrangler/4.147.0",
+  "bin": "node_modules/wrangler/bin/wrangler.js",
+  "recipe": "tools/cloudflare/wrangler-install"
+}

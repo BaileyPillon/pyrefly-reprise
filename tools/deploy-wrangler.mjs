@@ -6,14 +6,16 @@
  * wrangler is asked to put it there. `tools/deploy-cloudflare.mjs` runs both, with every side effect
  * injected.
  *
- * Everything here is pure (nothing spawns, reads a file or touches the network), so
- * tests/unit/deploy-host.test.ts covers it without wrangler. The field names and flags are those of
- * the pinned wrangler (4.147.0), read from its source and its `--help`. Nothing here ever sets,
- * reads or prints a credential. Game case: both (delivery tooling). Types: deploy-wrangler.d.mts.
+ * Everything here is pure given what it is handed (nothing spawns or touches the network; the only
+ * files read are package.json, a wrangler package.json and the small config files, through a
+ * `readFile` that tests replace), so tests/unit/deploy-wrangler.test.ts covers it without wrangler.
+ * The field names and flags are those of the pinned wrangler (4.147.0), read from its source and its
+ * `--help`. Nothing here ever sets, reads or prints a credential. Game case: both (delivery
+ * tooling). Types: deploy-wrangler.d.mts.
  */
 
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 
 /** wrangler's output file is newline-delimited JSON; one bad line never hides the rest. */
 export function parseWranglerOutput(text) {
@@ -44,16 +46,27 @@ export function pickDeployEntry(entries, name = null, kind = 'workers') {
 }
 
 /**
+ * A Custom Domain in a Workers entry's `targets`, as wrangler 4.147.0 renders it (`renderRoute`, read from its
+ * source): `echoesofspira.com (custom domain)`, with ` - zone id: ...` or ` - zone name: ...` and a trailing
+ * ` [production: enabled, ...]` only when the config says so. It is a hostname, not a URL, and not a route
+ * pattern either (`example.com/*` has no such suffix), so it gets its own reading.
+ */
+const CUSTOM_DOMAIN_TARGET = /^([a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+) \(custom domain\b[^)]*\)(?: \[[^\]]*\])?$/i;
+
+/**
  * https URLs (and loopback ones, for a local rehearsal) a deploy entry names, each with a trailing
- * slash and once: a Workers entry's `targets` (route patterns are not URLs and are skipped), or a
- * Pages entry's `url` (this exact deployment) followed by its `.pages.dev` `alias`.
+ * slash and once: a Workers entry's `targets` (the workers.dev address, and each Custom Domain as
+ * `https://<hostname>/`; route patterns are not URLs and are skipped), or a Pages entry's `url` (this
+ * exact deployment) followed by its `.pages.dev` `alias`.
  */
 export function pickDeployedUrls(entry) {
   const candidates = [...(Array.isArray(entry?.targets) ? entry.targets : []), entry?.url, entry?.alias];
   const urls = [];
   for (const candidate of candidates) {
     if (typeof candidate !== 'string') continue;
-    const url = candidate.trim();
+    let url = candidate.trim();
+    const domain = url.match(CUSTOM_DOMAIN_TARGET);
+    if (domain) url = `https://${domain[1].toLowerCase()}`;
     if (!/^https:\/\/[^\s/]+(\/\S*)?$/.test(url) && !/^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?(\/\S*)?$/.test(url)) continue;
     const withSlash = url.endsWith('/') ? url : `${url}/`;
     if (!urls.includes(withSlash)) urls.push(withSlash);
@@ -137,23 +150,118 @@ export function wranglerEnv(baseEnv, { outputFile = null } = {}) {
 /** How wrangler is spawned: stdin closed, so it is never interactive and no prompt (project, skills install, workers.dev name) can appear. */
 export const WRANGLER_STDIO = Object.freeze(['ignore', 'inherit', 'inherit']);
 
+/** The one file that says where the pinned wrangler is installed outside the repo, and which version that is. */
+export const WRANGLER_INSTALL_CONFIG = 'tools/cloudflare/wrangler-install.json';
+
+const EXACT_VERSION = /^\d+\.\d+\.\d+$/;
+
+/** The exact version this repo pins (`devDependencies.wrangler` in package.json), or null when that cannot be read. */
+export function readPinnedWranglerVersion(root, readFile = readFileSync) {
+  try {
+    const pinned = JSON.parse(readFile(join(root, 'package.json'), 'utf8'))?.devDependencies?.wrangler;
+    return typeof pinned === 'string' && EXACT_VERSION.test(pinned) ? pinned : null;
+  } catch {
+    return null;
+  }
+}
+
+/** The version of the wrangler package that a `<package>/bin/wrangler.js` belongs to, or null. */
+export function readWranglerVersion(bin, readFile = readFileSync) {
+  try {
+    const version = JSON.parse(readFile(join(dirname(dirname(bin)), 'package.json'), 'utf8'))?.version;
+    return typeof version === 'string' ? version : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Where the pinned wrangler is installed outside the repo (`WRANGLER_INSTALL_CONFIG`), or null when that file cannot be read. */
+export function readWranglerInstall(root, readFile = readFileSync) {
+  try {
+    const c = JSON.parse(readFile(join(root, ...WRANGLER_INSTALL_CONFIG.split('/')), 'utf8'));
+    if (typeof c?.version !== 'string' || typeof c?.dir !== 'string' || typeof c?.bin !== 'string') return null;
+    return { version: c.version, dir: c.dir, bin: join(c.dir, ...c.bin.split('/')) };
+  } catch {
+    return null;
+  }
+}
+
+const HOW_TO_INSTALL_WRANGLER =
+  'Install it once OUTSIDE the shared node_modules: put tools/cloudflare/wrangler-install/package.json and package-lock.json in the folder named by tools/cloudflare/wrangler-install.json and run `npm ci --ignore-scripts` there (docs/handoff/cf-switch.md has the commands). '
+  + 'Never run npm install, npm ci or npm install --dry-run in the main tree or through a worktree junction: even a dry run rewrites the shared hidden lockfile, and a real install would re-extract every package in it. '
+  + 'Or point PYREFLY_WRANGLER_BIN at any wrangler.js.';
+
 /**
- * Where wrangler lives: `PYREFLY_WRANGLER_BIN` when set (any copy, so a preview can run before the
- * branch is merged and without touching the shared node_modules), else the repo's own devDependency.
+ * Where wrangler lives, the first that exists:
+ *   1. `PYREFLY_WRANGLER_BIN`, when set: any copy, taken as it is (its version is reported, never refused).
+ *   2. the repo's own devDependency, `node_modules/wrangler` (it is there only after a real `npm install`).
+ *   3. the pinned install outside the repo that `tools/cloudflare/wrangler-install.json` names
+ *      (D:/Tools/wrangler/4.147.0): a standalone `npm ci` from `tools/cloudflare/wrangler-install/`, safe from
+ *      the shared tree, from worktree removal and from `npm ci`.
+ * A copy found in 2 or 3 must be the version package.json pins, or it is skipped and the reason reported.
  */
-export function resolveWranglerBin(root, exists = existsSync, env = process.env) {
+export function resolveWranglerBin(root, exists = existsSync, env = process.env, readFile = readFileSync) {
+  const pinned = readPinnedWranglerVersion(root, readFile);
   const override = env.PYREFLY_WRANGLER_BIN;
   if (override) {
     return exists(override)
-      ? { ok: true, bin: override }
+      ? { ok: true, bin: override, source: 'env', version: readWranglerVersion(override, readFile), pinned }
       : { ok: false, error: `PYREFLY_WRANGLER_BIN points at ${override}, which does not exist` };
   }
-  const bin = join(root, 'node_modules', 'wrangler', 'bin', 'wrangler.js');
-  if (exists(bin)) return { ok: true, bin };
-  return {
-    ok: false,
-    error: `wrangler is not installed (${bin} is missing). It is a devDependency of this repo: run \`npm install\` once in the main tree (the release worktrees share its node_modules through a junction). Never \`npm ci\`, which empties the shared node_modules first. Or point PYREFLY_WRANGLER_BIN at a wrangler.js.`,
-  };
+  const candidates = [{ source: 'repo', bin: join(root, 'node_modules', 'wrangler', 'bin', 'wrangler.js') }];
+  const install = readWranglerInstall(root, readFile);
+  if (install) candidates.push({ source: 'tools', bin: install.bin });
+  const notes = [];
+  for (const candidate of candidates) {
+    if (!exists(candidate.bin)) {
+      notes.push(`${candidate.bin} is missing`);
+      continue;
+    }
+    const version = readWranglerVersion(candidate.bin, readFile);
+    if (pinned && version !== pinned) {
+      notes.push(`${candidate.bin} is wrangler ${version ?? '(version unreadable)'}, but this repo pins ${pinned}`);
+      continue;
+    }
+    return { ok: true, bin: candidate.bin, source: candidate.source, version, pinned };
+  }
+  return { ok: false, error: `the pinned wrangler${pinned ? ` ${pinned}` : ''} was not found: ${notes.join('; ')}. ${HOW_TO_INSTALL_WRANGLER}` };
+}
+
+/** Whole-line `//` comments are all the committed wrangler configs carry; strip them and parse. */
+export function parseWranglerConfigText(text) {
+  return JSON.parse(String(text).split(/\r?\n/).filter((line) => !/^\s*\/\//.test(line)).join('\n'));
+}
+
+/**
+ * Problems with a wrangler config for a Workers run, checked before wrangler is asked to deploy. The two
+ * configs are public files and assets-only: the name must be the Worker this run deploys, workers.dev must stay on
+ * (it is the backup address, and wrangler switches it off by default as soon as `routes` exist), the assets must be
+ * the build, and the ONLY route is the production Worker's Custom Domain. A preview config with a route would move
+ * that domain onto the preview Worker: wrangler overrides an existing Custom Domain without asking when it runs
+ * without a terminal.
+ */
+export function checkWranglerConfig(text, { name, preview = false, customDomain }) {
+  let config;
+  try {
+    config = parseWranglerConfigText(text);
+  } catch (err) {
+    return [`the wrangler config cannot be read: ${err.message}`];
+  }
+  const problems = [];
+  const allowed = ['assets', 'compatibility_date', 'name', 'preview_urls', 'routes', 'workers_dev'];
+  const extra = Object.keys(config).filter((key) => !allowed.includes(key));
+  if (extra.length) problems.push(`unexpected key(s) ${extra.join(', ')}: the config is public and assets-only (no account id, binding, or route of its own)`);
+  if (config.name !== name) problems.push(`name is ${JSON.stringify(config.name)}, but this run deploys the Worker ${name}`);
+  if (config.workers_dev !== true) problems.push('workers_dev must be true: the workers.dev address is the backup address');
+  if (config.preview_urls !== false) problems.push('preview_urls must be false');
+  if (config.assets?.directory !== '../../dist-release') problems.push('assets.directory must be ../../dist-release, the build');
+  if (preview) {
+    if (config.routes !== undefined) problems.push(`a preview config must have no routes (found ${JSON.stringify(config.routes)}): a route would move the Custom Domain onto the preview Worker`);
+  } else {
+    const wanted = JSON.stringify([{ pattern: customDomain, custom_domain: true }]);
+    if (JSON.stringify(config.routes) !== wanted) problems.push(`routes must be exactly ${wanted}, the one Custom Domain (found ${JSON.stringify(config.routes)})`);
+  }
+  return problems;
 }
 
 /** Read `wrangler whoami --json`. Only whether a login exists and how many accounts it sees; the email and ids are never kept. */

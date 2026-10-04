@@ -6,26 +6,29 @@
  * Game case: both (delivery tooling, no gameplay).
  */
 
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import process from 'node:process';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import {
   NOT_LOGGED_IN,
   checkCloudflareLogin,
+  checkWwwForwarding,
   prepareCloudflareUpload,
   publishToCloudflare,
   type CloudflareDeps,
   type LiveCheck,
 } from '../../tools/deploy-cloudflare.mjs';
-import { CLOUDFLARE_LIMITS } from '../../tools/deploy-host.mjs';
+import { CLOUDFLARE_LIMITS, HOSTS } from '../../tools/deploy-host.mjs';
 import { WRANGLER_STDIO } from '../../tools/deploy-wrangler.mjs';
 
+const REPO = resolve(__dirname, '..', '..');
 const MIB = 1024 * 1024;
 const SECRET = 'SECRET-TOKEN-must-never-appear-anywhere';
 const WORKERS_URL = 'https://echoes-of-spira.bailey.workers.dev/';
+const CANONICAL = 'https://echoesofspira.com/';
 const PAGES_DEPLOYMENT = 'https://abc123.echoes-of-spira.pages.dev/';
 const PAGES_ALIAS = 'https://echoes-of-spira.pages.dev/';
 const PAGES_PREVIEW_ALIAS = 'https://preview.echoes-of-spira.pages.dev/';
@@ -38,7 +41,10 @@ const liveCheck = (over: Partial<LiveCheck> = {}): LiveCheck => ({
   result: 'PASS', checked: 40, liveManifest: 'match', mismatched: [], missing: [], wrongType: [], errors: [], ...over,
 });
 
-const WORKERS_ENTRY = '{"type":"deploy","version":1,"worker_name":"echoes-of-spira","version_id":"ver-1","targets":["https://echoes-of-spira.bailey.workers.dev"]}';
+// What wrangler 4.147.0 really writes for the production Worker: the workers.dev address with https:// added, and the Custom Domain as "host (custom domain)".
+const WORKERS_ENTRY = '{"type":"deploy","version":1,"worker_name":"echoes-of-spira","version_id":"ver-1","targets":["https://echoes-of-spira.bailey.workers.dev","echoesofspira.com (custom domain)"]}';
+const WORKERS_ONLY_ENTRY = '{"type":"deploy","version":1,"worker_name":"echoes-of-spira","version_id":"ver-1","targets":["https://echoes-of-spira.bailey.workers.dev"]}';
+const PREVIEW_ENTRY = '{"type":"deploy","version":1,"worker_name":"echoes-of-spira-preview","version_id":"pv-1","targets":["https://echoes-of-spira-preview.bailey.workers.dev"]}';
 const pagesEntry = (alias: string) => JSON.stringify({
   type: 'pages-deploy-detailed', version: 1, pages_project: 'echoes-of-spira', deployment_id: 'dep-1',
   url: 'https://abc123.echoes-of-spira.pages.dev', alias, environment: 'production',
@@ -54,6 +60,8 @@ interface Scenario {
   projects?: string[] | 'unreadable';
   listStatus?: number;
   createStatus?: number;
+  /** What www.echoesofspira.com answers (default: it forwards to the apex). */
+  www?: 'forwards' | 'serves-game' | 'error' | 'redirect-elsewhere' | 'unreachable';
   /** Replaces any dependency by name. */
   deps?: Partial<CloudflareDeps>;
 }
@@ -63,6 +71,7 @@ function harness(dir: string, scenario: Scenario = {}) {
   const calls: Call[] = [];
   const logs: string[] = [];
   const sleeps: number[] = [];
+  const fetches: { url: string; init?: Record<string, unknown> }[] = [];
   const checks: LiveCheck[] = [];
   const verifyCalls: { url: string; options: { changed: string[]; full: boolean } }[] = [];
   const deps: CloudflareDeps = {
@@ -82,26 +91,45 @@ function harness(dir: string, scenario: Scenario = {}) {
       if (args.includes('--dry-run')) return { status: scenario.dryStatus ?? 0 };
       const isPages = first === 'pages';
       const alias = args.includes('preview') ? PAGES_PREVIEW_ALIAS.slice(0, -1) : PAGES_ALIAS.slice(0, -1);
+      const workersEntry = (args[args.indexOf('--name') + 1] ?? '').endsWith('-preview') ? PREVIEW_ENTRY : WORKERS_ENTRY;
       const output = scenario.output === undefined
-        ? `{"type":"wrangler-session","version":1}\n${isPages ? pagesEntry(alias) : WORKERS_ENTRY}`
+        ? `{"type":"wrangler-session","version":1}\n${isPages ? pagesEntry(alias) : workersEntry}`
         : scenario.output;
       const env = options.env as Record<string, string>;
       if (output !== null && env.WRANGLER_OUTPUT_FILE_PATH) writeFileSync(env.WRANGLER_OUTPUT_FILE_PATH, output);
       return { status: scenario.deployStatus ?? 0 };
     },
     env: { PATH: 'x', CLOUDFLARE_API_TOKEN: SECRET },
+    // The committed configs are read for real, as ROOT/tools/cloudflare/<name>: the run checks them before it asks wrangler to deploy.
+    readFileSync: (path: string, encoding: 'utf8') => {
+      const config = path.replaceAll('\\', '/').match(/^ROOT\/tools\/cloudflare\/(wrangler(?:\.preview)?\.jsonc)$/);
+      return readFileSync(config ? join(REPO, 'tools', 'cloudflare', config[1] as string) : path, encoding);
+    },
     tmpFile: () => join(dir, 'wrangler-output.ndjson'),
     sleep: async (ms) => { sleeps.push(ms); },
     log: (m) => { logs.push(m); },
     fail: (m) => { throw new Failed(m); },
-    fetchImpl: async () => ({ status: 200, text: async () => '<script src="/assets/index-GoodHash.js"></script>' }),
+    fetchImpl: async (url, init) => {
+      fetches.push({ url, init });
+      if (url.startsWith('https://www.')) return wwwAnswer(scenario.www ?? 'forwards');
+      return { status: 200, text: async () => '<script src="/assets/index-GoodHash.js"></script>' };
+    },
     verifyLive: async (_manifest, url, options) => {
       verifyCalls.push({ url, options });
       return checks.shift() ?? liveCheck();
     },
     ...scenario.deps,
   };
-  return { deps, calls, logs, sleeps, checks, verifyCalls };
+  return { deps, calls, logs, sleeps, checks, verifyCalls, fetches };
+}
+
+/** What www.echoesofspira.com answers, in the four ways that matter. */
+function wwwAnswer(kind: 'forwards' | 'serves-game' | 'error' | 'redirect-elsewhere' | 'unreachable') {
+  if (kind === 'unreachable') throw Object.assign(new Error('fetch failed'), { cause: { code: 'ENOTFOUND' } });
+  if (kind === 'forwards') return { status: 301, text: async () => '', headers: { get: (name: string) => (name.toLowerCase() === 'location' ? CANONICAL : null) } };
+  if (kind === 'redirect-elsewhere') return { status: 302, text: async () => '', headers: { get: (name: string) => (name.toLowerCase() === 'location' ? 'https://example.com/' : null) } };
+  if (kind === 'error') return { status: 522, text: async () => 'connection timed out', headers: { get: () => null } };
+  return { status: 200, text: async () => '<script src="/assets/index-GoodHash.js"></script>', headers: { get: () => null } };
 }
 
 const manifest = { artifactHash: 'a'.repeat(64), files: { 'index.html': {}, 'art/a.png': {} } };
@@ -235,8 +263,8 @@ describe('prepareCloudflareUpload: the gate on what would be uploaded', () => {
   });
 });
 
-describe('publishToCloudflare, Workers static assets', () => {
-  it('runs wrangler\'s local check, then the real deploy, then verifies the address it reported', async () => {
+describe('publishToCloudflare, Workers static assets (production: the Custom Domain)', () => {
+  it('checks the config, runs wrangler\'s local check, then the real deploy, then verifies workers.dev and the Custom Domain', async () => {
     const h = harness(dir);
     const result = await publishToCloudflare({ ...publishArgs(), deps: h.deps });
     expect(h.calls).toHaveLength(2);
@@ -255,24 +283,75 @@ describe('publishToCloudflare, Workers static assets', () => {
     expect(real.args).not.toContain('--dry-run');
     expect((dry.options.env as Record<string, string>).WRANGLER_OUTPUT_FILE_PATH).toBeUndefined();
     expect((real.options.env as Record<string, string>).WRANGLER_OUTPUT_FILE_PATH).toBe(join(dir, 'wrangler-output.ndjson'));
-    expect(result).toMatchObject({ kind: 'workers', siteName: 'echoes-of-spira', versionId: 'ver-1', urls: [WORKERS_URL], liveUrl: WORKERS_URL });
-    expect(h.verifyCalls).toEqual([{ url: WORKERS_URL, options: { changed: ['art/a.png'], full: false } }]);
+    // the Worker is proved on the address that answers at once, then the Custom Domain, which is the live address
+    expect(result).toMatchObject({ kind: 'workers', siteName: 'echoes-of-spira', versionId: 'ver-1', urls: [WORKERS_URL, CANONICAL], liveUrl: CANONICAL });
+    expect(h.verifyCalls).toEqual([
+      { url: WORKERS_URL, options: { changed: ['art/a.png'], full: false } },
+      { url: CANONICAL, options: { changed: ['art/a.png'], full: false } },
+    ]);
     expect(existsSync(join(dir, 'wrangler-output.ndjson'))).toBe(false);
-    expect(h.logs.join('\n')).toMatch(/serves artifact a{16} byte for byte \(40 files compared\)/);
+    const logs = h.logs.join('\n');
+    expect(logs).toMatch(/tools\/cloudflare\/wrangler\.jsonc ok: the Custom Domain echoesofspira\.com is its only route, and workers\.dev stays on as the backup address/);
+    expect(logs).toMatch(/https:\/\/echoesofspira\.com\/ serves artifact a{16} byte for byte \(40 files compared\)/);
+    expect(logs).toMatch(/www check: www\.echoesofspira\.com forwards to the apex/);
+    expect(result.www).toMatchObject({ state: 'forwards' });
     expectNothingForbidden(h);
   });
 
-  it('deploys a preview to the preview Worker and compares every file when asked', async () => {
-    const out = '{"type":"deploy","version":1,"worker_name":"echoes-of-spira-preview","version_id":"pv-1","targets":["https://echoes-of-spira-preview.bailey.workers.dev"]}';
-    const h = harness(dir, { output: out });
-    const result = await publishToCloudflare({ ...publishArgs({ preview: true, fullVerify: true, extraMessage: 'first try' }), deps: h.deps });
-    const real = h.calls[1] as Call;
-    expect(real.args[real.args.indexOf('--name') + 1]).toBe('echoes-of-spira-preview');
-    expect(real.args[real.args.indexOf('--message') + 1]).toMatch(/^Pyrefly abc1234 .* preview: first try$/);
-    expect(result.siteName).toBe('echoes-of-spira-preview');
-    expect(h.verifyCalls[0]?.url).toBe('https://echoes-of-spira-preview.bailey.workers.dev/');
-    expect(h.verifyCalls[0]?.options.full).toBe(true);
-    expect(h.logs.join('\n')).toMatch(/\(PREVIEW\)/);
+  it('verifies the Custom Domain even when wrangler does not list it, and says so', async () => {
+    const h = harness(dir, { output: `{"type":"wrangler-session","version":1}\n${WORKERS_ONLY_ENTRY}` });
+    const result = await publishToCloudflare({ ...publishArgs(), deps: h.deps });
+    expect(result.urls).toEqual([WORKERS_URL, CANONICAL]);
+    expect(result.liveUrl).toBe(CANONICAL);
+    expect(h.verifyCalls.map((v) => v.url)).toEqual([WORKERS_URL, CANONICAL]);
+    expect(h.logs.join('\n')).toMatch(/wrangler did not list https:\/\/echoesofspira\.com\/ among its targets; it is verified anyway, as the live address/);
+  });
+
+  it('reports the Custom Domain as the live address, never the workers.dev one, whatever order wrangler lists them in', async () => {
+    const reversed = '{"type":"deploy","version":1,"worker_name":"echoes-of-spira","version_id":"ver-2","targets":["echoesofspira.com (custom domain)","https://echoes-of-spira.bailey.workers.dev"]}';
+    const h = harness(dir, { output: reversed });
+    const result = await publishToCloudflare({ ...publishArgs(), deps: h.deps });
+    expect(result.urls).toEqual([WORKERS_URL, CANONICAL]);
+    expect(result.liveUrl).toBe(CANONICAL);
+    expect(h.logs.join('\n')).not.toMatch(/did not list/);
+  });
+
+  it('works with only the Custom Domain listed, the workers.dev address being absent', async () => {
+    const h = harness(dir, { output: '{"type":"deploy","version":1,"worker_name":"echoes-of-spira","version_id":"ver-3","targets":["echoesofspira.com (custom domain)"]}' });
+    const result = await publishToCloudflare({ ...publishArgs(), deps: h.deps });
+    expect(result.urls).toEqual([CANONICAL]);
+    expect(h.verifyCalls.map((v) => v.url)).toEqual([CANONICAL]);
+  });
+
+  it('gives the Custom Domain ten minutes to serve the build (a fresh one needs its DNS record and certificate), the workers.dev address one and a half', async () => {
+    const attempts: Record<string, number> = {};
+    const h = harness(dir, { deps: { fetchImpl: async (url) => {
+      attempts[url] = (attempts[url] ?? 0) + 1;
+      if (url.startsWith('https://www.')) return wwwAnswer('forwards');
+      return { status: 200, text: async () => `<script src="/assets/index-${url === CANONICAL ? 'OldHash' : 'GoodHash'}.js"></script>` };
+    } } });
+    await expect(publishToCloudflare({ ...publishArgs(), deps: h.deps })).rejects.toThrow(/https:\/\/echoesofspira\.com\/ never served the built bundle \(local GoodHash, last seen OldHash.*The Worker itself is published.*Domains & Routes.*ipconfig \/flushdns/s);
+    expect(attempts[WORKERS_URL]).toBe(1);
+    expect(attempts[CANONICAL]).toBe(20);
+    expect(h.sleeps).toHaveLength(19);
+    expect(h.verifyCalls.map((v) => v.url)).toEqual([WORKERS_URL]);
+  });
+
+  it('refuses to start when the production config lost its Custom Domain, and runs nothing', async () => {
+    const h = harness(dir, { deps: { readFileSync: (path: string, encoding: 'utf8') => {
+      const isConfig = path.replaceAll('\\', '/').endsWith('wrangler.jsonc');
+      const text = readFileSync(isConfig ? join(REPO, 'tools', 'cloudflare', 'wrangler.jsonc') : path, encoding);
+      return isConfig ? text.replace(/"routes": \[[^\]]*\],?/s, '') : text;
+    } } });
+    await expect(publishToCloudflare({ ...publishArgs(), deps: h.deps })).rejects.toThrow(/tools\/cloudflare\/wrangler\.jsonc is not fit to deploy echoes-of-spira.*nothing was uploaded/s);
+    expect(h.calls).toHaveLength(0);
+    expect(h.logs.join('\n')).toMatch(/routes must be exactly/);
+  });
+
+  it('refuses to start when the config cannot be read, and runs nothing', async () => {
+    const h = harness(dir, { deps: { readFileSync: () => { throw new Error('ENOENT: no such file'); } } });
+    await expect(publishToCloudflare({ ...publishArgs(), deps: h.deps })).rejects.toThrow(/could not read tools\/cloudflare\/wrangler\.jsonc: ENOENT/);
+    expect(h.calls).toHaveLength(0);
   });
 
   it('does not upload when wrangler\'s own local check fails', async () => {
@@ -282,36 +361,29 @@ describe('publishToCloudflare, Workers static assets', () => {
     expect(h.verifyCalls).toHaveLength(0);
   });
 
-  it('verifies nothing when the real deploy fails, and says an interrupted upload is safe to repeat', async () => {
+  it('verifies nothing when the real deploy fails, and says an interrupted upload is safe to repeat and what a Custom Domain failure means', async () => {
     const h = harness(dir, { deployStatus: 1 });
-    await expect(publishToCloudflare({ ...publishArgs(), deps: h.deps })).rejects.toThrow(/nothing was verified or recorded.*workers\.dev name.*safe to repeat/s);
+    await expect(publishToCloudflare({ ...publishArgs(), deps: h.deps })).rejects.toThrow(/nothing was verified or recorded.*workers\.dev name.*"Custom domains".*echoesofspira\.com could not be attached.*Active.*no CNAME.*safe to repeat/s);
     expect(h.verifyCalls).toHaveLength(0);
   });
 
-  it('fails when wrangler leaves no output file, no deploy entry, or no address', async () => {
+  it('fails when wrangler leaves no output file or no deploy entry', async () => {
     const none = harness(dir, { output: null });
     await expect(publishToCloudflare({ ...publishArgs(), deps: none.deps })).rejects.toThrow(/left no output file/);
     const noEntry = harness(dir, { output: '{"type":"wrangler-session","version":1}' });
     await expect(publishToCloudflare({ ...publishArgs(), deps: noEntry.deps })).rejects.toThrow(/no deploy entry for echoes-of-spira/);
-    const noUrl = harness(dir, { output: '{"type":"deploy","version":1,"worker_name":"echoes-of-spira","targets":["pyrefly.example.com/*"]}' });
-    await expect(publishToCloudflare({ ...publishArgs(), deps: noUrl.deps })).rejects.toThrow(/reported no address.*workers_dev/s);
   });
 
-  it('waits for the address to serve this build\'s bundle', async () => {
+  it('waits for an address to serve this build\'s bundle', async () => {
     let n = 0;
-    const h = harness(dir, { deps: { fetchImpl: async () => ({ status: 200, text: async () => `<script src="/assets/index-${++n < 3 ? 'OldHash' : 'GoodHash'}.js"></script>` }) } });
+    const h = harness(dir, { deps: { fetchImpl: async (url) => {
+      if (url.startsWith('https://www.')) return wwwAnswer('forwards');
+      return { status: 200, text: async () => `<script src="/assets/index-${++n < 3 ? 'OldHash' : 'GoodHash'}.js"></script>` };
+    } } });
     await publishToCloudflare({ ...publishArgs(), deps: h.deps });
-    expect(n).toBe(3);
+    // workers.dev needed three tries; the Custom Domain, asked after it, served the build at once
+    expect(n).toBe(4);
     expect(h.sleeps).toEqual([30_000, 30_000]);
-  });
-
-  it('gives up after six tries when the address never serves this build', async () => {
-    let n = 0;
-    const h = harness(dir, { deps: { fetchImpl: async () => { n++; return { status: 200, text: async () => '<script src="/assets/index-OldHash.js"></script>' }; } } });
-    await expect(publishToCloudflare({ ...publishArgs(), deps: h.deps })).rejects.toThrow(/never served the built bundle \(local GoodHash, last seen OldHash/);
-    expect(n).toBe(6);
-    expect(h.sleeps).toHaveLength(5);
-    expect(h.verifyCalls).toHaveLength(0);
   });
 
   it('retries a failing byte-for-byte check four times, then fails naming the files', async () => {
@@ -328,7 +400,7 @@ describe('publishToCloudflare, Workers static assets', () => {
     h.checks.push(liveCheck({ result: 'UNVERIFIED', checked: 0, liveManifest: 'missing' }), liveCheck());
     const result = await publishToCloudflare({ ...publishArgs(), deps: h.deps });
     expect(result.liveArtifact.result).toBe('PASS');
-    expect(h.verifyCalls).toHaveLength(2);
+    expect(h.verifyCalls).toHaveLength(3);
   });
 
   it('never lets the token, the email or a throwaway account near wrangler, a log or an error', async () => {
@@ -346,6 +418,116 @@ describe('publishToCloudflare, Workers static assets', () => {
     }
     expect(message).toMatch(/wrangler deploy failed \(exit 2\)/);
     expectNothingForbidden(failed, [message]);
+  });
+});
+
+describe('publishToCloudflare, Workers static assets (preview: the second Worker, never the Custom Domain)', () => {
+  it('deploys to the preview Worker with the preview config, which has no routes, and compares every file', async () => {
+    const h = harness(dir);
+    const result = await publishToCloudflare({ ...publishArgs({ preview: true, fullVerify: true, extraMessage: 'first try' }), deps: h.deps });
+    for (const c of h.calls) {
+      expect(slash(c.args[c.args.indexOf('--config') + 1])).toBe('ROOT/tools/cloudflare/wrangler.preview.jsonc');
+      expect(c.args[c.args.indexOf('--name') + 1]).toBe('echoes-of-spira-preview');
+    }
+    const real = h.calls[1] as Call;
+    expect(real.args[real.args.indexOf('--message') + 1]).toMatch(/^Pyrefly abc1234 .* preview: first try$/);
+    expect(result.siteName).toBe('echoes-of-spira-preview');
+    expect(result.urls).toEqual(['https://echoes-of-spira-preview.bailey.workers.dev/']);
+    expect(result.liveUrl).toBe('https://echoes-of-spira-preview.bailey.workers.dev/');
+    expect(h.verifyCalls.map((v) => v.url)).toEqual(['https://echoes-of-spira-preview.bailey.workers.dev/']);
+    expect(h.verifyCalls[0]?.options.full).toBe(true);
+    expect(h.logs.join('\n')).toMatch(/\(PREVIEW\)/);
+    expect(h.logs.join('\n')).toMatch(/wrangler\.preview\.jsonc ok: no routes, so a preview can never touch the Custom Domain/);
+  });
+
+  it('never verifies, names or checks the live address or www: a preview is not the live build', async () => {
+    const h = harness(dir);
+    const result = await publishToCloudflare({ ...publishArgs({ preview: true }), deps: h.deps });
+    expect(result.www).toBeNull();
+    expect(h.fetches.map((f) => f.url).join(' ')).not.toMatch(/echoesofspira\.com/);
+    expect(h.verifyCalls.map((v) => v.url).join(' ')).not.toMatch(/echoesofspira\.com/);
+    expect(h.logs.join('\n')).not.toMatch(/www check/);
+  });
+
+  it('refuses a preview whose config carries a route, because that would move the Custom Domain onto the preview Worker', async () => {
+    const withRoute = JSON.stringify({
+      name: 'echoes-of-spira-preview', compatibility_date: '2026-10-04', workers_dev: true, preview_urls: false,
+      routes: [{ pattern: 'echoesofspira.com', custom_domain: true }], assets: { directory: '../../dist-release' },
+    });
+    const h = harness(dir, { deps: { readFileSync: () => withRoute } });
+    await expect(publishToCloudflare({ ...publishArgs({ preview: true }), deps: h.deps })).rejects.toThrow(/wrangler\.preview\.jsonc is not fit to deploy echoes-of-spira-preview/);
+    expect(h.calls).toHaveLength(0);
+    expect(h.logs.join('\n')).toMatch(/must have no routes/);
+  });
+
+  it('refuses the production config as a preview config, which is the same mistake by another route', async () => {
+    const h = harness(dir, { deps: { readFileSync: (path: string, encoding: 'utf8') => readFileSync(path.replaceAll('\\', '/').endsWith('.jsonc') ? join(REPO, 'tools', 'cloudflare', 'wrangler.jsonc') : path, encoding) } });
+    await expect(publishToCloudflare({ ...publishArgs({ preview: true }), deps: h.deps })).rejects.toThrow(/not fit to deploy echoes-of-spira-preview/);
+    expect(h.calls).toHaveLength(0);
+  });
+
+  it('fails when wrangler names no address for the preview Worker', async () => {
+    const h = harness(dir, { output: '{"type":"deploy","version":1,"worker_name":"echoes-of-spira-preview","targets":["pyrefly.example.com/*"]}' });
+    await expect(publishToCloudflare({ ...publishArgs({ preview: true }), deps: h.deps })).rejects.toThrow(/reported no address.*workers_dev in tools\/cloudflare\/wrangler\.preview\.jsonc/s);
+  });
+
+  it('gives a preview address six tries, like any address other than the Custom Domain', async () => {
+    let n = 0;
+    const h = harness(dir, { deps: { fetchImpl: async () => { n++; return { status: 200, text: async () => '<script src="/assets/index-OldHash.js"></script>' }; } } });
+    await expect(publishToCloudflare({ ...publishArgs({ preview: true }), deps: h.deps })).rejects.toThrow(/never served the built bundle \(local GoodHash, last seen OldHash/);
+    expect(n).toBe(6);
+    expect(h.sleeps).toHaveLength(5);
+    expect(h.verifyCalls).toHaveLength(0);
+  });
+});
+
+describe('checkWwwForwarding: www must forward to the apex, or saves split between two origins', () => {
+  const run = async (kind: Parameters<typeof wwwAnswer>[0]) => {
+    const h = harness(dir, { www: kind });
+    const result = await checkWwwForwarding({ host: HOSTS.cloudflare, deps: h.deps });
+    return { result, h, logs: h.logs.join('\n') };
+  };
+
+  it('is happy when www answers with a redirect to the apex, and asks it without following the redirect', async () => {
+    const { result, h, logs } = await run('forwards');
+    expect(result).toEqual({ state: 'forwards', detail: '301 to https://echoesofspira.com/' });
+    expect(logs).toMatch(/www check: www\.echoesofspira\.com forwards to the apex \(301 to https:\/\/echoesofspira\.com\/\)/);
+    expect(logs).not.toMatch(/WARNING/);
+    expect(h.fetches).toEqual([{ url: 'https://www.echoesofspira.com/', init: { redirect: 'manual' } }]);
+  });
+
+  it('warns loudly when www serves the game itself, because saves made there would not be the saves on the apex', async () => {
+    const { result, logs } = await run('serves-game');
+    expect(result.state).toBe('serves-game');
+    expect(logs).toMatch(/WARNING: www check: .*answers 200 with the game itself\. Saves made there would NOT be the saves on https:\/\/echoesofspira\.com\//);
+    expect(logs).toMatch(/docs\/handoff\/cf-switch\.md/);
+    expect(logs).toMatch(/Nothing was changed/);
+  });
+
+  it('warns, and changes nothing, when www answers with an error, redirects elsewhere or does not resolve yet', async () => {
+    const error = await run('error');
+    expect(error.result).toEqual({ state: 'other', detail: 'status 522' });
+    expect(error.logs).toMatch(/WARNING: www check: www\.echoesofspira\.com does not forward to https:\/\/echoesofspira\.com\/ yet \(status 522\)/);
+    const elsewhere = await run('redirect-elsewhere');
+    expect(elsewhere.result).toEqual({ state: 'other', detail: 'status 302, Location https://example.com/' });
+    const gone = await run('unreachable');
+    expect(gone.result.state).toBe('unreachable');
+    expect(gone.result.detail).toMatch(/did not answer \(ENOTFOUND\)/);
+    expect(gone.logs).toMatch(/WARNING: www check/);
+  });
+
+  it('never fails the deploy: a www that is not set up yet is a warning, and the Custom Domain still records as the live address', async () => {
+    const h = harness(dir, { www: 'unreachable' });
+    const result = await publishToCloudflare({ ...publishArgs(), deps: h.deps });
+    expect(result.liveUrl).toBe(CANONICAL);
+    expect(result.www?.state).toBe('unreachable');
+    expect(h.logs.join('\n')).toMatch(/WARNING: www check/);
+  });
+
+  it('does nothing for a host with no www', async () => {
+    const h = harness(dir);
+    expect(await checkWwwForwarding({ host: { ...HOSTS.cloudflare, wwwHost: undefined }, deps: h.deps })).toMatchObject({ state: 'skipped' });
+    expect(h.fetches).toHaveLength(0);
   });
 });
 

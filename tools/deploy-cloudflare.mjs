@@ -23,12 +23,13 @@ import { join } from 'node:path';
 import process from 'node:process';
 
 import { verifyLive } from './artifact-manifest.mjs';
-import { HOSTS, checkUploadLimits, compareUploadSet, listUploadFiles, siteNameFor } from './deploy-host.mjs';
+import { HOSTS, checkUploadLimits, compareUploadSet, listUploadFiles, siteNameFor, wranglerConfigFor } from './deploy-host.mjs';
 import {
   WRANGLER_STDIO,
   buildPagesDeployArgs,
   buildPagesProjectCreateArgs,
   buildWranglerDeployArgs,
+  checkWranglerConfig,
   parsePagesProjectNames,
   parseWhoami,
   parseWranglerOutput,
@@ -41,12 +42,23 @@ import {
 
 const MIB = 1024 * 1024;
 const BUNDLE_ATTEMPTS = 6;
+/** A Custom Domain attached a minute ago may still be getting its DNS record and certificate, so the address that matters gets ten minutes. */
+const CUSTOM_DOMAIN_BUNDLE_ATTEMPTS = 20;
 const ARTIFACT_ATTEMPTS = 4;
 const RETRY_WAIT_MS = 30_000;
 
 export const NOT_LOGGED_IN =
   'there is no Cloudflare login. Bailey logs in himself, once: `npx wrangler login` in the repo root, then approving it in the browser. '
   + 'Agents never create an account, enter credentials or approve a login. (wrangler will offer a throwaway `--temporary` account when it is not logged in: that creates an account and is never used here.)';
+
+/** One log line saying which wrangler runs, so a deploy log shows the version that deployed. */
+function describeWrangler(bin) {
+  const where = bin.source === 'env' ? 'PYREFLY_WRANGLER_BIN' : bin.source === 'repo' ? "the repo's node_modules" : 'the pinned install outside the repo (tools/cloudflare/wrangler-install.json)';
+  const warn = bin.source === 'env' && bin.pinned && bin.version !== bin.pinned
+    ? ` WARNING: this repo pins wrangler ${bin.pinned}; ${bin.version ?? 'an unreadable version'} is what runs`
+    : '';
+  return `wrangler ${bin.version ?? '(version unknown)'} from ${where}: ${bin.bin}${warn}`;
+}
 
 /** The real dependencies, overridden one by one by `deps`. */
 function withDeps(deps = {}) {
@@ -78,8 +90,9 @@ function withDeps(deps = {}) {
  */
 export function checkCloudflareLogin({ root, deps } = {}) {
   const d = withDeps(deps);
-  const bin = resolveWranglerBin(root, d.existsSync, d.env);
+  const bin = resolveWranglerBin(root, d.existsSync, d.env, d.readFileSync);
   if (!bin.ok) return d.fail(bin.error);
+  d.log(describeWrangler(bin));
   const res = d.spawnSync(process.execPath, [bin.bin, 'whoami', '--json'], {
     cwd: root,
     encoding: 'utf8',
@@ -133,10 +146,10 @@ export function prepareCloudflareUpload({ dist, manifest, manifestName, kind = '
 }
 
 /** Wait until the address serves the index.html of THIS build (the bundle name in it matches). */
-async function waitForBundle(d, url, bundleHash) {
+async function waitForBundle(d, url, bundleHash, attempts = BUNDLE_ATTEMPTS, hint = '') {
   let lastHash = null;
   let lastStatus = null;
-  for (let attempt = 1; attempt <= BUNDLE_ATTEMPTS; attempt++) {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
     try {
       const res = await d.fetchImpl(url, { redirect: 'follow' });
       lastStatus = res.status;
@@ -146,11 +159,16 @@ async function waitForBundle(d, url, bundleHash) {
     } catch (err) {
       d.log(`fetch attempt ${attempt} failed: ${err.message}`);
     }
-    d.log(`attempt ${attempt}/${BUNDLE_ATTEMPTS}: ${url} serves bundle ${lastHash ?? '(none)'} vs local ${bundleHash}${attempt < BUNDLE_ATTEMPTS ? ', retrying in 30s' : ''}`);
-    if (attempt < BUNDLE_ATTEMPTS) await d.sleep(RETRY_WAIT_MS);
+    d.log(`attempt ${attempt}/${attempts}: ${url} serves bundle ${lastHash ?? '(none)'} vs local ${bundleHash}${attempt < attempts ? ', retrying in 30s' : ''}`);
+    if (attempt < attempts) await d.sleep(RETRY_WAIT_MS);
   }
-  return d.fail(`${url} never served the built bundle (local ${bundleHash}, last seen ${lastHash}, last http status ${lastStatus})`);
+  return d.fail(`${url} never served the built bundle (local ${bundleHash}, last seen ${lastHash}, last http status ${lastStatus})${hint}`);
 }
+
+/** What to say when the Custom Domain does not serve the build: the Worker is already published, only the address is late. */
+const CUSTOM_DOMAIN_HINT =
+  '. The Worker itself is published and was verified on its workers.dev address above; only the Custom Domain is late. A fresh one can need a few minutes for its DNS record and certificate '
+  + '(Workers & Pages > the Worker > Settings > Domains & Routes shows its state). If this PC looked the name up before it was attached, run `ipconfig /flushdns`. Run the same command again: wrangler skips the files Cloudflare already holds';
 
 /** Download from the address and compare bytes with the manifest (critic check CHK-017). A 200 is not a pass; identical bytes are. */
 async function waitForArtifact(d, manifest, url, { changed, full }) {
@@ -192,14 +210,63 @@ function ensurePagesProject(d, { run, project, productionBranch, create }) {
 }
 
 /**
+ * Does `www.<domain>` forward to the apex? That is a zone Redirect Rule made in the dashboard (wrangler
+ * cannot make one), so this only LOOKS and reports; it never fails a deploy. Saves live in the origin they
+ * were made on, so a `www` that served the game itself would split them between two addresses:
+ *   forwards     a 301, 302, 307 or 308 whose Location is the apex: right.
+ *   serves-game  www answers 200 with the game: saves would split. Fix the Redirect Rule before anyone plays on it.
+ *   other        any other answer (an error status, a redirect elsewhere).
+ *   unreachable  no answer at all, usually because www has no proxied DNS record yet.
+ * The two bad states are logged as a WARNING with the dashboard steps' name; nothing is changed.
+ */
+export async function checkWwwForwarding({ host = HOSTS.cloudflare, deps } = {}) {
+  const d = withDeps(deps);
+  if (!host.wwwHost || !host.liveUrl) return { state: 'skipped', detail: 'no www host is configured' };
+  const www = `https://${host.wwwHost}/`;
+  let state;
+  let detail;
+  try {
+    const res = await d.fetchImpl(www, { redirect: 'manual' });
+    const location = res.headers?.get?.('location') ?? null;
+    let target = null;
+    try {
+      target = location ? new URL(location, www).href : null;
+    } catch {
+      target = null;
+    }
+    if ([301, 302, 307, 308].includes(res.status) && target?.startsWith(host.liveUrl)) {
+      state = 'forwards';
+      detail = `${res.status} to ${target}`;
+    } else if (res.status === 200 && /assets\/index-[\w-]+\.js/.test(await res.text())) {
+      state = 'serves-game';
+      detail = `${www} answers 200 with the game itself`;
+    } else {
+      state = 'other';
+      detail = `status ${res.status}${target ? `, Location ${target}` : ''}`;
+    }
+  } catch (err) {
+    state = 'unreachable';
+    detail = `${www} did not answer (${err.cause?.code ?? err.message})`;
+  }
+  const todo = 'see "www" in docs/handoff/cf-switch.md: a proxied DNS record for www, then the Redirect Rule (Rules > Redirect Rules). Nothing was changed.';
+  if (state === 'forwards') d.log(`www check: ${host.wwwHost} forwards to the apex (${detail})`);
+  else if (state === 'serves-game') d.log(`WARNING: www check: ${detail}. Saves made there would NOT be the saves on ${host.liveUrl}; ${todo}`);
+  else d.log(`WARNING: www check: ${host.wwwHost} does not forward to ${host.liveUrl} yet (${detail}); ${todo}`);
+  return { state, detail };
+}
+
+/**
  * Upload dist-release to Cloudflare, then prove the address serves this exact artifact.
- *   workers  wrangler's own local check (`deploy --dry-run`), then the real `deploy` of the
- *            assets-only Worker named for the run (the preview Worker for a preview).
+ *   workers  the config is checked first (the production Worker's only route is its Custom Domain; a
+ *            preview config has none), then wrangler's own local check (`deploy --dry-run`), then the real
+ *            `deploy` of the assets-only Worker named for the run (the preview Worker for a preview).
  *   pages    the project is ensured first, then `pages deploy` to its production branch, or to the
  *            preview branch for a preview.
  * The output file wrangler writes names the address(es); each is checked for this build's bundle and
- * then byte for byte. Returns `{ kind, siteName, versionId, urls, liveUrl, liveArtifact }`; every
- * failure goes through `fail`.
+ * then byte for byte. A production Workers deploy also verifies the canonical address (`host.liveUrl`,
+ * the Custom Domain) whether or not wrangler listed it (wrangler prints a Custom Domain as
+ * `host (custom domain)`, not a URL), last, with ten minutes' patience, and returns it as `liveUrl`.
+ * Returns `{ kind, siteName, versionId, urls, liveUrl, liveArtifact, www }`; every failure goes through `fail`.
  */
 export async function publishToCloudflare({
   root, dist = join(root, 'dist-release'), kind = HOSTS.cloudflare.kind, preview = false, createProject = false,
@@ -207,8 +274,9 @@ export async function publishToCloudflare({
   host = HOSTS.cloudflare, deps,
 } = {}) {
   const d = withDeps(deps);
-  const bin = resolveWranglerBin(root, d.existsSync, d.env);
+  const bin = resolveWranglerBin(root, d.existsSync, d.env, d.readFileSync);
   if (!bin.ok) return d.fail(bin.error);
+  d.log(describeWrangler(bin));
   const site = siteNameFor(host, kind, preview);
   const message = wranglerMessage({ mainSha, isoNow, preview, extra: extraMessage });
   const run = (args, { outputFile = null, capture = false } = {}) => d.spawnSync(process.execPath, [bin.bin, ...args], {
@@ -227,8 +295,22 @@ export async function publishToCloudflare({
     deployArgs = buildPagesDeployArgs({ dist, projectName: site, branch, commitHash: mainSha, commitMessage: message });
     where = `the Cloudflare Pages project ${site}, branch ${branch}`;
   } else {
+    const configRel = wranglerConfigFor(host, preview);
+    const configPath = join(root, ...configRel.split('/'));
+    let configText;
+    try {
+      configText = d.readFileSync(configPath, 'utf8');
+    } catch (err) {
+      return d.fail(`could not read ${configRel}: ${err.message}`);
+    }
+    const configProblems = checkWranglerConfig(configText, { name: site, preview, customDomain: host.customDomain });
+    if (configProblems.length) {
+      for (const problem of configProblems) d.log(`  ${problem}`);
+      return d.fail(`${configRel} is not fit to deploy ${site} (${configProblems.length} problem(s) above); nothing was uploaded`);
+    }
+    d.log(`${configRel} ok: ${preview ? 'no routes, so a preview can never touch the Custom Domain' : `the Custom Domain ${host.customDomain} is its only route, and workers.dev stays on as the backup address`}`);
     deployArgs = buildWranglerDeployArgs({
-      configPath: join(root, ...host.wranglerConfig.split('/')), workerName: site, message, tag: mainSha,
+      configPath, workerName: site, message, tag: mainSha,
     });
     d.log("wrangler's own local check of dist-release (deploy --dry-run: nothing is uploaded)");
     const dry = run([...deployArgs, '--dry-run']);
@@ -245,6 +327,9 @@ export async function publishToCloudflare({
     return d.fail(
       `wrangler ${kind === 'pages' ? 'pages deploy' : 'deploy'} failed (exit ${res.status}) — see output above; nothing was verified or recorded. `
       + (kind === 'pages' ? '' : 'A new account has to register its workers.dev name once in the dashboard (wrangler prints the link). ')
+      + (kind !== 'pages' && !preview && host.customDomain
+        ? `If wrangler lists "Custom domains" among the failures, ${host.customDomain} could not be attached to the Worker: check that the zone is Active in this account and holds no CNAME record for that name, then run the same command again. `
+        : '')
       + 'An interrupted upload is safe to repeat: wrangler skips the files Cloudflare already holds.',
     );
   }
@@ -260,21 +345,31 @@ export async function publishToCloudflare({
   if (malformed) d.log(`note: ${malformed} unreadable line(s) in wrangler's output file were skipped`);
   const entry = pickDeployEntry(entries, site, kind);
   if (!entry) return d.fail(`wrangler's output file has no deploy entry for ${site}, so the deploy cannot be verified`);
-  const urls = pickDeployedUrls(entry);
+  // The canonical address is verified whether or not wrangler listed it: it prints a Custom Domain as
+  // "host (custom domain)", and a missing line must never mean an unchecked live address. It goes last, so
+  // the Worker is proved on the address that answers at once before the Custom Domain gets its long wait.
+  const canonical = !preview && kind !== 'pages' && host.liveUrl ? (host.liveUrl.endsWith('/') ? host.liveUrl : `${host.liveUrl}/`) : null;
+  const reported = pickDeployedUrls(entry);
+  const urls = [...reported.filter((url) => url !== canonical), ...(canonical ? [canonical] : [])];
   if (!urls.length) {
-    return d.fail(`wrangler reported no address for ${site} (${JSON.stringify(entry.targets ?? entry.url ?? null)}); ${kind === 'pages' ? 'the project has no .pages.dev address' : `the workers.dev address must be on (workers_dev in ${host.wranglerConfig})`}`);
+    return d.fail(`wrangler reported no address for ${site} (${JSON.stringify(entry.targets ?? entry.url ?? null)}); ${kind === 'pages' ? 'the project has no .pages.dev address' : `the workers.dev address must be on (workers_dev in ${wranglerConfigFor(host, preview)})`}`);
   }
   const versionId = entry.version_id ?? entry.deployment_id ?? null;
   d.log(`deployed ${site}${versionId ? ` (${versionId})` : ''} at ${urls.join(', ')}`);
+  if (canonical && !reported.includes(canonical)) d.log(`note: wrangler did not list ${canonical} among its targets; it is verified anyway, as the live address`);
 
   let liveArtifact = null;
   for (const url of urls) {
     d.log(`verifying ${url}`);
-    await waitForBundle(d, url, bundleHash);
+    const isCanonical = url === canonical;
+    await waitForBundle(d, url, bundleHash, isCanonical ? CUSTOM_DOMAIN_BUNDLE_ATTEMPTS : BUNDLE_ATTEMPTS, isCanonical ? CUSTOM_DOMAIN_HINT : '');
     d.log(`${url} matches bundle ${bundleHash}`);
     liveArtifact = await waitForArtifact(d, manifest, url, { changed: changedShipped, full: fullVerify });
     d.log(`${url} serves artifact ${manifest.artifactHash.slice(0, 16)} byte for byte (${liveArtifact.checked} files compared)`);
   }
-  // Pages lists this exact deployment first and its stable .pages.dev alias last: the alias is the address people use.
-  return { kind, siteName: site, versionId, urls, liveUrl: kind === 'pages' ? urls[urls.length - 1] : urls[0], liveArtifact };
+  // www must forward to the apex, or saves split between two origins. It is a dashboard rule, so this only reports.
+  const www = canonical && host.wwwHost ? await checkWwwForwarding({ host, deps: d }) : null;
+  // The canonical address is the one people use. Otherwise Pages lists this exact deployment first and its stable .pages.dev alias last: the alias is the address people use.
+  const liveUrl = canonical ?? (kind === 'pages' ? urls[urls.length - 1] : urls[0]);
+  return { kind, siteName: site, versionId, urls, liveUrl, liveArtifact, www };
 }

@@ -26,9 +26,12 @@ npx playwright install chromium   # once, for e2e + screenshots
 
 ### Ports and base path
 
-- Dev serves at `/`. **Build and preview serve under `/pyrefly-reprise/`**
-  (`PROD_BASE` in `vite.config.ts`), so the preview is byte-identical to the
-  GitHub Pages artifact. Set `BASE_PATH=/` for a user page or custom domain.
+- Dev serves at `/`. **A plain build and preview serve under `/pyrefly-reprise/`**
+  (`PROD_BASE` in `vite.config.ts`): the artifact of the old GitHub Pages address. The live
+  site, https://echoesofspira.com, is the same files built with `BASE_PATH=/` (a user page or
+  custom domain), which `tools/deploy-pages.mjs` sets for Cloudflare and, explicitly, for GitHub
+  (`hostBuildEnv` in `tools/deploy-host.mjs`), so a `BASE_PATH` left in the shell never decides a
+  deploy.
 - The preview port is **4319** by default (4173 is a common squatter). Both
   `playwright.config.ts` and `tools/screenshot.mjs` read `PREVIEW_PORT`:
   `PREVIEW_PORT=4500 npm run test:e2e`.
@@ -140,11 +143,13 @@ npm run deploy -- [--skip-tests] [--allow-dirty] [--dry-run] [--message="text"]
 ```
 
 `tools/deploy-pages.mjs` does the whole release in one command: type-check +
-unit tests, `vite build --outDir dist-release`, re-init `dist-release` as a
-throwaway single-commit `gh-pages` git repo and force-push it, kick a Pages
-build and poll it to completion, then verify the live site serves the same
-bundle and that art assets resolve. It appends one line per run to
-`docs/deploys.log` and exits non-zero on any failure.
+unit tests, `vite build --outDir dist-release` (with the host's `BASE_PATH`), every
+gate on the finished build, then it publishes to the default host, **Cloudflare**
+(the Worker `echoes-of-spira`, served at https://echoesofspira.com as a Custom Domain,
+and at its workers.dev address as a backup), and verifies the live address serves this
+exact artifact byte for byte. It appends one line per run to `docs/deploys.log` and
+exits non-zero on any failure. `--host=github` publishes the old GitHub Pages address
+instead (the "legacy" mode below).
 
 The dirty-tree check only refuses on **build-relevant** paths — `src/`,
 `tests/`, `tools/`, `public/` outside `public/art/`, `index.html`,
@@ -160,11 +165,16 @@ and are pinned by `tests/unit/deploy-dirty-classify.test.ts`.
   (the dirty files are still printed); without it, such a tree aborts.
 - `--dry-run` stops right after the dirty-tree check and prints how each dirty
   path was classified — useful for confirming the tree is only fleet noise.
-- `--message="text"` appends free text to the gh-pages commit message.
-- `--host=github|cloudflare` picks where to publish (default `github`, set by
-  `DEFAULT_HOST` in `tools/deploy-host.mjs`). **A production deploy goes only to the
-  default host**; `--host=cloudflare` without `--preview` is refused until Bailey says
-  switch (a dry run only prints the refusal). Every gate above runs for both hosts.
+- `--message="text"` appends free text to the commit message (GitHub) or the wrangler version note (Cloudflare).
+- `--host=cloudflare|github` picks where to publish (default `cloudflare`, set by
+  `DEFAULT_HOST` in `tools/deploy-host.mjs` since the switch of 2026-10-04). Only a deploy
+  to the default host is "the live build": it alone writes `docs/deploys.log`, a critic
+  marker and a ledger entry. `--host=github` is the **legacy** mode: the old address,
+  https://baileypillon.github.io/pyrefly-reprise/, which carries the "we've moved" note on its
+  title screen (saves made there stay there); it builds with `BASE_PATH=/pyrefly-reprise/`,
+  force-pushes a throwaway single-commit `gh-pages`, kicks the Pages build, compares the files
+  byte for byte, and records one line in `docs/legacy-deploys.log` only. Every gate above runs
+  for both hosts; a legacy deploy needs the same review evidence or Bailey's override.
 - `--kind=workers|pages` (Cloudflare only) picks the Cloudflare product: Workers static assets
   (the default) or Pages. Both are named `echoes-of-spira` (D-368, D-369).
 - `--preview` (Cloudflare only) publishes to the preview instead: the Worker `echoes-of-spira-preview`,
@@ -177,15 +187,24 @@ and are pinned by `tests/unit/deploy-dirty-classify.test.ts`.
 Cloudflare serves from the root, so its build runs with `BASE_PATH=/` (set by the script
 through Node's environment; from Git Bash a hand-typed `BASE_PATH=/` is rewritten to
 `/Program Files/Git/` by MSYS, so use `MSYS_NO_PATHCONV=1` or PowerShell). It also needs
-Node 22 or newer, `wrangler` (a pinned devDependency; `npm install`, never `npm ci`; or any copy,
-named by `PYREFLY_WRANGLER_BIN=<path to wrangler.js>`) and Bailey's own login (`npx wrangler
-login`; the script checks it first and never logs in). wrangler is always spawned with stdin
-closed, so no prompt can appear. Nothing is deployed to Cloudflare yet: read
-[handoff/r39-cloudflare.md](handoff/r39-cloudflare.md) for the evidence, the limits, the commands
-and the switch checklist.
+Node 22 or newer, the **pinned wrangler 4.147.0** and Bailey's own login (`npx wrangler
+login`; the script checks it first and never logs in). The deploy finds wrangler by itself:
+`PYREFLY_WRANGLER_BIN=<path to wrangler.js>` if set, else the repo's `node_modules/wrangler`,
+else the standalone install named by `tools/cloudflare/wrangler-install.json`
+(`D:/Tools/wrangler/4.147.0`, made with `npm ci --ignore-scripts` from the lockfile in
+`tools/cloudflare/wrangler-install/`); a copy that is not the pinned version is skipped.
+**Never run `npm install`, `npm ci` or even `npm install --dry-run` in the main tree or through a
+worktree junction**: a dry run rewrites the shared hidden lockfile and a real install would
+re-extract every package in it. wrangler is always spawned with stdin closed, so no prompt can
+appear. The production config (`tools/cloudflare/wrangler.jsonc`) lists the Custom Domain, the
+preview config (`wrangler.preview.jsonc`) has no routes, and the deploy refuses a mix-up. `www`
+forwards to the apex through a dashboard Redirect Rule (wrangler cannot make one); the deploy
+only looks and warns. Read [handoff/cf-switch.md](handoff/cf-switch.md) for the commands and the
+dashboard steps, and [handoff/r39-cloudflare.md](handoff/r39-cloudflare.md) for the evidence and the limits.
 
-Safe to run repeatedly — `dist-release/.git` is deleted and recreated every
-run, so `gh-pages` always ends up with exactly one commit. Requires the `gh`
+Safe to run repeatedly — on GitHub, `dist-release/.git` is deleted and recreated every
+run, so `gh-pages` always ends up with exactly one commit; on Cloudflare a repeated upload
+skips the files Cloudflare already holds. A `--host=github` run requires the `gh`
 CLI (hardcoded at `D:/Tools/GitHubCLI/gh.exe`) authenticated against
 `BaileyPillon/pyrefly-reprise`.
 

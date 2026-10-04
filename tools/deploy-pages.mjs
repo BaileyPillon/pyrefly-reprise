@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 /**
- * Build and deploy Pyrefly Reprise to GitHub Pages (the default host) or to Cloudflare, in one command.
+ * Build and deploy Echoes of Spira (internally "pyrefly") to Cloudflare (the default host, since the
+ * switch of 2026-10-04) or to the old GitHub Pages address, in one command.
  *
  *   node tools/deploy-pages.mjs [--skip-tests] [--allow-dirty] [--dry-run]
  *                              [--message="text"] [--owner-override="words"]
- *                              [--host=github|cloudflare] [--kind=workers|pages] [--preview]
+ *                              [--host=cloudflare|github] [--kind=workers|pages] [--preview]
  *                              [--create-project] [--full-verify]
  *
  * Flags:
- *   --host=        where to publish: github (the default, until Bailey switches it in
- *                  tools/deploy-host.mjs) or cloudflare (read docs/handoff/r39-cloudflare.md
- *                  first). Every gate below runs for both hosts.
+ *   --host=        where to publish: cloudflare (the default, the game's permanent address
+ *                  https://echoesofspira.com/; docs/handoff/cf-switch.md) or github (the OLD address:
+ *                  a LEGACY deploy that carries the "we've moved" note and is logged in
+ *                  docs/legacy-deploys.log, never as the live build). Every gate below runs for both.
  *   --kind=        Cloudflare only: workers (Workers static assets, the default) or pages
  *                  (Cloudflare Pages, the host named in decision D-369).
  *   --preview      Cloudflare only: publish to the preview Worker (or the preview branch of the Pages
@@ -93,10 +95,13 @@ import { applyStoredReports } from './critic-clear.mjs';
 import { classifyPorcelain } from './deploy-classify.mjs';
 import { checkCloudflareLogin, prepareCloudflareUpload, publishToCloudflare } from './deploy-cloudflare.mjs';
 import {
+  DEFAULT_HOST,
   HOSTS,
+  LEGACY_LOG_NAME,
   PREVIEW_LOG_NAME,
   checkBuildBase,
   describeHostPlan,
+  formatLegacyLogLine,
   formatPreviewLogLine,
   hostBuildEnv,
   parseHostArgs,
@@ -122,10 +127,13 @@ const GH_EXE = 'D:/Tools/GitHubCLI/gh.exe';
 const SOURCEMAP_HOME = process.env.PYREFLY_SOURCEMAP_HOME ?? 'D:/Tools/pyrefly-sourcemaps';
 const REPO = 'BaileyPillon/pyrefly-reprise';
 const REPO_URL = `https://github.com/${REPO}.git`;
-const LIVE_URL = HOSTS.github.liveUrl;
+/** The GitHub Pages address, the OLD address since the switch: only a `--host=github` run reads it. The live address is HOSTS[DEFAULT_HOST].liveUrl. */
+const GITHUB_LIVE_URL = HOSTS.github.liveUrl;
 const LOG_PATH = join(ROOT, 'docs', 'deploys.log');
 /** Cloudflare previews only: never docs/deploys.log, whose last `status=ok` line is "the live build" to critic-plan and critic-status. */
 const PREVIEW_LOG_PATH = join(ROOT, 'docs', PREVIEW_LOG_NAME);
+/** Legacy deploys (the old GitHub Pages address) only: the same reason as the preview log. */
+const LEGACY_LOG_PATH = join(ROOT, 'docs', LEGACY_LOG_NAME);
 const PENDING_DIR = join(ROOT, 'critic', 'pending');
 const CLEARED_DIR = join(ROOT, 'critic', 'cleared');
 const ARTIFACTS_DIR = join(ROOT, 'critic', 'artifacts');
@@ -530,14 +538,37 @@ function recordDeploy({
   console.log(rule);
 }
 
+/**
+ * The record of a LEGACY deploy (the old GitHub Pages address, since the switch): one line in
+ * docs/legacy-deploys.log and a banner. Nothing the critic reads as "the live build" is written: no
+ * docs/deploys.log line, no critic marker, no ledger entry, no stored manifest. The live build is the
+ * default host's, and the critic's obligations stay with it.
+ */
+function recordLegacyDeploy({ host, liveUrl, isoNow, mainSha, bundleHash, artFileCount, ownerOverrideUsed }) {
+  mkdirSync(dirname(LEGACY_LOG_PATH), { recursive: true });
+  appendFileSync(LEGACY_LOG_PATH, formatLegacyLogLine({
+    isoNow, mainSha, bundleHash, artFileCount, host, url: liveUrl, overrideUsed: ownerOverrideUsed,
+  }));
+  const home = HOSTS[DEFAULT_HOST];
+  const summary = `LEGACY deploy of main ${mainSha} (bundle ${bundleHash}, ${artFileCount} art files) to the old address ${liveUrl} at ${isoNow}`;
+  log(summary);
+  console.log(summary);
+  const banner = `LEGACY HOST ONLY: logged in docs/${LEGACY_LOG_NAME}; no review obligation, ledger entry or live-build record was made, and the live address ${home.liveUrl} is untouched`;
+  const rule = '='.repeat(Math.min(banner.length, 160));
+  console.log('');
+  console.log(rule);
+  console.log(banner);
+  console.log(rule);
+}
+
 async function main() {
   if (!HOST_PARSE.ok) fail(HOST_PARSE.error);
   const {
-    host: HOST, kind: KIND, preview: PREVIEW, fullVerify: FULL_VERIFY, createProject: CREATE_PROJECT, refusal: HOST_REFUSAL,
+    host: HOST, kind: KIND, preview: PREVIEW, legacy: LEGACY, fullVerify: FULL_VERIFY, createProject: CREATE_PROJECT, refusal: HOST_REFUSAL,
   } = HOST_PARSE;
   if (HOST_REFUSAL && !DRY_RUN) fail(HOST_REFUSAL);
   if (HOST.name === 'github' && !existsSync(GH_EXE)) fail(`gh CLI not found at ${GH_EXE}`);
-  for (const line of describeHostPlan(HOST, { kind: KIND, preview: PREVIEW, fullVerify: FULL_VERIFY, createProject: CREATE_PROJECT })) log(line);
+  for (const line of describeHostPlan(HOST, { kind: KIND, preview: PREVIEW, fullVerify: FULL_VERIFY, createProject: CREATE_PROJECT, legacy: LEGACY })) log(line);
   if (HOST_REFUSAL) log(`NOTE (dry run only): a real run would refuse this — ${HOST_REFUSAL}`);
   // Cloudflare: no login, no deploy. The answer comes in seconds, before the preflight and the
   // build take minutes. A dry run asks nothing of Cloudflare.
@@ -616,7 +647,7 @@ async function main() {
     }
     if (HOST.name === 'cloudflare') {
       const wrangler = resolveWranglerBin(ROOT);
-      log(wrangler.ok ? `wrangler: installed (${wrangler.bin})` : `wrangler: NOT installed — ${wrangler.error}`);
+      log(wrangler.ok ? `wrangler: ${wrangler.version ?? '(version unknown)'} found (${wrangler.source}: ${wrangler.bin})` : `wrangler: NOT found — ${wrangler.error}`);
       log('the Cloudflare login is not checked on a dry run (that would ask Cloudflare); a real run checks it first');
     }
     log(
@@ -634,9 +665,10 @@ async function main() {
   if (run(process.execPath, [join(ROOT, 'tools', 'fx-assets.mjs'), 'ensure']).status !== 0) fail('public/fx is missing or differs from tools/fx/fx-assets.json, and the backup could not restore it — see output above');
   // PR-0328 / D-335: no source map ships. The build keeps its maps, keyed by this commit, outside dist-release.
   const sourceMapDir = join(SOURCEMAP_HOME, mainSha);
-  // GitHub Pages keeps vite's own default base; Cloudflare serves from the root, so it builds with BASE_PATH=/.
+  // Every host builds with its own base set explicitly: Cloudflare serves from the root (BASE_PATH=/), GitHub Pages from
+  // /pyrefly-reprise/. A BASE_PATH left in the shell by an earlier run can no longer decide it.
   const hostEnv = hostBuildEnv(HOST);
-  log(`building: npx vite build --outDir dist-release --emptyOutDir${HOST.name === 'cloudflare' ? ` with BASE_PATH=${HOST.base}` : ''} (source maps are kept in ${sourceMapDir}, none ship)`);
+  log(`building: npx vite build --outDir dist-release --emptyOutDir with BASE_PATH=${HOST.base} (source maps are kept in ${sourceMapDir}, none ship)`);
   if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir'], { env: { ...process.env, ...hostEnv, [SOURCEMAP_DIR_ENV]: sourceMapDir } }).status !== 0) {
     fail('vite build failed — see output above');
   }
@@ -685,8 +717,9 @@ async function main() {
   if (!bundleMatch) fail(`could not find an assets/index-*.js reference in ${indexPath}`);
   const bundleHash = bundleMatch[1];
   log(`bundle hash: ${bundleHash}`);
-  if (HOST.name === 'cloudflare') {
-    // A build made for the wrong base serves a blank page: every asset would 404 at the root.
+  {
+    // A build made for the wrong base serves a blank page: every asset would 404 (at the root for a GitHub base on Cloudflare,
+    // and in the project folder for a root base on GitHub Pages). Checked for every host since the switch.
     const baseProblems = checkBuildBase(indexHtml, HOST.base);
     for (const p of baseProblems) log(`  ${p}`);
     if (baseProblems.length) fail(`the build is not made for the base ${HOST.base} that ${HOST.label} serves from — see above`);
@@ -864,7 +897,7 @@ async function main() {
   let lastLiveStatus = null;
   for (let attempt = 1; attempt <= 6; attempt++) {
     try {
-      const res = await fetch(LIVE_URL, { redirect: 'follow' });
+      const res = await fetch(GITHUB_LIVE_URL, { redirect: 'follow' });
       lastLiveStatus = res.status;
       const text = await res.text();
       const m = text.match(/assets\/index-([\w-]+)\.js/);
@@ -895,7 +928,7 @@ async function main() {
   })();
   let liveArtifact = null;
   for (let attempt = 1; attempt <= 4; attempt++) {
-    liveArtifact = await verifyLive(manifest, LIVE_URL, { changed: changedShipped });
+    liveArtifact = await verifyLive(manifest, GITHUB_LIVE_URL, { changed: changedShipped });
     log(`live artifact check ${attempt}/4: ${liveArtifact.result} (${liveArtifact.checked} files compared, manifest ${liveArtifact.liveManifest})`);
     if (liveArtifact.result === 'PASS') break;
     if (attempt < 4) await sleep(30_000);
@@ -914,8 +947,15 @@ async function main() {
   }
   log('gh-pages branch has exactly 1 commit');
 
+  // Since the switch GitHub Pages is the OLD address: a deploy there records no live build, marker, ledger entry or artifact.
+  if (LEGACY) {
+    recordLegacyDeploy({
+      host: HOST.name, liveUrl: GITHUB_LIVE_URL, isoNow, mainSha, bundleHash, artFileCount, ownerOverrideUsed,
+    });
+    return;
+  }
   recordDeploy({
-    host: HOST.name, liveUrl: LIVE_URL, isoNow, mainSha, bundleHash, artFileCount, manifest, plan, liveArtifact,
+    host: HOST.name, liveUrl: GITHUB_LIVE_URL, isoNow, mainSha, bundleHash, artFileCount, manifest, plan, liveArtifact,
     ownerOverrideUsed, ownerOverrideReportPath, ownerOverrideChangedArea,
   });
 }

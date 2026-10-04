@@ -1,0 +1,9 @@
+{
+  "name": "echoes-of-spira-wrangler",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The pinned wrangler for the Cloudflare deploy (tools/cloudflare/wrangler-install.json says where it is installed). Install it with `npm ci --ignore-scripts` in an empty folder that holds this file and package-lock.json. Not a dependency of the game.",
+  "dependencies": {
+    "wrangler": "4.147.0"
+  }
+}
