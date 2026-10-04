@@ -1,11 +1,23 @@
 #!/usr/bin/env node
 /**
- * Build and deploy Pyrefly Reprise to GitHub Pages, in one command.
+ * Build and deploy Pyrefly Reprise to GitHub Pages (the default host) or to Cloudflare, in one command.
  *
  *   node tools/deploy-pages.mjs [--skip-tests] [--allow-dirty] [--dry-run]
  *                              [--message="text"] [--owner-override="words"]
+ *                              [--host=github|cloudflare] [--kind=workers|pages] [--preview]
+ *                              [--create-project] [--full-verify]
  *
  * Flags:
+ *   --host=        where to publish: github (the default, until Bailey switches it in
+ *                  tools/deploy-host.mjs) or cloudflare (read docs/handoff/r39-cloudflare.md
+ *                  first). Every gate below runs for both hosts.
+ *   --kind=        Cloudflare only: workers (Workers static assets, the default) or pages
+ *                  (Cloudflare Pages, the host named in decision D-369).
+ *   --preview      Cloudflare only: publish to the preview Worker (or the preview branch of the Pages
+ *                  project), not production. The same gates, every file compared byte for byte; logged
+ *                  in docs/preview-deploys.log (never in docs/deploys.log); no review obligation.
+ *   --create-project  Pages only: create the project first when the account has none by that name.
+ *   --full-verify  Cloudflare only: compare every file, not a sample (a preview always does).
  *   --skip-tests   skip `npx tsc --noEmit` and `npx vitest run`
  *   --allow-dirty  allow deploying even when a build-relevant path is dirty
  *                  (the dirty files are still printed as a warning)
@@ -56,6 +68,7 @@
 
 import { spawnSync } from 'node:child_process';
 import {
+  appendFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
@@ -71,6 +84,17 @@ import { fileURLToPath } from 'node:url';
 import { MANIFEST_NAME, buildManifest, diffManifests, verifyLive } from './artifact-manifest.mjs';
 import { applyStoredReports } from './critic-clear.mjs';
 import { classifyPorcelain } from './deploy-classify.mjs';
+import { checkCloudflareLogin, prepareCloudflareUpload, publishToCloudflare } from './deploy-cloudflare.mjs';
+import {
+  HOSTS,
+  PREVIEW_LOG_NAME,
+  checkBuildBase,
+  describeHostPlan,
+  formatPreviewLogLine,
+  hostBuildEnv,
+  parseHostArgs,
+} from './deploy-host.mjs';
+import { resolveWranglerBin } from './deploy-wrangler.mjs';
 import { SOURCEMAP_DIR_ENV, findSourceMapReferences, findUnshipped } from './dist-filter.mjs';
 import {
   archiveMarker,
@@ -91,8 +115,10 @@ const GH_EXE = 'D:/Tools/GitHubCLI/gh.exe';
 const SOURCEMAP_HOME = process.env.PYREFLY_SOURCEMAP_HOME ?? 'D:/Tools/pyrefly-sourcemaps';
 const REPO = 'BaileyPillon/pyrefly-reprise';
 const REPO_URL = `https://github.com/${REPO}.git`;
-const LIVE_URL = 'https://baileypillon.github.io/pyrefly-reprise/';
+const LIVE_URL = HOSTS.github.liveUrl;
 const LOG_PATH = join(ROOT, 'docs', 'deploys.log');
+/** Cloudflare previews only: never docs/deploys.log, whose last `status=ok` line is "the live build" to critic-plan and critic-status. */
+const PREVIEW_LOG_PATH = join(ROOT, 'docs', PREVIEW_LOG_NAME);
 const PENDING_DIR = join(ROOT, 'critic', 'pending');
 const CLEARED_DIR = join(ROOT, 'critic', 'cleared');
 const ARTIFACTS_DIR = join(ROOT, 'critic', 'artifacts');
@@ -285,11 +311,16 @@ function releaseGateFor(plan, mainSha) {
 /**
  * The `docs/deploys.log` line for one run. `overrideUsed` appends a trailing
  * `override=owner` field so a build shipped past the deep-review gate is
- * visible in the log itself, not only in `critic/pending/<sha>.json`.
+ * visible in the log itself, not only in `critic/pending/<sha>.json`. A
+ * `host` (github or cloudflare, since r39-cloudflare) appends a last
+ * `host=<name>` field; without one the line is exactly what it always was.
+ * Readers (critic-plan, critic-status) match `\tstatus=ok` and `\tmain=` and
+ * ignore every field they do not know.
  */
-export function formatDeployLogLine({ isoNow, mainSha, bundleHash, artFileCount, status, overrideUsed = false }) {
+export function formatDeployLogLine({ isoNow, mainSha, bundleHash, artFileCount, status, overrideUsed = false, host = null }) {
   const base = `${isoNow}\tmain=${mainSha}\tbundle=${bundleHash}\tartFiles=${artFileCount}\tstatus=${status}`;
-  return `${overrideUsed ? `${base}\toverride=owner` : base}\n`;
+  const withOverride = overrideUsed ? `${base}\toverride=owner` : base;
+  return `${host ? `${withOverride}\thost=${host}` : withOverride}\n`;
 }
 
 /** The release rules in one line: what has to happen before this deploy, and what after it. */
@@ -339,6 +370,8 @@ const DRY_RUN = Boolean(args['dry-run']);
 const EXTRA_MESSAGE = typeof args.message === 'string' ? args.message : '';
 const CLAIM = typeof args.claim === 'string' ? args.claim : null;
 const MINIMUM = typeof args.minimum === 'string' ? args.minimum : null;
+/** Pure: parsed at import so tests can load this module, and only acted on (fail) inside main(). */
+const HOST_PARSE = parseHostArgs(args);
 
 function log(msg) {
   console.log(`[deploy] ${msg}`);
@@ -411,8 +444,97 @@ function countFiles(dir) {
   return count;
 }
 
+/**
+ * Steps 6 and 7 of the pipeline, the same for every host: the docs/deploys.log line, the stored
+ * manifest, the critic-pending marker (what this build owes the critic), the ledger and the closing
+ * banner. Moved here verbatim from the end of main() when Cloudflare came in (r39-cloudflare); a
+ * GitHub Pages deploy runs exactly what it ran before, plus the `host=` field in its log line.
+ * `liveUrl` is the address that was verified: GitHub Pages' fixed one, or the one wrangler reported.
+ */
+function recordDeploy({
+  host, liveUrl, isoNow, mainSha, bundleHash, artFileCount, manifest, plan, liveArtifact,
+  ownerOverrideUsed, ownerOverrideReportPath, ownerOverrideChangedArea,
+}) {
+  // ---- 6. Log and summarize ---------------------------------------------
+  const status = 'ok';
+  const logLine = formatDeployLogLine({ isoNow, mainSha, bundleHash, artFileCount, status, overrideUsed: ownerOverrideUsed, host });
+  mkdirSync(dirname(LOG_PATH), { recursive: true });
+  if (!existsSync(LOG_PATH)) {
+    writeFileSync(
+      LOG_PATH,
+      'datetime\tmain_sha\tbundle_hash\tart_file_count\tstatus\n',
+    );
+  }
+  writeFileSync(LOG_PATH, logLine, { flag: 'a' });
+
+  const summary = `Deployed main ${mainSha} (bundle ${bundleHash}, ${artFileCount} art files) to ${liveUrl} at ${isoNow}`;
+  log(summary);
+  console.log(summary);
+
+  // ---- 7. Record what this build owes the critic ------------------------
+  // The build this one replaces can no longer be verified live. A deep review
+  // it still owed moves here; its other open obligations are recorded as never
+  // verified. Nothing is deleted: closed markers move to critic/cleared/.
+  mkdirSync(ARTIFACTS_DIR, { recursive: true });
+  writeFileSync(join(ARTIFACTS_DIR, `${mainSha}.json`), `${JSON.stringify(manifest)}\n`);
+  const older = readPendingMarkers(PENDING_DIR).filter((m) => !m.parseError);
+  const { carriedDeep, closed } = supersedeMarkers(older, mainSha, isoNow);
+  for (const m of closed) {
+    const { file: _file, ageHours: _age, ...content } = m;
+    archiveMarker(PENDING_DIR, CLEARED_DIR, content);
+    log(`build ${m.mainSha} was replaced: its marker moved to critic/cleared/ with what was never verified`);
+  }
+  const baseMarker = buildPendingMarker({
+    mainSha,
+    bundle: bundleHash,
+    deployedAt: isoNow,
+    liveUrl,
+    artFiles: artFileCount,
+    artifactHash: manifest.artifactHash,
+    plan,
+    carriedDeep,
+    liveArtifact: { result: liveArtifact.result, checked: liveArtifact.checked, at: isoNow },
+  });
+  // An override ships the build, it never settles a review: every obligation
+  // above stays exactly as planned. This only records, on the marker itself,
+  // that the owner's own words shipped it past the deep-review refusal.
+  const marker = ownerOverrideUsed
+    ? { ...baseMarker, ownerOverride: { words: OWNER_OVERRIDE_WORDS, date: isoNow, report: ownerOverrideReportPath, changedArea: ownerOverrideChangedArea } }
+    : baseMarker;
+  const markerPath = writePendingMarker(PENDING_DIR, marker);
+  log(`critic-pending marker written: ${markerPath}`);
+  // A focused or deep review made on the production candidate before this
+  // deploy counts now that the build it reviewed is the one that is live.
+  for (const r of applyStoredReports(ROOT, mainSha)) {
+    for (const s of r.settled) log(`  ${r.report} settled ${s.kind}: ${s.result}`);
+  }
+  const ledger = readLedger(ROOT, loadPolicy(ROOT));
+  writeLedger(ROOT, { ...ledger, deploysSinceDeep: [...ledger.deploysSinceDeep, { sha: mainSha, date: isoNow, substantial: plan.review !== 'live' }] });
+
+  const owed = (readPendingMarkers(PENDING_DIR).find((m) => m.mainSha === mainSha)?.obligations ?? [])
+    .filter((o) => o.status === 'pending').map((o) => o.kind);
+  const banner = owed.length
+    ? `REVIEW OWED for main ${mainSha} bundle ${bundleHash}: ${owed.join(' + ')} (planned review: ${plan.review}). A release is not finished until these are settled: npm run critic:status`
+    : `main ${mainSha} bundle ${bundleHash}: every review obligation is already settled`;
+  const rule = '='.repeat(Math.min(banner.length, 160));
+  console.log('');
+  console.log(rule);
+  console.log(banner);
+  console.log(rule);
+}
+
 async function main() {
-  if (!existsSync(GH_EXE)) fail(`gh CLI not found at ${GH_EXE}`);
+  if (!HOST_PARSE.ok) fail(HOST_PARSE.error);
+  const {
+    host: HOST, kind: KIND, preview: PREVIEW, fullVerify: FULL_VERIFY, createProject: CREATE_PROJECT, refusal: HOST_REFUSAL,
+  } = HOST_PARSE;
+  if (HOST_REFUSAL && !DRY_RUN) fail(HOST_REFUSAL);
+  if (HOST.name === 'github' && !existsSync(GH_EXE)) fail(`gh CLI not found at ${GH_EXE}`);
+  for (const line of describeHostPlan(HOST, { kind: KIND, preview: PREVIEW, fullVerify: FULL_VERIFY, createProject: CREATE_PROJECT })) log(line);
+  if (HOST_REFUSAL) log(`NOTE (dry run only): a real run would refuse this — ${HOST_REFUSAL}`);
+  // Cloudflare: no login, no deploy. The answer comes in seconds, before the preflight and the
+  // build take minutes. A dry run asks nothing of Cloudflare.
+  if (HOST.name === 'cloudflare' && !DRY_RUN) checkCloudflareLogin({ root: ROOT, deps: { log, fail } });
 
   // ---- 0. Warn about live builds still waiting on a critic round ---------
   // Printed at the start of every run, --dry-run included: hotfixes must
@@ -485,6 +607,11 @@ async function main() {
     } else {
       log(`DRY RUN: the release gate would let this build go out (${dryGate.evidence ? `${dryGate.evidence.review} review ${dryGate.evidence.path} says ${dryGate.evidence.ship}` : 'no candidate review required'})`);
     }
+    if (HOST.name === 'cloudflare') {
+      const wrangler = resolveWranglerBin(ROOT);
+      log(wrangler.ok ? `wrangler: installed (${wrangler.bin})` : `wrangler: NOT installed — ${wrangler.error}`);
+      log('the Cloudflare login is not checked on a dry run (that would ask Cloudflare); a real run checks it first');
+    }
     log(
       `--dry-run: stopping after the dirty-tree check (${dirty.buildRelevant.length} build-relevant, ${dirty.fleetNoise.length} fleet-noise). Nothing was built, pushed or deployed.`,
     );
@@ -500,8 +627,10 @@ async function main() {
   if (run(process.execPath, [join(ROOT, 'tools', 'fx-assets.mjs'), 'ensure']).status !== 0) fail('public/fx is missing or differs from tools/fx/fx-assets.json, and the backup could not restore it — see output above');
   // PR-0328 / D-335: no source map ships. The build keeps its maps, keyed by this commit, outside dist-release.
   const sourceMapDir = join(SOURCEMAP_HOME, mainSha);
-  log(`building: npx vite build --outDir dist-release --emptyOutDir (source maps are kept in ${sourceMapDir}, none ship)`);
-  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir'], { env: { ...process.env, [SOURCEMAP_DIR_ENV]: sourceMapDir } }).status !== 0) {
+  // GitHub Pages keeps vite's own default base; Cloudflare serves from the root, so it builds with BASE_PATH=/.
+  const hostEnv = hostBuildEnv(HOST);
+  log(`building: npx vite build --outDir dist-release --emptyOutDir${HOST.name === 'cloudflare' ? ` with BASE_PATH=${HOST.base}` : ''} (source maps are kept in ${sourceMapDir}, none ship)`);
+  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir'], { env: { ...process.env, ...hostEnv, [SOURCEMAP_DIR_ENV]: sourceMapDir } }).status !== 0) {
     fail('vite build failed — see output above');
   }
 
@@ -527,12 +656,20 @@ async function main() {
   if (!bundleMatch) fail(`could not find an assets/index-*.js reference in ${indexPath}`);
   const bundleHash = bundleMatch[1];
   log(`bundle hash: ${bundleHash}`);
+  if (HOST.name === 'cloudflare') {
+    // A build made for the wrong base serves a blank page: every asset would 404 at the root.
+    const baseProblems = checkBuildBase(indexHtml, HOST.base);
+    for (const p of baseProblems) log(`  ${p}`);
+    if (baseProblems.length) fail(`the build is not made for the base ${HOST.base} that ${HOST.label} serves from — see above`);
+    log(`build base ok: index.html loads ${HOST.base}assets/index-*.js`);
+  }
 
   // ---- 2b. Identity of the whole artifact, and the review it needs ---------
   // The bundle name says nothing about the art and audio that ship beside it,
   // so the build's identity is a manifest of every shipped file. Media that
   // does not decode, or decodes to one flat colour, never ships as a pass.
-  writeFileSync(join(DIST, '.nojekyll'), '');
+  // `.nojekyll` is the GitHub Pages marker; Cloudflare has no use for it.
+  if (HOST.name === 'github') writeFileSync(join(DIST, '.nojekyll'), '');
   log('hashing and decode-checking every shipped file');
   const manifest = await buildManifest(DIST);
   const flatOk = new Set(loadPolicy(ROOT).intentionalFlatImages ?? []);
@@ -544,6 +681,8 @@ async function main() {
   if (manifest.audioUnverified) log(`WARNING: ${manifest.audioUnverified} audio file(s) could not be decode-checked (no ffprobe): CHK-019 stays UNVERIFIED for them`);
   writeFileSync(join(DIST, MANIFEST_NAME), `${JSON.stringify(manifest)}\n`);
   log(`artifact ${manifest.artifactHash.slice(0, 16)}: ${manifest.count} files, ${(manifest.totalBytes / 1048576).toFixed(1)} MB`);
+  // Cloudflare: what wrangler would upload must be exactly the files just verified, and fit its limits.
+  if (HOST.name === 'cloudflare') prepareCloudflareUpload({ dist: DIST, manifest, manifestName: MANIFEST_NAME, kind: KIND, deps: { log, fail } });
 
   const previousSha = lastDeployedSha(ROOT);
   const previousManifestPath = previousSha ? join(ARTIFACTS_DIR, `${previousSha}.json`) : null;
@@ -575,6 +714,44 @@ async function main() {
       ? `release gate: the ${evidence.review} review ${evidence.path} says ${evidence.ship}`
       : 'release gate: no candidate review is required for this change');
     if (OWNER_OVERRIDE_WORDS) log('--owner-override was set but nothing refused this deploy: nothing to override');
+  }
+
+  // ---- 3c. Cloudflare: publish the Worker's static assets, then prove the address serves this artifact
+  // Everything above (build, base check, manifest, upload gate, review plan, release gate, owner
+  // override) ran for this host exactly as for GitHub Pages; only the publishing step, the address
+  // checked and what is recorded differ. A preview records nothing a live build owes.
+  if (HOST.name === 'cloudflare') {
+    const isoNow = new Date().toISOString();
+    const changedShipped = (() => {
+      const d = diffManifests(previousManifest, manifest);
+      return previousManifest ? [...d.added, ...d.changed] : [];
+    })();
+    const published = await publishToCloudflare({
+      root: ROOT, dist: DIST, kind: KIND, preview: PREVIEW, createProject: CREATE_PROJECT, mainSha, bundleHash, isoNow,
+      extraMessage: EXTRA_MESSAGE, manifest, changedShipped, fullVerify: FULL_VERIFY, deps: { log, fail },
+    });
+    if (PREVIEW) {
+      mkdirSync(dirname(PREVIEW_LOG_PATH), { recursive: true });
+      appendFileSync(PREVIEW_LOG_PATH, formatPreviewLogLine({
+        isoNow, mainSha, bundleHash, artFileCount, host: HOST.name, kind: published.kind, site: published.siteName, url: published.liveUrl,
+        overrideUsed: ownerOverrideUsed,
+      }));
+      const summary = `PREVIEW of main ${mainSha} (bundle ${bundleHash}, ${artFileCount} art files) is at ${published.liveUrl} (${published.liveArtifact.checked} files compared byte for byte) at ${isoNow}`;
+      log(summary);
+      console.log(summary);
+      const banner = `PREVIEW ONLY: logged in docs/${PREVIEW_LOG_NAME}; no review obligation, ledger entry or live-build record was made, and the production address is untouched`;
+      const rule = '='.repeat(Math.min(banner.length, 160));
+      console.log('');
+      console.log(rule);
+      console.log(banner);
+      console.log(rule);
+      return;
+    }
+    recordDeploy({
+      host: HOST.name, liveUrl: published.liveUrl, isoNow, mainSha, bundleHash, artFileCount, manifest, plan,
+      liveArtifact: published.liveArtifact, ownerOverrideUsed, ownerOverrideReportPath, ownerOverrideChangedArea,
+    });
+    return;
   }
 
   // ---- 3. Publish dist-release as a fresh gh-pages repo --------------------
@@ -708,72 +885,10 @@ async function main() {
   }
   log('gh-pages branch has exactly 1 commit');
 
-  // ---- 6. Log and summarize ---------------------------------------------
-  const status = 'ok';
-  const logLine = formatDeployLogLine({ isoNow, mainSha, bundleHash, artFileCount, status, overrideUsed: ownerOverrideUsed });
-  mkdirSync(dirname(LOG_PATH), { recursive: true });
-  if (!existsSync(LOG_PATH)) {
-    writeFileSync(
-      LOG_PATH,
-      'datetime\tmain_sha\tbundle_hash\tart_file_count\tstatus\n',
-    );
-  }
-  writeFileSync(LOG_PATH, logLine, { flag: 'a' });
-
-  const summary = `Deployed main ${mainSha} (bundle ${bundleHash}, ${artFileCount} art files) to ${LIVE_URL} at ${isoNow}`;
-  log(summary);
-  console.log(summary);
-
-  // ---- 7. Record what this build owes the critic ------------------------
-  // The build this one replaces can no longer be verified live. A deep review
-  // it still owed moves here; its other open obligations are recorded as never
-  // verified. Nothing is deleted: closed markers move to critic/cleared/.
-  mkdirSync(ARTIFACTS_DIR, { recursive: true });
-  writeFileSync(join(ARTIFACTS_DIR, `${mainSha}.json`), `${JSON.stringify(manifest)}\n`);
-  const older = readPendingMarkers(PENDING_DIR).filter((m) => !m.parseError);
-  const { carriedDeep, closed } = supersedeMarkers(older, mainSha, isoNow);
-  for (const m of closed) {
-    const { file: _file, ageHours: _age, ...content } = m;
-    archiveMarker(PENDING_DIR, CLEARED_DIR, content);
-    log(`build ${m.mainSha} was replaced: its marker moved to critic/cleared/ with what was never verified`);
-  }
-  const baseMarker = buildPendingMarker({
-    mainSha,
-    bundle: bundleHash,
-    deployedAt: isoNow,
-    liveUrl: LIVE_URL,
-    artFiles: artFileCount,
-    artifactHash: manifest.artifactHash,
-    plan,
-    carriedDeep,
-    liveArtifact: { result: liveArtifact.result, checked: liveArtifact.checked, at: isoNow },
+  recordDeploy({
+    host: HOST.name, liveUrl: LIVE_URL, isoNow, mainSha, bundleHash, artFileCount, manifest, plan, liveArtifact,
+    ownerOverrideUsed, ownerOverrideReportPath, ownerOverrideChangedArea,
   });
-  // An override ships the build, it never settles a review: every obligation
-  // above stays exactly as planned. This only records, on the marker itself,
-  // that the owner's own words shipped it past the deep-review refusal.
-  const marker = ownerOverrideUsed
-    ? { ...baseMarker, ownerOverride: { words: OWNER_OVERRIDE_WORDS, date: isoNow, report: ownerOverrideReportPath, changedArea: ownerOverrideChangedArea } }
-    : baseMarker;
-  const markerPath = writePendingMarker(PENDING_DIR, marker);
-  log(`critic-pending marker written: ${markerPath}`);
-  // A focused or deep review made on the production candidate before this
-  // deploy counts now that the build it reviewed is the one that is live.
-  for (const r of applyStoredReports(ROOT, mainSha)) {
-    for (const s of r.settled) log(`  ${r.report} settled ${s.kind}: ${s.result}`);
-  }
-  const ledger = readLedger(ROOT, loadPolicy(ROOT));
-  writeLedger(ROOT, { ...ledger, deploysSinceDeep: [...ledger.deploysSinceDeep, { sha: mainSha, date: isoNow, substantial: plan.review !== 'live' }] });
-
-  const owed = (readPendingMarkers(PENDING_DIR).find((m) => m.mainSha === mainSha)?.obligations ?? [])
-    .filter((o) => o.status === 'pending').map((o) => o.kind);
-  const banner = owed.length
-    ? `REVIEW OWED for main ${mainSha} bundle ${bundleHash}: ${owed.join(' + ')} (planned review: ${plan.review}). A release is not finished until these are settled: npm run critic:status`
-    : `main ${mainSha} bundle ${bundleHash}: every review obligation is already settled`;
-  const rule = '='.repeat(Math.min(banner.length, 160));
-  console.log('');
-  console.log(rule);
-  console.log(banner);
-  console.log(rule);
 }
 
 // Guarded so tests can import this module's pure helper functions (parseOwnerOverride,

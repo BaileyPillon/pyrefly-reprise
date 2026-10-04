@@ -50,7 +50,10 @@ export declare function formatOwnerOverrideWarning(words: string, refusals?: str
 /** One line saying which review this plan needs before the deploy, and which after it. */
 export declare function formatWhenLine(plan: { focusedBeforeDeploy?: boolean; deepBeforeDeploy?: boolean; deepAfterDeploy?: boolean }): string;
 
-/** The `docs/deploys.log` line for one run; `overrideUsed` appends a trailing `override=owner` field. */
+/**
+ * The `docs/deploys.log` line for one run; `overrideUsed` appends a trailing `override=owner` field and a
+ * `host` (github or cloudflare, since r39-cloudflare) a last `host=<name>` field. Without them the line is unchanged.
+ */
 export declare function formatDeployLogLine(input: {
   isoNow: string;
   mainSha: string;
@@ -58,6 +61,7 @@ export declare function formatDeployLogLine(input: {
   artFileCount: number;
   status: string;
   overrideUsed?: boolean;
+  host?: string | null;
 }): string;
 
 /** The newest deep or milestone report on record for this commit, whatever its verdict — informational only. */
