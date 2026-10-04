@@ -48,10 +48,9 @@
  * below the floor fails the suite.
  *
  * The letter-spacing on the display-face labels comes down as their size goes up (a 5.7px cap at
- * 0.2em is wider than the 132px rail). A long document pages: `StrategyGuide.ts` shows as many whole
- * blocks as the rail holds and `.sgd__more` turns the page. 1280x720 (scale 2x) is NOT cleared by this
- * floor — 5.7 is 11.4 px there — and is not in this repair's scope; see
- * `docs/handoff/builda1-boot-and-menus.md`.
+ * 0.2em is wider than the 132px rail). A long document scrolls: the whole of it is in `.sgd__panel`,
+ * which is the sheet (see "The sheet" below). 1280x720 (scale 2x) is NOT cleared by this floor — 5.7 is
+ * 11.4 px there — and is not in this repair's scope; see `docs/handoff/builda1-boot-and-menus.md`.
  */
 
 .sgd {
@@ -68,27 +67,20 @@
 /* ------------------------------------------------------------------ stack */
 
 /**
- * The rail is a **column**, not a box with things floated over it (round 04
- * PR-0009, second pass).
+ * The column: a box of the guide's own, with two rows (R38, 2026-10-03: the desktop guide is a reading
+ * sheet, not a paged rail).
  *
- * Two earlier attempts fixed the sliced last line by measuring: a CSS fade over
- * the cut, then a scale conversion of the measured glyph rects. Both left the
- * same two defects live — the slab still ended several grid px past the last
- * whole line, and `.sgd__more` was an absolutely positioned chip painted *on
- * top of* the body's last two lines. Neither is reachable from here any more,
- * because the geometry no longer allows it:
+ *  * `.sgd__stack` owns the measured `top` / `max-height` that `StrategyGuide.layout()` computes from the
+ *    anchors, and lays its rows out as a flex column. That box is the room the rail has always had on the
+ *    stage: the one place that is free of the HUD and the painted figures in every chapter.
+ *  * `.sgd__slot` is the first row: the status hint card stands in it while a party member has a status
+ *    with a sourced rule (`statusHintCard.ts`). It is empty, and zero tall, the rest of the time.
+ *  * `.sgd__panel` is the second row, the sheet: the whole document, scrolled. It is as tall as the
+ *    document, up to what the column has left after the slot, and no taller.
  *
- *  * `.sgd__stack` owns the measured `top` / `max-height` that
- *    `StrategyGuide.layout()` computes from the anchors, and lays its two
- *    children out as a flex column;
- *  * `.sgd__panel` is the ink slab and holds only the text;
- *  * `.sgd__more` is the **next row of that column**. It owns its own height in
- *    normal flow and is never positioned over the body, so it cannot intersect
- *    a glyph however the fit turns out.
- *
- * The panel's content box therefore ends exactly where the text ends — which is
- * what makes "the slab's bottom edge is a glyph's bottom edge" a property of
- * the construction rather than of a measurement that has to be right.
+ * Nothing is fitted any more: the old `fitWholeUnits` cut, the `MORE` row and the whole-block hiding are
+ * gone, so no line is ever sliced by the layout and no block is ever hidden. A line that is at the edge of
+ * a scrolled sheet is simply scrolled, as on the phone.
  */
 .sgd__stack {
   position: absolute;
@@ -101,10 +93,22 @@
   pointer-events: none;
 }
 
+/* The card's row. Plain: it adds no height of its own, the card carries its margin. */
+.sgd__slot {
+  flex: 0 0 auto;
+  pointer-events: none;
+}
+
 /* ------------------------------------------------------------------ panel */
 
+/**
+ * The sheet. It scrolls (`overflow-y: auto`), shrinks to the room the column has (`flex: 0 1 auto` with
+ * `min-height: 0`) and is as tall as the document when the document is shorter. There is no mask and no
+ * fade over the type (round 04 PR-0009: "no gradient may cover a readable glyph"): the scroll bar is the cue
+ * that there is more.
+ */
 .sgd__panel {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   min-height: 0;
   padding: 5px 7px 6px;
   background: var(--ig-ink-panel);
@@ -118,20 +122,40 @@
   border-left: calc((1 - var(--ig-edge)) * 1.78px) solid var(--ig-accent);
   border-right: calc(var(--ig-edge) * 1.78px) solid var(--ig-accent);
   pointer-events: auto;
-  /* No scrolling and no mask. The old `mask-image` faded the slab's last 7px,
-     which is to say it faded whatever glyphs happened to be there — round 04
-     PR-0009's "no gradient may cover a readable glyph". The body below is cut
-     to a whole number of blocks instead, so there is nothing left to hide. */
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* The desktop sheet only (the phone's has its own, `phone-battle.css`, and is not touched).
+   `position: relative` makes the sheet the offset parent of its content, so `StrategyGuide.scrollToStart()`
+   reads a block's place in the scrolled content from `offsetTop`, whatever the player has scrolled to and
+   whatever scale the stage is at. `overscroll-behavior: contain` keeps a wheel that has reached the end of
+   the sheet from doing anything else. */
+html:not([data-phone-battle]) .sgd__panel {
+  position: relative;
+  overscroll-behavior: contain;
+}
+
+/* The scroll bar, in stage px so it scales with the rest of the chrome (2.4 px is 6 px at 1600x900). Chromium and
+   Safari take the pseudo-elements; a browser without them (Firefox) takes the standard properties. */
+html:not([data-phone-battle]) .sgd__panel::-webkit-scrollbar {
+  width: 2.4px;
+}
+html:not([data-phone-battle]) .sgd__panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.07);
+}
+html:not([data-phone-battle]) .sgd__panel::-webkit-scrollbar-thumb {
+  background: var(--ig-accent);
+}
+@supports not selector(::-webkit-scrollbar) {
+  html:not([data-phone-battle]) .sgd__panel {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ig-accent) rgba(255, 255, 255, 0.07);
+  }
 }
 
 /**
- * The text box. `StrategyGuide.layout()` writes an explicit `height` here, in
- * the stage's own unscaled grid px, equal to the bottom of the last block that
- * fits **entirely**; every block past that one is `display: none`. A CSS
- * transform on an ancestor never touches `offsetTop`/`offsetHeight`, which is
- * the only geometry that decision reads, so the cut lands in the same place at
- * every letterbox scale.
+ * The text box: every block of the document, in order. It has no height of its own; the sheet scrolls it.
  */
 .sgd__body {
   overflow: hidden;
@@ -221,18 +245,9 @@
   margin: 1px 0 1px;
 }
 
-/* A split unit (a paragraph or a list item, `guideDocHtml.ts`): its text is one block so the panel can show
-   its first lines on one page and the rest on the next (`StrategyGuide.refit`, `showLines`). While only some
-   of its lines show, the box is an exact number of line pitches tall, so the cut falls between two lines. */
+/* The text of a paragraph or a list item sits in one inner block (`guideDocHtml.ts`). */
 .sgd__t {
   display: block;
-}
-.sgd__part {
-  overflow: hidden;
-}
-/* A list item that carries over from the last page has already shown its bullet there. */
-.sgd__cont::before {
-  display: none;
 }
 
 /* ------------------------------------------------------------------ lists */
@@ -340,49 +355,6 @@
   color: #dcd8cc;
 }
 
-/* The affordance the fade was not. Its own row in `.sgd__stack`'s column,
-   directly under the slab and never over it; one click pages the rail down,
-   and a click at the foot returns to the top — a pad has no wheel, so the
-   indicator has to be the control too.
-
-   Round 04 PR-0009, second pass: this used to be `position: absolute` at the
-   panel's bottom edge, i.e. printed across the body's last two lines. It is a
-   flex row now, so the only thing under it is the painting. It carries its own
-   backing plate for that reason — opaque ink where the word sits, easing off
-   at the top so the slab and the plate read as one object — and the same start
-   edge accent the slab has. The gradient is the only one left in this file and
-   it covers no glyph but its own. */
-.sgd__more {
-  flex: 0 0 auto;
-  height: 11px;
-  margin: 0;
-  padding: 0 0 0.5px;
-  border-left: calc((1 - var(--ig-edge)) * 1.78px) solid var(--ig-accent);
-  border-right: calc(var(--ig-edge) * 1.78px) solid var(--ig-accent);
-  border-top: 0;
-  border-bottom: 0;
-  background: linear-gradient(to top, var(--ig-ink-panel) 0%, rgba(11, 10, 18, 0.62) 100%);
-  box-shadow: 0 3.56px 8.89px rgba(0, 0, 0, 0.45);
-  color: var(--ig-accent);
-  font-family: var(--ig-font-display);
-  /* 7 grid px, not the old 5: at the smallest of the three viewports the
-     brief measures against (1280x720, letterbox scale 2x — `scale = min(w /
-     640, h / 360)`), 5px landed at 10 effective CSS px, under the project's
-     14px legibility floor. 7 clears all three (14 / 17.5 / ~19.7 px at
-     1280x720 / 1600x900 / 2000x1012). */
-  font-size: 7px;
-  line-height: 1;
-  letter-spacing: 0.2em;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  cursor: pointer;
-  pointer-events: auto;
-}
-.sgd__more::after { content: '\25BE  MORE'; }
-.sgd__more:hover,
-.sgd__more:focus-visible { color: var(--ig-paper); outline: none; }
-
 /* ----------------------------------------------------------------- toggle */
 
 /* Stays on screen when the panel is hidden — "fully hidden when off (only the
@@ -438,19 +410,4 @@
 .sgd--off .sgd__toggle:hover,
 .sgd--off .sgd__toggle:focus-visible {
   opacity: 1;
-}
-
-/* ------------------------------------------------------- the whole-block cut */
-
-/* Last rule in the file on purpose: it has to beat every `display` the rules
-   above set on the same element.
-
-   A `.sgd__u` is one block of text — the header, a paragraph, a list item, one
-   enemy's stat box. `StrategyGuide.layout()` hides the ones that do not fit the
-   rail **entirely** and then sets `.sgd__body`'s height to the bottom of the
-   last one that does. Hiding whole blocks is what makes "a line is never
-   sliced" structural: `overflow` has nothing left to cut through, because the
-   box ends where a block ended. */
-.sgd__u--out {
-  display: none;
 }

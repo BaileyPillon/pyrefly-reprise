@@ -99,6 +99,7 @@ const WATCH_SELECTORS = [
   '.mad__toggle',
   '.sgd__panel',
   '.sgd__toggle',
+  '.sgd__slot > .sthint', // the cure-hint card in the guide column's slot (R38)
   '.eint__panel',
   '.eint__toggle',
   '.ffx2-tplate',

@@ -27,12 +27,12 @@
  *
  * ## Block sizes
  *
- * The panel pages by whole blocks (`StrategyGuide.refit`), so a block taller than the rail could
- * never be shown whole. Every prose block therefore stays under {@link DOC_UNIT_MAX} characters
- * (a long paragraph is written as two), which the words test also pins.
+ * The panel is a scrolling reading sheet (`StrategyGuide.ts`), so no block has to fit a page; a short
+ * block still reads better in a narrow column. Every prose block stays under {@link DOC_UNIT_MAX}
+ * characters (a long paragraph is written as two), which the words test also pins.
  */
 
-/** The longest a single paragraph, list item or stat value may be, so one block always fits a page. */
+/** The longest a single paragraph, list item or stat value may be, so one block stays short enough to read in the sheet's column. */
 export const DOC_UNIT_MAX = 260;
 
 /**
@@ -62,11 +62,11 @@ export type DocBlock =
   | (DocBlockBase & { readonly t: 'head'; readonly title: string; readonly tag?: string })
   /** A paragraph. */
   | (DocBlockBase & { readonly t: 'p'; readonly text: string })
-  /** A run-in line that names what follows ("The strategy:"). Never the last line of a page. */
+  /** A run-in line that names what follows ("The strategy:"). */
   | (DocBlockBase & { readonly t: 'lead'; readonly text: string })
-  /** A sub-heading inside a boss's page ("Yu Pagodas"). Never the last line of a page. */
+  /** A sub-heading inside a boss's page ("Yu Pagodas"). */
   | (DocBlockBase & { readonly t: 'h3'; readonly text: string })
-  /** A bulleted list; every item is its own block, so a list can run across pages. */
+  /** A bulleted list; every item is its own block. */
   | (DocBlockBase & { readonly t: 'ul'; readonly items: readonly string[] })
   /** A numbered list. */
   | (DocBlockBase & { readonly t: 'ol'; readonly items: readonly string[] })

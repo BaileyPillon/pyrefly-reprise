@@ -33,6 +33,7 @@ describe('the guide reads no tactic and no advisor', () => {
     'src/ui/common/StrategyGuide.ts',
     'src/ui/common/guideDoc.ts',
     'src/ui/common/guideDocHtml.ts',
+    'src/ui/common/guideScroll.ts',
     'src/data/guides/doc-types.ts',
     ...list('src/data/guides/docs'),
   ];

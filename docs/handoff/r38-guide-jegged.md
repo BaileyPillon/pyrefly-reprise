@@ -10,9 +10,17 @@ no source anywhere.
 
 Bailey, 2026-10-03, in order: "from now on the guide follows the ffx/ffx-2 encounter guides from jegged" (~13:50 EDT); "The guide
 and next move advisor are completely separate entities" (~14:30); "Do not say adapted from Jegged or cite worded that just sounds
-stupid" (~14:40); "Just match the original document please in terms of formatting and everything else" (~18:35).
+stupid" (~14:40); "Just match the original document please in terms of formatting and everything else" (~18:35); "All your
+recommendations please thank you <3 I love you Claude" (~21:35, taking the driver's recommendations on section 7: the desktop reading
+sheet, the cure-hint card in a box of its own). Recorded on `main` (f3389dfc, docs only) as D-362 (the mirror), D-364 (the desktop
+reading view), D-365 (the Wait-split line stays out), D-366 (the hint cards in their own card) and D-367 (advice the kit cannot follow is
+printed as the page gives it).
 
 ## 0. Read this first
+
+**Pass three (2026-10-03, evening): the desktop guide is a scrolling reading sheet and the cure-hint card has a box of its own. It is
+section 10 below, and it supersedes what sections 1, 3, 6, 7 and 8 say about paging, the `MORE` row and the card inside the guide;
+those passages are marked.**
 
 This is the **second pass** on the branch. The first pass (a plan, a computed NEXT card, win rates) is superseded by the fourth
 instruction: the panel is now the encounter guide's page for the boss, with that page's layout and that page's content, in our own
@@ -29,7 +37,7 @@ longer apply and are not repeated here.
 | What the panel prints | RULES, WATCH and a NEXT card computed from the board (a tactic, then a line of our own) | the boss's page: header and tag, the stat lines that page prints, then its advice in its order: paragraphs, bullet and numbered lists, lead-ins, sub-headings, the boxed hint |
 | Data | `src/data/guides/<chapter>.ts` rules; first pass: `lines/` | `src/data/guides/docs/<chapter>.ts`: 18 plain-data documents (`doc-types.ts`); the 18 chapter files and `types.ts` are **byte-identical to origin/main** again (the advisor still reads them) |
 | Reasoning | `guide.ts`, later `guide-line.ts` | none; the panel reads no tactic, no advisor, no `intendedStrategy` |
-| Fit | a ladder of shorter wordings, citations under each line | whole blocks per page, and a paragraph may carry on to the next page **between two lines** (never through one, never one line alone); `MORE` turns the page and wraps |
+| Fit | a ladder of shorter wordings, citations under each line | **pass two:** whole blocks per page, a paragraph carried over between two lines, `MORE` turned the page and wrapped. **Pass three: none.** The desktop panel is a scrolling reading sheet with the whole page in it (section 10) |
 | Phone (390x844) | folded behind the GUIDE chip | unchanged chip; the sheet shows the whole document and opens scrolled to the boss's header |
 | HUDs | `showDecision`/`clearDecision` and a `held` option fed the panel | the three calls and the option are gone (the move advisor's own are untouched) |
 
@@ -170,7 +178,7 @@ they were not re-checked in this pass and no data changed.
   proof frame (measured stack 218 px; its limit is the fence above Yuna's head, which moves with the party). Nothing was
   widened (the width is mirrored by FFX-2's `GUIDE_RAIL_RIGHT`, the advisor's lane solver, `text-size-wide.css` and their
   tests). Text is 5.7 grid px (14.25 px at 1600x900, 15 px on the phone) at a line height of 1.32.
-- **What the rail covers, against origin/main.** The same spec (`tests/e2e/hud-collision.spec.ts`, CHK-008: every HUD panel
+- **What the rail covered, against origin/main (pass two; pass three re-measures the sheet in section 10).** The same spec (`tests/e2e/hud-collision.spec.ts`, CHK-008: every HUD panel
   against every painted figure's quad, "face" being the upper third) ran on the final branch build and on a build of
   origin/main (a6b79313), Chapters I, II, IV and V at 1280x720, 1600x900, 2000x1000 and 2560x1440, same seeds, six of the
   nine states reached in each. The guide panel's overlap with figures:
@@ -185,7 +193,7 @@ they were not re-checked in this pass and no data changed.
   (Per viewport, Chapter IV: 135 / 12,210 px at 1280x720, 0 / 7,818 at 1600x900, 0 / 44,234 at 2000x1000, 0 / 19,156 at 2560x1440.
   The reports are in scratch, `chk-fixed/` and `chk-main/`.)
 
-  A first run of this measurement found the guide **covering Yuna more than the old rail** in FFX-2 Chapter IV (19,402 px
+  (Pass two's note, about a fit that pass three removed.) A first run of this measurement found the guide **covering Yuna more than the old rail** in FFX-2 Chapter IV (19,402 px
   against 7,818 at 1600x900), and the box was not the cause: the status hint card (the cure hint for a party member's status) rides at
   the top of the guide's panel and counts as chrome in the fit, but the fit was keyed on the rail's height and the page, not on what else the panel held, and FFX-2's rail does not move
   with the menu (its limit is the fence above the party). A card arriving after the fit therefore grew on top of a body that
@@ -195,11 +203,10 @@ they were not re-checked in this pass and no data changed.
   in FFX-2 in the measurement), pinned by a test in `guide-doc-render.test.ts`, and the table is the re-run. While a card is up
   the body gets what is left of the rail, as that card's own header comment says it should (one block when the card is tall),
   and the page comes back when the card goes.
-- **Paging.** Every block is a unit; a page is as many whole units as fit; a "keep with next" unit (a header, a lead-in, a table
-  head, a list label) never ends a page. A paragraph or list item of two or more lines may carry on to the next page: the box is an
-  exact multiple of the line pitch, so no line is cut, and a page never shows or leaves one line alone. Where the pitch cannot be
-  read (jsdom, `line-height: normal`) units stay whole. The arithmetic is in `src/ui/common/guideFit.ts`; `StrategyGuide.ts` is 668
-  lines (826 on origin/main), which is still over the 400-line convention (section 7, item 6).
+- **Paging (pass two; removed in pass three).** The desktop rail used to show whole blocks a page at a time, carry a paragraph over
+  between two lines and turn the page with a `MORE` row. Pass three replaced all of it with a scrolling sheet in the same box (section
+  10); `guideFit.ts`, the `MORE` row, the fit and its tests are parked on `F:/pyrefly-parked/2026-10-03/guide-sheet/`.
+  The box itself (the "Rail box" bullet above) is what the sheet fills.
 - **Phone.** The sheet (370x410 at (10,66) at 390x844) holds the whole document and scrolls; it opens scrolled to the boss's header
   once laid out. `G`, the chip and the pause row work as before.
 - **Left unfixed, pre-existing:** the phone sheet is translucent, so faint HUD text ("2ND IN QUEUE ...") shows through behind
@@ -274,13 +281,11 @@ and removed from this branch's tip; they stay in its history.
 
 ## 7. For Bailey to decide
 
-1. **How the desktop reads a long page.** The rail shows 6 lines a page in FFX and 8 to 12 in FFX-2, so Chapter I's page is 14
-   pages long, Yunalesca's 14, Bahamut's 5, and the five-link Vegnagun document runs past 60 (a player needs one link of it, a few
-   pages). The phone's scrolling sheet has no such cost. I did not widen or lengthen the rail: more height would reach into the
-   command menu below it, and more width into the advisor card and the party. Options, each one a mockup before any build:
-   **(A)** keep the rail as it is; **(B)** open a scrolling reading sheet like the phone's on the desktop too (`G` closes it), so the
-   page scrolls instead of paging; **(C)** a wider rail, shown against the advisor card and the figures first. I recommend (B);
-   none is built.
+1. **How the desktop reads a long page. DECIDED and built in pass three** (Bailey, ~21:35, "All your recommendations"): option (B), a
+   scrolling reading sheet like the phone's. Section 10 has what it does, where it sits and why it is no bigger than the old rail.
+   (Original note, pass two: the rail showed 6 lines a page in FFX and 8 to 12 in FFX-2, so Chapter I's page was 14 pages long,
+   Yunalesca's 14, Bahamut's 5 and the five-link Vegnagun document ran past 60; options were (A) keep the rail, (B) the scrolling
+   sheet, (C) a wider rail.)
 2. **The Wait-split habit line** ("Pick a command at once. Until you do, the clock still runs.", approved 2026-09-25 for Chapters
    V and VI) is not on the panel any more: the page has no such line and the instruction is nothing of ours. It still lives in the
    guide data the advisor reads. Options: leave it out, or print it as a one-line note above the page for FFX-2 under Wait.
@@ -290,14 +295,15 @@ and removed from this branch's tip; they stay in its history.
    ingredients). The instruction is nothing of ours, so each stays as the page gives it; chapter-specific notes would be ours.
 5. **One drop each.** Where the page lists a rarer second drop the game does not award, the panel prints the one the game does.
    Natus's "None" and the Nodes' Hero Drink are the two where the data itself is open (research section 11).
-6. **StrategyGuide.ts is 668 lines** (826 before); the 400-line convention (AGENTS.md rule 7) would take a further split of the
-   paging code into its own module. Not done, to keep the proven panel as it is.
-7. **Record the instruction.** The ~18:35 sentence is not yet in `docs/target/decisions.json` (D-350 holds the first three).
-8. **The cure-hint card and the guide share a small rail.** While a party member has a status with a sourced rule (Zombie, Sleep,
-   Silence, Curse) the hint card rides at the top of the guide's panel and the page gets what is left of the rail: on FFX-2
-   Chapter IV that is one block at a time (the old rail showed a longer body and let the panel run past the rail instead, section 3).
-   That is how the card's own header says it should work, so I kept it. If you would rather the page keep its room, the card can
-   stand outside the guide (it already leaves the guide and stands alone when it would otherwise cover a command row).
+6. **StrategyGuide.ts was 668 lines** (826 before). **Closed in pass three:** the paging code is gone and the file is 399 lines,
+   with the scroll arithmetic in `guideScroll.ts` (the 400-line convention, AGENTS.md rule 7).
+7. **Record the instruction. Done on `main`** (f3389dfc): D-362, D-364 to D-367 hold the ~18:35 and ~21:35 sentences (D-350 holds the
+   first three). D-364 and D-366 say `delivery: in-progress`; pass three is what builds them, and D-364 wants Bailey's word on the
+   screenshots before it ships.
+8. **The cure-hint card and the guide share a small rail. DECIDED and built in pass three** (Bailey, ~21:35): the card moves out of the
+   guide into a box of its own, the first row of the guide's column (section 10). (Original note, pass two: while a party member has
+   a status with a sourced rule the card rode at the top of the guide's panel and the page got what was left of the rail, one block
+   at a time on FFX-2 Chapter IV.)
 
 ## 8. Gates
 
@@ -344,3 +350,327 @@ and `g-open.mjs` (the browser proof), `clip-check.mjs`, `probe-rail.mjs`, `probe
 `numword-scan.py`, `loot-compare.py`, `overlap.py` (the comparisons used to write the ledger above), `chk-compare.py` and
 `chk-table.py` with the CHK-008 reports (`chk-fixed/`, `chk-main/`, and `chk-keep/` with the first run, before the fit fix), the
 two builds (`dist-doc/`, `dist-main/`), the digests and the full-suite logs.
+
+## 10. Reading view (pass three)
+
+Bailey, 2026-10-03 ~21:35 EDT, "All your recommendations please thank you <3 I love you Claude" (D-364 to D-367 on `main`), taking the
+driver's recommendations on section 7: **(b)** (D-364) on the desktop a scrolling reading view like the phone's instead of paging the side rail, with a screenshot shown to
+him before it ships; **(c)** the Wait-split habit line stays out of the guide (D-365; it is: nothing changed); **(d)** the status hint cards
+move out of the guide into their own card so they no longer squeeze the page (D-366); **(e)** advice the chapter's kit cannot follow is
+printed exactly as the page gives it, no notes of ours (D-367; it is: nothing changed). **Game case: both** (AGENTS.md rule 14): the sheet, its
+scrolling, its column and the card's slot are shared plumbing, no line of the change reads which game is on, and each game keeps the
+rule it already had (FFX's CTB waits at the menu and fades the guide layer while an action plays; FFX-2's ATB runs as the X-2 BATTLE
+setting says and A-15 steps the column back from an action). Proved on FFX Chapters I and II and FFX-2 Chapters IV and V. Paper
+preflight: `docs/plans/r38-guide-sheet-review.md` (`critic-plan` classes the change DEEP after deploy; nothing is save-data class).
+
+### What the player gets
+
+- **The whole page, scrolling.** The desktop guide is a reading sheet like the phone's: every block of the boss's page is in it, nothing
+  is paged, fitted, cut or hidden, and the `MORE` row is gone. It **opens scrolled to the boss that is standing** with only the empty gap
+  above the header showing (no half line of the block before it); `G` off and on again opens it there again; a new boss (Anima over
+  Seymour, the next link of a chain, Yunalesca's next phase) takes it to that boss; the player's own place is kept while the fight goes
+  on, through menus, actions and the hint card coming and going.
+- **Scrolling:** the mouse wheel, the thin accent scroll bar (draggable; drawn in stage px so it scales), `[` and `]` a page (85 percent
+  of the sheet) up and down, `Home` and `End` the top and the foot, and the pad's right stick. These are the keys nothing else in a battle
+  uses (`PageUp` and `PageDown` are L1 and R1 in `Input.ts` and `rawInput.ts`, the arrows and `W`/`S` are the menu's). **The wheel needed
+  its own arithmetic:** the stage is scaled (2.5x at 1600x900) and a browser applies a wheel's pixels to a scroll offset as they are, so
+  a notch moved the sheet 250 screen px, three and a half times what it shows; `guideScroll.ts` converts by the scale the sheet is drawn
+  at, and a notch now moves the text 100 screen px at every scale (measured 100.0 at 2.5x, 101.2 at 2.81x).
+- **Open and close:** `G`, the chip and the pad's spare face button, as before. Closed, only the chip stays. The pause row still sets
+  the saved preference (`guideVisible`) for later battles; it has never toggled the guide of the battle that is running (no code reads
+  the setting after the constructor), and that is unchanged.
+- **The battle does not wait for it, in either game, exactly as it does not wait for the rail today.** The sheet is a passive HUD panel in
+  the rail's own box; opening, scrolling and closing it sends nothing to the battle (none of its keys is bound to a command and the
+  wheel listener is on the sheet alone). FFX (CTB): the battle holds at the command menu with or without it, and `.ffxhud--acting` fades
+  the guide layer while an action plays, as for the rail. FFX-2 (ATB): the clock runs as the player's X-2 BATTLE setting says, the sheet
+  never changes it, and A-15 steps the column back (`ActionFade` reads `.sgd__stack`, unchanged) while an action plays over a figure it
+  meets with no menu open. Because the sheet's box is the rail's box it blocks the view of an action no more than the rail did
+  (measured below). **No hold was built:** the pause overlay is the only freeze (`BattleScreen.pauseGate`), a reading mode that held the
+  FFX-2 ATB would be new pause plumbing in `BattleScreen` and the presenter, and a bigger sheet would cover figures (next section);
+  neither was asked for when the box can be kept.
+
+### Where it sits, and why it is no bigger than the rail
+
+The sheet fills the box the rail has always had: left 21.33 and width 132 grid px, from below the banner (below the boss strip in FFX-2) to
+the fence above the command help slab (FFX) or above the party's heads (FFX-2). At 1600x900 that is 330 x 178 px in FFX (about 8 lines of 14.25 px type at once, with a scroll bar), 330 x 173 in FFX-2 Chapter IV (about 8 lines) and 330 x 260 in Chapter V (about 12); the same box in grid px at every other size. That box is the one place free of
+the HUD and the painted figures in every chapter; it is also all that is. A lane scan of all 18 chapters at 1600x900 (the first command menu;
+a card 136 x 44 grid px stood right of the column, top-aligned with it) finds a painted figure under it in 6 chapters (IV Bahamut 5,205 px,
+V Vegnagun's Tail 32,265, VI Paine's face 869, XIII Paragon 9,303, XVII the Left Fin 17,028, XVIII Sin 2,235), the intent card or a
+chapter panel in 3 more without a figure (IX 744, XV 5,899, XVI 8,760), and, in FFX, the move advisor's own box in 8 of the 11 chapters
+(it would have to move). A wider or taller sheet in that lane covers the fight. A reading mode that covers the field on purpose
+(dimmed, the battle held, `G` or `Esc` to leave) is the other way to a larger sheet; it is not built because the hold touches
+`BattleScreen` and the presenter for FFX-2's ATB, and the brief's alternative is to keep the box.
+
+### What it covers, against origin/main
+
+Three measures, each of the guide's column (`.sgd__stack`, the card's slot and the sheet; the panel alone as well where it differs) against every painted figure's box
+(the painted quad's bounding box; "face" is its upper third), as CHK-008 reads them (`tests/e2e/hud-collision.spec.ts`), on this build and on a build of origin/main
+(a6b79313; `main` is two docs-only commits later, 77f0d157), same seeds, real input, one browser:
+
+1. **The CHK-008 states** (`coverage.mjs`): the first menu with every optional panel open, a submenu, that submenu cancelled, the target cursor, the numerals resolving;
+   Chapters I, II, IV and V at 1280x720, 1600x900, 2000x1012 and 2560x1440. The whole column is measured as well as the sheet's panel, because on origin/main the old
+   panel ran past its column when its text was long (the latent bug pass two found), so the column alone understates what that rail painted.
+2. **The first command menu in all 18 chapters at the same four sizes** (`lanescan.mjs`, 72 runs on each build).
+3. **Clearance** in the seven FFX-2 chapters: how far the column's bottom edge is above the nearest figure that stands under it, over every run taken on this build.
+
+Per chapter, summed over the four viewports (states reached: the first menu with every panel open, a submenu, that submenu cancelled, the target cursor, the numerals resolving):
+
+| Chapter | States where the guide column touches a figure, sheet / main | Overlap with figures, column (px), sheet / main | Overlap, the sheet or panel alone (px), sheet / main | Face hits (upper third of a figure), sheet / main | Column height at 1600x900 (px), sheet / main |
+|---|---|---|---|---|---|
+| I Flux (FFX) | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 178 / 168 |
+| II Yunalesca (FFX) | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 178 / 168 |
+| IV Bahamut (FFX-2) | 0 / 10 | 0 / 7,963 | 0 / 50,767 | 0 / 11 | 173 / 230 |
+| V Vegnagun (FFX-2) | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 260 / 302 |
+
+Per viewport (column overlap with figures in px summed over the states reached, sheet / main; "-" is none):
+
+| Chapter | 1280x720 | 1600x900 | 2000x1012 | 2560x1440 |
+|---|---|---|---|---|
+| I Flux (FFX) | - / - | - / - | - / - | - / - |
+| II Yunalesca (FFX) | - / - | - / - | - / - | - / - |
+| IV Bahamut (FFX-2) | - / 708 | - / 1,065 | - / 3,906 | - / 2,284 |
+| V Vegnagun (FFX-2) | - / - | - / - | - / - | - / - |
+
+All 18 chapters, the first command menu, the column against the painted figures and the other HUD panels, this build / origin/main:
+
+| Size | Chapters whose column touches a painted figure, sheet / main (of 18) | Overlap with figures (px), sheet / main | Face hits (upper third), sheet / main | Column over another HUD panel (px), sheet / main |
+|---|---|---|---|---|
+| 1280x720 | 0 / 1 | 0 / 79 | 0 / 1 | 0 / 0 |
+| 1600x900 | 0 / 1 | 0 / 97 | 0 / 1 | 0 / 0 |
+| 2000x1012 | 0 / 1 | 0 / 62 | 0 / 1 | 0 / 0 |
+| 2560x1440 | 0 / 1 | 0 / 165 | 0 / 1 | 0 / 0 |
+
+Every chapter with a nonzero overlap on either build:
+- ffx2-bahamut 1280x720: sheet none | main yuna 79
+- ffx2-bahamut 1600x900: sheet none | main yuna 97
+- ffx2-bahamut 2000x1012: sheet none | main yuna 62
+- ffx2-bahamut 2560x1440: sheet none | main yuna 165
+
+Clearance of the FFX-2 column above the nearest figure (grid px, stage units; 2.5 screen px each at 1600x900), the smallest to the largest over the four sizes and every run on this build (the 18-chapter scan and four repeats of the four chapters that matter: the girls stand in different places from run to run):
+
+| Chapter | Column clearance above the nearest figure (grid px), this build, smallest to largest | origin/main (one scan, four sizes) |
+|---|---|---|
+| IV Bahamut | 21.3 to 23.5 (20 of 20 runs with a figure under it) | -1.2 to -0.8 (4 of 4 runs with a figure under it) |
+| V Vegnagun | nothing under the column (4 runs) | nothing under the column (4 runs) |
+| VI Leblanc | 12.1 to 15.0 (20 of 20 runs with a figure under it) | 1.5 to 3.5 (4 of 4 runs with a figure under it) |
+| XI Fallen Aeons | 18.8 to 21.0 (20 of 20 runs with a figure under it) | 10.3 to 11.0 (4 of 4 runs with a figure under it) |
+| XIII Trema | 7.7 to 10.0 (20 of 20 runs with a figure under it) | 8.3 to 9.9 (4 of 4 runs with a figure under it) |
+| XVI Den of Woe | 21.3 to 22.2 (4 of 4 runs with a figure under it) | 11.5 to 12.5 (4 of 4 runs with a figure under it) |
+| XVII Ixion | 21.0 to 23.0 (4 of 4 runs with a figure under it) | 11.8 to 13.3 (4 of 4 runs with a figure under it) |
+
+runs on this build: 92; with the column touching a figure (clearance 0 or less): 0
+
+Reading it. **This build's column touches no painted figure in any chapter at any size, in any state or run measured; origin/main's touches Yuna in Chapter IV at all four sizes** (79, 97, 62 and 165 px at the first menu; 10 states and 7,963 px by the column, 50,767 by the panel that ran past it, in the CHK-008 states). Chapters I, II and V touch no figure on either build. No other HUD panel is under the column on either build. In FFX the column is the rail's full box, 178 px at 1600x900 where origin/main's was 168 by its content; the extra 10 px is empty sky and 0 px of any figure at any size in the 11 FFX chapters.
+
+FFX-2 is where the sheet's fill-the-box habit has a cost. The column's floor is the fence the HUD parks on the topmost girl standing in the rail's column (`layoutFences`), and a sheet that fills its column reaches that fence every time, where the old rail was often content-sized and short of it. A painted box also reaches above her head: Chapter XIII's Yuna by about 20 grid px. So the gap above the fence was settled by measuring, not guessing (`FENCE_GAP` in `StrategyGuide.ts`): 5 (a panel's own clearance) was above origin/main in Chapter IV at three of the four sizes (778, 1,623 and 2,596 px against 708, 1,065 and 2,284); 8 touched Yuna's box in XI and XIII; 14 left XIII touching; 20 touched XIII by a pixel at two sizes in the second of two scans (25 and 98 px); 24 cleared every run but by as little as 0.5 grid px; **28 keeps at least 7.7 grid px above her in XIII over 20 runs, which is what origin/main's rail kept (8.3 to 9.9)**. It costs FFX-2's sheet height: Chapter IV 173 px against 230 at 1600x900, V 260 against 302, VI 140 against 168, XI, XVI and XVII 188 against 211; XIII is taller, 213 against 211, because its girls stand lower; the column's height in FFX-2 is the fence's, so it also moves with who holds the menu (two values at 2000x1012 in Chapter IV across runs). The document scrolls, so the cost is lines on screen, not lines of the page; if Bailey would rather have the height and accept a corner of Yuna's box in two chapters, that one number is the knob.
+
+A more exact fence is possible (park it on the painted box's top instead of the head, in `FFX2BattleHud.layoutFences`, which would give the height back where the box sits close to the head) but it changes the HUD's shared fence and the advisor's lane code, and was left alone.
+
+No console error on either build over any of those runs, and no failed run.
+
+### The cure-hint card (D)
+
+It stands in its own box, `.sgd__slot`, the first row of the guide's column, above the sheet, outside the document: `statusHintCard.ts` puts
+it there while the guide is open and on the desktop, and the column is a flex column, so the sheet gives the card its height and takes it
+back (the page is never re-fitted, cut or re-opened, and its scroll position stays). Same content and triggers as today: BATTLE HELP on, a
+decision open, a living party member with a status that has a sourced rule (FFX Zombie, Sleep, Silence, Curse; FFX-2 Sleep, Silence,
+Curse); the full rule where it fits and the one-sentence rule where the sheet beside it would be left under 26 grid px; where even that
+is too much (FFX at 1280x720) it stands alone in the column and the sheet steps aside while the status lasts, as the approved O3 frame
+draws the card. With the guide folded (`G`) it stands at its approved O3 place in the stage, as today; the phone's card is the phone's and
+is untouched. The box is the old rail's box, so it covers nothing more than the in-panel card did; the numerals, the intent slab and the
+message banner still dodge it (`.sgd__slot > .sthint` in the five avoid lists). A real status needs no probe: Bahamut's fixed pattern lands a Curse within seconds in Chapter IV, and in Chapter I Yuna is a Zombie at the first menu with seed 3 (the two screenshots of the card).
+
+**It still shortens the sheet while a status lasts** (the column is the only free place; see the lane scan above): in FFX at 1600x900 the
+sheet beside the card is 86 px (3 lines) against 178 px, and in FFX-2 Chapter IV 81 px (3 lines) against 173; the page behind it is whole and
+scrolls, and the card is the one thing that is more important than the page while it is up. At TEXT SIZE 115 the card stands alone at 1280x720 and the sheet keeps 74 and 85 px beside it at 1600x900 and 2000x1012; at 130 it stands alone at all three sizes (the section below). Alternatives, if Bailey would rather the
+sheet kept its room: the card in the move advisor's lane (FFX: the advisor would give way, as it does when the guide is folded, and the lane
+covers a figure in 2 of the 11 chapters; FFX-2: the lane covers a figure in 4 of the 7), or the card replacing the sheet while it is up
+(the O3 frame as drawn).
+
+The card in its slot against the card inside the guide's panel (the branch as pass two left it): the status held on a party member as the HUD
+sees it by a labelled presentation probe (`lib.mjs` `injectStatus`; the engine and the game data are untouched), BATTLE HELP on, FFX Chapters I and
+II a Zombie, FFX-2 Chapter IV a Curse on Paine and Chapter V a Sleep on Rikku, at the four desktop sizes, then the guide folded with a real `G`,
+then the status released. The card's own box, the sheet beside it, the column now and before, what the card covers, and where the folded card stands:
+
+| Chapter | Viewport | Card (px) | Sheet beside it (px high) | Column, now / before (px high) | Card over figures | Folded-guide card place |
+|---|---|---|---|---|---|---|
+| I (FFX, Zombie on Kimahri) | 1280x720 | 264x100 at (43,88) | none: the card stands alone, the sheet steps aside | 105 / 142 | none | the same place (42,62) |
+| I (FFX, Zombie on Kimahri) | 1600x900 | 330x85 at (53,110) | 86 | 178 / 178 | none | the same place (53,78) |
+| I (FFX, Zombie on Kimahri) | 2000x1012 | 371x94 at (160,124) | 98 | 200 / 200 | none | the same place (160,88) |
+| I (FFX, Zombie on Kimahri) | 2560x1440 | 528x132 at (85,176) | 142 | 284 / 284 | none | the same place (85,125) |
+| II (FFX, Zombie on Tidus) | 1280x720 | 264x100 at (43,88) | none: the card stands alone, the sheet steps aside | 105 / 142 | none | the same place (42,62) |
+| II (FFX, Zombie on Tidus) | 1600x900 | 330x85 at (53,110) | 86 | 178 / 178 | none | the same place (53,78) |
+| II (FFX, Zombie on Tidus) | 2000x1012 | 371x94 at (160,124) | 98 | 200 / 200 | none | the same place (160,88) |
+| II (FFX, Zombie on Tidus) | 2560x1440 | 528x132 at (85,176) | 142 | 284 / 284 | none | the same place (85,125) |
+| IV (FFX-2, Curse on Paine) | 1280x720 | 264x80 at (43,176) | 54 | 138 / 184 | none | the same place (42,184) |
+| IV (FFX-2, Curse on Paine) | 1600x900 | 330x85 at (53,220) | 81 | 173 / 206 | none | the same place (53,230) |
+| IV (FFX-2, Curse on Paine) | 2000x1012 | 371x117 at (160,247) | 109 | 233 / 229 | none | the same place (160,259) |
+| IV (FFX-2, Curse on Paine) | 2560x1440 | 528x132 at (85,352) | 134 | 276 / 324 | none | the same place (85,368) |
+| V (FFX-2, Sleep on Rikku) | 1280x720 | 264x100 at (43,176) | 103 | 208 / 236 | none | the same place (42,184) |
+| V (FFX-2, Sleep on Rikku) | 1600x900 | 330x106 at (53,220) | 148 | 260 / 288 | none | the same place (53,230) |
+| V (FFX-2, Sleep on Rikku) | 2000x1012 | 371x117 at (160,247) | 168 | 292 / 319 | none | the same place (160,259) |
+| V (FFX-2, Sleep on Rikku) | 2560x1440 | 528x164 at (85,352) | 242 | 416 / 456 | none | the same place (85,368) |
+
+In all 16 cases the card is a child of `.sgd__slot` and not of the sheet, inside the column and clear of the sheet, over no painted figure, 0 console
+errors; after the status is released no card is left and the sheet is where it was (14 cases read the same scroll position; in the 2 where the card stood alone and the sheet was hidden it reads 107, 84 again, the places it opened at). Folded (`G`) the card stands at its approved O3 place, the box it
+stood in before, in all 16. The move advisor is untouched and its overlap with the figures is the same on both builds within the run-to-run noise of the
+formation (FFX: 0 in all eight cases; Chapter IV: 8 to 346 px; Chapter V: 22,219 to 46,371 px, which is Vegnagun's size, within 2 percent of the branch before). The phone's card is the phone's (a child of the HUD's own stage, not of the guide, in 4 of 4 chapters), which this pass did not touch.
+
+### TEXT SIZE 115 and 130 percent
+
+`text-size.css` grows FFX's guide column from its top left corner by its individual `scale` (1.15 or 1.3), and the layout cannot see a transform.
+**Found by running the check, and fixed:** a column that fills the room it is given (the old panel was content-sized and 10 px short of it) ended 3 px
+inside the command help slab at 130 percent in FFX Chapter I (`ig-cutin__info x sgd__stack`, 420x3 px at 1600x900 and 472x4 at 2000x1012). That is the
+failure `tests/e2e/accessibility-a2.spec.ts` checks ("no panels overlapping", `ix > 2 && iy > 2`), and that spec has not reached the check on any build: its
+first assertion, the command menu's `▼` glyph clipped at 130 percent, fails on origin/main too (3 of its 5 tests, the same on both builds) and stops it
+before the overlap checks. `drawnScale` (`guideScroll.ts`) reads the column's own `scale` and `layout()` gives the column the room divided by it, so the
+grown column ends where it ends at 100 percent: the sheet no longer grows with the type (142 to 205 px in FFX Chapter I over the three sizes and two TEXT SIZES, against origin/main's 154 to 245, whose content-sized panel grew into the free room above the slab). A unit test pins the arithmetic (`ui-strategy-guide.test.ts`).
+
+Measured with a2's own panel list and its three tests (overlap, off screen, clipped text), plus the same clipped-text test over the guide and the card,
+at TEXT SIZE 115 and 130 in FFX Chapter I and FFX-2 Chapter IV, on origin/main and on this build (`textsize-check.mjs`):
+
+| Chapter | Size | TEXT SIZE | Overlapping panels, main / sheet | Off screen, main / sheet | Clipped text in the guide, main / sheet | Column (px), main / sheet |
+|---|---|---|---|---|---|---|
+| I Flux (FFX) | 1280x720 | 115 % | none / none | none / none | none / none | 154 / 142 |
+| I Flux (FFX) | 1280x720 | 130 % | none / none | none / none | none / none | 174 / 146 |
+| I Flux (FFX) | 1600x900 | 115 % | none / none | none / none | none / none | 193 / 177 |
+| I Flux (FFX) | 1600x900 | 130 % | none / none | none / none | none / none | 218 / 182 |
+| I Flux (FFX) | 2000x1012 | 115 % | none / none | none / none | none / none | 217 / 200 |
+| I Flux (FFX) | 2000x1012 | 130 % | none / none | none / none | none / none | 245 / 205 |
+| IV Bahamut (FFX-2) | 1280x720 | 115 % | none / none | none / none | none / none | 184 / 138 |
+| IV Bahamut (FFX-2) | 1280x720 | 130 % | none / none | none / none | none / none | 184 / 138 |
+| IV Bahamut (FFX-2) | 1600x900 | 115 % | none / none | none / none | none / none | 230 / 173 |
+| IV Bahamut (FFX-2) | 1600x900 | 130 % | none / none | none / none | none / none | 230 / 173 |
+| IV Bahamut (FFX-2) | 2000x1012 | 115 % | none / none | none / none | none / none | 259 / 233 |
+| IV Bahamut (FFX-2) | 2000x1012 | 130 % | none / none | none / none | none / none | 298 / 194 |
+
+Problems on the sheet build over those rows: 0. Console errors: main 0, sheet 0.
+
+FFX-2's TEXT SIZE is off (`data-text-size-wide` ships off until D-220 Q4) and was not touched, so its rows differ between 115 and 130 only by where the girls stand in each run (the fence on their heads sets the column's floor).
+
+With a cure-hint card up (FFX Chapter I, a Zombie on Kimahri, BATTLE HELP on; `hint-textsize.mjs`):
+
+| Size | TEXT SIZE | Card (px), main (in the panel) / sheet (in the slot) | Sheet beside the card (px high), main / sheet | Overlapping panels, main / sheet | Off screen / clipped, sheet | Card type (px), main / sheet |
+|---|---|---|---|---|---|---|
+| 1280x720 | 115 % | 269x105 (sgd__panel) / 304x83 (sgd__slot) | 138 (the panel as a whole) / none: the card stands alone | none / none | none / none | 15 / 15 |
+| 1280x720 | 130 % | 304x91 (sgd__panel) / 343x88 (sgd__slot) | 127 (the panel as a whole) / none: the card stands alone | none / none | none / none | 15.6 / 15.6 |
+| 1600x900 | 115 % | 336x99 (sgd__panel) / 380x96 (sgd__slot) | 139 (the panel as a whole) / 74 | none / none | none / none | 17.25 / 17.25 |
+| 1600x900 | 130 % | 380x110 (sgd__panel) / 429x107 (sgd__slot) | 156 (the panel as a whole) / none: the card stands alone | none / none | none / none | 19.5 / 19.5 |
+| 2000x1012 | 115 % | 378x110 (sgd__panel) / 427x107 (sgd__slot) | 155 (the panel as a whole) / 85 | none / none | none / none | 19.4 / 19.4 |
+| 2000x1012 | 130 % | 428x124 (sgd__panel) / 482x120 (sgd__slot) | 175 (the panel as a whole) / none: the card stands alone | none / none | none / none | 21.93 / 21.93 |
+
+Problems on the sheet build over those rows: 0. Console errors: main 0, sheet 0.
+
+The card's type is the same size on both builds. At 130 percent the card stands alone in the column at all three sizes (the sheet steps aside while the status
+lasts), which is the rule the card already had where the sheet beside it would be left under 26 grid px.
+
+### The phone is unchanged
+
+Same four chapters, same 390x844 browser, the build before this pass (the branch as pass two left it) against this one, a real tap on the
+GUIDE chip: the stack's and the sheet's boxes and computed styles, every unit's box and computed type (22, 25, 16 and 100 units), the
+text, the scroll position the sheet opens at (235, 215, 152, 69 px), where a 700 px swipe-wheel lands, the end of the document (981,
+908, 301, 4,406 px), the chip and the folded and closed states: **identical, 0 differences** (`phone-compare.mjs`, `phone-diff.mjs`). A
+pixel diff of Chapter I's open sheet: 0 of 601,880 pixels differ by more than 24/255 (largest difference 3), and the bright (type) pixels
+differ in 1 of 65,448 (65,447 before, 65,448 after). The desktop-only rules are scoped `html:not([data-phone-battle])`, the phone keeps its own opening lead, and its
+wheel is left to the browser.
+
+### Proof in a browser (pass three)
+
+Headless Chromium in GPU mode, driven from node by Playwright (never the in-app browser pane, never the browser extension), real input: the mouse wheel a notch at
+a time, the keys `]`, `[`, `Home`, `End` and `G`, a click on the chip, a tap on the phone's chip. The build under test is a production build of this branch (code only,
+served with the shipped art, audio and fonts of an earlier full build: `vite.sheet.config.mjs`, `serve-fallback.mjs`), origin/main's is a build of a6b79313; the
+browser reads fonts, wheel and layout exactly as it ships. Chapters I and II (FFX) and IV and V (FFX-2) at 1600x900, 2000x1012 and 390x844; per desktop scenario
+the sheet is read as it opens, the whole document is read by wheel notches, `]` is pressed until every unit of the page has been at the top, `[`, `Home` and `End` are
+pressed, `G` puts it away and `G` brings it back:
+
+| Scenario | Box (px) | Smallest type | Opens | The page, by the real wheel and keys | Checks |
+|---|---|---|---|---|---|
+| I Flux (FFX) 1600x900 | sheet 330x178 at (53,110) | 14.25 px | at "Seymour Flux BOSS BATTLE", 9.3 px of gap above | 13 notches of 100 px read 581 layout px (the foot at 510 of 510); `]` reaches 22/22 units; Home 0, End the foot; a page is 85% of the sheet; `G` hides it and `G` again opens it on the header again | 0 under 14 px, 0 px sideways overflow, 0 hidden units, no MORE row, 0 console errors, 0 failed requests, 0 forbidden words |
+| I Flux (FFX) 2000x1012 | sheet 371x200 at (160,124) | 16.02 px | at "Seymour Flux BOSS BATTLE", 10.4 px of gap above | 14 notches of 101.2 px read 581 layout px (the foot at 510 of 510); `]` reaches 22/22 units; Home 0, End the foot; a page is 85% of the sheet; `G` hides it and `G` again opens it on the header again | 0 under 14 px, 0 px sideways overflow, 0 hidden units, no MORE row, 0 console errors, 0 failed requests, 0 forbidden words |
+| I Flux (FFX) 390x844 (phone) | sheet 367x410 at (13,66) | 15 px | scrolled to the header (235 px) | wheel reaches the end (981 of 981); document 1391 px | 0 under 14 px, 0 overflowing, 0 console errors, 0 forbidden words |
+| II Yunalesca (FFX) 1600x900 | sheet 330x178 at (53,110) | 14.25 px | at "Yunalesca BOSS BATTLE", 10.4 px of gap above | 13 notches of 100 px read 574 layout px (the foot at 503 of 503); `]` reaches 25/25 units; Home 0, End the foot; a page is 85% of the sheet; `G` hides it and `G` again opens it on the header again | 0 under 14 px, 0 px sideways overflow, 0 hidden units, no MORE row, 0 console errors, 0 failed requests, 0 forbidden words |
+| II Yunalesca (FFX) 2000x1012 | sheet 371x200 at (160,124) | 16.02 px | at "Yunalesca BOSS BATTLE", 11.7 px of gap above | 14 notches of 101.2 px read 574 layout px (the foot at 503 of 503); `]` reaches 25/25 units; Home 0, End the foot; a page is 85% of the sheet; `G` hides it and `G` again opens it on the header again | 0 under 14 px, 0 px sideways overflow, 0 hidden units, no MORE row, 0 console errors, 0 failed requests, 0 forbidden words |
+| II Yunalesca (FFX) 390x844 (phone) | sheet 367x410 at (13,66) | 15 px | scrolled to the header (215 px) | wheel reaches the end (908 of 908); document 1318 px | 0 under 14 px, 0 overflowing, 0 console errors, 0 forbidden words |
+| IV Bahamut (FFX-2) 1600x900 | sheet 330x173 at (53,220) | 14.25 px | at "Bahamut BOSS BATTLE", 10.3 px of gap above | 7 notches of 100 px read 315 layout px (the foot at 246 of 246); `]` reaches 16/16 units; Home 0, End the foot; a page is 86% of the sheet; `G` hides it and `G` again opens it on the header again | 0 under 14 px, 0 px sideways overflow, 0 hidden units, no MORE row, 0 console errors, 0 failed requests, 0 forbidden words |
+| IV Bahamut (FFX-2) 2000x1012 | sheet 371x194 at (160,247) | 16.02 px | at "Bahamut BOSS BATTLE", 11.6 px of gap above | 7 notches of 101.2 px read 315 layout px (the foot at 246 of 246); `]` reaches 16/16 units; Home 0, End the foot; a page is 86% of the sheet; `G` hides it and `G` again opens it on the header again | 0 under 14 px, 0 px sideways overflow, 0 hidden units, no MORE row, 0 console errors, 0 failed requests, 0 forbidden words |
+| IV Bahamut (FFX-2) 390x844 (phone) | sheet 367x410 at (13,66) | 15 px | scrolled to the header (152 px) | wheel reaches the end (301 of 301); document 711 px | 0 under 14 px, 0 overflowing, 0 console errors, 0 forbidden words |
+| V Vegnagun (FFX-2) 1600x900 | sheet 330x260 at (53,220) | 14.25 px | at "Vegnagun (Tail) BOSS BAT", 8.9 px of gap above | 53 notches of 100 px read 2153 layout px (the foot at 2013 of 2013); `]` reaches 100/100 units; Home 0, End the foot; a page is 85% of the sheet; `G` hides it and `G` again opens it on the header again | 0 under 14 px, 0 px sideways overflow, 0 hidden units, no MORE row, 0 console errors, 0 failed requests, 0 forbidden words |
+| V Vegnagun (FFX-2) 2000x1012 | sheet 371x292 at (160,247) | 16.02 px | at "Vegnagun (Tail) BOSS BAT", 10 px of gap above | 58 notches of 101.2 px read 2153 layout px (the foot at 2013 of 2013); `]` reaches 100/100 units; Home 0, End the foot; a page is 85% of the sheet; `G` hides it and `G` again opens it on the header again | 0 under 14 px, 0 px sideways overflow, 0 hidden units, no MORE row, 0 console errors, 0 failed requests, 0 forbidden words |
+| V Vegnagun (FFX-2) 390x844 (phone) | sheet 367x410 at (13,66) | 15 px | scrolled to the header (69 px) | wheel reaches the end (4406 of 4406); document 4816 px | 0 under 14 px, 0 overflowing, 0 console errors, 0 forbidden words |
+
+Over the 12 scenarios: 0 console errors, 0 failed requests, 0 forbidden words, 0 pieces of type under 14 px, 0 px of sideways overflow, 0 hidden units, no `MORE` row anywhere, and in every desktop scenario a real `G` twice put the sheet back on the boss's header.
+
+`tests/e2e/guide-sheet.spec.ts` (12 tests, FFX Chapter I and FFX-2 Chapter IV: it opens on the header and scrolls, a notch moves the text by what the wheel says, `[` `]` Home End, `G` and the chip, the card in its slot and the sheet keeping its page) against the production build on port 6402: **12 passed**.
+
+The pad (`pad-proof.mjs`; a synthetic gamepad, headless Chromium has none): the right stick pushed down for half a second moves the sheet 62 px in Chapter I (107 to 169) and 62 in Chapter IV (67 to 129); pushed up it comes back; inside the dead zone and on the left stick (the menu's) it does not move at all; button 2 folds the guide and again opens it on the header. A real pad is on the deep review's list.
+
+The screenshots for Bailey, `docs/screenshots/r38-guide-jegged/sheet/` (headless, 1600x900 unless named; real wheel, the real scroll bar left visible):
+
+- `ch1-flux-1600x900-sheet-open.jpg`: the desktop sheet as it opens in FFX Chapter I.
+- `ch4-bahamut-1600x900-sheet-open.jpg`: the same in FFX-2 Chapter IV, a calm frame (nothing playing over the party).
+- `ch1-flux-1600x900-hint-card.jpg`: the cure-hint card in its own box above the sheet, a real Zombie (Chapter I, seed 3).
+- `ch1-flux-390x844-phone-sheet.jpg`: the phone's sheet, unchanged.
+- `ch1-flux-1600x900-sheet-scrolled.jpg`: the sheet scrolled five notches.
+- `ch4-bahamut-1600x900-hint-card-real-curse.jpg`: Bahamut's own Curse landing on Paine, the card above the sheet, no probe.
+- `mockups/option-b-reading-mode-ch1-flux-...-MOCKUP-not-built.jpg` and `...ch4-bahamut...`: the alternative (a reading mode that dims the field), a picture only.
+
+### Gates, pass three
+
+- `npx tsc --noEmit` and `tsc -p tsconfig.e2e.json`: clean.
+- The guide's unit tests: `ui-strategy-guide` (28), `strategy-guide-sheet` (25), `status-o3-hint-place` (20), `strategy-guide-phone-sheet`, `strategy-guide-chip-and-type`,
+  `guide-doc-render`, `guide-doc-separation`, `guide-doc` (8 files, 147 tests), and the forbidden-words test `guide-doc-words` (37): all pass.
+- **The full unit suite, once, on the final tree:** 775 files passed, 5 skipped (of 780), 11437 tests passed, 41 skipped, 1 todo, 472.37 s, `--maxWorkers=3`.
+- `node tools/orphans.mjs`: 24 orphaned of 1227 modules, the same 24 as before this pass; `guideScroll.ts` is reached.
+- **The advisor digest** (every chapter, seeds 1 to 5, 90 runs, 8,256 decisions): `cc10c48f8757f72d07c44a7986c06e4b69b3d9d42e53cef6757dd8cb77ae425d`, **90 of 90 per-run hashes identical to origin/main's**
+  (the f4244e1f digest; `main` has had docs commits only since) and to pass two's. No tactic, advisor, bench, battle or chapter-data file is in this change, and
+  `guide-doc-separation` also scans `guideScroll.ts` for any import of them.
+- Browser: `tests/e2e/guide-sheet.spec.ts` 12 of 12 against the production build; `accessibility-a2.spec.ts`: **3 failed, 2 passed on this build and 3 failed,
+  2 passed on origin/main, with the same clipped-text entry** (the command menu's `▼` glyph at 130 percent, which is not the guide; it stops the spec before its overlap checks, which
+  `textsize-check.mjs` runs on its own, above). `tests/e2e/hud-collision.spec.ts` (CHK-008) was not run as a spec: `coverage.mjs` and `lanescan.mjs` measure the same thing with its own
+  states and quads, on both builds.
+- `src/ui/common/StrategyGuide.ts` is 399 lines (668 before; the house limit is under 400), `guideScroll.ts` 121, `statusHintCard.ts` 211.
+
+### Files, pass three
+
+**New:** `src/ui/common/guideScroll.ts` (the wheel, key and stick arithmetic, `gapAbove`, `drawnScale`); `tests/unit/strategy-guide-sheet.test.ts` (25),
+`tests/unit/helpers/guideSheetStub.ts`; `tests/e2e/guide-sheet.spec.ts`; `docs/plans/r38-guide-sheet-review.md`;
+`docs/screenshots/r38-guide-jegged/sheet/`.
+
+**Changed:** `src/ui/common/StrategyGuide.ts` (668 to 399 lines: no fit, no paging, a wheel, the keys, the stick, the card's slot, the
+opening place) and `strategy-guide.css` (the sheet is a scroller in a two-row column, the scroll bar, the desktop-only rules);
+`statusHintCard.ts` and `status-o3.css` (the card in the slot, `guideSqueezed` for the ladder); `guideDocHtml.ts` (the paging-only
+classes gone); `phone-battle.css` (one dead `.sgd__more` rule removed); one line each in `ffx/DamageNumbers.ts`,
+`ffx/hudAvoidSelectors.ts`, `ffx2/battleMessage.ts`, `ffx2/DamageLayer.ts` and `ffx2/intentBoard.ts` (the card is dodged as the panel
+was); `data/guides/doc-types.ts` (comments only: no block has to fit a page); the tests named in the commit
+(`guide-doc-render`, `strategy-guide-phone-sheet`, `strategy-guide-chip-and-type`, `ui-strategy-guide`, `status-o3-hint-place`,
+`guide-doc-separation`, `guide-doc`).
+
+**Removed, parked on `F:/pyrefly-parked/2026-10-03/guide-sheet/` first:** `src/ui/common/guideFit.ts`, `tests/unit/strategy-guide-fold.test.ts`,
+`strategy-guide-scale.test.ts`, `tests/unit/helpers/guideLayoutStub.ts` (and the before-copies of the three rewritten tests and of the paged
+`StrategyGuide.ts`).
+
+**Not touched:** every file under `src/engine/tactics/`, `src/battle/`, `src/data/ffx/`, `src/data/ffx2/`, the 18 `src/data/guides/<chapter>.ts`
+and `types.ts`, the 18 documents, `tools/` (`tools/hud-safe-area-check.mjs` still names `.sgd__more`; it reads null for it and carries on).
+
+**Scratch, outside the repo** (`D:/Tools/pyrefly-scratch/2026-10-03/guide-sheet/`): the proof scripts (`sheet-proof.mjs`, `hint-proof.mjs`,
+`coverage.mjs`, `phone-compare.mjs`, `phone-diff.mjs`, `pixdiff.py`, `pad-proof.mjs`, `lanescan.mjs`, `lanes.mjs`, `shots.mjs`, `lib.mjs`,
+`serve-fallback.mjs`, `vite.sheet.config.mjs`) and their reports; the servers on 6400 to 6404 (the build, pass two's build, origin/main's build and two experiments) were stopped by their PIDs at the end.
+
+### For Bailey, pass three
+
+1. **The reading window is the rail's box.** About 8 lines in FFX and 8 to 12 in FFX-2 at once at 1600x900, in 14 px type, with a scroll bar; the page is
+   whole and scrolls. If he wants a bigger window the choices are measured above: a reading mode that dims the field and holds the battle
+   (needs the pause plumbing, FFX-2's ATB above all; a mockup first), or a wider rail (the advisor's lane, a figure in 6 chapters).
+2. **The card shortens the sheet while a status lasts** (above), and the alternatives.
+3. **`[`, `]`, `Home`, `End` and the right stick are named nowhere in the game** (the controls hint says only `G`). Adding them to the
+   controls list is a one-line copy change; not done without his word.
+4. **1280x720** still draws the sheet's type at 11.4 px (5.7 grid px at 2x): the 14 px floor is cleared at 1600x900 and above, as before
+   (`strategy-guide-chip-and-type.test.ts`). With paging gone a floor in `--lb-scale` is now cheap; it would shrink the 1280 sheet to
+   about 8 lines. His call.
+5. **D-364 asks for his word on the screenshots before it ships** (hard rule 9): `docs/screenshots/r38-guide-jegged/sheet/`, listed in the
+   commit and the report; the two reading-mode mockups beside them are pictures only, nothing of them is built.
+6. **FFX-2's sheet is a little shorter than today's rail where the old rail was long** (Chapter IV 173 px against 230 at 1600x900, V 260 against 302, VI 140 against 168, XI, XVI and XVII 188 against 211; XIII is taller, 213 against 211, because its girls stand lower): it keeps 28 grid px off the fence on the
+   party's heads so that no chapter touches a girl's box (the coverage section). If he would rather have the height and accept a touch on Yuna's
+   box in two chapters, `FENCE_GAP` in `StrategyGuide.ts` is the one number (8 gives the old height and touches XI and XIII).
+7. **TEXT SIZE 130 percent: the card stands alone in FFX** (above), as it already did at 1280x720 at 100 percent. FFX-2's TEXT SIZE stays off
+   (D-220 Q4) and was not touched.

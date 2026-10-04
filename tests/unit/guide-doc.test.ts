@@ -136,8 +136,8 @@ describe('a document is a page, laid out like one', () => {
   });
 });
 
-describe('a document can always be paged', () => {
-  it(`keeps every block short enough for one page (at most ${DOC_UNIT_MAX} characters)`, () => {
+describe('a document reads well in the sheet’s narrow column', () => {
+  it(`keeps every block short (at most ${DOC_UNIT_MAX} characters)`, () => {
     const long: string[] = [];
     for (const d of GUIDE_DOCS) {
       for (const u of docUnits(d)) if (u.length > DOC_UNIT_MAX) long.push(`${d.id} (${u.length}): ${u.slice(0, 60)}...`);

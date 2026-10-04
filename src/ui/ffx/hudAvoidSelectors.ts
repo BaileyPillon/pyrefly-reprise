@@ -46,7 +46,8 @@ export const ADVISOR_PANEL_SELECTORS = [...OMNIS_READOUT_SELECTORS, ...SIN_HUD_S
  * Status O3's cure-hint card while it is up (PR-0282, both games' plumbing; only the FFX HUD's
  * card could reach its slot): the move advisor's card treats it as an obstacle beside
  * {@link ADVISOR_PANEL_SELECTORS}, so the card never prints beneath it with the guide folded
- * (inside the open guide it is the guide's own panel already). A hidden card matches nothing.
+ * (with the guide open it stands in the guide column's own slot, the column the advisor already
+ * clears, beside the sheet). A hidden card matches nothing.
  */
 export const STATUS_HINT_SELECTOR = '.sthint:not([hidden])';
 
@@ -80,6 +81,7 @@ export const INTENT_AVOID_SELECTORS = [
   '.mad__toggle',
   '.sgd__panel',
   '.sgd__toggle',
+  '.sgd__slot > .sthint', // the cure-hint card in the guide column's slot (R38)
   // The reticles. Round 02 #14's repro at 1000x562 had *both* of them
   // entirely inside the slab. Listing their boxes moves the slab and
   // changes nothing about how a reticle is drawn or aimed, which is issue

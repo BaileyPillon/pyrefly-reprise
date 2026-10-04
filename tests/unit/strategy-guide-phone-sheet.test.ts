@@ -3,10 +3,9 @@
  * The strategy guide on the upright phone is a scrolling sheet, and nothing is fitted to it.
  *
  * `phone-battle.css` opens the guide as a sheet behind the GUIDE chip, 15 px type, `overflow-y: auto`.
- * But `StrategyGuide.layout()` still solved the desktop rail against the desktop's anchors, which mean
- * nothing there: measured in headless Chromium at 390x844 the fit left **one block** (the title) in a
- * sheet that had the whole screen to scroll, so most of the guide was never reachable on a phone.
- * On the phone the content is now all there, at full length, and the sheet scrolls.
+ * Nothing is fitted to it: the content is all there, at full length, and the sheet scrolls. R38 (2026-10-03) made
+ * the desktop's guide a scrolling reading sheet too (`strategy-guide-sheet.test.ts`); the two share the document
+ * and the opening on the boss that is standing, and this file pins that the phone's own sheet is what it was.
  *
  * **Game case: both** [AGENTS.md rule 14]: the sheet is shared plumbing for both HUDs.
  */
@@ -14,7 +13,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { StrategyGuide } from '../../src/ui/common/StrategyGuide.ts';
 import { makeFakeBattleState } from '../../src/ui/ffx/testFixtures.ts';
-import { stubGuideLayout } from './helpers/guideLayoutStub.ts';
+import { stubSheetLayout } from './helpers/guideSheetStub.ts';
 
 function boxed(top: number, height: number): HTMLElement {
   const el = document.createElement('div');
@@ -38,30 +37,19 @@ function mounted(): { stage: HTMLElement; guide: StrategyGuide } {
 }
 
 describe('the phone sheet', () => {
-  const originalGetClientRects = Range.prototype.getClientRects;
   afterEach(() => {
-    Range.prototype.getClientRects = originalGetClientRects;
     delete document.documentElement.dataset['phoneBattle'];
     document.body.innerHTML = '';
-  });
-
-  it('on the desktop the same board is cut to the rail: blocks are hidden and MORE is up', () => {
-    const { stage, guide } = mounted();
-    stubGuideLayout(stage, { scale: 1, unitHeight: 20, glyphSlack: 2, bodyTop: 5, chrome: 11 });
-    guide.update(0.016);
-    expect(stage.querySelectorAll('.sgd__u--out').length).toBeGreaterThan(0);
-    expect(stage.querySelector<HTMLElement>('[data-role="strategy-guide-more"]')!.hidden).toBe(false);
-    guide.unmount();
   });
 
   it('on the phone every block is shown at full length, nothing is paged, and the body is not clamped', () => {
     document.documentElement.dataset['phoneBattle'] = 'ffx';
     const { stage, guide } = mounted();
-    stubGuideLayout(stage, { scale: 1, unitHeight: 20, glyphSlack: 2, bodyTop: 5, chrome: 11 });
+    stubSheetLayout(stage, { unitHeight: 20, gap: 4, padTop: 10, clientHeight: 300 });
     guide.update(0.016);
-    expect(stage.querySelectorAll('.sgd__u--out').length).toBe(0);
+    expect(stage.querySelectorAll('[hidden]').length).toBe(0);
     expect(stage.querySelector('.sgd')!.className).not.toMatch(/sgd--compact|sgd--fit/);
-    expect(stage.querySelector<HTMLElement>('[data-role="strategy-guide-more"]')!.hidden).toBe(true);
+    expect(stage.querySelector('[data-role="strategy-guide-more"]')).toBeNull();
     expect(stage.querySelector<HTMLElement>('.sgd__body')!.style.height).toBe('');
     // every written block is there to scroll to: the boss's header, its stat lines, the advice and the loot lists
     const text = stage.textContent ?? '';
@@ -69,17 +57,6 @@ describe('the phone sheet', () => {
     expect(text).toContain('Boss Battle');
     expect(text).toMatch(/Total Annihilation is the dangerous one/);
     expect(text).toContain('Lv. 4 Key Sphere');
-    guide.unmount();
-  });
-
-  it('undoes a desktop fit when the window becomes a phone', () => {
-    const { stage, guide } = mounted();
-    stubGuideLayout(stage, { scale: 1, unitHeight: 20, glyphSlack: 2, bodyTop: 5, chrome: 11 });
-    guide.update(0.016);
-    expect(stage.querySelectorAll('.sgd__u--out').length).toBeGreaterThan(0);
-    document.documentElement.dataset['phoneBattle'] = 'ffx';
-    guide.update(0.016);
-    expect(stage.querySelectorAll('.sgd__u--out').length).toBe(0);
     guide.unmount();
   });
 });

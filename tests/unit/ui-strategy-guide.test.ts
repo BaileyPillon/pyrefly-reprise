@@ -21,7 +21,7 @@
  *    pink accent from its `.ig--ffx2` root rather than carrying its own colour.
  */
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AtbSnapshot, BattleState, FFX2Combatant } from '../../src/battle/common/types.ts';
 import { SaveStore, defaultSettings } from '../../src/app/SaveData.ts';
 import { StrategyGuide } from '../../src/ui/common/StrategyGuide.ts';
@@ -87,13 +87,11 @@ function panelOf(root: HTMLElement): HTMLElement {
 }
 
 /**
- * The measured column: the ink slab, then the MORE row.
+ * The measured column: the card's slot, then the sheet.
  *
  * Round 04 PR-0009 moved the rail's geometry off `.sgd__panel` and onto
- * `.sgd__stack`. The panel is the slab now and nothing else, so its box can
- * end exactly where the type ends instead of eleven px further down with a
- * MORE chip painted over the difference. The anchor arithmetic these tests
- * pin is unchanged — it is read one element out.
+ * `.sgd__stack`; R38 kept it there when the paged rail became a scrolling
+ * sheet. The anchor arithmetic these tests pin is read one element out.
  */
 function stackOf(root: HTMLElement): HTMLElement {
   return root.querySelector<HTMLElement>('[data-role="strategy-guide-stack"]')!;
@@ -336,8 +334,8 @@ describe('the rail is measured, never fixed', () => {
     // panel: without the reserve the rail cleared FFX's action banner and the
     // chip landed on it (docs/handoff/fix3-ffx-hud.md, defect 4).
     expect(Number.parseFloat(stack.style.top)).toBeCloseTo(60, 1);
-    // 240 - 5 - 60.
-    expect(Number.parseFloat(stack.style.maxHeight)).toBeCloseTo(175, 1);
+    // 240 - 28 - 60: the fence the owner parks on the party's heads is kept FENCE_GAP (28) off, a panel's own clearance is 5.
+    expect(Number.parseFloat(stack.style.maxHeight)).toBeCloseTo(152, 1);
     // ...and the chip now sits *below* the anchor's bottom edge, not on it.
     expect(Number.parseFloat(toggleOf(stage).style.top)).toBeGreaterThanOrEqual(20 + 24);
   });
@@ -380,21 +378,40 @@ describe('the rail is measured, never fixed', () => {
   });
 
   /**
-   * Round 04 PR-0009, measured live: "MORE chip box 252.50-280.00 intersects 2
-   * glyph line boxes". It could, because it was an absolutely positioned chip
-   * whose `top` the layout wrote at the slab's own bottom edge. As the second
-   * row of a flex column it has nowhere to overlap from.
+   * TEXT SIZE (`text-size.css`) grows FFX's column from its top left corner by its individual `scale` property, and the layout
+   * cannot see a transform: a column given the whole room ended below its fence (3 px into the help slab at 130 percent, which the
+   * a2 spec's overlap check reads). The room is divided by the scale the column is drawn at, so the grown column ends at the fence.
    */
-  it('lays the slab and the MORE row out as one column, so the chip can never sit on the text', () => {
+  it('divides the column’s room by the scale TEXT SIZE grows it by, so it still ends at its fence', () => {
+    const { guide, stage } = mountGuide({ anchors: { above: () => boxed(240, 80), below: () => boxed(20, 24), top: 44, bottom: 34 } });
+    const stack = stackOf(stage);
+    const real = window.getComputedStyle.bind(window);
+    const spy = vi.spyOn(window, 'getComputedStyle').mockImplementation((el: Element, pseudo?: string | null) => {
+      const cs = real(el, pseudo);
+      return el === stack ? new Proxy(cs, { get: (t, k) => (k === 'scale' ? '1.3' : Reflect.get(t, k)) }) : cs;
+    });
+    try {
+      guide.sync(makeFakeBattleState());
+      guide.update(0.016);
+      // (240 - 28 - 60) / 1.3: the column, grown 1.3 times from its top, ends where it would have ended ungrown
+      expect(Number.parseFloat(stack.style.maxHeight)).toBeCloseTo(152 / 1.3, 1);
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
+  /**
+   * The column is two rows: the status hint card's slot, then the sheet. R38: the sheet scrolls (there is no MORE row
+   * and no paging), and the card stands in its own row above it instead of inside the document.
+   */
+  it('lays the card’s slot and the sheet out as one column, with no row for paging', () => {
     const { guide, stage } = mountGuide({ anchors: { below: () => boxed(20, 24), top: 44, bottom: 34 } });
     guide.sync(makeFakeBattleState());
     guide.update(0.016);
 
     const roles = [...stackOf(stage).children].map((c) => (c as HTMLElement).dataset['role']);
-    expect(roles).toEqual(['strategy-guide-panel', 'strategy-guide-more']);
-    // Nothing writes a `top` onto the affordance any more: its place in the
-    // column is its position.
-    expect(stage.querySelector<HTMLElement>('[data-role="strategy-guide-more"]')!.style.top).toBe('');
+    expect(roles).toEqual(['strategy-guide-slot', 'strategy-guide-panel']);
+    expect(stage.querySelector('[data-role="strategy-guide-more"]')).toBeNull();
   });
 
   /**
