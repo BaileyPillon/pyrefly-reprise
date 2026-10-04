@@ -1,13 +1,31 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 49 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 50 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows one picture from that build; "All pictures for this build" opens
 a page with every picture, before and after where both exist. Engineering detail lives in
 `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-04 · Release 38 on echoesofspira.com
+
+Address: https://echoesofspira.com (main 8136f2ed)
+
+- **Both:** the game has its own address, **echoesofspira.com**, served by Cloudflare.
+  www.echoesofspira.com forwards to it. It is release 38, unchanged: all 1,932 files were checked
+  byte for byte on the new address after the upload.
+- **Both:** saves are kept per address, so echoesofspira.com starts with fresh saves. The old
+  GitHub address keeps its own saves and stays up.
+- **Behind the scenes:** releases now go to Cloudflare by default. Only changed files are uploaded,
+  earlier versions can be rolled back in seconds, and the critic and the tools follow the new address.
+
+![The title card on echoesofspira.com](docs/screenshots/cf-switch/title-echoesofspira.com-1600x900.png)
+
+*The title card on echoesofspira.com at 1600x900.*
+
+All pictures for this build: [docs/changelog/release-38-echoesofspira.md](docs/changelog/release-38-echoesofspira.md)
 
 ## 2026-10-04 · Cloudflare preview (release 38)
 
