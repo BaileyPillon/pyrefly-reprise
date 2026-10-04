@@ -47,5 +47,7 @@ Address: https://baileypillon.github.io/pyrefly-reprise/ (main 6461999e)
 
 Address: https://baileypillon.github.io/pyrefly-reprise/ (main f4244e1f)
 
-- **FFX-2:** Trigger Happy counts Enter, touch and gamepad presses, not only the R key.
+- **FFX-2:** Trigger Happy counts gamepad R1 and taps or clicks on its bar, not only the R and Page
+  Down keys, and its prompt names the right button for your device (MASH R, MASH R1, MASH TAP or MASH
+  CLICK). Enter does not count, because it is not the bound button.
 - **FFX:** in Chapter IX, Yojimbo and Daigoro appear at the first menu after a hurried opening.
