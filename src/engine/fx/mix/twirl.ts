@@ -2,6 +2,12 @@ import type { Object3D } from 'three';
 import { artManifest } from '../../ArtManifest.ts';
 import { artUrl, loadPainted, prewarmPainted, softSilhouette, tryLoadMeta, type PaintedTexture, type PoseMeta } from '../../PaintedArt.ts';
 import { giveBackColumn, hideColumn, showColumn } from './twirlColumn.ts';
+import { GRID_EVENT, HOLD_MAX_MS, LATE_MS, TWIRL_WEIGHT, girlOf, keyRescale, playAt, twirlKeysOf, twirlPlan, twirlStepMs, twirlTimes, type TwirlKey } from './twirlPlan.ts';
+
+export { GRID_EVENT, HOLD_MAX_MS, LATE_MS, TWIRL_PARTS, TWIRL_WEIGHT, girlOf, keyRescale, playAt, twirlKeysOf, twirlPlan, twirlStepMs, twirlTimes, type TwirlKey } from './twirlPlan.ts';
+
+/** The pause between two prewarmed keys (ms): each decode is a burst of main-thread work, never two back to back. */
+const WARM_GAP_MS = 250;
 
 /**
  * The MAX mix (D-316), the FFX-2 spherechange's painted TWIRL KEYS slot (B's no-render part; FFX-2 only,
@@ -41,102 +47,11 @@ import { giveBackColumn, hideColumn, showColumn } from './twirlColumn.ts';
  *   each outfit in the Change submenu would put on, when it opens), and a change whose keys are not ready within `LATE_MS` plays today's
  *   flourish instead of keys that land after the new outfit.
  *
- * Round 21 (PR-0334; FFX-2 only):
- * - **no white slab while the keys load.** The flourish's CSS white column opens on the change's first frame, the keys on their
- *   first frame after the loads, so on a network the column stood at full white over her for hundreds of ms. The column is hidden
- *   from the first frame (`twirlColumn.ts`) as soon as a plan exists and given back, replayed, only if the keys do not come;
- * - **the scales a change reads are fetched ahead** with the keys (the idle sidecars of the outfit she leaves and of each outfit
- *   the Change submenu offers), so a first change does not wait a round trip for them and miss `LATE_MS`.
+ * Round 21 (PR-0334, PR-0314; FFX-2 only): the flourish's CSS white column is hidden from the change's first frame (`twirlColumn.ts`) and
+ * given back, replayed, only if the keys do not come; the idle sidecars a change reads are fetched with the keys (so a first change does not
+ * miss `LATE_MS`); the twirl starts as soon as its keys are here instead of after the new outfit's paintings have loaded, and its last key
+ * holds until they are (`playAt`, `load`); the held shot starts from `takeBegun()` and is held while `busy()` (`heldShots.ts`).
  */
-
-/** The five parts of a painted change, in playing order (D-322). */
-export const TWIRL_PARTS = ['twirl-start', 'twirl-going', 'twirl-mid', 'twirl-forming', 'twirl-end'] as const;
-
-/** Each part's share of the beat: the art run's proposed step clock (12 steps of 1/12 s: 2, 2, 3, 2, 3). */
-export const TWIRL_WEIGHT: Readonly<Record<string, number>> = { 'twirl-start': 2, 'twirl-going': 2, 'twirl-mid': 3, 'twirl-forming': 2, 'twirl-end': 3 };
-
-/** The twirl keys a figure ships, in playing order (from the art manifest's states). Pure on its input. */
-export function twirlKeysOf(states: readonly string[]): string[] {
-  const order = ['start', 'going', 'mid', 'forming', 'end'];
-  const rank = (s: string): number => {
-    const m = /-(start|going|mid|forming|end)$/.exec(s);
-    return m ? order.indexOf(m[1]!) : order.length;
-  };
-  return states.filter((s) => /^twirl-[a-z0-9-]+$/i.test(s)).sort((a, b) => rank(a) - rank(b) || a.localeCompare(b, 'en', { numeric: true }));
-}
-
-/** The girl a figure belongs to (`yuna-gunner` -> `yuna`). */
-export const girlOf = (figure: string): string => figure.split('-')[0] ?? '';
-
-/** One key of a change: the figure whose folder holds the painting (the dressphere it is painted in), and its state. */
-export interface TwirlKey {
-  figure: string;
-  key: string;
-}
-
-/**
- * The keys a change from `from` to `to` plays, in order: the old dressphere's `twirl-start` and
- * `twirl-going`, the girl's `twirl-mid` (under the new figure, the old one, or any figure of hers: `others`
- * is every subject id the manifest knows), the new dressphere's `twirl-forming` and `twirl-end`. Only what
- * `statesOf` lists; empty means today's flourish. Pure on its input.
- */
-export function twirlPlan(from: string, to: string, statesOf: (id: string) => readonly string[] | null, others: readonly string[] = []): TwirlKey[] {
-  const has = (fig: string, key: string): boolean => !!fig && (statesOf(fig) ?? []).includes(key);
-  const plan: TwirlKey[] = [];
-  for (const key of ['twirl-start', 'twirl-going']) if (has(from, key)) plan.push({ figure: from, key });
-  const girl = girlOf(to || from);
-  const mine = others.filter((id) => girl && id.startsWith(`${girl}-`)).sort();
-  const mid = [to, from, ...mine].find((fig) => has(fig, 'twirl-mid'));
-  if (mid) plan.push({ figure: mid, key: 'twirl-mid' });
-  for (const key of ['twirl-forming', 'twirl-end']) if (has(to, key)) plan.push({ figure: to, key });
-  return plan;
-}
-
-/**
- * What a key's own sidecar `scale` is multiplied by when it is shown on a figure standing in the idle
- * `stage` although it was painted against the idle `own` (`computePoseScale` sizes every pose by the idle
- * on stage): the two idles' pixels per world unit. 1 when either is unknown. Pure.
- */
-export function keyRescale(own: Pick<PoseMeta, 'baselineY' | 'scale'> | null, stage: Pick<PoseMeta, 'baselineY' | 'scale'> | null): number {
-  if (!own || !stage || !(own.baselineY > 0) || !(stage.baselineY > 0)) return 1;
-  return (stage.baselineY / own.baselineY) * ((own.scale ?? 1) / (stage.scale ?? 1));
-}
-
-/**
- * How far one frame moves the twirl's clock (ms): the frame's own time, but never more than two frames at
- * 60 Hz. The change's first frames upload the new outfit's paintings and the keys; one such long frame let
- * the first key show for a single frame in the 2026-10-02 in-battle check (Chapter IV, 15 to 74 ms instead
- * of 107), so a slow frame slows the twirl instead of skipping a key.
- */
-export function twirlStepMs(dtSeconds: number): number {
-  return Math.min(Math.max(0, dtSeconds) * 1000, 1000 / 30);
-}
-
-/**
- * When each key shows (ms from the change), inside today's 0.8 s beat; the new outfit at the returned
- * `end`. Equal steps, or each key's share of `weights` (one per key) when given.
- */
-export function twirlTimes(n: number, beatMs = 800, weights?: readonly number[]): { at: number[]; end: number } {
-  const span = beatMs * 0.8;
-  const w = weights && weights.length === n ? weights.map((x) => (x > 0 ? x : 1)) : Array.from({ length: n }, () => 1);
-  const total = w.reduce((s, x) => s + x, 0);
-  let acc = 0;
-  const at = w.map((x) => {
-    const t = Math.round((span * acc) / (total || 1));
-    acc += x;
-    return t;
-  });
-  return { at, end: Math.round(span) };
-}
-
-/** The FFX-2 Change submenu (`ui/ffx2/CommandMenu.ts`) says which dressphere ids it offers (`{ girl, to }`). */
-export const GRID_EVENT = 'pyrefly:garment-grid';
-
-/** The pause between two prewarmed keys (ms): each decode is a burst of main-thread work, never two back to back. */
-const WARM_GAP_MS = 250;
-
-/** A change whose keys are not ready this soon plays today's flourish: keys after the new outfit read as a pop. */
-export const LATE_MS = 300;
 
 type Guts = Object3D & {
   slots: { mesh: Object3D; pose: string; fade: number }[];
@@ -163,8 +78,12 @@ function hideWash(ms: number): void {
 export class TwirlSlot {
   private readonly wrapped = new Set<Guts>();
   private readonly idles = new Map<string, Promise<PoseMeta | null>>();
-  private play: { a: Guts; keys: PaintedTexture[]; at: number[]; end: number; t: number } | null = null;
+  /** `pre`: the keys sized for the figure standing now (the outfit she leaves); `post`: sized for the new outfit's idle, which the stage uses once it has loaded. */
+  private play: { a: Guts; pre: PaintedTexture[]; post: PaintedTexture[]; at: number[]; end: number; t: number; ready: boolean; held: number } | null = null;
   on = false;
+  /** Figures whose change began since the mix last asked, and how many changes are loading (PR-0314: the held shot starts at the first frame, not the load's end). */
+  private readonly began: Object3D[] = [];
+  private loading = 0;
   readonly stats = { changes: 0, played: 0, keysFound: 0, late: 0, prewarmed: 0, ghost: 0, ghostNow: 0, lastPlan: [] as string[] };
   /** Checks only: `false` leaves the planes as the presenter's crossfade has them (what round 19 saw). */
   pinOn = true;
@@ -199,7 +118,10 @@ export class TwirlSlot {
       const from = subjectOf(a.poseUrls['idle']);
       const to = subjectOf(poses['idle']);
       const done = load.call(a, poses, initial);
-      if (self.on && from && to && from !== to) void self.start(a, from, to, done);
+      if (self.on && from && to && from !== to) {
+        self.began.push(a);
+        void self.start(a, from, to, done);
+      }
       return done;
     };
     a.flash = function (colour?: number | string, ms?: number, peak?: number, floorCut?: number): void {
@@ -214,6 +136,14 @@ export class TwirlSlot {
     this.girls.set(girlOf(subjectOf(a.poseUrls['idle'])), a);
     this.idle(() => (this.eager ? this.prewarmFrom(a) : undefined));
   }
+
+  /** Is a change loading or its keys playing? A held shot is not handed back while it is (heldShots.ts). */
+  busy(): boolean {
+    return this.loading > 0 || this.play !== null;
+  }
+
+  /** The figures whose change began since the last call (and forget them): what `HeldIn.begun` carries. */
+  takeBegun(): Object3D[] { return this.began.length ? this.began.splice(0) : []; }
 
   /** Run `fn` when the browser is idle (a short timeout where it has no idle callback). */
   private idle(fn: () => void): void {
@@ -283,26 +213,35 @@ export class TwirlSlot {
     const plan = m ? twirlPlan(from, to, (id) => m.subjects[id]?.states ?? null, Object.keys(m.subjects)) : [];
     if (!plan.length) return; // today's flourish
     this.stats.keysFound++;
-    // PR-0334 (round 21): the flourish's white column (a CSS light over the girl, drawn by the HUD) opens on the change's first frame,
-    // but the keys only show once they and the new outfit have loaded: a few hundred ms on a network, and the column stood at full
-    // white over her the whole time, a hard-edged slab in 7 of 7 changes. The keys replace it, so it is hidden from the first frame
-    // (synchronously, before anything is awaited); if the keys do not come it is given back, replayed from its start.
+    // PR-0334 (round 21): the flourish's CSS white column opens on the change's first frame, the keys only after they and the new outfit
+    // have loaded (hundreds of ms on a network): a hard-edged white slab in 7 of 7 changes. The keys replace it, so it is hidden from
+    // the first frame, synchronously; if the keys do not come it is given back, replayed from its start.
     hideColumn();
     const guard = window.setTimeout(() => {
       if (!this.play) showColumn(); // a load that never ends must not hide a later change's column
     }, 3000);
     let played = false;
+    this.loading++;
     try {
-      played = await this.load(a, plan, to, done);
+      played = await this.load(a, plan, from, to, done);
     } finally {
+      this.loading--;
       window.clearTimeout(guard);
       if (!played) giveBackColumn(a.name);
     }
   }
 
-  /** Fetch the plan's keys (and the idles' scales), then queue the play. True when a play is queued; false for today's flourish. */
-  private async load(a: Guts, plan: readonly TwirlKey[], to: string, done: Promise<void>): Promise<boolean> {
-    const figs = [...new Set([to, ...plan.map((k) => k.figure)])];
+  /**
+   * Fetch the plan's keys (and the idles' scales), then queue the play. True when a play is queued; false for today's flourish.
+   *
+   * Round 21 (PR-0314): the play starts as soon as the keys are here, not after the new outfit's paintings have loaded (`done`): on a
+   * network that wait was the figure standing in her old outfit for hundreds of ms, longer with the high-resolution tiers. The keys are files
+   * of their own, so they do not wait for it; the only things that do are the size the stage draws a pose at (it is set by the idle in use, so
+   * each key carries a `pre` size for the outfit she leaves and a `post` one for the new idle) and the last frame, which holds until the new
+   * outfit is ready (`playAt`).
+   */
+  private async load(a: Guts, plan: readonly TwirlKey[], from: string, to: string, done: Promise<void>): Promise<boolean> {
+    const figs = [...new Set([to, from, ...plan.map((k) => k.figure)])];
     const all = Promise.all([
       Promise.all(plan.map((k) => loadPainted(artUrl(`art/characters/${k.figure}/${k.key}.png`), () => softSilhouette('twirl')))),
       Promise.all(figs.map((f) => this.idleMeta(f))),
@@ -319,21 +258,24 @@ export class TwirlSlot {
     }
     const [loaded, idles] = got;
     const idleOf = (f: string): PoseMeta | null => idles[figs.indexOf(f)] ?? null;
-    const keys: PaintedTexture[] = [];
+    const sized = (k: PaintedTexture, r: number): PaintedTexture => (r === 1 ? k : { ...k, meta: { ...k.meta, scale: (k.meta.scale ?? 1) * r } });
+    const pre: PaintedTexture[] = [];
+    const post: PaintedTexture[] = [];
     const parts: string[] = [];
     loaded.forEach((k, i) => {
       if (k.placeholder) return void k.texture.dispose();
       const own = plan[i]!;
-      const r = own.figure === to ? 1 : keyRescale(idleOf(own.figure), idleOf(to));
-      keys.push(r === 1 ? k : { ...k, meta: { ...k.meta, scale: (k.meta.scale ?? 1) * r } });
+      pre.push(sized(k, own.figure === from ? 1 : keyRescale(idleOf(own.figure), idleOf(from))));
+      post.push(sized(k, own.figure === to ? 1 : keyRescale(idleOf(own.figure), idleOf(to))));
       parts.push(own.key);
     });
-    if (!keys.length) return false;
-    await done;
-    const { at, end } = twirlTimes(keys.length, undefined, parts.map((p) => TWIRL_WEIGHT[p] ?? 2));
+    if (!pre.length) return false;
+    const { at, end } = twirlTimes(pre.length, undefined, parts.map((p) => TWIRL_WEIGHT[p] ?? 2));
     this.stats.lastPlan = plan.map((k) => `${k.figure}/${k.key}`);
-    this.play = { a, keys, at, end, t: 0 };
+    const play = { a, pre, post, at, end, t: 0, ready: false, held: 0 };
+    this.play = play;
     this.stats.played++;
+    void done.then(() => void (play.ready = true), () => void (play.ready = true)); // the outfit is in (or will never be): the last key may let go
     return true;
   }
 
@@ -341,13 +283,17 @@ export class TwirlSlot {
   update(dt: number): void {
     const p = this.play;
     if (!p) return;
-    p.t += twirlStepMs(dt);
+    const step = twirlStepMs(dt);
+    p.t += step;
     const a = p.a;
     const slot = a.slots[a.active];
-    if (p.t >= p.end || !slot) return this.finish();
-    let i = 0;
-    while (i + 1 < p.at.length && p.t >= p.at[i + 1]!) i++;
-    a.applyPose(a.active, slot.pose, p.keys[i]!);
+    const shown = playAt(p.at, p.end, p.t, p.ready);
+    if (!slot || shown.over) return this.finish();
+    if (p.t >= p.end) {
+      p.held += step; // the keys are done and the new outfit is not in yet: the last key holds, for a while
+      if (p.held > HOLD_MAX_MS) return this.finish();
+    }
+    a.applyPose(a.active, slot.pose, (p.ready ? p.post : p.pre)[shown.i]!);
     this.pin(a);
   }
 
@@ -375,7 +321,7 @@ export class TwirlSlot {
     const slot = p.a.slots[p.a.active];
     const tex = slot ? (p.a.poses.get(slot.pose) ?? p.a.poses.get('idle')) : undefined;
     if (slot && tex) p.a.applyPose(p.a.active, slot.pose, tex);
-    for (const k of p.keys) k.texture.dispose();
+    for (const k of p.pre) k.texture.dispose();
   }
 
   dispose(): void {

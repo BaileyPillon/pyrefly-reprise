@@ -56,7 +56,7 @@ describe('the DRESSPHERE SHOT is cut only where it can hold (PR-0313, PR-0314)',
     expect(s.update(1 / 60, o([rikku, actor('Paine')]))?.kind).toBe('sc');
   });
 
-  it('skips it when an enemy is mid-action as she changes', () => {
+  it('skips it when an enemy is still mid-action as she changes, once the wait for a quiet moment has run out (round 21: it used to be final on the first frame)', () => {
     rows([{ name: 'Rikku', pct: 0 }, { name: 'Paine', pct: 10 }]);
     const rikku = actor('Rikku', {}, 'art/characters/rikku-gunner/idle.png');
     const ixion = actor('Ixion', { facing: -1, lifeState: 'act' });
@@ -64,7 +64,11 @@ describe('the DRESSPHERE SHOT is cut only where it can hold (PR-0313, PR-0314)',
     s.update(1 / 60, o([rikku, ixion]));
     set(rikku, 'poseUrls', { idle: 'art/characters/rikku-black-mage/idle.png' });
     expect(s.update(1 / 60, o([rikku, ixion]))).toBeNull();
+    expect(s.lastTry).toBe(''); // still waiting: a quiet moment may come
+    for (let i = 0; i < 60; i++) s.update(1 / 60, o([rikku, ixion])); // the wait is 0.6 s
     expect(s.lastTry).toMatch(/another actor is acting/);
+    expect(s.stats.skipped).toBe(1);
+    expect(s.decisions.at(-1)).toMatchObject({ who: 'Rikku', outcome: 'skipped', gate: 'acting' });
   });
 });
 
