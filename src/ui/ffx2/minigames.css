@@ -8,16 +8,33 @@
  * state modifiers (hot pace, DUD warning colour).
  */
 
+/* FOC371-02 (FFX-2 only): the minigame layer is a grid layer BESIDE the HUD stage, not inside it (FFX2BattleHud.mount).
+   The stage's `transform` makes it a stacking context of its own, so a slab inside it could never out-rank the
+   enemy-intent slab (`.eint`, z-index 2, a sibling layer on the overlay): 37.1's `z-index: 15` on the slab was
+   trapped in that context, and on desktop the card painted over the ring, the hit counter and half the bar. Out
+   here the layer is a child of `.ffx2hud`, and the card, the guide (3), the advisor (4) and the phone's guide chip
+   (12) all share its stacking context, so it is above every one of them, on desktop and on the phone, while it is
+   open; below the pause chips (40 on the phone, 45 elsewhere) and the pause (999). It has the stage's box (640x360, origin top-left) and the
+   stage's transform (written by `FFX2BattleHud.layout()`, as for `.ffx2hud__plates`), so the overlays keep their
+   authored geometry; on the phone the stage's transform is dropped, and so is this layer's (phone-hud.css). The
+   layer's `pointer-events: none` and `inset: 0` come from ffx2-hud.css and are unchanged. */
+.ffx2hud > .ffx2hud__minigame {
+  inset: auto;
+  top: 0;
+  left: 0;
+  width: 640px;
+  height: 360px;
+  transform-origin: 0 0;
+  z-index: 15;
+}
+
 /* FOC37-02 (FFX-2 only): Trigger Happy is pressed, so the slab has to be reachable.
    - `.ffx2hud__minigame`, the layer it sits in, is `pointer-events: none` (the HUD's rule for everything drawn
      there); the slab takes them back so a finger or a click on it is a press (TriggerHappy.ts `pointerdown`).
-   - Above the enemy-intent slab (2), the guide card (3), the advisor card (4) and the phone's guide chip (12),
-     all in the same stacking context (`#ui`): on a 390x844 phone the intent slab sat exactly on it, so it could
-     be neither read nor tapped. Below the phone's pause chip (40). The Lady Luck reels' slab is left as it was.
+   - Its stacking is the layer's (above, see above); the slab has no z-index of its own.
    - `touch-action: manipulation` and no selection: a mash of taps must not zoom the page or select its words. */
 .ffx2-trigger {
   pointer-events: auto;
-  z-index: 15;
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;

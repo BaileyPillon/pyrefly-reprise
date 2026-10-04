@@ -221,16 +221,20 @@ describe('Trigger Happy: every input can press (FOC37-02)', () => {
       expect(hitsOf(h)).toBe(1);
     });
 
-    it('the slab takes pointer events back from its host layer, and sits above the HUD cards', () => {
+    it('the slab takes pointer events back from its host layer, and the layer sits above the HUD cards', () => {
       const css = readFileSync('src/ui/ffx2/minigames.css', 'utf8');
       const rule = /\.ffx2-trigger\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
       expect(rule).toMatch(/pointer-events:\s*auto/);
       expect(rule).toMatch(/touch-action:\s*manipulation/);
-      const z = Number(/z-index:\s*(\d+)/.exec(rule)?.[1]);
+      // FOC371-02: the slab's own z-index was trapped in the stage's stacking context; the layer carries the order now
+      // (`ui-ffx2-minigame-stacking.test.ts` pins it against the intent slab, the guide, the advisor and the chips).
+      expect(rule).not.toMatch(/z-index/);
+      const layer = /\.ffx2hud\s*>\s*\.ffx2hud__minigame\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
+      const z = Number(/z-index:\s*(\d+)/.exec(layer)?.[1]);
       // Above the intent slab (2), the guide (3), the advisor (4) and the phone's guide chip (12); below the phone's pause chip (40).
       expect(z).toBeGreaterThan(12);
       expect(z).toBeLessThan(30);
-      // The Lady Luck reels' slab keeps the layer it had.
+      // The Lady Luck reels' slab keeps the layer it had (it shares the layer, and has no z-index of its own).
       expect(/\.ffx2-reels[^{]*\{[^}]*z-index/.test(css)).toBe(false);
     });
   });
