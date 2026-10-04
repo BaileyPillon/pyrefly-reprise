@@ -64,10 +64,12 @@ Both run from a **clean** worktree of this branch with `node_modules` and `publi
 
 ```
 cd D:/pyrefly-cf-switch
-PYREFLY_BROWSER=gpu node tools/deploy-pages.mjs --host=cloudflare --kind=workers --skip-tests --message="Release 38 on echoesofspira.com" --owner-override="Yes I will go with your recommendation"
+PYREFLY_BROWSER=gpu node tools/deploy-pages.mjs --host=cloudflare --kind=workers --full-verify --skip-tests --message="Release 38 on echoesofspira.com" --owner-override="Yes I will go with your recommendation"
 ```
 
-(`--host=cloudflare --kind=workers` are the defaults now; they are spelled out so the line says what it does. `--skip-tests`
+(`--host=cloudflare --kind=workers` are the defaults now; they are spelled out so the line says what it does. `--full-verify` compares
+EVERY one of the 1,932 files on both addresses, as the preview run did, the first time bytes reach the new domain: about 1.5 GB of
+downloads; drop it for later releases, where the default check (the page, all code, the changed files, a sample) is enough. `--skip-tests`
 because tsc and the full suite were green on this branch, section 6. PowerShell: `$env:PYREFLY_BROWSER='gpu'` first. Run it where
 nothing times out: a deploy is long, mostly the upload. The override words are Bailey's own, quoted; an agent never invents them.)
 
@@ -85,7 +87,7 @@ What it does, in order:
    `tools/cloudflare/wrangler.jsonc` (after `checkWranglerConfig` approved it). **This is the step that attaches echoesofspira.com.**
 5. Verifies the workers.dev address, then **`https://echoesofspira.com/`**: the bundle name first (up to 20 tries 30 s apart, because a
    fresh Custom Domain needs its DNS record and certificate), then the page, all code, the changed files and a sample, byte for byte
-   (`--full-verify` adds every file). Then looks at `https://www.echoesofspira.com/` and **warns** until section 3 is done.
+   (every file, with the `--full-verify` of the command above). Then looks at `https://www.echoesofspira.com/` and **warns** until section 3 is done.
 6. Records, as for any live build: a `host=cloudflare` line in `docs/deploys.log`, `critic/artifacts/<sha>.json`, a
    `critic/pending/<sha>.json` marker (`liveUrl` is `https://echoesofspira.com/`; the marker of 6461999e is superseded, its deep review
    carried to the new build), `critic/ledger.json`.
@@ -124,7 +126,7 @@ PYREFLY_BROWSER=gpu node tools/moved-notice-check.mjs --url=https://baileypillon
 (12 checks at 1600x900 and 390x844: the note is there and clear of the card, a real click leaves for echoesofspira.com and starts nothing,
 a click elsewhere and Enter still start the game.)
 
-### 2.4 Rehearsals done (2026-10-04, at 769fbe73; nothing was built, pushed or deployed)
+### 2.4 Rehearsals done (2026-10-04, at 6e3c1647 and, before the merge of main, at 769fbe73; nothing was built, pushed or deployed)
 
 `node tools/deploy-pages.mjs --host=cloudflare --kind=workers --skip-tests --dry-run --owner-override="Yes I will go with your recommendation"`:
 prints the production plan, "working tree clean", the critic plan (a DEEP review, because `package.json` and the lockfile changed: focused
@@ -236,10 +238,10 @@ lookalike (`onOldAddress` is one pure function; the same build ships everywhere 
 
 | Gate | Result |
 |---|---|
-| `npx tsc --noEmit` | clean (before the last commits and after) |
+| `npx tsc --noEmit` | clean at the tip |
 | Deploy tests (host, wrangler, cloudflare) | 125 tests in 3 files (80 before); 20 single-line mutations of the new logic, **all caught** (default host, legacy, preview config, base env, canonical address, live address recorded, ten-minute wait, config check, www check, custom-domain targets, preview routes, workers_dev, version pin, tools install, runner literal, learn link, old-host rule, note inside the plate) |
 | `live-url-follows-host` / `moved-notice` | 14 / 15 tests (the note commit's message says 21 for the second; it is 15) |
-| Full unit suite, `--maxWorkers=3 --testTimeout=60000`, TEMP on D: | FULLSUITE |
+| Full unit suite, `--maxWorkers=3 --testTimeout=60000`, TEMP on D: | **805 files passed, 5 skipped (810); 11,970 tests passed, 46 skipped, 1 todo; exit 0** (448 s), run at `6e3c1647`. Later commits touch only this handoff, the `AGENTS.md` Live line, `tools/moved-notice-check.mjs` and one log wording in `deploy-cloudflare.mjs`; the three deploy files, the pin test and the note test (154 tests) and tsc were run again after them: green. The first full run, at `769fbe73`, was 805 passed, 11,969 tests. |
 | `node tools/orphans.mjs` | 1221 modules, 1197 reachable, **24 orphaned: the same 24 as before** (`movedNotice.ts` is reachable) |
 | Production Cloudflare build, `BASE_PATH=/` | 1,932 files, 760.73 MiB, bundle `X5kGUd9G`; base check ok; `art-derive verify` PASS (1005 masters, 539 WebP, 862 pixel-compared); `audit` PASS (0 dangling); the load gate PASS (1049 of 1049 in Chromium 153 and WebKit 26.6, 0 failed, 21 s) |
 | Cloudflare limits | 1,932 files of 20,000; largest `art/characters/yunalesca-2/idle@2x.png` 8.11 MiB of 25 MiB; no `.git`, no `_headers`/`_redirects`/`.assetsignore`; total 760.73 MiB (no total limit is stated) |
@@ -279,5 +281,8 @@ Not run: the whole real-play audit of all 19 chapters, `art-browser-identity`, a
     host; those sites have no deploy yet); `docs/handoff/NOW.md` (not staged); `CHANGELOG.md` and the ACTIONS and DECISIONS ledgers (written
     when it is live); `docs/handoff/r39-cloudflare.md` stays as history.
 11. **Pages kind** (D-369's wording) is not wired to the Custom Domain: only the Workers kind serves echoesofspira.com.
-12. Nothing was verified against Cloudflare itself: no login was used, nothing was uploaded, no DNS or dashboard state was read. The first
+12. **Zone security applies to the Custom Domain, not to workers.dev.** The preview and workers.dev checks passed outside the zone. If the live
+    check of echoesofspira.com ever sees a 403 or a challenge page, look at Security > Bots (Bot Fight Mode), Browser Integrity Check and the WAF
+    managed rules: a Node client is not a browser. Not seen; flagged because nothing here could be tried against the zone.
+13. Nothing was verified against Cloudflare itself: no login was used, nothing was uploaded, no DNS or dashboard state was read. The first
     real run is the first time wrangler meets this config and the Custom Domain.

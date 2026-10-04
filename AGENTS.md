@@ -6,7 +6,7 @@ An unofficial fan tribute that recreates five boss encounters from Final Fantasy
 and X-2 as a painted 2.5D web game: TypeScript (strict, ESM) + Vite + Three.js,
 HTML/CSS HUDs, vitest + Playwright. Owner: Bailey. Windows 11, repo at
 `D:\Final Fantasy` (the space in the path is real: quote it).
-Live: https://echoesofspira.com (Cloudflare, since 2026-10-04: [cf-switch](docs/handoff/cf-switch.md)); the old address https://baileypillon.github.io/pyrefly-reprise/ stays up with a "we've moved" note, and saves made there stay there · Repo: `BaileyPillon/pyrefly-reprise` (public).
+Live: https://echoesofspira.com (Cloudflare since 2026-10-04, [cf-switch](docs/handoff/cf-switch.md)); old address: https://baileypillon.github.io/pyrefly-reprise/ ("we've moved" note) · Repo: `BaileyPillon/pyrefly-reprise` (public).
 
 This file is the entry point for **any** coding agent (Claude Code, Codex, Gemini,
 Jules, ...). `CLAUDE.md` only imports it. Keep it short; details live in `docs/`.

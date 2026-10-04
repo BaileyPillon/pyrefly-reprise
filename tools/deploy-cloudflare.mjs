@@ -167,7 +167,7 @@ async function waitForBundle(d, url, bundleHash, attempts = BUNDLE_ATTEMPTS, hin
 
 /** What to say when the Custom Domain does not serve the build: the Worker is already published, only the address is late. */
 const CUSTOM_DOMAIN_HINT =
-  '. The Worker itself is published and was verified on its workers.dev address above; only the Custom Domain is late. A fresh one can need a few minutes for its DNS record and certificate '
+  '. The Worker itself is published (its workers.dev address, when wrangler listed it, was verified above); only the Custom Domain is late. A fresh one can need a few minutes for its DNS record and certificate '
   + '(Workers & Pages > the Worker > Settings > Domains & Routes shows its state). If this PC looked the name up before it was attached, run `ipconfig /flushdns`. Run the same command again: wrangler skips the files Cloudflare already holds';
 
 /** Download from the address and compare bytes with the manifest (critic check CHK-017). A 200 is not a pass; identical bytes are. */
