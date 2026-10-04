@@ -2395,6 +2395,45 @@
           "deliveryNote": "Adopted as D-305 in docs/target/decisions.json; not built yet."
         }
       ]
+    },
+    {
+      "id": "picks-1003",
+      "title": "Camera Lab verdict of 3 Oct 2026",
+      "evidence": "“I tried the camera lab with these settings and I really like it but not ready to commit to it for my game yet. can you show me more of what you can use? if there's going to often be close ups of character and enemy models and backgrounds it needs to be significantly higher res with all around better grpahics, presentation, and polish. Like top notch.” Bailey, 3 Oct 2026 ~23:45 EDT, after trying the Camera Lab.",
+      "tiles": [
+        {
+          "label": "Camera Lab: the Clair Obscur / Persona battle-camera grammar (both games)",
+          "state": "verdict",
+          "empty": "A playable test, not a picture: ?camera=lab on branch camera-lab (docs/handoff/camera-lab.md there). Waiting on his word whether to commit the grammar.",
+          "note": "The lab is a private playable test of the shot grammar (over-the-shoulder command shot, a cut per action, the target close-up, the menu at the hero) in FFX Chapter I and FFX-2 Chapter IV, built on its own branch with the flag off by default (D-318, docs/plans/camera-lab-review.md). He likes it but has not committed. The route to the close-ups he asked for is higher-resolution art everywhere first (D-379, D-376, D-377) and a \"show me more of what you can use\" round that is not built yet. No tile for the lab existed on main before this entry; it was added so his reaction has a place.",
+          "build": "Not in the game. The lab lives on the camera-lab branch; nothing from it is on main.",
+          "delivery": "not-scheduled",
+          "game": "both",
+          "gameNote": "Both: the lab tests the FFX Chapter I camera and the FFX-2 Chapter IV camera (D-318).",
+          "reaction": {
+            "date": "2026-10-03",
+            "words": "I tried the camera lab with these settings and I really like it but not ready to commit to it for my game yet. can you show me more of what you can use? if there's going to often be close ups of character and enemy models and backgrounds it needs to be significantly higher res with all around better grpahics, presentation, and polish. Like top notch.",
+            "how": "Bailey, 2026-10-03 ~23:45 EDT, in chat, after trying the Camera Lab with the settings he was given",
+            "liked": [
+              "the Clair Obscur style",
+              "today's paintings",
+              "the menu at the hero",
+              "the target cut on"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [
+              "close-ups need significantly higher-res characters, enemies and backgrounds, and top-notch graphics, presentation and polish"
+            ],
+            "undecided": [
+              "committing the camera grammar to the game"
+            ],
+            "inferred": [
+              "\"can you show me more of what you can use?\" reads as a request for more options to look at before he commits (the driver's reading); it is not recorded as a decision"
+            ]
+          }
+        }
+      ]
     }
   ]
 }
