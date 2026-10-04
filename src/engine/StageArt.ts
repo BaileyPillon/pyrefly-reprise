@@ -51,6 +51,7 @@ export class StageArt {
   private ticks = 0;
   private sig = '';
   private planned = false;
+  private master: { pos: Vector3; look: Vector3; fov: number } | null = null;
 
   constructor(deps: StageArtDeps) {
     this.deps = deps;
@@ -101,6 +102,7 @@ export class StageArt {
   plan(): void {
     this.anticipateRigs();
     this.anticipateShots();
+    if (this.master) this.view(this.master.pos, this.master.look, this.master.fov);
   }
 
   /** Every rig, as it rests, measured against the figures where they stand. */
@@ -160,7 +162,9 @@ export class StageArt {
     if (frac > 0) this.governor.anticipateSize(this.deps.party(), frac);
   }
 
+  /** A view that has not been cut to yet (the MaxMix master). It is measured now and again with every plan: the figures may not be up when it arrives. */
   anticipateView(v: { pos: Vector3; look: Vector3; fov: number }): void {
+    this.master = { pos: v.pos.clone(), look: v.look.clone(), fov: v.fov };
     this.view(v.pos, v.look, v.fov);
   }
 

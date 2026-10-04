@@ -113,6 +113,9 @@ export async function pixelUrlFor(url: string, wanted?: number): Promise<string>
   const b = artBudget();
   const pin = forcedArtScale();
   const cap = pin !== null ? 4 : kind === 'backdrop' ? Math.max(b.backdropScale, decided === true ? 2 : 1) : Math.max(b.maxScale, decided === true ? 2 : 1);
-  const scale = pickScale(wanted ?? baseScaleFor(url), available, cap);
+  // The base load never takes a master above the base scale (a set that has only `@4x` loads the 1x file, not the 4x); a load the
+  // governor asks for may go as high as the cap.
+  const base = baseScaleFor(url);
+  const scale = wanted === undefined ? pickScale(base, available.filter((s) => s <= base), cap) : pickScale(wanted, available, cap);
   return (scale > 1 ? tierUrl(url, scale) : null) ?? url;
 }

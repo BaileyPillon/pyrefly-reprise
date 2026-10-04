@@ -25,11 +25,12 @@ import {
 } from '../../../src/engine/ArtBudget.ts';
 import { manifestKnowsAsset, parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { artScalesForNow, baseScaleFor, pixelUrlFor, scaleOfUrl, setHiTier, tierUrl, tieredKind } from '../../../src/engine/ArtTier.ts';
-import { artBudget, deviceClass, setArtTier, setBufferWidth, setGpuInfo } from '../../../src/engine/ArtDevice.ts';
+import { artBudget, deviceClass, setArtTier, setBufferWidth, setForcedArtScale, setGpuInfo } from '../../../src/engine/ArtDevice.ts';
 import { PAINTING_CACHE_MB, cachedPainting, clearPaintingCache, hasPainting, paintingCacheMB, type PreparedPainting } from '../../../src/engine/PaintedArtCache.ts';
 
 afterEach(() => {
   resetArtManifest();
+  setForcedArtScale(undefined);
   setHiTier(null);
   setArtTier(null);
   setGpuInfo(null);
@@ -278,6 +279,17 @@ describe('which file a painting is drawn from', () => {
     setArtTier('mid');
     expect(await pixelUrlFor('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet.png');
     expect(await pixelUrlFor('/art/backdrops/bevelle-underground.png')).toBe('/art/backdrops/bevelle-underground.png');
+  });
+  it('the base load never goes above the base scale, and a pin takes the nearest master below it', async () => {
+    setArtManifest(manifest({ tidus: { states: ['idle', 'ready'], portrait: false, tiers: { idle: [4], ready: [2, 4] } } }));
+    setArtTier('high');
+    setBufferWidth(2560);
+    expect(await pixelUrlFor('/art/characters/tidus/idle.png')).toBe('/art/characters/tidus/idle.png'); // only a 4x on disk: the base is 2
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png');
+    expect(await pixelUrlFor('/art/characters/tidus/idle.png', 2)).toBe('/art/characters/tidus/idle@4x.png'); // the governor may ask for more
+    setForcedArtScale(3);
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png'); // pinned to 3, no 3x: the 2x
+    setForcedArtScale(null);
   });
   it('without a manifest the 1x painting is drawn, as it always was', async () => {
     setArtTier('high');

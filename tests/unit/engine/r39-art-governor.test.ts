@@ -7,7 +7,10 @@ import { Mesh, Object3D, PerspectiveCamera, PlaneGeometry, Texture } from 'three
 import { describe, expect, it } from 'vitest';
 import { budgetFor } from '../../../src/engine/ArtBudget.ts';
 import { ArtGovernor, PERSIST_FRAMES, pixelsPer1xTexel, type GovernedActor, type GovernedPainting, type PixelSource } from '../../../src/engine/ArtGovernor.ts';
-import { StageArt } from '../../../src/engine/StageArt.ts';
+import { StageArt, anticipateView } from '../../../src/engine/StageArt.ts';
+import { BattleCamera } from '../../../src/engine/BattleCamera.ts';
+import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
+import { setArtTier, setForcedArtScale } from '../../../src/engine/ArtDevice.ts';
 
 const META = { width: 673, height: 766, content: { x0: 40, x1: 640, y0: 30, y1: 740 } };
 
@@ -284,5 +287,74 @@ describe('plane helper sanity', () => {
     const one = pixelsPer1xTexel(plane().matrixWorld, camera(9), 1440, META);
     const two = pixelsPer1xTexel(m.matrixWorld, camera(9), 1440, META);
     expect(two).toBeGreaterThan(one * 1.5);
+  });
+});
+
+describe('StageArt: the plan ahead', () => {
+  const manifest = () =>
+    setArtManifest(parseArtManifest({ version: 1, subjects: { tidus: { states: ['pose0', 'pose1', 'pose2'], portrait: false, tiers: { pose0: [2, 3, 4], pose1: [2, 3, 4], pose2: [2, 3, 4] } } } }));
+  const stage = (actors: GovernedActor[]) => {
+    const main = camera(9);
+    const bc = new BattleCamera(main, { rigs: { idle: { position: [0, 1.4, 9], lookAt: [0, 1, 0], fov: 32 }, close: { position: [0, 1.4, 2.2], lookAt: [0, 1, 0], fov: 32 } }, initial: 'idle' });
+    return new StageArt({ actors: () => actors, party: () => actors, camera: main, canvas: { height: 1440 }, battleCamera: bc, game: 'ffx' });
+  };
+  const after = () => {
+    resetArtManifest();
+    setArtTier(null);
+    setForcedArtScale(undefined);
+  };
+
+  it('waits for the figures, then runs 30 frames after they stand, and asks for what a rig at rest would need', () => {
+    manifest();
+    setArtTier('high');
+    const list: GovernedActor[] = [];
+    const art = stage(list);
+    for (let i = 0; i < 40; i++) art.update(); // nobody on the field: nothing to plan
+    expect(art.governor.stats().trace).toEqual([]);
+    const f = figure(1, 1);
+    list.push(f.actor);
+    for (let i = 0; i < 25; i++) art.update();
+    expect(art.governor.stats().trace).toEqual([]); // the signature settles, the 30 frames have not passed
+    for (let i = 0; i < 25; i++) art.update();
+    const trace = art.governor.stats().trace;
+    expect(trace.some((t) => t.why === 'anticipated' || t.why === 'size')).toBe(true);
+    expect(trace.every((t) => t.want >= 2)).toBe(true);
+    art.dispose();
+    after();
+  });
+
+  it('plans again when who is on the field changes', () => {
+    manifest();
+    setArtTier('high');
+    const a = figure(1, 1);
+    const list: GovernedActor[] = [a.actor];
+    const art = stage(list);
+    for (let i = 0; i < 60; i++) art.update();
+    const first = art.governor.stats().trace.length;
+    expect(first).toBeGreaterThan(0);
+    const b = figure(2, 1, plane());
+    list.push(b.actor); // an arrival
+    for (let i = 0; i < 60; i++) art.update();
+    expect(art.governor.stats().trace.length).toBeGreaterThan(first);
+    art.dispose();
+    after();
+  });
+
+  it('measures the colossus master once the figures are up, wherever the order fell', () => {
+    manifest();
+    setArtTier('high');
+    const f = figure(1, 1);
+    const art = stage([f.actor]);
+    anticipateView({ pos: camera(2.2).position, look: camera(2.2).position.clone().setZ(0), fov: 32 } as never);
+    for (let i = 0; i < 60; i++) art.update();
+    expect(art.governor.stats().trace.length).toBeGreaterThan(0);
+    art.dispose();
+    after();
+  });
+
+  it('a stage that is gone no longer takes a master view', () => {
+    const art = stage([]);
+    art.dispose();
+    expect(() => anticipateView({ pos: camera(2.2).position, look: camera(2.2).position.clone().setZ(0), fov: 32 } as never)).not.toThrow();
   });
 });
