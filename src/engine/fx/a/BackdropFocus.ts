@@ -14,6 +14,7 @@
  */
 
 import type { Material, MeshBasicMaterial, Object3D } from 'three';
+import { ssLodCell } from '../../crisp/sceneScale.ts';
 
 const PATCHED = Symbol('fxFocus');
 
@@ -38,12 +39,14 @@ export class BackdropFocus {
       const bias = this.bias;
       mat.onBeforeCompile = (shader) => {
         shader.uniforms['uFxBias'] = bias;
+        shader.uniforms['uSsLod'] = ssLodCell; // the crispness options round: a supersampled scene reads finer levels, so the soft far field adds them back
         shader.fragmentShader = shader.fragmentShader
-          .replace('void main() {', `uniform float uFxBias;\nvoid main() {`)
+          .replace('void main() {', `uniform float uFxBias;\nuniform float uSsLod;\nvoid main() {`)
           .replace(
             '#include <map_fragment>',
             `#ifdef USE_MAP
               float fxB = uFxBias * ${depth.toFixed(2)} * mix(0.33, 1.0, smoothstep(0.12, 0.62, vMapUv.y));
+              fxB += uSsLod * smoothstep(0.0, 0.5, fxB);
               vec4 sampledDiffuseColor = texture2D( map, vMapUv, fxB );
               diffuseColor *= sampledDiffuseColor;
             #endif`,

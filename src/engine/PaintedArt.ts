@@ -10,6 +10,7 @@ import { groundHullFromBottoms, type GroundHull } from './PaintedRest.ts';
 import { cachedPainting, paintingKey, type PreparedPainting } from './PaintedArtCache.ts';
 import { cleanMatte, type MatteOptions } from './PaintedMatte.ts';
 import { poseScaleFor } from './KoPoseScale.ts';
+import { crispRegisterTexture } from './crisp/CrispRig.ts';
 
 export { cleanMatte, type MatteOptions } from './PaintedMatte.ts'; // matte cleanup lives there; re-exported for existing callers
 
@@ -109,6 +110,7 @@ export function configurePaintedTexture(tex: Texture): Texture {
   tex.generateMipmaps = true;
   tex.anisotropy = maxAnisotropy;
   tex.needsUpdate = true;
+  crispRegisterTexture(tex); // the crispness options round: the anisotropy floor and the prefiltered chain, when they are on
   return tex;
 }
 

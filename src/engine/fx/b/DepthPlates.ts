@@ -19,6 +19,7 @@ import {
 import { followTransform } from './focusMaths.ts';
 import { cutPlates } from './plateMaths.ts';
 import { composeHiPlates } from './PlateCompose.ts';
+import { crispRegisterTexture } from '../../crisp/CrispRig.ts';
 
 /**
  * Option B "Living Paintings" (B1): the approved backdrop cut into depth plates at runtime.
@@ -285,6 +286,7 @@ export class DepthPlates {
     plates.forEach((plate, i) => {
       const tex = textures[i]!;
       tex.anisotropy = 8;
+      crispRegisterTexture(tex); // the crispness options round: the anisotropy floor and the prefiltered chain for a plate
       const onFloor = !!layout.floor && i === plates.length - 1;
       const mesh = onFloor ? DepthPlates.floorMesh(g, tex, layout.floor!.far, group) : DepthPlates.uprightMesh(g, tex, zs[i]!, i > 0);
       dp.base.push(onFloor ? null : { k: mesh.scale.x, y: mesh.position.y });

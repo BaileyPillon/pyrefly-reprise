@@ -22,6 +22,7 @@ import { TiltShiftShader } from './shaders/TiltShiftShader.ts';
 import { GradeShader } from './shaders/GradeShader.ts';
 import { eyeCandy } from './fx/EyeCandy.ts';
 import { GoldenHour } from './fx/a/GoldenHour.ts';
+import { CrispRig } from './crisp/CrispRig.ts';
 
 export interface RendererOptions {
   /** Element the <canvas> is appended to. Defaults to #game. */
@@ -111,6 +112,8 @@ export class Renderer {
   /** Release 39: the scene pass of an MSAA chain (disabled unless `aaMode` is `msaa`), and the SMAA pass after the grade (`PostAa.ts`). */
   private readonly msaaPass: MsaaRenderPass;
   private readonly smaaPass: SMAAPass;
+  /** The crispness options round's passes, texture registry and switchboard (`crisp/CrispRig.ts`); the defaults leave release 39's frame as it was. */
+  readonly crisp: CrispRig;
   private aa: AaMode = 'off';
   private readonly maxPixelRatio: number;
   /** Drawn after the post chain, straight onto the finished frame (the spell effects, `SpellFxLayer`). */
@@ -197,6 +200,13 @@ export class Renderer {
     this.smaaPass = new SMAAPass();
     this.composer.addPass(this.smaaPass);
     this.setAa(parseAaOverride(new URLSearchParams(window.location?.search ?? '').get('aa')) ?? artBudget().aa);
+    this.crisp = new CrispRig(
+      this.renderer,
+      this.composer,
+      { renderPass: this.renderPass, msaaPass: this.msaaPass, smaaPass: this.smaaPass, gradePass: this.gradePass, tiltH: this.tiltH, aaMode: () => this.aa, setAa: (m) => this.setAa(m) },
+      this.camera,
+      window.location?.search ?? '',
+    );
 
     this.applyPost(DEFAULT_POST);
     this.resize();
@@ -338,6 +348,7 @@ export class Renderer {
     this.renderPass.camera = camera;
     this.msaaPass.scene = scene;
     this.msaaPass.camera = camera;
+    this.crisp.beforeRender(scene, camera);
     const t = this.gradePass.uniforms['time'];
     if (t) t.value = performance.now() / 1000;
     if (this.fxA || eyeCandy.on.a) (this.fxA ??= new GoldenHour(this)).update(scene, camera);
@@ -359,6 +370,7 @@ export class Renderer {
     this.disposed = true;
     window.removeEventListener('resize', this.onWindowResize);
     this.fxA?.dispose();
+    this.crisp.dispose();
     this.msaaPass.dispose();
     this.smaaPass.dispose();
     this.composer.dispose();

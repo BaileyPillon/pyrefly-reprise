@@ -44,6 +44,7 @@ import type { AtbSnapshot, BattleEvent, BattleState, CombatantId, TurnPreview } 
 import type { HudPort } from './HudPort.ts';
 import { ParticleField, ParticlePresets } from './Particles.ts';
 import { oversoulIds, oversoulTriggeredBy } from './OversoulMoment.ts';
+import { sceneScale } from './crisp/sceneScale.ts';
 
 /** Option B's numbers (README "The options", row B). Every one is ours, not the game's. */
 export const OVERSOUL_LOOK = {
@@ -187,7 +188,7 @@ export class OversoulLook {
     field.name = 'oversoul-motes';
     // Resolution parity with the scene's own motes (`BattleScreen.syncPixelScale`: 1 = 900 px tall).
     field.onBeforeRender = (renderer: WebGLRenderer): void => {
-      field.setPixelScale(Math.max(0.5, (renderer.domElement.height || 900) / 900));
+      field.setPixelScale(Math.max(0.5, ((renderer.domElement.height || 900) * sceneScale()) / 900));
     };
     this.figure.parent.add(field);
     this.motes = field;

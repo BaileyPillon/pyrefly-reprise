@@ -32,6 +32,8 @@ export const paintedVertexShader = /* glsl */ `
 export const paintedFragmentShader = /* glsl */ `
   uniform sampler2D map;
   uniform sampler2D noiseMap;
+  // The crispness options round: a (negative) mip bias of the colour fetch; 0 = sampled exactly as before.
+  uniform float mipBias;
   uniform float opacity;
   uniform float brightness;
   uniform vec3 tint;
@@ -100,7 +102,7 @@ export const paintedFragmentShader = /* glsl */ `
     // Mirroring is done with a negative plane scale.x, not in UV space, so the
     // texture's own orientation (and the rim sampling below) stays honest.
     vec2 uv = vUv;
-    vec4 texel4 = texture2D(map, uv);
+    vec4 texel4 = texture2D(map, uv, mipBias);
     float a = texel4.a;
 
     // --- edge feather --------------------------------------------------------
