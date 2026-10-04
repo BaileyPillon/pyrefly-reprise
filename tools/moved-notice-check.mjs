@@ -96,10 +96,11 @@ async function installRoutes(context) {
       if (!existsSync(file)) return route.fulfill({ status: 404, contentType: 'text/plain', body: `not in the build: ${url.pathname}` });
       return route.fulfill({ status: 200, contentType: MIME[extname(file).toLowerCase()] ?? 'application/octet-stream', body: readFileSync(file) });
     }
+    // A live address is the real network, and when it IS the new address (--url=https://echoesofspira.com/) the stub must not shadow it either.
+    if (live && url.origin === live.origin) return route.continue();
     if (url.origin === NEW_ORIGIN) {
       return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: '<!doctype html><title>the new address (stub)</title><p>stub</p>' });
     }
-    if (live && url.origin === live.origin) return route.continue();
     return route.abort('blockedbyclient');
   });
 }

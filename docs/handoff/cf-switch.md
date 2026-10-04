@@ -98,6 +98,9 @@ same command again: wrangler skips the files Cloudflare already holds. To look w
 After it (the usual release record, as in the deploy procedure): copy the new `docs/deploys.log` line, `critic/ledger.json`,
 `critic/artifacts/<sha>.json`, `critic/cleared/`, `critic/pending/` into main, `git rm` the superseded marker, commit, push main; merge
 `cf-switch` into main (it is `origin/main` plus these commits, so a fast-forward unless main moved); add the CHANGELOG entry (2.5).
+To look at the live address with real input (and prove the old-address note is not there):
+`PYREFLY_BROWSER=gpu node tools/moved-notice-check.mjs --url=https://echoesofspira.com/ --expect=hidden --out=docs/screenshots/cf-switch/live`
+(8 checks; the live critic review, `critic/runner/live.js`, now aims at this address by default).
 
 ### 2.3 The GitHub "we've moved" deploy, later (round 21 is finished: it is recorded on main as c3c4daba)
 
@@ -157,7 +160,8 @@ dashboard", Workers "Custom Domains", Fundamentals "Redirect one domain to anoth
    redirects"; nothing is ever sent to them. If the dashboard offers to create this record when you save the rule, accept it.)
    Do **not** add `www` as a second Custom Domain of the Worker: then, until the rule works, `www` would serve the game and split saves.
 2. **The rule.** Rules > **Overview** > **Create rule** > **Redirect Rule**. Either pick the template **Redirect from WWW to root**
-   (Rules > Overview > Templates) and check it matches the values below, or set them by hand:
+   (Rules > Overview > Templates; its own values, from Cloudflare's example page of that name, are the generic wildcard `https://www.*` to
+   `https://${1}`, 301, Preserve query string, which does the same on this zone) or set the zone's own values by hand:
    - Rule name: `www to the apex`
    - When incoming requests match: **Wildcard pattern**, Request URL `https://www.echoesofspira.com/*`
    - Then: **Target URL** `https://echoesofspira.com/${1}`, **Status code** `301`, **Preserve query string** checked
