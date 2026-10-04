@@ -32,7 +32,7 @@ import { radialCanvas, rng } from '../engine/ProceduralArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import type { SceneSlots } from './index.ts';
-import { addPlateWings } from './plateWings.ts';
+import { addPlateWings, paintPlateWings } from './plateWings.ts';
 import type {
   SceneBuild,
   SceneBuildOptions,
@@ -90,8 +90,15 @@ const BACKDROP = { width: 78, distance: -50, centreY: -2.82 } as const;
  * The plate's wings (PR-0300; FFX-2 only: Chapters IV and XIII stand here): the outer 23 % of the painting mirrored
  * out 18 units each side. At 2000x1012 the enemy, action and Bahamut rigs put the plane's right edge at 93 to 96 %
  * of the frame (86 to 88 % at 2.37) and the party rigs showed its left edge; the rigs themselves are unchanged.
+ *
+ * Release 38 (D-343): painted wings, left candidate 3 and right candidate 1 of the 2026-10-03 plate-wing round, replace the
+ * mirrored ones where `public/art/backdrops/wings/` holds them (716 px strips: 620 of wing, 96 over the plate's edge).
  */
-export const BEVELLE_PLATE_WINGS = { width: 18, reflect: 0.23 } as const;
+export const BEVELLE_PLATE_WINGS = {
+  width: 18,
+  reflect: 0.23,
+  painted: { left: 'art/backdrops/wings/bevelle-underground-left.png', right: 'art/backdrops/wings/bevelle-underground-right.png', stripPx: 716, overlapPx: 96, plateWidthPx: 2688 },
+} as const;
 
 /** The plate's plane and the rig table, exported for `tests/unit/plate-wings.test.ts`. */
 export const BEVELLE_UNDERGROUND_BACKDROP = BACKDROP;
@@ -1177,6 +1184,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
 
   let backdrop = await Backdrop.create(backdropOptions);
   addPlateWings(backdrop, BEVELLE_PLATE_WINGS);
+  await paintPlateWings(backdrop, BEVELLE_PLATE_WINGS);
   backdrop.applyTo(group);
 
   // ------------------------------------------------------------------ lights
@@ -2110,6 +2118,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
       void (async (): Promise<void> => {
         const next = await Backdrop.create(backdropOptions);
         addPlateWings(next, BEVELLE_PLATE_WINGS);
+        await paintPlateWings(next, BEVELLE_PLATE_WINGS);
         const wasIn = backdrop.group.parent;
         backdrop.dispose();
         backdrop = next;
