@@ -49,6 +49,11 @@ export function endSpellAction(ctx: EventCtx): void {
   ctx.acting = undefined;
 }
 
+/** The action a blow belongs to: its striker's latest (`awaitSpellLanding`'s own rule); SKILL TRAVEL reads it to wait on that action's effect clock. */
+export function actionOfBlow(ctx: EventCtx, sourceId: CombatantId | undefined): ActingAction | undefined {
+  return sourceId === undefined ? ctx.acting : byActor.get(ctx)?.get(sourceId);
+}
+
 /**
  * Start (or find) the effect for this blow and wait until it lands. The camera
  * cuts to the target first, so the spell is seen arriving rather than only its

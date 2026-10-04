@@ -356,7 +356,6 @@ export class FFX2BattleHud implements HudPort {
       <div class="ig-stat-list ffx2hud__party"></div>
       <div class="ffx2hud__command" hidden></div>
       <div class="ffx2-cmd-info" hidden><span class="ffx2-cmd-info__label" data-role="label"></span><span class="ffx2-cmd-info__desc" data-role="text"></span></div>
-      <div class="ffx2hud__minigame"></div>
       <div class="ffx2-atbmode" hidden></div>
       <i class="ffx2hud__fence" data-fence="party-top"></i>
       <i class="ffx2hud__fence" data-fence="party-right"></i>
@@ -369,6 +368,14 @@ export class FFX2BattleHud implements HudPort {
     this.platesLayer = document.createElement('div');
     this.platesLayer.className = 'ffx2hud__plates';
 
+    // FOC371-02: the minigame layer (Trigger Happy, Lady Luck) is a third grid layer beside the stage, not a child of
+    // it. The stage's `transform` makes it its own stacking context, so a slab inside it could never out-rank the
+    // enemy-intent slab (`.eint`, z-index 2, on the overlay): the intent card painted over the slab on desktop. Out
+    // here the slab and the card compete in one context, and the layer is transformed exactly like the stage in
+    // `layout()` (the plates layer's trick), so the overlays keep their 640x360 authored geometry.
+    this.minigameEl = document.createElement('div');
+    this.minigameEl.className = 'ffx2hud__minigame';
+
     // PR-0135: the grain and vignette cover the whole window, not the 16:9
     // stage (a hard edge either side at 2000x1012 and 2560x1080). First child,
     // so they still paint under every panel.
@@ -378,6 +385,7 @@ export class FFX2BattleHud implements HudPort {
     this.el.appendChild(surface);
     this.el.appendChild(this.stage);
     this.el.appendChild(this.overlay);
+    this.el.appendChild(this.minigameEl);
     this.el.appendChild(this.platesLayer);
     root.appendChild(this.el);
 
@@ -388,7 +396,6 @@ export class FFX2BattleHud implements HudPort {
     this.commandEl = this.stage.querySelector('.ffx2hud__command') as HTMLElement;
     this.commandInfoEl = this.stage.querySelector('.ffx2-cmd-info') as HTMLElement;
     this.help = new CommandHelp(this.commandInfoEl, () => FFX2_COMMAND_HELP_PLACEMENT_RESOLVED && battleHelpOn(), () => this.placeCommandBand());
-    this.minigameEl = this.stage.querySelector('.ffx2hud__minigame') as HTMLElement;
     // FFX-2 ONLY: the Active/Wait chip. FFX's CTB has no such Config entry.
     this.activeWaitEl = this.stage.querySelector('.ffx2-atbmode');
     this.fenceTopEl = this.stage.querySelector('[data-fence="party-top"]');
@@ -1137,6 +1144,7 @@ export class FFX2BattleHud implements HudPort {
     this.stageY = y;
     this.stage.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
     this.platesLayer.style.transform = this.stage.style.transform;
+    this.minigameEl.style.transform = this.stage.style.transform; // FOC371-02: the minigame layer is a grid layer too
     this.layoutFences();
     if (this.commandInfoEl && !this.commandInfoEl.hidden) this.placeCommandBand();
   }

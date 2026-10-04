@@ -97,7 +97,9 @@ async function decodeStatus(path, ext) {
     try {
       const sharp = (await import('sharp')).default;
       const stats = await sharp(path).stats();
-      const blank = stats.channels.slice(0, 3).every((c) => c.max === c.min);
+      // Alpha counts (2026-10-03): an alpha MASK is one RGB value whose shape lives in the alpha channel
+      // (the living-portrait eye windows), so it is blank only when every channel it has, alpha included, is flat.
+      const blank = stats.channels.every((c) => c.max === c.min);
       return blank ? 'blank' : 'ok';
     } catch {
       return 'failed';

@@ -16,6 +16,8 @@
  * shipped idle, laid down.
  */
 
+import { logicalArtUrl } from './ArtShipped.ts';
+
 /** The tip back toward the floor, radians: readable from the low battle camera (FF7's KO uses 0.55). */
 export const KO_FALLBACK_TILT = 0.55;
 
@@ -37,7 +39,8 @@ export function lacksKoPainting(actor: object): boolean {
   const urls = (actor as { poseUrls?: Readonly<Record<string, string>> }).poseUrls;
   if (!urls) return false;
   const url = urls['ko'];
-  return url === undefined || !/\/ko\.png(?:[?#].*)?$/.test(url);
+  // The master's name: a derived `ko.webp` is the KO painting itself (ArtShipped.ts), not a stand-in.
+  return url === undefined || !/\/ko\.png(?:[?#].*)?$/.test(logicalArtUrl(url));
 }
 
 /**

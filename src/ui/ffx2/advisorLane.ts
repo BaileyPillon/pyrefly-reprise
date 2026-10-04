@@ -83,6 +83,12 @@ const FOOT_GAP = 2;
  * girls' legs (mode `squeezed`) is the lesser evil.
  */
 export const MIN_UNDER_ROOM = 36;
+/**
+ * How far a girl's feet may reach into the chip's strip (grid px) before she counts as standing in the
+ * card's band (PR-0330). The chip is about 9 px tall and docks on the card's top-left corner; a graze
+ * this small touches only the chip's top edge, never the card.
+ */
+export const CHIP_GRAZE = 4;
 /** `move-advisor.css`'s own `max-height`; a lane with more room than this needs no inline cap. */
 export const CARD_CSS_CAP = 104;
 
@@ -95,7 +101,13 @@ export function solveAdvisorLane(input: LaneInput): Lane {
   const { figures, floor, wall, base, chip, cardHeight, cap } = input;
 
   // 1. The old lane: past every girl whose feet are below the card's top.
-  const top = base - cardHeight - chip;
+  // PR-0330: a girl whose feet only graze the chip's own strip (within
+  // {@link CHIP_GRAZE} of the top) is not in the band. At the colossus framing
+  // Paine's feet land 1 px inside it, which sent the card to the `under` lane
+  // with a cap 2.6 px short of its full text; the cap then stuck for the
+  // decision (a cap only tightens) and the card lost its hit chance, status
+  // and reason. The card's own body is nowhere near her feet.
+  const top = base - cardHeight - chip + CHIP_GRAZE;
   let after = floor;
   // A girl standing past the wall (under the rows) is not in the lane at all.
   for (const f of figures) if (f.foot > top && f.left < wall) after = Math.max(after, f.right);

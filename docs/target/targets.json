@@ -919,7 +919,7 @@
           "label": "Living portrait feel (both)",
           "src": "docs/concepts/pause-until-dawn/prototype-v2/shots/v6-pilot/clip-A2-measured.mp4",
           "state": "approved",
-          "delivery": "not-scheduled",
+          "delivery": "implemented",
           "game": "both",
           "gameNote": "Both: the rigged plate is Yuna X-2, but the pause portrait runtime (the parametric face rig, gaze and continuous expression) is shared plumbing (CHK-020) that every living portrait, whichever game's character, will run on.",
           "note": "docs/plans/living-portrait-v6-method.md's options round: three 8s frontal clips from the v6 pilot rig — clip-A-measured.mp4 (Until Dawn's own numbers: idle drift, no idle saccades, the eyes leading the input), clip-B-livelier.mp4 (a glance every 3-6s, a small blink on a big one, more smiles) and clip-C-quiet.mp4 (smaller, slower). No build reaches the nine painted keys until this pick is exercised there (rule 9). docs/target/decisions.json D-064. UPDATED 2026-09-25: Part 2 (PILOT.md) fixed the 'never still' measurement and the brow fold, offering clip-A2/B2/C2. Bailey named A2 as his own pick, not the driver's placeholder — see D-143 (supersedes D-064's driver's-choice framing).",

@@ -1,5 +1,7 @@
 # Chapter: Evrae on the deck of the Fahrenheit (FFX): the scene and the NEAR / FAR switch
 
+> **Update 2026-10-03 (E1-H, D-360, `docs/handoff/r38-evrae.md`):** NEAR Evrae's ground point is no longer (2.3, -0.9, -4.7): it is (3.9923, -0.9, -4.7), the centre it resolved to before (3.018: `ProneLay` slid the wide idle's plane 0.72 right) plus 0.9743 for the repainted idle's canvas, and the deck pins it (`enemySpots`: `evrae`, `cid`). Where this file says 2.3, read the pre-E1-H data spot (`EVRAE_NEAR_SPOT_BEFORE_E1H`), which the deck's generic enemy slot table keeps for Chapters XVII and XVIII.
+
 **Game case: FFX only** [AGENTS.md rule 14]. The airship distance mechanic "has no X-2
 counterpart" (`research/ffx-evrae-airship.md` §0.4), and nothing here applies to an FFX-2
 chapter. The absence check is the last `describe` in `tests/unit/chapters/evrae-scene.test.ts`:

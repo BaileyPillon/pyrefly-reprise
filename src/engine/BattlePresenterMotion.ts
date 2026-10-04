@@ -3,10 +3,12 @@
  * calls the beats make (`BattlePresenterBeats.ts` `actionStart` / `actionEnd`).
  *
  * Shared plumbing (both + FF7), additive: a presenter with no `actionMotion`
- * in its deps (every FFX and FFX-2 chapter) plays exactly as before. FF7 is the
- * one game that supplies it (`src/app/screens/BattleScreenFf7Motion.ts`): a
- * melee attacker runs to the target before the blow and back after it, and the
- * boss's physical moves get a lunge or a recoil.
+ * in its deps (every FFX chapter) plays exactly as before. FF7 supplies it
+ * (`src/app/screens/BattleScreenFf7Motion.ts`): a melee attacker runs to the
+ * target before the blow and back after it, and the boss's physical moves get a
+ * lunge or a recoil. FFX-2 supplies a smaller one since r38-motion (RUN-IN,
+ * `src/app/screens/BattleScreenRunIn.ts`: `strike`, `close`, `lungeFor`,
+ * `longRange` only; sourced for FFX-2, none for FFX).
  *
  * Like the rest of the presenter this imports no `three` and no DOM (hard rule 1).
  */
@@ -21,6 +23,11 @@ export interface MotionCtx {
   readonly stage: BattleStage;
   readonly speed: PlaybackSpeed;
   sleep(ms: number): Promise<void>;
+  /**
+   * Play nothing: REDUCE MOTION is on or, FFX-2 only, a command menu is open (r38-motion, `motion/MotionGate.ts`).
+   * A step that still has to happen (the run home) snaps instead of playing. Absent reads as false.
+   */
+  readonly still?: boolean;
 }
 
 /** A game's motion around each action. Both calls may resolve at once (nothing to do). */
@@ -29,6 +36,23 @@ export interface ActionMotionPort {
   open(event: ActionStartEvent, ctx: MotionCtx): Promise<void> | void;
   /** At `action-end`, before the frame returns to neutral: e.g. run back home. */
   close(actorId: CombatantId, ctx: MotionCtx): Promise<void> | void;
+  /**
+   * RUN-IN (r38-motion, FFX-2 only): at `action-start`, after the shot has opened and before the house strike, the
+   * figure runs to its target. Called only when the presenter's gate allows the look (`motion/MotionGate.ts`);
+   * `pose` is the pose the action drew. Optional: FFX and FF7 have none.
+   */
+  strike?(event: ActionStartEvent, ctx: MotionCtx, pose: string): Promise<void> | void;
+  /**
+   * How far the house strike's lunge carries `actorId` now, world units, when she has run in and only the blow is
+   * left (`undefined` = she has not: the lunge is today's 1.4 from where she stands).
+   */
+  lungeFor?(actorId: CombatantId): number | undefined;
+  /**
+   * Does `actorId` fire from where she stands? FFX-2: a long-range dressphere (Gunner, Gun Mage, Lady Luck,
+   * Alchemist, Trainer; `research/ffx2-combat-core.md` section 1), so her shot flies instead of her running in
+   * (`motion/SkillTravel.ts`).
+   */
+  longRange?(actorId: CombatantId): boolean;
   /** True when this action's wind-up is the game's own (painted key poses): the house lunge and squash stay out. */
   ownsWindUp?(event: ActionStartEvent): boolean;
   /** The game's own victory moment in place of the house `victory` pose (FF7's D1 win poses and hold). */

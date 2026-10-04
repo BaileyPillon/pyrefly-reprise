@@ -32,7 +32,7 @@ function fatal(message: string, detail?: unknown): void {
     <div style="position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:32px">
       <div style="max-width:42ch;color:#dbe6f7">
         <h1 style="font-family:var(--font-display);letter-spacing:.14em;text-transform:uppercase;font-size:20px">
-          Pyrefly Reprise
+          Echoes of Spira
         </h1>
         <p style="color:#9fb3cf;line-height:1.6">${message}</p>
       </div>

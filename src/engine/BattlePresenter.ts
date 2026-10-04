@@ -60,6 +60,7 @@ import { headlineEnemy } from '../battle/common/headlineEnemy.ts';
 import { paceFactor } from './pace.ts';
 import { shotHoldMs } from './fx/shotHold.ts';
 import { applyEventToVitals, captureVitals, projectState, type VitalsMap } from './BattlePresenterVitals.ts';
+import { blowHeld, revealBlow } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL: a blow whose shot is in flight shows its numeral and HP rows when it lands
 
 // Re-exported: the loop's public types live with the ports (`BattlePresenterPorts.ts`).
 export type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
@@ -138,6 +139,13 @@ export class BattlePresenter {
       () => this.speed,
     );
     this.ctx.menuOpen = () => this.pendingMenu !== null; // r37 slots: FFX-2 key paintings stand aside for a menu
+    this.ctx.reveal = async (event) => { // SKILL TRAVEL: the late half of what `playBurst` does before an event (the HUD's look, then the HP rows)
+      const was = this.phase;
+      this.phase = `hud:${event.type}`;
+      await this.notifyHud(event);
+      this.presentVitals(event);
+      this.phase = was;
+    };
     this.actingState = new ActingState(() => this.deps.hud);
     this.cutIns = new TurnCutInBeat({
       moments: deps.moments ?? null,
@@ -256,9 +264,13 @@ export class BattlePresenter {
       if (this.aborted) return { dropped: events.length - i };
       const event = events[i]!;
 
-      // The HUD gets first look at every event so it can raise a transient.
-      this.phase = `hud:${event.type}`;
-      await this.notifyHud(event);
+      // The HUD gets first look at every event so it can raise a transient. A blow whose spell or shot is still on its
+      // way (SKILL TRAVEL, r38-motion) is shown to it when the blow lands instead: its numeral and HP rows wait.
+      const held = blowHeld(this.ctx, event);
+      if (!held) {
+        this.phase = `hud:${event.type}`;
+        await this.notifyHud(event);
+      }
 
       const started = Date.now();
       if (event.type === 'minigame-request') {
@@ -288,7 +300,7 @@ export class BattlePresenter {
       // the number from before the command for as long as the command took to
       // animate — a KO'd Yuna drawn alive at 711/1500 for 2145 ms, and an
       // ordinary hit's numeral 4.5 s ahead of its own bar.
-      this.presentVitals(event);
+      if (!held) this.presentVitals(event);
 
       this.phase = `play:${event.type}`;
       this.actingState.observe(event);
@@ -298,6 +310,7 @@ export class BattlePresenter {
       this.ctx.opening = this.callouts.isOpening;
       if (event.type === 'victory' || event.type === 'defeat') this.ctx.stage.camera.hold?.(false); // PR-0150: the end shot always plays
       await playEvent(this.ctx, event);
+      if (held) await revealBlow(this.ctx, event); // the beat shows it itself; this only makes sure a held blow is never lost
       this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });
 
       if (event.type === 'victory' || event.type === 'defeat') {

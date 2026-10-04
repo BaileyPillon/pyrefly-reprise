@@ -1,0 +1,62 @@
+{
+  "schema": "visual-options/1",
+  "kind": "visual-options-judgement",
+  "provisional": true,
+  "date": "2026-10-03",
+  "note": "Critic judgement of today's options. Nothing is built into main or installed; sub-scores are estimates until a deep round re-measures a shipped build. Media were opened by the critic (restage sheets, motion clip frame tiles, art contact sheets, live-vs-preview stills, a 20-file WebP identity check). Not opened: Rikku Berserker and Den of Woe sheets, 7 preview clips, FFX-2 apex clips, 2560x1440 runs.",
+  "baseline": { "round": "19b", "build": "main c69de96a (release 36)", "plan": "critic/reviews/visual-plan-2026-10-03.md" },
+  "scores": {
+    "now": { "characters": 7.9, "enemies": 7.5, "animation": 6.9, "fidelity": 8.1, "camera": 7.7, "visualCategory": 8.9 },
+    "ifRecommendedShip": { "characters": "8.2 to 8.4", "enemies": "7.8 to 8.1", "animation": "7.3 to 7.5", "fidelity": "8.4 to 8.6", "camera": "7.9 to 8.0" },
+    "visualFloor": "Not crossed by today's options alone: PR-0311 closes with Yuna Thief, but PR-0310 stays open in Ch VIII (no position-only option clears it). Evrae needs its own mockup round."
+  },
+  "budgetFinding": "Morning page says 23.9 MB of headroom; the preview and bytes lanes measured 1.37 to 1.67 MB under the strict 800,000,000 reading with the art installed. Nothing in the recommended set fits under the strict reading until lossless WebP (or a MiB answer) lands.",
+  "items": [
+    { "id": "restage-D", "game": "ffx", "verdict": "baseline", "gain": "0", "why": "Today: Auron over Yunalesca's gown, party touching BFA, Tidus inside Evrae's coil." },
+    { "id": "restage-A", "game": "ffx", "verdict": "reject", "gain": "camera +0.1 Ch II only", "why": "Ch II clears at a knife-edge; in Ch III and VIII the party runs under the command list." },
+    { "id": "restage-B", "game": "ffx", "verdict": "recommend Ch III (boss 1.45 R / 0.94 back); acceptable Ch II", "gain": "camera +0.2, enemies +0.1", "why": "Clears Ch II and III at 1600x900 and 2000x1012; boss gets smaller and the advisor card lies over the near pagoda in Ch III." },
+    { "id": "restage-C", "game": "ffx", "verdict": "recommend Ch II only", "gain": "camera +0.2", "why": "One fixed move (party 0.5 L, boss 0.5 R) agrees at three sizes; fails Ch III at 1600x900." },
+    { "id": "restage-N", "game": "ffx", "verdict": "hold until deterministic", "gain": "enemies +0.2 (0.1 to 0.3)", "why": "Natus master returns in 5 of 6 runs and is visibly better; plan blocks the thread about 2 s and the card leaves its pin." },
+    { "id": "restage-Evrae", "game": "ffx", "verdict": "reject every position-only move; mockup round needed", "gain": "0", "why": "Even B at 2000x1012 (7 px on the metric) still shows Tidus and Rikku overlapping the coil." },
+    { "id": "motion-M1-ffx2", "game": "ffx2", "verdict": "recommend", "gain": "animation +0.2 (0.1 to 0.3), camera +0.1", "why": "Run-in of about 2 s is sourced (battle-camera-perspectives.md); measured 1.70 s. Small dark figure, so legibility is modest; adds 0.83 s under ATB." },
+    { "id": "motion-M1-ffx", "game": "ffx", "verdict": "acceptable, hold for Bailey's yes", "gain": "animation +0.1", "why": "Reads well in the clip; no source for FFX's approach; +1.1 s per Overdrive." },
+    { "id": "motion-M2", "game": "both", "verdict": "reject as a priority", "gain": "animation +0.05", "why": "Pin motion is nearly invisible in the frames; the hit kick is hidden by the flash and the card; pixel-difference test showed no separable motion." },
+    { "id": "motion-M3", "game": "both", "verdict": "acceptable, recommend after numeral sync fix", "gain": "animation +0.1, enemies +0.05", "why": "Damage numeral still lands before the bolt in the clips; FFX-2 violet beam is faint." },
+    { "id": "art-kimahri-breath-c2", "game": "ffx", "verdict": "acceptable", "gain": "+0.02", "why": "Horn fixed; skin and costume brighter than the idle." },
+    { "id": "art-kimahri-rage-c3", "game": "ffx", "verdict": "acceptable, hold", "gain": "+0.02", "why": "First Rage painting with a clear roar; black vest, orange sash and bright blue skin drift from the idle." },
+    { "id": "art-paine-warrior-plant-c7", "game": "ffx2", "verdict": "recommend", "gain": "+0.03", "why": "Sword planted steeply, matches the installed attack." },
+    { "id": "art-tidus-spiral-cut-c1", "game": "ffx", "verdict": "acceptable", "gain": "+0.02", "why": "Dark baggy trousers fixed; boots brown against the idle's dark ones." },
+    { "id": "art-tidus-slice-dice-c76-energy-rain-c71", "game": "ffx", "verdict": "recommend", "gain": "+0.03", "why": "Costume now matches the idle." },
+    { "id": "art-auron-shooting-star-c81-banishing-blade-c60", "game": "ffx", "verdict": "acceptable", "gain": "+0.02", "why": "Coat still opens and fans." },
+    { "id": "art-auron-dragon-fang-65", "game": "ffx", "verdict": "reject", "gain": "0", "why": "Blue hakama and a different torso: not Auron's costume." },
+    { "id": "art-rikku-white-mage-twirl-start", "game": "ffx2", "verdict": "recommend", "gain": "+0.02", "why": "Clean candidate for the one open key." },
+    { "id": "art-dark-knights-repicks", "game": "ffx2", "verdict": "recommend", "gain": "+0.05", "why": "Costumes closer to the idles; greatswords large by design." },
+    { "id": "art-mage-follow-throughs", "game": "ffx2", "verdict": "recommend", "gain": "+0.05", "why": "Staff no longer dominates; clean pick for all six." },
+    { "id": "art-rikku-berserker", "game": "ffx2", "verdict": "reject; keep c3, c6, c7", "gain": "0", "why": "No clean improvement; a real fix needs an identity LoRA (Bailey's yes, rules 10 and 11)." },
+    { "id": "preview-P1-yuna-thief", "game": "ffx2", "verdict": "recommend (first)", "gain": "characters +0.3, closes PR-0311", "why": "Live shows purple mannequins in Ch VI; the painted Yuna is reachable via the Gunner ring." },
+    { "id": "preview-P2-P3-rikku-warrior-paine-thief", "game": "ffx2", "verdict": "defer", "gain": "0 until a ring reaches them", "why": "Unreachable in shipped play; costumes are estimates; 8.4 MB." },
+    { "id": "preview-P4-ffx-apex", "game": "ffx", "verdict": "split: Lulu Fury acceptable; Wakka Slots and Kimahri Stone Breath reject; Rikku Mix and Yuna Grand Summon unverified", "gain": "+0.02", "why": "Wakka jacket drifts to red-orange; Kimahri upright pose is weaker than the live lunge; two previews are identical to live." },
+    { "id": "preview-P5-ffx2-apex", "game": "ffx2", "verdict": "hold for Bailey's menu-suppression answer", "gain": "0 to +0.1", "why": "The menu hides most keys in real play." },
+    { "id": "preview-P6-bahamut-shuyin-telegraph", "game": "ffx2", "verdict": "recommend", "gain": "enemies +0.15, animation +0.1", "why": "Fires today on the existing charge beat; Shuyin's clean lean replaces a ghosted frame." },
+    { "id": "preview-P7-wired-telegraphs", "game": "mixed", "verdict": "Flux and Braska's Final Aeon recommend with the 950 ms wiring yes; Omnis acceptable; Yunalesca and Natus near idle; Evrae reject; Trema and LeBlanc unplayed", "gain": "enemies +0.15, animation +0.1 for Flux and BFA", "why": "Evrae's telegraph paints a floating curled shape against a long serpent; wiring is an added wait and a deep-class change." },
+    { "id": "preview-P8-rerolls", "game": "ffx2", "verdict": "recommend", "gain": "+0.03", "why": "Net 992,306 bytes smaller than what they replace." },
+    { "id": "art-plate-wings", "game": "ffx2", "verdict": "recommend (Bevelle viewed, Den not)", "gain": "fidelity +0.05, camera +0.05", "why": "No visible seam in the wide strip; plate hash changes so Bailey must approve the extended painting." },
+    { "id": "bytes-A-depth8", "game": "both", "verdict": "recommend", "gain": "3.6 MB", "why": "Use d>>8, identical in game; not round(d/257)." },
+    { "id": "bytes-B-png-effort", "game": "both", "verdict": "acceptable", "gain": "26 MB", "why": "Pixel-identical, derive at build only." },
+    { "id": "bytes-C-webp", "game": "both", "verdict": "recommend (top enabler)", "gain": "212 MB; fidelity +0.2, enemies +0.1 via held masters", "why": "Critic re-ran 20 of 20 identical decodes, 30.7 percent smaller; decode 1.7x slower, paid at load." },
+    { "id": "bytes-C-partial", "game": "both", "verdict": "acceptable, safe first step", "gain": "about 77 MB", "why": "2x masters and backdrops only." },
+    { "id": "bytes-D-audio-bitrate", "game": "both", "verdict": "reject", "gain": "17.8 MB at 192 kbps", "why": "Audible loss unknown; agents cannot hear." }
+  ],
+  "rankedNextMoves": [
+    { "rank": 1, "move": "Answer D-332 and build lossless WebP (C-partial, then C, with A and B)", "game": "both", "gain": "fidelity +0.2; precondition for rows 2 and 5" },
+    { "rank": 2, "move": "Install shipped-play art: Yuna Thief, D-333/D-334 re-rolls, Bahamut and Shuyin telegraphs, Paine plant, Tidus Slice and Dice and Energy Rain, plate wings (asks 1, 2, 3, 6, 8)", "game": "mostly ffx2", "gain": "characters +0.3 to +0.4, enemies +0.15, closes PR-0311" },
+    { "rank": 3, "move": "Re-stage Ch II (C) and Ch III (B); start the Evrae mockup round (ask 10)", "game": "ffx", "gain": "camera +0.2 now, +0.2 more with Evrae; needed for the visual floor" },
+    { "rank": 4, "move": "M3 with numeral sync plus M1 for FFX-2, with the push-in yes (ask 11)", "game": "both / ffx2", "gain": "animation +0.2 to +0.3, camera +0.1" },
+    { "rank": 5, "move": "Wire the action-start telegraph for Flux and Braska's Final Aeon (ask 5); Natus colossus follows once the plan is a per-chapter table", "game": "ffx", "gain": "enemies +0.15, animation +0.1" }
+  ],
+  "limits": [
+    "Camera-lab grammar (D-318) is untouched and may change rows 3 and 4.",
+    "Audio is unverified and blocks any weighted score.",
+    "Live Ch III rest gap read +1 on the builder's run against round 19b's -44 to -100; PR-0310 for Ch III is the least reproduced of the three."
+  ]
+}

@@ -44,19 +44,29 @@ const PANEL_CLEAR = 0.78;
 /** How far a destructible part may stray from its machine, in world units. */
 const PART_LEASH = 3.2;
 
+/**
+ * The `userData` key a presentation layer sets on a figure it stands itself (the MAX mix's chapter table,
+ * `engine/fx/mix/stageTable.ts`, PR-0310): the relaxation neither moves nor measures a figure that carries it, exactly as for a
+ * `pinned` fiend. Without it the relaxation keeps re-spreading a table's formation to the camera of the moment (the opening
+ * dolly, the idle drift, the HUD panels as they appear), and where the fiends end up depends on the timing of the battle's
+ * first seconds: Chapter III's boss ended 0.5 to 1.2 units from where the table put it on eight seeds of nine (r38-restage).
+ * Game case: both (a flag nothing sets outside a table's fight, so no other chapter reads it).
+ */
+export const STAGE_HOLD_KEY = 'pyrefly:stage-hold';
+
 /** What the relaxation needs to know about one staged figure. */
 export interface RelaxActor {
   kind: 'party' | 'enemy';
   actor: { position: Vector3 };
   parentId?: CombatantId;
-  /** Figure-less (`PartAnchors.ts`) or pinned (`SceneSlots.enemySpots`): never moved, never measured. */
+  /** Figure-less (`PartAnchors.ts`), pinned (`SceneSlots.enemySpots`) or held ({@link STAGE_HOLD_KEY}): never moved, never measured. */
   fixed?: boolean;
 }
 
 /** What the stage keeps per figure that the relaxation reads (`PaintedStage`'s own record). */
 export interface StagedForRelax {
   kind: 'party' | 'enemy';
-  actor: { position: Vector3 };
+  actor: { position: Vector3; userData?: Record<string, unknown> };
   parentId?: CombatantId;
   /** Set for a figure-less part (`PartAnchors.ts`). */
   anchor?: unknown;
@@ -64,13 +74,13 @@ export interface StagedForRelax {
   pinned?: boolean;
 }
 
-/** The stage's figures as the relaxation sees them: figure-less parts and pinned fiends are `fixed`. */
+/** The stage's figures as the relaxation sees them: figure-less parts, pinned fiends and held figures are `fixed`. */
 export function relaxActorsOf(
   staged: ReadonlyMap<CombatantId, StagedForRelax>,
 ): Map<CombatantId, RelaxActor> {
   const out = new Map<CombatantId, RelaxActor>();
   for (const [id, s] of staged) {
-    const a: RelaxActor = { kind: s.kind, actor: s.actor, fixed: !!(s.anchor || s.pinned) };
+    const a: RelaxActor = { kind: s.kind, actor: s.actor, fixed: !!(s.anchor || s.pinned || s.actor.userData?.[STAGE_HOLD_KEY]) };
     if (s.parentId) a.parentId = s.parentId;
     out.set(id, a);
   }

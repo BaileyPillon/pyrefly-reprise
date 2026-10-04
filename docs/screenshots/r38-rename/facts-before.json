@@ -1,0 +1,529 @@
+{
+  "label": "before",
+  "base": "https://baileypillon.github.io/pyrefly-reprise/",
+  "browserMode": "gpu",
+  "at": "2026-10-04T04:30:13.127Z",
+  "runs": [
+    {
+      "viewport": "1600x900",
+      "phone": false,
+      "steps": {
+        "bootedToTitle": true,
+        "reachedChapterSelect": true,
+        "pauseError": null
+      },
+      "files": [
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\before-title-1600x900.png",
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\before-chapter-select-1600x900.png",
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\before-pause-1600x900.png"
+      ],
+      "title": {
+        "viewport": {
+          "w": 1600,
+          "h": 900,
+          "dpr": 1
+        },
+        "names": [
+          {
+            "text": "Pyrefly",
+            "fontSizePx": "84.4444px",
+            "lineHeightPx": 79.4,
+            "lines": 1,
+            "boxW": 374,
+            "textW": 217.7,
+            "scrollW": 374,
+            "clientW": 374,
+            "overflowsBox": false,
+            "rect": {
+              "x": 54.7,
+              "y": 309.1,
+              "w": 374,
+              "h": 79.4,
+              "right": 428.7,
+              "bottom": 388.4
+            }
+          },
+          {
+            "text": "Reprise",
+            "fontSizePx": "84.4444px",
+            "lineHeightPx": 79.4,
+            "lines": 1,
+            "boxW": 374,
+            "textW": 218.3,
+            "scrollW": 374,
+            "clientW": 374,
+            "overflowsBox": false,
+            "rect": {
+              "x": 34.5,
+              "y": 404,
+              "w": 374,
+              "h": 79.4,
+              "right": 408.5,
+              "bottom": 483.3
+            }
+          }
+        ],
+        "slab": {
+          "x": -98.2,
+          "y": 237.8,
+          "w": 607.6,
+          "h": 380.9,
+          "right": 509.4,
+          "bottom": 618.7
+        },
+        "chip": {
+          "x": 11.1,
+          "y": 531.1,
+          "w": 234.2,
+          "h": 45.3,
+          "right": 245.3,
+          "bottom": 576.4
+        },
+        "eyebrow": {
+          "text": "An unofficial fan tribute",
+          "rect": {
+            "x": 68.3,
+            "y": 275.5,
+            "w": 374,
+            "h": 18,
+            "right": 442.3,
+            "bottom": 293.5
+          }
+        },
+        "slabInsideViewport": true,
+        "chipInsideViewport": true,
+        "reveal": "decoded",
+        "documentTitle": "Pyrefly Reprise",
+        "metaDescription": "Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2.",
+        "visibleTextHasOldName": true,
+        "visibleTextHasNewName": false,
+        "oldNameSnippets": [
+          "Pyrefly\nReprise"
+        ]
+      },
+      "chapterSelect": {
+        "documentTitle": "Pyrefly Reprise",
+        "metaDescription": "Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2.",
+        "visibleTextHasOldName": false,
+        "visibleTextHasNewName": false,
+        "oldNameSnippets": [],
+        "screen": "chapter-select"
+      },
+      "pause": {
+        "documentTitle": "Pyrefly Reprise",
+        "metaDescription": "Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2.",
+        "visibleTextHasOldName": true,
+        "visibleTextHasNewName": false,
+        "oldNameSnippets": [
+          "PYREFLY REPRISE · FINAL FANTASY X"
+        ],
+        "brandText": "Pyrefly Reprise · Final Fantasy X",
+        "brandRect": {
+          "x": 64,
+          "y": 26,
+          "w": 422,
+          "h": 18,
+          "clipped": false
+        },
+        "stack": [
+          "battle",
+          "pause"
+        ]
+      },
+      "console": {
+        "consoleErrors": [],
+        "consoleWarnings": [],
+        "pageErrors": [],
+        "requestFailed": [
+          "https://baileypillon.github.io/pyrefly-reprise/art/characters/anima/idle.png :: net::ERR_ABORTED",
+          "https://baileypillon.github.io/pyrefly-reprise/art/characters/isaaru/idle.png :: net::ERR_ABORTED",
+          "https://baileypillon.github.io/pyrefly-reprise/art/pause/tidus.png :: net::ERR_ABORTED"
+        ],
+        "badResponses": []
+      }
+    },
+    {
+      "viewport": "390x844",
+      "phone": true,
+      "steps": {
+        "bootedToTitle": true,
+        "reachedChapterSelect": true,
+        "pauseError": null
+      },
+      "files": [
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\before-title-390x844.png",
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\before-chapter-select-390x844.png",
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\before-pause-390x844.png"
+      ],
+      "title": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "names": [
+          {
+            "text": "Pyrefly",
+            "fontSizePx": "41.0991px",
+            "lineHeightPx": 38.6,
+            "lines": 1,
+            "boxW": 131,
+            "textW": 105.9,
+            "scrollW": 131,
+            "clientW": 131,
+            "overflowsBox": false,
+            "rect": {
+              "x": 37.7,
+              "y": 187.9,
+              "w": 131,
+              "h": 38.6,
+              "right": 168.8,
+              "bottom": 226.6
+            }
+          },
+          {
+            "text": "Reprise",
+            "fontSizePx": "41.0991px",
+            "lineHeightPx": 38.6,
+            "lines": 1,
+            "boxW": 131,
+            "textW": 106.2,
+            "scrollW": 131,
+            "clientW": 131,
+            "overflowsBox": false,
+            "rect": {
+              "x": 27.3,
+              "y": 236.8,
+              "w": 131,
+              "h": 38.6,
+              "right": 158.4,
+              "bottom": 275.5
+            }
+          }
+        ],
+        "slab": {
+          "x": -55.7,
+          "y": 88.1,
+          "w": 271.4,
+          "h": 289.4,
+          "right": 215.7,
+          "bottom": 377.5
+        },
+        "chip": {
+          "x": 11.1,
+          "y": 307,
+          "w": 131,
+          "h": 51.4,
+          "right": 142.1,
+          "bottom": 358.4
+        },
+        "eyebrow": {
+          "text": "An unofficial fan tribute",
+          "rect": {
+            "x": 51.7,
+            "y": 105.7,
+            "w": 131,
+            "h": 72,
+            "right": 182.7,
+            "bottom": 177.7
+          }
+        },
+        "slabInsideViewport": true,
+        "chipInsideViewport": true,
+        "reveal": "decoded",
+        "documentTitle": "Pyrefly Reprise",
+        "metaDescription": "Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2.",
+        "visibleTextHasOldName": true,
+        "visibleTextHasNewName": false,
+        "oldNameSnippets": [
+          "Pyrefly\nReprise"
+        ]
+      },
+      "chapterSelect": {
+        "documentTitle": "Pyrefly Reprise",
+        "metaDescription": "Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2.",
+        "visibleTextHasOldName": false,
+        "visibleTextHasNewName": false,
+        "oldNameSnippets": [],
+        "screen": "chapter-select"
+      },
+      "pause": {
+        "documentTitle": "Pyrefly Reprise",
+        "metaDescription": "Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2.",
+        "visibleTextHasOldName": true,
+        "visibleTextHasNewName": false,
+        "oldNameSnippets": [
+          "PYREFLY REPRISE · FINAL FANTASY X"
+        ],
+        "brandText": "Pyrefly Reprise · Final Fantasy X",
+        "brandRect": {
+          "x": 20,
+          "y": 16,
+          "w": 362,
+          "h": 16,
+          "clipped": false
+        },
+        "stack": [
+          "battle",
+          "pause"
+        ]
+      },
+      "console": {
+        "consoleErrors": [],
+        "consoleWarnings": [
+          "THREE.WebGLProgram: Program Info Log: (198,12-86): warning X3595: gradient instruction used in a loop with varying iteration; partial derivatives may have undefined value\n(198,12-86): warning X3595: gradient instruction used in a loop with varying iteration; partial derivatives may have undefined value\n(419,1): warning X4000: use of potentially uninitialized variable (f_ApplyFXAA)"
+        ],
+        "pageErrors": [],
+        "requestFailed": [
+          "https://baileypillon.github.io/pyrefly-reprise/art/backdrops/cavern-stolen-fayth.png :: net::ERR_ABORTED",
+          "https://baileypillon.github.io/pyrefly-reprise/art/characters/yojimbo-cavern/idle.png :: net::ERR_ABORTED",
+          "https://baileypillon.github.io/pyrefly-reprise/art/pause/tidus.png :: net::ERR_ABORTED"
+        ],
+        "badResponses": []
+      }
+    },
+    {
+      "viewport": "1024x768",
+      "phone": false,
+      "steps": {
+        "bootedToTitle": true
+      },
+      "files": [
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\before-title-1024x768.png"
+      ],
+      "title": {
+        "viewport": {
+          "w": 1024,
+          "h": 768,
+          "dpr": 1
+        },
+        "names": [
+          {
+            "text": "Pyrefly",
+            "fontSizePx": "54.0444px",
+            "lineHeightPx": 50.8,
+            "lines": 1,
+            "boxW": 239.2,
+            "textW": 139.3,
+            "scrollW": 239,
+            "clientW": 239,
+            "overflowsBox": false,
+            "rect": {
+              "x": 32.8,
+              "y": 222.3,
+              "w": 239.2,
+              "h": 50.8,
+              "right": 272,
+              "bottom": 273.1
+            }
+          },
+          {
+            "text": "Reprise",
+            "fontSizePx": "54.0444px",
+            "lineHeightPx": 50.8,
+            "lines": 1,
+            "boxW": 239.2,
+            "textW": 139.7,
+            "scrollW": 239,
+            "clientW": 239,
+            "overflowsBox": false,
+            "rect": {
+              "x": 19.9,
+              "y": 283,
+              "w": 239.2,
+              "h": 50.8,
+              "right": 259.1,
+              "bottom": 333.8
+            }
+          }
+        ],
+        "slab": {
+          "x": -65.9,
+          "y": 152.2,
+          "w": 394.9,
+          "h": 272.2,
+          "right": 329,
+          "bottom": 424.3
+        },
+        "chip": {
+          "x": 4.5,
+          "y": 364.4,
+          "w": 181.9,
+          "h": 32.9,
+          "right": 186.4,
+          "bottom": 397.3
+        },
+        "eyebrow": {
+          "text": "An unofficial fan tribute",
+          "rect": {
+            "x": 44.1,
+            "y": 176.3,
+            "w": 239.2,
+            "h": 36,
+            "right": 283.4,
+            "bottom": 212.3
+          }
+        },
+        "slabInsideViewport": true,
+        "chipInsideViewport": true,
+        "reveal": "decoded",
+        "documentTitle": "Pyrefly Reprise",
+        "metaDescription": "Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2.",
+        "visibleTextHasOldName": true,
+        "visibleTextHasNewName": false,
+        "oldNameSnippets": [
+          "Pyrefly\nReprise"
+        ]
+      },
+      "console": {
+        "consoleErrors": [],
+        "consoleWarnings": [],
+        "pageErrors": [],
+        "requestFailed": [],
+        "badResponses": []
+      }
+    },
+    {
+      "viewport": "2000x1012",
+      "phone": false,
+      "steps": {
+        "bootedToTitle": true
+      },
+      "files": [
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\before-title-2000x1012.png"
+      ],
+      "title": {
+        "viewport": {
+          "w": 2000,
+          "h": 1012,
+          "dpr": 1
+        },
+        "names": [
+          {
+            "text": "Pyrefly",
+            "fontSizePx": "94.9531px",
+            "lineHeightPx": 89.3,
+            "lines": 1,
+            "boxW": 420.3,
+            "textW": 244.8,
+            "scrollW": 420,
+            "clientW": 420,
+            "overflowsBox": false,
+            "rect": {
+              "x": 61.4,
+              "y": 348.3,
+              "w": 420.3,
+              "h": 89.3,
+              "right": 481.7,
+              "bottom": 437.6
+            }
+          },
+          {
+            "text": "Reprise",
+            "fontSizePx": "94.9531px",
+            "lineHeightPx": 89.3,
+            "lines": 1,
+            "boxW": 420.3,
+            "textW": 245.5,
+            "scrollW": 420,
+            "clientW": 420,
+            "overflowsBox": false,
+            "rect": {
+              "x": 38.7,
+              "y": 455,
+              "w": 420.3,
+              "h": 89.3,
+              "right": 459,
+              "bottom": 544.3
+            }
+          }
+        ],
+        "slab": {
+          "x": -110.6,
+          "y": 267.4,
+          "w": 683.5,
+          "h": 429.3,
+          "right": 572.9,
+          "bottom": 696.7
+        },
+        "chip": {
+          "x": 12.4,
+          "y": 598,
+          "w": 263.1,
+          "h": 51.2,
+          "right": 275.5,
+          "bottom": 649.2
+        },
+        "eyebrow": {
+          "text": "An unofficial fan tribute",
+          "rect": {
+            "x": 76.9,
+            "y": 309.8,
+            "w": 420.3,
+            "h": 21,
+            "right": 497.2,
+            "bottom": 330.8
+          }
+        },
+        "slabInsideViewport": true,
+        "chipInsideViewport": true,
+        "reveal": "decoded",
+        "documentTitle": "Pyrefly Reprise",
+        "metaDescription": "Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2.",
+        "visibleTextHasOldName": true,
+        "visibleTextHasNewName": false,
+        "oldNameSnippets": [
+          "Pyrefly\nReprise"
+        ]
+      },
+      "console": {
+        "consoleErrors": [],
+        "consoleWarnings": [],
+        "pageErrors": [],
+        "requestFailed": [],
+        "badResponses": []
+      }
+    },
+    {
+      "viewport": "1600x900",
+      "kind": "noscript",
+      "files": [
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\before-noscript-1600x900.png"
+      ],
+      "staticHtml": {
+        "title": "Pyrefly Reprise",
+        "description": "Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2.",
+        "noscript": "Pyrefly Reprise needs JavaScript and WebGL 2.",
+        "hasOldNameAnywhere": true
+      },
+      "console": {
+        "consoleErrors": [],
+        "consoleWarnings": [],
+        "pageErrors": [],
+        "requestFailed": [],
+        "badResponses": []
+      }
+    },
+    {
+      "viewport": "1600x900",
+      "kind": "fatal-no-webgl",
+      "files": [
+        "D:\\Tools\\pyrefly-scratch\\2026-10-04\\rename\\shots\\before-fatal-1600x900.png"
+      ],
+      "fatalShown": true,
+      "heading": "Pyrefly Reprise",
+      "message": "This browser could not start WebGL 2. Try a recent Chrome, Edge or Firefox.",
+      "documentTitle": "Pyrefly Reprise",
+      "console": {
+        "consoleErrors": [
+          "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context.",
+          "[pyrefly] This browser could not start WebGL 2. Try a recent Chrome, Edge or Firefox. Error: THREE.WebGLRenderer: Error creating WebGL context.\n    at new Vre (https://baileypillon.github.io/pyrefly-reprise/assets/index-DhiL5vEz.js:4232:24492)\n    at new Kae (https://baileypillon.github.io/pyrefly-reprise/assets/index-DhiL5vEz.js:4787:8734)\n    at new lTt (https://baileypillon.github.io/pyrefly-reprise/assets/index-DhiL5vEz.js:7282:30339)\n    at $9 (https://baileypillon.github.io/pyrefly-reprise/assets/index-DhiL5vEz.js:7658:154)\n    at https://baileypillon.github.io/pyrefly-reprise/assets/index-DhiL5vEz.js:7658:1615"
+        ],
+        "consoleWarnings": [],
+        "pageErrors": [],
+        "requestFailed": [],
+        "badResponses": []
+      }
+    }
+  ]
+}
