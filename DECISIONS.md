@@ -1,0 +1,3724 @@
+# Echoes of Spira: ledger of Bailey's decisions
+
+Every decision Bailey has made on this game since it began on 2026-09-15, oldest first, grouped by day (US Eastern). This file is rendered from data and never edited by hand:
+
+- `docs/target/decisions.json`: the registry of his non-picture decisions (D-nnn), kept since 2026-09-21 and the single source of truth. D-022 to D-028 were written on 2026-09-21 and lost before they were committed; they were restored from the session notes on 2026-10-04.
+- `docs/target/decisions-early.json`: decisions made before that registry existed, and later ones it never received (E-nnn).
+- `docs/target/targets.json`: picture decisions (the approved, rejected and picked tiles of the end-state board).
+
+**How to read a row:** its id, the decision stated in full, his words (verbatim, typos kept), what changed because of it, then area, game case (FFX, FFX-2 or both), state (a superseded row links to its successor), delivery and source. One recommendation of a bundled acceptance is shown under its parent, as D-145/B1. A picture decision is marked "Picture" and carries the date of the last answer recorded on its tile (its group's approval date when the tile names none).
+
+**To add a decision:** add one row to `docs/target/decisions.json` (next free D-number: id, date, title, his words verbatim or null, state, game case, delivery, `area`, `changed`, `where`; `rule` when it sets a standing rule; `parts` to split a bundled acceptance), then run `node tools/decisions-ledger.mjs`. `node tools/decisions-ledger.mjs --check` and `tests/unit/decisions-ledger.test.ts` fail when this file is stale.
+
+**Sibling records:** `CHANGELOG.md` says what each live build gave the player; `ACTIONS.md` says what was built and carried out, and links each of its rows to the decisions here by id.
+
+**A blanket yes is never a row of its own** (Bailey, 2026-10-04: when he says "I'll go with all your recommendations" the record must say what was decided and what changed). Every recommendation he accepted is its own decision here, with his blanket words as the quote, the decision stated in full, and a "What changed" line. Where a source could not be recovered the row says so.
+
+## Summary
+
+844 decisions in all: 394 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 555 of the written decisions record a blanket yes.
+
+| State | Decisions |
+| --- | ---: |
+| adopted | 783 |
+| proposed | 15 |
+| deferred | 4 |
+| rejected | 11 |
+| superseded | 31 |
+| **All** | **844** |
+
+| Area | Decisions |
+| --- | ---: |
+| combat | 66 |
+| art | 195 |
+| visuals | 62 |
+| camera | 21 |
+| audio | 29 |
+| ui | 111 |
+| story | 14 |
+| chapters | 176 |
+| guide | 28 |
+| release | 31 |
+| hosting | 10 |
+| process | 65 |
+| critic | 18 |
+| data | 7 |
+| tech | 1 |
+| site | 10 |
+| **All** | **844** |
+
+| Game case | Decisions |
+| --- | ---: |
+| both games | 355 |
+| FFX only | 264 |
+| FFX-2 only | 208 |
+| FF7 hidden experiment | 17 |
+| **All** | **844** |
+
+## Standing rules in force
+
+Each rule links to the decision that set it. A rule drops off this list when its decision is superseded.
+
+- **Screenshots with progress**: send screenshots and a short, friendly progress fact at each milestone; a UI change is not done without a real-input browser check and a screenshot. Decision [E-004](#e-004) (2026-09-15, both games).
+- **Spending money needs Bailey's yes**: nothing is bought without asking and without the amount he names; downloads are separate (official sources, onto D: only). Decision [E-005](#e-005) (2026-09-15, both games).
+- **Original assets only**: no retail Square Enix assets, ever; public/art (the painted masters) never goes to main. Decision [E-007](#e-007) (2026-09-15, both games).
+- **Never invent game data**: numbers come from research/*.md with their source notes; if something is unsourced, leave it alone, say so, and label any value a build must show as "our estimate". Decision [E-008](#e-008) (2026-09-15, both games).
+- **Deploy every green checkpoint and announce it**: push main, deploy, and tell Bailey the URL, the main sha and what changed; never deploy a red tree. Decision [D-022](#d-022) (2026-09-17, both games).
+- **End state first**: before building anything Bailey will see, hear or feel, show 2 to 4 options of the finished result (mockup, concept frame, faked screenshot, audio sketch), build nothing until he picks, save the pick as the target, and when he cannot say what he wants make the options more concrete instead of asking more questions. Decision [D-001](#d-001) (2026-09-18, both games).
+- **Audio is judged by Bailey's ears**: the bar is "beautiful, the essence and soul of FFX and Clair Obscur"; agents cannot hear, so no cue is called good on an agent's say-so (docs/audio/audition.html). Decision [E-014](#e-014) (2026-09-18, both games).
+- **Ideas need a yes**: critic proposals and any new gameplay, content or system are presented to Bailey and built only after his explicit yes; proposals are never scored. Decision [E-016](#e-016) (2026-09-18, both games).
+- **Game-aware changes**: every change is FFX only, FFX-2 only or both, decided from research/*.md (never from memory) and written in the plan, handoff and commit; a change true to one game is not applied to the other. Decision [D-002](#d-002) (2026-09-19, both games).
+- **Usage readings at releases**: report the 5-hour, weekly and Fable allowance before the cut, after the deploy and after the review, and say which usage mode applies. Decision [D-003](#d-003) (2026-09-19, both games).
+- **Never weaken a boss**: no boss number is tuned to make a build green; a sourced boss-side fix is decided from measured options (build and measure each answer, then ask once with the numbers). Decision [D-024](#d-024) (2026-09-19, both games).
+- **Approved paintings are protected**: never replaced on an agent judge's say-so; changing one needs Bailey's yes, and the shipped files behind approved tiles are hashed in docs/target/approved-hashes.json and checked before a release. Decision [E-030](#e-030) (2026-09-19, both games).
+- **Critic policy v2**: every deployed build is evaluated and the review depth follows the change; three separate verdicts, one weighted score (9.60 unrounded, every category at least 9.0) plus gates, and unknown or stale evidence is never a pass. Decision [D-006](#d-006) (2026-09-20, both games).
+- **Usage modes and repair limits**: normal above 50 percent of the week left, conserve at 20 to 50, protect at 20 or below, set by Bailey's word and only ever tightened by agents; two failed attempts or two reviews with the same open issue require a written method check before a third try. Decision [D-014](#d-014) (2026-09-21, both games).
+- **Ship if better than live**: a build deploys when its changed area has no critical defect introduced or left reachable and no regression against the live build; other majors are disclosed and carried into the next batch. Decision [D-015](#d-015) (2026-09-21, both games).
+- **Deep review after the deploy**: focused review before the deploy, deep review afterwards on the live build; deep-before-deploy only for the save-data class; at most two deploys may go out while a deep review is owed. Decision [D-016](#d-016) (2026-09-21, both games).
+- **Owner override**: only Bailey's own quoted words, passed as --owner-override to tools/deploy-pages.mjs, let a build ship past a release-gate refusal; an agent never invokes it on its own initiative and it settles no review obligation. Decision [D-017](#d-017) (2026-09-21, both games).
+- **Painting quality bar**: judge art at 1:1 crops against the approved close-up quality (the Leblanc renders he called "AMAZING"); never approve or install art from thumbnails or contact sheets. Decision [D-027](#d-027) (2026-09-21, both games).
+- **A pick is never reopened**: once Bailey has picked something, do not offer it again because an agent finds it off-canon or imperfect; mention a concern once at pick time at most. Decision [D-028](#d-028) (2026-09-21, FFX).
+- **Steam copy for real-game checks**: check FFX and FFX-2 facts in the Steam HD Remaster copy on the D drive, never the PS2 emulator; ask Bailey for a window before driving it, keep recordings on D, and put only text observations in the repo. Decision [E-069](#e-069) (2026-09-25, both games).
+- **Parallel work stays below the machine's limit**: at most about four or five heavy agents at once (browser- or test-heavy agents count as one), launched in priority batches, so the PC stays usable and a reset never kills in-flight work. Decision [E-070](#e-070) (2026-09-25, both games).
+- **Sourcing tie-break**: where research is silent or sources conflict and nothing in the game settles it, use GameFAQs' reading, labelled "our estimate"; never invent game data, and if no source says, say so and ask Bailey. Decision [D-214](#d-214) (2026-09-26, both games).
+- **Thresholds loop**: keep iterating (triage, parallel fix batches, release, deep review) until every critic category is at least 9.0 and the weighted score at least 9.60 unrounded with every gate met; do not wait to be asked. Decision [E-075](#e-075) (2026-09-26, both games).
+- **The strategy guide follows Jegged's FFX and FFX-2 encounter guides**: each chapter's guide reads like that boss's page (same layout, information and order of advice) in our own words, with no source, citation or "adapted" wording shown to the player; the guide and the move advisor are separate and a guide change never touches the advisor or a boss. Decision [D-350](#d-350) (2026-10-03, both games).
+- **Delegation**: all mechanical implementation, file searches, tests and routine execution go to Sonnet sub-agents with the model set explicitly on every Agent call; the main session reserves its own reasoning for planning, architecture review and final validation (re-running the checks itself). Decision [E-081](#e-081) (2026-10-03, both games).
+- **Downloads**: agents may download what the work needs from official or reputable sources only, onto D: where possible, never an untrusted executable, recording each download (name, source, size, sha256) in the handoff that uses it; spending money still needs Bailey's yes. Decision [D-370](#d-370) (2026-10-04, both games).
+- **Progress notes and a changelog**: send Bailey concise progress notes as work lands, and write a CHANGELOG.md entry (date, release, address, player-facing bullets tagged FFX, FFX-2 or both) for every build that goes live or to a preview, with a screenshot under every visual change. Decision [D-390](#d-390) (2026-10-04, both games).
+- **Spell out every blanket yes**: when Bailey says "all your recommendations" (or "godspeed", "yes to all"), state each recommendation as its own decision with what was decided and what changed as a result, in the reply right after and in docs/target/decisions.json; a row that only says "all your recommendations" is never enough. Decision [D-394](#d-394) (2026-10-04, both games).
+
+## Waiting on Bailey's yes
+
+Proposed, asked or drafted, with no yes on record. Nothing here is built.
+
+- [D-010](#d-010) — Active mode: an enemy hit closes the open menu and delays that character
+- [D-012](#d-012) — Product brief
+- [D-013](#d-013) — Thrift habits (critic round only at milestones, one deploy per work block, fresh session past about 200k of context, a written weekly brief)
+- [D-160](#d-160) — NOT covered by the 2026-09-25 "I'll go with all your recommendations" yes: battle-pose candidates, the judge-locked art-sets question, and the round-12 human judgments
+- [D-253](#d-253) — Audio (§8 Q1): NOT answered — today's music score, the control/A/B/C pick, the Macalania scene cue and Chapter IX's own cue are all still open
+- [D-254](#d-254) — Phase lighting (D-224, option A): Bailey will look in Chapter I and say stronger or fine — still open
+- [D-255](#d-255) — Vegnagun implosion ships after Bailey looks at its frames — still open, frames owed
+- [D-256](#d-256) — Accessibility Q4 and Q7 (OR-13): pictures first — still open
+- [D-258](#d-258) — Steam session part 2: the yes stands (D-205), but the time is still Bailey's to pick
+- [D-266](#d-266) — Open: Giga-Graviton on Sin's 12th or 13th turn (S-1) — needs a Steam check only Bailey can schedule (FFX only)
+- [D-282](#d-282) — Sin's difficulty, disclosed at listing: Chapter XVII's chain 25.5 % first try on the sensible line (3 % on the advisor card), Chapter XVIII 31 % on turn 13; the link-3 checkpoint is built OFF and is …
+- [D-307](#d-307) — OPEN: the battle-ffx and boss-vegnagun cues screen lower on the automated ear than the files they replace; does Bailey keep them by ear?
+- [D-308](#d-308) — OPEN: do FFX human bosses (Seymour, Yunalesca) roar with the big-cat boss-roar, or get a different sound?
+- [D-309](#d-309) — OPEN: when an Overdrive or Special lands, do the stinger and the attack swing overlap or take turns?
+
+Pictures with no target yet (nothing to look at, so no decision): Move advisor card (fight); Defeat screen (fight); Enemy next-move panel (fight); Every screen except pause (phone); One finished minute of play (whole).
+
+## Days
+
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04)
+
+## Ledger
+
+### 2026-09-15
+
+Tuesday · 23 decisions
+
+- <a id="e-001"></a>**E-001** — The game: five boss encounters from Final Fantasy X and X-2 as a fan tribute that runs in a browser and can be shared as a link
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: The repository (public: BaileyPillon/pyrefly-reprise) was started under the working title Pyrefly Reprise with five chapters: Seymour Flux and Mortiorchis at Mt. Gagazet, Yunalesca at the Zanarkand Dome, Braska's Final Aeon and Yu Yevon at Dream's End (FFX), Bahamut under Bevelle and Vegnagun with Shuyin at the Farplane (FFX-2). Season 1 stayed those five until the extra chapters were approved on 2026-09-19.
+  - area chapters · both games · adopted · delivery implemented
+  - Source: AGENTS.md; docs/PRODUCT-BRIEF.md
+- <a id="e-002"></a>**E-002** — Engine and stack: a web game built with Vite, TypeScript (strict) and Three.js, HTML/CSS HUDs, Web Audio, tested with vitest and Playwright, published on GitHub Pages; chosen over Unreal for turnaround, agent iteration, screenshots and easy sharing
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Everything since is built on that stack (src/battle pure engines, src/engine presentation, src/ui HUDs); Unreal was not used. The live site was published on GitHub Pages from 2026-09-16; hosting moved to Cloudflare on 2026-10-04 (D-369, D-382).
+  - area tech · both games · adopted · delivery implemented
+  - Source: docs/ARCHITECTURE.md; AGENTS.md
+- <a id="e-003"></a>**E-003** — The pixel-art HD-2D look is rejected; the game uses painted 2.5D art generated locally with ComfyUI, with everything installed on the D: drive, never C:
+  - Bailey: “look terrible”
+  - What changed: Pixel sprites were dropped for good. Backdrops and character key-pose paintings are generated on this PC (ComfyUI under D:\Tools) and lit as billboards in Three.js; AGENTS.md hard rule 9 records "pixel art was rejected". New tools and models still go on D:.
+  - area art · both games · adopted · delivery implemented
+  - Source: AGENTS.md hard rule 9
+- <a id="e-004"></a>**E-004** — Send lots of screenshots and a short progress fact at every milestone; he gets bored without visible progress
+  - Bailey: “send me lots of screenshots as you progress”
+  - What changed: Every milestone since has come with screenshots; AGENTS.md "Done means" requires a real-input browser check and a screenshot for any UI change, and the changelog of 2026-10-04 (D-390) extends it to every visual change.
+  - area process · both games · adopted · nothing to build
+  - Source: AGENTS.md
+- <a id="e-005"></a>**E-005** — Ask before spending money (paid assets, tools, services)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Nothing is bought without his yes. AGENTS.md hard rule 11 keeps this for money; downloads were later allowed onto D: from official sources (D-236, D-370), and on 2026-10-04 he said yes to one named purchase with a ceiling (D-387).
+  - area process · both games · adopted · nothing to build
+  - Source: AGENTS.md hard rule 11
+- <a id="e-006"></a>**E-006** — An independent, harsh critic agent grades every build, the gate is 9.6 out of 10, and below it the critic returns a ranked issue list that drives the next revision
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: critic/RUBRIC.md was created the same day (commit 0a811c631) with weighted categories and the 9.6 gate; the rubric was widened on 2026-09-18 and replaced by critic policy v2 on 2026-09-20 (D-006), which keeps the 9.60 bar.
+  - area critic · both games · adopted · delivery implemented
+  - Source: critic/RUBRIC.md
+- <a id="e-007"></a>**E-007** — Original assets only: no retail Square Enix assets or ripped models in the repository, ever; the painted masters in public/art stay out of main
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Ripped models that exist locally were never committed; art is painted from scratch, public/art is gitignored on main (it ships only through the locally built deploy), and tools/gen holds the pipeline.
+  - area art · both games · adopted · nothing to build
+  - Source: AGENTS.md hard rule 8
+- <a id="e-008"></a>**E-008** — Never invent game data: every number, status, Overdrive and boss pattern comes from the research notes with their source tags, and anything unsourced is left alone and said so (and labelled "our estimate" where a build must show something)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: research/*.md carries source notes for every number the data files use; an unsourced value is labelled in the build and the notes instead of being invented; a bug is proved by running the engine, not by searching the code (the verification lesson of 2026-09-16). AGENTS.md hard rule 6 records it.
+  - area data · both games · adopted · nothing to build
+  - Source: AGENTS.md hard rule 6
+- <a id="e-009"></a>**E-009** — The interface gets the cinematic, Persona-style presentation that Clair Obscur: Expedition 33 uses (bold angled panels, character cut-ins, oversized type, diagonal wipes, one signature accent colour), and concept art and mockups are shown BEFORE anything is integrated
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Three directions were mocked up; Bailey picked A "Ink & Gold" that evening and approved the second round of screens (see the picture decisions of 2026-09-15). The "mockups before integrating" part became the standing rule of 2026-09-18 (D-001).
+  - area ui · both games · adopted · delivery implemented
+  - Source: docs/handoff/presentation-ink-and-gold.md
+- <a id="d-023"></a>**D-023** — Delegation: mechanical implementation, file searches, tests and routine execution go to cheaper sub-agents (Opus, Sonnet or Haiku); the top model is reserved for planning, architecture review and final validation
+  - Bailey: “DO NOT FORGET THIS NO MATTER WHAT ** VERY IMPORTANT ** - For all mechanical implementation, file searches, tests, and routine execution, use your judgment to delegate tasks to lower-power sub-agents running Opus or Sonnet or Haiku. For Fable - Reserve your direct reasoning capacity solely for high-level planning, architecture review, and final validation.”
+  - What changed: Every agent launched sets its model explicitly (omitting it inherits the expensive top model); the top model plans, reviews architecture and validates by re-running the checks itself. First given 2026-09-15, restated in capitals on 2026-09-21 (E-036) and written at the top of Bailey's global CLAUDE.md so every session loads it. Narrowed to Sonnet on 2026-10-03 (E-081).
+  - area process · both games · adopted · nothing to build
+  - Source: CLAUDE.md
+- **Picture** (presentation) — Approved: Style board
+  - Bailey: “I really like that style I approve of it.”
+  - Target: Not a screen: the palette, type and slab rules every other screen is checked against.
+  - area ui · both games · adopted · delivery verified
+  - Source: docs/target/targets.json, group presentation, tile "Style board"
+- **Picture** (presentation) — Approved: Title
+  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
+  - Target: The title screen as it first settles after loading the live URL.
+  - area ui · both games · superseded by "showpiece-frontend" · delivery verified
+  - Source: docs/target/targets.json, group presentation, tile "Title"
+- **Picture** (presentation) — Approved: Chapter select
+  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
+  - Target: Chapter select with chapter 1 (Seymour Flux) highlighted.
+  - area ui · both games · superseded by "showpiece-frontend" · delivery verified · see [D-183](#d-183)
+  - Source: docs/target/targets.json, group presentation, tile "Chapter select"
+- **Picture** (presentation) — Approved: Party prep
+  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
+  - Target: Party prep for chapter 1 (FFX) on its first tab.
+  - area ui · FFX · adopted · delivery verified
+  - Source: docs/target/targets.json, group presentation, tile "Party prep"
+- **Picture** (presentation) — Approved: Cutscene dialogue
+  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
+  - Target: A pre-battle dialogue line in chapter 1 with the speaker portrait showing.
+  - area ui · FFX · adopted · delivery verified
+  - Source: docs/target/targets.json, group presentation, tile "Cutscene dialogue"
+- **Picture** (presentation) — Approved: Battle start
+  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
+  - Target: The boss-name banner at the start of the chapter 1 battle.
+  - area ui · FFX · adopted · delivery verified
+  - Source: docs/target/targets.json, group presentation, tile "Battle start"
+- **Picture** (presentation) — Approved: Battle HUD, FFX
+  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
+  - Delivery: Built, and failing its target in critic/rounds/round-04.json at bc2571c.
+  - area ui · FFX · adopted · delivery implemented
+  - Source: docs/target/targets.json, group presentation, tile "Battle HUD, FFX"
+- **Picture** (presentation) — Approved: Turn cut-in
+  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
+  - Delivery: Approved and never wired; NOW.md asks Bailey whether the tile still stands.
+  - area ui · FFX · adopted · delivery not scheduled
+  - Source: docs/target/targets.json, group presentation, tile "Turn cut-in"
+- **Picture** (presentation) — Approved: Swordplay Overdrive
+  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
+  - Target: Tidus's Swordplay Overdrive timing overlay in chapter 1.
+  - area ui · FFX · adopted · nothing to build
+  - Source: docs/target/targets.json, group presentation, tile "Swordplay Overdrive"
+- **Picture** (presentation) — Approved: Results
+  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
+  - Target: The results screen after winning chapter 1.
+  - area ui · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group presentation, tile "Results"
+- **Picture** (presentation) — Rejected: B: Pyrefly Slash
+  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
+  - Note: Kept so nobody proposes it again.
+  - area ui · both games · rejected · nothing to build
+  - Source: docs/target/targets.json, group presentation, tile "B: Pyrefly Slash"
+- **Picture** (presentation) — Rejected: C: Sending Red
+  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
+  - Note: Kept so nobody proposes it again.
+  - area ui · both games · rejected · nothing to build
+  - Source: docs/target/targets.json, group presentation, tile "C: Sending Red"
+- **Picture** (scenes) — Approved: Ch. 2 · Zanarkand Dome
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: The chapter 2 (Yunalesca) battle backdrop as the camera first frames it.
+  - area art · FFX · adopted · nothing to build
+  - Source: docs/target/targets.json, group scenes, tile "Ch. 2 · Zanarkand Dome"
+
+### 2026-09-16
+
+Wednesday · 2 decisions
+
+- <a id="e-010"></a>**E-010** — A public GitHub Pages deploy WITH the paintings is approved, once the Chapter 2 Mega Death and enemy hit-rule fixes land and the suite is green; he knowingly accepts about 428 MB of AI-painted Final Fantasy likeness in the public gh-pages history, while public/art stays gitignored on main
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: The live site https://baileypillon.github.io/pyrefly-reprise/ went up on 2026-09-16 (alpha 1 at 11:43, alpha 2 at 12:17) from a locally built, single-commit gh-pages branch, because the paintings exist only on this PC; tools/deploy-pages.mjs grew out of that procedure.
+  - area hosting · both games · adopted · delivery implemented
+  - Source: docs/deploys.log
+- <a id="e-011"></a>**E-011** — Deploy alpha 2 now, from the live working tree
+  - Bailey: “deploy now”
+  - What changed: Alpha 2 went live at 12:17 on 2026-09-16. It stacked a second commit on gh-pages instead of replacing history; the later single-commit procedure fixed that.
+  - area release · both games · adopted · delivery implemented
+  - Source: docs/deploys.log
+
+### 2026-09-17
+
+Thursday · 1 decision
+
+- <a id="d-022"></a>**D-022** — Every green checkpoint is pushed to main and deployed live to GitHub Pages, and every new live build is announced (URL, commit, what changed) in the next message
+  - Bailey: “please make sure that you regularly push changes and additions live at each checkpoint.”
+  - What changed: A green tree (tsc clean, tests green) is pushed and deployed at each checkpoint, never a red one; he is told every time a live build goes out ("Let me know every time you push a new live build", 2026-09-17). On 2026-09-25 he asked "are you regularly updating the git and github?" and main turned out to be 383 commits behind live because release worktrees skipped the push; a release cut from a worktree still owes a push of main. After 2026-09-18 every live build also owes a critic review (see D-006).
+  - area release · both games · adopted · delivery implemented
+  - Source: docs/handoff/NOW.md; AGENTS.md
+
+### 2026-09-18
+
+Friday · 38 decisions
+
+- <a id="e-012"></a>**E-012** — Fix every criticism of the 2026-09-18 live build before anything else, in this order: advisor correctness, pause screen, audio, then the collision list
+  - Bailey: “do not forget all these criticisms”
+  - What changed: The eight criticisms below were worked off over the builds of 2026-09-19: most in main 5a82e71 (live 04:52), the targeting look in Build A (main 7191674, live 23:15). Each is its own row.
+  - area process · both games · adopted · delivery implemented
+  - Source: docs/handoff/fix3-targeting.md
+  - <a id="e-012-audio"></a>**E-012/audio** — Audio is arcade-y: replace the procedural synth with a sampled-orchestra, foley and hall-reverb sound, mockups for approval before integrating
+    - What changed: An offline sampled-orchestra render pipeline (68 instruments) produced 21 music cues and 134 sound effects shipped as prerendered files with a synth fallback; Bailey judges audio by ear from docs/audio/audition.html (see E-014).
+  - <a id="e-012-pause"></a>**E-012/pause** — The pause screen looks low-resolution and does not fill the window: regenerate the plates at 2688x1536, make the layer full-bleed with viewport-relative type
+    - What changed: Nineteen plates were remade as 2688x1536 masters and the pause layer became full-bleed with fluid type (commit 79f3c1d39); the pause screen was remade again on 2026-09-21 (D-021).
+  - <a id="e-012-poison-fang"></a>**E-012/poison-fang** — The move advisor recommended Kimahri's Poison Fang while Tidus was acting: validate by ability id against the acting character's own rows
+    - What changed: The advisor now owns its move: it names only abilities the acting character can use, and proposes a switch only when the sim says it is worth it (commit bab0b2902).
+  - <a id="e-012-revive"></a>**E-012/revive** — The advisor ignored a KO'd Yuna: make the revive value depend on the downed ally's role, how many are down, whether an item is available and the enemy's telegraphed next move
+    - What changed: A board-aware revive value replaced the flat 3,000; a fallen ally always gets a sentence on the card (later fix aceb8b9).
+  - <a id="e-012-banner"></a>**E-012/banner** — A stale "Ronso Rage · Choose a rage" banner stayed over the guide chip and the boss header: clear submenu titles
+    - What changed: The FFX HUD clears a stale overdrive title and the CTB names fit (commit 0ac7f095c).
+  - <a id="e-012-debug-text"></a>**E-012/debug-text** — Debug text leaked into the advisor card ("CHAPTER LINE", "ffx-seymour-flux §6 rows 5-6"): plain words, citations only inside the strategy guide
+    - What changed: The advisor card lost its internal chip and citation wording when the advisor was rebuilt on 2026-09-18 (commit bab0b2902).
+  - <a id="e-012-collisions"></a>**E-012/collisions** — Layout collisions: the advisor card and its chip sat over the party, turn-list names truncated, and the round-2 defect list was still open
+    - What changed: The advisor card has a measured slot or the live build's own placement (never hidden or sliced), turn-list names fit, and the round-2 list was worked down over the next builds.
+  - <a id="e-012-targeting"></a>**E-012/targeting** — Target selection is unclear and enemies hide behind bigger ones: a clearer in-world marker, dimming, and no enemy more than about 25 percent hidden (he approved shipping it in the same build)
+    - What changed: He picked the look "B: hand, ring and a quiet dim" on 2026-09-19 (D-004); it was built that evening and shipped in Build A (main 7191674, live 2026-09-19 23:15).
+- <a id="e-013"></a>**E-013** — Work-control instructions of 2026-09-18: pause everything except local art generation (about 03:30); pause and then resume local art generation (about 18:05, resumed that evening); pause and resume all work (about 18:18 to 18:20); after one more deploy pause everything except the promised concept boards and mockups and the critic round (about 23:15, revised 23:20)
+  - Bailey: “pause local art generation for now”
+  - What changed: Work stopped and restarted as he said. The art pipeline rule that remains is AGENTS.md hard rule 12: ComfyUI renders are queued only while docs/handoff/NOW.md says art generation is on. His exact words for the last two: "after a deploy to live build pause work afterward" and, revised, "... EXCEPT FOR those concepts and mockups you promised me and also the critic round". Each instruction is a short-lived control, all superseded by the go-aheads that followed.
+  - area process · both games · adopted · nothing to build
+  - Source: AGENTS.md hard rule 12
+- <a id="e-014"></a>**E-014** — Audio direction: the music and sound effects must be beautiful and capture the soul of Final Fantasy X and Clair Obscur: Expedition 33; agents cannot hear, so Bailey judges audio by ear
+  - Bailey: “the music and sound effects need to be beautiful and capture the very essence and soul of final fantasy x/clair obscur: expedition 33”
+  - What changed: A Direction phase set six original themes (docs/audio/THEMES.md); the 2026-09-19 build shipped 21 sampled cues and 134 effects; the music was redone repeatedly after he judged it ("too reminsicent of snes music", 2026-09-21; "kinda bad", 2026-09-29; "AWFUL", 2026-09-30) and AGENTS.md hard rule 13 keeps ears as the only judge.
+  - area audio · both games · adopted · delivery implemented
+  - Source: docs/audio/THEMES.md; docs/audio/audition.html; and others
+- <a id="e-015"></a>**E-015** — Battle help he asked for besides the strategy guide: a per-character next-best-move advisor, an enemy next-move panel, and pause panels that can be hidden (H) so the hero art is unobstructed
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Shipped in release 33b441cb9 (2026-09-18 15:38): N shows the move advisor, E the enemy intent panel, H hides the pause panels. The advisor was rebuilt as v2 on 2026-09-21 and v3 on 2026-09-27 (D-271).
+  - area guide · both games · adopted · delivery implemented
+  - Source: Notes of 2026-09-18; commit 33b441cb9. Bailey's exact words are not on record.
+  - <a id="e-015-advisor"></a>**E-015/advisor** — A per-character "next best move" advisor that follows the selected character (name, what it does, estimated damage or heal, MP, hit chance, the reason; the top two when the best is a party switch; switches suggested rarely)
+    - What changed: Built as the N key card; correctness fixes followed on 2026-09-18 to 2026-09-20 and the "smarter" rebuild on 2026-09-21.
+  - <a id="e-015-intent"></a>**E-015/intent** — An enemy "next move" panel near the enemies (name, effect, damage estimate, charge countdowns), hideable like the guide
+    - What changed: Built as the E key intent panel (docs/handoff/adv-enemy-intent.md).
+  - <a id="e-015-hide-h"></a>**E-015/hide-h** — The pause screen's panels hide with H so the hero art is unobstructed
+    - What changed: H hides the pause panels; verified with real key presses after the first release proved it only through a debug hook.
+- <a id="e-016"></a>**E-016** — Below the bar the critic returns a detailed ranked issue list that drives the revision; the critic may suggest new ideas from any aspect of game design, but none is built or scored without his explicit yes
+  - Bailey: “below that score threshold of 9.6, critic comes back with a detailed ranked list of issues so that the build is revised and refined, critic can even suggest new ideas for addictive gameplay elements but that needs my approval first”
+  - What changed: Critic reports carry a ranked list plus a separate, unscored Proposals section; proposals are presented to him and built only after a yes (AGENTS.md hard rule 10). The same evening he widened it: "the critic can even suggest and recommend expansions or novel ideas to improve the game from any aspect of game design but that needs my approval".
+  - area critic · both games · adopted · delivery implemented
+  - Source: critic/RUBRIC.md; AGENTS.md hard rule 10
+- <a id="e-017"></a>**E-017** — A full critic round on the live URL after every build pushed live, mandatory with no exceptions
+  - Bailey: “The critic now needs to evaluate every time a new build is pushed live.”
+  - What changed: Every deploy was followed by a full critic round (about 20 agents, 6 to 10 percent of the weekly allowance each) until critic policy v2 on 2026-09-20 replaced it with reviews whose depth follows the change (D-006, D-007).
+  - area critic · both games · superseded by [D-006](#d-006) · delivery implemented
+  - Source: critic/rounds/round-02.md
+- <a id="e-018"></a>**E-018** — The rubric gets a Part B covering all aspects of game design (audio, feel, clarity, onboarding, accessibility, controls, difficulty, retention, progression, narrative, cohesion), and at about 23:40 a Part C scoring fidelity to the approved end states
+  - Bailey: “Keep the criteria intact but also cover all aspects of game design.”
+  - What changed: The three-part rubric (A, B, C; headline = the lowest) scored rounds 02 and 03. For Part C he said "you can add that to the rubic as part C". On 2026-09-19 he first said "i'll incorporate your changes" to five suggested Part C edits, then "revert changes please": the rubric stayed as written. All of it was replaced by critic policy v2 on 2026-09-20, which turns approved-target matching into a gate.
+  - area critic · both games · superseded by [D-006](#d-006) · delivery implemented
+  - Source: critic/archive/RUBRIC-v1-ABC.md
+- <a id="e-019"></a>**E-019** — Eight standing triggers for when the critic runs (besides the round after every live build)
+  - Bailey: “I'll adopt your recommendations” (blanket yes)
+  - What changed: Adopted as the 2026-09-18 critic schedule, then replaced by the single schedule of critic policy v2 (critic/RUBRIC.md section 4) on 2026-09-20; the paper critique before a sizeable feature survives as the paper preflight.
+  - area critic · both games · superseded by [D-006](#d-006) · delivery implemented
+  - Source: critic/RUBRIC.md
+  - <a id="e-019-t1"></a>**E-019/t1** — Before each deploy, a short gate on the production preview (changed areas, stability, a player's-eye look); any blocker stops the release
+    - What changed: Became the focused review of the production candidate.
+  - <a id="e-019-t2"></a>**E-019/t2** — Whenever Bailey reports a defect, a retrospective: why the critic missed it, then a new check in critic/CHECKS.md and an automated test where possible
+    - What changed: Kept in critic policy v2; the first retrospective (advisor, targeting, pause, banner, audio, black frames, real-key pause) ran on 2026-09-18.
+  - <a id="e-019-t3"></a>**E-019/t3** — When an art batch lands, a visuals-only pass inside the running game, not on a contact sheet
+    - What changed: Folded into the visual lens of the reviews.
+  - <a id="e-019-t4"></a>**E-019/t4** — Before building any sizeable feature or approved proposal, a paper critique of the plan or mockup
+    - What changed: Became the paper preflight (docs/plans/&lt;track&gt;-review.md) of 2026-09-21 (D-014).
+  - <a id="e-019-t5"></a>**E-019/t5** — After audio renders, a technical and thematic check (loudness, loop seams, the themes each cue uses); beauty stays Bailey's call by ear
+    - What changed: Built into the audio workflow's QA stage.
+  - <a id="e-019-t6"></a>**E-019/t6** — A first-time-player pass every few rounds: an auditor who never played FFX grades onboarding and clarity
+    - What changed: Kept as a lens of deep reviews.
+  - <a id="e-019-t7"></a>**E-019/t7** — A weekly round on the live site when idle, started once the score reaches about 9.0
+    - What changed: Not started; the score never reached that point under rubric v1.
+  - <a id="e-019-t8"></a>**E-019/t8** — After any crash recovery, a quick integrity pass (repo, live build against deploys.log, every shipped image and audio file decodes, model hashes, disk state)
+    - What changed: Run after the 2026-09-18 crashes; the shipped-file decode check later became part of deploy-pages.
+- <a id="e-020"></a>**E-020** — When the Claude usage cap is hit, work continues in the Codex desktop app; AGENTS.md becomes the vendor-neutral entry point for any coding agent
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: AGENTS.md (commands, map, hard rules, shared-tree rules, release sequence), a CLAUDE.md that only imports it, and docs/handoff/NOW.md were written so another agent can resume cold; a non-Claude agent must not deploy because it cannot run the critic workflow.
+  - area process · both games · adopted · delivery implemented
+  - Source: AGENTS.md; docs/handoff/NOW.md
+- <a id="e-021"></a>**E-021** — An end-state board: one registry of Bailey's approved target pictures, pictures awaiting his verdict and gaps, rendered to a page he can look at
+  - Bailey: “yes I want it”
+  - What changed: docs/target/targets.json and tools/end-state-board.mjs exist (board published as an artifact); every approval is recorded there with his words and the date, and the critic scores approved tiles from their build hint.
+  - area process · both games · adopted · delivery implemented
+  - Source: docs/handoff/NOW.md
+- <a id="e-022"></a>**E-022** — Ideas for more graphics, presentation and polish are shown as concept art and mockups of the end state for each idea, and nothing is built unless he decides on it
+  - Bailey: “Don't do anything unless I decide on it”
+  - What changed: Twenty-three concept boards (22 ideas) were made as mockups only; on 2026-09-19 he picked 12 of them (the polish tiles in the picture list) and left 11 unapproved (E-029).
+  - area process · both games · adopted · delivery implemented
+  - Source: docs/concepts/polish/index.html
+- <a id="e-023"></a>**E-023** — Product brief picks, made between concrete options late on 2026-09-18 (the consolidated brief, docs/PRODUCT-BRIEF.md, is still a draft waiting for his yes: D-012)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: The picks fix the priority order for trade-offs and what "finished" means for season 1; agents settle conflicts with them. Not picked, and so not goals: "the friend link" for newcomers and a boss-rush challenge game.
+  - area process · both games · adopted · nothing to build
+  - Source: docs/PRODUCT-BRIEF.md
+  - <a id="e-023-north-star"></a>**E-023/north-star** — North star: a faithful recreation of the fights and a 2026 showpiece of what a browser game can look and sound like
+    - What changed: Every mechanic must be right as in the original, and most effort goes to what the eye and ear touch.
+  - <a id="e-023-collisions"></a>**E-023/collisions** — When goals collide: mechanics never bend, effort goes to what the eye and ear touch, newcomer help is an optional layer that never changes canon, and new ideas come last
+    - What changed: A cinematic camera may hide the HUD but never change a timing window, damage number or turn order; a confusing faithful rule gets a better explanation, never a simpler rule.
+  - <a id="e-023-finished"></a>**E-023/finished** — What finished means: seasons: five chapters now, more encounters later in batches, each with its own approved targets (no ship date, no replay layer)
+    - What changed: Season 1 was the five original chapters; the extra chapters approved on 2026-09-19 and later were added as batches.
+  - <a id="e-023-feeling"></a>**E-023/feeling** — The feeling wanted is "one more try", and it comes from the fight itself: hard, fair fights, losses that explain themselves and a fast retry, not medals or modifiers
+    - What changed: No medals, modifiers, rankings or unlocks in season 1 (they stay proposals); the defeat screen got its own gap on the end-state board.
+- <a id="d-001"></a>**D-001** — End state first, and raise the fidelity of the choices
+  - Bailey: “I like to have an idea of viewing the end state so I know what I'm working toward. For example if I am coding a video game I like seeing mock ups and concept art of what I imagine the end result to be.”
+  - What changed: From 2026-09-18 nothing Bailey will see, hear or feel is built before he has picked its end state from 2 to 4 options (a mockup at real resolution, a concept frame, a faked screenshot with a few lines of play, an audio sketch); the pick is saved as the approved target in docs/target/targets.json, and when he cannot say what he wants the options get more concrete instead of the questions more abstract. He approved the routine the same evening ("that sounds really good try to remember that"); AGENTS.md hard rule 9 and his global CLAUDE.md carry it.
+  - area process · both games · adopted · nothing to build
+  - Source: AGENTS.md hard rule 9
+- <a id="d-012"></a>**D-012** — Product brief
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Nothing changed yet: the draft brief waits for his yes. The four picks it is built from are recorded as E-023.
+  - area process · both games · proposed · nothing to build
+  - Source: docs/PRODUCT-BRIEF.md
+- <a id="d-013"></a>**D-013** — Thrift habits (critic round only at milestones, one deploy per work block, fresh session past about 200k of context, a written weekly brief)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Nothing changed: these habits were never approved; the pacing part is covered by the usage modes of D-014.
+  - area process · both games · proposed · nothing to build
+  - Source: never approved; the pacing part is now covered by D-014's usage modes
+
+### 2026-09-19
+
+Saturday · 53 decisions
+
+- <a id="e-024"></a>**E-024** — Work resumes on the next build (Build A) with the critic involved at every step and every change decided per game
+  - Bailey: “Ok on to the next build and dont forget the role of the critic this time please. there's a reason we have a critic. For these changes it should be ffx and ffx-2 aware. Whatever is most true to each specific game. Ask me clarifying questions if needed. If a change is true to ffx but not ffx-2 then do not apply the changes to ffx-2. if it true to ffx-2 but not ffx then do not apply the change to ffx.”
+  - What changed: Build A (the critic round 02 blockers plus the open fix-round-3 tracks) was run critic-first: a paper critique before any sizeable feature, a pre-deploy gate and a round on the live build. Game-aware changes became a standing rule that evening (D-002). Build A went live on 2026-09-19 at 23:15 (main 7191674).
+  - area process · both games · adopted · delivery implemented
+  - Source: docs/handoff/builda-flow.md; docs/deploys.log
+- <a id="e-025"></a>**E-025** — Pacing: full speed, everything in parallel, accepting that the weekly allowance may run out in a day or two (his answer of about 12:40)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Several workflows ran at once and the weekly allowance went from 61 percent at noon to 80 percent by 18:20, so he chose at about 18:40 to ship Build A and stop (E-032).
+  - area process · both games · superseded by [E-032](#e-032) · nothing to build
+  - Source: docs/handoff/NOW.md
+- <a id="e-026"></a>**E-026** — Build order: the critic-found fixes first, then the 12 approved presentation changes, then the new chapters one at a time (Leblanc, then Macalania, then Evrae)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Build A shipped the fixes; the title and chapter select that move came as Build B.1 (2026-09-21), and Leblanc, Macalania and Evrae were registered as chapters VI, VII and VIII on 2026-09-22 to 2026-09-23.
+  - area chapters · both games · adopted · delivery implemented
+  - Source: Notes of 2026-09-19 about 12:40; docs/target/targets.json group chapters.
+- <a id="e-027"></a>**E-027** — Audio verdict: the sampled-orchestra direction is right, keep refining; no score out of ten
+  - Bailey: “Right direction, keep refining”
+  - What changed: The themes and the sampled palette were kept and the new chapters' cues were written in the same language. With no number, the critic's audio category stays unverified until he scores a listening (CHK-B1; D-349).
+  - area audio · both games · adopted · nothing to build
+  - Source: docs/audio/OWNER-VERDICT.md
+- <a id="e-028"></a>**E-028** — Three new chapters are approved: Seymour and Anima at Macalania Temple (FFX), Evrae on the airship (FFX) and the Leblanc Syndicate at Chateau Leblanc (FFX-2), in the order Leblanc, Macalania, Evrae; each needs fact-checked research, a paper critique, art for his pick, engine data, a script, music and a guide first
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Each chapter went through that pipeline: Leblanc shipped as Chapter VI in release 09 (2026-09-23), Evrae as Chapter VIII in release 11 (2026-09-23 evening), and Macalania as Chapter VII once its scene cue was settled (D-278). More chapters followed on his word (D-134, D-135 and the chapter decisions after them).
+  - area chapters · both games · adopted · delivery implemented
+  - Source: critic/RUBRIC.md
+- <a id="e-029"></a>**E-029** — Eleven polish ideas from the concept boards are NOT approved and are not built: hit-feel, overkill-callout, overdrive-cinematic, victory-poses-results, aeon-arrival, clair-impact-feel, clair-command-camera, icons-loading-photo, cutout-animation, depth-normal-lighting, expressive-cutscene
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Nothing was built from those boards. Camera, Overdrive and aeon-arrival work later came back as new options rounds (the Camera Lab, D-318; the MAX visuals mix, D-316), each needing its own pick.
+  - area visuals · both games · rejected · nothing to build
+  - Source: docs/target/targets.json group polish (note: "NOT approved, do not build"); notes of 2026-09-19.
+- <a id="e-030"></a>**E-030** — Every picture on the end-state board is approved (47 tiles that day), and an approved painting is never replaced on an agent judge's say-so: a change needs his yes
+  - Bailey: “i approve everything you listed in the end state board and please let the other agents know” (blanket yes)
+  - What changed: The sha256 of the 94 shipped files behind the approved tiles was locked in docs/target/approved-hashes.json with a backup copy; art workflows must restore any approved file they overwrite (one overwrote 8 on the same day and they were restored). The individual pictures are listed as picture decisions below; the later alpha edit of two cut-outs needed his fresh yes (D-380).
+  - area art · both games · adopted · delivery implemented
+  - Source: docs/handoff/NOW.md; docs/target/approved-hashes.json; and others
+- <a id="e-031"></a>**E-031** — Replace the corrupt CLIP-Vision encoder with a verified download, and let art generation resume once the models verify
+  - Bailey: “You can replace it now”
+  - What changed: The CLIP-Vision encoder, the painting checkpoint and the IP-Adapter were replaced by verified copies (hashes recorded) before art generation resumed; the corrupt copies were kept aside.
+  - area process · both games · adopted · delivery implemented
+  - Source: docs/ART-PIPELINE.md
+- <a id="e-032"></a>**E-032** — Allowance: finish the HUD tracks and the targeting look, ship Build A with the critic round, announce it with screenshots, then pause everything until the weekly allowance resets
+  - Bailey: “ship Build A, then stop”
+  - What changed: Build A went live on 2026-09-19 at 23:15 (main 7191674) and the critic scored it (round 03, headline 4.09); everything else paused, then resumed early on 2026-09-20 when a fresh account allowed (E-033).
+  - area process · both games · adopted · delivery implemented
+  - Source: docs/deploys.log; critic/rounds/round-03.md
+- <a id="d-002"></a>**D-002** — Every change is specific and game-aware
+  - Bailey: “from now it is a rule that changes implemented must be specific and game aware. a change true to ffx but not ffx-2 does not apply to ffx-2. a change true to ffx-2 but not ffx does not apply to ffx. a change true to both ffx and ffx-2 applies to both ffx and ffx-2. let the other agents know.”
+  - What changed: Every change is now decided as FFX only, FFX-2 only or both from the research notes, and the case is written in the plan, the handoff and the commit; shared plumbing and bug fixes count as both. AGENTS.md hard rule 14 and critic check CHK-021 enforce it, and docs/PRODUCT-BRIEF.md carries it.
+  - area process · both games · adopted · nothing to build
+  - Source: AGENTS.md hard rule 14; critic/CHECKS.md
+- <a id="d-003"></a>**D-003** — Track the 5-hour and weekly allowance at every live build
+  - Bailey: “Continue keeping track of 5 hour and weekly usage when pushing live builds.”
+  - What changed: At every live build the 5-hour and weekly usage readings are taken before the cut, after the deploy and after the review and reported with the announcement; the old "ask above 85 percent" rule was later replaced by the usage modes of D-014.
+  - area process · both games · adopted · nothing to build
+  - Source: critic/RUBRIC.md
+- <a id="d-004"></a>**D-004** — Targeting look: option B
+  - Bailey: “B: hand, ring and a quiet dim”
+  - What changed: The targeting look is a pointing hand (FFX) or a pink sparkle cursor with a rotating six-petal flower reticle (FFX-2), a ground ring and a slight dim; the enemy formation spreads, ground decals and the yielding party-status panel are part of it, and there is no chevron plate, rim light, x-ray or moving enemies. The targeting track was built on that pick (commits 83ea60a to 9a5ad1a); the FFX-2 frame still failed review round 04.
+  - area ui · both games · adopted · delivery implemented
+  - Source: targets.json group fight; round 04 has the FFX-2 frame failing
+- <a id="d-005"></a>**D-005** — Proposals: only the cold open and taught first chapter; HUD density presets, medals or a scorecard, the accessibility pack and challenge ribbons are not approved
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Only the cold open and taught first chapter proposal went forward (it became the onboarding options round, D-008). HUD density presets, medals or a scorecard, the accessibility pack and challenge ribbons stayed unbuilt; the accessibility pack was reopened on 2026-09-26 (D-202).
+  - area process · both games · adopted · nothing to build
+  - Source: docs/handoff/NOW.md
+- <a id="d-024"></a>**D-024** — Never weaken a boss to make a test pass; when fixing a sourced bug exposes unsourced boss behaviour, build and measure each answer, then ask him once with the numbers (he picked the sourced Acta Est Fabula fix over a tactic-only workaround)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: FFX-2 Chapter 5's Acta Est Fabula heals only the two Redoubts, as sourced (the Head fight takes 34 turns instead of 81); no boss number is tuned to turn a test green, and unsourced boss behaviour is measured on the real engine before it is asked about.
+  - area combat · both games · adopted · delivery implemented
+  - Source: docs/handoff/NOW.md; AGENTS.md hard rule 6
+- **Picture** (scenes) — Approved: Ch. 1 · Mt. Gagazet
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: The chapter 1 battle backdrop as the camera first frames it.
+  - area art · FFX · adopted · nothing to build
+  - Source: docs/target/targets.json, group scenes, tile "Ch. 1 · Mt. Gagazet"
+- **Picture** (scenes) — Approved: Ch. 3 · Dream's End
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: The chapter 3 battle backdrop as the camera first frames it.
+  - area art · FFX · adopted · nothing to build
+  - Source: docs/target/targets.json, group scenes, tile "Ch. 3 · Dream's End"
+- **Picture** (scenes) — Approved: Ch. 4 · Bevelle Underground
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: The chapter 4 battle backdrop as the camera first frames it.
+  - area art · FFX-2 · adopted · nothing to build
+  - Source: docs/target/targets.json, group scenes, tile "Ch. 4 · Bevelle Underground"
+- **Picture** (scenes) — Approved: Ch. 5 · Farplane
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: The chapter 5 battle backdrop as the camera first frames it.
+  - area art · FFX-2 · adopted · nothing to build
+  - Source: docs/target/targets.json, group scenes, tile "Ch. 5 · Farplane"
+- **Picture** (cast) — Approved: FFX party portraits
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Delivery: Built, and failing its target in critic/rounds/round-04.json at bc2571c.
+  - area art · FFX · adopted · delivery implemented
+  - Source: docs/target/targets.json, group cast, tile "FFX party portraits"
+- **Picture** (cast) — Approved: Tidus, battle poses
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Tidus's shipped poses in chapter 1.
+  - area art · FFX · adopted · delivery verified
+  - Source: docs/target/targets.json, group cast, tile "Tidus, battle poses"
+- **Picture** (cast) — Approved: Yuna, battle poses
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Delivery: Built, and failing its target in critic/rounds/round-04.json at bc2571c.
+  - area art · FFX · adopted · delivery implemented
+  - Source: docs/target/targets.json, group cast, tile "Yuna, battle poses"
+- **Picture** (cast) — Approved: Auron, battle poses
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Auron's shipped poses in chapter 1.
+  - area art · FFX · adopted · delivery verified
+  - Source: docs/target/targets.json, group cast, tile "Auron, battle poses"
+- **Picture** (cast) — Approved: Seymour Flux
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Seymour Flux on the field in chapter 1.
+  - area art · FFX · adopted · delivery verified
+  - Source: docs/target/targets.json, group cast, tile "Seymour Flux"
+- **Picture** (cast) — Approved: Yunalesca, first form
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Yunalesca's first form on the field in chapter 2.
+  - area art · FFX · adopted · delivery verified
+  - Source: docs/target/targets.json, group cast, tile "Yunalesca, first form"
+- **Picture** (cast) — Approved: Braska's Final Aeon
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Braska's Final Aeon, first form, on the field in chapter 3.
+  - area art · FFX · adopted · delivery verified
+  - Source: docs/target/targets.json, group cast, tile "Braska's Final Aeon"
+- **Picture** (cast) — Approved: Shiva
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Shiva summoned in an FFX chapter.
+  - area art · FFX · adopted · nothing to build
+  - Source: docs/target/targets.json, group cast, tile "Shiva"
+- **Picture** (cast) — Approved: Yuna, Gunner (FFX-2)
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Yuna as Gunner on the field in chapter 4.
+  - area art · FFX-2 · adopted · delivery verified
+  - Source: docs/target/targets.json, group cast, tile "Yuna, Gunner (FFX-2)"
+- **Picture** (cast) — Approved: Shuyin
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Shuyin on the field in chapter 5.
+  - area art · FFX-2 · adopted · nothing to build
+  - Source: docs/target/targets.json, group cast, tile "Shuyin"
+- **Picture** (pause) — Approved: Rebuilt pause, 2000 × 1012
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Pause (Esc) during chapter 1 at 2000 x 1012, panels shown.
+  - area ui · both games · superseded by "Pause remade on the Until Dawn character screen" · nothing to build
+  - Source: docs/target/targets.json, group pause, tile "Rebuilt pause, 2000 × 1012"
+- **Picture** (pause) — Approved: Panels hidden (H)
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Pause during chapter 1 at 2000 x 1012 with panels hidden (H).
+  - area ui · both games · superseded by "Pause remade on the Until Dawn character screen" · delivery verified
+  - Source: docs/target/targets.json, group pause, tile "Panels hidden (H)"
+- **Picture** (pause) — Approved: Party panel
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Pause during chapter 1 at 2000 x 1012 with the PARTY panel open.
+  - area ui · both games · superseded by "Pause remade on the Until Dawn character screen" · delivery verified
+  - Source: docs/target/targets.json, group pause, tile "Party panel"
+- **Picture** (pause) — Approved: Hero plate, chapter 1
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: The chapter 1 pause painting, full-bleed.
+  - area ui · FFX · adopted · delivery verified
+  - Source: docs/target/targets.json, group pause, tile "Hero plate, chapter 1"
+- **Picture** (pause) — Approved: Hero plate, chapter 4
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Delivery: Was built as a different painting (round 04 PR-0242: the plate was the 'ch4-b v2' render, not this tile). Restored 2026-09-29 (r29-plate, D-257, FFX-2 only): public/art/pause/ch4-ffx2-bahamut.png is now the tile's own painting, byte-identical to D:/Tools/pyrefly-art-backup/20260918-1455/pause/ch4-bahamut.png and pixel-identical to this tile (mean abs diff 0.0); the 2x master is a lanczos resample of it (served-plate 
+  - area ui · FFX-2 · adopted · delivery implemented · see [D-257](#d-257)
+  - Source: docs/target/targets.json, group pause, tile "Hero plate, chapter 4"
+- **Picture** (pause) — Approved: All hero plates
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Every pause painting that ships.
+  - area ui · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group pause, tile "All hero plates"
+- **Picture** (fight) — Approved: Targeting: a spell on the whole party
+  - Bailey: “B: hand, ring and a quiet dim”
+  - Target: Chapter 3, Tidus, White Magic, Hastega highlighted: three party members ringed green, rows lit.
+  - area combat · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group fight, tile "Targeting: a spell on the whole party"
+- **Picture** (fight) — Approved: Targeting: one Yu Pagoda, every enemy visible
+  - Bailey: “B: hand, ring and a quiet dim”
+  - Target: Chapter 3, Attack aimed at one Yu Pagoda with the Final Aeon and both Pagodas all visible.
+  - area combat · FFX · adopted · nothing to build
+  - Source: docs/target/targets.json, group fight, tile "Targeting: one Yu Pagoda, every enemy visible"
+- **Picture** (fight) — Approved: Targeting in FFX-2: a Vegnagun part
+  - Bailey: “B: hand, ring and a quiet dim”
+  - Target: Chapter 5, a single-target attack on one of Vegnagun’s parts while the ATB keeps running.
+  - area combat · FFX-2 · adopted · nothing to build
+  - Source: docs/target/targets.json, group fight, tile "Targeting in FFX-2: a Vegnagun part"
+- **Picture** (fight) — Rejected: A: Taught first turn (not chosen)
+  - Bailey: “B: hand, ring and a quiet dim” (his words for the whole group of pictures)
+  - Note: A short cold open, then three coach marks on the real HUD, one at a time. Good work, simply not the one picked on 20 Sep 2026 — kept so the sheet stays readable and nobody re-proposes it as new.
+  - area ui · both games · rejected · nothing to build
+  - Source: docs/target/targets.json, group fight, tile "A: Taught first turn (not chosen)"
+- **Picture** (fight) — Rejected: B: Field notes (not chosen)
+  - Bailey: “B: hand, ring and a quiet dim” (his words for the whole group of pictures)
+  - Note: No interruption at all: one line on the hint bar and a HOW TO PLAY page on demand. Not picked on 20 Sep 2026; kept for the record, not rejected art.
+  - area ui · both games · rejected · nothing to build
+  - Source: docs/target/targets.json, group fight, tile "B: Field notes (not chosen)"
+- **Picture** (phone) — Approved: Pause on a phone
+  - Bailey: no verbatim quote on record for this decision
+  - Target: Pause during chapter 1 at 390 x 844.
+  - area ui · both games · superseded by "Pause remade on the Until Dawn character screen" · nothing to build · see [D-207](#d-207)
+  - Source: docs/target/targets.json, group phone, tile "Pause on a phone"
+- **Picture** (polish) — Approved: A front end that moves: parallax title and silhouette chapter cards
+  - Bailey: no verbatim quote on record for this decision
+  - Delivery: Supersedes the presentation-group 'Title' and 'Chapter select' tiles (docs/plans/build-b-review.md REQUIRED 11): the painted-silhouette parallax title and board replace those two approved pictures. Target/build pairs: docs/screenshots/frontend/pair-title.jpg, docs/screenshots/frontend/pair-chapter-select.jpg.
+  - area ui · both games · adopted · delivery implemented · see [D-183](#d-183)
+  - Source: docs/target/targets.json, group polish, tile "A front end that moves: parallax title and silhouette chapter cards"
+- **Picture** (polish) — Approved: The interface stops cutting and starts moving
+  - Bailey: no verbatim quote on record for this decision
+  - Target: The moment the mockup shows; see docs/concepts/polish/animated-ink-interface/ for the before picture and the motion clip.
+  - area ui · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group polish, tile "The interface stops cutting and starts moving"
+- **Picture** (polish) — Approved: A face pass on the weak close-ups
+  - Bailey: no verbatim quote on record for this decision
+  - Target: The moment the mockup shows; see docs/concepts/polish/closeup-likeness/ for the before picture and the motion clip.
+  - area visuals · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group polish, tile "A face pass on the weak close-ups"
+- **Picture** (polish) — Approved: Backdrops with a floor and a sky
+  - Bailey: no verbatim quote on record for this decision
+  - Target: The moment the mockup shows; see docs/concepts/polish/living-backdrops/ for the before picture and the motion clip.
+  - area visuals · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group polish, tile "Backdrops with a floor and a sky"
+- **Picture** (polish) — Approved: The queue answers before you commit
+  - Bailey: no verbatim quote on record for this decision
+  - Target: The moment the mockup shows; see docs/concepts/polish/ctb-preview/ for the before picture and the motion clip.
+  - area ui · FFX · adopted · nothing to build
+  - Source: docs/target/targets.json, group polish, tile "The queue answers before you commit"
+- **Picture** (polish) — Approved: The arena turns when the boss does
+  - Bailey: no verbatim quote on record for this decision
+  - Target: The moment the mockup shows; see docs/concepts/polish/phase-lighting/ for the before picture and the motion clip.
+  - area visuals · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group polish, tile "The arena turns when the boss does"
+- **Picture** (polish) — Approved: Air in the arena
+  - Bailey: no verbatim quote on record for this decision
+  - Target: The moment the mockup shows; see docs/concepts/polish/pyrefly-atmosphere/ for the before picture and the motion clip.
+  - area visuals · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group polish, tile "Air in the arena"
+- **Picture** (polish) — Approved: Show me the room before you ask me to fight in it
+  - Bailey: no verbatim quote on record for this decision
+  - Target: The moment the mockup shows; see docs/concepts/polish/arena-camera-sweep/ for the before picture and the motion clip.
+  - area visuals · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group polish, tile "Show me the room before you ask me to fight in it"
+- **Picture** (polish) — Approved: The pane breaks
+  - Bailey: no verbatim quote on record for this decision
+  - Target: The moment the mockup shows; see docs/concepts/polish/glass-shatter-transition/ for the before picture and the motion clip.
+  - area visuals · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group polish, tile "The pane breaks"
+- **Picture** (polish) — Approved: Dissolved into pyreflies, not faded out
+  - Bailey: no verbatim quote on record for this decision
+  - Target: The moment the mockup shows; see docs/concepts/polish/pyrefly-death/ for the before picture and the motion clip.
+  - area visuals · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group polish, tile "Dissolved into pyreflies, not faded out"
+- **Picture** (polish) — Approved: Chain counter, and a results card that respects your time
+  - Bailey: no verbatim quote on record for this decision
+  - Target: The moment the mockup shows; see docs/concepts/polish/x2-chain-and-mission/ for the before picture and the motion clip.
+  - area ui · FFX-2 · adopted · nothing to build
+  - Source: docs/target/targets.json, group polish, tile "Chain counter, and a results card that respects your time"
+- **Picture** (polish) — Approved: The spherechange gets its moment
+  - Bailey: no verbatim quote on record for this decision
+  - Target: The moment the mockup shows; see docs/concepts/polish/spherechange-sequence/ for the before picture and the motion clip.
+  - area visuals · FFX-2 · adopted · nothing to build
+  - Source: docs/target/targets.json, group polish, tile "The spherechange gets its moment"
+- **Picture** (whole) — Approved: Concept key art
+  - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
+  - Target: Not a screen: the yardstick for the whole-game look.
+  - area art · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group whole, tile "Concept key art"
+
+### 2026-09-20
+
+Sunday · 8 decisions
+
+- <a id="e-033"></a>**E-033** — Work resumes on a fresh account: continue, keep to the delegation policy and watch token usage closely
+  - Bailey: “continue on with work ... do not forget our delegation policy and carefully monitor token usage”
+  - What changed: Build A.1 and the critic policy v2 integration went ahead; usage was read at every release from then on (D-003).
+  - area process · both games · adopted · nothing to build
+  - Source: docs/handoff/NOW.md
+- <a id="e-034"></a>**E-034** — Paint candidates for Paine and the seven other missing speaker portraits (two or three each) and show them on a contact sheet for his pick; nothing ships until he chooses
+  - Bailey: “Yes, paint candidates”
+  - What changed: Candidates for eight portraits were painted (docs/concepts/portraits/sheet.png, commit d57aa41) and shown to him on 2026-09-21, when he picked (D-011 and the picture decisions).
+  - area art · both games · adopted · delivery implemented
+  - Source: docs/concepts/portraits
+- <a id="d-006"></a>**D-006** — Critic policy v2
+  - Bailey: “this message is my approval of the proposed scoring, gates, cadence, and resource controls”
+  - What changed: Every deployed build is evaluated, with the depth set by what changed: three separate verdicts (deployment, changed area, milestone), one weighted score over ten categories (9.60 unrounded, every category at least 9.0) plus gates, and unknown or stale evidence is never a pass. Integrated in critic/RUBRIC.md, critic/policy.json and the critic tools (commits 4ccba89 and d7b9dcb); rounds 02 and 03 stay rubric v1 history.
+  - area critic · both games · adopted · delivery implemented
+  - Source: critic/RUBRIC.md; critic/policy.json
+- <a id="d-007"></a>**D-007** — A full critic round after every deploy
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Replaced by D-006: the full round after every deploy (about 20 agents, 6 to 10 percent of the weekly allowance each) ended and review depth now follows the change.
+  - area critic · both games · superseded by [D-006](#d-006) · nothing to build
+  - Source: rounds 02 and 03 stay as rubric v1 history
+- <a id="d-008"></a>**D-008** — Onboarding: option C, Auron's briefing
+  - Bailey: “C: Auron’s briefing”
+  - What changed: The game opens with Auron's briefing: about 20 skippable seconds in the game's own voice with Auron's approved painting and four lines framing both clocks, then one whispered line on first use; the FFX-2 lines come from Rikku with nothing paused; it can be replayed from pause and has a BATTLE HELP toggle. Built and verified (commits 5e8eca5, b8a905f, e30ea5e) and switched on in release 08.
+  - area guide · both games · adopted · delivery implemented
+  - Source: docs/handoff/onboarding-c.md
+- **Picture** (fight) — Approved: Onboarding C1: Auron’s briefing
+  - Bailey: “C: Auron’s briefing”
+  - Delivery: Built and adversarially verified on main (5e8eca5, b8a905f, e30ea5e); not live and not yet matched by a review.
+  - area ui · FFX · adopted · delivery implemented · see [D-136](#d-136), [D-121](#d-121)
+  - Source: docs/target/targets.json, group fight, tile "Onboarding C1: Auron’s briefing"
+- **Picture** (fight) — Approved: Onboarding C2: FFX first-use line (Auron)
+  - Bailey: “C: Auron’s briefing”
+  - Delivery: Built and adversarially verified on main (5e8eca5, b8a905f, e30ea5e); not live and not yet matched by a review.
+  - area ui · FFX · adopted · delivery implemented
+  - Source: docs/target/targets.json, group fight, tile "Onboarding C2: FFX first-use line (Auron)"
+- **Picture** (fight) — Approved: Onboarding C3: FFX-2 first-use line (Rikku) and the pause rows
+  - Bailey: “C: Auron’s briefing”
+  - Delivery: Built and adversarially verified on main (5e8eca5, b8a905f, e30ea5e); round 05 repairs on top. SHIPPED DARK in the Build A.2 candidate (ONBOARDING_LIVE = false in src/ui/coach/coachState.ts): the briefing’s approved fourth line, ‘the clock does not wait’, is only true once Active ATB lands (PR-0046, owner chose Active 21 Sep 2026), so the feature waits for that candidate rather than ship a line that is not yet true. 
+  - area ui · FFX-2 · adopted · delivery implemented · see [D-121](#d-121)
+  - Source: docs/target/targets.json, group fight, tile "Onboarding C3: FFX-2 first-use line (Rikku) and the pause rows"
+
+### 2026-09-21
+
+Monday · 90 decisions
+
+- <a id="e-035"></a>**E-035** — Three separate interactive learning sites adapted from the Human Atlas and Model X Studio pattern (explode slider, systems panel, cited detail cards): A Pyrefly Atlas (a boss taken apart), B Pyrefly Studio (one turn taken apart, the real engine computing the numbers) and C Pyrefly Reprise, exploded (a game frame taken apart into layers)
+  - Bailey: “A, B, C all separately please but please be mindful of delegation here so we dont waste so many tokens and usage.”
+  - What changed: A new root folder learn/ with its own Vite config was built to the nine frames he approved ("yes commit it, all three looks are good"): all three sites run locally and were committed to main; the game build was untouched. Where to publish them was left open and is not recorded as settled.
+  - area site · both games · adopted · delivery implemented
+  - Source: docs/handoff/NOW.md; docs/plans/learning-sites.md; and others
+- <a id="e-036"></a>**E-036** — Delegation is restated in capitals after a session launched a workflow whose agents inherited the expensive top model, and a status message named only two of the top model's three jobs
+  - Bailey: “Don't you remember seeing the above”
+  - What changed: The rule was written verbatim at the top of Bailey's global CLAUDE.md; every Agent call and workflow agent now sets its model explicitly (Sonnet for well-specified tracks, Opus for judgement), and any description of the split must name all three of the top model's jobs: planning, architecture review and final validation. He also said "please delegation to opus and sonnet" during the learning-sites work and asked "what is the role of fable? you didn't forget right?".
+  - area process · both games · adopted · nothing to build · refines [D-023](#d-023)
+  - Source: docs/handoff/NOW.md
+- <a id="e-037"></a>**E-037** — Push Build A.2 live now, past the deploy gate that was holding it for a deep review
+  - Bailey: “Just push the build please”
+  - What changed: Build A.2 (main fd0ae96) went live at 12:43 EDT under the first use of the owner override; the deploy gate was relaxed later that day by his rules A, B and C (D-015, D-016, D-017).
+  - area release · both games · adopted · delivery implemented · at ~12:43 EDT
+  - Source: docs/deploys.log; critic/pending
+- <a id="e-038"></a>**E-038** — The next build (Build B) carries the title screen he approved (the parallax key-art title and silhouette chapter cards) and the three new chapters he approved (Leblanc, Macalania, Evrae)
+  - Bailey: “Next build needs to include the new chapters I approved of and the new title screen I approved of. Let's go. Let's hit the ground running!”
+  - What changed: Build B.1 went live at 14:24 EDT (main 8f48237) with the front end that moves: the painted key-art title and an eight-chapter grid with locked silhouettes for chapters still coming. The chapters followed one at a time.
+  - area chapters · both games · adopted · delivery implemented
+  - Source: docs/handoff/NOW.md
+- <a id="e-039"></a>**E-039** — The title screen must match its approved target (the painted key-art title) before the build ships
+  - Bailey: “Yes to all recommendations but the title screen needs to match the target.” (blanket yes)
+  - What changed: The first Build B title used a plain gradient instead of the approved key art; the main session compared the pair itself, the title was rebuilt on the approved plate (commit 8877431e) and an independent verifier passed the pair before B.1 shipped.
+  - area ui · both games · adopted · delivery implemented · at ~14:30 EDT
+  - Source: docs/screenshots/frontend/pair-title.jpg
+- <a id="e-040"></a>**E-040** — Concept recommendations for the three new chapters (besides the preflight questions D-018 to D-020), accepted as written
+  - Bailey: “Yes to all recommendations but the title screen needs to match the target.” (blanket yes)
+  - What changed: These fixed the look of each chapter's art before painting started (they are also recorded in the chapter tiles of docs/target/targets.json). Each item is its own row.
+  - area art · both games · adopted · delivery implemented · at ~14:30 EDT
+  - Source: docs/concepts/chapters/macalania/options.json; docs/concepts/chapters/evrae/options.json; and others
+  - <a id="e-040-guardian"></a>**E-040/guardian** — Macalania: the Guado Guardian is concept A, the on-canon reroll (face and pointed ears visible for the steal-a-potion gag)
+    - What changed: Concept A is the reference for the Guardian's paintings (FFX only; recorded on the Chapter VII tile; D-045 later fixed the set at an idle plus one hero cast painting).
+  - <a id="e-040-anima"></a>**E-040/anima** — Macalania: boss Anima reuses the approved aeon Anima painting; no new Anima render
+    - What changed: No Anima was painted for Chapter VII; she reuses public/art/characters/anima/idle.png at the Macalania scale (later D-045).
+  - <a id="e-040-evrae-backdrop"></a>**E-040/evrae-backdrop** — Evrae: the backdrop is concept B, looking up at the hull from the rail, not the off-canon A or the outside-hull C
+    - What changed: The Evrae airship-deck backdrop was painted from concept B (approved later as D-038).
+  - <a id="e-040-leblanc-backdrop"></a>**E-040/leblanc-backdrop** — Leblanc: the backdrop is concept C
+    - What changed: Concept C (mixed magenta and cyan, with the door and heart panel) is the reference for the Chateau Leblanc backdrop (FFX-2 only; recorded on the Leblanc tile).
+  - <a id="e-040-rerender"></a>**E-040/rerender** — Ormi and Logos are re-rendered on canon (Ormi's concepts B and C and Logos's concept B were off-canon)
+    - What changed: Both went through repeated re-render rounds, including a face-consistency method change on 2026-09-22; their hurt poses were accepted on 2026-09-26 (D-230; FFX-2 only).
+- <a id="e-041"></a>**E-041** — The remaining art-direction picks for the three new chapters, from the driver's art-director recommendations after looking at the three concept sheets
+  - Bailey: “Yes to these too.” (blanket yes)
+  - What changed: Each pick fixed which concept the chapter's painting follows; they are recorded in the chapter tiles of docs/target/targets.json. Each item is its own row.
+  - area art · both games · adopted · delivery implemented · at ~14:25 EDT
+  - Source: docs/concepts/chapters/macalania/options.json
+  - <a id="e-041-macalania-backdrop"></a>**E-041/macalania-backdrop** — Macalania backdrop: concept A (warm brazier gold dominant), not B or C
+    - What changed: The Macalania Temple backdrop follows concept A, warm brazier gold (FFX only; recorded on the Chapter VII tile and approved as final art on 2026-09-25, D-141).
+  - <a id="e-041-seymour"></a>**E-041/seymour** — Seymour, human form, at Macalania: concept B (arms crossed, warm brazier rim light)
+    - What changed: Seymour's Chapter VII paintings follow concept B (FFX only; D-045, D-065).
+  - <a id="e-041-evrae-look"></a>**E-041/evrae-look** — Evrae's look: concept B, cooler teal and gold, with the near and breath-charge poses derived in B's colours
+    - What changed: Evrae's palette is B's teal and gold in every pose (D-038, FFX only).
+  - <a id="e-041-leblanc-look"></a>**E-041/leblanc-look** — Leblanc's look: concept B (magenta, fan open)
+    - What changed: Leblanc's paintings follow B; her fan is fully open with a red leaf and silver ribs (D-139; FFX-2 only).
+  - <a id="e-041-logos"></a>**E-041/logos** — Logos: concept C
+    - What changed: Logos follows C with a plainer canon helmet, and one helmet in every state after the face-consistency fix of 2026-09-22 (FFX-2 only).
+  - <a id="e-041-ormi"></a>**E-041/ormi** — Ormi: re-render heavier from concept A (canon Ormi is big and round)
+    - What changed: Ormi was re-rendered from A; his idle gained the Syndicate heart on his shield (D-036; FFX-2 only).
+- <a id="e-042"></a>**E-042** — The next build (Build C) must finish ALL the new chapters (Leblanc, Macalania, Evrae), together with the smarter advisor, modern-sounding music, Active ATB, onboarding switched on and the Until Dawn pause menus
+  - Bailey: “let's decide on what to include in the next build please, you need to finish ALL chapters the new chapters need to be done”
+  - What changed: Build C was scoped that way, then split into increments (D-025). The three chapters were registered end to end on 2026-09-22 and 2026-09-23 and shipped from release 09 onward (see E-028).
+  - area chapters · both games · adopted · delivery implemented · at ~16:15 EDT
+  - Source: Said 2026-09-21 ~16:15 EDT (with the advisor and music asks below); commit 4c5a61e2 (NOW: keep Bailey's Build C scope quotes).
+- <a id="e-043"></a>**E-043** — The move advisor must be way smarter: aware turn by turn of what is happening and of which character is being controlled; the chapter line is a prior, not a pin, so the advisor may outrank the guide's pinned pick
+  - Bailey: “the move advisor needs to be way smarter and way more aware of what is going on turn by turn and what character you are controlling.”
+  - What changed: Advisor v2 (a per-turn planner simulating on a cloned engine for the acting character, with a sentence citing true board facts) was built the same day (commit f0ff68a7), v3 on 2026-09-27 (D-271) and v4 on 2026-09-28 (D-272). His words also settled the old question whether the ranking may outrank the guide's pinned pick: yes. On 2026-10-03 he made the strategy guide and the move advisor completely separate (D-359).
+  - area guide · both games · adopted · delivery implemented · at ~16:15 EDT
+  - Source: docs/handoff/advisor-v2.md; docs/plans/advisor-v2-review.md
+- <a id="e-044"></a>**E-044** — The pause menus are remade by carefully replicating the Until Dawn character screen (a video he linked) with the game's own art style and direction, ignoring the text on screen, and this goes into the next build
+  - Bailey: “We need to remake the pause menus and please see here and carefully replicate it but with our art style and direction (ignore text on the screen)”
+  - What changed: Seven concept frames were drawn on that layout the same evening (commit 05c02c3f); he picked grade B, the mirrored chrome, the meters and a MUSIC tab (D-021), and the remade pause screen was built, verified and live from release 08 (commit 8cf17246). His second sentence, "This needs to be included in our next build as well", made it part of the next build.
+  - area ui · both games · adopted · delivery implemented
+  - Source: docs/concepts/pause-until-dawn; docs/handoff/pause-remake.md
+- <a id="e-045"></a>**E-045** — Usage mode NORMAL by his word: release 08 tonight, the living-portrait round 2, and one new chapter finished; do not hold back
+  - Bailey: “1+2 and 1 new chapter finished. Don't hold back.”
+  - What changed: Release 08 shipped at 23:48 EDT (main 1b33971), the living-portrait rig and video routes ran, and the Leblanc chapter (Chapter VI) was built end to end; the usage-mode rule says only Bailey sets the mode and agents may only tighten it (D-014).
+  - area process · both games · adopted · delivery implemented · at ~21:10 EDT
+  - Source: docs/handoff/NOW.md
+- <a id="e-046"></a>**E-046** — Yes to downloading the Wan 2.2 image-to-video model set and a facial-animation tool for the living portrait, onto the D: drive
+  - Bailey: “yes to downloads but on D: please”
+  - What changed: The Wan 2.2 5B model set was downloaded to D:\Tools\video-models; the facial-animation tool turned out to have non-commercial weights and a torch that cannot run on his GPU, so only its code was cloned and it was not used. Later downloads follow the standing permission (D-236, D-370).
+  - area process · both games · adopted · delivery implemented · at ~21:10 EDT
+  - Source: docs/handoff/NOW.md
+- <a id="e-047"></a>**E-047** — The living portrait takes the expensive route: local image-to-video (Wan 2.2) for a clip graph, and as the source of consistent turn keys, besides the layered rig
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: A video preview and a layered rig were built the same night; the stitched preview was rejected (E-049) and the route moved to continuity-first (a first-and-last-frame model, then colour matching and ping-pong playback); the living portraits that shipped use painted face parts (D-320).
+  - area visuals · both games · adopted · delivery implemented
+  - Source: docs/concepts/pause-until-dawn; docs/plans/pause-living-portraits.md
+- <a id="e-048"></a>**E-048** — Push release 08 live now, past the two-deploy deep-review cap
+  - Bailey: “Push the live build now please”
+  - What changed: Release 08 went live at 23:48 EDT (main 1b33971, bundle BvhtVfzJ) with the focused review SHIP; its live check passed and a deep review followed on the live build.
+  - area release · both games · adopted · delivery implemented · at ~23:21 EDT
+  - Source: docs/deploys.log
+- <a id="e-049"></a>**E-049** — The stitched Wan 2.2 living-portrait video preview (two independently generated clips cross-faded) is rejected; continuity is the first requirement of the living portrait
+  - Bailey: “somehow the new live portrait looks even worse than before. there is absolutely no continuity whatsoever. it looks terrible.... it needs to be better implemented.”
+  - What changed: Nothing with a visible join goes to him again: every clip must start and end on the plate frame (he said "yes" at about 23:58 to downloading the first-and-last-frame model on D:), each join is judged frame by frame at 1:1, and the layered rig stays the continuity backbone. The version that finally shipped uses painted parts (D-320).
+  - area visuals · both games · rejected · nothing to build · at ~23:55 EDT
+  - Source: docs/concepts/pause-until-dawn/video-preview; docs/handoff/NOW.md
+- <a id="d-009"></a>**D-009** — FFX-2 ATB is Active only, no Wait toggle
+  - Bailey: “For ffx-2 I choose active.”
+  - What changed: FFX-2's battle clock was to run Active only, with no Wait toggle; the engine work started (it measured Chapter 5 at 0 of 40 wins at human decision speed), and on 2026-09-22 he replaced it with a Wait mode that is the default (D-029); the Active build stays as the other setting.
+  - area combat · FFX-2 · superseded by [D-029](#d-029) · delivery in progress
+  - Source: research/ffx2-combat-core.md; docs/handoff/NOW.md
+- <a id="d-010"></a>**D-010** — Active mode: an enemy hit closes the open menu and delays that character
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Nothing changed: proposed and unanswered when recorded. The engine behaviour was settled later by D-171 and D-198 (a plain hit leaves an open menu open; only a Delay or Action-cancel ability closes it).
+  - area combat · FFX-2 · proposed · nothing to build
+  - Source: single source; asked 2026-09-21, not answered
+- <a id="d-011"></a>**D-011** — Eight speaker portraits picked (Braska card 1 and Yu Yevon card 2 on the side session's recommendation)
+  - Bailey: “yes to both recommendations” (blanket yes)
+  - What changed: Six portraits he picked himself (Paine card 1, Shuyin 2, Yuna X-2 3, Rikku X-2 3, Young Auron 1, Fayth boy 1) were installed in public/art/portraits with measured face crops (commit e8df350); his "yes to both recommendations" covered Braska and Yu Yevon.
+  - area art · both games · adopted · delivery implemented
+  - Source: docs/handoff/NOW.md
+  - <a id="d-011-braska"></a>**D-011/braska** — Braska's speaker portrait is card 1 (his yes to the side session's recommendation)
+    - What changed: Card 1 is installed as public/art/portraits/braska.png. Its gold crest and sash are off-canon on every candidate, a headdress repaint was proposed, and on 2026-09-21 he closed that for good (D-028).
+  - <a id="d-011-yu-yevon"></a>**D-011/yu-yevon** — Yu Yevon's speaker portrait is card 2 (his yes to the side session's recommendation)
+    - What changed: Card 2 was installed with the other portraits; on 2026-09-26 he answered that there is no Yu Yevon speaker portrait at all (D-208), so this pick no longer stands.
+    - superseded by [D-208](#d-208)
+- <a id="d-014"></a>**D-014** — Six process adoptions from project-scaffolding: stagnation rule, repair-cycle cap, usage modes, decision states and delivery status, named versus inferred preferences, critic calibration and paper preflight
+  - Bailey: “adopt all six” (blanket yes)
+  - What changed: All six process rules went into force the same night (commit 62f4cbb; AGENTS.md hard rule 15; critic/RUBRIC.md sections 4 and 6 to 10; critic/policy.json). Each is its own row below.
+  - area process · both games · adopted · delivery implemented
+  - Source: docs/plans/scaffold-proposals.md; critic/RUBRIC.md
+  - <a id="d-014-usage-modes"></a>**D-014/usage-modes** — Usage modes by the weekly allowance left: normal above 50 percent, conserve 20 to 50 (one workflow, Sonnet unless engine, presenter or verifier, no art agents, one repair cycle), protect at 20 or below (no new workflow, hand off, ask Bailey); the 5-hour window can only tighten; Bailey sets the mode by word and agents may only tighten it
+    - What changed: critic/RUBRIC.md section 9 and critic/policy.json carry the modes; NOW.md starts with a "Usage mode:" line and release announcements state it; "protect at 80 percent used" replaced "ask above 85".
+  - <a id="d-014-stagnation"></a>**D-014/stagnation** — Stagnation rule: two consecutive deep reviews that leave the same issue open at the same severity mean a written method check before a third similar batch
+    - What changed: npm run critic:status prints STALLED: lines (stalledIssues in tools/critic-policy.mjs, information only).
+  - <a id="d-014-repair-cap"></a>**D-014/repair-cap** — Repair-cycle cap: a release candidate gets 2, 1 or 0 repair cycles in normal, conserve or protect; before another, a usage reading and a method check, then take the failing change out and ship what passed, defer, or ask Bailey
+    - What changed: Issues in reports may carry attempts, validated by validateReport; the cap follows the usage mode.
+  - <a id="d-014-decision-states"></a>**D-014/decision-states** — Decision states and delivery status: docs/target/decisions.json holds his non-picture decisions with a state, and target tiles carry delivery and verifiedBy; only a report makes a tile verified
+    - What changed: docs/target/decisions.json was created (14 decisions that day), 24 tiles got a delivery, and the end-state board gained a decisions section; this ledger is built on that file.
+  - <a id="d-014-named-inferred"></a>**D-014/named-inferred** — Named versus inferred preferences: a tile's reaction records his words and what he liked, disliked, must keep, must change and left undecided, apart from what an agent inferred; inferred or undecided items never fail a build and are asked about before anything is built
+    - What changed: reaction fields were added to the targeting, onboarding, Ink and Gold and Braska tiles; later answers are recorded the same way.
+  - <a id="d-014-calibration"></a>**D-014/calibration** — Critic calibration cases and a paper preflight: critic/calibration/cases.json holds known-answer cases, and a change that critic-plan classes as deep gets a 5-to-10-minute paper preflight (docs/plans/&lt;track&gt;-review.md) before it is built
+    - What changed: Four confirmed should-fail cases and four candidates were written; no calibration run has been made; the first paper preflight was for the FFX-2 Active-only ATB build.
+- <a id="d-015"></a>**D-015** — Release rule A: ship if better than live
+  - Bailey: “A, B, and C together please.” (blanket yes)
+  - What changed: The deploy gate now reads a ship verdict: a build deploys when its reviewed changed area has no critical defect introduced or left reachable by the change and no regression against the live build; majors that are not regressions are disclosed in the release announcement and carried into the next batch; a defect inside a brand-new feature does not block (the feature may ship switched off); unknown on a critical is a HOLD. Implemented in tools/critic-policy.mjs and critic/policy.json (commit bd16a18b).
+  - area release · both games · adopted · delivery implemented
+  - Source: critic/RUBRIC.md; critic/policy.json; and others
+- <a id="d-016"></a>**D-016** — Release rule B: the deep review runs after the deploy
+  - Bailey: “A, B, and C together please.” (blanket yes)
+  - What changed: A shared-system change is reviewed focused before the deploy and deep after it, on the live build, where the deep review stays that build's obligation and its issue list drives the next batch; deep-review-before-deploy survives only for the save-data class and a milestone claim; at most two deploys may go out while a deep review is owed and the third refuses (tools/critic-plan.mjs, tools/deploy-pages.mjs, critic/runner/release.js).
+  - area release · both games · adopted · delivery implemented
+  - Source: critic/RUBRIC.md; critic/policy.json; and others
+- <a id="d-017"></a>**D-017** — Release rule C: the owner override of the deploy gate
+  - Bailey: “A, B, and C together please.” (blanket yes)
+  - What changed: tools/deploy-pages.mjs gained --owner-override (commit d333b064): only Bailey's own quoted words turn a refusal of the release gate into a loud warning; an agent never invokes it on its own, it settles no obligation and changes no verdict. First used for Build A.2 ("Just push the build please"); every release he has authorised in his own words since uses it.
+  - area release · both games · adopted · delivery implemented
+  - Source: critic/RUBRIC.md; tools/deploy-pages.mjs; and others
+- <a id="d-018"></a>**D-018** — Leblanc chapter preflight recommendations (Q1-Q7 and §6 asset notes)
+  - Bailey: “Yes to all recommendations but the title screen needs to match the target.” (blanket yes)
+  - What changed: All seven recommendations from the Leblanc preflight were adopted (docs/plans/chapter-leblanc-review.md sections 5 and 6). The chapter was registered end to end on 2026-09-22 and went live as Chapter VI in release 09 (2026-09-23). Each recommendation is its own row below.
+  - area chapters · FFX-2 · adopted · delivery in progress
+  - Source: docs/plans/chapter-leblanc-review.md
+  - <a id="d-018-q1"></a>**D-018/q1** — Leblanc's chapter is Chapter VI with the engine id ffx2-leblanc
+    - What changed: The chapter is registered with that number and id (commit c473de84).
+  - <a id="d-018-q2"></a>**D-018/q2** — Mach Fan, Hail of Bullets and Russian Roulette have no published numbers, so they are authored at 106, 106 and 200 inside the published Syndicate band and labelled as authored
+    - What changed: The fight ships with those three authored values and a label saying so (hard rule 6: no unlabelled invention).
+  - <a id="d-018-q3"></a>**D-018/q3** — Ormi's Supercollider hits the highest slot (the back of the formation)
+    - What changed: The engine aims Supercollider at the back of the party formation.
+  - <a id="d-018-q4"></a>**D-018/q4** — No petrify-shatter staging in this chapter
+    - What changed: Chapter VI has no petrify-shatter.
+  - <a id="d-018-q5"></a>**D-018/q5** — The boss ships at full canonical strength; numbers are never tuned for onboarding
+    - What changed: Leblanc and her crew keep canonical strength; teaching is done with coach marks, never by softening the fight.
+  - <a id="d-018-asset-disquiet"></a>**D-018/asset-disquiet** — The "Disquiet" Vegnagun-reveal cue is included in the chapter's music, not skipped
+    - What changed: A composed Disquiet cue is on the chapter's cue list.
+  - <a id="d-018-asset-pink"></a>**D-018/asset-pink** — Syndicate-pink YRP outfits are deferred to a later version, not this build
+    - What changed: The girls wear their standard outfits in this chapter; pink uniforms wait.
+- <a id="d-019"></a>**D-019** — Macalania chapter preflight recommendations (§5 questions and §6.4 gates)
+  - Bailey: “Yes to all recommendations but the title screen needs to match the target.” (blanket yes)
+  - What changed: All five recommendations from the Macalania preflight were adopted (docs/plans/chapter-macalania-review.md section 5). Macalania was registered as Chapter VII on 2026-09-22 and unlocked later. Each recommendation is its own row below.
+  - area chapters · FFX · adopted · delivery in progress
+  - Source: docs/plans/chapter-macalania-review.md
+  - <a id="d-019-c2"></a>**D-019/c2** — Seymour is present but untargetable while Anima is out (flags.untargetable)
+    - What changed: The engine marks Seymour untargetable while Anima is on the field, and the arrival scene shows "Cannot be targeted" (D-033).
+  - <a id="d-019-c11"></a>**D-019/c11** — The Guado Guardians' Auto-Potion fires on any damage, behind a named constant AUTO_POTION_ON_ANY_DAMAGE
+    - What changed: The sourcing question is open, so the behaviour sits behind one flag that can be flipped without touching the engine.
+  - <a id="d-019-c14"></a>**D-019/c14** — The ice, thunder, water, fire element order persists into act three, as a labelled assumption
+    - What changed: Seymour's act-three spell cycle continues the same order and the guide says it is an assumption.
+  - <a id="d-019-shiva-gauge"></a>**D-019/shiva-gauge** — Shiva's Overdrive gauge starts at 0, not 100 (a rule, not a choice)
+    - What changed: Yuna's Shiva enters the Macalania fight with an empty gauge.
+  - <a id="d-019-g1"></a>**D-019/g1** — Anima's Overdrive gauge fills at the research's own estimate of +10 percent per turn and +5 percent per targeting, surfaced as an estimate
+    - What changed: Anima's gauge fills at those rates and the guide labels them an estimate.
+- <a id="d-020"></a>**D-020** — Evrae chapter preflight recommendations (§5 questions Q1-Q12)
+  - Bailey: “Yes to all recommendations but the title screen needs to match the target.” (blanket yes)
+  - What changed: All six recommendations from the Evrae preflight were adopted (docs/plans/chapter-evrae-review.md section 5). The chapter went live as Chapter VIII in release 11 (2026-09-23 evening). Each recommendation is its own row below.
+  - area chapters · FFX · adopted · delivery in progress
+  - Source: docs/plans/chapter-evrae-review.md
+  - <a id="d-020-q11"></a>**D-020/q11** — The airship names the chapter, not Evrae (Q11)
+    - What changed: Replaced for the chapter title by D-037 (the chapter is titled "Evrae"); the airship still names the location line, the mechanic and the music brief.
+    - superseded by [D-037](#d-037)
+  - <a id="d-020-q9"></a>**D-020/q9** — The two Trigger orders are labelled "Pull back" and "Close in" in our own copy
+    - What changed: The command rows read Pull Back and Close In (D-032).
+  - <a id="d-020-r1"></a>**D-020/r1** — The order widget (O-3) gets 3 to 4 mockups first and a minimal prototype if the stills do not settle it
+    - What changed: An options round followed and he picked A with C's staging on 2026-09-23 (D-032).
+  - <a id="d-020-q6"></a>**D-020/q6** — Reflect on Evrae bounces its self-Haste onto a random living party member
+    - What changed: No code change: the engine already did this and a unit test pins it.
+  - <a id="d-020-q7"></a>**D-020/q7** — Delaying Evrae before 1/3 HP does not advance the Haste phase: the invisible tempo penalty is not shipped
+    - What changed: Evrae's phase timing ignores delays; no hidden tempo penalty is in the build.
+  - <a id="d-020-q10"></a>**D-020/q10** — The Scan panel's stated lie about Poison Breath and Magic Defence ships as written, with the true behaviour noted in the help window
+    - What changed: Scan prints what the original printed and the help window states the real behaviour.
+- <a id="d-021"></a>**D-021** — The pause screen is remade on the Until Dawn character screen, grade B, mirrored chrome, the mocked meters, and MUSIC as its own tab
+  - Bailey: “B, yes, yes, yes”
+  - What changed: The pause screen was rebuilt on the Until Dawn character screen (commit 8cf17246, 2026-09-21; docs/handoff/pause-remake.md): a full-bleed painted close-up per party member, a tab strip with the members first and then CHAPTER, GUIDE, OPTIONS, CONTROLS and MUSIC, two columns of hairline meters, a small label with one large objective line and a single BACK prompt. Each of his four answers is its own row below.
+  - area ui · both games · adopted · delivery in progress
+  - Source: docs/concepts/pause-until-dawn; docs/handoff/pause-remake.md
+  - <a id="d-021-grade"></a>**D-021/grade** — Grade B, "ours" (warm ink and gold), not grade A "faithful" (cool dark)
+    - What changed: The remade pause screen uses the warm ink-and-gold grade.
+  - <a id="d-021-mirror"></a>**D-021/mirror** — The text block may sit on whichever side of a painting is empty, mirroring the chrome for left-facing plates such as FFX Yuna and Paine
+    - What changed: The pause layout mirrors for left-facing plates; the faces that still needed clearing were handled by D-070 and D-122.
+  - <a id="d-021-meters"></a>**D-021/meters** — The meters are BATTLE STATS (HP, MP, Strength, Magic, Defence, Magic Defence, Agility) plus a game-aware "in this fight" column
+    - What changed: Seven stat rows and the in-this-fight column were built (FFX: Overdrive gauge, mode, status durations, CTB position; FFX-2: ATB, Active or Wait, chain, dressphere, garment grid, gates).
+  - <a id="d-021-music-tab"></a>**D-021/music-tab** — MUSIC is its own tab of the pause screen
+    - What changed: The pause tab strip has a MUSIC tab.
+- <a id="d-025"></a>**D-025** — Release pacing: ship increments as each goes green (the pause remake, advisor v2, Active ATB and onboarding first), then the chapters one at a time, whichever is ready first, and send the pause mockups promptly
+  - Bailey: “I'll go with your recommendation as usage becomes a concern. One chapter at a time is ok. I expect timely mockups for the pause menus please.” (blanket yes)
+  - What changed: Builds went out as small increments from then on (B.1, release 08, release 09 with Leblanc, and so on) instead of one large Build C; the pause mockups were sent that evening and he picked grade B (D-021).
+  - area process · both games · adopted · delivery implemented · at ~18:05 EDT
+  - Source: docs/handoff/NOW.md
+- <a id="d-026"></a>**D-026** — The music must sound like the modern Final Fantasy titles and Clair Obscur, not like SNES music; he approved the route to get there (CC0 sample libraries, a local ACE-Step model rendering our own compositions, generated wordless choir layers) with a two-cue audition first
+  - Bailey: “music is too reminsicent of snes music instead of the more modern final fantasy titles and clair obscur. all of these next to be fixed very next build. we can do this.”
+  - What changed: Free CC0 sample libraries (VSCO 2 CE, VCSL) and the ACE-Step model were downloaded on D: (his "yes you have my approvals there for music", about 16:55 EDT), the renderer was rebuilt, and an A/B/C audition page followed; the final route per game was decided from 2026-09-27 to 2026-09-30 (D-235, D-292, D-302). Judging stays Bailey's ears (AGENTS.md hard rule 13).
+  - area audio · both games · adopted · delivery implemented · at ~16:15 EDT
+  - Source: docs/plans/music-modern-sound.md; docs/audio/audition.html; and others
+- <a id="d-027"></a>**D-027** — The painting quality bar: the Leblanc close-up renders (clean line, rich rim light, painted interiors behind, made with the long hand-written identity block and a weak or no IP-Adapter reference) are exactly the quality he expects; art is never approved or installed from thumbnails
+  - Bailey: “these leblanc renders you produced are AMAZING. it is exactly the kind of quality i expect. great job.”
+  - What changed: Recipe R2, already the generator's default (commit 4a41248f), is the recipe to reuse, and every new painting is judged against that bar at 1:1 crops; the 31 poses that had regressed after an IP-Adapter change (his "a huge downgrade in quality") were restored. Which Leblanc is installed was still open; he judged the quality, not one candidate.
+  - area art · both games · adopted · delivery implemented · at ~18:45 EDT
+  - Source: docs/concepts/art-quality-pilot; docs/handoff/NOW.md; and others
+- <a id="d-028"></a>**D-028** — A pick he has made is never reopened: Braska's speaker portrait stays as picked and the headdress repaint is dropped; the art round 4 poses (42 installed) are approved wholesale; and the build is pushed
+  - Bailey: “I already selected Braska why am I selecting it again with a reroll? Keep the one you already have. I approve everything else. There are too many build deployment blockers now, how did this happen and what can I change? Push the build please.” (blanket yes)
+  - What changed: Braska's card 1 stays and the "repaint owed" item was closed for good (the lesson: do not reopen a pick because an agent finds it off-canon; say so once at pick time at most). Art round 4 was installed (42 poses, commit 189a1adb); that evening the 31 poses that had replaced approved paintings were restored after a quality regression and the 11 missing-pose fills stayed (commit 0180be30). Build B.1 went live at 14:24 EDT. His question about the deploy blockers led to the release rules A, B and C (D-015 to D-017).
+  - area art · FFX · adopted · delivery implemented · at ~14:00 EDT
+  - Source: docs/handoff/NOW.md
+- **Picture** (cast) — Approved: Speaker portrait: Paine
+  - Bailey: “Paine: card 1”
+  - Target: A dialogue line spoken by Paine with the portrait showing (public/art/portraits/paine.png).
+  - area art · FFX-2 · adopted · nothing to build
+  - Source: docs/target/targets.json, group cast, tile "Speaker portrait: Paine"
+- **Picture** (cast) — Approved: Speaker portrait: Shuyin
+  - Bailey: “Shuyin: card 2”
+  - Target: A dialogue line spoken by Shuyin with the portrait showing (public/art/portraits/shuyin.png).
+  - area art · FFX-2 · adopted · nothing to build
+  - Source: docs/target/targets.json, group cast, tile "Speaker portrait: Shuyin"
+- **Picture** (cast) — Approved: Speaker portrait: Yuna (FFX-2)
+  - Bailey: “Yuna: card 3”
+  - Target: A dialogue line spoken by Yuna (FFX-2) with the portrait showing (public/art/portraits/yuna-x2.png).
+  - area art · FFX-2 · adopted · nothing to build
+  - Source: docs/target/targets.json, group cast, tile "Speaker portrait: Yuna (FFX-2)"
+- **Picture** (cast) — Approved: Speaker portrait: Rikku (FFX-2)
+  - Bailey: “Rikku: card 3”
+  - Target: A dialogue line spoken by Rikku (FFX-2) with the portrait showing (public/art/portraits/rikku-x2.png).
+  - area art · FFX-2 · adopted · nothing to build
+  - Source: docs/target/targets.json, group cast, tile "Speaker portrait: Rikku (FFX-2)"
+- **Picture** (cast) — Approved: Speaker portrait: Young Auron
+  - Bailey: “Young Auron: card 1”
+  - Target: A dialogue line spoken by Young Auron with the portrait showing (public/art/portraits/young-auron.png).
+  - area art · FFX · adopted · nothing to build
+  - Source: docs/target/targets.json, group cast, tile "Speaker portrait: Young Auron"
+- **Picture** (cast) — Approved: Speaker portrait: Fayth boy
+  - Bailey: “Fayth boy: card 1”
+  - Target: A dialogue line spoken by Fayth boy with the portrait showing (public/art/portraits/fayth-boy.png).
+  - area art · FFX · adopted · nothing to build
+  - Source: docs/target/targets.json, group cast, tile "Speaker portrait: Fayth boy"
+- **Picture** (cast) — Approved: Speaker portrait: Braska
+  - Bailey: “yes to both recommendations” (blanket yes)
+  - Target: A dialogue line spoken by Braska with the portrait showing (public/art/portraits/braska.png).
+  - area art · FFX · adopted · nothing to build
+  - Source: docs/target/targets.json, group cast, tile "Speaker portrait: Braska"
+- **Picture** (cast) — Rejected: Speaker portrait: Yu Yevon
+  - Bailey: “yes to both recommendations” (blanket yes)
+  - Target: A dialogue line spoken by Yu Yevon with the portrait showing (public/art/portraits/yu-yevon.png).
+  - area art · FFX · rejected · nothing to build · see [D-208](#d-208)
+  - Source: docs/target/targets.json, group cast, tile "Speaker portrait: Yu Yevon"
+- **Picture** (cast) — Rejected: Art round 4: 42 poses installed (groups B and C)
+  - Bailey: “I already selected Braska why am I selecting it again with a reroll? Keep the one you already have. I approve everything else.” (blanket yes)
+  - Delivery: The 11 missing-group poses (yuna-gunner/hurt, yuna-gunner/ko, yuna-gunner/victory, yuna-black-mage/attack, yuna-black-mage/cast, yuna-black-mage/hurt, yuna-black-mage/ko, yuna-black-mage/victory, yuna-songstress/attack, yuna-songstress/dance, lenne/portrait) stay installed under public/art and resolve through public/art/manifest.json. The other 31 poses were reverted to their pre-art4 paintings; see docs/concepts/art
+  - area art · both games · rejected · delivery implemented
+  - Source: docs/target/targets.json, group cast, tile "Art round 4: 42 poses installed (groups B and C)"
+- **Picture** (pause) — Approved: Pause remade on the Until Dawn character screen
+  - Bailey: “B, yes, yes, yes”
+  - Delivery: Recorded before a line of it was built (hard rule 9); built the same day on main. Not live and not yet matched by a review. Target-versus-build pairs for frames a, b, c and d are under docs/screenshots/pause-remake/; the track note is docs/handoff/pause-remake.md.
+  - area ui · both games · adopted · delivery implemented
+  - Source: docs/target/targets.json, group pause, tile "Pause remade on the Until Dawn character screen"
+- **Picture** (learning-sites) — Approved: A1: Pyrefly Atlas, assembled
+  - Bailey: “A, B, C all separately please / all three looks are good”
+  - Target: learn/atlas/, explode slider at 0%.
+  - area site · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group learning-sites, tile "A1: Pyrefly Atlas, assembled"
+- **Picture** (learning-sites) — Approved: A2: Pyrefly Atlas, exploded and selected
+  - Bailey: “A, B, C all separately please” (his words for the whole group of pictures)
+  - Target: learn/atlas/, explode slider at 55%, Body / Core selected.
+  - area site · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group learning-sites, tile "A2: Pyrefly Atlas, exploded and selected"
+- **Picture** (learning-sites) — Approved: A3: Pyrefly Atlas, inventory
+  - Bailey: “A, B, C all separately please” (his words for the whole group of pictures)
+  - Target: learn/atlas/, explode slider at 100%.
+  - area site · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group learning-sites, tile "A3: Pyrefly Atlas, inventory"
+- **Picture** (learning-sites) — Approved: B1: Pyrefly Studio, assembled
+  - Bailey: “A, B, C all separately please / all three looks are good”
+  - Target: learn/studio/, explode slider at 0%.
+  - area site · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group learning-sites, tile "B1: Pyrefly Studio, assembled"
+- **Picture** (learning-sites) — Approved: B2: Pyrefly Studio, exploded and selected
+  - Bailey: “A, B, C all separately please” (his words for the whole group of pictures)
+  - Target: learn/studio/, explode slider at 55%, '01 Turn order' selected.
+  - area site · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group learning-sites, tile "B2: Pyrefly Studio, exploded and selected"
+- **Picture** (learning-sites) — Approved: B3: Pyrefly Studio, inventory
+  - Bailey: “A, B, C all separately please” (his words for the whole group of pictures)
+  - Target: learn/studio/, explode slider at 100%.
+  - area site · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group learning-sites, tile "B3: Pyrefly Studio, inventory"
+- **Picture** (learning-sites) — Approved: C1: Pyrefly Reprise, exploded, assembled
+  - Bailey: “A, B, C all separately please / all three looks are good”
+  - Target: learn/exploded/, explode slider at 0%.
+  - area site · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group learning-sites, tile "C1: Pyrefly Reprise, exploded, assembled"
+- **Picture** (learning-sites) — Approved: C2: Pyrefly Reprise, exploded, sheets and selected
+  - Bailey: “A, B, C all separately please” (his words for the whole group of pictures)
+  - Target: learn/exploded/, explode slider at 55%, boss billboard selected.
+  - area site · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group learning-sites, tile "C2: Pyrefly Reprise, exploded, sheets and selected"
+- **Picture** (learning-sites) — Approved: C3: Pyrefly Reprise, exploded, inventory
+  - Bailey: “A, B, C all separately please” (his words for the whole group of pictures)
+  - Target: learn/exploded/, explode slider at 100%.
+  - area site · both games · adopted · nothing to build
+  - Source: docs/target/targets.json, group learning-sites, tile "C3: Pyrefly Reprise, exploded, inventory"
+
+### 2026-09-22
+
+Tuesday · 8 decisions
+
+- <a id="e-050"></a>**E-050** — Usage mode NORMAL by his word after the weekly allowance reset: get serious and keep working
+  - Bailey: “My usage just reset! Let's get serious and keep working. Awesome. Let's do it.”
+  - What changed: Five tracks started that afternoon (the release-09 batch, music, chapter art, a video round and the portrait rig); the usage-mode rule keeps saying that only he sets the mode and agents may only tighten it (D-014).
+  - area process · both games · adopted · nothing to build · at ~13:46 EDT
+  - Source: docs/handoff/NOW.md
+- <a id="e-051"></a>**E-051** — Yes to downloading the tools for the portrait rig, the art method and the music: SAM 2.1 hiera-small, kohya sd-scripts with a Python environment, an OpenPose ControlNet for SDXL and the Voxengo impulse responses
+  - Bailey: “5. Yes”
+  - What changed: All were downloaded to D: and recorded (SAM 2.1 184 MB, the OpenPose ControlNet 2.5 GB, kohya in its own environment, 39 hall impulse responses); they fed the portrait rig, the per-character art method and the music renders.
+  - area process · both games · adopted · delivery implemented · at ~21:50 EDT
+  - Source: docs/handoff/NOW.md
+- <a id="e-052"></a>**E-052** — FFX-2 pause OPTIONS gets an ATB SPEED row (Slow, Normal, Fast: the game's own Config ATB Speed), kept like the volumes and heard by the engine; Wait is the default with Active as an option
+  - Bailey: “2. Wait is now default but with active as an option. It's fine if it's faithful. 4. Where/how can I hear it? 5. Let me know when it's done please”
+  - What changed: The row exists in the pause OPTIONS and the FFX-2 engine reads it (commit 030d7e17); it needed his yes under hard rule 9, and "it's fine if it's faithful" gave it. The music excerpts he asked how to hear were sent as audio files.
+  - area ui · FFX-2 · adopted · delivery implemented · at ~21:55 EDT
+  - Source: docs/handoff/ffx2-wait-mode.md
+- <a id="e-053"></a>**E-053** — The new FFX-2 chapter (Chapter VI, the Leblanc Syndicate) ships unlocked in release 09, not locked as "Coming"
+  - Bailey: “please get to work on finishing the new chapter we cant delay any longer”
+  - What changed: The lock was removed and the chapter went live in release 09 on 2026-09-23 (main 5ddfde3) with its candidate pose art disclosed as such.
+  - area chapters · FFX-2 · adopted · delivery implemented · at ~23:35 EDT
+  - Source: docs/deploys.log
+- <a id="d-029"></a>**D-029** — FFX-2 gets a Wait mode, and Wait is the default; Active stays as the other setting
+  - Bailey: “1. C Wait mode. Also I want the default to be wait mode instead of active mode please.”
+  - What changed: FFX-2's clock and every status timer stop while a command menu is open (Wait mode) and Wait is the default; Active stays selectable in the pause OPTIONS (the X-2 BATTLE row, now read by the engine) and every existing save was moved to Wait once. Built (preflight docs/plans/ffx2-wait-mode-review.md; handoff docs/handoff/ffx2-wait-mode.md) and live from release 09; his three follow-up answers are the rows below.
+  - area combat · FFX-2 · adopted · delivery implemented · at ~21:45 EDT
+  - Source: research/ffx2-combat-core.md; docs/plans/ffx2-wait-mode-review.md; and others
+  - <a id="d-029-f1"></a>**D-029/f1** — Existing saves are moved to Wait mode once (follow-up 1, "1, 2, 3 I'll take your recommendations on all please")
+    - What changed: A one-time, idempotent migration in the save loader: a save with no ffx2AtbMigrated marker gets ffx2Atb "wait" and the marker; a marked save keeps the player's choice; a fresh save is Wait. No SAVE_VERSION bump (src/app/saveFfx2Atb.ts, tests/unit/save-ffx2-atb-migration.test.ts).
+  - <a id="d-029-f2"></a>**D-029/f2** — Wait is first built as a whole-menu hold; the research's faithful top-level and submenu split is deferred, then adopted on 2026-09-24 ~14:50 ("I'll go ahead with all your recommendations")
+    - What changed: The clock runs at the top-level command list and holds once a submenu is open, and aiming at a target holds it too (our reading); shipped off in hotfix 12.2 (?wait=split) and on by default in hotfix 12.3.
+  - <a id="d-029-f3"></a>**D-029/f3** — The briefing's fourth line is mode-aware: his approved "In hers, the clock does not wait" shows only under Active; under Wait an agent-drafted "In hers, the clock holds while you choose" shows
+    - What changed: src/ui/coach/coachCopy.ts BRIEFING_WAIT_LINE and Briefing.ts; the Wait wording is inferred and awaits his own yes.
+
+### 2026-09-23
+
+Wednesday · 19 decisions
+
+- <a id="e-054"></a>**E-054** — Push release 09 (Chapter VI Leblanc, the Wait-mode default and its save migration, all round-08 and round-09 fixes) live now
+  - Bailey: “Work on pushing at least a live build with one new chapter”
+  - What changed: Release 09 went live on 2026-09-23 at 07:55 EDT (main 5ddfde3, bundle Jw5R1yWQ) with Chapter VI unlocked, Wait as the FFX-2 default and the one-time save migration (D-029), after a deep review of the candidate (save-data class).
+  - area release · both games · adopted · delivery implemented · at ~00:20 EDT
+  - Source: docs/deploys.log; docs/handoff/NOW.md
+- <a id="e-055"></a>**E-055** — Usage is no concern: full steam ahead; finish the next chapter end to end (Chapter VIII, Evrae)
+  - Bailey: “Usage is no concern right now. Full steam ahead please.”
+  - What changed: Evrae was taken through scene, script, music, guide, order widget and painting that day (D-031 to D-039) and shipped as Chapter VIII in release 11 that evening.
+  - area process · both games · adopted · nothing to build · at ~12:55 EDT
+  - Source: docs/handoff/NOW.md; docs/handoff/chapter-evrae.md
+- <a id="e-056"></a>**E-056** — Push release 10 live now
+  - Bailey: “Just push the build live please”
+  - What changed: Release 10 went live on 2026-09-23 at 17:29 EDT (main 5348c2e3, bundle CcBx7HBL); the live site served the artifact byte for byte (74 files) from a gh-pages branch of exactly one commit, and its live check passed.
+  - area release · both games · adopted · delivery implemented · at ~17:29 EDT
+  - Source: docs/deploys.log
+- <a id="e-057"></a>**E-057** — Ship release 11 on his word: Chapter VIII (Evrae) unlocked together with the save-data-class two-tab save merge, with a targeted save check on the live build and the deep review after the weekly reset
+  - Bailey: “I'll go with your recommendations let's get to work” (blanket yes)
+  - What changed: Release 11 went live on 2026-09-23 at 20:25 EDT (main d9decadb, bundle B4_kxWCJ) with Chapter VIII unlocked; the live check passed (artifact, the Chapter VIII key smoke, the two-tab save). This is the same message that accepted the Evrae title, art and music (D-037, D-038, D-039).
+  - area release · both games · adopted · delivery implemented · at ~19:15 EDT
+  - Source: docs/deploys.log
+- <a id="e-058"></a>**E-058** — After the app restart on his second Claude account, resume every in-flight track at full steam on his permission (the release-12 fixes, the Chapter VII art and goons, the layout option sheets, the Nooj and Brother portraits)
+  - Bailey: “Go full steam ahead. You have my permission.”
+  - What changed: The three running workflows were resumed from their journals; release 12 followed at 01:36 EDT on 2026-09-24 (E-060).
+  - area process · both games · adopted · delivery implemented · at ~23:27 EDT
+  - Source: docs/handoff/NOW.md; docs/deploys.log
+- <a id="d-030"></a>**D-030** — FFX-2 first-time gauge coach line, Wait mode: draft 1 approved
+  - Bailey: “Wait line 1”
+  - What changed: The first-time FFX-2 gauge coach line under Wait mode reads "Bar's full, she's up! Take your time, nobody moves while you're picking." (src/ui/coach/coachCopy.ts FFX2_GAUGE_BODY_WAIT); the Active-mode body is unchanged. Later reworded by D-121.
+  - area guide · FFX-2 · superseded by [D-121](#d-121) · delivery implemented
+  - Source: docs/handoff/NOW.md; src/ui/coach/coachCopy.ts
+- <a id="d-031"></a>**D-031** — Evrae's death exit is the faithful fall from the sky, not the engine's generic pyreflies dissolve
+  - Bailey: “yes Evrae falls out of the sky”
+  - What changed: Evrae no longer dissolves into pyreflies when it dies: it breaks and falls out of the sky through the cloud layer, shrinking as it falls (a presenter departure kind, commits 314b61c3 and fb2858a3). FFX only.
+  - area visuals · FFX · adopted · delivery implemented
+  - Source: research/ffx-evrae-airship.md
+- <a id="d-032"></a>**D-032** — Evrae's order/range widget: option A (the Trigger pair, cost preview, ORDER chip) with option C's re-staging
+  - Bailey: “Evrae widget A with C’s staging, Anima A then B”
+  - What changed: Evrae's range order is issued through two Trigger rows in the command cascade ("Pull Back" and "Close In", the row matching the current range greyed "Already near/far") with a cost preview and a gold ORDER chip on Cid's CTB tile, and the field itself is re-staged for NEAR and FAR instead of showing a gauge (src/ui/ffx/AirshipOrderWidget.ts). Built before he answered; his answer made it approved.
+  - area ui · FFX · adopted · delivery implemented
+  - Source: docs/concepts/chapters/evrae/widget/options.json; src/ui/ffx/AirshipOrderWidget.ts; and others
+- <a id="d-033"></a>**D-033** — Anima's arrival, Macalania Temple: option A's staging leading into option B's beat
+  - Bailey: “Evrae widget A with C’s staging, Anima A then B”
+  - What changed: Anima arrives from below the ice in one continuous camera move, then Seymour steps back and shows "Cannot be targeted" as Anima's reticle lights gold (src/scenes/macalania-temple-arrival*.ts). Built before he answered; his answer made it approved.
+  - area visuals · FFX · adopted · delivery implemented
+  - Source: docs/concepts/chapters/macalania/arrival/options.json; src/scenes/macalania-temple-arrival.ts; and others
+- <a id="d-034"></a>**D-034** — Chapter 6 art, Decision 1: fewest paintings (option A) — Leblanc, Logos and Ormi each keep their idle plus one hero cast painting; hurt is the idle under the engine's flinch (no hurt file); no attack painting
+  - Bailey: “All recommendations on the three art decisions.” (blanket yes)
+  - What changed: Chapter VI's art plan is fixed at the fewest paintings: Leblanc, Logos and Ormi each get an idle plus one hero cast painting, hurt falls back to the idle under the engine's flinch and there is no attack painting (an attack pose was used in 0 of 1,699 simulated enemy actions). Nothing was rendered or installed by the decision itself.
+  - area art · FFX-2 · adopted · delivery not scheduled
+  - Source: docs/concepts/chapters/art-r3-decisions/README.md; docs/plans/art-method-r3/METHOD-CHECK.md
+- <a id="d-035"></a>**D-035** — Chapter 6 art, Decision 2: Yields — Leblanc, Logos and Ormi stay standing, dim and step back instead of dissolving into pyreflies
+  - Bailey: “All recommendations on the three art decisions.” (blanket yes)
+  - What changed: Defeated Leblanc, Logos and Ormi stay standing, dim and step back out of frame instead of dissolving into pyreflies, a new presenter departure kind shared by both games; the build was owed to the presenter pass that also built Evrae's fall.
+  - area visuals · both games · adopted · delivery not scheduled
+  - Source: docs/concepts/chapters/art-r3-decisions/README.md; docs/plans/art-method-r3/METHOD-CHECK.md; and others
+- <a id="d-036"></a>**D-036** — Chapter 6 art, Decision 3: lock the Leblanc, Logos and Ormi idles as anchors; Leblanc's fan and Logos's disc unchanged, Ormi's idle gains the Syndicate heart on his shield
+  - Bailey: “All recommendations on the three art decisions.” (blanket yes)
+  - What changed: The three idles are locked as the anchors for their poses: Leblanc's fan (red leaf with silver ribs) and Logos's shoulder disc stay as they are, and Ormi's idle gains the Syndicate heart on his shield. No approved hash was written by the decision.
+  - area art · FFX-2 · adopted · delivery not scheduled
+  - Source: docs/concepts/chapters/art-r3-decisions/README.md; docs/plans/art-method-r3/METHOD-CHECK.md; and others
+- <a id="d-037"></a>**D-037** — Chapter VIII keeps the title "Evrae" (subtitle "Bevelle's Doormat", location "Deck of the Fahrenheit — the approach to Bevelle"); the airship still names the location, the mechanic and the music brief
+  - Bailey: “I'll go with your recommendations let's get to work” (blanket yes)
+  - What changed: Chapter VIII is titled "Evrae" (subtitle "Bevelle's Doormat", location "Deck of the Fahrenheit — the approach to Bevelle") instead of being named after the airship; recorded as a decision only, the string change was owed to the next chapter-registration pass.
+  - area chapters · FFX · adopted · delivery not scheduled
+  - Source: src/data
+- <a id="d-038"></a>**D-038** — Evrae art approved as shown on docs/concepts/chapters/evrae/r3/sheet.jpg: backdrop, idle-near, idle-far, breath-charge, hurt (and idle)
+  - Bailey: “I'll go with your recommendations let's get to work” (blanket yes)
+  - What changed: Evrae's art is approved and locked: the airship-deck backdrop (concept B) and the idle-near, idle-far, breath-charge, hurt and idle paintings are in public/art, hashed in docs/target/approved-hashes.json under chapter:evrae:2026-09-23 and backed up on D:; actions show the idle only. Partly replaced later by the repainted Evrae of D-360.
+  - area art · FFX · adopted · delivery implemented
+  - Source: docs/concepts/chapters/evrae/r3/sheet.jpg; docs/target/approved-hashes.json
+- <a id="d-039"></a>**D-039** — Evrae chapter music: scene-fahrenheit and boss-evrae ship as the chapter's cues, accepted on the driver's recommendation, not judged by ear
+  - Bailey: “I'll go with your recommendations let's get to work” (blanket yes)
+  - What changed: Two composed cues, scene-fahrenheit and boss-evrae, replaced the Chapter I stand-ins as Chapter VIII's music. This is not a by-ear verdict (agents cannot hear), so the audio check CHK-B1 stays unverified.
+  - area audio · FFX · adopted · delivery implemented
+  - Source: src/audio/tracks/scene-fahrenheit.ts; AGENTS.md; and others
+- **Picture** (chapters) — Approved: Anima’s arrival, Macalania Temple (FFX)
+  - Bailey: “Evrae widget A with C’s staging, Anima A then B”
+  - Target: docs/screenshots/chapters/macalania-arrival.png (the drop, the rise, landed with the tags) from the scene’s debug screen; side by side with frame A in docs/screenshots/chapters/macalania-arrival-target-vs-build.jpg. In a REAL battle it now plays (fix pass 2026-09-22, docs/handoff/chapter-macalania.md “Fix pass”): the presenter holds her reveal until Yuna’s line has been spoken, stages her through PaintedStage.arrive 
+  - area chapters · FFX · adopted · delivery implemented
+  - Source: docs/target/targets.json, group chapters, tile "Anima’s arrival, Macalania Temple (FFX)"
+- **Picture** (chapters) — Approved: Evrae on the airship (FFX)
+  - Bailey: “Yes to all recommendations but the title screen needs to match the target. / Yes to these too. / I'll go with your recommendations let's get to work” (blanket yes)
+  - Target: Registered as Chapter 8 (evrae-airship) and playable through window.__pyrefly.gotoChapter, but LOCKED as a COMING card on chapter select until Bailey approves the art (one line in src/app/screens/frontend/comingChapters.ts LOCKED_CHAPTER_IDS; docs/handoff/chapter-evrae.md). In a real battle the deck re-stages NEAR/FAR when Cid flies an order (the scene's range director, hooked by src/app/screens/BattleScreenAirship.t
+  - area chapters · FFX · adopted · delivery implemented · see [D-020](#d-020), [D-038](#d-038), [D-037](#d-037), [D-039](#d-039), [D-144](#d-144)
+  - Source: docs/target/targets.json, group chapters, tile "Evrae on the airship (FFX)"
+- **Picture** (chapters) — Approved: Evrae's order/range widget (FFX)
+  - Bailey: “Evrae widget A with C’s staging, Anima A then B”
+  - Target: src/ui/ffx/AirshipOrderWidget.ts, its scoped CSS in src/ui/ffx/ffx-hud.css (new `.ffx-airship-order*` classes only — no existing rule touched), tests/unit/ui-ffx-airship-order-widget.test.ts (6 tests, all green). Mounts only when `BattleState.flags['airship.range']` is set, which only this encounter's engine ever sets, so no other chapter's screen changes. Not wired into FFXBattleHud.ts/CommandMenu.ts yet — that one-
+  - area chapters · FFX · adopted · delivery implemented
+  - Source: docs/target/targets.json, group chapters, tile "Evrae's order/range widget (FFX)"
+- **Picture** (chapters) — Approved: The Leblanc Syndicate (FFX-2)
+  - Bailey: “All recommendations on the three art decisions.” (blanket yes)
+  - Note: Set at Chateau Leblanc (FFX-2 Chapter 2), Bailey’s pick on 19 Sep. Leblanc, Logos and Ormi against Yuna, Rikku and Paine at low level. Doubles as the FFX-2 tutorial chapter. Picked frames (reference only, not yet painted at full/cutout resolution): backdrop C (docs/concepts/chapters/leblanc/renders/backdrop-c.png, mixed magenta/cyan with the door and heart panel), Leblanc pose B (renders/leblanc-b.png, fan fully open
+  - area chapters · FFX-2 · adopted · delivery in progress · see [D-018](#d-018), [D-034](#d-034), [D-035](#d-035), [D-036](#d-036), [D-031](#d-031)
+  - Source: docs/target/targets.json, group chapters, tile "The Leblanc Syndicate (FFX-2)"
+
+### 2026-09-24
+
+Thursday · 124 decisions
+
+- <a id="e-059"></a>**E-059** — Finish all the chapters that were decided; at that moment only Chapter VII (Macalania) was still locked
+  - Bailey: “Please finish all chapters”
+  - What changed: Chapters IX (Yojimbo), X (Natus), XI (Fallen Aeons) and four more (D-134, D-135) were planned and built in the days after; Macalania unlocked as a playable card on 2026-09-29 once its scene cue was settled (D-278).
+  - area chapters · both games · adopted · delivery implemented
+  - Source: docs/handoff/NOW.md
+- <a id="e-060"></a>**E-060** — Push release 12 live now
+  - Bailey: “You have my go ahead! Let's do it.”
+  - What changed: Release 12 went live on 2026-09-24 at 01:36 EDT (main 76f587c3, bundle 81kxOXnv); the live check passed (64 of 64 files; the Leblanc goons painted and the Nooj and Brother portraits in). In the same message he told the driver to finish all chapters; only Chapter VII was still locked.
+  - area release · both games · adopted · delivery implemented · at ~01:36 EDT
+  - Source: docs/deploys.log
+- <a id="e-061"></a>**E-061** — Push hotfixes 12.1 and 12.2 (the pause snapshot fix; the targeting default side, with the Wait split behind ?wait=split) live now
+  - Bailey: “ship the hotfixes”
+  - What changed: Hotfix 12.1 (main bcbdb483, bundle D_Y69PMP) went live at 13:52 EDT and hotfix 12.2 (main dc2669ac, bundle CzzK-khs) at 16:27 EDT; both live checks passed (894 of 894 files, the Chapter II snapshot fixed live).
+  - area release · both games · adopted · delivery implemented · at ~13:27 EDT
+  - Source: docs/deploys.log
+- <a id="e-062"></a>**E-062** — Ship hotfix 12.3 on his blanket yes: the faithful FFX-2 Wait split as the default, the three corrected wording lines (D-121), teardown hardening and the targeting lookup
+  - Bailey: “I'll go with all of your recommendations full speed” (blanket yes)
+  - What changed: Hotfix 12.3 went live on 2026-09-24 at 19:01 EDT (main e3b8c2a3, bundle CXcGU7y1): the clock now runs at the top-level command list and holds once a submenu is open (D-029 follow-up 2), the three lines that turned untrue read as he picked them (D-121), and the live check passed.
+  - area release · FFX-2 · adopted · delivery implemented · at ~19:01 EDT
+  - Source: docs/deploys.log; docs/handoff/ffx2-wait-mode.md
+- <a id="e-063"></a>**E-063** — Push release 13 live now
+  - Bailey: “Just push the live build please”
+  - What changed: Release 13 went live on 2026-09-24 at 19:47 EDT (main a999d133, bundle Ji5E4fD0) before its focused review finished; the live check passed (95 of 95 files, chapter select as specified) and the review later came back SHIP with two polish regressions disclosed.
+  - area release · both games · adopted · delivery implemented · at ~19:47 EDT
+  - Source: docs/deploys.log
+- <a id="d-040"></a>**D-040** — PR-0012, FFX-2 command-help placement: option A, a one-line band at the top of the screen
+  - Bailey: “I’ll take all of your recommendations” (blanket yes)
+  - What changed: FFX-2's command help prints on a one-line band across the top of the screen (the highlighted row's label and description, only while BATTLE HELP is on), replacing the placement that collided with the party column; built in src/ui/ffx2/FFX2BattleHud.ts and repaired after an independent check.
+  - area ui · FFX-2 · adopted · delivery implemented
+  - Source: docs/concepts/layout/pr-0012/README.md; research/ffx-vs-ffx2-presentation.md; and others
+- <a id="d-041"></a>**D-041** — PR-0002, option A: move Yuna's party slot right so the FFX command stack no longer covers her, chapters 1 and 3
+  - Bailey: “I’ll take all of your recommendations” (blanket yes)
+  - What changed: Decision recorded: Yuna's party slot moves right in chapters 1 and 3 so the five-row FFX command stack stops covering her, and the approved stack stays untouched. Not built when it was recorded; the registry still lists the build as not scheduled.
+  - area ui · FFX · adopted · delivery not scheduled · at ~00:20 EDT
+  - Source: docs/concepts/layout/pr-0002/README.md
+- <a id="d-042"></a>**D-042** — PR-0005-ffx, option B: the live FFX command menu draws in a stacking layer above the full-size turn cut-in slab
+  - Bailey: “I’ll take all of your recommendations” (blanket yes)
+  - What changed: Decision recorded: the live FFX command menu draws in a stacking layer above the full-size turn cut-in slab, so the menu is never unusable during the 0.76 s the slab plays; the slab's approved art is untouched. Not built when it was recorded; the registry still lists the build as not scheduled.
+  - area ui · FFX · adopted · delivery not scheduled · at ~00:20 EDT
+  - Source: docs/concepts/layout/pr-0005-ffx/README.md
+- <a id="d-043"></a>**D-043** — Speaker portraits: Brother option A, Nooj option C with one repair pass (red suit, neutral mouth, heavier ink); FFX-2 Brother lines speak under a new id, brother-x2
+  - Bailey: “I’ll take all of your recommendations” (blanket yes)
+  - What changed: Brother A and the repaired Nooj C were installed locally as public/art/portraits/brother-x2.png and nooj.png with measured face crops (commit de3059e); the ten FFX-2 Brother lines now speak under a new id, brother-x2 (docs/CONTRACT-CHANGES.md entry). The repaired Nooj has no independent score yet.
+  - area art · FFX-2 · adopted · delivery implemented · at ~00:20 EDT
+  - Source: docs/concepts/portraits/nooj-brother/README.md; research/ffx2-vegnagun-shuyin.md; and others
+- <a id="d-044"></a>**D-044** — Vegnagun parts: Bulwark option C*, Redoubt option C* (label to be moved clear of the command menu), Node option C, Tail tip option A
+  - Bailey: “I’ll take all of your recommendations” (blanket yes)
+  - What changed: Vegnagun's parts follow the judged options: Tail tip A is installed as public/art/characters/vegnagun-tail/idle.png (a candidate pick, no approved hash, commit 9ebd905e); Bulwark C*, Redoubt C* and Node C are planned in docs/plans/vegnagun-parts-wiring.md for a later pass, with the Redoubt label to move clear of the command menu.
+  - area art · FFX-2 · adopted · delivery in progress · at ~00:20 EDT
+  - Source: docs/concepts/chapters/vegnagun/parts/README.md; docs/concepts/portraits/nooj-brother/JUDGE.md; and others
+- <a id="d-045"></a>**D-045** — Chapter VII art, Decision 1: option A — Seymour and each Guado Guardian keep idle plus one hero cast painting; no attack painting; Anima reuses the approved aeon idle at Macalania scale
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Chapter VII's art plan is fixed at the fewest paintings: Seymour and each Guado Guardian keep an idle plus one hero cast painting and get no attack painting (the research shows neither ever throws a physical attack in this fight), and boss Anima reuses the approved aeon idle at the Macalania scale with no new render. Nothing was rendered or installed by the decision itself.
+  - area art · FFX · adopted · delivery not scheduled
+  - Source: docs/concepts/chapters/macalania/decisions/README.md
+- <a id="d-046"></a>**D-046** — Chapter VII art, Decision 2: the Guado Guardians get 'Yields' (extends D-035 to a second FFX subject); Seymour gets the new 'body' departure (falls and stays down); Anima's scripted recall is unchanged
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Defeated Guado Guardians stay standing, dim and step back (Yields, as D-035 set for the Syndicate), and Seymour gets a new "body" departure: he falls and stays down. Anima's scripted recall is unchanged. The build was owed to the presenter pass that also owed D-035 and D-031; a petrified Guardian later shatters instead (D-141).
+  - area visuals · FFX · adopted · delivery not scheduled
+  - Source: docs/concepts/chapters/macalania/decisions/README.md; research/ffx-vs-ffx2-presentation.md; and others
+- <a id="d-047"></a>**D-047** — Chapter VI (FFX-2) goons: Dr. Goon option C and Fem-Goon option C — the only options shown at the bar
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The two goons of the Chateau Leblanc mission are fixed: Dr. Goon option C (black domino mask, face shown, cocky grin) and Fem-Goon option C (brown bob under a pink domino mask, closed fan), with the sourced suit colours and the heart. The paintings were still to be installed when recorded; until then the game showed the placeholder silhouette.
+  - area art · FFX-2 · adopted · delivery not scheduled
+  - Source: docs/concepts/chapters/leblanc/goons/README.md; research/ffx2-leblanc-syndicate.md
+- <a id="d-048"></a>**D-048** — Macalania (Chapter VII) battle music mood: A, "The Courtesy," accepted on the driver's recommendation, not judged by ear
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Chapter VII's battle music mood is A, a court dance called "The Courtesy". It is not a by-ear verdict (agents cannot hear), so the audio check CHK-B1 stays unverified; the mood pick is not the finished cue, which was still to be composed and wired in place of the Chapter I stand-in.
+  - area audio · FFX · adopted · delivery not scheduled
+  - Source: docs/audio/sketches/2026-09-21/macalania-a-court-dance.mp3; AGENTS.md hard rule 13; and others
+- <a id="d-049"></a>**D-049** — Yojimbo chapter, B1: the fight is Lady Ginnem's Yojimbo, last chamber of the Cavern of the Stolen Fayth
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The Yojimbo chapter is Lady Ginnem's Yojimbo in the last chamber of the Cavern of the Stolen Fayth: formation Ginnem, Yojimbo and Daigoro, normal start, no forced party, no fleeing; the postgame Dark Yojimbo and the FFX-2 "Tourist Trap" fight are left out. Chapter IX went live in release 15 (2026-09-25).
+  - area chapters · FFX · adopted · delivery not scheduled
+  - Source: docs/plans/chapter-yojimbo-review.md; research/ffx-yojimbo.md
+- <a id="d-050"></a>**D-050** — Yojimbo chapter, B2: the unsourced gauge-band odds split evenly, labelled 'our estimate', no invented weights
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Yojimbo's attack odds inside each gauge band are unsourced, so they ship as an even split under an on-screen "our estimate" tag, with the gauge starting and resetting at 0; the sourced gates stay as researched (below 25 percent only Daigoro, 25 percent adds Kozuka, 50 percent adds Wakizashi, 80 percent a slight nudge, 100 percent Zanmato). Chapter IX went live in release 15 (2026-09-25).
+  - area combat · FFX · adopted · delivery not scheduled
+  - Source: docs/plans/chapter-yojimbo-review.md; research/ffx-yojimbo.md
+- <a id="d-051"></a>**D-051** — Yojimbo chapter, B3: Lady Ginnem and Daigoro are both untargetable
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Lady Ginnem and Daigoro cannot be targeted: no source says either can be hit, and killing a 1-HP dog or a 10-HP unsent summoner would be an unsourced shortcut around Zanmato. Daigoro acts only on Yojimbo's own order. Chapter IX went live in release 15 (2026-09-25).
+  - area combat · FFX · adopted · delivery not scheduled
+  - Source: docs/plans/chapter-yojimbo-review.md
+- <a id="d-052"></a>**D-052** — Yojimbo chapter, B4: no hiring or haggling Yojimbo this release
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Nothing is added for hiring or haggling Yojimbo: the post scene ends as Yuna goes on to the fayth and the 190,350 gil haggle is out of scope (a later epilogue beat would be new gameplay needing its own yes).
+  - area chapters · FFX · adopted · nothing to build
+  - Source: docs/plans/chapter-yojimbo-review.md
+- <a id="d-053"></a>**D-053** — Yojimbo chapter, B5: the chapter's title is "Yojimbo", location "Cavern of the Stolen Fayth"
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The chapter is titled "Yojimbo" with the location "Cavern of the Stolen Fayth", following the precedent of Chapter VIII, "Evrae" (D-037); the title string was owed to the next chapter-registration pass. Chapter IX went live in release 15 (2026-09-25).
+  - area chapters · FFX · adopted · delivery not scheduled
+  - Source: docs/plans/chapter-yojimbo-review.md
+- <a id="d-054"></a>**D-054** — Yojimbo chapter, B6 and O-1: Yojimbo gets a NEW painting in the wiki's sourced gold/orange/purple colours; the existing navy painting is not approved and is not used
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Yojimbo gets a NEW painting in the wiki's sourced gold, orange and purple colours (gold-spiral pauldrons, jinbaori, gold-embossed jingasa, geta, fanged menpo); the existing navy painting is not approved and is not used. The new painting was to be rendered and cleaned up after this record. Chapter IX went live in release 15 (2026-09-25).
+  - area art · FFX · adopted · delivery not scheduled
+  - Source: docs/plans/chapter-yojimbo-review.md; docs/concepts/chapters/yojimbo/README.md
+- <a id="d-055"></a>**D-055** — Yojimbo chapter, B7: the battle music is a new original cue built for the moment the game plays Lulu's Theme, auditioned by ear before it is built
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Yojimbo's battle music is a new original cue built for the moment the game plays Lulu's Theme (Lulu's grief under control, a slow minor line a battle pulse joins, one crack of feeling), auditioned by ear before it is built, with no quotation of the original melody; a stand-in plays only if the sketch is not picked in time.
+  - area audio · FFX · adopted · delivery not scheduled
+  - Source: docs/plans/chapter-yojimbo-review.md; AGENTS.md; and others
+- <a id="d-056"></a>**D-056** — Yojimbo chapter, B8: Kimahri arrives with Doom already learned and a full Overdrive gauge
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Kimahri was to arrive with Doom already learned and a full Overdrive gauge (the Lancet-from-a-Ghost route in the same cavern). Partly replaced on 2026-09-26 by D-222: he now arrives without Doom (cavernDoomPrep set to not-learned); the line-up half of this decision stands.
+  - area combat · FFX · adopted · delivery not scheduled · partly replaced by [D-222](#d-222)
+  - Source: docs/plans/chapter-yojimbo-review.md; research/ffx-yojimbo.md; and others
+- <a id="d-057"></a>**D-057** — Yojimbo chapter, B9: Threaten fails on Yojimbo until sourced
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Threaten fails on Yojimbo (immune), the same precaution used for Evrae, until a source says otherwise: the decompile says landable but the wiki's infobox says immune. Chapter IX went live in release 15 (2026-09-25).
+  - area combat · FFX · adopted · delivery not scheduled
+  - Source: docs/plans/chapter-yojimbo-review.md
+- <a id="d-058"></a>**D-058** — Yojimbo chapter, B10: this is Chapter IX; Seymour Natus becomes Chapter X
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: This chapter is Chapter IX and Seymour Natus becomes Chapter X, numbered by registration order; encounters.ts and the shared ids gain the new chapter and a CONTRACT-CHANGES entry was owed. Chapter IX went live in release 15 (2026-09-25).
+  - area chapters · FFX · adopted · delivery not scheduled
+  - Source: docs/plans/chapter-yojimbo-review.md; src/data/ffx/ids.ts; and others
+- <a id="d-059"></a>**D-059** — Yojimbo chapter, O-2: Daigoro is option B, a koma-inu lion-dog
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Daigoro is a koma-inu lion-dog (option B, the name the game's own data gives him), cream in colour so it reads against every chamber, about 0.4 of a party member's size (our estimate). Nothing was installed by the decision.
+  - area art · FFX · adopted · delivery not scheduled
+  - Source: docs/concepts/chapters/yojimbo/README.md
+- <a id="d-060"></a>**D-060** — Yojimbo chapter, O-3: Lady Ginnem's unsent is option B, a pyrefly glow and motes on her outline
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Lady Ginnem's unsent look is option B: a pyrefly glow and motes on her outline, drawn as live particles and a shader, not paint, so she reads as unsent without losing her face for Lulu's scene. Her render came out fair-haired with faint make-up and needed a repair before any render ships.
+  - area art · FFX · adopted · delivery not scheduled
+  - Source: docs/concepts/chapters/yojimbo/README.md
+- <a id="d-061"></a>**D-061** — Yojimbo chapter, O-4: the Cavern's last chamber is option A, cold grey-blue with a shaft of daylight
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The Cavern's last chamber is option A: cold grey-blue with a shaft of daylight, giving the gold-and-purple Yojimbo the most contrast; the teleport pad ships as a floor prop in the scene, not paint, and the night-sakura arrival is covered by D-072.
+  - area art · FFX · adopted · delivery not scheduled
+  - Source: docs/concepts/chapters/yojimbo/README.md
+- <a id="d-062"></a>**D-062** — Yojimbo chapter, O-5: the Zanmato gauge is option A, a bar under his name with the 25/50/80 bands, plus option C's full-gauge banner
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Yojimbo's Zanmato gauge is a bar under his name with the 25, 50 and 80 percent bands (option A) plus option C's one-shot "Zanmato" banner when the gauge is full; no FFX HUD element had drawn an enemy gauge before, so a small prototype comes first if the stills do not settle the feel, and a phone mockup was still owed (answered by D-073).
+  - area ui · FFX · adopted · delivery not scheduled
+  - Source: docs/concepts/chapters/yojimbo/README.md
+- <a id="d-063"></a>**D-063** — Yojimbo chapter, O-6: battle music is sketch A, "The Summoner's Sorrow"
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Yojimbo's battle music is sketch A, "The Summoner's Sorrow" (docs/audio/sketches/2026-09-24/yojimbo-a-summoners-sorrow.mp3). He had the file but gave no score, so this is not a scored ear judgement; the finished, composed and wired cue was not built by this decision.
+  - area audio · FFX · adopted · delivery not scheduled · at ~13:35 EDT
+  - Source: docs/plans/chapter-yojimbo-review.md; AGENTS.md hard rule 13; and others
+- <a id="d-064"></a>**D-064** — Living portrait feel: clip A, "measured" (Until Dawn's own numbers), the driver's choice under Bailey's words, revisable
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The living portrait idles measured, using Until Dawn's own numbers: a gentle drift, no idle saccades, the eyes leading the input (clip A of the v6 pilot); chosen by the driver under his blanket yes because it had made no recommendation among the three clips, and revisable once he reacts to the built keys. The pick was to be applied to the nine painted keys before anything else was built on it.
+  - area art · both games · adopted · delivery not scheduled
+  - Source: docs/plans/living-portrait-v6-method.md; docs/concepts/pause-until-dawn/prototype-v2/shots/v6-pilot/clip-A-measured.mp4
+- <a id="d-065"></a>**D-065** — Seymour's Chapter VII speaker portrait: option A, the idle's own likeness; new speaker id seymour-macalania, Chapter I keeps seymour
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Seymour's Chapter VII speaker portrait is option A, the battle idle's own face (judged 7 at 1:1); it has a new speaker id, seymour-macalania, and Chapter I keeps the plain seymour. The plate still reads "Seymour" in dialogue and a face-crop row was added. Nothing was installed by the decision itself.
+  - area art · FFX · adopted · delivery not scheduled
+  - Source: docs/concepts/portraits/seymour-macalania/README.md; src/story/scripts/seymour-anima-macalania.ts; and others
+- <a id="d-066"></a>**D-066** — Yojimbo chapter: the opening line-up is Lulu, Kimahri, Yuna; Tidus, Auron, Wakka, Rikku on the bench
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The Yojimbo chapter opens with Lulu, Kimahri and Yuna (magic, Doom and the aeon that takes Zanmato), and Tidus, Auron, Wakka and Rikku on the bench; the research calls "Lulu leads" a presentation choice, so this was his call. Kimahri no longer arrives with Doom (D-222), but the line-up stands. Chapter IX went live in release 15 (2026-09-25).
+  - area combat · FFX · adopted · delivery not scheduled · at ~12:50 EDT · partly replaced by [D-222](#d-222)
+  - Source: docs/plans/chapter-yojimbo-review.md; src/data/ffx/builds/cavern.ts; and others
+- <a id="d-067"></a>**D-067** — Yojimbo chapter: the Candle of Life is left out; Kimahri's Doom is the sourced route
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The Candle of Life is left out of the Yojimbo chapter: it exists in the data but no source places one in this party at this point, so Kimahri's Doom is the sourced route to Zanmato-readiness. Nothing to build: an item that is not given.
+  - area combat · FFX · adopted · nothing to build · at ~12:50 EDT
+  - Source: docs/plans/chapter-yojimbo-review.md
+- <a id="d-068"></a>**D-068** — Yojimbo chapter: the four mid-battle callouts are in (gauge crosses 50% with Lulu reading the blade; "Zanmato next turn"; Doom lands; an aeon takes Zanmato), gated on Bailey reading the story draft first
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Four mid-battle callouts are in the Yojimbo chapter (the gauge crossing 50 percent with Lulu reading the blade, "Zanmato next turn", Doom landing, an aeon taking Zanmato), but they are built into the game only after Bailey has read the story draft (docs/plans/yojimbo-story-draft.md); they were not built until that read (he kept the as-built lines of Chapter IX on 2026-09-27, D-241).
+  - area story · FFX · adopted · delivery not scheduled · at ~12:50 EDT
+  - Source: docs/plans/chapter-yojimbo-review.md; docs/plans/yojimbo-story-draft.md
+- <a id="d-069"></a>**D-069** — Yojimbo chapter: if the art picks are late, ship registered and LOCKED rather than hold the release
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: If the art picks are late, the Yojimbo chapter ships registered and LOCKED as a coming card (the Chapters VII and VIII precedent) rather than holding the release; engine, data, AI and story ship on schedule.
+  - area art · FFX · adopted · nothing to build · at ~12:50 EDT
+  - Source: docs/plans/chapter-yojimbo-review.md
+- <a id="d-070"></a>**D-070** — Pause faces: option B (slide the plate under the falloff) for Rikku, Tidus and Auron at 1280x960, applied as one rule for every painting the framing search cannot clear
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The pause screen slides the plate past its edge on the chrome side and feathers it into the falloff (option B) for FFX-2 Rikku at every size and for FFX Tidus and FFX Auron at 1280x960, as one rule for every painting the ordinary framing search cannot clear; src/app/screens/pause/faceClear.ts needed the past-edge pan and feather. Both games.
+  - area ui · both games · adopted · delivery not scheduled · at ~13:35 EDT
+  - Source: docs/concepts/layout/pause-faces/README.md; docs/plans/pr-0079-method-check.md; and others
+- <a id="d-071"></a>**D-071** — PR-0127 phone party-prep CHAPTER card: option A, stacked scrolling cards, keeping the three photos at phone width
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: On a phone the party-prep CHAPTER card becomes one scrolling column (title strip, place, story, the three photos with captions, objectives, tip, then the party, START BATTLE pinned at the bottom) instead of tabs or collapsible rows, so its type no longer falls to 4 to 7 px at 390x844; the photos stay at phone width. Built in src/ui/common's chapter panel. Both games.
+  - area ui · both games · adopted · delivery implemented · at ~13:35 EDT
+  - Source: docs/concepts/layout/pr-0127-phone/README.md; src/ui/common
+- <a id="d-072"></a>**D-072** — Yojimbo O-4: the promised night-sakura arrival plays over the cold chamber at fight start
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The night-sakura arrival plays at the start of the Yojimbo fight over the cold chamber (docs/concepts/chapters/yojimbo/chamber/sheet-arrival.jpg), not merely as a later overlay; a hurried opening of Chapter IX still plays it (fixed in release 38).
+  - area visuals · FFX · adopted · delivery not scheduled · at ~13:35 EDT
+  - Source: docs/concepts/chapters/yojimbo/chamber/sheet-arrival.jpg; src/scenes
+- <a id="d-073"></a>**D-073** — Yojimbo O-5: the Zanmato gauge's phone layout ships as drawn
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The Zanmato gauge ships at the phone layout drawn in docs/concepts/chapters/yojimbo/gauge/sheet-phone.jpg, with option C's full-gauge banner; no widget code was touched by the decision.
+  - area ui · FFX · adopted · delivery not scheduled · at ~13:35 EDT
+  - Source: docs/concepts/chapters/yojimbo/gauge/sheet-phone.jpg; src/ui/ffx
+- <a id="d-074"></a>**D-074** — Yojimbo hero plate: option B, drawing Zanmato
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Yojimbo's pause hero plate is option B: Yojimbo drawing Zanmato. The painting was still to be made from the chosen frame (docs/concepts/chapters/yojimbo/hero-plate/b-plate.jpg).
+  - area art · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/yojimbo/hero-plate/b-plate.jpg; docs/plans/chapter-yojimbo-review.md
+- <a id="d-075"></a>**D-075** — Yojimbo Chapter IX paintings: option A, fewest
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Yojimbo chapter gets the fewest paintings: an idle plus one hero cast for Yojimbo, Daigoro's bite painting at the sourced 30-degree lunge, Yojimbo's drawn-blade painting only once a repair scores 7 or better, no hurt paintings for either, and nothing new for Lady Ginnem.
+  - area art · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/yojimbo/decisions/decision-paintings.png; docs/plans/chapter-yojimbo-review.md
+- <a id="d-076"></a>**D-076** — Yojimbo Chapter IX exit: Yojimbo and Daigoro recalled together, our reading
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: After the fight Yojimbo and Daigoro are recalled together, like Anima's scripted departure, and the game labels this our own reading (no source describes the exit); Lady Ginnem stays on the field until Yuna sends her in the post-battle scene.
+  - area visuals · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/yojimbo/decisions/decision-exit.png; docs/plans/chapter-yojimbo-review.md
+- <a id="d-077"></a>**D-077** — Natus B1: chapter title "Seymour Natus", location the Highbridge of Bevelle
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Chapter X is titled "Seymour Natus" with the location "Highbridge of Bevelle — before the Main Gate", numbered X after Yojimbo (D-058). Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area chapters · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-078"></a>**D-078** — Natus B2: opening line-up a, Tidus/Yuna/Kimahri
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Natus chapter opens with Tidus, Yuna and Kimahri, with every switch legal from turn one; the line-up is single-sourced until checked against footage. Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area combat · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-079"></a>**D-079** — Natus B3: aeon Overdrive gauges at start, b
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The aeons start the Natus fight with Bahamut's Overdrive gauge full (the sourced Isaaru duel just before) and the other four at an estimated partial value. Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area combat · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-080"></a>**D-080** — Natus B4: Yuna does not know Reflect, b
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Yuna does not know Reflect in the Natus chapter; Rikku keeps the Reflect Chapter VIII gave her, so the Reflect path stays reachable through Rikku. Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area combat · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-081"></a>**D-081** — Natus B5: items, a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Natus chapter's inventory is Chapter VIII's carried forward plus Softs at an estimated count, following O'aka's sourced Highbridge list. Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area combat · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-082"></a>**D-082** — Natus B6: Desperado's buff ladder, a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Natus's Desperado gives only Haste on all three; the guessed 4 to 7 buff ladder is not built, and the guide's notes disclose the ladder as unsourced. Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area combat · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-083"></a>**D-083** — Natus B7: unsourced AI details, a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Natus's unsourced AI details are built as the element order Ice, Thunder, Water, Fire, the rotation keyed to the current element and Multi-ra hitting two different members, each labelled "our estimate" (GameFAQs only, matching Chapter VII's sourced cycle). Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area combat · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-084"></a>**D-084** — Natus B8: Natus's own reflected spells move his phase, a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Natus's own reflected spells move his phase, counted as an action's damage, labelled an estimate against the wiki's "direct damage" wording. Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area combat · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-085"></a>**D-085** — Natus B9: mid-battle callouts, in
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Natus chapter has mid-battle callouts (the Protect counter below 24,000 and below 12,000, the first Break, the first shatter, the Banish line, three Talk exchanges and a warning when the third Haste lands), drafted in a story draft that Bailey reads first. Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area story · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-086"></a>**D-086** — Natus B10: Threaten on Natus, immune
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Threaten fails on Natus (immune). Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area combat · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-087"></a>**D-087** — Natus B11: how the wedding is told, a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The wedding is told by Tidus's past-tense narration (wedding, leap, trial, Via Purifico) and the Highbridge is staged live, with no new Kinoc or Mika portraits; it picks up where Chapter VIII's narration stops. Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area story · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-088"></a>**D-088** — Natus B12: Seymour's face in dialogue, b (conditional)
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Seymour's dialogue face is the approved Macalania portrait until he transforms and then a Natus portrait from the O-1 painting if it lands in time; otherwise the Macalania portrait for every line.
+  - area art · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-089"></a>**D-089** — Natus B13: painted party and aeons without a verdict, a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Kimahri, Wakka, Lulu, Rikku, Valefor, Ifrit, Ixion and Bahamut ship with the paintings Chapters I, VII and VIII already use; they are not held for a separate verdict. Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area art · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-090"></a>**D-090** — Natus B14: do not stage the Isaaru duel or Evrae Altana
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Isaaru duel and Evrae Altana are not staged in the Natus chapter; narration only.
+  - area chapters · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-091"></a>**D-091** — Natus B15: music, a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Natus chapter's music is a new original cue from the "Noble Rot" family (SEYMOUR_UNMOORED) auditioned before it ships, with Chapter VII's boss-seymour-macalania as the stand-in if the sketch is not picked in time.
+  - area audio · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-092"></a>**D-092** — Natus B16: ship registered and LOCKED if art picks are late
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: If the Natus art picks are late the chapter ships registered and LOCKED (the D-069 precedent), not held, and Bailey is told before the cut.
+  - area art · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-natus-review.md
+- <a id="d-093"></a>**D-093** — Natus O-1: Seymour Natus painting, option A
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Seymour Natus gets a new painting at battle scale beside a party idle, with the ring rotation and the 1.3x Mortibody-height staging as drawn, labelled ours rather than sourced.
+  - area art · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/natus/natus; docs/plans/chapter-natus-review.md
+- <a id="d-094"></a>**D-094** — Natus O-2: Mortibody, option A, plus the KO-and-revive strip
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Mortibody is option A, with the KO-and-revive strip shown; the strip's "back weaker, max 3,000" reading follows the engine, not the wiki sentence.
+  - area art · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/natus/mortibody; docs/plans/chapter-natus-review.md
+- <a id="d-095"></a>**D-095** — Natus O-3: the Highbridge, option C, night with the city lit
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Highbridge is option C, a night with the city lit; the plate is a gate facade rather than a bridge and no plate shows the green runner or crimson canopies the sourced description calls for (disclosed). Taste over fidelity was his call.
+  - area chapters · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/natus/highbridge; docs/plans/chapter-natus-review.md
+- <a id="d-096"></a>**D-096** — Natus O-4: reading the fight, option B chips on HUD rows, keeping A's one-line text
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Natus fight is read through enemy-move chips on the HUD rows (option B's staging) with option A's one-line intent text kept, at 1600x900 and 390 px phone width; the Claw chip does not name a random target ("if the Claw hits him: 90%"), there is no FLEE control and the panel drops the leftover "Physical damage" label. Chapter X, built to this plan, went live in release 18 (2026-09-26).
+  - area ui · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/natus/fight; docs/plans/chapter-natus-review.md
+- <a id="d-097"></a>**D-097** — Natus O-5: Natus's portrait, option A
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Natus's portrait is option A (its own gold spiked halo and facial marks), used only if the conditional dialogue face of D-088 lands.
+  - area art · FFX · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/natus/portrait; docs/plans/chapter-natus-review.md
+- <a id="d-098"></a>**D-098** — Fallen Aeons FA1: the chapter is the Road gauntlet, option A
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Fallen Aeons chapter is the Road gauntlet: Shiva, then the Magus Sisters, then Anima, three different puzzles with the best data, as three links. Chapter XI, built to this plan, went live in release 18 (2026-09-26).
+  - area chapters · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-099"></a>**D-099** — Fallen Aeons FA2: between links, option b, full restore at a Save Sphere
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Between links HP, MP and status restore at a Save Sphere beat (the HD reading, not the PS2 reading where they carry over), because Delta Attack leaving the party at 1 HP into a 36,000-HP Anima would otherwise turn the puzzle into a coin toss. Chapter XI, built to this plan, went live in release 18 (2026-09-26).
+  - area chapters · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-100"></a>**D-100** — Fallen Aeons FA3: retry from the lost link, option b
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: A lost link is retried from that link, not from Shiva, because the Save Sphere is a checkpoint; kept in memory, not saved to disk. Chapter XI, built to this plan, went live in release 18 (2026-09-26).
+  - area chapters · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-101"></a>**D-101** — Fallen Aeons FA4: line-up and dresspheres, option a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The chapter opens with the Chapter V preset as is (two Dark Knights and a White Mage), verified in three sources. Chapter XI, built to this plan, went live in release 18 (2026-09-26).
+  - area combat · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-102"></a>**D-102** — Fallen Aeons FA5: items and gil, option a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Chapter V inventory carries over untrimmed for the three links: same stretch of the story, one inventory. Chapter XI, built to this plan, went live in release 18 (2026-09-26).
+  - area combat · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-103"></a>**D-103** — Fallen Aeons FA6: no Stop-protection accessory modelling, option a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: No Stop-protection accessory (Ribbon, Stopproof) is modelled: Remedy cures Stop and the guide already says so, so there is no new engine work. Chapter XI, built to this plan, went live in release 18 (2026-09-26).
+  - area combat · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-104"></a>**D-104** — Fallen Aeons FA7: Darkness-vs-Mindy miss chance, option a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Darkness-versus-Mindy miss chance is changed only if two or more sources agree, and then as an FFX-2 data change with its own deep review; the first step is to measure and find the sources.
+  - area combat · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-105"></a>**D-105** — Fallen Aeons FA8: what raises Mindy's counter, option a, tagged [conflict]
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: What raises Mindy's counter is every hostile action aimed at her, hit or miss, not only landed damage; the point is a conflict between two sourced wordings, so it is labelled a conflict and measured both ways.
+  - area combat · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-106"></a>**D-106** — Fallen Aeons FA9: the data conflicts, as listed
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Five data conflicts about the chapter's bosses are each shown tagged as a conflict or single source with no percentages invented: non-elemental (three observations), SinirothX's 15 x 1/16 of current HP, physical for SinirothX, AP 8 (three sources) and MP to 0 (wiki only).
+  - area chapters · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-107"></a>**D-107** — Fallen Aeons FA10: leave Remedy as is, option a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Remedy does not additionally clear Pain's stat losses; only one source says otherwise, so nothing changes.
+  - area combat · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-108"></a>**D-108** — Fallen Aeons FA11: the Anima painting counts as approved, yes
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: He confirmed that the Anima painting (public/art/characters/anima/*) is approved, so the chapter derives from it directly and no options round is needed.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-109"></a>**D-109** — Fallen Aeons FA12: the possessed look, option b, Chapter IV violet
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The possessed look is the Chapter IV Bahamut violet treatment (violet eyes, glowing purple veins, dark violet), for consistency, labelled our own choice because the canon is unverified.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-110"></a>**D-110** — Fallen Aeons FA13: scope of the Sisters' art, option a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Sisters' art follows the Chapter VI precedent: one idle and one hero-cast painting per Sister, with the hurt state the idle under the engine's flinch.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-111"></a>**D-111** — Fallen Aeons FA14: the arena, option b, a Road variant
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The arena is a Road variant derived from the approved Farplane backdrop's own pixels (repair only what must change, no fresh render).
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-112"></a>**D-112** — Fallen Aeons FA15: music, option a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Music is the game's own single "Aeons" cue (boss-ffx2-aeon) on all three links with scene-farplane as the field bed; a new cue is auditioned only if he hears a clash with the mood. Chapter XI, built to this plan, went live in release 18 (2026-09-26).
+  - area audio · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-113"></a>**D-113** — Fallen Aeons FA16: callouts and voices, option a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Each link has Yuna's opening line plus four callouts (Stop lands, the first sister falls, the third Pain, Anima at half HP) and no Farplane voices, since the sources place those in Chapter 5's scripts only; the lines were shown in a story draft first (he kept the as-built lines on 2026-09-27, D-241). Chapter XI, built to this plan, went live in release 18 (2026-09-26).
+  - area story · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-114"></a>**D-114** — Fallen Aeons FA17: title "Fallen Aeons", Chapter XI
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The chapter is titled "Fallen Aeons" (Chapter XI), not "The Road to the Farplane"; the location line reads "Road to the Farplane". Chapter XI, built to this plan, went live in release 18 (2026-09-26).
+  - area chapters · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-115"></a>**D-115** — Fallen Aeons FA18: ship registered and LOCKED if art is late, option a
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: If the Fallen Aeons art is late the chapter registers LOCKED and ships behind a flag (the Chapters VII and VIII precedent) instead of holding everything, and Bailey is told before the cut.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-116"></a>**D-116** — Fallen Aeons FA19: no X-2 Yojimbo link, no
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The X-2 Yojimbo does not become an optional fourth link: he is a different place in the story.
+  - area chapters · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-117"></a>**D-117** — Fallen Aeons O-1: the Magus Sisters, option A armoured, with the clean pass
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Magus Sisters are the armoured trio (A): a red mantis with a scythe, a rotund blue-and-red Cindy and the smallest sister an orange bee hovering on her wings; the clean-pass notes are applied as inferred fixes, and Cindy's shell reads red spots on blue, correcting the sheet's invented "black spots on red".
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/fallen-aeons/o1-sisters; docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-118"></a>**D-118** — Fallen Aeons O-2: the possessed treatment, option B, violet on the Road plate
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The possessed treatment is violet on the Road plate: Shiva first from her approved idle with the Chapter IV violet, each derived from approved pixels; Anima follows once the Anima approval (D-108) and the Road arena (D-111) are in.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/fallen-aeons/o2-possessed; docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-119"></a>**D-119** — Fallen Aeons O-3: the Road, option A, with option B as the between-links shot
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: The Road is option A, a stone platform in the foreground over the bright void, with option B (all three platforms in depth) as the between-links Save Sphere shot.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/fallen-aeons/o3-road; docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-120"></a>**D-120** — Fallen Aeons O-4: link transitions, the Save Sphere fade
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - What changed: Links change through a fade through the Save Sphere with the HP and MP restore shown, instead of a title-card cut or a camera pan; whether statuses clear at the Save Sphere too is not sourced and was put to him together with D-099.
+  - area visuals · FFX-2 · adopted · delivery not scheduled · at ~14:40 EDT
+  - Source: docs/concepts/chapters/fallen-aeons/o4-transitions; docs/plans/chapter-fallen-aeons-review.md
+- <a id="d-121"></a>**D-121** — FFX-2 Wait split: new wording for the three lines that turn untrue on the main command list
+  - Bailey: “I'll go with all of your recommendations full speed” (blanket yes)
+  - What changed: The three lines that turn untrue on the main command list under the Wait split read as he accepted them (below), built in commit 2b32ffe7; the pre-split lines survive only behind the ?wait=hold comparison switch, and the Wait-split default and these lines are live in hotfix 12.3 (e3b8c2a3). They replace D-030's line. FFX-2 only.
+  - area guide · FFX-2 · adopted · delivery implemented · at ~15:15 EDT
+  - Source: docs/concepts/coach/wait-split-lines.md; src/ui/coach/coachCopy.ts
+  - <a id="d-121-gauge-line"></a>**D-121/gauge-line** — Rikku's first-time gauge line under the Wait split reads "Bar's full, she's up! Open a list and take your time, nobody moves." (recommended 1a)
+    - What changed: src/ui/coach/coachCopy.ts FFX2_GAUGE_BODY_WAIT carries this line; his D-030 pick it replaces was true only while a whole-menu hold applied.
+  - <a id="d-121-briefing-line"></a>**D-121/briefing-line** — The briefing's fourth line under Wait reads "In hers, the clock does not wait. A list stops it." (recommended 2a; BRIEFING_WAIT_LINE)
+    - What changed: The briefing says the clock does not wait at the top-level list and a list stops it; the wording was inferred until he accepted it here.
+  - <a id="d-121-running-badge"></a>**D-121/running-badge** — The running badge under Wait reads "Gauges running · a list holds them" (recommended 3a; COACH_RUNNING_BADGE_WAIT)
+    - What changed: The badge states the true split: the gauges run at the top level and a list holds them.
+- <a id="d-122"></a>**D-122** — Pause faces: FFX-2 Paine, option A (stack the two stat columns) where B cannot clear her face
+  - Bailey: “I'll go with your recommendations full speed again please” (blanket yes)
+  - What changed: FFX-2 Paine's pause plate at 1280x960 and 1280x720 in chapters 5 and 6 stacks the two stat columns on her screen only (option A), because option B's slide cannot clear her face; built in commits d67c8534 and 380a3d53 (never slid, never under the phone stylesheet). FFX-2 only.
+  - area ui · FFX-2 · adopted · delivery implemented
+  - Source: docs/concepts/layout/pause-faces/sheet.jpg; docs/screenshots/pause-faces-b/paine-1280x960-ch5-build.jpg
+- <a id="d-123"></a>**D-123** — PR-0127 phone party-prep CHAPTER card: option A landed
+  - Bailey: “I'll go with your recommendations full speed again please” (blanket yes)
+  - What changed: The phone party-prep CHAPTER card of D-071 option A is built and repaired: one stacked scrolling page at 390x844 with the three photos kept (commit 56122e30), and the chapters 9 to 10 fallback card readable (commit 5396efec). Both games.
+  - area ui · both games · adopted · delivery implemented
+  - Source: D-071's option A (stacked scrolling cards, keeping the three photos at phone width) is built and repaired. Built: 56122e30 (the party-prep CHAPTER …
+- <a id="d-124"></a>**D-124** — Zanmato gauge: four built-state refinements approved as built
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: The Zanmato gauge stays as built, with four refinements from the mockup stills: no HP line (Yojimbo cannot be Sensored), the panel a little right and higher, the band labels one size bigger for the 12 px floor, and the banner's red line only as wide as its text. No further pass is needed.
+  - area combat · FFX · adopted · delivery implemented · at ~19:20 EDT
+  - Source: research/ffx-yojimbo.md
+- <a id="d-125"></a>**D-125** — Natus (Chapter X) opening party preset raised to the Gagazet upper bound
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: The Chapter X opening party preset is raised to what Chapter IX ships at, the Gagazet upper bound (the intended line measured 116 of 200 wins there against 8 of 200 at the midpoint preset); Natus himself is never tuned to compensate. Chapter X went live in release 18 (2026-09-26).
+  - area combat · FFX · adopted · delivery not scheduled · at ~19:20 EDT
+  - Source: Answered 2026-09-24 ~19:20 EDT, Bailey, verbatim: "I'll go with all your recommendations". Raise the Chapter X preset to what Chapter IX (Yojimbo) …
+- <a id="d-126"></a>**D-126** — Natus gets one hero cast painting, the D-034/D-045 precedent
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Seymour Natus gets an idle plus one hero-cast painting, following the D-034 and D-045 precedent.
+  - area art · FFX · adopted · delivery not scheduled · at ~19:20 EDT
+  - Source: Answered 2026-09-24 ~19:20 EDT, Bailey, verbatim: "I'll go with all your recommendations". Seymour Natus gets an idle plus one hero-cast painting, …
+- <a id="d-127"></a>**D-127** — Merge combat-fixes-0924: FFX-2 magic never rolls the hit check on either side
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: FFX-2 magic never rolls the hit check, on either side (merged from combat-fixes-0924, commit 3b7f0a2d); this is AGENTS.md hard rule 5 applied to the FFX-2 hit-roll path: magic and every Overdrive always hit. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery implemented · at ~19:20 EDT
+  - Source: AGENTS.md hard rule 5
+- <a id="d-128"></a>**D-128** — Merge combat-fixes-0924: Chapter I drain-crossing counters fire
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Chapter I's drain-crossing counters now fire (merged from combat-fixes-0924, commit 8bcb1e89, with the preflight 3cb97d9f and repair e694fc3e). FFX only.
+  - area combat · FFX · adopted · delivery implemented · at ~19:20 EDT
+  - Source: Answered 2026-09-24 ~19:20 EDT, Bailey, verbatim: "I'll go with all your recommendations". Merged from branch combat-fixes-0924 (worktree …
+- <a id="d-129"></a>**D-129** — Braska's Final Aeon's Provoke left as is, unsourced
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Braska's Final Aeon's Provoke is left unchanged: there is no sourced fix for its behaviour and nothing is invented (AGENTS.md hard rule 6).
+  - area combat · FFX · adopted · nothing to build · at ~19:20 EDT
+  - Source: AGENTS.md hard rule 6
+- <a id="d-130"></a>**D-130** — Chapter I Poison-crossing fix: Seymour Flux stays in phase 1 under Poison until a real hit
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Seymour Flux stays in phase 1 under Poison until a real hit crosses the 50 percent threshold, instead of switching phase on HP alone and Flaring himself without Reflect in 14 of 200 intended runs; the fix was still in progress when recorded.
+  - area combat · FFX · adopted · delivery in progress · at ~19:20 EDT
+  - Source: research/ffx-seymour-flux
+- <a id="d-131"></a>**D-131** — Longer Yojimbo blade: a 1:1 check first, then an in-battle frame before anything installs
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: A longer Yojimbo blade is only installed after a 1:1 scale check against the approved painting and a real in-battle frame that Bailey looks at (hard rule 9); nothing is installed before that look.
+  - area art · FFX · adopted · delivery not scheduled · at ~19:20 EDT
+  - Source: AGENTS.md hard rule 9
+- <a id="d-132"></a>**D-132** — Install the longer Yojimbo blade over the r1 drawn blade
+  - Bailey: “1. Yes install please 2. I'll go with your recommendation” (blanket yes)
+  - What changed: The longer Yojimbo blade is installed as public/art/characters/yojimbo-cavern/cast.png over the r1 drawn blade (the 1:1 check and the in-battle frame both passed); the replaced file is kept at D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo-casts/replaced-by-longer/ and the approved hashes were updated with 0 mismatches before and after.
+  - area art · FFX · adopted · delivery implemented · at ~20:00 EDT
+  - Source: docs/concepts/chapters/yojimbo/casts/JUDGE.md; docs/concepts/chapters/yojimbo/casts/longer-blade-in-battle.jpg
+- <a id="d-133"></a>**D-133** — Chapter X (Natus) party preset: Rikku's MP stays at Chapter VIII's 130, not the Gagazet copy's 115
+  - Bailey: “I'll go with your recommendation” (blanket yes)
+  - What changed: Rikku's MP and maximum MP in the Chapter X preset stay at Chapter VIII's 130 instead of the Gagazet copy's inverted 115 (src/data/ffx/builds/highbridge.ts, pinRikkuMp); every other stat cell is unchanged.
+  - area combat · FFX · adopted · delivery implemented · at ~20:00 EDT
+  - Source: src/data/ffx/builds/highbridge.ts; tests/unit/chapters/natus-build.test.ts
+- <a id="d-134"></a>**D-134** — Two new chapters after Yojimbo IX, Natus X and Fallen Aeons XI: Seymour Omnis (FFX) and Trema (FFX-2)
+  - Bailey: “I'll go with Seymour Omnis and Trema”
+  - What changed: Two chapters joined the plan after Yojimbo (IX), Natus (X) and Fallen Aeons (XI): Seymour Omnis (FFX, his last form fought inside Sin in the Garden of Pain) and Trema (FFX-2). Research and end-state options came first (the preflight answers are D-145 and D-146); they became Chapters XII and XIII.
+  - area chapters · both games · adopted · delivery not scheduled · at ~21:45 EDT
+  - Source: research/ffx-seymour-omnis.md; AGENTS.md
+- <a id="d-135"></a>**D-135** — Two more new chapters: Isaaru's contest of aeons at Bevelle (FFX) and Gippal in the Den of Woe (FFX-2)
+  - Bailey: “I'll also add Isaaru's contest of aeons at Beville and Gippal, in the Den of Woe as two additional chapters in addition to the ones I selected already”
+  - What changed: Two more chapters joined the plan: Isaaru's contest of aeons at Bevelle (FFX, the Via Purifico) and Gippal in the Den of Woe (FFX-2). Research and options came first (the preflight answers are D-147 and D-148); they became Chapters XIV and XV.
+  - area chapters · both games · adopted · delivery not scheduled · at ~21:50 EDT
+  - Source: research/ffx-isaaru-bevelle.md; docs/plans/chapter-isaaru-review.md; and others
+- **Picture** (cast) — Approved: Speaker portrait: Nooj (FFX-2)
+  - Bailey: “I’ll take all of your recommendations” (blanket yes)
+  - Note: FFX-2 only. Nooj speaks first in chapter 5 (ffx2-vegnagun-shuyin), now on his card: installed locally in de3059e after one repair pass (public/art is gitignored; the repair has no independent score yet). Independent 1:1 judge, 2026-09-24: C 7.1 ("yes, just"), A 6.6 and B 5.3 below the bar of 7. docs/target/decisions.json D-043.
+  - area art · FFX-2 · adopted · delivery implemented · see [D-043](#d-043)
+  - Source: docs/target/targets.json, group cast, tile "Speaker portrait: Nooj (FFX-2)"
+- **Picture** (cast) — Approved: Speaker portrait: Brother (FFX-2)
+  - Bailey: “I’ll take all of your recommendations” (blanket yes)
+  - Note: FFX-2 only, speaker id brother-x2 (not the shared brother id, which keeps the FFX evrae-airship lines on the text card until his FFX look is sourced). Brother has three comm lines in chapter 6 (ffx2-leblanc). Independent 1:1 judge, 2026-09-24: A 7.9, C 7.4, B 6.8 below the bar of 7. docs/target/decisions.json D-043.
+  - area art · FFX-2 · adopted · delivery implemented · see [D-043](#d-043)
+  - Source: docs/target/targets.json, group cast, tile "Speaker portrait: Brother (FFX-2)"
+- **Picture** (cast) — Approved: Dr. Goon and Fem-Goon, battle idle (FFX-2)
+  - Bailey: “All your recommendations” (blanket yes)
+  - Note: FFX-2 only. The goons fight only in the Chateau Leblanc mission (Act I); the game still shows the round-09 PR-0092 silhouette placeholder. Independent judge 815314a. docs/target/decisions.json D-047.
+  - area art · FFX-2 · adopted · delivery not scheduled · see [D-047](#d-047)
+  - Source: docs/target/targets.json, group cast, tile "Dr. Goon and Fem-Goon, battle idle (FFX-2)"
+- **Picture** (cast) — Approved: Speaker portrait: Seymour, Chapter VII (FFX)
+  - Bailey: “All your recommendations” (blanket yes)
+  - Note: FFX only. Chapter VII (seymour-anima-macalania) currently borrows public/art/portraits/seymour.png, the Flux-era face from Chapter I; option A is a portrait rendered from the Chapter VII battle idle's own pixels instead (denoise 0.45, 3.8x), the only option of the three that holds that idle's identity exactly. Independent 1:1 judge, 2026-09-24: 7. docs/target/decisions.json D-065.
+  - area art · FFX · adopted · delivery not scheduled · see [D-065](#d-065)
+  - Source: docs/target/targets.json, group cast, tile "Speaker portrait: Seymour, Chapter VII (FFX)"
+- **Picture** (pause) — Approved: Pause faces: cases the framing search cannot clear (both)
+  - Bailey: “All your recommendations” (blanket yes)
+  - Note: docs/concepts/layout/pause-faces/README.md's seven cases where clearFace's ordinary pan cannot clear the face box against src/app/screens/pause/faceClear.ts FACE_BOXES; option B (slide the plate under the falloff) is the only option that clears all seven. docs/target/decisions.json D-070. Not yet built.
+  - area ui · both games · adopted · delivery not scheduled · see [D-070](#d-070), [D-122](#d-122)
+  - Source: docs/target/targets.json, group pause, tile "Pause faces: cases the framing search cannot clear (both)"
+- **Picture** (fight) — Approved: PR-0002: Yuna's slot moves clear of the FFX command stack
+  - Bailey: “I’ll take all of your recommendations” (blanket yes)
+  - Note: FFX only, chapters 1 and 3: the approved 5-row Ink & Gold command cascade covers more than a third of Yuna's quad at 1600x900 (round-09). A 2-row cap fixed it once but shrank approved chrome and was reverted (4b2cafc, rule 9). docs/target/decisions.json D-041.
+  - area ui · FFX · adopted · delivery not scheduled · see [D-041](#d-041)
+  - Source: docs/target/targets.json, group fight, tile "PR-0002: Yuna's slot moves clear of the FFX command stack"
+- **Picture** (fight) — Approved: PR-0012: the FFX-2 command-help slab
+  - Bailey: “I’ll take all of your recommendations” (blanket yes)
+  - Delivery: Built in src/ui/ffx2/FFX2BattleHud.ts and src/ui/ffx2/ffx2-hud.css (FFX2_COMMAND_HELP_PLACEMENT_RESOLVED); gated on the existing BATTLE HELP setting. Built by another session in this shared tree (3fc3a93) and repaired in 9d3653b (clears the PAUSE chip and intent slab, bar mode at 390x844, commandHelpBand.ts); not yet matched by a review.
+  - area ui · FFX-2 · adopted · delivery implemented · see [D-040](#d-040)
+  - Source: docs/target/targets.json, group fight, tile "PR-0012: the FFX-2 command-help slab"
+- **Picture** (fight) — Approved: PR-0005-ffx: the turn cut-in slab covers the command menu
+  - Bailey: “I’ll take all of your recommendations” (blanket yes)
+  - Note: FFX only, chapters 1-3: the command menu takes keys while the approved Turn cut-in slab plays, but the slab sits over the same bottom-left region the FFX command cascade draws in, covering it for the ~0.76s hold. FFX-2's own ATB cut-in has no approved mockup and is unbuilt, so this sheet is FFX-only. docs/target/decisions.json D-042.
+  - area ui · FFX · adopted · delivery not scheduled · see [D-042](#d-042)
+  - Source: docs/target/targets.json, group fight, tile "PR-0005-ffx: the turn cut-in slab covers the command menu"
+- **Picture** (phone) — Approved: PR-0127 phone party-prep CHAPTER card (both)
+  - Bailey: “All your recommendations” (blanket yes)
+  - Note: docs/concepts/layout/pr-0127-phone/README.md: at 390x844 the prep screen is today the 16:9 layout scaled to 0.61, and the CHAPTER card's type falls to 4-7px (baseline docs/screenshots/fix12/PR-0127-phone-ch6-baseline.png). docs/target/decisions.json D-071. Not yet built.
+  - area ui · both games · adopted · delivery not scheduled · see [D-071](#d-071)
+  - Source: docs/target/targets.json, group phone, tile "PR-0127 phone party-prep CHAPTER card (both)"
+- **Picture** (chapters) — Approved: Seymour and Anima, Macalania Temple (FFX)
+  - Bailey: “All your recommendations” (blanket yes)
+  - Target: Registered as Chapter 7 (seymour-anima-macalania) and, since 2026-09-29, a playable card on chapter select: the lock line in src/app/screens/frontend/comingChapters.ts LOCKED_CHAPTER_IDS was deleted once the last pick landed (the scene cue, D-278: sketch A in remaster R1, the driver's pick, not by ear). Real keys on a production build at 1600x900 and 390x844 (chapter select, prep, back, the pre-battle scene on scene-
+  - area chapters · FFX · adopted · delivery implemented · see [D-019](#d-019), [D-278](#d-278), [D-045](#d-045), [D-046](#d-046), [D-048](#d-048)
+  - Source: docs/target/targets.json, group chapters, tile "Seymour and Anima, Macalania Temple (FFX)"
+- **Picture** (chapters) — Approved: Vegnagun's parts, chapter V (FFX-2)
+  - Bailey: “I’ll take all of your recommendations” (blanket yes)
+  - Note: FFX-2 only (chapter 5, Vegnagun with Shuyin). Fixes round-09/10 PR-0095 (the Bulwark, Redoubt and Node draw as hooded-cone placeholders) and PR-0015 (the green tail tip). Independent 1:1 judge, 2026-09-24: Bulwark C* 8.0, Redoubt C* 7.6, Node C 8.1, Tail A 8.6, all at or above the bar of 7; every separate-figure A/B option scored below it (docs/concepts/portraits/nooj-brother/JUDGE.md, Vegnagun section). Tail A insta
+  - area chapters · FFX-2 · adopted · delivery in progress · see [D-044](#d-044), [D-142](#d-142)
+  - Source: docs/target/targets.json, group chapters, tile "Vegnagun's parts, chapter V (FFX-2)"
+- **Picture** (chapters) — Approved: Yojimbo, Chapter IX (FFX)
+  - Bailey: “All your recommendations” (blanket yes)
+  - Note: Lady Ginnem's Yojimbo, last chamber of the Cavern of the Stolen Fayth, first Calm Lands visit, after Bevelle, before Gagazet (docs/plans/chapter-yojimbo-review.md, docs/target/decisions.json D-049 through D-058, D-062, D-063). Nothing here is built or wired: no file under src/, tests/, critic/ or public/art was touched by the options round or by Bailey's picks. The existing public/art/characters/yojimbo/{idle,attack,
+  - area chapters · FFX · adopted · delivery not scheduled · see [D-049](#d-049), [D-058](#d-058), [D-062](#d-062), [D-063](#d-063), [D-054](#d-054)
+  - Source: docs/target/targets.json, group chapters, tile "Yojimbo, Chapter IX (FFX)"
+- **Picture** (chapters) — Approved: Yojimbo's look, boss's own painting (FFX)
+  - Bailey: “All your recommendations” (blanket yes)
+  - Note: A NEW painting in the wiki's sourced gold/orange/purple, not the existing unapproved navy painting (B6, O-1, D-054). Needs a clean pass before final (it is a side profile with a second scabbard crossing behind him); nothing rendered or installed by this decision.
+  - area chapters · FFX · adopted · delivery not scheduled · see [D-054](#d-054)
+  - Source: docs/target/targets.json, group chapters, tile "Yojimbo's look, boss's own painting (FFX)"
+- **Picture** (chapters) — Approved: Daigoro (FFX)
+  - Bailey: “All your recommendations” (blanket yes)
+  - Note: Koma-inu lion-dog, option B, the name the game's own data gives him (O-2, D-059). Size is the research's own [estimate], about 0.4 of a party member.
+  - area chapters · FFX · adopted · delivery not scheduled · see [D-059](#d-059)
+  - Source: docs/target/targets.json, group chapters, tile "Daigoro (FFX)"
+- **Picture** (chapters) — Approved: Lady Ginnem, unsent (FFX)
+  - Bailey: “All your recommendations” (blanket yes)
+  - Note: The glowing unsent outline, option B, a pyrefly glow and motes on her outline (O-3, D-060): she reads as unsent without losing her face for Lulu's scene. The motes and fade are live particles and a shader, not paint, not yet built. Her render came out fair-haired with faint make-up, a disclosed gap against her sourced description (a Belgemine palette swap with white face make-up).
+  - area chapters · FFX · adopted · delivery not scheduled · see [D-060](#d-060)
+  - Source: docs/target/targets.json, group chapters, tile "Lady Ginnem, unsent (FFX)"
+- **Picture** (chapters) — Approved: The cold chamber, Cavern of the Stolen Fayth (FFX)
+  - Bailey: “All your recommendations” (blanket yes)
+  - Note: Option A, cold grey-blue with a shaft of daylight (O-4, D-061): the most contrast against a gold-and-purple Yojimbo, and it suits Lulu's scene. Disclosed gaps: no plate carries the dormant teleport pad the research places at the room's centre (three render attempts failed), and the promised night-sakura arrival overlay was never made; both owed to the real scene build.
+  - area chapters · FFX · adopted · delivery not scheduled · see [D-061](#d-061), [D-072](#d-072)
+  - Source: docs/target/targets.json, group chapters, tile "The cold chamber, Cavern of the Stolen Fayth (FFX)"
+- **Picture** (chapters) — Approved: The Zanmato gauge (FFX)
+  - Bailey: “All your recommendations” (blanket yes)
+  - Note: Option A, a bar under his name with the 25/50/80 bands, plus option C's one-shot full-gauge "Zanmato" banner (O-5, D-062). Highest-risk pick in the chapter (plan risk R1): if the built widget's stills alone do not settle the feel, a small clickable prototype comes before it ships. The mockups shipped at 1600x900 only; a phone-width mockup is still owed before the real widget is built.
+  - area chapters · FFX · adopted · delivery implemented · see [D-062](#d-062), [D-073](#d-073), [D-124](#d-124)
+  - Source: docs/target/targets.json, group chapters, tile "The Zanmato gauge (FFX)"
+- **Picture** (chapters) — Approved: Yojimbo's hero plate (FFX)
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - Note: Three options at chapter-card, plate and pause scale (docs/concepts/chapters/yojimbo/hero-plate/README.md); nothing installed or wired by this pick. docs/target/decisions.json D-074.
+  - area chapters · FFX · adopted · delivery not scheduled · see [D-074](#d-074)
+  - Source: docs/target/targets.json, group chapters, tile "Yojimbo's hero plate (FFX)"
+- **Picture** (chapters) — Approved: Seymour Natus, Chapter X (FFX)
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - Note: Seymour Natus + Mortibody, north end of the Highbridge of Bevelle, before the Main Gate, straight after the Via Purifico (docs/plans/chapter-natus-review.md, docs/target/decisions.json D-077 through D-097). Nothing here is built or wired: no file under src/, tests/, critic/ or public/art was touched by the options round or by Bailey's picks; PROCEED on engine, data, AI and story (the plan's own verdict), HOLD everyth
+  - area chapters · FFX · adopted · delivery in progress · see [D-077](#d-077), [D-097](#d-097), [D-074](#d-074), [D-120](#d-120), [D-079](#d-079)
+  - Source: docs/target/targets.json, group chapters, tile "Seymour Natus, Chapter X (FFX)"
+- **Picture** (chapters) — Approved: Fallen Aeons, Chapter XI (FFX-2)
+  - Bailey: “I'll go with your recommendations for all” (blanket yes)
+  - Note: Three links — Shiva, Magus Sisters, Anima — with a Save Sphere full restore between them (docs/plans/chapter-fallen-aeons-review.md, docs/target/decisions.json D-098 through D-120). Nothing here is built or wired: no file under src/, tests/, critic/ or public/art was touched by the options round or by Bailey's picks.
+  - area chapters · FFX-2 · adopted · delivery in progress · see [D-098](#d-098), [D-120](#d-120), [D-074](#d-074), [D-099](#d-099), [D-100](#d-100)
+  - Source: docs/target/targets.json, group chapters, tile "Fallen Aeons, Chapter XI (FFX-2)"
+
+### 2026-09-25
+
+Friday · 175 decisions
+
+- <a id="e-064"></a>**E-064** — Push release 14 live now
+  - Bailey: “Push next live build now please”
+  - What changed: Release 14 went live on 2026-09-25 at 00:06 EDT (main 1c22066e, bundle l_HXObKO) with a SHIP focused review; the live check passed on 942 files (Chapter I bracket clear, Chapter VIII Rikku clear).
+  - area release · both games · adopted · delivery implemented · at ~00:06 EDT
+  - Source: docs/deploys.log
+- <a id="e-065"></a>**E-065** — Push release 15 (Chapter IX, Yojimbo) live now
+  - Bailey: “Full steam ahead, push Yojimbo live. After that work on getting Trema live. You have my explicit approval. Godspeed.”
+  - What changed: Release 15 went live on 2026-09-25 at 01:54 EDT (main 5be4babe, bundle Dat8v42m) with Chapter IX, Yojimbo (FFX); two layout changes whose verifier found regressions were reverted in the release worktree only. His second instruction, to work on getting Trema live, was met by release 16 (Chapter XIII).
+  - area release · FFX · adopted · delivery implemented · at ~00:45 EDT
+  - Source: docs/deploys.log
+- <a id="e-066"></a>**E-066** — Push release 16 (Chapter XIII, Trema) live now
+  - Bailey: “push the build live now please”
+  - What changed: Release 16 went live on 2026-09-25 at 11:24 EDT (main fc7f1a20, bundle BQnfWT0X) with Chapter XIII, Trema (FFX-2), the phone battle HUD and the pause fallback; the live site served 81 files byte for byte and Trema's portrait, hero plate and backdrop.
+  - area release · both games · adopted · delivery implemented · at ~11:24 EDT
+  - Source: docs/deploys.log
+- <a id="e-067"></a>**E-067** — Push release 17 (the briefing option A and the 5860a134 batch) live now
+  - Bailey: “Push the build live please let's do it”
+  - What changed: Release 17 went live on 2026-09-25 at 16:06 EDT (main e45ed3c1, bundle RSsiNs7I) after a SHIP focused review; two disclosed majors in new features were fixed in 17.1.
+  - area release · both games · adopted · delivery implemented · at ~16:06 EDT
+  - Source: docs/deploys.log
+- <a id="e-068"></a>**E-068** — Push release 17.1 (the FFX-2 results wedge art and the phone target label) live now
+  - Bailey: “Push the build live please let's get moving”
+  - What changed: Release 17.1 went live on 2026-09-25 at 17:30 EDT (main 1a680e41, bundle BVdUtZb-), fixing FOC17-01 (FFX-2 wedge art) and FOC17-02 (phone label).
+  - area release · both games · adopted · delivery implemented · at ~17:30 EDT
+  - Source: docs/deploys.log
+- <a id="e-069"></a>**E-069** — Real-game checks of FFX and FFX-2 use the Steam HD Remaster copy he owns (installed on D:), never the PS2 emulator; he said earlier that morning that the game is available on Steam / PC to check things and may be installed on D:
+  - Bailey: “you are to use the steam version of ffx/ffx-2 not the ps2 emulator”
+  - What changed: The Steam copy was copied to D:\Tools\ffx-hd (app 359870) and observations from it settle sourced-fact questions; there are no saves on this PC so checks start from New Game; driving the game takes over his screen and keyboard, so a window is asked for first; recordings stay on D: and only text observations go in the repo (D-205, D-258).
+  - area data · both games · adopted · delivery implemented · at ~11:15 EDT
+  - Source: AGENTS.md hard rule 8
+- <a id="e-070"></a>**E-070** — Do as much work in parallel as possible (and a limit that followed: his PC must stay usable)
+  - Bailey: “do as much work in parallel as you can”
+  - What changed: About eight workflows ran at once; at about 13:10 he had to press the reset button because the PC crawled ("no I pressed the reset button myself because my computer was responding very slowly but it did not crash"), so heavy agents are now limited to about four or five at a time, run in priority batches and kept at below-normal process priority.
+  - area process · both games · adopted · nothing to build · at ~13:00 EDT
+  - Source: docs/handoff/NOW.md
+- <a id="d-136"></a>**D-136** — Coach copy stops calling the command menu a "list"; the briefing's fight count is now derived, not hard-coded
+  - Bailey: “Recommendations” (blanket yes)
+  - What changed: Two wording and plumbing fixes in src/ui/coach/coachCopy.ts, each its own row below; verified live and covered by updated tests (tsc clean, 364 test files green).
+  - area guide · both games · adopted · delivery implemented
+  - Source: src/ui/coach/coachCopy.ts; AGENTS.md; and others
+  - <a id="d-136-no-list"></a>**D-136/no-list** — The coach copy stops calling the command menu a "list": the FFX-2 Wait lines of D-121 now say "Pick a command and take your time" and "Choosing a command stops it"
+    - What changed: FFX2_GAUGE_BODY_WAIT reads "Bar's full, she's up! Pick a command and take your time, nobody moves.", the briefing's Wait tail reads "Choosing a command stops it." and the running badge reads "Gauges running · a command holds them" (src/ui/coach/coachCopy.ts); the FFX briefing's "read the list" stays because there it names the turn-order preview. FFX-2 only.
+  - <a id="d-136-fight-count"></a>**D-136/fight-count** — The briefing's fight count is derived, not hard-coded: Auron's first line no longer says "Five" while more chapters are playable
+    - What changed: A new playableChapterCount() reads the chapter list minus the locked chapters and the line renders "Eight fights. That is all this is." (it will move as chapters are added); lines 2 to 4 are unchanged. Both games (the briefing is shared).
+- <a id="d-137"></a>**D-137** — PR-0155: aeons lose the party's Items command (faithful); chapter 1 measured win rate drops 23/40 to 17/40
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: An aeon's command menu loses the Items row, which no research line sources (aeons have Attack, their own specials and Overdrive or Grand Summon): faithful over convenient. Chapter I's measured win rate drops from 23 of 40 seeds with Items to an estimated 17 of 40 without. The removal in src/battle/ffx/commands.ts and a re-run of the win-rate sweep were still owed when recorded. FFX only.
+  - area combat · FFX · adopted · delivery not scheduled · at ~01:40 EDT
+  - Source: docs/handoff/NOW.md; research/ffx-vs-ffx2-presentation.md; and others
+- <a id="d-138"></a>**D-138** — PR-0061: keep the approved battle-start card and opening beats, do not shorten them to cut load time
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: The approved 2.2 s boss-name card and 3.8 s opening beats stay exactly as shipped: shortening approved chrome to save load time is refused (hard rule 9). Chapter I's load-to-first-menu time stays 6.8 to 9.6 s; battle loading was already moved to run behind prep and the scene so the wait lands earlier. Both games.
+  - area ui · both games · adopted · delivery not scheduled · at ~01:40 EDT
+  - Source: docs/plans/pr-0061-method-check.md; docs/handoff/NOW.md
+- <a id="d-139"></a>**D-139** — Chapter VI (FFX-2), Leblanc's idle: the fan is fully open, red leaf with silver ribs (pick B's 'fully open', not its magenta)
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Leblanc's idle gets its fan fully open (a red leaf with silver ribs), replacing the shut black fan the idle showed; this settles a clash between his pick B ("fully open and magenta") and D-036 ("stays the red leaf"). The replacement is made after backing up the old file and recording its hash in approved-hashes.json. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~01:40 EDT
+  - Source: docs/concepts/chapters/leblanc/fan-open/README.md
+- <a id="d-140"></a>**D-140** — The battle HUD on a phone (390x844): option B, the compact rail
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: The battle HUD on a phone (390x844) becomes option B, a compact rail, instead of today's scaled-down desktop layout; every text node in the options measured 14 px or larger. FFX keeps the CTB rail with the target outlined in it and FFX-2 keeps the ATB-gauge reading on the chips. It was not built when recorded (no file under src/ had changed).
+  - area ui · both games · adopted · delivery not scheduled · at ~01:40 EDT
+  - Source: docs/concepts/layout/phone-battle-hud/README.md; docs/concepts/chapters/macalania/e2e/size-390x844-03-first-menu.jpg; and others
+- <a id="d-141"></a>**D-141** — Chapter VII (Macalania) art: all paintings approved as final EXCEPT the pause plate, which is redone; Petrify option A (a petrified Guardian shatters, an ordinary defeat yields)
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Chapter VII's battle paintings (Seymour idle, cast and hurt; Guado Guardian idle and cast; the backdrop) are approved as final art; the pause plate is excepted: its background reads as a rooftop village, not the temple, and is redone as the ice antechamber with the facial-vein "scar" softened. Petrify option A: a petrified Guardian shatters (forfeiting overkill AP) while an ordinary defeat still yields. FFX only.
+  - area art · FFX · adopted · delivery not scheduled · at ~01:40 EDT
+  - Source: docs/concepts/chapters/macalania/unlock/README.md; research/ffx-seymour-anima-macalania.md
+  - <a id="d-141-q1-art"></a>**D-141/q1-art** — Chapter VII's battle paintings are approved as final art: Seymour idle, cast and hurt (judged 7, read 8 in the game), the Guado Guardian idle and cast (judged 7, read 6 on a robe bloom treated as a renderer fix, not a repaint) and the backdrop (judged 7)
+    - What changed: They are final art; their hashes were owed to docs/target/approved-hashes.json and Anima's two Chapter VII paintings (hurt 7, ko 5) stay under D-108's blanket Anima approval. FFX only.
+  - <a id="d-141-q1-pause-plate"></a>**D-141/q1-pause-plate** — The Chapter VII pause plate is excepted from the approval and redone: repaint only the background (it reads as a rooftop village, not the temple's ice antechamber) and soften the facial veins that read as a scar, keeping the face
+    - What changed: The redo was installed later as option A2 (D-188). FFX only.
+    - delivery implemented
+  - <a id="d-141-q2-petrify"></a>**D-141/q2-petrify** — Petrify option A: a Guado Guardian petrified by Kimahri's Stone Breath or Rikku's Petrify Grenade shatters (grey flash, a petrify-shatter cue, a shake and a 0.6 s dissolve, forfeiting the overkill AP) while an ordinary defeat still yields
+    - What changed: Already built and live (BattlePresenterArrivals.ts statusAdded, BattlePresenterDepartures.ts); options B (always yield) and C (drop Petrify Grenade from the guide) were not taken. FFX only.
+    - delivery implemented
+- <a id="d-142"></a>**D-142** — Chapter V (FFX-2), Vegnagun's Body at link 3: staging option C
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: At link 3 of Chapter V, Vegnagun's Body is re-placed so the Left Bulwark's ring and name plate clear the FFX-2 command window (staging option C), at 1280x960, 1600x900 and 2000x1012; disclosed, not changed: the slab at the first menu covers 16 percent of the Body's box. Built, with screenshots in docs/screenshots/picks0925-staging/. FFX-2 only.
+  - area visuals · FFX-2 · adopted · delivery implemented · at ~01:40 EDT
+  - Source: docs/concepts/layout/ch5-vegnagun-staging/README.md; src/scenes/farplane-parts.ts; and others
+- <a id="d-143"></a>**D-143** — Living portrait feel: clip A2, 'measured' (Until Dawn's own numbers); keep the eye lead and the smile, no worried brow
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: The living portrait idles at "measured" with the eyes leading and a smile that opens, and no worried brow (clip A2 of the revised pilot); this is his first named pick on the feel, replacing D-064's driver-chosen A. The change reaches the nine painted keys after the cap and an independent judge. Both games.
+  - area visuals · both games · adopted · delivery not scheduled · at ~01:40 EDT
+  - Source: docs/concepts/pause-until-dawn/prototype-v2/shots/v6-pilot/PILOT.md
+- <a id="d-144"></a>**D-144** — R13-04, Chapter VIII (Evrae): option B, re-lay Tidus, Wakka and Rikku along the airship deck's rail (the D-041 recipe)
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: In Chapter VIII (Evrae) Tidus, Wakka and Rikku are re-laid along the airship deck's rail (Wakka, Tidus and Rikku slots moved, the D-041 recipe), lifting Tidus from 0.23 visible at the first menu to 1.00 and Wakka from 0.14 to about 0.94 at FAR; the cost is that Evrae's whole box is 0.58 to 0.60 visible at NEAR, with the head never covered. FFX only.
+  - area camera · FFX · adopted · delivery implemented · at ~01:40 EDT
+  - Source: docs/concepts/layout/r13-04-evrae/README.md; docs/screenshots/picks0925-staging/evrae
+- <a id="d-145"></a>**D-145** — Chapter XII (FFX), Seymour Omnis: all B1-B23 and O-1..O-6 preflight recommendations adopted, with the review's corrections applied
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: All 23 preflight questions (B1 to B23) and all six options rounds (O-1 to O-6) of the Seymour Omnis plan were adopted as recommended, with the adversarial review's corrections applied; each is its own row below. Nothing was built by the decision itself (research and options rounds came next); Chapter XII was listed in release 18 (2026-09-26). FFX only.
+  - area chapters · FFX · adopted · delivery not scheduled · at ~01:40 EDT
+  - Source: docs/plans/chapter-omnis-review.md; AGENTS.md
+  - <a id="d-145-b1"></a>**D-145/B1** — B1: Title, number, location
+    - What changed: Adopted as recommended: "Seymour Omnis", XII if registered before Trema; location "Inside Sin — the Garden of Pain".
+  - <a id="d-145-b2"></a>**D-145/B2** — B2: Opening line-up (nothing is forced)
+    - What changed: Adopted as recommended: a, every switch legal from turn one; finding Wakka is part of the puzzle and the guide says so.
+  - <a id="d-145-b3"></a>**D-145/B3** — B3: Optional aeons
+    - What changed: Adopted as recommended: a; b only if Bailey wants the Anima line (needs FFX Anima art).
+  - <a id="d-145-b4"></a>**D-145/B4** — B4: Aeon gauges at the start
+    - What changed: Adopted as recommended: a, [estimate] as that file labels it.
+  - <a id="d-145-b5"></a>**D-145/B5** — B5: Party stats
+    - What changed: Adopted as recommended: a (research §6.2: same dungeon).
+  - <a id="d-145-b6"></a>**D-145/B6** — B6: Gear
+    - What changed: Adopted as recommended: a; the ring eats three of his four elements, so it is a difficulty decision and yours.
+  - <a id="d-145-b7"></a>**D-145/B7** — B7: Items
+    - What changed: Adopted as recommended: a.
+  - <a id="d-145-b8"></a>**D-145/B8** — B8: The two blocking unknowns: the colour order around a disc (O-7) and the reset cycle (O-11)
+    - What changed: Adopted as recommended: b, then a before the chapter is listed; no download (rule 11). The option sheets draw GameFAQs' *reset cycle* as the *physical order around a disc*: two guesses stacked, both labelled; a confirmation must cover both (review, settled-list 3).
+  - <a id="d-145-b9"></a>**D-145/B9** — B9: The two-Water bug (two Water discs make him immune to Fire, not Water; [single source])
+    - What changed: Adopted as recommended: faithful, one constant, disclosed in the guide's notes.
+  - <a id="d-145-b10"></a>**D-145/B10** — B10: What turns a disc
+    - What changed: Adopted as recommended: a, [estimate] (the sources mean offensive spells).
+  - <a id="d-145-b11"></a>**D-145/B11** — B11: Do hits on the discs count toward the 6 / 3
+    - What changed: Adopted as recommended: no, [estimate] (the sources say "attacks on Seymour").
+  - <a id="d-145-b12"></a>**D-145/B12** — B12: Which disc's spell hits whom, and which disc's spell is dropped when a member is KO'd
+    - What changed: Adopted as recommended: a, labelled estimate (both halves unsourced; review S4).
+  - <a id="d-145-b13"></a>**D-145/B13** — B13: Threaten on Omnis (byte 0, wiki immune)
+    - What changed: Adopted as recommended: immune (Natus B10 precedent).
+  - <a id="d-145-b14"></a>**D-145/B14** — B14: Show the attack counter?
+    - What changed: Adopted as recommended: decide in O-4; leaning c, faithful core with a readable surface.
+  - <a id="d-145-b15"></a>**D-145/B15** — B15: Mid-battle callouts
+    - What changed: Adopted as recommended: in, drafted in a story draft Bailey reads first.
+  - <a id="d-145-b16"></a>**D-145/B16** — B16: How the dive into Sin is told; stage the airship fight?
+    - What changed: Adopted as recommended: a (separate fights, research O-15).
+  - <a id="d-145-b17"></a>**D-145/B17** — B17: Seymour's face in dialogue
+    - What changed: Adopted as recommended: c if O-5 lands; otherwise b.
+  - <a id="d-145-b18"></a>**D-145/B18** — B18: Music
+    - What changed: Adopted as recommended: a, b as stand-in; if Chapter X's cue also claims the motif, the Omnis cue should have it.
+  - <a id="d-145-b19"></a>**D-145/B19** — B19: Painted party and aeons shipping without a verdict (Wakka, Kimahri, Lulu, Rikku, Valefor, Ifrit, Ixion, Bahamut)
+    - What changed: Adopted as recommended: a; Wakka is on screen more here than anywhere.
+  - <a id="d-145-b20"></a>**D-145/B20** — B20: If the art picks are late
+    - What changed: Adopted as recommended: LOCKED (D-069), said to Bailey before the cut.
+  - <a id="d-145-b21"></a>**D-145/B21** — B21: The arena
+    - What changed: Adopted as recommended: a; a different place (research §7).
+  - <a id="d-145-b22"></a>**D-145/B22** — B22: Do the discs take turns of their own? (added by the review, E6)
+    - What changed: Adopted as recommended: a, [estimate]: the decompile lists no actions for m106, and no source gives a disc a turn. The option frames already show a (the discs were taken out of the queue).
+  - <a id="d-145-b23"></a>**D-145/B23** — B23: When the discs reset after Ultima (O-10; added by the review, S8)
+    - What changed: Adopted as recommended: a, by the majority rule; one constant either way.
+  - <a id="d-145-o-2"></a>**D-145/O-2** — O-2: options round scoped: the discs at game size, because readability decides the rest. Three treatments at 1600×900 and 390 px: (a) painted discs behind him, the facing section lit; (b) the same plus a HUD strip of four chips (facing colour) and
+    - What changed: The options round runs as scoped in section 6.2 of the plan: the discs at game size, because readability decides the rest. Three treatments at 1600×900 and 390 px: (a) painted discs behind him, the facing section lit; (b) the same plus a HUD strip of four chips (facing colour) and his affinity row; (c) Ink & Gold rings drawn as 3D meshes that physically turn. Each with a four-frame storyboard of one 90° turn. The ring order shown is our estimate until B8, and says so on the sheet.
+  - <a id="d-145-o-1"></a>**D-145/O-1** — O-1: options round scoped: Seymour Omnis: 3 concepts at battle scale beside a party idle and O-2's discs: (a) house style, (b) face from the approved portrait, (c) translucent, pyrefly-lit; each with the red-glow state.
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 3 concepts at battle scale beside a party idle and O-2's discs: (a) house style, (b) face from the approved portrait, (c) translucent, pyrefly-lit; each with the red-glow state.
+  - <a id="d-145-o-3"></a>**D-145/O-3** — O-3: options round scoped: The Garden of Pain: 3 plates contrasting light (red sea at dusk, pale noon, deep violet), the steps and platform, waterfalls behind.
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 3 plates contrasting light (red sea at dusk, pale noon, deep violet), the steps and platform, waterfalls behind.
+  - <a id="d-145-o-4"></a>**D-145/O-4** — O-4: options round scoped: Reading the fight (B14): mockups at both sizes of (i) the turn-one lesson (four Firaga, weak to Ice), (ii) the glow and the Dispel → Ultima telegraph, (iii) a turned disc and his affinity updating. No chip names a spell'
+    - What changed: The options round runs as scoped in section 6.2 of the plan: mockups at both sizes of (i) the turn-one lesson (four Firaga, weak to Ice), (ii) the glow and the Dispel → Ultima telegraph, (iii) a turned disc and his affinity updating. No chip names a spell's target (the mapping is B12, an estimate); no FLEE; no Chapter VII leftovers (the Natus review's findings).
+  - <a id="d-145-o-5"></a>**D-145/O-5** — O-5: options round scoped: Omnis portrait: 2 options, only if B17 = c.
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 2 options, only if B17 = c.
+  - <a id="d-145-o-6"></a>**D-145/O-6** — O-6: options round scoped: Music: 2 sketches on docs/audio/audition.html (rule 13). Brief: the Noble Rot motif at its last statement, courtesy become appetite. Anti-brief: no quotation or imitation of "Fight With Seymour" or any original cue (rule
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 2 sketches on docs/audio/audition.html (rule 13). Brief: the Noble Rot motif at its last statement, courtesy become appetite. Anti-brief: no quotation or imitation of "Fight With Seymour" or any original cue (rule 8).
+- <a id="d-146"></a>**D-146** — Chapter XIII (FFX-2), Trema: all TR1-TR19 and O-1..O-6 preflight recommendations adopted, with the review's corrections applied
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: All 19 preflight questions (TR1 to TR19) and all six options rounds (O-1 to O-6) of the Trema plan were adopted as recommended, with the review's corrections applied; each is its own row below. Nothing was built by the decision itself; Chapter XIII went live in release 16 (2026-09-25). FFX-2 only.
+  - area chapters · FFX-2 · adopted · delivery not scheduled · at ~01:40 EDT
+  - Source: docs/plans/chapter-trema-review.md; AGENTS.md
+  - <a id="d-146-tr1"></a>**D-146/TR1** — TR1: Chapter shape
+    - What changed: Adopted as recommended: a (the game's staging; Trema's entrance is the story beat).
+  - <a id="d-146-tr2"></a>**D-146/TR2** — TR2: Version
+    - What changed: Adopted as recommended: a.
+  - <a id="d-146-tr3"></a>**D-146/TR3** — TR3: Meteor's type in International/HD (T-3)
+    - What changed: Adopted as recommended: a, labelled [conflict], unless T0 finds a data source first.
+  - <a id="d-146-tr4"></a>**D-146/TR4** — TR4: MP drain against Spellspring (T-5)
+    - What changed: Adopted as recommended: b, [single source] + [conflict], disclosed in the guide; it keeps a sourced line alive.
+  - <a id="d-146-tr5"></a>**D-146/TR5** — TR5: Retry after a loss to Trema
+    - What changed: Adopted as recommended: b; a 30-minute fight should not replay Paragon.
+  - <a id="d-146-tr6"></a>**D-146/TR6** — TR6: Length (about 30 min faithful; never tune)
+    - What changed: Adopted as recommended: c (the Acta Est Fabula method).
+  - <a id="d-146-tr7"></a>**D-146/TR7** — TR7: Paragon's form
+    - What changed: Adopted as recommended: Normal.
+  - <a id="d-146-tr8"></a>**D-146/TR8** — TR8: Paragon's MAG and DEF (T-6)
+    - What changed: Adopted as recommended: a (the repo's ranked-first source), [conflict], if T0 finds no third data source.
+  - <a id="d-146-tr9"></a>**D-146/TR9** — TR9: Darkness against Eva 99 (TR-G2)
+    - What changed: Adopted as recommended: a, with b as the build until a source lands.
+  - <a id="d-146-tr10"></a>**D-146/TR10** — TR10: Line-up, level, paintings
+    - What changed: Adopted as recommended: a.
+  - <a id="d-146-tr11"></a>**D-146/TR11** — TR11: Items, accessories, grids
+    - What changed: Adopted as recommended: a.
+  - <a id="d-146-tr12"></a>**D-146/TR12** — TR12: Big Bang timing (TR-G5)
+    - What changed: Adopted as recommended: b if T1 keeps it under 1 hour; a otherwise, labelled.
+  - <a id="d-146-tr13"></a>**D-146/TR13** — TR13: Callouts
+    - What changed: Adopted as recommended: in, in a story draft first; no game line and no Hymn lyric quoted (rule 8).
+  - <a id="d-146-tr14"></a>**D-146/TR14** — TR14: How the story is told
+    - What changed: Adopted as recommended: a; no Kinderguardian portraits.
+  - <a id="d-146-tr15"></a>**D-146/TR15** — TR15: The "illusion of Zanarkand"
+    - What changed: Adopted as recommended: out (no source places it).
+  - <a id="d-146-tr16"></a>**D-146/TR16** — TR16: Music
+    - What changed: Adopted as recommended: a; boss-ffx2-aeon is the stand-in if the sketch is not picked.
+  - <a id="d-146-tr17"></a>**D-146/TR17** — TR17: Title, location, number
+    - What changed: Adopted as recommended: "Trema", "Via Infinito — Cloister 100"; number by registration (D-058): XIII after Omnis (XII, dab6f148's plan).
+  - <a id="d-146-tr18"></a>**D-146/TR18** — TR18: If the art is late
+    - What changed: Adopted as recommended: LOCKED, said before the cut.
+  - <a id="d-146-tr19"></a>**D-146/TR19** — TR19: The other Great Cloister bosses (20–80)
+    - What changed: Adopted as recommended: no (research §1.3).
+  - <a id="d-146-o-1"></a>**D-146/O-1** — O-1: options round scoped: Trema: 3 concepts at battle scale beside the Dark Knight idles (plain priest; unsent pallor; a "dark puppeteer" with pyrefly threads).
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 3 concepts at battle scale beside the Dark Knight idles (plain priest; unsent pallor; a "dark puppeteer" with pyrefly threads).
+  - <a id="d-146-o-2"></a>**D-146/O-2** — O-2: options round scoped: Paragon: 2–3 concepts beside O-1's pick, with a ko-by-Trema strip.
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 2–3 concepts beside O-1's pick, with a ko-by-Trema strip.
+  - <a id="d-146-o-3"></a>**D-146/O-3** — O-3: options round scoped: Cloister 100: 3 plates, two derived from the approved Bevelle Underground pixels (METHOD-CHECK), one new; light contrasted.
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 3 plates, two derived from the approved Bevelle Underground pixels (METHOD-CHECK), one new; light contrasted.
+  - <a id="d-146-o-4"></a>**D-146/O-4** — O-4: options round scoped: Reading the fight: mockups at 1600×900 and 390 px: seven-digit numerals, the Meteor telegraph at 1/2 and 1/4, which commands draw Big Bang, the link transition. One option is "intent text only". No invented target or odd
+    - What changed: The options round runs as scoped in section 6.2 of the plan: mockups at 1600×900 and 390 px: seven-digit numerals, the Meteor telegraph at 1/2 and 1/4, which commands draw Big Bang, the link transition. One option is "intent text only". No invented target or odds on a chip (the Natus O-4 lesson); no FLEE.
+  - <a id="d-146-o-5"></a>**D-146/O-5** — O-5: options round scoped: Trema portrait: 2 options from the O-1 pick.
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 2 options from the O-1 pick.
+  - <a id="d-146-o-6"></a>**D-146/O-6** — O-6: options round scoped: Music: 2 sketches of boss-trema on docs/audio/audition.html (rule 13). Brief: our HYMN motif turned against itself, FFX-2 harmony. Anti-brief: no quotation of "New Yevon" or the game's Hymn.
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 2 sketches of boss-trema on docs/audio/audition.html (rule 13). Brief: our HYMN motif turned against itself, FFX-2 harmony. Anti-brief: no quotation of "New Yevon" or the game's Hymn.
+- <a id="d-147"></a>**D-147** — Chapter XIV (FFX), Isaaru: all B1-B22 and O-1..O-6 preflight recommendations adopted, with the review's corrections applied
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: All 22 preflight questions (B1 to B22) and all six options rounds (O-1 to O-6) of the Isaaru plan were adopted as recommended, with the review's corrections applied; each is its own row below. Nothing was built by the decision itself; Chapter XIV was listed in release 18 (2026-09-26). FFX only.
+  - area chapters · FFX · adopted · delivery not scheduled · at ~01:40 EDT
+  - Source: docs/plans/chapter-isaaru-review.md; AGENTS.md
+  - <a id="d-147-b1"></a>**D-147/B1** — B1: Title, number, location
+    - What changed: Adopted as recommended: "Isaaru" (the bestiary's boss name; the OST title belongs to other fights); XIV by registration (D-058) after Omnis and Trema; "Via Purifico — beneath Bevelle"; story order VIII → this → X.
+  - <a id="d-147-b2"></a>**D-147/B2** — B2: Aeon stats
+    - What changed: Adopted as recommended: a, the same aeons the next chapter fields.
+  - <a id="d-147-b3"></a>**D-147/B3** — B3: Aeon gauges at the start
+    - What changed: Adopted as recommended: b; T10 reports how often the sourced line ends with Bahamut full, to match Chapter X.
+  - <a id="d-147-b4"></a>**D-147/B4** — B4: Yuna's stats
+    - What changed: Adopted as recommended: a, continuity with the next chapter.
+  - <a id="d-147-b5"></a>**D-147/B5** — B5: Yuna's Grand Summon gauge
+    - What changed: Adopted as recommended: a; it opens the sourced Grand Summon line.
+  - <a id="d-147-b6"></a>**D-147/B6** — B6: Yuna's own commands
+    - What changed: Adopted as recommended: a, labelled estimate; the mirror-locked aeon greyed with its reason. Still a question: the O-5 frames are *shown with* a (review).
+  - <a id="d-147-b7"></a>**D-147/B7** — B7: Items
+    - What changed: Adopted as recommended: a, with attack items greyed under B6 = a. Also: may an aeon use Items? Today every aeon's menu has an Items row (commands.ts:195 has no aeon check); no research line sources it, and combat-core §6.1 says party items cannot target aeons [single source] (review S5). Recommend: no Items row on an aeon, [estimate].
+  - <a id="d-147-b8"></a>**D-147/B8** — B8: Isaaru
+    - What changed: Adopted as recommended: a [estimate] (O-4).
+  - <a id="d-147-b9"></a>**D-147/B9** — B9: Unsourced AI
+    - What changed: Adopted as recommended: build all, each "our estimate"; footage check of the count before listing.
+  - <a id="d-147-b10"></a>**D-147/B10** — B10: Threaten (Shiva's Heavenly Strike)
+    - What changed: Adopted as recommended: immune (2 sources vs 1 byte; the Natus rule).
+  - <a id="d-147-b11"></a>**D-147/B11** — B11: Loss rule
+    - What changed: Adopted as recommended: a.
+  - <a id="d-147-b12"></a>**D-147/B12** — B12: Retry after a loss
+    - What changed: Adopted as recommended: a, faithful; no source heals between links.
+  - <a id="d-147-b13"></a>**D-147/B13** — B13: Rewards (I-1)
+    - What changed: Adopted as recommended: a.
+  - <a id="d-147-b14"></a>**D-147/B14** — B14: The scene's cast
+    - What changed: Adopted as recommended: a; approved portraits, no new party art.
+  - <a id="d-147-b15"></a>**D-147/B15** — B15: Narration
+    - What changed: Adopted as recommended: a, the anthology's frame; the bible's voice rules.
+  - <a id="d-147-b16"></a>**D-147/B16** — B16: Chapter X's interlude 2 (Tidus's side of the prison)
+    - What changed: Adopted as recommended: a; it tells the other half and contradicts nothing.
+  - <a id="d-147-b17"></a>**D-147/B17** — B17: Mid-battle callouts
+    - What changed: Adopted as recommended: in, drafted in a story draft Bailey reads first.
+  - <a id="d-147-b18"></a>**D-147/B18** — B18: How Isaaru's aeons are marked
+    - What changed: Adopted as recommended: decide on O-4; leaning b (the sources describe no visual difference).
+  - <a id="d-147-b19"></a>**D-147/B19** — B19: Hurt and KO poses (the aeon paintings have none)
+    - What changed: Adopted as recommended: decide on O-4, which shows both.
+  - <a id="d-147-b20"></a>**D-147/B20** — B20: Reading the fight
+    - What changed: Adopted as recommended: decide on O-5; leaning count numbers plus intent text.
+  - <a id="d-147-b21"></a>**D-147/B21** — B21: Music
+    - What changed: Adopted as recommended: a; b as the stand-in if the sketch is late.
+  - <a id="d-147-b22"></a>**D-147/B22** — B22: Art late
+    - What changed: Adopted as recommended: LOCKED (D-069 precedent), said before the cut.
+  - <a id="d-147-o-1"></a>**D-147/O-1** — O-1: options round scoped: Isaaru: 3 concepts at battle scale beside Yuna's idle and one enemy aeon, after a look at reference images: (a) the costume as the wiki words it, in the house style, (b) the same with a summoner's staff raised, (c) a qui
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 3 concepts at battle scale beside Yuna's idle and one enemy aeon, after a look at reference images: (a) the costume as the wiki words it, in the house style, (b) the same with a summoner's staff raised, (c) a quieter, kneeling-then-standing pose.
+  - <a id="d-147-o-2"></a>**D-147/O-2** — O-2: options round scoped: His portrait: 2 options from the O-1 pick.
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 2 options from the O-1 pick.
+  - <a id="d-147-o-3"></a>**D-147/O-3** — O-3: options round scoped: The chamber: 3 plates: (a) red-lit stone, the hallway behind, (b) a round prison chamber with the way up lit above, (c) darker, pyreflies in the red.
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 3 plates: (a) red-lit stone, the hallway behind, (b) a round prison chamber with the way up lit above, (c) darker, pyreflies in the red.
+  - <a id="d-147-o-4"></a>**D-147/O-4** — O-4: options round scoped: The enemy aeons: the Ifrit painting on the enemy side three ways (as is, name plate, tint), and a strip with the fallback KO beside a painted KO frame (B18, B19).
+    - What changed: The options round runs as scoped in section 6.2 of the plan: the Ifrit painting on the enemy side three ways (as is, name plate, tint), and a strip with the fallback KO beside a painted KO frame (B18, B19).
+  - <a id="d-147-o-5"></a>**D-147/O-5** — O-5: options round scoped: Reading the fight: 2–3 mockups at 1600×900 and 390 px phone of (i) the Summon list with the locked aeon greyed and its reason, (ii) Spathi at "count 1" with the Shield hint, (iii) Grothia's gauge before Hellfire, (iv) a 
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 2–3 mockups at 1600×900 and 390 px phone of (i) the Summon list with the locked aeon greyed and its reason, (ii) Spathi at "count 1" with the Shield hint, (iii) Grothia's gauge before Hellfire, (iv) a "link 2 of 3" card. One option is intent text only. The sheet shows only what the engine knows: no invented odds, no Flee row (the Natus O-4 lessons).
+  - <a id="d-147-o-6"></a>**D-147/O-6** — O-6: options round scoped: Music: 2 sketches on docs/audio/audition.html (rule 13). Brief: devotion, a duel neither side wants. Anti-brief: no quotation or imitation of any original cue (rule 8).
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 2 sketches on docs/audio/audition.html (rule 13). Brief: devotion, a duel neither side wants. Anti-brief: no quotation or imitation of any original cue (rule 8).
+- <a id="d-148"></a>**D-148** — Chapter XV (FFX-2), Gippal in the Den of Woe: all GP1-GP18 and O-1..O-5 preflight recommendations adopted, with the review's corrections applied
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: All 18 preflight questions (GP1 to GP18) and all five options rounds (O-1 to O-5) of the Gippal plan were adopted as recommended, with the review's corrections applied; each is its own row below. Nothing was built by the decision itself; Chapter XV was listed in release 19 (2026-09-26). FFX-2 only.
+  - area chapters · FFX-2 · adopted · delivery not scheduled · at ~01:40 EDT
+  - Source: docs/plans/chapter-gippal-review.md; AGENTS.md
+  - <a id="d-148-gp1"></a>**D-148/GP1** — GP1: Scope
+    - What changed: Adopted as recommended: b: how the game stages him; sorrow, anger, despair as one idea (§1.3). a is the small fully sourced fallback.
+  - <a id="d-148-gp2"></a>**D-148/GP2** — GP2: Title, location, number
+    - What changed: Adopted as recommended: "The Den of Woe" for b ("Gippal" for a); location "Den of Woe — under Mushroom Rock Road"; number by registration (D-058), XV after Isaaru's XIV.
+  - <a id="d-148-gp3"></a>**D-148/GP3** — GP3: What carries between links
+    - What changed: Adopted as recommended: a, [derived]: the sources back HP carried (research §2, 2 sources); statuses and the current dressphere carrying is our inference from "no break", not sourced (review item 12).
+  - <a id="d-148-gp4"></a>**D-148/GP4** — GP4: Retry after a loss on Gippal or Nooj
+    - What changed: Adopted as recommended: c, with a as the build until the numbers exist.
+  - <a id="d-148-gp5"></a>**D-148/GP5** — GP5: Line-up and level
+    - What changed: Adopted as recommended: a, measured on 200 seeds; b only if Bailey sees the numbers first.
+  - <a id="d-148-gp6"></a>**D-148/GP6** — GP6: Items
+    - What changed: Adopted as recommended: a; Yuna's Lightfall answer is a Phoenix Down, disclosed in the guide.
+  - <a id="d-148-gp7"></a>**D-148/GP7** — GP7: Mortar, the Blue Bullet
+    - What changed: Adopted as recommended: a.
+  - <a id="d-148-gp8"></a>**D-148/GP8** — GP8: The 140° arc and 5 m radius
+    - What changed: Adopted as recommended: a; the guide says it is harsher than the arc.
+  - <a id="d-148-gp9"></a>**D-148/GP9** — GP9: Source conflicts
+    - What changed: Adopted as recommended: the dump's values, each tagged; a PCSX2 check only if Bailey wants certainty.
+  - <a id="d-148-gp10"></a>**D-148/GP10** — GP10: Exact or rolled (GP-G2): Lightfall, and the fractions Bullseye (9/16), Drill Shot (3/4) and Greedy Aura (3/16), which roll ±6 % in the engine too (percent-current / percent-total; review item 15)
+    - What changed: Adopted as recommended: a now; b raised separately as a disclosed finding. A sources conflict, not an engine bug by default: SinirothX says "constant" / "fractional", combat-core step 7 says the roll applies to everything but menu White Magic.
+  - <a id="d-148-gp11"></a>**D-148/GP11** — GP11: Baralai's counter granularity
+    - What changed: Adopted as recommended: a, labelled estimate.
+  - <a id="d-148-gp12"></a>**D-148/GP12** — GP12: Weapon[..] entries in the formations (G-10)
+    - What changed: Adopted as recommended: props; no source names a second target.
+  - <a id="d-148-gp13"></a>**D-148/GP13** — GP13: Do the shades speak? (partly sourced)
+    - What changed: Adopted as recommended: a. The wiki does list battle lines for Baralai (before Looming Glacier and Drill Shot, fight not stated) and Nooj (in the Creature Creator / Fiend Arena part), but none is tied to the Den shades (review item 11). Rule 8: never quote them.
+  - <a id="d-148-gp14"></a>**D-148/GP14** — GP14: How the story opens
+    - What changed: Adopted as recommended: a.
+  - <a id="d-148-gp15"></a>**D-148/GP15** — GP15: Mid-battle callouts
+    - What changed: Adopted as recommended: in, drafted in a story draft Bailey reads first, our words (rule 8).
+  - <a id="d-148-gp16"></a>**D-148/GP16** — GP16: Music
+    - What changed: Adopted as recommended: a; b is the stand-in if the sketch is not picked in time.
+  - <a id="d-148-gp17"></a>**D-148/GP17** — GP17: Painted party with no verdict (yuna-white-mage, rikku-dark-knight, paine-dark-knight)
+    - What changed: Adopted as recommended: a.
+  - <a id="d-148-gp18"></a>**D-148/GP18** — GP18: If the art picks are late
+    - What changed: Adopted as recommended: LOCKED (D-069 precedent), said before the cut.
+  - <a id="d-148-o-1"></a>**D-148/O-1** — O-1: options round scoped: Gippal shade: 3 concepts at battle scale beside the Dark Knight idles: (a) the man in house paint, pyreflies at the edges; (b) the same, translucent, lit from within; (c) an anger-red pyrefly body holding his shape.
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 3 concepts at battle scale beside the Dark Knight idles: (a) the man in house paint, pyreflies at the edges; (b) the same, translucent, lit from within; (c) an anger-red pyrefly body holding his shape.
+  - <a id="d-148-o-2"></a>**D-148/O-2** — O-2: options round scoped: Baralai and Nooj shades: 2 each in O-1's picked treatment (only if GP1 = b or c).
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 2 each in O-1's picked treatment (only if GP1 = b or c).
+  - <a id="d-148-o-3"></a>**D-148/O-3** — O-3: options round scoped: The Den: 3 plates contrasting light (cold blue pyreflies; crimson; near-dark with one shaft from the ravine).
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 3 plates contrasting light (cold blue pyreflies; crimson; near-dark with one shaft from the ravine).
+  - <a id="d-148-o-4"></a>**D-148/O-4** — O-4: options round scoped: Reading the fight: mockups at 1600×900 and 390 px: the link count ("shade 2 of 3", our label), Gippal's next cycle step, Baralai's counter toward 8, a Lightfall warning as Nooj nears 2,999. One option is "intent text onl
+    - What changed: The options round runs as scoped in section 6.2 of the plan: mockups at 1600×900 and 390 px: the link count ("shade 2 of 3", our label), Gippal's next cycle step, Baralai's counter toward 8, a Lightfall warning as Nooj nears 2,999. One option is "intent text only". No invented target or odds; no FLEE (cannot escape, §3). The phone layout in these mockups is not this chapter's to settle (review (a)): the phone battle HUD is a cross-chapter question, game case both, already asked in docs/concepts/layout/phone-battle-hud/; picking O-4 approves no phone HUD.
+  - <a id="d-148-o-5"></a>**D-148/O-5** — O-5: options round scoped: Music: 2 sketches on docs/audio/audition.html (rule 13). Brief: Shuyin's grief wearing three men's faces. Anti-brief: no quotation of "The Crimson Squad", "Nightmare in the Den" or "Yuna's Ballad".
+    - What changed: The options round runs as scoped in section 6.2 of the plan: 2 sketches on docs/audio/audition.html (rule 13). Brief: Shuyin's grief wearing three men's faces. Anti-brief: no quotation of "The Crimson Squad", "Nightmare in the Den" or "Yuna's Ballad".
+- <a id="d-149"></a>**D-149** — Chapter VII petrify: the stone look is approved as built
+  - Bailey: “Keep the stone look, use Anima's approved paintings”
+  - What changed: The stone look Chapter VII already ships (a grey petrify drain plus shatter chips, commit cf95e634) is approved as built with no further pass; the stone beats are shared plumbing reachable by any petrify status in both games.
+  - area visuals · both games · adopted · delivery implemented · at ~00:40 EDT
+  - Source: docs/screenshots/ch7-fixes/6-guardian-a; AGENTS.md
+- <a id="d-150"></a>**D-150** — Chapter VII: the boss Anima now draws her whole approved painting folder, not the idle only
+  - Bailey: “Keep the stone look, use Anima's approved paintings”
+  - What changed: Boss Anima in Chapter VII now draws her whole approved painting folder instead of the idle only (the party's own Anima in other chapters already did); this replaces D-045's reading for Anima alone and invents no behaviour. FFX only.
+  - area art · FFX · adopted · delivery implemented · at ~00:40 EDT
+  - Source: src/engine/ChapterPoseLimits.ts; src/engine/BattlePresenterStage.ts; and others
+- <a id="d-151"></a>**D-151** — Chapter XIII (Trema): option 1 (Oversoul Paragon, Split_Infinity's kit) plus option 3 (Cloister-link action time at 3 s) adopted as the fight's shape
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Chapter XIII's link 1 becomes Oversoul Paragon with Split_Infinity's kit (it waits to be hit, answers, never opens with Big Bang; physicals can miss; its stats and AI are single-sourced and the 50 percent hit rate and HP thresholds are labelled estimates), and the Cloister link action time is 3 seconds; both ship built and switched off pending the chapter's own build, so this is a design pick, not yet wired when recorded. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery not scheduled · at ~10:20 EDT
+  - Source: docs/plans/trema-options-2026-09-25.md; AGENTS.md; and others
+- <a id="d-152"></a>**D-152** — Chapter XIII (Trema): Oversoul Paragon look, option B (blue cast + blue rim + blue pyrefly motes)
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Oversoul Paragon is drawn with the sourced "blue cast" the fiend acquires (a cast-colour uniform, the rim recoloured blue and a blue pyrefly mote preset of 70 motes); the transformation beat and Oversoul cast, hurt and KO variants were still owed. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~10:20 EDT
+  - Source: docs/concepts/chapters/trema/oversoul/README.md; research/ffx2-combat-core.md
+- <a id="d-153"></a>**D-153** — Chapter XIII (Trema): hero-plate option B (Trema over the beaten Paragon)
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Trema's hero plate is option B: Trema looking down in contempt as Paragon's gold horned head lies low at his side, breaking into pyreflies; it reads on the pause tab (cropped to Trema's face) and on the card's right-hand strip. A concept only when recorded: nothing was installed. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~10:20 EDT
+  - Source: docs/concepts/chapters/trema/hero-plate/README.md; docs/target
+- <a id="d-154"></a>**D-154** — Chapter XII (Seymour Omnis): speaker portrait option A, with three small install fixes
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Seymour Omnis's speaker portrait is option A: an img2img of the installed idle's own head and shoulders with dark violet veins under both eyes and both horned cowls with red eyes, with three small install fixes and its own face-crops row; until installed, dialogue keeps falling back to the approved Macalania portrait. FFX only.
+  - area art · FFX · adopted · delivery not scheduled · at ~10:20 EDT
+  - Source: docs/concepts/chapters/omnis/portrait-options/README.md
+- <a id="d-155"></a>**D-155** — Chapter XIV (Isaaru): hero-plate option B
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Chapter XIV's (Isaaru) hero plate is option B, "the only option that reads on both surfaces at a glance"; a concept only when recorded. FFX only.
+  - area art · FFX · adopted · delivery not scheduled · at ~10:20 EDT
+  - Source: docs/concepts/chapters/isaaru/hero-plate/README.md; docs/target
+- <a id="d-156"></a>**D-156** — Chapter X (Seymour Natus): hero-plate option B
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Chapter X's (Seymour Natus) hero plate is option B, "the only option that shows the boss on both surfaces", adding to the preflight picks (D-093, D-097); a concept only when recorded. FFX only.
+  - area art · FFX · adopted · delivery in progress · at ~10:20 EDT
+  - Source: docs/concepts/chapters/natus/hero-plate/README.md; docs/target
+- <a id="d-157"></a>**D-157** — Chapter XI (Fallen Aeons): hero-plate option B
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Chapter XI's (Fallen Aeons) hero plate is option B, "the only option that reads on both surfaces", adding to the preflight picks (D-098 to D-120); a concept only when recorded. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery in progress · at ~10:20 EDT
+  - Source: docs/concepts/chapters/fallen-aeons/hero-plate/README.md; docs/target
+- <a id="d-158"></a>**D-158** — Chapter XV (Gippal, the Den of Woe): hero-plate option B
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Chapter XV's (Gippal, the Den of Woe) hero plate is option B, following the three-shade chapter of D-148; a concept only when recorded. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~10:20 EDT
+  - Source: docs/concepts/chapters/gippal/hero-plate/README.md; docs/target
+- <a id="d-159"></a>**D-159** — Missing speaker portraits (2026-09-25 round): Trema B, Gippal A, Baralai B, Buddy B
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Four missing FFX-2 speaker portraits are fixed from the agent's recommendations: Trema B (the idle's face and hat exactly), Gippal A (his sourced smirk), Baralai B (his one apology line), Buddy B (seed 925602); Shinra got pilots only and is not covered. Nothing was installed when recorded.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~10:20 EDT
+  - Source: docs/concepts/portraits-2026-09-25/README.md
+- <a id="d-160"></a>**D-160** — NOT covered by the 2026-09-25 "I'll go with all your recommendations" yes: battle-pose candidates, the judge-locked art-sets question, and the round-12 human judgments
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Nothing changed: his yes did not cover the battle-pose candidates (trema/poses, art5), the question of replacing judge-locked art sets, or the nine human judgments of critic round 12; they stay exactly as they were and each needs its own yes.
+  - area process · both games · proposed · nothing to build · at ~10:20 EDT
+  - Source: docs/concepts/chapters/trema/poses; docs/concepts/art5; and others
+- <a id="d-161"></a>**D-161** — Release 17 go-ahead once its builds verify (owner override)
+  - Bailey: “all recommendations please” (blanket yes)
+  - What changed: He authorised cutting release 17 as soon as its candidate builds verify (focused or deep review as the plan requires); the owner override settles no review obligation. Release 17 went live on 2026-09-25 at 16:06 EDT after his "Push the build live please let's do it" (E-067).
+  - area release · both games · adopted · delivery not scheduled
+  - Source: AGENTS.md
+- <a id="d-162"></a>**D-162** — Ship order: Chapter XII Seymour Omnis (FFX) first, then Chapter XIV Isaaru; Den of Woe (XV) waits for Noojs art
+  - Bailey: “all recommendations please” (blanket yes)
+  - What changed: Chapter order for shipping: Seymour Omnis (XII, FFX) first, then Isaaru (XIV, FFX), with the Den of Woe (XV, FFX-2) held until Nooj has art under the fresh-render decision (D-164); Omnis's engine work was on branch chapter-omnis-0925.
+  - area release · FFX · adopted · delivery not scheduled
+  - Source: research/ffx-seymour-omnis.md; docs/plans/chapter-omnis-review.md; and others
+- <a id="d-163"></a>**D-163** — Battle-pose sheets: judged sheets go to Bailey for per-slot naming, nothing installed before that
+  - Bailey: “all recommendations please” (blanket yes)
+  - What changed: Judged battle-pose sheets (trema/poses, art5) go to Bailey, who names what each slot is, and no pose art is installed before that naming pass.
+  - area art · both games · adopted · delivery not scheduled
+  - Source: docs/concepts/chapters/trema/poses; docs/concepts/art5
+- <a id="d-164"></a>**D-164** — Nooj: fresh render with a new method, shown as options first
+  - Bailey: “all recommendations please” (blanket yes)
+  - What changed: Nooj's art is re-rendered with a new method and shown to him as options before anything is installed; this unblocks the Den of Woe, which was gated on Nooj's art (D-162).
+  - area art · FFX-2 · adopted · delivery not scheduled
+  - Source: Noojs art is re-rendered with a new method (prior renders/method rejected); the new attempt is presented to Bailey as options before anything is …
+- <a id="d-165"></a>**D-165** — Trema real-game check parked; the 3 s action-time figure stays a labelled estimate
+  - Bailey: “all recommendations please” (blanket yes)
+  - What changed: The Trema real-game check is parked because the community save available is post-Trema; the 3-second action-time value stays a labelled estimate until a pre-Trema save allows a real check.
+  - area data · FFX · adopted · nothing to build
+  - Source: The community save used for the Trema real-game session is post-Trema, so the real-game verification of Chapter XIII Trema is parked with no further …
+- <a id="d-166"></a>**D-166** — FFX/FFX-2 general game check (items 4 A2 and 9) runs at Baileys next screen break
+  - Bailey: “all recommendations please” (blanket yes)
+  - What changed: The outstanding general real-game checks (items 4 A2 and 9 of the standing checklist) are scheduled for his next screen break instead of run now.
+  - area process · both games · adopted · delivery not scheduled
+  - Source: The outstanding general real-game verification items (4 A2 and 9 on the standing checklist) are scheduled for Baileys next screen break rather than …
+- <a id="d-167"></a>**D-167** — FFX-2 field stays party-left, Bahamut-right; the mockup's mirrored side is recorded as an accepted adaptation, not a target miss (item 6, recommend A)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: The FFX-2 battle field keeps the party on the left and Bahamut on the right, as in FFX; the approved "Battle HUD, FFX-2" mockup's mirrored side is recorded as an accepted adaptation, not a target miss (the side was never something he named). Recorded on the tile; no chapter's staging was swapped. FFX-2 only.
+  - area camera · FFX-2 · adopted · delivery implemented
+  - Source: docs/plans/decisions-2026-09-25.md; research/ffx-vs-ffx2-presentation.md
+- <a id="d-168"></a>**D-168** — Audio verdict (CHK-B1) and the music direction pick: booked for Bailey's own fifteen-minute listening session (item 1, recommend A)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: A listening session is booked for his own ears: one number for the shipped mix (title, boss-seymour, boss-shuyin, boss-yojimbo) plus one sentence, then a letter among the four battle-theme direction clips (control, A, B, C). This books the session and does not settle CHK-B1; nothing is re-rendered until his words land in docs/audio/OWNER-VERDICT.md.
+  - area audio · both games · adopted · delivery not scheduled
+  - Source: docs/plans/decisions-2026-09-25.md; AGENTS.md; and others
+- <a id="d-169"></a>**D-169** — A Chapter IX (Yojimbo) play session for the feel verdict: booked for Bailey's own play (item 2, recommend A)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: A live play of Chapter IX with sound on is booked for his own play, to judge whether the Zanmato gauge builds dread and reads clearly, in the same sitting as the listening session; no agent runs it. FFX only.
+  - area process · FFX · adopted · delivery not scheduled
+  - Source: docs/plans/decisions-2026-09-25.md
+- <a id="d-170"></a>**D-170** — Chapters V and VI, the default Wait split: a guide line teaching the habit, after an advisor bench found the clock (not the card) behind the losses (item 3, recommend C with D)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: The Chapter V and VI guides gained the line "Open a list at once. On the top list, the clock still runs." after an advisor bench (decision times 0, 1 and 1.5 s) found the clock, not the card, behind the losses; Chapter XI gets it when its guide is written. A second whole-menu-hold setting was rejected as against "mechanics never bend". FFX-2 only. (The wording later lost the word "list", D-136.)
+  - area combat · FFX-2 · adopted · delivery implemented
+  - Source: docs/plans/decisions-2026-09-25.md; AGENTS.md
+- <a id="d-171"></a>**D-171** — An enemy hit while a girl's menu is open: A1 only, the hit closes the menu with no delay; A2's delay size stays unbuilt (unsourced) (item 4, recommend A1)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: At the time: an enemy hit closed the open menu with no delay (A1, commit 07af1f90) and A2's delay size stayed unbuilt because no source gives one. Replaced on 2026-09-26 by D-198: only Delay-effect and Action-cancel abilities close an open menu.
+  - area combat · FFX-2 · superseded by [D-198](#d-198) · delivery implemented
+  - Source: docs/plans/decisions-2026-09-25.md; research/ffx2-combat-core.md; and others
+- <a id="d-172"></a>**D-172** — Chapter I re-baseline (Poison phase, aeons lose Items) plus a fresh first-attempt seed so the same loss does not repeat (item 5, recommend B)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: Chapter I's baseline was re-measured on current main (Poison phase fix and aeons without Items; the 40-seed floor stays 15) and the first attempt now draws a fresh seed through a new __pyrefly.setSeed pinning path, so the same loss does not repeat, while tests and critic captures keep fixed seeds. The Chapter I guide fix is FFX only, the seed mechanism is shared plumbing.
+  - area combat · both games · adopted · delivery implemented
+  - Source: docs/plans/decisions-2026-09-25.md; AGENTS.md
+- <a id="d-173"></a>**D-173** — Victory lines rotate the speaker per chapter and serve each bank's first line; Chapter III's card goes quiet (item 7, recommend A)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: The shared results screen rotates the speaker of the victory line among the field and serves each speaker's first line from the writing bible's grim bank, instead of always using the first party row; Chapter III shows no line (our reading of the no-quip rule); built with tests in both games (commit e26c77aa).
+  - area story · both games · adopted · delivery implemented
+  - Source: docs/plans/decisions-2026-09-25.md; src/app/screens/ResultsScreen.ts; and others
+- <a id="d-174"></a>**D-174** — Chapter IX mid-battle callouts: booked, waiting on Bailey's own read of the four lines before anything is built (item 8, recommend A)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: Chapter IX's four mid-battle lines (Lulu at 50 percent, Auron at a full gauge, Kimahri on Doom, Yuna on an aeon's Zanmato) and the Wakizashi "long blade" wording question are booked for him to read; nothing is built until he says he has, and he kept the as-built lines on 2026-09-27 (D-241). FFX only.
+  - area story · FFX · adopted · delivery not scheduled
+  - Source: docs/plans/decisions-2026-09-25.md
+- <a id="d-175"></a>**D-175** — One valid target skips the target step (PR-0170): HELD, not built; the driver observes the real game first (item 9)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: One valid target no longer skips the target step in FFX: src/ui/ffx/loneTarget.ts maps a lone candidate to a one-candidate target step (self and random rows excepted), merged with iter2-b5 and checked by real keys; the driver first observed the real game rather than build from an unsourced call, and the FFX-2 half stays deferred and unbuilt. FFX only.
+  - area ui · FFX · adopted · delivery implemented
+  - Source: docs/plans/decisions-2026-09-25.md; research/observed-trema-steam-2026-09-25.md; and others
+- <a id="d-176"></a>**D-176** — Chapter XIII (Trema) battle poses, Yuna/Paine Dark Knight and Rikku Alchemist: independent judge and scale-sidecar pass run; install waits on Bailey naming picks from the sheet (item 10, recommend B)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: Fifteen Chapter XIII line-up pose candidates (Yuna 4, Paine 5, Rikku 6) were judged independently at 1:1 with head-match scale sidecars (7 of 15 passed) and a sheet goes to him; nothing was installed until he named picks (D-163); the judge-passed ones were installed under D-179. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery in progress
+  - Source: docs/plans/decisions-2026-09-25.md; docs/concepts/chapters/trema/poses/README.md; and others
+- <a id="d-177"></a>**D-177** — Other empty FFX-2 battle-pose slots (75 across 15 dresspheres): independent judge and scale pass run for the 63 of 75 reachable slots; install waits on Bailey's picks (item 11, recommend B)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: Seventy-five empty FFX-2 battle-pose slots across 15 dresspheres were worked (63 reachable; Rikku's Berserker and Paine's Samurai wait); faulted slots stay empty rather than ship off-model, and the install waited on his picks (D-163); the judge-passed ones were installed under D-179. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery in progress
+  - Source: docs/plans/decisions-2026-09-25.md; docs/concepts/art5
+- <a id="d-178"></a>**D-178** — Art sets an agent judge locked without Bailey's own word on the exact files: relabeled 'judge-locked' in a separate list, the lock stays (item 12, recommend B)
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: Superseded by D-181, which records the same item-12 decision more fully (the duplicate was created by a renumbering at a merge).
+  - area art · both games · superseded by [D-181](#d-181) · delivery implemented
+  - Source: docs/plans/decisions-2026-09-25.md
+- <a id="d-179"></a>**D-179** — Install all 22 judge-passed FFX-2 battle poses (Chapter XIII line-up 7 of 15, other reachable dresspheres 15 of 62); failed slots stay empty on the standing painting with its flinch
+  - Bailey: “I'll go with your recommendations for everything” (blanket yes)
+  - What changed: Twenty-two judge-passed FFX-2 battle poses are installed byte for byte into public/art/characters/&lt;dressphere&gt;/&lt;slot&gt;.png with head-matched scale sidecars (Chapter XIII line-up 7 of 15, other reachable dresspheres 15 of 62; every slot was empty before, nothing replaced), the manifest regenerated and the files locked in docs/target/approved-hashes.json; failed slots stay empty on the standing painting with its flinch; 14 of the 22 sidecars were re-measured and corrected. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented
+  - Source: docs/target/approved-hashes.json; docs/concepts/art5/installed; and others
+- <a id="d-180"></a>**D-180** — Victory lines VL-1: option 2, the speaker of the victory line stands in the results wedge instead of the leader
+  - Bailey: “I'll go with your recommendations for everything” (blanket yes)
+  - What changed: On the results screen the speaker of the victory line stands in the wedge instead of the leader (VL-1 option 2, helpers in src/ui/common/victoryLine.ts, frames in docs/screenshots/victory-lines/); built on the decisions-0925 track after the record. Both games.
+  - area ui · both games · adopted · delivery in progress
+  - Source: docs/screenshots/victory-lines/option-2-speaker-in-wedge.jpg; docs/handoff/victory-lines.md; and others
+- <a id="d-181"></a>**D-181** — Item 12: relabel judge-locked art sets, keep the same hashes locked
+  - Bailey: “I'll go with all your recommendations however we do have ffx /ffx-2 available on steam /pc for you to check these things if you need to.” (blanket yes)
+  - What changed: The nine art sets that an agent judge locked without his word on the exact files are relabelled "judge-locked" in a separate list in docs/target/approved-hashes.json while the same hashes stay locked (nothing was unlocked), with a new test (tests/unit/target-approved-hashes-judge-locked.test.ts); only his word on the exact files turns a set into an approved one.
+  - area art · both games · adopted · delivery implemented · at ~11:00 EDT
+  - Source: docs/plans/decisions-2026-09-25.md; docs/target/judge-locked-hashes.json; and others
+- <a id="d-182"></a>**D-182** — Nooj shade (Den of Woe): option A, the repaired idle installed and used for every action moment
+  - Bailey: “I'll go with all your recommendations however” (blanket yes)
+  - What changed: Nooj's shade for the Den of Woe uses option A: only the idle was repaired (the loops, the sleeve, the neck fringe), independently judged, installed and used for every action moment, as several bosses already do. One wiring gap stayed open: the chapter's data names the sprite shade-nooj while the art lives under nooj-shade. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~14:25 EDT
+  - Source: docs/concepts/chapters/gippal/nooj-options/idle-only/README.md; docs/concepts/chapters/gippal/nooj-options/README.md; and others
+- <a id="d-183"></a>**D-183** — Chapter select v2: option C (victory ribbon + progress strip), every plate and card the boss painted on its own scene, the fixed list, Coming VII in number order
+  - Bailey: “I'll go with C a victory ribbon | All recommendations | All recommendations” (blanket yes)
+  - What changed: Chapter select v2 is option C: a victory ribbon plus a progress strip, with the plate and every card showing the boss painted on its own scene (not the party close-up pause plates, which stay on the pause screen), the fixed list, and the Coming Chapter VII card in number order between III and VIII. Built and checked with real keys, clicks and taps at four window sizes; it replaces the silhouette board of the front-end tile for chapter select only (the parallax title stays).
+  - area ui · both games · adopted · delivery implemented
+  - Source: NOW.md; docs/concepts/chapter-select-v2/option-C; and others
+- <a id="d-184"></a>**D-184** — Chapter XII (FFX), Seymour Omnis, B8 settled: GameFAQs' cycle Fire, Water, Ice, Thunder kept as the disc ring and reset order, labelled "our estimate"; the chapter is listed
+  - Bailey: “I'll take your recommendation for this list it with GameFAQs' order, labelled "our estimate. I especially like gamefaqs.” (blanket yes)
+  - What changed: Seymour Omnis's disc ring and reset order are GameFAQs' cycle Fire, Water, Ice, Thunder, labelled "our estimate" wherever shown, which settles the plan's blocking unknown B8 so the chapter could be listed. It also became his standing tie-break: when sources conflict and nothing in the game settles it, use GameFAQs' reading, labelled our estimate (D-214).
+  - area data · FFX · adopted · delivery implemented · at ~18:10 EDT
+  - Source: docs/plans/chapter-omnis-review.md; research/ffx-seymour-omnis.md; and others
+- <a id="d-185"></a>**D-185** — Chapter X (FFX), Seymour Natus: the guide and tactic teach the research's line "Haste only Tidus and Auron" (169/200, never calls Desperado) instead of the planned line (116/200); the chapter is listed
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Seymour Natus's guide and tactic teach the research's line "Haste only two party members (three triggers Desperado)" with Tidus and Auron as the two (169 of 200 on the bench) instead of the planned line (116 of 200); Chapter X was added to the chapter list after Chapter IX. FFX only.
+  - area guide · FFX · adopted · delivery implemented · at ~18:30 EDT
+  - Source: research/ffx-seymour-natus-highbridge.md; docs/plans/natus-bench.md; and others
+- <a id="d-186"></a>**D-186** — Chapter XIV (FFX), Isaaru: shipped as is (the Isaaru tactic wins 125/200, 63 %), no build change; the chapter is listed
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Chapter XIV (Isaaru) ships as is: the shipped tactic wins 125 of 200 whole three-link chains (63 percent) and every loss is in link 3 (Spathi); the two player-side options measured were not taken; the chapter was added to the chapter list. FFX only.
+  - area chapters · FFX · adopted · delivery implemented · at ~18:30 EDT
+  - Source: docs/plans/isaaru-bench.md; tests/unit/chapters/isaaru-tactic-bench.test.ts; and others
+- <a id="d-188"></a>**D-188** — Chapter VII (FFX), Macalania pause plate redo: A2 (independent judge 7.4), installed and locked; the chapter stays locked for the scene cue
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Chapter VII's pause plate was redone as option A2 (independent judge 7.4), installed and locked; the chapter stays behind a Coming card until its scene cue is settled (D-190, then D-278). FFX only.
+  - area art · FFX · adopted · delivery implemented · at ~18:30 EDT
+  - Source: docs/concepts/chapters/macalania/unlock/pause-plate-redo.jpg; docs/concepts/chapters/macalania/pause-plate-redo/JUDGE-A2.md; and others
+- <a id="d-189"></a>**D-189** — Chapter VII (FFX), party layout: B, the party re-laid right of the FFX command stack and held, the three ground fiends one step right and back
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Chapter VII's party is re-laid to the right of the FFX command stack and held (MACALANIA_PARTY_LAYOUT = "b"), with the three ground fiends one step right and back; merged to main, leaving only the scene cue open. FFX only.
+  - area camera · FFX · adopted · delivery implemented · at ~18:30 EDT
+  - Source: docs/concepts/chapters/macalania/unlock/party-layout/sheet.jpg; src/scenes/macalania-temple-layout.ts; and others
+- <a id="d-190"></a>**D-190** — Chapter VII (FFX), scene cue: OPEN, Bailey picks by ear from the macalania-scene sketches A/B/C; the chapter stays locked until then
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: At the time: Chapter VII's scene cue was open and the chapter stayed locked until he picked by ear from three sketches ("The Frozen Temple", "The Wedding Proposal", "Crystal and Pyreflies"). Replaced on 2026-09-28 by D-278, when he delegated the pick to the driver.
+  - area audio · FFX · superseded by [D-278](#d-278) · nothing to build
+  - Source: src/data/chapter-macalania-ship.ts; docs/audio/audition.html; and others
+- **Picture** (presentation) — Approved: Battle HUD, FFX-2
+  - Bailey: “all recommendations” (blanket yes)
+  - Delivery: Party-left, enemy-right stays as built (docs/target/decisions.json D-167, item 6 of docs/plans/decisions-2026-09-25.md); this mockup's Bahamut-left/party-right side was never something Bailey named, so the built side is recorded as an accepted adaptation rather than a target miss. research/ffx-vs-ffx2-presentation.md: FFX-2 has free battle positions, no source fixes a side.
+  - area ui · FFX-2 · adopted · delivery implemented · see [D-167](#d-167)
+  - Source: docs/target/targets.json, group presentation, tile "Battle HUD, FFX-2"
+- **Picture** (presentation) — Approved: Battle HUD on a phone (both)
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - Target: Not yet built: src/ui/ffx and src/ui/ffx2 still ship the desktop layout scaled down at phone width.
+  - area ui · both games · adopted · delivery not scheduled · see [D-140](#d-140)
+  - Source: docs/target/targets.json, group presentation, tile "Battle HUD on a phone (both)"
+- **Picture** (pause) — Approved: Living portrait feel (both)
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - Note: docs/plans/living-portrait-v6-method.md's options round: three 8s frontal clips from the v6 pilot rig — clip-A-measured.mp4 (Until Dawn's own numbers: idle drift, no idle saccades, the eyes leading the input), clip-B-livelier.mp4 (a glance every 3-6s, a small blink on a big one, more smiles) and clip-C-quiet.mp4 (smaller, slower). No build reaches the nine painted keys until this pick is exercised there (rule 9). doc
+  - area ui · both games · adopted · delivery implemented · see [D-064](#d-064), [D-143](#d-143)
+  - Source: docs/target/targets.json, group pause, tile "Living portrait feel (both)"
+- **Picture** (polish) — Approved: Chapter select v2: victory ribbon, boss on its scene
+  - Bailey: “I'll go with C a victory ribbon / All recommendations” (blanket yes)
+  - Delivery: Target/build pairs: docs/screenshots/chapter-select-c/pair-&lt;1600|1280|2000|390&gt;-&lt;new|two&gt;-&lt;ch1|ch8&gt;.jpg (real keys, clicks and taps from the title; capture-report.json has the geometry checks). Deviations from the mockup, all from the README critique: sash at the plate's top-left (off the boss), best time on the card ribbon, flat higher-contrast pips, strip height taken from the plate, touch wording on a phone.
+  - area ui · both games · adopted · delivery implemented
+  - Source: docs/target/targets.json, group polish, tile "Chapter select v2: victory ribbon, boss on its scene"
+
+### 2026-09-26
+
+Saturday · 62 decisions
+
+- <a id="e-071"></a>**E-071** — Push release 18 (chapter select v2; Chapters X, XI, XII and XIV listed; the cutscene veil fix) live now
+  - Bailey: “come on please, godspeed. I have full usage.”
+  - What changed: Release 18 went live on 2026-09-26 at 02:27 EDT (main b975397b, bundle Dd1Fjf8_) with chapter select v2 and four more chapters listed; the focused review settled SHIP and the deep review followed as round 13.
+  - area release · both games · adopted · delivery implemented · at ~02:27 EDT
+  - Source: docs/deploys.log
+- <a id="e-072"></a>**E-072** — Push release 20 (the FFX-2 engine fix, the menu-cancel correction and 23 FFX-2 poses) live now
+  - Bailey: “Just push the live build please”
+  - What changed: Release 20 went live on 2026-09-26 at 14:20 EDT (main ce05b02c, bundle i8Mr-QwD): the FFX-2 all-target engine fix (D-193), the menu-cancel correction (D-198), 23 FFX-2 poses, and Sensor hidden for Sensor-immune targets.
+  - area release · FFX-2 · adopted · delivery implemented · at ~14:20 EDT
+  - Source: docs/deploys.log
+- <a id="e-073"></a>**E-073** — Push release 21 (phone results, the Chapter XI phone camera, spell effects B, the Vegnagun colossus and boss poses) live now
+  - Bailey: “just push the live build please and keep going”
+  - What changed: Release 21 went live on 2026-09-26 at 22:19 EDT (main d8837334, bundle DlL4YDmM) with the phone results (D-200), the Chapter XI phone camera (D-201), spell effects B (D-227), the Vegnagun colossus, boss attack and hurt poses, Yojimbo without Doom and the advisor, intent, story and coach fixes.
+  - area release · both games · adopted · delivery implemented · at ~22:19 EDT
+  - Source: docs/deploys.log
+- <a id="e-074"></a>**E-074** — Permission to download any saves needed to answer sourced-fact questions from the real game
+  - Bailey: “You can download any saves you want to get the answers you have my permission”
+  - What changed: Save files could be fetched without asking and were recorded next to the work (D:\Tools\ffx-hd\saves-incoming); the next day's wider permission to download whatever is needed onto D: (D-236) replaced it.
+  - area process · both games · superseded by [D-236](#d-236) · delivery implemented · at ~15:20 EDT
+  - Source: docs/handoff/NOW.md
+- <a id="e-075"></a>**E-075** — The standing goal: iterate until every critic category is at least 9.0 and the weighted score is at least 9.60 (review, fix, options, release, deep review, repeat), without waiting to be asked
+  - Bailey: “Focus on meeting all score thresholds iteratively. Godspeed. I have plenty of usage.”
+  - What changed: A standing loop runs: triage the open issues (fix now, mockup options, Bailey's call, stalled), fix in parallel batches in worktrees, merge, release with a focused review, deep review, re-triage. The starting point was round 13: combat 8.7, encounter 8.8, visual 8.3, feel 7.8, narrative 8.1, interface 7.2, onboarding 7.1, prep 8.5, delivery 8.2 (audio unverified without his listening score). The loop is still running; options and questions go to him in batches with recommendations.
+  - area critic · both games · adopted · delivery in progress · at ~15:00 EDT
+  - Source: docs/plans/thresholds-program-2026-09-26.md; critic/rounds/round-13.md; and others
+- <a id="d-187"></a>**D-187** — Chapter XI (FFX-2), Fallen Aeons: option A, 3 s of action time on the three Road links only (159/200, 79.5 % at human pace); the chapter is listed
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Chapter XI runs with 3 seconds of action time (an estimate) on the three Road links only (Shiva, the Magus Sisters, Anima): 159 of 200 wins (79.5 percent) at human pace; no other formation carries it and every other chapter's event logs are byte-identical; the chapter was added to the list. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery implemented
+  - Source: docs/concepts/chapters/fallen-aeons/ship/action-time-hashes.json; docs/plans/fallen-aeons-bench.md; and others
+- <a id="d-191"></a>**D-191** — Chapter XV (FFX-2), the Den of Woe: "Den: both, drop the prep" (3 Hero Drinks + 8 levels in the kit [estimate], no Lightfall prep, retry from the link OFF); 39/200 first try, 160/200 within five at human pace; the chapter is listed
+  - Bailey: “I pick your recommendation for Den of Woe” (blanket yes)
+  - What changed: The Den of Woe is built "both, drop the prep": 3 Hero Drinks and 8 levels in the Den's own kit (our estimates), no Lightfall prep and retry from the link off; the first attempt wins 39 of 200 and 160 of 200 within five attempts at human pace (about 1 in 6 first try, 3 in 4 within five); Chapter XV was listed in release 19. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery implemented · at ~00:05 EDT
+  - Source: docs/plans/den-of-woe-options-2026-09-25.md; src/data/ffx2/builds/den-of-woe.ts; and others
+- <a id="d-192"></a>**D-192** — Release 19: deploy when its review passes
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Release 19 (Chapter XV, the Den of Woe, plus the deep-review-13 fixes) deploys when its review passes; it went live on 2026-09-26 at 11:13 EDT.
+  - area release · both games · adopted · delivery in progress · at ~07:00 EDT
+  - Source: AGENTS.md; tools/deploy-pages.mjs
+- <a id="d-193"></a>**D-193** — FFX-2 engine fix, option B: an all-target move hits each girl exactly once (fixes IC-2); Acta Est Fabula heals only the two Redoubts (sourced); IC-1's immune-hit chain switch stays OFF (unsourced); Chapter IV's lone-White-Mage stalemate gets a real-game look before it changes
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: An all-target move now hits each girl exactly once (fixing IC-2); Acta Est Fabula heals only the two Redoubts, as sourced (PR-0200); the immune-hit chain switch IC-1 stays off (unsourced); Chapter IV's lone-White-Mage stalemate gets a real-game look before it changes. The measured outcomes equal the options sheet; shipped in release 20. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery implemented · at ~07:00 EDT
+  - Source: docs/handoff/NOW.md; research/ffx2-vegnagun-shuyin.md; and others
+- <a id="d-194"></a>**D-194** — Pose round 2: install all 21 judge-PASS picks
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Twenty-one judge-PASS FFX-2 pose picks (mean 7.0 or more in round 2) are installed together instead of slot by slot and locked in docs/target/approved-hashes.json (set bailey:2026-09-26-poses, 252 ok, 0 mismatched); real-key proof at 1600x900 (Chapters XIII, VI, IV, V) and 390x844 (VI). FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~07:00 EDT
+  - Source: docs/concepts/art5/round2/README.md; docs/target/approved-hashes.json; and others
+- <a id="d-195"></a>**D-195** — Rikku Thief poses: judge by body height, not head size (re-scale the gate for the Thief slot only); the Thief idle is not repainted
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Rikku Thief poses are judged by body height rather than head size, because the shipped Thief idle draws her head at 1.4 to 1.7 times her other dresspheres' idles; the head-match gate is re-scaled for the Thief slot only and the Thief idle is not repainted. Delivered by D-199. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~07:00 EDT
+  - Source: docs/concepts/art5/round2/METHOD-CHECK.md
+- <a id="d-196"></a>**D-196** — Chapter XIII (FFX-2, Trema): when Sensor fails on an immune target, show nothing (no "SENSOR FAILED" caption)
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: At the time: when Sensor fails on an immune target in Chapter XIII the game was to show nothing. The record's game turned out to be wrong (his answer was about FFX's own Sensor-immune bosses), and D-221 replaced it with the real game's help-bar line.
+  - area ui · FFX-2 · superseded by [D-221](#d-221) · delivery not scheduled · at ~07:00 EDT
+  - Source: research/ffx2-trema.md; src/ui/ffx/SensorPanel.ts; and others
+- <a id="d-197"></a>**D-197** — FOC18-01 accepted: Chapter XI keeps option A (3 s Road action time), the disclosed Shiva/Anima trade-off stands
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Chapter XI keeps D-187's option A (3 s Road action time) despite the disclosed trade-off FOC18-01 (Shiva and Anima no longer punish the wrong line); no code changed. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery implemented · at ~07:00 EDT
+  - Source: critic/reviews/b975397b-focused.md
+- <a id="d-198"></a>**D-198** — Menu-cancel correction ON: only a Delay-effect or Action-cancel enemy ability closes an open FFX-2 command menu; a plain hit leaves it open (supersedes D-171, item 4 A1; answers PR-0210)
+  - Bailey: “I’ll take all your recommendations” (blanket yes)
+  - What changed: An open FFX-2 command menu is closed only by an enemy ability that carries a Delay effect or Action-cancel, not by any hit (research/ffx2-combat-core.md section 9.2); the correction is ON and the win counts of several chapters moved; no boss number changed. Combat core, so a deep review is owed after the deploy; it replaces D-171. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery implemented · at ~11:30 EDT
+  - Source: research/ffx2-combat-core.md; docs/plans/decisions-2026-09-25.md; and others
+- <a id="d-199"></a>**D-199** — Rikku Thief: install the three body-gate picks (item, hurt, victory); Thief attack and cast stay on the idle
+  - Bailey: “I’ll take all your recommendations” (blanket yes)
+  - What changed: Rikku Thief's item, hurt and victory poses are installed (scaled by body height); her attack and cast stay on the idle. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~11:30 EDT
+  - Source: docs/concepts/art5/round2/sheet3-rikku-thief.jpg; docs/concepts/art5/round2/judge2.json; and others
+- <a id="d-200"></a>**D-200** — Phone Victory and Defeat results: option B, the painting full-bleed with an ink sheet on one screen (PR-0001)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: On a phone the Victory and Defeat results are one screen: the painting full-bleed with an ink sheet on it (option B), built on branch r21-results-phone (commits 4924aa79, 294f039a) with an independent check passed; the choices the mockup did not show (the LV chip on an FFX-2 loss, the quip kept, the level-up on the chip, long-caption wrapping) were inferred and accepted on 2026-09-27 (D-250). Both games.
+  - area ui · both games · adopted · delivery implemented · at ~13:00 EDT
+  - Source: docs/concepts/phone-2026-09-26/README.md; docs/screenshots/results-phone-B/CHECK.md; and others
+- <a id="d-201"></a>**D-201** — Chapter XI on a phone: option A, pull the idle camera back per Road link so every fighter is whole (PR-0201)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: On a phone, Chapter XI's idle camera pulls back per Road link (figure size 72 percent and 60 percent) so every fighter is whole (option A); built on branch r21-road-phone (commit 9bc8115e), independently checked and shipped in release 21. FFX-2 only.
+  - area camera · FFX-2 · adopted · delivery implemented · at ~13:00 EDT
+  - Source: docs/concepts/phone-2026-09-26/README.md; docs/screenshots/road-phone-A/CHECK.md; and others
+- <a id="d-202"></a>**D-202** — Accessibility settings reopen D-005: an options round is approved (text size, reduce motion, reduce flashes, key remap, all off by default)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The accessibility pack, left out in D-005, is reopened as an options round only: a small set that is all off by default (text size, reduce motion, reduce flashes, key remap); the pick came as D-220 and its build as D-285. Both games.
+  - area ui · both games · adopted · nothing to build · at ~16:00 EDT
+  - Source: docs/plans; AGENTS.md
+- <a id="d-203"></a>**D-203** — Chapter X Natus Talk lines (D-085, PR-0204) go in as drafted
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The three drafted Chapter X Natus Talk lines go into the game as drafted, closing PR-0204 (src/story and the Chapter X guide and callouts). FFX only.
+  - area story · FFX · adopted · delivery implemented · at ~16:00 EDT
+  - Source: docs/plans/thresholds-program-2026-09-26.md; src/story; and others
+- <a id="d-204"></a>**D-204** — D-173's rotating-speaker, first-line-of-each-bank victory lines are the finished form of PR-0021
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: D-173's victory-line scheme (rotating speaker, first line of each bank) is accepted as the finished form of PR-0021, so that stalled issue closes on a rotation re-test instead of another options round. Both games.
+  - area story · both games · adopted · nothing to build · at ~16:00 EDT
+  - Source: Bailey, 2026-09-26 ~16:00 EDT, "I'll go with all of your recommendations", answering item 3 of the driver's 16-item sheet (2026-09-26 ~15:45 EDT): …
+- <a id="d-205"></a>**D-205** — One Steam HD session (about 30 minutes, at a time Bailey chooses) is approved to settle sourced facts
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: One Steam HD Remaster session of about 30 minutes, at a time he chooses, is approved to settle sourced facts (enemy action names in FFX, the one-target cursor, immune handling and similar listed items); nothing is built by the decision and the findings become sourced research lines followed by fixes. The time was still his to pick (D-258).
+  - area process · both games · adopted · nothing to build · at ~16:00 EDT
+  - Source: research/verification
+- <a id="d-206"></a>**D-206** — PR-0061 / D-138: the critic counts the approved 2.2s card and 3.8s sweep as authored beats, and judges only the leftover
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The critic counts the approved 2.2 s boss-name card and 3.8 s opening sweep as authored beats and judges only the leftover wait (the calibration ruling for PR-0061 and D-138); the approved card and sweep are untouched, and not every threshold is met yet (Chapter VI 4.66 s and Chapter IX 4.36 s with Confirm, eight chapters over 7.5 s passive).
+  - area critic · both games · adopted · delivery implemented · at ~16:00 EDT
+  - Source: docs/plans/pr-0061-method-check.md; critic/calibration/cases.json; and others
+- <a id="d-207"></a>**D-207** — The Until Dawn pause remake supersedes the old v5 and v6 pause tiles (PR-0167)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The Until Dawn pause remake replaces the three old "v5" pause tiles on the end-state board (Rebuilt pause 2000 x 1012, Panels hidden (H), Party panel), which are marked superseded and kept for history; the hero paintings themselves stand.
+  - area ui · both games · adopted · nothing to build · at ~16:00 EDT
+  - Source: docs/screenshots/fix3/pause/v6-390x844-phone.png
+- <a id="d-208"></a>**D-208** — PR-0060: no Yu Yevon speaker portrait — NONE
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The game has no Yu Yevon speaker portrait at all (his answer was none), overriding the earlier approved card 2 (D-011); no dialogue line will show his portrait and the 404 safety-net image is no longer needed. FFX only.
+  - area art · FFX · adopted · nothing to build · at ~16:00 EDT
+  - Source: research/visual-bible.md
+- <a id="d-209"></a>**D-209** — PR-0099: every chapter gets its own composed cue after the audio direction pick; a stand-in does not count as finished
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Every chapter gets its own composed cue after the audio direction pick, and a stand-in cue never counts as finished; docs/audio/THEMES.md carries rows for the cues still owed (Chapter VI, the Chapter VII scene, X, XI, XII, XIII, XIV and XV).
+  - area audio · both games · adopted · nothing to build · at ~16:00 EDT
+  - Source: docs/audio/THEMES.md
+- <a id="d-210"></a>**D-210** — PR-0203: lower the sound effects, for new profiles only
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Sound effects are lowered for new profiles only, not for existing saves; because it differs by save profile it is save-data class and needs a deep review before deploy; built in the batch that owns AudioManager and the volumes. The attack sounds were later raised +6 dB against this default (D-293).
+  - area audio · both games · adopted · nothing to build · at ~16:00 EDT
+  - Source: AGENTS.md
+- <a id="d-211"></a>**D-211** — PR-0133: the Chapter XI epilogue stands Leblanc, Ormi and Logos for their lines
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: In Chapter XI's epilogue Leblanc, Ormi and Logos stand for their lines, as Chapters XII and XIV do (src/story, the Chapter XI script). FFX-2 only.
+  - area story · FFX-2 · adopted · delivery implemented · at ~16:00 EDT
+  - Source: src/story; research/writing-bible.md
+- <a id="d-212"></a>**D-212** — PR-0037: only fielded characters speak mid-battle lines, with an authored fallback
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Only characters in the field speak mid-battle lines, with an authored fallback when the speaker is on the bench (src/story and the mid-battle line dispatch), the same in both games.
+  - area story · both games · adopted · delivery implemented · at ~16:00 EDT
+  - Source: src/story; src/story/dsl.ts
+- <a id="d-213"></a>**D-213** — PR-0160: Chapter VIII rewords Rikku instead of an Al Bhed cipher
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: In Chapter VIII Rikku's lines are reworded so she does not repeat Brother, instead of showing an Al Bhed cipher (the Chapter VIII script). FFX only.
+  - area story · FFX · adopted · delivery implemented · at ~16:00 EDT
+  - Source: src/story
+- <a id="d-214"></a>**D-214** — GP-G2, PR-0217 and PR-0054: where research is silent, use GameFAQs' reading, labelled as our estimate
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Where the research is silent, the game uses GameFAQs' reading, labelled as our estimate (a data-sourcing policy that rules 6 and 14 still bound: say so and ask when no source speaks); the Steam session (D-205) may settle some items first; applied in the FFX-2 data and engine batch.
+  - area data · both games · adopted · nothing to build · at ~16:00 EDT
+  - Source: src/data/ffx2; src/battle/ffx2
+- <a id="d-215"></a>**D-215** — PR-0028: rename the H legend to match what H does
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The pause legend that said H hides every panel is renamed "H painting only" to match what H does (commit e02858f6), checked live on a production build and merged to main. Both games.
+  - area ui · both games · adopted · delivery implemented · at ~16:00 EDT
+  - Source: src/app/screens/pause; docs/handoff/iter2-b6.md
+- <a id="d-216"></a>**D-216** — Critic proposal accepted: a Chapter XII disc-turning coach line
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: A Chapter XII disc-turning coach line was accepted: Auron's line fires the first time the advisor's top row turns a disc, worded as D-248 sets (commit fa2ffece, built on the release 37 integration branch). FFX only.
+  - area guide · FFX · adopted · delivery implemented · at ~16:00 EDT
+  - Source: src/ui/coach; docs/plans/thresholds-program-2026-09-26.md; and others
+- <a id="d-217"></a>**D-217** — Critic proposal accepted: a Chapter V checkpoint at Shuyin, labelled as an adaptation
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Chapter V gets a checkpoint at Shuyin, labelled as an adaptation rather than a sourced rule, through Trema's checkpoint seam (src/app/screens/BattleEncounterChain.ts). FFX-2 only.
+  - area chapters · FFX-2 · adopted · delivery implemented · at ~16:00 EDT
+  - Source: src/app/screens/BattleEncounterChain.ts
+- <a id="d-218"></a>**D-218** — Critic proposal rejected: a visible whole-menu hold under Wait; D-029 and D-121 stand
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Nothing changes: the critic's proposal of a visible whole-menu hold under Wait was refused, so Wait stays as D-029 and D-121 built it. FFX-2 only.
+  - area ui · FFX-2 · rejected · nothing to build · at ~16:00 EDT
+  - Source: research/ffx-vs-ffx2-presentation.md
+- <a id="d-219"></a>**D-219** — Critic policy: coach copy fixes are reviewed focused, not deep
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Coach-copy fixes are reviewed with a focused review, not a deep one: a change to the review-depth classification in tools/critic-plan.mjs, not to product code.
+  - area critic · both games · adopted · nothing to build · at ~16:00 EDT
+  - Source: tools/critic-plan.mjs
+- <a id="d-220"></a>**D-220** — Accessibility options round: option C, rows in the pause SETTINGS column plus a first-launch comfort card
+  - Bailey: “Yes I’ll go with your recommendations for all” (blanket yes)
+  - What changed: The accessibility settings take option C: rows in the pause SETTINGS column plus a one-time comfort card at the title so players can set text size and flashes before the first flash; not scheduled when recorded; the FFX-2 HUD still needed its own 130 percent layout pass. The settings were built as the OPTIONS rows of D-285. Both games.
+  - area ui · both games · adopted · delivery not scheduled · at ~17:30 EDT
+  - Source: docs/concepts/accessibility-2026-09-26/README.md; AGENTS.md; and others
+- <a id="d-221"></a>**D-221** — FFX Sensor-immune targets show the real game's help-bar line, "Immune to sensors.", instead of hiding the panel
+  - Bailey: “Yes I’ll go with your recommendations for all” (blanket yes)
+  - What changed: In FFX a Sensor-immune target shows the real game's help-bar line "Immune to sensors." beside the enemy's name, with no HP, bar or chips, instead of hiding the panel (replaces D-196 for FFX); merged to main and unit-tested only, since no Sensor-immune combatant is reachable as an Attack candidate by real keys. FFX only.
+  - area ui · FFX · adopted · delivery implemented · at ~17:30 EDT · replaces [D-196](#d-196)
+  - Source: research/observed-ffx-steam-2026-09-26.md; src/ui/ffx/SensorPanel.ts; and others
+- <a id="d-222"></a>**D-222** — Yojimbo P-1: Kimahri arrives WITHOUT Doom (`cavernDoomPrep` = `not-learned`), the sourced default; re-opens D-056/D-066
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Kimahri arrives at the Yojimbo cavern WITHOUT Doom (cavernDoomPrep set to not-learned), the sourced default, so the player earns the counter; this reopens the Doom half of D-056 and D-066 (the line-up stands). Merged to main from branch yojimbo-pick-0926 with an independent check: real keys show no Doom through loss, reveal and win. FFX only.
+  - area combat · FFX · adopted · delivery implemented · at ~18:45 EDT
+  - Source: docs/plans/yojimbo-faithfulness-2026-09-26.md; src/data/ffx/builds/yojimbo-cavern.ts; and others
+- <a id="d-223"></a>**D-223** — Yojimbo P-2 option (b): the chapter card's Doom objective shows as a hidden "???" line until Doom lands or the player loses once
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The Yojimbo chapter card shows its Doom objective as a hidden "???" line until Doom lands or the player loses once (option b); merged to main on 2026-09-26 (commit 89ad246d). FFX only.
+  - area ui · FFX · adopted · delivery implemented · at ~18:45 EDT
+  - Source: docs/plans/yojimbo-faithfulness-2026-09-26.md; src/data/chapter-meta-yojimbo.ts; and others
+- <a id="d-224"></a>**D-224** — C-1 phase lighting: option (A), the reduced version (grade, fog, floor glow, a rim/bounce tint) on canon phase beats only
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Phase lighting is the reduced version (A): a grade, fog, a floor glow and a rim or bounce tint on canon phase beats only, because the painted actors are unlit by design and the full key light would need the declined depth-normal-lighting concept; the approved tile's after-picture is re-shot to match once built. Both games.
+  - area visuals · both games · adopted · delivery implemented · at ~18:45 EDT
+  - Source: docs/plans/presentation-program-2026-09-26.md; src/engine/Renderer.ts; and others
+- <a id="d-225"></a>**D-225** — C-4 pyreflies follow the sources: Macalania (save for Seymour's death) and Leblanc (indoor, none); Gagazet stays snow and glitter only
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Pyreflies follow the sources: Macalania has them only for Seymour's death, Leblanc's indoor chateau has none, and Gagazet stays snow and glitter only (the source there is an absence); built in src/engine/Particles.ts and the scenes. Both games.
+  - area visuals · both games · adopted · delivery implemented · at ~18:45 EDT
+  - Source: docs/plans/presentation-program-2026-09-26.md; src/engine/Particles.ts; and others
+- <a id="d-226"></a>**D-226** — C-7 Trema's victory pose: settle from GameFAQs, labelled as our estimate, per D-214's sourcing policy
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Trema's victory pose is settled from GameFAQs and labelled our estimate (D-214): chapter-meta victoryPose is "hold" for Chapter XIII beside Chapters II, IV and V (commit 7a7b7170, merged to main). FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~18:45 EDT
+  - Source: docs/plans/presentation-program-2026-09-26.md; src/data/chapter-meta; and others
+- <a id="d-227"></a>**D-227** — Spell and skill effects: option B (shader particles, per-element shape and motion)
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - What changed: Spell and skill effects are option B: shader particles with a shape and motion per element; built on branch iter2-spellfx-b (commit b27126c8) with an independent check (real keys in Chapters I and IV at both sizes, 15 chapters unchanged) and merged on 2026-09-26, then shipped in release 21. Both games.
+  - area visuals · both games · adopted · delivery implemented · at ~19:30 EDT
+  - Source: docs/plans/presentation-program-2026-09-26.md; docs/concepts/spell-fx-2026-09-26/README.md; and others
+- <a id="d-228"></a>**D-228** — Vegnagun staging: option A (per-link part scale and low camera)
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - What changed: Vegnagun is staged with per-link part position and scale and a low camera looking up (option A), built on iter2-vegnagun-a (commit fa7bb1a8), independently checked and merged on 2026-09-26. FFX-2 only.
+  - area camera · FFX-2 · adopted · delivery implemented · at ~19:30 EDT
+  - Source: docs/plans/presentation-program-2026-09-26.md; docs/concepts/vegnagun-colossus-2026-09-26/README.md
+- <a id="d-229"></a>**D-229** — Yojimbo attack and hurt pose picks (c45 attack, c35 hurt)
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - What changed: Yojimbo's attack pose c45 (score 7.69) and hurt pose c35 (7.44) are installed, with backups in D:/Tools/pyrefly-art-backup/approved/2026-09-26-boss-poses/ and a test (pose-install-bosses-0926). FFX only.
+  - area art · FFX · adopted · delivery implemented · at ~19:30 EDT
+  - Source: docs/plans/presentation-program-2026-09-26.md; docs/concepts/boss-poses-2026-09-26/README.md; and others
+- <a id="d-230"></a>**D-230** — FFX-2 boss and goon hurt pose picks: Trema c7, Logos c2, Leblanc c10, Ormi c7 flipped, Syndicate male goon c4
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - What changed: The FFX-2 boss and goon hurt poses are installed: Trema c7, Logos c2, Leblanc c10, Ormi c7 (flipped) and the Syndicate male goon c4, with backups in D:/Tools/pyrefly-art-backup/approved/2026-09-26-boss-poses/. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~19:30 EDT
+  - Source: docs/plans/presentation-program-2026-09-26.md; docs/concepts/boss-poses-2026-09-26/README.md; and others
+- <a id="d-231"></a>**D-231** — Presenter fix: a boss's PHYSICAL ability draws its attack painting, not cast
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - What changed: A boss's physical ability now draws its attack painting instead of the cast painting (the presenter's pose mapping no longer sends every enemy "ability" to cast); built on iter2-attack-pose (commit 5e80d4c3) with an independent check and merged on 2026-09-26. Both games.
+  - area visuals · both games · adopted · delivery implemented · at ~19:30 EDT
+  - Source: docs/plans/presentation-program-2026-09-26.md; docs/concepts/boss-poses-2026-09-26/README.md; and others
+- <a id="d-232"></a>**D-232** — PR-0211 mid-battle line card: option A, compact card in whichever slot is clear
+  - Bailey: “i'll go with all of your recommends. full speed ahead please. godspeed.” (blanket yes)
+  - What changed: The mid-battle line card is a compact card in whichever of four slots is clear of the party and the speaker, chosen once per beat, falling back to option B's bottom band when none is clear; built in batch B4 (src/ui/common/DialogueBox.ts). Both games.
+  - area ui · both games · adopted · delivery implemented
+  - Source: docs/concepts/line-card-2026-09-27; docs/plans/iteration-2-batches.md; and others
+- <a id="d-233"></a>**D-233** — Special moments: option A, Spiral Cut and Mega Flare as particles in the new-spells language
+  - Bailey: “i'll go with all of your recommends. full speed ahead please. godspeed.” (blanket yes)
+  - What changed: Spiral Cut and Mega Flare play as particles in the new-spells language (option A), skinned per game: Spiral Cut gold in FFX and Mega Flare pink in FFX-2; built in batch B3 (src/engine/spellfx). Both games.
+  - area visuals · both games · adopted · delivery implemented
+  - Source: docs/concepts/specials-2026-09-27; docs/plans/iteration-2-batches.md; and others
+- <a id="d-234"></a>**D-234** — PR-0171 pause CHAPTER dossier: option C, slide the plate under the member-tab rule
+  - Bailey: “i'll go with all of your recommends. full speed ahead please. godspeed.” (blanket yes)
+  - What changed: The pause CHAPTER dossier slides the plate right under the member-tab rule, at most to 0.88x and above the 0.755x floor (option C), for the FFX plates (II, IX) on the shared pause chrome; built in iter2-b6, confirmed live at 1600x900 and 2000x1012 with no text on the face; below 1600 wide in battle the plate is not slid (disclosed). Both games.
+  - area ui · both games · adopted · delivery implemented
+  - Source: docs/concepts/pause-dossier-2026-09-27; docs/plans/iteration-2-batches.md; and others
+- **Picture** (scenes) — Approved: Vegnagun staging: option A accepted
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - Target: Per-link part position and scale with a low master camera looking up; the part 4.3 to 6.3 times a girl's height on desktop and kept on screen on phones (fixes the today/C phone off-edge framing). Not yet built (D-228).
+  - area art · FFX-2 · adopted · delivery not scheduled · see [D-228](#d-228)
+  - Source: docs/target/targets.json, group scenes, tile "Vegnagun staging: option A accepted"
+- **Picture** (cast) — Approved: Yojimbo attack pose: c45 accepted
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - Target: Candidate c45, second-look score 7.69. Not yet installed into public/art (D-229/D-230); install after release 21.
+  - area art · FFX · adopted · delivery not scheduled · see [D-229](#d-229), [D-230](#d-230)
+  - Source: docs/target/targets.json, group cast, tile "Yojimbo attack pose: c45 accepted"
+- **Picture** (cast) — Approved: Yojimbo hurt pose: c35 accepted
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - Target: Candidate c35, second-look score 7.44. Not yet installed into public/art (D-229/D-230); install after release 21.
+  - area art · FFX · adopted · delivery not scheduled · see [D-229](#d-229), [D-230](#d-230)
+  - Source: docs/target/targets.json, group cast, tile "Yojimbo hurt pose: c35 accepted"
+- **Picture** (cast) — Approved: Trema hurt pose: c7 accepted
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - Target: Candidate c7. Not yet installed into public/art (D-229/D-230); install after release 21.
+  - area art · FFX-2 · adopted · delivery not scheduled · see [D-229](#d-229), [D-230](#d-230)
+  - Source: docs/target/targets.json, group cast, tile "Trema hurt pose: c7 accepted"
+- **Picture** (cast) — Approved: Logos hurt pose: c2 accepted
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - Target: Candidate c2. Not yet installed into public/art (D-229/D-230); install after release 21.
+  - area art · FFX-2 · adopted · delivery not scheduled · see [D-229](#d-229), [D-230](#d-230)
+  - Source: docs/target/targets.json, group cast, tile "Logos hurt pose: c2 accepted"
+- **Picture** (cast) — Approved: Leblanc hurt pose: c10 accepted
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - Target: Candidate c10. Not yet installed into public/art (D-229/D-230); install after release 21.
+  - area art · FFX-2 · adopted · delivery not scheduled · see [D-229](#d-229), [D-230](#d-230)
+  - Source: docs/target/targets.json, group cast, tile "Leblanc hurt pose: c10 accepted"
+- **Picture** (cast) — Approved: Ormi hurt pose: c7 (flipped) accepted
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - Target: Candidate c7, flipped. Not yet installed into public/art (D-229/D-230); install after release 21.
+  - area art · FFX-2 · adopted · delivery not scheduled · see [D-229](#d-229), [D-230](#d-230)
+  - Source: docs/target/targets.json, group cast, tile "Ormi hurt pose: c7 (flipped) accepted"
+- **Picture** (cast) — Approved: Leblanc Syndicate male goon hurt pose: c4 accepted
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - Target: Candidate c4 (male); the female goon pilot failed per commit a253cae9 and is not part of this pick. Not yet installed into public/art (D-229/D-230); install after release 21.
+  - area art · FFX-2 · adopted · delivery not scheduled · see [D-229](#d-229), [D-230](#d-230)
+  - Source: docs/target/targets.json, group cast, tile "Leblanc Syndicate male goon hurt pose: c4 accepted"
+- **Picture** (pause) — Approved: Accessibility settings: option C, rows plus a first-launch comfort card (both)
+  - Bailey: “Yes I’ll go with your recommendations for all” (blanket yes)
+  - Note: docs/concepts/accessibility-2026-09-26/README.md's three options (A rows only, B its own ACCESSIBILITY tab, C A's rows plus a one-time comfort card at first launch); C was recommended because REDUCE FLASHES and TEXT SIZE only fully help when set before the first flash and the first line of dialogue. docs/target/decisions.json D-220. Save-data class (new Settings fields): a deep review before deploy and the CHK-024 up
+  - area ui · both games · adopted · delivery not scheduled · see [D-220](#d-220)
+  - Source: docs/target/targets.json, group pause, tile "Accessibility settings: option C, rows plus a first-launch comfort card (both)"
+- **Picture** (fight) — Approved: Spell and skill effects: option B accepted
+  - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
+  - Target: Shader particles with a shape and motion per element (Fire a rising column, Ice floor crystals, Thunder one hard-flash bolt, Water a ring and sphere, Holy falling pillars, Cure rising motes, a physical hit a slash arc with sparks); FFX gold eight-point cast ring and round motes (see also sheet-6-ffx2-option-B.jpg for the FFX-2 pink four-point sparkle skin); lookup by ability id, falling back to element then to the cu
+  - area visuals · both games · adopted · delivery not scheduled · see [D-227](#d-227)
+  - Source: docs/target/targets.json, group fight, tile "Spell and skill effects: option B accepted"
+- **Picture** (phone) — Approved: PR-0201 phone framing of Chapter XI, Road to the Farplane (FFX-2 only)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - Target: Built on r21-road-phone (src/scenes/road-to-the-farplane-phone.ts), merged for release 21. Target vs build: docs/screenshots/road-phone-A/ (compare-*.jpg, CHECK.md). Disclosed major: after a party KO Mindy can slip off the right edge (docs/handoff/road-phone-A.md).
+  - area ui · FFX-2 · adopted · delivery implemented · see [D-201](#d-201)
+  - Source: docs/target/targets.json, group phone, tile "PR-0201 phone framing of Chapter XI, Road to the Farplane (FFX-2 only)"
+- **Picture** (phone) — Approved: PR-0001 phone Victory and Defeat results (both)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - Target: Built on r21-results-phone (src/ui/common/resultsPhone.ts, resultsPage.ts, results-phone.css), merged for release 21. Target vs build: docs/screenshots/results-phone-B/ (side-by-side-*.jpg, CHECK.md). Desktop and landscape unchanged.
+  - area ui · both games · adopted · delivery implemented · see [D-200](#d-200)
+  - Source: docs/target/targets.json, group phone, tile "PR-0001 phone Victory and Defeat results (both)"
+
+### 2026-09-27
+
+Sunday · 63 decisions
+
+- <a id="e-076"></a>**E-076** — Push release 25 (art-mask and scene fixes) live now
+  - Bailey: “ok just push the build live please”
+  - What changed: Release 25 went live on 2026-09-27 at 17:16 EDT (main 79adc4ff, bundle ykS1QEe6) before its focused review: the art-mask and scene fixes of the t1-b2b batch.
+  - area release · both games · adopted · delivery implemented · at ~17:16 EDT
+  - Source: docs/deploys.log
+- <a id="d-235"></a>**D-235** — Music direction: B, the ACE-Step AI restyle, is the only one that sounds good; the AI-restyle layers may ship (each cue re-heard before it goes live)
+  - Bailey: “7 is the only one that sounds good to me.”
+  - What changed: Direction B, the ACE-Step AI restyle (track 07), is the only music direction he likes ("7 is the only one that sounds good to me"), so AI-restyle layers may ship, each cue re-heard by him before it goes live; his score for today's music and the Macalania pick stayed open (later D-292, D-278). Both games.
+  - area audio · both games · adopted · delivery in progress · at ~00:50 EDT
+  - Source: docs/audio/OWNER-VERDICT.md; tools/audio/ace-step.mjs
+- <a id="d-236"></a>**D-236** — Standing permission to download onto D: (not C:) from official/reputable sources for this work
+  - Bailey: “also you can download whatever you need but on the D: drive you have my permission”
+  - What changed: Agents may download whatever the work needs onto the D: drive (never C:) from official or reputable sources, never run an executable from an untrusted source, and record each download (name, source URL, size, sha256) in a dated log under docs/audio; this narrows AGENTS.md hard rule 11 for downloads (money still needs his yes). Widened on 2026-10-04 by D-370.
+  - area process · both games · adopted · nothing to build
+  - Source: AGENTS.md hard rule 11; docs/audio/downloads
+- <a id="d-237"></a>**D-237** — FF7 battle HUD: option A, refined to be even more faithful to FF7 than A (FF7 only)
+  - Bailey: “ff7 screen layout ill go with a but it needs to be EVEN more faithful than a but remember it is specific to the ff7 encounters not ffx or ffx-2 also look at our other project ([another project of his] it might have done most of the menu look and feel already), push overnight”
+  - What changed: The FF7 battle HUD is option A, refined to be even more faithful to FF7 and specific to the FF7 encounter (not FFX or FFX-2); built on the ff7-integration branch (docs/handoff/ff7-guard-scorpion.md): the FF7 HUD wired to the FF7 engine and turned on behind the secret door, body face M PLUS Rounded 1c, stretched on 16:9, phone layout B. His "push overnight" is recorded as D-239. FF7 only.
+  - area ui · FF7 (hidden experiment) · adopted · delivery implemented
+  - Source: docs/handoff/ff7-guard-scorpion.md; docs/concepts/ff7-hud-2026-09-27; and others
+- <a id="d-238"></a>**D-238** — Hidden Guard Scorpion secret door: approved as proposed
+  - Bailey: “also the secret door to guard scorpion i really like your ideas there i will go with it”
+  - What changed: A hidden Guard Scorpion fight opens from a secret door (seven taps on the LIMIT label, or L1 R1 L1 R1 Select) with the normal chapter transition and no extra sign; FF7_EXPERIMENT_READY is on and an end-to-end test covers it (tests/e2e/ff7-guard-scorpion.spec.ts); built on ff7-integration. FF7 only.
+  - area chapters · FF7 (hidden experiment) · adopted · delivery implemented
+  - Source: tests/e2e/ff7-guard-scorpion.spec.ts; docs/plans/ff7-guard-scorpion-architecture.md; and others
+- <a id="d-239"></a>**D-239** — Overnight autonomous release permission: release 22, and 23 if ready, while Bailey sleeps
+  - Bailey: “push overnight”
+  - What changed: The driver may push release 22, and 23 if ready, while he sleeps, provided each passes its own focused review; the permission does not waive the deep-review cap or any other release gate. Releases 22 and 23 went live on 2026-09-27 (about 09:29 and 10:18 EDT).
+  - area release · both games · adopted · nothing to build
+  - Source: AGENTS.md
+- <a id="d-240"></a>**D-240** — FF7 art recommendations for Guard Scorpion, Cloud, Barret and the reactor core: accepted on recommendation
+  - Bailey: “full speed ahead please. godspeed. ill go with all your recommendations.” (blanket yes)
+  - What changed: The FF7 art for Guard Scorpion, Cloud, Barret and the reactor core is accepted as recommended after a rough composite: its files are locked in docs/target/approved-hashes.json (set bailey:2026-09-27-ff7) and staged the FF7 way (party on the right facing left, boss on the left facing right) on ff7-integration, then merged to main; audio for it stays silent until he hears it. FF7 only.
+  - area art · FF7 (hidden experiment) · adopted · delivery implemented
+  - Source: docs/concepts/ff7-art-2026-09-27/README.md; docs/concepts/ff7-art-2026-09-27/06-composite-1600.jpg; and others
+- <a id="d-241"></a>**D-241** — Story read (§8 Q2): keep the as-built lines in Chapters IX, XI, XII, XIII, XIV and XV, and keep the PR-0037 fielded-only stand-in lines
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: The as-built mid-battle and cutscene lines in Chapter IX (FFX) and Chapters XI to XV (FFX-2) stand as written, with no line marked for a cut, and the fielded-only stand-in lines of PR-0037 are kept; no line changes were owed.
+  - area story · both games · adopted · delivery not scheduled · at ~11:00 EDT
+  - Source: docs/plans/iteration-2-batches.md; src/story/dsl.ts
+  - <a id="d-241-as-built-lines"></a>**D-241/as-built-lines** — The as-built mid-battle and cutscene lines in Chapter IX (FFX) and Chapters XI to XV (FFX-2) stand as written, with no line marked for a cut
+    - What changed: No line changes were owed; the lines shipped as built.
+  - <a id="d-241-fielded-only"></a>**D-241/fielded-only** — The PR-0037 stand-in lines stay: fielded characters only speak mid-battle, with an authored fallback (D-212)
+    - What changed: Unchanged by the story read.
+- <a id="d-242"></a>**D-242** — Three FFX-2 switches (§8 Q4, four including PR-0107): IC-1 ON, PR-0106 ON (once, turn 5 Fan Slap), PR-0124 OFF (dressphere carry), PR-0107 OFF (Chapter VI random opening gauges)
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: Four FFX-2 switches are set: IC-1 ON (an immune hit opens no chain; source Split_Infinity), PR-0106 ON (once, turn 5 Fan Slap), PR-0124 OFF (the dressphere carry) and PR-0107 OFF (Chapter VI's random opening gauges); benches were re-measured (Chapter VI 157 to 165, Chapter XV 36 to 48 of 200 at human pace), an independent check found 0 blockers and it merged to main (merge e60afaff). FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery implemented · at ~11:00 EDT
+  - Source: docs/plans/iteration-2-batches.md; research/ffx2; and others
+  - <a id="d-242-ic-1"></a>**D-242/ic-1** — IC-1 ON: an immune hit opens no chain (source Split_Infinity, bench inside the accepted band)
+    - What changed: Switched on in src/battle/ffx2/constants.ts. FFX-2 only.
+  - <a id="d-242-pr-0106"></a>**D-242/pr-0106** — PR-0106 ON: the Leblanc failsafe fires once, and turn 5 is Fan Slap (source SinirothX, which conflicts with the wiki, bench inside the band)
+    - What changed: Switched on in src/battle/ffx2/constants.ts. FFX-2 only.
+  - <a id="d-242-pr-0124"></a>**D-242/pr-0124** — PR-0124 OFF: the dressphere carrying over between links (it pushed a chapter's bench outside the accepted band); asked again once the chapter benches can absorb it
+    - What changed: Stays off. FFX-2 only.
+  - <a id="d-242-pr-0107"></a>**D-242/pr-0107** — PR-0107 OFF: Chapter VI's random opening gauges (it pushed a chapter's bench outside the accepted band)
+    - What changed: Stays off. FFX-2 only.
+- <a id="d-243"></a>**D-243** — PR-0179 aeon HP: arm (a), the sourced Gagazet rows that Chapters X and XIV inherit
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: Aeon HP in Chapters X and XIV uses arm (a), the sourced Gagazet rows those chapters inherit (for example Bahamut at 2,935 HP); benches were re-measured, an independent check found 0 blockers and it merged to main (merge e60afaff). Gagazet's aeons now sit above Zanarkand's and Dream's End's, left as an open item for him. FFX only.
+  - area combat · FFX · adopted · delivery implemented · at ~11:00 EDT
+  - Source: docs/plans/iteration-2-batches.md; src/data/ffx; and others
+- <a id="d-244"></a>**D-244** — FF7 battle presentation options: A1 hard-light effects, B1 painted attack poses, C1 two-window results plus G1's Game Over, D1 victory poses held in silence, E1 phone camera moved in, F1 the FF7 swirl entry
+  - Bailey: “ff7 screen layout ill go with a but it needs to be EVEN more faithful than a but remember it is specific to the ff7 encounters not ffx or ffx-2 also look at our other project ([another project of his] it might have done most of the menu look and feel already), push overnight”
+  - What changed: Six FF7 battle presentation options are picked as the sheet recommended (each is its own row below); each is owed a build against docs/concepts/ff7-options-2026-09-27/README.md on the ff7-integration branch before the FF7 experiment is feature-complete. His later "tons of eye candy" direction overtook A1's flat effects (D-260). FF7 only.
+  - area visuals · FF7 (hidden experiment) · adopted · delivery not scheduled · at ~11:00 EDT
+  - Source: docs/concepts/ff7-options-2026-09-27/README.md
+  - <a id="d-244-a1"></a>**D-244/a1** — A1: FF7 effects are hard light (flat polygon shapes, additive, no bloom: our reading of a 1997 PlayStation game's real-time effects), over A2 painted glow or A3 hybrid
+    - What changed: The FF7 effects were first built flat; his "tons of eye candy" direction then replaced them with the Spectacle look (D-260).
+  - <a id="d-244-b1"></a>**D-244/b1** — B1: painted key attack poses (Cloud 3, Barret 2) with a white hit flash and a short knock-back, over one pose plus a code smear or no paintings
+    - What changed: Five painted attack poses were owed for the hidden fight.
+  - <a id="d-244-c1-g1"></a>**D-244/c1-g1** — C1: two results windows (EXP and AP with a row per member, then Gil and Items, confirm to advance) over one compact window, together with G1 for Game Over (the camera pans up, then GAME OVER, silent; no retail reel or music)
+    - What changed: The FF7 fight's results and Game Over follow these layouts.
+  - <a id="d-244-d1"></a>**D-244/d1** — D1: victory poses (Cloud's fist-pump or sword-spin, Barret's squat-and-punch loop) held in silence; D2 (plus an original sting) deferred until a sting passes his ear
+    - What changed: The victory poses play without music; no sting is added until he hears one.
+  - <a id="d-244-e1"></a>**D-244/e1** — E1: on a phone the formation is drawn in and the camera moved in, over zoom-plus-window or keeping the letterbox
+    - What changed: The FF7 fight's phone framing is moved in.
+  - <a id="d-244-f1"></a>**D-244/f1** — F1: the FF7 swirl entry plus a short opening camera, over swirl only or today's cut
+    - What changed: The hidden fight opens with an FF7-style swirl and a short camera intro, for the FF7 fight only.
+- <a id="d-245"></a>**D-245** — An original FF7-flavoured battle music sketch, in the track-7 (Direction B, ACE-Step restyle) style, silent until Bailey hears it
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: An original FF7-flavoured battle-music sketch is composed in the Direction B style of track 7 (ACE-Step restyle) and stays silent until he hears it (no agent can hear). FF7 only.
+  - area audio · FF7 (hidden experiment) · adopted · delivery not scheduled · at ~11:00 EDT
+  - Source: tools/audio/ace-step.mjs; AGENTS.md hard rule 13; and others
+- <a id="d-246"></a>**D-246** — Keep the window.__pyrefly.gotoChapter debug route open to the FF7 chapter
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: The debug route window.__pyrefly.gotoChapter stays open to the hidden FF7 chapter, as to every other unlisted chapter: no code change, the existing behaviour is confirmed as intended. FF7 only in effect.
+  - area process · FF7 (hidden experiment) · adopted · delivery implemented · at ~11:00 EDT
+  - Source: src/debug/api.ts
+- <a id="d-247"></a>**D-247** — The smaller 0.6-scale line card in Chapter III's opening
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: Chapter III's opening takes the smaller 0.6-scale line card instead of the full-size one (the default stays 0.7 elsewhere); the beat the code names differs from the decision's wording (the Macalania Woods pursuit is Chapter VII in code), a name question left open for him; the Talk beat's 0.6 card was built under this decision on 2026-10-03 (commit 09165aec). FFX only.
+  - area ui · FFX · adopted · delivery implemented · at ~11:00 EDT
+  - Source: src/ui/common/DialogueBox.ts
+- <a id="d-248"></a>**D-248** — Chapter XII disc hint by Auron, wording (c): "Hit a disc. Three alike, and his spell reaches everyone."
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: Auron's Chapter XII coach line reads "Hit a disc. Three alike, and his spell reaches everyone." (wording c) and fires the first time the advisor's top row turns a disc; wired on 2026-10-03 (commit fa2ffece, with D-216). FFX only.
+  - area guide · FFX · adopted · delivery implemented · at ~11:00 EDT
+  - Source: docs/plans/thresholds-program-2026-09-26.md; src/ui/coach
+- <a id="d-249"></a>**D-249** — Eight class-C recommendations accepted as sent (§8 Q5-Q12): FFX TARGET plate ON, stalemate card wording B, Chapter III Sensor card folds while aiming, keep Swordplay MISS/HIT, keep the Evrae far-range streak, keep the Chapter XII advisor rules, yes to the four-scene colour-pipeline sheet first, and weight a KO’d member lower in Chapter XI’s phone framing
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: Eight recommendations from the sheet's class-C list are accepted as sent; each is its own row below. Delivered in part (the FFX TARGET plate, the stalemate card, the Chapter III Sensor card and Chapter XI's KO weighting are built; the four-scene colour sheet is still owed), so the decision stays in progress.
+  - area ui · both games · adopted · delivery in progress · at ~11:00 EDT
+  - Source: docs/plans/iteration-2-batches.md; docs/plans/pr-0034-method-check.md; and others
+  - <a id="d-249-q5"></a>**D-249/q5** — Q5 (PR-0031, FFX): build the TARGET plate for FFX
+    - What changed: The FFX TARGET plate is built and ON (commits 7a9c0bda, 80d7fa0d); it shipped built OFF so the answer cost one flag, then was turned on.
+  - <a id="d-249-q6"></a>**D-249/q6** — Q6 (PR-0215, FFX rule on a shared screen): the FFX stalemate card reads option B, the WITHDREW caption plus the engine's own line "The battle cannot be won from here."
+    - What changed: Built (commit fd19557b).
+  - <a id="d-249-q7"></a>**D-249/q7** — Q7 (PR-0186, FFX): the Chapter III Sensor card folds while aiming
+    - What changed: Built, reusing the card's folded state (commits 6e73684a, c221781f).
+  - <a id="d-249-q8"></a>**D-249/q8** — Q8 (PR-0128, FFX): keep MISS and HIT on the Swordplay ticks, since no source gives a position-based hit count (the tile notes the labels are unsourced)
+    - What changed: No code: what was built stays.
+  - <a id="d-249-q9"></a>**D-249/q9** — Q9 (PR-0177, FFX, Chapter VIII): keep the Evrae far-range streak as D-032 built it ("a distant streak"), not scaled 1.3x to 1.7x
+    - What changed: No code: the issue is closed as intended.
+  - <a id="d-249-q10"></a>**D-249/q10** — Q10 (PR-0197, FFX, Chapter XII): keep the 2026-09-21 advisor rules (a refused revive, saves-from-lethal first) even though the Omnis advisor wins 25 of 40 against the line's 27; only the disc half is fixed
+    - What changed: Only the disc half of PR-0197 was fixed (commit cf6ea8e6: the advisor sees a disc turn and keeps and ranks a landed hit that takes a spell out of his volley); the other advisor rules stay.
+  - <a id="d-249-q11"></a>**D-249/q11** — Q11 (PR-0034, both): yes to a four-scene (I, III, IV, XI) before and after sheet of today's linear-light output against an sRGB-encoded output, after a method check; no blind pipeline change
+    - What changed: Still owed: the colour-pipeline sheet had not been made, which keeps this decision in progress.
+  - <a id="d-249-q12"></a>**D-249/q12** — Q12 (D-201 follow-up, FFX-2, Chapter XI): weight a knocked-out party member lower in the phone framing, for Chapter XI only, so the approved 60 percent framing elsewhere stays untouched
+    - What changed: Built on 2026-10-03 (commit be8e4bea, release 37 integration branch): a knocked-out girl is weighted lower in src/ui/common/phoneFraming.ts for Chapter XI only.
+- <a id="d-250"></a>**D-250** — Carried items accepted (§8 Q16, except C-3): C-2 Wakka's pause-plate face pass shown 1:1, C-5 repaint Yuna's chip only, FOC18-06 keep the trimmed Chapter XIV pause copy, approve the Wait briefing line, accept D-200's inferred results choices
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: Five carried items from the sheet are accepted (C-3 stays open separately); each is its own row below. Nothing was built by this decision beyond what D-021, D-029 and D-200 already record: the Wait briefing line and D-200's inferred choices move from inferred to his own named picks.
+  - area ui · both games · adopted · delivery not scheduled · at ~11:00 EDT
+  - Source: docs/plans/iteration-2-batches.md; docs/handoff/results-phone-B.md
+  - <a id="d-250-c2"></a>**D-250/c2** — C-2: Wakka's pause-plate face pass, shown to him 1:1 before it ships
+    - What changed: The face pass is made and shown 1:1 first; nothing ships before his look.
+  - <a id="d-250-c5"></a>**D-250/c5** — C-5: repaint Yuna's pause-plate chip only, not the whole plate
+    - What changed: Only the chip is repainted.
+  - <a id="d-250-foc18-06"></a>**D-250/foc18-06** — FOC18-06: keep the trimmed Chapter XIV pause copy
+    - What changed: The trimmed copy stays as built.
+  - <a id="d-250-wait-line"></a>**D-250/wait-line** — Approve the Wait briefing line from D-029's third follow-up ("In hers, the clock holds while you choose")
+    - What changed: The line moves from inferred to his own named pick on its tile.
+  - <a id="d-250-d200-choices"></a>**D-250/d200-choices** — Accept D-200's inferred phone-results choices (the LV chip on an FFX-2 loss, the quip kept, the level-up on the chip, long-caption wrapping)
+    - What changed: Those choices move from inferred to named on the results tile; they stay as built.
+- <a id="d-251"></a>**D-251** — NEW-C1: leave the lone-White-Mage-vs-Bahamut stall as faithful information, no new stalemate rule
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: A lone White Mage that can stall Bahamut forever by healing is recorded as faithful information; no new FFX-2 stalemate rule is added, unless the Steam session finds otherwise. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery not scheduled · at ~11:00 EDT
+  - Source: docs/plans/iteration-2-batches.md
+- <a id="d-252"></a>**D-252** — Start research and concept frames for Sin (FFX) and Ixion at Djose (FFX-2)
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: Sourced research and concept-frame options rounds start for two new subjects, Sin (FFX) and Ixion at Djose (FFX-2), with no encounter built before he picks; this led to the Sin and Ixion decisions D-263 to D-270.
+  - area chapters · both games · adopted · delivery not scheduled · at ~11:00 EDT
+  - Source: AGENTS.md hard rule 6
+- <a id="d-253"></a>**D-253** — Audio (§8 Q1): NOT answered — today's music score, the control/A/B/C pick, the Macalania scene cue and Chapter IX's own cue are all still open
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Nothing changed: the audio item (a number for today's music, the control/A/B/C pick, whether the AI-restyle layers may ship generally, the Macalania scene cue, Chapter IX's own cue) was not answered by his blanket yes and stays open; the music-score part was answered later by D-292.
+  - area audio · both games · proposed · nothing to build · at ~11:00 EDT
+  - Source: docs/plans/iteration-2-batches.md
+- <a id="d-254"></a>**D-254** — Phase lighting (D-224, option A): Bailey will look in Chapter I and say stronger or fine — still open
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: Nothing changed: he has not yet looked at D-224's built phase lighting in Chapter I and said stronger or fine, so that verdict step stays open (D-224 itself stands).
+  - area visuals · both games · proposed · nothing to build
+  - Source: Item 10 of the driver's list records that Bailey has not yet looked at D-224's built phase lighting (the reduced option A: grade, fog, floor glow, a …
+- <a id="d-255"></a>**D-255** — Vegnagun implosion ships after Bailey looks at its frames — still open, frames owed
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: Nothing changed: the Vegnagun implosion in Chapter V is built but withheld until he looks at its frames, which are still owed to him. FFX-2 only.
+  - area visuals · FFX-2 · proposed · nothing to build
+  - Source: Item 11 of the driver's list: the Vegnagun implosion (Chapter V) is built but withheld from shipping until Bailey looks at its frames and gives a …
+- <a id="d-256"></a>**D-256** — Accessibility Q4 and Q7 (OR-13): pictures first — still open
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: Nothing changed: accessibility questions Q4 (the FFX-2 HUD and pause screen at 130 percent) and Q7 (flash softness on the Braska form change) are owed to him as pictures first and are not yet answered.
+  - area ui · both games · proposed · nothing to build
+  - Source: docs/plans/iteration-2-batches.md
+- <a id="d-257"></a>**D-257** — C-3, the Chapter IV pause plate: switch back to the painting on its approved tile
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: The Chapter IV pause picture switches back to the approved painting on its approved tile (built 2026-09-29 on branch r29-plate and proven with a real Esc on a production build at 1600x900 and 390x844). FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented
+  - Source: docs/handoff/r29-plate.md; docs/target/approved-hashes.json; and others
+- <a id="d-258"></a>**D-258** — Steam session part 2: the yes stands (D-205), but the time is still Bailey's to pick
+  - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
+  - What changed: Nothing changed: the Steam session of D-205 stays approved but he has not yet picked its time (a roughly 20-minute session covering the FFX-2 lone-target question, the Bahamut stalemate check, the melee run-in and back, the PR-0180 party half, Yojimbo's Wakizashi and PR-0217).
+  - area process · both games · proposed · nothing to build
+  - Source: docs/plans/iteration-2-batches.md
+- <a id="d-259"></a>**D-259** — FF7 art direction: 3, Film, with the back-edge rim light fixed first (FF7 only)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The FF7 art direction is "3, Film", with the back-edge rim light fixed first; the paintings are generated from written descriptions with no retail FF7 image, model or pose used as input, reference, IP-Adapter or trace. FF7 only.
+  - area art · FF7 (hidden experiment) · adopted · delivery implemented · at ~13:00 EDT
+  - Source: docs/concepts/ff7-hifi-choice-2026-09-27/README.md; docs/concepts/ff7-art-2026-09-27/hifi
+- <a id="d-260"></a>**D-260** — FF7 effects: Spectacle, built on A3 plus (FF7 only)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The FF7 effects are "Spectacle", built on A3 plus: particles, light spilling onto the fighters and a flash frame on impact, with a calm reduced-motion version; every effect is procedural with no retail effect or footage as input. FF7 only.
+  - area visuals · FF7 (hidden experiment) · adopted · delivery implemented · at ~13:00 EDT
+  - Source: docs/concepts/ff7-hifi-choice-2026-09-27/part-2-effects.jpg; docs/concepts/ff7-effects-hifi-2026-09-27
+- <a id="d-261"></a>**D-261** — FF7 menu look: the punchier eye-candy treatment on the D-237 layout (FF7 only)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The FF7 menu look gets the punchier eye-candy treatment on the D-237 layout (heavier letters, a glass sheen, outer and row glows, a lit active row, a blazing gauge, digit glow), made with CSS and SVG on the existing glyphs, no retail font or UI art; nothing in the FFX or FFX-2 chrome changes. FF7 only.
+  - area ui · FF7 (hidden experiment) · adopted · delivery implemented · at ~13:00 EDT
+  - Source: docs/concepts/ff7-eyecandy-quick-2026-09-27; docs/plans/ff7-hud-faithful-a-spec.md
+- <a id="d-262"></a>**D-262** — Party and Guard Scorpion switch sides, not mirrored (FF7 only)
+  - Bailey: “cant you just have the characters and enemy switch sides? not mirrored just literally switch sides”
+  - What changed: In the FF7 fight the party stands on the LEFT facing screen-right and Guard Scorpion on the RIGHT facing screen-left, literally switched and not mirrored; Barret's right gun-arm is the near arm and new paintings face right. Nothing in FFX or FFX-2 staging changes. FF7 only.
+  - area camera · FF7 (hidden experiment) · adopted · delivery implemented
+  - Source: docs/concepts/ff7-eyecandy-quick-2026-09-27/README.md
+- <a id="d-263"></a>**D-263** — Sin: concept A as the end state, reached through B (FFX only)
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Sin follows concept A as the end state (Left Fin, Right Fin and Genais with the Core), reached through B; this adopts the concept and build method only, so the paintings, HUD and engine work still need his sight of each raised-fidelity step; amended the same day by D-270. FFX only.
+  - area art · FFX · adopted · delivery in progress · at ~13:40 EDT
+  - Source: docs/concepts/chapters/sin-2026-09-27/README.md; research/ffx-sin.md
+- <a id="d-264"></a>**D-264** — Sin chapter party: the Garden of Pain preset with Yuna's Tetra Ring back (S-29, our estimate) (FFX only)
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: The Sin chapter's party is the Garden of Pain preset with Yuna's Tetra Ring back (research question S-29, our estimate, i.e. Chapter III's party less the Inside-Sin finds). FFX only.
+  - area combat · FFX · adopted · delivery in progress · at ~13:40 EDT
+  - Source: research/ffx-sin.md
+- <a id="d-265"></a>**D-265** — Ixion at Djose: concept A, The Horn and the Hole (FFX-2 only)
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Ixion at Djose follows concept A, "The Horn and the Hole": one fight in the Chamber of the Fayth with the hole in view throughout and Ixion's fixed loop (two turns of Normal Attack or Thundara at 3/4 to 1/4, our estimate, then Aerospark); built as Chapter XVI, merged to main (merge e60afaff) and listed in release 26. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~13:40 EDT
+  - Source: docs/concepts/chapters/ixion-djose-2026-09-27/README.md; research/ffx2-ixion-djose.md; and others
+- <a id="d-266"></a>**D-266** — Open: Giga-Graviton on Sin's 12th or 13th turn (S-1) — needs a Steam check only Bailey can schedule (FFX only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Nothing changed: whether Giga-Graviton falls on Sin's 12th or 13th turn needs a Steam check that only he can schedule; the default stands as a placeholder on the HUD clock (settled for now by D-280). FFX only.
+  - area data · FFX · proposed · nothing to build
+  - Source: research/ffx-sin.md; docs/concepts/chapters/sin-2026-09-27/README.md
+- <a id="d-267"></a>**D-267** — Superseded: Ixion look B adopted (Q6 resolved) (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: At the time the question of Ixion's FFX-2 look was open between three readings; replaced the same day by D-268.
+  - area art · FFX-2 · superseded by [D-268](#d-268) · nothing to build
+  - Source: research/ffx2-ixion-djose.md; docs/concepts/chapters/ixion-djose-2026-09-27/README.md
+- <a id="d-268"></a>**D-268** — Ixion FFX-2 look: option B, possessed violet (resolves D-267) (FFX-2 only)
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Ixion's FFX-2 look is option B, the possessed violet (violet shadows, inner rim, glowing eyes, a dark aura, derived from the FFX Ixion idle's own pixels), installed as x2-ixion (4 poses) and merged with Chapter XVI after an independent check with 0 blockers. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~15:20 EDT
+  - Source: docs/concepts/chapters/ixion-djose-2026-09-27/look/README.md; docs/handoff/chapter-ixion.md
+- <a id="d-269"></a>**D-269** — Djose Ixion: the 3-second action time ON (FFX-2 only)
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Djose Ixion gets 3 seconds of action time (DJOSE_ACTION_TIME_ON turned on): at a sensible human pace the fight is cleared 191 times in 200, against 48 in 200 at a naive pace; merged with Chapter XVI. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery implemented · at ~15:20 EDT
+  - Source: docs/plans/ixion-bench.md; docs/handoff/chapter-ixion.md
+- <a id="d-270"></a>**D-270** — Sin split into two chapters: concept C, "the Fins and the Core" then "the Face" (amends D-263) (FFX only)
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Sin becomes two chapters (concept C, split where the game saves): Chapter XVII "Sin: the Fins and the Core" (links I to III) and Chapter XVIII "Sin: the Face"; every number is the research's own and the boss is never tuned; still open then: the Giga-Graviton turn (D-266) and Sin's head look. Amends D-263. FFX only.
+  - area chapters · FFX · adopted · delivery in progress · at ~15:20 EDT
+  - Source: docs/concepts/chapters/sin-2026-09-27/README.md; docs/plans/sin-link4-bench.md; and others
+- <a id="d-271"></a>**D-271** — Advisor v3: way smarter, with in-flight awareness of chosen/charging commands (both; in-flight part FFX-2 only)
+  - Bailey: “yes the advisor needs to be WAY WAY smarter please. it also needs to understand that if i select mega potion for example and executed that command then it needs to know that the mega potion is in progress so it shouldn't still tell me to mega potion.”
+  - What changed: Advisor v3 is built, "WAY WAY smarter" for both games' advisors, with in-flight awareness of a command already chosen and still charging or queued (FFX-2 only: FFX's CTB resolves a command at once), so after he selects Mega Potion the advisor no longer recommends it again; its scorecard is 453 of 600 (v2: 443), merged to main (merge e60afaff) and live in release 26. In-flight part FFX-2 only.
+  - area guide · both games · adopted · delivery implemented · at ~18:00 EDT
+  - Source: src/engine/tactics; docs/handoff; and others
+
+### 2026-09-28
+
+Monday · 15 decisions
+
+- <a id="e-077"></a>**E-077** — Push release 26 (advisor v3, Ixion at Djose listed as Chapter XVI, the approved combat switches) live now
+  - Bailey: “full speed ahead, godspeed. advisor v3 needs to be in the very next build. ixion needs to be in the next build as well. sin can wait for now.”
+  - What changed: Release 26 went live on 2026-09-28 at 00:10 EDT (main d89541b6, bundle eoq6aKmL) with advisor v3 (D-271), Ixion at Djose as a listed chapter (D-265, D-268, D-269) and the approved combat switches; the Sin chapters waited and resumed overnight (D-276).
+  - area release · both games · adopted · delivery implemented · at ~00:10 EDT
+  - Source: docs/deploys.log
+- <a id="e-078"></a>**E-078** — Push release 27 live while he sleeps: the hidden FF7 Guard Scorpion high-fidelity fight; then work all night and brief him in the morning
+  - Bailey: “full speed ahead, godspeed”
+  - What changed: Release 27 went live on 2026-09-28 at 05:34 EDT (main be1e964a, bundle 9QdEMZik) with the hidden FF7 fight (D-237 to D-262); releases 28 to 29 followed overnight. His other words that night, "I'm going to sleep now I'm counting on you to work all night and brief me in the morning thank you", are the standing overnight permission recorded as D-239 and D-276.
+  - area release · FF7 (hidden experiment) · adopted · delivery implemented · at ~00:30 EDT
+  - Source: docs/deploys.log
+- <a id="d-272"></a>**D-272** — Advisor v4: a background search that keeps v3 showing until its own pick is ready, FFX first
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Advisor v4 (FFX first) is adopted: a background search that keeps v3's pick showing until its own pick is ready, because the search thinks too long to block the menu; it overrides the guide's pinned pick more often. Not built when recorded.
+  - area guide · FFX · adopted · delivery in progress · at ~07:00 EDT
+  - Source: src/engine/tactics
+- <a id="d-273"></a>**D-273** — Ixion's Chapter XVI scenes: keep Chamber C2 and the repaired Abyss A1, resolving the pending pick
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Ixion's Chapter XVI scenes keep Chamber C2 and the repaired Abyss A1, resolving the pending pick; the plates were locked after verify-approved showed 0 mismatched. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~07:00 EDT
+  - Source: src/data/ixion-plates.ts; docs/concepts/chapters/ixion-djose-2026-09-27/scenes/README.md; and others
+- <a id="d-274"></a>**D-274** — Chapters II and III aeon HP: move to the same sourced Gagazet table as D-243, so aeons don't get weaker later in the story
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Chapters II and III aeon HP move to the same sourced Gagazet table as D-243, so aeons no longer get weaker later in the story; the data wiring was the next work item, to be benched like D-243's arms. FFX only.
+  - area combat · FFX · adopted · delivery implemented · at ~07:00 EDT
+  - Source: research/ffx-combat-core.md; src/data/ffx/builds/gagazet-aeon-arms.ts; and others
+- <a id="d-275"></a>**D-275** — Rikku's and Paine's Songstress dressphere (PR-0228): an options round of 2 to 4 concept paintings, rendered gently, Bailey picks before anything is installed
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: An options round of 2 to 4 concept paintings for Rikku's and Paine's Songstress dressphere (PR-0228) is made, rendered gently, with nothing installed until he picks; amended the same night by D-281. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery in progress · at ~22:00 EDT
+  - Source: Bailey, 2026-09-28 ~22:00 EDT, verbatim "all your recommendations", answering item 2 of the driver's list. Options round only: concept paintings …
+- <a id="d-276"></a>**D-276** — The remaining decided chapters, the two Sin chapters (D-263 / D-264 / D-270), resume the build overnight, UNLISTED until Bailey's picks
+  - Bailey: “please work on implementing all remaining chapters that we decided upon; then: "I'm about to go to sleep, we need to work on that over night and burn the midnight oil! I believe in you, Claude Opus. I love you. Let me know where we're at when I wake up please. Godspeed."”
+  - What changed: The remaining decided chapters, the two Sin chapters (D-263, D-264, D-270), are built overnight but UNLISTED until his picks (head look, wings, the other paintings, the HUD clock, the music by ear, S-1); Chapter VII stays locked. They were listed by morning under D-279. He also said: "I'm about to go to sleep, we need to work on that over night and burn the midnight oil!"
+  - area chapters · FFX · adopted · delivery in progress · at ~22:00 EDT
+  - Source: Bailey, 2026-09-28 ~22:00 EDT. The remaining decided chapters are the two Sin chapters (FFX only, rule 14): D-263 (concept A as the end state, …
+- <a id="d-277"></a>**D-277** — Round 15 fix batch r29 and release 29
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Round 15's fix batch r29 and release 29 go ahead (shared plumbing and bug fixes, both games); release 29 went live on 2026-09-29 at 07:37 EDT (main 49005f73).
+  - area release · both games · adopted · delivery implemented · at ~22:00 EDT
+  - Source: Bailey, 2026-09-28 ~22:00 EDT, verbatim "all your recommendations", answering the driver's list that carried critic round 15's fix batch r29 and …
+- <a id="d-278"></a>**D-278** — Chapter VII (FFX) scene cue: the driver picks the letter A/B/C and the remaster variant R1/R2/R3 once the remaster options exist (resolves D-190)
+  - Bailey: “ok well when you come back with r1, r2, and r3, i'll go with your pick for chapter VII, godspeed.” (blanket yes)
+  - What changed: The Chapter VII scene cue is picked by the driver, disclosed as its pick and not made by ear: the letter among A, B and C and the remaster variant R1, R2 or R3, once the remaster options exist; the cue was wired (src/audio/tracks/scene-macalania-temple.ts, MACALANIA_SCENE_CUE) and seymour-anima-macalania left the locked list, so Chapter VII became playable; real keys at 1600x900 and 390x844. Replaces D-190. FFX only.
+  - area audio · FFX · adopted · delivery implemented · at ~22:45 EDT
+  - Source: src/data/chapter-macalania-ship.ts; src/app/screens/frontend/comingChapters.ts; and others
+- <a id="d-279"></a>**D-279** — The two Sin chapters (XVII "Sin: the Fins and the Core", XVIII "Sin: the Face"): the driver picks Sin's paintings, the countdown (HUD clock) display and the music tonight, and both chapters are LISTED by morning
+  - Bailey: “Your picks (Recommended)” (blanket yes)
+  - What changed: The driver picks Sin's paintings (head look, wings, the other paintings), the countdown (HUD clock) display and the music that night, and both Sin chapters (XVII and XVIII) are LISTED by morning; two chapter-meta tests (the pause plates in the manifest) stayed red. FFX only.
+  - area art · FFX · adopted · delivery implemented · at ~22:45 EDT
+  - Source: docs/audio/audition.html; docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md; and others
+- <a id="d-280"></a>**D-280** — S-1 settled for now: Giga-Graviton on Sin's 13th turn, labelled our estimate, to be corrected after a Steam check
+  - Bailey: “Turn 13 for now (Recommended)” (blanket yes)
+  - What changed: Giga-Graviton ships on Sin's 13th turn, labelled our estimate on the chapter's HUD clock, to be corrected after a Steam check that only he can schedule; the number is neither tuned nor called sourced. FFX only.
+  - area data · FFX · adopted · delivery in progress · at ~22:45 EDT
+  - Source: research/ffx-sin.md; docs/concepts/chapters/sin-2026-09-27/README.md
+- <a id="d-281"></a>**D-281** — Rikku's and Paine's Songstress dressphere (PR-0228, D-275): the driver picks the best option tonight and installs it in the next build; the other options stay saved
+  - Bailey: “Your pick (Recommended)” (blanket yes)
+  - What changed: The driver picks the best Songstress option for Rikku and Paine that night and installs it in the next build, disclosed as the driver's pick; the other options stay saved so he can swap them (amends D-275's "nothing installed until Bailey picks"). FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~22:45 EDT
+  - Source: Bailey, 2026-09-28 ~22:45 EDT, choosing "Your pick (Recommended)" for the driver's question: "Rikku's and Paine's Songstress paintings ...: may I go …
+- **Picture** (audio) — Approved: Score and sound effects
+  - Bailey: “I'm not sure, they all sound pretty good and less snes music BUT they sound kind of tinny and hollow? Why? It almost sounds good. It's close to good. That goes for all 3 samples, a, b, and c.”
+  - Note: Approved as the direction: the themes and the sampled-orchestra palette stay. Bailey’s verdict by ear on 19 Sep 2026 was “Right direction, keep refining” (docs/audio/OWNER-VERDICT.md), so refinement continues. No score out of 10 is on record, so the critic’s audio category stays unverified for listening quality. Listen at docs/audio/audition.html.
+  - area visuals · both games · adopted · nothing to build · see [D-278](#d-278)
+  - Source: docs/target/targets.json, group audio, tile "Score and sound effects"
+- **Picture** (chapters) — Approved: Sin: the Fins and the Core, Chapter XVII (FFX)
+  - Bailey: “Your picks (Recommended)” (blanket yes)
+  - Note: Listed 2026-09-29 on branch chapter-sin (package L; not merged, not deployed). Links I to III on one party state (D-270), the Garden of Pain preset with the Tetra Ring (D-264). The art is staged, not installed: until the release-29 gate opens every picked key falls back (Evrae's deck painting, the grey silhouette). Frames: docs/screenshots/sin/listed/.
+  - area chapters · FFX · adopted · delivery implemented · see [D-270](#d-270), [D-264](#d-264), [D-279](#d-279), [D-280](#d-280)
+  - Source: docs/target/targets.json, group chapters, tile "Sin: the Fins and the Core, Chapter XVII (FFX)"
+- **Picture** (chapters) — Approved: Sin: the Face, Chapter XVIII (FFX)
+  - Bailey: “Your picks (Recommended)” (blanket yes)
+  - Note: Listed 2026-09-29 on branch chapter-sin (package L; not merged, not deployed). Link IV, Overdrive Sin; Giga-Graviton on turn 13, our estimate (D-280, the Steam check D-266 still open). The art is staged, not installed (see Chapter XVII's tile). Frames: docs/screenshots/sin/listed/.
+  - area chapters · FFX · adopted · delivery implemented · see [D-280](#d-280), [D-266](#d-266), [D-279](#d-279)
+  - Source: docs/target/targets.json, group chapters, tile "Sin: the Face, Chapter XVIII (FFX)"
+
+### 2026-09-29
+
+Tuesday · 22 decisions
+
+- <a id="e-079"></a>**E-079** — Take the first outside playtest seriously: fix the defects (Hi-Potion killed Kimahri in Chapter I, no attack sound effects, the items scrollbar, the Sphere Grid feeling buggy) and show options for the taste items (music quality, pacing and camera speed, a clearer first run, status display)
+  - Bailey: “I concur with everything said so take it very seriously!”
+  - What changed: Defects were fixed and options rounds produced his picks of 2026-09-29 and 2026-09-30: status display O3 (D-288), guided first run O2 (D-289), Sphere Grid explainer and auto-learn (D-290), the calm camera (D-291), music O1 (D-292), attack sounds +6 dB (D-293), steady pacing (D-294), the new sound set (D-303). He added that status effects should read as clearly as in the originals ("I like how status effects are displayed in the games. That should be examples.").
+  - area ui · both games · adopted · delivery implemented · at ~19:00 EDT
+  - Source: docs/handoff/fb-0929-music.md; docs/handoff/fb2-0929-camera.md
+- <a id="d-282"></a>**D-282** — Sin's difficulty, disclosed at listing: Chapter XVII's chain 25.5 % first try on the sensible line (3 % on the advisor card), Chapter XVIII 31 % on turn 13; the link-3 checkpoint is built OFF and is Bailey's call (FFX only)
+  - Bailey: no verbatim quote on record for this decision
+  - area combat · FFX · proposed · nothing to build
+  - Source: docs/plans/sin-fins-core-bench.md; docs/plans/sin-link4-bench.md; and others
+- <a id="d-283"></a>**D-283** — The whole soundtrack is the Direction B cues in remaster R1
+  - Bailey: “all your recommendations, full speed ahead. i still have full weekly usage on my other account so do not delay please.” (blanket yes)
+  - What changed: The whole soundtrack is the Direction B cues in remaster R1 (the "focus" preset of tools/audio/remaster.py), which resolves the remaster question; his numeric listening score (CHK-B1) is still owed since agents cannot hear. He also said he still had full weekly usage on his other account, so there was no reason to delay. Both games.
+  - area audio · both games · adopted · delivery implemented · at ~10:30 EDT
+  - Source: docs/audio/remaster-2026-09-29; tools/audio/remaster.py
+- <a id="d-284"></a>**D-284** — Sin link-3 checkpoint ON (SIN_LINK3_CHECKPOINT)
+  - Bailey: “all your recommendations, full speed ahead. i still have full weekly usage on my other account so do not delay please.” (blanket yes)
+  - What changed: The Sin link-3 checkpoint is switched on (SIN_LINK3_CHECKPOINT now ships true, pinned by tests/unit/chapters/sin-checkpoint-flow.test.ts): a loss at link 3 retries at link 3 and a loss at link 1 or 2 retries from the Left Fin; handled in the release 31 merge and resolves the question in D-282. FFX only.
+  - area combat · FFX · adopted · delivery implemented · at ~10:30 EDT
+  - Source: tests/unit/chapters/sin-checkpoint-flow.test.ts
+- <a id="d-285"></a>**D-285** — OPTIONS accessibility A2: Reduce motion + Low effects + Text size 100/115/130 percent (PR-0032)
+  - Bailey: “all your recommendations, full speed ahead. i still have full weekly usage on my other account so do not delay please.” (blanket yes)
+  - What changed: The pause OPTIONS screen gains accessibility option A2: Reduce motion, Low effects and Text size 100, 115 or 130 percent (PR-0032), built exactly as mocked. Both games.
+  - area ui · both games · adopted · delivery implemented · at ~10:30 EDT
+  - Source: docs/concepts/r29-options/options.html
+- <a id="d-286"></a>**D-286** — Phone command-list page buttons B1: real 44 px page buttons in the command-list header with an "N-M OF T" counter (PR-0218)
+  - Bailey: “all your recommendations, full speed ahead. i still have full weekly usage on my other account so do not delay please.” (blanket yes)
+  - What changed: On a phone the FFX command list gets real 44 px page buttons in its header with an "N-M OF T" counter (option B1, PR-0218), built exactly as mocked. FFX only.
+  - area ui · FFX · adopted · delivery implemented · at ~10:30 EDT
+  - Source: docs/concepts/r29-options/options.html
+- <a id="d-287"></a>**D-287** — Eye candy: option D, Golden-Hour Cinema + Living Paintings + Spectacle Combat together (with B's figure sway, C's hit-stop, C's Overdrive/Special splash cut-in and Aerospark's lightning lance D-233), after the judge's must-fix list
+  - Bailey: “I'll go with all of your recommendations please” (blanket yes)
+  - What changed: Eye candy option D is built: Golden-Hour Cinema, Living Paintings and Spectacle Combat together, with B's figure sway, C's hit-stop, C's Overdrive and Special splash cut-in and Aerospark's lightning lance, after the judge's must-fix list was fixed (he never read that list); each look then got its own switch (D-297). Both games.
+  - area visuals · both games · adopted · delivery implemented · at ~21:00 EDT
+  - Source: docs/concepts/eye-candy-2026-09-29
+- <a id="d-288"></a>**D-288** — Status display O3 "Originals + guard rails" for both games
+  - Bailey: “I'll go with all of your recommendations please” (blanket yes)
+  - What changed: The status display is option O3, "Originals + guard rails", for both games: statuses are shown as the originals show them plus guard rails. The Zombie item-on-a-Zombie warning is the driver's reading and the Zombie guard and word switches were not part of the pick and are not built.
+  - area ui · both games · adopted · delivery implemented · at ~21:00 EDT
+  - Source: docs/concepts/status-display-0929; research/status-display.md
+- <a id="d-289"></a>**D-289** — First run O2 "Guided first run": Auron's three-step pointer
+  - Bailey: “I'll go with all of your recommendations please” (blanket yes)
+  - What changed: A guided first run, "Auron's three-step pointer" (board, prep, battle), sits on top of the shipped Auron's briefing instead of replacing it; merged into main from fb2-0929-onboard. Both games.
+  - area guide · both games · adopted · delivery implemented · at ~21:00 EDT
+  - Source: docs/concepts/fb2-0929/onboard
+- <a id="d-290"></a>**D-290** — Sphere Grid: A first-time explainer card + C auto-learn with undo
+  - Bailey: “I'll go with all of your recommendations please” (blanket yes)
+  - What changed: The Sphere Grid gets option A, a first-time explainer card, and option C, auto-learn with undo, together; option B (the phone page) was left out then and taken up by D-295. FFX only.
+  - area ui · FFX · adopted · delivery implemented · at ~21:00 EDT
+  - Source: docs/concepts/fb-0929/sphere
+- <a id="d-291"></a>**D-291** — Battle camera: the 'calm' preset becomes the default for everyone
+  - Bailey: “I'll go with all of your recommendations please” (blanket yes)
+  - What changed: The "calm" battle-camera preset becomes the default for everyone (not a settings row), measured in Chapter I (FFX) and Chapter IV (FFX-2); merged from fb2-0929-camera. Both games.
+  - area camera · both games · adopted · delivery implemented · at ~21:00 EDT
+  - Source: docs/concepts/fb2-0929/camera
+- <a id="d-292"></a>**D-292** — Music: O1 for the whole score (the same R1 music re-encoded at high MP3 quality, V0), and test a newer AI music model before deciding O2/O3
+  - Bailey: “yes, all your recommendations” (blanket yes)
+  - What changed: The music is option O1 for the whole score: the same R1 music re-encoded at high MP3 quality (V0), growing the music from about 39 MB to about 73 MB, and a newer AI music model is tested before O2 or O3 is decided; no verdict is claimed since agents cannot hear. It answers the score part of D-253.
+  - area audio · both games · adopted · delivery implemented · at ~23:00 EDT · answers D-253 (today's music score, the control/A/B/C pick)
+  - Source: docs/concepts/fb-0929
+- <a id="d-293"></a>**D-293** — Attack sounds: SFX balance b (effects +6 dB against the D-210 default) becomes the default
+  - Bailey: “yes, all your recommendations” (blanket yes)
+  - What changed: Attack sounds get SFX balance b (effects +6 dB against D-210's default) as the default for new profiles, and a volume the player moved keeps its value; it touches the stored volume field, so it is save-data class and needs a deep review before the deploy that ships it. Refines D-210. Both games.
+  - area audio · both games · adopted · delivery implemented · at ~23:00 EDT · refines [D-210](#d-210)
+  - Source: docs/concepts/fb-0929; AGENTS.md
+- <a id="d-294"></a>**D-294** — Pacing: 'steady' becomes the default (FFX actions x1.2, numbers x1.3; FFX-2 x1.1 and x1.25)
+  - Bailey: “yes, all your recommendations” (blanket yes)
+  - What changed: Pacing: "steady" becomes the default (FFX actions x1.2 and numbers x1.3; FFX-2 x1.1 and x1.25); a URL switch and the console __pyrefly.pace() still override it. It answers the friend playtest note that the pacing was too fast. Both games, each with its own factors.
+  - area ui · both games · adopted · delivery implemented · at ~23:00 EDT
+  - Source: docs/concepts/fb-0929/pacing/README.md; docs/concepts/fb-0929
+- <a id="d-295"></a>**D-295** — Sphere Grid B (bigger grid, legend in words, node preview and path, a real phone page), built later on top of sphere-ac
+  - Bailey: “yes, all your recommendations” (blanket yes)
+  - What changed: Sphere Grid B (a bigger grid, the legend in words, a node preview and path, and a real phone page) is adopted, built later on top of A and C (D-290), reversing D-290's note that the phone page was left out. FFX only.
+  - area ui · FFX · adopted · delivery implemented · at ~23:00 EDT · built after [D-290](#d-290)
+  - Source: docs/concepts/fb-0929/sphere
+- <a id="d-296"></a>**D-296** — New paintings for the Sleep hunch and the low-HP slouch/kneel poses, painted after the eye-candy work
+  - Bailey: “yes, all your recommendations” (blanket yes)
+  - What changed: New paintings are made for the Sleep hunch and the low-HP slouch or kneel poses of the FFX and FFX-2 casts, painted after the eye-candy work; the picks are D-298, Kimahri was held (D-299), and installing into public/art waited until release 33 was live.
+  - area art · both games · adopted · delivery implemented · at ~23:00 EDT
+  - Source: docs/concepts/fb-0929
+- <a id="d-297"></a>**D-297** — Eye candy D: each of its three looks gets its own settings switch, default on
+  - Bailey: “Ok yes I picked D so all 3 together however in the settings I want to be able to turn each one off. Default will be on. Please.”
+  - What changed: Each of the three eye-candy D looks gets its own settings switch (CINEMA LIGHT, LIVING PAINTINGS, BATTLE SPECTACLE), default on (commit 2048cdac); the switches later moved to one EYE CANDY page (D-317). Both games.
+  - area visuals · both games · adopted · delivery implemented · at ~23:45 EDT · built after [D-287](#d-287)
+  - Source: Bailey, 2026-09-29 ~23:45 EDT, verbatim in words. Builds on D-287 (option D, all three looks together). Both games (rule 14): shared presentation …
+- **Picture** (picks-0929) — Approved: Eye candy: option D (A + B + C together)
+  - Bailey: “I'll go with all of your recommendations please” (blanket yes)
+  - Delivery: Adopted as D-287 in docs/target/decisions.json; not built yet.
+  - area visuals · both games · adopted · delivery in progress · see [D-233](#d-233), [D-287](#d-287)
+  - Source: docs/target/targets.json, group picks-0929, tile "Eye candy: option D (A + B + C together)"
+- **Picture** (picks-0929) — Approved: Status display O3: Originals + guard rails
+  - Bailey: “I'll go with all of your recommendations please” (blanket yes)
+  - Delivery: Adopted as D-288 in docs/target/decisions.json; not built yet.
+  - area ui · both games · adopted · delivery in progress · see [D-288](#d-288)
+  - Source: docs/target/targets.json, group picks-0929, tile "Status display O3: Originals + guard rails"
+- **Picture** (picks-0929) — Approved: First run O2: Guided first run (Auron's three steps)
+  - Bailey: “I'll go with all of your recommendations please” (blanket yes)
+  - Delivery: Adopted as D-289 in docs/target/decisions.json; not built yet.
+  - area ui · both games · adopted · delivery in progress · see [D-289](#d-289)
+  - Source: docs/target/targets.json, group picks-0929, tile "First run O2: Guided first run (Auron's three steps)"
+- **Picture** (picks-0929) — Approved: Sphere Grid: explainer card + auto-learn with undo
+  - Bailey: “I'll go with all of your recommendations please” (blanket yes)
+  - Delivery: Adopted as D-290 in docs/target/decisions.json; not built yet.
+  - area ui · FFX · adopted · delivery in progress · see [D-290](#d-290)
+  - Source: docs/target/targets.json, group picks-0929, tile "Sphere Grid: explainer card + auto-learn with undo"
+- **Picture** (picks-0929) — Approved: Battle camera: calm preset as the default
+  - Bailey: “I'll go with all of your recommendations please” (blanket yes)
+  - Delivery: Adopted as D-291 in docs/target/decisions.json; not built yet.
+  - area camera · both games · adopted · delivery in progress · see [D-291](#d-291)
+  - Source: docs/target/targets.json, group picks-0929, tile "Battle camera: calm preset as the default"
+
+### 2026-09-30
+
+Wednesday · 25 decisions
+
+- <a id="e-080"></a>**E-080** — Make the music and sound effects better, downloading whatever is needed onto D:; nothing ships until he picks by ear
+  - Bailey: “just make the music and sound effects better you can download whatever you want and need, on the D: drive for that. it still sounds AWFUL.”
+  - What changed: An audio overhaul ran: an automated "ear" (an audio-quality model, calibrated), a premium sampled orchestra and band route, a better AI route, and a new layered sound-effect set with battle reels, then one listening page. He picked per game on 2026-09-30 (D-302: sampled orchestra for every FFX cue, an AI restyle for every FFX-2 cue) and the new effects (D-303).
+  - area audio · both games · adopted · delivery implemented · at ~09:50 EDT
+  - Source: docs/handoff/fb-0929-music.md; docs/handoff/fb-0929-sfx.md; and others
+- <a id="d-298"></a>**D-298** — Approved art picks from the overnight run: Bahamut Mega Flare cut-in, Paine Songstress attack and hurt, and Sleep plus Low-HP paintings for the FFX and FFX-2 casts
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The agents' recommended candidates from the overnight art run are approved as a set (each is its own row below): Bahamut's Mega Flare cut-in, Paine Songstress attack and hurt, and Sleep and Low-HP paintings for the FFX and FFX-2 casts. Status then: adopted, not installed; nothing goes under public/art or approved-hashes.json until the driver says release 33 is live.
+  - area art · both games · adopted · delivery implemented · at ~09:40 EDT · answers [D-296](#d-296) · built after [D-296](#d-296)
+  - Source: Bailey, 2026-09-30 ~09:40 EDT, answering the morning art page https://claude.ai/artifact/T1dFHRNCsShJjmCPh7wPpm and the brief with: "all your …
+  - <a id="d-298-bahamut-splash"></a>**D-298/bahamut-splash** — Bahamut's Mega Flare cut-in (Chapter IV): splash B10-flare-55-core
+    - What changed: The candidate is approved for the Chapter IV cut-in; install waited for release 33. FFX-2 only.
+    - FFX-2
+  - <a id="d-298-songstress-attack"></a>**D-298/songstress-attack** — Paine Songstress attack: A1-attack-19
+    - What changed: Approved as the attack painting for the FFX-2 Songstress dressphere. FFX-2 only.
+    - FFX-2
+  - <a id="d-298-songstress-hurt"></a>**D-298/songstress-hurt** — Paine Songstress hurt: H1-hurt-121
+    - What changed: Approved as the hurt painting. FFX-2 only.
+    - FFX-2
+  - <a id="d-298-ffx-sleep-lowhp"></a>**D-298/ffx-sleep-lowhp** — Sleep and Low-HP paintings for the FFX cast: Yuna (sleep 56, critical 3), Auron (sleep 20 with the floor patch under the boots removed, or 45 if it cannot be removed cleanly; critical 4), Wakka (45, 6), Lulu (62, 42), Rikku (12, 10) and the Tidus pilot (3, 3)
+    - What changed: Each character gets a resting hunch and a low-HP slouch painting once installed. FFX only.
+    - FFX
+  - <a id="d-298-ffx2-sleep-lowhp"></a>**D-298/ffx2-sleep-lowhp** — Sleep and Low-HP paintings for the FFX-2 cast: Yuna Gunner (sleep 31, critical 6), Paine Warrior (36, 16) and the Rikku Thief pilot (3, 1)
+    - What changed: Each of the three gets the same pair once installed. FFX-2 only.
+    - FFX-2
+  - <a id="d-298-left-as-built"></a>**D-298/left-as-built** — Items with no recommendation stay as built: the advisor card wording on the Sin race, the N and G chip overlap at 100 percent text size, and every builder default recorded in the release 33 handoffs
+    - What changed: Nothing changed for them: they were not recommendations, so the blanket yes left them as built.
+- <a id="d-299"></a>**D-299** — Kimahri Sleep and Low-HP paintings held for a method check
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Kimahri's Sleep and Low-HP paintings are held out of the set for a method check because the pilot flagged identity drift; Seymour's kneel and KO paintings are rendered as candidates only, for a later pick; nothing is installed or built from them. Answered by D-301's changed method.
+  - area art · FFX · deferred · nothing to build · at ~09:40 EDT
+  - Source: Bailey, 2026-09-30 ~09:40 EDT, answering the morning art page https://claude.ai/artifact/T1dFHRNCsShJjmCPh7wPpm and the brief with: "all your …
+- <a id="d-300"></a>**D-300** — Music at 78 MB accepted
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The music bundle's size, about 78 MB, is accepted as the price of D-292's V0 re-encode; nothing to build. Both games.
+  - area audio · both games · adopted · delivery implemented · at ~09:40 EDT · answers [D-292](#d-292)
+  - Source: Bailey, 2026-09-30 ~09:40 EDT, answering the morning art page https://claude.ai/artifact/T1dFHRNCsShJjmCPh7wPpm and the brief with: "all your …
+- <a id="d-301"></a>**D-301** — Approved the day art set: Seymour at Macalania kneel and fall, Isaaru kneel, Shuyin kneel, and Kimahri Sleep and Low-HP by the changed method
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The day art set is approved (each is its own row below) and staged in D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/ (set bailey:2026-09-30-poses), with the code on branch poses-day; the install waited until the driver said release 33 was live.
+  - area art · both games · adopted · delivery implemented · at ~13:00 EDT · answers [D-299](#d-299)
+  - Source: Bailey, 2026-09-30 ~13:00 EDT, answering the day art page https://claude.ai/artifact/JqXgAx8rXaHdLWxES73Fmt with: "all your recommendations, …
+  - <a id="d-301-seymour-kneel"></a>**D-301/seymour-kneel** — Seymour at Macalania, kneel (cand-6), for the Chapter VII post scene
+    - What changed: Approved for the post scene; install waited for release 33. FFX only.
+    - FFX
+  - <a id="d-301-seymour-fall"></a>**D-301/seymour-fall** — Seymour at Macalania, fall and KO (cand-5), his KO slot
+    - What changed: Approved, then re-rendered wider so no edge cuts the robe or hair (D-304). FFX only.
+    - FFX
+  - <a id="d-301-isaaru-kneel"></a>**D-301/isaaru-kneel** — Isaaru, kneel (cand-9), for the Chapter XIV post scene
+    - What changed: Approved for the post scene. FFX only.
+    - FFX
+  - <a id="d-301-shuyin-kneel"></a>**D-301/shuyin-kneel** — Shuyin, kneel (cand-7), for the Chapter V post scene
+    - What changed: Approved for the post scene. FFX-2 only.
+    - FFX-2
+  - <a id="d-301-kimahri-sleep-lowhp"></a>**D-301/kimahri-sleep-lowhp** — Kimahri Sleep (cand-6) and Low-HP (cand-4), by the changed method (img2img from a warp of his own idle)
+    - What changed: The changed method is accepted, which answers the D-299 hold; they fill the rest-pose slots of the FFX thresholds. FFX only.
+    - FFX
+- <a id="d-302"></a>**D-302** — Music route per game: S (sampled orchestra) for every FFX cue, N2 (ACE-Step 1.5 at denoise ~0.30 over the S render) for every FFX-2 cue
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Music route per game: the sampled orchestra (S) for every FFX cue, and ACE-Step 1.5 at a denoise of about 0.30 over the S render (N2) for every FFX-2 cue; he chose on the agents' recommendation without having listened, so everything stays reversible by his ear after it ships (old files are recoverable). Licences are CC0, PD, MIT, Apache, BSD or CC-BY with credits in docs/audio/CREDITS.md; no retail audio; it ships after release 34 and agents screen only by measurement. Both games.
+  - area audio · both games · adopted · delivery in progress · at ~14:25 EDT · refines [D-292](#d-292) · replaces Direction B + R1 music pick
+  - Source: docs/audio/THEMES.md; docs/audio/CREDITS.md; and others
+- <a id="d-303"></a>**D-303** — SFX: the new 98-sound recorded, layered set with the full hookup, not the drop-in
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Sound effects: the new 98-sound recorded, layered set with the full hookup, not the drop-in; he chose without having listened and can veto by ear after it ships; licences as D-302, no retail audio, credits in docs/audio/CREDITS.md; it ships after release 34. Both games.
+  - area audio · both games · adopted · delivery in progress · at ~14:25 EDT
+  - Source: docs/audio/CREDITS.md; tools/orphans.mjs
+- <a id="d-304"></a>**D-304** — Seymour's Macalania fall painting (ko cand-5) re-rendered wider so no edge cuts the robe or hair
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Seymour's Macalania fall painting (ko cand-5) is re-rendered wider so no canvas edge cuts the robe or the hair; nothing goes under public/art or approved-hashes.json until release 33 is live and release 34 ships. FFX only.
+  - area art · FFX · adopted · delivery in progress · at ~14:25 EDT · refines [D-301](#d-301)
+  - Source: Bailey, 2026-09-30 ~14:25 EDT, answering the driver's audio recommendations (listening page https://claude.ai/artifact/UK57TAWkzgi2xuvymz5Uqw) with: …
+- <a id="d-305"></a>**D-305** — Credits screen: option O1, a CREDITS row under an ABOUT heading in the pause OPTIONS tab that opens a scrolling credits panel
+  - Bailey: “I'll go with all of your recommendations please keep going” (blanket yes)
+  - What changed: Credits are option O1: a CREDITS row under an ABOUT heading in the pause OPTIONS tab opens a scrolling credits panel (the list compiled in docs/concepts/credits-2026-09-30/credits.md, REQUIRED lines first, including Sonatina Symphonic Orchestra under CC Sampling Plus 1.0); option O2 (a title-screen link and credits page) was not chosen. Not built when recorded. Both games.
+  - area ui · both games · adopted · delivery in progress · at ~18:30 EDT
+  - Source: docs/concepts/credits-2026-09-30/credits.md
+- <a id="d-306"></a>**D-306** — Shipped-audio budget raised from 85 MB to 90 MB so the new SFX sprite (sprite-v2) ships at V0, the same encode quality as the music
+  - Bailey: “I'll go with all of your recommendations please keep going” (blanket yes)
+  - What changed: The shipped-audio budget is raised from 85 MB to 90 MB so the new sound-effect sprite (sprite-v2) ships at V0, the same encode quality as the music; the per-sprite size limit is raised only as far as V0 needs. Amends D-302. Both games.
+  - area audio · both games · adopted · delivery in progress · at ~18:30 EDT · refines [D-302](#d-302)
+  - Source: Bailey, 2026-09-30 ~18:30 EDT, answering the driver's two recommendations (credits option O1, audio budget 90 MB) with: "I'll go with all of your …
+- <a id="d-307"></a>**D-307** — OPEN: the battle-ffx and boss-vegnagun cues screen lower on the automated ear than the files they replace; does Bailey keep them by ear?
+  - Bailey: no verbatim quote on record for this decision
+  - area audio · both games · proposed · nothing to build
+  - Source: docs/handoff/music-v2.md; docs/plans/music-v2-review.md; and others
+- <a id="d-308"></a>**D-308** — OPEN: do FFX human bosses (Seymour, Yunalesca) roar with the big-cat boss-roar, or get a different sound?
+  - Bailey: no verbatim quote on record for this decision
+  - area audio · FFX · proposed · nothing to build
+  - Source: docs/handoff/sfx-v2.md
+- <a id="d-309"></a>**D-309** — OPEN: when an Overdrive or Special lands, do the stinger and the attack swing overlap or take turns?
+  - Bailey: no verbatim quote on record for this decision
+  - area audio · both games · proposed · nothing to build
+  - Source: docs/handoff/sfx-v2.md
+- **Picture** (picks-0930) — Approved: Credits: a CREDITS row under ABOUT in the pause OPTIONS tab opens a scrolling panel (option O1)
+  - Bailey: “I'll go with all of your recommendations please keep going” (blanket yes)
+  - Delivery: Adopted as D-305 in docs/target/decisions.json; not built yet.
+  - area ui · both games · adopted · delivery in progress · see [D-305](#d-305)
+  - Source: docs/target/targets.json, group picks-0930, tile "Credits: a CREDITS row under ABOUT in the pause OPTIONS tab opens a scrolling panel (option O1)"
+
+### 2026-10-01
+
+Thursday · 15 decisions
+
+- <a id="d-310"></a>**D-310** — Banishing Blade uses its Immune row only when the target is immune to all four of its Breaks; otherwise the success row applies and the Breaks the target is not immune to still land
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: Banishing Blade uses its Immune row only when the target is immune to all four of its Breaks; otherwise the success row applies and the Breaks the target is not immune to still land (GameFAQs is split here but the board version agrees with every other source). The other open Overdrive questions (HD button orders, Tornado's rank, Blitz Ace's hit count) stay open. FFX only.
+  - area combat · FFX · adopted · delivery in progress · at ~00:40 EDT
+  - Source: research/ffx-overdrive-input-rules-2026-09-30.md
+- <a id="d-311"></a>**D-311** — Immunity to an Overdrive's rider is decided per target, which matters for multi-target Dragon Fang
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: Immunity to an Overdrive's rider is decided once per target, not once per use, which matters for the multi-target Dragon Fang. FFX only.
+  - area combat · FFX · adopted · delivery in progress · at ~00:40 EDT
+  - Source: research/ffx-overdrive-input-rules-2026-09-30.md
+- <a id="d-312"></a>**D-312** — Tornado's input timer is 3 s (GameFAQs KeyBlade999 and two other guides) instead of 4 s
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: Tornado's input timer is 3 s (GameFAQs KeyBlade999 and two other guides) instead of 4 s; where sources are split or silent this is our estimate. FFX only.
+  - area combat · FFX · adopted · delivery in progress · at ~00:40 EDT
+  - Source: research/ffx-overdrive-input-rules-2026-09-30.md
+- <a id="d-313"></a>**D-313** — Party animation pose keys from the overnight run: the agents' recommended wind-up, impact / follow-through, cast, item and victory candidates for the FFX party and the FFX-2 dresspheres (25 sets)
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: The agents' recommended pose-key candidates for the party (wind-up, impact or follow-through, cast, item and victory for the FFX party and the FFX-2 dresspheres, 25 sets) are adopted but not installed: installing needs a presenter change because nobody had a ready painting for the "ready" slot at action start, and the usage mode was protect (weekly 65 percent at 2026-10-01 14:16).
+  - area art · both games · adopted · delivery not scheduled · at ~14:10 EDT
+  - Source: Bailey, 2026-10-01 ~14:10 EDT, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir (whose answer block lists the …
+- <a id="d-314"></a>**D-314** — Boss pose keys from the overnight run: the agents' recommended hurt, KO and attack candidates for 11 boss sets (Seymour Natus and Omnis, Shiva and x2-Shiva, Ixion and x2-Ixion, x2-Anima, Isaaru's aeons, Paragon, FFX-2 Bahamut attack, Mortibody, Vegnagun parts, Shuyin)
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: The agents' recommended hurt, KO and attack candidates for 11 boss sets (Seymour Natus and Omnis, Shiva and x2-Shiva, Ixion and x2-Ixion, x2-Anima, Isaaru's aeons, Paragon, FFX-2 Bahamut's attack, Mortibody, Vegnagun's parts, Shuyin) are adopted but not installed yet (usage mode protect); the install followed under D-325 to D-328.
+  - area art · both games · adopted · delivery not scheduled · at ~14:10 EDT
+  - Source: Bailey, 2026-10-01 ~14:10 EDT, answering the overnight art page https://claude.ai/artifact/MYND2UKD9WsToA3K3rwFir (whose answer block lists the …
+- <a id="d-315"></a>**D-315** — Fidelity 2x: the agents' recommended twice-resolution re-paint of the idle painting for 52 battle figures (the eight lowest-density first), same likeness, pose, palette and alpha
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: A twice-resolution re-paint of the idle painting is adopted for 52 battle figures, the eight lowest-density first, keeping likeness, pose, palette and alpha; in progress. Two masters (Rikku Dark Knight and x2-Anima, about +10.3 MB) were over the size line and Kimahri's had to be re-made from the single-horn idle of D-324 (docs/handoff/art-install-2026-10-04.md).
+  - area art · both games · adopted · delivery in progress · at ~14:10 EDT
+  - Source: docs/handoff/art-install-2026-10-04.md
+- <a id="d-316"></a>**D-316** — MAX visuals: the recommended mix of the 2026-10-01 options round is adopted: C's colossus masters, depth of field and fog, defringe and the held Overdrive and spherechange shots; B's no-render parts (splash-art crops, the Overdrive hero shot, the spherechange keys that remove the white column); A's KO collapse and breathing once its hit blackout is proven fixed; B's painted key sets later, in rounds Bailey approves; not D
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The recommended MAX visuals mix is adopted (each part is its own row below), with the gates before any of it is built into the game: the 0.43 s FFX hit blackout bisected and proven gone, the Chapter I, Ixion, Evrae and Vegnagun masters re-staged so the whole party and every boss part stay in view and clear of the HUD while a menu is open, and FFX-2 cuts never firing while a girl's menu is open; each new look has its own settings switch (D-297, D-317), which makes the build save-data class with a deep review before it goes live.
+  - area visuals · both games · adopted · delivery not scheduled · at ~21:00 EDT
+  - Source: docs/concepts/eye-candy-max-2026-10-01/OPTIONS.md
+  - <a id="d-316-colossus"></a>**D-316/colossus** — C's colossus masters: the big close framing of the boss for chosen chapters (Chapter I, Ixion, Evrae, Vegnagun re-staged so the whole party and every boss part stay in view and clear of the HUD while a menu is open)
+    - What changed: Adopted with that staging gate; the framing of Natus and FFX-2 Bahamut followed in D-319.
+  - <a id="d-316-dof-fog"></a>**D-316/dof-fog** — Depth of field and fog
+    - What changed: Depth of field and fog have their own switches under CINEMA LIGHT on the EYE CANDY page (D-317).
+  - <a id="d-316-defringe"></a>**D-316/defringe** — Defringe: cleaning the light fringe around cut-out paintings
+    - What changed: Adopted as part of the mix; the new looks get their own switches on the EYE CANDY page (D-317).
+  - <a id="d-316-held-shots"></a>**D-316/held-shots** — The held Overdrive shot (FFX holds the master and cuts on meaningful beats, with a hero shot for the Overdrive input) and the held spherechange shot (FFX-2: a wider view of its own, a held close shot on a spherechange, never cutting while a girl's menu is open, motion at 0.8 times inside today's action length)
+    - What changed: Adopted as the per-game camera grammar of the MAX mix (the over-the-shoulder command grammar is a separate test, D-318).
+  - <a id="d-316-b-no-render"></a>**D-316/b-no-render** — B's no-render parts: splash-art crops, the Overdrive hero shot and the spherechange keys that remove the white column
+    - What changed: The spherechange keys landed as D-322 and the other parts as presentation changes.
+  - <a id="d-316-ko-breathing"></a>**D-316/ko-breathing** — A's KO collapse and breathing, once its 0.43 s FFX hit blackout is bisected and proven gone
+    - What changed: Adopted behind that proof.
+  - <a id="d-316-painted-sets"></a>**D-316/painted-sets** — B's painted key sets later, in rounds he approves
+    - What changed: The later art rounds went to him as the morning asks of 2026-10-02 and 2026-10-03 (D-320 to D-349).
+  - <a id="d-316-not-d"></a>**D-316/not-d** — Not option D (the heaviest pack)
+    - What changed: Declined as a whole: its parts are only adopted where listed above.
+
+### 2026-10-02
+
+Friday · 18 decisions
+
+- <a id="d-317"></a>**D-317** — Eye-candy switches live on one EYE CANDY page (option A): one OPTIONS row opens a page like CREDITS with the three looks as masters and nine new parts under them, all default on
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The eye-candy switches live on one EYE CANDY page (option A): one OPTIONS row opens a page like CREDITS with ALL LOOKS on top and the three looks as masters with nine new parts under them, all default on; OVERDRIVE SHOT is FFX only and DRESSPHERE SHOT FFX-2 only, so each game shows 11 of the 12; the new settings rows make the build save-data class (deep review before deploy). Both games.
+  - area ui · both games · adopted · delivery not scheduled · at ~01:15 EDT
+  - Source: docs/concepts/eye-candy-settings-2026-10-02
+- <a id="d-318"></a>**D-318** — Camera: build a playable test of the Clair Obscur / Persona battle-camera grammar (Chapter I FFX, Chapter IV FFX-2) before any of it goes into the whole game, and share the research with every agent
+  - Bailey: “tell the other agents about this and let's build a playable test of it before we incorporate it in the whole game please.”
+  - What changed: A playable test of the Clair Obscur and Persona battle-camera grammar was built (the camera lab, ?camera=lab, branch camera-lab, Chapter I FFX and Chapter IV FFX-2) before any of it goes into the whole game, and the research was shared with every agent. He tried the lab on 2026-10-03 and likes it but is not ready to commit; close-ups need significantly higher-resolution art (D-379). Both games.
+  - area camera · both games · adopted · delivery in progress · at ~00:10 EDT
+  - Source: research/battle-camera-clair-obscur.md; research/battle-camera-persona5.md; and others
+- <a id="d-319"></a>**D-319** — Morning ask 2A: MAX mix framing: Natus (212 to 506 px) and FFX-2 Bahamut (407 to about 558 px) take the big colossus framing, changing two approved battle compositions
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The MAX mix framing is adopted: Natus (212 to 506 px) and FFX-2 Bahamut (407 to about 558 px) take the big colossus framing, which changes two approved battle compositions; built on rel36 (commit a4033fd9) with a deep review owed before the deploy. Both games.
+  - area camera · both games · adopted · delivery in progress · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+- <a id="d-320"></a>**D-320** — Morning ask 3A: Living portraits: the recommended painted face parts (closed eyes, eye movement, open smile, concerned press) for all ten pause paintings, flaws as listed
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The living portraits get the recommended painted face parts (closed eyes, eye movement, open smile, concerned press) for all ten pause paintings, flaws as listed: 193 files (3,079,042 bytes) installed, driven by src/app/screens/pause/livingParts.ts and live from release 37. Both games.
+  - area visuals · both games · adopted · delivery implemented · at ~09:50 EDT
+  - Source: src/app/screens/pause/livingParts.ts; docs/handoff/art-install-2026-10-03.md
+- <a id="d-321"></a>**D-321** — Morning ask 3B: Living portraits: the eyes follow the highlighted tab or row in the pause (no extra input; one rule for mouse, keys, pad and touch)
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The living portrait's eyes follow the highlighted tab or row in the pause screen, with no extra input and one rule for mouse, keys, pad and touch; the alternative (right stick plus mouse or finger on the painting) was declined. Both games.
+  - area visuals · both games · adopted · delivery not scheduled · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+- <a id="d-322"></a>**D-322** — Morning ask 4A: DRESSPHERE SHOT uses the painted twirl keys at the recommended picks (start keys hold no weapon, by design); today's white column stops once they are in
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The DRESSPHERE SHOT uses the painted twirl keys at the recommended picks (the start keys hold no weapon, by design) and today's white column stops once they are in; all 77 keys were installed on 2026-10-03 (docs/handoff/art-install-2026-10-03.md). FFX-2 only.
+  - area visuals · FFX-2 · adopted · delivery implemented · at ~09:50 EDT
+  - Source: src/engine/fx/mix/twirl.ts; docs/handoff/art-install-2026-10-03.md
+- <a id="d-323"></a>**D-323** — Morning ask 5A: Install the seven party re-rolls (Kimahri wind-up and follow-through, Yuna FFX follow-through, Lulu wind-up, Yuna Dark Knight cast, item and victory) at the recommended picks
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Seven party re-rolls are installed at the recommended picks (Kimahri wind-up and follow-through, Yuna FFX follow-through, Lulu wind-up, Yuna Dark Knight cast, item and victory) on 2026-10-02, set bailey:2026-10-02-art; each fills a gap and nothing approved is replaced. Both games.
+  - area art · both games · adopted · delivery implemented · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+- <a id="d-324"></a>**D-324** — Morning ask 5B: Kimahri gets the sourced single broken horn (candidate A) on all 12 of his paintings
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Kimahri gets the sourced single broken horn (candidate A) on all 12 of his paintings and the pause 2x master (set bailey:2026-10-02-art); the approved ones were backed up in D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/ and their older locks superseded in approved-hashes.json. FFX only.
+  - area art · FFX · adopted · delivery implemented · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+- <a id="d-325"></a>**D-325** — Morning ask 6A: Install the 73 boss paintings that replace nothing approved or pinned (53 new keys, 20 swaps of unpinned paintings), incl. Yu Yevon's size-matched idle
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Seventy-three boss paintings that replace nothing approved or pinned are installed (53 new keys and 20 swaps of unpinned paintings), including Yu Yevon's size-matched idle; the judge-locked entries for Valefor, Pterya, Spathi and x2-Anima moved to the new hash with a supersedes record (docs/handoff/art-install-2026-10-04.md). Both games.
+  - area art · both games · adopted · delivery implemented · at ~09:50 EDT
+  - Source: docs/handoff/art-install-2026-10-04.md
+- <a id="d-326"></a>**D-326** — Morning ask 6B: Replace six pinned paintings that run off their own canvas: Valefor hurt, Pterya hurt, Yunalesca form 1 attack, hurt and cast, Vegnagun head KO (old ones backed up first)
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Six pinned paintings that ran off their own canvas are replaced (Valefor hurt, Pterya hurt, Yunalesca form 1 attack, hurt and cast, Vegnagun head KO), installed on 2026-10-02 in set bailey:2026-10-02-art with the old paintings backed up first. Both games.
+  - area art · both games · adopted · delivery implemented · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+- <a id="d-327"></a>**D-327** — Morning ask 6C: Replace seven pinned paintings that show another design than the idle: Braska's Final Aeon form 1 attack and cast, the hurts of LeBlanc, Ormi, Trema and the male Syndicate goon, Anima's attack
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Seven pinned paintings that showed another design than the idle are replaced (Braska's Final Aeon form 1 attack and cast, the hurts of Leblanc, Ormi, Trema and the male Syndicate goon, Anima's attack), keeping the pose and taking the idle's design; installed on 2026-10-02 ahead of the page's order because the replacements make the build smaller. Both games.
+  - area art · both games · adopted · delivery implemented · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+- <a id="d-328"></a>**D-328** — Morning ask 6D: Seymour Flux: direction 1, four new action keys (attack, cast, hurt, KO) painted from his crouched idle, replacing the pinned action paintings
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Seymour Flux gets four new action keys (attack, cast, hurt, KO) painted from his crouched idle (direction 1; direction 2 declined), replacing the pinned action paintings; installed on 2026-10-02 and the build became 1.2 MB smaller. FFX only.
+  - area art · FFX · adopted · delivery implemented · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+- <a id="d-329"></a>**D-329** — Morning ask 6E: Vegnagun tail 3x masters: HOLD; they come last and only if the 800 MB line has room
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Nothing changed: the Vegnagun tail 3x masters are held and come last, only if the 800 MB line has room. FFX-2 only.
+  - area art · FFX-2 · deferred · delivery not scheduled · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+- <a id="d-330"></a>**D-330** — Morning ask 7A: Keep Paine Warrior's approved victory painting (candidate 2 not installed)
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Paine Warrior's approved victory painting stays (candidate 2 is not installed); it is locked in the 2026-09-25 set. FFX-2 only.
+  - area art · FFX-2 · adopted · nothing to build · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+- <a id="d-331"></a>**D-331** — Morning ask 7B: Keep the approved FFX victory paintings (the alternates are not installed)
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The approved FFX victory paintings stay and the alternates are not installed (Kimahri's alternate has two horns and is out either way). FFX only.
+  - area art · FFX · adopted · nothing to build · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+- <a id="d-332"></a>**D-332** — Morning ask 7C: Keep the 800 MB rule: the 28 held 2x masters stay held; new art installs in the page's order and stops at the line, and the driver says what waits
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: The 800 MB rule stays: the 28 held 2x masters stay held; new art installs in the page's order and stops at the line, and the driver says what waits (the new 1x art lands about 2 MB, public files, to 30 MB, live site, over the line if the unit is MB and under if MiB). The move to Cloudflare Workers static assets (D-382) ends the line's hold on the live site. Both games.
+  - area hosting · both games · adopted · nothing to build · at ~09:50 EDT
+  - Source: docs/handoff/art-install-2026-10-03.md; docs/handoff/art-install-2026-10-04.md
+- <a id="d-333"></a>**D-333** — Morning ask 7D: Re-roll Yuna Gunner's wind-up and Yuna Warrior's follow-through, which drift from their idles (both live since release 35)
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Yuna Gunner's wind-up and Yuna Warrior's follow-through, which drift from their idles (both live since release 35), are to be re-rolled and shown to him before install. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+- <a id="d-334"></a>**D-334** — Morning ask 7E: Paint hooded versions of the White Mage's hurt and KO next (LV-35-03)
+  - Bailey: “All your recommendations” (blanket yes)
+  - What changed: Hooded versions of the White Mage's hurt and KO are to be painted next (LV-35-03), shown to him before install; her attack painting is also unhooded and unused today. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~09:50 EDT
+  - Source: Bailey, 2026-10-02 ~09:50 EDT, answering the morning page https://claude.ai/artifact/4vkdBe5GKuHJZswrdfZQh2 (16 asks, each with the driver's …
+
+### 2026-10-03
+
+Saturday · 56 decisions
+
+- <a id="e-081"></a>**E-081** — Delegation narrowed to Sonnet: all mechanical implementation, file searches, tests and routine execution go to Sonnet sub-agents (including every critic agent); the main session only plans, reviews architecture and validates
+  - Bailey: “New rule AND DO NOT FORGET THIS: For all mechanical implementation, file searches, tests, and routine execution, use your judgment to delegate tasks to lower-power sub-agents running Sonnet. Reserve your direct reasoning capacity solely for high-level planning, architecture review, and final validation.”
+  - What changed: Every sub-agent and workflow agent defaults to Sonnet (the critic runners take sonnetKeys for capture, gaps, confirm and every auditor); Opus only where he asks for it; validation means re-running the checks and looking at the result, never taking an agent's own report as the validation.
+  - area process · both games · adopted · nothing to build · refines [D-023](#d-023)
+  - Source: CLAUDE.md; docs/handoff/NOW.md
+- <a id="d-335"></a>**D-335** — Ship no source maps to the live site (PR-0328): frees about 22.7 MB under the 800 MB line for the living portraits and the waiting adopted art
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The live site ships no source maps (PR-0328), freeing about 22.7 MB under the 800 MB line for the living portraits and the 67 waiting adopted images; merged into the release 37 integration branch. Both games, delivery plumbing.
+  - area hosting · both games · adopted · delivery implemented · at ~00:45 EDT
+  - Source: critic/rounds/round-19.json
+- <a id="d-336"></a>**D-336** — Morning ask 1: the three new FFX-2 idles: Yuna Thief cand-6, Rikku Warrior cand-12, Paine Thief cand-5 (closes PR-0311, the major holding visual under 9.0)
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The three new FFX-2 idles are approved and installed: Yuna Thief cand-6, Rikku Warrior cand-12 and Paine Thief cand-5, which closes PR-0311, the major that held the visual score under 9.0; Yuna Thief appears in Chapter VI through the Gunner-to-Thief change, and Rikku Warrior and Paine Thief through the garment grids' rings in several shipped chapters (docs/handoff/art-install-2026-10-04.md). Shipped in release 38 (live 2026-10-04). FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~12:00 EDT
+  - Source: docs/handoff/art-install-2026-10-04.md
+- <a id="d-337"></a>**D-337** — Morning ask 2: Rikku Warrior and Paine Thief costumes taken as our estimate (Yuna's costume rows), said so in the notes; a later source check may change them (Yuna Thief is sourced either way)
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The Rikku Warrior and Paine Thief costumes are taken as our estimate (Yuna's costume rows) and labelled so in the installed sidecars (costumeNote, 2026-10-04); a later source check may change them; Yuna Thief is sourced either way. FFX-2 only.
+  - area art · FFX-2 · adopted · nothing to build · at ~12:00 EDT
+  - Source: Bailey, 2026-10-03 ~12:00 EDT, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ (14 asks, each with the driver's …
+- <a id="d-338"></a>**D-338** — Morning ask 3: the recommended keys for the three new figures, holding Rikku Warrior's going and forming keys (they show a skirt where trousers were; the existing twirl keys are used there)
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The recommended keys for the three new figures are adopted and installed (Rikku Warrior's 11: idle, wind-up, attack, follow-through, cast, item, hurt, KO, victory, twirl start and manifest), holding her going and forming keys because they show a skirt where trousers were, so the existing twirl keys play there. Shipped in release 38 (live 2026-10-04). FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~12:00 EDT
+  - Source: Bailey, 2026-10-03 ~12:00 EDT, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ (14 asks, each with the driver's …
+- <a id="d-339"></a>**D-339** — Morning ask 4: the recommended Overdrive and Special apex keys, except Paine Warrior's break (the plant failed), Auron's keys (few and fragile) and Tidus's leaps (costume drift); Kimahri gets his breath only, Ronso Rage waits for a horn pass
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The recommended Overdrive and Special apex keys are adopted, except Paine Warrior's break (the plant failed), Auron's keys (few and fragile) and Tidus's leaps (costume drift); Kimahri gets his breath only and Ronso Rage waits for a horn pass; D-357 later dropped Wakka's Slots and Kimahri's Stone Breath too. Installs were in progress.
+  - area art · both games · adopted · delivery in progress · at ~12:00 EDT
+  - Source: Bailey, 2026-10-03 ~12:00 EDT, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ (14 asks, each with the driver's …
+  - <a id="d-339-recommended"></a>**D-339/recommended** — Adopt the recommended Overdrive and Special apex keys (FFX Overdrives and FFX-2 dressphere Specials, each installing for its own game)
+    - What changed: Installed on 2026-10-04: Lulu's Fury (one file for the 19 Furies, D-357) and, from the day pass, Paine Warrior's plant, Tidus's Slice and Dice and Energy Rain; the other FFX-2 apex keys (19 paintings, 7.0 MB), Rikku's Mix and Yuna's Grand Summon were not in that install.
+  - <a id="d-339-paine-break"></a>**D-339/paine-break** — Except Paine Warrior's break, whose plant failed
+    - What changed: Left out; the day pass later produced a plant (D-356).
+    - FFX-2
+  - <a id="d-339-auron"></a>**D-339/auron** — Except Auron's keys (few and fragile)
+    - What changed: Auron's apex keys stay out of the install.
+    - FFX
+  - <a id="d-339-tidus-leaps"></a>**D-339/tidus-leaps** — Except Tidus's leaps (costume drift)
+    - What changed: Tidus's leaps stay out of the install.
+    - FFX
+  - <a id="d-339-kimahri"></a>**D-339/kimahri** — Kimahri gets his breath only; Ronso Rage waits for a horn pass
+    - What changed: Kimahri's Stone Breath was then dropped as well (D-357); Ronso Rage waits.
+    - FFX
+- <a id="d-340"></a>**D-340** — Morning ask 5: the recommended boss telegraph keys for every boss except Natus (Natus waits until PR-0331 settles his colossus master; the Vegnagun head and Sin throat light states are fine)
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The recommended boss telegraph keys are adopted for every boss except Natus (he waits until PR-0331 settles his colossus master) and Evrae (his telegraph painting is rejected); only Seymour Flux and Braska's Final Aeon were wired at first (D-355). The Vegnagun head and Sin throat light states are fine as they are.
+  - area art · both games · adopted · delivery in progress · at ~12:00 EDT
+  - Source: Bailey, 2026-10-03 ~12:00 EDT, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ (14 asks, each with the driver's …
+- <a id="d-341"></a>**D-341** — Morning ask 6: the D-333/D-334 re-roll picks c1: Gunner wind-up (windup/cand-11), Warrior follow-through (follow/cand-4), White Mage hurt (hurt/cand-9), KO (ko/cand-2) and attack (attack/cand-10); the White Mage KO scale entry is changed at install; the hem and the small faces are known flaws
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The re-roll picks for D-333 and D-334 are adopted and installed: Yuna Gunner's wind-up (windup cand-11), Yuna Warrior's follow-through (follow cand-4) and the White Mage's hurt (cand-9), KO (cand-2) and attack (cand-10); the White Mage KO's scale entry was removed from src/engine/KoPoseScale.ts (the new KO is 1,070 px long against a 1,151 px idle); the hem and the small faces are known flaws. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~12:00 EDT
+  - Source: src/engine/KoPoseScale.ts
+- <a id="d-342"></a>**D-342** — Morning ask 7: the gap keys (56 slots): only the clean ones, skipping Rikku Berserker, the Dark Knight keys and the mage follow-throughs for now; the installer lists the clean ones
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The gap keys (56 slots) are installed only where clean, skipping Rikku Berserker, the Dark Knight keys and the mage follow-throughs for now; the installer lists the clean ones, and Rikku White Mage's manifest is still unsolved. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~12:00 EDT
+  - Source: Bailey, 2026-10-03 ~12:00 EDT, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ (14 asks, each with the driver's …
+- <a id="d-343"></a>**D-343** — Morning ask 8: painted plate wings: Den of Woe left cand-1 plus right cand-3, Bevelle Underground left cand-3 plus right cand-1, replacing the mirrored wings; the extended plate gets a new approved hash
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: Painted plate wings replace the mirrored wings: Den of Woe (Chapter XV) left cand-1 and right cand-3, Bevelle Underground (Chapter IV) left cand-3 and right cand-1, and the extended plate gets a new approved hash; built on branch r38-wings and shipped in release 38 (live 2026-10-04); Chapter XIII's scene is Cloister 100, so only Chapters IV and XV show wings. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery in progress · at ~12:00 EDT
+  - Source: docs/target/approved-hashes.json
+- <a id="d-344"></a>**D-344** — Morning ask 9: the 800 MB line (D-332) stays the strict reading, 800,000,000 bytes; install in page order and stop at the line, and the driver says what waits
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The 800 MB line stays the strict reading, 800,000,000 bytes: art installs in the page's order, stops at the line, and the driver says what waits (Lady Luck's 14.9 MB needed about 13 MB of room before then, D-373). It stopped governing the live site on 2026-10-04 when release 39 moved to Cloudflare (D-388).
+  - area hosting · both games · adopted · nothing to build · at ~12:00 EDT
+  - Source: Bailey, 2026-10-03 ~12:00 EDT, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ (14 asks, each with the driver's …
+- <a id="d-345"></a>**D-345** — Morning ask 10: make the four-option re-staging stills (A party left, B boss right, C both a little, D leave it) for Chapters II, III and VIII (PR-0310 and PR-0331), at 1600x900 and 2000x1012, against live; nothing changes until Bailey picks
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: Four-option re-staging stills (A party left, B boss right, C both a little, D leave it) are made for Chapters II, III and VIII (PR-0310 and PR-0331) at 1600x900 and 2000x1012 against live, and nothing changes until he picks; his pick came in D-353. FFX only.
+  - area camera · FFX · adopted · delivery in progress · at ~12:00 EDT
+  - Source: Bailey, 2026-10-03 ~12:00 EDT, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ (14 asks, each with the driver's …
+- <a id="d-346"></a>**D-346** — Morning ask 11: the push-in fallback for the dressphere shot (PR-0314) when no clean frame exists (Trema Paine, the phone): a small push-in on the changing girl instead of no shot
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: Where no clean frame exists for the dressphere shot (Trema's Paine, the phone), a small push-in on the changing girl plays instead of no shot (PR-0314, camera K3). Shipped in release 38 (live 2026-10-04). FFX-2 only.
+  - area camera · FFX-2 · adopted · delivery implemented · at ~12:00 EDT
+  - Source: Bailey, 2026-10-03 ~12:00 EDT, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ (14 asks, each with the driver's …
+- <a id="d-347"></a>**D-347** — Morning ask 12: the living portraits ship as built, with no brow lift (D-143); look at them live first; the parts go in with release 37
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The living portraits ship as built with no brow lift (the A2 brow lift is declined, as D-143 set), he looks at them live first, and the painted face parts go in with release 37. Both games.
+  - area visuals · both games · adopted · nothing to build · at ~12:00 EDT
+  - Source: Bailey, 2026-10-03 ~12:00 EDT, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ (14 asks, each with the driver's …
+- <a id="d-348"></a>**D-348** — Morning ask 13: the Bushido button order (PR-0308) uses the GameFAQs order, marked our estimate until the Steam copy is checked
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: The Bushido button order (PR-0308) uses the GameFAQs order, marked our estimate, because the HD button orders conflict in the sources; the Steam HD copy settles it later. FFX only.
+  - area combat · FFX · adopted · delivery implemented · at ~12:00 EDT
+  - Source: Bailey, 2026-10-03 ~12:00 EDT, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ (14 asks, each with the driver's …
+- <a id="d-349"></a>**D-349** — Morning ask 14: the listening score (CHK-B1): Bailey listens from docs/audio/audition.html when he has ten minutes; no number given yet
+  - Bailey: “all your recommendations, godspeed” (blanket yes)
+  - What changed: His listening score (CHK-B1) is booked for his own ten minutes at docs/audio/audition.html: a number from 0 to 10 for the shipped music v2 and SFX v2. No number was given yet, so audio stays unverified and the weighted score incomplete until he gives it. Both games.
+  - area audio · both games · adopted · nothing to build · at ~12:00 EDT
+  - Source: Bailey, 2026-10-03 ~12:00 EDT, answering the morning page https://claude.ai/artifact/MEX4XZMTZUQWDPh1193AEZ (14 asks, each with the driver's …
+- <a id="d-350"></a>**D-350** — Standing rule: the strategy guide (RULES, WATCH and its own NEXT line) follows Jegged's FFX and FFX-2 encounter guides, written as a plain guide with no source or 'adapted' wording; separate from the move advisor
+  - Bailey: “from now on the guide follows the ffx/ffx-2 encounter guides from jegged”
+  - What changed: The strategy guide's RULES, WATCH and its own NEXT line follow Jegged's FFX and FFX-2 encounter guides (each FFX chapter his FFX guide, each FFX-2 chapter his FFX-2 guide), written in our own words as a plain guide with no source, citation or "adapted" wording; the guide and the move advisor stay completely separate (his words of 14:30 and 14:40 the same afternoon). Built on branch r38-guide-jegged; the desktop reading view ships with release 39 (D-371).
+  - area guide · both games · adopted · delivery in progress · at ~13:50 EDT
+  - Source: Bailey, 2026-10-03 ~13:50 EDT, in chat after asking how the guide differs from the move advisor. Build on branch r38-guide-jegged (release 38). …
+- <a id="d-351"></a>**D-351** — Options ask 1: make room under the 800,000,000-byte line without changing a pixel: lossless WebP copies of the shipped art (PNG originals stay, a pixel-identity check on every shipped copy), depth maps at 8 bits (d&gt;&gt;8), tighter PNG compression; big paintings and backdrops first (about 77 MB), then the rest (about 212 MB in all); battles load about 0.3 s slower the first time
+  - Bailey: “I'll go with all your recommendations thank you &lt;3” (blanket yes)
+  - What changed: Room under the 800,000,000-byte line is made without changing a pixel: lossless WebP copies of the shipped art (PNG originals stay, a pixel-identity check on every shipped copy), depth maps at 8 bits, tighter PNG compression, big paintings and backdrops first (about 77 MB) and then the rest (about 212 MB in all); battles load about 0.3 s slower the first time (tools/art-derive-lib.mjs, docs/handoff/r38-bytes.md). Shipped in release 38 (live 2026-10-04). Both games.
+  - area hosting · both games · adopted · delivery implemented · at ~14:42 EDT
+  - Source: Bailey, 2026-10-03 ~14:42 EDT, answering the Visual Options page https://claude.ai/artifact/XFMV5qdNy97mWqg6NMYD8c (asks 1 to 10 with the …
+- <a id="d-352"></a>**D-352** — Options ask 2: this morning's picks go in as soon as room exists, starting with Yuna Thief (P1), the D-333/D-334 re-rolls (P8) and the Bahamut and Shuyin wind-ups (P6); Rikku Warrior and Paine Thief are held, packages ready, until a chapter reaches them
+  - Bailey: “I'll go with all your recommendations thank you &lt;3” (blanket yes)
+  - What changed: This morning's picks go in as soon as room exists, starting with Yuna Thief (P1), the D-333 and D-334 re-rolls (P8) and the Bahamut and Shuyin wind-ups (P6); Rikku Warrior and Paine Thief were held with their packages ready until a chapter reached them, and both were then installed (Rikku Warrior without her going and forming keys, D-338; docs/handoff/art-install-2026-10-04.md). FFX-2 only.
+  - area art · FFX-2 · adopted · delivery implemented · at ~14:42 EDT
+  - Source: src/battle/ffx2/setup.ts; src/data/ffx2/builds; and others
+- <a id="d-353"></a>**D-353** — Options ask 4: re-stage Chapter II with option C (party 0.5 left, boss 0.5 right) and Chapter III with option B (boss moves right and back), held in a per-chapter table; start an Evrae mockup round (E1 re-posed coil painting, E2 party slots down the deck with a camera pull-back) before any Evrae build; Natus option N waits until it is deterministic
+  - Bailey: “I'll go with all your recommendations thank you &lt;3” (blanket yes)
+  - What changed: Chapter II is re-staged with option C (party 0.5 left, boss 0.5 right) and Chapter III with option B (the boss moves right and back), held in a per-chapter table, an Evrae mockup round (E1 a re-posed coil painting, E2 party slots down the deck with a camera pull-back) comes before any Evrae build, and Natus's option N waits until it is deterministic. Chapter II's re-stage shipped in release 38; on 2026-10-04 his answer to question e (D-375) left Chapter III as live, so its option B is not shipped. FFX only.
+  - area camera · FFX · adopted · delivery in progress · at ~14:42 EDT
+  - Source: Bailey, 2026-10-03 ~14:42 EDT, answering the Visual Options page https://claude.ai/artifact/XFMV5qdNy97mWqg6NMYD8c (asks 1 to 10 with the …
+  - <a id="d-353-ch2-c"></a>**D-353/ch2-c** — Chapter II is re-staged with option C: the party moves 0.5 left and the boss 0.5 right, held in a per-chapter table
+    - What changed: It clears at three screen sizes and shipped in release 38. FFX only.
+  - <a id="d-353-ch3-b"></a>**D-353/ch3-b** — Chapter III is re-staged with option B: the boss moves right (1.45) and back (0.94), at the cost of a smaller boss and the advisor card over the near pagoda
+    - What changed: Not shipped: his answer to question e on 2026-10-04 (D-375) left Chapter III as live. FFX only.
+    - superseded by [D-375](#d-375)
+  - <a id="d-353-evrae-mockups"></a>**D-353/evrae-mockups** — An Evrae mockup round comes before any Evrae build (E1 a re-posed coil painting, E2 party slots down the deck with a camera pull-back), because no position-only move clears the coil
+    - What changed: He picked E1-H on 2026-10-03 (D-360) and it shipped in release 38. FFX only.
+  - <a id="d-353-natus-n"></a>**D-353/natus-n** — Natus option N waits until it is deterministic (it worked in 5 of 6 runs)
+    - What changed: Held; nothing built. FFX only.
+- <a id="d-354"></a>**D-354** — Options ask 5: motion: M1 run-in for FFX-2 (sourced) and M3 skill travel for both games once the damage numeral waits for the landing; M1 for FFX held (no source); M2 part motion skipped
+  - Bailey: “I'll go with all your recommendations thank you &lt;3” (blanket yes)
+  - What changed: Motion: a run-in for FFX-2 (M1, sourced) and skill travel for both games (M3, once the damage numeral waits for the landing) are adopted; the run-in for FFX is held (no source) and part motion (M2) is skipped; in FFX-2 neither plays while a command menu is open. Shipped in release 38 (live 2026-10-04). Both games.
+  - area visuals · both games · adopted · delivery in progress · at ~14:42 EDT
+  - Source: Bailey, 2026-10-03 ~14:42 EDT, answering the Visual Options page https://claude.ai/artifact/XFMV5qdNy97mWqg6NMYD8c (asks 1 to 10 with the …
+  - <a id="d-354-m1-ffx2"></a>**D-354/m1-ffx2** — M1 run-in for FFX-2 (sourced: a short-range run-in of about 2 s), rolled out per chapter after a stand-off pass
+    - What changed: A girl runs to the enemy for a plain Attack and runs home (release 38); Reduce Motion plays the old attack, and nothing plays over an open command menu. FFX-2 only.
+  - <a id="d-354-m3-both"></a>**D-354/m3-both** — M3 skill travel for both games: a bolt or orb crosses the field and lands with a starburst, no full-screen flash, the flight as long as the move's own opening wait, once the damage numeral waits for the landing
+    - What changed: Spells and shots fly to their target and the number lands with the hit (release 38). Both games.
+  - <a id="d-354-m1-ffx"></a>**D-354/m1-ffx** — M1 for FFX is held for lack of a source (our guess would need its own yes)
+    - What changed: Not built. FFX only.
+  - <a id="d-354-m2"></a>**D-354/m2** — M2 part motion (boss parts swing) is skipped: animation gain +0.05 at best
+    - What changed: Not built: part motion is skipped.
+- <a id="d-355"></a>**D-355** — Options ask 6: wire the 950 ms telegraph hold for Seymour Flux and Braska's Final Aeon (Omnis maybe later; Evrae's telegraph painting rejected)
+  - Bailey: “I'll go with all your recommendations thank you &lt;3” (blanket yes)
+  - What changed: A 950 ms telegraph hold is wired for Seymour Flux and Braska's Final Aeon (Omnis maybe later; Evrae's telegraph painting rejected); the two telegraph paintings were installed on 2026-10-04 and the hold is live (checked in the real game: Flux's telegraph pose held 1,133 ms, then the Lance). Shipped in release 38 (live 2026-10-04). FFX only.
+  - area visuals · FFX · adopted · delivery implemented · at ~14:42 EDT
+  - Source: Bailey, 2026-10-03 ~14:42 EDT, answering the Visual Options page https://claude.ai/artifact/XFMV5qdNy97mWqg6NMYD8c (asks 1 to 10 with the …
+- <a id="d-356"></a>**D-356** — Options ask 7: day-pass art: install Paine Warrior's plant, Tidus's Slice and Dice and Energy Rain, Rikku White Mage's twirl-start, the Dark Knight re-picks and the mage follow-throughs; hold Kimahri, Tidus's Spiral Cut, Auron's Shooting Star and Banishing Blade; reject Auron's Dragon Fang (cand-65) and the new Rikku Berserker keys
+  - Bailey: “I'll go with all your recommendations thank you &lt;3” (blanket yes)
+  - What changed: The day-pass art goes in (Paine Warrior's plant, Tidus's Slice and Dice and Energy Rain, Rikku White Mage's twirl-start, the Dark Knight re-picks and the mage follow-throughs), while Kimahri, Tidus's Spiral Cut, Auron's Shooting Star and Banishing Blade are held and Auron's Dragon Fang (cand-65) and the new Rikku Berserker keys are rejected.
+  - area art · both games · adopted · delivery implemented · at ~14:42 EDT
+  - Source: Bailey, 2026-10-03 ~14:42 EDT, answering the Visual Options page https://claude.ai/artifact/XFMV5qdNy97mWqg6NMYD8c (asks 1 to 10 with the …
+  - <a id="d-356-paine-plant"></a>**D-356/paine-plant** — Install Paine Warrior's plant
+    - What changed: Installed on 2026-10-04 under x2-warrior-power-break and x2-warrior-armor-break. FFX-2 only.
+    - FFX-2
+  - <a id="d-356-tidus-moves"></a>**D-356/tidus-moves** — Install Tidus's Slice and Dice and Energy Rain
+    - What changed: Installed on 2026-10-04 (cand-76 and cand-71). FFX only.
+    - FFX
+  - <a id="d-356-rikku-wm-twirl"></a>**D-356/rikku-wm-twirl** — Install Rikku White Mage's twirl-start (one clean key)
+    - What changed: Installed on 2026-10-04 (cand-33). FFX-2 only.
+    - FFX-2
+  - <a id="d-356-dark-knight"></a>**D-356/dark-knight** — Install the Dark Knight re-picks (7 slots, 3 girls), taking the redone sets D-342 skipped for now
+    - What changed: Installed on 2026-10-04: Rikku attack, hurt and KO; Paine hurt and victory; Yuna hurt and KO. FFX-2 only.
+    - FFX-2
+  - <a id="d-356-mage-follow"></a>**D-356/mage-follow** — Install the mage follow-throughs (6 figures)
+    - What changed: The six follow-throughs were installed on 2026-10-04. FFX-2 only.
+    - FFX-2
+  - <a id="d-356-held"></a>**D-356/held** — Hold Kimahri's breath and Ronso Rage (palette brighter than the idle), Tidus's Spiral Cut (brown boots against the idle's dark ones), and Auron's Shooting Star and Banishing Blade (the coat opens and fans)
+    - What changed: Held, not installed. FFX only.
+    - deferred · FFX
+  - <a id="d-356-reject-dragon-fang"></a>**D-356/reject-dragon-fang** — Reject Auron's Dragon Fang cand-65 (blue hakama, a different torso)
+    - What changed: Not installed. FFX only.
+    - rejected · FFX
+  - <a id="d-356-reject-berserker"></a>**D-356/reject-berserker** — Reject the new Rikku Berserker keys; last night's attack c3, hurt c6 and KO c7 stay
+    - What changed: Not installed (D-358). FFX-2 only.
+    - rejected · FFX-2
+- <a id="d-357"></a>**D-357** — Options ask 8: drop Wakka's Slots and Kimahri's Stone Breath from this morning's apex picks (seen in the game: Wakka's jacket drifts to red-orange, and the live lunge reads better than Kimahri's key), keep Lulu's Fury; keep the FFX-2 rule that nothing plays over an open command menu
+  - Bailey: “I'll go with all your recommendations thank you &lt;3” (blanket yes)
+  - What changed: Wakka's Slots and Kimahri's Stone Breath are dropped from the apex picks (seen in the game: Wakka's jacket drifts to red-orange and the live lunge reads better than Kimahri's key), Lulu's Fury is kept (installed 2026-10-04 as characters/lulu/od-fury), and the FFX-2 rule that nothing plays over an open command menu stays.
+  - area art · both games · adopted · delivery implemented · at ~14:42 EDT
+  - Source: Bailey, 2026-10-03 ~14:42 EDT, answering the Visual Options page https://claude.ai/artifact/XFMV5qdNy97mWqg6NMYD8c (asks 1 to 10 with the …
+- <a id="d-358"></a>**D-358** — Options ask 9: no trained identity model for Rikku Berserker yet; keep last night's three keys (attack c3, hurt c6, KO c7); decide after the cheaper wins land
+  - Bailey: “I'll go with all your recommendations thank you &lt;3” (blanket yes)
+  - What changed: Nothing changed now: no trained identity model for Rikku Berserker yet; last night's three keys stay (attack c3, hurt c6, KO c7), the day pass's new Berserker keys are rejected (D-356), and the question is decided after the cheaper wins land. FFX-2 only.
+  - area art · FFX-2 · deferred · nothing to build · at ~14:42 EDT
+  - Source: Bailey, 2026-10-03 ~14:42 EDT, answering the Visual Options page https://claude.ai/artifact/XFMV5qdNy97mWqg6NMYD8c (asks 1 to 10 with the …
+- <a id="d-359"></a>**D-359** — Options ask 11: remove the "GUIDE'S PICK" tag from the move advisor card, since the guide and the move advisor are separate
+  - Bailey: “I'll go with all your recommendations thank you &lt;3” (blanket yes)
+  - What changed: The "GUIDE'S PICK" tag is removed from the move advisor card, since the guide and the move advisor are separate (src/ui/common/MoveAdvisor.ts and advisorGuideBadge.ts). Shipped in release 38 (live 2026-10-04). Both games.
+  - area guide · both games · adopted · delivery implemented · at ~14:42 EDT
+  - Source: src/ui/common/MoveAdvisor.ts; src/ui/common/advisorGuideBadge.ts
+- <a id="d-360"></a>**D-360** — Evrae restage: adopt option E1-H from the mockup round D-353 asked for (Evrae's approved idle repainted with the neck arch lengthened about 165 px so the head stays and the coil sits right, tail loop dropped; party, camera and Evrae's scale unchanged; Evrae's slot moves +0.97 world, pinned)
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Evrae's approved idle is repainted with the neck arch lengthened about 165 px so the head stays and the coil sits right (the tail loop is dropped), with the party, the camera and Evrae's scale unchanged and Evrae's slot moved +0.97 world, pinned; Tidus's box covered by the figure falls from 27 percent to 1 percent. Shipped in release 38 (live 2026-10-04). FFX only.
+  - area camera · FFX · adopted · delivery implemented · at ~16:25 EDT
+  - Source: research/ffx-evrae-airship.md
+- <a id="d-361"></a>**D-361** — Lady Luck (PR-0340): make Lady Luck selectable, but only where the FFX-2 guides say the girls could have the dressphere at that point in the story (sourced, per chapter); otherwise it stays out (dormant)
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Lady Luck becomes selectable only where the FFX-2 guides say the girls could have the dressphere at that point in the story (sourced, per chapter); elsewhere it stays dormant. New gameplay adopted by these words (hard rule 10); each girl gives up one dressphere for it (D-373). FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery in progress · at ~16:25 EDT
+  - Source: src/data/ffx2/builds; src/battle/ffx2/setup.ts; and others
+- <a id="d-362"></a>**D-362** — The strategy guide panel mirrors Jegged's encounter guide page for each boss (same layout and content: the boss header, the stat lines that page prints, the advice in the page's order and structure; nothing of ours: no computed NEXT line, no extra WATCH logic), in our own words; where the page's numbers differ from our game data the panel prints the game's number
+  - Bailey: “Just match the original document please in terms of formatting and everything else”
+  - What changed: The guide panel mirrors Jegged's encounter guide page for each boss: the boss header, the stat lines that page prints and the advice in the page's order and structure, in our own words, with nothing of ours (no computed NEXT line, no extra WATCH logic); where the page's numbers differ from our game data the panel prints the game's number.
+  - area guide · both games · adopted · delivery in progress · at ~18:35 EDT
+  - Source: docs/handoff/r38-guide-jegged.md; src/data/guides/docs
+- <a id="d-363"></a>**D-363** — Lady Luck idles: Yuna c24, Rikku c5 and Paine c20, with the keys repainted to match the picked idles; the costume follows the FF Wiki text (the cut and the shades are our estimate)
+  - Bailey: “All your recommendations please thank you &lt;3 I love you Claude” (blanket yes)
+  - What changed: Lady Luck's idles are Yuna c24, Rikku c5 and Paine c20, with the keys repainted to match the picked idles and the costume following the FF Wiki text (the cut and the shades are our estimate); until paintings exist a girl who changes into it shows the procedural placeholder. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery in progress · at ~21:35 EDT
+  - Source: Bailey, 2026-10-03 ~21:35 EDT, in chat, answering the driver's recommendations (five answered together: the Lady Luck idles and four choices on the …
+- <a id="d-364"></a>**D-364** — Guide on the desktop: a scrollable reading view like the phone's sheet instead of paging the side rail (Chapter I was 14 pages, Vegnagun over 60); a screenshot is shown to Bailey before it ships
+  - Bailey: “All your recommendations please thank you &lt;3 I love you Claude” (blanket yes)
+  - What changed: On the desktop the guide opens as a scrollable reading view like the phone's sheet instead of paging the side rail (Chapter I was 14 pages, Yunalesca's 14 and Chapter V's over 60); a screenshot is shown to him before it ships, and his D-371 answer sends it out with release 39. Both games.
+  - area guide · both games · adopted · delivery in progress · at ~21:35 EDT
+  - Source: docs/handoff/r38-guide-jegged.md
+- <a id="d-365"></a>**D-365** — The Wait-split habit line (D-170) stays out of the guide, since it is not on Jegged's page and the guide prints nothing of ours
+  - Bailey: “All your recommendations please thank you &lt;3 I love you Claude” (blanket yes)
+  - What changed: The Wait-split habit line of D-170 is no longer printed in the guide, because it is not on Jegged's page and the guide prints nothing of ours; the line stays FFX-2's (Chapters V and VI), so nothing in FFX changes.
+  - area guide · both games · adopted · nothing to build · at ~21:35 EDT
+  - Source: docs/handoff/r38-guide-jegged.md
+- <a id="d-366"></a>**D-366** — Status hint cards move out of the guide into their own card, so they no longer squeeze the page
+  - Bailey: “All your recommendations please thank you &lt;3 I love you Claude” (blanket yes)
+  - What changed: The status hint cards (the cure hint shown while a party member has Zombie, Sleep, Silence or Curse) move out of the guide into their own card so they no longer squeeze the page (measured in FFX-2 Chapter IV). Both games.
+  - area guide · both games · adopted · delivery in progress · at ~21:35 EDT
+  - Source: docs/handoff/r38-guide-jegged.md
+- <a id="d-367"></a>**D-367** — Advice the chapter's kit cannot follow (for example Lulu's Bio, Holy, the Mix ingredients) is printed exactly as the page gives it, with no notes of ours
+  - Bailey: “All your recommendations please thank you &lt;3 I love you Claude” (blanket yes)
+  - What changed: Advice on the Jegged page that the chapter's kit cannot follow (for example Lulu's Bio, Holy and the Mix ingredients) is printed exactly as the page gives it, with no notes of ours; nothing to build, since the panel already prints it as the page gives it. Both games.
+  - area guide · both games · adopted · nothing to build · at ~21:35 EDT
+  - Source: docs/handoff/r38-guide-jegged.md
+- **Picture** (picks-1003) — Verdict recorded, no yes yet: Camera Lab: the Clair Obscur / Persona battle-camera grammar (both games)
+  - Bailey: “I tried the camera lab with these settings and I really like it but not ready to commit to it for my game yet. can you show me more of what you can use? if there's going to often be close ups of character and enemy models and backgrounds it needs to be significantly higher res with all around better grpahics, presentation, and polish. Like top notch.”
+  - Target: Not in the game. The lab lives on the camera-lab branch; nothing from it is on main.
+  - area camera · both games · proposed · delivery not scheduled · see [D-318](#d-318), [D-379](#d-379), [D-376](#d-376), [D-377](#d-377)
+  - Source: docs/target/targets.json, group picks-1003, tile "Camera Lab: the Clair Obscur / Persona battle-camera grammar (both games)"
+
+### 2026-10-04
+
+Sunday · 27 decisions
+
+- <a id="d-368"></a>**D-368** — The player-facing working title becomes Echoes of Spira in release 38 (title screen, browser title, meta, chapter select, pause, credits, disclaimer); the repo, folders, internal identifiers and save keys keep 'pyrefly'; a painted logo is a later option for Bailey
+  - Bailey: “I'll go with Echoes of Spira. The name change should take place immediate in our next build please.”
+  - What changed: The player-facing title is Echoes of Spira from release 38 (title screen, browser title, page meta, chapter select, pause, credits, disclaimer); the repository, its folders, the internal identifiers (window.__pyrefly, PYREFLY_* settings) and the save keys keep "pyrefly", so saves still load. He had said he did not like "Pyrefly Reprise"; the driver offered six titles (Echoes of Spira, Sending Light, Spira Encore, Farplane Requiem, Hymn & Spheres, Fayth & Fury) and he picked this one; a painted logo is a later option.
+  - area release · both games · adopted · delivery implemented · at ~00:06 EDT
+  - Source: Bailey, 2026-10-04 ~00:06 EDT, in chat, on the game's name: "I need a new working title for my game I dont like pyrefly reprise". The driver offered …
+- <a id="d-369"></a>**D-369** — Hosting: move the live site to Cloudflare Pages (free; no total size cap; 25 MB per file; 20,000 files), with Cloudflare R2 only for single files over 25 MB; the project and address are named after the new title (echoes-of-spira); GitHub Pages stays live until Bailey switches, then points players to the new address
+  - Bailey: “Ok I'll go with Cloudflare pages + r2 what are the costs? sign me up right now”
+  - What changed: The live site is to move off GitHub Pages to Cloudflare: free, no total size cap, 25 MB per file and 20,000 files, with R2 only for single files over 25 MB, the project and address named after the title, and GitHub Pages staying live until he switches. He created the Cloudflare account and ran the one-time wrangler login on 2026-10-04 and the driver fetched Cloudflare's wrangler tool with his permission (D-370); the work is on branch r39-cloudflare. The product was later changed from Pages to Workers static assets (D-382).
+  - area hosting · both games · adopted · delivery in progress
+  - Source: Bailey, in chat, in this order. 2026-10-03 ~23:59 EDT, asking where to host: "I'm ready for hosting beyond GitHub Pages' 1 GB file limit past the …
+- <a id="d-370"></a>**D-370** — Standing permission to download: Bailey's yes to 'download anything you want'; the limits agents keep: official or reputable sources only, onto D: where possible, never an untrusted executable, each download recorded in the handoff that uses it
+  - Bailey: “yes you can download anything you want.”
+  - What changed: Standing yes to downloading ("yes you can download anything you want."): agents download what the work needs, from official or reputable sources only, onto D: where possible, never an untrusted executable, each download recorded in the handoff that uses it; his words say nothing about spending money, which still needs his yes.
+  - area process · both games · adopted · nothing to build · at ~00:01 EDT
+  - Source: AGENTS.md hard rule 11; docs/audio/downloads
+- <a id="d-371"></a>**D-371** — Guide on the desktop (question a): ship the strategy guide reading view, as release 38.1 (branch r38-guide-jegged, head 8e85c1e2)
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: The strategy guide's desktop reading view ships (first as release 38.1, branch r38-guide-jegged, head 8e85c1e2, then with release 39 on Cloudflare, D-388): on the desktop the guide opens as a scrollable reading view like the phone's sheet instead of paging the side rail. An independent check had read all 18 chapters against their guide pages and found no blocker. Costs he accepted by this yes: the reading window is about 8 lines at 1600x900; type is 11.4 px at 1280x720 as on live (the 14 px floor of D-372 is the cure); the keys [ ] Home End and the right stick are named nowhere on screen; reading a long page while the FFX-2 clock runs can cost the party. Release 38 went live without it. Both games.
+  - area guide · both games · adopted · delivery in progress · at ~13:20 EDT
+  - Source: Bailey, 2026-10-04 ~13:20 EDT, in chat, replying to the morning page (source D:/Tools/pyre …
+- <a id="d-372"></a>**D-372** — Text floor (question b): ship the 14 px text floor in 38.1, with a run-time clamp for the Overdrive label (branch r381-ui-floor, head 9584aecd)
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: The 14 px text floor ships with a run-time clamp for the Overdrive label (branch r381-ui-floor, head 9584aecd; now part of release 39): in 60 of 60 test cells no text is under 14 px (live has 10,484 small text nodes in the same cells), and the label's room is measured at run time and the label clamped instead of assuming a fixed overhang, because in Chapter III at 1024 px it ran 5 to 7 px past the edge at all three text sizes (now 1017.7, 1017.2 and 1016.8 px at text size 1.0, 1.15 and 1.3, against 1028.9 to 1031.3). Not shipped yet. Floor: both games; clamp: FFX only.
+  - area ui · both games · adopted · delivery in progress · at ~13:20 EDT
+  - Source: Bailey, 2026-10-04 ~13:20 EDT, in chat, replying to the morning page (source D:/Tools/pyre …
+- <a id="d-373"></a>**D-373** — Lady Luck (question c): each girl gives up one dressphere; ship the lane's table with two swaps changed, checked again before it ships; she needs about 13 MB of room under the 800 MB line
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Each girl gives up one dressphere for Lady Luck, using the lane's table with two swaps changed and checked again before it ships: Paine gives up Black Mage and keeps White Mage in Chapters V, XI and XV, and at Djose Yuna and Rikku give up Gunner so Lady Luck takes the first Change row. Chapter XIII's line-up loses Yuna's Warrior, Rikku's Songstress and Paine's Songstress as built. She needed about 13 MB of room under the 800 MB line, which the Cloudflare move made moot (D-384, D-388); not shipped yet. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery in progress · at ~13:20 EDT
+  - Source: Bailey, 2026-10-04 ~13:20 EDT, in chat, replying to the morning page (source D:/Tools/pyre …
+- <a id="d-374"></a>**D-374** — Evrae below 16:9 (question d): keep the camera stand-back, live since release 38; Evrae's approved scale stays
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Evrae below 16:9: the camera stand-back stays (live since release 38) and Evrae's approved scale is unchanged: at 16:9 and wider nothing changes, below that the camera stands back so the coil clears the turn-order rail, and the party draws at about 0.82 times live's size at 16:10 and 0.61 times at 4:3. FFX only.
+  - area camera · FFX · adopted · delivery implemented · at ~13:20 EDT
+  - Source: Bailey, 2026-10-04 ~13:20 EDT, in chat, replying to the morning page (source D:/Tools/pyre …
+- <a id="d-375"></a>**D-375** — Chapter III staging (question e): leave it as live (CHAPTER_III_STAGED stays off) and show "another way" options next; nothing built before his pick
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Chapter III's staging is left as live (CHAPTER_III_STAGED stays off), so the party still touches the boss at rest, and an "another way" options round is shown next (a calmer camera drift for this fight's menus, Yuna's staff lower, or a wider lens); nothing is built before his pick. FFX only.
+  - area camera · FFX · adopted · delivery not scheduled · at ~13:20 EDT
+  - Source: Bailey, 2026-10-04 ~13:20 EDT, in chat, replying to the morning page (source D:/Tools/pyre …
+- <a id="d-376"></a>**D-376** — Release 39 masters (question f): ship them as lossless WebP instead of PNG, after a decoder-agreement proof; not the lossy q90 encode
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Release 39's masters ship as lossless WebP instead of PNG, after a decoder-agreement proof, and not as the lossy q90 encode: PNG is exact but ships 8.0 GB with the masters installed so far, while lossless WebP is about two thirds of that (2x masters 1,383 MB against 2,024 MB; 4x masters 3,446 MB against 5,229 MB); the proof and the encode were not done yet. Both games.
+  - area art · both games · adopted · delivery in progress · at ~13:20 EDT
+  - Source: tools/art-derive-lib.mjs
+- <a id="d-377"></a>**D-377** — Release 39 master tiers (question g): keep the 3x tier
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: The 3x master tier stays: 523 files adding 2.3 GB of the 8.0 GB, made from the 4x, buying 44 percent less graphics memory than 4x for the close shots that need 2.0 to 3.0 times magnification (the Overdrive and dressphere shots on a 1440p screen); built on the release 39 branch (r39-hires-engine). Both games.
+  - area art · both games · adopted · delivery in progress · at ~13:20 EDT
+  - Source: Bailey, 2026-10-04 ~13:20 EDT, in chat, replying to the morning page (source D:/Tools/pyre …
+- <a id="d-378"></a>**D-378** — Edge smoothing (question h): SMAA on desktop; MSAA stays selectable with ?aa=msaa
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Edge smoothing is SMAA on desktop, with MSAA still selectable through ?aa=msaa: frame cost at 1440p and 4K is 3.68 and 6.14 ms with no smoothing, 3.74 and 6.52 ms with SMAA and 4.60 and 8.03 ms with 4x MSAA; graphics memory is 573 and 790 MB, 630 and 917 MB (SMAA) and 784 and 1,265 MB (MSAA). Built on r39-hires-engine. Both games.
+  - area visuals · both games · adopted · delivery in progress · at ~13:20 EDT
+  - Source: Bailey, 2026-10-04 ~13:20 EDT, in chat, replying to the morning page (source D:/Tools/pyre …
+- <a id="d-379"></a>**D-379** — Close-up route (question i): faithful 2x and 4x masters everywhere now; Klein plates only if the Camera Lab grammar is adopted later
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Faithful 2x and 4x masters go in everywhere now (they fix the blur in every chapter without changing a drawing), and the richer Klein plates are kept for the Camera Lab if he adopts its grammar later (he said on 2026-10-03 he was not ready to commit). Both games.
+  - area art · both games · adopted · delivery in progress · at ~13:20 EDT
+  - Source: Bailey, 2026-10-04 ~13:20 EDT, in chat, replying to the morning page (source D:/Tools/pyre …
+- <a id="d-380"></a>**D-380** — Trapped white background (question j): clean it inside the cut-outs of Tidus's hair spikes (FFX) and Bahamut's wings (FFX-2), then a critic check; an alpha edit of protected approved paintings authorised by this yes
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: The trapped white background inside the cut-outs of Tidus's hair spikes (FFX) and Bahamut's wings (FFX-2) is cleaned, then a critic check; this yes authorises the alpha edit of those two protected approved paintings and nothing else: originals backed up first, each replaced file re-locked in docs/target/approved-hashes.json with a supersede record naming this decision. At 16:30 EDT the candidates (17 files) had passed their check and were install-ready. Both games, split by painting.
+  - area art · both games · adopted · delivery in progress · at ~13:20 EDT
+  - Source: docs/target/approved-hashes.json
+- <a id="d-381"></a>**D-381** — Download (question k): RealESRGAN x4plus anime 6B (17 MB, official release) onto D:, recorded in a handoff
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: The RealESRGAN x4plus anime 6B model (17 MB, official release) was downloaded to D: and recorded in hires/DOWNLOADS.md; the judge's verdict was to keep the current masters (the model redraws structure and had 2 quality-control failures), with an optional 3-asset subset (Yojimbo, FFX Bahamut, Rikku Dark Knight) only with his yes. Both games.
+  - area process · both games · adopted · delivery in progress · at ~13:20 EDT
+  - Source: critic/rounds/round-21/evidence/CAPTURE-DONE
+- <a id="d-382"></a>**D-382** — Hosting (question l): Cloudflare Workers static assets (not Pages), saves option S0, no custom domain; his one step is registering the workers.dev subdomain in his dashboard
+  - Bailey: “all your recommendations” (blanket yes)
+  - What changed: Hosting is Cloudflare Workers static assets (where Cloudflare now sends new projects), not Pages, at echoes-of-spira.&lt;workers.dev name&gt;.workers.dev; saves are option S0 (nothing built: the old GitHub Pages address keeps its saves and its page says the game moved); no custom domain then (partly replaced by D-389); his one step, registering the workers.dev name in his dashboard, was done as D-386. R2 stays only for a single file over the per-file limit. Both games.
+  - area hosting · both games · adopted · delivery in progress · at ~13:20 EDT · partly replaced by [D-389](#d-389)
+  - Source: Bailey, 2026-10-04 ~13:20 EDT, in chat, replying to the morning page (source D:/Tools/pyre …
+- <a id="d-383"></a>**D-383** — Usage mode NORMAL by his word: keep working until Claude account #2 reaches its limit, then he continues on Claude account #3 (full allowance), full speed ahead, with the work saved so he can pick it up there
+  - Bailey: “continue on until I reach my usage limit then I will continue on my [other Claude account] which has full usage”
+  - What changed: At about 12:45 EDT the driver stopped its agents cleanly at checkpoints, wrote a handoff block in docs/handoff/NOW.md (live release 38, the deep review in progress, release 39 and 38.1 preparation on branches only) and the work continued on Claude account #3 with usage at 0 percent; every sub-agent runs on Sonnet (D-023, E-081). He also said "full speed ahead please" and "save your work here so i can continue on my other account please".
+  - area process · both games · adopted · delivery implemented · at ~11:40 EDT
+  - Source: docs/handoff/NOW.md
+- <a id="d-384"></a>**D-384** — Release 38.1 ships Lady Luck by parking the smallest set of held 2x masters (about 13 MB) that the room under GitHub Pages' 800 MB line needs; the masters are parked, never deleted, and return with release 39
+  - Bailey: “yes, drop the 2x masters so Lady Luck ships”
+  - What changed: Made moot the same afternoon: when he moved release 39 to Cloudflare the 800 MB line stopped binding, so nothing is dropped, nothing was parked and Lady Luck ships with all the 2x masters (D-385, D-388); there is no separate 38.1 on GitHub.
+  - area art · FFX-2 · superseded by [D-388](#d-388) · delivery not scheduled · at ~13:35 EDT
+  - Source: docs/handoff/NOW.md
+- <a id="d-385"></a>**D-385** — Release 39 is the high-res release: the full set of 2x, 3x and 4x masters (including every 2x master parked for Lady Luck's room), as lossless WebP after the decoder-agreement proof, served from Cloudflare Workers static assets with saves S0 and no custom domain
+  - Bailey: “for release 39 let's bring the high-res version back on Cloudflare.”
+  - What changed: Release 39 is built on main after 38.1's parts, r39-hires-engine and r39-cloudflare (the deploy tool gained --host=cloudflare); it ships only after the proof and his answers f to l of 2026-10-04 (D-376 to D-382, all given). A Cloudflare preview of release 38 went live at 15:05 EDT to prove the path.
+  - area art · both games · adopted · delivery in progress · at ~13:40 EDT
+  - Source: docs/handoff/NOW.md; docs/handoff/r39-cloudflare.md; and others
+- <a id="d-386"></a>**D-386** — The Cloudflare workers.dev subdomain is baileypillon, to match his GitHub name; the driver sets it up in his dashboard for him ("just set it up for me please, you take control")
+  - Bailey: “i want the subdomain to be baileypillon to match the github”
+  - What changed: Done at about 14:15 EDT: the automatically assigned subdomain was renamed to baileypillon, so the game's Workers address is https://echoes-of-spira.baileypillon.workers.dev. This answers the one step D-382 left to him; a workers.dev name can be changed later on a week's notice.
+  - area hosting · both games · adopted · delivery implemented · at ~14:15 EDT
+  - Source: docs/handoff/NOW.md; docs/handoff/r39-cloudflare.md
+- <a id="d-387"></a>**D-387** — Another pass on visuals, maxing out eye candy with emphasis on character models, enemy models, animations, visual fidelity and camera perspective, at super high resolution and without holding back; the critic is involved and he gets updated scores
+  - Bailey: “I need another pass on visuals and maxing out eye candy with special emphasis on character models, enemy models, animations, visual fidelity, and camera perspective in relation to characters, enemies, and the battlefield as a whole. The critic needs to be involved as well and I need updated scores. I need super high resolution now. DO NOT hold back. I want the visual fidelity to be amazing and absolutely beautiful. …”
+  - What changed: A fix batch from round 21's character, enemy, animation, fidelity and camera issues (approved scope and bug fixes; new looks still go through options first) plus the waiting art (Kimahri 2x re-make, Rikku Warrior going and forming keys, other FFX-2 apex keys, Rikku Mix and Grand Summon, unwired telegraphs) once the critic's capture frees the GPU; the paused hires refine batch resumes then. The critic runs a focused review and an interim visual pass (five sub-scores at 1440p and 4K against live 38) before the Cloudflare deploy, a live check on Cloudflare and deep round 22 on that build for the updated scores.
+  - area visuals · both games · adopted · delivery in progress · at ~14:30 EDT
+  - Source: docs/handoff/NOW.md; critic/rounds/round-21
+- <a id="d-388"></a>**D-388** — Release 39 ships on the Cloudflare site (https://echoes-of-spira.baileypillon.workers.dev), carrying everything; there is no separate GitHub 38.1, and the 800 MB size line no longer binds on Cloudflare
+  - Bailey: “Get this release on the cloudflare site. We're unbounded now. We're free.”
+  - What changed: Release 39 carries the strategy guide, the 14 px text floor with its Overdrive clamp, Lady Luck with every 2x master, the trapped-white fix, the full high-res tier set as lossless WebP, the held masters that were over the line (Rikku Dark Knight, the FFX-2 Anima), SMAA and the host default flipped to Cloudflare; GitHub Pages keeps release 38 plus a "we have moved" notice (saves S0). A Cloudflare preview of release 38 (https://echoes-of-spira-preview.baileypillon.workers.dev/) went live at 15:05 EDT, deployed with these words as the owner override; production on Cloudflare stays refused until the host default flips.
+  - area hosting · both games · adopted · delivery in progress · at ~14:30 EDT
+  - Source: docs/handoff/NOW.md; docs/handoff/r39-cloudflare.md
+- <a id="d-389"></a>**D-389** — Check whether the domain echoesofspira.com is available and buy it if so, with his saved card, spending no more than $20
+  - Bailey: “You check and buy it if available please. Use my card that ends in [redacted]. / But not more than $20 please”
+  - What changed: The domain is available at about $10.46 a year, under his $20 ceiling. The purchase is pending his registrant details, so nothing has been bought yet. If bought, it gives the game an address of its own, which D-382 had left out as optional (D-382 is partly replaced by this decision). His standing rule "ask before spending money" (E-005) is satisfied by this explicit yes and its ceiling.
+  - area hosting · both games · adopted · delivery in progress
+  - Source: docs/handoff/NOW.md
+- <a id="d-390"></a>**D-390** — Write concise progress notes as work happens, and a changelog entry for every new build
+  - Bailey: “Continue work but you need to write concise progress notes as it happens and a changelog for every new build”
+  - What changed: CHANGELOG.md at the repo root now holds a short, player-facing entry for every build that goes live or to a Cloudflare preview, newest first, with date, release number, address and bullets tagged FFX, FFX-2 or both (release 37.1, release 38 and the first Cloudflare preview are in); progress notes go to him as things land, a few plain lines each; the internal detail stays in docs/handoff/release-NN.md.
+  - area process · both games · adopted · delivery implemented · at ~15:10 EDT
+  - Source: Said 2026-10-04 ~15:10 EDT; commit f808de48; CHANGELOG.md.
+- <a id="d-391"></a>**D-391** — Write the changelog retroactively for every previous build since inception
+  - Bailey: “Retroactively apply the changelog for all previous builds please since inception”
+  - What changed: The backfill of CHANGELOG.md for every earlier build (from the first alpha on 2026-09-16 onward) was split among parallel writers (parts A to D); at 16:30 EDT part C was done, parts A, B and D were being written and the pictures pass for part C was running.
+  - area process · both games · adopted · delivery in progress
+  - Source: docs/handoff/NOW.md; docs/deploys.log
+- <a id="d-392"></a>**D-392** — Wherever a visual change occurred, the changelog includes pictures and screenshots
+  - Bailey: “wherever visual changes occurred you need to include pictures and screenshots”
+  - What changed: Every visual change in an entry gets a screenshot embedded under its bullet, before and after where both exist: preferably frames captured at the time and already committed (docs/screenshots/&lt;track&gt;/, critic/rounds/round-NN/), otherwise a small JPEG (1280 px wide at most) copied into docs/changelog/img/&lt;release&gt;/; an old build is never re-rendered with today's art and presented as that build, and where no picture exists from the time the entry says "(no screenshot from the time)".
+  - area process · both games · adopted · delivery in progress · at ~15:50 EDT
+  - Source: docs/changelog
+- <a id="d-393"></a>**D-393** — A central ledger of every decision made since the project began
+  - Bailey: “We separately need a central ledger for all decisions made since the projects inception please”
+  - What changed: DECISIONS.md at the repo root lists every decision, oldest first, from docs/target/decisions.json (non-picture decisions, with D-022 to D-028 restored), docs/target/decisions-early.json (the decisions made before the registry existed and those it never received) and docs/target/targets.json (picture decisions); node tools/decisions-ledger.mjs renders it and --check fails when it is stale.
+  - area process · both games · adopted · delivery implemented · at ~16:00 EDT
+  - Source: tools/decisions-ledger.mjs; tests/unit/decisions-ledger.test.ts
+- <a id="d-394"></a>**D-394** — A blanket yes ("I'll go with all your recommendations", "godspeed", "yes to all") is never recorded as a single line: every accepted recommendation is stated as its own decision, with what changed as a result, both in the reply right after the yes and in the ledger
+  - Bailey: “Even when I basically just say “I’ll go with all your recommendations “ you need to explicility say what changed as a result and what was decided on as a result of going with the recommendations” (blanket yes)
+  - What changed: The ledger was rebuilt on this rule: each blanket acceptance since 2026-09-18 is its own row with his blanket words as the quote, the decision stated in full and a "What changed" line; bundled acceptances (the chapter preflights, the eight-item and thirteen-item class batches and similar) are split into their own rows; where a recommendation could not be recovered the row says so. tests/unit/decisions-ledger.test.ts fails a blanket-yes row that has no "changed" line.
+  - area process · both games · adopted · delivery implemented · at ~16:05 EDT
+  - Source: tools/decisions-ledger.mjs; tests/unit/decisions-ledger.test.ts

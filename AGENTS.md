@@ -57,6 +57,7 @@ debug API that plays a chapter to an outcome from the console) is in
 | `docs/handoff/<track>.md` | One file per finished or in-flight track | the one for your area |
 | `docs/PRODUCT-BRIEF.md` | North star, the priority order when goals collide, what "finished" means, what is out of scope (draft until Bailey approves it) | before proposing or planning anything |
 | `docs/target/targets.json`, `decisions.json` | Bailey's approved end states, pictures awaiting a verdict, and the gaps; per tile, whether it is built (`delivery`) and what Bailey named versus what an agent guessed (`reaction`). `decisions.json` holds the decisions that are not pictures, with their state. `node tools/end-state-board.mjs` renders the board | before building anything Bailey will see, hear or feel (hard rule 9) |
+| `DECISIONS.md`, `docs/target/decisions-early.json`, `tools/decisions-ledger.mjs` | The central ledger of every decision Bailey has made since 2026-09-15, rendered from `decisions.json` (D-nnn), `decisions-early.json` (E-nnn) and `targets.json`; `node tools/decisions-ledger.mjs` renders it, `--check` and `tests/unit/decisions-ledger.test.ts` fail when it is stale. A blanket "all your recommendations" is never one row: each accepted recommendation gets its own row with a `changed` line | after Bailey decides anything: add the row, rerun the tool |
 | `docs/CONTRACTS.md` | The shared files everyone imports | before touching any of them |
 
 ## Hard rules (each of these cost a day once)
