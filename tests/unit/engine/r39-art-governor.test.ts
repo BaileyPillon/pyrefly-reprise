@@ -245,6 +245,22 @@ describe('the governor', () => {
     expect(scales.slice(1).every((s) => s >= 3)).toBe(true);
   });
 
+  it('the poses that started at the approved file come up to the opening pose\'s master in the background, with nothing magnified on screen', async () => {
+    const f = figure(4, 2); // pose 0 is drawn and holds the base master
+    f.paintings.slice(1).forEach((p, i) => {
+      const t = f.textures[i + 1]!;
+      t.image = { width: META.width, height: META.height } as unknown as HTMLImageElement;
+      t.userData['artScale'] = 1;
+      p.painted.scale = 1;
+    });
+    const r = rig([f.actor], { z: 9 }); // the standard camera: no texel is magnified past a pixel, so no live need
+    await tick(r, 60);
+    expect(f.textures.map((t) => t.userData['artScale'])).toEqual([2, 2, 2, 2]);
+    expect(r.loads.map((l) => l.scale)).toEqual([2, 2, 2]);
+    expect(r.gov.stats().trace.every((t) => t.why === 'sibling')).toBe(true);
+    expect(r.gov.stats().downgrades).toBe(0);
+  });
+
   it('a sibling never evicts anything, and never takes more than the budget has room for', async () => {
     const f = figure(4);
     const r = rig([f.actor], { z: 2.2, budgetMB: 70 }); // a 3x master of this painting is 25 MB with its mips

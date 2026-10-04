@@ -9,9 +9,11 @@
  * comparison on the 1x name, so the plane, its baseline, scale, facing and every pose test are exactly what they were.
  *
  * Which master a painting loads at is a question of **magnification** (`ArtBudget.ts`): the standard camera at 1440p never draws
- * a figure above 0.95 pixels per texel, so under 1440p the 1x file is all anyone can see; from 1440p up the 2x master loads
- * first so a held shot starts sharp, and `ArtGovernor.ts` asks for 3x and 4x the moment a figure is on screen magnified past
- * one texel per pixel, within the device's budget (`ArtDevice.ts`). A master that fails to load falls back to the next one down.
+ * a figure above 0.95 pixels per texel, so under 1440p the 1x file is all anyone can see; from 1440p up the backdrop and the poses
+ * the first menu draws (`isOpeningPose`) load as the 2x master, the other poses as the 1x file and then, in the background, as the 2x
+ * (the governor's sibling rule), and `ArtGovernor.ts` asks for 3x and 4x the moment a figure is on screen magnified past one texel
+ * per pixel, within the device's budget (`ArtDevice.ts`). A slow link loads the 1x file for everything. A master that fails to load
+ * falls back to the next one down.
  *
  * Decided from the device and the camera, with no setting and no save key (the brief: "automatic by device").
  */
@@ -46,6 +48,26 @@ export function setHiTier(value: boolean | null): void {
 
 const CHARACTER_PNG = /(\/art\/characters\/[^/?#]+\/)([A-Za-z0-9][A-Za-z0-9_-]*)\.png((?:[?#].*)?)$/;
 const BACKDROP_PNG = /(\/art\/backdrops\/)([A-Za-z0-9][A-Za-z0-9_-]*)\.png((?:[?#].*)?)$/;
+
+/** The pose name of a figure's painting URL (`idle`, `attack`...), or null for anything else. */
+export function figureState(url: string): string | null {
+  return CHARACTER_PNG.exec(logicalArtUrl(url))?.[2] ?? null;
+}
+
+/**
+ * The poses a battle draws at its first menu: every figure's idle (`idle`, `idle-far`, `idle-near`...) and the ready stance of the
+ * character whose turn it is. Only these start at the base master; every other pose starts at the approved file and the art governor
+ * brings it up in the background once its figure's opening pose is on screen at the master (the sibling rule, `ArtGovernor.ts`). That
+ * keeps the first battle's bytes near the old ones (a Chapter I battle fetched 59 MB before and 177 MB with every pose at 2x) without
+ * a figure being soft at rest: the standard camera draws a 1x pose at 0.9 texel per pixel or less at 1440p.
+ */
+const OPENING_STATE = /^(idle|ready)/;
+
+/** True for a pose the first menu draws (and for anything that is not a figure's pose). */
+export function isOpeningPose(url: string): boolean {
+  const state = figureState(url);
+  return state === null || OPENING_STATE.test(state);
+}
 
 /** What kind of tiered painting a URL names: a figure state, a backdrop, or neither. */
 export function tieredKind(url: string): 'figure' | 'backdrop' | null {
@@ -97,8 +119,9 @@ export function baseScaleFor(url: string): number {
   const pin = forcedArtScale();
   if (pin !== null) return pin;
   const b = artBudget();
-  // A slow link (data-saver, 3G or under 5 Mbit/s) starts every painting at the approved file: the masters come when a shot needs them.
-  const want = slowLink() ? 1 : kind === 'backdrop' ? backdropScaleFor(b, bufferWidth()) : baseScale(b, bufferWidth());
+  // A slow link (data-saver, 3G or under 10 Mbit/s) starts every painting at the approved file: the masters come when a shot needs them.
+  // Otherwise the backdrop and the poses the first menu draws start at the base master; the other poses start at 1x (`isOpeningPose`).
+  const want = slowLink() ? 1 : kind === 'backdrop' ? backdropScaleFor(b, bufferWidth()) : isOpeningPose(url) ? baseScale(b, bufferWidth()) : 1;
   return decided === true ? Math.max(2, want) : want;
 }
 

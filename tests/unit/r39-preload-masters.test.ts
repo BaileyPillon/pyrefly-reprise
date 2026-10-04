@@ -1,7 +1,8 @@
 /**
  * Release 39 (both games, shared loading): the battle preload warms the file the stage will really draw from. With a master on disk
  * and the device at its base scale that is the master, never the approved file it is named after (a prefetch of the 1x file beside
- * a master doubled a battle's bytes and queued ahead of the real loads).
+ * a master doubled a battle's bytes and queued ahead of the real loads). Only the poses the first menu draws (idle, ready) start at the
+ * master; every other pose is prefetched as the approved file and the art governor brings it up afterwards (`ArtTier.isOpeningPose`).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -53,14 +54,14 @@ function manifest(withMasters: boolean): void {
 }
 
 describe('the battle preload prefetches what will be drawn', () => {
-  it('at 1440p on a strong desktop the other poses are prefetched as their 2x masters, not as the 1x files', async () => {
+  it('at 1440p on a strong desktop every pose after the opening frame is prefetched as the approved file, not as a master', async () => {
     manifest(true);
     setArtTier('high');
     setBufferWidth(2560);
     await preloadBattle(getChapter('seymour-flux')!, 1);
-    const art = fetched.filter((u) => /\/art\/characters\/[^/]+\/[^/]+\.png$/.test(u));
-    expect(art.length).toBeGreaterThan(5);
-    expect(art.every((u) => /@2x\.png$/.test(u))).toBe(true);
+    const other = fetched.filter((u) => /\/art\/characters\/[^/]+\/[^/]+\.png$/.test(u)); // phase 4: every other pose, by fetch
+    expect(other.length).toBeGreaterThan(5);
+    expect(other.some((u) => /@\dx\.png$/.test(u))).toBe(false); // they come at the approved file; the governor brings them up afterwards
   });
 
   it('under 1440p, or with no masters on disk, it is the approved file as it always was', async () => {

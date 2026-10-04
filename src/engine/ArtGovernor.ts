@@ -19,8 +19,10 @@ export { pixelsPer1xTexel, type GovernedActor, type GovernedPainting, type Gover
  *   colossus master, a push-in), so the master is resident when the cut lands.
  * - **Within a memory budget**: masters above the first-seen scale that are not on screen go back to it (`evictionOrder`) when the
  *   figures' texture memory passes `ArtBudget.textureMB`; a painting seen in the last 0.75 s is never evicted.
- * - **Siblings**: once a figure's painting has been upgraded, its other poses follow at the same scale in the background, as room
- *   allows without evicting anything, so a pose change inside a close shot does not drop to the smaller file.
+ * - **Siblings**: once a figure holds a master above where its other poses started, they follow at the same scale in the background, as
+ *   room allows without evicting anything, so a pose change inside a close shot does not drop to the smaller file. A figure's opening
+ *   poses start at the base master and its other poses at the approved file (`ArtTier.isOpeningPose`), so this is also what brings the
+ *   rest up to the base scale after the first menu, without their bytes being ahead of it.
  *
  * Measuring is arithmetic on the plane's world matrix and the camera (`pixelsPer1xTexel`). Loads and swaps are async and
  * staggered: at most two loads in flight and one swap per frame (a 4x master is a 50 MB upload).

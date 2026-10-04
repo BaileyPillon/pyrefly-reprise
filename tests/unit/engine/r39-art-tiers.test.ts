@@ -25,7 +25,7 @@ import {
   type Resident,
 } from '../../../src/engine/ArtBudget.ts';
 import { manifestKnowsAsset, parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
-import { artScalesForNow, baseScaleFor, pixelUrlFor, scaleOfUrl, setHiTier, tierUrl, tieredKind } from '../../../src/engine/ArtTier.ts';
+import { artScalesForNow, baseScaleFor, figureState, isOpeningPose, pixelUrlFor, scaleOfUrl, setHiTier, tierUrl, tieredKind } from '../../../src/engine/ArtTier.ts';
 import { artBudget, deviceClass, setArtTier, setBufferWidth, setForcedArtScale, setGpuInfo, setSlowLink, slowLink } from '../../../src/engine/ArtDevice.ts';
 import { PAINTING_CACHE_MB, cachedPainting, clearPaintingCache, hasPainting, paintingCacheMB, type PreparedPainting } from '../../../src/engine/PaintedArtCache.ts';
 
@@ -313,6 +313,29 @@ describe('which file a painting is drawn from', () => {
     expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png'); // pinned to 3, no 3x: the 2x
     setForcedArtScale(null);
   });
+  it('only the poses the first menu draws start at the base master; the rest start at the approved file, and the governor still may ask', async () => {
+    setArtManifest(manifest({ tidus: { states: ['idle', 'ready', 'attack', 'idle-far', 'hurt'], portrait: false, tiers: { idle: [2, 4], ready: [2, 3, 4], attack: [2], 'idle-far': [2], hurt: [2] } } }, { backdropTiers: { gagazet: [2] } }));
+    setArtTier('high');
+    setBufferWidth(2560);
+    for (const state of ['idle', 'ready', 'idle-far']) expect(baseScaleFor('/art/characters/tidus/' + state + '.png')).toBe(2);
+    for (const state of ['attack', 'hurt']) {
+      expect(baseScaleFor('/art/characters/tidus/' + state + '.png')).toBe(1);
+      expect(await pixelUrlFor('/art/characters/tidus/' + state + '.png')).toBe('/art/characters/tidus/' + state + '.png');
+    }
+    expect(await pixelUrlFor('/art/characters/tidus/attack.png', 1.4)).toBe('/art/characters/tidus/attack@2x.png'); // a need still gets its master
+    expect(baseScaleFor('/art/backdrops/gagazet.png')).toBe(2); // the backdrop is the opening frame
+    setForcedArtScale(2); // a pin and release 35's switch are for every painting
+    expect(baseScaleFor('/art/characters/tidus/attack.png')).toBe(2);
+    setForcedArtScale(undefined);
+    setHiTier(true);
+    expect(baseScaleFor('/art/characters/tidus/attack.png')).toBe(2);
+    setHiTier(null);
+    expect(figureState('/art/characters/tidus/ready.png')).toBe('ready');
+    expect(figureState('/art/backdrops/gagazet.png')).toBeNull();
+    expect(isOpeningPose('/art/characters/tidus/idle-near.png')).toBe(true);
+    expect(isOpeningPose('/art/characters/tidus/overdrive.png')).toBe(false);
+    expect(isOpeningPose('/art/backdrops/gagazet.png')).toBe(true);
+  });
   it('a slow link starts every painting at the approved file, and the governor still may ask for more', async () => {
     setArtManifest(tidus());
     setArtTier('high');
@@ -327,7 +350,7 @@ describe('which file a painting is drawn from', () => {
     setSlowLink(false);
     expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png');
   });
-  it('reads the connection: data-saver, 3G or under 5 Mbit/s is slow; no connection API reads as fast', () => {
+  it('reads the connection: data-saver, 3G or under 10 Mbit/s is slow; no connection API reads as fast', () => {
     const nav = (globalThis as { navigator?: unknown }).navigator;
     const set = (connection: unknown) => Object.defineProperty(globalThis, 'navigator', { value: connection === undefined ? {} : { connection }, configurable: true });
     try {
@@ -341,6 +364,10 @@ describe('which file a painting is drawn from', () => {
       expect(slowLink()).toBe(true);
       set({ effectiveType: '4g', downlink: 2.5 });
       expect(slowLink()).toBe(true);
+      set({ effectiveType: '4g', downlink: 7.5 });
+      expect(slowLink()).toBe(true);
+      set({ effectiveType: '4g', downlink: 10 }); // Chromium caps the reading at 10: a fast link reads exactly that
+      expect(slowLink()).toBe(false);
       set({ effectiveType: '4g', downlink: 0 }); // 0 means unknown
       expect(slowLink()).toBe(false);
       setSlowLink(false);

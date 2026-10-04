@@ -64,10 +64,12 @@ figure's own (FFX figures, FFX-2 dresspheres, bosses by chapter): nothing is dra
    canvas to its rows (a third of the memory, but the planes, their feathers and the parallax placement were tuned on full-height
    quads); drawing the bands at the master's full 5376 (176 MB for two layers, and they sit under the same camera as a painting that is
    already sharper than a pixel).
-5. **A slow link (2 follow-up).** `ArtDevice.slowLink` (data-saver, 3G or slower, under 5 Mbit/s; Chromium reports it, the rest read
-   as fast) starts every painting at the approved file, because the 2x base load is 3x the bytes before the first menu. *Rejected:* a
-   settings row (no setting, no save key); two-phase loading (opening poses at 2x, the rest upgraded in the background after the first
-   menu: about 1.5 to 2 s of the measured first-menu cost, at the price of a background upgrade mechanism; listed as a decision for Bailey).
+5. **The cold first battle (2 follow-up).** Every pose at 2x from 1440p up made a first battle 3x the bytes (59 MB to 177 MB, Chapter I), +28 s on the project's
+   named network (25 Mbit/s, 20 ms: 22.8 s to 50.5 s). So only the backdrop and the poses the first menu draws (`ArtTier.isOpeningPose`: `idle*`, `ready`) start at the
+   master; every other pose starts at the approved file and the governor's existing sibling rule brings it to the base scale in the background once its figure's
+   opening pose is on screen, as room allows and without evicting. A slow link (`ArtDevice.slowLink`: data-saver, 3G or slower, under 10 Mbit/s; Chromium
+   reports it, the rest read as fast) starts everything at the approved file. *Rejected:* a settings row (no setting, no save key); measuring throughput from
+   the page's own resources (HTTP/2 shares one pipe among parallel responses, so a busy page reads slow).
 6. **Tiers (2).** `ArtBudget` (pure) classes the device (phone / low / mid / high) from the GPU string and the phone layout and gives
    each class a budget; `ArtTier` names `@2x` to `@4x` masters; the manifest lists them (`tiers`, `backdropTiers`); `ArtGovernor` measures
    every drawn figure against the camera that is looking at it and swaps in the smallest master that keeps a texel under one pixel,
@@ -91,7 +93,7 @@ figure's own (FFX figures, FFX-2 dresspheres, bosses by chapter): nothing is dra
 | WebGL context loss | The composed plates are render targets and die with the context; `LivingPaintings` rebuilds them on `webglcontextrestored` (measured: lose and restore at 1080p and 1440p in Chapters I and IV, mean difference 0.1 level, no errors) |
 | The deck sparkles with a sharper bump map | The drawing is the same plate through a scale, no extra grain; the crops in the handoff; `?arttier=low` shows the old 512 deck |
 | Bytes | Masters ship as PNG under the exact scope (partly transparent), see the handoff's totals and the decision it asks Bailey for |
-| First load: the 2x base load is 3x the bytes before the first menu (59 MB to 177 MB, Chapter I at 1440p) | Measured in the handoff (first menu +4.5 s cold, GPU shared); `slowLink` keeps a slow connection at the approved set; the decision for Bailey names the two-phase alternative |
+| First load: every pose at 2x was 3x the bytes before the first menu (59 MB to 177 MB, Chapter I at 1440p; 22.8 s to 50.5 s on 25 Mbit/s) | Only the backdrop and the opening poses start at the master, the rest at 1x and then up in the background (sibling rule); `slowLink` keeps a slow connection at the approved set; measured in the handoff |
 | A battle leaves textures on the GPU | The one that did (the backdrop painting, pre-existing) is fixed and measured flat over six visits (`leak.mjs`: 148 MB at the chapter select after each) |
 
 ## 5. Measurement plan (all headless GPU Playwright from node, one browser at a time)

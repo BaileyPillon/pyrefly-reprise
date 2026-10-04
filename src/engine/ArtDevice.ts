@@ -86,7 +86,7 @@ export function setSlowLink(v: boolean | null | undefined): void {
 
 /**
  * True on a connection too slow to fetch the 2x masters ahead of the first menu (about 120 MB more than the approved set for a
- * chapter at 1440p): the data-saver switch on, a 3G-or-slower effective type, or a measured downlink under 5 Mbit/s. Only Chromium
+ * chapter at 1440p): the data-saver switch on, a 3G-or-slower effective type, or a measured downlink under 10 Mbit/s (Chromium caps the reading at 10, so a fast link reads 10). Only Chromium
  * reports `navigator.connection`; Safari and Firefox read as fast. `?artlink=slow|fast` forces it for captures. A slow link starts every
  * painting at the approved file, as before release 39; the governor still upgrades whatever a close shot needs, in the background.
  */
@@ -101,7 +101,7 @@ export function slowLink(): boolean {
   }
   const c = (globalThis as { navigator?: { connection?: { saveData?: boolean; effectiveType?: string; downlink?: number } } }).navigator?.connection;
   if (!c) return false;
-  return c.saveData === true || /^(slow-2g|2g|3g)$/.test(c.effectiveType ?? '') || (typeof c.downlink === 'number' && c.downlink > 0 && c.downlink < 5);
+  return c.saveData === true || /^(slow-2g|2g|3g)$/.test(c.effectiveType ?? '') || (typeof c.downlink === 'number' && c.downlink > 0 && c.downlink < 10);
 }
 
 /** `Renderer` hands over the GPU string (UNMASKED_RENDERER_WEBGL) once its context exists. */
