@@ -45,7 +45,8 @@ const mb = (n) => `${(n / 1048576).toFixed(1)} MB`;
  * Gagazet invents dark branching twig-like lines across the rock (the lowest SSIM of the set, 0.958); Garden of Pain, Via Purifico, the Road to
  * the Farplane (and its links variant) and the title's water replace soft ripples and floor bands with ruled, ruler-straight dark stripes.
  * Those six keep drawing the approved painting; a re-render of each from the approved painting is owed. Game case: per backdrop (Gagazet,
- * Garden of Pain, Via Purifico: FFX; the Road to the Farplane: FFX-2; the title: the title screen, both games).
+ * Garden of Pain, Via Purifico: FFX; the Road to the Farplane, Chapter XI: FFX-2; `backdrops/title.png` is a sea and a horizon that the title
+ * screen no longer draws, it shows `title/keyart.png`, so holding its master back changes nothing on screen and saves a dead file).
  */
 export const HELD_BACKDROPS = Object.freeze({
   gagazet: 'invented dark branching twig-like lines across the rock',

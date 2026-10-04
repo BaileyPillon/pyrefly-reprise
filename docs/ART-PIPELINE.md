@@ -813,6 +813,19 @@ manifest. **Install only what a loader reads: `node tools/hires-install.mjs --ap
 them and nothing loads them, so a plain run puts about 1.4 GB of dead bytes into the payload (104 files; three of the pause `@3x` are over Cloudflare's
 25 MiB per-file limit as written). Found on 2026-10-04 by the `r39-int` merge. Handoff: [handoff/r39-hires-engine.md](handoff/r39-hires-engine.md).
 
+**Repair of the masters (release 39, 2026-10-04).** The independent fidelity check of `296641de` found ragged matte edges and rims darker than the
+approved paintings on the figure masters, a Gagazet backdrop master that invents line structure, and a clean-worktree build that loses the plate depth
+maps. The library now has a repaired twin, `D:/Tools/pyrefly-art-backup/hires-alpha-fixed/` (the library itself is read only and paused): every figure and
+boss master has its alpha rebuilt from the approved 1x alpha (bicubic upscale, a smooth contour, a one-pixel feather), the approved rim put back (the outer
+2.0 px of the 1x take the approved colours, fading to the master's own by 3.5 px) and colour bled under the transparent pixels beside the silhouette; the
+scripts are in `tools/gen/hires-alpha-fix/` and the method and numbers in the twin's `reports/README-alpha-fix.md`. Install from it with
+`node tools/hires-install.mjs --lib D:/Tools/pyrefly-art-backup/hires-alpha-fixed --replace-from D:/Tools/pyrefly-art-backup/hires --park <dir> --only characters/,backdrops/ --apply`:
+a file in `public/art` is replaced only where it is exactly the old library's file (an approved master or a pilot stays), what is replaced is recorded under
+`--park`, and the `@3x` are derived again. `HELD_BACKDROPS` in `tools/hires-install.mjs` names six backdrop masters (Gagazet, Garden of Pain, Via Purifico, the
+Road to the Farplane and its links variant, the title) that are never installed because they draw ruled or invented dark lines the approved painting does not have: the
+game draws the approved painting there and a re-render is owed. `node tools/fx-assets.mjs verify --dir <build>/fx` (the deploy runs it for every host) now also
+requires `fx/<key>/depth.png` and `depth.json` for every room in `src/engine/fx/b/ambient/index.ts`. Handoff: [handoff/r39-hires-engine.md](handoff/r39-hires-engine.md), "Fidelity repair".
+
 ---
 
 ## 6. Judging a batch

@@ -7,6 +7,8 @@ shot, FFX-2 dressphere shot). Bailey, 2026-10-04 ~00:35 EDT, verbatim: "I need s
 fidelity to be amazing and absolutely beautiful. The critic will ensure this is the case." Paper preflight:
 [../plans/r39-hires-engine-review.md](../plans/r39-hires-engine-review.md). Pictures: [../screenshots/r39/](../screenshots/r39/).
 
+> **Fidelity repair (2026-10-04, branch `r39-int`):** the independent check of 296641de found ragged and darker rims on the masters, a backdrop master that invents lines and a build that loses the depth maps; the repair, with its numbers and contact sheets, is the last section of this note ("Fidelity repair").
+
 ## Result
 
 Branch `r39-hires-engine`, code tip **a7c660b4** (the commits on `origin/r38-bytes` 61708db6 listed below, then two docs commits), pushed; nothing is merged and nothing is deployed. Every
@@ -445,3 +447,182 @@ and so marks those rows; a reviewer should read the status codes (all 2xx). Art 
 Art requested at 1600x900: all 1x (the governor's need is met at 1x there).
 
 Frames (2560x1440, JPEG, the first command menu of each chapter, this build): `docs/screenshots/r39-int/ch1-seymour-flux-2560x1440-first-menu.jpg`, `ch2-yunalesca-...`, `ch4-ffx2-bahamut-...`, `ch8-evrae-airship-...`, `ch9-yojimbo-cavern-...`, `ch15-ffx2-den-of-woe-...` (same names).
+
+
+## Fidelity repair (branch `r39-int`, 2026-10-04; a Sonnet sub-agent of the driver session)
+
+The independent fidelity check of `origin/r39-hires-engine` **296641de** (workflow wf_adcde4ef-d00; evidence `D:/Tools/pyrefly-scratch/2026-10-04/r39-check/`) found four things (its items 2 to 5): a backdrop master that invents lines, ragged and darker rims on the figure masters, a build that loses the depth maps, and small invented micro-detail.
+This section is the repair. **Nothing here is deployed, nothing is merged into `main`, no approved painting of the shared tree was touched.** Game case, item by item (hard rule 14):
+
+| item | what the check found | game case | what was done |
+|---|---|---|---|
+| 3 | the 2x, 3x and 4x figure masters have ragged matte edges (specks, dashes) and rims darker than the approved 1x paintings (median luminance bias -3.7, 22 of 279 below -8) | **both games**, one shared pipeline over every figure and boss master (each asset keeps its own `game` field) | every master's alpha rebuilt from the approved 1x alpha and the approved rim put back, into a new library `D:/Tools/pyrefly-art-backup/hires-alpha-fixed/`; installed here |
+| 2 | the Gagazet backdrop master invents dark branching twig-like lines (SSIM 0.958, the lowest) | per backdrop: Gagazet, Garden of Pain, Via Purifico **FFX only**; Road to the Farplane and its links variant **FFX-2 only** (Chapter XI); `backdrops/title.png` is drawn by no screen any more (the title shows `title/keyart.png`) | six backdrop masters held back (`HELD_BACKDROPS`), the game draws the approved paintings; a re-render of each is owed |
+| 4 | a build from a clean worktree silently loses the plate depth maps (`public/fx` is untracked): `fx/<backdrop>/depth.png` answers 404 | **both games** (rooms are per game, the build is shared); the check is host-neutral | `tools/fx-assets.mjs verify` also checks the room registry; 10 tests |
+| 5 | small invented micro-detail (rivets on Paragon, a bead on Overdrive Sin, extra strands on Vegnagun's tail) | Paragon, Vegnagun: **FFX-2 only**; Overdrive Sin: **FFX only** | listed below with crops; **nothing changed** |
+| f | D-376: ship the masters as lossless WebP after a decoder-agreement proof | both | the proof and the bytes, below: the `exact` rule keeps every figure master a PNG |
+| D-380 | the white background trapped inside Tidus's hair spikes and Bahamut's wings | per painting: Tidus **FFX only**, Bahamut **FFX-2 only** | the 17 cleaned paintings installed in this tree only, supersede records written, the 30 masters of the 15 assets rebuilt from the cleaned alpha |
+
+### 3. Rims and alpha of every master (both games)
+
+**Cause.** The library's recipe removed the white-background fringe of the approved cut-outs (bright pixels within two rows of the transparent area took the interior colour) and redrew the alpha as a smooth contour. On a 1x cut-out whose rim is a white or
+pink fringe, an eye white beside a transparent eye window, or a two-pixel strand, that replaced the approved rim with the interior colour (the pink strand of Seymour's hair turned blue-grey, the eye whites of Rikku Berserker broke into dashes) and left a dotted line of what survived.
+
+**Fix** (`tools/gen/hires-alpha-fix/alphafix.py`, run by `batch.py`; the method is also in the new library's `reports/README-alpha-fix.md`):
+1. **alpha** from the APPROVED 1x alpha: bicubic upscale, a Gaussian of 0.4 1x pixels, steepened to a one-pixel feather around the 0.5 contour; a partial-alpha plateau (a glow, a ghost) keeps the plain upscale;
+2. **rim**: the approved colours (bled outward 6 px at 1x, then upscaled) take the outer 2.0 px of the 1x silhouette fully and fade out to the master's own colour by 3.5 px, so a thin strand is all rim and a broad body keeps its interior detail;
+3. **under alpha 0**: the approved edge colour bled outward, 24 px at 4x and 12 px at 2x (the library's derived 2x had none: 40 sampled, 0.0 %), so a bilinear or mip sample never blends in black or grey;
+4. **2x** of a 4x asset = the repaired 4x reduced (colour and alpha apart); the installer derives the **3x** from the repaired 4x as before;
+5. a **guard** takes a rebuilt master only if its alpha IoU, SSIM and rim numbers are no worse than the library's (3 assets kept as they were).
+
+**Numbers** (every rebuilt master, 1,278: 590 at 4x, 688 at 2x; medians, before -> after; `reports/results/*.json` in the new library hold each master's own numbers, `summary.json` the aggregates). The rim is the check's band (within about 2 px of the 1x silhouette, the master reduced to 1x by premultiplied Lanczos, both over grey):
+
+| | all 1,278 | 4x (590) | 2x (688) | the check's sample (278 of its 279) |
+|---|---|---|---|---|
+| rim luminance bias (negative: the rim is darker than the approved one) | -4.30 -> +0.28 | -4.37 -> +0.35 | -4.22 -> +0.23 | -4.16 -> +0.28 |
+| masters below -8 / below -5 | 123 -> 0 / 474 -> 2 | 57 -> 0 / 223 -> 1 | 66 -> 0 / 251 -> 1 | 26 -> 0 / 116 -> 1 |
+| rim mean absolute difference | 9.20 -> 4.94 | 9.21 -> 4.92 | 9.18 -> 4.98 | 8.66 -> 4.79 |
+| fraction of the rim off by more than 48 levels | 3.61 % -> 0.02 % | 3.70 % -> 0.02 % | 3.54 % -> 0.02 % | 3.34 % -> 0.02 % |
+| alpha IoU against the approved alpha upscaled (bicubic, 0.5) | 0.9981 -> 0.9991 | 0.9984 -> 0.9993 | 0.9976 -> 0.9987 | 0.9984 -> 0.9993 |
+| SSIM of the master reduced to 1x against the painting (luminance over grey, the check's `ssim_gray`) | 0.9836 -> 0.9906 | 0.9837 -> 0.9908 | 0.9834 -> 0.9904 | 0.9835 -> 0.9904 |
+| edge specks: rim-band blobs of 6 px or less at 1x off by over 48 levels, total (median per master) | 301,249 -> 16,398 (200 -> 4) | 142,962 -> 7,248 | 158,287 -> 9,150 | 74,771 -> 3,890 |
+| tiny alpha islands and holes (64 px or less at 4x), total | 1,399 -> 1,319 | 711 -> 743 | 688 -> 576 | 643 -> 483 |
+
+The two masters still below -5 are `characters/evrae/idle-far` at 4x and 2x (-11.2 -> -5.7): its approved alpha is a very wide soft ramp (a pale halo), the library flags it (`edge_corr`) and the installer does not install flagged assets, so it never reaches the game.
+The check's own sample counted the 49 approved `idle@2x` masters (rim bias about +0.5, locked in `approved-hashes.json`); they are not the library's files and are not part of the 1,278 (I measured them too: median +0.55, none below -5, so they need nothing; `D:/Tools/pyrefly-scratch/2026-10-04/r39-repair/approved2x-report.json`).
+**The installed 3x** (derived from the repaired 4x by the installer, measured on a sample of 67 against the parked old 3x): bias median -3.74 -> +0.27, below -8: 6 -> 0, rim MAD 8.97 -> 4.91.
+
+**The 20 worst rims, before and after** (4x, bias -> bias, rim MAD -> MAD, edge specks -> specks, SSIM -> SSIM): `docs/screenshots/r39-repair/rim-NN-<subject>-<state>.jpg` (one sheet each: the library master, the rebuilt master and the approved painting, 4x zoom nearest, over black, white and the chapter's plate) and `index.jpg` (all 20, before | after over the plate).
+
+| # | master | bias | MAD | specks | SSIM |
+|---|---|---|---|---|---|
+| 01 | rikku-songstress/ko | -16.70 -> +0.73 | 21.52 -> 5.43 | 201 -> 4 | 0.9638 -> 0.9907 |
+| 02 | seymour-flux/idle | -16.32 -> +0.58 | 19.62 -> 4.83 | 186 -> 2 | 0.9727 -> 0.9821 |
+| 03 | auron/critical | -14.79 -> +0.43 | 17.80 -> 4.58 | 136 -> 6 | 0.9688 -> 0.9803 |
+| 04 | yuna-songstress/attack | -13.88 -> +0.45 | 17.57 -> 5.15 | 380 -> 6 | 0.9734 -> 0.9902 |
+| 05 | paine-dark-knight/idle | -13.47 -> +0.26 | 16.80 -> 4.55 | 199 -> 6 | 0.9676 -> 0.9833 |
+| 06 | wakka/ko | -12.84 -> +0.65 | 15.82 -> 4.42 | 337 -> 1 | 0.9601 -> 0.9753 |
+| 07 | rikku-white-mage/twirl-start | -12.71 -> +0.55 | 16.75 -> 5.52 | 441 -> 3 | 0.9666 -> 0.9934 |
+| 08 | lulu/sleep | -12.68 -> +0.28 | 16.14 -> 5.20 | 229 -> 9 | 0.9775 -> 0.9872 |
+| 09 | shuyin/kneel | -12.54 -> +0.31 | 16.46 -> 5.15 | 236 -> 3 | 0.9609 -> 0.9773 |
+| 10 | wakka/item | -12.40 -> +0.41 | 14.98 -> 4.63 | 446 -> 1 | 0.9674 -> 0.9845 |
+| 11 | rikku-berserker/ready | -11.80 -> +0.51 | 15.45 -> 4.73 | 216 -> 1 | 0.9740 -> 0.9874 |
+| 12 | paine-dark-knight/victory | -11.62 -> +0.24 | 14.78 -> 5.08 | 450 -> 4 | 0.9740 -> 0.9863 |
+| 13 | yuna-black-mage/ko | -11.43 -> +0.48 | 14.70 -> 4.39 | 227 -> 2 | 0.9809 -> 0.9905 |
+| 14 | evrae/ko | -11.33 -> +0.23 | 13.88 -> 4.94 | 554 -> 10 | 0.9491 -> 0.9893 |
+| 15 | evrae/idle-far (flagged, not installed) | -11.24 -> -5.67 | 17.48 -> 11.78 | 246 -> 237 | 0.9803 -> 0.9887 |
+| 16 | rikku-berserker/idle | -10.83 -> +0.51 | 15.05 -> 5.15 | 465 -> 6 | 0.9672 -> 0.9903 |
+| 17 | yuna-songstress/item | -10.67 -> +0.51 | 14.79 -> 5.83 | 263 -> 1 | 0.9701 -> 0.9886 |
+| 18 | braskas-final-aeon-2/ko | -10.42 -> +0.24 | 13.21 -> 4.79 | 399 -> 5 | 0.9721 -> 0.9853 |
+| 19 | yuna-thief/ready | -10.35 -> +0.30 | 14.70 -> 5.08 | 212 -> 8 | 0.9795 -> 0.9928 |
+| 20 | mortiorchis/attack | -10.32 -> +0.32 | 14.57 -> 5.64 | 897 -> 13 | 0.9605 -> 0.9875 |
+
+(The check named seymour-flux idle -16, yuna-songstress attack -14, paine-dark-knight -14, rikku-berserker -11, mortiorchis attack -10 from its two-pose sample; over all poses the worst before was rikku-songstress ko at -16.7.)
+`random-check-*.jpg` are spot checks of random windows of random masters (before | after | approved): the contour is smooth, the approved rim colour is back, the dotted lines are gone.
+
+**What it looks like, honestly.** The rim is the approved rim: where the painting has a white or pink fringe, the master has that fringe again (a smooth one, with a crisp one-pixel alpha edge), not the darker interior colour the library gave it. In the outer 2 to 3.5 px of the 1x silhouette the master is as soft as the 1x painting upscaled
+(the rest keeps the library's detail), which is visible only at the largest magnification (a 4x master drawn 1:1) and nowhere at the sizes the governor draws a master. If a crisper rim at the cost of a few levels of bias is wanted, `d0` and `d1` in `batch.PARAMS` are the two numbers (1.0 and 2.0 left a bias of -0.4 to -1.1 and about 100 specks per master).
+The library batch (`hires/`) is untouched and paused; the new library is write-once like it.
+
+### D-380: the trapped white (Tidus FFX only, Bahamut FFX-2 only)
+
+The 17 cleaned paintings of `candidates/2026-10-04/trapped-white/install-ready` are installed in this tree only (backups: the `originals/` of that folder, also copied to `F:/pyrefly-parked/2026-10-04/r39-repair/trapped-white-originals/`; every sha256 re-checked before and after).
+`docs/target/approved-hashes.json` carries the supersede records (16 records changed in place with their `supersedes`; `ffx2-bahamut/idle.png` had no record, so it is in a new set, `bailey:2026-10-04-trapped-white`). `verify-approved` on this tree: **760 ok (712 approved, 48 judge-locked), 0 mismatched, 0 missing**; against the committed
+records before this change it read 695 ok and exactly those 16 mismatched. The 30 masters of the 15 assets (`hires-rederive-list.json`) are rebuilt from the cleaned 1x alpha by the same batch (no GPU job): in the removed regions the old library masters had alpha 1.000 and the rebuilt ones have 0.000 at 4x and 2x for all 15
+(`D:/Tools/pyrefly-scratch/2026-10-04/r39-repair/trapped-white-check.json`; Tidus attack: 3,257 px, Bahamut cast: 1,368 px). The critic check D-380 asks for after the install is owed.
+
+### 2. The backdrop masters (per backdrop)
+
+All 29 backdrop 2x masters were looked at against their approved painting (bicubic up) at 1:1, in the window of the worst local SSIM and in the window where straight dark line energy exceeds the painting's the most (sheets in `D:/Tools/pyrefly-scratch/2026-10-04/r39-repair/backdrops/`; the evidence is `docs/screenshots/r39-repair/held-backdrops.jpg`).
+**Held back, never installed, taken out of `public/art` (`HELD_BACKDROPS` in `tools/hires-install.mjs`; the game draws the approved painting; a re-render is owed for each):**
+
+| backdrop | game | what the master adds |
+|---|---|---|
+| `gagazet` | FFX (Chapter I) | dark branching twig-like cracks across the rock, crisp where the painting has soft ones (SSIM 0.9547 here, the lowest of the 29) |
+| `garden-of-pain` | FFX (Chapter XII) | ruled, ruler-straight dark stripes where the painting has soft ripples |
+| `via-purifico` | FFX (Chapter XIV) | the same stripes across the floor |
+| `road-to-the-farplane`, `road-to-the-farplane-links` | FFX-2 (Chapter XI) | ruled dark stripes across the water |
+| `title` | none: a sea and a horizon the title screen stopped drawing when it moved to `title/keyart.png` | ruled dark stripes across the water (a dead 2x master; holding it back changes nothing on screen) |
+
+**Kept** (the master sharpens what the painting has: a grid of windows, cables, cracks in the same places): the other 23. **Watch, not changed** (a few more lines or crisper ones than the painting, localized): `den-of-woe` (extra flow hairlines and bead dots), `macalania-temple` (crisper mullion grid), `ffx2-djose-chamber-provisional` (hairline cracks on the pale panels), `ff7-film-reactor` (the fine floor grid wobbles in one corner).
+The manifest now lists 23 `backdropTiers` (it listed 29); the numbers of the poses are unchanged (647 at 2x, 592 at 3x, 592 at 4x).
+
+### 4. The depth-map guard (both games, both hosts)
+
+`tools/fx-assets.mjs verify`, `backup` and `ensure` read the room registry (`ROOMS`, `src/engine/fx/b/ambient/index.ts`: 12 rooms, 6 FFX and 6 FFX-2) and require `fx/<key>/depth.png` (a real PNG) and `depth.json` for each, whether or not `tools/fx/fx-assets.json` lists the room; a missing `fx` folder (a clean worktree) fails with one line per room naming its game.
+`tools/deploy-pages.mjs` already runs `fx-assets verify --dir <build>/fx` after the build, before the build is hashed, for every host; the Cloudflare lane's `deploy-pages.mjs` (branch `r39-cloudflare`) has the same call at the same place, so the guard fires there without touching that file (no merge conflict). `tests/unit/fx-depth-guard.test.ts`: 10 tests (the registry, the list cannot lag the registry, missing / empty / non-PNG, a missing folder, both hosts' builds, the command line exits 1, and `deploy-pages.mjs` still runs it in that order).
+
+### 5. Small invented micro-detail (listed for Bailey; nothing changed)
+
+Crops, approved painting (bicubic up) | master | difference x4, 5x zoom: `docs/screenshots/r39-repair/micro-detail-for-bailey.jpg`. The masters are the approved `idle@2x` files (locked in `approved-hashes.json`), so they are Bailey's to change, not mine.
+
+| master | game | what the master has that the painting does not |
+|---|---|---|
+| `characters/paragon/idle@2x` | FFX-2 only | rivets: round bolt heads on the breastplate (about (1096, 376) of 2x) |
+| `characters/overdrive-sin/idle@2x` and `stage-0` to `stage-4` | FFX only | beads: small spheres with a dark rim where the painting has soft dots (about (456, 840)) |
+| `characters/vegnagun-tail/idle@2x` | FFX-2 only | an extra strand: a pink-brown cable between the plates (about (2088, 1128)) |
+| `characters/yunalesca-1/idle@2x` | FFX only | a small blue gem with a pink glint in a cloth fold (about (584, 1016)); found by a scan of the 53 approved 2x masters for compact high-contrast features the painting lacks (the scan ranks vegnagun-tail, x2-ixion, yunalesca-1, lulu, overdrive-sin first; x2-ixion's hatching and lulu's fur are the painting's own lines made crisp) |
+| `backdrops/den-of-woe@2x` | FFX-2 only | the soft glow dots became hard beads with a ring (and a few more flow lines) |
+
+### Install on this tree (`D:/pyrefly-r39-int/public/art`)
+
+`node tools/hires-install.mjs --lib D:/Tools/pyrefly-art-backup/hires-alpha-fixed --replace-from D:/Tools/pyrefly-art-backup/hires --park F:/pyrefly-parked/2026-10-04/r39-repair/install-parked --only characters/,backdrops/ --apply`, then `node tools/gen/manifest.mjs`.
+
+| | result |
+|---|---|
+| written | **1,779**: 1,184 masters replaced (the new library's file hard-linked in the place of the old library's), 589 `@3x` derived again from the repaired `@4x`, 6 held-back backdrop masters taken out of `public/art` |
+| recorded, nothing deleted | `F:/pyrefly-parked/2026-10-04/r39-repair/install-parked/parked.json` (1,779 records): the 589 old derived `@3x` (one link each, so the only copy) are copied there (4 GB); the 1,190 replaced or dropped names are hard links of `hires/` files, so only their names, sizes and link counts are recorded (the data stays in `D:/Tools/pyrefly-art-backup/hires/`) |
+| kept as they were | 48 masters that are not the old library's file (the approved `idle@2x` of D-315 and the later installs, the pilots), 28 already the new library's (the 3 assets the guard kept, ...), 10 Evrae masters (the E1-H repaint changed their 1x: re-render owed), 1 flagged (`evrae/idle-far`) |
+| manifest | 101 subjects, 651 poses; masters at 2x 647 poses, 3x 592, 4x 592 (unchanged); `backdropTiers` 29 -> 23 |
+| `verify-approved` (`D:/Tools/pyrefly-lora/tools/verify-approved.mjs`, `ROOT=D:/pyrefly-r39-int`) | **760 ok (712 approved, 48 judge-locked), 0 mismatched, 0 missing** (the 53 approved masters were never replaced) |
+| `fx-assets verify` | **PASS** (the guard reads all 12 rooms) |
+| idempotent | a second dry run says 0 to install |
+
+### (f) D-376: lossless WebP for the masters, after a decoder-agreement proof
+
+**Result: the proof fails for every figure master, so under the project's `exact` rule they ship as PNG; WebP ships only where every decoder draws it the same.**
+The rule (`tools/art-derive-lib.mjs`, `tools/art-image-facts.mjs`): a master ships as lossless WebP only if premultiplying alpha is the identity on all its pixels (opaque, or alpha only 0 and 255 with no colour left under alpha 0); every other master ships as a PNG recompressed at maximum effort, each proved to decode to the master's RGBA.
+The repaired figure masters have a one-pixel feather (partly transparent texels) and a colour ring under alpha 0 by design, so all of them are `translucent`.
+
+Measured on 29 repaired masters (9 at 4x, 20 at 2x, one or two per class, `D:/Tools/pyrefly-scratch/2026-10-04/r39-repair/webp-agree.json`; the project's own `comparePair` of `tools/art-browser-identity.mjs`, lossless WebP encoded with the project's `ENCODER`, compared with the PNG on a WebGL texture read, a 2D canvas read, and the canvas over black and over white):
+
+| engine | WebGL texture (what the 3D scenes draw) | 2D canvas | on screen over black / white |
+|---|---|---|---|
+| Chromium 153 (real GPU) | exact 29 of 29 | 0 of 29 exact (3,231,242 pixels differ: libwebp and Skia premultiply with different rounding) | 0 of 29 exact, at most 1 step in 255 |
+| WebKit 26.6 | **0 of 29 exact: 7,979,857 texels differ, exactly the texels that carry colour under alpha 0** (WebKit's WebP decoder drops it, so the ring that keeps a rim from blending in black is gone) | exact 29 of 29 | exact 29 of 29 |
+
+The WebP of these masters is 0.665 of the PNG (29 masters: 105.6 MB -> 70.2 MB), so shipping them as WebP would take about a third off the masters (a guess for the whole set: about 2.9 GB of the 8.7 GB) at the price of a darker rim in WebKit and a one-step difference through a 2D canvas in Chromium.
+That is Bailey's call under D-376 ("after a decoder-agreement proof"): the proof says no; the `exact` rule is unchanged.
+
+**What ships** (scratch production build of this tree, `PYREFLY_ART_WEBP=exact`, the default): 2,809 art PNG masters: **562 lossless WebP** (86 opaque and 476 binary-alpha files: the 1x paintings and the opaque backdrops), **1,540 recompressed PNG** (the 2x, 3x and 4x masters and the translucent paintings), 707 PNG as they are (a recompress is not smaller); art 10,188.9 MB -> 8,666.0 MB.
+`art-browser-identity --screen-exact` (Chromium, real GPU, no exemption): **PASS on all 562 WebP pairs** (all exact as a WebGL texture and on screen, 0 steps) and on 60 recompressed PNG pairs, 158 s.
+**Bytes** (counted as the deploy counts them, `harness/bytes-manifest.mjs`: every shipped file hashed and decode-checked, plus `artifact-manifest.json` and `.nojekyll`): **8,775,473,998 bytes in 3,738 files** (8,774,931,427 of 3,736 files, the manifest 542,571; artifact hash 6f0fafc2), **against 9,129,027,809 for 296641de: 353,553,811 fewer (-3.87 %)**. The repaired PNG masters recompress 3.4 % smaller (PNG 8,388.9 -> 8,103.0 MB) and the six held backdrops are six fewer WebP (642.1 -> 574.4 MB). By type now: PNG 2,259 files 8,103.0 MB, WebP 594 files 574.4 MB, mp3 28 files 88.5 MB, js 3 files 4.9 MB. It is still over GitHub Pages' strict 800,000,000-byte line (D-332, D-344) by 7,975,473,998 bytes, which the Cloudflare move (D-382) lifts; the bytes harness's exit 1 is that alone (decode-checked, 0 problems after the 2 intentional flat images listed in `critic/policy.json`).
+
+### Gates (scratch production build `F:/pyrefly-parked/2026-10-04/r39-repair/build`, never the shared `dist/`)
+
+| gate | result |
+|---|---|
+| `npx tsc --noEmit` | clean (exit 0) |
+| full unit suite, `--maxWorkers=3` (`QUIET-PLEASE` absent) | **803 files passed, 5 skipped (808); 11,834 tests passed, 46 skipped, 1 todo; 0 failed**; 415 s (before this repair: 802 files, 11,818 tests: +1 file, +16 tests, all this repair's) |
+| `node tools/orphans.mjs` | 1,229 modules, 1,205 reachable, 24 orphaned (the same 24 as release 38) |
+| vite production build | 682 s, 0 source maps; the art derivation (`exact`): 562 WebP, 1,540 recompressed PNG, 707 unchanged |
+| `fx-assets verify --dir <build>/fx` | PASS (all 12 rooms' depth maps in the build) |
+| `art-derive verify` (exact) | PASS: 2,809 masters (562 WebP, 2,247 PNG, 2,102 pixel-compared), 0 problems, 127 s |
+| `art-derive audit` | PASS: 832 text files, 576 literal art names (14 shipped files, 562 derived masters, 0 dangling) |
+| `art-browser-load` (Chromium 153, WebKit 26.6) | PASS: 2,853 of 2,853 images loaded and decoded at the master's size, 0 failed, 20 of 20 portrait plates living, 148 s |
+| `art-browser-identity --screen-exact` | PASS on 622 pairs (above) |
+| Cloudflare limits (25 MiB per file, 20,000 files, free plan) | 3,736 files (headroom 16,264); **largest file 16,528,517 bytes = 15.76 MiB** (`art/characters/x2-anima/overdrive@4x.png`; it was 18.18 MiB), 9,685,883 bytes under the limit; 0 files over; no total-size limit |
+| real-key turns on the new build (headless Chromium, real GPU) | Chapter I (FFX) and IV (FFX-2) at 1600x900 and 2560x1440: every one took the turn (Attack; White Magic > Shell) and opened the next actor's menu; 0 console errors, 0 non-2xx (one `net::ERR_ABORTED` warm-up fetch of `den-of-woe.webp`, as on live) |
+| in-engine, masters pinned to 4x (`?artscale=4`), 3840x2160, Ch I and IV, old build against new | 0 console errors, 0 non-2xx; the rim changes are subtle at this size, as they should be: `docs/screenshots/r39-repair/in-engine-4k-before-after.jpg` |
+
+### Owed, and not done
+
+- **Re-render the six held backdrops** (Gagazet, Garden of Pain, Via Purifico, Road to the Farplane and its links variant, the title) from their approved paintings: the game draws the approved paintings until then (Chapter I's plates stay at the approved resolution). `den-of-woe`, `macalania-temple`, `ffx2-djose-chamber-provisional` and `ff7-film-reactor` are on watch.
+- **Re-render Evrae** (`attack`, `breath-charge`, `hurt`, `idle`, `idle-near`: ten masters) from the E1-H paintings; they are not installed, and `evrae/idle-far` (flagged) keeps a pale halo the repair cannot restore.
+- **The critic check D-380 asks for** after the install, and the deep review of release 39's masters.
+- **A look decision** inside the repair: the outer 2.0 to 3.5 px of the 1x silhouette are the approved rim, upscaled (soft at the largest magnification); `d0` and `d1` in `tools/gen/hires-alpha-fix/batch.py` are the two numbers.
+- **The micro-detail list above is Bailey's** (approved masters; not touched).
+- **Disk**: `D:` is at 99 % (about 22 GB free). The art-derive cache `D:/Tools/pyrefly-art-cache` grew by about 8 GB (the repaired masters' derivations; the entries of the replaced masters are now unreferenced and were not removed); the scratch build and the parked files are on `F:` (`F:/pyrefly-parked/2026-10-04/r39-repair/`: `build` 8.2 GB, `identity-dist`, `install-parked`, `trapped-white-originals`, `approved-2x-candidates-not-needed`).
+- **The Cloudflare lane**: the depth-map guard needs nothing there (same call, same place); when `r39-cloudflare` is merged, `tests/unit/fx-depth-guard.test.ts` keeps proving it.
+- Not measured: Safari and iOS (Playwright's WebKit only), a card with nothing else on it (the critic's capture ran beside this repair's builds, so no timing is claimed).
+- **Commits** on `r39-int`, pushed to `origin/r39-hires-engine` (a fast-forward): 66846993 (the depth-map guard and its tests), 5b6796b8 (the installer's upgrade mode, the held backdrops and their tests), 0996801a (the D-380 supersede records), and the commit of this note (the repair's tools `tools/gen/hires-alpha-fix/`, the contact sheets and crops `docs/screenshots/r39-repair/`, `docs/ART-PIPELINE.md`).
