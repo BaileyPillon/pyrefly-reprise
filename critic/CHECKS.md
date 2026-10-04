@@ -614,7 +614,9 @@ answered with the SPA's `index.html` returns **200**, so a naive "did it load"
 check sees success. Preview was run, but the rounds were judged on preview
 rather than on the deployed URL for that exact bundle.
 **THE CHECK:** after the deploy, load
-`https://baileypillon.github.io/pyrefly-reprise/`, confirm the served bundle
+the live address (`LIVE_URL` in `tools/deploy-host.mjs`: `https://echoesofspira.com/` since
+2026-10-04; `https://baileypillon.github.io/pyrefly-reprise/` before it, and now the legacy
+address), confirm the served bundle
 hash equals the built one, then play all five chapters: zero console errors,
 zero responses with status >= 400, zero image responses with content-type
 `text/html`, every audio cue 200s, first load under 5 seconds, save data

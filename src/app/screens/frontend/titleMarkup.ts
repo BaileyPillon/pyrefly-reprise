@@ -26,6 +26,7 @@ import { artUrl } from '../../../engine/PaintedArt.ts';
 import { artManifest, loadArtManifest, title2xUrlFor } from '../../../engine/ArtManifest.ts';
 import { logicalArtUrl } from '../../../engine/ArtShipped.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
+import { movedNoticeHtml } from './movedNotice.ts';
 
 /**
  * Where the two on the shore stand, in fractions of the frame.
@@ -89,6 +90,11 @@ export function castHtml(): string {
 export interface TitleMarkupOptions {
   /** The `B` briefing chip, when onboarding is live. */
   readonly briefingChip: boolean;
+  /**
+   * The hostname the page is served from, for the "we've moved" note (`movedNotice.ts`): the note is drawn
+   * only for the old GitHub Pages address. Omitted, it is this page's own `location.hostname`; a test names one.
+   */
+  readonly host?: string;
 }
 
 /**
@@ -155,6 +161,7 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
       <span class="fe-hint__key"><b>Arrows / WASD</b> move</span><span class="fe-hint__key"><b>Enter</b> confirm</span><span class="fe-hint__key"><b>Esc</b> cancel</span><span class="fe-hint__tap"><b>Tap</b> begin</span>${briefing}
     </div>
     </div>
+    ${movedNoticeHtml(opts.host)}
   `;
 }
 

@@ -60,6 +60,10 @@ docs/target/board.html
 releases/
 dist-release/
 
+# wrangler's scratch folder: tools/deploy-cloudflare.mjs runs it from the repo root, and an
+# untracked .wrangler/ would count as a build-relevant dirty path and stop the next deploy
+.wrangler/
+
 # scratch harnesses and probe dumps
 critic/scratch/
 

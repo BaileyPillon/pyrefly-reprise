@@ -1,0 +1,117 @@
+{
+  "mainSha": "8136f2ed",
+  "bundle": "X5kGUd9G",
+  "deployedAt": "2026-10-04T22:49:41.045Z",
+  "liveUrl": "https://echoesofspira.com/",
+  "artFiles": 1402,
+  "policyVersion": 2,
+  "artifactHash": "4cd8518e36908f41743c633942159f7b6893a0a435e602d339f7e34d7f3cad84",
+  "review": "deep",
+  "reasons": [
+    "package-lock.json: build configuration and dependencies is a shared system",
+    "package.json: build configuration and dependencies is a shared system"
+  ],
+  "systems": [
+    "build configuration and dependencies",
+    "title, chapter select, prep, pause and results screens"
+  ],
+  "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon",
+    "ffx2-bahamut",
+    "ffx2-vegnagun-shuyin",
+    "ffx2-leblanc",
+    "seymour-anima-macalania",
+    "evrae-airship",
+    "yojimbo-cavern",
+    "seymour-natus",
+    "ffx2-fallen-aeons",
+    "seymour-omnis",
+    "ffx2-trema",
+    "isaaru-via-purifico",
+    "ffx2-den-of-woe",
+    "ffx2-ixion-djose",
+    "sin-fins-core",
+    "sin-face"
+  ],
+  "checks": [
+    "CHK-002",
+    "CHK-003",
+    "CHK-009",
+    "CHK-015",
+    "CHK-016",
+    "CHK-017",
+    "CHK-018",
+    "CHK-020",
+    "CHK-021"
+  ],
+  "liveArtifact": {
+    "result": "PASS",
+    "checked": 1932,
+    "at": "2026-10-04T22:49:41.045Z"
+  },
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "pending",
+      "requires": "exact-artifact verification and real-input smoke on the live URL"
+    },
+    {
+      "kind": "focused",
+      "status": "pending",
+      "requires": "acceptance of the changed area"
+    },
+    {
+      "kind": "deep",
+      "status": "pending",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971",
+        "5ddfde3",
+        "5348c2e3",
+        "d9decadb",
+        "76f587c3",
+        "bcbdb483",
+        "dc2669ac",
+        "e3b8c2a3",
+        "a999d133",
+        "1c22066e",
+        "5be4babe",
+        "fc7f1a20",
+        "e45ed3c1",
+        "1a680e41",
+        "b975397b",
+        "43dca986",
+        "ce05b02c",
+        "d8837334",
+        "a44297ca",
+        "ff3884fb",
+        "bc4e70ee",
+        "79adc4ff",
+        "d89541b6",
+        "be1e964a",
+        "6ea8528f",
+        "49005f73",
+        "1475ff6b",
+        "52a431d0",
+        "1a6fd3cc",
+        "f302f163",
+        "25faec70",
+        "ef3f6bbf",
+        "c69de96a",
+        "cd9dbbb0",
+        "f4244e1f",
+        "6461999e"
+      ]
+    }
+  ],
+  "ownerOverride": {
+    "words": "Yes I will go with your recommendation",
+    "date": "2026-10-04T22:49:41.045Z",
+    "report": null,
+    "changedArea": null
+  }
+}

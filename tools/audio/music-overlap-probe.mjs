@@ -14,9 +14,11 @@ import { writeFileSync } from 'node:fs';
 import * as pw from 'playwright';
 const ENGINE = (process.argv.find((a) => a.startsWith('--engine=')) ?? '--engine=chromium').split('=')[1];
 import { currentChromiumArgs } from '../browser-mode.mjs';
+import { LIVE_URL } from '../deploy-host.mjs';
 
 const arg = (k, d) => (process.argv.find((a) => a.startsWith(`--${k}=`)) ?? `--${k}=${d}`).split('=').slice(1).join('=');
-const URL_ = arg('url', 'https://baileypillon.github.io/pyrefly-reprise/');
+// Default: the live address (the default deploy host's, tools/deploy-host.mjs), not a literal. The old GitHub address needs an explicit --url.
+const URL_ = arg('url', LIVE_URL);
 const LABEL = arg('label', 'run');
 const INPUT = arg('input', 'keys');
 const CHAPTERS = arg('chapters', 'seymour-flux').split(',');
