@@ -12,6 +12,7 @@
 import type { WebGLRenderer } from 'three';
 import { FxBatch } from './FxBatch.ts';
 import { FxDrawList } from './FxDrawList.ts';
+import { FLIGHT_LEAD_MS, FLIGHT_MIN_MS, FlightLayer, type FlightKind, type FlightStats } from './FlightFx.ts'; // SKILL TRAVEL (r38-motion): a spell, skill or shot crossing the field
 import { targetFromRect, type FxTarget } from './effects-shared.ts';
 import { DEFAULT_FLASH_PARAMS, PEAK_BUDGET, QUALITY_DENSITY, type FlashParams, type FxQuality } from './SpellFxParams.ts';
 import { resolveAbilityFx } from './SpellFxLookup.ts';
@@ -85,8 +86,45 @@ export class SpellFxLayer {
   /** Debug: flash rules forced by `spellfx:flash:<reduced|default>`, until the setting exists. */
   flashOverride: Readonly<FlashParams> | null = null;
 
+  /** The shots in the air (SKILL TRAVEL), drawn in this layer's batch after the effects. */
+  private readonly flights: FlightLayer;
+
   constructor(opts: SpellFxLayerOptions) {
     this.opts = opts;
+    this.flights = new FlightLayer(opts.game, (id) => opts.rectOf(id));
+  }
+
+  /**
+   * Would SKILL TRAVEL draw a shot for this ability now (`VfxPort.canTravel`)? Not at the `low` tier (LOW EFFECTS,
+   * REDUCE MOTION), not in FF7, and not for a special that draws its own effect (D-233: Spiral Cut, Mega Flare).
+   */
+  canFly(abilityId: string | undefined, from: string): boolean {
+    if (this.quality === 'low' || this.opts.game === 'ff7') return false;
+    const fx = resolveAbilityFx(abilityId, this.opts.game, undefined, false, from);
+    return fx !== 'spiral' && fx !== 'megaflare';
+  }
+
+  /**
+   * SKILL TRAVEL (`VfxPort.travel`): send a shot from one figure to another. `o.ms` is the longest flight at normal
+   * speed; the flight lands `FLIGHT_LEAD_MS` before the effect's first mark when that is sooner (never under the
+   * kind's own minimum), so it fits inside the wait the spell already has. The layer's clock already runs at the
+   * playback speed's inverse. Draws nothing, and says so (`ms` 0), where `canFly` says no and when a figure is not
+   * on the field.
+   */
+  fly(from: string, to: string, o: { abilityId?: string; kind: FlightKind; ms: number }): { ms: number; landed: Promise<void> } {
+    const none = { ms: 0, landed: Promise.resolve() };
+    if (!this.canFly(o.abilityId, from) || !this.opts.rectOf(from) || !this.opts.rectOf(to)) return none;
+    const fx = resolveAbilityFx(o.abilityId, this.opts.game, undefined, false, from);
+    const spec = Object.hasOwn(FX_SPECS, fx) ? FX_SPECS[fx as DrawnFxId] : undefined;
+    const mark = spec ? ((spec.marks(this.opts.game)[0] ?? 0) - spec.startAt) * 1000 : 0; // how long the effect itself waits for its first blow
+    // An effect with no mark to hide behind (the bare impact bloom: Drain, Demi, Flare) flies the shortest crossing that reads, and adds just that.
+    const ms = Math.round(mark > 0 ? Math.max(Math.min(FLIGHT_MIN_MS[o.kind], o.ms), Math.min(o.ms, mark - FLIGHT_LEAD_MS)) : Math.min(FLIGHT_MIN_MS[o.kind], o.ms));
+    return { ms, landed: this.flights.launch(from, to, o.kind === 'beam' ? 'dark' : fx, o.kind, ms) };
+  }
+
+  /** Debug and the capture script: the shots launched and landed, and when. */
+  flightStats(): FlightStats {
+    return this.flights.stats();
   }
 
   get quality(): FxQuality {
@@ -114,6 +152,7 @@ export class SpellFxLayer {
     if (!run) return 0;
     if (o.crit) run.bloom = CRIT_BLOOM;
     this.covered.set(target, action);
+    this.lastMark.set(`${target}|${action}`, { run, k: o.hitIndex ?? 0 });
     const ms = run.msToMark(o.hitIndex ?? 0);
     if (spellTaps.land) spellTaps.land({ fx, game: this.opts.game, abilityId: o.abilityId, ms, rect: this.opts.rectOf(target), view: this.opts.view() }); // eye-candy A8
     // FF7: the landing is announced when the effect's own clock reaches the mark (`update`), so the hit flash and
@@ -125,6 +164,21 @@ export class SpellFxLayer {
 
   /** FF7's landings not yet drawn: fired from `update` when their effect's clock passes the mark. */
   private lands: Array<{ run: RunningFx; k: number; fx: SpellFxId; target: string; o: LandOpts }> = [];
+
+  /** The mark each target's latest blow landed on, by target and action: which running copy and which of its marks (`markIn`). */
+  private readonly lastMark = new Map<string, { run: RunningFx; k: number }>();
+
+  /**
+   * Milliseconds (effect time) until the drawn effect reaches the mark of the blow last landed on `target` in `action`,
+   * by the effect's own frame clock; 0 once it has, or when there is none. SKILL TRAVEL waits on it (every game but FF7,
+   * whose `pendingLand` does the same), so a held numeral lands with the drawn strike and not with a wall-clock estimate
+   * that a slow frame outruns.
+   */
+  markIn(target: string, action: number): number {
+    const m = this.lastMark.get(`${target}|${action}`);
+    const mark = m && !m.run.done ? m.run.spec.marks(this.opts.game)[m.k] : undefined;
+    return m && mark !== undefined ? Math.max(0, Math.round((mark - m.run.t) * 1000)) : 0;
+  }
 
   /** Milliseconds (effect time) until the landing on `target` in `action` is drawn; 0 when it has or none waits. */
   pendingLand(target: string, action: number): number {
@@ -204,6 +258,8 @@ export class SpellFxLayer {
     this.running = [];
     this.lands = [];
     this.covered.clear();
+    this.lastMark.clear();
+    this.flights.clear();
   }
 
   private targetOf(id: string, k: number): FxTarget | null {
@@ -228,6 +284,8 @@ export class SpellFxLayer {
       if (target) r.target = target;
     }
     this.running = this.running.filter((r) => !r.done);
+    for (const [key, m] of this.lastMark) if (m.run.done) this.lastMark.delete(key);
+    this.flights.advance(step);
     if (this.lands.length) {
       const due = this.lands.filter((l) => l.run.done || !this.running.includes(l.run) || l.run.msToMark(l.k) <= 0);
       this.lands = this.lands.filter((l) => !due.includes(l));
@@ -238,7 +296,7 @@ export class SpellFxLayer {
   /** This frame's quads, or null when nothing is playing. */
   drawList(): FxDrawList | null {
     const live = this.running.filter((r) => r.target && r.t >= 0);
-    if (!live.length) return null;
+    if (!live.length && !this.flights.active) return null;
     const flash = this.flashOverride ?? this.opts.flash?.() ?? DEFAULT_FLASH_PARAMS;
     const out = new FxDrawList(this.opts.game, 1, flash);
     const budget = PEAK_BUDGET[this.quality === 'phone' ? 'phone' : 'full'];
@@ -249,6 +307,9 @@ export class SpellFxLayer {
       out.begin();
       r.spec.draw(out, r.t, r.target!);
     }
+    out.dens = QUALITY_DENSITY[this.quality];
+    out.begin();
+    this.flights.draw(out); // SKILL TRAVEL: the shots in the air, over the effects
     if (out.items.length > budget) out.items.length = budget;
     return out;
   }
@@ -290,17 +351,19 @@ export class SpellFxLayer {
   }
 
   /** For `__pyrefly` and the capture script. */
-  snapshot(): { quality: FxQuality; running: Array<{ id: string; target: string; t: number }>; quads: number; cpuMs: number; cpuMeanMs: number } {
+  snapshot(): { quality: FxQuality; running: Array<{ id: string; target: string; t: number }>; quads: number; cpuMs: number; cpuMeanMs: number; flights: FlightStats } {
     return {
       quality: this.quality,
       running: this.running.map((r) => ({ id: r.id, target: r.targetId, t: Math.round(r.t * 1000) / 1000 })),
       quads: this.lastCount,
       cpuMs: Math.round(this.cpuMs * 1000) / 1000,
       cpuMeanMs: Math.round(this.cpuMean * 1000) / 1000,
+      flights: this.flights.stats(),
     };
   }
 
   dispose(): void {
+    this.flights.clear();
     this.running = [];
     this.batch?.dispose();
     this.batch = null;

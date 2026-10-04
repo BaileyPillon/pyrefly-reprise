@@ -38,18 +38,18 @@ export function odPoseFor(abilityId: string): string {
   return `${OD_POSE_PREFIX}${abilityId}`;
 }
 
-function spectacleOn(ctx: EventCtx): boolean {
+export function spectacleOn(ctx: EventCtx): boolean { // also read by the two motion looks (`motion/MotionGate.ts`); FF7 never installs the port, so it is off there
   const fx = (ctx.stage as { fx?: { enabled(): boolean } } | undefined)?.fx;
   return fx?.enabled() === true;
 }
 
 /** The presenter is playing an FFX-2 (ATB) battle: the same signal the shot picker's FFX-2 framing uses. */
-function isFfx2(ctx: EventCtx): boolean {
+export function isFfx2(ctx: EventCtx): boolean {
   return ctx.moments?.shots?.ffx2Framing === true;
 }
 
-/** FFX-2 only: a command menu is open right now. */
-function menuBlocks(ctx: EventCtx): boolean {
+/** FFX-2 only: a command menu is open right now. The one rule every FFX-2 look keeps: nothing plays over it. */
+export function menuBlocks(ctx: EventCtx): boolean {
   return FFX2_SUPPRESS_WHILE_MENU && isFfx2(ctx) && ctx.menuOpen?.() === true;
 }
 
