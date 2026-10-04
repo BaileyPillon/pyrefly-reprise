@@ -155,7 +155,8 @@ export const EVRAE_AIRSHIP_ACTOR_HEIGHTS = {
  * **E1-H (D-360, FFX only): Evrae and Cid are pinned on NEAR Evrae's spot** (`enemySpots`, the switch the Gagazet and Highbridge
  * boss scenes use): the repainted idle needs its slot moved right by `EVRAE_E1H_SLOT_DX` for the head to stay where it was, and the shared
  * relax step and the formation solver must not shove it off that spot (they spread Evrae and the invisible Cid, who share one slot).
- * The pin is the director's own NEAR spot, so a range swap and the stage agree. The generic enemy slot table above keeps its
+ * The pin is the director's own NEAR spot, so a range swap and the stage agree (below 16:9 the director stands Evrae a little
+ * further left of it, `nearAspectFor`, together with NEAR's stand-back: D-360 repair). The generic enemy slot table above keeps its
  * pre-E1-H point: Chapters XVII and XVIII share this slot table and the pin names only `evrae` and `cid`, so nothing else moves.
  */
 const EVRAE_AIRSHIP_DECK_STAGING = {

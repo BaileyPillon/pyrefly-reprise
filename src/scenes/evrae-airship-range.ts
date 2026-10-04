@@ -174,12 +174,26 @@ export const EVRAE_NEAR_CENTRE_X_BEFORE_E1H = 3.018;
 export const EVRAE_E1H_SLOT_DX = 0.9743;
 
 /**
+ * **D-360 repair (FFX only): the whole figure stands 0.1 world left of where the repaint alone puts it.** The MAX mix shifts the
+ * stage right by 4 % of the width at one of the first three menus (its downed-footprint rule, once that menu's real panels are
+ * known; origin/main does the same at other menus), and at 16:9 the coil's end stood 46 to 95 px short of the turn rail at the
+ * first menu, so 5 to 14 px of its tip went under the rail when the shift came. 0.1 world is 10 px at 1600x900: at the shifted
+ * menu the coil's end now stands 4 to 14 px short of the rail from 1280x720 to 1920x1080 and at 2560x1440 (4 px past it at 2000x1012,
+ * with no coil pixel inside the rail's rect). It is also about what the party allows: Rikku leans toward the coil at her own menu,
+ * and at 0.1 she has 1.0 % of her painted pixels inside the figure, at 0.15 1.9 %, at 0.2 5.8 % (the repo's rest gap fails at 0.2).
+ * The head moves with it, 10 px left of where the mockups had it at 1600x900. The cost: the repo's rest gap at menu 3, a KO'd
+ * Tidus's lying box against 3 of 48 sampled cells of the figure's hidden strip, reads below 1 at every desktop size (it did at
+ * three sizes before); the visible painted overlap there stays 0.0 %.
+ */
+export const EVRAE_E1H_RAIL_TRIM_DX = -0.1;
+
+/**
  * NEAR Evrae's ground point from E1-H on: the resolved centre it had before ({@link EVRAE_NEAR_CENTRE_X_BEFORE_E1H}) plus
- * {@link EVRAE_E1H_SLOT_DX}. Pinned (`SceneSlots.enemySpots`), so neither the prone slide nor the relax step moves it and the
- * range director's own placement is the stage's.
+ * {@link EVRAE_E1H_SLOT_DX} and {@link EVRAE_E1H_RAIL_TRIM_DX}. Pinned (`SceneSlots.enemySpots`), so neither the prone slide nor
+ * the relax step moves it and the range director's own placement is the stage's.
  */
 export const EVRAE_NEAR_SPOT: Spot = [
-  EVRAE_NEAR_CENTRE_X_BEFORE_E1H + EVRAE_E1H_SLOT_DX,
+  EVRAE_NEAR_CENTRE_X_BEFORE_E1H + EVRAE_E1H_SLOT_DX + EVRAE_E1H_RAIL_TRIM_DX,
   EVRAE_NEAR_SPOT_BEFORE_E1H[1],
   EVRAE_NEAR_SPOT_BEFORE_E1H[2],
 ];

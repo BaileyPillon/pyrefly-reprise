@@ -6,10 +6,15 @@
  * for the head to stay put the slot moves right by `(200 + 165) / 2` canvas px of `4.1 / 768` world. Evrae's resolved centre
  * before the repaint was 3.018, not the data spot's 2.3 (ProneLay slid the wide idle's plane 0.718 right along the floor), and a
  * pinned figure is never slid: the deck pins Evrae and Cid (`SceneSlots.enemySpots`) on the director's own NEAR spot, which is
- * that resolved centre plus the move. Staging, not game data.
+ * that resolved centre plus the move, less the 0.1 world rail trim of the repair. Staging, not game data.
+ *
+ * **The repair of the critic's check (2026-10-04).** The coil reached the turn rail at 16:10 and 4:3, and the phone's refit pulled
+ * the camera back for the longer figure. NEAR's rigs now stand back as the window narrows (`nearDollyFor`, Chapter VIII's Evrae
+ * only), and the phone's A-12 refit leaves Evrae out (`PHONE_FIT_KEY`).
  *
  * What this holds: the formula, the composition of the spot, the pin, the untouched generic slot table that Chapters XVII and XVIII
- * share, the relax step and the director both leaving the pinned spot alone, and (only once the E1-H art is installed, because
+ * share, the relax step and the director both leaving the pinned spot alone, the aspect stand-back (its function, the coil keeping
+ * its 16:9 place in the window, whom it applies to), the phone's flag, and (only once the E1-H art is installed, because
  * `public/art` is gitignored) the installed canvas agreeing with the numbers.
  *
  * **Game case: FFX only** [AGENTS.md rule 14]: Evrae is Chapter VIII's boss and its range mechanic has no FFX-2 counterpart
@@ -18,17 +23,30 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Group, PerspectiveCamera, Vector3 } from 'three';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { resetArtManifest, setArtManifest, type ArtManifest } from '../../../src/engine/ArtManifest.ts';
+import { BattleCamera } from '../../../src/engine/BattleCamera.ts';
+import { PHONE_FIT_KEY } from '../../../src/engine/ShotRules.ts';
 import { LightRig } from '../../../src/engine/Lighting.ts';
 import type { DepthRect } from '../../../src/engine/ScreenRects.ts';
 import { solveFormation, type Spot } from '../../../src/engine/Formation.ts';
 import { laneFrom, relaxActorsOf, relaxField, type RelaxField, type StagedForRelax } from '../../../src/engine/StageRelax.ts';
 import { evraeGroup } from '../../../src/data/ffx/enemies/evrae.ts';
-import { EVRAE_AIRSHIP_DECK_SLOTS as SLOTS, EVRAE_ENEMY_SLOT } from '../../../src/scenes/evrae-airship-deck.ts';
+import { EVRAE_AIRSHIP_DECK_RIGS as RIGS, EVRAE_AIRSHIP_DECK_SLOTS as SLOTS, EVRAE_ENEMY_SLOT } from '../../../src/scenes/evrae-airship-deck.ts';
 import { AirshipRangeDirector } from '../../../src/scenes/evrae-airship-director.ts';
 import {
+  EVRAE_COIL_REACH,
+  EVRAE_TRIM_PER_DOLLY,
+  NEAR_ASPECT_REF,
+  NEAR_DOLLY_MARGIN,
+  NEAR_DOLLY_MAX,
+  nearAspectFor,
+  nearCoilDepthRatio,
+  nearDollyFor,
+} from '../../../src/scenes/evrae-airship-aspect.ts';
+import {
   EVRAE_BASELINE_PX,
+  EVRAE_E1H_RAIL_TRIM_DX,
   EVRAE_E1H_SLOT_DX,
   EVRAE_NEAR_CENTRE_X_BEFORE_E1H,
   EVRAE_NEAR_SPOT,
@@ -37,10 +55,13 @@ import {
   RANGE_STAGING,
 } from '../../../src/scenes/evrae-airship-range.ts';
 import type { AirshipDeck } from '../../../src/scenes/evrae-airship-sky.ts';
-import { evraeSubject } from '../../../src/scenes/evrae-airship-subjects.ts';
+import { evraeSubject, phoneRig } from '../../../src/scenes/evrae-airship-subjects.ts';
 import type { SceneSlots } from '../../../src/scenes/index.ts';
 
-afterEach(() => resetArtManifest());
+afterEach(() => {
+  resetArtManifest();
+  vi.unstubAllGlobals();
+});
 
 describe('the slot move', () => {
   it('is the repaint\'s canvas change: ((200 + 165) / 2) canvas px of 4.1 / 768 world, kept to four places', () => {
@@ -50,10 +71,11 @@ describe('the slot move', () => {
     expect(EVRAE_E1H_SLOT_DX).toBe(0.9743);
   });
 
-  it('puts NEAR Evrae on the centre it resolved to before (3.018) plus that move, at the data spot\'s height and depth', () => {
+  it('puts NEAR Evrae on the centre it resolved to before (3.018) plus that move and the rail trim, at the data spot\'s height and depth', () => {
     expect(EVRAE_NEAR_CENTRE_X_BEFORE_E1H).toBe(3.018);
+    expect(EVRAE_E1H_RAIL_TRIM_DX).toBe(-0.1);
     expect([...EVRAE_NEAR_SPOT_BEFORE_E1H]).toEqual([2.3, -0.9, -4.7]);
-    expect(EVRAE_NEAR_SPOT[0]).toBeCloseTo(3.018 + 0.9743, 6);
+    expect(EVRAE_NEAR_SPOT[0]).toBeCloseTo(3.018 + 0.9743 - 0.1, 6);
     expect(EVRAE_NEAR_SPOT[1]).toBe(EVRAE_NEAR_SPOT_BEFORE_E1H[1]);
     expect(EVRAE_NEAR_SPOT[2]).toBe(EVRAE_NEAR_SPOT_BEFORE_E1H[2]);
     expect([...RANGE_STAGING.near.evrae]).toEqual([...EVRAE_NEAR_SPOT]);
@@ -193,6 +215,7 @@ function fakeActor() {
     lifeState: 'alive',
     position: new Vector3(),
     scale: new Vector3(1, 1, 1),
+    userData: {} as Record<string, unknown>,
     poseSize: [10, 5] as [number, number],
     setAlpha(): void {},
     async loadPoses(): Promise<void> {},
@@ -217,6 +240,198 @@ describe('the range director', () => {
     director.setRange('near', { immediate: true });
     await settle();
     expect(actor.position.toArray()).toEqual([...SLOTS.enemySpots!['evrae']!]);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// The aspect stage: NEAR's rigs stand back as the window narrows (D-360 repair of the critic's check, 2026-10-04)
+// ---------------------------------------------------------------------------------------------------------------------------
+
+const ASPECTS = { '21:9': 2560 / 1080, '1.98': 2000 / 1012, '16:9': 16 / 9, '16:10': 16 / 10, '3:2': 3 / 2, '4:3': 4 / 3 } as const;
+
+function lookCamera(rig: { position: readonly number[]; lookAt: readonly number[]; fov: number }, aspect: number): PerspectiveCamera {
+  const c = new PerspectiveCamera(rig.fov, aspect, 0.1, 400);
+  c.position.set(rig.position[0]!, rig.position[1]!, rig.position[2]!);
+  c.lookAt(new Vector3(rig.lookAt[0]!, rig.lookAt[1]!, rig.lookAt[2]!));
+  c.updateMatrixWorld(true);
+  return c;
+}
+
+/** The painted coil's outer end (the right edge of idle.png's alpha) at mid-height, as the stand-back is sized for it. */
+const coilEnd = (): Vector3 => new Vector3(EVRAE_NEAR_SPOT[0] + EVRAE_COIL_REACH, EVRAE_NEAR_SPOT[1] + 1.2, EVRAE_NEAR_SPOT[2]);
+
+describe('the aspect stand-back (nearDollyFor) and the trim that goes with it (nearAspectFor)', () => {
+  it('is 1 at 16:9 and wider, and grows as the window narrows, up to the mix\'s own bound', () => {
+    expect(NEAR_ASPECT_REF).toBeCloseTo(16 / 9, 12);
+    for (const a of [ASPECTS['21:9'], ASPECTS['1.98'], ASPECTS['16:9']]) expect(nearDollyFor(a)).toBe(1);
+    expect(nearDollyFor(ASPECTS['16:10'])).toBeGreaterThan(1.13);
+    expect(nearDollyFor(ASPECTS['16:10'])).toBeLessThan(1.16);
+    expect(nearDollyFor(ASPECTS['4:3'])).toBeGreaterThan(1.42);
+    expect(nearDollyFor(ASPECTS['4:3'])).toBeLessThanOrEqual(NEAR_DOLLY_MAX);
+    const asc = [1.7, ASPECTS['16:10'], ASPECTS['3:2'], ASPECTS['4:3'], 1.3].map(nearDollyFor);
+    for (let i = 1; i < asc.length; i++) expect(asc[i]).toBeGreaterThanOrEqual(asc[i - 1]!);
+    expect(NEAR_DOLLY_MAX).toBe(1.45);
+    expect(nearDollyFor(1.25)).toBe(NEAR_DOLLY_MAX);
+    expect(nearDollyFor(1)).toBe(NEAR_DOLLY_MAX);
+  });
+
+  it('answers 1 to anything that is not a window shape (no window, a zero size)', () => {
+    for (const a of [Number.NaN, 0, -1, Number.POSITIVE_INFINITY]) expect(nearDollyFor(a)).toBe(1);
+  });
+
+  it('sizes the stand-back for the coil\'s depth along the rig\'s view axis (recomputed here with three.js)', () => {
+    const idle = RANGE_STAGING.near.rigs.idle;
+    const cam = lookCamera(idle, NEAR_ASPECT_REF);
+    const depth = (v: Vector3): number => -v.clone().applyMatrix4(cam.matrixWorldInverse).z;
+    const aim = new Vector3(idle.lookAt[0], idle.lookAt[1], idle.lookAt[2]);
+    expect(nearCoilDepthRatio()).toBeCloseTo(depth(coilEnd()) / depth(aim), 6);
+    expect(nearCoilDepthRatio()).toBeGreaterThan(1.15);
+    expect(nearCoilDepthRatio()).toBeLessThan(1.22);
+  });
+
+  it('keeps the coil\'s end where it stands at 16:9 in the window\'s width, less the 10 % margin, from 16:10 down to 4:3', () => {
+    const at16by9 = coilEnd().project(lookCamera(RANGE_STAGING.near.rigs.idle, NEAR_ASPECT_REF)).x;
+    expect(NEAR_DOLLY_MARGIN).toBe(1.1);
+    for (const a of [ASPECTS['16:10'], ASPECTS['3:2'], ASPECTS['4:3'], 1.35]) {
+      const rig = phoneRig(RANGE_STAGING.near.rigs.idle, { dolly: nearDollyFor(a) });
+      const at = coilEnd().project(lookCamera(rig, a)).x;
+      expect(at, `aspect ${a.toFixed(3)}`).toBeLessThan(at16by9);
+      expect(at, `aspect ${a.toFixed(3)}`).toBeGreaterThan(at16by9 - 0.07);
+    }
+    // the plain Hor+ rule (margin 1) would land on it exactly, which is what the margin is measured from
+    const plain = (a: number): number => 1 + nearCoilDepthRatio() * (NEAR_ASPECT_REF / a - 1);
+    for (const a of [ASPECTS['16:10'], ASPECTS['4:3']]) {
+      const rig = phoneRig(RANGE_STAGING.near.rigs.idle, { dolly: plain(a) });
+      expect(coilEnd().project(lookCamera(rig, a)).x, `plain ${a.toFixed(3)}`).toBeCloseTo(at16by9, 3);
+    }
+  });
+
+  it('stands the camera back along its own view line: same aim, same angle, farther by the factor', () => {
+    const idle = RANGE_STAGING.near.rigs.idle;
+    const k = nearDollyFor(ASPECTS['4:3']);
+    const rig = phoneRig(idle, { dolly: k });
+    expect(rig.lookAt).toEqual(idle.lookAt);
+    const before = new Vector3(...idle.position).sub(new Vector3(...idle.lookAt));
+    const after = new Vector3(...rig.position).sub(new Vector3(...rig.lookAt));
+    expect(after.length()).toBeCloseTo(before.length() * k, 9);
+    expect(after.clone().normalize().distanceTo(before.clone().normalize())).toBeLessThan(1e-12);
+  });
+});
+
+describe('the window\'s trim off the 16:9 pin (nearAspectFor)', () => {
+  it('is nothing at 16:9 and wider, and moves the figure left in proportion to the stand-back below it', () => {
+    for (const a of [ASPECTS['21:9'], ASPECTS['1.98'], ASPECTS['16:9']]) expect(nearAspectFor(a)).toEqual({ dolly: 1, dx: 0 });
+    for (const a of [ASPECTS['16:10'], ASPECTS['3:2'], ASPECTS['4:3'], 1.2]) {
+      const { dolly, dx } = nearAspectFor(a);
+      expect(dolly).toBe(nearDollyFor(a));
+      expect(dx).toBeCloseTo(-EVRAE_TRIM_PER_DOLLY * (dolly - 1), 12);
+      expect(dx).toBeLessThan(0);
+    }
+    expect(EVRAE_TRIM_PER_DOLLY).toBe(0.25);
+  });
+
+  it('keeps the pin plus the trim within what the party allows at every window (a total shift of 0.35 world at most)', () => {
+    for (const a of [ASPECTS['16:10'], ASPECTS['3:2'], ASPECTS['4:3'], 1, 0.5]) {
+      expect(EVRAE_E1H_RAIL_TRIM_DX + nearAspectFor(a).dx).toBeGreaterThan(-0.35);
+    }
+  });
+});
+
+/** A window stand-in for the director's reads (`innerWidth`, `innerHeight`, `matchMedia` for the phone query). */
+function stubWindow(w: number, h: number, phone = false): void {
+  vi.stubGlobal('window', { innerWidth: w, innerHeight: h, matchMedia: () => ({ matches: phone }) });
+}
+
+async function boundDirector(id = 'evrae', actor = fakeActor()) {
+  setArtManifest(evraeManifest());
+  const palette = { sky: 0x6d8fbd, horizon: 0xc7d3e6, ground: 0x7a8394, key: 0xffe0b0, bounce: 0x8894a8 };
+  const director = new AirshipRangeDirector(fakeDeck(), new LightRig({ palette, shadows: false }));
+  const camera = new BattleCamera(new PerspectiveCamera(34, 16 / 9, 0.1, 400), { rigs: RIGS as Record<string, never>, initial: 'idle' });
+  director.bindCamera(camera);
+  await director.bindEvrae(actor as never, id);
+  return { director, camera, actor };
+}
+
+const positionOf = (camera: BattleCamera, rig: string): number[] => (camera.getRig(rig)!.position as Vector3).toArray();
+
+describe('the range director, aspect and phone (Chapter VIII\'s Evrae only)', () => {
+  it('stands NEAR\'s three rigs back for a 16:10 and a 4:3 window, about their own aim', async () => {
+    for (const [w, h] of [[1440, 900], [1024, 768]] as const) {
+      stubWindow(w, h);
+      const { camera } = await boundDirector();
+      const k = nearDollyFor(w / h);
+      expect(k).toBeGreaterThan(1);
+      for (const name of ['idle', 'action', 'enemy'] as const) {
+        const want = phoneRig(RANGE_STAGING.near.rigs[name], { dolly: k }).position;
+        expect(positionOf(camera, name), `${name} at ${w}x${h}`).toEqual([...want]);
+        expect((camera.getRig(name)!.lookAt as Vector3).toArray()).toEqual([...RANGE_STAGING.near.rigs[name].lookAt]);
+      }
+    }
+  });
+
+  it('leaves the rigs as authored at 16:9, 21:9 and with no window at all', async () => {
+    for (const [w, h] of [[1600, 900], [2560, 1080]] as const) {
+      stubWindow(w, h);
+      const { camera } = await boundDirector();
+      expect(positionOf(camera, 'idle')).toEqual([...RANGE_STAGING.near.rigs.idle.position]);
+    }
+    vi.unstubAllGlobals();
+    const { camera } = await boundDirector();
+    expect(positionOf(camera, 'idle')).toEqual([...RANGE_STAGING.near.rigs.idle.position]);
+  });
+
+  it('stands Evrae off the pin by the window\'s trim at NEAR, on the pin at 16:9, and back at the same spot after FAR', async () => {
+    stubWindow(1440, 900);
+    const narrow = await boundDirector();
+    const trim = nearAspectFor(1440 / 900).dx;
+    expect(trim).toBeLessThan(0);
+    expect(narrow.actor.position.x).toBeCloseTo(EVRAE_NEAR_SPOT[0] + trim, 9);
+    expect(narrow.actor.position.y).toBe(EVRAE_NEAR_SPOT[1]);
+    expect(narrow.actor.position.z).toBe(EVRAE_NEAR_SPOT[2]);
+    narrow.director.setRange('far', { immediate: true });
+    await settle();
+    expect(narrow.actor.position.toArray()).toEqual([...RANGE_STAGING.far.evrae]);
+    narrow.director.setRange('near', { immediate: true });
+    await settle();
+    expect(narrow.actor.position.x).toBeCloseTo(EVRAE_NEAR_SPOT[0] + trim, 9);
+    stubWindow(1600, 900);
+    const wide = await boundDirector();
+    expect(wide.actor.position.toArray()).toEqual([...EVRAE_NEAR_SPOT]);
+  });
+
+  it('puts FAR\'s rigs as authored, and NEAR\'s stand-back again on the way back', async () => {
+    stubWindow(1440, 900);
+    const { director, camera } = await boundDirector();
+    const near = positionOf(camera, 'idle');
+    expect(near).not.toEqual([...RANGE_STAGING.near.rigs.idle.position]);
+    director.setRange('far', { immediate: true });
+    await settle();
+    expect(positionOf(camera, 'idle')).toEqual([...RANGE_STAGING.far.rigs.idle.position]);
+    director.setRange('near', { immediate: true });
+    await settle();
+    expect(positionOf(camera, 'idle')).toEqual(near);
+  });
+
+  it('does not touch the rigs of a Fin (Chapter XVII) or of no foe (Chapter XVIII), at any window', async () => {
+    stubWindow(1024, 768);
+    const fin = await boundDirector('left-fin');
+    expect(positionOf(fin.camera, 'idle')).toEqual([...RANGE_STAGING.near.rigs.idle.position]);
+    const none = await boundDirector('evrae', null as never);
+    expect(positionOf(none.camera, 'idle')).toEqual([...RANGE_STAGING.near.rigs.idle.position]);
+    expect((fin.actor.userData as Record<string, unknown>)[PHONE_FIT_KEY]).toBeUndefined();
+  });
+
+  it('on a phone window keeps the rigs as authored (the A-12 refit owns that camera) and marks Evrae out of the refit', async () => {
+    stubWindow(390, 844, true);
+    const { camera, actor } = await boundDirector();
+    expect(positionOf(camera, 'idle')).toEqual([...RANGE_STAGING.near.rigs.idle.position]);
+    expect((actor.userData as Record<string, unknown>)[PHONE_FIT_KEY]).toBe(false);
+  });
+
+  it('marks Evrae out of the phone refit on a desktop window too (the flag is read only where the refit runs)', async () => {
+    stubWindow(1600, 900);
+    const { actor } = await boundDirector();
+    expect((actor.userData as Record<string, unknown>)[PHONE_FIT_KEY]).toBe(false);
   });
 });
 

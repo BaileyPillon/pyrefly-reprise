@@ -10,8 +10,9 @@
  * browser pass in `docs/handoff/chapter-evrae-scene.md`.
  *
  * The HUD-safe-area claim is measured the way Macalania's is: through a real
- * three.js camera on each range's `idle` rig at 16:9, against the FFX rail at
- * 0.79 of the width (`docs/ENGINE-API.md#hud-safe-area`).
+ * three.js camera on each range's `idle` rig, against the FFX rail
+ * (`docs/ENGINE-API.md#hud-safe-area`): FAR at 16:9 against 0.79 of the width, NEAR (E1-H's longer figure) against the Ink &
+ * Gold turn rail at 16:9, 16:10, 4:3 and the wider shapes, with the stand-back the director gives NEAR's rigs below 16:9.
  *
  * **Game case: FFX only** [AGENTS.md rule 14].
  */
@@ -34,6 +35,7 @@ import {
   EVRAE_AIRSHIP_DECK_SLOTS as SLOTS,
   EVRAE_ENEMY_SLOT,
 } from '../../../src/scenes/evrae-airship-deck.ts';
+import { NEAR_ASPECT_REF, nearAspectFor } from '../../../src/scenes/evrae-airship-aspect.ts';
 import {
   AirshipRangeDirector,
   airshipRangeDirectorOf,
@@ -54,11 +56,12 @@ import {
   type RigNumbers,
 } from '../../../src/scenes/evrae-airship-range.ts';
 import type { AirshipDeck } from '../../../src/scenes/evrae-airship-sky.ts';
+import { phoneRig } from '../../../src/scenes/evrae-airship-subjects.ts';
 
 const FFX_HUD_RAIL = 0.79;
 
-function camFor(r: RigNumbers | { position: unknown; lookAt: unknown; fov?: number }): PerspectiveCamera {
-  const cam = new PerspectiveCamera(r.fov ?? 34, 16 / 9, 0.1, 400);
+function camFor(r: RigNumbers | { position: unknown; lookAt: unknown; fov?: number }, aspect = 16 / 9): PerspectiveCamera {
+  const cam = new PerspectiveCamera(r.fov ?? 34, aspect, 0.1, 400);
   const [px, py, pz] = r.position as [number, number, number];
   const [lx, ly, lz] = r.lookAt as [number, number, number];
   cam.position.set(px, py, pz);
@@ -85,8 +88,18 @@ function box(cam: PerspectiveCamera, spot: readonly number[], w: number, h: numb
 }
 
 const NEAR_W = H.evrae * (1136 / 784); // idle.json 1136x784 from E1-H (D-360); the approved idle was 1171x784
-/** The Ink & Gold turn rail's left edge at 16:9, as a fraction of the width: hudPanels read 1405 of 1600 px (0.878), 2026-10-03. */
+/**
+ * The Ink & Gold turn rail's left edge at 16:9, as a fraction of the width: hudPanels read 1405 of 1600 px (0.878), 2026-10-03.
+ * The HUD's stage is 16:9 and keeps that fraction at every narrower window (it fits the width); a wider window pillarboxes it.
+ */
 const TURN_RAIL = 0.878;
+/** The rail's left edge as a fraction of the window's width, for a window `aspect` wide. */
+const railLeft = (aspect: number): number => {
+  const stage = Math.min(1, NEAR_ASPECT_REF / aspect);
+  return (1 - stage) / 2 + TURN_RAIL * stage;
+};
+/** The window shapes the critic's check measured (and the wide ones): 21:9, 2000x1012, 16:9, 1680x1050, 3:2, 1024x768. */
+const WINDOWS: Record<string, number> = { '21:9': 2560 / 1080, '2000x1012': 2000 / 1012, '16:9': 16 / 9, '16:10': 1680 / 1050, '3:2': 3 / 2, '4:3': 1024 / 768 };
 /** The snout's offset from the plane's centre, world units: E1-H's idle has it at x 21.7 of 1136 px, the plane centred on the slot. */
 const HEAD_DX = ((21.7 - 568) * H.evrae) / 768;
 const FAR_W = farWorldWidth(H.evrae);
@@ -127,13 +140,29 @@ describe('evrae-airship-deck: formation and marks', () => {
 });
 
 describe('evrae-airship-deck: framing, measured through a real camera', () => {
-  it('keeps NEAR Evrae inside the frame and left of the turn rail on NEAR’s idle rig', () => {
-    // E1-H (D-360): the lengthened neck puts the coil right of the party, ending 47 px before the Ink & Gold turn rail at 1600x900,
-    // so the old 0.79 planning rail no longer bounds it; the rail is the measured one (TURN_RAIL).
-    const b = box(camFor(RANGE_STAGING.near.rigs.idle), RANGE_STAGING.near.evrae, NEAR_W, H.evrae);
-    expect(b.l).toBeGreaterThan(0.3);
-    expect(b.r).toBeLessThan(TURN_RAIL);
-    expect(b.t).toBeGreaterThan(0.05);
+  it('keeps NEAR Evrae inside the frame and left of the turn rail on NEAR’s idle rig, in every window shape', () => {
+    // E1-H (D-360): the lengthened neck puts the coil right of the party, so the old 0.79 planning rail no longer bounds it; the rail
+    // is the measured one (TURN_RAIL). Below 16:9 the director stands NEAR's rigs back (`nearDollyFor`): the check of `3b709a4f` found
+    // the coil 51 to 59 px under the rail at 16:10 and 112 px at 4:3 on the authored rig, a test that only looked at 16:9.
+    // The plane box (the canvas, 0.09 world wider than the painted coil) keeps 0.012 of the width to the rail's left edge; the figure
+    // stands where the director puts it for that window (`nearAspectFor`: the stand-back and the trim off the pin).
+    for (const [name, aspect] of Object.entries(WINDOWS)) {
+      const { dolly, dx } = nearAspectFor(aspect);
+      const rig = phoneRig(RANGE_STAGING.near.rigs.idle, { dolly });
+      const spot = [RANGE_STAGING.near.evrae[0] + dx, RANGE_STAGING.near.evrae[1], RANGE_STAGING.near.evrae[2]];
+      const b = box(camFor(rig, aspect), spot, NEAR_W, H.evrae);
+      expect(b.l, name).toBeGreaterThan(0.3);
+      expect(b.r, name).toBeLessThan(railLeft(aspect) - 0.012);
+      expect(b.t, name).toBeGreaterThan(0.05);
+    }
+  });
+
+  it('would stand under the turn rail at 16:10 and 4:3 on the authored rig: why the camera stands back, not the figure', () => {
+    for (const name of ['16:10', '3:2', '4:3']) {
+      const aspect = WINDOWS[name]!;
+      const b = box(camFor(RANGE_STAGING.near.rigs.idle, aspect), RANGE_STAGING.near.evrae, NEAR_W, H.evrae);
+      expect(b.r, name).toBeGreaterThan(railLeft(aspect));
+    }
   });
 
   it('draws FAR Evrae small, in the sky above the rail line, left of the HUD rail, on FAR’s idle rig', () => {
