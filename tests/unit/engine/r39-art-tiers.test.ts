@@ -80,8 +80,9 @@ describe('device class', () => {
     expect(mid!.textureMB).toBeGreaterThan(low!.textureMB);
     expect(low!.textureMB).toBeGreaterThan(phone!.textureMB);
     expect(high!.backdropScale).toBe(2);
-    expect(high!.msaa).toBeGreaterThan(0);
-    expect(phone!.msaa).toBe(0);
+    expect(high!.aa).not.toBe('off');
+    expect(phone!.aa).toBe('off');
+    expect(low!.aa).toBe('off'); // a software renderer pays for every pass in CPU time
     // a returned budget is the caller's own copy
     const a = budgetFor('high');
     a.maxScale = 1;

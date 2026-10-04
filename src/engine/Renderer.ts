@@ -10,11 +10,13 @@ import {
   type Camera,
 } from 'three';
 import { setPaintedAnisotropy } from './PaintedArt.ts';
-import { setBufferWidth, setGpuInfo } from './ArtDevice.ts';
+import { artBudget, setBufferWidth, setGpuInfo } from './ArtDevice.ts';
+import { MsaaRenderPass, parseAaOverride, type AaMode } from './PostAa.ts';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { maskBloomHighPass, setFigureBloomMask } from './BloomMask.ts';
 import { TiltShiftShader } from './shaders/TiltShiftShader.ts';
 import { GradeShader } from './shaders/GradeShader.ts';
@@ -106,6 +108,10 @@ export class Renderer {
   readonly gradePass: ShaderPass;
 
   private readonly renderPass: RenderPass;
+  /** Release 39: the scene pass of an MSAA chain (disabled unless `aaMode` is `msaa`), and the SMAA pass after the grade (`PostAa.ts`). */
+  private readonly msaaPass: MsaaRenderPass;
+  private readonly smaaPass: SMAAPass;
+  private aa: AaMode = 'off';
   private readonly maxPixelRatio: number;
   /** Drawn after the post chain, straight onto the finished frame (the spell effects, `SpellFxLayer`). */
   private readonly overlays = new Set<(renderer: WebGLRenderer) => void>();
@@ -164,6 +170,8 @@ export class Renderer {
     // RenderPass wants a scene up front; the real one is swapped in per frame.
     this.renderPass = new RenderPass(new Scene(), this.camera);
     this.composer.addPass(this.renderPass);
+    this.msaaPass = new MsaaRenderPass(new Scene(), this.camera, artBudget().msaaSamples);
+    this.composer.addPass(this.msaaPass);
 
     this.bloomPass = new UnrealBloomPass(
       new Vector2(width, height),
@@ -183,13 +191,28 @@ export class Renderer {
     this.composer.addPass(this.tiltV);
 
     this.gradePass = new ShaderPass(GradeShader);
-    this.gradePass.renderToScreen = true;
+    this.gradePass.renderToScreen = true; // the composer re-decides it each frame: the last enabled pass draws to the screen
     this.composer.addPass(this.gradePass);
+    this.smaaPass = new SMAAPass();
+    this.composer.addPass(this.smaaPass);
+    this.setAa(parseAaOverride(new URLSearchParams(window.location?.search ?? '').get('aa')) ?? artBudget().aa);
 
     this.applyPost(DEFAULT_POST);
     this.resize();
 
     window.addEventListener('resize', this.onWindowResize, { passive: true });
+  }
+
+  /** Switch the anti-aliasing: `msaa` (a multisampled scene target), `smaa` (a pass after the grade) or `off`. Captures and the budget call it. */
+  setAa(mode: AaMode): void {
+    this.aa = mode;
+    this.renderPass.enabled = mode !== 'msaa';
+    this.msaaPass.enabled = mode === 'msaa';
+    this.smaaPass.enabled = mode === 'smaa';
+  }
+
+  get aaMode(): AaMode {
+    return this.aa;
   }
 
   /** The canvas element, for pointer handling and screenshots. */
@@ -312,6 +335,8 @@ export class Renderer {
     if (this.disposed) return;
     this.renderPass.scene = scene;
     this.renderPass.camera = camera;
+    this.msaaPass.scene = scene;
+    this.msaaPass.camera = camera;
     const t = this.gradePass.uniforms['time'];
     if (t) t.value = performance.now() / 1000;
     if (this.fxA || eyeCandy.on.a) (this.fxA ??= new GoldenHour(this)).update(scene, camera);
@@ -333,6 +358,8 @@ export class Renderer {
     this.disposed = true;
     window.removeEventListener('resize', this.onWindowResize);
     this.fxA?.dispose();
+    this.msaaPass.dispose();
+    this.smaaPass.dispose();
     this.composer.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();
