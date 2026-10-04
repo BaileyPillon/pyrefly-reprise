@@ -155,3 +155,154 @@ focused review of the production candidate and the deep review on the live build
 Changed src files over 400 lines (house rule 7), all already over on main and disclosed by their lanes: `FFX2BattleHud.ts` 1,290, `BattleScreen.ts` 929, `PaintedArt.ts` 860,
 `portrait.ts` 761, `MoveAdvisor.ts` 703, `hudSafeZones.ts` 543 (three `export` keywords, did not grow), `chapterPanel.ts` 502, `overdrive.ts` 472 (did not grow). The files this pass wrote:
 `openingMark.ts` 99, `cavern-stolen-fayth.ts` 396 and `cavern-stolen-fayth-arrival.ts` 398 stay under 400.
+
+---
+
+# Release 38 integration, part 2a (branch rel38-int2, 2026-10-04)
+
+Integrator pass, part 2a, built by a Sonnet sub-agent of the driver session in worktree `D:/pyrefly-r29-text`, from `origin/main` fad09603 (part 1, above). Bailey's
+go-ahead for release 38 is quoted in part 1. This part merges the two lanes whose merged re-checks passed, **r38-restage** and **r38-motion**. **Nothing here is
+deployed and no release was cut**: no release worktree and no shared `dist/` was touched. The gates below ran on the tested tip **d82414b3**, which is now `origin/main`
+(pushed `fad09603..d82414b3`, a fast-forward) and the shared main tree's HEAD; this record is a docs-only commit on top of it (plus one frame under `docs/screenshots/release-38/`).
+
+## What merged, in order (each a `--no-ff` merge, `npx tsc --noEmit` clean after each; the numbering continues part 1's seven)
+
+| # | Branch @ tip | Merge sha | Game case | What it is |
+|---|---|---|---|---|
+| 8 | r38-restage @ 8ce64ca2 | 658393e2 | the table's rows FFX only (Chapter II, Yunalesca); the roster, the hold and the per-axis write rule are shared plumbing, both games, and behave as before for a fight with no row | PR-0310, D-353 ask 4: Chapter II is staged from a per-chapter table (party -0.10 / +0.04, fiends +0.75 / -0.47) so the party and the fiends stop touching at rest; Chapter III's table is written and **switched off** (`CHAPTER_III_STAGED = false` in `stageTable.ts`, so Chapter III plays as origin/main does); Natus option N left off ([r38-restage.md](r38-restage.md)) |
+| 9 | r38-motion @ 54480b0d | 2d7cc1d3 | SKILL TRAVEL both games; RUN-IN FFX-2 only; the PlaceOwner hand-over is shared plumbing, inert in FFX; LOW EFFECTS plays today's attack | D-354 ask 5: SKILL TRAVEL (spells, skills and shots cross the field, and the number and the HP row wait for the landing), the FFX-2 run-in to the foe and home with a stand-off search, and a girl out on a run owns her place so the MAX mix stops adding its share to her home at every Attack ([r38-motion.md](r38-motion.md)) |
+| - | integration commit d82414b3 | - | slots FFX only, RUN-IN FFX-2 only, the hand-over guard both and inert in FFX | tests only: `tests/unit/r38-merged-staging.test.ts`, the guard on the resolution below |
+
+Merge 8 had no conflict. **Merge 9 conflicted in two files**, both resolved exactly as the merged re-check recorded them
+(`D:/Tools/pyrefly-scratch/2026-10-04/mr-recheck/resolution.md`, the re-check's scratch merge 363353d3; my resolver scripts are `resolve-staging.mjs` and `resolve-beats.mjs`
+in `D:/Tools/pyrefly-scratch/2026-10-04/rel38-int2/harness/`, both CRLF-preserving; the Beats one also refuses a hunk that is not the expected shape). No merge touched
+`docs/handoff/NOW.md` (`git diff fad09603 d82414b3 -- docs/handoff/NOW.md` is empty). Nothing else conflicted; the other files both sides edit auto-merged and I read them
+(`KeySlots.ts`: motion's three `export` keywords beside r38-keys' additions; `MaxMix.ts`: restage's and r38-pushin's hunks side by side).
+
+## The conflicts, resolved (verbatim)
+
+### `src/engine/fx/mix/staging.ts` (three hunks)
+
+1. Imports, keep both (restage's hold flag, motion's hand-over):
+
+```ts
+import { STAGE_HOLD_KEY } from '../../StageRelax.ts';
+import { placeOwned } from '../../motion/PlaceOwner.ts';
+```
+
+2. Header comment, restage's first line plus motion's two added lines:
+
+```ts
+ * by the stage (an arrival, a spot) is respected and the mix's share is put back on top of it.
+ * A figure that is out on a run of its own (`motion/PlaceOwner.ts`, RUN-IN) is no re-seat: it is left alone, record
+ * and all, until it is home (r38-motion repair; before it, every run added the share to the girl's home once more).
+```
+
+3. `Staging.release()`, motion's loop with restage's fourth argument (`null`: no slot share):
+
+```ts
+  release(): void {
+    for (const a of [...this.recs.keys()]) {
+      // Out on a run: her position holds none of the share now, and she returns to the place that does. Keep the record, so the
+      // next write takes the old share off and puts the new plan's on, once.
+      if (placeOwned(a)) continue;
+      this.write(a, 1, 0, null);
+      this.recs.delete(a);
+    }
+    this.plan.clear();
+  }
+```
+
+`apply` merged by itself (restage's `side ? shiftOf(side, a) : null` argument on the line below motion's `if (placeOwned(a)) continue;`). The result: `git diff origin/r38-restage HEAD -- src/engine/fx/mix/staging.ts`
+is **44 lines**, motion's additions only (the import, the two comment lines, the guard line in `apply`, the loop in `release`); `git diff 363353d3 d82414b3 -- src/engine/fx/mix/staging.ts`
+is **empty**, so the file is byte for byte the re-check's resolved one. The file is 215 lines.
+
+### `src/engine/BattlePresenterBeats.ts` (two adjacent import lines)
+
+r38-keys (part 1, already on main) added the `telegraphHold` import under the KeySlots line; r38-motion changed the KeySlots line (it adds `menuBlocks`) and added two imports under it.
+Keep all of them: motion's KeySlots line (the old line plus `menuBlocks`, nothing else; the resolver checks that), then `telegraphHold`, then motion's two:
+
+```ts
+import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
+import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
+import { motionAllowed } from './motion/MotionGate.ts'; // r38-motion: BATTLE SPECTACLE's two motion looks share one gate
+import { landFlight, launchShot, planSkill, revealBlow, settleFlight } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL (both games); a no-op without a shot
+```
+
+The rest of the file merged by itself: `git diff fad09603 d82414b3 -- src/engine/BattlePresenterBeats.ts` is motion's changes only (the run-in before the blow, `lungeFor`, `planSkill`, `launchShot`, `shotLanded`, `revealBlow`,
+`actionEnd(ctx, endedId?)`), and r38-keys' `telegraphHold` use is untouched.
+
+### The guard (d82414b3)
+
+Neither lane had a test of the combination (slots active and a girl out on a run): `r38-place-owner.test.ts` carries a verbatim **copy** of restage's `Staging` with the comment "when r38-restage
+lands, drop this copy". The re-check's scratch test of the real merged class is now `tests/unit/r38-merged-staging.test.ts` (185 lines, 6 tests; its body is the re-check's unchanged, only the header and the imports
+changed): the slots land once and hold; 30 runs out and back along her own lane and 30 with a change of depth leave every figure within 0.001; without the hand-over a depth change walks her (the control); a figure
+that arrives while another is out stands on its slot from its first write and never steps; `release()` puts a figure that is home back on the stage's seat and keeps an owned figure's record, so the share goes on
+once when she is home. The re-check showed two wrong resolutions fail it (restage's `release` loop taken verbatim; no `placeOwned` guard in `apply`). The copy in `r38-place-owner.test.ts` is **left in place** (nothing is
+deleted here); dropping it is a follow-up.
+
+## Gates (on the tested tip d82414b3)
+
+| Gate | Result |
+|---|---|
+| `npx tsc --noEmit` | clean after merge 8, after merge 9 with both resolutions, after the test commit, and once more at the tip (exit 0) |
+| Full suite `npx vitest run --testTimeout=60000 --maxWorkers=4` | **795 files passed, 5 skipped (800); 11,670 tests passed, 44 skipped, 1 todo (11,715); 0 failed; exit 0; 455.5 s** (log `D:/Tools/pyrefly-scratch/2026-10-04/rel38-int2/logs/full-suite.log`). None of the three known load timeouts fired. Against part 1's tip (784 files, 11,535 tests): **+11 files and +135 tests**, all new: restage's `fx-mix-roster` (7), `fx-mix-stage-hold` (12), `fx-mix-stage-table` (27); motion's `r38-skill-travel` (20), `r38-flight-fx` (17), `r38-stand-off` (7), `r38-run-in` (13), `r38-stage-motion` (11), `r38-run-in-staging` (6), `r38-place-owner` (9); and `r38-merged-staging` (6) |
+| `node tools/orphans.mjs` | 1218 modules, 1194 reachable, **24 orphaned**: the same 24 (part 1: 1208 and 1184); the ten new modules (`roster.ts`, `stageTable.ts`, `BattleScreenRunIn.ts`, `MotionGate.ts`, `PlaceOwner.ts`, `SkillTravel.ts`, `StageMotion.ts`, `StageMotionPort.ts`, `StandOff.ts`, `FlightFx.ts`) are all reachable |
+| Approved-art verifier `D:/Tools/pyrefly-lora/tools/verify-approved.mjs` | approved 586 ok, judge-locked 48 ok, **0 mismatched, 0 missing** (default root `D:/Final Fantasy`, and with `ROOT=D:/pyrefly-r29-text`: the same) |
+| `node tools/audio/qa.mjs --strict` | exit 0, 0 cues and 0 sfx with findings; 88.49 MB of the 90 MB budget (unchanged) |
+| `node tools/critic-plan.mjs` | **review DEEP; before the deploy a FOCUSED review of the production candidate; after the deploy live verification, then the DEEP review on the live build (this build owes it); obligations live + focused + deep; not the save-data class** (no `SaveData.ts`, schema, migration or settings key; no line about it in the plan). Against live 37.1 (f4244e1f): both games, checks CHK-002 003 004 006 007 008 009 010 011 012 013 014 015 016 017 018 019 020 021 022 023, targets cast, fight, pause, phone, presentation, scenes, "+ audit every changed data value against research/"; **70 shipped files, 245 with no product effect** |
+| Scratch production build `npx vite build --config .rel38int2-vite-tmp.config.mjs --outDir D:/Tools/pyrefly-scratch/2026-10-04/rel38-int2/dist --emptyOutDir` (a wrapper config that changes only `cacheDir`; art derivation in its default `exact` mode; never `dist/`) | 3 s, 1,286 modules. `scope exact: 480 lossless WebP, 284 recompressed PNG, 133 unchanged; art 686.9 MB -> 554.1 MB (saves 132.9 MB)`; bundle `assets/index-B18y6bAf.js` **3,724,311 bytes** (part 1: `index-vULu0TkU.js` 3,703,794, **+20,517**; live 37.1: 3,679,258); CSS `index-De9sl9AK.css` 337,488 and both workers unchanged from part 1; **0 `.map` files**; `fx-assets verify --dir <build>/fx` PASS |
+| `node tools/art-derive.mjs verify --dir <build>` | **PASS**: 897 masters (480 WebP, 417 PNG, 764 pixel-compared), 0 problems, 11 s |
+| `node tools/art-derive.mjs audit --dir <build>` (the reference audit) | **PASS**: 724 text files; 2 art names in pages and styles, each a shipped file; the bundle names 490 art files (10 shipped, 480 derived masters mapped at run time), **0 dangling**; 43 names built at run time |
+| `PYREFLY_BROWSER=gpu node tools/art-browser-load.mjs --dir <build> --port 7002` (the full-set load gate) | **PASS** in 23 s: 897 art files (480 WebP, 284 recompressed PNG, 133 PNG as shipped) and 44 other images; **Chromium 153.0.8010.12: 941 of 941** and **WebKit 26.6: 941 of 941** loaded and decoded at their masters' sizes, 0 failed; portrait plates living **20 of 20 in both** |
+| Bytes and headroom, counted as the deploy counts them (`buildManifest` plus the manifest it writes plus `.nojekyll`; `harness/bytes-manifest.mjs`) | the build is 1,716 files, 662,110,982 bytes; with `artifact-manifest.json` (240,165 bytes) and `.nojekyll`: **1,718 files, 662,351,147 bytes; headroom 137,648,853** under the strict 800,000,000 (part 1: 662,330,630 and 137,669,370; this pass adds **20,517 bytes**, all of it the bundle: neither lane ships art). The decode check names only Paine's two flat catchlight layers (both listed in `critic/policy.json`): 0 problems after the filter. By type: `.webp` 512 files 294,044,028 B, `.png` 429 files 271,355,745 B, `.mp3` 28 files 88,494,023 B, `.js` 3 files 4,888,567 B, `.json` 720 files 2,684,942 B, `.css` 1 file 337,488 B, `.woff2` 15 files 275,100 B. artifact hash `eca4b7eebafb628fe3a405aad2f9dc54fbe3388677f0b35be130efdaa8925a2c`. Release 38 still ships on GitHub Pages |
+| `PYREFLY_SCAN_DIST=<build> vitest run tests/unit/player-facing-title.test.ts` | 25 passed, 1 skipped: no player-facing copy of the old title in the source or in what ships |
+| Headless smoke on that build (`PYREFLY_BROWSER=gpu`, ANGLE on an RTX 5070 Ti; a static server on 7000 with an empty fallback root so a missing file would 404; stopped by PID) | **Chapter II (Yunalesca, FFX), real keys from the title, `setSeed` before the first key, 1600x900, seeds 1 to 3, two menus each: nobody inside Yunalesca in 6 of 6 menus** (painted overlap **0 px2**, rest gap +1 by the plan and by the live frame, closest painted approach 23.1, 25.6 and 25.2 px at the first menu of the three seeds; the re-check's merge read 23.1 to 27.7 px at 1600x900 over its five seeds). **Chapter IV (ffx2-bahamut, FFX-2): 8 plain Attacks (Paine 5, Rikku 3), resting x constant**: Paine -0.744 and Rikku -1.486 before and 1 s after every Attack, spread 0 (z -1.5 and 0.1, spread 0); the run-in played every time (8 of 8 plans); a whole Attack 1,481 to 1,535 ms (Paine) and 1,521 to 1,530 (Rikku); after the settle every figure back on its rest (distance 0 for Yuna, Rikku, Paine and Bahamut). **0 console errors, 0 page errors, 0 404s** in every run. Chapter IV used the debug hooks `gotoChapter` and `autoBattle` with 99,999 HP for the party (labelled setup scaffolding, as in the re-check); the party's rest x steps by a few hundredths between runs at the mix's own re-plans (the re-check's merge read Paine -0.753 to -0.757 and Rikku -1.475 to -1.478; its disclosure 2 says why). Frame: `docs/screenshots/release-38/ch2-first-menu-1600x900.jpg` (Chapter II's first menu: Yuna, Tidus and Auron left, Yunalesca right, nobody inside her, no "Guide's pick" tag) |
+
+## Main, the shared tree, and the fx maps
+
+- **Pushed:** `git push origin rel38-int2:main`, `fad09603..d82414b3` (a fetch just before showed main had not moved). 92 files, nothing under `public/`, the largest blob 770 KB.
+- **The shared main tree:** `git -C "D:/Final Fantasy" merge --ff-only origin/main` fast-forwarded to d82414b3. Its two dirty tracked files (`docs/handoff/NOW.md`, `research/jegged-encounter-guides-ffx-b.md`) are
+  not touched by the range and were left as they were.
+- **fx maps (the driver's note in part 1, now done):** in `D:/Final Fantasy` `node tools/fx-assets.mjs verify` read **FAIL (8)** after the fast-forward (the old 16-bit `depth.json` and `depth.png` of
+  `bevelle-underground`, `djose-chamber-provisional`, `gagazet`, `macalania-temple`). I parked a copy of those eight files (4.0 MB, sha256-identical to the live ones) at
+  `F:/pyrefly-parked/2026-10-04/rel38-int2/fx-old-16bit-main-tree/` first, then ran `node tools/fx-assets.mjs restore`: **"8 restored from D:/Tools/pyrefly-art-backup/fx"**, and `verify` after it:
+  **PASS** (twice). `public/fx` is gitignored, so `git status` of the main tree is unchanged.
+
+## Not merged here, still to come (the driver's list, replacing part 1's)
+
+- **r38-lady-luck-grid** (68cc4153) and **r37-ui-floor** (58fae0f9): check running. **r38-evrae**: its tip is now **f4113d87** (part 1 recorded e3a96f9c), re-check running; it ships only with its art.
+  **r38-guide-jegged** (8e85c1e2): waits for Bailey's look at the screenshots. Dry-run merges of all four onto d82414b3 (`git merge-tree`, nothing written to the tree): **each merges cleanly**.
+  Part 1's note on lady-luck-grid stands (its `ui-ffx2-minigame-layer.test.ts` must read the effective z-index 15 rule, not the plain selector, and Lady Luck's reels over a numeral on the phone were not proven).
+- **The art install** (the r38-keys paintings and whatever else is staged) and the **800,000,000-byte line** (D-369): headroom is now 137,648,853 bytes; the estimate in part 1 (D-332's adopted art about 13 to 16 MB over it) is unchanged.
+- **Cutting release 38** from a clean release worktree: `node tools/fx-assets.mjs restore` there first (the backup now matches `tools/fx/fx-assets.json`), then the plan above (focused review of the candidate before the deploy, live verification and the deep review after).
+  The two lanes' own notes say what the focused review should read: a Switch-in, Chapter II's later forms and the plan's timing in every chapter (restage); the four clips' scenes, the menu rule, REDUCE MOTION and the phone frame (motion).
+
+## Disclosures from the two lane checks (carry into the focused review; majors are not regressions unless marked)
+
+### r38-restage (re-check on a merge with motion: PASS for Chapter II alone)
+- **Chapter III is not fixed, it is off** (PR-0310 stays open there): the formation that clears the party on every seed is a bigger move than the approved picture. Chapter II's later forms are not cleared
+  (form 3 reads 16,516 px2 against live's 21,278), and the fiends draw 2 to 8 percent smaller (D-353 said they would; Chapter II -2.7 to -2.9 %).
+- **D1, for Bailey:** the table is nearer option B than the D-353 page's "party 0.5 left, boss 0.5 right" (party -0.10 / +0.04, fiends +0.75 / -0.47; the builder's reason is that the party's half puts a member 8 to 17 % under the
+  command list). A pick approves only what he names: show `docs/screenshots/r38-restage/yunalesca-1600x900-menu1-live-vs-branch.jpg` and ask.
+- Small HUD increases against live, cosmetic (Chapter II 2560x1080 menu 1: Yuna's staff ring under the ATTACK row, 0.27 of her pixels against 0.16). `?stand=` and `?standf=` (checks-only query hooks) ship in the production bundle like the product's other
+  ungated, non-persistent hooks. **`framing.ts` is 398 lines (two lines of headroom): the next change there must extract first.**
+
+### r38-motion (re-check on a merge with restage: PASS, the run-in drift repaired)
+- The check's other minors stand: Darkness's slash lands 85 to 130 ms before the beam; every `x2-dark-knight-*` ability flies as a beam (`DARK = /darkness|dark-knight/`), not Darkness only; in Wait mode SKILL TRAVEL shows in FFX-2 only when no menu
+  is open at the blow (D-357, as asked), so a charging spell's beam is usually suppressed (Darkness's beam in 5 of 5 casts in the check's sessions); HUD panels lie over the runner in the first frames of some runs; **on the phone the leftmost girl is clipped during the truck** (Chapter V: Yuna out of frame and Rikku half cut for about a second);
+  a plain Attack is 73 % longer in Chapter IV (860 to 1,500 ms) and about twice as long in Chapter V; the first-run hitch (gaps of 33 to 356 ms at the first Paine attack, base 30 to 55) needs a quiet machine and the deep review on the live build;
+  not driven in a browser: an enemy spell's party HP-row timing, two girls out at once, the Options page.
+- **The party's resting x steps by a few hundredths of a world unit at the mix's own re-plans** when real menus open (on origin/main too): it is not drift, and it is why Paine reads -0.744 here and -0.753 to -0.757 in the re-check. LOW EFFECTS plays today's attack (the run is off there).
+- **For Bailey:** the run is 0.6 to 0.9 s longer per plain Attack (0.27 to 0.39 s of that is the run home): is that the rhythm he wants, or should the run home be quicker; and whether FFX's physical blows (Wakka, Tidus) get a travelling shot or a run of their own
+  (no source, so his yes; FFX gets no run-in today).
+- This pass adds one: **the combination of slots and a run is guarded only by `r38-merged-staging.test.ts`**, because no shipped fight has both (slots are FFX only, the run is FFX-2 only).
+
+## For the driver (practical)
+
+- **Servers and scratch:** I started one static server (port 7000, PID 2676) and stopped it by PID; the art-browser-load gate used its own port 7002 and closed it; ports 7000 to 7009 are free. Scratch is `D:/Tools/pyrefly-scratch/2026-10-04/rel38-int2/`
+  (633 MB, nearly all of it the build `dist/`; plus the harness, runs, logs and the Vite cache `vite-cache-full`). Parked to `F:/pyrefly-parked/2026-10-04/rel38-int2/`: the wrapper config `.rel38int2-vite-tmp.config.mjs`, the eight old fx maps, and a stray 1 KB file I wrote to the Git install folder by a path typo (`/tmp_changed_int2.txt`, moved off C:).
+  Nothing was deleted. The worktree `D:/pyrefly-r29-text` is on branch `rel38-int2` (equal to main d82414b3 until this record's commit); its remaining untracked files are other agents' scratch.
+- **Commit trailers:** merge commit 658393e2 (r38-restage) carries no `Co-Authored-By` line (my omission; amending is banned); every later commit of this pass does.
+- **Layout facts.** Files this pass changed that are over 400 lines (house rule 7), all already over on main and disclosed by the motion lane: `BattlePresenterStage.ts` 891 (+30), `BattlePresenter.ts` 766 (+13), `BattlePresenterPorts.ts` 494 (+19),
+  `BattlePresenterEvents.ts` 431 (+5). Near the line: `framing.ts` 398, `BattleCamera.ts` 394, `SpellFxLayer.ts` 392. New files are all under 400 (`StageMotion.ts` 281, `FlightFx.ts` 255, `staging.ts` 215).
