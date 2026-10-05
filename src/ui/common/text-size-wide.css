@@ -75,7 +75,8 @@ html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battl
   scale: var(--pyr-ts);
   transform-origin: left top;
 }
-html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud__stage > .sgd > .sgd__toggle {
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud__stage > .sgd > .sgd__toggle,
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud__stage > .sgd > .sgd__keys {
   scale: var(--pyr-ts);
   transform-origin: left bottom;
 }

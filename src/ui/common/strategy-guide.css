@@ -156,9 +156,48 @@ html:not([data-phone-battle]) .sgd__panel::-webkit-scrollbar-thumb {
 
 /**
  * The text box: every block of the document, in order. It has no height of its own; the sheet scrolls it.
+ *
+ * PR-0385 (release 39.1): on the desktop the text is clipped, hard-edged, to the whole lines of the window the sheet shows (`StrategyGuide.syncWindow`
+ * writes how much to leave out at each end, `./guideLines.ts` measures the lines), so the foot of the sheet never cuts a line through its middle and nor
+ * does its head once it is scrolled. This is a clip and not a fade (no gradient covers a glyph, round 04 PR-0009), and it is on the text and not the
+ * panel, so the panel's own background shows in the sliver that is left and the sheet keeps its box. Nothing is written, and nothing is clipped, until
+ * the sheet scrolls.
  */
 .sgd__body {
   overflow: hidden;
+}
+html:not([data-phone-battle]) .sgd__body {
+  clip-path: inset(var(--sgd-clip-top, 0px) 0 var(--sgd-clip-bottom, 0px) 0);
+}
+
+/**
+ * Which way there is more (PR-0385): a small accent mark at the sheet's foot while there is more below, and at its head once it is scrolled, in the strip
+ * of the panel's padding the text never reaches (clear of the thin scroll bar too, on a browser that draws one: round 22's headless captures drew none).
+ * `StrategyGuide.syncWindow` writes `data-scroll` (`up`, `down`) on the column and where the sheet starts in it. Pseudo-elements, so the column's two
+ * rows stay two.
+ */
+html:not([data-phone-battle]) .sgd__stack::before,
+html:not([data-phone-battle]) .sgd__stack::after {
+  content: '';
+  position: absolute;
+  display: none;
+  right: calc(3.2px + var(--ig-edge) * 1.78px);
+  width: 3.6px;
+  height: 2.4px;
+  background: var(--ig-accent);
+  pointer-events: none;
+}
+html:not([data-phone-battle]) .sgd__stack::after {
+  bottom: 1.2px;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+html:not([data-phone-battle]) .sgd__stack::before {
+  top: calc(var(--sgd-panel-top, 0px) + 1.2px);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+html:not([data-phone-battle]) .sgd__stack[data-scroll~='down']::after,
+html:not([data-phone-battle]) .sgd__stack[data-scroll~='up']::before {
+  display: block;
 }
 
 /* ----------------------------------------------------------------- header */
@@ -397,6 +436,55 @@ html:not([data-phone-battle]) .sgd__panel::-webkit-scrollbar-thumb {
 }
 .sgd__toggle:hover,
 .sgd__toggle:focus-visible {
+  background: var(--ig-ink-acting);
+  color: var(--ig-paper);
+  outline: none;
+}
+
+/*
+ * The scroll chip (PR-0385): `[ ] SCROLL`, on the toggle's line just past it, up while the sheet has more than it shows (`StrategyGuide.syncWindow`).
+ * The toggle's own look, since it is the same kind of thing: a key and what it does. A click pages down, and from the foot back to the top. Desktop only:
+ * the phone's sheet is the player's to swipe.
+ */
+.sgd__keys {
+  position: absolute;
+  left: 21.33px;
+  /* Overwritten per frame by layout() beside the toggle. */
+  top: 44px;
+  display: none;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+  padding: 1px 5px 1.5px;
+  border: 0;
+  background: var(--ig-ink-chip);
+  color: #cfd6de;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 5.7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transform: skewX(var(--ig-skew));
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.sgd__keys--on {
+  display: flex;
+}
+html[data-phone-battle] .sgd__keys {
+  display: none !important;
+}
+.sgd__keys > * {
+  display: inline-block;
+  transform: skewX(var(--ig-skew-inverse));
+}
+.sgd__keys b {
+  color: var(--ig-accent);
+  font-weight: 700;
+}
+.sgd__keys:hover,
+.sgd__keys:focus-visible {
   background: var(--ig-ink-acting);
   color: var(--ig-paper);
   outline: none;

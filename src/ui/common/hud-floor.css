@@ -133,7 +133,10 @@ html:not([data-phone-battle]) .sgd .sgd__cite,
 html:not([data-phone-battle]) .sgd .sgd__phase-label,
 html:not([data-phone-battle]) .sgd .sgd__toggle,
 html:not([data-phone-battle]) .sgd .sgd__toggle b,
-html:not([data-phone-battle]) .sgd .sgd__toggle span { font-size: max(5.7px, var(--hud-floor)); }
+html:not([data-phone-battle]) .sgd .sgd__toggle span,
+html:not([data-phone-battle]) .sgd .sgd__keys,
+html:not([data-phone-battle]) .sgd .sgd__keys b,
+html:not([data-phone-battle]) .sgd .sgd__keys span { font-size: max(5.7px, var(--hud-floor)); }
 html:not([data-phone-battle]) .sgd .sgd__title { font-size: max(8px, var(--hud-floor)); }
 html:not([data-phone-battle]) .sgd .sgd__arrow { font-size: max(6px, var(--hud-floor)); }
 html:not([data-phone-battle]) .sgd .sgd__cmd { font-size: max(9px, var(--hud-floor)); }
