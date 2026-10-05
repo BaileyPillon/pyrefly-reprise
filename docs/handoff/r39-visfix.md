@@ -140,9 +140,9 @@ between poses (where FF7's `poseCut` cuts the whole scene); the Evrae deck names
 `pr-0367-evrae-hurt-before-after.jpg`.
 
 **Reverted for release 39 (2026-10-05, the critic's focused review R39F-02; FFX only).** The continuity harness counts a hard cut between two silhouettes this different as a snap: Chapter VIII read 107 snaps in 328.6 s
-(19.54 a minute) against 3 in 394.2 s on live (0.46), where D-424 allows 0.25. `9ff5760f` is reverted (the `r39-int` commit "Cut between Evrae's poses ... reverts PR-0367 to live's crossfade": `PoseCut.ts`, `poseCutArt` and the
-`r39-pose-cut` test are gone, `tests/unit/r39-evrae-crossfade.test.ts` pins the crossfade) and Evrae crossfades as on live, double head included. A cut, a short hold that never shows two heads, or an authored in-between pose
-is Bailey's call, as part of the pose-continuity decision (measure each, then ask); the revert is the text above undone, so the cut is one `git revert` of that commit away if Bailey picks it.
+(19.54 a minute) against 3 in 394.2 s on live (0.46), where D-424 allows 0.25. `9ff5760f` is reverted by `1c096064` on `r39-int` (`PoseCut.ts`, `poseCutArt` and the `r39-pose-cut` test are gone, `tests/unit/r39-evrae-crossfade.test.ts` pins the crossfade) and Evrae
+crossfades as on live, double head included (the rebuilt bundle reads `crossfadeMs` 140 for Evrae and 120 for the party). A cut, a short hold that never shows two heads, or an authored in-between pose
+is Bailey's call, as part of the pose-continuity decision (measure each, then ask); the revert is the text above undone, so the cut is one `git revert` of `1c096064` away if Bailey picks it.
 
 ### 2.5 PR-0344, the "tilted wing seam" at 21:9 (FFX-2 only in use: Chapters IV and XIII)
 
