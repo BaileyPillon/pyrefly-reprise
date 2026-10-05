@@ -76,11 +76,11 @@ def smooth_alpha(P, S, size, sigma=0.8, delta=0.6, ramp=1.5):
     return A.astype(np.float32), Aup, zone
 
 
-def decontaminate(rgb, A, S, band=2.5, white=(255.0, 255.0, 255.0)):
+def decontaminate(rgb, A, S, band=2.5, white=(255.0, 255.0, 255.0), core_px=None):
     """rgb: float32 HxWx3 (the master's colour); A: the smooth alpha. Returns (rgb', contamination map)."""
     core = A >= 0.999
     d_in = distance_transform_edt(A > 0.5).astype(np.float32)
-    core = core & (d_in >= 3.5 * S)
+    core = core & (d_in >= (3.5 * S if core_px is None else core_px))
     if not core.any():
         return rgb, np.zeros(A.shape, np.float32)
     # the interior colour beside each edge pixel: the nearest core pixel's colour, smoothed (a Voronoi cell would show)
@@ -121,7 +121,7 @@ def bleed(rgb, A, px):
     return out
 
 
-def apply_E(P, M, S, sigma=0.8, delta=0.6, ramp=1.5, band=2.5, bleed_px=24):
+def apply_E(P, M, S, sigma=0.8, delta=0.6, ramp=1.5, band=2.5, bleed_px=24, core_px=None):
     """P: approved 1x RGBA uint8; M: master RGBA uint8 at S x. Returns (N RGBA uint8, metrics dict)."""
     H, W = M.shape[:2]
     y0, y1, x0, x1 = _crop_box(M[..., 3].astype(np.float32) / 255.0, 32 * S // 4)
@@ -132,7 +132,7 @@ def apply_E(P, M, S, sigma=0.8, delta=0.6, ramp=1.5, band=2.5, bleed_px=24):
     size = (x1 - x0, y1 - y0)
     A, Aup, zone = smooth_alpha(Pc, S, size, sigma, delta, ramp)
     rgb = Mc[..., :3].astype(np.float32)
-    rgb2, c = decontaminate(rgb, A, S, band)
+    rgb2, c = decontaminate(rgb, A, S, band, core_px=core_px)
     rgb3 = bleed(rgb2, A, bleed_px)
     N = M.copy()
     N[y0:y1, x0:x1, :3] = np.clip(rgb3 + 0.5, 0, 255).astype(np.uint8)
