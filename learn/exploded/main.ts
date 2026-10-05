@@ -29,7 +29,7 @@ import { createExplodedPainter } from './stage-exploded.ts';
 import { poseThumbs, thumbSize } from './thumbs.ts';
 
 /** The unofficial fan tribute's own game, linked from the idle card. */
-const FIGHT_URL = 'https://baileypillon.github.io/pyrefly-reprise/';
+const FIGHT_URL = 'https://echoesofspira.com/';
 
 /** The one chapter this page has a frame for. */
 const BUILT_CHAPTER = 'yunalesca';

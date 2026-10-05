@@ -10,7 +10,7 @@
  * presentation timing is identical either way (the presenter plays the same events).
  *
  * Usage:
- *   node tools/pace-measure.mjs --url=https://baileypillon.github.io/pyrefly-reprise/ \
+ *   node tools/pace-measure.mjs --url=https://echoesofspira.com/ \
  *     --chapter=seymour-flux --turns=3 --out=D:/Tools/pyrefly-scratch/fb-0929/pacing/live-ch1 \
  *     [--pace=relaxed] [--finish] [--video] [--reduce] [--width=1600 --height=900]
  *

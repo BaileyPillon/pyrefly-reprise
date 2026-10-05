@@ -2,7 +2,7 @@
 
 An unofficial HD-2D fan tribute that recreates five of the most memorable encounters from *Final Fantasy X* and *Final Fantasy X-2*: the Conditional Turn-Based battles, the Sphere Grid, dresspheres, Overdrives, and the scenes around each fight.
 
-**Play it:** https://baileypillon.github.io/pyrefly-reprise/
+**Play it:** https://echoesofspira.com (the old address, https://baileypillon.github.io/pyrefly-reprise/, stays up with a note that the game has moved; saves are kept per address, so a save made on the old one stays there)
 
 Final Fantasy X and X-2, their characters, worlds, and names are the property of Square Enix. This project is a non-commercial fan work, unaffiliated with Square Enix. All code, art, music, and writing here are original.
 
@@ -37,7 +37,7 @@ One detail that fell out of the research: magical actions and every Overdrive al
 
 ### The stack
 
-Vite 8, TypeScript 7, Three.js 0.186 as the only runtime dependency, Vitest for unit tests, Playwright for end-to-end runs, and GitHub Pages for hosting. The game boots through a screen state machine (Title → Chapter Select → Party Prep → Cutscene → Battle → Cutscene → Results) and saves progress to `localStorage`.
+Vite 8, TypeScript 7, Three.js 0.186 as the only runtime dependency, Vitest for unit tests, Playwright for end-to-end runs, and Cloudflare (Workers static assets) for hosting. The game boots through a screen state machine (Title → Chapter Select → Party Prep → Cutscene → Battle → Cutscene → Results) and saves progress to `localStorage`.
 
 The 3D side is small on purpose. Each location is a diorama: a perspective camera looking slightly down at a parallax stack cut from one painting, a lit ground plane tinted from the painting's own bottom rows, drifting mist, matched fog, and a particle system for pyreflies, snow, embers, or petals. Characters are `PaintedActor`s, two crossfading textured planes plus a contact shadow, sized by world height rather than pixels. They are unlit, because the painting already carries its lighting, but they receive rim and bounce light from a `LightRig` whose colours are sampled from the backdrop's palette so a figure on Gagazet reads cold and a figure in the Farplane reads violet. A post-processing chain finishes the frame: bloom, tilt-shift depth of field focused on the actors, vignette and colour grade, all tuned per scene.
 

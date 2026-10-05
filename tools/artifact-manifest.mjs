@@ -13,8 +13,10 @@
  *
  *   node tools/artifact-manifest.mjs build --dir dist-release [--out <file>] [--no-decode]
  *   node tools/artifact-manifest.mjs diff <previous.json> <next.json>
- *   node tools/artifact-manifest.mjs verify-live --manifest <file> --url <base url>
+ *   node tools/artifact-manifest.mjs verify-live --manifest <file> [--url <base url>]
  *        [--changed-from <previous.json>] [--sample 40] [--full] [--out <report.json>]
+ *        (--url defaults to the live address, LIVE_URL of tools/deploy-host.mjs: https://echoesofspira.com/;
+ *        name the old GitHub Pages address, HOSTS.github.liveUrl, to verify a legacy deploy.)
  *   node tools/artifact-manifest.mjs rehash <stored manifest.json>
  *
  * `artifactHash` leaves out the manifest itself and the deploy-only markers
@@ -34,6 +36,7 @@ import { dirname, extname, join, relative, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import { LIVE_URL } from './deploy-host.mjs';
 import { hasSourceMapReference, isSourceMapFile } from './dist-filter.mjs';
 
 export const MANIFEST_NAME = 'artifact-manifest.json';
@@ -237,7 +240,7 @@ async function main(argv) {
     const manifest = read(opt('--manifest'));
     const previous = opt('--changed-from');
     const d = previous ? diffManifests(read(previous), manifest) : { added: [], changed: [] };
-    const report = await verifyLive(manifest, opt('--url'), { changed: [...d.added, ...d.changed], sample: Number(opt('--sample', '40')), full: rest.includes('--full') });
+    const report = await verifyLive(manifest, opt('--url', LIVE_URL), { changed: [...d.added, ...d.changed], sample: Number(opt('--sample', '40')), full: rest.includes('--full') });
     if (opt('--out')) writeFileSync(resolve(opt('--out')), `${JSON.stringify(report, null, 1)}\n`);
     console.log(JSON.stringify(report, null, 1));
     process.exitCode = report.result === 'PASS' ? 0 : report.result === 'FAIL' ? 1 : 2;

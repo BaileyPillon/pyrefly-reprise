@@ -1,0 +1,33 @@
+// The PRODUCTION Worker: how the game is served at https://echoesofspira.com/ (docs/handoff/cf-switch.md).
+// Workers static assets, an assets-only Worker with no script. Cloudflare's own Pages overview now tells new
+// projects to start on Workers, and wrangler 4.147.0 even converts a new Pages deploy started by an agent into a
+// Workers one, so this is the kind (docs/handoff/r39-cloudflare.md has the evidence and the Pages alternative).
+// Read only by tools/deploy-cloudflare.mjs, which runs `wrangler deploy --config tools/cloudflare/wrangler.jsonc`
+// on the build that tools/deploy-pages.mjs put in dist-release/ (built with BASE_PATH=/). An explicit --config is
+// also what keeps wrangler from running its framework auto-configuration in this Vite project.
+//
+// routes: the Custom Domain is the game's permanent address (Bailey bought echoesofspira.com; it is Active in the
+//   same Cloudflare account). Cloudflare creates the DNS record and the certificate for it. The apex is the only
+//   address: www is NOT a route (a zone Redirect Rule in the dashboard forwards it to the apex, so saves, which
+//   live in the origin they were made on, never split between two addresses). wrangler sends this list with
+//   replace semantics (`replace_state=true` and `override_scope: true` in its source), so a Custom Domain added to
+//   this Worker in the dashboard and not listed here may be removed by the next deploy: list every one it keeps.
+// workers_dev: the same Worker also answers at https://echoes-of-spira.<account>.workers.dev/ as a backup address.
+//   It has to say true: without the line wrangler turns workers.dev OFF as soon as `routes` exist. Saves made there
+//   stay there, so it is a backup, not a second home.
+// The preview Worker has its own file, wrangler.preview.jsonc, with no routes: a preview deployed from THIS file
+//   would try to move the Custom Domain onto the preview Worker (wrangler overrides an existing Custom Domain
+//   without asking when it has no terminal). tools/deploy-wrangler.mjs checkWranglerConfig refuses either mix-up.
+// Nothing account-specific or secret belongs here: the repo is public.
+{
+  "name": "echoes-of-spira",
+  "compatibility_date": "2026-10-04",
+  "workers_dev": true,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "echoesofspira.com", "custom_domain": true }
+  ],
+  "assets": {
+    "directory": "../../dist-release"
+  }
+}

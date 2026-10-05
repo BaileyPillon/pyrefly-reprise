@@ -6,7 +6,7 @@ An unofficial fan tribute that recreates five boss encounters from Final Fantasy
 and X-2 as a painted 2.5D web game: TypeScript (strict, ESM) + Vite + Three.js,
 HTML/CSS HUDs, vitest + Playwright. Owner: Bailey. Windows 11, repo at
 `D:\Final Fantasy` (the space in the path is real: quote it).
-Live: https://baileypillon.github.io/pyrefly-reprise/ · Repo: `BaileyPillon/pyrefly-reprise` (public).
+Live: https://echoesofspira.com (Cloudflare since 2026-10-04, [cf-switch](docs/handoff/cf-switch.md)); old address: https://baileypillon.github.io/pyrefly-reprise/ ("we've moved" note) · Repo: `BaileyPillon/pyrefly-reprise` (public).
 
 This file is the entry point for **any** coding agent (Claude Code, Codex, Gemini,
 Jules, ...). `CLAUDE.md` only imports it. Keep it short; details live in `docs/`.
@@ -57,6 +57,8 @@ debug API that plays a chapter to an outcome from the console) is in
 | `docs/handoff/<track>.md` | One file per finished or in-flight track | the one for your area |
 | `docs/PRODUCT-BRIEF.md` | North star, the priority order when goals collide, what "finished" means, what is out of scope (draft until Bailey approves it) | before proposing or planning anything |
 | `docs/target/targets.json`, `decisions.json` | Bailey's approved end states, pictures awaiting a verdict, and the gaps; per tile, whether it is built (`delivery`) and what Bailey named versus what an agent guessed (`reaction`). `decisions.json` holds the decisions that are not pictures, with their state. `node tools/end-state-board.mjs` renders the board | before building anything Bailey will see, hear or feel (hard rule 9) |
+| `DECISIONS.md`, `docs/target/decisions-early.json`, `tools/decisions-ledger.mjs` | The central ledger of every decision Bailey has made since 2026-09-15, rendered from `decisions.json` (D-nnn), `decisions-early.json` (E-nnn) and `targets.json`; `node tools/decisions-ledger.mjs` renders it, `--check` and `tests/unit/decisions-ledger.test.ts` fail when it is stale. A blanket "all your recommendations" is never one row: each accepted recommendation gets its own row with a `changed` line | after Bailey decides anything: add the row, rerun the tool |
+| `ACTIONS.md` | The central ledger of everything built and carried out since 2026-09-15 (implementations, art installs, deploys, reviews, records, infrastructure, accounts, downloads, maintenance, process): one row per unit of work with who, decisions, game case, result and evidence. Data in `docs/target/actions.json`; `node tools/actions-ledger.mjs` renders it, `--check` fails when it is stale | its header, which says how to add a row |
 | `docs/CONTRACTS.md` | The shared files everyone imports | before touching any of them |
 
 ## Hard rules (each of these cost a day once)
@@ -175,8 +177,10 @@ encounter through its real flow, every required target in `docs/target/targets.j
 matched, the exact artifact verified live). An old score never certifies a new build;
 rounds 02 and 03 are rubric v1 history.
 
-- `npm run deploy` builds locally (the art is only on this disk), force-pushes a
-  one-commit `gh-pages`, kicks the Pages build, appends to `docs/deploys.log`. It also
+- `npm run deploy` builds locally (the art is only on this disk), deploys the Worker
+  `echoes-of-spira` to Cloudflare (the default host; Custom Domain `echoesofspira.com`) and
+  appends to `docs/deploys.log`; `--host=github` publishes the old GitHub Pages address as a
+  legacy deploy (`docs/legacy-deploys.log`, no live-build record). It also
   hashes and decode-checks every shipped file (`artifact-manifest.json`), refuses a
   candidate with no validated focused or deep report for that commit, one whose ship
   verdict is HOLD, a save-data change with only a focused report, and the third deploy

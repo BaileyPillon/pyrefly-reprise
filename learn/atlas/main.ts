@@ -17,7 +17,7 @@ import type { ChapterId } from '../../src/data/encounters.ts';
 const ROMAN_BY_NUMBER: Readonly<Record<number, string>> = { 1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'V' };
 
 /** The unofficial fan tribute's own game, linked from a chapter's card (`docs/plans/learning-sites.md` site A). */
-const FIGHT_URL = 'https://baileypillon.github.io/pyrefly-reprise/';
+const FIGHT_URL = 'https://echoesofspira.com/';
 
 const PRESET_TABS: readonly PresetTab[] = [
   { label: 'What it does', systemIds: ['abilities', 'statuses-inflicted', 'turn-patterns'] },
