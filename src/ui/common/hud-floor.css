@@ -65,13 +65,20 @@ html:not([data-phone-battle]) .ffxhud .ffx-sensor__chip { font-size: max(6px, va
  * type grows (`--sensor-chip-h`, 8.8 px type at 1024x768), so the third row costs 7.5 grid px, not 15, and the plate
  * rises only that far to stay off the party rows (r37-ui-floor, blocker 3: the full 15 lifted the card's name into
  * the enemy's bracket). A folded card has no chip rows and keeps its authored top, off the targeting hand.
+ *
+ * This `top` is `ffx-hud.css`'s own with the lift taken off, so it must carry every term that one does, and this rule
+ * is the more specific: a term left out here is a term the card never gets. `--ffx-sensor-py` is where Seymour Natus's
+ * pinned colossus stands the card, a few px under the top of the stage (Chapter X, FFX only, `engine/fx/mix/sensorPin.ts`);
+ * left out, the card stood on his body (release 39 HOLD, R39F-01: 48 percent of him at 1600x900, 0 on live). At that place
+ * nothing sits under the card, so the third row may grow it downward: `max(0px, ...)` stops the lift at the stage's top,
+ * where the lift alone would carry the plate past it and clip its name (1280x720, 1366x768 and 1440x810, measured).
  */
 html:not([data-phone-battle]) .ffxhud .ffx-sensor {
   --sensor-chip-h: clamp(10.5px, calc(13px - (var(--hud-floor) - 6px) * 0.9), 13px);
 }
 html:not([data-phone-battle]) .ffxhud .ffx-sensor__chip { height: var(--sensor-chip-h); }
 html:not([data-phone-battle]) .ffxhud .ffx-sensor:not(.ffx-sensor--folded) {
-  top: calc(166px + var(--ffx-sensor-dy, 0px) - clamp(0px, (var(--hud-floor) - 5.6px) * 20, calc(3 * var(--sensor-chip-h) + 4px - 28px)));
+  top: max(0px, calc(166px + var(--ffx-sensor-dy, 0px) + var(--ffx-sensor-py, 0px) - clamp(0px, (var(--hud-floor) - 5.6px) * 20, calc(3 * var(--sensor-chip-h) + 4px - 28px))));
 }
 /* Three columns at 1600x900 as authored; two where the floored type no longer fits three ("THUNDER"). */
 html:not([data-phone-battle]) .ffxhud .ffx-sensor__chips {

@@ -75,7 +75,7 @@ describe('blocker 3: the targeting hand steps off the text cards (FFX only)', ()
   });
   it('a folded Sensor card keeps its authored top, and the open card rises only by its third chip row', () => {
     const sheet = css('ui', 'common', 'hud-floor.css');
-    expect(sheet).toMatch(/\.ffxhud \.ffx-sensor:not\(\.ffx-sensor--folded\) \{\s*top: calc\(166px/);
+    expect(sheet).toMatch(/\.ffxhud \.ffx-sensor:not\(\.ffx-sensor--folded\) \{\s*top: max\(0px, calc\(166px/); // R39F-01: the pin's term and the stage-top guard; the arithmetic is pinned in hud-floor-sensor-top.test.ts
     expect(sheet).toMatch(/--sensor-chip-h: clamp\(10\.5px/);
   });
 });
