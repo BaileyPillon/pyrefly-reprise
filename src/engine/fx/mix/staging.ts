@@ -18,7 +18,7 @@ import { MULTIPART } from './masters.ts';
  * - SPACING (VP-1001-44, PR-0002): the party spread about its leftmost member so nobody hides another
  *   (the judges' Evrae finding: Tidus in front of Wakka).
  * - THE CHAPTER'S SLOTS (`stageTable.ts`, PR-0310): one move on the floor for every figure of the party, one for every
- *   fiend (and one of its own for a fiend a row names), held per SIDE (a figure that arrives later, an aeon or a second
+ *   fiend (and one of its own for a fiend or a party member a row names, `enemyBy` and `partyBy`), held per SIDE (a figure that arrives later, an aeon or a second
  *   fiend, stands in the same formation). A fiend that carries a slot is HELD against the stage's formation relaxation
  *   (`StageRelax.ts`, {@link STAGE_HOLD_KEY}): the table's formation is the formation that plays, whatever the camera and the
  *   HUD do in the battle's first seconds (r38-restage repair: the relaxation re-spread it to the camera of the moment).
@@ -50,6 +50,12 @@ export interface Side {
   enemy: Shift;
   /** A move of its own for the fiends whose painted id matches (the first match wins); every other fiend takes `enemy`. */
   enemyBy?: readonly { id: RegExp; shift: Shift }[];
+  /**
+   * A move of its own for the party members whose combatant id or painted id matches (the first match wins); every other member takes `party`.
+   * A row that spreads a heap (Chapter XII's: three figures inside one figure-width) moves each member by his own step, as a row moves a fiend by
+   * `enemyBy`; the whole side's `party` is what a member with no step of his own takes.
+   */
+  partyBy?: readonly { id: RegExp; shift: Shift }[];
   /** They hold while a fiend with one of these painted ids stands on the stage (the chapter's boss); null: whatever is on it. */
   boss: RegExp | null;
   /** The strike follows these moves (`motion/StandReach.ts`, Chapter III's row): each figure's move is registered for the lunge while the table plays. */
@@ -58,7 +64,13 @@ export interface Side {
 
 /** The move a side gives this figure. */
 export function shiftOf(side: Side, a: Actor): Shift {
-  if (a.facing >= 0) return side.party;
+  if (a.facing >= 0) {
+    if (side.partyBy?.length) {
+      const id = subjectId(a);
+      for (const p of side.partyBy) if (p.id.test(a.name) || p.id.test(id)) return p.shift;
+    }
+    return side.party;
+  }
   if (side.enemyBy?.length) {
     // The combatant's own id first (the two Yu Pagodas paint the same art, `yu-pagoda`, and stand as `yu-pagoda-left` and `-right`), then the painted one.
     const id = subjectId(a);

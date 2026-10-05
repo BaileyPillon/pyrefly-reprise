@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { Object3D, Vector3 } from 'three';
 import type { Actor, Pose } from '../../src/engine/fx/mix/geometry.ts';
-import { Staging, type Side } from '../../src/engine/fx/mix/staging.ts';
+import { shiftOf, Staging, type Side } from '../../src/engine/fx/mix/staging.ts';
 import { ALL_ROWS, CHAPTER_III_STAGED, onPhone, parseStand, readStand, setStageTable, setStandOverride, sideShift, standFor, STAGE_TABLE } from '../../src/engine/fx/mix/stageTable.ts';
 
 /**
@@ -26,12 +26,12 @@ afterEach(() => {
 
 describe('the table', () => {
   it('names an FFX boss in every row, with finite moves', () => {
-    expect(ALL_ROWS.map((r) => r.chapter)).toEqual(['yunalesca', 'braskas-final-aeon', 'seymour-natus']);
+    expect(ALL_ROWS.map((r) => r.chapter)).toEqual(['yunalesca', 'braskas-final-aeon', 'seymour-natus', 'seymour-omnis']);
     for (const r of ALL_ROWS) {
-      for (const m of [r.party, r.enemy, ...(r.enemyBy ?? []).map((e) => e.move)]) expect(Number.isFinite(m.right) && Number.isFinite(m.toward)).toBe(true);
+      for (const m of [r.party, r.enemy, ...(r.enemyBy ?? []).map((e) => e.move), ...(r.partyBy ?? []).map((p) => p.move)]) expect(Number.isFinite(m.right) && Number.isFinite(m.toward)).toBe(true);
       // FFX-2's bosses never match, nor do the chapters that have no row (rule 14: FFX only; Evrae waits for its mockups).
-      // (Natus's own row, r39-natus, names Natus: it pins a colossus master and moves nobody; `fx-mix-colossus-pin.test.ts`.)
-      for (const id of ['ffx2-bahamut', 'ffx2-trema', 'ffx2-vegnagun', 'ffx2-leblanc', 'seymour-flux-body', 'evrae', 'seymour-natus', 'yojimbo']) expect(r.boss.test(id)).toBe(r.chapter === 'seymour-natus' && id === 'seymour-natus');
+      // (Natus's own row, r39-natus, names Natus: it pins a colossus master and moves nobody; `fx-mix-colossus-pin.test.ts`. Chapter XII's, r391-ui, names Omnis.)
+      for (const id of ['ffx2-bahamut', 'ffx2-trema', 'ffx2-vegnagun', 'ffx2-leblanc', 'seymour-flux-body', 'evrae', 'seymour-natus', 'seymour-omnis', 'yojimbo']) expect(r.boss.test(id)).toBe(id === r.chapter);
     }
   });
 
@@ -44,7 +44,7 @@ describe('the table', () => {
   });
 
   it("plays Chapter III only behind its one-line switch: off, Chapter II ships alone and Chapter III is the stage's own", () => {
-    expect(STAGE_TABLE.map((r) => r.chapter)).toEqual(CHAPTER_III_STAGED ? ['yunalesca', 'braskas-final-aeon', 'seymour-natus'] : ['yunalesca', 'seymour-natus']); // Natus's row (r39-natus) plays whatever Chapter III's switch says
+    expect(STAGE_TABLE.map((r) => r.chapter)).toEqual(CHAPTER_III_STAGED ? ['yunalesca', 'braskas-final-aeon', 'seymour-natus', 'seymour-omnis'] : ['yunalesca', 'seymour-natus', 'seymour-omnis']); // Natus's row (r39-natus) and Chapter XII's (r391-ui) play whatever Chapter III's switch says
     expect(standFor('ffx', ['yunalesca-1'], false)).not.toBeNull();
     expect(standFor('ffx', ['braskas-final-aeon-1', 'yu-pagoda', 'yu-pagoda'], false) === null).toBe(!CHAPTER_III_STAGED);
   });
@@ -92,7 +92,7 @@ describe('where it applies (FFX desktop, a named boss; checks only: ?stand=)', (
     expect(standFor('ffx', ['yunalesca-1'], true)).toBeNull();
   });
   it('leaves every other fight alone, Evrae included (it waits for its own mockups)', () => {
-    for (const id of ['seymour-flux-body', 'evrae-1', 'yojimbo', 'seymour-omnis', 'isaaru', 'ffx2-bahamut']) expect(standFor('ffx', [id], false)).toBeNull();
+    for (const id of ['seymour-flux-body', 'evrae-1', 'yojimbo', 'isaaru', 'ffx2-bahamut']) expect(standFor('ffx', [id], false)).toBeNull();
   });
   it('reads ?stand= (off, or four numbers) and nothing else', () => {
     expect(parseStand('')).toBeNull();
@@ -386,5 +386,94 @@ describe('Staging with no chapter slots is the old Staging', () => {
         expect(B[j]!.scale.toArray()).toEqual(A[j]!.scale.toArray());
       }
     }
+  });
+});
+
+describe("Chapter XII's party stands apart (r391-ui, PR-0382; FFX only)", () => {
+  const row = ALL_ROWS.find((r) => r.chapter === 'seymour-omnis')!;
+  const step = (id: string): { right: number; toward: number } => row.partyBy!.find((p) => p.id.test(id))!.move;
+  const slot = (right: number, toward: number): { dx: number; dz: number } => ({ dx: right, dz: toward }); // the camera looks down -z in these poses (`rest`): toward the camera is +z
+
+  it('names Omnis, and gives each of the three starters a step of his own', () => {
+    expect(row.boss.test('seymour-omnis')).toBe(true);
+    expect(row.boss.test('mortiphasm')).toBe(false);
+    expect(row.partyBy?.map((p) => p.id.source)).toEqual(['^tidus', '^yuna', '^auron']);
+  });
+
+  it('opens the heap up: Tidus left, Yuna right, Auron between and further back, all of them back from the camera', () => {
+    const t = step('tidus');
+    const y = step('yuna');
+    const a = step('auron');
+    expect(t.right).toBeLessThan(0);
+    expect(y.right).toBeGreaterThan(0);
+    expect(y.right - t.right).toBeGreaterThan(1); // the front pair a figure-width and more further apart than the scene stands them
+    expect(Math.abs(a.right - (t.right + y.right) / 2)).toBeLessThan(0.6); // Auron stays in the gap
+    expect(a.toward).toBeLessThan(Math.min(t.toward, y.toward)); // ...and behind the two
+    for (const m of [t, y, a]) expect(m.toward).toBeLessThan(0); // none nearer the camera than the scene put him
+  });
+
+  it('is a table, not a solve, and a member with no step of his own (a Switch brings Wakka in) stands as far back as the three', () => {
+    const s = standFor('ffx', ['mortiphasm', 'mortiphasm', 'seymour-omnis'], false)!;
+    expect(s.chapter).toBe('seymour-omnis');
+    expect(s.slots.partyBy).toBe(row.partyBy);
+    expect(s.slots.party.right).toBe(0);
+    expect(s.slots.party.toward).toBe(step('tidus').toward);
+    expect(s.calm).toBeNull();
+    expect(s.colossus).toBeUndefined();
+    expect(s.slots.follow).toBeUndefined(); // the presenter runs the figure to its target; the move is not a lunge's to follow
+  });
+
+  it('is FFX desktop only', () => {
+    expect(standFor('ffx2', ['seymour-omnis'], false)).toBeNull();
+    expect(standFor('ffx', ['seymour-omnis'], true)).toBeNull();
+  });
+
+  it('reads as three steps in the report and moves each member by his own', () => {
+    const roster = [actor('tidus', 1), actor('yuna', 1), actor('auron', 1), actor('wakka', 1), actor('seymour-omnis', -1)];
+    const r = readStand('ffx', roster, rest, false);
+    expect(r.report?.chapter).toBe('seymour-omnis');
+    expect(r.report?.byParty?.map((p) => p[0])).toEqual(['^tidus', '^yuna', '^auron']);
+    const s = r.side!;
+    expect(shiftOf(s, roster[0]!)).toBe(s.partyBy![0]!.shift);
+    expect(shiftOf(s, roster[1]!)).toBe(s.partyBy![1]!.shift);
+    expect(shiftOf(s, roster[2]!)).toBe(s.partyBy![2]!.shift);
+    expect(shiftOf(s, roster[3]!)).toBe(s.party); // Wakka has none: the side's
+    expect(shiftOf(s, roster[4]!)).toBe(s.enemy);
+    expect(s.partyBy![0]!.shift.dx).toBeCloseTo(step('tidus').right, 6);
+    expect(s.partyBy![2]!.shift.dz).toBeCloseTo(step('auron').toward, 6);
+  });
+
+  it('writes each figure at his own place and puts them back on release', () => {
+    const base = { tidus: [-0.85, 1.6], yuna: [0.22, 1.55], auron: [-0.4, -1.0] } as const; // the scene's own slots (`scenes/garden-of-pain.ts`)
+    const roster = (Object.entries(base) as [string, readonly [number, number]][]).map(([id, [x, z]]) => actor(id, 1, x, z));
+    const omnis = actor('seymour-omnis', -1, 2.15, -4);
+    const st = new Staging();
+    st.side = readStand('ffx', [...roster, omnis], rest, false).side;
+    st.apply([...roster, omnis], true);
+    const at = (a: Actor): [number, number] => [a.position.x, a.position.z];
+    const want = (id: 'tidus' | 'yuna' | 'auron'): [number, number] => {
+      const m = step(id);
+      const [x, z] = base[id];
+      return [x + slot(m.right, m.toward).dx, z + slot(m.right, m.toward).dz];
+    };
+    roster.forEach((a, i) => {
+      const [x, z] = want((['tidus', 'yuna', 'auron'] as const)[i]!);
+      expect(at(a)).toEqual([expect.closeTo(x, 6), expect.closeTo(z, 6)]);
+    });
+    expect(at(omnis)).toEqual([expect.closeTo(2.15, 6), expect.closeTo(-4, 6)]); // the boss stays
+    for (let i = 0; i < 20; i++) st.apply([...roster, omnis], true); // once, however many frames
+    expect(roster[0]!.position.x).toBeCloseTo(want('tidus')[0], 6);
+    st.release();
+    roster.forEach((a, i) => expect(at(a)).toEqual(Object.values(base)[i]!.map((v) => expect.closeTo(v, 9))));
+  });
+
+  it('reads ?standp= (a sweep): a step for each member whose id it names', () => {
+    const o = parseStand('?stand=0,0,0,0&standp=tidus:-0.9,-1.5;yuna:0.5,-1.5')! as { partyBy?: { id: RegExp; move: { right: number; toward: number } }[] };
+    expect(o.partyBy?.map((p) => [p.id.source, p.move])).toEqual([
+      ['tidus', { right: -0.9, toward: -1.5 }],
+      ['yuna', { right: 0.5, toward: -1.5 }],
+    ]);
+    expect((parseStand('?stand=0,0,0,0')! as { partyBy?: unknown }).partyBy).toBeUndefined();
+    expect(parseStand('?standp=tidus:1,2')).toBeNull(); // the four numbers are what turns a sweep on
   });
 });
