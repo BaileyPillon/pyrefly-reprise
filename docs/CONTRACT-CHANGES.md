@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-04 — Art URLs: the `@` of a master's name goes on the wire as `%40`, and `logicalArtUrl` reads either form (release 39, the live check's finding LV-2; both games; additive for readers)
+
+Branch `r39-int`. No file in the contract list changed; recorded because every reader of an art URL depends on `src/engine/ArtShipped.ts`. `shippedArtUrl` (which `artUrl`, `tierUrl`, `sidecarUrlOf` and
+`tryLoadMeta` go through) now writes `%40` for every `@` in the path of an art URL, with a build list or without one (`idle@2x.png` is asked for as `idle%402x.png`: Cloudflare answers the raw name with a 307
+first and only the encoded path with a 200), and `logicalArtUrl` turns either form back into the master's own name. A function that takes an art URL apart must still ask `logicalArtUrl` first (every one in
+`src/` does, `scaleOfUrl` too now); a test or a tool that compares a hand-written `@` URL with one from `artUrl` compares through `logicalArtUrl`. The dev server and `vite preview` serve the encoded form through
+`tools/vite-art-at.mjs`; `tools/art-play-audit.mjs` fails an art request with a raw `@`. Handoff: [r39-int](handoff/r39-int.md). Game case: both (shared plumbing).
+
 ## 2026-10-03 — `HudPort.syncQueued` (optional): the HUD hears a command the moment it is submitted (PR-0104; FFX-2 only; additive)
 
 Branch `r37-ui-floor`. `src/engine/HudPort.ts` gains `syncQueued?(state: BattleState): void`, called by `BattlePresenter.submit` right
