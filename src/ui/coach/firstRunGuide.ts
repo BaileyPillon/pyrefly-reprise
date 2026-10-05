@@ -5,7 +5,8 @@
  * `docs/plans/firstrun-o2-review.md`).
  *
  * 1. The board: a spot on the chosen chapter's picture (`.fe-hero`, Chapter I on a
- *    first run), "Start with the first one."
+ *    first run), "Start with the first one." (once the cursor is on another chapter the
+ *    card says "Start with this one.": judgment call M of round 21, PR-0289, text only)
  * 2. Party prep: a spot on START BATTLE (`.prep__start`), "Your party is ready."
  * 3. The first command (FFX only): Auron's approved first-command line, word for
  *    word, becomes the third step's slab (`CoachMark`'s `guide` option), with a
@@ -36,7 +37,7 @@
 import type { GameId } from '../../battle/common/types.ts';
 import type { CoachGuide, CoachMarkOutcome } from './CoachMark.ts';
 import { hasSeen, markSeen, shouldShow } from './coachState.ts';
-import { FIRST_RUN_IDS } from './firstRunCopy.ts';
+import { FIRST_RUN_IDS, firstRunBoardQuote } from './firstRunCopy.ts';
 import { FirstRunLayer, STEP_BATTLE, STEP_BOARD, STEP_PREP, onScreen, phoneLayout, slabHtml, type Box } from './firstRunView.ts';
 
 /** What the guide needs of the app. */
@@ -172,12 +173,19 @@ function frame(): void {
   if (line) drawTurn(layer, line);
   else if (document.querySelector(SEL.brief)) layer.hide();
   else {
-    const plate = shouldShow('firstrun-board') ? onScreen(document.querySelector(SEL.plate)) : null;
-    if (plate) layer.draw(STEP_BOARD, plate);
+    const plateEl = shouldShow('firstrun-board') ? document.querySelector<HTMLElement>(SEL.plate) : null;
+    const plate = onScreen(plateEl);
+    if (plate) layer.draw(STEP_BOARD, plate, 0, 0, firstRunBoardQuote(plateChapterNumber(plateEl)));
     else if (start && shouldShow('firstrun-prep')) layer.draw(STEP_PREP, start);
     else layer.hide();
   }
   schedule();
+}
+
+/** The number of the chapter on the board's plate (`data-chapter-number`, set by `heroHtml`), or null when it says none. */
+function plateChapterNumber(plate: HTMLElement | null): number | null {
+  const raw = plate?.dataset['chapterNumber'];
+  return raw === undefined || raw === '' ? null : Number(raw);
 }
 
 /** Step 3: the ring on ATTACK, and FFX's line placed beside it (or under the top band). */

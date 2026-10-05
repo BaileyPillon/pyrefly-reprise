@@ -1,0 +1,1797 @@
+{
+ "tag": "before",
+ "results": [
+  {
+   "chapter": "seymour-flux",
+   "start": {
+    "fxLight": true,
+    "fxDof": true,
+    "fxFog": true,
+    "fxEdges": true,
+    "fxLiving": true,
+    "fxBreath": true,
+    "fxKo": true,
+    "fxSpectacle": false,
+    "fxFraming": false,
+    "fxHero": false,
+    "fxSphere": false,
+    "fxSplash": false
+   },
+   "startStored": {
+    "version": 1,
+    "topKeys": [
+     "chapters",
+     "flags",
+     "seenCoach",
+     "settings",
+     "unlocked",
+     "updatedAt",
+     "version"
+    ],
+    "settingsKeys": [
+     "advisorVisible",
+     "battleHelp",
+     "ffx2Atb",
+     "ffx2AtbMigrated",
+     "ffx2AtbSpeed",
+     "fxBreath",
+     "fxDof",
+     "fxEdges",
+     "fxFog",
+     "fxFraming",
+     "fxHero",
+     "fxKo",
+     "fxLight",
+     "fxLiving",
+     "fxSpectacle",
+     "fxSphere",
+     "fxSplash",
+     "guideVisible",
+     "intentVisible",
+     "lowEffects",
+     "masterVolume",
+     "musicVolume",
+     "pausePanelsHidden",
+     "reduceMotion",
+     "sfxBalanceMigrated",
+     "sfxVolume",
+     "skipSeenCutscenes",
+     "textSize",
+     "textSpeed"
+    ]
+   },
+   "opening": [
+    {
+     "id": "fxAll",
+     "label": "ALL LOOKS",
+     "value": "MIXED",
+     "note": "",
+     "sel": true,
+     "dim": false
+    },
+    {
+     "id": "fxLight",
+     "label": "CINEMA LIGHT",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxDof",
+     "label": "DEPTH OF FIELD",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxFog",
+     "label": "FOG",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxEdges",
+     "label": "SMOOTH EDGES",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxLiving",
+     "label": "LIVING PAINTINGS",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxBreath",
+     "label": "BREATHING",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxKo",
+     "label": "KO COLLAPSE",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxSpectacle",
+     "label": "BATTLE SPECTACLE",
+     "value": "OFF",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxFraming",
+     "label": "CHAPTER FRAMING",
+     "value": "OFF",
+     "note": "",
+     "sel": false,
+     "dim": true
+    },
+    {
+     "id": "fxHero",
+     "label": "OVERDRIVE SHOT",
+     "value": "OFF",
+     "note": "",
+     "sel": false,
+     "dim": true
+    },
+    {
+     "id": "fxSplash",
+     "label": "SPLASH ART",
+     "value": "OFF",
+     "note": "",
+     "sel": false,
+     "dim": true
+    }
+   ],
+   "afterLookOn": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": true,
+     "fxFog": true,
+     "fxEdges": true,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": true,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": false
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "ON",
+      "note": "",
+      "sel": true,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxHero",
+      "label": "OVERDRIVE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     }
+    ]
+   },
+   "afterSplashOff": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": true,
+     "fxFog": true,
+     "fxEdges": true,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": true,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": true
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxHero",
+      "label": "OVERDRIVE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "ON",
+      "note": "",
+      "sel": true,
+      "dim": false
+     }
+    ]
+   },
+   "afterLookOff": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": true,
+     "fxFog": true,
+     "fxEdges": true,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": false,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": true
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "OFF",
+      "note": "",
+      "sel": true,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": true
+     },
+     {
+      "id": "fxHero",
+      "label": "OVERDRIVE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": true
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "ON",
+      "note": "· LOOK OFF",
+      "sel": false,
+      "dim": true
+     }
+    ]
+   },
+   "afterLookBack": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": true,
+     "fxFog": true,
+     "fxEdges": true,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": true,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": true
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "ON",
+      "note": "",
+      "sel": true,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxHero",
+      "label": "OVERDRIVE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     }
+    ]
+   },
+   "cinemaPartsOff": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": false,
+     "fxFog": false,
+     "fxEdges": false,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": true,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": true
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "OFF",
+      "note": "",
+      "sel": true,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxHero",
+      "label": "OVERDRIVE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     }
+    ]
+   },
+   "cinemaBack": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": false,
+     "fxFog": false,
+     "fxEdges": false,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": true,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": true
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": true,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxHero",
+      "label": "OVERDRIVE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     }
+    ]
+   },
+   "endStored": {
+    "version": 1,
+    "topKeys": [
+     "chapters",
+     "flags",
+     "seenCoach",
+     "settings",
+     "unlocked",
+     "updatedAt",
+     "version"
+    ],
+    "settingsKeys": [
+     "advisorVisible",
+     "battleHelp",
+     "ffx2Atb",
+     "ffx2AtbMigrated",
+     "ffx2AtbSpeed",
+     "fxBreath",
+     "fxDof",
+     "fxEdges",
+     "fxFog",
+     "fxFraming",
+     "fxHero",
+     "fxKo",
+     "fxLight",
+     "fxLiving",
+     "fxSpectacle",
+     "fxSphere",
+     "fxSplash",
+     "guideVisible",
+     "intentVisible",
+     "lowEffects",
+     "masterVolume",
+     "musicVolume",
+     "pausePanelsHidden",
+     "reduceMotion",
+     "sfxBalanceMigrated",
+     "sfxVolume",
+     "skipSeenCutscenes",
+     "textSize",
+     "textSpeed"
+    ]
+   },
+   "errors": [],
+   "log": [
+    "opened: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=ON | FOG=ON | SMOOTH EDGES=ON | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=OFF | CHAPTER FRAMING=OFF | OVERDRIVE SHOT=OFF | SPLASH ART=OFF",
+    "BATTLE SPECTACLE turned ON: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=ON | FOG=ON | SMOOTH EDGES=ON | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | OVERDRIVE SHOT=OFF | SPLASH ART=OFF",
+    "SPLASH ART turned OFF: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=ON | FOG=ON | SMOOTH EDGES=ON | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | OVERDRIVE SHOT=OFF | SPLASH ART=ON",
+    "BATTLE SPECTACLE turned OFF: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=ON | FOG=ON | SMOOTH EDGES=ON | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=OFF | CHAPTER FRAMING=OFF | OVERDRIVE SHOT=OFF | SPLASH ART=ON(· LOOK OFF)",
+    "BATTLE SPECTACLE turned ON again: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=ON | FOG=ON | SMOOTH EDGES=ON | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | OVERDRIVE SHOT=OFF | SPLASH ART=ON",
+    "CINEMA LIGHT parts all OFF (look still ON): ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=OFF | FOG=OFF | SMOOTH EDGES=OFF | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | OVERDRIVE SHOT=OFF | SPLASH ART=ON",
+    "CINEMA LIGHT turned OFF: ALL LOOKS=MIXED | CINEMA LIGHT=OFF | DEPTH OF FIELD=OFF | FOG=OFF | SMOOTH EDGES=OFF | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | OVERDRIVE SHOT=OFF | SPLASH ART=ON",
+    "CINEMA LIGHT turned ON again: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=OFF | FOG=OFF | SMOOTH EDGES=OFF | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | OVERDRIVE SHOT=OFF | SPLASH ART=ON"
+   ]
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "start": {
+    "fxLight": true,
+    "fxDof": true,
+    "fxFog": true,
+    "fxEdges": true,
+    "fxLiving": true,
+    "fxBreath": true,
+    "fxKo": true,
+    "fxSpectacle": false,
+    "fxFraming": false,
+    "fxHero": false,
+    "fxSphere": false,
+    "fxSplash": false
+   },
+   "startStored": {
+    "version": 1,
+    "topKeys": [
+     "chapters",
+     "flags",
+     "seenCoach",
+     "settings",
+     "unlocked",
+     "updatedAt",
+     "version"
+    ],
+    "settingsKeys": [
+     "advisorVisible",
+     "battleHelp",
+     "ffx2Atb",
+     "ffx2AtbMigrated",
+     "ffx2AtbSpeed",
+     "fxBreath",
+     "fxDof",
+     "fxEdges",
+     "fxFog",
+     "fxFraming",
+     "fxHero",
+     "fxKo",
+     "fxLight",
+     "fxLiving",
+     "fxSpectacle",
+     "fxSphere",
+     "fxSplash",
+     "guideVisible",
+     "intentVisible",
+     "lowEffects",
+     "masterVolume",
+     "musicVolume",
+     "pausePanelsHidden",
+     "reduceMotion",
+     "sfxBalanceMigrated",
+     "sfxVolume",
+     "skipSeenCutscenes",
+     "textSize",
+     "textSpeed"
+    ]
+   },
+   "opening": [
+    {
+     "id": "fxAll",
+     "label": "ALL LOOKS",
+     "value": "MIXED",
+     "note": "",
+     "sel": true,
+     "dim": false
+    },
+    {
+     "id": "fxLight",
+     "label": "CINEMA LIGHT",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxDof",
+     "label": "DEPTH OF FIELD",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxFog",
+     "label": "FOG",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxEdges",
+     "label": "SMOOTH EDGES",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxLiving",
+     "label": "LIVING PAINTINGS",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxBreath",
+     "label": "BREATHING",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxKo",
+     "label": "KO COLLAPSE",
+     "value": "ON",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxSpectacle",
+     "label": "BATTLE SPECTACLE",
+     "value": "OFF",
+     "note": "",
+     "sel": false,
+     "dim": false
+    },
+    {
+     "id": "fxFraming",
+     "label": "CHAPTER FRAMING",
+     "value": "OFF",
+     "note": "",
+     "sel": false,
+     "dim": true
+    },
+    {
+     "id": "fxSphere",
+     "label": "DRESSPHERE SHOT",
+     "value": "OFF",
+     "note": "",
+     "sel": false,
+     "dim": true
+    },
+    {
+     "id": "fxSplash",
+     "label": "SPLASH ART",
+     "value": "OFF",
+     "note": "",
+     "sel": false,
+     "dim": true
+    }
+   ],
+   "afterLookOn": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": true,
+     "fxFog": true,
+     "fxEdges": true,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": true,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": false
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "ON",
+      "note": "",
+      "sel": true,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSphere",
+      "label": "DRESSPHERE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     }
+    ]
+   },
+   "afterSplashOff": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": true,
+     "fxFog": true,
+     "fxEdges": true,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": true,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": true
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSphere",
+      "label": "DRESSPHERE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "ON",
+      "note": "",
+      "sel": true,
+      "dim": false
+     }
+    ]
+   },
+   "afterLookOff": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": true,
+     "fxFog": true,
+     "fxEdges": true,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": false,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": true
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "OFF",
+      "note": "",
+      "sel": true,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": true
+     },
+     {
+      "id": "fxSphere",
+      "label": "DRESSPHERE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": true
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "ON",
+      "note": "· LOOK OFF",
+      "sel": false,
+      "dim": true
+     }
+    ]
+   },
+   "afterLookBack": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": true,
+     "fxFog": true,
+     "fxEdges": true,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": true,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": true
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "ON",
+      "note": "",
+      "sel": true,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSphere",
+      "label": "DRESSPHERE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     }
+    ]
+   },
+   "cinemaPartsOff": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": false,
+     "fxFog": false,
+     "fxEdges": false,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": true,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": true
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "OFF",
+      "note": "",
+      "sel": true,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSphere",
+      "label": "DRESSPHERE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     }
+    ]
+   },
+   "cinemaBack": {
+    "settings": {
+     "fxLight": true,
+     "fxDof": false,
+     "fxFog": false,
+     "fxEdges": false,
+     "fxLiving": true,
+     "fxBreath": true,
+     "fxKo": true,
+     "fxSpectacle": true,
+     "fxFraming": false,
+     "fxHero": false,
+     "fxSphere": false,
+     "fxSplash": true
+    },
+    "rows": [
+     {
+      "id": "fxAll",
+      "label": "ALL LOOKS",
+      "value": "MIXED",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLight",
+      "label": "CINEMA LIGHT",
+      "value": "ON",
+      "note": "",
+      "sel": true,
+      "dim": false
+     },
+     {
+      "id": "fxDof",
+      "label": "DEPTH OF FIELD",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFog",
+      "label": "FOG",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxEdges",
+      "label": "SMOOTH EDGES",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxLiving",
+      "label": "LIVING PAINTINGS",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxBreath",
+      "label": "BREATHING",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxKo",
+      "label": "KO COLLAPSE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSpectacle",
+      "label": "BATTLE SPECTACLE",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxFraming",
+      "label": "CHAPTER FRAMING",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSphere",
+      "label": "DRESSPHERE SHOT",
+      "value": "OFF",
+      "note": "",
+      "sel": false,
+      "dim": false
+     },
+     {
+      "id": "fxSplash",
+      "label": "SPLASH ART",
+      "value": "ON",
+      "note": "",
+      "sel": false,
+      "dim": false
+     }
+    ]
+   },
+   "endStored": {
+    "version": 1,
+    "topKeys": [
+     "chapters",
+     "flags",
+     "seenCoach",
+     "settings",
+     "unlocked",
+     "updatedAt",
+     "version"
+    ],
+    "settingsKeys": [
+     "advisorVisible",
+     "battleHelp",
+     "ffx2Atb",
+     "ffx2AtbMigrated",
+     "ffx2AtbSpeed",
+     "fxBreath",
+     "fxDof",
+     "fxEdges",
+     "fxFog",
+     "fxFraming",
+     "fxHero",
+     "fxKo",
+     "fxLight",
+     "fxLiving",
+     "fxSpectacle",
+     "fxSphere",
+     "fxSplash",
+     "guideVisible",
+     "intentVisible",
+     "lowEffects",
+     "masterVolume",
+     "musicVolume",
+     "pausePanelsHidden",
+     "reduceMotion",
+     "sfxBalanceMigrated",
+     "sfxVolume",
+     "skipSeenCutscenes",
+     "textSize",
+     "textSpeed"
+    ]
+   },
+   "errors": [],
+   "log": [
+    "opened: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=ON | FOG=ON | SMOOTH EDGES=ON | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=OFF | CHAPTER FRAMING=OFF | DRESSPHERE SHOT=OFF | SPLASH ART=OFF",
+    "BATTLE SPECTACLE turned ON: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=ON | FOG=ON | SMOOTH EDGES=ON | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | DRESSPHERE SHOT=OFF | SPLASH ART=OFF",
+    "SPLASH ART turned OFF: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=ON | FOG=ON | SMOOTH EDGES=ON | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | DRESSPHERE SHOT=OFF | SPLASH ART=ON",
+    "BATTLE SPECTACLE turned OFF: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=ON | FOG=ON | SMOOTH EDGES=ON | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=OFF | CHAPTER FRAMING=OFF | DRESSPHERE SHOT=OFF | SPLASH ART=ON(· LOOK OFF)",
+    "BATTLE SPECTACLE turned ON again: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=ON | FOG=ON | SMOOTH EDGES=ON | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | DRESSPHERE SHOT=OFF | SPLASH ART=ON",
+    "CINEMA LIGHT parts all OFF (look still ON): ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=OFF | FOG=OFF | SMOOTH EDGES=OFF | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | DRESSPHERE SHOT=OFF | SPLASH ART=ON",
+    "CINEMA LIGHT turned OFF: ALL LOOKS=MIXED | CINEMA LIGHT=OFF | DEPTH OF FIELD=OFF | FOG=OFF | SMOOTH EDGES=OFF | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | DRESSPHERE SHOT=OFF | SPLASH ART=ON",
+    "CINEMA LIGHT turned ON again: ALL LOOKS=MIXED | CINEMA LIGHT=ON | DEPTH OF FIELD=OFF | FOG=OFF | SMOOTH EDGES=OFF | LIVING PAINTINGS=ON | BREATHING=ON | KO COLLAPSE=ON | BATTLE SPECTACLE=ON | CHAPTER FRAMING=OFF | DRESSPHERE SHOT=OFF | SPLASH ART=ON"
+   ]
+  }
+ ]
+}

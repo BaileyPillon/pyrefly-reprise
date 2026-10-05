@@ -1,5 +1,15 @@
 import type { BattleState, CombatantId } from '../../battle/common/types.ts';
-import { placeSlab, steerRects, type SlabRect } from './intentPlacement.ts';
+import {
+  pickSlabWidth,
+  placeSlab,
+  placeSlabScored,
+  steerRects,
+  type SlabOptions,
+  type SlabPlacement,
+  type SlabRect,
+  type SlabScore,
+  type SlabWidth,
+} from './intentPlacement.ts';
 
 /**
  * The board the enemy-intent slab and the chain counter steer around, in
@@ -29,6 +39,16 @@ const INTENT_EDGE_MARGIN = 4;
 const INTENT_FALLBACK_W = 150;
 const INTENT_FALLBACK_H = 40;
 
+/**
+ * How near its enemy the narrow slab's spot is searched, as a share of the window's width and half its height. The solver carries
+ * the wide slab across the screen when that is the only clean spot; changing its shape is a smaller thing to ask for and has to buy
+ * a place beside its enemy, not a corner (Chapter V at 130 %: the narrow slab found a clean spot in the bottom-left corner, 830 px
+ * from Vegnagun, with its numbers wrapped, where the wide one sat over a part of the painting; Chapter VI at 2000x1012: a clean spot
+ * at the far left edge beat the one above the enemies, which only grazed their heads). The same window is used to place the narrow
+ * slab once it is worn, so what was chosen is what is drawn.
+ */
+const NARROW_NEAR_SHARE = 0.3;
+
 const BOARD_SELECTORS = [
   '.ffx2hud__enemies',
   '.ffx2hud__party',
@@ -40,6 +60,9 @@ const BOARD_SELECTORS = [
   '.mad__card',
   '.mad__toggle',
   '.sgd__panel',
+  // The guide's MORE row sits under the panel in the same column and paints in the same place: the slab, and its `E HIDE` chip
+  // above all, wore it across the row at 2000x1012 (Chapter V, TEXT SIZE 130 %, judgment call K of round 21).
+  '.sgd__more',
   '.sgd__toggle',
   '.sgd__slot > .sthint', // the cure-hint card in the guide column's slot (R38)
   '.ffx2-chain-chip',
@@ -204,6 +227,10 @@ export interface SlabSolveInput {
   chip: { width: number; height: number } | null;
   /** The viewport y the help band reserves down to (0 when BATTLE HELP is off). */
   bandTop: number;
+  /** Rank the girls with the chrome (TEXT SIZE 115 / 130 %, judgment call K of round 21): never cover a girl to spare a panel. */
+  girlsFirst?: boolean;
+  /** The slab wears its narrow shape (`intentWidth.ts`): its spot is searched beside its enemy only (`NARROW_NEAR_SHARE`). */
+  narrow?: boolean;
 }
 
 /**
@@ -211,9 +238,26 @@ export interface SlabSolveInput {
  * the answer as avoid rectangles (`intentPlacement.ts` has the full account).
  */
 export function solveSlab(input: SlabSolveInput): IntentAvoidRect[] {
+  const { layer } = input;
+  const w = input.box?.width || INTENT_FALLBACK_W * input.scale;
+  const h = input.box?.height || INTENT_FALLBACK_H * input.scale;
+  const { natural, edge, headroom, local, opts } = slabProblem(input, w, h);
+  const target = placeSlab(natural, { w, h }, local, { width: layer.width, height: layer.height }, edge, headroom, opts);
+  const clampedNatural = {
+    left: Math.max(edge, Math.min(Math.max(edge, layer.width - w - edge), natural.left)),
+    top: Math.max(edge, Math.min(Math.max(edge, layer.height - h - edge), natural.top)),
+  };
+  return steerRects(clampedNatural, target, { w, h }, { width: layer.width, height: layer.height }).map((r) => ({
+    left: r.left + layer.left,
+    top: r.top + layer.top,
+    right: r.right + layer.left,
+    bottom: r.bottom + layer.top,
+  }));
+}
+
+/** The slab's natural spot, the obstacles in layer-local px and the solver's options, for a slab of `w` x `h`. */
+function slabProblem(input: SlabSolveInput, w: number, h: number, narrow = input.narrow === true) {
   const { layer, head, scale } = input;
-  const w = input.box?.width || INTENT_FALLBACK_W * scale;
-  const h = input.box?.height || INTENT_FALLBACK_H * scale;
   // The chip rides the panel's top-right corner and is clamped into the
   // frame, so a slab flush with the top edge wears its own `E HIDE` across
   // its first line. Reserve the chip's band while the panel is up.
@@ -239,18 +283,44 @@ export function solveSlab(input: SlabSolveInput): IntentAvoidRect[] {
   // Tiered: the command stack, the party and the boss plate outrank the fighters, and the chip
   // riding the panel is placed with it (M2, 2026-09-25).
   const chip = input.panelUp ? { w: input.chip?.width || 40 * scale, h: input.chip?.height || 8 * scale, gap: scale } : undefined;
-  const target = placeSlab(natural, { w, h }, local, { width: layer.width, height: layer.height }, edge, headroom, {
+  const opts: SlabOptions = {
     tiered: true,
     ...(chip ? { chip } : {}),
-  });
-  const clampedNatural = {
-    left: Math.max(edge, Math.min(Math.max(edge, layer.width - w - edge), natural.left)),
-    top: Math.max(edge, Math.min(Math.max(edge, layer.height - h - edge), natural.top)),
+    ...(input.girlsFirst ? { girlsFirst: true } : {}),
+    ...(narrow ? { near: { dx: NARROW_NEAR_SHARE * layer.width, dy: 0.5 * layer.height } } : {}),
   };
-  return steerRects(clampedNatural, target, { w, h }, { width: layer.width, height: layer.height }).map((r) => ({
-    left: r.left + layer.left,
-    top: r.top + layer.top,
-    right: r.right + layer.left,
-    bottom: r.bottom + layer.top,
-  }));
+  return { natural, edge, headroom, local, opts };
+}
+
+/** A slab's measured size, viewport px. */
+export interface SlabSize {
+  width: number;
+  height: number;
+}
+
+/**
+ * Which shape the intent slab should wear on this board (judgment call K of critic round 21; FFX-2 at TEXT SIZE 115 / 130 %):
+ * solves the slab at its wide size and at its narrow size, from the same head and obstacles, and lets
+ * `intentPlacement.pickSlabWidth` say which is the cleaner. `current` is the shape it wears now (the tie-break).
+ *
+ * Two things differ from the solve that places the slab. The painting of the enemy the slab hangs over (the soft box that holds
+ * the head it is pinned to) is left out: covering some of it is the design (the slab does at 100 %, 37 percent of Bahamut), and
+ * counting it made the taller narrow slab look worse than the wide one wherever the boss is the only fighter. And the narrow slab
+ * is only looked for beside its enemy (`NARROW_NEAR_SHARE`).
+ */
+export function chooseSlabWidth(input: SlabSolveInput, sizes: { wide: SlabSize; narrow: SlabSize }, current: SlabWidth): SlabWidth {
+  const { layer, head } = input;
+  // The head the slab is pinned to is projected for the rest pose, the boxes for the live one: they differ by the sway, so "inside"
+  // has some air (4 grid px). Vegnagun's tail swings its box top up and down across its own head.
+  const air = 4 * input.scale;
+  const own = (o: IntentAvoidRect): boolean =>
+    o.soft === true && o.party !== true && head.x >= o.left - air && head.x <= o.right + air && head.y >= o.top - air && head.y <= o.bottom + air;
+  const others = { ...input, obstacles: input.obstacles.filter((o) => !own(o)) };
+  const score = (s: SlabSize, narrow: boolean): SlabPlacement & SlabScore => {
+    const { natural, edge, headroom, local, opts } = slabProblem(others, s.width, s.height, narrow);
+    return placeSlabScored(natural, { w: s.width, h: s.height }, local, { width: layer.width, height: layer.height }, edge, headroom, opts);
+  };
+  const sw = score(sizes.wide, false);
+  const sn = score(sizes.narrow, true);
+  return pickSlabWidth(current, sw, sn, sizes.wide.width * sizes.wide.height);
 }

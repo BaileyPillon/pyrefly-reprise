@@ -21,12 +21,14 @@
  * the guide at its start).
  */
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { CoachMark } from '../../src/ui/coach/CoachMark.ts';
 import { marksFor } from '../../src/ui/coach/coachCopy.ts';
 import { hasSeen, markAllSeen, markSeen, resetCoach } from '../../src/ui/coach/coachState.ts';
-import { FIRST_RUN_IDS, FIRST_RUN_STEPS } from '../../src/ui/coach/firstRunCopy.ts';
+import { buildChapterTiles } from '../../src/app/screens/frontend/chapterGrid.ts';
+import { heroHtml } from '../../src/app/screens/frontend/chapterCards.ts';
+import { FIRST_RUN_BOARD_QUOTE_OTHER, FIRST_RUN_IDS, FIRST_RUN_STEPS, firstRunBoardQuote } from '../../src/ui/coach/firstRunCopy.ts';
 import {
   armFirstRunGuide,
   firstRunActive,
@@ -231,5 +233,116 @@ describe('placement reproduces the mockup\'s anchors (option.html)', () => {
     const s3 = place(3, attack, 176, 390, 844, true, 136);
     expect(s3.slab.top).toBe(150); // mockup: 150
     expect(s3.chev).toMatchObject({ top: 582, dir: 'down' }); // mockup: 582
+  });
+});
+
+describe('step 1 follows the chapter on the plate (PR-0289, judgment call M of round 21; text only)', () => {
+  const APPROVED = '“Start with the first one.”';
+  const OTHER = '“Start with this one.”';
+
+  it('Chapter I keeps the approved line; any other chapter says "this one"; a plate that names none keeps the approved line', () => {
+    expect(firstRunBoardQuote(1)).toBe(APPROVED);
+    expect(firstRunBoardQuote(1)).toBe(FIRST_RUN_STEPS[0].quote);
+    for (const n of [2, 3, 4, 5, 6, 8, 13, 18]) expect(firstRunBoardQuote(n), `chapter ${n}`).toBe(OTHER);
+    expect(FIRST_RUN_BOARD_QUOTE_OTHER).toBe(OTHER);
+    for (const none of [null, undefined, Number.NaN]) expect(firstRunBoardQuote(none)).toBe(APPROVED);
+  });
+
+  it('only the quote changes: the same eyebrow, line, pips and skip words under either', () => {
+    const [board] = FIRST_RUN_STEPS;
+    const html = (quote: string): HTMLElement => {
+      const el = document.createElement('div');
+      el.innerHTML = slabHtml(board, quote);
+      return el;
+    };
+    const a = html(APPROVED);
+    const b = html(OTHER);
+    expect(a.querySelector('.frg__quote')!.textContent).toBe(APPROVED);
+    expect(b.querySelector('.frg__quote')!.textContent).toBe(OTHER);
+    for (const sel of ['.frg__eyebrow', '.frg__line', '.frg__steps', '[data-role="firstrun-skip"]']) {
+      expect(b.querySelector(sel)!.outerHTML, sel).toBe(a.querySelector(sel)!.outerHTML);
+    }
+    expect(a.querySelector('.frg__eyebrow')!.textContent).toBe('Auron · 1 of 3');
+    expect(a.querySelectorAll('.frg__steps .on')).toHaveLength(1);
+  });
+
+  it('the real hero markup names its chapter: Chapter I carries number 1, Chapter IV (Bahamut) number 4', () => {
+    const tiles = buildChapterTiles({ isCleared: () => false });
+    const first = tiles.find((t) => t.id === 'seymour-flux')!;
+    const bahamut = tiles.find((t) => t.id === 'ffx2-bahamut')!;
+    const el = document.createElement('div');
+    el.innerHTML = heroHtml(first, tiles.indexOf(first)) + heroHtml(bahamut, tiles.indexOf(bahamut));
+    const heroes = el.querySelectorAll<HTMLElement>('.fe-hero');
+    expect(heroes[0]!.dataset['chapterNumber']).toBe('1');
+    expect(heroes[0]!.dataset['chapter']).toBe('seymour-flux');
+    expect(heroes[1]!.dataset['chapterNumber']).toBe('4');
+    expect(heroes[1]!.dataset['chapter']).toBe('ffx2-bahamut');
+  });
+
+  describe('on the board, frame by frame', () => {
+    beforeEach(() => {
+      vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame'] });
+    });
+    afterEach(() => {
+      stopFirstRun();
+      vi.useRealTimers();
+    });
+
+    /** The board's plate as the screen draws it, given a rect (jsdom has no layout) so the guide treats it as on screen. */
+    function mountPlate(tileId: string): HTMLElement {
+      const tiles = buildChapterTiles({ isCleared: () => false });
+      const tile = tiles.find((t) => t.id === tileId)!;
+      const holder = document.createElement('div');
+      holder.innerHTML = heroHtml(tile, tiles.indexOf(tile));
+      const hero = holder.querySelector<HTMLElement>('.fe-hero')!;
+      hero.style.opacity = '1';
+      hero.getBoundingClientRect = () => ({ left: 64, top: 133, width: 778, height: 407, right: 842, bottom: 540, x: 64, y: 133, toJSON: () => ({}) });
+      document.body.appendChild(holder);
+      return hero;
+    }
+    const quote = (): string | null => document.querySelector('.frg__quote')?.textContent ?? null;
+    const frames = (n = 2): void => void vi.advanceTimersByTime(17 * n);
+
+    it('draws the approved line on Chapter I, "this one" the moment the plate is another chapter, and the approved line again on return', () => {
+      const hero = mountPlate('seymour-flux');
+      armFirstRunGuide(host());
+      frames();
+      expect(document.querySelector<HTMLElement>('.frg')!.dataset['step']).toBe('1');
+      expect(quote()).toBe(APPROVED);
+      // the player moves the cursor to Chapter IV: the screen re-draws the plate with the new chapter's data
+      hero.dataset['chapterNumber'] = '4';
+      hero.dataset['chapter'] = 'ffx2-bahamut';
+      frames();
+      expect(quote()).toBe(OTHER);
+      expect(document.querySelector('.frg__eyebrow')!.textContent).toBe('Auron · 1 of 3');
+      expect(document.querySelector('.frg__line')!.textContent).toContain('Click its picture to begin.');
+      hero.dataset['chapterNumber'] = '1';
+      frames();
+      expect(quote()).toBe(APPROVED);
+    });
+
+    it('a first run that opens on another chapter (a saved cursor, a deep link) never says "the first one"', () => {
+      mountPlate('ffx2-bahamut');
+      armFirstRunGuide(host());
+      frames();
+      expect(quote()).toBe(OTHER);
+    });
+
+    it('step 2 is untouched: START BATTLE still wears "Your party is ready."', () => {
+      mountPlate('ffx2-bahamut');
+      armFirstRunGuide(host());
+      frames();
+      expect(quote()).toBe(OTHER);
+      markSeen('firstrun-board'); // the party prep is up
+      document.querySelector('.fe-hero')!.remove();
+      const start = document.createElement('div');
+      start.className = 'prep__start';
+      start.style.opacity = '1';
+      start.getBoundingClientRect = () => ({ left: 640, top: 600, width: 307, height: 61, right: 947, bottom: 661, x: 640, y: 600, toJSON: () => ({}) }); // inside jsdom's 1024x768
+      document.body.appendChild(start);
+      frames();
+      expect(document.querySelector<HTMLElement>('.frg')!.dataset['step']).toBe('2');
+      expect(quote()).toBe('“Your party is ready.”');
+    });
   });
 });

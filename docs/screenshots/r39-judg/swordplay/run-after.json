@@ -1,0 +1,262 @@
+{
+ "tag": "after",
+ "url": "http://127.0.0.1:7200/?coach=off",
+ "plays": [
+  {
+   "name": "Spiral Cut",
+   "overlay": {
+    "up": true,
+    "title": "Spiral Cut",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "chips": [],
+    "bar": true,
+    "timer": "2.5"
+   },
+   "geom": {
+    "zoneStartPct": 39,
+    "zoneWidthPct": 22,
+    "barPx": 720,
+    "zonePx": 158.3984375,
+    "sweepMs": 1388,
+    "windowMs": 305
+   },
+   "played": {
+    "turn": 4,
+    "kind": "swordplay",
+    "title": "Spiral Cut",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "attempts": [
+     {
+      "seenAt": 58.2,
+      "zone": [
+       39,
+       61
+      ]
+     },
+     "overlay closed"
+    ],
+    "pressLog": [
+     {
+      "key": "Enter",
+      "pos": 58.2,
+      "zoneStart": 39,
+      "zoneWidth": 22,
+      "inZone": true
+     }
+    ],
+    "closed": true,
+    "ms": 1050,
+    "engine": {
+     "actor": "tidus",
+     "ability": "Spiral Cut",
+     "extra": {
+      "kind": "tidus-timing",
+      "timing": {
+       "success": true,
+       "timeRemainingMs": 1012.6999999284744,
+       "timerMs": 3000
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "Slice & Dice",
+   "overlay": {
+    "up": true,
+    "title": "Slice & Dice",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "chips": [],
+    "bar": true,
+    "timer": "2.5"
+   },
+   "geom": {
+    "zoneStartPct": 42,
+    "zoneWidthPct": 16,
+    "barPx": 720,
+    "zonePx": 115.19534301757812,
+    "sweepMs": 1111,
+    "windowMs": 178
+   },
+   "played": {
+    "turn": 10,
+    "kind": "swordplay",
+    "title": "Slice & Dice",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "attempts": [
+     {
+      "seenAt": 55.8,
+      "zone": [
+       42,
+       58
+      ]
+     },
+     "overlay closed"
+    ],
+    "pressLog": [
+     {
+      "key": "Enter",
+      "pos": 55.8,
+      "zoneStart": 42,
+      "zoneWidth": 16,
+      "inZone": true
+     }
+    ],
+    "closed": true,
+    "ms": 738,
+    "engine": {
+     "actor": "tidus",
+     "ability": "Slice & Dice",
+     "extra": {
+      "kind": "tidus-timing",
+      "timing": {
+       "success": true,
+       "timeRemainingMs": 1340.6000000238419,
+       "timerMs": 3000
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "Energy Rain",
+   "overlay": {
+    "up": true,
+    "title": "Energy Rain",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "chips": [],
+    "bar": true,
+    "timer": "2.1"
+   },
+   "geom": {
+    "zoneStartPct": 44,
+    "zoneWidthPct": 11.999999999999998,
+    "barPx": 720,
+    "zonePx": 86.36721801757812,
+    "sweepMs": 894,
+    "windowMs": 107
+   },
+   "played": {
+    "turn": 17,
+    "kind": "swordplay",
+    "title": "Energy Rain",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "attempts": [
+     {
+      "seenAt": 48.9,
+      "zone": [
+       44,
+       56
+      ]
+     },
+     {
+      "seenAt": 48.8,
+      "zone": [
+       44,
+       56
+      ]
+     }
+    ],
+    "pressLog": [
+     {
+      "key": "Enter",
+      "pos": 48.86,
+      "zoneStart": 44,
+      "zoneWidth": 11.999999999999998,
+      "inZone": true
+     },
+     {
+      "key": "Enter",
+      "pos": 48.77,
+      "zoneStart": 44,
+      "zoneWidth": 11.999999999999998,
+      "inZone": true
+     }
+    ],
+    "closed": true,
+    "ms": 561,
+    "engine": {
+     "actor": "tidus",
+     "ability": "Energy Rain",
+     "extra": {
+      "kind": "tidus-timing",
+      "timing": {
+       "success": true,
+       "timeRemainingMs": 1238.8999999761581,
+       "timerMs": 2600
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "Blitz Ace",
+   "overlay": {
+    "up": true,
+    "title": "Blitz Ace",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "chips": [],
+    "bar": true,
+    "timer": "1.7"
+   },
+   "geom": {
+    "zoneStartPct": 45.5,
+    "zoneWidthPct": 9,
+    "barPx": 720,
+    "zonePx": 64.76565551757812,
+    "sweepMs": 753,
+    "windowMs": 68
+   },
+   "played": {
+    "turn": 20,
+    "kind": "swordplay",
+    "title": "Blitz Ace",
+    "subtitle": "SWORDPLAY · CONFIRM IN THE GOLD ZONE",
+    "attempts": [
+     {
+      "seenAt": 46.2,
+      "zone": [
+       45.5,
+       54.5
+      ]
+     },
+     "overlay closed"
+    ],
+    "pressLog": [
+     {
+      "key": "Enter",
+      "pos": 46.23,
+      "zoneStart": 45.5,
+      "zoneWidth": 9,
+      "inZone": true
+     }
+    ],
+    "closed": true,
+    "ms": 814,
+    "engine": {
+     "actor": "tidus",
+     "ability": "Blitz Ace",
+     "extra": {
+      "kind": "tidus-timing",
+      "timing": {
+       "success": true,
+       "timeRemainingMs": 475.2000000476837,
+       "timerMs": 2200
+      }
+     }
+    }
+   }
+  }
+ ],
+ "errors": [],
+ "log": [
+  "OVERLAY Spiral Cut: title=Spiral Cut zone 39% + 22% (158.4 of 720.0 px) sweep ~1388 ms window ~305 ms timer-ring=2.5",
+  "PLAYED Spiral Cut {\"attempts\":2,\"pressLog\":[{\"key\":\"Enter\",\"pos\":58.2,\"zoneStart\":39,\"zoneWidth\":22,\"inZone\":true}],\"engine\":{\"actor\":\"tidus\",\"ability\":\"Spiral Cut\",\"extra\":{\"kind\":\"tidus-timing\",\"timing\":{\"success\":true,\"timeRemainingMs\":1012.6999999284744,\"timerMs\":3000}}}}",
+  "OVERLAY Slice & Dice: title=Slice & Dice zone 42% + 16% (115.2 of 720.0 px) sweep ~1111 ms window ~178 ms timer-ring=2.5",
+  "PLAYED Slice & Dice {\"attempts\":2,\"pressLog\":[{\"key\":\"Enter\",\"pos\":55.8,\"zoneStart\":42,\"zoneWidth\":16,\"inZone\":true}],\"engine\":{\"actor\":\"tidus\",\"ability\":\"Slice & Dice\",\"extra\":{\"kind\":\"tidus-timing\",\"timing\":{\"success\":true,\"timeRemainingMs\":1340.6000000238419,\"timerMs\":3000}}}}",
+  "OVERLAY Energy Rain: title=Energy Rain zone 44% + 11.999999999999998% (86.4 of 720.0 px) sweep ~894 ms window ~107 ms timer-ring=2.1",
+  "PLAYED Energy Rain {\"attempts\":2,\"pressLog\":[{\"key\":\"Enter\",\"pos\":48.86,\"zoneStart\":44,\"zoneWidth\":11.999999999999998,\"inZone\":true},{\"key\":\"Enter\",\"pos\":48.77,\"zoneStart\":44,\"zoneWidth\":11.999999999999998,\"inZone\":true}],\"engine\":{\"actor\":\"tidus\",\"ability\":\"Energy Rain\",\"extra\":{\"kind\":\"tidus-timing\",\"timing\":{\"success\":true,\"timeRemainingMs\":1238.8999999761581,\"timerMs\":2600}}}}",
+  "OVERLAY Blitz Ace: title=Blitz Ace zone 45.5% + 9% (64.8 of 720.0 px) sweep ~753 ms window ~68 ms timer-ring=1.7",
+  "PLAYED Blitz Ace {\"attempts\":2,\"pressLog\":[{\"key\":\"Enter\",\"pos\":46.23,\"zoneStart\":45.5,\"zoneWidth\":9,\"inZone\":true}],\"engine\":{\"actor\":\"tidus\",\"ability\":\"Blitz Ace\",\"extra\":{\"kind\":\"tidus-timing\",\"timing\":{\"success\":true,\"timeRemainingMs\":475.2000000476837,\"timerMs\":2200}}}}"
+ ]
+}

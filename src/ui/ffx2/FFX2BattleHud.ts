@@ -46,10 +46,12 @@ import { ffx2EngineOptions } from '../../app/screens/BattleScreenContent.ts';
 import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import type { InFlightSource } from '../../engine/tactics/advisor-inflight.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
+import { currentWideTextScale } from '../common/hudTextSize.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
 import { BODY_HALF_WIDTH, boardRects, fighterBoxes, keyFeatureObstacles, slabPanels, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
-import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
+import { advisorFolds, solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
+import { INTENT_NARROW_CLASS, IntentWidth } from './intentWidth.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
 import { CommandHelp } from './commandHelpSync.ts';
 import { NodeEdgeMarkers } from './nodeEdgeMarkers.ts';
@@ -122,6 +124,8 @@ const GUIDE_RAIL_RIGHT = GUIDE_RAIL_LEFT + 132;
 const GUIDE_FALLBACK_BOTTOM = 104;
 const ADVISOR_FALLBACK_LEFT = 160;
 const ADVISOR_BOTTOM = 26;
+/** Extra air (grid px) between a girl's feet and the advisor chip while TEXT SIZE is 115 / 130 % (`layoutFences`). */
+const GROWN_FOOT_AIR = 3;
 
 /**
  * `tan(12deg)` — the house slab skew (`--ig-skew`, flipped to +12deg for
@@ -332,6 +336,10 @@ export class FFX2BattleHud implements HudPort {
   private fenceColumnEl: HTMLElement | null = null;
   /** The card's `max-height` from `advisorLane.ts` for the open decision; only tightens until the next one. */
   private advisorCap: number | null = null;
+  /** True once the card has folded for lack of a lane at TEXT SIZE 115 / 130 %; cleared with the next decision (`foldAdvisor`). */
+  private advisorFolded = false;
+  /** The intent slab's shape at TEXT SIZE 115 / 130 % (`intentWidth.ts`). */
+  private readonly intentWidth = new IntentWidth();
   private readonly onResize = (): void => this.layout();
 
   // -------------------------------------------------------------- HudPort
@@ -410,6 +418,9 @@ export class FFX2BattleHud implements HudPort {
       scale: () => this.stageScale,
       project: (id, anchor) => (this.labelsAtRest() && this.layoutProject ? this.layoutProject : this.project)(id, anchor), // fb2-0929 option
       avoid: () => this.intentAvoidRects(),
+      // Judgment call K (round 21, FFX-2 only): at TEXT SIZE 115 / 130 % the grown panels leave no free spot for the full
+      // read-out, so it prints its brief density (as FFX's does) and the solver finds the free band it fits.
+      density: () => (currentWideTextScale() > 1 ? 'brief' : 'full'),
     });
     this.queued.mount(this.overlay, { project: (id, anchor) => (this.labelsAtRest() && this.layoutProject ? this.layoutProject : this.project)(id, anchor) });
     this.openingHold.start();
@@ -579,18 +590,31 @@ export class FFX2BattleHud implements HudPort {
     if (!head) return null;
 
     const chip = this.el.querySelector<HTMLElement>('.eint__toggle');
-    const box = this.intent.isVisible ? this.el.querySelector<HTMLElement>('.eint__panel') : chip;
+    const panel = this.intent.isVisible ? this.el.querySelector<HTMLElement>('.eint__panel') : null;
     const bandIn = this.bandInput();
-    return solveSlab({
+    const grown = currentWideTextScale() > 1;
+    const board = {
       obstacles,
       layer,
       head,
       scale: this.stageScale || 1,
-      box: box?.getBoundingClientRect() ?? null,
       panelUp: this.intent.isVisible,
       chip: chip?.getBoundingClientRect() ?? null,
       bandTop: battleHelpOn() ? bandReserve(bandGeometry(bandIn), bandIn) : 0,
-    });
+      girlsFirst: grown,
+    };
+    // Judgment call K (round 21, FFX-2 only): at TEXT SIZE 115 / 130 % the slab wears its narrow shape when that is clearly the
+    // cleaner of its two on this board (`intentWidth.ts`); at 100 % it never does. The box is read after: the class may change it.
+    if (panel && grown) this.intentWidth.apply(panel, this.intentWidthKey(panel), board);
+    else this.intentWidth.reset(panel);
+    const box = this.intent.isVisible ? panel : chip;
+    const narrow = !!panel && grown && panel.classList.contains(INTENT_NARROW_CLASS);
+    return solveSlab({ ...board, box: box?.getBoundingClientRect() ?? null, ...(narrow ? { narrow: true } : {}) });
+  }
+
+  /** What the slab's measured sizes depend on besides its shape: its text, the stage scale and the body's height cap. */
+  private intentWidthKey(panel: HTMLElement): string {
+    return `${this.intent.contentKey}|${(this.stageScale || 1).toFixed(3)}|${panel.querySelector<HTMLElement>('.eint__body')?.style.maxHeight ?? ''}`;
   }
 
   /**
@@ -670,7 +694,9 @@ export class FFX2BattleHud implements HudPort {
       floor: ADVISOR_FALLBACK_LEFT,
       wall: wall ?? 458,
       base: 360 - ADVISOR_BOTTOM,
-      chip: chipH,
+      // At TEXT SIZE 115 / 130 % the chip keeps 3 more grid px from the girls' feet: the lane is solved on the camera's rest pose and
+      // the girls sway a few px off it, which put the chip across Rikku's boots (6 percent of her at 130 %, Chapter V; judgment call K).
+      chip: chipH + (currentWideTextScale() > 1 ? GROWN_FOOT_AIR : 0),
       cardHeight: cardH,
       cap: this.advisorCap,
     });
@@ -678,6 +704,22 @@ export class FFX2BattleHud implements HudPort {
     // 1px is part of the clearance it hands back.
     right.style.left = `${Math.max(0, Math.min(639, lane.after)).toFixed(2)}px`;
     this.applyAdvisorCap(lane.maxHeight, card);
+    this.advisor.el.dataset['lane'] = lane.mode;
+    this.foldAdvisor(card, lane.mode);
+  }
+
+  /**
+   * Judgment call K (round 21, FFX-2 only): at TEXT SIZE 115 / 130 % the grown party list leaves the card no lane (`squeezed`:
+   * `MoveAdvisor`'s hard wall would slide it back over the girls, Paine's feet in Chapter IV at 130 %), so it folds for the
+   * rest of the decision, as FFX's folds when no box is clear; `followCard` takes the chip down with it. The fold only latches
+   * on within a decision, as the cap does, and `resetAdvisorCap` starts the next decision unfolded: a lane that opens up is
+   * picked up then, and the card never flickers between two frames' answers. At 100 % nothing folds.
+   */
+  private foldAdvisor(card: HTMLElement | null, mode: 'clear' | 'under' | 'squeezed'): void {
+    if (!card) return;
+    this.advisorFolded = advisorFolds(mode, currentWideTextScale(), this.advisorFolded);
+    const want = !this.advisor.isVisible || this.advisorFolded;
+    if (card.hidden !== want) card.hidden = want;
   }
 
   /** Write the lane's cap onto the card, only when it changed (the card re-fits on a new cap). */
@@ -690,6 +732,7 @@ export class FFX2BattleHud implements HudPort {
 
   /** A new (or no) decision: the cap starts over with the card's full text. */
   private resetAdvisorCap(): void {
+    this.advisorFolded = false;
     this.applyAdvisorCap(null, this.stage?.querySelector<HTMLElement>('.mad__card') ?? null);
   }
 

@@ -198,3 +198,66 @@ describe('the three looks on the page: keys and taps switch the look live', () =
     expect(adjustSetting(store, 'fxAll', 1, true), 'ALL LOOKS is the page’s, not a setting').toBe(false);
   });
 });
+
+describe('a look turned back ON with every part OFF brings its parts back (PR-0329, judgment call L of round 21)', () => {
+  const LISTED = {
+    'seymour-flux': ['fxFraming', 'fxHero', 'fxSplash'], // OVERDRIVE SHOT is FFX's
+    'ffx2-bahamut': ['fxFraming', 'fxSphere', 'fxSplash'], // DRESSPHERE SHOT is FFX-2's
+  } as const;
+  const isOn = (h: Harness, id: string): boolean => valueOf(h, id).startsWith('ON');
+  const allOff = { fxSpectacle: false, fxFraming: false, fxHero: false, fxSphere: false, fxSplash: false };
+
+  for (const chapter of Object.keys(LISTED) as (keyof typeof LISTED)[]) {
+    it(`${chapter}: Enter on BATTLE SPECTACLE with its three parts OFF switches them ON, and a part turned off afterwards stays off`, () => {
+      const parts = LISTED[chapter];
+      const h = mount(chapter);
+      h.store.setSettings(allOff); // a save that had the look off: its parts were never chosen (they upgrade to OFF)
+      openPage(h);
+      expect(isOn(h, 'fxSpectacle')).toBe(false);
+      for (const p of parts) expect(isOn(h, p), `${p} starts OFF`).toBe(false);
+      selectRow(h, 'fxSpectacle');
+      key(h, 'Enter');
+      expect(isOn(h, 'fxSpectacle')).toBe(true);
+      for (const p of parts) expect(isOn(h, p), `${p} came back with the look`).toBe(true);
+      expect(eyeCandy.on.c, 'the look plays live').toBe(true);
+      // SPLASH ART is turned off by hand: it stays off, even through the look going off and on again
+      selectRow(h, 'fxSplash');
+      key(h, 'Enter');
+      expect(isOn(h, 'fxSplash')).toBe(false);
+      selectRow(h, 'fxSpectacle');
+      key(h, 'Enter');
+      expect(isOn(h, 'fxSpectacle')).toBe(false);
+      for (const p of [parts[0], parts[1]]) expect(isOn(h, p), `${p} is not rewritten by the look going off`).toBe(true);
+      key(h, 'Enter');
+      expect(isOn(h, 'fxSpectacle')).toBe(true);
+      expect(isOn(h, 'fxSplash'), 'a look with a part on keeps the player\'s choices').toBe(false);
+      for (const p of [parts[0], parts[1]]) expect(isOn(h, p)).toBe(true);
+    });
+  }
+
+  it('a tap on the look does the same (it is the same row path)', () => {
+    const h = mount('ffx2-bahamut');
+    h.store.setSettings({ fxLight: false, fxDof: false, fxFog: false, fxEdges: false });
+    h.screen.trigger('pause:tab:options');
+    const tap = (id: string): void => {
+      h.root.querySelector<HTMLElement>(`.pause__row[data-row="${id}"]`)!.click();
+      frame(h);
+    };
+    tap('eyeCandy');
+    expect(isOn(h, 'fxLight')).toBe(false);
+    tap('fxLight');
+    for (const id of ['fxLight', 'fxDof', 'fxFog', 'fxEdges']) expect(isOn(h, id), id).toBe(true);
+    expect(eyeCandy.on.a).toBe(true);
+  });
+
+  it('a look with one part on keeps the choices: nothing else switches', () => {
+    const h = mount('seymour-flux');
+    h.store.setSettings({ fxLiving: false, fxBreath: true, fxKo: false });
+    openPage(h);
+    selectRow(h, 'fxLiving');
+    key(h, 'Enter');
+    expect(isOn(h, 'fxLiving')).toBe(true);
+    expect(isOn(h, 'fxBreath')).toBe(true);
+    expect(isOn(h, 'fxKo'), 'KO COLLAPSE was off and stays off').toBe(false);
+  });
+});

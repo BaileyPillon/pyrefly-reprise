@@ -122,3 +122,23 @@
     display: none;
   }
 }
+
+/*
+ * The MUSIC tab's list (judgment call K of round 21, game case: both, one pause). `MusicPlayer` writes plain rows and no stylesheet
+ * ever bounded them, so the sound-test list ran down over the chapter objective at every TEXT SIZE and in both games (27 rows at
+ * 1600x900). It stops three rows above the objective (the SOUND TEST head takes one, and the objective's eyebrow another at 2000x1012)
+ * and scrolls on its own, as the OPTIONS settings column does
+ * (`pause-screen.css`); the selected row is scrolled into view (`MusicPlayer.scrollIntoView`).
+ */
+.pause__body[data-tab='music'] .pause__music-list {
+  max-height: calc(var(--pu-top-obj) - var(--pu-top-body) - 3 * var(--pu-row));
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding-bottom: 12px;
+  box-sizing: border-box;
+  mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 12px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 12px), transparent 100%);
+}
+.pause__body[data-tab='music'] .pause__music-list::-webkit-scrollbar {
+  display: none;
+}

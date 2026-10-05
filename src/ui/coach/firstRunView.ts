@@ -132,6 +132,8 @@ export class FirstRunLayer {
   private readonly chev: HTMLElement;
   readonly slab: HTMLElement;
   private shown: 0 | 1 | 2 | 3 = 0;
+  /** The quote the slab is drawn with now (step 1's changes with the chapter on the plate). */
+  private quote: string | null = null;
 
   constructor(onSkip: () => void) {
     const el = document.createElement('div');
@@ -152,15 +154,18 @@ export class FirstRunLayer {
 
   /**
    * Draw step `n` against `target`. Step 3's slab is FFX's own line: the caller
-   * passes its height and places it from the answer.
+   * passes its height and places it from the answer. `quote` overrides the step's
+   * own words (step 1 says "this one" once another chapter than Chapter I is on the
+   * plate, `firstRunBoardQuote`); the slab is drawn again when it changes.
    */
-  draw(step: FirstRunStep, target: Box, bandBottom = 0, lineH = 0): Placement {
+  draw(step: FirstRunStep, target: Box, bandBottom = 0, lineH = 0, quote: string | null = step.quote): Placement {
     const n = step.n;
-    if (this.shown !== n) {
+    if (this.shown !== n || (n !== 3 && this.quote !== quote)) {
       this.shown = n;
+      this.quote = quote;
       this.el.dataset['step'] = String(n);
       this.mark.className = n === 3 ? 'frg__ring' : 'frg__spot';
-      this.slab.innerHTML = n === 3 ? '' : slabHtml(step);
+      this.slab.innerHTML = n === 3 ? '' : slabHtml(step, quote);
       this.slab.style.display = n === 3 ? 'none' : '';
     }
     this.el.style.display = '';

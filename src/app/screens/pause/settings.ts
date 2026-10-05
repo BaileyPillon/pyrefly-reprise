@@ -14,8 +14,10 @@
  */
 
 import { audio } from '../../../audio/index.ts';
+import type { GameId } from '../../../battle/common/types.ts';
 import type { SaveStore } from '../../SaveData.ts';
-import { isFxSwitchField } from '../../fxParts.ts';
+import { isFxLookField } from '../../fxLooks.ts';
+import { fxLookOnPatch, isFxSwitchField } from '../../fxParts.ts';
 import { stepTextSize, wrapTextSize } from '../../saveComfort.ts';
 import { TEXT_SPEEDS, VOLUME_STEP } from '../PauseScreenPanels.ts';
 
@@ -24,13 +26,19 @@ export const ATB_SPEEDS = ['slow', 'normal', 'fast'] as const;
 
 const clamp01 =(v: number): number => Math.round(Math.min(1, Math.max(0, v)) * 100) / 100;
 
-/** True when the id named a setting and it was written. */
-export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1, press = false): boolean {
+/**
+ * True when the id named a setting and it was written. `game` is the page the player is on (the EYE CANDY page passes
+ * its own): it decides which parts of a look are in view when the look is turned ON.
+ */
+export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1, press = false, game?: GameId): boolean {
   const settings = save.settings;
   if (isFxSwitchField(id)) {
     // The EYE CANDY page's twelve switches (three looks, nine parts; D-317) flip like REDUCE MOTION, each on
-    // its own: a look never rewrites its parts. `applyComfort` switches the look and the seam live on the write.
-    save.setSettings({ [id]: settings[id] === false });
+    // its own: a look never rewrites its parts, with one exception (judgment call L of round 21, PR-0329): a look
+    // turned ON while every part under it is OFF brings its parts back ON (`fxLookOnPatch`). Same stored fields.
+    // `applyComfort` switches the look and the seam live on the write.
+    const turningOn = settings[id] === false;
+    save.setSettings(turningOn && isFxLookField(id) ? fxLookOnPatch(settings, id, game) : { [id]: turningOn });
     return true;
   }
   switch (id) {

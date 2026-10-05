@@ -56,6 +56,7 @@ export function heroHtml(tile: ChapterTile, index: number, bestTimeMs: number | 
   const numeral = tile.numeral ? `Chapter ${tile.numeral}` : 'Coming';
   return `
     <div class="fe-hero${tile.cleared ? ' fe-hero--cleared' : ''}" data-action="fe-card-${index}" role="button" tabindex="0"
+         data-chapter="${escapeHtml(tile.id)}" data-chapter-number="${tile.number ?? ''}"
          aria-label="${escapeHtml(tile.title)}">
       <div class="fe-hero__art">${plateArtHtml(tile, 'hero')}</div>
       <div class="fe-hero__fade"></div>

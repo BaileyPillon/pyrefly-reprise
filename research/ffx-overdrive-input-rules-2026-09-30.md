@@ -439,3 +439,8 @@ already merged over its defaults; the two overlays now read them.
   what the overlay played before (a 44 px zone, 12.22 % of the meter, at 340 px/s, 1 059 ms a
   crossing). The per-tier wiring stays, so sourced values (or Bailey's yes to the estimates) are a
   four-row edit in `inputs.ts`.
+  **Applied in release 39 (2026-10-04):** Bailey adopted the §5.3 table (judgment call J of critic round 21,
+  "all your recommendations") as **our estimate, adopted by Bailey 2026-10-04**: zones 22 / 16 / 12 / 9 % and
+  crossings 1 400 / 1 150 / 900 / 700 ms, timers unchanged (3 000 / 3 000 / 2 600 / 2 200 ms). Four rows in
+  `inputs.ts`, a unit test for the ordering. The Bushido order keeps its "our estimate" label until the Steam
+  read. A later Steam read of the four zones and sweeps replaces these numbers if it can.

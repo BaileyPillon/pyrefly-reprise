@@ -97,6 +97,19 @@ function laneWidth(after: number, wall: number): number {
   return wall - ADVISOR_CLEARANCE_GAP - (after + FENCE_WIDTH + ADVISOR_CLEARANCE_GAP);
 }
 
+/**
+ * Whether the card folds for the rest of the decision (judgment call K of critic round 21, PR-0270; FFX-2 only). While TEXT SIZE is
+ * 115 or 130 % the grown party list leaves the card no lane when the solver answers `squeezed` (`MoveAdvisor`'s hard wall would
+ * slide it back over the girls, Paine's feet in Chapter IV at 130 %), so it folds, as FFX's folds when no box is clear; `followCard`
+ * takes its chip down with it. The fold latches within a decision (a lane that opens up is picked up at the next one, so the card
+ * never flickers between two frames' answers) and lets go the moment the text is back at 100 %, where nothing folds.
+ * Pure, so the rule is unit-tested without a layout engine.
+ */
+export function advisorFolds(mode: Lane['mode'], textScale: number, latched: boolean): boolean {
+  if (!(textScale > 1)) return false;
+  return latched || mode === 'squeezed';
+}
+
 export function solveAdvisorLane(input: LaneInput): Lane {
   const { figures, floor, wall, base, chip, cardHeight, cap } = input;
 

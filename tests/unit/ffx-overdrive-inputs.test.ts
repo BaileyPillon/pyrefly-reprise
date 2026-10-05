@@ -9,12 +9,16 @@
  * Sourced: the sequence LENGTHS 8 / 7 / 7 / 6 (`research/ffx-overdrive-input-rules-2026-09-30.md` D2,
  * `[verified: 4 sources]`) and the Swordplay ORDERING (zone narrower, marker faster, timer shorter as the
  * Overdrive gets stronger, `ffx-combat-core.md` §5.3 rule 2). The button ORDER is our estimate (the GameFAQs
- * order, Bailey 2026-10-03; D3) and the Swordplay zone and speed numbers are unsourced, so every tier keeps today's pair (12.22 %, 1 059 ms).
+ * order, Bailey 2026-10-03; D3). The Swordplay zone and speed numbers are unsourced too: release 38 held every
+ * tier at one pair (12.22 %, 1 059 ms); since release 39 they are the §5.3 table, **our estimate, adopted by
+ * Bailey 2026-10-04** (round 21 judgment call J): zones 22 / 16 / 12 / 9 %, crossings 1 400 / 1 150 / 900 / 700 ms,
+ * timers unchanged (3 000 / 3 000 / 2 600 / 2 200 ms). Game case: FFX only.
  *
  * The request comes from the real engine, its params open the real overlay, and the sequence is typed with
  * real `keydown` events (the same `RawInputWatcher` the game uses).
  */
 
+import fs from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AbilityDef, BattleEvent, Command, Decision, MinigameResult } from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
@@ -85,29 +89,65 @@ describe('Bushido data: the sourced lengths, per Overdrive', () => {
   });
 });
 
-describe('Swordplay data: the ordering is sourced, the zone and speed numbers are still owed', () => {
-  it('the timer shortens with the tier (the sourced ordering, already shipped); zone and speed never get easier', () => {
+describe('Swordplay data: the ordering is sourced, the zone and speed numbers are our estimate (adopted by Bailey 2026-10-04)', () => {
+  it('a stronger tier has a narrower zone, a faster sweep and a shrinking window; the timer never lengthens (the sourced ordering)', () => {
     for (let i = 1; i < SWORDPLAY_IDS.length; i++) {
       const prev = SWORDPLAY_TUNING[SWORDPLAY_IDS[i - 1]!]!;
       const cur = SWORDPLAY_TUNING[SWORDPLAY_IDS[i]!]!;
-      expect(cur.zonePercent).toBeLessThanOrEqual(prev.zonePercent);
-      expect(cur.travelMs).toBeLessThanOrEqual(prev.travelMs);
+      expect(cur.zonePercent, `${SWORDPLAY_IDS[i]} zone`).toBeLessThan(prev.zonePercent);
+      expect(cur.travelMs, `${SWORDPLAY_IDS[i]} crossing (a shorter crossing is a faster marker)`).toBeLessThan(prev.travelMs);
+      expect((cur.zonePercent / 100) * cur.travelMs, `${SWORDPLAY_IDS[i]} window`).toBeLessThan((prev.zonePercent / 100) * prev.travelMs);
       expect(timerMsFor(TIDUS[SWORDPLAY_IDS[i]!]!)).toBeLessThanOrEqual(timerMsFor(TIDUS[SWORDPLAY_IDS[i - 1]!]!));
+    }
+    // the timer does shorten overall: strictly from Slice and Dice to Energy Rain to Blitz Ace
+    const timers = SWORDPLAY_IDS.map((id) => timerMsFor(TIDUS[id]!));
+    expect(timers[2]!).toBeLessThan(timers[1]!);
+    expect(timers[3]!).toBeLessThan(timers[2]!);
+  });
+
+  it('the four rows are the section 5.3 table Bailey adopted on 2026-10-04: zones 22 / 16 / 12 / 9 %, crossings 1 400 / 1 150 / 900 / 700 ms', () => {
+    expect(SWORDPLAY_TUNING['spiral-cut']).toEqual({ zonePercent: 22, travelMs: 1400 });
+    expect(SWORDPLAY_TUNING['slice-and-dice']).toEqual({ zonePercent: 16, travelMs: 1150 });
+    expect(SWORDPLAY_TUNING['energy-rain']).toEqual({ zonePercent: 12, travelMs: 900 });
+    expect(SWORDPLAY_TUNING['blitz-ace']).toEqual({ zonePercent: 9, travelMs: 700 });
+  });
+
+  it('the timers did not move: 3 000, 3 000, 2 600 and 2 200 ms', () => {
+    expect(SWORDPLAY_IDS.map((id) => timerMsFor(TIDUS[id]!))).toEqual([3000, 3000, 2600, 2200]);
+  });
+
+  it('Spiral Cut and Blitz Ace draw different zones and sweeps in the overlay\'s own pixels (a 360 px meter)', () => {
+    const spiral = swordplayGeometry({ ...SWORDPLAY_TUNING['spiral-cut']! }, 360);
+    const blitz = swordplayGeometry({ ...SWORDPLAY_TUNING['blitz-ace']! }, 360);
+    expect(spiral.zoneHalfWidth).toBeCloseTo(39.6, 6); // 22 % of 360 = 79.2 px wide
+    expect(blitz.zoneHalfWidth).toBeCloseTo(16.2, 6); // 9 % of 360 = 32.4 px wide
+    expect(spiral.speedPxPerSec).toBeCloseTo(360 / 1.4, 6);
+    expect(blitz.speedPxPerSec).toBeCloseTo(360 / 0.7, 6);
+    expect(blitz.zoneHalfWidth).toBeLessThan(spiral.zoneHalfWidth);
+    expect(blitz.speedPxPerSec).toBeGreaterThan(spiral.speedPxPerSec);
+  });
+
+  it('every zone is a real slice of the meter (never empty, never the whole bar) and every crossing takes time', () => {
+    for (const id of SWORDPLAY_IDS) {
+      const t = SWORDPLAY_TUNING[id]!;
+      expect(t.zonePercent).toBeGreaterThan(0);
+      expect(t.zonePercent).toBeLessThan(50);
+      expect(t.travelMs).toBeGreaterThan(0);
     }
   });
 
-  it('no unsourced zone or speed ships: every tier plays what the game played before release 38 (12.22 %, 1 059 ms)', () => {
-    for (const id of SWORDPLAY_IDS) expect(SWORDPLAY_TUNING[id]).toEqual({ travelMs: 1059, zonePercent: 12.22 });
-  });
-
-  it('that pair is the old overlay default: a 22 px half width and 340 px/s on a 360 px meter', () => {
-    const g = swordplayGeometry({ ...SWORDPLAY_TUNING['blitz-ace']! }, 360);
-    expect(g.zoneHalfWidth).toBeCloseTo(22, 2);
-    expect(g.speedPxPerSec).toBeCloseTo(340, 0);
+  it('the estimate is labelled where it lives: the data header and the section 5.3 research note; the Bushido order keeps its own label', () => {
+    const header = fs.readFileSync('src/data/ffx/overdrives/inputs.ts', 'utf8');
+    expect(header).toContain('our estimate, adopted by Bailey 2026-10-04');
+    expect(header, 'the Bushido order keeps its "our estimate" label').toContain('button ORDER is our estimate');
+    const note = fs.readFileSync('research/ffx-combat-core.md', 'utf8');
+    const at = note.indexOf('### 5.3 Tidus');
+    const section = note.slice(at, note.indexOf('### 5.4', at));
+    expect(section).toContain('our estimate, adopted by Bailey 2026-10-04');
+    expect(section).toContain('D-312'); // the style of Tornado's timer note
   });
 
   it('swordplayGeometry turns percent and travel time into the overlay\'s pixels, and keeps the old defaults', () => {
-    // the wiring is kept for when per-tier values are sourced: any pair converts, not only today's
     expect(swordplayGeometry({ zonePercent: 22, travelMs: 1400 }, 360)).toEqual({ zoneHalfWidth: 39.6, speedPxPerSec: 360 / 1.4 });
     expect(swordplayGeometry({ zonePercent: 9, travelMs: 700 }, 360).zoneHalfWidth).toBeCloseTo(16.2, 6);
     expect(swordplayGeometry({}, 360)).toEqual({ zoneHalfWidth: 22, speedPxPerSec: 340 });
