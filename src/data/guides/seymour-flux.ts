@@ -117,13 +117,13 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
     {
       name: 'Auto-Attack Mode',
       payload: 'Total Annihilation',
-      advice: 'Get Shell up, or Defend — it is ~3,300-4,145 of magic across the party and Shell halves it',
+      advice: 'Get Shell up — it is ~3,300-4,145 of magic across the party and Shell halves it',
       cite: 'ffx-seymour-flux §5.2, §6 row 13',
     },
     {
       name: 'Ready To Annihilate',
       payload: 'Total Annihilation, next turn',
-      advice: 'Shell or Defend now, and top up anyone who would not survive ~4,300 — a summon stalls the ladder outright',
+      advice: 'Shell now (Defend only halves physical hits, so it will not cut this), and top up anyone who would not survive ~4,300 — a summon stalls the ladder outright',
       cite: 'ffx-seymour-flux §4.4.2, §5.2',
     },
   ],

@@ -64,7 +64,10 @@ export const SEYMOUR_FLUX_DOC: GuideDoc = {
       t: 'p',
       text: 'On the warning, Yuna can cast Shell just before the blast lands, or Kimahri can use the Mighty Guard he learned from Biran, or Rikku can Mix up Mighty G, Super Mighty G, or the top-tier Hyper Mighty G.',
     },
-    { t: 'p', text: 'Defend as the attack hits to cut the damage even further.' },
+    {
+      t: 'p',
+      text: 'Defend will not help against this one: it only halves physical hits, and Total Annihilation is magic. Shell is what halves it.',
+    },
     {
       t: 'p',
       text: "You can also call an aeon once Ready to Annihilate shows: standing on the field when the blast fires, it takes the whole hit for the party. Do it after Seymour's turn so he cannot Banish it before the attack.",
