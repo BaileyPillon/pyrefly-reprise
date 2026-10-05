@@ -245,6 +245,66 @@ describe('size continuity at a swap (CHK-026)', () => {
     expect(r.unmeasured).toBeUndefined();
     expect(r.head!.ratio).toBeCloseTo(1.2, 3);
   });
+
+  describe('what counts as a change of pose (r391)', () => {
+    const slid = big(1.2).map((v, i) => (i % 2 === 0 ? v + 30 : v)); // a 20 percent bigger head AND feet 30 px away: both would fail
+    const art = (subject: string, pose: string, url = `/art/characters/${subject}/${pose}.webp`): Partial<Anchors> => ({ subject, pose, url } as Partial<Anchors>);
+
+    it('judges two poses of one subject, whatever their names', () => {
+      const r = swapOf(crossfade(qa, slid, FADES), [anchor(art('yuna-gunner', 'idle')), anchor(art('yuna-gunner', 'ready'))], 4);
+      expect(r.costume).toBe(false);
+      expect(r.sameArt).toBe(false);
+      expect(r.failHead).toBe(true);
+      expect(r.failFeet).toBe(true);
+    });
+
+    it('does not judge a change of dressphere or of a boss\'s form: it is a costume change, measured and shown', () => {
+      const r = swapOf(crossfade(qa, slid, FADES), [anchor(art('paine-warrior', 'idle')), anchor(art('paine-gunner', 'idle'))], 4);
+      expect(r.costume).toBe(true);
+      expect(r.head!.ratio).toBeCloseTo(1.2, 3); // still read, so the summary can show the worst one
+      expect(r.feet!.px).toBeGreaterThan(20);
+      expect(r.failHead).toBe(false);
+      expect(r.failFeet).toBe(false);
+    });
+
+    it('does not judge two pose names that draw one painting: the size cannot change and what moves is the pose state\'s own motion', () => {
+      const r = swapOf(crossfade(qa, slid, FADES), [anchor(art('seymour-flux', 'idle')), anchor(art('seymour-flux', 'hurt', '/art/characters/seymour-flux/idle.webp'))], 4);
+      expect(r.sameArt).toBe(true);
+      expect(r.costume).toBe(false);
+      expect(r.failHead).toBe(false);
+      expect(r.failFeet).toBe(false);
+    });
+
+    it('keeps everything judged when a painting says nothing about its subject (an older build, a stand-in)', () => {
+      const r = swapOf(crossfade(qa, slid, FADES), [anchor(), anchor()], 4);
+      expect(r.costume).toBe(false);
+      expect(r.sameArt).toBe(false);
+      expect(r.failHead).toBe(true);
+    });
+
+    it('counts them in the summary and keeps them out of the size numbers', () => {
+      const counted = (over: Partial<SwapRow>): SwapRow => ({ counted: true, camCut: false, notShowing: false, ghost: { frames: 0, ms: 0, peak: 0, severity: 0, worstFrame: null }, snap: false, hardCut: false, failHead: false, failFeet: false, ...over });
+      const head = (ratio: number) => ({ fromPx: 100, toPx: 100 * ratio, ratio, source: 'registration' as const, metric: 'head' as const });
+      const feet = (px: number) => ({ dx: px, dy: 0, px, standing: true, source: 'registration' });
+      const s = summarize({
+        swaps: [
+          counted({ head: head(1.01), feet: feet(0.3) }),
+          counted({ costume: true, head: head(1.3), feet: feet(40) }),
+          counted({ sameArt: true, head: head(1), feet: feet(36) }),
+        ],
+        jerks: [], battleSeconds: 120, cfg: CFG,
+      });
+      expect(s.size.judged).toBe(1);
+      expect(s.size.costumeSwaps).toBe(1);
+      expect(s.size.sameArtSwaps).toBe(1);
+      expect(s.size.costumeWorstHeadPct).toBeCloseTo(30, 1);
+      expect(s.size.costumeWorstFeetPx).toBeCloseTo(40, 1);
+      expect(s.size.maxHeadJumpPct).toBeCloseTo(1, 1);
+      expect(s.size.maxFeetShiftPx).toBeCloseTo(0.3, 1);
+      expect(s.size.headOverTolerance).toBe(0);
+      expect(s.size.feetOverTolerance).toBe(0);
+    });
+  });
 });
 
 describe('snaps, blends and double images at a swap (CHK-027)', () => {

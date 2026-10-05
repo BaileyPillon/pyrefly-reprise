@@ -189,6 +189,32 @@ describe('what the probe calls a swap', () => {
     expect(kinds).toContain('attack>ko'); // and then the same plane showed the KO painting
   });
 
+  it('keys a pose by its painting too: a spherechange re-points "idle" at another dressphere, and the old key keeps the old painting', async () => {
+    const r = rig();
+    r.probe.start();
+    for (let i = 0; i < 4; i++) await r.step();
+    r.actor.poseUrls['idle'] = '/art/characters/hero-b/idle.png'; // loadPoses with the new dressphere's paintings: same pose name, another file
+    await r.step();
+    const m = r.probe.meta();
+    expect(m.poses.filter((p) => p.pose === 'idle').map((p) => p.url)).toEqual(['/art/characters/hero/idle.png', '/art/characters/hero-b/idle.png']);
+    expect(m.swaps).toHaveLength(1);
+    expect(m.poses[m.swaps[0]!.from]!.url).toBe('/art/characters/hero/idle.png');
+    expect(m.poses[m.swaps[0]!.to]!.url).toBe('/art/characters/hero-b/idle.png');
+    // the frames before the change are recorded against the old key, the ones after against the new
+    const before = r.probe.records.find((x) => x.n === 3)!.f[0]!.s[0] as number[];
+    const after = r.probe.records.at(-1)!.f[0]!.s[0] as number[];
+    expect(before[0]).toBe(m.swaps[0]!.from);
+    expect(after[0]).toBe(m.swaps[0]!.to);
+  });
+
+  it('reads the painting a plane draws off the plane itself when it says (slot.painted.url), not off the actor\'s map', async () => {
+    const r = rig();
+    r.actor.slots[0].painted = { url: '/art/characters/hero-c/idle.webp' };
+    r.probe.start();
+    for (let i = 0; i < 2; i++) await r.step();
+    expect(r.probe.meta().poses[0]!.url).toBe('/art/characters/hero-c/idle.webp');
+  });
+
   it('does not make a swap of a figure that is not showing', async () => {
     const r = rig();
     r.probe.start();
