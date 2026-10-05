@@ -264,7 +264,7 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
             ph = p.bbox[3] - p.bbox[1]
             stature = ph * scale / idle_h
             if stature < STATURE_GATE:
-                smin = math.ceil(STATURE_GATE * idle_h / ph * 100) / 100
+                smin = math.ceil(STATURE_GATE * idle_h / ph * 1000) / 1000  # r391: to the thousandth (it was the hundredth, which left a gated head up to 1.5 percent further off than it had to be)
                 rec["gate"] = {"reading": round(scale, 3), "stature": round(ph * smin / idle_h, 3)}
                 scale, src = smin, "gated"
         if scale and not p.prone:
@@ -273,7 +273,7 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
         if anchor:
             rec["anchor"] = [r1(anchor[0]), r1(anchor[1])]
             hs = rec.get("reading") or scale
-            if hs:
+            if hs and ann.get("face"):  # a foe has no face box: its scale is read by the silhouette's mass, never as a head
                 rec["head"] = [r1(anchor[0] - bw / hs / 2), r1(anchor[1] - bh / hs / 2), r1(anchor[0] + bw / hs / 2), r1(anchor[1] + bh / hs / 2)]
         # ---- stance (standing poses only: a prone body rests by its own rule, PaintedRest.ts)
         # a pose wider than tall is lying down only when it is a KO: a standing lunge of a figure whose idle is upright is standing

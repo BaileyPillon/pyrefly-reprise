@@ -3232,7 +3232,7 @@
      "current": 0.72,
      "gate": {
       "reading": 0.533,
-      "stature": 0.604
+      "stature": 0.601
      },
      "head": [
       333.1,
@@ -3242,7 +3242,7 @@
      ],
      "prone": false,
      "reading": 0.533,
-     "scale": 0.59,
+     "scale": 0.587,
      "scaleSrc": "gated",
      "sha": "586b11ffab4339dab3d140a2fbeabbadb894ed08cf7c4472df9684c7ebf8de27",
      "size": [
@@ -3257,7 +3257,7 @@
       "x1": 465.0
      },
      "standing": true,
-     "stature": 0.604
+     "stature": 0.601
     },
     "follow": {
      "anchor": [
@@ -3753,6 +3753,118 @@
      },
      "standing": true,
      "stature": 1.0
+    }
+   }
+  },
+  "mortiorchis": {
+   "game": "foe",
+   "headsComplete": true,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      1021.3,
+      235.6
+     ],
+     "baseline": 748.0,
+     "current": 1.0,
+     "prone": true,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "c7e49ebf37c90ac684a3904144b2dd2db17713814368c9096b77a9912a92cd46",
+     "size": [
+      1201,
+      764
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "cast": {
+     "anchor": [
+      924.2,
+      221.8
+     ],
+     "baseline": 701.0,
+     "current": 1.0,
+     "prone": true,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "0da10b2d5633f7bc4d0446ca2344d0b85de5a253294343a6f1e6a63686420d84",
+     "size": [
+      1088,
+      718
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "hurt": {
+     "anchor": [
+      746.1,
+      228.7
+     ],
+     "baseline": 725.0,
+     "current": 1.0,
+     "prone": true,
+     "reading": 1.3,
+     "scale": 1.3,
+     "scaleSrc": "reviewed",
+     "sha": "5c4ca91ac38663bcdbbdfa32aa6cb57f1967811e174b276ecbaa1e32df0a1905",
+     "size": [
+      881,
+      741
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 820.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "863632fadc63f012c06f598c4567079e9f7eaa7e2da786e5d9eb3223fa1eb46f",
+     "size": [
+      1201,
+      829
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "ko": {
+     "anchor": [
+      542.9,
+      196.5
+     ],
+     "baseline": 826.0,
+     "current": 1.0,
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "d9d0d1f64e4b2b06d0040220b73e7bcc2eaa2f86d4fa2e5987376e58005a4f5c",
+     "size": [
+      825,
+      830
+     ],
+     "stance": {
+      "row": 826.0,
+      "src": "silhouette",
+      "x": 647.0,
+      "x0": 600.0,
+      "x1": 694.0
+     },
+     "standing": true,
+     "stature": 1.006
     }
    }
   },
@@ -5479,7 +5591,7 @@
      "current": 0.66,
      "gate": {
       "reading": 0.646,
-      "stature": 0.603
+      "stature": 0.6
      },
      "head": [
       539.4,
@@ -5489,7 +5601,7 @@
      ],
      "prone": false,
      "reading": 0.646,
-     "scale": 0.66,
+     "scale": 0.657,
      "scaleSrc": "gated",
      "sha": "c8fcb8f5370fe77aea90b355e81df364366078acbcd3be4cd997365324d07ff8",
      "size": [
@@ -5504,7 +5616,7 @@
       "x1": 637.0
      },
      "standing": true,
-     "stature": 0.603
+     "stature": 0.6
     },
     "idle": {
      "anchor": [
@@ -7384,7 +7496,7 @@
      "current": 1.1,
      "gate": {
       "reading": 0.573,
-      "stature": 0.606
+      "stature": 0.601
      },
      "head": [
       254.7,
@@ -7394,7 +7506,7 @@
      ],
      "prone": false,
      "reading": 0.573,
-     "scale": 0.66,
+     "scale": 0.654,
      "scaleSrc": "gated",
      "sha": "e2c3f9dbf35eb1bbdefe3e83074bb313d85b80eabafe6dc229491bb85fb2202b",
      "size": [
@@ -7409,7 +7521,7 @@
       "x1": 560.0
      },
      "standing": true,
-     "stature": 0.606
+     "stature": 0.601
     }
    }
   },
@@ -8181,7 +8293,7 @@
      "current": 1.1,
      "gate": {
       "reading": 0.65,
-      "stature": 0.604
+      "stature": 0.601
      },
      "head": [
       189.7,
@@ -8191,7 +8303,7 @@
      ],
      "prone": false,
      "reading": 0.65,
-     "scale": 0.67,
+     "scale": 0.666,
      "scaleSrc": "gated",
      "sha": "9da2f0bc503ebf87e368b168e69bf71b58b444003d0d8c343fe1742fe2b072ee",
      "size": [
@@ -8206,7 +8318,7 @@
       "x1": 509.0
      },
      "standing": true,
-     "stature": 0.604
+     "stature": 0.601
     },
     "twirl-end": {
      "baseline": 870.0,

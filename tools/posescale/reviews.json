@@ -45,6 +45,12 @@
   "sleep": 0.727,
   "victory": 0.909
  },
+ "mortiorchis": {
+  "attack": "=",
+  "cast": "=",
+  "hurt": 1.3,
+  "ko": "="
+ },
  "paine-black-mage": {
   "attack": 1.039,
   "cast": 0.946,

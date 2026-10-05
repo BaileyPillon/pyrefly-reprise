@@ -581,5 +581,9 @@
  "yunalesca-2": {
   "game": "foe",
   "rowFromBaseline": true
+ },
+ "mortiorchis": {
+  "game": "foe",
+  "rowFromBaseline": true
  }
 }

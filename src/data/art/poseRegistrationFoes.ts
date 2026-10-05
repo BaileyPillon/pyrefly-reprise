@@ -124,6 +124,9 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     hurt: { stanceX: 684.5 },
     idle: { stanceX: 548.5 },
   },
+  mortiorchis: {
+    hurt: { scale: 1.3 },
+  },
   'nooj-shade': {
     hurt: { stanceX: 283.0 },
     idle: { stanceX: 254.5 },

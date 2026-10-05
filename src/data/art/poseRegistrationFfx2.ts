@@ -54,7 +54,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     attack: { scale: 1.152, stanceX: 284.0 },
     cast: { scale: 1.033, stanceX: 158.5 },
     dance: { scale: 0.911, stanceX: 383.5, feetRow: 1170.0 },
-    hurt: { scale: 0.66, stanceX: 487.0 },
+    hurt: { scale: 0.657, stanceX: 487.0 },
     idle: { stanceX: 175.0, feetRow: 1174.0 },
     item: { scale: 0.988, stanceX: 210.0 },
     ko: { scale: 1.016 },
@@ -104,7 +104,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     follow: { scale: 1.04, stanceX: 70.5, feetRow: 988.0 },
     idle: { stanceX: 280.0 },
     item: { scale: 1.184, stanceX: 159.0 },
-    ready: { scale: 0.66, stanceX: 313.5, feetRow: 1074.0 },
+    ready: { scale: 0.654, stanceX: 313.5, feetRow: 1074.0 },
   },
   'rikku-black-mage': {
     attack: { stanceX: 345.5 },
@@ -132,7 +132,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     idle: { stanceX: 144.5 },
     item: { stanceX: 189.0 },
     ko: { scale: 0.849 },
-    ready: { scale: 0.67, stanceX: 334.5 },
+    ready: { scale: 0.666, stanceX: 334.5 },
     victory: { scale: 0.8, stanceX: 179.0 },
   },
   'rikku-lady-luck': {
