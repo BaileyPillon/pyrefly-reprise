@@ -15,6 +15,10 @@ approved painting does not have. They were held back (`HELD_BACKDROPS`, now empt
 | `fd_full.py` | the recipe over a whole backdrop (banded, about a gigabyte), the library QC (`qc.likeness_rgb`, backdrop thresholds), the line metrics and the report |
 | `linemetric.py` | hairline density and long horizontal dark runs against the painting (bicubic up), the worst windows; they rank windows to look at, they do not replace looking |
 | `lib_backdrops.py` | the records of the six masters in the r39 library manifest (`D:/Tools/pyrefly-art-backup/hires-r39-art/manifest.json`, the shape `tools/hires-install.mjs --lib` reads) |
+| `run_jobs.py` | runs the library's own jobs (`hires_lib.gpu_plain` / `gpu_refine` / `finish_job`) for chosen ids and tiers under the shared GPU lock and PAUSE-GPU, and merges the records into the library manifest (what the overnight driver does; never run it beside the driver). Used for Evrae's masters from the E1-H paintings |
+| `fig_to_lib.py` | after `run_jobs.py` and `tools/gen/hires-alpha-fix/batch.py` (`R39_ART=<tree> R39_FIXED_OUT=D:/Tools/pyrefly-art-backup/hires-r39-art ... --ids a,b`), writes the repaired figure masters' records into the r39 library manifest |
+| `qc_held2x.py` | the likeness QC and rim metrics of the held D-315 2x masters against the installed library 2x masters |
+| `gpu_watch.py` | keeps the overnight refine batch polite about the driver's PAUSE-GPU file (writes hires/STOP while it exists, starts the supervisor again when it is gone) and stops it for good at 08:00 on 2026-10-05 |
 | `r39lib.py` | the lane's helpers: the GPU gate (PAUSE-GPU, the shared lock, a stale-lock cleaner), ESRGAN through ComfyUI, the r39 library manifest |
 
 Run (after `make_e.py <keys>`): `fd_full.py <key>` per backdrop, `lib_backdrops.py`, then
