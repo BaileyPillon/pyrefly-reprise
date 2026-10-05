@@ -54,6 +54,14 @@ const FRAG = /* glsl */ `
   }
 `;
 
+/**
+ * The anisotropic filtering a depth plate is drawn with, 16 samples along the long axis of its footprint (three clamps it to what the GPU has).
+ * A plate seen at a grazing angle is a floor, and a floor is magnified 5 to 50 times in a close shot. It has to be given when the render target is
+ * CREATED: three.js writes a render target's filtering state to the GPU once, the first time it is drawn into, so a `texture.anisotropy = 8` set after
+ * the compose never reached the GPU (the crispness options round read back 1 from GL for every plate, `docs/handoff/crisp-options.md`, finding 3).
+ */
+export const PLATE_ANISOTROPY = 16;
+
 export interface ComposedPlates {
   targets: WebGLRenderTarget[];
   textures: Texture[];
@@ -121,6 +129,7 @@ export function composeHiPlates(
         generateMipmaps: true,
         minFilter: LinearMipmapLinearFilter,
         magFilter: LinearFilter,
+        anisotropy: PLATE_ANISOTROPY,
       });
       material.uniforms['uWork']!.value = workTex[k];
       material.uniforms['uAbove']!.value = workTex[k + 1] ?? workTex[k];

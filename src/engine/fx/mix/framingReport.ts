@@ -25,7 +25,7 @@ export interface FramingReport {
    * The chapter's slots now in force (`stageTable.ts`: the chapter and each side's move in world x and z, and the move of each fiend a row names
    * by its combatant id: `by`), or null (today's own slots).
    */
-  stand: { chapter: string; party: [number, number]; enemy: [number, number]; by?: [string, number, number][] } | null;
+  stand: { chapter: string; party: [number, number]; enemy: [number, number]; by?: [string, number, number][]; follow?: true } | null;
   /** Each candidate the last plan tried (checks only). */
   tries: string[];
 }

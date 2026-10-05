@@ -1,6 +1,7 @@
 import { Vector3, type PerspectiveCamera } from 'three';
 import type { BattleCamera } from '../../BattleCamera.ts';
 import { eyeCandy, type FxTier } from '../EyeCandy.ts';
+import { calmedDrift, menuCalm } from '../mix/menuCalm.ts';
 import { DRIFT_FFX, DRIFT_FFX2, DriftEnvelope, arcTurn, driftAt, easeWeight, type DriftOffset, type DriftSpec } from './CameraDrift.ts';
 
 /**
@@ -9,7 +10,8 @@ import { DRIFT_FFX, DRIFT_FFX2, DriftEnvelope, arcTurn, driftAt, easeWeight, typ
  * still and cut to zero on every move, plus REDUCE MOTION's hold on the rig's own idle sway. The maths is
  * `CameraDrift.ts`; this class only reads and writes the three.js camera.
  *
- * Game case: both (FFX at the tuned periods, FFX-2 at 0.8 of them).
+ * Game case: both (FFX at the tuned periods, FFX-2 at 0.8 of them). One fight asks for more: Chapter III's row calms the drift while a command
+ * menu is open (FFX only; `mix/menuCalm.ts`, `mix/stageTable.ts`): the amplitude shrinks and the camera leans to its right, eased in and out over a second.
  */
 
 const TIER_DRIFT: Record<FxTier, number> = { full: 1, phone: 0.6, low: 0.5 };
@@ -55,6 +57,7 @@ export class DriftRig {
   /** One frame, after the rig has placed the camera; `time` is the room's clock. */
   update(dt: number, time: number, rm: boolean, tier: FxTier): void {
     const cam = this.host.camera;
+    menuCalm.step(dt); // every frame, drifting or not: the calm follows the menu in real time
     let moving = false;
     if (dt > 0) {
       if (this.hasPrev) moving = cam.position.distanceTo(this.prevRaw) / dt > 0.25;
@@ -68,7 +71,9 @@ export class DriftRig {
     this.now = w;
     this.offset = null;
     if (w <= 0) return;
-    const d = driftAt(time, this.spec, w);
+    const raw = driftAt(time, this.spec, w);
+    const calm = menuCalm.active;
+    const d = calm ? calmedDrift(raw, calm, menuCalm.weight, w) : raw;
     this.offset = d;
     const q = cam.quaternion;
     const right = new Vector3(1, 0, 0).applyQuaternion(q);

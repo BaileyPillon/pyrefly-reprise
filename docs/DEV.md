@@ -374,7 +374,7 @@ frames have rendered.
 
 The device class, the master a figure is drawn from and the anti-aliasing are automatic (no setting, no save key); these force them for
 captures and QA. Address parameters: `?arttier=phone|low|mid|high` (the device class), `?artscale=1..4` (pin every painting to one master;
-the governor stands down), `?aa=off|smaa|msaa`, `?artlink=slow|fast` (the connection reading). `ArtBudget.ts` holds the numbers per class.
+the governor stands down), `?aa=off|smaa|msaa` (the renderer's own anti-aliasing after the grade: off on every class now, see "Sharpness" below), `?artlink=slow|fast` (the connection reading). `ArtBudget.ts` holds the numbers per class.
 
 | Member | Meaning |
 |--------|---------|
@@ -383,6 +383,32 @@ the governor stands down), `?aa=off|smaa|msaa`, `?artlink=slow|fast` (the connec
 | `art.shots()` | every painting the party holds with its painted height in approved texels (the held shots' sizes are arithmetic on it) |
 | `art.plan()` | run the stage's look-ahead (every rig, the held shots by size) now |
 | `art.tier(cls)` / `art.force(n)` / `art.aa(mode)` | the same as `?arttier=`, `?artscale=` and `?aa=`, from the console (`null` clears the first two) |
+
+### Sharpness (release 39, "F plus")
+
+The standard view's sharpness follows a ladder, automatic like the art tiers (no setting, no save key; `src/engine/crisp/`, handoff `docs/handoff/r39-looks.md`).
+The scene is drawn 2x wider and taller and resolved with a Lanczos-3 filter before the bloom, a light contrast-adaptive sharpen runs right before the
+grade, and neither SMAA pass runs (the supersample is the anti-aliasing). The rung comes from the device class (`?arttier=`), then a frame-time governor
+that can only take it down: a median frame interval over about 2 s above 22 ms (about 45 frames a second) is one rung down.
+
+| Rung | What | Who |
+|------|------|-----|
+| `fplus` | 2x supersample, sharpen 0.3, no SMAA | the high class (a discrete GPU) |
+| `f` | 1.5x supersample, sharpen 0.4, no SMAA | the mid class; where `fplus` steps down to |
+| `a2` | no supersample, no sharpen, the MAX mix's one SMAA before the grade (live release 38's frame) | the low class (software GL, so the default SwiftShader browser and its golden screenshots are unchanged); LOW EFFECTS; the floor |
+| `phone` | today's frame: no supersample, the MAX mix's one FXAA | the phone layout and the phone effects tier |
+
+Address parameters (captures and QA; each pins the frame, so the governor stands down, as `?artscale=` does for the art): `?crisp=fplus|f|a2|a|phone|ref3`
+(also `g2` for `fplus` and `g1` for `f`, the crispness options page's names; `a` is release 39 as first built, two SMAA passes; `ref3` is the 3x reference every
+sharpness number was measured against), the single levers `ss=1..4`, `cas=0..1` and `aapre=0|1` over it, and `?crispbudget=<ms>` for the governor's budget.
+A capture that must not change look mid-run should pin (`?crisp=fplus`): under load the governor will step a busy machine down, by design.
+
+| Member | Meaning |
+|--------|---------|
+| `crisp.report()` | the rung in force, whether it is pinned, the config, the device class and effects tier, the effective supersample, the governor's windows (`rung`, `median`, `samples`, `stepped`) and the composer's passes by name |
+| `crisp.get()` / `crisp.rung()` | the config and the rung name in force |
+| `crisp.preset(name)` / `crisp.set(patch)` | pin a named end state (`crisp.presets` lists them) or change single levers; `crisp.unpin()` hands the frame back to the device |
+| `crisp.simulate(ms)` | add `ms` to every frame interval the governor reads (a simulated slow frame; `null` stops it) |
 
 ### Cutscenes and screenshots
 

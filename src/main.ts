@@ -14,6 +14,7 @@ import { installDebugApi, markReady } from './debug/api.ts';
 import { installFxEnv } from './app/fxEnv.ts';
 import { installFxDebug } from './debug/fxApi.ts';
 import { installArtDebug } from './debug/artApi.ts';
+import { installCrispDebug } from './debug/crispApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
@@ -143,6 +144,7 @@ async function boot(): Promise<void> {
   const debugApi = installDebugApi(app) as unknown as Record<string, unknown>;
   installFxDebug(debugApi, app); // eye-candy options round: `__pyrefly.fx` (kept out of `debug/api.ts`)
   installArtDebug(debugApi, app); // release 39: `__pyrefly.art`, the art tiers and the anti-aliasing
+  installCrispDebug(debugApi, app); // release 39: `__pyrefly.crisp`, the sharpness ladder's switch for captures
 
   await app.push(new TitleScreen());
   app.start();

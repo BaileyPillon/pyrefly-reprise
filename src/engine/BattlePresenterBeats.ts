@@ -9,7 +9,7 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
-import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
+import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type ActionStartEvent, type MotionCtx } from './BattlePresenterMotion.ts';
 import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import { victoryPoseOf } from './VictoryPose.ts';
@@ -21,6 +21,7 @@ import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, te
 import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
 import { motionAllowed } from './motion/MotionGate.ts'; // r38-motion: BATTLE SPECTACLE's two motion looks share one gate
 import { landFlight, launchShot, planSkill, revealBlow, settleFlight } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL (both games); a no-op without a shot
+import { reachAlong, standMoveOf, type ReachWorld, type StandShift } from './motion/StandReach.ts'; // r39-looks (FFX only): the strike follows a staging row's move
 import { partyOffStage } from './SummonStaging.ts';
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
@@ -80,7 +81,7 @@ export async function actionStart(
   if (pose === 'attack') {
     cue(ctx, 'attack', { volume: 0.8 });
     const contact = (): LungeContact => (windUp ? impactAtApex(ctx, event.actorId, armContact(ctx, event.actorId)) : armContact(ctx, event.actorId));
-    if (!motion?.ownsWindUp?.(event)) void Promise.all([actor?.lunge(motion?.lungeFor?.(event.actorId) ?? 1.4, 440, contact()), actor?.squash(260, 0.45)]); // FF7: its painted keys
+    if (!motion?.ownsWindUp?.(event)) void Promise.all([actor?.lunge(strikeReach(ctx, event, motion?.lungeFor?.(event.actorId) ?? 1.4), 440, contact()), actor?.squash(260, 0.45)]); // FF7: its painted keys
   } else if (pose === 'cast') {
     cue(ctx, 'cast', { volume: 0.7 });
     actor?.flash(0x9fd8ff, 560, 0.45);
@@ -89,6 +90,38 @@ export async function actionStart(
   }
   planSkill(ctx, event, pose); // SKILL TRAVEL (both games, r38-motion): which shot this action would send; it leaves at the first blow, not here
   await ctx.sleep(pose === 'attack' ? TIMING.windUp : TIMING.actionStart);
+}
+
+const NO_MOVE: StandShift = { dx: 0, dz: 0 };
+
+/**
+ * How far the house strike's lunge carries `event.actorId`, world units: `base` (today's 1.4, or the port's own after FFX-2's run-in), or, in a fight whose
+ * staging row asks for it (`follow`, Chapter III's), the lunge that leaves the fighter and the foe the lateral gap the stage's own seats leave
+ * (`motion/StandReach.ts`, solved on the screen through `stage.motion`). A fiend's ability names its target only as it resolves (its `action-start`
+ * carries none): every figure on the other side is then a candidate and the shortest reach rules, so a strike never goes further than the one it could not
+ * tell from. `base` to the unit in every other fight (nothing is registered), in FFX-2 (no row, and its RUN-IN answers first) and where the stage offers no
+ * painted boxes. Presentation only.
+ */
+export function strikeReach(ctx: Pick<EventCtx, 'stage'>, event: Pick<ActionStartEvent, 'actorId' | 'targets'>, base: number): number {
+  const world = ctx.stage.motion;
+  const from = ctx.stage.actor(event.actorId);
+  if (!world || !from) return base;
+  const fiend = ctx.stage.sideOf(event.actorId) === 'enemy';
+  const named = event.targets ?? [];
+  const foes = (named.length ? named : ctx.stage.staged()).filter((t) => t !== event.actorId && ctx.stage.actor(t) !== undefined && (ctx.stage.sideOf(t) === 'enemy') !== fiend);
+  const mine = standMoveOf(from);
+  const dir = ((from as { facing?: number }).facing ?? (fiend ? -1 : 1)) < 0 ? -1 : 1;
+  const at = (id: CombatantId, p: { x: number; y: number; z: number }, move: StandShift | null, seat: boolean, along = 0): ReturnType<typeof world.rect> =>
+    world.rect(id, { at: { x: p.x - (seat && move ? move.dx : 0) + dir * along, y: p.y, z: p.z - (seat && move ? move.dz : 0) } });
+  let reach = Infinity;
+  for (const t of foes) {
+    const foe = ctx.stage.actor(t)!;
+    const theirs = standMoveOf(foe);
+    if (!mine && !theirs) continue; // nothing here was moved by a table: today's lunge
+    const w: ReachWorld = { dir, attacker: (along, seat) => at(event.actorId, from.position, mine ?? NO_MOVE, seat, along), target: (seat) => at(t, foe.position, theirs ?? NO_MOVE, seat) };
+    reach = Math.min(reach, reachAlong(base, w));
+  }
+  return Number.isFinite(reach) ? reach : base;
 }
 
 export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<void> {

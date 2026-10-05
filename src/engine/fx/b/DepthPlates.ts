@@ -18,7 +18,7 @@ import {
 } from 'three';
 import { followTransform } from './focusMaths.ts';
 import { cutPlates } from './plateMaths.ts';
-import { composeHiPlates } from './PlateCompose.ts';
+import { PLATE_ANISOTROPY, composeHiPlates } from './PlateCompose.ts';
 
 /**
  * Option B "Living Paintings" (B1): the approved backdrop cut into depth plates at runtime.
@@ -284,7 +284,7 @@ export class DepthPlates {
     }
     plates.forEach((plate, i) => {
       const tex = textures[i]!;
-      tex.anisotropy = 8;
+      tex.anisotropy = gpu ? PLATE_ANISOTROPY : 8; // a composed plate's render target was given the 16 when it was made (`PlateCompose.ts`); the CPU cut (the phone tier, the tests) keeps the 8 it always had
       const onFloor = !!layout.floor && i === plates.length - 1;
       const mesh = onFloor ? DepthPlates.floorMesh(g, tex, layout.floor!.far, group) : DepthPlates.uprightMesh(g, tex, zs[i]!, i > 0);
       dp.base.push(onFloor ? null : { k: mesh.scale.x, y: mesh.position.y });

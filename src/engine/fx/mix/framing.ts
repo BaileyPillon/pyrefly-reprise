@@ -1,14 +1,16 @@
 import { anticipateView } from '../../StageArt.ts';
 import type { Object3D, PerspectiveCamera } from 'three';
-import { boxesOf, bossCoverOf, clearBoxes, downsOf, fitClear, limitsFor, overlapOf, type Field, type Fit, type Gate, type Limit, type PartyRule } from './clearance.ts';
+import { boxesOf, clearBoxes, downsOf, fitClear, limitsFor, type Field, type Fit, type Gate, type Limit, type PartyRule } from './clearance.ts';
 import { cameraAt, figOf, stillActor, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
-import { advisorReserve, battleCanvas, fieldOf, hudFree, hudPanels, menuOpen, noteMenuPanels, phoneBattle, predictedPanels, rememberedMenuPanels, sensorSlab } from './hudPanels.ts';
-import { classify, keepsToday, master, scaleTarget, type MasterClass } from './masters.ts';
+import { advisorReserve, battleCanvas, fieldOf, hudPanels, menuOpen, noteMenuPanels, phoneBattle, predictedPanels, rememberedMenuPanels, sensorSlab } from './hudPanels.ts';
+import { classify, keepsToday, scaleTarget, type MasterClass } from './masters.ts';
+import { separateMaster } from './separate.ts';
 import { colossusExcess, gateNote, plateExcess, plateMiss, plateOf, restGap, shifted } from './plate.ts';
 import type { FramingReport } from './framingReport.ts';
 import { RigWatch, type BattleCameraLike } from './rigWatch.ts';
 import { Staging, type Side } from './staging.ts';
 import { onPhone, readStand, standFor } from './stageTable.ts';
+import { menuCalm, type MenuCalm } from './menuCalm.ts';
 
 /**
  * The MAX mix (D-316): CHAPTER FRAMING (BATTLE SPECTACLE's part; both games). The composed master per
@@ -76,6 +78,8 @@ export class Framing {
   private sig = '';
   /** The fight has a row in the staging table (read with the roster): it is planned at once. */
   private staged = false;
+  /** The row's calm camera for its menus (`menuCalm.ts`), read with the roster; null when the row has none. */
+  private calmSpec: MenuCalm | null = null;
   private sigAt = 0;
   private time = 0;
   private wasMenu = false;
@@ -122,7 +126,9 @@ export class Framing {
     if (sig !== this.sig) {
       this.sig = sig;
       this.sigAt = this.time;
-      this.staged = standFor(this.game, actors.filter((a) => a.facing < 0).map(subjectId), onPhone()) !== null;
+      const stand = standFor(this.game, actors.filter((a) => a.facing < 0).map(subjectId), false);
+      this.staged = stand !== null && !onPhone();
+      this.calmSpec = stand?.calm ?? null;
       // An arrival in the opening seconds (Mortiorchis, a second fiend) re-plans; later changes (a death,
       // a summon, a spherechange) keep the master: no cut on them, and the floor still holds.
       if (this.installed && this.time < 10) this.planWanted = true;
@@ -130,6 +136,7 @@ export class Framing {
     this.staging.hold(actors, on && this.staged); // a chapter with a row stands its fiends itself: the formation relaxation leaves them alone from the first frame
     if (this.rigs?.baseChanged()) this.planWanted = true; // the scene re-registered its master (Evrae's range, the phone refit)
     const menu = menuOpen();
+    menuCalm.arm(on && !onPhone() ? this.calmSpec : null, menu); // Chapter III's menus: a calmer camera (the drift rig eases it in and out)
     const ready = actors.some((a) => a.facing >= 0) && actors.some((a) => a.facing < 0) && actors.every((a) => a.isPlaceholder !== true);
     // The plan measures the figures where they stand, so it is decided only when every one stands at its
     // place (a menu's lean included); it is put on screen only once no menu is open (no cut while choosing).
@@ -329,34 +336,7 @@ export class Framing {
    * no member stands inside its painted box, both as seen from the master.
    */
   private separate(actors: readonly Actor[], cls: MasterClass, base: Pose, field: Field, rule: PartyRule): Pose {
-    const free = hudFree(field.W, field.H);
-    const plan = (): Pose => master({ cls, game: this.game, base, figs: this.visible(actors).figs, W: field.W, H: field.H, free });
-    let m = plan();
-    const cap = this.game === 'ffx2' ? 1.6 : 1.4;
-    let spread = this.game === 'ffx2' ? 1.15 : 1;
-    let apart = 0;
-    // The step apart scales with the boss (Evrae stands far down the deck, so a step must be a big one).
-    const bossH = Math.max(1, ...this.visible(actors).figs.filter((f) => f.enemy).map((f) => f.h));
-    const apartMax = 0.3 * bossH;
-    for (let i = 0; i < 8; i++) {
-      const { figs } = this.visible(actors);
-      const boxes = boxesOf(cameraAt(m, field.W / field.H), figs, field);
-      const needSpread = overlapOf(boxes, figs, m.pos) > rule.overlapMax && spread < cap - 1e-6;
-      const needApart = bossCoverOf(boxes, figs) > rule.bossCoverMax && apart < apartMax - 1e-6;
-      if (!needSpread && !needApart && i > 0) break;
-      if (needSpread) spread = Math.min(cap, spread + 0.08);
-      if (needApart) apart = Math.min(apartMax, apart + apartMax / 6);
-      this.staging.planSpread(actors, spread);
-      for (const a of actors) {
-        const p = this.staging.plan.get(a) ?? { k: 1, dx: 0 };
-        if (a.facing < 0) p.dx = apart;
-        else p.dx -= apart * 0.3;
-        this.staging.plan.set(a, p);
-      }
-      this.staging.apply(actors, true);
-      m = plan();
-    }
-    return m;
+    return separateMaster(this.game, this.staging, actors, cls, base, field, rule);
   }
 
   /** At a menu's opening: the live camera and the drawn quads against the HUD as laid out. */

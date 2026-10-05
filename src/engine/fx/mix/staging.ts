@@ -1,6 +1,7 @@
 import type { Vector3 } from 'three';
 import { STAGE_HOLD_KEY } from '../../StageRelax.ts';
 import { placeOwned } from '../../motion/PlaceOwner.ts';
+import { standMove } from '../../motion/StandReach.ts';
 import { figOf, subjectId, type Actor } from './geometry.ts';
 import { MULTIPART } from './masters.ts';
 
@@ -51,6 +52,8 @@ export interface Side {
   enemyBy?: readonly { id: RegExp; shift: Shift }[];
   /** They hold while a fiend with one of these painted ids stands on the stage (the chapter's boss); null: whatever is on it. */
   boss: RegExp | null;
+  /** The strike follows these moves (`motion/StandReach.ts`, Chapter III's row): each figure's move is registered for the lunge while the table plays. */
+  follow?: boolean;
 }
 
 /** The move a side gives this figure. */
@@ -142,7 +145,9 @@ export class Staging {
     for (const a of actors) {
       if (placeOwned(a)) continue; // out on a run: its x is hers (not a re-seat to read back), and the plan reaches it again when she is home
       const p = this.plan.get(a);
-      this.write(a, on ? (p?.k ?? 1) : 1, on ? (p?.dx ?? 0) : 0, side ? shiftOf(side, a) : null);
+      const shift = side ? shiftOf(side, a) : null;
+      standMove(a, side?.follow === true ? shift : null); // a row that asks for it: the lunge follows the move, and lets go when the table does (`motion/StandReach.ts`)
+      this.write(a, on ? (p?.k ?? 1) : 1, on ? (p?.dx ?? 0) : 0, shift);
     }
   }
 
@@ -193,6 +198,7 @@ export class Staging {
       // Out on a run: her position holds none of the share now, and she returns to the place that does. Keep the record, so the
       // next write takes the old share off and puts the new plan's on, once.
       if (placeOwned(a)) continue;
+      standMove(a, null);
       this.write(a, 1, 0, null);
       this.recs.delete(a);
     }
