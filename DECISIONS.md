@@ -16,21 +16,21 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-906 decisions in all: 456 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 613 of the written decisions record a blanket yes.
+907 decisions in all: 457 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 613 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 847 |
+| adopted | 848 |
 | proposed | 11 |
 | deferred | 4 |
 | rejected | 11 |
 | superseded | 33 |
-| **All** | **906** |
+| **All** | **907** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 73 |
-| art | 208 |
+| art | 209 |
 | visuals | 67 |
 | camera | 31 |
 | audio | 30 |
@@ -45,15 +45,15 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **906** |
+| **All** | **907** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 392 |
+| both games | 393 |
 | FFX only | 278 |
 | FFX-2 only | 219 |
 | FF7 hidden experiment | 17 |
-| **All** | **906** |
+| **All** | **907** |
 
 ## Standing rules in force
 
@@ -3939,7 +3939,7 @@ Sunday · 69 decisions
 
 ### 2026-10-05
 
-Monday · 20 decisions
+Monday · 21 decisions
 
 - <a id="d-437"></a>**D-437** — True colour (decision A): characters and bosses show their paintings' own colours: the "figures true" switch goes ON by default in release 39.1, with the bloom fix (r39-color ef0868b5)
   - Bailey: “I'll go with all of your recommendations” (blanket yes)
@@ -4038,6 +4038,11 @@ Monday · 20 decisions
   - Source: docs/handoff/r39-posescale.md
 - <a id="d-456"></a>**D-456** — Painterly finish strength for the cast roll-out: pilot "D-light" on Tidus first (face pass and init lock 0.99 kept, palette lock at about half strength), compare D, D-light and B side by side, then pick the method; the costume-colour gate relaxes from 3 to 8 percent of cells
   - Bailey: “i'll go with whatever you recommend” (blanket yes)
-  - What changed: From the next character on, the painterly finish can be a step richer than method D while faces and silhouettes stay locked; Tidus may be redone in the chosen method. Bailey delegated the call, so the driver's recommendation stands: (1) Pilot "D-light" first on Tidus's idle and attack: the face pass and the init lock at sigma 0.99 are kept, the palette lock runs at about half strength. (2) The driver compares D, D-light and B side by side at battle size and at 100 percent, then picks the method for the roll-out of D-438. (3) The costume-colour gate of D-438 relaxes from under 3 percent of a costume's cells moving by more than 20 dE to under 8 percent; the silhouette gate (IoU 0.95 or better) and the face-layout gate (0.75 or better) are unchanged. (4) Tidus's finished set in method D stays as the fallback until a richer set passes the gates and the side-by-side. The pilot is not run yet and nothing in the game changes on this yes alone: the roll-out's contact sheets still go to him before it ships. Both games: the painterly method is shared art plumbing and applies to FFX and FFX-2 figures alike.
-  - area art · both games · adopted · delivery not scheduled · see [D-438](#d-438), [D-429](#d-429), [D-431](#d-431)
+  - What changed: From the next character on, the painterly finish can be a step richer than method D while faces and silhouettes stay locked; Tidus may be redone in the chosen method. Bailey delegated the call, so the driver's recommendation stands: (1) Pilot "D-light" first on Tidus's idle and attack: the face pass and the init lock at sigma 0.99 are kept, the palette lock runs at about half strength. (2) The driver compares D, D-light and B side by side at battle size and at 100 percent, then picks the method for the roll-out of D-438. (3) The costume-colour gate of D-438 relaxes from under 3 percent of a costume's cells moving by more than 20 dE to under 8 percent; the silhouette gate (IoU 0.95 or better) and the face-layout gate (0.75 or better) are unchanged. (4) Tidus's finished set in method D stays as the fallback until a richer set passes the gates and the side-by-side. The pilot is not run yet and nothing in the game changes on this yes alone: the roll-out's contact sheets still go to him before it ships. Both games: the painterly method is shared art plumbing and applies to FFX and FFX-2 figures alike. Update 2026-10-05, evening (the pilot has now run, so "The pilot is not run yet" above is out of date): the D-light pilot ran on Tidus's idle and attack, seed 9101. Cells moved by more than 20 dE / face layout / core IoU: idle, D 0.0 percent / 0.815 / 0.974, D-light 2.5 percent / 0.805 / 0.974, B 5.5 percent / 0.733 / 0.974; attack, D 0.6 percent / 0.818 / 0.972, D-light 7.0 percent / 0.811 / 0.972, B 14.0 percent / 0.526 / 0.972. By the gates written above, D-light passes the 8 percent cells gate and the 0.75 face-layout gate on both poses, and B misses the face-layout gate on both and the cells gate on the attack. Finding: at battle size the three look nearly the same. The brushwork comes from the shared Klein pass, and the palette lock only pulls colours back, so loosening it buys little; D-light turned the black coat a little blue-purple and the skin pinker. Outcome (the driver's recommendation, with Bailey's go): the library keeps D for the roll-out of D-438. A new pilot loosens the init-lock sigma to 0.995 instead (the face pass and the full palette lock are kept), and its sheet goes to him before anything changes. The cells gate stays at 8 percent as written above. Delivery is now in progress (the new pilot). Nothing in the game changes. Both games (shared art plumbing).
+  - area art · both games · adopted · delivery in progress · at ~19:27 EDT · see [D-438](#d-438), [D-429](#d-429), [D-431](#d-431)
   - Source: Bailey, 2026-10-05, in chat, answering the driver's question on the painterly finish strength for the cast roll-out of D-438 with: "i'll go with …
+- <a id="d-457"></a>**D-457** — Pose size (the D-298 stature floor): the minimum height is lifted for exactly two poses, Lulu's critical (FFX) and Rikku Berserker's ready (FFX-2); every other pose keeps the floor
+  - Bailey: “you can continue please”
+  - What changed: The stature floor that came in with the D-298 pose picks (docs/handoff/poses-0930.md: a bend, hunch, kneel or lunge is held at 0.60 or more of the idle's height, which can leave its head larger than the idle's) is lifted for exactly two poses: Lulu's critical (FFX only) and Rikku Berserker's ready (FFX-2 only). Those two may now stand lower than 0.60 of the idle's height so that the head follows the idle's instead of growing; a hunched hurt pose standing lower reads better than a head that grows. Every other pose keeps the floor. Why: with the floor, Lulu's critical head draws about 10.7 percent over her idle's, which is 46 of the 49 remaining head-size jumps and the CHK-026 failures in Chapters III, VIII, IX and XVIII (CHK-026 allows 3 percent, critic/CHECKS.md); Berserker's ready sits about 14 percent over. This record does not touch D-455's re-paint of Rikku's two ready poses. Not shipped yet; the delivery stays in progress until the two scales are changed and a build carries them. Both games, each pose lifted only for its own game.
+  - area art · both games · adopted · delivery in progress · at ~19:27 EDT · see [D-298](#d-298), [D-437](#d-437), [D-441](#d-441)
+  - Source: critic/CHECKS.md
