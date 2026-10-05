@@ -21,7 +21,8 @@
  * figures): the acting figure first, then the rest of the party, then the
  * largest enemy, then the others, and among equally good slides the one
  * closest to where the field sat before (its "home": FFX centred, FFX-2 the
- * sheet's left-anchored 0.93 frame).
+ * sheet's left-anchored 0.93 frame). One scoped exception, FFX-2 Chapter XI:
+ * a knocked-out girl weighs less ({@link KO_FRAMING_SCOPE}, D-249 Q12).
  */
 
 import type { BattleState, CombatantId } from '../../battle/common/types.ts';
@@ -63,7 +64,21 @@ const TIE = 0.05;
  * the largest enemy alike, then every other enemy (a small one at the edge must
  * not push a girl out of the frame).
  */
-export const FRAME_WEIGHTS = { focus: 40, actor: 10, party: 6, boss: 6, enemy: 1 } as const;
+export const FRAME_WEIGHTS = { focus: 40, actor: 10, party: 6, boss: 6, enemy: 1, ko: 2 } as const;
+
+/**
+ * D-249 Q12 (FFX-2 Chapter XI only): in the Fallen Aeons road (Shiva, the Magus Sisters, Anima) a knocked-out
+ * party member weighs {@link FRAME_WEIGHTS}.ko instead of {@link FRAME_WEIGHTS}.party, so the slide follows the
+ * girls still fighting and a fallen one at the edge no longer drags it. Every other chapter keeps the approved
+ * 60 percent framing: the scope is the road's own enemy ids, the way `phoneBattleGuard.ts` scopes its table by
+ * painting id. An advisor-style presentation weight, not game data. Bailey 2026-09-27, "all of your recommendations".
+ */
+export const KO_FRAMING_SCOPE: ReadonlySet<string> = new Set(['x2-shiva', 'sandy', 'cindy', 'mindy', 'x2-anima']);
+
+/** True on the Chapter XI road: FFX-2 with one of its fallen-aeon enemies on the board. */
+export function koFramingChapter(state: BattleState): boolean {
+  return state.game === 'ffx2' && state.enemyIds.some((id) => KO_FRAMING_SCOPE.has(id));
+}
 
 /** How much of a figure's width lies inside `[lo, hi]`, 0..1. */
 function shown(f: FramedFigure, lo: number, hi: number): number {
@@ -109,7 +124,11 @@ export function framedIds(state: BattleState, actor: CombatantId | null): Array<
   const out: Array<[CombatantId, number]> = [];
   // A summoned aeon stands in for the party (FFX); the party has left the field.
   const party = state.aeonId ? [state.aeonId] : state.activeIds;
-  for (const id of party) out.push([id, id === actor ? FRAME_WEIGHTS.actor : FRAME_WEIGHTS.party]);
+  const lowerKo = !state.aeonId && koFramingChapter(state);
+  for (const id of party) {
+    const down = lowerKo && id !== actor && (state.combatants[id] as { alive?: boolean } | undefined)?.alive === false;
+    out.push([id, id === actor ? FRAME_WEIGHTS.actor : down ? FRAME_WEIGHTS.ko : FRAME_WEIGHTS.party]);
+  }
   for (const id of state.enemyIds) {
     const c = state.combatants[id] as { hp?: number } | undefined;
     if (c && typeof c.hp === 'number' && c.hp <= 0) continue;

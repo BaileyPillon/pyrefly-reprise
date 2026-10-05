@@ -26,6 +26,7 @@ import {
   type ObjectiveStatus,
 } from '../../../ui/common/chapterObjectives.ts';
 import { PortraitStage } from './PortraitStage.ts';
+import { LivingPause } from './livingPause.ts';
 import { memberChromeBoxes } from './chromeBoxes.ts';
 import { stackHost } from './stackColumn.ts';
 import { placeDossier } from './dossierPlace.ts';
@@ -68,6 +69,8 @@ export interface PauseFocus {
 
 export class PauseView {
   readonly portrait: PortraitStage;
+  /** D-143/D-321: the face parts and the eyes' follow, behind LIVING PAINTINGS and REDUCE MOTION. */
+  private readonly living: LivingPause;
   music: MusicPlayer | null = null;
   tabs: PauseTab[] = [];
 
@@ -95,6 +98,7 @@ export class PauseView {
       // D-234 (PR-0171): a chapter plate whose face the CHAPTER tab covers slides clear of it.
       slide: (id, base, f, w, h) => slideChapterPlate(root, art, id, base, f, w, h),
     });
+    this.living = new LivingPause(this.portrait, root, art, () => deps.save.settings.reduceMotion);
     this.tabs = buildTabs(deps.state());
   }
 
@@ -117,7 +121,7 @@ export class PauseView {
       <div class="pause__grain" aria-hidden="true"></div>
 
       <div class="pause__ui" data-role="ui">
-        <div class="pause__brand">Pyrefly Reprise &middot; ${escapeHtml(game)}</div>
+        <div class="pause__brand">Echoes of Spira &middot; ${escapeHtml(game)}</div>
         <nav class="pause__tabs" data-role="tabs" role="tablist" aria-label="Paused"></nav>
         <div class="pause__body" data-role="body"></div>
         <div class="pause__obj" data-role="obj"></div>
@@ -149,18 +153,11 @@ export class PauseView {
     fitPhoneBody(this.root);
     // PR-0079: frame the face clear of the chrome this render just laid out.
     this.portrait.layout();
+    this.living.sync();
     return { tabId, focus: at.focus, rowId };
   }
 
-  /**
-   * FOC-02 (`critic/reviews/5e92289…-focused.json`): at 390x844 the strip is
-   * `overflow-x: auto` (`.pause__swipe`) with a `scrollWidth` well past its
-   * `clientWidth`, and nothing ever moved `scrollLeft` — Guide, Options,
-   * Controls and Music were each *selected* while sitting outside the 350px
-   * window. `tabsHtml` rebuilds the strip's markup from scratch on every
-   * render, so the element this scrolls is always the one just inserted, never
-   * a stale reference from the previous tab.
-   */
+  /** FOC-02: at 390x844 the strip scrolls (`.pause__swipe`); the active tab is brought into view on every render. */
   private scrollActiveTabIntoView(tabId: string): void {
     const el = this.q('tabs')?.querySelector<HTMLElement>(`[data-tab="${tabId}"]`);
     if (!el || typeof el.scrollIntoView !== 'function') return;
@@ -392,6 +389,7 @@ export class PauseView {
   dispose(): void {
     this.music?.dispose();
     this.music = null;
+    this.living.dispose();
     this.portrait.dispose();
   }
 }

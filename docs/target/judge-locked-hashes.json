@@ -26,9 +26,16 @@
     "approved": "2026-09-25"
    },
    "public/art/characters/grothia/attack.png": {
-    "sha256": "e7b9b00b366d2f4520f70bedad1276de852583559c2791cc4806f208d9727df4",
-    "mtime": "2026-09-25T04:15:22.903Z",
-    "approved": "2026-09-25"
+    "sha256": "4e6aa7aa1f33e48ff578c883a5f9172bd02c70ba10b8d4a8aaca6269b9de2595",
+    "mtime": "2026-10-04T11:37:19.845Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-325; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "e7b9b00b366d2f4520f70bedad1276de852583559c2791cc4806f208d9727df4",
+     "mtime": "2026-09-25T04:15:22.903Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/backup/replaced/characters/grothia/attack.png"
+    }
    },
    "public/art/characters/grothia/overdrive.png": {
     "sha256": "780b689239b529bff2cf1b2680f2193a217246f225c7866c18f462436cda4f66",
@@ -36,14 +43,28 @@
     "approved": "2026-09-25"
    },
    "public/art/characters/pterya/idle.png": {
-    "sha256": "448f7f2a4181da13fa7934069421c139ee7ce6a8aaac6f881c1bd8695a2a20fa",
-    "mtime": "2026-09-25T04:15:22.941Z",
-    "approved": "2026-09-25"
+    "sha256": "182a2084a3ee0d35da0df17382a458771b61746450ab110b34eea129cc764ad2",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-325; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "448f7f2a4181da13fa7934069421c139ee7ce6a8aaac6f881c1bd8695a2a20fa",
+     "mtime": "2026-09-25T04:15:22.941Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/pterya/idle.png"
+    }
    },
    "public/art/characters/pterya/attack.png": {
-    "sha256": "d16c31ad216602845c1a010e87ffa84d1a8b781d8bd7975811d78275be7977ec",
-    "mtime": "2026-09-25T04:15:22.961Z",
-    "approved": "2026-09-25"
+    "sha256": "d168cea36fcf052a80617bb610766540b9fefb218ef84e0cad6d8f4afcfaf2d9",
+    "mtime": "2026-10-02T17:46:35.172Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-325; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "d16c31ad216602845c1a010e87ffa84d1a8b781d8bd7975811d78275be7977ec",
+     "mtime": "2026-09-25T04:15:22.961Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-02-art/backup/replaced/characters/pterya/attack.png"
+    }
    },
    "public/art/characters/pterya/overdrive.png": {
     "sha256": "0534de30bd83be8965cfec5a18f21100c75c3620515293ea51e327dfe28a8f20",
@@ -56,9 +77,16 @@
     "approved": "2026-09-25"
    },
    "public/art/characters/spathi/attack.png": {
-    "sha256": "fb6c6538fd72b77685f4b162996aa6c0b2f04dc765ab4277fd04dd2c69d060f9",
-    "mtime": "2026-09-25T04:15:23.023Z",
-    "approved": "2026-09-25"
+    "sha256": "ff3241ea15db6b5276f04e445b078e3eb6c3f0b515670ba59606aec60f13941e",
+    "mtime": "2026-10-04T11:37:19.845Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-325; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "fb6c6538fd72b77685f4b162996aa6c0b2f04dc765ab4277fd04dd2c69d060f9",
+     "mtime": "2026-09-25T04:15:23.023Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/backup/replaced/characters/spathi/attack.png"
+    }
    },
    "public/art/characters/spathi/overdrive.png": {
     "sha256": "99a10a220359f14e01e0075d04d5a61cb2344d877532839a410508db5cc2da60",
@@ -200,8 +228,15 @@
     "mtime": "2026-09-24T19:06:27.193Z"
    },
    "public/art/characters/x2-anima/attack.png": {
-    "sha256": "b84e67f3eca1bd61041d2b5ab3a6742a502211f40ccb1ea012f6efac22571d77",
-    "mtime": "2026-09-24T19:06:27.226Z"
+    "sha256": "d1514633cfc16fefbd4009fac24fa54e891a3c4ce00c585c8aef3ed4e2117c1c",
+    "mtime": "2026-10-04T11:37:19.845Z",
+    "approved": "2026-10-02",
+    "replacedBy": "bailey:2026-10-02-art (D-325; Bailey 2026-10-02, verbatim \"All your recommendations\")",
+    "supersedes": {
+     "sha256": "b84e67f3eca1bd61041d2b5ab3a6742a502211f40ccb1ea012f6efac22571d77",
+     "mtime": "2026-09-24T19:06:27.226Z",
+     "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-04-art/backup/replaced/characters/x2-anima/attack.png"
+    }
    },
    "public/art/characters/x2-anima/overdrive.png": {
     "sha256": "0ce67e776023eb89fcb16996519584cfc80c8d86e375cfd0896b2e2ac182f608",

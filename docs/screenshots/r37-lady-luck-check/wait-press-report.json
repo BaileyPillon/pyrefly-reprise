@@ -1,0 +1,73 @@
+{
+  "mode": "wait",
+  "scenario": "press",
+  "steps": [
+    "save blob present: none",
+    "ffx2Atb in save: wait",
+    "first menu:  [{\"t\":\"Attack◂\",\"sel\":true},{\"t\":\"Skill◂\",\"sel\":false},{\"t\":\"Change◂\",\"sel\":false},{\"t\":\"Item◂\",\"sel\":false}]",
+    "WARNING: first menu is not Yuna: ",
+    "submenu: [{\"t\":\"Bribe\",\"sel\":true},{\"t\":\"Two Dice4\",\"sel\":false},{\"t\":\"Attack Reels\",\"sel\":false},{\"t\":\"Magic Reels\",\"sel\":false},{\"t\":\"Luck8\",\"sel\":false},{\"t\":\"Felicity8\",\"sel\":false},{\"t\":\"Critical\",\"sel\":false}]",
+    "Attack Reels confirmed on the default target",
+    "overlay opened: true; other menus seen open before it: 1 (answered 1)",
+    "stopped: [\"cherry\",\"sword\",\"bar\"]",
+    "menu returned after the spin: true ()"
+  ],
+  "timeline": [
+    {
+      "ms": 3,
+      "state": "menu:Skill"
+    },
+    {
+      "ms": 985,
+      "state": "menu:-"
+    },
+    {
+      "ms": 3115,
+      "state": "OVERLAY"
+    }
+  ],
+  "atbSetting": "wait",
+  "overlayOpened": true,
+  "otherMenuTitlesSeen": [
+    "menu:Skill",
+    "menu:-"
+  ],
+  "menuVisibleUnderOverlay": false,
+  "stops": [
+    [
+      "red7",
+      "bar",
+      "bar"
+    ],
+    [
+      "cherry",
+      "bar",
+      "bar"
+    ],
+    [
+      "cherry",
+      "sword",
+      "bar"
+    ]
+  ],
+  "overlayGoneAfterAnswer": true,
+  "reelRequests": 1,
+  "messages": [
+    "Armor Break"
+  ],
+  "logTail": [
+    "{\"type\":\"miss\",\"targetId\":\"yuna\",\"sourceId\":\"vegnagun-tail\",\"reason\":\"evaded\",\"seq\":12}",
+    "{\"type\":\"damage\",\"targetId\":\"rikku\",\"sourceId\":\"vegnagun-tail\",\"amount\":1245,\"element\":\"none\",\"affinity\":\"normal\",\"crit\":false,\"hitIndex\":1,\"hitCount\":3,\"seq\":1",
+    "{\"type\":\"damage\",\"targetId\":\"paine\",\"sourceId\":\"vegnagun-tail\",\"amount\":1210,\"element\":\"none\",\"affinity\":\"normal\",\"crit\":false,\"hitIndex\":2,\"hitCount\":3,\"seq\":1",
+    "{\"type\":\"damage\",\"targetId\":\"vegnagun-tail\",\"sourceId\":\"yuna\",\"amount\":324,\"element\":\"none\",\"affinity\":\"normal\",\"crit\":false,\"hitIndex\":0,\"hitCount\":1,\"seq\":24}",
+    "{\"type\":\"status-add\",\"targetId\":\"vegnagun-tail\",\"sourceId\":\"yuna\",\"status\":\"def-down\",\"instance\":{\"id\":\"def-down\",\"turnsRemaining\":null,\"ticksRemaining\":null,\"c",
+    "{\"type\":\"miss\",\"targetId\":\"yuna\",\"sourceId\":\"vegnagun-tail\",\"reason\":\"evaded\",\"seq\":32}"
+  ],
+  "menuReturned": true,
+  "menuTitleAfter": "",
+  "logGrowth": [
+    35,
+    43
+  ],
+  "consoleIssues": []
+}

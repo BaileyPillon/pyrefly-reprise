@@ -866,6 +866,8 @@ Failure (timer expiry) resolves the "(Fail)" row. A third "(Immune)" row exists 
 
 `[verified: 2 sources]` (rows/DmgCon from the decompile; sequences, version splits, hit counts and unlocks from Fandom *Bushido (Final Fantasy X)*, cross-checked against Jegged + SuperCheats).
 
+> **Shipping order since release 38 (2026-10-03, PR-0308), our estimate:** the table's bolded International sequences are the research baseline; the game ships the GameFAQs order instead (Bailey: "all your recommendations"), Dragon Fang and Tornado in their NA/JP order, Shooting Star as GF-KB writes it, Banishing Blade unchanged; see `src/data/ffx/overdrives/inputs.ts` and `research/ffx-overdrive-input-rules-2026-09-30.md` "Applied in release 38". Lengths 8 / 7 / 7 / 6 are sourced and shipped.
+
 > Open: the button orders (HD guides give the NA/JP order) and Tornado's rank (rank 6 in the row-273 decode, 7 in FW-RK) are `[conflicting]`, unchanged here; see `research/ffx-overdrive-input-rules-2026-09-30.md` D3 and D4 (Blitz Ace's hit count, §5.3, is D5).
 
 > **Correction:** the previous revision printed the **NA/JP** button sequences while declaring an International/HD baseline. The baseline sequences are the bolded ones above; see §0 V14–V16.

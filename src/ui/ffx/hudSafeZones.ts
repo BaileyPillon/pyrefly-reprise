@@ -343,7 +343,7 @@ export function advisorChipDock(input: AdvisorZoneInput): { left: number; bottom
 // ----------------------------------------------------------------- the solve
 
 /** Every rectangle a panel may not be drawn over, in one list. */
-function obstaclesOf(input: AdvisorZoneInput): Rect[] {
+export function obstaclesOf(input: AdvisorZoneInput): Rect[] {
   const out: Rect[] = [];
   for (const r of [
     input.cmdArea,
@@ -366,7 +366,7 @@ function obstaclesOf(input: AdvisorZoneInput): Rect[] {
  * The point a tie is settled by distance from: the command stack's top-right
  * corner, which is where the player's eye already is.
  */
-function anchorOf(input: AdvisorZoneInput): { x: number; y: number } {
+export function anchorOf(input: AdvisorZoneInput): { x: number; y: number } {
   return { x: input.cmdArea.right, y: input.cmdArea.top };
 }
 
@@ -429,7 +429,7 @@ export function cardBoxInside(box: Rect, height: number): { left: number; width:
 }
 
 /** What kind of ground a solved box turned out to be. See {@link AdvisorZone.kind}. */
-function describe(box: Rect, input: AdvisorZoneInput): AdvisorZone['kind'] {
+export function describe(box: Rect, input: AdvisorZoneInput): AdvisorZone['kind'] {
   if (box.bottom >= STAGE.height - POCKET_BOTTOM - 1) return 'pocket';
   const heads = input.sprites.map((s) => s.top);
   if (heads.length && box.bottom <= Math.min(...heads)) return 'shelf';
@@ -499,7 +499,7 @@ export function solveBox(obstacles: readonly Rect[], want: BoxWant): Rect | null
 }
 
 /** The maximal clear x-intervals of `left..right` once `blockers` are removed. */
-function freeSpans(blockers: Array<[number, number]>, left: number, right: number): Array<[number, number]> {
+export function freeSpans(blockers: Array<[number, number]>, left: number, right: number): Array<[number, number]> {
   const sorted = [...blockers].sort((a, b) => a[0] - b[0]);
   const out: Array<[number, number]> = [];
   let x = left;

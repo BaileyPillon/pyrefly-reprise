@@ -7,15 +7,15 @@
  * target is the tile *"Pause remade on the Until Dawn character screen"* in
  * `docs/target/targets.json`; `docs/handoff/pause-remake.md` is how it was built.
  * This half owns the lifecycle, the keyboard claim and what a press means.
- * `pause/PauseView.ts` owns everything on screen, `pause/PauseOverlays.ts`
- * photo mode, the replayed briefing and the credits panel (D-305).
+ * `pause/PauseView.ts` owns everything on screen, `pause/PauseOverlays.ts` photo
+ * mode, the replayed briefing, the credits panel (D-305) and EYE CANDY (D-317).
  * An **overlay** (`App.pushOverlay`): the battle underneath keeps being drawn
  * and stops being ticked, and `BattleScreen` freezes the presenter — and the
  * FFX-2 Active ATB clock with it — through `PauseScreenOptions.onPause`.
  * Two focus levels, and Esc means "up one": `tabs` (Left/Right cycle, Down or
  * Confirm enters a tab that has rows, Esc resumes) and `body` (Up/Down walk
- * the rows, Left/Right adjust, Esc goes back to the strip); the credits panel
- * is a third, and Esc there goes back to its CREDITS row. `Q`/`E` and `L1`/`R1`
+ * the rows, Left/Right adjust, Esc goes back to the strip); a page (CREDITS, EYE
+ * CANDY) is a third, and Esc there goes back to its row. `Q`/`E` and `L1`/`R1`
  * cycle from any. The keyboard claim, held while the screen lives, keeps a
  * command menu underneath from seeing a key and is the only route to `H` and
  * to the keys `pause/keys.ts` re-points.
@@ -109,7 +109,7 @@ export class PauseScreen extends Screen {
         if (on) this.view?.setBare(this.panelsHidden);
       },
       refresh: () => this.refresh(),
-      creditsClosed: () => this.focusRow('options', 'credits'),
+      pageClosed: (rowId) => this.focusRow('options', rowId), // CREDITS or EYE CANDY
     });
     // "The active party member first": the leading tab is the first member on
     // the field, and it is the one the menu opens on.
@@ -151,7 +151,7 @@ export class PauseScreen extends Screen {
       this.suppressed.clear();
       return;
     }
-    if (this.overlays?.creditsInput(input, (b) => this.took(input, b))) return this.suppressed.clear();
+    if (this.overlays?.pageInput(input, (b) => this.took(input, b))) return this.suppressed.clear();
     if (this.took(input, 'l1')) this.cycle(-1);
     if (this.took(input, 'r1')) this.cycle(1);
 
@@ -242,7 +242,7 @@ export class PauseScreen extends Screen {
 
   /** Jump straight to a tab (a click, a touch, a `trigger`). */
   private selectTab(id: string): void {
-    this.overlays?.closeCredits(false);
+    this.overlays?.closePages();
     if (id === this.at.tabId || !this.view?.tabs.some((t) => t.id === id)) return;
     this.at = { tabId: id, focus: 'tabs', rowId: null };
     audio.playSfx('cursor-move');
@@ -282,7 +282,7 @@ export class PauseScreen extends Screen {
         onChapterSelect: this.opts.onChapterSelect,
         onQuitToTitle: this.opts.onQuitToTitle,
         extraRows: this.opts.extraRows,
-        openCredits: () => this.overlays?.openCredits(),
+        openCredits: () => this.overlays?.openCredits(), openEyeCandy: () => this.overlays?.openEyeCandy(this.opts.chapter.game),
       },
       id,
       dir, press,
@@ -376,7 +376,7 @@ export class PauseScreen extends Screen {
       rows: this.rows().map((r) => r.id),
       panelsHidden: this.panelsHidden,
       photo: this.overlays?.photoSnapshot() ?? null,
-      credits: this.overlays?.creditsSnapshot() ?? null,
+      credits: this.overlays?.creditsSnapshot() ?? null, eyeCandy: this.overlays?.eyeCandySnapshot() ?? null,
       playTimeMs: this.app.save.playTime(this.opts.chapter.id),
       ...(this.view?.snapshot(this.at) ?? {}),
     };

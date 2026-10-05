@@ -52,7 +52,7 @@ const STACKING: ReadonlyArray<readonly [label: string, status: string]> = [
  * All three are party-wide, so a stack is worth a turn while **anybody** on the
  * field is short of the cap — a member just switched in arrives with none.
  */
-function stackingBuff(commands: AvailableCommand[], living: AnyCombatant[]): Command | null {
+export function stackingBuff(commands: AvailableCommand[], living: AnyCombatant[]): Command | null {
   for (const [label, status] of STACKING) {
     const short = living.filter((c) => stacksOf(c, status) < MAX_STACKS);
     if (short.length === 0) continue;
@@ -69,7 +69,7 @@ function stackingBuff(commands: AvailableCommand[], living: AnyCombatant[]): Com
   return null;
 }
 
-function hasteAlly(commands: AvailableCommand[], living: AnyCombatant[]): Command | null {
+export function hasteAlly(commands: AvailableCommand[], living: AnyCombatant[]): Command | null {
   const unhasted = living.filter((c) => !has(c, 'haste'));
   // The reach first: Wakka and Lulu are the only swings that cross the gap (§4.3).
   const pick = unhasted.find((c) => c.id === 'wakka' || c.id === 'lulu') ?? unhasted[0];
@@ -103,7 +103,7 @@ function healFromBag(commands: AvailableCommand[], living: AnyCombatant[]): Comm
  */
 const SPARE: readonly string[] = ['Potion', 'Eye Drops', 'Echo Screen'];
 
-function spareItem(commands: AvailableCommand[], living: AnyCombatant[]): Command | null {
+export function spareItem(commands: AvailableCommand[], living: AnyCombatant[]): Command | null {
   const fragile = [...living].sort((a, b) => hpFraction(a) - hpFraction(b) || a.hp - b.hp);
   for (const label of SPARE) {
     for (const m of fragile) {

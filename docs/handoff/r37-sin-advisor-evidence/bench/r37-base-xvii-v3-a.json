@@ -1,0 +1,38 @@
+{
+  "tag": "r37-base-xvii-v3-a",
+  "budget": "lean",
+  "seeds": 100,
+  "first": 1,
+  "when": "2026-10-03T07:29:21.072Z",
+  "rows": [
+    {
+      "chapterId": "sin-fins-core",
+      "driver": "v3",
+      "budget": "-",
+      "seeds": 100,
+      "wins": 4,
+      "winSeeds": [
+        5,
+        10,
+        38,
+        71
+      ],
+      "linksCleared": 134,
+      "decisions": 29035,
+      "shownV4": 0,
+      "switched": 0,
+      "notReady": 0,
+      "lethalMiss": 19,
+      "savable": 472,
+      "missedRevive": 29,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "refused": 0,
+      "workerP50": 0,
+      "workerP95": 0,
+      "workerMax": 0,
+      "cardP50": 2.6675000000032014,
+      "cardP95": 7.235000000000582
+    }
+  ]
+}

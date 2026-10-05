@@ -34,9 +34,12 @@ import { dirname, extname, join, relative, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import { hasSourceMapReference, isSourceMapFile } from './dist-filter.mjs';
+
 export const MANIFEST_NAME = 'artifact-manifest.json';
 const IMAGE = new Set(['.png', '.webp', '.jpg', '.jpeg']);
 const AUDIO = new Set(['.mp3', '.ogg', '.wav']);
+const SOURCE_TEXT = new Set(['.js', '.mjs', '.css', '.html']);
 const TYPE_FAMILY = {
   '.html': 'text/html', '.js': 'javascript', '.css': 'text/css', '.json': 'json', '.png': 'image/png', '.webp': 'image/webp',
   '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.mp3': 'audio/', '.ogg': 'audio/', '.wav': 'audio/', '.woff2': 'font', '.woff': 'font', '.svg': 'image/svg',
@@ -94,7 +97,9 @@ async function decodeStatus(path, ext) {
     try {
       const sharp = (await import('sharp')).default;
       const stats = await sharp(path).stats();
-      const blank = stats.channels.slice(0, 3).every((c) => c.max === c.min);
+      // Alpha counts (2026-10-03): an alpha MASK is one RGB value whose shape lives in the alpha channel
+      // (the living-portrait eye windows), so it is blank only when every channel it has, alpha included, is flat.
+      const blank = stats.channels.every((c) => c.max === c.min);
       return blank ? 'blank' : 'ok';
     } catch {
       return 'failed';
@@ -120,6 +125,9 @@ export async function buildManifest(dir, { decode = true } = {}) {
     const buf = readFileSync(full);
     const entry = { sha256: sha256(buf), bytes: buf.length };
     if (buf.length === 0 && rel !== '.nojekyll') problems.push(`${rel}: empty file`);
+    // PR-0328, D-335: no source map ships, and no code points at one.
+    if (isSourceMapFile(rel)) problems.push(`${rel}: a source map must not ship`);
+    else if (SOURCE_TEXT.has(extname(rel).toLowerCase()) && hasSourceMapReference(buf.toString('latin1'))) problems.push(`${rel}: points at a source map, and none ships`);
     if (decode) {
       const status = await decodeStatus(full, extname(rel).toLowerCase());
       if (status) entry.decode = status;

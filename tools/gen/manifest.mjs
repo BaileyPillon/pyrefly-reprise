@@ -65,6 +65,16 @@ const CHOSEN = /^([A-Za-z0-9][A-Za-z0-9_-]*)\.png$/;
 const VARIANT = /^([A-Za-z0-9][A-Za-z0-9_-]*)\.(.+)\.png$/;
 
 /**
+ * `<state>@2x.png` — the twice-resolution master of a chosen state (D-315). Listed per subject in
+ * `states2x`, and only when the 1x `<state>.png` is there too: the runtime (`src/engine/ArtTier.ts`)
+ * swaps the pixels on a 2x device and keeps the 1x sidecar and name, so a master alone is never used.
+ *
+ * Release 39 widens it to `@2x`, `@3x` and `@4x` (`tiers`: `{ state: [2, 3, 4] }`; `states2x` stays, the states that list 2).
+ * A backdrop's masters are listed the same way, top level, as `backdropTiers`.
+ */
+const HI_RES = /^([A-Za-z0-9][A-Za-z0-9_-]*)@([2-4])x\.png$/;
+
+/**
  * A sidecar's `facing` is copied through as a trimmed, lower-cased string and
  * *interpreted* at runtime by `parseArtFacing` in `BattlePresenterActors.ts`,
  * which owns the alias table (`none`/`straight`/`camera` all mean `front`).
@@ -150,6 +160,7 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     const dir = join(charRoot, id);
     const states = [];
     const variants = new Set();
+    const hi = [];
 
     for (const entry of listDir(dir)) {
       if (!entry.isFile()) continue;
@@ -160,6 +171,11 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
           warnings.push(`${id}/${state}.png has no .json sidecar (the loader would 404 on it)`);
         }
         states.push(state);
+        continue;
+      }
+      const master = HI_RES.exec(entry.name);
+      if (master) {
+        hi.push([master[1], Number(master[2])]);
         continue;
       }
       const variant = VARIANT.exec(entry.name);
@@ -191,21 +207,44 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     }
 
     const portrait = existsSync(join(artRoot, 'portraits', `${id}.png`));
-    subjects[id] = { states, portrait, ...(facing ? { facing } : {}) };
+    // `<state>@<n>x.png` counts only beside its 1x file (a master alone is never used); a name with a dot (`idle.2@2x`) is a candidate.
+    const tiers = {};
+    for (const [state, scale] of hi) {
+      if (!states.includes(state)) continue;
+      (tiers[state] ??= []).push(scale);
+    }
+    for (const state of Object.keys(tiers)) tiers[state].sort((a, b) => a - b);
+    const tierStates = Object.keys(tiers).sort();
+    const states2x = tierStates.filter((state) => tiers[state].includes(2));
+    subjects[id] = {
+      states,
+      portrait,
+      ...(facing ? { facing } : {}),
+      ...(states2x.length ? { states2x } : {}),
+      ...(tierStates.length ? { tiers: Object.fromEntries(tierStates.map((state) => [state, tiers[state]])) } : {}),
+    };
   }
 
   const pause = chosenStems(join(artRoot, 'pause'));
   const title = chosenStems(join(artRoot, 'title'));
+  const backdrops = chosenStems(join(artRoot, 'backdrops'));
+  const backdropTiers = {};
+  for (const entry of listDir(join(artRoot, 'backdrops'))) {
+    const m = entry.isFile() ? HI_RES.exec(entry.name) : null;
+    if (m && backdrops.includes(m[1])) (backdropTiers[m[1]] ??= []).push(Number(m[2]));
+  }
+  for (const key of Object.keys(backdropTiers)) backdropTiers[key].sort((a, b) => a - b);
   const manifest = {
     version: 1,
     generatedAt: now,
     subjects,
     portraits: chosenStems(join(artRoot, 'portraits')),
-    backdrops: chosenStems(join(artRoot, 'backdrops')),
+    backdrops,
     pause,
     pause2x: retinaStems(join(artRoot, 'pause'), pause),
     title,
     title2x: retinaStems(join(artRoot, 'title'), title),
+    ...(Object.keys(backdropTiers).length ? { backdropTiers: Object.fromEntries(Object.keys(backdropTiers).sort().map((k) => [k, backdropTiers[k]])) } : {}),
   };
 
   return { manifest, warnings, variantsOnly };

@@ -19,6 +19,18 @@ export function apForLevel(sLv: number): number {
   return Math.min(5 * (sLv + 1) + idiv(sLv * sLv * sLv, 50), 22000);
 }
 
+/**
+ * An overkill doubles the item drops of the enemy it killed (PR-0258; FFX only).
+ *
+ * Sourced twice over: `research/ffx-vs-ffx2-presentation.md` §9 (Overkill "doubles AP and item drops ... does not
+ * affect gil or equipment drops", [verified: 2 sources], FF Wiki *Battle Results* and *Overkill*), and each
+ * chapter file's own drop row, e.g. Anima and the Guardians "Ability Sphere x1 (x2 on overkill)"
+ * (`ffx-seymour-anima-macalania.md` §1.4, §2.5), Flux, Evrae, Yojimbo and Natus (x2 normal, x4 overkill),
+ * Omnis (x1 / x2, then x2 / x4). Gil, steals and equipment are untouched. A stack still caps at 99
+ * (`ItemDrop.count`, 1-99). FFX-2 has no Overkill, and its engine never reaches this.
+ */
+export const OVERKILL_DROP_MULTIPLIER = 2;
+
 /** Total the rewards of every defeated enemy, rolling each drop's chance. */
 function collectRewards(ctx: Ctx): { ap: number; gil: number; drops: ItemDrop[] } {
   let ap = 0;
@@ -28,10 +40,13 @@ function collectRewards(ctx: Ctx): { ap: number; gil: number; drops: ItemDrop[] 
     const enemy = tryActor(ctx, id);
     const rewards = enemy?.enemy?.rewards;
     if (!enemy || !rewards || isAlive(enemy)) continue;
-    ap += ctx.rt.overkilled.includes(id) ? rewards.apOverkill : rewards.ap;
+    const overkilled = ctx.rt.overkilled.includes(id);
+    ap += overkilled ? rewards.apOverkill : rewards.ap;
     gil += rewards.gil;
     for (const drop of rewards.drops) {
-      if (drop.chance === undefined || ctx.rng.int(1, 100) <= drop.chance) drops.push({ ...drop });
+      if (drop.chance === undefined || ctx.rng.int(1, 100) <= drop.chance) {
+        drops.push({ ...drop, count: overkilled ? Math.min(99, drop.count * OVERKILL_DROP_MULTIPLIER) : drop.count });
+      }
     }
   }
   return { ap, gil, drops };

@@ -91,3 +91,76 @@ export function dboxStep(mem, cur, now, screen) {
   mem.seen = { speaker: cur.speaker, text };
   return line;
 }
+
+// ---------------------------------------------------------------------------
+// PR-0261 (critic round 19, widened): what the harness types into an Overdrive
+// overlay, and how it reads the end of a route. Game case: FFX only for the two
+// overlays (Bushido is Auron's, Swordplay is Tidus's: src/ui/ffx/minigames/);
+// the outcome reader is shared by both games.
+// ---------------------------------------------------------------------------
+
+/**
+ * The chip glyph `AuronSequence.ts` draws (its GLYPH map) -> the key a player presses for that
+ * button (`src/ui/ffx/rawInput.ts` KEY_MAP). The circle is X, not Escape: Escape opens the pause.
+ */
+export const BUSHIDO_KEYS = Object.freeze({ '↑': 'ArrowUp', '↓': 'ArrowDown', '←': 'ArrowLeft', '→': 'ArrowRight', '✕': 'Enter', '○': 'x', '△': 'q', '□': 'k', L1: 'f', R1: 'r' });
+
+/** Which overlay the `.ig-minigame__subtitle` ("BUSHIDO · ENTER THE SEQUENCE") names, or null for the others (reels, fury, mix, pickers). */
+export function minigameKindOf(subtitle) {
+  const s = String(subtitle ?? '').toUpperCase();
+  if (s.startsWith('BUSHIDO')) return 'bushido';
+  if (s.startsWith('SWORDPLAY')) return 'swordplay';
+  return null;
+}
+
+/** The keys that type the chips shown, in order; `unknown` lists a glyph with no key (the plan is then not safe to type). */
+export function keysForChips(chips) {
+  const keys = []; const unknown = [];
+  for (const g of chips) {
+    const k = BUSHIDO_KEYS[String(g).trim()];
+    if (k) keys.push(k); else unknown.push(g);
+  }
+  return { keys, unknown };
+}
+
+/**
+ * Swordplay: press now? `pos`/`prev` are the cursor's percent of the bar at this and the last sample (`dtMs` apart),
+ * `zoneStart`/`zoneWidth` the gold zone in percent (the overlay's CSS variables), `leadMs` the time a key takes to
+ * arrive. The press is made when the cursor, carried forward by the lead, sits inside the middle `inner` share of the
+ * zone. A miss is not a failure in the game (the marker restarts), so a late press only costs a sweep.
+ * Self-contained: injected into the page by source (Function#toString), like dboxStep.
+ */
+export function swordplayPressNow(pos, prev, dtMs, zoneStart, zoneWidth, leadMs, inner = 0.7) {
+  if (![pos, prev, dtMs, zoneStart, zoneWidth].every((n) => Number.isFinite(n)) || dtMs <= 0 || zoneWidth <= 0) return false;
+  const predicted = pos + ((pos - prev) / dtMs) * leadMs;
+  const centre = zoneStart + zoneWidth / 2;
+  return Math.abs(predicted - centre) <= (zoneWidth / 2) * inner;
+}
+
+/**
+ * The end of a route, read from what the game shows, never from the first `victory` event in the battle log (a chain
+ * logs one per link, and the log read at the results screen holds none: round 19 PR-0261).
+ *
+ * `end` = { screenAtEnd, resultsText, log: [{type}], seen: { links, chainLength, phase }, final } where `seen` is the
+ * last chain state read while the fight loop ran. Order of evidence: the results screen's own words; a fight loop that
+ * ended with the battle screen still up (budget, stuck menu) is `stalled`, with the link and the playback phase it stopped
+ * in ("stalled at link 2, moment:battle-start"); a screen that left the battle plus a defeat event, or a victory event on
+ * the LAST link, is a provisional answer; anything else is `undecided` until the results screen has been read, and with
+ * `final: true` (the route has nothing left to read) it is `stalled` too.
+ */
+export function deriveOutcome(end) {
+  const text = String(end.resultsText ?? '');
+  if (/Victory|· CLEARED/i.test(text)) return { outcome: 'victory', from: 'results screen text' };
+  if (/Defeat|· FELL/i.test(text)) return { outcome: 'defeat', from: 'results screen text' };
+  const kinds = new Set((end.log ?? []).map((e) => e.type));
+  const seen = end.seen ?? {};
+  const onLastLink = !seen.chainLength || (seen.links ?? 1) >= seen.chainLength;
+  const link = seen.links ?? 1;
+  const phase = seen.phase || 'no phase read';
+  const stalled = (from) => ({ outcome: 'stalled', from, stalledAt: { link, phase }, detail: `stalled at link ${link}, ${phase}` });
+  if (end.screenAtEnd === 'battle') return stalled('the battle screen was still up when the route stopped playing');
+  if (kinds.has('defeat')) return { outcome: 'defeat', from: 'engine log, screen left the battle' };
+  if (kinds.has('victory') && onLastLink) return { outcome: 'victory', from: 'engine log on the last link, screen left the battle' };
+  if (end.final) return stalled('no results screen and no final outcome event');
+  return { outcome: 'undecided', from: 'screen left the battle; the results screen is not read yet' };
+}

@@ -354,6 +354,7 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
     },
     setPixelScale(v): void {
       for (const p of build.particles) p.setPixelScale(v);
+      for (const p of build.pixelScaled ?? []) p.setPixelScale(v);
     },
     trigger: () => false,
     hideOwnActors: () => {},

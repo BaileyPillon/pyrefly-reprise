@@ -1,0 +1,60 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-03T18:05:00Z",
+  "build": {
+    "mainSha": "cd9dbbb0",
+    "bundle": "BGBDEn_P",
+    "artifactHash": "766d9587007f584bd20256f6afbaaa1397252b47ea3aa7e3d1f40a49283898f7"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/cd9dbbb0.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/c69de96a.json -> {result: PASS, artifactHash: 766d9587007f584bd20256f6afbaaa1397252b47ea3aa7e3d1f40a49283898f7, liveManifest: match, checked: 342, mismatched: [], missing: [], wrongType: [], errors: []}. The served script is assets/index-BGBDEn_P.js."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright from node (PYREFLY_BROWSER=gpu), 1600x900, fresh context, cache-busted URL, real key presses only. Every capture is preceded by a screen assertion (window.__pyrefly.app.current.name): title -> chapter-select -> party-prep -> cutscene skip -> battle, with the cursor reaching seymour-flux (Ch I, FFX) and ffx2-bahamut (Ch IV, FFX-2) by board selectedId, and a player turn reached on each (Ch IV menu rows Attack/Skill/Change/Item). Cancel path (Ch I): ArrowDown, Enter into a submenu, Escape returns to the command menu. Positive path: real Attack input on both chapters, battle still running. Pause: P opens screen=pause (Ch I tabs Tidus/Yuna/Kimahri/Chapter/Guide/Options/Controls/Music; Ch IV tabs Yuna/Rikku/Paine/...), H hides the pause panels (.pause__ui display block -> none, .pause--bare on) and H restores them, Escape returns to screen=battle and the living twin is removed ([data-living] count 0) on both chapters. LIVING PORTRAITS (the changed flow), sampled every 250 ms by reading the twin's data-state and canvas alpha pixels: Ch I Tidus plate ready, 31 samples, 22 distinct face states, 17 distinct canvas pixel hashes (face parts drawn, up to 104,083 non-transparent px); E to Yuna: ready, 17 states, 16 hashes; Ch IV Yuna X-2 plate ready, 16 states, 12 hashes; E to Rikku X-2: ready, 17 states, 16 hashes. 64 requests to art/portrait-parts/ (manifest.json and part PNGs), all HTTP 200. Music: 16 mp3 requests (title, chapter-select, scene-gagazet, boss-seymour, scene-bevelle-underground, boss-ffx2-aeon, pause.mp3, sprite sfx), none procedural-fallback evidence; window.__pyrefly.audio exposes no debug() so the network log is the evidence. Console errors 0, responses >= 400 0, 404s 0, image responses served as text/html 0."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke: real ArrowLeft x2 on OPTIONS > MASTER VOLUME (80 -> 60), pre-reload save pyrefly-reprise:save:v1 holds settings.masterVolume = 0.6, page.reload, __pyreflyReady, save still 0.6, and after re-entering Ch IV the OPTIONS row reads 60; restored to 80 with real keys.",
+      "reason": "The full upgrade matrix (fresh player / returning player / previous-build save fixture / invalid storage / reset flow) is not part of a live pass and was not run. No chapter-progress save was made (a chapter was entered but not completed), so only the setting survived a reload."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact identity: 342 files byte-compared against critic/artifacts/cd9dbbb0.json, diffed from c69de96a",
+      "served bundle BGBDEn_P",
+      "title -> chapter-select -> party-prep -> battle with real input, FFX (seymour-flux) and FFX-2 (ffx2-bahamut)",
+      "living pause portraits on Ch I (Tidus, then Yuna by E) and Ch IV (Yuna X-2, then Rikku X-2 by E): twin present, ready, face parts change over time, removed on close",
+      "P / Escape pause and resume, H hide and restore of the pause panels, submenu cancel path",
+      "portrait-parts requests all 200 (64 requests); no console errors, no 404, no mis-typed image responses",
+      "prerendered music fetched over the network on both chapters",
+      "settings reload persistence (masterVolume)"
+    ],
+    "reused": [],
+    "notTested": [
+      "full CHK-024 upgrade matrix",
+      "the 8 held twirl keys and the 35 boss keys of D-325 in battle (art identity only through the manifest bytes, not looked at in play)",
+      "FF7 plates (they have no parts and stay static by design) and the phone-width (390x844) living pause",
+      "win, loss and retry paths",
+      "whether the face movement looks right (this pass measures that it moves, not how it looks; that is the focused and deep reviews' job)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 35,
+  "notes": "LV-1 (script defect, not a build defect): the first run of this smoke script failed three checks that were stale for this build, not faults in it: H now toggles .pause--bare on .pause__stage and hides .pause__ui (it no longer changes .pause__col), and CINEMA LIGHT moved from the OPTIONS tab to the EYE CANDY page (the OPTIONS tab now has an EYE CANDY row), so a toggle of CINEMA LIGHT on OPTIONS found nothing. The script was corrected (H check on .pause__ui, a MASTER VOLUME change for the reload check) and the full run repeated: 35 steps OK, 0 failed. Both runs had 0 console errors. Evidence (screenshots, report.json) is in D:/Tools/pyrefly-scratch/2026-10-03/live-r37/; the script is .r37-live-smoke-tmp.mjs at the repo root."
+}

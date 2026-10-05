@@ -39,6 +39,7 @@ import { FFX_HP_YELLOW_BELOW } from '../ffx/PartyStatusWindow.ts';
 import { hpClass } from '../ffx2/PartyRows.ts';
 import type { StatusGame } from './statusLooks.ts';
 import { characterUrl } from '../../engine/BattlePresenterArt.ts';
+import { sidecarUrlOf } from '../../engine/ArtShipped.ts';
 
 export type RestPose = 'idle' | 'sleep' | 'critical';
 
@@ -142,7 +143,7 @@ export class RestPoses {
     if (!rect || !isFigure(fig) || (fig.pose !== 'sleep' && fig.pose !== 'critical')) return null;
     const art = this.field()?.snapshot?.().find((s) => s.id === id)?.art;
     if (!art) return null;
-    const url = characterUrl(art, fig.pose).replace(/\.png$/, '.json');
+    const url = sidecarUrlOf(characterUrl(art, fig.pose));
     if (!this.heads.has(url)) {
       this.heads.set(url, null);
       void fetch(url)

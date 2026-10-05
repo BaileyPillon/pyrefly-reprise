@@ -1,15 +1,22 @@
 /**
  * Lady Luck — Gamble / Tantalize / Bribe [ffx2-combat-core §2.9.1, §3.12, verified: 2 sources].
  *
- * Luck/critical specialist; long range. The four Reels open the
- * `ladyluck-reels` minigame; their payloads resolve to an existing ability or
- * item and inherit that entry's constant [§3.12] — the reel tables themselves
- * (which symbol combination yields which result) are minigame/UI content, not
- * battle data, and are out of this file's scope.
+ * Luck/critical specialist; long range. The two shipped Reels are **wrappers**:
+ * they open the `ladyluck-reels` overlay, deal nothing themselves, and resolve
+ * to the payload their spin paid — "every reel payload resolves to an existing
+ * ability or item and therefore inherits that entry's constant" [§2.9.1]. The
+ * pay table is battle data: it lives in `../reels.ts`, rides on each wrapper's
+ * `extra`, and is resolved by `src/battle/ffx2/reels.ts`. (This header used to
+ * call the table "minigame/UI content … out of this file's scope", which is
+ * how a spin came to do nothing at all.)
+ *
+ * Two payloads exist only on the reels and so are authored here: the **Dud**
+ * and the Magic Reels' **Auto-Life**.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
-import { CT_INSTANT, CT_MEDIUM, RT_NORMAL } from './helpers.ts';
+import { reelExtra } from '../reels.ts';
+import { CHANCE_ALWAYS, CT_INSTANT, CT_LONG, CT_MEDIUM, DURATION_INFINITE, RT_NORMAL } from './helpers.ts';
 
 export const ladyLuckAbilities: AbilityDef[] = [
   {
@@ -78,7 +85,7 @@ export const ladyLuckAbilities: AbilityDef[] = [
     game: 'ffx2',
     category: 'skill',
     mpCost: 0,
-    chargeTicks: CT_MEDIUM,
+    chargeTicks: CT_LONG, // §1.3 lists "all four Reels" in the Long `CT` tier [estimate]
     recoveryTicks: RT_NORMAL,
     power: 0,
     formula: 'none',
@@ -91,7 +98,7 @@ export const ladyLuckAbilities: AbilityDef[] = [
     flags: [],
     minigame: 'ladyluck-reels',
     messageTemplate: '{user} spins the Attack Reels',
-    extra: { reelSet: 'attack' },
+    extra: reelExtra('attack'),
   },
   {
     id: 'x2-lady-luck-magic-reels',
@@ -99,7 +106,7 @@ export const ladyLuckAbilities: AbilityDef[] = [
     game: 'ffx2',
     category: 'skill',
     mpCost: 0,
-    chargeTicks: CT_MEDIUM,
+    chargeTicks: CT_LONG, // §1.3 lists "all four Reels" in the Long `CT` tier [estimate]
     recoveryTicks: RT_NORMAL,
     power: 0,
     formula: 'none',
@@ -112,8 +119,56 @@ export const ladyLuckAbilities: AbilityDef[] = [
     flags: [],
     minigame: 'ladyluck-reels',
     messageTemplate: '{user} spins the Magic Reels',
-    // Triple Red 7 = Ultima (power 70, Mag); the only two routes to Ultima in the game besides the Megiddo grid.
-    extra: { reelSet: 'magic' },
+    // Triple Red 7 = Ultima (power 70, Mag): with the Megiddo grid, one of the only two routes to Ultima in the game.
+    extra: reelExtra('magic'),
+  },
+  {
+    // Reel payload only — never a menu row. "Dud (any Lady Luck reel failure): special gravity damage
+    // removing 75% of current HP from the whole party", ignoring defence [§2.3, §3.12, verified: 2 sources].
+    // `all-allies` is relative to the spinner, so it is her own party. It runs the ordinary 20-step pipeline,
+    // so step 18 (Cat Nip's 9999) applies — §3.12's "with Cat Nip equipped a Dud can wipe the party".
+    id: 'x2-lady-luck-dud',
+    name: 'Dud',
+    game: 'ffx2',
+    category: 'skill',
+    mpCost: 0,
+    chargeTicks: CT_INSTANT,
+    recoveryTicks: RT_NORMAL,
+    power: 12, // 12/16 = 75% of current HP
+    formula: 'percent-current',
+    damageType: 'other',
+    element: ['gravity'],
+    targeting: 'all-allies',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [],
+    flags: [],
+    canMiss: false,
+    messageTemplate: 'Dud!',
+    // Not an attack, so it neither opens nor is multiplied by a Chain (`resolve.ts`): it is 75%, and cannot kill.
+    extra: { noChain: true },
+  },
+  {
+    // Reel payload only: Magic Reels, three Staffs [§3.12]. Auto-Life is not a castable spell in X-2
+    // ("Not available natively" [§3.5]) and has no duration value: it lasts until consumed or dispelled [§2.8].
+    // Targeting is an [estimate]: §3.12 names the payload only, and the reel itself is single-target ("1 / any").
+    id: 'x2-lady-luck-reel-auto-life',
+    name: 'Auto-Life',
+    game: 'ffx2',
+    category: 'skill',
+    mpCost: 0,
+    chargeTicks: CT_INSTANT,
+    recoveryTicks: RT_NORMAL,
+    power: 0,
+    formula: 'none',
+    damageType: 'other',
+    element: ['none'],
+    targeting: 'single-ally',
+    hits: 1,
+    statusEffects: [{ status: 'auto-life', chance: CHANCE_ALWAYS, duration: DURATION_INFINITE }],
+    removesStatuses: [],
+    flags: [],
+    messageTemplate: '{target} gains Auto-Life',
   },
   {
     id: 'x2-lady-luck-luck',

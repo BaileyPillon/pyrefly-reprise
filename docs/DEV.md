@@ -1,4 +1,4 @@
-# Developing Pyrefly Reprise
+# Developing Echoes of Spira (formerly Pyrefly Reprise)
 
 Node 24, npm 11. Windows/macOS/Linux; every command below is run from the repo
 root. Read [ARCHITECTURE.md](ARCHITECTURE.md) first — the layering rule there is
@@ -167,6 +167,62 @@ run, so `gh-pages` always ends up with exactly one commit. Requires the `gh`
 CLI (hardcoded at `D:/Tools/GitHubCLI/gh.exe`) authenticated against
 `BaileyPillon/pyrefly-reprise`.
 
+**No source map ships (PR-0328, D-335; Bailey 2026-10-03).** A plain
+`vite build` makes none. `tools/deploy-pages.mjs` builds with
+`PYREFLY_SOURCEMAP_DIR=D:/Tools/pyrefly-sourcemaps/<sha>` set (the home folder
+is `PYREFLY_SOURCEMAP_HOME` when you want another), which makes the bundler write
+them `hidden` (no `sourceMappingURL` comment in the code); the `pyrefly-dist-filter`
+plugin copies them into that folder and prunes them from the build. The deploy
+refuses a build that still holds a `.map` file or a `sourceMappingURL` comment,
+and `artifact-manifest.mjs` calls either a problem. To read a minified stack trace
+from a live build, open `assets/index-<hash>.js.map` from that commit's folder
+(DevTools "Add source map", or `source-map` in node). The release-36 maps were
+22,775,896 bytes of a site held to 800,000,000 (D-332).
+
+**The painted art ships as lossless WebP where that changes no pixel on any decoder (release 38,
+"r38-bytes"; Bailey 2026-10-03; both games, shared build plumbing; handoff `docs/handoff/r38-bytes.md`).**
+`public/art/**.png` stays the approved masters (hashes, backups and `verify-approved` unchanged). Every
+production build, by any route (`npm run build`, the deploy, a critic's `vite build --outDir dist-gate`),
+decides by the pixels of each master (the default, `exact`): a master that is opaque, or whose alpha is only 0
+and 255 with no colour left under alpha 0, ships as a lossless WebP (premultiplying such a picture is the
+identity, so a lossless WebP and its PNG are the same on every path in every engine); every other master, the 2x
+ones included, ships as a PNG recompressed at maximum effort, its decoded RGBA (colour under alpha 0 included)
+proved identical before it is cached, and its own bytes where that is not smaller. A master whose WebP would be under 64
+bytes (a fully transparent layer is 28) ships as its PNG too, in every scope: Playwright's WebKit cannot load a WebP
+that small (the re-check's B3: Paine's two catchlight layers, so her living pause portrait stayed static there).
+Why: a browser may premultiply a
+decoded image, and for a pixel of partial alpha that differs from decoder to decoder (the independent check of
+2026-10-03 found Yunalesca's 2x master up to 124 in 255 apart once the matte reads it back through a 2D canvas),
+and WebKit drops the colour under alpha 0 of a WebP. It is done by the `pyrefly-art-derive` plugin in
+`vite.config.ts` (`tools/art-derive-plugin.mjs`, library `tools/art-derive-lib.mjs`, what is in a picture
+`tools/art-image-facts.mjs`). The dev server and the unit suite still serve the PNGs. `artUrl`
+(`src/engine/PaintedArt.ts`) hands the browser the file that ships (`src/engine/ArtShipped.ts`, fed by the
+constant `__PYREFLY_ART_WEBP__` the build inserts), and the few functions that read an art URL apart take either
+form (`tests/unit/art-url-sources.test.ts` pins the two rules: build art URLs with `artUrl`, match them through
+`logicalArtUrl`). Encoding at maximum effort is slow once and cached by content hash in `PYREFLY_ART_CACHE`
+(default `D:/Tools/pyrefly-art-cache`; safe to delete, it refills): `node tools/art-derive.mjs warm --jobs 8`
+fills it ahead of a build, and a new painting adds seconds to the next build with nothing to remember (a new
+painting with soft edges ships as a recompressed PNG, a clean cut-out as a WebP; nothing to decide).
+`PYREFLY_ART_WEBP=off|partial|safe|exact|all` (default `exact`) is the switch; `off` ships the PNGs exactly as
+before; `partial`, `safe` and `all` are not decoder independent, so the deploy's pixel gate refuses them and
+they stay for measurement. The proofs, each of which the deploy or a reviewer can re-run on a built folder:
+`node tools/art-derive.mjs verify --dir <build>` (every shipped file decodes to its master's RGBA in all four
+channels, sha256, both sides decoded again from the files, and every shipped WebP is of a master that is opaque or
+clean binary alpha, judged from the master, and none is under the 64-byte floor; the deploy runs it),
+`node tools/art-derive.mjs audit --dir <build> [--baseline <earlier build>]` (no page,
+stylesheet or data file names an art file the build left out; the deploy runs it),
+`node tools/art-browser-load.mjs --dir <build> [--engines chromium,webkit]` (every image the build ships, the whole set
+and no sample, loads and decodes at its master's size in Playwright's WebKit and Chromium, and every portrait plate
+stays living; an engine that cannot start fails it; Playwright from node, about 20 s; the deploy runs it),
+`node tools/art-play-audit.mjs --dir <build>` (a headless Chromium plays the title,
+chapter select, every chapter's opening and the pause screen and fails on any
+missing file, console error or art warning) and `node tools/art-browser-identity.mjs
+--dir <build> --screen-exact` (the same pixels as Chromium decodes them, as a WebGL texture and on
+a 2D canvas, over black and over white, with no file exempt); what it costs is `node tools/art-decode-cost.mjs --dir <build>` (decode time
+of the WebP against the PNG) and `node tools/art-load-timing.mjs --before <url> --after <url>`
+(the battle's first load against a PNG build). The build writes `art/derived.json` (every
+mapping, with the master's pixel hash and transparency) beside the art.
+
 **Every live build must be evaluated by the critic — no exceptions — and the
 depth of the review follows what changed** (critic policy v2, approved by
 Bailey on 2026-09-20; `critic/RUBRIC.md` sections 4 and 10). The sequence is
@@ -272,6 +328,46 @@ frames have rendered.
 | `setBattleSpeed(s)` | `'normal' \| 'fast' \| 'skip'` |
 | `waitBattleEnd()` | resolves when the running battle ends |
 | `cam(name?)` | camera comfort preset, read or set: `'current'` (default) \| `'calm'` \| `'steady'` \| `'originals'` (FFX only); also `?cam=<name>`. Options awaiting Bailey's pick, `docs/concepts/fb2-0929/camera/` |
+
+### Art resolution (release 39)
+
+The device class, the master a figure is drawn from and the anti-aliasing are automatic (no setting, no save key); these force them for
+captures and QA. Address parameters: `?arttier=phone|low|mid|high` (the device class), `?artscale=1..4` (pin every painting to one master;
+the governor stands down), `?aa=off|smaa|msaa` (the renderer's own anti-aliasing after the grade: off on every class now, see "Sharpness" below), `?artlink=slow|fast` (the connection reading). `ArtBudget.ts` holds the numbers per class.
+
+| Member | Meaning |
+|--------|---------|
+| `art.stats()` | the device class, its budget, the buffer width and the live stage's governor: masters resident, upgrades, evictions, `updateMs` (its own CPU per frame), the last decisions and what asked for each |
+| `art.rigs()` | every battle-camera rig, at rest and pushed in, with the magnification each drawn figure would have from it |
+| `art.shots()` | every painting the party holds with its painted height in approved texels (the held shots' sizes are arithmetic on it) |
+| `art.plan()` | run the stage's look-ahead (every rig, the held shots by size) now |
+| `art.tier(cls)` / `art.force(n)` / `art.aa(mode)` | the same as `?arttier=`, `?artscale=` and `?aa=`, from the console (`null` clears the first two) |
+
+### Sharpness (release 39, "F plus")
+
+The standard view's sharpness follows a ladder, automatic like the art tiers (no setting, no save key; `src/engine/crisp/`, handoff `docs/handoff/r39-looks.md`).
+The scene is drawn 2x wider and taller and resolved with a Lanczos-3 filter before the bloom, a light contrast-adaptive sharpen runs right before the
+grade, and neither SMAA pass runs (the supersample is the anti-aliasing). The rung comes from the device class (`?arttier=`), then a frame-time governor
+that can only take it down: a median frame interval over about 2 s above 22 ms (about 45 frames a second) is one rung down.
+
+| Rung | What | Who |
+|------|------|-----|
+| `fplus` | 2x supersample, sharpen 0.3, no SMAA | the high class (a discrete GPU) |
+| `f` | 1.5x supersample, sharpen 0.4, no SMAA | the mid class; where `fplus` steps down to |
+| `a2` | no supersample, no sharpen, the MAX mix's one SMAA before the grade (live release 38's frame) | the low class (software GL, so the default SwiftShader browser and its golden screenshots are unchanged); LOW EFFECTS; the floor |
+| `phone` | today's frame: no supersample, the MAX mix's one FXAA | the phone layout and the phone effects tier |
+
+Address parameters (captures and QA; each pins the frame, so the governor stands down, as `?artscale=` does for the art): `?crisp=fplus|f|a2|a|phone|ref3`
+(also `g2` for `fplus` and `g1` for `f`, the crispness options page's names; `a` is release 39 as first built, two SMAA passes; `ref3` is the 3x reference every
+sharpness number was measured against), the single levers `ss=1..4`, `cas=0..1` and `aapre=0|1` over it, and `?crispbudget=<ms>` for the governor's budget.
+A capture that must not change look mid-run should pin (`?crisp=fplus`): under load the governor will step a busy machine down, by design.
+
+| Member | Meaning |
+|--------|---------|
+| `crisp.report()` | the rung in force, whether it is pinned, the config, the device class and effects tier, the effective supersample, the governor's windows (`rung`, `median`, `samples`, `stepped`) and the composer's passes by name |
+| `crisp.get()` / `crisp.rung()` | the config and the rung name in force |
+| `crisp.preset(name)` / `crisp.set(patch)` | pin a named end state (`crisp.presets` lists them) or change single levers; `crisp.unpin()` hands the frame back to the device |
+| `crisp.simulate(ms)` | add `ms` to every frame interval the governor reads (a simulated slow frame; `null` stops it) |
 
 ### Cutscenes and screenshots
 

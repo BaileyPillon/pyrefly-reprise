@@ -10,15 +10,19 @@ import {
   type Camera,
 } from 'three';
 import { setPaintedAnisotropy } from './PaintedArt.ts';
+import { artBudget, setBufferWidth, setGpuInfo, setMaxTextureSize } from './ArtDevice.ts';
+import { MsaaRenderPass, parseAaOverride, type AaMode } from './PostAa.ts';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { maskBloomHighPass, setFigureBloomMask } from './BloomMask.ts';
 import { TiltShiftShader } from './shaders/TiltShiftShader.ts';
 import { GradeShader } from './shaders/GradeShader.ts';
 import { eyeCandy } from './fx/EyeCandy.ts';
 import { GoldenHour } from './fx/a/GoldenHour.ts';
+import { CrispRig } from './crisp/CrispRig.ts';
 
 export interface RendererOptions {
   /** Element the <canvas> is appended to. Defaults to #game. */
@@ -89,9 +93,10 @@ export interface ScenePalette {
  * Owns the WebGL renderer, the default perspective camera and the HD-2D post
  * chain:
  *
- *   RenderPass -> UnrealBloomPass -> TiltShift(H) -> TiltShift(V) -> Grade
+ *   RenderPass (or the supersampled scene pass) -> UnrealBloomPass -> TiltShift(H) -> TiltShift(V) -> [the MAX mix's SMAA / FXAA] -> [sharpen] -> Grade
  *
- * Call {@link render} every frame with the scene and camera to draw.
+ * The scene pass, the sharpening and the anti-aliasing follow the sharpness ladder (`crisp/CrispRig.ts`). Call {@link render} every frame with
+ * the scene and camera to draw.
  */
 export class Renderer {
   readonly renderer: WebGLRenderer;
@@ -105,6 +110,16 @@ export class Renderer {
   readonly gradePass: ShaderPass;
 
   private readonly renderPass: RenderPass;
+  /**
+   * Release 39: the scene pass of an MSAA chain (disabled unless `aaMode` is `msaa`), and the SMAA pass after the grade (`PostAa.ts`); both are
+   * overrides for a capture (`?aa=`), off on every rung of the sharpness ladder (the MAX mix's own SMAA is the only one a frame needs, and a
+   * supersampled frame needs none), and the SMAA pass is built only when something asks for it.
+   */
+  private readonly msaaPass: MsaaRenderPass;
+  private smaaPass: SMAAPass | null = null;
+  /** The sharpness ladder's passes and switchboard (`crisp/CrispRig.ts`): the supersampled scene pass, the sharpening, the frame-time governor. */
+  readonly crisp: CrispRig;
+  private aa: AaMode = 'off';
   private readonly maxPixelRatio: number;
   /** Drawn after the post chain, straight onto the finished frame (the spell effects, `SpellFxLayer`). */
   private readonly overlays = new Set<(renderer: WebGLRenderer) => void>();
@@ -139,6 +154,15 @@ export class Renderer {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = PCFSoftShadowMap;
     setPaintedAnisotropy(this.renderer.capabilities.getMaxAnisotropy());
+    // Release 39: the art budget follows the device (`ArtDevice.ts`): tell it which GPU this is, and keep the buffer width current in `resize`.
+    setMaxTextureSize(this.renderer.capabilities.maxTextureSize);
+    try {
+      const gl = this.renderer.getContext();
+      const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+      setGpuInfo(dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : null);
+    } catch {
+      setGpuInfo(null);
+    }
     this.renderer.domElement.setAttribute('data-role', 'game-canvas');
     container.appendChild(this.renderer.domElement);
 
@@ -155,6 +179,8 @@ export class Renderer {
     // RenderPass wants a scene up front; the real one is swapped in per frame.
     this.renderPass = new RenderPass(new Scene(), this.camera);
     this.composer.addPass(this.renderPass);
+    this.msaaPass = new MsaaRenderPass(new Scene(), this.camera, artBudget().msaaSamples);
+    this.composer.addPass(this.msaaPass);
 
     this.bloomPass = new UnrealBloomPass(
       new Vector2(width, height),
@@ -174,13 +200,39 @@ export class Renderer {
     this.composer.addPass(this.tiltV);
 
     this.gradePass = new ShaderPass(GradeShader);
-    this.gradePass.renderToScreen = true;
+    this.gradePass.renderToScreen = true; // the composer re-decides it each frame: the last enabled pass draws to the screen
     this.composer.addPass(this.gradePass);
+    this.setAa(parseAaOverride(new URLSearchParams(window.location?.search ?? '').get('aa')) ?? artBudget().aa);
+    this.crisp = new CrispRig(
+      this.renderer,
+      this.composer,
+      { renderPass: this.renderPass, msaaPass: this.msaaPass, gradePass: this.gradePass, tiltH: this.tiltH, aaMode: () => this.aa, setAa: (m) => this.setAa(m), ownSmaa: () => this.smaaPass },
+      this.camera,
+      window.location?.search ?? '',
+    );
 
     this.applyPost(DEFAULT_POST);
     this.resize();
 
     window.addEventListener('resize', this.onWindowResize, { passive: true });
+  }
+
+  /** Switch the anti-aliasing: `msaa` (a multisampled scene target), `smaa` (a pass after the grade, built the first time it is asked for) or `off`. Captures and the budget call it. */
+  setAa(mode: AaMode): void {
+    this.aa = mode;
+    this.renderPass.enabled = mode !== 'msaa';
+    this.msaaPass.enabled = mode === 'msaa';
+    if (mode === 'smaa') {
+      if (!this.smaaPass) {
+        this.smaaPass = new SMAAPass();
+        this.composer.addPass(this.smaaPass); // sized by the composer; last in the chain, after the grade
+      }
+      this.smaaPass.enabled = true;
+    } else if (this.smaaPass) this.smaaPass.enabled = false;
+  }
+
+  get aaMode(): AaMode {
+    return this.aa;
   }
 
   /** The canvas element, for pointer handling and screenshots. */
@@ -283,6 +335,7 @@ export class Renderer {
 
     this.renderer.setPixelRatio(dpr);
     this.renderer.setSize(width, height, false);
+    setBufferWidth(width * dpr);
 
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
@@ -295,6 +348,7 @@ export class Renderer {
     const invH = 1 / Math.max(1, height * dpr);
     (this.tiltH.uniforms['resolution']!.value as Vector2).set(invW, invH);
     (this.tiltV.uniforms['resolution']!.value as Vector2).set(invW, invH);
+    this.crisp.noteResize(); // the frame's cost changed with its size: the governor starts a fresh window
   }
 
   /** Draw one frame through the post chain. */
@@ -302,6 +356,9 @@ export class Renderer {
     if (this.disposed) return;
     this.renderPass.scene = scene;
     this.renderPass.camera = camera;
+    this.msaaPass.scene = scene;
+    this.msaaPass.camera = camera;
+    this.crisp.beforeRender(scene, camera);
     const t = this.gradePass.uniforms['time'];
     if (t) t.value = performance.now() / 1000;
     if (this.fxA || eyeCandy.on.a) (this.fxA ??= new GoldenHour(this)).update(scene, camera);
@@ -323,6 +380,9 @@ export class Renderer {
     this.disposed = true;
     window.removeEventListener('resize', this.onWindowResize);
     this.fxA?.dispose();
+    this.crisp.dispose();
+    this.msaaPass.dispose();
+    this.smaaPass?.dispose();
     this.composer.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();

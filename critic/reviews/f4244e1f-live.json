@@ -1,0 +1,355 @@
+{
+ "rubricVersion": 2,
+ "review": "live",
+ "date": "2026-10-04T00:13:56.893Z",
+ "build": {
+  "mainSha": "f4244e1f",
+  "bundle": "DhiL5vEz",
+  "artifactHash": "505e9ad6cc077616f8bf173e66912e428e47e9b2a5480554de32354919be9b24"
+ },
+ "verdicts": {
+  "deployment": "PASS",
+  "changedArea": "NOT APPLICABLE",
+  "milestone": "not assessed"
+ },
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/f4244e1f.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/cd9dbbb0.json --full -> {result: PASS, artifactHash: 505e9ad6cc077616f8bf173e66912e428e47e9b2a5480554de32354919be9b24, liveManifest: match, checked: 1716 of 1716 files in the manifest, mismatched: 0, missing: 0, wrongType: 0, errors: 0}. The planned review for this build is deep, so the whole file list was compared byte for byte. The run started 2026-10-03T23:51:51Z and finished 2026-10-03T23:58:29Z (6 min 38 s, one sequential run from the main tree, finished before any browser run began). The manifest diff from cd9dbbb0 is added assets/index-B8jtRvzT.css and assets/index-DhiL5vEz.js, changed index.html, removed assets/index-BGBDEn_P.js and assets/index-BI-IdB4b.css, as the focused report predicted. The page serves assets/index-DhiL5vEz.js and assets/index-B8jtRvzT.css, and its own artifact-manifest.json names artifactHash 505e9ad6cc077616f8bf173e66912e428e47e9b2a5480554de32354919be9b24. Cold first load of a fresh context: __pyreflyReady at 648 ms (limit 5000)."
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "Headless Playwright from node (PYREFLY_BROWSER=gpu), fresh context, cache-busted live URL, real key presses. Every capture is preceded by a read of the screen name, awaitingMenu, chapter and game and of the stale roots (smoke.mjs shot(); the focused critic's harness waits throw on a wrong screen): title -> chapter-select -> party-prep -> scene tapped through with Enter -> battle with the board cursor reaching ffx2-vegnagun-shuyin (Chapter V, FFX-2) and, after a reload, yojimbo-cavern (Chapter IX, FFX) by the board's selectedId, and a first command menu reached on each (chapter and game read from the screen state). Changed flow, cancel path: Skill > Trigger Happy, Escape out of the target step and out of the Skill list, no slab, no gunner-trigger command in the engine log, the same actor still awaiting its menu. Changed flow, positive path: Skill > Trigger Happy, the slab names the keyboard (MASH R), three real presses of R show 3 HITS and the engine's command carries trigger.hits 3 with 3 damage events. P during the open slab does not open the pause (a minigame blocks it by design) and the 3 hits stay. Pause: P opens screen=pause (tabs Yuna, Rikku, Paine, Chapter, Guide, Options, Controls, Music), H hides the pause panels (.pause__ui block to none, .pause--bare on) and restores them, MASTER VOLUME lowered 80 to 60 with real ArrowLeft, Escape closes the pause (screen=battle), the next command menu comes up, Escape at the top row opens the pause again and Escape returns to the same command rows. Chapter IX: P opens the pause, Escape returns to the same menu. Hotfix acceptance runs (the focused critic's harness reused as it was, plus a copy with the three actors fixed): see the tables. Music: prerendered tracks fetched (18 mp3 requests, all 200) and playing with source prerendered and mixer gain above 0 on both chapters (audioDebug). Console errors 0, responses of 400 or more 0, image or audio responses served as text/html 0, for the smoke run and for every acceptance run."
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "mandatory": false,
+   "evidence": "Lightweight reload smoke: real ArrowLeft x2 on the pause OPTIONS tab, MASTER VOLUME 80 to 60; progress made by entering Chapter V (the save's attempts for ffx2-vegnagun-shuyin went 0 to 1); before the reload pyrefly-reprise:save:v1 holds settings.masterVolume 0.6 and that attempt; page.reload, __pyreflyReady; after it the save still holds masterVolume 0.6, the same attempt counts and the same seenCoach list, and audioDebug().volumes.master is 0.6, so the saved setting is applied at boot, not only stored. The returning player then entered Chapter IX through the normal flow.",
+   "reason": "The full upgrade matrix (fresh player / returning player / previous-build save fixture / invalid storage / reset flow) is not part of a live pass and was not run (listed under notTested)."
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "mandatory": false,
+   "evidence": "Game-aware proof (FOC37-02 FFX-2 only, PR-0341 FFX only, as written in the focused report and docs/handoff/r37-hotfix.md): the Trigger Happy slab exists in the FFX-2 chapter (Chapter V, three routes, the words follow the input) and every FFX Chapter IX first menu on live carries 0 FFX-2 HUD nodes and 0 slabs (4 of 4 hurried runs, the tapped run and the smoke run); the Chapter IX first-menu fix has no counterpart in FFX-2, which has no Cavern."
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "artifact identity: all 1716 files of critic/artifacts/f4244e1f.json byte-compared with the live site (--full, --changed-from cd9dbbb0), live artifact-manifest.json names the same artifactHash, served bundle assets/index-DhiL5vEz.js and stylesheet assets/index-B8jtRvzT.css, cold first load ready in under 5 s",
+   "FOC37-02 on live (FFX-2 Chapter V ffx2-vegnagun-shuyin, seed 1, Yuna as Gunner): Trigger Happy by keyboard R x3, emulated pad R1 x3 (navigator.getGamepads stub) and 390x844 touch taps x3 give 3 hits in the overlay and 3 in the engine's command, and the overlay names the input (MASH R, MASH R1, MASH TAP); the smoke repeats the keyboard route in its own session",
+   "PR-0341 on live (FFX Chapter IX yojimbo-cavern, hurried opening with Enter held, seed 1): Yojimbo, Daigoro and Ginnem drawn in each of the first 3 frames after awaitingMenu in 4 of 4 runs (2 at 1600x900, 2 at 2000x1012), and in the tapped-through comparison run; the sakura arrival measured in all of them",
+   "the changed flow's cancel path with real input (Skill > Trigger Happy > Escape out of the target step and the Skill list: no slab, no command, same menu) and P during the open slab (refused by design)",
+   "real-input smoke at 1600x900: title, chapter select, party prep, scene tapped through, battle first menu on both changed chapters with screen, chapter, game and awaitingMenu asserted before each capture; P and Escape pause and resume, H hide and restore of the pause panels, OPTIONS MASTER VOLUME by real keys, Escape at the top row opens the pause and returns to the same menu",
+   "prerendered music over the network and in the mixer on both chapters (18 mp3 requests all 200, source prerendered, gain above 0)",
+   "reload smoke: lowered masterVolume and the Chapter V attempt survived a reload and the mixer applied the saved volume",
+   "console errors, responses of 400 or more and mis-typed media for the whole smoke and every acceptance run: 0, 0, 0"
+  ],
+  "reused": [],
+  "notTested": [
+   "the full CHK-024 upgrade matrix (fresh player, returning player, a save written by the previous live build, invalid or truncated storage, the reset flow): not part of a live pass",
+   "a physical pad or phone, Safari or Firefox: the pad is a navigator.getGamepads stub and the finger is Playwright touch emulation, Chromium only",
+   "Trigger Happy through the mouse (MASH CLICK), at 2000x1012, in Chapter IV or any other Gunner chapter, at Lv. 2 and 3 (windows of 2.2 and 2.6 s), and windows after the first of a fight",
+   "FOC371-02 (the enemy-intent card over the slab on desktop), FOC371-03 (slab text under the 14 px floor on a phone) and FOC371-04 (the slab covers the guide card) were not re-measured: the focused report holds them; this pass only watched that the slab takes its presses",
+   "win, loss and retry paths, the results screen, the other chapters (I to IV, VI to VIII, X onward) and Chapter IX beyond the first menu",
+   "the deep review of the build (it is a separate obligation)"
+  ]
+ },
+ "consoleErrors": 0,
+ "notFound": 0,
+ "elapsedMinutes": 35,
+ "hotfixAcceptance": {
+  "triggerHappyCh5Seed1": [
+   {
+    "route": "key",
+    "size": "1600x900",
+    "words": "MASH R",
+    "input": "keyboard",
+    "uiHits": "3 HITS",
+    "engineHits": 3,
+    "landed": [
+     72,
+     81,
+     78
+    ],
+    "removedMs": 2146,
+    "inertMs": 1819,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "ok": true
+   },
+   {
+    "route": "pad",
+    "size": "1600x900",
+    "words": "MASH R1",
+    "input": "gamepad",
+    "uiHits": "3 HITS",
+    "engineHits": 3,
+    "landed": [
+     72,
+     81,
+     78
+    ],
+    "removedMs": 2123,
+    "inertMs": 1777,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "ok": true
+   },
+   {
+    "route": "touch",
+    "size": "390x844",
+    "words": "MASH TAP",
+    "input": "pointer",
+    "uiHits": "3 HITS",
+    "engineHits": 3,
+    "landed": [
+     72,
+     81,
+     78
+    ],
+    "removedMs": 1916,
+    "inertMs": 1660,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "ok": true
+   }
+  ],
+  "chapterIXFirstMenuHurried": [
+   {
+    "tag": "live-1600x900-run1",
+    "size": "1600x900",
+    "tap": false,
+    "ids": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "idsFirstFrame": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "drawnAfterAwaiting": true,
+    "drawnAfterMenuDom": true,
+    "frames3": [
+     0,
+     11,
+     27
+    ],
+    "arrivalPeak": 0,
+    "arrivalPeakBeforeMenuMs": 6172,
+    "everHidden": {
+     "ginnem": false,
+     "yojimbo": false,
+     "daigoro": false
+    },
+    "ffx2hud": 0,
+    "ffx2Trigger": 0,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "pageErrors": 0,
+    "ok": true
+   },
+   {
+    "tag": "live-1600x900-run2",
+    "size": "1600x900",
+    "tap": false,
+    "ids": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "idsFirstFrame": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "drawnAfterAwaiting": true,
+    "drawnAfterMenuDom": true,
+    "frames3": [
+     0,
+     22,
+     44
+    ],
+    "arrivalPeak": 0,
+    "arrivalPeakBeforeMenuMs": 5774,
+    "everHidden": {
+     "ginnem": false,
+     "yojimbo": false,
+     "daigoro": false
+    },
+    "ffx2hud": 0,
+    "ffx2Trigger": 0,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "pageErrors": 0,
+    "ok": true
+   },
+   {
+    "tag": "live-2000x1012-run1",
+    "size": "2000x1012",
+    "tap": false,
+    "ids": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "idsFirstFrame": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "drawnAfterAwaiting": true,
+    "drawnAfterMenuDom": true,
+    "frames3": [
+     0,
+     10,
+     37
+    ],
+    "arrivalPeak": 0,
+    "arrivalPeakBeforeMenuMs": 5723,
+    "everHidden": {
+     "ginnem": false,
+     "yojimbo": false,
+     "daigoro": false
+    },
+    "ffx2hud": 0,
+    "ffx2Trigger": 0,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "pageErrors": 0,
+    "ok": true
+   },
+   {
+    "tag": "live-2000x1012-run2",
+    "size": "2000x1012",
+    "tap": false,
+    "ids": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "idsFirstFrame": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "drawnAfterAwaiting": true,
+    "drawnAfterMenuDom": true,
+    "frames3": [
+     0,
+     7,
+     20
+    ],
+    "arrivalPeak": 0,
+    "arrivalPeakBeforeMenuMs": 6008,
+    "everHidden": {
+     "ginnem": false,
+     "yojimbo": false,
+     "daigoro": false
+    },
+    "ffx2hud": 0,
+    "ffx2Trigger": 0,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "pageErrors": 0,
+    "ok": true
+   }
+  ],
+  "chapterIXFirstMenuTapped": [
+   {
+    "tag": "live-tap-1600x900-run1",
+    "size": "1600x900",
+    "tap": true,
+    "ids": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "idsFirstFrame": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "drawnAfterAwaiting": true,
+    "drawnAfterMenuDom": true,
+    "frames3": [
+     0,
+     11,
+     42
+    ],
+    "arrivalPeak": 1,
+    "arrivalPeakBeforeMenuMs": 8676,
+    "everHidden": {
+     "ginnem": false,
+     "yojimbo": true,
+     "daigoro": true
+    },
+    "ffx2hud": 0,
+    "ffx2Trigger": 0,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "pageErrors": 0,
+    "ok": true
+   }
+  ],
+  "chapterIXUnmodifiedHarness": [
+   {
+    "tag": "live-1600x900-run1",
+    "ids": [
+     "ginnem",
+     "yojimbo"
+    ],
+    "drawnAfterAwaiting": true,
+    "arrivalPeak": 0
+   },
+   {
+    "tag": "live-1600x900-run2",
+    "ids": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "drawnAfterAwaiting": true,
+    "arrivalPeak": 0
+   },
+   {
+    "tag": "live-2000x1012-run1",
+    "ids": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "drawnAfterAwaiting": true,
+    "arrivalPeak": 0
+   },
+   {
+    "tag": "live-2000x1012-run2",
+    "ids": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "drawnAfterAwaiting": true,
+    "arrivalPeak": 0
+   },
+   {
+    "tag": "live-tap-1600x900-run1",
+    "ids": [
+     "ginnem",
+     "yojimbo",
+     "daigoro"
+    ],
+    "drawnAfterAwaiting": true,
+    "arrivalPeak": 1
+   }
+  ]
+ },
+ "notes": "Live verification of release 37.1 (main f4244e1f, bundle DhiL5vEz). Step 1 PASS with --full (all 1716 files byte-identical). The two round-20 acceptance checks hold on the live build: Trigger Happy 3 of 3 routes give 3 hits with the overlay naming the input; Chapter IX Yojimbo, Daigoro and Ginnem drawn in the first 3 frames after awaitingMenu in 4 of 4 hurried runs (2 at 1600x900, 2 at 2000x1012). The smoke (39 steps, second run, 0 failed) covers the cancel and positive paths of the changed flow, P and Escape pause and resume, H, music, reload and both changed chapters. 0 console errors and 0 responses of 400 or more across every run. LV371-01 (focused harness can leave an actor out of its list) and LV371-02 (a wrong expectation in this pass's first smoke run, corrected and repeated) are informational; FOC371-01 is reproduced as disclosed. Evidence is under D:/Tools/pyrefly-scratch/2026-10-03/live371/."
+}

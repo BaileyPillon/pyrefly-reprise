@@ -192,7 +192,8 @@ export class TitleScreen extends Screen {
   private async advance(): Promise<void> {
     if (this.advancing) return;
     this.advancing = true;
-    audio.playSfx('battle-start');
+    // PR-0326: the cue plays from its sprite or not at all; the first press used to be the arcade synth.
+    void audio.playSfxFromSprite('battle-start');
     // PR-0065: the next screen's paintings first, so the wipe clears onto them (ceilinged).
     await holdForNextScreen(this.app, briefingDue(this.app));
     await playWipe(this.app.uiRoot, {

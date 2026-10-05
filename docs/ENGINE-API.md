@@ -105,8 +105,13 @@ interface SpriteStateOptions {
 (fov 34 by default) and the post chain:
 
 ```
-RenderPass -> UnrealBloomPass -> TiltShift(horizontal) -> TiltShift(vertical) -> Grade
+RenderPass -> UnrealBloomPass -> TiltShift(horizontal) -> TiltShift(vertical) -> [SMAA / FXAA] -> [Sharpen] -> Grade
 ```
+
+- Release 39's sharpness ladder (`src/engine/crisp/`, `docs/handoff/r39-looks.md`) decides the scene pass and the two bracketed passes per frame: on a
+  discrete GPU the scene is drawn 2x wider and taller by `SsaaRenderPass` in place of `RenderPass` and resolved with a Lanczos-3 filter before the bloom, no
+  SMAA runs, and `CasPass` sharpens lightly right before the grade; a lower rung (1.5x, then none) takes over on a slower device, the phone keeps its
+  one FXAA. The SMAA / FXAA pass is the MAX mix's SMOOTH EDGES (`fx/mix/cinema.ts`), built only on the rungs that do not supersample.
 
 - Bloom: threshold `0.90`, strength `0.50`, radius `0.55` by default; every scene overrides them through its `ScenePalette` (see **Painted 2.5D** below).
 - Tilt shift: `src/engine/shaders/TiltShiftShader.ts`. Blur radius grows with

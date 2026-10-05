@@ -20,6 +20,7 @@
 import './chapter-panel.css';
 import type { ChapterMeta } from '../../data/chapter-meta.ts';
 import { ART_INDEX_CACHE, loadArtManifest, manifestKnowsAssetNow, pause2xUrlFor, pauseStemOf } from '../../engine/ArtManifest.ts';
+import { sidecarUrlOf } from '../../engine/ArtShipped.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { escapeHtml } from './html.ts';
 import { formatPlayTime, type EncounterProgress, type ObjectiveStatus } from './chapterObjectives.ts';
@@ -54,8 +55,11 @@ export function heroArtCandidates(meta: ChapterMeta): string[] {
   // stopping at the first that works. `null` (no manifest yet, or a path it
   // does not index) is not "absent", so the error-driven chain below stays the
   // fallback rather than becoming a dependency.
+  //
+  // In a build that ships the plate as lossless WebP (`ArtShipped.ts`) the `.png` arm and the `.webp` arm are the same URL,
+  // so a repeated candidate is dropped rather than asked for twice.
   const filtered = all.filter((url) => manifestKnowsAssetNow(url) !== false);
-  return filtered.length ? filtered : all;
+  return [...new Set(filtered.length ? filtered : all)];
 }
 
 /** Where the subject's face sits in a plate, 0..1 from the top-left corner. */
@@ -251,7 +255,7 @@ export async function pauseFocal(pngUrl: string): Promise<Readonly<ArtFocal>> {
   let focal: ArtFocal | null = null;
   if (pauseStemOf(pngUrl) !== null && typeof fetch === 'function') {
     try {
-      const res = await fetch(pngUrl.replace(/\.png(?=$|[?#])/i, '.json'), { cache: ART_INDEX_CACHE });
+      const res = await fetch(sidecarUrlOf(pngUrl), { cache: ART_INDEX_CACHE });
       if (res.ok) focal = parseArtFocal(await res.json());
     } catch {
       focal = null;

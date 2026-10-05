@@ -129,9 +129,19 @@ export class CutsceneScreen extends Screen {
   readonly done: Promise<void>;
   private resolveDone!: () => void;
 
+  /**
+   * True once the player has hurried this scene: it started skipped (`startSkipped`, a seen scene), they held Confirm
+   * past the hold-to-skip time, or they skipped it from the pause menu or Escape. The battle that follows opens
+   * hurried too (PR-0061: `BattleScreenFlow` passes it on, `openingHurry.ts`).
+   */
+  get hurriedByPlayer(): boolean {
+    return this.hurried;
+  }
+
   private dialogueBox: DialogueBox | null = null;
   private hint: ControlsHint | null = null;
   private runner: CutsceneRunner | null = null;
+  private hurried = false;
   private eyebrowEl: HTMLElement | null = null;
   private stage: CutsceneStage | null = null;
   private finished = false;
@@ -195,7 +205,10 @@ export class CutsceneScreen extends Screen {
     this.pKey = createPauseKeyLatch(window);
 
     this.runner = new CutsceneRunner(this.buildPorts());
-    if (this.opts.startSkipped) this.runner.skip();
+    if (this.opts.startSkipped) {
+      this.hurried = true;
+      this.runner.skip();
+    }
     if (opening) void opening.then(() => this.gone || this.open());
     else this.open();
   }
@@ -262,7 +275,7 @@ export class CutsceneScreen extends Screen {
     // straight-to-skip behaviour.
     const chapter = this.opts.chapterId ? getChapter(this.opts.chapterId) : undefined;
     if (!chapter) {
-      if (skippable && backedOut) this.runner?.skip();
+      if (skippable && backedOut) this.skipByPlayer();
       return;
     }
     if (this.pauseScreen) return;
@@ -293,7 +306,7 @@ export class CutsceneScreen extends Screen {
                 id: 'skip-scene',
                 label: 'Skip Scene',
                 run: () => {
-                  void this.closePause().then(() => this.runner?.skip());
+                  void this.closePause().then(() => this.skipByPlayer());
                 },
               },
             ],
@@ -348,13 +361,20 @@ export class CutsceneScreen extends Screen {
     }
     this.confirmHeldMs += dt * 1000;
     if (this.confirmHeldMs < HOLD_TO_SKIP_MS) return;
+    this.hurried = true;
     this.runner?.nudge();
     this.dialogueBox?.forceAdvance();
   }
 
+  /** The player skips the scene: remembered, so the battle after it opens hurried. */
+  private skipByPlayer(): void {
+    this.hurried = true;
+    this.runner?.skip();
+  }
+
   override trigger(name: string): boolean {
     if (name === 'skip' || name === 'cutscene:skip') {
-      this.runner?.skip();
+      this.skipByPlayer();
       return true;
     }
     if (name === 'cutscene:advance') {

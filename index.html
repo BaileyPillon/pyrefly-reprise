@@ -4,13 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark" />
-    <meta name="description" content="Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2." />
-    <title>Pyrefly Reprise</title>
+    <meta name="description" content="Echoes of Spira - an unofficial HD-2D fan tribute to Final Fantasy X and X-2." />
+    <title>Echoes of Spira</title>
     <!-- A-16: the title plate, fetched before any script runs. The same candidates and sizes the
          title's planes offer (src/app/screens/frontend/titleMarkup.ts), so the browser picks the
-         same file and the plane reuses this request. -->
-    <link rel="preload" as="image" fetchpriority="high" href="/art/title/keyart.png"
-      imagesrcset="/art/title/keyart.png 1344w, /art/title/keyart.2x.webp 2688w"
+         same file and the plane reuses this request. Each URL below starts with Vite's base
+         variable (the word BASE_URL between two percent signs), which the build fills in from the
+         base the site is served under: the GitHub Pages folder, the Cloudflare root, or the dev
+         root. A root-absolute art name is never written in this page: Vite puts the base on one
+         only when it finds that file in public/ while it builds, and a candidate it misses (the
+         2x master, a half-installed art tree) stays at the server root and is a 404 under the
+         GitHub Pages folder (tests/unit/art-url-base.test.ts). -->
+    <link rel="preload" as="image" fetchpriority="high" href="%BASE_URL%art/title/keyart.png"
+      imagesrcset="%BASE_URL%art/title/keyart.png 1344w, %BASE_URL%art/title/keyart.2x.webp 2688w"
       imagesizes="calc(1.11 * max(100vw, 1.750 * 100vh))" />
     <style>
       /* ---- font stack ------------------------------------------------------
@@ -129,7 +135,7 @@
     </div>
     <noscript>
       <p style="padding: 2rem; font-family: sans-serif">
-        Pyrefly Reprise needs JavaScript and WebGL 2.
+        Echoes of Spira needs JavaScript and WebGL 2.
       </p>
     </noscript>
     <script type="module" src="/src/main.ts"></script>

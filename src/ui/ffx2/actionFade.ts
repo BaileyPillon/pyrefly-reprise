@@ -8,7 +8,8 @@
  * with the actor and targets, then `action-end` or `cancel`); this module is the fade the HUD
  * does with it. While an action plays, any card whose box meets the acting figure, or the upper
  * two thirds of a target (the face and the body the hit lands on), fades out; it comes back when
- * the action ends. Cards clear of both stay exactly as they are.
+ * the action ends. Cards clear of both stay exactly as they are. While a command menu is open no
+ * card fades (`menuOpen`, round 19 PR-0312): the player is reading them to choose.
  *
  * Game case: FFX-2 only (the ATB HUD). FFX's CTB HUD has its own fade (B5, PR-0157).
  */
@@ -22,6 +23,15 @@ export interface FadeBox {
   y: number;
   w: number;
   h: number;
+}
+
+/** Is the FFX-2 command list up and shown (the player is choosing)? Read from the DOM, as the mix's `menuOpen` does. */
+export function commandMenuUp(): boolean {
+  if (typeof document === 'undefined') return false;
+  const el = document.querySelector<HTMLElement>('.ffx2hud__command');
+  if (!el || el.hidden || el.closest('[hidden]')) return false;
+  const r = el.getBoundingClientRect();
+  return r.width > 0 && r.height > 20 && !!el.querySelector('.ig-cmd, [role="menuitem"], button, li');
 }
 
 /** The class a stepped-back card carries (`action-fade.css`). */
@@ -62,6 +72,12 @@ export interface ActionFadeOptions {
   rect: (id: CombatantId) => FadeBox | null;
   /** A clock in ms (tests); `performance.now` by default. */
   now?: () => number;
+  /**
+   * Is a command menu up? While the player is choosing, the cards stay as they are (round 19, PR-0312: under the MAX mix's
+   * larger boss the intent and advisor cards took the fade at opacity 0 for 0.55 to 0.6 s on every Bahamut action with a menu
+   * open, which hid the very advice and intent the player was reading). Default: the HUD's command list is up and shown.
+   */
+  menuOpen?: () => boolean;
 }
 
 /** An open action whose end never came is dropped after this long (an interrupted burst). */
@@ -153,7 +169,8 @@ export class ActionFade {
   private apply(): void {
     // Every open action's figures: a blow can land inside a later action's start (Bahamut's Attack
     // hit after Yuna's Cure began), so no one of them is safely "the" action on screen.
-    const zones = this.open.flatMap((a) => actionZones(a, this.opts.rect));
+    // A menu open holds every card up: nothing is faded while the player is choosing (PR-0312).
+    const zones = (this.opts.menuOpen ?? commandMenuUp)() ? [] : this.open.flatMap((a) => actionZones(a, this.opts.rect));
     for (const card of this.opts.cards()) {
       if (!card) continue;
       let hit = false;

@@ -62,7 +62,15 @@ export function applyRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Uni
 
   for (const application of applications) {
     const resist = target.immunities[application.status] ?? 0;
-    if (resist >= 255) continue;
+    if (resist >= 255) {
+      // A **status-only** action on an immune target says so. It used to say nothing, so Break, Bio
+      // or a reel's Shin-Zantetsu against a boss was a full charge bar followed by no event at all.
+      // A rider on a damaging hit stays quiet: the damage number already answered.
+      if (ability.formula === 'none') {
+        ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'immune' });
+      }
+      continue;
+    }
     const chance =
       application.chance >= 254
         ? 100

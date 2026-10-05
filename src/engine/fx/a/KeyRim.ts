@@ -9,15 +9,47 @@
  * Switching A off puts every recorded rim back.
  */
 
-import { Color, type Object3D, type ShaderMaterial } from 'three';
+import { Color, Vector3, type Camera, type Object3D, type ShaderMaterial } from 'three';
 
 interface RimCells {
   rimColor: { value: Color };
   rimStrength: { value: number };
   rimWidth?: { value: number };
+  texel?: { value: { y: number } };
+}
+
+/** What the rim width is measured against: the camera and the drawing buffer's height in pixels. */
+export interface RimView {
+  camera: Camera;
+  heightPx: number;
+}
+
+/**
+ * VP-1001-17: the rim's on-screen width, in device pixels. The shader offsets by `rimWidth`
+ * *texels*, so a low-density boss (Vegnagun ~0.9 texel per pixel, 0.45 at 2x) drew a 5 to 10 px
+ * pale halo while the party (3 to 4.7) drew about 1 px. The width is capped so it never exceeds
+ * this many screen pixels; the dense party keeps what it had.
+ */
+export const RIM_MAX_PX = 1.5;
+const scratchA = new Vector3();
+const scratchB = new Vector3();
+
+/** Texels of the figure's painting per screen pixel, or null when it cannot be measured. */
+export function texelsPerPixel(mesh: Object3D, texelY: number, view: RimView): number | null {
+  const cam = view.camera as Camera & { isPerspectiveCamera?: boolean; fov?: number };
+  if (!cam.isPerspectiveCamera || !cam.fov || texelY <= 0) return null;
+  mesh.getWorldScale(scratchA);
+  const planeH = Math.abs(scratchA.y);
+  mesh.getWorldPosition(scratchA);
+  cam.getWorldPosition(scratchB);
+  const dist = scratchA.distanceTo(scratchB);
+  if (planeH <= 0 || dist <= 0) return null;
+  const pxPerUnit = view.heightPx / (2 * Math.tan(((cam.fov * Math.PI) / 180) / 2) * dist);
+  return 1 / texelY / (planeH * pxPerUnit);
 }
 
 interface Record {
+  mesh: Object3D;
   u: RimCells;
   orig: Color;
   origStrength: number;
@@ -34,7 +66,7 @@ export class KeyRim {
    * @param strength the per-game strength
    * @param width a multiplier on the figure's own rim width (1 = unchanged)
    */
-  apply(root: Object3D, color: Color, strength: number, width = 1): void {
+  apply(root: Object3D, color: Color, strength: number, width = 1, view?: RimView): void {
     if (--this.scan <= 0) {
       this.scan = 20;
       root.traverse((o) => {
@@ -42,7 +74,7 @@ export class KeyRim {
         const u = m?.uniforms as unknown as RimCells | undefined;
         if (!m || !u || !u.rimColor || !u.rimStrength || this.seen.has(m)) return;
         if (!(u.rimColor.value instanceof Color)) return;
-        this.seen.set(m, { u, orig: u.rimColor.value.clone(), origStrength: u.rimStrength.value, origWidth: u.rimWidth?.value ?? null, wrote: null });
+        this.seen.set(m, { mesh: o, u, orig: u.rimColor.value.clone(), origStrength: u.rimStrength.value, origWidth: u.rimWidth?.value ?? null, wrote: null });
       });
     }
     for (const r of this.seen.values()) {
@@ -56,7 +88,11 @@ export class KeyRim {
       // Mostly the painting's key; a third of the stage's own rim stays so the figures keep their read.
       now.copy(r.orig).lerp(color, 0.7);
       r.u.rimStrength.value = strength;
-      if (r.u.rimWidth && r.origWidth !== null) r.u.rimWidth.value = r.origWidth * width;
+      if (r.u.rimWidth && r.origWidth !== null) {
+        const want = r.origWidth * width;
+        const tpp = view && r.u.texel ? texelsPerPixel(r.mesh, r.u.texel.value.y, view) : null;
+        r.u.rimWidth.value = tpp === null ? want : Math.min(want, Math.max(0.75, RIM_MAX_PX * tpp));
+      }
       r.wrote = now.clone();
     }
   }

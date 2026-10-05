@@ -31,6 +31,7 @@ import {
   defeat,
   formChange,
   ko,
+  missed,
   summon,
   turnStart,
   victory,
@@ -135,6 +136,13 @@ export interface EventCtx {
   acting?: ActingAction | undefined;
   /** PR-0061(a): still before the first command menu (`OpeningCallouts.ts`). */
   opening?: boolean;
+  /** A HUD command menu is open right now (`BattlePresenter`); `KeySlots.ts` keeps its FFX-2 key paintings off while one is. */
+  menuOpen?: () => boolean;
+  /**
+   * Show a blow to the HUD (its numeral) and move its HP rows: what the loop does before an event plays, done late
+   * for a blow whose spell or shot is still on its way (`motion/SkillTravel.ts`: SKILL TRAVEL). Set by `BattlePresenter`.
+   */
+  reveal?: (event: BattleEvent) => Promise<void>;
 }
 
 export function createEventCtx(
@@ -201,7 +209,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return actionStart(ctx, event);
 
     case 'action-end':
-      return actionEnd(ctx);
+      return actionEnd(ctx, event.actorId);
 
     case 'damage':
       return damage(ctx, event);
@@ -215,10 +223,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
     }
 
     case 'miss':
-      numeral(ctx, event.targetId, { kind: 'miss', text: reasonText(event.reason) });
-      cue(ctx, 'miss', { volume: 0.5 });
-      ctx.stage.actor(event.targetId)?.hop(0.18, 200);
-      return ctx.sleep(TIMING.miss);
+      return missed(ctx, event); // VP-1001-06: on the strike's apex
 
     case 'mp-damage':
       numeral(ctx, event.targetId, { kind: 'mp-damage', amount: event.amount });
@@ -415,7 +420,7 @@ export function poseForCommand(kind: string): string {
   }
 }
 
-function reasonText(reason: 'evaded' | 'nullified' | 'immune' | 'wrong-state'): string {
+export function reasonText(reason: 'evaded' | 'nullified' | 'immune' | 'wrong-state'): string {
   switch (reason) {
     case 'nullified':
       return 'NULLIFIED';

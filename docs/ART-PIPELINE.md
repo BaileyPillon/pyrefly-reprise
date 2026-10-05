@@ -767,6 +767,64 @@ public/art/
   <the keeper's seed>`) to place the chosen render under `public/art/`. The
   redirect is loud on stderr and the sidecar records `candidateOf` when it
   fires, so a chosen render's origin is never a mystery.
+- **What a production build ships (release 38, "r38-bytes").** The PNGs in
+  `public/art/` are the approved masters, and they stay exactly as installed:
+  hashes, backups and `verify-approved` are of the PNGs. A production build
+  decides by the pixels of each one (the default, `exact`): a master that is
+  opaque, or whose alpha is only 0 and 255 with no colour left under alpha 0,
+  ships as a lossless WebP (the same decoded pixels, 27 to 31 percent fewer bytes,
+  and the same on every decoder, because premultiplying such a picture is the
+  identity), so the live site holds `art/characters/tidus/idle.webp` where
+  `public/art` holds `idle.png`; every other master, the 2x ones included, ships
+  as a PNG recompressed at maximum effort with its pixels proved identical. The
+  dev server still serves the PNGs. There is nothing to do when installing art:
+  the build encodes a new file once (a few seconds at maximum effort, cached by
+  content hash) and a bulk install can warm the cache first with
+  `node tools/art-derive.mjs warm`. A painting cut out with soft edges, or with
+  colour left under its transparent pixels, ships as a PNG on purpose: a WebP of
+  it would not be the same on every engine. A deliberately one-colour image (Paine's
+  fully transparent catchlight layers) must be listed under its `.png` name in
+  `critic/policy.json` `intentionalFlatImages`, and it always ships as that PNG: the
+  WebP of a one-colour picture is 28 to 30 bytes, under the 64-byte floor, and
+  Playwright's WebKit cannot load a WebP that small. `tools/art-browser-load.mjs`
+  loads every shipped image in WebKit and Chromium (the deploy runs it).
+  Details: [handoff/r38-bytes.md](handoff/r38-bytes.md).
+
+**Masters (release 39, `r39-hires-engine`).** Beside an approved painting, `<state>@2x.png`, `@3x.png` and `@4x.png` are the same
+painting at that many times the size (same geometry, same silhouette); a backdrop has `<key>@2x.png`. They are *added* files:
+the approved 1x paintings are never replaced and `docs/target/approved-hashes.json` is untouched. The hi-res library
+(`D:/Tools/pyrefly-art-backup/hires`, `manifest.json`: RealESRGAN x4, then a low-denoise SDXL tile pass, the approved alpha redrawn as a
+smooth contour at scale, one record per asset with its source sha256 and QC numbers) is installed with
+`node tools/hires-install.mjs` (a dry run until `--apply`; hard links, `@3x` derived from `@4x`, backdrops stop at 2x, a master is
+installed only when the 1x file beside it still has the sha256 it was rendered from) and then `node tools/gen/manifest.mjs`, which lists
+them (`tiers`, `backdropTiers`); the game never asks for a master the manifest does not list, and a master that fails to load falls back
+to the next tier down. Which master a figure is drawn from is decided by magnification (`src/engine/ArtBudget.ts`, `ArtGovernor.ts`):
+the smallest one that keeps a texel under one screen pixel, inside the device class's ceiling (phone 2x, software 2x, integrated 2x,
+discrete GPU 4x) and texture budget, with no setting and no save key. `?arttier=phone|low|mid|high`, `?artscale=1..4` (pins every
+painting to one master) and `?aa=off|smaa|msaa` force a class, a scale or the anti-aliasing for captures; `__pyrefly.art` reads the
+governor, the rig table and the held-shot sizes. `?artlink=slow|fast` forces the connection reading: on a slow link (data-saver, 3G or
+slower, under 10 Mbit/s: Chromium only) every painting starts at the approved file and the governor upgrades what a shot needs; on any other link only the
+backdrop and the poses the first menu draws (`idle*`, `ready`) start at the base master and the other poses are brought up to it in the background (`ArtTier.isOpeningPose`). The
+procedural floors and the parallax bands follow the same device class (`ArtBudget.groundPx`, `deckPx`, `bandPx`, `floorDetail`: a floor
+is drawn on its design grid through a scale, so it is the same drawing at any resolution). Re-run the installer whenever the library
+grows (`node tools/hires-install.mjs --apply`, idempotent; `--redo3` re-derives every `@3x` after a change to `derive3`) and then the
+manifest. **Install only what a loader reads: `node tools/hires-install.mjs --apply --only characters/,backdrops/`.** The library also holds
+`pause/<name>@4x.png`, `portraits/<name>@2x.png` and `title/<name>@2x.png`, and the installer derives an `@3x` from every `@4x`; the manifest does not list
+them and nothing loads them, so a plain run puts about 1.4 GB of dead bytes into the payload (104 files; three of the pause `@3x` are over Cloudflare's
+25 MiB per-file limit as written). Found on 2026-10-04 by the `r39-int` merge. Handoff: [handoff/r39-hires-engine.md](handoff/r39-hires-engine.md).
+
+**Repair of the masters (release 39, 2026-10-04).** The independent fidelity check of `296641de` found ragged matte edges and rims darker than the
+approved paintings on the figure masters, a Gagazet backdrop master that invents line structure, and a clean-worktree build that loses the plate depth
+maps. The library now has a repaired twin, `D:/Tools/pyrefly-art-backup/hires-alpha-fixed/` (the library itself is read only and paused): every figure and
+boss master has its alpha rebuilt from the approved 1x alpha (bicubic upscale, a smooth contour, a one-pixel feather), the approved rim put back (the outer
+2.0 px of the 1x take the approved colours, fading to the master's own by 3.5 px) and colour bled under the transparent pixels beside the silhouette; the
+scripts are in `tools/gen/hires-alpha-fix/` and the method and numbers in the twin's `reports/README-alpha-fix.md`. Install from it with
+`node tools/hires-install.mjs --lib D:/Tools/pyrefly-art-backup/hires-alpha-fixed --replace-from D:/Tools/pyrefly-art-backup/hires --park <dir> --only characters/,backdrops/ --apply`:
+a file in `public/art` is replaced only where it is exactly the old library's file (an approved master or a pilot stays), what is replaced is recorded under
+`--park`, and the `@3x` are derived again. `HELD_BACKDROPS` in `tools/hires-install.mjs` names six backdrop masters (Gagazet, Garden of Pain, Via Purifico, the
+Road to the Farplane and its links variant, the title) that are never installed because they draw ruled or invented dark lines the approved painting does not have: the
+game draws the approved painting there and a re-render is owed. `node tools/fx-assets.mjs verify --dir <build>/fx` (the deploy runs it for every host) now also
+requires `fx/<key>/depth.png` and `depth.json` for every room in `src/engine/fx/b/ambient/index.ts`. Handoff: [handoff/r39-hires-engine.md](handoff/r39-hires-engine.md), "Fidelity repair".
 
 ---
 

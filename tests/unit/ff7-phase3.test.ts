@@ -285,7 +285,8 @@ describe('the punchier look and the extra key poses', () => {
     // Only its own paintings: a missing pose (cast, ko) resolves on the actor to a loaded one, never a second idle.png copy.
     expect(Object.keys(ff7).sort()).toEqual(['attack', 'back', 'follow', 'hurt', 'idle', 'spin', 'victory', 'windup']);
     const house = await resolvePoseMap('tidus', 'party');
-    for (const p of ['windup', 'follow', 'spin', 'back']) expect(house, p).not.toHaveProperty(p);
+    for (const p of ['windup', 'spin', 'back']) expect(house, p).not.toHaveProperty(p);
+    expect(house['follow']).toContain('tidus/follow.png'); // r35 (D-313): FFX and FFX-2 figures have a follow-through slot too
     vi.doUnmock('../../src/engine/ArtManifest.ts');
   });
 });

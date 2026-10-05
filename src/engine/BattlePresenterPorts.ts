@@ -51,7 +51,7 @@ export interface ActorHandle {
   setPose(name: string, opts?: { immediate?: boolean; force?: boolean }): void;
   flash(colour?: number | string, ms?: number, peak?: number, floorCut?: number): void; // floorCut 0..1: less dark-texel lift (FF7)
   shake(amount?: number, ms?: number): void;
-  lunge(distance?: number, ms?: number): Promise<void>;
+  lunge(distance?: number, ms?: number, contact?: { hold: Promise<unknown>; reached: () => void }): Promise<void>; // contact: VP-1001-06
   recoil(ms?: number, distance?: number): Promise<void>;
   squash(ms?: number, amount?: number): Promise<void>;
   hop(height?: number, ms?: number): Promise<void>;
@@ -168,6 +168,11 @@ export interface MomentsPort {
    */
   confirmPress?(): { pressed: Promise<void>; dispose(): void };
   /**
+   * True once when the player skipped the pre-scene, so the first opening runs as if Confirm were pressed at its start
+   * (PR-0061, `ui/common/transitions/openingHurry.ts`). Optional and additive: absent reads as false.
+   */
+  takeOpeningHurry?(): boolean;
+  /**
    * The player's reduce-motion setting (Settings.reduceMotion or the OS
    * preference), read by the DOM side so the presenter stays DOM-free.
    * Optional and additive (A-13): absent reads as "motion on".
@@ -220,6 +225,23 @@ export interface VfxPort {
    * for a wall-clock estimate that a slow frame outruns (repair item 6). Optional.
    */
   pendingLand?(at: CombatantId, action: number): number;
+  /**
+   * Milliseconds until the drawn effect reaches the mark of the blow last landed on `at` in `action`, by the effect's
+   * own frame clock; 0 once it has, or when there is none. SKILL TRAVEL waits on it so a held numeral lands with the
+   * drawn strike and not with a wall-clock estimate that a slow frame outruns (FFX and FFX-2; FF7 uses `pendingLand`). Optional.
+   */
+  markIn?(at: CombatantId, action: number): number;
+  /**
+   * SKILL TRAVEL (r38-motion, both games): send a shot from `from` to `to`, drawn in the spell layer's batch
+   * (`spellfx/FlightFx.ts`). `kind` is its shape: an `orb` (a spell on a lifted arc), a `tracer` (a thin fast
+   * shot) or a `beam` (a long line); `ms` is the longest flight at normal speed, and the stage lands it just before
+   * the spell's own first mark when that is sooner. Returns the flight it drew in ms (0 = nothing is drawn: LOW
+   * EFFECTS, REDUCE MOTION, or a special that draws its own effect) and a promise that settles when it has landed
+   * (the impact frame has begun). Optional, so a test fake need not implement it.
+   */
+  travel?(from: CombatantId, to: CombatantId, o: { abilityId?: string; kind: 'orb' | 'tracer' | 'beam'; ms: number }): { ms: number; landed: Promise<void> };
+  /** Would `travel` draw a shot for this ability (and caster) now? Asked before a blow's numeral is held for it. Optional: absent reads as yes. */
+  canTravel?(abilityId: string | undefined, from: CombatantId): boolean;
 }
 
 /** Rising damage/heal numerals. Supplied by `ui/common`, or the DOM fallback. */
@@ -347,6 +369,8 @@ export interface BattleStage {
    * enemy's physical ability on `cast`, as before.
    */
   paints?(id: CombatantId, pose: string): boolean;
+  /** RUN-IN's field: painted shapes, camera truck, smear (r38-motion, FFX-2 only; `motion/StageMotionPort.ts`). Optional and additive. */
+  readonly motion?: import('./motion/StageMotionPort.ts').StageMotionPort;
 }
 
 /** The presenter's clock, handed to a staged arrival so it obeys speed and pause. */
@@ -401,7 +425,7 @@ export interface PresenterDeps {
   victoryPose?: import('./VictoryPose.ts').VictoryPose;
   /** D-302: the chapter's voice for the recorded SFX set (`app/screens/battleSfxVoice.ts`); without one every cue is the presenter's own. */
   sfxVoice?: import('./BattlePresenterSfx.ts').SfxVoice | null;
-  /** A game's own motion around each action (FF7's melee run, `BattlePresenterMotion.ts`); none for FFX and FFX-2. */
+  /** A game's own motion around each action (FF7's melee run, FFX-2's RUN-IN, `BattlePresenterMotion.ts`); none for FFX. */
   actionMotion?: import('./BattlePresenterMotion.ts').ActionMotionPort | null;
   /**
    * CAMERA LAB (`?camera=lab`, branch camera-lab; a test harness, D-318): the beats the lab's camera

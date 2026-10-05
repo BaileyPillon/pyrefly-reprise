@@ -12,6 +12,10 @@ export interface ManifestSubject {
   states: string[];
   /** True when `portraits/<id>.png` exists. */
   portrait: boolean;
+  /** States that also ship `<state>@2x.png`, the twice-resolution master (D-315). */
+  states2x?: string[];
+  /** Every master a state ships beyond 1x, ascending: `{ idle: [2, 4] }` (release 39; `states2x` is the states listing 2). */
+  tiers?: Record<string, number[]>;
   /**
    * The sidecar's `facing`, lower-cased and otherwise untouched — the runtime's
    * `parseArtFacing` owns which spellings mean what.
@@ -31,6 +35,8 @@ export interface ArtManifestFile {
    * subset of `pause` — see `retinaStems` in `manifest.mjs`.
    */
   pause2x: string[];
+  /** Backdrops that also ship `<key>@2x.png`: `{ gagazet: [2] }` (release 39). Absent when none does. */
+  backdropTiers?: Record<string, number[]>;
 }
 
 export interface BuildManifestOptions {

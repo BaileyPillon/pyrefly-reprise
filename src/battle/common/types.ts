@@ -1499,11 +1499,17 @@ export interface ReelResult {
    * The three stopped symbols, left to right. Element Reels:
    * `'fire'|'ice'|'water'|'thunder'`. Attack Reels: `'1hit'|'2hit'|'miss'`.
    * Status Reels: `'skull'|'arrow'|'timer'`. Aurochs Reels adds `'aurochs'`.
+   *
+   * Lady Luck (FFX-2) is a different machine with a different strip: `'red7'`,
+   * `'bar'`, `'cherry'` plus the set's own three — `'sword'|'helmet'|'paw'` on
+   * the Attack Reels, `'skull'|'hat'|'staff'` on the Magic Reels — and **order
+   * matters**, because its pay table is read left to right
+   * [ffx2-combat-core §3.12, `src/data/ffx2/reels.ts`].
    */
   symbols: [string, string, string];
-  /** True when all three match — the effect hits every enemy instead of one random enemy. */
+  /** True when all three match. FFX: the effect hits every enemy instead of one random enemy. */
   threeOfAKind: boolean;
-  /** Attack Reels only: `sum(symbols)`, doubled on a three-match. Range 0–12. */
+  /** Wakka's Attack Reels only: `sum(symbols)`, doubled on a three-match. Range 0–12. Lady Luck never sets it. */
   hits?: number;
   /** Milliseconds left on the 20 000 ms timer. */
   timeRemainingMs: number;
@@ -1568,6 +1574,13 @@ export interface AbilityCommand {
   targets: CombatantId[];
   /** Doublecast / Copycat wrapper: the ability id this one is repeating. */
   wrappedId?: AbilityId;
+  /**
+   * The minigame outcome, for a menu ability that opens an overlay. FFX-2 only:
+   * Trigger Happy and Lady Luck's reels are ordinary abilities there, not
+   * Overdrives. Same protocol as {@link OverdriveCommand.extra} — omitted, the
+   * engine rolls a default from the seeded RNG.
+   */
+  extra?: MinigameResult;
 }
 
 /** Use an item from the Item (or Use) menu. */

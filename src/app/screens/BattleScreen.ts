@@ -33,6 +33,7 @@ import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
 import { cameraLabForBattle } from '../../engine/lab/LabSession.ts';
 import type { CameraLabHandle } from '../../ui/lab/battleLab.ts';
 import { loadScene, type LoadedScene } from '../../scenes/index.ts';
+import { markOpeningBegun, markOpeningHurried } from '../../scenes/openingMark.ts';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { demoReel, demoState } from './BattleScreenDemoReel.ts';
@@ -45,6 +46,7 @@ import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
+import { HURRIED_CARD_HOLD_MS } from '../../ui/common/transitions/openingHurry.ts';
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
 import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '../../ui/common/EnemyIntent.ts';
@@ -68,6 +70,7 @@ import { getChapterMeta } from '../../data/chapter-meta.ts';
 import { withdrawLineFrom } from './withdrawal.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
 import { setPaceGame } from '../../engine/pace.ts';
+import { onSceneScale, sceneScale } from '../../engine/crisp/sceneScale.ts';
 
 /**
  * How long after a formation is staged the field may still settle its own
@@ -91,6 +94,8 @@ export interface BattleScreenOptions {
   speed?: PlaybackSpeed;
   /** Open on this Save Sphere link instead of the first formation (FA3 = b). */
   resumeAt?: ChainCheckpoint;
+  /** The player skipped the pre-scene: the first opening runs hurried (PR-0061, `openingHurry.ts`). */
+  openingHurry?: boolean;
 }
 
 /** How the encounter ended, for the flow in `App.ts`. */
@@ -209,11 +214,13 @@ export class BattleScreen extends Screen {
     const scene = await loadScene(chapter.sceneKey, this.app.renderer.camera);
     if (this.exited) return void scene.dispose();
     this.scene = scene;
+    if (this.opts.openingHurry) markOpeningHurried(scene.scene, () => ({ speed: this.presenter?.playbackSpeed ?? 'normal', menu: this.presenter?.snapshot()['awaitingMenu'] === true })); // PR-0341: a scene that stages its own arrival (Ch. IX) must not wait for an opening shot a hurried opening never shows; FOC371-01: its compressed arrival follows fast and skip, and is over by the first menu
     this.app.renderer.applyPalette(this.scene.palette);
     bindEyeCandyScene({ key: scene.key, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
-    bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera }); // eye-candy option B (`?fx=b`)
+    bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera, renderer: this.app.renderer.renderer }); // eye-candy option B (`?fx=b`)
     this.scene.hideOwnActors();
     this.syncPixelScale();
+    this.offSceneScale = onSceneScale(() => this.syncPixelScale()); // a supersampled scene (`crisp/CrispRig.ts`) changes the point sprites' pixel grid
     void warmShaders(this.app.renderer, scene.scene); // the diorama's programs compile while the figures load
 
     // CAMERA LAB (`?camera=lab`; a test harness, D-318): loaded only for a lab battle, never otherwise.
@@ -309,6 +316,7 @@ export class BattleScreen extends Screen {
     });
 
     this.momentOverlay = createMomentOverlay(this.root);
+    if (this.opts.openingHurry) this.momentOverlay.hurry.arm();
 
     const registered = uiPortsRegistered();
     const ownsOverlays = registered.damageNumbers || this.hud === null;
@@ -420,6 +428,7 @@ export class BattleScreen extends Screen {
       backdropKey: chapter.sceneKey,
       party,
       game: chapter.game,
+      ...(this.opts.openingHurry ? { holdMs: HURRIED_CARD_HOLD_MS } : {}),
     });
     this.battleStartBanner = banner;
     await banner.show();
@@ -433,6 +442,8 @@ export class BattleScreen extends Screen {
     // Torn down while the card was up: `exit()` dismissed it (which is what
     // resumed this chain) and already resolved `finished` as aborted.
     if (this.exited) return;
+    // FOC371-01: the card is gone, so the opening begins now; a hurried one collapses inside a tick, and a scene that stages its own arrival (Ch. IX) starts a compressed one from this mark
+    if (this.opts.openingHurry && this.scene) markOpeningBegun(this.scene.scene);
     const presenter = this.presenter!;
     if (this.preview) {
       // No engine yet: play the canned reel so the scene is still alive.
@@ -883,8 +894,10 @@ export class BattleScreen extends Screen {
     };
   }
 
+  private offSceneScale: (() => void) | null = null;
+
   private syncPixelScale(): void {
-    const h = this.app.renderer.domElement.height || 900;
+    const h = (this.app.renderer.domElement.height || 900) * sceneScale(); // a supersampled scene pass draws point sprites on a finer grid (`crisp/sceneScale.ts`)
     this.scene?.setPixelScale(Math.max(0.5, h / 900));
   }
 
@@ -892,6 +905,8 @@ export class BattleScreen extends Screen {
 
   override exit(): void {
     this.exited = true;
+    this.offSceneScale?.();
+    this.offSceneScale = null;
     setPaceGame('other'); // a cutscene or the board after the fight is never paced (`pace.ts`)
     window.removeEventListener('keydown', this.onPauseKey);
     // Settle the card's promise so nothing stays parked on it; `runEncounter`

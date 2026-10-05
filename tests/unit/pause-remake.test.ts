@@ -565,8 +565,9 @@ describe('every function of the old pause screen is still reachable', () => {
     try {
       const h = mount('ffx2-bahamut');
       h.screen.trigger('pause:tab:options');
-      // D-285 (A2): TEXT SIZE, REDUCE MOTION and LOW EFFECTS sit under TEXT SPEED (eye-candy D's fx* rows: pause-fx-looks-rows.test.ts).
-      expect(rowIds(h).filter((id) => !id.startsWith('fx')).slice(0, 10)).toEqual([
+      // D-285 (A2): TEXT SIZE, REDUCE MOTION and LOW EFFECTS sit under TEXT SPEED; since D-317 one EYE CANDY row
+      // follows them where eye-candy D's three look rows were (pause-fx-looks-rows.test.ts).
+      expect(rowIds(h).slice(0, 11)).toEqual([
         'masterVolume',
         'musicVolume',
         'sfxVolume',
@@ -574,6 +575,7 @@ describe('every function of the old pause screen is still reachable', () => {
         'textSize',
         'reduceMotion',
         'lowEffects',
+        'eyeCandy',
         'ffx2Atb',
         'ffx2AtbSpeed',
         'guideVisible',
@@ -1032,14 +1034,15 @@ describe('the painting moves, until the player says not to', () => {
     expect((h.screen.snapshot()['portrait'] as Record<string, unknown>)['reduceMotion']).toBe(true);
   });
 
-  it('offers the living-portrait prototype a seam it can be dropped into', () => {
-    // docs/plans/pause-living-portraits.md — another agent's track. The layout
-    // must not have to change when the rig arrives.
+  it('offers the living portrait its seam: the driver is on by default and off under REDUCE MOTION', () => {
+    // The seam the living portrait (livingPause.ts, portraits-live) plugs into; the layout never had to change.
     const h = mount('seymour-flux');
     const portrait = h.screen.snapshot()['portrait'] as Record<string, unknown>;
     expect(portrait['gaze']).toEqual({ x: 0, y: 0 });
     expect(portrait['expression']).toBe('neutral');
-    expect(portrait['driver']).toBe(false);
+    expect(portrait['driver']).toBe(true);
     expect(typeof portrait['plate']).toBe('string');
+    const still = mount('seymour-flux', { reduceMotion: true });
+    expect((still.screen.snapshot()['portrait'] as Record<string, unknown>)['driver']).toBe(false);
   });
 });

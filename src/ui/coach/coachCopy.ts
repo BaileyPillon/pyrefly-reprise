@@ -47,6 +47,7 @@ export type CoachMarkId =
   | 'ffx-turn-order'
   | 'ffx-overdrive'
   | 'ffx-aeon'
+  | 'ffx-omnis-disc'
   | 'ffx2-gauge'
   | 'ffx2-dressphere'
   | 'ffx2-chain';
@@ -278,6 +279,16 @@ export const FFX_MARKS: readonly CoachMark[] = [
     game: 'ffx',
     speaker: 'Auron',
     body: '“Call the aeon. It fights alone, and it takes the blows meant for her.”',
+    holds: true,
+    fadeMs: 0,
+  },
+  {
+    // Chapter XII only (D-216, wording (c) picked verbatim in D-248): fired by
+    // `coachDisc.ts` the first time the advisor's top row turns a disc, never at a menu.
+    id: 'ffx-omnis-disc',
+    game: 'ffx',
+    speaker: 'Auron',
+    body: '“Hit a disc. Three alike, and his spell reaches everyone.”',
     holds: true,
     fadeMs: 0,
   },

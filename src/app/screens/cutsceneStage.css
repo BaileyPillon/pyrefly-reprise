@@ -150,6 +150,43 @@
   }
 }
 
+/*
+ * Lady Ginnem's live glow (`cutsceneAura.ts`, plan A-9): a halo plate behind her painting and a canvas of motes over
+ * it, both laid on the painting's own box grown by the plate's margin (the script sets the box). The wrapper adds no
+ * box, so the plate sits under the art and the motes over it inside the figure. They drift with her (`translate`,
+ * the same 6.5 s as her painting) and stand still under REDUCE MOTION.
+ */
+.cutscene__aura {
+  display: contents;
+}
+.cutscene__aura-halo,
+.cutscene__aura-motes {
+  position: absolute;
+  pointer-events: none;
+  animation: cutscene-aura-drift 6.5s ease-in-out infinite;
+}
+.cutscene__aura-halo {
+  z-index: -1;
+}
+.cutscene__aura-motes {
+  z-index: 1;
+}
+@keyframes cutscene-aura-drift {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -0.9%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cutscene__aura-halo,
+  .cutscene__aura-motes {
+    animation: none;
+  }
+}
+:root[data-reduce-motion] .cutscene__aura-halo,
+:root[data-reduce-motion] .cutscene__aura-motes,
+:root[data-reduce-motion] .cutscene__figure.is-unsent .cutscene__figure-art {
+  animation: none;
+}
+
 /* ------------------------------------------------------------------- veil */
 
 /*

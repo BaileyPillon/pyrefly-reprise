@@ -1,4 +1,4 @@
-import { AddEquation, Color, CustomBlending, Mesh, OneFactor, ShaderMaterial, Vector2, type DataTexture } from 'three';
+import { AddEquation, Color, CustomBlending, Mesh, OneFactor, ShaderMaterial, Vector2, type Texture } from 'three';
 
 /**
  * Option B "Living Paintings": the painting's own lights come alive (B3's lamp flicker and ice
@@ -93,7 +93,7 @@ export class Lamps {
   private readonly spec: LampSpec;
 
   /** One overlay for one plate: `plate` shares its geometry and transform, `tex` its pixels. */
-  constructor(plate: Mesh, tex: DataTexture, spec: LampSpec) {
+  constructor(plate: Mesh, tex: Texture, spec: LampSpec) {
     this.spec = spec;
     const w = spec.warm;
     const c = spec.cool;

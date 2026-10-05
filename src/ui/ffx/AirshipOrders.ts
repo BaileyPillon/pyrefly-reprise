@@ -58,7 +58,9 @@ export class AirshipOrders {
   ): Promise<Command> {
     const range = state?.flags[AIRSHIP_RANGE];
     const orders = commands.filter(isOrderRow);
-    if (!AirshipOrderWidget.applies(range) || orders.length === 0) return openMenu(commands);
+    // No range state (Sin's link 3, on his back): the engine's two order triggers stay greyed ("no Trigger
+    // Command", research/ffx-sin.md S1), so they are dropped, not listed dead (F4 / PR-0273).
+    if (!AirshipOrderWidget.applies(range) || orders.length === 0) return openMenu(withoutDeadOrders(commands));
 
     const folded = airshipMenuRows(commands, state?.flags);
     for (;;) {
@@ -139,8 +141,13 @@ export function airshipMenuRows(
   flags: Readonly<Record<string, unknown>> | undefined,
 ): AvailableCommand[] {
   const orders = commands.filter(isOrderRow);
-  if (!AirshipOrderWidget.applies(flags?.[AIRSHIP_RANGE]) || orders.length === 0) return commands;
+  if (!AirshipOrderWidget.applies(flags?.[AIRSHIP_RANGE]) || orders.length === 0) return withoutDeadOrders(commands);
   return foldOrders(commands, orders, flags ?? {});
+}
+
+/** `commands` without an order row the engine offers greyed while no range state exists (nothing to fold them into). */
+function withoutDeadOrders(commands: AvailableCommand[]): AvailableCommand[] {
+  return commands.some((c) => isOrderRow(c) && !c.enabled) ? commands.filter((c) => !(isOrderRow(c) && !c.enabled)) : commands;
 }
 
 function isOrderRow(c: AvailableCommand): boolean {

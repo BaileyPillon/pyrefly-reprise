@@ -1,0 +1,580 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-03T15:08:15.301Z",
+ "build": {
+  "mainSha": "3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142",
+  "fullSha": "3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142",
+  "bundle": "index-BGBDEn_P.js",
+  "candidate": "D:/pyrefly-rel37/dist-gate",
+  "previousLive": "c69de96a (release 36, bundle GO0eMOto)",
+  "bytes": 798329071
+ },
+ "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: every route (Ch I, III, IV, XII by real keys at 1600x900; I and IV also at 2000x1012 and 390x844) boots, enters the fight, opens and closes the living pause and resolves an Attack with 0 console errors, 0 page errors and 0 bad responses.",
+  "No regression at major or critical severity against release 36. The one regression found is polish (FOC37-03, a 46 px coach clip at 2000x1012 for some first actors); the Trigger Happy press-count change (FOC37-02) is the sourced rule.",
+  "The lady-luck reel overlay hidden behind the guide card (FOC37-01, major) is inside a feature that did not work on live at all, so it is disclosed and does not hold the build.",
+  "The data audit (Lady Luck pay table, Dud 75 percent, Shin-Zantetsu 80, Magicide power 8, Bulwark Acc/Eva/Luck-only immunities) matches research/; approved-art verifier 634 ok, 0 mismatched, 0 missing; tsc clean; no new orphan (24, same as release 36); 0 sourcemaps; build 1.67 MB under the 800 MB line."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "UNVERIFIED",
+   "reason": "No agent can hear. No music or SFX was auditioned; the title cue (PR-0326), the audio routing change and the twirl/overdrive cues belong to the audio ear tools and to Bailey. tools/audio/qa.mjs --strict was clean on the integration tip (lane gate, not re-run).",
+   "where": "both; audio routing",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Pause, battle-start, cutscene and prep layers own the window at 1600x900, 2000x1012 and 390x844 in every route; the pause opens full-bleed and closes back to the menu (screen back to battle, no stale layer, living twin removed).",
+   "where": "both; I, III, IV, XII",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-2000/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600-Escape/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-2000/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch3-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch12-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-390/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-390/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "FAIL",
+   "reason": "FFX-2 Chapter IV first-run coach at 2000x1012 (seed 2, Yuna White Magic menu): the pink tag runs to x=2046 on a 2000 px page, so \"A COMMAND HOLDS THEM\" is cut at \"TH\". Live puts the coach bottom-left for the same seed. 1600x900 (6 seeds) and 390x844 are not clipped. Everything else read at all three sizes. See FOC37-03.",
+   "where": "FFX-2 Ch IV",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/coach-probe-cand/seed2.png",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/coach-probe-live/seed2.png",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/coach-probe-cand-1600/seed1.png",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-2000-first-menu-live-vs-cand.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 5,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "UNVERIFIED",
+   "reason": "Attack was driven to a logged result in Ch I, III, IV, XII by real keys; the advisor panels and the Ch XVII Sin advisor (PR-0269) were not exercised for this report (lane evidence only).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600-Escape/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-005",
+   "result": "UNVERIFIED",
+   "reason": "Advisor on a broken board was not tested here. The Sin advisor (PR-0269, FFX Ch XVII) card chain 4 to 48 percent is the lane's own bench, not re-run.",
+   "where": "FFX Ch XVII",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "The pause and its living-portrait twin die with the pause: after Esc the screen is battle, the command menu is back and no [data-living] node remains (run.json step \"pause closes, menu returns\", living=[]).",
+   "where": "both; I, IV",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600-Escape/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "UNVERIFIED",
+   "reason": "No developer vocabulary on the screens captured, but the EYE CANDY page copy (PR-0322/0323) and the options rows were not opened.",
+   "where": "both",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "FAIL",
+   "reason": "At 2000x1012 in Ch IV the first-run coach card covers the right edge of the enemy intent card (\"92% to hit\", \"HOLD +1 MORE\"). The same overlap exists on live in other seeds (live seed 7 puts the coach over the intent card at bottom-left), so this is not new; for seed 2 it is new. Covered by FOC37-03.",
+   "where": "FFX-2 Ch IV",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/coach-probe-cand/seed2.png",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-2000-seed7-first-menu-live-vs-cand.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Chapter, enemy, party and tab names appear in full in the captured states (Seymour Flux, Mortiorchis, Bahamut, Yuna/Rikku/Paine, pause tabs, objective line).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/06-pause.png",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-2000/04-first-menu.png",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-390/06-pause.png"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "The selected command row is the lit gold (FFX) or pink (FFX-2) row in every first-menu capture; the selected pause tab is white with an underline.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/04-first-menu.png",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600-Escape/04-first-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "reason": "The single boss in Ch I, III, IV, XII is fully visible and targetable at all three sizes. Multi-target chapters (Evrae, Natus, Fins) were not opened here.",
+   "where": "both; I, III, IV, XII",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-2000/04-first-menu.png",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch12-1600/04-first-menu.png",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-390/04-first-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-012",
+   "result": "PASS",
+   "reason": "No fallback face: the pause shows the painted Tidus, Kimahri and Yuna X-2 plates and the living twin loads (data-living tidus:true, yuna-ffx2:true); 0 responses of 404 or worse and 0 console errors in 14 runs; the portrait-parts manifest resolves in the build (the integrator's 404 on a build without the parts is fixed by the install).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-2000/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600-Escape/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-2000/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch3-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch12-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-390/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-390/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/verify-approved.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "Art judged in the running game, against the approved Until Dawn pause: Ch I (Tidus) and Ch IV (Yuna X-2) composites show the same composition, grade and layout. Residual: the iris edge on Yuna X-2 reads slightly dark at phone size (disclosed, FOC37-05).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/pause-until-dawn-ch1.jpg",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/pause-until-dawn-ch4.jpg",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-390-pause-live-vs-cand.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Every flow was driven by real keyboard events: title Enter, board arrows, party prep, cutscene skip by Enter, battle menu arrows and Enter, P to open the pause, E for tabs, Esc to resume, Attack to a grown battle log and the next menu, at 1600x900, 2000x1012 and 390x844 viewport. No debug-API navigation (setSeed only, as setup).",
+   "where": "both; I, III, IV, XII",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-2000/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600-Escape/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-2000/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch3-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch12-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-390/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-390/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture asserted screen and chapter first (assertionsBad 0 in all 14 run.json files); no state-mismatch file was written. A failed wait was recorded as FAIL, not photographed.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-2000/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600-Escape/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-2000/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch3-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch12-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-390/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-390/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Candidate review. The exact live artifact is the separate live verification after the deploy.",
+   "where": "both",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "No hand-written path broke: 0 sourcemaps in dist-gate (find *.map = 0), 0 404 or 4xx/5xx in 14 candidate and live runs, every art and portrait-part request resolved. Size 798,329,071 bytes, 1,670,929 under the 800 MB line.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-2000/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600-Escape/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-2000/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch3-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch12-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-390/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-390/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-019",
+   "result": "UNVERIFIED",
+   "reason": "Hash check passed (verify-approved 634 ok, 0 mismatched, 0 missing, approved and judge-locked) and the portrait parts for Tidus and Yuna X-2 decoded and drew in the game; the 193-file decode check of every shipped file is npm run deploy's own gate and has not run yet.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/verify-approved.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "The pause and the living portrait driver (shared plumbing) work in both games: Ch I Tidus and Ch IV Yuna X-2 both show data-living ready, open and close identically, same layout at all three sizes.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/pause-until-dawn-ch1.jpg",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/pause-until-dawn-ch4.jpg",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600-Escape/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case stated per change from the lane handoffs and checked against research/: Lady Luck reels, Bulwark immunities (research/ffx2-vegnagun-shuyin.md line 341, \"Str/Mag/Def/MDef Up-Down all land\") and the dressphere shot items are FFX-2 only (src/data/ffx2/ only); D-216, D-247, PR-0258, PR-0324, Ginnem are FFX only; portraits, defocus, hurried entry are both. Observed: the FFX-2 Ch IV run shows no FFX coach line, the FFX Ch I/III/XII runs show no FFX-2 UI. Not seen on screen: the Ch XII disc line itself (see UNVERIFIED in coverage).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600-Escape/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch12-1600/run.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "UNVERIFIED",
+   "reason": "Only start-of-fight transitions were driven (title to board to prep to cutscene to battle, pause to resume). No win, loss or results route was run on this candidate; the lane smoke and release 36 evidence are not transferable to the lady-luck and slot changes.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/run.json",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-2000/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Living portraits were invoked through the real presentation path (battle, P, the pause stage mounts the driver, E changes plate and the driver follows, Esc unmounts it). Lady Luck reels through the presentation path were not run here (lane evidence).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/06-pause.png",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch1-1600/07-pause-tab4.png",
+    "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600-Escape/06-pause.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "reason": "Bailey judges audio beauty; no agent can hear.",
+   "where": "both; audio",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "3fb1de85 / dist-gate index-BGBDEn_P.js",
+   "targetVersion": "99480bc2168b62e85209e8d6e1ee9761077a60b593f1a251fa37accc8c7fad5c",
+   "environment": "candidate D:/pyrefly-rel37 3fb1de85, dist-gate (bundle index-BGBDEn_P.js, built 10:29 after the 10:24 commit, 798,329,071 bytes, 0 .map files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison runs on https://baileypillon.github.io/pyrefly-reprise/ (release 36)"
+  }
+ ],
+ "targets": {
+  "required": 4,
+  "matched": 2,
+  "failing": 0,
+  "unverified": 2,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "FOC37-01",
+   "severity": "major",
+   "title": "The Lady Luck reel overlay is covered by the guide card, so reel 1 and the DUD warning are half hidden",
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut / ffx2-leblanc (Lady Luck)",
+   "expected": "The reel overlay is readable while the player stops each reel; slot 1 decides the Cherry tier.",
+   "observed": "Reported by the lady-luck lane: the guide card is drawn above the overlay at top-left. Not re-reproduced in this review (no Lady Luck fight was driven).",
+   "repro": "Chapter V with Lady Luck, open Attack Reels with the guide card shown (lane evidence docs/handoff/r37-lady-luck.md).",
+   "evidence": "docs/handoff/r37-lady-luck.md",
+   "confidence": "medium (lane finding, not re-seen)",
+   "requirement": "CHK-008: panels against panels",
+   "where": "src/ui/ffx2 guide card z-order vs LadyLuckReels (suspected)",
+   "fix": "Raise the overlay above the guide or hide the guide while a minigame is open.",
+   "acceptanceCheck": "Open Attack Reels with the guide up; all three reels and the DUD line are fully visible.",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true,
+   "status": "open"
+  },
+  {
+   "id": "FOC37-02",
+   "severity": "polish",
+   "title": "Trigger Happy now honours a human's press count, so a Gunner who mashes under about 14 times does less than on live",
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut, ffx2-leblanc (Gunner)",
+   "expected": "research/ffx2-combat-core.md line 262: Trigger Happy is \"one hit per R1 press\"; the rule is faithful.",
+   "observed": "On release 36 any press count resolved as the engine roll (14 hits); on the candidate it resolves as the presses (3 gives 3). Not re-run in a browser by this review; read from the lane's CONTRACT-CHANGES entry and minigames.ts.",
+   "repro": "Chapter IV or V, Gunner, Trigger Happy, press 3 times in the window.",
+   "evidence": "docs/handoff/r37-lady-luck.md",
+   "confidence": "medium",
+   "requirement": "Faithful mechanic (sourced); disclose the balance effect",
+   "where": "src/battle/ffx2/minigames.ts",
+   "fix": "None needed; tell Bailey. Optionally make the window or the prompt say \"press as fast as you can\".",
+   "acceptanceCheck": "The onboarding copy for the Gunner names the press count.",
+   "introducedByCandidate": true,
+   "regressionVsLive": true,
+   "inNewFeature": false,
+   "status": "open"
+  },
+  {
+   "id": "FOC37-03",
+   "severity": "polish",
+   "title": "FFX-2 Chapter IV first-run coach is clipped at the right edge at 2000x1012 for some first actors and covers the enemy intent card",
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut",
+   "expected": "The first-run coach sits fully on screen without hiding the enemy intent card.",
+   "observed": "Seed 2 at 2000x1012: the coach tag reaches x=2046 on a 2000 px page (\"HOLDS TH\" cut), and the card covers \"92% to hit\" and \"HOLD +1 MORE\" of the intent card. Live places the coach bottom-left for the same seed. Seeds 1 to 6 at 1600x900 are all on screen. On live, other seeds put the coach over the intent card at bottom-left, so the overlap is old; the clip is new.",
+   "repro": "Fresh profile, seed 2, 2000x1012, Chapter IV, first menu (Yuna, White Magic): coach right edge 2046 against 2000. coach-probe-cand/seed2.png vs coach-probe-live/seed2.png.",
+   "evidence": "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/coach-probe-cand/seed2.png, critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/coach-probe-live/seed2.png",
+   "confidence": "high",
+   "requirement": "CHK-003 legibility and clipping",
+   "where": "src/ui/coach/CoachLayer.ts placement (suspected; the ui-floor lane describes the same clip and is not merged)",
+   "fix": "Clamp the coach card and its tag to the viewport width; avoid the intent card rectangle.",
+   "acceptanceCheck": "Seeds 1 to 8 at 1600x900 and 2000x1012: every coach rect inside the viewport.",
+   "introducedByCandidate": true,
+   "regressionVsLive": true,
+   "inNewFeature": false,
+   "status": "open"
+  },
+  {
+   "id": "FOC37-04",
+   "severity": "polish",
+   "title": "On a phone the Chapter IV first-run coach covers the enemy intent card",
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut",
+   "expected": "The intent card stays readable on the first turn.",
+   "observed": "At 390x844 the coach card sits over the second line of \"BAHAMUT ACTS NEXT\" on both live and the candidate.",
+   "repro": "Chapter IV at 390x844, first menu.",
+   "evidence": "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-390-first-menu-live-vs-cand.jpg",
+   "confidence": "high",
+   "requirement": "CHK-008",
+   "where": "src/ui/coach",
+   "fix": "Place the phone coach below the intent card.",
+   "acceptanceCheck": "Intent card fully visible with the coach up at 390x844.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false,
+   "status": "open"
+  },
+  {
+   "id": "FOC37-05",
+   "severity": "polish",
+   "title": "Living portrait: dark or pale iris edge on Yuna X-2 (and Wakka)",
+   "game": "both",
+   "chapter": "ffx2-bahamut pause",
+   "expected": "The animated eyes match the painted plate.",
+   "observed": "At 390x844 the blue iris of Yuna X-2 shows a darker rim and the green iris a small halo against the static live plate. Disclosed by the portraits-live checker. The parts are Bailey's D-320 picks, so a re-pick is his.",
+   "repro": "Chapter IV, P, first tab, 390x844.",
+   "evidence": "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-390-pause-live-vs-cand.jpg",
+   "confidence": "medium",
+   "requirement": "D-320 painted face parts",
+   "where": "public/art/portrait-parts yuna-ffx2",
+   "fix": "Re-pick the eye window or feather its edge.",
+   "acceptanceCheck": "Zoomed 1:1 composite shows no rim.",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true,
+   "status": "open"
+  },
+  {
+   "id": "FOC37-06",
+   "severity": "polish",
+   "title": "One Chapter IV run: the active girl changed between reading the menu and confirming, so Attack opened White Magic instead",
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut",
+   "expected": "The command menu stays with the girl it was shown for.",
+   "observed": "In the first two desktop runs (1600x900 and 2000x1012, no seed) the rows read as Attack, Skill, Change, Item; the four Enters then opened Yuna's White Magic and Cure (screenshot 08) and the log did not grow. Three later runs with the same script passed, a probe showed that P, E and Esc do not change the actor, and the first actor differs by seed. Cause unproven; likely the harness reading the menu while the next girl took over.",
+   "repro": "Not reliably reproduced.",
+   "evidence": "critic/reviews/3fb1de85c5f2907dabb8e1c95c5ecc5b303f0142-focused/ch4-1600/08-after-attack.png",
+   "confidence": "low",
+   "requirement": "CHK-015",
+   "where": "unknown",
+   "fix": "Repeat with a seed sweep on the deep review.",
+   "acceptanceCheck": "Twenty seeded Ch IV first turns: the menu actor never changes without input.",
+   "introducedByCandidate": "unknown",
+   "regressionVsLive": "unknown",
+   "inNewFeature": false,
+   "status": "open"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "npx tsc --noEmit (exit 0)",
+   "node tools/orphans.mjs (24 orphans, same as release 36)",
+   "verify-approved 634 ok / 0 mismatched / 0 missing",
+   "data audit of reels.ts, lady-luck.ts, samurai.ts, vegnagun Bulwark immunities against research/ffx2-combat-core.md and ffx2-vegnagun-shuyin.md",
+   "real-key routes title to battle to pause to resume to Attack: Ch I (1600, 2000, 390), Ch IV (1600 x3, 2000, 390), Ch III (1600), Ch XII (1600), and the same on the live site for Ch I, III, IV, XII for comparison",
+   "FFX-2 Ch IV first-run coach placement, seeds 1 to 6 at 2000 and 1600 on the candidate, seeds 2, 6, 7 on live",
+   "composites of the approved Until Dawn pause against Ch I and Ch IV builds"
+  ],
+  "reused": [
+   {
+    "what": "Full vitest suite (768 files, 11,272 tests, 0 failed), per-lane browser proofs of Lady Luck, scenes, living backdrops, mix polish, small-approved",
+    "from": "docs/handoff/release-37.md and r37-*.md on e5999700",
+    "why": "The only changes since e5999700 are the art install, docs and registry JSON (git diff --stat e5999700..3fb1de85 touches 5 non-src files), so no code the suite covers changed."
+   }
+  ],
+  "notTested": [
+   "The Ch XII Omnis disc line (D-216/D-248): two nine-turn attack-only runs (seeds none and 1) never reached a menu whose top row turns a disc, because the line needs a Wakka turn; the lane's PASS stands unreproduced here",
+   "D-247 Chapter III Talk card at 0.6 s and the title cue (PR-0326, heard by nobody)",
+   "Lady Luck and Trigger Happy in a browser (FOC37-01, FOC37-02 are lane findings)",
+   "A-9 Ginnem glow (FFX Ch IX), PR-0300 plate wings (a 2560x1080 and ultrawide matter), A-7 backdrops in the 8 new rooms, PR-0061 beyond skipping with Enter",
+   "Win, loss, results and retry on this candidate; the EYE CANDY page; REDUCE MOTION and LOW EFFECTS on the living pause; living-backdrops and living-portrait motion judged as a clip",
+   "Any Evrae, Natus, Sin or Yojimbo fight"
+  ]
+ },
+ "regressions": [
+  "FOC37-03 (polish): Ch IV first-run coach clipped 46 px at 2000x1012 for some first actors, fine on live for the same seed"
+ ],
+ "nextReview": "Live verification of this exact artifact after the deploy (CHK-017), then the deep review this build owes (plan depth deep, deepAfterDeploy true).",
+ "elapsedMinutes": 75
+}

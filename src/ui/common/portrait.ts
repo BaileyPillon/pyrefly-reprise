@@ -14,6 +14,7 @@
  */
 
 import { ART_INDEX_CACHE, manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
+import { logicalArtUrl } from '../../engine/ArtShipped.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import faceCropData from './face-crops.json';
 import { canHostCrop } from './portraitHost.ts';
@@ -555,8 +556,8 @@ export function refineFaceCrop(img: HTMLImageElement): void {
  * The file is its own identity, so read the id back off the URL rather than
  * reaching into another track's markup.
  */
-function portraitIdFromSrc(src: string): string | null {
-  const m = /\/art\/portraits\/([^/?#]+)\.png(?:[?#]|$)/.exec(src);
+export function portraitIdFromSrc(src: string): string | null {
+  const m = /\/art\/portraits\/([^/?#]+)\.png(?:[?#]|$)/.exec(logicalArtUrl(src)); // a derived .webp is the same portrait (ArtShipped.ts)
   return m?.[1] ?? null;
 }
 

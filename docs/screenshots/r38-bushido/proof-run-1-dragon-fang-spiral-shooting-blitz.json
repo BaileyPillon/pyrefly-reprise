@@ -1,0 +1,75 @@
+{
+ "plays": [
+  {
+   "want": [
+    "auron",
+    "Dragon Fang"
+   ],
+   "geom": null,
+   "overlay": {
+    "up": true,
+    "title": "Dragon Fang",
+    "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+    "chips": [
+     "↓",
+     "←",
+     "↑",
+     "→",
+     "L1",
+     "R1",
+     "○",
+     "✕"
+    ],
+    "bar": false,
+    "timer": "3.5"
+   },
+   "played": {
+    "turn": 3,
+    "kind": "bushido",
+    "title": "Dragon Fang",
+    "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+    "chips": [
+     "↓",
+     "←",
+     "↑",
+     "→",
+     "L1",
+     "R1",
+     "○",
+     "✕"
+    ],
+    "keys": [
+     "ArrowDown",
+     "ArrowLeft",
+     "ArrowUp",
+     "ArrowRight",
+     "f",
+     "r",
+     "x",
+     "Enter"
+    ],
+    "unknownGlyphs": [],
+    "closed": true,
+    "ms": 1335,
+    "engine": {
+     "actor": "auron",
+     "ability": "Dragon Fang",
+     "extra": {
+      "kind": "auron-sequence",
+      "sequence": {
+       "success": true,
+       "correctInputs": 8,
+       "timeRemainingMs": 1857.5
+      }
+     }
+    }
+   }
+  }
+ ],
+ "errors": [],
+ "log": [
+  "rows after Overdrive: [\"Dragon Fang\",\"Shooting Star\",\"Banishing Blade\",\"Tornado\"]",
+  "OVERLAY auron Dragon Fang: title=Dragon Fang subtitle=BUSHIDO · ENTER THE SEQUENCE chips=[\"↓\",\"←\",\"↑\",\"→\",\"L1\",\"R1\",\"○\",\"✕\"] (8) bar=false",
+  "PLAYED {\"keys\":[\"ArrowDown\",\"ArrowLeft\",\"ArrowUp\",\"ArrowRight\",\"f\",\"r\",\"x\",\"Enter\"],\"engine\":{\"actor\":\"auron\",\"ability\":\"Dragon Fang\",\"extra\":{\"kind\":\"auron-sequence\",\"sequence\":{\"success\":true,\"correctInputs\":8,\"timeRemainingMs\":1857.5}}},\"closed\":true,\"ms\":1335}"
+ ]
+}

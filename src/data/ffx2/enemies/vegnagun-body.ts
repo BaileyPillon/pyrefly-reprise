@@ -13,7 +13,7 @@
  */
 
 import type { EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
-import { STANDARD_AILMENT_IMMUNITY, STAT_MOD_IMMUNITY_5 } from './vegnagun-shared.ts';
+import { ACC_EVA_LUCK_MOD_IMMUNITY, STANDARD_AILMENT_IMMUNITY, STAT_MOD_IMMUNITY_5 } from './vegnagun-shared.ts';
 
 const LEG_LIKE_IMMUNITIES = {
   ...STANDARD_AILMENT_IMMUNITY,
@@ -49,8 +49,9 @@ function bulwark(id: string, name: string, slot: number): EnemyDef {
     mp: 9999,
     level: 39, // Oversoul level 47 is what the wiki prints in its Level field; 39 is correct and unreachable
     affinities: { gravity: 'immune' },
-    // §3.3 — Str/Mag/Def/MDef Up-Down ALL land; only Reflect and Accu/Eva/Luck Up-Down are blocked.
-    immunities: { ...STANDARD_AILMENT_IMMUNITY, ...STAT_MOD_IMMUNITY_5, reflect: 255, haste: 255, slow: 255, stop: 255 },
+    // §3.3 [verified: 2 sources] — "Str/Mag/Def/MDef Up-Down all land": of the stat statuses only Acc/Eva/Luck
+    // Up-Down are blocked. Not STAT_MOD_IMMUNITY_5 (that also blocks Str/Mag; it is right for the Core, not here).
+    immunities: { ...STANDARD_AILMENT_IMMUNITY, ...ACC_EVA_LUCK_MOD_IMMUNITY, reflect: 255, haste: 255, slow: 255, stop: 255 },
     immunityFlags: [],
     forms: [{ name, spriteKey: 'vegnagun-bulwark', hp: 3000 }],
     aiScriptId: 'vegnagun-bulwark',

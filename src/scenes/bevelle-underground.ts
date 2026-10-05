@@ -16,6 +16,7 @@ import {
   Vector3,
   type Material,
 } from 'three';
+import { artBudget } from '../engine/ArtDevice.ts';
 import { Backdrop, type BackdropOptions } from '../engine/Backdrop.ts';
 import type { CameraRig } from '../engine/BattleCamera.ts';
 import { makePillar } from '../engine/Diorama.ts';
@@ -32,6 +33,7 @@ import { radialCanvas, rng } from '../engine/ProceduralArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import type { SceneSlots } from './index.ts';
+import { addPlateWings, paintPlateWings } from './plateWings.ts';
 import type {
   SceneBuild,
   SceneBuildOptions,
@@ -86,6 +88,23 @@ const CAMERA_REF: [number, number, number] = [0, 3.0, 9.6];
 const BACKDROP = { width: 78, distance: -50, centreY: -2.82 } as const;
 
 /**
+ * The plate's wings (PR-0300; FFX-2 only: Chapters IV and XIII stand here): the outer 23 % of the painting mirrored
+ * out 18 units each side. At 2000x1012 the enemy, action and Bahamut rigs put the plane's right edge at 93 to 96 %
+ * of the frame (86 to 88 % at 2.37) and the party rigs showed its left edge; the rigs themselves are unchanged.
+ *
+ * Release 38 (D-343): painted wings, left candidate 3 and right candidate 1 of the 2026-10-03 plate-wing round, replace the
+ * mirrored ones where `public/art/backdrops/wings/` holds them (716 px strips: 620 of wing, 96 over the plate's edge).
+ */
+export const BEVELLE_PLATE_WINGS = {
+  width: 18,
+  reflect: 0.23,
+  painted: { left: 'art/backdrops/wings/bevelle-underground-left.png', right: 'art/backdrops/wings/bevelle-underground-right.png', stripPx: 716, overlapPx: 96, plateWidthPx: 2688 },
+} as const;
+
+/** The plate's plane and the rig table, exported for `tests/unit/plate-wings.test.ts`. */
+export const BEVELLE_UNDERGROUND_BACKDROP = BACKDROP;
+
+/**
  * FFX battle framing: fov 32 (inside the 30–34 band), the party in a shallow
  * left-facing arc in the lower left, the boss right of centre and further back.
  *
@@ -133,6 +152,8 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
   bahamut: { position: [0.9, 1.15, 6.4], lookAt: [2.2, 1.65, -2.8], fov: 30, sway: 0.5 },
   victory: { position: [0.4, 2.2, 8.6], lookAt: [-0.5, 1.45, 0.9], fov: 32, sway: 1.2 },
 };
+
+export const BEVELLE_UNDERGROUND_RIGS = RIGS;
 
 /**
  * Three active slots in the FFX arc, front to back and staggered into the lower
@@ -374,9 +395,13 @@ function makeCanvas(w: number, h: number): HTMLCanvasElement {
  * panel so the deck is not one corduroy sheet), and the **rivets**, which are
  * what gives the specular lobe something to break on.
  */
-function deckCanvas(size = 512, seed = 41): HTMLCanvasElement {
-  const c = makeCanvas(size, size);
+function deckCanvas(px = 512, seed = 41): HTMLCanvasElement {
+  // Release 39: written on the 512 design grid and drawn through a scale, so the deck is the same plate at any canvas size
+  // (`px`: the device's deck budget, `ArtBudget.deckPx`); only the seams, slots and rivets get crisper.
+  const size = 512;
+  const c = makeCanvas(px, px);
   const ctx = c.getContext('2d')!;
+  ctx.scale(px / size, px / size);
   const rand = rng(seed);
 
   ctx.fillStyle = '#5b6880';
@@ -1163,6 +1188,8 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
   } satisfies BackdropOptions;
 
   let backdrop = await Backdrop.create(backdropOptions);
+  addPlateWings(backdrop, BEVELLE_PLATE_WINGS);
+  await paintPlateWings(backdrop, BEVELLE_PLATE_WINGS);
   backdrop.applyTo(group);
 
   // ------------------------------------------------------------------ lights
@@ -1215,7 +1242,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
    * it reaches the painting, which is what puts the seam on the painted gantry
    * wall rather than in mid-air.
    */
-  const deckTex = paintedCanvasTexture(deckCanvas(512, 41));
+  const deckTex = paintedCanvasTexture(deckCanvas(artBudget().deckPx, 41)); // 512 / 2048 / 4096 by device
   deckTex.wrapS = deckTex.wrapT = RepeatWrapping;
   /**
    * 3.25, not 3 — and the quarter matters more than the three.
@@ -2095,6 +2122,8 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
     watcher = watchAssets([url], () => {
       void (async (): Promise<void> => {
         const next = await Backdrop.create(backdropOptions);
+        addPlateWings(next, BEVELLE_PLATE_WINGS);
+        await paintPlateWings(next, BEVELLE_PLATE_WINGS);
         const wasIn = backdrop.group.parent;
         backdrop.dispose();
         backdrop = next;

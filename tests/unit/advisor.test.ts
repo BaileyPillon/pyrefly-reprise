@@ -439,6 +439,15 @@ describe('the words', () => {
     expect(describeAbility(attack!).toLowerCase()).toContain('physical');
   });
 
+  it('PR-0324 (FFX): Ronso Rage is never described as a timed input, and the timed Overdrives still are', () => {
+    const rages = ALL_ABILITIES.filter((a) => a.minigame === 'kimahri-rage');
+    expect(rages.length, 'the rages exist in the data').toBeGreaterThan(0);
+    for (const rage of rages) expect(describeAbility(rage).toLowerCase(), rage.id).not.toContain('timed input');
+    const timed = ALL_ABILITIES.filter((a) => a.minigame === 'tidus-timing' || a.minigame === 'auron-sequence');
+    expect(timed.length).toBeGreaterThan(0);
+    for (const def of timed) expect(describeAbility(def).toLowerCase(), def.id).toContain('timed input');
+  });
+
   it('prefers a row’s own help text when the menu wrote one', () => {
     const attack = CORE_ABILITIES.find((a) => a.id === 'attack')!;
     const row = {

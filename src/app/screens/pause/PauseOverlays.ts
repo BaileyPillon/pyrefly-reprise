@@ -1,6 +1,6 @@
 /**
  * The things that take the pause screen over: photo mode, Auron's briefing
- * replayed, and (D-305) the credits panel.
+ * replayed, (D-305) the credits panel and (D-317) the EYE CANDY page.
  *
  * Both were preserved verbatim through the Until Dawn remake
  * (`docs/concepts/pause-until-dawn/options.json` → `preservedFunctions`: *"F —
@@ -19,6 +19,9 @@ import { makeBriefing } from '../raiseBriefing.ts';
 import { PhotoMode } from '../../../ui/common/PhotoMode.ts';
 import type { Button, InputSnapshot } from '../../Input.ts';
 import { CREDITS_CLOSE_ACTION, CreditsPanel } from './creditsPanel.ts';
+import type { GameId } from '../../../battle/common/types.ts';
+import { prefersReducedMotion } from '../../../ui/common/transitions/reduceMotion.ts';
+import { EYE_CANDY_CLOSE_ACTION, EyeCandyPage } from './eyeCandyPage.ts';
 
 export interface PauseOverlayHost {
   app: App;
@@ -32,8 +35,8 @@ export interface PauseOverlayHost {
   setBaselineVisible: (on: boolean) => void;
   /** Redraw after the briefing: "never show this again" flips a row. */
   refresh: () => void;
-  /** The player backed out of the credits: put the cursor back on CREDITS. */
-  creditsClosed?: () => void;
+  /** The player backed out of a page: put the cursor back on the row that opened it (`credits`, `eyeCandy`). */
+  pageClosed?: (rowId: string) => void;
 }
 
 export class PauseOverlays {
@@ -41,6 +44,7 @@ export class PauseOverlays {
   private photo: PhotoMode | null = null;
   private briefing: Briefing | null = null;
   private credits: CreditsPanel | null = null;
+  private eyeCandy: EyeCandyPage | null = null;
   /** Screen roots hidden for the duration of photo mode. */
   private hiddenUnder: HTMLElement[] = [];
 
@@ -159,7 +163,7 @@ export class PauseOverlays {
 
   openCredits(): void {
     const root = this.host.root();
-    if (this.credits || !root) return;
+    if (this.credits || this.eyeCandy || !root) return;
     this.credits = new CreditsPanel(root, () => this.host.app.save.settings.reduceMotion);
   }
 
@@ -174,7 +178,7 @@ export class PauseOverlays {
     this.credits = null;
     if (!back) return;
     audio.playSfx('cancel');
-    this.host.creditsClosed?.();
+    this.host.pageClosed?.('credits');
     this.host.root()?.querySelector<HTMLElement>('[data-row="credits"]')?.focus({ preventScroll: true });
   }
 
@@ -202,9 +206,65 @@ export class PauseOverlays {
     return this.credits?.snapshot() ?? null;
   }
 
+  // -------------------------------------------------------------- eye candy
+
+  /**
+   * The EYE CANDY page (D-317, option A): up from OPTIONS -> EYE CANDY.
+   * @param game the chapter's game: OVERDRIVE SHOT is listed for FFX, DRESSPHERE SHOT for FFX-2.
+   */
+  openEyeCandy(game: GameId): void {
+    const root = this.host.root();
+    if (this.eyeCandy || this.credits || !root || game === 'ff7') return;
+    this.eyeCandy = new EyeCandyPage(root, { save: this.host.app.save, game, reduceMotion: () => prefersReducedMotion() });
+  }
+
+  /** As {@link closeCredits}: a back puts the cursor and the DOM focus on the EYE CANDY row. */
+  closeEyeCandy(back = true): void {
+    if (!this.eyeCandy) return;
+    this.eyeCandy.dispose();
+    this.eyeCandy = null;
+    if (!back) return;
+    audio.playSfx('cancel');
+    this.host.pageClosed?.('eyeCandy');
+    this.host.root()?.querySelector<HTMLElement>('[data-row="eyeCandy"]')?.focus({ preventScroll: true });
+  }
+
+  /** A tab change: close whichever page is up, leaving the cursor where the new tab puts it. */
+  closePages(): void {
+    this.closeCredits(false);
+    this.closeEyeCandy(false);
+  }
+
+  /**
+   * One frame of input while a page (CREDITS or EYE CANDY) is up. True when the page took the frame;
+   * false when none is up, or when L1 / R1 closed it so the screen can go on to change tab. Esc, X,
+   * Backspace, the pad's Circle and Start, and the `Esc BACK` prompt go back to the row that opened it.
+   */
+  pageInput(input: InputSnapshot, took: (b: Button) => boolean): boolean {
+    if (this.credits) return this.creditsInput(input, took);
+    const page = this.eyeCandy;
+    if (!page) return false;
+    if (took('l1') || took('r1')) {
+      this.closeEyeCandy(false);
+      return false;
+    }
+    if (input.actions.includes(EYE_CANDY_CLOSE_ACTION) || input.justPressed('cancel') || took('start')) {
+      this.closeEyeCandy();
+      return true;
+    }
+    page.input(input);
+    return true;
+  }
+
+  eyeCandySnapshot(): Record<string, unknown> | null {
+    return this.eyeCandy?.snapshot() ?? null;
+  }
+
   dispose(): void {
     this.credits?.dispose();
     this.credits = null;
+    this.eyeCandy?.dispose();
+    this.eyeCandy = null;
     this.photo?.dispose();
     this.photo = null;
     // A briefing left up would outlive the screen that owns its input.

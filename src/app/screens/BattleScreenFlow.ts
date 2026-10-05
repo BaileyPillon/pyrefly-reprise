@@ -227,6 +227,8 @@ export class GameFlow {
 
   /** True when the flow stood down because something else navigated. */
   private handedOver = false;
+  /** The last cutscene the flow played was hurried by the player (PR-0061: the battle after it opens hurried). */
+  private lastSceneHurried = false;
 
   /** Title -> chapter select -> a chapter -> back to chapter select. */
   async start(): Promise<void> {
@@ -348,7 +350,11 @@ export class GameFlow {
       save.recordAttempt(id);
 
       // The pre-battle scene plays once (a retry goes straight back in).
-      if (!opts.skipCutscenes && attempt === 0) await this.playCutscene(chapter, 'pre');
+      let openingHurry = false;
+      if (!opts.skipCutscenes && attempt === 0) {
+        await this.playCutscene(chapter, 'pre');
+        openingHurry = this.lastSceneHurried; // PR-0061: a player who skipped the scene gets the hurried opening
+      }
       if (this.handedOver) return null;
 
       this.step = 'battle';
@@ -359,6 +365,7 @@ export class GameFlow {
         auto: opts.auto ?? null,
         ...(opts.speed ? { speed: opts.speed } : {}),
         ...(carry.resumeAt ? { resumeAt: carry.resumeAt } : {}),
+        ...(openingHurry ? { openingHurry } : {}),
       };
       const battle = factories.battle?.(battleOpts) ?? new BattleScreen(battleOpts);
       // A-2: the entry by situation (FFX blur or shatter, FFX-2 shatter; the
@@ -465,6 +472,7 @@ export class GameFlow {
     const screen = factories.cutscene?.(opts) ?? new StubCutscene(opts);
     if (!(await this.show(screen))) return null;
     await screen.done;
+    this.lastSceneHurried = (screen as { hurriedByPlayer?: boolean }).hurriedByPlayer === true;
     return marker;
   }
 

@@ -19,6 +19,7 @@ import {
 import {
   ActorLife,
   approach,
+  ATTACK_IMPACT,
   attackOffset,
   clampYawToCamera,
   facingForSide,
@@ -50,6 +51,7 @@ import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralA
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
+import { cutoutShadow } from './ShadowCutout.ts';
 
 /** One painted pose: a URL now, a texture once it has loaded. */
 export type PoseMap = Record<string, string>;
@@ -252,6 +254,8 @@ interface PlaneSlot {
   meta: PoseMeta;
   /** What {@link computePoseScale} worked out for this slot's pose. */
   scale: PoseScale;
+  /** The painting this plane draws (release 39: `ArtGovernor` reads which master its texture holds). */
+  painted: PaintedTexture | null;
 }
 
 /** A pose that has not been sized yet: 1x1, upright, no footprint. */
@@ -408,7 +412,7 @@ export class PaintedActor extends Group {
   private active = 0;
 
   private readonly poses = new Map<string, PaintedTexture>();
-  private readonly poseUrls: PoseMap = {};
+  readonly poseUrls: PoseMap = {};
   /**
    * Textures this actor loaded itself, and is therefore responsible for
    * freeing. Textures that arrived through {@link adoptPoses} are *borrowed* —
@@ -785,6 +789,7 @@ export class PaintedActor extends Group {
       pose: '',
       meta: { width: 1, height: 1, baselineY: 1 },
       scale: UNSIZED,
+      painted: null,
     };
   }
 
@@ -810,24 +815,19 @@ export class PaintedActor extends Group {
    */
   async loadPoses(poses: PoseMap, initial?: string): Promise<void> {
     const names = Object.keys(poses);
-    const loaded = await Promise.all(
-      names.map((n) =>
-        loadPainted(
-          poses[n]!,
-          this.placeholderFactory,
-          (c) => c.height * this.placeholderBaseline,
-          this.matte,
-          this.fitBaseline,
-        ),
-      ),
-    );
+    // One texture per file (r35, D-315): a pose that falls back to idle shares idle's texture
+    // instead of uploading the same pixels again, which a 2x master would make four times dearer.
+    const byUrl = new Map<string, Promise<PaintedTexture>>();
+    const load = (u: string): Promise<PaintedTexture> =>
+      byUrl.get(u) ?? byUrl.set(u, loadPainted(u, this.placeholderFactory, (c) => c.height * this.placeholderBaseline, this.matte, this.fitBaseline)).get(u)!;
+    const loaded = await Promise.all(names.map((n) => load(poses[n]!)));
+    const previous = names.map((n) => this.poses.get(n));
     names.forEach((n, i) => {
-      const next = loaded[i]!;
-      this.retire(this.poses.get(n));
-      this.poses.set(n, next);
-      this.owned.add(next.texture);
+      this.poses.set(n, loaded[i]!);
+      this.owned.add(loaded[i]!.texture);
       this.poseUrls[n] = poses[n]!;
     });
+    previous.forEach((p) => this.retire(p));
     this.pickReference();
     this.resize();
     const first = initial ?? (this.poses.has('idle') ? 'idle' : names[0]);
@@ -890,6 +890,26 @@ export class PaintedActor extends Group {
   /** The pose currently showing. */
   get pose(): string {
     return this.slots[this.active]!.pose;
+  }
+
+  /**
+   * Release 39 (`ArtGovernor.ts`): every real painting this actor holds, once each (a pose that fell back to idle shares idle's), and
+   * whether a plane is drawing it right now. A stand-in is left out: it has no master to swap in.
+   */
+  paintings(): Array<{ painted: PaintedTexture; mesh: Mesh; drawn: boolean }> {
+    const drawn = new Map<Texture, Mesh>();
+    for (const slot of this.slots) {
+      const p = slot.painted;
+      if (p && slot.mesh.visible && slot.fade > 0.02 && this._alpha > 0.02) drawn.set(p.texture, slot.mesh);
+    }
+    const out: Array<{ painted: PaintedTexture; mesh: Mesh; drawn: boolean }> = [];
+    const seen = new Set<Texture>();
+    for (const p of this.poses.values()) {
+      if (p.placeholder || seen.has(p.texture)) continue;
+      seen.add(p.texture);
+      out.push({ painted: p, mesh: drawn.get(p.texture) ?? this.slots[this.active]!.mesh, drawn: drawn.has(p.texture) });
+    }
+    return out;
   }
 
   get poseNames(): string[] {
@@ -1002,6 +1022,7 @@ export class PaintedActor extends Group {
     const tex = view ?? own;
     const slot = this.slots[slotIndex]!;
     slot.pose = name;
+    slot.painted = tex;
     slot.meta = tex.meta;
     slot.material.uniforms['map']!.value = tex.texture;
     (slot.material.uniforms['texel']!.value as Vector2).set(
@@ -1009,10 +1030,7 @@ export class PaintedActor extends Group {
       1 / Math.max(1, tex.meta.height),
     );
     slot.mesh.visible = this.showFigure;
-    if (slot.depth) {
-      slot.depth.map = tex.texture;
-      slot.depth.needsUpdate = true;
-    }
+    if (slot.depth) cutoutShadow(slot.material, slot.depth, tex.texture, this.shadowAlphaTest); // VP-1001-31: figure-shaped
 
     // One pixel scale for the whole subject, taken from idle — so a landscape
     // KO render becomes a wide, low body instead of a standing figure's height
@@ -1133,21 +1151,13 @@ export class PaintedActor extends Group {
    * peak is still `distance` and the whole move still takes `ms`, so every
    * existing call site keeps its staging.
    */
-  lunge(distance = 0.9, ms = 320): Promise<void> {
-    const from = this.lungeOffset;
-    return this.tweens.toAsync(0, 1, {
-      durationMs: Math.max(1, ms),
-      easing: 'linear',
-      onUpdate: (t) => {
-        // Anything already in flight is folded out over the first beat, so a
-        // second lunge on top of a first does not snap back to zero.
-        const carry = from * Math.max(0, 1 - t / 0.26);
-        this.lungeOffset = distance * attackOffset(t) + carry;
-      },
-      onComplete: () => {
-        this.lungeOffset = 0;
-      },
-    });
+  lunge(distance = 0.9, ms = 320, contact?: { hold: Promise<unknown>; reached: () => void }): Promise<void> {
+    const from = this.lungeOffset; // anything in flight folds out over the first beat (no snap back to zero)
+    const leg = (a: number, b: number, d: number): Promise<void> => this.tweens.toAsync(a, b, { durationMs: Math.max(1, d), easing: 'linear',
+      onUpdate: (t) => void (this.lungeOffset = distance * attackOffset(t) + from * Math.max(0, 1 - t / 0.26)) });
+    // VP-1001-06 (`ContactBeat.ts`): with a contact, the strike holds at its apex until the blow lands.
+    const run = contact ? leg(0, ATTACK_IMPACT, ms * ATTACK_IMPACT).then(() => (contact.reached(), contact.hold)).then(() => leg(ATTACK_IMPACT, 1, ms * (1 - ATTACK_IMPACT))) : leg(0, 1, ms);
+    return run.then(() => void (this.lungeOffset = 0));
   }
 
   /**

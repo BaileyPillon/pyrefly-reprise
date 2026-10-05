@@ -12,8 +12,13 @@ import {
   Vector3,
   type Group,
   type Object3D,
+  type Texture,
+  type WebGLRenderTarget,
+  type WebGLRenderer,
 } from 'three';
+import { followTransform } from './focusMaths.ts';
 import { cutPlates } from './plateMaths.ts';
+import { PLATE_ANISOTROPY, composeHiPlates } from './PlateCompose.ts';
 
 /**
  * Option B "Living Paintings" (B1): the approved backdrop cut into depth plates at runtime.
@@ -25,8 +30,8 @@ import { cutPlates } from './plateMaths.ts';
  * becomes a file: the plates are built in memory from the loaded painting, and the painting file
  * is never touched.
  *
- * While the plates show, the painting plane and its band layers are hidden; switching option B
- * off puts them back exactly as they were.
+ * While the plates show, the painting plane and its band layers are hidden (a layout with `keepBands` keeps the
+ * scene's own band layers drawn over the plates); switching option B off puts them back exactly as they were.
  *
  * Game case: both (plumbing); the cut is each room's own.
  */
@@ -37,9 +42,13 @@ export interface PlateLayout {
   /** World z of each plate above the first (plate 0 stays on the painting plane). */
   z: number[];
   soft: number;
-  /** Feather radius, pixels at `width`. */
+  /** Feather radius, pixels at `width` (scaled to the cut's own width when the cut runs at the painting's width). */
   blur: number;
-  /** Texture width of each plate. */
+  /**
+   * Texture width of each plate on the tiers that cut at a fixed size (the phone's 1024). The full tier cuts at the painting's own
+   * width instead (`PlateBuildOptions.native`): the 2048 this used to say was a cut of a 2688 painting, and the plates were the one
+   * soft thing on screen (release 39).
+   */
   width: number;
   /**
    * The top plate is the room's **painted floor, projected onto the ground (y = 0)** from the
@@ -48,6 +57,12 @@ export interface PlateLayout {
    * floor reaches back to; painting rows beyond it stay on the upright plates.
    */
   floor?: { far: number };
+  /**
+   * Leave the scene's own `backdrop-layer-*` bands visible over the plates (they draw after the plates, render order -80 and up).
+   * Without it the bands are hidden with the painting plane, which changes the resting frame wherever a scene's bands are translucent
+   * (the Farplane's are 0.38 and 0.52): the plates alone are the bare painting, the live frame is the painting plus its bands.
+   */
+  keepBands?: boolean;
 }
 
 const FLOOR_VERT = /* glsl */ `
@@ -93,6 +108,20 @@ export function floorRows(g: PlateGeometry, h: number, far: number): Float32Arra
   return rows;
 }
 
+/**
+ * The width the cut runs at when the plates are composed on the GPU: the derived depth maps are 1344x768 (`tools/fx/depth.py`), so
+ * a cut at their own size loses nothing, costs a quarter of a cut at the painting's 2688 and half of the 2048 it used to run at,
+ * and the colour comes from the painting's own pixels at their full size (`PlateCompose.ts`).
+ */
+export const GPU_CUT_WIDTH = 1344;
+
+export interface PlateBuildOptions {
+  /** The renderer the plates are composed on. Omitted (unit tests): the plates are CPU textures at the painting's approved width. */
+  renderer?: WebGLRenderer | null;
+  /** The full tier: the plates are as wide as the painting that loaded (2688 px, or the master's 5376); false keeps the layout's own small cut (the phone's). */
+  native?: boolean;
+}
+
 export interface PlateGeometry {
   width: number;
   height: number;
@@ -115,6 +144,7 @@ function pixels(src: CanvasImageSource, w: number, h: number): Uint8ClampedArray
   c.width = w;
   c.height = h;
   const ctx = c.getContext('2d', { willReadFrequently: true })!;
+  ctx.imageSmoothingQuality = 'high'; // a master is drawn down 2 to 4 times: the default bilinear read would alias
   ctx.drawImage(src, 0, 0, w, h);
   return ctx.getImageData(0, 0, w, h).data;
 }
@@ -128,7 +158,8 @@ export function plateGeometry(group: Group): PlateGeometry | null {
   return {
     width: p.width,
     height: p.height,
-    centreY: main.position.y,
+    // The plane's own height, not where a scene has moved it since (the Farplane lifts it during the colossus links; `follow`).
+    centreY: (main.userData['fxCentreY'] as number | undefined) ?? main.position.y,
     distance: main.position.z,
     camRef: new Vector3(ref[0] - group.position.x, ref[1] - group.position.y, ref[2] - group.position.z),
   };
@@ -143,7 +174,18 @@ export function paintPoint(g: PlateGeometry, u: number, v: number, z = g.distanc
 
 export class DepthPlates {
   readonly meshes: Mesh[] = [];
-  readonly textures: DataTexture[] = [];
+  readonly textures: Texture[] = [];
+  /** Render targets behind `textures` when the plates were composed at the master's resolution. */
+  private targets: WebGLRenderTarget[] = [];
+  /** How many times the approved painting's width each plate is (1, or 2 for a master). */
+  scale = 1;
+  /** The cut's working width, pixels. */
+  workWidth = 0;
+  /** The plates' own width in pixels (the painting's, 2688 or 5376; the layout's on the phone tier). */
+  pixelWidth = 0;
+  /** Milliseconds the cut (CPU) and the composition (GPU) took, for the debug snapshot and the measurements. */
+  cutMs = 0;
+  composeMs = 0;
   readonly coverage: number[] = [];
   readonly geometry: PlateGeometry;
   readonly zs: number[];
@@ -156,6 +198,10 @@ export class DepthPlates {
   private thresholds: number[] = [];
   private readonly hidden: Array<{ o: Object3D; was: boolean }> = [];
   private shown = false;
+  private keepBands = false;
+  private paint: Mesh | null = null;
+  /** Each upright plate's own scale (its `k`) and height at rest, for {@link follow}. */
+  private readonly base: Array<{ k: number; y: number } | null> = [];
 
   private constructor(group: Group, geometry: PlateGeometry, zs: number[], floored: boolean) {
     this.group = group;
@@ -175,40 +221,73 @@ export class DepthPlates {
     return k;
   }
 
-  static async build(group: Group, depthUrl: string, layout: PlateLayout): Promise<DepthPlates | null> {
+  static async build(group: Group, depthUrl: string, layout: PlateLayout, opts: PlateBuildOptions = {}): Promise<DepthPlates | null> {
     const g = plateGeometry(group);
     const main = group.getObjectByName('backdrop-painting') as Mesh | undefined;
     const map = (main?.material as MeshBasicMaterial | undefined)?.map;
-    const image = map?.image as CanvasImageSource | undefined;
+    const image = map?.image as (CanvasImageSource & { naturalWidth?: number; width?: number }) | undefined;
     if (!g || !image) return null;
     const depthImg = await loadImage(depthUrl);
-    const w = layout.width;
+    // The painting as loaded: the approved 2688 px, or its master (`artScale` 2: 5376 px). The full tier makes plates as wide as
+    // the painting that loaded, cutting at the depth map's own 1344 and laying the painting's pixels over that cut on the GPU; the
+    // phone tier keeps its own small cut. With no renderer (unit tests) the cut itself runs at the approved width on the CPU.
+    const loadedW = Number(image.naturalWidth || image.width || layout.width);
+    const loadedScale = Math.max(1, Math.round(Number(map?.userData['artScale'] ?? 1)));
+    const baseW = Math.round(loadedW / loadedScale);
+    const gpu = !!(opts.native && opts.renderer);
+    const w = opts.native ? (gpu ? Math.min(baseW, GPU_CUT_WIDTH) : baseW) : layout.width;
     const h = Math.round((w * g.height) / g.width);
+    const blur = opts.native ? Math.max(1, Math.round((layout.blur * w) / layout.width)) : layout.blur;
+    const t0 = performance.now();
     const paint = pixels(image, w, h);
     const dBytes = pixels(depthImg, w, h);
     const depth = new Float32Array(w * h);
     for (let i = 0; i < depth.length; i++) depth[i] = dBytes[i * 4]! / 255;
     const rows = layout.floor ? floorRows(g, h, layout.floor.far) : undefined;
-    const plates = cutPlates(paint, depth, w, h, { thresholds: layout.thresholds, soft: layout.soft, blur: layout.blur }, 0.999, rows);
+    const plates = cutPlates(paint, depth, w, h, { thresholds: layout.thresholds, soft: layout.soft, blur }, 0.999, rows);
     const zs = [g.distance, ...layout.z];
     const dp = new DepthPlates(group, g, zs, !!layout.floor);
+    dp.keepBands = !!layout.keepBands;
     dp.depth = depth;
     dp.dw = w;
     dp.dh = h;
     dp.thresholds = layout.thresholds;
-    plates.forEach((plate, i) => {
-      // Rows bottom-up for the GL upload (a data texture is never flipped by the driver).
+    dp.paint = main ?? null;
+    dp.workWidth = w;
+    dp.scale = gpu ? loadedScale : 1;
+    dp.cutMs = Math.round(performance.now() - t0);
+    // Rows bottom-up for the GL upload (a data texture is never flipped by the driver).
+    const flippedPlates = plates.map((plate) => {
       const flipped = new Uint8Array(w * h * 4);
       for (let y = 0; y < h; y++) flipped.set(plate.rgba.subarray(y * w * 4, (y + 1) * w * 4), (h - 1 - y) * w * 4);
-      const tex = new DataTexture(flipped, w, h, RGBAFormat, UnsignedByteType);
-      tex.colorSpace = SRGBColorSpace;
-      tex.generateMipmaps = true;
-      tex.minFilter = LinearMipmapLinearFilter;
-      tex.magFilter = LinearFilter;
-      tex.anisotropy = 8;
-      tex.needsUpdate = true;
+      return flipped;
+    });
+    let textures: Texture[];
+    if (gpu) {
+      const t1 = performance.now();
+      const composed = composeHiPlates(opts.renderer!, image as unknown as TexImageSource, { w, h, plates: flippedPlates }, loadedW / w);
+      dp.targets = composed.targets;
+      textures = composed.textures;
+      dp.composeMs = Math.round(performance.now() - t1);
+      dp.pixelWidth = loadedW;
+    } else {
+      textures = flippedPlates.map((flipped) => {
+        const tex = new DataTexture(flipped, w, h, RGBAFormat, UnsignedByteType);
+        tex.colorSpace = SRGBColorSpace;
+        tex.generateMipmaps = true;
+        tex.minFilter = LinearMipmapLinearFilter;
+        tex.magFilter = LinearFilter;
+        tex.needsUpdate = true;
+        return tex;
+      });
+      dp.pixelWidth = w;
+    }
+    plates.forEach((plate, i) => {
+      const tex = textures[i]!;
+      tex.anisotropy = gpu ? PLATE_ANISOTROPY : 8; // a composed plate's render target was given the 16 when it was made (`PlateCompose.ts`); the CPU cut (the phone tier, the tests) keeps the 8 it always had
       const onFloor = !!layout.floor && i === plates.length - 1;
       const mesh = onFloor ? DepthPlates.floorMesh(g, tex, layout.floor!.far, group) : DepthPlates.uprightMesh(g, tex, zs[i]!, i > 0);
+      dp.base.push(onFloor ? null : { k: mesh.scale.x, y: mesh.position.y });
       mesh.renderOrder = -90 + i * 3;
       mesh.name = `fx-b-plate-${i}`;
       mesh.visible = false;
@@ -220,7 +299,7 @@ export class DepthPlates {
     return dp;
   }
 
-  private static uprightMesh(g: PlateGeometry, tex: DataTexture, z: number, transparent: boolean): Mesh {
+  private static uprightMesh(g: PlateGeometry, tex: Texture, z: number, transparent: boolean): Mesh {
     const mat = new MeshBasicMaterial({ map: tex, transparent, depthWrite: false, fog: false, toneMapped: false });
     const mesh = new Mesh(new PlaneGeometry(g.width, g.height), mat);
     const k = (g.camRef.z - z) / (g.camRef.z - g.distance);
@@ -229,7 +308,7 @@ export class DepthPlates {
     return mesh;
   }
 
-  private static floorMesh(g: PlateGeometry, tex: DataTexture, far: number, group: Group): Mesh {
+  private static floorMesh(g: PlateGeometry, tex: Texture, far: number, group: Group): Mesh {
     const near = g.camRef.z;
     const mat = new ShaderMaterial({
       uniforms: {
@@ -251,6 +330,25 @@ export class DepthPlates {
     return mesh;
   }
 
+  /**
+   * Carry the plates through whatever a scene does to the (hidden) painting plane: its scale about its own centre and a lift.
+   * A plate standing at `k` of the painting's distance from the reference camera takes the same scale times `k` and `k` times
+   * the lift, so the stack still lands on the painting seen from that camera (the Farplane grows and lifts the painting 1.8 times
+   * and 6 units during the colossus links). At rest (scale 1, no lift) nothing moves.
+   */
+  follow(): void {
+    const main = this.paint;
+    if (!main || !this.shown) return;
+    const lift = main.position.y - this.geometry.centreY;
+    this.meshes.forEach((m, i) => {
+      const b = this.base[i];
+      if (!b) return;
+      const t = followTransform(b.k, b.y, main.scale.x, main.scale.y, lift);
+      m.scale.set(t.sx, t.sy, b.k);
+      m.position.y = t.y;
+    });
+  }
+
   /** Plates on (the painting plane and band layers hidden) or off (restored). */
   show(on: boolean): void {
     if (on === this.shown) return;
@@ -258,7 +356,7 @@ export class DepthPlates {
     if (on) {
       this.hidden.length = 0;
       for (const o of this.group.children) {
-        if (o.name === 'backdrop-painting' || o.name.startsWith('backdrop-layer-')) {
+        if (o.name === 'backdrop-painting' || (!this.keepBands && o.name.startsWith('backdrop-layer-'))) {
           this.hidden.push({ o, was: o.visible });
           o.visible = false;
         }
@@ -290,6 +388,8 @@ export class DepthPlates {
       m.removeFromParent();
     }
     for (const t of this.textures) t.dispose();
+    for (const rt of this.targets) rt.dispose();
+    this.targets = [];
     this.meshes.length = 0;
   }
 }

@@ -21,6 +21,8 @@
  */
 
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
+import { logicalArtUrl } from './ArtShipped.ts';
+import { masterListed, parseTiers, withStates2x } from './ArtManifestTiers.ts';
 
 /** One subject's entry: what `public/art/characters/<id>/` actually holds. */
 export interface ArtManifestSubject {
@@ -30,6 +32,10 @@ export interface ArtManifestSubject {
   readonly portrait: boolean;
   /** Declared facing, from `idle.json` or the first state that declares one. */
   readonly facing?: ArtFacing;
+  /** States that also ship `<state>@2x.png`, the twice-resolution master (D-315; `ArtTier.ts`). */
+  readonly states2x?: readonly string[];
+  /** Masters a state ships beyond 1x, `{ idle: [2, 4] }` (release 39, `ArtTier.ts`); `states2x` is the states listing 2, and an old manifest with only `states2x` reads as `[2]`. */
+  readonly tiers?: Readonly<Record<string, readonly number[]>>;
 }
 
 /** The whole of `public/art/manifest.json`. */
@@ -65,6 +71,8 @@ export interface ArtManifest {
   readonly title: readonly string[];
   /** Title plates that also ship `title/<id>.2x.webp`. Subset of `title`. */
   readonly title2x: readonly string[];
+  /** Masters a backdrop ships beyond 1x, `{ gagazet: [2] }`: its painting and depth plates are drawn from the one the budget allows (release 39). */
+  readonly backdropTiers?: Readonly<Record<string, readonly number[]>>;
 }
 
 /** Public path of the manifest, resolved against the Vite base path. */
@@ -121,11 +129,9 @@ export function parseArtManifest(raw: unknown): ArtManifest | null {
     // `parseArtFacing` owns the vocabulary (and its aliases); the generator
     // only copies the sidecar's string through.
     const facing = parseArtFacing(entry.facing);
-    subjects[id] = {
-      states,
-      portrait: entry.portrait === true,
-      ...(facing ? { facing } : {}),
-    };
+    const hi = Array.isArray(entry.states2x) ? entry.states2x.filter((s): s is string => states.includes(s as string)) : [];
+    const tiers = withStates2x(parseTiers(entry.tiers, (state) => states.includes(state)), hi);
+    subjects[id] = { states, portrait: entry.portrait === true, ...(facing ? { facing } : {}), ...(hi.length ? { states2x: hi } : {}), ...(Object.keys(tiers).length ? { tiers } : {}) };
   }
 
   const strings = (v: unknown): string[] =>
@@ -147,6 +153,7 @@ export function parseArtManifest(raw: unknown): ArtManifest | null {
     // plate-less gradient it shipped with rather than asking for a 404.
     title: strings(obj.title),
     title2x: strings(obj.title2x),
+    backdropTiers: parseTiers(obj.backdropTiers, (key) => strings(obj.backdrops).includes(key)),
   };
 }
 
@@ -240,7 +247,7 @@ export function hasPause2xArt(key: string): boolean | null {
  * the manifest that indexes it.
  */
 export function pauseStemOf(url: string): string | null {
-  const m = /(?:^|\/)art\/pause\/([A-Za-z0-9][A-Za-z0-9_-]*)\.png(?:$|[?#])/i.exec(url);
+  const m = /(?:^|\/)art\/pause\/([A-Za-z0-9][A-Za-z0-9_-]*)\.png(?:$|[?#])/i.exec(logicalArtUrl(url));
   return m?.[1] ?? null;
 }
 
@@ -251,7 +258,7 @@ export function pauseStemOf(url: string): string | null {
 export function pause2xUrlFor(url: string): string | null {
   const stem = pauseStemOf(url);
   if (stem === null || hasPause2xArt(stem) !== true) return null;
-  return url.replace(/\.png(?=$|[?#])/i, '.2x.webp');
+  return logicalArtUrl(url).replace(/\.png(?=$|[?#])/i, '.2x.webp');
 }
 
 /** Is `public/art/title/<key>.png` there? `null` when there is no manifest. */
@@ -266,7 +273,7 @@ export function hasTitle2xArt(key: string): boolean | null {
 
 /** The `title/<key>` stem a `public/art/title/...` URL names, or `null`. */
 export function titleStemOf(url: string): string | null {
-  const m = /(?:^|\/)art\/title\/([A-Za-z0-9][A-Za-z0-9_-]*)\.png(?:$|[?#])/i.exec(url);
+  const m = /(?:^|\/)art\/title\/([A-Za-z0-9][A-Za-z0-9_-]*)\.png(?:$|[?#])/i.exec(logicalArtUrl(url));
   return m?.[1] ?? null;
 }
 
@@ -282,7 +289,7 @@ export function titleStemOf(url: string): string | null {
 export function title2xUrlFor(url: string): string | null {
   const stem = titleStemOf(url);
   if (stem === null || hasTitle2xArt(stem) !== true) return null;
-  return url.replace(/\.png(?=$|[?#])/i, '.2x.webp');
+  return logicalArtUrl(url).replace(/\.png(?=$|[?#])/i, '.2x.webp');
 }
 
 /**
@@ -301,14 +308,17 @@ const ART_ASSET =
   /(?:^|\/)art\/(?:characters\/([^/?#]+)\/([^/?#]+)|(portraits|backdrops|pause|title)\/([^/?#]+))\.([a-z0-9]+)(?:$|[?#])/i;
 
 function judge(manifest: ArtManifest, url: string): boolean | null {
-  const m = ART_ASSET.exec(url);
+  // The master's name, whichever form the caller holds: a derived `.webp` (ArtShipped.ts) is the same painting as its PNG.
+  const m = ART_ASSET.exec(logicalArtUrl(url));
   if (!m) return null;
 
   const [, subjectId, state, folder, key, ext] = m;
   // The fleet ships PNG. A `.webp`/`.jpg` under an indexed folder is therefore
   // an *alternative encoding nobody produced* — a real `false`, which is what
-  // lets a candidate chain skip it instead of learning the hard way. A `.json`
-  // sidecar is not indexed and is judged by its PNG, so it stays `null`.
+  // lets a candidate chain skip it instead of learning the hard way. (The one
+  // `.webp` that is somebody's: the lossless copy a production build derives
+  // from a master; `logicalArtUrl` above has already given that its PNG name.)
+  // A `.json` sidecar is not indexed and is judged by its PNG, so it stays `null`.
   if ((ext ?? '').toLowerCase() === 'json') return null;
   const isPng = (ext ?? '').toLowerCase() === 'png';
 
@@ -316,7 +326,7 @@ function judge(manifest: ArtManifest, url: string): boolean | null {
     // A dotted stem is a candidate or a `.raw` intermediate: not indexed, and
     // not ours to judge.
     if (state.includes('.')) return null;
-    return isPng && (manifest.subjects[subjectId]?.states ?? []).includes(state);
+    return isPng && (masterListed(manifest, subjectId, state) ?? (manifest.subjects[subjectId]?.states ?? []).includes(state));
   }
   if (folder === undefined || key === undefined || key.includes('.')) return null;
   const list =
@@ -327,7 +337,7 @@ function judge(manifest: ArtManifest, url: string): boolean | null {
         : folder === 'title'
           ? manifest.title
           : manifest.pause;
-  return isPng && list.includes(key);
+  return isPng && ((folder === 'backdrops' ? masterListed(manifest, null, key) : null) ?? list.includes(key));
 }
 
 export async function manifestKnowsAsset(url: string): Promise<boolean | null> {

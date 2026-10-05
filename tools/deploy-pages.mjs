@@ -26,7 +26,12 @@
  *                  section 10, "Owner override of the deploy gate"). An agent
  *                  never passes this flag on its own initiative.
  *
- * Pipeline: preflight -> `vite build` into dist-release/ -> hash and
+ * Pipeline: preflight -> `vite build` into dist-release/ (which derives the
+ * art's lossless WebP from the PNG masters, `tools/art-derive-lib.mjs`) -> prove
+ * every derived file decodes to its master's pixels and that no page names an
+ * art file the build left out (`tools/art-verify.mjs`) -> load every shipped
+ * image in WebKit and in Chromium, at its master's size
+ * (`tools/art-browser-load.mjs`) -> hash and
  * decode-check every shipped file into `artifact-manifest.json` -> plan the
  * review this change needs (tools/critic-plan.mjs) and apply the owner's
  * release gate: refuse when this commit has no validated focused or deep
@@ -68,10 +73,12 @@ import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import { formatLoadReport, verifyArtLoads } from './art-browser-load.mjs';
+import { auditArtReferences, formatAudit, verifyShippedArt } from './art-verify.mjs';
 import { MANIFEST_NAME, buildManifest, diffManifests, verifyLive } from './artifact-manifest.mjs';
 import { applyStoredReports } from './critic-clear.mjs';
 import { classifyPorcelain } from './deploy-classify.mjs';
-import { findUnshipped } from './dist-filter.mjs';
+import { SOURCEMAP_DIR_ENV, findSourceMapReferences, findUnshipped } from './dist-filter.mjs';
 import {
   archiveMarker,
   buildPendingMarker,
@@ -87,6 +94,8 @@ import { loadPolicy, releasePolicy, validateReport } from './critic-policy.mjs';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist-release');
 const GH_EXE = 'D:/Tools/GitHubCLI/gh.exe';
+/** PR-0328 / D-335: the source maps of every deployed build, one folder per commit; none of them ship. */
+const SOURCEMAP_HOME = process.env.PYREFLY_SOURCEMAP_HOME ?? 'D:/Tools/pyrefly-sourcemaps';
 const REPO = 'BaileyPillon/pyrefly-reprise';
 const REPO_URL = `https://github.com/${REPO}.git`;
 const LIVE_URL = 'https://baileypillon.github.io/pyrefly-reprise/';
@@ -496,14 +505,20 @@ async function main() {
   log('building: node tools/gen/manifest.mjs, then node tools/fx-assets.mjs ensure (eye-candy D: public/fx is gitignored)');
   if (run(process.execPath, [join(ROOT, 'tools', 'gen', 'manifest.mjs')]).status !== 0) fail('art manifest generation failed — see output above');
   if (run(process.execPath, [join(ROOT, 'tools', 'fx-assets.mjs'), 'ensure']).status !== 0) fail('public/fx is missing or differs from tools/fx/fx-assets.json, and the backup could not restore it — see output above');
-  log('building: npx vite build --outDir dist-release --emptyOutDir');
-  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir']).status !== 0) {
+  // PR-0328 / D-335: no source map ships. The build keeps its maps, keyed by this commit, outside dist-release.
+  const sourceMapDir = join(SOURCEMAP_HOME, mainSha);
+  log(`building: npx vite build --outDir dist-release --emptyOutDir (source maps are kept in ${sourceMapDir}, none ship)`);
+  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir'], { env: { ...process.env, [SOURCEMAP_DIR_ENV]: sourceMapDir } }).status !== 0) {
     fail('vite build failed — see output above');
   }
 
   // PR-0100 / PR-0173: candidates, raw renders and numbered takes never ship (vite.config.ts prunes them).
   const unshipped = findUnshipped(DIST);
   if (unshipped.length) fail(`build still carries ${unshipped.length} unshipped file(s), e.g. ${unshipped.slice(0, 3).join(', ')}`);
+  // PR-0328: a leftover sourceMappingURL comment would make every browser ask the site for a map that is not there.
+  const mapRefs = findSourceMapReferences(DIST);
+  if (mapRefs.length) fail(`build still points at a source map from ${mapRefs.length} file(s), e.g. ${mapRefs.slice(0, 3).join(', ')}`);
+  log(existsSync(sourceMapDir) ? `source maps of ${mainSha} kept in ${sourceMapDir} (none ship)` : `WARNING: no source maps were kept for ${mainSha} (${sourceMapDir} does not exist); the build ships none either way`);
   const indexPath = join(DIST, 'index.html');
   const artCharactersDir = join(DIST, 'art', 'characters');
   if (!existsSync(indexPath)) fail(`build did not produce ${indexPath}`);
@@ -513,6 +528,28 @@ async function main() {
   const artFileCount = countFiles(artCharactersDir);
   log(`build ok: index.html present, ${artFileCount} files under art/characters`);
   if (run(process.execPath, [join(ROOT, 'tools', 'fx-assets.mjs'), 'verify', '--dir', join(DIST, 'fx')]).status !== 0) fail('the build did not ship public/fx intact — see output above');
+
+  // Release 38 (r38-bytes): the painted art ships as lossless WebP derived from the PNG masters. Prove it from the files about to
+  // be published, not from the cache that made them: every shipped WebP decodes to its master's pixels (RGBA, sha256), the build
+  // holds exactly one of the PNG and its WebP, no page, stylesheet or data file names an art file the build left out, and every shipped WebP is of a master that every decoder draws the same (opaque, or alpha only 0 and 255 with no colour under alpha 0: verifyShippedArt's default `exact`).
+  // The names the bundle builds at run time are covered by `node tools/art-play-audit.mjs --dir <this build>` (the focused review).
+  log('art: pixel identity of every shipped WebP against its master PNG, and every reference to the art');
+  const artIdentity = await verifyShippedArt({ distDir: DIST, publicDir: join(ROOT, 'public') });
+  log(`art identity ${artIdentity.ok ? 'PASS' : 'FAIL'}: ${artIdentity.checked} masters (${artIdentity.webp} shipped as WebP, ${artIdentity.png} as PNG, ${artIdentity.decoded} compared pixel for pixel) in ${(artIdentity.ms / 1000).toFixed(0)} s`);
+  if (!artIdentity.ok) {
+    for (const p of artIdentity.problems.slice(0, 25)) log(`  ${p}`);
+    fail(`${artIdentity.problems.length} shipped art file(s) are not their master's pixels, are missing, or are a WebP of art that a decoder could draw differently (node tools/art-derive.mjs verify --dir dist-release); the default PYREFLY_ART_WEBP=exact makes none of these, PYREFLY_ART_WEBP=off ships the PNGs as before`);
+  }
+  const artRefs = auditArtReferences(DIST);
+  for (const line of formatAudit(artRefs).split(/\r?\n/)) log(line);
+  if (!artRefs.ok) fail(`${artRefs.problems.length} reference(s) to an art file the build does not hold — see above`);
+  // The re-check's B3 (r38-bytes): every image the build ships loads and decodes, at its master's size, in WebKit and in Chromium, and no
+  // portrait plate would stay static. A pick of 20 to 30 files cannot find two bad ones in 900, and a file the browser cannot decode still
+  // answers 200 and logs nothing, so this loads the whole set (tools/art-browser-load.mjs, about 20 seconds). An engine that cannot start fails it.
+  log('art: every shipped image loads in WebKit and in Chromium (tools/art-browser-load.mjs)');
+  const artLoad = await verifyArtLoads({ distDir: DIST, publicDir: join(ROOT, 'public') });
+  for (const line of formatLoadReport(artLoad).split(/\r?\n/)) log(line);
+  if (!artLoad.ok) fail(`${artLoad.problems.length} problem(s): a shipped image does not load, or not at its master's size, in WebKit or Chromium; a portrait plate would stay static; or an engine could not start (node tools/art-browser-load.mjs --dir dist-release; a missing browser needs "npx playwright install webkit chromium", a download, so ask first)`);
 
   const indexHtml = readFileSync(indexPath, 'utf8');
   const bundleMatch = indexHtml.match(/assets\/index-([\w-]+)\.js/);
@@ -531,7 +568,7 @@ async function main() {
   const problems = manifest.problems.filter((p) => !flatOk.has(p.split(':')[0]));
   if (problems.length) {
     for (const p of problems) log(`  ${p}`);
-    fail(`${problems.length} shipped file(s) are empty, undecodable or blank — fix them, or list a deliberate flat image under "intentionalFlatImages" in critic/policy.json`);
+    fail(`${problems.length} shipped file(s) are empty, undecodable, blank or a source map — fix them, or list a deliberate flat image under "intentionalFlatImages" in critic/policy.json`);
   }
   if (manifest.audioUnverified) log(`WARNING: ${manifest.audioUnverified} audio file(s) could not be decode-checked (no ffprobe): CHK-019 stays UNVERIFIED for them`);
   writeFileSync(join(DIST, MANIFEST_NAME), `${JSON.stringify(manifest)}\n`);

@@ -35,6 +35,8 @@ import {
   RepeatWrapping,
   type Texture,
 } from 'three';
+import { floorDetail } from '../engine/ArtBudget.ts';
+import { artBudget, bufferWidth, maxTextureSize } from '../engine/ArtDevice.ts';
 import { paintedCanvasTexture } from '../engine/PaintedArt.ts';
 import { cloudCanvas, rng } from '../engine/ProceduralArt.ts';
 import { DECK } from './evrae-airship-range.ts';
@@ -50,12 +52,17 @@ function canvas(w: number, h: number): HTMLCanvasElement {
  * Deck plating: long plates running toward the vanishing point (the texture's
  * v axis runs along z), rivet rows on the seams, a worn stripe, and the
  * lettering is its own decal (`letteringCanvas`).
+ *
+ * Drawn on the 1024 x 2048 design grid through a scale (release 39, `ArtBudget.floorDetail`): the same plating at any resolution, the
+ * seams, rivets and scuffs crisper on a device that can hold the bigger canvas. A deck seen at a low angle is the most magnified
+ * thing in the frame: 3.8x at 1440p from the 1024 canvas.
  */
-function deckCanvas(): HTMLCanvasElement {
+function deckCanvas(detail = 1): HTMLCanvasElement {
   const W = 1024;
   const H = 2048;
-  const c = canvas(W, H);
+  const c = canvas(W * detail, H * detail);
   const ctx = c.getContext('2d')!;
+  ctx.scale(detail, detail);
   const rand = rng(41);
   ctx.fillStyle = '#7a808a';
   ctx.fillRect(0, 0, W, H);
@@ -105,9 +112,10 @@ function deckCanvas(): HTMLCanvasElement {
  * it five times across the deck), laid flat in front of the party: §12.3's
  * "lettered 'Salvage Dream' panel as a foreground read".
  */
-function letteringCanvas(): HTMLCanvasElement {
-  const c = canvas(1024, 320);
+function letteringCanvas(detail = 1): HTMLCanvasElement {
+  const c = canvas(1024 * detail, 320 * detail);
   const ctx = c.getContext('2d')!;
+  ctx.scale(detail, detail);
   ctx.fillStyle = 'rgba(226,214,186,0.9)';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -201,7 +209,8 @@ export function buildAirshipDeck(opts: { low?: boolean } = {}): AirshipDeck {
   const textures: Texture[] = [];
 
   // ------------------------------------------------------------------ deck
-  const deckTex = paintedCanvasTexture(deckCanvas());
+  const detail = floorDetail(artBudget(), bufferWidth(), 2048, maxTextureSize()); // 1 on a phone, 2 on a mid desktop, 3 on a strong card, 4 on a strong card at 4K
+  const deckTex = paintedCanvasTexture(deckCanvas(detail));
   deckTex.wrapS = deckTex.wrapT = RepeatWrapping;
   const deckLen = DECK.nearZ - DECK.edgeZ;
   deckTex.repeat.set((DECK.halfWidth * 2) / 12, deckLen / 18);
@@ -215,7 +224,7 @@ export function buildAirshipDeck(opts: { low?: boolean } = {}): AirshipDeck {
   group.add(deck);
   disposables.push(deck.geometry, deckMat);
 
-  const letterTex = paintedCanvasTexture(letteringCanvas());
+  const letterTex = paintedCanvasTexture(letteringCanvas(detail));
   textures.push(letterTex);
   const letterMat = new MeshLambertMaterial({ map: letterTex, transparent: true, opacity: 0.42, depthWrite: false });
   const lettering = new Mesh(new PlaneGeometry(7.2, 2.25), letterMat);

@@ -14,6 +14,7 @@
  */
 
 import type { Material, MeshBasicMaterial, Object3D } from 'three';
+import { ssLodCell } from '../../crisp/sceneScale.ts';
 
 const PATCHED = Symbol('fxFocus');
 
@@ -29,21 +30,23 @@ export class BackdropFocus {
   patch(root: Object3D): number {
     let n = 0;
     root.traverse((o) => {
-      if (o.name !== 'backdrop-painting' && !o.name.startsWith('backdrop-layer-')) return;
+      if (o.name !== 'backdrop-painting' && !o.name.startsWith('backdrop-layer-') && !o.name.startsWith('backdrop-wing-')) return;
       const mat = (o as Object3D & { material?: Material }).material as (MeshBasicMaterial & { [PATCHED]?: boolean }) | undefined;
       if (!mat || mat[PATCHED] || !mat.map) return;
       mat[PATCHED] = true;
       // Layers sit nearer the camera than the painting, so they soften less.
-      const depth = o.name === 'backdrop-painting' ? 1 : 0.6;
+      const depth = o.name === 'backdrop-painting' || o.name.startsWith('backdrop-wing-') ? 1 : 0.6; // a wing is the painting's own edge strip
       const bias = this.bias;
       mat.onBeforeCompile = (shader) => {
         shader.uniforms['uFxBias'] = bias;
+        shader.uniforms['uSsLod'] = ssLodCell; // a supersampled scene (`crisp/CrispRig.ts`) reads finer levels, so the soft far field adds them back
         shader.fragmentShader = shader.fragmentShader
-          .replace('void main() {', `uniform float uFxBias;\nvoid main() {`)
+          .replace('void main() {', `uniform float uFxBias;\nuniform float uSsLod;\nvoid main() {`)
           .replace(
             '#include <map_fragment>',
             `#ifdef USE_MAP
               float fxB = uFxBias * ${depth.toFixed(2)} * mix(0.33, 1.0, smoothstep(0.12, 0.62, vMapUv.y));
+              fxB += uSsLod * smoothstep(0.0, 0.5, fxB);
               vec4 sampledDiffuseColor = texture2D( map, vMapUv, fxB );
               diffuseColor *= sampledDiffuseColor;
             #endif`,

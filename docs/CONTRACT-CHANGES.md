@@ -6,6 +6,73 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-03 — FFX-2 Lady Luck's reels: a sourced pay table, the Dud, and a menu ability can carry a minigame outcome (FFX-2 only; additive)
+
+Branch `r37-lady-luck` (backlog key `BR-LADY-LUCK-REELS`; a port of `946918c69` onto `c69de96a`, not a merge). Critic round 02
+#05. One additive field in `src/battle/common/types.ts` and four changes to what the FFX-2 engine and presenter do. FFX is
+untouched. Reflect, which the old commit also carried, is **not** ported (its own item). Handoff:
+[r37-lady-luck](handoff/r37-lady-luck.md).
+
+**1. `AbilityCommand.extra?: MinigameResult` (additive).** FFX's timed inputs are Overdrives, so `extra` lived on
+`OverdriveCommand` alone. FFX-2's two timed inputs (Trigger Happy, Lady Luck's reels) are ordinary menu abilities and arrive
+as `kind: 'ability'`. `BattlePresenter.resolveMinigame` attached the overlay's result only to `'overdrive'`, and
+`ffx2/minigames.ts attachedResult` read it only off `'overdrive'`, so every X-2 minigame outcome a human produced (a Trigger
+Happy count included) was discarded and the engine rolled its own. Both now accept `'ability'`. Same protocol: omitted, the
+engine rolls a default from the seeded RNG.
+
+**2. `ReelResult` (doc only).** Documents Lady Luck's strip (`red7`, `bar`, `cherry` plus three per set) and that its order
+matters; `hits` is Wakka's Attack Reels only and Lady Luck never sets it.
+
+**3. A charged `minigame-request` is answered, by the unit that raised it.** The reels are the only X-2 timed input with a
+charge time, so the request comes out of `tick()`, not `submit()`. The presenter's `'waiting'` branch dropped it, the Active
+pump (`runActivePump`) dropped it under an open menu, and `FFX2Engine.submit` would have handed the answer to "whoever's gauge
+is full". The presenter now parks it (`deferredMinigame`), the pump gains an optional `interrupted` dep that closes the open
+menu, the overlay opens, and the engine resolves the command for the suspended actor (`suspendedActor`, `ExecEnv.setAwaiting(
+command, by?)`, engine-private). The presenter re-submits that actor's own command (`commandBy`), not `lastCommand`.
+
+**4. New events in the FFX-2 stream** (no new event types):
+- a reel action emits `message` (`kind: 'system'`) naming what the spin paid, the payload's name or `Dud!`, before the
+  payload's own events;
+- a **status-only** action (`formula: 'none'`) on a target immune to its status emits `miss` with `reason: 'immune'`; it used
+  to emit nothing at all. A rider on a damaging hit still stays quiet.
+
+**5. `AbilityDef.extra` keys the FFX-2 engine now reads:** `payTable` and `symbols` (reel wrappers; `symbols` is also what the
+overlay reads from `minigame-request.params`), and `noChain` (the Dud: nobody's attack, so it neither opens nor is multiplied
+by a Chain).
+
+## 2026-10-03 — `SceneBuild` gains the optional `pixelScaled` (FFX only in use: Lady Ginnem's glow, A-9; additive)
+
+Branch `r37-scenes`. `SceneBuild` (`src/scenes/types.ts`) may now carry `pixelScaled?: ReadonlyArray<{ setPixelScale(v: number): void }>`:
+mote layers a scene draws that are not `ParticleField`s (the pyrefly emitter's shells). `fromSceneBuild` (`src/scenes/index.ts`)
+passes the render-height scale to them next to `particles`. Every scene that omits it is unchanged. Only
+`cavern-stolen-fayth` sets it (FFX Chapter IX). `CutsceneFigure` (`src/app/screens/cutsceneFigures.ts`) gains the optional `aura`
+(Lady Ginnem only). Game case: FFX only.
+
+## 2026-10-02 — `Settings` gains the nine EYE CANDY parts; new seam `src/engine/fx/eyeCandyFlags.ts` (D-317; both games; additive)
+
+Branch `eye-candy-page` (from `ef3f6bbf`). Save-data class. `Settings` (`src/app/SaveData.ts`) now also extends
+`FxPartSettings` (`src/app/fxParts.ts`): nine booleans, every one default `true`: `fxDof`, `fxFog`, `fxEdges` under
+CINEMA LIGHT (`fxLight`); `fxBreath`, `fxKo` under LIVING PAINTINGS (`fxLiving`); `fxFraming`, `fxHero` (FFX only),
+`fxSphere` (FFX-2 only), `fxSplash` under BATTLE SPECTACLE (`fxSpectacle`). `SAVE_VERSION` stays 1. The upgrade: a
+part the stored blob does not hold as a boolean takes its look's value, once (a release 33 to 35 save with a look OFF
+gets that look's parts OFF; an older save, with no looks stored, gets them ON). For that, `migrateComfort(settings,
+defaults, raw?)` (`src/app/saveComfort.ts`) takes an optional third argument, the stored blob's own settings; the two
+existing arguments are unchanged. New file `src/engine/fx/eyeCandyFlags.ts` (`EyeCandyKey`, `setEyeCandyProvider`,
+`eyeCandyOn`; byte-identical with the mix-build lane's copy): `applyComfort` installs a provider at boot and on every
+settings write, in which a look key answers the look and a part key answers look AND part; REDUCE MOTION is not folded
+in (the play sites apply it). `FX_LOOK_ROWS` entries gain `key` (their seam key). The OPTIONS rows `fxLight`,
+`fxLiving` and `fxSpectacle` are replaced by one `eyeCandy` row (`optionRows(settings, game = 'ffx')`), which opens the
+EYE CANDY page; the three looks keep their ids, values and `adjustSetting` path there. Game case: both.
+
+## 2026-10-01 — `PaintedActor.lunge` and the presenter port's `lunge` take an optional `contact`; `PaintedActor.poseUrls` is readable (both games; additive)
+
+Branch `vis-fix` (critic visual pass VP-1001-06 and -04). `lunge(distance?, ms?, contact?: { hold: Promise<unknown>; reached: () => void })`:
+with a contact the strike runs to its impact frame (`ATTACK_IMPACT`), calls `reached()`, holds at the apex until `hold`
+settles, then goes home (`src/engine/ContactBeat.ts` arms and releases it). Without one, the lunge is exactly the
+old single tween, so every other caller is unchanged. `PaintedActor.poseUrls` lost its `private` so
+`src/engine/KoFallback.ts` can tell a real `ko` painting from a fallback; it is still `readonly`. `SpriteActor` is
+unchanged (it is not staged in battle). Game case: both (shared plumbing).
+
 ## 2026-10-01 — `SequenceResult` doc comments: Tornado's Bushido timer is 3 000 ms (od5, D-312)
 
 Branch `r34fix-od5`. Comments only, no type change. `timerMsFor` (`src/battle/ffx/overdrive.ts`) gives Tornado

@@ -10,10 +10,18 @@
  * That is what lets e2e run a chapter to victory headlessly.
  */
 
-import type { Command, MinigameKind, MinigameResult, ReelResult, Rng } from '../common/types.ts';
+import type { AbilityDef, Command, MinigameKind, MinigameResult, ReelResult, Rng } from '../common/types.ts';
+import { reelStripOf } from './reels.ts';
 
-/** Attack Reels-style strip. The reel sets are the Lady Luck data agent's. */
-const DEFAULT_REEL_STRIP: readonly string[] = ['1hit', '2hit', 'miss'];
+/**
+ * The three symbols every Lady Luck set shares [§3.12]. Only used when a reel
+ * command carries no strip of its own, which the shipped data never does.
+ *
+ * This used to be `['1hit', '2hit', 'miss']` — **Wakka's** Attack Reels strip
+ * from FFX, whose symbols X-2's pay table does not contain, so an unattended
+ * spin could only ever have been a Dud.
+ */
+const DEFAULT_REEL_STRIP: readonly string[] = ['red7', 'bar', 'cherry'];
 
 /**
  * Trigger Happy default: one hit per R1 press, 0–16, each hit self-chaining.
@@ -24,47 +32,57 @@ export function rollTriggerHappy(rng: Rng): number {
   return rng.int(6, 16);
 }
 
-/** Reels default: three independent symbols off the strip. §3.12 */
+/**
+ * Reels default: three independent, uniform symbols off the strip — a spin
+ * with nobody timing the presses. §3.12
+ *
+ * Still exactly three draws, so every replay keeps its place in the seeded
+ * stream. X-2's reels have **no hit-count rule** (that is Wakka's Attack
+ * Reels), so the result carries no `hits`.
+ */
 export function rollReels(rng: Rng, strip: readonly string[] = DEFAULT_REEL_STRIP): ReelResult {
   const symbols: [string, string, string] = [rng.pick(strip), rng.pick(strip), rng.pick(strip)];
-  const threeOfAKind = symbols[0] === symbols[1] && symbols[1] === symbols[2];
-  const hits = symbols.reduce((sum, s) => sum + (s === '2hit' ? 2 : s === '1hit' ? 1 : 0), 0);
   return {
     symbols,
-    threeOfAKind,
-    hits: threeOfAKind ? hits * 2 : hits,
+    threeOfAKind: symbols[0] === symbols[1] && symbols[1] === symbols[2],
     timeRemainingMs: 0,
   };
 }
 
-/** Roll a default outcome for `kind`. */
-export function rollDefault(kind: MinigameKind, rng: Rng): MinigameResult | null {
+/** Roll a default outcome for `kind`. `ability` supplies a reel command's own strip. */
+export function rollDefault(kind: MinigameKind, rng: Rng, ability?: AbilityDef): MinigameResult | null {
   if (kind === 'gunner-trigger') {
     return { kind: 'gunner-trigger', trigger: { hits: rollTriggerHappy(rng) } };
   }
   if (kind === 'ladyluck-reels') {
-    return { kind: 'ladyluck-reels', reels: rollReels(rng) };
+    const strip = ability ? reelStripOf(ability) : [];
+    return { kind: 'ladyluck-reels', reels: rollReels(rng, strip.length > 0 ? strip : DEFAULT_REEL_STRIP) };
   }
   return null;
 }
 
-/** The outcome already attached to a command, if any. */
+/**
+ * The outcome already attached to a command, if any.
+ *
+ * X-2's two timed inputs are ordinary menu abilities, so they arrive as
+ * `kind: 'ability'` — there is no Overdrive command in this game. Reading
+ * `extra` off `'overdrive'` alone meant a human's Trigger Happy count and her
+ * three stopped reels were both thrown away and re-rolled by the engine.
+ */
 export function attachedResult(command: Command): MinigameResult | null {
-  if (command.kind !== 'overdrive') return null;
+  if (command.kind !== 'overdrive' && command.kind !== 'ability') return null;
   return command.extra ?? null;
 }
 
 /**
  * How many hits this action lands, given a minigame outcome.
  *
- * Trigger Happy is one hit per press; the reels contribute `hits` when they
- * carry one. Returns `null` when the outcome does not change the hit count.
+ * Trigger Happy is one hit per press. Lady Luck's reels never change a hit
+ * count — a spin picks *which ability* fires (`reels.ts`), and that ability
+ * keeps its own. Returns `null` when the outcome does not change the count.
  */
 export function hitsFromOutcome(outcome: MinigameResult | null): number | null {
   if (!outcome) return null;
   if (outcome.kind === 'gunner-trigger') return Math.max(0, Math.min(16, outcome.trigger.hits));
-  if (outcome.kind === 'ladyluck-reels' || outcome.kind === 'wakka-reels') {
-    return outcome.reels.hits ?? null;
-  }
   return null;
 }

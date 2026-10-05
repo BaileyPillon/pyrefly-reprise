@@ -100,7 +100,15 @@ node critic/runner/lib/supp.mjs <mode> <chapterIndex> [w] [h] --base=<url> --evi
   (`injected: true` on every capture in this mode).
 - `win <idx> <w> <h> [budgetMs]` — plays the advisor's own recommendation
   with real arrow-key navigation and Enter, using `assertMenuRows` for row
-  reads and picks.
+  reads and picks. **Release 38 (D-359):** a pick no longer records `badge`.
+  `readPick` used to note whether the card printed the "Guide's pick" tag
+  (`.mad__badge`, `badge: true`); the tag is gone from the card in both games
+  because the guide and the advisor are separate, so no evidence file made
+  from release 38 on carries that field. Evidence from release 37.1 and
+  before has `badge: true` on the picks the tactic made. **An auditor who
+  compares picks across that boundary must read "no badge" as D-359, not as a
+  regression**; nothing in `critic/runner` ever keyed a verdict or a gate on
+  the field (checked in the independent check of `r38-polish`, 2026-10-04).
 
 ### `gap-audio.mjs` — mid-encounter music crossfade
 
@@ -185,6 +193,24 @@ node critic/runner/lib/route.mjs <chapterId> <win|lose> --base=<url> --evidence=
   per show (`dboxStep`): a typewriter growing is one entry, a repeat or a line
   that opens with the previous line's words is a new one, and `endMs` is when
   the box went away.
+
+- **Overdrive overlays typed as shown, the end of a route read from the screen, post scenes watched (PR-0261, round 19;
+  game case: the two overlays are FFX only, the rest both).** (1) `route-minigame.mjs`: when an Overdrive overlay is up, a
+  Bushido (Auron) is typed chip by chip from the glyphs on screen (`route-pure.mjs#keysForChips`; the circle is `x`,
+  never Escape, which opens the pause), a Swordplay (Tidus) is confirmed when the marker, carried forward by the key's travel
+  time, is inside the gold zone (`swordplayPressNow`; a miss only restarts the sweep, as in the game). The old Enter 3 s
+  after the overlay opened was 0 correct inputs and a press at a random spot, so every Auron or Tidus Overdrive was a
+  floor. Each play is in `run.json.minigames` (chips, keys, where the marker was at every Enter against the zone, and the
+  `correctInputs` the engine received); the first of each kind is shot (`28-bushido-overlay`, `28-swordplay-overlay`). Every
+  other overlay (reels, fury, Mix, the pickers) keeps the old handling. (2) `route-pure.mjs#deriveOutcome` reads the end of a
+  route from the results screen's words, then from the screen and the LAST link's outcome event, never from the first
+  `victory` event in the log (a chain logs one per link, and the log read at the results holds none). A fight that never
+  finished is `outcome: "stalled"`, `run.json.stalledAt = { link, phase }` and a `fails` entry "stalled at link 2,
+  moment:battle-start"; `rec.lastChain` is the last chain state the loop read. (3) `route-scene.mjs#watchThenTap`: a
+  cutscene after the results (and the scene after CONFIRM) is watched with NO input first (`run.json.post.scene.watch`: did it
+  move by itself?), then advanced with one Enter at a time; the old 4 s hold fast-forwarded it (hold-to-skip is 550 ms), which
+  produced round 19's refuted "scene runs with no input" major. A hold is the fallback only after 90 taps.
+  Cases: `tests/unit/critic-route-harness.test.ts` (the key table is also read against `AuronSequence.ts`'s own GLYPH table).
 
 ### `cli.mjs` — small arg helper
 

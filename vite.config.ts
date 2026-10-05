@@ -1,6 +1,7 @@
 import { resolve } from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
-import { pruneUnshipped } from './tools/dist-filter.mjs';
+import { pyreflyArtDerive } from './tools/art-derive-plugin.mjs';
+import { SOURCEMAP_DIR_ENV, keepSourceMaps, pruneUnshipped } from './tools/dist-filter.mjs';
 
 /** The base a production build is served from. Also used by tools/screenshot.mjs. */
 export const PROD_BASE = process.env.BASE_PATH ?? '/pyrefly-reprise/';
@@ -20,11 +21,13 @@ export const THIRD_PARTY_LICENCES = 'third-party-licenses.md';
  */
 /**
  * Audition candidates, raw renders and numbered art takes sit in `public/` but
- * never ship (PR-0100, PR-0173; the rule is `tools/dist-filter.mjs`). Pruned
- * after the build, so `npm run build` and `npm run deploy` both leave them out;
- * the dev server still serves them for local auditions.
+ * never ship (PR-0100, PR-0173; the rule is `tools/dist-filter.mjs`), and
+ * neither does any source map (PR-0328, D-335). Pruned after the build, so
+ * `npm run build` and `npm run deploy` both leave them out; the dev server
+ * still serves them for local auditions. When `sourceMapDir` is set the maps
+ * are copied there first; a copy that fails is a warning, never a failed build.
  */
-function distFilter(): Plugin {
+function distFilter(sourceMapDir: string | null): Plugin {
   let outDir = 'dist';
   return {
     name: 'pyrefly-dist-filter',
@@ -33,6 +36,14 @@ function distFilter(): Plugin {
       outDir = resolve(config.root, config.build.outDir);
     },
     closeBundle() {
+      if (sourceMapDir) {
+        try {
+          const kept = keepSourceMaps(outDir, sourceMapDir);
+          this.info?.(`dist-filter: kept ${kept.length} source map(s) in ${sourceMapDir}, none ship`);
+        } catch (err) {
+          this.warn?.(`dist-filter: could not keep the source maps in ${sourceMapDir}: ${(err as Error).message}`);
+        }
+      }
       const removed = pruneUnshipped(outDir);
       if (removed.length) this.info?.(`dist-filter: left out ${removed.length} unshipped file(s)`);
     },
@@ -41,15 +52,23 @@ function distFilter(): Plugin {
 
 export default defineConfig(({ command, isPreview }) => {
   const base = command === 'build' || isPreview ? PROD_BASE : '/';
+  // PR-0328, D-335: no source map ever ships. The variable SOURCEMAP_DIR_ENV names
+  // the folder a build keeps its maps in (the deploy sets it to
+  // D:/Tools/pyrefly-sourcemaps/<sha>): then the bundler writes them 'hidden' (no
+  // sourceMappingURL comment in the code), the dist-filter plugin copies them there
+  // and prunes them from the build. Unset, none are made at all (nothing reads them).
+  const sourceMapDir = process.env[SOURCEMAP_DIR_ENV] || null;
 
   return {
     base,
-    plugins: [distFilter()],
+    // Release 38 (r38-bytes): a production build ships the painted art as lossless WebP, derived from the PNG masters, which
+    // stay in public/art untouched (`tools/art-derive.mjs`; `PYREFLY_ART_WEBP=off` ships the PNGs as before). Dev serves PNG.
+    plugins: [distFilter(sourceMapDir), pyreflyArtDerive()],
     build: {
       target: 'es2022',
       outDir: 'dist',
       assetsDir: 'assets',
-      sourcemap: true,
+      sourcemap: sourceMapDir ? 'hidden' : false,
       chunkSizeWarningLimit: 1200,
       // The MIT licence of three.js (and of anything else bundled) asks its
       // copyright and permission notice to travel with the code. The minifier

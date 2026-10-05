@@ -28,12 +28,12 @@ export function sphereGridMarkup(): string {
           <span class="ffxprep-sg__slv">S.LV <b class="ffxprep-sg__slv-n">0</b><span class="sgb-after" hidden> &rarr; <i class="sgb-after-n"></i></span></span>
         </div>
         <div class="sgb-tools">
-          <button type="button" class="ffxprep-sg__btn ffxprep-sg__auto" data-sg="auto">AUTO-LEARN</button>
+          <button type="button" class="ffxprep-sg__btn ffxprep-sg__auto" data-sg="auto">AUTO-LEARN<span class="ffxprep-sg__key" data-pad="SELECT">M</span></button>
           <button type="button" class="ffxprep-sg__btn ffxprep-sg__walk" data-sg="walk">WALK</button>
           <button type="button" class="ffxprep-sg__btn" data-sg="out" aria-label="Zoom out">&minus;</button>
           <button type="button" class="ffxprep-sg__btn" data-sg="in" aria-label="Zoom in">+</button>
           <button type="button" class="ffxprep-sg__btn" data-sg="home">CENTRE</button>
-          <button type="button" class="ffxprep-sg__btn ffxprep-sg__help" data-sg="help" aria-label="How the Sphere Grid works">?</button>
+          <button type="button" class="ffxprep-sg__btn ffxprep-sg__help" data-sg="help" aria-label="How the Sphere Grid works (H)">?<span class="ffxprep-sg__key" data-pad="X">H</span></button>
         </div>
       </div>
       <div class="ffxprep-sg__slot"></div>

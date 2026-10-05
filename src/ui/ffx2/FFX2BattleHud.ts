@@ -48,10 +48,12 @@ import { solidPanelRects } from '../common/panel-rects.ts';
 import { BODY_HALF_WIDTH, boardRects, fighterBoxes, keyFeatureObstacles, slabPanels, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
 import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
+import { CommandHelp } from './commandHelpSync.ts';
 import { NodeEdgeMarkers } from './nodeEdgeMarkers.ts';
 import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, BAND_GRID_HEIGHT, type BandInput } from './commandHelpBand.ts';
 import { plateInputFromDom, TargetPlates, targetPlateText } from './TargetPlates.ts';
 import { BattleMessageBanner } from './battleMessage.ts';
+import { fightDecidedBy } from './fightDecided.ts';
 import { displayNameOf } from './displayName.ts';
 import { IntentOpeningHold } from './intentOpeningHold.ts';
 
@@ -146,6 +148,7 @@ export class FFX2BattleHud implements HudPort {
   private commandEl!: HTMLElement;
   /** PR-0012: the highlighted row's help sentence, a top-of-screen band (D-040), `battleHelpOn()`-gated. */
   private commandInfoEl!: HTMLElement;
+  private help: CommandHelp | null = null;
   private minigameEl!: HTMLElement;
   /** FFX-2's Active/Wait chip, shown while a target cursor is live. */
   private activeWaitEl: HTMLElement | null = null;
@@ -348,7 +351,6 @@ export class FFX2BattleHud implements HudPort {
       <div class="ig-stat-list ffx2hud__party"></div>
       <div class="ffx2hud__command" hidden></div>
       <div class="ffx2-cmd-info" hidden><span class="ffx2-cmd-info__label" data-role="label"></span><span class="ffx2-cmd-info__desc" data-role="text"></span></div>
-      <div class="ffx2hud__minigame"></div>
       <div class="ffx2-atbmode" hidden></div>
       <i class="ffx2hud__fence" data-fence="party-top"></i>
       <i class="ffx2hud__fence" data-fence="party-right"></i>
@@ -361,6 +363,14 @@ export class FFX2BattleHud implements HudPort {
     this.platesLayer = document.createElement('div');
     this.platesLayer.className = 'ffx2hud__plates';
 
+    // FOC371-02: the minigame layer (Trigger Happy, Lady Luck) is a third grid layer beside the stage, not a child of
+    // it. The stage's `transform` makes it its own stacking context, so a slab inside it could never out-rank the
+    // enemy-intent slab (`.eint`, z-index 2, on the overlay): the intent card painted over the slab on desktop. Out
+    // here the slab and the card compete in one context, and the layer is transformed exactly like the stage in
+    // `layout()` (the plates layer's trick), so the overlays keep their 640x360 authored geometry.
+    this.minigameEl = document.createElement('div');
+    this.minigameEl.className = 'ffx2hud__minigame';
+
     // PR-0135: the grain and vignette cover the whole window, not the 16:9
     // stage (a hard edge either side at 2000x1012 and 2560x1080). First child,
     // so they still paint under every panel.
@@ -370,6 +380,7 @@ export class FFX2BattleHud implements HudPort {
     this.el.appendChild(surface);
     this.el.appendChild(this.stage);
     this.el.appendChild(this.overlay);
+    this.el.appendChild(this.minigameEl);
     this.el.appendChild(this.platesLayer);
     root.appendChild(this.el);
 
@@ -379,7 +390,7 @@ export class FFX2BattleHud implements HudPort {
     this.partyEl = this.stage.querySelector('.ffx2hud__party') as HTMLElement;
     this.commandEl = this.stage.querySelector('.ffx2hud__command') as HTMLElement;
     this.commandInfoEl = this.stage.querySelector('.ffx2-cmd-info') as HTMLElement;
-    this.minigameEl = this.stage.querySelector('.ffx2hud__minigame') as HTMLElement;
+    this.help = new CommandHelp(this.commandInfoEl, () => FFX2_COMMAND_HELP_PLACEMENT_RESOLVED && battleHelpOn(), () => this.placeCommandBand());
     // FFX-2 ONLY: the Active/Wait chip. FFX's CTB has no such Config entry.
     this.activeWaitEl = this.stage.querySelector('.ffx2-atbmode');
     this.fenceTopEl = this.stage.querySelector('[data-fence="party-top"]');
@@ -442,6 +453,7 @@ export class FFX2BattleHud implements HudPort {
     this.advisor.update(dt);
     this.intent.update(dt);
     this.actionFade.update();
+    this.help?.sync();
     // GAME-AWARE (rule 14): the same shared plumbing FFX got. Panels were
     // published only on an engine sync, so between two syncs the field's idea
     // of where the chrome sits went stale and `visibleInFrame` lied.
@@ -728,8 +740,8 @@ export class FFX2BattleHud implements HudPort {
     // side takes the same precaution in `FFXBattleHud.sync`
     // (AGENTS.md rule 14: shared plumbing behind a defect, critic CHK-020).
     if (state.result) this.applySelection(null);
-    // ...and a decided battle keeps no command menu or reticle either: see `onEvent`'s victory case.
-    if (state.result && this.closeMenu) this.closeCommandMenu();
+    // ...and no command menu, reticle or banner either: `onEvent` swept at the last blow; an escape arrives only here.
+    if (state.result) this.endOfFight();
     this.lastState = state;
     this.guide.sync(state);
     this.advisor.sync(state);
@@ -889,22 +901,15 @@ export class FFX2BattleHud implements HudPort {
    * nothing on this side of the game before this row.
    */
   private setCommandHelp(label: string, text: string): void {
-    const show = FFX2_COMMAND_HELP_PLACEMENT_RESOLVED && battleHelpOn() && text.length > 0;
-    this.commandInfoEl.hidden = !show;
-    if (show) {
-      this.placeCommandBand();
-      this.commandInfoEl.querySelector('[data-role="label"]')!.textContent = label;
-      this.commandInfoEl.querySelector('[data-role="text"]')!.textContent = text;
-    }
+    this.help?.set(label, text); // U4 (PR-0305): `commandHelpSync.ts` also re-applies it every frame
   }
 
   onEvent(event: BattleEvent): Promise<void> | void {
     this.actionFade.observe(event); // A-15: overlapping ATB actions (actionFade.ts)
-    // FFX-2 only: Active ATB can end the fight while a girl is choosing, and the presenter drops the menu only after
-    // the burst (`runActivePump` -> `abandon`), so the menu goes with the deciding KO (or victory/defeat, if first).
-    if (this.closeMenu && (event.type === 'victory' || event.type === 'defeat' || (event.type === 'ko' && this.lastState?.result))) {
-      this.closeCommandMenu();
-    }
+    // The last blow landed or the end beat starts (`fightDecided.ts`): no banner rides it, and no menu (Active ATB can
+    // end the fight while a girl is choosing; the presenter drops the menu only after the burst, `runActivePump`).
+    if (fightDecidedBy(event, this.lastState)) this.endOfFight();
+    else if (event.type === 'defeat' && this.closeMenu) this.closeCommandMenu(); // an escape keeps its line, not its menu
     switch (event.type) {
       case 'atb':
         this.lastSnapshot = event.snapshot;
@@ -1125,6 +1130,7 @@ export class FFX2BattleHud implements HudPort {
     this.stageY = y;
     this.stage.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
     this.platesLayer.style.transform = this.stage.style.transform;
+    this.minigameEl.style.transform = this.stage.style.transform; // FOC371-02: the minigame layer is a grid layer too
     this.layoutFences();
     if (this.commandInfoEl && !this.commandInfoEl.hidden) this.placeCommandBand();
   }
@@ -1272,5 +1278,13 @@ export class FFX2BattleHud implements HudPort {
 
   private hold(ms: number): Promise<void> {
     return new Promise((resolve) => window.setTimeout(resolve, ms));
+  }
+
+  /** The fight is over on screen: the menu, the message line and the telegraph go, holds or not. Idempotent. */
+  private endOfFight(): void {
+    if (this.closeMenu) this.closeCommandMenu();
+    this.message.hide();
+    window.clearTimeout(this.telegraphHideTimer);
+    if (this.telegraphEl) this.telegraphEl.hidden = true;
   }
 }

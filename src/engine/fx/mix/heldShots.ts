@@ -1,0 +1,351 @@
+import { Vector3, type PerspectiveCamera } from 'three';
+import { measure, type Field } from './clearance.ts';
+import { cameraAt, figBox, figOf, stillActor, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
+import { battleCanvas, fieldOf, hudPanels } from './hudPanels.ts';
+import { closeShot, heroShot } from './masters.ts';
+import type { Plate } from './plate.ts';
+import { pushAt, searchPush, type PushPlan } from './pushIn.ts';
+import type { RigWatch } from './rigWatch.ts';
+
+/**
+ * The MAX mix (D-316), the two HELD SHOTS (BATTLE SPECTACLE), each a cut to a held shot and a cut back
+ * (D-291: no move, no orbit, no roll, no shake; the HUD stays laid out on the master):
+ *
+ * - OVERDRIVE SHOT (FFX only, EC-1001-07; B's hero shot): while the Overdrive input is up, a
+ *   three-quarter shot of the actor at about half the frame height; the cut back when the input ends.
+ * - DRESSPHERE SHOT (FFX-2 only, research 6.1): on a spherechange, a held close shot of the girl, at
+ *   least 1.6 s and until she is quiet again (at most 3 s); never fired while a girl's menu is open, and
+ *   handed back the frame a menu opens. Round 19 (PR-0313, PR-0314): the presenter holds the next decision until the shot
+ *   has run its 1.6 s (`holdMs`, `shotHold.ts`: the next menu or enemy action begins right after a burst, so the shot could
+ *   not be predicted to hold, it is made to), it is not cut to while anyone else is acting, and it is handed back at the
+ *   first action-start of anyone but its subject (an enemy's hit landed inside it with the enemy off camera).
+ *
+ * D-346 (morning ask 11): where the DRESSPHERE SHOT finds no clean frame, and on the upright phone (where the full shot is closed),
+ * a small push-in on the girl from the battle camera plays instead (`pushIn.ts`), holding the same minimum and handed back the same ways.
+ *
+ * Both shots are checked before they are cut to (the judges' must-fix list): the subject whole in the
+ * part of the frame the viewport shows (the phone's slice included) and clear of the HUD as laid out
+ * (the Overdrive input slab counts); every other figure either whole and clear or wholly out of frame
+ * (Yuna under the turn rail, Kimahri under the party panel, Yuna cropped on the phone). Candidates vary
+ * the size, the place on screen and the turn; when none passes there is no shot (the master holds).
+ * REDUCE MOTION keeps both (`gates.ts`, the approved page's `ON · CUT`): a held shot is already one static cut to the
+ * shot and one cut back, never a move, a zoom or a drift (`MaxMix` also holds the lens shift for as long as it is up),
+ * held for its normal length, and an FFX-2 shot still never opens, and never stays, while a girl's menu is open.
+ */
+
+export type ShotKind = 'od' | 'sc';
+
+interface Held {
+  kind: ShotKind;
+  pose: Pose;
+  since: number;
+  who: Actor;
+  /** A push-in fallback (`pushIn.ts`): the pose is moved along it each frame; absent for the cuts. */
+  push?: PushPlan;
+  /** The canvas's place when the push began; a push is handed back if the slice moves under it (the phone's HUD slides). */
+  canvasKey?: string;
+}
+
+const OD_INPUT = '.ffx-mg.ffx-mg--open';
+const QUIET = new Set(['idle', 'hurt', 'ko', 'critical', 'sleep', 'victory', 'ready', 'defend']);
+
+/**
+ * Score a candidate shot: the subject whole and clear of the HUD; every other PARTY member either whole
+ * and clear, or wholly out of the shot (VP-1001-26; Yuna under the turn rail, Kimahri under the party
+ * panel, Yuna cut at the phone's edge). Enemies may sit at the shot's edges: it is about the actor.
+ */
+export function shotScore(subject: number, boxes: readonly Box[], f: Field, figs: readonly Fig[] = [], strict = false, dwarf = 1.25): { ok: boolean; score: number; why?: string } {
+  let score = 0;
+  let why = '';
+  let ok = true;
+  const viewH = f.view.b - f.view.t;
+  const subjectH = boxes[subject] ? boxes[subject]!.b - boxes[subject]!.t : 0;
+  boxes.forEach((b0, i) => {
+    if (i !== subject && figs[i]?.enemy) return;
+    if (strict) {
+      // The dressphere shot (round 19, PR-0309; FFX-2 only): a face is never under a panel (the enemy gauge rows ran across Yuna's
+      // face), a head is never cut by the frame's top for anyone in the shot, and the girl who changes is not dwarfed (no neighbour stands over a quarter taller on screen than she does: a nearer one in the foreground).
+      const head = { l: b0.l, r: b0.r, t: b0.t, b: b0.t + 0.28 * (b0.b - b0.t) };
+      const inShot = i === subject || measure(b0, f, figs[i]?.mask).inView > 0.03;
+      if (inShot && f.panels.length && measure(head, f).underHud > 1e-6 && measure(head, f).inView > 0.5) {
+        ok = false;
+        score -= 5;
+        why ||= `head-under-panel:${figs[i]?.id}`;
+      }
+      if (inShot && b0.t < f.view.t + 0.01 * viewH) {
+        ok = false;
+        score -= 5;
+        why ||= `head-cut:${figs[i]?.id}`;
+      }
+      if (i !== subject && inShot && b0.b - b0.t > dwarf * subjectH && measure(b0, f).inView > 0.5) {
+        ok = false;
+        score -= 5;
+        why ||= `dwarf:${figs[i]?.id}`;
+      }
+    }
+    // A margin: the painting turns toward the new camera once the shot is up, so its drawn box widens.
+    const mx = (b0.r - b0.l) * (i === subject ? 0.1 : 0.05);
+    const my = (b0.b - b0.t) * 0.04;
+    const b = { l: b0.l - mx, r: b0.r + mx, t: b0.t - my, b: b0.b + my };
+    const m = measure(b, f, figs[i]?.mask);
+    if (i === subject) {
+      const bad = Math.max(0, 0.98 - m.inView) + Math.max(0, m.underHud - 0.04);
+      if (bad > 1e-6) { ok = false; why ||= `subject:${figs[i]?.id}`; }
+      score -= bad * 10;
+    } else {
+      const whole = Math.max(0, 0.97 - m.inView) + Math.max(0, m.underHud - 0.08);
+      const out = Math.max(0, m.inView - 0.03);
+      const bad = Math.min(whole, out);
+      if (bad > 0.02) { ok = false; why ||= `neighbour:${figs[i]?.id} in${m.inView.toFixed(2)} hud${m.underHud.toFixed(2)}`; }
+      score -= bad * 4;
+    }
+  });
+  return { ok, score, ...(why ? { why } : {}) };
+}
+
+/** What the mix hands the shots each frame. */
+export interface HeldIn {
+  actors: readonly Actor[];
+  master: Pose | null;
+  lens: [number, number];
+  odOn: boolean;
+  /** DRESSPHERE SHOT plays (its switches; on a phone too, where only the push-in fallback is used). */
+  scOn: boolean;
+  menu: boolean;
+  ready: boolean;
+  /** The upright phone: a slice the HUD slides, so the full shot is closed and the push-in fallback is the only dressphere shot (`pushIn.ts`). */
+  phone?: boolean;
+  /** REDUCE MOTION: a push-in is one static cut to its end framing. */
+  rm?: boolean;
+  /** The painted plate, for the push-in's edge gate; read only when a push-in is searched for. */
+  plate?: () => Plate | null;
+}
+
+/** Where the canvas sits (viewport px): a push-in framed for one slice is handed back when the slice moves. */
+function canvasKey(): string {
+  const r = battleCanvas()?.getBoundingClientRect();
+  return r ? `${Math.round(r.left)},${Math.round(r.top)},${Math.round(r.width)},${Math.round(r.height)}` : '';
+}
+
+export class HeldShots {
+  held: Held | null = null;
+  private time = 0;
+  private triedInput = false;
+  private inputSince = -1;
+  /** The best candidate of the last try (checks only). */
+  lastTry = '';
+  private readonly subjects = new Map<Actor, string>();
+  readonly stats = { od: 0, sc: 0, push: 0, slideBacks: 0, skipped: 0, handBacks: 0, actionBacks: 0, writes: 0, searchMs: 0 };
+  /** Seconds a dressphere shot holds at least (D-316). */
+  static readonly MIN_HOLD = 1.6;
+
+  constructor(private readonly game: 'ffx' | 'ffx2', private readonly rigs: RigWatch) {}
+
+  /** Every frame, after the rig placed the camera. Returns the shot held this frame, or null (the master). */
+  update(dt: number, o: HeldIn): Held | null {
+    this.time += dt;
+    const party = o.actors.filter((a) => a.facing >= 0 && a.visible);
+    // A spherechange: a party figure's painted subject changed this frame.
+    const changed: Actor[] = [];
+    for (const a of party) {
+      const s = subjectId(a);
+      const was = this.subjects.get(a);
+      if (was && was !== s) changed.push(a);
+      this.subjects.set(a, s);
+    }
+    const h = this.held;
+    // FFX: the Overdrive input's hero shot, for as long as the input is up (one try per input: a framing
+    // that does not pass leaves the master on screen for that input).
+    const input = this.game === 'ffx' && typeof document !== 'undefined' && document.querySelector(OD_INPUT) !== null;
+    if (!input) {
+      this.triedInput = false;
+      this.inputSince = -1;
+    } else if (this.inputSince < 0) this.inputSince = this.time;
+    // The input slab slides in: the shot is framed once it has landed (0.3 s), against where it sits.
+    const settled = input && this.time - this.inputSince >= 0.3;
+    if (h?.kind === 'od' && (!input || !o.odOn)) this.handBack();
+    else if (!h && settled && !this.triedInput && o.odOn && o.master && o.ready) {
+      const hero = party.find((a) => a.lifeState === 'ready') ?? null;
+      if (hero) {
+        this.triedInput = true;
+        this.cut('od', hero, o.actors, o.master, o.lens, o);
+      }
+    }
+    // A menu opening hands a spherechange shot back at once (never a cut while a girl is choosing).
+    if (this.held?.kind === 'sc' && (o.menu || !o.scOn)) this.handBack();
+    // Anyone but the subject starting an action (a lunge, a cast, a hit in flight) ends the shot: the actor and the target
+    // must both be readable (R19-FN-01).
+    if (this.held?.kind === 'sc' && this.actingElsewhere(o.actors, this.held.who)) {
+      this.stats.actionBacks++;
+      this.handBack();
+    }
+    if (this.held?.kind === 'sc') {
+      const age = this.time - this.held.since;
+      const quiet = QUIET.has(this.held.who.pose ?? 'idle');
+      if ((quiet && age >= 1.6) || age >= 3) this.handBack();
+    }
+    // A push-in (the fallback) moves the camera along its plan; a slice that moves under it (the phone's HUD slides) ends it.
+    const pi = this.held;
+    if (pi?.push) {
+      if (canvasKey() !== pi.canvasKey) {
+        this.stats.slideBacks++;
+        this.handBack();
+      } else pi.pose = pushAt(pi.push, this.time - pi.since, o.rm === true);
+    }
+    if (!this.held && this.game === 'ffx2' && o.scOn && !o.menu && o.master && o.ready && changed.length) {
+      const who = changed[0]!;
+      if (this.actingElsewhere(o.actors, who)) {
+        // Another actor is mid-action as she changes: the shot would show the wrong thing; the master holds.
+        this.stats.skipped++;
+        this.lastTry = `sc ${who.name} skipped: another actor is acting`;
+      } else this.cut('sc', who, o.actors, o.master, o.lens, o);
+    }
+    if (this.held) {
+      this.rigs.write(this.held.pose);
+      this.stats.writes++;
+    }
+    return this.held;
+  }
+
+  /**
+   * How many ms of a held dressphere shot are still to run (0 with none up): the presenter waits that long after the burst, so the
+   * next menu or enemy action begins after the shot, not inside it (`shotHold.ts`, PR-0313 and PR-0314).
+   */
+  holdMs(): number {
+    const h = this.held;
+    return h?.kind === 'sc' ? Math.max(0, (HeldShots.MIN_HOLD - (this.time - h.since)) * 1000) : 0;
+  }
+
+  /** Does anyone other than `who` act now (an action's first frames: a lunge, run, cast or strike in flight)? */
+  private actingElsewhere(actors: readonly Actor[], who: Actor): boolean {
+    return actors.some((a) => a !== who && a.visible && (a.lifeState === 'act' || (a.facing < 0 && !stillActor(a))));
+  }
+
+  private handBack(): void {
+    this.held = null;
+    this.stats.handBacks++;
+  }
+
+  /** Cut to the best passing framing of `who`, or stay on the master when none passes. */
+  private cut(kind: ShotKind, who: Actor, actors: readonly Actor[], master: Pose, lens: [number, number], o: HeldIn): void {
+    const canvas = battleCanvas();
+    if (!canvas) return;
+    const panels = hudPanels(canvas);
+    // The Overdrive input slab itself, as laid out (the hero must stand clear of it: the judges' frame put
+    // Tidus's head behind it).
+    const slab = kind === 'od' ? document.querySelector<HTMLElement>(OD_INPUT) : null;
+    if (slab) {
+      const r = slab.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) panels.push({ l: r.left, r: r.right, t: r.top, b: r.bottom });
+    }
+    const field = fieldOf(canvas, panels);
+    const vis = actors.filter((a) => a.visible);
+    const figs: Fig[] = vis.map(figOf);
+    const subject = vis.indexOf(who);
+    if (subject < 0) return;
+    // A dressphere with no painting yet (Yuna's Thief is a placeholder mannequin, round 19 PR-0311) is never framed in close-up:
+    // the master holds.
+    if (kind === 'sc' && who.isPlaceholder === true) {
+      this.stats.skipped++;
+      this.lastTry = `sc ${who.name} skipped: placeholder art`;
+      return;
+    }
+    const g = figs[subject]!;
+    const aspect = field.W / field.H;
+    // The visible slice's centre, in canvas fractions (the phone shows a slice of a wider field).
+    const vx = (u: number): number => (field.view.l + u * (field.view.r - field.view.l) - lens[0]) / field.W;
+    const vy = (v: number): number => (field.view.t + v * (field.view.b - field.view.t) - lens[1]) / field.H;
+    let best: { pose: Pose; score: number; ok: boolean } | null = null;
+    // Candidates: the size (about half the frame for the hero, 60 % for the close shot), the place on
+    // screen (low in the frame, clear of the input slab and the panels) and, for the hero, the turn.
+    // The close shot widens and slides too (a neighbour half in frame, or under the guide card, fails it).
+    const fracs = kind === 'od' ? [0.5, 0.45, 0.4, 0.55, 0.6, 0.66, 0.72] : [0.6, 0.52, 0.45, 0.68, 0.4];
+    const xs = kind === 'od' ? [0.52, 0.45, 0.6, 0.38, 0.68, 0.3] : [0.5, 0.42, 0.58, 0.35, 0.65];
+    const ys = kind === 'od' ? [0.62, 0.68, 0.72, 0.56] : [0.5, 0.45, 0.55, 0.6];
+    // The turn toward the actor's face first (B's 28 degrees), then the other side too: a member standing
+    // beside the hero swings out of the shot instead of under the party rows.
+    const turns = kind === 'od' ? [28, 16, 40, 52, 4, -12, -24] : [0, 12, -12, 24, -24];
+    // Tried in order of preference; the first framing that passes is the shot (one search per beat).
+    const t0 = performance.now();
+    // The upright phone has no full shot (a framing for one slice crops its subject in the next): the push-in fallback only.
+    const full = !(kind === 'sc' && o.phone === true);
+    search: for (const turn of full ? turns : [])
+      for (const frac of fracs)
+        for (const x of xs)
+          for (const y of ys) {
+            const pose = kind === 'od' ? heroShot(master, g, who.facing, aspect, frac, [vx(x), vy(y)], turn) : closeShot(master, g, aspect, frac, [vx(x), vy(y)], turn);
+            const cam = cameraAt(pose, aspect);
+            const boxes = figs.map((f) => {
+              const b = figBox(f, cam, field.W, field.H);
+              return { l: b.l + lens[0], r: b.r + lens[0], t: b.t + lens[1], b: b.b + lens[1] };
+            });
+            const s = shotScore(subject, boxes, field, figs, kind === 'sc');
+            if (!best || s.score > best.score || s.ok) {
+              best = { pose, score: s.score, ok: s.ok };
+              this.lastTry = `${kind} ${who.name} f${frac} x${x} y${y} t${turn} ` + boxes.map((b, i) => `${figs[i]!.id}:${measure(b, field, figs[i]!.mask).inView.toFixed(2)}/${measure(b, field, figs[i]!.mask).underHud.toFixed(2)}`).join(' ');
+            }
+            if (s.ok) break search;
+          }
+    // FFX-2: where the full shot found no clean frame, a small push-in on the girl from the battle camera (`pushIn.ts`).
+    if (kind === 'sc' && !best?.ok) {
+      // The change's name plate sits 14 px over the girl's head by design and follows her through the camera (`followFlourish`),
+      // so wherever the push puts her it is above her face again: it is not a panel her face can be under.
+      const plates = [...document.querySelectorAll<HTMLElement>('.ffx2sf__plate')].map((e) => e.getBoundingClientRect());
+      const clear = panels.filter((p) => !plates.some((r) => Math.abs(p.l - r.left) < 3 && Math.abs(p.r - r.right) < 3 && Math.abs(p.t - r.top) < 3 && Math.abs(p.b - r.bottom) < 3));
+      const r = searchPush({ master, subject, figs, field: fieldOf(canvas, clear), lens, aspect, plate: o.plate?.() ?? null, rule: shotScore });
+      this.lastTry = (full ? `${this.lastTry} | ` : '') + r.note;
+      if (r.plan) {
+        this.stats.searchMs = Math.round((performance.now() - t0) * 10) / 10;
+        this.held = { kind, pose: pushAt(r.plan, 0, o.rm === true), since: this.time, who, push: r.plan, canvasKey: canvasKey() };
+        this.stats.push++;
+        return;
+      }
+    }
+    this.stats.searchMs = Math.round((performance.now() - t0) * 10) / 10;
+    if (!best?.ok) {
+      this.stats.skipped++;
+      return;
+    }
+    this.held = { kind, pose: best.pose, since: this.time, who };
+    this.stats[kind]++;
+  }
+
+  /** The figures the shot is about (for the depth-of-field band). */
+  subjectFigs(): Fig[] {
+    return this.held ? [figOf(this.held.who)] : [];
+  }
+}
+
+/**
+ * FFX-2: today's spherechange flourish (`ui/ffx2/SpherechangeFlourish.ts`: the light column, the motes, the
+ * ring and the name plate) is anchored once, where the girl stands as the light starts; the close shot cuts in a
+ * moment later, so the light and the plate would play over whoever stands there in the shot. While one is up it
+ * follows its girl through the camera on screen (in the master that is where it already is). Its own anchors:
+ * the head point and the feet, in viewport CSS px (`PaintedStage.project`).
+ */
+export function followFlourish(actors: readonly Actor[], cam: PerspectiveCamera, canvas: HTMLElement | null): void {
+  if (!canvas || typeof document === 'undefined') return;
+  const els = document.querySelectorAll<HTMLElement>('.ffx2sf[data-who]');
+  if (!els.length) return;
+  const r = canvas.getBoundingClientRect();
+  if (!r.width || !r.height) return;
+  cam.updateMatrixWorld();
+  const px = (v: Vector3): { x: number; y: number } => {
+    v.project(cam);
+    return { x: r.left + (v.x * 0.5 + 0.5) * r.width, y: r.top + (-v.y * 0.5 + 0.5) * r.height };
+  };
+  for (const el of els) {
+    const a = actors.find((x) => x.name === el.dataset['who']) as (Actor & { headPoint?: (out: Vector3) => unknown }) | undefined;
+    if (!a?.headPoint) continue;
+    const hv = new Vector3();
+    a.headPoint(hv);
+    const head = px(hv);
+    const feet = px(a.position.clone());
+    const scale = parseFloat(el.style.getPropertyValue('--sf-scale')) || 1;
+    el.style.setProperty('--sf-x', `${head.x}px`);
+    el.style.setProperty('--sf-head', `${head.y}px`);
+    el.style.setProperty('--sf-feet', `${feet.y}px`);
+    el.style.setProperty('--sf-body', `${Math.max(Math.abs(feet.y - head.y), 24 * scale)}px`);
+  }
+}
+

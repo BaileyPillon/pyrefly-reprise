@@ -12,7 +12,9 @@
  *   capture that makes those frames.
  * - `data-reduce-motion` and `data-low-effects`, present while the flag is on: the
  *   CSS mirror of every `prefers-reduced-motion` block (`ui/common/comfort.css`).
- * - Not on `<html>`: eye-candy D's three look rows switch its options A, B and C (`fxLooks.ts`).
+ * - Not on `<html>`: eye-candy D's three looks switch its options A, B and C (`fxLooks.ts`), and the
+ *   `eyeCandyFlags.ts` seam gets a fresh provider for the looks and the EYE CANDY page's nine parts
+ *   (D-317, `fxParts.ts`): a look key answers the look, a part key the look AND the part.
  *
  * Called by `SaveStore` next to `audio.applySettings`, at construction and on
  * every settings write, so a saved 130 % is in force on the first frame without
@@ -25,8 +27,11 @@ import '../ui/common/comfort.css';
 import '../ui/common/text-size.css';
 import '../ui/common/text-size-wide.css';
 import { eyeCandy } from '../engine/fx/EyeCandy.ts';
+import { eyeCandyOn, setEyeCandyProvider } from '../engine/fx/eyeCandyFlags.ts';
+import { fxDebugHooks } from '../engine/fx/fxDebugHooks.ts';
 import type { Settings } from './SaveData.ts';
 import { fxLooksOf, type FxLookField } from './fxLooks.ts';
+import { EYE_CANDY_KEYS, eyeCandyProviderFor, type FxPartField } from './fxParts.ts';
 import { isTextSize } from './saveComfort.ts';
 
 /**
@@ -45,12 +50,15 @@ export function textSizeWideScope(): boolean {
   }
 }
 
-type ComfortFields = Pick<Settings, 'textSize' | 'reduceMotion' | 'lowEffects' | FxLookField>;
+type ComfortFields = Pick<Settings, 'textSize' | 'reduceMotion' | 'lowEffects' | FxLookField | FxPartField>;
 
 export function applyComfort(settings: Readonly<Partial<ComfortFields>>, root: HTMLElement | null = rootEl()): void {
   // Eye-candy D's three look rows (CINEMA LIGHT, LIVING PAINTINGS, BATTLE SPECTACLE), live and with or
   // without a DOM; a missing field reads as ON, and a URL `?fx=` wins for that page load (`EyeCandy.ts`).
   eyeCandy.applyLooks(fxLooksOf(settings));
+  // D-317: what the MAX mix's looks and parts read (`eyeCandyFlags.ts`); REDUCE MOTION is applied where motion plays.
+  setEyeCandyProvider(eyeCandyProviderFor(settings));
+  fxDebugHooks['flags'] = { snapshot: () => Object.fromEntries(EYE_CANDY_KEYS.map((k) => [k, eyeCandyOn(k)])) };
   if (!root) return;
   const size = isTextSize(settings.textSize) ? settings.textSize : 1;
   const pct = String(Math.round(size * 100));

@@ -31,11 +31,13 @@ import { bodyFacingOption, figureLightOf, poseScalingOf, stageCamera } from './S
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
 import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
+import { downWithoutKoPainting } from './KoFallback.ts';
 import { figureBloomMasked } from './BloomMask.ts';
 import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
 import * as SA from './StageAnchors.ts';
 import { stageSpellFx, type StageSpellFxOptions } from './spellfx/stageSpellFx.ts';
 import type { SpellFxLayer } from './spellfx/SpellFxLayer.ts';
+import { StageMotion } from './motion/StageMotion.ts'; // r38-motion RUN-IN's field: painted spans, camera truck, smear
 import { PyreflyStage } from './PyreflyStage.ts';
 import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
 import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
@@ -43,6 +45,7 @@ import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
 import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLumaOf } from './ContactShadow.ts';
 import { heldOffStage } from './SummonStaging.ts';
 import { paceRate } from './pace.ts';
+import { StageArt } from './StageArt.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -142,12 +145,16 @@ export class PaintedStage implements BattleStage {
   /** The B1 spell effects (option B); `impact` skips the bloom where they carry the hit. */
   readonly spellFx: SpellFxLayer;
   private readonly unhookSpellFx: () => void;
+  /** RUN-IN's field (r38-motion, FFX-2 only): where each painted shape stands, the camera truck, the smear. */
+  readonly motion: StageMotion;
   /** A-5 / A-6 / D-225: the dissolve's lights, the lens band and held motes (`PyreflyStage.ts`). */
   private readonly pyreflies: PyreflyStage;
   /** D-224 phase lighting: the presenter's `lighting` port (`BattlePresenterPhase.ts`). */
   readonly lighting: PhaseLighting;
   /** A-8: the floor's luma, which sets how strong a contact shadow must be to read on it (`ContactShadow.ts`). */
   private readonly groundLuma: number | null;
+  /** Release 39: which master of each painting the figures draw from, measured against the camera that is looking at them (`StageArt.ts`). */
+  readonly art: StageArt;
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
@@ -181,6 +188,36 @@ export class PaintedStage implements BattleStage {
       ...(opts.reduceFlashes ? { reduceFlashes: opts.reduceFlashes } : {}),
     });
     this.vfx = this.makeVfxPort();
+    this.art = new StageArt({
+      actors: () => [...this.actors.values()].map((s) => s.actor),
+      party: () => [...this.actors.values()].filter((s) => s.kind === 'party').map((s) => s.actor),
+      camera: opts.camera,
+      canvas: opts.canvas,
+      battleCamera: opts.battleCamera,
+      ...(opts.spellFx?.game ? { game: opts.spellFx.game } : {}),
+    });
+    this.motion = new StageMotion({
+      scene: opts.scene,
+      camera: opts.battleCamera,
+      quadOf: (id, out) => {
+        const s = this.actors.get(id);
+        if (!s) return null;
+        const q = s.anchor ? this.anchoredQuad(s) : s.actor.contentQuad(out);
+        if (q !== out) for (let i = 0; i < 4; i++) out[i]!.copy(q[i]!);
+        return out;
+      },
+      figure: (id) => this.actors.get(id)?.actor,
+      view: () => ({ w: opts.canvas.clientWidth || 1600, h: opts.canvas.clientHeight || 900 }),
+      lowEffects: () => opts.comfort?.().lowEffects === true,
+      warmFor: () => this.smearWarmId(),
+    });
+  }
+
+  /** FFX-2 only (RUN-IN is the one user of the smear): which party figure's painting builds the smear's program in the opening; none under REDUCE MOTION, which never runs. */
+  private smearWarmId(): CombatantId | undefined {
+    if (this.opts.spellFx?.game !== 'ffx2' || this.opts.comfort?.().reduceMotion === true) return undefined;
+    for (const [id, s] of this.actors) if (s.kind === 'party') return id;
+    return undefined;
   }
 
   // ------------------------------------------------------------------ staging
@@ -291,13 +328,12 @@ export class PaintedStage implements BattleStage {
     const pin = kind === 'enemy' ? this.opts.slots.enemySpots?.[c.id] : undefined;
     const spot = pin ?? spots[Math.min(c.slot, spots.length - 1)] ?? spots[0] ?? [0, 0, 0];
     actor.position.set(spot[0], spot[1], spot[2]);
-    // Already down when the field is staged: snap to it. `immediate` is what
-    // stops a party member who was KO'd before the battle opened from toppling
-    // over on frame one.
-    // Seymour's body (D-046) is the one enemy that stays down on the field.
+    // Already down when staged: snap to it (`immediate`: no topple on frame one). Seymour's
+    // body (D-046) is the one enemy that stays down; a figure with no KO painting lies down.
     if (!c.alive && (c.side === 'party' || departureKindOf(c.id) === 'body')) {
       actor.setPose('ko', { immediate: true });
-      if (c.side === 'enemy' && !paintedPoses(artId, poses, characterUrl).has('ko')) void actor.lieDown(0); // D-301: a painted fall lies by itself
+      if (c.side === 'party') downWithoutKoPainting(actor, 0); // VP-1001-04
+      else if (!paintedPoses(artId, poses, characterUrl).has('ko')) void actor.lieDown(0); // D-301: a painted fall lies by itself
     }
 
     this.opts.scene.add(actor);
@@ -663,6 +699,9 @@ export class PaintedStage implements BattleStage {
       screenFlash: (colour, ms) => this.screenFlash(colour, ms),
       land: (at, o) => this.spellFx.land(at, o),
       pendingLand: (at, action) => this.spellFx.pendingLand(at, action), // FF7: the numeral on the drawn strike
+      markIn: (at, action) => this.spellFx.markIn(at, action), // r38-motion: a held numeral waits for the drawn strike
+      travel: (from, to, o) => this.spellFx.fly(from, to, o), // r38-motion SKILL TRAVEL: drawn in the spell layer's batch; ms 0 where it draws nothing
+      canTravel: (abilityId, from) => this.spellFx.canFly(abilityId, from),
     };
   }
 
@@ -744,6 +783,7 @@ export class PaintedStage implements BattleStage {
   update(dt: number): void {
     for (const id of this.actors.keys()) this.placeAnchored(id);
     for (const { actor } of this.actors.values()) actor.update(dt);
+    this.motion.update(dt); // RUN-IN: the camera truck and the smear's afterimages
     this.partRings.update(
       dt,
       (id) => {
@@ -770,6 +810,7 @@ export class PaintedStage implements BattleStage {
     const range = phaseForFlags(this.lastState?.flags);
     if (range) this.lighting.phase(range);
     this.lighting.update(dt);
+    this.art.update();
   }
 
   /** The pyreflies' state, for the debug snapshot and the capture script. */
@@ -812,12 +853,14 @@ export class PaintedStage implements BattleStage {
     this.arrivalCleanups.clear();
     for (const { actor } of this.actors.values()) actor.dispose();
     this.actors.clear();
+    this.motion.dispose();
     this.partRings.dispose();
     this.hits.dispose();
     this.unhookSpellFx();
     this.spellFx.dispose();
     this.pyreflies.dispose();
     this.lighting.dispose();
+    this.art.dispose();
     disposeStoneShards(this.opts.scene);
     this.flashEl?.remove();
     this.flashEl = null;

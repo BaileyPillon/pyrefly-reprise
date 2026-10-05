@@ -10,8 +10,9 @@
  * `docs/plans/accessibility-review.md` §3.2). What this module adds is the
  * coercion: a stored value that is not one of the three sizes, or a flag that is
  * not a boolean, reads as the default instead of reaching the layout (CHK-024).
- * It coerces, it never decides: there is no one-time rule and no veteran rule.
- * Eye-candy D's three look rows (`fxLooks.ts`, default ON) are coerced here too.
+ * It coerces; it has no veteran rule. Eye-candy D's three looks (`fxLooks.ts`, default ON) are
+ * coerced here too, and its one decision is the EYE CANDY page's nine parts (`fxParts.ts`, D-317): a
+ * part the stored blob does not hold as a boolean takes its look's value, which happens once.
  *
  * Its own module only because `SaveData.ts` is over the house line cap.
  *
@@ -20,8 +21,10 @@
 
 import type { Settings } from './SaveData.ts';
 import { migrateFxLooks } from './fxLooks.ts';
+import { migrateFxParts } from './fxParts.ts';
 
 export { defaultFxLooks, type FxLookSettings } from './fxLooks.ts';
+export { defaultFxParts, type FxPartSettings } from './fxParts.ts';
 
 /** TEXT SIZE's three steps, smallest first: 100, 115 and 130 %. */
 export const TEXT_SIZES = [1, 1.15, 1.3] as const;
@@ -49,10 +52,14 @@ export function textSizeLabel(v: unknown): string {
   return `${Math.round((isTextSize(v) ? v : 1) * 100)}%`;
 }
 
-/** Apply the rule to `settings` (already merged over `defaults`), in place. */
-export function migrateComfort(settings: Settings, defaults: Readonly<Settings>): void {
+/**
+ * Apply the rule to `settings` (already merged over `defaults`), in place. `raw` is the stored blob's own
+ * settings, which the parts' upgrade reads to tell a stored part from a missing one (`fxParts.ts`).
+ */
+export function migrateComfort(settings: Settings, defaults: Readonly<Settings>, raw?: unknown): void {
   if (!isTextSize(settings.textSize)) settings.textSize = 1;
   if (typeof settings.reduceMotion !== 'boolean') settings.reduceMotion = defaults.reduceMotion;
   if (typeof settings.lowEffects !== 'boolean') settings.lowEffects = false;
-  migrateFxLooks(settings); // eye-candy D's three look rows: anything but a boolean reads as ON
+  migrateFxLooks(settings); // eye-candy D's three looks: anything but a boolean reads as ON
+  migrateFxParts(settings, raw); // D-317's nine parts: a part the blob lacks takes its look's value, once
 }

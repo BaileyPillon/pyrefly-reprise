@@ -24,6 +24,7 @@ import {
   type PaintedTexture,
 } from './PaintedArt.ts';
 import { cloudCanvas, groundCanvas, paintGagazetBackdrop, radialCanvas } from './ProceduralArt.ts';
+import { artBudget } from './ArtDevice.ts';
 
 /** Colours read back out of the painting, so the 3D layer can match it. */
 export interface BackdropPalette {
@@ -158,22 +159,26 @@ const DEFAULT_LAYERS: ParallaxLayerSpec[] = [
   { from: 0.79, to: 1.0, feather: 0.07, z: -12.5, opacity: 1 },
 ];
 
-/** Cap on the pixel width of a masked parallax layer; they are drawn small. */
-const LAYER_MAX_WIDTH = 1536;
-
+/**
+ * A masked parallax layer is a copy of the painting's rows nearer the camera, so it is drawn over the painting at the painting's own
+ * scale: its width cap is the device's (`ArtBudget.bandPx`: 1536 on a phone as before, the approved width on a mid desktop, 4096 on a
+ * strong one). At the old fixed 1536 it was the softest thing in a scene with no depth plates (2.1x to 3.2x magnified at 1440p
+ * against the painting's 1.2x to 1.4x), and it covers the lower half of the frame, where the party stands.
+ */
 function maskBand(
   source: CanvasImageSource,
   srcW: number,
   srcH: number,
   spec: ParallaxLayerSpec,
 ): HTMLCanvasElement {
-  const scale = Math.min(1, LAYER_MAX_WIDTH / srcW);
+  const scale = Math.min(1, artBudget().bandPx / srcW);
   const w = Math.max(2, Math.round(srcW * scale));
   const h = Math.max(2, Math.round(srcH * scale));
   const c = document.createElement('canvas');
   c.width = w;
   c.height = h;
   const ctx = c.getContext('2d')!;
+  ctx.imageSmoothingQuality = 'high'; // the painting may be its 2x master (release 39): a plain bilinear read of 3.5x less would alias
   ctx.drawImage(source, 0, 0, w, h);
 
   ctx.globalCompositeOperation = 'destination-in';
@@ -298,7 +303,7 @@ export class Backdrop {
     if (opts.ground !== false) {
       const g = opts.ground ?? {};
       const size = g.size ?? 150;
-      const tex = paintedCanvasTexture(groundCanvas(1024, 13));
+      const tex = paintedCanvasTexture(groundCanvas(artBudget().groundPx, 13)); // 1024 / 2048 / 4096 by device: a floor is seen at a low angle, so its texels are the most magnified in the frame
       tex.wrapS = tex.wrapT = RepeatWrapping;
       tex.repeat.set(g.repeat ?? 11, g.repeat ?? 11);
       const tint = new Color(normaliseLuma(groundHex, g.luma ?? 0.42));
@@ -359,7 +364,9 @@ export class Backdrop {
           : (fog?.color.clone() ?? new Color(horizon));
 
     const backdrop = new Backdrop(painting, palette, groundMesh, fog, background);
-    backdrop.ownedTextures.push(...extraTextures);
+    // The painting's own texture is this backdrop's (`loadPainted` makes a texture of its own every time), so it goes when the backdrop does:
+    // it never did, and every battle left its painting on the GPU (22 MB at the approved 2688 px, 84 MB from the 2x master).
+    backdrop.ownedTextures.push(painting.texture, ...extraTextures);
 
     // -------------------------------------------------------- main painting
     // The painting is already "final pixels" — tone-mapping it again crushes
@@ -373,7 +380,7 @@ export class Backdrop {
     const main = new Mesh(new PlaneGeometry(width, height), mainMat);
     main.position.set(0, centreY, distance);
     main.renderOrder = -90;
-    Object.assign(main, { name: 'backdrop-painting', userData: { fxRef: [camRef.x, camRef.y, camRef.z] } }); // fxRef: eye-candy option B registers its plates for this camera
+    Object.assign(main, { name: 'backdrop-painting', userData: { fxRef: [camRef.x, camRef.y, camRef.z], fxCentreY: centreY } }); // fxRef: eye-candy option B registers its plates for this camera
     backdrop.group.add(main);
     backdrop.layerMeshes.push(main);
 
@@ -459,6 +466,17 @@ export class Backdrop {
     if (!target) return;
     if (this.fog) target.fog = this.fog;
     if (this.background) target.background = this.background;
+  }
+
+  /** Put a mesh a scene built (a plate wing, `scenes/plateWings.ts`) under the stack; `dispose` frees its geometry and material. */
+  adopt(mesh: Mesh): void {
+    this.group.add(mesh);
+    this.layerMeshes.push(mesh);
+  }
+
+  /** A texture a scene loaded for a mesh it adopted (a painted plate wing, release 38, D-343): `dispose` frees it with the rest. */
+  adoptTexture(tex: Texture): void {
+    this.ownedTextures.push(tex);
   }
 
   /** @param dt seconds */

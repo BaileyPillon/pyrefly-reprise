@@ -26,6 +26,8 @@ export interface PauseActionHost {
   extraRows?: ReadonlyArray<{ id: string; run: () => void }> | undefined;
   /** CREDITS (D-305): open the credits panel. */
   openCredits?: (() => void) | undefined;
+  /** EYE CANDY (D-317): open the EYE CANDY page. */
+  openEyeCandy?: (() => void) | undefined;
 }
 
 /** @param dir which way Left / Right pushed; Confirm passes 1. @param press Confirm or a tap, not an arrow. */
@@ -56,6 +58,9 @@ export function activateRow(host: PauseActionHost, id: string | null, dir: 1 | -
       return;
     case 'credits':
       host.openCredits?.();
+      return;
+    case 'eyeCandy':
+      host.openEyeCandy?.();
       return;
     default:
       host.extraRows?.find((e) => e.id === id)?.run();

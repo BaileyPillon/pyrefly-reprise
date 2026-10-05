@@ -13,6 +13,8 @@ import { CHAPTERS } from './data/encounters.ts';
 import { installDebugApi, markReady } from './debug/api.ts';
 import { installFxEnv } from './app/fxEnv.ts';
 import { installFxDebug } from './debug/fxApi.ts';
+import { installArtDebug } from './debug/artApi.ts';
+import { installCrispDebug } from './debug/crispApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { cameraLabRequested } from './engine/lab/LabSession.ts';
@@ -33,7 +35,7 @@ function fatal(message: string, detail?: unknown): void {
     <div style="position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:32px">
       <div style="max-width:42ch;color:#dbe6f7">
         <h1 style="font-family:var(--font-display);letter-spacing:.14em;text-transform:uppercase;font-size:20px">
-          Pyrefly Reprise
+          Echoes of Spira
         </h1>
         <p style="color:#9fb3cf;line-height:1.6">${message}</p>
       </div>
@@ -140,7 +142,10 @@ async function boot(): Promise<void> {
   // fb-0929 pacing: `?pace=current|steady|relaxed`; no parameter = 'steady' (Bailey's pick, 2026-09-29; `src/engine/pace.ts`).
   setPace(paceFromQuery(window.location.search) ?? DEFAULT_PACE);
   installFxEnv(); // eye-candy D reads REDUCE MOTION, LOW EFFECTS and the viewport every frame
-  installFxDebug(installDebugApi(app) as unknown as Record<string, unknown>, app); // eye-candy options round: `__pyrefly.fx` (kept out of `debug/api.ts`)
+  const debugApi = installDebugApi(app) as unknown as Record<string, unknown>;
+  installFxDebug(debugApi, app); // eye-candy options round: `__pyrefly.fx` (kept out of `debug/api.ts`)
+  installArtDebug(debugApi, app); // release 39: `__pyrefly.art`, the art tiers and the anti-aliasing
+  installCrispDebug(debugApi, app); // release 39: `__pyrefly.crisp`, the sharpness ladder's switch for captures
 
   // CAMERA LAB (`?camera=lab`, branch camera-lab; a test harness, D-318): its panel instead of the title.
   if (cameraLabRequested()) await (await import('./ui/lab/bootCameraLab.ts')).bootCameraLab(app);

@@ -1,0 +1,13 @@
+/*
+ * U6 (PR-0276, FFX-2 only): the command window's header rides the box's top edge, so a wheel scroll no longer takes
+ * "ITEM" out of the window (it was cut 16 px above the box after one tick); the fold mark that rides the same edge sits
+ * under it. Kept apart from `ffx2-hud.css` (1,181 lines; house style: new rules, new file).
+ */
+.ffx2cmd__title {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+.ffx2hud__command:has(.ffx2cmd__title) .ffx2cmd__fold--up {
+  top: 16px;
+}

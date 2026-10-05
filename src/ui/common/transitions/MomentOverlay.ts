@@ -24,6 +24,7 @@ import './transitions.css';
 import type { MomentsPort } from '../../../engine/BattlePresenterPorts.ts';
 import { playTurnCutIn, type TurnCutInRequest } from './TurnCutInLayer.ts';
 import { confirmPress, type ConfirmPress } from './confirmPress.ts';
+import { OpeningHurry } from './openingHurry.ts';
 import { prefersReducedMotion } from './reduceMotion.ts';
 import { phoneSliceOf, phoneTopOf } from '../phoneSlice.ts';
 
@@ -38,6 +39,8 @@ const INSTANT_MS = 16;
 
 export class MomentOverlay implements MomentsPort {
   readonly el: HTMLElement;
+  /** The next opening runs hurried when armed (PR-0061, `openingHurry.ts`). */
+  readonly hurry = new OpeningHurry();
 
   private readonly slab: HTMLElement;
   private readonly slabTitle: HTMLElement;
@@ -142,6 +145,11 @@ export class MomentOverlay implements MomentsPort {
   /** The next Confirm press, for cutting the opening short (PR-0061). */
   confirmPress(): ConfirmPress {
     return confirmPress(this.el.ownerDocument.defaultView ?? window);
+  }
+
+  /** True once when the player skipped the pre-scene: the first opening is hurried (PR-0061). */
+  takeOpeningHurry(): boolean {
+    return this.hurry.take();
   }
 
   /** On an upright phone, the share of the 16:9 render the window shows (A-12); null elsewhere. */

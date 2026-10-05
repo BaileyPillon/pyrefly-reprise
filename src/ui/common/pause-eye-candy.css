@@ -1,0 +1,303 @@
+/*
+ * The EYE CANDY page and the OPTIONS tab's EYE CANDY row (D-317: Bailey, 2026-10-02, option A).
+ * Target: `docs/concepts/eye-candy-settings-2026-10-02/a*.jpg`, drawn on the live pause by that
+ * round's own stylesheet (`capture/mock.css`), which this file turns into product classes.
+ *
+ * Its own file because `pause-screen.css` is past the 400-line house cap and must not grow. Same
+ * rules as that file and `pause-credits.css`: no boxes, no scrim, nothing below 14px on a desktop
+ * window or 12px on a phone, every length the viewport expression that equals the frame's pixel value
+ * at 1600x900. Imported by `eyeCandyPage.ts`, which loads before `pause-screen.css`, so every
+ * selector here outranks the rule it replaces by specificity, not by order.
+ *
+ * Both games: the looks take `--pu-accent` (= `--ig-accent`), gold in FFX and pyre pink under
+ * `.ig--ffx2`, like every other accent on the pause.
+ */
+
+/* ------------------------------------------- OPTIONS: the cursor dot and the EYE CANDY row */
+
+/*
+ * The defect the mockup round found (its README, Findings 1): the 5px cursor square hangs 13px outside
+ * its row, and the settings column scrolls (`pause-labels.css` on a desktop window, `pause-screen.css`
+ * on a phone), whose overflow clips sideways as well, so the dot was cut off and only the brighter text
+ * said where the cursor was. The column gets 16px of room on both sides (the mirror puts the dot on
+ * the right), given back by a negative margin, so no row moves.
+ */
+.pause__body .pause__col[data-col='settings'] {
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-left: -16px;
+  margin-right: -16px;
+}
+
+/* EYE CANDY opens a page: an accent glyph where the bar would be, right after the label (frame a1). */
+.pause__col .pause__row[data-row='eyeCandy'] .pause__bar::before {
+  content: '\25B8';
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: calc(var(--pu-fs) + 3px);
+  line-height: 1;
+  font-weight: 700;
+  color: var(--pu-accent);
+  opacity: 0.92;
+}
+
+@media (min-width: 621px) {
+  .pause--mirror .pause__col .pause__row[data-row='eyeCandy'] .pause__bar::before { left: auto; right: 2px; }
+}
+
+/* ---------------------------------------------------------------- the page swaps in */
+
+.pause--ec .pause__body,
+.pause--ec .pause__prompts { visibility: hidden; }
+
+/* From the columns' top to one row above the objective line, which stays on screen on a desktop window. */
+.pause__ec {
+  position: absolute;
+  left: var(--pu-gut);
+  right: var(--pu-gut);
+  top: var(--pu-top-body);
+  bottom: calc(100% - var(--pu-top-obj) + var(--pu-row));
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.pause__ec-h {
+  flex: none;
+  margin: 0 0 clamp(9px, 1.7vh, 19px);
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.3);
+  white-space: nowrap;
+}
+
+.pause__ec-h b {
+  margin-left: 1.6em;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: rgba(var(--pu-paper), 0.46);
+}
+
+.pause__ec-h b.pause__ec-rm { color: var(--pu-accent); opacity: 0.8; }
+
+/* The list scrolls only when a short window needs it; the cursor dot keeps 16px of room on both sides. */
+.pause__ec-scroll {
+  flex: 0 1 auto;
+  min-height: 0;
+  padding: 0 16px;
+  margin: 0 -16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.pause__ec-scroll::-webkit-scrollbar { display: none; }
+
+.pause__ec-layer--below .pause__ec-scroll {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 22px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 22px), transparent 100%);
+}
+
+.pause__ec-layer--above .pause__ec-scroll {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 100%);
+}
+
+.pause__ec-layer--above.pause__ec-layer--below .pause__ec-scroll {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%);
+}
+
+/* Two columns, where the OPTIONS columns were: ALL LOOKS, CINEMA LIGHT, LIVING PAINTINGS; BATTLE SPECTACLE. */
+.pause__ec-cols {
+  display: flex;
+  gap: clamp(22px, 3vw, 58px);
+  align-items: flex-start;
+}
+
+.pause__ec-col,
+.pause__ec-col > [data-role='ec-col2'] {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/*
+ * The column is the frame's width (the clamp) or, when a row needs more, as wide as its widest row: a device note
+ * (`ON · LESS HERE`, release 36) beside a long label would otherwise run past the column's edge on a window under
+ * 1480px wide, where the clamp is at its 290px floor. With no note nothing is wider than the clamp, so nothing moves.
+ */
+.pause__ec-col {
+  flex: none;
+  width: max-content;
+  min-width: clamp(290px, 21.5vw, 400px);
+}
+
+/* A row of the page is a pause row: label left, value at the column's far edge (THIS ENCOUNTER's style). */
+.pause__ec-col .pause__ec-row { flex: none; cursor: pointer; column-gap: 14px; }
+.pause__ec-col .pause__ec-row .pause__k { width: auto; flex: 1 1 auto; text-align: left; overflow: visible; letter-spacing: 0.16em; }
+.pause__ec-col .pause__ec-row .pause__v { margin-left: auto; flex: none; }
+.pause__ec-col .pause__ec-row .pause__bar { display: none; }
+
+/* A look: the accent, like the credits panel's group headings. Its parts sit under it, indented and quieter. */
+.pause__ec-col .pause__ec-row--look { margin-top: clamp(8px, 1.5vh, 16px); }
+.pause__ec-col .pause__ec-row--look:first-child { margin-top: 0; }
+.pause__ec-col .pause__ec-row--look .pause__k { color: var(--pu-accent); letter-spacing: 0.22em; font-weight: 600; opacity: 0.92; }
+
+.pause__ec-col .pause__ec-row--part { padding-left: clamp(16px, 1.3vw, 24px); }
+.pause__ec-col .pause__ec-row--part .pause__k { color: rgba(var(--pu-paper), 0.58); }
+
+.pause__ec-col .pause__ec-row--part .pause__k::before,
+.pause__ec-col .pause__ec-row--part .pause__k::after {
+  content: '';
+  display: inline-block;
+  width: 9px;
+  height: 1px;
+  margin-right: 10px;
+  vertical-align: middle;
+  background: rgba(var(--pu-paper), 0.3);
+}
+
+.pause__ec-col .pause__ec-row--part .pause__k::after { display: none; margin: 0 0 0 10px; }
+
+/*
+ * OFF reads quiet; a part whose look is OFF keeps its own value, prints `ON · LOOK OFF` and is drawn dim.
+ * PR-0322 (round 19): the old 0.4 opacity and 0.36 grey read about 2:1 and 1.5:1 on the painting, so dim
+ * and OFF text is a flat paper tint now (0.52 and 0.5 on the dark ink), which measures 3:1 or better.
+ */
+.pause__ec-col .pause__ec-row--off .pause__v { color: rgba(var(--pu-paper), 0.5); }
+.pause__ec-col .pause__ec-row--dim .pause__k,
+.pause__ec-col .pause__ec-row--dim .pause__v { color: rgba(var(--pu-paper), 0.52); }
+.pause__ec-col .pause__ec-row .pause__v em { margin-left: 0.7em; font-style: normal; letter-spacing: 0.14em; color: rgba(var(--pu-paper), 0.55); }
+
+.pause__ec-col .pause__ec-row.pause__row--sel .pause__k,
+.pause__ec-col .pause__ec-row.pause__row--sel .pause__v { color: rgba(var(--pu-paper), 0.97); }
+.pause__ec-col .pause__ec-row--look.pause__row--sel .pause__k { color: var(--pu-accent); opacity: 1; }
+
+/* The cursor dot hangs 13px outside the column edge on every row, indented parts included. */
+.pause__ec-col .pause__ec-row.pause__row--sel::before { left: 0; margin-left: -13px; }
+
+/* DOM focus follows the cursor (a screen reader hears the switch); the dot and the bright text are the
+   focus mark the frames draw, so the browser's ring is not drawn on top of them. */
+.pause__ec-col .pause__ec-row:focus,
+.pause__col .pause__row[data-row='eyeCandy']:focus { outline: none; }
+
+.pause__ec-rule {
+  flex: none;
+  width: 100%;
+  height: 1px;
+  margin: clamp(8px, 1.4vh, 14px) 0;
+  background: rgba(var(--pu-paper), 0.14);
+}
+
+/* What the focused switch does: one short note, where the credits panel keeps its notes. */
+.pause__ec-help {
+  flex: none;
+  margin-top: clamp(16px, 2.6vh, 28px);
+  max-width: clamp(290px, 21.5vw, 400px);
+}
+
+.pause__ec-help-t {
+  display: block;
+  font-size: var(--pu-fs-v);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.94);
+}
+
+.pause__ec-help-b {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: var(--pu-fs);
+  line-height: 1.38;
+  letter-spacing: 0.02em;
+  color: rgba(var(--pu-paper), 0.6);
+}
+
+/* The device's reason (release 36): why this switch is off or lighter on this screen, closing the body in the accent. */
+.pause__ec-help-b .pause__ec-help-d {
+  display: block;
+  margin-top: 4px;
+  font-style: normal;
+  color: var(--pu-accent);
+  opacity: 0.85;
+}
+
+.pause__ec-help-g {
+  display: block;
+  margin-top: 5px;
+  font-size: var(--pu-fs);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(var(--pu-paper), 0.34);
+}
+
+.pause__ec-help--phone,
+.pause__ec-hint-phone { display: none; }
+
+/* The page's own prompts: `.pause__back` / `.pause__hide` placement; the hint is not a button. */
+.pause__ec-layer .pause__ec-hint { cursor: default; }
+
+/* -------------------------------------------- the mirror: the chrome on the painting's right */
+
+@media (min-width: 621px) {
+  .pause--mirror .pause__ec-h,
+  .pause--mirror .pause__ec-help { text-align: right; }
+  .pause--mirror .pause__ec-cols { flex-direction: row-reverse; }
+  .pause--mirror .pause__ec-col .pause__ec-row--part { padding-left: 0; padding-right: clamp(16px, 1.3vw, 24px); }
+  .pause--mirror .pause__ec-col .pause__ec-row--part .pause__k::before { display: none; }
+  .pause--mirror .pause__ec-col .pause__ec-row--part .pause__k::after { display: inline-block; }
+  .pause--mirror .pause__ec-col .pause__ec-row.pause__row--sel::before { left: auto; right: 0; margin-left: 0; margin-right: -13px; }
+}
+
+/* ----------------------------------------------------------------------------- phone */
+
+@media (max-width: 620px) {
+  .pause--ec .pause__obj { visibility: hidden; }
+
+  /* Under the tab strip to just above the prompts, as the credits panel; the help line pinned at the foot. */
+  .pause__ec {
+    top: 92px;
+    bottom: 58px;
+  }
+
+  .pause__ec-scroll { flex: 1 1 auto; }
+
+  /* The heading may carry a second note (REDUCE MOTION IS ON): it wraps under the title. */
+  .pause__ec-h { white-space: normal; }
+  .pause__ec-h b.pause__ec-rm { display: block; margin: 4px 0 0; }
+
+  .pause__ec-cols { flex-direction: column; gap: 0; }
+  .pause__ec-col { width: 100%; min-width: 0; }
+
+  /* The page has the whole height, so its rows are touch size: 40px, not the 20px of a five-row window. */
+  .pause__ec-col .pause__ec-row { height: 40px; }
+  .pause__ec-col .pause__ec-row--look { margin-top: 6px; }
+  .pause__ec-col .pause__ec-row--part { padding-left: 18px; }
+
+  .pause__ec-help--desk,
+  .pause__ec-hint-desk { display: none; }
+  .pause__ec-hint-phone { display: inline; }
+
+  .pause__ec-help--phone {
+    display: block;
+    margin-top: 10px;
+    padding-top: 10px;
+    max-width: none;
+    border-top: 1px solid rgba(var(--pu-paper), 0.14);
+  }
+
+  .pause__ec-help-g { margin-top: 3px; }
+
+  /* A portrait screen does not mirror the columns (`pause-screen.css`); nor does the page. */
+  .pause--mirror .pause__ec-col .pause__ec-row .pause__k { text-align: left; }
+  .pause--mirror .pause__ec-col .pause__ec-row .pause__v { margin-left: auto; margin-right: 0; }
+}

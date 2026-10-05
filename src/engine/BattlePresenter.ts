@@ -58,7 +58,9 @@ import {
 } from './BattlePresenterUtil.ts';
 import { headlineEnemy } from '../battle/common/headlineEnemy.ts';
 import { paceFactor } from './pace.ts';
+import { shotHoldMs } from './fx/shotHold.ts';
 import { applyEventToVitals, captureVitals, projectState, type VitalsMap } from './BattlePresenterVitals.ts';
+import { blowHeld, revealBlow } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL: a blow whose shot is in flight shows its numeral and HP rows when it lands
 
 // Re-exported: the loop's public types live with the ports (`BattlePresenterPorts.ts`).
 export type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
@@ -95,6 +97,14 @@ export class BattlePresenter {
   private phase = 'idle';
   /** The command most recently submitted, so a minigame can re-submit it. */
   private lastCommand: Command | null = null;
+  /** Each actor's most recent command: a charged minigame is re-submitted long after it was chosen. */
+  private readonly commandBy = new Map<CombatantId, Command>();
+  /**
+   * A minigame request that came out of the clock (`tick()`), not out of a `submit()`: FFX-2's Lady
+   * Luck reels are Long `CT`, so they ask when the purple bar empties. Parked here until the loop
+   * can open the overlay (an open command menu is closed first; FFX-2 only).
+   */
+  private deferredMinigame: { who: CombatantId; kind: MinigameKind; params: Record<string, unknown> } | null = null;
   /** A bare re-submit still suspended: this engine needs a human for minigames. */
   private minigamesNeedOverlay = false;
   /**
@@ -128,6 +138,14 @@ export class BattlePresenter {
       (ms) => this.sleep(ms),
       () => this.speed,
     );
+    this.ctx.menuOpen = () => this.pendingMenu !== null; // r37 slots: FFX-2 key paintings stand aside for a menu
+    this.ctx.reveal = async (event) => { // SKILL TRAVEL: the late half of what `playBurst` does before an event (the HUD's look, then the HP rows)
+      const was = this.phase;
+      this.phase = `hud:${event.type}`;
+      await this.notifyHud(event);
+      this.presentVitals(event);
+      this.phase = was;
+    };
     this.actingState = new ActingState(() => this.deps.hud);
     this.cutIns = new TurnCutInBeat({
       moments: deps.moments ?? null,
@@ -228,7 +246,11 @@ export class BattlePresenter {
     const run = this.playBurst(events);
     this.playing = run.then(() => undefined, () => undefined); // FF7's submit waits on it (`submit`)
     try {
-      return await run;
+      const res = await run;
+      // The MAX mix's DRESSPHERE SHOT runs its 1.6 s before the next menu or enemy action begins (fx/shotHold.ts; 0 with no shot up).
+      const held = res.ended || res.minigame ? 0 : shotHoldMs();
+      if (held > 0) await this.sleep(held);
+      return res;
     } finally {
       this.actingState.cancel(); // an action the burst stopped inside never ends on screen
     }
@@ -242,9 +264,13 @@ export class BattlePresenter {
       if (this.aborted) return { dropped: events.length - i };
       const event = events[i]!;
 
-      // The HUD gets first look at every event so it can raise a transient.
-      this.phase = `hud:${event.type}`;
-      await this.notifyHud(event);
+      // The HUD gets first look at every event so it can raise a transient. A blow whose spell or shot is still on its
+      // way (SKILL TRAVEL, r38-motion) is shown to it when the blow lands instead: its numeral and HP rows wait.
+      const held = blowHeld(this.ctx, event);
+      if (!held) {
+        this.phase = `hud:${event.type}`;
+        await this.notifyHud(event);
+      }
 
       const started = Date.now();
       if (event.type === 'minigame-request') {
@@ -275,7 +301,7 @@ export class BattlePresenter {
       // the number from before the command for as long as the command took to
       // animate — a KO'd Yuna drawn alive at 711/1500 for 2145 ms, and an
       // ordinary hit's numeral 4.5 s ahead of its own bar.
-      this.presentVitals(event);
+      if (!held) this.presentVitals(event);
 
       this.phase = `play:${event.type}`;
       this.actingState.observe(event);
@@ -283,6 +309,7 @@ export class BattlePresenter {
       this.ctx.opening = this.callouts.isOpening;
       if (event.type === 'victory' || event.type === 'defeat') this.ctx.stage.camera.hold?.(false); // PR-0150: the end shot always plays
       await playEvent(this.ctx, event);
+      if (held) await revealBlow(this.ctx, event); // the beat shows it itself; this only makes sure a held blow is never lost
       this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });
 
       if (event.type === 'victory' || event.type === 'defeat') {
@@ -336,6 +363,12 @@ export class BattlePresenter {
     for (;;) {
       if (this.aborted) return { kind: 'aborted' };
 
+      // A charged timed input (the reels) asked for its overlay out of the clock.
+      if (this.deferredMinigame) {
+        const ended = await this.settleDeferredMinigame(engine);
+        if (ended) return ended;
+      }
+
       // A decision that produces no events resolves its promise as a
       // microtask, and a run of them never returns to the event loop at all —
       // no timers, no rAF, a page that looks hung rather than slow. Yielding a
@@ -379,6 +412,10 @@ export class BattlePresenter {
           const res = await this.play(events);
           this.syncHud(engine);
           if (res.ended) return outcomeOf(res.result ?? engine.state().result);
+          // A *charged* timed input (X-2's reels) asks for its overlay when the purple bar empties,
+          // out of `tick()`, not `submit()`. This branch used to drop the request, so a human never
+          // saw the reels and the spin was never resolved at all.
+          if (res.minigame) this.deferredMinigame = res.minigame;
           break;
         }
 
@@ -407,6 +444,7 @@ export class BattlePresenter {
             break;
           }
           if (!command) return { kind: 'aborted' };
+          this.commandBy.set(decision.actorId, command);
           this.cutIns.acted(decision.actorId); // PR-0104: a moved cut-in waits for her next turn
           const out = await this.submit(engine, command);
           if (out) return out;
@@ -440,6 +478,11 @@ export class BattlePresenter {
 
   /** Submit one command and play everything it produced, minigames included. */
   private async submit(engine: BattleEngine, command: Command): Promise<BattleOutcome | null> {
+    // A reel request raised while this menu was open is answered before this command resolves.
+    if (this.deferredMinigame) {
+      const ended = await this.settleDeferredMinigame(engine);
+      if (ended) return ended;
+    }
     this.lastCommand = command;
     // FF7 resolves one action at a time (research/ff7-battle-core.md §2.6): a command confirmed while the pump
     // plays the boss's turn waits until that turn has finished on screen (repair item 3). FFX and FFX-2 as before.
@@ -459,6 +502,20 @@ export class BattlePresenter {
     return null;
   }
 
+  /** Open the overlay for a request parked by {@link deferredMinigame} and resolve the spin. */
+  private async settleDeferredMinigame(engine: BattleEngine): Promise<BattleOutcome | null> {
+    let request = this.deferredMinigame;
+    this.deferredMinigame = null;
+    let guard = 0;
+    while (request && guard++ < 4) {
+      const res = await this.resolveMinigame(engine, request, false);
+      this.syncHud(engine);
+      if (res.ended) return outcomeOf(res.result ?? engine.state().result);
+      request = res.minigame ?? null;
+    }
+    return null;
+  }
+
   /**
    * Open the overlay named by the request, then re-submit the **same** command
    * with the outcome in `extra`. With nobody at the controls it goes back bare
@@ -470,12 +527,18 @@ export class BattlePresenter {
     request: { who: CombatantId; kind: MinigameKind; params: Record<string, unknown> },
     engineDefault: boolean,
   ): Promise<PlayResult> {
-    const base = this.lastCommand;
+    // The command that raised it, which for a charged action is not the last one submitted:
+    // the other two girls act during her wind-up.
+    const base = this.commandBy.get(request.who) ?? this.lastCommand;
     if (!base) return { dropped: 0 };
     const answer = !engineDefault && !this.auto ? await askMinigame(this.deps.hud, request) : undefined;
     if (answer && answer.kind !== 'result' && backOutOfMinigame(engine)) return { dropped: 0 };
     const extra = answer?.kind === 'result' ? answer.result : undefined;
-    return this.play(engine.submit(extra && base.kind === 'overdrive' ? { ...base, extra } : { ...base }));
+    // FFX's timed inputs are Overdrives; FFX-2's (Trigger Happy, Lady Luck's reels) are ordinary menu
+    // abilities. Attaching the outcome to `overdrive` alone threw every X-2 result away: the player
+    // stopped three reels, the command went back bare, and the engine rolled a spin of its own.
+    const carries = base.kind === 'overdrive' || base.kind === 'ability';
+    return this.play(engine.submit(extra && carries ? { ...base, extra } : { ...base }));
   }
 
   /** Ask the HUD (or the auto strategy) for a command. */
@@ -576,7 +639,12 @@ export class BattlePresenter {
         aborted: () => this.aborted,
         sleep: (ms) => this.baseSleep(ms),
         now: this.now,
-        play: (events) => this.play(events),
+        play: async (events) => {
+          const res = await this.play(events);
+          if (res.minigame) this.deferredMinigame = res.minigame; // a reel asked while this menu was open
+          return res;
+        },
+        interrupted: () => this.deferredMinigame !== null,
         syncGauges: (snapshot) => this.syncGauges(snapshot),
         modeChanged: () => this.menuWake.park(),
         epoch: () => this.menuWake.epoch,
