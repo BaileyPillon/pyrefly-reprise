@@ -175,7 +175,7 @@ blurred extension behind the sharp plate, or a higher-resolution master (art). B
 **PR-0332, plate side bands at 21:9 in the FFX chapters (Yunalesca 15 % worst).** FFX-2's Bevelle plate now has its painted wings (release 38) and its seam is repaired above; the FFX plates have none. A fix is new painted wings (art generation), a cover-scale crop, or fog on the edge. B11.
 
 **PR-0320, the first-time coach line over the girls' feet during a held shot.** The coach mark is in the held-shot HUD list (`html.mix-held .coach-mark[data-game='ffx2']` hidden): `coachShown` was 0 in every shot of the proof runs above.
-**Not looked at:** PR-0247 (Chapter VII's Anima arrival at 390x844, a phone-only finding from round 16; needs Seymour below half HP to trigger it), PR-0366 / PR-0248 / PR-0271 / PR-0333 (HUD slabs over actors: the interface lane's), PR-0317's neighbour PR-0319, PR-0331 (a question).
+**Not looked at:** PR-0247 (Chapter VII's Anima arrival at 390x844, a phone-only finding from round 16; the clipped "CANNOT BE TARGETED" label it names is no longer in the code (no such string in `src/`), so that half is obsolete; the arrival camera half needs Seymour below half HP to trigger and was not re-measured), PR-0366 / PR-0248 / PR-0271 / PR-0333 (HUD slabs over actors: the interface lane's), PR-0317's neighbour PR-0319, PR-0331 (a question).
 
 ## 4. Left for Bailey (each needs a yes; nothing here is built)
 
