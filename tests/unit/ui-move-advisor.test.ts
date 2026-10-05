@@ -510,15 +510,41 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
       el.innerHTML = cardHtml(view, d);
       return el.textContent ?? '';
     };
-    // Every step is shorter than the one before it.
+    // Every step is shorter than the one before it. Rung 4 is the exception that proves the rule: the lead's reason
+    // runs to two lines there, which is the same words under a line clamp (a class, not shorter text; PR-0330).
     for (let d = 1 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
-      expect(text(d).length, `density ${d}`).toBeLessThan(text((d - 1) as Density).length);
+      const here = text(d).length;
+      const before = text((d - 1) as Density).length;
+      if (d === 4) expect(here, `density ${d}`).toBeLessThanOrEqual(before);
+      else expect(here, `density ${d}`).toBeLessThan(before);
     }
-    // The effect lines are the first thing to go, runner-up first.
+    // The runner-up's effect line is the first thing to go. The lead's effect line is the **last** description to
+    // go but one (PR-0330: it is the cheap line, 10 to 18 grid px, and the reason the dear one): it is on the card
+    // through rung 5 and goes at rung 6.
     expect(text(0)).toContain('Revives all fallen allies');
     expect(text(1)).not.toContain('Revives all fallen allies');
-    expect(text(1)).toContain('Puts Haste on the whole party');
-    expect(text(2)).not.toContain('Puts Haste on the whole party');
+    for (let d = 0 as Density; d <= 5; d = (d + 1) as Density) {
+      expect(text(d), `density ${d}`).toContain('Puts Haste on the whole party');
+    }
+    expect(text(6)).not.toContain('Puts Haste on the whole party');
+    // The lead's cost chip is on **every** rung, the last included (a free move says "no MP"; round 21 read a card
+    // with no cost on it as a card that had lost it). It sits in the menu chip's row, so it costs no height.
+    for (let d = 0 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
+      const el = document.createElement('div');
+      el.innerHTML = cardHtml(view, d);
+      const lead = el.querySelector('.mad__move')!;
+      expect(lead.textContent, `density ${d}`).toMatch(/no MP|\d+ MP/);
+    }
+    // The lead's reason runs to two lines at rung 4 (a clamp on the lead's sentence alone), and is gone from rung 5.
+    for (let d = 0 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
+      const el = document.createElement('div');
+      el.innerHTML = cardHtml(view, d);
+      const reason = el.querySelector('.mad__move:not(.mad__move--alt) .mad__why');
+      expect(!!reason, `density ${d} lead reason`).toBe(d <= 4);
+      expect(!!reason?.classList.contains('mad__why--clamp'), `density ${d} lead reason clamped`).toBe(d === 4);
+      // a runner-up's reason runs to two lines from rung 4 until the last rung takes it
+      expect(!!el.querySelector('.mad__move--alt .mad__why--clamp'), `density ${d} runner-up clamped`).toBe(d >= 4 && d <= 6);
+    }
 
     // Down to the second-to-last rung the card still answers the question in
     // full: both moves, where they live, why the revive is being offered, and
