@@ -16,21 +16,21 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-905 decisions in all: 455 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 612 of the written decisions record a blanket yes.
+906 decisions in all: 456 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 613 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 846 |
+| adopted | 847 |
 | proposed | 11 |
 | deferred | 4 |
 | rejected | 11 |
 | superseded | 33 |
-| **All** | **905** |
+| **All** | **906** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 73 |
-| art | 207 |
+| art | 208 |
 | visuals | 67 |
 | camera | 31 |
 | audio | 30 |
@@ -45,15 +45,15 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **905** |
+| **All** | **906** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 391 |
+| both games | 392 |
 | FFX only | 278 |
 | FFX-2 only | 219 |
 | FF7 hidden experiment | 17 |
-| **All** | **905** |
+| **All** | **906** |
 
 ## Standing rules in force
 
@@ -3939,7 +3939,7 @@ Sunday · 69 decisions
 
 ### 2026-10-05
 
-Monday · 19 decisions
+Monday · 20 decisions
 
 - <a id="d-437"></a>**D-437** — True colour (decision A): characters and bosses show their paintings' own colours: the "figures true" switch goes ON by default in release 39.1, with the bloom fix (r39-color ef0868b5)
   - Bailey: “I'll go with all of your recommendations” (blanket yes)
@@ -4036,3 +4036,8 @@ Monday · 19 decisions
   - What changed: Rikku Berserker's ready pose and Rikku Gunner's ready pose are close-ups whose head is 2.0 and 1.7 times the idle pose's on a normal body, so no single size fits both head and body, and today the game compromises: the stature gate of docs/handoff/poses-0930.md (not under 0.60 of the idle's height) leaves Berserker's head at 1.20 and Gunner's at 1.03 of the idle's, at 0.60 of the height. Two new paintings replace the compromise, drawn in the painterly finish (D-438) after the painterly cast lands (the art lane's order: the cast, then these two, then the animation keys); each is checked for head and feet against the idle's before it installs (the pose-size rule of D-434). Not shipped yet. FFX-2 only.
   - area art · FFX-2 · adopted · delivery not scheduled · at ~13:43 EDT · see [D-342](#d-342), [D-358](#d-358), [D-434](#d-434)
   - Source: docs/handoff/r39-posescale.md
+- <a id="d-456"></a>**D-456** — Painterly finish strength for the cast roll-out: pilot "D-light" on Tidus first (face pass and init lock 0.99 kept, palette lock at about half strength), compare D, D-light and B side by side, then pick the method; the costume-colour gate relaxes from 3 to 8 percent of cells
+  - Bailey: “i'll go with whatever you recommend” (blanket yes)
+  - What changed: From the next character on, the painterly finish can be a step richer than method D while faces and silhouettes stay locked; Tidus may be redone in the chosen method. Bailey delegated the call, so the driver's recommendation stands: (1) Pilot "D-light" first on Tidus's idle and attack: the face pass and the init lock at sigma 0.99 are kept, the palette lock runs at about half strength. (2) The driver compares D, D-light and B side by side at battle size and at 100 percent, then picks the method for the roll-out of D-438. (3) The costume-colour gate of D-438 relaxes from under 3 percent of a costume's cells moving by more than 20 dE to under 8 percent; the silhouette gate (IoU 0.95 or better) and the face-layout gate (0.75 or better) are unchanged. (4) Tidus's finished set in method D stays as the fallback until a richer set passes the gates and the side-by-side. The pilot is not run yet and nothing in the game changes on this yes alone: the roll-out's contact sheets still go to him before it ships. Both games: the painterly method is shared art plumbing and applies to FFX and FFX-2 figures alike.
+  - area art · both games · adopted · delivery not scheduled · see [D-438](#d-438), [D-429](#d-429), [D-431](#d-431)
+  - Source: Bailey, 2026-10-05, in chat, answering the driver's question on the painterly finish strength for the cast roll-out of D-438 with: "i'll go with …
