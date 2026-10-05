@@ -87,6 +87,16 @@ D: is at 99 percent (36 GB free) and F: at 98 percent; the E library is the lane
 **Not re-run tonight:** `art-derive verify` and `audit` and `art-browser-load` on a production build (a 9 GB build; no game code and no installed master changed after commit ea732eb5, the later commits are Python tools and docs, and the release build of the integration lane
 covers them) and the full `npm test`. They are owed by whoever cuts the release with these masters.
 
+## The painterly lock round (2026-10-05, after Bailey picked S2 painterly)
+
+`D:/Tools/pyrefly-art-backup/candidates/2026-10-05-painterly-lock/README.md` (candidates only, nothing installed, no approved painting touched; Tidus and Seymour Flux FFX only, Yuna Gunner FFX-2 only; the method is shared
+plumbing). Klein 9B with close-ups of the approved head and costume as extra references and an **init lock** (the painting's own latent noised to sigma 0.99, then the model's four-step schedule) holds the silhouette
+(IoU 0.98 to 0.99, Yuna Gunner 0.95), the costume parts and the seeds' agreement; a palette lock (C) and a painterly face pass (D) take the colour drift and the face drift out. **C and D are the best two; no single
+method holds both the S2 finish and the lock**: they keep about a third to a half of last round's finish by the CLIP measure and look visibly painted by eye. Recommendation: D as the default, C per figure where the face
+pass makes a face younger. Costs for a roll-out (636 masters about 13 GPU hours for one seed, plus about 27 animation keys about 35 GPU minutes) are in its README; the roll-out, the P2 keys and the refine were NOT started.
+Scripts: `tools/gen/hires-detail/lock_*.py`, `clipsim.py`, `comfy_wait.py`. Incidents: a Klein KV cache with four references overflowed the card and stalled 45 minutes (the same graph without the cache runs in 39 s), a second
+15.7 minutes, and a sampler fault 8.5 minutes; 31.7 minutes of runs completed; the lock pass must run without the KV cache and in a window where `PAUSE-GPU` is honoured.
+
 ## Decisions for Bailey
 
 1. The finish: S1, S2, S3b, a mix, or none (the style pilot README has the pictures and the recommendation). Name what is right and wrong in each; the pick approves only what he names.
