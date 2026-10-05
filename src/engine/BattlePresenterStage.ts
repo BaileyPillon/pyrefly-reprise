@@ -33,7 +33,6 @@ import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { figureBloomMasked } from './BloomMask.ts';
-import { posesCut } from './PoseCut.ts';
 import { cutRigsOf } from './motion/CutRig.ts';
 import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
 import * as SA from './StageAnchors.ts';
@@ -316,7 +315,7 @@ export class PaintedStage implements BattleStage {
       // art painted the way its body faces is drawn exactly as painted.
       ...bodyFacingOption(this.opts.slots.sideFacing, c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party'),
       worldHeight: anchor ? SA.anchoredHeight(anchor) : (worldHeight ?? own ?? worldHeightFor(c, heights)),
-      crossfadeMs: posesCut(this.opts.slots.poseCut, this.opts.slots.poseCutArt, artId) ? 0 : kind === 'party' ? 120 : 140, // FF7: a hard cut between its painted keys; Evrae (FFX VIII): a cut, not two heads (PoseCut.ts)
+      crossfadeMs: this.opts.slots.poseCut ? 0 : kind === 'party' ? 120 : 140, // FF7: a hard cut between its painted keys
       ...(this.opts.slots.poseShiftPx?.[artId] ? { poseShiftPx: this.opts.slots.poseShiftPx[artId] } : {}), // FF7: every key on the idle's stance
       poses,
       placeholder:

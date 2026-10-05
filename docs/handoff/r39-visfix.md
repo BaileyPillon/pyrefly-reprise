@@ -139,6 +139,11 @@ half strength (a plane probe: idle 0.493 + hurt 0.507 at the worst frame, 14 to 
 between poses (where FF7's `poseCut` cuts the whole scene); the Evrae deck names `evrae` and nobody else, so the party keeps its crossfade. After: 0 frames with both planes visible in 3 of 3 hits. Test `r39-pose-cut` (4). Frames:
 `pr-0367-evrae-hurt-before-after.jpg`.
 
+**Reverted for release 39 (2026-10-05, the critic's focused review R39F-02; FFX only).** The continuity harness counts a hard cut between two silhouettes this different as a snap: Chapter VIII read 107 snaps in 328.6 s
+(19.54 a minute) against 3 in 394.2 s on live (0.46), where D-424 allows 0.25. `9ff5760f` is reverted (the `r39-int` commit "Cut between Evrae's poses ... reverts PR-0367 to live's crossfade": `PoseCut.ts`, `poseCutArt` and the
+`r39-pose-cut` test are gone, `tests/unit/r39-evrae-crossfade.test.ts` pins the crossfade) and Evrae crossfades as on live, double head included. A cut, a short hold that never shows two heads, or an authored in-between pose
+is Bailey's call, as part of the pose-continuity decision (measure each, then ask); the revert is the text above undone, so the cut is one `git revert` of that commit away if Bailey picks it.
+
 ### 2.5 PR-0344, the "tilted wing seam" at 21:9 (FFX-2 only in use: Chapters IV and XIII)
 
 At 2560x1080 the seam the critic read as the painted wings meeting the plate was two other things: the foreground conduits (3D pipes with a strip of lamps, placed so the 16:9 frame cuts them) stood a third of the way into the
