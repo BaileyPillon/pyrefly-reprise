@@ -121,6 +121,14 @@ push-in, and painted plate wings for Ch IV. The lab's Chapter IV formation must 
 Release 39 (the high-resolution tier engine) is merging. Rebase after release 39 lands and the quality round
 reports, so the lab shows the camera with the high-resolution art Bailey asked for.
 
+Update, 2026-10-04 evening: Bailey asked the driver for the highest fidelity ("I need super high resolution now.
+DO NOT hold back."). The driver's agent is building a Camera Lab showcase on a NEW branch, `camera-lab-r39`
+(worktree D:/pyrefly-lab-r39): camera-lab merged with `r39-hires-engine` (1x-4x art tiers) and `r39-looks`, plus
+`anticipateView` for the lab's close shots, with 4K stills, clips and an options page asking Bailey to commit the
+Clair Obscur camera or not yet. That branch IS the release-39 rebase: continue from `camera-lab-r39`, not from
+`camera-lab`, and do not rebase `camera-lab` separately. Release 39 also changes Chapter III's camera (calm menus,
+boss 2.6 right / 0.95 back; FFX only).
+
 ## Budget and risks
 
 - Weekly 71 % used (rule 15: conserve band; Bailey's "keep working" stands). One Opus builder for the
