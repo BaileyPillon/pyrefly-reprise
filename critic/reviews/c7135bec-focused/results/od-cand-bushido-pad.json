@@ -1,0 +1,199 @@
+{
+ "name": "od-cand-bushido-pad",
+ "kind": "bushido",
+ "mode": "pad",
+ "label": "cand",
+ "size": "1600x900",
+ "chapter": "sin-fins-core",
+ "base": "http://127.0.0.1:5461/?coach=off",
+ "hooks": [
+  "setSeed(1) + gotoChapter (navigation only, ?coach=off)",
+  "battleState() gauge := 100 for tidus and auron (labelled)"
+ ],
+ "log": [
+  "first menu; actor command:tidus",
+  "overlay up {\"turns\":6,\"chosen\":\"Dragon Fang\"}",
+  "overlay {\"title\":\"Dragon Fang\",\"subtitle\":\"BUSHIDO · ENTER THE SEQUENCE\",\"input\":\"gamepad\",\"cls\":\"ig-minigame ffx-mg ffx-mg--tap ffx-mg--open\",\"chips\":[\"↓/down/28.9x28.9/pe:auto/top:true\",\"←/left/28.9x28.9/pe:auto/top:true\",\"↑/up/28.9x28.9/pe:auto/top:true\",\"→/right/28.9x28.9/pe:auto/top:true\",\"L1/l1/28.9x28.9/pe:auto/top:true\",\"R1/r1/28.9x28.9/pe:auto/top:true\",\"○/cancel/28.9x28.9/pe:auto/top:true\",\"✕/confirm/28.9x28.9/pe:auto/top:true\"],\"slab\":{\"x\":35.5,\"y\":140,\"w\":853.3,\"h\":250.7},\"slabPe\":\"auto\"}",
+  "typed the sequence",
+  "engine {\"seq\":35,\"actor\":\"auron\",\"ability\":\"Dragon Fang\",\"extra\":{\"kind\":\"auron-sequence\",\"sequence\":{\"success\":true,\"correctInputs\":8,\"timeRemainingMs\":1923.5999999046326}}}"
+ ],
+ "reach": {
+  "turns": 6,
+  "chosen": "Dragon Fang"
+ },
+ "overlay": {
+  "cls": "ig-minigame ffx-mg ffx-mg--tap ffx-mg--open",
+  "input": "gamepad",
+  "title": "Dragon Fang",
+  "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+  "timer": "3.6",
+  "slab": {
+   "x": 35.5,
+   "y": 140,
+   "w": 853.3,
+   "h": 250.7
+  },
+  "slabPe": "auto",
+  "chips": [
+   {
+    "text": "↓",
+    "main": "↓",
+    "sub": null,
+    "btn": "down",
+    "aria": "Down",
+    "x": 85.7,
+    "y": 328.6,
+    "w": 28.9,
+    "h": 28.9,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "←",
+    "main": "←",
+    "sub": null,
+    "btn": "left",
+    "aria": "Left",
+    "x": 123.4,
+    "y": 328.6,
+    "w": 28.9,
+    "h": 28.9,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "↑",
+    "main": "↑",
+    "sub": null,
+    "btn": "up",
+    "aria": "Up",
+    "x": 161.2,
+    "y": 328.6,
+    "w": 28.9,
+    "h": 28.9,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "→",
+    "main": "→",
+    "sub": null,
+    "btn": "right",
+    "aria": "Right",
+    "x": 198.9,
+    "y": 328.6,
+    "w": 28.9,
+    "h": 28.9,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "L1",
+    "main": "L1",
+    "sub": null,
+    "btn": "l1",
+    "aria": "L1",
+    "x": 236.6,
+    "y": 328.6,
+    "w": 28.9,
+    "h": 28.9,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "R1",
+    "main": "R1",
+    "sub": null,
+    "btn": "r1",
+    "aria": "R1",
+    "x": 274.4,
+    "y": 328.6,
+    "w": 28.9,
+    "h": 28.9,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "○",
+    "main": "○",
+    "sub": null,
+    "btn": "cancel",
+    "aria": "Circle",
+    "x": 312.1,
+    "y": 328.6,
+    "w": 28.9,
+    "h": 28.9,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "✕",
+    "main": "✕",
+    "sub": null,
+    "btn": "confirm",
+    "aria": "Cross",
+    "x": 349.8,
+    "y": 328.6,
+    "w": 28.9,
+    "h": 28.9,
+    "pe": "auto",
+    "topIsChip": true
+   }
+  ],
+  "bar": null,
+  "viewport": "1600x900"
+ },
+ "t0": 1791181808916,
+ "closed": true,
+ "engine": {
+  "seq": 35,
+  "actor": "auron",
+  "ability": "Dragon Fang",
+  "extra": {
+   "kind": "auron-sequence",
+   "sequence": {
+    "success": true,
+    "correctInputs": 8,
+    "timeRemainingMs": 1923.5999999046326
+   }
+  }
+ },
+ "sameAsPre": false,
+ "screenAfter": "battle",
+ "artTiers": {
+  "artResponses": 151,
+  "status": {
+   "200": 151
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 15,
+  "tiers": {
+   "x2": 15,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "hiResFiles": [
+  "http://127.0.0.1:5461characters/sin-left-fin/idle@2x.png",
+  "http://127.0.0.1:5461characters/sin-left-fin/attack@2x.png",
+  "http://127.0.0.1:5461characters/tidus/idle@2x.png",
+  "http://127.0.0.1:5461characters/tidus/ready@2x.png",
+  "http://127.0.0.1:5461characters/tidus/attack@2x.png",
+  "http://127.0.0.1:5461characters/tidus/cast@2x.png",
+  "http://127.0.0.1:5461characters/tidus/item@2x.png",
+  "http://127.0.0.1:5461characters/tidus/hurt@2x.png",
+  "http://127.0.0.1:5461characters/tidus/ko@2x.png",
+  "http://127.0.0.1:5461characters/tidus/victory@2x.png",
+  "http://127.0.0.1:5461characters/tidus/sleep@2x.png",
+  "http://127.0.0.1:5461characters/tidus/critical@2x.png",
+  "http://127.0.0.1:5461characters/tidus/follow@2x.png",
+  "http://127.0.0.1:5461characters/tidus/od-energy-rain@2x.png",
+  "http://127.0.0.1:5461characters/tidus/od-slice-and-dice@2x.png"
+ ],
+ "consoleErrors": []
+}

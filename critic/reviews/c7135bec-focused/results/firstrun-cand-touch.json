@@ -1,0 +1,224 @@
+{
+ "name": "firstrun-cand-touch",
+ "mode": "touch",
+ "label": "cand",
+ "size": "390x844",
+ "base": "http://127.0.0.1:5461/",
+ "hooks": [
+  "setSeed(1) before the first input (labelled)"
+ ],
+ "steps": [
+  {
+   "what": "title",
+   "screen": "title",
+   "sel": null,
+   "phase": null,
+   "guide": {
+    "slab": null,
+    "spot": false,
+    "ring": false,
+    "mark": null,
+    "brief": false
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   }
+  },
+  {
+   "what": "after the first press on the title (briefing expected)",
+   "screen": "title",
+   "sel": null,
+   "phase": null,
+   "guide": {
+    "slab": null,
+    "spot": false,
+    "ring": false,
+    "mark": null,
+    "brief": true
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   }
+  },
+  {
+   "what": "board: step 1 expected",
+   "screen": "chapter-select",
+   "sel": "seymour-flux",
+   "phase": null,
+   "guide": {
+    "slab": {
+     "eyebrow": "AURON · 1 OF 3",
+     "quote": "“Start with the first one.”",
+     "line": "Tap its picture to begin. The other fights wait on the board.",
+     "act": null,
+     "pips": 1,
+     "skip": "TAP HERE SKIP THE GUIDE"
+    },
+    "spot": true,
+    "ring": false,
+    "mark": null,
+    "brief": false
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   }
+  },
+  {
+   "what": "prep: step 2 expected",
+   "screen": "party-prep",
+   "sel": null,
+   "phase": null,
+   "guide": {
+    "slab": {
+     "eyebrow": "AURON · 2 OF 3",
+     "quote": "“Your party is ready.”",
+     "line": "Tabs are for later. Tap START BATTLE.",
+     "act": null,
+     "pips": 2,
+     "skip": "TAP HERE SKIP THE GUIDE"
+    },
+    "spot": true,
+    "ring": false,
+    "mark": null,
+    "brief": false
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   }
+  },
+  {
+   "what": "battle first menu: step 3 expected",
+   "screen": "battle",
+   "sel": null,
+   "phase": "command:tidus",
+   "guide": {
+    "slab": null,
+    "spot": false,
+    "ring": true,
+    "mark": {
+     "guide": "3",
+     "text": "AURON · 3 OF 3 “He moves after you. Not before. Use it.” Your turn. Tap ATTACK, then tap who it hits. TAP HERE SKIP THE GUIDE"
+    },
+    "brief": false
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   },
+   "rows": [
+    "Talk(off)",
+    ">Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Flee(off)"
+   ]
+  },
+  {
+   "what": "after ONE tap on ATTACK",
+   "screen": "battle",
+   "sel": null,
+   "phase": "command:tidus",
+   "guide": {
+    "slab": null,
+    "spot": false,
+    "ring": false,
+    "mark": null,
+    "brief": false
+   },
+   "targets": {
+    "n": 2,
+    "lit": 1,
+    "selecting": true
+   },
+   "rows": []
+  },
+  {
+   "what": "after the first command resolved",
+   "screen": "battle",
+   "sel": null,
+   "phase": "play:action-start",
+   "guide": {
+    "slab": null,
+    "spot": false,
+    "ring": false,
+    "mark": null,
+    "brief": false
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   },
+   "seenCoach": [
+    "briefing",
+    "firstrun-board",
+    "firstrun-prep",
+    "ffx-turn-order",
+    "firstrun-battle"
+   ]
+  }
+ ],
+ "cutsceneInputs": 43,
+ "firstActionOfTidus": "Attack",
+ "seenCoach": [
+  "briefing",
+  "firstrun-board",
+  "firstrun-prep",
+  "ffx-turn-order",
+  "firstrun-battle"
+ ],
+ "nextCoach": {
+  "at": 8000,
+  "text": "AURON “You have taken enough. Spend it — an Overdrive never misses.” TAP CONTINUE FIRST TIME ONLY"
+ },
+ "seenCoachLater": [
+  "briefing",
+  "firstrun-board",
+  "firstrun-prep",
+  "ffx-turn-order",
+  "firstrun-battle",
+  "ffx-overdrive"
+ ],
+ "markersLeft": {
+  "frg": false,
+  "coachMark": true
+ },
+ "s1": {
+  "eyebrow": "AURON · 1 OF 3",
+  "quote": "“Start with the first one.”",
+  "line": "Tap its picture to begin. The other fights wait on the board.",
+  "act": null,
+  "pips": 1,
+  "skip": "TAP HERE SKIP THE GUIDE"
+ },
+ "s2": {
+  "eyebrow": "AURON · 2 OF 3",
+  "quote": "“Your party is ready.”",
+  "line": "Tabs are for later. Tap START BATTLE.",
+  "act": null,
+  "pips": 2,
+  "skip": "TAP HERE SKIP THE GUIDE"
+ },
+ "s3": {
+  "slab": null,
+  "spot": false,
+  "ring": true,
+  "mark": {
+   "guide": "3",
+   "text": "AURON · 3 OF 3 “He moves after you. Not before. Use it.” Your turn. Tap ATTACK, then tap who it hits. TAP HERE SKIP THE GUIDE"
+  },
+  "brief": false
+ },
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -1,0 +1,139 @@
+{
+ "name": "governor-phone-ffx2-bahamut-390x844",
+ "mode": "phone",
+ "chapter": "ffx2-bahamut",
+ "size": "390x844",
+ "query": "coach=off",
+ "hooks": [
+  "setSeed(1) before the first key",
+  "?coach=off",
+  "crisp.simulate (QA seam)"
+ ],
+ "series": [
+  {
+   "label": "first menu",
+   "t": 14254,
+   "rung": "phone",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[]"
+  },
+  {
+   "label": "after turn",
+   "t": 21671,
+   "rung": "phone",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[]"
+  }
+ ],
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "t0": 1791180589031,
+ "first": {
+  "label": "first menu",
+  "t": 14254,
+  "rung": "phone",
+  "pinned": false,
+  "class": "phone",
+  "tier": "phone",
+  "ss": 1,
+  "simulated": 0,
+  "windows": [],
+  "passes": [
+   "0:scene",
+   "1:scene-msaa(off)",
+   "2:ssaa(off)",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas(off)",
+   "8:fxaa",
+   "9:grade",
+   "10:SpectacleShader(off)"
+  ]
+ },
+ "fps": {
+  "frames": 180,
+  "medianMs": 16.7,
+  "p95Ms": 16.8,
+  "maxMs": 16.8,
+  "fps": 59.9
+ },
+ "canvas": {
+  "w": 924,
+  "h": 520
+ },
+ "env": {
+  "inner": "390x844",
+  "touch": 1,
+  "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+ },
+ "turn": {
+  "who": "idle",
+  "rows": [
+   "White Magic",
+   "Change",
+   "Item"
+  ],
+  "picked": [
+   "advisor:{\"label\":\"Shell\",\"target\":\"the party\",\"menu\":\"White Magic\"}",
+   "White Magic",
+   "Shell"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "group"
+  },
+  "newEvents": 3,
+  "firstActions": [
+   {
+    "seq": 25,
+    "type": "action-start",
+    "actor": "yuna",
+    "ability": "Shell",
+    "target": null
+   }
+  ],
+  "tookTurn": true
+ },
+ "touchSummary": {
+  "hasTouch": true,
+  "isMobile": true,
+  "taps": 2,
+  "tapped": [
+   "row:White Magic",
+   "row:Shell"
+  ],
+  "keyboardFallbacks": 1
+ },
+ "final": {
+  "label": "after turn",
+  "t": 21671,
+  "rung": "phone",
+  "pinned": false,
+  "class": "phone",
+  "tier": "phone",
+  "ss": 1,
+  "simulated": 0,
+  "windows": [],
+  "passes": [
+   "0:scene",
+   "1:scene-msaa(off)",
+   "2:ssaa(off)",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas(off)",
+   "8:fxaa",
+   "9:grade",
+   "10:SpectacleShader(off)"
+  ]
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "rungSequence": [
+  "phone"
+ ]
+}

@@ -1,0 +1,1149 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-10-05T07:15:06.313Z",
+  "build": {
+    "mainSha": "c7135bec6ef6e820445e4714de1bf11750594b7f",
+    "shortSha": "c7135bec",
+    "bundle": "index-gfFVfQgT.js",
+    "css": "index-CcZyQUTT.css",
+    "candidate": "D:/pyrefly-r39-int/dist",
+    "files": 3848,
+    "bytes": 8323984466,
+    "basedOn": "built from 3cb9c520; git diff 3cb9c520 c7135bec over src, public, index.html, vite.config.* and package.json is empty",
+    "previousLive": "8136f2ed (release 38, bundle X5kGUd9G, css Cr9MD159, https://echoesofspira.com, checked at review time)"
+  },
+  "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "HOLD"
+  },
+  "shipReasons": [
+    "HOLD. R39F-01 is a major regression against live in the changed area (FFX Ch X): the Sensor card covers about 48% of Seymour Natus at the first menu and whenever Mortibody is aimed, at 1600x900, 2000x1012 and 2560x1440; live covers 0%. The cause is measured (hud-floor.css omits --ffx-sensor-py) and the fix is one line; with the term added the cover is 0.0 to 0.1%.",
+    "R39F-02 is a second major regression: Evrae (FFX Ch VIII) now cuts between poses, 19.54 snaps a minute against 0.46 on live. It removes the severe double images (9 to 0) at the price of hard cuts; by the written rule a snap the change adds is a regression, and whether a cut beats a ghost is Bailey's call. The HOLD does not depend on it alone.",
+    "No critical defect and nothing lost: three real-key fights won through the Victory screen and the board (Ch I 73 turns, Ch IV 48, Ch VIII 76; the cleared tile survived a reload), a Ch I defeat reached the Defeat screen and Retry reached a new battle, Ch V and XIII ran, Lady Luck's reels played by key, pad and tap in Wait and Active; 0 console errors, 0 missing files and 0 bad art responses in 125 recorded runs (5,510 art responses; the 19 redirects are all live release 38's raw @ URLs).",
+    "The release's other claims held: F plus by default and the governor only stepping down (F plus, F, A2, then staying); the phone keeps its chain; 2x, 3x and 4x masters load and decode in Chromium and WebKit (2,918 of 2,918); the six un-held backdrops draw 2x masters (link permitting, R39F-07); Chapter III calm menus and the target-aware lunge; the twirl start, dressphere shot, run-in truck and Bevelle conduits; Defend by Q, click, tap and pad with Shift not defending; the slab on pad Select; Bushido and Swordplay by tap and click; TEXT SIZE 115 and 130; EYE CANDY; the first-run guide; the corrected Seymour Flux text; Lady Luck's availability.",
+    "This release discloses R39F-03 and R39F-04: CHK-026 and CHK-027 still FAIL on the candidate as they do on live, with fewer feet and registered-head failures (868 to 137, 57.1% to 8.4%), fewer jerks (230 to 146) and double images (20 to 15). Fix R39F-01 and the build is better than live on every other measured point; R39F-02 needs Bailey's answer."
+  ],
+  "checks": [
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "reason": "Every full-screen layer the candidate changed owns the window: title, board, party prep, battle-start scene, battle HUD, the pause (8 tabs at 1024x768, 1280x720, 1600x900 and 390x844), the Overdrive overlays, the reels overlay (1600x900 and 390x844), the first-run cards (1600x900 and 390x844) and the Victory and Defeat screens at 1600x900. No stage-sized overlay and no orphaned layer was seen; the continuity harness records no failed seam in three full fights.",
+      "where": "both; Ch I, III, IV, V, VIII, X, XIII, XVI; 1600x900, 2000x1012, 2560x1440, 390x844",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/continuity/seymour-flux-win-c7135bec/run.json",
+        "critic/reviews/c7135bec-focused/continuity/ffx2-bahamut-win-c7135bec/run.json",
+        "critic/reviews/c7135bec-focused/continuity/evrae-airship-win-c7135bec/run.json",
+        "critic/reviews/c7135bec-focused/results/loss-seymour-flux-run.json",
+        "critic/reviews/c7135bec-focused/frames/ch1-defeat-results-1600x900.jpg",
+        "critic/reviews/c7135bec-focused/frames/guide-pause-reading-view-ch1.jpg",
+        "critic/reviews/c7135bec-focused/frames/textsize130-pause-options-ch4.jpg",
+        "critic/reviews/c7135bec-focused/frames/firstrun-board-step1-key.jpg"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 6,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-003",
+      "result": "FAIL",
+      "reason": "The 14 px floor holds at 1600x900 and on a phone: 0 text nodes under 14 px at the first menu, the target step and all 8 pause tabs in Ch I and IV (1600x900 and 390x844), and with TEXT SIZE 115 and 130 (minimum 14.0 in every step and pause tab). It does not hold for the guide: its labels (Boss Battle tag, In Game Description, HP, Steal, Drops; 4 or 5 per screen) draw at 11.4 px at 1280x720 and 9.1 px at 1024x768 in FFX, and 4 at 11.4 px in FFX-2 Ch IV at 1280x720. The floor lane's own walker read 14.0 in 60 of 60 cells before the guide sheet was merged. Live had about 3,500 nodes under 14 px at those sizes (the floor lane's own baseline measurement, not re-measured here), so this is not a regression (R39F-05, polish). The Overdrive label clamp holds: every bar and label ends inside the window at 1024x768 and 1280x720 (hang 4.05 to 16.25 px read, all inside).",
+      "where": "both; the failing labels are the strategy guide's, at windows narrower than 1600",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/floor-seymour-flux-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/floor-seymour-flux-1280x720.json",
+        "critic/reviews/c7135bec-focused/results/floor-seymour-flux-1024x768.json",
+        "critic/reviews/c7135bec-focused/results/floor-braskas-final-aeon-1024x768.json",
+        "critic/reviews/c7135bec-focused/results/floor-ffx2-bahamut-1280x720.json",
+        "critic/reviews/c7135bec-focused/results/floor-seymour-flux-390x844-touch.json",
+        "critic/reviews/c7135bec-focused/results/textsize-ffx2-bahamut-1600x900-130-pause.json",
+        "critic/reviews/c7135bec-focused/results/textsize-seymour-flux-1600x900-130-pause.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 8,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-004",
+      "result": "PASS",
+      "reason": "The advisor ladder prints the lead move with its cost and its menu path in the narrow boxes: Ch VII \"Steal to Guado Guardian A, in Special, no MP, 3% crit\" with its effect (237 characters, not clipped), Ch IX Fire Gem to Yojimbo (102), Ch XII Wakka in Switch plus the runner-up Cheer (141 at 1600x900, 197 at 2000x1012), Ch XVII Close in (30), Ch XVIII Hastega, 30 MP (46). Advisor-chosen moves were then executed through the real menus in Ch V and XIII (Light Curtain, Mega-Potion, Life, Gunner, White Mage, Warrior) and on the phone (White Magic then Shell).",
+      "where": "both; Ch VII, IX, XII, XVII, XVIII (cards), Ch V and XIII (executed), Ch IV phone",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/cells-cand-1600x900-seymour-anima-macalania+yojimbo-cavern+seymour-omnis+sin-fin.json",
+        "critic/reviews/c7135bec-focused/results/cells-cand-2000x1012-seymour-anima-macalania+yojimbo-cavern+seymour-omnis+sin-fin.json",
+        "critic/reviews/c7135bec-focused/results/smoke-ffx2-vegnagun-shuyin-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/smoke-ffx2-trema-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/phoneffx2-ffx2-bahamut-shell.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 6,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-006",
+      "result": "PASS",
+      "reason": "Each transient layer ended with its decision: the first-run card cleared on one Enter, one pad Cross or one tap and the targets opened on the next press; the Swordplay and Bushido overlays closed after the press and the engine recorded the result; the reels overlay closed after the third stop and the spell resolved; the target step closed on confirm. No leftover coach mark, ring or overlay after the first command resolved.",
+      "where": "both; first-run cards, Overdrive and reels overlays, target steps",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/firstrun-cand-key.json",
+        "critic/reviews/c7135bec-focused/results/firstrun-cand-pad.json",
+        "critic/reviews/c7135bec-focused/results/firstrun-cand-touch.json",
+        "critic/reviews/c7135bec-focused/results/od-cand-swordplay-touch.json",
+        "critic/reviews/c7135bec-focused/results/od-cand-bushido-pad.json",
+        "critic/reviews/c7135bec-focused/results/ladyluck-key-wait-ffx2-ixion-djose-s3.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 4,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-007",
+      "result": "PASS",
+      "reason": "No developer vocabulary in the player-facing copy that changed: the first-run quotes (\"Start with the first one.\"), the guide sheet, the EYE CANDY labels (ALL LOOKS, CINEMA LIGHT, DEPTH OF FIELD, FOG, SMOOTH EDGES, LIVING PAINTINGS, BREATHING, KO COLLAPSE, BATTLE SPECTACLE, CHAPTER FRAMING, OVERDRIVE SHOT or DRESSPHERE SHOT, SPLASH ART), TEXT SIZE, the Defend tab (\"Braces: halves the damage of the next physical hit\") and the reels prompts. One device-mismatched verb is logged as polish (R39F-06). Copy outside the changed screens was not read.",
+      "where": "both; the copy this release changed",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/eyecandy-seymour-flux-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/eyecandy-ffx2-bahamut-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/firstrun-cand-key.json",
+        "critic/reviews/c7135bec-focused/results/guide-seymour-flux-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/defend-key-seymour-flux-1600x900.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 4,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-008",
+      "result": "FAIL",
+      "reason": "The Sensor card sits on Seymour Natus. At the first menu it covers 47.9% of his figure box at 1600x900, 47.3% at 2000x1012 and 47.1% at 2560x1440, and 47 to 48% on the Attack target step and whenever Mortibody is aimed; live covers 0% (his figure is smaller there). Cause measured: the r381 floor rule in hud-floor.css restates the card's `top` without `--ffx-sensor-py`, so the pin's lift of -162 px never applies. A diagnostic stylesheet that adds the term puts the card at top 3.2 px and the cover at 0.0 to 0.1% in all four steps. Elsewhere the figures and panels measured against the actors held: Ch III with Tidus first has 0 overlap between figures at every reading (gap 28 px or more; live: median 2,566 px2, up to 4,126), and with Yuna first the overlap falls from live's median 3,803 px2 to 167 px2 after the first 3 s (R39F-10, polish); the Ch XVI run-in keeps all three girls whole in 623 of 623 samples.",
+      "where": "FFX only; Ch X Seymour Natus (R39F-01)",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/frames/natus-sensor-card-candidate-vs-diagnostic-vs-approved.jpg",
+        "critic/reviews/c7135bec-focused/results/sensor-cand-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/sensor-cand-2560x1440.json",
+        "critic/reviews/c7135bec-focused/results/sensor-live-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/sensor-cand-1600x900-fixdiag.json",
+        "critic/reviews/c7135bec-focused/results/natus-1600x900-s1-a.json",
+        "critic/reviews/c7135bec-focused/results/natus-2000x1012-s1-a.json",
+        "critic/reviews/c7135bec-focused/results/natus-2560x1440-s1-a.json",
+        "critic/reviews/c7135bec-focused/results/ch3-cand-1600x900-s1-cand.json",
+        "critic/reviews/c7135bec-focused/results/ch3-live-1600x900-s1-live.json",
+        "critic/reviews/c7135bec-focused/results/ri-after-ffx2-ixion-djose-1600x900-s1.run.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 25,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-009",
+      "result": "PASS",
+      "reason": "Names print in full: 0 ellipsised strings in every TEXT SIZE run (Ch I pause, Ch IV 115 and 130, Ch V 130, Ch VI 130), and every advisor card is unclipped except one pixel at Ch XII 2000x1012 (scrollHeight 99 against a cap of 98).",
+      "where": "both; Ch I, IV, V, VI; TEXT SIZE 100, 115, 130",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/textsize-ffx2-bahamut-1600x900-115.json",
+        "critic/reviews/c7135bec-focused/results/textsize-ffx2-vegnagun-shuyin-1600x900-130.json",
+        "critic/reviews/c7135bec-focused/results/textsize-ffx2-leblanc-1600x900-130.json",
+        "critic/reviews/c7135bec-focused/results/cells-cand-2000x1012-seymour-anima-macalania+yojimbo-cavern+seymour-omnis+sin-fin.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 3,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-010",
+      "result": "PASS",
+      "reason": "Selections read at a glance: the FFX target step lights one of two enemies and the cursor moves with the arrows; on the phone a group cast shows \"All allies\", the spell line and a CONFIRM control (\"Shell to All allies\", 270x52 px, tapped, no key needed); the reels overlay names the control in use (PRESS ENTER, PRESS CROSS, TAP).",
+      "where": "both; Ch I, IV (phone), V, XVI",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/frames/phone-ffx2-group-target-confirm-touch-390x844.jpg",
+        "critic/reviews/c7135bec-focused/results/phoneffx2-ffx2-bahamut-shell.json",
+        "critic/reviews/c7135bec-focused/frames/ladyluck-reels-tap-wait-390x844.jpg",
+        "critic/reviews/c7135bec-focused/results/floor-seymour-flux-1600x900.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 3,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-011",
+      "result": "PASS",
+      "reason": "Every targetable enemy was identifiable and selectable: Ch III both Yu Pagodas 100% clear (live 79 to 82% at worst; they are the owner's 2026-09-18 complaint and are fully visible) and Braska's Final Aeon 71 to 77% clear, so 23 to 29% occluded against live's 13 to 23%: the picked option spends a little of the boss's clear view on purpose (docs/handoff/r39-looks.md) and sits at the 25% line, 4 points over it in the Yuna-first menu; Ch X Seymour Natus 99.7% in frame with Mortibody selectable; Ch V Vegnagun Tail targeted. The card that covers Natus is a HUD defect and is recorded under CHK-008.",
+      "where": "both; Ch III, Ch X, Ch V",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/ch3-cand-1600x900-s1-cand.json",
+        "critic/reviews/c7135bec-focused/results/ch3-cand-1600x900-s9-cand.json",
+        "critic/reviews/c7135bec-focused/results/natus-1600x900-s1-a.json",
+        "critic/reviews/c7135bec-focused/results/smoke-ffx2-vegnagun-shuyin-1600x900.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 3,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-012",
+      "result": "PASS",
+      "reason": "No placeholder ships and every approved face and figure loads: art-browser-load.mjs loaded and decoded 2,918 of 2,918 images at their masters' size in Chromium 153 and WebKit 26.6, 0 failed, 20 of 20 living portrait plates living; art-derive verify: 2,874 masters, 0 problems; verify-approved: 807 ok, 0 mismatched, 0 missing.",
+      "where": "both; the whole shipped art set",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/art-browser-load-report.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 5,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-013",
+      "result": "PASS",
+      "reason": "Art was judged inside the running game at 100 percent beside live and the 1x version: the new 2x backdrop masters (Gagazet, Garden of Pain, Via Purifico, Road to the Farplane) keep the approved composition with finer detail and no invented twigs; Evrae's and Wakka's 2x and 4x rims are smooth with no specks or dashes; Evrae reads as a painted serpent beside live. Eight approved targets were compared (see the targets block).",
+      "where": "both; Ch I, VIII (4K and 1440p), the held backdrops",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/frames/backdrop-master-crop-gagazet-1x-left-2x-right.jpg",
+        "critic/reviews/c7135bec-focused/frames/backdrop-master-crop-garden-of-pain-1x-left-2x-right.jpg",
+        "critic/reviews/c7135bec-focused/frames/backdrop-master-crop-via-purifico-1x-left-2x-right.jpg",
+        "critic/reviews/c7135bec-focused/frames/backdrop-master-crop-road-to-the-farplane-1x-left-2x-right.jpg",
+        "critic/reviews/c7135bec-focused/frames/evrae-2560x1440-crop-live-left-candidate-right.jpg",
+        "critic/reviews/c7135bec-focused/frames/evrae-edge-100pct-default-2x-left-forced-4x-right.jpg",
+        "critic/reviews/c7135bec-focused/frames/crop-4k-ch1-party-100pct.jpg",
+        "critic/reviews/c7135bec-focused/results/fringe-1791179504525.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 10,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-014",
+      "result": "PASS",
+      "reason": "Actors face their enemies and the staging fixes read: Ch III attackers lunge to the boss (run-in 2.12 to 2.51 against 1.40 with the stage off; contact in 9 of 9 and 11 of 11 attacks, boss 3.24), the Ch XVI run-in leaves every girl whole (0 cropped frames, 0 below 90% share; camera truck x at most 0.19 at 1600x900, 0.44 at 2000x1012 and 0 on the phone), the twirl keys begin at 100 ms and the colour column is never drawn before the twirl (2 of 2 changes, 0 bad frames), and the dressphere shot plays in full (1.6 s, no menu or coach card in it). Scale and feet continuity across poses is CHK-026 and fails there.",
+      "where": "both; Ch I, III, IV, V, VIII, X, XVI",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/lunge-braskas-final-aeon-1600x900-s1-c.json",
+        "critic/reviews/c7135bec-focused/results/lunge-braskas-final-aeon-1600x900-s1-off.json",
+        "critic/reviews/c7135bec-focused/results/ri-after-ffx2-ixion-djose-1600x900-s1.run.json",
+        "critic/reviews/c7135bec-focused/results/ri-after-ffx2-ixion-djose-2000x1012-s1.run.json",
+        "critic/reviews/c7135bec-focused/results/ri-after-ffx2-ixion-djose-390x844-s1.run.json",
+        "critic/reviews/c7135bec-focused/results/sc-after-ffx2-den-of-woe-1600x900-s1.run.json",
+        "critic/reviews/c7135bec-focused/results/sc-after-ffx2-leblanc-1600x900-s9-shots.run.json",
+        "critic/reviews/c7135bec-focused/frames/dressphere-change-leblanc-seed9-contact.jpg"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 12,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "reason": "Each capability was demonstrated by that player's own input: Defend by Q, a click, a tap and the pad Triangle (all four fire Defend and set the status; Shift alone does nothing); the FFX slab opens and closes on pad Select (and E; FFX-2 still uses Triangle); Swordplay by pad, click and tap and Bushido by key, pad, click and tap (Swordplay's keyboard press is the old path and was not re-run); the first-run guide by key, pad and touch; Lady Luck's reels by key (Wait and Active), pad (Wait and Active) and tap (Wait and Active); a phone touch turn in Ch I (Attack, target) and Ch IV (White Magic, Shell, CONFIRM) with 0 key fallbacks; real-key fights in Ch I, IV and VIII.",
+      "where": "both; keys, mouse, pad, touch",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/defend-key-seymour-flux-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/defend-mouse-seymour-flux-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/defend-pad-seymour-flux-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/defend-touch-seymour-flux-390x844.json",
+        "critic/reviews/c7135bec-focused/results/defend-shift-seymour-flux-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/slab-cand-seymour-flux-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/slab-cand-ffx2-bahamut-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/od-cand-swordplay-mouse.json",
+        "critic/reviews/c7135bec-focused/results/od-cand-bushido-touch.json",
+        "critic/reviews/c7135bec-focused/results/ladyluck-pad-active-ffx2-ixion-djose-s3.json",
+        "critic/reviews/c7135bec-focused/results/ladyluck-tap-active-ffx2-ixion-djose-s3.json",
+        "critic/reviews/c7135bec-focused/results/governor-phone-seymour-flux-390x844.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 20,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "reason": "Each record names its chapter, seed, hooks and state read back from the page (phase, rows, targets, overlay, settings), and each frame was taken in the state the record asserts. Labelled hooks only: setSeed(1) before the first key, ?coach=off, gotoChapter for navigation (Overdrive and Lady Luck runs), battleState gauge := 100 for the Overdrive runs, crisp.simulate (the product's own QA seam), and the URL switches ?artlink, ?artscale, ?crisp, ?stand, ?figtrue. One cross-session pixel comparison of the figure true-colour switch was dropped because the sessions froze at different times; the within-session comparison stands.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/aggregate-console-network.json",
+        "critic/reviews/c7135bec-focused/results/figtrue-1600x900-default.json",
+        "critic/reviews/c7135bec-focused/results/od-cand-bushido-key.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 3,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-017",
+      "result": "NOT APPLICABLE",
+      "reason": "A focused review of the production candidate before the deploy. Live verification of the exact artifact is a separate obligation after the deploy; nothing here was deployed.",
+      "where": "both",
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 0,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-018",
+      "result": "PASS",
+      "reason": "No shipped path is hand-written: across 125 recorded runs the candidate asked for 0 raw `@` art URLs (every high-resolution file uses the `%40` wire form) and got 0 redirects and 0 bad responses; the 19 HTTP 307s in those runs all come from the five LIVE release 38 runs, which still ask for raw `@2x` files. Deploy tooling read without running it: verifyLive accepts exactly one Cloudflare Web Analytics beacon (its own host and path, no attribute Cloudflare does not use) and nothing else; checkHeadersFile vets the one `_headers` a Workers build may ship, and there is no public/_headers, `_redirects` or `.assetsignore` in the tree or in dist; tools/deploy-pages.mjs reads the commit identity from git config at run time and no source file holds a personal address; wrangler.jsonc holds nothing account-specific. art-derive audit: 879 text files, 0 dangling names.",
+      "where": "both; shipped art URLs and deploy tooling (read only)",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/aggregate-console-network.json",
+        "critic/reviews/c7135bec-focused/results/render-live-seymour-flux-2560x1440-c.json",
+        "critic/reviews/c7135bec-focused/results/render-cand-seymour-flux-2560x1440-c.json",
+        "critic/reviews/c7135bec-focused/results/render-cand-evrae-airship-2560x1440-pin4.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 8,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-019",
+      "result": "PASS",
+      "reason": "Every shipped image decodes and is the intended picture at its master's size (2,918 of 2,918 in Chromium and WebKit; 2,704 pixel-compared against the PNG masters by art-derive verify; 0 problems). The forced 3x and 4x tiers load and draw (Evrae: 39 files at 3x and 39 at 4x; Ch I at 4K: 46 files at 4x) at 59.9 fps with 0 errors.",
+      "where": "both; the whole shipped art set, 2x, 3x and 4x tiers",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/art-browser-load-report.json",
+        "critic/reviews/c7135bec-focused/results/render-cand-evrae-airship-2560x1440-pin3.json",
+        "critic/reviews/c7135bec-focused/results/render-cand-evrae-airship-2560x1440-pin4.json",
+        "critic/reviews/c7135bec-focused/results/render-cand-seymour-flux-3840x2160-pin4.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 6,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "reason": "The shared work landed in both games: the sharpness ladder, governor and phone chain, the art tiers, the 14 px floor, TEXT SIZE (FFX HUD, FFX-2 HUD and both pauses), the EYE CANDY page (11 looks each, with the game's own shot row), the strategy guide and the advisor ladder, the first-run guide and the figure true-colour switch. The Natus card (FFX Ch X) is a chapter-specific defect, not a shared one.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/render-cand-ffx2-bahamut-2560x1440-c.json",
+        "critic/reviews/c7135bec-focused/results/render-cand-seymour-flux-2560x1440-c.json",
+        "critic/reviews/c7135bec-focused/results/eyecandy-ffx2-bahamut-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/eyecandy-seymour-flux-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/textsize-ffx2-bahamut-1600x900-130-pause.json",
+        "critic/reviews/c7135bec-focused/results/textsize-seymour-flux-1600x900-130-pause.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 5,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "reason": "Each change landed only in the game it is true to. FFX only: Ch III calm menus and target-aware lunge, the Natus pin and card (Ch X), Evrae's masters and pose cut (Ch VIII), Defend on the tab and pad Select for the slab, Bushido and Swordplay by tap and click, the per-tier Swordplay zones. FFX-2 only: Lady Luck (absent in FFX; offered in Ch V, XIII, XVI and absent in Ch IV and VI, matching research/ffx2-lady-luck-availability.md), twirl start, dressphere shot, run-in truck, Bevelle conduits, the Road to the Farplane masters. Checked: FFX-2 has no Defend tab and its slab still toggles on Triangle, not Select; FFX has no reels.",
+      "where": "FFX only / FFX-2 only / both, per item",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/llneg-ffx2-bahamut+ffx2-leblanc+ffx2-vegnagun-shuyin+ffx2-ixion-djose+ffx2-trema.json",
+        "critic/reviews/c7135bec-focused/results/slab-cand-ffx2-bahamut-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/slab-cand-seymour-flux-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/defend-key-seymour-flux-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/ch3-cand-1600x900-s9-off.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 8,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-022",
+      "result": "PASS",
+      "reason": "A win, a loss and the scene transitions reach their real destination: real-key wins in Ch I (73 turns, 10.2 min), Ch IV (48 turns, 7.5 min) and Ch VIII (76 turns, 7.0 min) ended on the Victory screen, then the board with the chapter cleared, and the cleared tile survived a reload; a Ch I defeat reached the Defeat screen (RETRY and CHAPTER SELECT) and Retry reached a new battle; Ch V and XIII ran 8 turns each. Not exercised: a loss in FFX-2, and the chapters not named.",
+      "where": "both; Ch I, IV, VIII (wins), Ch I (loss)",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/continuity/seymour-flux-win-c7135bec/run.json",
+        "critic/reviews/c7135bec-focused/continuity/ffx2-bahamut-win-c7135bec/run.json",
+        "critic/reviews/c7135bec-focused/continuity/evrae-airship-win-c7135bec/run.json",
+        "critic/reviews/c7135bec-focused/results/loss-seymour-flux-run.json",
+        "critic/reviews/c7135bec-focused/frames/ch1-defeat-results-1600x900.jpg",
+        "critic/reviews/c7135bec-focused/frames/ch1-after-retry-battle-1600x900.jpg"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 40,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-023",
+      "result": "PASS",
+      "reason": "Every subsystem was reached through the real presentation path: the reels through Skill then Magic Reels in the live menu (not a debug call), Overdrives through the Overdrive row, Defend through its tab and keys, the dressphere change through Change and its row, the target step through the real cursor or tap. The only direct calls are the labelled hooks listed under CHK-016.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/ladyluck-key-wait-ffx2-ixion-djose-s3.json",
+        "critic/reviews/c7135bec-focused/results/od-cand-swordplay-touch.json",
+        "critic/reviews/c7135bec-focused/results/defend-touch-seymour-flux-390x844.json",
+        "critic/reviews/c7135bec-focused/results/sc-after-ffx2-leblanc-1600x900-s9-shots.run.json"
+      ],
+      "mode": "automated + visual",
+      "mandatory": true,
+      "minutes": 4,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-026",
+      "result": "FAIL",
+      "reason": "A figure still changes size or feet across a pose change, though far less than on live. Across 1,173.6 s of battle and 1,268 measured swaps: 281 swaps change a head beyond tolerance (live 297 of 1,281), worst 115.7% by mass (Evrae, the same as live) and 8.4% where the head is registered (live 57.1%); 137 standing swaps move the feet beyond tolerance (live 868), worst 140.6 px (live 259.4). Ch IV feet: 1 swap over (live 242) but that swap is 140.6 px (live worst 98.3). Disclosed as R39F-03.",
+      "where": "both; Ch I, IV, VIII; continuity harness",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/continuity/continuity-summary.json",
+        "critic/reviews/c7135bec-focused/continuity/seymour-flux-win-c7135bec/continuity/continuity.json",
+        "critic/reviews/c7135bec-focused/continuity/ffx2-bahamut-win-c7135bec/continuity/continuity.json",
+        "critic/reviews/c7135bec-focused/continuity/evrae-airship-win-c7135bec/continuity/continuity.json",
+        "critic/reviews/c7135bec-focused/continuity/ffx2-bahamut-win-c7135bec/continuity/strips/swap-392-bahamut-hurt-ko.jpg",
+        "critic/reviews/c7135bec-focused/continuity/evrae-airship-win-c7135bec/continuity/strips/swap-027-evrae-cast-idle.jpg",
+        "critic/reviews/continuity-baseline-r38/continuity-summary.json"
+      ],
+      "mode": "harness (critic/runner/lib/continuity.mjs, real keys)",
+      "mandatory": true,
+      "minutes": 45,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    },
+    {
+      "id": "CHK-027",
+      "result": "FAIL",
+      "reason": "Motion is not continuous. 116 snaps in 19.6 minutes is 5.93 per minute against a limit of 0.25 (live 0.53); Ch I 1.01 and Ch IV 0.16 are level with live (the same 8 and 1 snaps) and Evrae is 19.54 against live 0.46 (R39F-02, a regression). 146 jerks of 40 px or more in a frame (live 230), worst 353.1 px (live 371.3); 15 swaps show a double image of severity 0.40 or more (live 20), worst 0.422 (live 0.47). Evrae's severe double images went from 9 to 0 by cutting between poses. Disclosed as R39F-04 and R39F-02.",
+      "where": "both; Ch I, IV, VIII; continuity harness",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/continuity/continuity-summary.json",
+        "critic/reviews/c7135bec-focused/continuity/evrae-airship-win-c7135bec/continuity/continuity.json",
+        "critic/reviews/c7135bec-focused/continuity/evrae-airship-win-c7135bec/continuity/strips/swap-365-evrae-idle-cast.jpg",
+        "critic/reviews/c7135bec-focused/continuity/seymour-flux-win-c7135bec/continuity/strips/swap-087-seymour-flux-idle-hurt.jpg",
+        "critic/reviews/c7135bec-focused/continuity/ffx2-bahamut-win-c7135bec/continuity/continuity.json",
+        "critic/reviews/continuity-baseline-r38/evrae-airship/continuity.json"
+      ],
+      "mode": "harness (critic/runner/lib/continuity.mjs, real keys)",
+      "mandatory": true,
+      "minutes": 45,
+      "artifact": "c7135bec / dist index-gfFVfQgT.js",
+      "targetVersion": "b59337316b7caedde88694f13e17915da969225d53d9bfa3be3ae0033ae72e7d",
+      "environment": "candidate D:/pyrefly-r39-int c7135bec (clean tree), production build dist (bundle index-gfFVfQgT.js, css index-CcZyQUTT.css, 3,848 files, built from 3cb9c520 with src, public, index.html, vite.config and package.json identical to c7135bec), vite preview 127.0.0.1:5461; headless Playwright Chromium 153 with PYREFLY_BROWSER=gpu (RTX 5070 Ti, ANGLE D3D11, no black canvas, no fallback), one or two browsers at a time; live comparisons against https://echoesofspira.com (release 38, 8136f2ed, bundle X5kGUd9G)"
+    }
+  ],
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "chapters": [
+      {
+        "chapter": "seymour-flux",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "FAIL",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 476.7,
+        "swaps": 440,
+        "snapsPerMinute": 1.01,
+        "maxHeadJumpPct": 39.4,
+        "maxFeetShiftPx": 36.2,
+        "worstJerkPx": 353.1,
+        "strips": 20,
+        "worstSwapStrips": [
+          "seymour-flux-win-c7135bec/continuity/strips/swap-087-seymour-flux-idle-hurt.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-089-seymour-flux-hurt-idle.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-189-seymour-flux-telegraph-attack.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-076-bahamut-attack-idle.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-013-yuna-idle-ko.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-240-tidus-hurt-ko.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-198-tidus-idle-ko.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-188-seymour-flux-idle-telegraph.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-404-seymour-flux-cast-hurt.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-012-yuna-ko-idle.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "ffx2-bahamut",
+        "game": "ffx2",
+        "checks": {
+          "CHK-026": "FAIL",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 368.3,
+        "swaps": 391,
+        "snapsPerMinute": 0.16,
+        "maxHeadJumpPct": 77.3,
+        "maxFeetShiftPx": 140.6,
+        "worstJerkPx": 166.3,
+        "strips": 20,
+        "worstSwapStrips": [
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-392-bahamut-hurt-ko.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-381-paine-follow-idle.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-364-paine-ready-attack.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-341-paine-od-x2-warrior-armor-break-ready.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-302-paine-cast-od-x2-warrior-armor-break.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-340-paine-hurt-od-x2-warrior-armor-break.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-279-paine-od-x2-warrior-armor-break-idle.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-337-paine-od-x2-warrior-armor-break-hurt.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-379-paine-attack-follow.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-358-rikku-hurt-idle.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "evrae-airship",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "FAIL",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 328.6,
+        "swaps": 437,
+        "snapsPerMinute": 19.54,
+        "maxHeadJumpPct": 115.7,
+        "maxFeetShiftPx": 4.7,
+        "worstJerkPx": 267.6,
+        "strips": 19,
+        "worstSwapStrips": [
+          "evrae-airship-win-c7135bec/continuity/strips/swap-010-rikku-hurt-ko.jpg",
+          "evrae-airship-win-c7135bec/continuity/strips/swap-027-evrae-cast-idle.jpg",
+          "evrae-airship-win-c7135bec/continuity/strips/swap-318-tidus-idle-ko.jpg",
+          "evrae-airship-win-c7135bec/continuity/strips/swap-365-evrae-idle-cast.jpg",
+          "evrae-airship-win-c7135bec/continuity/strips/swap-014-rikku-ko-idle.jpg",
+          "evrae-airship-win-c7135bec/continuity/strips/swap-006-rikku-follow-idle.jpg",
+          "evrae-airship-win-c7135bec/continuity/strips/swap-005-rikku-attack-follow.jpg",
+          "evrae-airship-win-c7135bec/continuity/strips/swap-322-tidus-ko-critical.jpg",
+          "evrae-airship-win-c7135bec/continuity/strips/swap-229-kimahri-idle-hurt.jpg",
+          "evrae-airship-win-c7135bec/continuity/strips/swap-226-kimahri-hurt-idle.jpg"
+        ],
+        "unverified": null
+      }
+    ],
+    "battleSeconds": 1173.6,
+    "counted": 1268,
+    "swaps": 1318,
+    "size": {
+      "maxHeadJumpPct": 115.7,
+      "maxHeadJumpPctRegistration": 8.4,
+      "headOverTolerance": 281,
+      "maxFeetShiftPx": 140.6,
+      "feetOverTolerance": 137,
+      "headMeasured": 1268,
+      "headRegistration": 474,
+      "headSilhouette": 794,
+      "headUnmeasured": 0
+    },
+    "motion": {
+      "snaps": 116,
+      "snapsPerMinute": 5.93,
+      "hardCuts": 119,
+      "hardCutsPerMinute": 6.08,
+      "ghostSwaps": 1100,
+      "ghostFrames": 4506,
+      "worstGhostSeverity": 0.422,
+      "ghostOverFail": 15,
+      "jerks": 331,
+      "worstJerkPx": 353.1,
+      "jerksOverFail": 146,
+      "lowestIou": 0.008,
+      "maxCentroidShiftPx": 192.8
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "FAIL",
+        "reasons": [
+          "281 swap(s) change a head by more than the tolerance (worst 115.7 percent; 8.4 percent where the head is registered)",
+          "137 swap(s) of a standing figure move its feet more than the tolerance (worst 140.6 px at 1600 wide)"
+        ],
+        "note": "474 of 1268 measured swaps had a registered head (tolerance 3 percent); 794 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "5.93 snaps per minute is over 0.25",
+          "146 jerk(s) of 40 px or more in one frame (worst 353.1 px)",
+          "15 swap(s) show a double image of severity 0.4 or more (worst 0.422)"
+        ]
+      }
+    },
+    "base": "http://127.0.0.1:5461/",
+    "date": "2026-10-05T06:00:30.396Z",
+    "liveBaseline": {
+      "source": "critic/reviews/continuity-baseline-r38/continuity-summary.json (the same harness against https://echoesofspira.com, release 38, 2026-10-05T04:57Z)",
+      "battleSeconds": 1370.3,
+      "counted": 1281,
+      "swaps": 1334,
+      "size": {
+        "maxHeadJumpPct": 115.7,
+        "maxHeadJumpPctRegistration": 57.1,
+        "headOverTolerance": 297,
+        "maxFeetShiftPx": 259.4,
+        "feetOverTolerance": 868,
+        "headMeasured": 1281,
+        "headRegistration": 359,
+        "headSilhouette": 922,
+        "headUnmeasured": 0
+      },
+      "motion": {
+        "snaps": 12,
+        "snapsPerMinute": 0.53,
+        "hardCuts": 15,
+        "hardCutsPerMinute": 0.66,
+        "ghostSwaps": 1201,
+        "ghostFrames": 3879,
+        "worstGhostSeverity": 0.47,
+        "ghostOverFail": 20,
+        "jerks": 450,
+        "worstJerkPx": 371.3,
+        "jerksOverFail": 230,
+        "lowestIou": 0,
+        "maxCentroidShiftPx": 221.5
+      },
+      "checks": {
+        "CHK-026": "FAIL",
+        "CHK-027": "FAIL"
+      },
+      "chapters": [
+        {
+          "chapter": "seymour-flux",
+          "battleSeconds": 546.7,
+          "snapsPerMinute": 0.88,
+          "maxHeadJumpPct": 57.1,
+          "maxFeetShiftPx": 142.5,
+          "worstJerkPx": 371.3
+        },
+        {
+          "chapter": "ffx2-bahamut",
+          "battleSeconds": 429.4,
+          "snapsPerMinute": 0.14,
+          "maxHeadJumpPct": 77.8,
+          "maxFeetShiftPx": 98.3,
+          "worstJerkPx": 211.1
+        },
+        {
+          "chapter": "evrae-airship",
+          "battleSeconds": 394.2,
+          "snapsPerMinute": 0.46,
+          "maxHeadJumpPct": 115.7,
+          "maxFeetShiftPx": 259.4,
+          "worstJerkPx": 276.6
+        }
+      ]
+    },
+    "perChapterVsLive": [
+      {
+        "chapter": "seymour-flux (Ch I, FFX)",
+        "candidate": {
+          "headOver": 100,
+          "maxHeadPct": 39.4,
+          "feetOver": 135,
+          "maxFeetPx": 36.2,
+          "snaps": 8,
+          "snapsPerMinute": 1.01,
+          "doubleImages04": 1,
+          "jerks40": 34
+        },
+        "live": {
+          "headOver": 177,
+          "maxHeadPct": 57.1,
+          "feetOver": 346,
+          "maxFeetPx": 142.5,
+          "snaps": 8,
+          "snapsPerMinute": 0.88,
+          "doubleImages04": 3,
+          "jerks40": 69
+        }
+      },
+      {
+        "chapter": "ffx2-bahamut (Ch IV, FFX-2)",
+        "candidate": {
+          "headOver": 29,
+          "maxHeadPct": 77.3,
+          "feetOver": 1,
+          "maxFeetPx": 140.6,
+          "snaps": 1,
+          "snapsPerMinute": 0.16,
+          "doubleImages04": 12,
+          "jerks40": 74
+        },
+        "live": {
+          "headOver": 35,
+          "maxHeadPct": 77.8,
+          "feetOver": 242,
+          "maxFeetPx": 98.3,
+          "snaps": 1,
+          "snapsPerMinute": 0.14,
+          "doubleImages04": 7,
+          "jerks40": 69
+        }
+      },
+      {
+        "chapter": "evrae-airship (Ch VIII, FFX)",
+        "candidate": {
+          "headOver": 152,
+          "maxHeadPct": 115.7,
+          "feetOver": 1,
+          "maxFeetPx": 4.7,
+          "snaps": 107,
+          "snapsPerMinute": 19.54,
+          "doubleImages04": 2,
+          "jerks40": 38
+        },
+        "live": {
+          "headOver": 85,
+          "maxHeadPct": 115.7,
+          "feetOver": 280,
+          "maxFeetPx": 259.4,
+          "snaps": 3,
+          "snapsPerMinute": 0.46,
+          "doubleImages04": 10,
+          "jerks40": 92
+        }
+      }
+    ],
+    "note": "The top level is the harness aggregate (continuity-summary.json) copied verbatim; liveBaseline and perChapterVsLive were added by this review. Both builds FAIL both checks; the candidate is better than live on feet, registered heads, jerks and double images, and 11 times worse on snaps (Evrae, R39F-02). Chapter IV double images are all Paine at severity 0.401 to 0.410, on the 0.40 line; live had 0.45 on three of its seven."
+  },
+  "subScores": {
+    "owner": "Bailey's five visual sub-scores (provisional, judged from timed sequences, 100 percent crops and the continuity harness, not continuous video; not part of the weighted score)",
+    "characterModels": 7,
+    "enemyModels": 8,
+    "animation": 7,
+    "fidelity": 8.5,
+    "camera": 8,
+    "uncapped": {
+      "characterModels": 8.3,
+      "animation": 7.5
+    },
+    "capsApplied": [
+      "CHK-026 FAILS: characterModels and animation are at most 7.0 (critic/policy.json continuity.caps.sizeFails). Judged without the cap: characterModels 8.3, animation 7.5.",
+      "snaps per minute 5.93 is over 0.25: animation is at most 7.5 (continuity.caps.snaps); the 7.0 above is already below it."
+    ],
+    "previous": {
+      "source": "critic/rounds/round-21.json (6461999e, 2026-10-04)",
+      "characterModels": 8.2,
+      "enemyModels": 7.8,
+      "animation": 7.4,
+      "fidelity": 8.2,
+      "camera": 7.9
+    },
+    "note": "enemyModels 8.0 (+0.2): Evrae's ten re-made masters, smooth rims and no severe double image, Natus staged larger; held by the hard cuts (R39F-02) and the Natus card. fidelity 8.5 (+0.3): F plus 2x supersampling by default at 59.9 fps up to 4K, 2x/3x/4x masters load clean, un-held backdrops, lossless art proved in two engines; held by the link-gated tier (R39F-07) and the Natus card. camera 8.0 (+0.1): Ch III calm menus (camera drift while a menu is open 0.18 to 0.21 against live's 0.95 to 0.97), Natus framing at three sizes with a re-plan after a resize, run-in truck, Bevelle conduits at ultrawide; held by Natus being unpinned at 16:10 by design. animation: twirl start, dressphere shot and run-in truck are fixed, the reels are timed and readable; held by 5.93 snaps a minute and the jerks."
+  },
+  "targets": {
+    "required": 8,
+    "matched": 7,
+    "failing": 1,
+    "unverified": 0,
+    "waiting": 0,
+    "note": "The tiles this candidate changed or could regress, compared by `node tools/end-state-board.mjs --pair` (target left, build right) at the sizes named. The other tiles of the plan's groups (cast poses, targeting rings, onboarding, phone party prep and the rest) were not compared in this focused pass; the deep review owed after the deploy covers them.",
+    "list": [
+      {
+        "tile": "Title",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/title.jpg",
+        "note": "ink slab, PRESS ENTER, vertical line and legend as approved; the renamed title (Echoes of Spira, 2026-10-04) and the parallax key art are Bailey's later picks"
+      },
+      {
+        "tile": "Battle HUD, FFX",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/battle-hud-ffx.jpg",
+        "note": "Ch I first menu: the approved command stack, party plates and turn order, plus the approved guide and next-move panels; Defend tab bottom left"
+      },
+      {
+        "tile": "Battle HUD, FFX-2",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/battle-hud-ffx2.jpg",
+        "note": "Ch IV: pink command stack, girls' plates, boss bar, guide and intent slab"
+      },
+      {
+        "tile": "Swordplay Overdrive",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/swordplay-overlay.jpg",
+        "note": "slab, title, SWORDPLAY line, timer ring, bonus chip and the gold zone bar; the mockup's tier labels are illustrative (zones come from the sourced ordering and the owner-adopted estimates)"
+      },
+      {
+        "tile": "Ch. 1 Mt. Gagazet",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/scene-gagazet.jpg",
+        "note": "the painting is the approved composition (2x master with `?artlink=fast`)"
+      },
+      {
+        "tile": "Ch. 4 Bevelle Underground",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/scene-bevelle-underground.jpg",
+        "note": "the hall, lamps and central door as approved at 1600x900 and the conduits at 2560x1080"
+      },
+      {
+        "tile": "Pause on the Until Dawn character screen",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/pause.jpg",
+        "note": "tab strip, meter rows, objective line and painting as approved"
+      },
+      {
+        "tile": "Seymour Natus, Chapter X (FFX)",
+        "result": "failing",
+        "evidence": "critic/reviews/c7135bec-focused/frames/natus-sensor-card-candidate-vs-diagnostic-vs-approved.jpg",
+        "note": "the lane's own frame of the accepted option N has the card at the top and the figure clear; the build covers about 48% of him (R39F-01)"
+      }
+    ]
+  },
+  "issues": [
+    {
+      "id": "R39F-01",
+      "severity": "major",
+      "title": "Seymour Natus: the Sensor card sits on his body (about 48% covered) because the floor rule drops the pin's lift",
+      "game": "FFX",
+      "chapter": "seymour-natus (Chapter X)",
+      "expected": "The r39-natus lane stands the Sensor card at the top of the stage while Natus's colossus master stands (pin card [410, 4]); the card is clear of his figure at every window shape from 1.7 to 2.45. The lane measured 0% card cover of his painted pixels at 1600x900, 2000x1012 and 2560x1440 on its own branch (docs/handoff/r39-natus.md), and Bailey accepted option N on 2026-10-04.",
+      "observed": "On the production build the card is at CSS top 165 px instead of 4 px. It covers 47.9% of Natus's figure box at 1600x900 (card 297x223 at x1001 y413; Natus 201x349 at x1085 y231), 47.3% at 2000x1012 and 47.1% at 2560x1440, and 47 to 48% again on the Attack target step and whenever Mortibody is the aimed enemy (the default first target). Live covers 0%. In the later states of the resize run the visible `.ffx-sensor` was the 146x27 strip at the top (cover 0); the full card was not on screen in those states. With one diagnostic stylesheet rule that adds `--ffx-sensor-py` to the card's `top`, the card moves to top 3.2 px and the cover is 0.0 to 0.1% in all four steps.",
+      "repro": "Real keys, setSeed(1), ?coach=off, 1600x900, 2000x1012 or 2560x1440: title, board, Chapter X Seymour Natus, Enter on prep, skip the scene, first menu; read `.ffx-sensor` against `__pyrefly.targeting().rects[\"seymour-natus\"]` (scratch cap/natus.mjs and cap/sensorprobe.mjs; results in the review folder).",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/frames/natus-sensor-card-candidate-vs-diagnostic-vs-approved.jpg",
+        "critic/reviews/c7135bec-focused/frames/natus-first-menu-1600x900-candidate.jpg",
+        "critic/reviews/c7135bec-focused/frames/natus-first-menu-1600x900-diagnostic-css.jpg",
+        "critic/reviews/c7135bec-focused/frames/natus-first-menu-2560x1440-candidate.jpg",
+        "critic/reviews/c7135bec-focused/results/sensor-cand-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/sensor-cand-2560x1440.json",
+        "critic/reviews/c7135bec-focused/results/sensor-live-1600x900.json",
+        "critic/reviews/c7135bec-focused/results/sensor-cand-1600x900-fixdiag.json",
+        "critic/reviews/c7135bec-focused/results/natus-1600x900-s1-a.json",
+        "critic/reviews/c7135bec-focused/results/natus-2000x1012-s1-a.json",
+        "critic/reviews/c7135bec-focused/results/natus-2560x1440-s1-a.json"
+      ],
+      "confidence": "high (measured at three sizes against the game's own figure rect; cause shown by the diagnostic change)",
+      "requirement": "CHK-008, CHK-011; the r39-natus acceptance (card clear of Natus); target tile \"Seymour Natus, Chapter X (FFX)\"",
+      "where": "src/ui/common/hud-floor.css lines 73 to 75: `html:not([data-phone-battle]) .ffxhud .ffx-sensor:not(.ffx-sensor--folded) { top: calc(166px + var(--ffx-sensor-dy, 0px) - clamp(...)) }` omits `+ var(--ffx-sensor-py, 0px)`, which src/ui/ffx/ffx-hud.css:556 has and src/engine/fx/mix/sensorPin.ts writes (-162 px). The floor rule (r381-ui-floor) was merged after the pin (r39-natus) and wins the cascade. Cause shown by the diagnostic; the fix itself is not applied.",
+      "fix": "Add `+ var(--ffx-sensor-py, 0px)` inside that `top: calc(...)` (one line). Keep the folded rule as is.",
+      "acceptanceCheck": "sensorCoverOfBoss at most 0.05 on the first menu, on the Attack target step and with Mortibody aimed, at 1600x900, 2000x1012 and 2560x1440; card top about 4 px; the card at TEXT SIZE 115 and 130 and in other chapters unchanged; the floor lane's 14 px and clamp measurements unchanged.",
+      "introducedByCandidate": true,
+      "regressionVsLive": true,
+      "inNewFeature": false,
+      "status": "open"
+    },
+    {
+      "id": "R39F-02",
+      "severity": "major",
+      "title": "Evrae now cuts between poses: 19.5 snaps a minute against 0.46 on live (a double image traded for hard cuts)",
+      "game": "FFX",
+      "chapter": "evrae-airship (Chapter VIII)",
+      "expected": "PR-0367 removes the two-heads frame (the 140 ms cross-fade drew two half-strength heads on every hit). CHK-027 and D-424 allow at most 0.25 snaps per minute of battle.",
+      "observed": "Evrae's 105 counted pose swaps are all hard cuts (the chapter's snaps by the pose they land on: 56 to idle, 32 to hurt, 10 to cast, 7 to attack, 2 to KO; silhouette overlap as low as 0.008). The chapter has 107 snaps in 328.6 s (19.54 per minute) against 3 in 394.2 s on live (0.46); the severe double images on Evrae (0.40 or more) went from 9 to 0 and the chapter's from 10 to 2. Its head mass jump (115.6%) is unchanged. A cut between two silhouettes this different is a snap by the harness's definition and by Bailey's continuity rule.",
+      "repro": "`node critic/runner/lib/continuity.mjs --base=<candidate url> --chapters=evrae-airship` on the candidate and on live (the baseline of release 38 is in critic/reviews/continuity-baseline-r38); read strips swap-027-evrae-cast-idle.jpg and swap-365-evrae-idle-cast.jpg.",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/continuity/evrae-airship-win-c7135bec/continuity/continuity.json",
+        "critic/reviews/c7135bec-focused/continuity/evrae-airship-win-c7135bec/continuity/strips/swap-027-evrae-cast-idle.jpg",
+        "critic/reviews/c7135bec-focused/continuity/evrae-airship-win-c7135bec/continuity/strips/swap-365-evrae-idle-cast.jpg",
+        "critic/reviews/continuity-baseline-r38/evrae-airship/continuity.json",
+        "critic/reviews/c7135bec-focused/frames/evrae-2560x1440-crop-live-left-candidate-right.jpg"
+      ],
+      "confidence": "high for the measurement; whether a cut beats a ghost is Bailey's taste call, not a measurement (the lane chose the cut on purpose: docs/handoff/r39-visfix.md, PR-0367)",
+      "requirement": "CHK-027 (category feel); D-420 to D-426; RUBRIC 6a snap cap",
+      "where": "suspected: SceneStaging.poseCutArt (named in docs/handoff/r39-visfix.md); not traced here",
+      "fix": "Bailey decides, from a measured clip or mockup of each answer (rule 9 and the boss-side rule: do not tune numbers): (a) keep the cut and record the snap count as accepted; (b) a short hold or mask that never shows two heads; (c) an authored in-between pose for the head-only moves. The snap cap on animation (7.5) applies until then.",
+      "acceptanceCheck": "Evrae chapter snaps per minute at most 0.25 and 0 double images of severity 0.40 or more in the continuity harness, or an owner decision recorded that a hard cut between poses of different silhouettes is accepted.",
+      "introducedByCandidate": true,
+      "regressionVsLive": true,
+      "inNewFeature": false,
+      "status": "open"
+    },
+    {
+      "id": "R39F-03",
+      "severity": "major",
+      "title": "CHK-026 still fails: figures change size and feet across pose changes (less than on live)",
+      "game": "both",
+      "chapter": "Ch I, IV, VIII (harness)",
+      "expected": "Head size within 3% where the head is registered (30% by mass), feet within 2 px registered (6 px by silhouette) across a pose change (CHK-026).",
+      "observed": "281 of 1,268 swaps change a head beyond tolerance (live 297 of 1,281), worst 115.7% by mass (Evrae, unchanged) and 8.4% registered (live 57.1%); 137 standing swaps move the feet beyond tolerance (live 868), worst 140.6 px (live 259.4). By chapter, head-over / feet-over: Ch I 100 / 135 (live 177 / 346), Ch IV 29 / 1 (live 35 / 242), Ch VIII 152 / 1 (live 85 / 280; the head count rises because more swaps are now registered and held to the stricter 3%, 236 against 114). Ch IV's single remaining feet swap is 140.6 px (live worst 98.3).",
+      "repro": "The same harness run, strips in the continuity folder.",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/continuity/continuity-summary.json",
+        "critic/reviews/c7135bec-focused/continuity/seymour-flux-win-c7135bec/continuity/continuity.json",
+        "critic/reviews/c7135bec-focused/continuity/ffx2-bahamut-win-c7135bec/continuity/continuity.json",
+        "critic/reviews/c7135bec-focused/continuity/ffx2-bahamut-win-c7135bec/continuity/strips/swap-392-bahamut-hurt-ko.jpg",
+        "critic/reviews/continuity-baseline-r38/continuity-summary.json"
+      ],
+      "confidence": "high (harness measurement; the strips show the worst swaps)",
+      "requirement": "CHK-026; D-420 to D-426",
+      "where": "the pose registration table (src/data/art/poseRegistration*.ts, r39-posescale) and the poses it does not cover; not traced",
+      "fix": "Continue the r39-posescale batches over the poses the strips name (Ch IV Bahamut hurt to KO, Paine's follow and ready, Evrae's mass jump); the harness is the acceptance.",
+      "acceptanceCheck": "CHK-026 PASS in the harness over Ch I, IV and VIII, or a recorded owner decision per figure.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open"
+    },
+    {
+      "id": "R39F-04",
+      "severity": "major",
+      "title": "CHK-027 still fails: jerks and double images remain (fewer than on live), and Ch I and IV keep the snaps live has",
+      "game": "both",
+      "chapter": "Ch I, IV, VIII (harness)",
+      "expected": "At most 0.25 snaps per minute, no double image of severity 0.40 or more, no jerk of 40 px or more in one frame (CHK-027).",
+      "observed": "146 jerks of 40 px or more (live 230), worst 353.1 px (live 371.3); 15 swaps with a double image of 0.40 or more (live 20), worst 0.422 (live 0.47); Ch I 8 snaps in 7.9 minutes (1.01 per minute; live also 8, 0.88) and Ch IV 1 (0.16; live 0.14). Ch IV has 12 double images against live's 7, all Paine at 0.401 to 0.410 (on the line); live's worst there was 0.452.",
+      "repro": "The same harness run, strips in the continuity folder (ghost-*.jpg, jerk-*.jpg).",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/continuity/continuity-summary.json",
+        "critic/reviews/c7135bec-focused/continuity/seymour-flux-win-c7135bec/continuity/strips/swap-087-seymour-flux-idle-hurt.jpg",
+        "critic/reviews/c7135bec-focused/continuity/seymour-flux-win-c7135bec/continuity/continuity.json",
+        "critic/reviews/continuity-baseline-r38/continuity-summary.json"
+      ],
+      "confidence": "high (harness measurement)",
+      "requirement": "CHK-027; D-420 to D-426",
+      "where": "presenter pose swaps and camera cuts; not traced",
+      "fix": "The continuity program's next batches; the harness is the acceptance.",
+      "acceptanceCheck": "CHK-027 PASS in the harness, or a recorded owner decision.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open"
+    },
+    {
+      "id": "R39F-05",
+      "severity": "polish",
+      "title": "The strategy guide's labels fall below the 14 px floor in windows narrower than 1600",
+      "game": "both",
+      "chapter": "Ch I, III (FFX), Ch IV (FFX-2) at 1280x720 and 1024x768",
+      "expected": "No text under 14 px at any window (CHK-003; the floor lane read 14.0 in 60 of 60 cells).",
+      "observed": "The guide's Boss Battle tag, \"In Game Description:\", \"HP:\", \"Steal:\" and \"Drops:\" draw at 11.4 px at 1280x720 and 9.1 px at 1024x768 (FFX Ch I; 4 labels in Ch III and in FFX-2 Ch IV at 11.4 px). Everything else on the HUD holds 14 px. At 1600x900 and on phones there are 0 under 14.",
+      "repro": "node cap/floor.mjs seymour-flux 1280x720 (the results are in the review folder).",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/floor-seymour-flux-1280x720.json",
+        "critic/reviews/c7135bec-focused/results/floor-seymour-flux-1024x768.json",
+        "critic/reviews/c7135bec-focused/results/floor-braskas-final-aeon-1280x720.json",
+        "critic/reviews/c7135bec-focused/results/floor-ffx2-bahamut-1280x720.json"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-003; the owner's 14 px floor",
+      "where": "src/ui/common/strategy-guide.css (.sgd__tag, .sgd__flabel, .sgd__listlabel); suspected: the guide sheet was merged after the floor lane and is not in hud-floor.css's floor rules",
+      "fix": "Give those three selectors the same floor as the other HUD type (max of the authored size and 14 px over the stage scale).",
+      "acceptanceCheck": "floor.mjs minimum at least 13.95 at 1024x768 and 1280x720 for Ch I and Ch IV.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open"
+    },
+    {
+      "id": "R39F-06",
+      "severity": "polish",
+      "title": "The first-run board card says \"Click its picture\" to keyboard and pad players",
+      "game": "both",
+      "chapter": "chapter select (first run)",
+      "expected": "The verb follows the device (the touch card says \"Tap its picture\"; the reels and Overdrive overlays already name ENTER, CROSS or TAP).",
+      "observed": "Step 1 reads \"Click its picture to begin. The others wait on the board.\" for keyboard and pad users, who select with arrows and Enter or Cross. Steps 2 and 3 read correctly.",
+      "repro": "Fresh profile, press Enter on the title, read the board card by keys or the pad (firstrun-cand-key, firstrun-cand-pad).",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/firstrun-cand-key.json",
+        "critic/reviews/c7135bec-focused/results/firstrun-cand-pad.json",
+        "critic/reviews/c7135bec-focused/frames/firstrun-board-step1-key.jpg"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-007 (copy); the first-run target tile",
+      "where": "src/ui/coach/firstRunCopy.ts (suspected)",
+      "fix": "Say \"Pick Seymour Flux\" with the device's control for key and pad, as the other steps do.",
+      "acceptanceCheck": "Step 1 names the control in use on key, pad and touch.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true,
+      "status": "open"
+    },
+    {
+      "id": "R39F-07",
+      "severity": "polish",
+      "title": "The 2x backdrop masters depend on the browser's link estimate: below 10 Mbps the six un-held backdrops stay 1x",
+      "game": "both",
+      "chapter": "Ch I, XI, XII, XIV (the six held backdrops)",
+      "expected": "Gagazet, Garden of Pain, Via Purifico and Road to the Farplane draw their 2x masters at a 2560 wide window.",
+      "observed": "They do with `?artlink=fast` or a link estimate of 10 (5,376 px masters from the first sample). On this machine's loopback the page reports a downlink of 9.2 to 9.9 and `slowLink()` (downlink under 10) keeps the 1x masters (2,688 px) at 2560x1440 with no cue. Browsers without the Network Information API (Safari, Firefox) get 2x. The title's own backdrop master has no on-screen user (the title draws title/keyart.2x.webp, 2,841 px).",
+      "repro": "Ch I at 2560x1440 with and without `?artlink=fast` (bdwatch results).",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/bdwatch-seymour-flux-2560x1440-fast.json",
+        "critic/reviews/c7135bec-focused/results/bdwatch-seymour-flux-2560x1440-b.json",
+        "critic/reviews/c7135bec-focused/results/bdwatch-isaaru-via-purifico-2560x1440-fast.json",
+        "critic/reviews/c7135bec-focused/results/bdwatch-ffx2-fallen-aeons-2560x1440-fast.json",
+        "critic/reviews/c7135bec-focused/results/bdwatch-seymour-omnis-2560x1440-fast.json",
+        "critic/reviews/c7135bec-focused/results/titlefast-2560x1440-fast.json"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-013; the r39-art claim",
+      "where": "src/engine/ArtDevice.ts slowLink()",
+      "fix": "Bailey's call: lower the threshold, or ask for 2x from a measured throughput after the first assets rather than the cached estimate.",
+      "acceptanceCheck": "A fast broadband Chromium session reads 2x for the four backdrops at 2560 wide.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open"
+    },
+    {
+      "id": "R39F-08",
+      "severity": "polish",
+      "title": "At TEXT SIZE 115 and 130 the in-battle guide gives way in FFX-2 Ch IV and VI and G does nothing",
+      "game": "FFX-2",
+      "chapter": "ffx2-bahamut, ffx2-leblanc (Ch IV, VI)",
+      "expected": "A designed give-way (sgd--squeezed) tells the player, or the guide stays reachable.",
+      "observed": "At 115 and 130 percent the guide panel and its chip are hidden in Ch IV and VI (panel 0x0) and pressing G toggles a flag with nothing shown. The pause GUIDE tab still has the page. At 100 percent and in Ch V at 130 the guide shows. The lane documents the give-way (r39-judg).",
+      "repro": "Pause, OPTIONS, TEXT SIZE 130, back to the first menu, press G.",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/textsize-ffx2-bahamut-1600x900-130-pause.json",
+        "critic/reviews/c7135bec-focused/results/textsize-ffx2-leblanc-1600x900-130.json",
+        "critic/reviews/c7135bec-focused/frames/textsize130-ch6-menu-narrow-slab.jpg"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-004 (names how to reach it)",
+      "where": "src/ui/common/StrategyGuide.ts (sgd--squeezed, railRoom)",
+      "fix": "Show a one-line chip \"GUIDE: pause menu\" while squeezed, or fold the guide into the advisor lane.",
+      "acceptanceCheck": "At 130 percent in Ch IV and VI a player can tell where the guide went.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true,
+      "status": "open"
+    },
+    {
+      "id": "R39F-09",
+      "severity": "suggestion",
+      "title": "The title screen now fetches 58 art files before input (live: 27)",
+      "game": "both",
+      "chapter": "title",
+      "expected": "A cold title is light.",
+      "observed": "At 2560x1440 the candidate's title made 58 art requests (every chapter's backdrop and boss idle among them) against 27 on live; all were 200s. Whether this is the intended warm-up was not asked; the cost on a slow link was not measured.",
+      "repro": "title.mjs on candidate and live.",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/title-cand-2560x1440.json",
+        "critic/reviews/c7135bec-focused/results/title-live-2560x1440.json"
+      ],
+      "confidence": "medium (counts only; bytes and timing not measured)",
+      "requirement": "delivery; CHK-018",
+      "where": "src/app/screens/TitleScreen.ts preload (suspected)",
+      "fix": "Measure the cold-title bytes on a throttled link before the deploy; Bailey decides.",
+      "acceptanceCheck": "A recorded cold-title byte figure.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open"
+    },
+    {
+      "id": "R39F-10",
+      "severity": "polish",
+      "title": "Chapter III with Yuna first: her staff keeps a sliver of overlap with Braska's Final Aeon through the whole menu",
+      "game": "FFX",
+      "chapter": "braskas-final-aeon (Chapter III)",
+      "expected": "docs/handoff/r39-looks.md: a Yuna-first menu touches only in its first 3 s (up to 681 px2) and is clear after 3.0 s.",
+      "observed": "Seed 9 (Yuna first), 1600x900: overlap up to 1,129 px2 in the first 3 s, then a median of 167 px2 (max 282) in 85% of the 78 later readings; at 2000x1012: up to 1,486 px2, then a median of 104 (max 545) in 99% of readings. Live: a median of 3,803 px2 (max 5,261). Seed 1 (Tidus first) is clear at every reading (gap 28 px or more; live median 2,566 px2). The sliver is about a 13 px square; the camera drift while a menu is open is 0.18 to 0.21 units against live's 0.95 to 0.97.",
+      "repro": "node cap/ch3.mjs 1600x900 9 cand (setSeed(9) before the first key; real keys; results in the review folder).",
+      "evidence": [
+        "critic/reviews/c7135bec-focused/results/ch3-cand-1600x900-s9-cand.json",
+        "critic/reviews/c7135bec-focused/results/ch3-cand-2000x1012-s9-cand.json",
+        "critic/reviews/c7135bec-focused/results/ch3-live-1600x900-s9-live.json",
+        "critic/reviews/c7135bec-focused/results/ch3-cand-1600x900-s1-cand.json",
+        "critic/reviews/c7135bec-focused/frames/ch3-first-menu-yuna-first-1600x900-seed9.jpg",
+        "critic/reviews/c7135bec-focused/frames/ch3-first-menu-yuna-first-1600x900-seed9-live-r38.jpg"
+      ],
+      "confidence": "medium (the painted-overlap reading is in the lane's style but measured here with a fresh probe; the lane's numbers were taken before the pose-scale merge)",
+      "requirement": "CHK-008, CHK-011",
+      "where": "src/engine/fx/mix/stageTable.ts (the Chapter III row) with the pose registration merged after the lane measured (suspected)",
+      "fix": "Re-measure with the lane's own probe on this tree; if it reads the same, step the boss or the party 0.1 further apart for the Yuna menu.",
+      "acceptanceCheck": "Painted overlap 0 after 3 s for seeds 1 and 9 at 1600x900 and 2000x1012.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "The production build of c7135bec (dist, vite preview 127.0.0.1:5461) in headless GPU Chromium 153 with real keys, a virtual pad, the mouse and touch; labelled hooks only: setSeed(1) before the first key, ?coach=off, gotoChapter for navigation, battleState gauge := 100 for Overdrive runs, crisp.simulate, and the URL switches ?artlink, ?artscale, ?crisp, ?stand, ?figtrue.",
+      "Rendering: F plus default at 1600x900, 2560x1440 and 3840x2160 (59.9 fps, 2x supersampling); the governor stepping F plus to F to A2 and staying, the pinned frame holding, the phone chain; 2x default, 3x and 4x forced tiers; 0 raw @ requests; the six held backdrops with the link forced fast and natural; Evrae and Wakka rims at 100 percent; the figure true-colour switch off by default (0 differing pixels against set 0).",
+      "Staging: Ch III first menus (two seeds, two sizes, stage on and off) and the lunge; Ch X Natus at 1600x900, 2000x1012 and 2560x1440 with three mid-fight resizes (2000x1012, 1440x900, 2560x1440); twirl start (Ch XV, VI), dressphere shot (Ch VI), run-in truck (Ch XVI at three sizes), Evrae cut (Ch VIII, 120 s), Bevelle conduits at 1600x900, 2560x1080, 3440x1440 and 390x844.",
+      "Interface: Defend by four inputs and Shift; the slab on pad Select in both games; Swordplay by pad, click and tap and Bushido by key, pad, click and tap (Chapter XVII's fight, gauge forced to 100); the first-run guide by key, pad and touch; the advisor cards for Ch VII, IX, XII, XVII and XVIII at 1600x900 and 2000x1012; the 14 px floor and Overdrive clamp at 1024x768, 1280x720, 1600x900 and 390x844 in Ch I and IV (Ch III at the two small sizes); TEXT SIZE 115 and 130 in Ch IV, V, VI and both pauses (the FFX HUD at 130 percent, not part of this release's claim and not compared with live, covers 27% of Yuna in Ch I against 2% at 100 percent); EYE CANDY in both games; the strategy guide.",
+      "Lady Luck (FFX-2 only): reels in Ch XVI by key, pad and tap in Wait and Active ATB, in Ch V and XIII by key; Red 7 and cherry results; absent in Ch IV and VI; smoke fights in Ch V and XIII (8 turns each).",
+      "Continuity: the harness over Ch I, IV and VIII with real keys (1,173.6 s of battle) and the same harness on live (the baseline); real-key wins in all three to the board and a reload; a Ch I loss and retry; one phone touch turn in Ch I and one in Ch IV (touch only, CONFIRM tapped).",
+      "Gates re-run here: art-derive audit, art-derive verify (2,874 masters, 0 problems), art-browser-load (2,918 of 2,918 in Chromium and WebKit), verify-approved (807 ok), orphans (24, the same 24 as release 38), a numeric cross-check of the 9 HP fields of the new guide documents against the engine (9 of 9), the Lady Luck chapter map against research/ffx2-lady-luck-availability.md (7 of 7 chapters), the Swordplay zones against research/ffx-combat-core.md 5.3. Deploy tooling read without running it."
+    ],
+    "reused": [
+      {
+        "what": "tsc, the full vitest suite (859 files, 12,825 tests) and the integration lane's build gates, Cloudflare limits, play audit and real-key smoke",
+        "from": "docs/handoff/r39-int.md (the integration lane, same tree)",
+        "why": "they are the driver's gates and the tree is unchanged since (the source diff from 3cb9c520 to c7135bec is empty); this review re-ran the art gates and the behaviour, not the unit suite"
+      },
+      {
+        "what": "the live side of the continuity comparison",
+        "from": "critic/reviews/continuity-baseline-r38 (the same harness against https://echoesofspira.com, release 38, 2026-10-05T04:57Z)",
+        "why": "live is unchanged (bundle X5kGUd9G, confirmed at review time); the candidate side was run here"
+      },
+      {
+        "what": "the Natus lane's own frame of the accepted option N, and its 0% card cover measured on its branch",
+        "from": "docs/handoff/r39-natus.md and its evidence folder",
+        "why": "it is the reference the candidate is compared with; the candidate was measured afresh here"
+      }
+    ],
+    "notTested": [
+      "Chapters II, VII, IX, XI, XII, XIV, XV, XVII and XVIII by full play (Ch VII, IX, XII, XVII and XVIII only at the first menu, for the advisor cards; Ch XI and XV only as data for Lady Luck)",
+      "A full win by touch or by pad; a loss in FFX-2",
+      "Audio (agents cannot hear; docs/audio/audition.html is Bailey's)",
+      "Real-device browsers and hardware (Safari, Firefox, iOS, a laptop or integrated GPU, a throttled link beyond the forced switches); cold-load timing",
+      "Victory and Defeat screens at sizes other than 1600x900; targets of the cast, fight and phone groups other than the eight named; copy outside the changed screens",
+      "The live verification of the exact artifact (CHK-017, after the deploy) and the deep review owed on the live build"
+    ]
+  },
+  "regressions": [
+    {
+      "id": "R39F-01",
+      "summary": "Natus Sensor card covers about 48% of the figure (live 0%): hud-floor.css drops --ffx-sensor-py",
+      "severity": "major",
+      "game": "FFX"
+    },
+    {
+      "id": "R39F-02",
+      "summary": "Evrae snaps 0.46 to 19.54 per minute: the pose cut replaces the double image with hard cuts (owner taste call)",
+      "severity": "major",
+      "game": "FFX"
+    }
+  ],
+  "nextReview": "Fix R39F-01 (one line in hud-floor.css) and have Bailey answer R39F-02 (keep the Evrae cut, or one of the alternatives); then a focused re-check of only the changed areas (the Natus probes at 1600x900, 2000x1012 and 2560x1440, and the floor, TEXT SIZE and Evrae continuity runs) on the new candidate. After the deploy: live verification of that exact artifact (CHK-017), then the deep review owed on the live build (plan depth deep, deepAfterDeploy true; this candidate is the second shared-system release in a row with a deep review owed, so the third deploy would be refused). The continuity checks stay failing on live and candidate until the continuity program lands.",
+  "elapsedMinutes": 108
+}

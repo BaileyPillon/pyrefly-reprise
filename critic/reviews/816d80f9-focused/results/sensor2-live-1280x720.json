@@ -1,0 +1,163 @@
+{
+ "name": "sensor2-live-1280x720",
+ "size": "1280x720",
+ "which": "live",
+ "steps": [
+  {
+   "vp": "1280x720",
+   "clippedAbove": false,
+   "what": "first menu",
+   "present": true,
+   "shown": true,
+   "rect": {
+    "x": 853,
+    "y": 332,
+    "w": 237,
+    "h": 176
+   },
+   "vars": {
+    "px": "",
+    "py": "",
+    "dx": "",
+    "cdx": "",
+    "dy": ""
+   },
+   "left": "436px",
+   "top": "166px",
+   "text": "Mortibody HP 4000 / 4000 FIRE ICE THUNDER WATER HOLY GRAV I ",
+   "pin": null,
+   "natusRect": {
+    "x": 693,
+    "y": 284,
+    "w": 92,
+    "h": 165
+   },
+   "cardOverNatusRect": 0
+  },
+  {
+   "vp": "1280x720",
+   "clippedAbove": false,
+   "what": "Attack chosen (targets 2)",
+   "present": true,
+   "shown": true,
+   "rect": {
+    "x": 853,
+    "y": 332,
+    "w": 237,
+    "h": 176
+   },
+   "vars": {
+    "px": "",
+    "py": "",
+    "dx": "",
+    "cdx": "",
+    "dy": ""
+   },
+   "left": "436px",
+   "top": "166px",
+   "text": "Mortibody HP 4000 / 4000 FIRE ICE THUNDER WATER HOLY GRAV I ",
+   "pin": null,
+   "natusRect": {
+    "x": 693,
+    "y": 284,
+    "w": 94,
+    "h": 166
+   },
+   "cardOverNatusRect": 0
+  },
+  {
+   "vp": "1280x720",
+   "clippedAbove": false,
+   "what": "cursor moved right once",
+   "present": true,
+   "shown": true,
+   "rect": {
+    "x": 853,
+    "y": 332,
+    "w": 237,
+    "h": 176
+   },
+   "vars": {
+    "px": "",
+    "py": "",
+    "dx": "",
+    "cdx": "",
+    "dy": ""
+   },
+   "left": "436px",
+   "top": "166px",
+   "text": "Seymour Natus HP 36000 / 36000 FIRE ICE THUNDER WATER HOLY G",
+   "pin": null,
+   "natusRect": {
+    "x": 693,
+    "y": 284,
+    "w": 95,
+    "h": 167
+   },
+   "cardOverNatusRect": 0
+  },
+  {
+   "vp": "1280x720",
+   "clippedAbove": false,
+   "what": "cursor moved right twice",
+   "present": true,
+   "shown": true,
+   "rect": {
+    "x": 853,
+    "y": 332,
+    "w": 237,
+    "h": 176
+   },
+   "vars": {
+    "px": "",
+    "py": "",
+    "dx": "",
+    "cdx": "",
+    "dy": ""
+   },
+   "left": "436px",
+   "top": "166px",
+   "text": "Mortibody HP 4000 / 4000 FIRE ICE THUNDER WATER HOLY GRAV I ",
+   "pin": null,
+   "natusRect": {
+    "x": 693,
+    "y": 284,
+    "w": 94,
+    "h": 167
+   },
+   "cardOverNatusRect": 0
+  },
+  {
+   "vp": "1280x720",
+   "clippedAbove": false,
+   "what": "E (enemy read-out) on",
+   "present": true,
+   "shown": true,
+   "rect": {
+    "x": 870,
+    "y": 332,
+    "w": 102,
+    "h": 19
+   },
+   "vars": {
+    "px": "",
+    "py": "",
+    "dx": "",
+    "cdx": "",
+    "dy": ""
+   },
+   "left": "436px",
+   "top": "166px",
+   "text": "I MORTIBODY",
+   "pin": null,
+   "natusRect": {
+    "x": 693,
+    "y": 284,
+    "w": 92,
+    "h": 165
+   },
+   "cardOverNatusRect": 0
+  }
+ ],
+ "consoleErrors": []
+}

@@ -1,0 +1,381 @@
+{
+ "size": "1600x900",
+ "seed": 1,
+ "label": "a",
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off",
+  "page.setViewportSize for the resize (a real window resize event)"
+ ],
+ "states": [
+  {
+   "what": "first menu",
+   "viewport": "1600x900",
+   "framing": {
+    "pin": {
+     "frac": 0.45,
+     "blend": 0.65,
+     "back": 1.02,
+     "lens": [
+      0.03,
+      0
+     ],
+     "apart": 0.75,
+     "bossApart": 0.4,
+     "card": [
+      410,
+      4
+     ]
+    },
+    "bossPx": 341,
+    "planMs": 11,
+    "plans": 1,
+    "replans": 0,
+    "cls": "colossus",
+    "scale": 0.45,
+    "ready": null
+   },
+   "bossRect": {
+    "id": "seymour-natus",
+    "x": 1085,
+    "y": 231,
+    "w": 200,
+    "h": 349,
+    "visible": 0.9971727454919697,
+    "inFrame": 0.9971727454919697
+   },
+   "bossBoxH": 349,
+   "sensorRect": {
+    "x": 1001,
+    "y": 413,
+    "w": 297,
+    "h": 223
+   },
+   "sensorCoverOfBoss": 0.4785,
+   "advisorCoverOfBoss": 0,
+   "ids": [
+    "tidus",
+    "yuna",
+    "kimahri",
+    "seymour-natus",
+    "mortibody"
+   ]
+  },
+  {
+   "what": "resized to 2000x1012, menu still open",
+   "viewport": "2000x1012",
+   "framing": {
+    "pin": {
+     "frac": 0.45,
+     "blend": 0.65,
+     "back": 1.02,
+     "lens": [
+      0.03,
+      0
+     ],
+     "apart": 0.75,
+     "bossApart": 0.4,
+     "card": [
+      410,
+      4
+     ]
+    },
+    "bossPx": 341,
+    "planMs": 11,
+    "plans": 1,
+    "replans": 0,
+    "cls": "colossus",
+    "scale": 0.45,
+    "ready": null
+   },
+   "bossRect": {
+    "id": "seymour-natus",
+    "x": 1314,
+    "y": 259,
+    "w": 223,
+    "h": 392,
+    "visible": 0.9924834095629251,
+    "inFrame": 0.9924834095629251
+   },
+   "bossBoxH": 392,
+   "sensorRect": {
+    "x": 1250,
+    "y": 11,
+    "w": 146,
+    "h": 27
+   },
+   "sensorCoverOfBoss": 0,
+   "advisorCoverOfBoss": 0,
+   "ids": [
+    "tidus",
+    "yuna",
+    "kimahri",
+    "seymour-natus",
+    "mortibody"
+   ]
+  },
+  {
+   "what": "after one real turn at 2000x1012",
+   "viewport": "2000x1012",
+   "framing": {
+    "pin": {
+     "frac": 0.45,
+     "blend": 0.65,
+     "back": 1.02,
+     "lens": [
+      0.03,
+      0
+     ],
+     "apart": 0.75,
+     "bossApart": 0.4,
+     "card": [
+      410,
+      4
+     ]
+    },
+    "bossPx": 382,
+    "planMs": 3,
+    "plans": 2,
+    "replans": 0,
+    "cls": "colossus",
+    "scale": 0.45,
+    "ready": null
+   },
+   "bossRect": {
+    "id": "seymour-natus",
+    "x": 1329,
+    "y": 268,
+    "w": 222,
+    "h": 382,
+    "visible": 0.9972464944029111,
+    "inFrame": 0.9972464944029111
+   },
+   "bossBoxH": 382,
+   "sensorRect": {
+    "x": 1250,
+    "y": 11,
+    "w": 146,
+    "h": 27
+   },
+   "sensorCoverOfBoss": 0,
+   "advisorCoverOfBoss": 0,
+   "ids": [
+    "tidus",
+    "yuna",
+    "kimahri",
+    "seymour-natus",
+    "mortibody"
+   ],
+   "turn": {
+    "picked": [
+     "Attack"
+    ],
+    "tookTurn": true
+   }
+  },
+  {
+   "what": "resized to 1440x900, menu still open",
+   "viewport": "1440x900",
+   "framing": {
+    "pin": {
+     "frac": 0.45,
+     "blend": 0.65,
+     "back": 1.02,
+     "lens": [
+      0.03,
+      0
+     ],
+     "apart": 0.75,
+     "bossApart": 0.4,
+     "card": [
+      410,
+      4
+     ]
+    },
+    "bossPx": 382,
+    "planMs": 3,
+    "plans": 2,
+    "replans": 0,
+    "cls": "colossus",
+    "scale": 0.45,
+    "ready": null
+   },
+   "bossRect": {
+    "id": "seymour-natus",
+    "x": 1019,
+    "y": 238,
+    "w": 193,
+    "h": 340,
+    "visible": 1,
+    "inFrame": 0.9765634243732843
+   },
+   "bossBoxH": 340,
+   "sensorRect": {
+    "x": 920,
+    "y": 54,
+    "w": 139,
+    "h": 24
+   },
+   "sensorCoverOfBoss": 0,
+   "advisorCoverOfBoss": 0,
+   "ids": [
+    "tidus",
+    "yuna",
+    "kimahri",
+    "seymour-natus",
+    "mortibody"
+   ]
+  },
+  {
+   "what": "after one real turn at 1440x900",
+   "viewport": "1440x900",
+   "framing": {
+    "pin": null,
+    "bossPx": 208,
+    "planMs": 87,
+    "plans": 3,
+    "replans": 1,
+    "cls": "colossus",
+    "scale": -1,
+    "ready": null
+   },
+   "bossRect": {
+    "id": "seymour-natus",
+    "x": 792,
+    "y": 319,
+    "w": 115,
+    "h": 207,
+    "visible": 0.985569546377536,
+    "inFrame": 0.985569546377536
+   },
+   "bossBoxH": 207,
+   "sensorRect": {
+    "x": 978,
+    "y": 419,
+    "w": 139,
+    "h": 24
+   },
+   "sensorCoverOfBoss": 0,
+   "advisorCoverOfBoss": 0,
+   "ids": [
+    "tidus",
+    "yuna",
+    "kimahri",
+    "seymour-natus",
+    "mortibody"
+   ],
+   "turn": {
+    "picked": [
+     "Attack"
+    ],
+    "tookTurn": true
+   }
+  },
+  {
+   "what": "resized to 2560x1440, menu still open",
+   "viewport": "2560x1440",
+   "framing": {
+    "pin": null,
+    "bossPx": 208,
+    "planMs": 87,
+    "plans": 3,
+    "replans": 1,
+    "cls": "colossus",
+    "scale": -1,
+    "ready": null
+   },
+   "bossRect": {
+    "id": "seymour-natus",
+    "x": 1430,
+    "y": 531,
+    "w": 190,
+    "h": 334,
+    "visible": 0.9896736176600529,
+    "inFrame": 0.9896736176600529
+   },
+   "bossBoxH": 334,
+   "sensorRect": {
+    "x": 1740,
+    "y": 664,
+    "w": 204,
+    "h": 38
+   },
+   "sensorCoverOfBoss": 0,
+   "advisorCoverOfBoss": 0,
+   "ids": [
+    "tidus",
+    "yuna",
+    "kimahri",
+    "seymour-natus",
+    "mortibody"
+   ]
+  },
+  {
+   "what": "after one real turn at 2560x1440",
+   "viewport": "2560x1440",
+   "framing": {
+    "pin": {
+     "frac": 0.45,
+     "blend": 0.65,
+     "back": 1.02,
+     "lens": [
+      0.03,
+      0
+     ],
+     "apart": 0.75,
+     "bossApart": 0.4,
+     "card": [
+      410,
+      4
+     ]
+    },
+    "bossPx": 561,
+    "planMs": 1,
+    "plans": 4,
+    "replans": 1,
+    "cls": "colossus",
+    "scale": 0.45,
+    "ready": null
+   },
+   "bossRect": {
+    "id": "seymour-natus",
+    "x": 1728,
+    "y": 367,
+    "w": 318,
+    "h": 560,
+    "visible": 0.9917682288603782,
+    "inFrame": 0.9917682288603782
+   },
+   "bossBoxH": 560,
+   "sensorRect": {
+    "x": 1636,
+    "y": 16,
+    "w": 204,
+    "h": 38
+   },
+   "sensorCoverOfBoss": 0,
+   "advisorCoverOfBoss": 0,
+   "ids": [
+    "tidus",
+    "yuna",
+    "kimahri",
+    "seymour-natus",
+    "mortibody"
+   ],
+   "turn": {
+    "picked": [
+     "Attack"
+    ],
+    "tookTurn": true
+   }
+  }
+ ],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card seymour-natus by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

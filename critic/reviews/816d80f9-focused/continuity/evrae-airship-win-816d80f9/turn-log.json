@@ -1,0 +1,2616 @@
+[
+ {
+  "turn": 0,
+  "ms": 5,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Pull back",
+   "target": null,
+   "menu": "Orders"
+  },
+  "took": "Pull back",
+  "viaMenu": "Orders",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:880/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:32000/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 1,
+    "actor": "tidus",
+    "did": "Pull back",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 4433,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:880/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:32000/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 5,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 2,
+  "ms": 8116,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Rikku",
+   "menu": "Items"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:0/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:31832/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 14,
+    "actor": "wakka",
+    "did": "Phoenix Down",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 12549,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:440/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:31832/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 21,
+    "actor": "tidus",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 19234,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:965/1265",
+   "wakka:1112/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:31832/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 44,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 20841,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Lulu",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Lulu",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:965/1265",
+   "wakka:1112/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:31369/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 6,
+  "ms": 22787,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Watera",
+   "target": "Evrae",
+   "menu": "Black Magic"
+  },
+  "took": "Watera",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:965/1265",
+   "wakka:1112/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:31369/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 51,
+    "actor": "lulu",
+    "did": "Watera",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 35169,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Slow",
+   "target": "Evrae",
+   "menu": "White Magic"
+  },
+  "took": "Slow",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:965/1265",
+   "wakka:1112/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:28439/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 72,
+    "actor": "tidus",
+    "did": "Slow",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 38184,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:965/1265",
+   "wakka:1112/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:28439/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 75,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 39786,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Slow",
+   "target": "Evrae",
+   "menu": "White Magic"
+  },
+  "took": "Slow",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:965/1265",
+   "wakka:1112/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:27950/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 81,
+    "actor": "tidus",
+    "did": "Slow",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 42803,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Watera",
+   "target": "Evrae",
+   "menu": "Black Magic"
+  },
+  "took": "Watera",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:965/1265",
+   "wakka:1112/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:27950/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 85,
+    "actor": "lulu",
+    "did": "Watera",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 55448,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:537/1265",
+   "wakka:1003/1430",
+   "rikku:680/880",
+   "lulu:444/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:24948/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 119,
+    "actor": "tidus",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 62429,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:961/1265",
+   "wakka:1230/1430",
+   "rikku:680/880",
+   "lulu:437/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:24948/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 140,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 68278,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Focus",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Focus",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:961/1265",
+   "wakka:1230/1430",
+   "rikku:680/880",
+   "lulu:437/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:21638/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 160,
+    "actor": "lulu",
+    "did": "Focus",
+    "targets": [
+     "tidus",
+     "wakka",
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 71385,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Slow",
+   "target": "Evrae",
+   "menu": "White Magic"
+  },
+  "took": "Slow",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:961/1265",
+   "wakka:1230/1430",
+   "rikku:680/880",
+   "lulu:437/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:21638/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 167,
+    "actor": "tidus",
+    "did": "Slow",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 74403,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Watera",
+   "target": "Evrae",
+   "menu": "Black Magic"
+  },
+  "took": "Watera",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:961/1265",
+   "wakka:1230/1430",
+   "rikku:680/880",
+   "lulu:437/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:21638/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 171,
+    "actor": "lulu",
+    "did": "Watera",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 79413,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:961/1265",
+   "wakka:1230/1430",
+   "rikku:680/880",
+   "lulu:437/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:20965/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 175,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 86121,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:591/1265",
+   "wakka:1136/1430",
+   "rikku:680/880",
+   "lulu:195/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:20476/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 198,
+    "actor": "tidus",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 89927,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Slow",
+   "target": "Evrae",
+   "menu": "White Magic"
+  },
+  "took": "Slow",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:20476/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 207,
+    "actor": "tidus",
+    "did": "Slow",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 93477,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:20476/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 212,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 95110,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Watera",
+   "target": "Evrae",
+   "menu": "Black Magic"
+  },
+  "took": "Watera",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:19981/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 218,
+    "actor": "lulu",
+    "did": "Watera",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 103411,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1070/1265",
+   "wakka:849/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:19379/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 233,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 107004,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1070/1265",
+   "wakka:849/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:19379/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 240,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 110321,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1070/1265",
+   "wakka:849/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:19379/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 246,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 111980,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Watera",
+   "target": "Evrae",
+   "menu": "Black Magic"
+  },
+  "took": "Watera",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:1070/1265",
+   "wakka:849/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:18745/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 251,
+    "actor": "lulu",
+    "did": "Watera",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 117061,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1070/1265",
+   "wakka:849/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:18138/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 255,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 123976,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:689/1265",
+   "wakka:553/1430",
+   "rikku:680/880",
+   "lulu:615/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:18138/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 275,
+    "actor": "tidus",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 127584,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:18138/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 282,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 28,
+  "ms": 129233,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Rikku",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Rikku",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:17459/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 29,
+  "ms": 131423,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Reflect",
+   "target": "Evrae",
+   "menu": "White Magic"
+  },
+  "took": "Reflect (one-item group, direct)",
+  "viaMenu": "White Magic",
+  "target": {
+   "confirmed": true,
+   "target": "evrae",
+   "wanted": "evrae",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 288,
+    "actor": "rikku",
+    "did": "Reflect",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 30,
+  "ms": 134426,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:17459/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 292,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 31,
+  "ms": 138040,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:17459/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 299,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 32,
+  "ms": 141420,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Kimahri",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Kimahri",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:17459/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 33,
+  "ms": 145611,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Lancet",
+   "target": "Evrae",
+   "menu": "Special"
+  },
+  "took": "Lancet (one-item group, direct)",
+  "viaMenu": "Special",
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 308,
+    "actor": "kimahri",
+    "did": "Lancet",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 34,
+  "ms": 148758,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:17371/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 314,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 35,
+  "ms": 153763,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Wakka",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:976/1265",
+   "wakka:1335/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:838/1250",
+   "evrae:16518/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 334,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 36,
+  "ms": 157002,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Lancet",
+   "target": "Evrae",
+   "menu": "Special"
+  },
+  "took": "Lancet (one-item group, direct)",
+  "viaMenu": "Special",
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 339,
+    "actor": "kimahri",
+    "did": "Lancet",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 37,
+  "ms": 160158,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:976/1265",
+   "wakka:1335/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:929/1250",
+   "evrae:16427/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 345,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 38,
+  "ms": 162091,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:976/1265",
+   "wakka:1335/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:929/1250",
+   "evrae:15577/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 350,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 39,
+  "ms": 163751,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Lancet",
+   "target": "Evrae",
+   "menu": "Special"
+  },
+  "took": "Lancet (one-item group, direct)",
+  "viaMenu": "Special",
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 354,
+    "actor": "kimahri",
+    "did": "Lancet",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 40,
+  "ms": 166908,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:976/1265",
+   "wakka:1335/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1015/1250",
+   "evrae:14644/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 360,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 41,
+  "ms": 173066,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:874/1265",
+   "wakka:952/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:704/1250",
+   "evrae:14644/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 379,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 42,
+  "ms": 174729,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:874/1265",
+   "wakka:952/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:704/1250",
+   "evrae:13855/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 383,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 43,
+  "ms": 177556,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Lancet",
+   "target": "Evrae",
+   "menu": "Special"
+  },
+  "took": "Lancet (one-item group, direct)",
+  "viaMenu": "Special",
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 387,
+    "actor": "kimahri",
+    "did": "Lancet",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 44,
+  "ms": 180733,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:874/1265",
+   "wakka:952/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:788/1250",
+   "evrae:13771/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 393,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 45,
+  "ms": 182396,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:874/1265",
+   "wakka:952/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:788/1250",
+   "evrae:12898/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 398,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 46,
+  "ms": 185226,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:874/1265",
+   "wakka:952/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:788/1250",
+   "evrae:12898/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 402,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 47,
+  "ms": 186879,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Lancet",
+   "target": "Evrae",
+   "menu": "Special"
+  },
+  "took": "Lancet (one-item group, direct)",
+  "viaMenu": "Special",
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 406,
+    "actor": "kimahri",
+    "did": "Lancet",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 48,
+  "ms": 190064,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:874/1265",
+   "wakka:952/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:883/1250",
+   "evrae:11096/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 412,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 49,
+  "ms": 192884,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:874/1265",
+   "wakka:952/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:883/1250",
+   "evrae:11096/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 416,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 50,
+  "ms": 204920,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:0/1265",
+   "wakka:952/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:390/1250",
+   "evrae:10285/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 437,
+    "actor": "wakka",
+    "did": "Phoenix Down",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 51,
+  "ms": 208567,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:632/1265",
+   "wakka:952/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:390/1250",
+   "evrae:10285/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 444,
+    "actor": "kimahri",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 52,
+  "ms": 212376,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Dark Buster",
+   "target": "Evrae",
+   "menu": "Special"
+  },
+  "took": "Dark Buster",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:10285/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 453,
+    "actor": "wakka",
+    "did": "Dark Buster",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 53,
+  "ms": 216744,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:9448/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 460,
+    "actor": "kimahri",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 54,
+  "ms": 218408,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:8976/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 464,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 55,
+  "ms": 221671,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Element Reels",
+   "target": "all enemies",
+   "menu": "Overdrive"
+  },
+  "took": "Element Reels (picker opened)",
+  "viaMenu": "Overdrive",
+  "target": {
+   "confirmed": false,
+   "picker": true
+  },
+  "engineDid": [
+   {
+    "seq": 470,
+    "actor": "wakka",
+    "did": "Power Shot",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 56,
+  "ms": 238572,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:7140/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 476,
+    "actor": "kimahri",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 57,
+  "ms": 240236,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:6639/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 480,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 58,
+  "ms": 243210,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:6639/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 484,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 59,
+  "ms": 252454,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:5798/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 495,
+    "actor": "kimahri",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 60,
+  "ms": 254101,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Pull back",
+   "target": null,
+   "menu": "Orders"
+  },
+  "took": "Pull back",
+  "viaMenu": "Orders",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:5291/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 499,
+    "actor": "tidus",
+    "did": "Pull back",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 61,
+  "ms": 256502,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Dark Buster",
+   "target": "Evrae",
+   "menu": "Special"
+  },
+  "took": "Dark Buster",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:5291/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 504,
+    "actor": "wakka",
+    "did": "Dark Buster",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 62,
+  "ms": 261705,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Potion",
+   "target": "Kimahri",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:4425/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 513,
+    "actor": "kimahri",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 63,
+  "ms": 265107,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Aim",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Aim",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:4425/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 519,
+    "actor": "wakka",
+    "did": "Aim",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 64,
+  "ms": 269014,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Potion",
+   "target": "Kimahri",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:4425/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 525,
+    "actor": "kimahri",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 65,
+  "ms": 272439,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:4425/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 531,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 66,
+  "ms": 275279,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Aim",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Aim",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:4425/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 535,
+    "actor": "wakka",
+    "did": "Aim",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 67,
+  "ms": 279230,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Potion",
+   "target": "Kimahri",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:4425/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 541,
+    "actor": "kimahri",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 68,
+  "ms": 287177,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "wakka:1430/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:1250/1250",
+   "evrae:4425/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 554,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 69,
+  "ms": 290527,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:698/1265",
+   "wakka:981/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:840/1250",
+   "evrae:3597/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 566,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 70,
+  "ms": 294986,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:698/1265",
+   "wakka:981/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:840/1250",
+   "evrae:3597/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 570,
+    "actor": "kimahri",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 71,
+  "ms": 296651,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Dark Buster",
+   "target": "Evrae",
+   "menu": "Special"
+  },
+  "took": "Dark Buster",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:698/1265",
+   "wakka:981/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:840/1250",
+   "evrae:3096/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 575,
+    "actor": "wakka",
+    "did": "Dark Buster",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 72,
+  "ms": 301046,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:698/1265",
+   "wakka:981/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:840/1250",
+   "evrae:2310/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 583,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "wakka",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 73,
+  "ms": 304024,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:698/1265",
+   "wakka:981/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:840/1250",
+   "evrae:2310/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 587,
+    "actor": "kimahri",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 74,
+  "ms": 305702,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:698/1265",
+   "wakka:981/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:840/1250",
+   "evrae:1819/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 592,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "evrae"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 75,
+  "ms": 307546,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:698/1265",
+   "wakka:981/1430",
+   "rikku:680/880",
+   "lulu:700/700",
+   "auron:2000/2000",
+   "kimahri:840/1250",
+   "evrae:1174/32000",
+   "cid:410/410"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

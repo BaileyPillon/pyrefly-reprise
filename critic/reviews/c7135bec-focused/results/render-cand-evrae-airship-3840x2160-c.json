@@ -1,0 +1,743 @@
+{
+ "name": "render-cand-evrae-airship-3840x2160-c",
+ "chapter": "evrae-airship",
+ "size": "3840x2160",
+ "which": "cand",
+ "base": "http://127.0.0.1:5461/",
+ "query": "coach=off",
+ "hooks": [
+  "setSeed(1) before the first key",
+  "?coach=off (UI toggle)"
+ ],
+ "log": [],
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "env": {
+  "inner": "3840x2160",
+  "dpr": 1,
+  "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessC"
+ },
+ "titleCrisp": {
+  "rung": "fplus",
+  "pinned": false,
+  "cfg": {
+   "ss": 2,
+   "ssRing": 0.5,
+   "cas": 0.3,
+   "casSharp": 0.5,
+   "casFloor": 0.05,
+   "aaPre": false,
+   "aa": null
+  },
+  "class": "high",
+  "tier": "full",
+  "ssEffective": 1,
+  "simulatedMs": 0,
+  "governor": {
+   "rung": "fplus",
+   "budgetMs": 22,
+   "pending": 0,
+   "windows": []
+  },
+  "passes": [
+   "0:scene",
+   "1:scene-msaa(off)",
+   "2:ssaa(off)",
+   "3:bloom",
+   "4:TiltShiftShader",
+   "5:TiltShiftShader",
+   "6:cas(off)",
+   "7:grade"
+  ]
+ },
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card evrae-airship by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "crisp": {
+  "rung": "fplus",
+  "pinned": false,
+  "cfg": {
+   "ss": 2,
+   "ssRing": 0.5,
+   "cas": 0.3,
+   "casSharp": 0.5,
+   "casFloor": 0.05,
+   "aaPre": false,
+   "aa": null
+  },
+  "class": "high",
+  "tier": "full",
+  "ssEffective": 2,
+  "simulatedMs": 0,
+  "governor": {
+   "rung": "fplus",
+   "budgetMs": 22,
+   "pending": 83,
+   "windows": [
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 116,
+     "stepped": false
+    }
+   ]
+  },
+  "passes": [
+   "0:scene(off)",
+   "1:scene-msaa(off)",
+   "2:ssaa",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas",
+   "8:grade",
+   "9:SpectacleShader(off)"
+  ]
+ },
+ "art": {
+  "device": "high",
+  "budget": {
+   "cls": "high",
+   "maxScale": 4,
+   "backdropScale": 2,
+   "textureMB": 2600,
+   "groundPx": 4096,
+   "deckPx": 4096,
+   "bandPx": 4096,
+   "deckDetail": 3,
+   "aa": "off",
+   "msaaSamples": 4
+  },
+  "bufferWidth": 3840,
+  "pinned": null,
+  "aa": "off",
+  "governor": {
+   "frame": 258,
+   "upgrades": 29,
+   "downgrades": 0,
+   "loadFailures": 0,
+   "inflight": 0,
+   "queued": 0,
+   "residentMB": 64.3,
+   "budgetMB": 2600,
+   "lastSwapMs": 0,
+   "updateMs": 0.038,
+   "entries": [
+    {
+     "url": "/art/characters/tidus/idle.webp",
+     "scale": 2,
+     "mb": 16.8,
+     "px1x": 0.67,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/ready.webp",
+     "scale": 2,
+     "mb": 10.5,
+     "px1x": 0.86,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/tidus/attack.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/cast.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/item.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/hurt.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/ko.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/victory.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/sleep.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/critical.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/follow.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/od-energy-rain.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/od-slice-and-dice.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/wakka/idle.webp",
+     "scale": 1,
+     "mb": 4.1,
+     "px1x": 0.47,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/wakka/ready.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/wakka/attack.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/wakka/cast.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/wakka/item.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/wakka/hurt.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/wakka/ko.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/wakka/victory.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/wakka/sleep.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/wakka/critical.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/wakka/follow.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku/idle.webp",
+     "scale": 2,
+     "mb": 14.8,
+     "px1x": 0.49,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/rikku/ready.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku/attack.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku/cast.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku/item.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku/hurt.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku/ko.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku/victory.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku/sleep.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku/critical.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku/follow.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/evrae/idle.png",
+     "scale": 2,
+     "mb": 18.1,
+     "px1x": 1.31,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/evrae/attack.png",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/evrae/hurt.png",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/evrae/hurt.png",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/evrae/idle.png",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    }
+   ],
+   "trace": [
+    {
+     "frame": 2,
+     "why": "live",
+     "url": "/art/characters/evrae/idle.png",
+     "from": 1,
+     "want": 2,
+     "px1x": 1.35
+    },
+    {
+     "frame": 3,
+     "why": "sibling",
+     "url": "/art/characters/evrae/attack.png",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 6,
+     "why": "sibling",
+     "url": "/art/characters/evrae/hurt.png",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 7,
+     "why": "sibling",
+     "url": "/art/characters/evrae/hurt.png",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 10,
+     "why": "sibling",
+     "url": "/art/characters/evrae/idle.png",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 39,
+     "why": "anticipated",
+     "url": "/art/characters/tidus/idle.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 1.04
+    },
+    {
+     "frame": 39,
+     "why": "size",
+     "url": "/art/characters/rikku/idle.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 1.49
+    },
+    {
+     "frame": 42,
+     "why": "sibling",
+     "url": "/art/characters/tidus/ready.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 43,
+     "why": "sibling",
+     "url": "/art/characters/tidus/attack.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 46,
+     "why": "sibling",
+     "url": "/art/characters/tidus/cast.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 48,
+     "why": "sibling",
+     "url": "/art/characters/tidus/item.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 49,
+     "why": "sibling",
+     "url": "/art/characters/tidus/hurt.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 52,
+     "why": "sibling",
+     "url": "/art/characters/tidus/ko.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 53,
+     "why": "sibling",
+     "url": "/art/characters/tidus/victory.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 54,
+     "why": "sibling",
+     "url": "/art/characters/tidus/sleep.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 55,
+     "why": "sibling",
+     "url": "/art/characters/tidus/critical.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 56,
+     "why": "sibling",
+     "url": "/art/characters/tidus/follow.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 57,
+     "why": "sibling",
+     "url": "/art/characters/tidus/od-energy-rain.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 58,
+     "why": "sibling",
+     "url": "/art/characters/tidus/od-slice-and-dice.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 61,
+     "why": "sibling",
+     "url": "/art/characters/rikku/ready.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 62,
+     "why": "sibling",
+     "url": "/art/characters/rikku/attack.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 63,
+     "why": "sibling",
+     "url": "/art/characters/rikku/cast.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 65,
+     "why": "sibling",
+     "url": "/art/characters/rikku/item.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 66,
+     "why": "sibling",
+     "url": "/art/characters/rikku/hurt.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 67,
+     "why": "sibling",
+     "url": "/art/characters/rikku/ko.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 68,
+     "why": "sibling",
+     "url": "/art/characters/rikku/victory.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 69,
+     "why": "sibling",
+     "url": "/art/characters/rikku/sleep.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 70,
+     "why": "sibling",
+     "url": "/art/characters/rikku/critical.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 71,
+     "why": "sibling",
+     "url": "/art/characters/rikku/follow.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    }
+   ]
+  }
+ },
+ "fps": {
+  "frames": 240,
+  "medianMs": 16.7,
+  "p95Ms": 16.8,
+  "maxMs": 16.8,
+  "fps": 59.9
+ },
+ "canvas": {
+  "w": 3840,
+  "h": 2160,
+  "cssW": 3840,
+  "cssH": 2160
+ },
+ "audit": {
+  "artResponses": 220,
+  "status": {
+   "200": 220
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 27,
+  "tiers": {
+   "x2": 27,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "artFiles": 175,
+ "hiRes": [
+  "/art/characters/evrae/idle%402x.png",
+  "/art/characters/evrae/attack%402x.png",
+  "/art/characters/evrae/hurt%402x.png",
+  "/art/characters/tidus/idle%402x.png",
+  "/art/characters/rikku/idle%402x.png",
+  "/art/characters/tidus/ready%402x.png",
+  "/art/characters/tidus/attack%402x.png",
+  "/art/characters/tidus/cast%402x.png",
+  "/art/characters/tidus/item%402x.png",
+  "/art/characters/tidus/hurt%402x.png",
+  "/art/characters/tidus/ko%402x.png",
+  "/art/characters/tidus/victory%402x.png",
+  "/art/characters/tidus/sleep%402x.png",
+  "/art/characters/tidus/critical%402x.png",
+  "/art/characters/tidus/follow%402x.png",
+  "/art/characters/tidus/od-energy-rain%402x.png",
+  "/art/characters/tidus/od-slice-and-dice%402x.png",
+  "/art/characters/rikku/ready%402x.png",
+  "/art/characters/rikku/attack%402x.png",
+  "/art/characters/rikku/cast%402x.png",
+  "/art/characters/rikku/item%402x.png",
+  "/art/characters/rikku/hurt%402x.png",
+  "/art/characters/rikku/ko%402x.png",
+  "/art/characters/rikku/victory%402x.png",
+  "/art/characters/rikku/sleep%402x.png",
+  "/art/characters/rikku/critical%402x.png",
+  "/art/characters/rikku/follow%402x.png"
+ ],
+ "hiResCount": 27,
+ "sampleHiRes": [
+  "/art/characters/evrae/idle%402x.png",
+  "/art/characters/evrae/attack%402x.png",
+  "/art/characters/evrae/hurt%402x.png",
+  "/art/characters/tidus/idle%402x.png",
+  "/art/characters/rikku/idle%402x.png",
+  "/art/characters/tidus/ready%402x.png",
+  "/art/characters/tidus/attack%402x.png",
+  "/art/characters/tidus/cast%402x.png",
+  "/art/characters/tidus/item%402x.png",
+  "/art/characters/tidus/hurt%402x.png",
+  "/art/characters/tidus/ko%402x.png",
+  "/art/characters/tidus/victory%402x.png",
+  "/art/characters/tidus/sleep%402x.png",
+  "/art/characters/tidus/critical%402x.png",
+  "/art/characters/tidus/follow%402x.png",
+  "/art/characters/tidus/od-energy-rain%402x.png",
+  "/art/characters/tidus/od-slice-and-dice%402x.png",
+  "/art/characters/rikku/ready%402x.png",
+  "/art/characters/rikku/attack%402x.png",
+  "/art/characters/rikku/cast%402x.png",
+  "/art/characters/rikku/item%402x.png",
+  "/art/characters/rikku/hurt%402x.png",
+  "/art/characters/rikku/ko%402x.png",
+  "/art/characters/rikku/victory%402x.png",
+  "/art/characters/rikku/sleep%402x.png",
+  "/art/characters/rikku/critical%402x.png",
+  "/art/characters/rikku/follow%402x.png"
+ ],
+ "responsesNon2xx": [],
+ "aborted": -1,
+ "screenshotNote": "JPEG of the page at the first command menu",
+ "warns": [],
+ "consoleErrors": [],
+ "notFound": []
+}

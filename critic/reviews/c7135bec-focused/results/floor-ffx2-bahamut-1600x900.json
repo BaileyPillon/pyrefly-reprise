@@ -1,0 +1,82 @@
+{
+ "name": "floor-ffx2-bahamut-1600x900",
+ "chapter": "ffx2-bahamut",
+ "size": "1600x900",
+ "touch": false,
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off"
+ ],
+ "steps": [
+  {
+   "label": "first menu",
+   "minPx": 14,
+   "nTexts": 101,
+   "under14": [],
+   "under14Count": 0,
+   "od": {
+    "W": 1600,
+    "bars": 0,
+    "maxRight": null,
+    "inside": null,
+    "hang": null
+   }
+  }
+ ],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card ffx2-bahamut by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "attackChosen": null,
+ "targets": {
+  "n": 0,
+  "lit": 0,
+  "selecting": false
+ },
+ "pauseTabs": [
+  {
+   "tab": "Yuna",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Rikku",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Paine",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Chapter",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Guide",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Options",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Controls",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Music",
+   "minPx": 14,
+   "under14": 0
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -1,0 +1,104 @@
+{
+ "name": "floor-seymour-flux-390x844-touch",
+ "chapter": "seymour-flux",
+ "size": "390x844",
+ "touch": true,
+ "hooks": [
+  "gotoChapter navigation + real taps",
+  "?coach=off"
+ ],
+ "steps": [
+  {
+   "label": "first menu",
+   "minPx": 14,
+   "nTexts": 40,
+   "under14": [],
+   "under14Count": 0,
+   "od": {
+    "W": 390,
+    "bars": 3,
+    "maxRight": 374,
+    "inside": true,
+    "hang": null
+   }
+  },
+  {
+   "label": "Attack target step",
+   "minPx": 14,
+   "nTexts": 34,
+   "under14": [],
+   "under14Count": 0,
+   "od": {
+    "W": 390,
+    "bars": 3,
+    "maxRight": 374,
+    "inside": true,
+    "hang": null
+   }
+  },
+  {
+   "label": "target cursor moved",
+   "minPx": 14,
+   "nTexts": 34,
+   "under14": [],
+   "under14Count": 0,
+   "od": {
+    "W": 390,
+    "bars": 3,
+    "maxRight": 374,
+    "inside": true,
+    "hang": null
+   }
+  }
+ ],
+ "attackChosen": "Attack",
+ "targets": {
+  "n": 2,
+  "lit": 1,
+  "selecting": true
+ },
+ "pauseTabs": [
+  {
+   "tab": "Tidus",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Yuna",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Kimahri",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Chapter",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Guide",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Options",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Controls",
+   "minPx": 14,
+   "under14": 0
+  },
+  {
+   "tab": "Music",
+   "minPx": 14,
+   "under14": 0
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

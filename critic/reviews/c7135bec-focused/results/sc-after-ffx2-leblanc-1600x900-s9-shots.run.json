@@ -1,0 +1,631 @@
+{
+ "tag": "sc-after-ffx2-leblanc-1600x900-s9-shots",
+ "which": "after",
+ "chapter": "ffx2-leblanc",
+ "size": "1600x900",
+ "seed": 9,
+ "delayArt": 0,
+ "throttle": 1,
+ "touch": false,
+ "mode": "gpu",
+ "changes": [
+  {
+   "n": 0,
+   "actor": "rikku",
+   "real": true,
+   "rowsNow": [
+    {
+     "t": "BLACK MAGE GRANTS: RED",
+     "sel": false
+    },
+    {
+     "t": "WHITE MAGE",
+     "sel": true
+    }
+   ],
+   "changeAfterPressMs": 8,
+   "badFrames": 0,
+   "badIds": [],
+   "keysFirstT": 100,
+   "keysLastT": 750,
+   "keyNames": [
+    "twirl-start",
+    "twirl-going",
+    "twirl-mid",
+    "twirl-forming",
+    "twirl-end"
+   ],
+   "colFirstT": null,
+   "colLastT": null,
+   "colDrawnBeforeTwirl": false,
+   "colBeforeFrames": 0,
+   "colBeforeMs": 0,
+   "colBeforeFirstT": null,
+   "colMaxOpBeforeTwirl": 0,
+   "twirlClassFirstT": 100,
+   "shot": true,
+   "shotKind": "full",
+   "shotT0": 100,
+   "shotT1": 1717,
+   "shotMs": 1617,
+   "menuDuringShot": false,
+   "coachShownInShot": 0,
+   "enemyInside": 0,
+   "decisions": [
+    {
+     "who": "rikku",
+     "outcome": "full",
+     "gate": null,
+     "waitedMs": 0,
+     "searches": 1,
+     "note": "sc rikku f0.45 x0.5 y0.6 t0 yuna-gunner:1.00/0.00 rikku-thief:1.00/0.00 paine-warrior:1.00/0.00 ormi:1.00/0.00 ffx2-dr-g"
+    }
+   ],
+   "lastTry": "sc rikku f0.45 x0.5 y0.6 t0 yuna-gunner:1.00/0.00 rikku-thief:1.00/0.00 paine-warrior:1.00/0.00 ormi:1.00/0.00 ffx2-dr-goon:1.00/0.00 ffx2-fem-goon:1.00/0.13",
+   "skippedDelta": 0,
+   "twirlDelta": {
+    "changes": 1,
+    "played": 1,
+    "late": 0,
+    "ghost": 0.12
+   },
+   "frameDt": {
+    "n": 202,
+    "p50": 16.7,
+    "p95": 16.7,
+    "max": 66.7
+   },
+   "engine": [
+    {
+     "seq": 9,
+     "type": "spherechange",
+     "actor": "rikku",
+     "side": "party",
+     "ability": null
+    },
+    {
+     "seq": 14,
+     "type": "action-start",
+     "actor": "fem-goon",
+     "side": "enemy",
+     "ability": "Thunder"
+    },
+    {
+     "seq": 18,
+     "type": "action-start",
+     "actor": "dr-goon",
+     "side": "enemy",
+     "ability": "Strike"
+    }
+   ],
+   "frames": [
+    {
+     "f": "f000-2.jpg",
+     "ms": 2
+    },
+    {
+     "f": "f001-46.jpg",
+     "ms": 46
+    },
+    {
+     "f": "f002-96.jpg",
+     "ms": 96
+    },
+    {
+     "f": "f003-247.jpg",
+     "ms": 247
+    },
+    {
+     "f": "f004-312.jpg",
+     "ms": 312
+    },
+    {
+     "f": "f005-364.jpg",
+     "ms": 364
+    },
+    {
+     "f": "f006-414.jpg",
+     "ms": 414
+    },
+    {
+     "f": "f007-462.jpg",
+     "ms": 462
+    },
+    {
+     "f": "f008-515.jpg",
+     "ms": 515
+    },
+    {
+     "f": "f009-562.jpg",
+     "ms": 562
+    },
+    {
+     "f": "f010-616.jpg",
+     "ms": 616
+    },
+    {
+     "f": "f011-659.jpg",
+     "ms": 659
+    },
+    {
+     "f": "f012-709.jpg",
+     "ms": 709
+    },
+    {
+     "f": "f013-758.jpg",
+     "ms": 758
+    },
+    {
+     "f": "f014-820.jpg",
+     "ms": 820
+    },
+    {
+     "f": "f015-901.jpg",
+     "ms": 901
+    },
+    {
+     "f": "f016-946.jpg",
+     "ms": 946
+    },
+    {
+     "f": "f017-996.jpg",
+     "ms": 996
+    },
+    {
+     "f": "f018-1043.jpg",
+     "ms": 1043
+    },
+    {
+     "f": "f019-1092.jpg",
+     "ms": 1092
+    },
+    {
+     "f": "f020-1143.jpg",
+     "ms": 1143
+    },
+    {
+     "f": "f021-1197.jpg",
+     "ms": 1197
+    },
+    {
+     "f": "f022-1247.jpg",
+     "ms": 1247
+    },
+    {
+     "f": "f023-1296.jpg",
+     "ms": 1296
+    },
+    {
+     "f": "f024-1342.jpg",
+     "ms": 1342
+    },
+    {
+     "f": "f025-1393.jpg",
+     "ms": 1393
+    },
+    {
+     "f": "f026-1445.jpg",
+     "ms": 1445
+    },
+    {
+     "f": "f027-1498.jpg",
+     "ms": 1498
+    },
+    {
+     "f": "f028-1547.jpg",
+     "ms": 1547
+    },
+    {
+     "f": "f029-1592.jpg",
+     "ms": 1592
+    },
+    {
+     "f": "f030-1645.jpg",
+     "ms": 1645
+    },
+    {
+     "f": "f031-1692.jpg",
+     "ms": 1692
+    },
+    {
+     "f": "f032-1745.jpg",
+     "ms": 1745
+    }
+   ],
+   "timeline": [
+    {
+     "t": 0,
+     "shot": "master",
+     "keys": null,
+     "tw": false,
+     "col": 0,
+     "menu": false
+    },
+    {
+     "t": 100,
+     "shot": "sc",
+     "keys": "twirl-start",
+     "tw": true,
+     "col": 0,
+     "menu": false
+    },
+    {
+     "t": 233,
+     "shot": "sc",
+     "keys": "twirl-going",
+     "tw": true,
+     "col": 0,
+     "menu": false
+    },
+    {
+     "t": 333,
+     "shot": "sc",
+     "keys": "twirl-mid",
+     "tw": true,
+     "col": 0,
+     "menu": false
+    },
+    {
+     "t": 500,
+     "shot": "sc",
+     "keys": "twirl-forming",
+     "tw": true,
+     "col": 0,
+     "menu": false
+    },
+    {
+     "t": 600,
+     "shot": "sc",
+     "keys": "twirl-end",
+     "tw": true,
+     "col": 0,
+     "menu": false
+    },
+    {
+     "t": 767,
+     "shot": "sc",
+     "keys": null,
+     "tw": false,
+     "col": 0,
+     "menu": false
+    },
+    {
+     "t": 1733,
+     "shot": "master",
+     "keys": null,
+     "tw": false,
+     "col": 0,
+     "menu": false
+    }
+   ],
+   "camSamples": [
+    {
+     "t": 0,
+     "cam": [
+      0.348,
+      2.843,
+      9.411
+     ],
+     "fov": 32
+    },
+    {
+     "t": 100,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 250,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 350,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 450,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 550,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 650,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 750,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 883,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 983,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 1083,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 1183,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 1283,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 1383,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 1483,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 1583,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 1683,
+     "cam": [
+      -0.401,
+      0.879,
+      6.468
+     ],
+     "fov": 32
+    },
+    {
+     "t": 1783,
+     "cam": [
+      0.328,
+      2.732,
+      9.492
+     ],
+     "fov": 32
+    },
+    {
+     "t": 1883,
+     "cam": [
+      0.325,
+      2.726,
+      9.496
+     ],
+     "fov": 32
+    },
+    {
+     "t": 1983,
+     "cam": [
+      0.264,
+      2.727,
+      9.476
+     ],
+     "fov": 32
+    },
+    {
+     "t": 2083,
+     "cam": [
+      0.077,
+      2.742,
+      9.386
+     ],
+     "fov": 32
+    },
+    {
+     "t": 2183,
+     "cam": [
+      0.006,
+      2.732,
+      9.29
+     ],
+     "fov": 32
+    },
+    {
+     "t": 2283,
+     "cam": [
+      0.031,
+      2.702,
+      9.199
+     ],
+     "fov": 32
+    },
+    {
+     "t": 2383,
+     "cam": [
+      0.056,
+      2.672,
+      9.098
+     ],
+     "fov": 32
+    },
+    {
+     "t": 2483,
+     "cam": [
+      0.076,
+      2.646,
+      9.001
+     ],
+     "fov": 32
+    },
+    {
+     "t": 2583,
+     "cam": [
+      0.088,
+      2.631,
+      8.931
+     ],
+     "fov": 32
+    },
+    {
+     "t": 2683,
+     "cam": [
+      0.089,
+      2.626,
+      8.892
+     ],
+     "fov": 32
+    },
+    {
+     "t": 2783,
+     "cam": [
+      0.09,
+      2.623,
+      8.865
+     ],
+     "fov": 32
+    },
+    {
+     "t": 2883,
+     "cam": [
+      0.088,
+      2.623,
+      8.866
+     ],
+     "fov": 32
+    },
+    {
+     "t": 2983,
+     "cam": [
+      0.085,
+      2.625,
+      8.875
+     ],
+     "fov": 32
+    },
+    {
+     "t": 3083,
+     "cam": [
+      0.084,
+      2.624,
+      8.873
+     ],
+     "fov": 32
+    },
+    {
+     "t": 3183,
+     "cam": [
+      0.084,
+      2.624,
+      8.87
+     ],
+     "fov": 32
+    },
+    {
+     "t": 3283,
+     "cam": [
+      0.083,
+      2.623,
+      8.866
+     ],
+     "fov": 32
+    },
+    {
+     "t": 3383,
+     "cam": [
+      0.083,
+      2.622,
+      8.862
+     ],
+     "fov": 32
+    }
+   ]
+  }
+ ],
+ "walk": [
+  "setSeed(9) before the first key",
+  "board card ffx2-leblanc by arrow keys",
+  "party prep confirmed",
+  "scene skipped by held Enter x1",
+  "first menu"
+ ],
+ "fight": {
+  "end": "onTick",
+  "turns": 1,
+  "picks": []
+ },
+ "close": {
+  "consoleErrors": [],
+  "consoleErrorCount": 0,
+  "warnCount": 0,
+  "warns": [],
+  "notFound": [],
+  "notFoundCount": 0
+ }
+}

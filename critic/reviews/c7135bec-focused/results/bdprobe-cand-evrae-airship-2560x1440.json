@@ -1,0 +1,95 @@
+{
+ "name": "bdprobe-cand-evrae-airship-2560x1440",
+ "chapter": "evrae-airship",
+ "size": "2560x1440",
+ "which": "cand",
+ "meshes": [
+  {
+   "name": "backdrop-painting",
+   "w": 2688,
+   "h": 1536,
+   "src": "/art/backdrops/evrae-airship-deck.webp",
+   "kind": "HTMLImageElement",
+   "visible": true,
+   "parent": "backdrop"
+  },
+  {
+   "name": "deck",
+   "w": 3072,
+   "h": 6144,
+   "src": "",
+   "kind": "HTMLCanvasElement",
+   "visible": true,
+   "parent": "airship-deck"
+  },
+  {
+   "name": "deck-lettering",
+   "w": 3072,
+   "h": 960,
+   "src": "",
+   "kind": "HTMLCanvasElement",
+   "visible": true,
+   "parent": "airship-deck"
+  },
+  {
+   "name": "Mesh",
+   "w": 2272,
+   "h": 1568,
+   "src": "/art/characters/evrae/idle%402x.png",
+   "kind": "HTMLImageElement",
+   "visible": true,
+   "parent": ""
+  },
+  {
+   "name": "Mesh",
+   "w": 2272,
+   "h": 1568,
+   "src": "/art/characters/evrae/idle%402x.png",
+   "kind": "HTMLImageElement",
+   "visible": false,
+   "parent": ""
+  }
+ ],
+ "artReq": [
+  "/art/backdrops/zanarkand-dome.webp",
+  "/art/backdrops/dreams-end.webp",
+  "/art/backdrops/macalania-temple.webp",
+  "/art/backdrops/evrae-airship-deck.webp",
+  "/art/backdrops/cavern-stolen-fayth.webp",
+  "/art/backdrops/bevelle-highbridge.webp",
+  "/art/backdrops/garden-of-pain.webp",
+  "/art/backdrops/via-purifico.webp",
+  "/art/backdrops/sin-fahrenheit-flight.webp",
+  "/art/backdrops/sin-fahrenheit-bevelle.webp",
+  "/art/backdrops/bevelle-underground.webp",
+  "/art/backdrops/farplane.webp",
+  "/art/backdrops/leblanc-last-room.webp",
+  "/art/backdrops/road-to-the-farplane.webp",
+  "/art/backdrops/via-infinito.webp",
+  "/art/backdrops/den-of-woe.webp",
+  "/art/backdrops/djose-chamber-provisional.webp",
+  "/art/backdrops/evrae-airship-deck.json"
+ ],
+ "fxReq": [],
+ "audit": {
+  "artResponses": 197,
+  "status": {
+   "200": 196,
+   "304": 1
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 3,
+  "tiers": {
+   "x2": 3,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "warns": [],
+ "consoleErrors": []
+}

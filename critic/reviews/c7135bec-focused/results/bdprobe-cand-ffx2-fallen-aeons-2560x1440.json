@@ -1,0 +1,96 @@
+{
+ "name": "bdprobe-cand-ffx2-fallen-aeons-2560x1440",
+ "chapter": "ffx2-fallen-aeons",
+ "size": "2560x1440",
+ "which": "cand",
+ "meshes": [
+  {
+   "name": "backdrop-painting",
+   "w": 2688,
+   "h": 1536,
+   "src": "/art/backdrops/road-to-the-farplane.webp",
+   "kind": "HTMLImageElement",
+   "visible": true,
+   "parent": "backdrop"
+  },
+  {
+   "name": "backdrop-layer-0",
+   "w": 2688,
+   "h": 1536,
+   "src": "",
+   "kind": "HTMLCanvasElement",
+   "visible": true,
+   "parent": "backdrop"
+  },
+  {
+   "name": "backdrop-layer-skirt",
+   "w": 2688,
+   "h": 1536,
+   "src": "/art/backdrops/road-to-the-farplane.webp",
+   "kind": "HTMLImageElement",
+   "visible": true,
+   "parent": "backdrop"
+  },
+  {
+   "name": "backdrop-painting",
+   "w": 2688,
+   "h": 1536,
+   "src": "/art/backdrops/road-to-the-farplane-links.webp",
+   "kind": "HTMLImageElement",
+   "visible": true,
+   "parent": "backdrop"
+  },
+  {
+   "name": "backdrop-layer-skirt",
+   "w": 2688,
+   "h": 1536,
+   "src": "/art/backdrops/road-to-the-farplane-links.webp",
+   "kind": "HTMLImageElement",
+   "visible": true,
+   "parent": "backdrop"
+  }
+ ],
+ "artReq": [
+  "/art/backdrops/zanarkand-dome.webp",
+  "/art/backdrops/dreams-end.webp",
+  "/art/backdrops/macalania-temple.webp",
+  "/art/backdrops/evrae-airship-deck.webp",
+  "/art/backdrops/cavern-stolen-fayth.webp",
+  "/art/backdrops/bevelle-highbridge.webp",
+  "/art/backdrops/garden-of-pain.webp",
+  "/art/backdrops/via-purifico.webp",
+  "/art/backdrops/sin-fahrenheit-flight.webp",
+  "/art/backdrops/sin-fahrenheit-bevelle.webp",
+  "/art/backdrops/bevelle-underground.webp",
+  "/art/backdrops/farplane.webp",
+  "/art/backdrops/leblanc-last-room.webp",
+  "/art/backdrops/road-to-the-farplane.webp",
+  "/art/backdrops/via-infinito.webp",
+  "/art/backdrops/den-of-woe.webp",
+  "/art/backdrops/djose-chamber-provisional.webp",
+  "/art/backdrops/road-to-the-farplane.json",
+  "/art/backdrops/road-to-the-farplane-links.json",
+  "/art/backdrops/road-to-the-farplane-links.webp"
+ ],
+ "fxReq": [],
+ "audit": {
+  "artResponses": 206,
+  "status": {
+   "200": 206
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 8,
+  "tiers": {
+   "x2": 8,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "warns": [],
+ "consoleErrors": []
+}

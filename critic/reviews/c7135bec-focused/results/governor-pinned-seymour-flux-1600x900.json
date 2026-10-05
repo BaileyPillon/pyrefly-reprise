@@ -1,0 +1,280 @@
+{
+ "name": "governor-pinned-seymour-flux-1600x900",
+ "mode": "pinned",
+ "chapter": "seymour-flux",
+ "size": "1600x900",
+ "query": "coach=off&crisp=fplus",
+ "hooks": [
+  "setSeed(1) before the first key",
+  "?coach=off",
+  "crisp.simulate (QA seam)"
+ ],
+ "series": [
+  {
+   "label": "first menu",
+   "t": 15400,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+1s",
+   "t": 16476,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+2s",
+   "t": 17489,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+3s",
+   "t": 18500,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+4s",
+   "t": 19505,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+5s",
+   "t": 20516,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+6s",
+   "t": 21528,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+7s",
+   "t": 22543,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+8s",
+   "t": 23555,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+9s",
+   "t": 24569,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+10s",
+   "t": 25585,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+11s",
+   "t": 26600,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+12s",
+   "t": 27610,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+13s",
+   "t": 28626,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "slow+14s",
+   "t": 29633,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "healthy+1s",
+   "t": 30706,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "healthy+2s",
+   "t": 31715,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "healthy+3s",
+   "t": 32729,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "healthy+4s",
+   "t": 33740,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "healthy+5s",
+   "t": 34755,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "healthy+6s",
+   "t": 35769,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "healthy+7s",
+   "t": 36782,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "healthy+8s",
+   "t": 37788,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "healthy+9s",
+   "t": 38804,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  },
+  {
+   "label": "final",
+   "t": 38805,
+   "rung": "fplus",
+   "pinned": true,
+   "ss": 2,
+   "windows": "[]"
+  }
+ ],
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "t0": 1791180523947,
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card seymour-flux by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "first": {
+  "label": "first menu",
+  "t": 15400,
+  "rung": "fplus",
+  "pinned": true,
+  "class": "high",
+  "tier": "full",
+  "ss": 2,
+  "simulated": 0,
+  "windows": [],
+  "passes": [
+   "0:scene(off)",
+   "1:scene-msaa(off)",
+   "2:ssaa",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas",
+   "8:grade",
+   "9:SpectacleShader(off)"
+  ]
+ },
+ "final": {
+  "label": "final",
+  "t": 38805,
+  "rung": "fplus",
+  "pinned": true,
+  "class": "high",
+  "tier": "full",
+  "ss": 2,
+  "simulated": 0,
+  "windows": [],
+  "passes": [
+   "0:scene(off)",
+   "1:scene-msaa(off)",
+   "2:ssaa",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas",
+   "8:grade",
+   "9:SpectacleShader(off)"
+  ]
+ },
+ "fpsAfter": {
+  "frames": 180,
+  "medianMs": 16.7,
+  "p95Ms": 16.8,
+  "maxMs": 16.8,
+  "fps": 59.9
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "rungSequence": [
+  "fplus"
+ ]
+}

@@ -1,0 +1,489 @@
+{
+ "name": "render-cand-seymour-flux-1600x900-c",
+ "chapter": "seymour-flux",
+ "size": "1600x900",
+ "which": "cand",
+ "base": "http://127.0.0.1:5461/",
+ "query": "coach=off",
+ "hooks": [
+  "setSeed(1) before the first key",
+  "?coach=off (UI toggle)"
+ ],
+ "log": [],
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "env": {
+  "inner": "1600x900",
+  "dpr": 1,
+  "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessC"
+ },
+ "titleCrisp": {
+  "rung": "fplus",
+  "pinned": false,
+  "cfg": {
+   "ss": 2,
+   "ssRing": 0.5,
+   "cas": 0.3,
+   "casSharp": 0.5,
+   "casFloor": 0.05,
+   "aaPre": false,
+   "aa": null
+  },
+  "class": "high",
+  "tier": "full",
+  "ssEffective": 1,
+  "simulatedMs": 0,
+  "governor": {
+   "rung": "fplus",
+   "budgetMs": 22,
+   "pending": 0,
+   "windows": []
+  },
+  "passes": [
+   "0:scene",
+   "1:scene-msaa(off)",
+   "2:ssaa(off)",
+   "3:bloom",
+   "4:TiltShiftShader",
+   "5:TiltShiftShader",
+   "6:cas(off)",
+   "7:grade"
+  ]
+ },
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card seymour-flux by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "crisp": {
+  "rung": "fplus",
+  "pinned": false,
+  "cfg": {
+   "ss": 2,
+   "ssRing": 0.5,
+   "cas": 0.3,
+   "casSharp": 0.5,
+   "casFloor": 0.05,
+   "aaPre": false,
+   "aa": null
+  },
+  "class": "high",
+  "tier": "full",
+  "ssEffective": 2,
+  "simulatedMs": 0,
+  "governor": {
+   "rung": "fplus",
+   "budgetMs": 22,
+   "pending": 74,
+   "windows": [
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    }
+   ]
+  },
+  "passes": [
+   "0:scene(off)",
+   "1:scene-msaa(off)",
+   "2:ssaa",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas",
+   "8:grade",
+   "9:SpectacleShader(off)"
+  ]
+ },
+ "art": {
+  "device": "high",
+  "budget": {
+   "cls": "high",
+   "maxScale": 4,
+   "backdropScale": 2,
+   "textureMB": 2600,
+   "groundPx": 4096,
+   "deckPx": 4096,
+   "bandPx": 4096,
+   "deckDetail": 3,
+   "aa": "off",
+   "msaaSamples": 4
+  },
+  "bufferWidth": 1600,
+  "pinned": null,
+  "aa": "off",
+  "governor": {
+   "frame": 247,
+   "upgrades": 0,
+   "downgrades": 0,
+   "loadFailures": 0,
+   "inflight": 0,
+   "queued": 0,
+   "residentMB": 25.6,
+   "budgetMB": 2600,
+   "lastSwapMs": 0,
+   "updateMs": 0.037,
+   "entries": [
+    {
+     "url": "/art/characters/tidus/idle.webp",
+     "scale": 1,
+     "mb": 4.2,
+     "px1x": 0.33,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/ready.webp",
+     "scale": 1,
+     "mb": 2.6,
+     "px1x": 0.42,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/tidus/attack.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/cast.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/item.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/hurt.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/ko.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/victory.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/sleep.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/critical.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/follow.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/od-energy-rain.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/tidus/od-slice-and-dice.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna/idle.webp",
+     "scale": 1,
+     "mb": 4.4,
+     "px1x": 0.32,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/yuna/ready.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna/attack.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna/cast.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna/item.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna/hurt.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna/ko.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna/victory.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna/sleep.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna/critical.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna/follow.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/kimahri/idle.png",
+     "scale": 1,
+     "mb": 4.7,
+     "px1x": 0.23,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/kimahri/ready.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/kimahri/attack.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/kimahri/cast.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/kimahri/item.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/kimahri/hurt.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/kimahri/ko.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/kimahri/victory.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/kimahri/sleep.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/kimahri/critical.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/kimahri/follow.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/seymour-flux-body/idle.png",
+     "scale": 1,
+     "mb": 4.6,
+     "px1x": 0.33,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/seymour-flux-body/attack.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/seymour-flux-body/cast.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/seymour-flux-body/hurt.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/seymour-flux-body/ko.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/seymour-flux-body/telegraph.png",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/mortiorchis/idle.webp",
+     "scale": 1,
+     "mb": 5.1,
+     "px1x": 0.26,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/mortiorchis/attack.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/mortiorchis/cast.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/mortiorchis/hurt.webp",
+     "scale": 1,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    }
+   ],
+   "trace": []
+  }
+ },
+ "fps": {
+  "frames": 240,
+  "medianMs": 16.7,
+  "p95Ms": 16.7,
+  "maxMs": 16.8,
+  "fps": 59.9
+ },
+ "canvas": {
+  "w": 1600,
+  "h": 900,
+  "cssW": 1600,
+  "cssH": 900
+ },
+ "audit": {
+  "artResponses": 215,
+  "status": {
+   "200": 215
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 0,
+  "tiers": {
+   "x2": 0,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "artFiles": 162,
+ "hiRes": [],
+ "hiResCount": 0,
+ "sampleHiRes": [],
+ "responsesNon2xx": [],
+ "aborted": -1,
+ "screenshotNote": "JPEG of the page at the first command menu",
+ "warns": [],
+ "consoleErrors": [],
+ "notFound": []
+}

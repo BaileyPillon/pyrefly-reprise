@@ -1,0 +1,160 @@
+{
+ "name": "bdprobe-cand-seymour-omnis-2560x1440",
+ "chapter": "seymour-omnis",
+ "size": "2560x1440",
+ "which": "cand",
+ "meshes": [
+  {
+   "name": "backdrop-painting",
+   "w": 5376,
+   "h": 3072,
+   "src": "/art/backdrops/garden-of-pain%402x.webp",
+   "kind": "HTMLImageElement",
+   "visible": false,
+   "parent": "backdrop"
+  },
+  {
+   "name": "backdrop-layer-0",
+   "w": 4096,
+   "h": 2341,
+   "src": "",
+   "kind": "HTMLCanvasElement",
+   "visible": false,
+   "parent": "backdrop"
+  },
+  {
+   "name": "ground",
+   "w": 4096,
+   "h": 4096,
+   "src": "",
+   "kind": "HTMLCanvasElement",
+   "visible": true,
+   "parent": "backdrop"
+  },
+  {
+   "name": "fx-b-plate-0",
+   "w": 5376,
+   "h": 3072,
+   "src": "",
+   "kind": "Object",
+   "visible": true,
+   "parent": "backdrop"
+  },
+  {
+   "name": "fx-b-plate-1",
+   "w": 5376,
+   "h": 3072,
+   "src": "",
+   "kind": "Object",
+   "visible": true,
+   "parent": "backdrop"
+  },
+  {
+   "name": "fx-b-plate-2",
+   "w": 5376,
+   "h": 3072,
+   "src": "",
+   "kind": "Object",
+   "visible": true,
+   "parent": "backdrop"
+  },
+  {
+   "name": "fx-b-plate-3",
+   "w": 5376,
+   "h": 3072,
+   "src": "",
+   "kind": "Object",
+   "visible": true,
+   "parent": "backdrop"
+  },
+  {
+   "name": "Mesh",
+   "w": 1460,
+   "h": 2264,
+   "src": "/art/characters/tidus/idle%402x.png",
+   "kind": "HTMLImageElement",
+   "visible": false,
+   "parent": ""
+  },
+  {
+   "name": "Mesh",
+   "w": 1606,
+   "h": 2150,
+   "src": "/art/characters/yuna/idle%402x.png",
+   "kind": "HTMLImageElement",
+   "visible": true,
+   "parent": ""
+  },
+  {
+   "name": "Mesh",
+   "w": 1598,
+   "h": 2408,
+   "src": "/art/characters/auron/idle%402x.png",
+   "kind": "HTMLImageElement",
+   "visible": true,
+   "parent": ""
+  },
+  {
+   "name": "Mesh",
+   "w": 1728,
+   "h": 2458,
+   "src": "/art/characters/seymour-omnis/idle%402x.png",
+   "kind": "HTMLImageElement",
+   "visible": true,
+   "parent": ""
+  },
+  {
+   "name": "omnis-glow-halo",
+   "w": 1728,
+   "h": 2458,
+   "src": "/art/characters/seymour-omnis/idle%402x.png",
+   "kind": "HTMLImageElement",
+   "visible": false,
+   "parent": ""
+  }
+ ],
+ "artReq": [
+  "/art/backdrops/zanarkand-dome.webp",
+  "/art/backdrops/dreams-end.webp",
+  "/art/backdrops/macalania-temple.webp",
+  "/art/backdrops/evrae-airship-deck.webp",
+  "/art/backdrops/cavern-stolen-fayth.webp",
+  "/art/backdrops/bevelle-highbridge.webp",
+  "/art/backdrops/garden-of-pain.webp",
+  "/art/backdrops/via-purifico.webp",
+  "/art/backdrops/sin-fahrenheit-flight.webp",
+  "/art/backdrops/sin-fahrenheit-bevelle.webp",
+  "/art/backdrops/bevelle-underground.webp",
+  "/art/backdrops/farplane.webp",
+  "/art/backdrops/leblanc-last-room.webp",
+  "/art/backdrops/road-to-the-farplane.webp",
+  "/art/backdrops/via-infinito.webp",
+  "/art/backdrops/den-of-woe.webp",
+  "/art/backdrops/djose-chamber-provisional.webp",
+  "/art/backdrops/garden-of-pain.json",
+  "/art/backdrops/garden-of-pain%402x.webp"
+ ],
+ "fxReq": [
+  "/fx/garden-of-pain/depth.png"
+ ],
+ "audit": {
+  "artResponses": 226,
+  "status": {
+   "200": 226
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 40,
+  "tiers": {
+   "x2": 40,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "warns": [],
+ "consoleErrors": []
+}

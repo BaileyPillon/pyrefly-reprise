@@ -1,0 +1,123 @@
+{
+ "name": "title-cand-2560x1440",
+ "size": "2560x1440",
+ "which": "cand",
+ "crisp": {
+  "rung": "fplus",
+  "pinned": false,
+  "cfg": {
+   "ss": 2,
+   "ssRing": 0.5,
+   "cas": 0.3,
+   "casSharp": 0.5,
+   "casFloor": 0.05,
+   "aaPre": false,
+   "aa": null
+  },
+  "class": "high",
+  "tier": "full",
+  "ssEffective": 1,
+  "simulatedMs": 0,
+  "governor": {
+   "rung": "fplus",
+   "budgetMs": 22,
+   "pending": 0,
+   "windows": []
+  },
+  "passes": [
+   "0:scene",
+   "1:scene-msaa(off)",
+   "2:ssaa(off)",
+   "3:bloom",
+   "4:TiltShiftShader",
+   "5:TiltShiftShader",
+   "6:cas(off)",
+   "7:grade"
+  ]
+ },
+ "audit": {
+  "artResponses": 58,
+  "status": {
+   "200": 57,
+   "304": 1
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 0,
+  "tiers": {
+   "x2": 0,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [
+   {
+    "u": "/art/characters/mortiorchis/idle.webp",
+    "st": 304,
+    "ct": "",
+    "redirected": false
+   }
+  ],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "artFiles": [
+  "/art/characters/seymour-flux-body/idle.png",
+  "/art/portraits/tidus.webp",
+  "/art/portraits/yuna.webp",
+  "/art/portraits/kimahri.png",
+  "/art/portraits/auron.webp",
+  "/art/portraits/rikku.webp",
+  "/art/portraits/wakka.webp",
+  "/art/portraits/lulu.webp",
+  "/art/portraits/yuna-x2.webp",
+  "/art/portraits/rikku-x2.webp",
+  "/art/portraits/paine.webp",
+  "/art/characters/yuna-white-mage/idle.webp",
+  "/art/characters/rikku-dark-knight/idle.webp",
+  "/art/characters/paine-warrior/idle.webp",
+  "/art/characters/paine-dark-knight/idle.webp",
+  "/art/characters/yuna-gunner/idle.webp",
+  "/art/characters/rikku-thief/idle.webp",
+  "/art/characters/yuna-dark-knight/idle.webp",
+  "/art/characters/rikku-alchemist/idle.webp",
+  "/art/backdrops/zanarkand-dome.webp",
+  "/art/characters/yunalesca-1/idle.webp",
+  "/art/characters/braskas-final-aeon-1/idle.webp",
+  "/art/backdrops/macalania-temple.webp",
+  "/art/characters/anima/idle.webp",
+  "/art/backdrops/evrae-airship-deck.webp",
+  "/art/characters/evrae/idle.png",
+  "/art/backdrops/cavern-stolen-fayth.webp",
+  "/art/characters/yojimbo-cavern/idle.webp",
+  "/art/backdrops/bevelle-highbridge.webp",
+  "/art/characters/seymour-natus/idle.webp",
+  "/art/backdrops/garden-of-pain.webp",
+  "/art/characters/seymour-omnis/idle.webp",
+  "/art/backdrops/via-purifico.webp",
+  "/art/characters/isaaru/idle.png",
+  "/art/backdrops/sin-fahrenheit-flight.webp",
+  "/art/characters/sin-left-fin/idle.png",
+  "/art/backdrops/sin-fahrenheit-bevelle.webp",
+  "/art/characters/overdrive-sin/idle.png",
+  "/art/backdrops/bevelle-underground.webp",
+  "/art/characters/ffx2-bahamut/idle.webp",
+  "/art/backdrops/farplane.webp",
+  "/art/characters/vegnagun-body/idle.webp",
+  "/art/backdrops/leblanc-last-room.webp",
+  "/art/characters/leblanc/idle.png",
+  "/art/backdrops/road-to-the-farplane.webp",
+  "/art/characters/x2-shiva/idle.png",
+  "/art/backdrops/via-infinito.webp",
+  "/art/characters/trema/idle.png",
+  "/art/backdrops/den-of-woe.webp",
+  "/art/characters/baralai-shade/idle.png",
+  "/art/backdrops/djose-chamber-provisional.webp",
+  "/art/characters/x2-ixion/idle.png",
+  "/art/characters/x2-anima/idle.png",
+  "/art/characters/nooj-shade/idle.png",
+  "/art/characters/gippal-shade/idle.png"
+ ],
+ "warns": [],
+ "consoleErrors": []
+}

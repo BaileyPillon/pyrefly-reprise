@@ -1,0 +1,837 @@
+{
+  "startedAt": "2026-10-05T07:35:00Z",
+  "previewPid": 44728,
+  "remeasuredChecks": [
+    "CHK-008",
+    "CHK-011",
+    "CHK-022",
+    "CHK-026",
+    "CHK-027"
+  ],
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "SHIP. Both blockers of c7135bec are fixed on the rebuilt dist. R39F-01: the Sensor card no longer sits on Seymour Natus: its cover of his figure box is 1440x810 0.0% (Attack step 0.0%), 1600x900 0.0% (Attack step 0.1%), 2000x1012 0.0% (Attack step 0.0%), 2560x1440 0.0% (Attack step 0.0%) on the first menu, against 47 to 48% on c7135bec and 0% on live; with the cursor on Natus or Mortibody the worst reading is 0.1%. R39F-02: Evrae crossfades again as on live (1c096064 reverts PR-0367), and the chapter's snaps are back to live's: 3 in 329.2 s (0.55 a minute) against 3 in 394.2 s on the old baseline and 2 in 330.0 s on a fresh live run.",
+    "R39F-02 is not a regression. The fixer's 20 to 22 double images of 0.40 or more in Chapter VIII (live baseline 10) are measured the same on live: a fresh run of the same harness on https://echoesofspira.com (release 38) at 59.5 fps reads 20 as well, worst 0.439, every one of its 19 Evrae cast swaps at 0.40 or more, with the same 108 to 110 Evrae swaps and 19 to 20 cast swaps (so not more swaps). The old baseline ran at 42.4 fps with 2,266 slow frames (a 918 ms stall), which cut its Evrae crossfades to 0 to 6 blended frames and hid ten of the 20 double images (the control reads 20); at 60 fps a full Evrae cast crossfade reads 0.435 on live and on this build.",
+    "The delta leaves one new, small cost: at 1280x720 and 1366x768 the pinned card, held at the stage's top by the new max(0px, ...) so its name is not clipped, touches the tips of one wing spike: 7.0% and 7.9% of his box with Mortibody aimed (live 0%), 1.6% and 2.3% of his painted pixels. By the strict measure that is a regression against live; it is polish (R39F-11): the figure is clear, the name is whole, and 0.0% with the cursor on Natus.",
+    "No critical defect and nothing lost: Chapter VIII was won again by real keys (76 turns) through the Victory screen to the board with the chapter cleared, still cleared after a reload; the Ch I, IV and X smokes ran by real keys with 0 console errors, 0 missing files and 208 to 219 art responses, all 200, 0 raw @ and 0 redirects. The code outside the diff is identical (git diff c7135bec 816d80f9: 10 files changed, 215 insertions(+), 69 deletions(-)).",
+    "Disclosed majors, not regressions, carried: R39F-03 (CHK-026 still fails: Ch VIII now has 0 feet swaps over tolerance against live's 260 at equal fps) and R39F-04 (CHK-027 still fails on both builds). One correction to the c7135bec review: its live baseline for Ch I, IV and VIII was captured at 39 to 46 fps, which inflates the live jerk and double-image counts and truncates its crossfades, so \"fewer jerks and double images than live\" was not shown; the feet, head and snap comparisons do not depend on the frame rate and stand."
+  ],
+  "md": {
+    "changedAreaLine": "Changed area: FAIL, as for c7135bec, now only because carried claims are still unmet (the guide's labels under the 14 px floor in windows narrower than 1600, the link-gated 2x backdrops, a Ch III sliver, and the new R39F-11 sliver at two small windows). Both targets of this delta are met with no regression that matters: the Natus card is clear of him at 1440x810 and wider (R39F-01 fixed), and Evrae behaves as on live (R39F-02 fixed).",
+    "shipLine": "Ship: SHIP. No critical defect, no major regression against live. R39F-01 (cover 47 to 48% down to 0.0 to 0.1%) and R39F-02 (the Evrae cut reverted; at equal frame rate live and this build read the same 20 double images and 2 to 3 snaps) are fixed and verified on the rebuilt dist. This release discloses R39F-03 and R39F-04 (CHK-026 and CHK-027 still FAIL, as on live) and the polish items, among them R39F-11 (the card touches wing-spike tips at 1280x720 and 1366x768).",
+    "qualityLine": "Quality: not scored (focused pass). Bailey's five visual sub-scores, provisional, with the continuity caps applied (CHK-026 FAILS: characterModels and animation at most 7.0): characterModels 7.0 (capped; 8.3 without), enemyModels 8.0, animation 7.0 (capped; 7.5 without), fidelity 8.6, camera 8.1; c7135bec read 7.0 / 8.0 / 7.0 / 8.5 / 8.0 and round 21 read 8.2 / 7.8 / 7.4 / 8.2 / 7.9. The last full weighted score is round 21 (6461999e, 2026-10-04): provisional, audio unverified, six categories under the 9 floor.",
+    "topIssuesLine": "Top issues: R39F-01 fixed (Natus card cover 47 to 48% to 0.0 to 0.1% at 1440x810 and wider; evidence results/sensor2-cand-*.json and the three-up frame) with the residue filed as R39F-11 (polish, 1.6 to 2.3% of his painted pixels at 1280x720 and 1366x768). R39F-02 fixed (the Evrae cut reverted; the 22 double images the fixer read are live's own at 60 fps: a fresh live run reads 20; evidence continuity-live-control). Open and carried unchanged: R39F-03 and R39F-04 (major, disclosed, CHK-026 and CHK-027), R39F-05 to R39F-10 (polish or suggestion).",
+    "coverageLine": "Coverage: Tested: the rebuilt dist's bundle; the Natus card at six window sizes with the cursor on each target, against live at five; a painted-pixel estimate at the two small windows; the continuity harness on Ch VIII (victory, 59.5 fps) and again on live at full frame rate; smokes of Ch I, IV and X by real keys. Reused: everything else from c7135bec-focused (rendering, art gates, interface, Lady Luck, Ch III, targets, deploy tooling, data audit, Ch I and IV continuity), because the diff touches none of it. Not tested: Ch I and IV continuity again, a live control for Ch I and IV, the other 7 target tiles again, audio, real devices, the live artifact.",
+    "nextLine": "Next required review and why: live verification of this exact artifact after the deploy (CHK-017), then the deep review owed on the live build (plan depth deep; this is the second shared-system deploy while a deep review is owed, so a third would be refused). Before that, nothing blocks: R39F-11, R39F-03 to R39F-10 go to the next batch, and the continuity baseline should be re-taken at full frame rate.",
+    "runCount": 16,
+    "shipVerdictNote": ", with R39F-03 and R39F-04 disclosed",
+    "gpuNote": "The GPU art lane was idle (GPU at 1 to 11% before and between runs), so the driver's PAUSE-GPU marker was not recreated for this delta; it stays at F:/pyrefly-parked/2026-10-05/r39-focused/PAUSE-GPU, where the c7135bec review left it. The harness ran at 59.5 fps with 43 and 48 slow frames in its two runs.",
+    "newIssueIds": "R39F-11",
+    "delta": "`git diff c7135bec 816d80f9`: 10 files changed, 215 insertions(+), 69 deletions(-). Three commits. **6bd12f55** (R39F-01): `src/ui/common/hud-floor.css` only: the open Sensor card's `top` regains `+ var(--ffx-sensor-py, 0px)` and is wrapped in `max(0px, ...)` so the pinned lift cannot carry the plate (and its name) past the top of the stage at 1280x720 to 1440x810; the new test `hud-floor-sensor-top` reads the sheets and evaluates the rule. **1c096064** (R39F-02): reverts 9ff5760f (PR-0367): `BattlePresenterStage.ts` is back to `crossfadeMs: poseCut ? 0 : party ? 120 : 140`, `PoseCut.ts` is deleted and `poseCutArt` is gone from `evrae-airship-deck.ts` and `types.ts` (FF7's whole-scene `poseCut` is untouched); tests `r39-evrae-crossfade` added, `r39-pose-cut` removed. **816d80f9**: docs only (`r39-visfix.md`). Everything else in `src/` and `public/` is identical, and the rebuilt dist has the same 3,848 files and differs by 116 bytes (its bundle and stylesheet only). Checked in the built files: the stylesheet carries `top:max(0px, calc(166px + var(--ffx-sensor-dy,0px) + var(--ffx-sensor-py,0px) - clamp(...)))` and no longer the old rule; the bundle reads `crossfadeMs:this.opts.slots.poseCut?0:n===\"party\"?120:140` and holds no `poseCutArt`. Neither change reaches a chapter other than X (the card's pin term is written only by Natus's pin) and VIII (the Evrae scene row).",
+    "r1": "Method as in the c7135bec review (setSeed(1) before the first key, ?coach=off, real keys from the title to Chapter X's first menu; then Attack, the cursor to the right twice, then E): the Sensor card's rect over Natus's figure box, read from the game's own `targeting().rects`. The figure box is Natus's drawn size: larger on this build than on live, where he is unpinned, at every window shape.\n\n| Window | c7135bec, first menu | 816d80f9 first menu | Attack step (Mortibody aimed) | cursor on Natus | cursor back on Mortibody | card top (px) | live r38, worst |\n|---|---|---|---|---|---|---|---|\n| 1280x720 | not measured | 6.9% | 7.0% | 0.0% | 7.1% | 0 | 0.0% |\n| 1366x768 | not measured | 7.6% | 7.9% | 0.0% | 7.9% | 0 | 0.0% |\n| 1440x810 | not measured | 0.0% | 0.0% | 0.0% | 0.0% | 0 | not run (unpinned) |\n| 1600x900 | 47.9% | 0.0% | 0.1% | 0.0% | 0.0% | 8 | 0.0% |\n| 2000x1012 | 47.3% | 0.0% | 0.0% | 0.0% | 0.0% | 11 | 0.0% |\n| 2560x1440 | 47.1% | 0.0% | 0.0% | 0.0% | 0.0% | 16 | 0.0% |\n\nReading it: at 1440x810 and wider the card stands at the top of the stage and ends at or above his box (first menu 1440x810 0.0% (Attack step 0.0%); the worst reading at any step is 0.1%): **R39F-01 is fixed**. The card's name is never clipped above the window (the card top is 0 px at 1280x720, 1366x768 and 1440x810, where max(0px, ...) holds it; 8, 11 and 16 px at 1600, 2000 and 2560 wide). **At 1280x720 and 1366x768** the floor's larger type makes the card taller than the pin's lift can clear, so with Mortibody aimed (the default first target) it reaches 7.0% and 7.9% of his box, where live reads 0% (live's Natus is 92x165 to 98x176 px and unpinned, well left of the card). The box includes the transparent margin above his wing tips, so I also counted his own pixels in a scene-only frame (the HUD hidden, the scene frozen; his white rim and saturated violet, not the lamps or the hall): 86 of 5521 at 1280x720 (1.6%) and 141 of 6254 at 1366x768 (2.3%): the card's lowest row touches the tips of one wing spike (frames natus-attack-step-1280x720 and -1366x768 show it). **By the strict measure that is a regression against live, so it is recorded (R39F-11); its size is polish.** With the cursor on Natus the card moves left and reads 0.0% at every size.",
+    "r2": "Why the fixer's numbers look worse than live, and why they are not. The c7135bec review compared Chapter VIII with a live baseline (`continuity-baseline-r38`, 04:57Z) captured at **42.4 fps with 2,266 slow frames and a 918 ms stall** (Ch I 45.8 fps with a 6.2 s stall, Ch IV 39.1 fps): the GPU was shared with the art lane then. A 140 ms crossfade needs 8 frames at 60 fps; at 42 fps with stalls it lasts 0 to 6, so its double-image severity often reads 0.28 to 0.29 instead of 0.435 and falls under the 0.40 line. To settle it with a control instead of an argument, the same harness was run on https://echoesofspira.com (release 38) again, alone, at full frame rate, from the same seed:\n\n| Run | fps (slow frames) | Battle s | Evrae swaps / cast swaps | Evrae cast swaps at 0.40 or more | of the cast swaps that blended 7+ frames | Snaps (per min) | Double images 0.40+ (chapter) | Jerks 40 px+ | Head over / feet over |\n|---|---|---|---|---|---|---|---|---|---|\n| live r38 baseline (04:57Z) | 42.4 (2266) | 394.2 | 110 / 20 | 9 | 6 of 6 | 3 (0.46) | 10 | 92 | 85 / 280 |\n| live r38 control (this review) | 59.5 (48) | 330 | 108 / 19 | 19 | 19 of 19 | 2 (0.36) | 20 | 25 | 186 / 260 |\n| c7135bec (hard cut) | 59.5 (44) | 328.6 | 105 / 20 | 0 | 0 of 0 | 107 (19.54) | 2 | 38 | 152 / 1 |\n| 816d80f9 (crossfade restored) | 59.5 (43) | 329.2 | 110 / 20 | 19 | 19 of 19 | 3 (0.55) | 20 | 23 | 149 / 0 |\n\n- **Same swaps, not more:** the fight plays the same script: 110 Evrae swaps and 20 cast swaps on this build, 108 and 19 on the live control, 110 and 20 on the old baseline. The count of Evrae cast swaps did not grow.\n- **Same severity:** at 59.5 fps every full-length Evrae cast crossfade (7 or 8 blended frames) reads 0.435 to 0.439 on both builds: 19 of 19 on the live control and 19 of 19 on this build. The old baseline's six full-length ones read the same 0.435; its other fourteen were cut to 0 to 5 blended frames by the stall (ten read 0.28 to 0.29, three still read 0.43 to 0.44, one did not blend).\n- **Same count:** 20 double images of 0.40 or more in the chapter on both, worst 0.439 on both (Tidus attack to follow reads 0.405 here, 0.472 on live).\n- **Snaps:** 3 here (Rikku hurt to KO, Tidus idle to KO, and one Evrae idle to cast that did not blend), 2 on the live control (the same two KO swaps) and 3 on the old baseline (the same two plus an Evrae cast swap that did not blend): 0.55 against 0.36 and 0.46 a minute, all over the 0.25 limit and the same events. Against the cut build's 107.\n- **Better, and independent of the frame rate:** feet over tolerance 0 against 260 (worst 0.9 px against 257.4), heads over tolerance 149 against 186 (worst registered 8.4% against 39.2%). Jerks of 40 px or more: 23 against 25.\n\n**Verdict on R39F-02: not a regression against live; the same behaviour at the same swap count, and the two-head frame Evrae's cast shows is live's own** (it is in R39F-04's scope). The hard cut would remove 18 of those 20 double images and costs 105 snaps; which of the three answers Bailey wants is still his call.",
+    "smoke": "Real keys from the title, setSeed(1) before the first key and ?coach=off, on the rebuilt dist at 1600x900: **Chapter I** 3 Attack turns, then the results screen (the fight was lost: an all-Attack party cannot beat Seymour Flux in three turns), **Chapter IV** 8 turns including the advisor's Shell, Protect and Cura, **Chapter X** 5 Attack turns, then the results screen (lost likewise), and **Chapter VIII** the whole fight by the harness (76 turns, victory, the board with the chapter cleared, cleared again after a reload). 0 console errors and 0 missing files in all four; art responses 219, 208 and 208 in the three smokes, all HTTP 200, 0 raw `@` URLs, 0 redirects, 0 bad; the rung is F plus in each. The harness runs also read 0 console errors, 0 missing files and no HTML answered to an image.",
+    "issuesDetail": "### R39F-01 (major): fixed and verified\nc7135bec: the card covered 47.9%, 47.3% and 47.1% of Natus at 1600x900, 2000x1012 and 2560x1440. On 816d80f9: 1440x810 0.0% (Attack step 0.0%), 1600x900 0.0% (Attack step 0.1%), 2000x1012 0.0% (Attack step 0.0%), 2560x1440 0.0% (Attack step 0.0%); every step 0.0 to 0.1%. See the table above. The residue at two small windows is R39F-11.\n\n### R39F-02 (major): fixed; not a regression after the revert\nThe hard cut (19.54 snaps a minute against 0.46) is gone: Chapter VIII reads 3 snaps in 329.2 s (0.55 a minute), the same events as live. The two-head frame on Evrae's cast is live's behaviour (a fresh live run: 20 double images of 0.40 or more, as here).\n\n### R39F-03 (major, disclosed): carried, numbers updated for Chapter VIII\nAcross Ch I and IV (carried from c7135bec) and Ch VIII (fresh): 278 of 1,269 swaps over the head tolerance (live baseline 297 of 1,281), worst 115.7% by mass and 8.4% where registered (live 57.1%), 136 standing swaps over the feet tolerance (live 868), worst 140.6 px (Ch IV; live 259.4). Ch VIII alone against the live control at equal fps: heads 149 over against 186, feet 0 against 260, registered worst 8.4% against 39.2%. Still FAIL.\n\n### R39F-04 (major, disclosed): carried, with a correction to its comparison\nCHK-027 still FAILS: 12 snaps in 19.6 minutes is 0.61 a minute (the old baseline also had 12, 0.53), 131 jerks of 40 px or more (worst 353.1 px) and 33 double images of 0.40 or more (worst 0.439). **The c7135bec review's \"fewer jerks (230 to 146) and double images (20 to 15) than live\" is withdrawn**: its live baseline ran at 39 to 46 fps, which inflates jerks and truncates crossfades. At equal fps in Chapter VIII the two builds read the same (jerks 23 against 25, double images 20 against 20); for Ch I and IV there is no equal-fps live run, so no comparison is claimed.\n\n### R39F-11 (polish, new): the card touches wing-spike tips at 1280x720 and 1366x768\nSee the R39F-01 section: 7.0% to 7.9% of his box and 1.6% to 2.3% of his painted pixels with Mortibody aimed; live 0%; the name is whole. Cost of holding the card at the stage's top; the floor's 14 px type makes it taller than the pin's lift can clear at those sizes.\n\n### R39F-05 to R39F-10: carried unchanged\nNot touched by the diff; see the c7135bec review for each one's expected, observed, repro, evidence, where, fix and acceptance check.",
+    "continuity": "Ch VIII was re-run on this build; Ch I and IV are carried from c7135bec (the diff touches neither's code). The combined aggregate was recomputed with the harness's own `aggregate()` (it reproduces the c7135bec aggregate exactly from the three c7135bec chapters).\n\n| | 816d80f9 (Ch I, IV carried; Ch VIII fresh) | c7135bec | Live baseline (39 to 46 fps) |\n|---|---|---|---|\n| Battle time, swaps counted | 1174.2 s, 1269 | 1173.6 s, 1268 | 1370.3 s, 1281 |\n| Head over tolerance | 278 | 281 | 297 |\n| Worst head jump, by mass / registered | 115.7% / 8.4% | 115.7% / 8.4% | 115.7% / 57.1% |\n| Feet over tolerance, worst | 136, 140.6 px | 137, 140.6 px | 868, 259.4 px |\n| Snaps, per minute | 12, **0.61** | 116, 5.93 | 12, 0.53 |\n| Double images of 0.40 or more, worst | 33, 0.439 | 15, 0.422 | 20, 0.47 (understated: low fps) |\n| Jerks of 40 px or more, worst | 131, 353.1 px | 146, 353.1 px | 230, 371.3 px (inflated: stalls) |\n| CHK-026 / CHK-027 | FAIL / FAIL | FAIL / FAIL | FAIL / FAIL |\n\nChapter VIII against the live control at equal fps: see the table in the R39F-02 section. The caps follow as before: while CHK-026 fails characterModels and animation are at most 7.0, and the snap rate is over 0.25 (which caps animation at 7.5)."
+  },
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "chapters": [
+      {
+        "chapter": "seymour-flux",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "FAIL",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 476.7,
+        "swaps": 440,
+        "snapsPerMinute": 1.01,
+        "maxHeadJumpPct": 39.4,
+        "maxFeetShiftPx": 36.2,
+        "worstJerkPx": 353.1,
+        "strips": 20,
+        "worstSwapStrips": [
+          "seymour-flux-win-c7135bec/continuity/strips/swap-087-seymour-flux-idle-hurt.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-089-seymour-flux-hurt-idle.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-189-seymour-flux-telegraph-attack.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-076-bahamut-attack-idle.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-013-yuna-idle-ko.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-240-tidus-hurt-ko.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-198-tidus-idle-ko.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-188-seymour-flux-idle-telegraph.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-404-seymour-flux-cast-hurt.jpg",
+          "seymour-flux-win-c7135bec/continuity/strips/swap-012-yuna-ko-idle.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "ffx2-bahamut",
+        "game": "ffx2",
+        "checks": {
+          "CHK-026": "FAIL",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 368.3,
+        "swaps": 391,
+        "snapsPerMinute": 0.16,
+        "maxHeadJumpPct": 77.3,
+        "maxFeetShiftPx": 140.6,
+        "worstJerkPx": 166.3,
+        "strips": 20,
+        "worstSwapStrips": [
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-392-bahamut-hurt-ko.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-381-paine-follow-idle.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-364-paine-ready-attack.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-341-paine-od-x2-warrior-armor-break-ready.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-302-paine-cast-od-x2-warrior-armor-break.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-340-paine-hurt-od-x2-warrior-armor-break.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-279-paine-od-x2-warrior-armor-break-idle.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-337-paine-od-x2-warrior-armor-break-hurt.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-379-paine-attack-follow.jpg",
+          "ffx2-bahamut-win-c7135bec/continuity/strips/swap-358-rikku-hurt-idle.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "evrae-airship",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "FAIL",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 329.2,
+        "swaps": 438,
+        "snapsPerMinute": 0.55,
+        "maxHeadJumpPct": 115.7,
+        "maxFeetShiftPx": 0.9,
+        "worstJerkPx": 265.8,
+        "strips": 19,
+        "worstSwapStrips": [
+          "evrae-airship-win-816d80f9/continuity/strips/swap-009-rikku-hurt-ko.jpg",
+          "evrae-airship-win-816d80f9/continuity/strips/swap-317-tidus-idle-ko.jpg",
+          "evrae-airship-win-816d80f9/continuity/strips/swap-363-evrae-idle-cast.jpg",
+          "evrae-airship-win-816d80f9/continuity/strips/swap-026-evrae-cast-idle.jpg",
+          "evrae-airship-win-816d80f9/continuity/strips/swap-013-rikku-ko-idle.jpg",
+          "evrae-airship-win-816d80f9/continuity/strips/swap-005-rikku-follow-idle.jpg",
+          "evrae-airship-win-816d80f9/continuity/strips/swap-316-tidus-ko-idle.jpg",
+          "evrae-airship-win-816d80f9/continuity/strips/swap-321-tidus-ko-critical.jpg",
+          "evrae-airship-win-816d80f9/continuity/strips/swap-260-kimahri-idle-hurt.jpg",
+          "evrae-airship-win-816d80f9/continuity/strips/swap-224-kimahri-hurt-idle.jpg"
+        ],
+        "unverified": null
+      }
+    ],
+    "battleSeconds": 1174.2,
+    "counted": 1269,
+    "swaps": 1315,
+    "size": {
+      "maxHeadJumpPct": 115.7,
+      "maxHeadJumpPctRegistration": 8.4,
+      "headOverTolerance": 278,
+      "maxFeetShiftPx": 140.6,
+      "feetOverTolerance": 136,
+      "headMeasured": 1269,
+      "headRegistration": 468,
+      "headSilhouette": 801,
+      "headUnmeasured": 0
+    },
+    "motion": {
+      "snaps": 12,
+      "snapsPerMinute": 0.61,
+      "hardCuts": 15,
+      "hardCutsPerMinute": 0.77,
+      "ghostSwaps": 1203,
+      "ghostFrames": 4980,
+      "worstGhostSeverity": 0.439,
+      "ghostOverFail": 33,
+      "jerks": 320,
+      "worstJerkPx": 353.1,
+      "jerksOverFail": 131,
+      "lowestIou": 0.007,
+      "maxCentroidShiftPx": 192.8
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "FAIL",
+        "reasons": [
+          "278 swap(s) change a head by more than the tolerance (worst 115.7 percent; 8.4 percent where the head is registered)",
+          "136 swap(s) of a standing figure move its feet more than the tolerance (worst 140.6 px at 1600 wide)"
+        ],
+        "note": "468 of 1269 measured swaps had a registered head (tolerance 3 percent); 801 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "0.61 snaps per minute is over 0.25",
+          "131 jerk(s) of 40 px or more in one frame (worst 353.1 px)",
+          "33 swap(s) show a double image of severity 0.4 or more (worst 0.439)"
+        ]
+      }
+    },
+    "base": "combined re-aggregation with the harness's own aggregate(); see chaptersFreshlyRun and chaptersReused",
+    "date": "2026-10-05T08:11:17.000Z",
+    "chaptersFreshlyRun": [
+      "evrae-airship"
+    ],
+    "chaptersReused": [
+      {
+        "chapter": "seymour-flux",
+        "from": "critic/reviews/c7135bec-focused/continuity/seymour-flux-win-c7135bec",
+        "why": "the diff touches neither the chapter's code nor its art"
+      },
+      {
+        "chapter": "ffx2-bahamut",
+        "from": "critic/reviews/c7135bec-focused/continuity/ffx2-bahamut-win-c7135bec",
+        "why": "the diff touches neither the chapter's code nor its art"
+      }
+    ],
+    "freshHarnessRun": {
+      "schema": "continuity-summary/1",
+      "chapters": [
+        {
+          "chapter": "evrae-airship",
+          "game": "ffx",
+          "checks": {
+            "CHK-026": "FAIL",
+            "CHK-027": "FAIL"
+          },
+          "battleSeconds": 329.2,
+          "swaps": 438,
+          "snapsPerMinute": 0.55,
+          "maxHeadJumpPct": 115.7,
+          "maxFeetShiftPx": 0.9,
+          "worstJerkPx": 265.8,
+          "strips": 19,
+          "worstSwapStrips": [
+            "evrae-airship-win-816d80f9/continuity/strips/swap-009-rikku-hurt-ko.jpg",
+            "evrae-airship-win-816d80f9/continuity/strips/swap-317-tidus-idle-ko.jpg",
+            "evrae-airship-win-816d80f9/continuity/strips/swap-363-evrae-idle-cast.jpg",
+            "evrae-airship-win-816d80f9/continuity/strips/swap-026-evrae-cast-idle.jpg",
+            "evrae-airship-win-816d80f9/continuity/strips/swap-013-rikku-ko-idle.jpg",
+            "evrae-airship-win-816d80f9/continuity/strips/swap-005-rikku-follow-idle.jpg",
+            "evrae-airship-win-816d80f9/continuity/strips/swap-316-tidus-ko-idle.jpg",
+            "evrae-airship-win-816d80f9/continuity/strips/swap-321-tidus-ko-critical.jpg",
+            "evrae-airship-win-816d80f9/continuity/strips/swap-260-kimahri-idle-hurt.jpg",
+            "evrae-airship-win-816d80f9/continuity/strips/swap-224-kimahri-hurt-idle.jpg"
+          ],
+          "unverified": null
+        }
+      ],
+      "battleSeconds": 329.2,
+      "counted": 438,
+      "swaps": 453,
+      "size": {
+        "maxHeadJumpPct": 115.7,
+        "maxHeadJumpPctRegistration": 8.4,
+        "headOverTolerance": 149,
+        "maxFeetShiftPx": 0.9,
+        "feetOverTolerance": 0,
+        "headMeasured": 438,
+        "headRegistration": 230,
+        "headSilhouette": 208,
+        "headUnmeasured": 0
+      },
+      "motion": {
+        "snaps": 3,
+        "snapsPerMinute": 0.55,
+        "hardCuts": 3,
+        "hardCutsPerMinute": 0.55,
+        "ghostSwaps": 433,
+        "ghostFrames": 1882,
+        "worstGhostSeverity": 0.439,
+        "ghostOverFail": 20,
+        "jerks": 101,
+        "worstJerkPx": 265.8,
+        "jerksOverFail": 23,
+        "lowestIou": 0.007,
+        "maxCentroidShiftPx": 159.2
+      },
+      "checks": {
+        "CHK-026": {
+          "result": "FAIL",
+          "reasons": [
+            "149 swap(s) change a head by more than the tolerance (worst 115.7 percent; 8.4 percent where the head is registered)"
+          ],
+          "note": "230 of 438 measured swaps had a registered head (tolerance 3 percent); 208 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+        },
+        "CHK-027": {
+          "result": "FAIL",
+          "reasons": [
+            "0.55 snaps per minute is over 0.25",
+            "23 jerk(s) of 40 px or more in one frame (worst 265.8 px)",
+            "20 swap(s) show a double image of severity 0.4 or more (worst 0.439)"
+          ]
+        }
+      },
+      "base": "http://127.0.0.1:5462/",
+      "date": "2026-10-05T08:04:57.850Z"
+    },
+    "liveControlChVIII": {
+      "note": "The same harness against https://echoesofspira.com (release 38), Chapter VIII only, alone, at full frame rate, 2026-10-05 04:09 to 04:17 EDT",
+      "summary": {
+        "schema": "continuity-summary/1",
+        "chapters": [
+          {
+            "chapter": "evrae-airship",
+            "game": "ffx",
+            "checks": {
+              "CHK-026": "FAIL",
+              "CHK-027": "FAIL"
+            },
+            "battleSeconds": 330,
+            "swaps": 440,
+            "snapsPerMinute": 0.36,
+            "maxHeadJumpPct": 115.7,
+            "maxFeetShiftPx": 257.4,
+            "worstJerkPx": 265.2,
+            "strips": 20,
+            "worstSwapStrips": [
+              "evrae-airship-win-live38/continuity/strips/swap-440-tidus-attack-follow.jpg",
+              "evrae-airship-win-live38/continuity/strips/swap-439-tidus-ready-attack.jpg",
+              "evrae-airship-win-live38/continuity/strips/swap-312-kimahri-hurt-critical.jpg",
+              "evrae-airship-win-live38/continuity/strips/swap-004-rikku-attack-follow.jpg",
+              "evrae-airship-win-live38/continuity/strips/swap-409-kimahri-idle-hurt.jpg",
+              "evrae-airship-win-live38/continuity/strips/swap-412-kimahri-hurt-idle.jpg",
+              "evrae-airship-win-live38/continuity/strips/swap-006-rikku-follow-idle.jpg",
+              "evrae-airship-win-live38/continuity/strips/swap-442-tidus-follow-idle.jpg",
+              "evrae-airship-win-live38/continuity/strips/swap-372-tidus-ready-idle.jpg",
+              "evrae-airship-win-live38/continuity/strips/swap-340-tidus-idle-ready.jpg"
+            ],
+            "unverified": null
+          }
+        ],
+        "battleSeconds": 330,
+        "counted": 440,
+        "swaps": 454,
+        "size": {
+          "maxHeadJumpPct": 115.7,
+          "maxHeadJumpPctRegistration": 39.2,
+          "headOverTolerance": 186,
+          "maxFeetShiftPx": 257.4,
+          "feetOverTolerance": 260,
+          "headMeasured": 440,
+          "headRegistration": 236,
+          "headSilhouette": 204,
+          "headUnmeasured": 0
+        },
+        "motion": {
+          "snaps": 2,
+          "snapsPerMinute": 0.36,
+          "hardCuts": 2,
+          "hardCutsPerMinute": 0.36,
+          "ghostSwaps": 422,
+          "ghostFrames": 1841,
+          "worstGhostSeverity": 0.472,
+          "ghostOverFail": 20,
+          "jerks": 92,
+          "worstJerkPx": 265.2,
+          "jerksOverFail": 25,
+          "lowestIou": 0,
+          "maxCentroidShiftPx": 191
+        },
+        "checks": {
+          "CHK-026": {
+            "result": "FAIL",
+            "reasons": [
+              "186 swap(s) change a head by more than the tolerance (worst 115.7 percent; 39.2 percent where the head is registered)",
+              "260 swap(s) of a standing figure move its feet more than the tolerance (worst 257.4 px at 1600 wide)"
+            ],
+            "note": "236 of 440 measured swaps had a registered head (tolerance 3 percent); 204 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+          },
+          "CHK-027": {
+            "result": "FAIL",
+            "reasons": [
+              "0.36 snaps per minute is over 0.25",
+              "25 jerk(s) of 40 px or more in one frame (worst 265.2 px)",
+              "20 swap(s) show a double image of severity 0.4 or more (worst 0.472)"
+            ]
+          }
+        },
+        "base": "https://echoesofspira.com/",
+        "date": "2026-10-05T08:17:53.827Z"
+      }
+    },
+    "liveBaseline": {
+      "source": "critic/reviews/continuity-baseline-r38/continuity-summary.json (the same harness against https://echoesofspira.com, release 38, 2026-10-05T04:57Z)",
+      "battleSeconds": 1370.3,
+      "counted": 1281,
+      "swaps": 1334,
+      "size": {
+        "maxHeadJumpPct": 115.7,
+        "maxHeadJumpPctRegistration": 57.1,
+        "headOverTolerance": 297,
+        "maxFeetShiftPx": 259.4,
+        "feetOverTolerance": 868,
+        "headMeasured": 1281,
+        "headRegistration": 359,
+        "headSilhouette": 922,
+        "headUnmeasured": 0
+      },
+      "motion": {
+        "snaps": 12,
+        "snapsPerMinute": 0.53,
+        "hardCuts": 15,
+        "hardCutsPerMinute": 0.66,
+        "ghostSwaps": 1201,
+        "ghostFrames": 3879,
+        "worstGhostSeverity": 0.47,
+        "ghostOverFail": 20,
+        "jerks": 450,
+        "worstJerkPx": 371.3,
+        "jerksOverFail": 230,
+        "lowestIou": 0,
+        "maxCentroidShiftPx": 221.5
+      },
+      "checks": {
+        "CHK-026": "FAIL",
+        "CHK-027": "FAIL"
+      },
+      "chapters": [
+        {
+          "chapter": "seymour-flux",
+          "battleSeconds": 546.7,
+          "snapsPerMinute": 0.88,
+          "maxHeadJumpPct": 57.1,
+          "maxFeetShiftPx": 142.5,
+          "worstJerkPx": 371.3
+        },
+        {
+          "chapter": "ffx2-bahamut",
+          "battleSeconds": 429.4,
+          "snapsPerMinute": 0.14,
+          "maxHeadJumpPct": 77.8,
+          "maxFeetShiftPx": 98.3,
+          "worstJerkPx": 211.1
+        },
+        {
+          "chapter": "evrae-airship",
+          "battleSeconds": 394.2,
+          "snapsPerMinute": 0.46,
+          "maxHeadJumpPct": 115.7,
+          "maxFeetShiftPx": 259.4,
+          "worstJerkPx": 276.6
+        }
+      ]
+    },
+    "chapterVIIIVsLive": [
+      {
+        "name": "live r38 baseline (04:57Z)",
+        "fps": 42.4,
+        "slow": 2266,
+        "maxDt": 918.4,
+        "secs": 394.2,
+        "counted": 440,
+        "snaps": 3,
+        "spm": 0.46,
+        "ghost": 10,
+        "worstGhost": 0.47,
+        "jerks40": 92,
+        "worstJerk": 276.6,
+        "headOver": 85,
+        "feetOver": 280,
+        "maxFeet": 259.4,
+        "swaps": 110,
+        "cast": 20,
+        "castOver": 9,
+        "castMax": 0.439,
+        "castFull": 6,
+        "castFullOver": 6,
+        "meanBlend": 5.845454545454546,
+        "evraeSnaps": 1
+      },
+      {
+        "name": "live r38 control (this review)",
+        "fps": 59.5,
+        "slow": 48,
+        "maxDt": 121.5,
+        "secs": 330,
+        "counted": 440,
+        "snaps": 2,
+        "spm": 0.36,
+        "ghost": 20,
+        "worstGhost": 0.472,
+        "jerks40": 25,
+        "worstJerk": 265.2,
+        "headOver": 186,
+        "feetOver": 260,
+        "maxFeet": 257.4,
+        "swaps": 108,
+        "cast": 19,
+        "castOver": 19,
+        "castMax": 0.439,
+        "castFull": 19,
+        "castFullOver": 19,
+        "meanBlend": 7.9907407407407405,
+        "evraeSnaps": 0
+      },
+      {
+        "name": "c7135bec (hard cut)",
+        "fps": 59.5,
+        "slow": 44,
+        "maxDt": 126.5,
+        "secs": 328.6,
+        "counted": 437,
+        "snaps": 107,
+        "spm": 19.54,
+        "ghost": 2,
+        "worstGhost": 0.422,
+        "jerks40": 38,
+        "worstJerk": 267.6,
+        "headOver": 152,
+        "feetOver": 1,
+        "maxFeet": 4.7,
+        "swaps": 105,
+        "cast": 20,
+        "castOver": 0,
+        "castMax": 0,
+        "castFull": 0,
+        "castFullOver": 0,
+        "meanBlend": 0,
+        "evraeSnaps": 105
+      },
+      {
+        "name": "816d80f9 (crossfade restored)",
+        "fps": 59.5,
+        "slow": 43,
+        "maxDt": 136.2,
+        "secs": 329.2,
+        "counted": 438,
+        "snaps": 3,
+        "spm": 0.55,
+        "ghost": 20,
+        "worstGhost": 0.439,
+        "jerks40": 23,
+        "worstJerk": 265.8,
+        "headOver": 149,
+        "feetOver": 0,
+        "maxFeet": 0.9,
+        "swaps": 110,
+        "cast": 20,
+        "castOver": 19,
+        "castMax": 0.439,
+        "castFull": 19,
+        "castFullOver": 19,
+        "meanBlend": 7.872727272727273,
+        "evraeSnaps": 1
+      }
+    ],
+    "frameRateCaveat": "The live baseline (critic/reviews/continuity-baseline-r38, 2026-10-05T04:57Z) ran at 45.8, 39.1 and 42.4 fps with 2,441, 2,704 and 2,266 slow frames and stalls of 6.2 s, 0.75 s and 0.92 s (the GPU was shared with the art lane): its jerk and double-image counts are inflated and truncated respectively and are not comparable with a 59 fps run. Its feet, head and snap numbers do not depend on the frame rate. Chapter VIII has an equal-frame-rate live control; Ch I and IV do not.",
+    "note": "The top level is the harness aggregate recomputed with its own aggregate() over Ch I and IV (carried from c7135bec) and Ch VIII (this review's fresh run); freshHarnessRun is the harness's own summary of the Chapter VIII run alone. Both builds FAIL both checks."
+  },
+  "subScores": {
+    "owner": "Bailey's five visual sub-scores (provisional, judged from timed sequences, 100 percent crops and the continuity harness, not continuous video; not part of the weighted score)",
+    "characterModels": 7,
+    "enemyModels": 8,
+    "animation": 7,
+    "fidelity": 8.6,
+    "camera": 8.1,
+    "uncapped": {
+      "characterModels": 8.3,
+      "animation": 7.5
+    },
+    "capsApplied": [
+      "CHK-026 FAILS: characterModels and animation are at most 7.0 (critic/policy.json continuity.caps.sizeFails). Judged without the cap: characterModels 8.3, animation 7.5.",
+      "snaps per minute 0.61 is over 0.25: animation is at most 7.5 (continuity.caps.snaps); the 7.0 above is already below it."
+    ],
+    "previous": {
+      "source": "critic/reviews/c7135bec-focused.json (this review's predecessor)",
+      "characterModels": 7,
+      "enemyModels": 8,
+      "animation": 7,
+      "fidelity": 8.5,
+      "camera": 8,
+      "round21": {
+        "source": "critic/rounds/round-21.json (6461999e, 2026-10-04)",
+        "characterModels": 8.2,
+        "enemyModels": 7.8,
+        "animation": 7.4,
+        "fidelity": 8.2,
+        "camera": 7.9
+      }
+    },
+    "note": "Against c7135bec: fidelity 8.6 (+0.1) and camera 8.1 (+0.1) because the Natus card is off his body at 1440x810 and wider (held now only by the link-gated tier and by the sliver at 1280x720 and 1366x768); enemyModels stays 8.0 (the card fix is offset by Evrae's two-head cast frame coming back, which is live's own); characterModels and animation are capped at 7.0 by CHK-026 (judged 8.3 and 7.5 without the cap; Chapter VIII's feet and registered heads are far better than live's at equal frame rate, 0 against 260 feet swaps and 8.4% against 39.2%)."
+  },
+  "targets": {
+    "required": 8,
+    "matched": 8,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0,
+    "note": "The tiles release 39 changed or could regress, compared by `node tools/end-state-board.mjs --pair` (target left, build right) at the sizes named. The other tiles of the plan's groups (cast poses, targeting rings, onboarding, phone party prep and the rest) were not compared in this focused pass; the deep review owed after the deploy covers them. Seven tiles are carried from c7135bec (nothing in the diff reaches them); the Natus tile was re-compared on this build.",
+    "list": [
+      {
+        "tile": "Title",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/title.jpg",
+        "note": "ink slab, PRESS ENTER, vertical line and legend as approved; the renamed title (Echoes of Spira, 2026-10-04) and the parallax key art are Bailey's later picks (carried from c7135bec)"
+      },
+      {
+        "tile": "Battle HUD, FFX",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/battle-hud-ffx.jpg",
+        "note": "Ch I first menu: the approved command stack, party plates and turn order, plus the approved guide and next-move panels; Defend tab bottom left (carried from c7135bec)"
+      },
+      {
+        "tile": "Battle HUD, FFX-2",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/battle-hud-ffx2.jpg",
+        "note": "Ch IV: pink command stack, girls' plates, boss bar, guide and intent slab (carried from c7135bec)"
+      },
+      {
+        "tile": "Swordplay Overdrive",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/swordplay-overlay.jpg",
+        "note": "slab, title, SWORDPLAY line, timer ring, bonus chip and the gold zone bar; the mockup's tier labels are illustrative (zones come from the sourced ordering and the owner-adopted estimates) (carried from c7135bec)"
+      },
+      {
+        "tile": "Ch. 1 Mt. Gagazet",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/scene-gagazet.jpg",
+        "note": "the painting is the approved composition (2x master with `?artlink=fast`) (carried from c7135bec)"
+      },
+      {
+        "tile": "Ch. 4 Bevelle Underground",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/scene-bevelle-underground.jpg",
+        "note": "the hall, lamps and central door as approved at 1600x900 and the conduits at 2560x1080 (carried from c7135bec)"
+      },
+      {
+        "tile": "Pause on the Until Dawn character screen",
+        "result": "matched",
+        "evidence": "critic/reviews/c7135bec-focused/targets/pause.jpg",
+        "note": "tab strip, meter rows, objective line and painting as approved (carried from c7135bec)"
+      },
+      {
+        "tile": "Seymour Natus, Chapter X (FFX)",
+        "result": "matched",
+        "evidence": "critic/reviews/816d80f9-focused/frames/natus-sensor-card-c7135bec-vs-816d80f9-vs-accepted-option.jpg",
+        "note": "the card stands at the top right and the figure is clear, as in the lane's frame of the accepted option N (0.0 to 0.1% at 1440x810 and wider); at 1280x720 and 1366x768 it touches wing-spike tips (R39F-11)"
+      }
+    ]
+  },
+  "coverage": {
+    "tested": [
+      "The rebuilt production dist of 816d80f9 (bundle index-DIf_suBq.js; vite preview 127.0.0.1:5462, BASE_PATH=/) in headless GPU Chromium 153, real keys; labelled hooks only: setSeed(1) before the first key and ?coach=off.",
+      "R39F-01: the Sensor card's cover of Natus on the first menu, the Attack step, with the cursor on each target and with the read-out, at 1280x720, 1366x768, 1440x810, 1600x900, 2000x1012 and 2560x1440 (live at all but 1440x810); a painted-pixel estimate at the two small windows from a frozen scene-only frame.",
+      "R39F-02: the continuity harness (real keys, the game's own probe) over Chapter VIII on the rebuilt dist (329.2 s, 59.5 fps, victory) and again on live release 38 at full frame rate as the control; the old baseline and the c7135bec cut build re-read by swap and pose pair.",
+      "Smokes by real keys: Ch I (3 turns), Ch IV (8), Ch X (5) and the whole Ch VIII fight; 0 console errors, 0 missing files, no non-200 art response.",
+      "The diff read in full (git diff c7135bec 816d80f9), the built stylesheet and bundle checked for both changes, and the dist counted (3,848 files, 116 bytes different).",
+      "The harness's own `aggregate()` re-run over Ch I and IV (carried) and Ch VIII (fresh): 1174.2 s of battle, 1269 swaps."
+    ],
+    "reused": [
+      {
+        "what": "every other finding, check, target and gate of the c7135bec review: rendering and the governor, the art gates (2,918 images in Chromium and WebKit, 2,874 masters), the interface, TEXT SIZE, EYE CANDY, Lady Luck, Ch III, the first-run guide, the deploy tooling, the data audit, and the whole evidence folder",
+        "from": "critic/reviews/c7135bec-focused.json and its folder",
+        "why": "the code outside the diff is identical (git diff c7135bec 816d80f9: 10 files changed, 215 insertions(+), 69 deletions(-); src in five files, none of them read by those checks), public/ is unchanged and the dist has the same 3,848 files within 116 bytes"
+      },
+      {
+        "what": "Chapter I and IV continuity (the two runs and their strips)",
+        "from": "critic/reviews/c7135bec-focused/continuity",
+        "why": "the diff changes Evrae's scene row and one stylesheet rule; neither chapter loads either"
+      },
+      {
+        "what": "the live baseline for Ch I and IV",
+        "from": "critic/reviews/continuity-baseline-r38",
+        "why": "its feet, head and snap numbers do not depend on the frame rate; its jerk and double-image numbers do (39 to 46 fps), so no comparison of those two is claimed for Ch I and IV"
+      }
+    ],
+    "notTested": [
+      "Chapters I and IV continuity again on this build, and a live control at full frame rate for them",
+      "Chapters other than I, IV, VIII and X by play; the seven other target tiles again; Natus at 1440x900 (16:10, unpinned by design) and at TEXT SIZE 115 and 130",
+      "Audio (agents cannot hear), real devices and browsers, a laptop or integrated GPU, a throttled link",
+      "The live verification of the exact artifact (CHK-017, after the deploy) and the deep review owed on the live build"
+    ]
+  },
+  "regressions": [
+    {
+      "id": "R39F-11",
+      "summary": "At 1280x720 and 1366x768 the pinned Sensor card touches wing-spike tips of Natus (6.9 to 7.9% of his box, 1.6 to 2.3% of his painted pixels, with Mortibody aimed; live 0%)",
+      "severity": "polish",
+      "game": "FFX"
+    }
+  ],
+  "nextReview": "Live verification of this exact artifact after the deploy (CHK-017), then the deep review owed on the live build (plan depth deep, deepAfterDeploy true; this is the second shared-system deploy while a deep review is owed, so a third would be refused until one is settled). Nothing here blocks the deploy. R39F-11 and the carried R39F-03 to R39F-10 go to the next batch; the continuity live baseline should be re-taken at full frame rate (the art lane idle) before it is used for another comparison, and Bailey still decides the Evrae pose-continuity question (cut, hold, or an authored in-between).",
+  "issueOverrides": {
+    "R39F-01": {
+      "status": "fixed and verified on 816d80f9 at 1440x810 and wider (cover 0.0 to 0.1%, was 47 to 48%); the residue at 1280x720 and 1366x768 is R39F-11",
+      "observedAppend": "RE-MEASURED on 816d80f9 (rebuilt dist): 1440x810 0.0% (Attack step 0.0%), 1600x900 0.0% (Attack step 0.1%), 2000x1012 0.0% (Attack step 0.0%), 2560x1440 0.0% (Attack step 0.0%); every step at those sizes 0.0 to 0.1%; the card top is 8, 11 and 16 px at 1600, 2000 and 2560 wide (was 165 px on the old build's stage).",
+      "fix": "Applied by 6bd12f55: `+ var(--ffx-sensor-py, 0px)` restored inside the floor rule, wrapped in max(0px, ...).",
+      "evidence": [
+        "results/sensor2-cand-1280x720.json",
+        "results/sensor2-cand-1366x768.json",
+        "results/sensor2-cand-1440x810.json",
+        "results/sensor2-cand-1600x900.json",
+        "results/sensor2-cand-2000x1012.json",
+        "results/sensor2-cand-2560x1440.json",
+        "results/sensor2-live-1280x720.json",
+        "results/sensor2-live-1366x768.json",
+        "results/sensor2-live-1600x900.json",
+        "results/sensor2-live-2000x1012.json",
+        "results/sensor2-live-2560x1440.json",
+        "results/sensorpaint-cand-1280x720.json",
+        "results/sensorpaint-cand-1366x768.json",
+        "frames/natus-sensor-card-c7135bec-vs-816d80f9-vs-accepted-option.jpg",
+        "frames/natus-attack-step-1280x720-card-hud-on-816d80f9.jpg",
+        "frames/natus-attack-step-1366x768-card-hud-on-816d80f9.jpg",
+        "frames/natus-first-menu-1600x900-candidate-816d80f9.jpg",
+        "frames/natus-first-menu-2560x1440-candidate-816d80f9.jpg"
+      ]
+    },
+    "R39F-02": {
+      "status": "fixed: the cut is reverted (1c096064) and Evrae crossfades as on live; Chapter VIII reads 3 snaps in 329.2 s (0.55 a minute; live 2 to 3), 20 double images of 0.40 or more (live control 20); not a regression",
+      "observedAppend": "RE-MEASURED on 816d80f9: 3 snaps (Rikku hurt to KO, Tidus idle to KO, one Evrae idle to cast that did not blend), the same events as live; the 22 double images the fixer read are live's own at equal frame rate (a fresh live run: 20, worst 0.439 on both, 19 of 19 full-length Evrae cast crossfades at 0.435 to 0.439, the same 108 to 110 swaps); the old live baseline's 10 came from a 42.4 fps run that truncated its crossfades.",
+      "evidence": [
+        "continuity/continuity-summary-combined.json",
+        "continuity/continuity-summary.json",
+        "continuity/evrae-airship-win-816d80f9/continuity/continuity.json",
+        "continuity-live-control/continuity-summary.json",
+        "continuity-live-control/evrae-airship-win-live38/continuity/continuity.json"
+      ]
+    },
+    "R39F-03": {
+      "status": "open (carried; Chapter VIII re-measured)",
+      "observedAppend": "UPDATE on 816d80f9 (Ch VIII fresh, Ch I and IV carried): 278 of 1269 swaps over the head tolerance, 136 over the feet tolerance (worst 140.6 px, Ch IV), worst registered head 8.4%. Ch VIII: heads 149 over against the live control's 186, feet 0 against 260 (worst 0.9 px against 257.4), at equal frame rate.",
+      "evidence": [
+        "continuity/continuity-summary-combined.json",
+        "continuity/evrae-airship-win-816d80f9/continuity/continuity.json",
+        "continuity-live-control/evrae-airship-win-live38/continuity/continuity.json"
+      ]
+    },
+    "R39F-04": {
+      "title": "CHK-027 still fails: jerks and double images remain, and Ch I and IV keep the snaps live has",
+      "status": "open (carried; Chapter VIII re-measured; comparison with live corrected)",
+      "observedAppend": "UPDATE on 816d80f9: 12 snaps in 19.6 minutes (0.61 a minute; the old baseline also 12), 131 jerks of 40 px or more, 33 double images of 0.40 or more. CORRECTION: the live baseline used above was captured at 39 to 46 fps (Ch VIII 42.4 fps, 918 ms stall; Ch I 6.2 s stall), which inflates its jerk counts and truncates its crossfades, so \"fewer than live\" is withdrawn for jerks and double images. At equal frame rate in Ch VIII the two builds read the same: jerks 23 against 25, double images 20 against 20 (worst 0.439).",
+      "confidence": "high for the candidate's own numbers; medium for the comparison with live (the Ch I and IV live baseline ran at 39 to 46 fps; only Ch VIII has an equal-frame-rate live control)",
+      "evidence": [
+        "continuity/continuity-summary-combined.json",
+        "continuity-live-control/evrae-airship-win-live38/continuity/continuity.json"
+      ]
+    }
+  },
+  "newIssues": [
+    {
+      "id": "R39F-11",
+      "severity": "polish",
+      "title": "At 1280x720 and 1366x768 the pinned Sensor card touches the tips of one of Natus's wing spikes (1.6 to 2.3% of his painted pixels; live 0%)",
+      "game": "FFX",
+      "chapter": "seymour-natus (Chapter X)",
+      "expected": "The card is clear of Natus at every window shape the pin plays at (1.7 to 2.45), as in the lane's frame of the accepted option N.",
+      "observed": "On 816d80f9 with Mortibody aimed (the default first target): 1280x720 7.0% of his figure box (the card's top is 0 px and it is 204 px tall, ending 19 px into his box) and 1366x768 7.9% (top 0, 220 px tall); by his own painted pixels (a frozen scene-only frame, white rim and violet) 86 of 5521 (1.6%) and 141 of 6254 (2.3%); the frames show the card's lowest row on the tip of one wing spike. With the cursor on Natus the card moves left: 0.0%. At 1440x810 and wider: 0.0 to 0.1%. Live: 0.0% at both sizes (his figure is 92x165 and 98x176 px, unpinned, left of the card). The card's name is whole (never clipped above the window).",
+      "repro": "Real keys, setSeed(1), ?coach=off, 1280x720 or 1366x768: Chapter X first menu, Attack, read `.ffx-sensor` against `__pyrefly.targeting().rects[\"seymour-natus\"]` (results/sensor2-cand-*.json, sensorpaint-cand-*.json).",
+      "evidence": [
+        "results/sensor2-cand-1280x720.json",
+        "results/sensor2-cand-1366x768.json",
+        "results/sensor2-live-1280x720.json",
+        "results/sensor2-live-1366x768.json",
+        "results/sensorpaint-cand-1280x720.json",
+        "results/sensorpaint-cand-1366x768.json",
+        "frames/natus-attack-step-1280x720-card-hud-on-816d80f9.jpg",
+        "frames/natus-attack-step-1366x768-card-hud-on-816d80f9.jpg"
+      ],
+      "confidence": "high for the numbers; the painted share is an estimate (a colour classification inside his box in a frozen frame)",
+      "requirement": "CHK-008",
+      "where": "src/ui/common/hud-floor.css (the floor's larger Sensor type makes the card taller than the pin's lift can clear at small windows; the max(0px, ...) guard stops it at the stage top); src/engine/fx/mix/stageTable.ts (the pin's window shapes)",
+      "fix": "Either unpin Natus below about 1440 wide (as the 16:10 window already plays), or give the pin a smaller card place at those sizes; or accept it. A look decision for Bailey, not a numbers tune.",
+      "acceptanceCheck": "Card cover of his painted pixels 0% (and of his box at most 0.05) at 1280x720 and 1366x768 with Mortibody aimed, with the name unclipped.",
+      "introducedByCandidate": true,
+      "regressionVsLive": true,
+      "inNewFeature": false
+    }
+  ],
+  "checkOverrides": {
+    "CHK-008": {
+      "result": "PASS",
+      "where": "FFX only; Ch X Seymour Natus (re-measured); other panels carried",
+      "reason": "Re-measured on 816d80f9: the Sensor card no longer sits on Natus. Its cover of his figure box is 1440x810 0.0% (Attack step 0.0%), 1600x900 0.0% (Attack step 0.1%), 2000x1012 0.0% (Attack step 0.0%), 2560x1440 0.0% (Attack step 0.0%) on the first menu and 0.0 to 0.1% at every step (Attack with Mortibody aimed, cursor on Natus, cursor back, read-out), against 47 to 48% on c7135bec and 0% on live; the card stands at the top (8, 11 and 16 px at 1600, 2000 and 2560 wide) and its name is never clipped above the window (top 0 at 1280x720, 1366x768 and 1440x810). At 1280x720 and 1366x768 it touches wing-spike tips: 7.0% and 7.9% of his box with Mortibody aimed (live 0%), 1.6% and 2.3% of his painted pixels (R39F-11, polish). The other panels' measures (Ch III, Ch XVI run-in) are carried.",
+      "evidence": [
+        "results/sensor2-cand-1280x720.json",
+        "results/sensor2-cand-1366x768.json",
+        "results/sensor2-cand-1440x810.json",
+        "results/sensor2-cand-1600x900.json",
+        "results/sensor2-cand-2000x1012.json",
+        "results/sensor2-cand-2560x1440.json",
+        "results/sensor2-live-1280x720.json",
+        "results/sensor2-live-1366x768.json",
+        "results/sensor2-live-1600x900.json",
+        "results/sensor2-live-2000x1012.json",
+        "results/sensor2-live-2560x1440.json",
+        "results/sensorpaint-cand-1280x720.json",
+        "results/sensorpaint-cand-1366x768.json",
+        "frames/natus-sensor-card-c7135bec-vs-816d80f9-vs-accepted-option.jpg",
+        "frames/natus-attack-step-1280x720-card-hud-on-816d80f9.jpg",
+        "frames/natus-attack-step-1366x768-card-hud-on-816d80f9.jpg",
+        "frames/natus-first-menu-1600x900-candidate-816d80f9.jpg",
+        "frames/natus-first-menu-2560x1440-candidate-816d80f9.jpg"
+      ],
+      "minutes": 14,
+      "mode": "automated + visual",
+      "reusedFrom": "critic/reviews/c7135bec-focused.json (CHK-008, the parts other than Ch X)"
+    },
+    "CHK-011": {
+      "result": "PASS",
+      "where": "both; Ch X re-measured, Ch III and Ch V carried",
+      "reason": "Ch X re-measured: Natus is in frame (his box {\"x\":1085,\"y\":231,\"w\":203,\"h\":349} at 1600x900), Mortibody and Natus are both selectable by the cursor, and the card no longer covers him. Ch III (Yu Pagodas 100% clear, Braska's Final Aeon 71 to 77% clear) and Ch V (Vegnagun Tail) are carried from c7135bec.",
+      "evidence": [
+        "results/sensor2-cand-1600x900.json",
+        "results/sensor2-cand-2560x1440.json",
+        "frames/natus-sensor-card-c7135bec-vs-816d80f9-vs-accepted-option.jpg"
+      ],
+      "minutes": 3,
+      "reusedFrom": "critic/reviews/c7135bec-focused.json (CHK-011, Ch III and Ch V)"
+    },
+    "CHK-022": {
+      "result": "PASS",
+      "where": "both; Ch VIII (re-run), Ch I, IV and the loss carried",
+      "reason": "Chapter VIII was won again by real keys on the rebuilt dist: 76 turns, the Victory screen, then the board with the chapter cleared and still cleared after a reload; the Ch I, IV and X smokes ran by real keys to 3, 8 and 5 turns (Ch I and X ended on the results screen) with 0 console errors. The Ch I and IV wins, the Ch I defeat and Retry, and Ch V and XIII are carried from c7135bec.",
+      "evidence": [
+        "continuity/evrae-airship-win-816d80f9/run.json",
+        "continuity/evrae-airship-win-816d80f9/31-results.jpg",
+        "results/smoke-seymour-flux-1600x900.json",
+        "results/smoke-ffx2-bahamut-1600x900.json",
+        "results/smoke-seymour-natus-1600x900.json"
+      ],
+      "minutes": 12,
+      "reusedFrom": "critic/reviews/c7135bec-focused.json (CHK-022, the other chapters and the loss)"
+    },
+    "CHK-026": {
+      "result": "FAIL",
+      "where": "both; Ch VIII re-run, Ch I and IV carried; continuity harness",
+      "reason": "A figure still changes size or feet across a pose change, less than on live. Combined over Ch I and IV (carried) and Ch VIII (fresh), 1174.2 s of battle and 1269 swaps: 278 swaps over the head tolerance (live baseline 297 of 1,281), worst 115.7% by mass and 8.4% registered (live 57.1%); 136 standing swaps over the feet tolerance (live 868), worst 140.6 px (Ch IV). Ch VIII against the live control at equal frame rate: heads 149 over against 186, feet 0 against 260. Disclosed as R39F-03.",
+      "evidence": [
+        "continuity/continuity-summary-combined.json",
+        "continuity/continuity-summary.json",
+        "continuity/evrae-airship-win-816d80f9/continuity/continuity.json",
+        "continuity-live-control/continuity-summary.json",
+        "continuity-live-control/evrae-airship-win-live38/continuity/continuity.json",
+        "critic/reviews/c7135bec-focused/continuity/seymour-flux-win-c7135bec/continuity/continuity.json",
+        "critic/reviews/c7135bec-focused/continuity/ffx2-bahamut-win-c7135bec/continuity/continuity.json"
+      ],
+      "minutes": 12,
+      "mode": "harness (critic/runner/lib/continuity.mjs, real keys)",
+      "reusedFrom": "critic/reviews/c7135bec-focused.json (CHK-026, Ch I and IV)"
+    },
+    "CHK-027": {
+      "result": "FAIL",
+      "where": "both; Ch VIII re-run, Ch I and IV carried; continuity harness",
+      "reason": "Motion is not continuous. 12 snaps in 19.6 minutes is 0.61 a minute against a limit of 0.25 (the old live baseline also 12, 0.53); 131 jerks of 40 px or more (worst 353.1 px); 33 double images of 0.40 or more (worst 0.439). Chapter VIII at equal frame rate on this build and on live: snaps 3 and 2, double images 20 and 20, jerks 23 and 25: the same behaviour, so R39F-02 is not a regression. The live baseline's jerk and double-image counts for Ch I and IV (39 to 46 fps) are not comparable. Disclosed as R39F-04.",
+      "evidence": [
+        "continuity/continuity-summary-combined.json",
+        "continuity/continuity-summary.json",
+        "continuity/evrae-airship-win-816d80f9/continuity/continuity.json",
+        "continuity-live-control/continuity-summary.json",
+        "continuity-live-control/evrae-airship-win-live38/continuity/continuity.json",
+        "critic/reviews/c7135bec-focused/continuity/seymour-flux-win-c7135bec/continuity/continuity.json",
+        "critic/reviews/c7135bec-focused/continuity/ffx2-bahamut-win-c7135bec/continuity/continuity.json"
+      ],
+      "minutes": 12,
+      "mode": "harness (critic/runner/lib/continuity.mjs, real keys)",
+      "reusedFrom": "critic/reviews/c7135bec-focused.json (CHK-027, Ch I and IV)"
+    }
+  }
+}

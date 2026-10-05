@@ -1,0 +1,132 @@
+{
+ "name": "render-live-isaaru-via-purifico-2560x1440-c",
+ "chapter": "isaaru-via-purifico",
+ "size": "2560x1440",
+ "which": "live",
+ "base": "https://echoesofspira.com/",
+ "query": "coach=off",
+ "hooks": [
+  "setSeed(1) before the first key",
+  "?coach=off (UI toggle)"
+ ],
+ "log": [],
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "env": {
+  "inner": "2560x1440",
+  "dpr": 1,
+  "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessC"
+ },
+ "titleCrisp": {
+  "error": "TypeError: Cannot read properties of undefined (reading 'report')"
+ },
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card isaaru-via-purifico by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "crisp": {
+  "error": "TypeError: Cannot read properties of undefined (reading 'report')"
+ },
+ "art": {
+  "error": "TypeError: Cannot read properties of undefined (reading 'stats')"
+ },
+ "fps": {
+  "frames": 240,
+  "medianMs": 16.7,
+  "p95Ms": 16.8,
+  "maxMs": 16.8,
+  "fps": 59.9
+ },
+ "canvas": {
+  "w": 2560,
+  "h": 1440,
+  "cssW": 2560,
+  "cssH": 1440
+ },
+ "audit": {
+  "artResponses": 102,
+  "status": {
+   "200": 99,
+   "307": 3
+  },
+  "rawAtRequests": [
+   "/art/characters/isaaru/idle@2x.png",
+   "/art/characters/grothia/idle@2x.png",
+   "/art/characters/yuna/idle@2x.png"
+  ],
+  "rawAtCount": 3,
+  "encodedAtFiles": 3,
+  "tiers": {
+   "x2": 3,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [
+   {
+    "u": "/art/characters/isaaru/idle@2x.png",
+    "st": 307,
+    "ct": "",
+    "redirected": false
+   },
+   {
+    "u": "/art/characters/grothia/idle@2x.png",
+    "st": 307,
+    "ct": "",
+    "redirected": false
+   },
+   {
+    "u": "/art/characters/yuna/idle@2x.png",
+    "st": 307,
+    "ct": "",
+    "redirected": false
+   }
+  ],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "artFiles": 70,
+ "hiRes": [
+  "/art/characters/isaaru/idle@2x.png",
+  "/art/characters/isaaru/idle%402x.png",
+  "/art/characters/grothia/idle@2x.png",
+  "/art/characters/grothia/idle%402x.png",
+  "/art/characters/yuna/idle@2x.png",
+  "/art/characters/yuna/idle%402x.png"
+ ],
+ "hiResCount": 6,
+ "sampleHiRes": [
+  "/art/characters/isaaru/idle@2x.png",
+  "/art/characters/isaaru/idle%402x.png",
+  "/art/characters/grothia/idle@2x.png",
+  "/art/characters/grothia/idle%402x.png",
+  "/art/characters/yuna/idle@2x.png",
+  "/art/characters/yuna/idle%402x.png"
+ ],
+ "responsesNon2xx": [
+  {
+   "u": "/art/characters/isaaru/idle@2x.png",
+   "st": 307,
+   "ct": "",
+   "redirected": false
+  },
+  {
+   "u": "/art/characters/grothia/idle@2x.png",
+   "st": 307,
+   "ct": "",
+   "redirected": false
+  },
+  {
+   "u": "/art/characters/yuna/idle@2x.png",
+   "st": 307,
+   "ct": "",
+   "redirected": false
+  }
+ ],
+ "aborted": -3,
+ "screenshotNote": "JPEG of the page at the first command menu",
+ "warns": [],
+ "consoleErrors": [],
+ "notFound": []
+}

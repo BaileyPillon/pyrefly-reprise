@@ -1,0 +1,93 @@
+{
+ "name": "bdwatch-evrae-airship-2560x1440-fast",
+ "chapter": "evrae-airship",
+ "size": "2560x1440",
+ "series": [
+  {
+   "t": 0,
+   "paint": {
+    "w": 5376,
+    "src": "evrae-airship-deck%402x.webp"
+   },
+   "plates": []
+  },
+  {
+   "t": 1.5,
+   "paint": {
+    "w": 5376,
+    "src": "evrae-airship-deck%402x.webp"
+   },
+   "plates": []
+  },
+  {
+   "t": 3,
+   "paint": {
+    "w": 5376,
+    "src": "evrae-airship-deck%402x.webp"
+   },
+   "plates": []
+  },
+  {
+   "t": 4.5,
+   "paint": {
+    "w": 5376,
+    "src": "evrae-airship-deck%402x.webp"
+   },
+   "plates": []
+  },
+  {
+   "t": 6,
+   "paint": {
+    "w": 5376,
+    "src": "evrae-airship-deck%402x.webp"
+   },
+   "plates": []
+  },
+  {
+   "t": 7.5,
+   "paint": {
+    "w": 5376,
+    "src": "evrae-airship-deck%402x.webp"
+   },
+   "plates": []
+  },
+  {
+   "t": 9,
+   "paint": {
+    "w": 5376,
+    "src": "evrae-airship-deck%402x.webp"
+   },
+   "plates": []
+  },
+  {
+   "t": 10.6,
+   "paint": {
+    "w": 5376,
+    "src": "evrae-airship-deck%402x.webp"
+   },
+   "plates": []
+  }
+ ],
+ "menuAtMs": 13971,
+ "connStart": {
+  "downlink": 10,
+  "effectiveType": "4g",
+  "rtt": 0,
+  "saveData": false
+ },
+ "connEnd": {
+  "downlink": 10,
+  "effectiveType": "4g",
+  "rtt": 0,
+  "saveData": false
+ },
+ "maxPaintW": 5376,
+ "firstHiT": 0,
+ "backdropReq": [
+  "/art/backdrops/garden-of-pain.webp",
+  "/art/backdrops/via-purifico.webp",
+  "/art/backdrops/road-to-the-farplane.webp",
+  "/art/backdrops/evrae-airship-deck%402x.webp"
+ ],
+ "consoleErrors": []
+}

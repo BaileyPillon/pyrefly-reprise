@@ -1,0 +1,260 @@
+{
+ "name": "smoke-ffx2-trema-1600x900",
+ "chapter": "ffx2-trema",
+ "size": "1600x900",
+ "touch": false,
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off"
+ ],
+ "turns": [
+  {
+   "n": 0,
+   "who": "play:turn-start",
+   "picked": [
+    "Attack"
+   ],
+   "tookTurn": true,
+   "newEvents": 10
+  },
+  {
+   "n": 1,
+   "who": "command:paine",
+   "picked": [
+    "Attack"
+   ],
+   "tookTurn": true,
+   "newEvents": 10
+  },
+  {
+   "n": 2,
+   "who": "command:rikku",
+   "picked": [
+    "Attack"
+   ],
+   "tookTurn": true,
+   "newEvents": 12
+  },
+  {
+   "n": 3,
+   "who": "command:yuna",
+   "picked": [
+    "Attack"
+   ],
+   "tookTurn": true,
+   "newEvents": 12
+  },
+  {
+   "n": 4,
+   "who": "command:paine",
+   "picked": [
+    "Attack"
+   ],
+   "tookTurn": true,
+   "newEvents": 12
+  },
+  {
+   "n": 5,
+   "who": "command:rikku",
+   "picked": [
+    "advisor:{\"label\":\"Gunner\",\"target\":null,\"menu\":\"Change\"}",
+    "Change",
+    "Gunner"
+   ],
+   "tookTurn": false,
+   "newEvents": 11
+  },
+  {
+   "n": 6,
+   "who": "command:yuna",
+   "picked": [
+    "advisor:{\"label\":\"White Mage\",\"target\":null,\"menu\":\"Change\"}",
+    "Change",
+    "White Mage"
+   ],
+   "tookTurn": false,
+   "newEvents": 9
+  },
+  {
+   "n": 7,
+   "who": "idle",
+   "picked": [
+    "advisor:{\"label\":\"Warrior\",\"target\":null,\"menu\":\"Change\"}",
+    "Change",
+    "Warrior"
+   ],
+   "tookTurn": false,
+   "newEvents": 11
+  }
+ ],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card ffx2-trema by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "crisp": {
+  "rung": "fplus",
+  "pinned": false,
+  "cfg": {
+   "ss": 2,
+   "ssRing": 0.5,
+   "cas": 0.3,
+   "casSharp": 0.5,
+   "casFloor": 0.05,
+   "aaPre": false,
+   "aa": null
+  },
+  "class": "high",
+  "tier": "full",
+  "ssEffective": 2,
+  "simulatedMs": 0,
+  "governor": {
+   "rung": "fplus",
+   "budgetMs": 22,
+   "pending": 110,
+   "windows": [
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 119,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.7,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.5,
+     "samples": 120,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.65,
+     "samples": 120,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 119,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 120,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 120,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.7,
+     "samples": 120,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.7,
+     "samples": 115,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 114,
+     "stepped": false
+    }
+   ]
+  },
+  "passes": [
+   "0:scene(off)",
+   "1:scene-msaa(off)",
+   "2:ssaa",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas",
+   "8:grade",
+   "9:SpectacleShader(off)"
+  ]
+ },
+ "audit": {
+  "artResponses": 280,
+  "status": {
+   "200": 280
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 4,
+  "tiers": {
+   "x2": 4,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "state": {
+  "turn": 29,
+  "seed": 1,
+  "result": null,
+  "hp": {
+   "yuna": "1579/2294",
+   "rikku": "4308/5674",
+   "paine": "2867/4122"
+  }
+ },
+ "touchSummary": null,
+ "warns": [],
+ "consoleErrors": [],
+ "notFound": []
+}

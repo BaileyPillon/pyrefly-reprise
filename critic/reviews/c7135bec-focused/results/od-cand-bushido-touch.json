@@ -1,0 +1,164 @@
+{
+ "name": "od-cand-bushido-touch",
+ "kind": "bushido",
+ "mode": "touch",
+ "label": "cand",
+ "size": "390x844",
+ "chapter": "sin-fins-core",
+ "base": "http://127.0.0.1:5461/?coach=off",
+ "hooks": [
+  "setSeed(1) + gotoChapter (navigation only, ?coach=off)",
+  "battleState() gauge := 100 for tidus and auron (labelled)"
+ ],
+ "log": [
+  "first menu; actor command:tidus",
+  "overlay up {\"turns\":6,\"chosen\":\"Dragon Fang\"}",
+  "overlay {\"title\":\"Dragon Fang\",\"subtitle\":\"BUSHIDO · ENTER THE SEQUENCE\",\"input\":\"keyboard\",\"cls\":\"ig-minigame ffx-mg ffx-mg--tap ffx-mg--open\",\"chips\":[\"↓/down/66x50/pe:auto/top:true\",\"←/left/66x50/pe:auto/top:true\",\"↑/up/66x50/pe:auto/top:true\",\"→/right/66x50/pe:auto/top:true\",\"FL1/l1/66x50/pe:auto/top:true\",\"RR1/r1/66x50/pe:auto/top:true\",\"Esc○/cancel/66x50/pe:auto/top:true\",\"Enter✕/confirm/66x50/pe:auto/top:true\"],\"slab\":{\"x\":1.7,\"y\":56,\"w\":366.4,\"h\":218.3},\"slabPe\":\"auto\"}",
+  "typed the sequence",
+  "engine {\"seq\":34,\"actor\":\"auron\",\"ability\":\"Dragon Fang\",\"extra\":{\"kind\":\"auron-sequence\",\"sequence\":{\"success\":true,\"correctInputs\":8,\"timeRemainingMs\":2892.5}}}"
+ ],
+ "reach": {
+  "turns": 6,
+  "chosen": "Dragon Fang"
+ },
+ "overlay": {
+  "cls": "ig-minigame ffx-mg ffx-mg--tap ffx-mg--open",
+  "input": "keyboard",
+  "title": "Dragon Fang",
+  "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+  "timer": "3.7",
+  "slab": {
+   "x": 1.7,
+   "y": 56,
+   "w": 366.4,
+   "h": 218.3
+  },
+  "slabPe": "auto",
+  "chips": [
+   {
+    "text": "↓",
+    "main": "↓",
+    "sub": null,
+    "btn": "down",
+    "aria": "Down",
+    "x": 32,
+    "y": 152.9,
+    "w": 66,
+    "h": 50,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "←",
+    "main": "←",
+    "sub": null,
+    "btn": "left",
+    "aria": "Left",
+    "x": 106,
+    "y": 152.9,
+    "w": 66,
+    "h": 50,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "↑",
+    "main": "↑",
+    "sub": null,
+    "btn": "up",
+    "aria": "Up",
+    "x": 180,
+    "y": 152.9,
+    "w": 66,
+    "h": 50,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "→",
+    "main": "→",
+    "sub": null,
+    "btn": "right",
+    "aria": "Right",
+    "x": 254,
+    "y": 152.9,
+    "w": 66,
+    "h": 50,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "FL1",
+    "main": "F",
+    "sub": "L1",
+    "btn": "l1",
+    "aria": "L1, key F",
+    "x": 32,
+    "y": 210.9,
+    "w": 66,
+    "h": 50,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "RR1",
+    "main": "R",
+    "sub": "R1",
+    "btn": "r1",
+    "aria": "R1, key R",
+    "x": 106,
+    "y": 210.9,
+    "w": 66,
+    "h": 50,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "Esc○",
+    "main": "Esc",
+    "sub": "○",
+    "btn": "cancel",
+    "aria": "Circle, key Esc",
+    "x": 180,
+    "y": 210.9,
+    "w": 66,
+    "h": 50,
+    "pe": "auto",
+    "topIsChip": true
+   },
+   {
+    "text": "Enter✕",
+    "main": "Enter",
+    "sub": "✕",
+    "btn": "confirm",
+    "aria": "Cross, key Enter",
+    "x": 254,
+    "y": 210.9,
+    "w": 66,
+    "h": 50,
+    "pe": "auto",
+    "topIsChip": true
+   }
+  ],
+  "bar": null,
+  "viewport": "390x844"
+ },
+ "t0": 1791180790412,
+ "closed": true,
+ "engine": {
+  "seq": 34,
+  "actor": "auron",
+  "ability": "Dragon Fang",
+  "extra": {
+   "kind": "auron-sequence",
+   "sequence": {
+    "success": true,
+    "correctInputs": 8,
+    "timeRemainingMs": 2892.5
+   }
+  }
+ },
+ "sameAsPre": false,
+ "screenAfter": "battle",
+ "consoleErrors": []
+}

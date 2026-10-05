@@ -1,0 +1,382 @@
+{
+ "name": "eyecandy-seymour-flux-1600x900",
+ "chapter": "seymour-flux",
+ "size": "1600x900",
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off"
+ ],
+ "steps": [
+  {
+   "what": "page opened",
+   "head": "Eye candy11 of 11 on",
+   "rows": [
+    ">fxAll=ALL ON",
+    "fxLight=ON",
+    "fxDof=ON",
+    "fxFog=ON",
+    "fxEdges=ON",
+    "fxLiving=ON",
+    "fxBreath=ON",
+    "fxKo=ON",
+    "fxSpectacle=ON",
+    "fxFraming=ON",
+    "fxHero=ON",
+    "fxSplash=ON"
+   ],
+   "sel": "fxAll",
+   "labels": {
+    "fxAll": "ALL LOOKS",
+    "fxLight": "CINEMA LIGHT",
+    "fxDof": "DEPTH OF FIELD",
+    "fxFog": "FOG",
+    "fxEdges": "SMOOTH EDGES",
+    "fxLiving": "LIVING PAINTINGS",
+    "fxBreath": "BREATHING",
+    "fxKo": "KO COLLAPSE",
+    "fxSpectacle": "BATTLE SPECTACLE",
+    "fxFraming": "CHAPTER FRAMING",
+    "fxHero": "OVERDRIVE SHOT",
+    "fxSplash": "SPLASH ART"
+   }
+  },
+  {
+   "what": "ALL LOOKS Left = ALL OFF",
+   "head": "Eye candy0 of 11 on",
+   "rows": [
+    ">fxAll=ALL OFF",
+    "fxLight=OFF",
+    "fxDof=ON· LOOK OFF",
+    "fxFog=ON· LOOK OFF",
+    "fxEdges=ON· LOOK OFF",
+    "fxLiving=OFF",
+    "fxBreath=ON· LOOK OFF",
+    "fxKo=ON· LOOK OFF",
+    "fxSpectacle=OFF",
+    "fxFraming=ON· LOOK OFF",
+    "fxHero=ON· LOOK OFF",
+    "fxSplash=ON· LOOK OFF"
+   ],
+   "sel": "fxAll",
+   "labels": {
+    "fxAll": "ALL LOOKS",
+    "fxLight": "CINEMA LIGHT",
+    "fxDof": "DEPTH OF FIELD",
+    "fxFog": "FOG",
+    "fxEdges": "SMOOTH EDGES",
+    "fxLiving": "LIVING PAINTINGS",
+    "fxBreath": "BREATHING",
+    "fxKo": "KO COLLAPSE",
+    "fxSpectacle": "BATTLE SPECTACLE",
+    "fxFraming": "CHAPTER FRAMING",
+    "fxHero": "OVERDRIVE SHOT",
+    "fxSplash": "SPLASH ART"
+   }
+  },
+  {
+   "what": "look BATTLE SPECTACLE Confirm (look ON, all its parts were OFF)",
+   "head": "Eye candy4 of 11 on",
+   "rows": [
+    "fxAll=MIXED",
+    "fxLight=OFF",
+    "fxDof=ON· LOOK OFF",
+    "fxFog=ON· LOOK OFF",
+    "fxEdges=ON· LOOK OFF",
+    "fxLiving=OFF",
+    "fxBreath=ON· LOOK OFF",
+    "fxKo=ON· LOOK OFF",
+    ">fxSpectacle=ON",
+    "fxFraming=ON",
+    "fxHero=ON",
+    "fxSplash=ON"
+   ],
+   "sel": "fxSpectacle",
+   "labels": {
+    "fxAll": "ALL LOOKS",
+    "fxLight": "CINEMA LIGHT",
+    "fxDof": "DEPTH OF FIELD",
+    "fxFog": "FOG",
+    "fxEdges": "SMOOTH EDGES",
+    "fxLiving": "LIVING PAINTINGS",
+    "fxBreath": "BREATHING",
+    "fxKo": "KO COLLAPSE",
+    "fxSpectacle": "BATTLE SPECTACLE",
+    "fxFraming": "CHAPTER FRAMING",
+    "fxHero": "OVERDRIVE SHOT",
+    "fxSplash": "SPLASH ART"
+   }
+  },
+  {
+   "what": "every part of BATTLE SPECTACLE turned OFF by hand (look still ON)",
+   "head": "Eye candy1 of 11 on",
+   "rows": [
+    "fxAll=MIXED",
+    "fxLight=OFF",
+    "fxDof=ON· LOOK OFF",
+    "fxFog=ON· LOOK OFF",
+    "fxEdges=ON· LOOK OFF",
+    "fxLiving=OFF",
+    "fxBreath=ON· LOOK OFF",
+    "fxKo=ON· LOOK OFF",
+    "fxSpectacle=ON",
+    "fxFraming=OFF",
+    "fxHero=OFF",
+    ">fxSplash=OFF"
+   ],
+   "sel": "fxSplash",
+   "labels": {
+    "fxAll": "ALL LOOKS",
+    "fxLight": "CINEMA LIGHT",
+    "fxDof": "DEPTH OF FIELD",
+    "fxFog": "FOG",
+    "fxEdges": "SMOOTH EDGES",
+    "fxLiving": "LIVING PAINTINGS",
+    "fxBreath": "BREATHING",
+    "fxKo": "KO COLLAPSE",
+    "fxSpectacle": "BATTLE SPECTACLE",
+    "fxFraming": "CHAPTER FRAMING",
+    "fxHero": "OVERDRIVE SHOT",
+    "fxSplash": "SPLASH ART"
+   }
+  },
+  {
+   "what": "look turned OFF (its parts are all OFF)",
+   "head": "Eye candy0 of 11 on",
+   "rows": [
+    "fxAll=ALL OFF",
+    "fxLight=OFF",
+    "fxDof=ON· LOOK OFF",
+    "fxFog=ON· LOOK OFF",
+    "fxEdges=ON· LOOK OFF",
+    "fxLiving=OFF",
+    "fxBreath=ON· LOOK OFF",
+    "fxKo=ON· LOOK OFF",
+    ">fxSpectacle=OFF",
+    "fxFraming=OFF",
+    "fxHero=OFF",
+    "fxSplash=OFF"
+   ],
+   "sel": "fxSpectacle",
+   "labels": {
+    "fxAll": "ALL LOOKS",
+    "fxLight": "CINEMA LIGHT",
+    "fxDof": "DEPTH OF FIELD",
+    "fxFog": "FOG",
+    "fxEdges": "SMOOTH EDGES",
+    "fxLiving": "LIVING PAINTINGS",
+    "fxBreath": "BREATHING",
+    "fxKo": "KO COLLAPSE",
+    "fxSpectacle": "BATTLE SPECTACLE",
+    "fxFraming": "CHAPTER FRAMING",
+    "fxHero": "OVERDRIVE SHOT",
+    "fxSplash": "SPLASH ART"
+   }
+  },
+  {
+   "what": "look turned ON again with EVERY part OFF: parts expected to come back",
+   "head": "Eye candy4 of 11 on",
+   "rows": [
+    "fxAll=MIXED",
+    "fxLight=OFF",
+    "fxDof=ON· LOOK OFF",
+    "fxFog=ON· LOOK OFF",
+    "fxEdges=ON· LOOK OFF",
+    "fxLiving=OFF",
+    "fxBreath=ON· LOOK OFF",
+    "fxKo=ON· LOOK OFF",
+    ">fxSpectacle=ON",
+    "fxFraming=ON",
+    "fxHero=ON",
+    "fxSplash=ON"
+   ],
+   "sel": "fxSpectacle",
+   "labels": {
+    "fxAll": "ALL LOOKS",
+    "fxLight": "CINEMA LIGHT",
+    "fxDof": "DEPTH OF FIELD",
+    "fxFog": "FOG",
+    "fxEdges": "SMOOTH EDGES",
+    "fxLiving": "LIVING PAINTINGS",
+    "fxBreath": "BREATHING",
+    "fxKo": "KO COLLAPSE",
+    "fxSpectacle": "BATTLE SPECTACLE",
+    "fxFraming": "CHAPTER FRAMING",
+    "fxHero": "OVERDRIVE SHOT",
+    "fxSplash": "SPLASH ART"
+   }
+  },
+  {
+   "what": "part fxSplash turned OFF by hand",
+   "head": "Eye candy3 of 11 on",
+   "rows": [
+    "fxAll=MIXED",
+    "fxLight=OFF",
+    "fxDof=ON· LOOK OFF",
+    "fxFog=ON· LOOK OFF",
+    "fxEdges=ON· LOOK OFF",
+    "fxLiving=OFF",
+    "fxBreath=ON· LOOK OFF",
+    "fxKo=ON· LOOK OFF",
+    "fxSpectacle=ON",
+    "fxFraming=ON",
+    "fxHero=ON",
+    ">fxSplash=OFF"
+   ],
+   "sel": "fxSplash",
+   "labels": {
+    "fxAll": "ALL LOOKS",
+    "fxLight": "CINEMA LIGHT",
+    "fxDof": "DEPTH OF FIELD",
+    "fxFog": "FOG",
+    "fxEdges": "SMOOTH EDGES",
+    "fxLiving": "LIVING PAINTINGS",
+    "fxBreath": "BREATHING",
+    "fxKo": "KO COLLAPSE",
+    "fxSpectacle": "BATTLE SPECTACLE",
+    "fxFraming": "CHAPTER FRAMING",
+    "fxHero": "OVERDRIVE SHOT",
+    "fxSplash": "SPLASH ART"
+   }
+  },
+  {
+   "what": "look turned OFF",
+   "head": "Eye candy0 of 11 on",
+   "rows": [
+    "fxAll=ALL OFF",
+    "fxLight=OFF",
+    "fxDof=ON· LOOK OFF",
+    "fxFog=ON· LOOK OFF",
+    "fxEdges=ON· LOOK OFF",
+    "fxLiving=OFF",
+    "fxBreath=ON· LOOK OFF",
+    "fxKo=ON· LOOK OFF",
+    ">fxSpectacle=OFF",
+    "fxFraming=ON· LOOK OFF",
+    "fxHero=ON· LOOK OFF",
+    "fxSplash=OFF"
+   ],
+   "sel": "fxSpectacle",
+   "labels": {
+    "fxAll": "ALL LOOKS",
+    "fxLight": "CINEMA LIGHT",
+    "fxDof": "DEPTH OF FIELD",
+    "fxFog": "FOG",
+    "fxEdges": "SMOOTH EDGES",
+    "fxLiving": "LIVING PAINTINGS",
+    "fxBreath": "BREATHING",
+    "fxKo": "KO COLLAPSE",
+    "fxSpectacle": "BATTLE SPECTACLE",
+    "fxFraming": "CHAPTER FRAMING",
+    "fxHero": "OVERDRIVE SHOT",
+    "fxSplash": "SPLASH ART"
+   }
+  },
+  {
+   "what": "look turned ON again (fxSplash was OFF by hand, the other parts ON)",
+   "head": "Eye candy3 of 11 on",
+   "rows": [
+    "fxAll=MIXED",
+    "fxLight=OFF",
+    "fxDof=ON· LOOK OFF",
+    "fxFog=ON· LOOK OFF",
+    "fxEdges=ON· LOOK OFF",
+    "fxLiving=OFF",
+    "fxBreath=ON· LOOK OFF",
+    "fxKo=ON· LOOK OFF",
+    ">fxSpectacle=ON",
+    "fxFraming=ON",
+    "fxHero=ON",
+    "fxSplash=OFF"
+   ],
+   "sel": "fxSpectacle",
+   "labels": {
+    "fxAll": "ALL LOOKS",
+    "fxLight": "CINEMA LIGHT",
+    "fxDof": "DEPTH OF FIELD",
+    "fxFog": "FOG",
+    "fxEdges": "SMOOTH EDGES",
+    "fxLiving": "LIVING PAINTINGS",
+    "fxBreath": "BREATHING",
+    "fxKo": "KO COLLAPSE",
+    "fxSpectacle": "BATTLE SPECTACLE",
+    "fxFraming": "CHAPTER FRAMING",
+    "fxHero": "OVERDRIVE SHOT",
+    "fxSplash": "SPLASH ART"
+   }
+  }
+ ],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card seymour-flux by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "tab": "Options",
+ "row": "EYE CANDYALL ON",
+ "ruleCase": {
+  "before": [
+   "fxSpectacle=ON",
+   "fxFraming=OFF",
+   "fxHero=OFF",
+   ">fxSplash=OFF"
+  ],
+  "after": [
+   ">fxSpectacle=ON",
+   "fxFraming=ON",
+   "fxHero=ON",
+   "fxSplash=ON"
+  ]
+ },
+ "partsOfLook": [
+  "fxFraming",
+  "fxHero",
+  "fxSplash"
+ ],
+ "result": {
+  "allOffHead": "Eye candy0 of 11 on",
+  "afterLookOn": [
+   ">fxSpectacle=ON",
+   "fxFraming=ON",
+   "fxHero=ON",
+   "fxSplash=ON"
+  ],
+  "afterReOn": [
+   ">fxSpectacle=ON",
+   "fxFraming=ON",
+   "fxHero=ON",
+   "fxSplash=OFF"
+  ],
+  "keptHandChoice": true
+ },
+ "saved": {
+  "masterVolume": 0.8,
+  "musicVolume": 0.7,
+  "sfxVolume": 0.7,
+  "sfxBalanceMigrated": true,
+  "textSpeed": 1,
+  "skipSeenCutscenes": false,
+  "lowEffects": false,
+  "fxLight": false,
+  "fxLiving": false,
+  "fxSpectacle": true,
+  "fxDof": true,
+  "fxFog": true,
+  "fxEdges": true,
+  "fxBreath": true,
+  "fxKo": true,
+  "fxFraming": true,
+  "fxHero": true,
+  "fxSphere": true,
+  "fxSplash": false,
+  "textSize": 1,
+  "guideVisible": true,
+  "advisorVisible": true,
+  "intentVisible": true,
+  "ffx2Atb": "wait",
+  "ffx2AtbMigrated": true,
+  "pausePanelsHidden": false,
+  "battleHelp": true,
+  "reduceMotion": false
+ },
+ "consoleErrors": []
+}

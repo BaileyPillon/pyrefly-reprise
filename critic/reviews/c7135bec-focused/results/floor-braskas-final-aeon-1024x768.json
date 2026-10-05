@@ -1,0 +1,173 @@
+{
+ "name": "floor-braskas-final-aeon-1024x768",
+ "chapter": "braskas-final-aeon",
+ "size": "1024x768",
+ "touch": false,
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off"
+ ],
+ "steps": [
+  {
+   "label": "first menu",
+   "minPx": 9.12,
+   "nTexts": 77,
+   "under14": [
+    {
+     "t": "Helpful Hint",
+     "px": 9.12,
+     "cls": "sgd__hint-kind"
+    },
+    {
+     "t": "Final Boss Battle",
+     "px": 9.12,
+     "cls": "sgd__tag"
+    },
+    {
+     "t": "In Game Description:",
+     "px": 9.12,
+     "cls": "sgd__flabel"
+    },
+    {
+     "t": "Yu Pagodas",
+     "px": 10.88,
+     "cls": "sgd__u sgd__h3"
+    }
+   ],
+   "under14Count": 4,
+   "od": {
+    "W": 1024,
+    "bars": 3,
+    "maxRight": 1013,
+    "inside": true,
+    "hang": null
+   }
+  },
+  {
+   "label": "Attack target step",
+   "minPx": 9.12,
+   "nTexts": 80,
+   "under14": [
+    {
+     "t": "Helpful Hint",
+     "px": 9.12,
+     "cls": "sgd__hint-kind"
+    },
+    {
+     "t": "Final Boss Battle",
+     "px": 9.12,
+     "cls": "sgd__tag"
+    },
+    {
+     "t": "In Game Description:",
+     "px": 9.12,
+     "cls": "sgd__flabel"
+    },
+    {
+     "t": "Yu Pagodas",
+     "px": 10.88,
+     "cls": "sgd__u sgd__h3"
+    }
+   ],
+   "under14Count": 4,
+   "od": {
+    "W": 1024,
+    "bars": 3,
+    "maxRight": 1020.8,
+    "inside": true,
+    "hang": "16.25px"
+   }
+  },
+  {
+   "label": "target cursor moved",
+   "minPx": 9.12,
+   "nTexts": 79,
+   "under14": [
+    {
+     "t": "Helpful Hint",
+     "px": 9.12,
+     "cls": "sgd__hint-kind"
+    },
+    {
+     "t": "Final Boss Battle",
+     "px": 9.12,
+     "cls": "sgd__tag"
+    },
+    {
+     "t": "In Game Description:",
+     "px": 9.12,
+     "cls": "sgd__flabel"
+    },
+    {
+     "t": "Yu Pagodas",
+     "px": 10.88,
+     "cls": "sgd__u sgd__h3"
+    }
+   ],
+   "under14Count": 4,
+   "od": {
+    "W": 1024,
+    "bars": 3,
+    "maxRight": 1020.8,
+    "inside": true,
+    "hang": "16.25px"
+   }
+  }
+ ],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card braskas-final-aeon by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "attackChosen": "Attack",
+ "targets": {
+  "n": 3,
+  "lit": 1,
+  "selecting": true
+ },
+ "pauseTabs": [
+  {
+   "tab": "Tidus",
+   "minPx": 9.12,
+   "under14": 4
+  },
+  {
+   "tab": "Yuna",
+   "minPx": 9.12,
+   "under14": 4
+  },
+  {
+   "tab": "Auron",
+   "minPx": 9.12,
+   "under14": 4
+  },
+  {
+   "tab": "Chapter",
+   "minPx": 9.12,
+   "under14": 4
+  },
+  {
+   "tab": "Guide",
+   "minPx": 9.12,
+   "under14": 4
+  },
+  {
+   "tab": "Options",
+   "minPx": 9.12,
+   "under14": 4
+  },
+  {
+   "tab": "Controls",
+   "minPx": 9.12,
+   "under14": 4
+  },
+  {
+   "tab": "Music",
+   "minPx": 9.12,
+   "under14": 4
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

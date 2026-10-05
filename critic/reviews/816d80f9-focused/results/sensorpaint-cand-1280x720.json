@@ -1,0 +1,32 @@
+{
+ "name": "sensorpaint-cand-1280x720",
+ "size": "1280x720",
+ "which": "cand",
+ "targets": {
+  "n": 2,
+  "lit": 1,
+  "selecting": true
+ },
+ "geo": {
+  "card": {
+   "x": 798.2893676757812,
+   "y": 0,
+   "w": 243.42132568359375,
+   "h": 204.28125
+  },
+  "natus": {
+   "x": 867.4979833270606,
+   "y": 184.56716495059504,
+   "w": 159.67258913985233,
+   "h": 279.39343273875284
+  },
+  "text": "Mortibody HP 4000 / 4000 FIRE "
+ },
+ "painted": {
+  "naturalPixelsInBox": 5521,
+  "underCard": 86,
+  "shareUnderCard": 0.0156,
+  "boxCover": 0.075
+ },
+ "consoleErrors": []
+}

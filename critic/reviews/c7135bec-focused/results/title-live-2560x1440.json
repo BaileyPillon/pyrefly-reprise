@@ -1,0 +1,54 @@
+{
+ "name": "title-live-2560x1440",
+ "size": "2560x1440",
+ "which": "live",
+ "crisp": {
+  "error": "TypeError: Cannot read properties of undefined (reading 'report')"
+ },
+ "audit": {
+  "artResponses": 27,
+  "status": {
+   "200": 27
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 0,
+  "tiers": {
+   "x2": 0,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "artFiles": [
+  "/art/characters/seymour-flux-body/idle.png",
+  "/art/portraits/tidus.webp",
+  "/art/portraits/yuna.webp",
+  "/art/portraits/kimahri.png",
+  "/art/portraits/auron.webp",
+  "/art/portraits/rikku.webp",
+  "/art/portraits/wakka.webp",
+  "/art/portraits/lulu.webp",
+  "/art/portraits/yuna-x2.webp",
+  "/art/portraits/rikku-x2.webp",
+  "/art/portraits/paine.webp",
+  "/art/characters/yuna-white-mage/idle.webp",
+  "/art/characters/rikku-dark-knight/idle.webp",
+  "/art/characters/paine-warrior/idle.webp",
+  "/art/characters/paine-dark-knight/idle.webp",
+  "/art/characters/yuna-gunner/idle.webp",
+  "/art/characters/rikku-thief/idle.webp",
+  "/art/characters/yuna-dark-knight/idle.webp",
+  "/art/characters/rikku-alchemist/idle.webp",
+  "/art/backdrops/zanarkand-dome.webp",
+  "/art/characters/yunalesca-1/idle.webp",
+  "/art/characters/braskas-final-aeon-1/idle.webp",
+  "/art/backdrops/macalania-temple.webp",
+  "/art/characters/anima/idle.webp"
+ ],
+ "warns": [],
+ "consoleErrors": []
+}

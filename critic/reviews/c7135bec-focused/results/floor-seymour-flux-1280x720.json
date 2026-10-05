@@ -1,0 +1,188 @@
+{
+ "name": "floor-seymour-flux-1280x720",
+ "chapter": "seymour-flux",
+ "size": "1280x720",
+ "touch": false,
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off"
+ ],
+ "steps": [
+  {
+   "label": "first menu",
+   "minPx": 11.4,
+   "nTexts": 93,
+   "under14": [
+    {
+     "t": "Boss Battle",
+     "px": 11.4,
+     "cls": "sgd__tag"
+    },
+    {
+     "t": "In Game Description:",
+     "px": 11.4,
+     "cls": "sgd__flabel"
+    },
+    {
+     "t": "HP:",
+     "px": 11.4,
+     "cls": "sgd__flabel"
+    },
+    {
+     "t": "Steal:",
+     "px": 11.4,
+     "cls": "sgd__u sgd__flabel sgd__listlabel"
+    },
+    {
+     "t": "Drops:",
+     "px": 11.4,
+     "cls": "sgd__u sgd__flabel sgd__listlabel"
+    }
+   ],
+   "under14Count": 5,
+   "od": {
+    "W": 1280,
+    "bars": 3,
+    "maxRight": 1241.8,
+    "inside": true,
+    "hang": null
+   }
+  },
+  {
+   "label": "Attack target step",
+   "minPx": 11.4,
+   "nTexts": 93,
+   "under14": [
+    {
+     "t": "Boss Battle",
+     "px": 11.4,
+     "cls": "sgd__tag"
+    },
+    {
+     "t": "In Game Description:",
+     "px": 11.4,
+     "cls": "sgd__flabel"
+    },
+    {
+     "t": "HP:",
+     "px": 11.4,
+     "cls": "sgd__flabel"
+    },
+    {
+     "t": "Steal:",
+     "px": 11.4,
+     "cls": "sgd__u sgd__flabel sgd__listlabel"
+    },
+    {
+     "t": "Drops:",
+     "px": 11.4,
+     "cls": "sgd__u sgd__flabel sgd__listlabel"
+    }
+   ],
+   "under14Count": 5,
+   "od": {
+    "W": 1280,
+    "bars": 3,
+    "maxRight": 1267.6,
+    "inside": true,
+    "hang": "4.05px"
+   }
+  },
+  {
+   "label": "target cursor moved",
+   "minPx": 11.4,
+   "nTexts": 93,
+   "under14": [
+    {
+     "t": "Boss Battle",
+     "px": 11.4,
+     "cls": "sgd__tag"
+    },
+    {
+     "t": "In Game Description:",
+     "px": 11.4,
+     "cls": "sgd__flabel"
+    },
+    {
+     "t": "HP:",
+     "px": 11.4,
+     "cls": "sgd__flabel"
+    },
+    {
+     "t": "Steal:",
+     "px": 11.4,
+     "cls": "sgd__u sgd__flabel sgd__listlabel"
+    },
+    {
+     "t": "Drops:",
+     "px": 11.4,
+     "cls": "sgd__u sgd__flabel sgd__listlabel"
+    }
+   ],
+   "under14Count": 5,
+   "od": {
+    "W": 1280,
+    "bars": 3,
+    "maxRight": 1267.6,
+    "inside": true,
+    "hang": "4.05px"
+   }
+  }
+ ],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card seymour-flux by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "attackChosen": "Attack",
+ "targets": {
+  "n": 2,
+  "lit": 1,
+  "selecting": true
+ },
+ "pauseTabs": [
+  {
+   "tab": "Tidus",
+   "minPx": 11.4,
+   "under14": 5
+  },
+  {
+   "tab": "Yuna",
+   "minPx": 11.4,
+   "under14": 5
+  },
+  {
+   "tab": "Kimahri",
+   "minPx": 11.4,
+   "under14": 5
+  },
+  {
+   "tab": "Chapter",
+   "minPx": 11.4,
+   "under14": 5
+  },
+  {
+   "tab": "Guide",
+   "minPx": 11.4,
+   "under14": 5
+  },
+  {
+   "tab": "Options",
+   "minPx": 11.4,
+   "under14": 5
+  },
+  {
+   "tab": "Controls",
+   "minPx": 11.4,
+   "under14": 5
+  },
+  {
+   "tab": "Music",
+   "minPx": 11.4,
+   "under14": 5
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -1,0 +1,87 @@
+{
+ "name": "guide-seymour-flux-1600x900",
+ "chapter": "seymour-flux",
+ "size": "1600x900",
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off"
+ ],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card seymour-flux by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "railBefore": "Get ready before the next area, because a boss is waiting there. Buy Holy Water from Wantz: 30 of it, spent at the customize screen, puts Zombie Ward on a piece of armour, and this fight calls for that ward. Equip the armour. Bring about 30 Phoenix Downs to be safe. Anyone who struggled with the earlier bosses should fill every Overdrive gauge first, since this one is often called the hardest in the game. Yuna needs Dispel already learned, because it pays off here. Seymour Flux BOSS BATTLE IN GAME DESCRIPTION: Seymour's attacks tell you what the Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilation caps it off. HP: 70,000 Seymour again, and this time Kimahri and Yuna can use Trigger Commands: Kimahri's gives +10 Strength and Yuna's gives +10 Magic Defense. He brings out the Mortiorchis, much like the helper that fought beside him at Bevelle. Lance of Atrophy can leave one of your party Zombified. Zombie Ward armour (see above) makes that less likely. Whoever turns Zombie needs a Holy Water, a Remedy or Esuna right away. Full-Life would normally refill a character to full HP, but Zombie flips healing around, so Seymour uses it to KO a Zombie on the spot. He banishes aeons as he did before, so summon them only as a last resort. Lulu should Bio him early, since the poison piles up a great deal of damage, and Hastega should stay up on the party. If Seymour puts Reflect or Protect on himself, Yuna should Dispel it so your hits stay worthwhile. Dispel his Reflect quickly enough and he may Flare himself. Total Annihilation is the dangerous one, and the game announces it. It wipes out a party that is not ready. Once Seymour is at about half his HP, the Mortiorchis switches to Auto-Attack Mode and then declares that it is Ready to Annihilate. The blast lands on its following turn, and it charges faster after the first one, so keep an eye on those messages all fight. On the warning, Yuna can cast Shell just before the blast lands, or Kimahri can use the Mighty Guard he learned from Biran, or Rikku can Mix up Mighty G, Super Mighty G, or the top-tier Hyper Mighty G. Defend will not help against this one: it only halves physical hits, and Total Annihilation is magic. Shell is what halves it. You can also call an aeon once Ready to Annihilate shows: standing on the field when the blast fires, it takes the whole hit for the party. Do it after Seymour's turn so he cannot Banish it before the attack. Otherwise, keep up the regular attacks and magic until he drops. STEAL: Elixir DROPS: Lv. 4 Key Sphere G HIDE GUIDE",
+ "rail": "G GUIDE || G GUIDE",
+ "railClasses": [
+  "sgd",
+  "sgd__stack",
+  "sgd__slot",
+  "sgd__panel",
+  "sgd__body",
+  "sgd__u",
+  "sgd__t",
+  "sgd__title",
+  "sgd__tag",
+  "sgd__flabel",
+  "sgd__ul",
+  "sgd__toggle"
+ ],
+ "sheetFull": [
+  {
+   "cls": "sgd__panel",
+   "h": 0,
+   "ch": 0,
+   "text": "Get ready before the next area, because a boss is waiting there. Buy Holy Water from Wantz: 30 of it, spent at the customize screen, puts Zombie Ward on a piece of armour, and this fight calls for that ward. Equip the armour.Bring about 30 Phoenix Downs to be safe. Anyone who struggled with the earlier bosses should fill every Overdrive gauge first, since this one is often called the hardest in the game.Yuna needs Dispel already learned, because it pays off here.Seymour FluxBoss BattleIn Game Description: Seymour's attacks tell you what the Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilation caps it off.HP: 70,000Seymour again, and this time Kimahri and Yuna can use Trigger Commands: Kimahri's gives +10 Strength and Yuna's gives +10 Magic Defense.He brings out the Mortiorchis, much like the helper that fought beside him at Bevelle.Lance of Atrophy can leave one of your party Zombified. Zombie Ward armour (see above) makes that less likely.Whoever turns Zombie needs a Holy Water, a Remedy or Esuna right away. Full-Life would normally refill a character to full HP, but Zombie flips healing around, so Seymour uses it to KO a Zombie on the spot.He banishes aeons as he did before, so summon them only as a last resort. Lulu should Bio him early, since the poison piles up a great deal of damage, and Hastega should stay up on the party.If Seymour puts Reflect or Protect on himself, Yuna should Dispel it so your hits stay worthwhile. Dispel his Reflect quickly enough and he may Flare himself.Total Annihilation is the dangerous one, and the game announces it. It wipes out a party that is not ready.Once Seymour is at about half his HP, the Mortiorchis switches to Auto-Attack Mode and then declares that it is Ready to Annihilate. The bla"
+  },
+  {
+   "cls": "sgd__body",
+   "h": 0,
+   "ch": 0,
+   "text": "Get ready before the next area, because a boss is waiting there. Buy Holy Water from Wantz: 30 of it, spent at the customize screen, puts Zombie Ward on a piece of armour, and this fight calls for that ward. Equip the armour.Bring about 30 Phoenix Downs to be safe. Anyone who struggled with the earlier bosses should fill every Overdrive gauge first, since this one is often called the hardest in the game.Yuna needs Dispel already learned, because it pays off here.Seymour FluxBoss BattleIn Game Description: Seymour's attacks tell you what the Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilation caps it off.HP: 70,000Seymour again, and this time Kimahri and Yuna can use Trigger Commands: Kimahri's gives +10 Strength and Yuna's gives +10 Magic Defense.He brings out the Mortiorchis, much like the helper that fought beside him at Bevelle.Lance of Atrophy can leave one of your party Zombified. Zombie Ward armour (see above) makes that less likely.Whoever turns Zombie needs a Holy Water, a Remedy or Esuna right away. Full-Life would normally refill a character to full HP, but Zombie flips healing around, so Seymour uses it to KO a Zombie on the spot.He banishes aeons as he did before, so summon them only as a last resort. Lulu should Bio him early, since the poison piles up a great deal of damage, and Hastega should stay up on the party.If Seymour puts Reflect or Protect on himself, Yuna should Dispel it so your hits stay worthwhile. Dispel his Reflect quickly enough and he may Flare himself.Total Annihilation is the dangerous one, and the game announces it. It wipes out a party that is not ready.Once Seymour is at about half his HP, the Mortiorchis switches to Auto-Attack Mode and then declares that it is Ready to Annihilate. The bla"
+  },
+  {
+   "cls": "sgd__u sgd__p",
+   "h": 0,
+   "ch": 0,
+   "text": "Get ready before the next area, because a boss is waiting there. Buy Holy Water from Wantz: 30 of it, spent at the customize screen, puts Zombie Ward on a piece of armour, and this fight calls for that ward. Equip the armour."
+  },
+  {
+   "cls": "sgd__t",
+   "h": 0,
+   "ch": 0,
+   "text": "Get ready before the next area, because a boss is waiting there. Buy Holy Water from Wantz: 30 of it, spent at the customize screen, puts Zombie Ward on a piece of armour, and this fight calls for that ward. Equip the armour."
+  }
+ ],
+ "tab": "Guide",
+ "pauseGuide": "Tidus Seymour Flux Mortiorchis Kimahri Yuna Seymour Flux TALK ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×27 FLEE ▼ Q △ DEFEND Physical damage Tidus 2420 /2420 115 /115 OD Yuna 1500 /1500 270 /270 OD Kimahri 2310 /2310 130 /130 OVERDRIVE Mortiorchis HP 4000 / 4000 FIRE ICE THUNDER WATER HOLY GRAV I HIDE Get ready before the next area, because a boss is waiting there. Buy Holy Water from Wantz: 30 of it, spent at the customize screen, puts Zombie Ward on a piece of armour, and this fight calls for that ward. Equip the armour. Bring about 30 Phoenix Downs to be safe. Anyone who struggled with the earlier bosses should fill every Overdrive gauge first, since this one is often called the hardest in the game. Yuna needs Dispel already learned, because it pays off here. Seymour Flux BOSS BATTLE IN GAME DESCRIPTION: Seymour's attacks tell you what the Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilation caps it off. HP: 70,000 Seymour again, and this time Kimahri and Yuna can use Trigger Commands: Kimahri's gives +10 Strength and Yuna's gives +10 Magic Defense. He brings out the Mortiorchis, much like the helper that fought beside him at Bevelle. Lance of Atrophy can leave one of your party Zombified. Zombie Ward armour (see above) makes that less likely. Whoever turns Zombie needs a Holy Water, a Remedy or Esuna right away. Full-Life would normally refill a character to full HP, but Zombie flips healing around, so Seymour uses it to KO a Zombie on the spot. He banishes aeons as he did before, so summon them only as a last resort. Lulu should Bio him early, since the poison piles up a great deal of damage, and Hastega should stay up on the party. If Seymour puts Reflect or Protect on himself, Yuna should Dispel it so your hits stay worthwhile. Dispel his Reflect quickly enough and he may Flare himself. Total Annihilation is the dangerous one, and the game announces it. It wipes out a party that is not ready. Once Seymour is at about half his HP, the Mortiorchis switches to Auto-Attack Mode and then declares that it is Ready to Annihilate. The blast lands on its following turn, and it charges faster after the first one, so keep an eye on those messages all fight. On the warning, Yuna can cast Shell just before the blast lands, or Kimahri can use the Mighty Guard he learned from Biran, or Rikku can Mix up Mighty G, Super Mighty G, or the top-tier Hyper Mighty G. Defend will not help against this one: it only halves physical hits, and Total Annihilation is magic. Shell is what halves it. You can also call an aeon once Ready to Annihilate shows: standing on the field when the blast fires, it takes the whole hit for the party. Do it after Seymour's turn so he cannot Banish it before the attack. Otherwise, keep up the regular attacks and magic until he drops. STEAL: Elixir DROPS: Lv. 4 Key Sphere G HIDE GUIDE NEXT BEST MOVE Tidus Hastega → the party IN WHITE MAGIC 30 MP + HASTE Speeds the party’s turns up It puts Haste on the party; next, Lance of Atrophy hits for about 760. N HIDE MOVES PAUSE ECHOES OF SPIRA · FINAL FANTASY X Q L1 TIDUS YUNA KIMAHRI CHAPTER GUIDE OPTIONS CONTROLS MUSIC R1 E THE DESIGNED LINE “Bio him turn one — it deals a straight percentage every enemy turn and never triggers his HP-threshold reactions, so Protect and Reflect come out late.” SEYMOUR FLUX The Prominence WHILE YOU FIGHT STRATEGY GUIDE ON CHAPTER I · MT. GAGAZET — THE PROMINENCE HOLY WATER A ZOMBIE BEFORE FULL-LIFE LANDS ESC RESUME H PAINTING ONLY",
+ "pauseGuideScrollers": [
+  {
+   "cls": "sgd__panel",
+   "h": 588,
+   "len": 2573
+  }
+ ],
+ "pauseGuideFull": "Get ready before the next area, because a boss is waiting there. Buy Holy Water from Wantz: 30 of it, spent at the customize screen, puts Zombie Ward on a piece of armour, and this fight calls for that ward. Equip the armour. Bring about 30 Phoenix Downs to be safe. Anyone who struggled with the earlier bosses should fill every Overdrive gauge first, since this one is often called the hardest in the game. Yuna needs Dispel already learned, because it pays off here. Seymour Flux BOSS BATTLE IN GAME DESCRIPTION: Seymour's attacks tell you what the Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilation caps it off. HP: 70,000 Seymour again, and this time Kimahri and Yuna can use Trigger Commands: Kimahri's gives +10 Strength and Yuna's gives +10 Magic Defense. He brings out the Mortiorchis, much like the helper that fought beside him at Bevelle. Lance of Atrophy can leave one of your party Zombified. Zombie Ward armour (see above) makes that less likely. Whoever turns Zombie needs a Holy Water, a Remedy or Esuna right away. Full-Life would normally refill a character to full HP, but Zombie flips healing around, so Seymour uses it to KO a Zombie on the spot. He banishes aeons as he did before, so summon them only as a last resort. Lulu should Bio him early, since the poison piles up a great deal of damage, and Hastega should stay up on the party. If Seymour puts Reflect or Protect on himself, Yuna should Dispel it so your hits stay worthwhile. Dispel his Reflect quickly enough and he may Flare himself. Total Annihilation is the dangerous one, and the game announces it. It wipes out a party that is not ready. Once Seymour is at about half his HP, the Mortiorchis switches to Auto-Attack Mode and then declares that it is Ready to Annihilate. The blast lands on its following turn, and it charges faster after the first one, so keep an eye on those messages all fight. On the warning, Yuna can cast Shell just before the blast lands, or Kimahri can use the Mighty Guard he learned from Biran, or Rikku can Mix up Mighty G, Super Mighty G, or the top-tier Hyper Mighty G. Defend will not help against this one: it only halves physical hits, and Total Annihilation is magic. Shell is what halves it. You can also call an aeon once Ready to Annihilate shows: standing on the field when the blast fires, it takes the whole hit for the party. Do it after Seymour's turn so he cannot Banish it before the attack. Otherwise, keep up the regular attacks and magic until he drops. STEAL: Elixir DROPS: Lv. 4 Key Sphere",
+ "find": {
+  "totalAnnihilation": true,
+  "shellNow": false,
+  "defendWontHelp": true,
+  "oldShellOrDefend": false,
+  "oldDefendHits": false,
+  "snippets": [
+   "e Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilation caps it off.HP: 70,000Seymour again, and this time Kimahri and Yuna can use Trigger Commands: Kimahri's gives +10 Stren",
+   "its stay worthwhile. Dispel his Reflect quickly enough and he may Flare himself.Total Annihilation is the dangerous one, and the game announces it. It wipes out a party that is not ready.Once Seymour is at about half h",
+   "e Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilation caps it off.HP: 70,000Seymour again, and this time Kimahri and Yuna can use Trigger Commands: Kimahri's gives +10 Stren",
+   "its stay worthwhile. Dispel his Reflect quickly enough and he may Flare himself.Total Annihilation is the dangerous one, and the game announces it. It wipes out a party that is not ready.Once Seymour is at about half h",
+   "a Seymour Flux TALK ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×27 FLEE ▼ Q △ DEFEND Physical damage Tidus 2420 /2420 115 /115 OD Yuna 1500 /1500 270 /270 OD Kimahri 2310 /2310 130 /130 OVERDRIVE Mortiorc",
+   "e Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilation caps it off. HP: 70,000 Seymour again, and this time Kimahri and Yuna can use Trigger Commands: Kimahri's gives +10 Str",
+   "ts stay worthwhile. Dispel his Reflect quickly enough and he may Flare himself. Total Annihilation is the dangerous one, and the game announces it. It wipes out a party that is not ready. Once Seymour is at about half ",
+   ", or Rikku can Mix up Mighty G, Super Mighty G, or the top-tier Hyper Mighty G. Defend will not help against this one: it only halves physical hits, and Total Annihilation is magic. Shell is what halves it.",
+   "e Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilation caps it off. HP: 70,000 Seymour again, and this time Kimahri and Yuna can use Trigger Commands: Kimahri's gives +10 Str",
+   "ts stay worthwhile. Dispel his Reflect quickly enough and he may Flare himself. Total Annihilation is the dangerous one, and the game announces it. It wipes out a party that is not ready. Once Seymour is at about half "
+  ]
+ },
+ "consoleErrors": []
+}

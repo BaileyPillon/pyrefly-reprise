@@ -1,0 +1,343 @@
+{
+ "name": "defend-mouse-seymour-flux-1600x900",
+ "mode": "mouse",
+ "live": false,
+ "size": "1600x900",
+ "chapter": "seymour-flux",
+ "base": "http://127.0.0.1:5461/?coach=off",
+ "hooks": [
+  "setSeed(1) before the first key (labelled)"
+ ],
+ "log": [
+  "tag before {\"hidden\":false,\"text\":\"Q△Defend\",\"aria\":\"Defend, key Q\",\"input\":\"keyboard\",\"title\":\"Braces: halves the damage of the next physical hit\",\"x\":72.5,\"y\":853.1,\"w\":156.8,\"h\":28.8,\"right\":229.3,\"bottom\":881.8,\"inViewport\":true,\"pe\":\"auto\",\"viewport\":\"1600x900\"}",
+  "overlaps (HUD, backdrop layers removed) [{\"sel\":\"span.sgd__t\",\"area\":4485,\"text\":\"Once Seymour is at about half his HP, th\",\"x\":73,\"y\":788,\"w\":293,\"h\":113}]",
+  "fighters vs tab []",
+  "rows [\"Talk\",\"Attack\",\"Special\",\"White Magic\",\"Items\",\"Flee\"]",
+  "pre {\"nextSeq\":3,\"tidusStatuses\":[],\"phase\":\"command:tidus\",\"hp\":2420}",
+  "pressed mouse",
+  "  waiting: phase=play:status-add awaiting=false events=10",
+  "  waiting: phase=script:first-zombie awaiting=false events=10",
+  "  waiting: phase=script:seymour-lance awaiting=false events=10",
+  "  waiting: phase=play:action-start awaiting=false events=16",
+  "events [{\"seq\":3,\"type\":\"action-start\",\"actor\":\"tidus\",\"ability\":\"Defend\",\"kind\":\"defend\",\"status\":null,\"target\":null},{\"seq\":4,\"type\":\"status-add\",\"actor\":null,\"ability\":null,\"kind\":null,\"status\":\"defend\",\"target\":\"tidus\"},{\"seq\":6,\"type\":\"turn-start\",\"actor\":\"seymour-flux\",\"ability\":null,\"kind\":null,\"status\":null,\"target\":null},{\"seq\":7,\"type\":\"action-start\",\"actor\":\"seymour-flux\",\"ability\":\"Lance of Atrophy\",\"kind\":\"ability\",\"status\":null,\"target\":null},{\"seq\":8,\"type\":\"damage\",\"actor\":null,\"ability\":null,\"kind\":null,\"status\":null,\"target\":\"tidus\"},{\"seq\":9,\"type\":\"status-add\",\"actor\":null,\"ability\":null,\"kind\":null,\"status\":\"zombie\",\"target\":\"tidus\"},{\"seq\":13,\"type\":\"turn-start\",\"actor\":\"mortiorchis\",\"ability\":null,\"kind\":null,\"status\":null,\"target\":null},{\"seq\":14,\"type\":\"action-start\",\"actor\":\"mortiorchis\",\"ability\":\"Full-Life\",\"kind\":\"ability\",\"status\":null,\"target\":null},{\"seq\":15,\"type\":\"damage\",\"actor\":null,\"ability\":null,\"kind\":null,\"status\":null,\"target\":\"tidus\"},{\"seq\":19,\"type\":\"turn-start\",\"actor\":\"kimahri\",\"ability\":null,\"kind\":null,\"status\":null,\"target\":null}]",
+  "next menu command:kimahri",
+  "tag after {\"hidden\":false,\"text\":\"Q△Defend\"} rows after [\"Talk\",\"Attack\",\"Special\",\"Items\",\"Overdrive\",\"Switch\"]"
+ ],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card seymour-flux by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "tagBefore": {
+  "hidden": false,
+  "text": "Q△Defend",
+  "aria": "Defend, key Q",
+  "input": "keyboard",
+  "title": "Braces: halves the damage of the next physical hit",
+  "x": 72.5,
+  "y": 853.1,
+  "w": 156.8,
+  "h": 28.8,
+  "right": 229.3,
+  "bottom": 881.8,
+  "inViewport": true,
+  "pe": "auto",
+  "viewport": "1600x900",
+  "pts": [
+   {
+    "at": [
+     0.5,
+     0.5
+    ],
+    "onTab": true,
+    "top": "span.ffx-cmd-defend__label"
+   },
+   {
+    "at": [
+     0.08,
+     0.15
+    ],
+    "onTab": true,
+    "top": "div.ffx-cmd-defend"
+   },
+   {
+    "at": [
+     0.92,
+     0.15
+    ],
+    "onTab": true,
+    "top": "div.ffx-cmd-defend"
+   },
+   {
+    "at": [
+     0.08,
+     0.85
+    ],
+    "onTab": true,
+    "top": "div.ffx-cmd-defend"
+   },
+   {
+    "at": [
+     0.92,
+     0.85
+    ],
+    "onTab": true,
+    "top": "div.ffx-cmd-defend"
+   }
+  ]
+ },
+ "overlap": {
+  "tab": {
+   "x": 72,
+   "y": 853,
+   "w": 157,
+   "h": 29
+  },
+  "overlaps": [
+   {
+    "sel": "canvas.",
+    "area": 4508,
+    "text": "",
+    "x": 0,
+    "y": 0,
+    "w": 1600,
+    "h": 900
+   },
+   {
+    "sel": "div.ig-surface__grain",
+    "area": 4508,
+    "text": "",
+    "x": 0,
+    "y": 0,
+    "w": 1600,
+    "h": 900
+   },
+   {
+    "sel": "div.ig-surface__vignette",
+    "area": 4508,
+    "text": "",
+    "x": 0,
+    "y": 0,
+    "w": 1600,
+    "h": 900
+   },
+   {
+    "sel": "span.sgd__t",
+    "area": 4485,
+    "text": "Once Seymour is at about half his HP, th",
+    "x": 73,
+    "y": 788,
+    "w": 293,
+    "h": 113
+   }
+  ],
+  "hud": [
+   {
+    "sel": "span.sgd__t",
+    "area": 4485,
+    "text": "Once Seymour is at about half his HP, th",
+    "x": 73,
+    "y": 788,
+    "w": 293,
+    "h": 113
+   }
+  ]
+ },
+ "fightersVsTag": [],
+ "rows": [
+  "Talk",
+  "Attack",
+  "Special",
+  "White Magic",
+  "Items",
+  "Flee"
+ ],
+ "slabBefore": {
+  "off": true,
+  "chip": "Eenemy move"
+ },
+ "pre": {
+  "nextSeq": 3,
+  "tidusStatuses": [],
+  "phase": "command:tidus",
+  "hp": 2420
+ },
+ "pressedAt": 1791180547398,
+ "lastSnap": {
+  "phase": "command:kimahri",
+  "awaiting": true,
+  "tidusStatuses": [
+   "zombie",
+   "ko"
+  ]
+ },
+ "events": [
+  {
+   "seq": 3,
+   "type": "action-start",
+   "actor": "tidus",
+   "ability": "Defend",
+   "kind": "defend",
+   "status": null,
+   "target": null
+  },
+  {
+   "seq": 4,
+   "type": "status-add",
+   "actor": null,
+   "ability": null,
+   "kind": null,
+   "status": "defend",
+   "target": "tidus"
+  },
+  {
+   "seq": 6,
+   "type": "turn-start",
+   "actor": "seymour-flux",
+   "ability": null,
+   "kind": null,
+   "status": null,
+   "target": null
+  },
+  {
+   "seq": 7,
+   "type": "action-start",
+   "actor": "seymour-flux",
+   "ability": "Lance of Atrophy",
+   "kind": "ability",
+   "status": null,
+   "target": null
+  },
+  {
+   "seq": 8,
+   "type": "damage",
+   "actor": null,
+   "ability": null,
+   "kind": null,
+   "status": null,
+   "target": "tidus"
+  },
+  {
+   "seq": 9,
+   "type": "status-add",
+   "actor": null,
+   "ability": null,
+   "kind": null,
+   "status": "zombie",
+   "target": "tidus"
+  },
+  {
+   "seq": 13,
+   "type": "turn-start",
+   "actor": "mortiorchis",
+   "ability": null,
+   "kind": null,
+   "status": null,
+   "target": null
+  },
+  {
+   "seq": 14,
+   "type": "action-start",
+   "actor": "mortiorchis",
+   "ability": "Full-Life",
+   "kind": "ability",
+   "status": null,
+   "target": null
+  },
+  {
+   "seq": 15,
+   "type": "damage",
+   "actor": null,
+   "ability": null,
+   "kind": null,
+   "status": null,
+   "target": "tidus"
+  },
+  {
+   "seq": 19,
+   "type": "turn-start",
+   "actor": "kimahri",
+   "ability": null,
+   "kind": null,
+   "status": null,
+   "target": null
+  }
+ ],
+ "nextMenu": "command:kimahri",
+ "defendActionStart": [
+  "tidus"
+ ],
+ "tagAfter": {
+  "hidden": false,
+  "text": "Q△Defend",
+  "aria": "Defend, key Q",
+  "input": "pointer",
+  "title": "Braces: halves the damage of the next physical hit",
+  "x": 72.5,
+  "y": 853.1,
+  "w": 156.8,
+  "h": 28.8,
+  "right": 229.3,
+  "bottom": 881.8,
+  "inViewport": true,
+  "pe": "auto",
+  "viewport": "1600x900",
+  "pts": [
+   {
+    "at": [
+     0.5,
+     0.5
+    ],
+    "onTab": true,
+    "top": "span.ffx-cmd-defend__label"
+   },
+   {
+    "at": [
+     0.08,
+     0.15
+    ],
+    "onTab": true,
+    "top": "div.ffx-cmd-defend"
+   },
+   {
+    "at": [
+     0.92,
+     0.15
+    ],
+    "onTab": true,
+    "top": "div.ffx-cmd-defend"
+   },
+   {
+    "at": [
+     0.08,
+     0.85
+    ],
+    "onTab": true,
+    "top": "div.ffx-cmd-defend"
+   },
+   {
+    "at": [
+     0.92,
+     0.85
+    ],
+    "onTab": true,
+    "top": "div.ffx-cmd-defend"
+   }
+  ]
+ },
+ "rowsAfter": [
+  "Talk",
+  "Attack",
+  "Special",
+  "Items",
+  "Overdrive",
+  "Switch"
+ ],
+ "slabAfter": {
+  "off": true,
+  "chip": "Eenemy move"
+ },
+ "screen": "battle",
+ "consoleErrors": []
+}

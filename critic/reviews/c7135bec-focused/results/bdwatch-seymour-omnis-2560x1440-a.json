@@ -1,0 +1,287 @@
+{
+ "name": "bdwatch-seymour-omnis-2560x1440-a",
+ "chapter": "seymour-omnis",
+ "size": "2560x1440",
+ "series": [
+  {
+   "t": 0,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 1.5,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 3,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 4.5,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 6,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 7.6,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 9.1,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 10.6,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 12.1,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 13.6,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 15.1,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 16.6,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 18.1,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 19.6,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 21.1,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 22.7,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 24.2,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 25.7,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 27.2,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 28.7,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 30.2,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 31.7,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 33.2,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 34.7,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 36.3,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 37.8,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  },
+  {
+   "t": 39.3,
+   "paint": {
+    "w": 2688,
+    "src": "garden-of-pain.webp"
+   },
+   "plates": [
+    2688
+   ]
+  }
+ ],
+ "menuAtMs": 14024,
+ "maxPaintW": 2688,
+ "firstHiT": null,
+ "backdropReq": [
+  "/art/backdrops/garden-of-pain.webp",
+  "/art/backdrops/via-purifico.webp",
+  "/art/backdrops/road-to-the-farplane.webp",
+  "/art/backdrops/garden-of-pain.json"
+ ],
+ "consoleErrors": []
+}

@@ -1,0 +1,261 @@
+{
+ "name": "render-cand-evrae-airship-2560x1440-pin3",
+ "chapter": "evrae-airship",
+ "size": "2560x1440",
+ "which": "cand",
+ "base": "http://127.0.0.1:5461/",
+ "query": "coach=off&artscale=3",
+ "hooks": [
+  "setSeed(1) before the first key",
+  "?coach=off (UI toggle)"
+ ],
+ "log": [],
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "env": {
+  "inner": "2560x1440",
+  "dpr": 1,
+  "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessC"
+ },
+ "titleCrisp": {
+  "rung": "fplus",
+  "pinned": false,
+  "cfg": {
+   "ss": 2,
+   "ssRing": 0.5,
+   "cas": 0.3,
+   "casSharp": 0.5,
+   "casFloor": 0.05,
+   "aaPre": false,
+   "aa": null
+  },
+  "class": "high",
+  "tier": "full",
+  "ssEffective": 1,
+  "simulatedMs": 0,
+  "governor": {
+   "rung": "fplus",
+   "budgetMs": 22,
+   "pending": 0,
+   "windows": []
+  },
+  "passes": [
+   "0:scene",
+   "1:scene-msaa(off)",
+   "2:ssaa(off)",
+   "3:bloom",
+   "4:TiltShiftShader",
+   "5:TiltShiftShader",
+   "6:cas(off)",
+   "7:grade"
+  ]
+ },
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card evrae-airship by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "crisp": {
+  "rung": "fplus",
+  "pinned": false,
+  "cfg": {
+   "ss": 2,
+   "ssRing": 0.5,
+   "cas": 0.3,
+   "casSharp": 0.5,
+   "casFloor": 0.05,
+   "aaPre": false,
+   "aa": null
+  },
+  "class": "high",
+  "tier": "full",
+  "ssEffective": 2,
+  "simulatedMs": 0,
+  "governor": {
+   "rung": "fplus",
+   "budgetMs": 22,
+   "pending": 92,
+   "windows": [
+    {
+     "rung": "fplus",
+     "median": 16.7,
+     "samples": 111,
+     "stepped": false
+    }
+   ]
+  },
+  "passes": [
+   "0:scene(off)",
+   "1:scene-msaa(off)",
+   "2:ssaa",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas",
+   "8:grade",
+   "9:SpectacleShader(off)"
+  ]
+ },
+ "art": {
+  "device": "high",
+  "budget": {
+   "cls": "high",
+   "maxScale": 4,
+   "backdropScale": 2,
+   "textureMB": 2600,
+   "groundPx": 4096,
+   "deckPx": 4096,
+   "bandPx": 4096,
+   "deckDetail": 3,
+   "aa": "off",
+   "msaaSamples": 4
+  },
+  "bufferWidth": 2560,
+  "pinned": 3,
+  "aa": "off",
+  "governor": {
+   "frame": 272,
+   "upgrades": 0,
+   "downgrades": 0,
+   "loadFailures": 0,
+   "inflight": 0,
+   "queued": 0,
+   "residentMB": 0,
+   "budgetMB": 2600,
+   "lastSwapMs": 0,
+   "updateMs": 0.008,
+   "entries": [],
+   "trace": []
+  }
+ },
+ "fps": {
+  "frames": 240,
+  "medianMs": 16.7,
+  "p95Ms": 16.7,
+  "maxMs": 16.8,
+  "fps": 59.9
+ },
+ "conn": {
+  "downlink": 9,
+  "effectiveType": "4g",
+  "rtt": 0,
+  "saveData": false
+ },
+ "canvas": {
+  "w": 2560,
+  "h": 1440,
+  "cssW": 2560,
+  "cssH": 1440
+ },
+ "audit": {
+  "artResponses": 200,
+  "status": {
+   "200": 200
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 40,
+  "tiers": {
+   "x2": 1,
+   "x3": 39,
+   "x4": 0
+  },
+  "redirects": [],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "artFiles": 154,
+ "hiRes": [
+  "/art/backdrops/evrae-airship-deck%402x.webp",
+  "/art/characters/evrae/idle%403x.png",
+  "/art/characters/tidus/idle%403x.png",
+  "/art/characters/wakka/idle%403x.png",
+  "/art/characters/rikku/idle%403x.png",
+  "/art/characters/evrae/attack%403x.png",
+  "/art/characters/evrae/hurt%403x.png",
+  "/art/characters/evrae/ko%403x.png",
+  "/art/characters/tidus/ready%403x.png",
+  "/art/characters/tidus/attack%403x.png",
+  "/art/characters/tidus/cast%403x.png",
+  "/art/characters/tidus/item%403x.png",
+  "/art/characters/tidus/hurt%403x.png",
+  "/art/characters/tidus/ko%403x.png",
+  "/art/characters/tidus/victory%403x.png",
+  "/art/characters/tidus/sleep%403x.png",
+  "/art/characters/tidus/critical%403x.png",
+  "/art/characters/tidus/follow%403x.png",
+  "/art/characters/tidus/od-energy-rain%403x.png",
+  "/art/characters/tidus/od-slice-and-dice%403x.png",
+  "/art/characters/wakka/ready%403x.png",
+  "/art/characters/wakka/attack%403x.png",
+  "/art/characters/wakka/cast%403x.png",
+  "/art/characters/wakka/item%403x.png",
+  "/art/characters/wakka/hurt%403x.png",
+  "/art/characters/wakka/ko%403x.png",
+  "/art/characters/wakka/victory%403x.png",
+  "/art/characters/wakka/sleep%403x.png",
+  "/art/characters/wakka/critical%403x.png",
+  "/art/characters/wakka/follow%403x.png",
+  "/art/characters/rikku/ready%403x.png",
+  "/art/characters/rikku/attack%403x.png",
+  "/art/characters/rikku/cast%403x.png",
+  "/art/characters/rikku/item%403x.png",
+  "/art/characters/rikku/hurt%403x.png",
+  "/art/characters/rikku/ko%403x.png",
+  "/art/characters/rikku/victory%403x.png",
+  "/art/characters/rikku/sleep%403x.png",
+  "/art/characters/rikku/critical%403x.png",
+  "/art/characters/rikku/follow%403x.png"
+ ],
+ "hiResCount": 40,
+ "sampleHiRes": [
+  "/art/backdrops/evrae-airship-deck%402x.webp",
+  "/art/characters/evrae/idle%403x.png",
+  "/art/characters/tidus/idle%403x.png",
+  "/art/characters/wakka/idle%403x.png",
+  "/art/characters/rikku/idle%403x.png",
+  "/art/characters/evrae/attack%403x.png",
+  "/art/characters/evrae/hurt%403x.png",
+  "/art/characters/evrae/ko%403x.png",
+  "/art/characters/tidus/ready%403x.png",
+  "/art/characters/tidus/attack%403x.png",
+  "/art/characters/tidus/cast%403x.png",
+  "/art/characters/tidus/item%403x.png",
+  "/art/characters/tidus/hurt%403x.png",
+  "/art/characters/tidus/ko%403x.png",
+  "/art/characters/tidus/victory%403x.png",
+  "/art/characters/tidus/sleep%403x.png",
+  "/art/characters/tidus/critical%403x.png",
+  "/art/characters/tidus/follow%403x.png",
+  "/art/characters/tidus/od-energy-rain%403x.png",
+  "/art/characters/tidus/od-slice-and-dice%403x.png",
+  "/art/characters/wakka/ready%403x.png",
+  "/art/characters/wakka/attack%403x.png",
+  "/art/characters/wakka/cast%403x.png",
+  "/art/characters/wakka/item%403x.png",
+  "/art/characters/wakka/hurt%403x.png",
+  "/art/characters/wakka/ko%403x.png",
+  "/art/characters/wakka/victory%403x.png",
+  "/art/characters/wakka/sleep%403x.png",
+  "/art/characters/wakka/critical%403x.png",
+  "/art/characters/wakka/follow%403x.png",
+  "/art/characters/rikku/ready%403x.png",
+  "/art/characters/rikku/attack%403x.png",
+  "/art/characters/rikku/cast%403x.png",
+  "/art/characters/rikku/item%403x.png",
+  "/art/characters/rikku/hurt%403x.png",
+  "/art/characters/rikku/ko%403x.png",
+  "/art/characters/rikku/victory%403x.png",
+  "/art/characters/rikku/sleep%403x.png",
+  "/art/characters/rikku/critical%403x.png",
+  "/art/characters/rikku/follow%403x.png"
+ ],
+ "responsesNon2xx": [],
+ "aborted": 0,
+ "screenshotNote": "JPEG of the page at the first command menu",
+ "warns": [],
+ "consoleErrors": [],
+ "notFound": []
+}

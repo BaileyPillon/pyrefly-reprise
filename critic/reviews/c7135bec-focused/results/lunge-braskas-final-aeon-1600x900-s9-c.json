@@ -1,0 +1,1425 @@
+{
+ "name": "lunge-braskas-final-aeon-1600x900-s9-c",
+ "chapter": "braskas-final-aeon",
+ "size": "1600x900",
+ "seed": 9,
+ "query": "",
+ "target": "^braskas",
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off",
+  "autoBattle(strategy) hands the fight to an Attack-only strategy (a labelled debug hook; the geometry is what is measured)"
+ ],
+ "walk": [
+  "setSeed(9) before the first key",
+  "board card braskas-final-aeon by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "install": {
+  "ok": true,
+  "figs": [
+   "tidus:party",
+   "yuna:party",
+   "auron:party",
+   "braskas-final-aeon:enemy",
+   "yu-pagoda-left:enemy",
+   "yu-pagoda-right:enemy"
+  ]
+ },
+ "enemies": [
+  "braskas-final-aeon",
+  "yu-pagoda-left",
+  "yu-pagoda-right"
+ ],
+ "auto": true,
+ "rows": [
+  {
+   "cmd": "attack/attack",
+   "n": 0,
+   "who": "yuna",
+   "kind": "party",
+   "d": 2.119811498808616,
+   "ms": 440,
+   "contact": true,
+   "frames": 50,
+   "reachedFrame": 18,
+   "done": true,
+   "spans": {
+    "tidus": {
+     "kind": "party",
+     "x0": -1.723,
+     "x1": -0.553,
+     "y0": -0.005,
+     "y1": 1.801,
+     "z": 1.605,
+     "px": -1.12,
+     "pz": 1.605
+    },
+    "yuna": {
+     "kind": "party",
+     "x0": 0.153,
+     "x1": 1.63,
+     "y0": -0.037,
+     "y1": 1.829,
+     "z": 1.555,
+     "px": 0.57,
+     "pz": 1.555
+    },
+    "auron": {
+     "kind": "party",
+     "x0": -1.039,
+     "x1": 0.14,
+     "y0": 0,
+     "y1": 1.796,
+     "z": -0.995,
+     "px": -0.45,
+     "pz": -0.995
+    },
+    "braskas-final-aeon": {
+     "kind": "enemy",
+     "x0": 2.476,
+     "x1": 6.793,
+     "y0": -0.018,
+     "y1": 4.035,
+     "z": -8.915,
+     "px": 4.642,
+     "pz": -8.915
+    },
+    "yu-pagoda-left": {
+     "kind": "enemy",
+     "x0": 1.283,
+     "x1": 2.713,
+     "y0": 1.007,
+     "y1": 3.255,
+     "z": -7.54,
+     "px": 2.002,
+     "pz": -7.54
+    },
+    "yu-pagoda-right": {
+     "kind": "enemy",
+     "x0": 4.639,
+     "x1": 6.069,
+     "y0": 1.008,
+     "y1": 3.197,
+     "z": -8.623,
+     "px": 5.362,
+     "pz": -8.623
+    }
+   },
+   "vs": {
+    "braskas-final-aeon": {
+     "rest": 0,
+     "min": 0,
+     "minAt": 0,
+     "apex": 0,
+     "minOver": 1064,
+     "dxRest": -196.2,
+     "dxApex": -520.7,
+     "dxMin": -527.8,
+     "dyApex": 5.5,
+     "awApex": 237.1,
+     "twApex": 382.7
+    },
+    "yu-pagoda-left": {
+     "rest": 43,
+     "min": 43,
+     "minAt": 0,
+     "apex": 225.6,
+     "minOver": 0,
+     "dxRest": -286.2,
+     "dxApex": -624.8,
+     "dxMin": -628,
+     "dyApex": 82.6,
+     "awApex": 237.1,
+     "twApex": 141.1
+    },
+    "yu-pagoda-right": {
+     "rest": 33.8,
+     "min": 27.4,
+     "minAt": 1,
+     "apex": 71,
+     "minOver": 0,
+     "dxRest": -16.2,
+     "dxApex": -322.2,
+     "dxMin": -324.4,
+     "dyApex": 96.3,
+     "awApex": 237.1,
+     "twApex": 130
+    }
+   },
+   "boxShiftPx": 449.7,
+   "camStart": [
+    -0.057,
+    2.782,
+    10.235
+   ],
+   "camApex": [
+    0.658,
+    2.752,
+    8.244
+   ]
+  },
+  {
+   "cmd": "attack/attack",
+   "n": 1,
+   "who": "auron",
+   "kind": "party",
+   "d": 2.527955208276647,
+   "ms": 440,
+   "contact": true,
+   "frames": 51,
+   "reachedFrame": 18,
+   "done": true,
+   "spans": {
+    "tidus": {
+     "kind": "party",
+     "x0": -1.707,
+     "x1": -0.553,
+     "y0": 0,
+     "y1": 1.796,
+     "z": 1.605,
+     "px": -1.12,
+     "pz": 1.605
+    },
+    "yuna": {
+     "kind": "party",
+     "x0": -0.065,
+     "x1": 1.264,
+     "y0": -0.006,
+     "y1": 1.792,
+     "z": 1.555,
+     "px": 0.57,
+     "pz": 1.555
+    },
+    "auron": {
+     "kind": "party",
+     "x0": -0.81,
+     "x1": 0.09,
+     "y0": -0.005,
+     "y1": 1.364,
+     "z": -0.995,
+     "px": -0.45,
+     "pz": -0.995
+    },
+    "braskas-final-aeon": {
+     "kind": "enemy",
+     "x0": 2.519,
+     "x1": 6.877,
+     "y0": -0.096,
+     "y1": 4,
+     "z": -8.915,
+     "px": 4.642,
+     "pz": -8.915
+    },
+    "yu-pagoda-left": {
+     "kind": "enemy",
+     "x0": 1.291,
+     "x1": 2.729,
+     "y0": 1.005,
+     "y1": 3.221,
+     "z": -7.54,
+     "px": 2.002,
+     "pz": -7.54
+    },
+    "yu-pagoda-right": {
+     "kind": "enemy",
+     "x0": 4.651,
+     "x1": 6.089,
+     "y0": 1.005,
+     "y1": 3.266,
+     "z": -8.623,
+     "px": 5.362,
+     "pz": -8.623
+    }
+   },
+   "vs": {
+    "braskas-final-aeon": {
+     "rest": 150,
+     "min": 0,
+     "minAt": 3,
+     "apex": 0,
+     "minOver": 246,
+     "dxRest": 132.9,
+     "dxApex": -176.2,
+     "dxMin": -279.7,
+     "dyApex": -5.7,
+     "awApex": 130.8,
+     "twApex": 384.3
+    },
+    "yu-pagoda-left": {
+     "rest": 89.1,
+     "min": 0,
+     "minAt": 43,
+     "apex": 128,
+     "minOver": 27,
+     "dxRest": 28.4,
+     "dxApex": -284.4,
+     "dxMin": -385.9,
+     "dyApex": 75,
+     "awApex": 130.8,
+     "twApex": 143
+    },
+    "yu-pagoda-right": {
+     "rest": 376.2,
+     "min": 70.6,
+     "minAt": 16,
+     "apex": 91.6,
+     "minOver": 0,
+     "dxRest": 325.7,
+     "dxApex": 19.1,
+     "dxMin": -81.9,
+     "dyApex": 88.7,
+     "awApex": 130.8,
+     "twApex": 132.4
+    }
+   },
+   "boxShiftPx": 388.9,
+   "camStart": [
+    0.539,
+    2.746,
+    8.493
+   ],
+   "camApex": [
+    0.656,
+    2.739,
+    8.155
+   ]
+  },
+  {
+   "cmd": "ability/left-arm-strike",
+   "n": 2,
+   "who": "braskas-final-aeon",
+   "kind": "enemy",
+   "d": 3.2408290791640746,
+   "ms": 440,
+   "contact": true,
+   "frames": 39,
+   "reachedFrame": 18,
+   "done": true,
+   "spans": {
+    "tidus": {
+     "kind": "party",
+     "x0": -1.707,
+     "x1": -0.537,
+     "y0": -0.005,
+     "y1": 1.801,
+     "z": 1.605,
+     "px": -1.12,
+     "pz": 1.605
+    },
+    "yuna": {
+     "kind": "party",
+     "x0": -0.09,
+     "x1": 1.253,
+     "y0": -0.008,
+     "y1": 1.799,
+     "z": 1.555,
+     "px": 0.57,
+     "pz": 1.555
+    },
+    "auron": {
+     "kind": "party",
+     "x0": -1.013,
+     "x1": 0.164,
+     "y0": -0.002,
+     "y1": 1.793,
+     "z": -0.995,
+     "px": -0.45,
+     "pz": -0.995
+    },
+    "braskas-final-aeon": {
+     "kind": "enemy",
+     "x0": 2.436,
+     "x1": 6.967,
+     "y0": -0.079,
+     "y1": 4.105,
+     "z": -8.915,
+     "px": 4.642,
+     "pz": -8.915
+    },
+    "yu-pagoda-left": {
+     "kind": "enemy",
+     "x0": 1.291,
+     "x1": 2.726,
+     "y0": 1.006,
+     "y1": 3.22,
+     "z": -7.54,
+     "px": 2.002,
+     "pz": -7.54
+    },
+    "yu-pagoda-right": {
+     "kind": "enemy",
+     "x0": 4.651,
+     "x1": 6.086,
+     "y0": 1.006,
+     "y1": 3.2,
+     "z": -8.623,
+     "px": 5.362,
+     "pz": -8.623
+    }
+   },
+   "vs": {
+    "tidus": {
+     "rest": 373.4,
+     "min": 68.2,
+     "minAt": 19,
+     "apex": 69,
+     "minOver": 0,
+     "dxRest": 326,
+     "dxApex": 21.2,
+     "dxMin": 20.8,
+     "dyApex": -80.1,
+     "awApex": 397.2,
+     "twApex": 235.8
+    },
+    "yuna": {
+     "rest": 105.9,
+     "min": 0,
+     "minAt": 3,
+     "apex": 0,
+     "minOver": 240,
+     "dxRest": -77.2,
+     "dxApex": -346.2,
+     "dxMin": -365.6,
+     "dyApex": -79.8,
+     "awApex": 397.2,
+     "twApex": 276.5
+    },
+    "auron": {
+     "rest": 191,
+     "min": 0,
+     "minAt": 15,
+     "apex": 0,
+     "minOver": 15,
+     "dxRest": 143.4,
+     "dxApex": -108.7,
+     "dxMin": -108.9,
+     "dyApex": -112.8,
+     "awApex": 397.2,
+     "twApex": 180.6
+    }
+   },
+   "boxShiftPx": 273.9,
+   "camStart": [
+    0.525,
+    2.739,
+    8.507
+   ],
+   "camApex": [
+    -0.063,
+    2.456,
+    9.2
+   ]
+  },
+  {
+   "cmd": "attack/attack",
+   "n": 3,
+   "who": "auron",
+   "kind": "party",
+   "d": 2.498952853996795,
+   "ms": 440,
+   "contact": true,
+   "frames": 50,
+   "reachedFrame": 18,
+   "done": true,
+   "spans": {
+    "tidus": {
+     "kind": "party",
+     "x0": -1.707,
+     "x1": -0.544,
+     "y0": -0.003,
+     "y1": 1.799,
+     "z": 1.605,
+     "px": -1.12,
+     "pz": 1.605
+    },
+    "yuna": {
+     "kind": "party",
+     "x0": -0.094,
+     "x1": 1.239,
+     "y0": -0.004,
+     "y1": 1.796,
+     "z": 1.555,
+     "px": 0.57,
+     "pz": 1.555
+    },
+    "auron": {
+     "kind": "party",
+     "x0": -0.82,
+     "x1": 0.078,
+     "y0": -0.003,
+     "y1": 1.365,
+     "z": -0.995,
+     "px": -0.45,
+     "pz": -0.995
+    },
+    "braskas-final-aeon": {
+     "kind": "enemy",
+     "x0": 2.509,
+     "x1": 6.806,
+     "y0": -0.007,
+     "y1": 4.024,
+     "z": -8.915,
+     "px": 4.642,
+     "pz": -8.915
+    },
+    "yu-pagoda-left": {
+     "kind": "enemy",
+     "x0": 1.283,
+     "x1": 2.713,
+     "y0": 1.008,
+     "y1": 3.225,
+     "z": -7.54,
+     "px": 2.002,
+     "pz": -7.54
+    },
+    "yu-pagoda-right": {
+     "kind": "enemy",
+     "x0": 4.611,
+     "x1": 6.041,
+     "y0": 1.007,
+     "y1": 3.253,
+     "z": -8.623,
+     "px": 5.362,
+     "pz": -8.623
+    }
+   },
+   "vs": {
+    "braskas-final-aeon": {
+     "rest": 155.2,
+     "min": 0,
+     "minAt": 3,
+     "apex": 0,
+     "minOver": 160,
+     "dxRest": 136,
+     "dxApex": -169.1,
+     "dxMin": -267.9,
+     "dyApex": -3.5,
+     "awApex": 134.8,
+     "twApex": 386.1
+    },
+    "yu-pagoda-left": {
+     "rest": 87.1,
+     "min": 41.4,
+     "minAt": 41,
+     "apex": 120.8,
+     "minOver": 0,
+     "dxRest": 32,
+     "dxApex": -277.5,
+     "dxMin": -376.4,
+     "dyApex": 72.8,
+     "awApex": 134.8,
+     "twApex": 142.8
+    },
+    "yu-pagoda-right": {
+     "rest": 377.6,
+     "min": 72.7,
+     "minAt": 16,
+     "apex": 92.7,
+     "minOver": 0,
+     "dxRest": 327.9,
+     "dxApex": 27.8,
+     "dxMin": -70.3,
+     "dyApex": 86.3,
+     "awApex": 134.8,
+     "twApex": 129.8
+    }
+   },
+   "boxShiftPx": 382.3,
+   "camStart": [
+    0.587,
+    2.736,
+    8.529
+   ],
+   "camApex": [
+    0.727,
+    2.733,
+    8.139
+   ]
+  },
+  {
+   "cmd": "ability/left-arm-strike",
+   "n": 4,
+   "who": "braskas-final-aeon",
+   "kind": "enemy",
+   "d": 3.2456360075371893,
+   "ms": 440,
+   "contact": true,
+   "frames": 38,
+   "reachedFrame": 18,
+   "done": true,
+   "spans": {
+    "tidus": {
+     "kind": "party",
+     "x0": -1.722,
+     "x1": -0.553,
+     "y0": -0.005,
+     "y1": 1.8,
+     "z": 1.605,
+     "px": -1.12,
+     "pz": 1.605
+    },
+    "yuna": {
+     "kind": "party",
+     "x0": -0.11,
+     "x1": 1.234,
+     "y0": -0.008,
+     "y1": 1.8,
+     "z": 1.555,
+     "px": 0.57,
+     "pz": 1.555
+    },
+    "auron": {
+     "kind": "party",
+     "x0": -1.033,
+     "x1": 0.154,
+     "y0": -0.005,
+     "y1": 1.797,
+     "z": -0.995,
+     "px": -0.45,
+     "pz": -0.995
+    },
+    "braskas-final-aeon": {
+     "kind": "enemy",
+     "x0": 2.363,
+     "x1": 6.933,
+     "y0": -0.078,
+     "y1": 4.148,
+     "z": -8.915,
+     "px": 4.642,
+     "pz": -8.915
+    },
+    "yu-pagoda-left": {
+     "kind": "enemy",
+     "x0": 1.275,
+     "x1": 2.713,
+     "y0": 1.005,
+     "y1": 3.237,
+     "z": -7.54,
+     "px": 2.002,
+     "pz": -7.54
+    },
+    "yu-pagoda-right": {
+     "kind": "enemy",
+     "x0": 4.633,
+     "x1": 6.07,
+     "y0": 1.005,
+     "y1": 3.196,
+     "z": -8.623,
+     "px": 5.362,
+     "pz": -8.623
+    }
+   },
+   "vs": {
+    "tidus": {
+     "rest": 379,
+     "min": 77.4,
+     "minAt": 17,
+     "apex": 77.4,
+     "minOver": 0,
+     "dxRest": 332.3,
+     "dxApex": 28.8,
+     "dxMin": 28.7,
+     "dyApex": -77.7,
+     "awApex": 396.2,
+     "twApex": 240.1
+    },
+    "yuna": {
+     "rest": 117.1,
+     "min": 0,
+     "minAt": 3,
+     "apex": 0,
+     "minOver": 59,
+     "dxRest": -66.9,
+     "dxApex": -290,
+     "dxMin": -356.3,
+     "dyApex": -107.4,
+     "awApex": 396.2,
+     "twApex": 196.6
+    },
+    "auron": {
+     "rest": 193,
+     "min": 0,
+     "minAt": 15,
+     "apex": 0,
+     "minOver": 15,
+     "dxRest": 145.3,
+     "dxApex": -107.4,
+     "dxMin": -107.7,
+     "dyApex": -111.4,
+     "awApex": 396.2,
+     "twApex": 180.7
+    }
+   },
+   "boxShiftPx": 279.1,
+   "camStart": [
+    0.617,
+    2.743,
+    8.493
+   ],
+   "camApex": [
+    0.023,
+    2.462,
+    9.191
+   ]
+  },
+  {
+   "cmd": "attack/attack",
+   "n": 5,
+   "who": "auron",
+   "kind": "party",
+   "d": 2.4987646837131288,
+   "ms": 440,
+   "contact": true,
+   "frames": 51,
+   "reachedFrame": 18,
+   "done": true,
+   "spans": {
+    "tidus": {
+     "kind": "party",
+     "x0": -1.712,
+     "x1": -0.553,
+     "y0": -0.002,
+     "y1": 1.797,
+     "z": 1.605,
+     "px": -1.12,
+     "pz": 1.605
+    },
+    "yuna": {
+     "kind": "party",
+     "x0": 0.062,
+     "x1": 1.016,
+     "y0": -0.002,
+     "y1": 1.942,
+     "z": 1.555,
+     "px": 0.57,
+     "pz": 1.555
+    },
+    "auron": {
+     "kind": "party",
+     "x0": -0.81,
+     "x1": 0.09,
+     "y0": -0.004,
+     "y1": 1.364,
+     "z": -0.995,
+     "px": -0.45,
+     "pz": -0.995
+    },
+    "braskas-final-aeon": {
+     "kind": "enemy",
+     "x0": 2.506,
+     "x1": 6.794,
+     "y0": -0.003,
+     "y1": 4.018,
+     "z": -8.915,
+     "px": 4.642,
+     "pz": -8.915
+    },
+    "yu-pagoda-left": {
+     "kind": "enemy",
+     "x0": 1.291,
+     "x1": 2.725,
+     "y0": 1.006,
+     "y1": 3.194,
+     "z": -7.54,
+     "px": 2.002,
+     "pz": -7.54
+    },
+    "yu-pagoda-right": {
+     "kind": "enemy",
+     "x0": 4.617,
+     "x1": 6.052,
+     "y0": 1.006,
+     "y1": 3.249,
+     "z": -8.623,
+     "px": 5.362,
+     "pz": -8.623
+    }
+   },
+   "vs": {
+    "braskas-final-aeon": {
+     "rest": 157.3,
+     "min": 0,
+     "minAt": 3,
+     "apex": 0,
+     "minOver": 210,
+     "dxRest": 136.1,
+     "dxApex": -171.6,
+     "dxMin": -266.1,
+     "dyApex": 1.3,
+     "awApex": 131.6,
+     "twApex": 387.6
+    },
+    "yu-pagoda-left": {
+     "rest": 92.8,
+     "min": 2,
+     "minAt": 43,
+     "apex": 125.9,
+     "minOver": 0,
+     "dxRest": 32.7,
+     "dxApex": -277.9,
+     "dxMin": -380,
+     "dyApex": 77.7,
+     "awApex": 131.6,
+     "twApex": 143.3
+    },
+    "yu-pagoda-right": {
+     "rest": 381,
+     "min": 75.3,
+     "minAt": 16,
+     "apex": 96.5,
+     "minOver": 0,
+     "dxRest": 328.6,
+     "dxApex": 25.3,
+     "dxMin": -76.2,
+     "dyApex": 91.5,
+     "awApex": 131.6,
+     "twApex": 132.8
+    }
+   },
+   "boxShiftPx": 387.5,
+   "camStart": [
+    0.591,
+    2.772,
+    8.445
+   ],
+   "camApex": [
+    0.703,
+    2.766,
+    8.116
+   ]
+  },
+  {
+   "cmd": "ability/triumphant-grasp",
+   "n": 6,
+   "who": "braskas-final-aeon",
+   "kind": "enemy",
+   "d": 3.240871431174157,
+   "ms": 440,
+   "contact": true,
+   "frames": 38,
+   "reachedFrame": 18,
+   "done": true,
+   "spans": {
+    "tidus": {
+     "kind": "party",
+     "x0": -1.707,
+     "x1": -0.538,
+     "y0": -0.005,
+     "y1": 1.8,
+     "z": 1.605,
+     "px": -1.12,
+     "pz": 1.605
+    },
+    "yuna": {
+     "kind": "party",
+     "x0": 0.063,
+     "x1": 1.033,
+     "y0": -0.006,
+     "y1": 1.946,
+     "z": 1.555,
+     "px": 0.57,
+     "pz": 1.555
+    },
+    "auron": {
+     "kind": "party",
+     "x0": -1.013,
+     "x1": 0.168,
+     "y0": -0.004,
+     "y1": 1.795,
+     "z": -0.995,
+     "px": -0.45,
+     "pz": -0.995
+    },
+    "braskas-final-aeon": {
+     "kind": "enemy",
+     "x0": 2.436,
+     "x1": 6.967,
+     "y0": -0.079,
+     "y1": 4.105,
+     "z": -8.915,
+     "px": 4.642,
+     "pz": -8.915
+    },
+    "yu-pagoda-left": {
+     "kind": "enemy",
+     "x0": 1.291,
+     "x1": 2.73,
+     "y0": 1.005,
+     "y1": 3.263,
+     "z": -7.54,
+     "px": 2.002,
+     "pz": -7.54
+    },
+    "yu-pagoda-right": {
+     "kind": "enemy",
+     "x0": 4.647,
+     "x1": 6.085,
+     "y0": 1.005,
+     "y1": 3.201,
+     "z": -8.623,
+     "px": 5.362,
+     "pz": -8.623
+    }
+   },
+   "vs": {
+    "tidus": {
+     "rest": 376,
+     "min": 73.8,
+     "minAt": 18,
+     "apex": 73.8,
+     "minOver": 0,
+     "dxRest": 327.3,
+     "dxApex": 25.1,
+     "dxMin": 24.5,
+     "dyApex": -76.3,
+     "awApex": 397.6,
+     "twApex": 235.2
+    },
+    "yuna": {
+     "rest": 86.2,
+     "min": 0,
+     "minAt": 2,
+     "apex": 0,
+     "minOver": 6,
+     "dxRest": -24.5,
+     "dxApex": -341.6,
+     "dxMin": -367.3,
+     "dyApex": -76.2,
+     "awApex": 397.6,
+     "twApex": 276.5
+    },
+    "auron": {
+     "rest": 192.8,
+     "min": 0,
+     "minAt": 15,
+     "apex": 0,
+     "minOver": 6,
+     "dxRest": 144.6,
+     "dxApex": -106.9,
+     "dxMin": -107.2,
+     "dyApex": -110.8,
+     "awApex": 397.6,
+     "twApex": 180.4
+    }
+   },
+   "boxShiftPx": 272.4,
+   "camStart": [
+    0.554,
+    2.777,
+    8.55
+   ],
+   "camApex": [
+    -0.028,
+    2.492,
+    9.211
+   ]
+  },
+  {
+   "cmd": "ability/left-arm-strike",
+   "n": 7,
+   "who": "braskas-final-aeon",
+   "kind": "enemy",
+   "d": 3.245801950249319,
+   "ms": 440,
+   "contact": true,
+   "frames": 32,
+   "reachedFrame": 18,
+   "done": true,
+   "spans": {
+    "tidus": {
+     "kind": "party",
+     "x0": -1.72,
+     "x1": -0.553,
+     "y0": -0.004,
+     "y1": 1.8,
+     "z": 1.605,
+     "px": -1.12,
+     "pz": 1.605
+    },
+    "yuna": {
+     "kind": "party",
+     "x0": 0.059,
+     "x1": 1.334,
+     "y0": -0.302,
+     "y1": 0.815,
+     "z": 1.555,
+     "px": 0.57,
+     "pz": 1.555
+    },
+    "auron": {
+     "kind": "party",
+     "x0": -1.049,
+     "x1": 0.139,
+     "y0": -0.003,
+     "y1": 1.799,
+     "z": -0.995,
+     "px": -0.45,
+     "pz": -0.995
+    },
+    "braskas-final-aeon": {
+     "kind": "enemy",
+     "x0": 2.365,
+     "x1": 6.885,
+     "y0": -0.019,
+     "y1": 4.154,
+     "z": -8.915,
+     "px": 4.642,
+     "pz": -8.915
+    },
+    "yu-pagoda-left": {
+     "kind": "enemy",
+     "x0": 1.272,
+     "x1": 2.713,
+     "y0": 1.004,
+     "y1": 3.266,
+     "z": -7.54,
+     "px": 2.002,
+     "pz": -7.54
+    },
+    "yu-pagoda-right": {
+     "kind": "enemy",
+     "x0": 4.6,
+     "x1": 6.04,
+     "y0": 1.004,
+     "y1": 3.212,
+     "z": -8.623,
+     "px": 5.362,
+     "pz": -8.623
+    }
+   },
+   "vs": {
+    "tidus": {
+     "rest": 381.7,
+     "min": 174.1,
+     "minAt": 17,
+     "apex": 174.1,
+     "minOver": 0,
+     "dxRest": 333.5,
+     "dxApex": 124.7,
+     "dxMin": 124.7,
+     "dyApex": -30.6,
+     "awApex": 413.4,
+     "twApex": 291.8
+    },
+    "yuna": {
+     "rest": 250.4,
+     "min": 187,
+     "minAt": 16,
+     "apex": 188,
+     "minOver": 0,
+     "dxRest": -89.4,
+     "dxApex": -308.7,
+     "dxMin": -308.7,
+     "dyApex": 187.2,
+     "awApex": 413.4,
+     "twApex": 291
+    },
+    "auron": {
+     "rest": 197.2,
+     "min": 0,
+     "minAt": 15,
+     "apex": 0,
+     "minOver": 10,
+     "dxRest": 148.2,
+     "dxApex": -69.1,
+     "dxMin": -69.1,
+     "dyApex": -92.8,
+     "awApex": 413.4,
+     "twApex": 205.7
+    }
+   },
+   "boxShiftPx": 233.9,
+   "camStart": [
+    0.617,
+    2.739,
+    8.467
+   ],
+   "camApex": [
+    0.674,
+    2.734,
+    8.302
+   ]
+  },
+  {
+   "cmd": "attack/attack",
+   "n": 8,
+   "who": "auron",
+   "kind": "party",
+   "d": 2.5065029243561705,
+   "ms": 440,
+   "contact": true,
+   "frames": 49,
+   "reachedFrame": 18,
+   "done": true,
+   "spans": {
+    "tidus": {
+     "kind": "party",
+     "x0": -1.718,
+     "x1": -0.553,
+     "y0": -0.004,
+     "y1": 1.799,
+     "z": 1.605,
+     "px": -1.12,
+     "pz": 1.605
+    },
+    "yuna": {
+     "kind": "party",
+     "x0": 0.059,
+     "x1": 1.334,
+     "y0": -0.302,
+     "y1": 0.815,
+     "z": 1.555,
+     "px": 0.57,
+     "pz": 1.555
+    },
+    "auron": {
+     "kind": "party",
+     "x0": -0.81,
+     "x1": 0.086,
+     "y0": -0.003,
+     "y1": 1.363,
+     "z": -0.995,
+     "px": -0.45,
+     "pz": -0.995
+    },
+    "braskas-final-aeon": {
+     "kind": "enemy",
+     "x0": 2.431,
+     "x1": 6.734,
+     "y0": -0.01,
+     "y1": 4.027,
+     "z": -8.915,
+     "px": 4.642,
+     "pz": -8.915
+    },
+    "yu-pagoda-left": {
+     "kind": "enemy",
+     "x0": 1.291,
+     "x1": 2.717,
+     "y0": 1.009,
+     "y1": 3.195,
+     "z": -7.54,
+     "px": 2.002,
+     "pz": -7.54
+    },
+    "yu-pagoda-right": {
+     "kind": "enemy",
+     "x0": 4.647,
+     "x1": 6.073,
+     "y0": 1.009,
+     "y1": 3.257,
+     "z": -8.623,
+     "px": 5.362,
+     "pz": -8.623
+    }
+   },
+   "vs": {
+    "braskas-final-aeon": {
+     "rest": 152.2,
+     "min": 0,
+     "minAt": 3,
+     "apex": 0,
+     "minOver": 204,
+     "dxRest": 132.8,
+     "dxApex": -171.7,
+     "dxMin": -272.2,
+     "dyApex": -2.4,
+     "awApex": 131.5,
+     "twApex": 386.3
+    },
+    "yu-pagoda-left": {
+     "rest": 90,
+     "min": 3,
+     "minAt": 41,
+     "apex": 122.8,
+     "minOver": 0,
+     "dxRest": 35.2,
+     "dxApex": -275.3,
+     "dxMin": -378.3,
+     "dyApex": 74.9,
+     "awApex": 131.5,
+     "twApex": 142.6
+    },
+    "yu-pagoda-right": {
+     "rest": 384.4,
+     "min": 79,
+     "minAt": 15,
+     "apex": 95.1,
+     "minOver": 0,
+     "dxRest": 333,
+     "dxApex": 29.6,
+     "dxMin": -73.1,
+     "dyApex": 88.4,
+     "awApex": 131.5,
+     "twApex": 132.4
+    }
+   },
+   "boxShiftPx": 367.2,
+   "camStart": [
+    0.624,
+    2.736,
+    8.504
+   ],
+   "camApex": [
+    0.752,
+    2.73,
+    8.135
+   ]
+  },
+  {
+   "cmd": "attack/attack",
+   "n": 9,
+   "who": "auron",
+   "kind": "party",
+   "d": 2.5003647445685107,
+   "ms": 440,
+   "contact": true,
+   "frames": 50,
+   "reachedFrame": 18,
+   "done": true,
+   "spans": {
+    "tidus": {
+     "kind": "party",
+     "x0": -1.743,
+     "x1": -0.545,
+     "y0": -0.038,
+     "y1": 1.785,
+     "z": 1.605,
+     "px": -1.12,
+     "pz": 1.605
+    },
+    "yuna": {
+     "kind": "party",
+     "x0": 0.059,
+     "x1": 1.334,
+     "y0": -0.302,
+     "y1": 0.815,
+     "z": 1.555,
+     "px": 0.57,
+     "pz": 1.555
+    },
+    "auron": {
+     "kind": "party",
+     "x0": -0.82,
+     "x1": 0.078,
+     "y0": -0.003,
+     "y1": 1.365,
+     "z": -0.995,
+     "px": -0.45,
+     "pz": -0.995
+    },
+    "braskas-final-aeon": {
+     "kind": "enemy",
+     "x0": 2.45,
+     "x1": 6.746,
+     "y0": -0.006,
+     "y1": 4.023,
+     "z": -8.915,
+     "px": 4.642,
+     "pz": -8.915
+    },
+    "yu-pagoda-left": {
+     "kind": "enemy",
+     "x0": 1.283,
+     "x1": 2.713,
+     "y0": 1.007,
+     "y1": 3.203,
+     "z": -7.54,
+     "px": 2.002,
+     "pz": -7.54
+    },
+    "yu-pagoda-right": {
+     "kind": "enemy",
+     "x0": 4.641,
+     "x1": 6.072,
+     "y0": 1.007,
+     "y1": 3.219,
+     "z": -8.623,
+     "px": 5.362,
+     "pz": -8.623
+    }
+   },
+   "vs": {
+    "braskas-final-aeon": {
+     "rest": 106.1,
+     "min": 0,
+     "minAt": 2,
+     "apex": 0,
+     "minOver": 279,
+     "dxRest": 88.6,
+     "dxApex": -176.2,
+     "dxMin": -280.1,
+     "dyApex": -2.5,
+     "awApex": 134.9,
+     "twApex": 386
+    },
+    "yu-pagoda-left": {
+     "rest": 50,
+     "min": 0,
+     "minAt": 42,
+     "apex": 124.5,
+     "minOver": 6,
+     "dxRest": -0.9,
+     "dxApex": -281.6,
+     "dxMin": -381.6,
+     "dyApex": 73.8,
+     "awApex": 134.9,
+     "twApex": 143.1
+    },
+    "yu-pagoda-right": {
+     "rest": 323,
+     "min": 54.7,
+     "minAt": 15,
+     "apex": 92.8,
+     "minOver": 0,
+     "dxRest": 286.3,
+     "dxApex": 25.2,
+     "dxMin": -74.5,
+     "dyApex": 87.6,
+     "awApex": 134.9,
+     "twApex": 129.6
+    }
+   },
+   "boxShiftPx": 402.5,
+   "camStart": [
+    -0.036,
+    2.52,
+    9.341
+   ],
+   "camApex": [
+    0.68,
+    2.745,
+    8.113
+   ]
+  },
+  {
+   "cmd": "item/holy-water",
+   "n": 10,
+   "who": "braskas-final-aeon",
+   "kind": "enemy",
+   "d": 3.2451057438882143,
+   "ms": 440,
+   "contact": true,
+   "frames": 10,
+   "reachedFrame": null,
+   "done": false,
+   "spans": {
+    "tidus": {
+     "kind": "party",
+     "x0": -1.719,
+     "x1": -0.558,
+     "y0": -0.006,
+     "y1": 1.795,
+     "z": 1.605,
+     "px": -1.12,
+     "pz": 1.605
+    },
+    "yuna": {
+     "kind": "party",
+     "x0": 0.059,
+     "x1": 1.334,
+     "y0": -0.302,
+     "y1": 0.815,
+     "z": 1.555,
+     "px": 0.57,
+     "pz": 1.555
+    },
+    "auron": {
+     "kind": "party",
+     "x0": -1.027,
+     "x1": 0.167,
+     "y0": -0.009,
+     "y1": 1.798,
+     "z": -0.995,
+     "px": -0.45,
+     "pz": -0.995
+    },
+    "braskas-final-aeon": {
+     "kind": "enemy",
+     "x0": 2.367,
+     "x1": 6.966,
+     "y0": -0.117,
+     "y1": 4.141,
+     "z": -8.915,
+     "px": 4.642,
+     "pz": -8.915
+    },
+    "yu-pagoda-left": {
+     "kind": "enemy",
+     "x0": 1.272,
+     "x1": 2.713,
+     "y0": 1.004,
+     "y1": 3.266,
+     "z": -7.54,
+     "px": 2.002,
+     "pz": -7.54
+    },
+    "yu-pagoda-right": {
+     "kind": "enemy",
+     "x0": 4.632,
+     "x1": 6.073,
+     "y0": 1.004,
+     "y1": 3.22,
+     "z": -8.623,
+     "px": 5.362,
+     "pz": -8.623
+    }
+   },
+   "vs": {
+    "tidus": {
+     "rest": 369,
+     "min": 195,
+     "minAt": 9,
+     "apex": null,
+     "minOver": 0,
+     "dxRest": 322.3,
+     "dxApex": null,
+     "dxMin": 146.1,
+     "dyApex": null
+    },
+    "yuna": {
+     "rest": 238.8,
+     "min": 185.8,
+     "minAt": 3,
+     "apex": null,
+     "minOver": 0,
+     "dxRest": -99.1,
+     "dxApex": null,
+     "dxMin": -278.4,
+     "dyApex": null
+    },
+    "auron": {
+     "rest": 184,
+     "min": 8.2,
+     "minAt": 9,
+     "apex": null,
+     "minOver": 0,
+     "dxRest": 137.1,
+     "dxApex": null,
+     "dxMin": -40.2,
+     "dyApex": null
+    }
+   },
+   "boxShiftPx": 184.2,
+   "camStart": [
+    0.541,
+    2.758,
+    8.501
+   ],
+   "camApex": null
+  }
+ ],
+ "starts": [
+  "braskas-final-aeon:ability",
+  "yu-pagoda-left:ability",
+  "yu-pagoda-right:ability",
+  "yuna:attack",
+  "auron:attack",
+  "braskas-final-aeon:ability",
+  "yu-pagoda-left:ability",
+  "yu-pagoda-right:ability"
+ ],
+ "consoleErrors": []
+}

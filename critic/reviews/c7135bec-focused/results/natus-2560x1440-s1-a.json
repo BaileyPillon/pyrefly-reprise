@@ -1,0 +1,73 @@
+{
+ "size": "2560x1440",
+ "seed": 1,
+ "label": "a",
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off",
+  "page.setViewportSize for the resize (a real window resize event)"
+ ],
+ "states": [
+  {
+   "what": "first menu",
+   "viewport": "2560x1440",
+   "framing": {
+    "pin": {
+     "frac": 0.45,
+     "blend": 0.65,
+     "back": 1.02,
+     "lens": [
+      0.03,
+      0
+     ],
+     "apart": 0.75,
+     "bossApart": 0.4,
+     "card": [
+      410,
+      4
+     ]
+    },
+    "bossPx": 545,
+    "planMs": 81,
+    "plans": 1,
+    "replans": 0,
+    "cls": "colossus",
+    "scale": 0.45,
+    "ready": null
+   },
+   "bossRect": {
+    "id": "seymour-natus",
+    "x": 1736,
+    "y": 368,
+    "w": 315,
+    "h": 559,
+    "visible": 0.9934064537049325,
+    "inFrame": 0.9934064537049325
+   },
+   "bossBoxH": 559,
+   "sensorRect": {
+    "x": 1603,
+    "y": 664,
+    "w": 475,
+    "h": 352
+   },
+   "sensorCoverOfBoss": 0.4706,
+   "advisorCoverOfBoss": 0,
+   "ids": [
+    "tidus",
+    "yuna",
+    "kimahri",
+    "seymour-natus",
+    "mortibody"
+   ]
+  }
+ ],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card seymour-natus by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

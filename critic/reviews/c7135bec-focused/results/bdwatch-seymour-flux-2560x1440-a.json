@@ -1,0 +1,288 @@
+{
+ "name": "bdwatch-seymour-flux-2560x1440-a",
+ "chapter": "seymour-flux",
+ "size": "2560x1440",
+ "series": [
+  {
+   "t": 0,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 1.5,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 3,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 4.5,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 6,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 7.5,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 9.1,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 10.6,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 12.1,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 13.6,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 15.1,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 16.6,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 18.1,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 19.6,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 21.1,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 22.6,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 24.1,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 25.7,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 27.2,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 28.7,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 30.2,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 31.7,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 33.2,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 34.7,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 36.2,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 37.7,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 39.2,
+   "paint": {
+    "w": 5376,
+    "src": "gagazet%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  }
+ ],
+ "menuAtMs": 14407,
+ "maxPaintW": 5376,
+ "firstHiT": 0,
+ "backdropReq": [
+  "/art/backdrops/garden-of-pain.webp",
+  "/art/backdrops/via-purifico.webp",
+  "/art/backdrops/road-to-the-farplane.webp",
+  "/art/backdrops/gagazet.json",
+  "/art/backdrops/gagazet%402x.webp"
+ ],
+ "consoleErrors": []
+}

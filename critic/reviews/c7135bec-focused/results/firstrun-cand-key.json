@@ -1,0 +1,277 @@
+{
+ "name": "firstrun-cand-key",
+ "mode": "key",
+ "label": "cand",
+ "size": "1600x900",
+ "base": "http://127.0.0.1:5461/",
+ "hooks": [
+  "setSeed(1) before the first input (labelled)"
+ ],
+ "steps": [
+  {
+   "what": "title",
+   "screen": "title",
+   "sel": null,
+   "phase": null,
+   "guide": {
+    "slab": null,
+    "spot": false,
+    "ring": false,
+    "mark": null,
+    "brief": false
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   }
+  },
+  {
+   "what": "after the first press on the title (briefing expected)",
+   "screen": "title",
+   "sel": null,
+   "phase": null,
+   "guide": {
+    "slab": null,
+    "spot": false,
+    "ring": false,
+    "mark": null,
+    "brief": true
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   }
+  },
+  {
+   "what": "board: step 1 expected",
+   "screen": "chapter-select",
+   "sel": "seymour-flux",
+   "phase": null,
+   "guide": {
+    "slab": {
+     "eyebrow": "AURON · 1 OF 3",
+     "quote": "“Start with the first one.”",
+     "line": "Click its picture to begin. The others wait on the board.",
+     "act": null,
+     "pips": 1,
+     "skip": "ESC SKIP THE GUIDE"
+    },
+    "spot": true,
+    "ring": false,
+    "mark": null,
+    "brief": false
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   }
+  },
+  {
+   "what": "prep: step 2 expected",
+   "screen": "party-prep",
+   "sel": null,
+   "phase": null,
+   "guide": {
+    "slab": {
+     "eyebrow": "AURON · 2 OF 3",
+     "quote": "“Your party is ready.”",
+     "line": "The tabs are for later. Start the battle.",
+     "act": null,
+     "pips": 2,
+     "skip": "ESC SKIP THE GUIDE"
+    },
+    "spot": true,
+    "ring": false,
+    "mark": null,
+    "brief": false
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   }
+  },
+  {
+   "what": "battle first menu: step 3 expected",
+   "screen": "battle",
+   "sel": null,
+   "phase": "command:tidus",
+   "guide": {
+    "slab": null,
+    "spot": false,
+    "ring": true,
+    "mark": {
+     "guide": "3",
+     "text": "AURON · 3 OF 3 “He moves after you. Not before. Use it.” Your turn. Pick ATTACK, then pick who it hits. ESC SKIP THE GUIDE"
+    },
+    "brief": false
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   },
+   "rows": [
+    "Talk(off)",
+    ">Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Flee(off)"
+   ]
+  },
+  {
+   "what": "after ONE Enter on the card",
+   "screen": "battle",
+   "sel": null,
+   "phase": "command:tidus",
+   "guide": {
+    "slab": null,
+    "spot": false,
+    "ring": false,
+    "mark": null,
+    "brief": false
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   },
+   "rows": [
+    "Talk(off)",
+    ">Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Flee(off)"
+   ]
+  },
+  {
+   "what": "after the SECOND Enter",
+   "screen": "battle",
+   "sel": null,
+   "phase": "command:tidus",
+   "guide": {
+    "slab": null,
+    "spot": false,
+    "ring": false,
+    "mark": null,
+    "brief": false
+   },
+   "targets": {
+    "n": 2,
+    "lit": 1,
+    "selecting": true
+   },
+   "rows": [
+    "Talk(off)",
+    ">Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Flee(off)"
+   ]
+  },
+  {
+   "what": "after the first command resolved",
+   "screen": "battle",
+   "sel": null,
+   "phase": "play:action-start",
+   "guide": {
+    "slab": null,
+    "spot": false,
+    "ring": false,
+    "mark": null,
+    "brief": false
+   },
+   "targets": {
+    "n": 0,
+    "lit": 0,
+    "selecting": false
+   },
+   "seenCoach": [
+    "briefing",
+    "firstrun-board",
+    "firstrun-prep",
+    "ffx-turn-order",
+    "firstrun-battle"
+   ]
+  }
+ ],
+ "m": [
+  {
+   "at": "Chapter I",
+   "sel": "seymour-flux",
+   "line": "Click its picture to begin. The others wait on the board.",
+   "quote": "“Start with the first one.”"
+  },
+  {
+   "at": "after 3x ArrowRight",
+   "sel": "seymour-anima-macalania",
+   "line": "Click its picture to begin. The others wait on the board.",
+   "quote": "“Start with this one.”"
+  },
+  {
+   "at": "back on Chapter I",
+   "sel": "seymour-flux",
+   "line": "Click its picture to begin. The others wait on the board.",
+   "quote": "“Start with the first one.”"
+  }
+ ],
+ "cutsceneInputs": 1,
+ "firstActionOfTidus": "Attack",
+ "seenCoach": [
+  "briefing",
+  "firstrun-board",
+  "firstrun-prep",
+  "ffx-turn-order",
+  "firstrun-battle"
+ ],
+ "nextCoach": {
+  "at": 8500,
+  "text": "AURON “You have taken enough. Spend it — an Overdrive never misses.” ENTER CONTINUE FIRST TIME ONLY"
+ },
+ "seenCoachLater": [
+  "briefing",
+  "firstrun-board",
+  "firstrun-prep",
+  "ffx-turn-order",
+  "firstrun-battle",
+  "ffx-overdrive"
+ ],
+ "markersLeft": {
+  "frg": false,
+  "coachMark": true
+ },
+ "s1": {
+  "eyebrow": "AURON · 1 OF 3",
+  "quote": "“Start with the first one.”",
+  "line": "Click its picture to begin. The others wait on the board.",
+  "act": null,
+  "pips": 1,
+  "skip": "ESC SKIP THE GUIDE"
+ },
+ "s2": {
+  "eyebrow": "AURON · 2 OF 3",
+  "quote": "“Your party is ready.”",
+  "line": "The tabs are for later. Start the battle.",
+  "act": null,
+  "pips": 2,
+  "skip": "ESC SKIP THE GUIDE"
+ },
+ "s3": {
+  "slab": null,
+  "spot": false,
+  "ring": true,
+  "mark": {
+   "guide": "3",
+   "text": "AURON · 3 OF 3 “He moves after you. Not before. Use it.” Your turn. Pick ATTACK, then pick who it hits. ESC SKIP THE GUIDE"
+  },
+  "brief": false
+ },
+ "consoleErrors": [],
+ "notFound": []
+}

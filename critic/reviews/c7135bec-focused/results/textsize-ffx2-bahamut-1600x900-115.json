@@ -1,0 +1,156 @@
+{
+ "name": "textsize-ffx2-bahamut-1600x900-115",
+ "chapter": "ffx2-bahamut",
+ "size": "1600x900",
+ "pct": 115,
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off"
+ ],
+ "steps": [],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card ffx2-bahamut by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "base": {
+  "lab": "first menu at 100%",
+  "viewport": "1600x900",
+  "textSizeAttr": "100",
+  "wideAttr": "100",
+  "nTexts": 101,
+  "minPx": 14,
+  "under14": [],
+  "under14Count": 0,
+  "offWindow": [
+   {
+    "t": "Gris-Gris Bag",
+    "px": 14.25,
+    "x": 83,
+    "y": 882,
+    "r": 353,
+    "b": 904,
+    "cls": "sgd__lrow",
+    "ell": false
+   },
+   {
+    "t": "Drop:",
+    "px": 14.25,
+    "x": 83,
+    "y": 882,
+    "r": 131,
+    "b": 902,
+    "cls": "sgd__flabel",
+    "ell": false
+   }
+  ],
+  "offCount": 2,
+  "ellipsis": [],
+  "fightersCovered": [
+   {
+    "id": "paine",
+    "covered": 0.021
+   },
+   {
+    "id": "bahamut",
+    "covered": 0.026
+   }
+  ]
+ },
+ "set": {
+  "want": 115,
+  "steps": [
+   "TEXT SIZE100%",
+   "TEXT SIZE115%"
+  ],
+  "tab": "Options",
+  "row": "TEXT SIZE100%",
+  "final": "TEXT SIZE115%",
+  "saved": 1.15
+ },
+ "menu": {
+  "lab": "first menu at 115%",
+  "viewport": "1600x900",
+  "textSizeAttr": "115",
+  "wideAttr": "115",
+  "nTexts": 63,
+  "minPx": 14,
+  "under14": [],
+  "under14Count": 0,
+  "offWindow": [],
+  "offCount": 0,
+  "ellipsis": [],
+  "fightersCovered": [
+   {
+    "id": "bahamut",
+    "covered": 0.042
+   }
+  ]
+ },
+ "guideBefore": {
+  "cls": "sgd sgd--ffx2 sgd--squeezed",
+  "x": 0,
+  "y": 0,
+  "w": 0,
+  "h": 0,
+  "shown": false,
+  "squeezed": true
+ },
+ "guide": {
+  "lab": "guide (G) at 115%",
+  "viewport": "1600x900",
+  "textSizeAttr": "115",
+  "wideAttr": "115",
+  "nTexts": 69,
+  "minPx": 14,
+  "under14": [],
+  "under14Count": 0,
+  "offWindow": [],
+  "offCount": 0,
+  "ellipsis": [],
+  "fightersCovered": [
+   {
+    "id": "bahamut",
+    "covered": 0.057
+   }
+  ]
+ },
+ "guideAfter": {
+  "cls": "sgd sgd--ffx2 sgd--squeezed sgd--off",
+  "x": 0,
+  "y": 0,
+  "w": 0,
+  "h": 0,
+  "shown": false,
+  "squeezed": true
+ },
+ "rows": [
+  "White Magic",
+  "Change",
+  "Item"
+ ],
+ "sub": {
+  "lab": "row \"White Magic\" opened at 115%",
+  "viewport": "1600x900",
+  "textSizeAttr": "115",
+  "wideAttr": "115",
+  "nTexts": 71,
+  "minPx": 14,
+  "under14": [],
+  "under14Count": 0,
+  "offWindow": [],
+  "offCount": 0,
+  "ellipsis": [],
+  "fightersCovered": [
+   {
+    "id": "bahamut",
+    "covered": 0.114
+   }
+  ]
+ },
+ "subRows": 7,
+ "saved": 1.15,
+ "consoleErrors": [],
+ "notFound": []
+}

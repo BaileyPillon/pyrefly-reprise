@@ -1,0 +1,227 @@
+{
+ "name": "textsize-ffx2-bahamut-1600x900-130-pause",
+ "chapter": "ffx2-bahamut",
+ "size": "1600x900",
+ "pct": 130,
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off"
+ ],
+ "steps": [],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card ffx2-bahamut by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "base": {
+  "lab": "first menu at 100%",
+  "viewport": "1600x900",
+  "textSizeAttr": "100",
+  "wideAttr": "100",
+  "nTexts": 101,
+  "minPx": 14,
+  "under14": [],
+  "under14Count": 0,
+  "offWindow": [
+   {
+    "t": "Gris-Gris Bag",
+    "px": 14.25,
+    "x": 83,
+    "y": 882,
+    "r": 353,
+    "b": 904,
+    "cls": "sgd__lrow",
+    "ell": false
+   },
+   {
+    "t": "Drop:",
+    "px": 14.25,
+    "x": 83,
+    "y": 882,
+    "r": 131,
+    "b": 902,
+    "cls": "sgd__flabel",
+    "ell": false
+   }
+  ],
+  "offCount": 2,
+  "ellipsis": [],
+  "fightersCovered": [
+   {
+    "id": "bahamut",
+    "covered": 0.024
+   }
+  ]
+ },
+ "set": {
+  "want": 130,
+  "steps": [
+   "TEXT SIZE100%",
+   "TEXT SIZE115%",
+   "TEXT SIZE130%"
+  ],
+  "tab": "Options",
+  "row": "TEXT SIZE100%",
+  "final": "TEXT SIZE130%",
+  "saved": 1.3
+ },
+ "menu": {
+  "lab": "first menu at 130%",
+  "viewport": "1600x900",
+  "textSizeAttr": "130",
+  "wideAttr": "130",
+  "nTexts": 62,
+  "minPx": 14,
+  "under14": [],
+  "under14Count": 0,
+  "offWindow": [],
+  "offCount": 0,
+  "ellipsis": [],
+  "fightersCovered": [
+   {
+    "id": "bahamut",
+    "covered": 0.079
+   }
+  ]
+ },
+ "guideBefore": {
+  "cls": "sgd sgd--ffx2 sgd--squeezed",
+  "x": 0,
+  "y": 0,
+  "w": 0,
+  "h": 0,
+  "shown": false,
+  "squeezed": true
+ },
+ "guide": {
+  "lab": "guide (G) at 130%",
+  "viewport": "1600x900",
+  "textSizeAttr": "130",
+  "wideAttr": "130",
+  "nTexts": 68,
+  "minPx": 14,
+  "under14": [],
+  "under14Count": 0,
+  "offWindow": [],
+  "offCount": 0,
+  "ellipsis": [],
+  "fightersCovered": [
+   {
+    "id": "bahamut",
+    "covered": 0.135
+   }
+  ]
+ },
+ "guideAfter": {
+  "cls": "sgd sgd--ffx2 sgd--squeezed sgd--off",
+  "x": 0,
+  "y": 0,
+  "w": 0,
+  "h": 0,
+  "shown": false,
+  "squeezed": true
+ },
+ "rows": [
+  "White Magic",
+  "Change",
+  "Item"
+ ],
+ "sub": {
+  "lab": "row \"White Magic\" opened at 130%",
+  "viewport": "1600x900",
+  "textSizeAttr": "130",
+  "wideAttr": "130",
+  "nTexts": 70,
+  "minPx": 14,
+  "under14": [],
+  "under14Count": 0,
+  "offWindow": [],
+  "offCount": 0,
+  "ellipsis": [],
+  "fightersCovered": [
+   {
+    "id": "bahamut",
+    "covered": 0.219
+   }
+  ]
+ },
+ "subRows": 7,
+ "pause": [
+  {
+   "tab": "Yuna",
+   "minPx": 14,
+   "under14": 0,
+   "off": 0,
+   "offSample": [],
+   "ellipsis": [],
+   "n": 89
+  },
+  {
+   "tab": "Rikku",
+   "minPx": 14,
+   "under14": 0,
+   "off": 0,
+   "offSample": [],
+   "ellipsis": [],
+   "n": 89
+  },
+  {
+   "tab": "Paine",
+   "minPx": 14,
+   "under14": 0,
+   "off": 0,
+   "offSample": [],
+   "ellipsis": [],
+   "n": 89
+  },
+  {
+   "tab": "Chapter",
+   "minPx": 14,
+   "under14": 0,
+   "off": 0,
+   "offSample": [],
+   "ellipsis": [],
+   "n": 91
+  },
+  {
+   "tab": "Guide",
+   "minPx": 14,
+   "under14": 0,
+   "off": 0,
+   "offSample": [],
+   "ellipsis": [],
+   "n": 65
+  },
+  {
+   "tab": "Options",
+   "minPx": 14,
+   "under14": 0,
+   "off": 0,
+   "offSample": [],
+   "ellipsis": [],
+   "n": 95
+  },
+  {
+   "tab": "Controls",
+   "minPx": 14,
+   "under14": 0,
+   "off": 0,
+   "offSample": [],
+   "ellipsis": [],
+   "n": 80
+  },
+  {
+   "tab": "Music",
+   "minPx": 14,
+   "under14": 0,
+   "off": 0,
+   "offSample": [],
+   "ellipsis": [],
+   "n": 86
+  }
+ ],
+ "saved": 1.3,
+ "consoleErrors": [],
+ "notFound": []
+}

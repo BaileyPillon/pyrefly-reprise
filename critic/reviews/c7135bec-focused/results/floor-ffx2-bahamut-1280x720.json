@@ -1,0 +1,103 @@
+{
+ "name": "floor-ffx2-bahamut-1280x720",
+ "chapter": "ffx2-bahamut",
+ "size": "1280x720",
+ "touch": false,
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off"
+ ],
+ "steps": [
+  {
+   "label": "first menu",
+   "minPx": 11.4,
+   "nTexts": 98,
+   "under14": [
+    {
+     "t": "Boss Battle",
+     "px": 11.4,
+     "cls": "sgd__tag"
+    },
+    {
+     "t": "HP:",
+     "px": 11.4,
+     "cls": "sgd__flabel"
+    },
+    {
+     "t": "Steal:",
+     "px": 11.4,
+     "cls": "sgd__flabel"
+    },
+    {
+     "t": "Drop:",
+     "px": 11.4,
+     "cls": "sgd__flabel"
+    }
+   ],
+   "under14Count": 4,
+   "od": {
+    "W": 1280,
+    "bars": 0,
+    "maxRight": null,
+    "inside": null,
+    "hang": null
+   }
+  }
+ ],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card ffx2-bahamut by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "attackChosen": null,
+ "targets": {
+  "n": 0,
+  "lit": 0,
+  "selecting": false
+ },
+ "pauseTabs": [
+  {
+   "tab": "Yuna",
+   "minPx": 11.4,
+   "under14": 4
+  },
+  {
+   "tab": "Rikku",
+   "minPx": 11.4,
+   "under14": 4
+  },
+  {
+   "tab": "Paine",
+   "minPx": 11.4,
+   "under14": 4
+  },
+  {
+   "tab": "Chapter",
+   "minPx": 11.4,
+   "under14": 4
+  },
+  {
+   "tab": "Guide",
+   "minPx": 11.4,
+   "under14": 4
+  },
+  {
+   "tab": "Options",
+   "minPx": 11.4,
+   "under14": 4
+  },
+  {
+   "tab": "Controls",
+   "minPx": 11.4,
+   "under14": 4
+  },
+  {
+   "tab": "Music",
+   "minPx": 11.4,
+   "under14": 4
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

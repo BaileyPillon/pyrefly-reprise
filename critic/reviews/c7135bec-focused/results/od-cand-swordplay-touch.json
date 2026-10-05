@@ -1,0 +1,109 @@
+{
+ "name": "od-cand-swordplay-touch",
+ "kind": "swordplay",
+ "mode": "touch",
+ "label": "cand",
+ "size": "390x844",
+ "chapter": "sin-fins-core",
+ "base": "http://127.0.0.1:5461/?coach=off",
+ "hooks": [
+  "setSeed(1) + gotoChapter (navigation only, ?coach=off)",
+  "battleState() gauge := 100 for tidus and auron (labelled)"
+ ],
+ "log": [
+  "first menu; actor command:tidus",
+  "overlay up {\"turns\":4,\"chosen\":\"Spiral Cut\"}",
+  "overlay {\"title\":\"Spiral Cut\",\"subtitle\":\"SWORDPLAY · TAP IN THE GOLD ZONE\",\"input\":\"pointer\",\"cls\":\"ig-minigame ffx-mg ffx-mg--tap ffx-mg--tap-slab ffx-mg--open\",\"chips\":[],\"slab\":{\"x\":11.9,\"y\":56,\"w\":345.9,\"h\":121.8},\"slabPe\":\"auto\"}",
+  "pressed {\"pos\":50.58,\"predicted\":54.35,\"zoneStart\":39,\"zoneWidth\":22}",
+  "pressed {\"pos\":53.09,\"predicted\":53.09,\"zoneStart\":39,\"zoneWidth\":22}",
+  "engine {\"seq\":26,\"actor\":\"tidus\",\"ability\":\"Spiral Cut\",\"extra\":{\"kind\":\"tidus-timing\",\"timing\":{\"success\":true,\"timeRemainingMs\":2256.7999999523163,\"timerMs\":3000}}}"
+ ],
+ "reach": {
+  "turns": 4,
+  "chosen": "Spiral Cut"
+ },
+ "overlay": {
+  "cls": "ig-minigame ffx-mg ffx-mg--tap ffx-mg--tap-slab ffx-mg--open",
+  "input": "pointer",
+  "title": "Spiral Cut",
+  "subtitle": "SWORDPLAY · TAP IN THE GOLD ZONE",
+  "timer": "2.4",
+  "slab": {
+   "x": 11.9,
+   "y": 56,
+   "w": 345.9,
+   "h": 121.8
+  },
+  "slabPe": "auto",
+  "chips": [],
+  "bar": {
+   "x": 32,
+   "y": 152.9,
+   "w": 288,
+   "h": 11.5
+  },
+  "viewport": "390x844"
+ },
+ "t0": 1791180710114,
+ "attempts": [
+  {
+   "seen": {
+    "pos": 50.58,
+    "predicted": 54.35,
+    "zoneStart": 39,
+    "zoneWidth": 22
+   },
+   "pressedAfterMs": 35,
+   "markerAfterPress": 53.09
+  },
+  {
+   "seen": {
+    "pos": 53.09,
+    "predicted": 53.09,
+    "zoneStart": 39,
+    "zoneWidth": 22
+   },
+   "pressedAfterMs": 35,
+   "markerAfterPress": 53.09
+  }
+ ],
+ "zone": [
+  {
+   "seen": {
+    "pos": 50.58,
+    "predicted": 54.35,
+    "zoneStart": 39,
+    "zoneWidth": 22
+   },
+   "pressedAfterMs": 35,
+   "markerAfterPress": 53.09
+  },
+  {
+   "seen": {
+    "pos": 53.09,
+    "predicted": 53.09,
+    "zoneStart": 39,
+    "zoneWidth": 22
+   },
+   "pressedAfterMs": 35,
+   "markerAfterPress": 53.09
+  }
+ ],
+ "closed": true,
+ "engine": {
+  "seq": 26,
+  "actor": "tidus",
+  "ability": "Spiral Cut",
+  "extra": {
+   "kind": "tidus-timing",
+   "timing": {
+    "success": true,
+    "timeRemainingMs": 2256.7999999523163,
+    "timerMs": 3000
+   }
+  }
+ },
+ "sameAsPre": false,
+ "screenAfter": "battle",
+ "consoleErrors": []
+}

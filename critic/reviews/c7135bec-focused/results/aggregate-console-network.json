@@ -1,0 +1,17 @@
+{
+  "runs": 125,
+  "consoleErrors": 0,
+  "notFound": 0,
+  "badArtResponses": 0,
+  "artResponses": 5510,
+  "statuses": {
+    "200": 5485,
+    "304": 6,
+    "307": 19
+  },
+  "liveRuns307": 19,
+  "candidate307": 0,
+  "candidateRawAt": 0,
+  "liveRawAt": 19,
+  "runsWithErrors": []
+}

@@ -1,0 +1,72 @@
+[
+ {
+  "chapter": "ffx2-bahamut",
+  "lists": [
+   {
+    "who": "play:damage",
+    "rows": [
+     "Gunner",
+     "Black Mage"
+    ]
+   }
+  ],
+  "ladyLuckOffered": false,
+  "consoleErrors": []
+ },
+ {
+  "chapter": "ffx2-leblanc",
+  "lists": [
+   {
+    "who": "play:action-start",
+    "rows": [
+     "Songstress",
+     "Thief"
+    ]
+   }
+  ],
+  "ladyLuckOffered": false,
+  "consoleErrors": []
+ },
+ {
+  "chapter": "ffx2-vegnagun-shuyin",
+  "lists": [
+   {
+    "who": "play:damage",
+    "rows": [
+     "Gunner",
+     "Lady Luck"
+    ]
+   }
+  ],
+  "ladyLuckOffered": true,
+  "consoleErrors": []
+ },
+ {
+  "chapter": "ffx2-ixion-djose",
+  "lists": [
+   {
+    "who": "idle",
+    "rows": [
+     "Lady Luck",
+     "Black Mage"
+    ]
+   }
+  ],
+  "ladyLuckOffered": true,
+  "consoleErrors": []
+ },
+ {
+  "chapter": "ffx2-trema",
+  "lists": [
+   {
+    "who": "idle",
+    "rows": [
+     "White Mage",
+     "Lady Luck"
+    ]
+   }
+  ],
+  "ladyLuckOffered": true,
+  "consoleErrors": []
+ }
+]

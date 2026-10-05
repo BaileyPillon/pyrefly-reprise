@@ -1,0 +1,138 @@
+{
+ "name": "slab-cand-ffx2-bahamut-1600x900",
+ "chapter": "ffx2-bahamut",
+ "label": "cand",
+ "size": "1600x900",
+ "base": "http://127.0.0.1:5461/?coach=off",
+ "hooks": [
+  "setSeed(1) + gotoChapter (navigation only, ?coach=off)"
+ ],
+ "steps": [
+  {
+   "what": "first menu",
+   "slab": {
+    "present": true,
+    "off": false,
+    "rootHidden": false,
+    "chip": "Trianglehide",
+    "pressed": "true",
+    "panelShown": true
+   },
+   "world": {
+    "phase": "play:damage",
+    "awaiting": true,
+    "nextSeq": 16,
+    "actions": [
+     "bahamut:ability",
+     "bahamut:ability"
+    ]
+   },
+   "rows": [
+    "White Magic",
+    "Change",
+    "Item"
+   ]
+  },
+  {
+   "what": "after pad Select",
+   "slab": {
+    "present": true,
+    "off": false,
+    "rootHidden": false,
+    "chip": "Trianglehide",
+    "pressed": "true",
+    "panelShown": true
+   },
+   "world": {
+    "phase": "idle",
+    "awaiting": true,
+    "nextSeq": 16,
+    "actions": [
+     "bahamut:ability",
+     "bahamut:ability"
+    ]
+   },
+   "rows": [
+    "White Magic",
+    "Change",
+    "Item"
+   ]
+  },
+  {
+   "what": "after pad Select again",
+   "slab": {
+    "present": true,
+    "off": false,
+    "rootHidden": false,
+    "chip": "Trianglehide",
+    "pressed": "true",
+    "panelShown": true
+   },
+   "world": {
+    "phase": "idle",
+    "awaiting": true,
+    "nextSeq": 16,
+    "actions": [
+     "bahamut:ability",
+     "bahamut:ability"
+    ]
+   },
+   "rows": [
+    "White Magic",
+    "Change",
+    "Item"
+   ]
+  },
+  {
+   "what": "after pad Triangle",
+   "slab": {
+    "present": true,
+    "off": true,
+    "rootHidden": false,
+    "chip": "Triangleenemy move",
+    "pressed": "false",
+    "panelShown": false
+   },
+   "world": {
+    "phase": "idle",
+    "awaiting": true,
+    "nextSeq": 16,
+    "actions": [
+     "bahamut:ability",
+     "bahamut:ability"
+    ]
+   },
+   "rows": [
+    "White Magic",
+    "Change",
+    "Item"
+   ]
+  },
+  {
+   "what": "after key E",
+   "slab": {
+    "present": true,
+    "off": false,
+    "rootHidden": false,
+    "chip": "Trianglehide",
+    "pressed": "true",
+    "panelShown": true
+   },
+   "world": {
+    "phase": "idle",
+    "awaiting": true,
+    "nextSeq": 16,
+    "actions": [
+     "bahamut:ability",
+     "bahamut:ability"
+    ]
+   },
+   "rows": [
+    "White Magic",
+    "Change",
+    "Item"
+   ]
+  }
+ ],
+ "consoleErrors": []
+}

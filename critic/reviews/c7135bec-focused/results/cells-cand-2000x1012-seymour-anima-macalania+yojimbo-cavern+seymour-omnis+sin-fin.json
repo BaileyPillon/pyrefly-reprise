@@ -1,0 +1,1033 @@
+[
+ {
+  "label": "cand",
+  "size": "2000x1012",
+  "touch": false,
+  "chapter": "seymour-anima-macalania",
+  "base": "http://127.0.0.1:5461/?coach=off",
+  "hooks": [
+   "setSeed(1) + gotoChapter (navigation only, ?coach=off)"
+  ],
+  "samples": [
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 553.2,
+     "y": 76.5,
+     "w": 483,
+     "h": 232.8
+    },
+    "unscaled": {
+     "w": 154,
+     "clientH": 82,
+     "scrollH": 82,
+     "maxH": "93px"
+    },
+    "scale": 3.136,
+    "clipped": false,
+    "leafPast": [],
+    "text": "NEXT BEST MOVE Rikku Steal → Guado Guardian A IN SPECIAL NO MP 3% CRIT Steal Take the pouch off Guado Guardian A: one successful Steal ends its 1,000 HP Auto-Potion counter and its Hi-Potions for Seymour — and nothing else, so it will still Remedy him.",
+    "chars": 252,
+    "lead": {
+     "label": "Steal",
+     "target": "Guado Guardian A",
+     "actorInline": null,
+     "cost": "no MP",
+     "chips": [
+      "in Special",
+      "no MP",
+      "3% crit"
+     ],
+     "effect": "Steal",
+     "reason": "Take the pouch off Guado Guardian A: one successful Steal ends its 1,000 HP Auto-Potion counter and its Hi-Potions for Seymour — and nothing else, so it will still Remedy him.",
+     "warn": null
+    },
+    "alt": null,
+    "headShown": true,
+    "titleShown": true,
+    "fightersCovered": [
+     {
+      "id": "rikku",
+      "boxOverlapPx": 0,
+      "covered": 0.066
+     },
+     {
+      "id": "guado-guardian-b",
+      "boxOverlapPx": 0,
+      "covered": 0.037
+     }
+    ],
+    "maxCovered": 0.066
+   },
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 553.2,
+     "y": 76.5,
+     "w": 483,
+     "h": 232.8
+    },
+    "unscaled": {
+     "w": 154,
+     "clientH": 82,
+     "scrollH": 82,
+     "maxH": "93px"
+    },
+    "scale": 3.136,
+    "clipped": false,
+    "leafPast": [],
+    "text": "NEXT BEST MOVE Rikku Steal → Guado Guardian A IN SPECIAL NO MP 3% CRIT Steal Take the pouch off Guado Guardian A: one successful Steal ends its 1,000 HP Auto-Potion counter and its Hi-Potions for Seymour — and nothing else, so it will still Remedy him.",
+    "chars": 252,
+    "lead": {
+     "label": "Steal",
+     "target": "Guado Guardian A",
+     "actorInline": null,
+     "cost": "no MP",
+     "chips": [
+      "in Special",
+      "no MP",
+      "3% crit"
+     ],
+     "effect": "Steal",
+     "reason": "Take the pouch off Guado Guardian A: one successful Steal ends its 1,000 HP Auto-Potion counter and its Hi-Potions for Seymour — and nothing else, so it will still Remedy him.",
+     "warn": null
+    },
+    "alt": null,
+    "headShown": true,
+    "titleShown": true,
+    "fightersCovered": [
+     {
+      "id": "rikku",
+      "boxOverlapPx": 0,
+      "covered": 0.069
+     },
+     {
+      "id": "guado-guardian-b",
+      "boxOverlapPx": 0,
+      "covered": 0.035
+     }
+    ],
+    "maxCovered": 0.069
+   },
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 553.2,
+     "y": 76.5,
+     "w": 483,
+     "h": 232.8
+    },
+    "unscaled": {
+     "w": 154,
+     "clientH": 82,
+     "scrollH": 82,
+     "maxH": "93px"
+    },
+    "scale": 3.136,
+    "clipped": false,
+    "leafPast": [],
+    "text": "NEXT BEST MOVE Rikku Steal → Guado Guardian A IN SPECIAL NO MP 3% CRIT Steal Take the pouch off Guado Guardian A: one successful Steal ends its 1,000 HP Auto-Potion counter and its Hi-Potions for Seymour — and nothing else, so it will still Remedy him.",
+    "chars": 252,
+    "lead": {
+     "label": "Steal",
+     "target": "Guado Guardian A",
+     "actorInline": null,
+     "cost": "no MP",
+     "chips": [
+      "in Special",
+      "no MP",
+      "3% crit"
+     ],
+     "effect": "Steal",
+     "reason": "Take the pouch off Guado Guardian A: one successful Steal ends its 1,000 HP Auto-Potion counter and its Hi-Potions for Seymour — and nothing else, so it will still Remedy him.",
+     "warn": null
+    },
+    "alt": null,
+    "headShown": true,
+    "titleShown": true,
+    "fightersCovered": [
+     {
+      "id": "rikku",
+      "boxOverlapPx": 0,
+      "covered": 0.071
+     },
+     {
+      "id": "guado-guardian-b",
+      "boxOverlapPx": 0,
+      "covered": 0.033
+     }
+    ],
+    "maxCovered": 0.071
+   }
+  ],
+  "card": {
+   "present": true,
+   "visible": true,
+   "wrapHidden": false,
+   "rect": {
+    "x": 553.2,
+    "y": 76.5,
+    "w": 483,
+    "h": 232.8
+   },
+   "unscaled": {
+    "w": 154,
+    "clientH": 82,
+    "scrollH": 82,
+    "maxH": "93px"
+   },
+   "scale": 3.136,
+   "clipped": false,
+   "leafPast": [],
+   "text": "NEXT BEST MOVE Rikku Steal → Guado Guardian A IN SPECIAL NO MP 3% CRIT Steal Take the pouch off Guado Guardian A: one successful Steal ends its 1,000 HP Auto-Potion counter and its Hi-Potions for Seymour — and nothing else, so it will still Remedy him.",
+   "chars": 252,
+   "lead": {
+    "label": "Steal",
+    "target": "Guado Guardian A",
+    "actorInline": null,
+    "cost": "no MP",
+    "chips": [
+     "in Special",
+     "no MP",
+     "3% crit"
+    ],
+    "effect": "Steal",
+    "reason": "Take the pouch off Guado Guardian A: one successful Steal ends its 1,000 HP Auto-Potion counter and its Hi-Potions for Seymour — and nothing else, so it will still Remedy him.",
+    "warn": null
+   },
+   "alt": null,
+   "headShown": true,
+   "titleShown": true,
+   "fightersCovered": [
+    {
+     "id": "rikku",
+     "boxOverlapPx": 0,
+     "covered": 0.071
+    },
+    {
+     "id": "guado-guardian-b",
+     "boxOverlapPx": 0,
+     "covered": 0.033
+    }
+   ],
+   "maxCovered": 0.071
+  },
+  "stable": true,
+  "phase": "command:rikku",
+  "consoleErrors": []
+ },
+ {
+  "label": "cand",
+  "size": "2000x1012",
+  "touch": false,
+  "chapter": "yojimbo-cavern",
+  "base": "http://127.0.0.1:5461/?coach=off",
+  "hooks": [
+   "setSeed(1) + gotoChapter (navigation only, ?coach=off)"
+  ],
+  "samples": [
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 1360.4,
+     "y": 436.6,
+     "w": 274.3,
+     "h": 232.5
+    },
+    "unscaled": {
+     "w": 80,
+     "clientH": 82,
+     "scrollH": 82,
+     "maxH": "103.5px"
+    },
+    "scale": 3.429,
+    "clipped": false,
+    "leafPast": [],
+    "text": "Kimahri Fire Gem → Yojimbo IN ITEMS 2,810–3,175 5 HITS NO MP Deals fire damage to five random enemies.",
+    "chars": 102,
+    "lead": {
+     "label": "Fire Gem",
+     "target": "Yojimbo",
+     "actorInline": null,
+     "cost": "no MP",
+     "chips": [
+      "in Items",
+      "2,810–3,175",
+      "5 hits",
+      "no MP"
+     ],
+     "effect": "Deals fire damage to five random enemies.",
+     "reason": null,
+     "warn": null
+    },
+    "alt": null,
+    "headShown": true,
+    "titleShown": false,
+    "fightersCovered": [],
+    "maxCovered": 0
+   },
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 1360.4,
+     "y": 436.6,
+     "w": 274.3,
+     "h": 232.5
+    },
+    "unscaled": {
+     "w": 80,
+     "clientH": 82,
+     "scrollH": 82,
+     "maxH": "103.5px"
+    },
+    "scale": 3.429,
+    "clipped": false,
+    "leafPast": [],
+    "text": "Kimahri Fire Gem → Yojimbo IN ITEMS 2,810–3,175 5 HITS NO MP Deals fire damage to five random enemies.",
+    "chars": 102,
+    "lead": {
+     "label": "Fire Gem",
+     "target": "Yojimbo",
+     "actorInline": null,
+     "cost": "no MP",
+     "chips": [
+      "in Items",
+      "2,810–3,175",
+      "5 hits",
+      "no MP"
+     ],
+     "effect": "Deals fire damage to five random enemies.",
+     "reason": null,
+     "warn": null
+    },
+    "alt": null,
+    "headShown": true,
+    "titleShown": false,
+    "fightersCovered": [],
+    "maxCovered": 0
+   },
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 1360.4,
+     "y": 436.6,
+     "w": 274.3,
+     "h": 232.5
+    },
+    "unscaled": {
+     "w": 80,
+     "clientH": 82,
+     "scrollH": 82,
+     "maxH": "103.5px"
+    },
+    "scale": 3.429,
+    "clipped": false,
+    "leafPast": [],
+    "text": "Kimahri Fire Gem → Yojimbo IN ITEMS 2,810–3,175 5 HITS NO MP Deals fire damage to five random enemies.",
+    "chars": 102,
+    "lead": {
+     "label": "Fire Gem",
+     "target": "Yojimbo",
+     "actorInline": null,
+     "cost": "no MP",
+     "chips": [
+      "in Items",
+      "2,810–3,175",
+      "5 hits",
+      "no MP"
+     ],
+     "effect": "Deals fire damage to five random enemies.",
+     "reason": null,
+     "warn": null
+    },
+    "alt": null,
+    "headShown": true,
+    "titleShown": false,
+    "fightersCovered": [],
+    "maxCovered": 0
+   }
+  ],
+  "card": {
+   "present": true,
+   "visible": true,
+   "wrapHidden": false,
+   "rect": {
+    "x": 1360.4,
+    "y": 436.6,
+    "w": 274.3,
+    "h": 232.5
+   },
+   "unscaled": {
+    "w": 80,
+    "clientH": 82,
+    "scrollH": 82,
+    "maxH": "103.5px"
+   },
+   "scale": 3.429,
+   "clipped": false,
+   "leafPast": [],
+   "text": "Kimahri Fire Gem → Yojimbo IN ITEMS 2,810–3,175 5 HITS NO MP Deals fire damage to five random enemies.",
+   "chars": 102,
+   "lead": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "actorInline": null,
+    "cost": "no MP",
+    "chips": [
+     "in Items",
+     "2,810–3,175",
+     "5 hits",
+     "no MP"
+    ],
+    "effect": "Deals fire damage to five random enemies.",
+    "reason": null,
+    "warn": null
+   },
+   "alt": null,
+   "headShown": true,
+   "titleShown": false,
+   "fightersCovered": [],
+   "maxCovered": 0
+  },
+  "stable": true,
+  "phase": "command:kimahri",
+  "consoleErrors": []
+ },
+ {
+  "label": "cand",
+  "size": "2000x1012",
+  "touch": false,
+  "chapter": "seymour-omnis",
+  "base": "http://127.0.0.1:5461/?coach=off",
+  "hooks": [
+   "setSeed(1) + gotoChapter (navigation only, ?coach=off)"
+  ],
+  "samples": [
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 550.2,
+     "y": 47.8,
+     "w": 297.9,
+     "h": 275.5
+    },
+    "unscaled": {
+     "w": 85,
+     "clientH": 97,
+     "scrollH": 99,
+     "maxH": "98px"
+    },
+    "scale": 3.505,
+    "clipped": true,
+    "leafPast": [],
+    "text": "Tidus 1 Wakka IN SWITCH NO MP Swaps a bench member into the slot; they take this turn 2 Cheer → the party IN SPECIAL It puts Cheer on the party; next, Mortiphasm Spells hits for about 4,400 in all.",
+    "chars": 197,
+    "lead": {
+     "label": "Wakka",
+     "target": null,
+     "actorInline": null,
+     "cost": "no MP",
+     "chips": [
+      "in Switch",
+      "no MP"
+     ],
+     "effect": "Swaps a bench member into the slot; they take this turn",
+     "reason": null,
+     "warn": null
+    },
+    "alt": {
+     "label": "Cheer",
+     "chips": [
+      "in Special"
+     ],
+     "effect": null,
+     "reason": "It puts Cheer on the party; next, Mortiphasm Spells hits for about 4,400 in all."
+    },
+    "headShown": true,
+    "titleShown": false,
+    "fightersCovered": [
+     {
+      "id": "mortiphasm-3",
+      "boxOverlapPx": 0,
+      "covered": 0.354
+     }
+    ],
+    "maxCovered": 0.354
+   },
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 550.2,
+     "y": 47.8,
+     "w": 297.9,
+     "h": 275.5
+    },
+    "unscaled": {
+     "w": 85,
+     "clientH": 97,
+     "scrollH": 99,
+     "maxH": "98px"
+    },
+    "scale": 3.505,
+    "clipped": true,
+    "leafPast": [],
+    "text": "Tidus 1 Wakka IN SWITCH NO MP Swaps a bench member into the slot; they take this turn 2 Cheer → the party IN SPECIAL It puts Cheer on the party; next, Mortiphasm Spells hits for about 4,400 in all.",
+    "chars": 197,
+    "lead": {
+     "label": "Wakka",
+     "target": null,
+     "actorInline": null,
+     "cost": "no MP",
+     "chips": [
+      "in Switch",
+      "no MP"
+     ],
+     "effect": "Swaps a bench member into the slot; they take this turn",
+     "reason": null,
+     "warn": null
+    },
+    "alt": {
+     "label": "Cheer",
+     "chips": [
+      "in Special"
+     ],
+     "effect": null,
+     "reason": "It puts Cheer on the party; next, Mortiphasm Spells hits for about 4,400 in all."
+    },
+    "headShown": true,
+    "titleShown": false,
+    "fightersCovered": [
+     {
+      "id": "mortiphasm-3",
+      "boxOverlapPx": 0,
+      "covered": 0.355
+     }
+    ],
+    "maxCovered": 0.355
+   },
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 550.2,
+     "y": 47.8,
+     "w": 297.9,
+     "h": 275.5
+    },
+    "unscaled": {
+     "w": 85,
+     "clientH": 97,
+     "scrollH": 99,
+     "maxH": "98px"
+    },
+    "scale": 3.505,
+    "clipped": true,
+    "leafPast": [],
+    "text": "Tidus 1 Wakka IN SWITCH NO MP Swaps a bench member into the slot; they take this turn 2 Cheer → the party IN SPECIAL It puts Cheer on the party; next, Mortiphasm Spells hits for about 4,400 in all.",
+    "chars": 197,
+    "lead": {
+     "label": "Wakka",
+     "target": null,
+     "actorInline": null,
+     "cost": "no MP",
+     "chips": [
+      "in Switch",
+      "no MP"
+     ],
+     "effect": "Swaps a bench member into the slot; they take this turn",
+     "reason": null,
+     "warn": null
+    },
+    "alt": {
+     "label": "Cheer",
+     "chips": [
+      "in Special"
+     ],
+     "effect": null,
+     "reason": "It puts Cheer on the party; next, Mortiphasm Spells hits for about 4,400 in all."
+    },
+    "headShown": true,
+    "titleShown": false,
+    "fightersCovered": [
+     {
+      "id": "mortiphasm-3",
+      "boxOverlapPx": 0,
+      "covered": 0.356
+     }
+    ],
+    "maxCovered": 0.356
+   }
+  ],
+  "card": {
+   "present": true,
+   "visible": true,
+   "wrapHidden": false,
+   "rect": {
+    "x": 550.2,
+    "y": 47.8,
+    "w": 297.9,
+    "h": 275.5
+   },
+   "unscaled": {
+    "w": 85,
+    "clientH": 97,
+    "scrollH": 99,
+    "maxH": "98px"
+   },
+   "scale": 3.505,
+   "clipped": true,
+   "leafPast": [],
+   "text": "Tidus 1 Wakka IN SWITCH NO MP Swaps a bench member into the slot; they take this turn 2 Cheer → the party IN SPECIAL It puts Cheer on the party; next, Mortiphasm Spells hits for about 4,400 in all.",
+   "chars": 197,
+   "lead": {
+    "label": "Wakka",
+    "target": null,
+    "actorInline": null,
+    "cost": "no MP",
+    "chips": [
+     "in Switch",
+     "no MP"
+    ],
+    "effect": "Swaps a bench member into the slot; they take this turn",
+    "reason": null,
+    "warn": null
+   },
+   "alt": {
+    "label": "Cheer",
+    "chips": [
+     "in Special"
+    ],
+    "effect": null,
+    "reason": "It puts Cheer on the party; next, Mortiphasm Spells hits for about 4,400 in all."
+   },
+   "headShown": true,
+   "titleShown": false,
+   "fightersCovered": [
+    {
+     "id": "mortiphasm-3",
+     "boxOverlapPx": 0,
+     "covered": 0.356
+    }
+   ],
+   "maxCovered": 0.356
+  },
+  "stable": true,
+  "phase": "command:tidus",
+  "consoleErrors": []
+ },
+ {
+  "label": "cand",
+  "size": "2000x1012",
+  "touch": false,
+  "chapter": "sin-fins-core",
+  "base": "http://127.0.0.1:5461/?coach=off",
+  "hooks": [
+   "setSeed(1) + gotoChapter (navigation only, ?coach=off)"
+  ],
+  "samples": [
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 732.4,
+     "y": 856.1,
+     "w": 479,
+     "h": 82.8
+    },
+    "unscaled": {
+     "w": 164,
+     "clientH": 28,
+     "scrollH": 28,
+     "maxH": "37px"
+    },
+    "scale": 2.921,
+    "clipped": false,
+    "leafPast": [],
+    "text": "Tidus Close in IN ORDERS NO MP",
+    "chars": 30,
+    "lead": {
+     "label": "Close in",
+     "target": null,
+     "actorInline": "Tidus",
+     "cost": "no MP",
+     "chips": [
+      "in Orders",
+      "no MP"
+     ],
+     "effect": null,
+     "reason": null,
+     "warn": null
+    },
+    "alt": null,
+    "headShown": false,
+    "titleShown": false,
+    "fightersCovered": [
+     {
+      "id": "left-fin",
+      "boxOverlapPx": 0,
+      "covered": 0.056
+     }
+    ],
+    "maxCovered": 0.056
+   },
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 732.4,
+     "y": 856.1,
+     "w": 479,
+     "h": 82.8
+    },
+    "unscaled": {
+     "w": 164,
+     "clientH": 28,
+     "scrollH": 28,
+     "maxH": "37px"
+    },
+    "scale": 2.921,
+    "clipped": false,
+    "leafPast": [],
+    "text": "Tidus Close in IN ORDERS NO MP",
+    "chars": 30,
+    "lead": {
+     "label": "Close in",
+     "target": null,
+     "actorInline": "Tidus",
+     "cost": "no MP",
+     "chips": [
+      "in Orders",
+      "no MP"
+     ],
+     "effect": null,
+     "reason": null,
+     "warn": null
+    },
+    "alt": null,
+    "headShown": false,
+    "titleShown": false,
+    "fightersCovered": [
+     {
+      "id": "left-fin",
+      "boxOverlapPx": 0,
+      "covered": 0.056
+     }
+    ],
+    "maxCovered": 0.056
+   },
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 732.4,
+     "y": 856.1,
+     "w": 479,
+     "h": 82.8
+    },
+    "unscaled": {
+     "w": 164,
+     "clientH": 28,
+     "scrollH": 28,
+     "maxH": "37px"
+    },
+    "scale": 2.921,
+    "clipped": false,
+    "leafPast": [],
+    "text": "Tidus Close in IN ORDERS NO MP",
+    "chars": 30,
+    "lead": {
+     "label": "Close in",
+     "target": null,
+     "actorInline": "Tidus",
+     "cost": "no MP",
+     "chips": [
+      "in Orders",
+      "no MP"
+     ],
+     "effect": null,
+     "reason": null,
+     "warn": null
+    },
+    "alt": null,
+    "headShown": false,
+    "titleShown": false,
+    "fightersCovered": [
+     {
+      "id": "left-fin",
+      "boxOverlapPx": 0,
+      "covered": 0.057
+     }
+    ],
+    "maxCovered": 0.057
+   }
+  ],
+  "card": {
+   "present": true,
+   "visible": true,
+   "wrapHidden": false,
+   "rect": {
+    "x": 732.4,
+    "y": 856.1,
+    "w": 479,
+    "h": 82.8
+   },
+   "unscaled": {
+    "w": 164,
+    "clientH": 28,
+    "scrollH": 28,
+    "maxH": "37px"
+   },
+   "scale": 2.921,
+   "clipped": false,
+   "leafPast": [],
+   "text": "Tidus Close in IN ORDERS NO MP",
+   "chars": 30,
+   "lead": {
+    "label": "Close in",
+    "target": null,
+    "actorInline": "Tidus",
+    "cost": "no MP",
+    "chips": [
+     "in Orders",
+     "no MP"
+    ],
+    "effect": null,
+    "reason": null,
+    "warn": null
+   },
+   "alt": null,
+   "headShown": false,
+   "titleShown": false,
+   "fightersCovered": [
+    {
+     "id": "left-fin",
+     "boxOverlapPx": 0,
+     "covered": 0.057
+    }
+   ],
+   "maxCovered": 0.057
+  },
+  "stable": true,
+  "phase": "command:tidus",
+  "consoleErrors": []
+ },
+ {
+  "label": "cand",
+  "size": "2000x1012",
+  "touch": false,
+  "chapter": "sin-face",
+  "base": "http://127.0.0.1:5461/?coach=off",
+  "hooks": [
+   "setSeed(1) + gotoChapter (navigation only, ?coach=off)"
+  ],
+  "samples": [
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 732.4,
+     "y": 856.1,
+     "w": 479,
+     "h": 82.8
+    },
+    "unscaled": {
+     "w": 164,
+     "clientH": 28,
+     "scrollH": 28,
+     "maxH": "37px"
+    },
+    "scale": 2.921,
+    "clipped": false,
+    "leafPast": [],
+    "text": "Tidus Hastega → the party IN WHITE MAGIC 30 MP",
+    "chars": 46,
+    "lead": {
+     "label": "Hastega",
+     "target": "the party",
+     "actorInline": "Tidus",
+     "cost": "30 MP",
+     "chips": [
+      "in White Magic",
+      "30 MP"
+     ],
+     "effect": null,
+     "reason": null,
+     "warn": null
+    },
+    "alt": null,
+    "headShown": false,
+    "titleShown": false,
+    "fightersCovered": [
+     {
+      "id": "overdrive-sin",
+      "boxOverlapPx": 0,
+      "covered": 0.04
+     }
+    ],
+    "maxCovered": 0.04
+   },
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 732.4,
+     "y": 856.1,
+     "w": 479,
+     "h": 82.8
+    },
+    "unscaled": {
+     "w": 164,
+     "clientH": 28,
+     "scrollH": 28,
+     "maxH": "37px"
+    },
+    "scale": 2.921,
+    "clipped": false,
+    "leafPast": [],
+    "text": "Tidus Hastega → the party IN WHITE MAGIC 30 MP",
+    "chars": 46,
+    "lead": {
+     "label": "Hastega",
+     "target": "the party",
+     "actorInline": "Tidus",
+     "cost": "30 MP",
+     "chips": [
+      "in White Magic",
+      "30 MP"
+     ],
+     "effect": null,
+     "reason": null,
+     "warn": null
+    },
+    "alt": null,
+    "headShown": false,
+    "titleShown": false,
+    "fightersCovered": [
+     {
+      "id": "overdrive-sin",
+      "boxOverlapPx": 0,
+      "covered": 0.041
+     }
+    ],
+    "maxCovered": 0.041
+   },
+   {
+    "present": true,
+    "visible": true,
+    "wrapHidden": false,
+    "rect": {
+     "x": 732.4,
+     "y": 856.1,
+     "w": 479,
+     "h": 82.8
+    },
+    "unscaled": {
+     "w": 164,
+     "clientH": 28,
+     "scrollH": 28,
+     "maxH": "37px"
+    },
+    "scale": 2.921,
+    "clipped": false,
+    "leafPast": [],
+    "text": "Tidus Hastega → the party IN WHITE MAGIC 30 MP",
+    "chars": 46,
+    "lead": {
+     "label": "Hastega",
+     "target": "the party",
+     "actorInline": "Tidus",
+     "cost": "30 MP",
+     "chips": [
+      "in White Magic",
+      "30 MP"
+     ],
+     "effect": null,
+     "reason": null,
+     "warn": null
+    },
+    "alt": null,
+    "headShown": false,
+    "titleShown": false,
+    "fightersCovered": [
+     {
+      "id": "overdrive-sin",
+      "boxOverlapPx": 0,
+      "covered": 0.04
+     }
+    ],
+    "maxCovered": 0.04
+   }
+  ],
+  "card": {
+   "present": true,
+   "visible": true,
+   "wrapHidden": false,
+   "rect": {
+    "x": 732.4,
+    "y": 856.1,
+    "w": 479,
+    "h": 82.8
+   },
+   "unscaled": {
+    "w": 164,
+    "clientH": 28,
+    "scrollH": 28,
+    "maxH": "37px"
+   },
+   "scale": 2.921,
+   "clipped": false,
+   "leafPast": [],
+   "text": "Tidus Hastega → the party IN WHITE MAGIC 30 MP",
+   "chars": 46,
+   "lead": {
+    "label": "Hastega",
+    "target": "the party",
+    "actorInline": "Tidus",
+    "cost": "30 MP",
+    "chips": [
+     "in White Magic",
+     "30 MP"
+    ],
+    "effect": null,
+    "reason": null,
+    "warn": null
+   },
+   "alt": null,
+   "headShown": false,
+   "titleShown": false,
+   "fightersCovered": [
+    {
+     "id": "overdrive-sin",
+     "boxOverlapPx": 0,
+     "covered": 0.04
+    }
+   ],
+   "maxCovered": 0.04
+  },
+  "stable": true,
+  "phase": "command:tidus",
+  "consoleErrors": []
+ }
+]

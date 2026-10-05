@@ -1,0 +1,715 @@
+{
+ "name": "render-cand-ffx2-bahamut-2560x1440-c",
+ "chapter": "ffx2-bahamut",
+ "size": "2560x1440",
+ "which": "cand",
+ "base": "http://127.0.0.1:5461/",
+ "query": "coach=off",
+ "hooks": [
+  "setSeed(1) before the first key",
+  "?coach=off (UI toggle)"
+ ],
+ "log": [],
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "env": {
+  "inner": "2560x1440",
+  "dpr": 1,
+  "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessC"
+ },
+ "titleCrisp": {
+  "rung": "fplus",
+  "pinned": false,
+  "cfg": {
+   "ss": 2,
+   "ssRing": 0.5,
+   "cas": 0.3,
+   "casSharp": 0.5,
+   "casFloor": 0.05,
+   "aaPre": false,
+   "aa": null
+  },
+  "class": "high",
+  "tier": "full",
+  "ssEffective": 1,
+  "simulatedMs": 0,
+  "governor": {
+   "rung": "fplus",
+   "budgetMs": 22,
+   "pending": 0,
+   "windows": []
+  },
+  "passes": [
+   "0:scene",
+   "1:scene-msaa(off)",
+   "2:ssaa(off)",
+   "3:bloom",
+   "4:TiltShiftShader",
+   "5:TiltShiftShader",
+   "6:cas(off)",
+   "7:grade"
+  ]
+ },
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card ffx2-bahamut by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "crisp": {
+  "rung": "fplus",
+  "pinned": false,
+  "cfg": {
+   "ss": 2,
+   "ssRing": 0.5,
+   "cas": 0.3,
+   "casSharp": 0.5,
+   "casFloor": 0.05,
+   "aaPre": false,
+   "aa": null
+  },
+  "class": "high",
+  "tier": "full",
+  "ssEffective": 2,
+  "simulatedMs": 0,
+  "governor": {
+   "rung": "fplus",
+   "budgetMs": 22,
+   "pending": 41,
+   "windows": [
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 119,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.7,
+     "samples": 116,
+     "stepped": false
+    }
+   ]
+  },
+  "passes": [
+   "0:scene(off)",
+   "1:scene-msaa(off)",
+   "2:ssaa",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas",
+   "8:grade",
+   "9:SpectacleShader(off)"
+  ]
+ },
+ "art": {
+  "device": "high",
+  "budget": {
+   "cls": "high",
+   "maxScale": 4,
+   "backdropScale": 2,
+   "textureMB": 2600,
+   "groundPx": 4096,
+   "deckPx": 4096,
+   "bandPx": 4096,
+   "deckDetail": 3,
+   "aa": "off",
+   "msaaSamples": 4
+  },
+  "bufferWidth": 2560,
+  "pinned": null,
+  "aa": "off",
+  "governor": {
+   "frame": 343,
+   "upgrades": 28,
+   "downgrades": 0,
+   "loadFailures": 0,
+   "inflight": 0,
+   "queued": 0,
+   "residentMB": 120.9,
+   "budgetMB": 2600,
+   "lastSwapMs": 0.1,
+   "updateMs": 0.038,
+   "entries": [
+    {
+     "url": "/art/characters/yuna-white-mage/idle.webp",
+     "scale": 2,
+     "mb": 14,
+     "px1x": 0.48,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/yuna-white-mage/attack.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna-white-mage/cast.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna-white-mage/item.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna-white-mage/hurt.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna-white-mage/ko.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna-white-mage/victory.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/yuna-white-mage/follow.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku-dark-knight/idle.webp",
+     "scale": 2,
+     "mb": 19.3,
+     "px1x": 0.4,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/rikku-dark-knight/ready.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku-dark-knight/attack.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku-dark-knight/cast.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku-dark-knight/item.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku-dark-knight/hurt.webp",
+     "scale": 2,
+     "mb": 10.2,
+     "px1x": 0.42,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku-dark-knight/ko.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku-dark-knight/victory.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/rikku-dark-knight/follow.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/paine-warrior/idle.webp",
+     "scale": 2,
+     "mb": 9.8,
+     "px1x": 0.36,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/paine-warrior/ready.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/paine-warrior/attack.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/paine-warrior/cast.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/paine-warrior/item.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/paine-warrior/victory.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/paine-warrior/sleep.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/paine-warrior/critical.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/paine-warrior/follow.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/paine-warrior/od-x2-warrior-armor-break.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/paine-warrior/od-x2-warrior-power-break.webp",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/ffx2-bahamut/idle.webp",
+     "scale": 2,
+     "mb": 21.3,
+     "px1x": 0.95,
+     "seen": true
+    },
+    {
+     "url": "/art/characters/ffx2-bahamut/attack.png",
+     "scale": 2,
+     "mb": 21.2,
+     "px1x": 0.95,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/ffx2-bahamut/cast.png",
+     "scale": 2,
+     "mb": 25.1,
+     "px1x": 0.96,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/ffx2-bahamut/hurt.png",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/ffx2-bahamut/ko.png",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    },
+    {
+     "url": "/art/characters/ffx2-bahamut/telegraph.png",
+     "scale": 2,
+     "mb": 0,
+     "px1x": 0,
+     "seen": false
+    }
+   ],
+   "trace": [
+    {
+     "frame": 1,
+     "why": "sibling",
+     "url": "/art/characters/yuna-white-mage/attack.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 1,
+     "why": "sibling",
+     "url": "/art/characters/yuna-white-mage/cast.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 5,
+     "why": "sibling",
+     "url": "/art/characters/yuna-white-mage/item.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 5,
+     "why": "sibling",
+     "url": "/art/characters/yuna-white-mage/hurt.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 8,
+     "why": "sibling",
+     "url": "/art/characters/yuna-white-mage/ko.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 9,
+     "why": "sibling",
+     "url": "/art/characters/yuna-white-mage/victory.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 10,
+     "why": "sibling",
+     "url": "/art/characters/yuna-white-mage/follow.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 12,
+     "why": "sibling",
+     "url": "/art/characters/rikku-dark-knight/attack.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 13,
+     "why": "sibling",
+     "url": "/art/characters/rikku-dark-knight/cast.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 15,
+     "why": "sibling",
+     "url": "/art/characters/rikku-dark-knight/item.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 16,
+     "why": "sibling",
+     "url": "/art/characters/rikku-dark-knight/hurt.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 17,
+     "why": "sibling",
+     "url": "/art/characters/rikku-dark-knight/ko.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 18,
+     "why": "sibling",
+     "url": "/art/characters/rikku-dark-knight/victory.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 19,
+     "why": "sibling",
+     "url": "/art/characters/rikku-dark-knight/follow.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 20,
+     "why": "sibling",
+     "url": "/art/characters/paine-warrior/attack.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 21,
+     "why": "sibling",
+     "url": "/art/characters/paine-warrior/cast.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 23,
+     "why": "sibling",
+     "url": "/art/characters/paine-warrior/item.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 24,
+     "why": "sibling",
+     "url": "/art/characters/paine-warrior/victory.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 25,
+     "why": "sibling",
+     "url": "/art/characters/paine-warrior/sleep.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 26,
+     "why": "sibling",
+     "url": "/art/characters/paine-warrior/critical.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 27,
+     "why": "sibling",
+     "url": "/art/characters/paine-warrior/follow.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 29,
+     "why": "sibling",
+     "url": "/art/characters/paine-warrior/od-x2-warrior-armor-break.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 30,
+     "why": "sibling",
+     "url": "/art/characters/paine-warrior/od-x2-warrior-power-break.webp",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 31,
+     "why": "sibling",
+     "url": "/art/characters/ffx2-bahamut/attack.png",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 34,
+     "why": "sibling",
+     "url": "/art/characters/ffx2-bahamut/cast.png",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 35,
+     "why": "sibling",
+     "url": "/art/characters/ffx2-bahamut/hurt.png",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 38,
+     "why": "sibling",
+     "url": "/art/characters/ffx2-bahamut/ko.png",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    },
+    {
+     "frame": 40,
+     "why": "sibling",
+     "url": "/art/characters/ffx2-bahamut/telegraph.png",
+     "from": 1,
+     "want": 2,
+     "px1x": 0
+    }
+   ]
+  }
+ },
+ "fps": {
+  "frames": 240,
+  "medianMs": 16.7,
+  "p95Ms": 16.8,
+  "maxMs": 16.8,
+  "fps": 59.9
+ },
+ "canvas": {
+  "w": 2560,
+  "h": 1440,
+  "cssW": 2560,
+  "cssH": 1440
+ },
+ "audit": {
+  "artResponses": 233,
+  "status": {
+   "200": 233
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 35,
+  "tiers": {
+   "x2": 35,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "artFiles": 193,
+ "hiRes": [
+  "/art/backdrops/bevelle-underground%402x.webp",
+  "/art/characters/ffx2-bahamut/idle%402x.png",
+  "/art/characters/yuna-white-mage/idle%402x.png",
+  "/art/characters/rikku-dark-knight/idle%402x.png",
+  "/art/characters/paine-warrior/idle%402x.png",
+  "/art/characters/rikku-dark-knight/ready%402x.png",
+  "/art/characters/paine-warrior/ready%402x.png",
+  "/art/characters/yuna-white-mage/attack%402x.png",
+  "/art/characters/yuna-white-mage/cast%402x.png",
+  "/art/characters/yuna-white-mage/item%402x.png",
+  "/art/characters/yuna-white-mage/hurt%402x.png",
+  "/art/characters/yuna-white-mage/ko%402x.png",
+  "/art/characters/yuna-white-mage/victory%402x.png",
+  "/art/characters/yuna-white-mage/follow%402x.png",
+  "/art/characters/rikku-dark-knight/attack%402x.png",
+  "/art/characters/rikku-dark-knight/cast%402x.png",
+  "/art/characters/rikku-dark-knight/item%402x.png",
+  "/art/characters/rikku-dark-knight/hurt%402x.png",
+  "/art/characters/rikku-dark-knight/ko%402x.png",
+  "/art/characters/rikku-dark-knight/victory%402x.png",
+  "/art/characters/rikku-dark-knight/follow%402x.png",
+  "/art/characters/paine-warrior/attack%402x.png",
+  "/art/characters/paine-warrior/cast%402x.png",
+  "/art/characters/paine-warrior/item%402x.png",
+  "/art/characters/paine-warrior/victory%402x.png",
+  "/art/characters/paine-warrior/sleep%402x.png",
+  "/art/characters/paine-warrior/critical%402x.png",
+  "/art/characters/paine-warrior/follow%402x.png",
+  "/art/characters/paine-warrior/od-x2-warrior-armor-break%402x.png",
+  "/art/characters/paine-warrior/od-x2-warrior-power-break%402x.png",
+  "/art/characters/ffx2-bahamut/attack%402x.png",
+  "/art/characters/ffx2-bahamut/cast%402x.png",
+  "/art/characters/ffx2-bahamut/hurt%402x.png",
+  "/art/characters/ffx2-bahamut/ko%402x.png",
+  "/art/characters/ffx2-bahamut/telegraph%402x.png"
+ ],
+ "hiResCount": 35,
+ "sampleHiRes": [
+  "/art/backdrops/bevelle-underground%402x.webp",
+  "/art/characters/ffx2-bahamut/idle%402x.png",
+  "/art/characters/yuna-white-mage/idle%402x.png",
+  "/art/characters/rikku-dark-knight/idle%402x.png",
+  "/art/characters/paine-warrior/idle%402x.png",
+  "/art/characters/rikku-dark-knight/ready%402x.png",
+  "/art/characters/paine-warrior/ready%402x.png",
+  "/art/characters/yuna-white-mage/attack%402x.png",
+  "/art/characters/yuna-white-mage/cast%402x.png",
+  "/art/characters/yuna-white-mage/item%402x.png",
+  "/art/characters/yuna-white-mage/hurt%402x.png",
+  "/art/characters/yuna-white-mage/ko%402x.png",
+  "/art/characters/yuna-white-mage/victory%402x.png",
+  "/art/characters/yuna-white-mage/follow%402x.png",
+  "/art/characters/rikku-dark-knight/attack%402x.png",
+  "/art/characters/rikku-dark-knight/cast%402x.png",
+  "/art/characters/rikku-dark-knight/item%402x.png",
+  "/art/characters/rikku-dark-knight/hurt%402x.png",
+  "/art/characters/rikku-dark-knight/ko%402x.png",
+  "/art/characters/rikku-dark-knight/victory%402x.png",
+  "/art/characters/rikku-dark-knight/follow%402x.png",
+  "/art/characters/paine-warrior/attack%402x.png",
+  "/art/characters/paine-warrior/cast%402x.png",
+  "/art/characters/paine-warrior/item%402x.png",
+  "/art/characters/paine-warrior/victory%402x.png",
+  "/art/characters/paine-warrior/sleep%402x.png",
+  "/art/characters/paine-warrior/critical%402x.png",
+  "/art/characters/paine-warrior/follow%402x.png",
+  "/art/characters/paine-warrior/od-x2-warrior-armor-break%402x.png",
+  "/art/characters/paine-warrior/od-x2-warrior-power-break%402x.png",
+  "/art/characters/ffx2-bahamut/attack%402x.png",
+  "/art/characters/ffx2-bahamut/cast%402x.png",
+  "/art/characters/ffx2-bahamut/hurt%402x.png",
+  "/art/characters/ffx2-bahamut/ko%402x.png",
+  "/art/characters/ffx2-bahamut/telegraph%402x.png"
+ ],
+ "responsesNon2xx": [],
+ "aborted": -4,
+ "screenshotNote": "JPEG of the page at the first command menu",
+ "warns": [],
+ "consoleErrors": [],
+ "notFound": []
+}

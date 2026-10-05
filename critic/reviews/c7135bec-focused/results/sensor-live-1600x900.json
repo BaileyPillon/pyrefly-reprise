@@ -1,0 +1,153 @@
+{
+ "name": "sensor-live-1600x900",
+ "size": "1600x900",
+ "which": "live",
+ "steps": [
+  {
+   "what": "first menu",
+   "present": true,
+   "shown": true,
+   "rect": {
+    "x": 1067,
+    "y": 415,
+    "w": 297,
+    "h": 220
+   },
+   "vars": {
+    "px": "",
+    "py": "",
+    "dx": "",
+    "cdx": "",
+    "dy": ""
+   },
+   "left": "436px",
+   "top": "166px",
+   "text": "Mortibody HP 4000 / 4000 FIRE ICE THUNDER WATER HOLY GRAV I ",
+   "pin": null,
+   "natusRect": {
+    "x": 865,
+    "y": 355,
+    "w": 115,
+    "h": 207
+   },
+   "cardOverNatusRect": 0
+  },
+  {
+   "what": "Attack chosen (targets 2)",
+   "present": true,
+   "shown": true,
+   "rect": {
+    "x": 1067,
+    "y": 415,
+    "w": 297,
+    "h": 220
+   },
+   "vars": {
+    "px": "",
+    "py": "",
+    "dx": "",
+    "cdx": "",
+    "dy": ""
+   },
+   "left": "436px",
+   "top": "166px",
+   "text": "Mortibody HP 4000 / 4000 FIRE ICE THUNDER WATER HOLY GRAV I ",
+   "pin": null,
+   "natusRect": {
+    "x": 865,
+    "y": 355,
+    "w": 118,
+    "h": 208
+   },
+   "cardOverNatusRect": 0
+  },
+  {
+   "what": "cursor moved right once",
+   "present": true,
+   "shown": true,
+   "rect": {
+    "x": 1067,
+    "y": 415,
+    "w": 297,
+    "h": 220
+   },
+   "vars": {
+    "px": "",
+    "py": "",
+    "dx": "",
+    "cdx": "",
+    "dy": ""
+   },
+   "left": "436px",
+   "top": "166px",
+   "text": "Seymour Natus HP 36000 / 36000 FIRE ICE THUNDER WATER HOLY G",
+   "pin": null,
+   "natusRect": {
+    "x": 865,
+    "y": 355,
+    "w": 118,
+    "h": 208
+   },
+   "cardOverNatusRect": 0
+  },
+  {
+   "what": "cursor moved right twice",
+   "present": true,
+   "shown": true,
+   "rect": {
+    "x": 1067,
+    "y": 415,
+    "w": 297,
+    "h": 220
+   },
+   "vars": {
+    "px": "",
+    "py": "",
+    "dx": "",
+    "cdx": "",
+    "dy": ""
+   },
+   "left": "436px",
+   "top": "166px",
+   "text": "Mortibody HP 4000 / 4000 FIRE ICE THUNDER WATER HOLY GRAV I ",
+   "pin": null,
+   "natusRect": {
+    "x": 865,
+    "y": 355,
+    "w": 117,
+    "h": 208
+   },
+   "cardOverNatusRect": 0
+  },
+  {
+   "what": "E (enemy read-out) on",
+   "present": true,
+   "shown": true,
+   "rect": {
+    "x": 1087,
+    "y": 415,
+    "w": 128,
+    "h": 24
+   },
+   "vars": {
+    "px": "",
+    "py": "",
+    "dx": "",
+    "cdx": "",
+    "dy": ""
+   },
+   "left": "436px",
+   "top": "166px",
+   "text": "I MORTIBODY",
+   "pin": null,
+   "natusRect": {
+    "x": 865,
+    "y": 356,
+    "w": 115,
+    "h": 207
+   },
+   "cardOverNatusRect": 0
+  }
+ ],
+ "consoleErrors": []
+}

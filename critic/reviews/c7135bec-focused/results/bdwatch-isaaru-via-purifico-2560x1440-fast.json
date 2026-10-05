@@ -1,0 +1,110 @@
+{
+ "name": "bdwatch-isaaru-via-purifico-2560x1440-fast",
+ "chapter": "isaaru-via-purifico",
+ "size": "2560x1440",
+ "series": [
+  {
+   "t": 0,
+   "paint": {
+    "w": 5376,
+    "src": "via-purifico%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 1.5,
+   "paint": {
+    "w": 5376,
+    "src": "via-purifico%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 3,
+   "paint": {
+    "w": 5376,
+    "src": "via-purifico%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 4.5,
+   "paint": {
+    "w": 5376,
+    "src": "via-purifico%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 6,
+   "paint": {
+    "w": 5376,
+    "src": "via-purifico%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 7.6,
+   "paint": {
+    "w": 5376,
+    "src": "via-purifico%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 9.1,
+   "paint": {
+    "w": 5376,
+    "src": "via-purifico%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  },
+  {
+   "t": 10.6,
+   "paint": {
+    "w": 5376,
+    "src": "via-purifico%402x.webp"
+   },
+   "plates": [
+    5376
+   ]
+  }
+ ],
+ "menuAtMs": 16064,
+ "connStart": {
+  "downlink": 10,
+  "effectiveType": "4g",
+  "rtt": 0,
+  "saveData": false
+ },
+ "connEnd": {
+  "downlink": 10,
+  "effectiveType": "4g",
+  "rtt": 0,
+  "saveData": false
+ },
+ "maxPaintW": 5376,
+ "firstHiT": 0,
+ "backdropReq": [
+  "/art/backdrops/garden-of-pain.webp",
+  "/art/backdrops/via-purifico.webp",
+  "/art/backdrops/road-to-the-farplane.webp",
+  "/art/backdrops/via-purifico.json",
+  "/art/backdrops/via-purifico%402x.webp"
+ ],
+ "consoleErrors": []
+}

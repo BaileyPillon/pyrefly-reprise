@@ -1,0 +1,260 @@
+{
+ "name": "smoke-ffx2-vegnagun-shuyin-1600x900",
+ "chapter": "ffx2-vegnagun-shuyin",
+ "size": "1600x900",
+ "touch": false,
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off"
+ ],
+ "turns": [
+  {
+   "n": 0,
+   "who": "idle",
+   "picked": [
+    "advisor:{\"label\":\"Light Curtain\",\"target\":\"the party\",\"menu\":\"Item\"}",
+    "Item",
+    "Light Curtain"
+   ],
+   "tookTurn": true,
+   "newEvents": 11
+  },
+  {
+   "n": 1,
+   "who": "idle",
+   "picked": [
+    "Attack"
+   ],
+   "tookTurn": false,
+   "newEvents": 13
+  },
+  {
+   "n": 2,
+   "who": "play:status-tick",
+   "picked": [
+    "Attack"
+   ],
+   "tookTurn": true,
+   "newEvents": 9
+  },
+  {
+   "n": 3,
+   "who": "command:yuna",
+   "picked": [
+    "advisor:{\"label\":\"Mega-Potion\",\"target\":\"the party\",\"menu\":\"Item\"}",
+    "Item",
+    "Mega-Potion"
+   ],
+   "tookTurn": true,
+   "newEvents": 34
+  },
+  {
+   "n": 4,
+   "who": "play:status-tick",
+   "picked": [
+    "Attack"
+   ],
+   "tookTurn": true,
+   "newEvents": 13
+  },
+  {
+   "n": 5,
+   "who": "command:paine",
+   "picked": [
+    "Attack"
+   ],
+   "tookTurn": true,
+   "newEvents": 21
+  },
+  {
+   "n": 6,
+   "who": "play:status-tick",
+   "picked": [
+    "advisor:{\"label\":\"Life\",\"target\":\"Paine\",\"menu\":\"White Magic\"}",
+    "White Magic",
+    "Life"
+   ],
+   "tookTurn": true,
+   "newEvents": 26
+  },
+  {
+   "n": 7,
+   "who": "play:status-tick",
+   "picked": [
+    "Attack"
+   ],
+   "tookTurn": true,
+   "newEvents": 11
+  }
+ ],
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card ffx2-vegnagun-shuyin by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "crisp": {
+  "rung": "fplus",
+  "pinned": false,
+  "cfg": {
+   "ss": 2,
+   "ssRing": 0.5,
+   "cas": 0.3,
+   "casSharp": 0.5,
+   "casFloor": 0.05,
+   "aaPre": false,
+   "aa": null
+  },
+  "class": "high",
+  "tier": "full",
+  "ssEffective": 2,
+  "simulatedMs": 0,
+  "governor": {
+   "rung": "fplus",
+   "budgetMs": 22,
+   "pending": 70,
+   "windows": [
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.7,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.7,
+     "samples": 120,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.8,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.65,
+     "samples": 120,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.7,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.65,
+     "samples": 120,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.7,
+     "samples": 120,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.7,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 120,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.6,
+     "samples": 121,
+     "stepped": false
+    },
+    {
+     "rung": "fplus",
+     "median": 16.7,
+     "samples": 121,
+     "stepped": false
+    }
+   ]
+  },
+  "passes": [
+   "0:scene(off)",
+   "1:scene-msaa(off)",
+   "2:ssaa",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas",
+   "8:grade",
+   "9:SpectacleShader(off)"
+  ]
+ },
+ "audit": {
+  "artResponses": 204,
+  "status": {
+   "200": 204
+  },
+  "rawAtRequests": [],
+  "rawAtCount": 0,
+  "encodedAtFiles": 4,
+  "tiers": {
+   "x2": 4,
+   "x3": 0,
+   "x4": 0
+  },
+  "redirects": [],
+  "badResponses": [],
+  "badCount": 0,
+  "htmlAnswersToImages": []
+ },
+ "state": {
+  "turn": 15,
+  "seed": 1,
+  "result": null,
+  "hp": {
+   "yuna": "2488/2488",
+   "rikku": "5652/5652",
+   "paine": "0/5862"
+  }
+ },
+ "touchSummary": null,
+ "warns": [],
+ "consoleErrors": [],
+ "notFound": []
+}

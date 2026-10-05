@@ -1,0 +1,2506 @@
+{
+ "size": "1600x900",
+ "seed": 9,
+ "query": "coach=off",
+ "which": "live",
+ "label": "live",
+ "secs": 30,
+ "hooks": [
+  "setSeed before the first key",
+  "?coach=off"
+ ],
+ "menuAtMs": 7360.799999952316,
+ "stop": {
+  "n": 106,
+  "errors": []
+ },
+ "rows": [
+  {
+   "t": 0.35,
+   "awaiting": false,
+   "phase": "idle",
+   "camX": 0.074,
+   "minGap": 0,
+   "over": 2794,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2175",
+    "auron/yu-pagoda-left:619"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.589,
+    "braskas-final-aeon": 0.808,
+    "yu-pagoda-left": 0.865,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 0.7,
+   "awaiting": false,
+   "phase": "play:action-start",
+   "camX": 0.001,
+   "minGap": 0,
+   "over": 2880,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2015",
+    "auron/yu-pagoda-left:865"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.58,
+    "braskas-final-aeon": 0.825,
+    "yu-pagoda-left": 0.841,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 1.05,
+   "awaiting": false,
+   "phase": "play:action-start",
+   "camX": 0.514,
+   "minGap": 0,
+   "over": 1524,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1139",
+    "auron/yu-pagoda-left:385"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.61,
+    "braskas-final-aeon": 0.877,
+    "yu-pagoda-left": 0.884,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 1.41,
+   "awaiting": false,
+   "phase": "play:action-start",
+   "camX": 0.663,
+   "minGap": 0,
+   "over": 769,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:465",
+    "auron/yu-pagoda-left:304"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.62,
+    "braskas-final-aeon": 0.891,
+    "yu-pagoda-left": 0.896,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 1.75,
+   "awaiting": false,
+   "phase": "play:damage",
+   "camX": -0.068,
+   "minGap": 0,
+   "over": 5049,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3516",
+    "auron/yu-pagoda-left:1533"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.588,
+    "braskas-final-aeon": 0.783,
+    "yu-pagoda-left": 0.77,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 2.1,
+   "awaiting": false,
+   "phase": "play:status-add",
+   "camX": -0.067,
+   "minGap": 0,
+   "over": 5154,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:60",
+    "yuna/braskas-final-aeon:3459",
+    "auron/braskas-final-aeon:1",
+    "auron/yu-pagoda-left:1634"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.574,
+    "braskas-final-aeon": 0.786,
+    "yu-pagoda-left": 0.764,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 2.45,
+   "awaiting": false,
+   "phase": "play:status-add",
+   "camX": -0.065,
+   "minGap": 0,
+   "over": 5253,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:104",
+    "yuna/braskas-final-aeon:3461",
+    "auron/yu-pagoda-left:1688"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.566,
+    "braskas-final-aeon": 0.787,
+    "yu-pagoda-left": 0.76,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 2.81,
+   "awaiting": false,
+   "phase": "play:action-end",
+   "camX": -0.061,
+   "minGap": 0,
+   "over": 4825,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:66",
+    "yuna/braskas-final-aeon:3295",
+    "auron/yu-pagoda-left:1464"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.56,
+    "braskas-final-aeon": 0.799,
+    "yu-pagoda-left": 0.761,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 3.15,
+   "awaiting": false,
+   "phase": "play:action-start",
+   "camX": 0.059,
+   "minGap": 0,
+   "over": 4327,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:73",
+    "yuna/braskas-final-aeon:2973",
+    "auron/yu-pagoda-left:1281"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.566,
+    "braskas-final-aeon": 0.834,
+    "yu-pagoda-left": 0.783,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 3.51,
+   "awaiting": false,
+   "phase": "play:action-start",
+   "camX": 0.576,
+   "minGap": 0,
+   "over": 1651,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:767",
+    "auron/yu-pagoda-left:884"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.585,
+    "braskas-final-aeon": 0.894,
+    "yu-pagoda-left": 0.846,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 3.85,
+   "awaiting": false,
+   "phase": "play:action-start",
+   "camX": 0.683,
+   "minGap": 0,
+   "over": 1140,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:259",
+    "auron/yu-pagoda-left:881"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.588,
+    "braskas-final-aeon": 0.904,
+    "yu-pagoda-left": 0.859,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 4.21,
+   "awaiting": false,
+   "phase": "play:damage",
+   "camX": 0.69,
+   "minGap": 0,
+   "over": 1047,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:189",
+    "auron/yu-pagoda-left:858"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.591,
+    "braskas-final-aeon": 0.904,
+    "yu-pagoda-left": 0.858,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 4.55,
+   "awaiting": false,
+   "phase": "play:damage",
+   "camX": 0.696,
+   "minGap": 0,
+   "over": 1031,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:183",
+    "auron/yu-pagoda-left:848"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.597,
+    "braskas-final-aeon": 0.904,
+    "yu-pagoda-left": 0.857,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 4.9,
+   "awaiting": false,
+   "phase": "play:action-end",
+   "camX": 0.687,
+   "minGap": 0,
+   "over": 992,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:179",
+    "auron/yu-pagoda-left:813"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.603,
+    "braskas-final-aeon": 0.902,
+    "yu-pagoda-left": 0.86,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 5.26,
+   "awaiting": false,
+   "phase": "play:action-start",
+   "camX": 0.591,
+   "minGap": 0,
+   "over": 1237,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:439",
+    "auron/yu-pagoda-left:798"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.605,
+    "braskas-final-aeon": 0.891,
+    "yu-pagoda-left": 0.855,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 5.6,
+   "awaiting": false,
+   "phase": "play:action-start",
+   "camX": 0.679,
+   "minGap": 0,
+   "over": 1069,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:281",
+    "auron/yu-pagoda-left:788"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.614,
+    "braskas-final-aeon": 0.895,
+    "yu-pagoda-left": 0.865,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 5.95,
+   "awaiting": false,
+   "phase": "play:action-start",
+   "camX": 0.719,
+   "minGap": 0,
+   "over": 993,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:211",
+    "auron/yu-pagoda-left:782"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.62,
+    "braskas-final-aeon": 0.899,
+    "yu-pagoda-left": 0.868,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 6.3,
+   "awaiting": false,
+   "phase": "play:damage",
+   "camX": 0.727,
+   "minGap": 0,
+   "over": 1011,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:209",
+    "auron/yu-pagoda-left:802"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.619,
+    "braskas-final-aeon": 0.901,
+    "yu-pagoda-left": 0.868,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 6.65,
+   "awaiting": false,
+   "phase": "play:damage",
+   "camX": 0.733,
+   "minGap": 0,
+   "over": 994,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:204",
+    "auron/yu-pagoda-left:790"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.614,
+    "braskas-final-aeon": 0.902,
+    "yu-pagoda-left": 0.868,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 7,
+   "awaiting": false,
+   "phase": "play:action-end",
+   "camX": 0.736,
+   "minGap": 0,
+   "over": 948,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:157",
+    "auron/yu-pagoda-left:791"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.607,
+    "braskas-final-aeon": 0.898,
+    "yu-pagoda-left": 0.869,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 7.36,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.586,
+   "minGap": 0,
+   "over": 1501,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:722",
+    "auron/yu-pagoda-left:779"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.572,
+    "braskas-final-aeon": 0.866,
+    "yu-pagoda-left": 0.854,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 7.7,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.315,
+   "minGap": 0,
+   "over": 2706,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1918",
+    "auron/yu-pagoda-left:788"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.64,
+    "braskas-final-aeon": 0.846,
+    "yu-pagoda-left": 0.832,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 8.05,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.093,
+   "minGap": 0,
+   "over": 3712,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2953",
+    "auron/yu-pagoda-left:759"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.639,
+    "braskas-final-aeon": 0.828,
+    "yu-pagoda-left": 0.816,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 8.44,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.044,
+   "minGap": 0,
+   "over": 3781,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3024",
+    "auron/yu-pagoda-left:757"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.639,
+    "braskas-final-aeon": 0.826,
+    "yu-pagoda-left": 0.813,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 8.76,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.048,
+   "minGap": 0,
+   "over": 3654,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2888",
+    "auron/yu-pagoda-left:766"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.64,
+    "braskas-final-aeon": 0.825,
+    "yu-pagoda-left": 0.81,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 9.1,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.089,
+   "minGap": 0,
+   "over": 3793,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:7",
+    "yuna/braskas-final-aeon:2972",
+    "auron/yu-pagoda-left:814"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.643,
+    "braskas-final-aeon": 0.822,
+    "yu-pagoda-left": 0.806,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 9.46,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.151,
+   "minGap": 0,
+   "over": 3940,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:46",
+    "yuna/braskas-final-aeon:2982",
+    "auron/yu-pagoda-left:912"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.646,
+    "braskas-final-aeon": 0.819,
+    "yu-pagoda-left": 0.803,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 9.81,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.187,
+   "minGap": 0,
+   "over": 4108,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:61",
+    "yuna/braskas-final-aeon:3083",
+    "auron/yu-pagoda-left:964"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.65,
+    "braskas-final-aeon": 0.818,
+    "yu-pagoda-left": 0.802,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 10.16,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.174,
+   "minGap": 0,
+   "over": 4126,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:60",
+    "yuna/braskas-final-aeon:3123",
+    "auron/yu-pagoda-left:943"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.656,
+    "braskas-final-aeon": 0.819,
+    "yu-pagoda-left": 0.803,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 10.52,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.124,
+   "minGap": 0,
+   "over": 4011,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:30",
+    "yuna/braskas-final-aeon:3138",
+    "auron/yu-pagoda-left:843"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.662,
+    "braskas-final-aeon": 0.823,
+    "yu-pagoda-left": 0.806,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 10.86,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.07,
+   "minGap": 0,
+   "over": 4136,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3320",
+    "auron/yu-pagoda-left:816"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.663,
+    "braskas-final-aeon": 0.823,
+    "yu-pagoda-left": 0.803,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 11.2,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.012,
+   "minGap": 0,
+   "over": 4365,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3542",
+    "auron/yu-pagoda-left:823"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.658,
+    "braskas-final-aeon": 0.82,
+    "yu-pagoda-left": 0.798,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 11.56,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.047,
+   "minGap": 0,
+   "over": 4348,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3525",
+    "auron/yu-pagoda-left:823"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.646,
+    "braskas-final-aeon": 0.816,
+    "yu-pagoda-left": 0.798,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 11.91,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.108,
+   "minGap": 0,
+   "over": 4374,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3577",
+    "auron/yu-pagoda-left:797"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.639,
+    "braskas-final-aeon": 0.813,
+    "yu-pagoda-left": 0.801,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 12.26,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.168,
+   "minGap": 0,
+   "over": 4169,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3437",
+    "auron/yu-pagoda-left:732"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.637,
+    "braskas-final-aeon": 0.812,
+    "yu-pagoda-left": 0.808,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 12.6,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.227,
+   "minGap": 0,
+   "over": 4052,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3352",
+    "auron/yu-pagoda-left:700"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.641,
+    "braskas-final-aeon": 0.812,
+    "yu-pagoda-left": 0.815,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 12.96,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.282,
+   "minGap": 0,
+   "over": 3915,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3227",
+    "auron/yu-pagoda-left:688"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.645,
+    "braskas-final-aeon": 0.814,
+    "yu-pagoda-left": 0.821,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 13.3,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.334,
+   "minGap": 0,
+   "over": 3838,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3167",
+    "auron/yu-pagoda-left:671"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.649,
+    "braskas-final-aeon": 0.813,
+    "yu-pagoda-left": 0.821,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 13.65,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.38,
+   "minGap": 0,
+   "over": 3803,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3135",
+    "auron/yu-pagoda-left:668"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.655,
+    "braskas-final-aeon": 0.812,
+    "yu-pagoda-left": 0.82,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 14,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.42,
+   "minGap": 0,
+   "over": 3669,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3003",
+    "auron/yu-pagoda-left:666"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.663,
+    "braskas-final-aeon": 0.811,
+    "yu-pagoda-left": 0.82,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 14.36,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.453,
+   "minGap": 0,
+   "over": 3636,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3004",
+    "auron/braskas-final-aeon:1",
+    "auron/yu-pagoda-left:631"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.671,
+    "braskas-final-aeon": 0.812,
+    "yu-pagoda-left": 0.823,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 14.7,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.479,
+   "minGap": 0,
+   "over": 3523,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2921",
+    "auron/yu-pagoda-left:602"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.669,
+    "braskas-final-aeon": 0.815,
+    "yu-pagoda-left": 0.828,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 15.06,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.497,
+   "minGap": 0,
+   "over": 3412,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2850",
+    "auron/yu-pagoda-left:562"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.67,
+    "braskas-final-aeon": 0.819,
+    "yu-pagoda-left": 0.833,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 15.4,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.506,
+   "minGap": 0,
+   "over": 3430,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2840",
+    "auron/braskas-final-aeon:15",
+    "auron/yu-pagoda-left:575"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.675,
+    "braskas-final-aeon": 0.82,
+    "yu-pagoda-left": 0.836,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 15.76,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.508,
+   "minGap": 0,
+   "over": 3504,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2918",
+    "auron/braskas-final-aeon:22",
+    "auron/yu-pagoda-left:564"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.671,
+    "braskas-final-aeon": 0.818,
+    "yu-pagoda-left": 0.836,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 16.11,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.503,
+   "minGap": 0,
+   "over": 3646,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3023",
+    "auron/braskas-final-aeon:23",
+    "auron/yu-pagoda-left:600"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.658,
+    "braskas-final-aeon": 0.816,
+    "yu-pagoda-left": 0.833,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 16.46,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.491,
+   "minGap": 0,
+   "over": 3706,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3084",
+    "auron/braskas-final-aeon:19",
+    "auron/yu-pagoda-left:603"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.65,
+    "braskas-final-aeon": 0.814,
+    "yu-pagoda-left": 0.83,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 16.8,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.472,
+   "minGap": 0,
+   "over": 3712,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3094",
+    "auron/braskas-final-aeon:20",
+    "auron/yu-pagoda-left:598"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.648,
+    "braskas-final-aeon": 0.814,
+    "yu-pagoda-left": 0.829,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 17.16,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.447,
+   "minGap": 0,
+   "over": 3741,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3147",
+    "auron/braskas-final-aeon:8",
+    "auron/yu-pagoda-left:586"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.65,
+    "braskas-final-aeon": 0.815,
+    "yu-pagoda-left": 0.829,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 17.51,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.418,
+   "minGap": 0,
+   "over": 3705,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3116",
+    "auron/yu-pagoda-left:589"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.653,
+    "braskas-final-aeon": 0.817,
+    "yu-pagoda-left": 0.831,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 17.86,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.385,
+   "minGap": 0,
+   "over": 3736,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3093",
+    "auron/yu-pagoda-left:643"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.654,
+    "braskas-final-aeon": 0.817,
+    "yu-pagoda-left": 0.829,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 18.21,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.35,
+   "minGap": 0,
+   "over": 3708,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3062",
+    "auron/yu-pagoda-left:646"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.656,
+    "braskas-final-aeon": 0.816,
+    "yu-pagoda-left": 0.825,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 18.55,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.312,
+   "minGap": 0,
+   "over": 3808,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3124",
+    "auron/yu-pagoda-left:684"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.661,
+    "braskas-final-aeon": 0.815,
+    "yu-pagoda-left": 0.819,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 18.91,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.274,
+   "minGap": 0,
+   "over": 3823,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3108",
+    "auron/yu-pagoda-left:715"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.667,
+    "braskas-final-aeon": 0.815,
+    "yu-pagoda-left": 0.814,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 19.26,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.235,
+   "minGap": 0,
+   "over": 3808,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3092",
+    "auron/yu-pagoda-left:716"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.672,
+    "braskas-final-aeon": 0.816,
+    "yu-pagoda-left": 0.812,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 19.6,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.196,
+   "minGap": 0,
+   "over": 3796,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3065",
+    "auron/yu-pagoda-left:731"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.675,
+    "braskas-final-aeon": 0.818,
+    "yu-pagoda-left": 0.811,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 19.96,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.159,
+   "minGap": 0,
+   "over": 3999,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3252",
+    "auron/yu-pagoda-left:747"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.671,
+    "braskas-final-aeon": 0.817,
+    "yu-pagoda-left": 0.81,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 20.3,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.122,
+   "minGap": 0,
+   "over": 4385,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3587",
+    "auron/yu-pagoda-left:798"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.662,
+    "braskas-final-aeon": 0.814,
+    "yu-pagoda-left": 0.806,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 20.66,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.087,
+   "minGap": 0,
+   "over": 4699,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3859",
+    "auron/yu-pagoda-left:840"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.648,
+    "braskas-final-aeon": 0.811,
+    "yu-pagoda-left": 0.802,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 21,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.053,
+   "minGap": 0,
+   "over": 4984,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:4103",
+    "auron/yu-pagoda-left:881"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.638,
+    "braskas-final-aeon": 0.809,
+    "yu-pagoda-left": 0.796,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 21.36,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.021,
+   "minGap": 0,
+   "over": 5145,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:4263",
+    "auron/yu-pagoda-left:882"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.635,
+    "braskas-final-aeon": 0.807,
+    "yu-pagoda-left": 0.791,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 21.7,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.01,
+   "minGap": 0,
+   "over": 5138,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:4205",
+    "auron/yu-pagoda-left:933"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.635,
+    "braskas-final-aeon": 0.807,
+    "yu-pagoda-left": 0.79,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 22.06,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.039,
+   "minGap": 0,
+   "over": 5147,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:8",
+    "yuna/braskas-final-aeon:4193",
+    "auron/yu-pagoda-left:946"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.635,
+    "braskas-final-aeon": 0.807,
+    "yu-pagoda-left": 0.792,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 22.4,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.068,
+   "minGap": 0,
+   "over": 5122,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:39",
+    "yuna/braskas-final-aeon:4076",
+    "auron/yu-pagoda-left:1007"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.635,
+    "braskas-final-aeon": 0.806,
+    "yu-pagoda-left": 0.793,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 22.76,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.097,
+   "minGap": 0,
+   "over": 5232,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:56",
+    "yuna/braskas-final-aeon:4080",
+    "auron/yu-pagoda-left:1096"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.638,
+    "braskas-final-aeon": 0.804,
+    "yu-pagoda-left": 0.793,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 23.1,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.125,
+   "minGap": 0,
+   "over": 5180,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:72",
+    "yuna/braskas-final-aeon:3989",
+    "auron/yu-pagoda-left:1119"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.644,
+    "braskas-final-aeon": 0.805,
+    "yu-pagoda-left": 0.793,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 23.46,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.154,
+   "minGap": 0,
+   "over": 5118,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:79",
+    "yuna/braskas-final-aeon:3902",
+    "auron/yu-pagoda-left:1137"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.652,
+    "braskas-final-aeon": 0.808,
+    "yu-pagoda-left": 0.791,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 23.8,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.182,
+   "minGap": 0,
+   "over": 4930,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:75",
+    "yuna/braskas-final-aeon:3707",
+    "auron/yu-pagoda-left:1148"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.658,
+    "braskas-final-aeon": 0.811,
+    "yu-pagoda-left": 0.79,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 24.16,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.211,
+   "minGap": 0,
+   "over": 4677,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:73",
+    "yuna/braskas-final-aeon:3506",
+    "auron/yu-pagoda-left:1098"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.662,
+    "braskas-final-aeon": 0.814,
+    "yu-pagoda-left": 0.791,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 24.5,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.241,
+   "minGap": 0,
+   "over": 4480,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:65",
+    "yuna/braskas-final-aeon:3318",
+    "auron/yu-pagoda-left:1097"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.661,
+    "braskas-final-aeon": 0.818,
+    "yu-pagoda-left": 0.792,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 24.86,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.27,
+   "minGap": 0,
+   "over": 4430,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:53",
+    "yuna/braskas-final-aeon:3254",
+    "auron/yu-pagoda-left:1123"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.655,
+    "braskas-final-aeon": 0.82,
+    "yu-pagoda-left": 0.794,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 25.21,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.3,
+   "minGap": 0,
+   "over": 4237,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:39",
+    "yuna/braskas-final-aeon:3124",
+    "auron/yu-pagoda-left:1074"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.646,
+    "braskas-final-aeon": 0.823,
+    "yu-pagoda-left": 0.798,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 25.55,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.328,
+   "minGap": 0,
+   "over": 4068,
+   "worst": "tidus vs yu-pagoda-left",
+   "touching": [
+    "tidus/yu-pagoda-left:17",
+    "yuna/braskas-final-aeon:2989",
+    "auron/yu-pagoda-left:1062"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.637,
+    "braskas-final-aeon": 0.826,
+    "yu-pagoda-left": 0.801,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 25.91,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.356,
+   "minGap": 0,
+   "over": 3727,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2666",
+    "auron/yu-pagoda-left:1061"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.634,
+    "braskas-final-aeon": 0.829,
+    "yu-pagoda-left": 0.805,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 26.26,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.382,
+   "minGap": 0,
+   "over": 3304,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2307",
+    "auron/yu-pagoda-left:997"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.632,
+    "braskas-final-aeon": 0.831,
+    "yu-pagoda-left": 0.809,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 26.6,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.405,
+   "minGap": 0,
+   "over": 2787,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1831",
+    "auron/yu-pagoda-left:956"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.631,
+    "braskas-final-aeon": 0.833,
+    "yu-pagoda-left": 0.812,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 26.96,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.425,
+   "minGap": 0,
+   "over": 2641,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1678",
+    "auron/yu-pagoda-left:963"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.633,
+    "braskas-final-aeon": 0.834,
+    "yu-pagoda-left": 0.816,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 27.32,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.442,
+   "minGap": 0,
+   "over": 2463,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1520",
+    "auron/yu-pagoda-left:943"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.639,
+    "braskas-final-aeon": 0.836,
+    "yu-pagoda-left": 0.822,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 27.66,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.453,
+   "minGap": 0,
+   "over": 2160,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1285",
+    "auron/yu-pagoda-left:875"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.647,
+    "braskas-final-aeon": 0.839,
+    "yu-pagoda-left": 0.828,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 28,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.459,
+   "minGap": 0,
+   "over": 2035,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1219",
+    "auron/yu-pagoda-left:816"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.655,
+    "braskas-final-aeon": 0.844,
+    "yu-pagoda-left": 0.833,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 28.36,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.46,
+   "minGap": 0,
+   "over": 1926,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1171",
+    "auron/yu-pagoda-left:755"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.662,
+    "braskas-final-aeon": 0.849,
+    "yu-pagoda-left": 0.837,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 28.7,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.454,
+   "minGap": 0,
+   "over": 1809,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1096",
+    "auron/yu-pagoda-left:713"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.667,
+    "braskas-final-aeon": 0.853,
+    "yu-pagoda-left": 0.839,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 29.06,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.442,
+   "minGap": 0,
+   "over": 1769,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1086",
+    "auron/yu-pagoda-left:683"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.669,
+    "braskas-final-aeon": 0.857,
+    "yu-pagoda-left": 0.84,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 29.4,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.423,
+   "minGap": 0,
+   "over": 1875,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1195",
+    "auron/yu-pagoda-left:680"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.664,
+    "braskas-final-aeon": 0.859,
+    "yu-pagoda-left": 0.839,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 29.76,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.398,
+   "minGap": 0,
+   "over": 1884,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1209",
+    "auron/yu-pagoda-left:675"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.658,
+    "braskas-final-aeon": 0.86,
+    "yu-pagoda-left": 0.84,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 30.11,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.367,
+   "minGap": 0,
+   "over": 1944,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1306",
+    "auron/yu-pagoda-left:638"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.651,
+    "braskas-final-aeon": 0.861,
+    "yu-pagoda-left": 0.842,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 30.45,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.33,
+   "minGap": 0,
+   "over": 1985,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1368",
+    "auron/yu-pagoda-left:617"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.646,
+    "braskas-final-aeon": 0.861,
+    "yu-pagoda-left": 0.844,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 30.81,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.288,
+   "minGap": 0,
+   "over": 2019,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1445",
+    "auron/yu-pagoda-left:574"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.645,
+    "braskas-final-aeon": 0.861,
+    "yu-pagoda-left": 0.846,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 31.16,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.241,
+   "minGap": 0,
+   "over": 2131,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1551",
+    "auron/yu-pagoda-left:580"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.645,
+    "braskas-final-aeon": 0.859,
+    "yu-pagoda-left": 0.843,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 31.51,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.189,
+   "minGap": 0,
+   "over": 2295,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1678",
+    "auron/yu-pagoda-left:617"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.647,
+    "braskas-final-aeon": 0.856,
+    "yu-pagoda-left": 0.838,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 31.86,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.14,
+   "minGap": 0,
+   "over": 2418,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1802",
+    "auron/yu-pagoda-left:616"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.652,
+    "braskas-final-aeon": 0.85,
+    "yu-pagoda-left": 0.835,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 32.21,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.085,
+   "minGap": 0,
+   "over": 2552,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:1919",
+    "auron/yu-pagoda-left:633"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.66,
+    "braskas-final-aeon": 0.846,
+    "yu-pagoda-left": 0.834,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 32.56,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": 0.034,
+   "minGap": 0,
+   "over": 2693,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2072",
+    "auron/yu-pagoda-left:621"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.667,
+    "braskas-final-aeon": 0.844,
+    "yu-pagoda-left": 0.834,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 32.9,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.018,
+   "minGap": 0,
+   "over": 2849,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2233",
+    "auron/yu-pagoda-left:616"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.673,
+    "braskas-final-aeon": 0.843,
+    "yu-pagoda-left": 0.832,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 33.26,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.067,
+   "minGap": 0,
+   "over": 3048,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2431",
+    "auron/yu-pagoda-left:617"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.678,
+    "braskas-final-aeon": 0.843,
+    "yu-pagoda-left": 0.829,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 33.61,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.114,
+   "minGap": 0,
+   "over": 3220,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2573",
+    "auron/yu-pagoda-left:647"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.676,
+    "braskas-final-aeon": 0.837,
+    "yu-pagoda-left": 0.824,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 33.97,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.159,
+   "minGap": 0,
+   "over": 3559,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:2880",
+    "auron/yu-pagoda-left:679"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.668,
+    "braskas-final-aeon": 0.828,
+    "yu-pagoda-left": 0.817,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 34.31,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.195,
+   "minGap": 0,
+   "over": 3821,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3098",
+    "auron/yu-pagoda-left:723"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.655,
+    "braskas-final-aeon": 0.821,
+    "yu-pagoda-left": 0.813,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 34.66,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.229,
+   "minGap": 0,
+   "over": 4074,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3347",
+    "auron/yu-pagoda-left:727"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.645,
+    "braskas-final-aeon": 0.814,
+    "yu-pagoda-left": 0.812,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 35,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.258,
+   "minGap": 0,
+   "over": 4329,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3614",
+    "auron/yu-pagoda-left:715"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.641,
+    "braskas-final-aeon": 0.808,
+    "yu-pagoda-left": 0.813,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 35.36,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.281,
+   "minGap": 0,
+   "over": 4569,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3829",
+    "auron/yu-pagoda-left:740"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.643,
+    "braskas-final-aeon": 0.805,
+    "yu-pagoda-left": 0.813,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 35.7,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.299,
+   "minGap": 0,
+   "over": 4662,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:3921",
+    "auron/yu-pagoda-left:741"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.644,
+    "braskas-final-aeon": 0.803,
+    "yu-pagoda-left": 0.811,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 36.06,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.313,
+   "minGap": 0,
+   "over": 4833,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:4028",
+    "auron/yu-pagoda-left:805"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.645,
+    "braskas-final-aeon": 0.798,
+    "yu-pagoda-left": 0.804,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 36.41,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.322,
+   "minGap": 0,
+   "over": 5041,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:4229",
+    "auron/yu-pagoda-left:812"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.648,
+    "braskas-final-aeon": 0.793,
+    "yu-pagoda-left": 0.797,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 36.75,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.328,
+   "minGap": 0,
+   "over": 5170,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:4311",
+    "auron/yu-pagoda-left:859"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.654,
+    "braskas-final-aeon": 0.789,
+    "yu-pagoda-left": 0.793,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  },
+  {
+   "t": 37.11,
+   "awaiting": true,
+   "phase": "command:yuna",
+   "camX": -0.331,
+   "minGap": 0,
+   "over": 5261,
+   "worst": "yuna vs braskas-final-aeon",
+   "touching": [
+    "yuna/braskas-final-aeon:4395",
+    "auron/yu-pagoda-left:866"
+   ],
+   "clear": {
+    "tidus": 1,
+    "yuna": 1,
+    "auron": 0.66,
+    "braskas-final-aeon": 0.787,
+    "yu-pagoda-left": 0.793,
+    "yu-pagoda-right": 1
+   },
+   "W": 1600,
+   "H": 900
+  }
+ ],
+ "who": {
+  "first": [
+   "tidus",
+   "yuna",
+   "auron"
+  ],
+  "enemies": [
+   "braskas-final-aeon",
+   "yu-pagoda-left",
+   "yu-pagoda-right"
+  ]
+ },
+ "framing": {
+  "pin": null,
+  "stand": null,
+  "cls": "colossus",
+  "plans": 1,
+  "replans": 1
+ },
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -1,0 +1,81 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "evrae-airship",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "FAIL",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 329.2,
+   "swaps": 438,
+   "snapsPerMinute": 0.55,
+   "maxHeadJumpPct": 115.7,
+   "maxFeetShiftPx": 0.9,
+   "worstJerkPx": 265.8,
+   "strips": 19,
+   "worstSwapStrips": [
+    "evrae-airship-win-816d80f9/continuity/strips/swap-009-rikku-hurt-ko.jpg",
+    "evrae-airship-win-816d80f9/continuity/strips/swap-317-tidus-idle-ko.jpg",
+    "evrae-airship-win-816d80f9/continuity/strips/swap-363-evrae-idle-cast.jpg",
+    "evrae-airship-win-816d80f9/continuity/strips/swap-026-evrae-cast-idle.jpg",
+    "evrae-airship-win-816d80f9/continuity/strips/swap-013-rikku-ko-idle.jpg",
+    "evrae-airship-win-816d80f9/continuity/strips/swap-005-rikku-follow-idle.jpg",
+    "evrae-airship-win-816d80f9/continuity/strips/swap-316-tidus-ko-idle.jpg",
+    "evrae-airship-win-816d80f9/continuity/strips/swap-321-tidus-ko-critical.jpg",
+    "evrae-airship-win-816d80f9/continuity/strips/swap-260-kimahri-idle-hurt.jpg",
+    "evrae-airship-win-816d80f9/continuity/strips/swap-224-kimahri-hurt-idle.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 329.2,
+ "counted": 438,
+ "swaps": 453,
+ "size": {
+  "maxHeadJumpPct": 115.7,
+  "maxHeadJumpPctRegistration": 8.4,
+  "headOverTolerance": 149,
+  "maxFeetShiftPx": 0.9,
+  "feetOverTolerance": 0,
+  "headMeasured": 438,
+  "headRegistration": 230,
+  "headSilhouette": 208,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 3,
+  "snapsPerMinute": 0.55,
+  "hardCuts": 3,
+  "hardCutsPerMinute": 0.55,
+  "ghostSwaps": 433,
+  "ghostFrames": 1882,
+  "worstGhostSeverity": 0.439,
+  "ghostOverFail": 20,
+  "jerks": 101,
+  "worstJerkPx": 265.8,
+  "jerksOverFail": 23,
+  "lowestIou": 0.007,
+  "maxCentroidShiftPx": 159.2
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "FAIL",
+   "reasons": [
+    "149 swap(s) change a head by more than the tolerance (worst 115.7 percent; 8.4 percent where the head is registered)"
+   ],
+   "note": "230 of 438 measured swaps had a registered head (tolerance 3 percent); 208 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "0.55 snaps per minute is over 0.25",
+    "23 jerk(s) of 40 px or more in one frame (worst 265.8 px)",
+    "20 swap(s) show a double image of severity 0.4 or more (worst 0.439)"
+   ]
+  }
+ },
+ "base": "http://127.0.0.1:5462/",
+ "date": "2026-10-05T08:04:57.850Z"
+}

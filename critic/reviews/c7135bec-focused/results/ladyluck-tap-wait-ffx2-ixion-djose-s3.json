@@ -1,0 +1,165 @@
+{
+ "name": "ladyluck-tap-wait-ffx2-ixion-djose-s3",
+ "mode": "tap",
+ "atb": "wait",
+ "chapter": "ffx2-ixion-djose",
+ "seed": 3,
+ "size": "390x844",
+ "wanted": [
+  "cherry",
+  "cherry",
+  "cherry"
+ ],
+ "hooks": [
+  "gotoChapter + setSeed (navigation only, ?coach=off)",
+  "ATB mode as the default (Wait)"
+ ],
+ "log": [
+  "first menu, phase idle",
+  "menu idle: Change opened, rows: [\"Lady Luck\",\"Black Mage\"]",
+  "tapped Lady Luck: Lady Luck",
+  "menu owner=paine lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Skill\",\"Change\",\"Item\"]",
+  "filler turn: command:paine [\"Attack\"]",
+  "menu owner=rikku lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Skill\",\"Change\",\"Item\"]",
+  "filler turn: idle [\"Attack\"]",
+  "menu owner=yuna lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Skill\",\"Change\",\"Item\"]",
+  "Skill rows [\"Bribe\",\"Two Dice\",\"Attack Reels\",\"Magic Reels\",\"Luck\",\"Felicity\",\"Critical\"]",
+  "chose Magic Reels",
+  "target {\"confirmed\":true,\"target\":\"x2-ixion\",\"wanted\":null,\"mismatch\":false,\"taps\":1}",
+  "overlay: {\"subtitle\":\"TAP TO STOP\",\"input\":\"pointer\",\"stopOrder\":[2,1,0],\"phases\":[3.1585714649409056,4.990403089206666,3.2396826948970556],\"timerMs\":12000,\"strip\":[\"red7\",\"bar\",\"cherry\",\"skull\",\"hat\",\"staff\"]}",
+  "press 1: reel 2 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "press 2: reel 1 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "press 3: reel 0 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "engine: [{\"seq\":45,\"type\":\"message\",\"actor\":null,\"ability\":null,\"target\":null},{\"seq\":47,\"type\":\"damage\",\"actor\":null,\"ability\":null,\"target\":\"x2-ixion\"},{\"seq\":52,\"type\":\"action-start\",\"actor\":\"x2-ixion\",\"ability\":\"Aerospark\",\"target\":null},{\"seq\":54,\"type\":\"damage\",\"actor\":null,\"ability\":null,\"target\":\"paine\"}] msgs [\"Flare\"]",
+  "reel events: []"
+ ],
+ "rowsSeen": [
+  {
+   "who": "idle",
+   "rows": [
+    "White Magic",
+    "Change",
+    "Item"
+   ]
+  }
+ ],
+ "changedBy": "idle",
+ "ladyLuckGirl": "yuna",
+ "skillRows": [
+  "Bribe",
+  "Two Dice",
+  "Attack Reels",
+  "Magic Reels",
+  "Luck",
+  "Felicity",
+  "Critical"
+ ],
+ "reelsRow": "Magic Reels",
+ "overlayOpened": {
+  "subtitle": "TAP TO STOP",
+  "input": "pointer",
+  "layout": {
+   "strip": [
+    "red7",
+    "bar",
+    "cherry",
+    "skull",
+    "hat",
+    "staff"
+   ],
+   "stopOrder": [
+    2,
+    1,
+    0
+   ],
+   "phases": [
+    3.1585714649409056,
+    4.990403089206666,
+    3.2396826948970556
+   ],
+   "timerMs": 12000
+  },
+  "rect": {
+   "x": 6.141792297363281,
+   "y": 56,
+   "w": 357.4664306640625,
+   "h": 176.265625
+  },
+  "warn": "DUD: −75% PARTY HP"
+ },
+ "presses": [
+  {
+   "k": 0,
+   "armed": 2,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "909.0",
+   "waitedMs": 742,
+   "subtitleAfter": "TAP TO STOP",
+   "armedNext": "1"
+  },
+  {
+   "k": 1,
+   "armed": 1,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "1760.6",
+   "waitedMs": 646,
+   "subtitleAfter": "TAP TO STOP",
+   "armedNext": "0"
+  },
+  {
+   "k": 2,
+   "armed": 0,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "2118.9",
+   "waitedMs": 201,
+   "subtitleAfter": "TAP TO STOP",
+   "armedNext": ""
+  }
+ ],
+ "final": null,
+ "engine": [
+  {
+   "seq": 45,
+   "type": "message",
+   "actor": null,
+   "ability": null,
+   "target": null
+  },
+  {
+   "seq": 47,
+   "type": "damage",
+   "actor": null,
+   "ability": null,
+   "target": "x2-ixion"
+  },
+  {
+   "seq": 52,
+   "type": "action-start",
+   "actor": "x2-ixion",
+   "ability": "Aerospark",
+   "target": null
+  },
+  {
+   "seq": 54,
+   "type": "damage",
+   "actor": null,
+   "ability": null,
+   "target": "paine"
+  }
+ ],
+ "engineMessage": [
+  "Flare"
+ ],
+ "reelEvents": [],
+ "consoleErrors": [],
+ "notFound": []
+}

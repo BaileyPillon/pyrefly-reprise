@@ -1,0 +1,3102 @@
+{
+ "chapter": "ffx2-bahamut",
+ "game": "ffx2",
+ "goal": "win",
+ "size": "1600x900",
+ "base": "http://127.0.0.1:5461/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": {
+    "seq": 3,
+    "actor": "bahamut",
+    "ability": "Curse",
+    "targets": [
+     "paine"
+    ]
+   }
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 3,
+  "actor": "bahamut",
+  "ability": "Curse",
+  "targets": [
+   "paine"
+  ]
+ },
+ "steps": [
+  {
+   "ms": 10330,
+   "k": "prepEscGoesTo",
+   "v": "party-prep"
+  },
+  {
+   "ms": 33572,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 48629,
+   "k": "targetProbe",
+   "v": "no target cursor opened: 16 and 16b not shot (PR-0213)"
+  },
+  {
+   "ms": 48636,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 3,
+    "actor": "bahamut",
+    "ability": "Curse",
+    "targets": [
+     "paine"
+    ]
+   }
+  },
+  {
+   "ms": 401057,
+   "k": "fight",
+   "v": {
+    "outcome": "victory",
+    "turns": 48,
+    "ms": 352424,
+    "seams": 0,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 407847,
+   "k": "continuity",
+   "v": "[continuity] ffx2-bahamut: 368.348 s of battle, 21615 frames recorded, 393 swaps, 551 strips, 58.7 fps, 0 probe errors"
+  },
+  {
+   "ms": 410974,
+   "k": "continuity",
+   "v": "[continuity] ffx2-bahamut: CHK-026 FAIL, CHK-027 FAIL; max head jump 77.3% (0% registered), max feet shift 140.6px, 0.16 snaps/min, worst jerk 166.3px, 20 strips"
+  }
+ ],
+ "picks": [
+  {
+   "turn": 0,
+   "ms": 17,
+   "actor": "play:action-start",
+   "want": {
+    "label": "Shell",
+    "target": "the party",
+    "menu": "White Magic"
+   },
+   "took": "Shell",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:329/690",
+    "rikku:1004/1839",
+    "paine:1084/1706",
+    "bahamut:8400/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 43,
+     "actor": "yuna",
+     "did": "Shell",
+     "targets": [
+      "yuna",
+      "rikku",
+      "paine"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 1,
+   "ms": 3843,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:329/690",
+    "rikku:1004/1839",
+    "paine:1084/1706",
+    "bahamut:8400/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 46,
+     "actor": "rikku",
+     "did": "Darkness",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 2,
+   "ms": 9672,
+   "actor": "command:paine",
+   "want": {
+    "label": "Magic Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Magic Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:329/690",
+    "rikku:1004/1839",
+    "paine:1084/1706",
+    "bahamut:8400/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 90,
+     "actor": "paine",
+     "did": "Magic Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 3,
+   "ms": 24566,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Yuna",
+    "menu": "Item"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:211/690",
+    "rikku:421/1839",
+    "paine:683/1706",
+    "bahamut:7852/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 127,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 4,
+   "ms": 29077,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Magic Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Magic Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:421/1839",
+    "paine:683/1706",
+    "bahamut:7852/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 144,
+     "actor": "paine",
+     "did": "Magic Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 5,
+   "ms": 33798,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Rikku",
+    "menu": "Item"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:421/1839",
+    "paine:683/1706",
+    "bahamut:7852/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "rikku",
+    "wanted": "rikku",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 167,
+     "actor": "rikku",
+     "did": "Hi-Potion",
+     "targets": [
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 6,
+   "ms": 42227,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Cura",
+    "target": "Paine",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1413/1839",
+    "paine:683/1706",
+    "bahamut:7693/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "paine",
+    "wanted": "paine",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 212,
+     "actor": "yuna",
+     "did": "Cura",
+     "targets": [
+      "paine"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 7,
+   "ms": 47760,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Magic Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Magic Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1413/1839",
+    "paine:1166/1706",
+    "bahamut:7693/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 232,
+     "actor": "paine",
+     "did": "Magic Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 8,
+   "ms": 54184,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1413/1839",
+    "paine:1166/1706",
+    "bahamut:7544/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 268,
+     "actor": "rikku",
+     "did": "Darkness",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 9,
+   "ms": 58509,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Cura",
+    "target": "Rikku",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1413/1839",
+    "paine:1166/1706",
+    "bahamut:7544/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "rikku",
+    "wanted": "rikku",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 287,
+     "actor": "yuna",
+     "did": "Cura",
+     "targets": [
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 10,
+   "ms": 64878,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Magic Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Magic Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1184/1839",
+    "paine:1166/1706",
+    "bahamut:7197/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 312,
+     "actor": "paine",
+     "did": "Magic Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 11,
+   "ms": 79594,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Cura",
+    "target": "Paine",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:602/690",
+    "rikku:1506/1839",
+    "paine:967/1706",
+    "bahamut:6976/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "paine",
+    "wanted": "paine",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 388,
+     "actor": "yuna",
+     "did": "Cura",
+     "targets": [
+      "paine"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 12,
+   "ms": 83793,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:602/690",
+    "rikku:1506/1839",
+    "paine:967/1706",
+    "bahamut:6976/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 394,
+     "actor": "rikku",
+     "did": "Darkness",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 13,
+   "ms": 87186,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Magic Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Magic Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:602/690",
+    "rikku:1506/1839",
+    "paine:967/1706",
+    "bahamut:6976/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 400,
+     "actor": "paine",
+     "did": "Magic Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 14,
+   "ms": 98957,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Mental Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Mental Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:602/690",
+    "rikku:1277/1839",
+    "paine:1441/1706",
+    "bahamut:6322/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 475,
+     "actor": "paine",
+     "did": "Mental Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 15,
+   "ms": 103086,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Cura",
+    "target": "Rikku",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:602/690",
+    "rikku:1277/1839",
+    "paine:1441/1706",
+    "bahamut:6322/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "rikku",
+    "wanted": "rikku",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 485,
+     "actor": "yuna",
+     "did": "Cura",
+     "targets": [
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 16,
+   "ms": 110013,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:602/690",
+    "rikku:1733/1839",
+    "paine:1441/1706",
+    "bahamut:6170/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 527,
+     "actor": "rikku",
+     "did": "Darkness",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 17,
+   "ms": 115600,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Mental Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Mental Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:602/690",
+    "rikku:1504/1839",
+    "paine:1441/1706",
+    "bahamut:5816/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 560,
+     "actor": "paine",
+     "did": "Mental Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 18,
+   "ms": 120674,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Protect",
+    "target": "the party",
+    "menu": "White Magic"
+   },
+   "took": "Protect",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:602/690",
+    "rikku:1504/1839",
+    "paine:1441/1706",
+    "bahamut:5816/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 580,
+     "actor": "yuna",
+     "did": "Protect",
+     "targets": [
+      "yuna",
+      "rikku",
+      "paine"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 19,
+   "ms": 130023,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:508/690",
+    "rikku:1504/1839",
+    "paine:1441/1706",
+    "bahamut:5581/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 651,
+     "actor": "rikku",
+     "did": "Darkness",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 20,
+   "ms": 134133,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Mental Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Mental Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:508/690",
+    "rikku:1504/1839",
+    "paine:1441/1706",
+    "bahamut:5581/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 667,
+     "actor": "paine",
+     "did": "Mental Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 21,
+   "ms": 145380,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Cura",
+    "target": "Rikku",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:493/690",
+    "rikku:1226/1839",
+    "paine:1395/1706",
+    "bahamut:4909/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "rikku",
+    "wanted": "rikku",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 748,
+     "actor": "yuna",
+     "did": "Cura",
+     "targets": [
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 22,
+   "ms": 157116,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Mental Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Mental Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:479/690",
+    "rikku:1647/1839",
+    "paine:1354/1706",
+    "bahamut:4909/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 834,
+     "actor": "paine",
+     "did": "Mental Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 23,
+   "ms": 163563,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:479/690",
+    "rikku:1647/1839",
+    "paine:1354/1706",
+    "bahamut:4757/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 872,
+     "actor": "rikku",
+     "did": "Darkness",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 24,
+   "ms": 167831,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Cura",
+    "target": "Yuna",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:479/690",
+    "rikku:1647/1839",
+    "paine:1354/1706",
+    "bahamut:4757/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 888,
+     "actor": "yuna",
+     "did": "Cura",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 25,
+   "ms": 179705,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Mental Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Mental Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1418/1839",
+    "paine:1354/1706",
+    "bahamut:4414/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 972,
+     "actor": "paine",
+     "did": "Mental Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 26,
+   "ms": 189220,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Cure",
+    "target": "Rikku",
+    "menu": "White Magic"
+   },
+   "took": "Cure",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1418/1839",
+    "paine:1354/1706",
+    "bahamut:4259/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "rikku",
+    "wanted": "rikku",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1040,
+     "actor": "yuna",
+     "did": "Cure",
+     "targets": [
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 27,
+   "ms": 198587,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1641/1839",
+    "paine:1354/1706",
+    "bahamut:4259/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1106,
+     "actor": "rikku",
+     "did": "Darkness",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 28,
+   "ms": 202649,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Armor Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Armor Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1641/1839",
+    "paine:1354/1706",
+    "bahamut:4259/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1122,
+     "actor": "paine",
+     "did": "Armor Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 29,
+   "ms": 216279,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Cure",
+    "target": "Rikku",
+    "menu": "White Magic"
+   },
+   "took": "Cure",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1412/1839",
+    "paine:1354/1706",
+    "bahamut:3625/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "rikku",
+    "wanted": "rikku",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1191,
+     "actor": "yuna",
+     "did": "Cure",
+     "targets": [
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 30,
+   "ms": 229956,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Armor Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Armor Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:646/690",
+    "rikku:1569/1839",
+    "paine:1260/1706",
+    "bahamut:3625/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1274,
+     "actor": "paine",
+     "did": "Armor Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 31,
+   "ms": 234159,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:646/690",
+    "rikku:1569/1839",
+    "paine:1260/1706",
+    "bahamut:3625/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1290,
+     "actor": "rikku",
+     "did": "Darkness",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 32,
+   "ms": 240606,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Cure",
+    "target": "Rikku",
+    "menu": "White Magic"
+   },
+   "took": "Cure",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:646/690",
+    "rikku:1569/1839",
+    "paine:1260/1706",
+    "bahamut:3449/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "rikku",
+    "wanted": "rikku",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1330,
+     "actor": "yuna",
+     "did": "Cure",
+     "targets": [
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 33,
+   "ms": 250990,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Armor Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Armor Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:555/690",
+    "rikku:1564/1839",
+    "paine:1260/1706",
+    "bahamut:2984/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1406,
+     "actor": "paine",
+     "did": "Armor Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 34,
+   "ms": 256929,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Cure",
+    "target": "Paine",
+    "menu": "White Magic"
+   },
+   "took": "Cure",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:555/690",
+    "rikku:1564/1839",
+    "paine:1260/1706",
+    "bahamut:2778/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "paine",
+    "wanted": "paine",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1446,
+     "actor": "yuna",
+     "did": "Cure",
+     "targets": [
+      "paine"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 35,
+   "ms": 262897,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:460/690",
+    "rikku:1564/1839",
+    "paine:1496/1706",
+    "bahamut:2778/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1491,
+     "actor": "rikku",
+     "did": "Darkness",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 36,
+   "ms": 268074,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Armor Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Armor Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:460/690",
+    "rikku:1335/1839",
+    "paine:1496/1706",
+    "bahamut:2423/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1525,
+     "actor": "paine",
+     "did": "Armor Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 37,
+   "ms": 273710,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Cura",
+    "target": "Yuna",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:460/690",
+    "rikku:1335/1839",
+    "paine:1496/1706",
+    "bahamut:2423/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1554,
+     "actor": "yuna",
+     "did": "Cura",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 38,
+   "ms": 281712,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1335/1839",
+    "paine:1496/1706",
+    "bahamut:2108/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1604,
+     "actor": "rikku",
+     "did": "Darkness",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 39,
+   "ms": 285925,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Armor Break",
+    "target": "Bahamut",
+    "menu": "Skill"
+   },
+   "took": "Armor Break",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1335/1839",
+    "paine:1496/1706",
+    "bahamut:2108/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "bahamut",
+    "wanted": "bahamut",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1620,
+     "actor": "paine",
+     "did": "Armor Break",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 40,
+   "ms": 294346,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Cura",
+    "target": "Rikku",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:669/690",
+    "rikku:1293/1839",
+    "paine:1448/1706",
+    "bahamut:1859/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "rikku",
+    "wanted": "rikku",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1677,
+     "actor": "yuna",
+     "did": "Cura",
+     "targets": [
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 41,
+   "ms": 312580,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Attack",
+    "target": "Bahamut",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:648/690",
+    "rikku:1503/1839",
+    "paine:1406/1706",
+    "bahamut:1350/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1776,
+     "actor": "paine",
+     "did": "Attack",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 42,
+   "ms": 316818,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:648/690",
+    "rikku:1503/1839",
+    "paine:1406/1706",
+    "bahamut:1101/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1815,
+     "actor": "rikku",
+     "did": "Darkness",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 43,
+   "ms": 320425,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Cura",
+    "target": "Rikku",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:648/690",
+    "rikku:1503/1839",
+    "paine:1406/1706",
+    "bahamut:1101/8400"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "rikku",
+    "wanted": "rikku",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1827,
+     "actor": "yuna",
+     "did": "Cura",
+     "targets": [
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 44,
+   "ms": 328500,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Attack",
+    "target": "Bahamut",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:648/690",
+    "rikku:1610/1839",
+    "paine:1406/1706",
+    "bahamut:774/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1871,
+     "actor": "paine",
+     "did": "Attack",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 45,
+   "ms": 333927,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Vigor",
+    "target": "Yuna",
+    "menu": "White Magic"
+   },
+   "took": "Vigor",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "yuna:648/690",
+    "rikku:1610/1839",
+    "paine:1406/1706",
+    "bahamut:419/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1907,
+     "actor": "yuna",
+     "did": "Vigor",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 46,
+   "ms": 339100,
+   "actor": "play:status-tick",
+   "want": {
+    "label": "Attack",
+    "target": "Bahamut",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1610/1839",
+    "paine:1406/1706",
+    "bahamut:419/8400"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1931,
+     "actor": "paine",
+     "did": "Attack",
+     "targets": [
+      "bahamut"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 47,
+   "ms": 343168,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Darkness",
+    "target": "all enemies",
+    "menu": "Skill"
+   },
+   "took": "Darkness",
+   "viaMenu": "Skill",
+   "engineHp": [
+    "yuna:690/690",
+    "rikku:1610/1839",
+    "paine:1406/1706",
+    "bahamut:163/8400"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  }
+ ],
+ "seams": [],
+ "fails": [],
+ "contexts": {
+  "viewport": "1600x900",
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "briefingText": "AURON “Eighteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 18,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 18
+ },
+ "boardWalk": [
+  "seymour-flux",
+  "yunalesca",
+  "braskas-final-aeon",
+  "seymour-anima-macalania",
+  "evrae-airship",
+  "yojimbo-cavern",
+  "seymour-natus",
+  "seymour-omnis",
+  "isaaru-via-purifico",
+  "sin-fins-core",
+  "sin-face",
+  "ffx2-bahamut"
+ ],
+ "dossier": "AURON · 1 OF 3 “Start with this one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER IV Bahamut 0 OF 18 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII X-2 IV V VI XI XIII XV XVI Something she used to call by name Under the temple, in the hangar where Vegnagun used to stand, an aeon is waiting and it is not itself. Nobody cheers when this one is over. ATB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face FINAL FANTASY X-2 IV Bahamut V Vegnagun VI Leblanc XI Fallen Aeons XIII Trema XV The Den of Woe XVI Ixion LOCATION Bevelle Underground — Limbo BOSS Bahamut PARTY Y YUNA R RIKKU P PAINE BEST Not cleared LEFT/RIGHT CHOOSE · UP/DOWN GAME · ENTER BEGIN · ESC BACK",
+ "prepText": "AURON · 2 OF 3 “Your party is ready.” The tabs are for later. Start the battle. ESC SKIP THE GUIDE PARTY PREP IV · BAHAMUT — BEVELLE UNDERGROUND — LIMBO Y Yuna LV 23 R Rikku LV 24 P Paine LV 25 CHAPTER DRESSPHERES STATS ACCESSORIES ITEMS FFX-2 · IV Bahamut Something She Named Two years on, the aeon Yuna once called by name is standing in the dark with nobody home behind its eyes. She tries to talk it down anyway, because that is what she knows how to do. Limbo, a thousand years dark nobody is home you don't get another option OBJECTIVES Survive a Mega Flare Land a 5-hit Chain Attack Defeat Bahamut TIP Magic Break first, five stacks — it caps Mega Flare at a sixth of its damage and Impulse at a sixteenth, and it stacks with Shell. ▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL START BATTLE Y Yuna LV 23 · 10 DRESSPHERES WHITE MAGE R Rikku LV 24 · 10 DRESSPHERES DARK KNIGHT P Paine LV 25 · 9 DRESSPHERES WARRIOR",
+ "prepEsc": "party-prep",
+ "preScene": {
+  "lines": [
+   "CHAPTER IV · BEVELLE UNDERGROUND — LIMBO Rikku SPHERE HUNTER Creepy hole, creepy ladder, creepy hallway. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER IV · BEVELLE UNDERGROUND — LIMBO Yuna SPHERE HUNTER Um. That's a lot of creepy. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER IV · BEVELLE UNDERGROUND — LIMBO Paine SPHERE HUNTER It's Bevelle. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER IV · BEVELLE UNDERGROUND — LIMBO Ormi Boss, it's — it's big in here. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "ffx2-bahamut",
+  "game": "ffx2",
+  "scene": "bevelle-underground",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 6298.600000000006,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna-white-mage",
+    "pose": "ready",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "rikku",
+    "side": "party",
+    "art": "rikku-dark-knight",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "paine",
+    "side": "party",
+    "art": "paine-warrior",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "bahamut",
+    "side": "enemy",
+    "art": "ffx2-bahamut",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0.2,
+   "cpuMeanMs": 18.122,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "idle",
+   "awaitingMenu": true,
+   "played": 15,
+   "lastEvents": [
+    {
+     "seq": 4,
+     "type": "status-add",
+     "ms": 251
+    },
+    {
+     "seq": 5,
+     "type": "action-end",
+     "ms": 871
+    },
+    {
+     "seq": 6,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 7,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 8,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 9,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 10,
+     "type": "turn-start",
+     "ms": 111
+    },
+    {
+     "seq": 11,
+     "type": "action-start",
+     "ms": 630
+    },
+    {
+     "seq": 12,
+     "type": "chain",
+     "ms": 0
+    },
+    {
+     "seq": 13,
+     "type": "damage",
+     "ms": 532
+    },
+    {
+     "seq": 14,
+     "type": "action-end",
+     "ms": 290
+    },
+    {
+     "seq": 15,
+     "type": "atb",
+     "ms": 0
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 2,
+   "ticks": 16919,
+   "events": 16,
+   "result": null,
+   "combatants": [
+    {
+     "id": "yuna",
+     "hp": 690,
+     "maxHp": 690,
+     "mp": 130,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "rikku",
+     "hp": 1734,
+     "maxHp": 1839,
+     "mp": 158,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "paine",
+     "hp": 1706,
+     "maxHp": 1706,
+     "mp": 67,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "curse"
+     ]
+    },
+    {
+     "id": "bahamut",
+     "hp": 8400,
+     "maxHp": 8400,
+     "mp": 9999,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 0,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.3799500265010979,
+       "required": 13207,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.32,
+       "required": 13725,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0.5899316345556246,
+       "required": 8045,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 0
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 1099.6666666666665,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.6297418035890058,
+       "required": 13207,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.18380878092266548,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.5603642987249544,
+       "required": 13725,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 1,
+       "required": 8045,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 1
+   },
+   {
+    "type": "turn-start",
+    "actorId": "bahamut",
+    "turn": 1,
+    "elapsedTicks": 3299,
+    "seq": 2
+   },
+   {
+    "type": "action-start",
+    "actorId": "bahamut",
+    "command": {
+     "kind": "ability",
+     "id": "bahamut-curse",
+     "targets": [
+      "paine"
+     ]
+    },
+    "abilityId": "bahamut-curse",
+    "abilityName": "Curse",
+    "targets": [
+     "paine"
+    ],
+    "seq": 3
+   },
+   {
+    "type": "status-add",
+    "targetId": "paine",
+    "sourceId": "bahamut",
+    "status": "curse",
+    "instance": {
+     "id": "curse",
+     "turnsRemaining": null,
+     "ticksRemaining": null,
+     "charges": null,
+     "stacks": 0,
+     "permanent": true,
+     "sourceId": "bahamut",
+     "sourceAbilityId": "bahamut-curse"
+    },
+    "seq": 4
+   },
+   {
+    "type": "action-end",
+    "actorId": "bahamut",
+    "seq": 5
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 1099.6666666666665,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.6297418035890058,
+       "required": 13207,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.18380878092266548,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.5603642987249544,
+       "required": 13725,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0,
+       "required": 8045,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 6
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 2729.6666666666665,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 1,
+       "required": 13207,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.45626253621573437,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.916648451730419,
+       "required": 13725,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0.6078309509011809,
+       "required": 8045,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 7
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 3111,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 1.086620731430302,
+       "required": 13207,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.520002228660575,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 1,
+       "required": 13725,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0.7500310752019889,
+       "required": 8045,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 8
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 3781.333333333333,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 1.2388884682365413,
+       "required": 13207,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.6320481390684198,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 1.1465209471766848,
+       "required": 13725,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 1,
+       "required": 8045,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 9
+   },
+   {
+    "type": "turn-start",
+    "actorId": "bahamut",
+    "turn": 2,
+    "elapsedTicks": 11344,
+    "seq": 10
+   },
+   {
+    "type": "action-start",
+    "actorId": "bahamut",
+    "command": {
+     "kind": "ability",
+     "id": "attack",
+     "targets": [
+      "rikku"
+     ]
+    },
+    "abilityId": "attack",
+    "abilityName": "Attack",
+    "targets": [
+     "rikku"
+    ],
+    "seq": 11
+   },
+   {
+    "type": "chain",
+    "targetId": "rikku",
+    "count": 0,
+    "multiplier": 1,
+    "seq": 12
+   },
+   {
+    "type": "damage",
+    "targetId": "rikku",
+    "sourceId": "bahamut",
+    "amount": 105,
+    "element": "none",
+    "affinity": "normal",
+    "crit": false,
+    "hitIndex": 0,
+    "hitCount": 1,
+    "seq": 13
+   },
+   {
+    "type": "action-end",
+    "actorId": "bahamut",
+    "seq": 14
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 3781.333333333333,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 1.2388884682365413,
+       "required": 13207,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.6320481390684198,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 1.1465209471766848,
+       "required": 13725,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0,
+       "required": 8045,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 15
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": null,
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "NEXT BEST MOVE Yuna Shell → the party IN WHITE MAGIC 10 MP 100% TO HIT + SHELL It puts Shell on the party."
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [
+   {
+    "x": 0,
+    "y": 744,
+    "w": 400,
+    "h": 146
+   }
+  ],
+  "adv": [],
+  "cmd": [
+   {
+    "x": 1246,
+    "y": 418,
+    "w": 324,
+    "h": 191
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": null,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": []
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 646,
+    "y": 705,
+    "w": 493,
+    "h": 130
+   }
+  ],
+  "cmd": [
+   {
+    "x": 1246,
+    "y": 418,
+    "w": 324,
+    "h": 191
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Yuna",
+    "eff": 17.5
+   },
+   {
+    "t": "Shell",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "the party",
+    "eff": 21
+   },
+   {
+    "t": "in White Magic",
+    "eff": 14.2
+   },
+   {
+    "t": "10 MP",
+    "eff": 14.2
+   },
+   {
+    "t": "100% to hit",
+    "eff": 14.2
+   },
+   {
+    "t": "+ Shell",
+    "eff": 14.2
+   },
+   {
+    "t": "It puts Shell on the party.",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "NEXT BEST MOVE Yuna Shell → the party IN WHITE MAGIC 10 MP 100% TO HIT + SHELL It puts Shell on the party.",
+ "advisorHiddenByN": true,
+ "intentText": "Bahamutacts nextAttackScriptedPhysical non-elemental damage to one girl.Damage · random targetYuna168–19026% HP 92% to hitRikku93–1055% HP 95% to hitPaine115–1307% HP 90% to hitLands on one of these, picked when it acts.AlsoThe Mega Flare countdown is an action counter, not a clock — Slowing him slows it tooJ hold · +1 more",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "Bahamut SCAN WM WM Yuna 520 /690 130 /130 DK DK Rikku 1636 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 WHITE MAGIC ◂ CHANGE ◂ ITEM ◂ WHITE MAGIC Open the White Magic menu. GUIDE CURSE Paine is cursed: Holy Water, Esuna or a Remedy cures it. Dark Knight is among the strongest dresspheres in the game, with a slow but heavy attack and strong defense. Put one of your girls in it now. Save, and start one girl as a Thief so she can steal from the bosses ahead. A Ribbon on one party member is also worth having, to block nasty status effects. Bahamut BOSS BATTLE Time to take on an aeon! Remember to Steal a Mute Shock off him before the battle ends. Bahamut cycles through one fixed attack pattern: “Curse” or an ordinary physical hit (Curse locks a girl into her current dressphere) Ordinary physical hit Ordinary physical hit “Impulse” (takes 37.5% of HP) “Impulse” again “Countdown” “Mega Flare” T"
+  },
+  "optionsText": "Bahamut SCAN WM WM Yuna 520 /690 130 /130 DK DK Rikku 1636 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 WHITE MAGIC ◂ CHANGE ◂ ITEM ◂ WHITE MAGIC Open the White Magic menu. GUIDE CURSE Paine is cursed: Holy Water, Esuna or a Remedy cures it. Dark Knight is among the strongest dresspheres in the game, with a slow but heavy attack and strong defense. Put one of your girls in it now. Save, and start one girl as a Thief so she can steal from the bosses ahead. A Ribbon on one party member is also worth having, to block nasty status effects. Bahamut BOSS BATTLE Time to take on an aeon! Remember to Steal a Mute Shock off him before the battle ends. Bahamut cycles through one fixed attack pattern: “Curse” or an ordinary physical hit (Curse locks a girl into her current dressphere) Ordinary physical hit Ordinary physical hit “Impulse” (takes 37.5% of HP) “Impulse” again “Countdown” “Mega Flare” Then the cycle starts over. The first Impulse tells you Countdown is near, and Mega Flare hurts badly, so have everyone fully healed before it comes. Impulse cannot kill: it takes a percentage of HP, like Demi. With a pattern this simple there is little more to say. If you are struggling, grind some EXP by the Save Sphere to level up your Dark Knights. Bahamut HP: 8,400 STEAL: Mute Shock DROP: Gris-Gris Bag G HIDE GUIDE NEXT BEST MOVE Yuna Shell → the party IN WHITE MAGIC 10 MP N HIDE MOVES 170 P",
+  "tabs": [
+   "Yuna",
+   "Rikku",
+   "Paine",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [
+  "White Magic",
+  "Change",
+  "Item"
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "victory",
+   "seed": 1,
+   "turns": 48,
+   "firstEnemyAction": {
+    "seq": 3,
+    "actor": "bahamut",
+    "ability": "Curse",
+    "targets": [
+     "paine"
+    ]
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "seamCard": [],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "lastChain": {
+  "links": 1,
+  "chainLength": 1,
+  "phase": "play:victory",
+  "turn": 48,
+  "ms": 352171
+ },
+ "mgSince": null,
+ "emptyPicks": 0,
+ "lastPartySeq": 1931,
+ "turns": 48,
+ "fightMs": 352424,
+ "afterFight": "cutscene",
+ "outcome": "victory",
+ "outcomeFrom": "results screen text",
+ "stalledAt": null,
+ "logKinds": {
+  "atb": 242,
+  "turn-start": 81,
+  "action-start": 68,
+  "status-add": 24,
+  "action-end": 81,
+  "chain": 71,
+  "damage": 88,
+  "status-tick": 1317,
+  "charge": 15,
+  "script-trigger": 3,
+  "miss": 3,
+  "ko": 1,
+  "victory": 1
+ },
+ "continuity": {
+  "file": "continuity/continuity.json",
+  "checks": {
+   "CHK-026": "FAIL",
+   "CHK-027": "FAIL"
+  },
+  "reasons": {
+   "CHK-026": [
+    "29 swap(s) change a head by more than the tolerance (worst 77.3 percent; 0 percent where the head is registered)",
+    "1 swap(s) of a standing figure move its feet more than the tolerance (worst 140.6 px at 1600 wide)"
+   ],
+   "CHK-027": [
+    "74 jerk(s) of 40 px or more in one frame (worst 166.3 px)",
+    "12 swap(s) show a double image of severity 0.4 or more (worst 0.41)"
+   ]
+  },
+  "error": null
+ },
+ "post": {
+  "screen": "results",
+  "lines": []
+ },
+ "resultsScreen": "results",
+ "resultsText": "BEVELLE UNDERGROUND — LIMBO · CLEARED RESULTS · 6:17 Results NEW BEST EXP 1,300 ×3 PARTY AP 15 PER DRESSPHERE GIL 1,000 ITEMS Gris Gris Bag Y Yuna WHITE MAGE · CURAGA 55/80 AP +1,300EXP R Rikku DARK KNIGHT · CONFUSE 30/30 AP +1,300EXP P Paine WARRIOR · FLAMETONGUE 20/20 AP +1,300EXP CONFIRM ▸",
+ "afterConfirm": [
+  "cutscene"
+ ],
+ "epilogueShot": true,
+ "afterConfirmScenes": [
+  {
+   "watch": {
+    "ms": 6053,
+    "shows": 1,
+    "advancedWithoutInput": false,
+    "firstLine": "...Yunie.",
+    "screenAfterWatch": "cutscene"
+   },
+   "taps": 15,
+   "holds": 0,
+   "ended": true,
+   "lines": [
+    "...Yunie.",
+    "Did it do that? Did it dig its own way out?",
+    "That size doesn't leave in a hurry.",
+    "Not unless something called it.",
+    "This isn't how it was supposed to be.",
+    "Well. Obviously it heard I was coming.",
+    "Logos. Ormi. Record all of it. Every hole.",
+    "...Recording the hole. Naturally.",
+    "The Calm. I can feel it coming apart.",
+    "Everyone back to the ship. Now",
+    "No arguing! This is a Brother order!"
+   ]
+  }
+ ],
+ "afterResults": "chapter-select",
+ "boardAfter": {
+  "selectedIndex": 11,
+  "selectedId": "ffx2-bahamut",
+  "tiles": 18,
+  "coming": [],
+  "cleared": [
+   "ffx2-bahamut"
+  ],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 1,
+  "total": 18
+ },
+ "boardAfterReload": {
+  "selectedIndex": 11,
+  "selectedId": "ffx2-bahamut",
+  "tiles": 18,
+  "coming": [],
+  "cleared": [
+   "ffx2-bahamut"
+  ],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 1,
+  "total": 18
+ },
+ "dboxTimeline": [
+  {
+   "ms": 10832,
+   "lastMs": 16180,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "Creepy hole, creepy ladder, creepy hallway.",
+   "portrait": "rikku-x2.webp",
+   "narrate": false,
+   "show": 1
+  },
+  {
+   "ms": 16213,
+   "lastMs": 17680,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "Um. That's a lot of creepy.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 2
+  },
+  {
+   "ms": 17713,
+   "lastMs": 19197,
+   "screen": "cutscene",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "It's Bevelle.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 3
+  },
+  {
+   "ms": 19230,
+   "lastMs": 20713,
+   "screen": "cutscene",
+   "speaker": "Ormi",
+   "role": "",
+   "text": "Boss, it's — it's big in here.",
+   "portrait": "ormi.webp",
+   "narrate": false,
+   "show": 4
+  },
+  {
+   "ms": 20747,
+   "lastMs": 22686,
+   "screen": "cutscene",
+   "speaker": "Leblanc",
+   "role": "",
+   "text": "It's empty, you lump. That's worse.",
+   "portrait": "leblanc.webp",
+   "narrate": false,
+   "show": 5
+  },
+  {
+   "ms": 22796,
+   "lastMs": 22813,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "That's not machina.",
+   "portrait": "rikku-x2.webp",
+   "narrate": false,
+   "show": 6
+  },
+  {
+   "ms": 22829,
+   "lastMs": 22829,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "That's an aeon.",
+   "portrait": "rikku-x2.webp",
+   "narrate": false,
+   "show": 7
+  },
+  {
+   "ms": 22846,
+   "lastMs": 22846,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "Bahamut.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 8
+  },
+  {
+   "ms": 22863,
+   "lastMs": 22880,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "It's me. You know it's me.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 9
+  },
+  {
+   "ms": 22896,
+   "lastMs": 22913,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "Please. You have to stop.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 10
+  },
+  {
+   "ms": 22930,
+   "lastMs": 22930,
+   "screen": "cutscene",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "It's not in there, Yuna.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 11
+  },
+  {
+   "ms": 22946,
+   "lastMs": 23033,
+   "screen": "cutscene",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "Fight. You don't get another option.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 12,
+   "endMs": 23033
+  },
+  {
+   "ms": 68429,
+   "lastMs": 70213,
+   "screen": "battle",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "It stopped. That's not mercy.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 13
+  },
+  {
+   "ms": 70247,
+   "lastMs": 72412,
+   "screen": "battle",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "That's a timer.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 14,
+   "endMs": 72412
+  },
+  {
+   "ms": 256490,
+   "lastMs": 258473,
+   "screen": "battle",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "Is it — Yunie, is it slowing down?",
+   "portrait": "rikku-x2.webp",
+   "narrate": false,
+   "show": 15
+  },
+  {
+   "ms": 258506,
+   "lastMs": 260006,
+   "screen": "battle",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "No. It's counting.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 16,
+   "endMs": 260006
+  },
+  {
+   "ms": 348560,
+   "lastMs": 350039,
+   "screen": "battle",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "It's almost over.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 17
+  },
+  {
+   "ms": 350053,
+   "lastMs": 352086,
+   "screen": "battle",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "You can rest. You can rest.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 18,
+   "endMs": 352086
+  },
+  {
+   "ms": 413265,
+   "lastMs": 422114,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "...Yunie.",
+   "portrait": "rikku-x2.webp",
+   "narrate": false,
+   "show": 19
+  },
+  {
+   "ms": 422148,
+   "lastMs": 425097,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "I'm fine. Let's find the machine.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 20
+  },
+  {
+   "ms": 425164,
+   "lastMs": 426648,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "Did it do that? Did it dig its own way out?",
+   "portrait": "rikku-x2.webp",
+   "narrate": false,
+   "show": 21
+  },
+  {
+   "ms": 426680,
+   "lastMs": 428147,
+   "screen": "cutscene",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "That size doesn't leave in a hurry.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 22
+  },
+  {
+   "ms": 428180,
+   "lastMs": 429663,
+   "screen": "cutscene",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "Not unless something called it.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 23
+  },
+  {
+   "ms": 429696,
+   "lastMs": 431180,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "This isn't how it was supposed to be.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 24
+  },
+  {
+   "ms": 431214,
+   "lastMs": 432697,
+   "screen": "cutscene",
+   "speaker": "Leblanc",
+   "role": "",
+   "text": "Well. Obviously it heard I was coming.",
+   "portrait": "leblanc.webp",
+   "narrate": false,
+   "show": 25
+  },
+  {
+   "ms": 432731,
+   "lastMs": 434214,
+   "screen": "cutscene",
+   "speaker": "Leblanc",
+   "role": "",
+   "text": "Logos. Ormi. Record all of it. Every hole.",
+   "portrait": "leblanc.webp",
+   "narrate": false,
+   "show": 26
+  },
+  {
+   "ms": 434247,
+   "lastMs": 437091,
+   "screen": "cutscene",
+   "speaker": "Logos",
+   "role": "",
+   "text": "...Recording the hole. Naturally.",
+   "portrait": "logos.webp",
+   "narrate": false,
+   "show": 27
+  },
+  {
+   "ms": 437146,
+   "lastMs": 440096,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "The Calm. I can feel it coming apart.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 28
+  },
+  {
+   "ms": 440180,
+   "lastMs": 441763,
+   "screen": "cutscene",
+   "speaker": "Brother",
+   "role": "Gullwings",
+   "text": "Everyone back to the ship. Now",
+   "portrait": "brother-x2.webp",
+   "narrate": false,
+   "show": 29
+  },
+  {
+   "ms": 441796,
+   "lastMs": 444596,
+   "screen": "cutscene",
+   "speaker": "Brother",
+   "role": "Gullwings",
+   "text": "No arguing! This is a Brother order!",
+   "portrait": "brother-x2.webp",
+   "narrate": false,
+   "show": 30,
+   "endMs": 444665
+  }
+ ],
+ "audioDebugFile": {
+  "file": "ffx2-bahamut-win-c7135bec/audio-debug.jsonl",
+  "samples": 4,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 7.47,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "art/title/keyart.2x.webp",
+  "art/characters/tidus/idle.webp",
+  "art/characters/yuna/idle.webp",
+  "art/characters/auron/idle.webp",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.webp",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "art/portraits/auron.webp",
+  "art/portraits/rikku.webp",
+  "art/portraits/wakka.webp",
+  "art/portraits/lulu.webp",
+  "art/portraits/yuna-x2.webp",
+  "art/portraits/rikku-x2.webp",
+  "art/portraits/paine.webp",
+  "art/characters/yuna-white-mage/idle.webp",
+  "art/characters/rikku-dark-knight/idle.webp",
+  "art/characters/paine-warrior/idle.webp",
+  "art/characters/paine-dark-knight/idle.webp",
+  "art/characters/yuna-gunner/idle.webp",
+  "art/characters/rikku-thief/idle.webp",
+  "art/characters/yuna-dark-knight/idle.webp",
+  "art/characters/rikku-alchemist/idle.webp",
+  "art/backdrops/zanarkand-dome.webp",
+  "art/characters/yunalesca-1/idle.webp",
+  "art/characters/braskas-final-aeon-1/idle.webp",
+  "art/backdrops/macalania-temple.webp",
+  "art/characters/anima/idle.webp",
+  "art/backdrops/evrae-airship-deck.webp",
+  "art/characters/evrae/idle.png",
+  "art/backdrops/cavern-stolen-fayth.webp",
+  "art/characters/yojimbo-cavern/idle.webp",
+  "art/backdrops/bevelle-highbridge.webp",
+  "art/characters/seymour-natus/idle.webp",
+  "art/backdrops/garden-of-pain.webp",
+  "art/characters/seymour-omnis/idle.webp",
+  "art/backdrops/via-purifico.webp",
+  "art/characters/isaaru/idle.png",
+  "art/backdrops/sin-fahrenheit-flight.webp",
+  "art/characters/sin-left-fin/idle.png",
+  "art/backdrops/sin-fahrenheit-bevelle.webp",
+  "art/characters/overdrive-sin/idle.png",
+  "art/backdrops/bevelle-underground.webp",
+  "art/characters/ffx2-bahamut/idle.webp",
+  "art/backdrops/farplane.webp",
+  "art/characters/vegnagun-body/idle.webp",
+  "art/backdrops/leblanc-last-room.webp",
+  "art/characters/leblanc/idle.png",
+  "art/backdrops/road-to-the-farplane.webp",
+  "art/characters/x2-shiva/idle.png",
+  "art/backdrops/via-infinito.webp",
+  "art/characters/trema/idle.png",
+  "art/backdrops/den-of-woe.webp",
+  "art/characters/baralai-shade/idle.png",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "art/backdrops/djose-chamber-provisional.webp",
+  "art/characters/x2-ixion/idle.png",
+  "art/characters/x2-anima/idle.png",
+  "art/characters/nooj-shade/idle.png",
+  "art/characters/gippal-shade/idle.png",
+  "audio/music/chapter-select.mp3",
+  "art/portraits/seymour.webp",
+  "art/characters/kimahri/idle.png",
+  "art/pause/ch4-ffx2-bahamut.webp",
+  "art/portraits/ormi.webp",
+  "art/portraits/leblanc.webp",
+  "art/characters/ffx2-bahamut/attack.png",
+  "art/characters/ffx2-bahamut/cast.png",
+  "art/characters/ffx2-bahamut/hurt.png",
+  "art/characters/ffx2-bahamut/ko.png",
+  "art/characters/ffx2-bahamut/telegraph.png",
+  "art/characters/yuna-white-mage/attack.webp",
+  "art/characters/yuna-white-mage/cast.webp",
+  "art/characters/yuna-white-mage/item.webp",
+  "art/characters/yuna-white-mage/hurt.webp",
+  "art/characters/yuna-white-mage/ko.webp",
+  "art/characters/yuna-white-mage/victory.webp",
+  "art/characters/yuna-white-mage/follow.webp",
+  "art/characters/rikku-dark-knight/ready.webp",
+  "art/characters/rikku-dark-knight/attack.webp",
+  "art/characters/rikku-dark-knight/cast.webp",
+  "art/characters/rikku-dark-knight/item.webp",
+  "art/characters/rikku-dark-knight/hurt.webp",
+  "art/characters/rikku-dark-knight/ko.webp",
+  "art/characters/rikku-dark-knight/victory.webp",
+  "art/characters/rikku-dark-knight/follow.webp",
+  "art/characters/paine-warrior/ready.webp",
+  "art/characters/paine-warrior/attack.webp",
+  "art/characters/paine-warrior/cast.webp",
+  "art/characters/paine-warrior/item.webp",
+  "art/characters/paine-warrior/victory.webp",
+  "art/characters/paine-warrior/sleep.webp",
+  "art/characters/paine-warrior/critical.webp",
+  "art/characters/paine-warrior/follow.webp",
+  "art/characters/paine-warrior/od-x2-warrior-armor-break.webp",
+  "art/characters/paine-warrior/od-x2-warrior-power-break.webp",
+  "art/pause/yuna-ffx2.2x.webp",
+  "art/pause/rikku-ffx2.2x.webp",
+  "art/pause/paine.2x.webp",
+  "audio/music/scene-bevelle-underground.mp3",
+  "audio/music/pause.mp3",
+  "art/pause/ch4-ffx2-bahamut.2x.webp",
+  "audio/music/boss-ffx2-aeon.mp3",
+  "art/backdrops/wings/bevelle-underground-left.png",
+  "art/backdrops/wings/bevelle-underground-right.png",
+  "fx/bevelle-underground/depth.png",
+  "art/characters/ffx2-bahamut/splash.png",
+  "art/characters/yuna-white-mage/twirl-start.webp",
+  "art/characters/yuna-white-mage/twirl-going.png",
+  "art/characters/yuna-gunner/twirl-mid.png",
+  "art/characters/rikku-dark-knight/twirl-start.webp",
+  "art/characters/rikku-dark-knight/twirl-going.png",
+  "art/characters/rikku-gunner/twirl-mid.png",
+  "art/characters/paine-warrior/twirl-start.webp",
+  "art/characters/paine-warrior/twirl-going.png",
+  "art/characters/paine-gunner/twirl-mid.png",
+  "art/pause/yuna-ffx2.webp",
+  "art/portrait-parts/yuna-ffx2/2x/mouth-open-smile.png",
+  "art/portrait-parts/yuna-ffx2/2x/mouth-concerned-press.png",
+  "art/portrait-parts/yuna-ffx2/2x/lidR-closed.png",
+  "art/portrait-parts/yuna-ffx2/2x/lidL-closed.png",
+  "art/portrait-parts/yuna-ffx2/2x/eyeR-socket.webp",
+  "art/portrait-parts/yuna-ffx2/2x/eyeR-iris.webp",
+  "art/portrait-parts/yuna-ffx2/2x/eyeR-catch.png",
+  "art/portrait-parts/yuna-ffx2/2x/eyeR-window.png",
+  "art/portrait-parts/yuna-ffx2/2x/eyeL-socket.webp",
+  "art/portrait-parts/yuna-ffx2/2x/eyeL-iris.webp",
+  "art/portrait-parts/yuna-ffx2/2x/eyeL-catch.png",
+  "art/portrait-parts/yuna-ffx2/2x/eyeL-window.png",
+  "art/pause/rikku-ffx2.webp",
+  "art/portrait-parts/rikku-ffx2/2x/mouth-open-smile.png",
+  "art/portrait-parts/rikku-ffx2/2x/mouth-concerned-press.png",
+  "art/portrait-parts/rikku-ffx2/2x/lidL-closed.png",
+  "art/portrait-parts/rikku-ffx2/2x/eyeL-socket.webp",
+  "art/portrait-parts/rikku-ffx2/2x/eyeL-iris.webp",
+  "art/portrait-parts/rikku-ffx2/2x/eyeL-catch.png",
+  "art/portrait-parts/rikku-ffx2/2x/eyeL-window.png",
+  "art/pause/paine.webp",
+  "art/portrait-parts/paine/2x/mouth-open-smile.png",
+  "art/portrait-parts/paine/2x/mouth-concerned-press.png",
+  "art/portrait-parts/paine/2x/lidR-closed.png",
+  "art/portrait-parts/paine/2x/lidL-closed.png",
+  "art/portrait-parts/paine/2x/eyeR-socket.webp",
+  "art/portrait-parts/paine/2x/eyeR-iris.webp",
+  "art/portrait-parts/paine/2x/eyeR-catch.png",
+  "art/portrait-parts/paine/2x/eyeR-window.png",
+  "art/portrait-parts/paine/2x/eyeL-socket.webp",
+  "art/portrait-parts/paine/2x/eyeL-iris.webp",
+  "art/portrait-parts/paine/2x/eyeL-catch.png",
+  "art/portrait-parts/paine/2x/eyeL-window.png",
+  "art/portraits/logos.webp",
+  "art/portraits/brother-x2.webp"
+ ]
+}

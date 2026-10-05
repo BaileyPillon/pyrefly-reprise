@@ -1,0 +1,357 @@
+{
+ "name": "governor-step-seymour-flux-1600x900",
+ "mode": "step",
+ "chapter": "seymour-flux",
+ "size": "1600x900",
+ "query": "coach=off",
+ "hooks": [
+  "setSeed(1) before the first key",
+  "?coach=off",
+  "crisp.simulate (QA seam)"
+ ],
+ "series": [
+  {
+   "label": "first menu",
+   "t": 15346,
+   "rung": "fplus",
+   "pinned": false,
+   "ss": 2,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false}]"
+  },
+  {
+   "label": "slow+1s",
+   "t": 16405,
+   "rung": "fplus",
+   "pinned": false,
+   "ss": 2,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false}]"
+  },
+  {
+   "label": "slow+2s",
+   "t": 17417,
+   "rung": "f",
+   "pinned": false,
+   "ss": 1.5,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true}]"
+  },
+  {
+   "label": "slow+3s",
+   "t": 18419,
+   "rung": "f",
+   "pinned": false,
+   "ss": 1.5,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true}]"
+  },
+  {
+   "label": "slow+4s",
+   "t": 19433,
+   "rung": "f",
+   "pinned": false,
+   "ss": 1.5,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true}]"
+  },
+  {
+   "label": "slow+5s",
+   "t": 20442,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true}]"
+  },
+  {
+   "label": "slow+6s",
+   "t": 21454,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true}]"
+  },
+  {
+   "label": "slow+7s",
+   "t": 22461,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true}]"
+  },
+  {
+   "label": "slow+8s",
+   "t": 23471,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false}]"
+  },
+  {
+   "label": "slow+9s",
+   "t": 24485,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false}]"
+  },
+  {
+   "label": "slow+10s",
+   "t": 25498,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false}]"
+  },
+  {
+   "label": "slow+11s",
+   "t": 26504,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false}]"
+  },
+  {
+   "label": "slow+12s",
+   "t": 27515,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "slow+13s",
+   "t": 28531,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "slow+14s",
+   "t": 29539,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "healthy+1s",
+   "t": 30596,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "healthy+2s",
+   "t": 31609,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "healthy+3s",
+   "t": 32620,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "healthy+4s",
+   "t": 33633,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "healthy+5s",
+   "t": 34638,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "healthy+6s",
+   "t": 35651,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "healthy+7s",
+   "t": 36664,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "healthy+8s",
+   "t": 37679,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "healthy+9s",
+   "t": 38690,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  },
+  {
+   "label": "final",
+   "t": 38692,
+   "rung": "a2",
+   "pinned": false,
+   "ss": 1,
+   "windows": "[{\"rung\":\"fplus\",\"median\":16.8,\"samples\":121,\"stepped\":false},{\"rung\":\"fplus\",\"median\":45.8,\"samples\":121,\"stepped\":true},{\"rung\":\"f\",\"median\":46.6,\"samples\":121,\"stepped\":true},{\"rung\":\"a2\",\"median\":46.6,\"samples\":121,\"stepped\":false},{\"rung\":\"a2\",\"median\":46.7,\"samples\":121,\"stepped\":false},{\"rung"
+  }
+ ],
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "t0": 1791180480973,
+ "walk": [
+  "setSeed(1) before the first key",
+  "board card seymour-flux by arrows",
+  "prep confirmed by Enter",
+  "cutscene held-skip x1"
+ ],
+ "first": {
+  "label": "first menu",
+  "t": 15346,
+  "rung": "fplus",
+  "pinned": false,
+  "class": "high",
+  "tier": "full",
+  "ss": 2,
+  "simulated": 0,
+  "windows": [
+   {
+    "rung": "fplus",
+    "median": 16.8,
+    "samples": 121,
+    "stepped": false
+   }
+  ],
+  "passes": [
+   "0:scene(off)",
+   "1:scene-msaa(off)",
+   "2:ssaa",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas",
+   "8:grade",
+   "9:SpectacleShader(off)"
+  ]
+ },
+ "final": {
+  "label": "final",
+  "t": 38692,
+  "rung": "a2",
+  "pinned": false,
+  "class": "high",
+  "tier": "full",
+  "ss": 1,
+  "simulated": 0,
+  "windows": [
+   {
+    "rung": "fplus",
+    "median": 16.8,
+    "samples": 121,
+    "stepped": false
+   },
+   {
+    "rung": "fplus",
+    "median": 45.8,
+    "samples": 121,
+    "stepped": true
+   },
+   {
+    "rung": "f",
+    "median": 46.6,
+    "samples": 121,
+    "stepped": true
+   },
+   {
+    "rung": "a2",
+    "median": 46.6,
+    "samples": 121,
+    "stepped": false
+   },
+   {
+    "rung": "a2",
+    "median": 46.7,
+    "samples": 121,
+    "stepped": false
+   },
+   {
+    "rung": "a2",
+    "median": 46.6,
+    "samples": 121,
+    "stepped": false
+   },
+   {
+    "rung": "a2",
+    "median": 46.7,
+    "samples": 121,
+    "stepped": false
+   },
+   {
+    "rung": "a2",
+    "median": 17.4,
+    "samples": 121,
+    "stepped": false
+   },
+   {
+    "rung": "a2",
+    "median": 16.6,
+    "samples": 121,
+    "stepped": false
+   },
+   {
+    "rung": "a2",
+    "median": 16.65,
+    "samples": 120,
+    "stepped": false
+   },
+   {
+    "rung": "a2",
+    "median": 16.6,
+    "samples": 121,
+    "stepped": false
+   }
+  ],
+  "passes": [
+   "0:scene",
+   "1:scene-msaa(off)",
+   "2:ssaa(off)",
+   "3:bloom",
+   "4:soe",
+   "5:TiltShiftShader",
+   "6:TiltShiftShader",
+   "7:cas(off)",
+   "8:smaa",
+   "9:grade",
+   "10:SpectacleShader(off)"
+  ]
+ },
+ "fpsAfter": {
+  "frames": 180,
+  "medianMs": 16.7,
+  "p95Ms": 16.7,
+  "maxMs": 16.8,
+  "fps": 59.9
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "rungSequence": [
+  "fplus",
+  "f",
+  "a2"
+ ]
+}

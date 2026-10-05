@@ -1,0 +1,68 @@
+{
+ "name": "phoneffx2-ffx2-bahamut-shell",
+ "chapter": "ffx2-bahamut",
+ "hooks": [
+  "setSeed(1) + gotoChapter (navigation only, ?coach=off)"
+ ],
+ "log": [
+  "first menu, phase idle",
+  "tapped White Magic then Shell",
+  "target step: {\"targets\":{\"n\":0,\"lit\":0,\"selecting\":true},\"confirm\":{\"text\":\"Shell → All allies\",\"rect\":{\"x\":112,\"y\":754,\"w\":270,\"h\":52},\"topIsControl\":true,\"disabled\":false}}",
+  "tapped the CONFIRM control: true",
+  "actions: [{\"actor\":\"yuna\",\"ability\":\"Shell\"},{\"actor\":\"bahamut\",\"ability\":\"Attack\"}] keyboardFallbacks 0"
+ ],
+ "rows0": [
+  "White Magic",
+  "Change",
+  "Item"
+ ],
+ "subRows": [
+  "Cure",
+  "Shell",
+  "Protect",
+  "Esuna",
+  "Cura",
+  "Vigor",
+  "Dispel"
+ ],
+ "targets": {
+  "n": 0,
+  "lit": 0,
+  "selecting": true
+ },
+ "confirmControl": {
+  "text": "Shell → All allies",
+  "rect": {
+   "x": 112,
+   "y": 754,
+   "w": 270,
+   "h": 52
+  },
+  "topIsControl": true,
+  "disabled": false
+ },
+ "actionStarts": [
+  {
+   "actor": "yuna",
+   "ability": "Shell"
+  },
+  {
+   "actor": "bahamut",
+   "ability": "Attack"
+  }
+ ],
+ "tookTurn": true,
+ "touch": {
+  "hasTouch": true,
+  "isMobile": true,
+  "taps": 3,
+  "tapped": [
+   "row:White Magic",
+   "row:Shell",
+   "confirm:bar"
+  ],
+  "keyboardFallbacks": 0
+ },
+ "consoleErrors": [],
+ "notFound": []
+}

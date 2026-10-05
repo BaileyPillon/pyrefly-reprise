@@ -1,0 +1,212 @@
+{
+ "name": "ladyluck-tap-active-ffx2-ixion-djose-s3",
+ "mode": "tap",
+ "atb": "active",
+ "chapter": "ffx2-ixion-djose",
+ "seed": 3,
+ "size": "390x844",
+ "wanted": [
+  "cherry",
+  "cherry",
+  "cherry"
+ ],
+ "hooks": [
+  "gotoChapter + setSeed (navigation only, ?coach=off)",
+  "X-2 BATTLE set to ACTIVE by real keys in the pause OPTIONS"
+ ],
+ "log": [
+  "first menu, phase idle",
+  "ATB row: X-2 BATTLEWAIT -> X-2 BATTLEACTIVE",
+  "menu idle: Change opened, rows: [\"Lady Luck\",\"Black Mage\"]",
+  "tapped Lady Luck: Lady Luck",
+  "menu owner=paine lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Skill\",\"Change\",\"Item\"]",
+  "filler turn: command:paine [\"Attack\"]",
+  "menu owner=rikku lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Skill\",\"Change\",\"Item\"]",
+  "filler turn: command:rikku [\"Attack\"]",
+  "menu owner=yuna lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Skill\",\"Change\",\"Item\"]",
+  "Skill rows [\"Bribe\",\"Two Dice\",\"Attack Reels\",\"Magic Reels\",\"Luck\",\"Felicity\",\"Critical\"]",
+  "chose Magic Reels",
+  "target {\"confirmed\":true,\"target\":\"x2-ixion\",\"wanted\":null,\"mismatch\":false,\"taps\":1}",
+  "overlay: {\"subtitle\":\"TAP TO STOP\",\"input\":\"pointer\",\"stopOrder\":[0,1,2],\"phases\":[0.06963570602238178,5.264126198831946,1.8623820701614022],\"timerMs\":12000,\"strip\":[\"red7\",\"bar\",\"cherry\",\"skull\",\"hat\",\"staff\"]}",
+  "press 1: reel 0 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "press 2: reel 1 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "press 3: reel 2 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "engine: [{\"seq\":51,\"type\":\"message\",\"actor\":null,\"ability\":null,\"target\":null},{\"seq\":53,\"type\":\"damage\",\"actor\":null,\"ability\":null,\"target\":\"x2-ixion\"},{\"seq\":59,\"type\":\"action-start\",\"actor\":\"x2-ixion\",\"ability\":\"Thundara\",\"target\":null},{\"seq\":61,\"type\":\"damage\",\"actor\":null,\"ability\":null,\"target\":\"yuna\"},{\"seq\":63,\"type\":\"damage\",\"actor\":null,\"ability\":null,\"target\":\"rikku\"},{\"seq\":65,\"type\":\"damage\",\"actor\":null,\"ability\":null,\"target\":\"paine\"}] msgs [\"Flare\"]",
+  "reel events: []"
+ ],
+ "atbRowBefore": "X-2 BATTLEWAIT",
+ "atbRowAfter": "X-2 BATTLEACTIVE",
+ "savedAtb": {
+  "masterVolume": 0.8,
+  "musicVolume": 0.7,
+  "sfxVolume": 0.7,
+  "sfxBalanceMigrated": true,
+  "textSpeed": 1,
+  "skipSeenCutscenes": false,
+  "lowEffects": false,
+  "fxLight": true,
+  "fxLiving": true,
+  "fxSpectacle": true,
+  "fxDof": true,
+  "fxFog": true,
+  "fxEdges": true,
+  "fxBreath": true,
+  "fxKo": true,
+  "fxFraming": true,
+  "fxHero": true,
+  "fxSphere": true,
+  "fxSplash": true,
+  "textSize": 1,
+  "guideVisible": true,
+  "advisorVisible": true,
+  "intentVisible": true,
+  "ffx2Atb": "active",
+  "ffx2AtbMigrated": true,
+  "pausePanelsHidden": false,
+  "battleHelp": true,
+  "reduceMotion": false
+ },
+ "rowsSeen": [
+  {
+   "who": "idle",
+   "rows": [
+    "White Magic",
+    "Change",
+    "Item"
+   ]
+  }
+ ],
+ "changedBy": "idle",
+ "ladyLuckGirl": "yuna",
+ "skillRows": [
+  "Bribe",
+  "Two Dice",
+  "Attack Reels",
+  "Magic Reels",
+  "Luck",
+  "Felicity",
+  "Critical"
+ ],
+ "reelsRow": "Magic Reels",
+ "overlayOpened": {
+  "subtitle": "TAP TO STOP",
+  "input": "pointer",
+  "layout": {
+   "strip": [
+    "red7",
+    "bar",
+    "cherry",
+    "skull",
+    "hat",
+    "staff"
+   ],
+   "stopOrder": [
+    0,
+    1,
+    2
+   ],
+   "phases": [
+    0.06963570602238178,
+    5.264126198831946,
+    1.8623820701614022
+   ],
+   "timerMs": 12000
+  },
+  "rect": {
+   "x": 6.141792297363281,
+   "y": 56,
+   "w": 357.4664306640625,
+   "h": 176.265625
+  },
+  "warn": "DUD: −75% PARTY HP"
+ },
+ "presses": [
+  {
+   "k": 0,
+   "armed": 0,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "331.1",
+   "waitedMs": 183,
+   "subtitleAfter": "TAP TO STOP",
+   "armedNext": "1"
+  },
+  {
+   "k": 1,
+   "armed": 1,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "581.4",
+   "waitedMs": 51,
+   "subtitleAfter": "TAP TO STOP",
+   "armedNext": "2"
+  },
+  {
+   "k": 2,
+   "armed": 2,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "1187.0",
+   "waitedMs": 447,
+   "subtitleAfter": "TAP TO STOP",
+   "armedNext": ""
+  }
+ ],
+ "final": null,
+ "engine": [
+  {
+   "seq": 51,
+   "type": "message",
+   "actor": null,
+   "ability": null,
+   "target": null
+  },
+  {
+   "seq": 53,
+   "type": "damage",
+   "actor": null,
+   "ability": null,
+   "target": "x2-ixion"
+  },
+  {
+   "seq": 59,
+   "type": "action-start",
+   "actor": "x2-ixion",
+   "ability": "Thundara",
+   "target": null
+  },
+  {
+   "seq": 61,
+   "type": "damage",
+   "actor": null,
+   "ability": null,
+   "target": "yuna"
+  },
+  {
+   "seq": 63,
+   "type": "damage",
+   "actor": null,
+   "ability": null,
+   "target": "rikku"
+  },
+  {
+   "seq": 65,
+   "type": "damage",
+   "actor": null,
+   "ability": null,
+   "target": "paine"
+  }
+ ],
+ "engineMessage": [
+  "Flare"
+ ],
+ "reelEvents": [],
+ "consoleErrors": [],
+ "notFound": []
+}

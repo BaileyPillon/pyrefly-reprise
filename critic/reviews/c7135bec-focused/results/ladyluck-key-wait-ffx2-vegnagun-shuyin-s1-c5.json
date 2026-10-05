@@ -1,0 +1,165 @@
+{
+ "name": "ladyluck-key-wait-ffx2-vegnagun-shuyin-s1-c5",
+ "mode": "key",
+ "atb": "wait",
+ "chapter": "ffx2-vegnagun-shuyin",
+ "seed": 1,
+ "size": "1600x900",
+ "wanted": [
+  "cherry",
+  "cherry",
+  "cherry"
+ ],
+ "hooks": [
+  "gotoChapter + setSeed (navigation only, ?coach=off)",
+  "ATB mode as the default (Wait)"
+ ],
+ "log": [
+  "first menu, phase play:action-start",
+  "menu play:action-start: Change opened, rows: [\"Gunner\",\"Lady Luck\"]",
+  "chose Lady Luck: Lady Luck",
+  "menu owner=paine lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Skill\",\"Change\",\"Item\"]",
+  "filler turn: play:turn-start [\"Attack\"]",
+  "menu owner=rikku lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Skill\",\"Change\",\"Item\"]",
+  "filler turn: play:action-end [\"Attack\"]",
+  "menu owner=yuna lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Skill\",\"Change\",\"Item\"]",
+  "Skill rows [\"Bribe\",\"Two Dice\",\"Attack Reels\",\"Magic Reels\",\"Luck\",\"Felicity\",\"Critical\"]",
+  "chose Magic Reels",
+  "target {\"confirmed\":true}",
+  "overlay: {\"subtitle\":\"PRESS ENTER TO STOP\",\"input\":\"keyboard\",\"stopOrder\":[1,0,2],\"phases\":[1.145241470541805,0.25637825997546315,2.564291734714061],\"timerMs\":12000,\"strip\":[\"red7\",\"bar\",\"cherry\",\"skull\",\"hat\",\"staff\"]}",
+  "press 1: reel 1 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "press 2: reel 0 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "press 3: reel 2 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "engine: [{\"seq\":54,\"type\":\"message\",\"actor\":null,\"ability\":null,\"target\":null},{\"seq\":56,\"type\":\"damage\",\"actor\":null,\"ability\":null,\"target\":\"vegnagun-tail\"},{\"seq\":61,\"type\":\"action-start\",\"actor\":\"vegnagun-tail\",\"ability\":\"Tail Beam\",\"target\":null},{\"seq\":63,\"type\":\"damage\",\"actor\":null,\"ability\":null,\"target\":\"paine\"}] msgs [\"Flare\"]",
+  "reel events: []"
+ ],
+ "rowsSeen": [
+  {
+   "who": "play:action-start",
+   "rows": [
+    "White Magic",
+    "Change",
+    "Item"
+   ]
+  }
+ ],
+ "changedBy": "play:action-start",
+ "ladyLuckGirl": "yuna",
+ "skillRows": [
+  "Bribe",
+  "Two Dice",
+  "Attack Reels",
+  "Magic Reels",
+  "Luck",
+  "Felicity",
+  "Critical"
+ ],
+ "reelsRow": "Magic Reels",
+ "overlayOpened": {
+  "subtitle": "PRESS ENTER TO STOP",
+  "input": "keyboard",
+  "layout": {
+   "strip": [
+    "red7",
+    "bar",
+    "cherry",
+    "skull",
+    "hat",
+    "staff"
+   ],
+   "stopOrder": [
+    1,
+    0,
+    2
+   ],
+   "phases": [
+    1.145241470541805,
+    0.25637825997546315,
+    2.564291734714061
+   ],
+   "timerMs": 12000
+  },
+  "rect": {
+   "x": 26.829214096069336,
+   "y": 140,
+   "w": 870.716552734375,
+   "h": 332.6953125
+  },
+  "warn": "DUD: −75% PARTY HP"
+ },
+ "presses": [
+  {
+   "k": 0,
+   "armed": 1,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "327.7",
+   "waitedMs": 148,
+   "subtitleAfter": "PRESS ENTER TO STOP",
+   "armedNext": "0"
+  },
+  {
+   "k": 1,
+   "armed": 0,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "1344.7",
+   "waitedMs": 847,
+   "subtitleAfter": "PRESS ENTER TO STOP",
+   "armedNext": "2"
+  },
+  {
+   "k": 2,
+   "armed": 2,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "2263.9",
+   "waitedMs": 795,
+   "subtitleAfter": "PRESS ENTER TO STOP",
+   "armedNext": ""
+  }
+ ],
+ "final": null,
+ "engine": [
+  {
+   "seq": 54,
+   "type": "message",
+   "actor": null,
+   "ability": null,
+   "target": null
+  },
+  {
+   "seq": 56,
+   "type": "damage",
+   "actor": null,
+   "ability": null,
+   "target": "vegnagun-tail"
+  },
+  {
+   "seq": 61,
+   "type": "action-start",
+   "actor": "vegnagun-tail",
+   "ability": "Tail Beam",
+   "target": null
+  },
+  {
+   "seq": 63,
+   "type": "damage",
+   "actor": null,
+   "ability": null,
+   "target": "paine"
+  }
+ ],
+ "engineMessage": [
+  "Flare"
+ ],
+ "reelEvents": [],
+ "consoleErrors": [],
+ "notFound": []
+}

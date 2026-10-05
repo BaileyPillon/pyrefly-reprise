@@ -1,0 +1,311 @@
+{
+  "r1Table": "| Window | c7135bec, first menu | 816d80f9 first menu | Attack step (Mortibody aimed) | cursor on Natus | cursor back on Mortibody | card top (px) | live r38, worst |\n|---|---|---|---|---|---|---|---|\n| 1280x720 | not measured | 6.9% | 7.0% | 0.0% | 7.1% | 0 | 0.0% |\n| 1366x768 | not measured | 7.6% | 7.9% | 0.0% | 7.9% | 0 | 0.0% |\n| 1440x810 | not measured | 0.0% | 0.0% | 0.0% | 0.0% | 0 | not run (unpinned) |\n| 1600x900 | 47.9% | 0.0% | 0.1% | 0.0% | 0.0% | 8 | 0.0% |\n| 2000x1012 | 47.3% | 0.0% | 0.0% | 0.0% | 0.0% | 11 | 0.0% |\n| 2560x1440 | 47.1% | 0.0% | 0.0% | 0.0% | 0.0% | 16 | 0.0% |",
+  "r2Table": "| Run | fps (slow frames) | Battle s | Evrae swaps / cast swaps | Evrae cast swaps at 0.40 or more | of the cast swaps that blended 7+ frames | Snaps (per min) | Double images 0.40+ (chapter) | Jerks 40 px+ | Head over / feet over |\n|---|---|---|---|---|---|---|---|---|---|\n| live r38 baseline (04:57Z) | 42.4 (2266) | 394.2 | 110 / 20 | 9 | 6 of 6 | 3 (0.46) | 10 | 92 | 85 / 280 |\n| live r38 control (this review) | 59.5 (48) | 330 | 108 / 19 | 19 | 19 of 19 | 2 (0.36) | 20 | 25 | 186 / 260 |\n| c7135bec (hard cut) | 59.5 (44) | 328.6 | 105 / 20 | 0 | 0 of 0 | 107 (19.54) | 2 | 38 | 152 / 1 |\n| 816d80f9 (crossfade restored) | 59.5 (43) | 329.2 | 110 / 20 | 19 | 19 of 19 | 3 (0.55) | 20 | 23 | 149 / 0 |",
+  "startedAt": "2026-10-05T07:35:00Z",
+  "previewPid": 44728,
+  "r1": {
+    "rows": [
+      {
+        "size": "1280x720",
+        "menu": 0.069,
+        "atk": 0.07,
+        "natusAimed": 0,
+        "mortibodyAgain": 0.071,
+        "top": 0,
+        "clipped": false,
+        "candWorst": 0.071,
+        "liveWorst": 0,
+        "oldMenu": null,
+        "natusBox": {
+          "x": 867,
+          "y": 185,
+          "w": 162,
+          "h": 280
+        },
+        "liveNatusBox": {
+          "x": 693,
+          "y": 284,
+          "w": 92,
+          "h": 165
+        }
+      },
+      {
+        "size": "1366x768",
+        "menu": 0.076,
+        "atk": 0.079,
+        "natusAimed": 0,
+        "mortibodyAgain": 0.079,
+        "top": 0,
+        "clipped": false,
+        "candWorst": 0.079,
+        "liveWorst": 0,
+        "oldMenu": null,
+        "natusBox": {
+          "x": 926,
+          "y": 198,
+          "w": 173,
+          "h": 298
+        },
+        "liveNatusBox": {
+          "x": 738,
+          "y": 303,
+          "w": 98,
+          "h": 176
+        }
+      },
+      {
+        "size": "1440x810",
+        "menu": 0,
+        "atk": 0,
+        "natusAimed": 0,
+        "mortibodyAgain": 0,
+        "top": 0,
+        "clipped": false,
+        "candWorst": 0,
+        "liveWorst": null,
+        "oldMenu": null,
+        "natusBox": {
+          "x": 976,
+          "y": 208,
+          "w": 181,
+          "h": 314
+        },
+        "liveNatusBox": null
+      },
+      {
+        "size": "1600x900",
+        "menu": 0,
+        "atk": 0.001,
+        "natusAimed": 0,
+        "mortibodyAgain": 0,
+        "top": 8,
+        "clipped": false,
+        "candWorst": 0.001,
+        "liveWorst": 0,
+        "oldMenu": 0.479,
+        "natusBox": {
+          "x": 1085,
+          "y": 231,
+          "w": 203,
+          "h": 349
+        },
+        "liveNatusBox": {
+          "x": 866,
+          "y": 355,
+          "w": 116,
+          "h": 207
+        }
+      },
+      {
+        "size": "2000x1012",
+        "menu": 0,
+        "atk": 0,
+        "natusAimed": 0,
+        "mortibodyAgain": 0,
+        "top": 11,
+        "clipped": false,
+        "candWorst": 0,
+        "liveWorst": 0,
+        "oldMenu": 0.473,
+        "natusBox": {
+          "x": 1330,
+          "y": 261,
+          "w": 228,
+          "h": 393
+        },
+        "liveNatusBox": {
+          "x": 1150,
+          "y": 396,
+          "w": 136,
+          "h": 241
+        }
+      },
+      {
+        "size": "2560x1440",
+        "menu": 0,
+        "atk": 0,
+        "natusAimed": 0,
+        "mortibodyAgain": 0,
+        "top": 16,
+        "clipped": false,
+        "candWorst": 0,
+        "liveWorst": 0,
+        "oldMenu": 0.471,
+        "natusBox": {
+          "x": 1736,
+          "y": 369,
+          "w": 317,
+          "h": 558
+        },
+        "liveNatusBox": {
+          "x": 1386,
+          "y": 568,
+          "w": 187,
+          "h": 332
+        }
+      }
+    ],
+    "paint": {
+      "1280x720": {
+        "naturalPixelsInBox": 5521,
+        "underCard": 86,
+        "shareUnderCard": 0.0156,
+        "boxCover": 0.075
+      },
+      "1366x768": {
+        "naturalPixelsInBox": 6254,
+        "underCard": 141,
+        "shareUnderCard": 0.0225,
+        "boxCover": 0.0836
+      }
+    },
+    "smallWorst": 0.079,
+    "bigWorst": 0.001,
+    "anyClip": false
+  },
+  "r2": {
+    "rows": [
+      {
+        "name": "live r38 baseline (04:57Z)",
+        "fps": 42.4,
+        "slow": 2266,
+        "maxDt": 918.4,
+        "secs": 394.2,
+        "counted": 440,
+        "snaps": 3,
+        "spm": 0.46,
+        "ghost": 10,
+        "worstGhost": 0.47,
+        "jerks40": 92,
+        "worstJerk": 276.6,
+        "headOver": 85,
+        "feetOver": 280,
+        "maxFeet": 259.4,
+        "swaps": 110,
+        "cast": 20,
+        "castOver": 9,
+        "castMax": 0.439,
+        "castFull": 6,
+        "castFullOver": 6,
+        "meanBlend": 5.845454545454546,
+        "evraeSnaps": 1
+      },
+      {
+        "name": "live r38 control (this review)",
+        "fps": 59.5,
+        "slow": 48,
+        "maxDt": 121.5,
+        "secs": 330,
+        "counted": 440,
+        "snaps": 2,
+        "spm": 0.36,
+        "ghost": 20,
+        "worstGhost": 0.472,
+        "jerks40": 25,
+        "worstJerk": 265.2,
+        "headOver": 186,
+        "feetOver": 260,
+        "maxFeet": 257.4,
+        "swaps": 108,
+        "cast": 19,
+        "castOver": 19,
+        "castMax": 0.439,
+        "castFull": 19,
+        "castFullOver": 19,
+        "meanBlend": 7.9907407407407405,
+        "evraeSnaps": 0
+      },
+      {
+        "name": "c7135bec (hard cut)",
+        "fps": 59.5,
+        "slow": 44,
+        "maxDt": 126.5,
+        "secs": 328.6,
+        "counted": 437,
+        "snaps": 107,
+        "spm": 19.54,
+        "ghost": 2,
+        "worstGhost": 0.422,
+        "jerks40": 38,
+        "worstJerk": 267.6,
+        "headOver": 152,
+        "feetOver": 1,
+        "maxFeet": 4.7,
+        "swaps": 105,
+        "cast": 20,
+        "castOver": 0,
+        "castMax": 0,
+        "castFull": 0,
+        "castFullOver": 0,
+        "meanBlend": 0,
+        "evraeSnaps": 105
+      },
+      {
+        "name": "816d80f9 (crossfade restored)",
+        "fps": 59.5,
+        "slow": 43,
+        "maxDt": 136.2,
+        "secs": 329.2,
+        "counted": 438,
+        "snaps": 3,
+        "spm": 0.55,
+        "ghost": 20,
+        "worstGhost": 0.439,
+        "jerks40": 23,
+        "worstJerk": 265.8,
+        "headOver": 149,
+        "feetOver": 0,
+        "maxFeet": 0.9,
+        "swaps": 110,
+        "cast": 20,
+        "castOver": 19,
+        "castMax": 0.439,
+        "castFull": 19,
+        "castFullOver": 19,
+        "meanBlend": 7.872727272727273,
+        "evraeSnaps": 1
+      }
+    ],
+    "lc": {
+      "swaps": 108,
+      "cast": 19,
+      "castOver": 19,
+      "castMax": 0.439,
+      "castFull": 19,
+      "castFullOver": 19,
+      "meanBlend": 7.9907407407407405,
+      "evraeSnaps": 0
+    },
+    "sameBehaviour": true
+  },
+  "combined": {
+    "battleSeconds": 1174.2,
+    "counted": 1269,
+    "size": {
+      "maxHeadJumpPct": 115.7,
+      "maxHeadJumpPctRegistration": 8.4,
+      "headOverTolerance": 278,
+      "maxFeetShiftPx": 140.6,
+      "feetOverTolerance": 136,
+      "headMeasured": 1269,
+      "headRegistration": 468,
+      "headSilhouette": 801,
+      "headUnmeasured": 0
+    },
+    "motion": {
+      "snaps": 12,
+      "snapsPerMinute": 0.61,
+      "hardCuts": 15,
+      "hardCutsPerMinute": 0.77,
+      "ghostSwaps": 1203,
+      "ghostFrames": 4980,
+      "worstGhostSeverity": 0.439,
+      "ghostOverFail": 33,
+      "jerks": 320,
+      "worstJerkPx": 353.1,
+      "jerksOverFail": 131,
+      "lowestIou": 0.007,
+      "maxCentroidShiftPx": 192.8
+    }
+  }
+}

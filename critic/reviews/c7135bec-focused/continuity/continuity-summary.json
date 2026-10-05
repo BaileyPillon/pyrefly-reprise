@@ -1,0 +1,138 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "FAIL",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 476.7,
+   "swaps": 440,
+   "snapsPerMinute": 1.01,
+   "maxHeadJumpPct": 39.4,
+   "maxFeetShiftPx": 36.2,
+   "worstJerkPx": 353.1,
+   "strips": 20,
+   "worstSwapStrips": [
+    "seymour-flux-win-c7135bec/continuity/strips/swap-087-seymour-flux-idle-hurt.jpg",
+    "seymour-flux-win-c7135bec/continuity/strips/swap-089-seymour-flux-hurt-idle.jpg",
+    "seymour-flux-win-c7135bec/continuity/strips/swap-189-seymour-flux-telegraph-attack.jpg",
+    "seymour-flux-win-c7135bec/continuity/strips/swap-076-bahamut-attack-idle.jpg",
+    "seymour-flux-win-c7135bec/continuity/strips/swap-013-yuna-idle-ko.jpg",
+    "seymour-flux-win-c7135bec/continuity/strips/swap-240-tidus-hurt-ko.jpg",
+    "seymour-flux-win-c7135bec/continuity/strips/swap-198-tidus-idle-ko.jpg",
+    "seymour-flux-win-c7135bec/continuity/strips/swap-188-seymour-flux-idle-telegraph.jpg",
+    "seymour-flux-win-c7135bec/continuity/strips/swap-404-seymour-flux-cast-hurt.jpg",
+    "seymour-flux-win-c7135bec/continuity/strips/swap-012-yuna-ko-idle.jpg"
+   ],
+   "unverified": null
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "checks": {
+    "CHK-026": "FAIL",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 368.3,
+   "swaps": 391,
+   "snapsPerMinute": 0.16,
+   "maxHeadJumpPct": 77.3,
+   "maxFeetShiftPx": 140.6,
+   "worstJerkPx": 166.3,
+   "strips": 20,
+   "worstSwapStrips": [
+    "ffx2-bahamut-win-c7135bec/continuity/strips/swap-392-bahamut-hurt-ko.jpg",
+    "ffx2-bahamut-win-c7135bec/continuity/strips/swap-381-paine-follow-idle.jpg",
+    "ffx2-bahamut-win-c7135bec/continuity/strips/swap-364-paine-ready-attack.jpg",
+    "ffx2-bahamut-win-c7135bec/continuity/strips/swap-341-paine-od-x2-warrior-armor-break-ready.jpg",
+    "ffx2-bahamut-win-c7135bec/continuity/strips/swap-302-paine-cast-od-x2-warrior-armor-break.jpg",
+    "ffx2-bahamut-win-c7135bec/continuity/strips/swap-340-paine-hurt-od-x2-warrior-armor-break.jpg",
+    "ffx2-bahamut-win-c7135bec/continuity/strips/swap-279-paine-od-x2-warrior-armor-break-idle.jpg",
+    "ffx2-bahamut-win-c7135bec/continuity/strips/swap-337-paine-od-x2-warrior-armor-break-hurt.jpg",
+    "ffx2-bahamut-win-c7135bec/continuity/strips/swap-379-paine-attack-follow.jpg",
+    "ffx2-bahamut-win-c7135bec/continuity/strips/swap-358-rikku-hurt-idle.jpg"
+   ],
+   "unverified": null
+  },
+  {
+   "chapter": "evrae-airship",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "FAIL",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 328.6,
+   "swaps": 437,
+   "snapsPerMinute": 19.54,
+   "maxHeadJumpPct": 115.7,
+   "maxFeetShiftPx": 4.7,
+   "worstJerkPx": 267.6,
+   "strips": 19,
+   "worstSwapStrips": [
+    "evrae-airship-win-c7135bec/continuity/strips/swap-010-rikku-hurt-ko.jpg",
+    "evrae-airship-win-c7135bec/continuity/strips/swap-027-evrae-cast-idle.jpg",
+    "evrae-airship-win-c7135bec/continuity/strips/swap-318-tidus-idle-ko.jpg",
+    "evrae-airship-win-c7135bec/continuity/strips/swap-365-evrae-idle-cast.jpg",
+    "evrae-airship-win-c7135bec/continuity/strips/swap-014-rikku-ko-idle.jpg",
+    "evrae-airship-win-c7135bec/continuity/strips/swap-006-rikku-follow-idle.jpg",
+    "evrae-airship-win-c7135bec/continuity/strips/swap-005-rikku-attack-follow.jpg",
+    "evrae-airship-win-c7135bec/continuity/strips/swap-322-tidus-ko-critical.jpg",
+    "evrae-airship-win-c7135bec/continuity/strips/swap-229-kimahri-idle-hurt.jpg",
+    "evrae-airship-win-c7135bec/continuity/strips/swap-226-kimahri-hurt-idle.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 1173.6,
+ "counted": 1268,
+ "swaps": 1318,
+ "size": {
+  "maxHeadJumpPct": 115.7,
+  "maxHeadJumpPctRegistration": 8.4,
+  "headOverTolerance": 281,
+  "maxFeetShiftPx": 140.6,
+  "feetOverTolerance": 137,
+  "headMeasured": 1268,
+  "headRegistration": 474,
+  "headSilhouette": 794,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 116,
+  "snapsPerMinute": 5.93,
+  "hardCuts": 119,
+  "hardCutsPerMinute": 6.08,
+  "ghostSwaps": 1100,
+  "ghostFrames": 4506,
+  "worstGhostSeverity": 0.422,
+  "ghostOverFail": 15,
+  "jerks": 331,
+  "worstJerkPx": 353.1,
+  "jerksOverFail": 146,
+  "lowestIou": 0.008,
+  "maxCentroidShiftPx": 192.8
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "FAIL",
+   "reasons": [
+    "281 swap(s) change a head by more than the tolerance (worst 115.7 percent; 8.4 percent where the head is registered)",
+    "137 swap(s) of a standing figure move its feet more than the tolerance (worst 140.6 px at 1600 wide)"
+   ],
+   "note": "474 of 1268 measured swaps had a registered head (tolerance 3 percent); 794 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "5.93 snaps per minute is over 0.25",
+    "146 jerk(s) of 40 px or more in one frame (worst 353.1 px)",
+    "15 swap(s) show a double image of severity 0.4 or more (worst 0.422)"
+   ]
+  }
+ },
+ "base": "http://127.0.0.1:5461/",
+ "date": "2026-10-05T06:00:30.396Z"
+}

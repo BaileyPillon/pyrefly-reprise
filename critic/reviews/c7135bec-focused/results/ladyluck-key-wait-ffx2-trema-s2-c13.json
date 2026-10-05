@@ -1,0 +1,159 @@
+{
+ "name": "ladyluck-key-wait-ffx2-trema-s2-c13",
+ "mode": "key",
+ "atb": "wait",
+ "chapter": "ffx2-trema",
+ "seed": 2,
+ "size": "1600x900",
+ "wanted": [
+  "cherry",
+  "cherry",
+  "cherry"
+ ],
+ "hooks": [
+  "gotoChapter + setSeed (navigation only, ?coach=off)",
+  "ATB mode as the default (Wait)"
+ ],
+ "log": [
+  "first menu, phase idle",
+  "menu idle: Change opened, rows: [\"White Mage\",\"Lady Luck\"]",
+  "chose Lady Luck: Lady Luck",
+  "menu owner=paine lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Skill\",\"Change\",\"Item\"]",
+  "filler turn: command:paine [\"Attack\"]",
+  "menu owner=rikku lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Mix\",\"Item\",\"Change\"]",
+  "filler turn: play:turn-start [\"Attack\"]",
+  "menu owner=yuna lady-luck girls=[\"yuna\"] rows [\"Attack\",\"Skill\",\"Change\",\"Item\"]",
+  "Skill rows [\"Bribe\",\"Two Dice\",\"Attack Reels\",\"Magic Reels\",\"Luck\",\"Felicity\",\"Critical\"]",
+  "chose Magic Reels",
+  "target {\"confirmed\":true}",
+  "overlay: {\"subtitle\":\"PRESS ENTER TO STOP\",\"input\":\"keyboard\",\"stopOrder\":[2,0,1],\"phases\":[4.033363373950124,2.2001896128058434,5.829680688679218],\"timerMs\":12000,\"strip\":[\"red7\",\"bar\",\"cherry\",\"skull\",\"hat\",\"staff\"]}",
+  "press 1: reel 2 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "press 2: reel 0 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "press 3: reel 1 wanted cherry, on the line cherry, stopped on cherry (stopped)",
+  "engine: [{\"seq\":59,\"type\":\"message\",\"actor\":null,\"ability\":null,\"target\":null},{\"seq\":61,\"type\":\"damage\",\"actor\":null,\"ability\":null,\"target\":\"paragon\"},{\"seq\":64,\"type\":\"action-start\",\"actor\":\"paragon\",\"ability\":\"Attack\",\"target\":null}] msgs [\"Flare\"]",
+  "reel events: []"
+ ],
+ "rowsSeen": [
+  {
+   "who": "idle",
+   "rows": [
+    "Attack",
+    "Skill",
+    "Change",
+    "Item"
+   ]
+  }
+ ],
+ "changedBy": "idle",
+ "ladyLuckGirl": "yuna",
+ "skillRows": [
+  "Bribe",
+  "Two Dice",
+  "Attack Reels",
+  "Magic Reels",
+  "Luck",
+  "Felicity",
+  "Critical"
+ ],
+ "reelsRow": "Magic Reels",
+ "overlayOpened": {
+  "subtitle": "PRESS ENTER TO STOP",
+  "input": "keyboard",
+  "layout": {
+   "strip": [
+    "red7",
+    "bar",
+    "cherry",
+    "skull",
+    "hat",
+    "staff"
+   ],
+   "stopOrder": [
+    2,
+    0,
+    1
+   ],
+   "phases": [
+    4.033363373950124,
+    2.2001896128058434,
+    5.829680688679218
+   ],
+   "timerMs": 12000
+  },
+  "rect": {
+   "x": 26.829214096069336,
+   "y": 140,
+   "w": 870.716552734375,
+   "h": 332.6953125
+  },
+  "warn": "DUD: −75% PARTY HP"
+ },
+ "presses": [
+  {
+   "k": 0,
+   "armed": 2,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "412.2",
+   "waitedMs": 285,
+   "subtitleAfter": "PRESS ENTER TO STOP",
+   "armedNext": "0"
+  },
+  {
+   "k": 1,
+   "armed": 0,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "768.5",
+   "waitedMs": 175,
+   "subtitleAfter": "PRESS ENTER TO STOP",
+   "armedNext": "1"
+  },
+  {
+   "k": 2,
+   "armed": 1,
+   "want": "cherry",
+   "symOnLineAtPress": "cherry",
+   "stoppedOn": "cherry",
+   "state": "stopped",
+   "atMs": "1129.0",
+   "waitedMs": 234,
+   "subtitleAfter": "PRESS ENTER TO STOP",
+   "armedNext": ""
+  }
+ ],
+ "final": null,
+ "engine": [
+  {
+   "seq": 59,
+   "type": "message",
+   "actor": null,
+   "ability": null,
+   "target": null
+  },
+  {
+   "seq": 61,
+   "type": "damage",
+   "actor": null,
+   "ability": null,
+   "target": "paragon"
+  },
+  {
+   "seq": 64,
+   "type": "action-start",
+   "actor": "paragon",
+   "ability": "Attack",
+   "target": null
+  }
+ ],
+ "engineMessage": [
+  "Flare"
+ ],
+ "reelEvents": [],
+ "consoleErrors": [],
+ "notFound": []
+}

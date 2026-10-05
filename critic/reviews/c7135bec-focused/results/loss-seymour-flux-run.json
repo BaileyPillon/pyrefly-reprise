@@ -1,0 +1,1281 @@
+{
+ "chapter": "seymour-flux",
+ "game": "ffx",
+ "goal": "lose",
+ "size": "1600x900",
+ "base": "http://127.0.0.1:5461/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "retry after attempt 1",
+   "engineSeed": 1001,
+   "links": 1,
+   "firstEnemyAction": {
+    "seq": 3,
+    "actor": "seymour-flux",
+    "ability": "Lance of Atrophy",
+    "targets": [
+     "kimahri"
+    ]
+   }
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 8,
+  "actor": "seymour-flux",
+  "ability": "Lance of Atrophy",
+  "targets": [
+   "yuna"
+  ]
+ },
+ "steps": [
+  {
+   "ms": 8369,
+   "k": "prepEscGoesTo",
+   "v": "party-prep"
+  },
+  {
+   "ms": 27116,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 48706,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 8,
+    "actor": "seymour-flux",
+    "ability": "Lance of Atrophy",
+    "targets": [
+     "yuna"
+    ]
+   }
+  },
+  {
+   "ms": 85871,
+   "k": "fight",
+   "v": {
+    "outcome": "defeat",
+    "turns": 3,
+    "ms": 46269,
+    "seams": 0,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 93231,
+   "k": "retryReachedBattle",
+   "v": true
+  }
+ ],
+ "picks": [
+  {
+   "turn": 0,
+   "ms": 5,
+   "actor": "command:tidus",
+   "want": null,
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1500/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "seymour-flux:70000/70000",
+    "mortiorchis:4000/4000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 3,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "mortiorchis"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 1,
+   "ms": 17791,
+   "actor": "command:kimahri",
+   "want": null,
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:0/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "seymour-flux:70000/70000",
+    "mortiorchis:3847/4000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 21,
+     "actor": "kimahri",
+     "did": "Attack",
+     "targets": [
+      "mortiorchis"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 2,
+   "ms": 34687,
+   "actor": "command:kimahri",
+   "want": null,
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:0/2420",
+    "yuna:0/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "seymour-flux:70000/70000",
+    "mortiorchis:3602/4000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  }
+ ],
+ "seams": [],
+ "fails": [],
+ "contexts": {
+  "viewport": "1600x900",
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "briefingText": "AURON “Eighteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 18,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 18
+ },
+ "boardWalk": [
+  "seymour-flux"
+ ],
+ "dossier": "AURON · 1 OF 3 “Start with the first one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER I Seymour Flux 0 OF 18 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII X-2 IV V VI XI XIII XV XVI The mountain of the Ronso, and what was done to them The Ronso held the gate so the summoner could pass. Seymour calls it mercy. He is still unsent, he is waiting on the trail, and everything he says about Jecht is true. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face FINAL FANTASY X-2 IV Bahamut V Vegnagun VI Leblanc XI Fallen Aeons XIII Trema XV The Den of Woe XVI Ixion LOCATION Mt. Gagazet — the Prominence BOSS Seymour Flux + Mortiorchis PARTY T TIDUS Y YUNA K KIMAHRI BEST Not c",
+ "prepText": "AURON · 2 OF 3 “Your party is ready.” The tabs are for later. Start the battle. ESC SKIP THE GUIDE PARTY PREP I · SEYMOUR FLUX — MT. GAGAZET — THE PROMINENCE T Tidus S.LV 30 Y Yuna S.LV 32 K Kimahri S.LV 25 A Auron S.LV 35 W Wakka S.LV 30 L Lulu S.LV 30 R Rikku S.LV 42 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVERDRIVE FFX · I Seymour Flux The Prominence The Ronso died holding this gate, and Seymour is still standing over the bodies when the party arrives. He is offering the pilgrimage's ending early, and he is not lying about the cost. the Prominence, at last unhurried, always unhurried the machine beneath him OBJECTIVES Holy Water a Zombie before Full-Life lands Survive Total Annihilation Defeat Seymour Flux TIP Bio him turn one — it deals a straight percentage every enemy turn and never triggers his HP-threshold reactions, so Protect and Reflect come out late. ▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL START BATTLE T Tidus HP 2420/2420 · MP 115/115 WARRIOR Y Yuna HP 1500/1500 · MP 270/270 SUMMONER K Kimahri HP 2310/2310 · MP 130/130 STOIC",
+ "prepEsc": "party-prep",
+ "preScene": {
+  "lines": [
+   "CHAPTER I · MT. GAGAZET — THE PROMINENCE Kimahri GUARDIAN Kimahri knows this one. And this one. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER I · MT. GAGAZET — THE PROMINENCE Kimahri GUARDIAN Kimahri knows this one. And this one. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER I · MT. GAGAZET — THE PROMINENCE Seymour MAESTER They AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER I · MT. GAGAZET — THE PROMINENCE Seymour MAESTER They held the gate. All of them. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "seymour-flux",
+  "game": "ffx",
+  "scene": "gagazet",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 3733.2999999999993,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "tidus",
+    "side": "party",
+    "art": "tidus",
+    "pose": "ready",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "kimahri",
+    "side": "party",
+    "art": "kimahri",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "seymour-flux",
+    "side": "enemy",
+    "art": "seymour-flux-body",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "mortiorchis",
+    "side": "enemy",
+    "art": "mortiorchis",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:tidus",
+   "awaitingMenu": true,
+   "played": 3,
+   "lastEvents": [
+    {
+     "seq": 0,
+     "type": "sensor",
+     "ms": 0
+    },
+    {
+     "seq": 1,
+     "type": "sensor",
+     "ms": 0
+    },
+    {
+     "seq": 2,
+     "type": "turn-start",
+     "ms": 115
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 1,
+   "ticks": 0,
+   "events": 3,
+   "result": null,
+   "combatants": [
+    {
+     "id": "tidus",
+     "hp": 2420,
+     "maxHp": 2420,
+     "mp": 115,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "yuna",
+     "hp": 1500,
+     "maxHp": 1500,
+     "mp": 270,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "kimahri",
+     "hp": 2310,
+     "maxHp": 2310,
+     "mp": 130,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "auron",
+     "hp": 3410,
+     "maxHp": 3410,
+     "mp": 75,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "wakka",
+     "hp": 2530,
+     "maxHp": 2530,
+     "mp": 90,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "lulu",
+     "hp": 1375,
+     "maxHp": 1375,
+     "mp": 290,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "rikku",
+     "hp": 1540,
+     "maxHp": 1540,
+     "mp": 115,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "valefor",
+     "hp": 1530,
+     "maxHp": 1530,
+     "mp": 51,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ifrit",
+     "hp": 2075,
+     "maxHp": 2075,
+     "mp": 49,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ixion",
+     "hp": 2055,
+     "maxHp": 2055,
+     "mp": 54,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "shiva",
+     "hp": 1830,
+     "maxHp": 1830,
+     "mp": 59,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "bahamut",
+     "hp": 2935,
+     "maxHp": 2935,
+     "mp": 74,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "seymour-flux",
+     "hp": 70000,
+     "maxHp": 70000,
+     "mp": 512,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    },
+    {
+     "id": "mortiorchis",
+     "hp": 4000,
+     "maxHp": 4000,
+     "mp": 512,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "sensor",
+    "targetId": "seymour-flux",
+    "full": false,
+    "text": "Turns healing into a weapon. Kill the floating thing before it finishes counting.",
+    "hp": 70000,
+    "maxHp": 70000,
+    "mp": 512,
+    "maxMp": 512,
+    "weaknesses": [],
+    "seq": 0
+   },
+   {
+    "type": "sensor",
+    "targetId": "mortiorchis",
+    "full": false,
+    "text": "It is not attacking you. It is waiting for a number to fill.",
+    "hp": 4000,
+    "maxHp": 4000,
+    "mp": 512,
+    "maxMp": 512,
+    "weaknesses": [],
+    "seq": 1
+   },
+   {
+    "type": "turn-start",
+    "actorId": "tidus",
+    "turn": 1,
+    "elapsedTicks": 0,
+    "seq": 2
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": {
+   "x": 402,
+   "y": 63,
+   "w": 281,
+   "h": 225
+  },
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "Tidus Hastega → the party IN WHITE MAGIC 30 MP + HASTE Speeds the party’s turns up It puts Haste on the party; next, Lance of Atrophy hits for about 760."
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [
+   {
+    "x": 597,
+    "y": 744,
+    "w": 400,
+    "h": 146
+   }
+  ],
+  "adv": [
+   {
+    "x": 402,
+    "y": 63,
+    "w": 281,
+    "h": 225
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Hastega",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "the party",
+    "eff": 21
+   },
+   {
+    "t": "in White Magic",
+    "eff": 14.2
+   },
+   {
+    "t": "30 MP",
+    "eff": 14.2
+   },
+   {
+    "t": "+ Haste",
+    "eff": 14.2
+   },
+   {
+    "t": "Speeds the party’s turns up",
+    "eff": 14.2
+   },
+   {
+    "t": "It puts Haste on the party; next, Lance ",
+    "eff": 14.2
+   }
+  ]
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 402,
+    "y": 63,
+    "w": 281,
+    "h": 225
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Hastega",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "the party",
+    "eff": 21
+   },
+   {
+    "t": "in White Magic",
+    "eff": 14.2
+   },
+   {
+    "t": "30 MP",
+    "eff": 14.2
+   },
+   {
+    "t": "+ Haste",
+    "eff": 14.2
+   },
+   {
+    "t": "Speeds the party’s turns up",
+    "eff": 14.2
+   },
+   {
+    "t": "It puts Haste on the party; next, Lance ",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "Tidus Hastega → the party IN WHITE MAGIC 30 MP + HASTE Speeds the party’s turns up It puts Haste on the party; next, Lance of Atrophy hits for about 760.",
+ "advisorHiddenByN": true,
+ "intentText": " | SEYMOUR FLUX 2ND IN QUEUE Lance of Atrophy SCRIPTED ZOMBIE 100% Physical non-elemental damage to one character - never misses. DAMAGE · RANDOM TARGET TIDUS 707–799 31% HP YUNA 746–842 53% HP KIMAHRI 698–788 32% HP Lands on one of these, picked when it acts. IF YOU ATTACK A Delay attempt on either of them fails and is punished with party-wide Slowga Below 75% HP Seymour answers with Protect Below 50% HP Seymour answers with Reflect and phase 2 opens J HOLD · +4 MORE",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "Tidus Seymour Flux Mortiorchis Kimahri Yuna Seymour Flux TALK ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×27 FLEE ▼ Q △ DEFEND Physical damage Tidus 2420 /2420 115 /115 OD Yuna 1500 /1500 270 /270 OD Kimahri 2310 /2310 130 /130 OVERDRIVE I MORTIORCHIS Get ready before the next area, because a boss is waiting there. Buy Holy Water from Wantz: 30 of it, spent at the customize screen, puts Zombie Ward on a piece of armour, and this fight calls for that ward. Equip the armour. Bring about 30 Phoenix Downs to be safe. Anyone who struggled with the earlier bosses should fill every Overdrive gauge first, since this one is often called the hardest in the game. Yuna needs Dispel already learned, because it pays off here. Seymour Flux BOSS BATTLE IN GAME DESCRIPTION: Seymour's attacks tell you what the Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilati"
+  },
+  "optionsText": "Tidus Seymour Flux Mortiorchis Kimahri Yuna Seymour Flux TALK ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×27 FLEE ▼ Q △ DEFEND Physical damage Tidus 2420 /2420 115 /115 OD Yuna 1500 /1500 270 /270 OD Kimahri 2310 /2310 130 /130 OVERDRIVE I MORTIORCHIS Get ready before the next area, because a boss is waiting there. Buy Holy Water from Wantz: 30 of it, spent at the customize screen, puts Zombie Ward on a piece of armour, and this fight calls for that ward. Equip the armour. Bring about 30 Phoenix Downs to be safe. Anyone who struggled with the earlier bosses should fill every Overdrive gauge first, since this one is often called the hardest in the game. Yuna needs Dispel already learned, because it pays off here. Seymour Flux BOSS BATTLE IN GAME DESCRIPTION: Seymour's attacks tell you what the Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilation caps it off. HP: 70,000 Seymour again, and this time Kimahri and Yuna can use Trigger Commands: Kimahri's gives +10 Strength and Yuna's gives +10 Magic Defense. He brings out the Mortiorchis, much like the helper that fought beside him at Bevelle. Lance of Atrophy can leave one of your party Zombified. Zombie Ward armour (see above) makes that less likely. Whoever turns Zombie needs a Holy Water, a Remedy or Esuna right away. Full-Life would normally refill a character to full HP, but Zombie ",
+  "tabs": [
+   "Tidus",
+   "Yuna",
+   "Kimahri",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [
+  "Talk",
+  "Attack",
+  "Special",
+  "White Magic",
+  "Items",
+  "Flee"
+ ],
+ "targetsShown": [
+  "seymour-flux",
+  "mortiorchis"
+ ],
+ "afterTargetCancel": {
+  "screen": "battle",
+  "targets": 0,
+  "rows": 6
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "defeat",
+   "seed": 1,
+   "turns": 3,
+   "firstEnemyAction": {
+    "seq": 8,
+    "actor": "seymour-flux",
+    "ability": "Lance of Atrophy",
+    "targets": [
+     "yuna"
+    ]
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "seamCard": [],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "lastChain": {
+  "links": 1,
+  "chainLength": 1,
+  "phase": "play:defeat",
+  "turn": 3,
+  "ms": 46006
+ },
+ "mgSince": null,
+ "emptyPicks": 0,
+ "lastPartySeq": 21,
+ "turns": 3,
+ "fightMs": 46269,
+ "afterFight": "results",
+ "outcome": "defeat",
+ "outcomeFrom": "results screen text",
+ "stalledAt": null,
+ "logKinds": {
+  "sensor": 2,
+  "turn-start": 9,
+  "action-start": 9,
+  "damage": 8,
+  "overdrive-gauge": 1,
+  "action-end": 9,
+  "status-add": 3,
+  "script-trigger": 2,
+  "status-remove": 1,
+  "ko": 3,
+  "defeat": 1
+ },
+ "post": {
+  "screen": "results",
+  "lines": []
+ },
+ "resultsScreen": "results",
+ "resultsText": "MT. GAGAZET — THE PROMINENCE · FELL RESULTS · 1:04 Defeat TURNS 9 ATTEMPTS 1 BEST — NEVER CLEARED T Tidus S.LV 30 · 0/695 AP Y Yuna S.LV 32 · 0/820 AP K Kimahri S.LV 25 · 0/442 AP RETRY CHAPTER SELECT",
+ "afterRetry": "party-prep",
+ "retryReachedBattle": true,
+ "retrySeed": 1001,
+ "dboxTimeline": [
+  {
+   "ms": 9130,
+   "lastMs": 15494,
+   "screen": "cutscene",
+   "speaker": "Kimahri",
+   "role": "Guardian",
+   "text": "Kimahri knows this one. And this one.",
+   "portrait": "kimahri.png",
+   "narrate": false,
+   "show": 1
+  },
+  {
+   "ms": 15544,
+   "lastMs": 17145,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "They held the gate. All of them.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 2
+  },
+  {
+   "ms": 17179,
+   "lastMs": 19095,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "For you, Lady Yuna.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 3
+  },
+  {
+   "ms": 19211,
+   "lastMs": 19211,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Late, Ronso. They called your name.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 4
+  },
+  {
+   "ms": 19227,
+   "lastMs": 19245,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "You were on the wrong side of the mountain.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 5
+  },
+  {
+   "ms": 19262,
+   "lastMs": 19262,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "You did this? To them?",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 6
+  },
+  {
+   "ms": 19278,
+   "lastMs": 19278,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "They refused comfort. I offered it anyway.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 7
+  },
+  {
+   "ms": 19296,
+   "lastMs": 19296,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "That's not comfort. That's a pile of bodies.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 8
+  },
+  {
+   "ms": 19312,
+   "lastMs": 19312,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Ah. The son of Jecht.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 9
+  },
+  {
+   "ms": 19327,
+   "lastMs": 19327,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "You talk about him when you think no one listens.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 10
+  },
+  {
+   "ms": 19345,
+   "lastMs": 19345,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "So let me give you what no one else will.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 11
+  },
+  {
+   "ms": 19362,
+   "lastMs": 19379,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Your father is Sin.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 12
+  },
+  {
+   "ms": 19395,
+   "lastMs": 19411,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "...You're lying.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 13
+  },
+  {
+   "ms": 19428,
+   "lastMs": 19445,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Auron. Tell him he's lying.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 14
+  },
+  {
+   "ms": 19461,
+   "lastMs": 19461,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Kill Sin, and you free him.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 15
+  },
+  {
+   "ms": 19478,
+   "lastMs": 19478,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "I am offering you your father back.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 16
+  },
+  {
+   "ms": 19496,
+   "lastMs": 19512,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "No.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 17
+  },
+  {
+   "ms": 19528,
+   "lastMs": 19528,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "You don't get to hand me a reason.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 18
+  },
+  {
+   "ms": 19545,
+   "lastMs": 19545,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "He's not a bargaining chip. He's my old man.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 19
+  },
+  {
+   "ms": 19562,
+   "lastMs": 19562,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Yuna. Don't listen.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 20
+  },
+  {
+   "ms": 19578,
+   "lastMs": 19578,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "He talks to keep you standing still.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 21
+  },
+  {
+   "ms": 19595,
+   "lastMs": 19595,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Spira is a wound that will not close.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 22
+  },
+  {
+   "ms": 19616,
+   "lastMs": 19627,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "I am the bandage.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 23
+  },
+  {
+   "ms": 19645,
+   "lastMs": 19662,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "No. Not this time.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 24
+  },
+  {
+   "ms": 19694,
+   "lastMs": 19694,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Then your hope ends here.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 25
+  },
+  {
+   "ms": 19712,
+   "lastMs": 19786,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Enough talk. Move.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 26,
+   "endMs": 19786
+  },
+  {
+   "ms": 49312,
+   "lastMs": 50528,
+   "screen": "battle",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Let it in.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 27
+  },
+  {
+   "ms": 50561,
+   "lastMs": 52594,
+   "screen": "battle",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "It's quieter on the other side.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 28,
+   "endMs": 52594
+  },
+  {
+   "ms": 65744,
+   "lastMs": 67444,
+   "screen": "battle",
+   "speaker": "Kimahri",
+   "role": "Guardian",
+   "text": "Yuna. Do not heal him.",
+   "portrait": "kimahri.png",
+   "narrate": false,
+   "show": 29
+  },
+  {
+   "ms": 67477,
+   "lastMs": 69778,
+   "screen": "battle",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "He's turned. A cure would hurt him now.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 30,
+   "endMs": 69778
+  },
+  {
+   "ms": 103276,
+   "lastMs": 104494,
+   "screen": "battle",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Let it in.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 31
+  },
+  {
+   "ms": 104526,
+   "lastMs": 105947,
+   "screen": "battle",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "It's quieter on the other side.",
+   "portrait": "seymour.webp",
+   "narrate": false,
+   "show": 32
+  }
+ ],
+ "audioDebugFile": {
+  "file": "seymour-flux-lose-c7135bec/audio-debug.jsonl",
+  "samples": 4,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 1.79,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "art/title/keyart.2x.webp",
+  "art/characters/tidus/idle.webp",
+  "art/characters/yuna/idle.webp",
+  "art/characters/auron/idle.webp",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.webp",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "art/portraits/auron.webp",
+  "art/portraits/rikku.webp",
+  "art/portraits/wakka.webp",
+  "art/portraits/lulu.webp",
+  "art/portraits/yuna-x2.webp",
+  "art/portraits/rikku-x2.webp",
+  "art/portraits/paine.webp",
+  "art/characters/yuna-white-mage/idle.webp",
+  "art/characters/rikku-dark-knight/idle.webp",
+  "art/characters/paine-warrior/idle.webp",
+  "art/characters/paine-dark-knight/idle.webp",
+  "art/characters/yuna-gunner/idle.webp",
+  "art/characters/rikku-thief/idle.webp",
+  "art/characters/yuna-dark-knight/idle.webp",
+  "art/characters/rikku-alchemist/idle.webp",
+  "art/backdrops/zanarkand-dome.webp",
+  "art/characters/yunalesca-1/idle.webp",
+  "art/characters/braskas-final-aeon-1/idle.webp",
+  "art/backdrops/macalania-temple.webp",
+  "art/characters/anima/idle.webp",
+  "art/backdrops/evrae-airship-deck.webp",
+  "art/characters/evrae/idle.png",
+  "art/backdrops/cavern-stolen-fayth.webp",
+  "art/characters/yojimbo-cavern/idle.webp",
+  "art/backdrops/bevelle-highbridge.webp",
+  "art/characters/seymour-natus/idle.webp",
+  "art/backdrops/garden-of-pain.webp",
+  "art/characters/seymour-omnis/idle.webp",
+  "art/backdrops/via-purifico.webp",
+  "art/characters/isaaru/idle.png",
+  "art/backdrops/sin-fahrenheit-flight.webp",
+  "art/characters/sin-left-fin/idle.png",
+  "art/backdrops/sin-fahrenheit-bevelle.webp",
+  "art/characters/overdrive-sin/idle.png",
+  "art/backdrops/bevelle-underground.webp",
+  "art/characters/ffx2-bahamut/idle.webp",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "art/backdrops/farplane.webp",
+  "art/characters/vegnagun-body/idle.webp",
+  "art/backdrops/leblanc-last-room.webp",
+  "art/characters/leblanc/idle.png",
+  "art/backdrops/road-to-the-farplane.webp",
+  "art/characters/x2-shiva/idle.png",
+  "art/backdrops/via-infinito.webp",
+  "art/characters/trema/idle.png",
+  "art/backdrops/den-of-woe.webp",
+  "art/characters/baralai-shade/idle.png",
+  "art/backdrops/djose-chamber-provisional.webp",
+  "art/characters/x2-ixion/idle.png",
+  "art/characters/x2-anima/idle.png",
+  "art/characters/nooj-shade/idle.png",
+  "art/characters/gippal-shade/idle.png",
+  "audio/music/chapter-select.mp3",
+  "art/portraits/seymour.webp",
+  "art/pause/ch1-seymour-flux.webp",
+  "art/characters/seymour-flux/idle.webp",
+  "art/characters/kimahri/idle.png",
+  "art/characters/seymour-flux-body/attack.png",
+  "art/characters/seymour-flux-body/cast.png",
+  "art/characters/seymour-flux-body/hurt.png",
+  "art/characters/seymour-flux-body/ko.png",
+  "art/characters/seymour-flux-body/telegraph.png",
+  "art/characters/mortiorchis/attack.webp",
+  "art/characters/mortiorchis/cast.webp",
+  "art/characters/mortiorchis/hurt.webp",
+  "art/characters/mortiorchis/ko.webp",
+  "art/characters/tidus/ready.webp",
+  "art/characters/tidus/attack.webp",
+  "art/characters/tidus/cast.webp",
+  "art/characters/tidus/item.webp",
+  "art/characters/tidus/hurt.webp",
+  "art/characters/tidus/ko.webp",
+  "art/characters/tidus/victory.webp",
+  "art/characters/tidus/sleep.webp",
+  "art/characters/tidus/critical.webp",
+  "art/characters/tidus/follow.webp",
+  "art/characters/tidus/od-energy-rain.webp",
+  "art/characters/tidus/od-slice-and-dice.webp",
+  "art/characters/yuna/ready.webp",
+  "art/characters/yuna/attack.webp",
+  "art/characters/yuna/cast.webp",
+  "art/characters/yuna/item.webp",
+  "art/characters/yuna/hurt.webp",
+  "art/characters/yuna/ko.webp",
+  "art/characters/yuna/victory.webp",
+  "art/characters/yuna/sleep.webp",
+  "art/characters/yuna/critical.webp",
+  "art/characters/yuna/follow.webp",
+  "art/characters/kimahri/ready.webp",
+  "art/characters/kimahri/attack.png",
+  "art/characters/kimahri/cast.png",
+  "art/characters/kimahri/item.png",
+  "art/characters/kimahri/hurt.png",
+  "art/characters/kimahri/ko.webp",
+  "art/characters/kimahri/victory.png",
+  "art/characters/kimahri/sleep.png",
+  "art/characters/kimahri/critical.png",
+  "art/characters/kimahri/follow.webp",
+  "art/pause/tidus.2x.webp",
+  "art/pause/yuna.2x.webp",
+  "art/pause/kimahri.2x.webp",
+  "audio/music/pause.mp3",
+  "art/pause/ch1-seymour-flux.2x.webp",
+  "audio/music/scene-gagazet.mp3",
+  "audio/music/boss-seymour.mp3",
+  "fx/gagazet/depth.png",
+  "art/pause/tidus.webp",
+  "art/portrait-parts/tidus/2x/mouth-open-smile.png",
+  "art/portrait-parts/tidus/2x/mouth-concerned-press.png",
+  "art/portrait-parts/tidus/2x/lidR-closed.png",
+  "art/portrait-parts/tidus/2x/lidL-closed.png",
+  "art/portrait-parts/tidus/2x/eyeR-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeR-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeR-catch.png",
+  "art/portrait-parts/tidus/2x/eyeR-window.png",
+  "art/portrait-parts/tidus/2x/eyeL-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeL-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeL-catch.png",
+  "art/portrait-parts/tidus/2x/eyeL-window.png",
+  "art/pause/yuna.webp",
+  "art/portrait-parts/yuna/2x/mouth-open-smile.png",
+  "art/portrait-parts/yuna/2x/mouth-concerned-press.png",
+  "art/portrait-parts/yuna/2x/lidR-closed.png",
+  "art/portrait-parts/yuna/2x/lidL-closed.png",
+  "art/portrait-parts/yuna/2x/eyeR-socket.webp",
+  "art/portrait-parts/yuna/2x/eyeR-iris.webp",
+  "art/portrait-parts/yuna/2x/eyeR-catch.png",
+  "art/portrait-parts/yuna/2x/eyeR-window.png",
+  "art/portrait-parts/yuna/2x/eyeL-socket.webp",
+  "art/portrait-parts/yuna/2x/eyeL-iris.webp",
+  "art/portrait-parts/yuna/2x/eyeL-catch.png",
+  "art/portrait-parts/yuna/2x/eyeL-window.png",
+  "art/pause/kimahri.webp",
+  "art/portrait-parts/kimahri/2x/mouth-open-smile.png",
+  "art/portrait-parts/kimahri/2x/mouth-concerned-press.png",
+  "art/portrait-parts/kimahri/2x/lidL-closed.png",
+  "art/portrait-parts/kimahri/2x/eyeL-socket.webp",
+  "art/portrait-parts/kimahri/2x/eyeL-iris.webp",
+  "art/portrait-parts/kimahri/2x/eyeL-catch.png",
+  "art/portrait-parts/kimahri/2x/eyeL-window.png"
+ ]
+}
