@@ -149,6 +149,14 @@ What this says:
 - **So a lane that registers heads gets a clear CHK-026 for those heads and nothing for the rest.** The check stays FAIL until the
   bosses and the other heroes are registered and the KO paintings are within 3 percent; run the harness on release 39 before its deep
   review (`critic/runner/deep.js` does).
+- **The lane has moved since this measurement.** `origin/r39-posescale` is now at d3f17949, two commits past the 03821f57 measured
+  here: 1d9008b3 (every hero's stance "by the support under it", Wakka's, Auron's and Rikku's heads read, Evrae's near set) and
+  d3f17949 (five FFX-2 dressphere poses). By its own commit messages those address several of the open items above (Wakka's feet
+  and heads, Rikku's, Evrae's, Auron's ready, attack, item and hurt), so **the numbers above are not the lane's current state and
+  were not re-measured**: the machine had no memory headroom for another browser run (about 3 GB of physical and under 2 GB of
+  commit free at 01:05 on 2026-10-05), and step 3b of `focused.js` measures the release candidate anyway. Re-run the three chapters on the
+  release candidate with that build's `docs/target/pose-measure.json` (`--pose-measure=`) and compare with the baseline; the
+  harness records the records file's sha256 in every `continuity.json`, so a mismatch of records between two runs is visible.
 
 ## The thresholds and why
 
@@ -208,9 +216,9 @@ mass until their heads are registered (`tools/posescale/`).
    `critic/runner/lib/selftest.mjs` (the README asks for it after touching the library) was **not run**: it builds the app, and this
    worktree has no `public/art`; what it covers (`assertScreen`, `commandRows`, `audioDebug`) was not changed, `route.mjs`'s change is
    behind `--continuity` and nothing runs without it, and `route.mjs` ran six real chapters with the flag.
-5. The after-build numbers above rest on the lane's branch as pushed at 03821f57. If the lane registers more heads or changes the KO
-   scale, run the three chapters again (about 25 minutes of play) and compare with `critic/reviews/continuity-baseline-r38/`; the
-   baseline is the live release 38 and does not change.
+5. The after-build numbers above rest on the lane's branch as pushed at 03821f57; it has two newer commits (see the last bullet of
+   the before-and-after section). Run the three chapters again (about 25 minutes of play, on the GPU) on the release candidate and compare
+   with `critic/reviews/continuity-baseline-r38/`; the baseline is the live release 38 and does not change.
 6. **Housekeeping.** The dev server I started (port 6932) is stopped and its port is closed. My scratch (the raw frame dumps,
    the full evidence folders with the route's screenshots, the calibration and assembly scripts, 347 MB) was moved, not deleted, to
    `F:/pyrefly-parked/2026-10-04/critic-continuity/scratch/`. The detached worktree `D:/pyrefly-cont-r39ps` (the pushed
