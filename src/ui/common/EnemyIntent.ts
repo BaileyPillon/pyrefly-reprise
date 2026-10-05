@@ -197,6 +197,17 @@ export interface EnemyIntentMountOptions {
    * first-timer survives them.
    */
   density?: 'full' | 'brief';
+  /**
+   * The pad button that opens and folds the slab, and the word its chip prints for it. Omitted: standard button 3,
+   * Triangle ({@link INTENT_HINT_ITEM}), which is what FFX-2 keeps.
+   *
+   * FFX passes Select (release 39, FFX only): in the original FFX the Triangle button at the command menu is **Defend**
+   * (`research/ffx-defend-input-2026-10-04.md`), and the build now names it on a tab under the command window
+   * (`src/ui/ffx/defendControl.ts`). With the slab on the same button, one press both spent the turn and flipped the
+   * read-out, and the chip told a pad player to press the very button that ends their turn. The original's input keeps
+   * the button; our extra moves.
+   */
+  padToggle?: { index: number; label: string };
 }
 
 /** Standard-gamepad button 3 (Triangle / Y); see `INTENT_HINT_ITEM`. */
@@ -277,6 +288,8 @@ export class EnemyIntentPanel {
   private source: IntentSource | null = null;
   private current: IntentView | null = null;
   private padWasDown = false;
+  /** The pad button that toggles the slab and the word its chip prints (Triangle unless the HUD says otherwise). */
+  private padToggle: { index: number; label: string } = { index: PAD_TOGGLE_BUTTON, label: INTENT_HINT_ITEM.gamepad };
   /** Last good projection, keyed by enemy. See {@link layout}. */
   private lastPoint: { id: CombatantId; x: number; y: number } | null = null;
   /** Signature of the last render, so a per-frame tick does not re-write the DOM. */
@@ -319,6 +332,8 @@ export class EnemyIntentPanel {
   mount(overlay: HTMLElement, mountOpts: EnemyIntentMountOptions): void {
     if (this.mounted) return;
     this.mountOpts = mountOpts;
+    this.padToggle = mountOpts.padToggle ?? { index: PAD_TOGGLE_BUTTON, label: INTENT_HINT_ITEM.gamepad };
+    this.applyVisible(); // the chip's pad word follows the button this HUD chose
     overlay.appendChild(this.el);
     this.mounted = true;
     window.addEventListener('keydown', this.onKeyDown);
@@ -333,6 +348,7 @@ export class EnemyIntentPanel {
     this.el.remove();
     this.mounted = false;
     this.mountOpts = null;
+    this.padToggle = { index: PAD_TOGGLE_BUTTON, label: INTENT_HINT_ITEM.gamepad };
   }
 
   /** Where the answer comes from. `null` while a battle has no engine yet. */
@@ -366,7 +382,7 @@ export class EnemyIntentPanel {
   private applyVisible(): void {
     this.panelEl.hidden = !this.visible;
     this.el.classList.toggle('eint--off', !this.visible);
-    const keys = this.padConnected() ? INTENT_HINT_ITEM.gamepad : INTENT_HINT_ITEM.keyboard;
+    const keys = this.padConnected() ? this.padToggle.label : INTENT_HINT_ITEM.keyboard;
     this.toggleEl.innerHTML =
       `<b>${escapeHtml(keys)}</b><span>${escapeHtml(this.visible ? 'hide' : 'enemy move')}</span>`;
     this.toggleEl.setAttribute('aria-pressed', String(this.visible));
@@ -457,7 +473,7 @@ export class EnemyIntentPanel {
     let down = false;
     try {
       for (const pad of navigator.getGamepads?.() ?? []) {
-        if (pad?.connected && pad.buttons[PAD_TOGGLE_BUTTON]?.pressed) down = true;
+        if (pad?.connected && pad.buttons[this.padToggle.index]?.pressed) down = true;
       }
     } catch {
       down = false;
