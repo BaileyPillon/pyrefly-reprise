@@ -1,0 +1,121 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "FAIL",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 546.7,
+   "swaps": 437,
+   "snapsPerMinute": 0.88,
+   "maxHeadJumpPct": 57.1,
+   "maxFeetShiftPx": 142.5,
+   "worstJerkPx": 371.3,
+   "strips": 36,
+   "worstSwapStrips": [
+    "seymour-flux/strips/swap-386-auron-attack-follow.jpg",
+    "seymour-flux/strips/swap-189-yuna-item-idle.jpg",
+    "seymour-flux/strips/swap-037-kimahri-ready-item.jpg",
+    "seymour-flux/strips/swap-032-tidus-idle-ready.jpg"
+   ],
+   "unverified": null
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "checks": {
+    "CHK-026": "FAIL",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 429.4,
+   "swaps": 404,
+   "snapsPerMinute": 0.14,
+   "maxHeadJumpPct": 77.8,
+   "maxFeetShiftPx": 98.3,
+   "worstJerkPx": 211.1,
+   "strips": 36,
+   "worstSwapStrips": [
+    "ffx2-bahamut/strips/swap-403-yuna-cast-idle.jpg",
+    "ffx2-bahamut/strips/swap-219-yuna-cast-ready.jpg",
+    "ffx2-bahamut/strips/swap-327-rikku-cast-ready.jpg",
+    "ffx2-bahamut/strips/swap-346-paine-cast-od-x2-warrior-armor-break.jpg"
+   ],
+   "unverified": null
+  },
+  {
+   "chapter": "evrae-airship",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "FAIL",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 394.2,
+   "swaps": 440,
+   "snapsPerMinute": 0.46,
+   "maxHeadJumpPct": 115.7,
+   "maxFeetShiftPx": 259.4,
+   "worstJerkPx": 276.6,
+   "strips": 35,
+   "worstSwapStrips": [
+    "evrae-airship/strips/swap-441-tidus-attack-follow.jpg",
+    "evrae-airship/strips/swap-411-wakka-hurt-idle.jpg",
+    "evrae-airship/strips/swap-408-wakka-idle-hurt.jpg",
+    "evrae-airship/strips/swap-440-tidus-ready-attack.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 1370.3,
+ "counted": 1281,
+ "swaps": 1334,
+ "size": {
+  "maxHeadJumpPct": 115.7,
+  "maxHeadJumpPctRegistration": 57.1,
+  "headOverTolerance": 297,
+  "maxFeetShiftPx": 259.4,
+  "feetOverTolerance": 868,
+  "headMeasured": 1281,
+  "headRegistration": 359,
+  "headSilhouette": 922,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 12,
+  "snapsPerMinute": 0.53,
+  "hardCuts": 15,
+  "hardCutsPerMinute": 0.66,
+  "ghostSwaps": 1201,
+  "ghostFrames": 3879,
+  "worstGhostSeverity": 0.47,
+  "ghostOverFail": 20,
+  "jerks": 450,
+  "worstJerkPx": 371.3,
+  "jerksOverFail": 230,
+  "lowestIou": 0,
+  "maxCentroidShiftPx": 221.5
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "FAIL",
+   "reasons": [
+    "297 swap(s) change a head by more than the tolerance (worst 115.7 percent; 57.1 percent where the head is registered)",
+    "868 swap(s) of a standing figure move its feet more than the tolerance (worst 259.4 px at 1600 wide)"
+   ],
+   "note": "359 of 1281 measured swaps had a registered head (tolerance 3 percent); 922 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "0.53 snaps per minute is over 0.25",
+    "230 jerk(s) of 40 px or more in one frame (worst 371.3 px)",
+    "20 swap(s) show a double image of severity 0.4 or more (worst 0.47)"
+   ]
+  }
+ },
+ "base": "https://echoesofspira.com/",
+ "date": "2026-10-05T04:57:23.696Z",
+ "stripsNote": "worstSwapStrips lists the kept strips of the worst swaps of each chapter (one per figure and pose pair first); the chapter folders hold their double-image and jerk strips too"
+}
