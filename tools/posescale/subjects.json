@@ -1,0 +1,281 @@
+{
+ "tidus": {
+  "game": "ffx",
+  "face": [
+   362,
+   143,
+   472,
+   216
+  ]
+ },
+ "yuna": {
+  "game": "ffx",
+  "face": [
+   341,
+   69,
+   436,
+   135
+  ]
+ },
+ "auron": {
+  "game": "ffx",
+  "face": [
+   309,
+   71,
+   394,
+   133
+  ]
+ },
+ "wakka": {
+  "game": "ffx",
+  "face": [
+   400,
+   127,
+   508,
+   218
+  ]
+ },
+ "lulu": {
+  "game": "ffx",
+  "face": [
+   303,
+   143,
+   386,
+   196
+  ]
+ },
+ "kimahri": {
+  "game": "ffx",
+  "face": [
+   326,
+   182,
+   501,
+   285
+  ]
+ },
+ "rikku": {
+  "game": "ffx",
+  "face": [
+   192,
+   160,
+   316,
+   254
+  ]
+ },
+ "yuna-black-mage": {
+  "game": "ffx2",
+  "face": [
+   287,
+   171,
+   385,
+   245
+  ]
+ },
+ "yuna-dark-knight": {
+  "game": "ffx2",
+  "face": [
+   221,
+   230,
+   308,
+   295
+  ]
+ },
+ "yuna-gunner": {
+  "game": "ffx2",
+  "face": [
+   185,
+   97,
+   286,
+   175
+  ]
+ },
+ "yuna-songstress": {
+  "game": "ffx2",
+  "face": [
+   192,
+   105,
+   291,
+   174
+  ]
+ },
+ "yuna-thief": {
+  "game": "ffx2",
+  "face": [
+   340,
+   105,
+   429,
+   180
+  ]
+ },
+ "yuna-warrior": {
+  "game": "ffx2",
+  "face": [
+   317,
+   103,
+   401,
+   168
+  ]
+ },
+ "yuna-white-mage": {
+  "game": "ffx2",
+  "face": [
+   316,
+   115,
+   389,
+   176
+  ]
+ },
+ "rikku-alchemist": {
+  "game": "ffx2",
+  "face": [
+   181,
+   170,
+   257,
+   228
+  ]
+ },
+ "rikku-berserker": {
+  "game": "ffx2",
+  "face": [
+   221,
+   159,
+   321,
+   213
+  ]
+ },
+ "rikku-black-mage": {
+  "game": "ffx2",
+  "face": [
+   218,
+   199,
+   330,
+   289
+  ]
+ },
+ "rikku-dark-knight": {
+  "game": "ffx2",
+  "face": [
+   226,
+   151,
+   336,
+   209
+  ]
+ },
+ "rikku-gunner": {
+  "game": "ffx2",
+  "face": [
+   121,
+   125,
+   202,
+   158
+  ]
+ },
+ "rikku-songstress": {
+  "game": "ffx2",
+  "face": [
+   149,
+   209,
+   249,
+   280
+  ]
+ },
+ "rikku-thief": {
+  "game": "ffx2",
+  "face": [
+   250,
+   293,
+   366,
+   355
+  ]
+ },
+ "rikku-warrior": {
+  "game": "ffx2",
+  "face": [
+   392,
+   158,
+   503,
+   217
+  ]
+ },
+ "rikku-white-mage": {
+  "game": "ffx2",
+  "face": [
+   146,
+   173,
+   238,
+   229
+  ]
+ },
+ "paine-black-mage": {
+  "game": "ffx2",
+  "face": [
+   243,
+   188,
+   314,
+   244
+  ]
+ },
+ "paine-dark-knight": {
+  "game": "ffx2",
+  "face": [
+   330,
+   233,
+   396,
+   281
+  ]
+ },
+ "paine-gunner": {
+  "game": "ffx2",
+  "face": [
+   227,
+   127,
+   310,
+   192
+  ]
+ },
+ "paine-samurai": {
+  "game": "ffx2",
+  "face": [
+   314,
+   158,
+   404,
+   234
+  ]
+ },
+ "paine-songstress": {
+  "game": "ffx2",
+  "face": [
+   97,
+   128,
+   183,
+   197
+  ]
+ },
+ "paine-thief": {
+  "game": "ffx2",
+  "face": [
+   319,
+   156,
+   389,
+   214
+  ]
+ },
+ "paine-warrior": {
+  "game": "ffx2",
+  "face": [
+   130,
+   126,
+   234,
+   191
+  ]
+ },
+ "paine-white-mage": {
+  "game": "ffx2",
+  "face": [
+   389,
+   155,
+   457,
+   230
+  ]
+ }
+}
