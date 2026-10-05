@@ -6,6 +6,12 @@
  * shown first under Wait's split (the default), never under Active or the old whole-menu hold,
  * never in an FFX guide, and not yet in Chapter XI, which has no guide (the sheet: it gets the
  * line when its guide is written).
+ *
+ * **Since r38 (Bailey, 2026-10-03: "Just match the original document please in terms of formatting and
+ * everything else") the panel prints the encounter guide's page for the boss and has no RULES section**,
+ * and the habit line is ours, not the page's. It now lives only in the written guide data
+ * (`buildGuideView`, which the move advisor borrows from); the last test pins that the panel no longer
+ * shows it under either clock. The data-level tests above it are unchanged.
  */
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -72,7 +78,7 @@ describe.each(CASES)('%s', (_name, guide, state) => {
   });
 });
 
-describe('the panel reads the player\'s X-2 clock from the save', () => {
+describe('the panel prints the page, not the X-2 clock line', () => {
   let store: SaveStore;
   const mem = new Map<string, string>();
   beforeEach(() => {
@@ -102,10 +108,12 @@ describe('the panel reads the player\'s X-2 clock from the save', () => {
     return text;
   }
 
-  it('Wait (the default): the line is on the panel; Active: it is not', () => {
-    store.setSettings({ ffx2Atb: 'wait' });
-    expect(panelText()).toContain(WAIT_SPLIT_HABIT_RULE.text);
-    store.setSettings({ ffx2Atb: 'active' });
-    expect(panelText()).not.toContain(WAIT_SPLIT_HABIT_RULE.text);
+  it('Wait or Active: the Chapter V panel is the boss\'s page and never carries the habit line', () => {
+    for (const mode of ['wait', 'active'] as const) {
+      store.setSettings({ ffx2Atb: mode });
+      const text = panelText();
+      expect(text, mode).toContain('Vegnagun (Tail)');
+      expect(text, mode).not.toContain(WAIT_SPLIT_HABIT_RULE.text);
+    }
   });
 });

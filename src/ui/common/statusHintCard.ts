@@ -5,9 +5,13 @@
  *
  * While a decision is open and a living party member carries a status with a sourced rule
  * (`statusWords.ts`: FFX Zombie, Sleep, Silence, Curse; FFX-2 Sleep, Silence, Curse), the card says
- * the rule. The mockup shows it in the strategy guide's slot with the guide folded (G); with the
- * guide open it rides at the top of the guide's own panel, so the guide's fit counts it as chrome
- * (`StrategyGuide.refit`) and the two never overlap. No guide for the encounter: it stands alone.
+ * the rule. The mockup shows it in the strategy guide's slot with the guide folded (G). With the guide
+ * open it stands in the guide column's own slot (`.sgd__slot`, the first row of `.sgd__stack`), a card
+ * of its own above the sheet, **not** a block of the guide's document (R38, 2026-10-03: the guide is a
+ * scrolling reading sheet and the card no longer lives in it): the column is a flex column, so the sheet
+ * gives the card its height and takes it back, and nothing in the document is re-fitted, cut or paged.
+ * The slot is inside the column the rail has always had, so the card covers exactly what the old in-panel
+ * card covered, and nothing more. No guide for the encounter: it stands alone.
  *
  * Game case: both, each game's own cure table (rule 14). A status with no sourced rule: no card.
  *
@@ -21,11 +25,11 @@
  * "Tap another ally to switch" line; otherwise the command menu's slot above the party chips, so it
  * never covers that line or CONFIRM. PR-0304 (FFX-2 desktop, guide open): FFX-2's ATB plays actions
  * while a menu is open, and A-15's fade (`ui/ffx2/actionFade.ts`) takes the guide's stack, and the
- * hint in it, to opacity 0. While it is faded a solo copy stands in the hint's own stage slot (the
- * guide-folded slot); the copy in the guide keeps its place, so the guide's fit never moves.
- * PR-0302 repair (desktop, guide open): where the 14-px floor makes the in-guide card push the
- * guide's column over a command row (FFX at 1280 px wide), the card carries the rule's one-sentence
- * form for that card ({@link guideOverCommands}); TEXT SIZE no longer multiplies the floor in the guide.
+ * card in it, to opacity 0. While it is faded a solo copy stands in the card's own stage slot (the
+ * guide-folded slot); the copy in the guide keeps its place, so the column never moves.
+ * PR-0302 repair (desktop, guide open): where the 14-px floor leaves the sheet too little room beside the
+ * full card ({@link guideSqueezed}: FFX at 1280 px wide), the card carries the rule's one-sentence form,
+ * and if even that is too much it stands alone in the column and the sheet steps aside while it is up.
  */
 
 import type { BattleState, CombatantId, StatusId } from '../../battle/common/types.ts';
@@ -63,41 +67,24 @@ export function hintCardHtml(hints: readonly CureHint[], phone: boolean): string
   return `<div class="sthint__head">GUIDE <i>${first.label}</i></div><div class="sthint__body">${body}</div>`;
 }
 
-/** The clearance kept between the guide's column and the first command row under it, CSS px. */
-export const GUIDE_CMD_GAP = 0;
+/** The least the sheet may be left to show beside the card, in layout (stage-grid) px: two lines of its type and its padding. */
+export const MIN_SHEET_HEIGHT = 26;
 
 /**
- * PR-0302 repair: does the guide's column (its slab, which can run past the stack's max-height, and
- * the MORE row) reach within {@link GUIDE_CMD_GAP} of a command row it sits over? Rendered rects,
- * so TEXT SIZE's `scale` and the stage's letterbox scale are both counted. Every command row in the
- * stage, open submenus included; a box with no layout (jsdom, hidden) never counts.
- *
- * U2 (PR-0291, FFX only): the command window's help slab (`.ffx-cmd-info`, the red Zombie warning
- * while one is aimed) counts as a row. It sits between the guide and the stack, and the guide's
- * first block shows whatever its chrome, so the full-size card pushed that block's NEXT line under
- * the slab at 1600x900.
+ * PR-0302 repair, for the slot: does the card leave the guide's column too little room? The sheet is a flex
+ * item that shrinks behind the card, so it never runs past the column on its own; it is squeezed when it has
+ * more to scroll than it shows and shows less than {@link MIN_SHEET_HEIGHT}, or when the column's contents (the
+ * card, whose height nothing can shrink) overflow the box the column is capped at. Layout px, so TEXT SIZE's
+ * `scale` and the stage's letterbox scale are both outside it; a box with no layout (jsdom, hidden) is never
+ * squeezed.
  */
-export function guideOverCommands(guide: HTMLElement, stage: HTMLElement): boolean {
-  let left = Infinity;
-  let right = -Infinity;
-  let top = Infinity;
-  let bottom = -Infinity;
-  for (const el of guide.querySelectorAll<HTMLElement>('.sgd__stack, .sgd__panel, .sgd__more')) {
-    if (el.hidden) continue;
-    const r = el.getBoundingClientRect();
-    if (!(r.height > 0)) continue;
-    left = Math.min(left, r.left);
-    right = Math.max(right, r.right);
-    top = Math.min(top, r.top);
-    bottom = Math.max(bottom, r.bottom);
-  }
-  if (bottom === -Infinity) return false;
-  for (const row of stage.querySelectorAll<HTMLElement>('.ig-cmd, .ffx-cmd-info')) {
-    const r = row.getBoundingClientRect();
-    if (!(r.height > 0) || r.right <= left || r.left >= right) continue;
-    if (r.bottom > top && r.top < bottom + GUIDE_CMD_GAP) return true;
-  }
-  return false;
+export function guideSqueezed(guide: HTMLElement): boolean {
+  const stack = guide.querySelector<HTMLElement>('.sgd__stack');
+  const panel = guide.querySelector<HTMLElement>('.sgd__panel');
+  if (!stack || !panel || stack.hidden || panel.hidden) return false;
+  const overflow = stack.scrollHeight - stack.offsetHeight > 1;
+  const cramped = panel.offsetHeight > 0 && panel.scrollHeight > panel.clientHeight + 1 && panel.clientHeight < MIN_SHEET_HEIGHT;
+  return stack.offsetHeight > 0 && (overflow || cramped);
 }
 
 export class StatusHintCard {
@@ -108,7 +95,7 @@ export class StatusHintCard {
   /** PR-0302 repair: the in-guide card is in its one-sentence form (see `update`), for `compactKey`. */
   private compact = false;
   private compactKey = '';
-  /** U2: even the one-sentence card leaves the guide's column over a row or the help slab, so the card stands alone in it. */
+  /** U2: even the one-sentence card leaves the sheet too little room, so the card stands alone in the guide's column. */
   private alone: HTMLElement | null = null;
   private overFrames = 0;
 
@@ -130,11 +117,11 @@ export class StatusHintCard {
    */
   update(hints: readonly CureHint[], open: boolean, stage: HTMLElement | null, guide: HTMLElement | null, phone: boolean): void {
     const full = open && this.help() ? hintCardHtml(hints, phone) : '';
-    const panel = stage && guide && !guide.hidden && !guide.classList.contains('sgd--off') && !phone
-      ? guide.querySelector<HTMLElement>('.sgd__panel')
+    const slot = stage && guide && !guide.hidden && !guide.classList.contains('sgd--off') && !phone
+      ? guide.querySelector<HTMLElement>('.sgd__slot')
       : null;
     // PR-0302 repair: a new card, a resize or another TEXT SIZE starts from the full rule again.
-    const key = panel && full ? `${full}|${innerWidth}x${innerHeight}|${document.documentElement.dataset['textSize'] ?? ''}` : '';
+    const key = slot && full ? `${full}|${innerWidth}x${innerHeight}|${document.documentElement.dataset['textSize'] ?? ''}` : '';
     if (key !== this.compactKey) {
       this.compactKey = key;
       this.compact = false;
@@ -144,31 +131,31 @@ export class StatusHintCard {
     this.el.classList.toggle('sthint--phone', phone);
     if (phone && full) this.dockPhone(stage);
     if (!stage) return;
-    if (panel) {
-      if (this.el.parentElement !== panel) panel.insertBefore(this.el, panel.firstChild);
-      this.el.classList.add('sthint--inguide');
-      // The guide shows at least its first block whatever its chrome (StrategyGuide.refit), so a
-      // card grown by the 14-px floor pushes the guide's column down over the first command row
-      // at 1280 px wide. There the card carries the rule's one-sentence form (the phone card's).
-      // Measured before the frame paints, and kept for this card: one switch, never a flicker.
-      if (!this.compact && full && guideOverCommands(guide!, stage)) {
+    if (slot) {
+      if (this.el.parentElement !== slot) slot.appendChild(this.el);
+      this.el.classList.add('sthint--slot');
+      // The sheet is a flex item that shrinks behind the card, so it never runs past its column on its own. Where
+      // the full rule leaves it too little to read (the 14-px floor at 1280 px wide), the card carries the rule's
+      // one-sentence form (the phone card's). Measured before the frame paints, and kept for this card: one switch,
+      // never a flicker.
+      if (!this.compact && full && guideSqueezed(guide!)) {
         this.compact = true;
         this.show(hintCardHtml(hints, true));
       }
-      // U2 (PR-0291, FFX only): the guide shows at least its first block whatever its chrome, so on a short rail the
-      // one-sentence card still left that block's NEXT line under the Zombie warning slab at 1600x900. Two frames in
-      // a row (the guide re-fits a frame after the card changes), and the card stands alone in the guide's slot, as the
-      // approved O3 frame draws it. Latched for this card; cleared when the card goes.
-      if (this.compact && !this.alone && full && guideOverCommands(guide!, stage)) {
+      // U2 (PR-0291, FFX only): where even the one-sentence card leaves the sheet too little room, the card stands
+      // alone in the column and the sheet steps aside while it is up, as the approved O3 frame draws it. Two frames
+      // in a row (the sheet re-lays out a frame after the card changes). Latched for this card; cleared when the
+      // card goes.
+      if (this.compact && !this.alone && full && guideSqueezed(guide!)) {
         if (++this.overFrames >= 2) this.stand(guide);
       } else if (!this.compact || this.alone) this.overFrames = 0;
     } else {
       this.stand(null);
       if (this.el.parentElement !== stage) stage.appendChild(this.el);
-      this.el.classList.remove('sthint--inguide');
+      this.el.classList.remove('sthint--slot');
     }
     const html = this.html;
-    const solo = html !== '' && !!panel?.closest(`.${GUIDE_FADE_CLASS}`);
+    const solo = html !== '' && !!slot?.closest(`.${GUIDE_FADE_CLASS}`);
     if (solo && this.solo.innerHTML !== html) this.solo.innerHTML = html;
     if (solo && this.solo.parentElement !== stage) stage.appendChild(this.solo);
     this.solo.hidden = !solo;
@@ -199,7 +186,7 @@ export class StatusHintCard {
     if (this.el.style.bottom !== bottom) this.el.style.bottom = bottom;
   }
 
-  /** Put the card alone in `guide` (hiding its body and MORE row, `status-o3.css`), or give the guide back. */
+  /** Put the card alone in `guide` (hiding its sheet, `status-o3.css`), or give the guide back. */
   private stand(guide: HTMLElement | null): void {
     if (this.alone === guide) return;
     this.alone?.classList.remove('sgd--hint-alone');

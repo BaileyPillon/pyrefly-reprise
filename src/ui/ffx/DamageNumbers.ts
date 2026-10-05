@@ -42,6 +42,8 @@ const PANEL_SELECTORS = [
   '.ffx-sensor',
   '.sgd__panel',
   '.sgd__toggle',
+  // The cure-hint card in the guide column's slot (R38: it stood inside `.sgd__panel`, which numerals dodge, before).
+  '.sgd__slot > .sthint',
   // The move advisor and the enemy-intent slab, added for the same reason the
   // guide is here: both are opaque ink panels a player can have up while a
   // numeral lands, and both ship **on** by default. The advisor's card sits in

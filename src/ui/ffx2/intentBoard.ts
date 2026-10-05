@@ -41,6 +41,7 @@ const BOARD_SELECTORS = [
   '.mad__toggle',
   '.sgd__panel',
   '.sgd__toggle',
+  '.sgd__slot > .sthint', // the cure-hint card in the guide column's slot (R38)
   '.ffx2-chain-chip',
   // PR-0150: the target-select plates (`TargetPlates.ts`).
   '.ffx2-tplate',

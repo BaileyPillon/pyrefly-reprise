@@ -167,10 +167,11 @@ describe('PR-0001 — no string in the guide falls under 14 effective px', () =>
   it('finds every type size in the sheet', () => {
     const sizes = declaredSizes();
     expect(sizes.length).toBeGreaterThanOrEqual(10);
-    // The chip, the title and the MORE row are all in there.
+    // The chip, the title and the stat labels are all in there (the MORE row is gone with the paging).
     expect(sizes.some((s) => s.selector.includes('.sgd__toggle'))).toBe(true);
     expect(sizes.some((s) => s.selector.includes('.sgd__title'))).toBe(true);
-    expect(sizes.some((s) => s.selector.includes('.sgd__more'))).toBe(true);
+    expect(sizes.some((s) => s.selector.includes('.sgd__flabel'))).toBe(true);
+    expect(sizes.some((s) => s.selector.includes('.sgd__more'))).toBe(false);
   });
 
   for (const [label, scale] of SCALES) {

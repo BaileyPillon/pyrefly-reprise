@@ -58,6 +58,7 @@ const PANEL_SELECTORS = [
   '.ffx2hud__telegraph',
   '.sgd__panel',
   '.sgd__toggle',
+  '.sgd__slot > .sthint', // the cure-hint card in the guide column's slot (R38)
 ] as const;
 
 export interface DamageLayerOptions {

@@ -114,7 +114,11 @@ async function takeRow(page: Page, input: Input, label: string): Promise<boolean
   return false;
 }
 
-/** The girl whose menu is open, and what the guide says she should do. */
+/**
+ * The girl whose menu is open, and what the guide says she should do. The strategy guide is a written
+ * page now (r38) with no NEXT section, so this finds nothing and `playTurn` plays the chapter's own
+ * line (`fallbackPick`), the pick a phone with the guide folded away always took.
+ */
 async function guideNext(page: Page): Promise<{ actor: string; label: string; target: string } | null> {
   return page.evaluate(() => {
     const actor = document.querySelector('.sgd__sec--next .sgd__actor')?.textContent?.trim();
@@ -191,7 +195,7 @@ async function fallbackPick(page: Page, isYuna: boolean): Promise<{ actor: strin
   return { actor: 'Yuna', label: 'Pray', target: 'the party' };
 }
 
-/** Play one decision by real input, following the guide's NEXT. Returns what was taken. */
+/** Play one decision by real input, following the chapter's line (`fallbackPick`). Returns what was taken. */
 async function playTurn(page: Page, input: Input): Promise<string | null> {
   await page.waitForTimeout(220); // the guide re-reads the board as the menu opens
   const m = await menuView(page);
@@ -208,9 +212,8 @@ async function playTurn(page: Page, input: Input): Promise<string | null> {
     await aim(page, input, /party|all/i.test(again.target) ? '' : again.target || 'Ixion');
     return `${again.actor}: ${again.label}${again.target ? ` → ${again.target}` : ''} (again)`;
   }
-  // Whose menu: only the White Mage has White Magic. The guide's NEXT is used when it names that girl's kind;
-  // a phone keeps the guide folded behind its GUIDE chip and may not have re-read the board, so a stale pick
-  // falls back to the same line read off the party's HP (`fallbackPick`).
+  // Whose menu: only the White Mage has White Magic. The pick is the chapter's line read off the party's HP
+  // (`fallbackPick`); `guideNext` is kept for a guide that prints a NEXT section again, and is null today.
   const isYuna = m.rows.includes('White Magic');
   const guided = await guideNext(page);
   const next = guided && (guided.actor === 'Yuna') === isYuna ? guided : await fallbackPick(page, isYuna);

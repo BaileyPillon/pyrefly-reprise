@@ -3,9 +3,10 @@
  * The strategy guide's **panel half** (`src/ui/common/StrategyGuide.ts`) and
  * the two battle HUDs that mount it.
  *
- * The reasoning — that NEXT is the shipped `intendedStrategy` and nothing else —
- * is proved in `tests/unit/strategy-guide.test.ts` against real engines. What
- * is left for a DOM test is the half the player actually touches:
+ * The panel shows a written document for the boss on the field and nothing computed
+ * (`tests/unit/guide-doc*.test.ts` pin the documents, the lookup and the separation
+ * from the move advisor). What is left for this DOM test is the half the player
+ * actually touches:
  *
  *  * **Optional means optional.** G, the pad's spare face button and the chip
  *    itself all hide the slab, the answer survives into `Settings.guideVisible`,
@@ -20,7 +21,7 @@
  *    pink accent from its `.ig--ffx2` root rather than carrying its own colour.
  */
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AtbSnapshot, BattleState, FFX2Combatant } from '../../src/battle/common/types.ts';
 import { SaveStore, defaultSettings } from '../../src/app/SaveData.ts';
 import { StrategyGuide } from '../../src/ui/common/StrategyGuide.ts';
@@ -86,13 +87,11 @@ function panelOf(root: HTMLElement): HTMLElement {
 }
 
 /**
- * The measured column: the ink slab, then the MORE row.
+ * The measured column: the card's slot, then the sheet.
  *
  * Round 04 PR-0009 moved the rail's geometry off `.sgd__panel` and onto
- * `.sgd__stack`. The panel is the slab now and nothing else, so its box can
- * end exactly where the type ends instead of eleven px further down with a
- * MORE chip painted over the difference. The anchor arithmetic these tests
- * pin is unchanged — it is read one element out.
+ * `.sgd__stack`; R38 kept it there when the paged rail became a scrolling
+ * sheet. The anchor arithmetic these tests pin is read one element out.
  */
 function stackOf(root: HTMLElement): HTMLElement {
   return root.querySelector<HTMLElement>('[data-role="strategy-guide-stack"]')!;
@@ -266,33 +265,38 @@ describe('turning it off', () => {
 // ------------------------------------------------------------------ content
 
 describe('what the slab says', () => {
-  it('prints NEXT, WATCH and RULES for the chapter on the field', () => {
+  it('prints the boss guide for the chapter on the field: header, stat lines, advice and loot', () => {
+    const { guide, stage } = mountGuide();
+    guide.sync(makeFakeBattleState());
+
+    const text = panelOf(stage).textContent ?? '';
+    expect(text).toContain('Seymour Flux');
+    expect(text).toContain('Boss Battle');
+    expect(text).toContain('In Game Description');
+    expect(text).toContain('HP: 70,000');
+    expect(text).toMatch(/Mortiorchis/);
+    expect(text).toMatch(/Steal:\s*Elixir/);
+    expect(text).toMatch(/Drops:\s*Lv\. 4 Key Sphere/);
+    // A page, not a plan: no NEXT, WATCH or RULES section, no step to press, and no citation anywhere
+    // (Bailey, 2026-10-03).
+    expect(panelOf(stage).querySelectorAll('.sgd__cite, .sgd__cmd, .sgd__rules, .sgd__charge, .sgd__idle').length).toBe(0);
+    expect(text).not.toMatch(/§|ffx-seymour|research\/|Waiting for your turn/);
+    // Every block of text is a unit the rail can page by.
+    expect(panelOf(stage).querySelectorAll('.sgd__u').length).toBeGreaterThanOrEqual(15);
+  });
+
+  it('does not change with what the boss is winding up: a telegraph adds no note', () => {
     const { guide, stage } = mountGuide();
     const state = makeFakeBattleState();
+    guide.sync(state);
+    const before = panelOf(stage).innerHTML;
     state.log = [
       ...state.log,
       { seq: 1, type: 'charge', enemyId: 'seymour-flux', name: 'Auto-Attack Mode', turnsLeft: 2, stage: 1 },
     ] as BattleState['log'];
     guide.sync(state);
-    guide.showDecision('tidus', makeFakeCommands());
-
-    const text = panelOf(stage).textContent ?? '';
-    expect(text).toContain('Seymour Flux');
-    expect(text).toContain('Total Annihilation');
-    expect(text).toContain('in 2 turns');
-    // A RULES bullet and its citation.
-    expect(text).toMatch(/Mortiorchis/);
-    expect(panelOf(stage).querySelectorAll('.sgd__rules li').length).toBeGreaterThanOrEqual(3);
-    expect(panelOf(stage).querySelectorAll('.sgd__cite').length).toBeGreaterThan(3);
-  });
-
-  it('says it is waiting rather than going blank between turns', () => {
-    const { guide, stage } = mountGuide();
-    guide.sync(makeFakeBattleState());
-    guide.showDecision('tidus', makeFakeCommands());
-    expect(panelOf(stage).querySelector('.sgd__idle')).toBeNull();
-    guide.clearDecision();
-    expect(panelOf(stage).querySelector('.sgd__idle')).not.toBeNull();
+    expect(panelOf(stage).innerHTML).toBe(before);
+    expect(panelOf(stage).textContent).not.toContain('in 2 turns');
   });
 
   it('shows nothing at all — not even the chip — on a board with no written guide', () => {
@@ -301,6 +305,7 @@ describe('what the slab says', () => {
     state.combatants = {};
     guide.sync(state);
     expect(stage.querySelector<HTMLElement>('[data-role="strategy-guide"]')!.hidden).toBe(true);
+    expect(guide.view()).toBeNull();
   });
 
   it('escapes the written content rather than injecting it', () => {
@@ -308,19 +313,8 @@ describe('what the slab says', () => {
     const state = makeFakeBattleState();
     state.combatants['seymour-flux']!.name = '<img src=x onerror=alert(1)>';
     guide.sync(state);
-    guide.showDecision('tidus', makeFakeCommands());
     expect(panelOf(stage).querySelector('img')).toBeNull();
-  });
-
-  it('marks an imminent telegraph differently from a charging one', () => {
-    const { guide, stage } = mountGuide();
-    const state = makeFakeBattleState();
-    state.log = [
-      { seq: 1, type: 'charge', enemyId: 'seymour-flux', name: 'Ready To Annihilate', turnsLeft: 1, stage: 2 },
-    ] as BattleState['log'];
-    guide.sync(state);
-    expect(panelOf(stage).querySelector('.sgd__charge--s2')).not.toBeNull();
-    expect(panelOf(stage).querySelector('.sgd__charge--s1')).toBeNull();
+    expect(panelOf(stage).textContent).not.toContain('onerror');
   });
 });
 
@@ -340,8 +334,8 @@ describe('the rail is measured, never fixed', () => {
     // panel: without the reserve the rail cleared FFX's action banner and the
     // chip landed on it (docs/handoff/fix3-ffx-hud.md, defect 4).
     expect(Number.parseFloat(stack.style.top)).toBeCloseTo(60, 1);
-    // 240 - 5 - 60.
-    expect(Number.parseFloat(stack.style.maxHeight)).toBeCloseTo(175, 1);
+    // 240 - 28 - 60: the fence the owner parks on the party's heads is kept FENCE_GAP (28) off, a panel's own clearance is 5.
+    expect(Number.parseFloat(stack.style.maxHeight)).toBeCloseTo(152, 1);
     // ...and the chip now sits *below* the anchor's bottom edge, not on it.
     expect(Number.parseFloat(toggleOf(stage).style.top)).toBeGreaterThanOrEqual(20 + 24);
   });
@@ -384,21 +378,40 @@ describe('the rail is measured, never fixed', () => {
   });
 
   /**
-   * Round 04 PR-0009, measured live: "MORE chip box 252.50-280.00 intersects 2
-   * glyph line boxes". It could, because it was an absolutely positioned chip
-   * whose `top` the layout wrote at the slab's own bottom edge. As the second
-   * row of a flex column it has nowhere to overlap from.
+   * TEXT SIZE (`text-size.css`) grows FFX's column from its top left corner by its individual `scale` property, and the layout
+   * cannot see a transform: a column given the whole room ended below its fence (3 px into the help slab at 130 percent, which the
+   * a2 spec's overlap check reads). The room is divided by the scale the column is drawn at, so the grown column ends at the fence.
    */
-  it('lays the slab and the MORE row out as one column, so the chip can never sit on the text', () => {
+  it('divides the column’s room by the scale TEXT SIZE grows it by, so it still ends at its fence', () => {
+    const { guide, stage } = mountGuide({ anchors: { above: () => boxed(240, 80), below: () => boxed(20, 24), top: 44, bottom: 34 } });
+    const stack = stackOf(stage);
+    const real = window.getComputedStyle.bind(window);
+    const spy = vi.spyOn(window, 'getComputedStyle').mockImplementation((el: Element, pseudo?: string | null) => {
+      const cs = real(el, pseudo);
+      return el === stack ? new Proxy(cs, { get: (t, k) => (k === 'scale' ? '1.3' : Reflect.get(t, k)) }) : cs;
+    });
+    try {
+      guide.sync(makeFakeBattleState());
+      guide.update(0.016);
+      // (240 - 28 - 60) / 1.3: the column, grown 1.3 times from its top, ends where it would have ended ungrown
+      expect(Number.parseFloat(stack.style.maxHeight)).toBeCloseTo(152 / 1.3, 1);
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
+  /**
+   * The column is two rows: the status hint card's slot, then the sheet. R38: the sheet scrolls (there is no MORE row
+   * and no paging), and the card stands in its own row above it instead of inside the document.
+   */
+  it('lays the card’s slot and the sheet out as one column, with no row for paging', () => {
     const { guide, stage } = mountGuide({ anchors: { below: () => boxed(20, 24), top: 44, bottom: 34 } });
     guide.sync(makeFakeBattleState());
     guide.update(0.016);
 
     const roles = [...stackOf(stage).children].map((c) => (c as HTMLElement).dataset['role']);
-    expect(roles).toEqual(['strategy-guide-panel', 'strategy-guide-more']);
-    // Nothing writes a `top` onto the affordance any more: its place in the
-    // column is its position.
-    expect(stage.querySelector<HTMLElement>('[data-role="strategy-guide-more"]')!.style.top).toBe('');
+    expect(roles).toEqual(['strategy-guide-slot', 'strategy-guide-panel']);
+    expect(stage.querySelector('[data-role="strategy-guide-more"]')).toBeNull();
   });
 
   /**
@@ -438,13 +451,15 @@ describe('FFXBattleHud', () => {
     expect(rail.classList.contains('sgd--ffx2')).toBe(false);
   });
 
-  it('feeds the rail from sync and from the open decision', () => {
+  it('feeds the rail from sync, and an open decision changes nothing in it', () => {
     const { hud, root } = mountHud(new FFXBattleHud());
     hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
     expect(panelOf(root).textContent).toContain('Seymour Flux');
+    const before = panelOf(root).innerHTML;
 
     void hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
-    expect(hud.strategyGuide.view()?.next).not.toBeNull();
+    expect(hud.strategyGuide.view()?.chapterId).toBe('seymour-flux');
+    expect(panelOf(root).innerHTML).toBe(before);
   });
 
   it('takes the rail down with the HUD, key listener and all', () => {

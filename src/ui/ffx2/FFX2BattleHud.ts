@@ -224,11 +224,6 @@ export class FFX2BattleHud implements HudPort {
       top: 44,
       bottom: 104,
     },
-    // Advisor v3: the engine's held command, as the card gets it (never driven).
-    held: () => {
-      const h = this.inFlight?.heldCommand() ?? null;
-      return h ? [h] : [];
-    },
   });
   /**
    * The enemy-intent slab (`src/ui/common/EnemyIntent.ts`).
@@ -802,7 +797,6 @@ export class FFX2BattleHud implements HudPort {
     if (close) close();
     this.commandEl.hidden = true;
     this.actingId = null;
-    this.guide.clearDecision();
     this.advisor.clearDecision();
     this.resetAdvisorCap();
     this.applySelection(null);
@@ -843,11 +837,11 @@ export class FFX2BattleHud implements HudPort {
     this.actingId = actorId;
     if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
     this.commandEl.hidden = false;
-    // NEXT explains the decision that is open right now; cleared below, after
-    // the menu resolves.
+    // The advisor's card explains the decision that is open right now; cleared
+    // below, after the menu resolves. The strategy guide is a document and does
+    // not follow the decision.
     if (this.lastState) {
       this.resetAdvisorCap();
-      this.guide.showDecision(actorId, commands, this.lastState);
       this.advisor.showDecision(actorId, commands, this.lastState);
     }
     const command = await openCommandMenu({
@@ -885,7 +879,6 @@ export class FFX2BattleHud implements HudPort {
     this.closeMenu = null;
     this.commandEl.hidden = true;
     this.actingId = null;
-    this.guide.clearDecision();
     this.advisor.clearDecision();
     this.resetAdvisorCap();
     if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);

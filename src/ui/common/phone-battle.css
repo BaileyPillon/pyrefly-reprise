@@ -331,6 +331,3 @@ html[data-phone-battle] [data-phone-guide='open'] .sgd__panel * {
 html[data-phone-battle] [data-phone-guide='open'] .sgd__panel .sgd__title {
   font-size: 19px !important;
 }
-html[data-phone-battle] [data-phone-guide='open'] .sgd__more {
-  display: none !important;
-}

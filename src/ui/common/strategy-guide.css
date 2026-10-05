@@ -1,56 +1,56 @@
 /**
- * The optional in-battle strategy guide (`src/ui/common/StrategyGuide.ts`).
+ * The optional in-battle strategy guide (`src/ui/common/StrategyGuide.ts`): a written guide for the
+ * boss on the field, laid out as a plain boss guide is laid out.
  *
- * Authored on the same 640x360 logical grid as the two battle HUDs, because it
- * mounts inside their letterbox-scaled stage and has to scale with the rest of
- * the chrome (`src/ui/inkgold/tokens.css`, AUTHORING CONVENTION). Every length
- * here is grid px; spec numbers are quoted as `/* NN @1440 *\/` where the value
- * is a conversion of one.
+ * Authored on the same 640x360 logical grid as the two battle HUDs, because it mounts inside their
+ * letterbox-scaled stage and has to scale with the rest of the chrome (`src/ui/inkgold/tokens.css`,
+ * AUTHORING CONVENTION). Every length here is grid px; spec numbers are quoted as `/* NN @1440 *\/`
+ * where the value is a conversion of one.
+ *
+ * ## The document, block by block
+ *
+ * A guide document (`src/data/guides/docs/`) is a run of blocks, each one a `.sgd__u` unit or a list
+ * of them (`src/ui/common/guideDocHtml.ts`): the boss's header (`.sgd__title` and the small
+ * `.sgd__tag` under it), labelled stat lines (`.sgd__field`, label in `.sgd__flabel`), paragraphs
+ * (`.sgd__p`), run-in lines and sub-headings (`.sgd__lead`, `.sgd__h3`), bulleted and numbered lists
+ * (`.sgd__ul`, `.sgd__ol`), FFX-2's Enemy / HP / Steal / Drop table stacked one box per enemy
+ * (`.sgd__loot`), and boxed notes (`.sgd__hint`). Nothing else is drawn.
  *
  * ## Why this slab is not skewed
  *
- * Every other Ink & Gold slab is `transform: skewX(var(--ig-skew))` with its
- * contents counter-skewed. Those are *short*: `.ig-cmd` is 23px tall, the
- * banner 20, `.ffx-sensor` 78 — at 12deg a 78px box leans about 8px, which
- * reads as a deliberate angle. This rail is a variable 56-200px tall, and at
- * 200px the same skew leans 21px: its top and bottom edges would sit in
- * different columns, it would overhang the party rows beneath it in FFX-2, and
- * the counter-skew on multi-line paragraphs makes running text visibly
- * lozenge-shaped. So the accent moves instead of the box: the rail is a plain
- * ink panel with the accent on its start edge (the same `--ig-edge` trick
- * `.ig-stat` uses to border left in FFX and right in FFX-2), and the *short*
- * elements — the toggle chip and each section head's rule — carry the house
- * skew. Direction A's "one accent per context" is unchanged; only the geometry
- * that does not survive being made tall is dropped.
+ * Every other Ink & Gold slab is `transform: skewX(var(--ig-skew))` with its contents counter-skewed.
+ * Those are *short*: `.ig-cmd` is 23px tall, the banner 20, `.ffx-sensor` 78 — at 12deg a 78px box
+ * leans about 8px, which reads as a deliberate angle. This rail is a variable 56-200px tall, and at
+ * 200px the same skew leans 21px: its top and bottom edges would sit in different columns, it would
+ * overhang the party rows beneath it in FFX-2, and the counter-skew on multi-line paragraphs makes
+ * running text visibly lozenge-shaped. So the accent moves instead of the box: the rail is a plain ink
+ * panel with the accent on its start edge (the same `--ig-edge` trick `.ig-stat` uses to border left in
+ * FFX and right in FFX-2), and the *short* elements — the toggle chip and the header's tag — carry the
+ * house skew. Direction A's "one accent per context" is unchanged; only the geometry that does not
+ * survive being made tall is dropped.
  *
  * ## Which edge
  *
- * Left, in both games, and vertically between two anchors the owner names
- * (`StrategyGuideAnchors`) rather than at a fixed height. FFX puts its command
- * stack bottom-left and its CTB queue top-right; FFX-2 mirrors — command
- * bottom-right, telegraph top-right — and stands its party column bottom-left.
- * A left rail that is measured to stop above whatever is beneath it is the one
- * position that clears the command menu and the CTB list in both.
+ * Left, in both games, and vertically between two anchors the owner names (`StrategyGuideAnchors`)
+ * rather than at a fixed height. FFX puts its command stack bottom-left and its CTB queue top-right;
+ * FFX-2 mirrors — command bottom-right, telegraph top-right — and stands its party column bottom-left.
+ * A left rail that is measured to stop above whatever is beneath it is the one position that clears
+ * the command menu and the CTB list in both.
  *
  * ## The type floor: 5.7 grid px
  *
- * Round 05 PR-0001 (both games): the column rebuilt in ee49fc3 still printed
- * body text at 11.5 to 13.25 *effective* CSS px at 1600x900, under the
- * project's 14 px legibility bar (`critic/CHECKS.md` CHK-003). The stage scales
- * by `min(w / 640, h / 360)`, so an authored grid px is worth 2.5 screen px at
- * 1600x900 and ~2.81 at 2000x1012: the floor is `14 / 2.5 = 5.6`, and every
- * size in this file is authored at **5.7 or above** so a stage scale a hair
- * under 2.5 still clears 14. Enforced by
- * `tests/unit/strategy-guide-chip-and-type.test.ts`, which parses this sheet —
- * a new `font-size` below the floor fails the suite.
+ * Round 05 PR-0001 (both games): the column rebuilt in ee49fc3 still printed body text at 11.5 to
+ * 13.25 *effective* CSS px at 1600x900, under the project's 14 px legibility bar (`critic/CHECKS.md`
+ * CHK-003). The stage scales by `min(w / 640, h / 360)`, so an authored grid px is worth 2.5 screen px
+ * at 1600x900 and ~2.81 at 2000x1012: the floor is `14 / 2.5 = 5.6`, and every size in this file is
+ * authored at **5.7 or above** so a stage scale a hair under 2.5 still clears 14. Enforced by
+ * `tests/unit/strategy-guide-chip-and-type.test.ts`, which parses this sheet — a new `font-size`
+ * below the floor fails the suite.
  *
- * The letter-spacing on the display-face labels comes down as their size goes
- * up (a 5.7px cap at 0.2em is wider than the 132px rail), and fewer lines fit
- * the rail than before. That is the intended trade: the density ladder and the
- * MORE row in `StrategyGuide.ts` already decide *what* to drop, and dropping a
- * rule is recoverable where an unreadable one is not. 1280x720 (scale 2x) is
- * NOT cleared by this floor — 5.7 is 11.4 px there — and is not in this
- * repair's scope; see `docs/handoff/builda1-boot-and-menus.md`.
+ * The letter-spacing on the display-face labels comes down as their size goes up (a 5.7px cap at
+ * 0.2em is wider than the 132px rail). A long document scrolls: the whole of it is in `.sgd__panel`,
+ * which is the sheet (see "The sheet" below). 1280x720 (scale 2x) is NOT cleared by this floor — 5.7 is
+ * 11.4 px there — and is not in this repair's scope; see `docs/handoff/builda1-boot-and-menus.md`.
  */
 
 .sgd {
@@ -67,27 +67,20 @@
 /* ------------------------------------------------------------------ stack */
 
 /**
- * The rail is a **column**, not a box with things floated over it (round 04
- * PR-0009, second pass).
+ * The column: a box of the guide's own, with two rows (R38, 2026-10-03: the desktop guide is a reading
+ * sheet, not a paged rail).
  *
- * Two earlier attempts fixed the sliced last line by measuring: a CSS fade over
- * the cut, then a scale conversion of the measured glyph rects. Both left the
- * same two defects live — the slab still ended several grid px past the last
- * whole line, and `.sgd__more` was an absolutely positioned chip painted *on
- * top of* the body's last two lines. Neither is reachable from here any more,
- * because the geometry no longer allows it:
+ *  * `.sgd__stack` owns the measured `top` / `max-height` that `StrategyGuide.layout()` computes from the
+ *    anchors, and lays its rows out as a flex column. That box is the room the rail has always had on the
+ *    stage: the one place that is free of the HUD and the painted figures in every chapter.
+ *  * `.sgd__slot` is the first row: the status hint card stands in it while a party member has a status
+ *    with a sourced rule (`statusHintCard.ts`). It is empty, and zero tall, the rest of the time.
+ *  * `.sgd__panel` is the second row, the sheet: the whole document, scrolled. It is as tall as the
+ *    document, up to what the column has left after the slot, and no taller.
  *
- *  * `.sgd__stack` owns the measured `top` / `max-height` that
- *    `StrategyGuide.layout()` computes from the anchors, and lays its two
- *    children out as a flex column;
- *  * `.sgd__panel` is the ink slab and holds only the text;
- *  * `.sgd__more` is the **next row of that column**. It owns its own height in
- *    normal flow and is never positioned over the body, so it cannot intersect
- *    a glyph however the fit turns out.
- *
- * The panel's content box therefore ends exactly where the text ends — which is
- * what makes "the slab's bottom edge is a glyph's bottom edge" a property of
- * the construction rather than of a measurement that has to be right.
+ * Nothing is fitted any more: the old `fitWholeUnits` cut, the `MORE` row and the whole-block hiding are
+ * gone, so no line is ever sliced by the layout and no block is ever hidden. A line that is at the edge of
+ * a scrolled sheet is simply scrolled, as on the phone.
  */
 .sgd__stack {
   position: absolute;
@@ -100,44 +93,92 @@
   pointer-events: none;
 }
 
+/* The card's row. Plain: it adds no height of its own, the card carries its margin. */
+.sgd__slot {
+  flex: 0 0 auto;
+  pointer-events: none;
+}
+
 /* ------------------------------------------------------------------ panel */
 
+/**
+ * The sheet. It scrolls (`overflow-y: auto`), shrinks to the room the column has (`flex: 0 1 auto` with
+ * `min-height: 0`) and is as tall as the document when the document is shorter. There is no mask and no
+ * fade over the type (round 04 PR-0009: "no gradient may cover a readable glyph"): the scroll bar is the cue
+ * that there is more.
+ */
 .sgd__panel {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   min-height: 0;
   padding: 5px 7px 6px;
   background: var(--ig-ink-panel);
   color: var(--ig-paper);
   font-family: var(--ig-font-text);
   font-size: 5.7px;
-  line-height: 1.5;
+  line-height: 1.32;
   box-shadow: 0 3.56px 8.89px rgba(0, 0, 0, 0.45); /* 8 20 */
   /* Accent on the start edge: left in FFX (--ig-edge 0), right in FFX-2
      (--ig-edge 1), with no `.ig--ffx2` override rule — see tokens.css. */
   border-left: calc((1 - var(--ig-edge)) * 1.78px) solid var(--ig-accent);
   border-right: calc(var(--ig-edge) * 1.78px) solid var(--ig-accent);
   pointer-events: auto;
-  /* No scrolling and no mask. The old `mask-image` faded the slab's last 7px,
-     which is to say it faded whatever glyphs happened to be there — round 04
-     PR-0009's "no gradient may cover a readable glyph". The body below is cut
-     to a whole number of blocks instead, so there is nothing left to hide. */
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* The desktop sheet only (the phone's has its own, `phone-battle.css`, and is not touched).
+   `position: relative` makes the sheet the offset parent of its content, so `StrategyGuide.scrollToStart()`
+   reads a block's place in the scrolled content from `offsetTop`, whatever the player has scrolled to and
+   whatever scale the stage is at. `overscroll-behavior: contain` keeps a wheel that has reached the end of
+   the sheet from doing anything else. */
+html:not([data-phone-battle]) .sgd__panel {
+  position: relative;
+  overscroll-behavior: contain;
+}
+
+/* The scroll bar, in stage px so it scales with the rest of the chrome (2.4 px is 6 px at 1600x900). Chromium and
+   Safari take the pseudo-elements; a browser without them (Firefox) takes the standard properties. */
+html:not([data-phone-battle]) .sgd__panel::-webkit-scrollbar {
+  width: 2.4px;
+}
+html:not([data-phone-battle]) .sgd__panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.07);
+}
+html:not([data-phone-battle]) .sgd__panel::-webkit-scrollbar-thumb {
+  background: var(--ig-accent);
+}
+@supports not selector(::-webkit-scrollbar) {
+  html:not([data-phone-battle]) .sgd__panel {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ig-accent) rgba(255, 255, 255, 0.07);
+  }
 }
 
 /**
- * The text box. `StrategyGuide.layout()` writes an explicit `height` here, in
- * the stage's own unscaled grid px, equal to the bottom of the last block that
- * fits **entirely**; every block past that one is `display: none`. A CSS
- * transform on an ancestor never touches `offsetTop`/`offsetHeight`, which is
- * the only geometry that decision reads, so the cut lands in the same place at
- * every letterbox scale.
+ * The text box: every block of the document, in order. It has no height of its own; the sheet scrolls it.
  */
 .sgd__body {
   overflow: hidden;
 }
 
+/* ----------------------------------------------------------------- header */
+
+/* The boss's header: its name in the serif face, the small tag beside it (under it when the name is long). */
+.sgd__doc-head {
+  margin: 4px 0 3px;
+  /* The tag is skewed; this keeps its leaning corner inside the box, so the slab never overflows sideways. */
+  padding-right: 2.5px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1px 4px;
+}
+.sgd__doc-head:first-child {
+  margin-top: 0;
+}
 .sgd__title {
-  margin: 0 0 4px;
+  margin: 0;
   font-family: var(--ig-font-serif);
   font-weight: 700;
   font-style: italic;
@@ -145,17 +186,9 @@
   line-height: 1.1;
   color: var(--ig-paper);
 }
-
-.sgd__sec {
-  margin-top: 5px;
-}
-.sgd__sec:first-of-type {
-  margin-top: 0;
-}
-
-/* The one place the house skew survives: a head is a single short line. */
-.sgd__head {
-  margin: 0 0 2.5px;
+/* The one place the house skew survives: the tag is a single short line. */
+.sgd__tag {
+  margin: 0;
   padding: 1px 4px 1.2px;
   display: inline-block;
   font-family: var(--ig-font-display);
@@ -168,119 +201,72 @@
   transform: skewX(var(--ig-skew));
 }
 
-/* --------------------------------------------------------------- NEXT/WATCH */
+/* ------------------------------------------------------------------ prose */
 
-.sgd__actor {
-  margin: 0;
+.sgd__p {
+  margin: 0 0 2px;
+  color: #dcd8cc;
+}
+
+/* A run-in line that names what follows ("The strategy:"), and a sub-heading inside a boss's page. */
+.sgd__lead {
+  margin: 2px 0 1.5px;
   font-family: var(--ig-font-display);
-  font-size: 5.7px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #b9c6d6;
-}
-
-/* The command line: the thing the player is being told to press, in the
-   numeral face so it reads at a glance from across the room. */
-.sgd__cmd {
-  margin: 0.5px 0 1.5px;
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 3px;
-  font-family: var(--ig-font-numeral);
-  font-size: 9px;
-  line-height: 1.15;
-}
-.sgd__label {
-  color: var(--ig-accent);
   font-weight: 700;
-}
-.sgd__arrow {
-  color: #8d99a8;
-  font-size: 6px;
-}
-.sgd__target {
-  color: var(--ig-paper);
-  font-weight: 600;
-}
-.sgd__timing {
-  font-family: var(--ig-font-display);
   font-size: 5.7px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #e9d7a6;
+  color: var(--ig-accent);
+}
+.sgd__h3 {
+  margin: 3px 0 1.5px;
+  font-family: var(--ig-font-serif);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 6.8px;
+  line-height: 1.2;
+  color: var(--ig-paper);
 }
 
-.sgd__why {
-  margin: 0;
+/* A labelled stat line ("HP: 70,000") and the label wherever it appears. */
+.sgd__field {
+  margin: 0 0 3px;
   color: #dcd8cc;
 }
-.sgd__idle {
-  margin: 0;
-  color: #8d99a8;
-  font-style: italic;
-}
-
-/* Every claim the panel makes to the player names the research section it came
-   from (src/data/guides/types.ts). Quiet, but never absent. */
-.sgd__cite {
-  margin: 0.5px 0 0;
-  font-family: var(--ig-font-display);
-  font-size: 5.7px;
-  letter-spacing: 0.04em;
-  color: #7f8a99;
-}
-
-.sgd__charge {
-  margin-bottom: 3px;
-  padding-left: 4px;
-  border-left: 1.2px solid #8d99a8;
-}
-/* Stage 1 amber / stage 2 blood, the same two-stage reading the telegraph
-   banner and the CTB charge pip already use [visual-bible §3.13]. */
-.sgd__charge--s1 {
-  border-left-color: var(--ig-gold);
-}
-.sgd__charge--s2 {
-  border-left-color: var(--ig-blood);
-  animation: sgd-imminent 0.6s ease-in-out infinite alternate;
-}
-@keyframes sgd-imminent {
-  from {
-    filter: brightness(1);
-  }
-  to {
-    filter: brightness(1.45);
-  }
-}
-.sgd__charge--s2 .sgd__label {
-  color: #f2a0a0;
-}
-
-.sgd__phase-label {
-  margin: 0 0 0.5px;
+.sgd__flabel {
   font-family: var(--ig-font-display);
   font-weight: 700;
   font-size: 5.7px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ig-accent);
 }
+.sgd__listlabel {
+  margin: 1px 0 1px;
+}
 
-/* ------------------------------------------------------------------ RULES */
+/* The text of a paragraph or a list item sits in one inner block (`guideDocHtml.ts`). */
+.sgd__t {
+  display: block;
+}
 
-.sgd__rules {
-  margin: 0;
+/* ------------------------------------------------------------------ lists */
+
+.sgd__ul,
+.sgd__ol {
+  margin: 0 0 2px;
   padding: 0;
   list-style: none;
+  counter-reset: sgd-ol;
 }
-.sgd__rules li {
+.sgd__ul li,
+.sgd__ol li {
   position: relative;
-  margin-bottom: 3px;
+  margin-bottom: 1.2px;
   padding-left: 6px;
   color: #dcd8cc;
 }
-.sgd__rules li::before {
+.sgd__ul li::before {
   content: '';
   position: absolute;
   left: 0;
@@ -290,92 +276,84 @@
   background: var(--ig-accent);
   transform: rotate(45deg);
 }
-.sgd__rules .sgd__cite {
-  display: block;
+.sgd__ol li {
+  counter-increment: sgd-ol;
+  padding-left: 8px;
 }
-
-/* Roomy rail: the paragraph, with its citation. */
-.sgd__rule-short {
-  display: none;
-}
-
-/* ---------------------------------------------------------------- compact */
-
-/* A rail shorter than COMPACT_HEIGHT (StrategyGuide.ts) — which is every rail
-   with an FFX command menu open — swaps each rule's paragraph for its one-line
-   headline and drops the rules' citations. NEXT and WATCH are untouched: they
-   are what the player is reading at a decision, and they fit. The rule's
-   research section is still one `G`, one closed menu away. */
-.sgd--compact .sgd__rule-full,
-.sgd--compact .sgd__rules .sgd__cite {
-  display: none;
-}
-.sgd--compact .sgd__rule-short {
-  display: inline;
-}
-.sgd--compact .sgd__rules li {
-  margin-bottom: 1.6px;
-}
-
-/* ------------------------------------------------------- the density ladder */
-
-/* Round 02 #29 — "the strategy guide hard-clips mid-sentence with no
-   scrollbar, fade or affordance". The rail gives text up in this order, one
-   rung at a time, until what is left fits the height `layout()` measured
-   (`StrategyGuide.fit`, and `FIT_RUNGS` for why the order is this one). Every
-   rung hides **whole elements**, which is what makes "never cut a sentence"
-   true rather than aspirational. NEXT survives all five. */
-.sgd--fit1 .sgd__rules .sgd__cite { display: none; }
-.sgd--fit2 .sgd__rule-full { display: none; }
-.sgd--fit2 .sgd__rule-short { display: inline; }
-.sgd--fit2 .sgd__rules li { margin-bottom: 1.6px; }
-.sgd--fit3 .sgd__charge .sgd__why,
-.sgd--fit3 .sgd__phase .sgd__why,
-.sgd--fit3 .sgd__cite { display: none; }
-.sgd--fit4 .sgd__rules li:nth-child(n + 4) { display: none; }
-
-/* The affordance the fade was not. Its own row in `.sgd__stack`'s column,
-   directly under the slab and never over it; one click pages the rail down,
-   and a click at the foot returns to the top — a pad has no wheel, so the
-   indicator has to be the control too.
-
-   Round 04 PR-0009, second pass: this used to be `position: absolute` at the
-   panel's bottom edge, i.e. printed across the body's last two lines. It is a
-   flex row now, so the only thing under it is the painting. It carries its own
-   backing plate for that reason — opaque ink where the word sits, easing off
-   at the top so the slab and the plate read as one object — and the same start
-   edge accent the slab has. The gradient is the only one left in this file and
-   it covers no glyph but its own. */
-.sgd__more {
-  flex: 0 0 auto;
-  height: 11px;
-  margin: 0;
-  padding: 0 0 0.5px;
-  border-left: calc((1 - var(--ig-edge)) * 1.78px) solid var(--ig-accent);
-  border-right: calc(var(--ig-edge) * 1.78px) solid var(--ig-accent);
-  border-top: 0;
-  border-bottom: 0;
-  background: linear-gradient(to top, var(--ig-ink-panel) 0%, rgba(11, 10, 18, 0.62) 100%);
-  box-shadow: 0 3.56px 8.89px rgba(0, 0, 0, 0.45);
+.sgd__ol li::before {
+  content: counter(sgd-ol) '.';
+  position: absolute;
+  left: 0;
   color: var(--ig-accent);
-  font-family: var(--ig-font-display);
-  /* 7 grid px, not the old 5: at the smallest of the three viewports the
-     brief measures against (1280x720, letterbox scale 2x — `scale = min(w /
-     640, h / 360)`), 5px landed at 10 effective CSS px, under the project's
-     14px legibility floor. 7 clears all three (14 / 17.5 / ~19.7 px at
-     1280x720 / 1600x900 / 2000x1012). */
-  font-size: 7px;
-  line-height: 1;
-  letter-spacing: 0.2em;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  cursor: pointer;
-  pointer-events: auto;
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
 }
-.sgd__more::after { content: '\25BE  MORE'; }
-.sgd__more:hover,
-.sgd__more:focus-visible { color: var(--ig-paper); outline: none; }
+
+/* --------------------------------------------------- tables and boxed notes */
+
+/* FFX-2's Enemy / HP / Steal / Drop table, one stacked box per enemy so it fits the rail. */
+.sgd__loot {
+  margin: 1px 0 3px;
+  padding: 1.5px 4px 2px;
+  border-left: 1.2px solid var(--ig-accent);
+  background: rgba(255, 255, 255, 0.05);
+}
+.sgd__lname {
+  margin: 0;
+  font-family: var(--ig-font-numeral);
+  font-size: 7px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ig-paper);
+}
+.sgd__lrow {
+  margin: 0;
+  color: #dcd8cc;
+}
+/* Any other small table: a header line, then one stacked row at a time. */
+.sgd__thead {
+  margin: 1px 0 1.5px;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 5.7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #b9c6d6;
+}
+.sgd__trow {
+  margin: 0 0 2px;
+  padding-left: 4px;
+  border-left: 1.2px solid #8d99a8;
+  color: #dcd8cc;
+}
+/* A boxed note that stands apart from the text ("Helpful Hint", "Warning"). */
+.sgd__hint {
+  margin: 1px 0 3px;
+  padding: 1.5px 4px 2px;
+  border-left: 1.2px solid var(--ig-gold);
+  background: rgba(233, 215, 166, 0.07);
+}
+.sgd__hint--warning {
+  border-left-color: var(--ig-blood);
+  background: rgba(200, 80, 80, 0.08);
+}
+.sgd__hint-title {
+  margin: 0;
+  font-weight: 700;
+  color: var(--ig-paper);
+}
+.sgd__hint-kind {
+  margin: 0 0 1px;
+  font-family: var(--ig-font-display);
+  font-size: 5.7px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #e9d7a6;
+}
+.sgd__hint-text {
+  margin: 0;
+  color: #dcd8cc;
+}
 
 /* ----------------------------------------------------------------- toggle */
 
@@ -432,25 +410,4 @@
 .sgd--off .sgd__toggle:hover,
 .sgd--off .sgd__toggle:focus-visible {
   opacity: 1;
-}
-
-/* ------------------------------------------------------- the whole-block cut */
-
-/* Last rule in the file on purpose: it has to beat every `display` the density
-   ladder above sets on the same element.
-
-   A `.sgd__u` is one block of text — the title, a section head, the command
-   line, a reason, a citation, a rule bullet. `StrategyGuide.layout()` hides
-   the ones that do not fit the rail **entirely** and then sets `.sgd__body`'s
-   height to the bottom of the last one that does. Hiding whole blocks is what
-   makes "a line is never sliced" structural: `overflow` has nothing left to
-   cut through, because the box ends where a block ended. */
-.sgd__u--out {
-  display: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sgd__charge--s2 {
-    animation: none;
-  }
 }

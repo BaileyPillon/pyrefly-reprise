@@ -5,9 +5,10 @@
  * confirmed command for a chain lock while the next girl's menu is open
  * [research/ffx2-combat-core.md §1.1, §1.7; PR-0076]; FFX's CTB has no held command.
  *
- *  - C2-B1: the strategy guide rail's NEXT line must not name a move the engine is **holding**
- *    for another girl (a chain-locked Mega Phoenix at Vegnagun, a Phoenix Down at the Den of
- *    Woe). The card already avoided it; the rail never saw the held command.
+ *  - C2-B1: the guide NEXT the advisor borrows (`buildGuideView().next`) must not name a move the
+ *    engine is **holding** for another girl (a chain-locked Mega Phoenix at Vegnagun, a Phoenix Down
+ *    at the Den of Woe). The card already avoided it. (The strategy guide panel no longer shows a
+ *    NEXT: it is a document since r38, and the two panels are separate.)
  *
  *  - C2-M1: when the enemy moves before another girl's charging heal lands, the card judged "one
  *    hit from down" on HP the heal in flight was about to fill, and named a different heal on the
@@ -26,9 +27,7 @@ import type { QueuedCommand } from '../../src/engine/tactics/advisor-committed.t
 import { buildGuideView, recommendedCommand } from '../../src/engine/tactics/guide.ts';
 import { chosenAlready } from '../../src/engine/tactics/guide-inflight.ts';
 import { inFlight } from '../../src/engine/tactics/advisor-inflight.ts';
-import { StrategyGuide } from '../../src/ui/common/StrategyGuide.ts';
 import { chapterById, runChapter, type DecisionContext } from '../../critic/bench/advisor-v3/drive.ts';
-import { readFileSync } from 'node:fs';
 
 class Stop extends Error {
   constructor(readonly value: unknown) {
@@ -76,38 +75,23 @@ describe('advisor v3 final fix (FFX-2 only)', () => {
     ['ffx2-vegnagun-shuyin', 59, 'x2-mega-phoenix'],
     ['ffx2-den-of-woe', 62, 'x2-phoenix-down'],
   ] as const) {
-    it(`C2-B1: a held ${item} is not the rail's NEXT (${chapter} seed ${seed})`, async () => {
+    it(`C2-B1: a held ${item} is not the NEXT the advisor borrows (${chapter} seed ${seed})`, async () => {
       const found = await heldBoard(chapter, seed, item);
       expect(found, `a board where the engine holds ${item} and the chapter line picks it again`).not.toBeNull();
       const { ctx, held, line, card } = found!;
       const d = { actorId: ctx.decision.actorId, commands: ctx.decision.commands };
-      // The board is the bug's: without the held command the rail names the move.
+      // The board is the bug's: without the held command the borrowed NEXT names the move.
       expect(idOf(buildGuideView(ctx.state, d)?.next?.command)).toBe(item);
-      // Handed the engine's held command, exactly as the card gets it, the rail does not.
+      // Handed the engine's held command, exactly as the card gets it, it does not.
       expect(chosenAlready(ctx.state, d.actorId, line, [held])).toBe(true);
       expect(idOf(buildGuideView(ctx.state, { ...d, held: [held] })?.next?.command)).not.toBe(item);
       // v3 off: the v2 panel is unchanged.
       expect(chosenAlready(ctx.state, d.actorId, line, [held], false)).toBe(false);
-      // The rail itself (the panel the FFX-2 HUD mounts), handed the engine's held command.
-      const rail = (held?: () => readonly QueuedCommand[]): string => {
-        const g = new StrategyGuide({ game: 'ffx2', anchors: { below: () => null, above: () => null, top: 44, bottom: 104 },
-          readVisible: () => true, writeVisible: () => {}, ...(held ? { held } : {}) });
-        g.sync(ctx.state);
-        g.showDecision(d.actorId, d.commands, ctx.state);
-        return idOf(g.view()?.next?.command);
-      };
-      expect(rail()).toBe(item);
-      expect(rail(() => [held])).not.toBe(item);
       // And the card, which already had the held command, does not name it either.
       const t = top(card);
       expect(t !== null && idOf(t) === item && aimOf(t) === aimOf(held.command)).toBe(false);
     }, 600_000);
   }
-
-  it("C2-B1: the FFX-2 HUD hands the rail the engine's held command", () => {
-    const src = readFileSync('src/ui/ffx2/FFX2BattleHud.ts', 'utf8');
-    expect(src).toMatch(/new StrategyGuide\(\{[\s\S]*?held: \(\) => \{[\s\S]*?this\.inFlight\?\.heldCommand\(\)/);
-  });
 
   /** The card with the C2-M1 rule on (the default) and off, on one board. */
   const cards = (ctx: DecisionContext): { now: AdvisorView | null; before: AdvisorView | null } => {
