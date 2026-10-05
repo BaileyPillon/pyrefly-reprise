@@ -13,7 +13,8 @@
  * - FFX-2 desktop HUD (FFX-2 only): each panel of the 640x360 board grows from the corner it is pinned to, as FFX's
  *   does (`text-size.css`); the command list is capped so its top stays under the help band; the strategy guide's
  *   rail grows its type and not its column (it paints the 132 grid px it paints at 100 %), fits the room above
- *   the girls (`StrategyGuide.railRoom`) and gives way when the boss strips leave none (`sgd--squeezed`); the
+ *   the girls (`StrategyGuide.railRoom`) and, where the boss strips leave less than the 56 grid px it is at 100 percent, folds to its tab
+ *   (`sgd--squeezed`, PR-0389: the tab stays and G opens the sheet over the strips); the
  *   advisor folds when it has no lane (`advisorLane.advisorFolds`); the enemy-intent slab prints its brief density
  *   (`EnemyIntent`'s `density`) and never takes a girl before a panel (`placeSlab`'s `girlsFirst`).
  * - FFX-2 upright phone (FFX-2 only): the command tiles, the boss rail, the footer and the GUIDE chip grow; the
@@ -180,6 +181,8 @@ html[data-text-size-wide]:not([data-text-size-wide='100']) .pause .pause__snap f
   letter-spacing: 0.06em;
 }
 
-/* The guide rail gave way (`StrategyGuide.layout`: the boss strips left no room above the girls): neither the panel nor its chip is
-   left standing, and the intent slab's board stops counting it. */
-html[data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud .sgd.sgd--squeezed { display: none; }
+/* The guide rail folded to its tab (`StrategyGuide`: the boss strips left no room above the girls, PR-0389, release 39.1): the sheet and its scroll chip are not
+   drawn, the `G GUIDE` chip stays, and the intent slab's board stops counting the sheet. G opens it over the strips (`sgd--peek`, `strategy-guide.css`).
+   Round 21 hid the whole rail here, chip and all, and G did nothing. */
+html[data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud .sgd.sgd--squeezed:not(.sgd--peek) > .sgd__stack,
+html[data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud .sgd.sgd--squeezed:not(.sgd--peek) > .sgd__keys { display: none; }

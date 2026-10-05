@@ -490,6 +490,20 @@ html[data-phone-battle] .sgd__keys {
   outline: none;
 }
 
+/* Opened over the boss strips (PR-0389, a folded rail's G): near-opaque, so the strips' names and gauges under it do not show through the type. */
+.sgd--peek .sgd__panel {
+  background: rgba(11, 10, 18, 0.97);
+}
+
+/* Folded to its tab (no room above the girls, PR-0389): the chip is the whole of the guide until G opens it over the strips; the same dimmer offer. */
+.sgd--squeezed:not(.sgd--peek) .sgd__toggle {
+  opacity: 0.72;
+}
+.sgd--squeezed:not(.sgd--peek) .sgd__toggle:hover,
+.sgd--squeezed:not(.sgd--peek) .sgd__toggle:focus-visible {
+  opacity: 1;
+}
+
 /* Off: the chip alone, dimmer than when the guide is up — it is an offer, not
    a readout. */
 .sgd--off .sgd__toggle {

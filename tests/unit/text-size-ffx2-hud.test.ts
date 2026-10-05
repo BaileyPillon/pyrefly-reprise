@@ -301,10 +301,12 @@ describe('the grown guide rail keeps its column and gives way when it has no roo
     for (const w of widths) expect(w).toBeCloseTo(132, 9);
   });
 
-  it('a rail with no room above the girl (Chapter VI at 115 / 130 percent) is not drawn at all, panel and chip', () => {
-    expect(css2).toContain(".ffx2hud .sgd.sgd--squeezed { display: none; }");
+  it('a rail with no room above the girl (Chapter VI at 115 / 130 percent) folds to its tab: the sheet and its scroll chip are not drawn, the chip stays (PR-0389)', () => {
+    expect(css2).toContain('.ffx2hud .sgd.sgd--squeezed:not(.sgd--peek) > .sgd__stack');
+    expect(css2).not.toContain('.ffx2hud .sgd.sgd--squeezed { display: none; }');
     const src = readFileSync(join(__dirname, '../../src/ui/common/StrategyGuide.ts'), 'utf8');
-    expect(src).toContain("this.el.classList.toggle('sgd--squeezed', grown.scale > 1 && above !== null && room < MIN_PANEL_HEIGHT);");
+    // the least sheet is counted as it is painted (the room is in layout px, over the scale), and the rail is asked whether it fits whether or not it is up
+    expect(src).toContain('if (room < MIN_PANEL_HEIGHT / grown.scale + (this.squeezed ? SQUEEZE_HYSTERESIS : 0)) {');
     // and it is the FFX-2 rail only: FFX keeps its own rule
     expect(src).toContain("if (this.opts.game !== 'ffx2') return { scale: 1, shift: 0 };");
   });
