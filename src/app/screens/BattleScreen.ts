@@ -740,6 +740,7 @@ export class BattleScreen extends Screen {
     // nothing can be projected yet, so a slow first frame simply retries.
     this.settleFormation(dt);
     this.airship?.sync(this.engine?.state());
+    this.lab?.before(dt); // CAMERA LAB: ask the art governor for the masters the shots ahead need, before the stage's own update fills its load slots
     this.stage?.update(fieldDt);
     this.lab?.update(dt); // CAMERA LAB: cuts, paintings, drift (after the field, before the render)
     this.spectacle?.update(dt);

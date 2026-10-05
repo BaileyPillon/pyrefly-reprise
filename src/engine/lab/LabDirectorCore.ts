@@ -110,6 +110,11 @@ export class LabDirectorCore {
     return true;
   }
 
+  /** The grammar's context now (the art anticipation asks the same questions the director will). */
+  grammarContext(): GrammarContext {
+    return this.ctx();
+  }
+
   private ctx(): GrammarContext {
     const sw = this.o.switches();
     return {

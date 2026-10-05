@@ -15,6 +15,8 @@ import { Vector3, type PerspectiveCamera } from 'three';
 import type { BattleCamera } from '../BattleCamera.ts';
 import type { CameraPort } from '../BattlePresenterPorts.ts';
 import type { PaintedActor } from '../PaintedActor.ts';
+import { anticipateView } from '../StageArt.ts';
+import { likelyShots } from './anticipate.ts';
 import { LabCamera } from './LabCamera.ts';
 import { LabDirectorCore, type LabCut } from './LabDirectorCore.ts';
 import { viewFor, type LabFigure, type LabRig, type LabStageView, type V3 } from './labGeometry.ts';
@@ -28,6 +30,12 @@ export const LAB_RIG = 'lab-shot';
 /** Drift: speed (units/s) and the most it may travel inside one shot. Far inside D-291's 20 deg/s. */
 const DRIFT_SPEED = 0.045;
 const DRIFT_MAX = 0.22;
+/**
+ * Release 39: the lab asks the art governor for the masters its likely shots need, and asks in the frame a load slot is free. The governor starts at most
+ * two loads at a time and its own update refills a free slot with a background pose within a frame, so a request made on a timer found both slots taken
+ * (measured: the first HERO CLOSE of a fight landed on the 2x master). A pass that starts nothing means nothing is wanted: the asking rests this long.
+ */
+const ANTICIPATE_REST = 0.5;
 /** Clair Obscur's slow-down on the hit: the field runs at this rate for this long. */
 const SLOW_RATE = 0.35;
 const SLOW_MS = 260;
@@ -56,6 +64,8 @@ export interface LabDirectorOptions {
   alive: (id: string) => boolean;
   /** A cut just landed (the menu at the hero re-anchors on the next frame). */
   onCut?: (cut: LabCut, rig: LabRig) => void;
+  /** Release 39: ask the art governor for the masters the shots ahead will need (default on; `?labart=off` turns it off for a comparison). */
+  anticipate?: boolean;
 }
 
 const v3 = (v: { x: number; y: number; z: number }): V3 => ({ x: v.x, y: v.y, z: v.z });
@@ -69,6 +79,18 @@ export class LabDirector {
   private driftDir = new Vector3();
   private slowUntil = 0;
   private readonly scratch = new Vector3();
+  private antiRest = 0;
+  private antiEmpty = 0;
+  private antiCursor = 0;
+  /** Release 39: views handed to the art governor so far, and what asking costs (milliseconds per frame, an exponential mean; debug snapshot). */
+  anticipated = 0;
+  private antiMs = 0;
+  private antiTotalMs = 0;
+  private antiPasses = 0;
+  private antiSeconds = 0;
+  private solveMs = 0;
+  private viewMs = 0;
+  private viewCount = 0;
   /** The rig of the shot on screen (debug snapshot). */
   rig: LabRig | null = null;
 
@@ -164,6 +186,67 @@ export class LabDirector {
     return landed;
   }
 
+  /**
+   * Release 39: the 3x and 4x masters the shots ahead of this actor's menu will need, asked for now so they are resident when the cut lands
+   * and not a moment after it. Each likely shot (`likelyShots`: the grammar's own answers for the beats a menu leads to) is solved from where
+   * the figures stand and handed to `StageArt.anticipateView`, which measures it from a camera that is not on screen yet and starts the loads.
+   * Returns how many views were handed over.
+   */
+  anticipate(actorId: string): number {
+    const view = this.stageView();
+    const standing = (enemy: boolean): string[] => view.figures.filter((f) => f.standing && (f.side === 'enemy') === enemy).map((f) => f.id);
+    const enemies = standing(true).sort((a, b) => Number(b === view.bossId) - Number(a === view.bossId));
+    const tune = STYLE_TUNING[this.o.switches().style];
+    let n = 0;
+    const list = likelyShots(this.o.chapter.game, { actorId, enemies, party: standing(false) }, this.core.grammarContext());
+    for (const req of list) {
+      const t0 = performance.now();
+      const rig = solveShot(req, view, tune);
+      const t1 = performance.now();
+      anticipateView({ pos: new Vector3(...rig.position), look: new Vector3(...rig.lookAt), fov: rig.fov });
+      this.solveMs += (t1 - t0 - this.solveMs) * 0.01;
+      this.viewMs += (performance.now() - t1 - this.viewMs) * 0.01;
+      n++;
+    }
+    this.viewCount = n;
+    this.anticipated += n;
+    return n;
+  }
+
+  /**
+   * Every frame, before the stage's own update (`BattleScreen`), when `slotFree()` says the governor can start a load: while a menu is open, ask for its
+   * actor's likely shots; before the first menu and between turns, for each standing party member in turn, so the first hero shot of the fight lands on
+   * resident masters too. A whole round that starts nothing rests the asking for half a second (a pass costs a few milliseconds; resident and in-flight
+   * masters cost nothing to ask for but the measuring).
+   */
+  tickAnticipation(dt: number, slotFree: () => boolean, inflight: () => number): void {
+    if (this.o.anticipate === false) return;
+    this.antiSeconds += dt;
+    this.antiRest -= dt;
+    if (this.antiRest > 0 || !slotFree()) return;
+    try {
+      const t0 = performance.now();
+      const menu = this.core.menuOpen ? this.core.menuActor : null;
+      const party = menu ? [] : this.figures().filter((f) => f.side !== 'enemy' && f.standing);
+      const actor = menu ?? (party.length ? party[this.antiCursor++ % party.length]!.id : null);
+      if (actor) {
+        const before = inflight();
+        this.anticipate(actor);
+        this.antiEmpty = inflight() > before ? 0 : this.antiEmpty + 1;
+        if (this.antiEmpty >= Math.max(1, party.length)) {
+          this.antiRest = ANTICIPATE_REST;
+          this.antiEmpty = 0;
+        }
+      }
+      const spent = performance.now() - t0;
+      this.antiMs += (spent - this.antiMs) * 0.05;
+      this.antiTotalMs += spent;
+      this.antiPasses++;
+    } catch (err) {
+      console.warn('[camera-lab] anticipation failed', err);
+    }
+  }
+
   /** The field's clock: Clair Obscur's short slow-down on a hit. */
   fieldDt(dt: number): number {
     return performance.now() < this.slowUntil ? dt * SLOW_RATE : dt;
@@ -250,6 +333,10 @@ export class LabDirector {
       shot: this.core.current,
       rig: this.rig,
       beat: this.core.beatNumber,
+      anticipated: this.anticipated,
+      anticipateMs: Math.round(this.antiMs * 1000) / 1000,
+      anticipateLoad: { passes: this.antiPasses, totalMs: Math.round(this.antiTotalMs), perSecondMs: this.antiSeconds ? Math.round((this.antiTotalMs / this.antiSeconds) * 100) / 100 : 0 },
+      anticipateParts: { solveEachMs: Math.round(this.solveMs * 1000) / 1000, viewEachMs: Math.round(this.viewMs * 1000) / 1000, views: this.viewCount },
       counts: { ...this.core.counts },
       views: Object.fromEntries(this.actors().map((a) => [a.name, a.viewPoseName ?? 'front'])),
       log: this.core.log.slice(-12),
