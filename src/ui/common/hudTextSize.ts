@@ -26,6 +26,23 @@ export function currentTextScale(root: HTMLElement | null = rootEl()): number {
   }
 }
 
+/**
+ * The FFX-2 HUD's and the pause's TEXT SIZE as a fraction (`data-text-size-wide`, which `app/applyComfort.ts` puts on `<html>`
+ * while `TEXT_SIZE_WIDE_SCOPE` is on; judgment call K of critic round 21, PR-0270): 1, 1.15 or 1.3. 1 on the upright phone,
+ * which lays its own panels out in flow, and 1 without a DOM. FFX-2 only for the HUD; the pause reads the attribute in CSS.
+ */
+export function currentWideTextScale(root: HTMLElement | null = rootEl()): number {
+  if (!root || root.hasAttribute('data-phone-battle')) return 1;
+  switch (root.dataset['textSizeWide']) {
+    case '130':
+      return 1.3;
+    case '115':
+      return 1.15;
+    default:
+      return 1;
+  }
+}
+
 /** Rows the FFX desktop command list shows at the current TEXT SIZE, given its 100 % count. */
 export function commandRowsCap(base: number, root: HTMLElement | null = rootEl()): number {
   if (!root || root.hasAttribute('data-phone-battle')) return base;

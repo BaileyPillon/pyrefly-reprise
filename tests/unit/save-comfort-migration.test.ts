@@ -90,7 +90,8 @@ describe('a release-29 save upgrades (CHK-024, D-285)', () => {
     expect(html().dataset['textSize']).toBe('100');
     expect(html().hasAttribute('data-reduce-motion')).toBe(true);
     expect(html().hasAttribute('data-low-effects')).toBe(true);
-    expect(html().hasAttribute('data-text-size-wide')).toBe(false);
+    // judgment call K (round 21): the FFX-2 HUD and the pause follow TEXT SIZE since release 39, so the wide flag is on from the first frame too.
+    expect(html().dataset['textSizeWide']).toBe('100');
   });
 
   it('writing it back keeps textSize, and a second load reads the same thing (idempotent)', () => {

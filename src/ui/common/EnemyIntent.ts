@@ -196,7 +196,7 @@ export interface EnemyIntentMountOptions {
    * warning it carries (Total Annihilation, Mega Death) is the reason a
    * first-timer survives them.
    */
-  density?: 'full' | 'brief';
+  density?: 'full' | 'brief' | (() => 'full' | 'brief');
 }
 
 /** Standard-gamepad button 3 (Triangle / Y); see `INTENT_HINT_ITEM`. */
@@ -450,7 +450,23 @@ export class EnemyIntentPanel {
   update(_dt: number): void {
     this.pollPad();
     this.overflow.pollPad();
+    // The density may be a live rule (FFX-2 at TEXT SIZE 115 / 130 %, `density` below): a change draws the body again.
+    if (this.visible && !this.el.hidden && !this.lastSignature.startsWith(`${this.densityNow()}~`)) this.render();
     this.layout();
+  }
+
+  /**
+   * What the body is showing: its density, the enemy and the move. It changes whenever the slab's text, and so its height, can
+   * (FFX-2's `intentWidth.ts` keys the slab's measured sizes on it).
+   */
+  get contentKey(): string {
+    return this.lastSignature;
+  }
+
+  /** `'full'` or `'brief'` right now: the mount's option, which may be a function of the live settings. */
+  private densityNow(): 'full' | 'brief' {
+    const d = this.mountOpts?.density;
+    return (typeof d === 'function' ? d() : d) ?? 'full';
   }
 
   private pollPad(): void {
@@ -474,7 +490,7 @@ export class EnemyIntentPanel {
     this.el.hidden = view === null;
     if (!view) return;
     if (this.visible) {
-      const density = this.mountOpts?.density ?? 'full';
+      const density = this.densityNow();
       const signature = `${density}~${signatureOf(view)}`;
       if (signature !== this.lastSignature) {
         this.lastSignature = signature;
@@ -559,6 +575,10 @@ export class EnemyIntentPanel {
     const cx = point ? point.x - layer.left : layer.width / 2;
     const cy = point ? point.y - layer.top : layer.height * 0.3;
 
+    // Asked before the slab is measured: the owner's answer may change the slab's own shape (FFX-2 at TEXT SIZE 115 / 130 %
+    // puts it in a narrower column when the grown panels leave no band as wide as it is; `ffx2/intentWidth.ts`), and the box
+    // read below must be the one it is placed with. For every other owner `avoid()` only reads rectangles: no change.
+    const obstacles = opts.avoid();
     const rect = box.getBoundingClientRect();
     const w = rect.width || PANEL_WIDTH * scale;
     const h = rect.height || 40 * scale;
@@ -588,7 +608,6 @@ export class EnemyIntentPanel {
     // Two passes, not one: clearing a rectangle on the right can slide the slab
     // back onto one on the left, and a single pass leaves it there. Two settles
     // every arrangement these HUDs actually produce and costs nothing.
-    const obstacles = opts.avoid();
     for (let pass = 0; pass < 2; pass++) {
       for (const avoid of obstacles) {
         const a = { left: avoid.left - layer.left, top: avoid.top - layer.top, right: avoid.right - layer.left, bottom: avoid.bottom - layer.top };

@@ -5,11 +5,11 @@
  * - `data-text-size="100" | "115" | "130"` and `--pyr-ts` (1, 1.15 or 1.3): the
  *   FFX battle HUD, the phone HUD and the dialogue card scale from these
  *   (`ui/common/text-size.css`, `ui/common/hudTextSize.ts`).
- * - `data-text-size-wide`: the same value, but only while {@link textSizeWideScope}
- *   is on. The FFX-2 HUD and the pause key their 130 % rules on it. D-220's Q4 is
- *   still open (an FFX-2 HUD frame and a pause frame at 130 % are owed to Bailey
- *   before those two scale), so it ships off; `?textsize=wide` turns it on for the
- *   capture that makes those frames.
+ * - `data-text-size-wide`: the same value, while {@link textSizeWideScope} is on. The
+ *   FFX-2 HUD and both games' pause key their 115 / 130 % rules on it. D-220's Q4 held
+ *   it off until Bailey had seen the 130 % frames; judgment call K of critic round 21
+ *   (PR-0270; Bailey 2026-10-04, "all your recommendations") turned it on, so TEXT SIZE
+ *   now reaches the FFX-2 battle HUD and the pause in both games.
  * - `data-reduce-motion` and `data-low-effects`, present while the flag is on: the
  *   CSS mirror of every `prefers-reduced-motion` block (`ui/common/comfort.css`).
  * - Not on `<html>`: eye-candy D's three looks switch its options A, B and C (`fxLooks.ts`), and the
@@ -35,10 +35,12 @@ import { EYE_CANDY_KEYS, eyeCandyProviderFor, type FxPartField } from './fxParts
 import { isTextSize } from './saveComfort.ts';
 
 /**
- * The FFX-2 HUD and the pause at TEXT SIZE (D-220 Q4). Off until Bailey has seen
- * their 130 % frames; the CSS for both is built and measured behind it.
+ * The FFX-2 HUD and the pause at TEXT SIZE (D-220 Q4; judgment call K of critic round 21, PR-0270).
+ * ON since release 39: Bailey saw the 130 % frames and took recommendation 1 ("turn it on for the
+ * FFX-2 HUD and the pause", the relabel as the fallback). The CSS for both is `text-size-wide.css`.
+ * Game case: the FFX-2 HUD is FFX-2 only; the pause is both games.
  */
-export const TEXT_SIZE_WIDE_SCOPE = false;
+export const TEXT_SIZE_WIDE_SCOPE = true;
 
 /** True when the FFX-2 HUD and the pause follow TEXT SIZE too (the switch, or `?textsize=wide`). */
 export function textSizeWideScope(): boolean {

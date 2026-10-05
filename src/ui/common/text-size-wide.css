@@ -1,16 +1,23 @@
 /*
- * TEXT SIZE for the pause and the FFX-2 HUD (OPTIONS accessibility A2, D-285),
- * built and measured but **off** until Bailey has seen their 130 % frames
- * (D-220 Q4: "Until then TEXT SIZE leaves the FFX-2 HUD and the pause at
- * 100 %, disclosed"). Keyed on `data-text-size-wide`, which `app/applyComfort.ts`
- * sets only while `TEXT_SIZE_WIDE_SCOPE` is on or the page was opened with
- * `?textsize=wide` (the capture that makes those frames).
+ * TEXT SIZE for the pause and the FFX-2 HUD (OPTIONS accessibility A2, D-285). D-220 Q4 held it off until
+ * Bailey had seen the 130 % frames; judgment call K of critic round 21 (PR-0270; Bailey 2026-10-04, "all your
+ * recommendations") turned it ON (`TEXT_SIZE_WIDE_SCOPE` in `app/applyComfort.ts`) and this file carries what the
+ * first cut was missing, proved by real keys in a headless browser at 1600x900, 2000x1012 and 390x844, at 100,
+ * 115 and 130 %, in FFX-2 Chapters IV, V and VI and in both games' pause (`docs/handoff/r39-judg.md`,
+ * `docs/screenshots/r39-judg/text-size/`). Keyed on `data-text-size-wide`, which `app/applyComfort.ts` sets while
+ * the scope is on (or the page was opened with `?textsize=wide`).
  *
- * - Pause (both games): every `--pu-*` type size and the rows and key columns
- *   that hold them grow by the step; the phone keeps its own floor and grows
- *   from it.
- * - FFX-2 HUD (FFX-2 only): each panel of the 640x360 board grows from the
- *   corner it is pinned to, as FFX's does (`text-size.css`).
+ * - Pause (both games): every `--pu-*` type size and the rows and key columns that hold them grow by the step;
+ *   the phone keeps its own floor and grows from it (14 and 15 px). CONTROLS wraps its sentence labels, the CHAPTER
+ *   tab's captions keep their words whole, and the MUSIC list is bounded (`pause-labels.css`).
+ * - FFX-2 desktop HUD (FFX-2 only): each panel of the 640x360 board grows from the corner it is pinned to, as FFX's
+ *   does (`text-size.css`); the command list is capped so its top stays under the help band; the strategy guide's
+ *   rail grows its type and not its column (it paints the 132 grid px it paints at 100 %), fits the room above
+ *   the girls (`StrategyGuide.railRoom`) and gives way when the boss strips leave none (`sgd--squeezed`); the
+ *   advisor folds when it has no lane (`advisorLane.advisorFolds`); the enemy-intent slab prints its brief density
+ *   (`EnemyIntent`'s `density`) and never takes a girl before a panel (`placeSlab`'s `girlsFirst`).
+ * - FFX-2 upright phone (FFX-2 only): the command tiles, the boss rail, the footer and the GUIDE chip grow; the
+ *   party chips cap at 115 %; the command list gives the grown footer 6 / 12 px.
  */
 
 /* ------------------------------------------------------------------ pause */
@@ -40,9 +47,13 @@ html[data-text-size-wide]:not([data-text-size-wide='100']) .pause .pause__row--c
 }
 
 @media (max-width: 620px) {
+  /* The phone's type keeps its 14 and 15 px floor (`pause-screen.css`, PR-0321): 115 % of the old 12 and 13 px (13.8 and 14.95) was under it.
+     It grows from 12 and 13 px, as the first cut measured clean, and stops at the floor; 14 and 15 px multiplied by the scale (18.2 and 19.5 at
+     130 %) ran the brand line over the tabs and the two footer prompts over each other. So on the upright phone the type grows at 130 % (15.6 and
+     16.9 px) and holds its floor at 115 %, while the rows, the keys and the headings grow at both (judgment call K, round 21). */
   html[data-text-size-wide]:not([data-text-size-wide='100']) .pause {
-    --pu-fs: calc(12px * var(--pyr-ts));
-    --pu-fs-v: calc(13px * var(--pyr-ts));
+    --pu-fs: max(14px, calc(12px * var(--pyr-ts)));
+    --pu-fs-v: max(15px, calc(13px * var(--pyr-ts)));
     --pu-fs-on: calc(17px * var(--pyr-ts));
     --pu-fs-line: calc(20px * var(--pyr-ts));
     --pu-row: calc(20px * var(--pyr-ts));
@@ -50,6 +61,10 @@ html[data-text-size-wide]:not([data-text-size-wide='100']) .pause .pause__row--c
     --pu-bar: calc(110px / var(--pyr-ts));
     /* The objective wraps to more lines: it starts higher (`phoneFit.ts` lifts the body clear of it). */
     --pu-top-obj: calc(82vh - (var(--pyr-ts) - 1) * 30vh);
+  }
+  /* The key column's floor: 118 x 1.15 and x 1.3 (136 and 153 px) held "Strategy guide" cut to "Strategy gui..." in the 14 and 15.6 px type. */
+  html[data-text-size-wide]:not([data-text-size-wide='100']) .pause .pause__col--wide .pause__k {
+    width: calc(124px * var(--pyr-ts));
   }
 }
 
@@ -69,13 +84,101 @@ html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battl
   scale: var(--pyr-ts);
   transform-origin: right bottom;
 }
-/* The guide steps down by what the boss gauge grew; the command list steps up by what
-   the party list grew (grid px, 640x360). */
-html[data-text-size-wide='115']:not([data-phone-battle]) .ffx2hud__stage > .sgd > * { translate: 0 5px; }
-html[data-text-size-wide='130']:not([data-phone-battle]) .ffx2hud__stage > .sgd > * { translate: 0 10px; }
+/* The guide steps down by what the boss strips grew (`StrategyGuide.grownBy` measures it, strip height x (scale - 1), so
+   Chapter VI's three enemies step it down by three strips' growth, not one's); the command list steps up by what the
+   party list grew (grid px, 640x360). */
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud__stage > .sgd > * { translate: 0 var(--sgd-shift, 0px); }
+/* The rail grows its type, not its column: its layout width is 132 / scale, so painted it is the 132 grid px it is at 100 %. A column
+   grown to 172 px (130 %) reached across Yuna's and Rikku's heads and could only be kept off them by cutting it to a stub; at 132 it
+   keeps clear of the girls' x-range and runs as far down the left edge as it does at 100 % (judgment call K of round 21). */
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud__stage > .sgd > .sgd__stack { width: calc(132px / var(--pyr-ts)); }
 html[data-text-size-wide='115']:not([data-phone-battle]) .ffx2hud__stage > .ffx2hud__command { translate: 0 -15px; }
 html[data-text-size-wide='130']:not([data-phone-battle]) .ffx2hud__stage > .ffx2hud__command { translate: 0 -30px; }
+/* The list grows up from its bottom edge, so a long submenu (Chapter V's sixteen White Magic rows) would run off the top of
+   the window and under the help band. Its height is capped so that the painted list, `scale` times this, keeps its top below
+   the band: the list's bottom is 243.56 grid px down (360 - 116.44), less the step above, and the band ends at 17.3; 22 leaves
+   air (judgment call K of round 21). Layout px, so 179 x 1.15 and 147 x 1.3 paint about 206 and 191 tall. */
+html[data-text-size-wide='115']:not([data-phone-battle]) .ffx2hud__stage > .ffx2hud__command { max-height: 179px; }
+html[data-text-size-wide='130']:not([data-phone-battle]) .ffx2hud__stage > .ffx2hud__command { max-height: 147px; }
+/* The enemy-intent slab's narrow shape. The grown enemy list and command stack can leave a gap narrower than the slab's 150 px
+   (Chapter VI at 130 %: 121 grid px between them), and the slab then had nowhere to stand but across the enemies it names. At 116 it
+   fits that gap (the gap, less the 4 px of air each side the solver keeps, is 118); it is a third taller, so the HUD wears it only
+   when it is clearly the cleaner of the two shapes (`ffx2/intentWidth.ts`, `intentPlacement.pickSlabWidth`). The same words, wrapped
+   (judgment call K of round 21). */
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .eint__panel.eint__panel--narrow { width: 116px; }
 /* The advisor keeps the lane `advisorLane.ts` solves; its type grows inside it. */
 html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud .mad {
   --mad-fs-floor: calc(14.2px * var(--pyr-ts) / var(--lb-scale, 1));
 }
+
+/* ------------------------------------------------- FFX-2 upright phone (flow layout) */
+/*
+ * Judgment call K of critic round 21 (PR-0270; FFX-2 only: this is FFX-2's own phone HUD, `ffx2/phone-hud.css`; FFX's is in
+ * `text-size.css`). The first cut scaled the desktop panels and left the phone at 100 %, so TEXT SIZE did nothing there. As FFX's
+ * phone does, the type grows and reflows and the panels keep their size: the command tiles, the boss rail, the footer and the
+ * GUIDE chip scale with the setting; the party chips cap at 115 % (a 120 px chip holds "Paine" and "1706" there and no more);
+ * the tip line and the enemy-move line keep their type, as the target frames draw them. The px are the phone HUD's own sizes.
+ */
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud .ig-bosshp__name { font-size: calc(18px * var(--pyr-ts)); }
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) :is(.ffx2boss__num, .ffx2boss__num small, .ffx2boss__hint, .ffx2boss__partname, .ffx2boss__down) { font-size: calc(14px * var(--pyr-ts)); }
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud .ig-cmd { font-size: calc(16px * var(--pyr-ts)); }
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) .ffx2cmd__label {
+  font-size: calc(16px * var(--pyr-ts));
+  letter-spacing: 0.05em;
+  /* A long name wraps to a second line instead of losing its end: "White Magic Lv. 2" and "Lv. 3" read the same cut at "White Magic L..."
+     (199 px of name in a 155 px tile at 130 %; at 100 % the same two names already lose a character, 167 px in 155). The tile grows
+     with it (below); one with a sub-line (MP) keeps its one-line name for every name that fits. */
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud .ig-cmd {
+  height: auto;
+  min-height: 56px;
+}
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud__command:has(.ffx2cmd__title) .ig-cmd {
+  min-height: 48px;
+}
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) :is(.ffx2cmd__mp, .ffx2cmd__grants, .ffx2cmd__reason, .ffx2cmd__fold) { font-size: calc(14px * var(--pyr-ts)); }
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) .ffx2cmd__title { font-size: calc(15px * var(--pyr-ts)); }
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) :is(.phud-foot, .phud-foot__who, .phud-foot__help, .phud-guide) { font-size: calc(14px * var(--pyr-ts)); }
+/* The chip's two number rows and name row keep a line each, so they grow with the 115 % type; the chip rises by the difference. */
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud .ig-stat {
+  height: 68px;
+  grid-template-rows: calc(17px * 1.15) calc(17px * 1.15) auto;
+}
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud .ig-stat__name { font-size: calc(17px * 1.15); }
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud .ig-stat__value { font-size: calc(16px * 1.15); white-space: nowrap; }
+html[data-phone-battle='ffx2'][data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud .ig-stat__value--mp { font-size: calc(14px * 1.15); }
+/* The grown footer takes up to two lines of the larger type; the list above it gives that room up (its last tile's sub-line ran
+   into the footer's help text, Chapter V's White Magic, 130 %). The list scrolls, so a shorter window loses nothing. */
+html[data-phone-battle='ffx2'][data-text-size-wide='115'] .ffx2hud__command { max-height: calc(var(--phud-grid) - 44px - 6px); }
+html[data-phone-battle='ffx2'][data-text-size-wide='130'] .ffx2hud__command { max-height: calc(var(--phud-grid) - 44px - 12px); }
+html[data-phone-battle='ffx2'][data-text-size-wide='115'] .ffx2hud__command:has(.ffx2cmd__title) { max-height: calc(var(--phud-tip) - 6px); }
+html[data-phone-battle='ffx2'][data-text-size-wide='130'] .ffx2hud__command:has(.ffx2cmd__title) { max-height: calc(var(--phud-tip) - 12px); }
+
+/* ------------------------------------------------------------------ pause: what 115 / 130 % broke */
+/*
+ * Judgment call K (round 21). CONTROLS: the sentence labels ("In pause, the painting alone") outgrew their column and ran into the
+ * next column's bindings at 1600x900 and 2000x1012; they wrap, as the phone's do (`pause-labels.css`), and the row grows with them.
+ * The CHAPTER tab's polaroid captions broke "Prominence" in the middle of the word in a 104 px thumbnail; the thumbnails are a fifth
+ * wider and the caption type stops at 115 %, so a word of the longest caption fits whole.
+ */
+html[data-text-size-wide]:not([data-text-size-wide='100']) .pause__body[data-tab='controls'] .pause__row {
+  height: auto;
+  min-height: var(--pu-row);
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']) .pause__body[data-tab='controls'] .pause__k {
+  white-space: normal;
+  line-height: 1.3;
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']) .pause .pause__snap {
+  width: calc(clamp(72px, 6.5vw, 130px) * 1.2);
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']) .pause .pause__snap figcaption {
+  font-size: calc(clamp(14px, 0.875vw, 17px) * min(var(--pyr-ts), 1.15));
+  letter-spacing: 0.06em;
+}
+
+/* The guide rail gave way (`StrategyGuide.layout`: the boss strips left no room above the girls): neither the panel nor its chip is
+   left standing, and the intent slab's board stops counting it. */
+html[data-text-size-wide]:not([data-text-size-wide='100']) .ffx2hud .sgd.sgd--squeezed { display: none; }

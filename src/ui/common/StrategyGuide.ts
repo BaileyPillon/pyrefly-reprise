@@ -221,6 +221,20 @@ export function fitWholeUnits(units: readonly GuideFitUnit[], limit: number): Gu
   return { shown, height: Math.min(last.glyphBottom, last.bottom), clipped: shown < units.length };
 }
 
+/**
+ * The room the rail may fill, in its own **layout** px, once TEXT SIZE has grown it (judgment call K of critic round 21, PR-0270;
+ * FFX-2 only). `text-size-wide.css` scales the rail from its top-left corner by `scale` and steps it down by `shift`, the
+ * stage px its boss strips grew, so what is painted is `scale` times the layout height and starts `shift` lower. The layout room
+ * is therefore the stage room less the shift, over the scale: a rail fitted to the stage room would paint 1.3 times as tall and
+ * run over the girl it was fenced above (Yuna's head, 36 percent of her at 130 percent). Scale 1 and shift 0 give the stage
+ * room back unchanged.
+ */
+export function railRoom(stageRoom: number, scale: number, shift: number): number {
+  const s = Number.isFinite(scale) && scale > 1 ? scale : 1;
+  const down = Number.isFinite(shift) && shift > 0 ? shift : 0;
+  return (stageRoom - down) / s;
+}
+
 export class StrategyGuide {
   readonly el: HTMLElement;
   /** The measured column: the slab, then the MORE row. See `.sgd__stack`. */
@@ -523,7 +537,14 @@ export class StrategyGuide {
     const above = aboveEl && aboveEl.offsetHeight > 0 ? aboveEl : null;
     const floor = above ? above.offsetTop - CLEARANCE_GAP : 360 - anchors.bottom;
 
-    const available = Math.max(MIN_PANEL_HEIGHT, floor - top);
+    // FFX-2 at TEXT SIZE 115 / 130 %: the rail paints `scale` times its layout size and `shift` lower (`grownBy`).
+    const grown = this.grownBy();
+    this.el.style.setProperty('--sgd-shift', `${grown.shift.toFixed(2)}px`);
+    const room = railRoom(floor - top, grown.scale, grown.shift);
+    // Even the shortest rail would be painted past the girl it is fenced above (Chapter VI's three boss strips take 121 grid px at 130 %
+    // and leave 30 above Yuna's head): it gives way entirely, panel and chip, rather than cover her (`text-size-wide.css`).
+    this.el.classList.toggle('sgd--squeezed', grown.scale > 1 && above !== null && room < MIN_PANEL_HEIGHT);
+    const available = Math.max(MIN_PANEL_HEIGHT, room);
     this.stackEl.style.top = `${top.toFixed(2)}px`;
     this.stackEl.style.maxHeight = `${available.toFixed(2)}px`;
     this.layoutToggle();
@@ -531,6 +552,26 @@ export class StrategyGuide {
     // when it closes. See COMPACT_HEIGHT.
     this.el.classList.toggle('sgd--compact', available < COMPACT_HEIGHT);
     this.refit(available);
+  }
+
+  /**
+   * How TEXT SIZE has grown the rail: the scale it paints at and the stage px it steps down (FFX-2 only: FFX keeps its own rule).
+   * Read from the computed style, so it is exactly what `text-size-wide.css` applies, and 1 / 0 whenever nothing does (100 %, the
+   * phone, jsdom). The shift is what the boss strips above it grew, `strip height x (scale - 1)`, so it follows however many
+   * enemies there are (Chapter VI has three), not a fixed step.
+   */
+  private grownBy(): { scale: number; shift: number } {
+    if (this.opts.game !== 'ffx2') return { scale: 1, shift: 0 };
+    let scale = 1;
+    try {
+      const raw = Number.parseFloat(getComputedStyle(this.stackEl).scale);
+      if (Number.isFinite(raw) && raw > 1) scale = raw;
+    } catch {
+      scale = 1;
+    }
+    if (scale <= 1) return { scale: 1, shift: 0 };
+    const below = this.opts.anchors.below?.() ?? null;
+    return { scale, shift: below && below.offsetHeight > 0 ? below.offsetHeight * (scale - 1) : 0 };
   }
 
   /**
@@ -586,6 +627,12 @@ export class StrategyGuide {
     while (this.fitRung < FIT_RUNGS && this.bodyEl.scrollHeight > rail + 0.5) {
       this.fitRung++;
       this.applyRung();
+    }
+    // FFX-2 at TEXT SIZE 115 / 130 % (judgment call K, round 21): the rail is short and the type is large, so when even the last rung
+    // overflows, the encounter's name line goes (the boss strip above it already names the boss) before the NEXT block is torn:
+    // a curse card above it left "NEXT / YUNA" with its move cut off at 130 % in Chapter IV.
+    if (this.grownBy().scale > 1 && this.bodyEl.scrollHeight > rail + 0.5) {
+      this.bodyEl.querySelector('.sgd__title')?.classList.add(OUT_CLASS);
     }
 
     const visible = this.allUnits().filter((el) => el.offsetHeight > 0);
