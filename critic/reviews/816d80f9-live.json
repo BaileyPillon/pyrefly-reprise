@@ -1,0 +1,64 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-05T12:12:34Z",
+  "build": {
+    "mainSha": "816d80f9d07b750261804dc30b9e6991aaf75a9f",
+    "bundle": "DIf_suBq",
+    "artifactHash": "12418058c51d9995232bd0be6fbcf65b00fac6d38c985abb7851e88bd0ded264"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/816d80f9.json --url https://echoesofspira.com/ --changed-from critic/artifacts/8136f2ed.json --full (run in D:/Final Fantasy, HEAD 50828769, 2026-10-05 11:31:33Z to 11:55:18Z, under a preload that only counted fetch calls and logged progress: 3,800 logged, none non-200) -> {result: PASS, artifactHash: 12418058c51d9995232bd0be6fbcf65b00fac6d38c985abb7851e88bd0ded264, liveManifest: match, checked: 3848, mismatched: [], missing: [], wrongType: [], errors: [], notes: [], browserPages: {index.html: \"identical to the artifact once Cloudflare's Web Analytics beacon is removed (366 bytes and the line feed after it)\"}, assetCacheControl: assets/index-DIf_suBq.js \"public, max-age=0, must-revalidate\"}. --full compares all 3,848 files (8,323,984,350 bytes) byte for byte and by content type; the stored manifest, the marker and the live manifest name the same artifactHash. THE BEACON WAS SEEN: the verifier fetched index.html with a browser Accept, cut out exactly the one Cloudflare Web Analytics script and the line feed after it and found nothing else different; a browser-header curl shows the tag (type module, src https://static.cloudflareinsights.com/beacon.min.js/v31edd6df..., integrity, data-cf-beacon), and every browser session counted one script[data-cf-beacon] in its DOM. Missing paths answer a real 404, not the SPA fallback (art/does-not-exist-r39.png, nope-r39.js, audio/music/nope-r39.mp3, /pyrefly-reprise/), so a 200 for a shipped path is the file; 0 images answered as text/html in 9 sessions (2,003 responses); every session served assets/index-DIf_suBq.js. A first launch of the verifier was stopped by the 25-minute background limit of the reviewer's shell before it printed anything and an orphaned duplicate was stopped within minutes; neither result is used.",
+      "reason": "The identity claim rests on the byte comparison; the bundle name alone is not identity. The only difference between the artifact and the page a browser receives is the one tolerated Cloudflare beacon (LV39-2, carried from release 38)."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Chromium 153.0.8010.12 driven by Playwright from node, PYREFLY_BROWSER=gpu (real GPU through ANGLE D3D11: the WebGL renderer reads ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti, Direct3D11), never SwiftShader; no black canvas: mean luminance 12.6 to 89.7 over the first 36 frames read, so no fallback was needed), never Claude-in-Chrome or the built-in pane, one browser at a time. Live URL https://echoesofspira.com/ with a ?cb= query, a new browser and an empty profile for every session, 1600x900 (phone sessions 390x844, touch and mobile emulation), seed 1 pinned by setSeed(1) before the first key, every game decision a REAL key press, click or touch tap, automated. Before every frame the harness reads screen, chapter, game, awaiting-menu and open-target state and throws on a mismatch or on a stale title root or more than two screen roots (it did throw once, on a too-strict playback-phase assertion, and the frame was not taken): 35 of 37 frames asserted, 0 failed (the other two are crops of one). Sessions: (1) Ch I FFX: first-run line taken down by the first Enter, Defend tab (Q) on at the top level and away in a submenu with Q spending no turn, cancel path (Attack target step, Escape), real turn, Defend by Q (action-start defend, status-add defend) with the first-time Overdrive card up, Escape and P pause and resume, H hide and restore, MASTER VOLUME 80 to 60, guide text R39C-01 (\"Defend will not help against this one ... Shell is what halves it.\"), music prerendered; (2) Ch IV FFX-2: cancel path (Change list, Escape), dressphere change Gunner (spherechange white-mage to gunner), a real turn by Paine, pause, H, Escape; (3) Ch VIII FFX: cancel paths and four real turns by Tidus, Rikku, Wakka, Rikku; (4) Ch X FFX: Natus pinned (frac 0.45, card [410,4], bossPx 341, 1 plan, 0 re-plans), Sensor card box x 1001-1299 y 8-230, aim onto Natus and Escape, a real turn, the pin holding at the next menu; (5) Ch XVI FFX-2: Change list Escape, Change to Lady Luck, Skill list Escape, Magic Reels, overlay PRESS ENTER TO STOP, strip 4.97 symbols a second, spin 1 three Cherries by real Enter (each press stopped the armed reel on the symbol on the line, engine message Flare), spin 2 red7 / staff / cherry (engine message Cura); (6) phone Ch I by touch taps: Attack row, target, DEFEND tab; (7) ?artscale=2: 88 art requests with %40, 0 raw @, all 200, no 307; (8) phone Ch IV by touch taps: Change, Gunner, BACK, Attack, ATTACK -> BAHAMUT; (9) Natus margin: 14 paired scene/HUD frames, the open card drawn to y 209 and the wing tip at y 224-229 (gap 15-20 px), folded card gap 179-188 px, 0 of 14 overlapping, 0 under HUD by the product measure. Network over the 9 sessions: 2,003 responses (1,980 x 200, 10 x 204 beacon POSTs, 13 x 304 reload revalidations), 0 console errors, 0 page errors, 0 failed requests, 0 responses >= 400, 0 404s, 0 images as text/html, no 307 or other redirect, no Cloudflare challenge; art requests 1,762 (88 with %40, 0 with a raw @); 71 audio requests over 13 files all 200, the playing track prerendered in every session (manifest 26 cues, 100 v2 SFX cues decoded); page ready 0.66 to 1.99 s. Frames: critic/reviews/816d80f9-live/ (37 JPEGs)."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke on the Ch I session (last run of several): after the real turns one setting was changed through the pause screen's own OPTIONS row (MASTER VOLUME 80 to 60, so masterVolume 0.8 to 0.6, real ArrowLeft) and one piece of progress had been recorded (chapters.seymour-flux: attempts 1, cleared false, play time 39,848.6 ms); page.reload and window.__pyreflyReady, then the save under pyrefly-reprise:save:v1 (the only localStorage key; 832 bytes before and after) read back masterVolume 0.6 and an identical chapter record, audioDebug().volumes.master read 0.6 (the mixer applied it), and the app came back at the title.",
+      "reason": "The full upgrade matrix (fresh player, returning player, the previous build's save fixture, truncated or invalid storage, the reset flow) is not part of a live pass and was not run; this is the lightweight live check only (RUBRIC section 5)."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact identity: verify-live --full, 3,848 of 3,848 files byte-identical with the right content type; the beacon seen and tolerated; missing paths answer real 404s",
+      "title and chapter select by real Enter; Ch I (FFX) turn, cancel path, Defend by Q with the submenu and cancel cases, guide text R39C-01, pause by Escape and P, H hide and restore, an options change, prerendered music, save round trip by reload",
+      "Ch IV (FFX-2): cancel path, dressphere change, a real turn, pause, H, Escape",
+      "Ch VIII (FFX): cancel paths and four real turns by three members",
+      "Ch X (FFX): Natus pinned and the Sensor card clear of him (product measure 0 under HUD; 14 paired frames, 15 to 20 px clear of the wing tips while the card is open), aim onto Natus and cancel, a real turn, the pin at the next menu",
+      "Ch XVI (FFX-2): Change to Lady Luck with the cancel paths, Magic Reels, two spins of the timed reels stopped by real Enter presses (three Cherries -> Flare; red7, staff, cherry -> Cura), strip speed 4.97 symbols a second",
+      "phone 390x844 by touch taps: Ch I (Attack row, target, DEFEND tab) and Ch IV (Change, dressphere, BACK, Attack, ATTACK -> target)",
+      "art URL rule with ?artscale=2: 88 %40 requests, 0 raw @, 0 redirects",
+      "network sweep over 9 game sessions: statuses, hosts, redirects, image content types, Cloudflare challenge markers, audio requests, console and page errors, request failures"
+    ],
+    "reused": [],
+    "notTested": [
+      "the full CHK-024 upgrade matrix",
+      "the other 13 chapters (II, III, V, VI, VII, IX, XI to XV, XVII, XVIII), win, loss and retry paths, cutscene content beyond the held skip",
+      "every deep-review system and the continuity checks CHK-026 and CHK-027 (snaps, double images, size continuity), the guide beyond Ch I, the pose registration and art quality, audio by ear",
+      "the natural fetch of @2x/@3x/@4x masters in a long fight (the %40 rule was proved with ?artscale=2 only)",
+      "other window sizes (1280x720, 1366x768, 2000x1012, 2560x1440, 4K) for the Natus card margin and the layouts; slow or cold connections; Safari, Firefox, a real phone, a real controller",
+      "Lady Luck by pad or touch (key only), Active ATB, Dud and Auto-Life spins, Attack Reels",
+      "the www and plain-http behaviour of the host (checked in the release-38 live pass, not repeated)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 68,
+  "notes": "No critical or major finding. LV39-1 (informational, FFX-2): P does not pause while Lady Luck's reels are open (BattleScreen.canPause refuses during a minigame, snapshot canPause false, phase hud:minigame-request; the timer bar went on), so docs/handoff/ladyluck-reels-a.md's \"a pause freezes the reels and the timer\" cannot happen from the keyboard in the shipped game. LV39-2 (hosting, carried from release 38 LV-1): the Cloudflare Web Analytics beacon is still injected into the page a browser receives (366 bytes plus a line feed); the verifier tolerates exactly it. LV39-3: the default flows request no @Nx masters in a one-minute session; the %40 rule was proved with ?artscale=2. LV39-4: the ANGLE shader warning X3595 appears in each phone session (as in release 38). LV39-5: Natus's Sensor card is open for a few seconds (drawn to y 209; box to 230.5) then folds to one line; the wing tip rises to y 224, 15 to 20 px under the open card's drawn edge, 0 of 14 paired frames overlap; with the aim on Natus the card stood at the pinned place in the counted run and 91 px further left in a superseded run, both above him. LV39-6: method notes (first-run line swallows the first Enter by design; counts written 1.5 s after the last step; superseded earlier runs; a harness check that expected data-stops in press order, fixed). A first verifier launch was stopped by the reviewer's shell limit and a duplicate was stopped; the result used is the second full run."
+}
