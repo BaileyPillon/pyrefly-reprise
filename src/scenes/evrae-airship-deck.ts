@@ -165,6 +165,8 @@ const EVRAE_AIRSHIP_DECK_STAGING = {
     evrae: [...RANGE_STAGING.near.evrae] as [number, number, number],
     cid: [...RANGE_STAGING.near.evrae] as [number, number, number],
   },
+  // Round 21, PR-0367 (FFX only): Evrae's hurt and attack move only its head, so a crossfade drew two at half strength: it cuts (PoseCut.ts).
+  poseCutArt: ['evrae'],
 } as const;
 
 /** The published slots, same shape every other scene exports. */

@@ -207,6 +207,12 @@ export interface SceneStaging {
    */
   readonly poseCut?: true;
   /**
+   * The art ids whose pose changes are a hard cut, never a crossfade (the actor's `crossfadeMs` 0), where the scene's other figures keep
+   * theirs (`src/engine/PoseCut.ts`). Chapter VIII's Evrae (FFX only): its hurt and attack move the head, so every crossfade drew
+   * two heads at half strength (round 21, PR-0367). Unset everywhere else.
+   */
+  readonly poseCutArt?: readonly string[];
+  /**
    * Per art id, a horizontal shift per pose in the painting's own pixels (the actor's `poseShiftPx`), so every
    * pose stands on the idle's stance. FF7 only (`src/data/ff7/filmPoseAnchors.ts`). Unset everywhere else.
    */
@@ -246,6 +252,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.turnRings === false) out.turnRings = false;
   if (build.figureExtent) out.figureExtent = build.figureExtent;
   if (build.poseCut) out.poseCut = true;
+  if (build.poseCutArt) out.poseCutArt = build.poseCutArt;
   if (build.poseShiftPx) out.poseShiftPx = build.poseShiftPx;
   if (build.restPoses === false) out.restPoses = false;
   if (build.figureLight) out.figureLight = build.figureLight;

@@ -33,6 +33,8 @@ import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { figureBloomMasked } from './BloomMask.ts';
+import { posesCut } from './PoseCut.ts';
+import { cutRigsOf } from './motion/CutRig.ts';
 import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
 import * as SA from './StageAnchors.ts';
 import { stageSpellFx, type StageSpellFxOptions } from './spellfx/stageSpellFx.ts';
@@ -207,10 +209,28 @@ export class PaintedStage implements BattleStage {
         return out;
       },
       figure: (id) => this.actors.get(id)?.actor,
-      view: () => ({ w: opts.canvas.clientWidth || 1600, h: opts.canvas.clientHeight || 900 }),
+      view: () => this.motionView(),
+      cutRigs: (runner) => cutRigsOf(this, this.camera, runner, (r) => preset.shotRig(r)),
       lowEffects: () => opts.comfort?.().lowEffects === true,
       warmFor: () => this.smearWarmId(),
     });
+  }
+
+  /**
+   * The canvas's size and the part of it the window shows, in canvas px (`StageMotionPort.view`): the upright phone shows a slice of a
+   * wider field, and a girl outside the slice is out of the frame the player has (round 21, PR-0364). Whole canvas where it cannot be read.
+   */
+  private motionView(): { w: number; h: number; l?: number; r?: number; t?: number; b?: number } {
+    const canvas = this.opts.canvas;
+    const w = canvas.clientWidth || 1600;
+    const h = canvas.clientHeight || 900;
+    const box = typeof canvas.getBoundingClientRect === 'function' ? canvas.getBoundingClientRect() : null;
+    if (!box || !(box.width > 0) || !(box.height > 0) || typeof window === 'undefined' || !(window.innerWidth > 0)) return { w, h };
+    const frac = (lo: number, hi: number): [number, number] => [Math.min(1, Math.max(0, lo)), Math.min(1, Math.max(0, hi))];
+    const [fl, fr] = frac(-box.left / box.width, (window.innerWidth - box.left) / box.width);
+    const [ft, fb] = frac(-box.top / box.height, (window.innerHeight - box.top) / box.height);
+    if (fr <= fl || fb <= ft) return { w, h };
+    return { w, h, l: fl * w, r: fr * w, t: ft * h, b: fb * h };
   }
 
   /** FFX-2 only (RUN-IN is the one user of the smear): which party figure's painting builds the smear's program in the opening; none under REDUCE MOTION, which never runs. */
@@ -296,7 +316,7 @@ export class PaintedStage implements BattleStage {
       // art painted the way its body faces is drawn exactly as painted.
       ...bodyFacingOption(this.opts.slots.sideFacing, c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party'),
       worldHeight: anchor ? SA.anchoredHeight(anchor) : (worldHeight ?? own ?? worldHeightFor(c, heights)),
-      crossfadeMs: this.opts.slots.poseCut ? 0 : kind === 'party' ? 120 : 140, // FF7: a hard cut between its painted keys
+      crossfadeMs: posesCut(this.opts.slots.poseCut, this.opts.slots.poseCutArt, artId) ? 0 : kind === 'party' ? 120 : 140, // FF7: a hard cut between its painted keys; Evrae (FFX VIII): a cut, not two heads (PoseCut.ts)
       ...(this.opts.slots.poseShiftPx?.[artId] ? { poseShiftPx: this.opts.slots.poseShiftPx[artId] } : {}), // FF7: every key on the idle's stance
       poses,
       placeholder:

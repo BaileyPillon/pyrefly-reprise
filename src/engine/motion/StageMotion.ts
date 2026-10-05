@@ -15,9 +15,10 @@
  *
  * Presentation only: no engine state, no RNG, no new texture.
  */
-import { Mesh, PlaneGeometry, ShaderMaterial, Vector3, type Object3D, type Scene, type Texture } from 'three';
+import { Mesh, PerspectiveCamera, PlaneGeometry, ShaderMaterial, Vector3, type Object3D, type Scene, type Texture } from 'three';
 import type { CombatantId } from '../../battle/common/types.ts';
 import type { BattleCamera } from '../BattleCamera.ts';
+import { rigPose } from '../FrameFit.ts';
 import { paintedVertexShader } from '../shaders/PaintedShader.ts';
 import { TweenGroup } from '../Tween.ts';
 import type { PaintedSpan, Rect, Spot, StageMotionPort } from './StageMotionPort.ts';
@@ -31,8 +32,10 @@ export interface StageMotionOptions {
   quadOf(id: CombatantId, out: Quad): Quad | null;
   /** The figure's root, whose visible painted plane the smear copies. */
   figure(id: CombatantId): Object3D | undefined;
-  /** The canvas's CSS size. */
-  view(): { w: number; h: number };
+  /** The canvas's CSS size, and the part of it the window shows (see `StageMotionPort.view`). */
+  view(): { w: number; h: number; l?: number; r?: number; t?: number; b?: number };
+  /** The rigs the first hit's camera cut may go to (`StageMotionPort.cutRigs`); absent when the stage cannot say. */
+  cutRigs?(runner: CombatantId): readonly string[];
   /** LOW EFFECTS: no smear. */
   lowEffects(): boolean;
   /** Whose painting to warm the smear's program with (see `warm`), or undefined when it is not wanted (not FFX-2, REDUCE MOTION). Read each frame until done. */
@@ -74,6 +77,7 @@ export class StageMotion implements StageMotionPort {
   private readonly scratch: Quad = [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
   private readonly shift = new Vector3();
   private readonly corner = new Vector3();
+  private readonly shotCam = new PerspectiveCamera();
   private readonly trails = new Map<CombatantId, Trail>();
   private geometry: PlaneGeometry | null = null;
   /** The program warm-up: one afterimage at no opacity in the scene for a few frames; its material then stays alive (see `warm`). */
@@ -100,19 +104,26 @@ export class StageMotion implements StageMotionPort {
     return Number.isFinite(x0) && Number.isFinite(y0) ? { x0, x1, y0, y1, z } : null;
   }
 
-  view(): { w: number; h: number } {
+  view(): { w: number; h: number; l?: number; r?: number; t?: number; b?: number } {
     return this.o.view();
   }
 
+  cutRigs(runner: CombatantId): readonly string[] {
+    return this.o.cutRigs?.(runner) ?? [];
+  }
+
   /**
-   * The painted box's four corners as screen points, on the camera's rest pose (the shot it is settling on) slid by `o.truck`,
-   * and as if the figure's feet stood at `o.at`; the bounds of the four. The same box `projectRect` hugs.
+   * The painted box's four corners as screen points, on the camera's rest pose (the shot it is settling on, with the dolly the shot
+   * holds: the action's push, round 21 PR-0364) slid by `o.truck`, and as if the figure's feet stood at `o.at`; the bounds of the
+   * four. The same box `projectRect` hugs. With `o.rig`, on that rig pushed in by its `push` instead of the shot the camera is on: the
+   * cut an action makes (the foe's rig at the first hit, or the master); the truck stays on through the cut (round 21, PR-0364).
    */
-  rect(id: CombatantId, o: { at?: Spot; truck?: Spot } = {}): Rect | null {
+  rect(id: CombatantId, o: { at?: Spot; truck?: Spot; rig?: string } = {}): Rect | null {
     const q = this.o.quadOf(id, this.scratch);
     const fig = this.o.figure(id);
     if (!q || !fig) return null;
-    const cam = this.o.camera.restCamera();
+    const rig = o.rig ? this.o.camera.rigOf(o.rig) : undefined;
+    const cam = rig ? rigPose(this.shotCam, this.o.camera.camera, rig, this.o.camera.pushTarget) : this.o.camera.restCamera(true);
     if (o.truck) {
       cam.position.add(this.shift.set(o.truck.x, o.truck.y, o.truck.z));
       cam.updateMatrixWorld(true);

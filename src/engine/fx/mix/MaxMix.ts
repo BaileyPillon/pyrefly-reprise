@@ -14,7 +14,8 @@ import { aaKind, deviceCloses, deviceNote, fightFacts, liveGates, MIX_PARTS, par
 import { crispLive } from '../../crisp/crispLive.ts';
 import { menuCalm } from './menuCalm.ts';
 import { cameraAt, centroid, figOf, type Actor, type Box } from './geometry.ts';
-import { followFlourish, HeldShots } from './heldShots.ts';
+import { followFlourish } from './followFlourish.ts';
+import { HeldShots } from './heldShots.ts';
 import { battleCanvas, forgetMenuPanels, hudPanels, menuOpen, phoneBattle } from './hudPanels.ts';
 import { LivingFigure } from './living.ts';
 import { plateOf } from './plate.ts';
@@ -138,7 +139,7 @@ class Mix {
     const dev: Device = { tier, phone: phoneBattle(), colossus: fightFacts.colossus };
     const odOn = parts.overdriveShot && !deviceCloses('overdriveShot', dev);
     const scOn = parts.dressphereShot && !deviceCloses('dressphereShot', dev); // on the phone: the push-in fallback only (`pushIn.ts`)
-    const held = this.shots?.update(dt, { actors, master, lens, odOn, scOn, menu, ready: this.framing.ready && (this.framing.rigs?.introDone() ?? false), phone: dev.phone, rm, plate: () => plateOf(this.b.scene) }) ?? null;
+    const held = this.shots?.update(dt, { actors, master, lens, odOn, scOn, menu, ready: this.framing.ready && (this.framing.rigs?.introDone() ?? false), phone: dev.phone, rm, plate: () => plateOf(this.b.scene), begun: this.twirl.takeBegun() as unknown as Actor[], twirling: this.twirl.busy() }) ?? null;
     // A held shot is one static cut, under REDUCE MOTION as ever: the lens shift stays where the shot was framed against
     // it, so a move running underneath cannot drift it; it goes on with the cut back.
     if (!held) this.heldLens = null;
@@ -236,7 +237,7 @@ class Mix {
       shot: this.shots?.held?.kind ?? 'master',
       push: !!this.shots?.held?.push,
       camera: { pos: this.b.camera.position.toArray().map((x) => +x.toFixed(3)), fov: this.b.camera.fov },
-      shots: this.shots ? { ...this.shots.stats, lastTry: this.shots.lastTry } : null,
+      shots: this.shots ? { ...this.shots.stats, lastTry: this.shots.lastTry, decisions: this.shots.decisions } : null,
       cinema: { ...this.cinema.stats, band: this.band },
       living: [...this.living.values()].map((f) => ({ name: f.a.name, ...f.last })),
       defringed: this.defringed.size,

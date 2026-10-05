@@ -51,19 +51,22 @@ const scratchCam = new PerspectiveCamera();
 const quad: Quad = [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
 const tmp = new Vector3();
 
-function pose(live: PerspectiveCamera, rig: FitRig, push: number): PerspectiveCamera {
-  scratchCam.fov = rig.fov ?? live.fov;
-  scratchCam.aspect = live.aspect;
-  scratchCam.near = live.near;
-  scratchCam.far = live.far;
-  scratchCam.updateProjectionMatrix();
+/** `into` posed on `rig`, pushed in by `push`, with the live camera's lens and aspect (the run-in's look at a cut: `motion/StageMotion.rect`). */
+export function rigPose(into: PerspectiveCamera, live: PerspectiveCamera, rig: FitRig, push: number): PerspectiveCamera {
+  into.fov = rig.fov ?? live.fov;
+  into.aspect = live.aspect;
+  into.near = live.near;
+  into.far = live.far;
+  into.updateProjectionMatrix();
   tmp.subVectors(rig.lookAt, rig.position).multiplyScalar(push);
-  scratchCam.position.copy(rig.position).add(tmp);
-  scratchCam.up.set(0, 1, 0);
-  scratchCam.lookAt(rig.lookAt);
-  scratchCam.updateMatrixWorld(true);
-  return scratchCam;
+  into.position.copy(rig.position).add(tmp);
+  into.up.set(0, 1, 0);
+  into.lookAt(rig.lookAt);
+  into.updateMatrixWorld(true);
+  return into;
 }
+
+const pose = (live: PerspectiveCamera, rig: FitRig, push: number): PerspectiveCamera => rigPose(scratchCam, live, rig, push);
 
 function fraction(cam: PerspectiveCamera, subject: FitSubject['actor']): number | null {
   if (typeof subject.contentQuad !== 'function') return null;

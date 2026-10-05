@@ -64,6 +64,12 @@ export interface ParallaxLayerSpec {
   feather?: number;
   /** Feather on the bottom edge. Defaults to 0 (the band runs off-frame). */
   featherBottom?: number;
+  /**
+   * Feather on the left and right ends, as a fraction of the layer's width (round 21, PR-0344). Defaults to 0: the layer ends
+   * square, which is right while its ends are outside the frame; at a window wider than the plate was solved for (21:9) they stand
+   * inside it, and a layer that stops at a vertical line steps the picture's brightness there (the plate wings' "seam").
+   */
+  featherSide?: number;
   /** World z for this layer. Closer to the camera than the main plane. */
   z: number;
   opacity?: number;
@@ -160,6 +166,19 @@ const DEFAULT_LAYERS: ParallaxLayerSpec[] = [
 ];
 
 /**
+ * The alpha stops (offset along the layer's width, alpha) of a layer's side feather (`ParallaxLayerSpec.featherSide`, round 21,
+ * PR-0344): nothing for 0, else both ends fall away along a smoothstep over `side` of the width (capped at 0.45 so the two never
+ * meet), never a straight ramp that the eye finds as a line. Sorted by offset; pure.
+ */
+export function sideFeatherStops(side: number): Array<[number, number]> {
+  const s = Math.min(0.45, Math.max(0, Number.isFinite(side) ? side : 0));
+  if (!(s > 0)) return [];
+  const ease = (t: number): number => t * t * (3 - 2 * t);
+  const ts = [0, 0.25, 0.5, 0.75, 1];
+  return [...ts.map((t): [number, number] => [t * s, ease(t)]), ...[...ts].reverse().map((t): [number, number] => [1 - t * s, ease(t)])];
+}
+
+/**
  * A masked parallax layer is a copy of the painting's rows nearer the camera, so it is drawn over the painting at the painting's own
  * scale: its width cap is the device's (`ArtBudget.bandPx`: 1536 on a phone as before, the approved width on a mid desktop, 4096 on a
  * strong one). At the old fixed 1536 it was the softest thing in a scene with no depth plates (2.1x to 3.2x magnified at 1440p
@@ -198,6 +217,13 @@ function maskBand(
   }
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, w, h);
+  const stops = sideFeatherStops(spec.featherSide ?? 0);
+  if (stops.length) {
+    const gx = ctx.createLinearGradient(0, 0, w, 0);
+    for (const [at, a] of stops) gx.addColorStop(at, `rgba(0,0,0,${a})`);
+    ctx.fillStyle = gx;
+    ctx.fillRect(0, 0, w, h);
+  }
   ctx.globalCompositeOperation = 'source-over';
   return c;
 }
