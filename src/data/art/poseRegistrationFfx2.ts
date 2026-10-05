@@ -22,14 +22,14 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     victory: { stanceX: 403.5 },
   },
   'paine-gunner': {
-    attack: { stanceX: 261.0 },
+    attack: { scale: 0.86, stanceX: 261.0 },
     idle: { stanceX: 225.5 },
     item: { stanceX: 134.5 },
     ready: { stanceX: 244.0 },
     victory: { stanceX: 193.0 },
   },
   'paine-samurai': {
-    cast: { stanceX: 520.0 },
+    cast: { scale: 0.85, stanceX: 520.0 },
     follow: { stanceX: 347.5 },
     idle: { stanceX: 373.0 },
     item: { stanceX: 268.0 },
@@ -87,7 +87,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     follow: { stanceX: 70.5, feetRow: 988.0 },
     idle: { stanceX: 280.0 },
     item: { stanceX: 159.0 },
-    ready: { stanceX: 313.5, feetRow: 1074.0 },
+    ready: { scale: 0.66, stanceX: 313.5, feetRow: 1074.0 },
   },
   'rikku-black-mage': {
     attack: { stanceX: 345.5 },
@@ -112,8 +112,8 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     cast: { stanceX: 182.5 },
     idle: { stanceX: 144.5 },
     item: { stanceX: 189.0 },
-    ready: { stanceX: 334.5 },
-    victory: { stanceX: 179.0 },
+    ready: { scale: 0.67, stanceX: 334.5 },
+    victory: { scale: 0.8, stanceX: 179.0 },
   },
   'rikku-songstress': {
     attack: { stanceX: 285.5 },

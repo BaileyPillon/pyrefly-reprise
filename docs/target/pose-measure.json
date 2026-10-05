@@ -4,6 +4,7 @@
  "subjects": {
   "auron": {
    "game": "ffx",
+   "headsComplete": true,
    "idleHead": [
     309.0,
     71.0,
@@ -40,7 +41,8 @@
       "x0": 186.0,
       "x1": 642.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.701
     },
     "cast": {
      "anchor": [
@@ -71,7 +73,8 @@
       "x0": 292.0,
       "x1": 494.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.925
     },
     "critical": {
      "anchor": [
@@ -148,7 +151,8 @@
       "x0": 350.0,
       "x1": 505.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.727
     },
     "idle": {
      "anchor": [
@@ -177,7 +181,8 @@
       "x0": 416.0,
       "x1": 579.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -208,7 +213,8 @@
       "x0": 274.0,
       "x1": 732.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.692
     },
     "ko": {
      "anchor": [
@@ -264,7 +270,8 @@
       "x0": 224.0,
       "x1": 642.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.759
     },
     "sleep": {
      "anchor": [
@@ -316,6 +323,7 @@
   },
   "evrae": {
    "game": "ffx",
+   "headsComplete": true,
    "idleHead": [
     10.0,
     55.0,
@@ -468,6 +476,7 @@
   },
   "kimahri": {
    "game": "ffx",
+   "headsComplete": true,
    "idleHead": [
     326.0,
     182.0,
@@ -617,7 +626,8 @@
       "x0": 226.0,
       "x1": 744.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -755,6 +765,7 @@
   },
   "lulu": {
    "game": "ffx",
+   "headsComplete": true,
    "idleHead": [
     303.0,
     143.0,
@@ -904,7 +915,8 @@
       "x0": 47.0,
       "x1": 441.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -1042,6 +1054,7 @@
   },
   "paine-black-mage": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     243.0,
     188.0,
@@ -1145,7 +1158,8 @@
       "x0": 56.0,
       "x1": 330.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -1277,6 +1291,7 @@
   },
   "paine-dark-knight": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     330.0,
     233.0,
@@ -1403,7 +1418,8 @@
       "x0": 85.0,
       "x1": 427.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -1535,6 +1551,7 @@
   },
   "paine-gunner": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     227.0,
     127.0,
@@ -1548,9 +1565,17 @@
       64.5
      ],
      "baseline": 862.0,
+     "current": 1.01,
+     "head": [
+      254.8,
+      26.7,
+      351.3,
+      102.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.86,
+     "scale": 0.86,
+     "scaleSrc": "reviewed",
      "sha": "fe4ce87f9912ef6bf76cd4a71a2b7c805cbb9cef38f9f77afd410e6ca542edcc",
      "size": [
       638,
@@ -1563,7 +1588,8 @@
       "x0": 27.0,
       "x1": 495.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.659
     },
     "idle": {
      "anchor": [
@@ -1592,7 +1618,8 @@
       "x0": 100.0,
       "x1": 351.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -1717,6 +1744,7 @@
   },
   "paine-samurai": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     314.0,
     158.0,
@@ -1730,9 +1758,17 @@
       54.0
      ],
      "baseline": 1124.0,
+     "current": 1.1,
+     "head": [
+      365.2,
+      9.3,
+      471.1,
+      98.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.85,
+     "scale": 0.85,
+     "scaleSrc": "reviewed",
      "sha": "e95991ecf640b6febcef40f576dd8a217bc51591b9d0c00a3fa601fef325be89",
      "size": [
       817,
@@ -1745,7 +1781,8 @@
       "x0": 330.0,
       "x1": 710.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.859
     },
     "follow": {
      "anchor": [
@@ -1797,7 +1834,8 @@
       "x0": 134.0,
       "x1": 612.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -1849,6 +1887,7 @@
   },
   "paine-songstress": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     97.0,
     128.0,
@@ -1975,7 +2014,8 @@
       "x0": 62.0,
       "x1": 288.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -2084,6 +2124,7 @@
   },
   "paine-thief": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     319.0,
     156.0,
@@ -2210,7 +2251,8 @@
       "x0": 289.0,
       "x1": 448.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -2342,6 +2384,7 @@
   },
   "paine-warrior": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     130.0,
     126.0,
@@ -2468,7 +2511,8 @@
       "x0": 43.0,
       "x1": 292.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -2652,6 +2696,7 @@
   },
   "paine-white-mage": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     389.0,
     155.0,
@@ -2732,7 +2777,8 @@
       "x0": 364.0,
       "x1": 513.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -2801,6 +2847,7 @@
   },
   "rikku": {
    "game": "ffx",
+   "headsComplete": true,
    "idleHead": [
     192.0,
     160.0,
@@ -2837,7 +2884,8 @@
       "x0": 160.0,
       "x1": 563.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.819
     },
     "cast": {
      "anchor": [
@@ -2868,7 +2916,8 @@
       "x0": 66.0,
       "x1": 325.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.953
     },
     "critical": {
      "anchor": [
@@ -2922,7 +2971,8 @@
       "x0": 27.0,
       "x1": 120.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.601
     },
     "hurt": {
      "anchor": [
@@ -2953,7 +3003,8 @@
       "x0": 87.0,
       "x1": 276.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.926
     },
     "idle": {
      "anchor": [
@@ -2982,7 +3033,8 @@
       "x0": 152.0,
       "x1": 364.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -3013,7 +3065,8 @@
       "x0": 71.0,
       "x1": 257.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.036
     },
     "ko": {
      "anchor": [
@@ -3061,7 +3114,8 @@
       "x0": 74.0,
       "x1": 565.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.084
     },
     "sleep": {
      "anchor": [
@@ -3115,7 +3169,8 @@
       "x0": 168.0,
       "x1": 348.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.031
     },
     "victory": {
      "anchor": [
@@ -3146,12 +3201,14 @@
       "x0": 126.0,
       "x1": 207.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.895
     }
    }
   },
   "rikku-alchemist": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     181.0,
     170.0,
@@ -3255,7 +3312,8 @@
       "x0": 47.0,
       "x1": 396.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -3370,6 +3428,7 @@
   },
   "rikku-berserker": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     221.0,
     159.0,
@@ -3450,7 +3509,8 @@
       "x0": 165.0,
       "x1": 395.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -3481,9 +3541,21 @@
       51.0
      ],
      "baseline": 1106.0,
+     "current": 1.1,
+     "gate": {
+      "reading": 0.55,
+      "stature": 0.606
+     },
+     "head": [
+      240.2,
+      1.9,
+      422.0,
+      100.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.55,
+     "scale": 0.66,
+     "scaleSrc": "gated",
      "sha": "e2c3f9dbf35eb1bbdefe3e83074bb313d85b80eabafe6dc229491bb85fb2202b",
      "size": [
       832,
@@ -3496,12 +3568,14 @@
       "x0": 67.0,
       "x1": 560.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.606
     }
    }
   },
   "rikku-black-mage": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     218.0,
     199.0,
@@ -3605,7 +3679,8 @@
       "x0": 73.0,
       "x1": 480.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -3714,6 +3789,7 @@
   },
   "rikku-dark-knight": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     226.0,
     151.0,
@@ -3840,7 +3916,8 @@
       "x0": 145.0,
       "x1": 460.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -3972,6 +4049,7 @@
   },
   "rikku-gunner": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     121.0,
     125.0,
@@ -4052,7 +4130,8 @@
       "x0": 21.0,
       "x1": 268.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -4100,9 +4179,21 @@
       46.5
      ],
      "baseline": 945.0,
+     "current": 1.1,
+     "gate": {
+      "reading": 0.65,
+      "stature": 0.604
+     },
+     "head": [
+      254.1,
+      21.1,
+      378.7,
+      71.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.65,
+     "scale": 0.67,
+     "scaleSrc": "gated",
      "sha": "9da2f0bc503ebf87e368b168e69bf71b58b444003d0d8c343fe1742fe2b072ee",
      "size": [
       532,
@@ -4115,7 +4206,8 @@
       "x0": 160.0,
       "x1": 509.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.604
     },
     "twirl-end": {
      "baseline": 870.0,
@@ -4173,9 +4265,17 @@
       130.5
      ],
      "baseline": 960.0,
+     "current": 0.99,
+     "head": [
+      131.1,
+      109.9,
+      232.3,
+      151.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.8,
+     "scale": 0.8,
+     "scaleSrc": "reviewed",
      "sha": "274ea60c1c847aed9494dd49cfad92c09272a2a3715652e6847377b7364b7914",
      "size": [
       327,
@@ -4188,12 +4288,14 @@
       "x0": 76.0,
       "x1": 282.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.733
     }
    }
   },
   "rikku-songstress": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     149.0,
     209.0,
@@ -4320,7 +4422,8 @@
       "x0": 286.0,
       "x1": 547.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -4429,6 +4532,7 @@
   },
   "rikku-thief": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     250.0,
     293.0,
@@ -4555,7 +4659,8 @@
       "x0": 173.0,
       "x1": 400.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -4710,6 +4815,7 @@
   },
   "rikku-warrior": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     392.0,
     158.0,
@@ -4836,7 +4942,8 @@
       "x0": 353.0,
       "x1": 608.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -4948,6 +5055,7 @@
   },
   "rikku-white-mage": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     146.0,
     173.0,
@@ -5051,7 +5159,8 @@
       "x0": 144.0,
       "x1": 269.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -5133,6 +5242,7 @@
   },
   "tidus": {
    "game": "ffx",
+   "headsComplete": true,
    "idleHead": [
     362.0,
     143.0,
@@ -5169,7 +5279,8 @@
       "x0": 518.0,
       "x1": 598.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.005
     },
     "cast": {
      "anchor": [
@@ -5200,7 +5311,8 @@
       "x0": 72.0,
       "x1": 458.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "critical": {
      "anchor": [
@@ -5231,7 +5343,8 @@
       "x0": 96.0,
       "x1": 376.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "follow": {
      "anchor": [
@@ -5293,7 +5406,8 @@
       "x0": 281.0,
       "x1": 471.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.086
     },
     "idle": {
      "anchor": [
@@ -5322,7 +5436,8 @@
       "x0": 320.0,
       "x1": 508.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -5353,7 +5468,8 @@
       "x0": 232.0,
       "x1": 399.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.008
     },
     "ko": {
      "anchor": [
@@ -5409,7 +5525,8 @@
       "x0": 32.0,
       "x1": 599.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.922
     },
     "od-slice-and-dice": {
      "anchor": [
@@ -5440,7 +5557,8 @@
       "x0": 91.0,
       "x1": 691.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.8
     },
     "ready": {
      "anchor": [
@@ -5471,7 +5589,8 @@
       "x0": 72.0,
       "x1": 455.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.886
     },
     "sleep": {
      "anchor": [
@@ -5502,7 +5621,8 @@
       "x0": 62.0,
       "x1": 259.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.794
     },
     "victory": {
      "anchor": [
@@ -5533,12 +5653,14 @@
       "x0": 222.0,
       "x1": 392.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.607
     }
    }
   },
   "wakka": {
    "game": "ffx",
+   "headsComplete": true,
    "idleHead": [
     400.0,
     127.0,
@@ -5575,7 +5697,8 @@
       "x0": 32.0,
       "x1": 437.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.006
     },
     "cast": {
      "anchor": [
@@ -5606,7 +5729,8 @@
       "x0": 92.0,
       "x1": 671.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.116
     },
     "critical": {
      "anchor": [
@@ -5660,7 +5784,8 @@
       "x0": 28.0,
       "x1": 449.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.834
     },
     "hurt": {
      "anchor": [
@@ -5691,7 +5816,8 @@
       "x0": 400.0,
       "x1": 591.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.886
     },
     "idle": {
      "anchor": [
@@ -5720,7 +5846,8 @@
       "x0": 22.0,
       "x1": 583.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -5751,7 +5878,8 @@
       "x0": 116.0,
       "x1": 505.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.905
     },
     "ko": {
      "anchor": [
@@ -5807,7 +5935,8 @@
       "x0": 31.0,
       "x1": 414.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.122
     },
     "sleep": {
      "anchor": [
@@ -5861,12 +5990,14 @@
       "x0": 54.0,
       "x1": 354.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.886
     }
    }
   },
   "yuna": {
    "game": "ffx",
+   "headsComplete": true,
    "idleHead": [
     341.0,
     69.0,
@@ -5903,7 +6034,8 @@
       "x0": 136.0,
       "x1": 788.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.91
     },
     "cast": {
      "anchor": [
@@ -5934,7 +6066,8 @@
       "x0": 431.0,
       "x1": 563.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.13
     },
     "critical": {
      "anchor": [
@@ -6019,7 +6152,8 @@
       "x0": 48.0,
       "x1": 394.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.77
     },
     "idle": {
      "anchor": [
@@ -6048,7 +6182,8 @@
       "x0": 360.0,
       "x1": 488.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -6079,7 +6214,8 @@
       "x0": 35.0,
       "x1": 436.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.813
     },
     "ko": {
      "anchor": [
@@ -6135,7 +6271,8 @@
       "x0": 123.0,
       "x1": 451.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.02
     },
     "sleep": {
      "anchor": [
@@ -6189,7 +6326,8 @@
       "x0": 388.0,
       "x1": 771.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.699
     },
     "victory": {
      "anchor": [
@@ -6220,12 +6358,14 @@
       "x0": 78.0,
       "x1": 404.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.862
     }
    }
   },
   "yuna-black-mage": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     287.0,
     171.0,
@@ -6352,7 +6492,8 @@
       "x0": 179.0,
       "x1": 484.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -6484,6 +6625,7 @@
   },
   "yuna-dark-knight": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     221.0,
     230.0,
@@ -6587,7 +6729,8 @@
       "x0": 154.0,
       "x1": 434.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -6719,6 +6862,7 @@
   },
   "yuna-gunner": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     185.0,
     97.0,
@@ -6845,7 +6989,8 @@
       "x0": 108.0,
       "x1": 437.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -7010,6 +7155,7 @@
   },
   "yuna-songstress": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     192.0,
     105.0,
@@ -7113,7 +7259,8 @@
       "x0": 229.0,
       "x1": 286.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -7223,6 +7370,7 @@
   },
   "yuna-thief": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     340.0,
     105.0,
@@ -7349,7 +7497,8 @@
       "x0": 263.0,
       "x1": 527.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -7481,6 +7630,7 @@
   },
   "yuna-warrior": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     317.0,
     103.0,
@@ -7584,7 +7734,8 @@
       "x0": 280.0,
       "x1": 502.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
@@ -7699,6 +7850,7 @@
   },
   "yuna-white-mage": {
    "game": "ffx2",
+   "headsComplete": false,
    "idleHead": [
     316.0,
     115.0,
@@ -7825,7 +7977,8 @@
       "x0": 277.0,
       "x1": 423.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     },
     "item": {
      "anchor": [
