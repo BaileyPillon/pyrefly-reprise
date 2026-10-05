@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-886 decisions in all: 436 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 593 of the written decisions record a blanket yes.
+905 decisions in all: 455 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 612 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 827 |
+| adopted | 846 |
 | proposed | 11 |
 | deferred | 4 |
 | rejected | 11 |
 | superseded | 33 |
-| **All** | **886** |
+| **All** | **905** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 73 |
-| art | 204 |
-| visuals | 63 |
-| camera | 24 |
+| art | 207 |
+| visuals | 67 |
+| camera | 31 |
 | audio | 30 |
-| ui | 115 |
+| ui | 119 |
 | story | 15 |
 | chapters | 177 |
 | guide | 28 |
 | release | 31 |
 | hosting | 14 |
 | process | 70 |
-| critic | 24 |
+| critic | 25 |
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **886** |
+| **All** | **905** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 385 |
-| FFX only | 272 |
-| FFX-2 only | 212 |
+| both games | 391 |
+| FFX only | 278 |
+| FFX-2 only | 219 |
 | FF7 hidden experiment | 17 |
-| **All** | **886** |
+| **All** | **905** |
 
 ## Standing rules in force
 
@@ -111,7 +111,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05)
 
 ## Ledger
 
@@ -3936,3 +3936,103 @@ Sunday · 69 decisions
   - What changed: From that evening no session makes a new full copy of the repository or a new build folder on D: (D: was at 27.2 GB free and F: at 46.0 GB when the driver noted it at about 23:55 EDT): it reuses a worktree that exists (the release cut reuses D:/pyrefly-release, and this records lane reused D:/pyrefly-r39-int), and the lane that owns a finished copy or build deletes it, removing each folder link first so the shared art behind a junction is never touched. The driver wrote a list of the finished lane worktrees (safe to delete or keep, with the links to remove first) for the D emergency session to turn into Bailey's one dry-run-first command, and a parking agent moved the two release 39 hires-engine builds to F: (A-0431). The deletions themselves are his to run; the release 39 folder and his main art stay protected. Both games (shared process).
   - area process · both games · adopted · delivery in progress · see [D-236](#d-236)
   - Source: docs/handoff/NOW.md
+
+### 2026-10-05
+
+Monday · 19 decisions
+
+- <a id="d-437"></a>**D-437** — True colour (decision A): characters and bosses show their paintings' own colours: the "figures true" switch goes ON by default in release 39.1, with the bloom fix (r39-color ef0868b5)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Release 39.1 merges the bloom fix (branch r39-color, ef0868b5) and turns the figure true-colour switch (figureTrue, ?figtrue=0..1) ON by default; release 39 carries the switch, off. Characters and bosses then show their painting's own colour: they go through the sRGB encode the colour chain was missing (the paintings' gamma was applied twice), skip the scene's colour grade and glow, are no bloom source, and their rim light is cut to a third. Backdrops, floors and effects keep today's look; the only change around a figure is the soft glow it used to cast on the floor. Measured colour error, the mean over each scene's figures (0 = exactly the painting): Chapter VI Leblanc 15.9 to 2.5, Chapter I Gagazet 14.8 to 2.6, Chapter IV Bahamut 12.9 to 3.7; figures come out 1.3 to 2.3 times as colourful as their paintings today and 0.9 to 1.0 times with the switch on. The costs he accepted: figures read paler and calmer against saturated backdrops; Bahamut's wings go from deep red to the painting's own salmon; his dark body also lifts from near-black toward charcoal grey, from a faint extra light the old colour path hid, and that part is still open (under investigation). Known and not yet checked: phones, other chapters and spell effects; a figure fading out on a KO goes back to today's colour for the fade. Not chosen: the whole-frame version (right in theory, but every backdrop goes milky and every look would need re-tuning first) and leaving it as is. Not shipped yet; the delivery stays in progress until 39.1 is live. Both games.
+  - area visuals · both games · adopted · delivery in progress · at ~13:43 EDT · see [D-387](#d-387)
+  - Source: docs/handoff/r39-color.md; docs/screenshots/r39-color; and others
+- <a id="d-438"></a>**D-438** — Painterly finish (decision B): the locked version (method D) rolls out to the whole cast, 636 figure masters, with method C per figure where the face pass makes a face younger, behind per-figure gates and contact sheets before it ships in 39.2
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The painterly finish of D-429, in its identity-locked form (method D: the approved painting plus close-ups of its head and costume as references, an init lock at sigma 0.99, a separate painterly face pass and a palette lock), is rolled out to the whole cast: all 636 character and boss masters, both games, decided figure by figure. Method C (the lock and the palette lock, without the face pass) is used per figure where the face pass makes a face younger (Tidus on a second seed last round). Per-figure gates: the outline matches the approved painting's silhouette at IoU 0.95 or better; under 3 percent of the costume's cells move by more than 20 dE; the face layout match is at least 0.75; the seeds agree (a second seed is run only where the first fails). A figure that fails goes to the other of C and D, or to a list the driver looks at by eye. About 13 GPU hours at one try each, before retries. It runs on the GPU now, party figures first (both games), then bosses, then the rest, into a new library (D:/Tools/pyrefly-art-backup/hires-painterly/, every tier cut from the painterly 4x), never over the existing masters. Nothing changes in the game on this yes alone: contact sheets (each figure's idle and two poses at battle size, today beside painterly) go to him before it ships, in release 39.2, and the animation keys (about 27, about 35 GPU minutes) are then painted in the same finish (D-434). This is the yes D-435 waited for. Costs he accepted: D keeps about a third to two thirds of last round's finish, so figures are less luminous and less saturated than last round's; the weights are non-commercial (accepted in D-432). Not taken: B, a lighter colour lock that keeps more finish but lets 2 to 12 percent of a costume's colour drift, and waiting to see true colour in the game first. Both games, figure by figure: Tidus and Seymour Flux are FFX, Yuna Gunner is FFX-2.
+  - area art · both games · adopted · delivery in progress · at ~13:43 EDT · see [D-429](#d-429), [D-430](#d-430), [D-431](#d-431), [D-432](#d-432), [D-434](#d-434), [D-435](#d-435)
+  - Source: docs/handoff/r39-art.md; docs/handoff/NOW.md
+- <a id="d-439"></a>**D-439** — Pose continuity (decision C): the mix, with interpolated in-between frames for every pose pair, one extra painted key at the peak of each big move, a puppet rig for two or three signature swings and no video-model frames; Evrae's cut-or-ghost question is settled the same way
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Today a figure goes from one painting to the next with a quick 120 ms dissolve, or it snaps. Planned, and built after the painterly cast lands so the frames use the new art (the engine side is queued until a worktree frees): (1) interpolated in-between frames (FILM) for every pair of poses of the cast, about 3.5 GPU seconds a pair and about 1 GPU hour for the 978 pairs (7 FFX party figures, 24 FFX-2 dressphere figures and 62 enemies and bosses; FF7 left out); (2) one extra painted key at the peak of each big move, for example a mid-leap between Tidus's ready and attack, in the painterly finish of D-438, which halves every gap the interpolation has to cross; (3) a puppet rig (one painting cut into parts and moved by a small rig; no GPU, about an hour by hand a figure, about 90 hours for all 93 figures: our estimate) for two or three signature swings only; (4) no video-model frames: that option re-choreographs, inventing moves that are in neither painting (a standing sword thrust for Tidus, a flame blade for Seymour Flux, strike frames about a fifth too big for Yuna) and costs about 70 GPU hours. Where a gap is still too wide after the extra key, today's dissolve stays for that pair. Evrae (Chapter VIII, FFX): his big moves get a painted middle key and interpolated frames, instead of a hard cut (which removed most of the double images but cost about 105 snaps in one fight and was reverted) or the two-headed dissolve of live and release 39. The page's caveat: the options were judged from stepped frames and measurements, not by watching them move. Both games: shared pose plumbing.
+  - area art · both games · adopted · delivery not scheduled · at ~13:43 EDT · see [D-420](#d-420), [D-421](#d-421), [D-424](#d-424), [D-434](#d-434), [D-438](#d-438)
+  - Source: critic/reviews/816d80f9-focused.md; docs/handoff/NOW.md
+- <a id="d-440"></a>**D-440** — Camera Lab (decision D): the Clair Obscur style camera grammar is committed to the game after four changes (the stalls fixed, load-ahead, a 4K lens pull-back and an EYE CANDY switch), with a deep review before it goes public
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The Camera Lab's battle camera grammar (the style he played on 2026-10-03: the command menu at the hero, the cut to the target) stops being a test branch and is committed to the game after four changes, in this order. The camera commit itself is queued behind the first. (1) The master-upload stalls are fixed: a 4x painting is 40 to 65 MB of pixels uploaded on the frame that draws it, which stalls the game for 100 to 320 ms (the lab had 7 frames over 100 ms in the first 27 seconds after the first menu, worst 317 ms, against 1 on today's camera, worst 117 ms), so each big painting is loaded off the busy frame. It is an engine change that needs a deep review and helps release 39 whether or not the camera ships; the lane (r391-stalls) is running. (2) Load-ahead: every pose of the figures on screen is requested before a cut, inside the memory budget (a first version cut the soft landings in Chapter I from 10 of 31 cuts to 4 of 32). (3) A 4K lens pull-back: at 4K the closest shot sits a little past what the biggest painting resolves (1.13 screen pixels per painted dot), so the three closest lenses pull back about 12 percent, or a 5x art tier is added for those three shots. (4) A switch on the EYE CANDY page (D-317), ON by default on desktop; phones keep today's camera. ON by default is the driver's reading of "commit it" and is flagged to him to correct. A deep review comes before it goes public. FFX-2 keeps its rule that the camera never cuts while a girl's command menu is open (D-316, D-357); FFX cuts under skill lists and target picks, as designed. Not decided here: D-379 kept Klein close-up plates open only if this grammar is adopted; no plates are made on this yes. The art side also owes sharper aeons (named on the page, not one of the four). Not shipped yet. Both games.
+  - area camera · both games · adopted · delivery in progress · at ~13:43 EDT · see [D-316](#d-316), [D-317](#d-317), [D-318](#d-318), [D-357](#d-357), [D-379](#d-379)
+  - Source: docs/handoff/camera-lab-r39.md; docs/handoff/NOW.md
+- <a id="d-441"></a>**D-441** — Dressphere close-up and the next girl's menu (B1): no change; the close-up still skips while the next girl's command menu is already open, as D-357 set
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Nothing changes. The FFX-2 outfit-change close-up is still skipped while the next girl's command menu is already up (5 of 24 forced changes in the independent check), as in release 39: nothing plays over an open command menu, the rule he picked in D-357. If the close-up's presence ever matters more, the page's remedy is to hold the next girl's menu until the 1.6 second shot ends, not to loosen the rule; that is not built. FFX-2 only.
+  - area camera · FFX-2 · adopted · nothing to build · at ~13:43 EDT · see [D-357](#d-357), [D-407](#d-407)
+  - Source: critic/reviews/r39-visfix-check.md
+- <a id="d-442"></a>**D-442** — Guide and advisor cards during the dressphere close-up (B2): hide them while it plays, as the enemy-move and Sensor cards already hide, after a frame is shown to him
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: On branch r391-smaller (the release 39.1 smaller-fixes lane), the strategy guide card and the advisor card are hidden while the FFX-2 dressphere close-up plays, the way the enemy-move card and the Sensor card already are, so nothing sits over the girl in the shot. Frame first: a before and after frame at 1600x900 is captured under docs/screenshots/r391-smaller/ and shown to him before it ships. Not shipped yet. FFX-2 only.
+  - area ui · FFX-2 · adopted · delivery in progress · at ~13:43 EDT · see [D-357](#d-357), [D-407](#d-407)
+  - Source: critic/reviews/r39-visfix-check.md; docs/handoff/r391-smaller.md
+- <a id="d-443"></a>**D-443** — Enemy spell in flight during the dressphere close-up (B3): the close-up waits up to about 1.0 s, up from 0.6 s, and is measured; he is asked again only if it still shows in under about 80 percent of changes
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Today an enemy spell already in flight refuses the FFX-2 dressphere close-up after a 0.6 s wait (4 of 24 forced changes in the independent check). The wait grows to about 1.0 s, and the close-up's presence is measured over at least 12 changes before and after, on branch r391-smaller. ATB timing is not changed: holding the enemy's spell until the shot ends was not chosen because it would change the timing, so he is asked again only if the close-up still shows in under about 80 percent of changes. Not shipped yet. FFX-2 only.
+  - area camera · FFX-2 · adopted · delivery in progress · at ~13:43 EDT · see [D-357](#d-357), [D-407](#d-407)
+  - Source: critic/reviews/r39-visfix-check.md; docs/handoff/r391-smaller.md
+- <a id="d-444"></a>**D-444** — FFX-2 run-in camera follow (B4): no change; the shorter follow that shipped in release 39 stays, and the full follow is done later only if he misses the camera travel
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Nothing changes. When a girl runs in to attack, the camera keeps the shorter follow that shipped in release 39 (about 30 percent of release 38's travel at 1600x900, and none in Ixion or on the phone), which keeps all three girls in frame. The full follow that lets go at the first hit is built later only if he misses the camera travel. FFX-2 only.
+  - area camera · FFX-2 · adopted · nothing to build · at ~13:43 EDT · see [D-354](#d-354), [D-407](#d-407)
+  - Source: critic/reviews/r39-visfix-check.md
+- <a id="d-445"></a>**D-445** — Boss reveal in the Den of Woe and Fallen Aeons (B5): keep the approved 6.0 s opening and widen the reveal push so Yuna stays in frame
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The approved opening stays at 6.0 s (D-138: the 2.2 s boss-name card and the 3.8 s opening beats). In the two FFX-2 chapters where the boss reveal hides Yuna for about 2 seconds, Chapter XV (Den of Woe) and Chapter XI (Fallen Aeons), the reveal push is widened so Yuna stays in frame for the whole reveal, proven with frames, on branch r391-smaller. Not shipped yet. FFX-2 only.
+  - area camera · FFX-2 · adopted · delivery in progress · at ~13:43 EDT · see [D-138](#d-138)
+  - Source: critic/reviews/r39-visfix-check.md; docs/handoff/r391-smaller.md
+- <a id="d-446"></a>**D-446** — Bahamut's neck gap in Chapter IV (B6): leave his head as painted and dim the lamp bank behind him that blooms into a white blob, with a frame shown to him before anything moves
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Bahamut's painted head is not moved. The plate's lamp bank behind his neck gap, whose light shines through a gap in his outline and blooms into a white blob in his neck, is dimmed, locally. Frame first: a before and after frame is captured under docs/screenshots/r391-smaller/ on branch r391-smaller and shown to him, and nothing else, such as moving his slot, happens without his look. Not shipped yet. FFX-2 only (Chapter IV, Bevelle).
+  - area visuals · FFX-2 · adopted · delivery in progress · at ~13:43 EDT · see [D-380](#d-380)
+  - Source: critic/reviews/r39-visfix-check.md; docs/handoff/r391-smaller.md
+- <a id="d-447"></a>**D-447** — Seymour Flux's headroom in Chapter I (B7): no change; his crown stays 10 to 14 px inside the top of the frame during his attack, revisited only if the camera or his attack painting changes
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Nothing changes. During his attack Seymour Flux's crown sits 10 to 14 px inside the top of the frame, and he gets no extra headroom now. It is revisited if the camera or his attack painting changes. FFX only (Chapter I).
+  - area camera · FFX · adopted · nothing to build · at ~13:43 EDT · see [D-328](#d-328)
+  - Source: critic/reviews/r39-visfix-check.md
+- <a id="d-448"></a>**D-448** — Yojimbo's sakura arrival in Chapter IX (B8): the blue sakura tree ends by 3.6 s
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: The blue sakura tree of Yojimbo's arrival in Chapter IX, which lingers about a second after the first menu opens, is made to end by 3.6 seconds, on branch r391-smaller. The old timings were ours, not from the approved sheet, so no sourced number changes. Not shipped yet. FFX only.
+  - area visuals · FFX · adopted · delivery in progress · at ~13:43 EDT · see [D-072](#d-072)
+  - Source: critic/reviews/r39-visfix-check.md; docs/handoff/r391-smaller.md
+- <a id="d-449"></a>**D-449** — Mortiphasm's two lower discs in Chapter XII (B9): move them so none hides behind the party or under a card at the first menu, with a mockup first
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Two of Mortiphasm's discs are hidden at Chapter XII's first menu, one behind the party and one under a card. The two lower discs are moved so neither hides; the party is not moved. Mockup first: frames of the new placement are made under docs/screenshots/r391-smaller/ on branch r391-smaller and shown to him before it ships. Not shipped yet. FFX only.
+  - area camera · FFX · adopted · delivery in progress · at ~13:43 EDT · see [D-145](#d-145)
+  - Source: critic/reviews/r39-visfix-check.md; docs/handoff/r391-smaller.md
+- <a id="d-450"></a>**D-450** — 4K pause painting (B10): a blurred extension behind the sharp painting fills the window, with no new art
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: At 4K the pause painting is 3369x1925 and does not fill the window. A blurred extension is drawn behind the sharp painting so it fills the window; it costs no new art. Not chosen: softening the painting, or making a 4K painting. Built on branch r391-smaller, not shipped yet. Both games (the pause screen is shared).
+  - area ui · both games · adopted · delivery in progress · at ~13:43 EDT · see [D-021](#d-021)
+  - Source: critic/reviews/r39-visfix-check.md; docs/handoff/r391-smaller.md
+- <a id="d-451"></a>**D-451** — Ultrawide FFX backdrops (B11): fog the side edges first; painted wings only on a later yes of his
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: On ultrawide 21:9 windows the FFX backdrops show side bands (Yunalesca is the worst, at 15 percent). The edges are fogged, blending the band into the scene; it is cheap, and it is to be proven at 2560x1080 on the worst case, Yunalesca, on branch r391-smaller. Painted wings (the FFX-2 plates already have them, D-343) are not started: they cost GPU time and need a yes of his of their own. Not chosen: cropping. Not shipped yet. FFX only.
+  - area visuals · FFX · adopted · delivery in progress · at ~13:43 EDT · see [D-343](#d-343), [D-408](#d-408)
+  - Source: critic/reviews/r39-visfix-check.md; docs/handoff/r391-smaller.md
+- <a id="d-452"></a>**D-452** — Triangle and Defend (U1): Triangle Defends only at the main command menu, not from inside Special or Items (our estimate, not a sourced fact)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Nothing changes. The FFX Defend control (Q on a keyboard, Triangle on a pad, a tap on a phone; D-400) works at the main command menu only, as in release 39: Triangle does not Defend from inside a submenu such as Special or Items. The sources only describe Triangle at the main command menu, so this is our estimate, labelled so, not a sourced fact. FFX only.
+  - area ui · FFX · adopted · nothing to build · at ~13:43 EDT · see [D-400](#d-400)
+  - Source: docs/handoff/r39-uifix.md
+- <a id="d-453"></a>**D-453** — Keyboard Defend key (U2): it stays Q until he checks which key his Steam copy of the HD Remaster uses, then we match it
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Nothing changes now: the keyboard key for Defend in the FFX chapters stays Q (D-400 took it from GameFAQs). Open item for Bailey: when he next has his Steam copy open, he tells us which key the HD Remaster's own default uses, and ours is matched to it (the same Steam check D-348 waits on for the Bushido order). FFX only.
+  - area ui · FFX · adopted · nothing to build · at ~13:43 EDT · see [D-400](#d-400), [D-348](#d-348)
+  - Source: docs/handoff/r39-uifix.md
+- <a id="d-454"></a>**D-454** — Mark this moment (N1): a hidden key saves the fight's seed, inputs and time so the critic can replay the exact moment
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: On branch r391-smaller, a hidden key is built which, pressed in battle when something looks wrong, saves the fight's seed, the inputs since the battle began and their times, so the critic can replay that exact moment. The battle engine is deterministic under the seeded RNG (AGENTS.md hard rule 1); any source of non-determinism the build finds is recorded and reported. Not shipped yet. Both games: shared battle plumbing.
+  - area critic · both games · adopted · delivery in progress · at ~13:43 EDT · see [D-422](#d-422), [D-425](#d-425)
+  - Source: docs/handoff/r391-smaller.md
+- <a id="d-455"></a>**D-455** — Rikku's Berserker and Gunner ready poses (N2): both are re-painted in the painterly finish, two new paintings that fix the head-to-body size mismatch
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Rikku Berserker's ready pose and Rikku Gunner's ready pose are close-ups whose head is 2.0 and 1.7 times the idle pose's on a normal body, so no single size fits both head and body, and today the game compromises: the stature gate of docs/handoff/poses-0930.md (not under 0.60 of the idle's height) leaves Berserker's head at 1.20 and Gunner's at 1.03 of the idle's, at 0.60 of the height. Two new paintings replace the compromise, drawn in the painterly finish (D-438) after the painterly cast lands (the art lane's order: the cast, then these two, then the animation keys); each is checked for head and feet against the idle's before it installs (the pose-size rule of D-434). Not shipped yet. FFX-2 only.
+  - area art · FFX-2 · adopted · delivery not scheduled · at ~13:43 EDT · see [D-342](#d-342), [D-358](#d-358), [D-434](#d-434)
+  - Source: docs/handoff/r39-posescale.md
