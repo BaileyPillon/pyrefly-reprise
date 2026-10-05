@@ -108,8 +108,9 @@ function driveSideFog(mesh: Mesh, state: FogState, scene: Scene, camera: Camera)
   state.color.value.copy(bg);
 }
 
-/** Patch every layer under `root` that draws a painting. Safe to call again (a layer is patched once). */
+/** Patch every layer under `root` that draws a painting. Safe to call again (a layer is patched once), and on a root that is not a scene graph (a test's stand-in). */
 export function patchSideFogIn(root: Object3D): void {
+  if (typeof root?.traverse !== 'function') return;
   root.traverse((o) => {
     if (PLATE_NAME.test(o.name) && (o as Mesh).isMesh) patchSideFog(o as Mesh);
   });

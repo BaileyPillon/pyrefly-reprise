@@ -229,6 +229,17 @@ describe('the recorder', () => {
     expect(decodeMark(h.copied[0]!)).toEqual(r);
   });
 
+  it('never fails the battle: a profile that cannot be read at the start (a save that throws) leaves an empty one, and starting still works', () => {
+    const h = harness({}, [], { seenCoach: () => { throw new TypeError('no snapshot'); } });
+    expect(() => h.rec.start()).not.toThrow();
+    h.advance(1000);
+    key('keydown', MARK_KEY_CODE);
+    h.rec.stop();
+    const r = readMarks(h.storage)[0]!;
+    expect(r.seenCoach).toEqual([]);
+    expect(r.settings).toEqual({});
+  });
+
   it('keeps the profile as the battle began: a coach card seen or a setting changed during the fight is for the replay to do again, by its inputs', () => {
     const seen = ['briefing'];
     const settings: Record<string, unknown> = { textSize: 100, reduceMotion: false, musicVolume: 0.7 };

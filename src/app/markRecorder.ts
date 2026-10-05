@@ -126,11 +126,15 @@ export class MarkRecorder {
 
   /** The settings that differ from the shipped defaults, and the coaching seen, as they are now. */
   private profileNow(): { settings: Record<string, unknown>; seen: string[] } {
-    const settings = this.src.settings();
-    const defaults = this.src.defaults();
-    const diff: Record<string, unknown> = {};
-    for (const k of Object.keys(settings)) if (JSON.stringify(settings[k]) !== JSON.stringify(defaults[k])) diff[k] = settings[k];
-    return { settings: diff, seen: this.src.seenCoach() };
+    try {
+      const settings = this.src.settings();
+      const defaults = this.src.defaults();
+      const diff: Record<string, unknown> = {};
+      for (const k of Object.keys(settings)) if (JSON.stringify(settings[k]) !== JSON.stringify(defaults[k])) diff[k] = settings[k];
+      return { settings: diff, seen: this.src.seenCoach() };
+    } catch {
+      return { settings: {}, seen: [] }; // a profile that cannot be read is no reason to lose a battle (or a mark)
+    }
   }
 
   /** The moment, now: build the record, keep it, copy its code, write the console line. Nothing on screen. */

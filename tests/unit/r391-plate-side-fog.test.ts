@@ -137,4 +137,9 @@ describe('the material patch', () => {
     const patched = root.children.filter((c) => c.userData['sideFog']).map((c) => c.name);
     expect(patched).toEqual(['backdrop-painting', 'backdrop-layer-0', 'backdrop-layer-1', 'fx-b-plate-0', 'fx-b-plate-3']);
   });
+
+  it('does nothing, and does not throw, on a root that is not a scene graph (a presenter test stands a plain object in)', () => {
+    expect(() => patchSideFogIn({} as Group)).not.toThrow();
+    expect(() => patchSideFogIn(null as unknown as Group)).not.toThrow();
+  });
 });
