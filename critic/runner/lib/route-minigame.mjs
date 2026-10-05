@@ -12,7 +12,7 @@
 // keyboard, gamepad-shim and touch contexts keep their own recording.
 import { keysForChips, minigameKindOf, swordplayPressNow } from './route-pure.mjs';
 
-/** What the overlay on screen shows, or `{ up: false }`. `chips` are the Bushido glyphs in order. */
+/** What the overlay on screen shows, or `{ up: false }`. `chips` are the Bushido chip faces in order, `buttons` the abstract button each one presses (`data-btn`, release 39 on). */
 export function readMinigame(page) {
   return page.evaluate(() => {
     const el = document.querySelector('.ffx-mg.ig-minigame');
@@ -24,6 +24,7 @@ export function readMinigame(page) {
       title: text('[data-role="title"]'),
       subtitle: text('[data-role="subtitle"]'),
       chips: [...el.querySelectorAll('.ig-minigame__bar--sequence .ig-minigame__key')].map((k) => k.textContent.trim()),
+      buttons: [...el.querySelectorAll('.ig-minigame__bar--sequence .ig-minigame__key')].map((k) => k.dataset.btn ?? ''),
       bar: Boolean(bar && !bar.classList.contains('ig-minigame__bar--sequence')),
       timer: text('[data-role="ring-text"]'),
     };
@@ -94,8 +95,8 @@ export async function playMinigame({ page, input, rec, turn, shot, leadMs = 30 }
   if (!rec.minigameShots[kind]) { rec.minigameShots[kind] = true; await shot(kind, `${m.title}: ${m.subtitle}`); }
   const t0 = Date.now();
   if (kind === 'bushido') {
-    const { keys, unknown } = keysForChips(m.chips);
-    played.chips = m.chips; played.keys = keys; played.unknownGlyphs = unknown;
+    const { keys, unknown } = keysForChips(m.chips, m.buttons);
+    played.chips = m.chips; played.buttons = m.buttons; played.keys = keys; played.unknownGlyphs = unknown;
     if (unknown.length) { played.note = 'a chip glyph has no key in the table: nothing typed, the timer will decide'; }
     else for (const k of keys) { await input.press(k); await page.waitForTimeout(110); }
   } else {
