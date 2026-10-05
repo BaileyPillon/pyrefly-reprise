@@ -33,6 +33,7 @@ import { radialCanvas, rng } from '../engine/ProceduralArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import type { SceneSlots } from './index.ts';
+import { addPlateDim, type PlateDimSpec } from './plateDim.ts';
 import { addPlateWings, paintPlateWings } from './plateWings.ts';
 import { bracketScale } from './frameBracket.ts';
 import { viewportAspect } from './cavern-stolen-fayth-rigs.ts';
@@ -102,6 +103,15 @@ export const BEVELLE_PLATE_WINGS = {
   reflect: 0.23,
   painted: { left: 'art/backdrops/wings/bevelle-underground-left.png', right: 'art/backdrops/wings/bevelle-underground-right.png', stripPx: 716, overlapPx: 96, plateWidthPx: 2688 },
 } as const;
+
+/**
+ * Release 39.1, B6 (Bailey, 2026-10-05, "all of your recommendations"; FFX-2 only: this plate is Chapter IV's): the lamp bank behind Bahamut's neck gap.
+ * The painting has a strip of near-white lit panes under the rose window (u 0.44-0.565, v 0.11-0.155; pixels 1180-1520 by 170-240). At the first menu the
+ * S-curve of his neck frames it (screen 915,130 at 1600x900 looks at u 0.527, v 0.142), and with the bloom the strip showed as a white blob in the gap.
+ * It is held to `keep` of itself around the strip (`plateDim.ts`: a multiply on the painting's own plane, the file untouched); his head and his slot
+ * are as they were (the slot was solved to 0.014 of headroom).
+ */
+export const BEVELLE_PLATE_DIM: PlateDimSpec = { at: [0.503, 0.14], radius: [0.095, 0.05], keep: 0.45 };
 
 /** The plate's plane and the rig table, exported for `tests/unit/plate-wings.test.ts`. */
 export const BEVELLE_UNDERGROUND_BACKDROP = BACKDROP;
@@ -1191,6 +1201,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
 
   let backdrop = await Backdrop.create(backdropOptions);
   addPlateWings(backdrop, BEVELLE_PLATE_WINGS);
+  addPlateDim(backdrop, BEVELLE_PLATE_DIM);
   await paintPlateWings(backdrop, BEVELLE_PLATE_WINGS);
   backdrop.applyTo(group);
 
@@ -2129,6 +2140,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
       void (async (): Promise<void> => {
         const next = await Backdrop.create(backdropOptions);
         addPlateWings(next, BEVELLE_PLATE_WINGS);
+        addPlateDim(next, BEVELLE_PLATE_DIM);
         await paintPlateWings(next, BEVELLE_PLATE_WINGS);
         const wasIn = backdrop.group.parent;
         backdrop.dispose();
