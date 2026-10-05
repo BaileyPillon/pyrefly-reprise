@@ -8,7 +8,7 @@ import { Vector3 } from 'three';
 import type { Actor, Pose } from '../../src/engine/fx/mix/geometry.ts';
 import { HeldShots } from '../../src/engine/fx/mix/heldShots.ts';
 import type { RigWatch } from '../../src/engine/fx/mix/rigWatch.ts';
-import { DECISIONS_KEPT, MAX_SEARCHES, PENDING_S, RETRY_S, stepPending, type Pending, type PendingIn } from '../../src/engine/fx/mix/shotPending.ts';
+import { DECISIONS_KEPT, MAX_SEARCHES, PENDING_FOE_S, PENDING_S, RETRY_S, stepPending, waitFor, type Pending, type PendingIn } from '../../src/engine/fx/mix/shotPending.ts';
 
 afterEach(() => {
   delete (globalThis as { document?: unknown }).document;
@@ -34,6 +34,25 @@ describe('what a waiting change does each frame (stepPending)', () => {
     expect(stepPending(p({ last: 'acting' }), i({ time: 10 + PENDING_S + 0.01, acting: true }))).toEqual({ kind: 'drop', gate: 'acting' });
     expect(stepPending(p({ last: 'menu' }), i({ time: 10 + PENDING_S + 0.01, menu: true }))).toEqual({ kind: 'drop', gate: 'menu' });
     expect(stepPending(p(), i({ time: 10 + PENDING_S + 0.01 }))).toEqual({ kind: 'drop', gate: 'expired' });
+  });
+
+  it("B3: an enemy's action in flight is waited out to 1.0 s; every other gate, and a teammate's action, keeps 0.6 s", () => {
+    expect(PENDING_FOE_S).toBe(1.0);
+    expect(PENDING_FOE_S).toBeGreaterThan(PENDING_S);
+    const foe = p({ last: 'acting', foe: true });
+    // still waiting at 0.9 s, the enemy still acting
+    expect(stepPending(foe, i({ time: 10 + 0.9, acting: true, foeActing: true }))).toEqual({ kind: 'wait', gate: 'acting' });
+    // the enemy's action ends at 0.9 s: the shot is searched for
+    expect(stepPending(foe, i({ time: 10 + 0.9 }))).toEqual({ kind: 'search' });
+    // gives up past 1.0 s, naming the action
+    expect(stepPending(foe, i({ time: 10 + PENDING_FOE_S + 0.01, acting: true, foeActing: true }))).toEqual({ kind: 'drop', gate: 'acting' });
+    // a teammate's action (foe false), a menu, the framing: 0.6 s as before
+    expect(stepPending(p({ last: 'acting', foe: false }), i({ time: 10 + PENDING_S + 0.01, acting: true }))).toEqual({ kind: 'drop', gate: 'acting' });
+    expect(stepPending(p({ last: 'menu', foe: true }), i({ time: 10 + PENDING_S + 0.01, menu: true }))).toEqual({ kind: 'drop', gate: 'menu' });
+    expect(stepPending(p({ last: 'not-ready' }), i({ time: 10 + PENDING_S + 0.01, ready: false }))).toEqual({ kind: 'drop', gate: 'not-ready' });
+    expect(waitFor({ last: 'acting', foe: true })).toBe(PENDING_FOE_S);
+    expect(waitFor({ last: 'acting' })).toBe(PENDING_S);
+    expect(waitFor({ last: null, foe: true })).toBe(PENDING_S);
   });
 
   it('spaces the framing searches and caps them', () => {
@@ -85,6 +104,49 @@ describe('HeldShots waits for a clean moment and records why (PR-0314)', () => {
     expect(s.decisions.at(-1)).toMatchObject({ who: 'Rikku', outcome: 'full', gate: null });
     expect(s.decisions.at(-1)!.waitedMs).toBeGreaterThan(300);
     expect(s.stats.skipped).toBe(0);
+  });
+
+  it('B3: an enemy cast that is still in flight at 0.6 s no longer costs the shot when it ends by 1.0 s', () => {
+    const rikku = actor('Rikku');
+    const fem = actor('Fem-Goon', { facing: -1, lifeState: 'act' });
+    const { s, calls } = shots(['full']);
+    const mk = () => input([rikku, fem], { begun: [] });
+    s.update(1 / 60, input([rikku, fem], { begun: [rikku] }));
+    frames(s, 47, mk); // 0.79 s of the cast: past the old 0.6 s, inside the new 1.0 s
+    expect(calls.length).toBe(0);
+    expect(s.held).toBeNull();
+    expect(s.decisions.length).toBe(0); // still waiting: nothing is recorded yet
+    set(fem, 'lifeState', 'idle');
+    frames(s, 2, mk);
+    expect(calls.length).toBe(1);
+    expect(s.held?.kind).toBe('sc');
+    expect(s.decisions.at(-1)).toMatchObject({ who: 'Rikku', outcome: 'full', gate: null });
+    expect(s.decisions.at(-1)!.waitedMs).toBeGreaterThan(750);
+    expect(s.stats.skipped).toBe(0);
+  });
+
+  it('B3: a cast that outlasts 1.0 s is still refused, with the acting gate and the longer wait on record', () => {
+    const rikku = actor('Rikku');
+    const fem = actor('Fem-Goon', { facing: -1, lifeState: 'act' });
+    const { s, calls } = shots(['full']);
+    s.update(1 / 60, input([rikku, fem], { begun: [rikku] }));
+    frames(s, 90, () => input([rikku, fem], { begun: [] }));
+    expect(calls.length).toBe(0);
+    expect(s.held).toBeNull();
+    expect(s.decisions.at(-1)).toMatchObject({ outcome: 'skipped', gate: 'acting' });
+    expect(s.decisions.at(-1)!.waitedMs).toBeGreaterThanOrEqual(1000);
+    expect(s.decisions.at(-1)!.waitedMs).toBeLessThan(1100);
+  });
+
+  it("B3: a teammate's action (not an enemy's) still ends the wait at 0.6 s", () => {
+    const rikku = actor('Rikku');
+    const paine = actor('Paine', { lifeState: 'act' });
+    const { s } = shots(['full']);
+    s.update(1 / 60, input([rikku, paine], { begun: [rikku] }));
+    frames(s, 90, () => input([rikku, paine], { begun: [] }));
+    expect(s.held).toBeNull();
+    expect(s.decisions.at(-1)).toMatchObject({ outcome: 'skipped', gate: 'acting' });
+    expect(s.decisions.at(-1)!.waitedMs).toBeLessThan(700);
   });
 
   it('never cuts while a menu is open, however long it waits, and records the menu as the gate', () => {
