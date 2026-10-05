@@ -62,11 +62,21 @@ describe('checkPoseScale (what the art lane runs on a new key)', () => {
     expect(r.failures.join('\n')).toMatch(/table's scale \(1\.4\) is not the record's \(1\.25\)/);
   });
 
-  it('fails a head more than 3 percent off its idle\'s at the table\'s scale', () => {
-    // the record's head box is 80 wide at scale 1.25: 100 at the idle's size. A box of 90 is 12 percent too big.
-    const r = checkPoseScale({ records: records({ head: box(100, 90) }), table, artDir: tmp, subjects: ['hero'] });
-    expect(r.failures.join('\n')).toMatch(/head at the table's scale is x1\.125 of the idle's/);
-    expect(TOLERANCE).toBe(0.03);
+  it('fails an applied scale whose head box is not the idle\'s size at it', () => {
+    // the record's head box is 80 wide at scale 1.25: 100 at the idle's size. A box of 60 is x0.75 of it.
+    const r = checkPoseScale({ records: records({ head: box(100, 60) }), table, artDir: tmp, subjects: ['hero'] });
+    expect(r.failures.join('\n')).toMatch(/head at the scale the engine uses \(1\.25\) is x0\.750 of the idle's/);
+    expect(TOLERANCE).toBe(0.08);
+  });
+
+  it('lets a reading inside the resolution stand without a table scale, and fails one outside it', () => {
+    const own = { hero: { idle: { stanceX: 100 }, ready: { stanceX: 80 } } };
+    const inside = records({ scaleSrc: 'noise', scale: 1.0, current: 1.0, reading: 1.06 });
+    expect(checkPoseScale({ records: inside, table: own, artDir: tmp, subjects: ['hero'] }).failures).toEqual([]);
+    const outside = records({ scaleSrc: 'noise', scale: 1.0, current: 1.0, reading: 1.3 });
+    expect(checkPoseScale({ records: outside, table: own, artDir: tmp, subjects: ['hero'] }).failures.join('\n')).toMatch(/the reading \(1\.3\) is not within 8 percent/);
+    // a table that carries a scale the record says it does not need
+    expect(checkPoseScale({ records: inside, table, artDir: tmp, subjects: ['hero'] }).failures.join('\n')).toMatch(/keeps the pose's own scale but the table has one/);
   });
 
   it('fails a standing pose wider than tall that the table does not mark upright', () => {

@@ -16,7 +16,7 @@
  "yuna": {
   "attack": 0.79,
   "cast": 0.92,
-  "critical": 1.1,
+  "critical": "keep",
   "follow": 1.15,
   "hurt": 0.8,
   "item": 0.75,
@@ -35,6 +35,63 @@
   "ready": 0.77,
   "critical": "keep",
   "follow": "keep",
+  "sleep": "keep",
+  "victory": "keep"
+ },
+ "wakka": {
+  "attack": 1.05,
+  "cast": 1.09,
+  "critical": "keep",
+  "follow": 1.25,
+  "hurt": 1.05,
+  "item": 0.95,
+  "ko": 0.55,
+  "ready": 1.5,
+  "sleep": "keep",
+  "victory": 0.88
+ },
+ "lulu": {
+  "attack": "keep",
+  "cast": "keep",
+  "follow": "keep",
+  "hurt": "keep",
+  "item": "keep",
+  "victory": "keep",
+  "ready": "keep",
+  "od-fury": "keep",
+  "critical": "keep",
+  "sleep": "keep",
+  "ko": "keep"
+ },
+ "evrae": {
+  "attack": "keep",
+  "breath-charge": "keep",
+  "hurt": "keep",
+  "idle-near": "keep"
+ },
+ "rikku": {
+  "attack": 0.75,
+  "follow": 0.74,
+  "hurt": 0.9,
+  "cast": 1.0,
+  "item": 1.0,
+  "ready": 1.1,
+  "steal": 1.1,
+  "victory": 1.0,
+  "critical": "keep",
+  "sleep": "keep",
+  "ko": "keep"
+ },
+ "kimahri": {
+  "attack": "keep",
+  "cast": "keep",
+  "critical": "keep",
+  "follow": "keep",
+  "hurt": "keep",
+  "item": "keep",
+  "jump": "keep",
+  "ko": "keep",
+  "ready": "keep",
   "sleep": "keep",
   "victory": "keep"
  }

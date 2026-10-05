@@ -1,1 +1,25 @@
-{}
+{
+ "evrae": {
+  "idle-far": {
+   "skip": "the far range: the airship director swaps it in and sizes and places it itself"
+  },
+  "ko": {
+   "skip": "never shown: Evrae is not killed on screen (D-031); the departure maps ko to hurt"
+  },
+  "idle": {
+   "standing": true
+  },
+  "attack": {
+   "standing": true
+  },
+  "breath-charge": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle-near": {
+   "standing": true
+  }
+ }
+}
