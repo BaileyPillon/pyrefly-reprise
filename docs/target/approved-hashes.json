@@ -4015,6 +4015,236 @@
      "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-10-04/trapped-white/originals/public/art/characters/ffx2-bahamut/idle.png"
     }
    }
+  },
+  "bailey:2026-10-03-lady-luck": {
+   "words": "all your recommendations",
+   "decision": "D-363 (the idles), D-373 (the swaps), D-388 (ships in release 39)",
+   "note": "Bailey, 2026-10-03 ~21:35 EDT, in chat (D-363): \"All your recommendations please thank you <3 I love you Claude\" picked Lady Luck's idles Yuna c24, Rikku c5 and Paine c20, with the keys repainted to match the picked idles (the agents' recommended pick per slot, the costume following the FF Wiki text; the cut and the shades are our estimate). D-373 put her in the Garment Grids, and D-388 (\"We're unbounded now\") carries her in release 39 with every 2x master. 45 paintings (15 per girl) and 45 sidecars from D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/lady-luck/install-ready/, all new, FFX-2 only. Installed on the r39-int branch (release 39 integration) only; the shared tree and main are untouched until that branch ships.",
+   "public/art/characters/yuna-lady-luck/idle.png": {
+    "sha256": "11eec3300da84056b0a8581a07c4cd736f44f14770e115189a6c3085b0e154ad",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/ready.png": {
+    "sha256": "a6a5223666fa1fe49e7813ba376913e688e79f02c3f4945f998d38787eb18608",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/attack.png": {
+    "sha256": "59a2933dc2c9e7a02a855265d2aab6932749f2737ed41983f46b038e564ba8ee",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/follow.png": {
+    "sha256": "b4a515887e20afa0191874702b99656bf6c2f87ab14a91ef425a4f21a7a79976",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/cast.png": {
+    "sha256": "18c21904e8e053e38571b8fcc2fb745de99d5d4262d530c8450aa5cc80d07a3c",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/item.png": {
+    "sha256": "02b5669ac2888c38191da6f43698275eea00b0f08337fd1ea7bc06d5445fe3e5",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/hurt.png": {
+    "sha256": "614758d2697b9acf42aa8ad73cf0aaed1bf15e6fca12a8a28af9a8ebeabbad1d",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/ko.png": {
+    "sha256": "3f146357ab7f2c8f81c7f3c994a64d39b8b336f44d37a85c52663b574c4c5fa8",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/victory.png": {
+    "sha256": "df8154029699f70203d47089717c4676114e6558e89306eba7f36715bb9f4786",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/twirl-start.png": {
+    "sha256": "96316d730001a7daee0bf7ce6cf44e00b692698fab5a904e644c2b0d834fb93c",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/twirl-going.png": {
+    "sha256": "5ffbe476f6e0ff1fdd0c912d8569e025f10c25ecf0b29289e48c37abd79e7b05",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/twirl-forming.png": {
+    "sha256": "01222e47abb7031eeb392224adc5adb5488610a6e8acf00136278b5fab11ca88",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/twirl-end.png": {
+    "sha256": "08942ba437e10e50313fe0118aa3b180a0f64032038d77beff226ed460dda5e6",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/od-x2-lady-luck-attack-reels.png": {
+    "sha256": "0585cd14247d5190887168cd7e1bd1d774c8c2bffad0337943fc051dc4ab1a02",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/yuna-lady-luck/od-x2-lady-luck-magic-reels.png": {
+    "sha256": "0585cd14247d5190887168cd7e1bd1d774c8c2bffad0337943fc051dc4ab1a02",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/idle.png": {
+    "sha256": "6c4f140894c9b8a44a22e2e315a949e13cbb102343ce658e0df8bbc786c717c3",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/ready.png": {
+    "sha256": "07358030235bf58662e0aa73d588bf8de5c9239ea6abba85cd0e6d4331d8dcb3",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/attack.png": {
+    "sha256": "759b8dff6f31265d03f73ffc2e36766985a7794f23bded74ee2b74a82c3a6a16",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/follow.png": {
+    "sha256": "b1110888dfc94697300bb78c32ce6ec1c20aa0b84e11377b6b630f238c666179",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/cast.png": {
+    "sha256": "e81bf5ebecb5a025c0f28ea532189e798fa1b753c6497e10325061c91fe33899",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/item.png": {
+    "sha256": "8fbbfe0bc03dec3d32571274bfdf3fd433dd2139c266a4893c3742ab204498d6",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/hurt.png": {
+    "sha256": "01942d1f6c8e17ead34cfdac9dcb7537142a6db0002299579d5ba975b14ed9cd",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/ko.png": {
+    "sha256": "885bc174244798a3ec8e42d582450e9396bd89b525653a126b32b28d1720d675",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/victory.png": {
+    "sha256": "c2409c2d7e38a574a8949c9ae6505efa11574ed79e08e9f0ca84c574a38a9d49",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/twirl-start.png": {
+    "sha256": "1e217cf4382802e85aa2c2e40c29036586a6bd6272b0a5404c68a7ef464d16fb",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/twirl-going.png": {
+    "sha256": "a985b9fd99c993e32c37a86a71acfc49480f318e27fb21e1aa59583995d5b17d",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/twirl-forming.png": {
+    "sha256": "d8eaf8f8171552c61208d1ecc993bdd873b411def4bbaddef4c15506e8d45cff",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/twirl-end.png": {
+    "sha256": "f0f124d6fba7404fb369e8e7b847e997c71877c7966a68a61bc49a2084a123e2",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/od-x2-lady-luck-attack-reels.png": {
+    "sha256": "c9791ecb826be844d7ad860c0fbc312c41d38d4d343c4262f2b11c7b2e5067b8",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/rikku-lady-luck/od-x2-lady-luck-magic-reels.png": {
+    "sha256": "c9791ecb826be844d7ad860c0fbc312c41d38d4d343c4262f2b11c7b2e5067b8",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/idle.png": {
+    "sha256": "2c07c5c2fa0c38bc256c717aae7f23f323f30055619cede12bed4ad60b871894",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/ready.png": {
+    "sha256": "8716329fe452741c5233d9eaca9dc2ca2f910e942cb233eb5fd98f4a1fe3634e",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/attack.png": {
+    "sha256": "fdca27ee9e7fd16a736e5d34e02fd3308090c06cf6a9b3b9ab63c2e1d5b38428",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/follow.png": {
+    "sha256": "4426a83fbdce1958355983bacee37ba61da65fc5da558c886642a118a25320ae",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/cast.png": {
+    "sha256": "74f33bf295c75ebbc2a1e4640ac7658aa932927e4a895cc78874eb9ce1bb1354",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/item.png": {
+    "sha256": "72962ec13ad346632497ec023a2d069a8744dc0bf00fc4a586ebeaf0a30f6d83",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/hurt.png": {
+    "sha256": "37b2e5d6e110d3737ba140164829ba71b8514470c7d6b399ef590ba15d17f8c7",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/ko.png": {
+    "sha256": "314cda41ae63fa78aed10b2a6385488b65991dc1a7d27629a1b7b01d9ecca73a",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/victory.png": {
+    "sha256": "024f0fe20098dca8e3b8fbeacae26c99f101895e4715b2550152088c443f4954",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/twirl-start.png": {
+    "sha256": "b5313dfc332ef685527bab8c9ef3274edb9f2085476835a4dbe97daa7609520e",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/twirl-going.png": {
+    "sha256": "45b8dc852b23c9583496b4649bcd6c02e6f72929cdcd073c36706d17dfd6a669",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/twirl-forming.png": {
+    "sha256": "f6336e02f9c8d356e18750a657f98f307c13086f0c134df2e7f7cc84a74ae50a",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/twirl-end.png": {
+    "sha256": "9056ff32385a5af3ec75d3654c1123537dde16d632a4f1322ac5b5ae926ab6eb",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/od-x2-lady-luck-attack-reels.png": {
+    "sha256": "94017f80592a9edfa01fb8f1beeaa08625822d3eacd572e6be8a6516b5861632",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   },
+   "public/art/characters/paine-lady-luck/od-x2-lady-luck-magic-reels.png": {
+    "sha256": "94017f80592a9edfa01fb8f1beeaa08625822d3eacd572e6be8a6516b5861632",
+    "mtime": "2026-10-05T02:43:47.424Z",
+    "approved": "2026-10-03"
+   }
   }
  }
 }
