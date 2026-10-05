@@ -58,6 +58,7 @@ import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
 import { StallWatch } from './BattleScreenStall.ts';
 import { bindEyeCandyScene, sceneBackdropPalette } from '../../engine/fx/a/GoldenHour.ts';
 import { bindLivingScene, releaseLivingScene, updateLivingScene } from '../../engine/fx/b/LivingPaintings.ts';
+import { patchSideFogIn, setSideFogGame } from '../../engine/PlateSideFog.ts';
 import { attachSpectacle, type SpectacleHandle } from './battleSpectacle.ts'; // eye-candy option C, `?fx=c` only
 import { battleComfort } from './battleComfort.ts';
 import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
@@ -214,6 +215,8 @@ export class BattleScreen extends Screen {
     this.app.renderer.applyPalette(this.scene.palette);
     bindEyeCandyScene({ key: scene.key, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
     bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera, renderer: this.app.renderer.renderer }); // eye-candy option B (`?fx=b`)
+    setSideFogGame(chapter.game); // release 39.1, B11 (FFX only): fogged plate edges where the plane ends inside an ultrawide frame (`engine/PlateSideFog.ts`)
+    patchSideFogIn(scene.scene);
     this.scene.hideOwnActors();
     this.syncPixelScale();
     this.offSceneScale = onSceneScale(() => this.syncPixelScale()); // a supersampled scene (`crisp/CrispRig.ts`) changes the point sprites' pixel grid
@@ -889,6 +892,7 @@ export class BattleScreen extends Screen {
     this.offSceneScale = null;
     setPaceGame('other'); // a cutscene or the board after the fight is never paced (`pace.ts`)
     window.removeEventListener('keydown', this.onPauseKey);
+    setSideFogGame(null);
     // Settle the card's promise so nothing stays parked on it; `runEncounter`
     // sees `exited` and does not start the fight.
     this.battleStartBanner?.dismiss();
