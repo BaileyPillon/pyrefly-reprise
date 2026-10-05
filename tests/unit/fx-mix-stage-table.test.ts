@@ -26,11 +26,12 @@ afterEach(() => {
 
 describe('the table', () => {
   it('names an FFX boss in every row, with finite moves', () => {
-    expect(ALL_ROWS.map((r) => r.chapter)).toEqual(['yunalesca', 'braskas-final-aeon']);
+    expect(ALL_ROWS.map((r) => r.chapter)).toEqual(['yunalesca', 'braskas-final-aeon', 'seymour-natus']);
     for (const r of ALL_ROWS) {
       for (const m of [r.party, r.enemy, ...(r.enemyBy ?? []).map((e) => e.move)]) expect(Number.isFinite(m.right) && Number.isFinite(m.toward)).toBe(true);
       // FFX-2's bosses never match, nor do the chapters that have no row (rule 14: FFX only; Evrae waits for its mockups).
-      for (const id of ['ffx2-bahamut', 'ffx2-trema', 'ffx2-vegnagun', 'ffx2-leblanc', 'seymour-flux-body', 'evrae', 'seymour-natus', 'yojimbo']) expect(r.boss.test(id)).toBe(false);
+      // (Natus's own row, r39-natus, names Natus: it pins a colossus master and moves nobody; `fx-mix-colossus-pin.test.ts`.)
+      for (const id of ['ffx2-bahamut', 'ffx2-trema', 'ffx2-vegnagun', 'ffx2-leblanc', 'seymour-flux-body', 'evrae', 'seymour-natus', 'yojimbo']) expect(r.boss.test(id)).toBe(r.chapter === 'seymour-natus' && id === 'seymour-natus');
     }
   });
 
@@ -43,7 +44,7 @@ describe('the table', () => {
   });
 
   it("plays Chapter III only behind its one-line switch: off, Chapter II ships alone and Chapter III is the stage's own", () => {
-    expect(STAGE_TABLE.map((r) => r.chapter)).toEqual(CHAPTER_III_STAGED ? ['yunalesca', 'braskas-final-aeon'] : ['yunalesca']);
+    expect(STAGE_TABLE.map((r) => r.chapter)).toEqual(CHAPTER_III_STAGED ? ['yunalesca', 'braskas-final-aeon', 'seymour-natus'] : ['yunalesca', 'seymour-natus']); // Natus's row (r39-natus) plays whatever Chapter III's switch says
     expect(standFor('ffx', ['yunalesca-1'], false)).not.toBeNull();
     expect(standFor('ffx', ['braskas-final-aeon-1', 'yu-pagoda', 'yu-pagoda'], false) === null).toBe(!CHAPTER_III_STAGED);
   });
@@ -91,7 +92,7 @@ describe('where it applies (FFX desktop, a named boss; checks only: ?stand=)', (
     expect(standFor('ffx', ['yunalesca-1'], true)).toBeNull();
   });
   it('leaves every other fight alone, Evrae included (it waits for its own mockups)', () => {
-    for (const id of ['seymour-flux-body', 'evrae-1', 'seymour-natus', 'yojimbo', 'seymour-omnis', 'isaaru', 'ffx2-bahamut']) expect(standFor('ffx', [id], false)).toBeNull();
+    for (const id of ['seymour-flux-body', 'evrae-1', 'yojimbo', 'seymour-omnis', 'isaaru', 'ffx2-bahamut']) expect(standFor('ffx', [id], false)).toBeNull();
   });
   it('reads ?stand= (off, or four numbers) and nothing else', () => {
     expect(parseStand('')).toBeNull();
@@ -154,8 +155,15 @@ describe('readStand', () => {
     expect(r.report?.party[0]).toBeLessThan(0);
     expect(r.report?.enemy[0]).toBeGreaterThan(0);
   });
+  it("reads Natus's row (r39-natus): a side that moves nobody, and the colossus master it pins", () => {
+    const r = readStand('ffx', [actor('tidus', 1), actor('seymour-natus', -1), actor('mortibody', -1)], rest, false);
+    expect(r.side).not.toBeNull();
+    expect(r.report).toMatchObject({ chapter: 'seymour-natus', party: [0, 0], enemy: [0, 0] });
+    expect(r.colossus).toHaveLength(1);
+    expect(readStand('ffx', [actor('tidus', 1), actor('seymour-natus', -1)], rest, true).side).toBeNull();
+  });
   it('reads nothing for another chapter, the phone or FFX-2', () => {
-    expect(readStand('ffx', [actor('tidus', 1), actor('seymour-natus', -1)], rest, false)).toEqual({ side: null, report: null });
+    expect(readStand('ffx', [actor('tidus', 1), actor('yojimbo', -1)], rest, false)).toEqual({ side: null, report: null });
     expect(readStand('ffx', [actor('tidus', 1), actor('yunalesca-1', -1)], rest, true).side).toBeNull();
     expect(readStand('ffx2', [actor('tidus', 1), actor('yunalesca-1', -1)], rest, false).side).toBeNull();
   });

@@ -1,0 +1,51 @@
+# First menu of Chapter X, real keys, headless GPU Chromium (PYREFLY_BROWSER=gpu), seed per run. 'base2' = today (origin/main 105105c3, scratch base worktree, 3 seeds); 'v2' = branch r39-natus (8 seeds).
+# Natus px = painted height of his sprite (alpha >= 0.35 mask); card cover = share of Natus's painted pixels under the card's box; closest approach = painted pixels, any member to any fiend.
+# Produced by cap/agg.mjs (min / median / max over seeds) and the per-run lines of cap/natus.mjs.
+
+
+== base2
+1600x900 runs 3 | Natus px 206 / 207 / 207 | Sensor card over Natus 0.00 / 0.00 / 0.00 % | advisor 0.00 / 0.00 / 0.00 % | closest painted approach px 17.0 / 17.6 / 18.4 | painted overlap px2 0 / 0 / 0 | party under panels max % 0.0 / 0.0 / 0.0 | Mortibody over Natus % 0.00 / 0.00 / 0.00 | console errors 0 | plans 1 / 1 / 1 replans 1 / 1 / 1 planMs 146 / 152 / 153 scale -1 pin false
+2000x1012 runs 3 | Natus px 239 / 240 / 241 | Sensor card over Natus 0.00 / 0.00 / 0.00 % | advisor 0.00 / 0.00 / 0.00 % | closest painted approach px 19.6 / 19.8 / 24.3 | painted overlap px2 0 / 0 / 0 | party under panels max % 2.6 / 2.7 / 2.7 | Mortibody over Natus % 0.00 / 0.00 / 0.00 | console errors 0 | plans 1 / 1 / 1 replans 1 / 1 / 1 planMs 105 / 108 / 130 scale -1 pin false
+2560x1440 runs 3 | Natus px 329 / 331 / 331 | Sensor card over Natus 0.00 / 0.00 / 0.00 % | advisor 0.00 / 0.00 / 0.00 % | closest painted approach px 24.0 / 25.5 / 26.5 | painted overlap px2 0 / 0 / 0 | party under panels max % 0.0 / 0.0 / 0.0 | Mortibody over Natus % 0.00 / 0.00 / 0.00 | console errors 0 | plans 1 / 1 / 1 replans 1 / 1 / 1 planMs 129 / 132 / 135 scale -1 pin false
+
+== v2
+1600x900 runs 8 | Natus px 346 / 346 / 347 | Sensor card over Natus 0.00 / 0.00 / 0.00 % | advisor 0.00 / 0.00 / 0.00 % | closest painted approach px 37.3 / 39.1 / 43.6 | painted overlap px2 0 / 0 / 0 | party under panels max % 1.1 / 2.0 / 4.0 | Mortibody over Natus % 0.00 / 0.00 / 0.00 | console errors 0 | plans 1 / 1 / 1 replans 0 / 0 / 0 planMs 12 / 18 / 31 scale 0.45 pin true
+2000x1012 runs 8 | Natus px 389 / 390 / 390 | Sensor card over Natus 0.00 / 0.00 / 0.00 % | advisor 0.00 / 0.00 / 0.00 % | closest painted approach px 43.0 / 44.3 / 48.1 | painted overlap px2 0 / 0 / 0 | party under panels max % 0.0 / 0.1 / 0.7 | Mortibody over Natus % 0.00 / 0.00 / 0.00 | console errors 0 | plans 1 / 1 / 1 replans 0 / 0 / 0 planMs 12 / 18 / 34 scale 0.45 pin true
+2560x1440 runs 8 | Natus px 554 / 554 / 555 | Sensor card over Natus 0.00 / 0.00 / 0.00 % | advisor 0.00 / 0.00 / 0.00 % | closest painted approach px 60.6 / 63.1 / 67.4 | painted overlap px2 0 / 0 / 0 | party under panels max % 1.7 / 2.0 / 3.0 | Mortibody over Natus % 0.00 / 0.00 / 0.00 | console errors 0 | plans 1 / 1 / 1 replans 0 / 0 / 0 planMs 12 / 17 / 59 scale 0.45 pin true
+
+# Per-run lines (branch), sizes 1600x900 / 2000x1012 / 2560x1440 (8 seeds), extra pinned sizes (v2x), windows the row does not cover (v2f: plays as today)
+v2-1600x900-s1 {"pxNat":346,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0233 y:0 k:0 s:0 m:0","clearPx":40.6,"morOverNat":0
+v2-2000x1012-s1 {"pxNat":390,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0 y:0 k:0 s:0 m:0","clearPx":43.8,"morOverNat":0
+v2-2560x1440-s1 {"pxNat":554,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0233 y:0 k:0 s:0 m:0","clearPx":60.6,"morOverNat":0
+v2-1600x900-s2 {"pxNat":347,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0167 y:0 k:0 s:0 m:0","clearPx":37.3,"morOverNat":0
+v2-1600x900-s3 {"pxNat":346,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0233 y:0 k:0 s:0 m:0","clearPx":39.5,"morOverNat":0
+v2-1600x900-s4 {"pxNat":346,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0112 y:0 k:0 s:0 m:0","clearPx":37.7,"morOverNat":0
+v2-1600x900-s5 {"pxNat":346,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0167 y:0 k:0 s:0 m:0","clearPx":38.5,"morOverNat":0
+v2-1600x900-s6 {"pxNat":347,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0397 y:0 k:0 s:0 m:0","clearPx":43.6,"morOverNat":0
+v2-1600x900-s7 {"pxNat":346,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0112 y:0 k:0 s:0 m:0","clearPx":38.7,"morOverNat":0
+v2-1600x900-s8 {"pxNat":346,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0303 y:0 k:0 s:0 m:0","clearPx":42.2,"morOverNat":0
+v2-2000x1012-s2 {"pxNat":389,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0 y:0 k:0 s:0 m:0","clearPx":43.4,"morOverNat":0
+v2-2000x1012-s3 {"pxNat":389,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0 y:0 k:0 s:0 m:0","clearPx":43,"morOverNat":0
+v2-2000x1012-s4 {"pxNat":390,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0068 y:0 k:0 s:0 m:0","clearPx":47.7,"morOverNat":0
+v2-2000x1012-s5 {"pxNat":390,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0011 y:0 k:0 s:0 m:0","clearPx":46,"morOverNat":0
+v2-2000x1012-s6 {"pxNat":389,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0 y:0 k:0 s:0 m:0","clearPx":43.4,"morOverNat":0
+v2-2000x1012-s7 {"pxNat":389,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0033 y:0 k:0 s:0 m:0","clearPx":44.8,"morOverNat":0
+v2-2000x1012-s8 {"pxNat":390,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0033 y:0 k:0 s:0 m:0","clearPx":48.1,"morOverNat":0
+v2-2560x1440-s2 {"pxNat":554,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0303 y:0 k:0 s:0 m:0","clearPx":64.4,"morOverNat":0
+v2-2560x1440-s3 {"pxNat":554,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0167 y:0 k:0 s:0 m:0","clearPx":65.2,"morOverNat":0
+v2-2560x1440-s4 {"pxNat":554,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0167 y:0 k:0 s:0 m:0","clearPx":61,"morOverNat":0
+v2-2560x1440-s5 {"pxNat":555,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0233 y:0 k:0 s:0 m:0","clearPx":63.2,"morOverNat":0
+v2-2560x1440-s6 {"pxNat":555,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0233 y:0 k:0 s:0 m:0","clearPx":67.4,"morOverNat":0
+v2-2560x1440-s7 {"pxNat":554,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0167 y:0 k:0 s:0 m:0","clearPx":63,"morOverNat":0
+v2-2560x1440-s8 {"pxNat":554,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0167 y:0 k:0 s:0 m:0","clearPx":61,"morOverNat":0
+v2x-1280x720-s1 {"pxNat":277,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0167 y:0 k:0 s:0 m:0","clearPx":32.5,"morOverNat":0
+v2x-1280x720-s2 {"pxNat":277,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0397 y:0 k:0 s:0 m:0","clearPx":33.5,"morOverNat":0
+v2x-1366x768-s1 {"pxNat":296,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0303 y:0 k:0 s:0 m:0","clearPx":34.5,"morOverNat":0
+v2x-1366x768-s2 {"pxNat":295,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0112 y:0 k:0 s:0 m:0","clearPx":34.7,"morOverNat":0
+v2x-1920x1080-s1 {"pxNat":416,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0233 y:0 k:0 s:0 m:0","clearPx":46.7,"morOverNat":0
+v2x-1920x1080-s2 {"pxNat":416,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0.0233 y:0 k:0 s:0 m:0","clearPx":47.8,"morOverNat":0
+v2x-2560x1080-s1 {"pxNat":417,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0 y:0 k:0.0094 s:0 m:0","clearPx":47.3,"morOverNat":0
+v2x-2560x1080-s2 {"pxNat":416,"sens":0,"adv":0,"guide":0,"partyUnder":"t:0 y:0 k:0.0118 s:0 m:0","clearPx":43.7,"morOverNat":0
+v2f-1440x900-s1 {"pxNat":206,"sens":0.0002,"adv":0,"guide":0,"partyUnder":"t:0 y:0 s:0 m:0 k:0.0328","clearPx":18.3,"morOverNat":0
+v2f-1024x768-s1 {"pxNat":169,"sens":0.0572,"adv":0,"guide":0,"partyUnder":"t:0.0786 y:0 k:0.1226 s:0 m:0","clearPx":14.7,"morOverNat":0
+done

@@ -19,7 +19,9 @@ import { battleCanvas, forgetMenuPanels, hudPanels, menuOpen, phoneBattle } from
 import { LivingFigure } from './living.ts';
 import { plateOf } from './plate.ts';
 import { OdBanner } from './odBanner.ts';
+import { parsePin, type PinOverride } from './colossusPin.ts';
 import { Roster } from './roster.ts';
+import { SensorPin } from './sensorPin.ts';
 import { releaseMixSplash } from './splash.ts';
 import { TwirlSlot } from './twirl.ts';
 
@@ -79,10 +81,13 @@ class Mix {
   private readonly shots: HeldShots | null;
   private readonly banner = new OdBanner();
   private readonly twirl = new TwirlSlot();
+  /** The Sensor card's place while the table's colossus master stands (`colossusPin.ts`). */
+  private readonly card = new SensorPin();
   private readonly living = new Map<Object3D, LivingFigure>();
   private readonly defringed = new Set<ShaderMaterial>();
   private readonly roster: Roster;
   private plans = -1;
+  private lastActors: readonly Actor[] = [];
   private band: DofBand | null = null;
   private heldClass = false;
   /** The lens shift the held shot on screen was framed against (held with it); null with no shot up. */
@@ -116,9 +121,11 @@ class Mix {
     const rm = eyeCandy.reduceMotion;
     this.framing.rigs?.restore();
     const actors = this.roster.update(dt); // a figure that arrives mid-fight is in the list the frame it is drawn (`roster.ts`)
+    this.lastActors = actors;
     // CHAPTER FRAMING: the master, the staging, the menu clearance.
     this.framingOn = parts.chapterFraming;
     this.framing.update(dt, actors, parts.chapterFraming);
+    this.card.update(parts.chapterFraming ? this.framing.cardPlace : null);
     // The held shots (on today's rig too when CHAPTER FRAMING is off).
     const master = this.framing.masterPose ?? this.framing.rigs?.base('idle') ?? null;
     const lens: [number, number] = parts.chapterFraming ? this.framing.lensNow() : [0, 0];
@@ -239,6 +246,11 @@ class Mix {
     };
   }
 
+  /** Checks only: the framing's plan for a pin override (`colossusPin.ts`: `off`, or the nine numbers of `?natus=`), without putting it on screen. */
+  probe(o: PinOverride): ReturnType<Framing['probe']> {
+    return this.framing.probe(this.lastActors, o);
+  }
+
   /** Checks only: `false` leaves the planes as a pose crossfade has them under a twirl key (round 19's frames). */
   setTwirlPin(on: boolean): void {
     this.twirl.pinOn = on;
@@ -258,6 +270,7 @@ class Mix {
     setProneAvoid(null);
     setShotHold(null);
     this.framing.dispose();
+    this.card.dispose();
     this.roster.dispose();
     this.cinema.dispose();
     this.banner.dispose();
@@ -314,5 +327,7 @@ fxDebugHooks['mix'] = {
     resetCost: () => current?.resetCost(),
     twirlPin: (on: boolean) => current?.setTwirlPin(on),
     bodyAvoid: (on: boolean) => current?.setBodyAvoid(on),
+    /** `'off'` or the numbers of `?natus=` as a string: the plan that answer would make, read without playing it. */
+    natusProbe: (o: string) => current?.probe(parsePin(`?natus=${o}`)) ?? null,
   },
 };

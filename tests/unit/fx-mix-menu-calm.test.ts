@@ -143,7 +143,7 @@ describe("Chapter III's row: one switch plays the placement and the calm camera 
 
   it('is on: Chapter III plays option 1 (release 39), and the table has it', () => {
     expect(CHAPTER_III_STAGED).toBe(true);
-    expect(STAGE_TABLE.map((r) => r.chapter)).toEqual(['yunalesca', 'braskas-final-aeon']);
+    expect(STAGE_TABLE.map((r) => r.chapter)).toEqual(['yunalesca', 'braskas-final-aeon', 'seymour-natus']); // Chapter X's row is r39-natus's (the colossus pin), merged beside Chapter III's
   });
 
   it('stands the boss 2.6 right and 0.95 back, the party and the Yu Pagodas where the built row put them', () => {

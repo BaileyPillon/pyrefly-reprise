@@ -1,0 +1,66 @@
+# Fights and windows the table must NOT change: today (origin/main 105105c3, scratch base worktree) against the branch r39-natus, first menu by real keys, headless GPU Chromium (cap/cmp.mjs, cap/natus.mjs).
+# The framing report's decision: scale (-1 = today's rig), plans/replans, lens (px), blend, back, master (x, y, z), pin (false = no table row played).
+# Yojimbo, FFX-2 Bahamut, Yunalesca, Braska's Final Aeon and Evrae at 1600x900 (3 seeds each side), then Braska's Final Aeon with 6 more seeds each side, then Natus on the phone (390x844, touch) and in windows the row does not cover.
+
+base-yojimbo-cavern-1600x900-s1  {"scale":0.25,"plans":1,"replans":0,"lens":[0,-36],"blend":1,"back":1.04,"master":[-0.02,5.23,18.3],"pin":false} errors 0
+base-yojimbo-cavern-1600x900-s2  {"scale":0.25,"plans":1,"replans":0,"lens":[0,0],"blend":1,"back":1.04,"master":[-0.02,5.23,18.3],"pin":false} errors 0
+base-yojimbo-cavern-1600x900-s3  {"scale":0.25,"plans":1,"replans":0,"lens":[0,-36],"blend":1,"back":1.04,"master":[-0.02,5.23,18.3],"pin":false} errors 0
+branch-yojimbo-cavern-1600x900-s1  {"scale":0.25,"plans":1,"replans":0,"lens":[0,0],"blend":1,"back":1.04,"master":[-0.02,5.23,18.3],"pin":false} errors 0
+branch-yojimbo-cavern-1600x900-s2  {"scale":0.25,"plans":1,"replans":0,"lens":[0,0],"blend":1,"back":1.04,"master":[-0.02,5.23,18.3],"pin":false} errors 0
+branch-yojimbo-cavern-1600x900-s3  {"scale":0.25,"plans":1,"replans":0,"lens":[0,-36],"blend":1,"back":1.04,"master":[-0.02,5.23,18.3],"pin":false} errors 0
+base-ffx2-bahamut-1600x900-s1  {"scale":1,"plans":1,"replans":0,"lens":[-64,-36],"blend":0.5,"back":1,"master":[0.51,1.95,9.13],"pin":false} errors 0
+base-ffx2-bahamut-1600x900-s2  {"scale":1,"plans":1,"replans":0,"lens":[-64,-36],"blend":0.5,"back":1,"master":[0.51,1.95,9.14],"pin":false} errors 0
+base-ffx2-bahamut-1600x900-s3  {"scale":1,"plans":1,"replans":0,"lens":[-64,-36],"blend":0.5,"back":1,"master":[0.51,1.95,9.13],"pin":false} errors 0
+branch-ffx2-bahamut-1600x900-s1  {"scale":1,"plans":1,"replans":0,"lens":[-64,-36],"blend":0.5,"back":1,"master":[0.52,1.95,9.15],"pin":false} errors 0
+branch-ffx2-bahamut-1600x900-s2  {"scale":1,"plans":1,"replans":0,"lens":[-64,-36],"blend":0.5,"back":1,"master":[0.52,1.95,9.15],"pin":false} errors 0
+branch-ffx2-bahamut-1600x900-s3  {"scale":1,"plans":1,"replans":0,"lens":[-64,-36],"blend":0.5,"back":1,"master":[0.52,1.95,9.15],"pin":false} errors 0
+base-yunalesca-1600x900-s1  {"scale":-1,"plans":1,"replans":1,"lens":[64,-36],"blend":1,"back":1.04,"master":[-0.01,2.58,10.24],"pin":false} errors 0
+base-yunalesca-1600x900-s2  {"scale":-1,"plans":1,"replans":1,"lens":[64,-36],"blend":1,"back":1.04,"master":[-0.01,2.58,10.24],"pin":false} errors 0
+base-yunalesca-1600x900-s3  {"scale":-1,"plans":1,"replans":1,"lens":[64,-36],"blend":1,"back":1.04,"master":[-0.01,2.58,10.24],"pin":false} errors 0
+branch-yunalesca-1600x900-s1  {"scale":-1,"plans":1,"replans":1,"lens":[64,-36],"blend":1,"back":1.04,"master":[-0.01,2.58,10.24],"pin":false} errors 0
+branch-yunalesca-1600x900-s2  {"scale":-1,"plans":1,"replans":1,"lens":[64,-36],"blend":1,"back":1.04,"master":[-0.01,2.58,10.24],"pin":false} errors 0
+branch-yunalesca-1600x900-s3  {"scale":-1,"plans":1,"replans":1,"lens":[64,-36],"blend":1,"back":1.04,"master":[-0.01,2.58,10.24],"pin":false} errors 0
+base-braskas-final-aeon-1600x900-s1  {"scale":-1,"plans":1,"replans":1,"lens":[64,-36],"blend":1,"back":1.04,"master":[-0.01,2.78,10.25],"pin":false} errors 0
+base-braskas-final-aeon-1600x900-s2  {"scale":-1,"plans":1,"replans":1,"lens":[64,-36],"blend":1,"back":1.04,"master":[-0.01,2.78,10.25],"pin":false} errors 0
+base-braskas-final-aeon-1600x900-s3  {"scale":-1,"plans":1,"replans":1,"lens":[64,-36],"blend":1,"back":1.04,"master":[-0.01,2.78,10.25],"pin":false} errors 0
+branch-braskas-final-aeon-1600x900-s1  {"scale":-1,"plans":1,"replans":1,"lens":[64,-36],"blend":1,"back":1.04,"master":[-0.01,2.78,10.25],"pin":false} errors 0
+branch-braskas-final-aeon-1600x900-s2  {"scale":-1,"plans":1,"replans":1,"lens":[64,-36],"blend":1,"back":1.04,"master":[-0.01,2.78,10.25],"pin":false} errors 0
+branch-braskas-final-aeon-1600x900-s3  {"scale":-1,"plans":1,"replans":1,"lens":[128,-36],"blend":1,"back":1.04,"master":[-0.01,2.78,10.25],"pin":false} errors 0
+base-evrae-airship-1600x900-s1  {"scale":-1,"plans":1,"replans":1,"lens":[0,-36],"blend":1,"back":1.04,"master":[-0.56,1.44,9.9],"pin":false} errors 0
+base-evrae-airship-1600x900-s2  {"scale":-1,"plans":1,"replans":1,"lens":[0,-36],"blend":1,"back":1.04,"master":[-0.56,1.44,9.9],"pin":false} errors 0
+base-evrae-airship-1600x900-s3  {"scale":-1,"plans":1,"replans":1,"lens":[0,-36],"blend":1,"back":1.04,"master":[-0.56,1.44,9.9],"pin":false} errors 0
+branch-evrae-airship-1600x900-s1  {"scale":-1,"plans":1,"replans":1,"lens":[0,-36],"blend":1,"back":1.04,"master":[-0.56,1.44,9.9],"pin":false} errors 0
+branch-evrae-airship-1600x900-s2  {"scale":-1,"plans":1,"replans":1,"lens":[0,-36],"blend":1,"back":1.04,"master":[-0.56,1.44,9.9],"pin":false} errors 0
+branch-evrae-airship-1600x900-s3  {"scale":-1,"plans":1,"replans":1,"lens":[0,-36],"blend":1,"back":1.04,"master":[-0.56,1.44,9.9],"pin":false} errors 0
+base-seymour-natus-390x844-s1  {"scale":-1,"plans":1,"replans":1,"lens":[0,0],"blend":0,"back":1,"master":[0,5.1,17.6],"pin":false} errors 0
+base-seymour-natus-390x844-s2  {"scale":-1,"plans":1,"replans":1,"lens":[0,0],"blend":0,"back":1,"master":[0,5.1,17.6],"pin":false} errors 0
+branch-seymour-natus-390x844-s1  {"scale":-1,"plans":1,"replans":1,"lens":[0,0],"blend":0,"back":1,"master":[0,5.1,17.6],"pin":false} errors 0
+branch-seymour-natus-390x844-s2  {"scale":-1,"plans":1,"replans":1,"lens":[0,0],"blend":0,"back":1,"master":[0,5.1,17.6],"pin":false} errors 0
+
+# Braska's Final Aeon, 9 first menus each side (1600x900): lens by seed
+today: {"[64,-36]":8,"[128,-36]":1}   (9 runs)
+  base s1 lens [64,-36] scale -1 plans 1/1 pin false
+  base s2 lens [64,-36] scale -1 plans 1/1 pin false
+  base s3 lens [64,-36] scale -1 plans 1/1 pin false
+  base3 s1 lens [64,-36] scale -1 plans 1/1 pin false
+  base3 s2 lens [64,-36] scale -1 plans 1/1 pin false
+  base3 s3 lens [64,-36] scale -1 plans 1/1 pin false
+  base3 s4 lens [64,-36] scale -1 plans 1/1 pin false
+  base3 s5 lens [128,-36] scale -1 plans 1/1 pin false
+  base3 s6 lens [64,-36] scale -1 plans 1/1 pin false
+branch: {"[64,-36]":8,"[128,-36]":1}   (9 runs)
+  branch s1 lens [64,-36] scale -1 plans 1/1 pin false
+  branch s2 lens [64,-36] scale -1 plans 1/1 pin false
+  branch s3 lens [128,-36] scale -1 plans 1/1 pin false
+  branch3 s1 lens [64,-36] scale -1 plans 1/1 pin false
+  branch3 s2 lens [64,-36] scale -1 plans 1/1 pin false
+  branch3 s3 lens [64,-36] scale -1 plans 1/1 pin false
+  branch3 s4 lens [64,-36] scale -1 plans 1/0 pin false
+  branch3 s5 lens [64,-36] scale -1 plans 1/1 pin false
+  branch3 s6 lens [64,-36] scale -1 plans 1/1 pin false
+
+# Natus in windows the row does not cover (the pin is refused and today's framing plays), and the same windows on today's build
+out/cmp.log:base-x-1440x900-s1 {"pxNat":207,"sens":0.0003,"adv":0,"guide":0,"intent":null,"partyUnder":"t:0 y:0 k:0.0337 s:0 m:0","clearPx":18.3,"morOverNat":0} {"ok":true,"natH":207,"boxH":208,"sensorShare":0.0003,"sensorBox":[960,419,267,198],"scale":-1,"lens":[0,-36],"bl":1,"bk":1.04,"fitOk":false,"gate":0,"plans":1,"replans":1,"gap":1,"paintedOv":0,"first":"tidus","errs":0,"err":null,"ms":1908
+out/cmp.log:base-x-1024x768-s1 {"pxNat":170,"sens":0.0572,"adv":0,"guide":0,"intent":null,"partyUnder":"t:0.0909 y:0 k:0.1091 s:0 m:0","clearPx":14.1,"morOverNat":0} {"ok":true,"natH":170,"boxH":171,"sensorShare":0.0572,"sensorBox":[683,362,190,141],"scale":-1,"lens":[0,-31],"bl":1,"bk":1.08,"fitOk":false,"gate":0,"plans":1,"replans":1,"gap":1,"paintedOv":0,"first":"tidus","errs":0,"err":null,"ms"
+out/v2.log:v2f-1440x900-s1 {"pxNat":206,"sens":0.0002,"adv":0,"guide":0,"intent":null,"partyUnder":"t:0 y:0 s:0 m:0 k:0.0328","clearPx":18.3,"morOverNat":0
+out/v2.log:v2f-1024x768-s1 {"pxNat":169,"sens":0.0572,"adv":0,"guide":0,"intent":null,"partyUnder":"t:0.0786 y:0 k:0.1226 s:0 m:0","clearPx":14.7,"morOverNat":0
