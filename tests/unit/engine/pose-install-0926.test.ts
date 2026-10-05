@@ -29,6 +29,7 @@ import { resetArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { resolvePoseMap } from '../../../src/engine/BattlePresenterArt.ts';
 import { tryLoadMeta } from '../../../src/engine/PaintedArt.ts';
 import { poseScaleFor } from '../../../src/engine/KoPoseScale.ts';
+import { poseRegistrationFor } from '../../../src/engine/PoseRegistration.ts';
 
 const ROOT = path.resolve(__dirname, '../../..');
 const ART = path.join(ROOT, 'public/art');
@@ -192,8 +193,9 @@ describe.skipIf(!haveArt)('the installed files on this disk (public/art is gitig
       expect(String(side.scaleNote), p).toMatch(/^Head match 2026-09-26/);
       expect(side.decision, p).toBe('D-194');
       const meta = await tryLoadMeta(`/art/characters/${p}.png`);
-      // VP-1001-05: a src-side KO table (KoPoseScale.ts) may correct a sidecar's KO scale; the sidecar itself is untouched.
-      expect(meta?.scale, p).toBe(poseScaleFor(`/art/characters/${p}.png`, SCALES[p]));
+      // VP-1001-05: a src-side KO table (KoPoseScale.ts) may correct a sidecar's KO scale; the sidecar itself is untouched. Release 39 (r39-posescale): a pose
+      // the measured registration table lists takes the table's scale over both (PaintedArt.tryLoadMeta), so the loader's answer is the table's, else the sidecar's as before.
+      expect(meta?.scale, p).toBe(poseRegistrationFor(`/art/characters/${p}.png`)?.scale ?? poseScaleFor(`/art/characters/${p}.png`, SCALES[p]));
       expect(meta!.baselineY, p).toBeLessThanOrEqual(meta!.height);
     }
   });
