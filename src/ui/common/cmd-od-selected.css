@@ -1,0 +1,26 @@
+/*
+ * PR-0325 (round 19, CHK-010): the row the cursor is on must read as selected, in every command list.
+ *
+ * Game case: both. `.ig-cmd--overdrive` (`inkgold/slabs.css`) is the ink-and-gold look of a row that costs
+ * the turn or is the Overdrive: FFX's OVERDRIVE row and the three Overdrives under it (Kimahri's JUMP, MIGHTY
+ * GUARD, WHITE WIND), FFX-2's CHANGE row. It is declared after `.ig-cmd--selected`, so on the selected row
+ * it won the cascade and kept its ink face: the cursor moved and nothing on the slabs did (measured at
+ * 1600x900, Chapter I and Chapter IV, real keys: the selected row's background stayed rgb(11, 10, 18),
+ * the gold border and gold label identical on all three). A selected row of that kind now takes the
+ * selected face the main list uses (the accent fill, ink label), and the gold marks inside it (the
+ * chevron, the READY and cost chips) turn ink so they do not vanish into the fill.
+ *
+ * The phone is left to its own sheets (`phone-hud.css`, both games): the phone draws its own selection.
+ */
+
+html:not([data-phone-battle]) .ig-cmd--overdrive.ig-cmd--selected {
+  background: var(--ig-accent);
+  color: var(--ig-ink);
+}
+
+html:not([data-phone-battle]) .ffxhud .ig-cmd--overdrive.ig-cmd--selected .ffx-cmd__chev,
+html:not([data-phone-battle]) .ffxhud .ig-cmd--overdrive.ig-cmd--selected .ffx-cmd__badge,
+html:not([data-phone-battle]) .ffxhud .ig-cmd--overdrive.ig-cmd--selected .ffx-cmd__badge--ready,
+html:not([data-phone-battle]) .ffxhud .ig-cmd--overdrive.ig-cmd--selected .ig-cmd__ready {
+  color: var(--ig-ink);
+}

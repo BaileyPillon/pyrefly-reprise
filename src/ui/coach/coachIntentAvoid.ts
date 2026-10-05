@@ -28,15 +28,38 @@ const HARD_EXTRA: readonly string[] = ['.mad__card', ...CHAPTER_PANEL_SELECTORS]
 const SOFT: readonly string[] = INTENT_AVOID_SELECTORS.filter((s) => !SIDE.includes(s) && !HARD_EXTRA.includes(s));
 
 /**
+ * The box the line occupies on screen: its slab and the FFX-2 "Gauges running" badge that hangs
+ * 28 to 30 px above it (`coach.css` `.coach-mark__running`, `top: -28px`). The slab's own rect
+ * leaves the badge out, so on the phone the solver parked the slab 12 px under the intent card
+ * and the badge, which sits above the slab, printed over the card's last line by 10 to 16 px
+ * (LV-35-01, release 35 live check, FFX-2 Chapter IV at 390x844; game case: FFX-2 only, the
+ * badge is FFX-2's; FFX has none, so its box is the slab's).
+ */
+export function markBox(mark: HTMLElement): { left: number; top: number; right: number; bottom: number } {
+  const now = mark.getBoundingClientRect();
+  const box = { left: now.left, top: now.top, right: now.right, bottom: now.bottom };
+  const badge = mark.querySelector<HTMLElement>('.coach-mark__running');
+  if (badge) {
+    const b = badge.getBoundingClientRect();
+    if (b.width > 0 && b.height > 0) {
+      box.left = Math.min(box.left, b.left);
+      box.top = Math.min(box.top, b.top);
+      box.right = Math.max(box.right, b.right);
+      box.bottom = Math.max(box.bottom, b.bottom);
+    }
+  }
+  return box;
+}
+
+/**
  * Move `mark` (a `.coach-mark` in `host`) off the intent slab when it is on
  * it. Returns true when it moved. A no-op when there is no slab on screen or
- * the line already misses it.
+ * the line (badge included, {@link markBox}) already misses it.
  */
 export function keepMarkOffIntent(mark: HTMLElement, host: HTMLElement): boolean {
   const slab = rectsOf(host, INTENT_SLAB_SELECTORS);
   if (!slab.length) return false;
-  const now = mark.getBoundingClientRect();
-  const box = { left: now.left, top: now.top, right: now.right, bottom: now.bottom };
+  const box = markBox(mark);
   if (!slab.some((s) => overlaps(box, s))) return false;
   const stageRect = host.getBoundingClientRect();
   const stage = { left: stageRect.left, top: stageRect.top, right: stageRect.right, bottom: stageRect.bottom };
@@ -49,5 +72,25 @@ export function keepMarkOffIntent(mark: HTMLElement, host: HTMLElement): boolean
   const left = parseFloat(style.left) || 0;
   mark.style.top = `${top + moved.top - box.top}px`;
   mark.style.left = `${left + moved.left - box.left}px`;
+  return true;
+}
+
+/**
+ * Last word on where the line is (r37-ui-floor, third attempt; both games, FFX has no badge so its box is the slab).
+ * The solvers each work on a box and each can leave one edge outside the stage: the FFX-2 "Gauges running" badge hung
+ * 20 px off the top (a first-run line parked at the stage top) and off the right edge at 1440x900 (it runs 56 px wider
+ * than the slab; origin/main too). Whatever moved the line, shift it by the least that brings the whole box (badge
+ * included) back inside `host`; a box larger than the stage keeps its top-left.
+ */
+export function keepMarkInStage(mark: HTMLElement, host: HTMLElement): boolean {
+  const box = markBox(mark);
+  if (box.right - box.left <= 0) return false;
+  const s = host.getBoundingClientRect();
+  const dx = box.left < s.left ? s.left - box.left : box.right > s.right ? Math.max(s.right - box.right, s.left - box.left) : 0;
+  const dy = box.top < s.top ? s.top - box.top : box.bottom > s.bottom ? Math.max(s.bottom - box.bottom, s.top - box.top) : 0;
+  if (!dx && !dy) return false;
+  const style = getComputedStyle(mark);
+  if (dy) mark.style.top = `${(parseFloat(style.top) || 0) + dy}px`;
+  if (dx) mark.style.left = `${(parseFloat(style.left) || 0) + dx}px`;
   return true;
 }

@@ -150,6 +150,8 @@ export function fighterBoxes(state: BattleState | null, project: ProjectFn): Int
       bottom: Math.max(head.y, feet.y),
       // A painting, not chrome: the slab ranks it below the HUD (`placeSlab`, tiered).
       soft: true,
+      // PR-0249: and the girls rank above the boss's painting, so the slab covers Bahamut before it covers Rikku.
+      party: c.side === 'party',
     });
   }
   return out;
@@ -232,6 +234,7 @@ export function solveSlab(input: SlabSolveInput): IntentAvoidRect[] {
     right: o.right - layer.left,
     bottom: o.bottom - layer.top,
     soft: o.soft === true,
+    party: o.party === true,
   }));
   // Tiered: the command stack, the party and the boss plate outrank the fighters, and the chip
   // riding the panel is placed with it (M2, 2026-09-25).

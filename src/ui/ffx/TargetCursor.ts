@@ -1,6 +1,6 @@
 import type { CombatantId } from '../../battle/common/types.ts';
 import { anchorChipToRow, clearChipOfSlab } from './targetChipClear.ts';
-import { clamp, dockPlate, escapeHtml, FLOWER_SVG, HAND_SVG, noteHtml, px, type PlateDock } from './targetCursorParts.ts';
+import { clamp, dockPlate, escapeHtml, FLOWER_SVG, HAND_SVG, handBox, noteHtml, px, type PlateDock } from './targetCursorParts.ts';
 import { pickTargetAt, sameSide } from './targetHitPick.ts';
 
 export type { PlateDock } from './targetCursorParts.ts';
@@ -355,8 +355,7 @@ export class TargetCursor {
     // just the active one — a mouse player must be able to click straight on
     // any valid enemy, not only the keyboard-highlighted one.
     const clickable = !group;
-    const scale = typeof window === 'undefined' ? 1 : window.innerWidth / 1920;
-    const handGap = Math.max(10, HAND_GAP_AT_1920 * scale);
+    const handGap = this.handGap();
 
     // PR-0232: the side being aimed at is drawn last, the active target last of all,
     // so where brackets overlap the in-set one is on top for a tap.
@@ -464,7 +463,15 @@ export class TargetCursor {
   private dockFor(entry: TargetEntry, rect: TargetRect): { side: PlateDock; x: number; y: number } {
     // A rough plate box: ~10px per glyph plus the tag chip and the padding.
     const w = Math.max(64, entry.name.length * 10 + (entry.tag ? 34 : 0) + 28 + (entry.note ? entry.note.length * 6 : 0));
-    return dockPlate(rect, w, 34, this.panels);
+    // FFX's hand is a thing on the field too (r37-ui-floor): the plate docks off it as off any panel.
+    const hand = this.chrome === 'ffx' ? [handBox(rect, this.handGap())] : [];
+    return dockPlate(rect, w, 34, hand.length ? [...this.panels, ...hand] : this.panels);
+  }
+
+  /** How far the hand cursor is docked clear of the silhouette at this window width. */
+  private handGap(): number {
+    const scale = typeof window === 'undefined' ? 1 : window.innerWidth / 1920;
+    return Math.max(10, HAND_GAP_AT_1920 * scale);
   }
 
   /**
