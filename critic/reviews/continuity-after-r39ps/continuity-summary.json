@@ -1,0 +1,119 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "FAIL",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 550.2,
+   "swaps": 425,
+   "snapsPerMinute": 0.87,
+   "maxHeadJumpPct": 39.6,
+   "maxFeetShiftPx": 36.2,
+   "worstJerkPx": 348.6,
+   "strips": 36,
+   "worstSwapStrips": [
+    "seymour-flux/strips/swap-086-seymour-flux-idle-hurt.jpg",
+    "seymour-flux/strips/swap-088-seymour-flux-hurt-idle.jpg",
+    "seymour-flux/strips/swap-074-seymour-flux-idle-hurt.jpg"
+   ],
+   "unverified": null
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "checks": {
+    "CHK-026": "FAIL",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 422.1,
+   "swaps": 404,
+   "snapsPerMinute": 0.14,
+   "maxHeadJumpPct": 78.1,
+   "maxFeetShiftPx": 110.4,
+   "worstJerkPx": 235.5,
+   "strips": 36,
+   "worstSwapStrips": [
+    "ffx2-bahamut/strips/swap-408-bahamut-hurt-ko.jpg",
+    "ffx2-bahamut/strips/swap-409-paine-follow-idle.jpg",
+    "ffx2-bahamut/strips/swap-105-bahamut-hurt-cast.jpg"
+   ],
+   "unverified": null
+  },
+  {
+   "chapter": "evrae-airship",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "FAIL",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 354.7,
+   "swaps": 444,
+   "snapsPerMinute": 0.34,
+   "maxHeadJumpPct": 115.7,
+   "maxFeetShiftPx": 57.1,
+   "worstJerkPx": 245.2,
+   "strips": 35,
+   "worstSwapStrips": [
+    "evrae-airship/strips/swap-383-wakka-cast-idle.jpg",
+    "evrae-airship/strips/swap-333-wakka-ready-cast.jpg",
+    "evrae-airship/strips/swap-009-rikku-hurt-ko.jpg",
+    "evrae-airship/strips/swap-019-wakka-idle-hurt.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 1327,
+ "counted": 1273,
+ "swaps": 1331,
+ "size": {
+  "maxHeadJumpPct": 115.7,
+  "maxHeadJumpPctRegistration": 5.1,
+  "headOverTolerance": 86,
+  "maxFeetShiftPx": 110.4,
+  "feetOverTolerance": 139,
+  "headMeasured": 1273,
+  "headRegistration": 356,
+  "headSilhouette": 917,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 11,
+  "snapsPerMinute": 0.5,
+  "hardCuts": 14,
+  "hardCutsPerMinute": 0.63,
+  "ghostSwaps": 1191,
+  "ghostFrames": 4020,
+  "worstGhostSeverity": 0.439,
+  "ghostOverFail": 43,
+  "jerks": 397,
+  "worstJerkPx": 348.6,
+  "jerksOverFail": 181,
+  "lowestIou": 0.009,
+  "maxCentroidShiftPx": 229.1
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "FAIL",
+   "reasons": [
+    "86 swap(s) change a head by more than the tolerance (worst 115.7 percent; 5.1 percent where the head is registered)",
+    "139 swap(s) of a standing figure move its feet more than the tolerance (worst 110.4 px at 1600 wide)"
+   ],
+   "note": "356 of 1273 measured swaps had a registered head (tolerance 3 percent); 917 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "0.5 snaps per minute is over 0.25",
+    "181 jerk(s) of 40 px or more in one frame (worst 348.6 px)",
+    "43 swap(s) show a double image of severity 0.4 or more (worst 0.439)"
+   ]
+  }
+ },
+ "base": "http://127.0.0.1:6932/",
+ "date": "2026-10-05T04:57:23.854Z",
+ "stripsNote": "worstSwapStrips lists the kept strips of the worst swaps of each chapter (one per figure and pose pair first); the chapter folders hold their double-image and jerk strips too"
+}

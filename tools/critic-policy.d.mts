@@ -78,7 +78,11 @@ export interface CriticReport {
   verdicts?: { deployment?: string; changedArea?: string; milestone?: string; ship?: string };
   /** RULE A: why this build ships or is held, in the reviewer's own words. */
   shipReasons?: string[];
-  checks?: { id: string; result?: string; mandatory?: boolean; reason?: string; evidence?: string[]; reusedFrom?: string; dependencyArgument?: string }[];
+  checks?: { id: string; result?: string; mandatory?: boolean; reason?: string; evidence?: string[]; reusedFrom?: string; dependencyArgument?: string; metrics?: Record<string, unknown> }[];
+  /** Bailey's five visual sub-scores (not part of the weighted score); D-424 caps two of them by the continuity checks. */
+  subScores?: { characterModels?: number; enemyModels?: number; animation?: number; fidelity?: number; camera?: number; [key: string]: unknown };
+  /** The aggregate the continuity harness writes (`continuity-summary.json`): its checks and numbers. */
+  continuity?: { checks?: Record<string, string | { result?: string }>; motion?: { snapsPerMinute?: number | null; [key: string]: unknown }; size?: Record<string, unknown>; [key: string]: unknown };
   categories?: CategoryScore[];
   issues?: {
     id?: string; severity?: string; status?: string; title?: string; attempts?: unknown;
@@ -125,6 +129,8 @@ export declare function planReview(input: {
 export declare function weightedTotal(categories: CategoryScore[] | undefined, policy: Policy): ScoreResult;
 export declare function milestoneVerdict(report: CriticReport, policy: Policy): { accepted: boolean; reasons: string[]; score: ScoreResult };
 export declare function validateReport(report: CriticReport, policy: Policy): string[];
+/** D-424: the caps CHK-026 and CHK-027 put on the five visual sub-scores; error strings, empty when they hold. */
+export declare function continuityCaps(report: CriticReport, policy: Policy): string[];
 
 /** One report as the stagnation rule reads it, oldest first. */
 export interface ReportIssues { id: string; rubricVersion?: number; review?: string; issues?: CriticReport['issues'] | null }

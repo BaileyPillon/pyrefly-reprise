@@ -48,6 +48,27 @@
     "unknownHoldsSeverities": ["critical"],
     "issueTags": { "introducedByCandidate": [true, false, "unknown"], "regressionVsLive": [true, false, "unknown"], "inNewFeature": [true, false] }
   },
+  "continuity": {
+    "note": "CHK-026 (size continuity across pose changes) and CHK-027 (continuity of motion), measured by critic/runner/lib/continuity.mjs (Bailey, 2026-10-04: D-420 to D-426). The thresholds the owner named are the first four numbers of `size`; every other number is derived and the reasoning is in docs/handoff/critic-continuity.md and critic/CHECKS.md. tools/critic-policy.mjs reads `caps` and `requiredFrom`; the harness reads the rest.",
+    "requiredFrom": "2026-10-05",
+    "requiredFromNote": "A deep or milestone report dated on or after this day that carries subScores must record CHK-026 and CHK-027 (any result, UNVERIFIED needs its reason), and its characterModels and animation sub-scores obey `caps`. Reports before it (rounds 19 to 21 carry subScores) stay valid as history.",
+    "checks": ["CHK-026", "CHK-027"],
+    "minBattleSeconds": 60,
+    "minSwaps": 8,
+    "minFps": 30,
+    "size": { "headTolerancePct": 3, "feetTolerancePx": 2, "headTolerancePctCoarse": 30, "feetTolerancePxCoarse": 6 },
+    "motion": {
+      "windowFrames": 14, "blendFadeMin": 0.02, "ghostFadeMin": 0.15, "ghostOutlineMin": 0.1, "ghostSeverityFail": 0.4,
+      "snapOutlineMin": 0.05, "snapCentroidMinPx": 4, "snapsPerMinuteMax": 0.25,
+      "jerkMinPx": 24, "jerkFloorPx": 2, "jerkRatio": 3, "jerkFailPx": 40, "localWindow": 5, "mergeFrames": 2, "ballisticChain": 3, "cutPx": 120
+    },
+    "strips": { "worstSwaps": 10, "worstJerks": 5, "worstGhosts": 5, "beforeFrames": 6, "afterFrames": 6 },
+    "probe": { "ringScale": 0.6, "ringFrames": 16, "maxStrips": 1500, "cellHeight": 220, "encodePerFrame": 2, "jpegQuality": 0.65, "recentFrames": 14, "pendingFrames": 40, "jerkCandidatePx": 28, "jerkCandidateRatio": 3, "candidateWindow": 8 },
+    "caps": {
+      "sizeFails": { "check": "CHK-026", "subScores": ["characterModels", "animation"], "max": 7.0 },
+      "snaps": { "subScore": "animation", "max": 7.5 }
+    }
+  },
   "intentionalFlatImages": [
     "art/portrait-parts/paine/1x/eyeR-catch.png",
     "art/portrait-parts/paine/2x/eyeR-catch.png",
@@ -72,20 +93,20 @@
     { "id": "ffx2-engine", "depth": "deep", "system": "FFX-2 ATB engine", "games": "ffx2", "chapters": "ffx2", "match": ["src/battle/ffx2/**"], "checks": ["CHK-021", "CHK-022", "CHK-023"], "targetGroups": ["fight"] },
     { "id": "ff7-engine", "depth": "deep", "system": "FF7 ATB engine (the hidden Guard Scorpion experiment)", "games": "ff7", "chapters": [], "match": ["src/battle/ff7/**"], "checks": ["CHK-021", "CHK-022", "CHK-023", "CHK-025"], "targetGroups": ["fight"] },
     { "id": "ff7-experiment", "depth": "focused", "system": "FF7 experiment: data, flow, its own store, the secret door, its HUD and scene", "games": "ff7", "chapters": [], "match": ["src/data/ff7/**", "src/data/chapter-ff7-*.ts", "src/story/scripts/ff7-*.ts", "src/app/experiments/**", "src/app/screens/BattleScreenExperiment.ts", "src/app/screens/frontend/secretDoor.ts", "src/ui/ff7/**", "src/scenes/sector1-reactor*.ts"], "checks": ["CHK-021", "CHK-025"], "dataAudit": true },
-    { "id": "battle-presenter", "depth": "deep", "system": "battle presenter and lifecycle", "games": "both", "chapters": "all", "match": ["src/engine/BattlePresenter*.ts", "src/engine/Tween.ts", "src/engine/HudPort.ts", "src/engine/BattleMoments.ts"], "checks": ["CHK-006", "CHK-020", "CHK-022", "CHK-023"], "targetGroups": ["fight", "presentation"] },
+    { "id": "battle-presenter", "depth": "deep", "system": "battle presenter and lifecycle", "games": "both", "chapters": "all", "match": ["src/engine/BattlePresenter*.ts", "src/engine/Tween.ts", "src/engine/HudPort.ts", "src/engine/BattleMoments.ts"], "checks": ["CHK-006", "CHK-020", "CHK-022", "CHK-023", "CHK-026", "CHK-027"], "targetGroups": ["fight", "presentation"] },
     { "id": "story-runner", "depth": "deep", "system": "scene runner and transitions", "games": "both", "chapters": "all", "match": ["src/story/runner/**", "src/story/dsl.ts", "src/story/registry.ts"], "checks": ["CHK-022", "CHK-015"], "targetGroups": ["presentation"] },
     { "id": "save-schema", "depth": "deep", "deepBeforeDeploy": true, "system": "save data and settings", "games": "both", "chapters": "all", "match": ["src/app/SaveData.ts"], "checks": ["CHK-024", "CHK-017"] },
-    { "id": "asset-loader", "depth": "deep", "system": "asset loader and manifests", "games": "both", "chapters": "all", "match": ["src/engine/ArtManifest.ts", "src/engine/PaintedArt.ts", "src/engine/BattlePresenterArt.ts", "src/audio/MusicLoader.ts", "src/audio/manifest.ts", "public/audio/manifest.json", "public/art/manifest.json", "tools/gen/manifest.mjs"], "checks": ["CHK-012", "CHK-018", "CHK-019", "CHK-017"], "targetGroups": ["cast", "scenes", "pause"] },
+    { "id": "asset-loader", "depth": "deep", "system": "asset loader and manifests", "games": "both", "chapters": "all", "match": ["src/engine/ArtManifest.ts", "src/engine/PaintedArt.ts", "src/engine/BattlePresenterArt.ts", "src/audio/MusicLoader.ts", "src/audio/manifest.ts", "public/audio/manifest.json", "public/art/manifest.json", "tools/gen/manifest.mjs"], "checks": ["CHK-012", "CHK-018", "CHK-019", "CHK-017", "CHK-026"], "targetGroups": ["cast", "scenes", "pause"] },
     { "id": "global-layout-input-boot", "depth": "deep", "system": "global layout, input and boot", "games": "both", "chapters": "all", "match": ["index.html", "src/main.ts", "src/app/App.ts", "src/app/Screen.ts", "src/app/Input.ts", "src/engine/Renderer.ts", "src/engine/ScreenRects.ts", "src/ui/common/**", "src/ui/inkgold/**"], "checks": ["CHK-002", "CHK-003", "CHK-008", "CHK-009", "CHK-015", "CHK-020"], "targetGroups": ["presentation", "pause", "phone"] },
     { "id": "audio-routing", "depth": "deep", "system": "audio routing", "games": "both", "chapters": "all", "match": ["src/audio/AudioManager.ts", "src/audio/index.ts", "src/audio/tracks/index.ts", "src/audio/worker.ts"], "checks": ["CHK-001", "CHK-023"], "targetGroups": ["audio"] },
-    { "id": "chapter-registry", "depth": "deep", "system": "chapter registry or a new chapter", "games": "both", "chapters": "all", "match": ["src/data/encounters.ts", "src/data/chapter-meta.ts", "src/scenes/index.ts"], "checks": ["CHK-011", "CHK-021", "CHK-022"], "targetGroups": ["chapters", "scenes"] },
+    { "id": "chapter-registry", "depth": "deep", "system": "chapter registry or a new chapter", "games": "both", "chapters": "all", "match": ["src/data/encounters.ts", "src/data/chapter-meta.ts", "src/scenes/index.ts"], "checks": ["CHK-011", "CHK-021", "CHK-022", "CHK-026", "CHK-027"], "targetGroups": ["chapters", "scenes"] },
     { "id": "build-and-delivery", "depth": "deep", "system": "build configuration and dependencies", "games": "both", "chapters": "all", "match": ["package.json", "package-lock.json", "vite.config.*", "tsconfig*.json"], "checks": ["CHK-017", "CHK-018"] },
 
     { "id": "ffx-hud", "depth": "focused", "system": "FFX HUD", "games": "ffx", "chapters": "ffx", "match": ["src/ui/ffx/**"], "checks": ["CHK-003", "CHK-004", "CHK-006", "CHK-007", "CHK-008", "CHK-009", "CHK-010", "CHK-015", "CHK-021"], "targetGroups": ["presentation", "fight"] },
     { "id": "ffx2-hud", "depth": "focused", "system": "FFX-2 HUD", "games": "ffx2", "chapters": "ffx2", "match": ["src/ui/ffx2/**"], "checks": ["CHK-003", "CHK-006", "CHK-007", "CHK-008", "CHK-009", "CHK-010", "CHK-015", "CHK-021"], "targetGroups": ["presentation", "fight"] },
     { "id": "front-end-screens", "depth": "focused", "system": "title, chapter select, prep, pause and results screens", "games": "both", "chapters": "all", "match": ["src/app/screens/**"], "checks": ["CHK-002", "CHK-003", "CHK-009", "CHK-015", "CHK-020"], "targetGroups": ["presentation", "pause", "phone"] },
     { "id": "advisor", "depth": "focused", "system": "move advisor and enemy intent", "games": "both", "chapters": "all", "match": ["src/engine/tactics/**"], "checks": ["CHK-004", "CHK-005", "CHK-007"], "targetGroups": ["fight"] },
-    { "id": "targeting-formation-camera", "depth": "focused", "system": "targeting, formation and camera", "games": "both", "chapters": "all", "match": ["src/engine/TargetHighlight.ts", "src/engine/Formation.ts", "src/engine/BattleCamera.ts"], "checks": ["CHK-008", "CHK-010", "CHK-011", "CHK-014", "CHK-020"], "targetGroups": ["fight"] },
+    { "id": "targeting-formation-camera", "depth": "focused", "system": "targeting, formation and camera", "games": "both", "chapters": "all", "match": ["src/engine/TargetHighlight.ts", "src/engine/Formation.ts", "src/engine/BattleCamera.ts"], "checks": ["CHK-008", "CHK-010", "CHK-011", "CHK-014", "CHK-020", "CHK-027"], "targetGroups": ["fight"] },
     { "id": "ffx-data", "depth": "focused", "system": "FFX game data", "games": "ffx", "chapters": "ffx", "match": ["src/data/ffx/**"], "checks": ["CHK-021"], "dataAudit": true },
     { "id": "ffx2-data", "depth": "focused", "system": "FFX-2 game data", "games": "ffx2", "chapters": "ffx2", "match": ["src/data/ffx2/**"], "checks": ["CHK-021"], "dataAudit": true },
     { "id": "strategy-guide", "depth": "focused", "system": "strategy guide", "games": "both", "chapters": "all", "match": ["src/data/guides/**"], "checks": ["CHK-007"] },
@@ -96,8 +117,8 @@
     { "id": "scene-farplane", "depth": "focused", "system": "Farplane scene", "games": "ffx2", "chapters": ["ffx2-vegnagun-shuyin"], "match": ["src/scenes/farplane*.ts"], "checks": ["CHK-008", "CHK-013"], "targetGroups": ["scenes"] },
     { "id": "story-scripts", "depth": "focused", "system": "cutscene scripts", "games": "both", "chapters": "all", "match": ["src/story/scripts/**"], "checks": ["CHK-007", "CHK-022"] },
     { "id": "audio-cues", "depth": "focused", "system": "music and sound files", "games": "both", "chapters": "all", "match": ["src/audio/**", "public/audio/**"], "checks": ["CHK-001", "CHK-019", "CHK-B1"], "targetGroups": ["audio"] },
-    { "id": "artwork", "depth": "focused", "system": "painted artwork", "games": "both", "chapters": "all", "match": ["public/art/**"], "checks": ["CHK-012", "CHK-013", "CHK-014", "CHK-019"], "approvedArtCheck": true, "targetGroups": ["cast", "scenes", "pause"] },
-    { "id": "visual-engine", "fallback": true, "depth": "focused", "system": "effects, lighting and sprites", "games": "both", "chapters": "all", "match": ["src/engine/**", "src/sprites/**", "src/scenes/**"], "checks": ["CHK-008", "CHK-013"] },
+    { "id": "artwork", "depth": "focused", "system": "painted artwork", "games": "both", "chapters": "all", "match": ["public/art/**"], "checks": ["CHK-012", "CHK-013", "CHK-014", "CHK-019", "CHK-026", "CHK-027"], "approvedArtCheck": true, "targetGroups": ["cast", "scenes", "pause"] },
+    { "id": "visual-engine", "fallback": true, "depth": "focused", "system": "effects, lighting and sprites", "games": "both", "chapters": "all", "match": ["src/engine/**", "src/sprites/**", "src/scenes/**"], "checks": ["CHK-008", "CHK-013", "CHK-026", "CHK-027"] },
     { "id": "debug-api", "depth": "focused", "system": "debug API used by the evidence harness", "games": "both", "chapters": "all", "match": ["src/debug/**"], "checks": ["CHK-016"] }
   ],
   "unclassified": { "match": ["src/**", "public/**"], "depth": "deep", "system": "unclassified product path", "games": "both", "chapters": "all", "checks": ["CHK-020", "CHK-022"] },
@@ -127,6 +148,8 @@
     { "id": "CHK-023", "title": "A subsystem is invoked through the real presentation path", "automation": "planned" },
     { "id": "CHK-024", "title": "Saves and settings survive an actual upgrade", "automation": "planned" },
     { "id": "CHK-025", "title": "A hidden experiment stays hidden and writes nothing to the save", "automation": "implemented" },
+    { "id": "CHK-026", "title": "A figure keeps its size and its feet across a pose change", "automation": "implemented", "tool": "critic/runner/lib/continuity.mjs" },
+    { "id": "CHK-027", "title": "Motion is continuous: no snaps, double images, jerks or teleports", "automation": "implemented", "tool": "critic/runner/lib/continuity.mjs" },
     { "id": "CHK-B1", "title": "Bailey judges audio beauty", "automation": "human" },
     { "id": "CHK-B2", "title": "Human feel assessment supplements measurements", "automation": "human" },
     { "id": "CHK-B3", "title": "Bailey's taste defines the approved target", "automation": "human" },

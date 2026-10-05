@@ -16,16 +16,16 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-869 decisions in all: 419 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 579 of the written decisions record a blanket yes.
+876 decisions in all: 426 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 586 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 810 |
+| adopted | 817 |
 | proposed | 11 |
 | deferred | 4 |
 | rejected | 11 |
 | superseded | 33 |
-| **All** | **869** |
+| **All** | **876** |
 
 | Area | Decisions |
 | --- | ---: |
@@ -40,20 +40,20 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | guide | 28 |
 | release | 31 |
 | hosting | 14 |
-| process | 68 |
-| critic | 18 |
+| process | 69 |
+| critic | 24 |
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **869** |
+| **All** | **876** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 370 |
+| both games | 377 |
 | FFX only | 271 |
 | FFX-2 only | 211 |
 | FF7 hidden experiment | 17 |
-| **All** | **869** |
+| **All** | **876** |
 
 ## Standing rules in force
 
@@ -88,6 +88,8 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **Progress notes and a changelog**: send Bailey concise progress notes as work lands, and write a CHANGELOG.md entry (date, release, address, player-facing bullets tagged FFX, FFX-2 or both) for every build that goes live or to a preview, with a screenshot under every visual change. Decision [D-390](#d-390) (2026-10-04, both games).
 - **Spell out every blanket yes**: when Bailey says "all your recommendations" (or "godspeed", "yes to all"), state each recommendation as its own decision with what was decided and what changed as a result, in the reply right after and in docs/target/decisions.json; a row that only says "all your recommendations" is never enough. Decision [D-394](#d-394) (2026-10-04, both games).
 - **Public-repository privacy**: nothing committed to the repository carries an email address, card or payment details, an account id, a token or key, or his other personal projects (Claude accounts are named #1, #2 and #3); changed files are checked for the at sign, card-like digits and long hex ids before every commit, and rewriting published history is his decision alone. Decision [D-396](#d-396) (2026-10-04, both games).
+- **Every deep review includes a first-time-fan lens**: a reviewer who only lists immersion breakers from the checklist in critic/runner/deep.js, working from the continuity strips and event-locked clips, and whose findings are issues, not scores. Decision [D-423](#d-423) (2026-10-04, both games).
+- **Score caps tied to the continuity checks: while CHK-026 fails, characterModels and animation are capped at 7.0; while snaps per minute exceed the threshold, animation is capped at 7.5**: While CHK-026 (size continuity) fails, the characterModels and animation sub-scores are capped at 7.0; while snaps per minute of battle exceed the policy threshold (critic/policy.json, continuity), animation is capped at 7.5; the chief critic cannot score above a cap and the validator refuses a report that does. Decision [D-424](#d-424) (2026-10-04, both games).
 
 ## Waiting on Bailey's yes
 
@@ -3586,7 +3588,7 @@ Saturday · 56 decisions
 
 ### 2026-10-04
 
-Sunday · 52 decisions
+Sunday · 59 decisions
 
 - <a id="d-368"></a>**D-368** — The player-facing working title becomes Echoes of Spira in release 38 (title screen, browser title, meta, chapter select, pause, credits, disclaimer); the repo, folders, internal identifiers and save keys keep 'pyrefly'; a painted logo is a later option for Bailey
   - Bailey: “I'll go with Echoes of Spira. The name change should take place immediate in our next build please.”
@@ -3848,3 +3850,38 @@ Sunday · 52 decisions
   - What changed: Done at about 19:46 EDT: the driver switched Always Use HTTPS on for the zone in his Cloudflare dashboard (SSL/TLS, Edge Certificates) after his yes, and checked it from outside with curl at about 19:47: http://echoesofspira.com answers a 301 to https://echoesofspira.com/, http://www.echoesofspira.com is forwarded twice (http to https by this setting, then www to the main address by the Redirect Rule of D-397) and lands on https://echoesofspira.com/ with a 200, and https://echoesofspira.com still answers 200. So a visit through an http link no longer plays on a separate, insecure address with its own saves (saves are kept per address), and http://www, which answered 522 in the live check, now reaches the game. This closes LV-3 of the live check of release 38 and the note in A-0405 that the setting stayed off until he said yes. Both games.
   - area hosting · both games · adopted · delivery implemented · at ~19:45 EDT · see [D-382](#d-382), [D-397](#d-397), [D-418](#d-418)
   - Source: docs/handoff/NOW.md; critic/reviews/8136f2ed-live.json; and others
+- <a id="d-420"></a>**D-420** — The critic checks size continuity across pose changes by itself (CHK-026): at a pose swap a figure's head may change by at most 3 percent and a standing figure's feet by at most 2 px at 1600x900, unless the camera cuts in the same frame
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: A new check, CHK-026, in critic/CHECKS.md and critic/policy.json, measured by the new harness critic/runner/lib/continuity.mjs (real keys on a given base URL and chapter list, headless Playwright from node): at every pose swap it reads each figure's on-screen head height and feet point before and after (from the pose registration tables where they exist, else from the painting's alpha silhouette, and it says which), and fails the check when the head changes by more than 3 percent or a standing figure's feet move more than 2 px at 1600x900 with no camera cut in that frame. Nothing in the critic did this before, which is how the size jumps he saw in play reached him. Built on branch critic-continuity; it is merged by the driver, and deep round 22 (after release 39) is the first review to use it. Both games: shared critic plumbing, and a size jump is a defect in either game. Numbering: the driver's brief called the size check CHK-025 and the motion check CHK-026, but CHK-025 was already "A hidden experiment stays hidden and writes nothing to the save" (policy.json, rounds 15 to 21), so the new checks took the next free ids: CHK-026 (size) and CHK-027 (motion).
+  - area critic · both games · adopted · delivery in progress · at ~22:56 EDT · see [D-006](#d-006), [D-421](#d-421), [D-424](#d-424)
+  - Source: critic/reviews/visual-pass-2026-10-01.md; critic/reviews/visual-plan-2026-10-03.md; and others
+- <a id="d-421"></a>**D-421** — The critic judges continuity of motion by itself (CHK-027): snaps per minute of battle, the outline jump of every swap, double-image (ghost) frames per swap, and jerks or teleports on every frame of a move, with transition strips for the worst
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: A new check, CHK-027, in critic/CHECKS.md and critic/policy.json, measured by the same harness (critic/runner/lib/continuity.mjs): (1) snaps per minute of battle, a snap being a pose change with no in-between frames and no blend; (2) the outline jump of each swap, as the overlap (alpha-mask IoU) and the centroid shift between the two silhouettes as drawn; (3) half-motion or ghost frames, any frame where two poses of one figure are drawn at once at partial opacity, counted per swap with the worst shown in the strips; (4) jerks and teleports, each figure's feet point and head tracked on every frame of a move, flagging any frame-to-frame jump far out of line with the move's own speed with no camera cut (a lunge that pops back to its seat, a pose change that shifts the body sideways), reported in px per frame with their strips. The worst ten swaps, and the worst jerks and ghost frames, go to the reviewers as transition strips: 6 frames before and 6 after, side by side, with guide lines at the head and the feet. Before this the critic had no measure of snapping or half-motion at all. Built on branch critic-continuity; merge by the driver; first used in deep round 22. Both games: shared critic plumbing. Numbering: the driver's brief called the size check CHK-025 and the motion check CHK-026, but CHK-025 was already "A hidden experiment stays hidden and writes nothing to the save" (policy.json, rounds 15 to 21), so the new checks took the next free ids: CHK-026 (size) and CHK-027 (motion). A later message, at about 23:02 EDT, relayed by the driver, sharpened what the motion check must catch: "I meant to judge the pose sizing jumps and pose changes snapping around in a discontinuous half motion or whatever. Can't you do this automatically with critic?" (so CHK-027 also counts double-image frames, where two poses of one figure are drawn at once at partial opacity, and flags jerks and teleports on every frame of a move, not only at swaps).
+  - area critic · both games · adopted · delivery in progress · at ~22:56 EDT · see [D-006](#d-006), [D-420](#d-420), [D-422](#d-422), [D-424](#d-424)
+  - Source: Bailey, 2026-10-04 ~22:56 EDT, in chat, in the same reply as D-420 ("I'll go with all your recommendations"), recommendation (b) of the driver's six …
+- <a id="d-422"></a>**D-422** — Reviews capture by event, not by picked moment: the harness records the frames around every pose swap, camera cut, hit and spell, so the frames just before and after a swap are always side by side
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: The continuity harness (critic/runner/lib/continuity.mjs) reads the running game frame by frame for pose swaps, camera cuts, hits and spells (from the state the engine already exposes through window.__pyrefly, so it also works on a build already live) and keeps a rolling buffer of rendered frames, so around each swap it holds the 6 frames before and the 6 after at the real frame rate, and builds the transition strips from them. Before this the critic took stills and timed sequences at moments picked in advance, so a swap's before and after were rarely side by side. The harness is wired into critic/runner/deep.js as a required evidence step over every chapter the review lists, and into critic/runner/focused.js over the changed area's chapters. Built on branch critic-continuity; merge by the driver. Both games: shared critic plumbing.
+  - area critic · both games · adopted · delivery in progress · at ~22:56 EDT · see [D-420](#d-420), [D-421](#d-421)
+  - Source: Bailey, 2026-10-04 ~22:56 EDT, in chat, in the same reply as D-420 ("I'll go with all your recommendations"), recommendation (c) of the driver's six …
+- <a id="d-423"></a>**D-423** — Every deep review carries a first-time-fan lens: one reviewer whose only job is to list the things that break immersion, from a fixed checklist, looking at the transition strips and the event-locked clips
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: critic/runner/deep.js gains a reviewer (the first-time fan) who does not score categories and does not read the rubric: given the continuity harness's output, the transition strips and the event-locked clips, the reviewer lists immersion breakers against a checklist (size jumps, snapping, popping, sliding or floating feet, ghosting or half-motion, flicker, outline fringe, attacks that do not connect, UI covering the action, camera jerks, texture pop-in, and any jerk or teleport in a move), each with its frame and strip, as issues for the chief critic to rank. Before this the six category auditors each looked at stills for their own category, so nobody looked at the game the way a player who has never seen the rubric would. Built on branch critic-continuity; merge by the driver; first used in deep round 22. Both games: shared critic plumbing.
+  - area critic · both games · adopted · delivery in progress · at ~22:56 EDT · see [D-420](#d-420), [D-421](#d-421)
+  - Source: Bailey, 2026-10-04 ~22:56 EDT, in chat, in the same reply as D-420 ("I'll go with all your recommendations"), recommendation (d) of the driver's six …
+- <a id="d-424"></a>**D-424** — Score caps tied to the continuity checks: while CHK-026 fails, characterModels and animation are capped at 7.0; while snaps per minute exceed the threshold, animation is capped at 7.5
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: critic/policy.json gets a continuity block holding the thresholds and the two caps, critic/RUBRIC.md states them, and tools/critic-policy.mjs enforces them in validateReport and critic-score: a deep or milestone report dated 2026-10-05 or later whose subScores (Bailey's five visual sub-scores) put characterModels or animation above 7.0 while its CHK-026 result is FAIL, or animation above 7.5 while its recorded snaps per minute exceed the threshold, is not valid evidence. The snap threshold was derived from the harness's measurement of live release 38 (the reasoning is in the policy note and in docs/handoff/critic-continuity.md). No existing gate, verdict rule or deploy behaviour changed. Built on branch critic-continuity; merge by the driver. Both games: shared critic plumbing. Before this the animation score counted features, not breaks, so a build full of size jumps and snaps could still score 7.4.
+  - area critic · both games · adopted · delivery in progress · at ~22:56 EDT · see [D-420](#d-420), [D-421](#d-421), [D-425](#d-425)
+  - Source: Bailey, 2026-10-04 ~22:56 EDT, in chat, in the same reply as D-420 ("I'll go with all your recommendations"), recommendation (e) of the driver's six …
+- <a id="d-425"></a>**D-425** — Keep a "Bailey's eye" register: what he sees wrong in play (pose size jumps, snapping and the like) is recorded as a standing case the critic must be able to reproduce, with the check that now catches it
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Planned for this week and owned by the driver, not built tonight by the critic-continuity lane: a register of his own observations (his words and date, what he saw, the build, and the check or case that must reproduce it), starting with the pose size jumps and the pose snapping of 2026-10-04 (CHK-026 and CHK-027 are the first entries' checks), so the critic is tested against what he actually notices and each new observation adds a case in the same retrospective that adds or strengthens its check (critic/RUBRIC.md section 9 already asks for that for calibration cases in critic/calibration/cases.json). Nothing is built for it yet. Both games: shared critic process.
+  - area process · both games · adopted · delivery not scheduled · at ~22:56 EDT · see [D-420](#d-420), [D-421](#d-421), [D-426](#d-426)
+  - Source: Bailey, 2026-10-04 ~22:56 EDT, in chat, in the same reply as D-420 ("I'll go with all your recommendations"), recommendation (f) of the driver's six …
+- <a id="d-426"></a>**D-426** — Calibrate the critic's five visual sub-scores against his own 1 to 10 ratings after he plays release 39, so a number the critic gives means the same as a number he gives
+  - Bailey: “I'll go with all your recommendations” (blanket yes)
+  - What changed: Planned, not built tonight: once Bailey has played release 39 he gives his own 1 to 10 rating for each of the five visual sub-scores the critic reports (characterModels, enemyModels, animation, fidelity, camera; critic/rounds/round-21.json subScores), and the critic's numbers for the same build are compared with his to find how far apart they are and in which direction; the result adjusts how the chief critic reconciles those five numbers, and is recorded as a calibration run in critic/calibration/runs/ (critic/RUBRIC.md section 9: run the calibration when a prompt or the reviewing model changes and show him the size of the run first). Nothing is built for it yet and no run happens before he has played. Both games: shared critic process.
+  - area critic · both games · adopted · delivery not scheduled · at ~22:56 EDT · see [D-424](#d-424), [D-425](#d-425)
+  - Source: Bailey, 2026-10-04 ~22:56 EDT, in chat, in the same reply as D-420 ("I'll go with all your recommendations"), recommendation (g) of the driver's six …

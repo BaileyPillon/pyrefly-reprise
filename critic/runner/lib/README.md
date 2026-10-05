@@ -213,6 +213,52 @@ node critic/runner/lib/route.mjs <chapterId> <win|lose> --base=<url> --evidence=
   produced round 19's refuted "scene runs with no input" major. A hold is the fallback only after 90 taps.
   Cases: `tests/unit/critic-route-harness.test.ts` (the key table is also read against `AuronSequence.ts`'s own GLYPH table).
 
+### `continuity.mjs` — CHK-026 and CHK-027, frame by frame (Bailey, 2026-10-04, D-420 to D-426)
+
+The harness for "as poses change the characters change size", "pose changes snapping around in a discontinuous half
+motion". Before it the critic took stills and timed sequences at moments picked in advance, so the frames just before and
+after a pose swap were rarely side by side, and no check followed a figure's size or feet over time.
+
+```
+node critic/runner/lib/continuity.mjs --base=<url> --evidence=<dir> --chapters=seymour-flux,ffx2-bahamut,evrae-airship
+     [--goal=win|lose] [--size=1600x900] [--budget=900000] [--seed=1] [--tag=x]
+     [--pose-measure=<pose-measure.json> | --pose-measure-from=<repo root>] [--only-aggregate]
+```
+
+Run it with `PYREFLY_BROWSER=gpu` (in software the game draws at about 3 fps and two frames of one swap cannot be told
+apart; the harness says UNVERIFIED below 30 fps). One chapter after another, one browser at a time, headless Playwright from
+node (never the Claude-in-Chrome extension or the built-in pane). For each chapter it runs `route.mjs` (real keys, title to
+board again) with `--continuity`, which attaches the probe to the route's own page, and writes
+
+- `<evidence>/<chapter>-<goal>[-tag]/continuity/continuity.json`: the two checks' results with their reasons, the summary
+  (battle seconds, swaps per minute, head and feet worst cases, snaps per minute, ghost swaps and frames, jerks), `perFigure`
+  and `coverage` (who was measured by the registration and who from the silhouette, pose by pose), every swap (figure, from
+  and to pose, head ratio and its source, feet shift in px at 1600 wide, outline IoU and centroid shift, blend and ghost
+  frames, cut or snap, the battle-log event just before it) and every jerk (px, the move's own speed, at a swap or mid-move);
+- `.../continuity/strips/*.jpg`: the transition strips of the worst ten swaps, the worst five jerks and the worst five double
+  images, each figure and pose pair once before any repeat of one (see below);
+- `<evidence>/continuity-summary.json`: every chapter, and the whole run's numbers and checks (snaps per minute over all the
+  battle seconds). `CONT_RAW_DIR=<dir>` also keeps what the probe recorded, gzipped, to re-run the analysis later.
+
+How it sees (all of it plain engine state a running build already exposes; **no engine hook, so it also measures a build that is
+already live**; `tests/unit/critic-continuity-contract.test.ts` pins every field it reads):
+
+| File | Does |
+|---|---|
+| `continuity-probe.mjs` | Runs in the page right after each frame the game draws (`app.nextFrame()`): per visible figure, each of its two painted planes' pose, fade and the screen position of the painting's four corners (mirror and yaw included); how far the camera alone moved the figure's world point; the battle log's new events; a rolling buffer of rendered frames, from which 6 frames before and 6 after every swap and every jerk candidate are cropped to the figure and JPEG encoded two per frame. A swap is the frame in which the painting that dominates a figure changes (so a cut, a crossfade and the KO collapse are all swaps). |
+| `continuity-silhouette.mjs` | Decodes each painting's alpha (sharp) and finds its anchors: the head box and the stance from the registration (`docs/target/pose-measure.json`, `tools/posescale/`) where a fresh record exists, else the stance and the mass from the silhouette. A head cannot be read off a silhouette (the neck estimator tried was wrong by 22 percent at the median); the header says what was measured against what. |
+| `continuity-pure.mjs` | The maths: a flat plane through the camera is a homography of its four corners, so any anchor is one multiply; head size, feet, outline IoU and centroid shift, blend and ghost frames, snaps, jerks, the summary and the two verdicts. Held to known answers by `tests/unit/critic-continuity-pure.test.ts`. |
+| `continuity-summary.mjs` | The chapter's numbers and the two verdicts (`summarize`, `verdicts`, `swapBadness`, `distinctFirst`, `worstSwaps`): split out of `continuity-pure.mjs`, which re-exports them, to stay under the 400-line house limit. |
+| `continuity-analyze.mjs` | From the probe's records to swaps, jerks, summary, per-figure coverage and the worst events. |
+| `continuity-strips.mjs` | Puts the cropped frames side by side with a green line at the head and an orange line at the feet taken from the frame before the event, a cross where each frame's head and feet were measured, the event cell outlined in red. |
+| `continuity.mjs` | `attachProbe` (used by `route.mjs --continuity`), the chapter loop and the aggregate. |
+| `continuity-calibrate.mjs` | Read-only: re-runs the two measurements the wide tolerances rest on (the silhouette's stance and mass against the reviewed registration) and prints them. |
+
+Thresholds, caps and their reasoning are the `continuity` block of `critic/policy.json` and `critic/CHECKS.md` CHK-026 and
+CHK-027; the caps on the sub-scores are RUBRIC section 6a and `continuityCaps` (`tools/critic-continuity-caps.mjs`, re-exported by `tools/critic-policy.mjs`). What it does not
+see: pose changes in cutscenes (it watches the battle screen), a figure drawn by no plane (Vegnagun's parts), anything the
+page cannot give it on a build whose field names changed (it then says UNVERIFIED and the contract test fails first).
+
 ### `cli.mjs` — small arg helper
 
 `parseArgs`, `requireBase`, `requireEvidence`. `requireBase` /

@@ -19,6 +19,10 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
+import { continuityCaps } from './critic-continuity-caps.mjs';
+
+export { continuityCaps };
+
 export const REVIEW_KINDS = ['live', 'focused', 'deep', 'milestone'];
 export const RESULTS = ['PASS', 'FAIL', 'UNVERIFIED', 'NOT APPLICABLE'];
 export const MILESTONE_STATES = ['incomplete', 'not assessed', 'accepted'];
@@ -359,6 +363,8 @@ export function validateReport(report, policy) {
       if (verdict.ship !== 'SHIP') errors.push(`report claims ship SHIP but the release rules say HOLD: ${verdict.reasons.join('; ')}`);
     }
   }
+  // The caps of the continuity checks (D-424): only reports from `continuity.requiredFrom` on, only with subScores.
+  errors.push(...continuityCaps(report, policy));
   return errors;
 }
 
