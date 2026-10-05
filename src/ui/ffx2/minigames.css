@@ -105,31 +105,127 @@
   }
 }
 
-/* screens.css documents `.ig-minigame__bar--reel` as "extrapolated — not
-   mocked" and doesn't give it its own height (the base `.ig-minigame__bar`'s
-   11.56px is for the continuous timing bar, too short for a reel symbol) —
-   this is the first real consumer, so it sets one. */
+/* ---------------------------------------------------------------- Lady Luck's reels, timed by the press
+   (Bailey's pick A of 2026-10-04, "the slow strip"; FFX-2 only; docs/handoff/ladyluck-reels-a.md; the target is the options
+   page's in-game frame, critic/scratch/ladyluck-reels-1004/img/game-a.jpg).
+   Each reel is a window onto a strip of pictures that LadyLuckReels.ts moves every frame (transform and opacity only). The
+   window is 1.9 symbols high: the symbol on the gold line whole, a piece of the one above and the one below in view, the
+   neighbours at 45 percent (research/visual-bible.md 4.10.2). 60 grid px is 150 px at 1600x900; on the phone, which draws
+   the grid 1:1, the window is held to 72 px so the symbols stay readable. The slab takes pointer events back from its host
+   layer, as the Trigger Happy slab does, so a tap or a click on the reels is a press (and a late one belongs to what is under
+   the slab once it has closed: LadyLuckReels.ts sets pointer-events none on it). */
+.ffx2-reels {
+  pointer-events: auto;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  --reel-h: max(60px, calc(72px / var(--lb-scale, 1)));
+  --reel-cell: calc(var(--reel-h) / 1.9);
+}
+
+/* screens.css documents `.ig-minigame__bar--reel` as "extrapolated — not mocked" and gives it no height of its own (the base
+   `.ig-minigame__bar`'s 11.56px is for the continuous timing bar): this is its first real consumer, so it sets one. */
 .ffx2-reels .ig-minigame__bar--reel {
-  height: 44px;
-  /* room for the "next to stop" arrow above the first reel, which grows with the floor on a small window (FOC371-03) */
+  height: var(--reel-h);
+  /* room for the "next to stop" arrow above the reels, which grows with the floor on a small window (FOC371-03) */
   margin-top: calc(max(10px, var(--mg-fs-floor)) + 2px);
 }
 
-/* Position anchor for the "next to stop" arrow marker below — the shared
-   `.ig-minigame__reel` rule doesn't set `position`, so this is purely
-   additive (no visual change of its own). */
-.ffx2-reels .ig-minigame__reel {
+/* The safety timer, as a thin rule under the title that fills as the 12 seconds run (the mockup's bar). */
+.ffx2-reels__time {
   position: relative;
-  font-size: max(8px, var(--mg-fs-floor));
+  height: 1.6px;
+  margin-top: 3.5px;
+  background: rgba(11, 10, 18, 0.14);
 }
+.ffx2-reels__time > i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--ig-gold);
+}
+
+.ffx2-reels__reel {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+}
+.ffx2-reels__win {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--ig-ink);
+  box-shadow: 0 0 0 1px rgba(176, 72, 158, 0.55);
+}
+.ffx2-reels__reel--armed .ffx2-reels__win {
+  box-shadow: 0 0 0 1.5px var(--ig-pyre-pink);
+}
+.ffx2-reels__reel[data-state='stopped'] .ffx2-reels__win {
+  box-shadow: 0 0 0 1.5px var(--ig-gold);
+}
+.ffx2-reels.ffx2-reels--three .ffx2-reels__reel .ffx2-reels__win {
+  box-shadow: 0 0 0 1.5px var(--ig-gold), 0 0 6px 1px rgba(227, 185, 74, 0.7);
+}
+.ffx2-reels__cell {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: var(--reel-cell);
+  display: grid;
+  place-items: center;
+  will-change: transform, opacity;
+}
+.ffx2-reels__cell svg {
+  display: block;
+  width: calc(var(--reel-cell) * 0.82);
+  height: calc(var(--reel-cell) * 0.82);
+}
+
+/* The pay line: 1 grid px of gold across every reel, with a small triangle at each end (visual bible 4.10.2). */
+.ffx2-reels__line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  margin-top: -0.5px;
+  background: var(--ig-gold);
+  box-shadow: 0 0 3px rgba(227, 185, 74, 0.8);
+  pointer-events: none;
+}
+.ffx2-reels__line::before,
+.ffx2-reels__line::after {
+  content: '';
+  position: absolute;
+  top: -3.5px;
+  border: 4px solid transparent;
+}
+.ffx2-reels__line::before {
+  left: 0;
+  border-left-color: var(--ig-gold);
+}
+.ffx2-reels__line::after {
+  right: 0;
+  border-right-color: var(--ig-gold);
+}
+
+/* The pink arrow over the reel the next press stops. Pink on the paper slab needs the magenta edge to be read. */
 .ffx2-reels__arrow {
   position: absolute;
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
   color: var(--ig-accent);
+  -webkit-text-stroke: 0.5px #b0489e;
   font-size: max(10px, var(--mg-fs-floor));
   line-height: 1;
+  opacity: 0;
+}
+.ffx2-reels__reel--armed .ffx2-reels__arrow {
+  opacity: 1;
 }
 .ffx2-reels__warn {
   margin-top: 6px;
@@ -139,4 +235,19 @@
   letter-spacing: 0.1em;
   color: #c7343c;
   text-align: center;
+}
+
+/* The prompt names the input in use ("PRESS ENTER TO STOP", "PRESS CROSS TO STOP", "TAP TO STOP"), which is longer than the
+   words it replaced: in a window under 960x540 (stage scale under 1.5: a small window, the phone) the floor would push it past
+   the slab, so it takes its own line under the title, as the Trigger Happy instruction does. The window decides, not the
+   text, so the head never reflows when the player changes input. */
+@media (max-width: 959px), (max-height: 539px) {
+  .ffx2-reels .ig-minigame__head {
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+  .ffx2-reels .ig-minigame__subtitle {
+    order: 3;
+    flex: 1 1 100%;
+  }
 }

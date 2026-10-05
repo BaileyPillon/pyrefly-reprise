@@ -118,7 +118,13 @@ describe('Lady Luck with a human at the reels [ffx2-combat-core §3.12]', () => 
     const { events } = await play(['hat', 'skull', 'staff']);
     const said = events.filter((e) => e.type === 'message').map((e) => (e as { text: string }).text);
     expect(said).toContain('Dud!');
-    const hit = new Set(events.filter((e) => e.type === 'damage' && (e as { sourceId?: string }).sourceId === 'yuna').map((e) => (e as { targetId: string }).targetId));
+    // The Dud's own hits: from the `Dud!` message to the end of the spinner's action. (Not every yuna-sourced hit in the
+    // log: the harness keeps playing 12 more menus, and her next plain Attack on the boss is a later action whose place in
+    // the log moves with the seeded stream. Timed reels draw their layout from it when the overlay is asked for.)
+    const from = events.findIndex((e) => e.type === 'message' && (e as { text: string }).text === 'Dud!');
+    const rest = events.slice(from);
+    const end = rest.findIndex((e) => e.type === 'action-end');
+    const hit = new Set(rest.slice(0, end).filter((e) => e.type === 'damage' && (e as { sourceId?: string }).sourceId === 'yuna').map((e) => (e as { targetId: string }).targetId));
     expect([...hit].sort()).toEqual(['paine', 'rikku', 'yuna']);
   });
 });

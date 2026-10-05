@@ -49,6 +49,45 @@ export function rollReels(rng: Rng, strip: readonly string[] = DEFAULT_REEL_STRI
   };
 }
 
+/**
+ * The random half of a **human's** Lady Luck spin, drawn from the seeded stream when the overlay is asked for [FFX-2 only].
+ *
+ * The timed reels (`src/ui/ffx2/ladyLuckTiming.ts`, Bailey's pick A of 2026-10-04) leave exactly one thing to the player:
+ * *when* each press lands. Everything else about a spin must still be a function of the seed, so the engine draws it here
+ * and hands it to the overlay on the `minigame-request`: which reel each press stops (`stopOrder`, a random permutation of
+ * 0..2, the order the pink arrow follows [§3.12: "the slots begin spinning in a random order"]) and where each strip starts
+ * (`phases`, in symbols, 0 to `symbolCount`). Before this the overlay drew them itself with `Math.random`. The presses'
+ * *timing* never reaches this layer (hard rule 1): the overlay turns it into a symbol and returns the symbols, exactly as
+ * it always returned them.
+ *
+ * Five draws, in this fixed order, made at the request and nowhere else, so an unattended spin (`rollReels`, which never
+ * emits a request) and every shipped line of play keep the stream they had.
+ */
+export function rollReelLayout(
+  rng: Rng,
+  symbolCount: number,
+): { stopOrder: [number, number, number]; phases: [number, number, number] } {
+  const order = [0, 1, 2];
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = rng.int(0, i);
+    const tmp = order[i]!;
+    order[i] = order[j]!;
+    order[j] = tmp;
+  }
+  const n = Math.max(1, symbolCount);
+  return {
+    stopOrder: order as [number, number, number],
+    phases: [rng.next() * n, rng.next() * n, rng.next() * n],
+  };
+}
+
+/** What a `minigame-request` for `ability` carries beyond the ability's own `extra`: the seeded layout of a Lady Luck spin. */
+export function requestLayout(ability: AbilityDef, rng: Rng): Record<string, unknown> {
+  if (ability.minigame !== 'ladyluck-reels') return {};
+  const strip = reelStripOf(ability);
+  return rollReelLayout(rng, strip.length > 0 ? strip.length : DEFAULT_REEL_STRIP.length);
+}
+
 /** Roll a default outcome for `kind`. `ability` supplies a reel command's own strip. */
 export function rollDefault(kind: MinigameKind, rng: Rng, ability?: AbilityDef): MinigameResult | null {
   if (kind === 'gunner-trigger') {

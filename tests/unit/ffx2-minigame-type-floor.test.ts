@@ -87,7 +87,9 @@ describe('FOC371-03/-04: no label on the Trigger Happy slab or the Lady Luck ree
     const bySelector = (sel: string): Size | undefined => sizes.find((s) => s.selector === sel);
     expect(bySelector('.ffx2-trigger .ig-minigame__subtitle, .ffx2-reels .ig-minigame__subtitle')?.authoredPx).toBe(5.33); // MASH TAP / MASH R / PRESS TO STOP
     expect(bySelector('.ffx2-trigger .ig-minigame__bonus')?.authoredPx).toBe(5.78); // 0 HITS
-    expect(bySelector('.ffx2-reels .ig-minigame__reel')?.authoredPx).toBe(8); // the symbols
+    // the reel symbols are pictures now (Lady Luck's timed reels, pick A of 2026-10-04): no text left to floor on a reel cell
+    expect(bySelector('.ffx2-reels .ig-minigame__reel')).toBeUndefined();
+    expect(sizes.filter((s) => /cell|win|reel$|__line/.test(s.selector)).map((s) => s.selector)).toEqual([]);
     expect(bySelector('.ffx2-reels__arrow')?.authoredPx).toBe(10); // the next-to-stop marker
     expect(bySelector('.ffx2-reels__warn')?.authoredPx).toBe(8); // DUD: -75% PARTY HP
   });
@@ -109,9 +111,7 @@ describe('FOC371-03/-04: no label on the Trigger Happy slab or the Lady Luck ree
   }
 
   it('does not shrink a size that was already comfortably above the floor', () => {
-    // The reel symbols (8 grid px) are 20 effective px at 1600x900; the floor must not clamp them down to 14.2.
-    const reel = sizes.find((s) => s.selector === '.ffx2-reels .ig-minigame__reel')!;
-    expect(effective(reel, scaleOf(1600, 900, false))).toBeCloseTo(20, 5);
+    // The DUD line (8 grid px) is 20 effective px at 1600x900; the floor must not clamp it down to 14.2.
     const warn = sizes.find((s) => s.selector === '.ffx2-reels__warn')!;
     expect(effective(warn, scaleOf(1600, 900, false))).toBeCloseTo(20, 5);
   });
@@ -137,8 +137,21 @@ describe('the Trigger Happy head takes a second line in a small window and stays
     expect(head?.body).toMatch(/flex-wrap:\s*wrap/);
     expect(subtitle?.body).toMatch(/order:\s*3/);
     expect(subtitle?.body).toMatch(/flex:\s*1 1 100%/);
-    // Lady Luck's head fits on one line at every size (measured), so nothing there is rearranged
+    // Lady Luck has a rule of its own, under the same window query (see the next test): this one rearranges nothing of hers
     expect(inner.some((b) => /ffx2-reels/.test(b.selector))).toBe(false);
+  });
+
+  it('Lady Luck’s prompt names the input in use (PRESS ENTER TO STOP, PRESS CROSS TO STOP), so under the same window query it takes its own row too', () => {
+    const queries = [...css.matchAll(/@media\s*\(max-width:\s*(\d+)px\),\s*\(max-height:\s*(\d+)px\)\s*\{([\s\S]*?)\n\}/g)];
+    expect(queries.length).toBe(2);
+    expect([Number(queries[1]![1]), Number(queries[1]![2])]).toEqual([959, 539]);
+    const inner = blocks(`${queries[1]![3]!}\n}`);
+    const head = inner.find((b) => b.selector === '.ffx2-reels .ig-minigame__head');
+    const subtitle = inner.find((b) => b.selector === '.ffx2-reels .ig-minigame__subtitle');
+    expect(head?.body).toMatch(/flex-wrap:\s*wrap/);
+    expect(subtitle?.body).toMatch(/order:\s*3/);
+    expect(subtitle?.body).toMatch(/flex:\s*1 1 100%/);
+    expect(inner.some((b) => /ffx2-trigger/.test(b.selector))).toBe(false);
   });
 
   it('the Lady Luck arrow sits above the first reel at any size, with room reserved for it', () => {

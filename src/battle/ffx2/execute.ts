@@ -33,7 +33,7 @@ import type {
 import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { performSpherechange } from './spherechange.ts';
 import { resolveTheft } from './steal.ts';
-import { attachedResult, hitsFromOutcome, rollDefault } from './minigames.ts';
+import { attachedResult, hitsFromOutcome, requestLayout, rollDefault } from './minigames.ts';
 import { shapeLadyLuckSpin } from './reels.ts';
 import { beginCharge, beginRecovery, chargeTicksFor, extraRecoveryTicks } from './gauges.ts';
 import { ATB_BASE_VALUE, ATB_DOUBLE_RECOVERY_VALUE } from './constants.ts';
@@ -229,7 +229,8 @@ export function performCommand(
       type: 'minigame-request',
       who: actor.id,
       kind: ability.minigame as NonNullable<AbilityDef['minigame']>,
-      params: { ...(ability.extra ?? {}), abilityId: ability.id },
+      // A Lady Luck spin also carries its seeded layout (stop order, strip phases): the overlay times the presses against it.
+      params: { ...(ability.extra ?? {}), abilityId: ability.id, ...requestLayout(ability, env.rng) },
     });
     return;
   }

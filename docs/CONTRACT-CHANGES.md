@@ -14,6 +14,27 @@ first and only the encoded path with a 200), and `logicalArtUrl` turns either fo
 `src/` does, `scaleOfUrl` too now); a test or a tool that compares a hand-written `@` URL with one from `artUrl` compares through `logicalArtUrl`. The dev server and `vite preview` serve the encoded form through
 `tools/vite-art-at.mjs`; `tools/art-play-audit.mjs` fails an art request with a raw `@`. Handoff: [r39-int](handoff/r39-int.md). Game case: both (shared plumbing).
 
+## 2026-10-04 — FFX-2 Lady Luck's timed reels: the `minigame-request` carries a seeded layout (FFX-2 only; additive)
+
+Branch `ladyluck-reels-a` (Bailey's pick A of 2026-10-04, "the slow strip"). No shared contract file changes (`types.ts` is
+untouched: `params` is the free-form `Record<string, unknown>` the Minigame protocol already documents). One protocol detail
+is added, so it is recorded here. Handoff: [ladyluck-reels-a](handoff/ladyluck-reels-a.md).
+
+**The `minigame-request` of a Lady Luck spin (`kind: 'ladyluck-reels'`) now also carries `params.stopOrder` and `params.phases`.**
+`stopOrder` is a random permutation of the three reels (0 = left): the reel each press stops, in order. `phases` is where
+each reel's strip starts, in symbols (0 up to the strip's length, six on the shipped sets). The engine draws both from its
+**seeded stream** when it raises the request (`rollReelLayout`, `requestLayout`, `src/battle/ffx2/minigames.ts`): five draws,
+in a fixed order, at the request and nowhere else. The overlay (`src/ui/ffx2/LadyLuckReels.ts`) runs the strips at a constant
+rate and stops the reel at the symbol on the line at the instant of the press; that mapping lives in the presentation layer
+(`src/ui/ffx2/ladyLuckTiming.ts`) and the engine never sees a time. What reaches the engine is what always did: the three
+symbols as `ReelResult.symbols` on the command's `extra`. So the game stays deterministic under the seeded RNG for everything
+except the player's timing. An overlay opened without the two keys (a unit test, a bare mount) draws its own from `params.rng`,
+else `Math.random`.
+
+Unchanged: an unattended spin (`minigames: false`, auto-battle, the presenter's bare re-submit) never emits a request, and the
+engine's blind roll (`rollReels`) still draws exactly three values, so every shipped line of play keeps the stream it had (the
+Chapter V and XIII autopilot lines are measured identical in the handoff). Trigger Happy's request carries no layout.
+
 ## 2026-10-03 — `HudPort.syncQueued` (optional): the HUD hears a command the moment it is submitted (PR-0104; FFX-2 only; additive)
 
 Branch `r37-ui-floor`. `src/engine/HudPort.ts` gains `syncQueued?(state: BattleState): void`, called by `BattlePresenter.submit` right
