@@ -42,6 +42,7 @@ import { FaceFramer } from './faceFramer.ts';
 import { emptyEdges, slideMask, type FramedBox } from './faceSlide.ts';
 import { CHAPTER_SLIDE_FACES } from './chapterSlide.ts';
 import { chromeFor, type StackHost } from './faceStack.ts';
+import { applyExtension } from './extension.ts';
 import '../../../ui/common/pause-slide.css';
 
 /** The 1x plates the art fleet ships, and the width of their 2x masters. */
@@ -193,6 +194,7 @@ export class PortraitStage {
     // uncovered-but-not-slid box is feathered the same way instead of left as
     // a flat cut.
     const capped = !box.slid && Object.values(emptyEdges(box, w, h)).some((v) => v > 0);
+    if (live) applyExtension(this.root, img, capped, box, w, h); // release 39.1, B10: a blurred, darkened copy behind the capped plate
     const mask = box.slid || capped ? slideMask(box, w, h, FACE_BOXES[id] ?? CHAPTER_SLIDE_FACES[id]) : '';
     img.classList.toggle('pause__plate--slid', !!box.slid && mask !== '');
     img.classList.toggle('pause__plate--capped', capped && mask !== '');
@@ -349,9 +351,7 @@ export class PortraitStage {
       },
       { once: false },
     );
-    img.addEventListener('load', () => {
-      img.dataset['loaded'] = 'true';
-    });
+    img.addEventListener('load', () => { img.dataset['loaded'] = 'true'; if (img === this.current) this.layout(); }); // B10: the chosen file (2x) is known
     // A chapter's fallback is shown whole (pause-screen.css `[data-art='fallback']`),
     // so the global portrait face-crop (`ui/common/portrait.ts`) must not adopt it
     // and blow a 40px-tile crop up to the full frame.
