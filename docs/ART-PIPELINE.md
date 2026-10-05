@@ -821,9 +821,13 @@ boss master has its alpha rebuilt from the approved 1x alpha (bicubic upscale, a
 scripts are in `tools/gen/hires-alpha-fix/` and the method and numbers in the twin's `reports/README-alpha-fix.md`. Install from it with
 `node tools/hires-install.mjs --lib D:/Tools/pyrefly-art-backup/hires-alpha-fixed --replace-from D:/Tools/pyrefly-art-backup/hires --park <dir> --only characters/,backdrops/ --apply`:
 a file in `public/art` is replaced only where it is exactly the old library's file (an approved master or a pilot stays), what is replaced is recorded under
-`--park`, and the `@3x` are derived again. `HELD_BACKDROPS` in `tools/hires-install.mjs` names six backdrop masters (Gagazet, Garden of Pain, Via Purifico, the
-Road to the Farplane and its links variant, the title) that are never installed because they draw ruled or invented dark lines the approved painting does not have: the
-game draws the approved painting there and a re-render is owed. `node tools/fx-assets.mjs verify --dir <build>/fx` (the deploy runs it for every host) now also
+`--park`, and the `@3x` are derived again. `HELD_BACKDROPS` in `tools/hires-install.mjs` held six backdrop masters (Gagazet, Garden of Pain, Via Purifico, the
+Road to the Farplane and its links variant, the title) back for a few hours because they drew ruled or invented dark lines the approved painting does not have; **it is empty
+again since the evening of 2026-10-04** (the r39-art lane re-made the six: `D:/Tools/pyrefly-art-backup/hires-r39-art/`, tier `faithful`, scripts in `tools/gen/hires-faithful/`).
+Why the library recipe drew those lines: RealESRGAN (and the SDXL refine above it, for Gagazet) turns a soft ripple, a speckle or a faint crack into a crisp dark line. The
+faithful recipe keeps ESRGAN as a detail source only: its detail relative to the bicubic carrier is squashed per pixel to an amplitude the painting's own fine detail allows,
+and thin dark lines the painting does not imply are blended back to a bounded adaptive unsharp master, so nothing is drawn that the painting does not imply and the tones are the
+painting's own. `node tools/fx-assets.mjs verify --dir <build>/fx` (the deploy runs it for every host) now also
 requires `fx/<key>/depth.png` and `depth.json` for every room in `src/engine/fx/b/ambient/index.ts`. Handoff: [handoff/r39-hires-engine.md](handoff/r39-hires-engine.md), "Fidelity repair".
 
 ---

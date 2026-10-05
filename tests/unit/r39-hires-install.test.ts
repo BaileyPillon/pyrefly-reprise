@@ -202,8 +202,8 @@ describe('upgrade: the fixed library replaces what the old library installed (re
     return { oldLib, newLib, art, parkDir };
   }
 
-  it('knows the held-back backdrops and reads a key from a master path', () => {
-    expect(Object.keys(HELD_BACKDROPS).sort()).toEqual(['garden-of-pain', 'gagazet', 'road-to-the-farplane', 'road-to-the-farplane-links', 'title', 'via-purifico'].sort());
+  it('holds no backdrop back since the six were re-made faithful (r39-art), and reads a key from a master path', () => {
+    expect(Object.keys(HELD_BACKDROPS)).toEqual([]);
     expect(backdropKey('backdrops/gagazet@2x.png')).toBe('gagazet');
     expect(backdropKey('backdrops/road-to-the-farplane-links@2x.png')).toBe('road-to-the-farplane-links');
     expect(backdropKey('characters/tidus/idle@4x.png')).toBeNull();

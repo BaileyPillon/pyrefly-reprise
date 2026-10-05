@@ -18,7 +18,7 @@ import alphafix as af
 
 OLD = 'D:/Tools/pyrefly-art-backup/hires'
 NEW = os.environ.get('R39_FIXED_OUT', 'D:/Tools/pyrefly-art-backup/hires-alpha-fixed')
-ART = 'D:/pyrefly-r39-int/public/art'
+ART = os.environ.get('R39_ART', 'D:/pyrefly-r39-int/public/art')   # the tree whose approved 1x paintings the masters are repaired against
 PARAMS = dict(ka=0.4, d0=2.0, d1=3.5, feather=1.0, ring=6)
 VERSION = 1
 PNG_LEVEL = 9
@@ -187,11 +187,15 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--workers', type=int, default=4)
     ap.add_argument('--only', default='')
+    ap.add_argument('--ids', default='', help='comma-separated exact asset ids (instead of a prefix)')
     ap.add_argument('--limit', type=int, default=0)
     ap.add_argument('--dry', action='store_true')
     a = ap.parse_args()
     MAN = json.load(open(f'{OLD}/manifest.json', encoding='utf8'))
     ids = [k for k in MAN['assets'] if k.startswith(a.only)]
+    if a.ids:
+        want = set(a.ids.split(','))
+        ids = [k for k in MAN['assets'] if k in want]
     # largest first (the long jobs start early), assets without a rebuild last
     def px(k):
         return max((o['size'][0] * o['size'][1] for o in MAN['assets'][k]['outputs']), default=0)
