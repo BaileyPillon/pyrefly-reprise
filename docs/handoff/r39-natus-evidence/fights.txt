@@ -1,0 +1,65 @@
+# Whole fights of Chapter X on the branch: real keys to the first menu, then the intended strategy plays the fight on (autoBattle, fast), the page read every 2.5 s (cap/fight.mjs).
+# nat = Natus painted height (px; it moves with his own poses); bossPx = the framing report's tallest enemy box; plans/replans = the framing's counters; cover = share of Natus under the Sensor card / advisor / enemy-move slab.
+
+== f1-1600x900-s1.json  size 1600x900 seed 1: 24 battle samples over 67 s; Natus 346-422 px; plans 1 replans 0; bossPx 341; max cover sensor/advisor/intent 0/0/0; console errors 0; ended on results
+t(s) screen nat plans/replans pin bossPx cardPx cardPy sensor advisor intent
+3 battle 346 1/0 true 341 -26.0px -162.0px 0 0 
+6 battle 346 1/0 true 341 -26.0px -162.0px 0 0 
+8 battle 346 1/0 true 341 -26.0px -162.0px 0 0 
+11 battle 347 1/0 true 341 -26.0px -162.0px 0 0 
+13 battle 347 1/0 true 341 -26.0px -162.0px 0 0 
+16 battle 387 1/0 true 341 -26.0px -162.0px 0 0 
+19 battle 399 1/0 true 341 -26.0px -162.0px  0 
+21 battle 421 1/0 true 341 -26.0px -162.0px 0 0 
+24 battle 387 1/0 true 341 -26.0px -162.0px 0 0 
+27 battle 422 1/0 true 341 -26.0px -162.0px 0 0 
+30 battle 397 1/0 true 341 -26.0px -162.0px 0 0 
+32 battle 421 1/0 true 341 -26.0px -162.0px 0 0 
+35 battle 417 1/0 true 341 -26.0px -162.0px 0 0 
+38 battle 389 1/0 true 341 -26.0px -162.0px 0 0 
+40 battle 421 1/0 true 341 -26.0px -162.0px 0 0 
+43 battle 394 1/0 true 341 -26.0px -162.0px 0 0 
+46 battle 371 1/0 true 341 -26.0px -162.0px 0 0 
+49 battle 412 1/0 true 341 -26.0px -162.0px 0 0 
+51 battle 387 1/0 true 341 -26.0px -162.0px 0 0 
+54 battle 346 1/0 true 341 -26.0px -162.0px 0 0 
+56 battle 346 1/0 true 341 -26.0px -162.0px 0 0 
+60 battle 397 1/0 true 341 -26.0px -162.0px 0 0 
+62 battle 380 1/0 true 341 -26.0px -162.0px 0 0 
+65 battle 418 1/0 true 341 -26.0px -162.0px 0 0 
+67 results  -/- false      
+
+== f1-2000x1012-s2.json  size 2000x1012 seed 2: 31 battle samples over 82 s; Natus 389-474 px; plans 1 replans 0; bossPx 383; max cover sensor/advisor/intent 0/0/0; console errors 0; ended on cutscene
+t(s) screen nat plans/replans pin bossPx cardPx cardPy sensor advisor intent
+3 battle 390 1/0 true 383 -26.0px -162.0px 0 0 
+5 battle 390 1/0 true 383 -26.0px -162.0px 0 0 
+8 battle 433 1/0 true 383 -26.0px -162.0px 0 0 
+10 battle 426 1/0 true 383 -26.0px -162.0px 0 0 
+13 battle 461 1/0 true 383 -26.0px -162.0px 0 0 
+16 battle 474 1/0 true 383 -26.0px -162.0px 0 0 
+18 battle 426 1/0 true 383 -26.0px -162.0px 0 0 
+21 battle 473 1/0 true 383 -26.0px -162.0px 0 0 
+23 battle 468 1/0 true 383 -26.0px -162.0px 0 0 
+26 battle 459 1/0 true 383 -26.0px -162.0px 0 0 
+29 battle 434 1/0 true 383 -26.0px -162.0px 0 0 
+31 battle 439 1/0 true 383 -26.0px -162.0px 0 0 
+34 battle 462 1/0 true 383 -26.0px -162.0px 0 0 
+37 battle 445 1/0 true 383 -26.0px -162.0px 0 0 
+39 battle 397 1/0 true 383 -26.0px -162.0px 0 0 
+42 battle 389 1/0 true 383 -26.0px -162.0px 0 0 
+44 battle 390 1/0 true 383 -26.0px -162.0px 0 0 
+47 battle 395 1/0 true 383 -26.0px -162.0px 0 0 
+49 battle 436 1/0 true 383 -26.0px -162.0px 0 0 
+52 battle 455 1/0 true 383 -26.0px -162.0px 0 0 
+54 battle 427 1/0 true 383 -26.0px -162.0px 0 0 
+57 battle 457 1/0 true 383 -26.0px -162.0px 0 0 
+60 battle 436 1/0 true 383 -26.0px -162.0px 0 0 
+62 battle 390 1/0 true 383 -26.0px -162.0px 0 0 
+65 battle 390 1/0 true 383 -26.0px -162.0px 0 0 
+67 battle 472 1/0 true 383 -26.0px -162.0px 0 0 
+70 battle 429 1/0 true 383 -26.0px -162.0px 0 0 
+72 battle 453 1/0 true 383 -26.0px -162.0px 0 0 
+75 battle 435 1/0 true 383 -26.0px -162.0px 0 0 
+77 battle 468 1/0 true 383 -26.0px -162.0px 0 0 
+80 battle 462 1/0 true 383 -26.0px -162.0px 0 0 
+82 cutscene  -/- false      

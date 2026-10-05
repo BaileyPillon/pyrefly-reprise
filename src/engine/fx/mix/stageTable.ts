@@ -1,4 +1,5 @@
 import { Vector3 } from 'three';
+import type { PinClass } from './colossusPin.ts';
 import type { FramingReport } from './framingReport.ts';
 import { subjectId, UP, type Actor, type Pose } from './geometry.ts';
 import { phoneBattle } from './hudPanels.ts';
@@ -49,6 +50,8 @@ export interface Row extends Slots {
   chapter: string;
   /** A fiend of the fight whose painted id matches picks the row. */
   boss: RegExp;
+  /** The colossus master the chapter pins, per window shape (`colossusPin.ts`); none: the plan searches as before. */
+  colossus?: readonly PinClass[];
 }
 
 /** Chapter III's two Yu Pagodas (they paint one art, `yu-pagoda`, and stand as `yu-pagoda-left` and `-right`: told apart by the combatant id). */
@@ -79,8 +82,17 @@ const CHAPTER_II: Row = { chapter: 'yunalesca', boss: /^yunalesca/, party: { rig
 // stays off the turn rail. Measured over 12 seeds at four sizes: `docs/handoff/r38-restage.md`, "Repair".
 const CHAPTER_III: Row = { chapter: 'braskas-final-aeon', boss: /^braskas-final-aeon/, party: { right: 0.35, toward: 0 }, enemy: { right: 3.0, toward: -0.95 }, enemyBy: CH3_PAGODAS };
 
+// Chapter X, Seymour Natus (option N, PR-0331): nobody moves on the stage's own account (the scene pins both fiends and holds the party); the row holds the
+// ONE colossus master and the Sensor card's place (`colossusPin.ts`, written down from the sweeps in `docs/handoff/r39-natus.md`): BOSS SCALE step 0.45 (the
+// boss about 1.65 times as tall as today's rig draws him), the master drawn 65 % of the way back to today's rig and 2 % further off, the frame shifted right
+// 3 % of its width (the party between the command list and the status rows), the fiends 0.75 world units apart from the party and Natus 0.4 further (Mortibody,
+// in front of him, then stays off his ring), the card at the top, above him (grid 410, 4: clear of the advisor's band and of the turn rail). Proved from
+// 1280x720 to 2560x1080 (1.78 to 2.37); the 16:10 window (1440x900) is not yet (Tidus reads a third under the command list there): it plays as today.
+const NATUS_PIN: PinClass = { aspect: [1.7, 2.45], pin: { frac: 0.45, blend: 0.65, back: 1.02, lens: [0.03, 0], apart: 0.75, bossApart: 0.4, card: [410, 4] } };
+const CHAPTER_X: Row = { chapter: 'seymour-natus', boss: /^seymour-natus/, party: { right: 0, toward: 0 }, enemy: { right: 0, toward: 0 }, colossus: [NATUS_PIN] };
+
 /** Every row there is, switched on or not (the tests and the checks read this); `STAGE_TABLE` is the ones that play. */
-export const ALL_ROWS: readonly Row[] = [CHAPTER_II, CHAPTER_III];
+export const ALL_ROWS: readonly Row[] = [CHAPTER_II, CHAPTER_III, CHAPTER_X];
 
 /** The rows that play: Chapter II and, behind `CHAPTER_III_STAGED`, Chapter III. */
 export const STAGE_TABLE: readonly Row[] = ALL_ROWS.filter((r) => r !== CHAPTER_III || CHAPTER_III_STAGED);
@@ -151,11 +163,11 @@ export const setStandOverride = (o: StandOverride): void => {
  * This fight's slots, or null (today's own): FFX, desktop, and a fiend the table names. `enemies` are the painted ids of the
  * fiends on the stage.
  */
-export function standFor(game: 'ffx' | 'ffx2', enemies: readonly string[], phone: boolean): { chapter: string; slots: Slots; boss: RegExp | null } | null {
+export function standFor(game: 'ffx' | 'ffx2', enemies: readonly string[], phone: boolean): { chapter: string; slots: Slots; boss: RegExp | null; colossus: readonly PinClass[] | undefined } | null {
   if (game !== 'ffx' || phone || override === 'off') return null;
-  if (override) return { chapter: 'override', slots: override, boss: null };
+  if (override) return { chapter: 'override', slots: override, boss: null, colossus: undefined };
   const row = table.find((r) => enemies.some((id) => r.boss.test(id)));
-  return row ? { chapter: row.chapter, slots: { party: row.party, enemy: row.enemy, ...(row.enemyBy ? { enemyBy: row.enemyBy } : {}) }, boss: row.boss } : null;
+  return row ? { chapter: row.chapter, slots: { party: row.party, enemy: row.enemy, ...(row.enemyBy ? { enemyBy: row.enemyBy } : {}) }, boss: row.boss, colossus: row.colossus } : null;
 }
 
 /** A side's move in the world: the screen's right and toward axes from today's resting rig, flat on the floor. */
@@ -174,11 +186,11 @@ export function sideShift(slots: Slots, rest: Pose, boss: RegExp | null = null):
  * What `framing.ts` reads when it plans: this fight's side move from today's resting rig (null: the stage's own slots) and the report
  * line for it.
  */
-export function readStand(game: 'ffx' | 'ffx2', actors: readonly Actor[], rest: Pose, phone: boolean): { side: Side | null; report: FramingReport['stand'] } {
+export function readStand(game: 'ffx' | 'ffx2', actors: readonly Actor[], rest: Pose, phone: boolean): { side: Side | null; report: FramingReport['stand']; colossus?: readonly PinClass[] } {
   const s = standFor(game, actors.filter((a) => a.facing < 0).map(subjectId), phone);
   if (!s) return { side: null, report: null };
   const side = sideShift(s.slots, rest, s.boss);
   const r3 = (x: number): number => Math.round(x * 1000) / 1000;
   const by = (side.enemyBy ?? []).map((e) => [e.id.source, r3(e.shift.dx), r3(e.shift.dz)] as [string, number, number]);
-  return { side, report: { chapter: s.chapter, party: [r3(side.party.dx), r3(side.party.dz)], enemy: [r3(side.enemy.dx), r3(side.enemy.dz)], ...(by.length ? { by } : {}) } };
+  return { side, report: { chapter: s.chapter, party: [r3(side.party.dx), r3(side.party.dz)], enemy: [r3(side.enemy.dx), r3(side.enemy.dz)], ...(by.length ? { by } : {}) }, ...(s.colossus ? { colossus: s.colossus } : {}) };
 }

@@ -1,0 +1,18 @@
+# A window resized mid-fight, Chapter X seed 1, headless GPU Chromium, real keys (cap/resize2.mjs): the window is resized with a command menu open (a plan decided now waits for the first action),
+# one real Attack is played, and the next menu is read after it settles. framing = the report (pin, plans, replans, scale, bossPx, lens); cardPx = the Sensor card's pin variable; partyUnder = the party's
+# largest share under a HUD panel; sensorOverNatus / advisorOverNatus = share of Natus's painted pixels under the card; clearPx = closest painted approach, any member to any fiend.
+# The last row (turn 6) is the results screen: the fight ended, nothing to read. Two members were down by turn 5 (the test only attacks).
+
+{"label":"turn 1 menu, 1600x900","vp":"1600x900","framing":{"pin":true,"plans":3,"replans":0,"scale":0.45,"bossPx":349,"lens":[48,0]},"cardPx":"-26.0px","natusPx":347,"partyUnder":0.023,"sensorOverNatus":0,"advisorOverNatus":0,"clearPx":41.2,"overlapPx2":0}
+{"label":"resized to 1440x900, same menu still open","vp":"1440x900","framing":{"pin":true,"plans":3,"replans":0,"scale":0.45,"bossPx":349,"lens":[48,0]},"cardPx":"-26.0px","natusPx":347,"partyUnder":0.176,"sensorOverNatus":0.0071,"advisorOverNatus":0,"clearPx":43.2,"overlapPx2":0}
+{"label":"turn 2 menu, 1440x900","vp":"1440x900","framing":{"pin":false,"plans":4,"replans":1,"scale":-1,"bossPx":208,"lens":[-58,-36]},"cardPx":null,"natusPx":205,"partyUnder":0.096,"sensorOverNatus":0,"advisorOverNatus":0,"clearPx":15.5,"overlapPx2":0}
+{"label":"resized to 1600x900, same menu still open","vp":"1600x900","framing":{"pin":false,"plans":4,"replans":1,"scale":-1,"bossPx":208,"lens":[-58,-36]},"cardPx":null,"natusPx":207,"partyUnder":0.044,"sensorOverNatus":0,"advisorOverNatus":0,"clearPx":16.1,"overlapPx2":0}
+{"label":"turn 3 menu, 1600x900","vp":"1600x900","framing":{"pin":true,"plans":5,"replans":1,"scale":0.45,"bossPx":346,"lens":[48,0]},"cardPx":"-26.0px","natusPx":344,"partyUnder":0.002,"sensorOverNatus":0,"advisorOverNatus":0,"clearPx":38.9,"overlapPx2":0}
+{"label":"resized to 1024x768, same menu still open","vp":"1024x768","framing":{"pin":true,"plans":5,"replans":1,"scale":0.45,"bossPx":346,"lens":[48,0]},"cardPx":"-26.0px","natusPx":294,"partyUnder":0.62,"sensorOverNatus":0,"advisorOverNatus":0,"clearPx":36.9,"overlapPx2":0}
+{"label":"turn 4 menu, 1024x768","vp":"1024x768","framing":{"pin":false,"plans":6,"replans":2,"scale":-1,"bossPx":177,"lens":[0,-31]},"cardPx":null,"natusPx":176,"partyUnder":0.17,"sensorOverNatus":0,"advisorOverNatus":0,"clearPx":17,"overlapPx2":0}
+{"label":"resized to 2000x1012, same menu still open","vp":"2000x1012","framing":{"pin":false,"plans":6,"replans":2,"scale":-1,"bossPx":177,"lens":[0,-31]},"cardPx":null,"natusPx":231,"partyUnder":0.014,"sensorOverNatus":0,"advisorOverNatus":0,"clearPx":18,"overlapPx2":0}
+{"label":"turn 5 menu, 2000x1012","vp":"2000x1012","framing":{"pin":true,"plans":7,"replans":2,"scale":0.45,"bossPx":389,"lens":[60,0]},"cardPx":"-26.0px","natusPx":387,"partyUnder":0.161,"sensorOverNatus":0,"advisorOverNatus":0,"clearPx":6.4,"overlapPx2":0}
+{"label":"resized to 1600x900, same menu still open","vp":"1600x900","framing":{"pin":true,"plans":7,"replans":2,"scale":0.45,"bossPx":389,"lens":[60,0]},"cardPx":"-26.0px","natusPx":344,"partyUnder":0.124,"sensorOverNatus":0,"advisorOverNatus":0,"clearPx":3.8,"overlapPx2":0}
+{"label":"turn 6 menu, 1600x900","vp":"1600x900","framing":null,"cardPx":"no-card","natusPx":null,"partyUnder":0,"sensorOverNatus":0,"advisorOverNatus":0,"clearPx":null,"overlapPx2":0}
+
+console errors: 0

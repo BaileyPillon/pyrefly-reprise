@@ -1,4 +1,5 @@
 import type { Clear } from './clearance.ts';
+import type { ColossusPin } from './colossusPin.ts';
 import type { MasterClass } from './masters.ts';
 
 /** What the MAX mix's CHAPTER FRAMING reports (`__pyrefly.fx.mix.snapshot().framing`; captures and checks). Moved out of `framing.ts` (the 400-line rule). */
@@ -26,6 +27,12 @@ export interface FramingReport {
    * by its combatant id: `by`), or null (today's own slots).
    */
   stand: { chapter: string; party: [number, number]; enemy: [number, number]; by?: [string, number, number][] } | null;
+  /** The table's pinned colossus master when the plan plays it (`colossusPin.ts`: the one answer and where the Sensor card stands), else null. */
+  pin: ColossusPin | null;
+  /** The tallest enemy's box in the chosen pose (CSS px): how big the boss draws. */
+  bossPx: number;
+  /** How long the last plan took on the main thread (ms): the prototype of option N took about 2 s, the table well under 100. */
+  planMs: number;
   /** Each candidate the last plan tried (checks only). */
   tries: string[];
 }

@@ -1,0 +1,154 @@
+# Later menus of Chapter X: the first menu, the target cursor on Mortibody and on Natus (Attack, then the arrows), the enemy-move read-out on (E), and the menus after the first two actions.
+# Real keys, headless GPU Chromium, seeds 1-3 at 1600x900, 2000x1012, 2560x1440. 'sb' = today (origin/main 105105c3), 'st5' = branch r39-natus. Produced by cap/states.mjs, ranges.mjs, pairs.mjs.
+
+
+== sb  (party member's largest share under a HUD panel, %, range over seeds; Natus px; plans/replans at menu 3)
+1600x900 (3 runs) | menu1 0.0-0.0 | aim-mortibody 0.0-0.0 | aim-seymour-natus 0.0-0.0 | intent-on 0.0-0.0 | menu2 5.4-6.3 | menu3 0.0-0.9 | Natus px 205-207 | plans/replans at menu 3: 3/2,3/3,3/3
+2000x1012 (3 runs) | menu1 2.1-2.8 | aim-mortibody 0.0-0.1 | aim-seymour-natus 0.0-0.0 | intent-on 2.5-2.7 | menu2 7.4-8.9 | menu3 5.0-7.2 | Natus px 239-241 | plans/replans at menu 3: 3/3,3/3,3/3
+2560x1440 (3 runs) | menu1 0.0-0.0 | aim-mortibody 0.0-0.0 | aim-seymour-natus 0.0-0.0 | intent-on 0.0-0.0 | menu2 6.7-7.4 | menu3 0.0-1.4 | Natus px 328-331 | plans/replans at menu 3: 3/2,3/3,3/3
+
+== st5  (party member's largest share under a HUD panel, %, range over seeds; Natus px; plans/replans at menu 3)
+1600x900 (3 runs) | menu1 2.3-3.0 | aim-mortibody 1.1-4.0 | aim-seymour-natus 1.1-3.0 | intent-on 1.7-2.3 | menu2 1.1-1.8 | menu3 0.0-1.7 | Natus px 346-347 | plans/replans at menu 3: 1/0,1/0,3/0
+2000x1012 (3 runs) | menu1 0.0-0.1 | aim-mortibody 0.0-0.3 | aim-seymour-natus 0.0-0.0 | intent-on 0.0-0.3 | menu2 2.1-3.1 | menu3 0.0-0.2 | Natus px 389-390 | plans/replans at menu 3: 1/0,1/0,1/0
+2560x1440 (3 runs) | menu1 1.7-4.0 | aim-mortibody 2.3-3.0 | aim-seymour-natus 1.7-4.0 | intent-on 1.1-3.0 | menu2 1.1-1.3 | menu3 0.0-1.9 | Natus px 554-556 | plans/replans at menu 3: 3/0,1/0,1/0
+
+== sb  (closest painted approach px, member to Natus / member to Mortibody; min over seeds; overlap = runs with any painted overlap / runs)
+1600x900 (3 runs) | menu1: 30/18.0 ov 0/2 | aim-mortibody: 32/18.0 ov 0/2 | aim-seymour-natus: 33/18.4 ov 0/2 | intent-on: 29/15.9 ov 0/2 | menu2: 46/19.0 ov 0/2 | menu3: 33/0.0 ov 2/2
+2000x1012 (3 runs) | menu1: 51/19.0 ov 0/3 | aim-mortibody: 51/20.4 ov 0/3 | aim-seymour-natus: 52/18.0 ov 0/3 | intent-on: 51/20.8 ov 0/3 | menu2: 57/25.0 ov 0/3 | menu3: 67/8.0 ov 0/3
+2560x1440 (3 runs) | menu1: 44/26.0 ov 0/3 | aim-mortibody: 45/25.3 ov 0/3 | aim-seymour-natus: 46/26.0 ov 0/3 | intent-on: 45/27.0 ov 0/3 | menu2: 75/32.1 ov 0/3 | menu3: 47/0.0 ov 3/3
+
+== st5  (closest painted approach px, member to Natus / member to Mortibody; min over seeds; overlap = runs with any painted overlap / runs)
+1600x900 (3 runs) | menu1: 156/39.8 ov 0/3 | aim-mortibody: 149/36.9 ov 0/3 | aim-seymour-natus: 150/38.4 ov 0/3 | intent-on: 149/38.8 ov 0/3 | menu2: 117/4.8 ov 0/3 | menu3: 117/0.0 ov 1/3
+2000x1012 (3 runs) | menu1: 167/42.2 ov 0/3 | aim-mortibody: 166/40.6 ov 0/3 | aim-seymour-natus: 166/41.4 ov 0/3 | intent-on: 167/43.0 ov 0/3 | menu2: 131/3.8 ov 0/3 | menu3: 133/2.0 ov 0/3
+2560x1440 (3 runs) | menu1: 245/61.4 ov 0/3 | aim-mortibody: 245/61.8 ov 0/3 | aim-seymour-natus: 244/61.3 ov 0/3 | intent-on: 240/61.2 ov 0/3 | menu2: 192/11.5 ov 0/3 | menu3: 186/1.0 ov 0/3
+
+# Per-state lines, TODAY (sb). touch[member x fiend:px2] = painted overlap; 'clear' = closest painted approach any member to any fiend (px); 'plans a/b' = plans / live-check re-plans.
+# (sb seed 1 at 1600x900 was captured with an earlier script version: its closest-pair detail is absent; the summary lines below are from the same fields.)
+sb-1600x900-s1  errors 0
+  menu1              touch[] nat 207 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 19.4  ov 0  plans 1/1 pin false
+  aim-mortibody      touch[] nat 206 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 16.3  ov 0  plans 1/1 pin false
+  aim-seymour-natus  touch[] nat 207 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 14.1  ov 0  plans 1/1 pin false
+  intent-on          touch[] nat 207 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.000  clear 17.6  ov 0  plans 1/1 pin false
+  menu2              touch[] nat 206 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.063  clear 21.4  ov 0  plans 2/2 pin false
+  menu3              touch[] nat 206 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.009  clear 0  ov 190  plans 3/2 pin false
+sb-1600x900-s2  errors 0
+  menu1              touch[] nat 205 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 18  ov 0  plans 1/1 pin false
+  aim-mortibody      touch[] nat 207 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 18  ov 0  plans 1/1 pin false
+  aim-seymour-natus  touch[] nat 207 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 18.4  ov 0  plans 1/1 pin false
+  intent-on          touch[] nat 207 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.000  clear 19.8  ov 0  plans 1/1 pin false
+  menu2              touch[] nat 206 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.063  clear 21.2  ov 0  plans 2/2 pin false
+  menu3              touch[yunaxmortibody:54] nat 207 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 0  ov 54  plans 3/3 pin false
+sb-1600x900-s3  errors 0
+  menu1              touch[] nat 207 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 18.3  ov 0  plans 1/1 pin false
+  aim-mortibody      touch[] nat 205 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 18  ov 0  plans 1/1 pin false
+  aim-seymour-natus  touch[] nat 206 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 19.4  ov 0  plans 1/1 pin false
+  intent-on          touch[] nat 207 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.000  clear 15.9  ov 0  plans 1/1 pin false
+  menu2              touch[] nat 207 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.054  clear 19  ov 0  plans 2/2 pin false
+  menu3              touch[yunaxmortibody:58] nat 207 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 0  ov 58  plans 3/3 pin false
+sb-2000x1012-s1  errors 0
+  menu1              touch[] nat 239 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.026  clear 21.4  ov 0  plans 1/1 pin false
+  aim-mortibody      touch[] nat 240 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.001  clear 20.4  ov 0  plans 1/1 pin false
+  aim-seymour-natus  touch[] nat 240 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 18  ov 0  plans 1/1 pin false
+  intent-on          touch[] nat 240 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.025  clear 21  ov 0  plans 1/1 pin false
+  menu2              touch[] nat 239 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.089  clear 28.5  ov 0  plans 2/2 pin false
+  menu3              touch[] nat 241 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.072  clear 10  ov 0  plans 3/3 pin false
+sb-2000x1012-s2  errors 0
+  menu1              touch[] nat 239 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.028  clear 19  ov 0  plans 1/1 pin false
+  aim-mortibody      touch[] nat 241 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 20.4  ov 0  plans 1/1 pin false
+  aim-seymour-natus  touch[] nat 239 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 18.4  ov 0  plans 1/1 pin false
+  intent-on          touch[] nat 240 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.026  clear 23.2  ov 0  plans 1/1 pin false
+  menu2              touch[] nat 239 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.088  clear 27.9  ov 0  plans 2/2 pin false
+  menu3              touch[] nat 241 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.053  clear 10  ov 0  plans 3/3 pin false
+sb-2000x1012-s3  errors 0
+  menu1              touch[] nat 239 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.021  clear 24.7  ov 0  plans 1/1 pin false
+  aim-mortibody      touch[] nat 241 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 23.8  ov 0  plans 1/1 pin false
+  aim-seymour-natus  touch[] nat 239 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 24.8  ov 0  plans 1/1 pin false
+  intent-on          touch[] nat 240 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.027  clear 20.8  ov 0  plans 1/1 pin false
+  menu2              touch[] nat 240 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.074  clear 25  ov 0  plans 2/2 pin false
+  menu3              touch[] nat 241 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.050  clear 8  ov 0  plans 3/3 pin false
+sb-2560x1440-s1  errors 0
+  menu1              touch[] nat 330 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 26  ov 0  plans 1/1 pin false
+  aim-mortibody      touch[] nat 329 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 25.3  ov 0  plans 1/1 pin false
+  aim-seymour-natus  touch[] nat 328 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 29.7  ov 0  plans 1/1 pin false
+  intent-on          touch[] nat 329 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.000  clear 30  ov 0  plans 1/1 pin false
+  menu2              touch[] nat 331 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.067  clear 32.1  ov 0  plans 2/2 pin false
+  menu3              touch[yunaxmortibody:485] nat 329 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.014  clear 0  ov 485  plans 3/2 pin false
+sb-2560x1440-s2  errors 0
+  menu1              touch[] nat 331 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 27.3  ov 0  plans 1/1 pin false
+  aim-mortibody      touch[] nat 328 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 26.5  ov 0  plans 1/1 pin false
+  aim-seymour-natus  touch[] nat 331 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 26  ov 0  plans 1/1 pin false
+  intent-on          touch[] nat 330 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.000  clear 27.9  ov 0  plans 1/1 pin false
+  menu2              touch[] nat 331 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.067  clear 35.1  ov 0  plans 2/2 pin false
+  menu3              touch[yunaxmortibody:318] nat 331 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 0  ov 318  plans 3/3 pin false
+sb-2560x1440-s3  errors 0
+  menu1              touch[] nat 330 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 29.6  ov 0  plans 1/1 pin false
+  aim-mortibody      touch[] nat 330 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 29  ov 0  plans 1/1 pin false
+  aim-seymour-natus  touch[] nat 331 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 27.7  ov 0  plans 1/1 pin false
+  intent-on          touch[] nat 331 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.000  clear 27  ov 0  plans 1/1 pin false
+  menu2              touch[] nat 331 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.074  clear 37.3  ov 0  plans 2/2 pin false
+  menu3              touch[yunaxmortibody:151] nat 330 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 0  ov 151  plans 3/3 pin false
+
+# Per-state lines, BRANCH (st5)
+st5-1600x900-s1  errors 0
+  menu1              touch[] nat 346 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.023  clear 40.2  ov 0  plans 1/0 pin true lens [48,0]
+  aim-mortibody      touch[] nat 346 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.040  clear 39.8  ov 0  plans 1/0 pin true lens [48,0]
+  aim-seymour-natus  touch[] nat 346 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.030  clear 40.6  ov 0  plans 1/0 pin true lens [48,0]
+  intent-on          touch[] nat 346 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.017  clear 39.5  ov 0  plans 1/0 pin true lens [48,0]
+  menu2              touch[] nat 347 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.011  clear 7.7  ov 0  plans 1/0 pin true lens [48,0]
+  menu3              touch[] nat 346 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 40.9  ov 0  plans 1/0 pin true lens [48,0]
+st5-1600x900-s2  errors 0
+  menu1              touch[] nat 346 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.030  clear 41.8  ov 0  plans 1/0 pin true lens [48,0]
+  aim-mortibody      touch[] nat 346 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.023  clear 40.8  ov 0  plans 1/0 pin true lens [48,0]
+  aim-seymour-natus  touch[] nat 347 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.023  clear 39.2  ov 0  plans 1/0 pin true lens [48,0]
+  intent-on          touch[] nat 346 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.023  clear 38.8  ov 0  plans 1/0 pin true lens [48,0]
+  menu2              touch[] nat 347 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.013  clear 6.8  ov 0  plans 1/0 pin true lens [48,0]
+  menu3              touch[] nat 346 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.017  clear 2.4  ov 0  plans 1/0 pin true lens [48,0]
+st5-1600x900-s3  errors 0
+  menu1              touch[] nat 347 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.030  clear 39.8  ov 0  plans 3/0 pin true lens [48,0]
+  aim-mortibody      touch[] nat 346 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.011  clear 36.9  ov 0  plans 3/0 pin true lens [48,0]
+  aim-seymour-natus  touch[] nat 346 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.011  clear 38.4  ov 0  plans 3/0 pin true lens [48,0]
+  intent-on          touch[] nat 347 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.017  clear 39.6  ov 0  plans 3/0 pin true lens [48,0]
+  menu2              touch[] nat 347 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.018  clear 4.8  ov 0  plans 3/0 pin true lens [48,0]
+  menu3              touch[kimahrixmortibody:2] nat 347 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.011  clear 0  ov 2  plans 3/0 pin true lens [48,0]
+st5-2000x1012-s1  errors 0
+  menu1              touch[] nat 389 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.001  clear 45.8  ov 0  plans 1/0 pin true lens [60,0]
+  aim-mortibody      touch[] nat 390 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.003  clear 45.8  ov 0  plans 1/0 pin true lens [60,0]
+  aim-seymour-natus  touch[] nat 389 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 43.9  ov 0  plans 1/0 pin true lens [60,0]
+  intent-on          touch[] nat 389 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.000  clear 43  ov 0  plans 1/0 pin true lens [60,0]
+  menu2              touch[] nat 390 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.021  clear 8.1  ov 0  plans 1/0 pin true lens [60,0]
+  menu3              touch[] nat 390 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 42.4  ov 0  plans 1/0 pin true lens [60,0]
+st5-2000x1012-s2  errors 0
+  menu1              touch[] nat 389 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 42.2  ov 0  plans 1/0 pin true lens [60,0]
+  aim-mortibody      touch[] nat 389 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 40.6  ov 0  plans 1/0 pin true lens [60,0]
+  aim-seymour-natus  touch[] nat 389 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 41.4  ov 0  plans 1/0 pin true lens [60,0]
+  intent-on          touch[] nat 390 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.001  clear 44.8  ov 0  plans 1/0 pin true lens [60,0]
+  menu2              touch[] nat 390 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.030  clear 3.8  ov 0  plans 1/0 pin true lens [60,0]
+  menu3              touch[] nat 389 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.002  clear 2  ov 0  plans 1/0 pin true lens [60,0]
+st5-2000x1012-s3  errors 0
+  menu1              touch[] nat 389 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 42.7  ov 0  plans 1/0 pin true lens [60,0]
+  aim-mortibody      touch[] nat 390 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 45.8  ov 0  plans 1/0 pin true lens [60,0]
+  aim-seymour-natus  touch[] nat 390 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 44.4  ov 0  plans 1/0 pin true lens [60,0]
+  intent-on          touch[] nat 390 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.003  clear 45.4  ov 0  plans 1/0 pin true lens [60,0]
+  menu2              touch[] nat 389 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.031  clear 5.2  ov 0  plans 1/0 pin true lens [60,0]
+  menu3              touch[] nat 390 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.002  clear 6.2  ov 0  plans 1/0 pin true lens [60,0]
+st5-2560x1440-s1  errors 0
+  menu1              touch[] nat 556 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.040  clear 64.6  ov 0  plans 3/0 pin true lens [77,0]
+  aim-mortibody      touch[] nat 555 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.030  clear 63.8  ov 0  plans 3/0 pin true lens [77,0]
+  aim-seymour-natus  touch[] nat 555 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.017  clear 61.3  ov 0  plans 3/0 pin true lens [77,0]
+  intent-on          touch[] nat 555 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.011  clear 61.2  ov 0  plans 3/0 pin true lens [77,0]
+  menu2              touch[] nat 556 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.013  clear 14.5  ov 0  plans 3/0 pin true lens [77,0]
+  menu3              touch[] nat 555 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.000  clear 61.6  ov 0  plans 3/0 pin true lens [77,0]
+st5-2560x1440-s2  errors 0
+  menu1              touch[] nat 554 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.017  clear 61.4  ov 0  plans 1/0 pin true lens [77,0]
+  aim-mortibody      touch[] nat 554 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.023  clear 61.8  ov 0  plans 1/0 pin true lens [77,0]
+  aim-seymour-natus  touch[] nat 554 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.040  clear 65.2  ov 0  plans 1/0 pin true lens [77,0]
+  intent-on          touch[] nat 554 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.030  clear 64.6  ov 0  plans 1/0 pin true lens [77,0]
+  menu2              touch[] nat 555 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.013  clear 11.5  ov 0  plans 1/0 pin true lens [77,0]
+  menu3              touch[] nat 555 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.019  clear 7  ov 0  plans 1/0 pin true lens [77,0]
+st5-2560x1440-s3  errors 0
+  menu1              touch[] nat 554 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.030  clear 66.6  ov 0  plans 1/0 pin true lens [77,0]
+  aim-mortibody      touch[] nat 555 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.030  clear 63.6  ov 0  plans 1/0 pin true lens [77,0]
+  aim-seymour-natus  touch[] nat 554 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.040  clear 65.2  ov 0  plans 1/0 pin true lens [77,0]
+  intent-on          touch[] nat 554 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:0.000/0.000  partyUnder 0.023  clear 62.2  ov 0  plans 1/0 pin true lens [77,0]
+  menu2              touch[] nat 555 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.011  clear 12.3  ov 0  plans 1/0 pin true lens [77,0]
+  menu3              touch[] nat 555 px  covers s:0.000/0.000 a:0.000/0.000 g:0.000/0.000 i:-  partyUnder 0.017  clear 1  ov 0  plans 1/0 pin true lens [77,0]

@@ -549,9 +549,11 @@
    another panel's text. */
 /* `--ffx-sensor-dx` is the steer `FFXBattleHud.steerSensor` writes while an enemy target cursor is live, so the
    read-out stops opening across the very fiend it describes. Zero — the resting place — whenever no cursor is up.
-   `--ffx-sensor-dy`: Chapter XII's lift clear of the intent line (FFX only, `OmnisReadout.ts`); zero elsewhere. */
+   `--ffx-sensor-dy`: Chapter XII's lift clear of the intent line (FFX only, `OmnisReadout.ts`); zero elsewhere.
+   `--ffx-sensor-px` and `--ffx-sensor-py`: where the MAX mix's table stands the card while Seymour Natus's colossus master does (FFX only,
+   `engine/fx/mix/sensorPin.ts`, `colossusPin.ts`): a move from the resting place above, so the card is off the big boss; unset elsewhere. */
 .ffx-sensor {
-  position: absolute; left: calc(436px + var(--ffx-sensor-dx, 0px) + var(--ffx-sensor-cdx, 0px)); top: calc(166px + var(--ffx-sensor-dy, 0px)); width: 100px;
+  position: absolute; left: calc(436px + var(--ffx-sensor-dx, 0px) + var(--ffx-sensor-cdx, 0px) + var(--ffx-sensor-px, 0px)); top: calc(166px + var(--ffx-sensor-dy, 0px) + var(--ffx-sensor-py, 0px)); width: 100px;
   padding: 6px 8px; background: var(--ig-ink-panel);
   transform: skewX(var(--ig-skew));
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);

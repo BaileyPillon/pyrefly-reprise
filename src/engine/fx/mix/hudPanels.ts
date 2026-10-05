@@ -1,3 +1,4 @@
+import { stageOf } from './colossusPin.ts';
 import type { Box } from './geometry.ts';
 
 /**
@@ -78,8 +79,11 @@ const SOLID = '.ig-ctb, .ffx-cmd-area, .ffx2hud__command, .ig-stat-list';
  * fractions measured on release 35 at 1600x900 (desktop) and offsets from the bottom at 390x844 (phone);
  * the live check at each menu's opening replaces them with what is really laid out.
  */
-export function predictedPanels(game: 'ffx' | 'ffx2', vw: number, vh: number, phone: boolean): Box[] {
-  const f = (l: number, t: number, r: number, b: number): Box => ({ l: l * vw, t: t * vh, r: r * vw, b: b * vh });
+export function predictedPanels(game: 'ffx' | 'ffx2', vw: number, vh: number, phone: boolean, onStage = false): Box[] {
+  // `onStage` (a pinned colossus master, `colossusPin.ts`): the fractions are the HUD stage's, not the window's, so they land where the letterboxed
+  // stage draws them at any window shape (the same at 16:9, where the stage fills the window; 39 px lower at the bottom of a 16:10 window).
+  const st = onStage ? stageOf(vw, vh) : null;
+  const f = (l: number, t: number, r: number, b: number): Box => (st ? { l: st.ox + l * 640 * st.s, t: st.oy + t * 360 * st.s, r: st.ox + r * 640 * st.s, b: st.oy + b * 360 * st.s } : { l: l * vw, t: t * vh, r: r * vw, b: b * vh });
   if (phone) {
     const out: Box[] = [
       { l: 8, t: vh - 358, r: vw - 8, b: vh - 296 }, // the party tiles

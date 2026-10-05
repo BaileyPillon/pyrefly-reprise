@@ -87,7 +87,7 @@ describe('Staging.hold: a fiend that carries the slots is held against the forma
 
   it('is a no-op for a fight with no row (nothing flagged, nothing written)', () => {
     const st = new Staging();
-    const e = actor('seymour-natus', -1);
+    const e = actor('yojimbo', -1);
     st.hold([actor('tidus', 1), e], false);
     expect(e.userData[STAGE_HOLD_KEY]).toBeUndefined();
   });
@@ -195,9 +195,13 @@ describe('Framing holds the fiends of a table fight from the first frame it sees
     const y = [actor('tidus', 1), actor('yunalesca-1', -1)];
     framing('ffx').update(0.016, y, true);
     expect(held(y)).toEqual([false, true]);
-    const natus = [actor('tidus', 1), actor('seymour-natus', -1)];
+    const yojimbo = [actor('tidus', 1), actor('yojimbo', -1)];
+    framing('ffx').update(0.016, yojimbo, true);
+    expect(held(yojimbo)).toEqual([false, false]);
+    // Natus has a row since r39-natus (it pins his colossus master): his fiends are held like Chapter II's and III's.
+    const natus = [actor('tidus', 1), actor('seymour-natus', -1), actor('mortibody', -1)];
     framing('ffx').update(0.016, natus, true);
-    expect(held(natus)).toEqual([false, false]);
+    expect(held(natus)).toEqual([false, true, true]);
     const ffx2 = roster();
     framing('ffx2').update(0.016, ffx2, true);
     expect(held(ffx2)).toEqual([false, false, false, false]);
