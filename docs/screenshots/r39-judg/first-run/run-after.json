@@ -1,0 +1,169 @@
+{
+ "tag": "after",
+ "results": [
+  {
+   "viewport": "1600x900",
+   "first": {
+    "screen": "chapter-select",
+    "brief": false,
+    "frg": {
+     "step": "1",
+     "quote": "“Start with the first one.”",
+     "line": [
+      "Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.",
+      "Click its picture to begin. The others wait on the board.",
+      "Tap its picture to begin. The other fights wait on the board."
+     ],
+     "eyebrow": "Auron · 1 of 3"
+    },
+    "sel": {
+     "id": "seymour-flux",
+     "label": "Seymour Flux"
+    },
+    "heroNum": "Chapter I",
+    "heroChapter": "1"
+   },
+   "seen": [
+    {
+     "sel": "seymour-flux",
+     "hero": "Chapter I",
+     "quote": "“Start with the first one.”"
+    },
+    {
+     "sel": "ffx2-bahamut",
+     "hero": "Chapter IV",
+     "quote": "“Start with this one.”"
+    }
+   ],
+   "later": {
+    "screen": "chapter-select",
+    "brief": false,
+    "frg": {
+     "step": "1",
+     "quote": "“Start with this one.”",
+     "line": [
+      "Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.",
+      "Click its picture to begin. The others wait on the board.",
+      "Tap its picture to begin. The other fights wait on the board."
+     ],
+     "eyebrow": "Auron · 1 of 3"
+    },
+    "sel": {
+     "id": "ffx2-bahamut",
+     "label": "Bahamut"
+    },
+    "heroNum": "Chapter IV",
+    "heroChapter": "4"
+   },
+   "back": {
+    "screen": "chapter-select",
+    "brief": false,
+    "frg": {
+     "step": "1",
+     "quote": "“Start with the first one.”",
+     "line": [
+      "Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.",
+      "Click its picture to begin. The others wait on the board.",
+      "Tap its picture to begin. The other fights wait on the board."
+     ],
+     "eyebrow": "Auron · 1 of 3"
+    },
+    "sel": {
+     "id": "seymour-flux",
+     "label": "Seymour Flux"
+    },
+    "heroNum": "Chapter I",
+    "heroChapter": "1"
+   },
+   "errors": [],
+   "log": [
+    "after title: {\"screen\":\"title\",\"brief\":true,\"frg\":null,\"sel\":null,\"heroNum\":null,\"heroChapter\":null}",
+    "board: {\"screen\":\"chapter-select\",\"brief\":false,\"frg\":{\"step\":\"1\",\"quote\":\"“Start with the first one.”\",\"line\":[\"Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.\",\"Click its picture to begin. The others wait on the board.\",\"Tap its picture to begin. The other fights wait on the board.\"],\"eyebrow\":\"Auron · 1 of 3\"},\"sel\":{\"id\":\"seymour-flux\",\"label\":\"Seymour Flux\"},\"heroNum\":\"Chapter I\",\"heroChapter\":\"1\"}",
+    "after moving: {\"screen\":\"chapter-select\",\"brief\":false,\"frg\":{\"step\":\"1\",\"quote\":\"“Start with this one.”\",\"line\":[\"Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.\",\"Click its picture to begin. The others wait on the board.\",\"Tap its picture to begin. The other fights wait on the board.\"],\"eyebrow\":\"Auron · 1 of 3\"},\"sel\":{\"id\":\"ffx2-bahamut\",\"label\":\"Bahamut\"},\"heroNum\":\"Chapter IV\",\"heroChapter\":\"4\"}",
+    "back on Chapter I: {\"screen\":\"chapter-select\",\"brief\":false,\"frg\":{\"step\":\"1\",\"quote\":\"“Start with the first one.”\",\"line\":[\"Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.\",\"Click its picture to begin. The others wait on the board.\",\"Tap its picture to begin. The other fights wait on the board.\"],\"eyebrow\":\"Auron · 1 of 3\"},\"sel\":{\"id\":\"seymour-flux\",\"label\":\"Seymour Flux\"},\"heroNum\":\"Chapter I\",\"heroChapter\":\"1\"}"
+   ]
+  },
+  {
+   "viewport": "390x844",
+   "first": {
+    "screen": "chapter-select",
+    "brief": false,
+    "frg": {
+     "step": "1",
+     "quote": "“Start with the first one.”",
+     "line": [
+      "Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.",
+      "Click its picture to begin. The others wait on the board.",
+      "Tap its picture to begin. The other fights wait on the board."
+     ],
+     "eyebrow": "Auron · 1 of 3"
+    },
+    "sel": {
+     "id": "seymour-flux",
+     "label": "Seymour Flux"
+    },
+    "heroNum": "Chapter I",
+    "heroChapter": "1"
+   },
+   "seen": [
+    {
+     "sel": "seymour-flux",
+     "hero": "Chapter I",
+     "quote": "“Start with the first one.”"
+    },
+    {
+     "sel": "ffx2-bahamut",
+     "hero": "Chapter IV",
+     "quote": "“Start with this one.”"
+    }
+   ],
+   "later": {
+    "screen": "chapter-select",
+    "brief": false,
+    "frg": {
+     "step": "1",
+     "quote": "“Start with this one.”",
+     "line": [
+      "Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.",
+      "Click its picture to begin. The others wait on the board.",
+      "Tap its picture to begin. The other fights wait on the board."
+     ],
+     "eyebrow": "Auron · 1 of 3"
+    },
+    "sel": {
+     "id": "ffx2-bahamut",
+     "label": "Bahamut"
+    },
+    "heroNum": "Chapter IV",
+    "heroChapter": "4"
+   },
+   "back": {
+    "screen": "chapter-select",
+    "brief": false,
+    "frg": {
+     "step": "1",
+     "quote": "“Start with the first one.”",
+     "line": [
+      "Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.",
+      "Click its picture to begin. The others wait on the board.",
+      "Tap its picture to begin. The other fights wait on the board."
+     ],
+     "eyebrow": "Auron · 1 of 3"
+    },
+    "sel": {
+     "id": "seymour-flux",
+     "label": "Seymour Flux"
+    },
+    "heroNum": "Chapter I",
+    "heroChapter": "1"
+   },
+   "errors": [],
+   "log": [
+    "after title: {\"screen\":\"title\",\"brief\":true,\"frg\":null,\"sel\":null,\"heroNum\":null,\"heroChapter\":null}",
+    "board: {\"screen\":\"chapter-select\",\"brief\":false,\"frg\":{\"step\":\"1\",\"quote\":\"“Start with the first one.”\",\"line\":[\"Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.\",\"Click its picture to begin. The others wait on the board.\",\"Tap its picture to begin. The other fights wait on the board.\"],\"eyebrow\":\"Auron · 1 of 3\"},\"sel\":{\"id\":\"seymour-flux\",\"label\":\"Seymour Flux\"},\"heroNum\":\"Chapter I\",\"heroChapter\":\"1\"}",
+    "after moving: {\"screen\":\"chapter-select\",\"brief\":false,\"frg\":{\"step\":\"1\",\"quote\":\"“Start with this one.”\",\"line\":[\"Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.\",\"Click its picture to begin. The others wait on the board.\",\"Tap its picture to begin. The other fights wait on the board.\"],\"eyebrow\":\"Auron · 1 of 3\"},\"sel\":{\"id\":\"ffx2-bahamut\",\"label\":\"Bahamut\"},\"heroNum\":\"Chapter IV\",\"heroChapter\":\"4\"}",
+    "back on Chapter I: {\"screen\":\"chapter-select\",\"brief\":false,\"frg\":{\"step\":\"1\",\"quote\":\"“Start with the first one.”\",\"line\":[\"Click its picture to begin. The others wait on the board.Tap its picture to begin. The other fights wait on the board.\",\"Click its picture to begin. The others wait on the board.\",\"Tap its picture to begin. The other fights wait on the board.\"],\"eyebrow\":\"Auron · 1 of 3\"},\"sel\":{\"id\":\"seymour-flux\",\"label\":\"Seymour Flux\"},\"heroNum\":\"Chapter I\",\"heroChapter\":\"1\"}"
+   ]
+  }
+ ]
+}

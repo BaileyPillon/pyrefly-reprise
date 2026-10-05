@@ -1,0 +1,4674 @@
+[
+ {
+  "cell": "ffx2-bahamut-1600x900-ts100",
+  "kind": "hud",
+  "size": "1600x900",
+  "ts": 1,
+  "touch": false,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "advisorChip",
+      "figure": "paine",
+      "side": "party",
+      "px2": 547,
+      "figPct": 2
+     }
+    ],
+    "textOnText": 4,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "advisorChip",
+      "figure": "paine",
+      "side": "party",
+      "px2": 463,
+      "figPct": 2
+     },
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 28748,
+      "figPct": 37
+     }
+    ],
+    "textOnText": 4,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "advisorChip",
+      "figure": "paine",
+      "side": "party",
+      "px2": 569,
+      "figPct": 2
+     }
+    ],
+    "textOnText": 4,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-1600x900-ts100",
+  "kind": "pause",
+  "size": "1600x900",
+  "ts": 1,
+  "touch": false,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_yuna": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_rikku": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_paine": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-1600x900-ts115",
+  "kind": "hud",
+  "size": "1600x900",
+  "ts": 1.15,
+  "touch": false,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-1600x900-ts115",
+  "kind": "pause",
+  "size": "1600x900",
+  "ts": 1.15,
+  "touch": false,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_yuna": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_rikku": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_paine": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 16,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-1600x900-ts130",
+  "kind": "hud",
+  "size": "1600x900",
+  "ts": 1.3,
+  "touch": false,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 845,
+      "figPct": 1
+     },
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 7570,
+      "figPct": 11
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 1289,
+      "figPct": 2
+     },
+     {
+      "panel": "intent",
+      "figure": "paine",
+      "side": "party",
+      "px2": 87,
+      "figPct": 0
+     },
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 9779,
+      "figPct": 12
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 1615,
+      "figPct": 2
+     },
+     {
+      "panel": "intent",
+      "figure": "paine",
+      "side": "party",
+      "px2": 130,
+      "figPct": 0
+     },
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 8703,
+      "figPct": 11
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-1600x900-ts130",
+  "kind": "pause",
+  "size": "1600x900",
+  "ts": 1.3,
+  "touch": false,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_yuna": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_rikku": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_paine": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 16,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-2000x1012-ts100",
+  "kind": "hud",
+  "size": "2000x1012",
+  "ts": 1,
+  "touch": false,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "advisorChip",
+      "figure": "paine",
+      "side": "party",
+      "px2": 947,
+      "figPct": 3
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "advisorChip",
+      "figure": "paine",
+      "side": "party",
+      "px2": 832,
+      "figPct": 2
+     },
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 34221,
+      "figPct": 34
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "advisorChip",
+      "figure": "paine",
+      "side": "party",
+      "px2": 1005,
+      "figPct": 3
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-2000x1012-ts100",
+  "kind": "pause",
+  "size": "2000x1012",
+  "ts": 1,
+  "touch": false,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_yuna": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_rikku": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_paine": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 16,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-2000x1012-ts115",
+  "kind": "hud",
+  "size": "2000x1012",
+  "ts": 1.15,
+  "touch": false,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 6104,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-2000x1012-ts115",
+  "kind": "pause",
+  "size": "2000x1012",
+  "ts": 1.15,
+  "touch": false,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_yuna": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_rikku": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_paine": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 16,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-2000x1012-ts130",
+  "kind": "hud",
+  "size": "2000x1012",
+  "ts": 1.3,
+  "touch": false,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 23162,
+      "figPct": 27
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 29039,
+      "figPct": 29
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 27672,
+      "figPct": 27
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-2000x1012-ts130",
+  "kind": "pause",
+  "size": "2000x1012",
+  "ts": 1.3,
+  "touch": false,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_yuna": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_rikku": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_paine": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 16,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-390x844-ts100",
+  "kind": "hud",
+  "size": "390x844",
+  "ts": 1,
+  "touch": true,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "advisor",
+      "b": "tip",
+      "px2": 2466
+     }
+    ],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "command",
+      "b": "tip",
+      "px2": 2466
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 1442,
+      "figPct": 7
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-390x844-ts100",
+  "kind": "pause",
+  "size": "390x844",
+  "ts": 1,
+  "touch": true,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_yuna": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_rikku": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_paine": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-390x844-ts115",
+  "kind": "hud",
+  "size": "390x844",
+  "ts": 1.15,
+  "touch": true,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "advisor",
+      "b": "tip",
+      "px2": 2711
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 208,
+      "figPct": 1
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "command",
+      "b": "tip",
+      "px2": 2711
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 1811,
+      "figPct": 9
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-390x844-ts115",
+  "kind": "pause",
+  "size": "390x844",
+  "ts": 1.15,
+  "touch": true,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_yuna": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_rikku": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_paine": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-390x844-ts130",
+  "kind": "hud",
+  "size": "390x844",
+  "ts": 1.3,
+  "touch": true,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "advisor",
+      "b": "tip",
+      "px2": 2956
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 675,
+      "figPct": 4
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "command",
+      "b": "tip",
+      "px2": 2956
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "bahamut",
+      "side": "enemy",
+      "px2": 2330,
+      "figPct": 12
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-bahamut-390x844-ts130",
+  "kind": "pause",
+  "size": "390x844",
+  "ts": 1.3,
+  "touch": true,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_yuna": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_rikku": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_paine": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "ffx2-leblanc-1600x900-ts100",
+  "kind": "hud",
+  "size": "1600x900",
+  "ts": 1,
+  "touch": false,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 5140,
+      "figPct": 44
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 26,
+      "figPct": 0
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 12.5,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 4924,
+      "figPct": 43
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 146,
+      "figPct": 2
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 4929,
+      "figPct": 42
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 36,
+      "figPct": 1
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-leblanc-1600x900-ts115",
+  "kind": "hud",
+  "size": "1600x900",
+  "ts": 1.15,
+  "touch": false,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 5325,
+      "figPct": 46
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 77,
+      "figPct": 1
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 12.5,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 5602,
+      "figPct": 48
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 268,
+      "figPct": 4
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 5487,
+      "figPct": 47
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 180,
+      "figPct": 3
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-leblanc-1600x900-ts130",
+  "kind": "hud",
+  "size": "1600x900",
+  "ts": 1.3,
+  "touch": false,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "fem-goon",
+      "side": "enemy",
+      "px2": 1007,
+      "figPct": 11
+     },
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 5287,
+      "figPct": 45
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 37,
+      "figPct": 1
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": true,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 12.5,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "fem-goon",
+      "side": "enemy",
+      "px2": 1407,
+      "figPct": 16
+     },
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 5376,
+      "figPct": 47
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 107,
+      "figPct": 2
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": true,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "fem-goon",
+      "side": "enemy",
+      "px2": 910,
+      "figPct": 10
+     },
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 5416,
+      "figPct": 46
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 71,
+      "figPct": 1
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": true,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-leblanc-2000x1012-ts100",
+  "kind": "hud",
+  "size": "2000x1012",
+  "ts": 1,
+  "touch": false,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 6574,
+      "figPct": 44
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 40,
+      "figPct": 0
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 5844,
+      "figPct": 40
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 74,
+      "figPct": 1
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 6266,
+      "figPct": 42
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 37,
+      "figPct": 0
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-leblanc-2000x1012-ts115",
+  "kind": "hud",
+  "size": "2000x1012",
+  "ts": 1.15,
+  "touch": false,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 6761,
+      "figPct": 46
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 110,
+      "figPct": 1
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 6854,
+      "figPct": 47
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 182,
+      "figPct": 2
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 6465,
+      "figPct": 43
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-leblanc-2000x1012-ts130",
+  "kind": "hud",
+  "size": "2000x1012",
+  "ts": 1.3,
+  "touch": false,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "fem-goon",
+      "side": "enemy",
+      "px2": 1310,
+      "figPct": 11
+     },
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 6824,
+      "figPct": 46
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 73,
+      "figPct": 1
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": true,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "fem-goon",
+      "side": "enemy",
+      "px2": 1760,
+      "figPct": 16
+     },
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 6786,
+      "figPct": 47
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 153,
+      "figPct": 2
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": true,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "fem-goon",
+      "side": "enemy",
+      "px2": 1100,
+      "figPct": 10
+     },
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 7001,
+      "figPct": 48
+     },
+     {
+      "panel": "intent",
+      "figure": "dr-goon",
+      "side": "enemy",
+      "px2": 119,
+      "figPct": 1
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": true,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-leblanc-390x844-ts100",
+  "kind": "hud",
+  "size": "390x844",
+  "ts": 1,
+  "touch": true,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "advisor",
+      "b": "tip",
+      "px2": 2466
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 257,
+      "figPct": 8
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 282,
+      "figPct": 9
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-leblanc-390x844-ts115",
+  "kind": "hud",
+  "size": "390x844",
+  "ts": 1.15,
+  "touch": true,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "advisor",
+      "b": "tip",
+      "px2": 2711
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 555,
+      "figPct": 20
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 590,
+      "figPct": 21
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-leblanc-390x844-ts130",
+  "kind": "hud",
+  "size": "390x844",
+  "ts": 1.3,
+  "touch": true,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "advisor",
+      "b": "tip",
+      "px2": 2956
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 270,
+      "figPct": 8
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "ormi-entrance",
+      "side": "enemy",
+      "px2": 320,
+      "figPct": 10
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-vegnagun-shuyin-1600x900-ts100",
+  "kind": "hud",
+  "size": "1600x900",
+  "ts": 1,
+  "touch": false,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 5699,
+      "figPct": 2
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 6769,
+      "figPct": 2
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 3838,
+      "figPct": 1
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 639,
+      "figPct": 0
+     },
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 15862,
+      "figPct": 5
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 18973,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 6590,
+      "figPct": 2
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 23512,
+      "figPct": 7
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 4995,
+      "figPct": 1
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 483,
+      "figPct": 0
+     },
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 43755,
+      "figPct": 13
+     },
+     {
+      "panel": "intentChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 2407,
+      "figPct": 1
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 19033,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 7315,
+      "figPct": 2
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 9108,
+      "figPct": 3
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 5938,
+      "figPct": 2
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 379,
+      "figPct": 0
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 19073,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-vegnagun-shuyin-1600x900-ts115",
+  "kind": "hud",
+  "size": "1600x900",
+  "ts": 1.15,
+  "touch": false,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 14755,
+      "figPct": 4
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 18544,
+      "figPct": 5
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 13307,
+      "figPct": 4
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 1253,
+      "figPct": 0
+     },
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 15936,
+      "figPct": 5
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 18990,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 16091,
+      "figPct": 5
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 47098,
+      "figPct": 14
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 13871,
+      "figPct": 4
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 1100,
+      "figPct": 0
+     },
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 54333,
+      "figPct": 16
+     },
+     {
+      "panel": "intentChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 2407,
+      "figPct": 1
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 19047,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 17186,
+      "figPct": 5
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 21117,
+      "figPct": 6
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 14434,
+      "figPct": 4
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 1000,
+      "figPct": 0
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 19080,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-vegnagun-shuyin-1600x900-ts130",
+  "kind": "hud",
+  "size": "1600x900",
+  "ts": 1.3,
+  "touch": false,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 29268,
+      "figPct": 8
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 34355,
+      "figPct": 10
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "rikku",
+      "side": "party",
+      "px2": 175,
+      "figPct": 1
+     },
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 54418,
+      "figPct": 16
+     },
+     {
+      "panel": "intentChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 2407,
+      "figPct": 1
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 19025,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 31259,
+      "figPct": 9
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 69393,
+      "figPct": 20
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "rikku",
+      "side": "party",
+      "px2": 88,
+      "figPct": 1
+     },
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 54219,
+      "figPct": 16
+     },
+     {
+      "panel": "intentChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 2407,
+      "figPct": 1
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 19082,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 32430,
+      "figPct": 9
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 37178,
+      "figPct": 11
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "rikku",
+      "side": "party",
+      "px2": 62,
+      "figPct": 1
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 19123,
+      "figPct": 5
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-vegnagun-shuyin-2000x1012-ts100",
+  "kind": "hud",
+  "size": "2000x1012",
+  "ts": 1,
+  "touch": false,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 7033,
+      "figPct": 2
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 8182,
+      "figPct": 2
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 2826,
+      "figPct": 1
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 357,
+      "figPct": 0
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 23978,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 7958,
+      "figPct": 2
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 28433,
+      "figPct": 7
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 3949,
+      "figPct": 1
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 190,
+      "figPct": 0
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 24057,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 8901,
+      "figPct": 2
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 11190,
+      "figPct": 3
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 5193,
+      "figPct": 1
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 56,
+      "figPct": 0
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 24111,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-vegnagun-shuyin-2000x1012-ts115",
+  "kind": "hud",
+  "size": "2000x1012",
+  "ts": 1.15,
+  "touch": false,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 18587,
+      "figPct": 4
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 23209,
+      "figPct": 5
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 13128,
+      "figPct": 3
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 991,
+      "figPct": 0
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 23981,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 20081,
+      "figPct": 5
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 58990,
+      "figPct": 14
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 13726,
+      "figPct": 3
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 804,
+      "figPct": 0
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 24061,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 21506,
+      "figPct": 5
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 26645,
+      "figPct": 6
+     },
+     {
+      "panel": "advisor",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 14455,
+      "figPct": 3
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 662,
+      "figPct": 0
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 24115,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-vegnagun-shuyin-2000x1012-ts130",
+  "kind": "hud",
+  "size": "2000x1012",
+  "ts": 1.3,
+  "touch": false,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 37005,
+      "figPct": 9
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 43157,
+      "figPct": 10
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "rikku",
+      "side": "party",
+      "px2": 184,
+      "figPct": 1
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 24046,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 39457,
+      "figPct": 9
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 87092,
+      "figPct": 20
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "rikku",
+      "side": "party",
+      "px2": 66,
+      "figPct": 0
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 24113,
+      "figPct": 6
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "target": {
+    "minPx": 14.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [
+     {
+      "panel": "party",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 41053,
+      "figPct": 9
+     },
+     {
+      "panel": "command",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 46882,
+      "figPct": 11
+     },
+     {
+      "panel": "advisorChip",
+      "figure": "rikku",
+      "side": "party",
+      "px2": 37,
+      "figPct": 0
+     },
+     {
+      "panel": "help",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 24172,
+      "figPct": 5
+     }
+    ],
+    "textOnText": 3,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-vegnagun-shuyin-390x844-ts100",
+  "kind": "hud",
+  "size": "390x844",
+  "ts": 1,
+  "touch": true,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "advisor",
+      "b": "tip",
+      "px2": 2466
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 7432,
+      "figPct": 13
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "command",
+      "b": "tip",
+      "px2": 2466
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 7503,
+      "figPct": 13
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 2,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-vegnagun-shuyin-390x844-ts115",
+  "kind": "hud",
+  "size": "390x844",
+  "ts": 1.15,
+  "touch": true,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "advisor",
+      "b": "tip",
+      "px2": 2711
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 7990,
+      "figPct": 14
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "command",
+      "b": "tip",
+      "px2": 2711
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 8038,
+      "figPct": 14
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "ffx2-vegnagun-shuyin-390x844-ts130",
+  "kind": "hud",
+  "size": "390x844",
+  "ts": 1.3,
+  "touch": true,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "menu": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "advisor",
+      "b": "tip",
+      "px2": 2956
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 8690,
+      "figPct": 15
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   },
+   "step2": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [
+     {
+      "a": "command",
+      "b": "tip",
+      "px2": 2956
+     }
+    ],
+    "panelVsFigure": [
+     {
+      "panel": "intent",
+      "figure": "vegnagun-tail",
+      "side": "enemy",
+      "px2": 8741,
+      "figPct": 15
+     }
+    ],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": null
+   }
+  }
+ },
+ {
+  "cell": "seymour-flux-1600x900-ts100",
+  "kind": "pause",
+  "size": "1600x900",
+  "ts": 1,
+  "touch": false,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_tidus": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_yuna": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_kimahri": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "seymour-flux-1600x900-ts115",
+  "kind": "pause",
+  "size": "1600x900",
+  "ts": 1.15,
+  "touch": false,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_tidus": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_yuna": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_kimahri": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 16,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "seymour-flux-1600x900-ts130",
+  "kind": "pause",
+  "size": "1600x900",
+  "ts": 1.3,
+  "touch": false,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_tidus": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_yuna": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_kimahri": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 16.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 18.2,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 16,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "seymour-flux-2000x1012-ts100",
+  "kind": "pause",
+  "size": "2000x1012",
+  "ts": 1,
+  "touch": false,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_tidus": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_yuna": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_kimahri": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 17,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 16,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "seymour-flux-2000x1012-ts115",
+  "kind": "pause",
+  "size": "2000x1012",
+  "ts": 1.15,
+  "touch": false,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_tidus": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_yuna": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_kimahri": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 16,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "seymour-flux-2000x1012-ts130",
+  "kind": "pause",
+  "size": "2000x1012",
+  "ts": 1.3,
+  "touch": false,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_tidus": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_yuna": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_kimahri": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 19.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 22.1,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 16,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "seymour-flux-390x844-ts100",
+  "kind": "pause",
+  "size": "390x844",
+  "ts": 1,
+  "touch": true,
+  "applied": {
+   "attr": "100",
+   "wide": "100",
+   "setting": 1
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_tidus": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_yuna": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_kimahri": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "seymour-flux-390x844-ts115",
+  "kind": "pause",
+  "size": "390x844",
+  "ts": 1.15,
+  "touch": true,
+  "applied": {
+   "attr": "115",
+   "wide": "115",
+   "setting": 1.15
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_tidus": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_yuna": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_kimahri": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 14,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ },
+ {
+  "cell": "seymour-flux-390x844-ts130",
+  "kind": "pause",
+  "size": "390x844",
+  "ts": 1.3,
+  "touch": true,
+  "applied": {
+   "attr": "130",
+   "wide": "130",
+   "setting": 1.3
+  },
+  "errors": [],
+  "fail": null,
+  "steps": {
+   "pause-member_tidus": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_yuna": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-member_kimahri": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-chapter": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-guide": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-options": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-controls": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   },
+   "pause-music": {
+    "minPx": 15.6,
+    "off": [],
+    "offWindowPanels": [],
+    "panelVsPanel": [],
+    "panelVsFigure": [],
+    "textOnText": 0,
+    "splitWords": [],
+    "truncated": 0,
+    "intentNarrow": false,
+    "activeTabInside": true
+   }
+  }
+ }
+]
