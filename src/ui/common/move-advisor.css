@@ -281,15 +281,13 @@
   margin: 0.6px 0 0;
   color: #dcd8cc;
 }
-/* PR-0330, density 4 on: a reason shortens to two lines before the ladder lets it go, so a narrow box that cannot hold the
-   whole sentence still says why, with the effect and the cost above it; at density 5 the lead's effect does the same. */
-.mad__why--clamp,
-.mad__effect--clamp {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
+/* PR-0330 (release 39.1): no sentence on the card is clamped to an ellipsis any more. A reason is whole, or its first clause
+   (`advisorClause.ts`), or gone; the lead's effect is whole or gone. The Sin strip's one tight line: the lead's effect under the
+   bare rung's two rows, in the 37 grid px the strip has (a single line, so its line is as tall as the type: the floor's size is
+   kept and the leading is the tight one the chips use). */
+.mad__effect--tight {
+  margin-top: 0.6px;
+  line-height: 1.15;
 }
 .mad__cite {
   margin: 0.4px 0 0;
