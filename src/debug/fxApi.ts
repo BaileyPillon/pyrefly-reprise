@@ -13,6 +13,7 @@
 
 import type { App } from '../app/App.ts';
 import { installFxEnv } from '../app/fxEnv.ts';
+import { applyFigureTrue, figureTrueOf } from '../engine/figureTrue.ts';
 import { eyeCandy, type FxDial, type FxOption, type FxTier } from '../engine/fx/EyeCandy.ts';
 import { livingStats, pinLivingClock } from '../engine/fx/b/LivingPaintings.ts';
 import { fxDebugHooks } from '../engine/fx/fxDebugHooks.ts';
@@ -28,6 +29,11 @@ export function installFxDebug(api: Record<string, unknown>, app: App): void {
     dial: (name: FxDial, v?: number) => {
       if (v !== undefined) eyeCandy.setDial(name, v);
       return eyeCandy.dial(name);
+    },
+    /** Release 39 colour fidelity: how far a painted figure shows its painting's own colour, 0 (today's look, the default) to 1; no value reads it. */
+    figureTrue: (v?: number) => {
+      if (v !== undefined && Number.isFinite(v)) applyFigureTrue(app.renderer, v);
+      return figureTrueOf(app.renderer);
     },
     freeze: (on: boolean) => {
       eyeCandy.frozen = on;

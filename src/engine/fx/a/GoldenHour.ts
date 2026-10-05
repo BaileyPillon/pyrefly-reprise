@@ -31,6 +31,7 @@ import { spellTaps } from '../spellTaps.ts';
 import { BackdropFocus } from './BackdropFocus.ts';
 import { GlowPass, type GlowSource } from './GlowPass.ts';
 import { KeyRim, keyRimColor } from './KeyRim.ts';
+import { figureTrueOf, rimQuiet } from '../../figureTrue.ts';
 import { isBigSpell, LensFlare } from './LensFlare.ts';
 import { buildLookLut, FFX2_RECIPE, FFX_RECIPE, LUT_SIZE } from './LookLut.ts';
 import { OverlayGlow } from './OverlayGlow.ts';
@@ -249,7 +250,7 @@ export class GoldenHour {
     // A7: the rim from the key
     if (eyeCandy.sub('a', 'rim') && d('rim') > 0) {
       this.r.renderer.getDrawingBufferSize(this.buf); // VP-1001-17: the width is held to screen pixels
-      this.rim.apply(scene, this.rimColour, L.rim * d('rim'), 1 + (L.rimWidth - 1) * Math.min(1.5, d('rim')), { camera, heightPx: this.buf.y });
+      this.rim.apply(scene, this.rimColour, L.rim * d('rim') * rimQuiet(figureTrueOf(this.r)), 1 + (L.rimWidth - 1) * Math.min(1.5, d('rim')), { camera, heightPx: this.buf.y });
     }
     else this.rim.restore();
 
