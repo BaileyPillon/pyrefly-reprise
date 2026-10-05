@@ -23,6 +23,7 @@ import { GradeShader } from './shaders/GradeShader.ts';
 import { eyeCandy } from './fx/EyeCandy.ts';
 import { GoldenHour } from './fx/a/GoldenHour.ts';
 import { CrispRig } from './crisp/CrispRig.ts';
+import { FIGURE_TRUE_DEFAULT, applyFigureTrue, bloomMaskFor, figureTrueOf, parseFigureTrue } from './figureTrue.ts';
 
 export interface RendererOptions {
   /** Element the <canvas> is appended to. Defaults to #game. */
@@ -202,6 +203,7 @@ export class Renderer {
     this.gradePass = new ShaderPass(GradeShader);
     this.gradePass.renderToScreen = true; // the composer re-decides it each frame: the last enabled pass draws to the screen
     this.composer.addPass(this.gradePass);
+    applyFigureTrue(this, parseFigureTrue(window.location?.search ?? '') ?? FIGURE_TRUE_DEFAULT); // off unless the address asks (`?figtrue=`)
     this.setAa(parseAaOverride(new URLSearchParams(window.location?.search ?? '').get('aa')) ?? artBudget().aa);
     this.crisp = new CrispRig(
       this.renderer,
@@ -321,7 +323,7 @@ export class Renderer {
       ...(palette.tiltBandWidth !== undefined ? { tiltBandWidth: palette.tiltBandWidth } : {}),
       ...(palette.tiltMaxBlur !== undefined ? { tiltMaxBlur: palette.tiltMaxBlur } : {}),
     });
-    setFigureBloomMask(this.bloomPass, palette.figureBloomMask ?? 0);
+    setFigureBloomMask(this.bloomPass, bloomMaskFor(palette.figureBloomMask ?? 0, figureTrueOf(this)));
     this.palette = palette;
   }
 
