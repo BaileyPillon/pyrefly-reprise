@@ -33,9 +33,13 @@ export class SensorPin {
     if (px) {
       el.style.setProperty('--ffx-sensor-px', px);
       el.style.setProperty('--ffx-sensor-py', py);
+      // A flag (1 while the pin stands) the stylesheet multiplies by: the pinned card is as wide as its three chip columns need at a small window
+      // (`hud-floor.css`), so it keeps the two chip rows it has at 1600x900 and clears Natus's wing tips (PR-0406).
+      el.style.setProperty('--ffx-sensor-pin', '1');
     } else {
       el.style.removeProperty('--ffx-sensor-px');
       el.style.removeProperty('--ffx-sensor-py');
+      el.style.removeProperty('--ffx-sensor-pin');
     }
   }
 

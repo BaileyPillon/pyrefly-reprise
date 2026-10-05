@@ -84,6 +84,18 @@ html:not([data-phone-battle]) .ffxhud .ffx-sensor:not(.ffx-sensor--folded) {
 html:not([data-phone-battle]) .ffxhud .ffx-sensor__chips {
   grid-template-columns: repeat(auto-fit, minmax(calc(var(--hud-floor) * 4.2), 1fr));
 }
+/*
+ * Seymour Natus's pinned card (`--ffx-sensor-pin`, 1 while the colossus master's place stands the card at the top of the stage; `engine/fx/mix/sensorPin.ts`;
+ * FFX only, Chapter X, PR-0406). At 1280x720 and 1366x768 the floored type (7.05 and 6.61 grid px) makes the chips two columns of three rows, which made the
+ * card 14 grid px taller than the box the table solved the master against (88 tall, `SENSOR_SIZE`) and sent its foot over the tips of Natus's wing spikes (1.6 to
+ * 2.3 percent of his painted pixels). The stage's top is as high as the card can stand (the name would clip above it), so the cure is the other way: the card is
+ * as wide as three chip columns need (`12.6 * floor` for the columns and their two 2 px gaps, plus the card's 16 px of padding and 1 px of air; never under the
+ * authored 100, never over 112 so it stays off the turn rail), the chips keep the two rows they have at 1600x900 and the card is the 88 tall the table assumed.
+ * Unpinned (the multiplier is 0), every other chapter and window: the authored 100, untouched.
+ */
+html:not([data-phone-battle]) .ffxhud .ffx-sensor:not(.ffx-sensor--folded) {
+  width: calc(100px + var(--ffx-sensor-pin, 0) * max(0px, min(112px, var(--hud-floor) * 12.6 + 21px) - 100px));
+}
 html:not([data-phone-battle]) .ffxhud .ffx-sensor__toggle { font-size: max(4.9px, var(--hud-floor)); }
 /* Chapters II, III and V (r37-ui-floor, blocker 1): the Sensor card's other lines and the CTB tile letter. */
 html:not([data-phone-battle]) .ffxhud .ffx-sensor__unknown { font-size: max(5px, var(--hud-floor)); }
