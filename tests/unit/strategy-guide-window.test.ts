@@ -70,6 +70,12 @@ function mount(clientHeight = 90): { stage: HTMLElement; guide: StrategyGuide; s
   Object.defineProperty(body, 'offsetTop', { value: 5, configurable: true });
   Object.defineProperty(body, 'offsetHeight', { value: stub.panel.scrollHeight - 11, configurable: true });
   stub.panel.getBoundingClientRect = (): DOMRect => ({ top: 0, bottom: clientHeight, left: 0, right: 100, width: 100, height: clientHeight, x: 0, y: 0, toJSON: () => ({}) });
+  // The body is the box the line measure reads its scale and its origin off: 1:1 here, its top 5 px into the sheet, less how far the sheet is scrolled.
+  const bodyHeight = stub.panel.scrollHeight - 11;
+  body.getBoundingClientRect = (): DOMRect => {
+    const top = 5 - stub.panel.scrollTop;
+    return { top, bottom: top + bodyHeight, left: 0, right: 100, width: 100, height: bodyHeight, x: 0, y: top, toJSON: () => ({}) };
+  };
   Object.defineProperty(stub.panel, 'offsetWidth', { value: 100, configurable: true });
   guide.update(0.016);
   return { stage, guide, stub, body, keys: stage.querySelector<HTMLElement>('.sgd__keys')!, stack: stage.querySelector<HTMLElement>('.sgd__stack')! };
@@ -101,9 +107,12 @@ describe('the sheet never shows half a line', () => {
       const w = shown(body);
       expect(w.top, `scrollTop ${at}`).toBeGreaterThanOrEqual(at - 0.01);
       expect(w.bottom, `scrollTop ${at}`).toBeLessThanOrEqual(at + 90 + 0.01);
+      // An edge may stand a little inside a line's box where that part holds no ink (a descender's overshoot below the line above, the air above the capitals
+      // of the line below: the first 40 percent of a box at the head, the first quarter at the foot); it may not stand in the part that holds the glyphs.
       for (const b of blocksOf(stub)) {
-        expect(b.top < w.top - 0.4 && b.bottom > w.top + 0.4, `scrollTop ${at}: a line crosses the head ${w.top}`).toBe(false);
-        expect(b.top < w.bottom - 0.4 && b.bottom > w.bottom + 0.4, `scrollTop ${at}: a line crosses the foot ${w.bottom}`).toBe(false);
+        const h = b.bottom - b.top;
+        expect(w.top > b.top + h * 0.4 + 0.01 && w.top < b.bottom - 0.4, `scrollTop ${at}: a line crosses the head ${w.top}`).toBe(false);
+        expect(w.bottom > b.top + h * 0.25 + 0.4 && w.bottom < b.bottom - 0.01, `scrollTop ${at}: a line crosses the foot ${w.bottom}`).toBe(false);
       }
       if (w.top > at + 0.01 || w.bottom < at + 90 - 0.01) cutSomething++;
     }

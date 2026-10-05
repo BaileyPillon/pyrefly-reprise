@@ -40,19 +40,30 @@ describe('cleanWindow', () => {
     expect(cleanWindow(lines(10), 0, 54)).toEqual({ top: 0, bottom: 54 });
   });
 
-  it('ends above a line the foot would cut, in the gap after the line before it', () => {
+  it('ends at the head of a line the foot would cut, no higher than the foot of the line before it', () => {
     // the window 5..58 cuts the line 55..63 in its middle; the line before it is 45..53
     const w = cleanWindow(lines(10), 5, 53);
     expect(w.top).toBe(5);
-    expect(w.bottom).toBeCloseTo(54, 6); // the middle of 53 (the line before ends) and 55 (the next begins)
+    expect(w.bottom).toBeCloseTo(53.96, 6); // the foot of the line before it (53) and the overshoot of a descender's tail (12 percent of its 8): above the head of the cut line (55)
     for (const l of lines(10)) expect(l.top < w.bottom && l.bottom > w.bottom, `a line crosses ${w.bottom}`).toBe(false);
   });
 
-  it('starts below a line the head would cut, in the gap before the line after it', () => {
-    // a window from 29 cuts the line 25..33; it starts at the middle of 33 and 35
+  it('keeps the line before the cut whole when the boxes overlap: the clip is not above its foot (its descenders are in it)', () => {
+    // 9 px boxes on a 7.5 px pitch overlap by 1.5; the window cuts the third line
+    const tight: LineBox[] = [0, 1, 2, 3, 4].map((k) => ({ top: k * 7.5, bottom: k * 7.5 + 9 }));
+    const w = cleanWindow(tight, 0, 18); // the third line is 15..24: cut; the one before it is 7.5..16.5, so the window keeps it and no more of the cut line than its ink-free quarter
+    expect(w.bottom).toBeCloseTo(17.25, 6);
+    expect(w.bottom).toBeGreaterThanOrEqual(16.5);
+  });
+
+  it('starts at the foot of a line the head would cut, no further into the next line than its ink-free top', () => {
+    // a window from 29 cuts the line 25..33; it starts just past its foot (33 and 12 percent of 8), above the next line (35)
     const w = cleanWindow(lines(10), 29, 40);
-    expect(w.top).toBeCloseTo(34, 6);
+    expect(w.top).toBeCloseTo(33.96, 6);
     for (const l of lines(10)) expect(l.top < w.top && l.bottom > w.top).toBe(false);
+    // boxes that overlap: the cut line's foot (9) is past the next line's head (7.5); the window starts 12 percent past the foot, inside the ink-free 40 percent of the next box
+    const tight: LineBox[] = [0, 1, 2, 3].map((k) => ({ top: k * 7.5, bottom: k * 7.5 + 9 }));
+    expect(cleanWindow(tight, 4, 20).top).toBeCloseTo(10.08, 6);
   });
 
   it('cleans both edges at once, and never invents room: the clean window lies inside the window', () => {
@@ -77,6 +88,7 @@ describe('cleanWindow', () => {
 
   it('shows the last lines of the sheet whole at the foot (no line crosses the end of the content): only the head is cleaned', () => {
     const all = lines(10); // the last line ends at 103; the sheet's foot (with its padding) is at 111
-    expect(cleanWindow(all, 41, 70)).toEqual({ top: 44, bottom: 111 });
+    expect(cleanWindow(all, 41, 70).bottom).toBe(111);
+    expect(cleanWindow(all, 41, 70).top).toBeCloseTo(43.96, 6);
   });
 });
