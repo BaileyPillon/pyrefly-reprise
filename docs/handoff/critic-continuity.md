@@ -12,7 +12,7 @@ file is shared).
 
 ## What exists
 
-- **The harness** `critic/runner/lib/continuity.mjs` (+ `continuity-probe`, `-silhouette`, `-pure`, `-analyze`, `-strips`;
+- **The harness** `critic/runner/lib/continuity.mjs` (+ `continuity-probe`, `-silhouette`, `-pure`, `-summary`, `-analyze`, `-strips`;
   documented in `critic/runner/lib/README.md`). `node critic/runner/lib/continuity.mjs --base=<url> --evidence=<dir>
   --chapters=a,b,c` with `PYREFLY_BROWSER=gpu` runs each chapter through `route.mjs --continuity` (real keys, title to board
   again, headless Playwright from node) and writes per chapter `continuity.json` (every swap, every jerk, the summary, coverage,
@@ -29,7 +29,7 @@ file is shared).
 - **CHK-026 and CHK-027** in `critic/CHECKS.md` (entries and index rows), `critic/policy.json` (`checks` and the `continuity`
   block: thresholds, caps, probe settings; both checks are listed in the plan for the presenter, the stage, the figures, the
   camera, the paintings, the asset loader and a new chapter), `critic/RUBRIC.md` section 6a.
-- **The caps** (`continuityCaps` in `tools/critic-policy.mjs`, called by `validateReport`, so `critic-score` and `critic-clear`
+- **The caps** (`continuityCaps` in `tools/critic-continuity-caps.mjs`, re-exported by `tools/critic-policy.mjs` and called by `validateReport`, so `critic-score` and `critic-clear`
   refuse a report above one): while CHK-026 FAILS, `characterModels` and `animation` are at most **7.0**; while the snaps per
   minute of battle exceed **0.25**, `animation` is at most **7.5**. They bind Bailey's five visual sub-scores
   (`subScores` of a deep or milestone report), not the weighted score, from reports dated 2026-10-05 on; such a report must
