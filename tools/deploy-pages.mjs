@@ -836,8 +836,12 @@ async function main() {
   run('git', ['init', '-b', 'gh-pages'], { cwd: DIST });
   run('git', ['config', 'core.safecrlf', 'false'], { cwd: DIST });
   run('git', ['config', 'core.autocrlf', 'false'], { cwd: DIST });
-  run('git', ['config', 'user.name', 'Bailey Pillon'], { cwd: DIST });
-  run('git', ['config', 'user.email', 'baileypillon@gmail.com'], { cwd: DIST });
+  // The commit identity is the repository's own (D-402: its configured address is his GitHub noreply one), read from the repo root because a fresh repo in
+  // dist-release inherits no configuration. No personal address is written in this file; a repo with none configured gets a neutral deploy identity with no address.
+  const identityName = capture('git', ['config', '--get', 'user.name'], { cwd: ROOT, allowFail: true }) || 'Echoes of Spira deploy';
+  const identityEmail = capture('git', ['config', '--get', 'user.email'], { cwd: ROOT, allowFail: true });
+  run('git', ['config', 'user.name', identityName], { cwd: DIST });
+  run('git', ['config', 'user.email', identityEmail], { cwd: DIST });
   run('git', ['add', '-A'], { cwd: DIST });
 
   const isoNow = new Date().toISOString();
