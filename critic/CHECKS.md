@@ -623,7 +623,13 @@ zero responses with status >= 400, zero image responses with content-type
 survives a reload, and the same screenshot set as the preview run for
 comparison. Record the main sha and the bundle hash in the round report; the
 `critic/pending/<sha>.json` marker is cleared only by a round against that exact
-build.
+build. **The page a browser receives (release 39, D-418):** Cloudflare Web
+Analytics adds one beacon script to every HTML response whose `Accept` names
+text/html, so `verifyLive` fetches each HTML page twice: with a generic `Accept` it
+must equal the artifact's file, and with a browser's `Accept` it must equal it once
+exactly that element (and the line feed after it) is cut out; any other difference
+fails. `_headers`, which Cloudflare reads and never serves, is in the artifact and is
+not downloaded.
 **AUTOMATE:** yes, partly covered. `tools/deploy-pages.mjs` already verifies the
 live bundle hash and that art resolves, and `tests/e2e/portraits.spec.ts`
 watches for `/art/` 404s under the production base in preview. Missing: an e2e

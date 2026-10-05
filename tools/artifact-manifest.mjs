@@ -22,7 +22,13 @@
  * `artifactHash` leaves out the manifest itself and the deploy-only markers
  * (DEPLOY_ONLY_FILES: exactly `.nojekyll` at the root), which the deploy adds
  * for GitHub Pages; every real file counts, and verification still compares
- * every listed file, the marker included.
+ * every listed file, the marker included, except the host-read files
+ * (HOST_READ_FILES: `_headers`, which Cloudflare reads and never serves).
+ *
+ * The page is checked twice (release 39, D-418). A fetch with a generic `Accept` must
+ * equal the artifact's index.html. A fetch with a browser's `Accept` must equal it too,
+ * once the ONE script Cloudflare Web Analytics adds for browsers (and the line feed it
+ * writes after it) is cut out: nothing else may differ. See BROWSER_ACCEPT.
  *
  * Results are PASS, FAIL or UNVERIFIED. Anything that could not be checked is
  * UNVERIFIED, never PASS: a live site with no manifest, a file that would not
@@ -70,6 +76,57 @@ function walk(dir, root = dir, out = []) {
  * same (2026-09-29). Exactly these root paths, nothing else.
  */
 export const DEPLOY_ONLY_FILES = Object.freeze(['.nojekyll']);
+
+/**
+ * Root files a Cloudflare Workers upload reads as configuration and never serves. Only `_headers` is allowed, and
+ * `tools/deploy-host.mjs` vets its content before an upload. It is part of the artifact (listed, hashed, counted in
+ * `artifactHash`), but no address serves it, so live verification does not download it (it would answer 404, or with
+ * the page). Exactly these root paths.
+ */
+export const HOST_READ_FILES = Object.freeze(['_headers']);
+
+/**
+ * What a browser sends for a page. Cloudflare Web Analytics (the automatic setup, kept on for echoesofspira.com, D-418)
+ * adds ONE script to every HTML response whose `Accept` names text/html, and none to a generic `Accept`, so the live
+ * check asks the page both ways. On 2026-10-04 the page was 3,939 bytes for a browser against the artifact's 3,572: the
+ * element below, 366 bytes, and one line feed, written right before `</body>`:
+ *   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v<hash>" integrity="sha512-..."
+ *    data-cf-beacon='{"version":"...","token":"...","r":1,"spa":2}' crossorigin="anonymous"></script>
+ */
+export const BROWSER_ACCEPT = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+
+const BEACON_SRC = /^https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js(?:\/v[0-9a-f]+)?$/;
+const BEACON_ATTRIBUTES = new Set(['type', 'src', 'integrity', 'crossorigin', 'defer', 'async', 'nonce', 'data-cf-beacon']);
+const SCRIPT_ELEMENT = /<script((?:\s+[^\s"'<>\/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*)\s*><\/script>/gi;
+const ATTRIBUTE = /\s+([^\s"'<>\/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g;
+
+/** Is this the attribute text of Cloudflare's beacon: its own host and path as `src`, a `data-cf-beacon`, and no attribute it does not use? */
+function isBeaconScript(attributeText) {
+  const attributes = new Map();
+  for (const m of attributeText.matchAll(ATTRIBUTE)) {
+    const name = m[1].toLowerCase();
+    if (!BEACON_ATTRIBUTES.has(name) || attributes.has(name)) return false;
+    attributes.set(name, m[2] ?? m[3] ?? m[4] ?? '');
+  }
+  return BEACON_SRC.test(attributes.get('src') ?? '') && attributes.has('data-cf-beacon');
+}
+
+/**
+ * Cut Cloudflare's beacon out of a page, and nothing else. Returns how many beacon elements the page has and, only when
+ * there is exactly one, the byte strings that may equal the artifact's page: the page without the element and the one line
+ * feed Cloudflare writes after it (what it does), then without the element alone. Any other script, a beacon from another
+ * host, a second beacon or an element with an attribute Cloudflare does not use is not removed.
+ */
+export function withoutCloudflareBeacon(page) {
+  const bytes = Buffer.from(page);
+  const text = bytes.toString('latin1'); // one char per byte: offsets in the text are offsets in the bytes
+  const hits = [...text.matchAll(SCRIPT_ELEMENT)].filter((m) => isBeaconScript(m[1])).map((m) => ({ start: m.index, end: m.index + m[0].length }));
+  if (hits.length !== 1) return { beacons: hits.length, beaconBytes: 0, variants: [] };
+  const { start, end } = hits[0];
+  const cut = (to) => Buffer.concat([bytes.subarray(0, start), bytes.subarray(to)]);
+  const variants = text[end] === '\n' ? [{ bytes: cut(end + 1), lineFeed: true }, { bytes: cut(end), lineFeed: false }] : [{ bytes: cut(end), lineFeed: false }];
+  return { beacons: 1, beaconBytes: end - start, variants };
+}
 
 const hashLines = (files, keep) => sha256(Object.keys(files).filter(keep).sort().map((p) => `${p}\t${files[p].sha256}\n`).join(''));
 
@@ -166,12 +223,12 @@ export function shippedToRepoPaths(paths) {
   return paths.filter((p) => !p.startsWith('assets/') && p !== 'index.html' && p !== '.nojekyll').map((p) => `public/${p}`);
 }
 
-/** What to download: the page, all code, everything that changed, and an even sample of the rest. */
+/** What to download: the page, all code, everything that changed, and an even sample of the rest. A host-read file (`_headers`) is never downloaded: no address serves it. */
 export function selectForVerification(manifest, { changed = [], sample = 40, full = false } = {}) {
-  const all = Object.keys(manifest.files).sort();
+  const all = Object.keys(manifest.files).filter((p) => !HOST_READ_FILES.includes(p)).sort();
   if (full) return all;
   const picked = new Set(all.filter((p) => p === 'index.html' || p.startsWith('assets/')));
-  for (const p of changed) if (manifest.files[p]) picked.add(p);
+  for (const p of changed) if (manifest.files[p] && !HOST_READ_FILES.includes(p)) picked.add(p);
   const rest = all.filter((p) => !picked.has(p));
   const step = Math.max(1, Math.floor(rest.length / Math.max(1, sample)));
   for (let i = 0; i < rest.length && sample > 0; i += step) picked.add(rest[i]);
@@ -179,14 +236,36 @@ export function selectForVerification(manifest, { changed = [], sample = 40, ful
 }
 
 /**
+ * The page as a browser receives it: equal to the artifact's page, or to it plus exactly one Cloudflare Web Analytics beacon
+ * (see BROWSER_ACCEPT). Records what it saw in `out.browserPages[path]`, and any other difference as a mismatch.
+ */
+async function checkBrowserPage(out, fetchImpl, url, path, expectedSha256) {
+  const res = await fetchImpl(url, { headers: { Accept: BROWSER_ACCEPT } });
+  if (res.status !== 200) { out.missing.push(`${path} as a browser asks for it (${res.status})`); return; }
+  const buf = Buffer.from(await res.arrayBuffer());
+  if (sha256(buf) === expectedSha256) { out.browserPages[path] = 'identical to the artifact'; return; }
+  const cut = withoutCloudflareBeacon(buf);
+  const match = cut.variants.find((v) => sha256(v.bytes) === expectedSha256);
+  if (match) {
+    out.browserPages[path] = `identical to the artifact once Cloudflare's Web Analytics beacon is removed (${cut.beaconBytes} bytes${match.lineFeed ? ' and the line feed after it' : ''})`;
+    return;
+  }
+  const why = cut.beacons === 0 ? 'it differs and carries no Cloudflare beacon' : cut.beacons === 1 ? 'it differs by more than the one Cloudflare beacon' : `it carries ${cut.beacons} beacon elements`;
+  out.mismatched.push(`${path} as a browser asks for it (${why})`);
+}
+
+/**
  * Download from the real URL and compare bytes with the manifest.
  * PASS: the live manifest names this artifact and every selected file matched.
  * FAIL: a file differs, is missing, or has the wrong content type.
  * UNVERIFIED: the live site publishes no manifest, or something would not download.
+ * Every HTML page is fetched a second time with a browser's Accept header, and may then differ from the artifact by exactly
+ * Cloudflare's one Web Analytics beacon (`withoutCloudflareBeacon`), nothing more. `assetCacheControl` only reports what the
+ * first hashed bundle was served with (informational: it shows whether the host applied the artifact's `_headers`).
  */
 export async function verifyLive(manifest, baseUrl, { changed = [], sample = 40, full = false, fetchImpl = fetch, bust = String(Date.now()) } = {}) {
   const base = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-  const out = { result: 'UNVERIFIED', artifactHash: manifest.artifactHash, liveManifest: 'missing', checked: 0, mismatched: [], missing: [], wrongType: [], errors: [], notes: [] };
+  const out = { result: 'UNVERIFIED', artifactHash: manifest.artifactHash, liveManifest: 'missing', checked: 0, mismatched: [], missing: [], wrongType: [], errors: [], notes: [], browserPages: {}, assetCacheControl: null };
   try {
     const res = await fetchImpl(`${base}${MANIFEST_NAME}?v=${bust}`);
     if (res.status === 200) {
@@ -208,9 +287,15 @@ export async function verifyLive(manifest, baseUrl, { changed = [], sample = 40,
       const buf = Buffer.from(await res.arrayBuffer());
       if (sha256(buf) !== manifest.files[path].sha256) out.mismatched.push(path);
       out.checked++;
+      if (extname(path).toLowerCase() === '.html') await checkBrowserPage(out, fetchImpl, `${base}${path}?v=${bust}`, path, manifest.files[path].sha256);
+      else if (!out.assetCacheControl && /^assets\/.+\.(?:js|css)$/.test(path)) out.assetCacheControl = { path, value: res.headers.get('cache-control') ?? '' };
     } catch (err) {
       out.errors.push(`${path}: ${err.message}`);
     }
+  }
+  const hostRead = HOST_READ_FILES.filter((p) => manifest.files?.[p]);
+  if (hostRead.length) {
+    out.notes.push(`${hostRead.join(', ')} ${hostRead.length > 1 ? 'are' : 'is'} part of this artifact and was not downloaded (no address serves a host-read file)${out.assetCacheControl ? `; ${out.assetCacheControl.path} was served with Cache-Control "${out.assetCacheControl.value}"` : ''}`);
   }
   if (out.mismatched.length || out.missing.length || out.wrongType.length || out.liveManifest === 'mismatch') out.result = 'FAIL';
   else if (out.errors.length || out.liveManifest !== 'match' || out.checked === 0) out.result = 'UNVERIFIED';
