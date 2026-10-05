@@ -55,10 +55,15 @@ const arg = (name, fallback = null) => {
 };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/** Serve `dir` with `vite preview`; resolves once it answers. */
+/**
+ * Serve `dir` with `vite preview`; resolves once it answers. The preview serves under the base the build was made for, which is
+ * `vite.config.ts`'s own rule (`BASE_PATH`, else `/pyrefly-reprise/`): a Cloudflare build (BASE_PATH=/, the default host since
+ * release 38) is audited with `BASE_PATH=/` in the environment. (Git Bash turns a lone `/` in an environment variable into its own
+ * install folder: set it from PowerShell, or with MSYS_NO_PATHCONV=1.)
+ */
 async function startPreview(dir, port) {
   const child = spawn(process.execPath, [join(ROOT, 'node_modules', 'vite', 'bin', 'vite.js'), 'preview', '--outDir', dir, '--port', String(port), '--strictPort', '--host', '127.0.0.1'], { cwd: ROOT, stdio: 'ignore', windowsHide: true });
-  const base = `http://127.0.0.1:${port}/pyrefly-reprise/`;
+  const base = `http://127.0.0.1:${port}${process.env.BASE_PATH ?? '/pyrefly-reprise/'}`;
   for (let i = 0; i < 80; i++) {
     try {
       if ((await fetch(base)).ok) return { child, base };
