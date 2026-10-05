@@ -47,7 +47,7 @@ describe('the mapping from a master to the file the site serves', () => {
     expect(shippedArtUrl('art/backdrops/gagazet.png')).toBe('art/backdrops/gagazet.webp');
     expect(shippedArtUrl('https://example.test/pyrefly-reprise/art/portraits/lulu.png?v=7#x')).toBe('https://example.test/pyrefly-reprise/art/portraits/lulu.webp?v=7#x');
     expect(shippedArtUrl(`${BASE}art/backdrops/cavern-stolen-fayth/sakura.png`)).toBe(`${BASE}art/backdrops/cavern-stolen-fayth/sakura.webp`);
-    expect(shippedArtUrl(`${BASE}art/characters/tidus/idle@2x.png`)).toBe(`${BASE}art/characters/tidus/idle@2x.webp`);
+    expect(shippedArtUrl(`${BASE}art/characters/tidus/idle@2x.png`)).toBe(`${BASE}art/characters/tidus/idle%402x.webp`); // the @ goes on the wire as %40
     expect(shippedArtUrl(`${BASE}art/portrait-parts/kimahri/1x/eyeL-iris.png`)).toBe(`${BASE}art/portrait-parts/kimahri/1x/eyeL-iris.webp`);
   });
 
@@ -89,6 +89,37 @@ describe('the mapping from a master to the file the site serves', () => {
     expect(shippedArtUrl(`${BASE}art/characters/tidus/idle.png`)).toBe(`${BASE}art/characters/tidus/idle.png`);
   });
 
+  it('writes the @ of a master\'s name as %40, with a build list or without one (dev, tests), and reads it back as @ (LV-2, release 39)', () => {
+    // Cloudflare answers the raw `idle@2x.png` with a 307 to `idle%402x.png` and only that path with a 200.
+    for (const list of [DERIVED, null]) {
+      setShippedArt(list);
+      const ext = list === null ? 'png' : 'webp';
+      expect(shippedArtUrl(`${BASE}art/characters/tidus/idle@2x.png`)).toBe(`${BASE}art/characters/tidus/idle%402x.${ext}`);
+      expect(shippedArtUrl(`${BASE}art/characters/tidus/idle%402x.png`)).toBe(`${BASE}art/characters/tidus/idle%402x.${ext}`); // already in the wire form
+      expect(shippedArtUrl(`${BASE}art/characters/tidus/idle@2x.json`)).toBe(`${BASE}art/characters/tidus/idle%402x.json`);
+      expect(shippedArtUrl(`${BASE}art/backdrops/gagazet@2x.png?v=1#x`)).toBe(`${BASE}art/backdrops/gagazet%402x.png?v=1#x`); // a master that is not in the list stays PNG
+      expect(shippedArtUrl(`${BASE}art/characters/tidus/idle%402x.png`)).not.toContain('@');
+      expect(logicalArtUrl(`${BASE}art/characters/tidus/idle%402x.${ext}`)).toBe(`${BASE}art/characters/tidus/idle@2x.png`);
+      expect(logicalArtUrl(`${BASE}art/characters/tidus/idle@2x.png`)).toBe(`${BASE}art/characters/tidus/idle@2x.png`); // the master's own name reads as itself
+      expect(logicalArtUrl(`${BASE}art/backdrops/gagazet%402x.png?v=1`)).toBe(`${BASE}art/backdrops/gagazet@2x.png?v=1`);
+    }
+    setShippedArt(undefined);
+  });
+
+  it('touches only the path of an art URL: a query, a hash, another folder and a word that merely ends in "art" keep their @ and %40', () => {
+    for (const u of [
+      `${BASE}index.html?mail=a@b.test`,
+      `${BASE}index.html#idle@2x`,
+      `${BASE}fx/gagazet/idle@2x.png`, // not under art/
+      `${BASE}martart/characters/tidus/idle@2x.png`, // "art/" inside another word is not the art folder
+      `${BASE}audio/idle%402x.mp3`,
+    ]) {
+      expect(shippedArtUrl(u), u).toBe(u);
+      expect(logicalArtUrl(u), u).toBe(u);
+    }
+    expect(shippedArtUrl(`${BASE}art/characters/tidus/idle@2x.png?next=a@b`)).toBe(`${BASE}art/characters/tidus/idle%402x.webp?next=a@b`);
+  });
+
   it('artUrl hands the browser the file the site serves', () => {
     expect(artUrl('art/characters/tidus/idle.png')).toMatch(/\/art\/characters\/tidus\/idle\.webp$/);
     expect(artUrl('/art/backdrops/gagazet.png')).toMatch(/\/art\/backdrops\/gagazet\.webp$/);
@@ -102,6 +133,8 @@ describe('the mapping from a master to the file the site serves', () => {
     expect(sidecarUrlOf(`${BASE}art/characters/tidus/idle.webp`)).toBe(`${BASE}art/characters/tidus/idle.json`);
     expect(sidecarUrlOf(`${BASE}art/characters/tidus/idle.png`)).toBe(`${BASE}art/characters/tidus/idle.json`);
     expect(sidecarUrlOf(`${BASE}art/pause/ch1-seymour-flux.webp`)).toBe(`${BASE}art/pause/ch1-seymour-flux.json`);
+    // a master's sidecar is asked for in the wire form too, from the raw name or from either served form
+    for (const u of ['idle@2x.png', 'idle%402x.png', 'idle%402x.webp']) expect(sidecarUrlOf(`${BASE}art/characters/tidus/${u}`), u).toBe(`${BASE}art/characters/tidus/idle%402x.json`);
   });
 });
 
@@ -155,14 +188,14 @@ describe('what reads an art URL apart sees the master, whichever form it is give
 
   it('the 2x tier names the 2x master as the site serves it', () => {
     setArtManifest(MANIFEST);
-    expect(hiResUrl(artUrl('art/characters/tidus/idle.png'))).toMatch(/\/art\/characters\/tidus\/idle@2x\.webp$/);
-    expect(hiResUrl(`${BASE}art/characters/tidus/idle.png`)).toBe(`${BASE}art/characters/tidus/idle@2x.webp`);
+    expect(hiResUrl(artUrl('art/characters/tidus/idle.png'))).toMatch(/\/art\/characters\/tidus\/idle%402x\.webp$/);
+    expect(hiResUrl(`${BASE}art/characters/tidus/idle.png`)).toBe(`${BASE}art/characters/tidus/idle%402x.webp`);
     // Release 39: a backdrop has masters too (`backdrops/<key>@2x.png`); the other art folders do not.
-    expect(hiResUrl(`${BASE}art/backdrops/gagazet.webp`)).toBe(`${BASE}art/backdrops/gagazet@2x.png`);
+    expect(hiResUrl(`${BASE}art/backdrops/gagazet.webp`)).toBe(`${BASE}art/backdrops/gagazet%402x.png`);
     expect(hiResUrl(`${BASE}art/portraits/tidus.png`)).toBeNull();
     expect(hiResUrl(`${BASE}art/pause/ch1-seymour-flux.png`)).toBeNull();
     setShippedArt(['art/characters/tidus/idle.png']); // the 2x master stayed PNG
-    expect(hiResUrl(`${BASE}art/characters/tidus/idle.webp`)).toBe(`${BASE}art/characters/tidus/idle@2x.png`);
+    expect(hiResUrl(`${BASE}art/characters/tidus/idle.webp`)).toBe(`${BASE}art/characters/tidus/idle%402x.png`);
   });
 
   it('a KO painting is still the KO painting, and keeps its corrected scale', () => {

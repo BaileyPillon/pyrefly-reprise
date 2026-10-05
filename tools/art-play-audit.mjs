@@ -109,9 +109,14 @@ async function scenario(browser, id, base, dir, viewport, mobile, settle, play) 
   });
   page.on('response', (r) => {
     const url = r.url();
-    const rel = url.startsWith(base) ? url.slice(base.length).split(/[?#]/)[0] : null;
+    const wire = url.startsWith(base) ? url.slice(base.length).split(/[?#]/)[0] : null;
+    // The game asks for a master as `idle%402x.png` (ArtShipped.ts); the file on disk is `idle@2x.png`, so the path is decoded before it is looked up.
+    let rel = wire;
+    try { rel = wire === null ? null : decodeURIComponent(wire); } catch { rel = wire; }
     rec.statuses[r.status()] = (rec.statuses[r.status()] ?? 0) + 1;
     if (r.status() >= 400) fail(`HTTP ${r.status()} ${url.replace(base, '')}`);
+    // Release 39 (LV-2): Cloudflare answers a raw @ in an art URL with a 307 before the 200, so no request may carry one (an image or its sidecar).
+    if (wire !== null && /^art\//.test(wire) && wire.includes('@')) fail(`asked for ${wire} with a raw @ (it must be %40): a URL that did not go through artUrl`);
     if (!IMAGE.test(url)) return;
     const type = (r.headers()['content-type'] ?? '').split(';')[0];
     rec.images.push({ url: rel ?? url, status: r.status(), type });

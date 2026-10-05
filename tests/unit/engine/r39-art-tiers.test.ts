@@ -181,9 +181,9 @@ describe('eviction', () => {
 
 describe('master URLs', () => {
   it('names a figure state or a backdrop at a scale, and nothing else', () => {
-    expect(tierUrl('/pyrefly-reprise/art/characters/tidus/ready.png', 3)).toBe('/pyrefly-reprise/art/characters/tidus/ready@3x.png');
-    expect(tierUrl('/art/characters/sin-left-fin/idle-far.png?v=1', 4)).toBe('/art/characters/sin-left-fin/idle-far@4x.png?v=1');
-    expect(tierUrl('/art/backdrops/gagazet.png', 2)).toBe('/art/backdrops/gagazet@2x.png');
+    expect(tierUrl('/pyrefly-reprise/art/characters/tidus/ready.png', 3)).toBe('/pyrefly-reprise/art/characters/tidus/ready%403x.png');
+    expect(tierUrl('/art/characters/sin-left-fin/idle-far.png?v=1', 4)).toBe('/art/characters/sin-left-fin/idle-far%404x.png?v=1');
+    expect(tierUrl('/art/backdrops/gagazet.png', 2)).toBe('/art/backdrops/gagazet%402x.png');
     expect(tierUrl('/art/characters/tidus/idle.png', 1)).toBeNull();
     expect(tierUrl('/art/characters/tidus/idle.png', 5)).toBeNull();
     expect(tierUrl('/art/characters/tidus/idle.png', 2.5)).toBeNull();
@@ -199,6 +199,15 @@ describe('master URLs', () => {
     expect(scaleOfUrl('/art/characters/tidus/ready@4x.webp?x=1')).toBe(4);
     expect(scaleOfUrl('/art/characters/tidus/ready.png')).toBe(1);
     expect(scaleOfUrl('/art/pause/ch1.2x.webp')).toBe(1);
+  });
+  it('is read back from the wire form too: the @ of a master goes out as %40 (LV-2, release 39), and no tier URL has a raw @', () => {
+    expect(scaleOfUrl('/art/characters/tidus/ready%403x.png')).toBe(3);
+    expect(scaleOfUrl('/art/characters/tidus/ready%404x.webp?x=1')).toBe(4);
+    expect(scaleOfUrl(tierUrl('/art/backdrops/gagazet.png', 2) ?? '')).toBe(2);
+    for (const scale of [2, 3, 4]) {
+      expect(tierUrl('/pyrefly-reprise/art/characters/tidus/ready.png', scale)).not.toContain('@');
+      expect(tierUrl('/pyrefly-reprise/art/backdrops/gagazet.png', scale)).not.toContain('@');
+    }
   });
 });
 
@@ -230,6 +239,10 @@ describe('the manifest lists masters, and only those beside a 1x file', () => {
     expect(await manifestKnowsAsset('/art/backdrops/gagazet@2x.png')).toBe(true);
     expect(await manifestKnowsAsset('/art/backdrops/gagazet@4x.png')).toBe(false);
     expect(await manifestKnowsAsset('/art/backdrops/bevelle-underground@2x.png')).toBe(false);
+    // the wire form (`%40`, ArtShipped.ts) is judged as the same master
+    expect(await manifestKnowsAsset('/art/characters/tidus/ready%403x.png')).toBe(true);
+    expect(await manifestKnowsAsset('/art/characters/tidus/idle%403x.png')).toBe(false);
+    expect(await manifestKnowsAsset('/art/backdrops/gagazet%402x.png')).toBe(true);
   });
   it('answers which scales a painting has, or null with no manifest', async () => {
     expect(artScalesForNow('/art/characters/tidus/ready.png')).toBeNull();
@@ -274,27 +287,27 @@ describe('which file a painting is drawn from', () => {
     expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready.png');
     setBufferWidth(2560);
     expect(baseScaleFor('/art/characters/tidus/ready.png')).toBe(2);
-    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png');
-    expect(await pixelUrlFor('/art/characters/tidus/ready.png', 2.95)).toBe('/art/characters/tidus/ready@3x.png');
-    expect(await pixelUrlFor('/art/characters/tidus/ready.png', 3.4)).toBe('/art/characters/tidus/ready@4x.png');
-    expect(await pixelUrlFor('/art/characters/tidus/idle.png', 2.95)).toBe('/art/characters/tidus/idle@4x.png'); // no 3x of idle on disk
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready%402x.png');
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png', 2.95)).toBe('/art/characters/tidus/ready%403x.png');
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png', 3.4)).toBe('/art/characters/tidus/ready%404x.png');
+    expect(await pixelUrlFor('/art/characters/tidus/idle.png', 2.95)).toBe('/art/characters/tidus/idle%404x.png'); // no 3x of idle on disk
     expect(await pixelUrlFor('/art/characters/tidus/attack.png', 3)).toBe('/art/characters/tidus/attack.png'); // none at all
   });
   it('a weaker device stops at its own ceiling', async () => {
     setArtManifest(tidus());
     setBufferWidth(3840);
     setArtTier('mid');
-    expect(await pixelUrlFor('/art/characters/tidus/ready.png', 4)).toBe('/art/characters/tidus/ready@2x.png');
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png', 4)).toBe('/art/characters/tidus/ready%402x.png');
     setArtTier('phone');
     setBufferWidth(780);
     expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready.png');
-    expect(await pixelUrlFor('/art/characters/tidus/ready.png', 1.8)).toBe('/art/characters/tidus/ready@2x.png');
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png', 1.8)).toBe('/art/characters/tidus/ready%402x.png');
   });
   it('a backdrop is drawn from its 2x master only where the device holds it', async () => {
     setArtManifest(tidus());
     setBufferWidth(2560);
     setArtTier('high');
-    expect(await pixelUrlFor('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet@2x.png');
+    expect(await pixelUrlFor('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet%402x.png');
     setBufferWidth(1920);
     expect(await pixelUrlFor('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet.png');
     setBufferWidth(2560);
@@ -307,10 +320,10 @@ describe('which file a painting is drawn from', () => {
     setArtTier('high');
     setBufferWidth(2560);
     expect(await pixelUrlFor('/art/characters/tidus/idle.png')).toBe('/art/characters/tidus/idle.png'); // only a 4x on disk: the base is 2
-    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png');
-    expect(await pixelUrlFor('/art/characters/tidus/idle.png', 2)).toBe('/art/characters/tidus/idle@4x.png'); // the governor may ask for more
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready%402x.png');
+    expect(await pixelUrlFor('/art/characters/tidus/idle.png', 2)).toBe('/art/characters/tidus/idle%404x.png'); // the governor may ask for more
     setForcedArtScale(3);
-    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png'); // pinned to 3, no 3x: the 2x
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready%402x.png'); // pinned to 3, no 3x: the 2x
     setForcedArtScale(null);
   });
   it('only the poses the first menu draws start at the base master; the rest start at the approved file, and the governor still may ask', async () => {
@@ -322,7 +335,7 @@ describe('which file a painting is drawn from', () => {
       expect(baseScaleFor('/art/characters/tidus/' + state + '.png')).toBe(1);
       expect(await pixelUrlFor('/art/characters/tidus/' + state + '.png')).toBe('/art/characters/tidus/' + state + '.png');
     }
-    expect(await pixelUrlFor('/art/characters/tidus/attack.png', 1.4)).toBe('/art/characters/tidus/attack@2x.png'); // a need still gets its master
+    expect(await pixelUrlFor('/art/characters/tidus/attack.png', 1.4)).toBe('/art/characters/tidus/attack%402x.png'); // a need still gets its master
     expect(baseScaleFor('/art/backdrops/gagazet.png')).toBe(2); // the backdrop is the opening frame
     setForcedArtScale(2); // a pin and release 35's switch are for every painting
     expect(baseScaleFor('/art/characters/tidus/attack.png')).toBe(2);
@@ -340,15 +353,15 @@ describe('which file a painting is drawn from', () => {
     setArtManifest(tidus());
     setArtTier('high');
     setBufferWidth(3840);
-    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png');
-    expect(await pixelUrlFor('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet@2x.png');
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready%402x.png');
+    expect(await pixelUrlFor('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet%402x.png');
     setSlowLink(true);
     expect(baseScaleFor('/art/characters/tidus/ready.png')).toBe(1);
     expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready.png');
     expect(await pixelUrlFor('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet.png');
-    expect(await pixelUrlFor('/art/characters/tidus/ready.png', 2.95)).toBe('/art/characters/tidus/ready@3x.png'); // a close shot still gets its master
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png', 2.95)).toBe('/art/characters/tidus/ready%403x.png'); // a close shot still gets its master
     setSlowLink(false);
-    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png');
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready%402x.png');
   });
   it('reads the connection: data-saver, 3G or under 10 Mbit/s is slow; no connection API reads as fast', () => {
     const nav = (globalThis as { navigator?: unknown }).navigator;
@@ -390,7 +403,7 @@ describe('which file a painting is drawn from', () => {
     expect(await pixelUrlFor('/art/characters/tidus/ready.png', 3)).toBe('/art/characters/tidus/ready.png');
     setHiTier(true);
     expect(baseScaleFor('/art/characters/tidus/ready.png')).toBe(2);
-    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready@2x.png');
+    expect(await pixelUrlFor('/art/characters/tidus/ready.png')).toBe('/art/characters/tidus/ready%402x.png');
   });
 });
 

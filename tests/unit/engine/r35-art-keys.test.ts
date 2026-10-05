@@ -51,10 +51,10 @@ describe('2x tier: the device rule', () => {
 
 describe('2x tier: URLs and the manifest gate', () => {
   it('maps a chosen character painting or a backdrop to its @2x file (release 39 widened the backdrops in)', () => {
-    expect(hiResUrl('/pyrefly-reprise/art/characters/tidus/idle.png')).toBe('/pyrefly-reprise/art/characters/tidus/idle@2x.png');
-    expect(hiResUrl('/art/characters/sin-left-fin/idle-far.png?v=1')).toBe('/art/characters/sin-left-fin/idle-far@2x.png?v=1');
+    expect(hiResUrl('/pyrefly-reprise/art/characters/tidus/idle.png')).toBe('/pyrefly-reprise/art/characters/tidus/idle%402x.png');
+    expect(hiResUrl('/art/characters/sin-left-fin/idle-far.png?v=1')).toBe('/art/characters/sin-left-fin/idle-far%402x.png?v=1');
     expect(hiResUrl('/art/characters/tidus/idle.2.png')).toBeNull();
-    expect(hiResUrl('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet@2x.png');
+    expect(hiResUrl('/art/backdrops/gagazet.png')).toBe('/art/backdrops/gagazet%402x.png');
     expect(hiResUrl('/art/portraits/tidus.png')).toBeNull();
     expect(hiResUrl('/art/pause/ch1.png')).toBeNull();
   });
@@ -68,7 +68,7 @@ describe('2x tier: URLs and the manifest gate', () => {
   it('pixels come from the master on the 2x tier and from the 1x file otherwise', async () => {
     setArtManifest(manifest({ tidus: { states: ['idle', 'attack'], states2x: ['idle'] } }));
     setHiTier(true);
-    expect(await pixelUrlFor('/art/characters/tidus/idle.png')).toBe('/art/characters/tidus/idle@2x.png');
+    expect(await pixelUrlFor('/art/characters/tidus/idle.png')).toBe('/art/characters/tidus/idle%402x.png');
     expect(await pixelUrlFor('/art/characters/tidus/attack.png')).toBe('/art/characters/tidus/attack.png');
     setHiTier(false);
     expect(await pixelUrlFor('/art/characters/tidus/idle.png')).toBe('/art/characters/tidus/idle.png');

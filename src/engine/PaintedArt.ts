@@ -169,7 +169,7 @@ export async function tryLoadTexture(url: string): Promise<Texture | null> {
 
 /** Reads `<image>.json`. Resolves to null when there is no sidecar. */
 export async function tryLoadMeta(imageUrl: string): Promise<PoseMeta | null> {
-  const jsonUrl = imageUrl.replace(/\.[a-z0-9]+$/i, '.json');
+  const jsonUrl = shippedArtUrl(imageUrl.replace(/\.[a-z0-9]+$/i, '.json')); // a master's sidecar is asked for as `idle%402x.json` too (ArtShipped.ts)
   try {
     const res = await fetchWithOneRetry(jsonUrl, { cache: 'no-cache' });
     if (!res.ok) return null;

@@ -100,9 +100,9 @@ export function artScalesForNow(url: string): readonly number[] | null {
   return manifest ? scalesOf(manifest, url) : null;
 }
 
-/** Which master a URL names: `idle@3x.png` or `idle@3x.webp` is 3, anything else (the approved painting) is 1. */
+/** Which master a URL names: `idle@3x.png`, `idle@3x.webp` or the wire form `idle%403x.webp` is 3, anything else (the approved painting) is 1. */
 export function scaleOfUrl(url: string): number {
-  const m = /@([2-4])x\.(?:png|webp)(?:$|[?#])/.exec(url);
+  const m = /@([2-4])x\.(?:png|webp)(?:$|[?#])/.exec(logicalArtUrl(url)); // the wire form writes the @ as %40 (ArtShipped.ts)
   return m ? Number(m[1]) : 1;
 }
 
