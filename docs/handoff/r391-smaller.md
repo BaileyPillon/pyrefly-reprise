@@ -1,6 +1,6 @@
 # r391-smaller: release 39.1, the smaller decisions (B2, B3, B5, B6, B8, B9, B10, B11, N1)
 
-Built 2026-10-05 by a Sonnet sub-agent for the driver, on branch `r391-smaller` (from `origin/main` cfab29b4, worktree `D:/Tools/pyrefly-scratch/2026-10-05/r391-smaller`).
+Built 2026-10-05 by a Sonnet sub-agent for the driver, on branch `r391-smaller` (from `origin/main` cfab29b4, worktree `D:/pyrefly-cf-switch`).
 Nothing was merged into main and nothing was deployed. Bailey, 2026-10-05: **"I'll go with all of your recommendations"** and **"you can go full speed
 ahead i have another account with full usage"**; after seeing the B2, B6 and B9 before/after frames: **"I love the new changes. keep it going. it's lit."**
 (B9 as built: the symmetric `DISC_LIFT` 0.30 layout.) B1, B4, B7, U1 and U2 are "no change" and were not touched.
@@ -95,4 +95,4 @@ Tests: `r391-mark-moment` (19: the record, the code, the hashes, the storage, th
 ## Where things are
 
 Branch `r391-smaller` on origin (the commits are listed by `git log cfab29b4..r391-smaller`; every subject names its game case). Scratch evidence (run.json
-files, frames, logs, the capture scripts) is under `D:\Tools\pyrefly-scratch6-10-05391-smaller`. The dev server on port 7391 is stopped.
+files, frames, logs, the capture scripts) is under `D:/Tools/pyrefly-scratch/2026-10-05/r391-smaller`. The dev server on port 7391 is stopped.
