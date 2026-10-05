@@ -16,23 +16,23 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-876 decisions in all: 426 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 586 of the written decisions record a blanket yes.
+886 decisions in all: 436 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 593 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 817 |
+| adopted | 827 |
 | proposed | 11 |
 | deferred | 4 |
 | rejected | 11 |
 | superseded | 33 |
-| **All** | **876** |
+| **All** | **886** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 72 |
-| art | 197 |
+| combat | 73 |
+| art | 204 |
 | visuals | 63 |
-| camera | 23 |
+| camera | 24 |
 | audio | 30 |
 | ui | 115 |
 | story | 15 |
@@ -40,20 +40,20 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | guide | 28 |
 | release | 31 |
 | hosting | 14 |
-| process | 69 |
+| process | 70 |
 | critic | 24 |
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **876** |
+| **All** | **886** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 377 |
-| FFX only | 271 |
-| FFX-2 only | 211 |
+| both games | 385 |
+| FFX only | 272 |
+| FFX-2 only | 212 |
 | FF7 hidden experiment | 17 |
-| **All** | **876** |
+| **All** | **886** |
 
 ## Standing rules in force
 
@@ -90,6 +90,7 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **Public-repository privacy**: nothing committed to the repository carries an email address, card or payment details, an account id, a token or key, or his other personal projects (Claude accounts are named #1, #2 and #3); changed files are checked for the at sign, card-like digits and long hex ids before every commit, and rewriting published history is his decision alone. Decision [D-396](#d-396) (2026-10-04, both games).
 - **Every deep review includes a first-time-fan lens**: a reviewer who only lists immersion breakers from the checklist in critic/runner/deep.js, working from the continuity strips and event-locked clips, and whose findings are issues, not scores. Decision [D-423](#d-423) (2026-10-04, both games).
 - **Score caps tied to the continuity checks: while CHK-026 fails, characterModels and animation are capped at 7.0; while snaps per minute exceed the threshold, animation is capped at 7.5**: While CHK-026 (size continuity) fails, the characterModels and animation sub-scores are capped at 7.0; while snaps per minute of battle exceed the policy threshold (critic/policy.json, continuity), animation is capped at 7.5; the chief critic cannot score above a cap and the validator refuses a report that does. Decision [D-424](#d-424) (2026-10-04, both games).
+- **Stop copying on the D drive**: sessions make no new full repo copies, reuse an existing worktree, and delete their finished copies and builds, removing folder links first. Decision [D-436](#d-436) (2026-10-04, both games).
 
 ## Waiting on Bailey's yes
 
@@ -3588,7 +3589,7 @@ Saturday · 56 decisions
 
 ### 2026-10-04
 
-Sunday · 59 decisions
+Sunday · 69 decisions
 
 - <a id="d-368"></a>**D-368** — The player-facing working title becomes Echoes of Spira in release 38 (title screen, browser title, meta, chapter select, pause, credits, disclaimer); the repo, folders, internal identifiers and save keys keep 'pyrefly'; a painted logo is a later option for Bailey
   - Bailey: “I'll go with Echoes of Spira. The name change should take place immediate in our next build please.”
@@ -3885,3 +3886,53 @@ Sunday · 59 decisions
   - What changed: Planned, not built tonight: once Bailey has played release 39 he gives his own 1 to 10 rating for each of the five visual sub-scores the critic reports (characterModels, enemyModels, animation, fidelity, camera; critic/rounds/round-21.json subScores), and the critic's numbers for the same build are compared with his to find how far apart they are and in which direction; the result adjusts how the chief critic reconciles those five numbers, and is recorded as a calibration run in critic/calibration/runs/ (critic/RUBRIC.md section 9: run the calibration when a prompt or the reviewing model changes and show him the size of the run first). Nothing is built for it yet and no run happens before he has played. Both games: shared critic process.
   - area critic · both games · adopted · delivery not scheduled · at ~22:56 EDT · see [D-424](#d-424), [D-425](#d-425)
   - Source: Bailey, 2026-10-04 ~22:56 EDT, in chat, in the same reply as D-420 ("I'll go with all your recommendations"), recommendation (g) of the driver's six …
+- <a id="d-427"></a>**D-427** — Seymour Natus stands 346 px tall at 1600x900 in Chapter X (207 px on release 38), from a per-chapter framing table that also puts his Sensor card clear of him: accepted after he saw the side-by-side
+  - Bailey: “Ok great”
+  - What changed: Release 39 plays Chapter X's first menu with Natus 346 px tall at 1600x900 (389 px at 2000x1012 and 554 px at 2560x1440, against 207, 240 and 331 px on release 38, which held the colossus framing off for him), the same on every run: the framing now comes from a per-chapter table that pins one master and one place for the Sensor card, with no search and no re-plan. The size is one number in the table (BOSS SCALE step 0.45), so a bigger or smaller Natus is a table edit and a fresh proof and nothing else moves. His OK is for the size: Braska's Final Aeon, Evrae and Yunalesca keep today's framing, FFX-2 and the phone are untouched. The focused review's first HOLD (the Sensor card sat on his body, about 48 percent of him, at 1600x900) was fixed before the release went live (6bd12f55: 0.0 to 0.1 percent at 1440x810 and wider); in windows under 1440x810 the card still touches his wing-spike tips (R39F-11, disclosed). Shipped live in release 39 (main 816d80f9). FFX only.
+  - area camera · FFX · adopted · delivery implemented · at ~22:45 EDT · see [D-319](#d-319), [D-353](#d-353), [D-409](#d-409)
+  - Source: docs/screenshots/r39-natus/natus-1600x900-first-menu-side-by-side.jpg; docs/handoff/r39-natus.md; and others
+- <a id="d-428"></a>**D-428** — Lady Luck's reels are timed by the press (option A, the slow strip): 5 symbols a second, the symbol on the gold line at the press is the result, pictured symbols and a 12 second safety timer, with the speed and the timer our estimates
+  - Bailey: “I'll go with pick A, the slow strip”
+  - What changed: Release 39 ships Lady Luck's reels as option A of the options page: three reels, each a strip of its six symbols in the data's order scrolling at 5 symbols a second (200 ms a symbol); a press stops the reel the pink arrow marks, on the symbol that is on the gold line at that instant, and the strip eases onto it in 0.15 s; the symbols are pictures (Red 7, BAR, Cherry, Sword, Helmet, Paw or Skull, Hat, Staff, all original drawings); the pay table and the Dud (75 percent of every ally's current HP) are as before; and a 12 second safety timer stops any reel left where it is. The speed and the timer are our estimates (no source gives Lady Luck's reels a rate or a timer) and each is a one-line edit with the test that pins it. It replaces the luck-only reels release 38 would have kept (D-417, with the 26 percent pay rate stated). A key, a pad button or a tap or click all work, in Wait and in Active. The engine draws the stop order and the strip phases from the seeded stream, so everything but the player's timing stays reproducible and the autopilot's lines are identical in all seven FFX-2 chapters over seeds 1 to 200. Shipped live in release 39 (main 816d80f9). FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery implemented · at ~23:13 EDT · see [D-361](#d-361), [D-363](#d-363), [D-373](#d-373), [D-417](#d-417)
+  - Source: AGENTS.md; docs/handoff/ladyluck-reels-a.md
+- <a id="d-429"></a>**D-429** — The painterly finish (S2, FLUX.2 Klein) is the target direction for character and boss paintings, and the roll-out is decided per game
+  - Bailey: “I'll go with your recommendations, painterly” (blanket yes)
+  - What changed: The painterly finish becomes the finish the character and boss paintings are heading for: the visible painted upgrade that sits in the backdrop, in place of S1 (premium cel: the same picture as today at battle size), S3a (semi-real: changes who the characters are) and S3b (a render pasted on a painting). It is a direction and not a build: no painting changes in the game on this yes, and each game's roll-out is decided separately (FFX and FFX-2 are separate games) after the identity-lock round of D-430 passes. It also settles the detail-method question the pilots left open: a stronger pass over the same painting is the same picture at battle size, so only a redraw in the new finish is richer (the overnight refine pass is retired, D-433). Both games.
+  - area art · both games · adopted · delivery not scheduled · at ~23:58 EDT · see [D-387](#d-387), [D-430](#d-430), [D-433](#d-433)
+  - Source: docs/handoff/NOW.md; docs/handoff/r39-art.md
+- <a id="d-430"></a>**D-430** — Next is an identity-lock round on Tidus (FFX), Seymour Flux (FFX) and Yuna Gunner (FFX-2): the painterly finish with faces and costume parts held to the approved paintings, shown to him before anything changes in the game
+  - Bailey: “I'll go with your recommendations, painterly” (blanket yes)
+  - What changed: The r39-art lane ran the lock round before any roll-out: the painterly finish redrawn with close-ups of the approved head and costume as extra references and an init lock (the painting's own latent noised to sigma 0.99), which holds the silhouette (IoU 0.98 to 0.99, Yuna Gunner 0.95), the costume parts and the seeds' agreement, plus a palette lock (C) and a painterly face pass (D) to take out the colour and face drift. Done overnight: the candidates are in D:/Tools/pyrefly-art-backup/candidates/2026-10-05-painterly-lock/ (nothing installed, no approved painting touched), with the recommendation D as the default and C per figure where the face pass makes a face younger; they keep about a third to a half of the first round's finish by the CLIP measure and look visibly painted by eye. They await his look: he names what is right and wrong in each, and his pick approves only what he names. Tidus and Seymour Flux are FFX only, Yuna Gunner FFX-2 only, and the method is shared plumbing.
+  - area art · both games · adopted · delivery in progress · at ~23:58 EDT · see [D-429](#d-429), [D-431](#d-431), [D-435](#d-435)
+  - Source: docs/handoff/r39-art.md
+- <a id="d-431"></a>**D-431** — His yes covers the painterly finish redrawing faces and small parts of the approved paintings, within the identity lock
+  - Bailey: “I'll go with your recommendations, painterly” (blanket yes)
+  - What changed: Answers the second question of the page: S2 and S3 change faces and small parts of the approved paintings where S1 does not, and his yes covers that for the painterly finish as long as it stays inside the lock of D-430 (the approved face, costume parts and silhouette are the reference). So a redrawn face or a redrawn belt is allowed and a different character is not. Nothing is replaced on this yes: an approved painting is still never replaced on an agent's say-so (AGENTS.md rule 9 and the approved-hashes lock), and the lock round's candidates go to him first. Both games.
+  - area art · both games · adopted · delivery not scheduled · at ~23:58 EDT · see [D-429](#d-429), [D-430](#d-430)
+  - Source: Bailey, 2026-10-04 ~23:58 EDT, in chat, answering the figure-finish options page (https://claude.ai/artifact/UerhBdiSdN8PeAk5rPLiCJ; S1 premium cel, …
+- <a id="d-432"></a>**D-432** — The FLUX.2 Klein non-commercial weights are accepted for the free fan game, and the licence is read again before any commercial plan
+  - Bailey: “I'll go with your recommendations, painterly” (blanket yes)
+  - What changed: The painterly finish is drawn with FLUX.2 Klein 9B, whose weights are under the FLUX Non-Commercial License v2.1 (the weights are for non-commercial use; the outputs are usable under the licence's outputs clause, except for training competing models). He accepts that for the free fan tribute, so the weights stay on the machine and the paintings they make can be used in the game. It is not a commercial licence: the text is read again before any plan to sell, charge for or monetise the game, and no Klein weights are published. Nothing to build. Both games.
+  - area art · both games · adopted · nothing to build · at ~23:58 EDT · see [D-429](#d-429)
+  - Source: Bailey, 2026-10-04 ~23:58 EDT, in chat, answering the figure-finish options page (https://claude.ai/artifact/UerhBdiSdN8PeAk5rPLiCJ; S1 premium cel, …
+- <a id="d-433"></a>**D-433** — The overnight 0.3-denoise refine pass over the high-resolution masters is retired: the painterly finish supersedes it
+  - Bailey: “I'll go with your recommendations, painterly” (blanket yes)
+  - What changed: The overnight refine batch (an SDXL detail pass at denoise 0.3 over every high-resolution master, P3 of the r39-art lane) stays stopped and is dropped from the plan: the detail pilot found that a stronger pass over the same painting is the same picture at battle size, and only a redraw in the new finish (D-429) is visibly richer. No GPU time goes to it and no refined master is installed; the masters that shipped in release 39 (the faithful 2x to 4x set with the smooth-edge treatment) are what stays. Both games.
+  - area art · both games · adopted · delivery implemented · at ~23:58 EDT · see [D-387](#d-387), [D-429](#d-429)
+  - Source: docs/handoff/NOW.md
+- <a id="d-434"></a>**D-434** — New animation keys (the P2 poses) will be painted in the painterly finish, after the lock round passes
+  - Bailey: “I'll go with your recommendations, painterly” (blanket yes)
+  - What changed: The animation keys still to come (the Rikku Warrior twirl keys, the other FFX-2 apex keys, Rikku's and Yuna's Overdrive keys; about 27 keys, about 35 GPU minutes in the finish by the lock round's costing) wait for the lock round and are then drawn in the painterly finish, so a key never differs in finish from the idle it follows; before a key installs, its head and feet are measured against the idle's and written as the sidecar scale, as the pose-size rule asks. Nothing is painted or installed on this yes. Both games.
+  - area art · both games · adopted · delivery not scheduled · at ~23:58 EDT · see [D-429](#d-429), [D-430](#d-430)
+  - Source: docs/handoff/r39-art.md
+- <a id="d-435"></a>**D-435** — The whole-cast painterly roll-out waits for his yes on the lock round
+  - Bailey: “I'll go with your recommendations, painterly” (blanket yes)
+  - What changed: The roll-out to every character and boss painting (636 masters; about 6 to 9 GPU hours in the driver's estimate, about 13 for one seed in the lock round's costing, plus the animation keys) is not started and cannot start until he has looked at the lock round's candidates and said yes to them (D-430), per game. A start without that yes would break AGENTS.md rule 10 (ideas need a yes) and rule 9 (his pick approves only what he names). Until then every painting in the game stays the approved one or the release 39 master. Both games.
+  - area art · both games · adopted · delivery not scheduled · at ~23:58 EDT · see [D-429](#d-429), [D-430](#d-430), [D-434](#d-434)
+  - Source: docs/handoff/NOW.md
+- <a id="d-436"></a>**D-436** — Sessions stop making new full repo copies on D:, reuse an existing worktree, and delete their finished copies and builds, removing folder links first
+  - Bailey: “Tell sessions to stop copying: stop making new full repo copies, reuse existing ones, and delete their finished copies and builds (removing folder links first).”
+  - What changed: From that evening no session makes a new full copy of the repository or a new build folder on D: (D: was at 27.2 GB free and F: at 46.0 GB when the driver noted it at about 23:55 EDT): it reuses a worktree that exists (the release cut reuses D:/pyrefly-release, and this records lane reused D:/pyrefly-r39-int), and the lane that owns a finished copy or build deletes it, removing each folder link first so the shared art behind a junction is never touched. The driver wrote a list of the finished lane worktrees (safe to delete or keep, with the links to remove first) for the D emergency session to turn into Bailey's one dry-run-first command, and a parking agent moved the two release 39 hires-engine builds to F: (A-0431). The deletions themselves are his to run; the release 39 folder and his main art stay protected. Both games (shared process).
+  - area process · both games · adopted · delivery in progress · see [D-236](#d-236)
+  - Source: docs/handoff/NOW.md
