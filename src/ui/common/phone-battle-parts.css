@@ -68,6 +68,7 @@ html[data-phone-battle] .mad--off .mad__toggle::before {
   color: var(--ig-accent);
 }
 html[data-phone-battle] .mad__head,
+html[data-phone-battle] .mad__actor--inline,
 html[data-phone-battle] .mad__move--alt,
 html[data-phone-battle] .mad__stats,
 html[data-phone-battle] .mad__effect,

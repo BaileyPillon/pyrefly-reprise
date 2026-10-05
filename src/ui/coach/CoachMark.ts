@@ -28,7 +28,7 @@
 import './coach.css';
 import type { GameId } from '../../battle/common/types.ts';
 import { escapeHtml } from '../common/html.ts';
-import { RawInputWatcher } from '../ffx/rawInput.ts';
+import { RawInputWatcher, claimHeldPad, reservePad } from '../ffx/rawInput.ts';
 import { CHAPTER_PANEL_SELECTORS, INTENT_AVOID_SELECTORS, rectsOf } from '../ffx/hudAvoidSelectors.ts';
 import { bandClearOf, clearOfPanels, slideClearOf } from './coachAvoid.ts';
 import { coachRunningBadge, type CoachMark as CoachMarkDef } from './coachCopy.ts';
@@ -55,18 +55,24 @@ export interface CoachMarkOptions {
 /**
  * fb2-0929 O2 (D-289): the dress the guided first run puts on FFX's first-command
  * line, so its third step and Auron's approved line are one surface. In guide
- * mode the guide places the line, and a confirm with the cursor on ATTACK is not
- * swallowed: the ring is on ATTACK and the line says to pick it, so the press must
- * reach the menu. With the cursor elsewhere (Kimahri's first menu opens on TALK)
- * the approved rule stands and a bare confirm only takes the line down (PR-0051).
+ * mode the guide places the line, and nothing else about the line changes: a bare
+ * confirm only takes it down, whatever row the cursor is on (PR-0051).
+ *
+ * **PR-0362 (release 39, FFX only) took away the O2 exception.** The guide used to
+ * let a confirm through when the cursor rested on ATTACK (the ring is on ATTACK and
+ * the line says to pick it, so the press reached the menu): one Enter dismissed the
+ * card and opened the target cursor, and round 21's critic measured it in five
+ * chapters as "the key that dismisses the card does something else". Now the press
+ * that dismisses it does nothing else, on the keyboard (`onConfirmCapture`) and on
+ * the pad (`reservePad` / `claimHeldPad`); the next press is the player's pick. A
+ * tap or a click on ATTACK is unchanged: pointing at a row is an answer to it
+ * (`onPointerCapture`).
  */
 export interface CoachGuide {
   /** Rebuild the line as the step's slab around `body` (the approved words); `skip` ends the guide. */
   decorate(el: HTMLElement, body: string, skip: () => void): void;
   /** Once, as the line comes down; `skipped` for the player's own Esc or the skip words. */
   ended(outcome: CoachMarkOutcome, skipped: boolean): void;
-  /** True while the menu's cursor rests on the ringed control, so a confirm there must reach it. */
-  confirmReachesTarget(): boolean;
 }
 
 /** Attribute set on `<html>` while any line is up. See `coach.css`. */
@@ -108,6 +114,8 @@ export class CoachMark {
   private timer = 0;
   private settle: ((outcome: CoachMarkOutcome) => void) | null = null;
   private done = false;
+  /** FFX only: holds the pad's Cross for this line while it is up (PR-0362); null once released. */
+  private releasePad: (() => void) | null = null;
   /**
    * Set once the player moves the command cursor while the line is up. From
    * then on the confirm is theirs: it takes the line down *and* reaches the
@@ -131,10 +139,18 @@ export class CoachMark {
     el.addEventListener('click', this.onClick);
     this.el = el;
 
-    this.watcher = new RawInputWatcher((button) => {
-      if (button === 'confirm') this.finish('confirmed');
-      else if (button === 'cancel') this.finish('cancelled', true);
-      else this.navigated = true;
+    this.watcher = new RawInputWatcher((button, source) => {
+      if (button === 'confirm') {
+        // PR-0362 (FFX): the pad's Cross that takes the line down is not also the menu's press. The keyboard's twin
+        // is `onConfirmCapture`. A press after the cursor was moved is an answer to the menu and goes through.
+        if (source === 'gamepad' && opts.game === 'ffx' && !this.navigated) claimHeldPad('confirm');
+        this.finish('confirmed');
+      } else if (button === 'cancel') this.finish('cancelled', true);
+      else {
+        this.navigated = true;
+        this.releasePad?.(); // the confirm that follows answers the row they highlighted: the menu hears it too
+        this.releasePad = null;
+      }
     });
   }
 
@@ -225,7 +241,8 @@ export class CoachMark {
    *
    * The one exception (PR-0182 / PR-0190): once the player has moved the
    * cursor under the line, the confirm is an answer to the menu, so it takes
-   * the line down and is let through (see {@link navigated}).
+   * the line down and is let through (see {@link navigated}). The guided first
+   * run's ringed-ATTACK exception is gone (PR-0362).
    */
   private readonly onConfirmCapture = (e: KeyboardEvent): void => {
     if (this.done) return;
@@ -237,8 +254,9 @@ export class CoachMark {
     // The player has already moved the cursor under the line: this confirm
     // answers the row they highlighted, so it is not swallowed (PR-0182, a
     // dead press on Kimahri's OVERDRIVE row). A bare confirm still dies with
-    // the line, which is all PR-0051 was about.
-    if (!this.navigated && !this.opts.guide?.confirmReachesTarget()) {
+    // the line, which is all PR-0051 was about, **in guide mode too** (PR-0362:
+    // the first run's Enter on a ringed ATTACK used to open the target cursor).
+    if (!this.navigated) {
       e.preventDefault();
       e.stopImmediatePropagation();
     }
@@ -279,6 +297,9 @@ export class CoachMark {
     window.addEventListener('keydown', this.onConfirmCapture, true);
     window.addEventListener('pointerdown', this.onPointerCapture, true);
     this.watcher.attach();
+    // PR-0362 (FFX only): the pad is polled, so no capture listener can take its Cross first. While this line is up
+    // no other watcher hears the pad's confirm; the press that takes the line down is then claimed (see the watcher).
+    if (this.opts.game === 'ffx' && this.opts.mark.holds) this.releasePad = reservePad('confirm', this.watcher);
 
     if (!this.opts.mark.holds) {
       this.timer = this.setTimer(() => this.finish('faded'), Math.max(1, this.opts.mark.fadeMs));
@@ -373,6 +394,8 @@ export class CoachMark {
     if (this.timer) this.clearTimer(this.timer);
     this.timer = 0;
     this.watcher.detach();
+    this.releasePad?.();
+    this.releasePad = null;
     window.removeEventListener('keydown', this.onConfirmCapture, true);
     window.removeEventListener('pointerdown', this.onPointerCapture, true);
     this.el.removeEventListener('click', this.onClick);

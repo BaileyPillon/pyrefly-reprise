@@ -327,7 +327,7 @@ export class FFXBattleHud implements HudPort {
     this.infoEl.className = 'ig-cutin__info ffx-cmd-info';
     this.infoEl.hidden = true;
     this.infoEl.innerHTML = `<div class="ig-cutin__info-desc" data-role="text"></div>`;
-    cmdArea.append(this.commandMenu.stackEl, this.commandMenu.breadcrumbEl, this.commandMenu.pagerEl, this.airship.el);
+    cmdArea.append(this.commandMenu.stackEl, this.commandMenu.breadcrumbEl, this.commandMenu.pagerEl, this.airship.el, this.commandMenu.defendEl);
 
     this.stage.append(
       this.bannerEl,
@@ -416,6 +416,11 @@ export class FFXBattleHud implements HudPort {
       // nothing and keeps the full slab, which is the rule Bailey set on
       // 2026-09-19: a change true of one game is not applied to the other.
       density: 'brief',
+      // The pad's Triangle is Defend at the command menu (release 39: the original's input, named on the tab under the
+      // window, `defendControl.ts`), so the slab's pad toggle moves to Select, standard button 8: nothing in a fight
+      // reads it (`Input.ts` maps it to the music toggle of the demo scene only). FFX only: FFX-2's menu lists Defend as
+      // a row, Triangle is free there, and its chip keeps saying Triangle (it passes nothing).
+      padToggle: { index: 8, label: 'Select' },
     });
     this.openingHold.start();
     this.layout();

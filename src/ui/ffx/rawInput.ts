@@ -11,6 +11,12 @@
  */
 export type UiButton = 'up' | 'down' | 'left' | 'right' | 'confirm' | 'cancel' | 'triangle' | 'square' | 'l1' | 'r1';
 
+/** Where a press came from: the keyboard is evented, the pad is polled. */
+export type PressSource = 'keyboard' | 'gamepad';
+
+/** The three ways a player reaches the game, named as `app/Input.ts`'s `lastDevice` names them. */
+export type PlayerDevice = 'keyboard' | 'gamepad' | 'pointer';
+
 const KEY_MAP: Record<string, UiButton> = {
   ArrowUp: 'up',
   KeyW: 'up',
@@ -107,6 +113,81 @@ export function rawInputSuspended(): boolean {
   return suspended;
 }
 
+/**
+ * The input the player used last, as this module's own watchers and one window listener saw it, so an
+ * overlay that opens mid-turn (an Overdrive's minigame, PR-0361) can name the right controls on its
+ * first frame instead of guessing: the player reached it with a key, a pad button or a finger a moment ago.
+ *
+ * A **trusted** key only: the phone HUD's Confirm and Back buttons dispatch synthetic `keydown`s
+ * (`phoneBattleText.sendKey`), and those are a tap, not a key. A pointer press anywhere counts, and
+ * records what it was (`pointerType`: `mouse`, `touch`, `pen`). Null until the player has pressed anything.
+ */
+export interface SeenDevice {
+  device: PlayerDevice;
+  /** `PointerEvent.pointerType` for `pointer`, otherwise `''`. */
+  pointerKind: string;
+}
+let seenDevice: SeenDevice | null = null;
+let pointerTracked = false;
+
+function noteDevice(device: PlayerDevice, pointerKind = ''): void {
+  seenDevice = { device, pointerKind };
+}
+
+/** The device the player last pressed with, or null before the first press. */
+export function lastPlayerDevice(): SeenDevice | null {
+  return seenDevice;
+}
+
+/** Forget it (a unit test, or a fresh page). */
+export function forgetPlayerDevice(): void {
+  seenDevice = null;
+}
+
+/** One capture listener for the whole page, added by the first watcher that attaches. */
+function trackPointer(): void {
+  if (pointerTracked || typeof window === 'undefined') return;
+  pointerTracked = true;
+  window.addEventListener('pointerdown', (e) => noteDevice('pointer', e.pointerType || 'mouse'), true);
+}
+
+/**
+ * A pad press an overlay took down with it (PR-0362, FFX): the pad twin of a swallowed `keydown`.
+ *
+ * A key is evented, so an overlay's capture listener can stop the press before the menu behind it hears it
+ * (`CoachMark.onConfirmCapture`). The pad is polled, and every watcher polls it for itself, in the order they
+ * attached, so a capture listener has nothing to stop. Two things do the same job:
+ *
+ * - {@link reservePad}: while it stands, no watcher but `owner` hears that pad button. A coach line holds the
+ *   pad's Cross for itself while it is up, whichever of the two watchers happens to poll first.
+ * - {@link claimHeldPad}: the press that is down right now is nobody's any more until it is let go. The line
+ *   came down on it, and the menu behind must not take the same press.
+ */
+let padReserve: { button: UiButton; owner: RawInputWatcher } | null = null;
+const padClaims = new Set<UiButton>();
+
+/** Reserve a pad button for `owner`. Returns the release (a no-op once another reserve has replaced it). */
+export function reservePad(button: UiButton, owner: RawInputWatcher): () => void {
+  const mine = { button, owner };
+  padReserve = mine;
+  return () => {
+    if (padReserve === mine) padReserve = null;
+  };
+}
+
+/** The pad button is down now: nobody hears this press, until it is released. A no-op when no pad holds it. */
+export function claimHeldPad(button: UiButton): void {
+  for (const pad of navigator.getGamepads?.() ?? []) {
+    if (!pad) continue;
+    for (const [indexStr, b] of Object.entries(PAD_BUTTON_MAP)) {
+      if (b === button && pad.buttons[Number(indexStr)]?.pressed) {
+        padClaims.add(button);
+        return;
+      }
+    }
+  }
+}
+
 export interface RawInputWatcherOptions {
   /**
    * Keep reading input while every other watcher is muted.
@@ -136,7 +217,12 @@ export class RawInputWatcher {
   private readonly keyboard: boolean;
 
   constructor(
-    private readonly onButton: (button: UiButton) => void,
+    /**
+     * `source` is where the press came from (PR-0361: an overlay words itself for the device in use). `code` is the
+     * `KeyboardEvent.code` of a keyboard press, undefined for the pad: for a menu that answers only one of the keys that
+     * read as the same button (FFX's Defend is Q, not Shift: `CommandMenu`, release 39).
+     */
+    private readonly onButton: (button: UiButton, source: PressSource, code?: string) => void,
     opts: RawInputWatcherOptions = {},
   ) {
     this.ignoreSuspend = opts.ignoreSuspend === true;
@@ -148,9 +234,16 @@ export class RawInputWatcher {
     return suspended && !this.ignoreSuspend;
   }
 
+  /** Does this watcher hear `button` from the pad right now? (not while it is claimed, or reserved for another watcher) */
+  private hearsPad(button: UiButton): boolean {
+    if (padClaims.has(button)) return false;
+    return !(padReserve && padReserve.button === button && padReserve.owner !== this);
+  }
+
   attach(): void {
     if (this.attached) return;
     this.attached = true;
+    trackPointer();
     if (this.keyboard) window.addEventListener('keydown', this.onKeyDown);
     this.rafId = requestAnimationFrame(this.pollGamepad);
   }
@@ -170,7 +263,8 @@ export class RawInputWatcher {
     if (!button) return;
     if (e.repeat && !DIRECTIONS.has(button)) return;
     if (e.code.startsWith('Arrow') || e.code === 'Space' || e.code === 'Tab') e.preventDefault();
-    this.onButton(button);
+    if (e.isTrusted) noteDevice('keyboard');
+    this.onButton(button, 'keyboard', e.code);
   };
 
   private readonly pollGamepad = (now: number): void => {
@@ -193,15 +287,19 @@ export class RawInputWatcher {
       if (Math.abs(y) > AXIS_DEADZONE) next.add(y < 0 ? 'up' : 'down');
     }
 
+    for (const button of padClaims) if (!next.has(button)) padClaims.delete(button); // let go: the claim ends with the press
     for (const button of next) {
       const wasHeld = this.padHeld.has(button);
+      // A press this watcher may not hear is still marked held below, so it never fires late once the claim lifts.
+      if (!this.hearsPad(button)) continue;
       if (!wasHeld) {
-        this.onButton(button);
+        noteDevice('gamepad');
+        this.onButton(button, 'gamepad');
         this.repeatAt.set(button, now + REPEAT_DELAY_MS);
       } else if (DIRECTIONS.has(button)) {
         const due = this.repeatAt.get(button) ?? Infinity;
         if (now >= due) {
-          this.onButton(button);
+          this.onButton(button, 'gamepad');
           this.repeatAt.set(button, now + REPEAT_INTERVAL_MS);
         }
       }

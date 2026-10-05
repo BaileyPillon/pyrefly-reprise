@@ -60,10 +60,11 @@ import { followCard } from './advisorChipFollow.ts';
  * up" line faded out below the frame [critic, fix-3 round 1, F1]. So the card
  * now measures itself against the room it was given and **prints less** until
  * it fits ({@link fitCard}), instead of printing the same thing and hiding the
- * bottom of it. What it gives up, in order, is decoration: the one-line effect
- * descriptions, then the runner-up's numbers. What it never gives up is a
- * move's name, where that move lives on the menu, the *reason* the revive is
- * being offered, and any warning — those are the card.
+ * bottom of it. What it gives up, in order, is decoration: the runner-up's
+ * effect and numbers first, then the lead's reason (shortened to two lines
+ * before it goes), then the lead's effect. What it never gives up is a move's
+ * name, where that move lives on the menu, what the lead costs, the *reason* a
+ * revive is being offered, and any warning — those are the card.
  */
 
 /** Stage-relative geometry, in the 640x360 authoring grid's own pixels. */
@@ -557,10 +558,12 @@ function num(n: number): string {
  * |---|---|
  * | 0 | nothing — the full card |
  * | 1 | the runner-up's effect line |
- * | 2 | + the lead's effect line, and the runner-up's secondary chips |
+ * | 2 | + the runner-up's secondary chips |
  * | 3 | + the runner-up's numbers, down to the submenu chip |
- * | 4 | + the lead's reason and its secondary chips |
- * | 5 (phone compact) | + the lead's warning and the title: named moves, their submenu, the actor, the board's note |
+ * | 4 | the reasons run to two lines, not the whole sentence (the lead's and the runner-up's) |
+ * | 5 | + the lead's reason, and its secondary chips; its effect runs to two lines (what it costs stays) |
+ * | 6 | + the lead's effect line (what it costs stays) |
+ * | 7 (phone compact) | + the lead's warning and the title: named moves, their submenu, what the lead costs, the actor, the board's note |
  *
  * Six rungs rather than the four the first pass shipped, because the room
  * the card is given is much smaller than the stylesheet's 104px suggests. The
@@ -575,16 +578,33 @@ function num(n: number): string {
  * the real defect and it belongs to the HUD's `hudSafeZones.ts` — see
  * `docs/handoff/fix3-advisor.md`.
  *
+ * **PR-0330 (release 39, both games: it is the shared ladder).** Round 21 found the card stuck on the
+ * stub rungs in the narrow boxes of Chapters VII, IX, XII, XVII and XVIII: "Steal → Guado Guardian A
+ * IN SPECIAL" and nothing else, no cost and no effect, because the old order threw the lead's **effect**
+ * away at rung 2, long before its reason, and its cost whenever the move cost 0 MP. A narrow box
+ * (80 to 105 wide) wraps the reason to four or five lines, and the table in
+ * `docs/handoff/r39-uifix.md` shows the effect line is the cheap one (10 to 18 grid px of height) and the
+ * reason the dear one (40 to 62). So the lead now keeps its cost chip on every rung (it sits in the same row
+ * as the menu chip and adds no height) and its effect line to the last rung but one, and the reason is
+ * shortened (two lines, rung 4) before it goes (rung 5), and a runner-up's reason is shortened the same way before the
+ * last rung takes it (two moves in a narrow box, Chapter XII, would not fit the lead's effect otherwise). A card that fits
+ * at rung 0 or 1 prints exactly what it did; below that the lead keeps the effect and the cost it used to drop.
+ *
  * D-359 (both games): there used to be a rung between 4 and the last one that
  * shed the lead's "Guide's pick" badge. The badge is gone (the guide and the
  * advisor are separate, so the card no longer says whose advice it is), and a
  * rung that sheds nothing would only have repainted the same card, so the
  * ladder lost it. Nothing on screen changes: that rung printed what rung 4 did.
  */
-export type Density = 0 | 1 | 2 | 3 | 4 | 5;
-export const MAX_DENSITY: Density = 5;
+export type Density = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export const MAX_DENSITY: Density = 7;
 
-function statsHtml(s: MoveSuggestion, lead = '', trim = false): string {
+/** What a move costs, as a chip: `no MP` for a free one. The one chip that says something true when it is zero. */
+function costChip(s: MoveSuggestion): string {
+  return `<span class="mad__stat">${s.mpCost > 0 ? `${s.mpCost} MP` : 'no MP'}</span>`;
+}
+
+function statsHtml(s: MoveSuggestion, lead = '', trim = false, costAlways = false): string {
   const chips: string[] = lead ? [lead] : [];
   const e = s.estimate;
   if (e && e.kind !== 'none') {
@@ -595,7 +615,7 @@ function statsHtml(s: MoveSuggestion, lead = '', trim = false): string {
     if (e.killsTarget) chips.push('<span class="mad__stat mad__stat--kill">kills</span>');
   }
   if (!trim) {
-    chips.push(`<span class="mad__stat">${s.mpCost > 0 ? `${s.mpCost} MP` : 'no MP'}</span>`);
+    chips.push(costChip(s));
     // A hit chip belongs to a move that can miss or that deals damage. "Always
     // hits" on Talk, Pull back, a Grand Summon or a heal says nothing true
     // that matters and reads as a claim about the fight (PR-0234; both games).
@@ -603,11 +623,12 @@ function statsHtml(s: MoveSuggestion, lead = '', trim = false): string {
     else if (e && e.kind === 'damage') chips.push('<span class="mad__stat">always hits</span>');
     // Crit is deliberately outside the range — see `simulate.ts`'s roll policy.
     if (s.critChance > 0) chips.push(`<span class="mad__stat">${s.critChance}% crit</span>`);
-  } else if (s.mpCost > 0) {
+  } else if (costAlways || s.mpCost > 0) {
     // The one number a trimmed row keeps: a move the player cannot pay for is
-    // not advice, and "no MP" is the only chip that says nothing when it is
-    // missing.
-    chips.push(`<span class="mad__stat">${s.mpCost} MP</span>`);
+    // not advice. A runner-up drops "no MP" (a free move says nothing when it is
+    // missing); the **lead** keeps it (PR-0330: round 21 read a card with no cost
+    // as a card that had lost it), and it adds no height: it sits in the menu chip's row.
+    chips.push(costChip(s));
   }
   const applied = trim ? [] : [...new Set(s.statuses)];
   const cured = trim ? [] : [...new Set(s.cures)];
@@ -640,7 +661,7 @@ function statsHtml(s: MoveSuggestion, lead = '', trim = false): string {
  * reads as somebody else's ability; "Poison Fang · Items" is a set of
  * directions to the row, on the menu the player is already looking at.
  */
-function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Density = 0): string {
+function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Density = 0, actor = ''): string {
   const alt = rank > 1;
   const target = s.targetName
     ? `<span class="mad__arrow">→</span><span class="mad__target">${escapeHtml(s.targetName)}</span>`
@@ -663,30 +684,43 @@ function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Densi
   // enemies" with no menu named (critic round 13 PR-0126, phone half; CHK-004).
   // `move-advisor.css` hides it on desktop, where the chip above says it.
   const where = s.menu ? `<span class="mad__where">${escapeHtml(s.menu)}</span>` : '';
-  const showEffect = !bare && (alt ? density < 1 : density < 2);
-  const trimStats = alt ? density >= 2 : density >= 4;
+  // PR-0330: the lead keeps its effect to rung 5 and its cost to the last rung; its reason runs to two lines at
+  // rung 4 and goes at rung 5 (the table above). A runner-up keeps the thresholds it always had.
+  const showEffect = !bare && (alt ? density < 1 : density < 6);
+  const trimStats = alt ? density >= 2 : density >= 5;
   const barStats = (alt && density >= 3) || bare;
-  const showReason = !bare && (alt || density < 4);
+  const showReason = !bare && (alt || density < 5);
+  // A reason runs to two lines before it goes: the lead's at rung 4 (it goes at 5), a runner-up's from rung 4 until the last
+  // rung. The lead's effect runs to two lines at rung 5, where it is what keeps the card off the stub (Chapter XII's switch).
+  const clampReason = alt ? density >= 4 : density === 4;
+  const clampEffect = !alt && density === 5;
+  // The last rung's path chip is joined, for the lead, by what the move costs (the Sin strip, the phone tip's desktop twin).
+  const barRow = alt ? menu : `${menu}${costChip(s)}`;
   return [
     `<article class="mad__move${alt ? ' mad__move--alt' : ''}">`,
-    `<p class="mad__line">${rankChip}<span class="mad__label">${escapeHtml(s.label)}</span>${target}${where}</p>`,
-    barStats ? (menu ? `<p class="mad__stats">${menu}</p>` : '') : statsHtml(s, menu, trimStats),
-    showEffect && s.effect ? `<p class="mad__effect">${escapeHtml(s.effect)}</p>` : '',
-    showReason && s.reason ? `<p class="mad__why">${escapeHtml(s.reason)}.</p>` : '',
+    `<p class="mad__line">${actor ? `<span class="mad__actor mad__actor--inline${bare ? ' mad__actor--always' : ''}">${escapeHtml(actor)}</span>` : ''}${rankChip}<span class="mad__label">${escapeHtml(s.label)}</span>${target}${where}</p>`,
+    barStats ? (barRow ? `<p class="mad__stats">${barRow}</p>` : '') : statsHtml(s, menu, trimStats, !alt),
+    showEffect && s.effect ? `<p class="mad__effect${clampEffect ? ' mad__effect--clamp' : ''}">${escapeHtml(s.effect)}</p>` : '',
+    showReason && s.reason ? `<p class="mad__why${clampReason ? ' mad__why--clamp' : ''}">${escapeHtml(s.reason)}.</p>` : '',
     !bare && s.warning ? `<p class="mad__warn">${escapeHtml(s.warning)}.</p>` : '',
     '</article>',
   ].join('');
 }
 
 export function cardHtml(view: AdvisorView, density: Density = 0): string {
+  // The actor's name is also the first word of the lead's line (PR-0330), shown instead of the head row where the head costs
+  // too much: on the last rung (no head row at all: it cost the Sin strip 12 of its 37 grid px, so its path-and-cost chips sat
+  // under the card's fade) and in a narrow card (`move-advisor.css`: the head row is a name alone there). On the phone the name
+  // is hidden with the head, as it always was (`phone-battle-parts.css`).
+  const last = density >= MAX_DENSITY;
   const moves = view.suggestions
-    .map((s, i) => moveHtml(s, i + 1, view.suggestions.length, density))
+    .map((s, i) => moveHtml(s, i + 1, view.suggestions.length, density, i === 0 ? view.actorName : ''))
     .join('');
   return [
-    '<div class="mad__head">',
-    density >= MAX_DENSITY ? '' : '<span class="mad__title">Next best move</span>', // phone: the title wrapped over the move
-    `<span class="mad__actor">${escapeHtml(view.actorName)}</span>`,
-    '</div>',
+    last ? '' : '<div class="mad__head">',
+    last ? '' : '<span class="mad__title">Next best move</span>', // phone: the title wrapped over the move
+    last ? '' : `<span class="mad__actor">${escapeHtml(view.actorName)}</span>`,
+    last ? '' : '</div>',
     // The "wait for it" line, when an ally is down and raising them now would
     // only feed the boss a second kill.
     //

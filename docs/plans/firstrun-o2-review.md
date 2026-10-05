@@ -70,6 +70,14 @@ skipped. A battle in FFX-2 marks step 3 done at mount, ending the guide.
    the press through; on the keyboard the approved line swallows a bare first Enter
    (PR-0051), which would block ATTACK, so in guide mode the confirm is let through (the same
    rule PR-0182 uses once the cursor has moved). Proved by real clicks, taps and keys.
+   **Superseded 2026-10-04 (release 39, PR-0362, FFX only):** round 21's critic measured that
+   exception as "the key that dismisses the card does something else" (one Enter took the card
+   down and opened the target cursor, in the five chapters whose menu opens on ATTACK), and the
+   release 39 brief asked for the rule every other overlay follows to apply here too. A bare Enter or Cross now
+   only takes the card down, with the cursor on the ringed ATTACK or not; the next press is the
+   pick. A tap or a click on ATTACK still acts on the first press (pointing at a row is an answer
+   to it). This is a reversal of the "each acts on the first press" acceptance above for the
+   keyboard and the pad: it is flagged for Bailey in `docs/handoff/r39-uifix.md`.
 2. **Esc does two things.** On the board Esc is BACK, on prep BACK, in battle it opens the
    pause (`canPauseOnCancel`). `Input` latches the key in a window capture listener registered
    at boot, before anything the guide can add. The guide takes the latched edge back with the

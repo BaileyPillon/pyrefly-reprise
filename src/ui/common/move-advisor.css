@@ -107,6 +107,28 @@
 .mad__card > * {
   transform: skewX(var(--ig-skew-inverse));
 }
+/* PR-0330: a narrow card measures its own width, so a rule can answer it (the title below). The card's width is always set
+   from outside (the zone, or `layout`), never by its content, which is what inline-size containment asks. */
+.mad__card {
+  container-type: inline-size;
+}
+/* PR-0330: in a narrow box (a layout width under about 118 grid px, which is what every compact box is) the title chip and the
+   actor's name do not fit one row, so the chip wrapped to two or three lines of its own and cost the card 20 to 30 grid px of
+   height: the whole difference between the stub and the effect line in Chapters IX and XII. The chip names the card, and the
+   `N HIDE MOVES` tab above it already does; the actor's name stays, and so does the title on every card wide enough to hold both. */
+@container (max-width: 104px) {
+  .mad__title {
+    display: none;
+  }
+  /* ... and with the title gone the head row is the actor's name alone, a whole row (12 grid px) for one word: the name
+     moves onto the first move's line, which is what lets a two-move card in an 85-wide box keep the lead's effect. */
+  .mad__head {
+    display: none;
+  }
+  .mad__actor--inline {
+    display: inline;
+  }
+}
 
 /* ------------------------------------------------------------------- head */
 
@@ -133,6 +155,15 @@
   font-style: italic;
   font-size: max(7px, var(--mad-fs-floor));
   color: var(--ig-paper);
+}
+/* PR-0330: the actor's name also leads the first move's line, and shows there instead of in a head row of its own where
+   the head costs too much: on the last rung (`mad__actor--always`: there is no head row) and in a narrow card (below). */
+.mad__actor--inline {
+  display: none;
+  margin-right: 1px;
+}
+.mad__actor--always {
+  display: inline;
 }
 
 /* ------------------------------------------------------------------ a move */
@@ -249,6 +280,16 @@
 .mad__why {
   margin: 0.6px 0 0;
   color: #dcd8cc;
+}
+/* PR-0330, density 4 on: a reason shortens to two lines before the ladder lets it go, so a narrow box that cannot hold the
+   whole sentence still says why, with the effect and the cost above it; at density 5 the lead's effect does the same. */
+.mad__why--clamp,
+.mad__effect--clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 .mad__cite {
   margin: 0.4px 0 0;

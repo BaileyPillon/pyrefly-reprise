@@ -105,6 +105,14 @@ export function dboxStep(mem, cur, now, screen) {
  */
 export const BUSHIDO_KEYS = Object.freeze({ '↑': 'ArrowUp', '↓': 'ArrowDown', '←': 'ArrowLeft', '→': 'ArrowRight', '✕': 'Enter', '○': 'x', '△': 'q', '□': 'k', L1: 'f', R1: 'r' });
 
+/**
+ * Release 39 (r39-uifix, PR-0360 / PR-0361): a Bushido chip names the control for the device in use, so on a keyboard its text is no longer one
+ * glyph ("Q△", "Esc○", "Enter✕", "FL1"); a pad or a finger still sees the bare symbol. Every chip also carries the abstract button it presses in
+ * `data-btn`, and this is that button -> the key a player presses (`src/ui/ffx/rawInput.ts` KEY_MAP; the same keys as the glyph table above).
+ * The harness reads `data-btn` first, so it types the chips whatever their faces say, and falls back to the glyph for a build that has none.
+ */
+export const BUSHIDO_KEYS_BY_BUTTON = Object.freeze({ up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', cancel: 'x', triangle: 'q', square: 'k', l1: 'f', r1: 'r' });
+
 /** Which overlay the `.ig-minigame__subtitle` ("BUSHIDO · ENTER THE SEQUENCE") names, or null for the others (reels, fury, mix, pickers). */
 export function minigameKindOf(subtitle) {
   const s = String(subtitle ?? '').toUpperCase();
@@ -113,13 +121,16 @@ export function minigameKindOf(subtitle) {
   return null;
 }
 
-/** The keys that type the chips shown, in order; `unknown` lists a glyph with no key (the plan is then not safe to type). */
-export function keysForChips(chips) {
+/**
+ * The keys that type the chips shown, in order; `unknown` lists a chip with no key (the plan is then not safe to type).
+ * `buttons[i]` is chip `i`'s `data-btn` when the build has one (release 39 on): it wins over the face text.
+ */
+export function keysForChips(chips, buttons = []) {
   const keys = []; const unknown = [];
-  for (const g of chips) {
-    const k = BUSHIDO_KEYS[String(g).trim()];
+  chips.forEach((g, i) => {
+    const k = BUSHIDO_KEYS_BY_BUTTON[String(buttons[i] ?? '').trim()] ?? BUSHIDO_KEYS[String(g).trim()];
     if (k) keys.push(k); else unknown.push(g);
-  }
+  });
   return { keys, unknown };
 }
 

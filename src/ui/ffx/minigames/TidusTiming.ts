@@ -2,6 +2,7 @@ import type { MinigameResult, TimingResult } from '../../../battle/common/types.
 import { RawInputWatcher } from '../rawInput.ts';
 import { expireTidusTiming, pressTidusTiming, swordplayGeometry, tidusCursorPosition } from './logic.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
+import { DeviceTracker, markTappable, zoneInstruction } from './overlayInput.ts';
 import { num, str } from './params.ts';
 
 /**
@@ -18,6 +19,14 @@ import { num, str } from './params.ts';
  * A press outside the zone is not a failure: the cursor goes back to the far
  * left and sweeps again, and only timer expiry fails [ffx-combat-core §5.3
  * rule 1, `[verified: 2 sources]`; `pressTidusTiming`]. FFX only.
+ *
+ * ## Every input can press (PR-0360, FFX only)
+ *
+ * The press is the abstract `confirm`. The keyboard (`Enter`, `Space`, `Z`) and the pad (button 0) reach it
+ * through `RawInputWatcher` as before; a **tap or a click anywhere on the slab** is the same press
+ * (`pointerdown`, as Trigger Happy's slab, `ffx2/TriggerHappy.ts`), so a phone no longer resolves the Fail
+ * row at timer expiry. The zone, the marker speed and the timer are the Overdrive's own and are not touched.
+ * The subtitle names the control in use (`PRESS ENTER` / `PRESS CROSS` / `TAP` / `CLICK` in the gold zone).
  */
 export function openTidusTiming(root: HTMLElement, params: Record<string, unknown>): Promise<MinigameResult> {
   const timerMs = num(params['timerMs'], 3000);
@@ -27,8 +36,14 @@ export function openTidusTiming(root: HTMLElement, params: Record<string, unknow
   const name = str(params['name'], 'Slice & Dice');
 
   const overlay = new OverdriveOverlay();
+  markTappable(overlay.el, true);
   root.appendChild(overlay.el);
-  overlay.open({ title: name, mechanic: 'Swordplay', instruction: 'confirm in the gold zone', timerMs, showBonus: true });
+  const device = new DeviceTracker((d) => {
+    overlay.el.dataset['input'] = d.device;
+    overlay.setInstruction(zoneInstruction(d));
+  });
+  overlay.el.dataset['input'] = device.current.device;
+  overlay.open({ title: name, mechanic: 'Swordplay', instruction: zoneInstruction(device.current), timerMs, showBonus: true });
   overlay.bodyEl.innerHTML = `
     <div class="ig-minigame__bar" data-role="bar">
       <div class="ig-minigame__zone"></div>
@@ -44,8 +59,9 @@ export function openTidusTiming(root: HTMLElement, params: Record<string, unknow
     let rafId = 0;
     let settled = false;
     let sweepStartMs = 0;
-    const watcher = new RawInputWatcher((b) => {
-      if (b !== 'confirm' || settled) return;
+    /** The one press, from a key, the pad or a tap on the slab. */
+    const confirm = (): void => {
+      if (settled) return;
       const press = pressTidusTiming({ elapsedMs: overlay.elapsedMs(), sweepStartMs, barWidth, zoneHalfWidth, speedPxPerSec: speed, timerMs });
       if (press.kind === 'miss') {
         sweepStartMs = press.sweepStartMs; // the marker returns to the far left; the timer keeps running
@@ -54,7 +70,20 @@ export function openTidusTiming(root: HTMLElement, params: Record<string, unknow
       }
       if (press.kind === 'hit') setCursor(press.cursorPos);
       void finish(press.timing);
+    };
+    const watcher = new RawInputWatcher((b, source) => {
+      if (b !== 'confirm' || settled) return;
+      device.note(source);
+      confirm();
     });
+    // A finger or a click anywhere on the slab is the confirm press (PR-0360). `pointerdown`, like a key's `keydown`: no lift to wait for.
+    const onPointer = (e: PointerEvent): void => {
+      if (settled || e.button > 0) return;
+      e.preventDefault();
+      device.note('pointer', e.pointerType);
+      confirm();
+    };
+    overlay.el.addEventListener('pointerdown', onPointer);
 
     const setCursor = (pos: number): void => {
       cursorEl.style.left = `${((pos / barWidth) * 100).toFixed(2)}%`;
@@ -70,6 +99,7 @@ export function openTidusTiming(root: HTMLElement, params: Record<string, unknow
       settled = true;
       cancelAnimationFrame(rafId);
       watcher.detach();
+      overlay.el.removeEventListener('pointerdown', onPointer);
       await (timing.success ? overlay.flashSuccess() : overlay.flashFail());
       await overlay.close();
       resolve({ kind: 'tidus-timing', timing });

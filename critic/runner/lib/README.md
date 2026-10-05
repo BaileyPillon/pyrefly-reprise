@@ -196,8 +196,9 @@ node critic/runner/lib/route.mjs <chapterId> <win|lose> --base=<url> --evidence=
 
 - **Overdrive overlays typed as shown, the end of a route read from the screen, post scenes watched (PR-0261, round 19;
   game case: the two overlays are FFX only, the rest both).** (1) `route-minigame.mjs`: when an Overdrive overlay is up, a
-  Bushido (Auron) is typed chip by chip from the glyphs on screen (`route-pure.mjs#keysForChips`; the circle is `x`,
-  never Escape, which opens the pause), a Swordplay (Tidus) is confirmed when the marker, carried forward by the key's travel
+  Bushido (Auron) is typed chip by chip from the chips on screen (`route-pure.mjs#keysForChips`; the circle is `x`,
+  never Escape, which opens the pause; since release 39 a chip names the key for the device, "Q△" on a keyboard, so the
+  harness reads each chip's `data-btn` first and its bare glyph only for a build that has none), a Swordplay (Tidus) is confirmed when the marker, carried forward by the key's travel
   time, is inside the gold zone (`swordplayPressNow`; a miss only restarts the sweep, as in the game). The old Enter 3 s
   after the overlay opened was 0 correct inputs and a press at a random spot, so every Auron or Tidus Overdrive was a
   floor. Each play is in `run.json.minigames` (chips, keys, where the marker was at every Enter against the zone, and the

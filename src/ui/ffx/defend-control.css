@@ -1,0 +1,105 @@
+/*
+ * FFX's Defend tab (release 39, FFX only; `defendControl.ts`).
+ *
+ * The original game's Defend is the Triangle button, not a row in the list, and the build offered no way to press
+ * it. This is the small, always-visible tab that names the control for the device in use and takes a tap or a
+ * click: under the command stack, in the HUD's own key-chip idiom (the `G HIDE GUIDE` tab, `strategy-guide.css`
+ * `.sgd__toggle`: a skewed ink chip, the key in gold).
+ *
+ * It is out of flow, a child of `.ffx-cmd-area` (the stack's anchored, column-reverse parent), so it moves nothing:
+ * the stack, the help slab, the guide rail and the advisor's solver see the same rects they saw before. Its parent is
+ * `pointer-events: none` by design (`ffx-hud.css`), so the tab says `auto` itself.
+ */
+.ffx-cmd-defend {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 7px);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+  padding: 1.5px 6px 2px 4px;
+  background: var(--ig-paper);
+  border-left: 1.4px solid var(--ig-accent);
+  color: var(--ig-ink);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  /* the HUD's 14 px floor: 5.7 grid px is 14.25 px at 1600x900 and would be 11 px at 1280x720 */
+  font-size: max(5.7px, calc(14px / var(--lb-scale, 2.5)));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: skewX(var(--ig-skew));
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.ffx-cmd-defend > * {
+  display: inline-block;
+  transform: skewX(var(--ig-skew-inverse));
+}
+/* the key as a small ink keycap with the letter in gold, on the paper the unselected command rows are drawn on */
+.ffx-cmd-defend__key {
+  padding: 0 3px;
+  background: var(--ig-ink);
+  color: var(--ig-accent);
+  font-weight: 700;
+}
+.ffx-cmd-defend__sym {
+  font-style: normal;
+  opacity: 0.8;
+}
+.ffx-cmd-defend:hover {
+  background: var(--ig-accent);
+  color: var(--ig-ink);
+}
+/* a roomier hit area than the small tab itself, kept clear of the stack's last row above it */
+.ffx-cmd-defend::before {
+  content: '';
+  position: absolute;
+  inset: -2px -8px -8px -8px;
+}
+
+/*
+ * A touch screen that is not the upright phone (a tablet, a landscape phone): a bigger tab, as far as the stage's
+ * bottom margin lets it grow (18 grid px under the stack).
+ */
+@media (pointer: coarse) {
+  .ffx-cmd-defend {
+    padding: 3px 8px;
+    gap: 4px;
+    font-size: max(6.2px, calc(15px / var(--lb-scale, 1)));
+  }
+}
+
+/*
+ * The upright phone (`html[data-phone-battle='ffx']`, `phone-hud.css`): the stage is not scaled (1 grid px = 1 CSS px),
+ * the command grid is 2 columns of 56 px tiles and ends 50 px above the bottom, so the tab takes the bottom-left
+ * corner under the grid: a 40 px target, at the footer's height. The footer line's text centres in what is left of it.
+ */
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-defend {
+  top: calc(100% + 4px);
+  left: 0;
+  height: 40px;
+  padding: 0 16px;
+  gap: 8px;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  transform: none;
+  background: var(--ig-paper);
+  color: var(--ig-ink);
+  border-left-width: 3px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-defend > * {
+  transform: none;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-defend::before {
+  inset: 0;
+}
+html[data-phone-battle='ffx'] .ffxhud:has(.ffx-cmd-defend:not([hidden])) .phud-foot {
+  padding-left: 124px;
+}

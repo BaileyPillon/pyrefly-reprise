@@ -135,3 +135,59 @@ html[data-phone-battle='ffx'] .ffx-mg .ig-minigame__subtitle {
 }
 /* The selected row is the gold accent, and the ×2 chip was gold-on-paper on it (1.6:1): ink there. */
 .ffx-mg-list__row--selected .ffx-mg-list__qty { color: var(--ig-ink); }
+
+/* --------------------------------------------- tap targets (PR-0360, PR-0361; FFX only) */
+
+/*
+ * Bushido and Swordplay answer a finger or a click as well as a key or a pad button
+ * (`overlayInput.ts`, `AuronSequence.ts`, `TidusTiming.ts`). `.ffxhud` is `pointer-events: none` and the
+ * slab inherits it, so before release 39 a tap on either overlay reached nothing and the move resolved the
+ * Fail row when its timer ran out. The slab takes pointer events (as Trigger Happy's does, `ffx2/minigames.css`);
+ * `touch-action: manipulation` and no selection keep a run of taps from zooming the page or selecting its words.
+ * Only these two overlays carry `ffx-mg--tap`: the list pickers and the reels keep the layer's `none`.
+ */
+.ig-minigame.ffx-mg.ffx-mg--tap {
+  pointer-events: auto;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.ig-minigame.ffx-mg.ffx-mg--tap-slab { cursor: pointer; }
+.ffx-mg--tap .ffx-mg-key { cursor: pointer; }
+
+/*
+ * A Bushido chip names its control: the key (or the symbol) large, the PlayStation symbol small beside it
+ * ("Q △", "Esc ○", "K □", "Enter ✕"; a pad or a finger sees the symbol alone). A chip is as wide as its
+ * words and no narrower than the old 11.56 grid px square, so a symbol-only row looks as it did.
+ */
+.ig-minigame.ffx-mg .ig-minigame__key.ffx-mg-key {
+  box-sizing: border-box;
+  width: auto;
+  min-width: 11.56px;
+  padding: 0 2.4px;
+  gap: 1.6px;
+  white-space: nowrap;
+}
+.ffx-mg-key__main { font-weight: 700; }
+.ffx-mg-key__sub { font-style: normal; font-weight: 600; font-size: 0.78em; opacity: 0.74; }
+
+/*
+ * A touch screen: every chip is a real target, 4 to a row (Dragon Fang's 8 are two rows of 4), at least
+ * 56 x 50 screen px whatever the stage scale (`--lb-scale` is the letterbox factor; the upright phone layout
+ * pins it to 1, `phone-battle-parts.css`), with the symbol at 22 screen px. Desktop is unchanged.
+ */
+@media (pointer: coarse) {
+  .ig-minigame.ffx-mg .ig-minigame__bar--sequence {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: calc(8px / var(--lb-scale, 1));
+  }
+  .ig-minigame.ffx-mg .ig-minigame__key.ffx-mg-key {
+    width: auto;
+    min-width: calc(56px / var(--lb-scale, 1));
+    height: calc(50px / var(--lb-scale, 1));
+    font-size: calc(22px / var(--lb-scale, 1));
+    gap: calc(4px / var(--lb-scale, 1));
+  }
+}

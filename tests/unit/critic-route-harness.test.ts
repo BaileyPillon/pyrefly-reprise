@@ -11,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 
 import { letterTagsOf } from '../../src/battle/ffx/letterTags.ts';
 import type { BattleState } from '../../src/battle/common/types.ts';
-import { BUSHIDO_KEYS, dboxStep, deriveOutcome, isAllDisabledOverlay, keysForChips, letterTagMap, minigameKindOf, resolveTargetId, slugOf, swordplayPressNow, type DboxMem, type DboxSample } from '../../critic/runner/lib/route-pure.mjs';
+import { BUSHIDO_KEYS, BUSHIDO_KEYS_BY_BUTTON, dboxStep, deriveOutcome, isAllDisabledOverlay, keysForChips, letterTagMap, minigameKindOf, resolveTargetId, slugOf, swordplayPressNow, type DboxMem, type DboxSample } from '../../critic/runner/lib/route-pure.mjs';
 
 const stateOf = (defs: [string, string][]): BattleState =>
   ({ enemyIds: defs.map(([id]) => id), combatants: Object.fromEntries(defs.map(([id, name]) => [id, { id, name }])) }) as unknown as BattleState;
@@ -127,11 +127,36 @@ describe('Bushido: the chips shown are typed in order (PR-0261)', () => {
     expect(keysForChips(['↑', '?'])).toEqual({ keys: ['ArrowUp'], unknown: ['?'] });
   });
 
-  it('every glyph of the overlay\'s own GLYPH table is in the key table (the two cannot drift apart)', () => {
-    const src = fs.readFileSync('src/ui/ffx/minigames/AuronSequence.ts', 'utf8');
-    const glyphs = [...src.slice(src.indexOf('const GLYPH'), src.indexOf('};', src.indexOf('const GLYPH'))).matchAll(/:\s*'([^']+)'/g)].map((m) => m[1]!);
+  // Release 39 (PR-0360 / PR-0361): the overlay's glyph table moved to `overlayInput.ts` (`PAD_GLYPH`), and a chip on a keyboard reads "Q△", not "△".
+  const overlayTable = (name: string): string[][] => {
+    const src = fs.readFileSync('src/ui/ffx/minigames/overlayInput.ts', 'utf8');
+    const at = src.indexOf(`export const ${name}`);
+    return [...src.slice(at, src.indexOf('};', at)).matchAll(/(\w+):\s*'([^']+)'/g)].map((m) => [m[1]!, m[2]!]);
+  };
+
+  it('every glyph of the overlay\'s own glyph table is in the key table (the two cannot drift apart)', () => {
+    const glyphs = overlayTable('PAD_GLYPH').map(([, g]) => g!);
     expect(glyphs.length).toBeGreaterThanOrEqual(9);
     for (const g of glyphs) expect(BUSHIDO_KEYS[g], g).toBeTruthy();
+  });
+
+  it('every button the overlay can show is in the by-button table, and it gives the key the glyph table gives', () => {
+    const pad = overlayTable('PAD_GLYPH');
+    expect(pad.length).toBe(10);
+    for (const [button, glyph] of pad) {
+      expect(BUSHIDO_KEYS_BY_BUTTON[button!], button).toBeTruthy();
+      expect(BUSHIDO_KEYS_BY_BUTTON[button!], button).toBe(BUSHIDO_KEYS[glyph!]);
+    }
+  });
+
+  it('reads the button off `data-btn` when the chip carries one, so a keyboard chip\'s face ("Q△", "Enter✕", "FL1") cannot hide its key', () => {
+    const faces = ['Q△', 'Esc○', 'K□', 'Enter✕', 'FL1', 'RR1', '↑', '←'];
+    const buttons = ['triangle', 'cancel', 'square', 'confirm', 'l1', 'r1', 'up', 'left'];
+    expect(keysForChips(faces, buttons)).toEqual({ keys: ['q', 'x', 'k', 'Enter', 'f', 'r', 'ArrowUp', 'ArrowLeft'], unknown: [] });
+    // without the buttons the old reading stands: a bare symbol types, a keyboard face is reported, never guessed
+    expect(keysForChips(['△', 'Q△'])).toEqual({ keys: ['q'], unknown: ['Q△'] });
+    // a button the table does not know falls back to the face
+    expect(keysForChips(['△'], ['nonsense'])).toEqual({ keys: ['q'], unknown: [] });
   });
 });
 
