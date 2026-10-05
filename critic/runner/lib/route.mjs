@@ -3,6 +3,7 @@
 //   node critic/runner/lib/route.mjs <chapterId> <win|lose> --base=<url> --evidence=<dir>
 //        [--size=1600x900] [--budget=900000] [--tag=x] [--seed=1|drawn] [--attempts=1]
 //        [--touch] [--gamepad] [--reduce-motion] [--nochange] [--focus=a --avoid=b] [--jpeg]
+//        [--continuity [--pose-measure=<pose-measure.json>]]   CHK-026/027: watch every frame of the fight (continuity.mjs)
 //
 // Promoted from critic/rounds/round-13/cap/route.mjs (the round-13 capture
 // owner's route, which lived only in a gitignored round folder) by batch t1-b5
@@ -54,6 +55,8 @@ const rec = {
 };
 const note = (k, v) => { rec.steps.push({ ms: Date.now() - t00, k, v }); console.log(`[${id}/${goal}]`, k, typeof v === 'string' ? v : JSON.stringify(v)?.slice(0, 300)); };
 
+/** What run.json keeps of the continuity result: the two checks and where the rest is. */
+const continuityNote = (c) => ({ file: 'continuity/continuity.json', checks: Object.fromEntries(Object.entries(c.checks ?? {}).map(([k, v]) => [k, v.result])), reasons: Object.fromEntries(Object.entries(c.checks ?? {}).map(([k, v]) => [k, v.reasons])), error: c.error ?? null });
 const { browser, page, consoleErrors, notFound, htmlImages, net, contexts } = await openRoute({ base, width: W, height: H, ...flags });
 rec.contexts = contexts;
 const input = makeInput(page, contexts);
@@ -63,6 +66,8 @@ const snap = makeSnap({ page, evidence, dir, meta, fails: rec.fails, jpeg: Boole
 const addIndex = makeIndexer(evidence);
 const audioFile = path.join(evidence, dir, 'audio-debug.jsonl');
 const aud = makeAudioLog(page, audioFile, t00);
+// CHK-026 and CHK-027 (Bailey, 2026-10-04, D-420 to D-426): the in-page probe watches every rendered frame of the fight. Loaded only on request: it needs sharp.
+const cont = args.continuity ? await (await import('./continuity.mjs')).attachProbe({ page, outDir: path.join(evidence, dir), chapter: id, game, base, mode: MODE, poseMeasurePath: args['pose-measure'] ?? null, log: (m) => note('continuity', m) }) : null;
 const scr = () => page.evaluate(() => window.__pyrefly.screen());
 const ss = () => page.evaluate(() => window.__pyrefly.snapshotState()?.screenState ?? null);
 const selId = async () => (await ss())?.selectedId ?? null;
@@ -227,6 +232,7 @@ try {
     const fought = await playFight({ ...env2, pref });
     await closeFight({ ...env2, pref }, fought);
     for (let i = 0; i < 40 && (await scr()) === 'battle'; i++) await page.waitForTimeout(500);
+    if (cont && !rec.continuity) rec.continuity = continuityNote(await cont.finish()); // the battle is over: read the probe back before any reload
     await aud('after-fight'); rec.post = { screen: await scr(), lines: [] };
     if ((await scr()) === 'cutscene') {
       await page.waitForTimeout(1200);
@@ -299,6 +305,7 @@ try {
   rec.error = String(e); rec.errorScreen = await scr().catch(() => null); note('CAUGHT', rec.error);
   await snap('99-error.png', 'state at the failure (see run.json)', {}).catch(() => {});
 }
+if (cont && !rec.continuity) rec.continuity = continuityNote(await cont.finish());
 rec.dboxTimeline = [...(rec.dboxBeforeReload ?? []), ...(await readDboxTimeline(page))];
 delete rec.dboxBeforeReload;
 rec.audioDebugFile = { file: path.relative(evidence, audioFile).replace(/\\/g, '/'), samples: aud.count(), note: 'one whole audioDebug() per line; nothing cut' };
