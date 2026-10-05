@@ -18,16 +18,16 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 405, from 2026-09-15 to 2026-10-04 (ids A-0001 to A-0405), 195 of them linked to at least one decision (316 distinct decision ids).
+- **Rows:** 408, from 2026-09-15 to 2026-10-04 (ids A-0001 to A-0408), 198 of them linked to at least one decision (317 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
 | implementation | 107 |
 | art | 41 |
-| deploy | 47 |
-| review | 97 |
+| deploy | 48 |
+| review | 98 |
 | records | 22 |
-| infrastructure | 20 |
+| infrastructure | 21 |
 | account | 12 |
 | download | 10 |
 | maintenance | 16 |
@@ -36,21 +36,39 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 108 |
+| October 2026 | 111 |
 
-- **By game:** 299 both, 54 n/a, 29 FFX, 23 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
-- **Deploys and releases:** 47 deploy rows: 44 lines of docs/deploys.log (38 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, and 1 Cloudflare preview. The log runs from round 2 checkpoint (2026-09-17) to release 38 on echoesofspira.com (2026-10-04).
-- **Reviews:** 97 rows: 28 focused reviews (28 SHIP), 37 live checks (35 PASS, 1 FAIL, 1 UNVERIFIED), 19 deep rounds with a report (10 SHIP, 6 HOLD, 3 no verdict) and 13 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
+- **By game:** 302 both, 54 n/a, 29 FFX, 23 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **Deploys and releases:** 48 deploy rows: 44 lines of docs/deploys.log (38 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 1 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to release 38 on echoesofspira.com (2026-10-04).
+- **Reviews:** 98 rows: 28 focused reviews (28 SHIP), 38 live checks (36 PASS, 1 FAIL, 1 UNVERIFIED), 19 deep rounds with a report (10 SHIP, 6 HOLD, 3 no verdict) and 13 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 22 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-04](#2026-10-04) (58) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-04](#2026-10-04) (61) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
 ### 2026-10-04
 
+- **A-0408** · `infrastructure` · both · **Always Use HTTPS switched on for echoesofspira.com in his Cloudflare dashboard, and the redirects checked from outside**
+  - What: After his yes (D-419), the driver opened the zone's SSL/TLS Edge Certificates page in his Cloudflare dashboard and switched Always Use HTTPS on at about 19:46 EDT. About a minute later it checked from outside with curl: http://echoesofspira.com answers a 301 to https://echoesofspira.com/; http://www.echoesofspira.com is forwarded twice (http to https by this setting, then www to the main address by the Redirect Rule of A-0405) and lands on https://echoesofspira.com/ with a 200; https://echoesofspira.com still answers 200. So a visit through an http link no longer plays on a separate, insecure address with its own saves, and http://www, which answered 522 in the live check, now reaches the game. It closes LV-3 of that check (A-0407) and the note in A-0405 that the setting stayed off until he said yes; it had been recommended since about 19:00, asked of him at about 19:07 and again at about 19:32.
+  - Who: driver session, in Bailey's Cloudflare dashboard (at his yes) · Decisions: D-419
+  - Result: done (switched on; plain http now forwards with a 301)
+  - Evidence: `the driver's curl checks of about 19:47 EDT: http apex 301 to https; http www, 2 redirects to a 200 on the main address; https apex 200 (terminal output, not in the repo)` · `critic/reviews/8136f2ed-live.json (LV-3, the finding it closes)` · `docs/handoff/NOW.md 2026-10-04 ~19:30 entry (the driver's note)`
+  - Reversible: yes, switch Always Use HTTPS off again in the dashboard (SSL/TLS, Edge Certificates)
+- **A-0407** · `review` · both · **Live check of release 38 on echoesofspira.com (8136f2e, bundle X5kGUd9G): deployment PASS**
+  - What: The live check of release 38 at its new address, https://echoesofspira.com/ (main 8136f2ed, bundle X5kGUd9G, artifact 4cd8518e), run by a critic agent from its own worktree at origin/main dae5ed9e between about 19:04 and 19:28 EDT. Exact artifact (CHK-017): verify-live with --full compared all 1,932 files (797,684,655 bytes) byte for byte and by content type, and the served manifest equals the stored one on echoesofspira.com and on the workers.dev address; the deploy's own comparison was not reused. Real input (CHK-016), headless Chromium on the real GPU, a new browser per session: 12 game sessions and 2,304 responses with 0 console errors, no 4xx or 5xx and no Cloudflare challenge. The title reads Echoes of Spira at 1600x900 and 390x844 with no "we've moved" note, the chapter select loads, real-key turns ran in Chapter I, Chapter IV and Chapter VIII plus Chapter II's first menu, one phone turn by touch, a save survived a reload under the new origin (the key pyrefly-reprise:save:v1), and www forwards with a 301. Findings: LV-1 Cloudflare's Web Analytics adds one script tag to the HTML a browser receives (+367 bytes, invisible to verify-live because it asks with a generic Accept header), which Bailey then chose to keep (D-418); LV-2 the 100 files whose names contain an at sign (the 50 2x figure paintings and their 50 JSON sidecars) are answered with one 307 redirect to the percent-encoded path before the 200, so nothing is missing but each costs a round trip (the fix, building those art URLs with %40, is owed in release 39); LV-3 plain http was not forwarded to https (http://echoesofspira.com answered 200 as a separate origin with separate saves, and http://www answered 522), which his yes to Always Use HTTPS fixed (D-419, A-0408); LV-4 to LV-7 are informational notes (every file is served must-revalidate, two console warnings, method notes, the first sound of a run on the synth path). The pass settles only the live obligation of 8136f2ed; its focused review and the deep review (which carries 38 earlier builds) stay owed.
+  - Who: critic live-check agent, launched by the driver session · Decisions: D-397
+  - Result: deployment PASS; the live obligation of 8136f2ed is settled, its focused and deep reviews stay pending; findings: analytics script (kept, D-418), 307s on 2x art names (fix owed in release 39), plain http not forwarded (fixed, D-419)
+  - Evidence: `critic/reviews/8136f2ed-live.json` · `critic/reviews/8136f2ed-live.md` · `commit 61e674bc (report, six frames in docs/screenshots/release-38-cf-live, critic/pending/8136f2ed.json), merged in 34b7cd45`
+  - Reversible: no, a review report
+- **A-0406** · `deploy` · both · **Legacy deploy to the old GitHub address (release 38 with the "we've moved" note): main dae5ed9, bundle DySQmN\_B, 1,402 art files**
+  - What: The GitHub "we've moved" deploy that D-397 held back until round 21's passes on the old address had finished (about 17:37 EDT). The driver ran it at about 19:10 EDT as a legacy deploy (node tools/deploy-pages.mjs --host=github, under Bailey's owner override): main dae5ed9e (the record commit of release 38 on echoesofspira.com, on top of the cf-switch merge 8136f2ed that carries the note code) built for the base path /pyrefly-reprise/ with 1,402 art files, force-pushed as a one-commit gh-pages, and the live files at https://baileypillon.github.io/pyrefly-reprise/ were compared with the build byte for byte before the line was logged. The game there is release 38 unchanged; what is new is a note on the title screen, drawn only on that host: "Echoes of Spira has moved to echoesofspira.com · Saves made here stay here". Clicking it opens echoesofspira.com and never starts the game; Enter still starts it. moved-notice-check passed 12 of 12 at 1600x900 and 390x844 (the note is drawn and clear of the card, the click leaves for echoesofspira.com and starts nothing, Enter still starts the game). A legacy deploy is logged in docs/legacy-deploys.log only: no docs/deploys.log line, critic marker, ledger entry or stored manifest, so the live build the critic follows stays echoesofspira.com (A-0404). Saves made on the old address stay there (D-382). The CHANGELOG entry and its page, with two frames, are commit efad9d29.
+  - Who: driver session (runs the deploys), on Bailey's GitHub repository, under his owner override · Decisions: D-397
+  - Result: shipped to the old address (logged in the legacy log only); note checked 12 of 12; no review obligation or live-build record
+  - Evidence: `docs/legacy-deploys.log line 1 (23:10:24Z, status=legacy, host=github, override=owner; a local, gitignored file in the cf-switch worktree, not in the repo)` · `commit efad9d29 (CHANGELOG entry, docs/changelog/legacy-moved-note.md and two frames)` · `node tools/moved-notice-check.mjs on the old address: 12 of 12 PASS (the driver's run, noted in docs/handoff/NOW.md 2026-10-04 ~19:15 entry)` · `src/app/screens/frontend/movedNotice.ts (the note, drawn only on the old host)`
+  - Reversible: yes, a later legacy deploy of a build without the note replaces it (gh-pages is a throwaway single commit)
 - **A-0405** · `infrastructure` · both · **www.echoesofspira.com set to forward to echoesofspira.com (a placeholder record and a Redirect Rule in his Cloudflare dashboard)**
   - What: While the production deploy uploaded (from about 18:46 EDT), the driver set up www forwarding in his Cloudflare dashboard, as the switch of D-397 and the cf-switch handoff planned and as he approved with that switch: a proxied placeholder address record for www (a redirect only applies to traffic that passes through Cloudflare, and the placeholder points nowhere) and a Redirect Rule that permanently forwards www visitors to https://echoesofspira.com, keeping any link details. The rule read Active at about 18:53 EDT and the deploy's check afterwards found www forwarding with a 301, so saves cannot split between the two addresses. Related and still open: Cloudflare's "Always Use HTTPS" zone setting (so plain http lands on the secure address) was recommended and asked of Bailey at about 19:07; it stays off until he says yes.
   - Who: driver session, in Bailey's Cloudflare dashboard (approved as part of the switch) · Decisions: D-397
