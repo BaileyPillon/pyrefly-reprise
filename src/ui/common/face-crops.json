@@ -180,6 +180,9 @@
     "yuna-songstress": { "fx": 0.3713, "fy": 0.1061, "ipd": 0.0771, "px": [655, 1116] },
     "yuna-thief": { "fx": 0.5137, "fy": 0.1172, "ipd": 0.0776, "px": [767, 1176], "note": "release 38 (D-336 idle, FFX-2 only), measured 2026-10-04 with the rig's probe and checked by iris colour: green pupil at about (364, 138), blue at (424, 137)" },
     "yuna-warrior": { "fx": 0.4942, "fy": 0.1005, "ipd": 0.0773, "px": [728, 1183] },
-    "yuna": { "fx": 0.4975, "fy": 0.0989, "ipd": 0.0472, "px": [803, 1075] }
+    "yuna": { "fx": 0.4975, "fy": 0.0989, "ipd": 0.0472, "px": [803, 1075] },
+    "yuna-lady-luck": { "fx": 0.4393, "fy": 0.1219, "ipd": 0.1158, "px": [443, 1164], "note": "Lady Luck (FFX-2 only), release 39: measured 2026-10-04 off the installed idle.png with the rig's probe, irises at about (169, 144) teal and (220, 140) blue; the head is rolled, so ipd is the diagonal" },
+    "rikku-lady-luck": { "fx": 0.5905, "fy": 0.168, "ipd": 0.1546, "px": [337, 1174], "note": "Lady Luck (FFX-2 only), release 39: measured 2026-10-04 off the installed idle.png with the rig's probe, irises at about (174, 204) and (224, 191) green; the head is rolled, so ipd is the diagonal" },
+    "paine-lady-luck": { "fx": 0.557, "fy": 0.1442, "ipd": 0.1077, "px": [495, 1216], "note": "Lady Luck (FFX-2 only), release 39: measured 2026-10-04 off the installed idle.png with the rig's probe, irises at about (250, 181) and (302, 170) red; the head is rolled, so ipd is the diagonal" }
   }
 }
