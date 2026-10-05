@@ -283,7 +283,15 @@ report (`critic/reviews/`, `critic/rounds/`) and run
 only what that report can settle. `node tools/critic-score.mjs --report <file>`
 does the score arithmetic and the acceptance gates. Run `npm run critic:status`
 at any time to see what each live build still owes and which build the last
-full score belongs to. The review workflows are `critic/runner/*.js`.
+full score belongs to. The review workflows are `critic/runner/*.js`. The
+**continuity harness** (`critic/runner/lib/continuity.mjs`, checks CHK-026 and
+CHK-027; Bailey, 2026-10-04) plays chapters by real keys and watches every
+rendered frame of the fight for size jumps, sliding feet, snaps, double images
+and jerks, reading only `window.__pyrefly.app` and the engine state a running
+build already exposes (no hook; its field names are pinned by
+`tests/unit/critic-continuity-contract.test.ts`, so renaming `slots`, `active`,
+`fade` or `stage.actors` in the presenter fails that test first). It needs
+`PYREFLY_BROWSER=gpu`; see `critic/runner/lib/README.md`.
 
 ### Sprite tool (retired)
 
