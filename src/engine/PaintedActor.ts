@@ -45,6 +45,7 @@ import {
 } from './PaintedArt.ts';
 import { computePoseScale, contactBandFor, type PoseScale } from './PaintedScale.ts';
 import { placePlane } from './PaintedRest.ts';
+import { stanceShift } from './PoseRegistration.ts';
 import { LIE_FLAT_TILT, lieOffset } from './LieFlat.ts';
 import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
@@ -442,6 +443,8 @@ export class PaintedActor extends Group {
    * when each pose should fall back to sizing itself.
    */
   private reference: PoseMeta | null = null;
+  /** World units per pixel of {@link PaintedActor.reference}'s own plane: what every other pose's stance is lined up against. */
+  private referenceUpp = 0;
   private readonly referencePose: string;
   private readonly sizeFromReference: boolean;
   private readonly extents: { maxExtent: number; minExtent: number; proneAspect: number };
@@ -1041,23 +1044,21 @@ export class PaintedActor extends Group {
    * never qualify, because a grey silhouette's pixels mean nothing.
    */
   private pickReference(): void {
-    if (!this.sizeFromReference) {
-      this.reference = null;
-      return;
-    }
+    this.reference = this.chooseReference();
+    this.referenceUpp = this.reference
+      ? computePoseScale(this.reference, { worldHeight: this.worldHeight, reference: this.reference, ...this.extents }).unitsPerPixel
+      : 0;
+  }
+
+  private chooseReference(): PoseMeta | null {
+    if (!this.sizeFromReference) return null;
     const idle = this.poses.get(this.referencePose);
-    if (idle && !idle.placeholder) {
-      this.reference = idle.meta;
-      return;
-    }
+    if (idle && !idle.placeholder) return idle.meta;
     for (const pose of this.poses.values()) {
       if (pose.placeholder) continue;
-      if (pose.meta.height >= pose.meta.width) {
-        this.reference = pose.meta;
-        return;
-      }
+      if (pose.meta.height >= pose.meta.width) return pose.meta;
     }
-    this.reference = null;
+    return null;
   }
 
   /** Re-size both planes — after the reference pose has changed underneath. */
@@ -1736,6 +1737,22 @@ export class PaintedActor extends Group {
     placePlane(slot.mesh, slot.scale, slot.meta, this.proneShift);
     const dx = this.poseShiftPx?.[slot.pose];
     if (dx) slot.mesh.position.x += dx * slot.scale.unitsPerPixel * (slot.mesh.scale.x < 0 ? -1 : 1);
+    slot.mesh.position.x += this.registrationShift(slot);
+  }
+
+  /**
+   * Release 39 pose registration (`PoseRegistration.ts`): a plane is centred on the actor by its PNG, but a pose's feet are not
+   * at its PNG's middle, so the figure slid across the floor whenever the pose changed. Each plane is slid so the point the
+   * figure stands on sits where the idle's does. Only measured, standing poses move; the idle itself never does.
+   */
+  private registrationShift(slot: PlaneSlot): number {
+    const ref = this.reference;
+    const at = slot.meta.stanceX;
+    if (!ref || ref === slot.meta || ref.stanceX === undefined || at === undefined || slot.scale.prone || this.referenceUpp <= 0) return 0;
+    return stanceShift(
+      { stanceX: at, width: slot.meta.width, unitsPerPixel: slot.scale.unitsPerPixel, mirror: slot.mesh.scale.x < 0 ? -1 : 1 },
+      { stanceX: ref.stanceX, width: ref.width, unitsPerPixel: this.referenceUpp, mirror: this.mirrorOf(ref) },
+    );
   }
 
   /** Slide a prone body along the floor, world units (`ProneLay` picks it). */

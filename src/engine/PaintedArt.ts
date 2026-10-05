@@ -10,6 +10,7 @@ import { groundHullFromBottoms, type GroundHull } from './PaintedRest.ts';
 import { cachedPainting, paintingKey, type PreparedPainting } from './PaintedArtCache.ts';
 import { cleanMatte, type MatteOptions } from './PaintedMatte.ts';
 import { poseScaleFor } from './KoPoseScale.ts';
+import { poseRegistrationFor } from './PoseRegistration.ts';
 
 export { cleanMatte, type MatteOptions } from './PaintedMatte.ts'; // matte cleanup lives there; re-exported for existing callers
 
@@ -176,13 +177,18 @@ export async function tryLoadMeta(imageUrl: string): Promise<PoseMeta | null> {
     const raw = (await res.json()) as Partial<PoseMeta>;
     if (typeof raw.height !== 'number' || typeof raw.width !== 'number') return null;
     const positive = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v) && v > 0;
-    const scale = poseScaleFor(imageUrl, positive(raw.scale) ? raw.scale : undefined); // VP-1001-05: src-side KO scales
+    // Release 39 pose registration: the measured table beats the sidecar's eye-estimated `scale` and the KO table (VP-1001-05).
+    const reg = poseRegistrationFor(imageUrl);
+    const scale = reg?.scale ?? poseScaleFor(imageUrl, positive(raw.scale) ? raw.scale : undefined);
+    const anchorY = reg?.feetRow ?? (positive(raw.anchorY) ? raw.anchorY : undefined);
     return {
       width: raw.width,
       height: raw.height,
       baselineY: typeof raw.baselineY === 'number' ? raw.baselineY : raw.height,
       ...(scale !== undefined ? { scale } : {}),
-      ...(positive(raw.anchorY) ? { anchorY: raw.anchorY } : {}),
+      ...(anchorY !== undefined ? { anchorY } : {}),
+      ...(reg?.stanceX !== undefined ? { stanceX: reg.stanceX } : {}),
+      ...(reg?.upright ? { upright: true } : {}),
       ...(parseArtFacing(raw.facing) ? { facing: parseArtFacing(raw.facing)! } : {}),
       ...(raw.seed !== undefined ? { seed: raw.seed } : {}),
       ...(raw.prompt !== undefined ? { prompt: raw.prompt } : {}),
@@ -279,8 +285,14 @@ async function preparePainting(
   const [loaded, meta] = await Promise.all([loadPixels(url), tryLoadMeta(url)]);
   if (!loaded) return null;
   const { image, scale } = loaded;
-  const width = meta?.width ?? Math.round((image.width || 1024) / scale);
-  const height = meta?.height ?? Math.round((image.height || 1024) / scale);
+  // The plane is sized from these, so they have to be the painting's own: a sidecar that was written for another render of the
+  // same file name (braskas-final-aeon-1/ko, yunalesca-1/ko) stretched the figure and sized it from the wrong pixel count.
+  const realW = Math.round((image.width || 1024) / scale);
+  const realH = Math.round((image.height || 1024) / scale);
+  const stale = !!meta && (Math.abs(meta.width - realW) > 1 || Math.abs(meta.height - realH) > 1);
+  if (stale) console.warn(`[painted] ${url}: the sidecar says ${meta!.width}x${meta!.height} but the painting is ${realW}x${realH}; using the painting's own size.`);
+  const width = stale || !meta ? realW : meta.width;
+  const height = stale || !meta ? realH : meta.height;
   let pixels: HTMLImageElement | HTMLCanvasElement = image;
   // A master's alpha is its own (redrawn smooth at scale from a painting that already passed this cleanup), so only the approved
   // file is matte-checked: a flood fill over a 4x master would cost sixteen times as much for nothing.
@@ -314,7 +326,9 @@ async function preparePainting(
       // The hand overrides ride along untouched: `anchorY` beats the measured
       // baseline and `scale` trims the derived pixel scale (`computePoseScale`).
       ...(meta?.scale !== undefined ? { scale: meta.scale } : {}),
-      ...(meta?.anchorY !== undefined ? { anchorY: meta.anchorY } : {}),
+      ...(meta?.anchorY !== undefined && !stale ? { anchorY: meta.anchorY } : {}),
+      ...(meta?.stanceX !== undefined ? { stanceX: meta.stanceX } : {}),
+      ...(meta?.upright ? { upright: true } : {}),
       // Facing is a per-*pose* question: it decides whether the plane is
       // mirrored, and one old frontal `cast.png` can sit in a right-facing set.
       ...(meta?.facing !== undefined ? { facing: meta.facing } : {}),

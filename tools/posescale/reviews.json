@@ -1,0 +1,41 @@
+{
+ "tidus": {
+  "attack": 0.95,
+  "cast": 0.95,
+  "critical": 0.94,
+  "follow": 1.3,
+  "hurt": 1.0,
+  "item": 0.94,
+  "ko": 0.85,
+  "od-energy-rain": 0.84,
+  "od-slice-and-dice": 1.08,
+  "ready": 1.26,
+  "sleep": 0.98,
+  "victory": 1.6
+ },
+ "yuna": {
+  "attack": 0.79,
+  "cast": 0.92,
+  "critical": 1.1,
+  "follow": 1.15,
+  "hurt": 0.8,
+  "item": 0.75,
+  "ko": 0.52,
+  "ready": 1.17,
+  "summon": 0.6,
+  "victory": 0.77,
+  "sleep": "keep"
+ },
+ "auron": {
+  "attack": 0.69,
+  "cast": 0.9,
+  "hurt": 0.75,
+  "item": 0.69,
+  "ko": 0.45,
+  "ready": 0.77,
+  "critical": "keep",
+  "follow": "keep",
+  "sleep": "keep",
+  "victory": "keep"
+ }
+}
