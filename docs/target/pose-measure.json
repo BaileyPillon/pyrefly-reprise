@@ -1,6 +1,7 @@
 {
+ "koProjection": 0.978,
  "metric": "head box read against the idle's by rulers (sqrt(width*height)); stance from the silhouette",
- "resolution": 0.08,
+ "resolution": 0.005,
  "subjects": {
   "auron": {
    "game": "ffx",
@@ -82,9 +83,17 @@
       120.0
      ],
      "baseline": 1116.0,
+     "current": 0.64,
+     "head": [
+      363.6,
+      71.6,
+      496.4,
+      168.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.64,
+     "scale": 0.64,
+     "scaleSrc": "noise",
      "sha": "e03472b268104a5b59581a3eb9c886c80aac10c8223bd851cd51f21f5d2b2311",
      "size": [
       832,
@@ -97,7 +106,8 @@
       "x0": 56.0,
       "x1": 602.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.609
     },
     "follow": {
      "anchor": [
@@ -105,9 +115,17 @@
       95.0
      ],
      "baseline": 657.0,
+     "current": 1.5,
+     "head": [
+      516.7,
+      74.3,
+      573.3,
+      115.7
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.5,
+     "scale": 1.5,
+     "scaleSrc": "noise",
      "sha": "b1a7d1f119344e817bb869240c59a410dd9fb7a6f4383e635decdfef12d674aa",
      "size": [
       799,
@@ -279,9 +297,17 @@
       130.0
      ],
      "baseline": 840.0,
+     "current": 1.0,
+     "head": [
+      427.5,
+      99.0,
+      512.5,
+      161.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "4a8805c65b4230fe5bc91ad31f4012ac44090af3842c140a0e301d78b5727a66",
      "size": [
       629,
@@ -294,7 +320,8 @@
       "x0": 260.0,
       "x1": 492.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.703
     },
     "victory": {
      "anchor": [
@@ -302,9 +329,17 @@
       125.0
      ],
      "baseline": 1188.0,
+     "current": 1.0,
+     "head": [
+      272.5,
+      94.0,
+      357.5,
+      156.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "4ac7cf854ee4576f0b6487e14fb77aa81bca6a83cc9cec49c2c41e507430ae8f",
      "size": [
       653,
@@ -317,7 +352,8 @@
       "x0": 240.0,
       "x1": 343.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.0
     }
    }
   },
@@ -337,9 +373,17 @@
       245.0
      ],
      "baseline": 767.0,
+     "current": 1.0,
+     "head": [
+      35.0,
+      190.0,
+      175.0,
+      300.0
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "dab9623ce8a509c4f412cb1d692dc8dacdebff84040cb8cb23a6093f078f3198",
      "size": [
       1264,
@@ -360,9 +404,17 @@
       140.0
      ],
      "baseline": 768.0,
+     "current": 1.0,
+     "head": [
+      15.0,
+      85.0,
+      155.0,
+      195.0
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "1b1e12977f49b7d66de69e43ac8fbdfa33536fa8df99b7b30a9a5afed3b47fa4",
      "size": [
       1136,
@@ -383,9 +435,17 @@
       165.0
      ],
      "baseline": 858.0,
+     "current": 1.0,
+     "head": [
+      10.0,
+      110.0,
+      150.0,
+      220.0
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "02c22daaf1a0c359da8074a7034d28588bdffb4fc4d3c3582ec605c81f72c401",
      "size": [
       1136,
@@ -445,9 +505,17 @@
       160.0
      ],
      "baseline": 768.0,
+     "current": 1.0,
+     "head": [
+      10.0,
+      105.0,
+      150.0,
+      215.0
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "4911670ae7afc54d64f1bf8e1d2224f68bb59467e1aa1100fd8d1608dd01f00b",
      "size": [
       1136,
@@ -490,9 +558,17 @@
       298.0
      ],
      "baseline": 1156.0,
+     "current": 1.0,
+     "head": [
+      424.5,
+      246.5,
+      599.5,
+      349.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "fc2915463695fe98664e1d7f840872d9809491567613498fbdfbfd12bd36e134",
      "size": [
       832,
@@ -505,7 +581,8 @@
       "x0": 103.0,
       "x1": 719.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.943
     },
     "cast": {
      "anchor": [
@@ -513,9 +590,17 @@
       210.0
      ],
      "baseline": 1209.0,
+     "current": 1.0,
+     "head": [
+      239.5,
+      158.5,
+      414.5,
+      261.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "46b62d3972164031c987b3d68d4787678def50ffa5f13288e4e5cb6165439655",
      "size": [
       814,
@@ -528,7 +613,8 @@
       "x0": 164.0,
       "x1": 472.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.024
     },
     "critical": {
      "anchor": [
@@ -536,9 +622,17 @@
       310.0
      ],
      "baseline": 1137.0,
+     "current": 1.0,
+     "head": [
+      602.5,
+      258.5,
+      777.5,
+      361.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "a35f7c8e13ca4b622b0f068a7a4bb6b2357681a72cad24d2646edf14d1fe96fc",
      "size": [
       799,
@@ -551,7 +645,8 @@
       "x0": 223.0,
       "x1": 747.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.961
     },
     "follow": {
      "anchor": [
@@ -559,9 +654,17 @@
       422.0
      ],
      "baseline": 1000.0,
+     "current": 1.35,
+     "head": [
+      517.2,
+      383.9,
+      646.8,
+      460.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.35,
+     "scale": 1.35,
+     "scaleSrc": "noise",
      "sha": "d5fe6643e651ce2af2c496d60e6f7214a05d6b1c0cc1104754ee97a6bd2a4ba2",
      "size": [
       832,
@@ -574,7 +677,8 @@
       "x0": 139.0,
       "x1": 610.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.139
     },
     "hurt": {
      "anchor": [
@@ -582,9 +686,17 @@
       197.0
      ],
      "baseline": 1157.0,
+     "current": 1.0,
+     "head": [
+      437.5,
+      145.5,
+      612.5,
+      248.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "785ee8df73aebe1d8e79dd26c9f0b3e51733a2fae96b459fa40d733f5fbd809c",
      "size": [
       827,
@@ -597,7 +709,8 @@
       "x0": 51.0,
       "x1": 322.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.908
     },
     "idle": {
      "anchor": [
@@ -635,9 +748,17 @@
       105.0
      ],
      "baseline": 1162.0,
+     "current": 1.0,
+     "head": [
+      202.5,
+      53.5,
+      377.5,
+      156.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "da6d895aa23d70cb7f33881cebb31ca66f409be8c47b44e3ac55dbef4d75933b",
      "size": [
       734,
@@ -650,7 +771,8 @@
       "x0": 292.0,
       "x1": 621.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.964
     },
     "jump": {
      "anchor": [
@@ -658,9 +780,17 @@
       98.0
      ],
      "baseline": 1072.0,
+     "current": 1.0,
+     "head": [
+      332.5,
+      46.5,
+      507.5,
+      149.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "84701cfeb65e8f3c1f396218e948339dd445b3dc49e47624da9ba5645a641d81",
      "size": [
       723,
@@ -673,7 +803,8 @@
       "x0": 301.0,
       "x1": 356.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.909
     },
     "ko": {
      "anchor": [
@@ -681,9 +812,17 @@
       435.0
      ],
      "baseline": 783.0,
+     "current": 0.58,
+     "head": [
+      761.1,
+      346.2,
+      1062.9,
+      523.8
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.58,
+     "scale": 0.58,
+     "scaleSrc": "noise",
      "sha": "7a797ceacfad678b211d9524298f61aef79a32231f0506f3c377b622bf5cbeb8",
      "size": [
       1216,
@@ -698,9 +837,17 @@
       148.0
      ],
      "baseline": 957.0,
+     "current": 1.2,
+     "head": [
+      304.1,
+      105.1,
+      449.9,
+      190.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.2,
+     "scale": 1.2,
+     "scaleSrc": "noise",
      "sha": "4c62f0cb06f479a40aeffa857d49c21b99321304580ab9dd3a50d1f960f6506f",
      "size": [
       832,
@@ -713,7 +860,8 @@
       "x0": 141.0,
       "x1": 529.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.969
     },
     "sleep": {
      "anchor": [
@@ -721,9 +869,17 @@
       222.0
      ],
      "baseline": 1173.0,
+     "current": 1.0,
+     "head": [
+      517.5,
+      170.5,
+      692.5,
+      273.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "29c80c17d4126bc3f0be85e6d19555c10831dda2e72040cecaf1c56dd884418f",
      "size": [
       781,
@@ -736,7 +892,8 @@
       "x0": 226.0,
       "x1": 750.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.997
     },
     "victory": {
      "anchor": [
@@ -744,9 +901,17 @@
       300.0
      ],
      "baseline": 1191.0,
+     "current": 1.0,
+     "head": [
+      137.5,
+      248.5,
+      312.5,
+      351.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "3c3638e28b95831ba19c2a00b91ddb9afeac77b4325ef6cd73e4f2186a453f64",
      "size": [
       533,
@@ -759,7 +924,8 @@
       "x0": 20.0,
       "x1": 388.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.008
     }
    }
   },
@@ -779,9 +945,17 @@
       165.0
      ],
      "baseline": 1108.0,
+     "current": 1.0,
+     "head": [
+      304.5,
+      138.5,
+      387.5,
+      191.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "9e66f42b64f16d2bd22a27efd7901a20180e1654c9793d9ae367b104de1535c3",
      "size": [
       695,
@@ -794,7 +968,8 @@
       "x0": 121.0,
       "x1": 586.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.964
     },
     "cast": {
      "anchor": [
@@ -802,9 +977,17 @@
       204.0
      ],
      "baseline": 1143.0,
+     "current": 1.0,
+     "head": [
+      292.6,
+      178.8,
+      371.4,
+      229.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.053,
+     "scale": 1.053,
+     "scaleSrc": "reviewed",
      "sha": "27965070e9cb586c0c312479715d61c7c75d819f5189098a4ee5cbeef2583f40",
      "size": [
       629,
@@ -817,7 +1000,8 @@
       "x0": 125.0,
       "x1": 395.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.047
     },
     "critical": {
      "anchor": [
@@ -825,9 +1009,21 @@
       275.0
      ],
      "baseline": 1176.0,
+     "current": 0.72,
+     "gate": {
+      "reading": 0.533,
+      "stature": 0.604
+     },
+     "head": [
+      333.1,
+      225.3,
+      488.9,
+      324.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.533,
+     "scale": 0.59,
+     "scaleSrc": "gated",
      "sha": "586b11ffab4339dab3d140a2fbeabbadb894ed08cf7c4472df9684c7ebf8de27",
      "size": [
       647,
@@ -840,7 +1036,8 @@
       "x0": 83.0,
       "x1": 465.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.604
     },
     "follow": {
      "anchor": [
@@ -848,9 +1045,17 @@
       200.0
      ],
      "baseline": 1123.0,
+     "current": 0.95,
+     "head": [
+      422.6,
+      166.5,
+      527.4,
+      233.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.792,
+     "scale": 0.792,
+     "scaleSrc": "reviewed",
      "sha": "f2cf5dffea1ec99037883cbf6250dc788001a75aeda6510ce3ec9c89a5f8d1f0",
      "size": [
       636,
@@ -863,7 +1068,8 @@
       "x0": 116.0,
       "x1": 567.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.774
     },
     "hurt": {
      "anchor": [
@@ -871,9 +1077,17 @@
       200.0
      ],
      "baseline": 1136.0,
+     "current": 1.0,
+     "head": [
+      314.8,
+      160.3,
+      439.2,
+      239.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.667,
+     "scale": 0.667,
+     "scaleSrc": "reviewed",
      "sha": "3406ea72ddbe47ae0ac6502f8028e0da8120a5cbcf7efac6e89fe0063b8caf1e",
      "size": [
       800,
@@ -886,7 +1100,8 @@
       "x0": 268.0,
       "x1": 350.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.665
     },
     "idle": {
      "anchor": [
@@ -924,9 +1139,17 @@
       167.0
      ],
      "baseline": 1161.0,
+     "current": 1.0,
+     "head": [
+      379.5,
+      140.5,
+      462.5,
+      193.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "a619f0527cbfc3c7ae189e388a70b3bdb23036c62d8ed308530b1ec148afd145",
      "size": [
       732,
@@ -939,7 +1162,8 @@
       "x0": 73.0,
       "x1": 586.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.011
     },
     "ko": {
      "anchor": [
@@ -947,9 +1171,17 @@
       110.0
      ],
      "baseline": 753.0,
+     "current": 0.47,
+     "head": [
+      872.1,
+      42.4,
+      1083.9,
+      177.6
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.392,
+     "scale": 0.392,
+     "scaleSrc": "reviewed",
      "sha": "cdd75693478cbd06ebcd5af197b092e6a5d7329de1d3b392bfa97c7091335c72",
      "size": [
       1216,
@@ -964,9 +1196,17 @@
       171.0
      ],
      "baseline": 917.0,
+     "current": 1.3,
+     "head": [
+      188.9,
+      148.6,
+      259.1,
+      193.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.182,
+     "scale": 1.182,
+     "scaleSrc": "reviewed",
      "sha": "e13caa64aaa5060894691382f1ff02e63e098a7151cfcb8fbf4cc35e8f743e7a",
      "size": [
       580,
@@ -979,7 +1219,8 @@
       "x0": 85.0,
       "x1": 470.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.94
     },
     "ready": {
      "anchor": [
@@ -987,9 +1228,17 @@
       363.0
      ],
      "baseline": 1060.0,
+     "current": 1.2,
+     "head": [
+      178.8,
+      335.4,
+      265.2,
+      390.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.96,
+     "scale": 0.96,
+     "scaleSrc": "reviewed",
      "sha": "7f0eb69e3cfbc7a6c9070593afd7b72d92495b6aa7f7b345e8ed7ca980a3c523",
      "size": [
       658,
@@ -1002,7 +1251,8 @@
       "x0": 43.0,
       "x1": 583.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.885
     },
     "sleep": {
      "anchor": [
@@ -1010,9 +1260,17 @@
       86.0
      ],
      "baseline": 990.0,
+     "current": 0.8,
+     "head": [
+      464.9,
+      49.5,
+      579.1,
+      122.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.727,
+     "scale": 0.727,
+     "scaleSrc": "reviewed",
      "sha": "83787dad6e8f1446f1d66a6b970ed6b1b4915b874fe26b15f2377cfca7e0674a",
      "size": [
       742,
@@ -1025,7 +1283,8 @@
       "x0": 154.0,
       "x1": 676.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.625
     },
     "victory": {
      "anchor": [
@@ -1033,9 +1292,17 @@
       175.0
      ],
      "baseline": 1166.0,
+     "current": 1.0,
+     "head": [
+      186.3,
+      145.8,
+      277.7,
+      204.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.909,
+     "scale": 0.909,
+     "scaleSrc": "reviewed",
      "sha": "02bc5230926e72f86ee7d606bf5537dfef20a8534f4c1e77f1f7701db91a9571",
      "size": [
       671,
@@ -1048,13 +1315,14 @@
       "x0": 92.0,
       "x1": 548.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.923
     }
    }
   },
   "paine-black-mage": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     243.0,
     188.0,
@@ -1064,13 +1332,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      478.5,
-      124.0
+      491.0,
+      368.0
      ],
      "baseline": 1000.0,
+     "current": 1.05,
+     "head": [
+      456.8,
+      341.1,
+      525.2,
+      394.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.039,
+     "scale": 1.039,
+     "scaleSrc": "reviewed",
      "sha": "944f89be4420cafdfa3f92ecdce346c2f00e59cb68f5bb267fa866013550ea88",
      "size": [
       991,
@@ -1083,17 +1359,26 @@
       "x0": 114.0,
       "x1": 612.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.914
     },
     "cast": {
      "anchor": [
-      307.4,
-      130.0
+      203.0,
+      435.0
      ],
      "baseline": 1196.0,
+     "current": 1.0,
+     "head": [
+      165.5,
+      405.4,
+      240.5,
+      464.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.946,
+     "scale": 0.946,
+     "scaleSrc": "reviewed",
      "sha": "e8f7200bc0bb52a6c35dc42baa6428fe81a67da21f4d47fc4ce36664df0fc66f",
      "size": [
       563,
@@ -1106,17 +1391,26 @@
       "x0": 69.0,
       "x1": 296.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.998
     },
     "follow": {
      "anchor": [
-      454.5,
-      44.0
+      456.0,
+      201.0
      ],
      "baseline": 1152.0,
+     "current": 0.95,
+     "head": [
+      418.6,
+      171.5,
+      493.4,
+      230.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.948,
+     "scale": 0.95,
+     "scaleSrc": "noise",
      "sha": "fada5db7ba731da361a99edb4745327c66c3565b9891568b1ed9f9e848585bb4",
      "size": [
       832,
@@ -1129,7 +1423,8 @@
       "x0": 386.0,
       "x1": 624.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.964
     },
     "idle": {
      "anchor": [
@@ -1163,13 +1458,21 @@
     },
     "item": {
      "anchor": [
-      364.4,
-      118.0
+      267.0,
+      276.0
      ],
      "baseline": 1054.0,
+     "current": 1.03,
+     "head": [
+      233.1,
+      249.3,
+      300.9,
+      302.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.047,
+     "scale": 1.047,
+     "scaleSrc": "reviewed",
      "sha": "67c4610d621f011da158ee48591e91aa2303d9ab8b5d00f3c792153728ceb245",
      "size": [
       615,
@@ -1182,17 +1485,26 @@
       "x0": 168.0,
       "x1": 381.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.971
     },
     "ko": {
      "anchor": [
-      1054.0,
-      129.1
+      796.0,
+      212.0
      ],
      "baseline": 390.0,
+     "current": 0.82,
+     "head": [
+      749.8,
+      175.6,
+      842.2,
+      248.4
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.769,
+     "scale": 0.769,
+     "scaleSrc": "reviewed",
      "sha": "43125f4667b195a7a9a40250dfb9287c342574834675067c6f3438a99d55949b",
      "size": [
       1239,
@@ -1203,13 +1515,21 @@
     },
     "ready": {
      "anchor": [
-      342.4,
-      76.0
+      290.0,
+      472.0
      ],
      "baseline": 1185.0,
+     "current": 1.15,
+     "head": [
+      257.1,
+      446.1,
+      322.9,
+      497.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.08,
+     "scale": 1.08,
+     "scaleSrc": "reviewed",
      "sha": "34f4533dd819bd134069a4d827502f14b89e9018b9c9d7fe7d7fea0b24bed284",
      "size": [
       522,
@@ -1222,7 +1542,8 @@
       "x0": 125.0,
       "x1": 493.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.132
     },
     "twirl-end": {
      "baseline": 1140.0,
@@ -1266,13 +1587,21 @@
     },
     "victory": {
      "anchor": [
-      311.6,
-      296.0
+      335.0,
+      441.0
      ],
      "baseline": 1203.0,
+     "current": 1.14,
+     "head": [
+      303.2,
+      415.9,
+      366.8,
+      466.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.117,
+     "scale": 1.117,
+     "scaleSrc": "reviewed",
      "sha": "5f416dfbe414927c73c63098aa853c3d64fdd46a6d1d7d81631113a2efb575ed",
      "size": [
       731,
@@ -1285,13 +1614,14 @@
       "x0": 205.0,
       "x1": 473.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.186
     }
    }
   },
   "paine-dark-knight": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     330.0,
     233.0,
@@ -1301,13 +1631,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      214.1,
-      78.0
+      419.0,
+      492.0
      ],
      "baseline": 1197.0,
+     "current": 0.92,
+     "head": [
+      385.9,
+      467.9,
+      452.1,
+      516.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.996,
+     "scale": 0.996,
+     "scaleSrc": "reviewed",
      "sha": "e2ab3af4cb132e93290f8b4d75eefd6293f86d7f26b65efd978796705967b5f4",
      "size": [
       867,
@@ -1320,17 +1658,26 @@
       "x0": 61.0,
       "x1": 681.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.999
     },
     "cast": {
      "anchor": [
-      309.0,
-      134.0
+      302.0,
+      177.0
      ],
      "baseline": 911.0,
+     "current": 1.2,
+     "head": [
+      272.5,
+      155.6,
+      331.5,
+      198.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.119,
+     "scale": 1.119,
+     "scaleSrc": "reviewed",
      "sha": "84e0fc47c5f27902903c7cd584e3da3476396c9904c4abbde890f4bcf2a8425b",
      "size": [
       542,
@@ -1343,17 +1690,26 @@
       "x0": 192.0,
       "x1": 428.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.851
     },
     "follow": {
      "anchor": [
-      329.2,
-      376.0
+      456.0,
+      433.0
      ],
      "baseline": 1007.0,
+     "current": 1.2,
+     "head": [
+      428.5,
+      413.0,
+      483.5,
+      453.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.2,
+     "scale": 1.2,
+     "scaleSrc": "noise",
      "sha": "5ccbe8d06d6d90add5077daf06a43fa557ac73177366b89ae108d9e50afcd546",
      "size": [
       795,
@@ -1366,17 +1722,26 @@
       "x0": 91.0,
       "x1": 553.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.01
     },
     "hurt": {
      "anchor": [
-      321.0,
-      106.0
+      269.0,
+      127.0
      ],
      "baseline": 814.0,
+     "current": 1.0,
+     "head": [
+      235.8,
+      102.9,
+      302.2,
+      151.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.994,
+     "scale": 0.994,
+     "scaleSrc": "reviewed",
      "sha": "d0f450e055f76bf0eaa0c91fbcdc22630331f35a6d7ff1b0dd9fb383b2fb8be3",
      "size": [
       824,
@@ -1389,7 +1754,8 @@
       "x0": 182.0,
       "x1": 287.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.675
     },
     "idle": {
      "anchor": [
@@ -1423,13 +1789,21 @@
     },
     "item": {
      "anchor": [
-      317.9,
-      40.0
+      314.0,
+      95.0
      ],
      "baseline": 844.0,
+     "current": 0.98,
+     "head": [
+      282.7,
+      72.3,
+      345.3,
+      117.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.055,
+     "scale": 1.055,
+     "scaleSrc": "reviewed",
      "sha": "6c0101b02347961eb1d35713f15ab8644907135aa03a0b519f5170ea303512a7",
      "size": [
       699,
@@ -1442,17 +1816,26 @@
       "x0": 213.0,
       "x1": 473.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.742
     },
     "ko": {
      "anchor": [
-      1115.9,
-      117.1
+      1035.0,
+      177.0
      ],
      "baseline": 352.0,
+     "current": 0.8,
+     "head": [
+      995.9,
+      148.6,
+      1074.1,
+      205.4
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.844,
+     "scale": 0.844,
+     "scaleSrc": "reviewed",
      "sha": "b2e2c52e573f878ab649e67f0fbc6f43fab3cd6698d8a5e0f538e750ca8b7821",
      "size": [
       1311,
@@ -1463,13 +1846,21 @@
     },
     "ready": {
      "anchor": [
-      272.3,
-      178.0
+      258.0,
+      451.0
      ],
      "baseline": 1190.0,
+     "current": 1.15,
+     "head": [
+      229.3,
+      430.1,
+      286.7,
+      471.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.15,
+     "scale": 1.15,
+     "scaleSrc": "noise",
      "sha": "3bcfeea0a8cfd343b4031f13844599cc40fc31919fb13933843023bad5863322",
      "size": [
       713,
@@ -1482,7 +1873,8 @@
       "x0": 26.0,
       "x1": 483.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.157
     },
     "twirl-end": {
      "baseline": 1202.0,
@@ -1526,13 +1918,21 @@
     },
     "victory": {
      "anchor": [
-      537.6,
-      44.0
+      386.0,
+      363.0
      ],
      "baseline": 1128.0,
+     "current": 0.95,
+     "head": [
+      351.3,
+      337.7,
+      420.7,
+      388.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.95,
+     "scale": 0.95,
+     "scaleSrc": "noise",
      "sha": "2a80924549b1db74b7b681543faa20d7292f004029f1a8b3a874dff748cf1c97",
      "size": [
       816,
@@ -1545,13 +1945,14 @@
       "x0": 288.0,
       "x1": 519.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.898
     }
    }
   },
   "paine-gunner": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     227.0,
     127.0,
@@ -1561,20 +1962,20 @@
    "poses": {
     "attack": {
      "anchor": [
-      303.1,
-      64.5
+      316.0,
+      177.0
      ],
      "baseline": 862.0,
      "current": 1.01,
      "head": [
-      254.8,
-      26.7,
-      351.3,
-      102.3
+      266.9,
+      138.5,
+      365.1,
+      215.5
      ],
      "prone": false,
-     "reading": 0.86,
-     "scale": 0.86,
+     "reading": 0.845,
+     "scale": 0.845,
      "scaleSrc": "reviewed",
      "sha": "fe4ce87f9912ef6bf76cd4a71a2b7c805cbb9cef38f9f77afd410e6ca542edcc",
      "size": [
@@ -1589,7 +1990,7 @@
       "x1": 495.0
      },
      "standing": true,
-     "stature": 0.659
+     "stature": 0.648
     },
     "idle": {
      "anchor": [
@@ -1623,13 +2024,21 @@
     },
     "item": {
      "anchor": [
-      114.4,
-      60.5
+      115.0,
+      113.0
      ],
      "baseline": 838.0,
+     "current": 1.21,
+     "head": [
+      78.4,
+      84.3,
+      151.6,
+      141.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.133,
+     "scale": 1.133,
+     "scaleSrc": "reviewed",
      "sha": "7fb8a1b954346ef7707677108965102e8286b46355608ce68be807619d776e8c",
      "size": [
       377,
@@ -1642,17 +2051,26 @@
       "x0": 21.0,
       "x1": 248.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.844
     },
     "ready": {
      "anchor": [
-      233.4,
-      100.5
+      251.0,
+      174.0
      ],
      "baseline": 919.0,
+     "current": 1.1,
+     "head": [
+      213.1,
+      144.3,
+      288.9,
+      203.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.096,
+     "scale": 1.1,
+     "scaleSrc": "noise",
      "sha": "67bb980319bc9a80e14a5b6857ca5d7a2850bd20808b1b52068092e59d141f8d",
      "size": [
       496,
@@ -1665,7 +2083,8 @@
       "x0": 64.0,
       "x1": 424.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.9
     },
     "twirl-end": {
      "baseline": 883.0,
@@ -1719,13 +2138,21 @@
     },
     "victory": {
      "anchor": [
-      162.4,
-      336.5
+      161.0,
+      377.0
      ],
      "baseline": 1139.0,
+     "current": 1.2,
+     "head": [
+      126.1,
+      349.7,
+      195.9,
+      404.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.189,
+     "scale": 1.189,
+     "scaleSrc": "reviewed",
      "sha": "49651347b0103d09a112cfeb01d4780f5c1b4fdbac4b392b1b44dd3f0f399a74",
      "size": [
       334,
@@ -1738,13 +2165,409 @@
       "x0": 77.0,
       "x1": 309.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.209
+    }
+   }
+  },
+  "paine-lady-luck": {
+   "game": "ffx2",
+   "headsComplete": true,
+   "idleHead": [
+    197.5,
+    122.0,
+    323.5,
+    222.8
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      344.0,
+      247.0
+     ],
+     "baseline": 1007.0,
+     "current": 0.95,
+     "head": [
+      277.1,
+      193.5,
+      410.9,
+      300.5
+     ],
+     "prone": false,
+     "reading": 0.942,
+     "scale": 0.942,
+     "scaleSrc": "reviewed",
+     "sha": "fdca27ee9e7fd16a736e5d34e02fd3308090c06cf6a9b3b9ab63c2e1d5b38428",
+     "size": [
+      684,
+      1010
+     ],
+     "stance": {
+      "row": 1008.0,
+      "src": "silhouette",
+      "x": 59.5,
+      "x0": 21.0,
+      "x1": 98.0
+     },
+     "standing": true,
+     "stature": 0.781
+    },
+    "cast": {
+     "anchor": [
+      234.0,
+      252.0
+     ],
+     "baseline": 1012.0,
+     "current": 1.3,
+     "head": [
+      185.5,
+      213.2,
+      282.5,
+      290.8
+     ],
+     "prone": false,
+     "reading": 1.299,
+     "scale": 1.3,
+     "scaleSrc": "noise",
+     "sha": "74f33bf295c75ebbc2a1e4640ac7658aa932927e4a895cc78874eb9ce1bb1354",
+     "size": [
+      471,
+      1012
+     ],
+     "stance": {
+      "row": 1012.0,
+      "src": "silhouette",
+      "x": 277.5,
+      "x0": 111.0,
+      "x1": 444.0
+     },
+     "standing": true,
+     "stature": 1.083
+    },
+    "follow": {
+     "anchor": [
+      290.0,
+      131.0
+     ],
+     "baseline": 752.0,
+     "current": 1.65,
+     "head": [
+      250.9,
+      99.7,
+      329.1,
+      162.3
+     ],
+     "prone": false,
+     "reading": 1.611,
+     "scale": 1.611,
+     "scaleSrc": "reviewed",
+     "sha": "4426a83fbdce1958355983bacee37ba61da65fc5da558c886642a118a25320ae",
+     "size": [
+      697,
+      768
+     ],
+     "stance": {
+      "row": 552.0,
+      "src": "silhouette(opened harder)",
+      "x": 328.0,
+      "x0": 221.0,
+      "x1": 435.0
+     },
+     "standing": true,
+     "stature": 0.991
+    },
+    "hurt": {
+     "anchor": [
+      215.0,
+      241.0
+     ],
+     "baseline": 800.0,
+     "current": 1.3,
+     "head": [
+      166.5,
+      202.2,
+      263.5,
+      279.8
+     ],
+     "prone": false,
+     "reading": 1.3,
+     "scale": 1.3,
+     "scaleSrc": "noise",
+     "sha": "37b2e5d6e110d3737ba140164829ba71b8514470c7d6b399ef590ba15d17f8c7",
+     "size": [
+      531,
+      816
+     ],
+     "stance": {
+      "row": 472.0,
+      "src": "silhouette(opened harder)",
+      "x": 287.5,
+      "x0": 184.0,
+      "x1": 391.0
+     },
+     "standing": true,
+     "stature": 0.852
+    },
+    "idle": {
+     "anchor": [
+      260.5,
+      172.4
+     ],
+     "baseline": 1209.0,
+     "head": [
+      197.5,
+      122.0,
+      323.5,
+      222.8
+     ],
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "2c07c5c2fa0c38bc256c717aae7f23f323f30055619cede12bed4ad60b871894",
+     "size": [
+      495,
+      1216
+     ],
+     "stance": {
+      "row": 1210.0,
+      "src": "silhouette",
+      "x": 240.0,
+      "x0": 210.0,
+      "x1": 270.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "item": {
+     "anchor": [
+      170.0,
+      163.0
+     ],
+     "baseline": 896.0,
+     "current": 1.2,
+     "head": [
+      121.6,
+      124.3,
+      218.4,
+      201.7
+     ],
+     "prone": false,
+     "reading": 1.302,
+     "scale": 1.302,
+     "scaleSrc": "reviewed",
+     "sha": "72962ec13ad346632497ec023a2d069a8744dc0bf00fc4a586ebeaf0a30f6d83",
+     "size": [
+      453,
+      912
+     ],
+     "stance": {
+      "row": 896.0,
+      "src": "silhouette",
+      "x": 178.5,
+      "x0": 64.0,
+      "x1": 293.0
+     },
+     "standing": true,
+     "stature": 0.958
+    },
+    "ko": {
+     "anchor": [
+      926.0,
+      119.0
+     ],
+     "baseline": 424.0,
+     "current": 1.2,
+     "head": [
+      873.5,
+      77.0,
+      978.5,
+      161.0
+     ],
+     "prone": true,
+     "reading": 1.2,
+     "scale": 1.2,
+     "scaleSrc": "noise",
+     "sha": "314cda41ae63fa78aed10b2a6385488b65991dc1a7d27629a1b7b01d9ecca73a",
+     "size": [
+      1151,
+      441
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "od-x2-lady-luck-attack-reels": {
+     "anchor": [
+      407.0,
+      342.0
+     ],
+     "baseline": 1057.0,
+     "current": 1.25,
+     "head": [
+      358.5,
+      303.2,
+      455.5,
+      380.8
+     ],
+     "prone": false,
+     "reading": 1.298,
+     "scale": 1.298,
+     "scaleSrc": "reviewed",
+     "sha": "94017f80592a9edfa01fb8f1beeaa08625822d3eacd572e6be8a6516b5861632",
+     "size": [
+      682,
+      1062
+     ],
+     "stance": {
+      "row": 760.0,
+      "src": "silhouette(opened harder)",
+      "x": 338.5,
+      "x0": 170.0,
+      "x1": 507.0
+     },
+     "standing": true,
+     "stature": 1.13
+    },
+    "od-x2-lady-luck-magic-reels": {
+     "anchor": [
+      407.0,
+      342.0
+     ],
+     "baseline": 1057.0,
+     "current": 1.25,
+     "head": [
+      358.5,
+      303.2,
+      455.5,
+      380.8
+     ],
+     "prone": false,
+     "reading": 1.298,
+     "scale": 1.298,
+     "scaleSrc": "reviewed",
+     "sha": "94017f80592a9edfa01fb8f1beeaa08625822d3eacd572e6be8a6516b5861632",
+     "size": [
+      682,
+      1062
+     ],
+     "stance": {
+      "row": 760.0,
+      "src": "silhouette(opened harder)",
+      "x": 338.5,
+      "x0": 170.0,
+      "x1": 507.0
+     },
+     "standing": true,
+     "stature": 1.13
+    },
+    "ready": {
+     "anchor": [
+      172.0,
+      136.0
+     ],
+     "baseline": 829.0,
+     "current": 1.5,
+     "head": [
+      132.3,
+      104.2,
+      211.7,
+      167.8
+     ],
+     "prone": false,
+     "reading": 1.585,
+     "scale": 1.585,
+     "scaleSrc": "reviewed",
+     "sha": "8716329fe452741c5233d9eaca9dc2ca2f910e942cb233eb5fd98f4a1fe3634e",
+     "size": [
+      496,
+      845
+     ],
+     "stance": {
+      "row": 830.0,
+      "src": "silhouette",
+      "x": 175.5,
+      "x0": 20.0,
+      "x1": 331.0
+     },
+     "standing": true,
+     "stature": 1.077
+    },
+    "twirl-end": {
+     "baseline": 895.0,
+     "prone": false,
+     "sha": "9056ff32385a5af3ec75d3654c1123537dde16d632a4f1322ac5b5ae926ab6eb",
+     "size": [
+      521,
+      911
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "twirl-forming": {
+     "baseline": 901.0,
+     "prone": false,
+     "sha": "f6336e02f9c8d356e18750a657f98f307c13086f0c134df2e7f7cc84a74ae50a",
+     "size": [
+      527,
+      914
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "twirl-going": {
+     "baseline": 946.0,
+     "prone": false,
+     "sha": "45b8dc852b23c9583496b4649bcd6c02e6f72929cdcd073c36706d17dfd6a669",
+     "size": [
+      600,
+      946
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "twirl-start": {
+     "baseline": 941.0,
+     "prone": false,
+     "sha": "b5313dfc332ef685527bab8c9ef3274edb9f2085476835a4dbe97daa7609520e",
+     "size": [
+      603,
+      947
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "victory": {
+     "anchor": [
+      170.0,
+      314.0
+     ],
+     "baseline": 1200.0,
+     "current": 1.1,
+     "head": [
+      112.7,
+      268.2,
+      227.3,
+      359.8
+     ],
+     "prone": false,
+     "reading": 1.1,
+     "scale": 1.1,
+     "scaleSrc": "noise",
+     "sha": "024f0fe20098dca8e3b8fbeacae26c99f101895e4715b2550152088c443f4954",
+     "size": [
+      387,
+      1211
+     ],
+     "stance": {
+      "row": 1198.0,
+      "src": "silhouette",
+      "x": 232.5,
+      "x0": 102.0,
+      "x1": 363.0
+     },
+     "standing": true,
+     "stature": 1.089
     }
    }
   },
   "paine-samurai": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     314.0,
     158.0,
@@ -1754,20 +2577,20 @@
    "poses": {
     "cast": {
      "anchor": [
-      418.1,
-      54.0
+      444.0,
+      118.0
      ],
      "baseline": 1124.0,
      "current": 1.1,
      "head": [
-      365.2,
-      9.3,
-      471.1,
-      98.7
+      388.9,
+      71.5,
+      499.1,
+      164.5
      ],
      "prone": false,
-     "reading": 0.85,
-     "scale": 0.85,
+     "reading": 0.817,
+     "scale": 0.817,
      "scaleSrc": "reviewed",
      "sha": "e95991ecf640b6febcef40f576dd8a217bc51591b9d0c00a3fa601fef325be89",
      "size": [
@@ -1782,17 +2605,25 @@
       "x1": 710.0
      },
      "standing": true,
-     "stature": 0.859
+     "stature": 0.825
     },
     "follow": {
      "anchor": [
-      435.4,
-      54.0
+      428.0,
+      120.0
      ],
      "baseline": 714.0,
+     "current": 1.1,
+     "head": [
+      385.6,
+      84.2,
+      470.4,
+      155.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.061,
+     "scale": 1.061,
+     "scaleSrc": "reviewed",
      "sha": "e47574ff182332db0bb1bdffe1cf60637b3591b89669c318f5bc38298a7974ab",
      "size": [
       801,
@@ -1805,7 +2636,8 @@
       "x0": 83.0,
       "x1": 612.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.675
     },
     "idle": {
      "anchor": [
@@ -1839,13 +2671,21 @@
     },
     "item": {
      "anchor": [
-      234.7,
-      58.0
+      246.0,
+      97.0
      ],
      "baseline": 830.0,
+     "current": 1.15,
+     "head": [
+      207.1,
+      64.2,
+      284.9,
+      129.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.157,
+     "scale": 1.157,
+     "scaleSrc": "reviewed",
      "sha": "4b9c9c07f751680e1f9f7b8fbd5a0f3d77da707926c265e96bb123ab0a2b1337",
      "size": [
       575,
@@ -1858,17 +2698,26 @@
       "x0": 154.0,
       "x1": 382.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.859
     },
     "ready": {
      "anchor": [
-      320.1,
-      92.0
+      296.0,
+      194.0
      ],
      "baseline": 943.0,
+     "current": 1.15,
+     "head": [
+      255.6,
+      159.9,
+      336.4,
+      228.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.115,
+     "scale": 1.115,
+     "scaleSrc": "reviewed",
      "sha": "6b67d6fc5ec63bc7ea1f8faf98dbef139d13f7bb486bb8789b6d06ad1d6b44a5",
      "size": [
       663,
@@ -1881,13 +2730,14 @@
       "x0": 75.0,
       "x1": 450.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.942
     }
    }
   },
   "paine-songstress": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     97.0,
     128.0,
@@ -1897,13 +2747,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      320.0,
-      78.5
+      361.0,
+      168.0
      ],
      "baseline": 866.0,
+     "current": 1.05,
+     "head": [
+      323.7,
+      138.1,
+      398.3,
+      197.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.152,
+     "scale": 1.152,
+     "scaleSrc": "reviewed",
      "sha": "99ddf3db584c9a9891ea55594082ba4056d7d966048c9891535b68da3c685eb4",
      "size": [
       695,
@@ -1916,17 +2774,26 @@
       "x0": 34.0,
       "x1": 534.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.843
     },
     "cast": {
      "anchor": [
-      145.6,
-      172.5
+      134.0,
+      234.0
      ],
      "baseline": 937.0,
+     "current": 1.1,
+     "head": [
+      92.4,
+      200.6,
+      175.6,
+      267.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.033,
+     "scale": 1.033,
+     "scaleSrc": "reviewed",
      "sha": "a7660c3602818168c6abe899f3745f72345cd32d38d1ca7d821af832e74652e6",
      "size": [
       309,
@@ -1939,17 +2806,26 @@
       "x0": 31.0,
       "x1": 286.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.819
     },
     "dance": {
      "anchor": [
-      304.0,
-      90.5
+      271.0,
+      154.0
      ],
      "baseline": 1174.0,
+     "current": 1.0,
+     "head": [
+      223.8,
+      116.1,
+      318.2,
+      191.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.911,
+     "scale": 0.911,
+     "scaleSrc": "reviewed",
      "sha": "e4b1b955ac11c5ad643642d395ef5e63681eed70c0a46f820a6f0b87800d0cba",
      "size": [
       672,
@@ -1962,17 +2838,30 @@
       "x0": 323.0,
       "x1": 444.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.908
     },
     "hurt": {
      "anchor": [
-      425.7,
-      66.5
+      606.0,
+      300.0
      ],
      "baseline": 1078.0,
+     "current": 0.66,
+     "gate": {
+      "reading": 0.646,
+      "stature": 0.603
+     },
+     "head": [
+      539.4,
+      246.6,
+      672.6,
+      353.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.646,
+     "scale": 0.66,
+     "scaleSrc": "gated",
      "sha": "c8fcb8f5370fe77aea90b355e81df364366078acbcd3be4cd997365324d07ff8",
      "size": [
       823,
@@ -1985,7 +2874,8 @@
       "x0": 337.0,
       "x1": 637.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.603
     },
     "idle": {
      "anchor": [
@@ -2019,13 +2909,21 @@
     },
     "item": {
      "anchor": [
-      186.5,
-      94.5
+      118.0,
+      189.0
      ],
      "baseline": 960.0,
+     "current": 1.05,
+     "head": [
+      74.5,
+      154.1,
+      161.5,
+      223.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.988,
+     "scale": 0.988,
+     "scaleSrc": "reviewed",
      "sha": "ce42cfeba40c7b8aaef4b288f708c42589389e40c2266a37416cf80fccd2b08c",
      "size": [
       434,
@@ -2038,17 +2936,26 @@
       "x0": 88.0,
       "x1": 332.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.803
     },
     "ko": {
      "anchor": [
-      1035.1,
-      106.9
+      917.0,
+      165.0
      ],
      "baseline": 319.0,
+     "current": 1.0,
+     "head": [
+      873.7,
+      130.3,
+      960.3,
+      199.7
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.994,
+     "scale": 0.994,
+     "scaleSrc": "reviewed",
      "sha": "ef94d717b09a52489bd20aba78a8edff4dad57ff02aaf732f90c8191afe5cec6",
      "size": [
       1216,
@@ -2099,13 +3006,21 @@
     },
     "victory": {
      "anchor": [
-      335.0,
-      78.5
+      331.0,
+      154.0
      ],
      "baseline": 1071.0,
+     "current": 1.05,
+     "head": [
+      289.0,
+      120.3,
+      373.0,
+      187.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.024,
+     "scale": 1.024,
+     "scaleSrc": "reviewed",
      "sha": "94feef4e1d67bd05cf703c6c1c7d6b07029601836e2e4d29c49c46895481bd26",
      "size": [
       596,
@@ -2118,13 +3033,14 @@
       "x0": 91.0,
       "x1": 502.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.93
     }
    }
   },
   "paine-thief": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     319.0,
     156.0,
@@ -2134,13 +3050,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      355.3,
-      81.0
+      373.0,
+      145.0
      ],
      "baseline": 842.0,
+     "current": 0.9,
+     "head": [
+      334.4,
+      113.0,
+      411.6,
+      177.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.906,
+     "scale": 0.906,
+     "scaleSrc": "reviewed",
      "sha": "ab693d110c993553bfb0f9cf2df451387058d9bc435e360bcf015d02aaabb25d",
      "size": [
       751,
@@ -2153,17 +3077,26 @@
       "x0": 98.0,
       "x1": 504.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.651
     },
     "cast": {
      "anchor": [
-      195.0,
-      349.0
+      198.0,
+      396.0
      ],
      "baseline": 1140.0,
+     "current": 1.15,
+     "head": [
+      168.0,
+      371.1,
+      228.0,
+      420.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.165,
+     "scale": 1.165,
+     "scaleSrc": "reviewed",
      "sha": "f66b21dca335d29d7d67f18ecbd90e3f15674c70ac451e8032832946d314c0b6",
      "size": [
       426,
@@ -2176,17 +3109,26 @@
       "x0": 82.0,
       "x1": 351.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.14
     },
     "follow": {
      "anchor": [
-      622.6,
-      75.0
+      381.0,
+      164.0
      ],
      "baseline": 788.0,
+     "current": 1.05,
+     "head": [
+      348.2,
+      136.8,
+      413.8,
+      191.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.066,
+     "scale": 1.066,
+     "scaleSrc": "reviewed",
      "sha": "5f4f5543a0b8720acd6e54ac5c6f93b20e1e860c2c2543e5619692802b7c9e15",
      "size": [
       749,
@@ -2199,17 +3141,26 @@
       "x0": 49.0,
       "x1": 509.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.716
     },
     "hurt": {
      "anchor": [
-      239.4,
-      63.0
+      233.0,
+      118.0
      ],
      "baseline": 796.0,
+     "current": 1.15,
+     "head": [
+      201.9,
+      92.3,
+      264.1,
+      143.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.127,
+     "scale": 1.127,
+     "scaleSrc": "reviewed",
      "sha": "e2fe3ee8ea254fad7e5d6460479ec4f47e55b557b435362e8c8f7bad9b1aa14d",
      "size": [
       567,
@@ -2222,7 +3173,8 @@
       "x0": 188.0,
       "x1": 542.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.765
     },
     "idle": {
      "anchor": [
@@ -2256,13 +3208,21 @@
     },
     "item": {
      "anchor": [
-      263.3,
-      79.0
+      222.0,
+      182.0
      ],
      "baseline": 942.0,
+     "current": 0.95,
+     "head": [
+      184.5,
+      150.9,
+      259.5,
+      213.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.933,
+     "scale": 0.933,
+     "scaleSrc": "reviewed",
      "sha": "b724198eefe4b51c5b626d055f5226a042eca34cd297b3fa3f21b3e0d47f3c09",
      "size": [
       553,
@@ -2275,17 +3235,26 @@
       "x0": 148.0,
       "x1": 407.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.752
     },
     "ko": {
      "anchor": [
-      994.7,
-      123.7
+      924.0,
+      130.0
      ],
      "baseline": 375.0,
+     "current": 1.0,
+     "head": [
+      888.5,
+      100.6,
+      959.5,
+      159.4
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.987,
+     "scale": 0.987,
+     "scaleSrc": "reviewed",
      "sha": "6af0cf2758a914cda09195074913ac7a827170b52fe7267541e9d0e3dbd0f0e9",
      "size": [
       1170,
@@ -2296,13 +3265,21 @@
     },
     "ready": {
      "anchor": [
-      461.1,
-      65.0
+      480.0,
+      132.0
      ],
      "baseline": 790.0,
+     "current": 1.0,
+     "head": [
+      443.6,
+      101.9,
+      516.4,
+      162.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.962,
+     "scale": 0.962,
+     "scaleSrc": "reviewed",
      "sha": "c58c56ee4f85290db48c18f8ec7187fa98e64bc4fefe086b410ab36cd09b9127",
      "size": [
       593,
@@ -2315,7 +3292,8 @@
       "x0": 115.0,
       "x1": 567.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.648
     },
     "twirl-end": {
      "baseline": 988.0,
@@ -2359,13 +3337,21 @@
     },
     "victory": {
      "anchor": [
-      175.2,
-      67.0
+      166.0,
+      138.0
      ],
      "baseline": 873.0,
+     "current": 1.1,
+     "head": [
+      135.8,
+      113.0,
+      196.2,
+      163.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.159,
+     "scale": 1.159,
+     "scaleSrc": "reviewed",
      "sha": "827c3322959306cdbd4ad646b928c2efcc3521aa26e226cf7bf00634eb9c6886",
      "size": [
       346,
@@ -2378,13 +3364,14 @@
       "x0": 25.0,
       "x1": 311.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.864
     }
    }
   },
   "paine-warrior": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     130.0,
     126.0,
@@ -2394,13 +3381,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      417.4,
-      62.5
+      430.0,
+      118.0
      ],
      "baseline": 823.0,
+     "current": 1.15,
+     "head": [
+      380.1,
+      86.8,
+      479.9,
+      149.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.042,
+     "scale": 1.042,
+     "scaleSrc": "reviewed",
      "sha": "19079342ab7685542eba798cc105d34c1120417c69c8b4a72c28a923d13913d2",
      "size": [
       937,
@@ -2413,17 +3408,26 @@
       "x0": 22.0,
       "x1": 678.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.733
     },
     "cast": {
      "anchor": [
-      361.7,
-      116.5
+      332.0,
+      220.0
      ],
      "baseline": 945.0,
+     "current": 1.09,
+     "head": [
+      288.1,
+      192.6,
+      375.9,
+      247.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.185,
+     "scale": 1.185,
+     "scaleSrc": "reviewed",
      "sha": "3a0dde295dcb9764b23a20b3367b6d3c9f7cb69f317fe140ab369521bdd7e0dd",
      "size": [
       587,
@@ -2436,17 +3440,26 @@
       "x0": 260.0,
       "x1": 449.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.959
     },
     "critical": {
      "anchor": [
-      394.7,
-      360.5
+      402.0,
+      381.0
      ],
      "baseline": 987.0,
+     "current": 0.9,
+     "head": [
+      344.7,
+      345.2,
+      459.3,
+      416.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.908,
+     "scale": 0.908,
+     "scaleSrc": "reviewed",
      "sha": "a6f76d9a71035d14cd8c164a00af519290e5ce2b6a48db733178f0e8491948a4",
      "size": [
       701,
@@ -2459,17 +3472,26 @@
       "x0": 37.0,
       "x1": 668.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.768
     },
     "follow": {
      "anchor": [
-      404.6,
-      478.5
+      411.0,
+      514.0
      ],
      "baseline": 1155.0,
+     "current": 1.15,
+     "head": [
+      358.3,
+      481.0,
+      463.7,
+      547.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.986,
+     "scale": 0.986,
+     "scaleSrc": "reviewed",
      "sha": "45814afa4ce141aa317c852d0949a06f586c2ca144f6b879ef33082d20d8222c",
      "size": [
       605,
@@ -2482,7 +3504,8 @@
       "x0": 22.0,
       "x1": 521.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.978
     },
     "idle": {
      "anchor": [
@@ -2516,13 +3539,21 @@
     },
     "item": {
      "anchor": [
-      351.5,
-      56.5
+      346.0,
+      127.0
      ],
      "baseline": 849.0,
+     "current": 1.15,
+     "head": [
+      295.8,
+      95.6,
+      396.2,
+      158.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.035,
+     "scale": 1.035,
+     "scaleSrc": "reviewed",
      "sha": "47418824bc4d9c25bfe8b91a9b2727a9e11142ed16cf9f013b431ef4f9db0bea",
      "size": [
       649,
@@ -2535,17 +3566,26 @@
       "x0": 33.0,
       "x1": 474.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.751
     },
     "od-x2-warrior-armor-break": {
      "anchor": [
-      416.3,
-      62.5
+      374.0,
+      76.0
      ],
      "baseline": 826.0,
+     "current": 1.15,
+     "head": [
+      324.1,
+      44.8,
+      423.9,
+      107.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.042,
+     "scale": 1.042,
+     "scaleSrc": "reviewed",
      "sha": "87ff28e2c69338ff5e8c0ff973449eeed475cdff777caccf2ae8af56ebe81bc4",
      "size": [
       875,
@@ -2558,17 +3598,26 @@
       "x0": 23.0,
       "x1": 852.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.735
     },
     "od-x2-warrior-power-break": {
      "anchor": [
-      416.3,
-      62.5
+      433.0,
+      120.0
      ],
      "baseline": 826.0,
+     "current": 1.15,
+     "head": [
+      383.1,
+      88.8,
+      482.9,
+      151.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.042,
+     "scale": 1.042,
+     "scaleSrc": "reviewed",
      "sha": "87ff28e2c69338ff5e8c0ff973449eeed475cdff777caccf2ae8af56ebe81bc4",
      "size": [
       875,
@@ -2581,17 +3630,26 @@
       "x0": 23.0,
       "x1": 852.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.735
     },
     "ready": {
      "anchor": [
-      328.1,
-      288.5
+      355.0,
+      320.0
      ],
      "baseline": 1082.0,
+     "current": 1.15,
+     "head": [
+      309.9,
+      291.8,
+      400.1,
+      348.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.154,
+     "scale": 1.15,
+     "scaleSrc": "noise",
      "sha": "7b86fbfac490aa2332255d02c2dae868f50de8dae200af09a61c7ba681a57936",
      "size": [
       769,
@@ -2604,17 +3662,26 @@
       "x0": 178.0,
       "x1": 521.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.068
     },
     "sleep": {
      "anchor": [
-      243.6,
-      388.5
+      210.0,
+      393.0
      ],
      "baseline": 1181.0,
+     "current": 0.9,
+     "head": [
+      150.2,
+      355.6,
+      269.8,
+      430.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.87,
+     "scale": 0.87,
+     "scaleSrc": "reviewed",
      "sha": "ca8053448ed3cd6d102d0b1e1fa962ce842061e18a13fdf6cfa167a0f6ce1c33",
      "size": [
       446,
@@ -2627,7 +3694,8 @@
       "x0": 34.0,
       "x1": 360.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.883
     },
     "twirl-end": {
      "baseline": 1172.0,
@@ -2671,13 +3739,21 @@
     },
     "victory": {
      "anchor": [
-      311.3,
-      328.5
+      269.0,
+      266.0
      ],
      "baseline": 1191.0,
+     "current": 1.01,
+     "head": [
+      218.4,
+      234.4,
+      319.6,
+      297.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.027,
+     "scale": 1.027,
+     "scaleSrc": "reviewed",
      "sha": "cb8a42412bbfdc6f495f53e266e170b442ee0bd76cac59ea896a6def2c637d60",
      "size": [
       556,
@@ -2690,13 +3766,14 @@
       "x0": 244.0,
       "x1": 455.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.051
     }
    }
   },
   "paine-white-mage": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     389.0,
     155.0,
@@ -2706,13 +3783,21 @@
    "poses": {
     "cast": {
      "anchor": [
-      400.1,
-      347.5
+      364.0,
+      380.0
      ],
      "baseline": 1104.0,
+     "current": 1.2,
+     "head": [
+      334.0,
+      346.9,
+      394.0,
+      413.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.133,
+     "scale": 1.133,
+     "scaleSrc": "reviewed",
      "sha": "e0f127e9305feac4856eed4f2dad971c2536953362f385f2161925c9315c9279",
      "size": [
       700,
@@ -2725,17 +3810,26 @@
       "x0": 242.0,
       "x1": 442.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.113
     },
     "follow": {
      "anchor": [
-      697.5,
-      53.5
+      364.0,
+      116.0
      ],
      "baseline": 760.0,
+     "current": 1.25,
+     "head": [
+      337.5,
+      86.8,
+      390.5,
+      145.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.283,
+     "scale": 1.283,
+     "scaleSrc": "reviewed",
      "sha": "1566e4551d0f111f4452905cf2590512fccb144c9abec0d20c81b74196a08aec",
      "size": [
       801,
@@ -2748,7 +3842,8 @@
       "x0": 264.0,
       "x1": 470.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.862
     },
     "idle": {
      "anchor": [
@@ -2782,13 +3877,21 @@
     },
     "item": {
      "anchor": [
-      261.3,
-      69.5
+      281.0,
+      156.0
      ],
      "baseline": 860.0,
+     "current": 1.15,
+     "head": [
+      253.3,
+      125.4,
+      308.7,
+      186.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.226,
+     "scale": 1.226,
+     "scaleSrc": "reviewed",
      "sha": "f8da14196bddada76b378aa5d22f05ac0918960c17819535edddc5c2441dacd3",
      "size": [
       719,
@@ -2801,7 +3904,8 @@
       "x0": 185.0,
       "x1": 413.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.934
     },
     "twirl-end": {
      "baseline": 1161.0,
@@ -2863,14 +3967,14 @@
      "baseline": 1188.0,
      "current": 1.0,
      "head": [
-      317.3,
-      197.3,
-      482.7,
-      322.7
+      315.5,
+      196.0,
+      484.5,
+      324.0
      ],
      "prone": false,
-     "reading": 0.75,
-     "scale": 0.75,
+     "reading": 0.734,
+     "scale": 0.734,
      "scaleSrc": "reviewed",
      "sha": "26875750ee0df24d5407af5d86fdb72da6c132f878b605b63504ddebb6ae004d",
      "size": [
@@ -2885,7 +3989,7 @@
       "x1": 563.0
      },
      "standing": true,
-     "stature": 0.819
+     "stature": 0.801
     },
     "cast": {
      "anchor": [
@@ -2925,9 +4029,17 @@
       285.0
      ],
      "baseline": 1142.0,
+     "current": 0.8,
+     "head": [
+      223.3,
+      223.1,
+      386.7,
+      346.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.759,
+     "scale": 0.759,
+     "scaleSrc": "reviewed",
      "sha": "429211ffa043e1c46596da46c9b0871455b3cd90b4e39ed53963c6b0e0be3eeb",
      "size": [
       476,
@@ -2940,7 +4052,8 @@
       "x0": 63.0,
       "x1": 346.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.786
     },
     "follow": {
      "anchor": [
@@ -2950,14 +4063,14 @@
      "baseline": 900.0,
      "current": 1.1,
      "head": [
-      186.2,
-      158.5,
-      353.8,
-      285.5
+      187.8,
+      159.7,
+      352.2,
+      284.3
      ],
      "prone": false,
-     "reading": 0.74,
-     "scale": 0.74,
+     "reading": 0.754,
+     "scale": 0.754,
      "scaleSrc": "reviewed",
      "sha": "4fefb6aa5d829d5674981a8cbdebe9a63abbac20ccfa88a2526ca8e5b7132c26",
      "size": [
@@ -2972,7 +4085,7 @@
       "x1": 120.0
      },
      "standing": true,
-     "stature": 0.601
+     "stature": 0.613
     },
     "hurt": {
      "anchor": [
@@ -3074,9 +4187,17 @@
       150.0
      ],
      "baseline": 450.0,
+     "current": 0.56,
+     "head": [
+      939.3,
+      66.1,
+      1160.7,
+      233.9
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.56,
+     "scale": 0.56,
+     "scaleSrc": "noise",
      "sha": "91256f0fdb249115b21425f412b5be304bf34687f9e9a90dfc20c4f17328e7a1",
      "size": [
       1216,
@@ -3100,8 +4221,8 @@
      ],
      "prone": false,
      "reading": 1.1,
-     "scale": 1.05,
-     "scaleSrc": "noise",
+     "scale": 1.1,
+     "scaleSrc": "reviewed",
      "sha": "67ecd532e81a7cec50de96b2c38a0c4fea7a12f9a5521cd3c3e99de6fe3229cf",
      "size": [
       592,
@@ -3115,7 +4236,7 @@
       "x1": 565.0
      },
      "standing": true,
-     "stature": 1.084
+     "stature": 1.135
     },
     "sleep": {
      "anchor": [
@@ -3123,9 +4244,17 @@
       185.0
      ],
      "baseline": 1176.0,
+     "current": 0.8,
+     "head": [
+      37.5,
+      126.2,
+      192.5,
+      243.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.8,
+     "scale": 0.8,
+     "scaleSrc": "noise",
      "sha": "cab78a3de17182c18bbe1a1226def5ddc6d60666d4e96b9ce653a7131128ccb7",
      "size": [
       463,
@@ -3138,7 +4267,8 @@
       "x0": 119.0,
       "x1": 323.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.853
     },
     "steal": {
      "anchor": [
@@ -3208,7 +4338,7 @@
   },
   "rikku-alchemist": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     181.0,
     170.0,
@@ -3218,13 +4348,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      433.0,
-      81.0
+      438.0,
+      215.0
      ],
      "baseline": 925.0,
+     "current": 0.97,
+     "head": [
+      402.8,
+      188.1,
+      473.2,
+      241.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.08,
+     "scale": 1.08,
+     "scaleSrc": "reviewed",
      "sha": "b61577f33e2474924bf80342fbbbf0c76922ff06c980aed7191c3d36949b2aa4",
      "size": [
       748,
@@ -3237,17 +4375,26 @@
       "x0": 89.0,
       "x1": 683.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.845
     },
     "cast": {
      "anchor": [
-      186.8,
-      149.0
+      242.0,
+      235.0
      ],
      "baseline": 1170.0,
+     "current": 0.96,
+     "head": [
+      205.4,
+      207.1,
+      278.6,
+      262.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.039,
+     "scale": 1.039,
+     "scaleSrc": "reviewed",
      "sha": "1bc78194168d9e45223bc4bc96f243b383e0545831a860bf6caca61c13b735bc",
      "size": [
       439,
@@ -3260,17 +4407,26 @@
       "x0": 79.0,
       "x1": 405.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.032
     },
     "hurt": {
      "anchor": [
-      187.3,
-      71.0
+      185.0,
+      125.0
      ],
      "baseline": 788.0,
+     "current": 1.08,
+     "head": [
+      149.8,
+      98.1,
+      220.2,
+      151.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.08,
+     "scale": 1.08,
+     "scaleSrc": "noise",
      "sha": "cdbf864aaee28dd7c6f8add5f49445c477c9dccac0355f98ce95c765a1ec7cc8",
      "size": [
       541,
@@ -3283,7 +4439,8 @@
       "x0": 97.0,
       "x1": 337.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.718
     },
     "idle": {
      "anchor": [
@@ -3317,13 +4474,21 @@
     },
     "item": {
      "anchor": [
-      159.3,
-      81.0
+      200.0,
+      120.0
      ],
      "baseline": 918.0,
+     "current": 1.15,
+     "head": [
+      168.9,
+      96.3,
+      231.1,
+      143.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.223,
+     "scale": 1.223,
+     "scaleSrc": "reviewed",
      "sha": "7ed0cd7b2616e2ede9dec2e4fd5fce5aa9e167da35dc9ae5def976e554063359",
      "size": [
       464,
@@ -3336,17 +4501,26 @@
       "x0": 81.0,
       "x1": 330.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.949
     },
     "ready": {
      "anchor": [
-      176.5,
-      57.0
+      200.0,
+      150.0
      ],
      "baseline": 853.0,
+     "current": 1.15,
+     "head": [
+      170.8,
+      127.7,
+      229.2,
+      172.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.303,
+     "scale": 1.303,
+     "scaleSrc": "reviewed",
      "sha": "6a484e93f6e18682d0941b3b7190ed035bd884d1b0974813b8b59920a0bf4f51",
      "size": [
       496,
@@ -3359,7 +4533,8 @@
       "x0": 64.0,
       "x1": 393.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.939
     },
     "twirl-end": {
      "baseline": 1174.0,
@@ -3403,13 +4578,21 @@
     },
     "victory": {
      "anchor": [
-      158.2,
-      97.0
+      187.0,
+      142.0
      ],
      "baseline": 859.0,
+     "current": 1.16,
+     "head": [
+      157.0,
+      119.1,
+      217.0,
+      164.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.266,
+     "scale": 1.266,
+     "scaleSrc": "reviewed",
      "sha": "2c3ab09b02485b7593cfebe715a93659b2bb101e16fad3e7aba227b585f6a925",
      "size": [
       318,
@@ -3422,13 +4605,14 @@
       "x0": 46.0,
       "x1": 276.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.918
     }
    }
   },
   "rikku-berserker": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     221.0,
     159.0,
@@ -3438,13 +4622,21 @@
    "poses": {
     "cast": {
      "anchor": [
-      400.6,
-      79.0
+      326.0,
+      123.0
      ],
      "baseline": 1039.0,
+     "current": 1.1,
+     "head": [
+      280.5,
+      98.5,
+      371.5,
+      147.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.1,
+     "scale": 1.1,
+     "scaleSrc": "noise",
      "sha": "ab2fa9e7e1b6a81fd492ad781e9e3efd95a3f0e89446045565f4ea202a609962",
      "size": [
       600,
@@ -3457,17 +4649,26 @@
       "x0": 137.0,
       "x1": 412.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.948
     },
     "follow": {
      "anchor": [
-      373.2,
-      129.0
+      342.0,
+      316.0
      ],
      "baseline": 1000.0,
+     "current": 1.1,
+     "head": [
+      293.9,
+      290.0,
+      390.1,
+      342.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.04,
+     "scale": 1.04,
+     "scaleSrc": "reviewed",
      "sha": "abbaa7329360da0404fd2b6938af8d64e7ce217535ed2e8ff9f405802574fc6d",
      "size": [
       672,
@@ -3480,7 +4681,8 @@
       "x0": 20.0,
       "x1": 121.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.865
     },
     "idle": {
      "anchor": [
@@ -3514,13 +4716,21 @@
     },
     "item": {
      "anchor": [
-      137.6,
-      69.0
+      146.0,
+      168.0
      ],
      "baseline": 887.0,
+     "current": 1.1,
+     "head": [
+      103.8,
+      145.2,
+      188.2,
+      190.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.184,
+     "scale": 1.184,
+     "scaleSrc": "reviewed",
      "sha": "39bc005267f9890461db166f04c5e7f130f4be31814f34516d17a7e585498e69",
      "size": [
       456,
@@ -3533,27 +4743,28 @@
       "x0": 36.0,
       "x1": 282.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.869
     },
     "ready": {
      "anchor": [
-      331.1,
-      51.0
+      342.0,
+      313.0
      ],
      "baseline": 1106.0,
      "current": 1.1,
      "gate": {
-      "reading": 0.55,
+      "reading": 0.573,
       "stature": 0.606
      },
      "head": [
-      240.2,
-      1.9,
-      422.0,
-      100.1
+      254.7,
+      265.9,
+      429.3,
+      360.1
      ],
      "prone": false,
-     "reading": 0.55,
+     "reading": 0.573,
      "scale": 0.66,
      "scaleSrc": "gated",
      "sha": "e2c3f9dbf35eb1bbdefe3e83074bb313d85b80eabafe6dc229491bb85fb2202b",
@@ -3575,7 +4786,7 @@
   },
   "rikku-black-mage": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     218.0,
     199.0,
@@ -3585,13 +4796,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      388.3,
-      77.0
+      428.0,
+      275.0
      ],
      "baseline": 971.0,
+     "current": 1.26,
+     "head": [
+      383.4,
+      239.1,
+      472.6,
+      310.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.255,
+     "scale": 1.26,
+     "scaleSrc": "noise",
      "sha": "b896affad1f3fc4fe69951369270d8c173eac4c167fbe0ca0d2089509fc4194b",
      "size": [
       954,
@@ -3604,17 +4823,26 @@
       "x0": 40.0,
       "x1": 651.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.039
     },
     "cast": {
      "anchor": [
-      258.7,
-      333.0
+      252.0,
+      650.0
      ],
      "baseline": 1203.0,
+     "current": 1.04,
+     "head": [
+      198.2,
+      606.7,
+      305.8,
+      693.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.04,
+     "scale": 1.04,
+     "scaleSrc": "noise",
      "sha": "a1007f9b73912bacc4785ddf190a0502acea1f4880c946656d1eb9aa1b9deb91",
      "size": [
       583,
@@ -3627,17 +4855,26 @@
       "x0": 122.0,
       "x1": 363.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.07
     },
     "follow": {
      "anchor": [
-      429.5,
-      173.0
+      334.0,
+      545.0
      ],
      "baseline": 1200.0,
+     "current": 1.35,
+     "head": [
+      287.5,
+      507.7,
+      380.5,
+      582.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.205,
+     "scale": 1.205,
+     "scaleSrc": "reviewed",
      "sha": "a6f2f0f651dffc86b1cff1b1bf372e96e418a7b6e9f783a0171c468f804b976d",
      "size": [
       653,
@@ -3650,7 +4887,8 @@
       "x0": 145.0,
       "x1": 328.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.232
     },
     "idle": {
      "anchor": [
@@ -3684,13 +4922,21 @@
     },
     "item": {
      "anchor": [
-      398.3,
-      135.0
+      345.0,
+      339.0
      ],
      "baseline": 1058.0,
+     "current": 1.15,
+     "head": [
+      294.0,
+      298.0,
+      396.0,
+      380.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.097,
+     "scale": 1.097,
+     "scaleSrc": "reviewed",
      "sha": "88bac3942f7b29f8c54f2d3a1bcc0910914e40b8a3359503922ce5eaad30216c",
      "size": [
       608,
@@ -3703,17 +4949,26 @@
       "x0": 216.0,
       "x1": 446.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.987
     },
     "ko": {
      "anchor": [
-      967.2,
-      134.8
+      703.0,
+      291.0
      ],
      "baseline": 412.0,
+     "current": 1.15,
+     "head": [
+      654.3,
+      251.9,
+      751.7,
+      330.1
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.15,
+     "scale": 1.15,
+     "scaleSrc": "noise",
      "sha": "d3f9cc048d0666fafe71d342831257d7fc2a200e401aedb99ce719444c2cf2f9",
      "size": [
       1138,
@@ -3724,13 +4979,21 @@
     },
     "ready": {
      "anchor": [
-      676.7,
-      161.0
+      384.0,
+      340.0
      ],
      "baseline": 1106.0,
+     "current": 1.15,
+     "head": [
+      339.2,
+      304.0,
+      428.8,
+      376.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.249,
+     "scale": 1.249,
+     "scaleSrc": "reviewed",
      "sha": "afc9053cfb8e0252d696670fde507cb35f13b957e487ef33762e7bdbb29f9d6e",
      "size": [
       787,
@@ -3743,7 +5006,8 @@
       "x0": 192.0,
       "x1": 476.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.176
     },
     "twirl-end": {
      "baseline": 1190.0,
@@ -3789,7 +5053,7 @@
   },
   "rikku-dark-knight": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     226.0,
     151.0,
@@ -3799,13 +5063,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      328.9,
-      45.0
+      575.0,
+      355.0
      ],
      "baseline": 1170.0,
+     "current": 0.9,
+     "head": [
+      513.9,
+      322.8,
+      636.1,
+      387.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.9,
+     "scale": 0.9,
+     "scaleSrc": "noise",
      "sha": "be6402a00eefb82d8864e3d0d2684c321892b7cc4a455086c17e35ce652a75be",
      "size": [
       980,
@@ -3818,17 +5090,26 @@
       "x0": 95.0,
       "x1": 171.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.885
     },
     "cast": {
      "anchor": [
-      167.4,
-      339.0
+      133.0,
+      410.0
      ],
      "baseline": 1147.0,
+     "current": 1.2,
+     "head": [
+      87.2,
+      385.8,
+      178.8,
+      434.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.2,
+     "scale": 1.2,
+     "scaleSrc": "noise",
      "sha": "112e316ab68a2ead3d51db5e4242a820d82b1091dfcee85de4e8e89b22ff630f",
      "size": [
       386,
@@ -3841,17 +5122,26 @@
       "x0": 112.0,
       "x1": 344.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.157
     },
     "follow": {
      "anchor": [
-      305.4,
-      41.0
+      339.0,
+      571.0
      ],
      "baseline": 1207.0,
+     "current": 1.2,
+     "head": [
+      293.2,
+      546.8,
+      384.8,
+      595.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.2,
+     "scale": 1.2,
+     "scaleSrc": "noise",
      "sha": "1ee97fab022609c47dc00ebe0bfab745973230d5b129da382234117ee4510d23",
      "size": [
       695,
@@ -3864,17 +5154,26 @@
       "x0": 25.0,
       "x1": 656.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.23
     },
     "hurt": {
      "anchor": [
-      231.4,
-      115.0
+      164.0,
+      128.0
      ],
      "baseline": 798.0,
+     "current": 1.05,
+     "head": [
+      111.6,
+      100.4,
+      216.4,
+      155.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.05,
+     "scale": 1.05,
+     "scaleSrc": "noise",
      "sha": "0307f60cfca3343dc0d15fe468dbe1419994a933bd03238fdcd0688870f8b19f",
      "size": [
       618,
@@ -3887,7 +5186,8 @@
       "x0": 37.0,
       "x1": 464.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.7
     },
     "idle": {
      "anchor": [
@@ -3921,13 +5221,21 @@
     },
     "item": {
      "anchor": [
-      115.1,
-      63.0
+      180.0,
+      122.0
      ],
      "baseline": 850.0,
+     "current": 1.15,
+     "head": [
+      132.2,
+      96.8,
+      227.8,
+      147.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.15,
+     "scale": 1.15,
+     "scaleSrc": "noise",
      "sha": "185a6b25e6735742c0322bb494bc1b7a746b2588156e71a82eb163e41af8b96a",
      "size": [
       429,
@@ -3940,17 +5248,26 @@
       "x0": 52.0,
       "x1": 286.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.818
     },
     "ko": {
      "anchor": [
-      1021.7,
-      180.4
+      1023.0,
+      279.0
      ],
      "baseline": 563.0,
+     "current": 0.85,
+     "head": [
+      958.3,
+      244.9,
+      1087.7,
+      313.1
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.85,
+     "scale": 0.85,
+     "scaleSrc": "noise",
      "sha": "86717e715f347c6b3f848577814a4e838b6d37185ff39963e068a4c3778bb1d1",
      "size": [
       1204,
@@ -3961,13 +5278,21 @@
     },
     "ready": {
      "anchor": [
-      294.3,
-      137.0
+      244.0,
+      205.0
      ],
      "baseline": 924.0,
+     "current": 1.35,
+     "head": [
+      203.3,
+      183.5,
+      284.7,
+      226.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.35,
+     "scale": 1.35,
+     "scaleSrc": "noise",
      "sha": "c9bd3ae7a2cf90a7cc2d51b8dde30277671d48423738e5bfff9f22b94a892916",
      "size": [
       652,
@@ -3980,7 +5305,8 @@
       "x0": 43.0,
       "x1": 386.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.045
     },
     "twirl-end": {
      "baseline": 1193.0,
@@ -4024,13 +5350,21 @@
     },
     "victory": {
      "anchor": [
-      191.4,
-      407.0
+      220.0,
+      419.0
      ],
      "baseline": 1103.0,
+     "current": 1.15,
+     "head": [
+      172.2,
+      393.8,
+      267.8,
+      444.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.15,
+     "scale": 1.15,
+     "scaleSrc": "noise",
      "sha": "d23039c689eb609003f102f2897e156897d07d268d2c32dc1c03412bea031183",
      "size": [
       428,
@@ -4043,13 +5377,14 @@
       "x0": 91.0,
       "x1": 297.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.066
     }
    }
   },
   "rikku-gunner": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     121.0,
     125.0,
@@ -4059,13 +5394,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      372.7,
-      50.5
+      372.0,
+      170.0
      ],
      "baseline": 875.0,
+     "current": 1.0,
+     "head": [
+      331.5,
+      153.5,
+      412.5,
+      186.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "448f9c942b4d2402adb71533f65da6de9e05053becca541a92d5ea2e1acb8c68",
      "size": [
       670,
@@ -4078,17 +5421,26 @@
       "x0": 49.0,
       "x1": 605.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.834
     },
     "cast": {
      "anchor": [
-      152.3,
-      218.5
+      154.0,
+      294.0
      ],
      "baseline": 1028.0,
+     "current": 0.99,
+     "head": [
+      111.5,
+      276.7,
+      196.5,
+      311.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.954,
+     "scale": 0.954,
+     "scaleSrc": "reviewed",
      "sha": "41953bc670d7b30b8837cac54f1d0143e9d7082cc58fdd16933e68662d1a0af7",
      "size": [
       382,
@@ -4101,7 +5453,8 @@
       "x0": 56.0,
       "x1": 309.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.937
     },
     "idle": {
      "anchor": [
@@ -4135,13 +5488,21 @@
     },
     "item": {
      "anchor": [
-      163.5,
-      70.5
+      154.0,
+      194.0
      ],
      "baseline": 968.0,
+     "current": 0.92,
+     "head": [
+      110.0,
+      176.1,
+      198.0,
+      211.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.92,
+     "scale": 0.92,
+     "scaleSrc": "noise",
      "sha": "2f0302605de77bd52a4cbc5355afe22718b74ddab1e276071b2bcaa42f3265ef",
      "size": [
       502,
@@ -4154,17 +5515,26 @@
       "x0": 63.0,
       "x1": 315.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.85
     },
     "ko": {
      "anchor": [
-      890.6,
-      85.0
+      886.0,
+      116.0
      ],
      "baseline": 246.0,
+     "current": 0.83,
+     "head": [
+      837.2,
+      96.1,
+      934.8,
+      135.9
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.83,
+     "scale": 0.83,
+     "scaleSrc": "noise",
      "sha": "c1b975d41a0fbd285272137fa4882f4ae9e62d514f1cb29d9c267aa5cb3fb8e3",
      "size": [
       1049,
@@ -4175,8 +5545,8 @@
     },
     "ready": {
      "anchor": [
-      316.4,
-      46.5
+      252.0,
+      200.0
      ],
      "baseline": 945.0,
      "current": 1.1,
@@ -4185,10 +5555,10 @@
       "stature": 0.604
      },
      "head": [
-      254.1,
-      21.1,
-      378.7,
-      71.9
+      189.7,
+      174.6,
+      314.3,
+      225.4
      ],
      "prone": false,
      "reading": 0.65,
@@ -4261,16 +5631,16 @@
     },
     "victory": {
      "anchor": [
-      181.7,
-      130.5
+      158.0,
+      202.0
      ],
      "baseline": 960.0,
      "current": 0.99,
      "head": [
-      131.1,
-      109.9,
-      232.3,
-      151.1
+      107.4,
+      181.4,
+      208.6,
+      222.6
      ],
      "prone": false,
      "reading": 0.8,
@@ -4293,9 +5663,404 @@
     }
    }
   },
+  "rikku-lady-luck": {
+   "game": "ffx2",
+   "headsComplete": true,
+   "idleHead": [
+    148.6,
+    165.1,
+    248.4,
+    244.9
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      272.0,
+      312.0
+     ],
+     "baseline": 967.0,
+     "current": 0.85,
+     "head": [
+      214.0,
+      265.6,
+      330.0,
+      358.4
+     ],
+     "prone": false,
+     "reading": 0.86,
+     "scale": 0.86,
+     "scaleSrc": "reviewed",
+     "sha": "759b8dff6f31265d03f73ffc2e36766985a7794f23bded74ee2b74a82c3a6a16",
+     "size": [
+      633,
+      983
+     ],
+     "stance": {
+      "row": 594.0,
+      "src": "silhouette(opened harder)",
+      "x": 326.0,
+      "x0": 185.0,
+      "x1": 467.0
+     },
+     "standing": true,
+     "stature": 0.716
+    },
+    "cast": {
+     "anchor": [
+      164.0,
+      225.0
+     ],
+     "baseline": 961.0,
+     "current": 1.2,
+     "head": [
+      125.5,
+      194.2,
+      202.5,
+      255.8
+     ],
+     "prone": false,
+     "reading": 1.296,
+     "scale": 1.296,
+     "scaleSrc": "reviewed",
+     "sha": "e81bf5ebecb5a025c0f28ea532189e798fa1b753c6497e10325061c91fe33899",
+     "size": [
+      327,
+      974
+     ],
+     "stance": {
+      "row": 962.0,
+      "src": "silhouette",
+      "x": 139.0,
+      "x0": 41.0,
+      "x1": 237.0
+     },
+     "standing": true,
+     "stature": 1.072
+    },
+    "follow": {
+     "anchor": [
+      228.0,
+      146.0
+     ],
+     "baseline": 803.0,
+     "current": 1.45,
+     "head": [
+      193.6,
+      118.5,
+      262.4,
+      173.5
+     ],
+     "prone": false,
+     "reading": 1.45,
+     "scale": 1.45,
+     "scaleSrc": "noise",
+     "sha": "b1110888dfc94697300bb78c32ce6ec1c20aa0b84e11377b6b630f238c666179",
+     "size": [
+      566,
+      812
+     ],
+     "stance": {
+      "row": 804.0,
+      "src": "silhouette",
+      "x": 232.0,
+      "x0": 142.0,
+      "x1": 322.0
+     },
+     "standing": true,
+     "stature": 0.999
+    },
+    "hurt": {
+     "anchor": [
+      191.0,
+      225.0
+     ],
+     "baseline": 821.0,
+     "current": 1.1,
+     "head": [
+      145.6,
+      188.7,
+      236.4,
+      261.3
+     ],
+     "prone": false,
+     "reading": 1.1,
+     "scale": 1.1,
+     "scaleSrc": "noise",
+     "sha": "01942d1f6c8e17ead34cfdac9dcb7537142a6db0002299579d5ba975b14ed9cd",
+     "size": [
+      522,
+      836
+     ],
+     "stance": {
+      "row": 822.0,
+      "src": "silhouette",
+      "x": 323.0,
+      "x0": 150.0,
+      "x1": 496.0
+     },
+     "standing": true,
+     "stature": 0.775
+    },
+    "idle": {
+     "anchor": [
+      198.5,
+      205.0
+     ],
+     "baseline": 1158.0,
+     "head": [
+      148.6,
+      165.1,
+      248.4,
+      244.9
+     ],
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "6c4f140894c9b8a44a22e2e315a949e13cbb102343ce658e0df8bbc786c717c3",
+     "size": [
+      337,
+      1174
+     ],
+     "stance": {
+      "row": 1158.0,
+      "src": "silhouette",
+      "x": 211.5,
+      "x0": 168.0,
+      "x1": 255.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "item": {
+     "anchor": [
+      163.0,
+      237.0
+     ],
+     "baseline": 978.0,
+     "current": 0.95,
+     "head": [
+      113.4,
+      197.4,
+      212.6,
+      276.6
+     ],
+     "prone": false,
+     "reading": 1.007,
+     "scale": 1.007,
+     "scaleSrc": "reviewed",
+     "sha": "8fbbfe0bc03dec3d32571274bfdf3fd433dd2139c266a4893c3742ab204498d6",
+     "size": [
+      464,
+      994
+     ],
+     "stance": {
+      "row": 978.0,
+      "src": "silhouette",
+      "x": 146.0,
+      "x0": 54.0,
+      "x1": 238.0
+     },
+     "standing": true,
+     "stature": 0.848
+    },
+    "ko": {
+     "anchor": [
+      1026.0,
+      119.0
+     ],
+     "baseline": 359.0,
+     "current": 0.55,
+     "head": [
+      935.3,
+      46.5,
+      1116.7,
+      191.5
+     ],
+     "prone": true,
+     "reading": 0.55,
+     "scale": 0.55,
+     "scaleSrc": "noise",
+     "sha": "885bc174244798a3ec8e42d582450e9396bd89b525653a126b32b28d1720d675",
+     "size": [
+      1206,
+      375
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "od-x2-lady-luck-attack-reels": {
+     "anchor": [
+      358.0,
+      231.0
+     ],
+     "baseline": 903.0,
+     "current": 1.25,
+     "head": [
+      321.1,
+      201.5,
+      394.9,
+      260.5
+     ],
+     "prone": false,
+     "reading": 1.352,
+     "scale": 1.352,
+     "scaleSrc": "reviewed",
+     "sha": "c9791ecb826be844d7ad860c0fbc312c41d38d4d343c4262f2b11c7b2e5067b8",
+     "size": [
+      668,
+      919
+     ],
+     "stance": {
+      "row": 904.0,
+      "src": "silhouette",
+      "x": 286.0,
+      "x0": 33.0,
+      "x1": 539.0
+     },
+     "standing": true,
+     "stature": 1.05
+    },
+    "od-x2-lady-luck-magic-reels": {
+     "anchor": [
+      358.0,
+      231.0
+     ],
+     "baseline": 903.0,
+     "current": 1.25,
+     "head": [
+      321.1,
+      201.5,
+      394.9,
+      260.5
+     ],
+     "prone": false,
+     "reading": 1.352,
+     "scale": 1.352,
+     "scaleSrc": "reviewed",
+     "sha": "c9791ecb826be844d7ad860c0fbc312c41d38d4d343c4262f2b11c7b2e5067b8",
+     "size": [
+      668,
+      919
+     ],
+     "stance": {
+      "row": 904.0,
+      "src": "silhouette",
+      "x": 286.0,
+      "x0": 33.0,
+      "x1": 539.0
+     },
+     "standing": true,
+     "stature": 1.05
+    },
+    "ready": {
+     "anchor": [
+      264.0,
+      278.0
+     ],
+     "baseline": 1002.0,
+     "current": 1.25,
+     "head": [
+      223.0,
+      245.2,
+      305.0,
+      310.8
+     ],
+     "prone": false,
+     "reading": 1.216,
+     "scale": 1.216,
+     "scaleSrc": "reviewed",
+     "sha": "07358030235bf58662e0aa73d588bf8de5c9239ea6abba85cd0e6d4331d8dcb3",
+     "size": [
+      564,
+      1009
+     ],
+     "stance": {
+      "row": 1002.0,
+      "src": "silhouette",
+      "x": 272.5,
+      "x0": 29.0,
+      "x1": 516.0
+     },
+     "standing": true,
+     "stature": 1.05
+    },
+    "twirl-end": {
+     "baseline": 919.0,
+     "prone": false,
+     "sha": "f0f124d6fba7404fb369e8e7b847e997c71877c7966a68a61bc49a2084a123e2",
+     "size": [
+      640,
+      935
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "twirl-forming": {
+     "baseline": 897.0,
+     "prone": false,
+     "sha": "d8eaf8f8171552c61208d1ecc993bdd873b411def4bbaddef4c15506e8d45cff",
+     "size": [
+      590,
+      914
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "twirl-going": {
+     "baseline": 1001.0,
+     "prone": false,
+     "sha": "a985b9fd99c993e32c37a86a71acfc49480f318e27fb21e1aa59583995d5b17d",
+     "size": [
+      575,
+      1001
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "twirl-start": {
+     "baseline": 993.0,
+     "prone": false,
+     "sha": "1e217cf4382802e85aa2c2e40c29036586a6bd6272b0a5404c68a7ef464d16fb",
+     "size": [
+      576,
+      1002
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "victory": {
+     "anchor": [
+      283.0,
+      270.0
+     ],
+     "baseline": 934.0,
+     "current": 1.05,
+     "head": [
+      235.5,
+      232.0,
+      330.5,
+      308.0
+     ],
+     "prone": false,
+     "reading": 1.05,
+     "scale": 1.05,
+     "scaleSrc": "noise",
+     "sha": "c2409c2d7e38a574a8949c9ae6505efa11574ed79e08e9f0ca84c574a38a9d49",
+     "size": [
+      592,
+      950
+     ],
+     "stance": {
+      "row": 934.0,
+      "src": "silhouette",
+      "x": 353.5,
+      "x0": 216.0,
+      "x1": 491.0
+     },
+     "standing": true,
+     "stature": 0.844
+    }
+   }
+  },
   "rikku-songstress": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     149.0,
     209.0,
@@ -4305,13 +6070,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      309.7,
-      95.5
+      377.0,
+      214.0
      ],
      "baseline": 941.0,
+     "current": 1.15,
+     "head": [
+      337.2,
+      185.8,
+      416.8,
+      242.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.257,
+     "scale": 1.257,
+     "scaleSrc": "reviewed",
      "sha": "438e878339243ea9b3544ab3fe66d97fe36e09fa0b2e4abc870e01ac0c8710b6",
      "size": [
       693,
@@ -4324,17 +6097,26 @@
       "x0": 36.0,
       "x1": 535.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.014
     },
     "cast": {
      "anchor": [
-      157.9,
-      183.5
+      207.0,
+      285.0
      ],
      "baseline": 1031.0,
+     "current": 1.15,
+     "head": [
+      163.5,
+      254.1,
+      250.5,
+      315.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.15,
+     "scale": 1.15,
+     "scaleSrc": "noise",
      "sha": "55f6ebf891c265f170819d887a580fc631589ecdc2c94125a02686fed6bb9283",
      "size": [
       432,
@@ -4347,17 +6129,26 @@
       "x0": 82.0,
       "x1": 407.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.018
     },
     "dance": {
      "anchor": [
-      259.9,
-      107.5
+      241.0,
+      256.0
      ],
      "baseline": 1157.0,
+     "current": 1.0,
+     "head": [
+      191.0,
+      220.5,
+      291.0,
+      291.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "f18c8a000140425ed50e86a9f762789309c010ace7b445248681bcf3fdd85fbb",
      "size": [
       757,
@@ -4370,17 +6161,26 @@
       "x0": 559.0,
       "x1": 633.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.995
     },
     "hurt": {
      "anchor": [
-      213.9,
-      93.5
+      241.0,
+      181.0
      ],
      "baseline": 872.0,
+     "current": 1.25,
+     "head": [
+      201.0,
+      152.6,
+      281.0,
+      209.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.25,
+     "scale": 1.25,
+     "scaleSrc": "noise",
      "sha": "e9e10d9bf37ab3c23720db0e39c8f57538096d50aa59972c9d6c8f7fb264404f",
      "size": [
       571,
@@ -4393,7 +6193,8 @@
       "x0": 234.0,
       "x1": 469.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.933
     },
     "idle": {
      "anchor": [
@@ -4427,13 +6228,21 @@
     },
     "item": {
      "anchor": [
-      160.3,
-      103.5
+      212.0,
+      239.0
      ],
      "baseline": 1010.0,
+     "current": 1.15,
+     "head": [
+      168.5,
+      208.1,
+      255.5,
+      269.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.15,
+     "scale": 1.15,
+     "scaleSrc": "noise",
      "sha": "ff26db1f9257cb70429a8f14d53694e61d54a4f1db28a2ea3021b6c4ea76e5ce",
      "size": [
       490,
@@ -4446,17 +6255,26 @@
       "x0": 71.0,
       "x1": 337.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.997
     },
     "ko": {
      "anchor": [
-      1034.3,
-      148.9
+      991.0,
+      150.0
      ],
      "baseline": 457.0,
+     "current": 1.1,
+     "head": [
+      945.5,
+      117.7,
+      1036.5,
+      182.3
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.1,
+     "scale": 1.1,
+     "scaleSrc": "noise",
      "sha": "4c23936f79d98cb5f379684d4be3d132653ed1605ba3c60381d39c7018945198",
      "size": [
       1216,
@@ -4507,13 +6325,21 @@
     },
     "victory": {
      "anchor": [
-      423.3,
-      77.5
+      414.0,
+      213.0
      ],
      "baseline": 1188.0,
+     "current": 1.05,
+     "head": [
+      366.4,
+      179.2,
+      461.6,
+      246.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.05,
+     "scale": 1.05,
+     "scaleSrc": "noise",
      "sha": "d508bef7dc3fa7f1e90dd527eba4f2f95f8e56d2db8bff0e7fb95b2525bafd1f",
      "size": [
       724,
@@ -4526,13 +6352,14 @@
       "x0": 295.0,
       "x1": 359.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.077
     }
    }
   },
   "rikku-thief": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     250.0,
     293.0,
@@ -4542,13 +6369,21 @@
    "poses": {
     "cast": {
      "anchor": [
-      274.9,
-      73.0
+      345.0,
+      144.0
      ],
      "baseline": 896.0,
+     "current": 1.15,
+     "head": [
+      300.6,
+      120.2,
+      389.4,
+      167.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.305,
+     "scale": 1.305,
+     "scaleSrc": "reviewed",
      "sha": "28b86aca845f51911e1ca4ece12024beb33f1511860e89b7e71cf567688a3825",
      "size": [
       596,
@@ -4561,17 +6396,26 @@
       "x0": 209.0,
       "x1": 483.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.973
     },
     "critical": {
      "anchor": [
-      550.2,
-      91.0
+      515.0,
+      210.0
      ],
      "baseline": 770.0,
+     "current": 1.05,
+     "head": [
+      459.8,
+      180.5,
+      570.2,
+      239.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.05,
+     "scale": 1.05,
+     "scaleSrc": "noise",
      "sha": "0567783ac69ffb61e85fe2865da06326bc2888e3c676bfe2b00faf9c11a49565",
      "size": [
       807,
@@ -4584,17 +6428,26 @@
       "x0": 35.0,
       "x1": 723.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.671
     },
     "follow": {
      "anchor": [
-      408.2,
-      73.0
+      419.0,
+      120.0
      ],
      "baseline": 773.0,
+     "current": 1.2,
+     "head": [
+      366.9,
+      92.1,
+      471.1,
+      147.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.113,
+     "scale": 1.113,
+     "scaleSrc": "reviewed",
      "sha": "734961f13f8845da2591ad3c9443ebd8edd7dadc82e9e7f49dfef6a059ac3d5b",
      "size": [
       799,
@@ -4607,17 +6460,26 @@
       "x0": 80.0,
       "x1": 574.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.715
     },
     "hurt": {
      "anchor": [
-      167.6,
-      67.0
+      155.0,
+      146.0
      ],
      "baseline": 820.0,
+     "current": 1.15,
+     "head": [
+      104.6,
+      119.0,
+      205.4,
+      173.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.15,
+     "scale": 1.15,
+     "scaleSrc": "noise",
      "sha": "60aef5ccc4556df084762fbcb5816bcbca3c5e55e811e7bebf882124916c7ee6",
      "size": [
       569,
@@ -4630,7 +6492,8 @@
       "x0": 131.0,
       "x1": 500.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.784
     },
     "idle": {
      "anchor": [
@@ -4664,13 +6527,21 @@
     },
     "item": {
      "anchor": [
-      150.6,
-      75.0
+      192.0,
+      186.0
      ],
      "baseline": 880.0,
+     "current": 1.25,
+     "head": [
+      145.6,
+      161.2,
+      238.4,
+      210.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.25,
+     "scale": 1.25,
+     "scaleSrc": "noise",
      "sha": "fd98514546e05b8a80660e68659a6a028faa776f914ab9d4072d024671d36117",
      "size": [
       461,
@@ -4683,17 +6554,26 @@
       "x0": 53.0,
       "x1": 300.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.915
     },
     "ko": {
      "anchor": [
-      945.7,
-      163.9
+      933.0,
+      231.0
      ],
      "baseline": 508.0,
+     "current": 1.31,
+     "head": [
+      888.7,
+      207.3,
+      977.3,
+      254.7
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.31,
+     "scale": 1.31,
+     "scaleSrc": "noise",
      "sha": "8d0b011167985a0abc2b73061f510e976b8e9def1070b411d12cc37de09e2444",
      "size": [
       1113,
@@ -4704,13 +6584,21 @@
     },
     "ready": {
      "anchor": [
-      357.0,
-      53.0
+      298.0,
+      188.0
      ],
      "baseline": 785.0,
+     "current": 1.15,
+     "head": [
+      246.5,
+      160.5,
+      349.5,
+      215.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.126,
+     "scale": 1.126,
+     "scaleSrc": "reviewed",
      "sha": "63f44a322544a57d04628bb1d562c722f7d7bc4bdf02982c60e01bdbcdcb3750",
      "size": [
       548,
@@ -4723,17 +6611,26 @@
       "x0": 23.0,
       "x1": 503.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.734
     },
     "sleep": {
      "anchor": [
-      270.5,
-      79.0
+      250.0,
+      124.0
      ],
      "baseline": 1118.0,
+     "current": 1.05,
+     "head": [
+      194.8,
+      94.5,
+      305.2,
+      153.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.05,
+     "scale": 1.05,
+     "scaleSrc": "noise",
      "sha": "1134d988e2a2bec79bae5cd82fdfe5b30526239ae175f8351e78942410ee7f06",
      "size": [
       435,
@@ -4746,7 +6643,8 @@
       "x0": 74.0,
       "x1": 323.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.981
     },
     "twirl-end": {
      "baseline": 1096.0,
@@ -4790,13 +6688,21 @@
     },
     "victory": {
      "anchor": [
-      205.1,
-      153.0
+      206.0,
+      168.0
      ],
      "baseline": 943.0,
+     "current": 1.21,
+     "head": [
+      158.1,
+      142.4,
+      253.9,
+      193.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.21,
+     "scale": 1.21,
+     "scaleSrc": "noise",
      "sha": "80821d5b064a40891cf847f0bf5e024bd40fb43374dfd07cbff38020d757e536",
      "size": [
       399,
@@ -4809,13 +6715,14 @@
       "x0": 136.0,
       "x1": 320.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.951
     }
    }
   },
   "rikku-warrior": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     392.0,
     158.0,
@@ -4825,13 +6732,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      265.8,
-      79.5
+      330.0,
+      275.0
      ],
      "baseline": 1182.0,
+     "current": 0.75,
+     "head": [
+      262.1,
+      238.9,
+      397.9,
+      311.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.817,
+     "scale": 0.817,
+     "scaleSrc": "reviewed",
      "sha": "c157ef0ae15984039ef532156923f7eb86eb915ee2b02a161ebfaf51a6051f94",
      "size": [
       912,
@@ -4844,17 +6759,26 @@
       "x0": 25.0,
       "x1": 101.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.801
     },
     "cast": {
      "anchor": [
-      144.4,
-      275.5
+      159.0,
+      341.0
      ],
      "baseline": 1063.0,
+     "current": 1.15,
+     "head": [
+      109.2,
+      314.5,
+      208.8,
+      367.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.115,
+     "scale": 1.115,
+     "scaleSrc": "reviewed",
      "sha": "f0db3cb5eaf9b5bc12007fb7bc5bbbcd0e1f4f98c69e45cbcea9156036c20ae0",
      "size": [
       369,
@@ -4867,17 +6791,26 @@
       "x0": 55.0,
       "x1": 277.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.982
     },
     "follow": {
      "anchor": [
-      405.9,
-      55.5
+      392.0,
+      101.0
      ],
      "baseline": 708.0,
+     "current": 1.2,
+     "head": [
+      351.1,
+      79.3,
+      432.9,
+      122.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.357,
+     "scale": 1.357,
+     "scaleSrc": "reviewed",
      "sha": "7612e300e02c31e666b97ab6083d826be6e152df9d58ca77b8b301b459366f99",
      "size": [
       700,
@@ -4890,17 +6823,26 @@
       "x0": 24.0,
       "x1": 674.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.79
     },
     "hurt": {
      "anchor": [
-      183.9,
-      73.5
+      197.0,
+      174.0
      ],
      "baseline": 1067.0,
+     "current": 0.95,
+     "head": [
+      138.6,
+      142.9,
+      255.4,
+      205.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.95,
+     "scale": 0.95,
+     "scaleSrc": "noise",
      "sha": "0e0358342cb13e30c47b7121d53ae5c3a73d4fb38f54aa47c44b9e6af0d9743d",
      "size": [
       547,
@@ -4913,7 +6855,8 @@
       "x0": 50.0,
       "x1": 390.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.84
     },
     "idle": {
      "anchor": [
@@ -4947,13 +6890,21 @@
     },
     "item": {
      "anchor": [
-      127.1,
-      77.5
+      158.0,
+      188.0
      ],
      "baseline": 894.0,
+     "current": 1.2,
+     "head": [
+      117.8,
+      166.7,
+      198.2,
+      209.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.382,
+     "scale": 1.382,
+     "scaleSrc": "reviewed",
      "sha": "8e1561687435f36f750921caa26d4da4c295f07ad1dd0de2deae46a385b7f15e",
      "size": [
       444,
@@ -4966,17 +6917,26 @@
       "x0": 39.0,
       "x1": 272.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.021
     },
     "ko": {
      "anchor": [
-      1015.3,
-      136.3
+      1000.0,
+      210.0
      ],
      "baseline": 416.0,
+     "current": 1.0,
+     "head": [
+      940.4,
+      178.3,
+      1059.6,
+      241.7
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.931,
+     "scale": 0.931,
+     "scaleSrc": "reviewed",
      "sha": "b0afb0fecbf98115b47a60415787b8a9c6c9d1e544ac8a560bfbb0102dce75ed",
      "size": [
       1194,
@@ -4987,13 +6947,21 @@
     },
     "ready": {
      "anchor": [
-      287.0,
-      129.5
+      315.0,
+      222.0
      ],
      "baseline": 918.0,
+     "current": 1.05,
+     "head": [
+      260.5,
+      193.1,
+      369.5,
+      250.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.019,
+     "scale": 1.019,
+     "scaleSrc": "reviewed",
      "sha": "6312f07d0c4a6b2f081e3fce698da5fc7e3c6f1dee52129802a4817feb7e4e3f",
      "size": [
       606,
@@ -5006,7 +6974,8 @@
       "x0": 143.0,
       "x1": 521.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.773
     },
     "twirl-end": {
      "baseline": 910.0,
@@ -5030,13 +6999,21 @@
     },
     "victory": {
      "anchor": [
-      367.3,
-      77.5
+      405.0,
+      118.0
      ],
      "baseline": 904.0,
+     "current": 1.1,
+     "head": [
+      359.2,
+      93.6,
+      450.8,
+      142.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.211,
+     "scale": 1.211,
+     "scaleSrc": "reviewed",
      "sha": "a2e6f1ae0e5f4dc44a95429988e2dad4a001e2a88f672f6513109737693670f1",
      "size": [
       681,
@@ -5049,13 +7026,14 @@
       "x0": 234.0,
       "x1": 510.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.904
     }
    }
   },
   "rikku-white-mage": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     146.0,
     173.0,
@@ -5065,13 +7043,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      474.9,
-      216.0
+      528.0,
+      385.0
      ],
      "baseline": 1173.0,
+     "current": 0.94,
+     "head": [
+      478.3,
+      354.7,
+      577.7,
+      415.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.925,
+     "scale": 0.925,
+     "scaleSrc": "reviewed",
      "sha": "ed917bde87bb9ad59458397019210509a5d1bc45cb2606046fa75e5791d5cd08",
      "size": [
       952,
@@ -5084,17 +7070,26 @@
       "x0": 27.0,
       "x1": 121.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.903
     },
     "cast": {
      "anchor": [
-      387.5,
-      354.0
+      370.0,
+      412.0
      ],
      "baseline": 1192.0,
+     "current": 1.26,
+     "head": [
+      332.3,
+      389.0,
+      407.7,
+      435.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.22,
+     "scale": 1.22,
+     "scaleSrc": "reviewed",
      "sha": "159bff34350c80f72404ad028cd5533998b38b2e9efbf64d57e7311d79eecccf",
      "size": [
       727,
@@ -5107,17 +7102,26 @@
       "x0": 274.0,
       "x1": 448.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.213
     },
     "follow": {
      "anchor": [
-      201.4,
-      430.0
+      259.0,
+      519.0
      ],
      "baseline": 1152.0,
+     "current": 1.15,
+     "head": [
+      219.0,
+      494.7,
+      299.0,
+      543.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.15,
+     "scale": 1.15,
+     "scaleSrc": "noise",
      "sha": "135169a1c847427603dd29a0325b2dd134d46ade7634108d65fb31eebee5b9a2",
      "size": [
       599,
@@ -5130,7 +7134,8 @@
       "x0": 30.0,
       "x1": 383.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.102
     },
     "idle": {
      "anchor": [
@@ -5164,13 +7169,21 @@
     },
     "item": {
      "anchor": [
-      334.3,
-      60.0
+      359.0,
+      190.0
      ],
      "baseline": 892.0,
+     "current": 1.15,
+     "head": [
+      319.0,
+      165.7,
+      399.0,
+      214.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.15,
+     "scale": 1.15,
+     "scaleSrc": "noise",
      "sha": "b9e2659b3c71dd7ed2a6853e58c7ee41ea19870837bd8b6c0716333b3f4c9da3",
      "size": [
       707,
@@ -5183,7 +7196,8 @@
       "x0": 52.0,
       "x1": 516.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.85
     },
     "twirl-end": {
      "baseline": 767.0,
@@ -5217,13 +7231,21 @@
     },
     "victory": {
      "anchor": [
-      181.1,
-      302.0
+      195.0,
+      282.0
      ],
      "baseline": 1152.0,
+     "current": 1.1,
+     "head": [
+      153.2,
+      256.5,
+      236.8,
+      307.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.1,
+     "scale": 1.1,
+     "scaleSrc": "noise",
      "sha": "b3ffdac925dc221d8a7a5ce9ad60d820c353b6386aa2ad45b7c506a0c1f5e6b6",
      "size": [
       365,
@@ -5236,7 +7258,8 @@
       "x0": 26.0,
       "x1": 285.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.055
     }
    }
   },
@@ -5258,15 +7281,15 @@
      "baseline": 1121.0,
      "current": 1.0,
      "head": [
-      287.1,
-      81.6,
-      402.9,
-      158.4
+      287.2,
+      81.7,
+      402.8,
+      158.3
      ],
      "prone": false,
-     "reading": 0.95,
-     "scale": 1.0,
-     "scaleSrc": "noise",
+     "reading": 0.952,
+     "scale": 0.952,
+     "scaleSrc": "reviewed",
      "sha": "75bde03cb2c5b7377632b814262cee95aaafc7ff5373b2fb7f939927f54d11b4",
      "size": [
       816,
@@ -5280,7 +7303,7 @@
       "x1": 598.0
      },
      "standing": true,
-     "stature": 1.005
+     "stature": 0.956
     },
     "cast": {
      "anchor": [
@@ -5290,15 +7313,15 @@
      "baseline": 1116.0,
      "current": 1.0,
      "head": [
-      242.1,
-      126.6,
-      357.9,
-      203.4
+      242.5,
+      126.9,
+      357.5,
+      203.1
      ],
      "prone": false,
-     "reading": 0.95,
-     "scale": 1.0,
-     "scaleSrc": "noise",
+     "reading": 0.957,
+     "scale": 0.957,
+     "scaleSrc": "reviewed",
      "sha": "cf0b2115e292cdea6541f31f1c44750b869b686fae38e3ff53e9219a5eb2a49c",
      "size": [
       709,
@@ -5312,7 +7335,7 @@
       "x1": 458.0
      },
      "standing": true,
-     "stature": 1.0
+     "stature": 0.957
     },
     "critical": {
      "anchor": [
@@ -5322,15 +7345,15 @@
      "baseline": 1174.0,
      "current": 0.95,
      "head": [
-      341.5,
-      176.2,
-      458.5,
-      253.8
+      343.1,
+      177.3,
+      456.9,
+      252.7
      ],
      "prone": false,
-     "reading": 0.94,
-     "scale": 0.95,
-     "scaleSrc": "noise",
+     "reading": 0.967,
+     "scale": 0.967,
+     "scaleSrc": "reviewed",
      "sha": "672f798da91deae7d072b9714c42496b89bdd835074e3c26f820688133722b86",
      "size": [
       620,
@@ -5344,7 +7367,7 @@
       "x1": 376.0
      },
      "standing": true,
-     "stature": 1.0
+     "stature": 1.018
     },
     "follow": {
      "anchor": [
@@ -5354,15 +7377,15 @@
      "baseline": 670.0,
      "current": 1.4,
      "head": [
-      385.7,
-      56.9,
-      470.3,
-      113.1
+      385.9,
+      57.1,
+      470.1,
+      112.9
      ],
      "prone": true,
-     "reading": 1.3,
-     "scale": 1.4,
-     "scaleSrc": "noise",
+     "reading": 1.306,
+     "scale": 1.306,
+     "scaleSrc": "reviewed",
      "sha": "f77b87944faac8ae0df226ff9dead540111184e07ade1bdebdc2582169caaffc",
      "size": [
       795,
@@ -5447,15 +7470,15 @@
      "baseline": 1125.0,
      "current": 1.0,
      "head": [
-      381.5,
-      83.2,
-      498.5,
-      160.8
+      380.2,
+      82.3,
+      499.8,
+      161.7
      ],
      "prone": false,
-     "reading": 0.94,
-     "scale": 1.0,
-     "scaleSrc": "noise",
+     "reading": 0.92,
+     "scale": 0.92,
+     "scaleSrc": "reviewed",
      "sha": "132d7f7697bc27e47d39ee37958ca9d5f7a4596ab0cfd4f21d69b8be02be7dae",
      "size": [
       752,
@@ -5469,7 +7492,7 @@
       "x1": 399.0
      },
      "standing": true,
-     "stature": 1.008
+     "stature": 0.928
     },
     "ko": {
      "anchor": [
@@ -5504,14 +7527,14 @@
      "baseline": 1207.0,
      "current": 1.0,
      "head": [
-      254.5,
-      241.5,
-      385.5,
-      328.5
+      256.5,
+      242.9,
+      383.5,
+      327.1
      ],
      "prone": false,
-     "reading": 0.84,
-     "scale": 0.84,
+     "reading": 0.866,
+     "scale": 0.866,
      "scaleSrc": "reviewed",
      "sha": "7bef180f80fcb49097f8989a410b63b748684a99b9efa4f877250897a921ffc0",
      "size": [
@@ -5526,7 +7549,7 @@
       "x1": 599.0
      },
      "standing": true,
-     "stature": 0.922
+     "stature": 0.95
     },
     "od-slice-and-dice": {
      "anchor": [
@@ -5536,14 +7559,14 @@
      "baseline": 831.0,
      "current": 1.0,
      "head": [
-      417.1,
-      87.2,
-      518.9,
-      154.8
+      417.4,
+      87.5,
+      518.6,
+      154.5
      ],
      "prone": false,
-     "reading": 1.08,
-     "scale": 1.08,
+     "reading": 1.088,
+     "scale": 1.088,
      "scaleSrc": "reviewed",
      "sha": "6e4f0f7d54161e16d9c662f4b67d6d8110bb487acf553caba81e4d8e4a98280b",
      "size": [
@@ -5558,7 +7581,7 @@
       "x1": 691.0
      },
      "standing": true,
-     "stature": 0.8
+     "stature": 0.806
     },
     "ready": {
      "anchor": [
@@ -5568,15 +7591,15 @@
      "baseline": 766.0,
      "current": 1.3,
      "head": [
-      328.3,
-      46.0,
-      415.7,
-      104.0
+      329.5,
+      46.8,
+      414.5,
+      103.2
      ],
      "prone": false,
-     "reading": 1.26,
-     "scale": 1.3,
-     "scaleSrc": "noise",
+     "reading": 1.293,
+     "scale": 1.293,
+     "scaleSrc": "reviewed",
      "sha": "0b651de8e4b720a5fdddeae3e1c2fef5a7ef3b4ddca94c5216218f6b0949df31",
      "size": [
       673,
@@ -5590,7 +7613,7 @@
       "x1": 455.0
      },
      "standing": true,
-     "stature": 0.886
+     "stature": 0.882
     },
     "sleep": {
      "anchor": [
@@ -5600,15 +7623,15 @@
      "baseline": 889.0,
      "current": 1.0,
      "head": [
-      157.9,
-      62.8,
-      270.1,
-      137.2
+      157.1,
+      62.2,
+      270.9,
+      137.8
      ],
      "prone": false,
-     "reading": 0.98,
-     "scale": 1.0,
-     "scaleSrc": "noise",
+     "reading": 0.966,
+     "scale": 0.966,
+     "scaleSrc": "reviewed",
      "sha": "d55e3997d09afbdebf4ba577e149312fb939fc72d53c11ff793f56e029bc4fee",
      "size": [
       606,
@@ -5622,7 +7645,7 @@
       "x1": 259.0
      },
      "standing": true,
-     "stature": 0.794
+     "stature": 0.767
     },
     "victory": {
      "anchor": [
@@ -5632,14 +7655,14 @@
      "baseline": 1121.0,
      "current": 1.0,
      "head": [
-      320.6,
-      349.2,
-      389.4,
-      394.8
+      320.3,
+      349.0,
+      389.7,
+      395.0
      ],
      "prone": false,
-     "reading": 1.6,
-     "scale": 1.6,
+     "reading": 1.585,
+     "scale": 1.585,
      "scaleSrc": "reviewed",
      "sha": "3a7823beb13fcdc280ce46edb22fd2b9534a31946b746b1ddc83df7055ab3cd3",
      "size": [
@@ -5654,7 +7677,7 @@
       "x1": 392.0
      },
      "standing": true,
-     "stature": 1.607
+     "stature": 1.592
     }
    }
   },
@@ -5683,8 +7706,8 @@
      ],
      "prone": false,
      "reading": 1.05,
-     "scale": 1.0,
-     "scaleSrc": "noise",
+     "scale": 1.05,
+     "scaleSrc": "reviewed",
      "sha": "39a49d0fe6702b854b9783b66914eece040086248b815b13cf62d3ed61c747b2",
      "size": [
       806,
@@ -5698,7 +7721,7 @@
       "x1": 437.0
      },
      "standing": true,
-     "stature": 1.006
+     "stature": 1.056
     },
     "cast": {
      "anchor": [
@@ -5738,9 +7761,17 @@
       135.0
      ],
      "baseline": 1187.0,
+     "current": 1.05,
+     "head": [
+      428.6,
+      91.7,
+      531.4,
+      178.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.05,
+     "scale": 1.05,
+     "scaleSrc": "noise",
      "sha": "7e7ee5374aba2f36b61384d49554c59f39776724f5fc80d620f0b15c0b17abb2",
      "size": [
       704,
@@ -5753,7 +7784,8 @@
       "x0": 153.0,
       "x1": 314.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.058
     },
     "follow": {
      "anchor": [
@@ -5802,8 +7834,8 @@
      ],
      "prone": false,
      "reading": 1.05,
-     "scale": 1.0,
-     "scaleSrc": "noise",
+     "scale": 1.05,
+     "scaleSrc": "reviewed",
      "sha": "0245a000dc4553b12e83fb5fb0a75cb464d7fc82c1600eda1ae8374879a8370e",
      "size": [
       779,
@@ -5817,7 +7849,7 @@
       "x1": 591.0
      },
      "standing": true,
-     "stature": 0.886
+     "stature": 0.93
     },
     "idle": {
      "anchor": [
@@ -5864,8 +7896,8 @@
      ],
      "prone": false,
      "reading": 0.95,
-     "scale": 1.0,
-     "scaleSrc": "noise",
+     "scale": 0.95,
+     "scaleSrc": "reviewed",
      "sha": "efeecbcbf2a4c10500bebfcab2bd523b8b5eb8ba29e94a76df67028e35757ded",
      "size": [
       786,
@@ -5879,7 +7911,7 @@
       "x1": 505.0
      },
      "standing": true,
-     "stature": 0.905
+     "stature": 0.86
     },
     "ko": {
      "anchor": [
@@ -5896,8 +7928,8 @@
      ],
      "prone": true,
      "reading": 0.55,
-     "scale": 0.58,
-     "scaleSrc": "noise",
+     "scale": 0.55,
+     "scaleSrc": "reviewed",
      "sha": "a325a0ecb5828443a7fbe88e9d3140db7e24ec623984915fd9aafeeb1876d199",
      "size": [
       1212,
@@ -5921,8 +7953,8 @@
      ],
      "prone": false,
      "reading": 1.5,
-     "scale": 1.45,
-     "scaleSrc": "noise",
+     "scale": 1.5,
+     "scaleSrc": "reviewed",
      "sha": "ae8ee70d91201a5bab8b0132f39444baa3430a97a81cc00479aa31a61e484d5a",
      "size": [
       487,
@@ -5936,7 +7968,7 @@
       "x1": 414.0
      },
      "standing": true,
-     "stature": 1.122
+     "stature": 1.16
     },
     "sleep": {
      "anchor": [
@@ -5944,9 +7976,17 @@
       168.0
      ],
      "baseline": 1138.0,
+     "current": 1.0,
+     "head": [
+      196.0,
+      122.5,
+      304.0,
+      213.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "3838d88727027fed630239506db8c953c6a736f0dedafc79ec872fde99f0e042",
      "size": [
       435,
@@ -5959,7 +7999,8 @@
       "x0": 99.0,
       "x1": 305.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.966
     },
     "victory": {
      "anchor": [
@@ -6013,14 +8054,14 @@
      "baseline": 1207.0,
      "current": 1.0,
      "head": [
-      297.9,
-      224.2,
-      418.1,
-      307.8
+      295.6,
+      222.6,
+      420.4,
+      309.4
      ],
      "prone": false,
-     "reading": 0.79,
-     "scale": 0.79,
+     "reading": 0.761,
+     "scale": 0.761,
      "scaleSrc": "reviewed",
      "sha": "74f3467202682f2c90847298658b7066b70af7eb28fdf9a96801e7c777fa88b2",
      "size": [
@@ -6035,7 +8076,7 @@
       "x1": 788.0
      },
      "standing": true,
-     "stature": 0.91
+     "stature": 0.877
     },
     "cast": {
      "anchor": [
@@ -6052,8 +8093,8 @@
      ],
      "prone": false,
      "reading": 0.92,
-     "scale": 1.0,
-     "scaleSrc": "noise",
+     "scale": 0.92,
+     "scaleSrc": "reviewed",
      "sha": "6088f249b0d76ed456506258ba0ae9bfee54dc213a3bd817c4fae4bf0a9d94d3",
      "size": [
       815,
@@ -6067,7 +8108,7 @@
       "x1": 563.0
      },
      "standing": true,
-     "stature": 1.13
+     "stature": 1.04
     },
     "critical": {
      "anchor": [
@@ -6075,9 +8116,17 @@
       487.0
      ],
      "baseline": 1148.0,
+     "current": 1.0,
+     "head": [
+      306.9,
+      452.9,
+      405.1,
+      521.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.967,
+     "scale": 0.967,
+     "scaleSrc": "reviewed",
      "sha": "4f74ca07ca559d4833698f9aafdef5bb51d039d9aef4c96f6d62f2f2ed7f9365",
      "size": [
       585,
@@ -6090,7 +8139,8 @@
       "x0": 106.0,
       "x1": 559.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.049
     },
     "follow": {
      "anchor": [
@@ -6100,14 +8150,14 @@
      "baseline": 670.0,
      "current": 1.35,
      "head": [
-      436.7,
-      69.3,
-      519.3,
-      126.7
+      433.8,
+      67.3,
+      522.2,
+      128.7
      ],
      "prone": true,
-     "reading": 1.15,
-     "scale": 1.15,
+     "reading": 1.074,
+     "scale": 1.074,
      "scaleSrc": "reviewed",
      "sha": "a51861243506745d249fe6e3489f06916deea7bbeef4a6c9873e33da7f6fa6f5",
      "size": [
@@ -6131,14 +8181,14 @@
      "baseline": 1021.0,
      "current": 1.0,
      "head": [
-      226.6,
-      98.8,
-      345.4,
-      181.2
+      226.9,
+      99.0,
+      345.1,
+      181.0
      ],
      "prone": false,
-     "reading": 0.8,
-     "scale": 0.8,
+     "reading": 0.804,
+     "scale": 0.804,
      "scaleSrc": "reviewed",
      "sha": "101c79151448e67975860cde240eeffd58b151eb87c672b4a30d0d8232b036b2",
      "size": [
@@ -6153,7 +8203,7 @@
       "x1": 394.0
      },
      "standing": true,
-     "stature": 0.77
+     "stature": 0.774
     },
     "idle": {
      "anchor": [
@@ -6193,14 +8243,14 @@
      "baseline": 1148.0,
      "current": 1.0,
      "head": [
-      250.7,
-      102.0,
-      377.3,
-      190.0
+      250.8,
+      102.1,
+      377.2,
+      189.9
      ],
      "prone": false,
-     "reading": 0.75,
-     "scale": 0.75,
+     "reading": 0.752,
+     "scale": 0.752,
      "scaleSrc": "reviewed",
      "sha": "df46dc0e3ceda08dc962ad9b9e4bf68e6147a03aac8a2e4dec915945a7a0ea35",
      "size": [
@@ -6215,7 +8265,7 @@
       "x1": 436.0
      },
      "standing": true,
-     "stature": 0.813
+     "stature": 0.815
     },
     "ko": {
      "anchor": [
@@ -6225,15 +8275,15 @@
      "baseline": 804.0,
      "current": 0.52,
      "head": [
-      128.7,
-      98.5,
-      311.3,
-      225.5
+      128.1,
+      98.2,
+      311.9,
+      225.8
      ],
      "prone": true,
-     "reading": 0.52,
-     "scale": 0.52,
-     "scaleSrc": "noise",
+     "reading": 0.517,
+     "scale": 0.517,
+     "scaleSrc": "reviewed",
      "sha": "6c5b43f6d3d9406e3a4d1cd282bf6a3950abcfc6d6ade076ca2daefd3f894def",
      "size": [
       1216,
@@ -6250,15 +8300,15 @@
      "baseline": 903.0,
      "current": 1.2,
      "head": [
-      222.4,
-      143.8,
-      303.6,
-      200.2
+      224.8,
+      145.5,
+      301.2,
+      198.5
      ],
      "prone": false,
-     "reading": 1.17,
-     "scale": 1.2,
-     "scaleSrc": "noise",
+     "reading": 1.245,
+     "scale": 1.245,
+     "scaleSrc": "reviewed",
      "sha": "7dd0f38367bef3b68357e6b3a55153f007ecb695cad52a5e5b3879fea4fb0258",
      "size": [
       708,
@@ -6272,7 +8322,7 @@
       "x1": 451.0
      },
      "standing": true,
-     "stature": 1.02
+     "stature": 1.058
     },
     "sleep": {
      "anchor": [
@@ -6280,9 +8330,17 @@
       158.0
      ],
      "baseline": 897.0,
+     "current": 0.8,
+     "head": [
+      420.6,
+      116.8,
+      539.4,
+      199.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "kept",
+     "reading": 0.8,
+     "scale": 0.8,
+     "scaleSrc": "noise",
      "sha": "68b429abe4e1d3a08ab64c3944f7ab0d534e7f2766126ef434c2008b6e19d34c",
      "size": [
       765,
@@ -6295,7 +8353,8 @@
       "x0": 264.0,
       "x1": 445.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.675
     },
     "summon": {
      "anchor": [
@@ -6305,14 +8364,14 @@
      "baseline": 1216.0,
      "current": 1.0,
      "head": [
-      292.8,
-      302.0,
-      451.2,
-      412.0
+      293.4,
+      302.4,
+      450.6,
+      411.6
      ],
      "prone": false,
-     "reading": 0.6,
-     "scale": 0.6,
+     "reading": 0.604,
+     "scale": 0.604,
      "scaleSrc": "reviewed",
      "sha": "e6da79539089c536022bb4c0a7625549fed034dbb7cb860cbb5d114787ec2f4e",
      "size": [
@@ -6327,7 +8386,7 @@
       "x1": 771.0
      },
      "standing": true,
-     "stature": 0.699
+     "stature": 0.704
     },
     "victory": {
      "anchor": [
@@ -6337,14 +8396,14 @@
      "baseline": 1179.0,
      "current": 1.0,
      "head": [
-      140.3,
-      229.1,
-      263.7,
-      314.9
+      141.4,
+      229.9,
+      262.6,
+      314.1
      ],
      "prone": false,
-     "reading": 0.77,
-     "scale": 0.77,
+     "reading": 0.784,
+     "scale": 0.784,
      "scaleSrc": "reviewed",
      "sha": "962c0daad0d578a7101fcdef3b5849b7f19238f519b38669c7245e3e3bf0d61b",
      "size": [
@@ -6359,13 +8418,13 @@
       "x1": 404.0
      },
      "standing": true,
-     "stature": 0.862
+     "stature": 0.878
     }
    }
   },
   "yuna-black-mage": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     287.0,
     171.0,
@@ -6375,13 +8434,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      451.7,
-      63.0
+      395.0,
+      232.0
      ],
      "baseline": 1180.0,
+     "current": 1.0,
+     "head": [
+      345.7,
+      194.8,
+      444.3,
+      269.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.994,
+     "scale": 0.994,
+     "scaleSrc": "reviewed",
      "sha": "857355f3128d2c150333cd20af9591154a50b060b8b7aa5b13deb8eb90f1c3d1",
      "size": [
       794,
@@ -6394,17 +8461,26 @@
       "x0": 639.0,
       "x1": 705.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.036
     },
     "cast": {
      "anchor": [
-      342.3,
-      71.0
+      345.0,
+      205.0
      ],
      "baseline": 1179.0,
+     "current": 1.0,
+     "head": [
+      294.6,
+      166.9,
+      395.4,
+      243.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.972,
+     "scale": 0.972,
+     "scaleSrc": "reviewed",
      "sha": "686c3f1e646f3453d87fd848ee8f97c1bf6a58d671bfbd838e6e368e4d8cc837",
      "size": [
       766,
@@ -6417,17 +8493,26 @@
       "x0": 238.0,
       "x1": 453.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.012
     },
     "follow": {
      "anchor": [
-      540.3,
-      133.0
+      372.0,
+      365.0
      ],
      "baseline": 1193.0,
+     "current": 0.9,
+     "head": [
+      325.4,
+      329.8,
+      418.6,
+      400.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.052,
+     "scale": 1.052,
+     "scaleSrc": "reviewed",
      "sha": "863491dbb5eda1090f9c301234f7c5c16b18843f6cfce82e591b4e9030c2deb3",
      "size": [
       707,
@@ -6440,17 +8525,26 @@
       "x0": 129.0,
       "x1": 517.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.109
     },
     "hurt": {
      "anchor": [
-      398.5,
-      77.0
+      382.0,
+      240.0
      ],
      "baseline": 1182.0,
+     "current": 1.0,
+     "head": [
+      334.4,
+      204.0,
+      429.6,
+      276.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.029,
+     "scale": 1.029,
+     "scaleSrc": "reviewed",
      "sha": "d145d75ca72f14a202da7fca018bc614fc8a835ab9a2eba44d2eaf78b91db51b",
      "size": [
       832,
@@ -6463,7 +8557,8 @@
       "x0": 375.0,
       "x1": 518.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.074
     },
     "idle": {
      "anchor": [
@@ -6497,13 +8592,21 @@
     },
     "item": {
      "anchor": [
-      423.5,
-      61.0
+      336.0,
+      178.0
      ],
      "baseline": 891.0,
+     "current": 1.34,
+     "head": [
+      300.2,
+      151.0,
+      371.8,
+      205.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.369,
+     "scale": 1.369,
+     "scaleSrc": "reviewed",
      "sha": "cbd4f7c0889026731fbf34be10e1008afab139f5caca00cb44175b9431d423b5",
      "size": [
       804,
@@ -6516,17 +8619,26 @@
       "x0": 306.0,
       "x1": 505.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.072
     },
     "ko": {
      "anchor": [
-      1045.8,
-      252.4
+      849.0,
+      210.0
      ],
      "baseline": 832.0,
+     "current": 0.66,
+     "head": [
+      772.8,
+      152.5,
+      925.2,
+      267.5
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.643,
+     "scale": 0.643,
+     "scaleSrc": "reviewed",
      "sha": "cfcadf04c28ba584f75e49400c13281c4cf419341a768ff18f251d93fff4da54",
      "size": [
       1216,
@@ -6537,13 +8649,21 @@
     },
     "ready": {
      "anchor": [
-      375.4,
-      93.0
+      359.0,
+      200.0
      ],
      "baseline": 967.0,
+     "current": 1.15,
+     "head": [
+      318.5,
+      169.4,
+      399.5,
+      230.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.211,
+     "scale": 1.211,
+     "scaleSrc": "reviewed",
      "sha": "562ba7caef2af097e251c8eec6d9cb7915019149c1ff12f689108f3079c3e286",
      "size": [
       803,
@@ -6556,7 +8676,8 @@
       "x0": 218.0,
       "x1": 507.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.031
     },
     "twirl-end": {
      "baseline": 1196.0,
@@ -6600,13 +8721,21 @@
     },
     "victory": {
      "anchor": [
-      411.6,
-      97.0
+      419.0,
+      300.0
      ],
      "baseline": 1145.0,
+     "current": 1.0,
+     "head": [
+      370.0,
+      263.0,
+      468.0,
+      337.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.001,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "031c343a27476c784da1682c5b317749f646afbe6ee356061c1aa4ad00689b88",
      "size": [
       642,
@@ -6619,13 +8748,14 @@
       "x0": 326.0,
       "x1": 559.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.012
     }
    }
   },
   "yuna-dark-knight": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     221.0,
     230.0,
@@ -6635,13 +8765,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      255.3,
-      78.5
+      415.0,
+      520.0
      ],
      "baseline": 1209.0,
+     "current": 1.0,
+     "head": [
+      372.4,
+      488.1,
+      457.6,
+      551.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.02,
+     "scale": 1.02,
+     "scaleSrc": "reviewed",
      "sha": "c2e55c0526c788c4a29585651f8c04aac6563d539f2b60df8040f876762702da",
      "size": [
       885,
@@ -6654,17 +8792,26 @@
       "x0": 57.0,
       "x1": 773.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.048
     },
     "cast": {
      "anchor": [
-      204.3,
-      344.5
+      205.0,
+      485.0
      ],
      "baseline": 1198.0,
+     "current": 1.15,
+     "head": [
+      168.8,
+      458.0,
+      241.2,
+      512.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.202,
+     "scale": 1.202,
+     "scaleSrc": "reviewed",
      "sha": "c2859937773460aa84560543de1794004324da6ad788a9f827a756e4223a7294",
      "size": [
       399,
@@ -6677,17 +8824,26 @@
       "x0": 71.0,
       "x1": 363.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.228
     },
     "hurt": {
      "anchor": [
-      596.3,
-      84.5
+      235.0,
+      150.0
      ],
      "baseline": 850.0,
+     "current": 1.15,
+     "head": [
+      199.4,
+      123.4,
+      270.6,
+      176.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.222,
+     "scale": 1.222,
+     "scaleSrc": "reviewed",
      "sha": "a04b86b9d79953bca21e50e6a252c69f05f5ba01cbde765fb573d05c8db2beb9",
      "size": [
       743,
@@ -6700,7 +8856,8 @@
       "x0": 123.0,
       "x1": 458.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.876
     },
     "idle": {
      "anchor": [
@@ -6734,13 +8891,21 @@
     },
     "item": {
      "anchor": [
-      495.7,
-      254.5
+      382.0,
+      425.0
      ],
      "baseline": 1186.0,
+     "current": 1.25,
+     "head": [
+      346.1,
+      398.2,
+      417.9,
+      451.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.212,
+     "scale": 1.212,
+     "scaleSrc": "reviewed",
      "sha": "3ded70e817c241e06960223d14d3975cf9315f6efa2d236d8ff3c071cc1e287d",
      "size": [
       682,
@@ -6753,17 +8918,26 @@
       "x0": 52.0,
       "x1": 499.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.22
     },
     "ko": {
      "anchor": [
-      1045.8,
-      148.3
+      950.0,
+      250.0
      ],
      "baseline": 457.0,
+     "current": 0.85,
+     "head": [
+      899.8,
+      212.5,
+      1000.2,
+      287.5
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.866,
+     "scale": 0.866,
+     "scaleSrc": "reviewed",
      "sha": "7b42021a1adc4896eb346d2bc1ac234f3c172e073b82f327a0721fc53a80c9a6",
      "size": [
       1216,
@@ -6774,13 +8948,21 @@
     },
     "ready": {
      "anchor": [
-      135.5,
-      240.5
+      181.0,
+      450.0
      ],
      "baseline": 1128.0,
+     "current": 1.15,
+     "head": [
+      146.3,
+      424.1,
+      215.7,
+      475.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.255,
+     "scale": 1.255,
+     "scaleSrc": "reviewed",
      "sha": "b47db018305d6c0109039b97e344a4ad9efb6fba2dfc76ef3ccf609d9fdde7d2",
      "size": [
       642,
@@ -6793,7 +8975,8 @@
       "x0": 76.0,
       "x1": 530.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.2
     },
     "twirl-end": {
      "baseline": 1164.0,
@@ -6837,13 +9020,21 @@
     },
     "victory": {
      "anchor": [
-      259.9,
-      398.5
+      270.0,
+      430.0
      ],
      "baseline": 1177.0,
+     "current": 1.2,
+     "head": [
+      235.1,
+      404.0,
+      304.9,
+      456.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.248,
+     "scale": 1.248,
+     "scaleSrc": "reviewed",
      "sha": "6e1268444dfabbfd8c7dfebee3ec30a83c5a9498b85ab74753bcfa7d9b1a71a4",
      "size": [
       461,
@@ -6856,13 +9047,14 @@
       "x0": 57.0,
       "x1": 352.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.246
     }
    }
   },
   "yuna-gunner": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     185.0,
     97.0,
@@ -6872,13 +9064,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      416.7,
-      123.0
+      407.0,
+      193.0
      ],
      "baseline": 1083.0,
+     "current": 1.0,
+     "head": [
+      356.4,
+      154.0,
+      457.6,
+      232.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.999,
+     "scale": 1.0,
+     "scaleSrc": "noise",
      "sha": "29aae5f48c8284c1a1aa7d33037e9048fa35a97a37476c4bc456ef892c57c897",
      "size": [
       823,
@@ -6891,17 +9091,26 @@
       "x0": 46.0,
       "x1": 796.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.918
     },
     "cast": {
      "anchor": [
-      300.7,
-      39.0
+      278.0,
+      465.0
      ],
      "baseline": 1191.0,
+     "current": 1.0,
+     "head": [
+      228.8,
+      427.0,
+      327.2,
+      503.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.026,
+     "scale": 1.026,
+     "scaleSrc": "reviewed",
      "sha": "566d9af83440f6cdf6b5c315a775e940c228bab2e396a2c3f28622c2d9d953ab",
      "size": [
       611,
@@ -6914,17 +9123,26 @@
       "x0": 80.0,
       "x1": 579.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.052
     },
     "critical": {
      "anchor": [
-      379.6,
-      55.0
+      313.0,
+      177.0
      ],
      "baseline": 722.0,
+     "current": 0.99,
+     "head": [
+      266.1,
+      140.8,
+      359.9,
+      213.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.076,
+     "scale": 1.076,
+     "scaleSrc": "reviewed",
      "sha": "bf0f6a115f00f6f9da22697d7b328d6af3ef5076b49d53298c19256ca0c4fdc6",
      "size": [
       723,
@@ -6937,17 +9155,26 @@
       "x0": 31.0,
       "x1": 688.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.654
     },
     "hurt": {
      "anchor": [
-      342.6,
-      55.0
+      359.0,
+      139.0
      ],
      "baseline": 1102.0,
+     "current": 1.0,
+     "head": [
+      311.2,
+      102.1,
+      406.8,
+      175.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.057,
+     "scale": 1.057,
+     "scaleSrc": "reviewed",
      "sha": "fdf06616039f139c4c6f7dcc04e40595eee9c1a0acd212f5d1560340b55445aa",
      "size": [
       706,
@@ -6960,7 +9187,8 @@
       "x0": 215.0,
       "x1": 339.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.988
     },
     "idle": {
      "anchor": [
@@ -6994,13 +9222,21 @@
     },
     "item": {
      "anchor": [
-      187.0,
-      55.0
+      196.0,
+      119.0
      ],
      "baseline": 947.0,
+     "current": 1.09,
+     "head": [
+      151.2,
+      84.4,
+      240.8,
+      153.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.128,
+     "scale": 1.128,
+     "scaleSrc": "reviewed",
      "sha": "993a53574c2623ebb79ae76031f954210ac66582e4ae0c4d0de5f9396b03b7a1",
      "size": [
       521,
@@ -7013,17 +9249,26 @@
       "x0": 22.0,
       "x1": 316.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.904
     },
     "ko": {
      "anchor": [
-      1005.0,
-      183.1
+      763.0,
+      300.0
      ],
      "baseline": 573.0,
+     "current": 0.6,
+     "head": [
+      677.1,
+      233.7,
+      848.9,
+      366.3
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.588,
+     "scale": 0.588,
+     "scaleSrc": "reviewed",
      "sha": "f0af2d4edf5a782016399e169cf39dcce9a24335363ff716d459c9edd0bb2947",
      "size": [
       1183,
@@ -7034,13 +9279,21 @@
     },
     "ready": {
      "anchor": [
-      312.1,
-      155.0
+      339.0,
+      224.0
      ],
      "baseline": 958.0,
+     "current": 1.4,
+     "head": [
+      301.6,
+      195.2,
+      376.4,
+      252.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.352,
+     "scale": 1.352,
+     "scaleSrc": "reviewed",
      "sha": "61a17ea24fa8565a2c4a6fe9c245a798e15cc176f12adcc1945c409333593f3e",
      "size": [
       543,
@@ -7053,17 +9306,26 @@
       "x0": 168.0,
       "x1": 518.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.096
     },
     "sleep": {
      "anchor": [
-      192.1,
-      55.0
+      202.0,
+      98.0
      ],
      "baseline": 867.0,
+     "current": 1.0,
+     "head": [
+      156.3,
+      62.7,
+      247.7,
+      133.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.106,
+     "scale": 1.106,
+     "scaleSrc": "reviewed",
      "sha": "caae8448253b964c849e02c1a91872e54a7cee5c671c964efda4d029285912b1",
      "size": [
       292,
@@ -7076,7 +9338,8 @@
       "x0": 68.0,
       "x1": 256.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.81
     },
     "twirl-end": {
      "baseline": 818.0,
@@ -7130,13 +9393,21 @@
     },
     "victory": {
      "anchor": [
-      200.0,
-      211.0
+      201.0,
+      276.0
      ],
      "baseline": 1187.0,
+     "current": 1.0,
+     "head": [
+      151.2,
+      237.6,
+      250.8,
+      314.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.015,
+     "scale": 1.015,
+     "scaleSrc": "reviewed",
      "sha": "96a2c9086e316e6427651d5eeab53d2a1f54112c8d1169cf46b34618eb4f9428",
      "size": [
       537,
@@ -7149,13 +9420,409 @@
       "x0": 116.0,
       "x1": 241.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.023
+    }
+   }
+  },
+  "yuna-lady-luck": {
+   "game": "ffx2",
+   "headsComplete": true,
+   "idleHead": [
+    136.4,
+    108.6,
+    234.6,
+    187.1
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      327.0,
+      132.0
+     ],
+     "baseline": 817.0,
+     "current": 1.3,
+     "head": [
+      288.5,
+      101.2,
+      365.5,
+      162.8
+     ],
+     "prone": false,
+     "reading": 1.274,
+     "scale": 1.274,
+     "scaleSrc": "reviewed",
+     "sha": "59a2933dc2c9e7a02a855265d2aab6932749f2737ed41983f46b038e564ba8ee",
+     "size": [
+      597,
+      833
+     ],
+     "stance": {
+      "row": 816.0,
+      "src": "silhouette",
+      "x": 232.5,
+      "x0": 31.0,
+      "x1": 434.0
+     },
+     "standing": true,
+     "stature": 0.901
+    },
+    "cast": {
+     "anchor": [
+      172.0,
+      208.0
+     ],
+     "baseline": 947.0,
+     "current": 1.3,
+     "head": [
+      134.6,
+      178.1,
+      209.4,
+      237.9
+     ],
+     "prone": false,
+     "reading": 1.314,
+     "scale": 1.314,
+     "scaleSrc": "reviewed",
+     "sha": "18c21904e8e053e38571b8fcc2fb745de99d5d4262d530c8450aa5cc80d07a3c",
+     "size": [
+      312,
+      955
+     ],
+     "stance": {
+      "row": 942.0,
+      "src": "silhouette",
+      "x": 145.0,
+      "x0": 59.0,
+      "x1": 231.0
+     },
+     "standing": true,
+     "stature": 1.081
+    },
+    "follow": {
+     "anchor": [
+      347.0,
+      255.0
+     ],
+     "baseline": 1101.0,
+     "current": 1.0,
+     "head": [
+      298.9,
+      216.6,
+      395.1,
+      293.4
+     ],
+     "prone": false,
+     "reading": 1.021,
+     "scale": 1.021,
+     "scaleSrc": "reviewed",
+     "sha": "b4a515887e20afa0191874702b99656bf6c2f87ab14a91ef425a4f21a7a79976",
+     "size": [
+      624,
+      1101
+     ],
+     "stance": {
+      "row": 1101.0,
+      "src": "silhouette",
+      "x": 311.5,
+      "x0": 138.0,
+      "x1": 485.0
+     },
+     "standing": true,
+     "stature": 0.979
+    },
+    "hurt": {
+     "anchor": [
+      201.0,
+      145.0
+     ],
+     "baseline": 778.0,
+     "current": 1.05,
+     "head": [
+      154.2,
+      107.6,
+      247.8,
+      182.4
+     ],
+     "prone": false,
+     "reading": 1.05,
+     "scale": 1.05,
+     "scaleSrc": "noise",
+     "sha": "614758d2697b9acf42aa8ad73cf0aaed1bf15e6fca12a8a28af9a8ebeabbad1d",
+     "size": [
+      515,
+      793
+     ],
+     "stance": {
+      "row": 776.0,
+      "src": "silhouette",
+      "x": 215.5,
+      "x0": 181.0,
+      "x1": 250.0
+     },
+     "standing": true,
+     "stature": 0.707
+    },
+    "idle": {
+     "anchor": [
+      185.5,
+      147.8
+     ],
+     "baseline": 1148.0,
+     "head": [
+      136.4,
+      108.6,
+      234.6,
+      187.1
+     ],
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "11eec3300da84056b0a8581a07c4cd736f44f14770e115189a6c3085b0e154ad",
+     "size": [
+      443,
+      1164
+     ],
+     "stance": {
+      "row": 1148.0,
+      "src": "silhouette",
+      "x": 224.0,
+      "x0": 175.0,
+      "x1": 273.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "item": {
+     "anchor": [
+      108.0,
+      130.0
+     ],
+     "baseline": 867.0,
+     "current": 1.35,
+     "head": [
+      71.3,
+      100.7,
+      144.7,
+      159.3
+     ],
+     "prone": false,
+     "reading": 1.338,
+     "scale": 1.338,
+     "scaleSrc": "reviewed",
+     "sha": "02b5669ac2888c38191da6f43698275eea00b0f08337fd1ea7bc06d5445fe3e5",
+     "size": [
+      426,
+      883
+     ],
+     "stance": {
+      "row": 868.0,
+      "src": "silhouette",
+      "x": 125.5,
+      "x0": 42.0,
+      "x1": 209.0
+     },
+     "standing": true,
+     "stature": 1.006
+    },
+    "ko": {
+     "anchor": [
+      798.0,
+      128.0
+     ],
+     "baseline": 307.0,
+     "current": 0.8,
+     "head": [
+      736.6,
+      78.9,
+      859.4,
+      177.1
+     ],
+     "prone": true,
+     "reading": 0.8,
+     "scale": 0.8,
+     "scaleSrc": "noise",
+     "sha": "3f146357ab7f2c8f81c7f3c994a64d39b8b336f44d37a85c52663b574c4c5fa8",
+     "size": [
+      1040,
+      323
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "od-x2-lady-luck-attack-reels": {
+     "anchor": [
+      441.0,
+      210.0
+     ],
+     "baseline": 1107.0,
+     "current": 0.9,
+     "head": [
+      384.1,
+      164.5,
+      497.9,
+      255.5
+     ],
+     "prone": false,
+     "reading": 0.863,
+     "scale": 0.863,
+     "scaleSrc": "reviewed",
+     "sha": "0585cd14247d5190887168cd7e1bd1d774c8c2bffad0337943fc051dc4ab1a02",
+     "size": [
+      796,
+      1107
+     ],
+     "stance": {
+      "row": 1107.0,
+      "src": "silhouette",
+      "x": 336.5,
+      "x0": 102.0,
+      "x1": 571.0
+     },
+     "standing": true,
+     "stature": 0.832
+    },
+    "od-x2-lady-luck-magic-reels": {
+     "anchor": [
+      441.0,
+      210.0
+     ],
+     "baseline": 1107.0,
+     "current": 0.9,
+     "head": [
+      384.1,
+      164.5,
+      497.9,
+      255.5
+     ],
+     "prone": false,
+     "reading": 0.863,
+     "scale": 0.863,
+     "scaleSrc": "reviewed",
+     "sha": "0585cd14247d5190887168cd7e1bd1d774c8c2bffad0337943fc051dc4ab1a02",
+     "size": [
+      796,
+      1107
+     ],
+     "stance": {
+      "row": 1107.0,
+      "src": "silhouette",
+      "x": 336.5,
+      "x0": 102.0,
+      "x1": 571.0
+     },
+     "standing": true,
+     "stature": 0.832
+    },
+    "ready": {
+     "anchor": [
+      235.0,
+      143.0
+     ],
+     "baseline": 867.0,
+     "current": 1.2,
+     "head": [
+      194.1,
+      110.3,
+      275.9,
+      175.7
+     ],
+     "prone": false,
+     "reading": 1.2,
+     "scale": 1.2,
+     "scaleSrc": "noise",
+     "sha": "a6a5223666fa1fe49e7813ba376913e688e79f02c3f4945f998d38787eb18608",
+     "size": [
+      505,
+      879
+     ],
+     "stance": {
+      "row": 866.0,
+      "src": "silhouette",
+      "x": 177.0,
+      "x0": 41.0,
+      "x1": 313.0
+     },
+     "standing": true,
+     "stature": 0.902
+    },
+    "twirl-end": {
+     "baseline": 817.0,
+     "prone": false,
+     "sha": "08942ba437e10e50313fe0118aa3b180a0f64032038d77beff226ed460dda5e6",
+     "size": [
+      529,
+      834
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "twirl-forming": {
+     "baseline": 810.0,
+     "prone": false,
+     "sha": "01222e47abb7031eeb392224adc5adb5488610a6e8acf00136278b5fab11ca88",
+     "size": [
+      529,
+      826
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "twirl-going": {
+     "baseline": 924.0,
+     "prone": false,
+     "sha": "5ffbe476f6e0ff1fdd0c912d8569e025f10c25ecf0b29289e48c37abd79e7b05",
+     "size": [
+      523,
+      928
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "twirl-start": {
+     "baseline": 907.0,
+     "prone": false,
+     "sha": "96316d730001a7daee0bf7ce6cf44e00b692698fab5a904e644c2b0d834fb93c",
+     "size": [
+      525,
+      923
+     ],
+     "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
+    },
+    "victory": {
+     "anchor": [
+      416.0,
+      158.0
+     ],
+     "baseline": 774.0,
+     "current": 1.15,
+     "head": [
+      370.2,
+      121.4,
+      461.8,
+      194.6
+     ],
+     "prone": false,
+     "reading": 1.071,
+     "scale": 1.071,
+     "scaleSrc": "reviewed",
+     "sha": "df8154029699f70203d47089717c4676114e6558e89306eba7f36715bb9f4786",
+     "size": [
+      530,
+      774
+     ],
+     "stance": {
+      "row": 774.0,
+      "src": "silhouette",
+      "x": 181.5,
+      "x0": 115.0,
+      "x1": 248.0
+     },
+     "standing": true,
+     "stature": 0.717
     }
    }
   },
   "yuna-songstress": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     192.0,
     105.0,
@@ -7165,13 +9832,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      518.1,
-      52.5
+      466.0,
+      144.0
      ],
      "baseline": 1129.0,
+     "current": 1.0,
+     "head": [
+      420.4,
+      112.2,
+      511.6,
+      175.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.086,
+     "scale": 1.086,
+     "scaleSrc": "reviewed",
      "sha": "5dc3e5af25b363c1cdbdb69aa766ef6bed07e1aa38faf961a83383e03f109a17",
      "size": [
       829,
@@ -7184,17 +9859,26 @@
       "x0": 322.0,
       "x1": 517.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.115
     },
     "cast": {
      "anchor": [
-      129.8,
-      208.5
+      116.0,
+      250.0
      ],
      "baseline": 1000.0,
+     "current": 1.13,
+     "head": [
+      73.5,
+      220.4,
+      158.5,
+      279.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.165,
+     "scale": 1.165,
+     "scaleSrc": "reviewed",
      "sha": "e5c3cd2730220371d3a8348b831f9836c049d4f1210e3143cd9b0ac910d8bee4",
      "size": [
       286,
@@ -7207,17 +9891,26 @@
       "x0": 36.0,
       "x1": 255.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.058
     },
     "dance": {
      "anchor": [
-      322.8,
-      50.5
+      347.0,
+      162.0
      ],
      "baseline": 1109.0,
+     "current": 1.0,
+     "head": [
+      300.0,
+      129.3,
+      394.0,
+      194.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.054,
+     "scale": 1.054,
+     "scaleSrc": "reviewed",
      "sha": "0da2878fead5c062384059ac32eb5c005f7e8796b8d9b00c587cfbafda885a24",
      "size": [
       729,
@@ -7230,7 +9923,8 @@
       "x0": 281.0,
       "x1": 432.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.063
     },
     "idle": {
      "anchor": [
@@ -7264,13 +9958,21 @@
     },
     "item": {
      "anchor": [
-      310.6,
-      52.5
+      299.0,
+      99.0
      ],
      "baseline": 833.0,
+     "current": 1.38,
+     "head": [
+      260.8,
+      72.4,
+      337.2,
+      125.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.295,
+     "scale": 1.295,
+     "scaleSrc": "reviewed",
      "sha": "4114bd7edabd7c5504d9fb09d53108a71135e65349a2a1beda45d148d1f061be",
      "size": [
       573,
@@ -7284,17 +9986,26 @@
       "x0": 56.0,
       "x1": 444.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.976
     },
     "ko": {
      "anchor": [
-      965.4,
-      109.6
+      923.0,
+      118.0
      ],
      "baseline": 327.0,
+     "current": 0.85,
+     "head": [
+      864.8,
+      77.4,
+      981.2,
+      158.6
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.85,
+     "scale": 0.85,
+     "scaleSrc": "noise",
      "sha": "ae343a1c154e16992cdba7d23fae704fee049bed08d562f1eef3b721ca5e4f09",
      "size": [
       1136,
@@ -7345,13 +10056,21 @@
     },
     "victory": {
      "anchor": [
-      191.4,
-      158.5
+      216.0,
+      190.0
      ],
      "baseline": 904.0,
+     "current": 1.16,
+     "head": [
+      176.2,
+      162.2,
+      255.8,
+      217.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.243,
+     "scale": 1.243,
+     "scaleSrc": "reviewed",
      "sha": "1c59e895373d3d26f156be097658dec659bc62f814744b37c356703418e1900e",
      "size": [
       406,
@@ -7364,13 +10083,14 @@
       "x0": 97.0,
       "x1": 292.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.018
     }
    }
   },
   "yuna-thief": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     340.0,
     105.0,
@@ -7380,13 +10100,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      281.4,
-      55.5
+      275.0,
+      83.0
      ],
      "baseline": 827.0,
+     "current": 1.3,
+     "head": [
+      233.9,
+      48.4,
+      316.1,
+      117.6
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.083,
+     "scale": 1.083,
+     "scaleSrc": "reviewed",
      "sha": "6beaace6942db92f260d98450a25917c753f3dbd5c5600f82b24e7ecbe7b9880",
      "size": [
       694,
@@ -7399,17 +10127,26 @@
       "x0": 22.0,
       "x1": 495.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.768
     },
     "cast": {
      "anchor": [
-      258.6,
-      275.5
+      94.0,
+      293.0
      ],
      "baseline": 1058.0,
+     "current": 1.4,
+     "head": [
+      63.8,
+      267.6,
+      124.2,
+      318.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.474,
+     "scale": 1.474,
+     "scaleSrc": "reviewed",
      "sha": "4c5970e3ab2e58b79a75f7803138df4b255751cb48c818607765db639f759b0e",
      "size": [
       432,
@@ -7422,17 +10159,26 @@
       "x0": 98.0,
       "x1": 360.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.343
     },
     "follow": {
      "anchor": [
-      425.5,
-      53.5
+      382.0,
+      73.0
      ],
      "baseline": 705.0,
+     "current": 1.4,
+     "head": [
+      352.6,
+      48.2,
+      411.4,
+      97.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.515,
+     "scale": 1.515,
+     "scaleSrc": "reviewed",
      "sha": "d0c9be00d9c8b280e3e2a0ddb06c4034ae8c6e9bda02b312ab2ee443ccd2d801",
      "size": [
       666,
@@ -7445,17 +10191,26 @@
       "x0": 124.0,
       "x1": 595.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.912
     },
     "hurt": {
      "anchor": [
-      260.3,
-      53.5
+      252.0,
+      64.0
      ],
      "baseline": 754.0,
+     "current": 1.4,
+     "head": [
+      221.3,
+      38.1,
+      282.7,
+      89.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.449,
+     "scale": 1.449,
+     "scaleSrc": "reviewed",
      "sha": "0ec32055f9b9970c48c599f8f7faa4802f371fa2983067a8018413660d174b56",
      "size": [
       696,
@@ -7468,7 +10223,8 @@
       "x0": 185.0,
       "x1": 500.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.935
     },
     "idle": {
      "anchor": [
@@ -7502,13 +10258,21 @@
     },
     "item": {
      "anchor": [
-      235.9,
-      55.5
+      203.0,
+      105.0
      ],
      "baseline": 841.0,
+     "current": 1.45,
+     "head": [
+      170.7,
+      77.8,
+      235.3,
+      132.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.378,
+     "scale": 1.378,
+     "scaleSrc": "reviewed",
      "sha": "9be9d426c9f1e4c39dd170cd7a72f9b173d6d7506eb994f8d10957fb0b96bdfb",
      "size": [
       539,
@@ -7521,17 +10285,26 @@
       "x0": 36.0,
       "x1": 403.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.994
     },
     "ko": {
      "anchor": [
-      1007.6,
-      126.1
+      937.0,
+      103.0
      ],
      "baseline": 383.0,
+     "current": 1.4,
+     "head": [
+      905.2,
+      76.2,
+      968.8,
+      129.8
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.4,
+     "scale": 1.4,
+     "scaleSrc": "noise",
      "sha": "8b84f9e1be6d81b2e6a313034254356ef4fca50226d2d28586a0c4a90d20ceba",
      "size": [
       1185,
@@ -7542,13 +10315,21 @@
     },
     "ready": {
      "anchor": [
-      476.0,
-      53.5
+      465.0,
+      80.0
      ],
      "baseline": 761.0,
+     "current": 1.5,
+     "head": [
+      436.8,
+      56.3,
+      493.2,
+      103.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.579,
+     "scale": 1.579,
+     "scaleSrc": "reviewed",
      "sha": "8b8c7f16390551f78663c2cc27c6af9d077c43c1d6b379fc25ec1c8f93a10866",
      "size": [
       585,
@@ -7561,7 +10342,8 @@
       "x0": 215.0,
       "x1": 556.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.028
     },
     "twirl-end": {
      "baseline": 1010.0,
@@ -7605,13 +10387,21 @@
     },
     "victory": {
      "anchor": [
-      150.9,
-      53.5
+      131.0,
+      102.0
      ],
      "baseline": 1134.0,
+     "current": 0.95,
+     "head": [
+      82.9,
+      61.5,
+      179.1,
+      142.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.926,
+     "scale": 0.926,
+     "scaleSrc": "reviewed",
      "sha": "00d5fdc882287ae4dd223a0478d94ec9de8ebb457f3e2f63b0194abea990370f",
      "size": [
       604,
@@ -7624,13 +10414,14 @@
       "x0": 150.0,
       "x1": 218.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.905
     }
    }
   },
   "yuna-warrior": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     317.0,
     103.0,
@@ -7640,13 +10431,21 @@
    "poses": {
     "cast": {
      "anchor": [
-      269.6,
-      206.5
+      243.0,
+      251.0
      ],
      "baseline": 1164.0,
+     "current": 1.15,
+     "head": [
+      206.5,
+      222.7,
+      279.5,
+      279.3
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.15,
+     "scale": 1.15,
+     "scaleSrc": "noise",
      "sha": "5806cf5dffac3c65ba799e379e2d97961f0c7d669640dfe835908f2492e7a7f8",
      "size": [
       445,
@@ -7659,17 +10458,26 @@
       "x0": 52.0,
       "x1": 415.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.147
     },
     "follow": {
      "anchor": [
-      316.0,
-      82.5
+      305.0,
+      139.0
      ],
      "baseline": 720.0,
+     "current": 1.5,
+     "head": [
+      277.9,
+      118.0,
+      332.1,
+      160.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.547,
+     "scale": 1.547,
+     "scaleSrc": "reviewed",
      "sha": "5dc11cb4f128d648ce6be6528265f103273218164f9f6dcb3a728e3c1a7e3852",
      "size": [
       717,
@@ -7682,17 +10490,26 @@
       "x0": 31.0,
       "x1": 520.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.946
     },
     "hurt": {
      "anchor": [
-      226.8,
-      48.5
+      250.0,
+      64.0
      ],
      "baseline": 773.0,
+     "current": 1.06,
+     "head": [
+      211.6,
+      34.3,
+      288.4,
+      93.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.093,
+     "scale": 1.093,
+     "scaleSrc": "reviewed",
      "sha": "d1f522154217b8022168d3fa8d1382b64287456e70b259ca3c6ca55c517ab42b",
      "size": [
       754,
@@ -7705,7 +10522,8 @@
       "x0": 151.0,
       "x1": 544.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.719
     },
     "idle": {
      "anchor": [
@@ -7739,13 +10557,21 @@
     },
     "item": {
      "anchor": [
-      362.7,
-      48.5
+      354.0,
+      71.0
      ],
      "baseline": 827.0,
+     "current": 1.15,
+     "head": [
+      318.4,
+      43.5,
+      389.6,
+      98.5
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.181,
+     "scale": 1.181,
+     "scaleSrc": "reviewed",
      "sha": "6a49e9d16e33f6cb1a83769f18510409dd3e115e854603ffe2cf6354ada461ca",
      "size": [
       637,
@@ -7758,17 +10584,26 @@
       "x0": 261.0,
       "x1": 312.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.832
     },
     "ready": {
      "anchor": [
-      186.2,
-      82.5
+      204.0,
+      107.0
      ],
      "baseline": 859.0,
+     "current": 1.2,
+     "head": [
+      170.7,
+      81.2,
+      237.3,
+      132.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.261,
+     "scale": 1.261,
+     "scaleSrc": "reviewed",
      "sha": "1c19b00d9c1c806637ec73acf7fe700f89ee565ab4ef84380a0efb35633e5c96",
      "size": [
       670,
@@ -7781,7 +10616,8 @@
       "x0": 98.0,
       "x1": 460.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.924
     },
     "twirl-end": {
      "baseline": 1141.0,
@@ -7825,13 +10661,21 @@
     },
     "victory": {
      "anchor": [
-      301.5,
-      378.5
+      261.0,
+      413.0
      ],
      "baseline": 1197.0,
+     "current": 1.28,
+     "head": [
+      227.5,
+      387.1,
+      294.5,
+      438.9
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.255,
+     "scale": 1.255,
+     "scaleSrc": "reviewed",
      "sha": "2b846f54059e4568a754ca15e199a493c95cc48539a0c272c3a2c4f14f48f05a",
      "size": [
       490,
@@ -7844,13 +10688,14 @@
       "x0": 198.0,
       "x1": 437.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.288
     }
    }
   },
   "yuna-white-mage": {
    "game": "ffx2",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
     316.0,
     115.0,
@@ -7860,13 +10705,21 @@
    "poses": {
     "attack": {
      "anchor": [
-      704.0,
-      88.5
+      388.0,
+      234.0
      ],
      "baseline": 825.0,
+     "current": 1.3,
+     "head": [
+      361.9,
+      212.2,
+      414.1,
+      255.8
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.398,
+     "scale": 1.398,
+     "scaleSrc": "reviewed",
      "sha": "336af4f0f5c118d93e841f540487dc7af26ff7a18ef76f3fdbf01409da02d205",
      "size": [
       794,
@@ -7879,17 +10732,26 @@
       "x0": 26.0,
       "x1": 546.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.984
     },
     "cast": {
      "anchor": [
-      571.1,
-      190.5
+      272.0,
+      437.0
      ],
      "baseline": 1149.0,
+     "current": 1.25,
+     "head": [
+      242.8,
+      412.6,
+      301.2,
+      461.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.25,
+     "scale": 1.25,
+     "scaleSrc": "noise",
      "sha": "9fc54b0a753896a7b28465e117118bb42aa4df48621caa255973bd4d20808bc9",
      "size": [
       644,
@@ -7902,17 +10764,26 @@
       "x0": 175.0,
       "x1": 383.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.23
     },
     "follow": {
      "anchor": [
-      615.7,
-      74.5
+      291.0,
+      262.0
      ],
      "baseline": 931.0,
+     "current": 1.25,
+     "head": [
+      263.3,
+      238.8,
+      318.7,
+      285.2
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.316,
+     "scale": 1.316,
+     "scaleSrc": "reviewed",
      "sha": "8573590de142f91bfe58bac83def87192501b3d50b07fe3b13de8bae9ae5004b",
      "size": [
       722,
@@ -7925,17 +10796,26 @@
       "x0": 117.0,
       "x1": 357.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.046
     },
     "hurt": {
      "anchor": [
-      263.6,
-      46.5
+      265.0,
+      66.0
      ],
      "baseline": 736.0,
+     "current": 1.6,
+     "head": [
+      242.2,
+      47.0,
+      287.8,
+      85.0
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.603,
+     "scale": 1.6,
+     "scaleSrc": "noise",
      "sha": "5fe8e4c3c8c7cd3a6d01d3830d226846c0f2c3c2d95f030230d03f59e9ab5490",
      "size": [
       758,
@@ -7948,7 +10828,8 @@
       "x0": 214.0,
       "x1": 486.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.001
     },
     "idle": {
      "anchor": [
@@ -7982,13 +10863,21 @@
     },
     "item": {
      "anchor": [
-      309.6,
-      46.5
+      334.0,
+      95.0
      ],
      "baseline": 816.0,
+     "current": 1.2,
+     "head": [
+      301.6,
+      67.9,
+      366.4,
+      122.1
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.126,
+     "scale": 1.126,
+     "scaleSrc": "reviewed",
      "sha": "c524046a5cc7d46dbfd4699a709aba13e8aaa337f85205878fec162a1231e7de",
      "size": [
       594,
@@ -8001,17 +10890,26 @@
       "x0": 202.0,
       "x1": 463.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.783
     },
     "ko": {
      "anchor": [
-      936.2,
-      125.2
+      884.0,
+      122.0
      ],
      "baseline": 380.0,
+     "current": 1.0,
+     "head": [
+      841.8,
+      86.7,
+      926.2,
+      157.3
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.864,
+     "scale": 0.864,
+     "scaleSrc": "reviewed",
      "sha": "bf859d072d61d85d534a1d9eb3018605bf65a39ad93a4e2ae027fde778d30cd2",
      "size": [
       1102,
@@ -8062,13 +10960,21 @@
     },
     "victory": {
      "anchor": [
-      375.4,
-      160.5
+      372.0,
+      190.0
      ],
      "baseline": 935.0,
+     "current": 1.15,
+     "head": [
+      343.6,
+      166.3,
+      400.4,
+      213.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 1.286,
+     "scale": 1.286,
+     "scaleSrc": "reviewed",
      "sha": "68aa7652a575c68dfa6010ade653d40be7246fd198e4bad9358d2ca144e70ed2",
      "size": [
       810,
@@ -8081,7 +10987,8 @@
       "x0": 298.0,
       "x1": 513.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 1.027
     }
    }
   }
