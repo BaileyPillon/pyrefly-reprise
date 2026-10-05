@@ -57,7 +57,7 @@ used: a pause freezes the reels and the timer, so it can neither line one up nor
   (`rollReels`), so every shipped line is untouched: **the autopilot's event-log digest over seeds 1 to 200 is identical to r381's
   recorded values in all seven FFX-2 chapters** (IV `10be3653d65ace71` 200/200, V `a2bdf7ce055958dd` 188/200, VI `2c17fadc43601d6b`
   198/200, XI `0e47b91402fcb4f1` 174/200, XIII `9aebd9f707d6cd9c` 14/200, XV `c5e43cb264008c79` 111/200, XVI `545d43dfeae497c5` 197/200;
-  `D:/Tools/pyrefly-scratch/2026-10-04/ladyluck-a/digest.mjs`, the r381 harness's own hash).
+  `digest.mjs` in the parked scratch below, the r381 harness's own hash).
 - The browser runs show it: every Wait run of the same chapter and seed (twelve in the final matrix, eleven in the first) raised the same layout (stop order `[2,1,0]`,
   phases `3.16 4.99 3.24`, phone and desktop alike), and the Active runs another (`[0,2,1]`, `3.24 0.07 5.26`).
 - One existing test needed a repair, not a rule change: `ffx2-lady-luck-human` asserted that every Yuna-sourced hit in a log that keeps
@@ -139,7 +139,7 @@ on the shipped Magic Reels.
 
 The model column is `node --experimental-transform-types tools/ladyluck-reels-bench.mjs pay`: the engine's layout, the overlay's timing rule
 and the engine's pay table, with no screen. The in-game column is the same players sending real Enter key events to the real
-`LadyLuckReels.ts` (a scratch page that mounts it as `FFX2BattleHud` does, dev server, `D:/Tools/pyrefly-scratch/2026-10-04/ladyluck-a/lab-measure.mjs`).
+`LadyLuckReels.ts` (a scratch page that mounts it as `FFX2BattleHud` does, dev server, `lab-measure.mjs` in the parked scratch below).
 The model reproduces the page's numbers to within sampling error, and the game reproduces the model (every in-game interval holds the model's value; 100 spins is a wide net,
 plus or minus 5 to 9 points). Real-input error of the aimed presses in those runs, ms after the instant meant, 300 presses a row: careful +3.3 (SD 3.4, at worst 19.9, a quiet machine);
 casual +5.2 (SD 15.8, at worst 210) and greedy +8.4 (SD 19.0, at worst 185) ran while the bench and the other jobs of this lane were using the CPU, so a few presses landed late, which can only
@@ -230,4 +230,8 @@ Lady Luck's paintings are not installed (the shared `public/art` is gitignored):
 
 - Unit: `node node_modules/vitest/vitest.mjs run tests/unit/ladyluck-timing.test.ts tests/unit/ui-ffx2-lady-luck.test.ts tests/unit/ffx2-lady-luck-layout.test.ts tests/unit/ffx2-minigame-type-floor.test.ts`
 - Measure: `node --experimental-transform-types tools/ladyluck-reels-bench.mjs pay` and `... chapters --seeds=1000 [--spinner=yuna|rikku|paine] [--arms=a,b]`.
-- The browser drivers and the lab page are scratch (parked in `F:/pyrefly-parked/2026-10-04/ladyluck-a/`, with the raw outputs and the digest harness); the method is in the section above.
+- The browser drivers, the lab page, the digest harness, the production build and every raw output are scratch, parked in `F:/pyrefly-parked/2026-10-04/ladyluck-a/` (the lab page, `zz-ll-lab.tmp.*`, at its top;
+  everything else under `scratch/`: `ll-aim.mjs` and `lib.mjs` are the drivers, `serve.mjs` the static server with the dev-only Lady Luck overlay, `lab-measure.mjs`, `digest.mjs`, `tojpg.mjs`, the `out/` PNGs and
+  reports, `dist/`). The paths inside the scripts still name the old `D:/Tools/pyrefly-scratch/2026-10-04/ladyluck-a` folder; the method is in the sections above.
+- One side effect to know about: the lab page ran on a Vite dev server with the default cache folder, which through the worktree's `node_modules` junction is the main tree's `node_modules/.vite/deps`
+  (rewritten at 23:30). It is a cache, so nothing is lost, but a dev server running from the main tree may have re-optimised once. The dev server and the static server were stopped by PID.
