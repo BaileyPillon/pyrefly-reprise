@@ -1,10 +1,14 @@
-import { PerspectiveCamera, Vector3 } from 'three';
+import { PerspectiveCamera, Vector3, type Texture } from 'three';
 import type { BattleCamera } from './BattleCamera.ts';
-import { artBudget, forcedArtScale, maxTextureSize } from './ArtDevice.ts';
+import { artBudget, forcedArtScale, maxTextureSize, stagedUploads } from './ArtDevice.ts';
 import { ArtGovernor, type GovernedActor } from './ArtGovernor.ts';
 import { pickScale, requiredScale } from './ArtBudget.ts';
 import { artScalesForNow } from './ArtTier.ts';
 import { loadPixels } from './PaintedArt.ts';
+import { loadMaster } from './MasterLoad.ts';
+import { TextureStager, type StageHost, type StagerStats } from './TextureStager.ts';
+import type { ProbeResult } from './StageProbe.ts';
+import type { GovernorStats, LoadedPixels } from './ArtMeasure.ts';
 
 /**
  * A battle stage's art governor, wired (release 39; both games, shared plumbing).
@@ -18,6 +22,9 @@ import { loadPixels } from './PaintedArt.ts';
  * - **the held shots by size**: the FFX Overdrive shot frames its subject at up to 72 percent of the frame's height and the FFX-2
  *   dressphere shot at up to 68 percent (`fx/mix/heldShots.ts`), so each party member's master for that size is asked for up front;
  * - **the colossus master**: `anticipateView` takes the MaxMix framing's chosen master pose the moment it is installed.
+ *
+ * Release 39.1: given the renderer (`host`), a master the governor loads is uploaded to the GPU ahead of its swap, a few megabytes a frame (`TextureStager.ts`), and the
+ * painting adopts it when it is resident; this ticks that upload once a frame, before the governor's own update applies the finished swaps.
  */
 
 /** The FFX Overdrive shot and the FFX-2 dressphere shot's largest framings, as a fraction of the frame's height (`heldShots.ts`). */
@@ -34,6 +41,10 @@ export interface StageArtDeps {
   canvas: { height: number };
   battleCamera: BattleCamera;
   game?: 'ffx' | 'ffx2' | string;
+  /** The renderer, for staged uploads; absent (the tests) a master swaps in the release 39 way. */
+  host?: StageHost;
+  /** The browser's verdict on the staged upload (`StageProbe.ts`): the tests pass their own; the game runs the probe. */
+  probe?: Promise<ProbeResult> | ProbeResult;
 }
 
 let active: StageArt | null = null;
@@ -45,6 +56,8 @@ export function anticipateView(view: { pos: Vector3; look: Vector3; fov: number 
 
 export class StageArt {
   readonly governor: ArtGovernor;
+  /** Uploads a loaded master ahead of its swap (release 39.1); null without a renderer. */
+  readonly stager: TextureStager | null;
   private readonly deps: StageArtDeps;
   private readonly probe: PerspectiveCamera;
   private frames = 0;
@@ -56,13 +69,16 @@ export class StageArt {
   constructor(deps: StageArtDeps) {
     this.deps = deps;
     this.probe = new PerspectiveCamera(deps.camera.fov, deps.camera.aspect, deps.camera.near, deps.camera.far);
+    this.stager = deps.host && stagedUploads() ? new TextureStager(deps.host, deps.probe) : null;
     this.governor = new ArtGovernor({
       actors: deps.actors,
       camera: () => deps.camera,
       bufferHeight: () => deps.canvas.height,
       budget: artBudget,
       scalesFor: artScalesForNow,
-      load: (url, scale) => loadPixels(url, scale),
+      // With the stager proved exact on this browser a master loads as a bitmap too (decoded off the main thread); otherwise as release 39 loaded it.
+      load: (url, scale, opts) => (this.stager?.enabled ? loadMaster(url, scale, opts) : loadPixels(url, scale)),
+      stage: this.stager ? (texture, loaded, urgent) => this.stage(texture, loaded, urgent) : undefined,
       pinned: () => forcedArtScale() !== null,
       maxTexture: maxTextureSize,
     });
@@ -70,6 +86,7 @@ export class StageArt {
   }
 
   update(): void {
+    this.stager?.tick();
     this.governor.update();
     // The plan runs once the figures are on the field and have stood for a moment, and again when who is on the field changes
     // (an arrival, a part, a form change): the stage builds its actors after it is made, so a plan on a timer alone ran on nothing.
@@ -85,6 +102,16 @@ export class StageArt {
       this.planned = true;
       this.plan();
     }
+  }
+
+  private stage(texture: Texture, loaded: LoadedPixels, urgent: boolean): ReturnType<TextureStager['stage']> {
+    if (!this.stager || !loaded.bitmap) return null;
+    return this.stager.stage({ target: texture, image: loaded.image, bitmap: loaded.bitmap, urgent });
+  }
+
+  /** The governor's stats and the stager's, for the debug API and the measurements. */
+  stats(): GovernorStats & { stager: StagerStats | null } {
+    return { ...this.governor.stats(), stager: this.stager?.stats() ?? null };
   }
 
   /** Who is on the field, as a string: the number of figures and of their paintings (empty with none). */
@@ -186,6 +213,7 @@ export class StageArt {
 
   dispose(): void {
     this.governor.dispose();
+    this.stager?.dispose();
     if (active === this) active = null;
   }
 }

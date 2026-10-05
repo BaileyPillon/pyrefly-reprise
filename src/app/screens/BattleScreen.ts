@@ -226,6 +226,7 @@ export class BattleScreen extends Screen {
       battleCamera: this.scene.battleCamera,
       slots: this.scene.slots,
       canvas: this.app.renderer.domElement,
+      renderer: this.app.renderer.renderer, // release 39.1: masters are uploaded ahead of their swap (TextureStager.ts)
       overlayRoot: this.root,
       // FF7: its own effects, Spectacle on A3 plus (battleSpellFx answers 'ff7' with battleFf7Fx.ts)
       spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed, () => this.stage ?? null), // FF7: its hit flash and shake

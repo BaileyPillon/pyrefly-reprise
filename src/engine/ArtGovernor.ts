@@ -1,91 +1,33 @@
 import type { PerspectiveCamera, Texture } from 'three';
-import { evictionOrder, pickScale, requiredScale, textureMB, type Resident } from './ArtBudget.ts';
-import { pixelsPer1xTexel, type GovernedActor, type GovernedPainting, type GovernorDeps, type PixelSource } from './ArtMeasure.ts';
+import { pickScale, requiredScale, textureMB } from './ArtBudget.ts';
+import { EVICT_EVERY_MS, MAX_LOADS, PERSIST_MS, SAFETY, SEEN_WINDOW_MS, URGENT_EXTRA, type Entry, type Need } from './ArtEntry.ts';
+import { evictions, roomFor, WARM_MIN_PIXELS, warmMB, warmRoom } from './ArtMemory.ts';
+import { imageHeight, imageWidth, pixelsPer1xTexel, type GovernedActor, type GovernedPainting, type GovernedStage, type GovernorDeps, type GovernorStats, type LoadedPixels } from './ArtMeasure.ts';
 
-export { pixelsPer1xTexel, type GovernedActor, type GovernedPainting, type GovernorDeps, type PixelSource } from './ArtMeasure.ts';
+export { PERSIST_MS, SEEN_WINDOW_MS } from './ArtEntry.ts';
+export { pixelsPer1xTexel, type GovernedActor, type GovernedPainting, type GovernedStage, type GovernorDeps, type GovernorStats, type LoadedPixels, type LoadOptions, type PixelSource } from './ArtMeasure.ts';
 
 /**
  * The art governor (release 39, "r39-hires-engine"; both games, shared plumbing, no game content).
  *
- * A painting is loaded at the master the device's budget allows before anything has measured it (`ArtTier.baseScaleFor`). From
- * then on this decides, every frame and from the camera that is actually looking at it, which master each figure needs: the
- * smallest one that does not magnify a texel past one screen pixel (`ArtBudget.pickScale`), within the device's ceiling. A
- * figure drawn bigger than its master asks for the next one up; the swap is made **in place**, on the texture object the plane
- * already draws (`texture.dispose()`, new image, `needsUpdate`), so the plane, its sidecar geometry, its shadow and every pose
- * comparison are untouched and every actor sharing the texture sees the new pixels at once.
+ * A painting is loaded at the master the device's budget allows before anything has measured it (`ArtTier.baseScaleFor`). From then on this decides, every frame and
+ * from the camera that is actually looking at it, which master each figure needs: the smallest one that does not magnify a texel past one screen pixel
+ * (`ArtBudget.pickScale`), within the device's ceiling. The swap is made **in place**, on the texture object the plane already draws, so the plane, its sidecar geometry,
+ * its shadow and every pose comparison are untouched and every actor sharing the texture sees the new pixels at once.
  *
  * - **On demand**: a drawn painting whose measured magnification passes one texel per pixel is upgraded (`update`).
- * - **Ahead of a shot**: `anticipate` runs the same measurement from a camera that is not on screen yet (a rig, a held shot, the
- *   colossus master, a push-in), so the master is resident when the cut lands.
- * - **Within a memory budget**: masters above the first-seen scale that are not on screen go back to it (`evictionOrder`) when the
- *   figures' texture memory passes `ArtBudget.textureMB`; a painting seen in the last 0.75 s is never evicted.
- * - **Siblings**: once a figure holds a master above where its other poses started, they follow at the same scale in the background, as
- *   room allows without evicting anything, so a pose change inside a close shot does not drop to the smaller file. A figure's opening
- *   poses start at the base master and its other poses at the approved file (`ArtTier.isOpeningPose`), so this is also what brings the
- *   rest up to the base scale after the first menu, without their bytes being ahead of it.
+ * - **Ahead of a shot**: `anticipate` runs the same measurement from a camera that is not on screen yet (a rig, a held shot, the colossus master, a push-in).
+ * - **Within a memory budget**: masters above the first-seen scale that are not on screen go back to it (`ArtMemory.evictions`) over `ArtBudget.textureMB`.
+ * - **Siblings**: once a figure holds a master above where its other poses started, they follow at the same scale in the background, as room allows without evicting
+ *   anything (a figure's opening poses start at the base master and its other poses at the approved file, `ArtTier.isOpeningPose`).
  *
- * Measuring is arithmetic on the plane's world matrix and the camera (`pixelsPer1xTexel`). Loads and swaps are async and
- * staggered: at most two loads in flight and one swap per frame (a 4x master is a 50 MB upload).
+ * At most two masters are in the air and one swap lands per frame.
+ *
+ * **Release 39.1: a swap never uploads.** Three used to upload a swapped-in master inside the next render, on the frame that drew it (145 ms for a 4x figure). Now a loaded
+ * master that carries decoded pixels is uploaded ahead, a few megabytes a frame, into a staging texture (`TextureStager.ts`) while the painting keeps drawing the one it has;
+ * when it is fully resident the painting adopts it (`apply`). A painting not drawn yet is **warmed** the same way (its own master, uploaded before its first draw), up to the
+ * warm cap (`ArtMemory.ts`). With no stager (the tests, a browser that failed the probe) the swap is release 39's.
  */
-
-interface Entry {
-  texture: Texture;
-  painted: GovernedPainting['painted'];
-  url: string;
-  /** The master the texture holds now. */
-  scale: number;
-  /** What it was first seen holding, and the image to go back to. */
-  baseScale: number;
-  baseImage: unknown;
-  /** GPU megabytes (with mips) once it has been drawn; 0 until then. */
-  mb: number;
-  lastSeen: number;
-  px1x: number;
-  /** The scale being loaded or waiting to be swapped in (0 = none). */
-  loading: number;
-  failed: Set<number>;
-  /** The time (ms) the live camera first wanted a bigger master than it holds (-1 = it does not now). */
-  needSince: number;
-}
-
-interface Need {
-  entry: Entry;
-  want: number;
-  /** 0 for a painting on screen (biggest magnification first), 1 for a sibling pose. */
-  rank: number;
-  px1x: number;
-}
-
-/** How long (ms) a painting counts as "on screen" after it was last drawn, for eviction. */
-export const SEEN_WINDOW_MS = 750;
-const MAX_LOADS = 2;
-/**
- * How long (ms) a live need must last before a master is fetched for it: a punch or a shake bounces a figure to twice its size for a
- * third of a second, and a download that lands after it is bytes for nothing. Time, not frames, so a 144 or 240 Hz screen waits as
- * long as a 60 Hz one. A planned view (`anticipate`) is not asked to wait.
- */
-export const PERSIST_MS = 300;
-/** How often (ms) the memory budget is checked besides after each swap. */
-const EVICT_EVERY_MS = 250;
-/** A little over the measured number: the plane's yaw and the camera's sway only shrink it, but the measure is taken a frame late. */
-const SAFETY = 1.04;
-
-export interface GovernorStats {
-  frame: number;
-  upgrades: number;
-  downgrades: number;
-  loadFailures: number;
-  inflight: number;
-  queued: number;
-  residentMB: number;
-  budgetMB: number;
-  lastSwapMs: number;
-  /** The CPU time of `update()` itself, milliseconds per frame (an exponential mean): the cost of measuring. */
-  updateMs: number;
-  entries: Array<{ url: string; scale: number; mb: number; px1x: number; seen: boolean }>;
-  /** The last decisions to load a bigger master: what asked (`live`, `anticipated`, `size`, `sibling`), for which painting, at what magnification. */
-  trace: Array<{ frame: number; why: string; url: string; from: number; want: number; px1x: number }>;
-}
 
 export class ArtGovernor {
   private readonly deps: GovernorDeps;
@@ -100,9 +42,13 @@ export class ArtGovernor {
   private upgrades = 0;
   private downgrades = 0;
   private loadFailures = 0;
+  private staging = 0;
+  private stagedLanded = 0;
+  private warmed = 0;
   private lastSwapMs = 0;
   private updateMs = 0;
   private readonly trace: GovernorStats['trace'] = [];
+  private readonly swaps: GovernorStats['swaps'] = [];
   /** Who is asking right now (for the trace). */
   private why = 'live';
 
@@ -133,10 +79,7 @@ export class ArtGovernor {
     }
   }
 
-  /**
-   * Measure every drawn figure from a camera that is not on screen yet (a rig, a held shot, the colossus master, a push-in) and
-   * start loading what that view would ask for; the figures are measured where they stand now. Returns how many loads it wanted.
-   */
+  /** Measure every drawn figure from a camera that is not on screen yet (a rig, a held shot, the colossus master, a push-in) and load what it would ask for. Returns how many loads it wanted. */
   anticipate(cam: PerspectiveCamera): number {
     if (this.disposed || this.deps.pinned?.()) return 0;
     cam.updateMatrixWorld();
@@ -146,11 +89,7 @@ export class ArtGovernor {
     return needs.length;
   }
 
-  /**
-   * Ask for the master a figure needs when it is drawn `frac` of the frame tall: the held shots are framed by size, not by camera
-   * (`fx/mix/heldShots.ts`: the Overdrive shot up to 0.72, the dressphere shot up to 0.68), so their masters can be had before the
-   * first cut. Only the paintings on screen are asked for. Returns how many loads it wanted.
-   */
+  /** Ask for the master a figure needs when drawn `frac` of the frame tall (the held shots are framed by size, `fx/mix/heldShots.ts`); only paintings on screen. Returns how many loads it wanted. */
   anticipateSize(actors: Iterable<GovernedActor>, frac: number): number {
     if (this.disposed || this.deps.pinned?.()) return 0;
     const H = this.deps.bufferHeight();
@@ -194,26 +133,19 @@ export class ArtGovernor {
     const entries: GovernorStats['entries'] = [];
     for (const e of this.entries.values()) {
       resident += e.mb;
-      entries.push({ url: e.url, scale: e.scale, mb: Math.round(e.mb * 10) / 10, px1x: Math.round(e.px1x * 100) / 100, seen: this.t - e.lastSeen <= SEEN_WINDOW_MS });
+      entries.push({ url: e.url, scale: e.scale, mb: Math.round(e.mb * 10) / 10, px1x: Math.round(e.px1x * 100) / 100, seen: this.t - e.lastSeen <= SEEN_WINDOW_MS, warm: e.warm });
     }
     return {
-      frame: this.frame,
-      upgrades: this.upgrades,
-      downgrades: this.downgrades,
-      loadFailures: this.loadFailures,
-      inflight: this.inflight,
-      queued: this.ready.length,
-      residentMB: Math.round(resident * 10) / 10,
-      budgetMB: this.deps.budget().textureMB,
-      lastSwapMs: this.lastSwapMs,
-      updateMs: Math.round(this.updateMs * 1000) / 1000,
-      entries,
-      trace: [...this.trace],
+      frame: this.frame, upgrades: this.upgrades, downgrades: this.downgrades, loadFailures: this.loadFailures, inflight: this.inflight, queued: this.ready.length,
+      staging: this.staging, stagedLanded: this.stagedLanded, warmed: this.warmed, warmMB: Math.round(warmMB(this.entries.values()) * 10) / 10,
+      residentMB: Math.round(resident * 10) / 10, budgetMB: this.deps.budget().textureMB, lastSwapMs: this.lastSwapMs, updateMs: Math.round(this.updateMs * 1000) / 1000,
+      entries, trace: [...this.trace], swaps: [...this.swaps],
     };
   }
 
   dispose(): void {
     this.disposed = true;
+    for (const e of this.entries.values()) this.dropStage(e);
     this.entries.clear();
     this.ready.length = 0;
   }
@@ -225,7 +157,7 @@ export class ArtGovernor {
     let e = this.entries.get(tex);
     if (!e) {
       const scale = Math.max(1, Math.round(Number(tex.userData['artScale'] ?? g.painted.scale ?? 1)));
-      e = { texture: tex, painted: g.painted, url: g.painted.url, scale, baseScale: scale, baseImage: tex.image, mb: 0, lastSeen: -1e9, px1x: 0, loading: 0, failed: new Set(), needSince: -1 };
+      e = { texture: tex, painted: g.painted, url: g.painted.url, scale, baseScale: scale, baseImage: tex.image, mb: 0, lastSeen: -1e9, px1x: 0, loading: 0, failed: new Set(), needSince: -1, staged: null, askedAt: 0, dropped: false, warm: false, warmTried: false, pendingMB: 0 };
       this.entries.set(tex, e);
     }
     return e;
@@ -242,11 +174,22 @@ export class ArtGovernor {
     return (this.deps.scalesFor(e.url) ?? []).filter((s) => !e.failed.has(s));
   }
 
+  /** Can a loaded master be staged right now (a stage dependency, and the browser has proved the staged upload exact)? */
+  private canStage(): boolean {
+    return this.deps.stage !== undefined && (this.deps.canStage?.() ?? true);
+  }
+
+  /** A painting not drawn in the last 0.75 s: what lands for it is speculative until it is seen. */
+  private unseen(e: Entry): boolean {
+    return this.t - e.lastSeen > SEEN_WINDOW_MS;
+  }
+
   /** Register every painting, measure the drawn ones, and list what each would like to be. `hypothetical`: a camera that is not the live one. */
   private collect(cam: PerspectiveCamera, hypothetical: boolean): Need[] {
     const alive = new Set<Texture>();
     const needs: Need[] = [];
     const H = this.deps.bufferHeight();
+    const warming = !hypothetical && this.canStage();
     for (const actor of this.deps.actors()) {
       const list = actor.paintings();
       let lead = 0;
@@ -259,6 +202,7 @@ export class ArtGovernor {
         if (!hypothetical) {
           e.lastSeen = this.t;
           e.px1x = px;
+          e.warm = false; // drawn: no longer speculative
           if (e.mb === 0) e.mb = textureMB(imageWidth(e.texture), imageHeight(e.texture));
         }
         const want = pickScale(requiredScale(px), this.scalesOf(e), this.capOf(e));
@@ -272,117 +216,170 @@ export class ArtGovernor {
         } else if (!hypothetical) e.needSince = -1;
       }
       // Siblings: once a figure holds a master above where it started, its other poses follow it there, as room allows. Only a live,
-      // lasting need makes a lead (a planned view or a bounce does not drag every pose of a figure up a tier).
+      // lasting need makes a lead (a planned view or a bounce does not drag every pose of a figure up a tier). A painting that has
+      // not been drawn yet and has nothing to upgrade to is warmed instead: its own master, uploaded before its first draw.
       if (!hypothetical) {
         for (const g of list) {
           const s = this.entryOf(g);
-          if (g.drawn || lead <= s.baseScale || lead <= s.scale || lead <= s.loading) continue;
-          const want = pickScale(lead, this.scalesOf(s), this.capOf(s));
-          if (want > s.scale && want > s.loading) needs.push({ entry: s, want, rank: 1, px1x: 0 });
+          if (g.drawn) continue;
+          if (lead > s.baseScale && lead > s.scale && lead > s.loading) {
+            const want = pickScale(lead, this.scalesOf(s), this.capOf(s));
+            if (want > s.scale && want > s.loading) {
+              needs.push({ entry: s, want, rank: 1, px1x: 0 });
+              continue;
+            }
+          }
+          if (warming && s.mb === 0 && !s.warm && !s.warmTried && s.loading === 0 && imageWidth(s.texture) * imageHeight(s.texture) >= WARM_MIN_PIXELS) {
+            if (warmRoom(this.entries.values(), textureMB(imageWidth(s.texture), imageHeight(s.texture)), this.deps.budget().textureMB)) needs.push({ entry: s, want: s.scale, rank: 1, px1x: 1, warm: true });
+          }
         }
       }
     }
-    if (!hypothetical) for (const tex of [...this.entries.keys()]) if (!alive.has(tex)) this.entries.delete(tex);
+    if (!hypothetical) {
+      for (const [tex, e] of [...this.entries]) {
+        if (alive.has(tex)) continue;
+        this.dropStage(e);
+        this.entries.delete(tex);
+      }
+    }
     return needs.sort((a, b) => a.rank - b.rank || b.px1x - a.px1x);
   }
 
   private dispatch(needs: Need[]): void {
     for (const n of needs) {
-      if (this.inflight >= MAX_LOADS) break;
+      if (this.inflight >= MAX_LOADS + (n.rank === 0 ? URGENT_EXTRA : 0)) break; // a figure on screen never waits behind a speculative load
       const e = n.entry;
       if (e.loading >= n.want) continue;
-      if (n.rank === 1 && !this.roomFor(n.want, e)) continue; // a speculative load never makes the budget evict anything
+      const budgetMB = this.deps.budget().textureMB;
+      if (n.rank === 1 && !roomFor(this.entries.values(), n.want, e, budgetMB)) continue; // a speculative load never makes the budget evict anything
+      const sizeMB = textureMB((imageWidth(e.texture) * n.want) / e.scale, (imageHeight(e.texture) * n.want) / e.scale);
+      if (n.warm && !warmRoom(this.entries.values(), sizeMB, budgetMB)) continue; // the warm pool has room for this one, counting every one already on its way
       e.loading = n.want;
+      e.askedAt = this.t;
+      if (n.rank === 1) e.pendingMB = sizeMB;
+      if (n.warm) e.warmTried = true;
       this.inflight++;
-      this.trace.push({ frame: this.frame, why: n.rank === 1 ? 'sibling' : this.why, url: e.url, from: e.scale, want: n.want, px1x: Math.round(n.px1x * 100) / 100 });
+      this.trace.push({ frame: this.frame, why: n.warm ? 'warm' : n.rank === 1 ? 'sibling' : this.why, url: e.url, from: e.scale, want: n.want, px1x: Math.round(n.px1x * 100) / 100 });
       if (this.trace.length > 48) this.trace.shift();
       this.deps
-        .load(e.url, n.want)
-        .then((got) => {
-          this.inflight--;
-          if (this.disposed) return;
-          if (!got || got.scale <= e.scale) {
-            e.loading = 0;
-            e.failed.add(n.want);
-            if (!got) this.loadFailures++;
-            return;
-          }
-          this.ready.push(() => this.apply(e, got.image, got.scale));
-        })
-        .catch(() => {
-          this.inflight--;
-          e.loading = 0;
-          e.failed.add(n.want);
-          this.loadFailures++;
-        });
+        .load(e.url, n.want, { urgent: n.rank === 0, warm: n.warm === true })
+        .then((got) => this.loaded(e, n, got))
+        .catch(() => this.failed(e, n));
     }
   }
 
-  /** Would a master of `scale` for this painting fit under the budget, counting every master already promised? (Sibling loads ask; they never evict.) */
-  private roomFor(scale: number, e: Entry): boolean {
-    const k = scale / e.scale;
-    const now = e.mb > 0 || e.scale > e.baseScale ? textureMB(imageWidth(e.texture), imageHeight(e.texture)) : 0;
-    return this.committedMB() + textureMB(imageWidth(e.texture) * k, imageHeight(e.texture) * k) - now <= this.deps.budget().textureMB;
+  /** A load that raised: the master is not asked for again (a warm-up is just dropped). */
+  private failed(e: Entry, n: Need): void {
+    this.inflight--;
+    this.clearLoading(e, n.want);
+    if (n.warm) return;
+    e.failed.add(n.want);
+    this.loadFailures++;
   }
 
-  /** Megabytes the figures' textures take once drawn: what is resident now, the masters swapped in that have not been drawn yet, and the loads on their way. */
-  private committedMB(): number {
-    let t = 0;
-    for (const e of this.entries.values()) {
-      const k = Math.max(e.loading, e.scale) / e.scale;
-      if (e.mb > 0 || e.scale > e.baseScale || e.loading > e.scale) t += textureMB(imageWidth(e.texture) * k, imageHeight(e.texture) * k);
-    }
-    return t;
-  }
-
-  /** Swap the pixels in, on the next frame's turn. */
-  private apply(e: Entry, image: PixelSource, scale: number): void {
+  /** The job for `scale` is over: the entry is free to ask again, unless a bigger one has been asked for since. */
+  private clearLoading(e: Entry, scale: number): void {
+    if (e.loading > scale) return;
     e.loading = 0;
-    if (this.disposed || !this.entries.has(e.texture) || scale <= e.scale) return;
+    e.pendingMB = 0;
+  }
+
+  /** A master has loaded: stage its upload when it can be (the painting adopts it once it is resident), else queue the swap on the spot (a warm-up is dropped instead). */
+  private loaded(e: Entry, n: Need, got: LoadedPixels | null): void {
+    if (this.disposed) return void got?.bitmap?.close();
+    const warm = n.warm === true;
+    if (!got || got.scale < e.scale || (got.scale === e.scale && !warm) || !this.entries.has(e.texture)) {
+      this.inflight--;
+      this.clearLoading(e, n.want);
+      got?.bitmap?.close();
+      if (!warm) {
+        e.failed.add(n.want); // nothing better came back: the master is not asked for again
+        if (!got) this.loadFailures++;
+      }
+      return;
+    }
+    // Memory the painting is not using yet is speculative: it is staged only while the warm pool has room (a drawn painting is always staged).
+    const room = !this.unseen(e) || warmRoom(this.entries.values(), textureMB(got.image.width, got.image.height), this.deps.budget().textureMB, e);
+    const staged = got.bitmap && room ? (this.deps.stage?.(e.texture, got, n.rank === 0) ?? null) : null;
+    if (!staged) {
+      this.inflight--;
+      got.bitmap?.close();
+      if (warm) this.clearLoading(e, n.want);
+      else this.ready.push(() => this.apply(e, got, null));
+      return;
+    }
+    e.staged = staged;
+    this.staging++;
+    void staged.ready.then((ok) => {
+      this.staging--;
+      this.inflight--;
+      e.staged = null;
+      if (this.disposed) return staged.cancel();
+      if (!ok) return this.clearLoading(e, n.want); // cancelled (a lost context, the painting left): not the master's fault, so it is not marked failed
+      this.ready.push(() => this.apply(e, got, staged));
+    });
+  }
+
+  /** Cancel a painting's upload in progress (it left the field, or the stage ended). */
+  private dropStage(e: Entry): void {
+    if (!e.staged) return;
+    e.dropped = true;
+    e.staged.cancel();
+  }
+
+  /** Swap the master in, on the next frame's turn: adopt the one already uploaded (release 39.1), or put the pixels in the old way. */
+  private apply(e: Entry, got: LoadedPixels, staged: GovernedStage | null): void {
+    this.clearLoading(e, got.scale);
+    const warm = got.scale === e.scale;
+    if (this.disposed || !this.entries.has(e.texture) || got.scale < e.scale || (warm && !staged)) return void staged?.cancel();
     const t0 = performance.now();
-    this.setImage(e, image, scale);
-    this.upgrades++;
+    const from = e.scale;
+    if (staged) {
+      if (!staged.adopt()) {
+        if (!warm) {
+          e.failed.add(got.scale);
+          this.loadFailures++;
+        }
+        return;
+      }
+      this.stagedLanded++;
+      this.noteSwap(e, got.scale, true);
+      e.warm = this.unseen(e); // resident before it was drawn: speculative until it is
+      if (warm) this.warmed++;
+    } else {
+      this.setImage(e, got.image, got.scale);
+    }
+    if (!warm) this.upgrades++;
     this.lastSwapMs = Math.round((performance.now() - t0) * 100) / 100;
+    this.swaps.push({ t: Math.round(this.t), url: e.url, from, to: got.scale, staged: staged !== null, warm, waitMs: Math.round(this.t - e.askedAt) });
+    if (this.swaps.length > 48) this.swaps.shift();
     this.evict();
   }
 
-  /** In place: the GL texture is freed now and made again, at the new size, on the next draw. */
+  /** In place, the release 39 way: the GL texture is freed now and made again, at the new size, on the next draw. */
   private setImage(e: Entry, image: unknown, scale: number): void {
     const tex = e.texture;
     tex.dispose();
     tex.image = image as typeof tex.image;
     tex.needsUpdate = true;
+    e.warm = false;
+    this.noteSwap(e, scale, false);
+  }
+
+  /** The bookkeeping of a swap: which master the texture holds, and its GPU size (a staged texture is resident whether or not it has been drawn). */
+  private noteSwap(e: Entry, scale: number, resident: boolean): void {
+    const tex = e.texture;
     tex.userData['artScale'] = scale;
     e.painted.scale = scale;
     e.scale = scale;
-    e.mb = e.mb > 0 ? textureMB(imageWidth(tex), imageHeight(tex)) : 0;
+    e.mb = resident || e.mb > 0 ? textureMB(imageWidth(tex), imageHeight(tex)) : 0;
   }
 
   /** Send masters above their first scale that are not on screen back to it, least recently seen first, until the textures fit the budget. */
   private evict(): void {
-    const residents: Resident[] = [];
-    const byKey = new Map<string, Entry>();
-    let i = 0;
-    for (const e of this.entries.values()) {
-      if (e.mb <= 0) continue;
-      const key = String(i++);
-      byKey.set(key, e);
-      residents.push({ key, scale: e.scale > e.baseScale ? e.scale : 1, mb: e.mb, lastSeen: e.lastSeen, visible: this.t - e.lastSeen <= SEEN_WINDOW_MS });
-    }
-    for (const key of evictionOrder(residents, this.deps.budget().textureMB)) {
-      const e = byKey.get(key)!;
+    for (const e of evictions(this.entries.values(), this.t, this.deps.budget().textureMB)) {
       this.setImage(e, e.baseImage, e.baseScale);
       this.downgrades++;
     }
   }
-}
-
-function imageWidth(t: Texture): number {
-  const img = t.image as { naturalWidth?: number; width?: number } | null;
-  return Number(img?.naturalWidth || img?.width || 1);
-}
-
-function imageHeight(t: Texture): number {
-  const img = t.image as { naturalHeight?: number; height?: number } | null;
-  return Number(img?.naturalHeight || img?.height || 1);
 }
