@@ -109,9 +109,10 @@ function summaryLines(rows) {
   const owner = logged.filter((r) => /owner override/i.test(r.result));
   const alphas = dep.filter((r) => /^Alpha /.test(r.title)).length;
   const previews = dep.filter((r) => /^Cloudflare preview/.test(r.title)).length;
+  const legacy = dep.filter((r) => r.evidence.some((e) => e.startsWith('docs/legacy-deploys.log line'))).length;
   const label = (r) => (/\(([^)]+)\)/.exec(r.title) || [, r.id])[1];
   const span = logged.length ? ` The log runs from ${label(logged[0])} (${logged[0].date}) to ${label(logged[logged.length - 1])} (${logged[logged.length - 1].date}).` : '';
-  L.push(`- **Deploys and releases:** ${dep.length} deploy rows: ${logged.length} lines of docs/deploys.log (${owner.length} of them under Bailey's owner override of the deep-review gate), ${alphas} early alphas that predate the log, and ${previews} Cloudflare preview.${span}`);
+  L.push(`- **Deploys and releases:** ${dep.length} deploy rows: ${logged.length} lines of docs/deploys.log (${owner.length} of them under Bailey's owner override of the deep-review gate), ${alphas} early alphas that predate the log, ${legacy ? `${previews} Cloudflare preview and ${legacy} legacy deploy${legacy === 1 ? '' : 's'} to the old GitHub address (docs/legacy-deploys.log)` : `and ${previews} Cloudflare preview`}.${span}`);
   const rev = rows.filter((r) => r.kind === 'review');
   const foc = rev.filter((r) => /^Focused review/.test(r.title)), live = rev.filter((r) => /^Live check/.test(r.title)), deep = rev.filter((r) => /^Deep review round/.test(r.title));
   const rest = rev.length - foc.length - live.length - deep.length;

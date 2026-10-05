@@ -16,16 +16,16 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-867 decisions in all: 417 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 579 of the written decisions record a blanket yes.
+869 decisions in all: 419 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 579 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 808 |
+| adopted | 810 |
 | proposed | 11 |
 | deferred | 4 |
 | rejected | 11 |
 | superseded | 33 |
-| **All** | **867** |
+| **All** | **869** |
 
 | Area | Decisions |
 | --- | ---: |
@@ -39,21 +39,21 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | chapters | 177 |
 | guide | 28 |
 | release | 31 |
-| hosting | 12 |
+| hosting | 14 |
 | process | 68 |
 | critic | 18 |
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **867** |
+| **All** | **869** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 368 |
+| both games | 370 |
 | FFX only | 271 |
 | FFX-2 only | 211 |
 | FF7 hidden experiment | 17 |
-| **All** | **867** |
+| **All** | **869** |
 
 ## Standing rules in force
 
@@ -3586,7 +3586,7 @@ Saturday · 56 decisions
 
 ### 2026-10-04
 
-Sunday · 50 decisions
+Sunday · 52 decisions
 
 - <a id="d-368"></a>**D-368** — The player-facing working title becomes Echoes of Spira in release 38 (title screen, browser title, meta, chapter select, pause, credits, disclaimer); the repo, folders, internal identifiers and save keys keep 'pyrefly'; a painted logo is a later option for Bailey
   - Bailey: “I'll go with Echoes of Spira. The name change should take place immediate in our next build please.”
@@ -3838,3 +3838,13 @@ Sunday · 50 decisions
   - What changed: Release 39 ships Lady Luck's reels exactly as built (the press only stops a reel and the symbol is a random draw, so 160 of 216 stops, 74 percent, are a Dud, which takes 75 percent of every ally's current HP) with the 26 percent pay rate stated in the handoff and the release note. Lane r39-natus (branch r39-natus) makes an options page of timed reels (two or three options made from the sources: the player presses once per reel, and players line symbols up by pausing the game); nothing is built for timing until he picks one. Her other abilities and her ship schedule (D-373) are unaffected. This card answers PR-0349, a polish item with medium confidence; no category moves. FFX-2 only: Lady Luck is an FFX-2 dressphere.
   - area combat · FFX-2 · adopted · delivery in progress · at ~18:30 EDT · refines [D-373](#d-373)
   - Source: docs/handoff/NOW.md; critic/scratch/judgments-r21
+- <a id="d-418"></a>**D-418** — Keep Cloudflare Web Analytics on echoesofspira.com (its cookie-less visitor counts), and let the exact-artifact check allow the one script it adds to the page; the check change is release 39 tooling
+  - Bailey: “I’ll keep analytics. Yes for always use https”
+  - What changed: Cloudflare Web Analytics stays on for the zone: Cloudflare's cookie-less visitor counts keep running, and visits show in the Cloudflare dashboard under Analytics. The HTML page a browser receives therefore keeps Cloudflare's one added script, so that page is no longer exactly the tested artifact: Cloudflare puts one script tag from static.cloudflareinsights.com in before the closing body tag of index.html (3,939 bytes against the 3,572 of the tested file, 367 more), only for requests whose Accept header includes text/html, and each visit then sends one small report to the game's own /cdn-cgi/rum address (it does not touch play: 0 console errors in the live check). Owed in release 39: the exact-artifact check (CHK-017: verify-live and the deploy's own byte comparison) must allow that one known injection on index.html, by fetching the page once with a browser Accept header, stripping the beacon tag and still comparing everything else byte for byte; today both ask with a generic Accept header, never receive the tag and so pass without seeing it. Not chosen: turning Web Analytics off for the zone, which the driver recommended so that the page would stay exactly what was tested. Both games.
+  - area hosting · both games · adopted · delivery in progress · at ~19:45 EDT · see [D-397](#d-397), [D-419](#d-419)
+  - Source: critic/reviews/8136f2ed-live.json; docs/handoff/NOW.md
+- <a id="d-419"></a>**D-419** — Always Use HTTPS is ON for the echoesofspira.com zone: plain http is forwarded with a 301 to https, so saves cannot split onto an insecure address
+  - Bailey: “I’ll keep analytics. Yes for always use https”
+  - What changed: Done at about 19:46 EDT: the driver switched Always Use HTTPS on for the zone in his Cloudflare dashboard (SSL/TLS, Edge Certificates) after his yes, and checked it from outside with curl at about 19:47: http://echoesofspira.com answers a 301 to https://echoesofspira.com/, http://www.echoesofspira.com is forwarded twice (http to https by this setting, then www to the main address by the Redirect Rule of D-397) and lands on https://echoesofspira.com/ with a 200, and https://echoesofspira.com still answers 200. So a visit through an http link no longer plays on a separate, insecure address with its own saves (saves are kept per address), and http://www, which answered 522 in the live check, now reaches the game. This closes LV-3 of the live check of release 38 and the note in A-0405 that the setting stayed off until he said yes. Both games.
+  - area hosting · both games · adopted · delivery implemented · at ~19:45 EDT · see [D-382](#d-382), [D-397](#d-397), [D-418](#d-418)
+  - Source: docs/handoff/NOW.md; critic/reviews/8136f2ed-live.json; and others
