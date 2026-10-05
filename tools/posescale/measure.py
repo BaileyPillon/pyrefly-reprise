@@ -1,4 +1,5 @@
 """Measure every pose of a subject: the head against the idle's head, and where the figure stands.
+(Foes, `game: foe` with `rowFromBaseline` in subjects.json: the stance only, its row the painting's baseline; no face box, so no head reading.)
 
     python -s tools/posescale/measure.py tiles tidus [yuna ...] [--poses a,b] --out DIR   the review sheets (ruler tiles, 6 poses each)
     python -s tools/posescale/measure.py pairs yuna-gunner [...] [--poses ready] --out DIR   idle beside each pose at the current scale (a quick same-size check)
@@ -298,6 +299,9 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
                         rec["stance"] = {"x": r1(st["x"]), "row": r1(st["row"]), "x0": r1(st["x0"]), "x1": r1(st["x1"]), "src": "silhouette(opened harder)"}
                 if ratio > 6.0:
                     rec["stance"]["flag"] = f"width x{ratio:.2f} of the idle's"
+        if ann.get("rowFromBaseline") and rec.get("stance"):
+            # a foe: the engine plants the painting's baseline on the ground and the stage owns its height (a hover, a pedestal); only the stance's x is registered, its row is the baseline's
+            rec["stance"]["row"] = rec["baseline"]
         recs[pose] = rec
         stn = rec["stance"]
         print(f"  {pose:22s} scale {('%.3f' % scale) if scale else '  -  '} [{src}]  stance {('x=%.0f row=%.0f' % (stn['x'], stn['row'])) if stn else 'n/a'}{('  FLAG ' + stn['flag']) if stn and stn.get('flag') else ''}  baseline {rec['baseline']}", flush=True)

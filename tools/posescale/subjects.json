@@ -413,5 +413,173 @@
   "iris": [
    355
   ]
+ },
+ "anima": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "bahamut": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "baralai-shade": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "braskas-final-aeon-1": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "braskas-final-aeon-2": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "cindy": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "daigoro": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "ffx2-bahamut": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "ffx2-dr-goon": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "ffx2-fem-goon": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "gippal-shade": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "grothia": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "guado-guardian": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "ifrit": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "isaaru": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "jecht": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "leblanc": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "logos": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "mindy": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "mortibody": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "nooj-shade": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "ormi": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "sandy": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "seymour-flux-body": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "seymour-macalania": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "seymour-natus": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "seymour-omnis": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "shiva": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "shuyin": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "sin-left-fin": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "sin-right-fin": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "spathi": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "trema": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "vegnagun-leg": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "x2-anima": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "x2-shiva": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "yojimbo": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "yojimbo-cavern": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "yu-pagoda": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "yu-yevon": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "yunalesca-1": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "yunalesca-2": {
+  "game": "foe",
+  "rowFromBaseline": true
  }
 }

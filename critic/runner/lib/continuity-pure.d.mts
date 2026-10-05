@@ -21,7 +21,7 @@ export interface ContinuityConfig {
 }
 
 export interface SwapResult {
-  camCut: boolean; costume?: boolean; sameArt?: boolean;
+  camCut: boolean; costume?: boolean; sameArt?: boolean; range?: boolean;
   head: { fromPx: number; toPx: number; ratio: number | null; source: 'registration' | 'silhouette'; metric: 'head' | 'mass' } | null;
   feet: { dx: number; dy: number; px: number; standing: boolean; source: string } | null;
   outline: { iou: number; centroidShiftPx: number; areaRatio: number | null } | null;

@@ -267,6 +267,18 @@ describe('size continuity at a swap (CHK-026)', () => {
       expect(r.failFeet).toBe(false);
     });
 
+    it('does not judge a change of range: a far-range painting swapped in by the airship director (Evrae idle to idle-far)', () => {
+      const r = swapOf(crossfade(qa, slid, FADES), [anchor(art('evrae', 'idle')), anchor(art('evrae', 'cast', '/art/characters/evrae/idle-far.webp'))], 4);
+      expect(r.range).toBe(true);
+      expect(r.costume).toBe(true);
+      expect(r.failHead).toBe(false);
+      expect(r.failFeet).toBe(false);
+      // near to the base set is not a range change
+      const n = swapOf(crossfade(qa, slid, FADES), [anchor(art('evrae', 'idle')), anchor(art('evrae', 'idle', '/art/characters/evrae/idle-near.webp'))], 4);
+      expect(n.range).toBe(false);
+      expect(n.failHead).toBe(true);
+    });
+
     it('does not judge two pose names that draw one painting: the size cannot change and what moves is the pose state\'s own motion', () => {
       const r = swapOf(crossfade(qa, slid, FADES), [anchor(art('seymour-flux', 'idle')), anchor(art('seymour-flux', 'hurt', '/art/characters/seymour-flux/idle.webp'))], 4);
       expect(r.sameArt).toBe(true);
