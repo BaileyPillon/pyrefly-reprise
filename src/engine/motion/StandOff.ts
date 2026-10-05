@@ -55,7 +55,13 @@ export interface RunWorld {
    * The girls on her side other than her: figures the truck must keep in the frame (round 21, PR-0364). Each one's painted box on
    * screen with the camera slid by `truck`. Optional: with none given the truck is the whole follow, as it was before.
    */
-  keep?: ReadonlyArray<{ rect(truck: Spot): Rect | null }>;
+  keep?: ReadonlyArray<{ rect(truck: Spot, rig?: string): Rect | null }>;
+  /**
+   * The rigs the action cuts to while the truck is still on (round 21, PR-0364): the one the first hit's cut goes to. The girls must
+   * hold the truck there too, not only on the shot she runs on: Yuna was out of the frame at the blow in Chapters IV and XIII, the
+   * cut standing her further left than the run's own shot. Optional.
+   */
+  cuts?: readonly string[];
   /** The canvas, CSS px, and the part of it the window shows (`l`, `r`, `t`, `b`; the whole canvas when absent). */
   view: { w: number; h: number; l?: number; r?: number; t?: number; b?: number };
 }
@@ -81,8 +87,12 @@ function covers(a: Rect, b: Rect): number {
   return w > 0 && h > 0 ? (w * h) / area(a) : 0;
 }
 
-/** The share of the frame's width a girl on her side may be left from its edge when the truck is on: 1.5 %, never more cropped than at rest. */
-export const KEEP_MARGIN = 0.015;
+/**
+ * The share of the frame's width a girl on her side may be left from its edge when the truck is on, never more cropped than at rest: 3 %.
+ * The camera's idle sway moves a girl at the frame's edge about 30 px at 1600 wide (measured: Chapter IV, Yuna's left edge, the rest
+ * rig 332 px and the sway 297 to 332), and the rest rig the planner reads has none of it; the margin is the sway's reach and as much again.
+ */
+export const KEEP_MARGIN = 0.03;
 
 /** The part of the canvas the window shows, canvas px (the whole canvas when the view does not say). */
 function frameOf(v: RunWorld['view']): { l: number; r: number; t: number; b: number } {
@@ -104,14 +114,18 @@ export function fitTruck(w: RunWorld, dx: number): Spot {
   if (!keep.length) return full;
   const { l, r: right, b: bottom } = frameOf(w.view);
   const m = (right - l) * KEEP_MARGIN;
-  const rest = keep.map((k) => k.rect(ZERO));
+  // The shot she runs on, then each cut the action makes with the truck still on; each judged against what it shows at rest.
+  const shots: Array<string | undefined> = [undefined, ...(w.cuts ?? [])];
+  const rest = shots.map((s) => keep.map((k) => k.rect(ZERO, s)));
   const holds = (truck: Spot): boolean =>
-    keep.every((k, i) => {
-      const r0 = rest[i];
-      const r = k.rect(truck);
-      if (!r0 || !r) return true;
-      return r.x >= Math.min(r0.x, l + m) - 0.5 && r.x + r.w <= Math.max(r0.x + r0.w, right - m) + 0.5 && r.y + r.h <= Math.max(r0.y + r0.h, bottom) + 0.5;
-    });
+    shots.every((s, j) =>
+      keep.every((k, i) => {
+        const r0 = rest[j]![i];
+        const r = k.rect(truck, s);
+        if (!r0 || !r) return true;
+        return r.x >= Math.min(r0.x, l + m) - 0.5 && r.x + r.w <= Math.max(r0.x + r0.w, right - m) + 0.5 && r.y + r.h <= Math.max(r0.y + r0.h, bottom) + 0.5;
+      }),
+    );
   for (const k of TRUCK_STEPS) {
     const truck: Spot = { x: full.x * k, y: full.y * k, z: 0 };
     if (holds(truck)) return truck;

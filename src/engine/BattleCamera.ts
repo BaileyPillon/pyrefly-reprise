@@ -1,6 +1,6 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { TweenGroup, damp, type EasingFn, type EasingName } from './Tween.ts';
-import { fitRigToSlice, frameFit, type FitSubject, type FrameVerdict } from './FrameFit.ts';
+import { fitRigToSlice, frameFit, type FitRig, type FitSubject, type FrameVerdict } from './FrameFit.ts';
 
 export interface CameraRig {
   /** Camera world position. */
@@ -124,6 +124,9 @@ export class BattleCamera {
     const r = this.rigs.get(rig);
     return !!r && fitRigToSlice(this.camera, r, slice, subjects as readonly FitSubject[], top);
   }
+
+  /** A rig as the camera holds it, to pose a scratch camera on (`FrameFit.rigPose`). Read-only. */
+  rigOf(name: string): FitRig | undefined { return this.rigs.get(name); }
 
   getRig(name: string): CameraRig | undefined {
     const r = this.rigs.get(name);

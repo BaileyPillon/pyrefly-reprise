@@ -196,6 +196,11 @@ export class PresetCamera implements CameraPort {
     return name;
   }
 
+  /** The rig a cut to `rig` really lands on under this preset (`calm`: `action~calm`); the run-in's planner judges the frame by it. */
+  shotRig(rig: string): string {
+    return this.realRig(rig);
+  }
+
   moveTo(rig: CameraRigId, ms = 900): Promise<void> {
     const s = this.s;
     this.asked = rig;

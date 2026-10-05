@@ -91,7 +91,9 @@ function worldOf(world: StageMotionPort, ctx: MotionCtx, id: CombatantId, target
     keep: ctx.stage
       .staged()
       .filter((o) => o !== id && ctx.stage.sideOf(o) === 'party')
-      .map((o) => ({ rect: (truck) => world.rect(o, { truck }) })),
+      .map((o) => ({ rect: (truck, rig) => world.rect(o, { truck, ...(rig ? { rig } : {}) }) })),
+    // ...on each rig the first hit may cut to as well, the truck still on through the cut (PR-0364: Yuna was out of it at the blow in IV and XIII).
+    cuts: world.cutRigs?.(id) ?? [],
     view: world.view(),
   };
 }

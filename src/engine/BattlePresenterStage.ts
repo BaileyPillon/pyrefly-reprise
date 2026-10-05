@@ -34,6 +34,7 @@ import { layProneFigures } from './ProneLay.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { figureBloomMasked } from './BloomMask.ts';
 import { posesCut } from './PoseCut.ts';
+import { cutRigsOf } from './motion/CutRig.ts';
 import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
 import * as SA from './StageAnchors.ts';
 import { stageSpellFx, type StageSpellFxOptions } from './spellfx/stageSpellFx.ts';
@@ -198,6 +199,7 @@ export class PaintedStage implements BattleStage {
       },
       figure: (id) => this.actors.get(id)?.actor,
       view: () => this.motionView(),
+      cutRigs: (runner) => cutRigsOf(this, this.camera, runner, (r) => preset.shotRig(r)),
       lowEffects: () => opts.comfort?.().lowEffects === true,
       warmFor: () => this.smearWarmId(),
     });

@@ -39,9 +39,15 @@ export interface StageMotionPort {
   /**
    * The screen rectangle `id`'s painted box covers on the shot the camera is settling on (its rest pose and the dolly the shot
    * holds, not the move in flight), with the camera slid by `truck`; with `at`, as if its feet stood there instead. Null when it
-   * is not on the field.
+   * is not on the field. With `rig`, on that named rig instead (the cut the action is going to make: round 21, PR-0364), with the same
+   * held dolly.
    */
-  rect(id: CombatantId, o?: { at?: Spot; truck?: Spot }): Rect | null;
+  rect(id: CombatantId, o?: { at?: Spot; truck?: Spot; rig?: string }): Rect | null;
+  /**
+   * The rigs the camera may cut to at the first hit of `runner`'s attack, as `BattleMoments.impact` and the FFX-2 framing rule will
+   * choose among them (under the comfort preset), for `rect`'s `rig`. Optional: without it the planner judges only the shot she runs on.
+   */
+  cutRigs?(runner: CombatantId): readonly string[];
   /**
    * The canvas's CSS size, for keeping a stop inside the frame; `l`, `r`, `t`, `b` are the part of it the window shows (canvas px;
    * all four default to the whole canvas): the upright phone shows a slice of a wider field (round 21, PR-0364).
