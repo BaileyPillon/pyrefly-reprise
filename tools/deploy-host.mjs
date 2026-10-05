@@ -109,8 +109,56 @@ export const CLOUDFLARE_LIMITS = Object.freeze({
   paidMaxFiles: 100000,
 });
 
-/** Root files a Workers upload reads as configuration and never serves; none may ship (the live check could not match them). */
+/**
+ * Root files a Workers upload reads as configuration and never serves. None may ship except a vetted `_headers`
+ * (`checkHeadersFile`, release 39): the live byte check does not download a host-read file (`HOST_READ_FILES` in
+ * `tools/artifact-manifest.mjs`), but `_redirects` and `.assetsignore` change what is served, so they stay refused.
+ */
 export const CLOUDFLARE_CONFIG_FILES = Object.freeze(['_headers', '_redirects', '.assetsignore']);
+
+/**
+ * The one `_headers` a Cloudflare build may ship. Vite names every file it emits under `assets/` with a content hash
+ * (`index-<hash>.js`, `.css`, the workers), so a hashed bundle can be cached for a year and never goes stale: a new build
+ * changes the name, and index.html, which names it, keeps Cloudflare's default (`max-age=0, must-revalidate`). Nothing
+ * else carries a content hash in its URL (the art, the fonts and the depth maps keep plain names), so nothing else is touched.
+ */
+export const VETTED_HEADERS = Object.freeze({
+  patterns: Object.freeze(['/assets/*']),
+  cacheControl: 'public, max-age=31536000, immutable',
+});
+
+/**
+ * Is this `_headers` exactly the vetted one? Returns the problems found (none means it is vetted). Each rule is a URL
+ * pattern at the start of a line followed by indented `Name: value` lines (Cloudflare's format); comments and blank lines
+ * are free. Only the patterns in VETTED_HEADERS, only `Cache-Control`, only that value, each pattern once with the header
+ * once; a `! Name` detach line, a placeholder, a second header or any other pattern is refused.
+ */
+export function checkHeadersFile(text) {
+  const problems = [];
+  const patterns = new Map(); // pattern -> how many Cache-Control lines it has
+  let current = null;
+  String(text).split(/\r?\n/).forEach((raw, i) => {
+    const at = `_headers line ${i + 1}`;
+    if (!raw.trim() || raw.trimStart().startsWith('#')) return;
+    if (!/^\s/.test(raw)) {
+      current = raw.trim();
+      if (!VETTED_HEADERS.patterns.includes(current)) problems.push(`${at}: the pattern "${current}" is not vetted (only ${VETTED_HEADERS.patterns.join(', ')})`);
+      else if (patterns.has(current)) problems.push(`${at}: the pattern "${current}" appears twice`);
+      patterns.set(current, patterns.get(current) ?? 0);
+      return;
+    }
+    if (current === null) { problems.push(`${at}: a header before any URL pattern`); return; }
+    const m = /^\s+([A-Za-z][A-Za-z0-9-]*):\s*(.*?)\s*$/.exec(raw);
+    if (!m) problems.push(`${at}: "${raw.trim()}" is not a "Name: value" header (a "! Name" detach line is not vetted)`);
+    else if (m[1].toLowerCase() !== 'cache-control' || m[2] !== VETTED_HEADERS.cacheControl) problems.push(`${at}: only "Cache-Control: ${VETTED_HEADERS.cacheControl}" is vetted, found "${m[1]}: ${m[2]}"`);
+    else patterns.set(current, (patterns.get(current) ?? 0) + 1);
+  });
+  for (const [pattern, count] of patterns) {
+    if (VETTED_HEADERS.patterns.includes(pattern) && count !== 1) problems.push(`the pattern "${pattern}" must carry "Cache-Control: ${VETTED_HEADERS.cacheControl}" once (it has ${count})`);
+  }
+  if (patterns.size === 0) problems.push('the file has no rule');
+  return problems;
+}
 
 /** What the Pages walker skips at the root (configuration and Functions) and at any depth (proved from wrangler 4.147.0's own list). */
 const PAGES_ROOT_SKIPPED = Object.freeze(['_worker.js', '_redirects', '_headers', '_routes.json', 'functions']);

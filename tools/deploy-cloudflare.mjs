@@ -23,7 +23,7 @@ import { join } from 'node:path';
 import process from 'node:process';
 
 import { verifyLive } from './artifact-manifest.mjs';
-import { HOSTS, checkUploadLimits, compareUploadSet, listUploadFiles, siteNameFor, wranglerConfigFor } from './deploy-host.mjs';
+import { HOSTS, checkHeadersFile, checkUploadLimits, compareUploadSet, listUploadFiles, siteNameFor, wranglerConfigFor } from './deploy-host.mjs';
 import {
   WRANGLER_STDIO,
   buildPagesDeployArgs,
@@ -128,12 +128,23 @@ export function prepareCloudflareUpload({ dist, manifest, manifestName, kind = '
   }
   const { files, configFiles } = d.list(dist, kind);
   const problems = [];
-  if (configFiles.length) {
-    problems.push(`dist-release holds ${configFiles.join(', ')}: Cloudflare reads those as configuration and never serves them, so the live check could not match them (not supported yet)`);
+  // Cloudflare reads root config files and never serves them. A vetted `_headers` is the one allowed (it is in the artifact,
+  // and the live byte check does not download it: HOST_READ_FILES); every other one changes what is served and is refused.
+  const vetted = [];
+  const refused = [];
+  for (const name of configFiles) {
+    if (name !== '_headers') { refused.push(name); continue; }
+    const bad = checkHeadersFile(d.readFileSync(join(dist, name), 'utf8'));
+    if (bad.length) problems.push(`dist-release/_headers is not the vetted file: ${bad.join('; ')}`);
+    else vetted.push(name);
   }
+  if (refused.length) {
+    problems.push(`dist-release holds ${refused.join(', ')}: Cloudflare reads those as configuration and never serves them, so the live check could not match them (only a vetted _headers is supported)`);
+  }
+  if (vetted.length) d.log(`vetted ${vetted.join(', ')} ships: Cloudflare reads it and never serves it, so the live check does not download it`);
   const limits = checkUploadLimits(files);
   problems.push(...limits.problems);
-  const { unlisted, missing } = compareUploadSet(files, manifest.files, manifestName);
+  const { unlisted, missing } = compareUploadSet([...files, ...vetted.map((path) => ({ path, bytes: 0 }))], manifest.files, manifestName);
   if (unlisted.length) problems.push(`${unlisted.length} file(s) would be uploaded that the artifact manifest does not list, e.g. ${unlisted.slice(0, 3).join(', ')}`);
   if (missing.length) problems.push(`${missing.length} file(s) the artifact manifest lists would not be uploaded, e.g. ${missing.slice(0, 3).join(', ')}`);
   if (problems.length) {

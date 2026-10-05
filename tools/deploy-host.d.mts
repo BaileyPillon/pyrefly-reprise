@@ -44,6 +44,10 @@ export interface CloudflareLimits {
 }
 export declare const CLOUDFLARE_LIMITS: CloudflareLimits;
 export declare const CLOUDFLARE_CONFIG_FILES: readonly string[];
+/** The one `_headers` a Cloudflare build may ship: the hashed bundles under /assets/ get this Cache-Control, nothing else is touched. */
+export declare const VETTED_HEADERS: Readonly<{ patterns: readonly string[]; cacheControl: string }>;
+/** The problems that keep a `_headers` text from being the vetted one (none: it is vetted). */
+export declare function checkHeadersFile(text: string): string[];
 export declare const PREVIEW_LOG_NAME: string;
 export declare const LEGACY_LOG_NAME: string;
 
