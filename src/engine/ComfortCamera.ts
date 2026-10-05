@@ -77,6 +77,10 @@ export class StillCamera implements CameraPort {
     this.inner.addRig?.(name, rig);
   }
 
+  blendRig(from: string, to: string, t: number): string | null {
+    return this.inner.blendRig?.(from, to, t) ?? null;
+  }
+
   get rigNames(): string[] {
     return this.inner.rigNames;
   }
