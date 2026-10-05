@@ -40,22 +40,21 @@ const sha256 = (p) => createHash('sha256').update(readFileSync(p)).digest('hex')
 const mb = (n) => `${(n / 1048576).toFixed(1)} MB`;
 
 /**
- * Backdrops whose 2x master is held back (release 39 repair, 2026-10-04). The independent fidelity check found that the master draws dark,
- * hard line structure the approved painting does not have, and the repair looked at all 29 at 2x against the approved painting (bicubic up):
- * Gagazet invents dark branching twig-like lines across the rock (the lowest SSIM of the set, 0.958); Garden of Pain, Via Purifico, the Road to
- * the Farplane (and its links variant) and the title's water replace soft ripples and floor bands with ruled, ruler-straight dark stripes.
- * Those six keep drawing the approved painting; a re-render of each from the approved painting is owed. Game case: per backdrop (Gagazet,
- * Garden of Pain, Via Purifico: FFX; the Road to the Farplane, Chapter XI: FFX-2; `backdrops/title.png` is a sea and a horizon that the title
- * screen no longer draws, it shows `title/keyart.png`, so holding its master back changes nothing on screen and saves a dead file).
+ * Backdrops whose 2x master is held back. The mechanism stays (a held backdrop is never installed and, with --replace-from, is taken out of
+ * `public/art` again); the list is EMPTY since the evening of 2026-10-04 (release 39, r39-art lane).
+ *
+ * History: the release 39 repair held six masters because the independent fidelity check and the repair's own survey found that they draw dark,
+ * hard line structure the approved painting does not have: Gagazet invented dark branching twig-like lines across the rock (the lowest SSIM of the set,
+ * 0.958); Garden of Pain, Via Purifico, the Road to the Farplane (and its links variant) and the title's water replaced soft ripples and floor bands with
+ * ruled, ruler-straight dark stripes. The cause is in the library recipe, not in the paintings: RealESRGAN (and the SDXL refine on top of it for Gagazet)
+ * turns a soft ripple, a speckle or a faint crack into a crisp dark line. The six were re-made from their approved paintings with a recipe that cannot
+ * draw what the painting does not imply (`D:/Tools/pyrefly-art-backup/hires-r39-art/`, tier `faithful`; `tools/gen/hires-faithful/`): ESRGAN stays as a detail source
+ * only, its detail is squashed per pixel to an amplitude the painting's own fine detail allows, and thin dark lines the painting does not imply are blended back
+ * to a bounded adaptive unsharp master. Each passes the backdrop QC and was looked at 1:1 against the approved painting and the held master.
+ * Game case: per backdrop (Gagazet, Garden of Pain, Via Purifico: FFX; the Road to the Farplane, Chapter XI: FFX-2; `backdrops/title.png` is a sea and a horizon
+ * that the title screen no longer draws, it shows `title/keyart.png`, so that master changes nothing on screen).
  */
-export const HELD_BACKDROPS = Object.freeze({
-  gagazet: 'invented dark branching twig-like lines across the rock',
-  'garden-of-pain': 'ruled dark stripes where the approved painting has soft ripples',
-  'road-to-the-farplane': 'ruled dark stripes across the water',
-  'road-to-the-farplane-links': 'ruled dark stripes across the water',
-  title: 'ruled dark stripes across the water',
-  'via-purifico': 'ruled dark stripes across the floor',
-});
+export const HELD_BACKDROPS = Object.freeze({});
 
 /** The backdrop key of a library output path (`backdrops/gagazet@2x.png` -> `gagazet`), or null for anything else. */
 export function backdropKey(outputPath) {
