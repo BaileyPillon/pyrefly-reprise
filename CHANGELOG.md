@@ -1,13 +1,79 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 51 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 52 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows one picture from that build; "All pictures for this build" opens
 a page with every picture, before and after where both exist. Engineering detail lives in
 `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-05 · Release 39 on echoesofspira.com
+
+Address: https://echoesofspira.com (main 816d80f9, bundle DIf_suBq)
+
+- **Both:** high-resolution art. Paintings draw from 2x, 3x and 4x files wherever your window and
+  graphics card can use them, so backdrops, floors and figures are far sharper at 1440p and 4K. A
+  phone or a weak card keeps the lighter files, and a first battle on a strong desktop loads nearly
+  twice as much art.
+- **Both:** "F plus" is the new default way to draw a battle on a strong graphics card: twice the
+  width and height, shrunk with a sharper filter, which brings out fine lines. It steps down by
+  itself on a slower card, and a phone draws as before.
+- **Both:** almost every character and boss painting has a smooth outline, with the white fringe taken
+  out.
+- **Both:** a figure keeps its size and stays planted when it changes pose. In our measured test
+  battles the worst head-size jump fell from 57 percent to 8, and feet no longer slide sideways.
+  Some size jumps and snaps are left; they are the next job.
+- **FFX:** in Chapter III Braska's Final Aeon stands further right and back, clear of the party, the
+  camera is calmer while a menu is open, and the strike runs far enough to reach him.
+- **FFX:** Seymour Natus is bigger in Chapter X: 346 px tall at 1600x900, up from 207. His Sensor
+  card stands above him, clear of his painting, in windows 1440x810 and wider.
+- **FFX-2:** four visual fixes. The white rectangle at the start of an outfit change is gone, the
+  close-up on a change starts with it, the camera keeps every girl in the frame when one runs in to
+  attack, and the dark pipe slabs at the edges of Bevelle's plate in wide windows (Chapters IV and
+  XIII) are gone.
+- **FFX:** Defend is on a tab under the command window: Triangle on a pad, Q on a keyboard, a tap on
+  a phone.
+- **FFX:** Bushido and Swordplay answer taps and clicks, and the Bushido chips name the key for your
+  device. The press that closes the last first-turn tip no longer also picks Attack.
+- **Both:** the move advisor's card no longer shrinks to a stub in the narrow boxes of Chapters VII,
+  IX, XII, XVII and XVIII: it keeps its cost and its effect.
+- **FFX-2:** TEXT SIZE (115 and 130 percent) now reaches the battle screen, as it already did in
+  FFX, and both games' pause screens follow it.
+- **FFX-2:** Lady Luck joins the Garment Grid in Chapters V, XI, XIII, XV and XVI, with 45 new
+  paintings for Yuna, Rikku and Paine. Her reels are timed by you: three reels run on a slow strip
+  of pictured symbols, 5 a second, and a press stops the reel the pink arrow marks on the symbol on
+  the gold line. A 12 second timer stops any reel left. The slow strip was Bailey's pick; the speed
+  and the timer are our estimates.
+- **Both:** the strategy guide is a scrolling page for each boss. It opens on the boss on the field
+  and scrolls with the wheel, the `[` and `]` keys or the pad's right stick. In Chapter I it no
+  longer says Defend answers Total Annihilation, which is a Magic attack: Shell does.
+- **Both:** six backdrops get new 2x paintings that stay true to the originals (Mt. Gagazet, the
+  Garden of Pain, Via Purifico and the Road to the Farplane among them), and Evrae has ten new
+  high-resolution paintings in Chapter VIII.
+- **FFX:** Tidus's four Swordplay moves now differ. Spiral Cut has the widest gold zone (22 percent)
+  on the slowest sweep, Blitz Ace the narrowest (9 percent) on the fastest, and the timers are
+  unchanged. The numbers are our estimate.
+- **Both:** turning an EYE CANDY look on now switches its parts on too, when all of them were off. A
+  part you turn off afterwards stays off.
+- **Both:** interface polish. Battle labels keep a 14 px floor in 4:3 windows (they drew as small as
+  8 px), the phone's pause text is 14 to 15 px (it was 12 to 13), and the chosen row of an Overdrive
+  list is filled. In FFX the OD label stays inside a 1024 px window at every TEXT SIZE. In FFX-2 a
+  queued command shows its chip over the girl at once, and the enemy-move card keeps off the girls
+  at Yuna's White Magic list.
+- **Both:** the first-run tip says "Start with this one." when you pick a chapter other than the
+  first.
+- **Behind the scenes:** the critic now measures pose size jumps and snapping frame by frame (two
+  new checks, with score caps), and every deep review adds a first-time-fan reviewer. The live site
+  now holds 3,289 art files, 8.3 GB in all (0.8 GB before). A figure true-colour switch is built in,
+  off by default, waiting for Bailey's pick.
+
+![Chapter I's first menu on release 39 at 2560x1440](docs/changelog/img/release-39/first-menu-ch1-release-39.jpg)
+
+*Chapter I's first menu on the release 39 build at 2560x1440: sharper paintings, the scrolling guide at the top left and the new Defend tab at the bottom left.*
+
+All pictures for this build: [docs/changelog/release-39.md](docs/changelog/release-39.md)
 
 ## 2026-10-04 · Old address: the "we've moved" note
 
