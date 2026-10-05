@@ -65,6 +65,16 @@ export interface PoseFrame {
    * *fraction* of the height instead, so `0.98` and `816` both work.
    */
   anchorY?: number;
+  /**
+   * Where the figure stands, in pixels from the PNG's left edge (release 39, `PoseRegistration.ts`): what the actor lines up
+   * between poses so a change of pose does not slide the feet. Not used by the sizing maths itself.
+   */
+  stanceX?: number;
+  /**
+   * A standing pose that is wider than tall (a lunge, a wing-spread painting): never laid down by the aspect test. Set from
+   * the measured table (`PoseRegistration.ts`); a KO is never marked.
+   */
+  upright?: boolean;
 }
 
 export interface PoseScaleOptions {
@@ -200,7 +210,7 @@ export function computePoseScale(pose: PoseFrame, opts: PoseScaleOptions): PoseS
   // painted row (the body's near side) for a prone one.
   const offsetY = height / 2 - (h - anchorPx) * unitsPerPixel;
 
-  const prone = w > h * (opts.proneAspect ?? 1.15);
+  const prone = w > h * (opts.proneAspect ?? 1.15) && pose.upright !== true;
 
   // The silhouette's box, moved out of image space (origin top-left, y down)
   // and into the plane's own space (origin at the ground point, y up). The
