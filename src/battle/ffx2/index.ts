@@ -134,7 +134,7 @@ export type { DataDressphere, DataGarmentGrid, DataGridEffect } from './adapters
 
 // --- abilities, minigames, AI ----------------------------------------------
 export { chainRegistries, defaultAbilities, FALLBACK_ABILITY_IDS } from './abilities.ts';
-export { attachedResult, hitsFromOutcome, rollDefault, rollReels, rollTriggerHappy } from './minigames.ts';
+export { attachedResult, hitsFromOutcome, requestLayout, rollDefault, rollReelLayout, rollReels, rollTriggerHappy } from './minigames.ts';
 export { reelStripOf, resolveLadyLuckSpin, shapeLadyLuckSpin } from './reels.ts';
 export type { LadyLuckOutcome, LadyLuckTier, ShapedSpin } from './reels.ts';
 export { aiScriptFor, aiScriptIds, registerAiScript } from './ai/index.ts';
