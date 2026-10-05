@@ -80,7 +80,7 @@ and the same as `research/visual-bible.md` §3.3 ("L1 / LB opens it", Gamer Guid
 |---|---|---|---|
 | PlayStation pad (the original) | Triangle | `△ DEFEND` | sourced (Q1) |
 | Any pad, standard mapping | standard button 3 (`app/Input.ts` `PAD_MAP` `triangle`, Y on an Xbox pad) | `△ DEFEND` | our estimate (pad layouts differ) |
-| Keyboard | `Q` or `Shift`, the two keys `rawInput.KEY_MAP` reads as `triangle` | `Q △ DEFEND` (Q is the one printed) | our estimate |
+| Keyboard | `Q` only (`rawInput.KEY_MAP` reads Shift as `triangle` too, and Shift keeps every other job it had, but the command menu ignores it: a stray Shift tap must not spend a turn; release 39 independent check) | `Q △ DEFEND` (Q is the one printed) | our estimate |
 | Mouse | a click on the tab | `Q △ DEFEND` | our estimate |
 | Touch | a tap on the tab (a 40 px target on the upright phone) | `DEFEND` | our estimate |
 

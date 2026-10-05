@@ -18,7 +18,7 @@ import { ffxTargetMode } from './loneTarget.ts';
 import { noteWarnsZombieHarm, zombieWarnOn } from './zombieWarnOptions.ts';
 import { touchTapped } from '../common/touchTapAim.ts';
 import { commandHelpText } from './commandHelp.ts';
-import { DefendTag, defendCommandOf } from './defendControl.ts';
+import { DefendTag, defendCommandOf, pressDefends } from './defendControl.ts';
 import { DeviceTracker } from './minigames/overlayInput.ts';
 import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
@@ -170,9 +170,9 @@ export class CommandMenu {
   private wrap: { wrapper: AvailableCommand; group: TopGroupRow; back: 'top' | 'sub'; backIndex: number } | null = null;
   private opts: CommandMenuOpenOptions | null = null;
   private resolve: ((cmd: Command) => void) | null = null;
-  private readonly watcher = new RawInputWatcher((b, source) => {
+  private readonly watcher = new RawInputWatcher((b, source, code) => {
     this.device.note(source);
-    this.onButton(b);
+    this.onButton(b, code);
   });
   private unwireClicks: (() => void) | null = null;
   /**
@@ -292,7 +292,7 @@ export class CommandMenu {
     this.defendTag.set(this.defendCmd, !!this.resolve && !this.suspended && this.state === 'top', this.device.current);
   }
 
-  /** The Defend press, from Triangle (`Q` / `Shift` / the pad's Triangle) or a tap on the tab: the engine's own `defend` command. */
+  /** The Defend press, from Triangle (`Q` or the pad's Triangle; not Shift) or a tap on the tab: the engine's own `defend` command. */
   private defend(): void {
     if (!this.resolve || this.suspended || this.state !== 'top' || !this.defendCmd) return;
     this.resolveCommand(this.defendCmd);
@@ -412,7 +412,8 @@ export class CommandMenu {
 
   // ------------------------------------------------------------------- input
 
-  private onButton(b: UiButton): void {
+  /** `code`: the key of a keyboard press (`KeyboardEvent.code`), undefined for the pad; only the Triangle branch reads it. */
+  private onButton(b: UiButton, code?: string): void {
     if (this.resume()) return;
     // The flag is read by the `state` setter, which any of the three handlers
     // may trip. Set here rather than in each cancel branch so a branch added
@@ -421,13 +422,13 @@ export class CommandMenu {
     try {
       if (this.state === 'target') return this.onTargetButton(b);
       if (this.state === 'sub') return this.onSubButton(b);
-      return this.onTopButton(b);
+      return this.onTopButton(b, code);
     } finally {
       this.handlingCancel = false;
     }
   }
 
-  private onTopButton(b: UiButton): void {
+  private onTopButton(b: UiButton, code?: string): void {
     if (b === 'up' || b === 'down') {
       this.moveTop(b === 'up' ? -1 : 1);
     } else if (b === 'confirm') {
@@ -436,8 +437,10 @@ export class CommandMenu {
       // Defend is the original's Triangle (`defendControl.ts`, `research/ffx-defend-input-2026-10-04.md`,
       // `[verified: 4 GameFAQs sources]`): the engine's own `defend` command, not a row in the list. Triangle
       // used to open the party swap here, which the sources give to L1 (the roster strip's triangle MARKER, an
-      // authored UI sprite in visual-bible §3.3, was read as the button).
-      this.defend();
+      // authored UI sprite in visual-bible §3.3, was read as the button). The keyboard's Defend is Q, the key the tab
+      // names; Shift also reads as Triangle (the Bushido chip, the sphere grid, the coach line) and a stray tap of it
+      // must not spend the turn, so it stops here (release 39 check; every other thing Shift does is untouched).
+      if (pressDefends(code)) this.defend();
     } else if (b === 'l1' || b === 'r1') {
       // Party swap is its own affordance, not a verb in the list: L1/LB opens
       // it in FFX [visual-bible §3.3, "The Switch flow", verified]. Both jump

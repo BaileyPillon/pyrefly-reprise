@@ -18,8 +18,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AnyCombatant, AvailableCommand, CombatantId, Command } from '../../src/battle/common/types.ts';
 import { onTheMenu } from '../../src/engine/tactics/advisor-menu.ts';
 import { CommandMenu, buildTopRows } from '../../src/ui/ffx/CommandMenu.ts';
-import { defendCommandOf, defendFace } from '../../src/ui/ffx/defendControl.ts';
-import { forgetPlayerDevice } from '../../src/ui/ffx/rawInput.ts';
+import { DEFEND_KEY_CODE, defendCommandOf, defendFace, pressDefends } from '../../src/ui/ffx/defendControl.ts';
+import { RawInputWatcher, forgetPlayerDevice } from '../../src/ui/ffx/rawInput.ts';
 import { makeFakeCombatants, makeFakeCommands } from '../../src/ui/ffx/testFixtures.ts';
 
 const COMBATANTS = makeFakeCombatants() as unknown as Record<CombatantId, AnyCombatant>;
@@ -162,9 +162,16 @@ describe('every input can Defend: the engine\'s own defend command comes out', (
     expect(o.tag().hidden).toBe(true);
   });
 
-  it('Shift is Defend too (the other key the game reads as Triangle)', async () => {
+  it('Shift is not Defend: the tab names Q, and a stray Shift tap, left or right, spends no turn (release 39 check)', async () => {
     const o = open();
+    const selected = (): string => o.menu.stackEl.querySelector('.ig-cmd--selected')?.textContent ?? '';
+    const before = selected();
     keydown('ShiftLeft');
+    keydown('ShiftRight');
+    expect(await o.decided()).toBeUndefined();
+    expect(o.tag().hidden).toBe(false); // the menu is still open at its top level, the tab still up
+    expect(selected()).toBe(before); // and nothing moved
+    keydown('KeyQ'); // Q still is Defend
     expect(await o.decided()).toEqual({ kind: 'defend', targets: [] });
   });
 
@@ -249,6 +256,55 @@ describe('every input can Defend: the engine\'s own defend command comes out', (
     o.menu.close();
     keydown('KeyQ');
     o.tag().dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    expect(await o.decided()).toBeUndefined();
+  });
+});
+
+describe('Shift keeps everything else it did (release 39 check: only the Defend press at this menu ignores it)', () => {
+  it('the watcher still reads Shift (either side) and Q as Triangle, and now also says which key it was', () => {
+    const seen: string[] = [];
+    const watcher = new RawInputWatcher((b, source, code) => seen.push(`${b}/${source}/${code}`));
+    watcher.attach();
+    keydown('ShiftLeft');
+    keydown('ShiftRight');
+    keydown('KeyQ');
+    watcher.detach();
+    expect(seen).toEqual(['triangle/keyboard/ShiftLeft', 'triangle/keyboard/ShiftRight', 'triangle/keyboard/KeyQ']);
+  });
+
+  it('a pad press carries no key, which is how the pad\'s Triangle stays the original\'s Defend', async () => {
+    const { pad, set } = makePad();
+    Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => [pad] });
+    const seen: string[] = [];
+    const watcher = new RawInputWatcher((b, source, code) => seen.push(`${b}/${source}/${code}`));
+    watcher.attach();
+    await tapPad(set, 3);
+    watcher.detach();
+    expect(seen).toEqual(['triangle/gamepad/undefined']);
+  });
+
+  it('pressDefends: the pad (no key) and Q defend; Shift, Tab and any other key that reads as Triangle do not', () => {
+    expect(DEFEND_KEY_CODE).toBe('KeyQ'); // the key the tab prints
+    expect(pressDefends(undefined)).toBe(true);
+    expect(pressDefends('KeyQ')).toBe(true);
+    for (const code of ['ShiftLeft', 'ShiftRight', 'Tab', 'Enter', 'KeyE']) expect(pressDefends(code)).toBe(false);
+  });
+
+  it('a Shift tap at the menu is still a keyboard press: on a touch screen the tab names the keys again', async () => {
+    stubCoarsePointer(true);
+    const o = open();
+    expect(o.words()).toBe('Defend');
+    keydown('ShiftLeft');
+    expect(o.words()).toBe('Q△Defend');
+    expect(await o.decided()).toBeUndefined();
+  });
+
+  it('a Shift tap still wakes a suspended menu, as any button does, and spends nothing', async () => {
+    const o = open();
+    o.menu.suspend();
+    expect(o.tag().hidden).toBe(true);
+    keydown('ShiftLeft');
+    expect(o.tag().hidden).toBe(false);
     expect(await o.decided()).toBeUndefined();
   });
 });

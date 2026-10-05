@@ -217,8 +217,12 @@ export class RawInputWatcher {
   private readonly keyboard: boolean;
 
   constructor(
-    /** `source` is where the press came from (PR-0361: an overlay words itself for the device in use). */
-    private readonly onButton: (button: UiButton, source: PressSource) => void,
+    /**
+     * `source` is where the press came from (PR-0361: an overlay words itself for the device in use). `code` is the
+     * `KeyboardEvent.code` of a keyboard press, undefined for the pad: for a menu that answers only one of the keys that
+     * read as the same button (FFX's Defend is Q, not Shift: `CommandMenu`, release 39).
+     */
+    private readonly onButton: (button: UiButton, source: PressSource, code?: string) => void,
     opts: RawInputWatcherOptions = {},
   ) {
     this.ignoreSuspend = opts.ignoreSuspend === true;
@@ -260,7 +264,7 @@ export class RawInputWatcher {
     if (e.repeat && !DIRECTIONS.has(button)) return;
     if (e.code.startsWith('Arrow') || e.code === 'Space' || e.code === 'Tab') e.preventDefault();
     if (e.isTrusted) noteDevice('keyboard');
-    this.onButton(button, 'keyboard');
+    this.onButton(button, 'keyboard', e.code);
   };
 
   private readonly pollGamepad = (now: number): void => {

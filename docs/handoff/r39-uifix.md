@@ -233,7 +233,7 @@ the player choosing something else, and Triangle does nothing there: our estimat
 
 | Device | The tab reads | Does |
 |---|---|---|
-| keyboard | `Q  △  DEFEND` | `Q` or `Shift` (the two keys `rawInput.KEY_MAP` reads as `triangle`) |
+| keyboard | `Q  △  DEFEND` | `Q` only (Shift is also `triangle` in `rawInput.KEY_MAP`; the command menu ignores it since the release 39 independent check) |
 | gamepad | `△  DEFEND` | the pad's Triangle (standard button 3) |
 | mouse | `Q  △  DEFEND` | a click on the tab |
 | touch | `DEFEND` (a 40 px target on the upright phone, bottom-left under the grid) | a tap on the tab |
@@ -326,7 +326,7 @@ a check against the Steam copy (`D:/Tools/ffx-hd`) or Jegged's guide; I did not 
    (Square is the guide's); FFX-2's non-holding coach line has the pad leak PR-0362 closed for FFX (a Cross dismisses the fading line and also acts on the menu); `src/data/guides/evrae.ts:112`'s comment about the quiet turn is stale now that FFX can Defend.
 
 **Open for Bailey:** whether Triangle should also Defend from inside a submenu (the sources only describe the command menu); whether the HD Remaster's own default (the Steam copy, `D:/Tools/ffx-hd`) should replace our keyboard key for Defend;
-whether **Shift** should keep Defending (it is `triangle` in `rawInput.KEY_MAP` already, so it came with the button; the tab names `Q` only, and a stray Shift tap now spends a turn where it used to open the party swap);
+whether **Shift** should Defend (settled by the release 39 independent check, 2026-10-04: no. `Q` is the keyboard's Defend, the key the tab names; a stray Shift tap at the FFX command menu spends no turn, and every other thing Shift does is untouched, `tests/unit/ui-ffx-defend-control.test.ts`; FFX only);
 which pad button the slab should have; the PR-0362 reversal; the Chapter I guide line; whether Chapter III's card, which at 1600x900 now prints cost and effect where it printed cost and reason, should keep the effect or the reason when a 69-tall shelf holds only one; the unconfirmed Bushido chip order (our estimate, GameFAQs', still pending his Steam check).
 
 ## Gates

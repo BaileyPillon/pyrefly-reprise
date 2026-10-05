@@ -253,6 +253,20 @@ describe('Bushido: every input answers, and the chips say what to press (PR-0360
     expect(o.chips().every((c) => c.getAttribute('role') === 'button')).toBe(true);
   });
 
+  it('Shift still presses the Triangle chip (the release 39 Defend check changed the command menu only)', async () => {
+    const o = open(['triangle', 'confirm'], 3000);
+    keydown('ShiftLeft');
+    await vi.advanceTimersByTimeAsync(100);
+    expect(o.done()).toBe(1);
+    keydown('Enter');
+    await vi.advanceTimersByTimeAsync(1000);
+    const r = o.result();
+    expect(r?.kind).toBe('auron-sequence');
+    if (r?.kind !== 'auron-sequence') return;
+    expect(r.sequence.success).toBe(true);
+    expect(r.sequence.correctInputs).toBe(2);
+  });
+
   it('every key the chips name, pressed for real, completes Shooting Star (a run using only what the overlay says)', async () => {
     const o = open();
     for (const label of ['Q', 'Esc', 'K', 'Esc', '←', '→', 'Enter']) {

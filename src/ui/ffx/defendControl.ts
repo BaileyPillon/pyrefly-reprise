@@ -24,7 +24,7 @@ import { namesKeys, type DeviceState } from './minigames/overlayInput.ts';
  *
  * | Input    | The tab reads          | Press                                                  |
  * |----------|------------------------|--------------------------------------------------------|
- * | keyboard | `Q  △  DEFEND`         | `Q` (or Shift): `rawInput.KEY_MAP` gives both `triangle` |
+ * | keyboard | `Q  △  DEFEND`         | `Q` only (`rawInput.KEY_MAP` reads Shift as `triangle` too, but this menu ignores it) |
  * | gamepad  | `△  DEFEND`            | Triangle, standard button 3                            |
  * | mouse    | `Q  △  DEFEND`         | a click on the tab                                     |
  * | touch    | `DEFEND`, a 40 px target | a tap on the tab                                     |
@@ -38,6 +38,21 @@ import { namesKeys, type DeviceState } from './minigames/overlayInput.ts';
  * applies the `defend` status for a turn). The move advisor still never offers it (`engine/tactics/advisor-menu.ts`
  * `onTheMenu`, unchanged): this is a control the player reaches for, not a row the card names.
  */
+
+/**
+ * The one key that Defends (`KeyboardEvent.code`): the one the tab names. Shift is `triangle` in `rawInput.KEY_MAP` as well
+ * (the Bushido Triangle chip, the sphere grid's walk mode and the coach line all read it), so the button alone cannot tell
+ * the two apart, and a stray Shift tap at the command menu must not spend a turn (release 39 check; FFX only).
+ */
+export const DEFEND_KEY_CODE = 'KeyQ';
+
+/**
+ * Whether a Triangle press at the command menu is a Defend: the pad's Triangle (no key code, it is the original's input)
+ * or the key the tab names. Any other key that happens to read as Triangle is not.
+ */
+export function pressDefends(code: string | undefined): boolean {
+  return code === undefined || code === DEFEND_KEY_CODE;
+}
 
 /** The Defend command the engine offers this actor, when it is usable now; `null` when there is none or it is greyed out. */
 export function defendCommandOf(commands: readonly AvailableCommand[]): AvailableCommand | null {
