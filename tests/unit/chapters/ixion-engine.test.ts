@@ -303,13 +303,16 @@ describe('registration: listed as Chapter XVI (2026-09-27)', () => {
     expect(x2Ixion.forms?.map((f) => f.spriteKey)).toEqual(['x2-ixion']);
   });
 
-  it('the party: Yuna White Mage, Rikku and Paine Dark Knight, Lv 32 / 33 / 34 (our estimate), Samurai owned', () => {
+  it('the party: Yuna White Mage, Rikku and Paine Dark Knight, Lv 32 / 33 / 34 (our estimate), Samurai and Lady Luck owned (D-361)', () => {
     expect(djoseBuild.members.map((m) => [m.id, m.currentDressphere, m.level])).toEqual([
       ['yuna', 'white-mage', 32], ['rikku', 'dark-knight', 33], ['paine', 'dark-knight', 34],
     ]);
     for (const m of djoseBuild.members) {
       expect(m.owned).toContain('samurai');
-      for (const no of ['mascot', 'berserker', 'lady-luck', 'trainer']) expect(m.owned).not.toContain(no);
+      // Lady Luck was left out until Bailey's D-361 (2026-10-03): the Luca Sphere Break is a Chapter 3 event and Djose is
+      // the end of Chapter 3, so she is owned here; the other three conditional pickups stay out.
+      expect(m.owned).toContain('lady-luck');
+      for (const no of ['mascot', 'berserker', 'trainer']) expect(m.owned).not.toContain(no);
       expect(m.garmentGrid.id).not.toBe('unwavering-guard');
     }
   });

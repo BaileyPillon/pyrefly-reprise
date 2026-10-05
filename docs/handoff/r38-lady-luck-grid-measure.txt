@@ -1,0 +1,31 @@
+# r38-lady-luck-grid: autopilot digests and win rates, before and after (FFX-2 only).
+# Harness: the shipped autopilot (intendedStrategy, which picks each chapter's own tactic) driving each chapter's own build and link chain,
+# Wait mode, minigames off, seeds 1-200; digest = sha256 (first 16) of every link's full event log over seeds 1-20, then hashed together.
+# Harness file (parked, scratch): F:/pyrefly-parked/2026-10-03/lady-luck/zz-tmp-r38-measure.test.ts; raw output: D:/Tools/pyrefly-scratch/2026-10-03/lady-luck/measure/.
+
+## BEFORE: origin/main 3b1ed60f, nothing changed
+RESULT ffx2-bahamut wins=200/200 lostAtLink={} spherechangesInAutopilotRuns=0 digest(seeds1-20)=bf9c550821654448 grids=[yuna:protection-halo rikku:hour-of-need paine:stonehewn]
+RESULT ffx2-vegnagun-shuyin wins=188/200 lostAtLink={"2":11,"3":1} spherechangesInAutopilotRuns=0 digest(seeds1-20)=2ef4fc3acea4cf6d grids=[yuna:tempered-will rikku:flash-of-steel paine:pride-of-the-sword]
+RESULT ffx2-leblanc wins=198/200 lostAtLink={"3":2} spherechangesInAutopilotRuns=0 digest(seeds1-20)=72f319f8870f5b70 grids=[yuna:hour-of-need rikku:bum-rush paine:stonehewn]
+RESULT ffx2-fallen-aeons wins=174/200 lostAtLink={"2":26} spherechangesInAutopilotRuns=427 digest(seeds1-20)=e62cd5f1b0420d0a grids=[yuna:tempered-will rikku:flash-of-steel paine:pride-of-the-sword]
+RESULT ffx2-trema wins=14/200 lostAtLink={"1":174,"2":12} spherechangesInAutopilotRuns=6117 digest(seeds1-20)=004aed0c3e397d39 grids=[yuna:valiant-lustre rikku:valiant-lustre paine:valiant-lustre]
+RESULT ffx2-den-of-woe wins=111/200 lostAtLink={"2":23,"3":66} spherechangesInAutopilotRuns=0 digest(seeds1-20)=2398517e0816e3ac grids=[yuna:tempered-will rikku:flash-of-steel paine:pride-of-the-sword]
+RESULT ffx2-ixion-djose wins=197/200 lostAtLink={"1":3} spherechangesInAutopilotRuns=0 digest(seeds1-20)=21a5bd42ba86e91a grids=[yuna:protection-halo rikku:hour-of-need paine:stonehewn]
+
+## AFTER: branch r38-lady-luck-grid (identical lines are the point)
+RESULT ffx2-bahamut wins=200/200 lostAtLink={} spherechangesInAutopilotRuns=0 digest(seeds1-20)=bf9c550821654448 grids=[yuna:protection-halo rikku:hour-of-need paine:stonehewn]
+RESULT ffx2-vegnagun-shuyin wins=188/200 lostAtLink={"2":11,"3":1} spherechangesInAutopilotRuns=0 digest(seeds1-20)=2ef4fc3acea4cf6d grids=[yuna:tempered-will rikku:flash-of-steel paine:pride-of-the-sword]
+RESULT ffx2-leblanc wins=198/200 lostAtLink={"3":2} spherechangesInAutopilotRuns=0 digest(seeds1-20)=72f319f8870f5b70 grids=[yuna:hour-of-need rikku:bum-rush paine:stonehewn]
+RESULT ffx2-fallen-aeons wins=174/200 lostAtLink={"2":26} spherechangesInAutopilotRuns=427 digest(seeds1-20)=e62cd5f1b0420d0a grids=[yuna:tempered-will rikku:flash-of-steel paine:pride-of-the-sword]
+RESULT ffx2-trema wins=14/200 lostAtLink={"1":174,"2":12} spherechangesInAutopilotRuns=6117 digest(seeds1-20)=004aed0c3e397d39 grids=[yuna:valiant-lustre rikku:valiant-lustre paine:valiant-lustre]
+RESULT ffx2-den-of-woe wins=111/200 lostAtLink={"2":23,"3":66} spherechangesInAutopilotRuns=0 digest(seeds1-20)=2398517e0816e3ac grids=[yuna:tempered-will rikku:flash-of-steel paine:pride-of-the-sword]
+RESULT ffx2-ixion-djose wins=197/200 lostAtLink={"1":3} spherechangesInAutopilotRuns=0 digest(seeds1-20)=21a5bd42ba86e91a grids=[yuna:protection-halo rikku:hour-of-need paine:stonehewn]
+
+## CONTROL (never shipped): Lady Luck laid on node 1, the first Change row, instead of the last node. Chapters XI and XIII move, because the autopilot answers Itchy with the first Change row.
+RESULT ffx2-bahamut wins=200/200 lostAtLink={} spherechangesInAutopilotRuns=0 digest(seeds1-20)=bf9c550821654448
+RESULT ffx2-vegnagun-shuyin wins=188/200 lostAtLink={"2":11,"3":1} spherechangesInAutopilotRuns=0 digest(seeds1-20)=2ef4fc3acea4cf6d
+RESULT ffx2-leblanc wins=198/200 lostAtLink={"3":2} spherechangesInAutopilotRuns=0 digest(seeds1-20)=72f319f8870f5b70
+RESULT ffx2-fallen-aeons wins=174/200 lostAtLink={"2":26} spherechangesInAutopilotRuns=409 digest(seeds1-20)=a77b91c3df2ace4d
+RESULT ffx2-trema wins=14/200 lostAtLink={"1":168,"2":18} spherechangesInAutopilotRuns=5470 digest(seeds1-20)=ec3122c9dbb23313
+RESULT ffx2-den-of-woe wins=111/200 lostAtLink={"2":23,"3":66} spherechangesInAutopilotRuns=0 digest(seeds1-20)=2398517e0816e3ac
+RESULT ffx2-ixion-djose wins=197/200 lostAtLink={"1":3} spherechangesInAutopilotRuns=0 digest(seeds1-20)=21a5bd42ba86e91a

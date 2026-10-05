@@ -57,14 +57,30 @@ import { openCommandMenu } from '../../src/ui/ffx2/CommandMenu.ts';
 // ------------------------------------------------------- the two real windows
 
 /**
+ * The top-level stack: the labels in paint order, and which of them open a submenu (a **group**) rather than act
+ * (a **leaf**). The chip rule below needs the difference: a chip may never name the leaf the player is standing on,
+ * but a group that shares its name with one of its members is a real path (r38-lady-luck-grid: Lady Luck's
+ * `Tantalize` is an attack-category row like her Attack, so both sit under one `Attack` group, and `Attack > Attack`
+ * is where her Attack is).
+ */
+interface TopStack {
+  labels: string[];
+  groups: Set<string>;
+}
+
+/**
  * The top-level rows FFX would paint, in the words it paints them in.
  *
  * `buildTopRows` is what `ui/ffx/CommandMenu.ts` builds its stack from (line
  * 244), and `CommandMenu`'s own view-model copies `row.cmd.label` for a direct
  * row and `row.label` for a group, which is what this reproduces.
  */
-function ffxTopLabels(commands: AvailableCommand[]): string[] {
-  return buildTopRows(commands).map((row) => (row.kind === 'direct' ? row.cmd.label : row.label));
+function ffxTopStack(commands: AvailableCommand[]): TopStack {
+  const rows = buildTopRows(commands);
+  return {
+    labels: rows.map((row) => (row.kind === 'direct' ? row.cmd.label : row.label)),
+    groups: new Set(rows.filter((row) => row.kind !== 'direct').map((row) => row.label)),
+  };
 }
 
 /**
@@ -76,7 +92,7 @@ function ffxTopLabels(commands: AvailableCommand[]): string[] {
  * `window` — harmless here because this file dispatches no keys, and the
  * alternative is driving a whole menu to a target just to read a label.
  */
-function ffx2TopLabels(commands: AvailableCommand[], actorName: string): string[] {
+function ffx2TopStack(commands: AvailableCommand[], actorName: string): TopStack {
   const container = document.createElement('div');
   const targetLayer = document.createElement('div');
   document.body.append(container, targetLayer);
@@ -89,18 +105,21 @@ function ffx2TopLabels(commands: AvailableCommand[], actorName: string): string[
     project: () => null,
     onPreview: () => {},
   });
-  const labels = [...container.querySelectorAll('.ffx2cmd__label')].map((el) =>
-    (el.textContent ?? '').trim(),
+  const labelEls = [...container.querySelectorAll('.ffx2cmd__label')];
+  const labels = labelEls.map((el) => (el.textContent ?? '').trim());
+  // A group row paints its arrow chip (`.ffx2cmd__arrow`) beside the label; a leaf does not.
+  const groups = new Set(
+    labelEls.filter((el) => el.parentElement?.querySelector('.ffx2cmd__arrow')).map((el) => (el.textContent ?? '').trim()),
   );
   container.remove();
   targetLayer.remove();
-  return labels;
+  return { labels, groups };
 }
 
-function topLabels(state: Readonly<BattleState>, commands: AvailableCommand[], actorName: string): string[] {
+function topStack(state: Readonly<BattleState>, commands: AvailableCommand[], actorName: string): TopStack {
   // Evrae's cascade folds its two orders into one "Orders" row (FFX only; a
   // pass-through in every other battle), so the stack is the folded one.
-  return state.game === 'ffx2' ? ffx2TopLabels(commands, actorName) : ffxTopLabels(airshipMenuRows(commands, state.flags));
+  return state.game === 'ffx2' ? ffx2TopStack(commands, actorName) : ffxTopStack(airshipMenuRows(commands, state.flags));
 }
 
 // --------------------------------------------------------------- the engines
@@ -185,17 +204,20 @@ function sweep(chapterId: string, seed: number, play: 'intended' | 'random', bud
     const state = engine.state();
     const view = buildAdvisorView(state, decision, options);
     if (view) {
-      const stack = topLabels(state, decision.commands, view.actorName);
+      const { labels: stack, groups } = topStack(state, decision.commands, view.actorName);
       for (const s of view.suggestions) {
         const where = `${chapterId}/${play}/${view.actorName}: ${s.label}`;
         if (s.menu) {
           out.chips += 1;
           // The chip promises a row on the stack, spelled the way the stack
-          // spells it — and it can never be the row itself.
+          // spells it — and it can never be the row itself. "The row itself" is a
+          // **leaf** the player is standing on [F3]: a top-level *group* named like
+          // its member (Lady Luck's `Attack` group holds Attack and Tantalize) is
+          // where the row really is, so `Attack · in Attack` is true there.
           if (!stack.includes(s.menu)) {
             out.phantom.push({ where, said: `in ${s.menu}`, stack: stack.join(' / ') });
           }
-          if (s.menu === s.label) {
+          if (s.menu === s.label && !groups.has(s.menu)) {
             out.phantom.push({ where, said: `in ${s.menu} (its own row)`, stack: stack.join(' / ') });
           }
         } else {

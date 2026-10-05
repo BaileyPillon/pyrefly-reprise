@@ -1,0 +1,505 @@
+{
+ "note": "Real keyboard input, headless GPU Chromium (PYREFLY_BROWSER=gpu args), scratch Vite on :6610 serving the worktree; the debug API only started the chapter (gotoChapter) and read the battle log. Overlay probe: elementsFromPoint (paint order) at three points on the title, subtitle, three reels and the DUD line; any painted element above the overlay is listed.",
+ "runs": [
+  {
+   "tag": "iv-none",
+   "chapter": "ffx2-bahamut",
+   "viewport": "1600x900",
+   "actor": "yuna",
+   "changeMenu": [
+    "GunnerGRANTS: Red",
+    "Black Mage"
+   ],
+   "ladyLuckOffered": false,
+   "skillMenu": null,
+   "reelsChosen": null,
+   "overlay": null,
+   "stoppedSymbols": null,
+   "result": null,
+   "consoleIssues": []
+  },
+  {
+   "tag": "vi-none",
+   "chapter": "ffx2-leblanc",
+   "viewport": "1600x900",
+   "actor": "yuna",
+   "changeMenu": [
+    "SongstressGRANTS: Red",
+    "Thief"
+   ],
+   "ladyLuckOffered": false,
+   "skillMenu": null,
+   "reelsChosen": null,
+   "overlay": null,
+   "stoppedSymbols": null,
+   "result": null,
+   "consoleIssues": []
+  },
+  {
+   "tag": "v-1600",
+   "chapter": "ffx2-vegnagun-shuyin",
+   "viewport": "1600x900",
+   "actor": "yuna",
+   "changeMenu": [
+    "GunnerGRANTS: Red",
+    "Lady Luck"
+   ],
+   "ladyLuckOffered": true,
+   "skillMenu": [
+    "Bribe",
+    "Two Dice4",
+    "Attack Reels",
+    "Magic Reels",
+    "Luck8",
+    "Felicity8",
+    "Critical"
+   ],
+   "reelsChosen": "Attack Reels",
+   "overlay": {
+    "fullyVisible": true,
+    "occludedPoints": 0,
+    "insideViewport": true,
+    "overlayRect": {
+     "x": 33,
+     "y": 140,
+     "w": 858.3,
+     "h": 274.4
+    },
+    "dudWarning": {
+     "x": 121.6,
+     "y": 356.1,
+     "w": 720,
+     "h": 25
+    },
+    "reel1": {
+     "x": 104.1,
+     "y": 231.1,
+     "w": 237,
+     "h": 110
+    },
+    "zIndex": {
+     "overlayContainer": "5",
+     "guide": "3",
+     "advisor": "4"
+    },
+    "phoneLayout": false
+   },
+   "stoppedSymbols": [
+    "paw",
+    "sword",
+    "helmet"
+   ],
+   "result": {
+    "messages": [
+     "Dud!"
+    ],
+    "minigameRequests": 1,
+    "spherechanges": [
+     "yuna: white-mage -> lady-luck"
+    ]
+   },
+   "consoleIssues": [
+    "warning: [fx-b] depth plates unavailable EncodingError: The source image cannot be decoded."
+   ]
+  },
+  {
+   "tag": "v-2000",
+   "chapter": "ffx2-vegnagun-shuyin",
+   "viewport": "2000x1012",
+   "actor": "yuna",
+   "changeMenu": [
+    "GunnerGRANTS: Red",
+    "Lady Luck"
+   ],
+   "ladyLuckOffered": true,
+   "skillMenu": [
+    "Bribe",
+    "Two Dice4",
+    "Attack Reels",
+    "Magic Reels",
+    "Luck8",
+    "Felicity8",
+    "Critical"
+   ],
+   "reelsChosen": "Attack Reels",
+   "overlay": {
+    "fullyVisible": true,
+    "occludedPoints": 0,
+    "insideViewport": true,
+    "overlayRect": {
+     "x": 137.6,
+     "y": 157.4,
+     "w": 965.1,
+     "h": 308.5
+    },
+    "dudWarning": {
+     "x": 237.2,
+     "y": 400.4,
+     "w": 809.6,
+     "h": 28.1
+    },
+    "reel1": {
+     "x": 217.5,
+     "y": 259.8,
+     "w": 266.5,
+     "h": 123.7
+    },
+    "zIndex": {
+     "overlayContainer": "5",
+     "guide": "3",
+     "advisor": "4"
+    },
+    "phoneLayout": false
+   },
+   "stoppedSymbols": [
+    "bar",
+    "bar",
+    "paw"
+   ],
+   "result": {
+    "messages": [
+     "Dud!"
+    ],
+    "minigameRequests": 1,
+    "spherechanges": [
+     "yuna: white-mage -> lady-luck"
+    ]
+   },
+   "consoleIssues": [
+    "warning: [fx-b] depth plates unavailable EncodingError: The source image cannot be decoded."
+   ]
+  },
+  {
+   "tag": "v-390",
+   "chapter": "ffx2-vegnagun-shuyin",
+   "viewport": "390x844",
+   "actor": "yuna",
+   "changeMenu": [
+    "GunnerGRANTS: Red",
+    "Lady Luck"
+   ],
+   "ladyLuckOffered": true,
+   "skillMenu": [
+    "Bribe",
+    "Two Dice4",
+    "Attack Reels",
+    "Magic Reels",
+    "Luck8",
+    "Felicity8",
+    "Critical"
+   ],
+   "reelsChosen": "Attack Reels",
+   "overlay": {
+    "fullyVisible": true,
+    "occludedPoints": 0,
+    "insideViewport": true,
+    "overlayRect": {
+     "x": 13.2,
+     "y": 56,
+     "w": 343.3,
+     "h": 109.8
+    },
+    "dudWarning": {
+     "x": 48.6,
+     "y": 142.4,
+     "w": 288,
+     "h": 10
+    },
+    "reel1": {
+     "x": 41.6,
+     "y": 92.4,
+     "w": 94.8,
+     "h": 44
+    },
+    "zIndex": {
+     "overlayContainer": "5",
+     "guide": "3",
+     "advisor": "4"
+    },
+    "phoneLayout": true
+   },
+   "stoppedSymbols": [
+    "sword",
+    "paw",
+    "paw"
+   ],
+   "result": {
+    "messages": [
+     "Dud!"
+    ],
+    "minigameRequests": 1,
+    "spherechanges": [
+     "yuna: white-mage -> lady-luck"
+    ]
+   },
+   "consoleIssues": [
+    "warning: [fx-b] depth plates unavailable EncodingError: The source image cannot be decoded.",
+    "warning: THREE.WebGLProgram: Program Info Log: (198,12-86): warning X3595: gradient instruction used in a loop with varying iteration; partial derivatives may have undefined value\n(198,12-86): warning X3595: gradient instruction used in a loop with varying iteration; partial derivatives may have und"
+   ]
+  },
+  {
+   "tag": "xi-1600",
+   "chapter": "ffx2-fallen-aeons",
+   "viewport": "1600x900",
+   "actor": "yuna",
+   "changeMenu": [
+    "GunnerGRANTS: Red",
+    "Lady Luck"
+   ],
+   "ladyLuckOffered": true,
+   "skillMenu": [
+    "Bribe",
+    "Two Dice4",
+    "Attack Reels",
+    "Magic Reels",
+    "Luck8",
+    "Felicity8",
+    "Critical"
+   ],
+   "reelsChosen": "Attack Reels",
+   "overlay": {
+    "fullyVisible": true,
+    "occludedPoints": 0,
+    "insideViewport": true,
+    "overlayRect": {
+     "x": 33,
+     "y": 140,
+     "w": 858.3,
+     "h": 274.4
+    },
+    "dudWarning": {
+     "x": 121.6,
+     "y": 356.1,
+     "w": 720,
+     "h": 25
+    },
+    "reel1": {
+     "x": 104.1,
+     "y": 231.1,
+     "w": 237,
+     "h": 110
+    },
+    "zIndex": {
+     "overlayContainer": "5",
+     "guide": "3",
+     "advisor": "4"
+    },
+    "phoneLayout": false
+   },
+   "stoppedSymbols": [
+    "helmet",
+    "red7",
+    "paw"
+   ],
+   "result": {
+    "messages": [
+     "Dud!"
+    ],
+    "minigameRequests": 1,
+    "spherechanges": [
+     "yuna: white-mage -> lady-luck"
+    ]
+   },
+   "consoleIssues": []
+  },
+  {
+   "tag": "xiii-1600",
+   "chapter": "ffx2-trema",
+   "viewport": "1600x900",
+   "actor": "yuna",
+   "changeMenu": [
+    "White MageGRANTS: Yellow",
+    "Lady Luck"
+   ],
+   "ladyLuckOffered": true,
+   "skillMenu": [
+    "Bribe",
+    "Two Dice4",
+    "Attack Reels",
+    "Magic Reels",
+    "Luck8",
+    "Felicity8",
+    "Critical"
+   ],
+   "reelsChosen": "Attack Reels",
+   "overlay": {
+    "fullyVisible": true,
+    "occludedPoints": 0,
+    "insideViewport": true,
+    "overlayRect": {
+     "x": 33,
+     "y": 140,
+     "w": 858.3,
+     "h": 274.4
+    },
+    "dudWarning": {
+     "x": 121.6,
+     "y": 356.1,
+     "w": 720,
+     "h": 25
+    },
+    "reel1": {
+     "x": 104.1,
+     "y": 231.1,
+     "w": 237,
+     "h": 110
+    },
+    "zIndex": {
+     "overlayContainer": "5",
+     "guide": "3",
+     "advisor": "4"
+    },
+    "phoneLayout": false
+   },
+   "stoppedSymbols": [
+    "cherry",
+    "cherry",
+    "bar"
+   ],
+   "result": {
+    "messages": [
+     "Clean Slate"
+    ],
+    "minigameRequests": 1,
+    "spherechanges": [
+     "yuna: dark-knight -> lady-luck"
+    ]
+   },
+   "consoleIssues": [
+    "warning: [fx-b] depth plates unavailable EncodingError: The source image cannot be decoded."
+   ]
+  },
+  {
+   "tag": "xv-1600",
+   "chapter": "ffx2-den-of-woe",
+   "viewport": "1600x900",
+   "actor": "yuna",
+   "changeMenu": [
+    "GunnerGRANTS: Red",
+    "Lady Luck"
+   ],
+   "ladyLuckOffered": true,
+   "skillMenu": [
+    "Bribe",
+    "Two Dice4",
+    "Attack Reels",
+    "Magic Reels",
+    "Luck8",
+    "Felicity8",
+    "Critical"
+   ],
+   "reelsChosen": "Attack Reels",
+   "overlay": {
+    "fullyVisible": true,
+    "occludedPoints": 0,
+    "insideViewport": true,
+    "overlayRect": {
+     "x": 33,
+     "y": 140,
+     "w": 858.3,
+     "h": 274.4
+    },
+    "dudWarning": {
+     "x": 121.6,
+     "y": 356.1,
+     "w": 720,
+     "h": 25
+    },
+    "reel1": {
+     "x": 104.1,
+     "y": 231.1,
+     "w": 237,
+     "h": 110
+    },
+    "zIndex": {
+     "overlayContainer": "5",
+     "guide": "3",
+     "advisor": "4"
+    },
+    "phoneLayout": false
+   },
+   "stoppedSymbols": [
+    "helmet",
+    "cherry",
+    "paw"
+   ],
+   "result": {
+    "messages": [
+     "Dud!"
+    ],
+    "minigameRequests": 1,
+    "spherechanges": [
+     "yuna: white-mage -> lady-luck"
+    ]
+   },
+   "consoleIssues": [
+    "warning: [fx-b] depth plates unavailable EncodingError: The source image cannot be decoded."
+   ]
+  },
+  {
+   "tag": "xvi-1600",
+   "chapter": "ffx2-ixion-djose",
+   "viewport": "1600x900",
+   "actor": "yuna",
+   "changeMenu": [
+    "GunnerGRANTS: Red",
+    "Lady Luck"
+   ],
+   "ladyLuckOffered": true,
+   "skillMenu": [
+    "Bribe",
+    "Two Dice4",
+    "Attack Reels",
+    "Magic Reels",
+    "Luck8",
+    "Felicity8",
+    "Critical"
+   ],
+   "reelsChosen": "Magic Reels",
+   "overlay": {
+    "fullyVisible": true,
+    "occludedPoints": 0,
+    "insideViewport": true,
+    "overlayRect": {
+     "x": 33,
+     "y": 140,
+     "w": 858.3,
+     "h": 274.4
+    },
+    "dudWarning": {
+     "x": 121.6,
+     "y": 356.1,
+     "w": 720,
+     "h": 25
+    },
+    "reel1": {
+     "x": 104.1,
+     "y": 231.1,
+     "w": 237,
+     "h": 110
+    },
+    "zIndex": {
+     "overlayContainer": "5",
+     "guide": "3",
+     "advisor": "4"
+    },
+    "phoneLayout": false
+   },
+   "stoppedSymbols": [
+    "skull",
+    "staff",
+    "skull"
+   ],
+   "result": {
+    "messages": [
+     "Dud!"
+    ],
+    "minigameRequests": 1,
+    "spherechanges": [
+     "yuna: white-mage -> lady-luck"
+    ]
+   },
+   "consoleIssues": []
+  }
+ ]
+}

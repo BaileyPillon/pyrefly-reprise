@@ -766,10 +766,20 @@
 
 /* -------------------------------------------------------------- minigames */
 
+/*
+ * The minigame layer paints **above** the strategy guide (`.sgd`, z-index 3, `strategy-guide.css`) and the move
+ * advisor (`.mad`, z-index 4, `move-advisor.css`), and below the damage numerals (`.dnum`, 6). The Lady Luck reels
+ * open top-left, on the guide rail's own corner, and with this layer at `auto` the guide was painted over reel 1
+ * and half of the DUD warning at 1600x900 (critic FOC37-01, release 37, 2026-10-03; found once a player could
+ * reach the reels, `docs/handoff/r38-lady-luck-grid.md`). Slot 1 decides the Cherry tier, so it is the reel a
+ * player most needs to read. The mash meter (Trigger Happy) lives on the same layer and has the same corner.
+ * FFX-2 only: this is the FFX-2 HUD's layer; the FFX HUD has its own and is untouched.
+ */
 .ffx2hud__minigame {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 5;
 }
 
 /* --------------------------------------------------------- damage numerals */
