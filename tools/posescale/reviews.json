@@ -94,5 +94,18 @@
   "ready": "keep",
   "sleep": "keep",
   "victory": "keep"
+ },
+ "rikku-berserker": {
+  "ready": 0.55
+ },
+ "rikku-gunner": {
+  "ready": 0.65,
+  "victory": 0.8
+ },
+ "paine-samurai": {
+  "cast": 0.85
+ },
+ "paine-gunner": {
+  "attack": 0.86
  }
 }

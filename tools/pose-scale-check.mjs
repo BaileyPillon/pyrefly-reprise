@@ -15,8 +15,8 @@
  *  - a record the table does not agree with (a hand-edited table, or `measure.py table` not run after `measure.py measure --write`);
  *  - a reviewed pose whose head, at the scale the engine will use, is not within the reading's resolution (8 percent) of its idle's: either the table
  *    does not carry the reading (it is more than 12 percent from the pose's own scale), or it was edited by hand;
- *  - in a subject whose heads are reviewed, a pose with a head and no reviewed scale.
- * A subject whose heads are not reviewed yet (only its stance is registered) is listed, not failed.
+ *  - in a subject whose heads were fully reviewed (`headsComplete` in the record), a pose with no reading (a new key).
+ * A subject whose heads are not (fully) reviewed yet is listed, not failed; its stances are registered either way.
  */
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
@@ -86,7 +86,7 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
         registered++;
         if (!row || row.stanceX === undefined || Math.abs(row.stanceX - rec.stance.x) > 0.06) failures.push(`${key}: the table's stanceX (${row?.stanceX}) is not the record's (${rec.stance.x}); run measure.py table`);
       }
-      if (['reviewed', 'accepted', 'noise'].includes(rec.scaleSrc)) {
+      if (['reviewed', 'accepted', 'gated', 'noise'].includes(rec.scaleSrc)) {
         reviewed++;
         const applied = rec.scaleSrc !== 'noise';
         const effective = applied ? row?.scale : rec.current; // 'noise': the pose keeps the scale it has (the sidecar's, or the KO table's)
@@ -97,6 +97,8 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
         } else if (!applied) {
           const res = records.resolution ?? TOLERANCE;
           if (!(rec.reading > 0) || !(rec.current > 0) || Math.abs(rec.reading / rec.current - 1) > res + 1e-6) failures.push(`${key}: the reading (${rec.reading}) is not within ${res * 100} percent of the pose's own scale (${rec.current}); it must be applied (measure.py measure --write)`);
+        } else if (rec.scaleSrc === 'gated') {
+          if (!(rec.stature >= 0.595)) failures.push(`${key}: gated to the stature floor but its stature is ${rec.stature}`);
         } else if (rec.head && idleBox && effective) {
           const ratio = (size(rec.head) * effective) / size(idleBox);
           if (Math.abs(ratio - 1) > 0.02) failures.push(`${key}: head at the scale the engine uses (${effective}) is x${ratio.toFixed(3)} of the idle's (the record's own reading says it should be x1.0)`);
@@ -107,7 +109,8 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
       if (pose !== 'idle' && rec.scaleSrc !== 'unreviewed') withHead++;
     }
     const nonIdle = files.filter((p) => p !== 'idle' && !sub.poses[p]?.skip).length;
-    if (withHead > 0 && withHead < nonIdle) failures.push(`${subject}: heads reviewed for ${withHead} of ${nonIdle} poses; review the rest (or none)`);
+    if (sub.headsComplete === true && withHead < nonIdle) failures.push(`${subject}: its heads were fully reviewed and ${nonIdle - withHead} pose(s) are not (a new key?): read them, then measure.py measure --write`);
+    else if (withHead > 0 && withHead < nonIdle) notes.push(`${subject}: heads reviewed for ${withHead} of ${nonIdle} poses`);
     summary.push({ subject, poses: files.length, reviewed, registered });
     if (withHead === 0) notes.push(`${subject}: heads not reviewed yet (${registered} of ${files.length} stances registered)`);
   }

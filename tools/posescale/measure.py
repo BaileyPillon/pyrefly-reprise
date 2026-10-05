@@ -1,6 +1,7 @@
 """Measure every pose of a subject: the head against the idle's head, and where the figure stands.
 
     python -s tools/posescale/measure.py tiles tidus [yuna ...] [--poses a,b] --out DIR   the review sheets (ruler tiles, 6 poses each)
+    python -s tools/posescale/measure.py pairs yuna-gunner [...] [--poses ready] --out DIR   idle beside each pose at the current scale (a quick same-size check)
     python -s tools/posescale/measure.py measure tidus [yuna ...] [--out DIR] [--write]   the table; --write merges docs/target/pose-measure.json
     python -s tools/posescale/measure.py table                                            records -> src/data/art/poseRegistration*.ts
 
@@ -26,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import pathlib
 import re
 import sys
@@ -40,6 +42,8 @@ HERE = pathlib.Path(__file__).resolve().parent
 # What a by-eye reading can resolve (about +-8 percent against rulers, +-10 on the first pass over Tidus, Wakka and Lulu). A reading within BAND of the scale the pose
 # already has is inside the noise: applying it would add as much error as it removes. It is recorded, not applied; a larger one replaces the pose's scale.
 BAND = 0.08
+# poses-0930's stature gate (D-298): a bent, hunched, kneeling or lunging pose may not be drawn smaller than this fraction of the idle's height, whatever its head says
+STATURE_GATE = 0.60
 ANCHORS_JSON = HERE / "anchors.json"
 SEEDS_JSON = HERE / "seeds.json"
 REVIEWS_JSON = HERE / "reviews.json"
@@ -170,10 +174,50 @@ def cmd_tiles(subjects: list, out: pathlib.Path, only: list | None) -> None:
         print("   poses in sheet order:", [n for n in sorted(todo, key=lambda n: (n != 'idle', n)) if todo[n]], flush=True)
 
 
+def cmd_pairs(subjects: list, out: pathlib.Path, only: list | None) -> None:
+    """Pair sheets: for each pose the subject's idle and the pose side by side at the same on-screen scale (the pose at the scale the engine uses now), the idle's
+    face box in bold and the scales that would fit a larger or smaller face labelled on it. A face that looks as big as the idle's needs no change (reviews.json "="),
+    one that fills the box labelled X needs X. The head centre is anchors.json's, else the topmost thick part of the figure (give an anchor when it misses)."""
+    import math
+
+    from PIL import Image
+
+    ann_all = L.load_json(L.SUBJECTS_JSON, {})
+    anchors_all = L.load_json(ANCHORS_JSON, {})
+    out.mkdir(parents=True, exist_ok=True)
+    cell, span = 300, 300.0
+    tiles, labels = [], []
+    for subject in subjects:
+        hb = ref_box(subject, ann_all.get(subject, {}))
+        wh = (hb[2] - hb[0], hb[3] - hb[1])
+        ic = [(hb[0] + hb[2]) / 2, (hb[1] + hb[3]) / 2]
+        for pose in L.pose_names(subject):
+            if pose == "idle" or pose.startswith("twirl-") or (only and pose not in only):
+                continue
+            p = L.Painting(subject, pose)
+            c = centre_of(p, anchors_all.get(subject, {}).get(pose), wh[1])
+            if c is None:
+                continue
+            tiles.append(S.cur_tile(subject, "idle", ic, wh, 1.0, cell=cell, idle_span=span, label=subject))
+            tiles.append(S.cur_tile(subject, pose, c, wh, current_scale(subject, pose), cell=cell, idle_span=span, label=pose))
+            labels.append(f"{subject}/{pose}")
+    cols, per = 6, 18
+    for bi in range(0, len(tiles), per):
+        chunk = tiles[bi: bi + per]
+        rows = math.ceil(len(chunk) / cols)
+        sheet = Image.new("RGB", (cols * (cell + 3), rows * (cell + 3)), (24, 24, 28))
+        for i, tl in enumerate(chunk):
+            sheet.paste(tl.convert("RGB"), ((i % cols) * (cell + 3), (i // cols) * (cell + 3)))
+        path = out / f"pairs-{bi // per + 1}.jpg"
+        sheet.save(path, quality=84)
+        print(path.name, labels[bi // 2: (bi + per) // 2], flush=True)
+
+
 def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: dict, seeds: dict, only: list[str] | None, out: pathlib.Path | None) -> dict:
     hb = ref_box(subject, ann) if ann.get("face") else [0.0, 0.0, 1.0, 1.0]
     bw, bh = hb[2] - hb[0], hb[3] - hb[1]
     proposals_cache = sam_proposals(subject, ann, seeds, only) if any(v == "ok" for v in reviews.values()) else {}
+    idle_box = L.Painting(subject, "idle").bbox
     recs: dict = {}
     idle_width = [0.0]
     idle_prone = [L.Painting(subject, "idle").prone]
@@ -208,6 +252,16 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
             scale, src = float(proposals_cache[pose]["scale"]), "accepted"
         else:
             scale, src = None, "unreviewed"
+        if src == "reviewed" and scale and not p.prone:
+            idle_h = idle_box[3] - idle_box[1]
+            ph = p.bbox[3] - p.bbox[1]
+            stature = ph * scale / idle_h
+            if stature < STATURE_GATE:
+                smin = math.ceil(STATURE_GATE * idle_h / ph * 100) / 100
+                rec["gate"] = {"reading": round(scale, 3), "stature": round(ph * smin / idle_h, 3)}
+                scale, src = smin, "gated"
+        if scale and not p.prone:
+            rec["stature"] = round((p.bbox[3] - p.bbox[1]) * scale / (idle_box[3] - idle_box[1]), 3)
         rec["scale"], rec["scaleSrc"] = (round(scale, 3) if scale else None), src
         if anchor:
             rec["anchor"] = [r1(anchor[0]), r1(anchor[1])]
@@ -250,7 +304,9 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
             ss = {k: v["stance"] for k, v in recs.items() if v.get("stance")}
             if "idle" in ss:
                 S.stance_sheet(subject, ss, facs, str(out / f"{subject}-stance.jpg"))
-    return {"game": ann.get("game"), "idleHead": [r1(v) for v in hb], "poses": recs}
+    todo = [p for p, v in recs.items() if p != "idle" and not v.get("skip")]
+    complete = bool(todo) and all(recs[p].get("scaleSrc") != "unreviewed" for p in todo)
+    return {"game": ann.get("game"), "idleHead": [r1(v) for v in hb], "headsComplete": complete, "poses": recs}
 
 
 # ---------------------------------------------------------------- the engine table
@@ -275,7 +331,7 @@ def cmd_table() -> None:
             if r.get("skip"):
                 continue
             row: dict = {}
-            if pose != "idle" and r.get("scale") and r.get("scaleSrc") in ("reviewed", "accepted"):
+            if pose != "idle" and r.get("scale") and r.get("scaleSrc") in ("reviewed", "accepted", "gated"):
                 row["scale"] = r["scale"]
             st = r.get("stance")
             if st and st.get("flag"):
@@ -312,7 +368,7 @@ def cmd_table() -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["measure", "tiles", "props", "table"])
+    ap.add_argument("cmd", choices=["measure", "tiles", "pairs", "props", "table"])
     ap.add_argument("subjects", nargs="*")
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--poses")
@@ -333,6 +389,9 @@ def main() -> None:
     if a.cmd == "tiles":
         cmd_tiles(names, out or pathlib.Path("."), only)
         return
+    if a.cmd == "pairs":
+        cmd_pairs(names, out or pathlib.Path("."), only)
+        return
     if a.cmd == "props":
         cmd_props(names, out or pathlib.Path("."), only)
         return
@@ -346,7 +405,8 @@ def main() -> None:
             old = rec["subjects"].get(s, {"poses": {}})
             if only:
                 old["poses"].update(v["poses"])
-                v = {**v, "poses": old["poses"]}
+                allp = [p for p, x in old["poses"].items() if p != "idle" and not x.get("skip")]
+                v = {**v, "poses": old["poses"], "headsComplete": bool(allp) and all(old["poses"][p].get("scaleSrc") != "unreviewed" for p in allp)}
             rec["subjects"][s] = v
         L.RECORDS_JSON.parent.mkdir(parents=True, exist_ok=True)
         L.RECORDS_JSON.write_text(json.dumps(rec, indent=1, sort_keys=True) + "\n", encoding="utf8")

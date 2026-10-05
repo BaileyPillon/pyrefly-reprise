@@ -29,6 +29,7 @@ frozen), before this branch (`?posereg=off`) and after; the head columns are the
 | I, IX | Kimahri | heads not changed (readings disagreed) | 60 to 70 px -> 0.0 |
 | IX | Lulu | heads not changed (readings disagreed) | 18 px -> 0.0 |
 | IV (FFX-2) | Yuna White Mage, Rikku Dark Knight, Paine Warrior | heads not read | 60, 55 and 23 px -> 0.0 |
+| spherechange (FFX-2) | Rikku Berserker `ready`, Rikku Gunner `ready` and `victory`, Paine Samurai `cast`, Paine Gunner `attack` | 2.00, 1.70, 1.24, 1.29 and 1.17 of the idle's head -> 1.20 (gated), 1.03, 1.00, 1.00 and 1.00 | 27, 31, 14, 16 and 8 px -> 0.0 |
 
 **The independent cross-check's swaps** (driver, from visfix; "painted box" is the silhouette's height on screen, which changes with the pose by design: a
 crouch is shorter, a raised arm taller; the rule is about the head and the feet), live 38 and r39 against this branch:
@@ -88,8 +89,8 @@ read off the rulers: a number, `"="` = the face fills the ruler drawn at the pos
 node tools/pose-scale-check.mjs                    # PASS/FAIL for every measured subject against public/art; --subjects a,b; --art <dir>; --new lists unmeasured subjects
 ```
 It fails (and says what to run) for: a painting of a measured subject with no record (a new key); a painting whose bytes changed since it was measured; a table that is
-not the record; a pose that is `upright`-by-shape but not marked; a reading more than 8 percent from the scale the engine will use that is not applied; a subject whose
-heads are reviewed for some poses and not others. `npx vitest run tests/unit/engine/pose-scale-art.test.ts` runs the same (and its rules against synthetic art; and the
+not the record; a pose that is `upright`-by-shape but not marked; a reading more than 8 percent from the scale the engine will use that is not applied; a gated pose whose stature is under the floor; a new
+key of a subject whose heads were fully reviewed. `npx vitest run tests/unit/engine/pose-scale-art.test.ts` runs the same (and its rules against synthetic art; and the
 real art when `public/art` is there). For a new key (say `yuna-warrior/ready`):
 
 ```
@@ -97,8 +98,8 @@ real art when `public/art` is there). For a new key (say `yuna-warrior/ready`):
 (write the scale into tools/posescale/reviews.json: a number, "=" or "keep")
 ... measure.py measure yuna-warrior --write ; ... measure.py table ; node tools/pose-scale-check.mjs
 ```
-A new key of a subject whose heads were never reviewed (the FFX-2 dresspheres, aeons, bosses) is registered by `measure --write` (its stance) and passes; reviewing the
-subject's heads makes every later key owe a reading.
+A new key of a subject whose heads were not fully reviewed (most FFX-2 dresspheres, aeons, bosses) is registered by `measure --write` (its stance) and passes with a note; once every pose of a
+subject has a reading (`headsComplete` in its record) every later key owes one.
 
 ## How good is it
 
@@ -117,11 +118,13 @@ subject's heads makes every later key owe a reading.
 
 ## Owed, and not done tonight
 
-- **FFX-2 dressphere heads** (24 paintings sets, 160 poses): stances registered, heads not read. A gross-outlier scan (every pose drawn at its current scale, side by side with
-  its idle; `tools/posescale` sheets) showed nothing more than about 25 percent off by eye except Rikku Berserker's `ready` (a close-up, the head about 1.8 of the idle's at
-  its 1.10); 80 of the 160 scales were set by overnight or day-pass eye guesses and are the first to check. **Across dresspheres** the idle `scale`s differ per sphere (1.09 to 1.41)
-  and the faces on screen still vary by an estimated 15 to 30 percent between a girl's spheres; equalising them changes statures (Rikku Thief's head is 1.4 to 1.7 of the others'),
-  so it needs a decision, not a guess.
+- **FFX-2 dressphere heads** (24 dresspheres, 160 poses): stances registered for all; heads read only for five poses (above). A scan of every `ready`, `follow` and
+  `victory` key (idle beside the pose at the same on-screen scale, `measure.py pairs`) and a quick look at the rest found nothing else more than about 15 percent off by eye;
+  80 of the 160 scales were set by overnight or day-pass eye guesses and are the first to check. A **reading is limited by the painting**: Rikku Berserker's `ready` and Rikku
+  Gunner's `ready` are close-ups with a head 1.7 to 2.0 of the idle's against a normal body, so no scale fits both; they carry poses-0930's stature gate (D-298: not under 0.60 of the
+  idle's height), which leaves Berserker's head 1.20 and Gunner's 1.03 at 0.60 of the height. **A re-render of those two is the real fix** (art lane). Rikku Thief is the Thief rule's (her idle's head is
+  1.4 to 1.7 of the others', poses are sized by body height) and was left. **Across dresspheres** the idle `scale`s differ per sphere (1.09 to 1.41) and the faces on screen still vary by an estimated
+  15 to 30 percent between a girl's spheres; equalising them changes statures, so it needs a decision, not a guess.
 - **Aeons and bosses** (Valefor, Ifrit, Ixion, Shiva, Bahamut, Anima, Yojimbo, Yunalesca, Seymour, Sin's parts, the Moorish...): no records, so no change; their poses share the engine's
   rule 2 (centred by PNG) and have not been measured. The tool takes any subject with a face box (`subjects.json`), or `"stance": "mass"` for a beast.
 - **Heads read but not applied**: Lulu, Kimahri, Evrae (`keep`); Auron's critical, follow, sleep and victory (`keep`); Yuna's critical and sleep; Wakka's critical and sleep.
