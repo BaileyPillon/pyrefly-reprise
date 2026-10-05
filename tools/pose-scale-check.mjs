@@ -13,7 +13,8 @@
  *  - a painting of a measured subject with no record: a new key landed (the art lane's new poses); measure it (the command is printed);
  *  - a record whose painting's bytes changed (re-rendered or re-installed): measure it again;
  *  - a record the table does not agree with (a hand-edited table, or `measure.py table` not run after `measure.py measure --write`);
- *  - a reviewed pose whose head, drawn at the table's scale, is not within 3 percent of its idle's (the rule: the same head in every pose);
+ *  - a reviewed pose whose head, at the scale the engine will use, is not within the reading's resolution (8 percent) of its idle's: either the table
+ *    does not carry the reading (it is more than 12 percent from the pose's own scale), or it was edited by hand;
  *  - in a subject whose heads are reviewed, a pose with a head and no reviewed scale.
  * A subject whose heads are not reviewed yet (only its stance is registered) is listed, not failed.
  */
@@ -24,7 +25,8 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-export const TOLERANCE = 0.03;
+/** What a ruler reading can resolve (records carry it as `resolution`): a reviewed pose's head, at the table's scale, must be within it of its idle's. */
+export const TOLERANCE = 0.08;
 
 const sha256 = (p) => createHash('sha256').update(readFileSync(p)).digest('hex');
 
@@ -84,17 +86,23 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
         registered++;
         if (!row || row.stanceX === undefined || Math.abs(row.stanceX - rec.stance.x) > 0.06) failures.push(`${key}: the table's stanceX (${row?.stanceX}) is not the record's (${rec.stance.x}); run measure.py table`);
       }
-      if (rec.scaleSrc === 'reviewed' || rec.scaleSrc === 'accepted') {
+      if (['reviewed', 'accepted', 'noise'].includes(rec.scaleSrc)) {
         reviewed++;
-        if (!row || row.scale === undefined || Math.abs(row.scale - rec.scale) > 0.0006) {
+        const applied = rec.scaleSrc !== 'noise';
+        const effective = applied ? row?.scale : rec.current; // 'noise': the pose keeps the scale it has (the sidecar's, or the KO table's)
+        if (applied && (!row || row.scale === undefined || Math.abs(row.scale - rec.scale) > 0.0006)) {
           failures.push(`${key}: the table's scale (${row?.scale}) is not the record's (${rec.scale}); run measure.py table`);
-        } else if (rec.head && idleBox) {
-          const ratio = (size(rec.head) * row.scale) / size(idleBox);
-          if (Math.abs(ratio - 1) > TOLERANCE) failures.push(`${key}: head at the table's scale is x${ratio.toFixed(3)} of the idle's (limit ${TOLERANCE * 100} percent)`);
+        } else if (!applied && row?.scale !== undefined) {
+          failures.push(`${key}: the record keeps the pose's own scale but the table has one (${row.scale}); run measure.py table`);
+        } else if (!applied) {
+          const res = records.resolution ?? TOLERANCE;
+          if (!(rec.reading > 0) || !(rec.current > 0) || Math.abs(rec.reading / rec.current - 1) > res + 1e-6) failures.push(`${key}: the reading (${rec.reading}) is not within ${res * 100} percent of the pose's own scale (${rec.current}); it must be applied (measure.py measure --write)`);
+        } else if (rec.head && idleBox && effective) {
+          const ratio = (size(rec.head) * effective) / size(idleBox);
+          if (Math.abs(ratio - 1) > 0.02) failures.push(`${key}: head at the scale the engine uses (${effective}) is x${ratio.toFixed(3)} of the idle's (the record's own reading says it should be x1.0)`);
         }
-      } else if (pose !== 'idle' && rec.head === undefined && rec.scaleSrc === 'unreviewed') {
-        /* head not reviewed: listed through the subject's summary */
       }
+      if (rec.scaleSrc === 'kept') reviewed++;
       if (rec.prone && rec.standing && pose !== 'ko' && !row?.upright) failures.push(`${key}: a standing pose wider than tall must be marked upright in the table`);
       if (pose !== 'idle' && rec.scaleSrc !== 'unreviewed') withHead++;
     }

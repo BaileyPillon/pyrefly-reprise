@@ -12,10 +12,13 @@ overview sheet); the reviewer reads off the ruler the head fills snugly and writ
 the pose's `scale` (PaintedScale.ts): the idle's pixel scale times it brings the pose's head to the idle's. `measure` also
 draws the normalised sheet (every head at its recorded scale in the idle's rectangle) to confirm the whole set by eye.
 
-The stance. The middle of the lowest thick part of the silhouette (thin blades and staffs are opened away): automatic, shown
-on the stance sheet, with a hand `stance` in overrides.json when a weapon's tip is lower than the boots.
+A reading within 8 percent of the scale the pose already has (its sidecar's, or the KO table's) is inside what a ruler reading can tell
+apart: it is recorded (`reading`) and not applied (`scaleSrc: noise`); a larger one replaces the pose's scale (`reviewed`).
 
-Hand input (tools/posescale/): subjects.json (subject -> `game`, `face`), anchors.json (subject -> pose -> [x, y]), reviews.json
+The stance. The middle of the support under the figure (every opaque pixel in the 4 percent of its height above the lowest thick row, thin
+soles included, outliers trimmed): automatic, shown on the stance sheet, with a hand `stance` in overrides.json when a weapon's tip is lower than the boots.
+
+Hand input (tools/posescale/): subjects.json (subject -> `game`, `face`, `stance`: "mass" for a beast with no feet), anchors.json (subject -> pose -> [x, y]), reviews.json
 (subject -> pose -> scale), overrides.json (subject -> pose -> `stance` [x, row], `standing` true for a pose wider than tall that
 is not lying down, `skip`). Run with ComfyUI's embedded python (numpy, scipy, PIL; see ps_lib.py).
 """
@@ -24,6 +27,7 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
+import re
 import sys
 
 import numpy as np
@@ -33,6 +37,9 @@ import ps_lib as L  # noqa: E402
 import ps_sheets as S  # noqa: E402
 
 HERE = pathlib.Path(__file__).resolve().parent
+# What a by-eye reading can resolve (about +-8 percent against rulers, +-10 on the first pass over Tidus, Wakka and Lulu). A reading within BAND of the scale the pose
+# already has is inside the noise: applying it would add as much error as it removes. It is recorded, not applied; a larger one replaces the pose's scale.
+BAND = 0.08
 ANCHORS_JSON = HERE / "anchors.json"
 SEEDS_JSON = HERE / "seeds.json"
 REVIEWS_JSON = HERE / "reviews.json"
@@ -47,6 +54,23 @@ def engine_baseline(p: L.Painting) -> float:
 
 def r1(v) -> float:
     return round(float(v), 1)
+
+
+_KO = None
+
+
+def current_scale(subject: str, pose: str) -> float:
+    """The `scale` the engine gives this painting without the measured table: the KO table's for a listed KO, else the sidecar's, else 1."""
+    global _KO
+    if _KO is None:
+        src = (L.REPO / "src" / "engine" / "KoPoseScale.ts").read_text(encoding="utf8")
+        block = src[src.index("KO_POSE_SCALE"):]
+        _KO = {m_.group(1).strip("'"): float(m_.group(2)) for m_ in re.finditer(r"^\s*('?[\w-]+'?):\s*([0-9.]+),", block, re.M)}
+    if pose == "ko" and subject in _KO:
+        return _KO[subject]
+    side = L.load_json(L.CHAR / subject / f"{pose}.json", {})
+    v = side.get("scale")
+    return float(v) if isinstance(v, (int, float)) and v > 0 else 1.0
 
 
 def centre_of(p: L.Painting, hand: list | None, bh: float):
@@ -159,16 +183,25 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
         o = ov.get(pose, {})
         p = L.Painting(subject, pose)
         rec: dict = {"sha": L.sha256_file(p.path), "size": [p.w, p.h], "prone": p.prone, "baseline": r1(engine_baseline(p))}
-        if o.get("skip"):
-            rec["skip"] = o["skip"]
+        if o.get("skip") or pose.startswith("twirl-"):
+            rec["skip"] = o.get("skip") or "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
             recs[pose] = rec
             continue
         anchor = [(hb[0] + hb[2]) / 2, (hb[1] + hb[3]) / 2] if pose == "idle" else centre_of(p, anchors.get(pose), bh)
         review = reviews.get(pose)
         if pose == "idle":
             scale, src = 1.0, "reference"
+        elif review == "=":  # read against rulers drawn at the pose's current scale: the face fills the current ruler, so the current scale stands
+            cur = current_scale(subject, pose)
+            rec["reading"], rec["current"] = round(cur, 3), round(cur, 3)
+            scale, src = cur, "noise"
         elif isinstance(review, (int, float)):
-            scale, src = float(review), "reviewed"
+            cur = current_scale(subject, pose)
+            rec["reading"], rec["current"] = round(float(review), 3), round(cur, 3)
+            if abs(float(review) / cur - 1) > BAND:
+                scale, src = float(review), "reviewed"
+            else:
+                scale, src = cur, "noise"  # the reading agrees with what the pose already has, to within what a reading can tell
         elif review == "keep":  # measured, the two readings (hair mass, face) disagree: the sidecar's own scale stays
             scale, src = None, "kept"
         elif review == "ok" and proposals_cache.get(pose, {}).get("scale"):
@@ -178,8 +211,9 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
         rec["scale"], rec["scaleSrc"] = (round(scale, 3) if scale else None), src
         if anchor:
             rec["anchor"] = [r1(anchor[0]), r1(anchor[1])]
-            if scale:
-                rec["head"] = [r1(anchor[0] - bw / scale / 2), r1(anchor[1] - bh / scale / 2), r1(anchor[0] + bw / scale / 2), r1(anchor[1] + bh / scale / 2)]
+            hs = rec.get("reading") or scale
+            if hs:
+                rec["head"] = [r1(anchor[0] - bw / hs / 2), r1(anchor[1] - bh / hs / 2), r1(anchor[0] + bw / hs / 2), r1(anchor[1] + bh / hs / 2)]
         # ---- stance (standing poses only: a prone body rests by its own rule, PaintedRest.ts)
         # a pose wider than tall is lying down only when it is a KO: a standing lunge of a figure whose idle is upright is standing
         standing = (not p.prone) or o.get("standing") is True or (pose != "ko" and not idle_prone[0])
@@ -189,13 +223,20 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
         elif "stance" in o:
             rec["stance"] = {"x": o["stance"][0], "row": o["stance"][1], "src": "hand"}
         else:
-            st = L.stance_from_hem(p)
-            rec["stance"] = {"x": r1(st["x"]), "row": r1(st["row"]), "x0": r1(st["x0"]), "x1": r1(st["x1"]), "src": "silhouette"} if st else None
+            mass = ann.get("stance") == "mass"
+            st = L.stance_from_mass(p) if mass else L.stance_from_hem(p)
+            rec["stance"] = {"x": r1(st["x"]), "row": r1(st["row"]), "x0": r1(st["x0"]), "x1": r1(st["x1"]), "src": "mass" if mass else "silhouette"} if st else None
             if rec["stance"] and pose == "idle":
                 idle_width[0] = st["x1"] - st["x0"]
             elif rec["stance"] and idle_width[0]:
                 ratio = (st["x1"] - st["x0"]) / idle_width[0]
-                if ratio > 6.0:  # a ground glyph or an effect in the lowest band: the stance is not trusted (a narrow one, a spinning figure's, is fine)
+                if ratio > 6.0 and not mass:  # a ground glyph or an effect in the lowest band: open the silhouette harder (a thin ring goes, the foot stays)
+                    st2 = L.stance_from_hem(p, 0.05)
+                    ratio2 = (st2["x1"] - st2["x0"]) / idle_width[0] if st2 else 99
+                    if st2 and ratio2 <= 6.0:
+                        st, ratio = st2, ratio2
+                        rec["stance"] = {"x": r1(st["x"]), "row": r1(st["row"]), "x0": r1(st["x0"]), "x1": r1(st["x1"]), "src": "silhouette(opened harder)"}
+                if ratio > 6.0:
                     rec["stance"]["flag"] = f"width x{ratio:.2f} of the idle's"
         recs[pose] = rec
         stn = rec["stance"]
@@ -234,7 +275,7 @@ def cmd_table() -> None:
             if r.get("skip"):
                 continue
             row: dict = {}
-            if pose != "idle" and r.get("scale"):
+            if pose != "idle" and r.get("scale") and r.get("scaleSrc") in ("reviewed", "accepted"):
                 row["scale"] = r["scale"]
             st = r.get("stance")
             if st and st.get("flag"):
@@ -300,6 +341,7 @@ def main() -> None:
         result[s] = measure_subject(s, subjects.get(s, {}), overrides.get(s, {}), reviews.get(s, {}), anchors.get(s, {}), seeds.get(s, {}), only, out)
     if a.write:
         rec = L.load_json(L.RECORDS_JSON, {"version": 1, "metric": "head box read against the idle's by rulers (sqrt(width*height)); stance from the silhouette", "subjects": {}})
+        rec["resolution"] = BAND  # what a ruler reading can resolve; the check's tolerance for a reviewed head
         for s, v in result.items():
             old = rec["subjects"].get(s, {"poses": {}})
             if only:

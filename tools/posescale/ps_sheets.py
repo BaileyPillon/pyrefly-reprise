@@ -219,3 +219,50 @@ def ruler_sheet(subject: str, centres: dict, ref_wh: tuple, out_prefix: str, col
         sheet.save(out, quality=88)
         outs.append(out)
     return outs
+
+
+CUR_FACTORS = (0.7, 0.8, 0.9, 1.0, 1.12, 1.25, 1.4)
+
+
+def cur_tile(subject: str, pose: str, centre: list, ref_wh: tuple, cur: float, cell: int = 330, idle_span: float = 400.0, label: str = "") -> Image.Image:
+    """A pose's head region drawn at the size the engine draws it now (the idle's pixel scale times the pose's current scale `cur`), at a fixed
+    zoom of `cell / idle_span` tile pixels per idle pixel, so a face can be compared with the idle's directly. The bold box is the idle's face box;
+    the others are that box grown or shrunk for the scale that would make the pose's face fit them (labelled with that scale). A face that fills the
+    bold box like the idle's fills its own needs no change; one that fills the box labelled X needs scale X."""
+    bg = _bg(subject, pose)
+    bw, bh = ref_wh
+    z = cell / idle_span  # tile px per idle px
+    pz = z * cur  # tile px per painting px of this pose
+    side = cell / pz  # window side in this pose's painting px
+    cx, cy = centre
+    x0, y0 = cx - side / 2, cy - side / 2
+    pad = Image.new("RGBA", (bg.width + 2400, bg.height + 2400), (60, 60, 66, 255))
+    pad.paste(bg, (1200, 1200))
+    crop = pad.crop((int(x0) + 1200, int(y0) + 1200, int(x0) + 1200 + max(2, int(side)), int(y0) + 1200 + max(2, int(side)))).resize((cell, cell), Image.LANCZOS)
+    d = ImageDraw.Draw(crop)
+    for i, k in enumerate(CUR_FACTORS):
+        w, h = bw * z / k, bh * z / k  # a face f = 1/k times the idle's on screen fills this box
+        r = [cell / 2 - w / 2, cell / 2 - h / 2, cell / 2 + w / 2, cell / 2 + h / 2]
+        col = RULER_COLOURS[min(9, i + 1)] if abs(k - 1.0) > 1e-6 else (255, 255, 255)
+        d.rectangle(r, outline=col, width=3 if abs(k - 1.0) < 1e-6 else 1)
+        d.text((r[0] + 2, r[1] - 9), f"{cur * k:.2f}", fill=col)
+    d.rectangle([0, 0, cell, 14], fill=(20, 20, 24))
+    d.text((3, 1), f"{label or pose} cur {cur:.2f}", fill=(255, 255, 0))
+    return crop
+
+
+def cur_sheet(subject: str, items: list, out_prefix: str, cols: int = 4, rows: int = 3, cell: int = 330) -> list:
+    """items: [(pose, centre, ref_wh, cur)] -> sheets of cols x rows tiles."""
+    tiles = [cur_tile(subject, p, c, wh, cur, cell=cell) for p, c, wh, cur in items]
+    per = cols * rows
+    outs = []
+    for bi in range(0, len(tiles), per):
+        chunk = tiles[bi: bi + per]
+        r = math.ceil(len(chunk) / cols)
+        sheet = Image.new("RGB", (cols * (cell + 3), r * (cell + 3)), (24, 24, 28))
+        for i, t in enumerate(chunk):
+            sheet.paste(t.convert("RGB"), ((i % cols) * (cell + 3), (i // cols) * (cell + 3)))
+        out = f"{out_prefix}-{bi // per + 1}.jpg"
+        sheet.save(out, quality=84)
+        outs.append(out)
+    return outs

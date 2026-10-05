@@ -7,8 +7,8 @@ the idle's pixel scale times a per-pose `scale` (PaintedScale.ts); this module i
 
 What is automatic and what is read by eye (there is no face detector on this machine and nothing may be downloaded):
 
-- STANCE (automatic). The middle of the lowest thick part of the silhouette (thin blades, staffs and tails are opened away): where the
-  figure stands. `stance_from_hem`. Shown on a stance sheet and checked by eye; a hand `stance` overrides it.
+- STANCE (automatic). The middle of the support under the figure: every opaque pixel in the 4 percent of its height above the lowest thick row
+  (thin soles included, outliers trimmed). `stance_from_hem`. Shown on a stance sheet and checked by eye; a hand `stance` overrides it.
 - HEAD SCALE (read by eye, SAM helps). The reference is the idle's face box (hand, subjects.json). `measure.py tiles` draws every pose's
   head at one fixed zoom with ten concentric rulers (the idle's box at scales 0.60 to 1.85) and the reviewer writes the scale of the
   ruler the face fills (reviews.json). `measure.py props` adds SAM 2.1 (small, D:/Tools/sam2, as tools/gen/rig-sam.py) cutting the head
@@ -200,15 +200,25 @@ def opened(p: Painting, frac: float = 0.022):
 
 
 def stance_from_hem(p: Painting, frac: float = 0.02):
-    """The middle of the lowest thick part of the silhouette (boots or a hem; thin blades, staffs and tails are opened away)."""
+    """Where the figure stands: the middle of the support under it. The lowest row of the silhouette with thin parts (blades, staffs, tails)
+    opened away says where the soles are; the support is then every opaque pixel, thin soles and all, in the 4 percent of the figure's height above
+    that row (and a few rows below it), and its middle is the midpoint of the 3rd and 97th percentile of those pixels' columns (a blade crossing the legs
+    is a few pixels and drops out). Two feet, one foot, a hem and a ground glyph all give the middle of what is on the ground."""
     o = opened(p, frac)
     rows = np.nonzero(o.sum(1) >= 2)[0]
     if len(rows) == 0:
         return None
     fb = int(rows.max())
-    band = max(4, int(0.03 * (p.bbox[3] - p.bbox[1])))
-    cols = np.nonzero(o[max(0, fb - band): fb + 1].any(0))[0]
-    return dict(x=float((cols.min() + cols.max() + 1) / 2), row=float(fb + 1), x0=float(cols.min()), x1=float(cols.max() + 1), area=0)
+    H = p.bbox[3] - p.bbox[1]
+    band = max(6, int(0.04 * H))
+    y0, y1 = max(0, fb - band), min(p.h, fb + 8)
+    sub = p.alpha[y0:y1]
+    counts = sub.sum(0).astype(np.float64)
+    if counts.sum() <= 0:
+        return None
+    cum = np.cumsum(counts) / counts.sum()
+    x0, x1 = int(np.searchsorted(cum, 0.03)), int(np.searchsorted(cum, 0.97))
+    return dict(x=float((x0 + x1 + 1) / 2), row=float(fb + 1), x0=float(x0), x1=float(x1 + 1), area=0)
 
 
 def auto_idle_seed(p: Painting):
@@ -243,3 +253,13 @@ def auto_top_anchor(p: Painting):
     """The hair-top centre proposal for any pose: the top of the topmost thick part of the silhouette and its centre column."""
     a = auto_idle_seed(p)
     return None if a is None else [a["x"], a["top"]]
+
+
+def stance_from_mass(p: Painting, frac: float = 0.55):
+    """A beast with no feet (Evrae's coil): the centre of the silhouette's lower `frac`, its soles the lowest row. Thin parts count here: the whole body is the base."""
+    ys, xs = np.nonzero(p.alpha)
+    if len(ys) == 0:
+        return None
+    top, bot = int(ys.min()), int(ys.max())
+    sel = ys >= top + (1 - frac) * (bot - top)
+    return dict(x=float(xs[sel].mean()), row=float(bot + 1), x0=float(xs[sel].min()), x1=float(xs[sel].max() + 1), area=0)
