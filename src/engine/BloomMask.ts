@@ -49,12 +49,8 @@
  */
 
 import {
-  AddEquation,
-  AdditiveBlending,
   CustomBlending,
-  DstAlphaFactor,
   NormalBlending,
-  OneFactor,
   OneMinusSrcAlphaFactor,
   SrcAlphaFactor,
   Vector2,
@@ -158,30 +154,6 @@ export function maskBloomHighPass(pass: UnrealBloomPass): void {
 export function setFigureBloomMask(pass: UnrealBloomPass, strength: number): void {
   maskBloomHighPass(pass);
   pass.materialHighPassFilter.uniforms['figureMask']!.value = Math.min(1, Math.max(0, strength));
-}
-
-/**
- * Release 39 colour fidelity (`figureTrue.ts`): the receiving side of the mask. The mask above keeps a figure from being a bloom SOURCE; the bloom
- * the backdrop throws still lands on the figure (the pass adds it to every pixel), a veil that lifts the figure's blacks. With this on the pass adds
- * its light scaled by the frame's alpha (`src * dstAlpha + dst`), so where a painted plane has written 0 nothing lands; the frame alpha itself is left
- * as it was. Off puts three's own additive blend back.
- */
-export function maskBloomReceiver(pass: UnrealBloomPass, on: boolean): void {
-  const m = pass.blendMaterial;
-  if (on) {
-    m.premultipliedAlpha = false;
-    m.blending = CustomBlending;
-    m.blendEquation = AddEquation;
-    m.blendEquationAlpha = AddEquation;
-    m.blendSrc = DstAlphaFactor;
-    m.blendDst = OneFactor;
-    m.blendSrcAlpha = ZeroFactor;
-    m.blendDstAlpha = OneFactor;
-  } else {
-    m.premultipliedAlpha = true;
-    m.blending = AdditiveBlending;
-  }
-  m.needsUpdate = true;
 }
 
 /**

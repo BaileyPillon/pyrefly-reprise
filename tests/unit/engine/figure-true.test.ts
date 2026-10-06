@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AdditiveBlending, CustomBlending, DstAlphaFactor, OneFactor, Vector2, ZeroFactor } from 'three';
+import { Vector2 } from 'three';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { maskBloomHighPass } from '../../../src/engine/BloomMask.ts';
@@ -62,6 +62,7 @@ describe('figureTrue', () => {
   it('reads the figure from the frame alpha (the bloom mask), gates on the switch, and runs before the grain and the vignette', () => {
     const src = GradeShader.fragmentShader;
     expect(src).toContain('uniform float figureTrue;');
+    expect(src).toContain('rawc - (bloomRemove > 0.0 ? texture2D(tBloom, vUv).rgb : vec3(0.0))');
     expect(src).toContain('figureTrue > 0.0 ? (1.0 - clamp(texel.a, 0.0, 1.0)) * figureTrue : 0.0');
     const at = src.indexOf('if (figm > 0.0)');
     expect(at).toBeGreaterThan(src.indexOf('lookAmount > 0.0'));
@@ -86,40 +87,39 @@ describe('figureTrue', () => {
     expect(rimQuiet(-3)).toBe(1);
   });
 
-  it('moves the grade exemption, the bloom receiving mask and the figure bloom mask together, and puts all three back at 0', () => {
+  it('moves the grade exemption, the bloom it gives back and the figure bloom mask together, and puts all three back at 0', () => {
     const grade = new ShaderPass(GradeShader);
     const bloom = new UnrealBloomPass(new Vector2(64, 64), 1, 0.5, 0.5);
     maskBloomHighPass(bloom);
     const host = { gradePass: grade, bloomPass: bloom, palette: { figureBloomMask: 0.7 } };
     const mask = (): number => bloom.materialHighPassFilter.uniforms['figureMask']!.value as number;
+    const remove = (): number => grade.uniforms['bloomRemove']!.value as number;
     const blend = bloom.blendMaterial;
     const before = { blending: blend.blending, premultipliedAlpha: blend.premultipliedAlpha };
 
     applyFigureTrue(host, 0);
     expect(figureTrueOf(host)).toBe(0);
     expect(mask()).toBe(0.7);
-    expect(blend.blending).toBe(AdditiveBlending);
-    expect({ blending: blend.blending, premultipliedAlpha: blend.premultipliedAlpha }).toEqual(before); // three's own blend, untouched
+    expect(remove()).toBe(0);
 
     applyFigureTrue(host, 1);
     expect(figureTrueOf(host)).toBe(1);
     expect(mask()).toBe(1);
-    expect(blend.blending).toBe(CustomBlending);
-    expect(blend.blendSrc).toBe(DstAlphaFactor); // the bloom's light scaled by the frame alpha ...
-    expect(blend.blendDst).toBe(OneFactor);
-    expect(blend.blendSrcAlpha).toBe(ZeroFactor); // ... and the frame alpha (the mask) left exactly as it was
-    expect(blend.blendDstAlpha).toBe(OneFactor);
+    expect(remove()).toBe(1);
+    // the grade reads the bloom's last composite target, the light the pass adds to the frame
+    expect(grade.uniforms['tBloom']!.value).toBe(bloom.renderTargetsHorizontal[0]!.texture);
 
     applyFigureTrue(host, 0.4);
     expect(figureTrueOf(host)).toBeCloseTo(0.4, 12);
-    expect(blend.blending).toBe(CustomBlending);
+    expect(remove()).toBe(1);
 
     applyFigureTrue(host, 7);
     expect(figureTrueOf(host)).toBe(1);
     applyFigureTrue(host, -1);
     expect(figureTrueOf(host)).toBe(0);
     expect(mask()).toBe(0.7);
-    expect({ blending: blend.blending, premultipliedAlpha: blend.premultipliedAlpha }).toEqual(before);
+    expect(remove()).toBe(0);
+    expect({ blending: blend.blending, premultipliedAlpha: blend.premultipliedAlpha }).toEqual(before); // three's own additive blend is never touched
     bloom.dispose();
     grade.dispose();
   });
