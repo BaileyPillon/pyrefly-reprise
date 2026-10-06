@@ -56,7 +56,8 @@ html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhu
   transform-origin: left top;
 }
 /* The G chip sits on top of its panel: it grows upwards, off the panel. */
-html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud__stage > .sgd > .sgd__toggle {
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud__stage > .sgd > .sgd__toggle,
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud__stage > .sgd > .sgd__keys {
   transform-origin: left bottom;
 }
 
