@@ -23,7 +23,7 @@ import { DECISIONS_KEPT, RETRY_S, stepPending, type Decision, type Gate, type Pe
  * a small push-in on the girl from the battle camera plays instead (`pushIn.ts`), holding the same minimum and handed back the same ways.
  *
  * Round 21 (PR-0314, stalled over three reviews; FFX-2 only): the shot was decided on one frame, so any closed gate on it was final and
- * untraced. A change now WAITS up to 0.6 s for a clean moment (`shotPending.ts`), starts at the change's first frame (`HeldIn.begun`,
+ * untraced. A change now WAITS up to 0.6 s for a clean moment (1.0 s while an enemy's action in flight holds it, B3; `shotPending.ts`), starts at the change's first frame (`HeldIn.begun`,
  * from the twirl slot) instead of after the new outfit has loaded, and every outcome is recorded with its gate (`decisions`). The rules
  * (no menu, nobody else acting, the strict framing) are as they were.
  *
@@ -156,7 +156,7 @@ export class HeldShots {
       // A change starts waiting for its shot the frame its outfit starts to load (or, with no twirl slot, the frame the new subject lands).
       const first = o.begun?.find((a) => a.visible && a.facing >= 0 && !this.recent(a)) ?? changed.find((a) => !this.recent(a));
       if (first && !this.held) {
-        this.pending = { who: first, since: this.time, nextTry: this.time, searches: 0, last: null };
+        this.pending = { who: first, since: this.time, nextTry: this.time, searches: 0, last: null, foe: false };
         this.seen.set(first, this.time);
       } else if (first) this.seen.set(first, this.time);
       if (this.pending) this.tickPending(o);
@@ -180,6 +180,11 @@ export class HeldShots {
   /** Does anyone other than `who` act now (an action's first frames: a lunge, run, cast or strike in flight)? */
   private actingElsewhere(actors: readonly Actor[], who: Actor): boolean {
     return actors.some((a) => a !== who && a.visible && (a.lifeState === 'act' || (a.facing < 0 && !stillActor(a))));
+  }
+
+  /** Is an enemy mid-action now (a cast, a lunge, a strike in flight)? B3's longer wait is for these only. */
+  private foeActing(actors: readonly Actor[]): boolean {
+    return actors.some((a) => a.visible && a.facing < 0 && (a.lifeState === 'act' || !stillActor(a)));
   }
 
   private handBack(): void {
@@ -256,9 +261,12 @@ export class HeldShots {
       this.pending = null; // a shot is already up
       return;
     }
-    const step = stepPending(p, { time: this.time, scOn: o.scOn, menu: o.menu, ready: o.ready, master: !!o.master, acting: this.actingElsewhere(o.actors, p.who) });
+    const acting = this.actingElsewhere(o.actors, p.who);
+    const foeActing = acting && this.foeActing(o.actors);
+    const step = stepPending(p, { time: this.time, scOn: o.scOn, menu: o.menu, ready: o.ready, master: !!o.master, acting, foeActing });
     if (step.kind === 'wait') {
       p.last = step.gate;
+      p.foe = step.gate === 'acting' && foeActing; // B3: an enemy's action in flight gets the longer wait
       return;
     }
     if (step.kind === 'drop') return this.finish('skipped', step.gate);

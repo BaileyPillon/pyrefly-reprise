@@ -322,10 +322,12 @@ export class BattleMoments {
     this.revealed.add(bossId);
     if (this.skipping) return;
 
-    const rig = this.rigFor(bossId);
+    // FFX-2 desktop: a reveal that would pull a girl out of the frame goes less far (`ShotRules.reveal`, B5); everywhere else it is as it was.
+    const shot = this.shots.reveal(this.rigFor(bossId), MOMENT_PUSH.reveal);
+    const rig = shot.rig;
     const g = sfxGame(); // D-302: the boss's own roar in a voiced chapter (`sfxV2/weapons.ts`), else today's
     this.cue((g && roarFor(g, bossId)) || 'boss-roar', 0.9);
-    const push = this.cam.push?.(fittedPush(this.deps.stage, this.cam, rig, MOMENT_PUSH.reveal), this.ms(MOMENT_TIMING.revealPush));
+    const push = this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.revealPush));
     const plate = bossName
       ? this.deps.moments?.nameSlab({
           title: bossName,

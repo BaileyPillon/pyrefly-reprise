@@ -120,6 +120,12 @@ export interface CameraPort {
    * Optional and additive; without it the phone keeps the desktop rigs.
    */
   fitSlice?(rig: string, slice: number, subjects: ReadonlyArray<{ actor: ActorHandle; min: number }>, top?: number): boolean;
+  /**
+   * Register (or refresh) a rig that stands `t` (0..1) of the way from rig `from` to rig `to` (position, aim and lens) and answer its name; null
+   * when either rig is missing. Optional and additive (release 39.1, B5): the FFX-2 boss reveal asks for the furthest push on the boss that still
+   * keeps every girl whole (`ShotRules.reveal`). It moves nothing by itself.
+   */
+  blendRig?(from: string, to: string, t: number): string | null;
   readonly rigNames: string[];
   readonly rigName: string;
 }

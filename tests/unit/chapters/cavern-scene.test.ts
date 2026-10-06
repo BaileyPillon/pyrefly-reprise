@@ -251,6 +251,22 @@ describe('cavern-stolen-fayth — the night-sakura arrival (O-4 A, D-072)', () =
     expect(sakuraArrivalAt(0).yojimbo).toBe(0);
   });
 
+  it('B8 (release 39.1, FFX only): the whole arrival is over by 3.6 s, Yojimbo and Daigoro stay, and the moment is still seen for about two seconds', () => {
+    const T = SAKURA_ARRIVAL_MS;
+    expect(T.end).toBeLessThanOrEqual(3600);
+    for (const k of ['nightOut', 'treeOut', 'petalsOut'] as const) expect(T[k][1]).toBeLessThanOrEqual(3600);
+    expect(sakuraArrivalAt(3600)).toEqual({ night: 0, tree: 0, petals: 0, daigoro: 1, yojimbo: 1, done: true });
+    expect(sakuraArrivalAt(3599).done).toBe(false);
+    // the coming in is as approved: Yojimbo whole at 1.3 s, the tree whole by 1.1 s, and all of it held for at least a second
+    expect(sakuraArrivalAt(1300).yojimbo).toBe(1);
+    expect(sakuraArrivalAt(1100).tree).toBe(1);
+    expect(sakuraArrivalAt(2150)).toMatchObject({ night: 1, tree: 1, petals: 1 });
+    // the going out is a fade, not a cut: strictly falling between the first and last beat, each at least a second long
+    for (const k of ['nightOut', 'treeOut', 'petalsOut'] as const) expect(T[k][1] - T[k][0]).toBeGreaterThanOrEqual(1000);
+    const tree = [2300, 2600, 2900, 3200, 3500].map((ms) => sakuraArrivalAt(ms).tree);
+    for (let i = 1; i < tree.length; i++) expect(tree[i]!).toBeLessThan(tree[i - 1]!);
+  });
+
   it('forms the night, holds it, and gives the fight back the cold chamber', () => {
     const mid = sakuraArrivalAt(2000);
     expect(mid.night).toBe(1);

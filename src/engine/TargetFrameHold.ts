@@ -131,6 +131,11 @@ export class HoldableCamera implements CameraPort {
     this.inner.addRig?.(name, rig);
   }
 
+  /** Forwarded untouched: registering a blended rig moves nothing, held or not (B5). */
+  blendRig(from: string, to: string, t: number): string | null {
+    return this.inner.blendRig?.(from, to, t) ?? null;
+  }
+
   get rigNames(): string[] {
     return this.inner.rigNames;
   }

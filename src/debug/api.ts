@@ -16,6 +16,7 @@ import { registerSceneScreens } from './sceneScreens.ts';
 // Results agent: fixture-driven results panels, `goto('results-victory')` etc.
 import { registerResultsDemoScreens } from './resultsDemo.ts';
 import { cameraPreset, setCameraPreset } from '../engine/CameraPreset.ts';
+import { buildInfo } from '../app/markRecorder.ts';
 import {
   battleHelpOn,
   coachingAllowed,
@@ -55,6 +56,8 @@ export interface GotoChapterOptions {
  */
 export interface PyreflyDebugApi {
   readonly version: string;
+  /** The build: the short commit and the bundle file (release 39.1, N1: what a marked moment records and `tools/replay-mark.mjs` checks). */
+  build(): { sha: string; bundle: string };
   readonly app: App;
   /** Name of the active screen. */
   screen(): string;
@@ -368,6 +371,7 @@ export function installDebugApi(app: App): PyreflyDebugApi {
 
   const api: PyreflyDebugApi = {
     version: VERSION,
+    build: buildInfo,
     app,
     screen: () => app.screenName,
     goto: (screenName: string) => app.goto(screenName),

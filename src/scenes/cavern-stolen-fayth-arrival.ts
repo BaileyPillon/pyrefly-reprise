@@ -59,7 +59,15 @@ export const SAKURA_TREE_ROOT = 880 / 1024;
 /** The plate's edge mask lives in `cavern-sakura-mask.ts` (PR-0184); re-exported for its callers. */
 export { sakuraEdgeAlpha } from './cavern-sakura-mask.ts';
 
-/** The arrival's beats, in ms from the opening shot (the scene's `intro` rig). */
+/**
+ * The arrival's beats, in ms from the opening shot (the scene's `intro` rig).
+ *
+ * Release 39.1, B8 (Bailey, 2026-10-05, "all of your recommendations"; FFX only: Chapter IX is FFX's): the arrival is over by 3.6 s. It used to
+ * begin to fade at 3.6 s and end at 5.8 s, so the blue tree and the night were still on the chamber when the first command menu opened for a
+ * player who skips the scene (whose compressed copy of this timeline runs at twice the speed, `HURRIED_ARRIVAL_SPEED`). The coming in is
+ * untouched (Yojimbo whole at 1.3 s, as the boss push lands on him); the going out now runs 2.2 to 3.6 s. The timings are ours, the sheet is a
+ * still; Bailey's O-4 pick is the moment itself (night, one blue tree, Daigoro first, Yojimbo steps out), which is all still there.
+ */
 export const SAKURA_ARRIVAL_MS = {
   nightIn: [0, 700],
   treeIn: [250, 1100],
@@ -67,10 +75,10 @@ export const SAKURA_ARRIVAL_MS = {
   daigoroIn: [400, 800],
   // In before the opening's boss push lands on him (`BattleMoments.revealBoss`, about 1.3 s in).
   yojimboIn: [650, 1300],
-  nightOut: [3600, 5200],
-  treeOut: [3700, 5200],
-  petalsOut: [4000, 5800],
-  end: 5800,
+  nightOut: [2200, 3600],
+  treeOut: [2300, 3600],
+  petalsOut: [2500, 3600],
+  end: 3600,
 } as const;
 
 /** One frame of the arrival: every value 0..1. */
@@ -106,9 +114,9 @@ export function sakuraArrivalAt(ms: number): SakuraArrivalFrame {
 export type ArrivalWaitStep = 'hold' | 'go' | 'rest';
 
 /**
- * A hurried opening runs the arrival's own clock this many times faster (FOC371-01): the 5.8 s timeline plays in
- * 2.9 s, Daigoro is on the field 0.4 s in and Yojimbo stands on his spot 0.65 s in, so both are drawn long before the
- * first command menu, and the night and the tree are gone again by the time the first enemy acts.
+ * A hurried opening runs the arrival's own clock this many times faster (FOC371-01): the timeline plays in half the
+ * time (1.8 s since release 39.1; it was 2.9 s), Daigoro is on the field 0.4 s in and Yojimbo stands on his spot 0.65 s in, so both are
+ * drawn long before the first command menu, and the night and the tree are gone again by the time the first enemy acts.
  */
 export const HURRIED_ARRIVAL_SPEED = 2;
 
