@@ -7,6 +7,7 @@ import type { Limit, PartyRule } from './clearance.ts';
 import type { ColossusPin } from './colossusPin.ts';
 import type { FramingReport } from './framingReport.ts';
 import type { Actor, Pose } from './geometry.ts';
+import type { ScaleLock } from './scaleLock.ts';
 import type { Side } from './staging.ts';
 
 /** One candidate of the plan: the colossus master at a BOSS SCALE step (the table's pinned one carries its `pin`), or today's rig with the party stepped. */
@@ -27,4 +28,6 @@ export interface Decision {
   rule: PartyRule | null;
   limitOf: Map<Actor, Limit | null>;
   report: Partial<FramingReport>;
+  /** The size each boss plays from here on (`scaleLock.ts`); null: none is sized (or the phone, which keeps today's rig). */
+  lock: ScaleLock | null;
 }

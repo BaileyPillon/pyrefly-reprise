@@ -1,7 +1,7 @@
-import type { Vector3 } from 'three';
+import type { PerspectiveCamera, Vector3 } from 'three';
 import { STAGE_HOLD_KEY } from '../../StageRelax.ts';
 import { placeOwned } from '../../motion/PlaceOwner.ts';
-import { figOf, subjectId, type Actor } from './geometry.ts';
+import { figBox, figOf, subjectId, type Actor } from './geometry.ts';
 import { MULTIPART } from './masters.ts';
 
 /**
@@ -41,6 +41,16 @@ interface Rec {
 export interface Shift {
   dx: number;
   dz: number;
+}
+
+/** What BOSS SCALE reads besides the class target (`planScale`; `scaleLock.ts` builds it). */
+export interface ScaleOpts {
+  /** The factor each boss already plays in this link, by painted id: used as it stands, never planned again. */
+  locked?: ReadonlyMap<string, number> | null;
+  /** The bosses that hold their full target in every plan (`masters.ts` `scaleHeld`). */
+  held?: (id: string) => boolean;
+  /** Today's camera and the canvas it draws on (CSS px), for the held bosses' size as the picture shows it. */
+  view?: { cam: PerspectiveCamera; W: number; H: number };
 }
 
 /** The chapter's slots: one move for the party, one for the fiends, and a move of its own for a fiend a row names. */
@@ -86,9 +96,11 @@ export class Staging {
 
   /**
    * Plan the scale per boss against the party's mean, seen from `camPos`. Colossi only ever grow;
-   * `frac` takes a share of the growth (1 = the class target, 0 = the drawn scale).
+   * `frac` takes a share of the growth (1 = the class target, 0 = the drawn scale). `opts` (`scaleLock.ts`, r392-boss-scale): a boss the
+   * link already sizes keeps its factor as it stands (`locked`), and a held boss (`held`) takes its full target whatever `frac` says, read
+   * as the picture shows it (`view`: its painted box and the party's through today's camera) rather than by distance.
    */
-  planScale(actors: readonly Actor[], camPos: Vector3, target: (id: string) => number | null, frac = 1): void {
+  planScale(actors: readonly Actor[], camPos: Vector3, target: (id: string) => number | null, frac = 1, opts: ScaleOpts = {}): void {
     const party = actors.filter((a) => a.facing >= 0);
     if (!party.length) return;
     const persp = (a: Actor): number => {
@@ -96,13 +108,20 @@ export class Staging {
       return f.h / Math.abs(a.scale.y || 1) / Math.max(0.5, f.feet.distanceTo(camPos));
     };
     const pMean = party.reduce((s, a) => s + persp(a), 0) / party.length;
+    const view = opts.view;
+    const shown = (a: Actor): number => {
+      const b = figBox(figOf(a), view!.cam, view!.W, view!.H);
+      return (b.b - b.t) / Math.abs(a.scale.y || 1);
+    };
+    const shownMean = view ? party.reduce((s, a) => s + shown(a), 0) / party.length : 1;
     for (const a of actors) {
       if (a.facing >= 0) continue;
       const id = subjectId(a);
       const t = target(id);
       if (t === null || MULTIPART.test(id)) continue;
-      const ratio = persp(a) / pMean;
-      const k = 1 + (Math.min(2.6, Math.max(1, t / Math.max(0.05, ratio))) - 1) * frac;
+      const held = opts.held?.(id) === true;
+      const ratio = held && view ? shown(a) / shownMean : persp(a) / pMean;
+      const k = opts.locked?.get(id) ?? 1 + (Math.min(2.6, Math.max(1, t / Math.max(0.05, ratio))) - 1) * (held ? 1 : frac);
       if (Math.abs(k - 1) < 0.04) continue;
       const p = this.plan.get(a) ?? { k: 1, dx: 0 };
       p.k = k;
