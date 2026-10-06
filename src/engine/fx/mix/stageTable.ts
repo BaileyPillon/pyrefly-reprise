@@ -54,11 +54,6 @@ export interface Slots {
    * One move for the whole side cannot spread a heap (it carries every member the same way): a row that stands the party apart names each member.
    */
   partyBy?: readonly { id: RegExp; move: Move }[];
-  /**
-   * The strike follows this table's move (`motion/StandReach.ts`): a lunge carries its fighter further by the distance the table opened between it and
-   * its target, so the blow still reaches. Only a row whose move leaves the fixed 1.4 short asks for it (Chapter III's); absent: the lunge is 1.4.
-   */
-  follow?: boolean;
 }
 
 export interface Row extends Slots {
@@ -101,12 +96,11 @@ const CH3_CALM: MenuCalm = { drift: 0.15, lean: 0.5 };
 // depended on the camera's first seconds, is written down. The boss goes right 2.6 and back 0.95 (the built row had it 3.0 right: the calm camera at the
 // menus, `CH3_CALM`, is what lets Yuna's ready staff clear its blade 0.4 sooner); the left pagoda stands off the party's heads (back, and right up to the
 // boss's box, so her raised staff in the hurt pose clears its base); the right one is drawn in and back so it stays off the turn rail. The pagodas keep the
-// built row's places, so they stand a little nearer the boss than with the 3.0 row. `follow`: the boss's 2.26 of extra distance (2.6 less the party's 0.35) is more than the
-// fixed 1.4 lunge can close (Tidus's strike stopped 165 px short of the boss, painted, where the stage's own formation touches it), so each strike is carried that much further per
-// target (`motion/StandReach.ts`); Chapter II's smaller move leaves every strike landing (Tidus overlaps Yunalesca by about 195 px at the apex) and its row does not ask. Measured
-// over a full drift swing, seeds 1 and 9, two sizes:
+// built row's places, so they stand a little nearer the boss than with the 3.0 row. The boss's 2.26 of extra distance (2.6 less the party's 0.35) is more than the fixed 1.4 lunge can
+// close (Tidus's strike stopped 165 px short of the boss, painted); the strike is solved against the picture in every chapter now (`motion/StandReach.ts`, r391-reach), so the
+// row carries no flag for it. Measured over a full drift swing, seeds 1 and 9, two sizes:
 // `docs/handoff/r39-looks.md`; the 12-seed sweep of the 3.0 row it began from: `docs/handoff/r38-restage.md`, "Repair".
-const CHAPTER_III: Row = { chapter: 'braskas-final-aeon', boss: /^braskas-final-aeon/, party: { right: 0.35, toward: 0 }, enemy: { right: 2.6, toward: -0.95 }, enemyBy: CH3_PAGODAS, calm: CH3_CALM, follow: true };
+const CHAPTER_III: Row = { chapter: 'braskas-final-aeon', boss: /^braskas-final-aeon/, party: { right: 0.35, toward: 0 }, enemy: { right: 2.6, toward: -0.95 }, enemyBy: CH3_PAGODAS, calm: CH3_CALM };
 
 // Chapter X, Seymour Natus (option N, PR-0331): nobody moves on the stage's own account (the scene pins both fiends and holds the party); the row holds the
 // ONE colossus master and the Sensor card's place (`colossusPin.ts`, written down from the sweeps in `docs/handoff/r39-natus.md`): BOSS SCALE step 0.45 (the
@@ -125,7 +119,7 @@ const CHAPTER_X: Row = { chapter: 'seymour-natus', boss: /^seymour-natus/, party
 // figures of this size are wider than that band). Measured at 1280x720, 1600x900, 2000x1012, 2560x1080 and 2560x1440 (`docs/handoff/r391-ui.md`): no pair
 // over 0.11 of the smaller figure's box (0.69 before), nobody under 0.82 visible (0.20 before). `party` is what a member with no step of his own takes (a
 // Switch brings Wakka into the vacated slot, which the scene stands at its own place): the same depth as the three, so he is neither larger nor nearer the
-// camera than they are. No row asks `follow`: the presenter runs a figure to its target, and Tidus's strike still lands on Omnis from his new place.
+// camera than they are. Tidus's strike still lands on Omnis from his new place: the lunge is solved against the picture (r391-reach, `motion/StrikeReach.ts`).
 const CHAPTER_XII: Row = {
   chapter: 'seymour-omnis',
   boss: /^seymour-omnis/,
@@ -223,7 +217,7 @@ export function standFor(game: 'ffx' | 'ffx2', enemies: readonly string[], phone
   if (game !== 'ffx' || phone || override === 'off') return null;
   if (override) return { chapter: 'override', slots: override, boss: null, calm: null, colossus: undefined };
   const row = table.find((r) => enemies.some((id) => r.boss.test(id)));
-  return row ? { chapter: row.chapter, slots: { party: row.party, enemy: row.enemy, ...(row.enemyBy ? { enemyBy: row.enemyBy } : {}), ...(row.partyBy ? { partyBy: row.partyBy } : {}), ...(row.follow ? { follow: true } : {}) }, boss: row.boss, calm: row.calm ?? null, colossus: row.colossus } : null;
+  return row ? { chapter: row.chapter, slots: { party: row.party, enemy: row.enemy, ...(row.enemyBy ? { enemyBy: row.enemyBy } : {}), ...(row.partyBy ? { partyBy: row.partyBy } : {}) }, boss: row.boss, calm: row.calm ?? null, colossus: row.colossus } : null;
 }
 
 /** A side's move in the world: the screen's right and toward axes from today's resting rig, flat on the floor. */
@@ -237,7 +231,7 @@ export function sideShift(slots: Slots, rest: Pose, boss: RegExp | null = null):
   };
   return {
     party: at(slots.party), enemy: at(slots.enemy), enemyBy: (slots.enemyBy ?? []).map((e) => ({ id: e.id, shift: at(e.move) })),
-    ...(slots.partyBy?.length ? { partyBy: slots.partyBy.map((p) => ({ id: p.id, shift: at(p.move) })) } : {}), boss, ...(slots.follow ? { follow: true } : {}),
+    ...(slots.partyBy?.length ? { partyBy: slots.partyBy.map((p) => ({ id: p.id, shift: at(p.move) })) } : {}), boss,
   };
 }
 
@@ -252,5 +246,5 @@ export function readStand(game: 'ffx' | 'ffx2', actors: readonly Actor[], rest: 
   const r3 = (x: number): number => Math.round(x * 1000) / 1000;
   const by = (side.enemyBy ?? []).map((e) => [e.id.source, r3(e.shift.dx), r3(e.shift.dz)] as [string, number, number]);
   const byParty = (side.partyBy ?? []).map((p) => [p.id.source, r3(p.shift.dx), r3(p.shift.dz)] as [string, number, number]);
-  return { side, report: { chapter: s.chapter, party: [r3(side.party.dx), r3(side.party.dz)], enemy: [r3(side.enemy.dx), r3(side.enemy.dz)], ...(by.length ? { by } : {}), ...(byParty.length ? { byParty } : {}), ...(s.slots.follow ? { follow: true } : {}) }, ...(s.colossus ? { colossus: s.colossus } : {}) };
+  return { side, report: { chapter: s.chapter, party: [r3(side.party.dx), r3(side.party.dz)], enemy: [r3(side.enemy.dx), r3(side.enemy.dz)], ...(by.length ? { by } : {}), ...(byParty.length ? { byParty } : {}) }, ...(s.colossus ? { colossus: s.colossus } : {}) };
 }

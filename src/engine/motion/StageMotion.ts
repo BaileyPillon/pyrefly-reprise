@@ -21,6 +21,7 @@ import type { BattleCamera } from '../BattleCamera.ts';
 import { rigPose } from '../FrameFit.ts';
 import { paintedVertexShader } from '../shaders/PaintedShader.ts';
 import { TweenGroup } from '../Tween.ts';
+import type { Profile, Shape } from './Silhouette.ts';
 import type { PaintedSpan, Rect, Spot, StageMotionPort } from './StageMotionPort.ts';
 
 type Quad = [Vector3, Vector3, Vector3, Vector3];
@@ -28,8 +29,8 @@ type Quad = [Vector3, Vector3, Vector3, Vector3];
 export interface StageMotionOptions {
   scene: Scene;
   camera: BattleCamera;
-  /** The four world corners of `id`'s painted box into `out`, or null when it is not on the field. */
-  quadOf(id: CombatantId, out: Quad): Quad | null;
+  /** The four world corners of `id`'s painted box into `out`, or null when it is not on the field. With `pose`: of that pose as it would stand (`PaintedActor.poseShape`; the one showing when it cannot say). */
+  quadOf(id: CombatantId, out: Quad, pose?: string): Quad | null;
   /** The figure's root, whose visible painted plane the smear copies. */
   figure(id: CombatantId): Object3D | undefined;
   /** The canvas's CSS size, and the part of it the window shows (see `StageMotionPort.view`). */
@@ -40,7 +41,14 @@ export interface StageMotionOptions {
   lowEffects(): boolean;
   /** Whose painting to warm the smear's program with (see `warm`), or undefined when it is not wanted (not FFX-2, REDUCE MOTION). Read each frame until done. */
   warmFor?(): CombatantId | undefined;
+  /** The rig a cut to `asked` really lands on under the camera comfort preset (`PresetCamera.shotRig`: `enemy` -> `enemy~calm`); a name already mapped comes back as it is. Absent: the names are the rigs'. */
+  realRig?(asked: string): string;
+  /** The rows of `id`'s painting as it is drawn now, or of `pose` as it would stand (`motion/Silhouette.ts`, r391-reach); absent when it cannot be read: `shape` then gives the box alone. */
+  profileOf?(id: CombatantId, pose?: string): Profile | undefined;
 }
+
+/** A figure whose opacity is under this (or whose dissolve is over its complement) is not on the screen: it is nobody's obstacle or target. */
+const SHOWN = 0.05;
 
 const GHOST_FRAG = /* glsl */ `
   uniform sampler2D map;
@@ -116,16 +124,17 @@ export class StageMotion implements StageMotionPort {
    * The painted box's four corners as screen points, on the camera's rest pose (the shot it is settling on, with the dolly the shot
    * holds: the action's push, round 21 PR-0364) slid by `o.truck`, and as if the figure's feet stood at `o.at`; the bounds of the
    * four. The same box `projectRect` hugs. With `o.rig`, on that rig pushed in by its `push` instead of the shot the camera is on: the
-   * cut an action makes (the foe's rig at the first hit, or the master); the truck stays on through the cut (round 21, PR-0364).
+   * cut an action makes (the foe's rig at the first hit, or the master); the truck stays on through the cut (round 21, PR-0364): `o.truck` when given, else the one the camera is under.
    */
-  rect(id: CombatantId, o: { at?: Spot; truck?: Spot; rig?: string } = {}): Rect | null {
-    const q = this.o.quadOf(id, this.scratch);
+  rect(id: CombatantId, o: { at?: Spot; truck?: Spot; rig?: string; pose?: string } = {}): Rect | null {
+    const q = this.o.quadOf(id, this.scratch, o.pose);
     const fig = this.o.figure(id);
     if (!q || !fig) return null;
-    const rig = o.rig ? this.o.camera.rigOf(o.rig) : undefined;
+    const rig = o.rig ? this.o.camera.rigOf(this.o.realRig?.(o.rig) ?? o.rig) : undefined;
     const cam = rig ? rigPose(this.shotCam, this.o.camera.camera, rig, this.o.camera.pushTarget) : this.o.camera.restCamera(true);
-    if (o.truck) {
-      cam.position.add(this.shift.set(o.truck.x, o.truck.y, o.truck.z));
+    const truck = o.truck ?? (rig ? this.o.camera.truck : undefined); // a cut keeps the truck the run is under (r391-reach: the strike after a run-in reads it as it is now)
+    if (truck && (truck.x !== 0 || truck.y !== 0 || truck.z !== 0)) {
+      cam.position.add(this.shift.set(truck.x, truck.y, truck.z));
       cam.updateMatrixWorld(true);
     }
     const { w, h } = this.o.view();
@@ -144,6 +153,14 @@ export class StageMotion implements StageMotionPort {
       if (sy > y1) y1 = sy;
     }
     return Number.isFinite(x0) && Number.isFinite(y0) ? { x: x0, y: y0, w: x1 - x0, h: y1 - y0 } : null;
+  }
+
+  /** The painted shape `rect` reads and, where the painting can be read, its rows (r391-reach); null when the figure is not shown. */
+  shape(id: CombatantId, o: { at?: Spot; truck?: Spot; rig?: string; pose?: string } = {}): Shape | null {
+    const fig = this.o.figure(id) as { visible?: boolean; alpha?: number; dissolveLevel?: number } | undefined;
+    if (fig && (fig.visible === false || (fig.alpha ?? 1) < SHOWN || (fig.dissolveLevel ?? 0) > 1 - SHOWN)) return null;
+    const rect = this.rect(id, o);
+    return rect ? { rect, profile: this.o.profileOf?.(id, o.pose) } : null;
   }
 
   truck(dx: number, dy: number, dz: number, ms: number): Promise<void> {

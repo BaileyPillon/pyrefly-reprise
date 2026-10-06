@@ -38,6 +38,7 @@ import {
 } from './BattlePresenterBeats.ts';
 import { comeBack, flushArrivals, keptToReturn, restorePart, statusAdded, unstone } from './BattlePresenterArrivals.ts';
 import { PARTY_SWAP_MS, partyBack } from './SummonStaging.ts';
+import { lungePlan } from './motion/StrikeReach.ts';
 
 /** One numeral, minus the screen position the stage supplies. */
 type Numeral = Omit<Parameters<DamageNumbersPort['show']>[0], 'x' | 'y'>;
@@ -143,6 +144,11 @@ export interface EventCtx {
    * for a blow whose spell or shot is still on its way (`motion/SkillTravel.ts`: SKILL TRAVEL). Set by `BattlePresenter`.
    */
   reveal?: (event: BattleEvent) => Promise<void>;
+  /**
+   * The burst being played and where the event in hand is in it (set by `BattlePresenter.playBurst` before each event, cleared when the burst ends): the events that
+   * FOLLOW the one in hand are the action's own. `motion/StrikeReach.ts` reads them for the target of a fiend's ability, which names none at `action-start`.
+   */
+  burst?: { readonly events: readonly BattleEvent[]; readonly at: number } | undefined;
 }
 
 export function createEventCtx(
@@ -327,7 +333,9 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       const a = ctx.stage.actor(event.actorId);
       cue(ctx, 'counter', { volume: 0.8 }); // voiced chapters only: the parry before the blow
       a?.setPose('attack');
-      await settled(ctx, a?.lunge(0.6, 280), 280);
+      // r391: a counter is a physical blow like any other: the same reach from its shorter lunge (an ally as target: none)
+      const plan = lungePlan(ctx, { actorId: event.actorId, targets: [event.targetId] }, ctx.deps.actionMotion, 'attack', undefined, 0.6);
+      await settled(ctx, a?.lunge(plan.distance, 280, undefined, plan.house), 280);
       a?.setPose('idle');
       return;
     }

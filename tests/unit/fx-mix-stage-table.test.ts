@@ -420,7 +420,7 @@ describe("Chapter XII's party stands apart (r391-ui, PR-0382; FFX only)", () => 
     expect(s.slots.party.toward).toBe(step('tidus').toward);
     expect(s.calm).toBeNull();
     expect(s.colossus).toBeUndefined();
-    expect(s.slots.follow).toBeUndefined(); // the presenter runs the figure to its target; the move is not a lunge's to follow
+    expect('follow' in s.slots).toBe(false); // no row carries a lunge flag (r391-reach removed it): the strike is solved against the picture
   });
 
   it('is FFX desktop only', () => {

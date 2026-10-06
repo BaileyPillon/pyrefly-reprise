@@ -118,6 +118,15 @@ export class RunInMotion implements ActionMotionPort {
     return c?.dresspheres?.current;
   }
 
+  /**
+   * The strike's lunge reaches for its target (r391-reach) for a fiend (it has no run: its lunge is its whole approach, as in FFX) and for a girl who has RUN IN (the run's
+   * stop is staged, not sourced: where it leaves a gap, the lunge from there closes the rest, as in FFX). Not for a girl who has not (a long-range dressphere fires from where she
+   * stands, sourced; a menu open suppresses the run by design): her strike must not close the distance.
+   */
+  reachFor(id: CombatantId): boolean {
+    return this.state()?.combatants[id]?.side === 'enemy' || this.runs.has(id);
+  }
+
   /** The strike's lunge while she is out: shorter, since she has run in. */
   lungeFor(id: CombatantId): number | undefined {
     return this.runs.has(id) ? STRIKE_LUNGE : undefined;

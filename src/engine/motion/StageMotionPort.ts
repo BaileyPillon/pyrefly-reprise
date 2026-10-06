@@ -5,6 +5,7 @@
  * supplies as much of it as it needs.
  */
 import type { CombatantId } from '../../battle/common/types.ts';
+import type { Shape } from './Silhouette.ts';
 
 /** A point on the floor, world units: x to the right, y up, z toward the camera. */
 export interface Spot {
@@ -40,9 +41,15 @@ export interface StageMotionPort {
    * The screen rectangle `id`'s painted box covers on the shot the camera is settling on (its rest pose and the dolly the shot
    * holds, not the move in flight), with the camera slid by `truck`; with `at`, as if its feet stood there instead. Null when it
    * is not on the field. With `rig`, on that named rig instead (the cut the action is going to make: round 21, PR-0364), with the same
-   * held dolly.
+   * held dolly (`rig` is the name the moments ask for: the stage maps it to the rig the comfort preset really cuts to). With `pose`, the box of that pose as it would stand instead of the one showing (r391-reach: the pose a blow ends on, while the wind-up is up).
    */
-  rect(id: CombatantId, o?: { at?: Spot; truck?: Spot; rig?: string }): Rect | null;
+  rect(id: CombatantId, o?: { at?: Spot; truck?: Spot; rig?: string; pose?: string }): Rect | null;
+  /**
+   * `id`'s painted shape as the strike sees it (r391-reach): `rect` (same options) and, read from the alpha of the pose on screen, its painted front row by row
+   * (`motion/Silhouette.ts`; absent where the painting cannot be read, then the box stands in). Null when `id` is not on the field or not shown (a summon
+   * took it off the field, a fiend has dissolved). Optional: a stage without it gives boxes only.
+   */
+  shape?(id: CombatantId, o?: { at?: Spot; truck?: Spot; rig?: string; pose?: string }): Shape | null;
   /**
    * The rigs the camera may cut to at the first hit of `runner`'s attack, as `BattleMoments.impact` and the FFX-2 framing rule will
    * choose among them (under the comfort preset), for `rect`'s `rig`. Optional: without it the planner judges only the shot she runs on.

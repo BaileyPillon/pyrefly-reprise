@@ -1,100 +1,103 @@
 /**
- * **The strike follows the stand** (r39-looks, FFX only; no `three`, no DOM).
+ * **The strike reaches its target** (r391-reach; both games, see `StrikeReach.ts` for who gets it; no `three`, no DOM).
  *
- * The house lunge is a fixed 1.4 world units (`BattlePresenterBeats.actionStart`), tuned against the stage's own formations: there it carries a
- * fighter to the foe's near edge or past it. A staging row (`fx/mix/stageTable.ts`) moves the figures after the stage seats them, and Chapter III's
- * is a big move: the boss stands 2.6 right and 0.95 back of its seat, the party 0.35 right. The same 1.4 then stopped short of the boss (Tidus's
- * painted box ended 70 px clear of the boss's instead of 204 px inside it, and 165 px of painted air stood between their painted shapes where the stage's
- * own formation touches them: 1600x900, `docs/handoff/r39-looks.md`, honest cost 6). A strike that does not reach its target is a defect, and a longer fixed lunge is the wrong repair: the
- * fighter is in front of the camera and the boss is far behind it, so a world unit of lunge is about four times as many pixels as a world unit of the
- * boss's move (the first try, "lunge the boss's 2.26 further", ran Tidus across the whole frame and behind the party panel). The relation that has to
- * come back is the one on the screen.
+ * The house lunge is a fixed 1.4 world units (`BattlePresenterBeats.actionStart`), tuned against the stage's own formations. It stops short wherever
+ * the picture puts the foe further than that away: in Chapter I Tidus ended 159 px from Seymour Flux, in Chapter VI a goon 300 px from Yuna, in
+ * Chapter III release 39's own staging made the boss's move too long for it (`r39-looks` repaired that chapter alone). A strike that does not reach
+ * its target is a defect, and a longer fixed lunge is the wrong repair: the figures stand 4 to 17 world units apart in depth, so a world unit of lunge
+ * is a different number of pixels for every pair, and a lunge long enough for the farthest sends the nearest through its target. The relation that has
+ * to hold is the one on the screen.
  *
- * So a row that sets `follow` (Chapter III's) makes the MAX mix's staging register every figure's table move here each frame (`Staging.apply`; nothing
- * while the table is off: `?stand=off`, the phone, EYE CANDY off, FFX-2), and the strike is solved against the screen: {@link reachAlong} finds the
- * lunge that leaves the fighter's painted box and its target's the same lateral gap at the apex as the stage's own seats do, the two figures put back
- * where the table found them and lunging today's 1.4, both boxes read through the camera the shot is settling on (`StageMotionPort.rect`, `at`).
- * Never less than today's lunge and never more than {@link REACH_CAP} further. It restores the relation the fight had without the table, and no other:
- * a fight whose row does not ask (Chapter II: its smaller move leaves every strike landing, Tidus's box overlaps Yunalesca's by about 195 px at the
- * apex), a fight with no row, and every FFX-2 fight register nothing, so their lunges are today's, to the unit. Per target: Tidus on the boss, on
- * the left pagoda and on the right one each get their own reach.
+ * So the strike is solved against the picture ({@link reachAlong}): the lunge, never less than today's and never more than {@link REACH_CAP}
+ * further, at which the attacker's painted FRONT meets the target's painted near side with {@link CONTACT_PX} of painted overlap over the rows the two
+ * share (`motion/Silhouette.ts`: the front is read row by row from the painting's alpha, the measure the critic's chamfer reads, not the boxes, which
+ * overlap by 150 px while the pixels are still apart). Both are read through the camera the shot is settling on (`StageMotionPort.shape`).
  *
- * Game case (AGENTS.md rule 14): FFX only. The rows are FFX-only (`standFor` is null for FFX-2), FFX-2's strike has its own RUN-IN
- * (`app/screens/BattleScreenRunIn.ts`: she runs to the foe and the lunge only carries the blow) and a long-range dressphere fires from where she
- * stands. Presentation only: no engine state, no RNG, no timing (the lunge keeps its 440 ms and its apex at 0.58).
+ * What it leaves alone, to the unit: a strike that already reaches; a target that shares no screen row with the attacker (above or below it: a lateral
+ * lunge cannot touch it, and a longer one only runs under it); a box the stage cannot give. And it never runs the attacker into a figure standing in
+ * its own depth lane ({@link LANE}) that today's lunge is clear of: no new collisions.
  *
- * Keyed by the figure object (weakly, as `PlaceOwner.ts` is), so nothing is left behind when a figure goes; no setting, no save key.
+ * Presentation only: no engine state, no RNG, no timing (the lunge keeps its 440 ms and its apex at 0.58). The distance beyond the house lunge rides an eased step
+ * (`BattlePresenterActors.reachOffset`), so a long lunge does not jump its first frame; the house part is the old curve to the frame.
  */
-import type { Rect } from './StageMotionPort.ts';
+import { frontClearance, nearClearance, type Shape } from './Silhouette.ts';
 
-/** The most a row may add to a lunge, world units (a row that opens a bigger gap is a design question, not a longer lunge). */
+/** The most the solver may add to a lunge, world units (a target further than that is a design question, not a longer lunge). */
 export const REACH_CAP = 3;
 
-/** How a table moved a figure on the floor, world units (the same `dx`, `dz` `fx/mix/staging.ts` adds to its place). */
-export interface StandShift {
-  dx: number;
-  dz: number;
-}
+/** How deep the attacker's painted front goes into the target's at the apex, px on a 1600-wide frame (scaled with the frame): a visible touch, not a walk through. */
+export const CONTACT_PX = 14;
 
-const moved = new WeakMap<object, StandShift>();
+/** The rows the two shapes must share for a strike to be worth solving, px on a 1600-wide frame: under it the target is above or below the attacker. */
+export const MIN_SHARED_PX = 10;
 
 /**
- * Register (or, with `null` or a zero move, forget) how far the table moved `figure`. Called by the staging every frame for every figure it
- * writes, so a table that lets go (the next link's fiends are on the stage, a switch turned off) leaves nothing here.
+ * A target at most this far above or below the attacker's rows (px on a 1600-wide frame; no row in common, a little air between) is lined up with, not touched: a
+ * lateral lunge ends beside it, as close as it can get. Further than that it is out of reach of a lateral lunge and the lunge is left alone.
  */
-export function standMove(figure: object, shift: StandShift | null): void {
-  if (!shift || !Number.isFinite(shift.dx) || !Number.isFinite(shift.dz) || (shift.dx === 0 && shift.dz === 0)) moved.delete(figure);
-  else moved.set(figure, { dx: shift.dx, dz: shift.dz });
-}
+export const NEAR_PX = 40;
 
-/** How the table moved `figure` (null: it stands where the stage seats it). */
-export function standMoveOf(figure: object | undefined): StandShift | null {
-  return figure ? (moved.get(figure) ?? null) : null;
-}
+/**
+ * An attacker whose painted box is wider than this share of the frame is a colossus (Sin's fins and face, Vegnagun's tail): it is the field, not a fighter that crosses it, and the
+ * giant plane far behind the camera is the one thing the screen reading cannot place to within a hundred pixels. Its lunge is left alone.
+ */
+export const COLOSSUS = 0.5;
 
-/** What {@link reachAlong} needs to see: the two painted boxes on screen, where the fighter would stand after `along` of lunge, and the stage's own seats. */
+/** A figure within this many world units of the attacker's depth stands in its lane: two painted figures that close in depth intersect on the floor, not only on the screen. */
+export const LANE = 0.5;
+
+/** What {@link reachAlong} needs to see: the painted shapes on screen with the attacker carried `along`, and who stands in its way. */
 export interface ReachWorld {
-  /** +1: the fighter faces +x (the party's, an aeon's); -1: it faces -x (a fiend's). */
+  /** +1: the attacker faces +x (the party's, an aeon's); -1: it faces -x (a fiend's). */
   dir: 1 | -1;
-  /**
-   * The fighter's painted box on screen with its feet carried `along` world units along its facing from where it stands; with `seat`, from where the stage
-   * seats it (the table's move undone). Null when it is not on the field.
-   */
-  attacker(along: number, seat: boolean): Rect | null;
-  /** The target's painted box on screen, where it stands now, or (`seat`) where the stage seats it. */
-  target(seat: boolean): Rect | null;
-}
-
-/** The lateral gap between the two boxes, in the fighter's own direction: positive is air between them, negative is how far the fighter's box has gone into the target's. */
-export function lateralGap(dir: 1 | -1, a: Rect, t: Rect): number {
-  return dir > 0 ? t.x - (a.x + a.w) : a.x - (t.x + t.w);
+  /** The canvas width over 1600: the margins are in px on a 1600-wide frame. */
+  scale: number;
+  /** The attacker's painted shape with its feet carried `along` world units along its facing from where it stands. Null when it is not on the field. */
+  attacker(along: number): Shape | null;
+  /** The target's painted shape, where it stands now. */
+  target(): Shape | null;
+  /** The figures in the attacker's own lane (not the target): each one's painted shape, where it stands now (null: not shown). */
+  lane?: ReadonlyArray<() => Shape | null>;
 }
 
 /**
- * The lunge, world units, that leaves the fighter and its target the lateral gap their stage seats leave at the apex of today's `base` lunge: `base` when the
- * table cost the strike nothing (or when a box is unknown), else more, by at most {@link REACH_CAP}. The screen gap is nearly linear in the lunge (a camera
+ * How far the strike at `along` is from the end it aims at, px (+ short of it, 0 or less: there): the painted fronts {@link CONTACT_PX} into one another over the rows
+ * the shapes share, else (the target a little above or below, {@link NEAR_PX}) lined up laterally; null when it cannot be read or the target is out of reach of a lateral lunge.
+ */
+function shortBy(w: ReachWorld, t: Shape, along: number): number | null {
+  const a = w.attacker(along);
+  if (!a) return null;
+  const c = frontClearance(w.dir, a, t);
+  if (c && Number.isFinite(c.gap) && c.shared >= MIN_SHARED_PX * w.scale) return c.gap + CONTACT_PX * w.scale;
+  const n = nearClearance(w.dir, a, t, NEAR_PX * w.scale);
+  return n && Number.isFinite(n.gap) ? n.gap : null;
+}
+
+/** The lateral painted clearance between the attacker at `along` and another figure (+ air, - overlap), null when they share no row. */
+function gapAt(w: ReachWorld, t: Shape, along: number): number | null {
+  const a = w.attacker(along);
+  const c = a ? frontClearance(w.dir, a, t) : null;
+  return c && Number.isFinite(c.gap) ? c.gap : null;
+}
+
+/**
+ * The lunge, world units, at which the strike reaches its target ({@link shortBy}): `base` when it already does, when the target is out of reach of a lateral lunge or a
+ * shape is unknown, else more, by at most {@link REACH_CAP}; and never into a figure of the lane that `base` is clear of. The screen gap is nearly linear in the lunge (a camera
  * with some yaw bends it a little), so a secant search with a few steps lands on it.
  */
 export function reachAlong(base: number, w: ReachWorld): number {
-  const aSeat = w.attacker(base, true);
-  const tSeat = w.target(true);
-  if (!aSeat || !tSeat) return base;
-  const want = lateralGap(w.dir, aSeat, tSeat); // where the stage's own formation leaves the strike
-  if (!Number.isFinite(want)) return base;
-  const t = w.target(false);
-  const gapAt = (l: number): number | null => {
-    const a = w.attacker(l, false);
-    return a && t ? lateralGap(w.dir, a, t) : null;
-  };
-  const g0 = gapAt(base);
-  if (g0 === null || !Number.isFinite(g0) || g0 <= want + 0.5) return base; // already as close as the stage's own seats get it (half a pixel)
+  const t = w.target();
+  const a0 = w.attacker(base);
+  if (!t || !a0 || a0.rect.w > COLOSSUS * 1600 * w.scale) return base;
+  const e0 = shortBy(w, t, base);
+  if (e0 === null || !Number.isFinite(e0) || e0 <= 0.5) return base; // out of reach of a lateral lunge, or already there (half a pixel)
   const top = base + REACH_CAP;
   let l0 = base;
   let l1 = Math.min(top, base + 1);
-  let f0 = g0 - want;
-  let f1 = gapAt(l1);
-  if (f1 === null || !Number.isFinite(f1)) return base;
-  f1 -= want;
+  let f0 = e0;
+  const e1 = shortBy(w, t, l1);
+  if (e1 === null) return base;
+  let f1 = e1;
   for (let i = 0; i < 6 && Math.abs(f1) > 0.5; i++) {
     const slope = (f1 - f0) / (l1 - l0);
     if (!(slope < 0)) return base; // a gap that does not close with the lunge (a box that went missing): leave today's
@@ -103,9 +106,29 @@ export function reachAlong(base: number, w: ReachWorld): number {
     l0 = l1;
     f0 = f1;
     l1 = next;
-    const f = gapAt(l1);
-    if (f === null || !Number.isFinite(f)) return base;
-    f1 = f - want;
+    const f = shortBy(w, t, l1);
+    if (f === null) return base;
+    f1 = f;
   }
-  return Math.min(top, Math.max(base, l1));
+  let reach = Math.min(top, Math.max(base, l1));
+
+  // The lane: a figure that today's lunge is clear of and the longer one would newly run into stops it at the figure's near side.
+  for (const other of w.lane ?? []) {
+    const o = other();
+    if (!o) continue;
+    const g0 = gapAt(w, o, base);
+    if (g0 === null || g0 <= 0) continue; // not in its way, or today's lunge already overlaps it: not this solver's doing
+    const gEnd = gapAt(w, o, reach);
+    if (gEnd === null || gEnd > 0) continue;
+    let lo = base;
+    let hi = reach;
+    for (let i = 0; i < 14; i++) {
+      const mid = (lo + hi) / 2;
+      const g = gapAt(w, o, mid);
+      if (g !== null && g > 0) lo = mid;
+      else hi = mid;
+    }
+    reach = lo;
+  }
+  return reach;
 }

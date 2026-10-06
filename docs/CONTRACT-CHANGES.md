@@ -6,6 +6,24 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-05 — The strike reaches its target in every fight: `StageMotionPort.shape`, `ActionMotionPort.reachFor`, `EventCtx.burst`, `PaintedActor.poseShape` (release 39.1; both games; additive)
+
+Branch `r391-reach`. No file in the contract list changed; recorded because four shared surfaces gain an optional member and one registry goes. Handoff: [r391-reach](handoff/r391-reach.md).
+
+- `src/engine/motion/StageMotionPort.ts`: `shape?(id, { at, truck, rig, pose })` returns a figure's painted box (`rect`) and, read from the alpha of its painting, its painted front row by row
+  (`motion/Silhouette.ts`); null when the figure is not on the field or not shown (faded, dissolved). `rect` gains the same optional `pose` (the box of a pose as it would stand). A stage
+  without `shape` gives boxes only and the strike is solved on them.
+- `src/engine/BattlePresenterMotion.ts`: `ActionMotionPort.reachFor?(actorId)`: does the strike's lunge reach for its target for this fighter. A game with no port reaches (FFX); a game with a port
+  that does not answer does not (FF7); FFX-2's `RunInMotion` answers yes for its fiends and for a girl while she is out on her run-in (the lunge closes what the staged stop leaves), no for a girl who has not run.
+- `src/engine/motion/StageMotion.ts`: `rect` / `shape` with a `rig` now map the rig through the camera comfort preset (`realRig`: `enemy` is `enemy~calm` where the preset says so) and, with no `truck` given, read the
+  truck the camera is under (a cut keeps it). A caller that passes a `truck` or an already-mapped rig name (RUN-IN's planner) reads what it did.
+- `src/engine/BattlePresenterEvents.ts`: a `counter`'s 0.6 lunge is solved against its target like any strike (the base 0.6; an ally as target: none).
+- `src/engine/BattlePresenterEvents.ts`: `EventCtx.burst?`: the burst being played and the index of the event in hand, set by `BattlePresenter.playBurst` before each event and cleared when the burst
+  ends. A beat that needs an action's later events (a fiend's ability names no target at `action-start`) takes it before its first await.
+- `src/engine/PaintedActor.ts`: `poseShape(name)`: the painted box of a pose the actor is not showing, nothing changed.
+- Removed (added in release 39, `r39-looks`): `motion/StandReach.ts`'s `standMove` / `standMoveOf` registry and the staging row flag `follow` (`stageTable.ts`, `staging.ts`, `framingReport.ts`): the solver reads the
+  picture in every chapter now, so a table's move needs no registering.
+
 ## 2026-10-04 — Art URLs: the `@` of a master's name goes on the wire as `%40`, and `logicalArtUrl` reads either form (release 39, the live check's finding LV-2; both games; additive for readers)
 
 Branch `r39-int`. No file in the contract list changed; recorded because every reader of an art URL depends on `src/engine/ArtShipped.ts`. `shippedArtUrl` (which `artUrl`, `tierUrl`, `sidecarUrlOf` and
