@@ -1,5 +1,7 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { AdditiveBlending, CustomBlending, DstAlphaFactor, OneFactor, Vector2, ZeroFactor } from 'three';
+import { Vector2 } from 'three';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { maskBloomHighPass } from '../../../src/engine/BloomMask.ts';
@@ -9,6 +11,7 @@ import {
   FIGURE_TRUE_RIM_CUT,
   applyFigureTrue,
   bloomMaskFor,
+  figureTrueFromAddress,
   figureTrueOf,
   parseFigureTrue,
   rimQuiet,
@@ -17,13 +20,29 @@ import {
 } from '../../../src/engine/figureTrue.ts';
 
 /**
- * r39-color (both games): a painted figure drawn true to its painting, behind a switch that is OFF by default.
+ * r39-color (both games): a painted figure drawn true to its painting, behind a switch that is ON by default since release 39.1
+ * (D-437, Bailey 2026-10-05: "I'll go with all of your recommendations"); `?figtrue=0` or `__pyrefly.fx.figureTrue(0)` is the way back.
  * The GLSL cannot run here; what can be pinned is the switch, the maths it applies, where the shader reads it, and what it moves in the renderer.
  */
 describe('figureTrue', () => {
-  it('is off by default, in the shader and in the default, so every frame is what it was', () => {
-    expect(FIGURE_TRUE_DEFAULT).toBe(0);
+  it('is on by default (D-437), while the grade pass keeps 0 as its neutral value until the renderer applies the default', () => {
+    expect(FIGURE_TRUE_DEFAULT).toBe(1);
     expect(GradeShader.uniforms.figureTrue.value).toBe(0);
+  });
+
+  it('starts a page load on unless the address says otherwise, and ?figtrue=0 puts release 39\'s look back', () => {
+    expect(figureTrueFromAddress('')).toBe(1);
+    expect(figureTrueFromAddress('?coach=off')).toBe(1);
+    expect(figureTrueFromAddress('?figtrue=')).toBe(1);
+    expect(figureTrueFromAddress('?figtrue=abc')).toBe(1);
+    expect(figureTrueFromAddress('?figtrue=0')).toBe(0);
+    expect(figureTrueFromAddress('?stage=off&figtrue=0')).toBe(0);
+    expect(figureTrueFromAddress('?figtrue=0.5')).toBe(0.5);
+  });
+
+  it('is what the renderer applies at start-up, through the address helper', () => {
+    const renderer = readFileSync(fileURLToPath(new URL('../../../src/engine/Renderer.ts', import.meta.url)), 'utf8');
+    expect(renderer).toContain("applyFigureTrue(this, figureTrueFromAddress(window.location?.search ?? ''))");
   });
 
   it('reads ?figtrue= as an amount from 0 to 1 and ignores anything else', () => {
@@ -62,6 +81,7 @@ describe('figureTrue', () => {
   it('reads the figure from the frame alpha (the bloom mask), gates on the switch, and runs before the grain and the vignette', () => {
     const src = GradeShader.fragmentShader;
     expect(src).toContain('uniform float figureTrue;');
+    expect(src).toContain('rawc - (bloomRemove > 0.0 ? texture2D(tBloom, vUv).rgb : vec3(0.0))');
     expect(src).toContain('figureTrue > 0.0 ? (1.0 - clamp(texel.a, 0.0, 1.0)) * figureTrue : 0.0');
     const at = src.indexOf('if (figm > 0.0)');
     expect(at).toBeGreaterThan(src.indexOf('lookAmount > 0.0'));
@@ -86,40 +106,39 @@ describe('figureTrue', () => {
     expect(rimQuiet(-3)).toBe(1);
   });
 
-  it('moves the grade exemption, the bloom receiving mask and the figure bloom mask together, and puts all three back at 0', () => {
+  it('moves the grade exemption, the bloom it gives back and the figure bloom mask together, and puts all three back at 0', () => {
     const grade = new ShaderPass(GradeShader);
     const bloom = new UnrealBloomPass(new Vector2(64, 64), 1, 0.5, 0.5);
     maskBloomHighPass(bloom);
     const host = { gradePass: grade, bloomPass: bloom, palette: { figureBloomMask: 0.7 } };
     const mask = (): number => bloom.materialHighPassFilter.uniforms['figureMask']!.value as number;
+    const remove = (): number => grade.uniforms['bloomRemove']!.value as number;
     const blend = bloom.blendMaterial;
     const before = { blending: blend.blending, premultipliedAlpha: blend.premultipliedAlpha };
 
     applyFigureTrue(host, 0);
     expect(figureTrueOf(host)).toBe(0);
     expect(mask()).toBe(0.7);
-    expect(blend.blending).toBe(AdditiveBlending);
-    expect({ blending: blend.blending, premultipliedAlpha: blend.premultipliedAlpha }).toEqual(before); // three's own blend, untouched
+    expect(remove()).toBe(0);
 
     applyFigureTrue(host, 1);
     expect(figureTrueOf(host)).toBe(1);
     expect(mask()).toBe(1);
-    expect(blend.blending).toBe(CustomBlending);
-    expect(blend.blendSrc).toBe(DstAlphaFactor); // the bloom's light scaled by the frame alpha ...
-    expect(blend.blendDst).toBe(OneFactor);
-    expect(blend.blendSrcAlpha).toBe(ZeroFactor); // ... and the frame alpha (the mask) left exactly as it was
-    expect(blend.blendDstAlpha).toBe(OneFactor);
+    expect(remove()).toBe(1);
+    // the grade reads the bloom's last composite target, the light the pass adds to the frame
+    expect(grade.uniforms['tBloom']!.value).toBe(bloom.renderTargetsHorizontal[0]!.texture);
 
     applyFigureTrue(host, 0.4);
     expect(figureTrueOf(host)).toBeCloseTo(0.4, 12);
-    expect(blend.blending).toBe(CustomBlending);
+    expect(remove()).toBe(1);
 
     applyFigureTrue(host, 7);
     expect(figureTrueOf(host)).toBe(1);
     applyFigureTrue(host, -1);
     expect(figureTrueOf(host)).toBe(0);
     expect(mask()).toBe(0.7);
-    expect({ blending: blend.blending, premultipliedAlpha: blend.premultipliedAlpha }).toEqual(before);
+    expect(remove()).toBe(0);
+    expect({ blending: blend.blending, premultipliedAlpha: blend.premultipliedAlpha }).toEqual(before); // three's own additive blend is never touched
     bloom.dispose();
     grade.dispose();
   });

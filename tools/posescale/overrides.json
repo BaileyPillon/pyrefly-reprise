@@ -21,5 +21,21 @@
   "idle-near": {
    "standing": true
   }
+ },
+ "sin-left-fin": {
+  "idle-far": {
+   "skip": "the far range: the airship director swaps it in and sizes and places it itself (evrae-airship-director.ts)"
+  },
+  "charge-far": {
+   "skip": "the far range: the airship director swaps it in and sizes and places it itself (evrae-airship-director.ts)"
+  }
+ },
+ "sin-right-fin": {
+  "idle-far": {
+   "skip": "the far range: the airship director swaps it in and sizes and places it itself (evrae-airship-director.ts)"
+  },
+  "charge-far": {
+   "skip": "the far range: the airship director swaps it in and sizes and places it itself (evrae-airship-director.ts)"
+  }
  }
 }

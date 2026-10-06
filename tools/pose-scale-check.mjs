@@ -88,10 +88,12 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
       }
       if (['reviewed', 'accepted', 'gated', 'noise'].includes(rec.scaleSrc)) {
         reviewed++;
-        const applied = rec.scaleSrc !== 'noise';
-        const effective = applied ? row?.scale : rec.current; // 'noise': the pose keeps the scale it has (the sidecar's, or the KO table's)
-        if (applied && (!row || row.scale === undefined || Math.abs(row.scale - rec.scale) > 0.0006)) {
-          failures.push(`${key}: the table's scale (${row?.scale}) is not the record's (${rec.scale}); run measure.py table`);
+        const koLike = pose === 'ko' && rec.prone && !rec.standing; // a KO's table scale is the reading over the lying plane's projection (measure.py KO_PROJECTION)
+        const proj = koLike ? (records.koProjection ?? 1) : 1;
+        const applied = rec.scaleSrc !== 'noise' || koLike;
+        const effective = applied ? (row?.scale ?? NaN) * proj : rec.current; // 'noise': the pose keeps the scale it has (the sidecar's, or the KO table's)
+        if (applied && (!row || row.scale === undefined || Math.abs(row.scale * proj - rec.scale) > 0.0006 * Math.max(1, proj > 0 ? 1 / proj : 1))) {
+          failures.push(`${key}: the table's scale (${row?.scale}) is not the record's (${rec.scale}${koLike ? ` over the KO projection ${proj}` : ''}); run measure.py table`);
         } else if (!applied && row?.scale !== undefined) {
           failures.push(`${key}: the record keeps the pose's own scale but the table has one (${row.scale}); run measure.py table`);
         } else if (!applied) {

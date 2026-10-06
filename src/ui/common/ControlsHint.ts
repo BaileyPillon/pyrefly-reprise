@@ -175,6 +175,18 @@ export const GUIDE_HINT_ITEM: ControlHintItem = {
 };
 
 /**
+ * The strategy guide's scroll keys, worded per device (PR-0385, release 39.1: the guide's chip beside `G HIDE GUIDE` says the sheet scrolls and how).
+ * `[` and `]` are a page up and down on the keyboard, the right stick scrolls on a pad, and a mouse has its wheel and the chip itself (a click pages down).
+ * No `action`: the chip is the guide's own, wired in `StrategyGuide.ts`, not a controls strip's.
+ */
+export const GUIDE_SCROLL_HINT_ITEM: ControlHintItem = {
+  label: 'scroll',
+  keyboard: '[ ]',
+  gamepad: 'R-Stick',
+  pointer: 'Wheel',
+};
+
+/**
  * The in-battle move advisor's toggle, worded per device.
  *
  * Here beside {@link GUIDE_HINT_ITEM} and for the same reason: the card's own

@@ -104,6 +104,26 @@ export function slowLink(): boolean {
   return c.saveData === true || /^(slow-2g|2g|3g)$/.test(c.effectiveType ?? '') || (typeof c.downlink === 'number' && c.downlink > 0 && c.downlink < 10);
 }
 
+let stagedOverride: boolean | null | undefined;
+
+/** Force the staged uploads on or off (tests, captures, `__pyrefly.art.stage`); `null` goes back to the address. */
+export function setStagedUploads(v: boolean | null | undefined): void {
+  stagedOverride = v;
+}
+
+/**
+ * Release 39.1: are masters uploaded to the GPU ahead of their swap (`TextureStager.ts`)? On unless the address says `?stage=off`: the switch for a live problem with the staged
+ * path (the release 39 swap, in place, is what runs then) and the A/B of the measurements. Nothing is saved.
+ */
+export function stagedUploads(): boolean {
+  if (stagedOverride !== undefined && stagedOverride !== null) return stagedOverride;
+  try {
+    return new URLSearchParams(globalThis.location?.search ?? '').get('stage') !== 'off';
+  } catch {
+    return true;
+  }
+}
+
 /** `Renderer` hands over the GPU string (UNMASKED_RENDERER_WEBGL) once its context exists. */
 export function setGpuInfo(renderer: string | null): void {
   gpu = renderer;

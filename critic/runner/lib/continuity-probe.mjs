@@ -6,7 +6,7 @@
 //
 // What it reads, all of it already exposed by a running build (no engine hook, so it works on a build that is already
 // live): `window.__pyrefly.app` -> the battle screen -> `stage.actors` (id -> { actor, side, kind, anchor }) ->
-// `actor.slots` (the two textured planes: `pose`, `fade`, `meta`, `mesh`), `actor.active`, `actor._alpha`,
+// `actor.slots` (the two textured planes: `pose`, `fade`, `meta`, `mesh`, `painted.url`), `actor.active`, `actor._alpha`,
 // `actor.poseUrls`; the stage's `opts.camera` and `opts.canvas`; and `window.__pyrefly.battleState().log`.
 //
 // What it records, once per rendered frame while a battle is the screen being played (it runs right after the game's
@@ -60,12 +60,19 @@ export function createProbe(cfg, env) {
     }
     return null;
   };
-  const poseKey = (fi, actor, pose, meta) => {
-    const id = `${fi}|${pose}`;
+  // The painting a plane draws NOW: the plane's own texture (`slot.painted.url`, what the stage shows), else the actor's url for that pose name.
+  // A pose key is the figure, the pose name AND this painting: an FFX-2 girl's spherechange (and a boss's change of form) re-points the same
+  // pose name ("idle") at another painting while the old keys stay valid, and a key that ignored the painting kept reading the first
+  // painting's head, feet and outline for every later one (release 39's round 22: Paine's "registered" feet moving 20 px at every swap).
+  const urlOf = (actor, sl) => (sl.painted && sl.painted.url) || (actor.poseUrls && actor.poseUrls[sl.pose]) || null;
+  const keyId = (fi, pose, url) => `${fi}|${pose}|${url || ''}`;
+  const poseKey = (fi, actor, sl) => {
+    const url = urlOf(actor, sl);
+    const id = keyId(fi, sl.pose, url);
     let k = S.poseIdx.get(id);
     if (k === undefined) {
       k = S.poses.length;
-      S.poses.push({ fig: fi, pose, url: (actor.poseUrls && actor.poseUrls[pose]) || null, w: meta ? meta.width : 0, h: meta ? meta.height : 0 });
+      S.poses.push({ fig: fi, pose: sl.pose, url, w: sl.meta ? sl.meta.width : 0, h: sl.meta ? sl.meta.height : 0 });
       S.poseIdx.set(id, k);
     }
     return k;
@@ -172,12 +179,12 @@ export function createProbe(cfg, env) {
         const sl = a.slots[i];
         if (!sl || !sl.pose) continue;
         if (sl.fade > bestF) { bestF = sl.fade; bestI = i; }
-        if (fs.shown !== -1 && S.poseIdx.get(`${fi}|${sl.pose}`) === fs.shown && sl.fade > shownF) shownF = sl.fade;
+        if (fs.shown !== -1 && S.poseIdx.get(keyId(fi, sl.pose, urlOf(a, sl))) === fs.shown && sl.fade > shownF) shownF = sl.fade;
       }
       let flip = null, kBest = -1;
       if (bestI >= 0) {
         const sb = a.slots[bestI];
-        kBest = poseKey(fi, a, sb.pose, sb.meta);
+        kBest = poseKey(fi, a, sb);
         if (fs.shown !== -1 && kBest !== fs.shown && bestF > shownF) flip = { from: fs.shown, to: kBest };
       }
       if (flip) fs.lastFlip = n;
@@ -188,7 +195,7 @@ export function createProbe(cfg, env) {
         const sl = a.slots[i];
         if (!sl || !sl.pose) continue;
         if (!(i === act || sl.fade > 0.001 || recent)) continue;
-        const k = poseKey(fi, a, sl.pose, sl.meta);
+        const k = poseKey(fi, a, sl);
         const m = sl.mesh.matrixWorld.elements;
         const rec = [k, R3(sl.fade), sl.mesh.visible ? 1 : 0];
         for (const [lx, ly] of CORNERS) {

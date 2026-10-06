@@ -25,6 +25,29 @@ export interface PixelSource {
   height: number;
 }
 
+/** A loaded master: the image the texture keeps (an `<img>` handle in the game), its scale, and the decoded pixels it is staged from (`MasterLoad.ts`) when there are any. */
+export interface LoadedPixels {
+  image: PixelSource;
+  scale: number;
+  /** Decoded off the main thread; whoever takes it closes it (the stager once resident, the governor when it swaps the old way). */
+  bitmap?: ImageBitmap | null;
+}
+
+/** What a load is for (see {@link GovernorDeps.load}). */
+export interface LoadOptions {
+  urgent: boolean;
+  warm: boolean;
+}
+
+/** A master on its way to the GPU as the governor sees it (`TextureStager.StagedUpload`; a fake in the tests). */
+export interface GovernedStage {
+  /** True once it is fully resident on the GPU, false when it was cancelled or failed. */
+  readonly ready: Promise<boolean>;
+  /** The painting draws it from the next draw on, in place. False (and the painting unchanged) when it cannot. */
+  adopt(): boolean;
+  cancel(): void;
+}
+
 export interface GovernorDeps {
   actors: () => Iterable<GovernedActor>;
   camera: () => PerspectiveCamera;
@@ -33,14 +56,60 @@ export interface GovernorDeps {
   budget: () => ArtBudget;
   /** The masters on disk beyond 1x for a painting's 1x URL, or null when unknown. */
   scalesFor: (url: string) => readonly number[] | null;
-  /** Load the master of that scale (or the best one below it); null when nothing loads. */
-  load: (url: string, scale: number) => Promise<{ image: PixelSource; scale: number } | null>;
+  /**
+   * Load the master of that scale (or the best one below it); null when nothing loads. `opts` (release 39.1): `urgent` is a figure on screen waiting for it (everything else is
+   * background work and should not crowd out the loads the first menu waits for), `warm` is a master the browser has already fetched once (read it from the cache, do not revalidate).
+   */
+  load: (url: string, scale: number, opts?: LoadOptions) => Promise<LoadedPixels | null>;
+  /**
+   * Release 39.1: start uploading a loaded master to the GPU ahead of the frame that draws it (`TextureStager.ts`); the painting adopts it when it is resident. Null (or
+   * absent: the tests, a browser that failed the probe) means swap on the spot as release 39 did. `urgent`: a figure on screen is waiting for it.
+   */
+  stage?: (texture: Texture, loaded: LoadedPixels, urgent: boolean) => GovernedStage | null;
+  /** True while `stage` can take a master (the browser has proved the staged upload exact); the governor asks for warm-ups only then. Absent: whenever `stage` is. */
+  canStage?: () => boolean;
   /** True under `?artscale=`: every painting is pinned to one master and nothing is measured. */
   pinned?: () => boolean;
   /** The clock in ms (default `performance.now`); the tests step their own. */
   now?: () => number;
   /** The GPU's largest texture edge in pixels: a master whose longer edge would pass it is never asked for. */
   maxTexture?: () => number;
+}
+
+/** What the governor reports (`ArtGovernor.stats()`, `__pyrefly.art.stats()`). */
+export interface GovernorStats {
+  frame: number;
+  upgrades: number;
+  downgrades: number;
+  loadFailures: number;
+  inflight: number;
+  queued: number;
+  /** Masters being uploaded to the GPU ahead of their swap, how many landed that way, how many paintings were warmed (a master uploaded before its first draw), and the speculative megabytes held (release 39.1). */
+  staging: number;
+  stagedLanded: number;
+  warmed: number;
+  warmMB: number;
+  residentMB: number;
+  budgetMB: number;
+  lastSwapMs: number;
+  /** The CPU time of `update()` itself, milliseconds per frame (an exponential mean): the cost of measuring. */
+  updateMs: number;
+  entries: Array<{ url: string; scale: number; mb: number; px1x: number; seen: boolean; warm: boolean }>;
+  /** The last decisions to load a bigger master: what asked (`live`, `anticipated`, `size`, `sibling`), for which painting, at what magnification. */
+  trace: Array<{ frame: number; why: string; url: string; from: number; want: number; px1x: number }>;
+  /** The last swaps: when (ms on the page's clock), which painting, from which master to which, whether it was staged, and how long it took from the ask to the swap. */
+  swaps: Array<{ t: number; url: string; from: number; to: number; staged: boolean; warm: boolean; waitMs: number }>;
+}
+
+/** A texture's image size in pixels (an `<img>` reports its natural size, a bitmap or a canvas its own). */
+export function imageWidth(t: Texture): number {
+  const img = t.image as { naturalWidth?: number; width?: number } | null;
+  return Number(img?.naturalWidth || img?.width || 1);
+}
+
+export function imageHeight(t: Texture): number {
+  const img = t.image as { naturalHeight?: number; height?: number } | null;
+  return Number(img?.naturalHeight || img?.height || 1);
 }
 
 const a0 = new Vector3();

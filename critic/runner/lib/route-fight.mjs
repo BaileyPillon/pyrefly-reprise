@@ -51,12 +51,30 @@ export async function playFight(r) {
     await input.press('Escape'); await page.waitForTimeout(400);
   };
 
+  // r391: a watchdog on the battle log. A fight in which nothing happens for STALL_MS (the route waiting in a submenu it cannot leave, a menu that wants
+  // an item it cannot reach) used to wait out the whole budget, 15 minutes in round 22's Chapter VI (PR-0348); now it backs out of the menus, and after
+  // STALL_TRIES backings-out with still nothing it gives the fight up as stalled. Time in the pause is not stall time (`lastLogAt` moves with the pause).
+  const STALL_MS = Number(process.env.ROUTE_STALL_MS ?? 120000), STALL_TRIES = 3;
+  let lastLogLen = -1, lastLogAt = Date.now(), stallTries = 0;
+  rec.stallRecoveries = 0;
+
   while (['battle', 'pause'].includes(await scr()) && Date.now() - tb < budget) {
-    if ((await scr()) === 'pause') { rec.pauseRecoveries++; await input.press('Escape'); await page.waitForTimeout(700); continue; }
+    if ((await scr()) === 'pause') { rec.pauseRecoveries++; lastLogAt = Date.now(); await input.press('Escape'); await page.waitForTimeout(700); continue; }
     if (Date.now() - lastLogPull > 4000) {
       lastLogPull = Date.now();
       const l = await page.evaluate(() => { try { return window.__pyrefly.battleLog() ?? []; } catch { return []; } });
       if (l.length >= bestLog.length) bestLog = l;
+      if (l.length !== lastLogLen) { lastLogLen = l.length; lastLogAt = Date.now(); }
+    }
+    if (Date.now() - lastLogAt > STALL_MS) {
+      stallTries++; rec.stallRecoveries = stallTries;
+      note('stallRecovery', { n: stallTries, quietMs: Date.now() - lastLogAt, rows: (await readRows(page)).map((x) => x.label).slice(0, 12), phase: (await ss())?.playback?.phase ?? null });
+      if (stallTries === 1) await snap(`${r.pref ?? ''}27b-stalled-menu.png`, 'the fight made no progress for two minutes (a submenu the route could not leave?), before it backed out', { screen: 'battle' });
+      if (stallTries > STALL_TRIES) { rec.stuckStop = `no battle event for ${Math.round((Date.now() - lastLogAt) / 1000)} s after ${STALL_TRIES} recoveries`; break; }
+      for (let i = 0; i < 3; i++) { await input.press('Escape'); await page.waitForTimeout(500); }
+      await escPause();
+      lastLogAt = Date.now();
+      continue;
     }
     if (!firstEnemy) {
       const sr = await battleSeedRead(page);

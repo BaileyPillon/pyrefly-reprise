@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
 import { pyreflyArtDerive } from './tools/art-derive-plugin.mjs';
@@ -51,6 +52,20 @@ function distFilter(sourceMapDir: string | null): Plugin {
   };
 }
 
+/**
+ * The short commit this build is made from, for the hidden mark key's record (`src/app/markMoment.ts`, release 39.1, N1): the build a marked moment came
+ * from. `PYREFLY_BUILD_SHA` overrides it; `unknown` where there is no git (a source archive). Never fails a build.
+ */
+function buildSha(): string {
+  const set = process.env['PYREFLY_BUILD_SHA'];
+  if (set) return set;
+  try {
+    return execSync('git rev-parse --short=8 HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim() || 'unknown';
+  } catch {
+    return 'unknown';
+  }
+}
+
 export default defineConfig(({ command, isPreview }) => {
   const base = command === 'build' || isPreview ? PROD_BASE : '/';
   // PR-0328, D-335: no source map ever ships. The variable SOURCEMAP_DIR_ENV names
@@ -62,6 +77,7 @@ export default defineConfig(({ command, isPreview }) => {
 
   return {
     base,
+    define: { __PYREFLY_BUILD_SHA__: JSON.stringify(buildSha()) },
     // Release 38 (r38-bytes): a production build ships the painted art as lossless WebP, derived from the PNG masters, which
     // stay in public/art untouched (`tools/art-derive.mjs`; `PYREFLY_ART_WEBP=off` ships the PNGs as before). Dev serves PNG.
     // Release 39: the game asks for a master as `idle%402x.png` (ArtShipped.ts); dev and preview serve it from `idle@2x.png` (tools/vite-art-at.mjs).

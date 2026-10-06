@@ -5,7 +5,7 @@
  * added, so it also works on a build that is already live): `window.__pyrefly.app.screens` -> the battle screen
  * (`name`, `fieldShown`, `stage`) -> `stage.actors` (id -> { actor, side, kind, anchor, artId }) and `stage.opts`
  * (`camera`, `canvas`) -> the painted actor (`slots`, `active`, `_alpha`, `showFigure`, `poseUrls`) -> each plane
- * (`pose`, `fade`, `meta`, `mesh`), plus `window.__pyrefly.battleState().log`. Those are names of fields, some of them
+ * (`pose`, `fade`, `meta`, `mesh`, `painted`), plus `window.__pyrefly.battleState().log`. Those are names of fields, some of them
  * private in TypeScript and all of them plain properties at runtime. If one is renamed the probe would see an empty
  * battle and the harness would say UNVERIFIED, so this test fails first and says which file to look at.
  *
@@ -37,7 +37,7 @@ describe('the engine fields the continuity probe reads', () => {
 
   it('a plane has a mesh, a fade, a pose and its painting\'s size', () => {
     const slot = /interface PlaneSlot \{([\s\S]*?)\n\}/.exec(actor)?.[1] ?? '';
-    for (const field of ['mesh: Mesh;', 'fade: number;', 'pose: string;', 'meta: PoseMeta;']) expect(slot, `PlaneSlot ${field} ${WHY}`).toContain(field);
+    for (const field of ['mesh: Mesh;', 'fade: number;', 'pose: string;', 'meta: PoseMeta;', 'painted: PaintedTexture | null;']) expect(slot, `PlaneSlot ${field} ${WHY}`).toContain(field);
     const frame = /export interface PoseFrame \{([\s\S]*?)\n\}/.exec(read('src/engine/PaintedScale.ts'))?.[1] ?? '';
     expect(frame, `PoseFrame.width: ${WHY}`).toContain('width: number;');
     expect(frame, `PoseFrame.height: ${WHY}`).toContain('height: number;');
@@ -77,7 +77,7 @@ describe('the engine fields the continuity probe reads', () => {
   });
 
   it('the probe reads exactly these names and no engine hook', () => {
-    for (const name of ['slots', 'active', '_alpha', 'showFigure', 'poseUrls', 'stage', 'actors', 'opts', 'fieldShown', 'matrixWorld', 'projectionMatrix', 'matrixWorldInverse']) expect(probe).toContain(name);
+    for (const name of ['slots', 'active', '_alpha', 'showFigure', 'poseUrls', 'painted', 'stage', 'actors', 'opts', 'fieldShown', 'matrixWorld', 'projectionMatrix', 'matrixWorldInverse']) expect(probe).toContain(name);
     expect(probe, 'the probe must not depend on a hook that only a newer build has').not.toMatch(/onPoseSwap|__pyrefly\.motion|__pyrefly\.continuity/);
   });
 });

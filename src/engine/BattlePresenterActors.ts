@@ -489,10 +489,25 @@ const HOLD_REACH = 0.9;
  * @see ATTACK_BEATS
  */
 export function attackOffset(t: number): number {
+  return beatsOffset(t, cubicOut);
+}
+
+/**
+ * The same beats with the step eased in and out (no kick on its first frame): the curve the distance a strike is carried BEYOND the house lunge rides
+ * (`PaintedActor.lunge`'s `house`, r391-reach). The house part of every lunge keeps `attackOffset` to the frame, so a strike that already reached plays exactly as
+ * before; the extra distance (up to 3 world units) arrives without the single-frame jump a long cubic-out step makes (the harness's jerk rule, CHK-027, flags a step
+ * of 24 px or more that is 3 times its neighbours and does not keep half its speed for 3 frames: a step three times as long is three times as likely to be one).
+ * Both curves pass through `STEP_REACH` at the end of the step, 1 at the impact and 0 at the end, so the timing of the move is the same.
+ */
+export function reachOffset(t: number): number {
+  return beatsOffset(t, smooth);
+}
+
+function beatsOffset(t: number, stepEase: (u: number) => number): number {
   if (!(t > 0)) return 0;
   if (t >= 1) return 0;
   const { step, hold, strike } = ATTACK_BEATS;
-  if (t < step) return STEP_REACH * cubicOut(t / step);
+  if (t < step) return STEP_REACH * stepEase(t / step);
   if (t < step + hold) return lerp(STEP_REACH, HOLD_REACH, (t - step) / hold);
   if (t < step + hold + strike) {
     return lerp(HOLD_REACH, 1, quadOut((t - step - hold) / strike));

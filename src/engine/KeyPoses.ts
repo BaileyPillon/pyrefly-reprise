@@ -35,6 +35,15 @@ export function windUpLeads(ctx: EventCtx, actorId: CombatantId, pose: string): 
 }
 
 /**
+ * The pose the blow lands in while the wind-up (`ready`) is still up, for the reach solver (`motion/StrikeReach.ts`, r391-reach): the impact painting, the blow's key
+ * frame, which goes up at the lunge's apex as the hit lands (`impactAtApex`); the follow-through that holds after it carries on from there, a little further in. `undefined`
+ * without a wind-up: the pose showing is the one the blow lands in.
+ */
+export function blowPose(windUp: boolean): string | undefined {
+  return windUp ? 'attack' : undefined;
+}
+
+/**
  * The lunge's contact, with the impact painting put up at the apex (after the wind-up). Only while
  * the action is still on: a lunge is never awaited, so its apex can come after `actionEnd` when the
  * playback runs ahead (seen in Chapter IV under the ATB), and the figure must not stay on its impact.

@@ -6,6 +6,7 @@ import { DriftRig } from './DriftRig.ts';
 import { PlateFocus, focusDial } from './PlateFocus.ts'; // A-7: the plates' defocus, aimed at the party's plate
 import { DepthPlates, paintPoint } from './DepthPlates.ts';
 import { Lamps } from './Lamps.ts';
+import { patchSideFogIn } from '../../PlateSideFog.ts';
 import { QuadField } from './QuadField.ts';
 import { Haze } from './Haze.ts';
 import { Figures } from './Figures.ts';
@@ -136,6 +137,7 @@ class Living {
       return;
     }
     const plates = this.plates;
+    if (group) patchSideFogIn(group); // release 39.1, B11 (FFX only): the depth plates fog their edges too
     if (plates) {
       this.focus = new PlateFocus(plates.meshes, plates.zs.map((z) => plates.geometry.camRef.z - z), plates.floored, room.focus);
       plates.meshes.forEach((m, i) => {

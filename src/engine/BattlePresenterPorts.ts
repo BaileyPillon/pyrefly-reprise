@@ -51,7 +51,7 @@ export interface ActorHandle {
   setPose(name: string, opts?: { immediate?: boolean; force?: boolean }): void;
   flash(colour?: number | string, ms?: number, peak?: number, floorCut?: number): void; // floorCut 0..1: less dark-texel lift (FF7)
   shake(amount?: number, ms?: number): void;
-  lunge(distance?: number, ms?: number, contact?: { hold: Promise<unknown>; reached: () => void }): Promise<void>; // contact: VP-1001-06
+  lunge(distance?: number, ms?: number, contact?: { hold: Promise<unknown>; reached: () => void }, house?: number): Promise<void>; // contact: VP-1001-06; house: the part of `distance` that is the house lunge (r391-reach), the rest rides an eased step
   recoil(ms?: number, distance?: number): Promise<void>;
   squash(ms?: number, amount?: number): Promise<void>;
   hop(height?: number, ms?: number): Promise<void>;
@@ -120,6 +120,12 @@ export interface CameraPort {
    * Optional and additive; without it the phone keeps the desktop rigs.
    */
   fitSlice?(rig: string, slice: number, subjects: ReadonlyArray<{ actor: ActorHandle; min: number }>, top?: number): boolean;
+  /**
+   * Register (or refresh) a rig that stands `t` (0..1) of the way from rig `from` to rig `to` (position, aim and lens) and answer its name; null
+   * when either rig is missing. Optional and additive (release 39.1, B5): the FFX-2 boss reveal asks for the furthest push on the boss that still
+   * keeps every girl whole (`ShotRules.reveal`). It moves nothing by itself.
+   */
+  blendRig?(from: string, to: string, t: number): string | null;
   readonly rigNames: string[];
   readonly rigName: string;
 }

@@ -138,12 +138,15 @@ describe('the lead keeps its effect to the last rung but one; its reason shorten
     for (const d of RUNGS) expect(html(CLOSE_IN, d).querySelector('.mad__effect'), `rung ${d}`).toBeNull();
   });
 
-  it('reason: whole on rungs 0 to 3, two lines (a clamp) on rung 4, gone from rung 5', () => {
+  it('reason: whole on rungs 0 to 3, its first whole clause on rung 4 (a reason with no semicolon or second sentence stays whole), gone from rung 5; never an ellipsis or a clamp', () => {
     for (const d of RUNGS) {
       const why = html(STEAL, d).querySelector('.mad__move:not(.mad__move--alt) .mad__why');
       expect(!!why, `rung ${d}`).toBe(d <= 4);
-      expect(!!why?.classList.contains('mad__why--clamp'), `rung ${d} clamped`).toBe(d === 4);
+      expect(why?.classList.contains('mad__why--clamp') ?? false, `rung ${d} clamped`).toBe(false);
     }
+    expect(text(html(STEAL, 3).querySelector('.mad__why'))).toContain('and nothing else, so it will still Remedy him');
+    // a dash or a colon is no place to cut: what follows is the point, so a reason with no semicolon or second sentence is whole or gone
+    expect(text(html(STEAL, 4).querySelector('.mad__why'))).toBe(text(html(STEAL, 3).querySelector('.mad__why')));
   });
 
   it('a card reached by the old rungs 0 and 1 prints what it printed (a lone lead is the same words on rungs 0 to 3)', () => {
@@ -154,22 +157,50 @@ describe('the lead keeps its effect to the last rung but one; its reason shorten
   });
 });
 
-describe('a runner-up keeps its old thresholds, and its reason shortens before the last rung takes it', () => {
-  it('its effect goes at rung 1, its reason runs to two lines from rung 4 and stays until the last rung', () => {
+describe('a runner-up keeps its old thresholds, and its reason shortens to a clause before the last rung takes it', () => {
+  it('its effect goes at rung 1, its reason is a whole clause from rung 4 and stays until the last rung', () => {
     const alt = (d: Density): Element => html(OMNIS, d).querySelector('.mad__move--alt')!;
     for (const d of [0, 1, 2, 3, 4, 5, 6] as Density[]) expect(!!alt(d).querySelector('.mad__why'), `rung ${d}`).toBe(true);
     expect(!!alt(7).querySelector('.mad__why')).toBe(false);
-    for (const d of RUNGS) expect(!!alt(d).querySelector('.mad__why--clamp'), `rung ${d} clamped`).toBe(d >= 4 && d <= 6);
+    expect(text(alt(3).querySelector('.mad__why'))).toBe('It puts Cheer on the party; next, Mortiphasm Spells hits for about 4,400 in all.');
+    expect(text(alt(4).querySelector('.mad__why'))).toBe('It puts Cheer on the party.');
     // and on the bare row it prints the path chip only, no cost
     expect(alt(7).querySelectorAll('.mad__stat').length).toBe(1); // "in Special" only
   });
 
-  it('the lead effect runs to two lines on rung 5 only, where it is what keeps the card off the stub', () => {
+  it('the lead effect is whole on every rung it is printed on (0 to 5) and never clamped', () => {
     for (const d of RUNGS) {
       const eff = html(OMNIS, d).querySelector('.mad__move:not(.mad__move--alt) .mad__effect');
       expect(!!eff, `rung ${d}`).toBe(d <= 5);
-      expect(!!eff?.classList.contains('mad__effect--clamp'), `rung ${d} clamped`).toBe(d === 5);
+      expect(eff?.classList.contains('mad__effect--clamp') ?? false, `rung ${d} clamped`).toBe(false);
+      if (eff) expect(text(eff), `rung ${d}`).toBe('Swaps a bench member into the slot; they take this turn');
     }
+  });
+});
+
+describe('rung 6 and the bare rung keep one tight line of the effect of the lead when it fits (release 39.1: the Sin strip, Chapter XVIII; Chapter XII)', () => {
+  const tight = (v: AdvisorView): HTMLElement => {
+    const el = document.createElement('div');
+    el.innerHTML = cardHtml(v, MAX_DENSITY, true);
+    return el;
+  };
+  it('prints the effect after the path row, only for the lead and only when asked', () => {
+    const eff = tight(HASTEGA).querySelector('.mad__move:not(.mad__move--alt) .mad__effect');
+    expect(text(eff)).toBe('Speeds the party’s turns up');
+    expect(eff?.classList.contains('mad__effect--tight')).toBe(true);
+    expect(html(HASTEGA, MAX_DENSITY).querySelector('.mad__effect'), 'not asked: the bare rung as it was').toBeNull();
+    expect(tight(OMNIS).querySelector('.mad__move--alt .mad__effect')).toBeNull();
+  });
+  it('prints nothing for a move with no effect text (Close in) and changes no other rung', () => {
+    expect(tight(CLOSE_IN).querySelector('.mad__effect')).toBeNull();
+    for (const d of [0, 1, 2, 3, 4, 5] as Density[]) expect(cardHtml(HASTEGA, d, true)).toBe(cardHtml(HASTEGA, d));
+  });
+  it('gives rung 6 its effect back the same way (it loses it otherwise), for the lead alone', () => {
+    const el = document.createElement('div');
+    el.innerHTML = cardHtml(OMNIS, 6, true);
+    expect(text(el.querySelector('.mad__move:not(.mad__move--alt) .mad__effect'))).toBe('Swaps a bench member into the slot; they take this turn');
+    expect(el.querySelector('.mad__move--alt .mad__effect')).toBeNull();
+    expect(html(OMNIS, 6).querySelector('.mad__effect')).toBeNull();
   });
 });
 
@@ -219,7 +250,9 @@ describe('the stylesheet', () => {
     expect(narrow).toMatch(/\.mad__actor--inline\s*\{\s*display:\s*inline/);
   });
 
-  it('a clamped reason and a clamped effect run to two lines', () => {
-    expect(css).toMatch(/\.mad__why--clamp,\s*\.mad__effect--clamp\s*\{[^}]*-webkit-line-clamp:\s*2/);
+  it('no sentence on the card is clamped to an ellipsis (round 22, PR-0330) and the tight effect line of the strip has its own leading', () => {
+    expect(css).not.toMatch(/line-clamp/);
+    expect(css).not.toMatch(/text-overflow:\s*ellipsis/);
+    expect(css).toMatch(/\.mad__effect--tight\s*\{[^}]*line-height:\s*1\.15/);
   });
 });

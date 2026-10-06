@@ -260,10 +260,10 @@ describe('hurriedArrivalPace: the compressed arrival follows the presenter\'s pl
     }
   });
 
-  it('the normal-speed pace leaves the approved timing exactly as FOC371-01 measured it (2x, over in 2.9 s)', () => {
+  it('the normal-speed pace is the hurried 2x of FOC371-01 (the arrival over in half its authored length: 1.8 s since release 39.1, B8)', () => {
     const rate = HURRIED_ARRIVAL_SPEED * hurriedArrivalPace(hurriedAt(() => 'normal'));
     expect(rate).toBe(2);
-    expect(SAKURA_ARRIVAL_MS.end / rate).toBeCloseTo(2900, 6);
+    expect(SAKURA_ARRIVAL_MS.end / rate).toBeCloseTo(1800, 6);
   });
 });
 

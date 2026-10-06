@@ -30,7 +30,7 @@ export function installFxDebug(api: Record<string, unknown>, app: App): void {
       if (v !== undefined) eyeCandy.setDial(name, v);
       return eyeCandy.dial(name);
     },
-    /** Release 39 colour fidelity: how far a painted figure shows its painting's own colour, 0 (today's look, the default) to 1; no value reads it. */
+    /** Release 39 colour fidelity: how far a painted figure shows its painting's own colour, 0 (release 39's look) to 1 (the default since 39.1, D-437); no value reads it. */
     figureTrue: (v?: number) => {
       if (v !== undefined && Number.isFinite(v)) applyFigureTrue(app.renderer, v);
       return figureTrueOf(app.renderer);

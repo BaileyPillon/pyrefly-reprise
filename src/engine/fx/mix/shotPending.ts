@@ -11,11 +11,18 @@
  *
  * The RULES are the ones D-316, R19-FN-01 and D-357 set and are not loosened: never over an open command menu, never while anyone else is
  * acting (an enemy's hit would land inside the shot with the enemy off camera), the strict framing rules, the placeholder rule. What changes
- * is that a closed gate is waited out for up to 0.6 s instead of being final. Pure: no DOM, no `three`.
+ * is that a closed gate is waited out for up to 0.6 s instead of being final (1.0 s while an enemy's action in flight is what holds it, B3). Pure: no DOM, no `three`.
  */
 
 /** How long a change waits for a clean moment, seconds (the twirl keys play for 0.64 s, `twirl.ts`). */
 export const PENDING_S = 0.6;
+/**
+ * How long a change waits while what holds it up is an ENEMY's action already in flight (an enemy spell or strike that began before, or just
+ * after, the change), seconds. Release 39.1, B3 (Bailey, 2026-10-05, "all of your recommendations"; FFX-2 only: only FFX-2 has the shot): 4 of 24
+ * changes lost the close-up to a spell in flight that ended a moment after the 0.6 s were up. Only this wait is longer; the other gates (a menu,
+ * the framing, a teammate's action) keep {@link PENDING_S}, nothing is held back (no enemy action is delayed: ATB timing is untouched).
+ */
+export const PENDING_FOE_S = 1.0;
 /** Between two framing searches while a change waits, seconds. */
 export const RETRY_S = 0.12;
 /** The most framing searches one change gets (each is one frame's hitch when nothing passes). */
@@ -34,6 +41,8 @@ export interface Pending<A> {
   searches: number;
   /** The gate that held it up on the last frame it was waiting. */
   last: Gate | null;
+  /** On that frame the 'acting' gate was an enemy's action (B3: such a wait runs to {@link PENDING_FOE_S}). Absent reads as false. */
+  foe?: boolean;
 }
 
 /** What the gates read on this frame. */
@@ -48,15 +57,22 @@ export interface PendingIn {
   master: boolean;
   /** Anyone but the girl is acting (R19-FN-01). */
   acting: boolean;
+  /** An enemy is acting (a subset of `acting`; B3). Absent reads as false. */
+  foeActing?: boolean;
 }
 
 export type PendingStep = { kind: 'wait'; gate: Gate } | { kind: 'drop'; gate: Gate } | { kind: 'search' };
+
+/** How long this change may wait: {@link PENDING_FOE_S} while an enemy's action is what holds it, else {@link PENDING_S}. */
+export function waitFor(p: Pick<Pending<unknown>, 'last' | 'foe'>): number {
+  return p.last === 'acting' && p.foe === true ? PENDING_FOE_S : PENDING_S;
+}
 
 /** What a waiting change does on this frame. Pure on its input. */
 export function stepPending(p: Pending<unknown>, i: PendingIn): PendingStep {
   const age = i.time - p.since;
   if (!i.scOn) return { kind: 'drop', gate: 'off' };
-  if (age > PENDING_S) return { kind: 'drop', gate: p.last ?? 'expired' };
+  if (age > waitFor(p)) return { kind: 'drop', gate: p.last ?? 'expired' };
   // A menu that is up now may be the changer's own, still closing; one that stays up for the whole wait ends it as a drop above.
   if (i.menu) return { kind: 'wait', gate: 'menu' };
   if (!i.master || !i.ready) return { kind: 'wait', gate: 'not-ready' };

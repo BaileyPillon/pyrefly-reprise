@@ -1,4 +1,5 @@
 """Measure every pose of a subject: the head against the idle's head, and where the figure stands.
+(Foes, `game: foe` with `rowFromBaseline` in subjects.json: the stance only, its row the painting's baseline; no face box, so no head reading.)
 
     python -s tools/posescale/measure.py tiles tidus [yuna ...] [--poses a,b] --out DIR   the review sheets (ruler tiles, 6 poses each)
     python -s tools/posescale/measure.py pairs yuna-gunner [...] [--poses ready] --out DIR   idle beside each pose at the current scale (a quick same-size check)
@@ -13,8 +14,8 @@ overview sheet); the reviewer reads off the ruler the head fills snugly and writ
 the pose's `scale` (PaintedScale.ts): the idle's pixel scale times it brings the pose's head to the idle's. `measure` also
 draws the normalised sheet (every head at its recorded scale in the idle's rectangle) to confirm the whole set by eye.
 
-A reading within 8 percent of the scale the pose already has (its sidecar's, or the KO table's) is inside what a ruler reading can tell
-apart: it is recorded (`reading`) and not applied (`scaleSrc: noise`); a larger one replaces the pose's scale (`reviewed`).
+A reading within half a percent of the scale the pose already has (its sidecar's, or the KO table's) is that same scale: it is recorded (`reading`)
+and not applied (`scaleSrc: noise`); any other replaces the pose's scale (`reviewed`). (Until r391 the band was 8 percent.)
 
 The stance. The middle of the support under the figure (every opaque pixel in the 4 percent of its height above the lowest thick row, thin
 soles included, outliers trimmed): automatic, shown on the stance sheet, with a hand `stance` in overrides.json when a weapon's tip is lower than the boots.
@@ -39,9 +40,15 @@ import ps_lib as L  # noqa: E402
 import ps_sheets as S  # noqa: E402
 
 HERE = pathlib.Path(__file__).resolve().parent
-# What a by-eye reading can resolve (about +-8 percent against rulers, +-10 on the first pass over Tidus, Wakka and Lulu). A reading within BAND of the scale the pose
-# already has is inside the noise: applying it would add as much error as it removes. It is recorded, not applied; a larger one replaces the pose's scale.
-BAND = 0.08
+# r391: the 8 percent band is gone. A reading within BAND of the scale the pose already has is the same number (it is recorded, not applied); every other
+# reading replaces the pose's scale. Release 39 left a reading within 8 percent of the sidecar's scale unapplied ("applying it would add as much error as it removes"),
+# and the continuity harness, which reads the same records, then found those poses 3 to 8 percent off their idle's head: 100 percent of the registered swaps over 3 percent
+# in Tidus's, Wakka's and Yuna's, by construction. A reading is good to about +-4 percent (fine rulers, tools/posescale/fine.py), see docs/handoff/r391-posescale.md.
+BAND = 0.005
+# r391: a KO painting lies rolled on the floor, and drawn through the stage camera its head comes out smaller than the same head standing: measured on screen
+# (the harness's `measure.mjs`, 7 chapters, 12 subjects) the KO head is 0.957 to 1.006 of its idle's with a median of 0.978 at the registered scale. The table gives
+# every KO `scale / KO_PROJECTION`, so the head on screen is the idle's to about 2.5 percent (the spread is the station: Ch I and VIII lay Tidus at 0.957 and 0.99).
+KO_PROJECTION = 0.978
 # poses-0930's stature gate (D-298): a bent, hunched, kneeling or lunging pose may not be drawn smaller than this fraction of the idle's height, whatever its head says
 STATURE_GATE = 0.60
 ANCHORS_JSON = HERE / "anchors.json"
@@ -257,7 +264,7 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
             ph = p.bbox[3] - p.bbox[1]
             stature = ph * scale / idle_h
             if stature < STATURE_GATE:
-                smin = math.ceil(STATURE_GATE * idle_h / ph * 100) / 100
+                smin = math.ceil(STATURE_GATE * idle_h / ph * 1000) / 1000  # r391: to the thousandth (it was the hundredth, which left a gated head up to 1.5 percent further off than it had to be)
                 rec["gate"] = {"reading": round(scale, 3), "stature": round(ph * smin / idle_h, 3)}
                 scale, src = smin, "gated"
         if scale and not p.prone:
@@ -266,7 +273,7 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
         if anchor:
             rec["anchor"] = [r1(anchor[0]), r1(anchor[1])]
             hs = rec.get("reading") or scale
-            if hs:
+            if hs and ann.get("face"):  # a foe has no face box: its scale is read by the silhouette's mass, never as a head
                 rec["head"] = [r1(anchor[0] - bw / hs / 2), r1(anchor[1] - bh / hs / 2), r1(anchor[0] + bw / hs / 2), r1(anchor[1] + bh / hs / 2)]
         # ---- stance (standing poses only: a prone body rests by its own rule, PaintedRest.ts)
         # a pose wider than tall is lying down only when it is a KO: a standing lunge of a figure whose idle is upright is standing
@@ -292,6 +299,9 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
                         rec["stance"] = {"x": r1(st["x"]), "row": r1(st["row"]), "x0": r1(st["x0"]), "x1": r1(st["x1"]), "src": "silhouette(opened harder)"}
                 if ratio > 6.0:
                     rec["stance"]["flag"] = f"width x{ratio:.2f} of the idle's"
+        if ann.get("rowFromBaseline") and rec.get("stance"):
+            # a foe: the engine plants the painting's baseline on the ground and the stage owns its height (a hover, a pedestal); only the stance's x is registered, its row is the baseline's
+            rec["stance"]["row"] = rec["baseline"]
         recs[pose] = rec
         stn = rec["stance"]
         print(f"  {pose:22s} scale {('%.3f' % scale) if scale else '  -  '} [{src}]  stance {('x=%.0f row=%.0f' % (stn['x'], stn['row'])) if stn else 'n/a'}{('  FLAG ' + stn['flag']) if stn and stn.get('flag') else ''}  baseline {rec['baseline']}", flush=True)
@@ -331,7 +341,10 @@ def cmd_table() -> None:
             if r.get("skip"):
                 continue
             row: dict = {}
-            if pose != "idle" and r.get("scale") and r.get("scaleSrc") in ("reviewed", "accepted", "gated"):
+            ko_like = pose == "ko" and r.get("prone") and not r.get("standing")
+            if ko_like and r.get("scale"):
+                row["scale"] = round(r["scale"] / rec.get("koProjection", 1.0), 3)  # a KO's head is drawn smaller by its lying plane: see KO_PROJECTION
+            elif pose != "idle" and r.get("scale") and r.get("scaleSrc") in ("reviewed", "accepted", "gated"):
                 row["scale"] = r["scale"]
             st = r.get("stance")
             if st and st.get("flag"):
@@ -401,6 +414,7 @@ def main() -> None:
     if a.write:
         rec = L.load_json(L.RECORDS_JSON, {"version": 1, "metric": "head box read against the idle's by rulers (sqrt(width*height)); stance from the silhouette", "subjects": {}})
         rec["resolution"] = BAND  # what a ruler reading can resolve; the check's tolerance for a reviewed head
+        rec["koProjection"] = KO_PROJECTION
         for s, v in result.items():
             old = rec["subjects"].get(s, {"poses": {}})
             if only:

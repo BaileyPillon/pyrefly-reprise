@@ -173,3 +173,45 @@ describe('no sheet sets the open Sensor card\'s top without the pin\'s lift agai
     }
   });
 });
+
+describe("Natus's pinned card keeps its two chip rows at a small window (PR-0406; FFX only, Chapter X)", () => {
+  const widthRule = FLOOR_RULES.find((r) => r.selector === OPEN_CARD && /(?:^|;|\s)width:/.test(r.body));
+  const widthExpr = declOf(widthRule, 'width');
+  /** The card's CSS width (grid px) in a window, with the pin's flag (`pinned`) or without it. */
+  function widthAt(w: number, h: number, pinned: boolean): number {
+    const vars: Record<string, string> = { '--lb-scale': String(stageScale(w, h)), '--hud-floor': floorToken };
+    if (pinned) vars['--ffx-sensor-pin'] = '1';
+    return evaluate(widthExpr, vars);
+  }
+  /** The width three chip columns need: `.ffx-sensor__chips` is `repeat(auto-fit, minmax(4.2 * floor, 1fr))`, 2 grid px apart, in the card's 8 + 8 of padding. */
+  const threeColumns = (w: number, h: number): number => 3 * 4.2 * (14.1 / stageScale(w, h)) + 2 * 2 + 16;
+
+  it('has a width rule on the open card, and the pin writes its flag beside the place and removes it with it', () => {
+    expect(widthRule).toBeDefined();
+    expect(widthExpr).toContain('var(--ffx-sensor-pin, 0)');
+    document.body.innerHTML = '<div class="ffx-sensor"></div>';
+    const el = document.querySelector<HTMLElement>('.ffx-sensor')!;
+    const pin = new SensorPin();
+    pin.update(NATUS.pin.card);
+    expect(el.style.getPropertyValue('--ffx-sensor-pin')).toBe('1');
+    pin.update(null);
+    expect(el.style.getPropertyValue('--ffx-sensor-pin')).toBe('');
+    document.body.innerHTML = '';
+  });
+
+  it('is the authored 100 whenever the card is not pinned, in every window (every other chapter, and Natus with no pin)', () => {
+    for (const [w, h] of [[1024, 768], [1280, 720], [1366, 768], [1600, 900], [2560, 1440]] as const) expect(widthAt(w, h, false), `${w}x${h}`).toBe(100);
+  });
+
+  it('is wide enough for three chip columns at 1280x720 and 1366x768 (it was 100, two columns and a third row: 14 grid px taller than the table assumed)', () => {
+    for (const [w, h] of [[1280, 720], [1366, 768]] as const) {
+      expect(widthAt(w, h, true), `${w}x${h}`).toBeGreaterThan(100);
+      expect(widthAt(w, h, true), `${w}x${h}`).toBeGreaterThanOrEqual(threeColumns(w, h));
+    }
+  });
+
+  it('is the authored 100 where the floored type already fits three columns (1440x810 and up) and never wider than 112 (it stays off the turn rail)', () => {
+    for (const [w, h] of [[1440, 810], [1600, 900], [2000, 1012], [2560, 1440]] as const) expect(widthAt(w, h, true), `${w}x${h}`).toBe(100);
+    for (const [w, h] of [[1024, 576], [1280, 720], [1366, 768]] as const) expect(widthAt(w, h, true), `${w}x${h}`).toBeLessThanOrEqual(112);
+  });
+});
