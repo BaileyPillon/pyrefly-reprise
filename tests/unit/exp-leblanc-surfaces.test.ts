@@ -71,8 +71,12 @@ describe('facing: every installed painting faces the way the game draws its side
   it("installs every painting from the Art Room's approved record: the girls' poses by hand (Rikku's and Paine's attacks from the automatic pose rounds), the fiends by the driver's delegation", () => {
     // Bailey approved by hand: all of Yuna's, and the idle and the ready pose of Rikku and of Paine. Everything painted since came from the Art Room's automatic pose rounds.
     const BY_HAND: Record<string, string[]> = { 'yuna-gunner': ['idle', 'ready', 'attack', 'cast', 'hurt', 'ko', 'victory'], 'rikku-thief': ['idle', 'ready'], 'paine-warrior': ['idle', 'ready'] };
+    // The driver delegated each fiend's idle, and Leblanc's hurt (p_7f698e5d) by name; every other fiend pose came from the automatic pose rounds.
+    const DELEGATED = new Set(['leblanc/hurt']);
     for (const subject of FIENDS) {
-      for (const [pose, rec] of Object.entries(INSTALLED[subject]!)) expect(rec.artRoom.approvedBy, `${subject}/${pose}`).toBe(pose === 'idle' ? 'driver-delegated' : 'auto-pose');
+      for (const [pose, rec] of Object.entries(INSTALLED[subject]!)) {
+        expect(rec.artRoom.approvedBy, `${subject}/${pose}`).toBe(pose === 'idle' || DELEGATED.has(`${subject}/${pose}`) ? 'driver-delegated' : 'auto-pose');
+      }
     }
     for (const subject of GIRLS) {
       for (const [pose, rec] of Object.entries(INSTALLED[subject]!)) {
@@ -82,10 +86,9 @@ describe('facing: every installed painting faces the way the game draws its side
   });
 
   it("installs the three girls' idles and every pose installed for them, and the five fiends' idles", () => {
-    expect(Object.keys(INSTALLED['yuna-gunner']!).sort()).toEqual(['attack', 'cast', 'hurt', 'idle', 'ko', 'ready', 'victory']);
-    expect(Object.keys(INSTALLED['rikku-thief']!).sort()).toEqual(['attack', 'hurt', 'idle', 'ko', 'ready', 'victory']);
-    expect(Object.keys(INSTALLED['paine-warrior']!).sort()).toEqual(['attack', 'hurt', 'idle', 'ko', 'ready']);
-    for (const subject of ['leblanc', 'logos', 'ormi']) expect(Object.keys(INSTALLED[subject]!)).toEqual(['idle']);
+    // Every everyday pose of the three girls (idle, ready, attack, cast, hurt, ko, victory, item) and of the three fiends who walk off (no KO) has new art.
+    for (const subject of ['yuna-gunner', 'rikku-thief', 'paine-warrior']) expect(Object.keys(INSTALLED[subject]!).sort(), subject).toEqual(['attack', 'cast', 'hurt', 'idle', 'item', 'ko', 'ready', 'victory']);
+    for (const subject of ['leblanc', 'logos', 'ormi']) expect(Object.keys(INSTALLED[subject]!).sort(), subject).toEqual(['attack', 'cast', 'hurt', 'idle']);
     for (const subject of ['ffx2-dr-goon', 'ffx2-fem-goon']) expect(Object.keys(INSTALLED[subject]!).sort()).toEqual(['attack', 'hurt', 'idle', 'ko']); // the goons are complete
   });
 });
@@ -142,7 +145,9 @@ describe('registration: each installed girl\'s idle carries a head box, and ever
     expect(attack.stanceSource).toBe('hand');
     expect(attack.row['stanceX']).toBe(927.5);
     expect(poseRegistrationFor(characterUrl('exp-leblanc-ffx2-dr-goon', 'attack'))?.stanceX).toBe(927.5);
-    expect(INSTALLED['ffx2-dr-goon']!['idle']!.row['stanceX']).toBe(509); // the idle's rear boot is the reference and never moves
+    const idleStance = INSTALLED['ffx2-dr-goon']!['idle']!.row['stanceX'] as number;
+    expect(idleStance).toBeGreaterThan(458); // the idle's rear boot (x 458 to 559) is the reference and never moves
+    expect(idleStance).toBeLessThan(559);
     // Every other new pose keeps the tool's own stance.
     for (const [subject, poses] of Object.entries(INSTALLED)) {
       for (const [pose, rec] of Object.entries(poses)) if (rec.stanceSource) expect(`${subject}/${pose}`).toBe('ffx2-dr-goon/attack');
@@ -233,11 +238,14 @@ describe('the story-scene figures: Leblanc, Ormi and Logos stand on the experime
   });
 
   it('stands each on its namespaced idle, with that painting\'s size, feet and facing, placed exactly as before', () => {
-    for (const [actor, size, feet, facing] of [['leblanc', [806, 1404], 1388, -1], ['logos', [825, 1400], 1384, -1], ['ormi', [819, 1380], 1364, -1]] as const) {
+    for (const [actor, facing] of [['leblanc', -1], ['logos', -1], ['ormi', -1]] as const) {
+      // The size and the feet line are the idle's own (its record in installed.json, which is its sidecar's), so a re-cut of the painting moves them with it.
+      const idle = INSTALLED[actor]!['idle']!;
+      const [w, h] = idle.size;
       const fig = cutsceneFigureIn(NS, actor)!;
       expect(fig.art).toBe(`art/characters/exp-leblanc-${actor}/idle.png`);
-      expect(fig.aspect).toBeCloseTo(size[0] / size[1], 6);
-      expect(fig.baseline).toBeCloseTo(feet / size[1], 6);
+      expect(fig.aspect).toBeCloseTo(w / h, 6);
+      expect(fig.baseline).toBeCloseTo(idle.baselineY / h, 6);
       expect(fig.artFacing, actor).toBe(facing);
       expect(fig.landscape).toEqual(cutsceneFigure(actor)!.landscape);
       expect(fig.portrait).toEqual(cutsceneFigure(actor)!.portrait);
@@ -296,5 +304,31 @@ describe('the dressphere twirl reads the namespace\'s own figures', () => {
       'yuna-gunner/twirl-mid',
       'yuna-songstress/twirl-end',
     ]);
+  });
+});
+
+describe('the keyed sheets: the generator\'s pale grey fringe is peeled off the silhouette', () => {
+  const matteOf = (id: string, pose: string): { how: string; haloPeel?: number; haloPeeledPx?: number } => JSON.parse(readFileSync(join(ART, 'characters', id, `${pose}.json`), 'utf8')).matte;
+
+  it.skipIf(!HAVE_ART)("cuts Leblanc's four paintings with the halo peel (a neutral grey glow a few pixels wide ran along her whole silhouette on the room's dark floor)", () => {
+    for (const pose of ['idle', 'cast', 'attack', 'hurt']) {
+      const matte = matteOf('exp-leblanc-leblanc', pose);
+      expect(matte.how, pose).toBe('key');
+      expect(matte.haloPeel, pose).toBe(6);
+      expect(matte.haloPeeledPx ?? 0, pose).toBeGreaterThan(500);
+    }
+  });
+
+  it.skipIf(!HAVE_ART)('cuts every other keyed painting of the experiment with it too (the grey sheets of the second set, and the goons, Ormi and the girls\' KOs of the first two builds), and a sheet with no halo (Logos on ochre) loses nothing to it', () => {
+    const KEYED: Array<[string, string]> = [
+      ['exp-leblanc-rikku-thief', 'cast'], ['exp-leblanc-rikku-thief', 'item'], ['exp-leblanc-rikku-thief', 'ko'],
+      ['exp-leblanc-paine-warrior', 'cast'], ['exp-leblanc-paine-warrior', 'item'], ['exp-leblanc-paine-warrior', 'ko'],
+      ['exp-leblanc-yuna-gunner', 'item'],
+      ['exp-leblanc-ormi', 'idle'], ['exp-leblanc-ormi', 'cast'], ['exp-leblanc-ormi', 'attack'], ['exp-leblanc-ormi', 'hurt'],
+      ...['idle', 'attack', 'hurt', 'ko'].flatMap((pose): Array<[string, string]> => [['exp-leblanc-ffx2-dr-goon', pose], ['exp-leblanc-ffx2-fem-goon', pose]]),
+    ];
+    for (const [id, pose] of KEYED) expect(matteOf(id, pose).haloPeel, `${id}/${pose}`).toBe(6);
+    // Logos's sheets are on ochre and carry no neutral grey glow: the peel runs and finds (almost) nothing, and his idle is unchanged from the first build.
+    for (const pose of ['cast', 'attack', 'hurt']) expect(matteOf('exp-leblanc-logos', pose).haloPeeledPx ?? 0, `logos/${pose}`).toBeLessThan(10);
   });
 });

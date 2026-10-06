@@ -21,6 +21,7 @@
  *   --no-tiers                 skip the @2x/@3x/@4x masters (a pose that already has them is refused: they would be the old painting's)
  *   --matte auto|keep|key|rembg  keep the image's own alpha, key a figure on one flat colour (the Art Room's idle sheets), or cut it with isnet-anime
  *                              (auto: keep when it has real alpha, key on a flat background, else isnet-anime)
+ *   --halo-peel N             key matte only: peel a neutral-grey halo up to N pixels deep off the outside of the figure (Leblanc's attack and hurt sheets carry one)
  *   --pockets flat|tinted      key matte only: `tinted` also clears glow-tinted enclosed gaps (Leblanc's legs); the default clears only gaps of the background colour
  *   --dry-run                  validate and say what would be written; write nothing
  *   --allow-unapproved         install an image that is not in the Art Room's approved record (tests only)
@@ -301,7 +302,7 @@ export async function install(opts) {
   mkdirSync(work, { recursive: true });
   const cut = join(work, `${pose}.png`);
   say(`matte, clean and frame ${basename(src)} -> ${cut}`);
-  const fig = run(join(REPO, 'tools', 'exp-art', 'figure.py'), ['--src', src, '--out', cut, '--matte', opts.matte ?? 'auto', ...(opts.pockets ? ['--pockets', opts.pockets] : []), ...(opts['feet-row'] ? ['--feet-row', opts['feet-row']] : [])], 'figure.py');
+  const fig = run(join(REPO, 'tools', 'exp-art', 'figure.py'), ['--src', src, '--out', cut, '--matte', opts.matte ?? 'auto', ...(opts.pockets ? ['--pockets', opts.pockets] : []), ...(opts['halo-peel'] ? ['--halo-peel', opts['halo-peel']] : []), ...(opts['feet-row'] ? ['--feet-row', opts['feet-row']] : [])], 'figure.py');
 
   // The painting, and the sidecar the engine reads; a painting that replaces earlier new art is kept first.
   if (before) {

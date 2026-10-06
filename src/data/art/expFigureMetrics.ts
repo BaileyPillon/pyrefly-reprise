@@ -13,11 +13,11 @@ export interface ExpFigureMetrics {
 }
 
 export const EXP_FIGURE_METRICS: Readonly<Record<string, ExpFigureMetrics>> = {
-  'exp-leblanc-ffx2-dr-goon': { width: 577, height: 1380, baselineY: 1364, facing: 'left' },
-  'exp-leblanc-ffx2-fem-goon': { width: 449, height: 1387, baselineY: 1371, facing: 'left' },
-  'exp-leblanc-leblanc': { width: 806, height: 1404, baselineY: 1388, facing: 'left' },
+  'exp-leblanc-ffx2-dr-goon': { width: 577, height: 1379, baselineY: 1363, facing: 'left' },
+  'exp-leblanc-ffx2-fem-goon': { width: 449, height: 1386, baselineY: 1370, facing: 'left' },
+  'exp-leblanc-leblanc': { width: 805, height: 1403, baselineY: 1387, facing: 'left' },
   'exp-leblanc-logos': { width: 825, height: 1400, baselineY: 1384, facing: 'left' },
-  'exp-leblanc-ormi': { width: 819, height: 1380, baselineY: 1364, facing: 'left' },
+  'exp-leblanc-ormi': { width: 819, height: 1379, baselineY: 1363, facing: 'left' },
   'exp-leblanc-paine-black-mage': { width: 567, height: 1151, baselineY: 1135, facing: 'auto' },
   'exp-leblanc-paine-gunner': { width: 493, height: 1136, baselineY: 1120, facing: 'auto' },
   'exp-leblanc-paine-songstress': { width: 344, height: 1194, baselineY: 1178, facing: 'left' },

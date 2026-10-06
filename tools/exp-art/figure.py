@@ -51,6 +51,9 @@ EDGE_BAND = 3  # px beyond the body a soft pixel may sit (the antialiased edge);
 FLAT_P99 = 14.0  # a border ring this flat (99th percentile of the RGB distance to its median) is a flat background: `key` is the cutter
 POCKET_MIN = 10  # px: an enclosed pocket of the background colour smaller than this is a pinhole in the figure, not a gap
 POCKET_THICK = 2.4  # px: the inscribed radius that makes a region near the background colour a blob (a gap), not a curve of anti-aliasing
+HALO_SAT = 24.0  # the halo is neutral grey: a pixel this close to colourless (max minus min of its RGB) can be halo
+HALO_LO = 100.0  # and a mid-to-light grey (the mean of its RGB), darker than a pale highlight and lighter than ink
+HALO_HI = 190.0
 POCKET_TINT = 24.0  # the median distance a blob may sit from the background colour (the sheet's glow tints the air in the gaps)
 KEY_CHOKE = 1  # px the keyed matte is pulled in (the blended edge pixels of the source sit outside the true outline)
 KEY_FEATHER = 0.75  # sigma of the soft edge (px)
@@ -80,7 +83,31 @@ def flat_background(rgb: np.ndarray) -> tuple[np.ndarray, float] | None:
     return (med, n) if float(np.percentile(d, 99)) <= FLAT_P99 else None
 
 
-def key_matte(rgb: np.ndarray, med: np.ndarray, noise: float, tinted: bool = False) -> tuple[np.ndarray, dict]:
+def peel_halo(fg: np.ndarray, rgb: np.ndarray, depth: int) -> tuple[np.ndarray, int]:
+    """Peel the generator's grey halo off the outside of a keyed figure. Some sheets (Leblanc's attack and hurt) carry a soft neutral-grey glow a few pixels
+    wide along the whole silhouette: it differs from the flat background enough to survive the flood, and a one-pixel choke leaves most of it, so on the room's dark
+    floor it reads as a pale outline. Here, from the outside in and at most `depth` times, a figure pixel that touches the outside and is neutral mid-grey
+    (HALO_SAT, HALO_LO to HALO_HI) is taken off, so only a CONTIGUOUS grey fringe goes; a coloured edge (skin, hair, the kimono's beige trim), a dark ink line
+    and a white highlight are never candidates, and an isolated grey pixel inside the figure is untouched. Returns (the new figure mask, pixels peeled)."""
+    f = rgb.astype(np.float32)
+    sat = f.max(axis=2) - f.min(axis=2)
+    val = f.mean(axis=2)
+    cand = (sat < HALO_SAT) & (val >= HALO_LO) & (val <= HALO_HI)
+    cur = fg.copy()
+    st = ndi.generate_binary_structure(2, 1)
+    peeled = 0
+    for _ in range(depth):
+        edge = cur & ndi.binary_dilation(~cur, structure=st)
+        peel = edge & cand
+        n = int(peel.sum())
+        if n == 0:
+            break
+        cur &= ~peel
+        peeled += n
+    return cur, peeled
+
+
+def key_matte(rgb: np.ndarray, med: np.ndarray, noise: float, tinted: bool = False, halo_peel: int = 0) -> tuple[np.ndarray, dict]:
     """Alpha of a figure on one flat colour: flood the background from the border, choke by KEY_CHOKE px, feather. Returns (alpha uint8, stats).
 
     `tinted` also takes a BLOB of nearly the background colour that is enclosed (the sheet's glow tints the air between a figure's legs a little) as a gap; it is
@@ -123,11 +150,14 @@ def key_matte(rgb: np.ndarray, med: np.ndarray, noise: float, tinted: bool = Fal
     small = [i for i in range(1, hn + 1) if (hl == i).sum() < POCKET_MIN]
     if small:
         fg |= np.isin(hl, small)
+    peeled = 0
+    if halo_peel > 0:
+        fg, peeled = peel_halo(fg, rgb, halo_peel)
     fg1 = ndi.binary_erosion(fg, structure=ndi.generate_binary_structure(2, 1), iterations=KEY_CHOKE) if KEY_CHOKE else fg
     alpha = ndi.gaussian_filter(fg1.astype(np.float32), KEY_FEATHER)
     alpha = np.where(fg1, np.maximum(alpha, 0.0), alpha)
     a = np.clip(np.round(alpha * 255.0), 0, 255).astype(np.uint8)
-    return a, {"background": [int(round(float(x))) for x in med], "noise": round(noise, 1), "tFg": round(t_fg, 1), "enclosedGaps": enclosed, "chokePx": KEY_CHOKE, "featherSigma": KEY_FEATHER, "pockets": "tinted" if tinted else "flat"}
+    return a, {"background": [int(round(float(x))) for x in med], "noise": round(noise, 1), "tFg": round(t_fg, 1), "enclosedGaps": enclosed, "chokePx": KEY_CHOKE, "featherSigma": KEY_FEATHER, "pockets": "tinted" if tinted else "flat", **({"haloPeel": halo_peel, "haloPeeledPx": peeled} if halo_peel > 0 else {})}
 
 
 
@@ -238,6 +268,7 @@ def main() -> int:
     ap.add_argument("--out", required=True)
     ap.add_argument("--matte", choices=["auto", "keep", "key", "rembg"], default="auto")
     ap.add_argument("--pockets", choices=["flat", "tinted"], default="flat", help="key matte only: `tinted` also clears glow-tinted enclosed gaps (Leblanc's legs); the default clears only gaps of the background colour")
+    ap.add_argument("--halo-peel", type=int, default=0, help="key matte only: peel a neutral-grey halo this many pixels deep off the outside of the figure (Leblanc's attack and hurt sheets carry one); 0 keeps it")
     ap.add_argument("--margin", type=int, default=16)
     ap.add_argument("--haze", type=int, default=16)
     ap.add_argument("--feet-row", type=float, default=None, help="the row of the soles when a thick weapon hangs lower (the registration's feetRow)")
@@ -254,7 +285,7 @@ def main() -> int:
         flat = flat or flat_background(rgba[..., :3])
         if flat is None:
             raise SystemExit("[figure] --matte key: the border of the image is not one flat colour; use --matte rembg")
-        rgba[..., 3], key_stats = key_matte(rgba[..., :3], flat[0], flat[1], tinted=args.pockets == "tinted")
+        rgba[..., 3], key_stats = key_matte(rgba[..., :3], flat[0], flat[1], tinted=args.pockets == "tinted", halo_peel=args.halo_peel)
     elif how == "rembg":
         rgba = np.asarray(cut_with_rembg(src)).copy()
     elif how == "keep" and not real:

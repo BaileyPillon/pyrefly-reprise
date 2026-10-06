@@ -280,10 +280,12 @@ async function runShots() {
     await shot('4-act1-first-menu');
 
     // Acts I and II by the debug route, until Act III's figures stand on the field. Act I is Ormi and the two goons, so it plays at the normal pace until each
-    // goon pose that now has new art (attack, hurt, ko) has been photographed (the stage's own snapshot says which pose a figure is in), at most 100 seconds, then at a fast pace.
+    // goon pose that has new art (the wind-up, hurt and ko; a strike if one comes) and a girl's item pose have been photographed (the stage's own snapshot says which pose
+    // a figure is in), at most 45 seconds, then at a fast pace.
     const goonShots = { cast: null, attack: null, hurt: null, ko: null };
     const goonLetter = { cast: 'a', attack: 'b', hurt: 'c', ko: 'd' };
     const posesSeen = new Set();
+    let itemShot = null;
     await page.evaluate(() => {
       window.__pyrefly.setBattleSpeed('normal');
       window.__pyrefly.autoBattle('intended');
@@ -307,7 +309,14 @@ async function runShots() {
             await shot(`4${goonLetter[slot]}-act1-goon-${slot}`);
           }
         }
-        if (!fast && (Object.values(goonShots).every(Boolean) || Date.now() - act1T0 > 100000)) {
+        const user = itemShot ? null : now.find((a) => girls.includes(a.id) && a.pose === 'item');
+        if (user) {
+          itemShot = { id: user.id, art: user.art, pose: user.pose, facing: user.facing, mirrored: user.mirrored };
+          await page.waitForTimeout(420); // the item painting cross-fades in from the ready pose: a frame at the label is two ghosts, a frame a moment later is the pose
+          await shot('4f-act1-item');
+        }
+        // A goon's strike never comes when the party's first item (Grenade) takes both goons down, so it is optional; the rest decide.
+        if (!fast && ((goonShots.cast && goonShots.hurt && goonShots.ko && itemShot) || Date.now() - act1T0 > 45000)) {
           fast = true;
           await page.evaluate(() => window.__pyrefly.setBattleSpeed('fast'));
         }
@@ -316,6 +325,7 @@ async function runShots() {
       { ms: 360000, pollMs: 60 },
     );
     log('act1.goons', goonShots);
+    log('act1.item', itemShot);
     log('act1.goon-poses-seen', [...posesSeen].sort());
     await page.evaluate(() => {
       window.__pyrefly.battle().battlePresenter.setAutoPlay(null); // the keys take over
@@ -345,15 +355,15 @@ async function runShots() {
 
     // A party attack, an enemy action and a hit by real keys: Enter takes Attack, Enter opens the target, Enter confirms it; the frames are taken
     // the moment a figure strikes its attack or cast pose (the stage's own snapshot says which pose each figure is in).
-    const acted = { party: null, enemy: null, hurt: null };
-    for (let round = 0; round < 26 && !(acted.party && acted.enemy); round++) {
+    const acted = { party: null, enemy: null, hurt: null, foeHurt: null };
+    for (let round = 0; round < 26 && !(acted.party && acted.enemy && acted.foeHurt); round++) {
       await waitBattleMenu(page, 90000).catch(() => null);
       for (let i = 0; i < 3; i++) {
         await page.keyboard.press('Enter');
         await page.waitForTimeout(650);
       }
       const t0 = Date.now();
-      while (Date.now() - t0 < 7000 && !(acted.party && acted.enemy)) {
+      while (Date.now() - t0 < 7000 && !(acted.party && acted.enemy && acted.foeHurt)) {
         const now = await actors();
         const girl = now.find((a) => girls.includes(a.id) && (a.pose === 'attack' || a.pose === 'cast'));
         if (girl && !acted.party) {
@@ -366,6 +376,12 @@ async function runShots() {
           await page.waitForTimeout(170);
           await shot('7-enemy-action');
           acted.enemy = { id: foe.id, pose: foe.pose, art: foe.art };
+        }
+        const foeHit = now.find((a) => a.side === 'enemy' && a.pose === 'hurt');
+        if (foeHit && !acted.foeHurt) {
+          await page.waitForTimeout(60);
+          await shot('7c-enemy-hurt');
+          acted.foeHurt = { id: foeHit.id, pose: foeHit.pose, art: foeHit.art };
         }
         const hit = now.find((a) => girls.includes(a.id) && a.pose === 'hurt');
         if (hit && !acted.hurt) {

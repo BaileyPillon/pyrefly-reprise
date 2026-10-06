@@ -30,6 +30,10 @@
    "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4a-act1-goon-cast.jpg"
   },
   {
+   "k": "shot.4f-act1-item",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4f-act1-item.jpg"
+  },
+  {
    "k": "shot.4c-act1-goon-hurt",
    "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4c-act1-goon-hurt.jpg"
   },
@@ -65,12 +69,24 @@
    }
   },
   {
+   "k": "act1.item",
+   "v": {
+    "id": "yuna",
+    "art": "exp-leblanc-yuna-gunner",
+    "pose": "item",
+    "facing": 1,
+    "mirrored": false
+   }
+  },
+  {
    "k": "act1.goon-poses-seen",
    "v": [
     "dr-goon:hurt",
     "dr-goon:idle",
     "dr-goon:ko",
-    "fem-goon:cast"
+    "fem-goon:cast",
+    "fem-goon:hurt",
+    "fem-goon:ko"
    ]
   },
   {
@@ -276,6 +292,10 @@
    "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-6-party-attack.jpg"
   },
   {
+   "k": "shot.7c-enemy-hurt",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-7c-enemy-hurt.jpg"
+  },
+  {
    "k": "acted",
    "v": {
     "party": {
@@ -292,6 +312,11 @@
      "id": "yuna",
      "pose": "hurt",
      "art": "exp-leblanc-yuna-gunner"
+    },
+    "foeHurt": {
+     "id": "logos",
+     "pose": "hurt",
+     "art": "exp-leblanc-logos"
     }
    }
   },
@@ -314,6 +339,11 @@
       "id": "yuna",
       "pose": "hurt",
       "art": "exp-leblanc-yuna-gunner"
+     },
+     "foeHurt": {
+      "id": "logos",
+      "pose": "hurt",
+      "art": "exp-leblanc-logos"
      }
     }
    }

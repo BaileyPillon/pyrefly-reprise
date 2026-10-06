@@ -32,19 +32,19 @@
   },
   {
    "k": "shot.2-chapter-select-experiment",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b4\\preview-smoke-2-chapter-select-experiment.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-2-chapter-select-experiment.png"
   },
   {
    "k": "shot.3-party-prep",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b4\\preview-smoke-3-party-prep.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-3-party-prep.png"
   },
   {
    "k": "shot.4-cutscene",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b4\\preview-smoke-4-cutscene.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-4-cutscene.png"
   },
   {
    "k": "shot.5-battle-first-menu",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b4\\preview-smoke-5-battle-first-menu.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-5-battle-first-menu.png"
   },
   {
    "k": "field",
@@ -167,15 +167,16 @@
   },
   {
    "k": "shot.7a-yuna-attack-start",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b4\\preview-smoke-7a-yuna-attack-start.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-7a-yuna-attack-start.png"
   },
   {
    "k": "shot.7b-yuna-attack-hit",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b4\\preview-smoke-7b-yuna-attack-hit.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-7b-yuna-attack-hit.png"
   },
   {
    "k": "actors",
    "v": [
+    "rikku",
     "yuna"
    ]
   },
@@ -185,9 +186,14 @@
     "ok": true,
     "detail": [
      {
-      "from": "yuna",
+      "from": "rikku",
       "to": "dr-goon",
-      "amount": 101
+      "amount": 238
+     },
+     {
+      "from": "yuna",
+      "to": "ormi-entrance",
+      "amount": 58
      }
     ]
    }
