@@ -67,9 +67,12 @@ function ffx2Subjects(stage: BattleStage, focus: CombatantId | null): Subject[] 
  */
 export const REVEAL_PARTY_MIN = 0.97;
 
-/** B5: the standing girls whole (at {@link REVEAL_PARTY_MIN}, with the sway margin) and the enemy in play at A-1's 75 percent. */
-export function ffx2RevealSubjects(stage: BattleStage, focus: CombatantId | null): Subject[] {
-  const subjects = partySubjects(stage, REVEAL_PARTY_MIN);
+/**
+ * B5: the standing girls whole (at `whole`, {@link REVEAL_PARTY_MIN} unless the reveal asks for more, with the sway margin) and the enemy in play at A-1's 75 percent.
+ * r392-motion: `whole` is how whole the reveal asks the girls to stay, up to all of each ({@link import('./ShotRules.ts').ShotRules.reveal}).
+ */
+export function ffx2RevealSubjects(stage: BattleStage, focus: CombatantId | null, whole = REVEAL_PARTY_MIN): Subject[] {
+  const subjects = partySubjects(stage, whole);
   const boss = focus ? stage.actor(focus) : undefined;
   if (boss) subjects.push({ actor: boss, min: FFX2_BOSS_MIN + FIT_MARGIN, floor: FFX2_BOSS_MIN });
   return subjects;

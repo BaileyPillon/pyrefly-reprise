@@ -69,7 +69,7 @@ describe('the FFX-2 boss reveal keeps every girl whole (B5)', () => {
     const { moments, asked } = setup({ ffx2: true, fitUpTo: 220, plainFits: false });
     await moments.revealBoss('shade-baralai', 'Baralai');
     const q = asked.find((a) => /~\d+$/.test(a.rig) && a.n === 4)!;
-    expect(q.floor).toBe(REVEAL_PARTY_MIN);
+    expect(q.floor).toBeGreaterThanOrEqual(REVEAL_PARTY_MIN); // r392-motion: as whole as the master keeps them (here all of each), never under B5's 97 percent
     expect(REVEAL_PARTY_MIN).toBeGreaterThanOrEqual(0.97);
     // whether the plain reveal has to change is asked of the three girls alone, at the rig the camera plays (500 permille)
     const first = asked.find((a) => /~500$/.test(a.rig))!;

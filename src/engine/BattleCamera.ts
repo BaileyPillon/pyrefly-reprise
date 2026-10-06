@@ -114,9 +114,9 @@ export class BattleCamera {
   }
 
   /** How a rig, pushed in by `push`, frames these figures (`FrameFit.ts`; A-11, A-1). */
-  frame(rig: string, push: number, subjects: ReadonlyArray<{ actor: unknown; min: number; floor?: number }>): FrameVerdict | null {
+  frame(rig: string, push: number, subjects: ReadonlyArray<{ actor: unknown; min: number; floor?: number }>, lens = false): FrameVerdict | null {
     const r = this.rigs.get(rig);
-    return r ? frameFit(this.camera, r, push, subjects as readonly FitSubject[]) : null;
+    return r ? frameFit(this.camera, r, push, subjects as readonly FitSubject[], lens) : null;
   }
 
   /** A-12: dolly `rig` back until these figures fit a phone slice (`FrameFit.fitRigToSlice`). */

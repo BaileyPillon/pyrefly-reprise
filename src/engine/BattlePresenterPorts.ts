@@ -108,11 +108,14 @@ export interface CameraPort {
    * whether each keeps its minimum share of its painted quad inside the frame
    * with no push, and the largest push up to `push` that cuts nobody who was
    * in. Optional and additive (A-11, A-1): without it every shot plays as asked.
+   * `lens` (r392-motion, additive; off reads the rig as before): measured through the live camera's view offset too, the lens shift CHAPTER FRAMING
+   * puts on the picture, so the answer is what the screen shows (`FrameFit.rigPose`).
    */
   frame?(
     rig: string,
     push: number,
     subjects: ReadonlyArray<{ actor: ActorHandle; min: number; floor?: number }>,
+    lens?: boolean,
   ): { fits: boolean; push: number; worst: number } | null;
   /**
    * A-12, option A's phone rule: dolly `rig` straight back until these figures
