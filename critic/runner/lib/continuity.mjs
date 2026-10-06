@@ -1,8 +1,8 @@
 // Continuity harness: CHK-026 (size continuity across pose changes) and CHK-027 (continuity of motion).
 //
 //   node critic/runner/lib/continuity.mjs --base=<url> --evidence=<dir> --chapters=seymour-flux,ffx2-bahamut,evrae-airship
-//        [--goal=win|lose] [--size=1600x900] [--budget=900000] [--seed=1] [--tag=x] [--pose-measure=<pose-measure.json>]
-//        [--pose-measure-from=<repo root whose docs/target/pose-measure.json to use>]
+//        [--goal=win|lose] [--size=1600x900] [--budget=1800000] [--seed=1] [--tag=x] [--pose-measure=<pose-measure.json>]
+//        [--pose-measure-from=<repo root whose docs/target/pose-measure.json to use>] [--summary=<file name under --evidence, default continuity-summary.json>]
 //
 // For each chapter it runs `route.mjs` (real keys, title to board again, headless Playwright from node, never the
 // Claude-in-Chrome extension or the in-app browser pane) with `--continuity`, which attaches the in-page probe
@@ -48,6 +48,13 @@ export function continuityConfig(root = ROOT) {
   for (const [k, v] of Object.entries(over)) merged[k] = v && typeof v === 'object' && !Array.isArray(v) ? { ...(c[k] ?? {}), ...v } : v;
   return merged;
 }
+
+/**
+ * How long one chapter's fight may run (ms) before the route gives up on it. Release 39's round 22 ended Ch III, V, XI, XII and XVII mid-fight at 900 s (a Braska gauntlet,
+ * the Fallen Aeons and the Sin chapters take 13 to 20 minutes at the route's pace, PR-0339), so a long fight was measured for its first quarter only. 30 minutes covers them;
+ * a fight still going then is cut and the chapter says so (`run.json` outcome 'stalled').
+ */
+export const DEFAULT_BUDGET_MS = 1800000;
 
 const safe = (s) => String(s ?? 'x').replace(/[^a-z0-9._-]+/gi, '-').slice(0, 40);
 
@@ -170,13 +177,13 @@ export async function runContinuity(argv) {
   const base = base0 && !base0.endsWith('/') ? `${base0}/` : base0;
   const evidence = path.resolve(args.evidence ?? process.env.PYREFLY_EVIDENCE ?? '');
   const chapters = String(args.chapters ?? '').split(',').map((s) => s.trim()).filter(Boolean);
-  if (!base || !args.evidence && !process.env.PYREFLY_EVIDENCE || !chapters.length) throw new Error('usage: continuity.mjs --base=<url> --evidence=<dir> --chapters=a,b,c [--goal=win] [--size=1600x900] [--budget=900000] [--seed=1] [--tag=x] [--pose-measure=<path>] [--pose-measure-from=<repo root>]');
+  if (!base || !args.evidence && !process.env.PYREFLY_EVIDENCE || !chapters.length) throw new Error('usage: continuity.mjs --base=<url> --evidence=<dir> --chapters=a,b,c [--goal=win] [--size=1600x900] [--budget=1800000] [--seed=1] [--tag=x] [--pose-measure=<path>] [--pose-measure-from=<repo root>]');
   const goal = args.goal ?? 'win';
   const poseMeasure = args['pose-measure'] ?? (args['pose-measure-from'] ? path.join(args['pose-measure-from'], 'docs', 'target', 'pose-measure.json') : fs.existsSync(path.join(ROOT, 'docs', 'target', 'pose-measure.json')) ? path.join(ROOT, 'docs', 'target', 'pose-measure.json') : null);
   const cfg = continuityConfig();
   const results = [];
   for (const chapter of chapters) {
-    if (!args['only-aggregate']) await runRoute({ chapter, goal, base, evidence, size: args.size ?? '1600x900', budget: args.budget ?? 900000, seed: args.seed ?? 1, tag: args.tag, poseMeasure });
+    if (!args['only-aggregate']) await runRoute({ chapter, goal, base, evidence, size: args.size ?? '1600x900', budget: args.budget ?? DEFAULT_BUDGET_MS, seed: args.seed ?? 1, tag: args.tag, poseMeasure });
     const dir = [chapter, goal, args.tag].filter(Boolean).join('-');
     const file = path.join(evidence, dir, 'continuity', 'continuity.json');
     results.push(fs.existsSync(file) ? { ...JSON.parse(fs.readFileSync(file, 'utf8')), dir } : { chapter, error: 'the route wrote no continuity.json', checks: { 'CHK-026': { result: 'UNVERIFIED', reasons: ['the route wrote no continuity.json'] }, 'CHK-027': { result: 'UNVERIFIED', reasons: ['the route wrote no continuity.json'] } } });
@@ -184,7 +191,8 @@ export async function runContinuity(argv) {
   const summary = aggregate(results, cfg);
   summary.base = base; summary.date = new Date().toISOString();
   fs.mkdirSync(evidence, { recursive: true });
-  fs.writeFileSync(path.join(evidence, 'continuity-summary.json'), JSON.stringify(summary, null, 1));
+  // PR-0398: a retry of one chapter used to overwrite the whole review's summary with its own; `--summary=<file>` names the file (a run that is not the whole review should not use the default)
+  fs.writeFileSync(path.join(evidence, args.summary ?? 'continuity-summary.json'), JSON.stringify(summary, null, 1));
   console.log(JSON.stringify({ checks: summary.checks, size: summary.size, motion: summary.motion }, null, 1));
   return summary;
 }
@@ -198,6 +206,7 @@ export function aggregate(results, cfg) {
   const minutes = battleSeconds / 60;
   const per = (n) => (minutes > 0 ? Math.round((n / minutes) * 100) / 100 : null);
   const size = {
+    judged: sum((s) => s.size.judged ?? s.counted), costumeSwaps: sum((s) => s.size.costumeSwaps ?? 0), sameArtSwaps: sum((s) => s.size.sameArtSwaps ?? 0), costumeWorstHeadPct: max((s) => s.size.costumeWorstHeadPct ?? 0), costumeWorstFeetPx: max((s) => s.size.costumeWorstFeetPx ?? 0),
     maxHeadJumpPct: max((s) => s.size.maxHeadJumpPct), maxHeadJumpPctRegistration: max((s) => s.size.maxHeadJumpPctRegistration), headOverTolerance: sum((s) => s.size.headOverTolerance),
     maxFeetShiftPx: max((s) => s.size.maxFeetShiftPx), feetOverTolerance: sum((s) => s.size.feetOverTolerance), headMeasured: sum((s) => s.size.headMeasured), headRegistration: sum((s) => s.size.headRegistration), headSilhouette: sum((s) => s.size.headSilhouette), headUnmeasured: sum((s) => s.size.headUnmeasured),
   };

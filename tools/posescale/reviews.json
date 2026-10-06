@@ -1,111 +1,351 @@
 {
- "tidus": {
-  "attack": 0.95,
-  "cast": 0.95,
-  "critical": 0.94,
-  "follow": 1.3,
-  "hurt": 1.0,
-  "item": 0.94,
-  "ko": 0.85,
-  "od-energy-rain": 0.84,
-  "od-slice-and-dice": 1.08,
-  "ready": 1.26,
-  "sleep": 0.98,
-  "victory": 1.6
- },
- "yuna": {
-  "attack": 0.79,
-  "cast": 0.92,
-  "critical": "keep",
-  "follow": 1.15,
-  "hurt": 0.8,
-  "item": 0.75,
-  "ko": 0.52,
-  "ready": 1.17,
-  "summon": 0.6,
-  "victory": 0.77,
-  "sleep": "keep"
- },
  "auron": {
   "attack": 0.69,
   "cast": 0.9,
+  "critical": "=",
+  "follow": "=",
   "hurt": 0.75,
   "item": 0.69,
   "ko": 0.45,
   "ready": 0.77,
-  "critical": "keep",
-  "follow": "keep",
-  "sleep": "keep",
-  "victory": "keep"
+  "sleep": "=",
+  "victory": "="
+ },
+ "evrae": {
+  "attack": "=",
+  "breath-charge": "=",
+  "hurt": "=",
+  "idle-far": "=",
+  "idle-near": "=",
+  "ko": "="
+ },
+ "kimahri": {
+  "attack": "=",
+  "cast": "=",
+  "critical": "=",
+  "follow": "=",
+  "hurt": "=",
+  "item": "=",
+  "jump": "=",
+  "ko": "=",
+  "ready": "=",
+  "sleep": "=",
+  "victory": "="
+ },
+ "lulu": {
+  "attack": 1.0,
+  "cast": 1.053,
+  "critical": 0.533,
+  "follow": 0.792,
+  "hurt": 0.667,
+  "item": 1.0,
+  "ko": 0.392,
+  "od-fury": 1.182,
+  "ready": 0.96,
+  "sleep": 0.727,
+  "victory": 0.909
+ },
+ "mortiorchis": {
+  "attack": "=",
+  "cast": "=",
+  "hurt": 1.3,
+  "ko": "="
+ },
+ "paine-black-mage": {
+  "attack": 1.039,
+  "cast": 0.946,
+  "follow": 0.948,
+  "item": 1.047,
+  "ko": 0.769,
+  "ready": 1.08,
+  "victory": 1.117
+ },
+ "paine-dark-knight": {
+  "attack": 0.996,
+  "cast": 1.119,
+  "follow": 1.2,
+  "hurt": 0.994,
+  "item": 1.055,
+  "ko": 0.844,
+  "ready": 1.15,
+  "victory": 0.95
+ },
+ "paine-gunner": {
+  "attack": 0.845,
+  "item": 1.133,
+  "ready": 1.096,
+  "victory": 1.189
+ },
+ "paine-lady-luck": {
+  "attack": 0.942,
+  "cast": 1.299,
+  "follow": 1.611,
+  "hurt": "=",
+  "item": 1.302,
+  "ko": "=",
+  "od-x2-lady-luck-attack-reels": 1.298,
+  "od-x2-lady-luck-magic-reels": 1.298,
+  "ready": 1.585,
+  "victory": "="
+ },
+ "paine-samurai": {
+  "cast": 0.817,
+  "follow": 1.061,
+  "item": 1.157,
+  "ready": 1.115
+ },
+ "paine-songstress": {
+  "attack": 1.152,
+  "cast": 1.033,
+  "dance": 0.911,
+  "hurt": 0.646,
+  "item": 0.988,
+  "ko": 0.994,
+  "victory": 1.024
+ },
+ "paine-thief": {
+  "attack": 0.906,
+  "cast": 1.165,
+  "follow": 1.066,
+  "hurt": 1.127,
+  "item": 0.933,
+  "ko": 0.987,
+  "ready": 0.962,
+  "victory": 1.159
+ },
+ "paine-warrior": {
+  "attack": 1.042,
+  "cast": 1.185,
+  "critical": 0.908,
+  "follow": 0.986,
+  "item": 1.035,
+  "od-x2-warrior-armor-break": 1.042,
+  "od-x2-warrior-power-break": 1.042,
+  "ready": 1.154,
+  "sleep": 0.87,
+  "victory": 1.027
+ },
+ "paine-white-mage": {
+  "cast": 1.133,
+  "follow": 1.283,
+  "item": 1.226
+ },
+ "rikku": {
+  "attack": 0.734,
+  "cast": 1.0,
+  "critical": 0.759,
+  "follow": 0.754,
+  "hurt": 0.9,
+  "item": 1.0,
+  "ko": "=",
+  "ready": 1.1,
+  "sleep": "=",
+  "steal": 1.1,
+  "victory": 1.0
+ },
+ "rikku-alchemist": {
+  "attack": 1.08,
+  "cast": 1.039,
+  "hurt": "=",
+  "item": 1.223,
+  "ready": 1.303,
+  "victory": 1.266
+ },
+ "rikku-berserker": {
+  "cast": "=",
+  "follow": 1.04,
+  "item": 1.184,
+  "ready": 0.573
+ },
+ "rikku-black-mage": {
+  "attack": 1.255,
+  "cast": 1.04,
+  "follow": 1.205,
+  "item": 1.097,
+  "ko": "=",
+  "ready": 1.249
+ },
+ "rikku-dark-knight": {
+  "attack": 0.9,
+  "cast": "=",
+  "follow": "=",
+  "hurt": "=",
+  "item": "=",
+  "ko": "=",
+  "ready": 1.35,
+  "victory": "="
+ },
+ "rikku-gunner": {
+  "attack": 1.0,
+  "cast": 0.954,
+  "item": 0.92,
+  "ko": "=",
+  "ready": 0.65,
+  "victory": 0.8
+ },
+ "rikku-lady-luck": {
+  "attack": 0.86,
+  "cast": 1.296,
+  "follow": "=",
+  "hurt": "=",
+  "item": 1.007,
+  "ko": "=",
+  "od-x2-lady-luck-attack-reels": 1.352,
+  "od-x2-lady-luck-magic-reels": 1.352,
+  "ready": 1.216,
+  "victory": "="
+ },
+ "rikku-songstress": {
+  "attack": 1.257,
+  "cast": "=",
+  "dance": 1.0,
+  "hurt": 1.25,
+  "item": "=",
+  "ko": "=",
+  "victory": "="
+ },
+ "rikku-thief": {
+  "cast": 1.305,
+  "critical": 1.05,
+  "follow": 1.113,
+  "hurt": "=",
+  "item": 1.25,
+  "ko": "=",
+  "ready": 1.126,
+  "sleep": "=",
+  "victory": "="
+ },
+ "rikku-warrior": {
+  "attack": 0.817,
+  "cast": 1.115,
+  "follow": 1.357,
+  "hurt": 0.95,
+  "item": 1.382,
+  "ko": 0.931,
+  "ready": 1.019,
+  "victory": 1.211
+ },
+ "rikku-white-mage": {
+  "attack": 0.925,
+  "cast": 1.22,
+  "follow": 1.15,
+  "item": "=",
+  "victory": "="
+ },
+ "tidus": {
+  "attack": 0.952,
+  "cast": 0.957,
+  "critical": 0.967,
+  "follow": 1.306,
+  "hurt": 1.0,
+  "item": 0.92,
+  "ko": 0.85,
+  "od-energy-rain": 0.866,
+  "od-slice-and-dice": 1.088,
+  "ready": 1.293,
+  "sleep": 0.966,
+  "victory": 1.585
  },
  "wakka": {
   "attack": 1.05,
   "cast": 1.09,
-  "critical": "keep",
+  "critical": "=",
   "follow": 1.25,
   "hurt": 1.05,
   "item": 0.95,
   "ko": 0.55,
   "ready": 1.5,
-  "sleep": "keep",
+  "sleep": "=",
   "victory": 0.88
  },
- "lulu": {
-  "attack": "keep",
-  "cast": "keep",
-  "follow": "keep",
-  "hurt": "keep",
-  "item": "keep",
-  "victory": "keep",
-  "ready": "keep",
-  "od-fury": "keep",
-  "critical": "keep",
-  "sleep": "keep",
-  "ko": "keep"
+ "yuna": {
+  "attack": 0.761,
+  "cast": 0.92,
+  "critical": 0.967,
+  "follow": 1.074,
+  "hurt": 0.804,
+  "item": 0.752,
+  "ko": 0.517,
+  "ready": 1.245,
+  "sleep": "=",
+  "summon": 0.604,
+  "victory": 0.784
  },
- "evrae": {
-  "attack": "keep",
-  "breath-charge": "keep",
-  "hurt": "keep",
-  "idle-near": "keep"
+ "yuna-black-mage": {
+  "attack": 0.994,
+  "cast": 0.972,
+  "follow": 1.052,
+  "hurt": 1.029,
+  "item": 1.369,
+  "ko": 0.643,
+  "ready": 1.211,
+  "victory": 1.001
  },
- "rikku": {
-  "attack": 0.75,
-  "follow": 0.74,
-  "hurt": 0.9,
-  "cast": 1.0,
-  "item": 1.0,
-  "ready": 1.1,
-  "steal": 1.1,
-  "victory": 1.0,
-  "critical": "keep",
-  "sleep": "keep",
-  "ko": "keep"
+ "yuna-dark-knight": {
+  "attack": 1.02,
+  "cast": 1.202,
+  "hurt": 1.222,
+  "item": 1.212,
+  "ko": 0.866,
+  "ready": 1.255,
+  "victory": 1.248
  },
- "kimahri": {
-  "attack": "keep",
-  "cast": "keep",
-  "critical": "keep",
-  "follow": "keep",
-  "hurt": "keep",
-  "item": "keep",
-  "jump": "keep",
-  "ko": "keep",
-  "ready": "keep",
-  "sleep": "keep",
-  "victory": "keep"
+ "yuna-gunner": {
+  "attack": 0.999,
+  "cast": 1.026,
+  "critical": 1.076,
+  "hurt": 1.057,
+  "item": 1.128,
+  "ko": 0.588,
+  "ready": 1.352,
+  "sleep": 1.106,
+  "victory": 1.015
  },
- "rikku-berserker": {
-  "ready": 0.55
+ "yuna-lady-luck": {
+  "attack": 1.274,
+  "cast": 1.314,
+  "follow": 1.021,
+  "hurt": "=",
+  "item": 1.338,
+  "ko": 0.8,
+  "od-x2-lady-luck-attack-reels": 0.863,
+  "od-x2-lady-luck-magic-reels": 0.863,
+  "ready": "=",
+  "victory": 1.071
  },
- "rikku-gunner": {
-  "ready": 0.65,
-  "victory": 0.8
+ "yuna-songstress": {
+  "attack": 1.086,
+  "cast": 1.165,
+  "dance": 1.054,
+  "item": 1.295,
+  "ko": "=",
+  "victory": 1.243
  },
- "paine-samurai": {
-  "cast": 0.85
+ "yuna-thief": {
+  "attack": 1.083,
+  "cast": 1.474,
+  "follow": 1.515,
+  "hurt": 1.449,
+  "item": 1.378,
+  "ko": 1.4,
+  "ready": 1.579,
+  "victory": 0.926
  },
- "paine-gunner": {
-  "attack": 0.86
+ "yuna-warrior": {
+  "cast": 1.15,
+  "follow": 1.547,
+  "hurt": 1.093,
+  "item": 1.181,
+  "ready": 1.261,
+  "victory": 1.255
+ },
+ "yuna-white-mage": {
+  "attack": 1.398,
+  "cast": 1.25,
+  "follow": 1.316,
+  "hurt": 1.603,
+  "item": 1.126,
+  "ko": 0.864,
+  "victory": 1.286
  }
 }

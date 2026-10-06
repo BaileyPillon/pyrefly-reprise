@@ -79,6 +79,20 @@ describe('checkPoseScale (what the art lane runs on a new key)', () => {
     expect(checkPoseScale({ records: inside, table, artDir: tmp, subjects: ['hero'] }).failures.join('\n')).toMatch(/keeps the pose's own scale but the table has one/);
   });
 
+  it('gives a KO its reading over the lying plane projection (r391: a KO draws its head smaller than the same head standing)', () => {
+    const koSha = paint('hero', 'ko', 'ko-bytes');
+    const rec = records() as { subjects: Record<string, any>; koProjection?: number };
+    rec.subjects.hero.poses.ko = { sha: koSha, prone: true, standing: false, scaleSrc: 'reviewed', scale: 0.5, head: box(100, 200), stance: null };
+    rec.koProjection = 0.978;
+    // the record reads 0.5 and the projection is 0.978: the table must say 0.5 / 0.978 = 0.511
+    const good = { hero: { ...table.hero, ko: { scale: 0.511 } } };
+    expect(checkPoseScale({ records: rec, table: good, artDir: tmp, subjects: ['hero'] }).failures).toEqual([]);
+    const forgot = { hero: { ...table.hero, ko: { scale: 0.5 } } };
+    const failed = checkPoseScale({ records: rec, table: forgot, artDir: tmp, subjects: ['hero'] }).failures.join(' | ');
+    expect(failed).toContain("hero/ko: the table's scale (0.5) is not the record's (0.5 over the KO projection 0.978)");
+    rmSync(join(tmp, 'characters', 'hero', 'ko.png'));
+  });
+
   it('fails a standing pose wider than tall that the table does not mark upright', () => {
     const r = checkPoseScale({ records: records({ prone: true, standing: true }), table, artDir: tmp, subjects: ['hero'] });
     expect(r.failures.join('\n')).toMatch(/must be marked upright/);

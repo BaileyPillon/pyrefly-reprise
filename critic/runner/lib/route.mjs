@@ -86,10 +86,20 @@ async function seq(sub, n, every, state) {
   const s = await scr();
   addIndex({ file: `${rel}/`, ...meta, state: `timed frame sequence: ${state}`, asserted: `screen=${s} (read after the last frame)`, verified: true, frames, staleRoots: { screen: s } });
 }
+// PR-0359: the board has 18 tiles and the cursor moves tile by tile. The old walk pressed ArrowRight 16 times and then turned back, so the
+// 18th tile (Ch XVI Ixion) was never reached. Walk right over every tile (the tile count and a margin), then left over every tile, and look
+// at the selection after EVERY press, the last one included; the caller still throws when the card was not found.
+const BOARD_TILES = 18;
 async function findCard(target) {
   const seen = [];
-  for (const k of [...Array(16).fill('ArrowRight'), ...Array(16).fill('ArrowLeft')]) { const s = await selId(); seen.push(s); if (s === target) return seen; await input.press(k); await page.waitForTimeout(200); }
-  seen.push(await selId()); return seen;
+  for (const [k, n] of [['ArrowRight', BOARD_TILES + 6], ['ArrowLeft', 2 * BOARD_TILES + 6]]) {
+    for (let i = 0; i <= n; i++) {
+      const s = await selId(); seen.push(s);
+      if (s === target) return seen;
+      if (i < n) { await input.press(k); await page.waitForTimeout(200); }
+    }
+  }
+  return seen;
 }
 const menuWait = async (n = 300) => { for (let i = 0; i < n; i++) { if ((await pbk())?.awaitingMenu) return true; await page.waitForTimeout(150); } return false; };
 const escPause = async () => { for (let i = 0; i < 5 && (await scr()) === 'pause'; i++) { await input.press('Escape'); await page.waitForTimeout(800); } };
