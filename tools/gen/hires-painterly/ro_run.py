@@ -35,6 +35,10 @@ def free_gb():
     return m.ullAvailPhys / 1e9
 
 
+def free_disk_gb(p):
+    return shutil.disk_usage(p).free / 1e9
+
+
 def sha(p):
     return ro_cpu.sha256(p)
 
@@ -63,6 +67,13 @@ def main():
     say(f'{len(assets)} figures in scope, {len(todo)} to do; free RAM {free_gb():.1f} GB; library {lib}')
     pool = ProcessPoolExecutor(max_workers=a.workers, initializer=ro_cpu.worker_init, max_tasks_per_child=20)
     pending = collections.deque((x, SEEDS[0]) for x in todo)
+    for x in assets:       # a re-run (redo list) that was interrupted resumes with the seed it was given
+        r0 = man['assets'].get(x['id'], {})
+        if r0.get('status') == 'redo':
+            pending = collections.deque((y, sd) for (y, sd) in pending if y['id'] != x['id'])
+            pending.appendleft((x, r0['redo_seed']))
+    all_assets = {y['id']: y for y in plan()}
+    redo_ids = set()
     inflight = {}
     attempts = collections.defaultdict(list)
     t_start = time.time()
@@ -94,6 +105,43 @@ def main():
                                               'gpu_hours': round(sum(r.get('gpu_s', 0) for r in recs) / 3600, 2), 'finished': now()})
             say(f'GROUP {g} COMPLETE: {dict(c)} methods {dict(m)}')
 
+    def process_redo():
+        rf = f'{RW}/redo.txt'
+        if not os.path.exists(rf):
+            return
+        ids = [l.strip() for l in open(rf, encoding='utf8') if l.strip() and not l.startswith('#')]
+        os.replace(rf, f'{RW}/redo.done-{int(time.time())}.txt')
+        insert_at = next((k for k, (y, _) in enumerate(pending) if y['group'] != 'party'), len(pending))
+        for i in ids:
+            i = i if i.startswith('characters/') else 'characters/' + i
+            x = all_assets.get(i)
+            if not x:
+                say(f'redo: {i} is not a figure of the library')
+                continue
+            old = man['assets'].get(i, {})
+            if i in [y['id'] for (y, _) in pending] or old.get('status') == 'redo':
+                continue
+            used = set(old.get('seeds_tried', [])) | ({old['seed']} if old.get('seed') else set())
+            seed = next(sd for sd in (9102, 9103, 9104, 9105) if sd not in used)
+            sup = f'{lib}/_superseded/{i}'
+            os.makedirs(sup, exist_ok=True)
+            moved = []
+            for o in old.get('outputs', []):
+                src = f'{lib}/{o["path"]}'
+                if os.path.exists(src):
+                    os.replace(src, f'{sup}/{os.path.basename(src)}')
+                    moved.append(o['path'])
+            wd = f'{RW}/{i}'
+            for f in (os.listdir(wd) if os.path.isdir(wd) else []):
+                if f'-s{seed}' in f:
+                    os.remove(f'{wd}/{f}')
+            man['assets'][i] = {'id': i, 'status': 'redo', 'redo_seed': seed, 'group': x['group'], 'game': x['game'], 'previous': {k: old.get(k) for k in ('status', 'method', 'seed', 'gates', 'outputs')}, 'superseded_files': moved}
+            pending.insert(min(insert_at, len(pending)), (x, seed))
+            redo_ids.add(i)
+            say(f'redo: {i} queued with seed {seed} (the old files are in {sup})')
+        man['updated'] = now()
+        save_json(mp, man)
+
     def face_only(r):
         c = r.get('candidates') or {}
         return bool(c) and all(g.get('pass_iou') and g.get('pass_cells') and not g.get('pass_face') for g in c.values()) and 'D' in c
@@ -105,14 +153,16 @@ def main():
             import ro_sheets
             recs = [man['assets'][x['id']] for x in mem]
             sheet, n_ok, n_eye = ro_sheets.char_sheet(cid, man['assets'], {x['id']: x for x in plan()}, lib, SHEETS)
+            ro_sheets.char_sheet_all(cid, man['assets'], {x['id']: x for x in plan()}, lib, SHEETS)
             m = collections.Counter(r.get('method') for r in recs if r['status'] == 'ok')
             save_json(mf, {'cid': cid, 'poses': len(mem), 'ok': n_ok, 'by_eye': n_eye, 'D': m.get('D', 0), 'C': m.get('C', 0), 'second_seed': sum(1 for r in recs if len(r.get('seeds_tried', [])) > 1),
                            'by_eye_poses': [r['id'].split('/')[-1] for r in recs if r['status'] == 'by-eye'], 'sheet': sheet, 'finished': now(), 'announced': False})
-            for x2 in mem:     # the work files of a finished character (kept until now so that a change in the CPU stage can be redone without the GPU)
-                w2 = f'{RW}/{x2["id"]}'
-                for f in os.listdir(w2) if os.path.isdir(w2) else []:
-                    if f.endswith('.png') and not (man['assets'][x2['id']]['status'] == 'by-eye' and f.startswith('cand-')):
-                        os.remove(f'{w2}/{f}')
+            if free_disk_gb(RW) < 40:     # the work files (Klein, ESRGAN, face pass) are kept so that the CPU stage can be redone without the GPU; they go only when the disk runs short
+                for x2 in mem:
+                    w2 = f'{RW}/{x2["id"]}'
+                    for f in os.listdir(w2) if os.path.isdir(w2) else []:
+                        if f.endswith('.png') and not (man['assets'][x2['id']]['status'] == 'by-eye' and f.startswith('cand-')):
+                            os.remove(f'{w2}/{f}')
             say(f'CHARACTER {cid} COMPLETE: {len(mem)} poses, ok {n_ok} (D {m.get("D", 0)}, C {m.get("C", 0)}), by eye {n_eye}')
 
     def handle(fut):
@@ -124,6 +174,7 @@ def main():
             r = {'id': x['id'], 'seed': seed, 'status': 'error', 'error': repr(e), 'trace': traceback.format_exc()[-1200:]}
         attempts[x['id']].append(r)
         wd = f'{RW}/{x["id"]}'
+        prior = man['assets'].get(x['id'], {}) if man['assets'].get(x['id'], {}).get('status') == 'redo' else None
         if r['status'] == 'ok':
             P1 = f'{ART}/{x["id"]}.png'
             man['assets'][x['id']] = {'id': x['id'], 'status': 'ok', 'method': r['method'], 'seed': seed, 'seeds_tried': [q['seed'] for q in attempts[x['id']]], 'gates': r['gates'],
@@ -145,6 +196,8 @@ def main():
         else:
             errors.append(f'{x["id"]}: {r.get("error")}')
             man['assets'][x['id']] = {'id': x['id'], 'status': 'error', 'error': r.get('error'), 'trace': r.get('trace'), 'group': x['group']}
+        if prior and man['assets'][x['id']].get('status') in ('ok', 'by-eye'):
+            man['assets'][x['id']]['redo'] = {'previous': prior.get('previous'), 'superseded_files': prior.get('superseded_files'), 'seed': seed}
         man['updated'] = now()
         save_json(mp, man)
         cs = ', '.join(f"{k}:{'pass' if v.get('pass') else 'fail'} struct {v.get('head_struct')} cells {v.get('cells_over20')}" for k, v in (r.get('candidates') or {}).items())
@@ -152,10 +205,18 @@ def main():
         progress()
         group_check(x['group'])
         char_check(x['cid'])
+        if x['id'] in redo_ids and man['assets'][x['id']]['status'] in ('ok', 'by-eye'):
+            redo_ids.discard(x['id'])
+            import ro_sheets
+            allx = {y['id']: y for y in plan()}
+            ro_sheets.char_sheet(x['cid'], man['assets'], allx, lib, SHEETS)
+            ro_sheets.char_sheet_all(x['cid'], man['assets'], allx, lib, SHEETS)
+            say(f'REDO {x["id"]} finished: {man["assets"][x["id"]]["status"]} {man["assets"][x["id"]].get("method", "")}; sheets refreshed')
 
     while pending or inflight:
         for f in [f for f in inflight if f.done()]:
             handle(f)
+        process_redo()
         if os.path.exists(STOP):
             say('STOP file present: finishing the CPU work in flight and stopping')
             pending.clear()
@@ -179,9 +240,13 @@ def main():
             wait(list(inflight), timeout=10, return_when=FIRST_COMPLETED)
             for f in [f for f in inflight if f.done()]:
                 handle(f)
-        fut = pool.submit(ro_cpu.cpu_task, x, seed, lib, head, seed == SEEDS[-1])
+        fut = pool.submit(ro_cpu.cpu_task, x, seed, lib, head, seed != SEEDS[0])
         inflight[fut] = (x, seed)
         progress()
+    err = [x for x in assets if man['assets'].get(x['id'], {}).get('status') == 'error']
+    if err and not os.path.exists(f'{RW}/retried-errors') and not os.path.exists(STOP):
+        open(f'{RW}/retried-errors', 'w').write(now())
+        say(f'{len(err)} figures ended in error: the supervisor restarts the run to try them once more')
     pool.shutdown()
     say(f'finished: {dict(collections.Counter(r["status"] for r in man["assets"].values()))}')
     for g in GROUPS:

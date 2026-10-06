@@ -91,6 +91,58 @@ def char_sheet(cid, man, assets, lib, outdir, n_poses=4, h=560):
     return f'{outdir}/{cid}.jpg', len(ok), len(eye)
 
 
+def char_sheet_all(cid, man, assets, lib, outdir, h=330):
+    """Every pose of a character on one sheet (today above, painterly below, small): the review instrument for what the gates cannot see (a prop that turned into another prop, a small part lost)."""
+    ids = sorted([k for k in assets if assets[k]['cid'] == cid], key=lambda i: (STATE_ORDER.index(assets[i]['state']) if assets[i]['state'] in STATE_ORDER else 9, assets[i]['state']))
+    cols = []
+    for i in ids:
+        a = assets[i]
+        r = man.get(i, {})
+        pth = None
+        lab = ''
+        if r.get('status') == 'ok':
+            pth, lab = f'{lib}/{i}@{a["S"]}x.png', f'{r.get("method")} s{r.get("seed")}'
+        else:
+            for m in ('D', 'C'):
+                for sd in (9101, 9102):
+                    q = f'{lib}/by-eye/{i}/cand-{m}-s{sd}.png'
+                    if pth is None and os.path.exists(q):
+                        pth, lab = q, f'BY EYE {m}{sd % 100}'
+        if not pth:
+            continue
+        t = Image.open(f'{EDIR}/{i}@{a["S"]}x.png').convert('RGBA')
+        p = Image.open(pth).convert('RGBA')
+        if p.size != t.size:
+            p = p.resize(t.size, Image.LANCZOS)
+        bb = bbox(t)
+        two = []
+        for im in (t, p):
+            c = flat(im.crop(bb))
+            two.append(c.resize((max(1, round(c.width * h / c.height)), h), Image.LANCZOS))
+        cols.append((a['state'], lab, two))
+    if not cols:
+        return None
+    # wrap into rows of at most ~2400 px
+    rows, cur, w = [], [], 0
+    for c in cols:
+        if w + c[2][0].width + 6 > 2400 and cur:
+            rows.append(cur); cur, w = [], 0
+        cur.append(c); w += c[2][0].width + 6
+    rows.append(cur)
+    sh = Image.new('RGB', (2400, len(rows) * (2 * h + 50)), (24, 24, 28))
+    d = ImageDraw.Draw(sh)
+    for ri, row in enumerate(rows):
+        x, y = 0, ri * (2 * h + 50)
+        for st, lab, (t, p) in row:
+            d.text((x + 3, y + 1), f'{st} today', fill=(235, 235, 235), font=FONT)
+            d.text((x + 3, y + h + 24), f'{st} {lab}', fill=(255, 120, 120) if 'BY EYE' in lab else (255, 220, 120), font=FONT)
+            sh.paste(t, (x, y + 20)); sh.paste(p, (x, y + h + 44))
+            x += t.width + 6
+    os.makedirs(outdir, exist_ok=True)
+    sh.save(f'{outdir}/{cid}-all-poses.jpg', quality=84)
+    return f'{outdir}/{cid}-all-poses.jpg'
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--lib', default=OUTLIB)
