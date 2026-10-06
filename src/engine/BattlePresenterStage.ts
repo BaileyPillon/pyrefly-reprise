@@ -47,6 +47,7 @@ import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLu
 import { heldOffStage } from './SummonStaging.ts';
 import { paceRate } from './pace.ts';
 import { StageArt } from './StageArt.ts';
+import type { StageHost } from './TextureStager.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -73,6 +74,8 @@ export interface PaintedStageOptions {
   comfort?: () => ComfortFlags;
   /** Camera comfort preset (fb2-0929 options, default `current` = untouched; `CameraPreset.ts`). */
   cameraPreset?: () => CameraPresetSpec;
+  /** The renderer, so a master the art governor loads is uploaded ahead of its swap (release 39.1, `TextureStager.ts`); without it the swap is release 39's. */
+  renderer?: StageHost;
 }
 
 interface StagedActor {
@@ -196,6 +199,7 @@ export class PaintedStage implements BattleStage {
       canvas: opts.canvas,
       battleCamera: opts.battleCamera,
       ...(opts.spellFx?.game ? { game: opts.spellFx.game } : {}),
+      ...(opts.renderer ? { host: opts.renderer } : {}),
     });
     this.motion = new StageMotion({
       scene: opts.scene,
