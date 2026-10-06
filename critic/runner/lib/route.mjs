@@ -161,6 +161,19 @@ try {
   note('battleSeed', { pinned, engine: rec.seed });
   await aud('battle-first-menu');
   rec.firstState = await ss();
+  // r391: a labelled setup hook (CHK-015), like setSeed. `ROUTE_SETART=<party art prefix>:<art id>` (e.g. rikku:rikku-berserker) swaps that figure's painting once, at the first menu, the way a
+  // spherechange does (Stage.setArt), so the continuity harness can play a painting no chapter's Garment Grid offers (no build puts Rikku Berserker one Change away). Recorded in run.json hooks.
+  if (process.env.ROUTE_SETART) {
+    const [prefix, art] = process.env.ROUTE_SETART.split(':');
+    rec.hooks.push(`stage.setArt(<the ${prefix} figure>, '${art}') at the first menu (ROUTE_SETART, r391)`);
+    const swapped = await page.evaluate(async ([px, a]) => {
+      const stage = window.__pyrefly.app.current.stage;
+      for (const [id, s] of stage.actors) if (s.kind === 'party' && String(s.artId).startsWith(px)) { await stage.setArt(id, a); return id; }
+      return null;
+    }, [prefix, art]);
+    note('setArt', { prefix, art, figure: swapped });
+    await page.waitForTimeout(16000); // the dressphere twirl owns the planes until it ends
+  }
 
   // ---------- First turn: coach mark, advisor, N, E, G, pause, target and cancel
   rec.cardFirst = await measureCardVsRows(page); rec.focFirst = await measureFoc(page);

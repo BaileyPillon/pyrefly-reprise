@@ -263,7 +263,10 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
             idle_h = idle_box[3] - idle_box[1]
             ph = p.bbox[3] - p.bbox[1]
             stature = ph * scale / idle_h
-            if stature < STATURE_GATE:
+            if stature < STATURE_GATE and o.get("gateLift"):
+                # r391: Bailey lifted the D-298 floor for exactly the poses that name it here (overrides.json `gateLift`, with his words): the head-matched reading stands
+                rec["gateLifted"] = {"reading": round(scale, 3), "stature": round(stature, 3), "by": o["gateLift"]}
+            elif stature < STATURE_GATE:
                 smin = math.ceil(STATURE_GATE * idle_h / ph * 1000) / 1000  # r391: to the thousandth (it was the hundredth, which left a gated head up to 1.5 percent further off than it had to be)
                 rec["gate"] = {"reading": round(scale, 3), "stature": round(ph * smin / idle_h, 3)}
                 scale, src = smin, "gated"

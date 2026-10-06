@@ -37,5 +37,15 @@
   "charge-far": {
    "skip": "the far range: the airship director swaps it in and sizes and places it itself (evrae-airship-director.ts)"
   }
+ },
+ "lulu": {
+  "critical": {
+   "gateLift": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)"
+  }
+ },
+ "rikku-berserker": {
+  "ready": {
+   "gateLift": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)"
+  }
  }
 }

@@ -39,7 +39,7 @@ export const POSE_REGISTRATION_FFX: PoseRegistrationTable = {
   lulu: {
     attack: { stanceX: 353.5 },
     cast: { scale: 1.053, stanceX: 260.0 },
-    critical: { scale: 0.587, stanceX: 274.0 },
+    critical: { scale: 0.533, stanceX: 274.0 },
     follow: { scale: 0.792, stanceX: 341.5 },
     hurt: { scale: 0.667, stanceX: 309.0 },
     idle: { stanceX: 244.0, feetRow: 1142.0 },
