@@ -37,3 +37,18 @@
   -webkit-mask-image: none;
   mask-image: none;
 }
+
+/*
+ * Release 39.1, B10 (both games): a blurred, darkened copy of the live plate behind it, only while the plate leaves page uncovered and is not slid
+ * (3840x2160, 3440x1440: `framePlate` never magnifies a master past 1.25x). The grade is the plate's own (`.pause__plate`) and then darker, so the
+ * sharp plate's feathered edge (`--capped`) blends into more of the picture instead of into black. `src/app/screens/pause/extension.ts` sets the
+ * class and the two custom properties; the box is a little over the frame so the blur never shows its own edge.
+ */
+.pause__art--extended::before {
+  content: '';
+  position: absolute;
+  inset: -3%;
+  background: var(--pu-ext-url) var(--pu-ext-pos, 50% 50%) / cover no-repeat;
+  filter: saturate(0.58) contrast(1.05) brightness(0.4) blur(2.4vmin);
+  pointer-events: none;
+}

@@ -1,0 +1,534 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-06T06:22:06.611Z",
+ "build": {
+  "mainSha": "d3fe9fe5"
+ },
+ "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "UNVERIFIED",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect and no regression against live: pose registration cut CHK-026 head jumps from 57, 78, 116 pct to 12.6, 9.4, 1.5 pct and feet shifts from 142, 98, 259 px to 4.3, 0.4, 0.9 px in the three baseline chapters; Ch IV and VIII now pass.",
+  "Three whole fights (FFX Ch I, VIII; FFX-2 Ch IV) play title to victory by real keys with 0 seams, 0 console errors and 0 asset 404s; the new title renders at 1600x900, 2000x1012 and 390x844.",
+  "CHK-026 (Ch I) and CHK-027 still FAIL as on live and are disclosed; changed area is UNVERIFIED because most of the plan chapters and the small items B2 to B11 were not driven."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Title, chapter select, party prep, cutscene, battle menu and pause own the window at 1600x900, 2000x1012, 2560x1080 and 390x844; no stage-sized or orphaned layer seen.",
+   "where": "both; Ch I, Ch IV; title/battle/pause",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/frames/title-1600x900.png",
+    "critic/reviews/d3fe9fe5-focused/frames/title-390x844.png",
+    "critic/reviews/d3fe9fe5-focused/frames/menu-seymour-flux-2560x1080.png",
+    "critic/reviews/d3fe9fe5-focused/frames/menu-ffx2-bahamut-390x844.png",
+    "critic/reviews/d3fe9fe5-focused/frames/pause-ch1-1600x900.png"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 6,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-003",
+   "result": "UNVERIFIED",
+   "reason": "Legibility floor not measured in this pass (no per-label size read).",
+   "where": "both",
+   "evidence": [],
+   "mode": "not run",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "Overlay lifetime not examined beyond the harness reporting 0 seams in three victories.",
+   "where": "both",
+   "evidence": [],
+   "mode": "not run",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-008",
+   "result": "UNVERIFIED",
+   "reason": "Panels vs painted actors seen clear in Ch I and Ch IV at 1600x900 and 2000x1012; the Natus Sensor card and the other chapters were not checked.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/frames/menu-seymour-flux-1600x900.png",
+    "critic/reviews/d3fe9fe5-focused/frames/menu-ffx2-bahamut-1600x900.png"
+   ],
+   "mode": "visual",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-009",
+   "result": "UNVERIFIED",
+   "reason": "Name truncation not audited; the deep review owes it.",
+   "where": "both",
+   "evidence": [],
+   "mode": "not run",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-012",
+   "result": "UNVERIFIED",
+   "reason": "art-derive verify/audit and art-browser-load were not run (the deploy runs them); only zero 404s and no HTML-as-image on every page load were seen.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/results/p1.json",
+    "critic/reviews/d3fe9fe5-focused/results/p3.json"
+   ],
+   "mode": "not run",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "Approved-choice rendering at gameplay scale beside neighbours not compared beyond the title tile.",
+   "where": "both",
+   "evidence": [],
+   "mode": "not run",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Title to chapter select to party prep to cutscene by real Enter presses; three whole fights (Ch I, IV, VIII) played to victory by real keys through the route driver. Battle menus for layout were reached with the labelled setup hook gotoChapter(skipCutscenes) and setSeed(1).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/frames/flow-1-chapter-select.png",
+    "critic/reviews/d3fe9fe5-focused/frames/flow-2-party-prep.png",
+    "critic/reviews/d3fe9fe5-focused/continuity/index.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 14,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture followed assertScreen or waitBattleMenu; a first attempt that waited on a menu during a cutscene threw and its screenshots were deleted, not used.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/frames/index.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Candidate review before the deploy; live verification is a separate obligation after the deploy.",
+   "where": "both",
+   "evidence": [],
+   "mode": "n/a",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "No 404 and no HTML served as an image or audio on any of the 14 page loads; 0 console errors; the bundle reports sha d3fe9fe5.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/results/p1.json",
+    "critic/reviews/d3fe9fe5-focused/results/p3.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-019",
+   "result": "UNVERIFIED",
+   "reason": "No blank-image or silence sweep was run; every screenshot taken was non-blank.",
+   "where": "both",
+   "evidence": [],
+   "mode": "not run",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "FFX (Ch I, VIII) and FFX-2 (Ch IV) both exercised for the shared figure, stage and reach changes.",
+   "where": "both; Ch I, IV, VIII",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-021",
+   "result": "UNVERIFIED",
+   "reason": "Both-games changes seen in both games. B11 (FFX-only 21:9 side fade) seen on the FFX frame at 2560x1080 only; its absence in FFX-2 was not checked, nor B6, B8, B9 presence.",
+   "where": "both; FFX only B11",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/frames/menu-seymour-flux-2560x1080.png"
+   ],
+   "mode": "visual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Ch I, IV and VIII each ran title to victory to board again by real keys, 0 seams.",
+   "where": "both; Ch I, IV, VIII",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/continuity/index.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Presentation path exercised by the real route (lunges, pose swaps, figtrue default on); ?figtrue=0 loaded in Ch IV without error.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/frames/menu-ffx2-bahamut-1600x900-figtrue0.png"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Ch I: one standing-to-KO swap moves the feet 4.3 px (tolerance 2 px); max head jump 12.6 pct. Ch IV and Ch VIII PASS (head 9.4 and 1.5 pct, feet 0.4 and 0.9 px). Live baseline r38 failed all three (head 57, 78, 116 pct; feet 142, 98, 259 px). The lane also reported Ch II and VII failing; those were not re-run here.",
+   "where": "both; Ch I, IV, VIII",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/continuity/continuity-summary.json",
+    "critic/reviews/d3fe9fe5-focused/continuity/seymour-flux-win-d3fe9fe5/continuity/strips/swap-260-yuna-idle-ko.jpg"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 28,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "All three chapters over the thresholds: snaps/min 1.01, 0.18, 0.54; worst jerk 347, 174, 265 px; Ch I one double image 0.406. Baseline r38: 0.88, 0.14, 0.46 snaps and 371, 211, 277 px jerk. Jerks are equal or smaller; snaps/min are 9 to 29 pct higher in every chapter (single runs, noise unmeasured).",
+   "where": "both; Ch I, IV, VIII",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "d3fe9fe5 / dist-gate index-B6DQPYhY.js",
+   "targetVersion": "83e7d58aed0288933245b9573c67ef63021bb7fc174f616e858d0e2df2fbc797",
+   "environment": "candidate D:/pyrefly-r39-int d3fe9fe5, production build dist-gate (BASE_PATH=/, bundle index-B6DQPYhY.js, 3,848 files), vite preview 127.0.0.1:5471; headless Playwright Chromium, PYREFLY_BROWSER=gpu; preview stopped by PID, port confirmed closed"
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 473.9,
+    "swaps": 437,
+    "snapsPerMinute": 1.01,
+    "maxHeadJumpPct": 12.6,
+    "maxFeetShiftPx": 4.3,
+    "worstJerkPx": 347,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-flux-win-d3fe9fe5/continuity/strips/swap-260-yuna-idle-ko.jpg",
+     "seymour-flux-win-d3fe9fe5/continuity/strips/swap-062-tidus-hurt-ko.jpg",
+     "seymour-flux-win-d3fe9fe5/continuity/strips/swap-198-tidus-idle-ko.jpg",
+     "seymour-flux-win-d3fe9fe5/continuity/strips/swap-012-yuna-ko-idle.jpg",
+     "seymour-flux-win-d3fe9fe5/continuity/strips/swap-068-tidus-ko-idle.jpg",
+     "seymour-flux-win-d3fe9fe5/continuity/strips/swap-007-yuna-hurt-critical.jpg",
+     "seymour-flux-win-d3fe9fe5/continuity/strips/swap-006-yuna-critical-hurt.jpg",
+     "seymour-flux-win-d3fe9fe5/continuity/strips/swap-037-kimahri-idle-ready.jpg",
+     "seymour-flux-win-d3fe9fe5/continuity/strips/swap-164-auron-attack-follow.jpg",
+     "seymour-flux-win-d3fe9fe5/continuity/strips/swap-223-yuna-ready-item.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 340.9,
+    "swaps": 387,
+    "snapsPerMinute": 0.18,
+    "maxHeadJumpPct": 9.4,
+    "maxFeetShiftPx": 0.4,
+    "worstJerkPx": 174.2,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-bahamut-win-d3fe9fe5/continuity/strips/swap-390-paine-follow-idle.jpg",
+     "ffx2-bahamut-win-d3fe9fe5/continuity/strips/swap-370-paine-attack-follow.jpg",
+     "ffx2-bahamut-win-d3fe9fe5/continuity/strips/swap-341-paine-od-x2-warrior-armor-break-hurt.jpg",
+     "ffx2-bahamut-win-d3fe9fe5/continuity/strips/swap-315-paine-hurt-od-x2-warrior-armor-break.jpg",
+     "ffx2-bahamut-win-d3fe9fe5/continuity/strips/swap-348-paine-od-x2-warrior-armor-break-ready.jpg",
+     "ffx2-bahamut-win-d3fe9fe5/continuity/strips/swap-386-paine-ready-attack.jpg",
+     "ffx2-bahamut-win-d3fe9fe5/continuity/strips/swap-331-paine-cast-od-x2-warrior-armor-break.jpg",
+     "ffx2-bahamut-win-d3fe9fe5/continuity/strips/swap-227-rikku-idle-hurt.jpg",
+     "ffx2-bahamut-win-d3fe9fe5/continuity/strips/swap-023-rikku-cast-hurt.jpg",
+     "ffx2-bahamut-win-d3fe9fe5/continuity/strips/swap-006-rikku-hurt-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "evrae-airship",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 332.2,
+    "swaps": 447,
+    "snapsPerMinute": 0.54,
+    "maxHeadJumpPct": 1.5,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 264.7,
+    "strips": 20,
+    "worstSwapStrips": [
+     "evrae-airship-win-d3fe9fe5/continuity/strips/swap-010-rikku-hurt-ko.jpg",
+     "evrae-airship-win-d3fe9fe5/continuity/strips/swap-318-tidus-idle-ko.jpg",
+     "evrae-airship-win-d3fe9fe5/continuity/strips/swap-014-rikku-ko-idle.jpg",
+     "evrae-airship-win-d3fe9fe5/continuity/strips/swap-006-rikku-follow-idle.jpg",
+     "evrae-airship-win-d3fe9fe5/continuity/strips/swap-317-tidus-ko-idle.jpg",
+     "evrae-airship-win-d3fe9fe5/continuity/strips/swap-322-tidus-ko-critical.jpg",
+     "evrae-airship-win-d3fe9fe5/continuity/strips/swap-413-kimahri-idle-hurt.jpg",
+     "evrae-airship-win-d3fe9fe5/continuity/strips/swap-225-kimahri-hurt-idle.jpg",
+     "evrae-airship-win-d3fe9fe5/continuity/strips/swap-004-rikku-attack-follow.jpg",
+     "evrae-airship-win-d3fe9fe5/continuity/strips/swap-463-kimahri-idle-victory.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 1147,
+  "counted": 1271,
+  "swaps": 1321,
+  "size": {
+   "judged": 1161,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 110,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 12.6,
+   "maxHeadJumpPctRegistration": 2.5,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 4.3,
+   "feetOverTolerance": 1,
+   "headMeasured": 1161,
+   "headRegistration": 857,
+   "headSilhouette": 304,
+   "headUnmeasured": 0
+  },
+  "motion": {
+   "snaps": 12,
+   "snapsPerMinute": 0.63,
+   "hardCuts": 15,
+   "hardCutsPerMinute": 0.78,
+   "ghostSwaps": 1141,
+   "ghostFrames": 4731,
+   "worstGhostSeverity": 0.425,
+   "ghostOverFail": 16,
+   "jerks": 290,
+   "worstJerkPx": 347,
+   "jerksOverFail": 82,
+   "lowestIou": 0.008,
+   "maxCentroidShiftPx": 161.2
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "1 swap(s) of a standing figure move its feet more than the tolerance (worst 4.3 px at 1600 wide)"
+    ],
+    "note": "857 of 1161 measured swaps had a registered head (tolerance 3 percent); 304 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "0.63 snaps per minute is over 0.25",
+     "82 jerk(s) of 40 px or more in one frame (worst 347 px)",
+     "16 swap(s) show a double image of severity 0.4 or more (worst 0.425)"
+    ]
+   }
+  },
+  "base": "http://127.0.0.1:5471/",
+  "date": "2026-10-06T06:19:55.317Z"
+ },
+ "targets": {
+  "required": 1,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "note": "Only the Title tile was compared (mockup A-title is older than the renamed title and key art Bailey approved later, D-458 to D-460); cast, fight, pause, phone and scene tiles are left to the deep review.",
+  "list": [
+   {
+    "tile": "Title",
+    "result": "matched",
+    "evidence": "critic/reviews/d3fe9fe5-focused/title.jpg",
+    "note": "ink slab, PRESS ENTER, vertical line and legend as approved; new name, key art and top-left panel are later picks"
+   }
+  ]
+ },
+ "issues": [
+  {
+   "game": "both",
+   "confidence": "high",
+   "requirement": "CHK-026/027 (D-420 to D-426)",
+   "where": "src/engine/BattlePresenter*.ts, src/data/art/poseRegistration*.ts (suspected)",
+   "inNewFeature": false,
+   "id": "D391F-01",
+   "severity": "major",
+   "title": "CHK-026 still FAILS in Ch I (one KO swap, feet 4.3 px) and, per the lane, Ch II and VII",
+   "chapter": "seymour-flux (Ch I); Ch II, VII reported by the lane",
+   "expected": "Feet move at most 2 px at a swap at 1600 wide; head at most 3 pct.",
+   "observed": "Ch I: 1 swap Yuna idle to KO, feet 4.3 px, head 12.6 pct on an unregistered figure; Ch IV and VIII pass. Ch II and VII not re-run here.",
+   "repro": "node critic/runner/lib/continuity.mjs --chapters=seymour-flux on the candidate; seed 1",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/continuity/seymour-flux-win-d3fe9fe5/continuity/continuity.json"
+   ],
+   "fix": "Register the KO pose feet for Yuna and re-measure; check Ch II and VII.",
+   "acceptanceCheck": "continuity.mjs CHK-026 PASS on Ch I, II, VII",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "game": "both",
+   "confidence": "high",
+   "requirement": "CHK-026/027 (D-420 to D-426)",
+   "where": "src/engine/BattlePresenter*.ts, src/data/art/poseRegistration*.ts (suspected)",
+   "inNewFeature": false,
+   "id": "D391F-02",
+   "severity": "major",
+   "title": "CHK-027 still FAILS: snaps per minute and jerks over threshold; snaps 9 to 29 pct above live",
+   "chapter": "Ch I, IV, VIII",
+   "expected": "At most 0.25 snaps per minute, no jerk of 40 px or more.",
+   "observed": "Snaps/min 1.01, 0.18, 0.54 vs live 0.88, 0.14, 0.46; 28 jerks of 40 px or more in Ch I (worst 347 px); same class as live.",
+   "repro": "continuity.mjs on seymour-flux, ffx2-bahamut, evrae-airship",
+   "evidence": [
+    "critic/reviews/d3fe9fe5-focused/continuity/continuity-summary.json"
+   ],
+   "fix": "Find which swaps and lunges add the extra snaps; repeat the runs to size the noise.",
+   "acceptanceCheck": "snaps/min no higher than live in all three, then toward 0.25",
+   "introducedByCandidate": "unknown",
+   "regressionVsLive": "unknown"
+  },
+  {
+   "game": "both",
+   "confidence": "medium",
+   "requirement": "CHK-026/027 (D-420 to D-426)",
+   "where": "src/engine/BattlePresenter*.ts, src/data/art/poseRegistration*.ts (suspected)",
+   "inNewFeature": false,
+   "id": "D391F-03",
+   "severity": "polish",
+   "title": "Coverage gap: lunge reach, B2 to B11, N1 replay and 4K pause were not driven in detail",
+   "chapter": "various",
+   "expected": "Each small change seen once on the candidate.",
+   "observed": "Only the title (3 sizes), Ch I and IV menus, pause, 21:9 FFX, the backtick no-op and three continuity fights were examined.",
+   "repro": "n/a",
+   "evidence": [],
+   "fix": "Cover in the deep review after the deploy.",
+   "acceptanceCheck": "deep review list",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Production build of d3fe9fe5 (bundle index-B6DQPYhY.js), headless GPU Chromium",
+   "Title at 1600x900, 2000x1012, 390x844; title to cutscene by Enter",
+   "Ch I and Ch IV battle menus at 1600x900, 2000x1012, 390x844; Ch I at 2560x1080; pause Ch I; backtick key is a visible no-op; ?figtrue=0 loads",
+   "Continuity harness on Ch I, IV, VIII (victory, about 60 fps) vs critic/reviews/continuity-baseline-r38"
+  ],
+  "reused": [
+   {
+    "what": "r38 continuity baseline",
+    "from": "critic/reviews/continuity-baseline-r38",
+    "why": "live comparison for Ch I, IV, VIII without a rerun on live"
+   }
+  ],
+  "notTested": [
+   "The other 15 chapters of the plan (continuity or play)",
+   "Lunge reach, B2 to B11 features, N1 replay, 4K pause, Natus Sensor card",
+   "Art gates, audio, data audit (not required), approved-hash verify (not required; the tool run on the main tree reported 17 mismatched, 47 missing, not examined)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of the exact artifact after the deploy, then the deep review owed (15 chapters of continuity, lunge reach, B items).",
+ "elapsedMinutes": 55
+}

@@ -28,6 +28,7 @@ import {
   lifeStateForPose,
   mirrorFor,
   nextLifeState,
+  reachOffset,
   resolvePoseName,
   type ActorSide,
   type ArtFacing,
@@ -56,6 +57,18 @@ import { cutoutShadow } from './ShadowCutout.ts';
 
 /** One painted pose: a URL now, a texture once it has loaded. */
 export type PoseMap = Record<string, string>;
+
+/** A pose seen without showing it (`PaintedActor.poseShape`): its painted box in the world, and what its alpha is read from (`motion/Silhouette.ts`). */
+export interface PoseShape {
+  corners: [Vector3, Vector3, Vector3, Vector3];
+  /** The painting, and its painted box in the painting's own uv (v up), the mirror already told. */
+  tex: Texture;
+  u0: number;
+  u1: number;
+  v0: number;
+  v1: number;
+  mirrored: boolean;
+}
 
 export interface PaintedActorRimOptions {
   color?: number | string;
@@ -1123,12 +1136,15 @@ export class PaintedActor extends Group {
    * which is what makes a still painting read as hitting something. The timing
    * lives in {@link import('./BattlePresenterActors.ts').ATTACK_BEATS}; the
    * peak is still `distance` and the whole move still takes `ms`, so every
-   * existing call site keeps its staging.
+   * existing call site keeps its staging. `house`: how much of `distance` is the
+   * house lunge (default all of it); a strike carried further than that to reach its
+   * target (`motion/StrikeReach.ts`) moves the rest on the eased step.
    */
-  lunge(distance = 0.9, ms = 320, contact?: { hold: Promise<unknown>; reached: () => void }): Promise<void> {
+  lunge(distance = 0.9, ms = 320, contact?: { hold: Promise<unknown>; reached: () => void }, house = distance): Promise<void> {
     const from = this.lungeOffset; // anything in flight folds out over the first beat (no snap back to zero)
+    const extra = Math.max(0, distance - house); // the distance beyond the house lunge rides the eased step (`reachOffset`); the house part is `attackOffset` to the frame
     const leg = (a: number, b: number, d: number): Promise<void> => this.tweens.toAsync(a, b, { durationMs: Math.max(1, d), easing: 'linear',
-      onUpdate: (t) => void (this.lungeOffset = distance * attackOffset(t) + from * Math.max(0, 1 - t / 0.26)) });
+      onUpdate: (t) => void (this.lungeOffset = (distance - extra) * attackOffset(t) + extra * reachOffset(t) + from * Math.max(0, 1 - t / 0.26)) });
     // VP-1001-06 (`ContactBeat.ts`): with a contact, the strike holds at its apex until the blow lands.
     const run = contact ? leg(0, ATTACK_IMPACT, ms * ATTACK_IMPACT).then(() => (contact.reached(), contact.hold)).then(() => leg(ATTACK_IMPACT, 1, ms * (1 - ATTACK_IMPACT))) : leg(0, 1, ms);
     return run.then(() => void (this.lungeOffset = 0));
@@ -1341,6 +1357,41 @@ export class PaintedActor extends Group {
     slot.mesh.updateWorldMatrix(true, false);
     for (const c of corners) c.applyMatrix4(slot.mesh.matrixWorld);
     return corners;
+  }
+
+  /**
+   * The painted box of pose `name` as it would stand if it were the pose showing now, and what its alpha is read from (`motion/Silhouette.ts`): nothing is changed
+   * (no pose swap, no crossfade, no life state). The strike solver's look at the pose a blow lands in (the impact painting) while the wind-up is still up
+   * (r391-reach): the same sizing, placement and registration `applyPose` gives a slot, so for the pose that IS showing it is `contentQuad`. Null for a pose with
+   * no painting of its own to size (a placeholder) and for a body lying down (a prone plane is placed by its ground hull).
+   */
+  poseShape(name: string): PoseShape | null {
+    const resolved = resolvePoseName(name, (p) => this.poses.has(p));
+    const painted = resolved ? this.poses.get(resolved) : undefined;
+    if (!resolved || !painted || painted.placeholder) return null;
+    const scale = computePoseScale(painted.meta, { worldHeight: this.worldHeight, reference: this.reference, ...this.extents });
+    if (scale.prone) return null;
+    const mirror = this.mirrorOf(painted.meta);
+    const sx = scale.width * mirror;
+    // where `placeSlot` puts the plane across: the sidecar's shift, then the registration that stands the pose's feet where the idle's are
+    let px = 0;
+    const shift = this.poseShiftPx?.[resolved];
+    if (shift) px += shift * scale.unitsPerPixel * (sx < 0 ? -1 : 1);
+    px += this.registrationShift({ meta: painted.meta, scale, mesh: { scale: { x: sx } } } as unknown as PlaneSlot);
+    const b = scale.contentBox;
+    const x0 = px + (mirror > 0 ? b.x0 : -b.x1);
+    const x1 = px + (mirror > 0 ? b.x1 : -b.x0);
+    this.inner.updateWorldMatrix(true, false);
+    const at = (x: number, y: number): Vector3 => new Vector3(x, y, 0).applyMatrix4(this.inner.matrixWorld);
+    return {
+      corners: [at(x0, b.y0), at(x1, b.y0), at(x1, b.y1), at(x0, b.y1)],
+      tex: painted.texture,
+      u0: b.x0 / scale.width + 0.5,
+      u1: b.x1 / scale.width + 0.5,
+      v0: (b.y0 - scale.offsetY) / scale.height + 0.5,
+      v1: (b.y1 - scale.offsetY) / scale.height + 0.5,
+      mirrored: mirror < 0,
+    };
   }
 
   /**

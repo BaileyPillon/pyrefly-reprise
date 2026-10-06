@@ -61,6 +61,20 @@ function ffx2Subjects(stage: BattleStage, focus: CombatantId | null): Subject[] 
   return subjects;
 }
 
+/**
+ * B5 (release 39.1, FFX-2 only): share of each girl the boss reveal keeps on screen. All of her: the defect was a girl the reveal's push pulled
+ * out of the frame (Den of Woe and Fallen Aeons, Yuna at the left edge for about 2.7 s of the 6 s opening).
+ */
+export const REVEAL_PARTY_MIN = 0.97;
+
+/** B5: the standing girls whole (at {@link REVEAL_PARTY_MIN}, with the sway margin) and the enemy in play at A-1's 75 percent. */
+export function ffx2RevealSubjects(stage: BattleStage, focus: CombatantId | null): Subject[] {
+  const subjects = partySubjects(stage, REVEAL_PARTY_MIN);
+  const boss = focus ? stage.actor(focus) : undefined;
+  if (boss) subjects.push({ actor: boss, min: FFX2_BOSS_MIN + FIT_MARGIN, floor: FFX2_BOSS_MIN });
+  return subjects;
+}
+
 /** A-1 (FFX-2): the push to use on `rig`, never cutting the party or the enemy in play. */
 export function ffx2Push(stage: BattleStage, cam: CameraPort, rig: string | null, push: number, focus: CombatantId | null): number {
   if (!rig || push <= 0 || !cam.frame) return push;

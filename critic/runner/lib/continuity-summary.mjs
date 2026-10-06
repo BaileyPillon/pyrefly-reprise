@@ -17,16 +17,20 @@ const round = (v, d) => { const k = 10 ** d; return Math.round(v * k) / k; };
 export function summarize({ swaps, jerks, battleSeconds, cfg }) {
   const counted = swaps.filter((s) => s.counted);
   const minutes = battleSeconds / 60;
-  const heads = counted.filter((s) => s.head && s.head.ratio !== null);
+  // CHK-026 judges a change of POSE: a swap between two dresspheres or two forms (`costume`) and a swap between two pose names that draw one painting
+  // (`sameArt`) are counted and shown, and kept out of the size numbers (see analyzeSwap).
+  const judged = counted.filter((s) => !s.costume && !s.sameArt);
+  const costume = counted.filter((s) => s.costume);
+  const heads = judged.filter((s) => s.head && s.head.ratio !== null);
   const regHeads = heads.filter((s) => s.head.source === 'registration');
   const worstHead = heads.reduce((m, s) => Math.max(m, Math.abs(s.head.ratio - 1)), 0);
   const worstHeadReg = regHeads.reduce((m, s) => Math.max(m, Math.abs(s.head.ratio - 1)), 0);
-  const feetSwaps = counted.filter((s) => s.feet && s.feet.standing);
+  const feetSwaps = judged.filter((s) => s.feet && s.feet.standing);
   const snaps = counted.filter((s) => s.snap);
   const hard = counted.filter((s) => s.hardCut);
   const ghostSwaps = counted.filter((s) => s.ghost.frames > 0);
-  const failHead = counted.filter((s) => s.failHead);
-  const failFeet = counted.filter((s) => s.failFeet);
+  const failHead = judged.filter((s) => s.failHead);
+  const failFeet = judged.filter((s) => s.failFeet);
   const ghostFail = counted.filter((s) => s.ghost.severity >= cfg.motion.ghostSeverityFail);
   const perMin = (n) => (minutes > 0 ? round(n / minutes, 2) : null);
   const bySnapPose = {};
@@ -37,7 +41,10 @@ export function summarize({ swaps, jerks, battleSeconds, cfg }) {
     swaps: swaps.length, counted: counted.length, excludedByCut: swaps.filter((s) => s.camCut).length, excludedNotShowing: swaps.filter((s) => s.notShowing).length,
     swapsPerMinute: perMin(counted.length),
     size: {
-      headMeasured: heads.length, headRegistration: regHeads.length, headSilhouette: heads.length - regHeads.length, headUnmeasured: counted.length - heads.length,
+      judged: judged.length, costumeSwaps: costume.length, sameArtSwaps: counted.length - judged.length - costume.length,
+      costumeWorstHeadPct: round(costume.reduce((m, s) => (s.head && s.head.ratio !== null ? Math.max(m, Math.abs(s.head.ratio - 1)) : m), 0) * 100, 1),
+      costumeWorstFeetPx: round(costume.reduce((m, s) => (s.feet && s.feet.standing ? Math.max(m, s.feet.px) : m), 0), 1),
+      headMeasured: heads.length, headRegistration: regHeads.length, headSilhouette: heads.length - regHeads.length, headUnmeasured: judged.length - heads.length,
       maxHeadJumpPct: round(worstHead * 100, 1), maxHeadJumpPctRegistration: round(worstHeadReg * 100, 1),
       headOverTolerance: failHead.length,
       feetMeasured: feetSwaps.length, maxFeetShiftPx: round(feetSwaps.reduce((m, s) => Math.max(m, s.feet.px), 0), 1), feetOverTolerance: failFeet.length,
@@ -88,8 +95,9 @@ export function verdicts(s, cfg, run = {}) {
  * 40 percent head jump and a 119 px slide each outrank a mild ghost; a snap or a double image adds weight.
  */
 export function swapBadness(s, cfg) {
-  const head = s.head && s.head.ratio !== null ? Math.abs(s.head.ratio - 1) * 100 / (s.head.source === 'registration' ? cfg.size.headTolerancePct : cfg.size.headTolerancePctCoarse) : 0;
-  const feet = s.feet && s.feet.standing ? s.feet.px / (s.feet.source === 'registration' ? cfg.size.feetTolerancePx : cfg.size.feetTolerancePxCoarse) : 0;
+  const sized = !s.costume && !s.sameArt; // a costume change and a swap of one painting to itself are not judged on size or feet
+  const head = sized && s.head && s.head.ratio !== null ? Math.abs(s.head.ratio - 1) * 100 / (s.head.source === 'registration' ? cfg.size.headTolerancePct : cfg.size.headTolerancePctCoarse) : 0;
+  const feet = sized && s.feet && s.feet.standing ? s.feet.px / (s.feet.source === 'registration' ? cfg.size.feetTolerancePx : cfg.size.feetTolerancePxCoarse) : 0;
   const outline = s.outline ? (1 - s.outline.iou) / 0.25 : 0;
   const ghost = s.ghost.severity / Math.max(0.01, cfg.motion.ghostSeverityFail);
   return Math.max(head, feet, outline, ghost) + (s.snap ? 0.5 : 0);

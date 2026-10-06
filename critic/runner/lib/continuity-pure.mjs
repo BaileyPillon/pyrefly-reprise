@@ -183,8 +183,18 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg 
   const fromRaw = planeIn(f0, swap.from) ?? planeIn(frames[at - 1], swap.from);
   const toRaw = planeIn(f0, swap.to) ?? planeIn(frames[at + 1], swap.to);
   const aFrom = anchors[swap.from] ?? null, aTo = anchors[swap.to] ?? null;
+  // A swap between two dresspheres' paintings (or two forms of a boss) is a change of costume, staged by its own sequence (the spherechange's twirl), not a change of
+  // pose: it is measured and shown (`costume`) and not judged against the pose tolerances. A swap between two pose names that draw one and the same painting (a pose
+  // that falls back to the idle's) cannot change the figure's size, and whatever it moves is the pose state's own motion (a recoil, a lean: CHK-027's jerks).
+  // A change of RANGE is staged by its own director too (Evrae's and Sin's fins' `idle-far` streak is swapped in sized and placed by the airship director, `idle-near` is the close set): one
+  // painting of the swap is a far-range painting and the other is not. Another subject (dressphere, form) or another range is a change of costume and place, not of pose.
+  const farOf = (a) => /-far(?:\.|$)/.test(String(a?.url ?? '').split('/').pop() ?? '');
+  const range = Boolean(aFrom?.url && aTo?.url && farOf(aFrom) !== farOf(aTo));
+  const costume = range || Boolean(aFrom?.subject && aTo?.subject && aFrom.subject !== aTo.subject);
+  const sameArt = !costume && Boolean(aFrom?.url && aFrom.url === aTo?.url);
+  const judged = !costume && !sameArt;
   const out = {
-    camCut: Boolean(camCut),
+    camCut: Boolean(camCut), costume, sameArt, range,
     head: null, feet: null, outline: null, ghost: { frames: 0, ms: 0, peak: 0, severity: 0, worstFrame: null }, blendFrames: 0,
     snap: false, hardCut: false, failHead: false, failFeet: false,
   };
@@ -201,7 +211,7 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg 
     pf *= k1600; pt *= k1600;
     const ratio = pt / pf;
     out.head = { fromPx: round(pf, 1), toPx: round(pt, 1), ratio: round(ratio, 4), source: bothHeads ? 'registration' : 'silhouette', metric: bothHeads ? 'head' : 'mass' };
-    out.failHead = Math.abs(ratio - 1) > (bothHeads ? cfg.size.headTolerancePct : cfg.size.headTolerancePctCoarse) / 100;
+    out.failHead = judged && Math.abs(ratio - 1) > (bothHeads ? cfg.size.headTolerancePct : cfg.size.headTolerancePctCoarse) / 100;
   }
   // --- feet: where the standing figure stands, before and after
   if (aFrom?.stance && aTo?.stance) {
@@ -211,7 +221,7 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg 
     const px = Math.hypot(dx, dy);
     const coarse = aFrom.stanceSrc !== 'registration' || aTo.stanceSrc !== 'registration';
     out.feet = { dx: round(dx, 1), dy: round(dy, 1), px: round(px, 1), standing, source: coarse ? 'silhouette' : 'registration' };
-    if (standing) out.failFeet = px > (coarse ? cfg.size.feetTolerancePxCoarse : cfg.size.feetTolerancePx);
+    if (standing) out.failFeet = judged && px > (coarse ? cfg.size.feetTolerancePxCoarse : cfg.size.feetTolerancePx);
   }
   // --- the outline: what the swap does to the silhouette as drawn (CHK-027)
   if (aFrom?.mask && aTo?.mask) {

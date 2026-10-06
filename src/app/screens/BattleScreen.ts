@@ -58,6 +58,9 @@ import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
 import { StallWatch } from './BattleScreenStall.ts';
 import { bindEyeCandyScene, sceneBackdropPalette } from '../../engine/fx/a/GoldenHour.ts';
 import { bindLivingScene, releaseLivingScene, updateLivingScene } from '../../engine/fx/b/LivingPaintings.ts';
+import { patchSideFogIn, setSideFogGame } from '../../engine/PlateSideFog.ts';
+import { startMarkRecorder, type MarkRecorder } from '../markRecorder.ts';
+import { defaultSettings } from '../SaveData.ts';
 import { attachSpectacle, type SpectacleHandle } from './battleSpectacle.ts'; // eye-candy option C, `?fx=c` only
 import { battleComfort } from './battleComfort.ts';
 import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
@@ -136,6 +139,9 @@ export class BattleScreen extends Screen {
   private checkpoint: ChainCheckpoint | null = null;
 
   private startedAt = 0;
+  /** N1 (release 39.1, both games): the hidden mark key and the inputs since the battle began (`markRecorder.ts`); shows nothing. */
+  private markRecorder: MarkRecorder | null = null;
+  private startParty: string[] = [];
   private links = 0;
   private preview = false;
   private finishedResolve: ((r: BattleScreenResult) => void) | null = null;
@@ -205,6 +211,20 @@ export class BattleScreen extends Screen {
     const chapter = this.opts.chapter;
     this.startedAt = performance.now();
     this.root.className = 'screen battle-screen';
+    this.markRecorder = startMarkRecorder({
+      chapter: chapter.id,
+      game: chapter.game,
+      hurried: !!this.opts.openingHurry,
+      startedAt: this.startedAt,
+      seed: () => this.setup?.seed ?? this.opts.seed ?? null,
+      log: () => this.engine?.state().log ?? [],
+      party: () => this.startParty,
+      phase: () => String(this.presenter?.snapshot()['phase'] ?? ''),
+      menu: () => this.presenter?.snapshot()['awaitingMenu'] === true,
+      settings: () => ({ ...this.app.save.settings }),
+      defaults: () => ({ ...defaultSettings() }),
+      seenCoach: () => [...this.app.save.snapshot().seenCoach],
+    });
 
     // --- diorama -----------------------------------------------------------
     const scene = await loadScene(chapter.sceneKey, this.app.renderer.camera);
@@ -214,6 +234,8 @@ export class BattleScreen extends Screen {
     this.app.renderer.applyPalette(this.scene.palette);
     bindEyeCandyScene({ key: scene.key, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
     bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera, renderer: this.app.renderer.renderer }); // eye-candy option B (`?fx=b`)
+    setSideFogGame(chapter.game); // release 39.1, B11 (FFX only): fogged plate edges where the plane ends inside an ultrawide frame (`engine/PlateSideFog.ts`)
+    patchSideFogIn(scene.scene);
     this.scene.hideOwnActors();
     this.syncPixelScale();
     this.offSceneScale = onSceneScale(() => this.syncPixelScale()); // a supersampled scene (`crisp/CrispRig.ts`) changes the point sprites' pixel grid
@@ -226,6 +248,7 @@ export class BattleScreen extends Screen {
       battleCamera: this.scene.battleCamera,
       slots: this.scene.slots,
       canvas: this.app.renderer.domElement,
+      renderer: this.app.renderer.renderer, // release 39.1: masters are uploaded ahead of their swap (TextureStager.ts)
       overlayRoot: this.root,
       // FF7: its own effects, Spectacle on A3 plus (battleSpellFx answers 'ff7' with battleFf7Fx.ts)
       spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed, () => this.stage ?? null), // FF7: its hit flash and shake
@@ -242,6 +265,7 @@ export class BattleScreen extends Screen {
     this.engine = await createEngine(chapter.game, this.setup, { automated: this.opts.auto != null });
     if (this.exited) return this.releaseParts();
     this.preview = this.engine === null;
+    this.startParty = this.engine ? [...this.engine.state().activeIds] : [];
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
     if (this.exited) return this.releaseParts();
@@ -889,6 +913,9 @@ export class BattleScreen extends Screen {
     this.offSceneScale = null;
     setPaceGame('other'); // a cutscene or the board after the fight is never paced (`pace.ts`)
     window.removeEventListener('keydown', this.onPauseKey);
+    setSideFogGame(null);
+    this.markRecorder?.stop();
+    this.markRecorder = null;
     // Settle the card's promise so nothing stays parked on it; `runEncounter`
     // sees `exited` and does not start the fight.
     this.battleStartBanner?.dismiss();

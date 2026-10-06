@@ -1,0 +1,271 @@
+[
+ {
+  "chapter": "seymour-flux",
+  "ch": "I",
+  "steps": [
+   "card selected by real keys",
+   "pre-battle scene skipped with 1 hold(s) of Enter",
+   "shot ch01-seymour-flux-first-menu.png",
+   "target steered: mortiorchis > seymour-flux",
+   "turn: Attack; burst 40 frames"
+  ],
+  "fail": null,
+  "targetTrail": [
+   "mortiorchis",
+   "seymour-flux"
+  ],
+  "turn": {
+   "label": "Attack",
+   "confirm": {
+    "confirmed": true,
+    "frames": 40
+   }
+  },
+  "burst": [
+   {
+    "f": "b00.jpg",
+    "ms": 73,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b01.jpg",
+    "ms": 138,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b02.jpg",
+    "ms": 203,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b03.jpg",
+    "ms": 322,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b04.jpg",
+    "ms": 413,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b05.jpg",
+    "ms": 478,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b06.jpg",
+    "ms": 552,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b07.jpg",
+    "ms": 608,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b08.jpg",
+    "ms": 661,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b09.jpg",
+    "ms": 730,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b10.jpg",
+    "ms": 795,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b11.jpg",
+    "ms": 862,
+    "n": 7,
+    "last": "action-end"
+   },
+   {
+    "f": "b12.jpg",
+    "ms": 935,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b13.jpg",
+    "ms": 994,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b14.jpg",
+    "ms": 1070,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b15.jpg",
+    "ms": 1123,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b16.jpg",
+    "ms": 1176,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b17.jpg",
+    "ms": 1226,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b18.jpg",
+    "ms": 1285,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b19.jpg",
+    "ms": 1352,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b20.jpg",
+    "ms": 1408,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b21.jpg",
+    "ms": 1460,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b22.jpg",
+    "ms": 1505,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b23.jpg",
+    "ms": 1562,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b24.jpg",
+    "ms": 1637,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b25.jpg",
+    "ms": 1691,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b26.jpg",
+    "ms": 1752,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b27.jpg",
+    "ms": 1806,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b28.jpg",
+    "ms": 1866,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b29.jpg",
+    "ms": 1928,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b30.jpg",
+    "ms": 1992,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b31.jpg",
+    "ms": 2044,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b32.jpg",
+    "ms": 2112,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b33.jpg",
+    "ms": 2175,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b34.jpg",
+    "ms": 2261,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b35.jpg",
+    "ms": 2309,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b36.jpg",
+    "ms": 2361,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b37.jpg",
+    "ms": 2429,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b38.jpg",
+    "ms": 2496,
+    "n": 14,
+    "last": "script-trigger"
+   },
+   {
+    "f": "b39.jpg",
+    "ms": 2571,
+    "n": 14,
+    "last": "script-trigger"
+   }
+  ],
+  "finalScreen": "battle",
+  "events": 14,
+  "consoleErrors": [],
+  "notFound": []
+ }
+]

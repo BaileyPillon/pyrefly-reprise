@@ -79,6 +79,16 @@ export const GARDEN_IDS = {
 } as const;
 
 /**
+ * Release 39.1, B9 (Bailey, 2026-10-05, "all of your recommendations"; FFX only: Chapter XII is FFX's): the whole two-by-two stands this much higher
+ * (in multiples of his height) than the O-2 composite had it, so the lower pair no longer hides at the first menu: the lower-left disc was 21 to 23
+ * percent behind Yuna and Auron and the lower-right 38 percent under the enemy-intent card (1600x900; pixel counts, `docs/handoff/r391-smaller.md`).
+ * Every offset keeps its place in the grid (the strip reads it as it stands: a test pins the order), the gaps between discs are the composite's, and
+ * the boss, the party and the HUD do not move; only the four discs and their overhead anchors, which follow the same numbers. 0.30 is the least lift
+ * that leaves every disc 97 percent or more in view at 1024x768, 1280x720, 1600x900, 2000x1012, 2560x1080 and 2560x1440.
+ */
+export const DISC_LIFT = 0.3;
+
+/**
  * The discs, left to right as the party faces them (the order B12 reads them in): upper left,
  * lower left, lower right, upper right. Offsets from his feet in multiples of his height, read off
  * the O-2 composite (canvas 2050 x 1560, Omnis 0.86 of it, discs 0.34 of it), drawn in 7 % so the
@@ -90,10 +100,10 @@ export const DISC_LAYOUT = {
   diameter: 0.42,
   dz: -0.25,
   at: [
-    { dx: -0.53, dy: 0.71, towardHim: 0 },
-    { dx: -0.44, dy: 0.27, towardHim: 0 },
-    { dx: 0.45, dy: 0.28, towardHim: 180 },
-    { dx: 0.53, dy: 0.72, towardHim: 180 },
+    { dx: -0.53, dy: 0.71 + DISC_LIFT, towardHim: 0 },
+    { dx: -0.44, dy: 0.27 + DISC_LIFT, towardHim: 0 },
+    { dx: 0.45, dy: 0.28 + DISC_LIFT, towardHim: 180 },
+    { dx: 0.53, dy: 0.72 + DISC_LIFT, towardHim: 180 },
   ],
 } as const;
 

@@ -16,7 +16,8 @@
 
 import type { CombatantId } from '../battle/common/types.ts';
 import type { BattleStage, MomentsPort } from './BattlePresenterPorts.ts';
-import { ffx2Push, ffx2Shot, fittedPush } from './ShotFit.ts';
+import { cameraPresetFor } from './CameraPreset.ts';
+import { ffx2Push, ffx2RevealSubjects, ffx2Shot, fittedPush } from './ShotFit.ts';
 
 /**
  * `actor.userData[PHONE_FIT_KEY] = false`: a scene's mark on a figure the phone's A-12 refit leaves out ({@link ShotRules.fitPhone}).
@@ -53,6 +54,46 @@ export class ShotRules {
     const focus = this.focus ?? this.headline;
     const chosen = ffx2Shot(this.stage, cam, rig, push, focus);
     return { rig: chosen, push: ffx2Push(this.stage, cam, chosen, push, focus) };
+  }
+
+  /**
+   * B5 (release 39.1, Bailey 2026-10-05, "all of your recommendations"; **FFX-2 desktop only**): the rig and push the boss reveal takes.
+   *
+   * The reveal pushes on the enemy's own rig under the comfort preset's travel (`calm`: half way from the master). In Den of Woe and Fallen Aeons that
+   * rig puts the leftmost girl out of the frame, from about 2.6 s of the 6 s opening, for 2.7 s (Yuna at 0 percent in frame in both, in the first
+   * link's opening and in every seam's). Where that happens the reveal goes as far toward the boss as keeps every girl whole and the boss in play
+   * (`ffx2RevealSubjects`), and the push after it is the one that keeps them so: a wider push, the same moves in the same times, so the opening
+   * stays as long as it was.
+   *
+   * Only a girl cut by the played rig changes the reveal: where the plain reveal's rig keeps every girl (Leblanc and Vegnagun, measured; the boss
+   * a master half shows, Vegnagun's tail, is no reason), and for FFX and the phone, the answer is the one `fittedPush` has always given. Chapter
+   * IV's Bahamut also keeps the girls at the rig, but its 0.12 push then takes Yuna to a 0.45 share for about 2 s (on live as well): left as it
+   * is, disclosed in docs/handoff/r391-smaller.md.
+   */
+  reveal(rig: string | null, push: number): { rig: string | null; push: number } {
+    const cam = this.stage.camera;
+    const plain = { rig, push: fittedPush(this.stage, cam, rig, push) };
+    if (!rig || !this.ffx2Framing || this.phone !== null || !cam.frame || !cam.blendRig || !cam.rigNames.includes('idle')) return plain;
+    const spec = cameraPresetFor('ffx2');
+    const reach = spec.holdWide ? 0 : spec.travel; // how far from the master the comfort preset really takes a close rig
+    if (reach <= 0) return plain;
+    const girls = ffx2RevealSubjects(this.stage, null); // the girls alone decide whether the plain reveal has to change: a boss the master half shows never does
+    const withBoss = ffx2RevealSubjects(this.stage, this.focus ?? this.headline);
+    const fits = (name: string, subjects: typeof girls): boolean => {
+      const v = cam.frame?.(name, 0, subjects);
+      return !v || v.fits;
+    };
+    const played = cam.blendRig('idle', rig, reach);
+    if (!played || fits(played, girls)) return plain;
+    // The furthest blend that keeps everyone and the boss in play, else the furthest that keeps the girls, found from the played one downward in
+    // steps; the master itself always keeps the girls.
+    for (const subjects of withBoss.length > girls.length ? [withBoss, girls] : [girls]) {
+      for (const k of [0.85, 0.7, 0.58, 0.46, 0.36, 0.28, 0.2, 0.14, 0.08, 0.04]) {
+        const name = cam.blendRig('idle', rig, reach * k);
+        if (name && fits(name, subjects)) return { rig: name, push: cam.frame(name, push, subjects)?.push ?? push };
+      }
+    }
+    return { rig: 'idle', push: cam.frame('idle', push, girls)?.push ?? 0 };
   }
 
   /** A-12: at a battle start, read the phone slice and stand the master back until everyone fits it. */

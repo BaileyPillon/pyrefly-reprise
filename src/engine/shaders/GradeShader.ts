@@ -60,11 +60,14 @@ export const GradeShader = {
     /** How much of the grain the highlights keep; 1 = the old weighting. */
     grainHighlights: { value: 1 },
     /**
-     * Release 39 colour fidelity (`engine/figureTrue.ts`): 0 = off, the default, and the grade is exactly what it was; 1 = a painted figure
+     * Release 39 colour fidelity (`engine/figureTrue.ts`): 0 = off (the pass's own neutral value; the renderer applies FIGURE_TRUE_DEFAULT, on since 39.1), the grade exactly as it was; 1 = a painted figure
      * (where the frame's alpha, the bloom mask, is 0) skips the scene grade, the shadow tint, the saturation and the look and takes the sRGB
      * encode this pass never applied to anything. Between the two it is a mix.
      */
     figureTrue: { value: 0 },
+    /** The bloom pass's own light (its last composite target) and whether a figure that shows its own colour gives it back (`figureTrue.ts`). */
+    tBloom: { value: null as unknown },
+    bloomRemove: { value: 0 },
   },
 
   vertexShader: /* glsl */ `
@@ -95,6 +98,8 @@ export const GradeShader = {
     uniform float grainSize;
     uniform float grainHighlights;
     uniform float figureTrue;
+    uniform sampler2D tBloom;
+    uniform float bloomRemove;
 
     varying vec2 vUv;
 
@@ -144,7 +149,7 @@ export const GradeShader = {
 
       // release 39: the figure's own colour, through the sRGB encode (the chain works in linear light and nothing else encodes it)
       if (figm > 0.0) {
-        vec3 s = clamp(rawc, 0.0, 1.0);
+        vec3 s = clamp(rawc - (bloomRemove > 0.0 ? texture2D(tBloom, vUv).rgb : vec3(0.0)), 0.0, 1.0);
         vec3 enc = mix(s * 12.92, 1.055 * pow(s, vec3(1.0 / 2.4)) - 0.055, step(vec3(0.0031308), s));
         c = mix(c, enc, figm);
         luma = dot(c, vec3(0.2126, 0.7152, 0.0722));

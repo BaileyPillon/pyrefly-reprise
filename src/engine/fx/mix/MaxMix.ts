@@ -65,11 +65,21 @@ const GRID: Record<'full' | 'phone' | 'low', [number, number]> = { full: [12, 24
  */
 const HELD_CSS = "html.mix-held .ffx-sensor,html.mix-held .eint,html.mix-held .coach-mark[data-game='ffx2']{visibility:hidden !important}";
 
+/**
+ * Release 39.1, B2 (Bailey, 2026-10-05, "all of your recommendations"; **FFX-2 only**: only FFX-2 has the dressphere close-up, so the class is
+ * `mix-held-sc`, never set for FFX's Overdrive shot): the strategy guide (`.sgd`) and the move advisor (`.mad`) step out for the close-up too, as
+ * the cards above do. They are clipped away, not made `visibility:hidden`, on purpose: `hudPanels` counts the guide as a panel the framing keeps the
+ * figures clear of, and reads it again at the frame a menu opens (the hand-back frame), so the guide must keep its box, its colour and its
+ * visibility for that read and only stop being painted. They come back with the master. The upright phone keeps its HUD as laid out (its
+ * guide and advisor are tiles in the HUD column, away from the slice the close-up shows).
+ */
+export const HELD_SC_CSS = "html.mix-held-sc:not([data-phone-battle]) .sgd,html.mix-held-sc:not([data-phone-battle]) .mad{clip-path:inset(100%) !important}";
+
 function heldStyle(): void {
   if (typeof document === 'undefined' || document.getElementById('mix-held-style')) return;
   const st = document.createElement('style');
   st.id = 'mix-held-style';
-  st.textContent = HELD_CSS;
+  st.textContent = `${HELD_CSS}${HELD_SC_CSS}`;
   document.head.appendChild(st);
 }
 
@@ -91,6 +101,8 @@ class Mix {
   private lastActors: readonly Actor[] = [];
   private band: DofBand | null = null;
   private heldClass = false;
+  /** The held shot on screen is FFX-2's dressphere close-up (`HELD_SC_CSS`). */
+  private heldScClass = false;
   /** The lens shift the held shot on screen was framed against (held with it); null with no shot up. */
   private heldLens: [number, number] | null = null;
   private cost = 0;
@@ -149,6 +161,11 @@ class Mix {
     if (!!held !== this.heldClass) {
       this.heldClass = !!held;
       document.documentElement.classList.toggle('mix-held', this.heldClass);
+    }
+    const sc = held?.kind === 'sc';
+    if (sc !== this.heldScClass) {
+      this.heldScClass = sc;
+      document.documentElement.classList.toggle('mix-held-sc', sc);
     }
     // FOG and the DEPTH OF FIELD band, re-planned with the master.
     const canvas = battleCanvas();
@@ -284,6 +301,8 @@ class Mix {
     menuCalm.reset(); // Chapter III's calm camera never carries into the next fight
     fightFacts.colossus = null;
     document.documentElement.classList.remove('mix-held');
+    document.documentElement.classList.remove('mix-held-sc');
+    this.heldScClass = false;
   }
 }
 

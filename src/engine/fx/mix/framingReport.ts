@@ -26,7 +26,7 @@ export interface FramingReport {
    * The chapter's slots now in force (`stageTable.ts`: the chapter and each side's move in world x and z, and the move of each fiend a row names
    * by its combatant id: `by`), or null (today's own slots).
    */
-  stand: { chapter: string; party: [number, number]; enemy: [number, number]; by?: [string, number, number][]; follow?: true } | null;
+  stand: { chapter: string; party: [number, number]; enemy: [number, number]; by?: [string, number, number][]; byParty?: [string, number, number][] } | null;
   /** The table's pinned colossus master when the plan plays it (`colossusPin.ts`: the one answer and where the Sensor card stands), else null. */
   pin: ColossusPin | null;
   /** The tallest enemy's box in the chosen pose (CSS px): how big the boss draws. */

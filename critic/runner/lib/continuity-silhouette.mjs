@@ -127,7 +127,7 @@ export function loadPoseMeasure(path) {
 /** `/art/characters/tidus/attack@2x.webp?v=1` -> { subject: 'tidus', pose: 'attack' }, or null (not a character painting). */
 export function subjectPoseOf(url) {
   const m = /\/art\/characters\/([^/]+)\/([^/.?#]+)\.(?:png|webp)(?:[?#].*)?$/i.exec(String(url));
-  return m ? { subject: m[1], pose: m[2].replace(/@\d+x$/i, '') } : null;
+  return m ? { subject: m[1], pose: m[2].replace(/(?:@|%40)\d+x$/i, '') } : null;
 }
 
 /**
@@ -142,7 +142,9 @@ export function anchorsFor({ url, mask, measure }) {
   const fresh = Boolean(rec) && Array.isArray(rec.size) && rec.size[1] > 0 && Math.abs(rec.size[0] / rec.size[1] / aspect - 1) < 0.01;
   // Lying down: the registration says so (a lunge is wider than tall and still standing), else the engine's own aspect test.
   const out = {
-    subject: sp?.subject ?? null, pose: sp?.pose ?? null, mask, stale: Boolean(rec) && !fresh,
+    // `url` says which painting this is, so a swap between two poses that draw the very same file (a pose that falls back to the idle's) is told from a
+    // change of painting, and `subject` which dressphere or form it belongs to (a swap between two of them is a costume change, not a pose change).
+    subject: sp?.subject ?? null, pose: sp?.pose ?? null, url: String(url ?? '').replace(/[?#].*$/, ''), mask, stale: Boolean(rec) && !fresh,
     prone: fresh ? Boolean(rec.prone) && !rec.standing : mask.srcW > mask.srcH * 1.15,
     head: null, mass: estimateMass(mask), stance: null, stanceSrc: null,
   };

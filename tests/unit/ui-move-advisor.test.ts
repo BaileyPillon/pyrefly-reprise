@@ -510,8 +510,8 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
       el.innerHTML = cardHtml(view, d);
       return el.textContent ?? '';
     };
-    // Every step is shorter than the one before it. Rung 4 is the exception that proves the rule: the lead's reason
-    // runs to two lines there, which is the same words under a line clamp (a class, not shorter text; PR-0330).
+    // Every step is shorter than the one before it, or no longer: rung 4 cuts each reason to its first whole clause
+    // (PR-0330, release 39.1: no sentence is clamped), and a reason of one clause is the same words there.
     for (let d = 1 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
       const here = text(d).length;
       const before = text((d - 1) as Density).length;
@@ -520,7 +520,7 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
     }
     // The runner-up's effect line is the first thing to go. The lead's effect line is the **last** description to
     // go but one (PR-0330: it is the cheap line, 10 to 18 grid px, and the reason the dear one): it is on the card
-    // through rung 5 and goes at rung 6.
+    // through rung 5 and goes at rung 6 (the bare rung may keep it as one tight line when the box has the height).
     expect(text(0)).toContain('Revives all fallen allies');
     expect(text(1)).not.toContain('Revives all fallen allies');
     for (let d = 0 as Density; d <= 5; d = (d + 1) as Density) {
@@ -535,15 +535,15 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
       const lead = el.querySelector('.mad__move')!;
       expect(lead.textContent, `density ${d}`).toMatch(/no MP|\d+ MP/);
     }
-    // The lead's reason runs to two lines at rung 4 (a clamp on the lead's sentence alone), and is gone from rung 5.
+    // The lead's reason is cut to its first whole clause at rung 4 and is gone from rung 5; a runner-up's reason is a clause from
+    // rung 4 and stays until the last rung takes it. Nothing is clamped to an ellipsis (PR-0330, release 39.1).
     for (let d = 0 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
       const el = document.createElement('div');
       el.innerHTML = cardHtml(view, d);
       const reason = el.querySelector('.mad__move:not(.mad__move--alt) .mad__why');
       expect(!!reason, `density ${d} lead reason`).toBe(d <= 4);
-      expect(!!reason?.classList.contains('mad__why--clamp'), `density ${d} lead reason clamped`).toBe(d === 4);
-      // a runner-up's reason runs to two lines from rung 4 until the last rung takes it
-      expect(!!el.querySelector('.mad__move--alt .mad__why--clamp'), `density ${d} runner-up clamped`).toBe(d >= 4 && d <= 6);
+      expect(el.querySelector('.mad__why--clamp, .mad__effect--clamp'), `density ${d} clamped`).toBeNull();
+      expect(!!el.querySelector('.mad__move--alt .mad__why'), `density ${d} runner-up reason`).toBe(d <= 6);
     }
 
     // Down to the second-to-last rung the card still answers the question in
@@ -645,6 +645,41 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
     advisor.update(16);
     expect(advisor.printedDensity).toBeLessThan(tight);
     expect(card.textContent).toContain('Revives all fallen allies');
+  });
+
+  it('keeps the lead’s effect as one tight line on the bare rung only when the box has the height for it (the Sin strip, Chapter XVIII)', () => {
+    const lead = {
+      command: { kind: 'ability', targets: [] } as unknown as MoveSuggestion['command'], targetId: null, targetName: 'the party', label: 'Hastega', menu: 'White Magic',
+      effect: 'Speeds the party’s turns up', reason: 'It puts Haste on the party', estimate: null, mpCost: 30, hitChance: null, critChance: 0, statuses: [], cures: [],
+      cite: '', warning: '', score: 1, isSwitch: false, source: 'simulated',
+    } as unknown as MoveSuggestion;
+    const view = { actorId: 'tidus', actorName: 'Tidus', suggestions: [lead], note: '', considered: 3 } as unknown as AdvisorView;
+    const heights = (card: HTMLElement): number => card.querySelectorAll('p, article').length * 10 + (card.querySelector('.mad__head') ? 12 : 0);
+    const run = (cap: number): { text: string; density: number } => {
+      const { advisor, stage } = mountAdvisor();
+      const card = cardOf(stage);
+      card.style.maxHeight = `${cap}px`;
+      Object.defineProperty(card, 'clientWidth', { configurable: true, get: () => 164 });
+      Object.defineProperty(card, 'clientHeight', { configurable: true, get: () => Math.min(cap, heights(card)) });
+      Object.defineProperty(card, 'scrollHeight', { configurable: true, get: () => heights(card) });
+      advisor.showDecision('tidus', makeFakeCommands(), makeFakeBattleState());
+      const inner = advisor as unknown as { cached: AdvisorView | null; lastSignature: string; render(): void };
+      inner.cached = view;
+      inner.lastSignature = '';
+      inner.render();
+      advisor.update(16);
+      return { text: card.textContent ?? '', density: advisor.printedDensity };
+    };
+    // 36: the bare rung (3 lines, 30) fits and the effect's line (40) does not: the bare rung, as it was.
+    const short = run(36);
+    expect(short.density).toBe(MAX_DENSITY);
+    expect(short.text).not.toContain('Speeds the party');
+    expect(short.text).toContain('Hastega');
+    // 40: the rung before it (head row and three lines, 42) does not fit, the bare rung and its tight line (40) do.
+    const roomy = run(40);
+    expect(roomy.density).toBe(MAX_DENSITY);
+    expect(roomy.text).toContain('Speeds the party’s turns up');
+    expect(roomy.text).toContain('30 MP');
   });
 
   it('leaves the card alone where there is no layout to measure', () => {

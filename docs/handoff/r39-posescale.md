@@ -1,5 +1,7 @@
 # r39-posescale: one head size and one stance for a figure in every pose (release 39 material)
 
+> **Update, release 39.1 (r391-posescale, 2026-10-05):** the 8 percent "noise" band described below is gone (every reading is applied), the 24 FFX-2 dresspheres and the three Lady Luck sets now have head records, KO paintings carry a projection factor, 42 foes have stances, and the continuity harness was corrected. The numbers in this file are release 39's; see [r391-posescale.md](r391-posescale.md) for what is true now.
+
 Date 2026-10-04 to 05. Branch `r39-posescale` (from the local `r39-hires-engine` tip d6810315), worktree `D:/pyrefly-r39-posescale`. Nothing is merged and
 nothing is deployed. Game case: **both games, shared plumbing**; the per-figure data is FFX (Tidus, Yuna, Auron, Wakka, Lulu, Kimahri, Rikku, Evrae) and
 FFX-2 (the 24 dressphere paintings of Yuna, Rikku and Paine) in their own tables. Trigger, Bailey 2026-10-04: "As poses change for the characters their

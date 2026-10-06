@@ -1,12 +1,13 @@
 import type { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import type { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { maskBloomReceiver, setFigureBloomMask } from './BloomMask.ts';
+import { setFigureBloomMask } from './BloomMask.ts';
 import type { ScenePalette } from './Renderer.ts';
 
 /**
  * Release 39 colour fidelity (r39-color, Bailey 2026-10-04: "colors look washed out like it's masking better character model detail" and
- * "the colors are vibrant but too vibrant"): a painted figure drawn true to its painting. Both games, shared plumbing; OFF by default, so with
- * no address override every frame is what it was. The maths and the parsing are pure; `applyFigureTrue` touches the renderer's two passes.
+ * "the colors are vibrant but too vibrant"): a painted figure drawn true to its painting. Both games, shared plumbing; ON by default since
+ * release 39.1 (D-437, Bailey 2026-10-05: "I'll go with all of your recommendations"); `?figtrue=0` or `__pyrefly.fx.figureTrue(0)` puts
+ * release 39's look back. The maths and the parsing are pure; `applyFigureTrue` touches the renderer's two passes.
  *
  * Why it exists. The post chain ends in `GradeShader`, a raw `ShaderMaterial` with no `<colorspace_fragment>`, and the composer's targets are
  * linear, so the linear values the chain works in reach the canvas with no sRGB encode: `outputColorSpace = SRGBColorSpace` is never applied.
@@ -16,13 +17,14 @@ import type { ScenePalette } from './Renderer.ts';
  *
  * What it does. A painted figure writes 0 into the frame's alpha (the bloom mask, `BloomMask.ts`). Where this switch is on, the grade shows such a
  * pixel's own colour: no scene grade, shadow tint, saturation or look, and the sRGB encode the chain never applied. Backdrops and effects are
- * untouched. The amount mixes the two (0 = today, 1 = the painting's colour). It is a developer switch (`?figtrue=`, `__pyrefly.fx.figureTrue`)
- * until Bailey picks from the stills; the default below is the one line that changes then.
+ * untouched. The amount mixes the two (0 = release 39's look, 1 = the painting's colour). Bailey picked "figures true" from the stills (D-437),
+ * so the default below is 1; the address (`?figtrue=`) and the console (`__pyrefly.fx.figureTrue`) still set any amount.
  *
- * The amount carries the quiet edge with it: a figure that shows its own colour takes no bloom light (the figure bloom mask in full, and the bloom
- * adds nothing where a figure stands, `BloomMask.maskBloomReceiver`) and its rim light is cut (`rimQuiet`). Measured in docs/handoff/r39-color.md.
+ * The amount carries the quiet edge with it: a figure that shows its own colour is no bloom source (the figure bloom mask in full), gives back the
+ * bloom's light in the grade (the pass adds it to every pixel, a veil that lifts the figure's blacks), and its rim light is cut (`rimQuiet`). Measured in
+ * docs/handoff/r39-color.md.
  */
-export const FIGURE_TRUE_DEFAULT = 0;
+export const FIGURE_TRUE_DEFAULT = 1;
 
 /** The share of the rim light a figure that shows its own colour gives up, at an amount of 1. */
 export const FIGURE_TRUE_RIM_CUT = 0.55;
@@ -49,11 +51,13 @@ export function figureTrueOf(host: Pick<FigureTrueHost, 'gradePass'>): number {
   return host.gradePass.uniforms['figureTrue']!.value as number;
 }
 
-/** Set the amount: the grade's exemption, the bloom's receiving mask and the figure bloom mask move together. */
+/** Set the amount: the grade's exemption, the bloom light it gives back and the figure bloom mask move together. */
 export function applyFigureTrue(host: FigureTrueHost, amount: number): void {
   const v = Math.min(1, Math.max(0, amount));
-  host.gradePass.uniforms['figureTrue']!.value = v;
-  maskBloomReceiver(host.bloomPass, v > 0);
+  const u = host.gradePass.uniforms;
+  u['figureTrue']!.value = v;
+  u['bloomRemove']!.value = v > 0 ? 1 : 0;
+  u['tBloom']!.value = host.bloomPass.renderTargetsHorizontal[0]!.texture; // the bloom's last composite target: what the pass adds to the frame
   setFigureBloomMask(host.bloomPass, bloomMaskFor(host.palette?.figureBloomMask ?? 0, v));
 }
 
@@ -68,6 +72,11 @@ export function parseFigureTrue(search: string): number | null {
   if (raw === null || raw.trim() === '') return null;
   const n = Number(raw);
   return Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : null;
+}
+
+/** The amount a page load starts with: what `?figtrue=` asks for, else the default (on). `?figtrue=0` is the way back to release 39's look. */
+export function figureTrueFromAddress(search: string): number {
+  return parseFigureTrue(search) ?? FIGURE_TRUE_DEFAULT;
 }
 
 /** The sRGB encode (OETF), 0..1 to 0..1: the maths `GradeShader` applies to a figure pixel, here for the tests. */

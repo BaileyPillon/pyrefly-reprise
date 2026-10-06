@@ -63,10 +63,10 @@ export interface ArtManifest {
    * painting the title card splits into its parallax planes.
    *
    * Its own folder rather than `backdrops/`, because a backdrop is a *scene* a
-   * battle is staged in and this is the key art of the whole game: it is the
-   * approved end state `docs/concepts/polish/showpiece-frontend/after.png`,
-   * it carries a 2x master, and nothing in the battle presenter may pick it up
-   * by accident.
+   * battle is staged in and this is the key art of the whole game: the title
+   * painting Bailey approved (the Gullwings "Farplane Field" since 2026-10-05,
+   * `docs/handoff/title-gullwings-keyart.md`), it carries a 2x master, and
+   * nothing in the battle presenter may pick it up by accident.
    */
   readonly title: readonly string[];
   /** Title plates that also ship `title/<id>.2x.webp`. Subset of `title`. */

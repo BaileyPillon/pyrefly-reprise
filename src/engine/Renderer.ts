@@ -23,7 +23,7 @@ import { GradeShader } from './shaders/GradeShader.ts';
 import { eyeCandy } from './fx/EyeCandy.ts';
 import { GoldenHour } from './fx/a/GoldenHour.ts';
 import { CrispRig } from './crisp/CrispRig.ts';
-import { FIGURE_TRUE_DEFAULT, applyFigureTrue, bloomMaskFor, figureTrueOf, parseFigureTrue } from './figureTrue.ts';
+import { applyFigureTrue, bloomMaskFor, figureTrueFromAddress, figureTrueOf } from './figureTrue.ts';
 
 export interface RendererOptions {
   /** Element the <canvas> is appended to. Defaults to #game. */
@@ -203,7 +203,7 @@ export class Renderer {
     this.gradePass = new ShaderPass(GradeShader);
     this.gradePass.renderToScreen = true; // the composer re-decides it each frame: the last enabled pass draws to the screen
     this.composer.addPass(this.gradePass);
-    applyFigureTrue(this, parseFigureTrue(window.location?.search ?? '') ?? FIGURE_TRUE_DEFAULT); // off unless the address asks (`?figtrue=`)
+    applyFigureTrue(this, figureTrueFromAddress(window.location?.search ?? '')); // on (D-437) unless the address asks otherwise (`?figtrue=0`)
     this.setAa(parseAaOverride(new URLSearchParams(window.location?.search ?? '').get('aa')) ?? artBudget().aa);
     this.crisp = new CrispRig(
       this.renderer,

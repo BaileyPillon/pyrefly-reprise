@@ -3,7 +3,7 @@ export type Quad = number[]; // [x0,y0,x1,y1,x2,y2,x3,y3]: top-left, top-right, 
 export type Mat3 = number[]; // row-major 3x3
 export interface Box { u0: number; t0: number; u1: number; t1: number }
 export interface Mask { w: number; h: number; bits: Uint8Array | number[] }
-export interface Anchors { head: Box | null; mass: number | null; stance: { u: number; t: number } | null; stanceSrc: string | null; mask: Mask | null; prone: boolean; stale?: boolean }
+export interface Anchors { head: Box | null; mass: number | null; stance: { u: number; t: number } | null; stanceSrc: string | null; mask: Mask | null; prone: boolean; stale?: boolean; subject?: string | null; pose?: string | null; url?: string }
 export interface PlaneRec { k: number; fade: number; vis: boolean; q: number[] }
 export interface FigRec { i: number; a: number; act: number; s: (number[] | 0)[]; g: [number, number] }
 export interface FrameOfFig { n: number; t: number; fig: FigRec }
@@ -21,7 +21,7 @@ export interface ContinuityConfig {
 }
 
 export interface SwapResult {
-  camCut: boolean;
+  camCut: boolean; costume?: boolean; sameArt?: boolean; range?: boolean;
   head: { fromPx: number; toPx: number; ratio: number | null; source: 'registration' | 'silhouette'; metric: 'head' | 'mass' } | null;
   feet: { dx: number; dy: number; px: number; standing: boolean; source: string } | null;
   outline: { iou: number; centroidShiftPx: number; areaRatio: number | null } | null;
@@ -52,7 +52,7 @@ export declare function detectJerks(track: { n: number; t: number; feet: [number
 export declare function median(a: number[]): number;
 export interface Summary {
   battleSeconds: number; swaps: number; counted: number; excludedByCut: number; excludedNotShowing: number; swapsPerMinute: number | null;
-  size: { headMeasured: number; headRegistration: number; headSilhouette: number; headUnmeasured: number; maxHeadJumpPct: number; maxHeadJumpPctRegistration: number; headOverTolerance: number; feetMeasured: number; maxFeetShiftPx: number; feetOverTolerance: number };
+  size: { judged?: number; costumeSwaps?: number; sameArtSwaps?: number; costumeWorstHeadPct?: number; costumeWorstFeetPx?: number; headMeasured: number; headRegistration: number; headSilhouette: number; headUnmeasured: number; maxHeadJumpPct: number; maxHeadJumpPctRegistration: number; headOverTolerance: number; feetMeasured: number; maxFeetShiftPx: number; feetOverTolerance: number };
   motion: { snaps: number; snapsPerMinute: number | null; hardCuts: number; hardCutsPerMinute: number | null; snapsByToPose: Record<string, number>; lowestIou: number; maxCentroidShiftPx: number; ghostSwaps: number; ghostFrames: number; worstGhostSeverity: number; ghostOverFail: number; jerks: number; jerksMidMove: number; worstJerkPx: number; jerksOverFail: number };
   checks: Record<'CHK-026' | 'CHK-027', { result: 'PASS' | 'FAIL' | 'UNVERIFIED'; reasons: string[]; note?: string }>;
 }

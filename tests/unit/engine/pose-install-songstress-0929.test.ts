@@ -24,6 +24,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { resetArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { resolvePoseMap } from '../../../src/engine/BattlePresenterArt.ts';
 import { tryLoadMeta } from '../../../src/engine/PaintedArt.ts';
+import { poseRegistrationFor } from '../../../src/engine/PoseRegistration.ts';
 
 const ROOT = path.resolve(__dirname, '../../..');
 const ART = path.join(ROOT, 'public/art');
@@ -136,7 +137,7 @@ describe.skipIf(!haveArt)('the installed files on this disk (public/art is gitig
     }
   });
 
-  it('every sidecar carries its scale and D-281, and the loader keeps it', async () => {
+  it('every sidecar carries its scale and D-281, and the loader keeps it (unless the measured table has one: r391 reads every pose against its idle)', async () => {
     globalThis.fetch = vi.fn(async (input: RequestInfo | URL) => {
       const rel = String(input).replace(/^.*\/art\//, '').split('?')[0] ?? '';
       const file = path.join(ART, rel);
@@ -149,7 +150,7 @@ describe.skipIf(!haveArt)('the installed files on this disk (public/art is gitig
       expect(side.decision, p).toBe('D-281');
       expect(side.game, p).toBe('ffx2');
       const meta = await tryLoadMeta(`/art/characters/${p}.png`);
-      expect(meta?.scale, p).toBe(SCALES[p]);
+      expect(meta?.scale, p).toBe(poseRegistrationFor(`/art/characters/${p}.png`)?.scale ?? SCALES[p]);
       expect(meta!.baselineY, p).toBeLessThanOrEqual(meta!.height);
     }
   });

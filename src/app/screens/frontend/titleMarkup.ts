@@ -6,14 +6,22 @@
  * `docs/concepts/polish/showpiece-frontend/after.png`; the base look is the
  * approved tile `docs/screenshots/mockups/A-title.jpg`, which this keeps.
  *
- * The painting is `public/art/title/keyart.png` — **the plate `after.png`
- * itself was composited from**, this project's own render, installed from
- * `docs/concepts/polish/showpiece-frontend/_src/title-keyart.2.png` on
- * 2026-09-21. The first build of this screen reached for
- * `backdrops/title.png` instead, on a brief that said "only art already in
- * `public/art`"; that brief was wrong for this one case, because the key art
- * is the approved picture. Hard rule 8 is about *retail* assets and this is
- * ours.
+ * The painting is `public/art/title/keyart.png`. Since 2026-10-05 it is the
+ * Art Room's "Farplane Field, the Gullwings" (proposal p_f4836b8c, made with
+ * ChatGPT Images 2.5 by Codex), which Bailey approved for the title screen
+ * ("it's soooo epic i love it"; both games, `docs/handoff/title-gullwings-keyart.md`):
+ * Yuna, Rikku and Paine from behind in a lavender flower field, a golden
+ * crystal spire on the water. It replaced the 2026-09-21 plate `after.png`
+ * was composited from (`docs/concepts/polish/showpiece-frontend/_src/title-keyart.2.png`).
+ * The first build of this screen reached for `backdrops/title.png` instead, on
+ * a brief that said "only art already in `public/art`"; that brief was wrong
+ * for this one case, because the key art is the approved picture. Hard rule 8
+ * is about *retail* assets and this is ours.
+ *
+ * What the new picture changed in this screen: it already carries its own
+ * three people, so the two black silhouettes of the concept's shore are not
+ * drawn any more (`TITLE_CAST_ON`), and the slab sits above the three of them
+ * instead of in front (`frontend.css`).
  *
  * The wordmark is "Echoes of Spira", stacked "Echoes" over "of Spira" (Bailey,
  * 2026-10-04; the working title before it was "Pyrefly Reprise"). The approved
@@ -82,8 +90,19 @@ function figureHtml(id: string, left: number, bottom: number, height: number): s
   );
 }
 
-/** Every figure on the shore, reflections first so they sit behind. */
-export function castHtml(): string {
+/**
+ * Whether the two on the shore are drawn (Tidus and Yuna as ink silhouettes, from the concept's `after.png`).
+ *
+ * Off since 2026-10-05: the Gullwings key art has Yuna, Rikku and Paine standing in it already, and two black cut-outs on
+ * the flower field next to them read as extra people and hide the painting Bailey approved. Nothing else changes when
+ * it is turned back on: the stylesheet rules (`.fe-title__cast`, `.fe-figure`) and the parallax layer are still there.
+ * Both games: the title screen is shared (AGENTS.md rule 14).
+ */
+export const TITLE_CAST_ON = false;
+
+/** Every figure on the shore, reflections first so they sit behind. Empty while `TITLE_CAST_ON` is off. */
+export function castHtml(on: boolean = TITLE_CAST_ON): string {
+  if (!on) return '';
   return CAST.map((c) => figureHtml(c.id, c.left, c.bottom, c.height)).join('');
 }
 
@@ -99,8 +118,9 @@ export interface TitleMarkupOptions {
 
 /**
  * The whole title card. The two `<img>` planes are the **same painting**: the
- * near one is masked to the shore band in CSS, which is the concept's
- * luminance cut expressed without shipping a second file.
+ * near one is masked in CSS to the foreground flower band under the three
+ * heroes' feet (`frontend.css`), so a second file is never shipped and no
+ * figure is ever cut between the planes.
  *
  * A plane whose painting fails to load marks itself `data-art="missing"`; the
  * stylesheet then paints the dusk gradient the screen shipped with, so a build
@@ -134,12 +154,13 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
   // (`.fe-title__chip-label--key` / `--tap` in frontend.css), so a keyboard
   // or mouse player is never told to tap and a touch player is never told
   // to press a key that is not there.
+  const cast = castHtml();
   return `
     <div class="fe-title__tap" data-action="confirm">
     ${plane('far')}
     <div class="fe-title__bloom"></div>
     ${plane('near')}
-    <div class="fe-title__cast">${castHtml()}</div>
+    ${cast ? `<div class="fe-title__cast">${cast}</div>` : ''}
     <div class="fe-title__grade"></div>
     <div class="fe-title__motes"></div>
 

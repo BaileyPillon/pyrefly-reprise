@@ -5,6 +5,7 @@ import { readSetting, writeSetting } from '../../app/SaveData.ts';
 import { ADVISOR_HINT_ITEM } from './ControlsHint.ts';
 import { escapeHtml } from './html.ts';
 import { followCard } from './advisorChipFollow.ts';
+import { firstClause } from './advisorClause.ts';
 
 /**
  * The optional in-battle **move advisor**: an Ink & Gold card that says what to
@@ -444,6 +445,22 @@ export class MoveAdvisor {
       this.cardEl.innerHTML = cardHtml(this.cached, density);
     }
     this.density = density;
+    // PR-0330: the card settled on rung 6 or the bare rung, which lost the pick's effect, and it fits: try the effect back as one tight line under
+    // the path chips (the Sin strip, Chapter XII); if that does not fit the box's height the card stays as it was (the effect is whole or gone, never cut).
+    if (density >= 6 && this.cached.suggestions[0]?.effect && this.cardEl.scrollHeight <= cap + 1) {
+      // On rung 6 first, then on the bare rung (it gives up the head row and the runner-up's reason for the pick's effect, which is the answer to
+      // "what does it do").
+      let kept = false;
+      for (const d of density === MAX_DENSITY ? [MAX_DENSITY] : [density, MAX_DENSITY]) {
+        this.cardEl.innerHTML = cardHtml(this.cached, d as Density, true);
+        if (this.cardEl.scrollHeight <= cap + 1) {
+          this.density = d as Density;
+          kept = true;
+          break;
+        }
+      }
+      if (!kept) this.cardEl.innerHTML = cardHtml(this.cached, density, false);
+    }
   }
 
   /**
@@ -560,10 +577,10 @@ function num(n: number): string {
  * | 1 | the runner-up's effect line |
  * | 2 | + the runner-up's secondary chips |
  * | 3 | + the runner-up's numbers, down to the submenu chip |
- * | 4 | the reasons run to two lines, not the whole sentence (the lead's and the runner-up's) |
- * | 5 | + the lead's reason, and its secondary chips; its effect runs to two lines (what it costs stays) |
+ * | 4 | the reasons are cut to their first whole clause (the lead's and the runner-up's), never to an ellipsis (`advisorClause.ts`) |
+ * | 5 | + the lead's reason, and its secondary chips; its effect is whole (what it costs stays) |
  * | 6 | + the lead's effect line (what it costs stays) |
- * | 7 (phone compact) | + the lead's warning and the title: named moves, their submenu, what the lead costs, the actor, the board's note |
+ * | 7 (phone compact) | + the lead's warning and the title: named moves, their submenu, what the lead costs, the actor, the board's note; where the box has the height for it, `tightEffect` keeps the lead's effect there as one tight line |
  *
  * Six rungs rather than the four the first pass shipped, because the room
  * the card is given is much smaller than the stylesheet's 104px suggests. The
@@ -589,6 +606,13 @@ function num(n: number): string {
  * shortened (two lines, rung 4) before it goes (rung 5), and a runner-up's reason is shortened the same way before the
  * last rung takes it (two moves in a narrow box, Chapter XII, would not fit the lead's effect otherwise). A card that fits
  * at rung 0 or 1 prints exactly what it did; below that the lead keeps the effect and the cost it used to drop.
+ *
+ * **PR-0330 again (release 39.1, round 22: the effect was still cut in Chapters VII, XII and XVIII).** The two-line clamps of rungs 4 and 5 ended a sentence
+ * in an ellipsis ("Take the pouch off Guado Guardian A: one..."), which a player reads as text the card lost. No sentence is clamped now: a reason is
+ * whole or cut at a clause (`advisorClause.ts`) or gone, and the lead's effect is whole or gone. What the card still never gives up is unchanged (a runner-up's
+ * reason to rung 6: it is where a revive's "why" lives). The effect that rungs 6 and 7 used to lose is kept as one tight line under the path chips when the
+ * box has the height for it (`tightEffect`, tried by `fitCard` once the card has settled on one of them and fits): Chapter XII's Switch pick (room for 73 to
+ * 86 grid px) and the Sin strip's Hastega (37) print it, and a box with no height for the line prints the rung as before.
  *
  * D-359 (both games): there used to be a rung between 4 and the last one that
  * shed the lead's "Guide's pick" badge. The badge is gone (the guide and the
@@ -661,7 +685,7 @@ function statsHtml(s: MoveSuggestion, lead = '', trim = false, costAlways = fals
  * reads as somebody else's ability; "Poison Fang · Items" is a set of
  * directions to the row, on the menu the player is already looking at.
  */
-function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Density = 0, actor = ''): string {
+function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Density = 0, actor = '', tightEffect = false): string {
   const alt = rank > 1;
   const target = s.targetName
     ? `<span class="mad__arrow">→</span><span class="mad__target">${escapeHtml(s.targetName)}</span>`
@@ -684,37 +708,37 @@ function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Densi
   // enemies" with no menu named (critic round 13 PR-0126, phone half; CHK-004).
   // `move-advisor.css` hides it on desktop, where the chip above says it.
   const where = s.menu ? `<span class="mad__where">${escapeHtml(s.menu)}</span>` : '';
-  // PR-0330: the lead keeps its effect to rung 5 and its cost to the last rung; its reason runs to two lines at
-  // rung 4 and goes at rung 5 (the table above). A runner-up keeps the thresholds it always had.
+  // PR-0330: the lead keeps its effect to rung 5 and its cost to the last rung; its reason is cut to a clause at rung 4 and goes at rung 5 (the table
+  // above). A runner-up's effect goes at rung 1 and its reason, cut to a clause from rung 4, with the bare rung. No sentence is ever clamped.
   const showEffect = !bare && (alt ? density < 1 : density < 6);
   const trimStats = alt ? density >= 2 : density >= 5;
   const barStats = (alt && density >= 3) || bare;
   const showReason = !bare && (alt || density < 5);
-  // A reason runs to two lines before it goes: the lead's at rung 4 (it goes at 5), a runner-up's from rung 4 until the last
-  // rung. The lead's effect runs to two lines at rung 5, where it is what keeps the card off the stub (Chapter XII's switch).
-  const clampReason = alt ? density >= 4 : density === 4;
-  const clampEffect = !alt && density === 5;
+  // The reason is whole to rung 3 and its first clause from rung 4: a clause is a statement in itself, so nothing printed ends mid-thought.
+  const reason = density >= 4 ? firstClause(s.reason) : s.reason;
   // The last rung's path chip is joined, for the lead, by what the move costs (the Sin strip, the phone tip's desktop twin).
   const barRow = alt ? menu : `${menu}${costChip(s)}`;
+  // The one tight line: the lead's effect back under the rows of rung 6 or the bare rung, when `fitCard` found the height for it.
+  const tight = density >= 6 && tightEffect && !alt && !!s.effect;
   return [
     `<article class="mad__move${alt ? ' mad__move--alt' : ''}">`,
     `<p class="mad__line">${actor ? `<span class="mad__actor mad__actor--inline${bare ? ' mad__actor--always' : ''}">${escapeHtml(actor)}</span>` : ''}${rankChip}<span class="mad__label">${escapeHtml(s.label)}</span>${target}${where}</p>`,
     barStats ? (barRow ? `<p class="mad__stats">${barRow}</p>` : '') : statsHtml(s, menu, trimStats, !alt),
-    showEffect && s.effect ? `<p class="mad__effect${clampEffect ? ' mad__effect--clamp' : ''}">${escapeHtml(s.effect)}</p>` : '',
-    showReason && s.reason ? `<p class="mad__why${clampReason ? ' mad__why--clamp' : ''}">${escapeHtml(s.reason)}.</p>` : '',
+    (showEffect || tight) && s.effect ? `<p class="mad__effect${tight ? ' mad__effect--tight' : ''}">${escapeHtml(s.effect)}</p>` : '',
+    showReason && reason ? `<p class="mad__why">${escapeHtml(reason)}.</p>` : '',
     !bare && s.warning ? `<p class="mad__warn">${escapeHtml(s.warning)}.</p>` : '',
     '</article>',
   ].join('');
 }
 
-export function cardHtml(view: AdvisorView, density: Density = 0): string {
+export function cardHtml(view: AdvisorView, density: Density = 0, tightEffect = false): string {
   // The actor's name is also the first word of the lead's line (PR-0330), shown instead of the head row where the head costs
   // too much: on the last rung (no head row at all: it cost the Sin strip 12 of its 37 grid px, so its path-and-cost chips sat
   // under the card's fade) and in a narrow card (`move-advisor.css`: the head row is a name alone there). On the phone the name
   // is hidden with the head, as it always was (`phone-battle-parts.css`).
   const last = density >= MAX_DENSITY;
   const moves = view.suggestions
-    .map((s, i) => moveHtml(s, i + 1, view.suggestions.length, density, i === 0 ? view.actorName : ''))
+    .map((s, i) => moveHtml(s, i + 1, view.suggestions.length, density, i === 0 ? view.actorName : '', tightEffect))
     .join('');
   return [
     last ? '' : '<div class="mad__head">',

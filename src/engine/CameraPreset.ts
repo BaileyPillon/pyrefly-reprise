@@ -262,6 +262,23 @@ export class PresetCamera implements CameraPort {
     this.inner.addRig?.(name, rig);
   }
 
+  /** B5: a rig `t` of the way from `from` to `to`, registered under a name of its own (a refreshed one keeps its name). */
+  blendRig(from: string, to: string, t: number): string | null {
+    const a = this.inner.getRig(from);
+    const b = this.inner.getRig(to);
+    if (!a || !b || !this.inner.addRig) return null;
+    const k = Math.min(1, Math.max(0, t));
+    const name = `${from}>${to}~${Math.round(k * 1000)}`;
+    const fov = a.fov !== undefined && b.fov !== undefined ? a.fov + (b.fov - a.fov) * k : b.fov;
+    this.inner.addRig(name, {
+      position: lerp3(xyz(a.position), xyz(b.position), k),
+      lookAt: lerp3(xyz(a.lookAt), xyz(b.lookAt), k),
+      ...(fov !== undefined ? { fov } : {}),
+      ...(b.sway !== undefined ? { sway: b.sway } : {}),
+    });
+    return name;
+  }
+
   get rigNames(): string[] {
     return this.inner.rigNames;
   }
