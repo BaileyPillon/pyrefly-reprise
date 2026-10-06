@@ -77,7 +77,7 @@ describe('critic/runner/deep.js, the continuity harness and the first-time fan',
   it('adds a reviewer whose only job is listing what breaks immersion, from the whole checklist, from pictures', async () => {
     const { calls } = await runWorkflow('critic/runner/deep.js', DEEP_ARGS, ANSWERS);
     const fan = calls.find((c) => c.label === 'first-time-fan')!;
-    expect(fan.opts.model).toBe('opus');
+    expect(fan.opts.model).toBe('sonnet'); // every role defaults to Sonnet (Bailey's delegation rule); Opus is an opt-in
     expect(fan.opts.phase).toBe('Audit');
     for (const item of ['size jumps', 'snapping', 'half-motion or ghosting', 'popping', 'sliding or floating feet', 'flicker', 'outline fringe', 'attacks that do not connect', 'UI covering the action', 'camera jerks', 'texture pop-in', 'jerks or teleports']) expect(fan.prompt, item).toContain(item);
     expect(fan.prompt).toMatch(/do not read critic\/RUBRIC\.md and do not score anything/);

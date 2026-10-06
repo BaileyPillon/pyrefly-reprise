@@ -8,7 +8,7 @@ const MAIN = 'D:/Final Fantasy'
 const ROOT = (args && args.root) || MAIN
 const SHA = (args && args.sha) || '(run git rev-parse --short HEAD in the candidate root)'
 const CHANGED = (args && args.changed) || 'read git log and the diff since the last line of docs/deploys.log'
-const MODEL = (args && args.model) || 'opus'
+const MODEL = (args && args.model) || 'sonnet' // Bailey's delegation rule (E-081; restated 2026-10-05 ~22:00 EDT): Sonnet by default, Opus only when args.model says so
 const OUT = { type: 'object', properties: { reportPath: { type: 'string' }, deployment: { type: 'string' }, changedArea: { type: 'string' }, ship: { type: 'string' }, shipReasons: { type: 'array', items: { type: 'string' } }, disclosed: { type: 'array', items: { type: 'string' } }, regressions: { type: 'array', items: { type: 'string' } }, issues: { type: 'array', items: { type: 'string' } }, clearOutput: { type: 'string' }, elapsedMinutes: { type: 'number' }, notes: { type: 'string' } }, required: ['reportPath', 'changedArea', 'ship', 'clearOutput'] }
 phase('Focused review')
 const out = await agent(`You are the FOCUSED CRITIC for "Pyrefly Reprise" (main tree ${MAIN}; the immutable production candidate is ${ROOT} at commit ${SHA}). Read critic/RUBRIC.md completely (policy v2: three verdicts, when the critic runs, evidence, reporting) and the entries of critic/CHECKS.md for the checks you are given. WHAT CHANGED: ${CHANGED}.
