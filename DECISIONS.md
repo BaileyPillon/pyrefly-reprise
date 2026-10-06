@@ -16,21 +16,21 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-913 decisions in all: 462 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 125 picture decisions. 617 of the written decisions record a blanket yes.
+928 decisions in all: 477 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 125 picture decisions. 618 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 853 |
+| adopted | 868 |
 | proposed | 11 |
 | deferred | 4 |
 | rejected | 11 |
 | superseded | 34 |
-| **All** | **913** |
+| **All** | **928** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 73 |
-| art | 211 |
+| art | 219 |
 | visuals | 69 |
 | camera | 31 |
 | audio | 30 |
@@ -40,20 +40,20 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | guide | 28 |
 | release | 31 |
 | hosting | 14 |
-| process | 70 |
-| critic | 25 |
+| process | 73 |
+| critic | 29 |
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **913** |
+| **All** | **928** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 398 |
+| both games | 413 |
 | FFX only | 278 |
 | FFX-2 only | 220 |
 | FF7 hidden experiment | 17 |
-| **All** | **913** |
+| **All** | **928** |
 
 ## Standing rules in force
 
@@ -91,6 +91,11 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **Every deep review includes a first-time-fan lens**: a reviewer who only lists immersion breakers from the checklist in critic/runner/deep.js, working from the continuity strips and event-locked clips, and whose findings are issues, not scores. Decision [D-423](#d-423) (2026-10-04, both games).
 - **Score caps tied to the continuity checks: while CHK-026 fails, characterModels and animation are capped at 7.0; while snaps per minute exceed the threshold, animation is capped at 7.5**: While CHK-026 (size continuity) fails, the characterModels and animation sub-scores are capped at 7.0; while snaps per minute of battle exceed the policy threshold (critic/policy.json, continuity), animation is capped at 7.5; the chief critic cannot score above a cap and the validator refuses a report that does. Decision [D-424](#d-424) (2026-10-04, both games).
 - **Stop copying on the D drive**: sessions make no new full repo copies, reuse an existing worktree, and delete their finished copies and builds, removing folder links first. Decision [D-436](#d-436) (2026-10-04, both games).
+- **Only Bailey approves artwork**: no agent, critic score or script approves, rejects or installs a picture; Approve, Reject and Ask for changes exist only as buttons in the Art Room app, and nothing is copied into the game automatically. Decision [D-464](#d-464) (2026-10-05, both games).
+- **Claude writes the art prompts**: every Art Room image prompt comes from Claude, built from the project's needs, with the need, the game case of each picture and the exact text; Codex renders it unchanged. Decision [D-467](#d-467) (2026-10-05, both games).
+- **The art critic loop**: every Art Room picture is scored 0 to 10 by an independent critic; below 8 the director revises the prompt from the critic's ranked issues and Codex repaints, until the loop cap of D-477 is reached, then the best version goes to Bailey; a score never approves anything. Decision [D-469](#d-469) (2026-10-05, both games).
+- **Art matches the game's own art**: every picture made in the Art Room must match the visual style of the paintings already in the game (title key art, backdrops, character idle paintings); Ink & Gold (navy, gold, parchment) is the interface look only, never a painting palette. Decision [D-473](#d-473) (2026-10-05, both games).
+- **Critic loop cap**: every Art Room critic loop (art, design and functionality) stops after at most 2 revisions per round (3 versions); below 8 still returns a ranked list of issues and a revision until the cap is reached. Decision [D-477](#d-477) (2026-10-05, both games).
 
 ## Waiting on Bailey's yes
 
@@ -3939,7 +3944,7 @@ Sunday · 69 decisions
 
 ### 2026-10-05
 
-Monday · 27 decisions
+Monday · 42 decisions
 
 - <a id="d-437"></a>**D-437** — True colour (decision A): characters and bosses show their paintings' own colours: the "figures true" switch goes ON by default in release 39.1, with the bloom fix (r39-color ef0868b5)
   - Bailey: “I'll go with all of your recommendations” (blanket yes)
@@ -4071,6 +4076,81 @@ Monday · 27 decisions
   - What changed: Bailey's pick replaces the painterly roll-out of D-438 for now. Overnight (2026-10-05 into 2026-10-06) the character art work is: (1) repair today's paintings without redrawing any of them: the jagged white fringes on hair edges, and the coats that change colour from one pose to the next (costume colour consistent across poses), as candidates he sees before anything is installed (approved paintings are never replaced on an agent's say-so); and (2) 2 to 3 in-game lighting mockups ready for him to pick from in the morning (end state first, AGENTS.md rule 9: he picks or mixes, the pick is saved as the target, and nothing is built before that). Why: an independent full-size review of 21 D+R pilot poses found the painterly version better at battle size in 0 of 21 (the same in 8, worse in 13), with real defects confirmed in 20 of 20 checked (the figures are the driver's, as given in the brief for this record). D-438 is marked superseded by this row, and nothing painterly ships in 39.2 on its authority; nothing painterly was ever installed. Rows that lean on the painterly finish are not edited by this record and wait for the driver and Bailey to say what the finish becomes: D-455 (Rikku's Berserker and Gunner ready poses re-painted in the painterly finish), D-456 (the init-lock pilot) and D-434 (the animation keys in the same finish). Both games: the repairs and the lighting apply to FFX and FFX-2 figures alike, and each figure keeps its own game.
   - area art · both games · adopted · delivery in progress · at ~21:45 EDT · see [D-438](#d-438), [D-455](#d-455), [D-456](#d-456), [D-434](#d-434), [D-429](#d-429) · replaces [D-438](#d-438)
   - Source: Bailey, 2026-10-05 ~21:45 EDT, in the Claude Code chat, through its question form. The question, verbatim: "The painterly finish failed, so what …
+- <a id="d-463"></a>**D-463** — Game art is made by coordinating with ChatGPT's image generation through his open Codex instance (his second ChatGPT account), and he gets previews of each picture; both games (tooling)
+  - Bailey: “coordinate with chatgpt for image generation and give me some previews. i have my codex instance open up right now on my [second ChatGPT account].”
+  - What changed: The Art Room was built that evening (A-0442): a local app on this PC, in D:/Tools/art-room outside the repo, where Codex makes the pictures with the ChatGPT image tool built into the Codex command line, signed in to his second ChatGPT account, and each picture arrives in the room as a preview for him to look at. The room's checked facts name the model as ChatGPT Images 2.5 (OpenAI's own announcement of 2026-09-08), reached through his Codex plan and not the paid API, so no extra cost; one image takes about 20 to 30 seconds inside Codex and 1 to 2 minutes a run. Nothing the room makes is copied into the game by itself (D-464).
+  - area art · both games · adopted · delivery implemented · at ~17:06 EDT · see [D-464](#d-464)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-464"></a>**D-464** — A separate chat and app window is built where Claude and Codex coordinate on the game's artwork, and every piece of artwork needs his own approval; both games (tooling)
+  - Bailey: “you need to create a separate chat box/app window where you and codex can coordinate on the artwork for the game, i need to approve of all artwork though.”
+  - What changed: The Art Room (A-0442): a local app window with a chat where Claude (the art director), Codex (the images), a critic and Bailey talk, and a gallery of proposals with big previews and three buttons, Approve, Ask for changes and Reject. Only his click changes a picture's state: the one piece of code that can set approved, rejected or changes is decide.mjs, imported only by the server (a test checks it). A critic score of 8 or more only means good enough to show him; nothing is ever approved automatically, not even a 10. Since the Windows app (A-0447) the server accepts a decision only from the app, which holds a per-launch secret handed over a private pipe and never written to a file; a plain browser can read and chat but not decide. Approving copies the picture into the room's own approved folder and nothing else: installing it into the game is a separate step by its own lane (D-458 is the first).
+  - area art · both games · adopted · delivery implemented · at ~17:06 EDT · see [D-463](#d-463), [D-465](#d-465), [D-466](#d-466)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-465"></a>**D-465** — The Art Room window uses layout A, Chat plus gallery: the chat on the left, proposal cards with large previews and Approve, Ask for changes and Reject on the right; both games (tooling)
+  - Bailey: “A: Chat + gallery (Recommended)” (blanket yes)
+  - What changed: The window was built as layout A: Claude, Codex, the critic and Bailey in one chat on the left, and on the right proposal cards with big previews and the three decision buttons (later with a details pane for the score, the critic's ranked issues and the exact prompt, and a full-size viewer). Layout B, one big image at a time with keyboard approve and reject, and layout C, the approved target beside each candidate with the chat in a drawer, were not taken. "(Recommended)" is the question form's own tag on the option, so this is a pick of one named layout, not a blanket yes.
+  - area art · both games · adopted · delivery implemented · at ~17:11 EDT · see [D-464](#d-464), [D-466](#d-466)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-466"></a>**D-466** — How Codex takes part is left to the driver, with one requirement, that it is seamless: the driver chose a headless relay that runs the Codex command line itself, so Bailey pastes nothing; both games (tooling)
+  - Bailey: “you decide for me but it needs to be seamless”
+  - What changed: A relay (relay.mjs) runs in the background and starts Codex (codex exec, read-only sandbox, the reference pictures attached, one image per run) and Claude (claude -p) itself, so Bailey pastes nothing by hand and the pictures come into the room by themselves (A-0442). The driver read "seamless" as no manual relaying; the other option, pasting one instruction into his open Codex chat (the form's recommended one), was not taken, at the cost that he cannot watch Codex work inside the app: the lane status line and the chat show what runs.
+  - area art · both games · adopted · delivery implemented · at ~17:11 EDT · see [D-464](#d-464), [D-465](#d-465)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-467"></a>**D-467** — Claude writes every Art Room image prompt from the project's needs, and Codex renders each one as written; both games (tooling)
+  - Bailey: “claude you give it the prompts based on the project needs please.”
+  - What changed: In the v2 pass (A-0443) Claude (claude -p --model opus) became the art director: it writes a brief of 1 to 4 pictures from the project's needs (docs/target/targets.json, the top of NOW.md, docs/ART-PIPELINE.md and the style guide), and every item carries its own game case (FFX only, FFX-2 only or both; an FFX-only item that shows FFX-2 costumes is refused), the exact prompt, the aspect, at least two environment anchors (game masters from public/art, or a picture he has already seen) and the idle painting of every named FFX or FFX-2 character as references. Codex renders it verbatim. A second brief while another is looping, or more than 4 pictures, needs his yes (the id of a real message of his, or his exact words). The backend pass (A-0446) added the per-item game case and the brief gate.
+  - area art · both games · adopted · delivery implemented · at ~17:29 EDT · see [D-468](#d-468), [D-469](#d-469)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-468"></a>**D-468** — Claude answers in the Art Room whenever Bailey asks something there, promptly, even while Codex is painting; both games (tooling)
+  - Bailey: “you have to respond there when i ask you something also.”
+  - What changed: A chat lane in the relay (A-0443): every message of his is answered by Claude (claude -p --model opus) at the highest priority, and the chat never waits behind renders. A reply is guaranteed: one retry, then the printed text, then a system line; each attempt is cut off after 3 minutes and he gets one "still working" line at 90 seconds. Messages he addresses to Codex go straight to Codex through a reserved third slot. The functionality critic measured replies in about 7 seconds during a render, 7 to 20 seconds idle, and about 38 seconds behind a long brief-writing run (the target was under 2 minutes).
+  - area art · both games · adopted · delivery implemented · at ~17:29 EDT · see [D-467](#d-467), [D-469](#d-469)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-469"></a>**D-469** — Every Art Room picture goes through an art critic that scores it 0 to 10; below 8 it is revised and repainted, with at most 3 revisions; both games (tooling)
+  - Bailey: “a critic will give a score 0 out of 10. below 8, revise, and keep iterating (looping) or up until 3 loops max.”
+  - What changed: The loop was built in the v2 pass (A-0443): an independent critic (claude -p --model opus, read-only tools) scores each version on brief, project (matches the art already in the game), craft, game and rules, weighted 0.25, 0.25, 0.25, 0.15 and 0.10, with hard caps (a style mismatch, a stray mark however faint, a look he dislikes, an off-model character), and returns a ranked list of issues; the relay computes the score. 8.0 or more is shown to him; below 8 the director rewrites the prompt from the issues in rank order and Codex repaints. "Up until 3 loops max" was built as at most 3 revisions (v1 plus 3, four versions), after which the best version is shown labelled "best of 4, below 8". The backend pass (A-0446) made a revision start from the best-scoring version of the round, not the latest (the first critic round found revisions drifting down, 7.8 to 6.5). His Ask for changes starts a new round with a fresh cap. Partly replaced on 2026-10-05 (~22:15 EDT) by D-477: the cap of 3 revisions became 2; the rest of this decision stands.
+  - area critic · both games · adopted · delivery implemented · at ~17:29 EDT · see [D-467](#d-467), [D-468](#d-468), [D-477](#d-477) · partly replaced by [D-477](#d-477)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-470"></a>**D-470** — The Art Room becomes a legitimate-looking Windows app, not a web page in a window; both games (tooling)
+  - Bailey: “make art room a legitimate looking windows app it looks like crap right now.”
+  - What changed: Art Room.exe was built (A-0447): an Electron 44.5.1 shell with its own window and icon, a taskbar button with a badge for the pictures waiting for him, Windows toasts when a picture is ready or Claude or Codex answers, a tray icon, one instance (a second launch focuses the window), and the room's server and relay started and watched by the app. Its look is the option he picked (D-474) and its shortcuts are D-475; the design critic scored the shipped build 8.4 (D-471).
+  - area process · both games · adopted · delivery implemented · at ~17:40 EDT · see [D-471](#d-471), [D-472](#d-472), [D-474](#d-474), [D-475](#d-475)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-471"></a>**D-471** — A design critic scores the Art Room's look 0 to 10 and, below 8, returns a ranked list of issues; the look is revised and scored again, at most 3 loops; both games (tooling)
+  - Bailey: “a critic will score from 0 out of 10. below 8 it comes back with a ranked list of issues, revise, and keep iterating or up until 3 loops max.”
+  - What changed: The design critic ran on the three mockups and on the built app (A-0444, A-0447): option A scored 8.2 at its first version, B 6.0 and then 8.1, C 6.0, 6.0 and then 8.0; the built app scored 8.3, then 6.0 (capped for text under 12 px and clipped text) and then 8.4, which shipped (score history in D:/Tools/art-room/design/build-critique.json, not in the repo). The ranked issues left on the shipped build are listed in docs/handoff/art-room.md. Partly replaced on 2026-10-05 (~22:15 EDT) by D-477: the cap of 3 loops became 2; the rest of this decision stands.
+  - area critic · both games · adopted · delivery implemented · at ~17:40 EDT · see [D-470](#d-470), [D-469](#d-469), [D-477](#d-477) · partly replaced by [D-477](#d-477)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-472"></a>**D-472** — A separate critic scores the Art Room's functionality 0 to 10 against Bailey's intentions, as he laid them out earlier; both games (tooling)
+  - Bailey: “a separate critic scores from 0 out of 10 for the app's functionality based on what my intentions are that i laid out earlier.”
+  - What changed: An independent functionality critic (an Opus sub-agent, A-0449) scored the app against his own words, compiled in D:/Tools/art-room/prompts/intentions.md as ten checks (a separate app window, seamless Claude and Codex coordination, the latest ChatGPT image model, Claude writing every prompt, answers in the room, the critic loop, only he approves, previews, robustness, behaving like a Windows app), each by actually using the app, with hard caps. Round 1 scored 7.6 and round 2 scored 8.6 (his bar is 8); the round 1 issues drove the backend pass (A-0446) and the app fixes (A-0447). Two majors remain open (docs/handoff/art-room.md).
+  - area critic · both games · adopted · delivery implemented · at ~17:40 EDT · see [D-470](#d-470), [D-477](#d-477)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-473"></a>**D-473** — Every picture made for the game matches the visual style of the art already in the game; Ink & Gold is the interface look only, never a painting palette; both games
+  - Bailey: “come up with artwork that has the visual style art direction of the art already in the game in mind please you are failing hard.”
+  - What changed: Round 1 of the title key art (dark navy and gold, ornate) was rejected, and the room's prompts had carried the interface's Ink & Gold palette into paintings. The correction (A-0445): the driver wrote the style guide D:/Tools/art-room/prompts/style.md after looking at the masters, with his reactions (smooth luminous digital painting like a matte painting; blues, indigo and violet with warm peach and gold light at the sources; anime characters with clean dark outlines; no gouache or parchment texture, no ink linework on environments, no gold everywhere); the director, the revise step and the critic all carry it; every palette and texture rule for paintings and the Ink & Gold mention were removed from the prompts; a brief needs at least two game masters as references; the critic's project score is the match with the art already in the game (a style mismatch caps the score at 5); and, after the first calibration, the critic is shown the pictures he approved or praised as anchors, so his approved title picture re-scores from 7.1 to 9.2 and the round 1 pictures he rejected score 5.0 or less.
+  - area art · both games · adopted · delivery implemented · at ~17:59 EDT · see [D-469](#d-469)
+  - Source: docs/handoff/art-room.md
+- <a id="d-474"></a>**D-474** — The Art Room app is built in look A, Native Windows 11, light, not B, Pro review studio, dark, or C, Windows 11 in Ink & Gold; both games (tooling)
+  - Bailey: “A: Native Windows 11, light”
+  - What changed: The app follows the approved target D:/Tools/art-room/design/TARGET.png (A-0444): light Windows 11 with Mica behind the title bar and the navigation rail, Segoe UI Variable and Segoe Fluent Icons, the default blue accent only for selection and the main actions, and three calm panes (chat, proposals, details). Option B, a dense dark review tool, and option C, the game's navy and gold on a Windows frame, are dropped; nothing was built from them.
+  - area process · both games · adopted · delivery implemented · at ~18:30 EDT · see [D-470](#d-470), [D-475](#d-475)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-475"></a>**D-475** — The Art Room's shortcut goes in the Start menu and on the desktop; both games (tooling)
+  - Bailey: “Start menu + desktop”
+  - What changed: Art Room.exe --setup-shortcuts made an "Art Room" shortcut in the Start menu and one on the desktop (A-0447); both carry the app's icon and its taskbar identity (EchoesOfSpira.ArtRoom), so the app has its own taskbar button and can be pinned from there. Not done: a taskbar pin (it cannot be made by a program) and starting at login (it needs his yes).
+  - area process · both games · adopted · delivery implemented · at ~18:30 EDT · see [D-470](#d-470), [D-474](#d-474)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
+- <a id="d-476"></a>**D-476** — The title key art must show real FFX and FFX-2 characters, not hooded silhouettes; he liked the Farplane Field picture otherwise; both games
+  - Bailey: “i really like this but needs to have actual ffx/ffx-2 charactters please for the title screen.”
+  - What changed: He said it of "V3 Farplane Field" version 3 (a luminous violet-blue sky, a field of glowing pale flowers, a crystal spire on the water, four small hooded silhouettes on a ridge). Liked: the whole picture. Must change: real FFX or FFX-2 characters instead of the silhouettes. The director wrote a character brief with two pictures, each with its own game case: V3b with Tidus and Yuna (FFX only) and V3c with Yuna Gunner, Rikku Thief and Paine Warrior (FFX-2 only), each with the characters' idle paintings as references, and the critic loop ran on both (A-0446). He approved V3c version 2, the Gullwings, at 19:24 EDT, which is D-458. The first critic had scored that picture 7.1; the calibrated one scores 9.2.
+  - area art · both games · adopted · delivery implemented · at ~18:31 EDT · see [D-458](#d-458), [D-473](#d-473)
+  - Source: docs/handoff/art-room.md
+- <a id="d-477"></a>**D-477** — The Art Room's critic loops stop after 2 revisions per round (at most 3 versions), not 3; scores are still 0 to 10 and below 8 still returns a ranked list of issues and a revision; both games (tooling)
+  - Bailey: “a critic now rated from 0 out of 10. below 8, come back with a ranked list of issues, revise, and keep iterating (looping) or up until 2 loops max.”
+  - What changed: A critic loop now stops after 2 revisions per round (v1 plus at most 2 revisions, at most 3 versions) instead of 3 (at most 4 versions). Unchanged: scores are still 0 to 10, 8.0 is still the bar, a score below 8 still returns a ranked list of issues that drives the revision, and when the cap is reached the best version of the round is still what he sees. It applies to the art critic loop (D-469), the design critic loop (D-471) and any functionality-critic rounds run for this work (D-472). It partly replaces the "3 loops max" of D-469 and D-471, which stand otherwise. The change to the room is being made by another sub-agent in D:/Tools/art-room (A-0450).
+  - area critic · both games · adopted · delivery in progress · at ~22:15 EDT · see [D-469](#d-469), [D-471](#d-471), [D-472](#d-472)
+  - Source: docs/handoff/art-room.md; critic/CHECKS.md
 - **Picture** (polish) — Approved: Title key art: the Art Room's Gullwings Farplane Field (both games)
   - Bailey: “use what i just approved for the new title screen please, it's soooo epic i love it.”
   - Delivery: Built on branch title-gullwings-keyart (fa09c73f; docs/handoff/title-gullwings-keyart.md), not merged and not live. The new art is staged (D:/Tools/pyrefly-art-staging/title-gullwings/) and is NOT installed in any public/art: the swap is owed at integration into the 39.1 release tree, together with the branch's docs/target/approved-hashes.json change. Bailey has seen the screenshot and likes it (D-459, D-460).
