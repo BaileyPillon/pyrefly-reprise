@@ -18,7 +18,7 @@ from scipy.ndimage import gaussian_filter
 from skimage.color import rgb2lab, lab2rgb
 
 Image.MAX_IMAGE_PIXELS = None
-GATE = {'iou': 0.95, 'cells': 0.03, 'struct': 0.75}
+GATE = {'iou': 0.95, 'cells': 0.08, 'struct': 0.75}     # cells relaxed from 0.03 to 0.08 by the driver (2026-10-05, after the D-light pilot)
 _m = {}
 _sess = [None]
 _clip = [None]
@@ -189,13 +189,13 @@ def smooth(lab, w, s):
     return num / np.maximum(den, 1e-4)[..., None], den
 
 
-def palette_lock(Tm, cand, S, strength=0.9, lam_l=0.95, dmax=(30.0, 28.0)):
+def palette_lock(Tm, cand, S, strength=0.9, lam_l=0.95, dmax=(30.0, 28.0), dark_floor=0.15):
     """The cut-out's low-frequency Lab colour moved 85 percent of the way to today's (masked blur of 5 px of the 1x painting, outlines and the transparent area left out)."""
     lr, ar = lab_scaled(Tm, S)
     lo, ao = lab_scaled(cand, S)
     sigma = 5.0 if min(ar.shape) >= 300 else max(2.0, 5.0 * min(ar.shape) / 300.0)
-    wr = ar * np.maximum(0.15, np.clip((lr[..., 0] - 14.0) / 16.0, 0, 1))     # thin dark outlines count little, but a dark region (a black coat) still counts: it is what the lock must restore
-    wo = ao * np.maximum(0.15, np.clip((lo[..., 0] - 14.0) / 16.0, 0, 1))
+    wr = ar * np.maximum(dark_floor, np.clip((lr[..., 0] - 14.0) / 16.0, 0, 1))     # thin dark outlines count little, but a dark region (a black coat) still counts: it is what the lock must restore
+    wo = ao * np.maximum(dark_floor, np.clip((lo[..., 0] - 14.0) / 16.0, 0, 1))
     sr, dr = smooth(lr, wr, sigma)
     so, do = smooth(lo, wo, sigma)
     valid = gaussian_filter(((dr > 0.08) & (do > 0.08)).astype(np.float32), 1.5)
@@ -209,7 +209,7 @@ def palette_lock(Tm, cand, S, strength=0.9, lam_l=0.95, dmax=(30.0, 28.0)):
     return Image.fromarray(np.dstack([out, np.asarray(cand.getchannel('A'))]), 'RGBA')
 
 
-def build_master(rgb, Tm, P_img, S):
+def build_master(rgb, Tm, P_img, S, pal=True):
     """The approved alpha cut (the library's own rim repair, as for the style pilot's S1), the edge treatment E, then the palette lock."""
     m = mods()
     P = np.asarray(P_img)
@@ -220,7 +220,10 @@ def build_master(rgb, Tm, P_img, S):
     out = m['H'].trim_bleed(out, m['H'].BLEED)
     N, _ = m['af'].repair(P, np.asarray(out), S, **m['AB'].PARAMS)
     NE, _ = m['edge_e'].apply_E(P, N, S)
-    return palette_lock(Tm, Image.fromarray(NE, 'RGBA'), S)
+    cut = Image.fromarray(NE, 'RGBA')
+    if pal is False:
+        return cut
+    return palette_lock(Tm, cut, S, **(pal if isinstance(pal, dict) else {}))
 
 
 def gates(Tm, M, S, iou, head):

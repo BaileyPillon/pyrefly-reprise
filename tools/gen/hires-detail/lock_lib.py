@@ -23,8 +23,8 @@ def gpu_run_retry(graph, out_nodes, tag='job', timeout=1800, tries=4, wait=60):
     for k in range(tries):
         try:
             return _r39.gpu_run(graph, out_nodes, tag=tag, timeout=timeout)
-        except RuntimeError as e:
-            if 'execution error' not in str(e) or k == tries - 1:
+        except (RuntimeError, OSError) as e:      # a failed execution, or ComfyUI not answering for a while (the shared card and RAM): wait and try again
+            if (isinstance(e, RuntimeError) and 'execution error' not in str(e)) or k == tries - 1:
                 raise
             say(f'{tag}: {str(e)[:160]} ... retry {k + 1} after {wait} s')
             time.sleep(wait)

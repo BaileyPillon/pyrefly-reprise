@@ -97,6 +97,15 @@ pass makes a face younger. Costs for a roll-out (636 masters about 13 GPU hours 
 Scripts: `tools/gen/hires-detail/lock_*.py`, `clipsim.py`, `comfy_wait.py`. Incidents: a Klein KV cache with four references overflowed the card and stalled 45 minutes (the same graph without the cache runs in 39 s), a second
 15.7 minutes, and a sampler fault 8.5 minutes; 31.7 minutes of runs completed; the lock pass must run without the KV cache and in a window where `PAUSE-GPU` is honoured.
 
+## The painterly roll-out (2026-10-05): paused at 21:23 EDT, nothing deleted
+
+Bailey approved the roll-out of method D ("I'll go with all of your recommendations"); the GPU roll-out (`tools/gen/hires-painterly/ro_*.py`, a character at a time: FFX party, FFX-2 girls by dressphere, bosses, the rest) ran about 5.5 hours and
+finished 86 figures ok (D or C), 18 by eye, 1 in redo (Lulu ready), over 10 characters (Tidus, Yuna, Auron, Wakka, Lulu, Kimahri, Rikku complete; Rikku Alchemist complete; Rikku Berserker and Yuna Black Mage partial). The independent
+full-size review then found method D defective at battle size (small props and chains lost, blue-to-violet hue drift, changed irises; 55 of 68 poses of the first five characters), and the D+R CPU restore pilot (today's chroma and high band
+restored over D, `ro_restore.py`) was no better than today at battle size in any of 21 poses, worse in 13: the method is paused, not shipped. Bailey decides what happens next.
+Parked and kept: library `D:/Tools/pyrefly-art-backup/hires-painterly/` (manifest with the gates per figure, by-eye candidates, `_superseded/`), the Klein/ESRGAN/face-pass intermediates in `D:/Tools/pyrefly-scratch/2026-10-05/rollout/`
+(the D+R pilot and the pilots of D-light and sigma 0.995 are in `candidates/2026-10-05-painterly-cast/`). Resume: `RESUME-AND-PAUSE-NOTE.txt` in the library folder.
+
 ## Decisions for Bailey
 
 1. The finish: S1, S2, S3b, a mix, or none (the style pilot README has the pictures and the recommendation). Name what is right and wrong in each; the pick approves only what he names.
