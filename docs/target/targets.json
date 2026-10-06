@@ -1939,7 +1939,44 @@
           "build": "The moment the mockup shows; see docs/concepts/polish/showpiece-frontend/ for the before picture and the motion clip.",
           "delivery": "implemented",
           "deliveryNote": "Supersedes the presentation-group 'Title' and 'Chapter select' tiles (docs/plans/build-b-review.md REQUIRED 11): the painted-silhouette parallax title and board replace those two approved pictures. Target/build pairs: docs/screenshots/frontend/pair-title.jpg, docs/screenshots/frontend/pair-chapter-select.jpg.",
-          "note": "Chapter select half superseded by 'Chapter select v2: victory ribbon, boss on its scene' (D-183, 2026-09-25); the parallax title half stands."
+          "note": "Chapter select half superseded by 'Chapter select v2: victory ribbon, boss on its scene' (D-183, 2026-09-25); the parallax title half stands. UPDATED 2026-10-05: the painting in this tile's picture was replaced by the Gullwings Farplane Field (see the next tile); the parallax planes, the motes and the chrome stand."
+        },
+        {
+          "label": "Title key art: the Art Room's Gullwings Farplane Field (both games)",
+          "src": "docs/concepts/title-gullwings/approved-farplane-field.jpg",
+          "state": "approved",
+          "approved": "Bailey, 5 Oct 2026",
+          "build": "The title screen with this picture as its painting, on branch title-gullwings-keyart: docs/screenshots/title-gullwings-1920x1080.png there, the approved picture beside the build in title-gullwings-target-vs-build.png, and the parallax extremes, a phone and 1280x720, 2560x1080 and HiDPI frames beside them. Not on main.",
+          "delivery": "in-progress",
+          "deliveryNote": "Built on branch title-gullwings-keyart (fa09c73f; docs/handoff/title-gullwings-keyart.md), not merged and not live. The new art is staged (D:/Tools/pyrefly-art-staging/title-gullwings/) and is NOT installed in any public/art: the swap is owed at integration into the 39.1 release tree, together with the branch's docs/target/approved-hashes.json change. Bailey has not seen the screen.",
+          "game": "both",
+          "gameNote": "Both: the title screen is the front door to the FFX and FFX-2 chapters and the strap names both; the picture shows the FFX-2 party but is the title of the whole game (AGENTS.md rule 14).",
+          "note": "Replaces the 2026-09-21 painting in the parallax title ('A front end that moves', the tile above): the planes, the motes and the chrome stand, the painting under them is new. The picture is the Art Room's proposal p_f4836b8c (Yuna, Rikku and Paine from behind in a lavender flower field, a golden crystal spire on the water, made by Codex with ChatGPT Images 2.5). What the build had to change on the screen so that it shows (all the build's own choices, Bailey has not seen them): the two black silhouettes of Tidus and Yuna are not drawn; the wordmark slab sits above the three heroes instead of in front of them; the grade is light (0.98 of the picture's luminance, it was 0.64); the strap has a halo; the near plane is the foreground flower band; the crop follows the heroes in other window shapes.",
+          "reaction": {
+            "date": "2026-10-05",
+            "words": "use what i just approved for the new title screen please, it's soooo epic i love it.",
+            "named": [
+              "use what i just approved for the new title screen please, it's soooo epic i love it."
+            ],
+            "how": "Bailey, 2026-10-05 ~19:25 EDT, in chat, a minute after approving the picture in the Art Room (proposal p_f4836b8c) at 19:24 EDT; the driver relayed the words to the title-art lane",
+            "liked": [
+              "it's soooo epic i love it (the picture as it is)"
+            ],
+            "disliked": [],
+            "mustRemain": [
+              "the picture as approved is the title screen: use what i just approved for the new title screen please"
+            ],
+            "mustChange": [],
+            "undecided": [
+              "where the wordmark slab sits (above the heroes at the top left is built; top centre and lower right are mocked up in docs/screenshots on the branch)",
+              "whether the two silhouettes of Tidus and Yuna stay out",
+              "how light the grade is (built at 0.98 of the approved luminance; 1.00 is the pure picture)",
+              "the strap's halo, the crop anchored at the heroes in other window shapes, and a phone that shows all three heads and not the spire"
+            ],
+            "inferred": [
+              "the lane's reading: the words are about the picture, so the picture is the target and every layout choice on top of it still needs his look before it ships (rule 9, end state first)"
+            ]
+          }
         },
         {
           "label": "Chapter select v2: victory ribbon, boss on its scene",

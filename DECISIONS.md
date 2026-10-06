@@ -16,22 +16,22 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-907 decisions in all: 457 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 124 picture decisions. 613 of the written decisions record a blanket yes.
+909 decisions in all: 458 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 125 picture decisions. 613 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 847 |
+| adopted | 849 |
 | proposed | 12 |
 | deferred | 4 |
 | rejected | 11 |
 | superseded | 33 |
-| **All** | **907** |
+| **All** | **909** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 73 |
-| art | 209 |
-| visuals | 67 |
+| art | 210 |
+| visuals | 68 |
 | camera | 31 |
 | audio | 30 |
 | ui | 119 |
@@ -45,15 +45,15 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **907** |
+| **All** | **909** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 393 |
+| both games | 395 |
 | FFX only | 278 |
 | FFX-2 only | 219 |
 | FF7 hidden experiment | 17 |
-| **All** | **907** |
+| **All** | **909** |
 
 ## Standing rules in force
 
@@ -3940,7 +3940,7 @@ Sunday · 69 decisions
 
 ### 2026-10-05
 
-Monday · 21 decisions
+Monday · 23 decisions
 
 - <a id="d-437"></a>**D-437** — True colour (decision A): characters and bosses show their paintings' own colours: the "figures true" switch goes ON by default in release 39.1, with the bloom fix (r39-color ef0868b5)
   - Bailey: “I'll go with all of your recommendations” (blanket yes)
@@ -4047,3 +4047,13 @@ Monday · 21 decisions
   - What changed: The proposal (the driver's recommendation, answered at about 19:27 EDT with "you can continue please" before the build was stopped): lift the stature floor that came in with the D-298 pose picks (docs/handoff/poses-0930.md: a bend, hunch, kneel or lunge is held at 0.60 or more of the idle's height, which can leave its head larger than the idle's) for exactly two poses, Lulu's critical (FFX only) and Rikku Berserker's ready (FFX-2 only), so that they may stand lower than 0.60 of the idle's height and the head follows the idle's instead of growing; every other pose keeps the floor. Why it was proposed: with the floor, Lulu's critical head draws about 10.7 percent over her idle's, which is 46 of the 49 remaining head-size jumps and the CHK-026 failures in Chapters III, VIII, IX and XVIII (CHK-026 allows 3 percent, critic/CHECKS.md); Berserker's ready sits about 14 percent over. This record does not touch D-455's re-paint of Rikku's two ready poses. Both games, each pose only in its own game. Update 2026-10-05 ~19:40 EDT: Bailey stopped the build before any change; nothing is built and the lift awaits his word.
   - area art · both games · proposed · nothing to build · at ~19:27 EDT · see [D-298](#d-298), [D-437](#d-437), [D-441](#d-441)
   - Source: critic/CHECKS.md
+- <a id="d-458"></a>**D-458** — The title screen's key art becomes the Art Room's Gullwings Farplane Field (Yuna, Rikku and Paine from behind in a lavender flower field, a golden crystal spire on the water), both games; the screen is re-cut around it on a branch
+  - Bailey: “use what i just approved for the new title screen please, it's soooo epic i love it.”
+  - What changed: The title screen's painting is the picture Bailey approved in the Art Room at 19:24 EDT (proposal p_f4836b8c, made by Codex with ChatGPT Images 2.5), not the 2026-09-21 plate of the parallax title; that refines E-039, whose approved target was the old painted key art. Built on branch title-gullwings-keyart (fa09c73f; docs/handoff/title-gullwings-keyart.md): the picture cropped to the plate ratio (25 px off the right edge), RealESRGAN_x4plus through ComfyUI to 2688x1536 with the colour drift removed, a 1344x768 plate, a new 32 px placeholder, a new sidecar, and docs/target/approved-hashes.json carrying the new hashes. Not merged, not live, and the art is staged but NOT installed in any public/art: the swap is owed when 39.1 is integrated (the handoff has the commands). Bailey has not seen the screen. Both games: the title screen is shared by the FFX and FFX-2 chapters, and the strap names both (AGENTS.md rule 14). What the build changed on the screen so that the picture shows as approved, each the build's own choice and not his (the board tile lists them as undecided, with before and after pictures in docs/screenshots/title-gullwings-*.png): (1) the concept's two black silhouettes of Tidus and Yuna are no longer drawn; (2) the wordmark slab moved from in front of Yuna and Rikku to above the three of them and is 20 percent shorter; (3) the 2026-09-21 grade, which took the picture to 0.64 of its approved luminance, is replaced by a light one at 0.98; (4) the strap gets full gold and a halo (contrast 1.3 to 1 became 5.9 to 1); (5) the near parallax plane is the foreground flower band only, so no hero is split between planes; (6) the crop follows the heroes in a window that is not 16:9, and a phone shows all three heads. Verified on the branch: tsc clean, 30 unit test files green, a production build passes art-derive verify and audit and the browser load of 1,049 images in Chromium and WebKit.
+  - area art · both games · adopted · delivery in progress · at ~19:25 EDT · see [E-038](#e-038), [D-368](#d-368) · refines [E-039](#e-039)
+  - Source: docs/handoff/title-gullwings-keyart.md; docs/target/approved-hashes.json
+- **Picture** (polish) — Approved: Title key art: the Art Room's Gullwings Farplane Field (both games)
+  - Bailey: “use what i just approved for the new title screen please, it's soooo epic i love it.”
+  - Delivery: Built on branch title-gullwings-keyart (fa09c73f; docs/handoff/title-gullwings-keyart.md), not merged and not live. The new art is staged (D:/Tools/pyrefly-art-staging/title-gullwings/) and is NOT installed in any public/art: the swap is owed at integration into the 39.1 release tree, together with the branch's docs/target/approved-hashes.json change. Bailey has not seen the screen.
+  - area visuals · both games · adopted · delivery in progress
+  - Source: docs/target/targets.json, group polish, tile "Title key art: the Art Room's Gullwings Farplane Field (both games)"
