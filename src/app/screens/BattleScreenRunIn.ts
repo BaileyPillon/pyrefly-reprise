@@ -40,14 +40,6 @@ import type { StageMotionPort } from '../../engine/motion/StageMotionPort.ts';
 export const STRIKE_LUNGE = 0.6;
 
 /**
- * Whether an FFX-2 fiend's lunge reaches for its target (r391-reach). Held OFF, live release 39's lunge (the house 1.4, a counter's 0.6), until Bailey decides:
- * the sources say nothing about a fiend's approach in FFX-2 (AGENTS.md rule 14; `docs/handoff/r391-reach.md` "For Bailey" item 1). `true` is the lane's
- * judgement call (a fiend has no run, so its lunge is its whole approach, as in FFX). FFX's fiends and party have no motion port and reach; an FFX-2 girl
- * reaches after her run-in either way.
- */
-export const FFX2_FIENDS_REACH = false;
-
-/**
  * Run times, ms at normal speed, by distance in world units: ours (a short read of the sources' "about 2 s"). A run is 0.32 to
  * 0.47 s in and three quarters of that home, so a whole attack is 0.56 to 0.82 s longer than today's.
  */
@@ -127,12 +119,12 @@ export class RunInMotion implements ActionMotionPort {
   }
 
   /**
-   * The strike's lunge reaches for its target (r391-reach) for a girl who has RUN IN (the run's stop is staged, not sourced: where it leaves a gap, the lunge from there
-   * closes the rest, as in FFX), and for a fiend only while {@link FFX2_FIENDS_REACH} says so (held off: live's lunge until Bailey decides). Not for a girl who has not
-   * run (a long-range dressphere fires from where she stands, sourced; a menu open suppresses the run by design): her strike must not close the distance.
+   * The strike's lunge reaches for its target (r391-reach) for a fiend (it has no run: its lunge is its whole approach, as in FFX) and for a girl who has RUN IN (the run's
+   * stop is staged, not sourced: where it leaves a gap, the lunge from there closes the rest, as in FFX). Not for a girl who has not (a long-range dressphere fires from where she
+   * stands, sourced; a menu open suppresses the run by design): her strike must not close the distance.
    */
   reachFor(id: CombatantId): boolean {
-    return (FFX2_FIENDS_REACH && this.state()?.combatants[id]?.side === 'enemy') || this.runs.has(id);
+    return this.state()?.combatants[id]?.side === 'enemy' || this.runs.has(id);
   }
 
   /** The strike's lunge while she is out: shorter, since she has run in. */

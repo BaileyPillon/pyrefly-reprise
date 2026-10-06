@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BattleState } from '../../src/battle/common/types.ts';
-import { FFX2_FIENDS_REACH, RunInMotion } from '../../src/app/screens/BattleScreenRunIn.ts';
+import { RunInMotion } from '../../src/app/screens/BattleScreenRunIn.ts';
 
 /**
  * r391-reach, FFX-2: the strike's lunge reaches for its target for the fiends (no run: the lunge is their whole approach) and for a girl who has RUN IN (the stop is staged, not
@@ -10,17 +10,10 @@ import { FFX2_FIENDS_REACH, RunInMotion } from '../../src/app/screens/BattleScre
 const state = (sides: Record<string, string>): BattleState => ({ combatants: Object.fromEntries(Object.entries(sides).map(([id, side]) => [id, { id, side }])) }) as unknown as BattleState;
 
 describe('RunInMotion.reachFor', () => {
-  it('holds an FFX-2 fiend at live release 39\'s lunge until Bailey decides (the sources are silent; rule 14)', () => {
-    expect(FFX2_FIENDS_REACH).toBe(false);
-    const m = new RunInMotion(() => state({ yuna: 'party', bahamut: 'enemy', 'ormi-entrance': 'enemy' }));
-    expect(m.reachFor('bahamut')).toBe(false);
-    expect(m.reachFor('ormi-entrance')).toBe(false);
-  });
-
-  it('answers for a fiend exactly as the hold says, false for a girl who has not run in (whatever her dressphere) and for a combatant it does not know', () => {
+  it('is true for a fiend, false for a girl who has not run in (whatever her dressphere) and for a combatant it does not know', () => {
     const m = new RunInMotion(() => state({ yuna: 'party', paine: 'party', bahamut: 'enemy', 'ormi-entrance': 'enemy' }));
-    expect(m.reachFor('bahamut')).toBe(FFX2_FIENDS_REACH);
-    expect(m.reachFor('ormi-entrance')).toBe(FFX2_FIENDS_REACH);
+    expect(m.reachFor('bahamut')).toBe(true);
+    expect(m.reachFor('ormi-entrance')).toBe(true);
     expect(m.reachFor('yuna')).toBe(false);
     expect(m.reachFor('paine')).toBe(false);
     expect(m.reachFor('nobody')).toBe(false);

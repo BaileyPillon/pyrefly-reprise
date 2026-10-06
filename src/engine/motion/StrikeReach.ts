@@ -104,8 +104,8 @@ export const HOUSE_LUNGE = 1.4;
  * Game case (AGENTS.md rule 14, CHK-021; decided from `research/*.md`, written in `docs/handoff/r391-reach.md`):
  * - **FFX: yes, party and fiends.** FFX has no run-in (`research/battle-camera-perspectives.md` A.2 `[absence]`; D-354 holds one for Bailey's yes), so the house
  *   lunge is FFX's whole approach and a blow that stops short of its target is a defect (a port-less presenter reaches).
- * - **FFX-2 fiends: held at live's lunge until Bailey decides.** A fiend has no run in either game (its approach is the same lunge) and the sources say nothing either
- *   way, so the lane's "yes" (shared plumbing, CHK-020) waits for his word: `reachFor` answers no for them while `FFX2_FIENDS_REACH` (`BattleScreenRunIn.ts`) is false.
+ * - **FFX-2 fiends: yes.** A fiend has no run in either game (its approach is the same lunge), and the sources say nothing that would keep it short: shared plumbing, a bug
+ *   fix of the same defect (CHK-020). `reachFor` answers for them.
  * - **FFX-2 girls: after her run-in, yes; without one, no.** A short-range dressphere RUNS IN first (sourced: "a character standing far away spends ~2 s running in",
  *   `research/ffx2-combat-core.md` section 1); where she stops is ours (`motion/StandOff.ts`, chosen against the target's painted shape, up to a quarter of the frame of travel),
  *   and where that leaves a gap (Leblanc, Rikku, when Ormi stands far to the right: 170 to 300 px) the lunge from there closes the rest, as in FFX. A long-range dressphere
