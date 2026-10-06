@@ -117,8 +117,8 @@ export class HoldableCamera implements CameraPort {
   }
 
   /** Forwarded untouched: measuring a shot moves nothing, held or not (A-11, A-1). */
-  frame(rig: string, push: number, subjects: Parameters<NonNullable<CameraPort['frame']>>[2]): ReturnType<NonNullable<CameraPort['frame']>> {
-    return this.inner.frame?.(rig, push, subjects) ?? null;
+  frame(rig: string, push: number, subjects: Parameters<NonNullable<CameraPort['frame']>>[2], lens?: boolean): ReturnType<NonNullable<CameraPort['frame']>> {
+    return this.inner.frame?.(rig, push, subjects, lens) ?? null;
   }
 
   /** Forwarded untouched: refitting a rig for a phone moves nothing by itself (A-12). */

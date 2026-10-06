@@ -51,13 +51,20 @@ const scratchCam = new PerspectiveCamera();
 const quad: Quad = [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
 const tmp = new Vector3();
 
-/** `into` posed on `rig`, pushed in by `push`, with the live camera's lens and aspect (the run-in's look at a cut: `motion/StageMotion.rect`). */
-export function rigPose(into: PerspectiveCamera, live: PerspectiveCamera, rig: FitRig, push: number): PerspectiveCamera {
+/**
+ * `into` posed on `rig`, pushed in by `push`, with the live camera's lens and aspect (the run-in's look at a cut: `motion/StageMotion.rect`).
+ * `lens` (r392-motion): also with the live camera's view offset, the static lens shift CHAPTER FRAMING puts on the camera (`fx/mix/framing.ts`, `setViewOffset`: Chapter IV's master
+ * shifts the picture 64 px left and 36 px up at 1600x900). Off by default: every measure made before r392 reads the rig without it.
+ */
+export function rigPose(into: PerspectiveCamera, live: PerspectiveCamera, rig: FitRig, push: number, lens = false): PerspectiveCamera {
   into.fov = rig.fov ?? live.fov;
   into.aspect = live.aspect;
   into.near = live.near;
   into.far = live.far;
   into.updateProjectionMatrix();
+  const v = live.view;
+  if (lens && v?.enabled) into.setViewOffset(v.fullWidth, v.fullHeight, v.offsetX, v.offsetY, v.width, v.height);
+  else if (into.view?.enabled) into.clearViewOffset();
   tmp.subVectors(rig.lookAt, rig.position).multiplyScalar(push);
   into.position.copy(rig.position).add(tmp);
   into.up.set(0, 1, 0);
@@ -66,7 +73,7 @@ export function rigPose(into: PerspectiveCamera, live: PerspectiveCamera, rig: F
   return into;
 }
 
-const pose = (live: PerspectiveCamera, rig: FitRig, push: number): PerspectiveCamera => rigPose(scratchCam, live, rig, push);
+const pose = (live: PerspectiveCamera, rig: FitRig, push: number, lens = false): PerspectiveCamera => rigPose(scratchCam, live, rig, push, lens);
 
 function fraction(cam: PerspectiveCamera, subject: FitSubject['actor']): number | null {
   if (typeof subject.contentQuad !== 'function') return null;
@@ -96,14 +103,15 @@ export function insideFraction(live: PerspectiveCamera, rig: FitRig, push: numbe
   return fraction(pose(live, rig, push), subject) ?? 1;
 }
 
-/** See the module note. `push` is a fraction of the rig's camera-to-aim distance. */
+/** See the module note. `push` is a fraction of the rig's camera-to-aim distance. `lens`: measured through the live camera's view offset as well ({@link rigPose}). */
 export function frameFit(
   live: PerspectiveCamera,
   rig: FitRig,
   push: number,
   subjects: readonly FitSubject[],
+  lens = false,
 ): FrameVerdict {
-  const at0 = pose(live, rig, 0);
+  const at0 = pose(live, rig, 0, lens);
   const keep: Array<{ actor: FitSubject['actor']; target: number }> = [];
   let worst = 1;
   let fits = true;
@@ -115,7 +123,7 @@ export function frameFit(
     else keep.push({ actor: s.actor, target: Math.min(s.min, f) });
   }
   const ok = (p: number): boolean => {
-    const cam = pose(live, rig, p);
+    const cam = pose(live, rig, p, lens);
     return keep.every((s) => (fraction(cam, s.actor) ?? 1) + 1e-9 >= s.target);
   };
   if (push <= 0 || keep.length === 0 || ok(push)) return { fits, push, worst };

@@ -65,8 +65,8 @@ export class StillCamera implements CameraPort {
     return this.inner.roll(this.still() ? 0 : deg, ms);
   }
 
-  frame(rig: string, push: number, subjects: Parameters<NonNullable<CameraPort['frame']>>[2]): ReturnType<NonNullable<CameraPort['frame']>> {
-    return this.inner.frame?.(rig, push, subjects) ?? null;
+  frame(rig: string, push: number, subjects: Parameters<NonNullable<CameraPort['frame']>>[2], lens?: boolean): ReturnType<NonNullable<CameraPort['frame']>> {
+    return this.inner.frame?.(rig, push, subjects, lens) ?? null;
   }
 
   fitSlice(rig: string, slice: number, subjects: Parameters<NonNullable<CameraPort['fitSlice']>>[2], top?: number): boolean {

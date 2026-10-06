@@ -112,17 +112,42 @@ export const HOUSE_LUNGE = 1.4;
  *   (Gunner, Lady Luck, Alchemist, Trainer, Gun Mage) fires from where she stands, no run-in at all (sourced, 2 sources), and with a command menu open the run is suppressed by
  *   design: her strike must not close the distance (`reachFor` answers no for her).
  * - **FF7: no** (its port does not answer: it runs its own melee).
+ * - **REDUCE MOTION (r392-motion): both games shorten what was solved** ({@link calmLunge}); FFX-2's girls, who do not run under it, are the house 1.4 as before.
  */
-export function lungeDistance(ctx: { readonly stage: BattleStage }, event: Pick<ActionStartEvent, 'actorId' | 'targets'>, motion: ActionMotionPort | null | undefined, pose?: string, burst?: Burst, base = HOUSE_LUNGE): number {
+export function lungeDistance(ctx: LungeCtx, event: Pick<ActionStartEvent, 'actorId' | 'targets'>, motion: ActionMotionPort | null | undefined, pose?: string, burst?: Burst, base = HOUSE_LUNGE): number {
   return lungePlan(ctx, event, motion, pose, burst, base).distance;
 }
 
 /**
- * {@link lungeDistance} with the part of it that is the house lunge: `house` is the start (the lunge as today), `distance - house` the extra carried to reach. The extra rides
- * the eased step (`PaintedActor.lunge`'s `house`), so a strike that reaches further does not jump further in a frame.
+ * REDUCE MOTION (r392-motion; Bailey, 2026-10-06, "REDUCE MOTION shortens the attack lunge"; **both games**: FFX's party and fiends, FFX-2's fiends. An FFX-2 girl has no run-in under
+ * it, so her lunge was never solved and keeps its 1.4, which this leaves alone): the share of the distance a strike is carried BEYOND its start (the house lunge, 1.4) that is still
+ * travelled. The solved reach (r391-reach) adds up to 3 world units, a lateral slide of a few hundred pixels; with the setting on a strike travels half of that extra, so it
+ * still closes part of the gap it was solved for but never slides further than 2.9 units (the start plus half the cap), and is exactly as long as the house lunge where the
+ * strike already reaches. Chosen over capping at the house lunge: the cap leaves every long strike where it stopped short before r391 (Tidus 138 px short of Seymour Flux,
+ * Ixion 231 px short); half the extra closes about half of each such gap for half the extra travel. The extra rides the eased step (`reachOffset`): no kick and no overshoot.
+ * The move keeps its 440 ms, its apex and its contact hold, so no timing, no ATB pacing and no engine state changes.
  */
-export function lungePlan(ctx: { readonly stage: BattleStage }, event: Pick<ActionStartEvent, 'actorId' | 'targets'>, motion: ActionMotionPort | null | undefined, pose?: string, burst?: Burst, base = HOUSE_LUNGE): { distance: number; house: number } {
+export const CALM_REACH_SHARE = 0.5;
+
+/** `solved` (the lunge that reaches, from `start`) with REDUCE MOTION on: the start plus {@link CALM_REACH_SHARE} of what the solver added to it; never under `start`, never over `solved`. */
+export function calmLunge(start: number, solved: number): number {
+  return Math.min(Math.max(start, solved), start + Math.max(0, solved - start) * CALM_REACH_SHARE);
+}
+
+/** What the plan reads of the presenter: the stage, and the player's REDUCE MOTION (`BattleMoments.reducedMotion`: the pause row or the OS preference) when there is one. */
+export interface LungeCtx {
+  readonly stage: BattleStage;
+  readonly moments?: { readonly reducedMotion?: boolean } | undefined;
+}
+
+/**
+ * {@link lungeDistance} with the part of it that is the house lunge: `house` is the start (the lunge as today), `distance - house` the extra carried to reach. The extra rides
+ * the eased step (`PaintedActor.lunge`'s `house`), so a strike that reaches further does not jump further in a frame. With REDUCE MOTION on the extra is {@link CALM_REACH_SHARE}
+ * of what the solver found ({@link calmLunge}); the start is as it was.
+ */
+export function lungePlan(ctx: LungeCtx, event: Pick<ActionStartEvent, 'actorId' | 'targets'>, motion: ActionMotionPort | null | undefined, pose?: string, burst?: Burst, base = HOUSE_LUNGE): { distance: number; house: number } {
   const house = motion?.lungeFor?.(event.actorId) ?? base; // after a run-in only the blow is left: the port's shorter lunge
   const reaches = motion ? motion.reachFor?.(event.actorId) === true : true;
-  return { distance: reaches ? strikeReach(ctx, event, house, pose, burst) : house, house };
+  const solved = reaches ? strikeReach(ctx, event, house, pose, burst) : house;
+  return { distance: ctx.moments?.reducedMotion === true ? calmLunge(house, solved) : solved, house };
 }
