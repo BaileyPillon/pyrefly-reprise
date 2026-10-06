@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-949 decisions in all: 497 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 624 of the written decisions record a blanket yes.
+958 decisions in all: 506 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 626 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 884 |
+| adopted | 893 |
 | proposed | 11 |
 | deferred | 4 |
 | rejected | 11 |
 | superseded | 39 |
-| **All** | **949** |
+| **All** | **958** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 74 |
-| art | 230 |
-| visuals | 70 |
+| art | 234 |
+| visuals | 71 |
 | camera | 32 |
 | audio | 30 |
 | ui | 122 |
 | story | 15 |
-| chapters | 178 |
+| chapters | 179 |
 | guide | 28 |
-| release | 34 |
+| release | 35 |
 | hosting | 14 |
-| process | 75 |
+| process | 77 |
 | critic | 29 |
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **949** |
+| **All** | **958** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 428 |
-| FFX only | 278 |
-| FFX-2 only | 226 |
+| both games | 429 |
+| FFX only | 280 |
+| FFX-2 only | 232 |
 | FF7 hidden experiment | 17 |
-| **All** | **949** |
+| **All** | **958** |
 
 ## Standing rules in force
 
@@ -99,6 +99,7 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **The game's art is kept with full version history in a private GitHub repository, BaileyPillon/pyrefly-art, apart from the public game repo: every painting is archived there before it is replaced, and the approved masters are kept as they are now (both games)**: Before any painting in public/art is replaced, archive it to the private art repo with tools/archive-replaced.mjs; copy each newly approved master into its current/ folder; the public game repo never receives public/art. Decision [D-478](#d-478) (2026-10-05, both games).
 - **The driver makes the selections for the experimental chapter while he is at work: mockups, anchors, poses, backdrops; every pick is recorded as a delegated pick with his words (FFX-2 only)**: For the experimental Leblanc chapter only, the driver makes the end-state and art selections on his behalf; every such pick is recorded as delegated, with these words, in docs/target/targets.json (the tile's inferred list) and decisions.json, so he can overturn it; nothing outside that chapter is delegated and spending money or downloading still needs his yes. Decision [D-494](#d-494) (2026-10-06, FFX-2).
 - **Priority: the playable experimental chapter comes first, with all resources; everything else that was in progress comes second (both games)**: The playable experimental Leblanc chapter is the first priority for the driver and every lane until he says otherwise; everything else already in progress is second and continues behind it. Decision [D-497](#d-497) (2026-10-06, both games).
+- **Batch emails**: every batch of images the Art Room finishes is emailed to Bailey, from his own Gmail account to himself through Chrome, with a subject line that names the batch and comments in the body, within about 10 minutes of finishing; batch-digest.mjs builds the package and art-batches/index.json records what was sent. Decision [D-501](#d-501) (2026-10-06, both games).
 
 ## Waiting on Bailey's yes
 
@@ -4172,7 +4173,7 @@ Monday · 44 decisions
 
 ### 2026-10-06
 
-Tuesday · 19 decisions
+Tuesday · 28 decisions
 
 - <a id="d-480"></a>**D-480** — From now on the game's artwork is made with Codex through the Art Room, beginning with the characters and bosses (the cast repaint); withdrawn the same day by D-486 (both games)
   - Bailey: “from now on you will coordinate with codex in art room to generate artwork for the game beginning with the characters and bosses”
@@ -4217,7 +4218,7 @@ Tuesday · 19 decisions
 - <a id="d-488"></a>**D-488** — An experimental chapter: the Leblanc preview, as an additional, separate chapter with all-new ChatGPT Images art; Chapter VI, the current Leblanc chapter, is kept as it is (FFX-2 only)
   - Bailey: “so the leblanc preview will be an additional experimental chapter. keep the current leblanc chapter.”
   - What changed: A new chapter beside Chapter VI: the same Leblanc encounter (ffx2-leblanc: Chateau Leblanc in Guadosalam; Act I the entrance, Act II Logos' room, Act III the Last Room with Leblanc, Logos and Ormi) built a second time with every picture newly made in ChatGPT Images 2.5 (D-489), by the Art Room. Chapter VI keeps its encounter and its art, untouched. The driver told him it goes to the Cloudflare preview worker only, never to echoesofspira.com (the question of 13:27 that D-495 answers). It began at 12:02:41, when he asked for "a preview with one screne/one encounter full implemented with the new art" (D-485): the driver had started the Leblanc preview and stopped it before any image was made when he withdrew the repaint (the driver's account), and it came back as this chapter. The first end-state target is mockup B (D-496). At 14:07:10 he made it the first priority (D-497).
-  - area chapters · FFX-2 · adopted · delivery in progress · see [D-485](#d-485), [D-486](#d-486), [D-489](#d-489), [D-494](#d-494), [D-496](#d-496), [D-497](#d-497)
+  - area chapters · FFX-2 · adopted · delivery in progress · see [D-485](#d-485), [D-486](#d-486), [D-489](#d-489), [D-494](#d-494), [D-496](#d-496), [D-497](#d-497), [D-505](#d-505)
   - Source: Bailey, 2026-10-06, in the Claude Code chat (the times are the session transcript's). 12:36:52 EDT, verbatim: "the experimental new chapter will be …
 - <a id="d-489"></a>**D-489** — The experimental chapter's art is ChatGPT Images 2.5: Flare for mockups and Sunburst for anything that ships, and Flare is fine when Sunburst is not available to the Art Room (FFX-2 only); the Sunburst costs were asked for
   - Bailey: “the artwork for that experimental chapter will be chatgpt images 2.5, flare for mockups and sunburst for anything mission critical, stuff that ships.”
@@ -4226,8 +4227,8 @@ Tuesday · 19 decisions
   - Source: Bailey, 2026-10-06 12:33:59 EDT (the rule, verbatim in D-486's source) and 12:41:07 EDT (the Flare fallback and the cost request), in the Claude Code …
 - <a id="d-490"></a>**D-490** — Release 39.2 carries the last pose-size fixes and the fix for the Chapter XIII (Trema) retry bug (both games; the Trema fix FFX-2 only)
   - Bailey: “Ok I approve of all of the above”
-  - What changed: Item 4 of the driver's summary (12:39:57), verbatim: "Release 39.2 work: clearing the last pose-size failures, which hold the character-models score at 7.0 instead of about 8.7, and fixing the retry bug in Trema's chapter. Both are already running and ship after the critic's review." (The scores are the driver's figures as given to him.) The lanes: r392-size (pose size) and r392-trema (Chapter XIII: a Retry from a state with fewer than two girls standing opens with the Save Sphere's rule instead of replaying a state nobody can win from, PR-0407, FFX-2 only, commit 95fb69aa); 39.2 also holds the REDUCE MOTION lunge and the Bahamut reveal fix (D-492, D-493). It ships when the critic's focused review says SHIP (D-495).
-  - area release · both games · adopted · delivery in progress · see [D-486](#d-486), [D-492](#d-492), [D-493](#d-493), [D-495](#d-495)
+  - What changed: Item 4 of the driver's summary (12:39:57), verbatim: "Release 39.2 work: clearing the last pose-size failures, which hold the character-models score at 7.0 instead of about 8.7, and fixing the retry bug in Trema's chapter. Both are already running and ship after the critic's review." (The scores are the driver's figures as given to him.) The lanes: r392-size (pose size) and r392-trema (Chapter XIII: a Retry from a state with fewer than two girls standing opens with the Save Sphere's rule instead of replaying a state nobody can win from, PR-0407, FFX-2 only, commit 95fb69aa); 39.2 also holds the REDUCE MOTION lunge and the Bahamut reveal fix (D-492, D-493). It ships when the critic's focused review says SHIP (D-495). UPDATE, 2026-10-06 18:41 EDT: the form of the Trema fix is Bailey's pick among three measured answers, 'restore' (D-506); release 39.2 also holds Yojimbo's size hold and the once-per-phase boss size (D-500, lane r392-boss-scale).
+  - area release · both games · adopted · delivery in progress · see [D-486](#d-486), [D-492](#d-492), [D-493](#d-493), [D-495](#d-495), [D-500](#d-500), [D-506](#d-506)
   - Source: Bailey, 2026-10-06 12:39:40 EDT, in the Claude Code chat (the times are the session transcript's), to the driver's four-item summary of what his …
 - <a id="d-491"></a>**D-491** — Lighting: held for now; the three looks (rim, wrap and glint; lit by the room; Satsuei) stay behind ?light=1|2|3 on the unmerged branch lighting-mockups and none is built into the game (both games)
   - Bailey: “yes, include those three too”
@@ -4247,7 +4248,7 @@ Tuesday · 19 decisions
 - <a id="d-494"></a>**D-494** — The driver makes the selections for the experimental chapter while he is at work: mockups, anchors, poses, backdrops; every pick is recorded as a delegated pick with his words (FFX-2 only)
   - Bailey: “I have to go to work soon. You make the selections for me as far as the experimental chapter goes.”
   - What changed: For the experimental Leblanc chapter only, the driver (not an agent lane) makes the end-state and art selections for him, so the chapter does not wait for his clicks. Each pick is recorded under D-496 and the like as a delegated pick quoting these words, and the tile's reaction keeps what he named apart from what the driver chose, so he can see which were his and overturn any. The Art Room is getting a delegated-selection command (tools/select.mjs, marked approvedBy driver-delegated) that works only for briefs tagged exp-leblanc, with auto-pose at a score of 8.0 or more for that experiment (being added by a lane as of 14:09). Not delegated: anything outside that chapter, spending money, downloading, and any deploy beyond what D-495 says.
-  - area process · FFX-2 · adopted · delivery in progress · see [D-488](#d-488), [D-496](#d-496)
+  - area process · FFX-2 · adopted · delivery in progress · see [D-488](#d-488), [D-496](#d-496), [D-499](#d-499), [D-502](#d-502), [D-503](#d-503), [D-504](#d-504)
   - Source: Bailey, 2026-10-06 13:26:51 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "I have to go to work soon. You make the …
 - <a id="d-495"></a>**D-495** — Release 39.2 goes live on echoesofspira.com if the critic's focused review says SHIP (both games)
   - Bailey: “Yes, ship 39.2 on SHIP (Recommended)” (blanket yes)
@@ -4264,6 +4265,51 @@ Tuesday · 19 decisions
   - What changed: The driver and every lane are pointed at the playable experimental Leblanc chapter first (the Art Room's ChatGPT Images painting for it, the chapter's build, its preview); release 39.2 and the other lanes continue behind it as the second priority. Not read as a change of the usage mode (he sets that by word, AGENTS.md rule 15) or as leave to spend money or download without asking.
   - area process · both games · adopted · delivery in progress · see [D-488](#d-488), [D-490](#d-490)
   - Source: Bailey, 2026-10-06 14:07:10 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "the priority is the experimental …
+- <a id="d-498"></a>**D-498** — The driver may open FFX on his computer to check Yojimbo's size in the real game, with his volume muted first; the check is owed and waits for a reboot (FFX only)
+  - Bailey: “You may open up ffx on my computer to check but make sure my volume is muted.”
+  - What changed: A real-game check takes over his screen and keyboard, so it needs his say (D-205, D-266); for this one check he says the driver may open FFX on his computer, with the volume muted first. Tried at 15:08 and 15:12 EDT (A-0475): every active audio output was muted and re-checked before each launch (the mute flag only: the speakers had been unmuted at a 17 percent level and are left muted with the level untouched), and both launches drew only a uniformly white window, the same fault as on 2026-10-01 (FFX-2 draws fine), so no save was loaded and nothing was measured. The likely cure is a reboot (the PC has not rebooted since 2026-09-25), which closes every Claude window and the work running in them, so the reboot is his call and the check is owed after it. Until a real frame decides, the 1.15 times the party of D-500 stands as the picked number.
+  - area process · FFX · adopted · delivery in progress · see [D-205](#d-205), [D-266](#d-266), [D-500](#d-500)
+  - Source: Bailey, 2026-10-06 15:00:39 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "You may open up ffx on my computer to …
+- <a id="d-499"></a>**D-499** — DELEGATED PICKS: the experimental chapter's arena and the three Syndicate idles, chosen by the driver under his delegation, not by him: the empty Last Room plate (p_f948757e, version 3, critic score 8.8), Leblanc's idle (p_64941a30, version 6, 8.6), Logos's (p_6ce73dd5, version 4, 8.6) and Ormi's (p_bbf396bf, version 4, 8.9), each the top score of its best of 7 (FFX-2 only)
+  - Bailey: “You make the selections for me as far as the experimental chapter goes.”
+  - What changed: At 15:33:11 to 15:33:12 EDT the driver used the Art Room's select command (approvedBy driver-delegated, tagged exp-leblanc) on the four chains of art-1 (brief b_73b14330, posted 14:13 EDT, 4 chains of 7 versions, 28 images) and took the top-ranked version of each: the arena, mockup B's Last Room painted empty of figures (version 3, 8.8; the other six scored 8.3 to 8.7), then the idles the other poses are painted from: Leblanc (version 6, 8.6), Logos (version 4, 8.6) and Ormi (version 4, 8.9). He has not seen them side by side and named no property of any of them, so he can overturn any pick, and that figure is then redone (AGENTS.md rule 9). Installed in the playable chapter on branch exp-leblanc (30606c49: the plate, and the idles cut out of their flat backgrounds, all facing left and none mirrored); not merged and not deployed (the preview is D-505).
+  - area art · FFX-2 · adopted · delivery in progress · see [D-488](#d-488), [D-494](#d-494), [D-496](#d-496)
+  - Source: The driver, 2026-10-06 15:33:11 to 15:33:12 EDT (the Art Room's select command; its records are D:/Tools/art-room/data/approved.jsonl and …
+- <a id="d-500"></a>**D-500** — Yojimbo holds about 1.15 times the party on screen in Chapter IX, fixed so he stops changing size from menu to menu, until a real FFX screenshot settles it (FFX only)
+  - Bailey: “About 1.15× the party (Recommended)” (blanket yes)
+  - What changed: Built on branch r392-boss-scale (code d1cd08c8, handoff c1f103ba; A-0471): Yojimbo's BOSS SCALE target is 1.15 (it was 2.2) and he is held there at every command menu (group scale 1.163; 1.153, 1.151 and 1.152 times the party at rest at 1600x900, 2560x1440 and 1280x720). Before, the framing searched BOSS SCALE's steps afresh at each menu, so his painted height swung between 214 and 285 px (0.96 to 1.35 times the party at 1600x900) with the girl whose menu was open; now it is 252 to 261 px. The hold is one number, scaleTarget('yojimbo') in src/engine/fx/mix/masters.ts, and no source states his on-screen proportion (rule 6), so 1.15 is the presentation estimate he picked until the real FFX check (D-498) reads it. The same lane sizes every enlarged boss once per phase (src/engine/fx/mix/scaleLock.ts), which also steadies FFX-2's Bahamut (shared plumbing, both games). The phone is left as is (BOSS SCALE never applies there: Yojimbo reads 1.00 times the party), and on the phone the Zanmato gauge card covers him (pre-existing; two fixes were tried on the open page, either changes the card or the Chapter IX phone rigs and needs his look first, rule 9). Not merged and not live: it rides in release 39.2 (integration and the focused review are next; D-495 is the go for 39.2).
+  - area visuals · FFX · adopted · delivery in progress · see [D-495](#d-495), [D-498](#d-498)
+  - Source: Bailey, 2026-10-06, in the Claude Code chat (the times are the session transcript's). 14:58:59 EDT, verbatim: "Yojimbo looks huge compared to the …
+- <a id="d-501"></a>**D-501** — Every finished batch of Art Room images is emailed to him with a fitting subject line and comments in the body, the earlier batches too, sent from his own Gmail account to himself through Chrome (both games)
+  - Bailey: “I need to be able to look all new images generated in batches. Each batch done needs to be sent to my email at [his own Gmail address] with an appropriate subject line and comments in the body of the email.”
+  - What changed: From 2026-10-06 each batch of images the Art Room finishes is packaged and emailed to him. D:/Tools/art-room/tools/batch-digest.mjs builds a package per batch (a contact sheet of every image with the critic's score, who picked it (Bailey, the driver on his behalf, or the room automatically) and its status; the winning images at full size; a write-up of what the batch was for, the game and chapter, notable critic comments, failures and the ChatGPT usage it cost); the driver sends it from Chrome through the Gmail compose window of his own account, to himself, with a subject line of the form "Echoes of Spira art batch NN: &lt;what it was&gt; (N chains, N images)"; and D:/Tools/pyrefly-scratch/art-batches/index.json records sent and sentAt. The rule covers the batches already finished: all 19 so far (the title key art rounds, the Yuna and Gullwings sets, the Leblanc mockups, art-1 and art-2 batches 1 to 8) were sent on 2026-10-06 between about 17:45 and 18:37 EDT (A-0469), and every new batch gets its own email within about 10 minutes of finishing. The driver first offered to send them through a Gmail connector he would connect; he answered with the Chrome instruction instead. Nothing else in his mailbox is touched.
+  - area process · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-06, in the Claude Code chat (the times are the session transcript's), four messages. 17:06:14 EDT, verbatim: "What’s the eta on the …
+- <a id="d-502"></a>**D-502** — DELEGATED PICKS: the two henchmen's idles of Acts I and II, chosen by the driver under his delegation, not by him: Dr. Goon (p_b04ae813, version 4, critic score 8.8) and Fem-Goon (p_c69090f4, version 3, 8.4), each the top score of its best of 7 (FFX-2 only)
+  - Bailey: “You make the selections for me as far as the experimental chapter goes.”
+  - What changed: At 17:21:44 EDT, when batch 1 of art-2 finished (brief b_3c694eb1, posted 17:03:25 EDT: the two idles at 7 versions each plus Rikku's and Paine's attacks, 4 chains, 20 images), the driver took the top-ranked version of each henchman's idle, the anchors their other poses are painted from. Its reasons, as it told him at 17:21:55: Dr. Goon, "the best three-quarter turn, and the clearest face"; Fem-Goon, "the matte finish, which matches Leblanc, Logos and Ormi better than the glossy versions". The seven versions scored 8.5, 8.5, 8.6, 8.8, 8.5, 8.5 and 8.5 for Dr. Goon and 7.7, 7.7, 8.4, 8.3, 8.1, 8.2 and 7.8 for Fem-Goon. He named no property of either, so he can overturn a pick and that henchman is then redone. Their attack, hurt and KO poses were painted next from these anchors (batches 3 and 4, auto-selected at 8.0 or more under the experiment's rule, D-494). Installed in the chapter on branch exp-leblanc (the idles in 30606c49, their other poses in d196435e); not merged and not deployed (the preview is D-505).
+  - area art · FFX-2 · adopted · delivery in progress · see [D-488](#d-488), [D-494](#d-494), [D-499](#d-499)
+  - Source: The driver, 2026-10-06 17:21:44 EDT (the Art Room's select command; its records are D:/Tools/art-room/data/approved.jsonl and decisions.log, not in …
+- <a id="d-503"></a>**D-503** — DELEGATED PICK: Leblanc's hurt pose, version 2 (p_7f698e5d, critic score 8.5), chosen by the driver under his delegation because its round was cut short and the room never auto-selects a cut-short round (FFX-2 only)
+  - Bailey: “You make the selections for me as far as the experimental chapter goes.”
+  - What changed: The round was Leblanc's hurt pose in batch 6 (brief b_cad2b5fd, posted 18:03:17 EDT), a best of 3: version 1 scored 8.3 (p_92a657b7) and version 2 8.5; the image tool refused version 3 three times, so the round ended with 2 of 3 versions, and the Art Room's auto-pose rule (8.0 or more) leaves a cut-short round to the driver. At 18:19:49 EDT the driver took version 2, the top-ranked, and told him at 18:25. He named no property of it, so he can overturn it and the pose is then redone. Not installed yet at this record (it is in the install lane's later rounds, with the other poses that landed after the first build); not merged and not deployed (the preview is D-505).
+  - area art · FFX-2 · adopted · delivery in progress · see [D-488](#d-488), [D-494](#d-494)
+  - Source: The driver, 2026-10-06 18:19:49 EDT (the Art Room's select command; its records are D:/Tools/art-room/data/approved.jsonl and decisions.log, not in …
+- <a id="d-504"></a>**D-504** — DELEGATED SELECTION: the experimental chapter's last old-art surfaces are painted next, chosen by the driver under his delegation: the six dialogue and cut-in portraits (Yuna Gunner, Rikku Thief, Paine Warrior, Leblanc, Logos, Ormi) and the pause close-up (FFX-2 only)
+  - Bailey: “You make the selections for me as far as the experimental chapter goes.”
+  - What changed: At 18:36:29 EDT, when all 44 must-have poses had a winner, the driver briefed the Art Room lane for the surfaces the chapter still draws from Chapter VI's old art (listed in section 14.4 of the handoff on branch exp-leblanc): the dialogue and cut-in portraits of the six speakers (the list is read from the chapter's story scripts and cut-ins, never guessed; the results screen's wedge hero is a portrait too), each matching the existing portrait's size, crop, facing and eye line (leblanc.png is 832x1216) with identity, costume and finish taken from the new idles, and the pause screen's Leblanc close-up (public/art/pause/leblanc.png). The pose role: 3 versions each, auto-selected at 8.0 or more under the experiment's rule (D-494), a flat mid-grey background unless the format needs alpha, the alpha check on every winner (haze over 1 percent never passes), one brief at a time, and the weekly ChatGPT gate kept (the usage was 64 percent against a 75 percent stop line). The painting lane installs nothing: the install lane wires the namespace for portraits/ and pause/ and installs when the art lands. In progress: the first portrait chains (the Gunner, Thief and Warrior girls and the Syndicate leader) had started when this row was written. He has not seen any of it and can overturn it.
+  - area art · FFX-2 · adopted · delivery in progress · see [D-488](#d-488), [D-494](#d-494), [D-497](#d-497)
+  - Source: The driver, 2026-10-06 18:36:29 EDT (its message to the Art Room lane), under D-494: Bailey, 2026-10-06 13:26:51 EDT, verbatim: "I have to go to work …
+- <a id="d-505"></a>**D-505** — The experimental Leblanc chapter goes on the Cloudflare preview address, and is redeployed there today as the new poses land; never on echoesofspira.com (FFX-2 only)
+  - Bailey: “Yes deploy the preview.”
+  - What changed: The driver may publish the experimental chapter to the preview address only (the echoes-of-spira-preview Worker, https://echoes-of-spira-preview.baileypillon.workers.dev/), never to production, and the driver reads it as covering today's redeploys to the same address as the new poses land, because that is what it recommended in the question: "I'll publish it right away, then redeploy it today as the new poses land." His words are the words for the deploy gate's owner override. The first preview run (branch exp-leblanc 30606c49, bundle D49XT3i5; every shipped image identical to its master and loading in WebKit and Chromium; A-0470) was refused because the candidate has no focused report and 39.1's deep-review debt is at the cap of two; only Bailey can override that (AGENTS.md, Release), and an override settles no review obligation. It covers this chapter on the preview address, not echoesofspira.com and not another build. Nothing in this row says the deploy has happened: the driver runs it and records it (docs/preview-deploys.log, ACTIONS.md).
+  - area release · FFX-2 · adopted · delivery in progress · see [D-488](#d-488), [D-497](#d-497), [D-506](#d-506)
+  - Source: Bailey, 2026-10-06 18:41:36 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "Yes deploy the preview. I’ll go with …
+- <a id="d-506"></a>**D-506** — Chapter XIII (Trema), PR-0407: when fewer than two girls are standing after Oversoul Paragon, a Retry at Trema opens with the Save Sphere's rule (HP and MP full, a KO'd girl back up, statuses kept); nothing else about the retry changes (FFX-2 only)
+  - Bailey: “I’ll go with all your recommendations” (blanket yes)
+  - What changed: His yes took the driver's recommendation, answer (a) of four (the same message's "Yes deploy the preview" is D-505). The retry bug was not the one first reported: a loss to Trema already retries at Trema, not at Paragon (D-146/TR5, "b"); the defect (PR-0407) is that when only one girl survives Paragon the carried state has no winning line and every Retry reopens it (0 wins in 200 at the Wait split, 0 in 240 under Active). Now a Retry at Trema with fewer than two girls standing opens like a Save Sphere: HP and MP full, a KO'd girl up, statuses kept (Chapter XI's rule). Only that case changes: with two or three standing a Retry replays the state exactly as entered, and the first entry into Trema is unchanged (the sources carry Paragon's state). No sourced number moves and Trema is not tuned (D-410). Measured with one girl standing: 175 of 200 wins per Retry (87.5 percent) at the Wait split and 181 of 240 (75.4 percent) under Active. Built on branch r392-trema (commit 95fb69aa, handoff de8bff32; A-0472); not merged and not live: it ships in 39.2 (D-495). The answers he did not take: (b) restart the chapter through party prep (about 6.5 percent per full run); (c) keep the carried state and say so on the defeat card (copy only, not built); (d) restore every Retry (measured, not built: it changes nothing for three girls at the Wait split and lifts two standing under Active from 42.5 to 63.8 percent).
+  - area chapters · FFX-2 · adopted · delivery in progress · see [D-146/TR5](#d-146-tr5), [D-410](#d-410), [D-490](#d-490), [D-495](#d-495), [D-505](#d-505) · refines [D-490](#d-490)
+  - Source: docs/handoff/r392-trema.md
 - **Picture** (chapters) — Approved: Experimental chapter, the Leblanc preview: target mockup B, Moonlit Blue Hall (FFX-2; the driver's pick for Bailey, delegated)
   - Bailey: “You make the selections for me as far as the experimental chapter goes.”
   - Delivery: The chapter is being built as a separate, additional chapter (D-488), preview worker only, never echoesofspira.com; Chapter VI keeps its encounter and its art. Its pictures are made in the Art Room with ChatGPT Images 2.5 (Flare for mockups, Sunburst for what ships, D-489); this mockup is the first of them and is not installed in any public/art.
