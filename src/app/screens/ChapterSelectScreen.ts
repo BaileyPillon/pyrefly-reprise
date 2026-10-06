@@ -21,6 +21,7 @@ import { BoardWarmer } from './frontend/boardWarm.ts';
 import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts';
 import { SecretDoor } from './frontend/secretDoor.ts';
 import { ff7ExperimentReady } from '../experiments/ff7Flag.ts';
+import { experimentRecord } from '../experiments/experimentRecords.ts';
 
 /** Where the secret door leads: the hidden FF7 experiment (`data/chapter-ff7-guard-scorpion.ts`). */
 const SECRET_CHAPTER: ChapterId = 'ff7-guard-scorpion';
@@ -256,6 +257,7 @@ export class ChapterSelectScreen extends Screen {
 
   private bestTime(id: string): number | null {
     const tile = this.tiles.find((t) => t.id === id);
+    if (tile?.chapter?.experimental) return experimentRecord(id).bestTimeMs; // an experiment's best time is in its own store (reading the save's would create a record there)
     return tile?.chapter ? this.app.save.chapter(id).bestTimeMs : null;
   }
 

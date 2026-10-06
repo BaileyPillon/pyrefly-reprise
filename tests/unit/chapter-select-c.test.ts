@@ -20,6 +20,7 @@ import { forgetBoardChapter } from '../../src/app/screens/frontend/boardFocus.ts
 import { Input } from '../../src/app/Input.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
 import { CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
+import { baseArtId } from '../../src/data/art/artNamespace.ts';
 import { buildChapterTiles, silhouetteKeysFor } from '../../src/app/screens/frontend/chapterGrid.ts';
 import { boardProgress } from '../../src/app/screens/frontend/chapterProgress.ts';
 import { CARD_CLEAR, compositionFor, PLATE_COMPOSITIONS } from '../../src/app/screens/frontend/chapterPlates.ts';
@@ -125,7 +126,7 @@ describe('the fixed list', () => {
     const rig = mount();
     const before = cards(rig);
     const ids = cardIds(rig);
-    expect(ids).toHaveLength(18);
+    expect(ids).toHaveLength(19); // the eighteen, then the Leblanc preview (2026-10-06)
     const moves = ['ArrowRight', 'ArrowRight', 'ArrowDown', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowLeft'];
     for (const code of moves) {
       rig.key(code);
@@ -145,7 +146,7 @@ describe('the fixed list', () => {
   it('puts Chapter VII in number order, between III and VIII, and it is playable since its unlock (D-278)', () => {
     const rig = mount();
     const numerals = cards(rig).map((c) => c.querySelector('.fe-card__num')?.textContent);
-    expect(numerals).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV', 'XVII', 'XVIII', 'IV', 'V', 'VI', 'XI', 'XIII', 'XV', 'XVI']);
+    expect(numerals).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV', 'XVII', 'XVIII', 'IV', 'V', 'VI', 'XI', 'XIII', 'XV', 'XVI', 'EXP']);
     const vii = card(rig, 'seymour-anima-macalania');
     expect(vii.classList.contains('fe-card--coming')).toBe(false);
     expect(vii.getAttribute('data-action')).toBeTruthy();
@@ -158,7 +159,7 @@ describe('the fixed list', () => {
     for (const c of cards(rig)) {
       const num = c.querySelector('.fe-card__num');
       const name = c.querySelector('.fe-card__name');
-      expect(num?.textContent).toMatch(/^[IVXL]+$/);
+      expect(num?.textContent).toMatch(/^([IVXL]+|EXP)$/); // EXP: the Leblanc preview
       expect(name?.textContent?.trim()).toBeTruthy();
       expect(num!.contains(name!) || name!.contains(num!)).toBe(false);
     }
@@ -192,7 +193,7 @@ describe('the progress strip', () => {
     expect(rig.screen.snapshot()['total']).toBe(18);
     expect(rig.root.querySelector('.cs-strip__count b')?.textContent).toBe('0');
     expect(rig.root.querySelector('.cs-strip__of')?.textContent).toBe('of 18 beaten');
-    expect(rig.root.querySelectorAll('.cs-pip')).toHaveLength(18);
+    expect(rig.root.querySelectorAll('.cs-pip')).toHaveLength(19); // the Leblanc preview has a pip (EXP) but is no part of "of 18"
     expect(rig.root.querySelectorAll('.cs-pip.is-lit')).toHaveLength(0);
     expect(rig.root.querySelectorAll('.cs-pip.is-coming')).toHaveLength(0);
   });
@@ -290,7 +291,7 @@ describe('the boss painted on its own scene', () => {
       const own = new Set([...silhouetteKeysFor(tile.chapter!), ...spriteKeysIn(tile.chapter), titleKey]);
       const keys = compositionFor(tile).layers.map((l) => l.key);
       expect(keys.length).toBeGreaterThan(0);
-      for (const k of keys) expect(own.has(k), `${tile.id} paints ${k}`).toBe(true);
+      for (const k of keys) expect(own.has(k) || own.has(baseArtId(k)), `${tile.id} paints ${k}`).toBe(true); // the Leblanc preview paints its namespaced twin of a boss of its own data
       expect(tile.sceneKey).toBe(tile.chapter!.sceneKey);
     }
   });

@@ -27,6 +27,7 @@ import {
   uiPortsRegistered,
 } from '../../engine/BattlePresenterFallbacks.ts';
 import { PaintedStage } from '../../engine/BattlePresenterStage.ts';
+import { inArtNamespace } from '../../data/art/artNamespace.ts';
 import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
@@ -417,21 +418,23 @@ export class BattleScreen extends Screen {
     if (!state) return;
     const boss = headlineEnemy(state, chapter.enemyGroupRef.bossId); // PR-0243
     if (!boss) return;
+    const ns = this.scene?.slots.artNamespace; // the scene's art namespace (the experimental Leblanc chapter): the card shows the paintings the field stages
     const party = state.activeIds
       .map((id) => state.combatants[id])
       .filter((c): c is NonNullable<typeof c> => Boolean(c))
       // Both keys, not one. The card wants the character's own id to find her
       // portrait and the sprite key to find the painting the field is staging
       // — which in FFX-2 is her dressphere, and in FFX is the same string.
-      .map((c) => ({ id: c.id, artId: c.spriteKey || c.id, name: c.name }));
+      .map((c) => ({ id: c.id, artId: inArtNamespace(ns, c.spriteKey || c.id), name: c.name }));
 
     const banner = new BattleStartBanner({
       root: this.root,
       chapterNumber: chapter.number,
+      ...(chapter.experimental ? { experimental: true as const } : {}),
       location: chapter.location,
       bossName: boss.name,
       subline: chapter.subtitle,
-      artKey: boss.spriteKey || boss.id,
+      artKey: inArtNamespace(ns, boss.spriteKey || boss.id),
       backdropKey: chapter.sceneKey,
       party,
       game: chapter.game,

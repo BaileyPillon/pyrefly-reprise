@@ -48,7 +48,8 @@ export interface BoardProgress {
 
 /** "N of M beaten" and the strip's marks, from the board's own tiles. */
 export function boardProgress(tiles: readonly ChapterTile[], selected: number): BoardProgress {
-  const playable = tiles.filter((t) => t.playable);
+  // An experiment (the FFX-2 Leblanc preview, `data/chapter-exp-leblanc.ts`) has a pip and a card but is no part of "N of M": that stays the eighteen.
+  const playable = tiles.filter((t) => t.playable && !t.chapter?.experimental);
   return {
     beaten: playable.filter((t) => t.cleared).length,
     total: playable.length,

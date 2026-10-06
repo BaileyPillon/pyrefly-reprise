@@ -6,6 +6,16 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-06 — The experimental Leblanc chapter: `ChapterId` 'exp-leblanc', `Chapter.number` 19, `EXPERIMENT_CHAPTERS`, `SceneStaging.artNamespace` (FFX-2 only; additive)
+
+Branch `exp-leblanc` (never merged, never deployed to production; the Cloudflare PREVIEW worker only). `src/data/encounters.ts` (a contract file) gains: `'exp-leblanc'` in `ChapterId` (and out of
+`ListedChapterId`, so it is in no `SaveData.chapters` table), `19` in `Chapter.number`, `EXPERIMENT_CHAPTERS` (the experiments with a card after the eighteen; `getChapter` finds them; `CHAPTERS` and
+`CHAPTER_IDS` stay the eighteen), and the `experimental` flag's comment (an experiment's attempts and clears go to `app/experiments/experimentRecords.ts`, never the save; FF7's is hidden and has its own
+flow, the FFX-2 preview has a card and plays through the chapters' own flow, `BattleScreenFlow.playChapter` handing it `experimentProgress` in place of the save). `src/scenes/types.ts` (`SceneStaging`):
+`artNamespace?`, the art namespace a scene's figures are read from (`src/data/art/artNamespace.ts`: the stage prefixes every art id it resolves; unset everywhere else, so every other chapter resolves
+exactly as before). The chapter record is Chapter VI's by reference with its own id, number, title and `sceneKey` (`src/data/chapter-exp-leblanc.ts`). Handoff: [exp-leblanc](handoff/exp-leblanc.md).
+Game case: FFX-2 only (the mechanism is shared plumbing, both games, with one user).
+
 ## 2026-10-05 — The strike reaches its target in every fight: `StageMotionPort.shape`, `ActionMotionPort.reachFor`, `EventCtx.burst`, `PaintedActor.poseShape` (release 39.1; both games; additive)
 
 Branch `r391-reach`. No file in the contract list changed; recorded because four shared surfaces gain an optional member and one registry goes. Handoff: [r391-reach](handoff/r391-reach.md).

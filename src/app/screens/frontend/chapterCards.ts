@@ -62,7 +62,7 @@ export function heroHtml(tile: ChapterTile, index: number, bestTimeMs: number | 
       <div class="fe-hero__fade"></div>
       ${victorySashHtml(tile, bestTimeMs)}
       <div class="fe-hero__num">${escapeHtml(numeral)}</div>
-      <div class="fe-hero__name">${escapeHtml(tile.title)}</div>
+      <div class="fe-hero__name${tile.title.length > XLONG_TITLE ? ' fe-hero__name--xlong' : ''}">${escapeHtml(tile.title)}</div>
     </div>
   `;
 }
@@ -99,11 +99,13 @@ export function proseHtml(tile: ChapterTile): string {
  */
 /** A title longer than this takes the smaller card-name size (`chapter-select-c.css`). */
 const LONG_TITLE = 22;
+/** A title longer than this (only the Leblanc preview's, 31) takes one more step down, on its card and on the hero. */
+const XLONG_TITLE = 28;
 
 export function cardHtml(tile: ChapterTile, index: number, selected: boolean, bestTimeMs: number | null = null): string {
   const num = `<span class="fe-card__num">${escapeHtml(tile.numeral ?? '')}</span>`;
   // PR-0275 (both games): a long title ("Sin: the Fins and the Core") steps down a size instead of ending in an ellipsis.
-  const name = `<span class="fe-card__name${tile.title.length > LONG_TITLE ? ' fe-card__name--long' : ''}">${escapeHtml(tile.title)}</span>`;
+  const name = `<span class="fe-card__name${tile.title.length > LONG_TITLE ? ' fe-card__name--long' : ''}${tile.title.length > XLONG_TITLE ? ' fe-card__name--xlong' : ''}">${escapeHtml(tile.title)}</span>`;
   const art = `<div class="fe-card__art">${plateArtHtml(tile, 'card')}</div><div class="fe-card__fade"></div>`;
   if (!tile.playable) {
     return `

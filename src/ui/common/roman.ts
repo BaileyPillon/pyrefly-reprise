@@ -11,6 +11,19 @@ const FIGURES: ReadonlyArray<readonly [number, string]> = [
   [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
 ];
 
+/**
+ * The numeral a chapter wears: its Roman figure, or `EXP` for an experiment (the FFX-2 Leblanc preview is number 19 on the board but is
+ * no "Chapter XIX": it is Chapter VI's mission in new paintings, `data/chapter-exp-leblanc.ts`).
+ */
+export function chapterNumeral(chapter: { number: number; experimental?: true }): string {
+  return chapter.experimental ? 'EXP' : romanNumeral(chapter.number);
+}
+
+/** The eyebrow over a chapter's opening cards: `CHAPTER VI`, or `EXPERIMENTAL` for the preview. */
+export function chapterLabel(chapter: { number: number; experimental?: true }): string {
+  return chapter.experimental ? 'EXPERIMENTAL' : `CHAPTER ${romanNumeral(chapter.number)}`;
+}
+
 export function romanNumeral(n: number): string {
   if (!Number.isInteger(n) || n < 1 || n > 3999) return String(n);
   let rest = n;

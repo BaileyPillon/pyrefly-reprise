@@ -17,6 +17,7 @@ export function entryCardWait(root: HTMLElement, chapter: Chapter): CoverWait {
     if (!info) return null;
     return {
       chapterNumber: chapter.number,
+      ...(chapter.experimental ? { experimental: true as const } : {}),
       location: chapter.location,
       bossName: info.bossName,
       subline: chapter.subtitle,

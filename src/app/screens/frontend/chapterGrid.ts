@@ -18,8 +18,10 @@
 
 import type { GameId } from '../../../battle/common/types.ts';
 import type { FfxFamilyGame } from '../../../battle/common/game.ts';
-import { CHAPTERS, type Chapter } from '../../../data/encounters.ts';
-import { romanNumeral } from '../../../ui/common/roman.ts';
+import { CHAPTERS, EXPERIMENT_CHAPTERS, type Chapter } from '../../../data/encounters.ts';
+import { artNamespaceOfScene, inArtNamespace } from '../../../data/art/artNamespace.ts';
+import { experimentRecord } from '../../experiments/experimentRecords.ts';
+import { chapterNumeral, romanNumeral } from '../../../ui/common/roman.ts';
 import { COMING_CHAPTERS, LOCKED_CHAPTER_IDS, type ComingChapter } from './comingChapters.ts';
 
 /**
@@ -97,9 +99,10 @@ const GROUP_LABELS: Readonly<Record<FfxFamilyGame, string>> = {
 /** The silhouette paintings for one built chapter. */
 export function silhouetteKeysFor(chapter: Chapter): readonly string[] {
   const override = SILHOUETTE_OVERRIDES[chapter.id];
-  if (override) return override;
   const first = chapter.enemyGroupRef.enemies[0];
-  return first ? [first.spriteKey] : [];
+  const keys = override ?? (first ? [first.spriteKey] : []);
+  const ns = artNamespaceOfScene(chapter.sceneKey); // the Leblanc preview draws its own paintings (`data/art/artNamespace.ts`)
+  return ns ? keys.map((k) => inArtNamespace(ns, k)) : keys;
 }
 
 function tileForChapter(chapter: Chapter, save: ClearedLookup): ChapterTile {
@@ -108,12 +111,12 @@ function tileForChapter(chapter: Chapter, save: ClearedLookup): ChapterTile {
     id: chapter.id,
     game: chapter.game,
     number: chapter.number,
-    numeral: romanNumeral(chapter.number),
+    numeral: chapterNumeral(chapter),
     title: chapter.title,
     location: chapter.location,
     sceneKey: chapter.sceneKey,
     silhouetteKeys: silhouetteKeysFor(chapter),
-    cleared: save.isCleared(chapter.id),
+    cleared: chapter.experimental ? experimentRecord(chapter.id).clears > 0 : save.isCleared(chapter.id), // an experiment's clears are in its own store, never the save
     playable: true,
     chapter,
   };
@@ -152,6 +155,8 @@ export interface ChapterRegistries {
   readonly coming?: readonly ComingChapter[];
   /** Registered chapters still shown as COMING. Defaults to `LOCKED_CHAPTER_IDS`. */
   readonly locked?: ReadonlySet<string>;
+  /** Experiments with a card after the numbered ones (the FFX-2 Leblanc preview). Defaults to `EXPERIMENT_CHAPTERS`. */
+  readonly experiments?: readonly Chapter[];
 }
 
 /**
@@ -185,6 +190,9 @@ export function buildChapterTiles(
     const own: ChapterTile[] = [];
     for (const chapter of chapters) {
       if (chapter.game === game) own.push(tileForChapter(chapter, save));
+    }
+    for (const chapter of registries.experiments ?? EXPERIMENT_CHAPTERS) {
+      if (chapter.game === game) own.push(tileForChapter(chapter, save)); // number 19: sorts after the eighteen
     }
     for (const row of coming) {
       if (row.game !== game) continue;

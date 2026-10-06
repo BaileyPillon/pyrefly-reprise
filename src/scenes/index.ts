@@ -24,6 +24,8 @@ import { buildBevelleUndergroundScene, BEVELLE_UNDERGROUND_SLOTS } from './bevel
 import { buildDreamsEndScene, DREAMS_END_SLOTS } from './dreams-end.ts';
 import { buildFarplanePainted, buildFarplaneScene, FARPLANE_SLOTS } from './farplane.ts';
 import { buildLeblancLastRoomScene, LEBLANC_LAST_ROOM_SLOTS } from './leblanc-last-room.ts';
+import { buildExpLeblancLastRoomScene, EXP_LEBLANC_LAST_ROOM_SLOTS } from './exp-leblanc-last-room.ts';
+import { EXP_LEBLANC_SCENE } from '../data/art/artNamespace.ts';
 import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-temple.ts';
 import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
 import { SIN_SCENE_ENTRIES, SIN_SCENE_FACTORIES } from './evrae-airship-sin.ts';
@@ -182,6 +184,9 @@ SCENES.set('farplane', {
  */
 SCENES.set('leblanc-last-room', { key: 'leblanc-last-room', title: 'Chateau Leblanc — the Last Room',
   build: buildDemoScene, slots: LEBLANC_LAST_ROOM_SLOTS, placeholder: false });
+/** The experimental Leblanc chapter's room (FFX-2 only): the same room over its own plate and art namespace (`./exp-leblanc-last-room.ts`). */
+SCENES.set(EXP_LEBLANC_SCENE, { key: EXP_LEBLANC_SCENE, title: 'Chateau Leblanc — the Last Room (new art)',
+  build: buildDemoScene, slots: EXP_LEBLANC_LAST_ROOM_SLOTS, placeholder: false });
 /**
  * Macalania Temple, the antechamber (Chapter 7, FFX only) — real
  * (`buildMacalaniaTempleScene` in {@link SCENE_FACTORIES}); `build` is the
@@ -260,6 +265,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'dreams-end': buildDreamsEndScene,
   'bevelle-underground': buildBevelleUndergroundScene,
   'leblanc-last-room': buildLeblancLastRoomScene,
+  [EXP_LEBLANC_SCENE]: buildExpLeblancLastRoomScene, // the experimental Leblanc chapter (FFX-2 only)
   'macalania-temple': buildMacalaniaTempleScene,
   'evrae-airship-deck': buildEvraeAirshipDeckScene,
   ...SIN_SCENE_FACTORIES, // Chapters XVII and XVIII (FFX only): the deck over Sin's plates

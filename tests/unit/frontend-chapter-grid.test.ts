@@ -9,7 +9,7 @@
  */
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { CHAPTERS, type Chapter, type ChapterId } from '../../src/data/encounters.ts';
+import { CHAPTERS, EXPERIMENT_CHAPTERS, type Chapter, type ChapterId } from '../../src/data/encounters.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
 import { COMING_CHAPTERS, LOCKED_CHAPTER_IDS } from '../../src/app/screens/frontend/comingChapters.ts';
 import {
@@ -42,8 +42,10 @@ describe('the board', () => {
     // none with a COMING row of its own; Chapter VII (Macalania) left its lock
     // on 2026-09-29 (D-278).
     expect(LOCKED_CHAPTER_IDS.size).toBe(0);
-    expect(tiles).toHaveLength(18);
-    expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length);
+    // The eighteen, then the Leblanc preview (2026-10-06, FFX-2 only: an experiment with a card, in no count of the eighteen).
+    expect(tiles).toHaveLength(18 + EXPERIMENT_CHAPTERS.length);
+    expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length + EXPERIMENT_CHAPTERS.length);
+    expect(tiles.filter((t) => !t.chapter?.experimental)).toHaveLength(CHAPTERS.length);
     expect(tiles.filter((t) => t.kind === 'coming')).toEqual([]);
   });
 
@@ -61,7 +63,8 @@ describe('the board', () => {
     expect(groups[0]!.tiles[3]!.id).toBe('seymour-anima-macalania');
     expect(groups[0]!.tiles[3]!.playable).toBe(true);
     expect(groups[0]!.tiles.every((t) => t.playable)).toBe(true);
-    expect(groups[1]!.tiles.map((t) => t.numeral)).toEqual(['IV', 'V', 'VI', 'XI', 'XIII', 'XV', 'XVI']);
+    // The FFX-2 group ends with the Leblanc preview, numbered 19 and wearing EXP.
+    expect(groups[1]!.tiles.map((t) => t.numeral)).toEqual(['IV', 'V', 'VI', 'XI', 'XIII', 'XV', 'XVI', 'EXP']);
     for (const group of groups) {
       const numbers = group.tiles.map((t) => t.number ?? Number.MAX_SAFE_INTEGER);
       expect(numbers).toEqual([...numbers].sort((a, b) => a - b));
@@ -127,7 +130,7 @@ describe('the board', () => {
     expect(live[0]!.playable).toBe(true);
     expect(live[0]!.numeral).toBe('VII');
     expect(live[0]!.silhouetteKeys).toEqual(['seymour-macalania']);
-    expect(unlocked.filter((t) => t.playable)).toHaveLength(CHAPTERS.length);
+    expect(unlocked.filter((t) => t.playable)).toHaveLength(CHAPTERS.length + EXPERIMENT_CHAPTERS.length);
   });
 
   it('Chapter 8 (Evrae) is UNLOCKED by Bailey\'s word and shows as a playable card; so is Chapter 7 (Macalania, D-278)', () => {
@@ -211,8 +214,9 @@ describe('the cursor', () => {
     const fromLastFfx = tiles.findIndex((t) => t.id === 'sin-face');
     expect(tiles[stepSelection(tiles, fromLastFfx, 1)]!.id).toBe('ffx2-bahamut');
     // Wrapping backwards from the first card lands on the last *playable* one
-    // — Ixion at Djose now, listed 2026-09-27 after Chapter XV in the FFX-2 group.
-    expect(tiles[stepSelection(tiles, 0, -1)]!.id).toBe('ffx2-ixion-djose');
+    // — the Leblanc preview since 2026-10-06 (after the eighteen in the FFX-2 group); Ixion at Djose (listed 2026-09-27) is the one before it.
+    expect(tiles[stepSelection(tiles, 0, -1)]!.id).toBe('exp-leblanc');
+    expect(tiles[stepSelection(tiles, 0, -2)]!.id).toBe('ffx2-ixion-djose');
     for (let i = 0; i < tiles.length; i++) {
       if (!tiles[i]!.playable) continue;
       expect(tiles[stepSelection(tiles, i, 1)]!.playable).toBe(true);

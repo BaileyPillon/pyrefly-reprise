@@ -13,7 +13,7 @@ import {
 } from '../../story/runner/CutsceneRunner.ts';
 import { DialogueBox } from '../../ui/common/DialogueBox.ts';
 import { ControlsHint, type ControlHintItem } from '../../ui/common/ControlsHint.ts';
-import { romanNumeral } from '../../ui/common/roman.ts';
+import { chapterLabel } from '../../ui/common/roman.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
@@ -180,8 +180,8 @@ export class CutsceneScreen extends Screen {
     if (chapter) {
       this.eyebrowEl = document.createElement('div');
       this.eyebrowEl.className = 'cutscene__eyebrow';
-      this.eyebrowEl.innerHTML = `<span class="cutscene__eyebrow-rule"></span><span class="cutscene__eyebrow-label">CHAPTER ${romanNumeral(
-        chapter.number,
+      this.eyebrowEl.innerHTML = `<span class="cutscene__eyebrow-rule"></span><span class="cutscene__eyebrow-label">${chapterLabel(
+        chapter,
       )} &middot; ${escapeHtml(chapter.location.toUpperCase())}</span>`;
       this.root.appendChild(this.eyebrowEl);
     }

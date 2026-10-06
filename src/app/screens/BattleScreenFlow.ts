@@ -41,6 +41,7 @@ import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
 import { drawRunSeed } from '../runSeed.ts';
+import { experimentProgress, type FlowProgress } from '../experiments/experimentRecords.ts';
 
 /** A screen the flow can await. */
 export interface FlowScreen<T> extends Screen {
@@ -311,12 +312,12 @@ export class GameFlow {
   private async playChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
     const chapter = getChapter(id);
     if (!chapter) return null;
-    if (chapter.experimental) {
+    if (chapter.experimental && chapter.game === 'ff7') { // FF7's hidden experiment has its own flow; the FFX-2 Leblanc preview plays through this one, below
       if (!this.running) [this.owned, this.handedOver] = [null, false]; // a fresh owner, as below
       return runExperiment(chapter, { ...opts, seed: opts.seed ?? drawRunSeed() }, { show: (s) => this.show(s), setStep: (s) => void (this.step = s), makeBattle: (o) => factories.battle?.(o) ?? new BattleScreen(o), results: (c, o) => (c.game === 'ff7' ? ff7Results((s) => this.show(s), c, o) : this.showResults(c, o)), // FF7: its own results windows and Game Over (C1, G1)
         playIn: (swap, o) => experimentPlayIn(this.app.uiRoot, chapter, swap, o) }); // FF7: its own swirl of the frozen board (F1)
     }
-    const save = this.app.save;
+    const save: FlowProgress = chapter.experimental ? experimentProgress : this.app.save; // an experiment keeps its attempts and clears in the experiments' store, never the save
     // FA3 = b (FFX-2 Ch. XI only): RETRY and RESTART ENCOUNTER past a Save Sphere re-enter that link.
     let { attempt, carry, opts: { seed } } = ({ opts } = openRun(this, id, opts)); // a fresh first seed (PR-0008)
     void preloadBattle(chapter, seed); // the battle's art loads behind prep and the scene (PR-0061)

@@ -158,19 +158,36 @@ export const LEBLANC_LAST_ROOM_SLOTS: SceneSlots = {
 };
 
 /**
+ * Which painting a Last Room draws, and the art namespace its figures come from (`src/data/art/artNamespace.ts`). Chapter VI's is
+ * `{ key: 'leblanc-last-room' }` (no namespace: every id resolves as it always did); the experimental chapter's
+ * (`./exp-leblanc-last-room.ts`) is its own plate and the `exp-leblanc` namespace.
+ */
+export interface LeblancPlate {
+  readonly key: string;
+  readonly artNamespace?: string;
+}
+
+const BASE_PLATE: LeblancPlate = { key: 'leblanc-last-room' };
+
+/**
  * **Heart of the Syndicate**, as a {@link SceneFactory}. Owns no actors — see
  * `docs/ENGINE-API.md#scene-builder-contract`.
  */
-export const buildLeblancLastRoomScene: SceneFactory = async (
-  opts: SceneBuildOptions = {},
-): Promise<SceneBuild> => {
+export const buildLeblancLastRoomScene: SceneFactory = (opts: SceneBuildOptions = {}): Promise<SceneBuild> => buildLastRoom(BASE_PLATE, opts);
+
+/** The same room (rigs, slots, lights, particles) over another plate and art namespace. Game case: FFX-2 only. */
+export function makeLeblancLastRoomScene(plate: LeblancPlate): SceneFactory {
+  return (opts: SceneBuildOptions = {}): Promise<SceneBuild> => buildLastRoom(plate, opts);
+}
+
+async function buildLastRoom(plate: LeblancPlate, opts: SceneBuildOptions): Promise<SceneBuild> {
   const group = new Group();
-  group.name = 'scene:leblanc-last-room';
+  group.name = `scene:${plate.key}`;
   const low = opts.quality === 'low';
   const cameraRef = opts.cameraRef ?? CAMERA_REF;
 
   // ---------------------------------------------------------------- backdrop
-  const url = artUrl('art/backdrops/leblanc-last-room.png');
+  const url = artUrl(`art/backdrops/${plate.key}.png`);
 
   const backdropOptions = {
     url,
@@ -332,6 +349,7 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
     partyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna,
     enemyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc,
     enemyLaneX: LEBLANC_ENEMY_LANE_X,
+    ...(plate.artNamespace ? { artNamespace: plate.artNamespace } : {}),
     palette: {
       ...ScenePalettes.chateauLeblanc,
     } satisfies ScenePalette,
@@ -359,4 +377,4 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
     },
   };
   return build;
-};
+}

@@ -1,0 +1,38 @@
+{
+ "yuna-gunner": {
+  "idle": {
+   "artRoom": {
+    "id": "p_3712fb7d",
+    "version": 3,
+    "file": "p_3712fb7d-yuna-gunner-idle-finish-b-v3.png",
+    "sha256": "ba6835695614208c524650d73642efc00658b616e2f2107965d32deb86978f74",
+    "score": 7.6
+   },
+   "sha256": "6f9ac5bdb118814e44506bfdfa0cbc4bda95ba370f76ed520a404838d4a5c210",
+   "size": [
+    674,
+    1548
+   ],
+   "baselineY": 1532,
+   "contentBox": [
+    16,
+    16,
+    658,
+    1532
+   ],
+   "facing": "right",
+   "head": null,
+   "headSource": "none",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "stanceX": 417
+   },
+   "provisional": null,
+   "installedAt": "2026-10-06T18:55:13.102Z"
+  }
+ }
+}

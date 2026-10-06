@@ -28,7 +28,7 @@ import type { InputSnapshot } from '../Input.ts';
 import type { FlowScreen } from './BattleScreenFlow.ts';
 import { createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
-import { romanNumeral } from '../../ui/common/roman.ts';
+import { chapterNumeral } from '../../ui/common/roman.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { rosterHtml, slotsHtml, statSheetHtml } from './PartyPrepContent.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
@@ -165,7 +165,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
         <span class="prep__eyebrow-rule"></span>
         <span class="prep__eyebrow-label">PARTY PREP</span>
       </div>
-      <div class="prep__where">${romanNumeral(this.chapter.number)} &middot; ${escapeHtml(
+      <div class="prep__where">${chapterNumeral(this.chapter)} &middot; ${escapeHtml(
         this.chapter.title.toUpperCase(),
       )} &mdash; ${escapeHtml(this.chapter.location.toUpperCase())}</div>
 

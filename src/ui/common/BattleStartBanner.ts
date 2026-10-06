@@ -29,7 +29,7 @@ import './battle-start-banner.css';
 import type { GameId } from '../../battle/common/types.ts';
 import { escapeHtml } from './html.ts';
 import { faceImgHtml, faceLayersHtml } from './portrait.ts';
-import { romanNumeral } from './roman.ts';
+import { chapterLabel } from './roman.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 
 export interface BattleStartBannerMember {
@@ -69,6 +69,8 @@ export interface BattleStartBannerOptions {
   game?: GameId;
   /** How long the card holds with no input. */
   holdMs?: number;
+  /** An experiment (the FFX-2 Leblanc preview): the eyebrow says EXPERIMENTAL, not a chapter numeral. */
+  experimental?: true;
 }
 
 /** Spec pace: the card is a beat, not a screen. */
@@ -115,7 +117,7 @@ export class BattleStartBanner {
 
     const eyebrow =
       opts.chapterNumber !== undefined
-        ? `<div class="bstart__eyebrow">CHAPTER ${romanNumeral(opts.chapterNumber)}${
+        ? `<div class="bstart__eyebrow">${chapterLabel({ number: opts.chapterNumber, ...(opts.experimental ? { experimental: true as const } : {}) })}${
             opts.location ? ` &middot; ${escapeHtml(opts.location.toUpperCase())}` : ''
           }</div>`
         : '';

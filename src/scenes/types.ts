@@ -230,6 +230,12 @@ export interface SceneStaging {
     bounce: Readonly<{ color: number; strength: number }>;
     erode: number;
   }>;
+  /**
+   * Draw every figure from this art namespace instead of the base art (`src/data/art/artNamespace.ts`): the stage prefixes each
+   * art id it resolves, so `yuna-gunner` is read from `characters/exp-leblanc-yuna-gunner/`. The experimental Leblanc chapter
+   * (FFX-2 only) is the one user; omitted everywhere else, where every id resolves exactly as it always did.
+   */
+  readonly artNamespace?: string;
 }
 
 /** The staging switches a build set, and only those. */
@@ -249,6 +255,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.poseShiftPx) out.poseShiftPx = build.poseShiftPx;
   if (build.restPoses === false) out.restPoses = false;
   if (build.figureLight) out.figureLight = build.figureLight;
+  if (build.artNamespace) out.artNamespace = build.artNamespace;
   return out;
 }
 
