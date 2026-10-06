@@ -6,6 +6,15 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-06 — REDUCE MOTION shortens the lunge; the boss reveal is measured through the lens shift: `CameraPort.frame`'s `lens`, `rigPose`/`frameFit`'s `lens`, `lungePlan`'s `LungeCtx` (release 39.2; both games for the lunge, FFX-2 desktop for the reveal; additive)
+
+Branch `r392-motion`. No file in the contract list changed; recorded because one shared port gains an optional argument. Handoff: [r392-motion](handoff/r392-motion.md).
+
+- `src/engine/BattlePresenterPorts.ts`: `CameraPort.frame?(rig, push, subjects, lens?)`: with `lens` true the rig is measured through the live camera's view offset too (the static lens shift CHAPTER FRAMING puts on the
+  picture, `fx/mix/framing.ts`). Absent or false is the measure as before, to the digit; `BattleCamera`, `PresetCamera`, `StillCamera` and `TargetFrameHold` forward it. `FrameFit.rigPose` / `frameFit` take the same optional `lens`.
+- `src/engine/motion/StrikeReach.ts`: `lungePlan` / `lungeDistance` take a `LungeCtx` (`{ stage, moments? }`: the old `{ stage }` still fits); with `moments.reducedMotion` true the solved lunge is cut to its start plus half of
+  what the solver added (`calmLunge`, `CALM_REACH_SHARE`). No port, event or engine field changes.
+
 ## 2026-10-05 — The strike reaches its target in every fight: `StageMotionPort.shape`, `ActionMotionPort.reachFor`, `EventCtx.burst`, `PaintedActor.poseShape` (release 39.1; both games; additive)
 
 Branch `r391-reach`. No file in the contract list changed; recorded because four shared surfaces gain an optional member and one registry goes. Handoff: [r391-reach](handoff/r391-reach.md).
