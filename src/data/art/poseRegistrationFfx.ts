@@ -104,6 +104,6 @@ export const POSE_REGISTRATION_FFX: PoseRegistrationTable = {
     ready: { scale: 1.245, stanceX: 287.0 },
     sleep: { stanceX: 354.5 },
     summon: { scale: 0.604, stanceX: 579.5 },
-    victory: { scale: 0.807, stanceX: 241.0 },
+    victory: { scale: 0.804, stanceX: 241.0 },
   },
 };
