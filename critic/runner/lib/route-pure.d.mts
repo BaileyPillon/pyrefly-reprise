@@ -16,3 +16,8 @@ export function swordplayPressNow(pos: number, prev: number, dtMs: number, zoneS
 export interface RouteEnd { screenAtEnd: string | null; resultsText?: string | null; final?: boolean; log?: readonly { type: string }[]; seen?: { links?: number; chainLength?: number; phase?: string } }
 export interface RouteOutcome { outcome: 'victory' | 'defeat' | 'stalled' | 'undecided'; from: string; stalledAt?: { link: number; phase: string }; detail?: string }
 export function deriveOutcome(end: RouteEnd): RouteOutcome;
+export const NO_SCRIPTED_CHANGE: readonly string[];
+export function scriptedChangeAllowed(chapterId: string, nochange?: unknown): boolean;
+export const DEFAULT_BUDGET_MS: number;
+export const LONG_FIGHT_BUDGET_MS: Readonly<Record<string, number>>;
+export function budgetFor(chapterId: string, explicit?: unknown): number;
