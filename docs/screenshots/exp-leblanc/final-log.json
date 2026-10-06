@@ -176,9 +176,6 @@
   {
    "k": "actors",
    "v": [
-    "rikku",
-    "paine",
-    "rikku",
     "yuna"
    ]
   },
@@ -188,19 +185,9 @@
     "ok": true,
     "detail": [
      {
-      "from": "paine",
-      "to": "ormi-entrance",
-      "amount": 124
-     },
-     {
-      "from": "rikku",
-      "to": "ormi-entrance",
-      "amount": 70
-     },
-     {
       "from": "yuna",
-      "to": "ormi-entrance",
-      "amount": 59
+      "to": "dr-goon",
+      "amount": 96
      }
     ]
    }
@@ -211,6 +198,7 @@
     "total": 163,
     "experimental": 106,
     "baseArtStillRead": [
+     "/art/characters/seymour-flux-body/idle.png",
      "/art/characters/yuna-white-mage/idle.png",
      "/art/characters/rikku-dark-knight/idle.png",
      "/art/characters/paine-warrior/idle.png",
@@ -258,7 +246,6 @@
      "/art/backdrops/gagazet.json",
      "/art/backdrops/gagazet.png",
      "/art/characters/seymour-flux-body/idle.json",
-     "/art/characters/seymour-flux-body/idle.png",
      "/art/characters/mortiorchis/idle.json",
      "/art/characters/mortiorchis/idle.png",
      "/art/characters/tidus/idle.json",
