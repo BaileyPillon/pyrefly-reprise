@@ -1,0 +1,187 @@
+{
+ "what": "Real-key run of FFX-2 Ch XIII (critic/runner/lib/route.mjs ffx2-trema win --seed=drawn --attempts=40), headless Chromium PYREFLY_BROWSER=gpu, the r392-trema build served by vite preview from dist-gate. Evidence folder (scratch, not committed): D:/Tools/pyrefly-scratch/r392-trema/evidence/ffx2-trema-win-r392/",
+ "build": "branch r392-trema at fa9a789e (the PR-0407 fix and the route change)",
+ "outcome": "victory",
+ "outcomeFrom": "results screen text",
+ "minutes": 70.82,
+ "scriptedChange": "not made (PR-0353: this chapter plays its own spherechanges)",
+ "budgetMs": 6000000,
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "defeat",
+   "seed": 1310857385,
+   "turns": 82,
+   "firstEnemyAction": {
+    "seq": 54,
+    "actor": "paragon",
+    "ability": "Attack",
+    "targets": [
+     "yuna"
+    ]
+   }
+  },
+  {
+   "attempt": 2,
+   "outcome": "defeat",
+   "seed": 1310858385,
+   "turns": 86,
+   "firstEnemyAction": {
+    "seq": 26,
+    "actor": "paragon",
+    "ability": "Attack",
+    "targets": [
+     "yuna"
+    ]
+   }
+  },
+  {
+   "attempt": 3,
+   "outcome": "defeat",
+   "seed": 1310859385,
+   "turns": 75,
+   "firstEnemyAction": {
+    "seq": 25,
+    "actor": "paragon",
+    "ability": "Attack",
+    "targets": [
+     "yuna"
+    ]
+   }
+  },
+  {
+   "attempt": 4,
+   "outcome": "defeat",
+   "seed": 1310860385,
+   "turns": 249,
+   "firstEnemyAction": {
+    "seq": 36,
+    "actor": "paragon",
+    "ability": "Attack",
+    "targets": [
+     "yuna"
+    ]
+   }
+  },
+  {
+   "attempt": 5,
+   "outcome": "victory",
+   "seed": 1310861386,
+   "turns": 219,
+   "firstEnemyAction": {
+    "seq": 3,
+    "actor": "trema",
+    "ability": "Waning Moon",
+    "targets": [
+     "yuna"
+    ]
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1310857385,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "retry after attempt 1",
+   "engineSeed": 1310858385,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "retry after attempt 2",
+   "engineSeed": 1310859385,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "retry after attempt 3",
+   "engineSeed": 1310860385,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "link 2",
+   "engineSeed": 1310860386,
+   "links": 2,
+   "firstEnemyAction": {
+    "seq": 3,
+    "actor": "trema",
+    "ability": "Waning Moon",
+    "targets": [
+     "yuna"
+    ]
+   }
+  },
+  {
+   "at": "retry after attempt 4",
+   "engineSeed": 1310861386,
+   "links": 2,
+   "firstEnemyAction": {
+    "seq": 3,
+    "actor": "trema",
+    "ability": "Waning Moon",
+    "targets": [
+     "yuna"
+    ]
+   }
+  },
+  {
+   "at": "link 2",
+   "engineSeed": 1310861386,
+   "links": 2,
+   "firstEnemyAction": {
+    "seq": 3,
+    "actor": "trema",
+    "ability": "Waning Moon",
+    "targets": [
+     "yuna"
+    ]
+   }
+  }
+ ],
+ "resultsText": "VIA INFINITO — CLOISTER 100 · CLEARED RESULTS · 49:47 Victory NEW BEST EXP 23,000 ×3 PARTY AP 52 PER DRESSPHERE GIL 18,000 ITEMS Dark Matter ×2 Y Yuna DARK KNIGHT · MASTERED +23,000EXP R Rikku ALCHEMIST · MASTERED +23,000EXP P Paine DARK KNIGHT · MASTERED +23,000EXP CONFIRM ▸",
+ "postSceneLines": [
+  "Why do you fight, if not to forget?",
+  "For what I made with them. Every day of it.",
+  "He smiled, I think. Then he was gone.",
+  "So... is that a Garment Grid? Dibs!"
+ ],
+ "afterConfirm": [
+  "cutscene"
+ ],
+ "afterConfirmScenes": [
+  [
+   "Hole in the floor. Out."
+  ]
+ ],
+ "afterResults": "chapter-select",
+ "boardAtEntry": {
+  "cleared": [],
+  "beaten": 0,
+  "total": 18
+ },
+ "boardAfter": {
+  "cleared": [
+   "ffx2-trema"
+  ],
+  "beaten": 1,
+  "total": 18
+ },
+ "boardAfterReload": {
+  "cleared": [
+   "ffx2-trema"
+  ],
+  "beaten": 1,
+  "total": 18
+ },
+ "consoleErrors": [
+  "[presenter] mid-battle script \"paragon-falls\" did not finish within 30000ms; abandoning the beat and resuming the battle"
+ ],
+ "fails": []
+}

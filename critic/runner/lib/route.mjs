@@ -26,7 +26,7 @@ import path from 'node:path';
 import { parseArgs, requireBase, requireEvidence } from './cli.mjs';
 import { makeIndexer } from './lib.mjs';
 import { playFight, closeFight } from './route-fight.mjs';
-import { deriveOutcome } from './route-pure.mjs';
+import { budgetFor, deriveOutcome, scriptedChangeAllowed } from './route-pure.mjs';
 import { watchThenTap } from './route-scene.mjs';
 import { MODE, makeAudioLog, makeInput, makeSnap, openRoute, readDboxTimeline } from './route-evidence.mjs';
 import { battleSeedRead, makeChooser, measureCardVsRows, measureFoc, readRows, targetsUp } from './route-ui.mjs';
@@ -37,7 +37,7 @@ if (!id) throw new Error('usage: route.mjs <chapterId> <win|lose> --base=<url> -
 const base = requireBase(args);
 const evidence = requireEvidence(args);
 const [W, H] = String(args.size ?? '1600x900').split('x').map(Number);
-const budget = Number(args.budget ?? 900000);
+const budget = budgetFor(id, args.budget); // PR-0353: an explicit --budget wins; Chapter XIII's two links get 100 minutes, not 15
 const MAXA = Number(args.attempts ?? process.env.ATTEMPTS ?? 1);
 const seedArg = String(args.seed ?? '1');
 const pinned = seedArg === 'drawn' ? null : Number(seedArg) | 0;
@@ -45,7 +45,7 @@ const game = id.startsWith('ffx2') ? 'ffx2' : 'ffx';
 const flags = { touch: Boolean(args.touch), gamepad: Boolean(args.gamepad), reduceMotion: Boolean(args['reduce-motion']) };
 const ctxTag = [flags.touch && 'touch', flags.gamepad && 'pad', flags.reduceMotion && 'rm'].filter(Boolean).join('-');
 const dir = [id, goal, args.tag, ctxTag].filter(Boolean).join('-');
-const env = { FOCUS: args.focus ?? process.env.FOCUS, AVOID: args.avoid ?? process.env.AVOID, NOCHANGE: args.nochange ?? process.env.NOCHANGE };
+const env = { FOCUS: args.focus ?? process.env.FOCUS, AVOID: args.avoid ?? process.env.AVOID, NOCHANGE: scriptedChangeAllowed(id, args.nochange ?? process.env.NOCHANGE) ? undefined : (args.nochange ?? process.env.NOCHANGE ?? 'chapter') }; // PR-0353: Chapter XIII never makes the scripted CHANGE
 const t00 = Date.now();
 const rec = {
   chapter: id, game, goal, size: `${W}x${H}`, base, mode: MODE,
@@ -59,6 +59,8 @@ const note = (k, v) => { rec.steps.push({ ms: Date.now() - t00, k, v }); console
 const continuityNote = (c) => ({ file: 'continuity/continuity.json', checks: Object.fromEntries(Object.entries(c.checks ?? {}).map(([k, v]) => [k, v.result])), reasons: Object.fromEntries(Object.entries(c.checks ?? {}).map(([k, v]) => [k, v.reasons])), error: c.error ?? null });
 const { browser, page, consoleErrors, notFound, htmlImages, net, contexts } = await openRoute({ base, width: W, height: H, ...flags });
 rec.contexts = contexts;
+rec.scriptedChange = game !== 'ffx2' || goal !== 'win' ? 'not applicable' : env.NOCHANGE ? `not made (${env.NOCHANGE === 'chapter' ? 'PR-0353: this chapter plays its own spherechanges' : '--nochange'})` : 'made once per attempt (route-fight.mjs)';
+rec.budgetMs = budget;
 const input = makeInput(page, contexts);
 const chooser = makeChooser(page, input, contexts);
 const meta = { game, chapter: id, size: rec.size, input: flags.touch ? 'touch + keyboard' : flags.gamepad ? 'gamepad shim + keyboard' : 'keyboard (Playwright)', injected: false, seed: pinned ?? 'drawn' };

@@ -11,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 
 import { letterTagsOf } from '../../src/battle/ffx/letterTags.ts';
 import type { BattleState } from '../../src/battle/common/types.ts';
-import { BUSHIDO_KEYS, BUSHIDO_KEYS_BY_BUTTON, dboxStep, deriveOutcome, isAllDisabledOverlay, keysForChips, letterTagMap, minigameKindOf, resolveTargetId, slugOf, swordplayPressNow, type DboxMem, type DboxSample } from '../../critic/runner/lib/route-pure.mjs';
+import { BUSHIDO_KEYS, BUSHIDO_KEYS_BY_BUTTON, DEFAULT_BUDGET_MS, LONG_FIGHT_BUDGET_MS, NO_SCRIPTED_CHANGE, budgetFor, dboxStep, deriveOutcome, isAllDisabledOverlay, keysForChips, letterTagMap, minigameKindOf, resolveTargetId, scriptedChangeAllowed, slugOf, swordplayPressNow, type DboxMem, type DboxSample } from '../../critic/runner/lib/route-pure.mjs';
 
 const stateOf = (defs: [string, string][]): BattleState =>
   ({ enemyIds: defs.map(([id]) => id), combatants: Object.fromEntries(defs.map(([id, name]) => [id, { id, name }])) }) as unknown as BattleState;
@@ -209,5 +209,34 @@ describe('the end of a route is read from what the game shows (PR-0261)', () => 
 
   it('a single-link chapter (no chain length) is its own last link', () => {
     expect(deriveOutcome({ screenAtEnd: 'cutscene', log: link1Won, seen: { links: 1 } }).outcome).toBe('victory');
+  });
+});
+
+describe('Chapter XIII: the route does not script a CHANGE that costs the fight, and lets the two links run (PR-0353, FFX-2 only)', () => {
+  it('names Chapter XIII and no other chapter, so every other FFX-2 route still captures the Garment Grid menu', () => {
+    expect([...NO_SCRIPTED_CHANGE]).toEqual(['ffx2-trema']);
+    expect(scriptedChangeAllowed('ffx2-trema', undefined)).toBe(false);
+    for (const id of ['ffx2-bahamut', 'ffx2-vegnagun-shuyin', 'ffx2-leblanc', 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-ixion-djose']) expect(scriptedChangeAllowed(id, undefined), id).toBe(true);
+  });
+
+  it('an explicit --nochange skips it anywhere', () => {
+    expect(scriptedChangeAllowed('ffx2-bahamut', true)).toBe(false);
+    expect(scriptedChangeAllowed('ffx2-bahamut', '1')).toBe(false);
+  });
+
+  it('the attempt budget: 15 minutes by default, 100 for Chapter XIII, and an explicit --budget wins everywhere', () => {
+    expect(budgetFor('ffx2-bahamut', undefined)).toBe(DEFAULT_BUDGET_MS);
+    expect(DEFAULT_BUDGET_MS).toBe(900000);
+    expect(budgetFor('ffx2-trema', undefined)).toBe(6000000);
+    expect(budgetFor('ffx2-trema', '1680000')).toBe(1680000);
+    expect(budgetFor('ffx2-bahamut', 120000)).toBe(120000);
+    expect(budgetFor('ffx2-trema', '')).toBe(LONG_FIGHT_BUDGET_MS['ffx2-trema']);
+  });
+
+  it("route.mjs reads both through those helpers, so the defaults above are the route's", () => {
+    const src = fs.readFileSync('critic/runner/lib/route.mjs', 'utf8');
+    expect(src).toMatch(/budgetFor\(id, args\.budget\)/);
+    expect(src).toMatch(/scriptedChangeAllowed\(id, /);
+    expect(src).not.toMatch(/Number\(args\.budget \?\? 900000\)/);
   });
 });
