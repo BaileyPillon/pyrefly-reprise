@@ -15,8 +15,12 @@ Not merged, not deployed, nothing in `D:/Final Fantasy/public/art` touched. The 
 - 19:25 EDT, verbatim: "use what i just approved for the new title screen please, it's soooo epic i love it."
 - It shows Yuna, Rikku and Paine from behind in the lower left, a lavender flower field with golden pyreflies, a golden crystal spire on the water at right.
 
-What Bailey approved is the picture. Everything in section 4 is a consequence of putting it on the existing screen that he has not seen: the
-main session decides what to show him (target and build side by side: `docs/screenshots/title-gullwings-target-vs-build.png`).
+What Bailey approved is the picture. Everything in section 4 is a consequence of putting it on the existing screen, which he had not seen when
+this was built: the main session decides what to show him (target and build side by side: `docs/screenshots/title-gullwings-target-vs-build.png`).
+
+**Update, 2026-10-05 evening (records):** the main session then showed him the screen, and he approved decisions 1 and 2 of section 4 (the
+silhouettes out, D-460; the panel top-left, D-459; both in `DECISIONS.md` on main). Of two crops of `docs/screenshots/title-gullwings-1920x1080.png`
+he wrote, verbatim: "i like this one". Decisions 3 to 7 are still the build's own choices, which he has not named.
 
 ## 2. The art (staged, not installed)
 
@@ -62,12 +66,16 @@ No new module (`node tools/orphans.mjs` has nothing to report for this change), 
 
 ## 4. Decisions this build takes, for the main session to show Bailey
 
+**Status, 2026-10-05 evening: decisions 1 and 2 are approved by Bailey** (D-460 and D-459 in `DECISIONS.md` on main; his words are with each decision below).
+Decisions 3 to 7 are the build's own choices: he has not named them, so they stay open on the board tile in `docs/target/targets.json`
+("Title key art: the Art Room's Gullwings Farplane Field (both games)").
+
 Dropping the file in as it was (`docs/screenshots/title-gullwings-before-naive-swap-1920x1080.png`) has four defects: the paper slab sits in front of Yuna and
 Rikku and hides both; the concept's two black silhouettes (Tidus, Yuna) stand in the flower field as two extra people; the grade makes the pastel picture dull;
 the near plane (a 61 to 100 % ramp over the lower frame) draws the heroes' legs twice. The smallest changes that remove each are below, each with its undo.
 
-1. **The two silhouettes on the shore are no longer drawn** (Tidus, Yuna as ink cut-outs from the concept's `after.png`). The picture already has three people. Undo: `TITLE_CAST_ON = true` in `titleMarkup.ts` (the CSS, the parallax layer and the tests for it stay).
-2. **The slab moved up and got 20 % shorter.** Same slab, same skew, same words; its top went from 214 to 22 grid units, the wordmark from 76 to 62 units, tighter padding and gaps (343 to 274 units tall). It ends at 0.37 of the frame over the pink clouds, and the three heads (at 0.44) stay clear. It is **not** scaled by a transform: that would draw the 14 px type floor below 14 effective px (PR-0066, CHK-003; `frontend-css-type-floor.test.ts` pins every size). The drop shadow is shorter (6 down, 24 blur, 0.40 instead of 26, 70, 0.72) because the old one reached the heroes' faces. The art's own prompt asked for a calm upper-centre sky for the wordmark; two other places are mocked up from CSS overrides, not built: **top centre** (`title-gullwings-option-top-centre-mockup-1920x1080.png`) and **lower right** over the field (`...-option-lower-right-mockup-1920x1080.png`). A different placement is a change of `left` and `top` in `.fe-title__slab`.
+1. **The two silhouettes on the shore are no longer drawn** (Tidus, Yuna as ink cut-outs from the concept's `after.png`). The picture already has three people. Undo: `TITLE_CAST_ON = true` in `titleMarkup.ts` (the CSS, the parallax layer and the tests for it stay). **Approved by Bailey, 2026-10-05 (about 21:00 EDT, the Claude Code chat's question form): "Remove them (Recommended)" to "On your new title screen, should the two black Tidus and Yuna shadow figures (first picture, on the right) be removed, so only your painting shows (second picture)?" (asked twice: the first time he asked what it meant) = D-460.** `TITLE_CAST_ON` stays false; the undo is not wanted now.
+2. **The slab moved up and got 20 % shorter.** Same slab, same skew, same words; its top went from 214 to 22 grid units, the wordmark from 76 to 62 units, tighter padding and gaps (343 to 274 units tall). It ends at 0.37 of the frame over the pink clouds, and the three heads (at 0.44) stay clear. It is **not** scaled by a transform: that would draw the 14 px type floor below 14 effective px (PR-0066, CHK-003; `frontend-css-type-floor.test.ts` pins every size). The drop shadow is shorter (6 down, 24 blur, 0.40 instead of 26, 70, 0.72) because the old one reached the heroes' faces. The art's own prompt asked for a calm upper-centre sky for the wordmark; two other places are mocked up from CSS overrides, not built: **top centre** (`title-gullwings-option-top-centre-mockup-1920x1080.png`) and **lower right** over the field (`...-option-lower-right-mockup-1920x1080.png`). A different placement is a change of `left` and `top` in `.fe-title__slab`. **Approved by Bailey, 2026-10-05 (about 21:00 EDT, the question form): "Top-left (built)" to "Where should the "Echoes of Spira" title panel sit on your new title screen?" (the other options were "Top centre" and "Lower right") = D-459. He then said "i like this one" of two crops of `docs/screenshots/title-gullwings-1920x1080.png`, so the top-left layout is approved by sight as well. The two mock-ups need nothing more.**
 3. **The grade is light.** The concept's grade (brightness 0.78 under a 0.66 black cap, a 0.72 foot, a 0.62 vignette) was cut for the dusk plate; over this picture it measures 0.64 of the approved picture's mean luminance (sky band 0.47, foot band 0.26). Now: no filter on the picture, and a scrim of three named strengths on `.fe-title` (`--fe-scrim-top` 0.12, `--fe-scrim-foot` 0.16, `--fe-scrim-edge` 0.14): 0.98 of the approved luminance (sky 0.96, centre 1.00, foot 0.90). Nothing the chrome needs comes from the grade (the slab, chip and hint row have their own backgrounds). The pure picture is `.fe-title__grade { display: none; }`; a moodier one is a bigger number. Before and after: `title-gullwings-grade-before-after.png`.
 4. **The strap ("Final Fantasy X and X-2", the vertical gold text at the right) has a dark halo and full gold.** It was 78 % gold with nothing behind it, which the old dark edge carried; on the pink clouds and lilac flowers it measures 1.3:1 (WCAG contrast, median over the letters, 1920x1080); with the halo 5.9:1. An edge scrim would have dimmed the picture instead. Before and after: `title-gullwings-strap-before-after.png`.
 5. **The crop follows the heroes in a window that is not 16:9.** `--fe-art-x/-y` (30 %, 45 %) are `keyart.json`'s `focal`, used the way the pause plates use theirs: the three heroes stay on screen down to 4:3 and the spire down to about 1:1 (the old 50 % cut Yuna off at 5:4). A phone anchors at 14 %: all three heads in frame (390x844), the spire and Paine's sword out. The phone slab went from 120 to 36 units from the top so it clears the heads. The `focal` in the sidecar is (0.30, 0.45), the heads where the gaze toward the spire starts; the midpoint of the gaze line (0.42, 0.40) would have cut Yuna off at 5:4 (justified in `keyart.json`).
@@ -124,7 +132,7 @@ The clearance shrinks as a window gets wider than 3:1 (the heroes rise in the fr
 
 ## 8. Not done, and limits
 
-- Bailey has not seen the screen. Nothing here is live or merged; the layout choices in section 4 are mine.
+- Nothing here is live or merged. Bailey has seen the screen as screenshots: decisions 1 and 2 of section 4 are his (D-460, D-459) and he said "i like this one" of the 1920x1080 frame; decisions 3 to 7 are still the build's own choices, which he has not named.
 - The wordmark is still the type on a paper slab; a painted logo is the follow-up recorded in `titleMarkup.ts` (`docs/handoff/r38-rename.md`).
 - At 1280x720 the eyebrow wraps to two lines (the 14 px floor makes it wider than the slab's text column; the old slab's column was about as wide, so the arithmetic is the same, but the old frame was not re-shot to prove it).
 - 360x640 clears Yuna's hair by 5 px only; windows wider than 3:1 meet the heroes (section 6).
