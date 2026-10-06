@@ -18,7 +18,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 466, from 2026-09-15 to 2026-10-06 (ids A-0001 to A-0466), 245 of them linked to at least one decision (370 distinct decision ids).
+- **Rows:** 467, from 2026-09-15 to 2026-10-06 (ids A-0001 to A-0467), 246 of them linked to at least one decision (388 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
@@ -26,7 +26,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | art | 51 |
 | deploy | 50 |
 | review | 106 |
-| records | 26 |
+| records | 27 |
 | infrastructure | 22 |
 | account | 12 |
 | download | 11 |
@@ -36,21 +36,27 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 169 |
+| October 2026 | 170 |
 
-- **By game:** 352 both, 56 n/a, 31 FFX, 27 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **By game:** 353 both, 56 n/a, 31 FFX, 27 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
 - **Deploys and releases:** 50 deploy rows: 45 lines of docs/deploys.log (39 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 1 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to release 39 on echoesofspira.com (2026-10-05).
 - **Reviews:** 106 rows: 31 focused reviews (30 SHIP, 1 HOLD), 39 live checks (37 PASS, 1 FAIL, 1 UNVERIFIED), 19 deep rounds with a report (10 SHIP, 6 HOLD, 3 no verdict) and 17 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 23 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-06](#2026-10-06) (7) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-06](#2026-10-06) (8) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
 ### 2026-10-06
 
+- **A-0467** · `records` · both · **Recorded Bailey's 12:00 to 14:07 decisions of 2026-10-06 (D-480 to D-497): cast repaint withdrawn, the experimental Leblanc chapter, 39.2, delegation, priority; read the Sunburst facts (both games; records only)**
+  - What: The records sub-agent (Sonnet) added decisions D-480 to D-497 to docs/target/decisions.json, each with his words verbatim and the transcript time (the 12:00:04 repaint request and the four 12:01:29 picks as superseded rows pointing at D-486 or D-489, the 12:02:41 archive, the 12:33:59 withdrawal, the 12:34:36 title, the 12:36:52 to 12:39:40 chapter and its approval of the driver's four-item summary split into its items, the 12:40:28 three picks as three rows, the 12:41:07 Flare fallback and cost request, the 13:26:51 delegation, the 13:27:27 ship-39.2 answer, the first delegated pick and the 14:07:10 priority); a tile for the experimental chapter's target (mockup B, Moonlit Blue Hall, the driver's pick) in the chapters group of docs/target/targets.json with the picture and the four-option sheet in docs/concepts/exp-leblanc/; a WITHDRAWN note at the top of docs/plans/cast-repaint-2026-10-06.md; and this row. It also read OpenAI's own pages for ChatGPT Images 2.5 (model ids, per-image price by size and quality from the image generation guide's calculator, rate limits, transparent background, API billing separate from ChatGPT Pro, what Codex documents) for the driver; the figures are in D-489. No money was spent and nothing was downloaded beyond reading pages.
+  - Who: records sub-agent (Sonnet) under the driver session · Decisions: D-480, D-481, D-482, D-483, D-484, D-485, D-486, D-487, D-488, D-489, D-490, D-491, D-492, D-493, D-494, D-495, D-496, D-497
+  - Result: done; recorded on main
+  - Evidence: `docs/target/decisions.json, docs/target/targets.json and docs/target/actions.json` · `DECISIONS.md and ACTIONS.md` · `docs/plans/cast-repaint-2026-10-06.md` · `docs/concepts/exp-leblanc/` · `tests/unit/decisions-ledger.test.ts and tests/unit/actions-ledger.test.ts`
+  - Reversible: yes, documentation only; revert the records commit
 - **A-0466** · `records` · both · **Release 39.1 recorded: the CHANGELOG entry and page with 15 pictures, decisions D-478 and D-479 and the shipped delivery of D-437 and D-457 to D-461, action rows A-0452 onward, and the NOW.md entry**
   - What: The records sub-agent (Sonnet) wrote CHANGELOG.md (53 entries now) and docs/changelog/release-39-1.md with 15 JPEG pictures (the title at 1600x900 and on a phone, the Chapter I and Chapter IV strikes, the 4K pause, the Lulu and Rikku lifts, Tidus's poses before and after, B5, B6, B9, B10, B11 and the colour switch), every link checked (the commit message says 16 pictures; the page holds 15); two decisions he gave in chat that were not yet rows (D-478 the private art repo, D-479 ship tonight); the delivery of D-437, D-457, D-458, D-459, D-460 and D-461 changed from in-progress to implemented with a shipped line (D-457's own text had said the lift would not ride in 39.1, and does not any more); a line on E-081 for the runner change; action rows A-0452 to A-0466; the runner defaults (A-0465) and the NOW.md entry for 39.1. DECISIONS.md and ACTIONS.md were re-rendered. Not touched: the other decisions whose items shipped in 39.1 (D-442, D-443, D-445, D-446, D-448, D-449, D-450, D-451, D-454, D-440) still read in-progress and are listed for the driver.
   - Who: records sub-agent (Sonnet) under the driver session · Decisions: D-437, D-457, D-458, D-459, D-460, D-461, D-478, D-479

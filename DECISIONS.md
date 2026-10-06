@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-930 decisions in all: 479 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 125 picture decisions. 619 of the written decisions record a blanket yes.
+949 decisions in all: 497 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 624 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 870 |
+| adopted | 884 |
 | proposed | 11 |
 | deferred | 4 |
 | rejected | 11 |
-| superseded | 34 |
-| **All** | **930** |
+| superseded | 39 |
+| **All** | **949** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 73 |
-| art | 220 |
-| visuals | 69 |
-| camera | 31 |
+| combat | 74 |
+| art | 230 |
+| visuals | 70 |
+| camera | 32 |
 | audio | 30 |
-| ui | 121 |
+| ui | 122 |
 | story | 15 |
-| chapters | 177 |
+| chapters | 178 |
 | guide | 28 |
-| release | 32 |
+| release | 34 |
 | hosting | 14 |
-| process | 73 |
+| process | 75 |
 | critic | 29 |
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **930** |
+| **All** | **949** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 415 |
+| both games | 428 |
 | FFX only | 278 |
-| FFX-2 only | 220 |
+| FFX-2 only | 226 |
 | FF7 hidden experiment | 17 |
-| **All** | **930** |
+| **All** | **949** |
 
 ## Standing rules in force
 
@@ -97,6 +97,8 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **Art matches the game's own art**: every picture made in the Art Room must match the visual style of the paintings already in the game (title key art, backdrops, character idle paintings); Ink & Gold (navy, gold, parchment) is the interface look only, never a painting palette. Decision [D-473](#d-473) (2026-10-05, both games).
 - **Critic loop cap**: every Art Room critic loop (art, design and functionality) stops after at most 2 revisions per round (3 versions); below 8 still returns a ranked list of issues and a revision until the cap is reached. Decision [D-477](#d-477) (2026-10-05, both games).
 - **The game's art is kept with full version history in a private GitHub repository, BaileyPillon/pyrefly-art, apart from the public game repo: every painting is archived there before it is replaced, and the approved masters are kept as they are now (both games)**: Before any painting in public/art is replaced, archive it to the private art repo with tools/archive-replaced.mjs; copy each newly approved master into its current/ folder; the public game repo never receives public/art. Decision [D-478](#d-478) (2026-10-05, both games).
+- **The driver makes the selections for the experimental chapter while he is at work: mockups, anchors, poses, backdrops; every pick is recorded as a delegated pick with his words (FFX-2 only)**: For the experimental Leblanc chapter only, the driver makes the end-state and art selections on his behalf; every such pick is recorded as delegated, with these words, in docs/target/targets.json (the tile's inferred list) and decisions.json, so he can overturn it; nothing outside that chapter is delegated and spending money or downloading still needs his yes. Decision [D-494](#d-494) (2026-10-06, FFX-2).
+- **Priority: the playable experimental chapter comes first, with all resources; everything else that was in progress comes second (both games)**: The playable experimental Leblanc chapter is the first priority for the driver and every lane until he says otherwise; everything else already in progress is second and continues behind it. Decision [D-497](#d-497) (2026-10-06, both games).
 
 ## Waiting on Bailey's yes
 
@@ -117,7 +119,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06)
 
 ## Ledger
 
@@ -4167,3 +4169,103 @@ Monday · 44 decisions
   - Delivery: Built on branch title-gullwings-keyart (fa09c73f; docs/handoff/title-gullwings-keyart.md), not merged and not live. The new art is staged (D:/Tools/pyrefly-art-staging/title-gullwings/) and is NOT installed in any public/art: the swap is owed at integration into the 39.1 release tree, together with the branch's docs/target/approved-hashes.json change. Bailey has seen the screenshot and likes it (D-459, D-460).
   - area visuals · both games · adopted · delivery in progress · see [D-460](#d-460), [D-459](#d-459)
   - Source: docs/target/targets.json, group polish, tile "Title key art: the Art Room's Gullwings Farplane Field (both games)"
+
+### 2026-10-06
+
+Tuesday · 19 decisions
+
+- <a id="d-480"></a>**D-480** — From now on the game's artwork is made with Codex through the Art Room, beginning with the characters and bosses (the cast repaint); withdrawn the same day by D-486 (both games)
+  - Bailey: “from now on you will coordinate with codex in art room to generate artwork for the game beginning with the characters and bosses”
+  - What changed: The driver wrote the plan docs/plans/cast-repaint-2026-10-06.md (the FFX party first with Tidus as the pilot, then the FFX-2 girls, then the bosses chapter by chapter) and began changing the Art Room for it (an anchor idle per figure that only he approves, a veto sheet per figure). At 12:00:17 he asked whether anything needed his approval or change, and at 12:01:29 he answered the four questions of D-481 to D-484. At 12:33:59 he withdrew it (D-486). No repainted figure was ever installed: no file of public/art changed after this message, and the plan now carries a WITHDRAWN note at its top.
+  - area art · both games · superseded by [D-486](#d-486) · nothing to build · see [D-481](#d-481), [D-482](#d-482), [D-483](#d-483), [D-484](#d-484), [D-486](#d-486)
+  - Source: docs/plans/cast-repaint-2026-10-06.md; AGENTS.md
+- <a id="d-481"></a>**D-481** — Cast repaint approval: he approves each character's idle by hand (best of 7), the other poses are auto-approved at a critic score of 8 or more, and a veto sheet per character goes to him before anything ships; withdrawn by D-486 (both games)
+  - Bailey: “Anchor + veto sheet (Recommended)” (blanket yes)
+  - What changed: The option's own description on the form, verbatim: "You approve each character's idle by hand (best of 7). Its other poses are painted from that idle so they match it. They're auto-approved if the critic scores 8+, and you get a contact sheet per character to veto before anything ships." The driver turned the Art Room's overnight auto-approval off because of it (an anchor was never to be auto-approved). Superseded with the repaint: no anchor or veto sheet is made for the main game's cast.
+  - area art · both games · superseded by [D-486](#d-486) · nothing to build · see [D-480](#d-480), [D-486](#d-486)
+  - Source: Bailey, 2026-10-06 12:01:29 EDT, in the Claude Code chat (the times are the session transcript's), through its question form. The question, verbatim: …
+- <a id="d-482"></a>**D-482** — Cast repaint budget: 7 candidates for each idle and 3 for every other pose (about 2,500 images, roughly 2.3 weeks of the ChatGPT allowance); withdrawn by D-486 (both games)
+  - Bailey: “7 for idles, 3 for others (Recommended)” (blanket yes)
+  - What changed: The plan's budget (docs/plans/cast-repaint-2026-10-06.md): 104 idles x 7 and about 590 poses x 3, about 0.09 weekly Codex points per image as measured in the Art Room's usage log, with the relay stopping new rounds at 80 percent of the weekly allowance. It applied to the cast repaint only; no repainted figure was installed. Superseded with the repaint.
+  - area art · both games · superseded by [D-486](#d-486) · nothing to build · see [D-480](#d-480), [D-486](#d-486)
+  - Source: Bailey, 2026-10-06 12:01:29 EDT, in the Claude Code chat (the times are the session transcript's), through its question form. The question, verbatim: …
+- <a id="d-483"></a>**D-483** — Cast repaint order: the FFX party first, then the FFX-2 girls' outfits, then the bosses chapter by chapter; a character ships only when its whole pose set is approved; withdrawn by D-486 (both games)
+  - Bailey: “Party first, then bosses (Recommended)” (blanket yes)
+  - What changed: The option's own description on the form, verbatim: "The FFX party (in every FFX chapter), then the FFX-2 girls' outfits, then bosses chapter by chapter. A character ships only when its whole pose set is approved, so no figure mixes old and new art." Superseded with the repaint: nothing was repainted or installed.
+  - area art · both games · superseded by [D-486](#d-486) · nothing to build · see [D-480](#d-480), [D-486](#d-486)
+  - Source: Bailey, 2026-10-06 12:01:29 EDT, in the Claude Code chat (the times are the session transcript's), through its question form. The question, verbatim: …
+- <a id="d-484"></a>**D-484** — Sunburst for the cast repaint: no, ChatGPT picks Flare or Sunburst itself through Codex (the route that made the title art); replaced for the experimental chapter by D-489 (both games)
+  - Bailey: “No, ChatGPT's own choice (Recommended)” (blanket yes)
+  - What changed: At 12:33:59 he asked for Sunburst on anything that ships in the experimental chapter (D-489), which replaces this pick for that chapter. In practice the route is unchanged until he sets up the paid service himself: pictures still come from Codex's built-in image tool with ChatGPT's own choice of model, labelled "ChatGPT Images 2.5 (auto)", and nothing is spent without his yes (AGENTS.md rule 11).
+  - area art · both games · superseded by [D-489](#d-489) · nothing to build · see [D-480](#d-480), [D-489](#d-489)
+  - Source: Bailey, 2026-10-06 12:01:29 EDT, in the Claude Code chat (the times are the session transcript's), through its question form. The question, verbatim: …
+- <a id="d-485"></a>**D-485** — An archive of all the old art, kept so he can go back: every art file as shipped in release 39.1, every size, in the private repo BaileyPillon/pyrefly-art as the release art-39.1 (both games)
+  - Bailey: “i need an archive of all the old art just in case i want to go back...also give me a preview with one screne/one encounter full implemented with the new art”
+  - What changed: Delivered: the private repo BaileyPillon/pyrefly-art (D-478) holds a published release named art-39.1, "Every game art file as shipped in release 39.1", made 2026-10-06 at 17:04 UTC (9 files, about 10.1 GB, a checksum on every file), and its own tools (tools/restore-art.mjs, with a dry run, never deleting anything) put a whole snapshot back. The second half of the same message, a preview with one scene or one encounter fully implemented with the new art, became the experimental chapter (D-488). At 12:39:40 he approved the driver's summary of this item ("Ok I approve of all of the above"; the four items are D-486, D-488 with D-489, this one and D-490).
+  - area art · both games · adopted · delivery implemented · see [D-478](#d-478), [D-486](#d-486), [D-488](#d-488)
+  - Source: Bailey, 2026-10-06 12:02:41 EDT, in the Claude Code chat (the times are the session transcript's); approved again at 12:39:40 to the driver's …
+- <a id="d-486"></a>**D-486** — Cast repaint withdrawn: the game's art stays as it is and new art for the main game goes back to the local pipeline (Animagine XL 4.0 with IP-Adapter and OpenPose, enlarged with RealESRGAN, on his own graphics card), not ChatGPT Images (both games)
+  - Bailey: “actually im not sure about this new art change. go back to what it was before...before i asked you to use chatgpt images 2.5.”
+  - What changed: Nothing repainted had been installed, so the revert is a change of plan, not of files: the cast repaint plan (D-480 to D-483, all superseded here) carries a WITHDRAWN note and no file of public/art changed after it began. New art for the main game, when there is any, is made with the local ComfyUI pipeline of docs/ART-PIPELINE.md as before (item 2 of the driver's summary: "New art for the main game comes from the local pipeline again: Animagine XL 4.0 with IP-Adapter and OpenPose, enlarged with RealESRGAN, all on your graphics card. There's no cast repaint, and the Gullwings title stays."); the repairs and the lighting decision of D-462 stay on the list. ChatGPT Images 2.5 is used only for the experimental chapter (D-488, D-489). In progress: the Art Room's half-built cast changes are being tidied by a lane so they serve only the experimental chapter, and overnight auto-approval stays off.
+  - area art · both games · adopted · delivery in progress · see [D-480](#d-480), [D-481](#d-481), [D-482](#d-482), [D-483](#d-483), [D-485](#d-485), [D-487](#d-487), [D-488](#d-488), [D-489](#d-489)
+  - Source: Bailey, 2026-10-06 12:33:59 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "actually im not sure about this new art …
+- <a id="d-487"></a>**D-487** — The new Gullwings title screen stays: the title key art of D-458 with the layout of D-459 and D-460 (both games)
+  - Bailey: “keep the new title screen though I love it”
+  - What changed: When the ChatGPT Images art for the main game was withdrawn (D-486) the Gullwings Farplane Field title painting was kept: it shipped in release 39.1 (live on echoesofspira.com since 2026-10-06 06:39 UTC) and nothing is reverted for it.
+  - area art · both games · adopted · delivery implemented · see [D-458](#d-458), [D-459](#d-459), [D-460](#d-460), [D-486](#d-486)
+  - Source: Bailey, 2026-10-06 12:34:36 EDT, in the Claude Code chat (the times are the session transcript's), a minute after D-486. Game case: both (the title …
+- <a id="d-488"></a>**D-488** — An experimental chapter: the Leblanc preview, as an additional, separate chapter with all-new ChatGPT Images art; Chapter VI, the current Leblanc chapter, is kept as it is (FFX-2 only)
+  - Bailey: “so the leblanc preview will be an additional experimental chapter. keep the current leblanc chapter.”
+  - What changed: A new chapter beside Chapter VI: the same Leblanc encounter (ffx2-leblanc: Chateau Leblanc in Guadosalam; Act I the entrance, Act II Logos' room, Act III the Last Room with Leblanc, Logos and Ormi) built a second time with every picture newly made in ChatGPT Images 2.5 (D-489), by the Art Room. Chapter VI keeps its encounter and its art, untouched. The driver told him it goes to the Cloudflare preview worker only, never to echoesofspira.com (the question of 13:27 that D-495 answers). It began at 12:02:41, when he asked for "a preview with one screne/one encounter full implemented with the new art" (D-485): the driver had started the Leblanc preview and stopped it before any image was made when he withdrew the repaint (the driver's account), and it came back as this chapter. The first end-state target is mockup B (D-496). At 14:07:10 he made it the first priority (D-497).
+  - area chapters · FFX-2 · adopted · delivery in progress · see [D-485](#d-485), [D-486](#d-486), [D-489](#d-489), [D-494](#d-494), [D-496](#d-496), [D-497](#d-497)
+  - Source: Bailey, 2026-10-06, in the Claude Code chat (the times are the session transcript's). 12:36:52 EDT, verbatim: "the experimental new chapter will be …
+- <a id="d-489"></a>**D-489** — The experimental chapter's art is ChatGPT Images 2.5: Flare for mockups and Sunburst for anything that ships, and Flare is fine when Sunburst is not available to the Art Room (FFX-2 only); the Sunburst costs were asked for
+  - Bailey: “the artwork for that experimental chapter will be chatgpt images 2.5, flare for mockups and sunburst for anything mission critical, stuff that ships.”
+  - What changed: The rule for the chapter's pictures; at 12:41:07 he added: "you may use flare if thats the only one available to you. let me know about the costs for sunburst please." What exists: through Codex's built-in image tool on his ChatGPT Pro plan, ChatGPT picks Flare or Sunburst itself (the tool has no setting, and nothing says which one drew a picture), so the Art Room labels every picture "ChatGPT Images 2.5 (auto)" and claims neither. An explicit Sunburst (the API model gpt-image-2.5-sunburst) needs OpenAI's paid Images API, a key and API billing that are separate from ChatGPT Pro and that only he can set up; the Art Room has a switch for it (data/image-path.json), OFF, with no key and no client built, and nothing is spent without his yes. The cost, from OpenAI's image generation guide and model pages (read 2026-10-06): both Images 2.5 models cost 30 USD per million image output tokens (15 in batch), so one 1024x1536 or 1536x1024 picture is about 0.0047 USD at low, 0.0103 at medium, 0.0412 at high, 0.0738 at xhigh and 0.1646 at max, and 2048x3072 is about 0.0955 at high (output tokens only; edits add image input tokens at 8 USD per million); transparent backgrounds are supported (png or webp); rate limits start at tier 1, after 5 USD paid, with 5 images a minute. Replaces D-484 for this chapter.
+  - area art · FFX-2 · adopted · delivery in progress · see [D-484](#d-484), [D-486](#d-486), [D-488](#d-488)
+  - Source: Bailey, 2026-10-06 12:33:59 EDT (the rule, verbatim in D-486's source) and 12:41:07 EDT (the Flare fallback and the cost request), in the Claude Code …
+- <a id="d-490"></a>**D-490** — Release 39.2 carries the last pose-size fixes and the fix for the Chapter XIII (Trema) retry bug (both games; the Trema fix FFX-2 only)
+  - Bailey: “Ok I approve of all of the above”
+  - What changed: Item 4 of the driver's summary (12:39:57), verbatim: "Release 39.2 work: clearing the last pose-size failures, which hold the character-models score at 7.0 instead of about 8.7, and fixing the retry bug in Trema's chapter. Both are already running and ship after the critic's review." (The scores are the driver's figures as given to him.) The lanes: r392-size (pose size) and r392-trema (Chapter XIII: a Retry from a state with fewer than two girls standing opens with the Save Sphere's rule instead of replaying a state nobody can win from, PR-0407, FFX-2 only, commit 95fb69aa); 39.2 also holds the REDUCE MOTION lunge and the Bahamut reveal fix (D-492, D-493). It ships when the critic's focused review says SHIP (D-495).
+  - area release · both games · adopted · delivery in progress · see [D-486](#d-486), [D-492](#d-492), [D-493](#d-493), [D-495](#d-495)
+  - Source: Bailey, 2026-10-06 12:39:40 EDT, in the Claude Code chat (the times are the session transcript's), to the driver's four-item summary of what his …
+- <a id="d-491"></a>**D-491** — Lighting: held for now; the three looks (rim, wrap and glint; lit by the room; Satsuei) stay behind ?light=1|2|3 on the unmerged branch lighting-mockups and none is built into the game (both games)
+  - Bailey: “yes, include those three too”
+  - What changed: Nothing about lighting is built. His pick of look 1, 2 or 3 from the comparison sheets (docs/screenshots/lighting-mockups/ on that branch), and of the glint shapes, stays open (D-462). The branch is not merged and not deployed.
+  - area visuals · both games · adopted · delivery not scheduled · see [D-462](#d-462), [D-492](#d-492), [D-493](#d-493)
+  - Source: Bailey, 2026-10-06 12:40:28 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "yes, include those three too", to the …
+- <a id="d-492"></a>**D-492** — REDUCE MOTION shortens the attack lunge: a strike carried to reach its target travels half of what the solver added, same 440 ms and eased step (both games: the FFX party and fiends, the FFX-2 fiends; the FFX-2 girls do not run in under it)
+  - Bailey: “yes, include those three too”
+  - What changed: Built on branch r392-motion (commit d8151a63; docs/handoff/r392-motion.md has the measured numbers and four before/after strips): with the pause row REDUCE MOTION or the OS preference on, the lunge is the start plus half of what the solver added; Tidus's first Attack in Chapter I goes from 2.85 to 2.15 and no lunge is over 2.9; with the setting off nothing changes. Not merged and not live: it ships in 39.2 (D-495).
+  - area ui · both games · adopted · delivery in progress · see [D-490](#d-490), [D-491](#d-491), [D-493](#d-493), [D-495](#d-495)
+  - Source: Bailey, 2026-10-06 12:40:28 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "yes, include those three too", to the …
+- <a id="d-493"></a>**D-493** — Chapter IV Bahamut reveal: the camera push shrinks so Yuna stays in frame (FFX-2 only, desktop only)
+  - Bailey: “yes, include those three too”
+  - What changed: Built on branch r392-motion (commit 81ee5fe2; docs/handoff/r392-motion.md): the reveal is measured through the chapter's lens shift, so the push no longer carries Yuna out of the frame (it had let her out for about 2 s; the open question was to shrink the push or keep the drama, and he chose to shrink it). Gated on FFX-2 framing and not the phone (B5's own gate); FFX keeps its fitted push. Not merged and not live: it ships in 39.2 (D-495).
+  - area camera · FFX-2 · adopted · delivery in progress · see [D-490](#d-490), [D-491](#d-491), [D-492](#d-492), [D-495](#d-495)
+  - Source: Bailey, 2026-10-06 12:40:28 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "yes, include those three too", to the …
+- <a id="d-494"></a>**D-494** — The driver makes the selections for the experimental chapter while he is at work: mockups, anchors, poses, backdrops; every pick is recorded as a delegated pick with his words (FFX-2 only)
+  - Bailey: “I have to go to work soon. You make the selections for me as far as the experimental chapter goes.”
+  - What changed: For the experimental Leblanc chapter only, the driver (not an agent lane) makes the end-state and art selections for him, so the chapter does not wait for his clicks. Each pick is recorded under D-496 and the like as a delegated pick quoting these words, and the tile's reaction keeps what he named apart from what the driver chose, so he can see which were his and overturn any. The Art Room is getting a delegated-selection command (tools/select.mjs, marked approvedBy driver-delegated) that works only for briefs tagged exp-leblanc, with auto-pose at a score of 8.0 or more for that experiment (being added by a lane as of 14:09). Not delegated: anything outside that chapter, spending money, downloading, and any deploy beyond what D-495 says.
+  - area process · FFX-2 · adopted · delivery in progress · see [D-488](#d-488), [D-496](#d-496)
+  - Source: Bailey, 2026-10-06 13:26:51 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "I have to go to work soon. You make the …
+- <a id="d-495"></a>**D-495** — Release 39.2 goes live on echoesofspira.com if the critic's focused review says SHIP (both games)
+  - Bailey: “Yes, ship 39.2 on SHIP (Recommended)” (blanket yes)
+  - What changed: The driver reads it as the deploy go for 39.2 and, as with D-479 for 39.1, the words behind the deploy gate's owner override. It covers the one release named in the question, not later ones, and it does not settle the live check or the deep review of the build, which stay owed after the deploy. The experimental Leblanc chapter is not part of it: the question said it goes to the separate preview address only. 39.2 holds the last pose-size fixes, the Trema retry fix, the REDUCE MOTION lunge and the Bahamut camera fix (D-490, D-492, D-493); not yet built, reviewed or deployed as of this record.
+  - area release · both games · adopted · delivery in progress · see [D-479](#d-479), [D-490](#d-490), [D-492](#d-492), [D-493](#d-493)
+  - Source: Bailey, 2026-10-06 13:27:27 EDT, in the Claude Code chat (the times are the session transcript's), through its question form. The question, verbatim: …
+- <a id="d-496"></a>**D-496** — DELEGATED PICK: the experimental chapter's end-state target is mockup B, Moonlit Blue Hall (Art Room proposal p_14df3754, version 7, critic score 8.7), chosen by the driver under his delegation, not by him (FFX-2 only)
+  - Bailey: “You make the selections for me as far as the experimental chapter goes.”
+  - What changed: The pick is the driver's (D-494); he has not seen the four mockups side by side and has named no property of B (he had asked at 12:48:49 and 12:51:16 to be sent the mockups, and delegated the selection at 13:26:51, before they were ready), so he can overturn or mix it and the pick is then redone for this area only. The four options, made in the Art Room with ChatGPT Images 2.5 (best of 7 each) and scored by its critic: A Rose-Gold Vault 8.6, B Moonlit Blue Hall 8.7, C Candlelit Low Angle 8.3, D Lavender Dusk 8.4. What the picture shows: the three Gullwings (Yuna Gunner, Rikku Thief, Paine Warrior) from behind on the left and Logos, Leblanc and Ormi facing them across a glossy blue marble hall, a pink heart inlaid in the floor leading to a heart-shaped door under a heart stained-glass window with shafts of light, blue and violet with warm light at the candles and the inlay. Saved as the target (docs/target/targets.json, group chapters) with the picture docs/concepts/exp-leblanc/B-moonlit-blue-hall-target.jpg and the four options on docs/concepts/exp-leblanc/options-sheet.jpg; progress is reported as this target and the build side by side.
+  - area art · FFX-2 · adopted · delivery in progress · see [D-488](#d-488), [D-489](#d-489), [D-494](#d-494)
+  - Source: The driver, 2026-10-06 (the Art Room's options sheet was made at 13:53 EDT), under D-494: Bailey, 2026-10-06 13:26:51 EDT, verbatim: "I have to go to …
+- <a id="d-497"></a>**D-497** — Priority: the playable experimental chapter comes first, with all resources; everything else that was in progress comes second (both games)
+  - Bailey: “the priority is the experimental chapter right now. devote all resources to the playable experimental chapter. second priority is everything else you were already working on.”
+  - What changed: The driver and every lane are pointed at the playable experimental Leblanc chapter first (the Art Room's ChatGPT Images painting for it, the chapter's build, its preview); release 39.2 and the other lanes continue behind it as the second priority. Not read as a change of the usage mode (he sets that by word, AGENTS.md rule 15) or as leave to spend money or download without asking.
+  - area process · both games · adopted · delivery in progress · see [D-488](#d-488), [D-490](#d-490)
+  - Source: Bailey, 2026-10-06 14:07:10 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "the priority is the experimental …
+- **Picture** (chapters) — Approved: Experimental chapter, the Leblanc preview: target mockup B, Moonlit Blue Hall (FFX-2; the driver's pick for Bailey, delegated)
+  - Bailey: “You make the selections for me as far as the experimental chapter goes.”
+  - Delivery: The chapter is being built as a separate, additional chapter (D-488), preview worker only, never echoesofspira.com; Chapter VI keeps its encounter and its art. Its pictures are made in the Art Room with ChatGPT Images 2.5 (Flare for mockups, Sunburst for what ships, D-489); this mockup is the first of them and is not installed in any public/art.
+  - area combat · FFX-2 · adopted · delivery in progress · see [D-494](#d-494), [D-488](#d-488), [D-489](#d-489), [D-496](#d-496)
+  - Source: docs/target/targets.json, group chapters, tile "Experimental chapter, the Leblanc preview: target mockup B, Moonlit Blue Hall (FFX-2; the driver's …

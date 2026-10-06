@@ -1922,6 +1922,42 @@
               "music: the stand-ins scene-fahrenheit, boss-evrae and victory-ffx, labelled; the owed countdown cue is Bailey's by ear (S-21)"
             ]
           }
+        },
+        {
+          "label": "Experimental chapter, the Leblanc preview: target mockup B, Moonlit Blue Hall (FFX-2; the driver's pick for Bailey, delegated)",
+          "src": "docs/concepts/exp-leblanc/B-moonlit-blue-hall-target.jpg",
+          "state": "approved",
+          "pill": "Approved: the driver's pick, delegated",
+          "approved": "Picked by the driver under Bailey's delegation on 6 Oct 2026 (D-494, D-496); Bailey has not seen it",
+          "build": "Not built yet. The moment the picture targets: the experimental chapter's full-cast confrontation, the three Gullwings (Yuna Gunner, Rikku Thief, Paine Warrior) from behind on the left and Logos, Leblanc and Ormi facing them across a glossy blue marble hall, a pink heart inlaid in the floor leading to a heart-shaped door under a heart stained-glass window. Act III of the encounter has Leblanc, Logos and Ormi together; which of the three acts each frame stands for is the chapter plan's to decide.",
+          "delivery": "in-progress",
+          "deliveryNote": "The chapter is being built as a separate, additional chapter (D-488), preview worker only, never echoesofspira.com; Chapter VI keeps its encounter and its art. Its pictures are made in the Art Room with ChatGPT Images 2.5 (Flare for mockups, Sunburst for what ships, D-489); this mockup is the first of them and is not installed in any public/art.",
+          "game": "ffx2",
+          "gameNote": "FFX-2 only: the Leblanc encounter (ffx2-leblanc, Chateau Leblanc in Guadosalam) is FFX-2's Chapter VI, its cast is the Gullwings against the Leblanc Syndicate, and FFX is not touched (AGENTS.md rule 14).",
+          "note": "The Art Room's proposal p_14df3754, version 7, critic score 8.7, copied here as a JPEG from the Art Room's work folder. The other options of the round, all in docs/concepts/exp-leblanc/options-sheet.jpg: A Rose-Gold Vault 8.6 (p_f0734dc5, version 6), C Candlelit Low Angle 8.3 (p_90654951, version 3), D Lavender Dusk 8.4 (p_2737d600, version 2). The delegation (D-494) lets the driver pick for the experimental chapter, so this pick is not a property Bailey named; if he prefers another option or a mix, the pick is redone for this area only (AGENTS.md rule 9). The target and the build are reported side by side from here on.",
+          "reaction": {
+            "date": "2026-10-06",
+            "words": "You make the selections for me as far as the experimental chapter goes.",
+            "how": "Bailey, 2026-10-06 13:26:51 EDT, in the Claude Code chat, before the mockups were ready (he had asked at 12:48:49 and 12:51:16 to be sent the Flare mockups); the pick is the driver's, under that delegation (D-494, D-496)",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [
+              "whether he likes B, prefers A, C or D, or wants a mix: he has not seen the sheet",
+              "which painting method the chapter's other art follows beyond \"ChatGPT Images 2.5, Flare for mockups, Sunburst for what ships\" (D-489): an explicit Sunburst needs his own API key and billing"
+            ],
+            "named": [
+              "the experimental chapter is the Leblanc preview, a separate additional chapter, Chapter VI kept (D-488)",
+              "the chapter's art is ChatGPT Images 2.5: Flare for mockups, Sunburst for anything that ships, Flare when Sunburst is not available (D-489)",
+              "the driver makes the selections for him as far as this chapter goes (D-494)"
+            ],
+            "inferred": [
+              "every pick on this tile is the driver's, under D-494's delegation, not a property Bailey named; he can swap any of them",
+              "mockup B Moonlit Blue Hall over A Rose-Gold Vault, C Candlelit Low Angle and D Lavender Dusk: the highest critic score of the four (8.7 against 8.6, 8.3 and 8.4) and the blue and violet palette of the game's own paintings with warm light at the sources",
+              "the full-cast framing (three girls on the left from behind, the three Syndicate members facing them) as the chapter's target composition"
+            ]
+          }
         }
       ]
     },
