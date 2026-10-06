@@ -5,8 +5,9 @@ import type { ScenePalette } from './Renderer.ts';
 
 /**
  * Release 39 colour fidelity (r39-color, Bailey 2026-10-04: "colors look washed out like it's masking better character model detail" and
- * "the colors are vibrant but too vibrant"): a painted figure drawn true to its painting. Both games, shared plumbing; OFF by default, so with
- * no address override every frame is what it was. The maths and the parsing are pure; `applyFigureTrue` touches the renderer's two passes.
+ * "the colors are vibrant but too vibrant"): a painted figure drawn true to its painting. Both games, shared plumbing; ON by default since
+ * release 39.1 (D-437, Bailey 2026-10-05: "I'll go with all of your recommendations"); `?figtrue=0` or `__pyrefly.fx.figureTrue(0)` puts
+ * release 39's look back. The maths and the parsing are pure; `applyFigureTrue` touches the renderer's two passes.
  *
  * Why it exists. The post chain ends in `GradeShader`, a raw `ShaderMaterial` with no `<colorspace_fragment>`, and the composer's targets are
  * linear, so the linear values the chain works in reach the canvas with no sRGB encode: `outputColorSpace = SRGBColorSpace` is never applied.
@@ -16,14 +17,14 @@ import type { ScenePalette } from './Renderer.ts';
  *
  * What it does. A painted figure writes 0 into the frame's alpha (the bloom mask, `BloomMask.ts`). Where this switch is on, the grade shows such a
  * pixel's own colour: no scene grade, shadow tint, saturation or look, and the sRGB encode the chain never applied. Backdrops and effects are
- * untouched. The amount mixes the two (0 = today, 1 = the painting's colour). It is a developer switch (`?figtrue=`, `__pyrefly.fx.figureTrue`)
- * until Bailey picks from the stills; the default below is the one line that changes then.
+ * untouched. The amount mixes the two (0 = release 39's look, 1 = the painting's colour). Bailey picked "figures true" from the stills (D-437),
+ * so the default below is 1; the address (`?figtrue=`) and the console (`__pyrefly.fx.figureTrue`) still set any amount.
  *
  * The amount carries the quiet edge with it: a figure that shows its own colour is no bloom source (the figure bloom mask in full), gives back the
  * bloom's light in the grade (the pass adds it to every pixel, a veil that lifts the figure's blacks), and its rim light is cut (`rimQuiet`). Measured in
  * docs/handoff/r39-color.md.
  */
-export const FIGURE_TRUE_DEFAULT = 0;
+export const FIGURE_TRUE_DEFAULT = 1;
 
 /** The share of the rim light a figure that shows its own colour gives up, at an amount of 1. */
 export const FIGURE_TRUE_RIM_CUT = 0.55;
@@ -71,6 +72,11 @@ export function parseFigureTrue(search: string): number | null {
   if (raw === null || raw.trim() === '') return null;
   const n = Number(raw);
   return Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : null;
+}
+
+/** The amount a page load starts with: what `?figtrue=` asks for, else the default (on). `?figtrue=0` is the way back to release 39's look. */
+export function figureTrueFromAddress(search: string): number {
+  return parseFigureTrue(search) ?? FIGURE_TRUE_DEFAULT;
 }
 
 /** The sRGB encode (OETF), 0..1 to 0..1: the maths `GradeShader` applies to a figure pixel, here for the tests. */

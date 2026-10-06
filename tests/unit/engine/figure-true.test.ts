@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { Vector2 } from 'three';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
@@ -9,6 +11,7 @@ import {
   FIGURE_TRUE_RIM_CUT,
   applyFigureTrue,
   bloomMaskFor,
+  figureTrueFromAddress,
   figureTrueOf,
   parseFigureTrue,
   rimQuiet,
@@ -17,13 +20,29 @@ import {
 } from '../../../src/engine/figureTrue.ts';
 
 /**
- * r39-color (both games): a painted figure drawn true to its painting, behind a switch that is OFF by default.
+ * r39-color (both games): a painted figure drawn true to its painting, behind a switch that is ON by default since release 39.1
+ * (D-437, Bailey 2026-10-05: "I'll go with all of your recommendations"); `?figtrue=0` or `__pyrefly.fx.figureTrue(0)` is the way back.
  * The GLSL cannot run here; what can be pinned is the switch, the maths it applies, where the shader reads it, and what it moves in the renderer.
  */
 describe('figureTrue', () => {
-  it('is off by default, in the shader and in the default, so every frame is what it was', () => {
-    expect(FIGURE_TRUE_DEFAULT).toBe(0);
+  it('is on by default (D-437), while the grade pass keeps 0 as its neutral value until the renderer applies the default', () => {
+    expect(FIGURE_TRUE_DEFAULT).toBe(1);
     expect(GradeShader.uniforms.figureTrue.value).toBe(0);
+  });
+
+  it('starts a page load on unless the address says otherwise, and ?figtrue=0 puts release 39\'s look back', () => {
+    expect(figureTrueFromAddress('')).toBe(1);
+    expect(figureTrueFromAddress('?coach=off')).toBe(1);
+    expect(figureTrueFromAddress('?figtrue=')).toBe(1);
+    expect(figureTrueFromAddress('?figtrue=abc')).toBe(1);
+    expect(figureTrueFromAddress('?figtrue=0')).toBe(0);
+    expect(figureTrueFromAddress('?stage=off&figtrue=0')).toBe(0);
+    expect(figureTrueFromAddress('?figtrue=0.5')).toBe(0.5);
+  });
+
+  it('is what the renderer applies at start-up, through the address helper', () => {
+    const renderer = readFileSync(fileURLToPath(new URL('../../../src/engine/Renderer.ts', import.meta.url)), 'utf8');
+    expect(renderer).toContain("applyFigureTrue(this, figureTrueFromAddress(window.location?.search ?? ''))");
   });
 
   it('reads ?figtrue= as an amount from 0 to 1 and ignores anything else', () => {

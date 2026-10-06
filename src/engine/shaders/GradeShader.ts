@@ -60,7 +60,7 @@ export const GradeShader = {
     /** How much of the grain the highlights keep; 1 = the old weighting. */
     grainHighlights: { value: 1 },
     /**
-     * Release 39 colour fidelity (`engine/figureTrue.ts`): 0 = off, the default, and the grade is exactly what it was; 1 = a painted figure
+     * Release 39 colour fidelity (`engine/figureTrue.ts`): 0 = off (the pass's own neutral value; the renderer applies FIGURE_TRUE_DEFAULT, on since 39.1), the grade exactly as it was; 1 = a painted figure
      * (where the frame's alpha, the bloom mask, is 0) skips the scene grade, the shadow tint, the saturation and the look and takes the sRGB
      * encode this pass never applied to anything. Between the two it is a mix.
      */
