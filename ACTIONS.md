@@ -18,7 +18,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 440, from 2026-09-15 to 2026-10-05 (ids A-0001 to A-0440), 220 of them linked to at least one decision (336 distinct decision ids).
+- **Rows:** 441, from 2026-09-15 to 2026-10-05 (ids A-0001 to A-0441), 221 of them linked to at least one decision (338 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
@@ -26,7 +26,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | art | 49 |
 | deploy | 49 |
 | review | 102 |
-| records | 23 |
+| records | 24 |
 | infrastructure | 21 |
 | account | 12 |
 | download | 10 |
@@ -36,21 +36,27 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 143 |
+| October 2026 | 144 |
 
-- **By game:** 326 both, 56 n/a, 31 FFX, 27 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **By game:** 327 both, 56 n/a, 31 FFX, 27 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
 - **Deploys and releases:** 49 deploy rows: 45 lines of docs/deploys.log (39 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 1 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to release 39 on echoesofspira.com (2026-10-05).
 - **Reviews:** 102 rows: 30 focused reviews (29 SHIP, 1 HOLD), 38 live checks (36 PASS, 1 FAIL, 1 UNVERIFIED), 19 deep rounds with a report (10 SHIP, 6 HOLD, 3 no verdict) and 15 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 22 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-05](#2026-10-05) (15) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-05](#2026-10-05) (16) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
 ### 2026-10-05
 
+- **A-0441** · `records` · both · **Bailey's two title-screen layout picks and his "i like this one" recorded: D-459 (panel top-left) and D-460 (silhouettes removed), the board tile, the handoff and NOW.md**
+  - What: Bailey answered two questions about the new title screen in the Claude Code chat's question form (about 21:00 EDT) and the driver relayed them: the title panel sits top-left, as built ("Top-left (built)", D-459), and the two black Tidus and Yuna shadow figures are removed ("Remove them (Recommended)", D-460; asked twice, the second time with pictures after he asked what it meant). Afterwards he was sent two crops of docs/screenshots/title-gullwings-1920x1080.png (panel top-left, silhouettes removed, the picture at its original brightness) and wrote "i like this one". The records sub-agent added both rows to docs/target/decisions.json, wrote his answers and the like into the reaction of the board tile "Title key art: the Art Room's Gullwings Farplane Field (both games)" (the two layout questions leave its undecided list; the grade, the strap's halo and the crop in other window shapes stay on it), corrected the tile's old "Bailey has not seen the screen", marked decisions 1 and 2 approved in docs/handoff/title-gullwings-keyart.md on branch title-gullwings-keyart (commit 3e4a906a, pushed), added a line to docs/handoff/NOW.md and re-rendered DECISIONS.md and ACTIONS.md. Nothing in the game changed: the screen is still built only on the branch, not merged and not live, and its art is staged and not installed (A-0440's swap is still owed at integration into 39.1). A-0440's own result line still says Bailey has not seen the screen; it is history and is not edited here.
+  - Who: records sub-agent (Sonnet) under the driver session · Decisions: D-459, D-460
+  - Result: done; recorded on main and on branch title-gullwings-keyart (commit 3e4a906a, pushed); the build itself is not merged and not live
+  - Evidence: `docs/target/decisions.json (D-459, D-460)` · `docs/target/targets.json (the reaction of the tile "Title key art: the Art Room's Gullwings Farplane Field (both games)")` · `docs/handoff/title-gullwings-keyart.md section 4 (commit 3e4a906a on branch title-gullwings-keyart)` · `docs/handoff/NOW.md (the 2026-10-05 title lane line)`
+  - Reversible: yes, documentation only; revert the records commits (the build is untouched)
 - **A-0440** · `implementation` · both · **Title key art: the Art Room's Gullwings Farplane Field staged and built into the title screen on branch title-gullwings-keyart**
   - What: The title-art lane took the picture Bailey approved in the Art Room (proposal p\_f4836b8c) and made the title masters: the approved image cropped to 1647x941, one RealESRGAN\_x4plus job through ComfyUI (6.9 GPU seconds, behind the shared lock, the painterly roll-out's queue untouched), the colour drift the upscaler added (+1.7 levels of green) removed, a 1344x768 plate, a 2688x1536 lossy WebP master and a new sidecar; mean pixel difference of the plate from the approved crop 1.96 of 255. It then re-cut the title screen around the picture on branch title-gullwings-keyart: no silhouettes on the shore, the wordmark slab above the three heroes (20 percent shorter, the 14 px type floor kept), the near parallax plane cut to the foreground flower band by an SVG mask registered with the painting (a new test pins it against the heroes' lowest pixels), a light grade, a haloed strap, a crop anchored at the heroes in other window shapes, a new 32 px placeholder, and the new hashes in docs/target/approved-hashes.json. Checked: tsc clean; 30 unit test files (463 tests) green; a production build in the worktree's own dist passed art-derive verify (1,005 masters) and audit and the browser load (1,049 images, Chromium and WebKit); Enter, a click on the chip and a click over the painting each left the title for chapter select; frames at 1920x1080, 1280x720, 2560x1080, HiDPI, a phone and both parallax extremes are on the branch. The art is staged and backed up (the old files too) but not installed in any public/art; the swap is the driver's, at integration.
   - Who: title-art lane (Sonnet sub-agent) under the driver session · Decisions: D-458

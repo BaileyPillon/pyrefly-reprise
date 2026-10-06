@@ -16,16 +16,16 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-909 decisions in all: 458 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 125 picture decisions. 613 of the written decisions record a blanket yes.
+911 decisions in all: 460 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 125 picture decisions. 614 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 849 |
+| adopted | 851 |
 | proposed | 12 |
 | deferred | 4 |
 | rejected | 11 |
 | superseded | 33 |
-| **All** | **909** |
+| **All** | **911** |
 
 | Area | Decisions |
 | --- | ---: |
@@ -34,7 +34,7 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | visuals | 68 |
 | camera | 31 |
 | audio | 30 |
-| ui | 119 |
+| ui | 121 |
 | story | 15 |
 | chapters | 177 |
 | guide | 28 |
@@ -45,15 +45,15 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **909** |
+| **All** | **911** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 395 |
+| both games | 397 |
 | FFX only | 278 |
 | FFX-2 only | 219 |
 | FF7 hidden experiment | 17 |
-| **All** | **909** |
+| **All** | **911** |
 
 ## Standing rules in force
 
@@ -3940,7 +3940,7 @@ Sunday · 69 decisions
 
 ### 2026-10-05
 
-Monday · 23 decisions
+Monday · 25 decisions
 
 - <a id="d-437"></a>**D-437** — True colour (decision A): characters and bosses show their paintings' own colours: the "figures true" switch goes ON by default in release 39.1, with the bloom fix (r39-color ef0868b5)
   - Bailey: “I'll go with all of your recommendations” (blanket yes)
@@ -4052,8 +4052,18 @@ Monday · 23 decisions
   - What changed: The title screen's painting is the picture Bailey approved in the Art Room at 19:24 EDT (proposal p_f4836b8c, made by Codex with ChatGPT Images 2.5), not the 2026-09-21 plate of the parallax title; that refines E-039, whose approved target was the old painted key art. Built on branch title-gullwings-keyart (fa09c73f; docs/handoff/title-gullwings-keyart.md): the picture cropped to the plate ratio (25 px off the right edge), RealESRGAN_x4plus through ComfyUI to 2688x1536 with the colour drift removed, a 1344x768 plate, a new 32 px placeholder, a new sidecar, and docs/target/approved-hashes.json carrying the new hashes. Not merged, not live, and the art is staged but NOT installed in any public/art: the swap is owed when 39.1 is integrated (the handoff has the commands). Bailey has not seen the screen. Both games: the title screen is shared by the FFX and FFX-2 chapters, and the strap names both (AGENTS.md rule 14). What the build changed on the screen so that the picture shows as approved, each the build's own choice and not his (the board tile lists them as undecided, with before and after pictures in docs/screenshots/title-gullwings-*.png): (1) the concept's two black silhouettes of Tidus and Yuna are no longer drawn; (2) the wordmark slab moved from in front of Yuna and Rikku to above the three of them and is 20 percent shorter; (3) the 2026-09-21 grade, which took the picture to 0.64 of its approved luminance, is replaced by a light one at 0.98; (4) the strap gets full gold and a halo (contrast 1.3 to 1 became 5.9 to 1); (5) the near parallax plane is the foreground flower band only, so no hero is split between planes; (6) the crop follows the heroes in a window that is not 16:9, and a phone shows all three heads. Verified on the branch: tsc clean, 30 unit test files green, a production build passes art-derive verify and audit and the browser load of 1,049 images in Chromium and WebKit.
   - area art · both games · adopted · delivery in progress · at ~19:25 EDT · see [E-038](#e-038), [D-368](#d-368) · refines [E-039](#e-039)
   - Source: docs/handoff/title-gullwings-keyart.md; docs/target/approved-hashes.json
+- <a id="d-459"></a>**D-459** — The "Echoes of Spira" title panel sits top-left on the new title screen, as built on the branch (above the three heroes, 20 percent shorter), not top centre and not lower right; both games
+  - Bailey: “Top-left (built)”
+  - What changed: The title panel (the paper slab with the eyebrow, the wordmark and the PRESS ENTER chip) stays where the build put it: top-left, above Yuna, Rikku and Paine and no longer in front of Yuna and Rikku, and 20 percent shorter (343 to 274 grid units; it ends at 0.37 of the frame over the pink clouds, and the three heads, at 0.44, stay clear). Top centre and lower right, the two mock-ups on the branch, are not taken and nothing more is built for them. This approves decision 2 of docs/handoff/title-gullwings-keyart.md section 4 and answers the board tile's open question "where the wordmark slab sits". He then confirmed it by sight: shown two crops of docs/screenshots/title-gullwings-1920x1080.png (panel top-left, silhouettes removed, the picture at its original brightness) he wrote, verbatim, "i like this one". What he named is the placement; the like is of the whole frame as shown, and he did not name the grade, the strap's halo or the crop in other window shapes, which stay open on the tile. Built on branch title-gullwings-keyart (fa09c73f); not merged and not live, it ships with release 39.1 at integration (swap procedure in the handoff section 5). Both games: the title screen is shared by the FFX and FFX-2 chapters and its strap names both (AGENTS.md rule 14).
+  - area ui · both games · adopted · delivery in progress · at ~21:00 EDT · see [D-460](#d-460), [E-039](#e-039) · refines [D-458](#d-458)
+  - Source: docs/handoff/title-gullwings-keyart.md; docs/screenshots/title-gullwings-1920x1080.png
+- <a id="d-460"></a>**D-460** — The two black Tidus and Yuna shadow figures (the silhouettes) are removed from the new title screen, so only the painting shows (TITLE_CAST_ON stays false); both games
+  - Bailey: “Remove them (Recommended)” (blanket yes)
+  - What changed: The concept's two ink cut-outs of Tidus and Yuna on the shore are not drawn: TITLE_CAST_ON stays false in src/app/screens/frontend/titleMarkup.ts on branch title-gullwings-keyart (fa09c73f), so the title shows only his painting (Yuna, Rikku and Paine of the picture itself). This approves decision 1 of docs/handoff/title-gullwings-keyart.md section 4 and answers the board tile's open question "whether the two silhouettes of Tidus and Yuna stay out". The undo the handoff kept (TITLE_CAST_ON = true; the CSS, the parallax layer and the tests for it stay in the code) is not wanted now. He asked what the question meant, so it was asked a second time with the two pictures; this is a yes to that one question, not a blanket yes: "(Recommended)" is the question form's own tag on the option. Not merged and not live; it ships with release 39.1 at integration. Both games: the title screen is shared by the FFX and FFX-2 chapters (AGENTS.md rule 14).
+  - area ui · both games · adopted · delivery in progress · at ~21:00 EDT · see [D-459](#d-459), [E-038](#e-038) · refines [D-458](#d-458)
+  - Source: docs/handoff/title-gullwings-keyart.md
 - **Picture** (polish) — Approved: Title key art: the Art Room's Gullwings Farplane Field (both games)
   - Bailey: “use what i just approved for the new title screen please, it's soooo epic i love it.”
-  - Delivery: Built on branch title-gullwings-keyart (fa09c73f; docs/handoff/title-gullwings-keyart.md), not merged and not live. The new art is staged (D:/Tools/pyrefly-art-staging/title-gullwings/) and is NOT installed in any public/art: the swap is owed at integration into the 39.1 release tree, together with the branch's docs/target/approved-hashes.json change. Bailey has not seen the screen.
-  - area visuals · both games · adopted · delivery in progress
+  - Delivery: Built on branch title-gullwings-keyart (fa09c73f; docs/handoff/title-gullwings-keyart.md), not merged and not live. The new art is staged (D:/Tools/pyrefly-art-staging/title-gullwings/) and is NOT installed in any public/art: the swap is owed at integration into the 39.1 release tree, together with the branch's docs/target/approved-hashes.json change. Bailey has seen the screenshot and likes it (D-459, D-460).
+  - area visuals · both games · adopted · delivery in progress · see [D-460](#d-460), [D-459](#d-459)
   - Source: docs/target/targets.json, group polish, tile "Title key art: the Art Room's Gullwings Farplane Field (both games)"

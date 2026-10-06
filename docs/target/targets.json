@@ -1948,33 +1948,38 @@
           "approved": "Bailey, 5 Oct 2026",
           "build": "The title screen with this picture as its painting, on branch title-gullwings-keyart: docs/screenshots/title-gullwings-1920x1080.png there, the approved picture beside the build in title-gullwings-target-vs-build.png, and the parallax extremes, a phone and 1280x720, 2560x1080 and HiDPI frames beside them. Not on main.",
           "delivery": "in-progress",
-          "deliveryNote": "Built on branch title-gullwings-keyart (fa09c73f; docs/handoff/title-gullwings-keyart.md), not merged and not live. The new art is staged (D:/Tools/pyrefly-art-staging/title-gullwings/) and is NOT installed in any public/art: the swap is owed at integration into the 39.1 release tree, together with the branch's docs/target/approved-hashes.json change. Bailey has not seen the screen.",
+          "deliveryNote": "Built on branch title-gullwings-keyart (fa09c73f; docs/handoff/title-gullwings-keyart.md), not merged and not live. The new art is staged (D:/Tools/pyrefly-art-staging/title-gullwings/) and is NOT installed in any public/art: the swap is owed at integration into the 39.1 release tree, together with the branch's docs/target/approved-hashes.json change. Bailey has seen the screenshot and likes it (D-459, D-460).",
           "game": "both",
           "gameNote": "Both: the title screen is the front door to the FFX and FFX-2 chapters and the strap names both; the picture shows the FFX-2 party but is the title of the whole game (AGENTS.md rule 14).",
-          "note": "Replaces the 2026-09-21 painting in the parallax title ('A front end that moves', the tile above): the planes, the motes and the chrome stand, the painting under them is new. The picture is the Art Room's proposal p_f4836b8c (Yuna, Rikku and Paine from behind in a lavender flower field, a golden crystal spire on the water, made by Codex with ChatGPT Images 2.5). What the build had to change on the screen so that it shows (all the build's own choices, Bailey has not seen them): the two black silhouettes of Tidus and Yuna are not drawn; the wordmark slab sits above the three heroes instead of in front of them; the grade is light (0.98 of the picture's luminance, it was 0.64); the strap has a halo; the near plane is the foreground flower band; the crop follows the heroes in other window shapes.",
+          "note": "Replaces the 2026-09-21 painting in the parallax title ('A front end that moves', the tile above): the planes, the motes and the chrome stand, the painting under them is new. The picture is the Art Room's proposal p_f4836b8c (Yuna, Rikku and Paine from behind in a lavender flower field, a golden crystal spire on the water, made by Codex with ChatGPT Images 2.5). What the build had to change on the screen so that it shows (all the build's own choices, Bailey has not seen them): the two black silhouettes of Tidus and Yuna are not drawn; the wordmark slab sits above the three heroes instead of in front of them; the grade is light (0.98 of the picture's luminance, it was 0.64); the strap has a halo; the near plane is the foreground flower band; the crop follows the heroes in other window shapes. UPDATED 2026-10-05 (evening): Bailey has since seen the build as a screenshot and answered the first two: the silhouettes stay out (D-460) and the panel sits top-left (D-459); of two crops of docs/screenshots/title-gullwings-1920x1080.png he wrote \"i like this one\". The grade, the strap's halo, the near plane and the crop in other window shapes are still the build's own choices, not named by him.",
           "reaction": {
             "date": "2026-10-05",
             "words": "use what i just approved for the new title screen please, it's soooo epic i love it.",
             "named": [
-              "use what i just approved for the new title screen please, it's soooo epic i love it."
+              "use what i just approved for the new title screen please, it's soooo epic i love it.",
+              "Panel placement. Question, verbatim: \"Where should the \"Echoes of Spira\" title panel sit on your new title screen?\" (options: \"Top-left (built)\", \"Top centre\", \"Lower right\"). His answer, verbatim: \"Top-left (built)\" (D-459). Asked in the Claude Code chat's question form, about 21:00 EDT.",
+              "Silhouettes. Question, verbatim, asked twice (the second time with the pictures, after he asked what it meant): \"On your new title screen, should the two black Tidus and Yuna shadow figures (first picture, on the right) be removed, so only your painting shows (second picture)?\" His answer, verbatim: \"Remove them (Recommended)\" (D-460).",
+              "Of two crops of docs/screenshots/title-gullwings-1920x1080.png on branch title-gullwings-keyart (fa09c73f; panel top-left, silhouettes removed, the picture at its original brightness), sent to him after the two answers, he wrote, verbatim: \"i like this one\" (confirmation by sight of D-459 and D-460)."
             ],
-            "how": "Bailey, 2026-10-05 ~19:25 EDT, in chat, a minute after approving the picture in the Art Room (proposal p_f4836b8c) at 19:24 EDT; the driver relayed the words to the title-art lane",
+            "how": "Bailey, 2026-10-05 ~19:25 EDT, in chat, a minute after approving the picture in the Art Room (proposal p_f4836b8c) at 19:24 EDT; the driver relayed the words to the title-art lane; later that evening (about 21:00 EDT) he answered the two layout questions above in the Claude Code chat's question form (D-459, D-460) and, shown two crops of the branch's 1920x1080 screenshot, wrote \"i like this one\"; the driver relayed each to the records sub-agent with his words quoted",
             "liked": [
-              "it's soooo epic i love it (the picture as it is)"
+              "it's soooo epic i love it (the picture as it is)",
+              "i like this one (the title screen as shown in docs/screenshots/title-gullwings-1920x1080.png on branch title-gullwings-keyart at fa09c73f: panel top-left, silhouettes removed, the picture at its original brightness)"
             ],
             "disliked": [],
             "mustRemain": [
-              "the picture as approved is the title screen: use what i just approved for the new title screen please"
+              "the picture as approved is the title screen: use what i just approved for the new title screen please",
+              "the title panel top-left, as built: \"Top-left (built)\" (D-459)",
+              "the two Tidus and Yuna silhouettes stay out, only the painting shows: \"Remove them (Recommended)\" (D-460; TITLE_CAST_ON stays false)"
             ],
             "mustChange": [],
             "undecided": [
-              "where the wordmark slab sits (above the heroes at the top left is built; top centre and lower right are mocked up in docs/screenshots on the branch)",
-              "whether the two silhouettes of Tidus and Yuna stay out",
-              "how light the grade is (built at 0.98 of the approved luminance; 1.00 is the pure picture)",
-              "the strap's halo, the crop anchored at the heroes in other window shapes, and a phone that shows all three heads and not the spire"
+              "how light the grade is (built at 0.98 of the approved luminance, the picture at its original brightness; it is in the frame he liked but he did not name it; 1.00 is the pure picture)",
+              "the strap's halo, the crop anchored at the heroes in other window shapes, and a phone that shows all three heads and not the spire (none named by him)"
             ],
             "inferred": [
-              "the lane's reading: the words are about the picture, so the picture is the target and every layout choice on top of it still needs his look before it ships (rule 9, end state first)"
+              "the lane's reading: the words are about the picture, so the picture is the target and every layout choice on top of it still needs his look before it ships (rule 9, end state first)",
+              "records sub-agent's reading (2026-10-05, evening): his \"i like this one\" is about that screenshot (he saw two crops of it); the file also shows the light grade and the haloed strap, but he named neither, so they stay under undecided; treating the like as settling them would be a reading, not his word"
             ]
           }
         },
