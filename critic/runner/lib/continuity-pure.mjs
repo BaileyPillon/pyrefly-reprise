@@ -200,13 +200,21 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg 
   };
   if (!fromRaw || !toRaw) return { ...out, unmeasured: 'a plane of the swap was not recorded' };
   const Hf = unitSquareToQuad(fromRaw.q), Ht = unitSquareToQuad(toRaw.q);
+  // CHK-026 reads the old and the new painting through their own planes IN THE SAME FRAME (item 1), so that nothing but the registration can move the head or the feet.
+  // When the old painting's plane was re-pointed in the swap's own frame (a KO cuts in while a crossfade is still running), `fromRaw` came from the frame before and
+  // `toRaw` from this one, and whatever the figure itself did in that one frame (the collapse's first jolt, a lunge) was charged to the registration: Chapter I's Yuna hurt to idle
+  // read 4.4 px of feet where the two planes of the frame before agree to 0.2 px. Where one frame shows both planes, the size and the feet are read there. The outline (CHK-027)
+  // keeps reading what the picture did across the swap, so the snap counts do not move.
+  const both = (fr) => { const a = planeIn(fr, swap.from), b = planeIn(fr, swap.to); return a && b ? [a, b] : null; };
+  const same = both(f0) ?? both(frames[at - 1]) ?? both(frames[at + 1]);
+  const Hf26 = same ? unitSquareToQuad(same[0].q) : Hf, Ht26 = same ? unitSquareToQuad(same[1].q) : Ht;
 
   // --- size: the head on screen before and after (CHK-026). Registered heads where both poses have one; else the two
   // masses (a head and a mass are never compared with each other).
   const bothHeads = Boolean(aFrom?.head && aTo?.head);
   let pf = null, pt = null;
-  if (bothHeads) { pf = headSizePx(Hf, aFrom.head); pt = headSizePx(Ht, aTo.head); }
-  else if (aFrom?.mass > 0 && aTo?.mass > 0) { pf = headSizePx(Hf, WHOLE) * Math.sqrt(aFrom.mass); pt = headSizePx(Ht, WHOLE) * Math.sqrt(aTo.mass); }
+  if (bothHeads) { pf = headSizePx(Hf26, aFrom.head); pt = headSizePx(Ht26, aTo.head); }
+  else if (aFrom?.mass > 0 && aTo?.mass > 0) { pf = headSizePx(Hf26, WHOLE) * Math.sqrt(aFrom.mass); pt = headSizePx(Ht26, WHOLE) * Math.sqrt(aTo.mass); }
   if (pf !== null && pf > 0) {
     pf *= k1600; pt *= k1600;
     const ratio = pt / pf;
@@ -215,7 +223,7 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg 
   }
   // --- feet: where the standing figure stands, before and after
   if (aFrom?.stance && aTo?.stance) {
-    const ff = feetPoint(Hf, aFrom.stance), ft = feetPoint(Ht, aTo.stance);
+    const ff = feetPoint(Hf26, aFrom.stance), ft = feetPoint(Ht26, aTo.stance);
     const dx = (ft[0] - ff[0]) * k1600, dy = (ft[1] - ff[1]) * k1600;
     const standing = !aFrom.prone && !aTo.prone;
     const px = Math.hypot(dx, dy);

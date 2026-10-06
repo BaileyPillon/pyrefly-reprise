@@ -239,11 +239,33 @@ describe('size continuity at a swap (CHK-026)', () => {
   });
 
   it('finds the old painting in the frame before when its plane was re-pointed while it still showed', () => {
-    const before = frame(99, figure(plane(0, 0.76, qa), plane(1, 0.24, big(1))));
+    const before = frame(99, figure(plane(0, 0.76, qa), plane(1, 0.24, big(1.2))));
     const at = frame(100, figure(0, plane(1, 0.57, big(1.2))));
     const r = swapOf([before, at], [anchor(), anchor()], 1);
     expect(r.unmeasured).toBeUndefined();
     expect(r.head!.ratio).toBeCloseTo(1.2, 3);
+  });
+
+  it('reads size and feet in ONE frame when a frame shows both paintings, so a jolt of the figure in the swap frame is not charged to the registration (r392, Chapter I Yuna hurt to idle)', () => {
+    // the KO cut re-points the hurt plane in the swap's own frame: the frame before has both planes (agreeing), the swap's frame has only the new one, 4 px over
+    const jolted = big(1).map((v, i) => (i % 2 === 0 ? v + 4 : v));
+    const before = frame(99, figure(plane(0, 0.57, qa), plane(1, 0.43, big(1))));
+    const at = frame(100, figure(0, plane(1, 0.65, jolted)));
+    const r = swapOf([before, at], [anchor(), anchor()], 1);
+    expect(r.unmeasured).toBeUndefined();
+    expect(r.feet!.px).toBeLessThan(0.01);
+    expect(r.failFeet).toBe(false);
+    // what the picture did across the swap (CHK-027) is still read across the two frames: the outline moved with the jolt
+    expect(r.outline!.centroidShiftPx).toBeGreaterThan(3);
+  });
+
+  it('still reads a real registration error in the frame that has both paintings', () => {
+    const off = big(1).map((v, i) => (i % 2 === 0 ? v + 5 : v));
+    const before = frame(99, figure(plane(0, 0.57, qa), plane(1, 0.43, off)));
+    const at = frame(100, figure(0, plane(1, 0.65, off)));
+    const r = swapOf([before, at], [anchor(), anchor()], 1);
+    expect(r.feet!.px).toBeCloseTo(5, 3);
+    expect(r.failFeet).toBe(true);
   });
 
   describe('what counts as a change of pose (r391)', () => {
