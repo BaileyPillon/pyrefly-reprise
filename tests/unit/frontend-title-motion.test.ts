@@ -14,7 +14,9 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { MoteField } from '../../src/app/screens/frontend/motes.ts';
 import { ParallaxField, normalisePointer } from '../../src/app/screens/frontend/parallax.ts';
 import {
+  TITLE_CAST_ON,
   TITLE_PLATE,
+  castHtml,
   titleMarkup,
   titlePlateSizes,
   upgradeTitlePlanes,
@@ -153,7 +155,7 @@ describe('titleMarkup', () => {
     expect(sources.size).toBe(1);
   });
 
-  it('is the key art after.png was composited from, not a stand-in backdrop', () => {
+  it('is the key art (the Gullwings painting since 2026-10-05), not a stand-in backdrop', () => {
     expect(TITLE_PLATE).toBe('art/title/keyart.png');
     expect(html).toContain('art/title/keyart.png');
     // The first build reached for backdrops/title.png; nothing may again.
@@ -166,11 +168,25 @@ describe('titleMarkup', () => {
     for (const [tag] of planes) expect(tag).toContain("data-art','missing'");
   });
 
-  it('puts the two on the shore in as approved paintings, drawn as silhouettes', () => {
-    expect(html).toContain('art/characters/tidus/idle.png');
-    expect(html).toContain('art/characters/yuna/idle.png');
+  /**
+   * Since 2026-10-05 (both games) the key art is the Gullwings painting, which has Yuna, Rikku and Paine in it. The
+   * concept's two black silhouettes of Tidus and Yuna on the shore read as two extra people on top of it (and hid the
+   * picture Bailey approved), so the screen draws nobody of its own. The switch stays, and the old markup with it.
+   */
+  it('draws no figures of its own on top of the painting, which carries its three heroes already', () => {
+    expect(TITLE_CAST_ON).toBe(false);
+    expect(castHtml()).toBe('');
+    expect(html).not.toContain('art/characters/');
+    expect(html).not.toContain('fe-title__cast');
+    expect(html).not.toContain('fe-sil');
+  });
+
+  it('still builds the two on the shore, as ink silhouettes, when the switch is turned back on', () => {
+    const cast = castHtml(true);
+    expect(cast).toContain('art/characters/tidus/idle.png');
+    expect(cast).toContain('art/characters/yuna/idle.png');
     // Two figures and their two reflections, every one of them an ink shape.
-    expect(html.match(/class="fe-sil"/g) ?? []).toHaveLength(4);
+    expect(cast.match(/class="fe-sil"/g) ?? []).toHaveLength(4);
   });
 
   it('keeps the approved slab copy and the Press Enter chip as a real button', () => {
@@ -231,7 +247,7 @@ describe('titleMarkup', () => {
    */
   it('places the cast at after.html’s own pixel geometry, not a rounded guess', () => {
     const boxes = Array.from(
-      html.matchAll(/class="fe-figure" style="left:([\d.]+)%;bottom:([\d.]+)%;height:([\d.]+)%"/g),
+      castHtml(true).matchAll(/class="fe-figure" style="left:([\d.]+)%;bottom:([\d.]+)%;height:([\d.]+)%"/g),
     );
     expect(boxes).toHaveLength(2);
     const [tidus, yuna] = boxes;
@@ -251,7 +267,7 @@ describe('titleMarkup', () => {
    */
   it('hangs each reflection from its figure’s feet and hands CSS the ratio', () => {
     const boxes = Array.from(
-      html.matchAll(/class="fe-figure fe-figure--refl" style="([^"]+)"/g),
+      castHtml(true).matchAll(/class="fe-figure fe-figure--refl" style="([^"]+)"/g),
       (m) => m[1]!,
     );
     expect(boxes).toHaveLength(2);

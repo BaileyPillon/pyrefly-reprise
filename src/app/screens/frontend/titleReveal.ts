@@ -17,14 +17,16 @@
  *    request from holding the reveal: past it the layers show as they are.
  *
  * The placeholder is this project's own key art (`public/art/title/keyart.png`,
- * hard rule 8 is about retail assets), 32 x 18, WebP, 340 characters.
+ * hard rule 8 is about retail assets), 32 x 18, WebP, 475 characters. It is
+ * the Gullwings painting since 2026-10-05; regenerate it from the plate when
+ * the plate changes (Lanczos to 32 x 18, lossy WebP quality 80).
  */
 
 import './title-reveal.css';
 
-/** `public/art/title/keyart.png` at 32 x 18 (mean luma 0.46 before the far plane's grade). */
+/** `public/art/title/keyart.png` at 32 x 18 (mean luma 0.54 before the far plane's grade; the 2026-09-21 plate was 0.46). */
 export const TITLE_PLACEHOLDER =
-  'data:image/webp;base64,UklGRvYAAABXRUJQVlA4IOoAAACwBQCdASogABIAPrVQn0qnJSKhsBgIAOAWiWQAnTKDLHQdz7y64zqQZAHBfwr8CldR6zXRtIAA/SLl4kCZpLbqgsOmKUXOx/fJNKZSQfexl9QGkHFa3tLG0v+3NSx6fG9KnOuqttEvdSWX14af4A6U20DFpOke4bLWu3p7CYMD1XVTWCImAMKoef43UYEvgxOXbETLkiuQyVotUcD6Nkq3yV1FMRQBZuv/zdmVwgAypTVawnq6J7FF77rtUY5MTsw/YFMaH06oqPJhQ1yCEldGclS7FqXROBdhNQrfrcic5GCvqynHLeWCAAA=';
+  'data:image/webp;base64,UklGRkoBAABXRUJQVlA4ID4BAACwBwCdASogABIAPm0ulUakIqIhKAqogA2JaACdMoR7ToM6zgk9FGFS6YBvPJtAVTGcwNImDRTo8ayYWo+l+NOCGeL9dxKAAP5rXz3LHknAuE2/ir0EyRJrJLA7qydm2JPCDozTL4gzvxLHE2jswQciKo/o2scLaWWikxDK4mycl99PElE/SxiSO+JAEr+iO7dP7W3WHMfs/IVFQVAjQt7+YeodnEy4Zxyx4MuezOVpKr1CbQMrHUgKLj5YEvDjhQQ+Ggh61xRTAKBu3PSUVvfsb4Wyho7xKD3vuaoqbvrkG+wKRwcfcbbdCyh/GJc/N23QLIv2ykEfzpR2mif/pjpDtam/+IkXuGohgCnItt1PMxbg0nOII/BPKQsekhAVcbdO5LMnX8FXqVhZnrYhpITOCNgZ1iTmzs+f42AAAAA=';
 
 /** Longest the reveal waits for decoding before it shows the layers anyway. */
 export const TITLE_DECODE_CAP_MS = 2500;

@@ -4,16 +4,18 @@
  *
  * The placeholder sits in the far plane's own stacking context (the plane is
  * transformed, so `z-index: -1` stays inside it, under the `<img>`), graded
- * like the far `<img>` (`frontend.css`) and softened so its 32 pixels read as
- * distance, not as blocks.
+ * like the far `<img>` (`--fe-title-grade`, one value in `frontend.css`) and
+ * softened so its 32 pixels read as distance, not as blocks. It is anchored
+ * at the same `--fe-art-x` / `--fe-art-y` as the painting, so the first frame
+ * is the same crop as the sharp one that replaces it.
  */
 .fe-title__plane--far::before {
   content: '';
   position: absolute;
   inset: -4%;
   z-index: -1;
-  background: var(--fe-title-ph, none) center / cover no-repeat;
-  filter: saturate(0.94) brightness(0.78) contrast(1.08) blur(10px);
+  background: var(--fe-title-ph, none) var(--fe-art-x, 50%) var(--fe-art-y, 50%) / cover no-repeat;
+  filter: var(--fe-title-grade, saturate(1)) blur(10px);
   pointer-events: none;
 }
 /* A plate that 404s keeps the dusk gradient it has always fallen back on. */

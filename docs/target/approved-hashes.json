@@ -638,12 +638,30 @@
   },
   "title:keyart": {
    "public/art/title/keyart.png": {
-    "sha256": "835d56b4254eef20aef715335207a61392adc7b5ae500dbb7f3a70b9470f9f02",
-    "mtime": "2026-09-21T17:41:55.622Z"
+    "sha256": "94f37ae06ab7ad3e7db38b7aace91e72c7de2949485a172d45c59479ffe48c05",
+    "mtime": "2026-10-05T23:38:28.181Z",
+    "approved": "2026-10-05",
+    "words": "use what i just approved for the new title screen please, it's soooo epic i love it.",
+    "note": "Bailey, 2026-10-05 ~19:25 EDT, after approving the picture in the Art Room at 19:24 EDT (proposal p_f4836b8c, the Gullwings 'Farplane Field', made with ChatGPT Images 2.5 by Codex): the title screen's key art, both games. The picture is the approved 1672x941 image cropped to 1647x941 (25 px off the right edge), RealESRGAN_x4plus to 2688x1536 with the colour drift removed, keyart.png its Lanczos downscale to 1344x768, keyart.2x.webp the master as a lossy WebP (quality 95). Staged at D:/Tools/pyrefly-art-staging/title-gullwings/; backup of the files it replaced: D:/Tools/pyrefly-art-backup/title-2026-10-05-before-gullwings/. Built on branch title-gullwings-keyart; docs/handoff/title-gullwings-keyart.md.",
+    "supersedes": {
+     "sha256": "835d56b4254eef20aef715335207a61392adc7b5ae500dbb7f3a70b9470f9f02",
+     "mtime": "2026-09-21T17:41:55.622Z",
+     "approved": "2026-09-19",
+     "backup": "D:/Tools/pyrefly-art-backup/title-2026-10-05-before-gullwings/keyart.png"
+    }
    },
    "public/art/title/keyart.2x.webp": {
-    "sha256": "1ab89b73cc4316c111ae2147ff7fb28e9172396b8da51487dc379ee8c693b7a1",
-    "mtime": "2026-09-21T17:41:55.589Z"
+    "sha256": "58a13dd78f73bed879494346a3e79b17237692245ed86f84d0074e11d5ef27bd",
+    "mtime": "2026-10-05T23:38:44.882Z",
+    "approved": "2026-10-05",
+    "words": "use what i just approved for the new title screen please, it's soooo epic i love it.",
+    "note": "Bailey, 2026-10-05 ~19:25 EDT, after approving the picture in the Art Room at 19:24 EDT (proposal p_f4836b8c, the Gullwings 'Farplane Field', made with ChatGPT Images 2.5 by Codex): the title screen's key art, both games. The picture is the approved 1672x941 image cropped to 1647x941 (25 px off the right edge), RealESRGAN_x4plus to 2688x1536 with the colour drift removed, keyart.png its Lanczos downscale to 1344x768, keyart.2x.webp the master as a lossy WebP (quality 95). Staged at D:/Tools/pyrefly-art-staging/title-gullwings/; backup of the files it replaced: D:/Tools/pyrefly-art-backup/title-2026-10-05-before-gullwings/. Built on branch title-gullwings-keyart; docs/handoff/title-gullwings-keyart.md.",
+    "supersedes": {
+     "sha256": "1ab89b73cc4316c111ae2147ff7fb28e9172396b8da51487dc379ee8c693b7a1",
+     "mtime": "2026-09-21T17:41:55.589Z",
+     "approved": "2026-09-19",
+     "backup": "D:/Tools/pyrefly-art-backup/title-2026-10-05-before-gullwings/keyart.2x.webp"
+    }
    }
   },
   "chapter:leblanc-idles:2026-09-23": {
