@@ -39,6 +39,7 @@ import * as SA from './StageAnchors.ts';
 import { stageSpellFx, type StageSpellFxOptions } from './spellfx/stageSpellFx.ts';
 import type { SpellFxLayer } from './spellfx/SpellFxLayer.ts';
 import { StageMotion } from './motion/StageMotion.ts'; // r38-motion RUN-IN's field: painted spans, camera truck, smear
+import { profileOfActor } from './motion/Silhouette.ts'; // r391-reach: a painting's rows, for the strike
 import { PyreflyStage } from './PyreflyStage.ts';
 import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
 import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
@@ -200,18 +201,24 @@ export class PaintedStage implements BattleStage {
     this.motion = new StageMotion({
       scene: opts.scene,
       camera: opts.battleCamera,
-      quadOf: (id, out) => {
+      quadOf: (id, out, pose) => {
         const s = this.actors.get(id);
         if (!s) return null;
-        const q = s.anchor ? this.anchoredQuad(s) : s.actor.contentQuad(out);
+        const other = pose && !s.anchor ? s.actor.poseShape(pose) : null; // r391-reach: the pose a blow ends on, not yet showing
+        const q = other ? other.corners : s.anchor ? this.anchoredQuad(s) : s.actor.contentQuad(out);
         if (q !== out) for (let i = 0; i < 4; i++) out[i]!.copy(q[i]!);
         return out;
       },
       figure: (id) => this.actors.get(id)?.actor,
       view: () => this.motionView(),
       cutRigs: (runner) => cutRigsOf(this, this.camera, runner, (r) => preset.shotRig(r)),
+      realRig: (asked) => preset.shotRig(asked), // r391-reach: the strike reads the rig the first hit's cut really lands on
       lowEffects: () => opts.comfort?.().lowEffects === true,
       warmFor: () => this.smearWarmId(),
+      profileOf: (id, pose) => {
+        const s = this.actors.get(id);
+        return s && !s.anchor ? profileOfActor(s.actor, pose) : undefined; // a figure-less part has no painting: its box stands in
+      },
     });
   }
 
