@@ -1,0 +1,250 @@
+{
+ "build": "r391-int + revert of 9406b41c (D-461) + merge of title-gullwings-keyart 3e4a906a; production build BASE_PATH=/, vite preview :5198, headless GPU Chromium, real keys / real taps, 1600x900 unless named",
+ "title": [
+  {
+   "size": "1600x900",
+   "touch": false,
+   "fail": null,
+   "reached": "chapter-select",
+   "enters": 2,
+   "taps": 0,
+   "note": "the first-run coach brief sits between the title and the board: the first Enter/tap opens it, the second reaches chapter-select",
+   "planes": [
+    {
+     "src": "title/keyart.2x.webp",
+     "natural": [
+      1776,
+      1014
+     ],
+     "complete": true
+    },
+    {
+     "src": "title/keyart.2x.webp",
+     "natural": [
+      1776,
+      1014
+     ],
+     "complete": true
+    }
+   ],
+   "slab": {
+    "l": -86,
+    "t": 24,
+    "r": 468,
+    "b": 329
+   },
+   "silhouettesDrawn": 0,
+   "artFetched": [
+    "art/title/keyart.2x.webp"
+   ],
+   "consoleErrors": 0,
+   "notFound": 0
+  },
+  {
+   "size": "2560x1440",
+   "touch": false,
+   "fail": null,
+   "reached": "chapter-select",
+   "enters": 2,
+   "taps": 0,
+   "note": "the first-run coach brief sits between the title and the board: the first Enter/tap opens it, the second reaches chapter-select",
+   "planes": [
+    {
+     "src": "title/keyart.2x.webp",
+     "natural": [
+      2841,
+      1623
+     ],
+     "complete": true
+    },
+    {
+     "src": "title/keyart.2x.webp",
+     "natural": [
+      2841,
+      1623
+     ],
+     "complete": true
+    }
+   ],
+   "slab": {
+    "l": -137,
+    "t": 39,
+    "r": 749,
+    "b": 527
+   },
+   "silhouettesDrawn": 0,
+   "artFetched": [
+    "art/title/keyart.2x.webp"
+   ],
+   "consoleErrors": 0,
+   "notFound": 0
+  },
+  {
+   "size": "390x844",
+   "touch": true,
+   "fail": null,
+   "reached": "chapter-select",
+   "enters": 0,
+   "taps": 2,
+   "note": "the first-run coach brief sits between the title and the board: the first Enter/tap opens it, the second reaches chapter-select",
+   "planes": [
+    {
+     "src": "title/keyart.2x.webp",
+     "natural": [
+      1639,
+      936
+     ],
+     "complete": true
+    },
+    {
+     "src": "title/keyart.2x.webp",
+     "natural": [
+      1639,
+      936
+     ],
+     "complete": true
+    }
+   ],
+   "slab": {
+    "l": -54,
+    "t": 26,
+    "r": 214,
+    "b": 301
+   },
+   "silhouettesDrawn": 0,
+   "artFetched": [
+    "art/title/keyart.2x.webp"
+   ],
+   "consoleErrors": 0,
+   "notFound": 0
+  }
+ ],
+ "chapterI": [
+  {
+   "chapter": "seymour-flux",
+   "ch": "I",
+   "fail": null,
+   "turn": {
+    "label": "Attack",
+    "confirm": {
+     "confirmed": true,
+     "frames": 30
+    }
+   },
+   "finalScreen": "battle",
+   "events": 14,
+   "consoleErrors": 0,
+   "notFound": 0
+  }
+ ],
+ "chapterIV_fiendStrikeApex": [
+  {
+   "tag": "int391reach2",
+   "frozenOnLunge": 7,
+   "consoleErrors": 0,
+   "notFound": 0,
+   "fiendStrikes": [
+    {
+     "n": 1,
+     "fiend": "bahamut",
+     "named": [
+      "paine"
+     ],
+     "lungeDistance": 1.4,
+     "houseLunge": 1.4,
+     "paintedGapPx": {
+      "yuna": {
+       "atRest": 209.3,
+       "atApex": 75
+      },
+      "rikku": {
+       "atRest": 48.8,
+       "atApex": 0
+      },
+      "paine": {
+       "atRest": 0,
+       "atApex": 0
+      }
+     }
+    },
+    {
+     "n": 4,
+     "fiend": "bahamut",
+     "named": [
+      "rikku"
+     ],
+     "lungeDistance": 1.4,
+     "houseLunge": 1.4,
+     "paintedGapPx": {
+      "yuna": {
+       "atRest": 325.1,
+       "atApex": 194.7
+      },
+      "rikku": {
+       "atRest": 52.7,
+       "atApex": 0
+      },
+      "paine": {
+       "atRest": 0,
+       "atApex": 0
+      }
+     }
+    },
+    {
+     "n": 7,
+     "fiend": "bahamut",
+     "named": [
+      "yuna"
+     ],
+     "lungeDistance": 3.04,
+     "houseLunge": 1.4,
+     "paintedGapPx": {
+      "yuna": {
+       "atRest": 153.5,
+       "atApex": 0
+      },
+      "rikku": {
+       "atRest": 0,
+       "atApex": 0
+      },
+      "paine": {
+       "atRest": 0,
+       "atApex": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "tag": "int391final2",
+   "frozenOnLunge": 1,
+   "consoleErrors": 0,
+   "notFound": 0,
+   "fiendStrikes": [
+    {
+     "n": 1,
+     "fiend": "bahamut",
+     "named": [
+      "paine"
+     ],
+     "lungeDistance": 1.4,
+     "houseLunge": 1.4,
+     "paintedGapPx": {
+      "yuna": {
+       "atRest": 201.4,
+       "atApex": 71
+      },
+      "rikku": {
+       "atRest": 47.7,
+       "atApex": 0
+      },
+      "paine": {
+       "atRest": 0,
+       "atApex": 0
+      }
+     }
+    }
+   ]
+  }
+ ]
+}
