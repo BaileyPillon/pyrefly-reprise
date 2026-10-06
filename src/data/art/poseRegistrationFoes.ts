@@ -255,9 +255,9 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     ko: { stanceX: 589.5 },
   },
   'yunalesca-1': {
-    attack: { stanceX: 642.0 },
-    cast: { stanceX: 1016.5, upright: true },
-    hurt: { stanceX: 463.0 },
+    attack: { scale: 0.7, stanceX: 642.0 },
+    cast: { scale: 0.77, stanceX: 1016.5, upright: true },
+    hurt: { scale: 0.67, stanceX: 463.0 },
     idle: { stanceX: 402.5 },
   },
   'yunalesca-2': {
