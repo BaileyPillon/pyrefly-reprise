@@ -1,0 +1,891 @@
+[
+ {
+  "k": "shot.1-chapter-select-first",
+  "v": "docs\\screenshots\\exp-leblanc\\smoke-1-chapter-select-first.png"
+ },
+ {
+  "k": "board",
+  "v": {
+   "selected": {
+    "id": "exp-leblanc",
+    "text": "EXPExperimental: Leblanc (new art)"
+   },
+   "cards": 19,
+   "last": {
+    "id": "exp-leblanc",
+    "text": "EXPExperimental: Leblanc (new art)"
+   },
+   "hero": "Chapter EXP Experimental: Leblanc (new art)",
+   "prose": "Chapter VI's mission, in new paintings The same three-act ambush at Chateau Leblanc, fought exactly as it is in Chapter VI, over a set of new paintings made with ChatGPT Images. A preview: a figure not yet repainted is still the old painting, and nothing you do here is written to your chapter progress. ATB"
+  }
+ },
+ {
+  "k": "shot.2-chapter-select-experiment",
+  "v": "docs\\screenshots\\exp-leblanc\\smoke-2-chapter-select-experiment.png"
+ },
+ {
+  "k": "afterSelect",
+  "v": "party-prep"
+ },
+ {
+  "k": "shot.3-party-prep",
+  "v": "docs\\screenshots\\exp-leblanc\\smoke-3-party-prep.png"
+ },
+ {
+  "k": "afterPrep",
+  "v": "cutscene"
+ },
+ {
+  "k": "shot.4-cutscene",
+  "v": "docs\\screenshots\\exp-leblanc\\smoke-4-cutscene.png"
+ },
+ {
+  "k": "preBattle",
+  "v": {
+   "screen": "battle",
+   "presses": 0
+  }
+ },
+ {
+  "k": "menu",
+  "v": {
+   "screen": "battle",
+   "awaiting": true,
+   "st": {
+    "version": "0.1.0",
+    "seed": 1,
+    "screen": "battle",
+    "stack": [
+     "battle"
+    ],
+    "overlayDepth": 0,
+    "frameCount": 1991,
+    "elapsed": 34.383,
+    "registered": [
+     "hud2-mock",
+     "title",
+     "demo",
+     "ffx-hud-demo",
+     "chapter-select",
+     "party-prep",
+     "battle",
+     "party-prep-ffx2",
+     "cutscene",
+     "results",
+     "results-silent",
+     "scene-gagazet",
+     "scene-farplane",
+     "scene-zanarkand-dome",
+     "scene-dreams-end",
+     "scene-bevelle-underground",
+     "scene-leblanc-last-room",
+     "scene-macalania-temple",
+     "scene-evrae-airship-deck",
+     "results-victory",
+     "results-defeat",
+     "results-ffx2"
+    ],
+    "save": {
+     "version": 1,
+     "updatedAt": 1791312047956,
+     "chapters": {
+      "seymour-flux": {
+       "id": "seymour-flux",
+       "cleared": false,
+       "bestTimeMs": null,
+       "bestTurns": null,
+       "attempts": 0,
+       "playTimeMs": 0
+      }
+     },
+     "unlocked": [],
+     "settings": {
+      "masterVolume": 0.8,
+      "musicVolume": 0.7,
+      "sfxVolume": 0.7,
+      "sfxBalanceMigrated": true,
+      "textSpeed": 1,
+      "skipSeenCutscenes": false,
+      "lowEffects": false,
+      "fxLight": true,
+      "fxLiving": true,
+      "fxSpectacle": true,
+      "fxDof": true,
+      "fxFog": true,
+      "fxEdges": true,
+      "fxBreath": true,
+      "fxKo": true,
+      "fxFraming": true,
+      "fxHero": true,
+      "fxSphere": true,
+      "fxSplash": true,
+      "textSize": 1,
+      "guideVisible": true,
+      "advisorVisible": true,
+      "intentVisible": true,
+      "ffx2Atb": "wait",
+      "ffx2AtbMigrated": true,
+      "pausePanelsHidden": false,
+      "battleHelp": true,
+      "reduceMotion": false
+     },
+     "seenCoach": [
+      "briefing",
+      "firstrun-board",
+      "firstrun-prep",
+      "firstrun-battle",
+      "ffx2-gauge"
+     ],
+     "flags": {}
+    },
+    "flowStep": "battle",
+    "flowScreens": {
+     "chapterSelect": true,
+     "partyPrep": false,
+     "cutscene": true,
+     "results": true
+    },
+    "screenState": {
+     "chapter": "exp-leblanc",
+     "game": "ffx2",
+     "scene": "exp-leblanc-last-room",
+     "scenePlaceholder": false,
+     "preview": false,
+     "links": 1,
+     "chainLength": 3,
+     "paused": false,
+     "canPause": true,
+     "canPauseOnCancel": true,
+     "exitIntent": null,
+     "playTimeMs": 0,
+     "hud": true,
+     "rig": "idle",
+     "actors": [
+      {
+       "id": "yuna",
+       "side": "party",
+       "art": "exp-leblanc-yuna-gunner",
+       "pose": "idle",
+       "placeholder": false,
+       "facing": 1,
+       "mirrored": false,
+       "life": "idle"
+      },
+      {
+       "id": "rikku",
+       "side": "party",
+       "art": "exp-leblanc-rikku-thief",
+       "pose": "idle",
+       "placeholder": false,
+       "facing": 1,
+       "mirrored": false,
+       "life": "idle"
+      },
+      {
+       "id": "paine",
+       "side": "party",
+       "art": "exp-leblanc-paine-warrior",
+       "pose": "ready",
+       "placeholder": false,
+       "facing": 1,
+       "mirrored": false,
+       "life": "ready"
+      },
+      {
+       "id": "ormi-entrance",
+       "side": "enemy",
+       "art": "exp-leblanc-ormi",
+       "pose": "idle",
+       "placeholder": false,
+       "facing": -1,
+       "mirrored": true,
+       "life": "idle"
+      },
+      {
+       "id": "dr-goon",
+       "side": "enemy",
+       "art": "exp-leblanc-ffx2-dr-goon",
+       "pose": "idle",
+       "placeholder": false,
+       "facing": -1,
+       "mirrored": true,
+       "life": "idle"
+      },
+      {
+       "id": "fem-goon",
+       "side": "enemy",
+       "art": "exp-leblanc-ffx2-fem-goon",
+       "pose": "cast",
+       "placeholder": false,
+       "facing": -1,
+       "mirrored": true,
+       "life": "act"
+      }
+     ],
+     "spellFx": {
+      "quality": "full",
+      "running": [],
+      "quads": 0,
+      "cpuMs": 0.3,
+      "cpuMeanMs": 32.406,
+      "flights": {
+       "launched": 0,
+       "landed": 0,
+       "live": 0,
+       "lastLaunchAt": 0,
+       "lastLandAt": 0
+      }
+     },
+     "playback": {
+      "speed": "normal",
+      "timeScale": 1,
+      "auto": false,
+      "aborted": false,
+      "phase": "command:paine",
+      "awaitingMenu": true,
+      "played": 12,
+      "lastEvents": [
+       {
+        "seq": 1,
+        "type": "atb",
+        "ms": 1
+       },
+       {
+        "seq": 2,
+        "type": "turn-start",
+        "ms": 164
+       },
+       {
+        "seq": 3,
+        "type": "action-start",
+        "ms": 391
+       },
+       {
+        "seq": 4,
+        "type": "chain",
+        "ms": 0
+       },
+       {
+        "seq": 5,
+        "type": "damage",
+        "ms": 643
+       },
+       {
+        "seq": 6,
+        "type": "action-end",
+        "ms": 231
+       },
+       {
+        "seq": 7,
+        "type": "atb",
+        "ms": 0
+       },
+       {
+        "seq": 8,
+        "type": "atb",
+        "ms": 0
+       },
+       {
+        "seq": 9,
+        "type": "turn-start",
+        "ms": 100
+       },
+       {
+        "seq": 10,
+        "type": "action-start",
+        "ms": 892
+       },
+       {
+        "seq": 11,
+        "type": "atb",
+        "ms": 0
+       },
+       {
+        "seq": 12,
+        "type": "atb",
+        "ms": 0
+       }
+      ],
+      "lastCommand": null
+     },
+     "battle": {
+      "turn": 2,
+      "ticks": 9333,
+      "events": 13,
+      "result": null,
+      "combatants": [
+       {
+        "id": "yuna",
+        "hp": 1034,
+        "maxHp": 1034,
+        "mp": 51,
+        "alive": true,
+        "side": "party",
+        "statuses": []
+       },
+       {
+        "id": "rikku",
+        "hp": 823,
+        "maxHp": 934,
+        "mp": 106,
+        "alive": true,
+        "side": "party",
+        "statuses": []
+       },
+       {
+        "id": "paine",
+        "hp": 1089,
+        "maxHp": 1089,
+        "mp": 62,
+        "alive": true,
+        "side": "party",
+        "statuses": []
+       },
+       {
+        "id": "ormi-entrance",
+        "hp": 1640,
+        "maxHp": 1640,
+        "mp": 45,
+        "alive": true,
+        "side": "enemy",
+        "statuses": []
+       },
+       {
+        "id": "dr-goon",
+        "hp": 232,
+        "maxHp": 232,
+        "mp": 41,
+        "alive": true,
+        "side": "enemy",
+        "statuses": []
+       },
+       {
+        "id": "fem-goon",
+        "hp": 167,
+        "maxHp": 167,
+        "mp": 172,
+        "alive": true,
+        "side": "enemy",
+        "statuses": []
+       }
+      ]
+     },
+     "log": [
+      {
+       "type": "atb",
+       "snapshot": {
+        "elapsedMs": 0,
+        "bars": [
+         {
+          "actorId": "yuna",
+          "fill": 0.17998765622589108,
+          "required": 12962,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "rikku",
+          "fill": 0.08,
+          "required": 11475,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "paine",
+          "fill": 0.32,
+          "required": 13725,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "ormi-entrance",
+          "fill": 0.4399533140856318,
+          "required": 16279,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "dr-goon",
+          "fill": 0.18994904234756632,
+          "required": 17073,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "fem-goon",
+          "fill": 0.39994742721955706,
+          "required": 15217,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         }
+        ]
+       },
+       "seq": 0
+      },
+      {
+       "type": "atb",
+       "snapshot": {
+        "elapsedMs": 3039,
+        "bars": [
+         {
+          "actorId": "yuna",
+          "fill": 0.8833513346705756,
+          "required": 12962,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "rikku",
+          "fill": 0.8745098039215686,
+          "required": 11475,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "paine",
+          "fill": 0.9842622950819672,
+          "required": 13725,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "ormi-entrance",
+          "fill": 1,
+          "required": 16279,
+          "ready": true,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "dr-goon",
+          "fill": 0.7239500966438236,
+          "required": 17073,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "fem-goon",
+          "fill": 0.9990799763422488,
+          "required": 15217,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         }
+        ]
+       },
+       "seq": 1
+      },
+      {
+       "type": "turn-start",
+       "actorId": "ormi-entrance",
+       "turn": 1,
+       "elapsedTicks": 9117,
+       "seq": 2
+      },
+      {
+       "type": "action-start",
+       "actorId": "ormi-entrance",
+       "command": {
+        "kind": "ability",
+        "id": "x2-ormi-shield-bash",
+        "targets": [
+         "rikku"
+        ]
+       },
+       "abilityId": "x2-ormi-shield-bash",
+       "abilityName": "Shield Bash",
+       "targets": [
+        "rikku"
+       ],
+       "seq": 3
+      },
+      {
+       "type": "chain",
+       "targetId": "rikku",
+       "count": 0,
+       "multiplier": 1,
+       "seq": 4
+      },
+      {
+       "type": "damage",
+       "targetId": "rikku",
+       "sourceId": "ormi-entrance",
+       "amount": 111,
+       "element": "none",
+       "affinity": "normal",
+       "crit": false,
+       "hitIndex": 0,
+       "hitCount": 1,
+       "seq": 5
+      },
+      {
+       "type": "action-end",
+       "actorId": "ormi-entrance",
+       "seq": 6
+      },
+      {
+       "type": "atb",
+       "snapshot": {
+        "elapsedMs": 3039,
+        "bars": [
+         {
+          "actorId": "yuna",
+          "fill": 0.8833513346705756,
+          "required": 12962,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "rikku",
+          "fill": 0.8745098039215686,
+          "required": 11475,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "paine",
+          "fill": 0.9842622950819672,
+          "required": 13725,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "ormi-entrance",
+          "fill": 0,
+          "required": 16279,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "dr-goon",
+          "fill": 0.7239500966438236,
+          "required": 17073,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "fem-goon",
+          "fill": 0.9990799763422488,
+          "required": 15217,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         }
+        ]
+       },
+       "seq": 7
+      },
+      {
+       "type": "atb",
+       "snapshot": {
+        "elapsedMs": 3043.6666666666665,
+        "bars": [
+         {
+          "actorId": "yuna",
+          "fill": 0.8844314149051072,
+          "required": 12962,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "rikku",
+          "fill": 0.8757298474945534,
+          "required": 11475,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "paine",
+          "fill": 0.9852823315118397,
+          "required": 13725,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "ormi-entrance",
+          "fill": 0.0008600036857300817,
+          "required": 16279,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "dr-goon",
+          "fill": 0.7247701048439056,
+          "required": 17073,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "fem-goon",
+          "fill": 1,
+          "required": 15217,
+          "ready": true,
+          "charge": null,
+          "state": "normal"
+         }
+        ]
+       },
+       "seq": 8
+      },
+      {
+       "type": "turn-start",
+       "actorId": "fem-goon",
+       "turn": 2,
+       "elapsedTicks": 9131,
+       "seq": 9
+      },
+      {
+       "type": "action-start",
+       "actorId": "fem-goon",
+       "command": {
+        "kind": "ability",
+        "id": "x2-fem-goon-water",
+        "targets": []
+       },
+       "abilityId": "x2-fem-goon-water",
+       "abilityName": "Water",
+       "targets": [],
+       "seq": 10
+      },
+      {
+       "type": "atb",
+       "snapshot": {
+        "elapsedMs": 3043.6666666666665,
+        "bars": [
+         {
+          "actorId": "yuna",
+          "fill": 0.8844314149051072,
+          "required": 12962,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "rikku",
+          "fill": 0.8757298474945534,
+          "required": 11475,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "paine",
+          "fill": 0.9852823315118397,
+          "required": 13725,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "ormi-entrance",
+          "fill": 0.0008600036857300817,
+          "required": 16279,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "dr-goon",
+          "fill": 0.7247701048439056,
+          "required": 17073,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "fem-goon",
+          "fill": 0,
+          "required": 15217,
+          "ready": false,
+          "charge": 0,
+          "state": "normal"
+         }
+        ]
+       },
+       "seq": 11
+      },
+      {
+       "type": "atb",
+       "snapshot": {
+        "elapsedMs": 3111,
+        "bars": [
+         {
+          "actorId": "yuna",
+          "fill": 0.9000154297176362,
+          "required": 12962,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "rikku",
+          "fill": 0.8933333333333333,
+          "required": 11475,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "paine",
+          "fill": 1,
+          "required": 13725,
+          "ready": true,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "ormi-entrance",
+          "fill": 0.01326862829412126,
+          "required": 16279,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "dr-goon",
+          "fill": 0.736601651730803,
+          "required": 17073,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "fem-goon",
+          "fill": 0,
+          "required": 15217,
+          "ready": false,
+          "charge": 0.03573956121726818,
+          "state": "normal"
+         }
+        ]
+       },
+       "seq": 12
+      }
+     ]
+    }
+   }
+  }
+ },
+ {
+  "k": "shot.5-battle-first-menu",
+  "v": "docs\\screenshots\\exp-leblanc\\smoke-5-battle-first-menu.png"
+ },
+ {
+  "k": "chapterInState",
+  "v": {
+   "chapter": null,
+   "screen": "battle"
+  }
+ },
+ {
+  "k": "shot.6-command-open",
+  "v": "docs\\screenshots\\exp-leblanc\\smoke-6-command-open.png"
+ },
+ {
+  "k": "shot.6b-target",
+  "v": "docs\\screenshots\\exp-leblanc\\smoke-6b-target.png"
+ },
+ {
+  "k": "presses",
+  "v": [
+   "|menu",
+   "|confirm",
+   "|menu"
+  ]
+ },
+ {
+  "k": "shot.7-attack-in-flight",
+  "v": "docs\\screenshots\\exp-leblanc\\smoke-7-attack-in-flight.png"
+ },
+ {
+  "k": "shot.8-attack-landed",
+  "v": "docs\\screenshots\\exp-leblanc\\smoke-8-attack-landed.png"
+ },
+ {
+  "k": "afterAttack",
+  "v": {
+   "partyActions": 1,
+   "lastAction": {
+    "actor": "paine",
+    "ability": "attack",
+    "targets": [
+     "dr-goon"
+    ]
+   },
+   "logLen": 46,
+   "partyDamage": [
+    {
+     "from": "paine",
+     "to": "dr-goon",
+     "amount": 410,
+     "crit": true
+    }
+   ],
+   "verdict": "PASS"
+  }
+ },
+ {
+  "k": "requests",
+  "v": {
+   "total": 163,
+   "experimental": 106,
+   "baseLeaks": [
+    "/art/characters/yuna-white-mage/idle.png",
+    "/art/characters/rikku-dark-knight/idle.png",
+    "/art/characters/paine-warrior/idle.png",
+    "/art/characters/paine-dark-knight/idle.png",
+    "/art/characters/yuna-gunner/idle.png",
+    "/art/characters/rikku-thief/idle.png",
+    "/art/characters/yuna-dark-knight/idle.png",
+    "/art/characters/rikku-alchemist/idle.png",
+    "/art/characters/leblanc/idle.png",
+    "/art/characters/ormi/idle.png"
+   ]
+  }
+ },
+ {
+  "k": "expSample",
+  "v": [
+   "/art/backdrops/exp-leblanc-last-room.png",
+   "/art/characters/exp-leblanc-leblanc/idle.png",
+   "/art/backdrops/exp-leblanc-last-room.json",
+   "/art/characters/exp-leblanc-yuna-gunner/idle.png",
+   "/art/characters/exp-leblanc-rikku-thief/idle.png",
+   "/art/characters/exp-leblanc-paine-warrior/idle.png",
+   "/art/characters/exp-leblanc-ormi/idle.json",
+   "/art/characters/exp-leblanc-ormi/idle.png",
+   "/art/characters/exp-leblanc-ffx2-dr-goon/idle.json",
+   "/art/characters/exp-leblanc-ffx2-dr-goon/idle.png",
+   "/art/characters/exp-leblanc-ffx2-fem-goon/idle.json",
+   "/art/characters/exp-leblanc-ffx2-fem-goon/idle.png"
+  ]
+ },
+ {
+  "k": "consoleErrors",
+  "v": []
+ },
+ {
+  "k": "notFound",
+  "v": []
+ }
+]
