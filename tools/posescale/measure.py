@@ -49,6 +49,11 @@ BAND = 0.005
 # (the harness's `measure.mjs`, 7 chapters, 12 subjects) the KO head is 0.957 to 1.006 of its idle's with a median of 0.978 at the registered scale. The table gives
 # every KO `scale / KO_PROJECTION`, so the head on screen is the idle's to about 2.5 percent (the spread is the station: Ch I and VIII lay Tidus at 0.957 and 0.99).
 KO_PROJECTION = 0.978
+# r392: a CAMERA ALLOWANCE (overrides.json `allow` {scale, why}) is a factor on a pose's applied scale, written only where the harness measured a pose's head on screen off its idle's by the stage
+# camera and by the pose's own height: a victory pose whose head sits a third of a figure lower than the idle's is drawn smaller by a close victory camera (Macalania: Yuna x0.948 to 0.953, Rikku
+# x0.967 to 0.970 of their idle's head; x0.986 to 0.996 in the far cameras). The record keeps the head box and the reading as they are (what the painting is), `allow` rides beside them, and the table
+# multiplies it in: the head on screen is the idle's to within the tolerance in every chapter measured, not at one camera. It is not a way to pass a check: pose-scale-check.mjs wants the reason and a
+# factor within 10 percent, and no factor is written for a KO, whose head against the standing one spreads wider than the tolerance between stages (Yuna: x0.972 in Chapter I, x1.033 in Chapter XVII).
 # poses-0930's stature gate (D-298): a bent, hunched, kneeling or lunging pose may not be drawn smaller than this fraction of the idle's height, whatever its head says
 STATURE_GATE = 0.60
 ANCHORS_JSON = HERE / "anchors.json"
@@ -273,6 +278,8 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
         if scale and not p.prone:
             rec["stature"] = round((p.bbox[3] - p.bbox[1]) * scale / (idle_box[3] - idle_box[1]), 3)
         rec["scale"], rec["scaleSrc"] = (round(scale, 3) if scale else None), src
+        if o.get("allow") and scale:  # r392: see the camera allowance above; the factor and the reason travel with the record
+            rec["allow"] = {"scale": round(float(o["allow"]["scale"]), 4), "why": o["allow"]["why"]}
         if anchor:
             rec["anchor"] = [r1(anchor[0]), r1(anchor[1])]
             hs = rec.get("reading") or scale
@@ -345,10 +352,11 @@ def cmd_table() -> None:
                 continue
             row: dict = {}
             ko_like = pose == "ko" and r.get("prone") and not r.get("standing")
+            allow = (r.get("allow") or {}).get("scale", 1.0)  # r392: the camera allowance, a factor on the applied scale
             if ko_like and r.get("scale"):
-                row["scale"] = round(r["scale"] / rec.get("koProjection", 1.0), 3)  # a KO's head is drawn smaller by its lying plane: see KO_PROJECTION
-            elif pose != "idle" and r.get("scale") and r.get("scaleSrc") in ("reviewed", "accepted", "gated"):
-                row["scale"] = r["scale"]
+                row["scale"] = round(r["scale"] / rec.get("koProjection", 1.0) * allow, 3)  # a KO's head is drawn smaller by its lying plane: see KO_PROJECTION
+            elif pose != "idle" and r.get("scale") and (r.get("scaleSrc") in ("reviewed", "accepted", "gated") or allow != 1.0):
+                row["scale"] = round(r["scale"] * allow, 3)
             st = r.get("stance")
             if st and st.get("flag"):
                 st = None

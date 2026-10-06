@@ -90,10 +90,12 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
         reviewed++;
         const koLike = pose === 'ko' && rec.prone && !rec.standing; // a KO's table scale is the reading over the lying plane's projection (measure.py KO_PROJECTION)
         const proj = koLike ? (records.koProjection ?? 1) : 1;
-        const applied = rec.scaleSrc !== 'noise' || koLike;
+        const allow = rec.allow?.scale ?? 1; // r392: a camera allowance (measure.py, overrides.json `allow`): a factor the table carries over the reading, with its reason in the record
+        if (rec.allow && !(rec.allow.why && allow > 0.9 && allow < 1.1)) failures.push(`${key}: its camera allowance (${allow}) needs a reason and a factor between 0.9 and 1.1`);
+        const applied = rec.scaleSrc !== 'noise' || koLike || allow !== 1;
         const effective = applied ? (row?.scale ?? NaN) * proj : rec.current; // 'noise': the pose keeps the scale it has (the sidecar's, or the KO table's)
-        if (applied && (!row || row.scale === undefined || Math.abs(row.scale * proj - rec.scale) > 0.0006 * Math.max(1, proj > 0 ? 1 / proj : 1))) {
-          failures.push(`${key}: the table's scale (${row?.scale}) is not the record's (${rec.scale}${koLike ? ` over the KO projection ${proj}` : ''}); run measure.py table`);
+        if (applied && (!row || row.scale === undefined || Math.abs(row.scale * proj - rec.scale * allow) > 0.0006 * Math.max(1, proj > 0 ? 1 / proj : 1))) {
+          failures.push(`${key}: the table's scale (${row?.scale}) is not the record's (${rec.scale}${koLike ? ` over the KO projection ${proj}` : ''}${allow !== 1 ? ` times its camera allowance ${allow}` : ''}); run measure.py table`);
         } else if (!applied && row?.scale !== undefined) {
           failures.push(`${key}: the record keeps the pose's own scale but the table has one (${row.scale}); run measure.py table`);
         } else if (!applied) {
@@ -102,7 +104,7 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
         } else if (rec.scaleSrc === 'gated') {
           if (!(rec.stature >= 0.595)) failures.push(`${key}: gated to the stature floor but its stature is ${rec.stature}`);
         } else if (rec.head && idleBox && effective) {
-          const ratio = (size(rec.head) * effective) / size(idleBox);
+          const ratio = (size(rec.head) * effective) / allow / size(idleBox); // the allowance is on purpose: the head at the reading's scale is the idle's
           if (Math.abs(ratio - 1) > 0.02) failures.push(`${key}: head at the scale the engine uses (${effective}) is x${ratio.toFixed(3)} of the idle's (the record's own reading says it should be x1.0)`);
         }
       }
