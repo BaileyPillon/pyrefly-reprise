@@ -1,0 +1,1255 @@
+{
+ "made": "2026-10-06",
+ "branch": "lighting-mockups",
+ "builderCommit": "cc5dd279c11feab2936eb842eb5cebb36d71439c",
+ "how": {
+  "server": "npx vite --config tools/lighting/vite-lighting.config.mjs --port 6951 --strictPort (dev only, serves the normal maps at /__lightmaps/); stopped afterwards",
+  "browser": "headless Chromium from node on the real GPU (ANGLE d3d11), Playwright; never the browser pane or the Chrome extension",
+  "route": "real keys: Enter on the title, ArrowRight in chapter select to the chapter, Enter in party prep, hold Enter to skip the cutscene, then wait for the first command menu; the run seed is pinned to 1",
+  "url": "?coach=off&crisp=fplus (the sharpness rung pinned so the frame cannot step down under load); clips add &light=N for looks 1 to 3, today has no light flag",
+  "stills": "at the frozen moment (fx.freeze plus a frozen performance.now) the look is switched at run time with __pyrefly.fx.light.set({mode, strength: 1}); the canvas is read once it stops changing between two grabs; then today is drawn again and its canvas hash must equal the first (it does, in all four sets)",
+  "sizes": "1600x900 and 2560x1440, device pixel ratio 1",
+  "clips": "DevTools screencast (JPEG q95, about 100 frames a second delivered), resampled to a constant 30 fps and encoded by ffmpeg (VP9 crf 24; GIF with a generated palette); every clip is a fresh page load, same seed, the live battle"
+ },
+ "moments": {
+  "ch1": "the party's first command menu in the CTB battle (Tidus to act, phase command:tidus); the turn-based battle holds there, so the clip is pure idle",
+  "ch4": "FFX-2 is Active ATB, so the battle keeps running at the first menu: the stills use the first calm moment after it (phase idle, no damage number on screen, no hit flash), frozen at once; the clips start 0.8 s into that calm moment and run 5 s, so Bahamut's next attack lands in every clip at about the same time (the sim is seeded; the timing can differ by a few tenths of a second between looks)"
+ },
+ "checks": {
+  "ch1__1600x900": {
+   "todayAgainEqualsToday": true,
+   "frozen": {
+    "phase": "command:tidus",
+    "screen": "battle"
+   },
+   "consoleErrors": 0,
+   "lightPerLook": {
+    "today": {
+     "room": "",
+     "figures": 0,
+     "slots": 0,
+     "normals": 0,
+     "domes": 0,
+     "stars": 0,
+     "halos": 0
+    },
+    "l1": {
+     "room": "gagazet",
+     "figures": 5,
+     "slots": 5,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 0
+    },
+    "l2": {
+     "room": "gagazet",
+     "figures": 5,
+     "slots": 5,
+     "normals": 5,
+     "domes": 0,
+     "stars": 4,
+     "halos": 0
+    },
+    "l3": {
+     "room": "gagazet",
+     "figures": 5,
+     "slots": 5,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 5
+    },
+    "today-again": {
+     "room": "gagazet",
+     "figures": 5,
+     "slots": 5,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 5
+    }
+   }
+  },
+  "ch1__2560x1440": {
+   "todayAgainEqualsToday": true,
+   "frozen": {
+    "phase": "command:tidus",
+    "screen": "battle"
+   },
+   "consoleErrors": 0,
+   "lightPerLook": {
+    "today": {
+     "room": "",
+     "figures": 0,
+     "slots": 0,
+     "normals": 0,
+     "domes": 0,
+     "stars": 0,
+     "halos": 0
+    },
+    "l1": {
+     "room": "gagazet",
+     "figures": 5,
+     "slots": 5,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 0
+    },
+    "l2": {
+     "room": "gagazet",
+     "figures": 5,
+     "slots": 5,
+     "normals": 5,
+     "domes": 0,
+     "stars": 4,
+     "halos": 0
+    },
+    "l3": {
+     "room": "gagazet",
+     "figures": 5,
+     "slots": 5,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 5
+    },
+    "today-again": {
+     "room": "gagazet",
+     "figures": 5,
+     "slots": 5,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 5
+    }
+   }
+  },
+  "ch4__1600x900": {
+   "todayAgainEqualsToday": true,
+   "frozen": {
+    "phase": "idle",
+    "screen": "battle"
+   },
+   "consoleErrors": 0,
+   "lightPerLook": {
+    "today": {
+     "room": "",
+     "figures": 0,
+     "slots": 0,
+     "normals": 0,
+     "domes": 0,
+     "stars": 0,
+     "halos": 0
+    },
+    "l1": {
+     "room": "bevelle-underground",
+     "figures": 4,
+     "slots": 4,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 0
+    },
+    "l2": {
+     "room": "bevelle-underground",
+     "figures": 4,
+     "slots": 4,
+     "normals": 4,
+     "domes": 0,
+     "stars": 4,
+     "halos": 0
+    },
+    "l3": {
+     "room": "bevelle-underground",
+     "figures": 4,
+     "slots": 4,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 4
+    },
+    "today-again": {
+     "room": "bevelle-underground",
+     "figures": 4,
+     "slots": 4,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 4
+    }
+   }
+  },
+  "ch4__2560x1440": {
+   "todayAgainEqualsToday": true,
+   "frozen": {
+    "phase": "idle",
+    "screen": "battle"
+   },
+   "consoleErrors": 0,
+   "lightPerLook": {
+    "today": {
+     "room": "",
+     "figures": 0,
+     "slots": 0,
+     "normals": 0,
+     "domes": 0,
+     "stars": 0,
+     "halos": 0
+    },
+    "l1": {
+     "room": "bevelle-underground",
+     "figures": 4,
+     "slots": 4,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 0
+    },
+    "l2": {
+     "room": "bevelle-underground",
+     "figures": 4,
+     "slots": 4,
+     "normals": 4,
+     "domes": 0,
+     "stars": 4,
+     "halos": 0
+    },
+    "l3": {
+     "room": "bevelle-underground",
+     "figures": 4,
+     "slots": 4,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 4
+    },
+    "today-again": {
+     "room": "bevelle-underground",
+     "figures": 4,
+     "slots": 4,
+     "normals": 0,
+     "domes": 0,
+     "stars": 4,
+     "halos": 4
+    }
+   }
+  }
+ },
+ "notes": [
+  "The sheets read left to right, top to bottom: today, look 1, look 2, look 3. The 2560x1440 sheets are 5186 px wide; the 1600x900 ones 3242.",
+  "The canvas sheets leave the HUD out so the figures can be judged alone; the full sheets show the game as played.",
+  "The close-up windows are 480x420 pixels cut 1:1 from the 2560x1440 canvas frames; no scaling.",
+  "Look 2 normal maps loaded in every look-2 frame (5 figures in Chapter I, 4 in Chapter IV); look 3 halos 5 and 4; stars 4 in every lit look.",
+  "No public/art file was written and no ComfyUI job was queued."
+ ],
+ "files": [
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__1600x900__today__full.png",
+   "kind": "still",
+   "bytes": 2212278,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, today (flag off, the build as it plays now), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "look": "today",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__1600x900__today__canvas.png",
+   "kind": "still",
+   "bytes": 2776939,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, today (flag off, the build as it plays now), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "look": "today",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__1600x900__l1__full.png",
+   "kind": "still",
+   "bytes": 2214521,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, look 1, rim, wrap and glint (no maps), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "look": "l1",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__1600x900__l1__canvas.png",
+   "kind": "still",
+   "bytes": 2783513,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, look 1, rim, wrap and glint (no maps), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "look": "l1",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__1600x900__l2__full.png",
+   "kind": "still",
+   "bytes": 2212605,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, look 2, lit by the room (normal maps), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "look": "l2",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__1600x900__l2__canvas.png",
+   "kind": "still",
+   "bytes": 2782090,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, look 2, lit by the room (normal maps), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "look": "l2",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__1600x900__l3__full.png",
+   "kind": "still",
+   "bytes": 2212222,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, look 3, Satsuei (gradient, diffusion, glow), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "look": "l3",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__1600x900__l3__canvas.png",
+   "kind": "still",
+   "bytes": 2785083,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, look 3, Satsuei (gradient, diffusion, glow), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "look": "l3",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__1600x900__today-again__full.png",
+   "kind": "still",
+   "bytes": 2212268,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, today drawn again after the three looks (a check: pixel-identical to the first today frame), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "look": "today-again",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__1600x900__today-again__canvas.png",
+   "kind": "still",
+   "bytes": 2776939,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, today drawn again after the three looks (a check: pixel-identical to the first today frame), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "look": "today-again",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__1600x900__meta.json",
+   "kind": "data",
+   "bytes": 7735,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900: the frozen moment, every figure's plane in drawing-buffer pixels, the light snapshot per look and the hash check that today-again equals today."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__2560x1440__today__full.png",
+   "kind": "still",
+   "bytes": 5365462,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, today (flag off, the build as it plays now), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "look": "today",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__2560x1440__today__canvas.png",
+   "kind": "still",
+   "bytes": 6809202,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, today (flag off, the build as it plays now), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "look": "today",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__2560x1440__l1__full.png",
+   "kind": "still",
+   "bytes": 5370998,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, look 1, rim, wrap and glint (no maps), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "look": "l1",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__2560x1440__l1__canvas.png",
+   "kind": "still",
+   "bytes": 6823787,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, look 1, rim, wrap and glint (no maps), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "look": "l1",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__2560x1440__l2__full.png",
+   "kind": "still",
+   "bytes": 5366414,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, look 2, lit by the room (normal maps), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "look": "l2",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__2560x1440__l2__canvas.png",
+   "kind": "still",
+   "bytes": 6821475,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, look 2, lit by the room (normal maps), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "look": "l2",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__2560x1440__l3__full.png",
+   "kind": "still",
+   "bytes": 5359372,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, look 3, Satsuei (gradient, diffusion, glow), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "look": "l3",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__2560x1440__l3__canvas.png",
+   "kind": "still",
+   "bytes": 6821802,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, look 3, Satsuei (gradient, diffusion, glow), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "look": "l3",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__2560x1440__today-again__full.png",
+   "kind": "still",
+   "bytes": 5365590,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, today drawn again after the three looks (a check: pixel-identical to the first today frame), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "look": "today-again",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__2560x1440__today-again__canvas.png",
+   "kind": "still",
+   "bytes": 6809202,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, today drawn again after the three looks (a check: pixel-identical to the first today frame), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "look": "today-again",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch1__2560x1440__meta.json",
+   "kind": "data",
+   "bytes": 7788,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440: the frozen moment, every figure's plane in drawing-buffer pixels, the light snapshot per look and the hash check that today-again equals today."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__1600x900__today__full.png",
+   "kind": "still",
+   "bytes": 2058222,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, today (flag off, the build as it plays now), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "look": "today",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__1600x900__today__canvas.png",
+   "kind": "still",
+   "bytes": 2791285,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, today (flag off, the build as it plays now), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "look": "today",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__1600x900__l1__full.png",
+   "kind": "still",
+   "bytes": 2060593,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, look 1, rim, wrap and glint (no maps), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "look": "l1",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__1600x900__l1__canvas.png",
+   "kind": "still",
+   "bytes": 2798170,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, look 1, rim, wrap and glint (no maps), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "look": "l1",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__1600x900__l2__full.png",
+   "kind": "still",
+   "bytes": 2056014,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, look 2, lit by the room (normal maps), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "look": "l2",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__1600x900__l2__canvas.png",
+   "kind": "still",
+   "bytes": 2790591,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, look 2, lit by the room (normal maps), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "look": "l2",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__1600x900__l3__full.png",
+   "kind": "still",
+   "bytes": 2058610,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, look 3, Satsuei (gradient, diffusion, glow), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "look": "l3",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__1600x900__l3__canvas.png",
+   "kind": "still",
+   "bytes": 2799413,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, look 3, Satsuei (gradient, diffusion, glow), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "look": "l3",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__1600x900__today-again__full.png",
+   "kind": "still",
+   "bytes": 2058197,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, today drawn again after the three looks (a check: pixel-identical to the first today frame), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "look": "today-again",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__1600x900__today-again__canvas.png",
+   "kind": "still",
+   "bytes": 2791285,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, today drawn again after the three looks (a check: pixel-identical to the first today frame), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "look": "today-again",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__1600x900__meta.json",
+   "kind": "data",
+   "bytes": 6663,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900: the frozen moment, every figure's plane in drawing-buffer pixels, the light snapshot per look and the hash check that today-again equals today."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__2560x1440__today__full.png",
+   "kind": "still",
+   "bytes": 4926822,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, today (flag off, the build as it plays now), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "look": "today",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__2560x1440__today__canvas.png",
+   "kind": "still",
+   "bytes": 6736124,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, today (flag off, the build as it plays now), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "look": "today",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__2560x1440__l1__full.png",
+   "kind": "still",
+   "bytes": 4929293,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, look 1, rim, wrap and glint (no maps), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "look": "l1",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__2560x1440__l1__canvas.png",
+   "kind": "still",
+   "bytes": 6745440,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, look 1, rim, wrap and glint (no maps), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "look": "l1",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__2560x1440__l2__full.png",
+   "kind": "still",
+   "bytes": 4916589,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, look 2, lit by the room (normal maps), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "look": "l2",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__2560x1440__l2__canvas.png",
+   "kind": "still",
+   "bytes": 6729477,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, look 2, lit by the room (normal maps), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "look": "l2",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__2560x1440__l3__full.png",
+   "kind": "still",
+   "bytes": 4923369,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, look 3, Satsuei (gradient, diffusion, glow), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "look": "l3",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__2560x1440__l3__canvas.png",
+   "kind": "still",
+   "bytes": 6748502,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, look 3, Satsuei (gradient, diffusion, glow), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "look": "l3",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__2560x1440__today-again__full.png",
+   "kind": "still",
+   "bytes": 4927112,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, today drawn again after the three looks (a check: pixel-identical to the first today frame), the page as played, HUD included. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "look": "today-again",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__2560x1440__today-again__canvas.png",
+   "kind": "still",
+   "bytes": 6736124,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, today drawn again after the three looks (a check: pixel-identical to the first today frame), the game canvas only, no HUD. The same frozen frame in every look.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "look": "today-again",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/stills/ch4__2560x1440__meta.json",
+   "kind": "data",
+   "bytes": 6714,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440: the frozen moment, every figure's plane in drawing-buffer pixels, the light snapshot per look and the hash check that today-again equals today."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/sheet__ch1__1600x900__full.jpg",
+   "kind": "sheet",
+   "bytes": 1872394,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, page with HUD: 2x2 grid in reading order today, look 1, look 2, look 3, the same frozen frame, each tile labelled.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/sheet__ch1__1600x900__canvas.jpg",
+   "kind": "sheet",
+   "bytes": 1562939,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 1600x900, game canvas only, no HUD: 2x2 grid in reading order today, look 1, look 2, look 3, the same frozen frame, each tile labelled.",
+   "chapter": "ch1",
+   "size": "1600x900",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/sheet__ch1__2560x1440__full.jpg",
+   "kind": "sheet",
+   "bytes": 3841397,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, page with HUD: 2x2 grid in reading order today, look 1, look 2, look 3, the same frozen frame, each tile labelled.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/sheet__ch1__2560x1440__canvas.jpg",
+   "kind": "sheet",
+   "bytes": 3373111,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux, 2560x1440, game canvas only, no HUD: 2x2 grid in reading order today, look 1, look 2, look 3, the same frozen frame, each tile labelled.",
+   "chapter": "ch1",
+   "size": "2560x1440",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/sheet__ch4__1600x900__full.jpg",
+   "kind": "sheet",
+   "bytes": 1789094,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, page with HUD: 2x2 grid in reading order today, look 1, look 2, look 3, the same frozen frame, each tile labelled.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/sheet__ch4__1600x900__canvas.jpg",
+   "kind": "sheet",
+   "bytes": 1546131,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 1600x900, game canvas only, no HUD: 2x2 grid in reading order today, look 1, look 2, look 3, the same frozen frame, each tile labelled.",
+   "chapter": "ch4",
+   "size": "1600x900",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/sheet__ch4__2560x1440__full.jpg",
+   "kind": "sheet",
+   "bytes": 3664491,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, page with HUD: 2x2 grid in reading order today, look 1, look 2, look 3, the same frozen frame, each tile labelled.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "view": "full"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/sheet__ch4__2560x1440__canvas.jpg",
+   "kind": "sheet",
+   "bytes": 3267305,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut, 2560x1440, game canvas only, no HUD: 2x2 grid in reading order today, look 1, look 2, look 3, the same frozen frame, each tile labelled.",
+   "chapter": "ch4",
+   "size": "2560x1440",
+   "view": "canvas"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/sheet__closeups__2560x1440__1to1.jpg",
+   "kind": "sheet",
+   "bytes": 3167770,
+   "shows": "Close-up sheet at 100 percent (1:1 pixels of the 2560x1440 render): rows Tidus, Yuna, Seymour Flux (Chapter I) and Yuna White Mage, Rikku Dark Knight, Paine Warrior, Bahamut head (Chapter IV); columns today, look 1, look 2, look 3."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__seymour-flux__l1__1to1.png",
+   "kind": "closeup",
+   "bytes": 330479,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: seymour-flux, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 1, rim, wrap and glint (no maps).",
+   "chapter": "ch1",
+   "figure": "seymour-flux",
+   "look": "l1"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__seymour-flux__l2__1to1.png",
+   "kind": "closeup",
+   "bytes": 330352,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: seymour-flux, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 2, lit by the room (normal maps).",
+   "chapter": "ch1",
+   "figure": "seymour-flux",
+   "look": "l2"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__seymour-flux__l3__1to1.png",
+   "kind": "closeup",
+   "bytes": 326079,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: seymour-flux, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 3, Satsuei (gradient, diffusion, glow).",
+   "chapter": "ch1",
+   "figure": "seymour-flux",
+   "look": "l3"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__seymour-flux__today__1to1.png",
+   "kind": "closeup",
+   "bytes": 331545,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: seymour-flux, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, today (flag off, the build as it plays now).",
+   "chapter": "ch1",
+   "figure": "seymour-flux",
+   "look": "today"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__tidus__l1__1to1.png",
+   "kind": "closeup",
+   "bytes": 322173,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: tidus, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 1, rim, wrap and glint (no maps).",
+   "chapter": "ch1",
+   "figure": "tidus",
+   "look": "l1"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__tidus__l2__1to1.png",
+   "kind": "closeup",
+   "bytes": 321454,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: tidus, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 2, lit by the room (normal maps).",
+   "chapter": "ch1",
+   "figure": "tidus",
+   "look": "l2"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__tidus__l3__1to1.png",
+   "kind": "closeup",
+   "bytes": 329080,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: tidus, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 3, Satsuei (gradient, diffusion, glow).",
+   "chapter": "ch1",
+   "figure": "tidus",
+   "look": "l3"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__tidus__today__1to1.png",
+   "kind": "closeup",
+   "bytes": 316254,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: tidus, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, today (flag off, the build as it plays now).",
+   "chapter": "ch1",
+   "figure": "tidus",
+   "look": "today"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__yuna__l1__1to1.png",
+   "kind": "closeup",
+   "bytes": 339873,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: yuna, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 1, rim, wrap and glint (no maps).",
+   "chapter": "ch1",
+   "figure": "yuna",
+   "look": "l1"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__yuna__l2__1to1.png",
+   "kind": "closeup",
+   "bytes": 339756,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: yuna, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 2, lit by the room (normal maps).",
+   "chapter": "ch1",
+   "figure": "yuna",
+   "look": "l2"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__yuna__l3__1to1.png",
+   "kind": "closeup",
+   "bytes": 342923,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: yuna, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 3, Satsuei (gradient, diffusion, glow).",
+   "chapter": "ch1",
+   "figure": "yuna",
+   "look": "l3"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch1__yuna__today__1to1.png",
+   "kind": "closeup",
+   "bytes": 337188,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: yuna, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, today (flag off, the build as it plays now).",
+   "chapter": "ch1",
+   "figure": "yuna",
+   "look": "today"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__bahamut__l1__1to1.png",
+   "kind": "closeup",
+   "bytes": 352961,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: bahamut, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 1, rim, wrap and glint (no maps).",
+   "chapter": "ch4",
+   "figure": "bahamut",
+   "look": "l1"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__bahamut__l2__1to1.png",
+   "kind": "closeup",
+   "bytes": 349424,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: bahamut, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 2, lit by the room (normal maps).",
+   "chapter": "ch4",
+   "figure": "bahamut",
+   "look": "l2"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__bahamut__l3__1to1.png",
+   "kind": "closeup",
+   "bytes": 353146,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: bahamut, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 3, Satsuei (gradient, diffusion, glow).",
+   "chapter": "ch4",
+   "figure": "bahamut",
+   "look": "l3"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__bahamut__today__1to1.png",
+   "kind": "closeup",
+   "bytes": 354061,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: bahamut, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, today (flag off, the build as it plays now).",
+   "chapter": "ch4",
+   "figure": "bahamut",
+   "look": "today"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__paine__l1__1to1.png",
+   "kind": "closeup",
+   "bytes": 306411,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: paine, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 1, rim, wrap and glint (no maps).",
+   "chapter": "ch4",
+   "figure": "paine",
+   "look": "l1"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__paine__l2__1to1.png",
+   "kind": "closeup",
+   "bytes": 303544,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: paine, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 2, lit by the room (normal maps).",
+   "chapter": "ch4",
+   "figure": "paine",
+   "look": "l2"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__paine__l3__1to1.png",
+   "kind": "closeup",
+   "bytes": 307890,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: paine, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 3, Satsuei (gradient, diffusion, glow).",
+   "chapter": "ch4",
+   "figure": "paine",
+   "look": "l3"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__paine__today__1to1.png",
+   "kind": "closeup",
+   "bytes": 302343,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: paine, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, today (flag off, the build as it plays now).",
+   "chapter": "ch4",
+   "figure": "paine",
+   "look": "today"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__rikku__l1__1to1.png",
+   "kind": "closeup",
+   "bytes": 342614,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: rikku, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 1, rim, wrap and glint (no maps).",
+   "chapter": "ch4",
+   "figure": "rikku",
+   "look": "l1"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__rikku__l2__1to1.png",
+   "kind": "closeup",
+   "bytes": 343599,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: rikku, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 2, lit by the room (normal maps).",
+   "chapter": "ch4",
+   "figure": "rikku",
+   "look": "l2"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__rikku__l3__1to1.png",
+   "kind": "closeup",
+   "bytes": 344563,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: rikku, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 3, Satsuei (gradient, diffusion, glow).",
+   "chapter": "ch4",
+   "figure": "rikku",
+   "look": "l3"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__rikku__today__1to1.png",
+   "kind": "closeup",
+   "bytes": 339239,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: rikku, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, today (flag off, the build as it plays now).",
+   "chapter": "ch4",
+   "figure": "rikku",
+   "look": "today"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__yuna__l1__1to1.png",
+   "kind": "closeup",
+   "bytes": 308081,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: yuna, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 1, rim, wrap and glint (no maps).",
+   "chapter": "ch4",
+   "figure": "yuna",
+   "look": "l1"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__yuna__l2__1to1.png",
+   "kind": "closeup",
+   "bytes": 311667,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: yuna, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 2, lit by the room (normal maps).",
+   "chapter": "ch4",
+   "figure": "yuna",
+   "look": "l2"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__yuna__l3__1to1.png",
+   "kind": "closeup",
+   "bytes": 310132,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: yuna, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, look 3, Satsuei (gradient, diffusion, glow).",
+   "chapter": "ch4",
+   "figure": "yuna",
+   "look": "l3"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/closeups/ch4__yuna__today__1to1.png",
+   "kind": "closeup",
+   "bytes": 305965,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: yuna, upper body, 480x420 pixels 1:1 from the 2560x1440 canvas, today (flag off, the build as it plays now).",
+   "chapter": "ch4",
+   "figure": "yuna",
+   "look": "today"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__today__1600x900.webm",
+   "kind": "clip",
+   "bytes": 6336065,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: 5 s of the live idle battle at 1600x900, 30 fps, VP9, today (flag off, the build as it plays now).",
+   "chapter": "ch1",
+   "look": "today",
+   "screencastFrames": 507
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__today__1600x900.gif",
+   "kind": "clip",
+   "bytes": 6128891,
+   "shows": "The same clip as a GIF, 800 px wide at 12 fps, under 8 MB.",
+   "chapter": "ch1",
+   "look": "today"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__today__meta.json",
+   "kind": "data",
+   "bytes": 478,
+   "shows": "Recording facts for ch1 today: URL, light snapshot (maps, halos, stars, room), frames, phase at the end."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__l1__1600x900.webm",
+   "kind": "clip",
+   "bytes": 6335007,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: 5 s of the live idle battle at 1600x900, 30 fps, VP9, look 1, rim, wrap and glint (no maps).",
+   "chapter": "ch1",
+   "look": "l1",
+   "screencastFrames": 509
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__l1__1600x900.gif",
+   "kind": "clip",
+   "bytes": 6269631,
+   "shows": "The same clip as a GIF, 800 px wide at 12 fps, under 8 MB.",
+   "chapter": "ch1",
+   "look": "l1"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__l1__meta.json",
+   "kind": "data",
+   "bytes": 720,
+   "shows": "Recording facts for ch1 l1: URL, light snapshot (maps, halos, stars, room), frames, phase at the end."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__l2__1600x900.webm",
+   "kind": "clip",
+   "bytes": 6347112,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: 5 s of the live idle battle at 1600x900, 30 fps, VP9, look 2, lit by the room (normal maps).",
+   "chapter": "ch1",
+   "look": "l2",
+   "screencastFrames": 500
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__l2__1600x900.gif",
+   "kind": "clip",
+   "bytes": 6306822,
+   "shows": "The same clip as a GIF, 800 px wide at 12 fps, under 8 MB.",
+   "chapter": "ch1",
+   "look": "l2"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__l2__meta.json",
+   "kind": "data",
+   "bytes": 720,
+   "shows": "Recording facts for ch1 l2: URL, light snapshot (maps, halos, stars, room), frames, phase at the end."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__l3__1600x900.webm",
+   "kind": "clip",
+   "bytes": 6323003,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: 5 s of the live idle battle at 1600x900, 30 fps, VP9, look 3, Satsuei (gradient, diffusion, glow).",
+   "chapter": "ch1",
+   "look": "l3",
+   "screencastFrames": 505
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__l3__1600x900.gif",
+   "kind": "clip",
+   "bytes": 6260291,
+   "shows": "The same clip as a GIF, 800 px wide at 12 fps, under 8 MB.",
+   "chapter": "ch1",
+   "look": "l3"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__l3__meta.json",
+   "kind": "data",
+   "bytes": 720,
+   "shows": "Recording facts for ch1 l3: URL, light snapshot (maps, halos, stars, room), frames, phase at the end."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch1__compare-4up__1600x900.webm",
+   "kind": "clip",
+   "bytes": 3945172,
+   "shows": "Chapter I (FFX), Mt. Gagazet, Seymour Flux: the four clips in one 2x2 webm (today, look 1, look 2, look 3), 5 s, each tile 800x450 and labelled.",
+   "chapter": "ch1"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__today__1600x900.webm",
+   "kind": "clip",
+   "bytes": 5489569,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: 5 s of the live idle battle at 1600x900, 30 fps, VP9, today (flag off, the build as it plays now).",
+   "chapter": "ch4",
+   "look": "today",
+   "screencastFrames": 416
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__today__1600x900.gif",
+   "kind": "clip",
+   "bytes": 5567405,
+   "shows": "The same clip as a GIF, 720 px wide at 12 fps, under 8 MB.",
+   "chapter": "ch4",
+   "look": "today"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__today__meta.json",
+   "kind": "data",
+   "bytes": 496,
+   "shows": "Recording facts for ch4 today: URL, light snapshot (maps, halos, stars, room), frames, phase at the end."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__l1__1600x900.webm",
+   "kind": "clip",
+   "bytes": 6716763,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: 5 s of the live idle battle at 1600x900, 30 fps, VP9, look 1, rim, wrap and glint (no maps).",
+   "chapter": "ch4",
+   "look": "l1",
+   "screencastFrames": 497
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__l1__1600x900.gif",
+   "kind": "clip",
+   "bytes": 6836548,
+   "shows": "The same clip as a GIF, 720 px wide at 12 fps, under 8 MB.",
+   "chapter": "ch4",
+   "look": "l1"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__l1__meta.json",
+   "kind": "data",
+   "bytes": 739,
+   "shows": "Recording facts for ch4 l1: URL, light snapshot (maps, halos, stars, room), frames, phase at the end."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__l2__1600x900.webm",
+   "kind": "clip",
+   "bytes": 6348930,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: 5 s of the live idle battle at 1600x900, 30 fps, VP9, look 2, lit by the room (normal maps).",
+   "chapter": "ch4",
+   "look": "l2",
+   "screencastFrames": 500
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__l2__1600x900.gif",
+   "kind": "clip",
+   "bytes": 6759805,
+   "shows": "The same clip as a GIF, 720 px wide at 12 fps, under 8 MB.",
+   "chapter": "ch4",
+   "look": "l2"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__l2__meta.json",
+   "kind": "data",
+   "bytes": 689,
+   "shows": "Recording facts for ch4 l2: URL, light snapshot (maps, halos, stars, room), frames, phase at the end."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__l3__1600x900.webm",
+   "kind": "clip",
+   "bytes": 6747304,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: 5 s of the live idle battle at 1600x900, 30 fps, VP9, look 3, Satsuei (gradient, diffusion, glow).",
+   "chapter": "ch4",
+   "look": "l3",
+   "screencastFrames": 500
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__l3__1600x900.gif",
+   "kind": "clip",
+   "bytes": 6819995,
+   "shows": "The same clip as a GIF, 720 px wide at 12 fps, under 8 MB.",
+   "chapter": "ch4",
+   "look": "l3"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__l3__meta.json",
+   "kind": "data",
+   "bytes": 690,
+   "shows": "Recording facts for ch4 l3: URL, light snapshot (maps, halos, stars, room), frames, phase at the end."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/clips/ch4__compare-4up__1600x900.webm",
+   "kind": "clip",
+   "bytes": 3709445,
+   "shows": "Chapter IV (FFX-2), Bevelle Underground, Bahamut: the four clips in one 2x2 webm (today, look 1, look 2, look 3), 5 s, each tile 800x450 and labelled.",
+   "chapter": "ch4"
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/harness/calmprobe.mjs",
+   "kind": "script",
+   "bytes": 1526,
+   "shows": "Script that produced the files above (real keys to the battle, stills, clips, sheets, this index)."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/harness/clips.mjs",
+   "kind": "script",
+   "bytes": 5105,
+   "shows": "Script that produced the files above (real keys to the battle, stills, clips, sheets, this index)."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/harness/keyprobe.mjs",
+   "kind": "script",
+   "bytes": 1138,
+   "shows": "Script that produced the files above (real keys to the battle, stills, clips, sheets, this index)."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/harness/mkindex.py",
+   "kind": "script",
+   "bytes": 6912,
+   "shows": "Script that produced the files above (real keys to the battle, stills, clips, sheets, this index)."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/harness/nav.mjs",
+   "kind": "script",
+   "bytes": 1638,
+   "shows": "Script that produced the files above (real keys to the battle, stills, clips, sheets, this index)."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/harness/navprobe.mjs",
+   "kind": "script",
+   "bytes": 1050,
+   "shows": "Script that produced the files above (real keys to the battle, stills, clips, sheets, this index)."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/harness/sheets.py",
+   "kind": "script",
+   "bytes": 4713,
+   "shows": "Script that produced the files above (real keys to the battle, stills, clips, sheets, this index)."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/harness/stills.mjs",
+   "kind": "script",
+   "bytes": 4618,
+   "shows": "Script that produced the files above (real keys to the battle, stills, clips, sheets, this index)."
+  },
+  {
+   "file": "D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/vite-6951.log",
+   "kind": "log",
+   "bytes": 159,
+   "shows": "The dev server's own log (port 6951, started for this run and stopped afterwards)."
+  }
+ ]
+}

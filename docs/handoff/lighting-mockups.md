@@ -97,3 +97,15 @@ interval is not a usable number here (the game does not draw on every rAF with v
 - No retargeting of B5's cast shadow or the shadow map to the painting's key (needs Bailey's yes).
 - Only two rooms have a confirmed light table and only the two chapters have placed stars.
 - Phones: the looks run (look 3's halo included); a phone build would drop look 2's maps and look 3's halo first.
+
+## Mockup renders for the morning pick (2026-10-06)
+
+Comparison sheets of today against the three looks, the same frozen frame in every tile, real keys from the title to the first
+command menu, headless Chromium on the real GPU: `docs/screenshots/lighting-mockups/` (2x2 sheets, reading order today, look 1,
+look 2, look 3; `sheet__<ch1|ch4>__<size>__<full|canvas>.jpg`, with and without the HUD, at 1600x900 and 2560x1440; and
+`sheet__closeups__2560x1440__1to1.jpg`, upper bodies cut 1:1 from the 2560x1440 render). `index.json` there lists every file of the
+round and what it shows. The stills, the 1:1 crops, the 5 s clips (webm, GIF under 8 MB, and a 4-up webm per chapter) and the scripts
+are in `D:/Tools/pyrefly-scratch/2026-10-06/lighting/out/` (clips are not in the repo). Chapter I is held at its first command menu
+(CTB waits); Chapter IV is Active ATB, so its stills use the first calm moment after the first menu and its clips are the live
+battle, where Bahamut's next attack lands in every clip. Today drawn again after the three looks equals the first today frame, pixel
+for pixel, in all four sets.
