@@ -18,11 +18,11 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 439, from 2026-09-15 to 2026-10-05 (ids A-0001 to A-0439), 219 of them linked to at least one decision (335 distinct decision ids).
+- **Rows:** 440, from 2026-09-15 to 2026-10-05 (ids A-0001 to A-0440), 220 of them linked to at least one decision (336 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
-| implementation | 122 |
+| implementation | 123 |
 | art | 49 |
 | deploy | 49 |
 | review | 102 |
@@ -36,21 +36,27 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 142 |
+| October 2026 | 143 |
 
-- **By game:** 325 both, 56 n/a, 31 FFX, 27 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **By game:** 326 both, 56 n/a, 31 FFX, 27 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
 - **Deploys and releases:** 49 deploy rows: 45 lines of docs/deploys.log (39 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 1 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to release 39 on echoesofspira.com (2026-10-05).
 - **Reviews:** 102 rows: 30 focused reviews (29 SHIP, 1 HOLD), 38 live checks (36 PASS, 1 FAIL, 1 UNVERIFIED), 19 deep rounds with a report (10 SHIP, 6 HOLD, 3 no verdict) and 15 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 22 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-05](#2026-10-05) (14) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-05](#2026-10-05) (15) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
 ### 2026-10-05
 
+- **A-0440** · `implementation` · both · **Title key art: the Art Room's Gullwings Farplane Field staged and built into the title screen on branch title-gullwings-keyart**
+  - What: The title-art lane took the picture Bailey approved in the Art Room (proposal p\_f4836b8c) and made the title masters: the approved image cropped to 1647x941, one RealESRGAN\_x4plus job through ComfyUI (6.9 GPU seconds, behind the shared lock, the painterly roll-out's queue untouched), the colour drift the upscaler added (+1.7 levels of green) removed, a 1344x768 plate, a 2688x1536 lossy WebP master and a new sidecar; mean pixel difference of the plate from the approved crop 1.96 of 255. It then re-cut the title screen around the picture on branch title-gullwings-keyart: no silhouettes on the shore, the wordmark slab above the three heroes (20 percent shorter, the 14 px type floor kept), the near parallax plane cut to the foreground flower band by an SVG mask registered with the painting (a new test pins it against the heroes' lowest pixels), a light grade, a haloed strap, a crop anchored at the heroes in other window shapes, a new 32 px placeholder, and the new hashes in docs/target/approved-hashes.json. Checked: tsc clean; 30 unit test files (463 tests) green; a production build in the worktree's own dist passed art-derive verify (1,005 masters) and audit and the browser load (1,049 images, Chromium and WebKit); Enter, a click on the chip and a click over the painting each left the title for chapter select; frames at 1920x1080, 1280x720, 2560x1080, HiDPI, a phone and both parallax extremes are on the branch. The art is staged and backed up (the old files too) but not installed in any public/art; the swap is the driver's, at integration.
+  - Who: title-art lane (Sonnet sub-agent) under the driver session · Decisions: D-458
+  - Result: built on branch title-gullwings-keyart (fa09c73f, pushed); not merged, not live; the art is staged, not installed (swap owed at integration); Bailey has not seen the screen
+  - Evidence: `commit fa09c73f (on branch title-gullwings-keyart)` · `docs/handoff/title-gullwings-keyart.md (on the branch)` · `docs/screenshots/title-gullwings-1920x1080.png and the rest of title-gullwings-*.png (on the branch)` · `tests/unit/title-near-mask.test.ts (on the branch)`
+  - Reversible: yes, the branch is not merged; at integration the three old title files are backed up and putting them back is a file copy
 - **A-0439** · `records` · both · **Release 39 changelog with 36 pictures, decisions D-427 to D-436 and action rows A-0409 onward recorded**
   - What: The records lane wrote the 2026-10-05 entry of CHANGELOG.md (19 bullets tagged FFX, FFX-2 or both, one picture, the entry count 51 to 52) and docs/changelog/release-39.md with 36 pictures (the lanes' proof frames, the critic's frames of the release candidate and re-laid composites of frames that already existed; JPEG, at most 1280 px wide), then added ten decisions (Natus at 346 px, Lady Luck option A, the seven painterly picks from "I'll go with your recommendations, painterly" as separate rows with a changed line each, and the stop-copying rule for D:) and these action rows, and re-rendered DECISIONS.md and ACTIONS.md. The link check passes (52 entries, 52 detail pages, 0 orphans, 0 bad links) and so do the two ledger tests. Older rows still read in-progress for lanes that shipped in release 39 (for example D-398, D-409, D-413 to D-417) and are not edited here.
   - Who: records lane (Sonnet sub-agent) under the driver session
