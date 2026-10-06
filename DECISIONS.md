@@ -16,22 +16,22 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-911 decisions in all: 460 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 125 picture decisions. 614 of the written decisions record a blanket yes.
+913 decisions in all: 462 registry rows, 245 items split out of bundled acceptances, 81 early or backfilled rows, 125 picture decisions. 617 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 851 |
-| proposed | 12 |
+| adopted | 853 |
+| proposed | 11 |
 | deferred | 4 |
 | rejected | 11 |
-| superseded | 33 |
-| **All** | **911** |
+| superseded | 34 |
+| **All** | **913** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 73 |
-| art | 210 |
-| visuals | 68 |
+| art | 211 |
+| visuals | 69 |
 | camera | 31 |
 | audio | 30 |
 | ui | 121 |
@@ -45,15 +45,15 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | data | 7 |
 | tech | 1 |
 | site | 10 |
-| **All** | **911** |
+| **All** | **913** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 397 |
+| both games | 398 |
 | FFX only | 278 |
-| FFX-2 only | 219 |
+| FFX-2 only | 220 |
 | FF7 hidden experiment | 17 |
-| **All** | **911** |
+| **All** | **913** |
 
 ## Standing rules in force
 
@@ -106,7 +106,6 @@ Proposed, asked or drafted, with no yes on record. Nothing here is built.
 - [D-256](#d-256) — Accessibility Q4 and Q7 (OR-13): pictures first — still open
 - [D-258](#d-258) — Steam session part 2: the yes stands (D-205), but the time is still Bailey's to pick
 - [D-266](#d-266) — Open: Giga-Graviton on Sin's 12th or 13th turn (S-1) — needs a Steam check only Bailey can schedule (FFX only)
-- [D-457](#d-457) — Pose size (the D-298 stature floor), proposed: lift the minimum height for exactly two poses, Lulu's critical (FFX) and Rikku Berserker's ready (FFX-2), and keep it for every other pose
 
 Pictures with no target yet (nothing to look at, so no decision): Move advisor card (fight); Defeat screen (fight); Enemy next-move panel (fight); Every screen except pause (phone); One finished minute of play (whole).
 
@@ -3940,7 +3939,7 @@ Sunday · 69 decisions
 
 ### 2026-10-05
 
-Monday · 25 decisions
+Monday · 27 decisions
 
 - <a id="d-437"></a>**D-437** — True colour (decision A): characters and bosses show their paintings' own colours: the "figures true" switch goes ON by default in release 39.1, with the bloom fix (r39-color ef0868b5)
   - Bailey: “I'll go with all of your recommendations” (blanket yes)
@@ -3949,8 +3948,8 @@ Monday · 25 decisions
   - Source: docs/handoff/r39-color.md; docs/screenshots/r39-color; and others
 - <a id="d-438"></a>**D-438** — Painterly finish (decision B): the locked version (method D) rolls out to the whole cast, 636 figure masters, with method C per figure where the face pass makes a face younger, behind per-figure gates and contact sheets before it ships in 39.2
   - Bailey: “I'll go with all of your recommendations” (blanket yes)
-  - What changed: The painterly finish of D-429, in its identity-locked form (method D: the approved painting plus close-ups of its head and costume as references, an init lock at sigma 0.99, a separate painterly face pass and a palette lock), is rolled out to the whole cast: all 636 character and boss masters, both games, decided figure by figure. Method C (the lock and the palette lock, without the face pass) is used per figure where the face pass makes a face younger (Tidus on a second seed last round). Per-figure gates: the outline matches the approved painting's silhouette at IoU 0.95 or better; under 3 percent of the costume's cells move by more than 20 dE; the face layout match is at least 0.75; the seeds agree (a second seed is run only where the first fails). A figure that fails goes to the other of C and D, or to a list the driver looks at by eye. About 13 GPU hours at one try each, before retries. It runs on the GPU now, party figures first (both games), then bosses, then the rest, into a new library (D:/Tools/pyrefly-art-backup/hires-painterly/, every tier cut from the painterly 4x), never over the existing masters. Nothing changes in the game on this yes alone: contact sheets (each figure's idle and two poses at battle size, today beside painterly) go to him before it ships, in release 39.2, and the animation keys (about 27, about 35 GPU minutes) are then painted in the same finish (D-434). This is the yes D-435 waited for. Costs he accepted: D keeps about a third to two thirds of last round's finish, so figures are less luminous and less saturated than last round's; the weights are non-commercial (accepted in D-432). Not taken: B, a lighter colour lock that keeps more finish but lets 2 to 12 percent of a costume's colour drift, and waiting to see true colour in the game first. Both games, figure by figure: Tidus and Seymour Flux are FFX, Yuna Gunner is FFX-2.
-  - area art · both games · adopted · delivery in progress · at ~13:43 EDT · see [D-429](#d-429), [D-430](#d-430), [D-431](#d-431), [D-432](#d-432), [D-434](#d-434), [D-435](#d-435)
+  - What changed: The painterly finish of D-429, in its identity-locked form (method D: the approved painting plus close-ups of its head and costume as references, an init lock at sigma 0.99, a separate painterly face pass and a palette lock), is rolled out to the whole cast: all 636 character and boss masters, both games, decided figure by figure. Method C (the lock and the palette lock, without the face pass) is used per figure where the face pass makes a face younger (Tidus on a second seed last round). Per-figure gates: the outline matches the approved painting's silhouette at IoU 0.95 or better; under 3 percent of the costume's cells move by more than 20 dE; the face layout match is at least 0.75; the seeds agree (a second seed is run only where the first fails). A figure that fails goes to the other of C and D, or to a list the driver looks at by eye. About 13 GPU hours at one try each, before retries. It runs on the GPU now, party figures first (both games), then bosses, then the rest, into a new library (D:/Tools/pyrefly-art-backup/hires-painterly/, every tier cut from the painterly 4x), never over the existing masters. Nothing changes in the game on this yes alone: contact sheets (each figure's idle and two poses at battle size, today beside painterly) go to him before it ships, in release 39.2, and the animation keys (about 27, about 35 GPU minutes) are then painted in the same finish (D-434). This is the yes D-435 waited for. Costs he accepted: D keeps about a third to two thirds of last round's finish, so figures are less luminous and less saturated than last round's; the weights are non-commercial (accepted in D-432). Not taken: B, a lighter colour lock that keeps more finish but lets 2 to 12 percent of a costume's colour drift, and waiting to see true colour in the game first. Both games, figure by figure: Tidus and Seymour Flux are FFX, Yuna Gunner is FFX-2. Update 2026-10-05 ~21:45 EDT: superseded by D-462. Bailey picked "Repairs + lighting mockups (Recommended)" for the character art, which replaces this roll-out of the painterly finish for now: an independent full-size review of 21 D+R pilot poses found the painterly version better at battle size in 0 of 21 (the same in 8, worse in 13), with real defects confirmed in 20 of 20 checked. Nothing painterly was ever installed or shipped (this row never changed the game), so delivery is now not-scheduled; what happens to the GPU run and to the candidate library on disk is not decided by this record, and the library is kept as candidates only.
+  - area art · both games · superseded by [D-462](#d-462) · delivery not scheduled · at ~13:43 EDT · see [D-429](#d-429), [D-430](#d-430), [D-431](#d-431), [D-432](#d-432), [D-434](#d-434), [D-435](#d-435), [D-462](#d-462)
   - Source: docs/handoff/r39-art.md; docs/handoff/NOW.md
 - <a id="d-439"></a>**D-439** — Pose continuity (decision C): the mix, with interpolated in-between frames for every pose pair, one extra painted key at the peak of each big move, a puppet rig for two or three signature swings and no video-model frames; Evrae's cut-or-ghost question is settled the same way
   - Bailey: “I'll go with all of your recommendations” (blanket yes)
@@ -4042,10 +4041,10 @@ Monday · 25 decisions
   - What changed: From the next character on, the painterly finish can be a step richer than method D while faces and silhouettes stay locked; Tidus may be redone in the chosen method. Bailey delegated the call, so the driver's recommendation stands: (1) Pilot "D-light" first on Tidus's idle and attack: the face pass and the init lock at sigma 0.99 are kept, the palette lock runs at about half strength. (2) The driver compares D, D-light and B side by side at battle size and at 100 percent, then picks the method for the roll-out of D-438. (3) The costume-colour gate of D-438 relaxes from under 3 percent of a costume's cells moving by more than 20 dE to under 8 percent; the silhouette gate (IoU 0.95 or better) and the face-layout gate (0.75 or better) are unchanged. (4) Tidus's finished set in method D stays as the fallback until a richer set passes the gates and the side-by-side. The pilot is not run yet and nothing in the game changes on this yes alone: the roll-out's contact sheets still go to him before it ships. Both games: the painterly method is shared art plumbing and applies to FFX and FFX-2 figures alike. Update 2026-10-05, evening (the pilot has now run, so "The pilot is not run yet" above is out of date): the D-light pilot ran on Tidus's idle and attack, seed 9101. Cells moved by more than 20 dE / face layout / core IoU: idle, D 0.0 percent / 0.815 / 0.974, D-light 2.5 percent / 0.805 / 0.974, B 5.5 percent / 0.733 / 0.974; attack, D 0.6 percent / 0.818 / 0.972, D-light 7.0 percent / 0.811 / 0.972, B 14.0 percent / 0.526 / 0.972. By the gates written above, D-light passes the 8 percent cells gate and the 0.75 face-layout gate on both poses, and B misses the face-layout gate on both and the cells gate on the attack. Finding: at battle size the three look nearly the same. The brushwork comes from the shared Klein pass, and the palette lock only pulls colours back, so loosening it buys little; D-light turned the black coat a little blue-purple and the skin pinker. Outcome (the driver's recommendation, with Bailey's go): the library keeps D for the roll-out of D-438. A new pilot loosens the init-lock sigma to 0.995 instead (the face pass and the full palette lock are kept), and its sheet goes to him before anything changes. The cells gate stays at 8 percent as written above. Delivery is now in progress (the new pilot). Nothing in the game changes. Both games (shared art plumbing).
   - area art · both games · adopted · delivery in progress · at ~19:27 EDT · see [D-438](#d-438), [D-429](#d-429), [D-431](#d-431)
   - Source: Bailey, 2026-10-05, in chat, answering the driver's question on the painterly finish strength for the cast roll-out of D-438 with: "i'll go with …
-- <a id="d-457"></a>**D-457** — Pose size (the D-298 stature floor), proposed: lift the minimum height for exactly two poses, Lulu's critical (FFX) and Rikku Berserker's ready (FFX-2), and keep it for every other pose
-  - Bailey: “you can continue please”
-  - What changed: The proposal (the driver's recommendation, answered at about 19:27 EDT with "you can continue please" before the build was stopped): lift the stature floor that came in with the D-298 pose picks (docs/handoff/poses-0930.md: a bend, hunch, kneel or lunge is held at 0.60 or more of the idle's height, which can leave its head larger than the idle's) for exactly two poses, Lulu's critical (FFX only) and Rikku Berserker's ready (FFX-2 only), so that they may stand lower than 0.60 of the idle's height and the head follows the idle's instead of growing; every other pose keeps the floor. Why it was proposed: with the floor, Lulu's critical head draws about 10.7 percent over her idle's, which is 46 of the 49 remaining head-size jumps and the CHK-026 failures in Chapters III, VIII, IX and XVIII (CHK-026 allows 3 percent, critic/CHECKS.md); Berserker's ready sits about 14 percent over. This record does not touch D-455's re-paint of Rikku's two ready poses. Both games, each pose only in its own game. Update 2026-10-05 ~19:40 EDT: Bailey stopped the build before any change; nothing is built and the lift awaits his word.
-  - area art · both games · proposed · nothing to build · at ~19:27 EDT · see [D-298](#d-298), [D-437](#d-437), [D-441](#d-441)
+- <a id="d-457"></a>**D-457** — Pose size (the D-298 stature floor): lift the minimum height for exactly two poses, Lulu's critical (FFX) and Rikku Berserker's ready (FFX-2), and keep it for every other pose
+  - Bailey: “Lift it for those two (Recommended)” (blanket yes)
+  - What changed: The proposal (the driver's recommendation, answered at about 19:27 EDT with "you can continue please" before the build was stopped): lift the stature floor that came in with the D-298 pose picks (docs/handoff/poses-0930.md: a bend, hunch, kneel or lunge is held at 0.60 or more of the idle's height, which can leave its head larger than the idle's) for exactly two poses, Lulu's critical (FFX only) and Rikku Berserker's ready (FFX-2 only), so that they may stand lower than 0.60 of the idle's height and the head follows the idle's instead of growing; every other pose keeps the floor. Why it was proposed: with the floor, Lulu's critical head draws about 10.7 percent over her idle's, which is 46 of the 49 remaining head-size jumps and the CHK-026 failures in Chapters III, VIII, IX and XVIII (CHK-026 allows 3 percent, critic/CHECKS.md); Berserker's ready sits about 14 percent over. This record does not touch D-455's re-paint of Rikku's two ready poses. Both games, each pose only in its own game. Update 2026-10-05 ~19:40 EDT: Bailey stopped the build before any change; nothing is built and the lift awaits his word. Update 2026-10-05 ~21:45 EDT: Bailey picked "Lift it for those two (Recommended)", after he had stopped the first build at about 19:40 EDT, so the row is now adopted and the lift is to be built; it ships in a build after 39.1 (the first build never changed anything, and 39.1 does not carry it). The 19:27 go ("you can continue please") was withdrawn by that stop; this 2026-10-05 ~21:45 EDT pick is the yes that stands. The proposal above stands as written: exactly two poses, Lulu's critical (FFX only) and Rikku Berserker's ready (FFX-2 only), each only in its own game, may stand lower than 0.60 of the idle's height so that the head follows the idle's; every other pose keeps the floor; D-455's re-paint of Rikku's two ready poses is not touched.
+  - area art · both games · adopted · delivery in progress · at ~19:27 EDT · see [D-298](#d-298), [D-437](#d-437), [D-441](#d-441), [D-420](#d-420), [D-455](#d-455)
   - Source: critic/CHECKS.md
 - <a id="d-458"></a>**D-458** — The title screen's key art becomes the Art Room's Gullwings Farplane Field (Yuna, Rikku and Paine from behind in a lavender flower field, a golden crystal spire on the water), both games; the screen is re-cut around it on a branch
   - Bailey: “use what i just approved for the new title screen please, it's soooo epic i love it.”
@@ -4062,6 +4061,16 @@ Monday · 25 decisions
   - What changed: The concept's two ink cut-outs of Tidus and Yuna on the shore are not drawn: TITLE_CAST_ON stays false in src/app/screens/frontend/titleMarkup.ts on branch title-gullwings-keyart (fa09c73f), so the title shows only his painting (Yuna, Rikku and Paine of the picture itself). This approves decision 1 of docs/handoff/title-gullwings-keyart.md section 4 and answers the board tile's open question "whether the two silhouettes of Tidus and Yuna stay out". The undo the handoff kept (TITLE_CAST_ON = true; the CSS, the parallax layer and the tests for it stay in the code) is not wanted now. He asked what the question meant, so it was asked a second time with the two pictures; this is a yes to that one question, not a blanket yes: "(Recommended)" is the question form's own tag on the option. Not merged and not live; it ships with release 39.1 at integration. Both games: the title screen is shared by the FFX and FFX-2 chapters (AGENTS.md rule 14).
   - area ui · both games · adopted · delivery in progress · at ~21:00 EDT · see [D-459](#d-459), [E-038](#e-038) · refines [D-458](#d-458)
   - Source: docs/handoff/title-gullwings-keyart.md
+- <a id="d-461"></a>**D-461** — FFX-2 fiends step all the way to their target when they attack, like the FFX party, the FFX fiends and the FFX-2 girls after their run-in; the sources are silent on how an FFX-2 fiend approaches, so it is his call (FFX-2 only)
+  - Bailey: “Yes, let them reach (Recommended)” (blanket yes)
+  - What changed: In the FFX-2 chapters (IV, V, VI, XI, XIII, XV, XVI) a fiend's physical strike is solved against the painted figures on screen so that the fiend reaches the struck girl, instead of stopping short of her as on live release 39 (the fixed 1.4 world-unit lunge left, for example, Dr. Goon 560 px from Rikku in Chapter VI). In the code of branch r391-reach it is `reachFor` in `src/app/screens/BattleScreenRunIn.ts` answering yes for a fiend (commit 9b492316; the handoff docs/handoff/r391-reach.md section "Game case" flagged it for him, and the revert would be one line). Presentation only: no engine state, no RNG, no timing change. Not taken: leaving FFX-2 fiends at the old fixed lunge. What it does not change: a girl who stays where she stands (a long-range dressphere fires from where she is, sourced in research/ffx2-combat-core.md) still does not close the distance, and the run-in rules of D-354 are as approved. The FFX party and FFX fiends reaching, and the FFX-2 girls reaching after their run-in, are the lane's bug fix inside approved scope and are not decided by this row. Built on branch r391-reach (65ac60be), not merged and not live: it ships in release 39.1 at integration. FFX-2 only: the sources say nothing about how an FFX-2 fiend approaches, so by AGENTS.md rule 14 it is Bailey's call, and this row is that call.
+  - area visuals · FFX-2 · adopted · delivery in progress · at ~21:45 EDT · see [D-354](#d-354), [D-407](#d-407)
+  - Source: docs/handoff/r391-reach.md; AGENTS.md
+- <a id="d-462"></a>**D-462** — Character art: repair today's paintings without redrawing them (hair-edge fringes, costume colour across poses) and have 2 to 3 in-game lighting mockups ready to pick from, instead of the painterly roll-out; this replaces D-438 for now (both games)
+  - Bailey: “Repairs + lighting mockups (Recommended)” (blanket yes)
+  - What changed: Bailey's pick replaces the painterly roll-out of D-438 for now. Overnight (2026-10-05 into 2026-10-06) the character art work is: (1) repair today's paintings without redrawing any of them: the jagged white fringes on hair edges, and the coats that change colour from one pose to the next (costume colour consistent across poses), as candidates he sees before anything is installed (approved paintings are never replaced on an agent's say-so); and (2) 2 to 3 in-game lighting mockups ready for him to pick from in the morning (end state first, AGENTS.md rule 9: he picks or mixes, the pick is saved as the target, and nothing is built before that). Why: an independent full-size review of 21 D+R pilot poses found the painterly version better at battle size in 0 of 21 (the same in 8, worse in 13), with real defects confirmed in 20 of 20 checked (the figures are the driver's, as given in the brief for this record). D-438 is marked superseded by this row, and nothing painterly ships in 39.2 on its authority; nothing painterly was ever installed. Rows that lean on the painterly finish are not edited by this record and wait for the driver and Bailey to say what the finish becomes: D-455 (Rikku's Berserker and Gunner ready poses re-painted in the painterly finish), D-456 (the init-lock pilot) and D-434 (the animation keys in the same finish). Both games: the repairs and the lighting apply to FFX and FFX-2 figures alike, and each figure keeps its own game.
+  - area art · both games · adopted · delivery in progress · at ~21:45 EDT · see [D-438](#d-438), [D-455](#d-455), [D-456](#d-456), [D-434](#d-434), [D-429](#d-429) · replaces [D-438](#d-438)
+  - Source: Bailey, 2026-10-05 ~21:45 EDT, in the Claude Code chat, through its question form. The question, verbatim: "The painterly finish failed, so what …
 - **Picture** (polish) — Approved: Title key art: the Art Room's Gullwings Farplane Field (both games)
   - Bailey: “use what i just approved for the new title screen please, it's soooo epic i love it.”
   - Delivery: Built on branch title-gullwings-keyart (fa09c73f; docs/handoff/title-gullwings-keyart.md), not merged and not live. The new art is staged (D:/Tools/pyrefly-art-staging/title-gullwings/) and is NOT installed in any public/art: the swap is owed at integration into the 39.1 release tree, together with the branch's docs/target/approved-hashes.json change. Bailey has seen the screenshot and likes it (D-459, D-460).
