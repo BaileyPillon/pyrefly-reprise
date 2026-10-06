@@ -1,0 +1,46 @@
+[
+ {
+  "chapter": "ffx2-bahamut",
+  "ch": "IV",
+  "steps": [
+   "card selected by real keys",
+   "pre-battle scene skipped with 1 hold(s) of Enter",
+   "shot ch04-ffx2-bahamut-first-menu.png",
+   "turn: White Magic > Cure",
+   "shot ch04-ffx2-bahamut-after-attack.png"
+  ],
+  "fail": null,
+  "turn": {
+   "label": "White Magic > Cure",
+   "confirm": {
+    "confirmed": true
+   }
+  },
+  "finalScreen": "battle",
+  "events": 27,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ {
+  "chapter": "ffx2-ixion-djose",
+  "ch": "XVI",
+  "steps": [
+   "card selected by real keys",
+   "pre-battle scene skipped with 1 hold(s) of Enter",
+   "shot ch16-ffx2-ixion-djose-first-menu.png",
+   "turn: White Magic > Pray",
+   "shot ch16-ffx2-ixion-djose-after-attack.png"
+  ],
+  "fail": null,
+  "turn": {
+   "label": "White Magic > Pray",
+   "confirm": {
+    "confirmed": true
+   }
+  },
+  "finalScreen": "battle",
+  "events": 29,
+  "consoleErrors": [],
+  "notFound": []
+ }
+]
