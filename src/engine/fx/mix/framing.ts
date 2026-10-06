@@ -9,6 +9,7 @@ import { colossusExcess, gateNote, plateExcess, plateMiss, plateOf, restGap, shi
 import type { FramingReport } from './framingReport.ts';
 import type { Decision, Try } from './framingTypes.ts';
 import { RigWatch, type BattleCameraLike } from './rigWatch.ts';
+import { holdEarly, lockOf, phaseLayout, scaleKey, sizingOf, stepOf, stepsFor, type ScaleLock } from './scaleLock.ts';
 import { separate } from './separate.ts';
 import { Staging } from './staging.ts';
 import { onPhone, readStand, standFor } from './stageTable.ts';
@@ -18,7 +19,7 @@ import { menuCalm, type MenuCalm } from './menuCalm.ts';
  * The MAX mix (D-316): CHAPTER FRAMING (BATTLE SPECTACLE's part; both games). The composed master per chapter, ported from option C's prototype
  * (`fx/max/c/DioramaDirector.ts`, mix refinement): the colossus masters with BOSS SCALE for the giants, today's rig everywhere else (Vegnagun keeps D-228, Sin its
  * deck), and for every master, today's rig included, the menu clearance (`clearance.ts`) with the judges' party-height floor, party-overlap and boss-cover checks and a
- * static lens shift. When a colossus cannot pass at its full size, BOSS SCALE steps down until it does (Braska's Final Aeon and its pagodas, Evrae with the NEXT BEST MOVE card).
+ * static lens shift. When a colossus cannot pass at its full size, BOSS SCALE steps down until it does (Braska's Final Aeon and its pagodas, Evrae with the NEXT BEST MOVE card), once per phase of the link: the first plan's size is kept by every later plan, the fit moves the camera (`scaleLock.ts`).
  *
  * Comfort (D-291): the calm camera stays the camera. The master is registered as the battle camera's resting rig, so the battle-start move lands on it; it is planned
  * during the battle-start moment, never while a command menu is open. At each menu's opening the live frame is checked against the HUD as laid out; a failure re-plans
@@ -36,8 +37,6 @@ import { menuCalm, type MenuCalm } from './menuCalm.ts';
  */
 
 export type { FramingReport } from './framingReport.ts';
-
-const FRACS = [1, 0.7, 0.45, 0.25, 0];
 
 export class Framing {
   readonly rigs: RigWatch | null;
@@ -63,6 +62,8 @@ export class Framing {
   private calmSpec: MenuCalm | null = null;
   /** The colossus master the table pinned, once it is on screen (`colossusPin.ts`); the Sensor card stands at its place. */
   private pinned: ColossusPin | null = null;
+  /** The size each boss plays in this phase of the link (`scaleLock.ts`): kept by every later plan, so no menu re-sizes a boss. */
+  private lock: ScaleLock | null = null;
   /** TEXT SIZE as the last plan read it (the pin is proved at the default size only). */
   private textSize = textSizeKey();
   /** The window under a table row's plan: a resize re-plans it (`colossusPin.ts`). */
@@ -146,7 +147,12 @@ export class Framing {
       this.pending = null;
       this.commit(d, actors);
     }
-    if (!this.installed) return;
+    if (!this.installed) {
+      const [base, canvas] = [this.rigs?.base('idle'), battleCanvas()]; // a held boss takes its size before the plan lands (`scaleLock.ts`)
+      if (this.wantOn && base && canvas && !onPhone()) this.lock = holdEarly(this.staging, actors, base, canvas.getBoundingClientRect(), phaseLayout(this.layoutKey(canvas), false), this.lock, ready && this.calm(actors, false));
+      else if (this.staging.plan.size) this.staging.release(); // switched off (or a phone) before the plan landed: nothing stays sized
+      return;
+    }
     this.staging.apply(actors, this.wantOn);
     // The live check, at each menu's opening and once more half a second in (the HUD settles), each on the
     // first calm frame from then on while the menu stays open.
@@ -222,7 +228,7 @@ export class Framing {
     this.report.colossusFight = cls === 'colossus' && !keep;
     if (!this.wantOn || keep) {
       // Nothing to check against: today's rig is the master.
-      return { keep: true, pose: base, lens: [0, 0], plan: new Map(), side: null, pin: null, today: base, rule: null, limitOf: new Map(), report: { tries: [keep && this.wantOn ? 'keeps today (D-228 / Sin)' : 'off'] } };
+      return { keep: true, pose: base, lens: [0, 0], plan: new Map(), side: null, pin: null, today: base, rule: null, limitOf: new Map(), report: { tries: [keep && this.wantOn ? 'keeps today (D-228 / Sin)' : 'off'] }, lock: null };
     }
     const t0 = performance.now();
     const before = new Map([...this.staging.plan].map(([a, p]) => [a, { ...p }] as const));
@@ -232,6 +238,9 @@ export class Framing {
     this.windowWatch.plannedFor(stand.colossus ? windowKey() : ''); // watched only under a table row's pin
     const cr = canvas.getBoundingClientRect();
     const pin = this.report.colossusFight && !phoneBattle() ? pinFor(stand.colossus, cr.width / Math.max(1, cr.height)) : null; // the table's colossus master for this window shape, else the search below
+    const key = scaleKey(actors, base, phaseLayout(this.layoutKey(canvas), pin !== null));
+    const lock = key !== null && this.lock?.key === key ? this.lock : null; // the size this phase of the link already plays: no plan re-sizes a boss (`scaleLock.ts`)
+    const sizing = sizingOf(lock, base, cr, phoneBattle());
     const field = this.field(canvas, null); // today's field (the card at home): every plan but the table's own is measured in it, as before
     const fieldPin = pin ? this.field(canvas, pin) : field; // the table's: the card where it puts it, the HUD's stage as drawn
     this.staging.side = stand.side;
@@ -253,7 +262,7 @@ export class Framing {
     const today0: Try = { frac: -1, colossus: false, partyDx: 0 };
     const steps = stand.side && !stand.colossus ? [] : [0.35, 0.7].map((partyDx): Try => ({ frac: -1, colossus: false, partyDx })); // a chapter's table places its own party: no step toward the fiends (Natus's row only pins a master)
     // The table's colossus master (`colossusPin.ts`) is the one candidate when it is pinned: today's rig stays behind it for a window it fails.
-    const tries: Try[] = [...(pin ? [{ frac: pin.frac, colossus: true, partyDx: 0, pin }] : colossus ? FRACS.map((frac) => ({ frac, colossus: true, partyDx: 0 })) : []), today0, ...steps];
+    const tries: Try[] = [...(pin ? [{ frac: pin.frac, colossus: true, partyDx: 0, pin }] : colossus ? stepsFor(lock, actors).map((frac) => ({ frac, colossus: true, partyDx: 0 })) : []), today0, ...steps];
     let chosen: { fit: Fit; frac: number; gap: number; bossPx: number; plan: Map<Actor, { k: number; dx: number }>; pin: ColossusPin | null } | null = null;
     // Fail closed (round 19): a pose that shows more of the plate's edge than today's rig (PR-0307) or, for a colossus
     // master, leaves a member inside a boss at rest (PR-0310) is held; today's rig is always a candidate that passes both.
@@ -266,8 +275,8 @@ export class Framing {
       const fld = t.pin ? fieldPin : field;
       this.staging.clearPlan();
       let m = base;
+      this.staging.planScale(actors, base.pos, scaleTarget, t.colossus ? t.frac : 0, sizing); // today's rig plays only the sizes the phase holds (a held boss, a lock)
       if (t.colossus) {
-        this.staging.planScale(actors, base.pos, scaleTarget, t.frac);
         this.staging.apply(actors, true);
         m = separate(this.game, this.staging, () => this.visible(actors).figs, actors, cls, base, fld, rule, t.pin ?? null, stand.side?.boss ?? null);
       } else {
@@ -275,7 +284,8 @@ export class Framing {
         this.staging.apply(actors, true);
       }
       const figs = this.visible(actors).figs;
-      const gate: Gate = (pose, lens, boxes) => plateExcess(plate, plateToday, pose, field.W, field.H, lens) + (t.pin && slab ? pinnedExcess(boxes, figs, slab, field.W) : t.colossus ? colossusExcess(boxes, figs, slab, field.W) : 0);
+      const grown = !t.colossus && [...this.staging.plan.values()].some((p) => p.k > 1); // today's rig is exempt from the gate because it draws the stage's own boss; with a size the phase holds (a held boss, a lock) it does not
+      const gate: Gate = (pose, lens, boxes) => plateExcess(plate, plateToday, pose, field.W, field.H, lens) + (t.pin && slab ? pinnedExcess(boxes, figs, slab, field.W) : t.colossus || grown ? colossusExcess(boxes, figs, slab, field.W) : 0);
       const fit = t.pin ? fitPinned(m, base, figs, fld, limits, rule, gate, t.pin, (bx) => restGap(bx, figs)) : fitClear(m, base, figs, fld, true, limits, rule, gate);
       const mb = shifted(boxesOf(cameraAt(fit.pose, field.W / field.H), figs, fld), fit.lens);
       log.push(`${t.frac}:${fit.clear.ok && fit.gate === 0 ? 'ok' : 'x'}${fit.gate > 0 ? ' gate' + fit.gate.toFixed(3) + ' ' + gateNote(mb, figs, slab) : ''} w${fit.clear.worst.toFixed(2)} px${Math.round(fit.clear.partyPx)} ov${fit.clear.overlap.toFixed(2)} bc${fit.clear.bossCover.toFixed(2)} ${fit.clear.figs.filter((r) => r.underHud > 0.06 || r.inView < 0.97).map((r) => `${r.id}:${r.inView}/${r.underHud}`).join(',')}`);
@@ -304,7 +314,7 @@ export class Framing {
       planMs: Math.round(performance.now() - t0),
       tries: log,
     };
-    return { keep: false, pose: pick.fit.pose, lens: pick.fit.lens, plan: pick.plan, side: stand.side, pin: pick.pin, today: base, rule, limitOf, report };
+    return { keep: false, pose: pick.fit.pose, lens: pick.fit.lens, plan: pick.plan, side: stand.side, pin: pick.pin, today: base, rule, limitOf, report, lock: key !== null && !phoneBattle() ? lockOf(key, stepOf(lock, pick.frac), pick.plan, actors) : null };
   }
 
   /** Put a decision on screen: the staging, the master as the resting rig (a cut if the camera rests on it), the lens. */
@@ -324,6 +334,7 @@ export class Framing {
     this.lensSeq = rigs.moveSeq;
     this.lens = d.lens;
     this.pinned = d.pin;
+    this.lock = d.lock;
     this.rule = d.rule;
     this.limitOf.clear();
     for (const [a, l] of d.limitOf) this.limitOf.set(a, l);
