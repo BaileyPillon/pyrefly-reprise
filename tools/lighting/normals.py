@@ -30,6 +30,7 @@ import time
 
 import numpy as np
 from PIL import Image
+from scipy import ndimage as ndi
 
 MODEL = 'depth-anything/Depth-Anything-V2-Small-hf'
 REVISION = '5426e4f0f36572d16453bbda7a8389317b1bef99'
@@ -57,13 +58,8 @@ def guided(guide, src, r=4, eps=2e-3):
 
 
 def dist_inside(mask, iters):
-    """A cheap chamfer distance (in pixels) from the outside, capped at `iters`."""
-    d = np.where(mask, float(iters), 0.0)
-    for _ in range(iters):
-        p = np.pad(d, 1, mode='constant')
-        n = np.minimum.reduce([p[:-2, 1:-1], p[2:, 1:-1], p[1:-1, :-2], p[1:-1, 2:]]) + 1
-        d = np.where(mask, np.minimum(d, n), 0.0)
-    return d
+    """The exact Euclidean distance (in pixels) from the outside, capped at `iters` (the chamfer of the first version left stripes)."""
+    return np.minimum(ndi.distance_transform_edt(np.pad(mask, 1, mode='constant'))[1:-1, 1:-1], float(iters))
 
 
 def normals_for(model, proc, src):
@@ -74,9 +70,16 @@ def normals_for(model, proc, src):
     w, h = max(8, round(W * k)), max(8, round(H * k))
     rgb = Image.new('RGB', img.size, (128, 128, 128))
     rgb.paste(img, mask=img.split()[3])
-    with torch.no_grad():
-        inp = proc(images=rgb, return_tensors='pt')
-        pred = model(**inp).predicted_depth[0].numpy().astype(np.float32)
+    cache = os.path.join(OUT, 'depth', os.path.splitext(os.path.basename(src))[0] + '.npy')
+    cache = os.path.join(os.path.dirname(cache), os.path.basename(os.path.dirname(src)) + '__' + os.path.basename(cache))
+    if os.path.exists(cache):
+        pred = np.load(cache).astype(np.float32)
+    else:
+        with torch.no_grad():
+            inp = proc(images=rgb, return_tensors='pt')
+            pred = model(**inp).predicted_depth[0].numpy().astype(np.float32)
+        os.makedirs(os.path.dirname(cache), exist_ok=True)
+        np.save(cache, pred.astype(np.float16))
     small = img.resize((w, h), Image.LANCZOS)
     A = np.asarray(small.split()[3], dtype=np.float64) / 255
     g = np.asarray(small.convert('L'), dtype=np.float64) / 255
@@ -92,7 +95,7 @@ def normals_for(model, proc, src):
     dome = dist_inside(inside, reach) / reach
     dome = np.sqrt(np.clip(dome, 0, 1))
     z = (0.55 * d + 0.45 * dome) * A
-    z = box(z, 1)
+    z = ndi.gaussian_filter(z, 1.4)  # smooth the height before the Sobel: no steps, no stripes
     p = np.pad(z, 1, mode='edge')
     gx = (p[:-2, 2:] + 2 * p[1:-1, 2:] + p[2:, 2:]) - (p[:-2, :-2] + 2 * p[1:-1, :-2] + p[2:, :-2])
     gy = (p[2:, :-2] + 2 * p[2:, 1:-1] + p[2:, 2:]) - (p[:-2, :-2] + 2 * p[:-2, 1:-1] + p[:-2, 2:])

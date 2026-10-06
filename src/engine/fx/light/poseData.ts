@@ -44,7 +44,8 @@ export function poseKeyOf(url: string | undefined): { id: string; pose: string }
   return m ? { id: m[1]!, pose: m[2]! } : null;
 }
 
-const MAPS = `${import.meta.env?.BASE_URL ?? '/'}__lightmaps/`;
+/** The dev server's maps (`tools/lighting/vite-lighting.config.mjs`) are served from the site root; a build has none (the base path is read by the art loader alone, `art-url-sources.test.ts`). */
+const MAPS = '/__lightmaps/';
 const loader = new TextureLoader();
 const cache = new Map<string, Texture | null | 'loading'>();
 let manifest: Set<string> | null = null;
