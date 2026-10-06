@@ -47,6 +47,37 @@
 
 /* ======================================================== title: the planes */
 
+/*
+ * The painting is public/art/title/keyart.png: since 2026-10-05 the Art Room's "Farplane Field, the Gullwings" (Yuna,
+ * Rikku and Paine from behind on the lower left, a lavender flower field, a golden crystal spire on the water at
+ * right; Bailey: "it's soooo epic i love it"; both games). It is a 1.75:1 plate like the one before it, so the
+ * `object-fit: cover` crop below behaves the same.
+ *
+ * --fe-art-x and --fe-art-y are where a window of another shape keeps the painting: they are keyart.json's `focal`
+ * (0.30, 0.45: the heroes' heads, where the gaze toward the spire starts), used the way the pause plates use theirs, as
+ * the cover crop's anchor. 30 % across puts the crop's left edge a third of the way in, so the three heroes (u 0.108 to
+ * 0.40 of the painting) stay on screen down to about 4:3 and the spire (u 0.70) down to about 1:1; the old 50 % cut Yuna
+ * off at 5:4. 45 % down matters only in a window wider than 16:9 (it crops less off the top than the middle would, so the
+ * heroes sit lower and the slab keeps clear of them). A phone (below) keeps the three heads and gives up the spire.
+ */
+.fe-title {
+  --fe-art-x: 30%;
+  --fe-art-y: 45%;
+  /*
+   * The grade the painting is drawn through, one place for the far plane and the 32 px placeholder under it
+   * (title-reveal.css): none (saturate(1) is the identity), so the screen shows the picture Bailey approved. The
+   * concept's grade (brightness 0.78 under a 0.66 black cap, a 0.72 foot and a 0.62 vignette) was cut for the dusk plate
+   * it came with: over this pastel picture it took the mean luminance to 0.64 of the approved one (sky 0.47, foot 0.26)
+   * and read as a different, duller picture. Nothing the chrome needs comes from the grade: the slab, the chip and the
+   * hint row carry their own backgrounds, and the strap its own halo (below). What is left of the scrim is three named
+   * strengths, light, so that the concept's framing survives as a hint and a decision on it is a number
+   * (docs/handoff/title-gullwings-keyart.md has the measurements; `.fe-title__grade { display: none; }` is the pure picture).
+   */
+  --fe-title-grade: saturate(1);
+  --fe-scrim-top: 0.12;
+  --fe-scrim-foot: 0.16;
+  --fe-scrim-edge: 0.14;
+}
 .fe-title__plane {
   position: absolute;
   inset: 0;
@@ -57,57 +88,45 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: var(--fe-art-x) var(--fe-art-y);
   display: block;
 }
 
 /*
- * The plane cut. card.json: "the shore plane here is cut on luminance from one
- * painting" — and the painting is public/art/title/keyart.png, the very plate
- * after.png was composited from.
+ * The plane cut. The near plane is the same painting again, drawn larger and moved further by the pointer, and
+ * masked to the foreground flower band at the bottom: the crisp blossoms in front of the heroes' feet.
  *
- * The concept baked that cut into plane-near.png as an alpha channel. Measured
- * off that file, its alpha is nothing at 62 % of the frame and ramps to about
- * 0.95 at the bottom edge, so the mask below is that ramp: no hard line
- * anywhere, and the blend crosses the painting's own horizon instead of
- * cutting across it. (The first build used clip-path: inset(57% 0 0 0), a hard
- * edge above the horizon — the thing the verifier saw.)
+ * Two rules decide the shape, both measured off the painting (u, v = fractions of its width and height):
+ * - No hero may be split between the planes. The lowest pixel of any of them is Paine's boot at v 0.81 and the
+ *   point of his sword at v 0.82 (u 0.40), so the mask is nothing above v 0.85 and the ramp ends at 0.94. The
+ *   near plane also slides against the far one by up to 9 px (the 14 px pointer travel times the depth gap, 0.65),
+ *   about 1.3 % of a 720 px window, and it is held at a slightly larger scale (TitleScreen.ts), which pushes its
+ *   band down, never up: the lowest hero pixel keeps 1.2 % of the height of clear far plane at 720 px high (1.7 % at
+ *   1080) in the worst case.
+ *   tests/unit/title-near-mask.test.ts pins both.
+ * - The ramp is soft (eight stops, no visible edge), because two copies of the same crisp blossoms never line up
+ *   exactly and a hard edge would show the seam.
  *
- * The grades are the concept's two applied twice over, because plane-far.png
- * and plane-near.png were themselves already graded (measured against the
- * plate: 0.86 and 0.713) before after.html put its CSS filter on top. Working
- * from the ungraded plate, this screen has to do both.
+ * The mask is a picture, not a gradient on the box, so that it stays registered with the painting: `mask-size:
+ * cover` with the same anchor as `object-position` crops it the way the <img> is cropped, in any window shape. A
+ * plain `linear-gradient` is measured against the box and slides down the heroes on every window that is not 16:9
+ * (at 2560x1080 it lands on their faces). The SVG is 1344x768 like the plate, one vertical gradient.
+ *
+ * (History: the concept's ramp ran from 61 % to 100 % of the frame; that was cut for the old plate's empty shore.)
  */
 .fe-title__plane--far img {
-  filter: saturate(0.94) brightness(0.78) contrast(1.08);
+  filter: var(--fe-title-grade);
 }
 .fe-title__plane--near {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 61%,
-    rgba(0, 0, 0, 0.16) 67%,
-    rgba(0, 0, 0, 0.34) 70.5%,
-    rgba(0, 0, 0, 0.5) 74%,
-    rgba(0, 0, 0, 0.6) 78%,
-    rgba(0, 0, 0, 0.72) 82%,
-    rgba(0, 0, 0, 0.8) 89%,
-    rgba(0, 0, 0, 0.9) 95%,
-    rgba(0, 0, 0, 0.96) 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 61%,
-    rgba(0, 0, 0, 0.16) 67%,
-    rgba(0, 0, 0, 0.34) 70.5%,
-    rgba(0, 0, 0, 0.5) 74%,
-    rgba(0, 0, 0, 0.6) 78%,
-    rgba(0, 0, 0, 0.72) 82%,
-    rgba(0, 0, 0, 0.8) 89%,
-    rgba(0, 0, 0, 0.9) 95%,
-    rgba(0, 0, 0, 0.96) 100%
-  );
-}
-.fe-title__plane--near img {
-  filter: brightness(0.6) saturate(0.88);
+  --fe-near-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1344 768' preserveAspectRatio='none'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0.85' stop-color='%23000' stop-opacity='0'/><stop offset='0.862' stop-color='%23000' stop-opacity='0.03'/><stop offset='0.875' stop-color='%23000' stop-opacity='0.12'/><stop offset='0.89' stop-color='%23000' stop-opacity='0.32'/><stop offset='0.905' stop-color='%23000' stop-opacity='0.58'/><stop offset='0.92' stop-color='%23000' stop-opacity='0.82'/><stop offset='0.93' stop-color='%23000' stop-opacity='0.94'/><stop offset='0.94' stop-color='%23000' stop-opacity='1'/></linearGradient></defs><rect width='1344' height='768' fill='url(%23g)'/></svg>");
+  -webkit-mask-image: var(--fe-near-mask);
+  mask-image: var(--fe-near-mask);
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-position: var(--fe-art-x) var(--fe-art-y);
+  mask-position: var(--fe-art-x) var(--fe-art-y);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 /*
@@ -125,7 +144,13 @@
     linear-gradient(to bottom, #0b1024 0%, #1c2440 46%, #3a3352 62%, #120e1c 100%);
 }
 
+/*
+ * The warm bloom of the concept's plate sat under its tower. This painting carries its own glow at the spire's
+ * base, which a blob in box coordinates would double (and, on a window that is not 16:9, miss: the box does not
+ * follow the painting's crop), so it is off. The element stays in the markup for a plate that wants it again.
+ */
 .fe-title__bloom {
+  display: none;
   position: absolute;
   left: 40%;
   top: 50%;
@@ -136,23 +161,33 @@
   pointer-events: none;
 }
 
+/*
+ * The scrim over the painting: a light cap, foot and edge (the three `--fe-scrim-*` strengths on `.fe-title`, 0.12, 0.16
+ * and 0.14; the concept's were 0.66, 0.72 and 0.62). It is not there for legibility (see the grade above); it keeps a
+ * little of the concept's framing, and the foot sits under the hint row. Mean luminance against the approved picture,
+ * measured at 1920x1080 with the chrome hidden: 0.98 (sky band 0.96, centre 1.00, foot band 0.90); the concept's grade: 0.64.
+ */
 .fe-title__grade {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(90% 60% at 50% 62%, rgba(255, 196, 120, 0.14), rgba(0, 0, 0, 0) 62%),
     linear-gradient(
       to bottom,
-      rgba(5, 4, 10, 0.66) 0%,
-      rgba(5, 4, 10, 0) 22%,
-      rgba(5, 4, 10, 0) 62%,
-      rgba(5, 4, 10, 0.72) 100%
+      rgba(5, 4, 10, var(--fe-scrim-top)) 0%,
+      rgba(5, 4, 10, 0) 14%,
+      rgba(5, 4, 10, 0) 80%,
+      rgba(5, 4, 10, var(--fe-scrim-foot)) 100%
     ),
-    radial-gradient(120% 96% at 46% 46%, rgba(5, 4, 10, 0) 40%, rgba(5, 4, 10, 0.62) 100%);
+    radial-gradient(120% 96% at 44% 48%, rgba(5, 4, 10, 0) 60%, rgba(5, 4, 10, var(--fe-scrim-edge)) 100%);
 }
 
 /* ----------------------------------------------- the two on the shore */
+
+/*
+ * Not drawn since 2026-10-05 (`TITLE_CAST_ON` in titleMarkup.ts): the Gullwings painting has its own three people.
+ * The rules stay so that the pair can be put back with that one switch.
+ */
 
 .fe-title__cast {
   position: absolute;
@@ -259,15 +294,27 @@
   inset: 0;
 }
 
+/*
+ * The slab sits ABOVE the three heroes now, not in front of them. On the old plate it stood on the open left (top 214
+ * of 810, 343 grid units tall) where nothing was painted; on this one that spot is exactly where Yuna and Rikku stand
+ * (their heads are at 0.44 of the painting's height) and the paper hid both. So the same slab is made 20 % shorter
+ * (343 to 274 grid units) and moved up: it ends at about 0.37 of the frame, over the pink clouds, which leaves the
+ * heads clear on every window from 16:9 to 21:9 (they rise to 0.43 of the frame at 21:9, a 67 px gap at 2560x1080;
+ * docs/handoff/title-gullwings-keyart.md has the table). It is shorter by its own metrics (the wordmark at 62 where it was 76, tighter padding and gaps), NOT
+ * by a transform: scaling it would draw the 14 px type floor below 14 effective px (PR-0066, CHK-003), and
+ * tests/unit/frontend-css-type-floor.test.ts pins every size in this sheet to that floor. The drop shadow is shorter
+ * for the same reason as the slab: the old one (26 down, 70 blur, 0.72) reached the heroes' faces from here.
+ * A phone has its own numbers (below).
+ */
 .fe-title__slab {
   position: absolute;
-  left: calc(-52 * var(--fe-k));
-  top: calc(214 * var(--fe-k));
-  width: calc(474 * var(--fe-k));
-  padding: calc(34 * var(--fe-k)) calc(46 * var(--fe-k)) calc(38 * var(--fe-k)) calc(86 * var(--fe-k));
+  left: calc(-48 * var(--fe-k));
+  top: calc(22 * var(--fe-k));
+  width: calc(440 * var(--fe-k));
+  padding: calc(24 * var(--fe-k)) calc(40 * var(--fe-k)) calc(26 * var(--fe-k)) calc(80 * var(--fe-k));
   background: var(--ig-paper);
   transform: skewX(var(--ig-skew, -12deg));
-  box-shadow: 0 calc(26 * var(--fe-k)) calc(70 * var(--fe-k)) rgba(0, 0, 0, 0.72);
+  box-shadow: 0 calc(6 * var(--fe-k)) calc(24 * var(--fe-k)) rgba(0, 0, 0, 0.4);
   border-right: calc(6 * var(--fe-k)) solid var(--ig-gold);
 }
 .fe-title__slab > * {
@@ -290,18 +337,18 @@
   color: var(--ig-gold-on-paper);
 }
 .fe-title__name {
-  margin: calc(14 * var(--fe-k)) 0 0;
+  margin: calc(10 * var(--fe-k)) 0 0;
   font-family: var(--ig-font-serif);
   font-style: italic;
   font-weight: 700;
-  font-size: max(var(--fe-fs-floor), calc(76 * var(--fe-k)));
+  font-size: max(var(--fe-fs-floor), calc(62 * var(--fe-k)));
   line-height: 0.94;
   color: var(--ig-ink);
   letter-spacing: -0.01em;
 }
 .fe-title__rule {
-  margin: calc(20 * var(--fe-k)) 0 0;
-  width: calc(228 * var(--fe-k));
+  margin: calc(14 * var(--fe-k)) 0 0;
+  width: calc(190 * var(--fe-k));
   height: calc(3 * var(--fe-k));
   background: var(--ig-ink);
 }
@@ -309,7 +356,7 @@
   display: inline-flex;
   align-items: center;
   gap: calc(12 * var(--fe-k));
-  margin-top: calc(20 * var(--fe-k));
+  margin-top: calc(14 * var(--fe-k));
   padding: calc(10 * var(--fe-k)) calc(22 * var(--fe-k)) calc(11 * var(--fe-k));
   background: var(--ig-ink);
   font-family: var(--ig-font-display);
@@ -356,7 +403,18 @@
   font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
   letter-spacing: 0.42em;
   text-transform: uppercase;
-  color: rgba(227, 185, 74, 0.78);
+  /*
+   * Full gold with a dark halo. It was 78 % gold with nothing behind it, which the old dusk plate's dark edge carried;
+   * on the Gullwings painting's pink clouds and lilac flowers that measures 1.3:1 (WCAG contrast, median over the
+   * letters' pixels at 1920x1080). The halo keeps the picture untouched, where an edge scrim would dim it, and
+   * measures 5.9:1 (the hint row's own ink chip measures 5.6:1).
+   */
+  color: var(--ig-gold);
+  text-shadow:
+    0 0 calc(2 * var(--fe-k)) rgba(5, 4, 10, 1),
+    0 0 calc(5 * var(--fe-k)) rgba(5, 4, 10, 0.95),
+    0 0 calc(12 * var(--fe-k)) rgba(5, 4, 10, 0.75),
+    0 0 calc(26 * var(--fe-k)) rgba(5, 4, 10, 0.4);
 }
 .fe-title__verr {
   position: absolute;
@@ -801,13 +859,23 @@
     --fe-fs-floor: 14px;
   }
   /*
+   * The Gullwings painting on a phone: the window shows only the middle quarter of a 1.75:1 picture, so the crop is
+   * anchored at 14 % (the left edge of the visible part lands at u 0.10 and the right edge at 0.37), which keeps all
+   * three heads in frame and gives up the spire and Paine's sword. The slab sits higher (36 where it was 120): its
+   * eyebrow wraps to four lines at this width, so it ran to 0.45 of the height and met the heroes' hair (their heads
+   * are at 0.44); now it ends at 0.36 at 390x844 and just clears Yuna's hair at 360x640.
+   */
+  .fe-title {
+    --fe-art-x: 14%;
+  }
+  /*
    * The slab is skewed, so its bottom-left corner sits further left than its
    * padding says. The left padding carries that lean plus a real margin —
    * measured at 390x844, where 58 put the PRESS ENTER chip 2.9px off frame.
    */
   .fe-title__slab {
     left: calc(-34 * var(--fe-k));
-    top: calc(120 * var(--fe-k));
+    top: calc(36 * var(--fe-k));
     width: calc(286 * var(--fe-k));
     padding: calc(24 * var(--fe-k)) calc(24 * var(--fe-k)) calc(26 * var(--fe-k)) calc(78 * var(--fe-k));
   }

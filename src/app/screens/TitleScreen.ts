@@ -22,18 +22,22 @@ import { briefingDue } from './raiseBriefing.ts';
  * (Bailey, 2026-09-19). The base look is the approved tile
  * `docs/screenshots/mockups/A-title.jpg` and the spec in
  * `docs/handoff/presentation-ink-and-gold.md`; what this adds is the plane
- * split, the drift, the two on the shore and the pyreflies.
+ * split, the drift and the pyreflies (and, until 2026-10-05, the two on the
+ * shore: see `TITLE_CAST_ON`).
  *
  * Game-aware (AGENTS.md rule 14): **both**. The title is the front door to
  * both halves of the game; nothing about it is true of one and not the other,
  * and the strap names both by name.
  *
- * The painting is `public/art/title/keyart.png` — the plate `after.png` was
- * itself composited from, installed from the concept folder on 2026-09-21.
- * The first cut of this screen used `backdrops/title.png` instead (a sea and a
- * horizon), on a brief that said "only art already in `public/art`"; that read
- * of the rule was wrong here, because the key art is this project's own render
- * and it is the picture Bailey approved.
+ * The painting is `public/art/title/keyart.png`. Since 2026-10-05 it is the Art
+ * Room's "Farplane Field, the Gullwings" (proposal p_f4836b8c), which Bailey
+ * approved for this screen ("it's soooo epic i love it"; see
+ * `docs/handoff/title-gullwings-keyart.md`); before that it was the plate
+ * `after.png` was composited from, installed on 2026-09-21. The first cut of
+ * this screen used `backdrops/title.png` instead (a sea and a horizon), on a
+ * brief that said "only art already in `public/art`"; that read of the rule was
+ * wrong here, because the key art is this project's own picture and it is the
+ * one Bailey approved.
  *
  * Two things changed from the screen this replaces, both deliberate:
  * - it is **full bleed**, not a letterboxed 640x360 stage scaled by a
@@ -111,9 +115,12 @@ export class TitleScreen extends Screen {
     const far = this.root.querySelector('.fe-title__plane--far');
     const near = this.root.querySelector('.fe-title__plane--near');
     const cast = this.root.querySelector('.fe-title__cast');
+    // The near plane's scale was 1.11 for the old plate's open shore. At 1.11 against the far plane's 1.045 the two copies
+    // of the flower band sit 2.3 % of the window height apart at rest (25 px at 1080), a visible double image where the near
+    // plane fades in; 1.06 keeps them within 0.5 % and still clears the frame at full drift (frontend.css, the plane cut).
     const layers = [
       far instanceof HTMLElement ? { el: far, depth: 0.35, scale: 1.045 } : null,
-      near instanceof HTMLElement ? { el: near, depth: 1, scale: 1.11 } : null,
+      near instanceof HTMLElement ? { el: near, depth: 1, scale: 1.06 } : null,
       cast instanceof HTMLElement ? { el: cast, depth: 1.35, scale: 1 } : null,
     ].filter((l): l is { el: HTMLElement; depth: number; scale: number } => l !== null);
     this.parallax = new ParallaxField({ layers, reduceMotion: this.reduceMotion });

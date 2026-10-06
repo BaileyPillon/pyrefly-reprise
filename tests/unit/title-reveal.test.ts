@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { resetArtManifest, setArtManifest } from '../../src/engine/ArtManifest.ts';
-import { titleMarkup, titlePlateSizes, upgradeTitlePlanes } from '../../src/app/screens/frontend/titleMarkup.ts';
+import { castHtml, titleMarkup, titlePlateSizes, upgradeTitlePlanes } from '../../src/app/screens/frontend/titleMarkup.ts';
 import { TITLE_PLACEHOLDER, revealTitleWhenDecoded, titleLayers } from '../../src/app/screens/frontend/titleReveal.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -39,6 +39,18 @@ describe('the placeholder', () => {
     expect(TITLE_PLACEHOLDER.length).toBeLessThan(1024);
   });
 
+  /** The Gullwings plate's 32 x 18 copy (2026-10-05): a lossy VP8 WebP whose header says 32 x 18, not the old plate's. */
+  it('is a 32 x 18 lossy WebP (the header says so)', () => {
+    const bytes = Buffer.from(TITLE_PLACEHOLDER.slice('data:image/webp;base64,'.length), 'base64');
+    expect(bytes.subarray(0, 4).toString('latin1')).toBe('RIFF');
+    expect(bytes.subarray(8, 12).toString('latin1')).toBe('WEBP');
+    expect(bytes.subarray(12, 16).toString('latin1')).toBe('VP8 ');
+    // The key frame's start code, then the 14-bit width and height.
+    expect([...bytes.subarray(23, 26)]).toEqual([0x9d, 0x01, 0x2a]);
+    expect(bytes.readUInt16LE(26) & 0x3fff).toBe(32);
+    expect(bytes.readUInt16LE(28) & 0x3fff).toBe(18);
+  });
+
   it('is drawn under the far plane, graded like it, and gives way to the dusk fallback on a 404', () => {
     const css = read('src', 'app', 'screens', 'frontend', 'title-reveal.css');
     expect(css).toMatch(/\.fe-title__plane--far::before \{[^}]*z-index: -1;[^}]*var\(--fe-title-ph/);
@@ -47,9 +59,10 @@ describe('the placeholder', () => {
 });
 
 describe('the reveal waits for every layer to decode', () => {
-  it('holds both planes and the two on the shore, then shows them together', async () => {
+  it('holds both planes, then shows them together', async () => {
     const host = mount();
-    expect(titleLayers(host)).toHaveLength(2 + 4);
+    // The two on the shore are not drawn since the Gullwings key art (TITLE_CAST_ON): the planes are the whole reveal.
+    expect(titleLayers(host)).toHaveLength(2);
     const decoded: Array<() => void> = [];
     for (const img of titleLayers(host)) {
       img.decode = () => new Promise<void>((r) => decoded.push(r));
@@ -66,6 +79,12 @@ describe('the reveal waits for every layer to decode', () => {
     expect(host.classList.contains('fe-title--decoding')).toBe(false);
     expect(host.dataset['titleReveal']).toBe('decoded');
     capped();
+  });
+
+  it('would hold the two on the shore as well, if they were switched back on', () => {
+    const host = mount();
+    host.insertAdjacentHTML('beforeend', `<div class="fe-title__cast">${castHtml(true)}</div>`);
+    expect(titleLayers(host)).toHaveLength(2 + 4);
   });
 
   it('shows the layers anyway when one never decodes, once the cap passes', async () => {
