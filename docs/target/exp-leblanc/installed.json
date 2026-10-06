@@ -518,6 +518,124 @@
    },
    "provisional": null,
    "installedAt": "2026-10-06T21:29:21.346Z"
+  },
+  "hurt": {
+   "artRoom": {
+    "id": "p_88387fe8",
+    "version": 3,
+    "file": "p_88387fe8-experimental-chapter-rikku-thief-hurt-v3.png",
+    "sha256": "2f361e4a3f6d20f9e0a43ed7dd3d7afd242992bee2ac9eb8b0b72ef07c4b9d57",
+    "score": 8.2,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "73689f5df8357d4a6edcf4c9d680e7d4acbcbb3f40edf4e814e78ff4373764e3",
+   "size": [
+    958,
+    1418
+   ],
+   "baselineY": 1402,
+   "contentBox": [
+    16,
+    16,
+    942,
+    1402
+   ],
+   "facing": "right",
+   "head": [
+    300,
+    33,
+    680,
+    312
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 1.091,
+    "stanceX": 511.5
+   },
+   "provisional": null,
+   "installedAt": "2026-10-06T22:20:18.334Z"
+  },
+  "victory": {
+   "artRoom": {
+    "id": "p_b0f03b9d",
+    "version": 3,
+    "file": "p_b0f03b9d-experimental-chapter-rikku-thief-victory-v3.png",
+    "sha256": "39378fe05365facfb7cb5088be2e62843de558cb1c7cccadb001ce63a198e40a",
+    "score": 8.5,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "e1be6f4adb0f2a165aff76b9b5602e8b57e62e34e3efaa320194b10af9f9c847",
+   "size": [
+    511,
+    1436
+   ],
+   "baselineY": 1420,
+   "contentBox": [
+    16,
+    16,
+    495,
+    1420
+   ],
+   "facing": "right",
+   "head": [
+    85,
+    197,
+    350,
+    435
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 1.415,
+    "stanceX": 340
+   },
+   "provisional": null,
+   "installedAt": "2026-10-06T22:20:29.585Z"
+  },
+  "ko": {
+   "artRoom": {
+    "id": "p_11066170",
+    "version": 2,
+    "file": "p_11066170-experimental-chapter-rikku-thief-ko-redo-v2.png",
+    "sha256": "66c50f170cf258b7df34bdd11461db12b0f1b66731e26f84aff0f23af893d298",
+    "score": 8.6,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "cbf81c81925ec5cdb3c181a2a68eba42a788032eceddf57da4c2b22bf0ea3650",
+   "size": [
+    1526,
+    466
+   ],
+   "baselineY": 450,
+   "contentBox": [
+    16,
+    16,
+    1510,
+    450
+   ],
+   "facing": "right",
+   "head": null,
+   "headSource": "none",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 1.02
+   },
+   "scaleSource": "length",
+   "provisional": null,
+   "installedAt": "2026-10-06T22:20:47.418Z"
   }
  },
  "paine-warrior": {
@@ -643,6 +761,83 @@
    },
    "provisional": null,
    "installedAt": "2026-10-06T21:29:30.842Z"
+  },
+  "hurt": {
+   "artRoom": {
+    "id": "p_29e6d29b",
+    "version": 3,
+    "file": "p_29e6d29b-experimental-chapter-paine-warrior-hurt-v3.png",
+    "sha256": "572d3be082f88502d9a6afcf98b9ad4325973f59b41d6744d8a3291df62ec647",
+    "score": 8.4,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "84fd9264dd44290977fe49476be9268118cc967066153c088a3915bf612393c6",
+   "size": [
+    933,
+    1289
+   ],
+   "baselineY": 1273,
+   "contentBox": [
+    16,
+    16,
+    917,
+    1273
+   ],
+   "facing": "right",
+   "head": [
+    388,
+    28,
+    602,
+    258
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 0.941,
+    "stanceX": 426
+   },
+   "provisional": null,
+   "installedAt": "2026-10-06T22:20:37.787Z"
+  },
+  "ko": {
+   "artRoom": {
+    "id": "p_ded975b1",
+    "version": 3,
+    "file": "p_ded975b1-experimental-chapter-paine-warrior-ko-v3.png",
+    "sha256": "363f73cf61564a803d9f5f683b9aa3e8cf8c6694cecbe6317fdddf95a89a41ac",
+    "score": 8.5,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "b33f9a9de5d9062b42e4e740e77c6ac9e9121cf9cc48e6f8da73a64cb125191f",
+   "size": [
+    1495,
+    458
+   ],
+   "baselineY": 442,
+   "contentBox": [
+    16,
+    16,
+    1479,
+    442
+   ],
+   "facing": "right",
+   "head": null,
+   "headSource": "none",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 1.052
+   },
+   "scaleSource": "length",
+   "provisional": null,
+   "installedAt": "2026-10-06T22:20:55.741Z"
   }
  },
  "ffx2-dr-goon": {
@@ -680,6 +875,114 @@
    },
    "provisional": "no head box on the idle: the poses of this subject are drawn at the idle's pixel scale until `head` sets it",
    "installedAt": "2026-10-06T21:31:37.397Z"
+  },
+  "attack": {
+   "artRoom": {
+    "id": "p_eb7556df",
+    "version": 3,
+    "file": "p_eb7556df-experimental-chapter-dr-goon-attack-v3.png",
+    "sha256": "a3477ee2a589845b6918453462e391f3b7131c710b2277e7888c933b575064ff",
+    "score": 8,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "7b460af6235fd2137186a160f5952b8db06b4ffc83d48dcf2b019117ee099692",
+   "size": [
+    1004,
+    1383
+   ],
+   "baselineY": 1367,
+   "contentBox": [
+    16,
+    16,
+    988,
+    1367
+   ],
+   "facing": "left",
+   "head": null,
+   "headSource": "none",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "stanceX": 927.5
+   },
+   "provisional": "no head box: the pose is drawn at the idle's pixel scale until --head is given",
+   "installedAt": "2026-10-06T22:21:04.315Z",
+   "stanceSource": "hand",
+   "stanceNote": "the rear boot (x 869 to 986), the foot the idle stands on (its lowest, x 458 to 559); the automatic rule took the planted front boot (x 30 to 256), which would have landed it where the idle's rear boot is and popped the whole figure back by about 0.7 m"
+  },
+  "hurt": {
+   "artRoom": {
+    "id": "p_480b50fc",
+    "version": 3,
+    "file": "p_480b50fc-experimental-chapter-dr-goon-hurt-v3.png",
+    "sha256": "4480557b5c71721f30271e5c2d633621bd42f3485a523a7af563576b5ef58ebb",
+    "score": 8.4,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "8644f86caf1b7c868987ace9cbdeb3a6562b8245af9aaf258a12284a6343cee8",
+   "size": [
+    761,
+    1347
+   ],
+   "baselineY": 1331,
+   "contentBox": [
+    16,
+    16,
+    745,
+    1331
+   ],
+   "facing": "left",
+   "head": null,
+   "headSource": "none",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "stanceX": 212.5
+   },
+   "provisional": "no head box: the pose is drawn at the idle's pixel scale until --head is given",
+   "installedAt": "2026-10-06T22:21:14.295Z"
+  },
+  "ko": {
+   "artRoom": {
+    "id": "p_73909588",
+    "version": 3,
+    "file": "p_73909588-experimental-chapter-dr-goon-ko-v3.png",
+    "sha256": "a959f8a8c6ff36bdd5816185668a4971199d6be253bd7f29761bd6f2ce60a1e0",
+    "score": 8.5,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "514d1758ca747b149465f3ceab747eccf7272fb888bbe2854bb9037eb581f939",
+   "size": [
+    1441,
+    562
+   ],
+   "baselineY": 546,
+   "contentBox": [
+    16,
+    16,
+    1425,
+    546
+   ],
+   "facing": "right",
+   "head": null,
+   "headSource": "none",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 0.978
+   },
+   "scaleSource": "length",
+   "provisional": null,
+   "installedAt": "2026-10-06T22:21:22.779Z"
   }
  },
  "ffx2-fem-goon": {
@@ -717,6 +1020,112 @@
    },
    "provisional": "no head box on the idle: the poses of this subject are drawn at the idle's pixel scale until `head` sets it",
    "installedAt": "2026-10-06T21:29:14.073Z"
+  },
+  "attack": {
+   "artRoom": {
+    "id": "p_1ce82ff6",
+    "version": 2,
+    "file": "p_1ce82ff6-experimental-chapter-fem-goon-attack-v2.png",
+    "sha256": "1b98a616b42d5cc6e2eb8a74d3e788428a9ac68b578d1cd8203c0a056657fb39",
+    "score": 8.5,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "e63b04a5ae8b985064ef9f1d60e357bb4881ed3913240753ccf81ce29d75ae4c",
+   "size": [
+    1015,
+    1169
+   ],
+   "baselineY": 1153,
+   "contentBox": [
+    16,
+    16,
+    999,
+    1153
+   ],
+   "facing": "left",
+   "head": null,
+   "headSource": "none",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "stanceX": 595.5
+   },
+   "provisional": "no head box: the pose is drawn at the idle's pixel scale until --head is given",
+   "installedAt": "2026-10-06T22:21:30.800Z"
+  },
+  "hurt": {
+   "artRoom": {
+    "id": "p_d8a30b84",
+    "version": 2,
+    "file": "p_d8a30b84-experimental-chapter-fem-goon-hurt-v2.png",
+    "sha256": "c1eafd1ecded608be771c46ec0b305fe29196607288ac9c4c693af1f05c389e5",
+    "score": 8.3,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "a38d36da7539887a54979525f7d0160ad7586f9c62941355c878a5dcec2db5fc",
+   "size": [
+    518,
+    1422
+   ],
+   "baselineY": 1406,
+   "contentBox": [
+    16,
+    16,
+    502,
+    1406
+   ],
+   "facing": "left",
+   "head": null,
+   "headSource": "none",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "stanceX": 220.5
+   },
+   "provisional": "no head box: the pose is drawn at the idle's pixel scale until --head is given",
+   "installedAt": "2026-10-06T22:21:39.603Z"
+  },
+  "ko": {
+   "artRoom": {
+    "id": "p_a948fff5",
+    "version": 3,
+    "file": "p_a948fff5-experimental-chapter-fem-goon-ko-v3.png",
+    "sha256": "61b7d897e8b80dfb82881c51628299816780a716d05b499d212e4c69e406390a",
+    "score": 8.5,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "dac35350aee966d4642fb01fabf442d7b4be7a80b46397ce081e75bc05a1426a",
+   "size": [
+    1447,
+    458
+   ],
+   "baselineY": 442,
+   "contentBox": [
+    16,
+    16,
+    1431,
+    442
+   ],
+   "facing": "right",
+   "head": null,
+   "headSource": "none",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 0.979
+   },
+   "scaleSource": "length",
+   "provisional": null,
+   "installedAt": "2026-10-06T22:21:47.130Z"
   }
  }
 }

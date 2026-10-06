@@ -26,6 +26,54 @@
    "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4-act1-first-menu.jpg"
   },
   {
+   "k": "shot.4a-act1-goon-cast",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4a-act1-goon-cast.jpg"
+  },
+  {
+   "k": "shot.4c-act1-goon-hurt",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4c-act1-goon-hurt.jpg"
+  },
+  {
+   "k": "shot.4d-act1-goon-ko",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4d-act1-goon-ko.jpg"
+  },
+  {
+   "k": "act1.goons",
+   "v": {
+    "cast": {
+     "id": "fem-goon",
+     "art": "exp-leblanc-ffx2-fem-goon",
+     "pose": "cast",
+     "facing": -1,
+     "mirrored": false
+    },
+    "attack": null,
+    "hurt": {
+     "id": "dr-goon",
+     "art": "exp-leblanc-ffx2-dr-goon",
+     "pose": "hurt",
+     "facing": -1,
+     "mirrored": false
+    },
+    "ko": {
+     "id": "dr-goon",
+     "art": "exp-leblanc-ffx2-dr-goon",
+     "pose": "ko",
+     "facing": -1,
+     "mirrored": true
+    }
+   }
+  },
+  {
+   "k": "act1.goon-poses-seen",
+   "v": [
+    "dr-goon:hurt",
+    "dr-goon:idle",
+    "dr-goon:ko",
+    "fem-goon:cast"
+   ]
+  },
+  {
    "k": "field.act3",
    "v": [
     {

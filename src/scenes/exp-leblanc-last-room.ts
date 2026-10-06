@@ -31,6 +31,7 @@ export const EXP_LEBLANC_LOOK: LeblancPlateLook = {
   palette: ScenePalettes.expMoonlitHall,
   ground: { size: 42, shadowOnly: true, shadowOpacity: 0.3, center: [0, -1.6] },
   fog: { near: 22, far: 60, colorMix: 0.3 },
+  background: 0x3e4276, // mid blue-violet, close to the plate's own edges (a held shot swings past the plate: Chapter VI's near-black showed as a black band)
   fogPlanes: [
     { z: -26, y: 3.2, width: 60, height: 16, opacity: 0.08, speed: 0.008 },
     { z: -14, y: 1.6, width: 36, height: 8, opacity: 0.06, speed: 0.02, additive: true },

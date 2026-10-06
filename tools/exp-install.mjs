@@ -6,6 +6,7 @@
  *   node tools/exp-install.mjs backdrop --src <approved plate.png> [--dry-run]    the empty plate and its @2x (RealESRGAN, local)
  *   node tools/exp-install.mjs depth                      the plate's depth map (CPU) and the fx record that lists it
  *   node tools/exp-install.mjs head --subject S --pose P --head x0,y0,x1,y1    set the head box of an installed pose (the idle's is the reference)
+ *   node tools/exp-install.mjs stance --subject S --pose P --x N [--note "..."]   set the stance of an installed pose by hand (the foot the idle stands on)
  *   node tools/exp-install.mjs table                      regenerate src/data/art/poseRegistrationExp.ts
  *   node tools/exp-install.mjs list                       what is installed, what is still a placeholder
  *
@@ -14,6 +15,8 @@
  *   --head x0,y0,x1,y1         the head's box on THIS painting, hair top to chin and outer side to side, read by eye (a pose other than the idle
  *                              needs it for its registered `scale`; the idle's box is the reference every other pose is matched to)
  *   --feet-row N               the row of the soles when a thick weapon hangs lower than the boots (the registration's `feetRow`)
+ *   --scale N                  the row's scale when no head can be matched (a lying KO matched by length: the idle's content height over the KO's content
+ *                              length, over 0.978); `--scale-source length|hand` is recorded beside it
  *   --upright                  a standing pose wider than tall (a lunge): never laid down like a KO
  *   --no-tiers                 skip the @2x/@3x/@4x masters (a pose that already has them is refused: they would be the old painting's)
  *   --matte auto|keep|key|rembg  keep the image's own alpha, key a figure on one flat colour (the Art Room's idle sheets), or cut it with isnet-anime
@@ -150,7 +153,7 @@ const headSize = (h) => Math.sqrt(Math.max(1, h[2] - h[0]) * Math.max(1, h[3] - 
  * The registration row of a freshly installed pose (tools/posescale/measure.py's rules): the idle is the reference (stance only); another pose
  * carries the scale that brings its head to the idle's (`scale`, gated to the D-298 stature floor), its stance, and the flags.
  */
-export function registrationRow({ pose, width, height, baselineY, contentBox, stance, head, idle, feetRow, upright }) {
+export function registrationRow({ pose, width, height, baselineY, contentBox, stance, head, idle, feetRow, upright, scale: given }) {
   const row = {};
   const prone = width > height * PRONE_ASPECT;
   if (pose !== 'idle' && head && idle?.head) {
@@ -161,6 +164,8 @@ export function registrationRow({ pose, width, height, baselineY, contentBox, st
     }
     row.scale = Math.round((pose === 'ko' && prone ? scale / KO_PROJECTION : scale) * 1000) / 1000;
   }
+  // An explicit scale (a lying KO matched by length, `--scale`) is the row's scale as given.
+  if (pose !== 'idle' && typeof given === 'number' && given > 0) row.scale = Math.round(given * 1000) / 1000;
   // A KO lies down and rests by its own rule (PaintedRest.ts): measure.py gives it no stance, so its base rows are `{ scale }` alone.
   const lying = pose === 'ko' && prone && !upright;
   if (stance && !lying) row.stanceX = Math.round(stance.x * 10) / 10;
@@ -194,7 +199,9 @@ const insideOrThrow = (child, parent) => {
 export function recomputeRows(records) {
   const idle = records.idle;
   for (const [pose, r] of Object.entries(records)) {
-    if (pose === 'idle' || !r.head || !idle?.head) continue;
+    if (pose === 'idle') continue;
+    if (r.scaleSource === 'length') continue; // matched by length, not by a head: nothing to recompute
+    if (!r.head || !idle?.head) continue;
     const prev = r.row ?? {};
     r.row = registrationRow({
       pose,
@@ -228,6 +235,30 @@ export async function setHead(opts) {
   recomputeRows(installed[subject]);
   writeJsonAtomic(INSTALLED_JSON, installed);
   say(`${nsId(subject)}/${pose}: head box ${head.join(',')}${pose === 'idle' ? ' (the reference: every other pose of the subject is recomputed against it)' : ` -> row ${JSON.stringify(rec.row)}`}`);
+  say(`table: ${await writeTable()} subjects -> ${TABLE_TS}`);
+  return rec;
+}
+
+/**
+ * Set the stance of an installed pose by hand, read off THAT painting, and regenerate the table. No pixel is touched.
+ * The automatic stance is the middle of the LOWEST thick part of the silhouette (`ps_lib.stance_from_hem`), so a pose whose weight is on a different foot
+ * than the idle's lands that foot where the idle's stands and the figure pops a body-width sideways. Name the foot the idle stands on in this pose.
+ */
+export async function setStance(opts) {
+  const { subject, pose } = opts;
+  const x = Number(opts.x);
+  if (!subject || !pose || !Number.isFinite(x)) throw new Error('stance needs --subject, --pose and --x (the middle of the support, in the painting\'s own pixels)');
+  const installed = readInstalled();
+  const rec = installed[subject]?.[pose];
+  if (!rec) throw new Error(`${subject}/${pose} is not installed (nothing to set a stance on)`);
+  if (!(x > 0 && x < rec.size[0])) throw new Error(`the stance ${x} is not inside the painting (${rec.size[0]} px wide)`);
+  if (rec.row?.stanceX === undefined) throw new Error(`${subject}/${pose} has no stance (a lying KO rests by its own rule)`);
+  const before = rec.row.stanceX;
+  rec.row = { ...rec.row, stanceX: Math.round(x * 10) / 10 };
+  rec.stanceSource = 'hand';
+  rec.stanceNote = opts.note ?? null;
+  writeJsonAtomic(INSTALLED_JSON, installed);
+  say(`${nsId(subject)}/${pose}: stance ${before} -> ${rec.row.stanceX} by hand${pose === 'idle' ? ' (the reference: every other pose slides to match it)' : ''}`);
   say(`table: ${await writeTable()} subjects -> ${TABLE_TS}`);
   return rec;
 }
@@ -342,8 +373,9 @@ export async function install(opts) {
     head,
     headSource: head ? 'hand' : 'none',
     tiers,
-    row: registrationRow({ pose, width: fig.width, height: fig.height, baselineY: fig.baselineY, contentBox: fig.contentBox, stance: fig.stance, head, idle: pose === 'idle' ? null : installed[subject]?.idle, feetRow: opts['feet-row'] ? Number(opts['feet-row']) : undefined, upright: !!opts.upright }),
-    provisional: !head ? (pose === 'idle' ? 'no head box on the idle: the poses of this subject are drawn at the idle\'s pixel scale until `head` sets it' : 'no head box: the pose is drawn at the idle\'s pixel scale until --head is given') : null,
+    row: registrationRow({ pose, width: fig.width, height: fig.height, baselineY: fig.baselineY, contentBox: fig.contentBox, stance: fig.stance, head, idle: pose === 'idle' ? null : installed[subject]?.idle, feetRow: opts['feet-row'] ? Number(opts['feet-row']) : undefined, upright: !!opts.upright, ...(opts.scale ? { scale: Number(opts.scale) } : {}) }),
+    ...(opts.scale ? { scaleSource: opts['scale-source'] ?? 'hand' } : {}),
+    provisional: !head && !opts.scale ? (pose === 'idle' ? 'no head box on the idle: the poses of this subject are drawn at the idle\'s pixel scale until `head` sets it' : 'no head box: the pose is drawn at the idle\'s pixel scale until --head is given') : null,
     installedAt: side.installedAt,
   };
   const next = { ...installed, [subject]: { ...(installed[subject] ?? {}), [pose]: rec } };
@@ -461,10 +493,11 @@ async function main() {
   else if (cmd === 'install') console.log(JSON.stringify(await install(a), null, 1));
   else if (cmd === 'backdrop') console.log(JSON.stringify(await installBackdrop(a), null, 1));
   else if (cmd === 'head') console.log(JSON.stringify(await setHead(a), null, 1));
+  else if (cmd === 'stance') console.log(JSON.stringify(await setStance(a), null, 1));
   else if (cmd === 'depth') installDepth();
   else if (cmd === 'list') list();
   else {
-    console.error('usage: node tools/exp-install.mjs install|backdrop|head|depth|table|list   (see the header of this file)');
+    console.error('usage: node tools/exp-install.mjs install|backdrop|head|stance|depth|table|list   (see the header of this file)');
     process.exitCode = 2;
   }
 }

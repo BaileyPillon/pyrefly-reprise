@@ -279,12 +279,44 @@ async function runShots() {
     await page.waitForTimeout(1800);
     await shot('4-act1-first-menu');
 
-    // Acts I and II by the debug route, at a fast pace, until Act III's figures stand on the field.
+    // Acts I and II by the debug route, until Act III's figures stand on the field. Act I is Ormi and the two goons, so it plays at the normal pace until each
+    // goon pose that now has new art (attack, hurt, ko) has been photographed (the stage's own snapshot says which pose a figure is in), at most 100 seconds, then at a fast pace.
+    const goonShots = { cast: null, attack: null, hurt: null, ko: null };
+    const goonLetter = { cast: 'a', attack: 'b', hurt: 'c', ko: 'd' };
+    const posesSeen = new Set();
     await page.evaluate(() => {
-      window.__pyrefly.setBattleSpeed('fast');
+      window.__pyrefly.setBattleSpeed('normal');
       window.__pyrefly.autoBattle('intended');
     });
-    await waitFor('Act III on the field', async () => (await arts()).some((a) => a.art === 'exp-leblanc-leblanc'), { ms: 240000, pollMs: 60 });
+    const act1T0 = Date.now();
+    let fast = false;
+    await waitFor(
+      'Act III on the field',
+      async () => {
+        const now = await actors();
+        for (const g of now.filter((a) => /^exp-leblanc-ffx2-(dr|fem)-goon$/.test(a.art ?? ''))) {
+          posesSeen.add(`${g.id}:${g.pose}`);
+          // A goon that acts next stands in a `cast` pose (its attack painting, held as the wind-up: it has no cast painting and falls back to the attack one),
+          // and strikes in `attack`: both are photographed, the wind-up as 4a and the strike as 4b.
+          const slot = g.pose;
+          if (goonShots[slot] === null) {
+            goonShots[slot] = { id: g.id, art: g.art, pose: g.pose, facing: g.facing, mirrored: g.mirrored };
+            // A goon falls and lies for only about 0.6 seconds before it leaves the field (measured with tools/exp-burst.mjs: the stage's `ko` label, then about a quarter
+            // of a second until the lying painting is down, then gone), so a KO is photographed a quarter-second in; an attack or a hurt is over in under a second too.
+            if (g.pose === 'ko') await page.waitForTimeout(250);
+            await shot(`4${goonLetter[slot]}-act1-goon-${slot}`);
+          }
+        }
+        if (!fast && (Object.values(goonShots).every(Boolean) || Date.now() - act1T0 > 100000)) {
+          fast = true;
+          await page.evaluate(() => window.__pyrefly.setBattleSpeed('fast'));
+        }
+        return now.some((a) => a.art === 'exp-leblanc-leblanc');
+      },
+      { ms: 360000, pollMs: 60 },
+    );
+    log('act1.goons', goonShots);
+    log('act1.goon-poses-seen', [...posesSeen].sort());
     await page.evaluate(() => {
       window.__pyrefly.battle().battlePresenter.setAutoPlay(null); // the keys take over
       window.__pyrefly.setBattleSpeed('normal');
@@ -296,9 +328,12 @@ async function runShots() {
     const want = ['exp-leblanc-yuna-gunner', 'exp-leblanc-rikku-thief', 'exp-leblanc-paine-warrior', 'exp-leblanc-leblanc', 'exp-leblanc-logos', 'exp-leblanc-ormi'];
     check('Act III stages the six figures from the experiment', want.every((w) => six.some((a) => a.art === w && a.placeholder === false)), six);
     await shot('5-act3-first-menu');
+    // The clean frame, for the composite beside the approved mockup: no HUD, and no story dialogue box over the room (a capture-only style, removed after).
     await page.evaluate(() => window.__pyrefly.trigger('hud:off'));
+    const hideDialogue = await page.addStyleTag({ content: '.dbox { display: none !important; }' });
     await page.waitForTimeout(1000);
     await shot('5b-act3-first-menu-clean');
+    await hideDialogue.evaluate((el) => el.remove());
     await page.evaluate(() => window.__pyrefly.trigger('hud:on'));
     await page.waitForTimeout(800);
 

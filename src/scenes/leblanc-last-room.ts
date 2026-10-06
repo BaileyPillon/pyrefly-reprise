@@ -177,6 +177,8 @@ export interface LeblancPlateLook {
   readonly ground?: BackdropOptions['ground'];
   readonly fog?: BackdropOptions['fog'];
   readonly fogPlanes?: BackdropOptions['fogPlanes'];
+  /** The flat colour behind the plate, which a held shot (a push-in past the plate's edge) can show; Chapter VI's is a near-black violet. */
+  readonly background?: number;
   /** Light-rig fields over the room's own (key, rim, fill and ambient strength, the rim colour). */
   readonly lights?: Partial<Omit<LightRigOptions, 'palette'>>;
   /** The floor pools under the party (one each) and under the trio (one shared). */
@@ -253,7 +255,7 @@ async function buildLastRoom(plate: LeblancPlate, opts: SceneBuildOptions): Prom
       { z: -26, y: 3.2, width: 60, height: 16, opacity: 0.14, speed: 0.008 },
       { z: -14, y: 1.6, width: 36, height: 8, opacity: 0.1, speed: 0.02, additive: true },
     ],
-    background: 0x160f24,
+    background: look.background ?? 0x160f24,
   } satisfies BackdropOptions;
 
   let backdrop = await Backdrop.create(backdropOptions);

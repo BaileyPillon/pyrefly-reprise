@@ -38,7 +38,7 @@ const HAVE_ART = existsSync(join(ART, 'manifest.json')) && existsSync(join(ART, 
 const NS = 'exp-leblanc';
 const exp = getChapter('exp-leblanc')!;
 
-interface InstalledPose { size: [number, number]; baselineY: number; contentBox: number[]; facing: string; head: number[] | null; row: Record<string, number | true>; artRoom: { id: string; approvedBy?: string } }
+interface InstalledPose { size: [number, number]; baselineY: number; contentBox: number[]; facing: string; head: number[] | null; row: Record<string, number | true>; scaleSource?: string; stanceSource?: string; artRoom: { id: string; approvedBy?: string } }
 const INSTALLED: Record<string, Record<string, InstalledPose>> = JSON.parse(readFileSync(join(REPO, 'docs', 'target', 'exp-leblanc', 'installed.json'), 'utf8'));
 const sidecar = (id: string, pose: string): { facing?: string; width: number; height: number; baselineY: number } => JSON.parse(readFileSync(join(ART, 'characters', id, `${pose}.json`), 'utf8'));
 
@@ -47,7 +47,13 @@ describe('facing: every installed painting faces the way the game draws its side
   const GIRLS = ['yuna-gunner', 'rikku-thief', 'paine-warrior'];
 
   it('records the facing of each painting: fiends left (they face the party), girls right', () => {
-    for (const subject of FIENDS) for (const [pose, rec] of Object.entries(INSTALLED[subject] ?? {})) expect(rec.facing, `${subject}/${pose}`).toBe('left');
+    for (const subject of FIENDS) {
+      for (const [pose, rec] of Object.entries(INSTALLED[subject] ?? {})) {
+        // A lying KO is oriented by where its head lies. The goons' KOs lie head to the right, as Chapter VI's do (sidecar right); the engine mirrors a
+        // right-facing painting for an enemy, so the head lies toward the party. Every standing pose faces left.
+        expect(rec.facing, `${subject}/${pose}`).toBe(pose === 'ko' ? 'right' : 'left');
+      }
+    }
     for (const subject of GIRLS) for (const [pose, rec] of Object.entries(INSTALLED[subject] ?? {})) expect(rec.facing, `${subject}/${pose}`).toBe('right');
   });
 
@@ -63,20 +69,24 @@ describe('facing: every installed painting faces the way the game draws its side
   });
 
   it("installs every painting from the Art Room's approved record: the girls' poses by hand (Rikku's and Paine's attacks from the automatic pose rounds), the fiends by the driver's delegation", () => {
-    for (const subject of FIENDS) expect(INSTALLED[subject]!['idle']!.artRoom.approvedBy, subject).toBe('driver-delegated');
+    // Bailey approved by hand: all of Yuna's, and the idle and the ready pose of Rikku and of Paine. Everything painted since came from the Art Room's automatic pose rounds.
+    const BY_HAND: Record<string, string[]> = { 'yuna-gunner': ['idle', 'ready', 'attack', 'cast', 'hurt', 'ko', 'victory'], 'rikku-thief': ['idle', 'ready'], 'paine-warrior': ['idle', 'ready'] };
+    for (const subject of FIENDS) {
+      for (const [pose, rec] of Object.entries(INSTALLED[subject]!)) expect(rec.artRoom.approvedBy, `${subject}/${pose}`).toBe(pose === 'idle' ? 'driver-delegated' : 'auto-pose');
+    }
     for (const subject of GIRLS) {
       for (const [pose, rec] of Object.entries(INSTALLED[subject]!)) {
-        const auto = pose === 'attack' && subject !== 'yuna-gunner'; // Yuna's attack was approved by hand
-        expect(rec.artRoom.approvedBy ?? 'human', `${subject}/${pose}`).toBe(auto ? 'auto-pose' : 'human');
+        expect(rec.artRoom.approvedBy ?? 'human', `${subject}/${pose}`).toBe(BY_HAND[subject]!.includes(pose) ? 'human' : 'auto-pose');
       }
     }
   });
 
   it("installs the three girls' idles and every pose installed for them, and the five fiends' idles", () => {
     expect(Object.keys(INSTALLED['yuna-gunner']!).sort()).toEqual(['attack', 'cast', 'hurt', 'idle', 'ko', 'ready', 'victory']);
-    expect(Object.keys(INSTALLED['rikku-thief']!).sort()).toEqual(['attack', 'idle', 'ready']);
-    expect(Object.keys(INSTALLED['paine-warrior']!).sort()).toEqual(['attack', 'idle', 'ready']);
-    for (const subject of FIENDS) expect(Object.keys(INSTALLED[subject]!)).toEqual(['idle']);
+    expect(Object.keys(INSTALLED['rikku-thief']!).sort()).toEqual(['attack', 'hurt', 'idle', 'ko', 'ready', 'victory']);
+    expect(Object.keys(INSTALLED['paine-warrior']!).sort()).toEqual(['attack', 'hurt', 'idle', 'ko', 'ready']);
+    for (const subject of ['leblanc', 'logos', 'ormi']) expect(Object.keys(INSTALLED[subject]!)).toEqual(['idle']);
+    for (const subject of ['ffx2-dr-goon', 'ffx2-fem-goon']) expect(Object.keys(INSTALLED[subject]!).sort()).toEqual(['attack', 'hurt', 'idle', 'ko']); // the goons are complete
   });
 });
 
@@ -86,6 +96,7 @@ describe('registration: each installed girl\'s idle carries a head box, and ever
       const poses = INSTALLED[subject]!;
       expect(poses['idle']!.head, `${subject}/idle head`).toHaveLength(4);
       for (const [pose, rec] of Object.entries(poses)) {
+        if (rec.scaleSource === 'length') continue; // a lying KO is matched by its length, below
         expect(rec.head, `${subject}/${pose} head`).toHaveLength(4);
         const [x0, y0, x1, y1] = rec.head as [number, number, number, number];
         expect(x1 - x0).toBeGreaterThan(50);
@@ -101,11 +112,40 @@ describe('registration: each installed girl\'s idle carries a head box, and ever
     for (const subject of ['yuna-gunner', 'rikku-thief', 'paine-warrior']) {
       const idle = INSTALLED[subject]!['idle']!;
       for (const [pose, rec] of Object.entries(INSTALLED[subject]!)) {
-        if (pose === 'idle') continue;
+        if (pose === 'idle' || rec.scaleSource === 'length') continue;
         const prone = rec.size[0] > rec.size[1] * 1.15;
         const drawn = (size(rec.head!) * (rec.row['scale'] as number)) * (pose === 'ko' && prone ? 0.978 : 1);
         expect(Math.abs(drawn / size(idle.head!) - 1), `${subject}/${pose}`).toBeLessThan(0.05);
       }
+    }
+  });
+
+  it("matches a lying KO by its length where no head can be matched: the idle's content height over the KO's content length, over 0.978", () => {
+    // Rikku's and Paine's KOs lie with their hair flat, so a hair-and-face box reads 1.77 and 0.93 where the eyes read 0.62; the body's own density is the honest match.
+    for (const subject of ['rikku-thief', 'paine-warrior', 'ffx2-dr-goon', 'ffx2-fem-goon']) {
+      const idle = INSTALLED[subject]!['idle']!;
+      const ko = INSTALLED[subject]!['ko']!;
+      expect(ko.scaleSource, subject).toBe('length');
+      const idleHeight = idle.contentBox[3]! - idle.contentBox[1]!;
+      const koLength = ko.contentBox[2]! - ko.contentBox[0]!;
+      expect(ko.row['scale'] as number, subject).toBeCloseTo(idleHeight / koLength / 0.978, 2);
+      expect(ko.row['stanceX'], `${subject}: a KO rests by its own rule`).toBeUndefined();
+      expect(ko.size[0], subject).toBeGreaterThan(ko.size[1] * 1.15); // wider than tall: the engine lays it down
+    }
+  });
+
+  it("lands a pose's weight on the foot the idle stands on: Dr. Goon's lunge is registered by its rear boot, by hand, not by the planted front boot", () => {
+    // The automatic stance is the middle of the lowest thick part. Dr. Goon's idle stands on its rear boot (x 458 to 559 of 577: its front boot is 84 rows higher),
+    // his lunge plants the front boot (x 30 to 256) and trails the rear one (x 869 to 986), so the automatic 140 would have put the lunge's front boot where the
+    // idle's rear boot is and popped the whole figure back by 0.7 m. The same boot as the idle's: 927.5.
+    const attack = INSTALLED['ffx2-dr-goon']!['attack']!;
+    expect(attack.stanceSource).toBe('hand');
+    expect(attack.row['stanceX']).toBe(927.5);
+    expect(poseRegistrationFor(characterUrl('exp-leblanc-ffx2-dr-goon', 'attack'))?.stanceX).toBe(927.5);
+    expect(INSTALLED['ffx2-dr-goon']!['idle']!.row['stanceX']).toBe(509); // the idle's rear boot is the reference and never moves
+    // Every other new pose keeps the tool's own stance.
+    for (const [subject, poses] of Object.entries(INSTALLED)) {
+      for (const [pose, rec] of Object.entries(poses)) if (rec.stanceSource) expect(`${subject}/${pose}`).toBe('ffx2-dr-goon/attack');
     }
   });
 
