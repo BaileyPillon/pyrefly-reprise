@@ -7495,9 +7495,10 @@
      ],
      "baseline": 1106.0,
      "current": 1.1,
-     "gate": {
+     "gateLifted": {
+      "by": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)",
       "reading": 0.573,
-      "stature": 0.601
+      "stature": 0.526
      },
      "head": [
       254.7,
@@ -7507,8 +7508,8 @@
      ],
      "prone": false,
      "reading": 0.573,
-     "scale": 0.654,
-     "scaleSrc": "gated",
+     "scale": 0.573,
+     "scaleSrc": "reviewed",
      "sha": "e2c3f9dbf35eb1bbdefe3e83074bb313d85b80eabafe6dc229491bb85fb2202b",
      "size": [
       832,
@@ -7522,7 +7523,7 @@
       "x1": 560.0
      },
      "standing": true,
-     "stature": 0.601
+     "stature": 0.526
     }
    }
   },

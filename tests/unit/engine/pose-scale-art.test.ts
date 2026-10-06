@@ -112,8 +112,8 @@ describe.skipIf(!haveArt)('the measured art on this disk', () => {
 });
 
 describe.skipIf(!existsSync(resolve('docs/target/pose-measure.json')))('the D-298 stature floor (a bent, hunched or kneeling pose is not drawn under 0.60 of its idle height)', () => {
-  // Bailey, 2026-10-05, on the driver's recommendation: lifted for exactly this pose and no other (Rikku Berserker ready follows in its own commit).
-  const LIFTED = ['lulu/critical'];
+  // Bailey, 2026-10-05, on the driver's recommendation: lifted for exactly these two poses and no other.
+  const LIFTED = ['lulu/critical', 'rikku-berserker/ready'];
   it('holds for every measured pose except the two Bailey lifted, and those two say so in the record', () => {
     const records = JSON.parse(readFileSync(resolve('docs/target/pose-measure.json'), 'utf8')) as { subjects: Record<string, { poses: Record<string, { stature?: number; gateLifted?: unknown }> }> };
     const under: string[] = [];

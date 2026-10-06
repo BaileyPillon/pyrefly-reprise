@@ -104,7 +104,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     follow: { scale: 1.04, stanceX: 70.5, feetRow: 988.0 },
     idle: { stanceX: 280.0 },
     item: { scale: 1.184, stanceX: 159.0 },
-    ready: { scale: 0.654, stanceX: 313.5, feetRow: 1074.0 },
+    ready: { scale: 0.573, stanceX: 313.5, feetRow: 1074.0 },
   },
   'rikku-black-mage': {
     attack: { stanceX: 345.5 },
