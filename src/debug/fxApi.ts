@@ -57,7 +57,7 @@ export function installFxDebug(api: Record<string, unknown>, app: App): void {
     },
   };
   fxDebugHooks['b'] = { snapshot: livingStats, api: { pin: pinLivingClock } }; // option B: `fx.b.pin(t)` holds the room's clock (a capture on one drift phase)
-  for (const k of ['a', 'b', 'c', 'mix']) { // mix: the MAX mix's parts (D-316; `fx/mix/MaxMix.ts`)
+  for (const k of ['a', 'b', 'c', 'mix', 'light']) { // mix: the MAX mix's parts (D-316; `fx/mix/MaxMix.ts`); light: the figure lighting mockups (branch lighting-mockups, `fx/light/`)
     Object.defineProperty(api['fx'], k, { get: () => fxDebugHooks[k]?.api ?? null, enumerable: true });
   }
 }

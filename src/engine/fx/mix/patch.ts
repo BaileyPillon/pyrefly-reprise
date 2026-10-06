@@ -1,6 +1,7 @@
 import type { ShaderMaterial } from 'three';
 import { patchDefringe } from './defringe.ts';
 import { patchLiving } from './livingShader.ts';
+import { patchLight } from '../light/lightShader.ts';
 
 /**
  * The MAX mix (D-316): ONE compile hook per painted figure material for both of its shader patches,
@@ -9,13 +10,15 @@ import { patchLiving } from './livingShader.ts';
  * hook and program key are put back exactly. Both games (plumbing).
  */
 
-type Which = 'defringe' | 'live';
+type Which = 'defringe' | 'live' | 'light';
 
 interface Hook {
   prevCompile: ShaderMaterial['onBeforeCompile'];
   prevKey: ShaderMaterial['customProgramCacheKey'];
   defringe: boolean;
   live: boolean;
+  /** The figure lighting mockups' block (`fx/light/`, branch lighting-mockups only). */
+  light: boolean;
 }
 
 const KEY = 'mixHook';
@@ -26,20 +29,21 @@ export function setMixPatch(mat: ShaderMaterial, which: Which, on: boolean): voi
   let h = ud[KEY] as Hook | undefined;
   if (!h) {
     if (!on) return;
-    const hook: Hook = { prevCompile: mat.onBeforeCompile, prevKey: mat.customProgramCacheKey, defringe: false, live: false };
+    const hook: Hook = { prevCompile: mat.onBeforeCompile, prevKey: mat.customProgramCacheKey, defringe: false, live: false, light: false };
     h = hook;
     ud[KEY] = hook;
     mat.onBeforeCompile = (shader, renderer) => {
       hook.prevCompile.call(mat, shader, renderer);
       if (hook.defringe) shader.fragmentShader = patchDefringe(shader.fragmentShader) ?? shader.fragmentShader;
+      if (hook.light) shader.fragmentShader = patchLight(shader.fragmentShader) ?? shader.fragmentShader;
       if (hook.live) shader.vertexShader = patchLiving(shader.vertexShader) ?? shader.vertexShader;
     };
-    mat.customProgramCacheKey = () => `${hook.prevKey.call(mat)}|mix${+hook.defringe}${+hook.live}`;
+    mat.customProgramCacheKey = () => `${hook.prevKey.call(mat)}|mix${+hook.defringe}${+hook.live}${+hook.light}`;
   }
   if (h[which] === on) return;
   h[which] = on;
   mat.needsUpdate = true;
-  if (!h.defringe && !h.live) {
+  if (!h.defringe && !h.live && !h.light) {
     mat.onBeforeCompile = h.prevCompile;
     mat.customProgramCacheKey = h.prevKey;
     delete ud[KEY];

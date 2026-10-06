@@ -10,6 +10,8 @@ import { setShotHold } from '../shotHold.ts';
 import { panelsNdc } from './downed.ts';
 import { ejectDefringe, injectDefringe } from './patch.ts';
 import { Framing } from './framing.ts';
+import { FigureLight } from '../light/FigureLight.ts';
+import { lightState } from '../light/lightFlags.ts';
 import { aaKind, deviceCloses, deviceNote, fightFacts, liveGates, MIX_PARTS, partsOn, twirlKeysOn, type Device, type MixGame } from './gates.ts';
 import { crispLive } from '../../crisp/crispLive.ts';
 import { menuCalm } from './menuCalm.ts';
@@ -96,6 +98,8 @@ class Mix {
   private readonly card = new SensorPin();
   private readonly living = new Map<Object3D, LivingFigure>();
   private readonly defringed = new Set<ShaderMaterial>();
+  /** Figure lighting MOCKUPS (branch lighting-mockups only, `fx/light/`): built only when `?light` or the debug API asks for a look. */
+  private light: FigureLight | null = null;
   private readonly roster: Roster;
   private plans = -1;
   private lastActors: readonly Actor[] = [];
@@ -185,6 +189,7 @@ class Mix {
     // SMOOTH EDGES: the post pass per tier, and the defringe on every painted figure.
     this.cinema.aa(parts.smoothEdges ? aaKind(tier, crispLive.aaPre) : null);
     this.defringe(actors, parts.smoothEdges);
+    if (lightState.mode > 0 || this.light) (this.light ??= new FigureLight(this.b.scene, this.b.camera, this.game)).update(dt, actors);
     // BREATHING and KO COLLAPSE.
     if (parts.breathing || parts.koCollapse || this.living.size) {
       const grid = GRID[tier];
@@ -297,6 +302,8 @@ class Mix {
     this.living.clear();
     for (const m of this.defringed) ejectDefringe(m);
     this.defringed.clear();
+    this.light?.dispose();
+    this.light = null;
     this.heldLens = null;
     menuCalm.reset(); // Chapter III's calm camera never carries into the next fight
     fightFacts.colossus = null;
