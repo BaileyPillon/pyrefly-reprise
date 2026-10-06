@@ -34,14 +34,37 @@ both paintings have a registered head and at 30 percent (the figure's mass) wher
 | XVII | sin-fins-core | 39.5 %, 275, 665.5 px, 19 | 24 %, 0, 0.8 px, 0 | **PASS** | 977 s, 1012 judged (954 by registered head, 58 by mass) |  |
 | XVIII | sin-face | 39.5 %, 61, 1 px, 0 | 11.2 %, 26, 1 px, 0 | **FAIL** | 223 s, 226 judged (225 by registered head, 1 by mass) | 26 swaps: Lulu critical (floor, 11.2 percent) |
 
-Totals over the chapters round 22 measured (17): head swaps over tolerance 1688 -> 49 (the 18th, Ch XVI, adds 0), feet swaps over tolerance 1749 -> 1; CHK-026 PASSES in 12 of 18.
+Totals over the chapters round 22 measured (17): head swaps over tolerance 1688 -> 49 (the 18th, Ch XVI, adds 0), feet swaps over tolerance 1749 -> 1; CHK-026 PASSES in 12 of 18. **After the floor lift below (Chapters III, VIII, IX and XVIII re-run): 16 of 18; the head swaps over tolerance in those four fall from 46 to 0, and the two chapters still failing (II, VII) are named in "What is left".**
+
+### The floor lift (Bailey, 2026-10-05 about 21:45 EDT: "Lift it for those two (Recommended)"; commits `8e6287d3` FFX, `ea589ce5` FFX-2)
+
+The D-298 stature floor is lifted for exactly **Lulu's critical (FFX)** and **Rikku Berserker's ready (FFX-2)**; every other pose keeps it (a unit test holds that: only those two records may be under 0.595 of their idle's height, and each says `gateLifted` with Bailey's words).
+Their scales are the head-matched readings, 0.533 and 0.573; the feet stay planted (Berserker's weapon-tip `feetRow` is kept).
+
+| pose | before (the floor) on screen | after | picture |
+|---|---|---|---|
+| Lulu critical | head x1.08 of her idle's, figure x0.59 of her idle's height, feet dx 0.00 dy 0.00 | head x0.98, figure x0.54, feet dx 0.00 dy 0.00 | `lift-lulu-critical-before-after.jpg` |
+| Rikku Berserker ready | head x1.14, figure x0.60, feet dx 0.00 dy 0.00 | head x1.00, figure x0.52, feet dx 0.00 dy 0.00 | `lift-rikku-berserker-ready-before-after.jpg` |
+
+The harness re-run (same route, seed 1, 1600x900): worst head, swaps over, worst feet, swaps over, before the lift then after it.
+
+| Ch | chapter | before | after | CHK-026 | battle |
+|---|---|---|---|---|---|
+| III | braskas-final-aeon | 26.1 %, 8, 1.5 px, 0 | 26.1 % (mass), 0, 1.2 px, 0 | PASS | 1428 s, 1233 judged (727 registered, 506 mass) |
+| VIII | evrae-airship | 10.7 %, 4, 4.6 px, 1 | 1.7 %, 0, 1 px, 0 | PASS | 460 s, 361 judged (361 registered) |
+| IX | yojimbo-cavern | 9.7 %, 8, 0.9 px, 0 | 4.8 %, 0, 0.8 px, 0 | PASS | 130 s, 119 judged (72 registered, 47 mass) |
+| XVIII | sin-face | 11.2 %, 26, 1 px, 0 | 6.2 %, 0, 1 px, 0 | PASS | 213 s, 234 judged (233 registered, 1 mass) |
+| IV, Rikku painted as Berserker | 9.2 %, 0, 0.6 px, 0 | 9.2 % (mass), 0, 0.5 px, 0 | PASS | 375 s, 337 judged (211 registered, 126 mass); Rikku idle to ready 0.996 to 0.999, ready to idle 0.999 to 1.004, feet 0.1 px |
+
+**Berserker is not in any of the 18 chapters' battles.** No build's Garment Grid puts it one Change away (Chapter V's Farplane build owns it but its grids offer Gunner and Lady Luck; Via Infinito's ring pushes it out) and no girl starts as Berserker, so the harness never plays its ready. To play it anyway the route has a
+labelled setup hook (CHK-015, like `setSeed`): `ROUTE_SETART=rikku:rikku-berserker` swaps Rikku's painting once at the first menu, the way a spherechange does, and is recorded in `run.json` hooks (the run above is Chapter IV with `NOCHANGE=1`, because it has a short, calm fight; any FFX-2 chapter works).
 
 What the table says in words:
 
 - Every **foot** is planted: the worst slide in any of the 18 chapters is 4.6 px (one swap), the rest are 1.6 px or less; round 22 had 1,749 swaps over the tolerance and slides of 100 to 665 px.
 - Every **head** that is registered is within 3 percent of its idle's in every swap except the ones named in the last column. **Lulu's critical pose** is 46 of the 49 remaining swaps: its head is 9.7 to 11.2 percent over her idle's
   because the painting is held at the stature floor (see "What is left").
-- **CHK-026 PASSES in 12 of 18 chapters** (I, IV, V, VI, X, XI, XII, XIII, XIV, XV, XVI, XVII) and FAILS in six (II, III, VII, VIII, IX, XVIII), four of them only because of Lulu's critical pose.
+- **CHK-026 PASSED in 12 of 18 chapters in the main run** (I, IV, V, VI, X, XI, XII, XIII, XIV, XV, XVI, XVII) and FAILED in six (II, III, VII, VIII, IX, XVIII), four of them only because of Lulu's critical pose; **after the floor lift it passes in 16 of 18** (III, VIII, IX and XVIII added; II and VII remain).
 - Chapter XVI (Ixion) is measured for the first time (523 s of battle, 360 judged swaps, PASS).
 - A like-for-like run of the **new harness on the live release 39** (Chapters I, IV and XIII, `ev-live39`, same seed) read worst head jumps of 39.4, 78.2 and 31.1 percent and worst feet slides of 42, 100 and 23 px: round 22's numbers
   for the same chapters (39.4, 78.2, 37.1 percent; 35.5, 112, 36.5 px) hold when the harness is corrected, so the improvement above is the build's, not the harness's.
@@ -104,8 +127,7 @@ What would tighten it: a face detector (a download, which needs Bailey's yes) or
 
 ## What is left
 
-1. **Lulu's critical pose (46 swaps, Chapters III, VIII, IX, XVIII) and Rikku Berserker's ready** are held at the stature floor of the day pass (D-298, `poses-0930`: a bent, hunched or kneeling pose is not drawn under 0.60 of the idle's height, "whatever its head says"). Lulu's critical reads 0.533 against the floor's 0.587:
-   her head draws 10 percent over her idle's; Rikku Berserker's ready 14 percent (a close-up painting, no scale fits both). Lifting the floor for Lulu's critical would clear CHK-026 in Chapters III, VIII, IX and XVIII; Rikku's close-ups need the re-paint that awaits Bailey's yes. **Bailey's decision.** Rikku Gunner's ready (+2.5 percent) and Paine Songstress's hurt (+1.7 percent) are held at the floor too and now sit inside 3 percent.
+1. **Done after the first run of this note (the floor lift, below): Lulu's critical and Rikku Berserker's ready.** They were held at the stature floor of the day pass (D-298, `poses-0930`: a bent, hunched or kneeling pose is not drawn under 0.60 of the idle's height, "whatever its head says"), Lulu's critical at 0.587 against its reading 0.533 (head 1.08 of her idle's), Berserker's ready at 0.654 against 0.573 (head 1.14). Bailey lifted the floor for exactly those two. Rikku Gunner's ready (+2.5 percent) and Paine Songstress's hurt (+1.7 percent) keep it and sit inside 3 percent.
 2. Two victory swaps in Chapter VII (Yuna 5.2, Rikku 3.4 percent): a still of the victory pose shows 0.999, so something in the fight's end (a plane re-pointed while it shows, the camera) draws it smaller; not traced.
 3. One mass swap in Chapter II (Yunalesca hurt to attack, x1.33: a foe pose change read by mass at 30 percent) and one hurt-to-idle right after a KO in Chapter VIII (Tidus, feet 4.6 px, during the rise); a second one in Chapter IX is gone since the re-run.
 4. **Heads of foes are read by mass, not by head** (30 percent): the passes in Chapters VI, XIV, XVI and XVII rest on that (worst mass jumps 28.8, 25.7, 16.8 and 24 percent). A boss with a face (Seymour, Yunalesca, Braska's aeon, Shiva) would need its face box and the same measurement.
