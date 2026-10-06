@@ -47,5 +47,27 @@
   "ready": {
    "gateLift": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)"
   }
+ },
+ "yuna": {
+  "victory": {
+   "allow": {
+    "scale": 1.0293,
+    "why": "r392 camera allowance, from the heads the continuity harness measures on screen (round 23 on live 39.1 and the r392 runs on the same table): her victory head sits about a third of a figure lower than her idle's head, so the stage camera draws it smaller than the registered reading and the close victory camera of Seymour and Anima at Macalania draws it much smaller: idle to victory reads x0.948 to x0.953 there (five runs) and x0.986 to x0.996 in the other FFX chapters that show it (I, III, IX, X, XII). 1.0293 (table 0.784 to 0.807) brings Macalania to x0.975 to x0.981 and the others to x1.014 to x1.025, about half a percent inside the 3 percent tolerance at both ends; the factor may not fall under 1.0235 (Macalania) or pass 1.0343 (Chapter X)"
+   }
+  },
+  "critical": {
+   "allow": {
+    "scale": 1.0103,
+    "why": "r392 recentring: her critical head reads x0.983 to x0.998 of her idle's in the seven chapters that show it (I, III, VII, IX, X, XII, XVII), all on the small side, so a swap between her critical and her victory (x1.0293 above) would read up to x1.032 bigger (critical to victory x0.9996 to x1.0027 before this change); 1.0103 (table 0.967 to 0.977) centres the critical against the idle (x0.993 to x1.008) and keeps critical to victory at x1.018 to x1.022"
+   }
+  }
+ },
+ "rikku": {
+  "victory": {
+   "allow": {
+    "scale": 1.015,
+    "why": "r392 camera allowance, from the harness's on-screen heads (round 23 and the r392 runs): her victory head sits well below her idle's (about a tenth of a figure), so the close victory camera at Macalania draws it x0.967 to x0.970 of the idle's (the only FFX chapter that showed her victory in those runs); the far cameras draw a lower head 2 to 4 percent bigger (Yuna's and Auron's victory heads at Macalania against the other chapters), so 1.015 brings Macalania to x0.981 to x0.984 and a far camera to about x1.01 to x1.02, 3 percent allowed both ways. Seen in one chapter: the far-camera end is inferred from Yuna's and Auron's"
+   }
+  }
  }
 }
