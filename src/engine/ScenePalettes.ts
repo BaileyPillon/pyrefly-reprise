@@ -157,6 +157,34 @@ export const ScenePalettes = {
     tiltBandWidth: 0.15,
     tiltMaxBlur: 4.6,
   },
+
+  /**
+   * The experimental Leblanc chapter's Last Room (FFX-2 only; branch `exp-leblanc`, 2026-10-06): a cool, soft, moonlit marble hall in
+   * lavender and periwinkle (the approved target "Moonlit Blue Hall", `docs/handoff/exp-leblanc.md` section 2). Chateau Leblanc's
+   * hot-magenta grade over this plate turned it electric blue and blew the stained glass out, so this one keeps the plate's own colour
+   * (saturation just under 1, lavender lifted shadows, a high bloom threshold so only the glass and the candles glow) and blurs the far
+   * wall less, so the heart window and the door read.
+   */
+  expMoonlitHall: {
+    name: 'exp-moonlit-hall',
+    figureBloomMask: FFX2_FIGURE_BLOOM_MASK,
+    lift: [0.018, 0.018, 0.034],
+    gamma: [1.0, 1.0, 1.0],
+    gain: [1.0, 1.0, 1.02],
+    saturation: 0.88,
+    vignette: 0.3,
+    vignetteRadius: 0.66,
+    shadowTint: [0.5, 0.5, 0.88],
+    shadowTintAmount: 0.12,
+    grain: 0.02,
+    exposure: 1.04,
+    bloomThreshold: 0.92,
+    bloomStrength: 0.4,
+    bloomRadius: 0.7,
+    tiltFocus: 0.38,
+    tiltBandWidth: 0.22,
+    tiltMaxBlur: 2.4,
+  },
 } satisfies Record<string, ScenePalette>;
 
 export type ScenePaletteName = keyof typeof ScenePalettes;

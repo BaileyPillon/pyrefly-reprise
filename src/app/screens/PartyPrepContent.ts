@@ -39,8 +39,11 @@ export function faceHtml(m: PartyFaceMember): string {
   return `<span>${escapeHtml(m.name.charAt(0).toUpperCase())}</span>${partyFaceHtml(m)}`;
 }
 
-/** The roster column: every member the chapter lets the player look at. */
-export function rosterHtml(anyBuild: AnyPartyBuild, selected: number): string {
+/**
+ * The roster column: every member the chapter lets the player look at. `artNamespace`: the chapter's art namespace
+ * (`data/art/artNamespace.ts`, the experimental Leblanc chapter), so each face is the head of the namespaced painting.
+ */
+export function rosterHtml(anyBuild: AnyPartyBuild, selected: number, artNamespace?: string): string {
   const build = prepBuild(anyBuild);
   const levels =
     build.game === 'ffx'
@@ -60,7 +63,7 @@ export function rosterHtml(anyBuild: AnyPartyBuild, selected: number): string {
           <div class="prep__member${i === selected ? ' prep__member--sel' : ''}"
                data-action="prep:member-${i}" role="button" tabindex="0"
                style="margin-left:${indent.toFixed(2)}px">
-            <div class="prep__face">${faceHtml({ id: m.id, name: m.name, dressphere: dresspheres[i] })}</div>
+            <div class="prep__face">${faceHtml({ id: m.id, name: m.name, dressphere: dresspheres[i], ...(artNamespace ? { artNamespace } : {}) })}</div>
             <span class="prep__member-name">${escapeHtml(m.name)}</span>
             <span class="prep__member-lv">${levels[i] ?? ''}</span>
           </div>
@@ -69,8 +72,8 @@ export function rosterHtml(anyBuild: AnyPartyBuild, selected: number): string {
     .join('');
 }
 
-/** The three who actually walk in, along the bottom. */
-export function slotsHtml(anyBuild: AnyPartyBuild): string {
+/** The three who actually walk in, along the bottom (`artNamespace` as in {@link rosterHtml}). */
+export function slotsHtml(anyBuild: AnyPartyBuild, artNamespace?: string): string {
   const build = prepBuild(anyBuild);
   type Slot = { id: string; name: string; sub: string; role: string | undefined; dressphere?: string };
   const slots: Slot[] =
@@ -100,7 +103,7 @@ export function slotsHtml(anyBuild: AnyPartyBuild): string {
     .map(
       (s) => `
           <div class="prep__slot">
-            <div class="prep__face">${faceHtml({ id: s.id, name: s.name, dressphere: s.dressphere })}</div>
+            <div class="prep__face">${faceHtml({ id: s.id, name: s.name, dressphere: s.dressphere, ...(artNamespace ? { artNamespace } : {}) })}</div>
             <div>
               <div class="prep__slot-name">${escapeHtml(s.name)}</div>
               <div class="prep__slot-sub">${s.sub}</div>

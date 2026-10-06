@@ -16,6 +16,7 @@
 
 import type { Chapter } from '../../../data/encounters.ts';
 import { Ff7NotHandledError } from '../../../battle/common/game.ts';
+import { artNamespaceOfScene } from '../../../data/art/artNamespace.ts';
 import { getChapterMeta } from '../../../data/chapter-meta.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
 import { partyFaceHtml, type PartyFaceMember } from '../../../ui/common/partyFace.ts';
@@ -44,7 +45,9 @@ export function recommendedParty(chapter: Chapter): PartyFaceMember[] {
       return m ? [{ id: m.id, name: m.name }] : [];
     });
   }
-  return build.members.map((m) => ({ id: m.id, name: m.name, dressphere: m.currentDressphere }));
+  // The Leblanc preview's card shows the heads of its own paintings (`data/art/artNamespace.ts`); every other chapter, the base art.
+  const artNamespace = artNamespaceOfScene(chapter.sceneKey);
+  return build.members.map((m) => ({ id: m.id, name: m.name, dressphere: m.currentDressphere, ...(artNamespace ? { artNamespace } : {}) }));
 }
 
 /**

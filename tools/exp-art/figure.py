@@ -2,7 +2,7 @@
 
 Run by `tools/exp-install.mjs install` with ComfyUI's embedded python (numpy, scipy, PIL, rembg; nothing is downloaded):
 
-    D:/Tools/ComfyUI/python_embeded/python.exe -s tools/exp-art/figure.py --src IN.png --out OUT.png [--matte auto|keep|rembg]
+    D:/Tools/ComfyUI/python_embeded/python.exe -s tools/exp-art/figure.py --src IN.png --out OUT.png [--matte auto|keep|key|rembg]
         [--margin 16] [--haze 16] [--facing right|left|front] [--feet-row N]
 
 It writes OUT.png (8-bit RGBA, straight alpha) and prints ONE line of JSON on stdout: the measurements the sidecar and the registration need.
@@ -16,7 +16,14 @@ What the house figure is (measured off the shipped paintings, `docs/handoff/exp-
 - `baselineY` is the bottom row of the content (the soles), counted in the cropped image.
 
 The Art Room's images carry real alpha (0..254, some of them a faint glow at alpha 1 to 7 around the figure: the `haze` below). An
-opaque image (no transparency) is cut with rembg's isnet-anime, the house cutter (`tools/gen/rembg.py`), then cleaned the same way.
+opaque image (no transparency) is cut one of two ways, then cleaned the same way:
+
+- `key`: the image is a figure on ONE flat colour (the Art Room's idle sheets of Leblanc, Logos and Ormi: mid-grey and warm ochre, measured:
+  the border ring is within 5 to 11 of its median in RGB distance). The background is found by a flood from the border (plus any enclosed
+  gap that is exactly the background colour: the sliver between a ribbon and a neck), the matte is choked by one pixel and feathered, so
+  the edge carries no ring of the background's colour (rembg's mask is hard, keeps the blended edge pixels and left a gold strip behind
+  Logos's ribbon, see `docs/handoff/exp-leblanc.md` section 6);
+- `rembg`: isnet-anime, the house cutter (`tools/gen/rembg.py`), for an image whose background is not flat.
 """
 
 from __future__ import annotations
@@ -41,6 +48,12 @@ sys.path.insert(0, str(HERE.parent / "posescale"))
 ALPHA_FLOOR = 8  # what counts as content when the box is measured (tools/gen/rembg.py)
 CORE = 128  # a pixel this opaque belongs to a body
 EDGE_BAND = 3  # px beyond the body a soft pixel may sit (the antialiased edge); farther is haze
+FLAT_P99 = 14.0  # a border ring this flat (99th percentile of the RGB distance to its median) is a flat background: `key` is the cutter
+POCKET_MIN = 10  # px: an enclosed pocket of the background colour smaller than this is a pinhole in the figure, not a gap
+POCKET_THICK = 2.4  # px: the inscribed radius that makes a region near the background colour a blob (a gap), not a curve of anti-aliasing
+POCKET_TINT = 24.0  # the median distance a blob may sit from the background colour (the sheet's glow tints the air in the gaps)
+KEY_CHOKE = 1  # px the keyed matte is pulled in (the blended edge pixels of the source sit outside the true outline)
+KEY_FEATHER = 0.75  # sigma of the soft edge (px)
 
 
 def sha256_file(path: str) -> str:
@@ -52,6 +65,70 @@ def has_real_alpha(a: np.ndarray) -> bool:
     h, w = a.shape
     corners = [a[0, 0], a[0, w - 1], a[h - 1, 0], a[h - 1, w - 1]]
     return float((a < 8).mean()) > 0.10 and all(int(c) < 8 for c in corners)
+
+
+def border_ring(rgb: np.ndarray, width: int = 8) -> np.ndarray:
+    return np.concatenate([rgb[:width].reshape(-1, 3), rgb[-width:].reshape(-1, 3), rgb[:, :width].reshape(-1, 3), rgb[:, -width:].reshape(-1, 3)]).astype(np.float32)
+
+
+def flat_background(rgb: np.ndarray) -> tuple[np.ndarray, float] | None:
+    """The colour of a flat background (median of the border ring) and how noisy it is (99.5th percentile of the distance), or None when the ring is not flat."""
+    ring = border_ring(rgb)
+    med = np.median(ring, axis=0)
+    d = np.linalg.norm(ring - med, axis=1)
+    n = float(np.percentile(d, 99.5))
+    return (med, n) if float(np.percentile(d, 99)) <= FLAT_P99 else None
+
+
+def key_matte(rgb: np.ndarray, med: np.ndarray, noise: float, tinted: bool = False) -> tuple[np.ndarray, dict]:
+    """Alpha of a figure on one flat colour: flood the background from the border, choke by KEY_CHOKE px, feather. Returns (alpha uint8, stats).
+
+    `tinted` also takes a BLOB of nearly the background colour that is enclosed (the sheet's glow tints the air between a figure's legs a little) as a gap; it is
+    off by default because a shaded part of a figure on a grey sheet (Dr. Goon's olive suit in the shade) is a blob of nearly the background colour too.
+    """
+    d = np.linalg.norm(rgb.astype(np.float32) - med, axis=2)
+    t_fg = max(26.0, 3.0 * noise)  # a pixel this far from the background colour is the figure
+    t_pocket = max(14.0, noise + 8.0)  # an enclosed pocket must be this close to it at its MEDIAN pixel to count as background
+    cand = d <= t_fg
+    lab, n = ndi.label(cand)  # 4-connected
+    if n == 0:
+        raise SystemExit("[figure] key matte: no background found")
+    border = np.zeros_like(cand)
+    border[0, :] = border[-1, :] = border[:, 0] = border[:, -1] = True
+    touching = np.unique(lab[border & cand])
+    bg = np.isin(lab, touching[touching > 0])
+    # Enclosed pockets that are the background colour (a sliver between a ribbon and a neck, the loops of a lock of hair, the gap between a hand
+    # and a fan): background too. A pocket's own blended rim sits outside `cand` and the plate's glow tints it, so it is judged by its MEDIAN pixel.
+    # A pocket is any enclosed region that is the background colour to within t_pocket at its median pixel; with `tinted`, also a BLOB (an inscribed circle
+    # of POCKET_THICK px or more, medianed within POCKET_TINT of it: the sheet's glow tints the air between the legs). A one-pixel curve of anti-aliasing where an
+    # ink line meets a light fill passes through grey too, but it is thin: it stays figure.
+    sizes = np.asarray(ndi.sum(cand, lab, range(1, n + 1)))
+    med_d = np.asarray(ndi.median(d, lab, range(1, n + 1)))
+    thick = np.asarray(ndi.maximum(ndi.distance_transform_edt(cand), lab, range(1, n + 1)))
+    enclosed = 0
+    for i in range(1, n + 1):
+        if i in touching:
+            continue
+        if sizes[i - 1] >= POCKET_MIN and (med_d[i - 1] <= t_pocket or (tinted and thick[i - 1] >= POCKET_THICK and med_d[i - 1] <= POCKET_TINT)):
+            bg |= lab == i
+            enclosed += 1
+    fg = ~bg
+    # specks of noise inside the background and pinholes inside the figure
+    lab2, n2 = ndi.label(fg, structure=np.ones((3, 3)))
+    sizes2 = np.asarray(ndi.sum(fg, lab2, range(1, n2 + 1)))
+    big = int(np.argmax(sizes2)) + 1
+    fg = np.isin(lab2, [i for i in range(1, n2 + 1) if sizes2[i - 1] >= 24 or i == big])
+    holes = ndi.binary_fill_holes(fg) & ~fg
+    hl, hn = ndi.label(holes)
+    small = [i for i in range(1, hn + 1) if (hl == i).sum() < POCKET_MIN]
+    if small:
+        fg |= np.isin(hl, small)
+    fg1 = ndi.binary_erosion(fg, structure=ndi.generate_binary_structure(2, 1), iterations=KEY_CHOKE) if KEY_CHOKE else fg
+    alpha = ndi.gaussian_filter(fg1.astype(np.float32), KEY_FEATHER)
+    alpha = np.where(fg1, np.maximum(alpha, 0.0), alpha)
+    a = np.clip(np.round(alpha * 255.0), 0, 255).astype(np.uint8)
+    return a, {"background": [int(round(float(x))) for x in med], "noise": round(noise, 1), "tFg": round(t_fg, 1), "enclosedGaps": enclosed, "chokePx": KEY_CHOKE, "featherSigma": KEY_FEATHER, "pockets": "tinted" if tinted else "flat"}
+
 
 
 def cut_with_rembg(im: Image.Image) -> Image.Image:
@@ -159,7 +236,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--src", required=True)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--matte", choices=["auto", "keep", "rembg"], default="auto")
+    ap.add_argument("--matte", choices=["auto", "keep", "key", "rembg"], default="auto")
+    ap.add_argument("--pockets", choices=["flat", "tinted"], default="flat", help="key matte only: `tinted` also clears glow-tinted enclosed gaps (Leblanc's legs); the default clears only gaps of the background colour")
     ap.add_argument("--margin", type=int, default=16)
     ap.add_argument("--haze", type=int, default=16)
     ap.add_argument("--feet-row", type=float, default=None, help="the row of the soles when a thick weapon hangs lower (the registration's feetRow)")
@@ -169,8 +247,15 @@ def main() -> int:
     rgba = np.asarray(src.convert("RGBA")).copy()
     source = {"file": os.path.basename(args.src), "size": list(src.size), "mode": src.mode, "sha256": sha256_file(args.src)}
     real = has_real_alpha(rgba[..., 3])
-    how = args.matte if args.matte != "auto" else ("keep" if real else "rembg")
-    if how == "rembg":
+    flat = None if real else flat_background(rgba[..., :3])
+    how = args.matte if args.matte != "auto" else ("keep" if real else ("key" if flat else "rembg"))
+    key_stats: dict = {}
+    if how == "key":
+        flat = flat or flat_background(rgba[..., :3])
+        if flat is None:
+            raise SystemExit("[figure] --matte key: the border of the image is not one flat colour; use --matte rembg")
+        rgba[..., 3], key_stats = key_matte(rgba[..., :3], flat[0], flat[1], tinted=args.pockets == "tinted")
+    elif how == "rembg":
         rgba = np.asarray(cut_with_rembg(src)).copy()
     elif how == "keep" and not real:
         print("[figure] --matte keep on an image with no real alpha: the whole canvas is kept", file=sys.stderr)
@@ -196,7 +281,7 @@ def main() -> int:
         "opaqueShare": round(float((fa >= 250).mean()), 4),
         "softShare": round(float(((fa > 0) & (fa < 250)).mean()), 5),
         "stance": st,
-        "matte": {"how": how, "sourceHadRealAlpha": real, **stats},
+        "matte": {"how": how, "sourceHadRealAlpha": real, **key_stats, **stats},
         "source": source,
         "outSha256": sha256_file(args.out),
     }

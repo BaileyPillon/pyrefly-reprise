@@ -301,7 +301,8 @@ describe('every figure and the backdrop resolve to the experimental namespace', 
   it('a pose of a figure with no new idle is registered exactly as its base painting is (one head size, one stance)', () => {
     const installedSubjects = Object.keys(INSTALLED);
     let checked = 0;
-    for (const [base, poses] of [['rikku-thief', ['idle', 'ready', 'ko', 'victory']], ['paine-warrior', ['idle', 'ready', 'attack']], ['leblanc', ['idle', 'cast']], ['ormi', ['idle', 'hurt']], ['yuna-gunner', ['idle', 'attack', 'ko']]] as const) {
+    // The figures with no new idle yet: the girls' other dresspheres (a spherechange draws them).
+    for (const [base, poses] of [['paine-thief', ['idle', 'attack', 'ko', 'victory']], ['rikku-warrior', ['idle', 'attack', 'ko', 'ready']], ['yuna-thief', ['idle', 'attack', 'hurt']], ['yuna-songstress', ['idle', 'attack']], ['paine-songstress', ['idle', 'attack', 'ko']]] as const) {
       if (installedSubjects.includes(base)) continue; // its rows are measured or rescaled: the next tests
       for (const pose of poses) {
         const theirs = poseRegistrationFor(characterUrl(base, pose));

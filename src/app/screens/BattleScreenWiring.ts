@@ -144,15 +144,17 @@ export function applyAtbConfig(engine: BattleEngine | null): void {
  * sources). The wrapper is transparent when coaching is off, already seen, or
  * suppressed with `?coach=off`, so every capture harness sees the bare HUD.
  */
-export function createHud(game: GameId, field?: () => (OversoulField & StatusField) | null, engine?: BattleEngine | null): HudPort {
+export function createHud(game: GameId, field?: () => (OversoulField & StatusField) | null, engine?: BattleEngine | null, artNamespace?: string): HudPort {
   // FF7 gets its own HUD: Bailey's option A made more faithful (docs/plans/ff7-hud-faithful-a-spec.md).
   // Never the FFX-2 HUD, never a coach, never the shared phone rail: it draws FF7's own phone band (FF7 only).
   // The Item list's counts come from the engine's bag (the HUD holds no numbers of its own).
   if (game === 'ff7') return new Ff7BattleHud(engine instanceof Ff7Engine ? { itemCount: (id) => engine.inventory()[id] } : {});
   // The upright-phone layout, option B (Bailey, 2026-09-25; `ui/common/phoneBattle.ts`).
+  // The FFX-2 HUD: the engine (advisor v3), and the scene's art namespace (the experimental Leblanc chapter's party heads come from its own paintings).
+  const ffx2Options = { engine: engine instanceof FFX2Engine ? engine : null, ...(artNamespace ? { artNamespace } : {}) };
   const hud: HudPort = game === 'ffx'
     ? withSinHud(withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud)))
-    : withPhoneLayout(new FFX2BattleHud({ engine: engine instanceof FFX2Engine ? engine : null }), installFfx2PhoneHud); // advisor v3
+    : withPhoneLayout(new FFX2BattleHud(ffx2Options), installFfx2PhoneHud); // advisor v3
   // The Oversoul look (FFX-2 only: Oversoul exists only in FFX-2), on the field the screen passes in.
   // Inert unless an Oversoul form is on the field (`engine/OversoulLook.ts`). The FFX side gets the
   // Mortiphasm disc colours and Omnis's red glow (FFX only, Chapter XII; inert without the Omnis state,

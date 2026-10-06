@@ -21,3 +21,14 @@ export function buildExpRegistration(
   opts?: BuildOptions,
 ): RegistrationTable;
 export function renderExpRegistration(table: RegistrationTable): string;
+export interface ExpFigureMetricsRow {
+  width: number;
+  height: number;
+  baselineY: number;
+  facing: 'right' | 'left' | 'front' | 'auto';
+}
+export function buildExpFigureMetrics(
+  subjects: readonly string[],
+  readIdle: (subject: string) => { width?: number; height?: number; baselineY?: number; facing?: string } | null,
+): Record<string, ExpFigureMetricsRow>;
+export function renderExpFigureMetrics(table: Record<string, ExpFigureMetricsRow>): string;

@@ -305,8 +305,12 @@ export class FFX2BattleHud implements HudPort {
   /** The live engine for the advisor's projected board; `null` on a mock screen. */
   private readonly inFlight: InFlightSource | null;
 
-  constructor(opts: { engine?: InFlightSource | null } = {}) {
+  /** The scene's art namespace (the experimental Leblanc chapter, `data/art/artNamespace.ts`): the party rows' heads come from its paintings. */
+  private readonly artNamespace: string | undefined;
+
+  constructor(opts: { engine?: InFlightSource | null; artNamespace?: string } = {}) {
     this.inFlight = opts.engine ?? null;
+    this.artNamespace = opts.artNamespace;
   }
   /** PR-0104 (FFX-2 only): the chip naming a girl's queued command from the confirm on (`QueuedChips.ts`). */
   private readonly queued = new QueuedChips();
@@ -1209,7 +1213,7 @@ export class FFX2BattleHud implements HudPort {
         const c = state.combatants[id];
         if (!isFfx2(c)) return '';
         const bar = snapshot.bars.find((b) => b.actorId === id) ?? null;
-        return partyRowHtml(c, bar, { actingId: this.actingId, index: i });
+        return partyRowHtml(c, bar, { actingId: this.actingId, index: i, ...(this.artNamespace ? { artNamespace: this.artNamespace } : {}) });
       })
       .join('');
     this.partyEl.innerHTML = rows;

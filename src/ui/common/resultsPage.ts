@@ -115,6 +115,7 @@ export function memberFaceHtml(row: ResultsMemberRow): string {
     id: row.id,
     name: row.name,
     dressphere: row.dressphere,
+    ...(row.artNamespace ? { artNamespace: row.artNamespace } : {}),
   })}`;
 }
 

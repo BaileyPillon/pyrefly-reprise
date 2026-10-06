@@ -11,6 +11,7 @@ import {
   PlaneGeometry,
   RepeatWrapping,
   Scene,
+  ShadowMaterial,
   Vector3,
   type Object3D,
   type Texture,
@@ -123,6 +124,14 @@ export interface BackdropOptions {
         fadeCore?: number;
         /** Where the opaque core sits, in world XZ. */
         center?: [number, number];
+        /**
+         * Draw NO floor of its own: the plane only receives the actors' shadows (a `ShadowMaterial`), so the painting's floor
+         * shows through everywhere. For a painting whose floor is the picture (a polished, reflective one), where a tinted
+         * plane would bury it. `tintMix`, `luma`, `brightness`, `repeat` and `fade` are then unused.
+         */
+        shadowOnly?: boolean;
+        /** The shadow's strength under `shadowOnly`, 0..1 (default 0.34). */
+        shadowOpacity?: number;
       };
   /** Drifting mist sheets between the actors and the painting. */
   fogPlanes?: false | Array<{ z: number; y: number; width: number; height: number; opacity?: number; speed?: number; additive?: boolean }>;
@@ -359,11 +368,13 @@ export class Backdrop {
         alphaMap.wrapS = alphaMap.wrapT = ClampToEdgeWrapping;
       }
 
-      const mat = new MeshLambertMaterial({
-        map: tex,
-        color: tint,
-        ...(alphaMap ? { alphaMap, transparent: true, depthWrite: false } : {}),
-      });
+      const mat = g.shadowOnly
+        ? new ShadowMaterial({ opacity: g.shadowOpacity ?? 0.34, depthWrite: false })
+        : new MeshLambertMaterial({
+            map: tex,
+            color: tint,
+            ...(alphaMap ? { alphaMap, transparent: true, depthWrite: false } : {}),
+          });
       groundMesh = new Mesh(new PlaneGeometry(size, size, 1, 1), mat);
       groundMesh.rotation.x = -Math.PI / 2;
       const c = g.center ?? [0, -size * 0.26];
@@ -528,8 +539,8 @@ export class Backdrop {
     }
     if (this.ground) {
       this.ground.geometry.dispose();
-      const m = this.ground.material as MeshLambertMaterial;
-      m.map?.dispose();
+      const m = this.ground.material as MeshLambertMaterial | ShadowMaterial;
+      if ('map' in m) m.map?.dispose();
       m.dispose();
     }
     for (const t of this.ownedTextures) t.dispose();

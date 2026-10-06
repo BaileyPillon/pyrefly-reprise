@@ -11,6 +11,7 @@
  * nothing.
  */
 
+import { artNamespaceOfScene, inArtNamespace } from '../../data/art/artNamespace.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { measuredPortraitIds } from './portrait.ts';
 import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
@@ -106,7 +107,7 @@ export function wedgePortraitId(id: string, chapter: Chapter | undefined): strin
 export function wedgeFallenArt(chapter: Chapter | undefined, id: string): [string, string] {
   const build = chapter?.buildRef;
   const dress = build?.game === 'ffx2' ? build.members.find((m) => m.id === id)?.currentDressphere : undefined;
-  const dir = dress ? `${id}-${dress}` : id;
+  const dir = inArtNamespace(artNamespaceOfScene(chapter?.sceneKey), dress ? `${id}-${dress}` : id); // the Leblanc preview's own paintings (`data/art/artNamespace.ts`)
   const poses = ['hurt', 'ko', 'idle'].map((p) => `art/characters/${dir}/${p}.png`);
   if (manifestKnowsAssetNow(poses[0]!) === null) return [poses[0]!, poses[1]!];
   const onDisk = poses.filter((u) => manifestKnowsAssetNow(u) !== false);

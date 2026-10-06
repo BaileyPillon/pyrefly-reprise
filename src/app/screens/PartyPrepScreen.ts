@@ -22,6 +22,7 @@
 import '../../ui/common/party-prep.css';
 import type { GameId } from '../../battle/common/types.ts';
 import type { Chapter } from '../../data/encounters.ts';
+import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
 import { audio } from '../../audio/index.ts';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
@@ -181,7 +182,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
       <div class="prep__start" data-action="prep:begin">
         <span><span class="prep__start-tri"></span>START BATTLE</span>
       </div>
-      <div class="prep__slots">${slotsHtml(this.chapter.buildRef)}</div>
+      <div class="prep__slots">${slotsHtml(this.chapter.buildRef, artNamespaceOfScene(this.chapter.sceneKey))}</div>
     `;
 
     this.body = this.stage.stage.querySelector('[data-role="body"]');
@@ -241,7 +242,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
   private renderRoster(): void {
     const col = this.root.querySelector('[data-role="roster"]');
     if (!col) return;
-    col.innerHTML = rosterHtml(this.chapter.buildRef, this.member);
+    col.innerHTML = rosterHtml(this.chapter.buildRef, this.member, artNamespaceOfScene(this.chapter.sceneKey));
   }
 
   private renderBody(): void {

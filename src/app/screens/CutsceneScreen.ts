@@ -3,6 +3,7 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import { fadeMsToSec } from '../../audio/AudioManager.ts';
+import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { battleStart, beat, camera, fx, music, narrate, say, type SpeakerId, type StoryScript } from '../../story/dsl.ts';
 import {
@@ -187,7 +188,8 @@ export class CutsceneScreen extends Screen {
     }
 
     // Backdrop, then the stage (figures, effects, and the box inside its shake layer), then the flash.
-    this.stage = new CutsceneStage(this.root, { wait: (ms) => this.waitGate(ms), skipping: () => this.runner?.skipped === true });
+    const artNamespace = artNamespaceOfScene(sceneKey); // the experimental Leblanc chapter's story figures stand on its own paintings (`data/art/artNamespace.ts`)
+    this.stage = new CutsceneStage(this.root, { wait: (ms) => this.waitGate(ms), skipping: () => this.runner?.skipped === true, ...(artNamespace ? { artNamespace } : {}) });
     this.stage.mount();
     this.stage.prepare(this.opts.script ?? DEMO_CUTSCENE_SCRIPT);
 

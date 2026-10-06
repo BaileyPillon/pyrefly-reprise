@@ -7,6 +7,7 @@ import type { BattleResult, GameId } from '../../battle/common/types.ts';
 import { ff7MemberRows } from '../ff7/ff7ResultRows.ts';
 import { apForLevel } from '../../battle/ffx/results.ts';
 import type { Chapter } from '../../data/encounters.ts';
+import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
 import { ITEMS as FFX_ITEMS } from '../../data/ffx/index.ts';
 import {
   ABILITIES as FFX2_ABILITIES,
@@ -173,6 +174,8 @@ export interface ResultsMemberRow {
    * is already the right answer there.
    */
   dressphere?: string;
+  /** The chapter's art namespace (`data/art/artNamespace.ts`; FFX-2's experimental Leblanc chapter): the face is the head of the namespaced painting. Absent: the base art. */
+  artNamespace?: string;
   /**
    * FFX only (PR-0241): why a listed member got no AP, when the engine's rule excluded
    * them — `long` for the desktop detail line, `short` for the phone chip. Absent when
@@ -292,6 +295,7 @@ export function buildMemberRows(
     });
   }
 
+  const artNamespace = artNamespaceOfScene(chapter?.sceneKey); // the Leblanc preview's faces come from its own paintings (`data/art/artNamespace.ts`)
   return build.members.map((member) => {
     const progress = member.abilitiesLearned[member.currentDressphere];
     const banked = (progress?.ap ?? 0) + result.ap;
@@ -305,6 +309,7 @@ export function buildMemberRows(
       detail: dressphereDetail(member.currentDressphere, progress?.learned ?? [], banked),
       standing: `LV ${member.level + (result.levelsGained?.[member.id] ?? 0)}`,
       dressphere: member.currentDressphere,
+      ...(artNamespace ? { artNamespace } : {}),
     };
   });
 }

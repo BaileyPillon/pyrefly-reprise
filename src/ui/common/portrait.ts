@@ -13,6 +13,7 @@
  * square frame comes out at the same head scale with its eyes on one line.
  */
 
+import { artNamespaceOf, baseArtId } from '../../data/art/artNamespace.ts';
 import { ART_INDEX_CACHE, manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { logicalArtUrl } from '../../engine/ArtShipped.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
@@ -179,6 +180,16 @@ const DEFAULT_CROP: PortraitCrop = { fx: 0.5, fy: 0.295, ipd: 0.3, aspect: CANVA
 
 const PORTRAIT_ROWS = faceCropData.portraits as Readonly<Record<string, MeasuredRow>>;
 const BODY_ROWS = faceCropData.bodies as Readonly<Record<string, MeasuredRow>>;
+
+/**
+ * The measured head row of a full-body painting. A painting inside an art namespace (the experimental Leblanc chapter,
+ * `data/art/artNamespace.ts`) has a row of its own when it was painted afresh (`exp-leblanc-yuna-gunner`); one that is still
+ * a copy of the base painting (a placeholder) is the same file, so it takes the base subject's row.
+ */
+function bodyRowFor(id: string | undefined): MeasuredRow | undefined {
+  if (!id) return undefined;
+  return BODY_ROWS[id] ?? (artNamespaceOf(id) ? BODY_ROWS[baseArtId(id)] : undefined);
+}
 
 function toCrop(row: MeasuredRow | undefined, fallback: PortraitCrop): PortraitCrop {
   if (!row) return fallback;
@@ -421,7 +432,7 @@ const GENERIC_BODY_CROP: PortraitCrop = { ...GENERIC_BODY_HEAD_CROP, aspect: GEN
  * "full body, centered, straight-on" render is still better than a cover crop.
  */
 export function bodyCrop(id: string | undefined): PortraitCrop {
-  return toCrop(id ? BODY_ROWS[id] : undefined, GENERIC_BODY_CROP);
+  return toCrop(bodyRowFor(id), GENERIC_BODY_CROP);
 }
 
 /**
@@ -432,7 +443,7 @@ export function bodyCrop(id: string | undefined): PortraitCrop {
  * exact current behaviour; passing an id opts into the measured table.
  */
 export function bodyHeadCropStyle(aspect: number = GENERIC_BODY_ASPECT, opts: FaceOptions = {}, id?: string): string {
-  const row = id ? BODY_ROWS[id] : undefined;
+  const row = bodyRowFor(id);
   return cropStyle(row ? toCrop(row, GENERIC_BODY_CROP) : { ...GENERIC_BODY_HEAD_CROP, aspect }, opts);
 }
 
@@ -671,7 +682,7 @@ export function refineBodyCropFromAlpha(img: HTMLImageElement): void {
   const id = img.getAttribute('data-body-id');
   if (!id || !img.naturalWidth || !img.naturalHeight) return;
   // A hand-measured row is better than anything measured here.
-  if (BODY_ROWS[id]) return;
+  if (bodyRowFor(id)) return;
   if (img.dataset['bodyCropMeasured'] === '1') return;
 
   const box = alphaBoxOf(img);
