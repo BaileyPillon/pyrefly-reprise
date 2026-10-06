@@ -6,6 +6,16 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-06 — A Retry from a hopeless checkpoint: `EnemyGroupDef.hopelessRetry` (branch `r392-trema`, PR-0407; FFX-2 only in effect; additive)
+
+Critic round 23's finding PR-0407: a loss to Trema retries at Trema (TR5 b) in Paragon's end state, and with one girl standing there the engine measured 0 wins in 200 Retries. Handoff: [r392-trema](handoff/r392-trema.md).
+
+- `src/battle/common/types.ts`: `EnemyGroupDef.hopelessRetry?: { standing: number; answer: 'restore' | 'chapter-start' }`. Absent on every formation but Trema's link (`tests/unit/chapters/trema-hopeless-retry.test.ts`
+  pins that), so every other chain retries exactly as before. Read only by `app/screens/BattleChainCheckpoint.ts`: `checkpointAt` makes no checkpoint for `'chapter-start'` when fewer than `standing` of the party are on their feet in
+  the setup the link opens on, and `resumeSetup` gives a `'restore'` Retry the formation with `restoresPartyOnEntry: true` (the engine's own Save Sphere rule, `battle/ffx2/setup.ts`). The first entry into the link is never changed.
+- New exports in `BattleChainCheckpoint.ts`: `standingIn(setup)`, `hopelessAt(group, setup)`. The shipped answer is `TREMA_HOPELESS_RETRY` in `src/data/ffx2/enemies/trema.ts` (on this branch `'restore'`, awaiting Bailey's yes;
+  `'carry'` is the old behaviour).
+
 ## 2026-10-05 — The strike reaches its target in every fight: `StageMotionPort.shape`, `ActionMotionPort.reachFor`, `EventCtx.burst`, `PaintedActor.poseShape` (release 39.1; both games; additive)
 
 Branch `r391-reach`. No file in the contract list changed; recorded because four shared surfaces gain an optional member and one registry goes. Handoff: [r391-reach](handoff/r391-reach.md).

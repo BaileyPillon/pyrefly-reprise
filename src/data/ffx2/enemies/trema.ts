@@ -12,7 +12,8 @@
  *   a new battle), and restores nothing;
  * - is the retry checkpoint (`checkpointOnEntry`, plan TR5 = b): a loss to Trema retries
  *   Trema in Paragon's end state, kept in memory only (never saved, D-100), so this chapter
- *   is not save-data class.
+ *   is not save-data class. With fewer than two girls standing in that state the Retry opens
+ *   with the Save Sphere's rule instead (`hopelessRetry`, PR-0407; see `TREMA_HOPELESS_RETRY`).
  *
  * Music, TR16 = a: Paragon under `scene-bevelle-underground` (the game plays "The Bevelle
  * Underground" there, research §6.3), Trema under `boss-ffx2-aeon`, the plan's named stand-in
@@ -46,6 +47,30 @@ export const CLOISTER_ACTION_TIME_SECONDS = 3;
 /** Seconds of action time on the Cloister links: {@link CLOISTER_ACTION_TIME_SECONDS}, or 0 with the switch off. */
 export const CLOISTER_ACTION_TIME = CLOISTER_ACTION_TIME_ON ? CLOISTER_ACTION_TIME_SECONDS : 0;
 const actionTime = CLOISTER_ACTION_TIME > 0 ? { actionTimeSeconds: CLOISTER_ACTION_TIME } : {};
+
+/**
+ * **PR-0407, the answer to a Retry from a state nobody can win from** (critic round 23; Bailey's call, awaiting
+ * his yes: nothing here touches a sourced number). TR5 = b retries a lost Trema at Trema in Paragon's end state, and
+ * when one girl stood at the seam that state has no winning line: the engine's 200-seed probe measured 0 wins in 200
+ * Retries, 107 of them lost within two decisions. Three answers are built and measured
+ * (`docs/handoff/r392-trema.md`); the first entry into Trema is never changed (the sources carry Paragon's state).
+ *
+ * - `'restore'` (shipped on this branch): with fewer than two girls standing, the Retry opens with the Save Sphere's rule,
+ *   full HP and MP and a KO'd girl up (Chapter XI's `restoresPartyOnEntry`), still at Trema, still without Paragon;
+ * - `'chapter-start'`: with fewer than two standing, a loss makes no checkpoint and the Retry plays Paragon again (TR5 a);
+ * - `'carry'`: what shipped before, the Retry replays the carried state as entered, unwinnable or not.
+ *
+ * Two or three standing always replay as entered (TR5 b as adopted). `HOPELESS_BELOW` is the number standing under which
+ * the probe found no win: one girl 0 of 200, two 20 of 20 (Wait split) and 35 of 80 (Active), three 301 of 340 and 167 of 220.
+ */
+export type TremaHopelessRetry = 'restore' | 'chapter-start' | 'carry';
+export const TREMA_HOPELESS_RETRY: TremaHopelessRetry = 'restore';
+export const HOPELESS_BELOW = 2;
+
+/** The formation field that gives Trema's link the answer `answer` (nothing for `'carry'`, which is the absence of the rule). */
+export function tremaHopelessRetry(answer: TremaHopelessRetry): Pick<EnemyGroupDef, 'hopelessRetry'> {
+  return answer === 'carry' ? {} : { hopelessRetry: { standing: HOPELESS_BELOW, answer } };
+}
 
 /** Trema, Via Infinito story version, bestiary #243 on the wiki (§3.1). International / HD (TR2 = a). */
 export const trema: EnemyDef = {
@@ -126,6 +151,7 @@ export const cloisterTremaGroup: EnemyGroupDef = {
   musicCues: [{ at: 'start', track: 'boss-ffx2-aeon', fadeMs: 800 }], // TR16 = a, the stand-in for `boss-trema`
   carriesPartyState: true, // "whatever state the Paragon fight left them" [verified: 5 sources]
   checkpointOnEntry: true, // TR5 = b
+  ...tremaHopelessRetry(TREMA_HOPELESS_RETRY), // PR-0407: what a Retry opens on when fewer than two girls stand
   timedAilmentDefaults: true, // Beguiling Mire's Stop wears off (§2.8, 100 [estimate]), method check E1
   ...actionTime, // option 3 (E4), ON at 3 s
 };

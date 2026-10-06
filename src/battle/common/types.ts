@@ -2679,6 +2679,15 @@ export interface EnemyGroupDef {
   victoryBonusAp?: number;
   /** A chained link that is a retry checkpoint with no Save Sphere: FFX-2's Trema (TR5 b) and Shuyin (D-217); FFX, Sin's link 3 only, through the switch `SIN_LINK3_CHECKPOINT` (on since D-284; CONTRACT-CHANGES). */
   checkpointOnEntry?: boolean;
+  /**
+   * **A retry checkpoint that would be hopeless** (PR-0407; FFX-2's Trema only). Read by `checkpointAt` and
+   * `resumeSetup` (`app/screens/BattleChainCheckpoint.ts`) and nothing else: when fewer than `standing` of the
+   * party are on their feet in the state the link was entered on, the retry answers `'restore'` (it opens with the
+   * Save Sphere's rule, full HP and MP and a KO'd girl up, which `restoresPartyOnEntry` gives a link on entry) or
+   * `'chapter-start'` (the link makes no checkpoint, so a loss retries the chapter from its first formation). The
+   * first entry is never changed: it carries Paragon's state as the sources have it. Absent everywhere else.
+   */
+  hopelessRetry?: { standing: number; answer: 'restore' | 'chapter-start' };
   /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema); FFX too, statuses only (Sin links 2 and 3; CONTRACT-CHANGES). */
   carriesPartyState?: boolean;
   timedAilmentDefaults?: boolean; // FFX-2: a duration-0 ailment row lasts §2.8's default, not until cured (Chapter XIII; CONTRACT-CHANGES)
