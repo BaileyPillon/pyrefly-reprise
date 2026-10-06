@@ -110,3 +110,20 @@ describe.skipIf(!haveArt)('the measured art on this disk', () => {
     expect(r.summary.length).toBeGreaterThan(0);
   });
 });
+
+describe.skipIf(!existsSync(resolve('docs/target/pose-measure.json')))('the D-298 stature floor (a bent, hunched or kneeling pose is not drawn under 0.60 of its idle height)', () => {
+  // Bailey, 2026-10-05, on the driver's recommendation: lifted for exactly this pose and no other (Rikku Berserker ready follows in its own commit).
+  const LIFTED = ['lulu/critical'];
+  it('holds for every measured pose except the two Bailey lifted, and those two say so in the record', () => {
+    const records = JSON.parse(readFileSync(resolve('docs/target/pose-measure.json'), 'utf8')) as { subjects: Record<string, { poses: Record<string, { stature?: number; gateLifted?: unknown }> }> };
+    const under: string[] = [];
+    for (const [subject, sub] of Object.entries(records.subjects)) {
+      for (const [pose, r] of Object.entries(sub.poses)) {
+        const key = `${subject}/${pose}`;
+        if (typeof r.stature === 'number' && r.stature < 0.595) under.push(key);
+        if (r.gateLifted) expect(LIFTED, `${key} lifts the floor without Bailey's yes`).toContain(key);
+      }
+    }
+    expect(under.sort()).toEqual([...LIFTED].sort());
+  });
+});
