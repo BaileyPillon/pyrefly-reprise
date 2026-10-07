@@ -23,6 +23,7 @@
  */
 
 import { artUrl } from '../../../engine/PaintedArt.ts';
+import { inArtNamespace } from '../../../data/art/artNamespace.ts';
 import type { ChapterTile } from './chapterGrid.ts';
 
 /**
@@ -73,6 +74,13 @@ const cardAt = (x: number, y: number, h: number, focus: readonly [number, number
  */
 export const CARD_CLEAR = { x: 68, y: 64 } as const;
 const cardClear = (h: number, focus: readonly [number, number]): Placement => cardAt(CARD_CLEAR.x, CARD_CLEAR.y, h, focus);
+
+/** Chapter VI's plate: Leblanc in her Last Room, from the thighs up (the Leblanc preview, `exp-leblanc`, reuses it). */
+const LEBLANC_PLATE: PlateComposition = {
+  scene: { hero: '50% 55%', card: '50% 42%' },
+  glow: 'rgba(247, 120, 200, 0.4)',
+  layers: [{ key: 'leblanc', focus: [0.56, 0.1], hero: P(68, 19, 158), card: card(480) }],
+};
 
 /**
  * Per chapter, measured on the paintings (face centres read off a 5 percent
@@ -129,11 +137,9 @@ export const PLATE_COMPOSITIONS: Readonly<Record<string, PlateComposition>> = {
     ],
   },
   // VI (FFX-2): Leblanc in her Last Room, from the thighs up.
-  'ffx2-leblanc': {
-    scene: { hero: '50% 55%', card: '50% 42%' },
-    glow: 'rgba(247, 120, 200, 0.4)',
-    layers: [{ key: 'leblanc', focus: [0.56, 0.1], hero: P(68, 19, 158), card: card(480) }],
-  },
+  'ffx2-leblanc': LEBLANC_PLATE,
+  // EXP (FFX-2, the Leblanc preview): Chapter VI's composition over the preview's paintings (`data/art/artNamespace.ts`).
+  'exp-leblanc': { ...LEBLANC_PLATE, layers: LEBLANC_PLATE.layers.map((l) => ({ ...l, key: inArtNamespace('exp-leblanc', l.key) })) },
   // VII (coming): Anima in the Macalania antechamber.
   'seymour-anima-macalania': {
     scene: { hero: '50% 50%', card: '50% 40%' },

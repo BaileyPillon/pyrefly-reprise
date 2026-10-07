@@ -14,7 +14,9 @@
 
 import type { StoryScript } from '../../story/dsl.ts';
 import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
+import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
+import { portraitIdIn } from '../../ui/common/portraitNamespace.ts';
 import { untilWarm, warmImage, warmImages, type WarmLane } from '../imageWarm.ts';
 
 /**
@@ -83,12 +85,13 @@ export function sceneArtUrls(script: StoryScript | undefined, sceneKey: string |
   const first: string[] = [];
   const rest: string[] = [];
   if (sceneKey) first.push(artUrl(`art/backdrops/${sceneKey}.png`));
+  const namespace = artNamespaceOfScene(sceneKey); // the experimental Leblanc chapter's speakers show its own portraits (`DialogueBox`)
   let speaker = false;
   for (const step of script ?? []) {
     if (step.type === 'say') {
       const id: string = step.portrait ?? step.who;
       if (!id || id === 'none' || id === 'narrator') continue;
-      const url = artUrl(`art/portraits/${id}.png`);
+      const url = artUrl(`art/portraits/${portraitIdIn(namespace, id)}.png`);
       (speaker ? rest : first).push(url);
       speaker = true;
     } else if (step.type === 'backdrop') {

@@ -20,6 +20,7 @@
 import type { AnyCombatant, FFX2Combatant, FFXCombatant } from '../battle/common/types.ts';
 import { ART_INDEX_CACHE, artStatesFor } from './ArtManifest.ts';
 import { artUrl } from './PaintedArt.ts';
+import { baseArtId, inArtNamespace } from '../data/art/artNamespace.ts';
 
 /** Poses a party member is painted in. */
 export const PARTY_POSES = [
@@ -105,6 +106,15 @@ function isFfx2Enemy(c: AnyCombatant): boolean {
   return typeof (c as FFXCombatant).enemy?.level === 'number';
 }
 
+/**
+ * The art ids a live combatant is looked up under, best first: the mapped id, its sprite key, its raw id. Inside an art
+ * namespace (the experimental Leblanc chapter, `data/art/artNamespace.ts`) every candidate is read from that set; with none, they
+ * are exactly the ids Chapter VI and every other chapter have always used. The stage and the preload both ask this.
+ */
+export function artCandidatesFor(c: AnyCombatant, namespace?: string): string[] {
+  return [artIdFor(c), c.spriteKey, c.id].map((id) => (id ? inArtNamespace(namespace, id) : id));
+}
+
 /** URL of one painted pose. */
 export function characterUrl(artId: string, pose: string): string {
   return artUrl(`art/characters/${artId}/${pose}.png`);
@@ -176,7 +186,7 @@ const DRESSPHERE_POSE_FALLBACKS: Readonly<Record<string, readonly string[]>> = {
  * are the bare `yuna` and `rikku`, and `yunalesca-1` is not a girl.
  */
 export function isDresspherePainting(artId: string): boolean {
-  return /^(yuna|rikku|paine)-[a-z]/.test(artId);
+  return /^(yuna|rikku|paine)-[a-z]/.test(baseArtId(artId)); // a namespaced painting (`exp-leblanc-yuna-gunner`) is its base's kind
 }
 
 function fallbacksFor(artId: string): Readonly<Record<string, readonly string[]>> {

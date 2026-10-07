@@ -88,6 +88,10 @@ export interface ScenePalette {
   tiltMaxBlur?: number;
   /** How far the painted figures are kept out of the bloom, 0..1 (`BloomMask.ts`). Unset is 0, not "keep". */
   figureBloomMask?: number;
+  /** The room's haze (`GradeShader`): a veil of `hazeColor` over all but the painted figures, `hazeAmount` thick at the bottom edge, the middle and the top edge (0..1), thinning toward the sides by `hazeSide` (0..1). Every palette resets them: unset is none. */
+  hazeColor?: [number, number, number];
+  hazeAmount?: [number, number, number];
+  hazeSide?: number;
 }
 
 /**
@@ -303,6 +307,8 @@ export class Renderer {
     vec('gamma', palette.gamma);
     vec('gain', palette.gain);
     vec('shadowTint', palette.shadowTint);
+    vec('hazeColor', palette.hazeColor ?? [0, 0, 0]); // unlike the fields above, the haze is reset by every palette: never a leftover of the last room
+    vec('hazeAmount', palette.hazeAmount ?? [0, 0, 0]);
     const num = (name: string, v: number | undefined): void => {
       if (v === undefined) return;
       const u = this.gradePass.uniforms[name];
@@ -312,6 +318,7 @@ export class Renderer {
     num('vignette', palette.vignette);
     num('vignetteRadius', palette.vignetteRadius);
     num('shadowTintAmount', palette.shadowTintAmount);
+    num('hazeSide', palette.hazeSide ?? 0);
     num('grain', palette.grain);
     if (palette.exposure !== undefined) this.renderer.toneMappingExposure = palette.exposure;
 

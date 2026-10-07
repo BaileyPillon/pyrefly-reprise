@@ -1,3 +1,4 @@
+import { artNamespaceOf, baseArtId } from '../../../data/art/artNamespace.ts';
 import type { PoseMeta } from '../../PaintedArt.ts';
 
 /**
@@ -21,8 +22,17 @@ export function twirlKeysOf(states: readonly string[]): string[] {
   return states.filter((s) => /^twirl-[a-z0-9-]+$/i.test(s)).sort((a, b) => rank(a) - rank(b) || a.localeCompare(b, 'en', { numeric: true }));
 }
 
-/** The girl a figure belongs to (`yuna-gunner` -> `yuna`). */
-export const girlOf = (figure: string): string => figure.split('-')[0] ?? '';
+/** The girl a figure belongs to (`yuna-gunner` -> `yuna`; inside an art namespace, `exp-leblanc-yuna-gunner` -> `yuna` too). */
+export const girlOf = (figure: string): string => baseArtId(figure).split('-')[0] ?? '';
+
+/**
+ * The art-namespace prefix a figure id carries (`exp-leblanc-` for `exp-leblanc-yuna-gunner`, the experimental Leblanc chapter;
+ * `''` for a base id). A girl's other figures, and the keys of her other dresspheres, are looked up inside the SAME namespace.
+ */
+export const namespacePrefixOf = (figure: string): string => {
+  const ns = artNamespaceOf(figure);
+  return ns ? `${ns}-` : '';
+};
 
 /** One key of a change: the figure whose folder holds the painting (the dressphere it is painted in), and its state. */
 export interface TwirlKey {
@@ -41,7 +51,8 @@ export function twirlPlan(from: string, to: string, statesOf: (id: string) => re
   const plan: TwirlKey[] = [];
   for (const key of ['twirl-start', 'twirl-going']) if (has(from, key)) plan.push({ figure: from, key });
   const girl = girlOf(to || from);
-  const mine = others.filter((id) => girl && id.startsWith(`${girl}-`)).sort();
+  const prefix = namespacePrefixOf(to || from); // the figures of her own namespace only: the base art is never mixed in
+  const mine = others.filter((id) => girl && id.startsWith(`${prefix}${girl}-`)).sort();
   const mid = [to, from, ...mine].find((fig) => has(fig, 'twirl-mid'));
   if (mid) plan.push({ figure: mid, key: 'twirl-mid' });
   for (const key of ['twirl-forming', 'twirl-end']) if (has(to, key)) plan.push({ figure: to, key });

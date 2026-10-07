@@ -10,7 +10,8 @@
 
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
-import { artIdFor, characterUrl, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
+import { artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
+import { inArtNamespace } from '../data/art/artNamespace.ts';
 import { paintedPoses } from './EnemyActionPose.ts';
 import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresenterPorts.ts';
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
@@ -310,7 +311,8 @@ export class PaintedStage implements BattleStage {
     const kind: 'party' | 'enemy' = c.side === 'enemy' ? 'enemy' : 'party';
     // The mapped id first, then the raw ones, so a figure whose art has not
     // been renamed yet still shows its painting instead of a silhouette.
-    const art = await resolveArt([artIdFor(c), c.spriteKey, c.id], kind);
+    // The scene's art namespace (`data/art/artNamespace.ts`, the experimental Leblanc chapter): every candidate is read from the namespaced set; none: the base art, as always.
+    const art = await resolveArt(artCandidatesFor(c, this.opts.slots.artNamespace), kind);
     const { artId } = art;
     const poses = departurePoses(c.id, art.poses); // D-031 Evrae
     const heights = { party: this.opts.slots.partyHeight ?? 1.82, enemy: this.opts.slots.enemyHeight ?? 4.1 };
@@ -617,7 +619,8 @@ export class PaintedStage implements BattleStage {
   }
 
   /** Swap a combatant's painting in place — form change, spherechange. */
-  async setArt(id: CombatantId, artId: string): Promise<void> {
+  async setArt(id: CombatantId, baseArtId: string): Promise<void> {
+    const artId = inArtNamespace(this.opts.slots.artNamespace, baseArtId); // a spherechange stays inside the scene's art namespace
     const staged = this.actors.get(id);
     if (!staged || staged.artId === artId) return;
     staged.artId = artId;

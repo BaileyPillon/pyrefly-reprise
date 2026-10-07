@@ -43,6 +43,8 @@ export const GARDEN_OF_PAIN = platesRoom('garden-of-pain', 'ffx', -50, [0.05, 0.
 export const FARPLANE = platesRoom('farplane', 'ffx2', -48, [0.01, 0.07, 0.17], undefined, 1, true);
 /** Chapter VI, Leblanc's last room (FFX-2; z -47). */
 export const LEBLANC_LAST_ROOM = platesRoom('leblanc-last-room', 'ffx2', -47, [0.1, 0.14, 0.26]);
+/** The experimental Leblanc chapter's room (FFX-2; `scenes/exp-leblanc-last-room.ts`): Chapter VI's, over its own plate; its depth map is `public/fx/exp-leblanc-last-room/` (a copy until the new plate's is derived). */
+export const EXP_LEBLANC_LAST_ROOM = platesRoom('exp-leblanc-last-room', 'ffx2', -47, [0.1, 0.14, 0.26]);
 /** Chapter XIII, the Via Infinito (FFX-2; z -50). */
 export const VIA_INFINITO = platesRoom('via-infinito', 'ffx2', -50, [0.07, 0.14, 0.22]);
 /** Chapter XIV, the Via Purifico (FFX; the painting stands at z -20 like Macalania's, so its plates take Macalania's z). */

@@ -3,7 +3,7 @@ import { loadArtManifest, manifestKnowsAssetNow } from '../../engine/ArtManifest
 import { artUrl } from '../../engine/PaintedArt.ts';
 import type { HideActorStep, SetPoseStep, ShowActorStep, StoryScript } from '../../story/dsl.ts';
 import {
-  cutsceneFigure,
+  cutsceneFigureIn,
   figureBox,
   figuresIn,
   type CutsceneFigure,
@@ -52,6 +52,11 @@ export interface CutsceneStageOptions {
   wait?: (ms: number) => Promise<void>;
   /** True while the scene is being skipped: effects are not worth drawing then. */
   skipping?: () => boolean;
+  /**
+   * The chapter's art namespace (`data/art/artNamespace.ts`; the experimental Leblanc chapter): a staged figure that namespace paints
+   * stands on its own painting (`cutsceneFigureIn`). Absent: the base art, exactly as always.
+   */
+  artNamespace?: string;
 }
 
 export class CutsceneStage {
@@ -109,7 +114,7 @@ export class CutsceneStage {
     // Their story-pose paintings too (D-301), once the manifest says they are installed, so a kneel is not a pop-in.
     void loadArtManifest().then(() => {
       for (const actor of actors) {
-        const fig = cutsceneFigure(actor);
+        const fig = this.figureOf(actor);
         for (const pose of Object.keys(fig?.poses ?? {}) as StoryPose[]) {
           const p = fig ? paintedPose(fig, pose) : undefined;
           if (p) new Image().src = artUrl(p.art);
@@ -131,7 +136,7 @@ export class CutsceneStage {
   // ------------------------------------------------------------------ ports
 
   showActor(step: ShowActorStep): Promise<void> {
-    const fig = cutsceneFigure(step.actor);
+    const fig = this.figureOf(step.actor);
     if (!fig) return Promise.resolve();
     const el = this.figureEl(step.actor);
     if (!el) return Promise.resolve();
@@ -163,7 +168,7 @@ export class CutsceneStage {
    * fades in already down. Every other figure: no-op, as it always was.
    */
   setPose(step: SetPoseStep): void {
-    const fig = cutsceneFigure(step.actor);
+    const fig = this.figureOf(step.actor);
     if (!fig) return;
     const painting = paintedPose(fig, step.state);
     if (!painting && !fig.stagesUnpaintedPoses && !this.figures.get(step.actor)?.classList.contains('is-painted-pose')) return;
@@ -259,8 +264,13 @@ export class CutsceneStage {
 
   /** Where an effect `at` an actor plays: on the staged figure, or mid-stage. */
   private anchor(at: string | undefined, w: number, h: number): FigureBox {
-    const fig: CutsceneFigure | undefined = at ? cutsceneFigure(at) : undefined;
+    const fig: CutsceneFigure | undefined = at ? this.figureOf(at) : undefined;
     return figureBox(fig, w, h);
+  }
+
+  /** The staged figure for `actor`: the base art's, or the chapter's art namespace's own painting of it (`cutsceneFigureIn`). */
+  private figureOf(actor: string): CutsceneFigure | undefined {
+    return cutsceneFigureIn(this.opts.artNamespace, actor);
   }
 
   private size(): { w: number; h: number } {
@@ -314,7 +324,7 @@ export class CutsceneStage {
   private figureEl(actor: string): HTMLElement | null {
     const existing = this.figures.get(actor);
     if (existing) return existing;
-    const fig = cutsceneFigure(actor);
+    const fig = this.figureOf(actor);
     if (!fig) return null;
     const doc = this.root.ownerDocument;
     const el = doc.createElement('div');

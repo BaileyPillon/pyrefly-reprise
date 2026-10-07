@@ -18,6 +18,8 @@
  * places in the two and a figure must never stand behind it.
  */
 
+import { EXP_FIGURE_METRICS } from '../../data/art/expFigureMetrics.ts';
+import { inArtNamespace } from '../../data/art/artNamespace.ts';
 import type { Step } from '../../story/dsl.ts';
 
 /** Where a figure stands, in fractions of the stage. */
@@ -277,6 +279,30 @@ export function cutsceneFigure(actor: string): CutsceneFigure | undefined {
   return Object.prototype.hasOwnProperty.call(CUTSCENE_FIGURES, actor) ? CUTSCENE_FIGURES[actor] : undefined;
 }
 
+/**
+ * {@link cutsceneFigure} inside an art namespace (`data/art/artNamespace.ts`; FFX-2's experimental Leblanc chapter, whose Leblanc, Ormi and
+ * Logos speak in their story scenes): the same figure, placed the same, standing on the namespace's own idle painting, with that painting's size,
+ * feet line and facing (`data/art/expFigureMetrics.ts`, generated from the namespace's idle sidecars). A figure the namespace does not paint,
+ * and no namespace at all, give the base figure exactly as it was.
+ */
+export function cutsceneFigureIn(namespace: string | undefined, actor: string): CutsceneFigure | undefined {
+  const base = cutsceneFigure(actor);
+  if (!base || !namespace) return base;
+  // `art/characters/<id>/idle.png`: the figure's own idle painting, whose folder is the art id (split, not matched: no pattern here names the extension).
+  const parts = base.art.split('/');
+  const own = parts.length === 4 && parts[0] === 'art' && parts[1] === 'characters' && parts[3] === 'idle.png' ? parts[2] : undefined;
+  const id = own ? inArtNamespace(namespace, own) : undefined;
+  const m = id ? EXP_FIGURE_METRICS[id] : undefined;
+  if (!id || !m) return base;
+  return {
+    ...base,
+    art: `art/characters/${id}/idle.png`,
+    aspect: m.width / m.height,
+    baseline: m.baselineY / m.height,
+    artFacing: m.facing === 'left' ? -1 : m.facing === 'right' ? 1 : base.artFacing,
+  };
+}
+
 /** A figure's box on a stage of `w` x `h` pixels. */
 export interface FigureBox {
   /** Centre x. */
@@ -312,7 +338,7 @@ export function figureBox(fig: CutsceneFigure | undefined, w: number, h: number)
   return { cx: p.x * w, top, feet, width, height };
 }
 
-/** Every staged figure a script brings on, so the screen can load them before the first frame. */
+/** Every staged figure a script brings on, so the screen can load them before the first frame. (Which actors are staged does not depend on the art namespace.) */
 export function figuresIn(script: readonly Step[]): string[] {
   const found = new Set<string>();
   const walk = (list: readonly Step[]): void => {

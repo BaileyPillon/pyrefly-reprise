@@ -1,0 +1,38 @@
+{
+ "artRoom": {
+  "id": "p_f948757e",
+  "version": 3,
+  "file": "p_f948757e-experimental-chapter-last-room-environme-v3.png",
+  "sha256": "2abfb94a437e0ba8d87a88c4de38666e84c787bcb2c303b07d95f920e2a33ee0",
+  "score": 8.8,
+  "approvedBy": "driver-delegated"
+ },
+ "scene": "exp-leblanc-last-room",
+ "size": [
+  2688,
+  1513
+ ],
+ "size2x": [
+  5376,
+  3026
+ ],
+ "files": {
+  "exp-leblanc-last-room.png": {
+   "size": [
+    2688,
+    1513
+   ],
+   "bytes": 4586700,
+   "sha256": "904910a2941c4fab85b26e539846a8529f1425526c9240669897641496b30551"
+  },
+  "exp-leblanc-last-room@2x.png": {
+   "size": [
+    5376,
+    3026
+   ],
+   "bytes": 15893397,
+   "sha256": "b9c48dee3931798f4c72d6417b57d62211f3d526dcda6d341280b80cc275d7a7"
+  }
+ },
+ "installedAt": "2026-10-06T21:02:32.187Z"
+}

@@ -1,0 +1,286 @@
+{
+ "base": "http://127.0.0.1:4190/",
+ "failures": [],
+ "steps": [
+  {
+   "k": "board",
+   "v": {
+    "selected": "exp-leblanc",
+    "selectedText": "EXPExperimental: Leblanc (new art)",
+    "cards": 19,
+    "strip": "0of 18 beaten/18"
+   }
+  },
+  {
+   "k": "check.board shows the experiment last and selected",
+   "v": {
+    "ok": true,
+    "detail": {
+     "selected": "exp-leblanc",
+     "selectedText": "EXPExperimental: Leblanc (new art)",
+     "cards": 19,
+     "strip": "0of 18 beaten/18"
+    }
+   }
+  },
+  {
+   "k": "check.\"of 18 beaten\" stays the eighteen",
+   "v": {
+    "ok": true,
+    "detail": "0of 18 beaten/18"
+   }
+  },
+  {
+   "k": "shot.2-chapter-select-experiment",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\final-2-chapter-select-experiment.png"
+  },
+  {
+   "k": "shot.3-party-prep",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\final-3-party-prep.png"
+  },
+  {
+   "k": "shot.4-cutscene",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\final-4-cutscene.png"
+  },
+  {
+   "k": "shot.5-battle-first-menu",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\final-5-battle-first-menu.png"
+  },
+  {
+   "k": "field",
+   "v": {
+    "chapter": "exp-leblanc",
+    "scene": "exp-leblanc-last-room",
+    "actors": [
+     {
+      "id": "yuna",
+      "art": "exp-leblanc-yuna-gunner",
+      "placeholder": false
+     },
+     {
+      "id": "rikku",
+      "art": "exp-leblanc-rikku-thief",
+      "placeholder": false
+     },
+     {
+      "id": "paine",
+      "art": "exp-leblanc-paine-warrior",
+      "placeholder": false
+     },
+     {
+      "id": "ormi-entrance",
+      "art": "exp-leblanc-ormi",
+      "placeholder": false
+     },
+     {
+      "id": "dr-goon",
+      "art": "exp-leblanc-ffx2-dr-goon",
+      "placeholder": false
+     },
+     {
+      "id": "fem-goon",
+      "art": "exp-leblanc-ffx2-fem-goon",
+      "placeholder": false
+     }
+    ]
+   }
+  },
+  {
+   "k": "check.the chapter and scene are the experiment's",
+   "v": {
+    "ok": true,
+    "detail": {
+     "chapter": "exp-leblanc",
+     "scene": "exp-leblanc-last-room",
+     "actors": [
+      {
+       "id": "yuna",
+       "art": "exp-leblanc-yuna-gunner",
+       "placeholder": false
+      },
+      {
+       "id": "rikku",
+       "art": "exp-leblanc-rikku-thief",
+       "placeholder": false
+      },
+      {
+       "id": "paine",
+       "art": "exp-leblanc-paine-warrior",
+       "placeholder": false
+      },
+      {
+       "id": "ormi-entrance",
+       "art": "exp-leblanc-ormi",
+       "placeholder": false
+      },
+      {
+       "id": "dr-goon",
+       "art": "exp-leblanc-ffx2-dr-goon",
+       "placeholder": false
+      },
+      {
+       "id": "fem-goon",
+       "art": "exp-leblanc-ffx2-fem-goon",
+       "placeholder": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "k": "check.every figure is read from the experimental namespace",
+   "v": {
+    "ok": true,
+    "detail": [
+     {
+      "id": "yuna",
+      "art": "exp-leblanc-yuna-gunner",
+      "placeholder": false
+     },
+     {
+      "id": "rikku",
+      "art": "exp-leblanc-rikku-thief",
+      "placeholder": false
+     },
+     {
+      "id": "paine",
+      "art": "exp-leblanc-paine-warrior",
+      "placeholder": false
+     },
+     {
+      "id": "ormi-entrance",
+      "art": "exp-leblanc-ormi",
+      "placeholder": false
+     },
+     {
+      "id": "dr-goon",
+      "art": "exp-leblanc-ffx2-dr-goon",
+      "placeholder": false
+     },
+     {
+      "id": "fem-goon",
+      "art": "exp-leblanc-ffx2-fem-goon",
+      "placeholder": false
+     }
+    ]
+   }
+  },
+  {
+   "k": "shot.7a-yuna-attack-start",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\final-7a-yuna-attack-start.png"
+  },
+  {
+   "k": "shot.7b-yuna-attack-hit",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\final-7b-yuna-attack-hit.png"
+  },
+  {
+   "k": "actors",
+   "v": [
+    "yuna"
+   ]
+  },
+  {
+   "k": "check.a party attack landed",
+   "v": {
+    "ok": true,
+    "detail": [
+     {
+      "from": "yuna",
+      "to": "dr-goon",
+      "amount": 96
+     }
+    ]
+   }
+  },
+  {
+   "k": "requests",
+   "v": {
+    "total": 163,
+    "experimental": 106,
+    "baseArtStillRead": [
+     "/art/characters/seymour-flux-body/idle.png",
+     "/art/characters/yuna-white-mage/idle.png",
+     "/art/characters/rikku-dark-knight/idle.png",
+     "/art/characters/paine-warrior/idle.png",
+     "/art/characters/paine-dark-knight/idle.png",
+     "/art/characters/yuna-gunner/idle.png",
+     "/art/characters/rikku-thief/idle.png",
+     "/art/characters/yuna-dark-knight/idle.png",
+     "/art/characters/rikku-alchemist/idle.png",
+     "/art/backdrops/zanarkand-dome.png",
+     "/art/characters/yunalesca-1/idle.png",
+     "/art/characters/braskas-final-aeon-1/idle.png",
+     "/art/backdrops/macalania-temple.png",
+     "/art/characters/anima/idle.png",
+     "/art/backdrops/evrae-airship-deck.png",
+     "/art/characters/evrae/idle.png",
+     "/art/backdrops/cavern-stolen-fayth.png",
+     "/art/characters/yojimbo-cavern/idle.png",
+     "/art/backdrops/bevelle-highbridge.png",
+     "/art/characters/seymour-natus/idle.png",
+     "/art/backdrops/garden-of-pain.png",
+     "/art/characters/seymour-omnis/idle.png",
+     "/art/backdrops/via-purifico.png",
+     "/art/characters/isaaru/idle.png",
+     "/art/backdrops/sin-fahrenheit-flight.png",
+     "/art/characters/sin-left-fin/idle.png",
+     "/art/backdrops/sin-fahrenheit-bevelle.png",
+     "/art/characters/overdrive-sin/idle.png",
+     "/art/backdrops/bevelle-underground.png",
+     "/art/characters/ffx2-bahamut/idle.png",
+     "/art/backdrops/farplane.png",
+     "/art/characters/vegnagun-body/idle.png",
+     "/art/backdrops/leblanc-last-room.png",
+     "/art/characters/leblanc/idle.png",
+     "/art/backdrops/road-to-the-farplane.png",
+     "/art/characters/x2-shiva/idle.png",
+     "/art/backdrops/via-infinito.png",
+     "/art/characters/trema/idle.png",
+     "/art/backdrops/den-of-woe.png",
+     "/art/characters/baralai-shade/idle.png",
+     "/art/backdrops/djose-chamber-provisional.png",
+     "/art/characters/x2-ixion/idle.png",
+     "/art/characters/x2-anima/idle.png",
+     "/art/characters/nooj-shade/idle.png",
+     "/art/characters/gippal-shade/idle.png",
+     "/art/backdrops/gagazet.json",
+     "/art/backdrops/gagazet.png",
+     "/art/characters/seymour-flux-body/idle.json",
+     "/art/characters/mortiorchis/idle.json",
+     "/art/characters/mortiorchis/idle.png",
+     "/art/characters/tidus/idle.json",
+     "/art/characters/tidus/idle.png",
+     "/art/characters/yuna/idle.json",
+     "/art/characters/yuna/idle.png",
+     "/art/characters/kimahri/idle.json",
+     "/art/characters/kimahri/idle.png",
+     "/art/characters/ormi/idle.png"
+    ]
+   }
+  },
+  {
+   "k": "check.no fiend and no backdrop is read from the base art in battle (the story scenes' figures are the known exception)",
+   "v": {
+    "ok": true,
+    "detail": [
+     "/art/characters/leblanc/idle.png",
+     "/art/characters/ormi/idle.png"
+    ]
+   }
+  },
+  {
+   "k": "check.no console errors",
+   "v": {
+    "ok": true,
+    "detail": []
+   }
+  },
+  {
+   "k": "check.no 404s",
+   "v": {
+    "ok": true,
+    "detail": []
+   }
+  }
+ ]
+}

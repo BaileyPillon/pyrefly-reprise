@@ -181,6 +181,7 @@ describe('A-7 plates-only rooms (game-aware)', () => {
     'dreams-end': 'ffx',
     'garden-of-pain': 'ffx',
     'leblanc-last-room': 'ffx2',
+    'exp-leblanc-last-room': 'ffx2', // the Leblanc preview's own plate (2026-10-06), Chapter VI's room over it
     'via-infinito': 'ffx2',
     'den-of-woe': 'ffx2',
     farplane: 'ffx2',

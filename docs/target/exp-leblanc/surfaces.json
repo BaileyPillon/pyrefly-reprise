@@ -1,0 +1,526 @@
+{
+ "portraits": {
+  "yuna-x2": {
+   "file": "portraits/exp-leblanc-yuna-x2.png",
+   "size": [
+    832,
+    1216
+   ],
+   "artRoom": {
+    "id": "p_d0de9505",
+    "version": 2,
+    "score": 8.7,
+    "approvedBy": "auto-pose",
+    "sha256": "25b28958b4e1a37de48e5d9ad69ba48af5d23fbeb84d5d266fda6530023c3841"
+   },
+   "source": {
+    "file": "p_d0de9505-experimental-chapter-dialogue-portrait-t-v2.png",
+    "size": [
+     1024,
+     1536
+    ]
+   },
+   "trim": {
+    "how": "bottom",
+    "firstRow": 0,
+    "rows": 32
+   },
+   "matte": {
+    "how": "key",
+    "background": [
+     123,
+     123,
+     123
+    ],
+    "noise": 11.6,
+    "tFg": 34.7,
+    "enclosedGaps": 7,
+    "chokePx": 1,
+    "featherSigma": 0.75,
+    "pockets": "flat",
+    "haloPeel": 6,
+    "haloPeeledPx": 955,
+    "chromaTol": 14,
+    "rimPx": 0,
+    "hazePixels": 4281
+   },
+   "transparentShare": 0.0826,
+   "outSha256": "4f2fb98b82d034ef3bcfff653d2658bf3167b4c905f1c0856d73bdeeb20a4792",
+   "installedAt": "2026-10-07T00:14:41.204Z"
+  },
+  "rikku-x2": {
+   "file": "portraits/exp-leblanc-rikku-x2.png",
+   "size": [
+    832,
+    1216
+   ],
+   "artRoom": {
+    "id": "p_b0849d8b",
+    "version": 3,
+    "score": 8.7,
+    "approvedBy": "auto-pose",
+    "sha256": "44a337855f87760bf5caa70233d0e457584518674fa5b4f7409184718b57d3ed"
+   },
+   "source": {
+    "file": "p_b0849d8b-experimental-chapter-dialogue-portrait-t-v3.png",
+    "size": [
+     1024,
+     1536
+    ]
+   },
+   "trim": {
+    "how": "bottom",
+    "firstRow": 0,
+    "rows": 32
+   },
+   "matte": {
+    "how": "key",
+    "background": [
+     128,
+     128,
+     128
+    ],
+    "noise": 13.9,
+    "tFg": 41.8,
+    "enclosedGaps": 12,
+    "chokePx": 1,
+    "featherSigma": 0.75,
+    "pockets": "flat",
+    "haloPeel": 6,
+    "haloPeeledPx": 3592,
+    "chromaTol": 14,
+    "rimPx": 0,
+    "hazePixels": 4900
+   },
+   "transparentShare": 0.0598,
+   "outSha256": "b42b46dec10c8bb4262bbb9bbd7b14f8020f819f4eafceaca9ed6fcccbcc0f36",
+   "installedAt": "2026-10-07T00:14:43.842Z"
+  },
+  "paine": {
+   "file": "portraits/exp-leblanc-paine.png",
+   "size": [
+    832,
+    1216
+   ],
+   "artRoom": {
+    "id": "p_8baf5d6e",
+    "version": 3,
+    "score": 8.6,
+    "approvedBy": "auto-pose",
+    "sha256": "971162655f3b70a8a9809bfea39dd4e67ae84d0e40cc49ef5444c00ec30fcf18"
+   },
+   "source": {
+    "file": "p_8baf5d6e-experimental-chapter-dialogue-portrait-t-v3.png",
+    "size": [
+     1024,
+     1536
+    ]
+   },
+   "trim": {
+    "how": "bottom",
+    "firstRow": 0,
+    "rows": 32
+   },
+   "matte": {
+    "how": "key",
+    "background": [
+     125,
+     125,
+     125
+    ],
+    "noise": 10.5,
+    "tFg": 31.5,
+    "enclosedGaps": 11,
+    "chokePx": 1,
+    "featherSigma": 0.75,
+    "pockets": "flat",
+    "haloPeel": 6,
+    "haloPeeledPx": 4796,
+    "chromaTol": 14,
+    "rimPx": 0,
+    "hazePixels": 5854
+   },
+   "transparentShare": 0.1956,
+   "outSha256": "d085f5a244b9378b742929fee6c3c1df86cc45098d8f9852866431f40acb86da",
+   "installedAt": "2026-10-07T00:14:46.182Z"
+  },
+  "leblanc": {
+   "file": "portraits/exp-leblanc-leblanc.png",
+   "size": [
+    832,
+    1216
+   ],
+   "artRoom": {
+    "id": "p_ac07a50d",
+    "version": 3,
+    "score": 8.6,
+    "approvedBy": "auto-pose",
+    "sha256": "908f67f95e4484be58009624f34129581f3cf24e50357e10db986225d7842a22"
+   },
+   "source": {
+    "file": "p_ac07a50d-experimental-chapter-dialogue-portrait-t-v3.png",
+    "size": [
+     1024,
+     1536
+    ]
+   },
+   "trim": {
+    "how": "bottom",
+    "firstRow": 0,
+    "rows": 32
+   },
+   "matte": {
+    "how": "key",
+    "background": [
+     121,
+     121,
+     121
+    ],
+    "noise": 13.5,
+    "tFg": 40.4,
+    "enclosedGaps": 28,
+    "chokePx": 1,
+    "featherSigma": 0.75,
+    "pockets": "tinted",
+    "haloPeel": 6,
+    "haloPeeledPx": 6635,
+    "chromaTol": 14,
+    "rimPx": 1,
+    "hazePixels": 4434
+   },
+   "transparentShare": 0.1991,
+   "outSha256": "2bd8ef55d4dcbfa1520e194f5d57e1797e51257b104c66bd6967cae44fc537ad",
+   "installedAt": "2026-10-07T00:14:48.777Z"
+  },
+  "logos": {
+   "file": "portraits/exp-leblanc-logos.png",
+   "size": [
+    832,
+    1216
+   ],
+   "artRoom": {
+    "id": "p_de3e27cd",
+    "version": 3,
+    "score": 8.6,
+    "approvedBy": "auto-pose",
+    "sha256": "cff2ebbf48f3646f5bfbf5fc5ebae4e394e997b31138f0125e8c8ca2f588a4a4"
+   },
+   "source": {
+    "file": "p_de3e27cd-experimental-chapter-dialogue-portrait-l-v3.png",
+    "size": [
+     1024,
+     1536
+    ]
+   },
+   "trim": {
+    "how": "bottom",
+    "firstRow": 0,
+    "rows": 32
+   },
+   "matte": {
+    "how": "key",
+    "background": [
+     217,
+     163,
+     68
+    ],
+    "noise": 7.5,
+    "tFg": 26,
+    "enclosedGaps": 3,
+    "chokePx": 1,
+    "featherSigma": 0.75,
+    "pockets": "flat",
+    "haloPeel": 6,
+    "haloPeeledPx": 1,
+    "chromaTol": 14,
+    "rimPx": 0,
+    "hazePixels": 3627
+   },
+   "transparentShare": 0.1914,
+   "outSha256": "4b7ffc4747508d2ed2b747b85c142fb75e8ac3d7daaeb7620056a6f62e56f9f6",
+   "installedAt": "2026-10-07T00:14:51.108Z"
+  },
+  "ormi": {
+   "file": "portraits/exp-leblanc-ormi.png",
+   "size": [
+    832,
+    1216
+   ],
+   "artRoom": {
+    "id": "p_d4aee16e",
+    "version": 3,
+    "score": 8.6,
+    "approvedBy": "auto-pose",
+    "sha256": "2a2fa8a1796199149b45241cc159075a29ff313bdc57e839b418fec1a2525265"
+   },
+   "source": {
+    "file": "p_d4aee16e-experimental-chapter-dialogue-portrait-o-v3.png",
+    "size": [
+     1024,
+     1536
+    ]
+   },
+   "trim": {
+    "how": "bottom",
+    "firstRow": 0,
+    "rows": 32
+   },
+   "matte": {
+    "how": "key",
+    "background": [
+     125,
+     124,
+     124
+    ],
+    "noise": 7.1,
+    "tFg": 26,
+    "enclosedGaps": 5,
+    "chokePx": 1,
+    "featherSigma": 0.75,
+    "pockets": "flat",
+    "haloPeel": 6,
+    "haloPeeledPx": 818,
+    "chromaTol": 14,
+    "rimPx": 0,
+    "hazePixels": 3624
+   },
+   "transparentShare": 0.1615,
+   "outSha256": "2f0949c4472cc8d1221c0e598147e0f9259bbc4ab3babdf412c4324d97864727",
+   "installedAt": "2026-10-07T00:14:53.895Z"
+  },
+  "brother-x2": {
+   "file": "portraits/exp-leblanc-brother-x2.png",
+   "size": [
+    832,
+    1216
+   ],
+   "artRoom": {
+    "id": "p_9cfc5a29",
+    "version": 7,
+    "score": 8.6,
+    "approvedBy": "driver-delegated",
+    "sha256": "22847cb0f023c3d6eeb0a1ed1da1d905fa18c24f39b4e04895011771fcf6d6d1"
+   },
+   "source": {
+    "file": "p_9cfc5a29-experimental-chapter-dialogue-portrait-b-v7.png",
+    "size": [
+     1037,
+     1516
+    ]
+   },
+   "trim": {
+    "how": "bottom",
+    "firstRow": 0,
+    "rows": 0
+   },
+   "matte": {
+    "how": "key",
+    "background": [
+     125,
+     125,
+     125
+    ],
+    "noise": 8.7,
+    "tFg": 26.2,
+    "enclosedGaps": 0,
+    "chokePx": 1,
+    "featherSigma": 0.75,
+    "pockets": "flat",
+    "haloPeel": 6,
+    "haloPeeledPx": 3065,
+    "chromaTol": 14,
+    "rimPx": 1,
+    "hazePixels": 2921
+   },
+   "transparentShare": 0.1788,
+   "outSha256": "c5e55d8aa613ee8b3f853e87524a31366ef67be154bdd7fb88e54c00911d051d",
+   "installedAt": "2026-10-07T00:14:56.237Z"
+  }
+ },
+ "pause": {
+  "leblanc": {
+   "files": [
+    "pause/exp-leblanc-leblanc.png",
+    "pause/exp-leblanc-leblanc.2x.webp",
+    "pause/exp-leblanc-leblanc.json"
+   ],
+   "focal": {
+    "x": 0.52,
+    "y": 0.38
+   },
+   "artRoom": {
+    "id": "p_8672844a",
+    "version": 3,
+    "score": 8.7,
+    "approvedBy": "auto-pose",
+    "sha256": "10fa6254e590d7954493714fbc343845ee3e960919c15d8e356bce88e547017c"
+   },
+   "source": {
+    "file": "p_8672844a-experimental-chapter-pause-close-up-the--v3.png",
+    "size": [
+     1659,
+     948
+    ]
+   },
+   "crop": {
+    "box": [
+     0,
+     0,
+     1659,
+     948
+    ],
+    "columnsTrimmed": 0,
+    "rowsTrimmed": 0
+   },
+   "sizes": {
+    "exp-leblanc-leblanc.2x.webp": [
+     2688,
+     1536
+    ],
+    "exp-leblanc-leblanc.png": [
+     1344,
+     768
+    ]
+   },
+   "installedAt": "2026-10-07T00:15:07.526Z"
+  },
+  "rikku-ffx2": {
+   "files": [
+    "pause/exp-leblanc-rikku-ffx2.png",
+    "pause/exp-leblanc-rikku-ffx2.2x.webp",
+    "pause/exp-leblanc-rikku-ffx2.json"
+   ],
+   "focal": {
+    "x": 0.54,
+    "y": 0.48
+   },
+   "artRoom": {
+    "id": "p_808ad911",
+    "version": 3,
+    "score": 8.4,
+    "approvedBy": "auto-pose",
+    "sha256": "4462ac1c6d6934c78a415a8d85e7f8a943347491fbe4c089db492739a5673e5f"
+   },
+   "source": {
+    "file": "p_808ad911-experimental-chapter-pause-close-up-the--v3.png",
+    "size": [
+     1660,
+     948
+    ]
+   },
+   "crop": {
+    "box": [
+     0,
+     0,
+     1659,
+     948
+    ],
+    "columnsTrimmed": 1,
+    "rowsTrimmed": 0
+   },
+   "sizes": {
+    "exp-leblanc-rikku-ffx2.2x.webp": [
+     2688,
+     1536
+    ],
+    "exp-leblanc-rikku-ffx2.png": [
+     1344,
+     768
+    ]
+   },
+   "installedAt": "2026-10-07T00:15:15.237Z"
+  },
+  "yuna-ffx2": {
+   "files": [
+    "pause/exp-leblanc-yuna-ffx2.png",
+    "pause/exp-leblanc-yuna-ffx2.2x.webp",
+    "pause/exp-leblanc-yuna-ffx2.json"
+   ],
+   "focal": {
+    "x": 0.5,
+    "y": 0.27
+   },
+   "artRoom": {
+    "id": "p_e33f7e7b",
+    "version": 3,
+    "score": 8.6,
+    "approvedBy": "auto-pose",
+    "sha256": "8eafdc1053093e5c4567aefb40e6a4f0affa6312d3c3962e76bab2fadb462cc0"
+   },
+   "source": {
+    "file": "p_e33f7e7b-experimental-chapter-pause-close-up-the--v3.png",
+    "size": [
+     1659,
+     948
+    ]
+   },
+   "crop": {
+    "box": [
+     0,
+     0,
+     1659,
+     948
+    ],
+    "columnsTrimmed": 0,
+    "rowsTrimmed": 0
+   },
+   "sizes": {
+    "exp-leblanc-yuna-ffx2.2x.webp": [
+     2688,
+     1536
+    ],
+    "exp-leblanc-yuna-ffx2.png": [
+     1344,
+     768
+    ]
+   },
+   "installedAt": "2026-10-07T00:15:23.141Z"
+  },
+  "paine": {
+   "files": [
+    "pause/exp-leblanc-paine.png",
+    "pause/exp-leblanc-paine.2x.webp",
+    "pause/exp-leblanc-paine.json"
+   ],
+   "focal": {
+    "x": 0.35,
+    "y": 0.4
+   },
+   "artRoom": {
+    "id": "p_98c6b3ac",
+    "version": 1,
+    "score": 8.4,
+    "approvedBy": "auto-pose",
+    "sha256": "0e7c168f5dba10f0c1984884ab93944433b57ce88b319584550a24afd3c936c9"
+   },
+   "source": {
+    "file": "p_98c6b3ac-experimental-chapter-pause-close-up-the--v1.png",
+    "size": [
+     1672,
+     941
+    ]
+   },
+   "crop": {
+    "box": [
+     12,
+     0,
+     1659,
+     941
+    ],
+    "columnsTrimmed": 25,
+    "rowsTrimmed": 0
+   },
+   "sizes": {
+    "exp-leblanc-paine.2x.webp": [
+     2688,
+     1536
+    ],
+    "exp-leblanc-paine.png": [
+     1344,
+     768
+    ]
+   },
+   "installedAt": "2026-10-07T00:15:30.727Z"
+  }
+ }
+}

@@ -1,7 +1,7 @@
 import { Group, Vector3 } from 'three';
 import { Backdrop, type BackdropOptions } from '../engine/Backdrop.ts';
 import type { CameraRig } from '../engine/BattleCamera.ts';
-import { LightRig, makeLightPool } from '../engine/Lighting.ts';
+import { LightRig, makeLightPool, type LightRigOptions } from '../engine/Lighting.ts';
 import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts';
 import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
@@ -158,19 +158,57 @@ export const LEBLANC_LAST_ROOM_SLOTS: SceneSlots = {
 };
 
 /**
+ * Which painting a Last Room draws, and the art namespace its figures come from (`src/data/art/artNamespace.ts`). Chapter VI's is
+ * `{ key: 'leblanc-last-room' }` (no namespace: every id resolves as it always did); the experimental chapter's
+ * (`./exp-leblanc-last-room.ts`) is its own plate and the `exp-leblanc` namespace.
+ */
+export interface LeblancPlate {
+  readonly key: string;
+  readonly artNamespace?: string;
+  /** The room's light, grade and floor, for a plate painted differently from Chapter VI's. Absent: Chapter VI's, exactly as it always was. */
+  readonly look?: LeblancPlateLook;
+}
+
+/** What a different plate changes about the room's look (each field replaces Chapter VI's value; the experimental chapter's is `./exp-leblanc-last-room.ts`). */
+export interface LeblancPlateLook {
+  /** The grade (`ScenePalettes`). */
+  readonly palette?: ScenePalette;
+  /** The 3D floor: Chapter VI's is a tinted plane that fades out; a plate with a floor worth showing takes `{ shadowOnly: true }`. */
+  readonly ground?: BackdropOptions['ground'];
+  readonly fog?: BackdropOptions['fog'];
+  readonly fogPlanes?: BackdropOptions['fogPlanes'];
+  /** The flat colour behind the plate, which a held shot (a push-in past the plate's edge) can show; Chapter VI's is a near-black violet. */
+  readonly background?: number;
+  /** Light-rig fields over the room's own (key, rim, fill and ambient strength, the rim colour). */
+  readonly lights?: Partial<Omit<LightRigOptions, 'palette'>>;
+  /** The floor pools under the party (one each) and under the trio (one shared). */
+  readonly pools?: { readonly party?: { readonly color: number; readonly opacity: number }; readonly trio?: { readonly color: number; readonly opacity: number } };
+  /** The dust in the air. */
+  readonly dust?: { readonly colors: number[]; readonly opacity: number };
+}
+
+const BASE_PLATE: LeblancPlate = { key: 'leblanc-last-room' };
+
+/**
  * **Heart of the Syndicate**, as a {@link SceneFactory}. Owns no actors — see
  * `docs/ENGINE-API.md#scene-builder-contract`.
  */
-export const buildLeblancLastRoomScene: SceneFactory = async (
-  opts: SceneBuildOptions = {},
-): Promise<SceneBuild> => {
+export const buildLeblancLastRoomScene: SceneFactory = (opts: SceneBuildOptions = {}): Promise<SceneBuild> => buildLastRoom(BASE_PLATE, opts);
+
+/** The same room (rigs, slots, lights, particles) over another plate and art namespace. Game case: FFX-2 only. */
+export function makeLeblancLastRoomScene(plate: LeblancPlate): SceneFactory {
+  return (opts: SceneBuildOptions = {}): Promise<SceneBuild> => buildLastRoom(plate, opts);
+}
+
+async function buildLastRoom(plate: LeblancPlate, opts: SceneBuildOptions): Promise<SceneBuild> {
   const group = new Group();
-  group.name = 'scene:leblanc-last-room';
+  group.name = `scene:${plate.key}`;
   const low = opts.quality === 'low';
   const cameraRef = opts.cameraRef ?? CAMERA_REF;
+  const look = plate.look ?? {}; // Chapter VI's room has none: every field below falls back to what it always was
 
   // ---------------------------------------------------------------- backdrop
-  const url = artUrl('art/backdrops/leblanc-last-room.png');
+  const url = artUrl(`art/backdrops/${plate.key}.png`);
 
   const backdropOptions = {
     url,
@@ -203,7 +241,7 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
     },
     // The painting already carries its own amber floor light; the 3D ground is
     // only there to catch the actors' shadows and dissolve into it.
-    ground: {
+    ground: look.ground ?? {
       size: 42,
       repeat: 4,
       tintMix: 0.1,
@@ -212,12 +250,12 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
       fadeCore: 0.06,
       center: [0, -1.6] as [number, number],
     },
-    fog: { near: 15, far: 44, colorMix: 0.22 },
-    fogPlanes: [
+    fog: look.fog ?? { near: 15, far: 44, colorMix: 0.22 },
+    fogPlanes: look.fogPlanes ?? [
       { z: -26, y: 3.2, width: 60, height: 16, opacity: 0.14, speed: 0.008 },
       { z: -14, y: 1.6, width: 36, height: 8, opacity: 0.1, speed: 0.02, additive: true },
     ],
-    background: 0x160f24,
+    background: look.background ?? 0x160f24,
   } satisfies BackdropOptions;
 
   let backdrop = await Backdrop.create(backdropOptions);
@@ -237,6 +275,7 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
     ambientIntensity: 0.62,
     luma: { key: 0.82, fill: 0.62, rim: 0.86, ambient: 0.52 },
     shadows: low ? false : { mapSize: 1024, area: 14, radius: 3.4, bias: -0.0013 },
+    ...(look.lights ?? {}),
   });
   group.add(lights.group);
 
@@ -253,13 +292,13 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
     ParticlePresets.snow({
       count: Math.round(90 * k),
       bounds: { x: 6, y: 3, z: 5 },
-      colors: [0xffd9a8, 0xffe9c8, 0xffffff],
+      colors: look.dust?.colors ?? [0xffd9a8, 0xffe9c8, 0xffffff],
       size: 2.6,
       drift: [0.02, -0.06, 0],
       wobble: [0.2, 0.08, 0.16],
       wobbleSpeed: 0.4,
       twinkle: 0.15,
-      opacity: 0.35,
+      opacity: look.dust?.opacity ?? 0.35,
       additive: false,
       hardness: 0.5,
       gravity: 0,
@@ -273,14 +312,14 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
   // ------------------------------------------------------------- light pools
   const pools = [
     ...PARTY_SLOTS.slice(0, 3).map((s) => {
-      const pool = makeLightPool({ color: 0xffcf9e, radius: 1.05, opacity: 0.15 });
+      const pool = makeLightPool({ color: look.pools?.party?.color ?? 0xffcf9e, radius: 1.05, opacity: look.pools?.party?.opacity ?? 0.15 });
       pool.position.set(s[0], 0.02, s[2]);
       return pool;
     }),
     (() => {
       // One shared magenta pool under the trio, centred on Leblanc's own
       // slot — the picture's own floor spotlight is already there.
-      const pool = makeLightPool({ color: 0xff8fd6, radius: 3.1, opacity: 0.2 });
+      const pool = makeLightPool({ color: look.pools?.trio?.color ?? 0xff8fd6, radius: 3.1, opacity: look.pools?.trio?.opacity ?? 0.2 });
       const s = ENEMY_SLOTS[0]!;
       pool.position.set(s[0], 0.018, s[2] + 1.0);
       pool.name = 'trio-pool';
@@ -332,8 +371,9 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
     partyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna,
     enemyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc,
     enemyLaneX: LEBLANC_ENEMY_LANE_X,
+    ...(plate.artNamespace ? { artNamespace: plate.artNamespace } : {}),
     palette: {
-      ...ScenePalettes.chateauLeblanc,
+      ...(look.palette ?? ScenePalettes.chateauLeblanc),
     } satisfies ScenePalette,
     update(dt: number): void {
       clock += dt;
@@ -359,4 +399,4 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
     },
   };
   return build;
-};
+}

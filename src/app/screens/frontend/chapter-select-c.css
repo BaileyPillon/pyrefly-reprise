@@ -204,6 +204,9 @@
 .fe-card--cleared .fe-card__name { right: calc(52 * var(--fe-k)); }
 /* PR-0275: one step down for a long title, so it fits its line (cleared card included) with no ellipsis. */
 .fe-card__name--long { font-size: max(var(--fe-fs-floor), calc(18 * var(--fe-k))); }
+/* The Leblanc preview's title ("Experimental: Leblanc (new art)", 31 characters, over 28): the rail card and the hero step down once more, so neither wraps over the numeral nor ends in an ellipsis. */
+.fe-card__name--xlong { font-size: max(var(--fe-fs-floor), calc(14 * var(--fe-k))); }
+.fe-hero__name--xlong { font-size: max(var(--fe-fs-floor), calc(40 * var(--fe-k))); }
 
 /* ----------------------------------------- the progress strip, flat pips */
 
@@ -327,6 +330,7 @@
 /* ------------------------------------------------------------- the phone */
 
 @media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  .fe-hero__name--xlong { font-size: max(var(--fe-fs-floor), calc(24 * var(--fe-k))); }
   .cs-strip {
     position: relative;
     left: auto;

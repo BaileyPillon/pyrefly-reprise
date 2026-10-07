@@ -87,6 +87,13 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
     cite: `${PRES}, Chateau Leblanc [single source]: "Indoor dust at most. No pyreflies."`,
     treatment: "D-225: the magenta and cyan glow motes are removed; the warm dust stays",
   },
+  // The experimental Leblanc chapter (FFX-2 only; `scenes/exp-leblanc-last-room.ts`): Chapter VI's room over its own plate, so Chapter VI's row.
+  'exp-leblanc-last-room': {
+    game: 'ffx2',
+    verdict: 'absent',
+    cite: `${PRES}, Chateau Leblanc [single source]: "Indoor dust at most. No pyreflies."`,
+    treatment: "D-225, as Chapter VI: no glow motes; the warm dust stays",
+  },
   gagazet: {
     game: 'ffx',
     verdict: 'unattested',

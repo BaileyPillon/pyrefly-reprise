@@ -3,6 +3,7 @@ import type { PoseRegistrationRow, PoseRegistrationTable } from '../data/art/pos
 import { POSE_REGISTRATION_FFX } from '../data/art/poseRegistrationFfx.ts';
 import { POSE_REGISTRATION_FFX2 } from '../data/art/poseRegistrationFfx2.ts';
 import { POSE_REGISTRATION_FOES } from '../data/art/poseRegistrationFoes.ts';
+import { POSE_REGISTRATION_EXP } from '../data/art/poseRegistrationExp.ts';
 
 /**
  * **One figure, one size and one stance in every pose** (release 39 pose registration; both games).
@@ -32,6 +33,7 @@ export const POSE_REGISTRATION: PoseRegistrationTable = {
   ...POSE_REGISTRATION_FFX,
   ...POSE_REGISTRATION_FFX2,
   ...POSE_REGISTRATION_FOES,
+  ...POSE_REGISTRATION_EXP, // the experimental Leblanc chapter's paintings, `exp-leblanc-<subject>` (`tools/exp-art-table.mjs`)
 };
 
 const CHARACTER_POSE = /\/art\/characters\/([^/]+)\/([^/.?#]+)\.png(?:[?#].*)?$/;

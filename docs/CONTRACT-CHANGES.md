@@ -6,6 +6,12 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-06 (later) — The experimental Leblanc chapter is hidden: no board card, reached by its word (FFX-2 only; behaviour, no type changes)
+
+Branch `exp-leblanc`. `src/data/encounters.ts` (a contract file) changes in comments only: `EXPERIMENT_CHAPTERS` still lists the experiment and `getChapter` still finds it, but chapter select no longer builds a card for it
+(`chapterGrid.ts`'s `experiments` registry defaults to none), so the board is the eighteen again; typing the word on the board opens it, as "limit" opens FF7's (`app/screens/frontend/leblancDoor.ts`,
+the shared `WordDoor` of `secretDoor.ts`). Bailey: "put the experimental new chapter in the live build but make it hidden like you did with ff7"; the word "leblanc". Tests: `tests/unit/exp-leblanc-door.test.ts`.
+
 ## 2026-10-06 — A Retry from a hopeless checkpoint: `EnemyGroupDef.hopelessRetry` (branch `r392-trema`, PR-0407; FFX-2 only in effect; additive)
 
 Critic round 23's finding PR-0407: a loss to Trema retries at Trema (TR5 b) in Paragon's end state, and with one girl standing there the engine measured 0 wins in 200 Retries. Handoff: [r392-trema](handoff/r392-trema.md).
@@ -15,6 +21,16 @@ Critic round 23's finding PR-0407: a loss to Trema retries at Trema (TR5 b) in P
   the setup the link opens on, and `resumeSetup` gives a `'restore'` Retry the formation with `restoresPartyOnEntry: true` (the engine's own Save Sphere rule, `battle/ffx2/setup.ts`). The first entry into the link is never changed.
 - New exports in `BattleChainCheckpoint.ts`: `standingIn(setup)`, `hopelessAt(group, setup)`. The shipped answer is `TREMA_HOPELESS_RETRY` in `src/data/ffx2/enemies/trema.ts` (`'restore'`, adopted by Bailey on 2026-10-06 at 18:41 EDT, D-506;
   `'carry'` is the old behaviour).
+
+## 2026-10-06 — The experimental Leblanc chapter: `ChapterId` 'exp-leblanc', `Chapter.number` 19, `EXPERIMENT_CHAPTERS`, `SceneStaging.artNamespace` (FFX-2 only; additive)
+
+Branch `exp-leblanc` (never merged, never deployed to production; the Cloudflare PREVIEW worker only). `src/data/encounters.ts` (a contract file) gains: `'exp-leblanc'` in `ChapterId` (and out of
+`ListedChapterId`, so it is in no `SaveData.chapters` table), `19` in `Chapter.number`, `EXPERIMENT_CHAPTERS` (the experiments with a card after the eighteen; `getChapter` finds them; `CHAPTERS` and
+`CHAPTER_IDS` stay the eighteen), and the `experimental` flag's comment (an experiment's attempts and clears go to `app/experiments/experimentRecords.ts`, never the save; FF7's is hidden and has its own
+flow, the FFX-2 preview has a card and plays through the chapters' own flow, `BattleScreenFlow.playChapter` handing it `experimentProgress` in place of the save). `src/scenes/types.ts` (`SceneStaging`):
+`artNamespace?`, the art namespace a scene's figures are read from (`src/data/art/artNamespace.ts`: the stage prefixes every art id it resolves; unset everywhere else, so every other chapter resolves
+exactly as before). The chapter record is Chapter VI's by reference with its own id, number, title and `sceneKey` (`src/data/chapter-exp-leblanc.ts`). Handoff: [exp-leblanc](handoff/exp-leblanc.md).
+Game case: FFX-2 only (the mechanism is shared plumbing, both games, with one user).
 
 ## 2026-10-06 — REDUCE MOTION shortens the lunge; the boss reveal is measured through the lens shift: `CameraPort.frame`'s `lens`, `rigPose`/`frameFit`'s `lens`, `lungePlan`'s `LungeCtx` (release 39.2; both games for the lunge, FFX-2 desktop for the reveal; additive)
 
