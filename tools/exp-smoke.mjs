@@ -45,6 +45,9 @@ function arg(name, fallback) {
  * here, so a changed word changes this run too. On the last letter the door settles the board on the chapter with no sound and no sign, and the
  * standard flow opens party prep. A fresh profile's first-run guide takes the first key, so it is skipped first (and again if it was still up and
  * swallowed a letter). The board is measured BEFORE the word: eighteen cards, none of them the experiment, "of 18 beaten".
+ * The door must lead to PARTY PREP and leave the player there until Enter (release 39.3's F393-03: the word's last letter, C, is the board's START key, and party prep
+ * begins the fight on START, so the chapter used to skip prep and drop into the pre-battle scene; the door now takes that press). So the step asserts party prep, then lets
+ * it stand for a moment and asserts it is still the screen; a skip straight to the scene fails here, never later as "the scene came early".
  * `ctx` is `{ assertScreen, log, check, shot }` of the calling mode; `shotName` names the board's screenshot.
  */
 async function enterByWord(page, ctx, shotName) {
@@ -82,6 +85,9 @@ async function enterByWord(page, ctx, shotName) {
     await page.waitForTimeout(2200);
   }
   await assertScreen(page, 'party-prep');
+  await page.waitForTimeout(1500); // party prep waits for Enter: a START left over from the word's C would have begun the fight by now
+  const held = await screenNow();
+  check('party prep holds after the word (the door took the last letter\'s START press; the chapter did not skip to the scene)', held === 'party-prep', held);
 }
 
 function build() {
