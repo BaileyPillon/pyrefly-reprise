@@ -265,7 +265,7 @@ How a later round works (the commands are at the end of this section):
   It is a private comparison with the real game and is never copied into this repo, so it is not written here. Each preview opens with it, so the three voices say the same words as the real clip. The service wants at least 100 characters of preview text and the comparison lines are shorter,
   so each block adds lines from our own script (Chapter 1, `seymour-flux`; the speaker's own plain voiced lines, checked against the inventory). Wakka needs three of them, Seymour two.
 - **Where it lands:** `design-r2/<voice>/{A,B,C}.mp3` and `design.json`, beside the untouched `design/`. A live run refuses a folder that already holds a set unless `--overwrite` is added (a designed voice cannot be re-made exactly).
-- **Saving a pick:** `save-voice --round 2 --voice wakka --option B` reads `design-r2/`, names the voice `pyrefly-wakka-r2B` and keeps it as `r2B` in `voices.json`, so it never replaces a round-1 entry (on 2026-10-07 `voices.json` already held round 1's A, B and C for all seven pilot voices).
+- **Saving a pick:** `save-voice --round 2 --voice wakka --option B` reads `design-r2/`, names the voice `pyrefly-wakka-r2B` and keeps it as `r2B` in `voices.json`, so it never replaces an entry from an earlier round; every other key in `voices.json` is left as it is.
   A round-2 pick goes into `picks.json` under that key (`"wakka": "r2B"`); `tts` and `audition --scene` use it as they use `B`.
 - **Hearing it:** `audition --dir <candidates>` adds a "Round 2" section above the round-1 rows, with each speaker's real-game clip (the same embed as `voices-vs-ffx.html`) beside the three previews.
 
