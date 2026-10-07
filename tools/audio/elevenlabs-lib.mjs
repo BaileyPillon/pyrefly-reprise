@@ -129,6 +129,62 @@ export function previewTextFor(inv, voice, preferredIds = []) {
 }
 
 // ---------------------------------------------------------------------------
+// Design rounds. Round 1 is the first set of previews; a later round redesigns the voices that were not picked, in a folder of its
+// own, with previews that open with the speaker's comparison line so the three can be heard against the real clip.
+// ---------------------------------------------------------------------------
+
+/** Where a design round lands under <out>: design (round 1), design-r2, design-r3... A later round never writes into an earlier one's folder. */
+export const designDir = (round) => (round <= 1 ? 'design' : `design-r${round}`);
+/** The key a saved voice is kept under in voices.json and picks.json: A, B, C for round 1; r2A, r2B, r2C for round 2, so saving a later pick never replaces an earlier one. */
+export const saveKey = (round, option) => (round <= 1 ? option : `r${round}${option}`);
+
+/** True when `p` or any folder above it holds a .git entry (the comparison lines stay out of every repo, not only this one). */
+export function inGitRepo(p) {
+  for (let dir = path.resolve(p); ; dir = path.dirname(dir)) {
+    if (existsSync(path.join(dir, '.git'))) return true;
+    if (path.dirname(dir) === dir) return false;
+  }
+}
+
+/**
+ * The comparison lines a voice is judged against, by speaker: { speaker, line, videoId, t, verified }. The file is a private comparison
+ * kept in the candidates folder (outside every repo). It is read when a command runs and never copied into a repo, a doc or a game file.
+ */
+export function loadCompareLines(file) {
+  const p = path.resolve(file);
+  if (insideRepo(p) || inGitRepo(p)) throw new Error(`the comparison lines are a private comparison and never go in a repo (got ${p})`);
+  if (!existsSync(p)) throw new Error(`no comparison lines at ${p} (pass --compare-lines <file>, or --out <the candidates folder that holds compare-lines.json>)`);
+  const rows = JSON.parse(readFileSync(p, 'utf8'));
+  if (!Array.isArray(rows)) throw new Error(`${p} must be an array of { speaker, line, videoId, t }`);
+  const bySpeaker = new Map();
+  for (const row of rows) {
+    if (typeof row?.speaker !== 'string' || typeof row.line !== 'string' || !row.line.trim()) throw new Error(`${p}: every entry needs a "speaker" and a non-empty "line"`);
+    bySpeaker.set(row.speaker, row);
+  }
+  return bySpeaker;
+}
+
+/** The real-game clip of a comparison entry, checked before it goes into a page address: an 11-character video id and a whole second. Null when it has none. */
+export function clipOf(entry) {
+  if (!entry || !/^[A-Za-z0-9_-]{11}$/.test(entry.videoId ?? '') || !Number.isInteger(entry.t) || entry.t < 0) return null;
+  return { videoId: entry.videoId, t: entry.t, note: entry.verified === true ? 'verified from subtitle' : 'not verified' };
+}
+
+/** The lines named in a "preview-rN <voice>" block (ids, split on spaces or commas): this voice's own plain voiced lines in our inventory, never anything else. */
+export function padLinesFor(inv, voice, block) {
+  return String(block ?? '').split(/[\s,]+/).filter(Boolean).map((id) => {
+    const line = inv.byId.get(id);
+    if (!line) throw new Error(`${voice}: pad line "${id}" is not in docs/audio/voice-line-inventory.json`);
+    if (line.voice !== voice) throw new Error(`${voice}: pad line "${id}" is ${line.voice}'s, not ${voice}'s`);
+    if (line.voiced !== 'yes' || line.kind === 'fallback' || line.treatment) throw new Error(`${voice}: pad line "${id}" is not a plain voiced line`);
+    return line;
+  });
+}
+
+/** A later round's preview text: the comparison line first, then our own pad lines (the service wants 100 to 1000 characters and the comparison lines are shorter). */
+export const comparePreviewText = (entry, padLines) => [entry.line.trim(), ...padLines.map((l) => l.text)].join(' ');
+
+// ---------------------------------------------------------------------------
 // Requests
 // ---------------------------------------------------------------------------
 
@@ -188,17 +244,28 @@ export function readUsage(home = HOME) {
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
+/** m:ss for the second a clip starts at. */
+const stamp = (t) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
+/** The real-game clip beside a row, in the embed style of voices-vs-ffx.html: youtube-nocookie starting a second early and ending seven seconds on, and a link to the video. */
+const clipBlock = (c) => `<div class="real"><div class="lab">REAL FFX</div><iframe width="256" height="144" src="https://www.youtube-nocookie.com/embed/${esc(c.videoId)}?start=${Math.max(0, c.t - 1)}&amp;end=${c.t + 7}&amp;rel=0&amp;modestbranding=1&amp;playsinline=1" title="real FFX line" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=${esc(c.videoId)}&amp;t=${c.t}s">&#9654; open at ${stamp(c.t)}</a><div class="src"> &middot; ${esc(c.note)}</div></div>`;
+/** Extra rules for a page that has a section heading or a real-game clip; a page with neither is written exactly as before. */
+const CLIP_CSS = 'h2{margin:1.4em 0 .2em}.cols{display:grid;grid-template-columns:272px 1fr;gap:18px}@media(max-width:700px){.cols{grid-template-columns:1fr}}.lab{font-size:11px;letter-spacing:.08em;color:#9aa0ad;margin-bottom:6px}.real a{display:inline-block;background:#c9a24a;color:#14121b;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:6px}.src{font-size:12px;color:#9aa0ad;margin-top:6px}';
+
 /**
  * `groups`: [{ id, title, note, options: [{ label, file, caption }] }] is a row to pick one from (a radio group per row);
- * [{ id, title, note, scene: [{ speaker, text, file }] }] is a read-through with a button that plays it in order.
+ * the same with `clip: { videoId, t, note }` puts the real-game clip beside the options (see `clipOf`);
+ * [{ id, title, note, scene: [{ speaker, text, file }] }] is a read-through with a button that plays it in order;
+ * [{ heading, note }] is a section heading (a design round).
  * "Collect my picks" fills a textarea, as the other sections of docs/audio/audition.html do.
  */
 export function auditionHtml(title, groups) {
   const pickRow = (g) => `${g.options.map((o) => `<label class="opt"><input type="radio" name="${esc(g.id)}" value="${esc(o.label)}"><strong>${esc(o.label)}</strong> <audio controls preload="none" src="${esc(o.file)}"></audio> <span>${esc(o.caption ?? '')}</span></label>`).join('')}<label class="opt"><input type="radio" name="${esc(g.id)}" value="none"> none of these (say why in chat)</label>`;
   const sceneRow = (g) => `<button type="button" class="play">Play the scene in order</button><ol>${g.scene.map((l) => `<li><strong>${esc(l.speaker)}</strong> ${esc(l.text)} <audio controls preload="none" src="${esc(l.file)}"></audio></li>`).join('')}</ol>`;
-  const rows = groups.map((g) => `<section><h3>${esc(g.title)}</h3><p>${esc(g.note ?? '')}</p>${g.scene ? sceneRow(g) : pickRow(g)}</section>`).join('\n');
+  const pickBody = (g) => (g.clip ? `<div class="cols">${clipBlock(g.clip)}<div class="ours">${pickRow(g)}</div></div>` : pickRow(g));
+  const rows = groups.map((g) => (g.heading ? `<h2>${esc(g.heading)}</h2><p>${esc(g.note ?? '')}</p>` : `<section><h3>${esc(g.title)}</h3><p>${esc(g.note ?? '')}</p>${g.scene ? sceneRow(g) : pickBody(g)}</section>`)).join('\n');
+  const extraCss = groups.some((g) => g.clip || g.heading) ? CLIP_CSS : '';
   return `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title>
-<style>body{font:16px/1.5 system-ui,sans-serif;max-width:860px;margin:2rem auto;padding:0 16px;background:#14121b;color:#eee8d8}section{border:1px solid #ffffff22;border-radius:8px;padding:12px 16px;margin:14px 0}h3{margin:.2em 0}.opt{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:6px 0}audio{height:34px}button{font:inherit;padding:8px 16px;background:#c9a24a;color:#14121b;border:0;border-radius:6px;cursor:pointer}textarea{width:100%;font:12px ui-monospace,monospace;background:#0d0c13;color:#eee8d8;border:1px solid #ffffff33;border-radius:6px;padding:8px}</style>
+<style>body{font:16px/1.5 system-ui,sans-serif;max-width:860px;margin:2rem auto;padding:0 16px;background:#14121b;color:#eee8d8}section{border:1px solid #ffffff22;border-radius:8px;padding:12px 16px;margin:14px 0}h3{margin:.2em 0}.opt{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:6px 0}audio{height:34px}button{font:inherit;padding:8px 16px;background:#c9a24a;color:#14121b;border:0;border-radius:6px;cursor:pointer}textarea{width:100%;font:12px ui-monospace,monospace;background:#0d0c13;color:#eee8d8;border:1px solid #ffffff33;border-radius:6px;padding:8px}${extraCss}</style>
 <h1>${esc(title)}</h1><p>Candidates only: nothing here is in the game. Listen, pick one per row, then press the button and paste the result into chat. Agents cannot hear; only your ear counts.</p>
 ${rows}
 <p><button type="button" id="collect">Collect my picks</button></p><textarea id="out" rows="8" readonly></textarea>

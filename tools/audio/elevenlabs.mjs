@@ -9,7 +9,13 @@
  *
  *   estimate                         offline: the cost of the pilot and of the whole game (from the inventory and the briefs)
  *   design  --scene pilot-a          Voice Design: three previews per speaker, written to <out>/design/<voice>/{A,B,C}.mp3
- *   save-voice --voice tidus --option A   keep a chosen preview as a saved voice (uses a voice slot; free of credits)
+ *           [--voice wakka,seymour]  design only these speakers (a comma list; with or without --scene)
+ *           [--round 2]              a redesign round: the "design-r2" prompts of voice-casting.md, and previews that open with the speaker's
+ *                                    line from <out>/compare-lines.json (or --compare-lines <file>; a private comparison, outside every repo)
+ *                                    followed by the lines named in the "preview-r2" blocks; written to <out>/design-r2/<voice>/, round 1 untouched.
+ *                                    A folder that already holds a set is refused on a live run unless --overwrite is added.
+ *   save-voice --voice tidus --option A [--round 2]   keep a chosen preview as a saved voice (uses a voice slot; free of credits);
+ *                                    round 2 reads design-r2/ and keeps it as r2A/r2B/r2C in voices.json, so round 1's entries stay
  *   tts     --scene pilot-a|--lines id,id [--option pick|A|B|C|all] [--model eleven_v4] [--tags] [--stitch] [--seed N]
  *   music   --brief boss-seymour-a [--takes 3]    Eleven Music from a brief in docs/audio/music-briefs.md
  *   balance                          credits left, voice slots (read-only call)
@@ -39,6 +45,10 @@ const live = flags.yes === true && flags['dry-run'] !== true;
 const date = new Date().toISOString().slice(0, 10);
 const OUT = path.resolve(typeof flags.out === 'string' ? flags.out : path.join(L.HOME, 'candidates', date));
 if (L.insideRepo(OUT) || L.underPublic(OUT)) die(`candidates stay outside the repo and never under public/ (got ${OUT})`);
+// The design round: 1 is the first set of previews (design/), 2 and later redesign the voices that were not picked (design-r2/, ...).
+if (flags.round !== undefined && typeof flags.round !== 'string') die('--round needs a number: --round 2');
+const ROUND = flags.round === undefined ? 1 : Number(flags.round);
+if (!Number.isInteger(ROUND) || ROUND < 1 || ROUND > 9) die(`--round must be a whole number from 1 to 9 (got ${flags.round})`);
 const FORMAT = typeof flags.format === 'string' ? flags.format : 'mp3_44100_128';
 const readJson = (file, fallback) => (existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : fallback);
 const VOICES_FILE = path.join(L.HOME, 'voices.json'); // { voice: { A: voice_id, ... } }, written by save-voice
@@ -64,7 +74,10 @@ async function call(ctx, method, route, { body, query, binary = false } = {}) {
 async function runJobs(jobs) {
   const credits = jobs.reduce((a, j) => a + j.credits, 0);
   const usd = jobs.reduce((a, j) => a + j.usd, 0);
-  for (const j of jobs) console.log(`  ${j.label.padEnd(58)} ${String(j.credits).padStart(7)} credits  ${L.money(j.usd).padStart(7)}  -> ${path.relative(OUT, j.out)}`);
+  for (const j of jobs) {
+    console.log(`  ${j.label.padEnd(58)} ${String(j.credits).padStart(7)} credits  ${L.money(j.usd).padStart(7)}  -> ${path.relative(OUT, j.out)}`);
+    for (const note of j.notes ?? []) console.log(`      ${note}`);
+  }
   console.log(`${mode}: ${jobs.length} request(s), ${credits.toLocaleString('en-US')} credits (about ${L.money(usd)} at the API list price)`);
   if (!live) return console.log('DRY RUN: nothing was sent and no key was read. To send: add --yes --max-credits N (N at least the total above).');
   const cap = Number(flags['max-credits']);
@@ -94,24 +107,39 @@ async function runJobs(jobs) {
 // ---------------------------------------------------------------------------
 
 function designJobs(inv) {
-  const casting = L.loadFenced(path.join(L.ROOT, 'docs/audio/voice-casting.md'), 'design');
+  const castingFile = path.join(L.ROOT, 'docs/audio/voice-casting.md');
+  const casting = L.loadFenced(castingFile, L.designDir(ROUND));
   const scene = flags.scene ? L.SCENES[flags.scene] : null;
   if (flags.scene && !scene) die(`unknown scene ${flags.scene}`);
   const sceneIds = scene ? L.sceneLines(inv, flags.scene).map((l) => l.id) : [];
-  const voices = flags.voice ? [flags.voice] : scene ? scene.optioned : die('design needs --voice <id> or --scene <pilot-a|pilot-b>');
+  // --voice a,b designs exactly those speakers, with or without --scene; without it the scene's optioned voices are designed.
+  if (flags.voice === true) die('--voice needs a value: --voice wakka or --voice wakka,seymour');
+  const voices = flags.voice ? [...new Set(String(flags.voice).split(',').map((v) => v.trim()).filter(Boolean))] : scene ? scene.optioned : die('design needs --voice <id>[,<id>] or --scene <pilot-a|pilot-b>');
+  // A later round's previews open with the speaker's comparison line (read from the candidates folder when the command runs: a private
+  // comparison that never goes in the repo) and carry on with the lines named in that round's "preview-rN" blocks, which are our own.
+  const pads = L.loadFenced(castingFile, `preview-r${ROUND}`);
+  const compareFile = path.resolve(typeof flags['compare-lines'] === 'string' ? flags['compare-lines'] : path.join(OUT, 'compare-lines.json'));
+  const useCompare = ROUND > 1 && typeof flags.text !== 'string';
+  if (useCompare && L.inGitRepo(OUT)) die(`round ${ROUND} previews carry the comparison line, so they are never written inside a repo (got ${OUT})`);
+  const compare = useCompare ? L.loadCompareLines(compareFile) : null;
   return voices.map((voice) => {
-    const description = casting.get(voice) ?? die(`no design prompt for "${voice}" in docs/audio/voice-casting.md`);
-    const text = typeof flags.text === 'string' ? flags.text : L.previewTextFor(inv, voice, sceneIds);
+    const description = casting.get(voice) ?? die(`no "${L.designDir(ROUND)}" design prompt for "${voice}" in docs/audio/voice-casting.md${ROUND > 1 ? ` (round ${ROUND} designs only the voices it has a prompt for)` : ''}`);
+    if (compare && !compare.has(voice)) die(`${voice}: no comparison line for "${voice}" in ${compareFile}`);
+    const text = typeof flags.text === 'string' ? flags.text : compare ? L.comparePreviewText(compare.get(voice), L.padLinesFor(inv, voice, pads.get(voice))) : L.previewTextFor(inv, voice, sceneIds);
     const problems = L.validateDesign(description, text);
     if (problems.length) die(`${voice}: ${problems.join('; ')}`);
-    const dir = path.join(OUT, 'design', voice);
+    const dir = path.join(OUT, L.designDir(ROUND), voice);
+    // A designed voice cannot be re-made exactly: a live run never replaces a set that is already on disk unless --overwrite says so.
+    const held = existsSync(path.join(dir, 'design.json'));
+    if (held && live && flags.overwrite !== true) die(`${path.relative(OUT, dir)} already holds a designed set, and a designed voice cannot be re-made exactly: add --overwrite to design it again, or --round <n> for a new folder`);
     const body = { voice_description: description, text, model_id: flags.model ?? 'eleven_ttv_v3', ...(flags.seed ? { seed: Number(flags.seed) } : {}) };
     return {
-      label: `design ${voice} (preview text ${text.length} chars)`, credits: L.creditsForDesign(text.length), usd: L.usdForTts(text.length, 'eleven_v4'), out: dir,
+      label: `design ${voice}${ROUND > 1 ? ` r${ROUND}` : ''} (preview text ${text.length} chars)`, credits: L.creditsForDesign(text.length), usd: L.usdForTts(text.length, 'eleven_v4'), out: dir,
+      notes: [...(held ? [`HELD: ${path.relative(OUT, dir)} already holds a designed set; a live run needs --overwrite`] : []), ...(ROUND > 1 ? [`description: ${description}`, `preview text: ${text}`] : [])],
       async run(ctx) {
         const { data, requestId } = await call(ctx, 'POST', '/v1/text-to-voice/design', { body, query: { output_format: FORMAT } });
         data.previews.forEach((p, i) => write(path.join(dir, `${'ABC'[i]}.mp3`), Buffer.from(p.audio_base_64, 'base64')));
-        write(path.join(dir, 'design.json'), JSON.stringify({ voice, body, previews: data.previews.map((p, i) => ({ option: 'ABC'[i], generated_voice_id: p.generated_voice_id, duration_secs: p.duration_secs })) }, null, 1));
+        write(path.join(dir, 'design.json'), JSON.stringify({ voice, round: ROUND, body, previews: data.previews.map((p, i) => ({ option: 'ABC'[i], generated_voice_id: p.generated_voice_id, duration_secs: p.duration_secs })) }, null, 1));
         return { requestId };
       },
     };
@@ -121,15 +149,18 @@ function designJobs(inv) {
 function saveVoiceJob() {
   const voice = flags.voice ?? die('save-voice needs --voice <id> --option A|B|C');
   const option = flags.option ?? die('save-voice needs --option A|B|C');
-  const sidecar = readJson(path.join(OUT, 'design', voice, 'design.json'), null) ?? die(`no design.json for ${voice} under ${OUT}; run design first`);
+  // Round 1 reads design/ and keeps A, B, C; a later round reads its own folder and keeps r2A, r2B, r2C, so it never replaces an earlier entry.
+  const sidecarFile = path.join(OUT, L.designDir(ROUND), voice, 'design.json');
+  const sidecar = readJson(sidecarFile, null) ?? die(`no design.json for ${voice} under ${path.join(OUT, L.designDir(ROUND))}; run design${ROUND > 1 ? ` --round ${ROUND}` : ''} first`);
   const chosen = sidecar.previews.find((p) => p.option === option) ?? die(`no option ${option} for ${voice}`);
-  const name = typeof flags.name === 'string' ? flags.name : `pyrefly-${voice}-${option}`;
+  const key = L.saveKey(ROUND, option);
+  const name = typeof flags.name === 'string' ? flags.name : `pyrefly-${voice}-${key}`;
   return [{
-    label: `save ${voice} option ${option} as "${name}" (uses a voice slot)`, credits: 0, usd: 0, out: path.join(OUT, 'design', voice, 'design.json'),
+    label: `save ${voice} option ${option} as "${name}" (uses a voice slot; kept as ${key} in voices.json)`, credits: 0, usd: 0, out: sidecarFile,
     async run(ctx) {
-      const { data, requestId } = await call(ctx, 'POST', '/v1/text-to-voice', { body: { voice_name: name, voice_description: sidecar.body.voice_description, generated_voice_id: chosen.generated_voice_id, labels: { project: 'pyrefly', voice, option } } });
+      const { data, requestId } = await call(ctx, 'POST', '/v1/text-to-voice', { body: { voice_name: name, voice_description: sidecar.body.voice_description, generated_voice_id: chosen.generated_voice_id, labels: { project: 'pyrefly', voice, option, ...(ROUND > 1 ? { round: String(ROUND) } : {}) } } });
       const all = readJson(VOICES_FILE, {});
-      write(VOICES_FILE, JSON.stringify({ ...all, [voice]: { ...(all[voice] ?? {}), [option]: data.voice_id } }, null, 1));
+      write(VOICES_FILE, JSON.stringify({ ...all, [voice]: { ...(all[voice] ?? {}), [key]: data.voice_id } }, null, 1));
       return { requestId };
     },
   }];
@@ -233,9 +264,22 @@ function audition() {
   const dir = path.resolve(typeof flags.dir === 'string' ? flags.dir : OUT);
   const ls = (p) => (existsSync(p) ? readdirSync(p) : []);
   const groups = [];
-  for (const voice of ls(path.join(dir, 'design'))) {
-    const side = readJson(path.join(dir, 'design', voice, 'design.json'), null);
-    groups.push({ id: `voice:${voice}`, title: `Voice: ${voice}`, note: side ? `Preview text: ${side.body.text.slice(0, 160)}...` : '', options: ls(path.join(dir, 'design', voice)).filter((f) => /^[ABC]\.mp3$/.test(f)).map((f) => ({ label: f[0], file: `design/${voice}/${f}` })) });
+  // Voice rows, the newest design round first: design/ is round 1, design-r2/ round 2, and so on. With more than one round each gets a heading;
+  // a later round shows the speaker's real-game clip beside the three previews when compare-lines.json is in the folder (or --compare-lines).
+  const rounds = ls(dir).flatMap((d) => { const m = /^design(?:-r(\d+))?$/.exec(d); return m && ls(path.join(dir, d)).length ? [{ round: m[1] ? Number(m[1]) : 1, folder: d }] : []; }).sort((a, b) => b.round - a.round);
+  let compare = new Map();
+  if (rounds.some((r) => r.round > 1)) {
+    if (L.insideRepo(dir) || L.inGitRepo(dir)) die(`a page that carries the comparison lines is never written inside a repo (got ${dir})`);
+    try { compare = L.loadCompareLines(typeof flags['compare-lines'] === 'string' ? flags['compare-lines'] : path.join(dir, 'compare-lines.json')); } catch (err) { console.log(`audition: ${err.message}; the later rounds show no real-game clip`); }
+  }
+  for (const { round, folder } of rounds) {
+    if (rounds.length > 1) groups.push({ heading: `Round ${round}`, note: round > 1 ? 'A second try at these voices, from new descriptions. Each preview opens with the same line as the real clip: play the real clip, then A, B and C. The rest of each preview is lines from our own script.' : 'The first previews, kept as they were.' });
+    for (const voice of ls(path.join(dir, folder))) {
+      const side = readJson(path.join(dir, folder, voice, 'design.json'), null);
+      const options = ls(path.join(dir, folder, voice)).filter((f) => /^[ABC]\.mp3$/.test(f)).map((f) => ({ label: f[0], file: `${folder}/${voice}/${f}` }));
+      if (round === 1) groups.push({ id: `voice:${voice}`, title: `Voice: ${voice}`, note: side ? `Preview text: ${side.body.text.slice(0, 160)}...` : '', options });
+      else groups.push({ id: `voice-r${round}:${voice}`, title: `Voice: ${voice} (round ${round})`, note: side ? `Preview text: ${side.body.text}` : '', clip: L.clipOf(compare.get(voice)), options });
+    }
   }
   // Music: one row per cue, every brief of that cue (a, b, c...) and every take in it, with today's shipped cue as the control.
   const cues = new Map();

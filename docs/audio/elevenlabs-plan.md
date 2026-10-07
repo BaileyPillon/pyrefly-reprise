@@ -89,6 +89,7 @@ Nothing else is built until he picks or mixes; a pick approves only what he name
 ```
 node tools/audio/elevenlabs.mjs estimate
 node tools/audio/elevenlabs.mjs design --scene pilot-a --yes --max-credits 2500         # Round 1: 7 voices x 3 previews
+node tools/audio/elevenlabs.mjs design --scene pilot-a --voice wakka,seymour --round 2 --out <dir> --yes --max-credits 300  # a redesign round (folder design-r2) for voices not picked: voice-casting.md, "Design round 2"; not this plan's scene round
 node tools/audio/elevenlabs.mjs music  --brief boss-seymour-a --yes --max-credits 1700  # and -b, -c
 node tools/audio/elevenlabs.mjs audition --dir D:/Tools/elevenlabs/candidates/<date>    # his page; first copy the shipped public/audio/music/boss-seymour.mp3 to <dir>/music/_control/ as the control
 # his picks -> save-voice per speaker, picks.json -> tts --scene pilot-a (three renders) -> audition --scene pilot-a

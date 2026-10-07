@@ -244,3 +244,51 @@ Native English, loose and cocky. Male, 18 to 20. Clean studio recording. Persona
 ```design trema
 Native English, patrician and calm. Male, 50s. Clean studio recording. Persona: a gentle, weary philosopher who destroyed what he loved. Emotion: serene, sorrowful, quietly menacing. A calm, courteous baritone. Unhurried, speaks in tidy aphorisms, and is frightening because he is so kind.
 ```
+
+## Design round 2 (2026-10-07): Wakka and Seymour redesigned
+
+Bailey judged the round-1 previews against the real game by ear and picked, verbatim: "Tidus: B / Yuna: B / Auron: B / Wakka: None / Seymour: None". Lulu and Kimahri are still undecided.
+Tidus, Yuna and Auron keep their round-1 voices. Wakka and Seymour get a second try from the new descriptions below; the round-1 blocks above stay as they were, so what was rejected stays on record.
+(This is a *design* round, a redesign of voices not picked. It is not the plan's scene round, where the picked voices read the whole scene.)
+
+**Game case: FFX only** for the two voices (Wakka and Seymour speak only in FFX chapters in the inventory); the tool changes that carry them are plumbing for both games.
+
+| Voice | Round 1 asked for (not picked) | Round 2 asks for | Why, from the game and the writing bible (section 1.5 and 1.9) |
+|---|---|---|---|
+| `wakka` | late 20s; a big-hearted sportsman who jokes to ease tension; quietly shaken, the laughter going hollow; a warm, easy baritone | mid twenties; a warm, grinning big brother, sunny and playful, quick to laugh; a round, slightly husky mid-range baritone; soft vowels and a sing-song lift (a light island lilt); a loose rolling pace that thinks out loud and ends on "ya?" | He is the party's tension release and its loyalty: easy, friendly, volunteers first, the one who lightens the room (the driver's round-2 brief asks for big-brother energy). The bible has his tics going hollow as his faith breaks in the first two chapters; that is direction for a line, not the voice, which has to be the warm one. |
+| `seymour` | early 30s; a nobleman who believes his cruelty is mercy; calm, courteous, sorrowful; a smooth, soft tenor-baritone | mid 30s; a silky, gracious aristocrat and priest; serene, tender, faintly amused and entirely calm; a smooth baritone in the low-middle of the range; slow, a pause before the sting of each sentence; volume low and level throughout | "Correct about the diagnosis and monstrous about the cure": the bargain must read as generous, never as a taunt, and he never raises his voice. The menace is the courtesy. |
+
+How a later round works (the commands are at the end of this section):
+
+- **`design-r2 <voice>` blocks** hold the new description. The same rules and the same refusals as the round-1 `design` blocks: no franchise, character or place name, no likeness, no minor.
+- **`preview-r2 <voice>` blocks** name the lines that follow the comparison line in the preview text. The comparison line itself is the speaker's line in `compare-lines.json`, which sits in the candidates folder and is read when the command runs.
+  It is a private comparison with the real game and is never copied into this repo, so it is not written here. Each preview opens with it, so the three voices say the same words as the real clip. The service wants at least 100 characters of preview text and the comparison lines are shorter,
+  so each block adds lines from our own script (Chapter 1, `seymour-flux`; the speaker's own plain voiced lines, checked against the inventory). Wakka needs three of them, Seymour two.
+- **Where it lands:** `design-r2/<voice>/{A,B,C}.mp3` and `design.json`, beside the untouched `design/`. A live run refuses a folder that already holds a set unless `--overwrite` is added (a designed voice cannot be re-made exactly).
+- **Saving a pick:** `save-voice --round 2 --voice wakka --option B` reads `design-r2/`, names the voice `pyrefly-wakka-r2B` and keeps it as `r2B` in `voices.json`, so it never replaces a round-1 entry (on 2026-10-07 `voices.json` already held round 1's A, B and C for all seven pilot voices).
+  A round-2 pick goes into `picks.json` under that key (`"wakka": "r2B"`); `tts` and `audition --scene` use it as they use `B`.
+- **Hearing it:** `audition --dir <candidates>` adds a "Round 2" section above the round-1 rows, with each speaker's real-game clip (the same embed as `voices-vs-ffx.html`) beside the three previews.
+
+```design-r2 wakka
+Native English with a light, easygoing island lilt: soft rounded vowels, relaxed consonants and a gentle sing-song lift at the end of phrases, easy to follow. Male, in his mid twenties. Clean studio recording. Persona: a warm, grinning big brother who has everyone's back and teases them kindly. Emotion: friendly, sunny, playful, quick to laugh. A mid-range baritone, round and a little husky, with a smile in it. Loose, unhurried pace that rolls along with easy pauses; he thinks out loud and ends friendly questions on a soft, rising "ya?".
+```
+
+```preview-r2 wakka
+seymour-flux.post.005 seymour-flux.quip-wakka.002 seymour-flux.quip-wakka.001
+```
+
+```design-r2 seymour
+Native English with a cultured, precise, old-world aristocratic accent: every consonant clean, every vowel rounded. Male, mid 30s. Clean studio recording. Persona: a silky, gracious aristocrat and priest who offers terrible mercy with perfect manners. Emotion: serene, tender, faintly amused and entirely calm; a velvet menace under flawless courtesy. A smooth, soft-spoken baritone in the low-middle of the range, silky and a little breathy, warm on the surface and cool underneath. Slow, unhurried, deliberate pace with a gentle pause before the sting of each sentence. Volume stays low and level from first word to last; he is frightening because he is so kind.
+```
+
+```preview-r2 seymour
+seymour-flux.pre.007 seymour-flux.pre.023
+```
+
+Commands (run from the repo root; the dry run sends nothing and reads no key; add `--yes --max-credits N` only after the driver has the estimate; `--out` is explicit because the default folder is named by the UTC date):
+
+```
+node tools/audio/elevenlabs.mjs design --scene pilot-a --voice wakka,seymour --round 2 --out D:/Tools/elevenlabs/candidates/2026-10-07
+node tools/audio/elevenlabs.mjs design --scene pilot-a --voice wakka,seymour --round 2 --out D:/Tools/elevenlabs/candidates/2026-10-07 --yes --max-credits 300
+node tools/audio/elevenlabs.mjs audition --dir D:/Tools/elevenlabs/candidates/2026-10-07
+```
