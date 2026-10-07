@@ -195,13 +195,30 @@ function ttsJobs(inv) {
   return jobs;
 }
 
+// The briefs write plans in the music_v1 "MusicPrompt" shape (global styles plus named sections). music_v2 and
+// music_v2_5 take a "CompositionPlan" instead: a list of chunks, each with its own text, duration and styles
+// (API reference, music/compose, read 2026-10-07). Convert, carrying the global styles into every chunk.
+function planForModel(plan, model) {
+  if (!/^music_v2/.test(model) || !Array.isArray(plan.sections)) return plan;
+  const pos = plan.positive_global_styles ?? [];
+  const neg = plan.negative_global_styles ?? [];
+  return {
+    chunks: plan.sections.map((s) => ({
+      text: (s.lines ?? []).join('\n'),
+      duration_ms: s.duration_ms,
+      positive_styles: [...pos, ...(s.positive_local_styles ?? [])],
+      negative_styles: [...neg, ...(s.negative_local_styles ?? [])],
+    })),
+  };
+}
+
 function musicJobs() {
   const briefs = L.loadFenced(path.join(L.ROOT, 'docs/audio/music-briefs.md'), 'music');
   const id = flags.brief ?? die(`music needs --brief <id> (${[...briefs.keys()].slice(0, 6).join(', ')}, ...)`);
   const brief = JSON.parse(briefs.get(id) ?? die(`no brief "${id}" in docs/audio/music-briefs.md`));
   const takes = Number(flags.takes ?? 1);
   const base = { model_id: flags.model ?? brief.model ?? 'music_v2_5' };
-  const body = brief.plan ? { ...base, composition_plan: brief.plan } : { ...base, prompt: brief.prompt, music_length_ms: brief.lengthMs, force_instrumental: brief.instrumental !== false };
+  const body = brief.plan ? { ...base, composition_plan: planForModel(brief.plan, base.model_id) } : { ...base, prompt: brief.prompt, music_length_ms: brief.lengthMs, force_instrumental: brief.instrumental !== false };
   const ms = brief.plan ? brief.plan.sections.reduce((a, x) => a + x.duration_ms, 0) : brief.lengthMs;
   if (!(ms >= 3000 && ms <= 300000)) die(`${id}: the length must be 3 to 300 seconds (got ${ms} ms)`);
   const hit = L.bannedIn(JSON.stringify(brief.plan ?? brief.prompt));

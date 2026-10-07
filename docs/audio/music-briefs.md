@@ -278,3 +278,23 @@ Targets come from `THEMES.md` (owed column), `docs/plans/chapter-leblanc-review.
 ```music owed-sin-countdown
 {"cue":"sin-countdown","game":"ffx","lengthMs":90000,"instrumental":true,"model":"music_v2_5","bpm":100,"meter":"4/4","key":"D minor","loop":{"startSec":6.0,"endSec":90.0},"prompt":"A countdown at 100 BPM in D minor: a quiet ticking pulse that tightens as the music goes, strings in a rising sequence, a single sustained brass note growing, no drum fills, with the pulse speeding up in small steps toward a single huge held chord that never arrives. Dread, time running out. Instrumental."}
 ```
+
+Chapter select, two more directions for Bailey to compare (2026-10-07, his words: "the first thing we need is better chapter select music. it is abysmal right now."):
+
+```music chapter-select-b
+{"cue":"chapter-select","game":"both","lengthMs":80000,"instrumental":true,"model":"music_v2_5","bpm":72,"meter":"4/4","key":"D major","loop":{"startSec":5.3,"endSec":80},"prompt":"Warm, cinematic and hopeful menu theme at 72 BPM in D major, 4/4. A solo grand piano opens with a gentle, singing melody over soft sustained strings; a warm cello answers; then the full string section swells softly with a light harp and a distant French horn, like the calm morning before a long journey. Emotional but restrained, spacious, beautifully recorded. No drums, no percussion, no vocals, no electronic sounds. Loops cleanly: no final chord, no fade-out."}
+```
+
+```music chapter-select-c
+{"cue":"chapter-select","game":"both","lengthMs":80000,"instrumental":false,"model":"music_v2_5","bpm":66,"meter":"3/4","key":"E minor","loop":{"startSec":5,"endSec":80},"prompt":"Ethereal, dreamlike menu theme at 66 BPM in E minor, 3/4. A concert harp plays slow rippling arpeggios; soft glass bells and a celesta sparkle above like drifting lights over still water; a wordless solo soprano sings a long, calm, floating melody on open vowels only, no words; a low warm string pad underneath. Serene, luminous, a little sad, very spacious with natural hall reverb. No drums, no lyrics, no electronic beats. Loops cleanly: no final chord, no fade-out."}
+```
+
+Title, two more directions for Bailey to compare (2026-10-07, his words: "and what about the title screen music? we need to hotfix in the title screen music updated please"):
+
+```music title-b
+{"cue":"title","game":"both","lengthMs":90000,"instrumental":false,"model":"music_v2_5","bpm":72,"meter":"4/4","key":"D major","loop":{"startSec":6.7,"endSec":90},"prompt":"Epic, hopeful orchestral overture for the title screen of a grand fantasy adventure, 72 BPM in D major, 4/4. Opens with soft high strings and a single French horn calling a noble, singable melody; the full string section and horns take the melody up; timpani rolls build to a soaring climax where a wordless choir sings open vowels; then it settles back to warm strings so it can loop. Cinematic, emotional, majestic, beautifully recorded concert hall. No lyrics, no drums kit, no electronic sounds. Loops cleanly: no final chord, no fade-out."}
+```
+
+```music title-c
+{"cue":"title","game":"both","lengthMs":90000,"instrumental":false,"model":"music_v2_5","bpm":66,"meter":"3/4","key":"E-flat major","loop":{"startSec":5.5,"endSec":90},"prompt":"Bittersweet, dreamy title theme at 66 BPM in E-flat major, 3/4. A delicate music box plays a gentle lullaby melody; a concert harp joins with soft rolling chords; a distant wordless female voice sings a long, tender line on open vowels; warm soft strings swell underneath like a fond memory of a summer long gone. Nostalgic, intimate, a little sad but full of love, spacious hall reverb. No lyrics, no drums, no electronic beats. Loops cleanly: no final chord, no fade-out."}
+```
