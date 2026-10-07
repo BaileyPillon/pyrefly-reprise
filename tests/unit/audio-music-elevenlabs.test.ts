@@ -13,7 +13,7 @@
  *
  * The older record tests (`audio-music-v2.test.ts`, `audio-music-o1.test.ts`) step aside for a cue this record lists.
  * Nothing here is a listening verdict (AGENTS.md rule 13). Game case: per cue, from the record (the Seymour battle
- * cues FFX only, the chapter select board both games); the plumbing is both.
+ * cues FFX only, the chapter select board and the title both games); the plumbing is both.
  */
 
 import { createHash } from 'node:crypto';

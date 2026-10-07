@@ -9,7 +9,7 @@
  * down: the pick, the prompt, the raw take's hash, where the mastered files are staged
  * (`D:/Tools/elevenlabs/install/<cue>/`, outside the repo), the tempo and key, and both stereo variants' hashes
  * and manifest entries. And what this tool measures from the files that are in `public/audio` right now: every
- * `after`, the stereo gate, which variant is installed, the totals.
+ * `after`, the stereo gate, which variant is installed.
  * `tests/unit/audio-music-elevenlabs.test.ts` holds the shipped files to the record, so a file swapped without
  * `measure` fails it.
  *
