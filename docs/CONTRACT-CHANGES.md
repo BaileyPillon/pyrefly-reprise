@@ -13,7 +13,7 @@ Critic round 23's finding PR-0407: a loss to Trema retries at Trema (TR5 b) in P
 - `src/battle/common/types.ts`: `EnemyGroupDef.hopelessRetry?: { standing: number; answer: 'restore' | 'chapter-start' }`. Absent on every formation but Trema's link (`tests/unit/chapters/trema-hopeless-retry.test.ts`
   pins that), so every other chain retries exactly as before. Read only by `app/screens/BattleChainCheckpoint.ts`: `checkpointAt` makes no checkpoint for `'chapter-start'` when fewer than `standing` of the party are on their feet in
   the setup the link opens on, and `resumeSetup` gives a `'restore'` Retry the formation with `restoresPartyOnEntry: true` (the engine's own Save Sphere rule, `battle/ffx2/setup.ts`). The first entry into the link is never changed.
-- New exports in `BattleChainCheckpoint.ts`: `standingIn(setup)`, `hopelessAt(group, setup)`. The shipped answer is `TREMA_HOPELESS_RETRY` in `src/data/ffx2/enemies/trema.ts` (on this branch `'restore'`, awaiting Bailey's yes;
+- New exports in `BattleChainCheckpoint.ts`: `standingIn(setup)`, `hopelessAt(group, setup)`. The shipped answer is `TREMA_HOPELESS_RETRY` in `src/data/ffx2/enemies/trema.ts` (`'restore'`, adopted by Bailey on 2026-10-06 at 18:41 EDT, D-506;
   `'carry'` is the old behaviour).
 
 ## 2026-10-06 — REDUCE MOTION shortens the lunge; the boss reveal is measured through the lens shift: `CameraPort.frame`'s `lens`, `rigPose`/`frameFit`'s `lens`, `lungePlan`'s `LungeCtx` (release 39.2; both games for the lunge, FFX-2 desktop for the reveal; additive)

@@ -49,13 +49,14 @@ export const CLOISTER_ACTION_TIME = CLOISTER_ACTION_TIME_ON ? CLOISTER_ACTION_TI
 const actionTime = CLOISTER_ACTION_TIME > 0 ? { actionTimeSeconds: CLOISTER_ACTION_TIME } : {};
 
 /**
- * **PR-0407, the answer to a Retry from a state nobody can win from** (critic round 23; Bailey's call, awaiting
- * his yes: nothing here touches a sourced number). TR5 = b retries a lost Trema at Trema in Paragon's end state, and
- * when one girl stood at the seam that state has no winning line: the engine's 200-seed probe measured 0 wins in 200
- * Retries, 107 of them lost within two decisions. Three answers are built and measured
- * (`docs/handoff/r392-trema.md`); the first entry into Trema is never changed (the sources carry Paragon's state).
+ * **PR-0407, the answer to a Retry from a state nobody can win from** (critic round 23; the form of the fix was Bailey's
+ * call, and on 2026-10-06 at 18:41 EDT he adopted `'restore'`, D-506: nothing here touches a sourced number). TR5 = b
+ * retries a lost Trema at Trema in Paragon's end state, and when one girl stood at the seam that state has no winning
+ * line: the engine's 200-seed probe measured 0 wins in 200 Retries, 107 of them lost within two decisions. Three answers
+ * are built and measured (`docs/handoff/r392-trema.md`); the first entry into Trema is never changed (the sources carry
+ * Paragon's state).
  *
- * - `'restore'` (shipped on this branch): with fewer than two girls standing, the Retry opens with the Save Sphere's rule,
+ * - `'restore'` (adopted, D-506): with fewer than two girls standing, the Retry opens with the Save Sphere's rule,
  *   full HP and MP and a KO'd girl up (Chapter XI's `restoresPartyOnEntry`), still at Trema, still without Paragon;
  * - `'chapter-start'`: with fewer than two standing, a loss makes no checkpoint and the Retry plays Paragon again (TR5 a);
  * - `'carry'`: what shipped before, the Retry replays the carried state as entered, unwinnable or not.
