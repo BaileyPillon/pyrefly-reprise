@@ -10,9 +10,17 @@
  *    remembered and nothing is written to the save or the experiments' store. The tests read the word from its one constant.
  * 3. **The two doors do not interfere**: "limit" still opens FF7's; "limitleblanc" opens FF7's alone, "leblanclimit" the Leblanc one alone, a typo neither.
  * 4. **Chapter VI is unchanged** (its record and its card; the pinned art hashes are in `exp-leblanc.test.ts`) and the experiment's own store stays separate.
+ *
+ * Release 39.3's focused review (`critic/reviews/b80f772f-focused.json`) found three faults in the door; these pin the repairs of the first two (the third, F393-05, is the coach's and comes with its own tests; FFX-2 only for the chapter, both games for the board):
+ * 5. **F393-03, the last letter is START.** The word's C is the board's START key, and party prep begins the fight on START: the press that finished the word reached prep one frame after
+ *    the flow mounted it, so the chapter skipped party prep. Now the door takes that press (it opens on the frame that reads it) and party prep stays up until Enter. Driven with the real
+ *    `PartyPrepScreen` mounted the way the flow mounts it (in the microtask after the board settles), in three typing styles.
+ * 6. **F393-04, the arrow after part of the word.** `WordDoor.continued` stayed true after a letter, so the next key, an arrow, was read as a letter of the word and the board swallowed it.
+ *    A letter is the word's only while it extends a live match; an arrow always moves the cursor and ends the match.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { PartyPrepScreen } from '../../src/app/screens/PartyPrepScreen.ts';
 import { ChapterSelectScreen } from '../../src/app/screens/ChapterSelectScreen.ts';
 import { forgetBoardChapter, lastBoardChapter } from '../../src/app/screens/frontend/boardFocus.ts';
 import { buildChapterTiles, groupChapterTiles } from '../../src/app/screens/frontend/chapterGrid.ts';
@@ -85,6 +93,38 @@ describe('the word (pure)', () => {
     door.feedKey('x', 200);
     expect(door.continued).toBe(false);
   });
+
+  it('claims nothing that is not a letter, however fresh the match: an arrow stays the board\'s (F393-04)', () => {
+    for (const key of ['ArrowRight', 'ArrowLeft', 'ArrowDown', 'Enter', 'Escape', 'Tab', 'Shift', 'CapsLock']) {
+      const door = new WordDoor(WORD);
+      typeWord(door, WORD.slice(0, 4));
+      expect(door.continued, `${key}: after a letter`).toBe(true);
+      door.feedKey(key, 450);
+      expect(door.continued, key).toBe(false);
+    }
+  });
+
+  it('claims no letter that comes after a pause longer than the gap: the match was already over', () => {
+    const door = new WordDoor(WORD);
+    typeWord(door, WORD.slice(0, 4));
+    door.feedKey(WORD[4]!, 300 + KEY_GAP_MS + 1);
+    expect(door.continued).toBe(false);
+  });
+
+  it('an arrow, Enter, Escape, Backspace, Tab or a page key ends the match; Shift, CapsLock and the other typing aids do not', () => {
+    for (const key of ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Enter', 'Escape', 'Backspace', 'Tab', 'PageUp', 'PageDown']) {
+      const door = new WordDoor(WORD);
+      typeWord(door, WORD.slice(0, 3));
+      door.feedKey(key, 350);
+      expect(typeWord(door, WORD.slice(3), 450), key).not.toContain('open');
+    }
+    for (const key of ['Shift', 'CapsLock', 'AltGraph', 'Dead', 'Process', 'Unidentified']) {
+      const door = new WordDoor(WORD);
+      typeWord(door, WORD.slice(0, 3));
+      door.feedKey(key, 350);
+      expect(typeWord(door, WORD.slice(3), 450).at(-1), key).toBe('open');
+    }
+  });
 });
 
 // ------------------------------------------------------------------ board
@@ -92,13 +132,16 @@ describe('the word (pure)', () => {
 interface Rig {
   screen: ChapterSelectScreen;
   root: HTMLElement;
+  input: Input;
   picked: string[];
   settled: string[];
+  frame(): void;
   type(key: string, code?: string): void;
   typeWord(word: string): void;
 }
 
 let rigs: Array<{ screen: ChapterSelectScreen; input: Input; root: HTMLElement }> = [];
+let preps: PartyPrepScreen[] = []; // the party prep screens the flow rigs mounted (`mountFlow`)
 let clock = 0;
 
 function mount(): Rig {
@@ -125,7 +168,7 @@ function mount(): Rig {
     frame();
     window.dispatchEvent(new KeyboardEvent('keyup', { key, code, bubbles: true }));
   };
-  return { screen, root, picked, settled, type, typeWord: (word) => [...word].forEach((ch) => type(ch)) };
+  return { screen, root, input, picked, settled, frame, type, typeWord: (word) => [...word].forEach((ch) => type(ch)) };
 }
 
 async function flush(): Promise<void> {
@@ -145,6 +188,11 @@ afterEach(() => {
     root.remove();
   }
   rigs = [];
+  for (const prep of preps) {
+    prep.exit();
+    prep.root.remove();
+  }
+  preps = [];
   setFf7ExperimentReadyForTests(null);
   forgetBoardChapter();
   vi.restoreAllMocks();
@@ -296,6 +344,229 @@ describe('the two doors do not interfere', () => {
     for (const ch of 'frfrm') pad.type(ch);
     await flush();
     expect(pad.picked).toEqual([FF7]);
+  });
+});
+
+// ------------------------------------------------------- the board, inside the flow
+
+interface FlowRig extends Rig {
+  /** Party prep, once the flow has mounted it. */
+  prep(): PartyPrepScreen | null;
+  /** One browser frame for the screen on top, then the microtasks it queued (the flow swaps screens there). */
+  step(): Promise<void>;
+  /** A real key: down, the microtasks that follow it, a frame, up. */
+  press(key: string, code?: string): Promise<void>;
+}
+
+const codeOf = (key: string): string => (/^[a-z]$/i.test(key) ? `Key${key.toUpperCase()}` : key);
+
+/**
+ * The board as the flow runs it: the real `Input`, the real board, and when the board settles on a chapter the real `PartyPrepScreen` mounted in the microtask after, as
+ * `main.ts` -> `runChapter` -> `show(prep)` does it (the review found party prep mounted and gone 2 ms apart); every frame goes to whichever screen is on top.
+ */
+function mountFlow(): FlowRig {
+  const rig = mount();
+  let prep: PartyPrepScreen | null = null;
+  void rig.screen.done.then((id) => {
+    const chapter = id ? getChapter(id) : undefined;
+    if (!chapter) return;
+    rig.screen.exit(); // the flow replaces the board
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    prep = new PartyPrepScreen({ chapter });
+    prep.root = root;
+    prep.app = { fade: () => Promise.resolve() } as unknown as PartyPrepScreen['app']; // enter() only reaches App for the fade
+    prep.enter();
+    preps.push(prep);
+  });
+  const step = async (): Promise<void> => {
+    clock += 100;
+    (prep ?? rig.screen).handleInput(rig.input.update(clock));
+    rig.input.endFrame();
+    await flush();
+  };
+  const press = async (key: string, code = codeOf(key)): Promise<void> => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { key, code, bubbles: true }));
+    await flush();
+    await step();
+    window.dispatchEvent(new KeyboardEvent('keyup', { key, code, bubbles: true }));
+  };
+  return { ...rig, prep: () => prep, step, press };
+}
+
+const keyDown = (key: string, init: KeyboardEventInit = {}): void => {
+  window.dispatchEvent(new KeyboardEvent('keydown', { key, code: codeOf(key), bubbles: true, ...init }));
+};
+const keyUp = (key: string): void => {
+  window.dispatchEvent(new KeyboardEvent('keyup', { key, code: codeOf(key), bubbles: true }));
+};
+
+describe('the word opens party prep, and its last letter is not a START press (F393-03)', () => {
+  it('the word\'s last letter is the board\'s START key, which is the whole trouble (the test would prove nothing otherwise)', () => {
+    expect(WORD.at(-1)).toBe('c');
+    const rig = mount();
+    keyDown('c');
+    expect(rig.input.justPressed('start')).toBe(true);
+    keyUp('c');
+  });
+
+  it('a key per letter and a frame after each: party prep is up, holds through more frames, and Enter begins it', async () => {
+    const flow = mountFlow();
+    for (const ch of WORD) await flow.press(ch);
+    expect(flow.settled).toEqual([EXP]);
+    const prep = flow.prep();
+    expect(prep, 'the flow mounted party prep').not.toBeNull();
+    expect(prep!.snapshot()['chapter']).toBe(EXP);
+    for (let i = 0; i < 6; i++) await flow.step();
+    expect(prep!.snapshot()['outcome'], 'party prep began the fight on the press that finished the word').toBeNull();
+    await flow.press('Enter', 'Enter');
+    expect(prep!.snapshot()['outcome']).toBe('begin');
+  });
+
+  it('every letter dispatched back to back, up and down before any frame (keyboard.type with no delay): the same', async () => {
+    const flow = mountFlow();
+    for (const ch of WORD) keyDown(ch);
+    for (const ch of WORD) keyUp(ch);
+    await flush();
+    for (let i = 0; i < 6; i++) await flow.step();
+    expect(flow.settled).toEqual([EXP]);
+    expect(flow.prep()!.snapshot()['outcome']).toBeNull();
+  });
+
+  it('the last letter held down while the screens change, auto-repeat included: no START, party prep stays', async () => {
+    const flow = mountFlow();
+    for (const ch of WORD.slice(0, -1)) await flow.press(ch);
+    keyDown(WORD.at(-1)!);
+    await flush();
+    await flow.step();
+    keyDown(WORD.at(-1)!, { repeat: true });
+    for (let i = 0; i < 4; i++) await flow.step();
+    keyUp(WORD.at(-1)!);
+    for (let i = 0; i < 4; i++) await flow.step();
+    expect(flow.settled).toEqual([EXP]);
+    expect(flow.prep()!.snapshot()['outcome']).toBeNull();
+  });
+
+  it('the door takes the press that finished the word: the frame that opens it reads no START, and the chapter is picked once', async () => {
+    const flow = mountFlow();
+    for (const ch of WORD.slice(0, -1)) await flow.press(ch);
+    keyDown('c');
+    clock += 100;
+    flow.screen.handleInput(flow.input.update(clock));
+    expect(flow.input.justPressed('start')).toBe(false);
+    expect(flow.picked).toEqual([EXP]);
+    flow.input.endFrame();
+    keyUp('c');
+    await flush();
+    for (let i = 0; i < 3; i++) await flow.step();
+    expect(flow.picked).toEqual([EXP]);
+    expect(flow.settled).toEqual([EXP]);
+  });
+
+  it('"limit" is unchanged: FF7\'s door still opens on its own last key (T is bound to no button, so nothing is left to take)', async () => {
+    const rig = mount();
+    for (const ch of DOOR_WORD.slice(0, -1)) rig.type(ch);
+    keyDown(DOOR_WORD.at(-1)!);
+    expect(rig.picked, 'opened by the key itself, before any frame').toEqual([FF7]);
+    keyUp(DOOR_WORD.at(-1)!);
+    rig.frame();
+    await flush();
+    expect(rig.settled).toEqual([FF7]);
+  });
+
+  it('"leblanclimit" and "limitleblanc" typed with no frame between the letters: the first word to finish wins, as before', async () => {
+    for (const [typed, opens] of [[WORD + DOOR_WORD, EXP], [DOOR_WORD + WORD, FF7]] as const) {
+      const rig = mount();
+      for (const ch of typed) keyDown(ch);
+      for (const ch of typed) keyUp(ch);
+      rig.frame();
+      rig.frame();
+      await flush();
+      expect(rig.picked, typed).toEqual([opens]);
+      expect(rig.settled, typed).toEqual([opens]);
+    }
+  });
+});
+
+describe('the board keeps its presses after part of the word (F393-04)', () => {
+  it('an arrow right after "lebl" moves the cursor on its first press, and ends the match', async () => {
+    const rig = mount();
+    for (const ch of WORD.slice(0, 4)) rig.type(ch);
+    const before = rig.screen.snapshot()['selectedIndex'];
+    rig.type('ArrowRight');
+    expect(rig.screen.snapshot()['selectedIndex'], 'the first arrow press was swallowed').not.toBe(before);
+    rig.typeWord(WORD.slice(4)); // "anc": the arrow ended the match, so these are not the rest of the word
+    await flush();
+    expect(rig.picked).toEqual([]);
+  });
+
+  it('the same after a pause longer than the gap between letters (the match was already over), for every arrow', async () => {
+    for (const arrow of ['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp']) {
+      let t = 5_000;
+      vi.spyOn(performance, 'now').mockImplementation(() => t);
+      const rig = mount();
+      rig.type('ArrowRight'); // off the first card, so a move left and a move up are both visible
+      for (const ch of WORD.slice(0, 4)) {
+        rig.type(ch);
+        t += 100;
+      }
+      t += KEY_GAP_MS + 1_000;
+      const before = rig.screen.snapshot()['selectedIndex'];
+      rig.type(arrow);
+      expect(rig.screen.snapshot()['selectedIndex'], arrow).not.toBe(before);
+      await flush();
+      expect(rig.picked, arrow).toEqual([]);
+      vi.restoreAllMocks();
+    }
+  });
+
+  it('a letter of the word is the board\'s again once it no longer extends a live match: the A after a pause moves the cursor left', () => {
+    let t = 5_000;
+    vi.spyOn(performance, 'now').mockImplementation(() => t);
+    const rig = mount();
+    rig.type('ArrowRight');
+    for (const ch of WORD.slice(0, 4)) {
+      rig.type(ch);
+      t += 100;
+    }
+    t += KEY_GAP_MS + 1_000;
+    const before = rig.screen.snapshot()['selectedIndex'];
+    rig.type(WORD[4]!); // the A: the word's fifth letter, but the match is over
+    expect(rig.screen.snapshot()['selectedIndex']).not.toBe(before);
+  });
+
+  it('while the match is live, the A of the word is the word\'s: the cursor does not move (the reason the board claims it)', () => {
+    const rig = mount();
+    rig.type('ArrowRight');
+    for (const ch of WORD.slice(0, 4)) rig.type(ch);
+    const before = rig.screen.snapshot()['selectedIndex'];
+    rig.type(WORD[4]!);
+    expect(rig.screen.snapshot()['selectedIndex']).toBe(before);
+  });
+
+  it('a mid-word typo ends the match: the letters after it are the board\'s again, and the word does not open', async () => {
+    const rig = mount();
+    rig.type('ArrowRight');
+    for (const ch of 'lebk') rig.type(ch); // k: wrong, and bound to nothing
+    const before = rig.screen.snapshot()['selectedIndex'];
+    rig.type('a'); // would be the word's fifth letter, but the typo ended it
+    expect(rig.screen.snapshot()['selectedIndex']).not.toBe(before);
+    rig.typeWord('nc');
+    await flush();
+    expect(rig.picked).toEqual([]);
+    rig.typeWord(WORD); // and the word, typed whole after the typo, still opens
+    await flush();
+    expect(rig.picked).toEqual([EXP]);
+  });
+
+  it('Shift, held for a capital in the middle of the word, neither ends the match nor is taken from the board', async () => {
+    const rig = mount();
+    for (const ch of WORD.slice(0, 2)) rig.type(ch);
+    rig.type('Shift', 'ShiftLeft');
+    rig.type(WORD[2]!.toUpperCase());
+    rig.typeWord(WORD.slice(3));
+    await flush();
+    expect(rig.picked).toEqual([EXP]);
   });
 });
 

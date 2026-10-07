@@ -44,10 +44,14 @@ describe('the door matcher (pure)', () => {
     expect(typeWord(new SecretDoor(), 'LIMIT').at(-1)).toBe('open');
   });
 
-  it('ignores keys that are not characters (Shift for the capitals, arrows, Enter)', () => {
+  it('ignores the typing aids (Shift for the capitals, CapsLock), and a key the board answers (an arrow, Enter, Escape) ends the word', () => {
     const door = new SecretDoor();
     const feed = ['Shift', 'l', 'Shift', 'i', 'CapsLock', 'm', 'i', 'Shift', 't'];
     expect(feed.map((k, i) => door.feedKey(k, i * 50)).at(-1)).toBe('open');
+    for (const key of ['ArrowLeft', 'ArrowRight', 'Enter', 'Escape']) {
+      const broken = new SecretDoor(); // release 39.3, F393-04: the arrow that moves the cursor must not also be a pause in the word
+      expect(['l', 'i', 'm', key, 'i', 't'].map((k, i) => broken.feedKey(k, i * 50)), key).not.toContain('open');
+    }
   });
 
   it('resets on a wrong letter, and a wrong L starts it again', () => {

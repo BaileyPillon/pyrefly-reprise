@@ -4,7 +4,7 @@ import { Screen } from '../Screen.ts';
 import { BUTTONS, type InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import type { ChapterId } from '../../data/encounters.ts';
-import { ControlsHint } from '../../ui/common/ControlsHint.ts';
+import { ControlsHint, isCoarsePointer } from '../../ui/common/ControlsHint.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import {
@@ -59,14 +59,6 @@ const TOUCH_HINTS = [
   { keyboard: 'Tap here', gamepad: 'Circle', label: 'back', action: 'cancel' },
 ];
 
-function isTouchScreen(): boolean {
-  try {
-    return typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
-  } catch {
-    return false;
-  }
-}
-
 /**
  * The board of the whole game: every listed encounter as its boss painted on
  * its own scene, in a fixed list of two game groups.
@@ -110,6 +102,7 @@ export class ChapterSelectScreen extends Screen {
   private door = new SecretDoor();
   private leblancDoor = new WordDoor(EXP_LEBLANC_DOOR_WORD); // the second door, to the hidden Leblanc experiment (`frontend/leblancDoor.ts`): its word, typed; shows nothing either
   private wordKey = false; // a later letter of that word was just typed: the board leaves this frame's presses alone (the A of "leblanc" is `left`)
+  private opening: ChapterId | null = null; // its last letter was just typed: the door opens on the next frame, which can take that press (C is START; see `handleInput`)
   private eyebrow: HTMLElement | null = null;
   /** A-3: the focused chapter's battle starts loading while its card is read. */
   private readonly warmer = new BoardWarmer();
@@ -142,7 +135,7 @@ export class ChapterSelectScreen extends Screen {
         <div class="fe-aside"></div>
       </div>
     `;
-    this.hint = new ControlsHint({ root: this.root, items: isTouchScreen() ? TOUCH_HINTS : HINTS });
+    this.hint = new ControlsHint({ root: this.root, items: isCoarsePointer() ? TOUCH_HINTS : HINTS });
     this.hint.mount();
     this.armDoor();
     // The list is drawn once: after this only its selected mark moves.
@@ -166,6 +159,15 @@ export class ChapterSelectScreen extends Screen {
 
   override handleInput(input: InputSnapshot): void {
     this.hint?.handleInput(input);
+    if (this.opening) {
+      // A typed word's last key went down since the last frame. That press is the door's and nobody else's: the word's C is START, and party prep begins the fight on START, so
+      // a press left latched skipped prep (F393-03). A key can be taken only inside a frame, so the door opens here, taking every press with it, as FF7's T (bound to nothing) never needed.
+      const id = this.opening;
+      this.opening = null;
+      for (const b of BUTTONS) input.consume(b);
+      this.openDoor(id);
+      return;
+    }
     if (this.confirming) return;
     // The door reads edges without consuming them, so the board below sees every press as before.
     for (const button of BUTTONS) if (input.justPressed(button) && this.door.feedButton(button, now()) === 'open') this.openDoor();
@@ -266,7 +268,7 @@ export class ChapterSelectScreen extends Screen {
   }
 
   private confirm(): void {
-    if (this.confirming) return;
+    if (this.confirming || this.opening) return;
     const tile = this.tiles[this.selected];
     // A COMING card is never the cursor's home, but a stray `confirm` action
     // from a click must not start a chapter that does not exist.
@@ -307,10 +309,10 @@ export class ChapterSelectScreen extends Screen {
   }
 
   private readonly onDoorKey = (e: KeyboardEvent): void => {
-    if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || this.confirming) return;
+    if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || this.confirming || this.opening) return;
     const at = now();
     if (this.door.feedKey(e.key, at) === 'open') this.openDoor();
-    if (this.leblancDoor.feedKey(e.key, at) === 'open') this.openDoor(EXP_LEBLANC_DOOR_CHAPTER);
+    if (this.leblancDoor.feedKey(e.key, at) === 'open') this.opening = EXP_LEBLANC_DOOR_CHAPTER; // the board is shut from now (`confirm`, this handler); the door opens on the next frame
     if (this.leblancDoor.continued) this.wordKey = true;
   };
 
