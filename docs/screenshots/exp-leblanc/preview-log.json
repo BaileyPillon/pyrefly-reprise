@@ -542,9 +542,9 @@
     },
     "hurt": null,
     "foeHurt": {
-     "id": "logos",
+     "id": "ormi",
      "pose": "hurt",
-     "art": "exp-leblanc-logos"
+     "art": "exp-leblanc-ormi"
     }
    }
   },
@@ -565,9 +565,9 @@
      },
      "hurt": null,
      "foeHurt": {
-      "id": "logos",
+      "id": "ormi",
       "pose": "hurt",
-      "art": "exp-leblanc-logos"
+      "art": "exp-leblanc-ormi"
      }
     }
    }

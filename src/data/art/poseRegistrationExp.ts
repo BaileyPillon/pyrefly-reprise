@@ -189,7 +189,7 @@ export const POSE_REGISTRATION_EXP: PoseRegistrationTable = {
     critical: { scale: 0.874, stanceX: 472.5 },
     hurt: { scale: 0.916, stanceX: 642.0 },
     idle: { stanceX: 417.0 },
-    item: { scale: 1.106, stanceX: 288.5 },
+    item: { scale: 1.198, stanceX: 405.0 },
     ko: { scale: 1.101 },
     ready: { scale: 1.001, stanceX: 781.5 },
     sleep: { scale: 1.04, stanceX: 335.5 },

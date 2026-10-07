@@ -159,23 +159,33 @@ export const ScenePalettes = {
   },
 
   /**
-   * The experimental Leblanc chapter's Last Room (FFX-2 only; branch `exp-leblanc`, 2026-10-06): a cool, soft, moonlit marble hall in
-   * lavender and periwinkle (the approved target "Moonlit Blue Hall", `docs/handoff/exp-leblanc.md` section 2). Chateau Leblanc's
-   * hot-magenta grade over this plate turned it electric blue and blew the stained glass out, so this one keeps the plate's own colour
-   * (saturation just under 1, lavender lifted shadows, a high bloom threshold so only the glass and the candles glow) and blurs the far
-   * wall less, so the heart window and the door read.
+   * The experimental Leblanc chapter's Last Room (FFX-2 only; branch `exp-leblanc`, 2026-10-06): a pale, soft, moonlit marble hall in lavender and periwinkle,
+   * the approved target "Moonlit Blue Hall" (mockup B; `docs/handoff/exp-leblanc.md` sections 2 and 14.5). Chateau Leblanc's hot-magenta grade over this plate
+   * turned it a deep electric blue; this one draws the plate as it was painted and brings it to the mockup's air.
+   *
+   * - `gamma` is the display transform here, not a taste control (`scenes/zanarkand-dome.ts` explains the same fact): the post chain runs on linear values and nothing
+   *   in it applies the sRGB encode, so a painting's sRGB values are decoded to linear on load and never encoded again: it is shown darker and more saturated than painted
+   *   unless this pass encodes it. About 2.2 puts the plate back as painted (the pale hall the Art Room made); 2.05 keeps a little of the depth. Chapter VI's room
+   *   (gamma 1) is the deep blue it is because of it.
+   * - `gain`, `lift` and `saturation` cut the look from there. A negative lift bites hard under this gamma, which the haze below covers where it matters.
+   * - The haze (`hazeColor`, `hazeAmount`, `hazeSide`; `GradeShader`) is the mockup's milky air: a veil of near-white lavender, thick at the floor and at the top of the
+   *   frame, none at the horizon, thinner toward the side walls. A painted figure keeps its own colour over it (the figure mix runs after it).
+   * The numbers were fitted in the engine against the mockup's regional statistics (`tools/exp-art/look.py`, `tools/exp-look.mjs`); the table is in the handoff's 14.5.
    */
   expMoonlitHall: {
     name: 'exp-moonlit-hall',
     figureBloomMask: FFX2_FIGURE_BLOOM_MASK,
-    lift: [0.018, 0.018, 0.034],
-    gamma: [1.0, 1.0, 1.0],
-    gain: [1.0, 1.0, 1.02],
-    saturation: 0.88,
-    vignette: 0.3,
+    lift: [-0.11, -0.08, -0.05],
+    gamma: [2.05, 2.05, 2.05],
+    gain: [0.915, 0.815, 0.915],
+    saturation: 0.906,
+    vignette: 0.08,
     vignetteRadius: 0.66,
     shadowTint: [0.5, 0.5, 0.88],
-    shadowTintAmount: 0.12,
+    shadowTintAmount: 0,
+    hazeColor: [1.0, 0.958, 1.0],
+    hazeAmount: [0.5, 0.0, 0.48],
+    hazeSide: 0.3,
     grain: 0.02,
     exposure: 1.04,
     bloomThreshold: 0.92,

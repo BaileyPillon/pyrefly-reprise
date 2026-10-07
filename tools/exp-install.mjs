@@ -7,6 +7,8 @@
  *   node tools/exp-install.mjs depth                      the plate's depth map (CPU) and the fx record that lists it
  *   node tools/exp-install.mjs head --subject S --pose P --head x0,y0,x1,y1    set the head box of an installed pose (the idle's is the reference)
  *   node tools/exp-install.mjs stance --subject S --pose P --x N [--note "..."]   set the stance of an installed pose by hand (the foot the idle stands on)
+ *   node tools/exp-install.mjs retier [--subject S --pose P] [--dry-run]   put the masters of the painting that stands there in place of any stale ones (the old ones are
+ *                              moved into the replaced folder: `hires-install` never overwrites a master, so a repainted or re-cut pose kept its OLD masters until this existed)
  *   node tools/exp-install.mjs table                      regenerate src/data/art/poseRegistrationExp.ts
  *   node tools/exp-install.mjs list                       what is installed, what is still a placeholder
  *
@@ -264,6 +266,122 @@ export async function setStance(opts) {
   return rec;
 }
 
+/** A PNG's width and height off its header (no decoding). */
+export function pngSize(path) {
+  const b = readFileSync(path).subarray(0, 24);
+  return [b.readUInt32BE(16), b.readUInt32BE(20)];
+}
+
+/** The library's record of one pose's masters (hires-install's own format): made from THIS 1x painting (its sha256), the 4x and its 2x reduction. */
+function writeLibRecord(subject, pose, target, files) {
+  const libDir = join(TIER_LIB, 'characters', nsId(subject));
+  const lib = readJson(join(TIER_LIB, 'manifest.json'), { version: 1, created: new Date().toISOString(), assets: {} });
+  const id = `characters/${nsId(subject)}/${pose}`;
+  lib.assets[id] = {
+    id,
+    src: `public/art/${id}.png`,
+    status: 'ok',
+    flags: [],
+    class: 'exp-leblanc',
+    scale: 4,
+    source_sha256: sha256(target),
+    outputs: [4, 2].map((s) => {
+      const name = `${pose}@${s}x.png`;
+      return { path: `characters/${nsId(subject)}/${name}`, scale: s, bytes_png: statSync(join(libDir, name)).size, size: files[name].size };
+    }),
+  };
+  writeJsonAtomic(join(TIER_LIB, 'manifest.json'), lib);
+}
+
+/** RealESRGAN x4 of the installed 1x painting into the library (and its 2x reduction), then the library's record of them. */
+function makeMasters(subject, pose, target) {
+  say('tiers: RealESRGAN x4, the 2x from it');
+  const libDir = join(TIER_LIB, 'characters', nsId(subject));
+  mkdirSync(libDir, { recursive: true });
+  const t = run(join(REPO, 'tools', 'exp-art', 'tiers.py'), ['--src', target, '--out-dir', libDir, '--name', pose], 'tiers.py');
+  writeLibRecord(subject, pose, target, t.files);
+}
+
+/**
+ * Are the @2x/@3x/@4x masters in the art folder the ones the library made from the painting that stands there now? `hires-install` never overwrites a master that is already
+ * in place, so a pose that was repainted (or re-cut) kept the OLD painting's masters until this was written: the game draws the masters on a high-density screen, and a
+ * stale one shows the earlier painting (a grey halo the peel had taken off, or a drape on the other side) at the new one's size.
+ */
+export function mastersCurrent(subject, pose) {
+  const folder = join(EXP_ART, 'characters', nsId(subject));
+  const one = join(folder, `${pose}.png`);
+  const lib = readJson(join(TIER_LIB, 'manifest.json'), null);
+  const rec = lib?.assets?.[`characters/${nsId(subject)}/${pose}`];
+  if (!rec || rec.source_sha256 !== sha256(one)) return { current: false, libCurrent: false, why: 'the library holds masters of another painting, or none' };
+  const [w, h] = pngSize(one);
+  for (const s of [4, 2]) {
+    const mine = join(folder, `${pose}@${s}x.png`);
+    const theirs = join(TIER_LIB, 'characters', nsId(subject), `${pose}@${s}x.png`);
+    if (!existsSync(mine)) return { current: false, libCurrent: true, why: `no @${s}x in the art folder` };
+    if (!existsSync(theirs) || sha256(mine) !== sha256(theirs)) return { current: false, libCurrent: true, why: `the @${s}x in the art folder is not the library's` };
+  }
+  const three = join(folder, `${pose}@3x.png`);
+  if (!existsSync(three)) return { current: false, libCurrent: true, why: 'no @3x' };
+  const [w3, h3] = pngSize(three);
+  if (w3 !== w * 3 || h3 !== h * 3) return { current: false, libCurrent: true, why: `the @3x is ${w3}x${h3}, not 3 x ${w}x${h}` };
+  return { current: true, libCurrent: true, why: 'ok' };
+}
+
+/**
+ * Put the library's masters of one pose into the art folder. A master that is already there is put aside first (moved into the replaced folder, nothing is lost):
+ * `hires-install` would leave it, and it is the old painting's.
+ */
+export function installMasters(subject, pose, stamp) {
+  const folder = join(EXP_ART, 'characters', nsId(subject));
+  const id = `characters/${nsId(subject)}/${pose}`;
+  const stale = [2, 3, 4].filter((n) => existsSync(join(folder, `${pose}@${n}x.png`)));
+  if (stale.length) {
+    const keep = join(REPLACED_DIR, nsId(subject), pose, `${stamp}-masters`);
+    mkdirSync(keep, { recursive: true });
+    for (const n of stale) renameSync(join(folder, `${pose}@${n}x.png`), join(keep, `${pose}@${n}x.png`));
+    say(`the old @${stale.join('/@')}x masters are put aside in ${keep} (hires-install never overwrites one)`);
+  }
+  const hi = spawnSync(process.execPath, [join(REPO, 'tools', 'hires-install.mjs'), '--lib', TIER_LIB, '--art', EXP_ART, '--only', id, '--copy', '--apply'], { encoding: 'utf8' });
+  if (hi.status !== 0) throw new Error(`hires-install failed: ${(hi.stderr || hi.stdout).slice(-1200)}`);
+  say(hi.stdout.trim().split(/\r?\n/).slice(0, 3).join(' | '));
+  const tiers = [2, 3, 4].filter((n) => existsSync(join(folder, `${pose}@${n}x.png`)));
+  if (tiers.length !== 3) throw new Error(`expected @2x, @3x and @4x of ${pose}, found @${tiers.join('/@')}x (hires-install said: ${hi.stdout.slice(-400)})`);
+  const cur = mastersCurrent(subject, pose);
+  if (!cur.current) throw new Error(`the masters of ${nsId(subject)}/${pose} are still not the library's after the install: ${cur.why}`);
+  return tiers;
+}
+
+/**
+ * Make every installed pose's masters the ones of the painting that stands there (`--subject S --pose P` for one; `--dry-run` lists them): the old ones are put
+ * aside in the replaced folder, the library's are copied in and the @3x derived from the @4x. When the library holds masters of another painting they are made again (local RealESRGAN).
+ */
+export async function retier(opts) {
+  const installed = readInstalled();
+  const jobs = [];
+  for (const [subject, poses] of Object.entries(installed)) {
+    for (const pose of Object.keys(poses)) {
+      if ((opts.subject && opts.subject !== subject) || (opts.pose && opts.pose !== pose)) continue;
+      const st = mastersCurrent(subject, pose);
+      if (!st.current) jobs.push({ subject, pose, st });
+    }
+  }
+  say(`${jobs.length} installed pose(s) with masters that are not those of the painting that stands there`);
+  for (const j of jobs) say(`  ${nsId(j.subject)}/${j.pose}: ${j.st.why}`);
+  if (opts['dry-run']) return jobs.map((j) => ({ subject: j.subject, pose: j.pose, why: j.st.why }));
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  for (const j of jobs) {
+    const target = join(EXP_ART, 'characters', nsId(j.subject), `${j.pose}.png`);
+    if (!j.st.libCurrent) makeMasters(j.subject, j.pose, target);
+    installMasters(j.subject, j.pose, stamp);
+  }
+  if (jobs.length) {
+    const gen = spawnSync(process.execPath, [join(REPO, 'tools', 'gen', 'manifest.mjs'), '--quiet'], { encoding: 'utf8' });
+    if (gen.status !== 0) throw new Error(`manifest.mjs failed: ${gen.stderr.slice(-600)}`);
+    say('manifest regenerated');
+  }
+  return jobs.map((j) => ({ subject: j.subject, pose: j.pose, why: j.st.why }));
+}
+
 /** Install one painting. Returns the record written to `installed.json`. */
 export async function install(opts) {
   const { src, subject, pose } = opts;
@@ -285,7 +403,7 @@ export async function install(opts) {
   const before = installed[subject]?.[pose];
   const tiersWanted = !opts['no-tiers'];
   const staleTiers = [2, 3, 4].filter((n) => existsSync(join(folder, `${pose}@${n}x.png`)));
-  if (before && staleTiers.length && !tiersWanted) throw new Error(`${pose} already has @${staleTiers.join('/@')}x masters of the painting it replaces: install with tiers (they are overwritten) or move them aside`);
+  if (before && staleTiers.length && !tiersWanted) throw new Error(`${pose} already has @${staleTiers.join('/@')}x masters of the painting it replaces: install with tiers (the old ones are put aside in the replaced folder, and made again) or run \`retier\` after`);
   if (!before && staleTiers.length) throw new Error(`${folder} holds @${staleTiers.join('/@')}x masters of a ${pose} nobody installed: refusing to guess what they are`);
   const head = opts.head ? opts.head.split(',').map(Number) : null;
   if (head && (head.length !== 4 || head.some((n) => !Number.isFinite(n)))) throw new Error('--head is x0,y0,x1,y1');
@@ -338,32 +456,8 @@ export async function install(opts) {
 
   let tiers = [];
   if (tiersWanted) {
-    say('tiers: RealESRGAN x4, the 2x from it, then hires-install (3x derived)');
-    const libDir = join(TIER_LIB, 'characters', nsId(subject));
-    mkdirSync(libDir, { recursive: true });
-    const t = run(join(REPO, 'tools', 'exp-art', 'tiers.py'), ['--src', target, '--out-dir', libDir, '--name', pose], 'tiers.py');
-    const lib = readJson(join(TIER_LIB, 'manifest.json'), { version: 1, created: new Date().toISOString(), assets: {} });
-    const id = `characters/${nsId(subject)}/${pose}`;
-    lib.assets[id] = {
-      id,
-      src: `public/art/${id}.png`,
-      status: 'ok',
-      flags: [],
-      class: 'exp-leblanc',
-      scale: 4,
-      source_sha256: sha256(target),
-      outputs: [4, 2].map((s) => {
-        const name = `${pose}@${s}x.png`;
-        const f = t.files[name];
-        return { path: `characters/${nsId(subject)}/${name}`, scale: s, bytes_png: statSync(join(libDir, name)).size, size: f.size };
-      }),
-    };
-    writeJsonAtomic(join(TIER_LIB, 'manifest.json'), lib);
-    const hi = spawnSync(process.execPath, [join(REPO, 'tools', 'hires-install.mjs'), '--lib', TIER_LIB, '--art', EXP_ART, '--only', id, '--copy', '--apply'], { encoding: 'utf8' });
-    if (hi.status !== 0) throw new Error(`hires-install failed: ${(hi.stderr || hi.stdout).slice(-1200)}`);
-    say(hi.stdout.trim().split(/\r?\n/).slice(0, 3).join(' | '));
-    tiers = [2, 3, 4].filter((n) => existsSync(join(folder, `${pose}@${n}x.png`)));
-    if (tiers.length !== 3) throw new Error(`expected @2x, @3x and @4x of ${pose}, found @${tiers.join('/@')}x (hires-install said: ${hi.stdout.slice(-400)})`);
+    makeMasters(subject, pose, target);
+    tiers = installMasters(subject, pose, stamp); // then hires-install (the 3x derived); a replaced painting's old masters are put aside first
   }
 
   const rec = {
@@ -498,9 +592,10 @@ async function main() {
   else if (cmd === 'head') console.log(JSON.stringify(await setHead(a), null, 1));
   else if (cmd === 'stance') console.log(JSON.stringify(await setStance(a), null, 1));
   else if (cmd === 'depth') installDepth();
+  else if (cmd === 'retier') console.log(JSON.stringify(await retier(a), null, 1));
   else if (cmd === 'list') list();
   else {
-    console.error('usage: node tools/exp-install.mjs install|backdrop|head|stance|depth|table|list   (see the header of this file)');
+    console.error('usage: node tools/exp-install.mjs install|backdrop|head|stance|retier|depth|table|list   (see the header of this file)');
     process.exitCode = 2;
   }
 }

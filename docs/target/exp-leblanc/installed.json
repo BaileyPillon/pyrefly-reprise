@@ -286,30 +286,30 @@
   },
   "item": {
    "artRoom": {
-    "id": "p_8c8392ce",
-    "version": 3,
-    "file": "p_8c8392ce-experimental-chapter-yuna-gunner-item-v3.png",
-    "sha256": "08ec18b75cecdb6dc25e81b7b78893a30ffa634d63138d6e372196c05834700a",
-    "score": 8.4,
+    "id": "p_aec9ace7",
+    "version": 2,
+    "file": "p_aec9ace7-experimental-chapter-gunner-girl-item-re-v2.png",
+    "sha256": "4d8198a22a117add8cb48f0761d3d4a70cfe0313820e280064a082a80c2c423c",
+    "score": 8.8,
     "approvedBy": "auto-pose"
    },
-   "sha256": "a7f56431cf37c7fc49353c3ba7f1a496c0a7d1f7642175bdf6649c75eaa511ff",
+   "sha256": "f028ef9c6a3eab42960f905adfcba888987976a6f5ef25685ab16e4cb503ebbd",
    "size": [
-    580,
-    1392
+    634,
+    1448
    ],
-   "baselineY": 1376,
+   "baselineY": 1432,
    "contentBox": [
     16,
     16,
-    564,
-    1376
+    618,
+    1432
    ],
    "facing": "right",
    "head": [
-    112,
+    180,
     20,
-    370,
+    400,
     220
    ],
    "headSource": "hand",
@@ -319,11 +319,11 @@
     4
    ],
    "row": {
-    "scale": 1.106,
-    "stanceX": 288.5
+    "scale": 1.198,
+    "stanceX": 405
    },
    "provisional": null,
-   "installedAt": "2026-10-06T23:29:42.872Z"
+   "installedAt": "2026-10-07T01:55:36.723Z"
   },
   "critical": {
    "artRoom": {

@@ -32,19 +32,19 @@
   },
   {
    "k": "shot.2-chapter-select-experiment",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-2-chapter-select-experiment.png"
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\smoke-2-chapter-select-experiment.png"
   },
   {
    "k": "shot.3-party-prep",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-3-party-prep.png"
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\smoke-3-party-prep.png"
   },
   {
    "k": "shot.4-cutscene",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-4-cutscene.png"
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\smoke-4-cutscene.png"
   },
   {
    "k": "shot.5-battle-first-menu",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-5-battle-first-menu.png"
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\smoke-5-battle-first-menu.png"
   },
   {
    "k": "field",
@@ -167,18 +167,17 @@
   },
   {
    "k": "shot.7a-yuna-attack-start",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-7a-yuna-attack-start.png"
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\smoke-7a-yuna-attack-start.png"
   },
   {
    "k": "shot.7b-yuna-attack-hit",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-7b-yuna-attack-hit.png"
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\smoke-7b-yuna-attack-hit.png"
   },
   {
    "k": "actors",
    "v": [
     "paine",
     "rikku",
-    "paine",
     "yuna"
    ]
   },
@@ -188,19 +187,19 @@
     "ok": true,
     "detail": [
      {
-      "from": "rikku",
-      "to": "ormi-entrance",
-      "amount": 67
+      "from": "yuna",
+      "to": "dr-goon",
+      "amount": 150
      },
      {
-      "from": "paine",
+      "from": "rikku",
       "to": "ormi-entrance",
-      "amount": 127
+      "amount": 70
      },
      {
       "from": "yuna",
       "to": "ormi-entrance",
-      "amount": 90
+      "amount": 63
      }
     ]
    }

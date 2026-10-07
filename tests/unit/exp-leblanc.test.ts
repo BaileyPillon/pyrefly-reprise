@@ -515,3 +515,29 @@ describe('an experiment, not a chapter: the board, the store, the save', () => {
     expect(progress.pips.at(-1)!.lit).toBe(true);
   });
 });
+
+describe("the experiment's room is pale, so its HUD takes more ink (and only its HUD)", () => {
+  const read = (rel: string): string => readFileSync(join(process.cwd(), rel), 'utf8');
+
+  it("BattleScreen puts the scene's art namespace on the root, and takes it off for a scene with none", () => {
+    const src = read('src/app/screens/BattleScreen.ts');
+    expect(src).toContain("this.root.dataset['artNamespace'] = scene.slots.artNamespace;");
+    expect(src).toContain("delete this.root.dataset['artNamespace'];");
+    expect(SCENE_ART_NAMESPACE[EXP_LEBLANC_SCENE]).toBe('exp-leblanc');
+  });
+
+  it('the FFX-2 HUD stylesheet names the namespace once, with the three ink tokens, and the shared tokens are untouched', () => {
+    const css = read('src/ui/ffx2/ffx2-hud.css').replace(/\r\n/g, '\n');
+    const rule = css.match(/\[data-art-namespace='exp-leblanc'\] \.ig \{([^}]*)\}/);
+    expect(rule, 'the scoped rule').not.toBeNull();
+    const body = rule![1]!;
+    expect(body).toMatch(/--ig-ink-panel: rgba\(11, 10, 18, 0\.92\)/);
+    expect(body).toMatch(/--ig-ink-chip: rgba\(11, 10, 18, 0\.8\)/);
+    expect(body).toMatch(/--ig-ink-acting: rgba\(11, 10, 18, 0\.96\)/);
+    expect(css.split("data-art-namespace='exp-leblanc'").length - 1).toBe(1);
+    const tokens = read('src/ui/inkgold/tokens.css');
+    expect(tokens).toContain('--ig-ink-panel: rgba(11, 10, 18, 0.84);');
+    expect(tokens).toContain('--ig-ink-chip: rgba(11, 10, 18, 0.62);');
+    expect(tokens).toContain('--ig-ink-acting: rgba(11, 10, 18, 0.94);');
+  });
+});

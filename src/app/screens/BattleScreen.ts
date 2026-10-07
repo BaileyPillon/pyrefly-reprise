@@ -231,6 +231,9 @@ export class BattleScreen extends Screen {
     const scene = await loadScene(chapter.sceneKey, this.app.renderer.camera);
     if (this.exited) return void scene.dispose();
     this.scene = scene;
+    // The scene's art namespace on the root, for the one place chrome is keyed on it: the experimental Leblanc room is pale, and its HUD takes more ink (`ui/ffx2/ffx2-hud.css`).
+    if (scene.slots.artNamespace) this.root.dataset['artNamespace'] = scene.slots.artNamespace;
+    else delete this.root.dataset['artNamespace'];
     if (this.opts.openingHurry) markOpeningHurried(scene.scene, () => ({ speed: this.presenter?.playbackSpeed ?? 'normal', menu: this.presenter?.snapshot()['awaitingMenu'] === true })); // PR-0341: a scene that stages its own arrival (Ch. IX) must not wait for an opening shot a hurried opening never shows; FOC371-01: its compressed arrival follows fast and skip, and is over by the first menu
     this.app.renderer.applyPalette(this.scene.palette);
     bindEyeCandyScene({ key: scene.key, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)

@@ -25,7 +25,8 @@ import { LEBLANC_LAST_ROOM_SLOTS, makeLeblancLastRoomScene, type LeblancPlate, t
  * The moonlit hall's own light (the approved target "Moonlit Blue Hall": cool, soft, lavender and periwinkle, a polished reflective floor).
  * Chapter VI's room lights a hot-magenta plate: a tinted 3D floor over this plate's marble would bury it, its warm and magenta pools and
  * its cyan rim would fight the cool light, and its grade turned the plate electric blue. So: the floor only receives shadows, the pools and
- * the rim are pale lavender, and the grade is `ScenePalettes.expMoonlitHall`. Everything else (rigs, slots, camera, heights) is Chapter VI's.
+ * the rim are pale lavender, and the grade is `ScenePalettes.expMoonlitHall` (the plate drawn as it was painted, brought to the mockup's air: pale, milky, soft;
+ * `docs/handoff/exp-leblanc.md` 14.5). Everything else (rigs, slots, camera, heights) is Chapter VI's.
  */
 export const EXP_LEBLANC_LOOK: LeblancPlateLook = {
   palette: ScenePalettes.expMoonlitHall,
