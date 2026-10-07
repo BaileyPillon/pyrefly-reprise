@@ -28,6 +28,7 @@ import { sfxNames } from '../../src/audio/sfx/index.ts';
 import { tempoCurveOf } from '../../src/audio/tempo.ts';
 // @ts-expect-error -- the render tooling is plain .mjs with no declarations.
 import { AUDIO_BUDGET_BYTES, scoreFingerprint } from '../../tools/audio/manifest-io.mjs';
+import { externalSource } from '../../tools/audio/manifest-io.mjs';
 
 const AUDIO_DIR = new URL('../../public/audio/', import.meta.url);
 const raw = JSON.parse(readFileSync(new URL('manifest.json', AUDIO_DIR), 'utf8'));
@@ -140,14 +141,21 @@ describe('the shipped audio manifest', () => {
    * been rendered since the field was introduced, and it fills itself in the
    * next time anyone renders it — deliberately, so this does not demand six
    * CPU-minutes on a shared machine to go green.
+   *
+   * An entry with a `source` field is not a render of the score at all (the
+   * ElevenLabs takes of 2026-10-07 were made elsewhere and installed under the
+   * cue's name), so there is nothing here for it to be stale against. Which
+   * entries carry `source`, and the file each one must be, is pinned by
+   * `audio-music-elevenlabs.test.ts` against `docs/audio/music-elevenlabs-2026-10-07.json`.
    */
   it('was rendered from the score that is in the repo now', () => {
     const stale: string[] = [];
     const unverifiable: string[] = [];
     for (const name of trackNames()) {
-      const entry = raw.music[name] as { loopStart: number; loopEnd: number; score?: string };
+      const entry = raw.music[name] as { loopStart: number; loopEnd: number; score?: string; source?: string };
       const track = getTrack(name);
       if (!entry || !track?.loop) continue;
+      if (externalSource(entry)) continue;
 
       const curve = tempoCurveOf(track);
       const drift = Math.max(

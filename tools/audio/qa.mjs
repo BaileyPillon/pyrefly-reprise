@@ -380,10 +380,24 @@ async function main() {
   // rendered from, so the two can be compared.
   const { getTrack, hasTrack } = await import('../../src/audio/tracks/index.ts');
   const { tempoCurveOf } = await import('../../src/audio/tempo.ts');
-  const { scoreFingerprint } = await import('./manifest-io.mjs');
+  const { scoreFingerprint, externalSource } = await import('./manifest-io.mjs');
   const freshness = new Map();
   for (const [name, entry] of Object.entries(manifest.music)) {
     if (!hasTrack(name)) continue;
+
+    // A file made outside the score and installed under the cue's name says so with `source`
+    // (manifest-io.mjs `externalSource`). There is no render to be stale, so the loop points and the
+    // fingerprint below do not apply to it; its own record pins it instead. Every other gate in this
+    // file still runs on it.
+    const external = externalSource(entry);
+    if (external) {
+      freshness.set(name, {
+        stale: false,
+        note: `not a render of the score (source: ${external}); held to its own record, not to the score`,
+      });
+      continue;
+    }
+
     const track = getTrack(name);
     const current = scoreFingerprint(track);
 
