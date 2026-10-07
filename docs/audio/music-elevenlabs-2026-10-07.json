@@ -17,7 +17,7 @@
   "master": {
     "chain": [
       "Decode the raw take with ffmpeg to float 44.1 kHz stereo (no normalisation, as qa.mjs does).",
-      "Cut [0, loopEnd), crossfade the last beat before loopEnd into the audio just before loopStart (equal power; the project's remaster.finish()) and append the 3 s run-on, an exact copy of the loop head. Loop points are exact samples.",
+      "Cut [0, loopEnd), crossfade the last beat before loopEnd into the audio just before loopStart (equal power; the project's remaster.finish()) and append the 3 s run-on, an exact copy of the loop head. Loop points are exact samples. A take that opens with silence loses it first (`headTrimSeconds` in the cue's `master`).",
       "One linear gain to -16.0 LUFS integrated (ffmpeg ebur128). No limiter was needed: the true peak after the gain is under the -1.5 dBFS ceiling.",
       "Encode with libmp3lame -q:a 0 (V0), 44.1 kHz stereo, LAME/Info gapless header: the shipped music format.",
       "No EQ, no stereo repair, no reverb, no exciter, no dither."
@@ -45,7 +45,7 @@
     "The shipped file is a transcode: MP3 to float to MP3.",
     "Not a render of the score. The score of each cue stays in src/audio/tracks as the synth fallback when the MP3 cannot load, and TRACK_NOTES and the cue map in docs/audio/THEMES.md still describe that score (its key, tempo and themes), not the take. No claim is made here that a take carries a motif of the thematic bible.",
     "No resemblance check against existing music was run on any take (agents cannot hear, rule 13). The prompts name no composer, franchise, character or melody.",
-    "Bailey has heard the loop wraps of the mastered files and his words are in each cue's `pick`; no agent has heard anything.",
+    "What Bailey said of each cue's loop jump is in its `pick`; no agent has heard anything.",
     "Not yet run on a production build: tools/audio/music-v2-browser-proof.mjs needs a built dist, so the release runs it on the candidate. The install notes record a headless Chromium 153 decode of each staged file equal to ffmpeg's (the sample counts in `after.decodedSamples`)."
   ],
   "supersedes": "For each cue, the older record that last pinned its file: docs/audio/music-v2-2026-09-30.json (the FFX cues) or docs/audio/music-o1-2026-09-30.json (chapter-select). Their tests step aside for a cue this record lists, and the cue's `before` here is the file they pinned.",
@@ -385,6 +385,174 @@
         "corr": false,
         "sideMid": false,
         "monoLoss": false
+      }
+    },
+    {
+      "cue": "title",
+      "game": "both",
+      "chapters": [
+        "the title screen, both games (TitleScreen.enter, src/app/screens/TitleScreen.ts)",
+        "the attract DemoScene (src/app/screens/DemoScene.ts)"
+      ],
+      "install": {
+        "dir": "D:/Tools/elevenlabs/install/title",
+        "stageFile": "title.mp3"
+      },
+      "brief": "title",
+      "take": 1,
+      "pick": [
+        {
+          "who": "Bailey",
+          "when": "2026-10-07",
+          "said": "we need to hotfix in the title screen music updated please",
+          "of": "the title screen music"
+        },
+        {
+          "who": "Bailey",
+          "when": "2026-10-07",
+          "said": "ok ill go with title 1",
+          "of": "the title option he heard: the `title` brief, take 1 (\"title #1\" on the audition page)"
+        }
+      ],
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Sparse, melancholy solo piano piece at 58 BPM in A minor. A lone flute plays four soft notes, then the piano answers with a slow rising phrase that never finishes, over gentle broken chords and one low string drone. Intimate, nostalgic, like a story that is already over being told anyway. Quiet dynamics, much silence and natural room reverb, no drums, no vocals. No fade-out; it ends unresolved on a held note.",
+        "music_length_ms": 91000,
+        "force_instrumental": true
+      },
+      "generated": {
+        "at": "2026-10-07T13:36:12.142Z",
+        "credits": 1365,
+        "usd": 0.2275
+      },
+      "raw": {
+        "path": "D:/Tools/elevenlabs/candidates/2026-10-07/music/title/take-1.mp3",
+        "sha256": "1c04aa5d07419e7239aca51de22a02eb29a3d64280292a5caddbd6286d5d081c",
+        "bytes": 1456632,
+        "format": "mp3 128 kbps CBR 44.1 kHz stereo",
+        "seconds": 91.0367
+      },
+      "master": {
+        "gainDb": 1,
+        "headTrimSeconds": 1.9
+      },
+      "loop": {
+        "introSeconds": 33.306,
+        "bodyBars": 12,
+        "barSeconds": 4.137931,
+        "how": "Bars 9 to 20 of the take: starts 4 ms before the attack of the piano's first chord (33.3098 s after the head trim) and ends on the start of bar 21, after the held last chord has rung out; three four-bar phrases. The intro is the flute opening plus the 0.19 s lead-in, so the flute plays once. The last second before the loop end is crossfaded into the audio before the loop start."
+      },
+      "tempoKey": {
+        "meter": "4/4",
+        "beatGridBpm": 58.013,
+        "key": "D minor",
+        "keyNote": "Krumhansl-Schmuckler, tuning-corrected, r 0.93 (install notes); the brief asked for A minor.",
+        "notesBy": "the install notes (beat-grid fit over local 20 s windows; the twelve piano attacks give 58.0001)",
+        "scoreHas": "A minor, 58 bpm (src/audio/tracks/title.ts)",
+        "projectEstimator": {
+          "tempoEst": 115.5,
+          "tempoEstFolded": 57.75,
+          "keyEst": "D minor",
+          "keyEstScore": 0.925,
+          "measuredWith": "tools/audio/ace-measure.py on the staged wide file"
+        }
+      },
+      "before": {
+        "bytes": 2888145,
+        "sha256": "59ec7baac93cb02100d13640b0cc107a87caf8389a1af5cd0525dab1ba8e9682",
+        "route": "Direction B + R1",
+        "measuredIn": "docs/audio/music-o1-2026-09-30.json, cues[title].after",
+        "manifestEntry": {
+          "file": "music/title.mp3",
+          "loopStart": 8.275873,
+          "loopEnd": 94.826893,
+          "duration": 97.8269,
+          "bytes": 2888145,
+          "lufs": -16,
+          "truePeakDb": -1.5
+        }
+      },
+      "variants": {
+        "wide": {
+          "dir": "stage",
+          "what": "the file as mastered from the take, with the stereo image of the take: what Bailey picked by ear",
+          "sha256": "27708094f4f3dad80e3f3a1c6f65db3ca60fdd1a773895fe81c7fc615ec9ccb7",
+          "bytes": 2331315,
+          "manifestEntry": {
+            "loopStart": 33.305805,
+            "loopEnd": 82.960975,
+            "duration": 85.961,
+            "bytes": 2331315,
+            "lufs": -16,
+            "truePeakDb": -2.4
+          },
+          "stereo": {
+            "corr": 0.602,
+            "sideMid": -6,
+            "monoLoss": -1
+          }
+        },
+        "narrow": {
+          "dir": "stage-narrow",
+          "what": "the same file with only the project's width stage added (remaster.image(): the mid untouched, the side high-passed at 120 Hz and set 8 dB under the mid; no phase repair, no EQ)",
+          "sha256": "9124c8ae794f3ea67907c580363f71c764a72d88778bd09387f54160c7ecb301",
+          "bytes": 2294964,
+          "manifestEntry": {
+            "loopStart": 33.305805,
+            "loopEnd": 82.960975,
+            "duration": 85.961,
+            "bytes": 2294964,
+            "lufs": -16,
+            "truePeakDb": -2.4
+          },
+          "stereo": {
+            "corr": 0.726,
+            "sideMid": -7.9,
+            "monoLoss": -0.6
+          }
+        }
+      },
+      "notes": [
+        "The stereo gate passes on the whole file by a hair (0.602, -6.0 dB, -1.0 dB against 0.60, -6, -1; unrounded 0.6021, -6.011, -0.971), and only because the 33 s flute opening is nearly mono. The loop body alone, which plays almost all the time, reads 0.469 / -4.3 / -1.36 and misses all three. The narrow variant passes on the whole file (0.726 / -7.9 / -0.6) and on the loop alone (0.626 / -6.3 / -0.92).",
+        "The take is in D minor (the brief asked for A minor) and its flute opening runs 33 s where the brief planned about 8 s, so the piano enters 33 s after the cue starts where the old file had it at 8 s; 33 s is a long time to sit on one soft line if a player lingers. The synth fallback (title.ts, A minor, 58 bpm) now plays a different piece from the file when the MP3 cannot load.",
+        "The raw take opens with 2.09 s of silence and qa.mjs allows 0.5 s, so the first 1.9 s were cut (83,790 samples; the cut part never exceeds -89.6 dBFS). TitleScreen fades the cue in over 1.6 s.",
+        "The wrap passes through the last chord's decay: about 2.5 s near -45 dBFS before the piano restarts at -21 dBFS. Of the loop's 100 ms blocks 3.4 % are under -40 dBFS and none under -50. It is a breath, not a stop, but it is the one place a listener could call a gap.",
+        "Band-limited at about 17.1 kHz (a 27 dB cliff); the music itself has almost nothing above 6 kHz, so the wall sits above what the piece uses."
+      ],
+      "installedVariant": "wide",
+      "after": {
+        "bytes": 2331315,
+        "sha256": "27708094f4f3dad80e3f3a1c6f65db3ca60fdd1a773895fe81c7fc615ec9ccb7",
+        "decodedSamples": 3790879,
+        "qa": {
+          "lufs": -16.13,
+          "truePeakDb": -2.39,
+          "seamOk": true,
+          "seamStep": 0.00049,
+          "seamAllowed": 0.00504,
+          "seamFluxRatio": 0.6,
+          "tilt": -11.9,
+          "failures": []
+        },
+        "measure": {
+          "corr": 0.602,
+          "sideMid": -6,
+          "monoLoss": -1,
+          "lra": 8.7,
+          "riseMs": 13.5,
+          "crispDb": 1.3,
+          "hfFlatnessDb": -7.1,
+          "topEdge70": 13383,
+          "cliff": {
+            "db": 27.3,
+            "hz": 17076
+          }
+        }
+      },
+      "themesStereoGate": {
+        "corr": true,
+        "sideMid": true,
+        "monoLoss": true
       }
     }
   ]

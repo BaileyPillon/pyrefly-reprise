@@ -263,6 +263,16 @@ sent (`music_length_ms` 80000, `force_instrumental` true):
 Warm, cinematic and hopeful menu theme at 72 BPM in D major, 4/4. A solo grand piano opens with a gentle, singing melody over soft sustained strings; a warm cello answers; then the full string section swells softly with a light harp and a distant French horn, like the calm morning before a long journey. Emotional but restrained, spacious, beautifully recorded. No drums, no percussion, no vocals, no electronic sounds. Loops cleanly: no final chord, no fade-out.
 ```
 
+#### `title` (both games: the title screen and the attract demo)
+
+Brief `title`, take 1; generated 2026-10-07 13:36 UTC (1,365 credits). The raw take is an MP3 at
+128 kbps, 91.04 s, SHA-256 `1c04aa5d07419e7239aca51de22a02eb29a3d64280292a5caddbd6286d5d081c`. Its first 1.9 s were silence and were cut when it was
+mastered. The prompt, as sent (`music_length_ms` 91000, `force_instrumental` true):
+
+```
+Sparse, melancholy solo piano piece at 58 BPM in A minor. A lone flute plays four soft notes, then the piano answers with a slow rising phrase that never finishes, over gentle broken chords and one low string drone. Intimate, nostalgic, like a story that is already over being told anyway. Quiet dynamics, much silence and natural room reverb, no drums, no vocals. No fade-out; it ends unresolved on a held note.
+```
+
 ## What must appear in the game credits
 
 Four entries, verbatim (the last two since music v2, 2026-09-30):

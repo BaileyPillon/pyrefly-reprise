@@ -219,12 +219,13 @@
     },
     "title": {
       "file": "music/title.mp3",
-      "loopStart": 8.275873,
-      "loopEnd": 94.826893,
-      "duration": 97.8269,
-      "bytes": 2888145,
+      "loopStart": 33.305805,
+      "loopEnd": 82.960975,
+      "duration": 85.961,
+      "bytes": 2331315,
       "lufs": -16.0,
-      "truePeakDb": -1.5
+      "truePeakDb": -2.4,
+      "source": "elevenlabs-music_v2_5"
     },
     "victory-ffx": {
       "file": "music/victory-ffx.mp3",
