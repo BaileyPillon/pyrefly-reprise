@@ -255,10 +255,10 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     ko: { stanceX: 589.5 },
   },
   'yunalesca-1': {
-    attack: { scale: 0.7, stanceX: 642.0 },
-    cast: { scale: 0.77, stanceX: 1016.5, upright: true },
-    hurt: { scale: 0.67, stanceX: 463.0 },
-    idle: { stanceX: 402.5 },
+    attack: { scale: 0.7, stanceX: 642.0, head: [0.607, 0.3352, 0.7364, 0.4713] },
+    cast: { scale: 0.77, stanceX: 1016.5, upright: true, head: [0.4204, 0.1181, 0.5348, 0.2627] },
+    hurt: { scale: 0.67, stanceX: 463.0, head: [0.4149, 0.169, 0.5578, 0.3364] },
+    idle: { stanceX: 402.5, head: [0.3718, 0.0971, 0.5249, 0.2111] },
   },
   'yunalesca-2': {
     attack: { stanceX: 709.5 },
