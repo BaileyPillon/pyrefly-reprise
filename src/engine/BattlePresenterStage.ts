@@ -11,6 +11,7 @@
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
 import { artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
+import { figureHeight, partyStature } from './PartyStature.ts';
 import { inArtNamespace } from '../data/art/artNamespace.ts';
 import { paintedPoses } from './EnemyActionPose.ts';
 import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresenterPorts.ts';
@@ -318,7 +319,9 @@ export class PaintedStage implements BattleStage {
     const poses = departurePoses(c.id, art.poses); // D-031 Evrae
     const heights = { party: this.opts.slots.partyHeight ?? 1.82, enemy: this.opts.slots.enemyHeight ?? 4.1 };
     const own = this.opts.slots.figureHeights?.[c.id]; // a scene's per-combatant height; ring and shadow follow it
-    const k = own !== undefined && !worldHeight ? own / worldHeightFor(c, heights) : 1;
+    // r3941-heights (FFX only): a hero stands at his own height next to Tidus's (`PartyStature.ts`); the shadow and the ring follow it.
+    const size = figureHeight({ shared: worldHeightFor(c, heights), own, given: worldHeight, stature: partyStature(this.lastState?.game, c.side, c.id) });
+    const k = size.ringScale;
 
     const anchor = anchorFor(this.opts.slots.partAnchors, c.id);
     const actor = await PaintedActor.create({
@@ -328,7 +331,7 @@ export class PaintedStage implements BattleStage {
       // turns them (FF7, `sideFacing`). Mirroring is a separate question, answered by each pose's sidecar;
       // art painted the way its body faces is drawn exactly as painted.
       ...bodyFacingOption(this.opts.slots.sideFacing, c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party'),
-      worldHeight: anchor ? SA.anchoredHeight(anchor) : (worldHeight ?? own ?? worldHeightFor(c, heights)),
+      worldHeight: anchor ? SA.anchoredHeight(anchor) : size.height,
       crossfadeMs: this.opts.slots.poseCut ? 0 : kind === 'party' ? 120 : 140, // FF7: a hard cut between its painted keys
       ...(this.opts.slots.poseShiftPx?.[artId] ? { poseShiftPx: this.opts.slots.poseShiftPx[artId] } : {}), // FF7: every key on the idle's stance
       poses,

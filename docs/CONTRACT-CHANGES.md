@@ -6,6 +6,18 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-07 — The FFX party stands at its real relative heights: `src/data/ffx/party-stature.ts`, `src/engine/PartyStature.ts`, one rule in `PaintedStage.add` (FFX only; additive)
+
+Branch `r3941-heights`. No file in the contract list changed; recorded because the stage's sizing of a party member gains a rule and a switch, and a data table joins `src/data/ffx/`. Handoff: [r3941-heights](handoff/r3941-heights.md); plan:
+[r3941-heights-review](plans/r3941-heights-review.md); the numbers and their source: `research/ffx-character-heights.md`.
+
+- `src/data/ffx/party-stature.ts` (new, pure data): `FFX_PARTY_STATURE` (`Record<CharacterId, { ratio, top, wiki }>`, Tidus 1; `ratio` is the only field the build reads), `ffxPartyStature(id)` (1 for any other id), `TIDUS_TOP`, `FFX_STATURE_BASIS`.
+- `src/engine/PartyStature.ts` (new, no `three`, no DOM but the page address): `partyStature(game, side, id)` (the table's ratio for one of the seven in an FFX battle on the party's side, else 1), `figureHeight({ shared, own, given, stature })`
+  (the actor's world height and the scale of its contact shadow and turn ring), `statureOff()` / `setStatureOff()` (`?stature=off`: the old equal heights, for same-build captures).
+- `src/engine/BattlePresenterStage.ts`: `add` sizes a combatant through `figureHeight`. For every figure that is not a hero in an FFX battle the numbers are the old ones bit for bit (`tests/unit/engine/party-stature.test.ts`); a height a scene names
+  (`SceneStaging.figureHeights`) or an arrival director hands `add` is the figure's own and carries no ratio. `src/scenes/via-purifico.ts` names Yuna (its `partyHeight` is her own 1.68), so Chapter XIV is unchanged.
+- No port, event or `PaintedActor` member changes: the actor already sizes every plane, mark and motion from the `worldHeight` it is given.
+
 ## 2026-10-06 (later) — The experimental Leblanc chapter is hidden: no board card, reached by its word (FFX-2 only; behaviour, no type changes)
 
 Branch `exp-leblanc`. `src/data/encounters.ts` (a contract file) changes in comments only: `EXPERIMENT_CHAPTERS` still lists the experiment and `getChapter` still finds it, but chapter select no longer builds a card for it

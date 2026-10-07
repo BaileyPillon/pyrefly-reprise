@@ -330,6 +330,16 @@ breathe and sway — a body on the ground does not shift its weight — widens t
 contact shadow to the body's footprint, and pulls `headPoint` / `centerPoint`
 down to the top of the actual plane, so damage numerals land over the body.
 
+**Party stature (r3941-heights, FFX only).** The battle stage hands each FFX hero his own `worldHeight`: the scene's
+shared `partyHeight` times his ratio to Tidus (`src/data/ffx/party-stature.ts`, source
+`research/ffx-character-heights.md`; the stage's half is `src/engine/PartyStature.ts`, `figureHeight`). The factor is
+the *actor's*, not a pose's, and the plane scales about the feet (the anchor row sits on the ground point at any scale),
+so the per-pose registration, the KO and hurt scales and the head lock see one pixel scale and nothing per pose
+changes. Everything the actor derives from `worldHeight` (`headPoint`, `centerPoint`, `height`, the selection pool, the
+hop, shake, lean and crouch) follows it; the contact shadow and the turn ring the stage authors at a fixed radius are
+scaled by the same factor. FFX-2, aeons, fiends and a height a scene or an arrival director names are not touched.
+`?stature=off` plays the old equal heights for same-build A/B captures.
+
 ### Options
 
 | Option | Meaning |

@@ -100,6 +100,9 @@ const VIA_STAGING = {
     [VIA_IDS.spathi]: VIA_AEON_SPOT,
   },
   figureHeights: {
+    // r3941-heights (FFX only): this scene's `partyHeight` IS Yuna's own height, so she is named here and the party-stature table
+    // (`data/ffx/party-stature.ts`, a multiple of Tidus's height) is not laid on top of it: she stands as she always has in this room.
+    yuna: VIA_ACTOR_HEIGHTS.yuna,
     [VIA_IDS.isaaru]: VIA_ACTOR_HEIGHTS.isaaru,
     ...Object.fromEntries(YUNA_AEONS.map((id) => [id, VIA_ACTOR_HEIGHTS.aeon])),
   },
