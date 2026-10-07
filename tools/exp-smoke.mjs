@@ -13,7 +13,8 @@
  * a new `build` (about 3 seconds); a new painting does not (the art is read from the junction). The junctions are removed with `rmdir`
  * (which cannot delete a folder with files, so it can never follow a link into the art) before a rebuild empties the folder.
  *
- * `run` plays: title, chapter select (the experiment is the last card: one step back from the first wraps to it), party prep, the pre-battle
+ * `run` plays: title, chapter select (the experiment has NO card since the hidden door: the word `EXP_LEBLANC_DOOR_WORD`, read from
+ * `src/app/screens/frontend/leblancDoor.ts`, is typed on the board), party prep, the pre-battle
  * scene, the first menu, then Attack by real keys until Yuna has acted; it takes a screenshot at each step, asserts that every figure on the
  * field is read from the experimental namespace and that a party attack landed, and lists any art request that still reads the base art.
  * Exit code 1 on a failed step. Headless only (`PYREFLY_BROWSER=gpu`); never the Chrome extension or the browser pane.
@@ -35,6 +36,52 @@ const vite = () => [process.execPath, [join(REPO, 'node_modules', 'vite', 'bin',
 function arg(name, fallback) {
   const i = process.argv.indexOf(name);
   return i >= 0 ? process.argv[i + 1] : fallback;
+}
+
+/**
+ * Chapter select to party prep through the hidden door (FFX-2 only; the door is `frontend/leblancDoor.ts`, the typed-word half of FF7's `secretDoor.ts`).
+ * The board has no card for the experiment, so the way in is its word, typed one `KeyboardEvent.key` at a time with a short gap (the door allows
+ * 2 s between letters; a wrong letter or a pause resets it silently). The word and the chapter are read from the door's own constants, never retyped
+ * here, so a changed word changes this run too. On the last letter the door settles the board on the chapter with no sound and no sign, and the
+ * standard flow opens party prep. A fresh profile's first-run guide takes the first key, so it is skipped first (and again if it was still up and
+ * swallowed a letter). The board is measured BEFORE the word: eighteen cards, none of them the experiment, "of 18 beaten".
+ * `ctx` is `{ assertScreen, log, check, shot }` of the calling mode; `shotName` names the board's screenshot.
+ */
+async function enterByWord(page, ctx, shotName) {
+  const { assertScreen, log, check, shot } = ctx;
+  const door = await import(pathToFileURL(join(REPO, 'src', 'app', 'screens', 'frontend', 'leblancDoor.ts')).href);
+  const word = door.EXP_LEBLANC_DOOR_WORD;
+  const chapter = door.EXP_LEBLANC_DOOR_CHAPTER;
+  const guideUp = () => page.evaluate(() => /SKIP THE GUIDE/i.test(document.body.innerText));
+  const screenNow = () => page.evaluate(() => window.__pyrefly?.screen?.() ?? null);
+  if (await guideUp()) {
+    await page.keyboard.press('Escape'); // the first-run guide of a fresh profile takes the first key
+    await page.waitForTimeout(900);
+  }
+  const board = await page.evaluate((id) => {
+    const cards = [...document.querySelectorAll('.fe-card')];
+    return {
+      cards: cards.length,
+      hasExperimentCard: !!document.querySelector(`[data-card="${id}"]`),
+      selected: document.querySelector('.fe-card--sel')?.getAttribute('data-card') ?? null,
+      strip: document.querySelector('.cs-strip__count')?.textContent.replace(/\s+/g, ' ').trim() ?? null,
+    };
+  }, chapter);
+  log('board', board);
+  check('the board has no card for the experiment (eighteen cards)', board.hasExperimentCard === false && board.cards === 18, board);
+  check('"of 18 beaten" stays the eighteen', /of 18/.test(board.strip ?? ''), board.strip);
+  await page.waitForTimeout(1200);
+  await shot(shotName);
+  log('door', { word, chapter });
+  for (let attempt = 0; attempt < 3 && (await screenNow()) !== 'party-prep'; attempt++) {
+    if (attempt > 0 && (await guideUp())) {
+      await page.keyboard.press('Escape'); // the guide was still up and took a letter: skip it and type the word again
+      await page.waitForTimeout(900);
+    }
+    await page.keyboard.type(word, { delay: 150 });
+    await page.waitForTimeout(2200);
+  }
+  await assertScreen(page, 'party-prep');
 }
 
 function build() {
@@ -95,28 +142,7 @@ async function run() {
     await page.waitForTimeout(1500);
     await assertScreen(page, 'chapter-select');
     await page.waitForTimeout(2500);
-    const selected = () => page.evaluate(() => document.querySelector('.fe-card--sel')?.getAttribute('data-card') ?? null);
-    for (let attempt = 0; attempt < 4 && (await selected()) !== 'exp-leblanc'; attempt++) {
-      if (await page.evaluate(() => /SKIP THE GUIDE/i.test(document.body.innerText))) {
-        await page.keyboard.press('Escape'); // the first-run guide of a fresh profile takes the first key
-        await page.waitForTimeout(900);
-      }
-      await page.keyboard.press('ArrowLeft'); // one step back from the first card wraps to the last: the experiment
-      await page.waitForTimeout(1500);
-    }
-    const board = await page.evaluate(() => {
-      const sel = document.querySelector('.fe-card--sel');
-      const cards = [...document.querySelectorAll('.fe-card')];
-      return { selected: sel?.getAttribute('data-card') ?? null, selectedText: sel?.textContent.replace(/\s+/g, ' ').trim() ?? null, cards: cards.length, strip: document.querySelector('.cs-strip__count')?.textContent.replace(/\s+/g, ' ').trim() ?? null };
-    });
-    log('board', board);
-    check('board shows the experiment last and selected', board.selected === 'exp-leblanc' && board.cards === 19 && /Experimental: Leblanc \(new art\)/.test(board.selectedText ?? ''), board);
-    check('"of 18 beaten" stays the eighteen', /of 18/.test(board.strip ?? ''), board.strip);
-    await shot('2-chapter-select-experiment');
-
-    await page.keyboard.press('Enter');
-    await page.waitForTimeout(2200);
-    await assertScreen(page, 'party-prep');
+    await enterByWord(page, { assertScreen, log, check, shot }, '2-chapter-select-hidden'); // the word, typed on the board; no card to select
     await shot('3-party-prep');
     await page.keyboard.press('Enter');
     await page.waitForTimeout(2500);
@@ -240,22 +266,7 @@ async function runShots() {
     await page.waitForTimeout(1500);
     await assertScreen(page, 'chapter-select');
     await page.waitForTimeout(2500);
-    const selected = () => page.evaluate(() => document.querySelector('.fe-card--sel')?.getAttribute('data-card') ?? null);
-    for (let attempt = 0; attempt < 4 && (await selected()) !== 'exp-leblanc'; attempt++) {
-      if (await page.evaluate(() => /SKIP THE GUIDE/i.test(document.body.innerText))) {
-        await page.keyboard.press('Escape');
-        await page.waitForTimeout(900);
-      }
-      await page.keyboard.press('ArrowLeft'); // one step back from the first card wraps to the last: the experiment
-      await page.waitForTimeout(1500);
-    }
-    check('the board selects the experiment', (await selected()) === 'exp-leblanc', await selected());
-    await page.waitForTimeout(1200);
-    await shot('1-chapter-select');
-
-    await page.keyboard.press('Enter');
-    await page.waitForTimeout(2200);
-    await assertScreen(page, 'party-prep');
+    await enterByWord(page, { assertScreen, log, check, shot }, '1-chapter-select'); // the word, typed on the board; no card to select
     await shot('2-party-prep');
     await page.keyboard.press('Enter');
     await page.waitForTimeout(2500);
