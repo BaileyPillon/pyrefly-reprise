@@ -7,6 +7,11 @@
  * files are the ones measured, that each game got its own route (rule 14), that loop points did not move, and
  * that the proof passed. Nothing here is a listening verdict (AGENTS.md rule 13). Game case: FFX cues FFX only,
  * FFX-2 cues FFX-2 only; the plumbing is both.
+ *
+ * A cue that `docs/audio/music-elevenlabs-2026-10-07.json` lists has a newer file than this record measured: its bytes,
+ * hash, loop points and headless proof belong to that record (pinned by `audio-music-elevenlabs.test.ts`, which also
+ * checks that its `before` is the file this record pinned), so those checks step over it here, and the music total is
+ * this record's plus the bytes that record measured as moved.
  */
 
 import { createHash } from 'node:crypto';
@@ -33,6 +38,12 @@ const record = read('docs/audio/music-v2-2026-09-30.json') as {
   gates: { qaStrictFindings: number };
   cues: Cue[];
 };
+const later = read('docs/audio/music-elevenlabs-2026-10-07.json') as {
+  cues: { cue: string; before: { bytes: number }; after: { bytes: number } }[];
+};
+/** Cues a later record replaced, and the bytes it moved the music total by. */
+const replacedLater = new Set(later.cues.map((c) => c.cue));
+const movedLater = later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
 const proof = read('docs/audio/music-v2-2026-09-30-browser.json') as {
   cues: Record<string, { status: number; frameDiff: number; click: { wrapErrorOverP99: number }; level: { loopAddedJumpDb: number } }>;
   live: { label: string; ok: boolean }[];
@@ -68,8 +79,9 @@ describe('music v2: route S for FFX, N2 for FFX-2', () => {
     expect(record.cues.filter((c) => c.route === 'N2').length).toBe(5);
   });
 
-  it('ships the files the record measured, byte for byte', () => {
+  it('ships the files the record measured, byte for byte (except the cues a later record replaced)', () => {
     for (const c of record.cues) {
+      if (replacedLater.has(c.cue)) continue;
       const m = manifest.music[c.cue]!;
       const bytes = readFileSync(new URL(`../../public/audio/${m.file}`, import.meta.url));
       expect(bytes.length, `${c.cue} bytes`).toBe(c.after.bytes);
@@ -77,11 +89,12 @@ describe('music v2: route S for FFX, N2 for FFX-2', () => {
       expect(createHash('sha256').update(bytes).digest('hex'), `${c.cue} sha256`).toBe(c.after.sha256);
     }
     const total = Object.values(manifest.music).reduce((a, m) => a + m.bytes, 0);
-    expect(total).toBe(record.totals.musicBytesAfter);
+    expect(total).toBe(record.totals.musicBytesAfter + movedLater);
   });
 
-  it('kept every loop point and duration', () => {
+  it('kept every loop point and duration (except the cues a later record replaced)', () => {
     for (const c of record.cues) {
+      if (replacedLater.has(c.cue)) continue;
       const m = manifest.music[c.cue]!;
       expect([m.loopStart, m.loopEnd, m.duration], c.cue).toEqual([c.loop.loopStart, c.loop.loopEnd, c.loop.duration]);
     }
@@ -99,8 +112,9 @@ describe('music v2: route S for FFX, N2 for FFX-2', () => {
     expect(record.totals.shippedAudioBytesAfter).toBeLessThanOrEqual(AUDIO_BUDGET_BYTES);
   });
 
-  it('passed the headless proof on a production build', () => {
+  it('passed the headless proof on a production build (for the files it played: not the cues a later record replaced)', () => {
     for (const k of Object.keys(manifest.music)) {
+      if (replacedLater.has(k)) continue; // the proof played the file this record measured; the release proves the new one
       const c = proof.cues[k]!;
       expect(c.status, k).toBe(200);
       expect(Math.abs(c.frameDiff), `${k} decoded length`).toBeLessThanOrEqual(2); // the manifest's 4 decimals

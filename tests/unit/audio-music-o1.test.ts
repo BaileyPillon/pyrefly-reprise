@@ -7,17 +7,20 @@
  * 16.6 kHz), and that the budget was raised to fit rather than the cues shrunk to fit the old one.
  * Music v2 (2026-09-30) replaced 23 of the 26 files with new renders at the same V0 setting; their bytes are pinned
  * by `audio-music-v2.test.ts` and `docs/audio/music-v2-2026-09-30.json`, so this record now pins the other three.
+ * The ElevenLabs install (2026-10-07, `docs/audio/music-elevenlabs-2026-10-07.json`) replaced some of those files
+ * again; a cue that record lists is pinned by it (`audio-music-elevenlabs.test.ts`), and the music total here is
+ * music v2's plus the bytes that record measured as moved.
  * Nothing here is a listening verdict (AGENTS.md rule 13). Game case: both.
  */
 
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-import { AUDIO_BUDGET_BYTES } from '../../tools/audio/manifest-io.mjs';
+import { AUDIO_BUDGET_BYTES, externalSource } from '../../tools/audio/manifest-io.mjs';
 
 const read = (p: string) => JSON.parse(readFileSync(new URL(`../../${p}`, import.meta.url), 'utf8'));
 const manifest = read('public/audio/manifest.json') as {
-  music: Record<string, { bytes: number; duration: number }>;
+  music: Record<string, { bytes: number; duration: number; source?: string }>;
 };
 const report = read('docs/audio/music-o1-2026-09-30.json') as {
   totals: { musicBytesAfter: number };
@@ -32,6 +35,11 @@ const report = read('docs/audio/music-o1-2026-09-30.json') as {
 
 const v2 = read('docs/audio/music-v2-2026-09-30.json') as { totals: { musicBytesAfter: number }; cues: { cue: string }[] };
 const replacedByV2 = new Set(v2.cues.map((c) => c.cue));
+const later = read('docs/audio/music-elevenlabs-2026-10-07.json') as {
+  cues: { cue: string; before: { bytes: number }; after: { bytes: number } }[];
+};
+const replacedLater = new Set(later.cues.map((c) => c.cue));
+const movedLater = later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
 
 describe('music O1: every cue at LAME V0', () => {
   it('records every shipped cue, each reproduced byte for byte before the re-encode', () => {
@@ -39,12 +47,12 @@ describe('music O1: every cue at LAME V0', () => {
     for (const c of report.cues) expect(c.q5ReproducesShipped, `${c.cue} twin`).toBe(true);
   });
 
-  it('ships the files the record measured, except the ones music v2 replaced (pinned by its own record)', () => {
+  it('ships the files the record measured, except the ones music v2 and the ElevenLabs install replaced (each pinned by its own record)', () => {
     for (const c of report.cues) {
-      if (!replacedByV2.has(c.cue)) expect(manifest.music[c.cue]?.bytes, `${c.cue} bytes`).toBe(c.after.bytes);
+      if (!replacedByV2.has(c.cue) && !replacedLater.has(c.cue)) expect(manifest.music[c.cue]?.bytes, `${c.cue} bytes`).toBe(c.after.bytes);
     }
     const total = Object.values(manifest.music).reduce((a, m) => a + m.bytes, 0);
-    expect(total).toBe(v2.totals.musicBytesAfter);
+    expect(total).toBe(v2.totals.musicBytesAfter + movedLater);
   });
 
   it('has not slipped back to q5: at least 200 kbps average, no encoder wall', () => {
@@ -53,6 +61,13 @@ describe('music O1: every cue at LAME V0', () => {
     }
     for (const c of report.cues) {
       expect(c.before.lowpassCliff.db, `${c.cue} had the q5 wall`).toBeGreaterThan(20);
+      // The one exemption, and it is keyed by the manifest, not by cue name: an entry that carries `source` is a take
+      // made elsewhere (the ElevenLabs takes of 2026-10-07), band-limited near 16.6 to 17.1 kHz by its 128 kbps
+      // source, a wall of 27 to 44 dB that our V0 encode keeps. That bandwidth is part of what Bailey picked by ear
+      // (docs/audio/THEMES.md says so), and its measured value is recorded as measured in
+      // docs/audio/music-elevenlabs-2026-10-07.json (`after.measure.cliff`). The 15 dB cap here was for the file
+      // this record measured; every other check on such a cue (the bitrate floor above, the qa gates) still runs.
+      if (externalSource(manifest.music[c.cue]) !== null) continue;
       expect(c.after.lowpassCliff.db, `${c.cue} still has a wall`).toBeLessThan(15);
     }
   });
