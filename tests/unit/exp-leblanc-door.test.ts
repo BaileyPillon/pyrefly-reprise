@@ -11,16 +11,25 @@
  * 3. **The two doors do not interfere**: "limit" still opens FF7's; "limitleblanc" opens FF7's alone, "leblanclimit" the Leblanc one alone, a typo neither.
  * 4. **Chapter VI is unchanged** (its record and its card; the pinned art hashes are in `exp-leblanc.test.ts`) and the experiment's own store stays separate.
  *
- * Release 39.3's focused review (`critic/reviews/b80f772f-focused.json`) found three faults in the door; these pin the repairs of the first two (the third, F393-05, is the coach's and comes with its own tests; FFX-2 only for the chapter, both games for the board):
+ * Release 39.3's focused review (`critic/reviews/b80f772f-focused.json`) found three faults in the door; these pin their repairs (FFX-2 only for the chapter, both games for the board):
  * 5. **F393-03, the last letter is START.** The word's C is the board's START key, and party prep begins the fight on START: the press that finished the word reached prep one frame after
  *    the flow mounted it, so the chapter skipped party prep. Now the door takes that press (it opens on the frame that reads it) and party prep stays up until Enter. Driven with the real
  *    `PartyPrepScreen` mounted the way the flow mounts it (in the microtask after the board settles), in three typing styles.
  * 6. **F393-04, the arrow after part of the word.** `WordDoor.continued` stayed true after a letter, so the next key, an arrow, was read as a letter of the word and the board swallowed it.
  *    A letter is the word's only while it extends a live match; an arrow always moves the cursor and ends the match.
+ * 7. **F393-05, the coach wrote into the save.** A hidden run marked its coach hints seen in `pyrefly-reprise:save:v1`. While an experimental chapter runs, what the coach shows is
+ *    remembered for the session only, and the save stays byte-identical (CHK-025).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { App } from '../../src/app/App.ts';
+import { Screen } from '../../src/app/Screen.ts';
+import { GameFlow, registerFlowScreens, resetFlowScreens, type FlowScreen } from '../../src/app/screens/BattleScreenFlow.ts';
+import type { BattleScreenOptions, BattleScreenResult } from '../../src/app/screens/BattleScreen.ts';
 import { PartyPrepScreen } from '../../src/app/screens/PartyPrepScreen.ts';
+import { beginExperimentRun, experimentRunActive } from '../../src/app/experiments/experimentRun.ts';
+import { hasSeen, markSeen, resetCoach } from '../../src/ui/coach/coachState.ts';
+import { armFirstRunGuide, firstRunBattleBegan, stopFirstRun } from '../../src/ui/coach/firstRunGuide.ts';
 import { ChapterSelectScreen } from '../../src/app/screens/ChapterSelectScreen.ts';
 import { forgetBoardChapter, lastBoardChapter } from '../../src/app/screens/frontend/boardFocus.ts';
 import { buildChapterTiles, groupChapterTiles } from '../../src/app/screens/frontend/chapterGrid.ts';
@@ -589,5 +598,173 @@ describe('Chapter VI is unchanged, and the experiment keeps its own store', () =
     expect(Object.keys(JSON.parse(window.localStorage.getItem(EXPERIMENTS_KEY)!))).toEqual([EXP]);
     expect(JSON.stringify(save.snapshot())).toBe(before);
     expect(window.localStorage.getItem(SAVE_KEY) ?? '').not.toContain(EXP);
+  });
+});
+
+// ------------------------------------------------------- the coach and the save (F393-05)
+
+/** The six hints the review found in the main save after one hidden win: the guide's three steps and the three FFX-2 lines (`CoachLayer`). */
+const TAUGHT = ['firstrun-board', 'firstrun-prep', 'firstrun-battle', 'ffx2-gauge', 'ffx2-dressphere', 'ffx2-chain'] as const;
+
+let shownInside: boolean[] = [];
+let battleOutcome: 'victory' | 'defeat' = 'victory';
+let battleThrows = false;
+
+/** What a first FFX-2 battle does to a first-time player's coach memory, with no engine behind it: the first-run guide's end and the three lines. */
+class StandInBattle extends Screen implements FlowScreen<BattleScreenResult> {
+  readonly name = 'battle';
+  readonly done: Promise<BattleScreenResult>;
+  constructor(opts: BattleScreenOptions) {
+    super();
+    const won = battleOutcome === 'victory';
+    this.done = Promise.resolve({
+      chapterId: opts.chapter.id,
+      outcome: battleOutcome,
+      result: won ? ({ turns: 7, elapsedMs: 0, elapsedTicks: 0 } as never) : null,
+      elapsedMs: 95_000,
+      links: 1,
+      preview: false,
+    });
+  }
+  override enter(): void {
+    if (battleThrows) throw new Error('the battle failed to start');
+    firstRunBattleBegan('ffx2');
+    for (const id of TAUGHT) markSeen(id);
+    shownInside.push(TAUGHT.every((id) => hasSeen(id)));
+  }
+}
+
+class FlowApp {
+  readonly uiRoot = document.body.appendChild(document.createElement('div'));
+  readonly save = new SaveStore();
+  readonly flow = new GameFlow(this as unknown as App);
+  current: Screen | null = null;
+  get overlayActive(): boolean {
+    return false;
+  }
+  async replace(screen: Screen): Promise<void> {
+    await this.current?.exit();
+    screen.app = this as unknown as App;
+    screen.root = document.createElement('div');
+    this.current = screen;
+    await screen.enter();
+  }
+  async goto(): Promise<boolean> {
+    return true;
+  }
+  fade(): Promise<void> {
+    return Promise.resolve();
+  }
+  nextFrame(): Promise<void> {
+    return Promise.resolve();
+  }
+}
+
+/** No prep, no scenes, no results panel, no entry animation: these checks are about the save. */
+const QUIET = { seed: 7, speed: 'skip', skipPrep: true, skipCutscenes: true, skipResults: true } as const;
+
+describe('the coach never writes the save during a hidden run (F393-05, CHK-025)', () => {
+  beforeEach(() => {
+    shownInside = [];
+    battleOutcome = 'victory';
+    battleThrows = false;
+    resetCoach();
+    resetFlowScreens();
+    registerFlowScreens({ battle: (opts) => new StandInBattle(opts) });
+  });
+
+  afterEach(() => {
+    stopFirstRun();
+    resetFlowScreens();
+    resetCoach();
+  });
+
+  /** A save with some history, and its bytes: the thing a hidden run must leave alone. */
+  function seeded(): { app: FlowApp; raw: string | null } {
+    const app = new FlowApp();
+    app.save.recordAttempt('seymour-flux');
+    app.save.recordClear('yunalesca', 300_000, 20);
+    return { app, raw: window.localStorage.getItem(SAVE_KEY) };
+  }
+  const armGuide = (): void => armFirstRunGuide({ root: document.body, absorbInput: () => undefined });
+
+  it('a win marks the six hints seen for the session only: the save is byte-identical, and the player has still been taught nothing', async () => {
+    const { app, raw } = seeded();
+    expect(raw).not.toBeNull();
+    armGuide();
+    const result = await app.flow.runChapter(EXP, { ...QUIET });
+    expect(result?.outcome).toBe('victory');
+    expect(shownInside, 'inside the run the hints read as shown').toEqual([true]);
+    expect(window.localStorage.getItem(SAVE_KEY)).toBe(raw);
+    expect(app.save.seenCoach).toEqual([]);
+    expect(TAUGHT.filter((id) => hasSeen(id))).toEqual([]);
+    expect(experimentRecord(EXP)).toMatchObject({ attempts: 1, clears: 1 });
+    expect(app.save.value.chapters[EXP]).toBeUndefined();
+  });
+
+  it('a loss leaves the save byte-identical too, and so does a retry of it', async () => {
+    const { app, raw } = seeded();
+    armGuide();
+    battleOutcome = 'defeat';
+    expect((await app.flow.runChapter(EXP, { ...QUIET }))?.outcome).toBe('defeat');
+    battleOutcome = 'victory';
+    expect((await app.flow.runChapter(EXP, { ...QUIET }))?.outcome).toBe('victory');
+    expect(window.localStorage.getItem(SAVE_KEY)).toBe(raw);
+    expect(experimentRecord(EXP)).toMatchObject({ attempts: 2, clears: 1 });
+  });
+
+  it('the same battle in a listed chapter still records what the coach showed (so the hidden run is saved by its scope, not by the stand-in)', async () => {
+    const { app, raw } = seeded();
+    armGuide();
+    await app.flow.runChapter('ffx2-leblanc', { ...QUIET });
+    expect([...app.save.seenCoach].sort()).toEqual([...TAUGHT].sort());
+    expect(window.localStorage.getItem(SAVE_KEY)).not.toBe(raw);
+  });
+
+  it('the scope ends with the run, even one that throws: the coach writes the save again afterwards', async () => {
+    const { app } = seeded();
+    battleThrows = true;
+    await expect(app.flow.runChapter(EXP, { ...QUIET })).rejects.toThrow('the battle failed to start');
+    expect(experimentRunActive()).toBe(false);
+    markSeen('after-the-run');
+    expect(app.save.seenCoach).toEqual(['after-the-run']);
+  });
+
+  it('a hint the player already saw in a listed chapter stays seen inside the hidden run', async () => {
+    const { app } = seeded();
+    app.save.markCoachSeen('ffx2-gauge');
+    const raw = window.localStorage.getItem(SAVE_KEY);
+    await app.flow.runChapter(EXP, { ...QUIET });
+    expect(window.localStorage.getItem(SAVE_KEY)).toBe(raw);
+    expect(app.save.seenCoach).toEqual(['ffx2-gauge']);
+  });
+});
+
+describe('the coach memory inside an experiment run (the scope)', () => {
+  beforeEach(() => resetCoach());
+  afterEach(() => resetCoach());
+
+  it('writes nothing to the save, remembers for the session, and forgets when the run ends', () => {
+    const save = new SaveStore();
+    const end = beginExperimentRun();
+    expect(experimentRunActive()).toBe(true);
+    markSeen('a-hint');
+    expect(save.seenCoach).toEqual([]);
+    expect(hasSeen('a-hint')).toBe(true);
+    end();
+    expect(experimentRunActive()).toBe(false);
+    expect(hasSeen('a-hint'), 'outside a run the save is the memory').toBe(false);
+    markSeen('another');
+    expect(save.seenCoach).toEqual(['another']);
+  });
+
+  it('runs nest, and ending one twice ends it once', () => {
+    const outer = beginExperimentRun();
+    const inner = beginExperimentRun();
+    inner();
+    inner();
+    expect(experimentRunActive(), 'the outer run is still on').toBe(true);
+    outer();
+    expect(experimentRunActive()).toBe(false);
   });
 });
