@@ -581,6 +581,12 @@ actually matters — **the one thing the cue must leave behind**.
 
 **Before music v2 (history).** 2026-09-29 (D-283): every cue was the sampled render restyled by Direction B and put through remaster R1 "focus" (`docs/audio/soundtrack-r1-2026-09-29.json`), except `boss-vegnagun` and `scene-bevelle-underground`, which failed the R1 stereo gate and kept the plain sampled render. 2026-09-30 (D-292, music O1): the same music re-encoded at LAME V0 instead of q5 (`docs/audio/music-o1-2026-09-30.json`, `tools/audio/music-o1-ship.py`); the budget in `tools/audio/manifest-io.mjs` became 85 MB. Music v2 keeps V0: the music is now 80.9 MB, 83.6 MB with the sfx sprite, of the 85 MB budget.
 
+**Since 2026-10-07 (ElevenLabs): a take, not a render of the score.** Bailey picked, by ear, takes that the ElevenLabs Music API generated from our own written briefs (`docs/audio/music-briefs.md` on branch `elevenlabs-groundwork`: mood, tempo, key, instruments and structure; no composer, franchise, character or melody is named in any prompt) for the cues below whose "Ships as" says **ElevenLabs**; for those cues it replaces the "unchanged" and the route above. A take is mastered with one gain to -16 LUFS, the loop cut and the 3 s run-on built the way the ship chain builds them, and a LAME V0 encode; nothing else (`docs/audio/music-elevenlabs-2026-10-07.json`, `master`). **The score stays in `src/audio/tracks` as the synth fallback for when the MP3 cannot load, and the cue map above and `TRACK_NOTES` still describe that score (its key, tempo and themes), not what plays.** What plays has its own key, tempo and shape, listed per cue below; this bible claims no theme for it, and nobody has checked it for resemblance to existing music (agents cannot hear, rule 13). **Stereo gate:** the takes are wide and partly decorrelated, the image remaster R1 was built to repair, so most **fail** the three stereo measures (L/R correlation 0.60 to 0.85, side 6 to 10 dB under the mid, mono-sum loss no worse than -1 dB; `GATES` in `tools/audio/remaster-score.mjs`); each row below says what its file measures. The driver installed the stereo image Bailey picked by ear. The same file with only the project's width stage added passes the gate and is kept per cue in the record (`node tools/audio/music-elevenlabs.mjs install --variant=narrow`, then `measure`, then correct the rows below). **Bandwidth:** they are also band-limited at about 16.6 to 17.1 kHz, a wall of 27 to 44 dB that their 128 kbps source carries and our V0 encode keeps, where the files they replace had 6 to 12 dB. That is part of what Bailey picked by ear, not a defect to repair here: a take at a higher output format would be a different piece. So `audio-music-o1.test.ts`, which caps a cue's recorded lowpass cliff at 15 dB, skips that one cap for a cue whose manifest entry carries `source` (the field these entries carry, which also exempts them from the stale-render check against the score), and the cliff of each is recorded as measured in the record (`after.measure.cliff`). Bailey has heard the loop wraps (his words are in the record); no production-build browser proof has run on these files yet (it needs a built dist; the release runs it). Credits and the prompts: `CREDITS.md`.
+
+- `boss-seymour` (FFX only: Chapter I, and Chapter XII as its stand-in): take A, brief `boss-seymour-a`. D minor at about 132 bpm in 4/4; the score is C# minor at 132. Bailey called its loop jump "perfect".
+
+- `chapter-select` (both games): take B, brief `chapter-select-b`. D major at 72 bpm in 4/4; the score is B minor in 3/4 at 84. Bailey called its loop jump "perfect". From 40.0 s it carries a flat noise-like floor from 3 kHz to 12 kHz, 41 dB under the mix: listen to the second half on a menu screen.
+
 | Cue | Game | Ships as | L/R corr | side/mid dB | mono-sum loss dB |
 |---|---|---|---|---|---|
 | `battle-ffx` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.71 | -7.5 | -0.7 |
@@ -589,13 +595,13 @@ actually matters — **the one thing the cue must leave behind**.
 | `boss-ffx2-aeon` | FFX-2 | **route N2** (ACE-Step 1.5 turbo, denoise 0.3, seed 505, 8 steps) | 0.643 | -6.6 | -0.9 |
 | `boss-jecht` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.718 | -7.5 | -0.7 |
 | `boss-seymour-macalania` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
-| `boss-seymour` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
+| `boss-seymour` | FFX | **ElevenLabs** (Music `music_v2_5`, brief `boss-seymour-a` take 1; AI; the stereo gate fails, the narrow variant passes) | 0.293 | -2.6 | -1.9 |
 | `boss-shuyin` | FFX-2 | **route N2** (ACE-Step 1.5 xl, denoise 0.25, seed 505, 8 steps) | 0.65 | -6.7 | -0.8 |
 | `boss-vegnagun` | FFX-2 | **route S band render** (N2 fallback: no take kept structure fidelity 0.80) | 0.694 | -7.4 | -0.7 |
 | `boss-yojimbo` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.695 | -7.4 | -0.7 |
 | `boss-yu-yevon` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
 | `boss-yunalesca` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.728 | -7.5 | -0.7 |
-| `chapter-select` | both | Direction B + R1 | 0.741 | -8.2 | -0.6 |
+| `chapter-select` | both | **ElevenLabs** (Music `music_v2_5`, brief `chapter-select-b` take 1; AI; the stereo gate fails, the narrow variant passes) | 0.431 | -4.0 | -1.5 |
 | `ending-ffx2` | FFX-2 | **route N2** (ACE-Step 1.5 turbo, denoise 0.25, seed 303, 8 steps) | 0.646 | -6.3 | -0.9 |
 | `ending-ffx` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
 | `pause` | both | Direction B + R1 | 0.753 | -8.2 | -0.6 |
