@@ -263,6 +263,20 @@ async function runShots() {
     if (s === 'cutscene') {
       await page.waitForTimeout(2500);
       await shot('3-story-scene');
+      // One frame for each speaker of the scene (up to eight), once the first of its lines has typed out: the dialogue box wears the experiment's own portrait of each.
+      const spoken = new Map();
+      for (let i = 0; i < 80 && spoken.size < 8 && (await screen()) === 'cutscene'; i++) {
+        await waitFor('a line to finish typing', () => page.evaluate(() => !!document.querySelector('.dbox--waiting')), { ms: 20000, pollMs: 120 }).catch(() => null);
+        const line = await page.evaluate(() => ({ who: document.querySelector('.dbox__speaker')?.textContent?.trim() ?? '', src: document.querySelector('.dbox__portrait img')?.getAttribute('src') ?? '' }));
+        if (line.who && !spoken.has(line.who)) {
+          spoken.set(line.who, line.src);
+          await shot(`3${'bcdefghi'[spoken.size - 1]}-story-line-${line.who.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`);
+        }
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(250);
+      }
+      log('story.portraits', Object.fromEntries(spoken));
+      check('the dialogue box wears the experiment\'s own portrait of every speaker it has one for', spoken.size > 0 && [...spoken.entries()].every(([who, src]) => !src || /exp-leblanc-/.test(src) || !['Leblanc', 'Logos', 'Ormi', 'Yuna', 'Rikku', 'Paine', 'Brother'].includes(who)), Object.fromEntries(spoken));
       await page.keyboard.down('Enter');
       await page.waitForTimeout(7000);
       await page.keyboard.up('Enter');
@@ -275,6 +289,14 @@ async function runShots() {
       s = await screen();
     }
     await assertScreen(page, 'battle', 120000);
+    // The turn cut-in (the slab with the speaker's tall portrait) comes up with the first menu and is gone in about a second: photographed the moment it stands.
+    const cutIn = await waitFor('the turn cut-in', () => page.evaluate(() => document.querySelector('[data-role="turn-cut-in"] .ig-cutin__portrait')?.getAttribute('src') ?? false), { ms: 120000, pollMs: 40 }).catch(() => null);
+    if (cutIn) {
+      await page.waitForTimeout(280);
+      await shot('4g-turn-cutin');
+    }
+    log('cutin.portrait', cutIn);
+    check('the turn cut-in wears the experiment\'s own portrait', !!cutIn && /exp-leblanc-/.test(cutIn), cutIn);
     await waitBattleMenu(page, 120000);
     await page.waitForTimeout(1800);
     await shot('4-act1-first-menu');
@@ -353,6 +375,64 @@ async function runShots() {
     log('stage.act3', stage);
     check('every figure faces its opponents and none is drawn mirrored', stage.length >= 6 && stage.every((a) => a.mirrored === false && a.facing === (a.side === 'party' ? 1 : -1)), stage);
 
+    // The pause screen (P): every member's plate and the CHAPTER tab (the preview's hero plate, its fallback and its three journal snapshots), then P again to go on.
+    await page.keyboard.press('KeyP');
+    await waitFor('the pause screen', () => page.evaluate(() => !!document.querySelector('[data-role="body"][data-tab]')), { ms: 8000, pollMs: 120 });
+    const tabNow = () => page.evaluate(() => document.querySelector('[data-role="body"]')?.getAttribute('data-tab') ?? null);
+    const plates = {};
+    for (let i = 0; i < 9; i++) {
+      const tab = await tabNow();
+      await page.waitForTimeout(1700); // the plate cross-fades in and settles into its framing
+      if (tab && (tab === 'chapter' || /^member:/.test(tab)) && !plates[tab]) {
+        await shot(`5c-pause-${tab.replace(/[^a-z0-9]+/gi, '-')}`);
+        plates[tab] = await page.evaluate(() => ({
+          plates: [...document.querySelectorAll('.pause__plate')].map((e) => ({ plate: e.dataset.plate ?? null, art: e.dataset.art ?? null, src: (e.currentSrc || e.getAttribute('src') || '').replace(/^https?:\/\/[^/]+/, '') })),
+          snaps: [...document.querySelectorAll('.pause__snap img')].map((e) => (e.getAttribute('src') ?? '').replace(/^https?:\/\/[^/]+/, '')),
+        }));
+      }
+      if (tab === 'chapter') break;
+      await page.keyboard.press('Tab');
+      await page.waitForTimeout(500);
+    }
+    log('pause.plates', plates);
+    const members = Object.keys(plates).filter((k) => k !== 'chapter');
+    check('every member tab shows the experiment\'s own plate', members.length >= 3 && members.every((k) => plates[k].plates.some((p) => /^exp-leblanc-/.test(p.plate ?? '') && p.art === 'plate')), plates);
+    check('the CHAPTER tab shows the preview\'s own hero plate and its own three snapshots', !!plates['chapter'] && plates['chapter'].plates.some((p) => p.plate === 'exp-leblanc-leblanc' && p.art === 'plate') && plates['chapter'].snaps.length === 3 && plates['chapter'].snaps.every((s) => /exp-leblanc/.test(s)), plates['chapter']);
+    await page.keyboard.press('KeyP');
+    await page.waitForTimeout(1200);
+
+    // A girl at low HP kneels: one girl who is resting (the one whose menu is open stands in her ready pose, which a rest never replaces) is put under a third of her HP
+    // in the live state (a capture-only edit of the debug surface) and the presenter is told to sync the HUD, which is what lays her in her critical painting
+    // (`restPoses.ts` reads the HP on every sync). Her HP is put back after the frame: an edit left in place changes the fight (the first try did, and the run lost).
+    const resting = (await actors()).find((a) => girls.includes(a.id) && a.pose === 'idle')?.id ?? null;
+    const lowered = resting
+      ? await page.evaluate((id) => {
+          const b = window.__pyrefly.battle();
+          const c = b?.battleEngine?.state()?.combatants?.[id];
+          if (!c) return null;
+          const was = c.hp;
+          c.hp = Math.max(1, Math.floor(c.stats.maxHp * 0.2));
+          b.battlePresenter.syncHud(b.battleEngine);
+          return { id, was };
+        }, resting)
+      : null;
+    const kneel = lowered ? await waitFor('a girl kneeling at low HP', async () => (await actors()).find((a) => a.id === lowered.id && a.pose === 'critical') ?? false, { ms: 12000, pollMs: 100 }).catch(() => null) : null;
+    log('kneel', kneel);
+    if (kneel) {
+      await page.waitForTimeout(900);
+      await shot('5d-low-hp-kneel');
+    }
+    check('a girl at low HP kneels in the experiment\'s own critical painting', !!kneel && /^exp-leblanc-/.test(kneel.art ?? '') && kneel.facing === 1 && kneel.mirrored === false, kneel);
+    if (lowered) {
+      await page.evaluate(({ id, was }) => {
+        const b = window.__pyrefly.battle();
+        const c = b?.battleEngine?.state()?.combatants?.[id];
+        if (c) c.hp = was;
+        b?.battlePresenter?.syncHud(b.battleEngine);
+      }, lowered);
+      await page.waitForTimeout(600);
+    }
+
     // A party attack, an enemy action and a hit by real keys: Enter takes Attack, Enter opens the target, Enter confirms it; the frames are taken
     // the moment a figure strikes its attack or cast pose (the stage's own snapshot says which pose each figure is in).
     const acted = { party: null, enemy: null, hurt: null, foeHurt: null };
@@ -421,6 +501,13 @@ async function runShots() {
     await page.waitForTimeout(2800);
     check('the results screen follows the victory', (await screen()) === 'results', await screen());
     await shot('9-results');
+    // The wedge wears the experiment's own portrait of the leader (or of the girl who speaks the victory line), with its own measured crop.
+    const wedge = await page.evaluate(() => {
+      const img = document.querySelector('.rres__hero');
+      return img ? { src: (img.getAttribute('src') ?? '').replace(/^https?:\/\/[^/]+/, ''), w: Math.round(img.getBoundingClientRect().width), h: Math.round(img.getBoundingClientRect().height) } : null;
+    });
+    log('results.wedge', wedge);
+    check('the results wedge wears the experiment\'s own portrait', !!wedge && /exp-leblanc-/.test(wedge.src), wedge);
     check('no console errors', ctx.consoleErrors.length === 0, ctx.consoleErrors);
     check('no 404s', ctx.notFound.length === 0, ctx.notFound);
   } catch (e) {

@@ -14,6 +14,7 @@
 import { artNamespaceOfScene, inArtNamespace } from '../../data/art/artNamespace.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { measuredPortraitIds } from './portrait.ts';
+import { portraitIdIn } from './portraitNamespace.ts';
 import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 
 /** One served victory line and the party member who says it. */
@@ -89,7 +90,9 @@ const X2_PORTRAITS = new Set(measuredPortraitIds().filter((id) => id.endsWith('-
  */
 export function wedgePortraitId(id: string, chapter: Chapter | undefined): string {
   if (chapter?.buildRef.game !== 'ffx2') return id;
-  return X2_PORTRAITS.has(`${id}-x2`) ? `${id}-x2` : id;
+  const own = X2_PORTRAITS.has(`${id}-x2`) ? `${id}-x2` : id;
+  // The Leblanc preview's own portraits (`data/art/artNamespace.ts`, `ui/common/portraitNamespace.ts`): the painting the namespace has repainted, else the base one.
+  return portraitIdIn(artNamespaceOfScene(chapter.sceneKey), own);
 }
 
 /**

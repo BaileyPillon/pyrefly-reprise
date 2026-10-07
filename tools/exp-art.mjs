@@ -30,6 +30,10 @@ import { BASE_SCENE_KEY, EXP_ART, NAMESPACE, REAL_COPY_IN_MIRROR, RELEASE_ART, R
 
 const sha256 = (p) => createHash('sha256').update(readFileSync(p)).digest('hex');
 
+/** The dialogue portraits and pause plates the preview repaints (`tools/exp-install-surfaces.mjs`); the base files of the same names are Chapter VI's. */
+export const SURFACE_PORTRAITS = Object.freeze(['yuna-x2', 'rikku-x2', 'paine', 'leblanc', 'logos', 'ormi', 'brother-x2']);
+export const SURFACE_PLATES = Object.freeze(['leblanc', 'yuna-ffx2', 'rikku-ffx2', 'paine']);
+
 /** Every file under `root`, as paths relative to it with forward slashes. */
 function walk(root, rel = '') {
   const out = [];
@@ -41,7 +45,8 @@ function walk(root, rel = '') {
   return out;
 }
 
-const inNamespace = (rel) => rel.startsWith(`characters/${NAMESPACE}-`) || rel.startsWith(`backdrops/${SCENE_KEY}`);
+// The namespace's files: its figures, its plate, and (since the surfaces task) its dialogue portraits and pause plates, all real copies that no release file shares.
+const inNamespace = (rel) => rel.startsWith(`characters/${NAMESPACE}-`) || rel.startsWith(`backdrops/${SCENE_KEY}`) || rel.startsWith(`portraits/${NAMESPACE}-`) || rel.startsWith(`pause/${NAMESPACE}-`);
 
 /** Is `a` the same file as `b` (one inode on one device)? */
 function sameInode(a, b) {
@@ -225,12 +230,23 @@ export async function snapshot({ release = RELEASE_ART, out = join(REPO, 'tests'
   }
   const backdropFiles = {};
   for (const name of [`${BASE_SCENE_KEY}.png`, `${BASE_SCENE_KEY}.json`, `${BASE_SCENE_KEY}@2x.png`]) backdropFiles[name] = sha256(join(release, 'backdrops', name));
+  // The surfaces outside the stage (the surfaces pass): the dialogue portraits of the seven speakers the preview repaints and the four pause plates it repaints, as Chapter VI draws them.
+  const surfaces = { portraits: {}, pause: {} };
+  for (const id of SURFACE_PORTRAITS) for (const ext of ['png', 'json']) surfaces.portraits[`${id}.${ext}`] = sha256(join(release, 'portraits', `${id}.${ext}`));
+  for (const id of SURFACE_PLATES) {
+    for (const ext of ['png', 'json', '2x.webp']) {
+      const p = join(release, 'pause', `${id}.${ext}`);
+      if (existsSync(p)) surfaces.pause[`${id}.${ext}`] = sha256(p); // Chapter VI's CHAPTER-tab plate (`leblanc`) ships no 2x master
+    }
+  }
   const doc = {
     about: "Chapter VI's art as the release tree holds it (tools/exp-art.mjs snapshot). The experimental Leblanc chapter's workspace must serve exactly this for Chapter VI.",
     girls,
     enemies,
     subjects,
     backdrop: { key: BASE_SCENE_KEY, listed: manifest.backdrops.includes(BASE_SCENE_KEY), tiers: manifest.backdropTiers?.[BASE_SCENE_KEY] ?? [], files: backdropFiles },
+    surfaces,
+    surfaceLists: { portraits: SURFACE_PORTRAITS.filter((id) => manifest.portraits.includes(id)), pause: SURFACE_PLATES.filter((id) => manifest.pause.includes(id)), pause2x: SURFACE_PLATES.filter((id) => (manifest.pause2x ?? []).includes(id)) },
   };
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, `${JSON.stringify(doc, null, 1)}

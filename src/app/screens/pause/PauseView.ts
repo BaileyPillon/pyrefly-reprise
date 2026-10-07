@@ -12,6 +12,7 @@
  */
 
 import type { BattleState, GameId, TurnPreview } from '../../../battle/common/types.ts';
+import { artNamespaceOfScene } from '../../../data/art/artNamespace.ts';
 import type { Chapter } from '../../../data/encounters.ts';
 import type { ChapterMeta } from '../../../data/chapter-meta.ts';
 import type { SaveStore } from '../../SaveData.ts';
@@ -106,6 +107,11 @@ export class PauseView {
     return this.deps.chapter.game;
   }
 
+  /** The chapter's art namespace (the experimental Leblanc chapter): its member plates are its own paintings (`plates.plateIdFor`). */
+  private get artNamespace(): string | undefined {
+    return artNamespaceOfScene(this.deps.chapter.sceneKey);
+  }
+
   private q(role: string): HTMLElement | null {
     return this.root.querySelector<HTMLElement>(`[data-role="${role}"]`);
   }
@@ -194,9 +200,9 @@ export class PauseView {
     }
     const state = this.deps.state();
     const memberId = this.plateMemberId ?? state?.activeIds[0] ?? null;
-    if (memberId) this.portrait.show(plateIdFor(memberId, this.game), memberId);
+    if (memberId) this.portrait.show(plateIdFor(memberId, this.game, this.artNamespace), memberId);
     else if (meta) this.portrait.show(meta.heroArt.replace(/^pause\//, ''), undefined, meta.heroArtFallback);
-    const side = memberId ? chromeSideForCombatant(memberId, this.game) : 'left';
+    const side = memberId ? chromeSideForCombatant(memberId, this.game, this.artNamespace) : 'left';
     this.root.classList.toggle('pause--mirror', side === 'right');
   }
 

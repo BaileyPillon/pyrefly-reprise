@@ -324,6 +324,89 @@
    },
    "provisional": null,
    "installedAt": "2026-10-06T23:29:42.872Z"
+  },
+  "critical": {
+   "artRoom": {
+    "id": "p_6e424a1c",
+    "version": 2,
+    "file": "p_6e424a1c-experimental-chapter-yuna-gunner-critica-v2.png",
+    "sha256": "5a23f7c7dacaa50117187c07be14595d42caf94b31f6867af03c6e7296931238",
+    "score": 8.8,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "cc6d27f3472068c62211a43a7f5fa6866c73f74c25373fd93c0c7fccc9d7bcc6",
+   "size": [
+    871,
+    1092
+   ],
+   "baselineY": 1076,
+   "contentBox": [
+    16,
+    16,
+    855,
+    1076
+   ],
+   "facing": "right",
+   "head": [
+    488,
+    18,
+    792,
+    290
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 0.874,
+    "stanceX": 472.5
+   },
+   "provisional": null,
+   "installedAt": "2026-10-07T00:43:17.854Z"
+  },
+  "sleep": {
+   "artRoom": {
+    "id": "p_ad27e8d6",
+    "version": 3,
+    "file": "p_ad27e8d6-experimental-chapter-yuna-gunner-sleep-v3.png",
+    "sha256": "f151087acf18ffa43981fe4ad64320db02934d938c1d946b748a5badc40f7ad8",
+    "score": 8.4,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "849796877d9385a5b0b0ecd0a7d7b75381539aa1a5d49b47724015e2f55fc2ef",
+   "size": [
+    549,
+    1411
+   ],
+   "baselineY": 1395,
+   "contentBox": [
+    16,
+    16,
+    533,
+    1395
+   ],
+   "facing": "right",
+   "head": [
+    290,
+    17,
+    524,
+    245
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 1.04,
+    "stanceX": 335.5
+   },
+   "scaleSource": "combined",
+   "provisional": null,
+   "installedAt": "2026-10-07T00:43:26.933Z"
   }
  },
  "leblanc": {
@@ -1074,6 +1157,131 @@
    },
    "provisional": null,
    "installedAt": "2026-10-06T23:29:23.974Z"
+  },
+  "critical": {
+   "artRoom": {
+    "id": "p_32f14f15",
+    "version": 3,
+    "file": "p_32f14f15-experimental-chapter-rikku-thief-critica-v3.png",
+    "sha256": "3cea47208bed8150d86bb8e38cabe46db3f978fcbb220a70ba7a5c385ad5781c",
+    "score": 8.7,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "bc6dbbab7b918ca1f45ed1c33df5b05104d01d6f9c2789ca8322ae3c7cb3ef17",
+   "size": [
+    1030,
+    1144
+   ],
+   "baselineY": 1128,
+   "contentBox": [
+    16,
+    16,
+    1014,
+    1128
+   ],
+   "facing": "right",
+   "head": [
+    495,
+    27,
+    916,
+    385
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 0.882,
+    "stanceX": 525.5
+   },
+   "scaleSource": "combined",
+   "provisional": null,
+   "installedAt": "2026-10-07T00:43:35.261Z"
+  },
+  "sleep": {
+   "artRoom": {
+    "id": "p_27da4295",
+    "version": 2,
+    "file": "p_27da4295-experimental-chapter-rikku-thief-sleep-v2.png",
+    "sha256": "c886279cd08f9912ddd8b0ff585e45f05bf113844f9a63ac1c62a71f95ead0d7",
+    "score": 8.3,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "785f99cb1f617e6e607e9095294d796f07c179007394d3a910b638da1906940f",
+   "size": [
+    653,
+    1473
+   ],
+   "baselineY": 1457,
+   "contentBox": [
+    16,
+    16,
+    637,
+    1457
+   ],
+   "facing": "right",
+   "head": [
+    257,
+    20,
+    624,
+    357
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 1.01,
+    "stanceX": 307.5
+   },
+   "provisional": null,
+   "installedAt": "2026-10-07T00:43:44.406Z"
+  },
+  "follow": {
+   "artRoom": {
+    "id": "p_5ad9da04",
+    "version": 2,
+    "file": "p_5ad9da04-experimental-chapter-rikku-thief-follow-v2.png",
+    "sha256": "c41022bb4ac3e94f17a0758fdff06a2b4f91dc5854b8eb110eea8acb93fa0b1c",
+    "score": 8.6,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "afe58a8cc60b42eeba62b9051ab3d030fdaa2a9d08babb50576f858cc108df0d",
+   "size": [
+    1126,
+    1177
+   ],
+   "baselineY": 1161,
+   "contentBox": [
+    16,
+    16,
+    1110,
+    1161
+   ],
+   "facing": "right",
+   "head": [
+    429,
+    75,
+    753,
+    376
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 1.124,
+    "stanceX": 961.5
+   },
+   "scaleSource": "combined",
+   "provisional": null,
+   "installedAt": "2026-10-07T00:39:06.482Z"
   }
  },
  "paine-warrior": {
@@ -1399,6 +1607,219 @@
    },
    "provisional": null,
    "installedAt": "2026-10-06T23:29:33.246Z"
+  },
+  "critical": {
+   "artRoom": {
+    "id": "p_47f38386",
+    "version": 2,
+    "file": "p_47f38386-experimental-chapter-paine-warrior-criti-v2.png",
+    "sha256": "91a4474dc18dd2fd7053bdfe222a72e6b2bcfc7e2c9f9e2269c4ba6f25586288",
+    "score": 8.7,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "69cff8b19fe74c61ca46201ae0cf10743885fe661a8d39ff81c0ea527721af16",
+   "size": [
+    942,
+    1349
+   ],
+   "baselineY": 1333,
+   "contentBox": [
+    16,
+    16,
+    926,
+    1333
+   ],
+   "facing": "right",
+   "head": [
+    410,
+    34,
+    723,
+    330
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 0.706,
+    "stanceX": 658.5
+   },
+   "scaleSource": "combined",
+   "provisional": null,
+   "installedAt": "2026-10-07T00:43:52.996Z"
+  },
+  "sleep": {
+   "artRoom": {
+    "id": "p_53140431",
+    "version": 2,
+    "file": "p_53140431-experimental-chapter-paine-warrior-sleep-v2.png",
+    "sha256": "c90e265e5d7ad82d71d3e9fd548892a5eccb56401ef91ca1622ceca2759c5fcf",
+    "score": 8.4,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "c37ce26a896ca772a0f2ff1184c1b766d4e5bcd674b4874c5d39ccbe7a5d13b7",
+   "size": [
+    500,
+    1255
+   ],
+   "baselineY": 1239,
+   "contentBox": [
+    16,
+    16,
+    484,
+    1239
+   ],
+   "facing": "right",
+   "head": [
+    199,
+    23,
+    448,
+    222
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 0.934,
+    "stanceX": 241
+   },
+   "scaleSource": "combined",
+   "provisional": null,
+   "installedAt": "2026-10-07T00:44:02.510Z"
+  },
+  "follow": {
+   "artRoom": {
+    "id": "p_a3ea1e24",
+    "version": 2,
+    "file": "p_a3ea1e24-experimental-chapter-paine-warrior-follo-v2.png",
+    "sha256": "97117f9fdf21ddc96dfb0fb3a8b94267cd8baed5c5c56c3cff9d79814f5f8ac3",
+    "score": 8.4,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "33fbb530e0438f95f4a7ee51be66812ff93588f0a3754061e97dc3520aad6a6e",
+   "size": [
+    1423,
+    998
+   ],
+   "baselineY": 982,
+   "contentBox": [
+    16,
+    16,
+    1407,
+    982
+   ],
+   "facing": "right",
+   "head": [
+    629,
+    25,
+    828,
+    210
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 1.088,
+    "stanceX": 523.5,
+    "upright": true
+   },
+   "provisional": null,
+   "installedAt": "2026-10-07T00:39:42.103Z"
+  },
+  "od-x2-warrior-armor-break": {
+   "artRoom": {
+    "id": "p_1e6e8d6b",
+    "version": 3,
+    "file": "p_1e6e8d6b-experimental-chapter-paine-warrior-armor-v3.png",
+    "sha256": "4de3458e08a9f967937215b7d9ccc56a4422afdd83cb795341026010c783cfa7",
+    "score": 8.4,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "0dc949e0d796f9a082552058c57a206f96ed2a0b78453c6a5b0e75283bde6fb1",
+   "size": [
+    1404,
+    869
+   ],
+   "baselineY": 853,
+   "contentBox": [
+    16,
+    16,
+    1388,
+    853
+   ],
+   "facing": "right",
+   "head": [
+    658,
+    29,
+    910,
+    207
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 0.985,
+    "stanceX": 555.5,
+    "feetRow": 828,
+    "upright": true
+   },
+   "provisional": null,
+   "installedAt": "2026-10-07T00:39:52.618Z",
+   "stanceSource": "hand",
+   "stanceNote": "the middle of the two boots (x 17 to 1094); the automatic rule counted the blade tip (x 1269 to 1386), which hangs lowest, and put the stance at 701"
+  },
+  "od-x2-warrior-power-break": {
+   "artRoom": {
+    "id": "p_eda99ac0",
+    "version": 3,
+    "file": "p_eda99ac0-experimental-chapter-paine-warrior-power-v3.png",
+    "sha256": "8a7eb9003e78689c540c463394cc3cd0060ae58e0acd528ec843afe0a5a54d14",
+    "score": 8,
+    "approvedBy": "auto-pose"
+   },
+   "sha256": "b4b15bfef0567e514964208541c27fb98bb5d281d4e39769d9bc7574d36e9ea6",
+   "size": [
+    1467,
+    831
+   ],
+   "baselineY": 815,
+   "contentBox": [
+    16,
+    16,
+    1451,
+    815
+   ],
+   "facing": "right",
+   "head": [
+    590,
+    30,
+    835,
+    217
+   ],
+   "headSource": "hand",
+   "tiers": [
+    2,
+    3,
+    4
+   ],
+   "row": {
+    "scale": 0.975,
+    "stanceX": 1046.5,
+    "upright": true
+   },
+   "provisional": null,
+   "installedAt": "2026-10-07T00:40:03.041Z"
   }
  },
  "ffx2-dr-goon": {

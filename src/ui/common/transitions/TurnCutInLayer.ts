@@ -30,6 +30,7 @@
 import { showTurnCutIn } from '../../inkgold/cutin.ts';
 import { manifestKnowsAssetNow } from '../../../engine/ArtManifest.ts';
 import { artUrl } from '../../../engine/PaintedArt.ts';
+import { portraitIdIn } from '../portraitNamespace.ts';
 import { confirmPress } from './confirmPress.ts';
 import { liftCommandArea } from '../../ffx/cutInLift.ts';
 
@@ -40,19 +41,24 @@ export interface TurnCutInRequest {
   label: string;
   side: 'left' | 'right';
   holdMs: number;
+  /** The scene's art namespace, set by the overlay (`MomentOverlay`), never by the presenter: a portrait the namespace has repainted wins. */
+  artNamespace?: string;
 }
 
 const FRAME_W = 640;
 const FRAME_H = 360;
 
-/** The tall portrait: FFX-2's own likeness first, then the shared one. */
-function portraitFor(actorId: string, game: 'ffx' | 'ffx2'): string {
-  const ids = game === 'ffx2' ? [`${actorId}-x2`, actorId] : [actorId];
+/**
+ * The tall portrait: FFX-2's own likeness first, then the shared one. Inside an art namespace (the experimental Leblanc chapter) each candidate is
+ * the namespace's own painting when it has one (`portraitNamespace.ts`: `yuna-x2` is `exp-leblanc-yuna-x2`, Paine's one portrait `paine` is `exp-leblanc-paine`).
+ */
+function portraitFor(actorId: string, game: 'ffx' | 'ffx2', namespace?: string): string {
+  const ids = (game === 'ffx2' ? [`${actorId}-x2`, actorId] : [actorId]).map((id) => portraitIdIn(namespace, id));
   for (const id of ids) {
     const url = artUrl(`art/portraits/${id}.png`);
     if (manifestKnowsAssetNow(url) !== false) return url;
   }
-  return artUrl(`art/portraits/${actorId}.png`);
+  return artUrl(`art/portraits/${portraitIdIn(namespace, actorId)}.png`);
 }
 
 /** Show the cut-in inside `host`; resolves once it has left the screen. */
@@ -91,7 +97,7 @@ export async function playTurnCutIn(host: HTMLElement, req: TurnCutInRequest): P
   try {
     const handle = showTurnCutIn(frame, {
       name: req.name,
-      portraitUrl: portraitFor(req.actorId, req.game),
+      portraitUrl: portraitFor(req.actorId, req.game, req.artNamespace),
       ctbLabel: req.label,
       side: req.side,
     });

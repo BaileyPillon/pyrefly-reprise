@@ -93,6 +93,8 @@ export interface MidBattleCutsceneOptions {
   audio?: AudioPort | null;
   /** `SaveData.settings.textSpeed`. */
   textSpeed?: number;
+  /** The scene's art namespace (the experimental Leblanc chapter): a speaker it has repainted shows its own portrait (`portraitNamespace.ts`). */
+  artNamespace?: string;
   /**
    * Wall-clock sleep hook, so a skipped or fast-forwarded battle stays
    * responsive and a test can own the clock.
@@ -172,6 +174,7 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
     root: opts.root,
     ...(opts.game ? { game: opts.game } : {}),
     ...(opts.textSpeed !== undefined ? { textSpeed: opts.textSpeed } : {}),
+    ...(opts.artNamespace ? { artNamespace: opts.artNamespace } : {}),
   });
   box.mount();
   // The box only belongs on screen while a beat is actually playing.

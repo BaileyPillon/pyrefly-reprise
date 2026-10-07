@@ -107,16 +107,23 @@ def peel_halo(fg: np.ndarray, rgb: np.ndarray, depth: int) -> tuple[np.ndarray, 
     return cur, peeled
 
 
-def key_matte(rgb: np.ndarray, med: np.ndarray, noise: float, tinted: bool = False, halo_peel: int = 0) -> tuple[np.ndarray, dict]:
+def key_matte(rgb: np.ndarray, med: np.ndarray, noise: float, tinted: bool = False, halo_peel: int = 0, chroma_tol: float | None = None) -> tuple[np.ndarray, dict]:
     """Alpha of a figure on one flat colour: flood the background from the border, choke by KEY_CHOKE px, feather. Returns (alpha uint8, stats).
 
     `tinted` also takes a BLOB of nearly the background colour that is enclosed (the sheet's glow tints the air between a figure's legs a little) as a gap; it is
     off by default because a shaded part of a figure on a grey sheet (Dr. Goon's olive suit in the shade) is a blob of nearly the background colour too.
+
+    `chroma_tol`, when given, also asks a background pixel to be as colourless (or as coloured) as the background itself, to within that much: a bust that
+    bleeds off the canvas has figure pixels ON the border, and a shadow on the skin (Brother's, 133 102 121, 25 from the grey) is near enough to a grey sheet in
+    colour distance to be flooded in from the edge, though its chroma (31) is nothing like the sheet's (0). `None` keeps the figure installs exactly as they were.
     """
     d = np.linalg.norm(rgb.astype(np.float32) - med, axis=2)
     t_fg = max(26.0, 3.0 * noise)  # a pixel this far from the background colour is the figure
     t_pocket = max(14.0, noise + 8.0)  # an enclosed pocket must be this close to it at its MEDIAN pixel to count as background
     cand = d <= t_fg
+    if chroma_tol is not None:
+        px = rgb.astype(np.float32)
+        cand &= np.abs((px.max(axis=2) - px.min(axis=2)) - float(np.max(med) - np.min(med))) <= chroma_tol
     lab, n = ndi.label(cand)  # 4-connected
     if n == 0:
         raise SystemExit("[figure] key matte: no background found")
@@ -157,7 +164,7 @@ def key_matte(rgb: np.ndarray, med: np.ndarray, noise: float, tinted: bool = Fal
     alpha = ndi.gaussian_filter(fg1.astype(np.float32), KEY_FEATHER)
     alpha = np.where(fg1, np.maximum(alpha, 0.0), alpha)
     a = np.clip(np.round(alpha * 255.0), 0, 255).astype(np.uint8)
-    return a, {"background": [int(round(float(x))) for x in med], "noise": round(noise, 1), "tFg": round(t_fg, 1), "enclosedGaps": enclosed, "chokePx": KEY_CHOKE, "featherSigma": KEY_FEATHER, "pockets": "tinted" if tinted else "flat", **({"haloPeel": halo_peel, "haloPeeledPx": peeled} if halo_peel > 0 else {})}
+    return a, {"background": [int(round(float(x))) for x in med], "noise": round(noise, 1), "tFg": round(t_fg, 1), "enclosedGaps": enclosed, "chokePx": KEY_CHOKE, "featherSigma": KEY_FEATHER, "pockets": "tinted" if tinted else "flat", **({"haloPeel": halo_peel, "haloPeeledPx": peeled} if halo_peel > 0 else {}), **({"chromaTol": chroma_tol} if chroma_tol is not None else {})}
 
 
 
@@ -262,6 +269,22 @@ def stance_of(a: np.ndarray, bbox: tuple[int, int, int, int]) -> dict | None:
     return None if s is None else {k: round(float(v), 1) for k, v in s.items() if k in ("x", "row", "x0", "x1")}
 
 
+def head_top(a: np.ndarray, head: list[int], cb: list[int]) -> list[float]:
+    """Where the top of a bowed head is, as `[x, y]` fractions of the OPAQUE box `cb` (what `ui/common/restPoses.ts` `headOf` reads from a sleep or critical sidecar to seat
+    the status marks: the Z's of Sleep). The box is the head's (hair top to chin) on the framed painting; the top is its highest opaque row, the x the middle of the opaque
+    pixels of the topmost rows (a tenth of the head's height) inside the box."""
+    x0, y0, x1, y1 = head
+    sub = a[max(0, y0) : y1, max(0, x0) : x1] >= 128
+    rows = np.nonzero(sub.sum(1) >= 6)[0]
+    top = int(rows.min()) if len(rows) else 0
+    band = sub[top : top + max(8, (y1 - y0) // 10)]
+    ys, xs = np.nonzero(band)
+    hx = float(np.median(xs)) + max(0, x0) if len(xs) else (x0 + x1) / 2
+    hy = top + max(0, y0)
+    cw, ch = max(1, cb[2] - cb[0]), max(1, cb[3] - cb[1])
+    return [round(min(1.0, max(0.0, (hx - cb[0]) / cw)), 3), round(min(1.0, max(0.0, (hy - cb[1]) / ch)), 3)]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--src", required=True)
@@ -272,6 +295,7 @@ def main() -> int:
     ap.add_argument("--margin", type=int, default=16)
     ap.add_argument("--haze", type=int, default=16)
     ap.add_argument("--feet-row", type=float, default=None, help="the row of the soles when a thick weapon hangs lower (the registration's feetRow)")
+    ap.add_argument("--head", default=None, help="the head box x0,y0,x1,y1 on the FRAMED painting: the output then says where the top of the head is (headTop, for the status marks of a bowed figure)")
     args = ap.parse_args()
 
     src = Image.open(args.src)
@@ -318,6 +342,8 @@ def main() -> int:
     }
     if args.feet_row is not None:
         out["feetRow"] = args.feet_row
+    if args.head:
+        out["headTop"] = head_top(fa, [int(v) for v in args.head.split(",")], cb)
     print(json.dumps(out))
     return 0
 

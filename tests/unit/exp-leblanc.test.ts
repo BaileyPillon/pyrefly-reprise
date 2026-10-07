@@ -179,6 +179,25 @@ describe('Chapter VI is unchanged', () => {
     expect(manifest.backdropTiers?.[snap.backdrop.key] ?? []).toEqual(snap.backdrop.tiers);
     for (const [name, hash] of Object.entries<string>(snap.backdrop.files)) expect(sha(join(ART, 'backdrops', name)), name).toBe(hash);
   });
+
+  it.skipIf(!HAVE_ART)("serves Chapter VI's dialogue portraits and pause plates exactly as the release tree holds them (the preview's own are new files beside them)", () => {
+    const snap = JSON.parse(readFileSync(join(REPO, 'tests', 'fixtures', 'exp-leblanc', 'ch6-art.json'), 'utf8'));
+    const manifest = JSON.parse(readFileSync(join(ART, 'manifest.json'), 'utf8'));
+    let files = 0;
+    for (const [name, hash] of Object.entries<string>(snap.surfaces.portraits)) {
+      expect(sha(join(ART, 'portraits', name)), `portraits/${name}`).toBe(hash);
+      files++;
+    }
+    for (const [name, hash] of Object.entries<string>(snap.surfaces.pause)) {
+      expect(sha(join(ART, 'pause', name)), `pause/${name}`).toBe(hash);
+      files++;
+    }
+    expect(files).toBeGreaterThanOrEqual(25);
+    // Still listed under their own names, and the 2x masters Chapter VI's plates have are still listed.
+    for (const id of snap.surfaceLists.portraits) expect(manifest.portraits, id).toContain(id);
+    for (const id of snap.surfaceLists.pause) expect(manifest.pause, id).toContain(id);
+    for (const id of snap.surfaceLists.pause2x) expect(manifest.pause2x, id).toContain(id);
+  });
 });
 
 describe('the experiment is the same encounter', () => {

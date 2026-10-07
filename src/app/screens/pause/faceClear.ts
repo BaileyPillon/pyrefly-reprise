@@ -56,6 +56,11 @@ export const FACE_BOXES: Readonly<Record<string, FaceBox>> = {
   wakka: { x0: 0.36, x1: 0.7, y0: 0.43, y1: 0.83 },
   yuna: { x0: 0.16, x1: 0.44, y0: 0.25, y1: 0.69 },
   'yuna-ffx2': { x0: 0.355, x1: 0.51, y0: 0.22, y1: 0.45 },
+  // The experimental Leblanc chapter's own member plates (`pause/exp-leblanc-<plate>.png`, art namespace `exp-leblanc`, `plates.ts` `EXP_PLATE_FRAMING`),
+  // measured 2026-10-06 off the installed files on a 5 % grid the same way: brow to chin, cheek to cheek, hair and ears outside.
+  'exp-leblanc-yuna-ffx2': { x0: 0.385, x1: 0.605, y0: 0.14, y1: 0.405 },
+  'exp-leblanc-rikku-ffx2': { x0: 0.375, x1: 0.71, y0: 0.22, y1: 0.75 },
+  'exp-leblanc-paine': { x0: 0.265, x1: 0.445, y0: 0.24, y1: 0.565 },
 };
 
 /** Air kept between a face and the nearest line of chrome, in CSS px. */

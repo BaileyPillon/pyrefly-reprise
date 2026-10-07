@@ -2582,5 +2582,58 @@
    "leblanc-last-room.json": "cacd166fa7f63fee0db889e01895f376d0520246d72d60e353378dae1a9ca27a",
    "leblanc-last-room@2x.png": "0600d1a1b7dc674859e90f8bc011665c3b5a9c6ed24bd4087a75cc75d61eb253"
   }
+ },
+ "surfaces": {
+  "portraits": {
+   "yuna-x2.png": "7427dc7fc4811782c00be3888dbca713d04c3755328b179da3bfc5e1fd371200",
+   "yuna-x2.json": "ef893193183040049b553f06cfbf6ce90d5fa2c448ae4b503e631a155d9c262c",
+   "rikku-x2.png": "ac408f345f3ae5f7daf17d73027dcdfef756366fff8071dcaa5ef38ea06b1307",
+   "rikku-x2.json": "d164afd27e2937fc60143fc4d038ef072950e93b15459371c45255968adeba21",
+   "paine.png": "72ec132c48b1b0b76581806f7e6b84693ce4cf978cf4e94be4a0e9cced30dbb7",
+   "paine.json": "ecf08627b51f307a70059e2f4006447be452a499c9da863ded7c57b050f8fa2f",
+   "leblanc.png": "f82f2d74bdaf1931b592b859112975cb841c056c518450afa5a0c9a35acb9e37",
+   "leblanc.json": "aae8d7e427382e715aa7cb61af8848816b7655e94f0cd2db3b08623e4b9576f3",
+   "logos.png": "b10142876dcd3eeacc168b615fdf674e6d68372c69b4182dd3d461f2f7f79bd8",
+   "logos.json": "de5861d0043a5288d7c8b3140acd6a5e83ab4575806b596129009b7e312f9e89",
+   "ormi.png": "fd29a3439913004356509a53d36ebd03756c9929820334384d5320936fdb2187",
+   "ormi.json": "96b0daf8b742be0e7732ce830e089ed9fdfd3dcba742ba67103241c1ea187208",
+   "brother-x2.png": "97bb04ad8368e33d73fc493592b414df61671208b34d40de2387bd504adcc852",
+   "brother-x2.json": "c44586274689fcd10fa540c2ce52ca89fff88d3fce5d2c91ec776ac6d387b33e"
+  },
+  "pause": {
+   "leblanc.png": "d4655b8abe02a5360b6b05d7bf8c574b7f67d5704b4c8696fb9cdd7e33469899",
+   "leblanc.json": "5a2c771fc6edb69f86ec97637213c8093355d0cdbc77f1bf5d0b15aa52cb585e",
+   "yuna-ffx2.png": "f1efe21f6c7588d3c9a5b72b6374daabb02bbe0f3315ebe78ef5f29b958617bc",
+   "yuna-ffx2.json": "03231725bec81afaa0b24f9e61323e9d433f048123bb4993600094109a4c54d7",
+   "yuna-ffx2.2x.webp": "3d60038ceead22c0d7e868eb3222f80e06def1a7b186b8452fc93991224217ec",
+   "rikku-ffx2.png": "b19fe8a3e833a3fbaa238ba71b47bda0581264a74c097d16a11ab53739d6afb2",
+   "rikku-ffx2.json": "b69d357a7dc83972b8140e23a0ebaa1c819d9126ad404464ffc8cc61a10162d1",
+   "rikku-ffx2.2x.webp": "974da5ccb86d35f21b2fb77f9c7d0124f2098d7e143a08b106194695e81a42bb",
+   "paine.png": "1de559d4262305c26e866f6a7ca3eb555fcaeca6d6418a706f9d7ad4c8eb6815",
+   "paine.json": "90c475fa557e28009580a7850ce6ba663679609dddd262f0bb37799d889c4c24",
+   "paine.2x.webp": "e8a182b8333dcd6fa33d844deb7f2b60359a04d2092052361f497f2c457c573c"
+  }
+ },
+ "surfaceLists": {
+  "portraits": [
+   "yuna-x2",
+   "rikku-x2",
+   "paine",
+   "leblanc",
+   "logos",
+   "ormi",
+   "brother-x2"
+  ],
+  "pause": [
+   "leblanc",
+   "yuna-ffx2",
+   "rikku-ffx2",
+   "paine"
+  ],
+  "pause2x": [
+   "yuna-ffx2",
+   "rikku-ffx2",
+   "paine"
+  ]
  }
 }

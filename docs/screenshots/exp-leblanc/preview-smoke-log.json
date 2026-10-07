@@ -32,19 +32,19 @@
   },
   {
    "k": "shot.2-chapter-select-experiment",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-2-chapter-select-experiment.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-2-chapter-select-experiment.png"
   },
   {
    "k": "shot.3-party-prep",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-3-party-prep.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-3-party-prep.png"
   },
   {
    "k": "shot.4-cutscene",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-4-cutscene.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-4-cutscene.png"
   },
   {
    "k": "shot.5-battle-first-menu",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-5-battle-first-menu.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-5-battle-first-menu.png"
   },
   {
    "k": "field",
@@ -167,16 +167,18 @@
   },
   {
    "k": "shot.7a-yuna-attack-start",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-7a-yuna-attack-start.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-7a-yuna-attack-start.png"
   },
   {
    "k": "shot.7b-yuna-attack-hit",
-   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b5\\preview-smoke-7b-yuna-attack-hit.png"
+   "v": "D:\\Tools\\pyrefly-scratch\\2026-10-06\\exp-leblanc\\smoke-b6\\preview-smoke-7b-yuna-attack-hit.png"
   },
   {
    "k": "actors",
    "v": [
+    "paine",
     "rikku",
+    "paine",
     "yuna"
    ]
   },
@@ -187,13 +189,18 @@
     "detail": [
      {
       "from": "rikku",
-      "to": "dr-goon",
-      "amount": 238
+      "to": "ormi-entrance",
+      "amount": 67
+     },
+     {
+      "from": "paine",
+      "to": "ormi-entrance",
+      "amount": 127
      },
      {
       "from": "yuna",
       "to": "ormi-entrance",
-      "amount": 58
+      "amount": 90
      }
     ]
    }
@@ -201,7 +208,7 @@
   {
    "k": "requests",
    "v": {
-    "total": 172,
+    "total": 171,
     "experimental": 115,
     "baseArtStillRead": [
      "/art/characters/seymour-flux-body/idle.png",
@@ -259,8 +266,7 @@
      "/art/characters/yuna/idle.json",
      "/art/characters/yuna/idle.webp",
      "/art/characters/kimahri/idle.json",
-     "/art/characters/kimahri/idle.png",
-     "/art/characters/ormi/idle.webp"
+     "/art/characters/kimahri/idle.png"
     ]
    }
   },
@@ -269,8 +275,7 @@
    "v": {
     "ok": true,
     "detail": [
-     "/art/characters/leblanc/idle.png",
-     "/art/characters/ormi/idle.webp"
+     "/art/characters/leblanc/idle.png"
     ]
    }
   },

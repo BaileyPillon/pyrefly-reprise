@@ -15,8 +15,8 @@
  *   --head x0,y0,x1,y1         the head's box on THIS painting, hair top to chin and outer side to side, read by eye (a pose other than the idle
  *                              needs it for its registered `scale`; the idle's box is the reference every other pose is matched to)
  *   --feet-row N               the row of the soles when a thick weapon hangs lower than the boots (the registration's `feetRow`)
- *   --scale N                  the row's scale when no head can be matched (a lying KO matched by length: the idle's content height over the KO's content
- *                              length, over 0.978); `--scale-source length|hand` is recorded beside it
+ *   --scale N                  the row's scale as given, over the head box's own: a lying KO matched by length (the idle's content height over the KO's content
+ *                              length, over 0.978), or a bowed head whose box is averaged with a body cue; `--scale-source length|combined|hand` is recorded beside it
  *   --upright                  a standing pose wider than tall (a lunge): never laid down like a KO
  *   --no-tiers                 skip the @2x/@3x/@4x masters (a pose that already has them is refused: they would be the old painting's)
  *   --matte auto|keep|key|rembg  keep the image's own alpha, key a figure on one flat colour (the Art Room's idle sheets), or cut it with isnet-anime
@@ -75,7 +75,7 @@ export function readInstalled() {
   return readJson(INSTALLED_JSON, {}) ?? {};
 }
 
-function writeJsonAtomic(path, value) {
+export function writeJsonAtomic(path, value) {
   mkdirSync(dirname(path), { recursive: true });
   const tmp = `${path}.tmp-${process.pid}`;
   writeFileSync(tmp, `${JSON.stringify(value, null, 1)}\n`);
@@ -137,7 +137,7 @@ export function approvedFor(src, { allowUnapproved = false } = {}) {
   );
 }
 
-function run(script, args, label) {
+export function run(script, args, label) {
   const r = spawnSync(PYTHON, ['-s', script, ...args], { encoding: 'utf8', maxBuffer: 1 << 28, env: { ...process.env, PYTHONIOENCODING: 'utf-8' } });
   if (r.status !== 0) throw new Error(`${label} failed (${r.status}): ${(r.stderr || r.stdout || '').slice(-1500)}`);
   const last = r.stdout.trim().split(/\r?\n/).filter(Boolean).at(-1);
@@ -201,7 +201,7 @@ export function recomputeRows(records) {
   const idle = records.idle;
   for (const [pose, r] of Object.entries(records)) {
     if (pose === 'idle') continue;
-    if (r.scaleSource === 'length') continue; // matched by length, not by a head: nothing to recompute
+    if (r.scaleSource) continue; // a scale given by hand (a KO matched by length, or a head box averaged with a body cue): nothing to recompute
     if (!r.head || !idle?.head) continue;
     const prev = r.row ?? {};
     r.row = registrationRow({
@@ -302,7 +302,7 @@ export async function install(opts) {
   mkdirSync(work, { recursive: true });
   const cut = join(work, `${pose}.png`);
   say(`matte, clean and frame ${basename(src)} -> ${cut}`);
-  const fig = run(join(REPO, 'tools', 'exp-art', 'figure.py'), ['--src', src, '--out', cut, '--matte', opts.matte ?? 'auto', ...(opts.pockets ? ['--pockets', opts.pockets] : []), ...(opts['halo-peel'] ? ['--halo-peel', opts['halo-peel']] : []), ...(opts['feet-row'] ? ['--feet-row', opts['feet-row']] : [])], 'figure.py');
+  const fig = run(join(REPO, 'tools', 'exp-art', 'figure.py'), ['--src', src, '--out', cut, '--matte', opts.matte ?? 'auto', ...(opts.head && (pose === 'critical' || pose === 'sleep') ? ['--head', opts.head] : []), ...(opts.pockets ? ['--pockets', opts.pockets] : []), ...(opts['halo-peel'] ? ['--halo-peel', opts['halo-peel']] : []), ...(opts['feet-row'] ? ['--feet-row', opts['feet-row']] : [])], 'figure.py');
 
   // The painting, and the sidecar the engine reads; a painting that replaces earlier new art is kept first.
   if (before) {
@@ -329,6 +329,8 @@ export async function install(opts) {
     matte: fig.matte,
     margins: fig.margins,
     ...(fig.feetRow !== undefined ? { feetRow: fig.feetRow } : {}),
+    // A bowed rest painting (sleep, critical) says where the top of its head is, so the status marks (the Z's of Sleep) sit above the head and not at the standing head's height.
+    ...(fig.headTop ? { headTop: fig.headTop } : {}),
     installedAt: new Date().toISOString(),
     installedBy: 'tools/exp-install.mjs',
   };

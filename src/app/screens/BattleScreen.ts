@@ -314,6 +314,7 @@ export class BattleScreen extends Screen {
       stage: this.stage,
       audio,
       textSpeed: this.app.save.settings.textSpeed,
+      ...(scene.slots.artNamespace ? { artNamespace: scene.slots.artNamespace } : {}), // the mid-battle lines show the experiment's own portraits
       // A `'skip'` run is e2e or the critic: no viewer, and a whole chapter to
       // finish inside a budget. Give the runner a clock that collapses instead
       // of the bare `setTimeout` it defaulted to, so a beat's waits cost a
@@ -324,7 +325,7 @@ export class BattleScreen extends Screen {
       sleep: (ms) => defaultSleep(this.opts.speed === 'skip' ? 0 : ms),
     });
 
-    this.momentOverlay = createMomentOverlay(this.root);
+    this.momentOverlay = createMomentOverlay(this.root, scene.slots.artNamespace); // the turn cut-in shows the experiment's own portraits
     if (this.opts.openingHurry) this.momentOverlay.hurry.arm();
 
     const registered = uiPortsRegistered();

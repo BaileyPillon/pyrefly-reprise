@@ -26,6 +26,7 @@
  */
 
 import type { GameId } from '../../../battle/common/types.ts';
+import { inArtNamespace } from '../../../data/art/artNamespace.ts';
 
 /** Which side of the painting the tab strip, meters, objective and prompts use. */
 export type ChromeSide = 'left' | 'right';
@@ -206,6 +207,24 @@ export const PLATE_FRAMING: Readonly<Record<string, PlateFraming>> = Object.from
   Object.entries(PLATE_SHAPES).map(([id, shape]) => [id, { ...shape, side: deriveChromeSide(shape) }]),
 );
 
+/**
+ * The experimental Leblanc chapter's own member plates (`public/art/pause/exp-leblanc-<plate>.png`, art namespace `exp-leblanc`,
+ * `data/art/artNamespace.ts`), apart from the shipped plates above so the approved release framings, and every test that walks them, are untouched.
+ * Measured 2026-10-06 off the installed files the way the shipped ones were: the focal is the middle of the plate's face box (`faceClear.FACE_BOXES`,
+ * written to the sidecar by `tools/exp-install-surfaces.mjs focal`), `head` is how much of the source's height the head takes (hair top to chin).
+ * The CHAPTER tab's plate (`exp-leblanc-leblanc`) has no row, like Chapter VI's `leblanc`: it frames through {@link framingFor}'s default and its sidecar focal.
+ */
+const EXP_PLATE_SHAPES: Readonly<Record<string, PlateShape>> = {
+  'exp-leblanc-yuna-ffx2': { x: 0.5, y: 0.27, head: 0.43 },
+  'exp-leblanc-rikku-ffx2': { x: 0.54, y: 0.48, head: 0.8 },
+  'exp-leblanc-paine': { x: 0.35, y: 0.4, head: 0.58 },
+};
+
+/** The experiment's member plates with their framing; the side is derived the same way. */
+export const EXP_PLATE_FRAMING: Readonly<Record<string, PlateFraming>> = Object.fromEntries(
+  Object.entries(EXP_PLATE_SHAPES).map(([id, shape]) => [id, { ...shape, side: deriveChromeSide(shape) }]),
+);
+
 /** Focal x of every plate that ships. Kept for the sidecar cross-check. */
 export const FOCAL_X: Readonly<Record<string, number>> = Object.fromEntries(
   Object.entries(PLATE_FRAMING).map(([id, f]) => [id, f.x]),
@@ -226,10 +245,14 @@ const FFX2_PLATE: Readonly<Record<string, string>> = {
   rikku: 'rikku-ffx2',
 };
 
-/** The plate id for a combatant in a given game. */
-export function plateIdFor(combatantId: string, game: GameId): string {
-  if (game !== 'ffx2') return combatantId;
-  return FFX2_PLATE[combatantId] ?? combatantId;
+/**
+ * The plate id for a combatant in a given game. Inside an art namespace (the experimental Leblanc chapter) a plate the namespace has repainted
+ * (`exp-leblanc-yuna-ffx2`) takes the place of the base plate; one it has not stays the base plate.
+ */
+export function plateIdFor(combatantId: string, game: GameId, namespace?: string): string {
+  const base = game !== 'ffx2' ? combatantId : (FFX2_PLATE[combatantId] ?? combatantId);
+  const own = inArtNamespace(namespace, base);
+  return own !== base && Object.hasOwn(EXP_PLATE_FRAMING, own) ? own : base;
 }
 
 /**
@@ -245,7 +268,7 @@ export function chromeSideFor(focalX: number | null | undefined): ChromeSide {
 
 /** The approved framing for a plate, or the default for one nobody has judged. */
 export function framingFor(plateId: string): PlateFraming {
-  const known = PLATE_FRAMING[plateId];
+  const known = PLATE_FRAMING[plateId] ?? EXP_PLATE_FRAMING[plateId];
   if (known) return known;
   return { x: 0.5, y: 0.35, head: DEFAULT_HEAD, side: 'left' };
 }
@@ -256,7 +279,8 @@ export function plateFocalX(plateId: string): number | null {
 }
 
 /** Convenience: the chrome side for a combatant, from the approved table. */
-export function chromeSideForCombatant(combatantId: string, game: GameId): ChromeSide {
-  return PLATE_FRAMING[plateIdFor(combatantId, game)]?.side ?? 'left';
+export function chromeSideForCombatant(combatantId: string, game: GameId, namespace?: string): ChromeSide {
+  const id = plateIdFor(combatantId, game, namespace);
+  return (PLATE_FRAMING[id] ?? EXP_PLATE_FRAMING[id])?.side ?? 'left';
 }
 

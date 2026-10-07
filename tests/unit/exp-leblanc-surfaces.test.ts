@@ -86,8 +86,12 @@ describe('facing: every installed painting faces the way the game draws its side
   });
 
   it("installs the three girls' idles and every pose installed for them, and the five fiends' idles", () => {
-    // Every everyday pose of the three girls (idle, ready, attack, cast, hurt, ko, victory, item) and of the three fiends who walk off (no KO) has new art.
-    for (const subject of ['yuna-gunner', 'rikku-thief', 'paine-warrior']) expect(Object.keys(INSTALLED[subject]!).sort(), subject).toEqual(['attack', 'cast', 'hurt', 'idle', 'item', 'ko', 'ready', 'victory']);
+    // Every everyday pose of the three girls (idle, ready, attack, cast, hurt, ko, victory, item) and of the three fiends who walk off (no KO) has new art, and so has each girl's
+    // low-HP kneel (critical) and sleep, Rikku's and Paine's follow-through, and Paine's two Breaks (the surfaces pass).
+    const EVERYDAY = ['attack', 'cast', 'critical', 'hurt', 'idle', 'item', 'ko', 'ready', 'sleep', 'victory'];
+    expect(Object.keys(INSTALLED['yuna-gunner']!).sort()).toEqual(EVERYDAY);
+    expect(Object.keys(INSTALLED['rikku-thief']!).sort()).toEqual([...EVERYDAY, 'follow'].sort());
+    expect(Object.keys(INSTALLED['paine-warrior']!).sort()).toEqual([...EVERYDAY, 'follow', 'od-x2-warrior-armor-break', 'od-x2-warrior-power-break'].sort());
     for (const subject of ['leblanc', 'logos', 'ormi']) expect(Object.keys(INSTALLED[subject]!).sort(), subject).toEqual(['attack', 'cast', 'hurt', 'idle']);
     for (const subject of ['ffx2-dr-goon', 'ffx2-fem-goon']) expect(Object.keys(INSTALLED[subject]!).sort()).toEqual(['attack', 'hurt', 'idle', 'ko']); // the goons are complete
   });
@@ -148,9 +152,16 @@ describe('registration: each installed girl\'s idle carries a head box, and ever
     const idleStance = INSTALLED['ffx2-dr-goon']!['idle']!.row['stanceX'] as number;
     expect(idleStance).toBeGreaterThan(458); // the idle's rear boot (x 458 to 559) is the reference and never moves
     expect(idleStance).toBeLessThan(559);
+    // Paine's Armor Break is the other one: the automatic rule counted the blade tip (x 1269 to 1386), which hangs lowest, and put her stance at 701; her feet are the two boots
+    // (x 17 to 1094), so the stance is their middle, 555.5, and the soles' row (828) is the feet row the blade tip must not set.
+    const armor = INSTALLED['paine-warrior']!['od-x2-warrior-armor-break']!;
+    expect(armor.stanceSource).toBe('hand');
+    expect(armor.row['stanceX']).toBe(555.5);
+    expect(armor.row['feetRow']).toBe(828);
+    expect(armor.row['upright']).toBe(true);
     // Every other new pose keeps the tool's own stance.
     for (const [subject, poses] of Object.entries(INSTALLED)) {
-      for (const [pose, rec] of Object.entries(poses)) if (rec.stanceSource) expect(`${subject}/${pose}`).toBe('ffx2-dr-goon/attack');
+      for (const [pose, rec] of Object.entries(poses)) if (rec.stanceSource) expect(['ffx2-dr-goon/attack', 'paine-warrior/od-x2-warrior-armor-break']).toContain(`${subject}/${pose}`);
     }
   });
 
@@ -330,5 +341,73 @@ describe('the keyed sheets: the generator\'s pale grey fringe is peeled off the 
     for (const [id, pose] of KEYED) expect(matteOf(id, pose).haloPeel, `${id}/${pose}`).toBe(6);
     // Logos's sheets are on ochre and carry no neutral grey glow: the peel runs and finds (almost) nothing, and his idle is unchanged from the first build.
     for (const pose of ['cast', 'attack', 'hurt']) expect(matteOf('exp-leblanc-logos', pose).haloPeeledPx ?? 0, `logos/${pose}`).toBeLessThan(10);
+  });
+});
+
+describe("the girls' rare poses: the low-HP kneel, the sleep, the follow-through and Paine's two Breaks (the surfaces pass)", () => {
+  const RARE: Array<[string, string]> = [
+    ['yuna-gunner', 'critical'], ['yuna-gunner', 'sleep'],
+    ['rikku-thief', 'critical'], ['rikku-thief', 'sleep'], ['rikku-thief', 'follow'],
+    ['paine-warrior', 'critical'], ['paine-warrior', 'sleep'], ['paine-warrior', 'follow'], ['paine-warrior', 'od-x2-warrior-armor-break'], ['paine-warrior', 'od-x2-warrior-power-break'],
+  ];
+
+  it('registers each of the ten against its idle: a head box, a scale in the sane range, a stance, and the stature a kneel or a doze can have', () => {
+    for (const [subject, pose] of RARE) {
+      const rec = INSTALLED[subject]![pose]!;
+      const idle = INSTALLED[subject]!['idle']!;
+      expect(rec.facing, `${subject}/${pose}`).toBe('right');
+      expect(rec.head, `${subject}/${pose} head`).toHaveLength(4);
+      const scale = rec.row['scale'] as number;
+      expect(scale, `${subject}/${pose} scale`).toBeGreaterThan(0.6);
+      expect(scale, `${subject}/${pose} scale`).toBeLessThan(1.3);
+      expect(rec.row['stanceX'], `${subject}/${pose} stance`).toBeGreaterThan(0);
+      // How tall the figure stands on the field, against the idle: a kneel is a little over half of a standing figure, a slumped doze never taller than it.
+      const stature = ((rec.contentBox[3]! - rec.contentBox[1]!) * scale) / (idle.contentBox[3]! - idle.contentBox[1]!);
+      if (pose === 'critical') {
+        expect(stature, `${subject} kneel`).toBeGreaterThan(0.5);
+        expect(stature, `${subject} kneel`).toBeLessThan(0.75);
+      }
+      if (pose === 'sleep') expect(stature, `${subject} doze`).toBeLessThan(1.0);
+    }
+  });
+
+  it('marks the lunges upright (wider than tall, never laid down like a KO) and gives the Armor Break its soles', () => {
+    for (const pose of ['follow', 'od-x2-warrior-armor-break', 'od-x2-warrior-power-break']) {
+      const rec = INSTALLED['paine-warrior']![pose]!;
+      expect(rec.size[0], pose).toBeGreaterThan(rec.size[1] * 1.15);
+      expect(rec.row['upright'], pose).toBe(true);
+      expect(poseRegistrationFor(characterUrl('exp-leblanc-paine-warrior', pose))?.upright, pose).toBe(true);
+    }
+    expect(INSTALLED['rikku-thief']!['follow']!.size[0]).toBeLessThan(INSTALLED['rikku-thief']!['follow']!.size[1] * 1.15); // Rikku's is not wider than tall
+    expect(INSTALLED['paine-warrior']!['od-x2-warrior-armor-break']!.row['feetRow']).toBe(828);
+  });
+
+  it('records which were matched by the head box alone and which by the box averaged with a body cue (the geometric mean, in the record)', () => {
+    const COMBINED = ['yuna-gunner/sleep', 'rikku-thief/critical', 'rikku-thief/follow', 'paine-warrior/critical', 'paine-warrior/sleep'];
+    for (const [subject, pose] of RARE) {
+      const rec = INSTALLED[subject]![pose]!;
+      expect(rec.scaleSource ?? 'head', `${subject}/${pose}`).toBe(COMBINED.includes(`${subject}/${pose}`) ? 'combined' : 'head');
+    }
+  });
+
+  it("gives Paine's two Breaks two different paintings (the old art had one image under both names)", () => {
+    const armor = INSTALLED['paine-warrior']!['od-x2-warrior-armor-break']!;
+    const power = INSTALLED['paine-warrior']!['od-x2-warrior-power-break']!;
+    expect(armor.artRoom.id).not.toBe(power.artRoom.id);
+    expect(armor.size).not.toEqual(power.size);
+  });
+
+  it.skipIf(!HAVE_ART)("seats the status marks of a bowed figure: a critical or sleep sidecar says where the top of the head is, inside the figure's box", () => {
+    for (const subject of ['yuna-gunner', 'rikku-thief', 'paine-warrior']) {
+      for (const pose of ['critical', 'sleep']) {
+        const side = JSON.parse(readFileSync(join(ART, 'characters', inArtNamespace(NS, subject), `${pose}.json`), 'utf8')) as { headTop?: [number, number] };
+        expect(side.headTop, `${subject}/${pose} headTop`).toBeDefined();
+        const [x, y] = side.headTop!;
+        expect(x, `${subject}/${pose} x`).toBeGreaterThan(0.3);
+        expect(x, `${subject}/${pose} x`).toBeLessThan(0.95);
+        expect(y, `${subject}/${pose} y`).toBeGreaterThanOrEqual(0);
+        expect(y, `${subject}/${pose} y`).toBeLessThan(0.08); // a bowed head's crown is the top of the figure
+      }
+    }
   });
 });

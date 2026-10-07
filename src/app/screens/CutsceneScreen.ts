@@ -199,6 +199,7 @@ export class CutsceneScreen extends Screen {
       ...(this.opts.nameFor ? { nameFor: this.opts.nameFor } : {}),
       ...(this.opts.portraitFor ? { portraitFor: this.opts.portraitFor } : {}),
       ...(this.opts.roleFor ? { roleFor: this.opts.roleFor } : {}),
+      ...(artNamespace ? { artNamespace } : {}), // the experimental Leblanc chapter's speakers show its own portraits
     });
     this.dialogueBox.mount();
 

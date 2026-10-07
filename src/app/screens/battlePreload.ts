@@ -153,8 +153,8 @@ export function plateUrlFor(sceneKey: string): string {
 }
 
 /** The pause close-up the pause's `srcset` will pick for this window (`PortraitStage.mountPlate`). */
-export function pausePlateUrl(memberId: string, game: Chapter['game']): string {
-  const url1x = artUrl(`art/pause/${plateIdFor(memberId, game)}.png`);
+export function pausePlateUrl(memberId: string, game: Chapter['game'], namespace?: string): string {
+  const url1x = artUrl(`art/pause/${plateIdFor(memberId, game, namespace)}.png`);
   if (typeof window === 'undefined') return url1x;
   return pickHeroBackgroundUrl(url1x, pause2xUrlFor(url1x), window.innerWidth, window.innerHeight, window.devicePixelRatio);
 }
@@ -293,7 +293,7 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
     }
 
     // Phase 5: the party's pause close-ups (first Esc, then tab-next).
-    await warm(party.map((c) => pausePlateUrl(c.id, chapter.game)));
+    await warm(party.map((c) => pausePlateUrl(c.id, chapter.game, ns)));
   } catch (e) {
     console.warn(`[preload] ${chapter.id}: stopped early`, e);
   } finally {

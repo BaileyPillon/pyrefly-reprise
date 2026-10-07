@@ -11,6 +11,8 @@
  *
  *   characters/exp-leblanc-<subject>/<pose>.png + .json   one folder per base subject (`exp-leblanc-yuna-gunner`, `exp-leblanc-leblanc`)
  *   backdrops/exp-leblanc-last-room.png + .json (+ @2x)   the Last Room plate, the scene key `exp-leblanc-last-room`
+ *   portraits/exp-leblanc-<id>.png + .json                the dialogue portraits (`yuna-x2`, `rikku-x2`, `paine`, `leblanc`, `logos`, `ormi`, `brother-x2`)
+ *   pause/exp-leblanc-<plate>.png + .2x.webp + .json      the pause close-ups (`yuna-ffx2`, `rikku-ffx2`, `paine`, and the CHAPTER tab's `leblanc`)
  *
  * Nothing in this file writes anything; `exp-art.mjs` and `exp-install.mjs` do. Plain JS (no type syntax), so Node loads it as is.
  */
