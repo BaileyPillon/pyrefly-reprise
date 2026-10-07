@@ -1,13 +1,170 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 55 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 56 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-07 · Release 39.4 on echoesofspira.com
+
+Address: https://echoesofspira.com (main 55db51dd, bundle D57LJe-j)
+
+- **Both:** the art repairs Bailey approved this morning are installed: 586 character and boss poses
+  (218 FFX and 368 FFX-2), 2,063 painting files in all (569 at the base size and 1,494 at the larger
+  sizes a sharper screen draws). Nothing was redrawn. The repairs take the jagged white fringe off the
+  edges of hair and cloth and make a costume's colour the same from one pose to the next, and every
+  repaired painting keeps the exact pixel size of the one it replaces. At battle size the edge repair
+  is subtle by design; at 3x the fringe is gone (the pictures below). Bailey's words: "yes install the
+  555 repairs, go with your recommendations". 555 of the poses had nothing to decide; the other 31
+  came as four calls, and he took the recommendation on each (the next three lines).
+- **Both:** where a figure runs off the edge of its painting, a hard straight cut is now a soft fade
+  about 30 to 35 pixels wide: 21 poses (12 FFX-2 and 9 FFX).
+- **FFX-2:** Paine's Black Mage dress matches her idle in five poses (attack, cast, KO, ready,
+  victory). Seven of its poses were violet and the idle is slate-blue; the research notes give no colour
+  for the dress, so this was a picture call, and the two poses the repair could not do cleanly (follow
+  and item) stay violet. Rikku's Thief critical pose lost one floating blue ellipse (121 pixels) beside
+  her right boot; a reviewer could not tell a stray from a deliberate puddle, and Bailey took the
+  recommendation to remove it.
+- **FFX:** Yuna's skirt matches her idle in four poses (attack, hurt, item, ready).
+- **FFX:** Evrae's (Chapter VIII) idle painting is a byte-for-byte twin of its near-idle painting again
+  at the base size, 3x and 4x (the 2x never was one). The repairs had made two files out of two
+  identical sources, 82,198 of 890,624 pixels apart along the edge, and a test requires the pair to be
+  the same file; the near-idle's repaired painting now stands in for both. The pre-repair file is in the
+  private art archive.
+- **Both:** what was not installed looks as it did: 39 repairs that failed review (a thinner sword
+  blade, mottled robes, erased fingers and the like), 5 FFX poses whose fade exists at the smaller
+  sizes only, and 7 poses of FF7's fight. Of the 586 installed poses, 475 are repaired at all four
+  sizes, 70 at the base size only (a sharper screen draws the older painting), 24 at the base size and
+  2x only, and 17 FFX fiend poses (Grothia, Pterya, Spathi) at the larger sizes only (a 1600x900
+  screen draws the base size, so it looks as before).
+- **Both:** a figure's head keeps its size when it changes pose, a knock-out included (Bailey's pick,
+  D-510). The stage now holds each pose's head to its idle's size on screen, under the frame's own
+  camera, within 10 percent of the table's scale; `?headlock=off` puts the old behaviour back. In the
+  continuity run, the two chapters that failed the head-size test (CHK-026) on 39.2 now pass. Chapter V
+  (FFX-2, Vegnagun and Shuyin): the worst head step fell from 3.50 to 0.27 percent and the swaps over 1
+  percent from 5 to 0. Chapter XVII (FFX, Sin's fins and core): 3.34 to 0.24 percent and 213 swaps to
+  0. The five other chapters measured (I, II, VII, IX, XVIII) pass too, with 0 swaps over 1 percent in
+  all seven. With `?headlock=off` on the same build the two still fail (3.51 and 3.78 percent), so the
+  lock is the cause. The lock's own counters over seven chapters played by the debug autoplayer read
+  56,507 planes held, 0 clamped, 0 warnings; the focused review's own real-key runs read 20,094 planes
+  held and 0 clamped, and 0.29 and 0.24 percent worst steps in Chapters V and XVII.
+- **FFX-2:** typing `leblanc` on the board opens the hidden chapter's party prep and leaves it up until
+  Enter (F393-03). The word's last letter, C, is also the board's START key, and the chapter used to
+  drop straight into its pre-battle scene, with party prep on screen for 2 ms.
+- **Both:** an arrow pressed after typing part of a secret word is the board's again and moves the
+  cursor (F393-04, the one regression 39.3 had against 39.2); the word `limit` for FF7's fight shares
+  the fix and types as before. The chapter is FFX-2 only; the board is both games'.
+- **FFX-2:** a run of the hidden chapter leaves the main save byte-identical (F393-05). It used to
+  write six first-run tips and a timestamp into the save, and a first-time FFX-2 player who found the
+  word first would have lost the first-battle hints of the real chapters. The cost: the hidden
+  chapter's own hints replay once per page load. The coach code is shared and both games' real chapters
+  teach their hints as before.
+- **Both:** a new title-screen track: ElevenLabs Music's take "title 1", which Bailey picked by ear
+  ("ok ill go with title 1"). A flute opens it and plays once (about 33 seconds), then 12 bars of piano
+  repeat (the loop runs from 33.3 to 83.0 seconds of an 86.0-second file); the old file brought the
+  piano in at about 8 seconds. Bailey heard the loop's wrap: "it sounds natural, keep it".
+- **FFX:** new battle music for Seymour Flux (Chapter I) and Seymour Omnis (Chapter XII, which plays the
+  same cue): take A, the epic orchestral one, 44 bars at about 132 bpm (the loop runs from 7.3 to 87.3
+  seconds of a 90.3-second file). Bailey: "ill go with this  it sounds epic!". After listening to the
+  loop jumps he said "this is the only one that isnt smooth, the other 2 are perfect"; this is one of
+  the two.
+- **Both:** new music for the chapter select board: take B, the default (Bailey: "I'll go with B"; its
+  loop jump is the other one he called perfect). The plan to offer A and C as selectable alternates is
+  not in this release.
+- **FFX:** Chapters VII (Seymour Anima) and X (Seymour Natus) keep the battle music they had in 39.3.
+  Take C, the organ one, had been picked for them ("Split: C early, A late"), but it is the one loop
+  Bailey heard as not smooth, and the rework of it was stopped, so C is held out of 39.4.
+- **Disclosed, Both:** the project's stereo gate (how the mix holds together in mono) fails on take A
+  and take B, and the title passes it only just. Correlation, side-to-mid and mono loss against the 0.60,
+  -6 dB and -1 dB it asks for: A 0.29, -2.6, -1.9; B 0.43, -4.0, -1.5; the title 0.602, -6.0, -1.0, and
+  only because its 33-second flute opening is nearly mono (its looping piano part alone reads 0.469,
+  -4.3, -1.36 and would miss all three). The takes ship as Bailey heard them; "narrow" versions of each
+  (0.73 to 0.74 correlation) pass the gate and swap in with one command, and Bailey has not chosen
+  between the two widths.
+- **Disclosed, Both:** every take is band-limited: a steep wall near 16.6 to 17.1 kHz (27 to 38 dB deep;
+  the files they replace had 6 to 12 dB), because the generator hands over a 128 kbps MP3 and the game's
+  encode keeps the wall. Only generating again at a higher output format would remove it, and a new roll
+  is a different piece of music. The shipped files are transcodes (MP3 to float to MP3).
+- **Disclosed, Both:** the three takes are AI-generated, with ElevenLabs Music (model music_v2_5) from
+  our own written briefs, cut to a loop and mastered here (one gain to -16 LUFS; no EQ, stereo repair
+  or reverb). No prompt names a composer, franchise, character or melody; nobody has checked the
+  takes against existing music, and no agent has heard any of it (Bailey chose by ear). They were
+  generated on Bailey's paid ElevenLabs plan; the plan, the date and the terms are to be confirmed on
+  the day a build ships. If a take cannot load, the game plays the older synthesized score for the cue,
+  a different piece. The in-game credits do not name the service yet (the repo's audio credits file
+  does).
+- **Disclosed, Both:** shipped audio is 87.09 MB of the 90 MB cap.
+- **Behind the scenes, Both:** against 39.3 the build holds the same 4,537 files and changes 2,070 of
+  them: 1,662 in place (1,656 repaired paintings, the art manifest, the audio manifest, the three music
+  files and index.html), 407 paintings that shipped as lossless WebP and now ship as PNG, and the
+  bundle (index-Dk9resVW.js out, index-D57LJe-j.js in). The stylesheet, both workers and the other 2,467
+  files are byte-identical. The 407 changed format because the repairs gave their edges soft, partly
+  transparent pixels (39.3's WebPs had alpha of only 0 and 255; every one of the 407 repaired files now
+  has partial alpha and colour under the transparent pixels), and the build ships a WebP only where
+  every decoder draws it the same. The shipped total grows from 9,482.6 to 9,670.6 MB (+188.0 MB, 2.0
+  percent): the art by 189.4 MB (the 407 from 142.6 to 253.9 MB, the 1,656 others by 78.1 MB) and the
+  three music files shrink by 1.4 MB. A player's first menu downloads about 10 percent more art
+  (14 to 16 MB, F394-02).
+- **Still open, FFX (Auron):** after the colour match, Auron's coat is uneven in his cast, attack and
+  victory poses (Chapters II, III, XVII and XVIII): pale blotches, a two-tone coat, flatter fold
+  shading (F394-01, polish; it needs Bailey's eye).
+- **Still open, FFX-2 (the hidden chapter):** the head lock does not cover it. Its figures still slide
+  their feet up to 75 px at an enemy's attack and change size at pose changes (F393-01 and F393-02),
+  its 183 placeholder poses stay exactly as 39.3 shipped them (the art repairs replaced 225 paintings of
+  Chapter VI, not the hidden chapter's copies), a girl who changes dressphere is drawn in the older
+  painting beside the new ones (F393-07), and the pre-battle scene's location label crosses the window
+  glow (F393-06).
+- **Still open, Both:** as on 39.3, pose changes in every chapter still snap (CHK-027: 0.28 to 0.97
+  snaps a minute in the seven chapters measured, against a limit of 0.25), and on a phone in Chapter IX
+  (FFX) the Zanmato gauge card hides Yojimbo and his fiends. Opening the chapter board creates an empty
+  record for a chapter in memory, and any later save (a HUD toggle, a setting) writes it into the main
+  save (F394-03, harmless, a suggestion). The deep review is owed on this build: it carries 43 earlier
+  builds.
+- **Deploy notes:** it shipped under Bailey's owner override ("yes deploy 39.4") because 43 builds
+  already owe a deep review and at most two deploys may go out while one is owed. The deploy ran with
+  the preflight tests skipped and the dirty tree allowed (the review's untracked build folder counts as
+  one); the full suite had passed on the candidate (below). docs/deploys.log records 14:54 EDT, the
+  moment the upload began; 2,061 files were uploaded (2,477 were already there), about 6.4 GB in 35
+  minutes, and the byte-for-byte checks and the records ended at 16:12 EDT.
+- **How it was checked:** on the candidate before the review (r394-int at 4d282a62, dist-gate bundle
+  index-DBDUO1LL.js): tsc clean over 3,091 files; `qa.mjs --strict` 0 findings in 26 music cues, 87.09
+  MB of the 90 MB cap; the audio tests 35 files and 585 tests passed; the browser proof on the built
+  files: all 26 cues decode to their manifest length with no loop click and no level jump, the title
+  and the board play from their files, Chapters I and XII play the new Seymour take and VII and X the
+  unchanged one, 17 of 18 chapters play every cue they should (Trema's results screen was not reached,
+  as on 2026-09-30), 0 console errors, 0 page errors, 0 failed requests; the door smoke (`leblanc`
+  opens party prep and it holds, a party attack lands, 0 console errors, 0 404s) passed; the full unit
+  suite ran 917 files and 13,629 tests with 60-second timeouts: 912 files and 13,582 tests passed, the
+  rest skipped by design (5 files, 46 tests, 1 todo), 0 failed. Then a focused review of the exact
+  build (55db51dd, rebuilt as bundle D57LJe-j; 78 minutes) said SHIP: changed area FAIL, but every
+  failure carried or polish (F392-01, F392-03, F393-01, F393-02; new polish F394-01 and F394-02); the
+  head-size check passed in Chapters V, XVII, I and IV, the door and the music behaved as above, 2,063
+  repaired files all matched the approved list and their old pixel sizes, and 3,346 of 3,346 shipped
+  images load in Chromium and WebKit. The deploy compared 2,114 files byte for byte on both
+  addresses. The live check (45 minutes) compared 4,537 of 4,537 files byte for byte, played the board,
+  `leblanc`, `limit`, Chapter I (FFX) and Chapter IV (FFX-2) by real keys with 0 console errors and 0
+  responses of 400 or more, read the new Seymour take looping in Chapter I and the head lock holding
+  Yuna's and Tidus's knock-outs at x1.0000, and said PASS.
+
+![Yuna's idle at 3x, before and after the repairs](docs/screenshots/r394-repairs/ch2-yuna-ffx-idle-closeup-3x.jpg)
+
+*FFX, Chapter II: Yuna's idle at 3x in real pixels, the live site (39.3) on the left and this build on the
+right. The pale fringe along her hair and cloth edges is gone. At battle size the change is subtle by
+design (a 1 to 3 pixel rim); the full six-pose sheet is `ch2-yuna-ffx-before-after.jpg` beside it.*
+
+![Rikku as a Dark Knight, idle at 3x, before and after the repairs](docs/screenshots/r394-repairs/ch5-rikku-dark-knight-ffx2-idle-closeup-3x.jpg)
+
+*FFX-2, Chapter V: Rikku as a Dark Knight, idle at 3x in real pixels, 39.3 beside this build; the six-pose
+sheet is `ch5-rikku-dark-knight-ffx2-before-after.jpg`.*
+
+![Yuna's idle to KO swap in Chapter XVII with the head lock on](docs/screenshots/r394-headlock/sin-fins-core-yuna-idle-ko-ON.jpg)
+
+*FFX, Chapter XVII: the frames around Yuna's swap from idle to KO with the head lock on; the head after over
+before reads x1.0001. With the lock off the same swap read x1.0378, and on 39.2 x1.0294.*
 
 ## 2026-10-07 · Release 39.3 on echoesofspira.com
 
