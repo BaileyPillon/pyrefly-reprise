@@ -3,12 +3,14 @@
  * release tree and does nothing else. Every rule is tried on small fake trees in a temporary folder, never on the real art:
  * a dry run writes nothing; an existing file is never overwritten or touched; a path outside the namespace is never copied and never allowed;
  * a target that is the source is refused; each copy is checked by its sha256 and leaves no temporary name behind.
+ * `--link` (D: is nearly full) hard-links instead of copying, on one volume only: each new name is the same file as its source, with the same sha256,
+ * and every rule above still holds; two volumes are refused with nothing written (the volume check takes a test seam, `deviceOf`).
  */
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { applySync, isCleanRelative, isFxNamespacePath, isNamespacePath, planSync } from '../../tools/exp-art-sync.mjs';
@@ -162,6 +164,89 @@ describe('the copy', () => {
   });
 });
 
+describe('--link (hard links on one volume)', () => {
+  /** One device and one inode: the same file under two names. */
+  const same = (a: string, b: string): boolean => {
+    const x = statSync(a, { bigint: true });
+    const y = statSync(b, { bigint: true });
+    return x.dev === y.dev && x.ino === y.ino && x.ino !== 0n;
+  };
+  const SOURCE_COUNT = NAMESPACE_FILES.length + 2; // the namespace plus the depth map's two files
+
+  it('plans the same files as a copy, marked as links, and planning writes nothing', () => {
+    const { source, fxSource, target, fxTarget } = fakeTrees();
+    const before = [listing(source), listing(target), listing(fxTarget)];
+    const copyPlan = planSync({ source, target, fxSource });
+    const plan = planSync({ source, target, fxSource, link: true });
+    expect(copyPlan.link).toBe(false);
+    expect(plan.link).toBe(true);
+    expect(plan.problems).toEqual([]);
+    expect(plan.entries.map((e: { rel: string }) => e.rel)).toEqual(copyPlan.entries.map((e: { rel: string }) => e.rel)); // nothing outside the namespace, the same as a copy
+    expect([listing(source), listing(target), listing(fxTarget)]).toEqual(before);
+  });
+
+  it('gives every new file a second name for the source\'s own bytes: the same file, the same sha256, no bytes copied, no temporary name left', async () => {
+    const { source, fxSource, target, fxTarget } = fakeTrees();
+    const result = await applySync(planSync({ source, target, fxSource, link: true }));
+    expect(result.failed).toEqual([]);
+    expect(result.copied).toHaveLength(SOURCE_COUNT);
+    for (const f of NAMESPACE_FILES) {
+      expect(same(join(source, f), join(target, f)), f).toBe(true);
+      expect(statSync(join(target, f)).nlink, f).toBe(2); // the workspace's name and the release tree's
+      expect(sha(join(target, f)), f).toBe(sha(join(source, f)));
+    }
+    for (const f of ['exp-leblanc-last-room/depth.png', 'exp-leblanc-last-room/depth.json']) expect(same(join(fxSource, f), join(fxTarget, f)), f).toBe(true);
+    for (const c of result.copied as Array<{ dst: string; sha256: string }>) expect(sha(c.dst)).toBe(c.sha256);
+    expect([...listing(target), ...listing(fxTarget)].join('\n')).not.toMatch(/exp-sync|\.tmp/);
+    expect(existsSync(join(target, 'manifest.json'))).toBe(false); // the release build lists the namespace itself
+    expect(statSync(join(source, 'manifest.json')).nlink).toBe(1); // the workspace's files outside the namespace gained no name
+    expect(statSync(join(source, 'characters/yuna-gunner/idle.png')).nlink).toBe(1);
+    expect(same(join(source, 'characters/yuna-gunner/idle.png'), join(target, 'characters/yuna-gunner/idle.png'))).toBe(false); // the release tree's own file, untouched
+    expect(readFileSync(join(target, 'characters/yuna-gunner/idle.png'), 'utf8')).toBe('the release tree\'s own painting');
+  });
+
+  it('never overwrites or touches a name that is there: its bytes, time and file stay as they were, and a second run links nothing', async () => {
+    const { source, fxSource, target } = fakeTrees();
+    const mine = 'backdrops/exp-leblanc-last-room.png';
+    put(target, mine, 'PAINTING backdrops/exp-leblanc-last-room.png'); // the same length as the source's, other bytes: "present"
+    const ino = statSync(join(target, mine), { bigint: true }).ino;
+    const before = [readFileSync(join(target, mine), 'utf8'), statSync(join(target, mine)).mtimeMs];
+    const first = await applySync(planSync({ source, target, fxSource, link: true }));
+    expect(first.failed).toEqual([]);
+    expect(first.copied).toHaveLength(SOURCE_COUNT - 1);
+    expect([readFileSync(join(target, mine), 'utf8'), statSync(join(target, mine)).mtimeMs]).toEqual(before);
+    expect(statSync(join(target, mine), { bigint: true }).ino).toBe(ino);
+    expect(same(join(source, mine), join(target, mine))).toBe(false); // left alone, never replaced by a link
+    expect(statSync(join(source, mine)).nlink).toBe(1);
+    const again = await applySync(planSync({ source, target, fxSource, link: true }));
+    expect(again.copied).toEqual([]);
+    expect(again.skipped).toHaveLength(SOURCE_COUNT);
+  });
+
+  it('refuses to link anything while a conflict stands', async () => {
+    const { source, fxSource, target } = fakeTrees();
+    put(target, 'pause/exp-leblanc-paine.2x.webp', 'a different length');
+    const plan = planSync({ source, target, fxSource, link: true });
+    await expect(applySync(plan)).rejects.toThrow(/refusing to link/);
+    expect(existsSync(join(target, 'characters/exp-leblanc-yuna-gunner/idle.png'))).toBe(false);
+    expect(statSync(join(source, 'characters/exp-leblanc-yuna-gunner/idle.png')).nlink).toBe(1);
+  });
+
+  it('fails on two volumes (the art\'s or the depth map\'s): refused, nothing written; a plain copy across volumes is still allowed', async () => {
+    const { source, fxSource, target, fxTarget } = fakeTrees();
+    const workspaceApart = (folder: string): bigint => (folder.replace(/\\/g, '/').includes('/workspace/') ? 1n : 2n); // the workspace on one volume, the release tree on another
+    const plan = planSync({ source, target, fxSource, link: true, deviceOf: workspaceApart });
+    expect(plan.problems.join('\n')).toMatch(/--link needs the art source and target on one volume/);
+    expect(plan.entries).toEqual([]);
+    await expect(applySync(plan)).rejects.toThrow(/refusing to link/);
+    expect(listing(target).join('\n')).not.toMatch(/exp-leblanc/);
+    expect(listing(fxTarget)).toEqual([]);
+    const fxApart = (folder: string): bigint => (resolve(folder) === resolve(fxTarget) ? 2n : 1n); // only the depth map's folders differ
+    expect(planSync({ source, target, fxSource, link: true, deviceOf: fxApart }).problems.join('\n')).toMatch(/--link needs the fx source and target on one volume/);
+    expect(planSync({ source, target, fxSource, deviceOf: workspaceApart }).problems).toEqual([]); // a copy does not need one volume
+  });
+});
+
 describe('the command line', () => {
   const run = (args: string[]) => spawnSync(process.execPath, [TOOL, ...args], { encoding: 'utf8' });
 
@@ -185,5 +270,35 @@ describe('the command line', () => {
     const r = run(['--source', clean.source, '--fx-source', clean.fxSource, '--target', clean.target]);
     expect(r.status).toBe(0);
     expect(r.stdout).toMatch(/copied and verified/);
+  });
+
+  it('--link --dry-run says "to link" and writes nothing (exit 0); --link makes hard links (exit 0, two names each) and a second run has nothing to do', () => {
+    const { source, fxSource, target, fxTarget } = fakeTrees();
+    const before = [listing(target), listing(fxTarget), listing(source)];
+    const args = ['--source', source, '--fx-source', fxSource, '--target', target, '--link'];
+    const dry = run([...args, '--dry-run']);
+    expect(dry.status).toBe(0);
+    expect(dry.stdout).toMatch(new RegExp(`to link ${NAMESPACE_FILES.length + 2} files`));
+    expect(dry.stdout).toMatch(/nothing is written/);
+    expect(dry.stdout).toMatch(/no new disk space/);
+    expect([listing(target), listing(fxTarget), listing(source)]).toEqual(before);
+    const real = run(args);
+    expect(real.status).toBe(0);
+    expect(real.stdout).toMatch(new RegExp(`${NAMESPACE_FILES.length + 2} linked and verified`));
+    for (const f of NAMESPACE_FILES) expect(statSync(join(target, f)).nlink, f).toBe(2);
+    const again = run(args);
+    expect(again.status).toBe(0);
+    expect(again.stdout).toMatch(/0 linked and verified/);
+  });
+
+  it('--link exits 2 on a conflict, like a copy, and a real copy without --link makes independent files (one name each)', () => {
+    const { source, fxSource, target } = fakeTrees();
+    put(target, 'portraits/exp-leblanc-yuna-x2.png', 'another size');
+    expect(run(['--source', source, '--fx-source', fxSource, '--target', target, '--link', '--dry-run']).status).toBe(2);
+    expect(run(['--source', source, '--fx-source', fxSource, '--target', target, '--link']).status).toBe(2);
+    expect(statSync(join(source, 'portraits/exp-leblanc-yuna-x2.png')).nlink).toBe(1);
+    const clean = fakeTrees();
+    expect(run(['--source', clean.source, '--fx-source', clean.fxSource, '--target', clean.target]).status).toBe(0);
+    expect(statSync(join(clean.target, 'characters/exp-leblanc-yuna-gunner/idle.png')).nlink).toBe(1);
   });
 });
