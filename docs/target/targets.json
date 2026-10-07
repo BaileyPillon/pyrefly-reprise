@@ -1929,9 +1929,9 @@
           "state": "approved",
           "pill": "Approved: the driver's pick, delegated",
           "approved": "Picked by the driver under Bailey's delegation on 6 Oct 2026 (D-494, D-496); Bailey has not seen it",
-          "build": "Not built yet. The moment the picture targets: the experimental chapter's full-cast confrontation, the three Gullwings (Yuna Gunner, Rikku Thief, Paine Warrior) from behind on the left and Logos, Leblanc and Ormi facing them across a glossy blue marble hall, a pink heart inlaid in the floor leading to a heart-shaped door under a heart stained-glass window. Act III of the encounter has Leblanc, Logos and Ormi together; which of the three acts each frame stands for is the chapter plan's to decide.",
+          "build": "Built since the first preview (A-0470): the room is graded toward this mockup in the renderer and reads within 4 L* of it in every region (exp-leblanc 3c34015c, A-0482; the preview address still serves the first look, a3b31533). The moment the picture targets: the experimental chapter's full-cast confrontation, the three Gullwings (Yuna Gunner, Rikku Thief, Paine Warrior) from behind on the left and Logos, Leblanc and Ormi facing them across a glossy blue marble hall, a pink heart inlaid in the floor leading to a heart-shaped door under a heart stained-glass window. Act III of the encounter has Leblanc, Logos and Ormi together; which of the three acts each frame stands for is the chapter plan's to decide.",
           "delivery": "in-progress",
-          "deliveryNote": "The chapter is being built as a separate, additional chapter (D-488), preview worker only, never echoesofspira.com; Chapter VI keeps its encounter and its art. Its pictures are made in the Art Room with ChatGPT Images 2.5 (Flare for mockups, Sunburst for what ships, D-489); this mockup is the first of them and is not installed in any public/art.",
+          "deliveryNote": "The chapter is a separate, additional chapter (D-488): on the Cloudflare preview address (branch exp-leblanc; two preview deploys, A-0477 and A-0478) and, since 2026-10-06 23:39 EDT, bound for the live build on echoesofspira.com as release 39.3, hidden until the word \"leblanc\" is typed on the chapter board like FF7's \"limit\" (D-507, D-508); it waits for its own focused review. Chapter VI keeps its encounter and its art. Its pictures are made in the Art Room with ChatGPT Images 2.5 and ship as they are, with no paid Sunburst repaint (D-509; D-489's Flare for mockups and Sunburst for what ships is not applied to the live hidden build).",
           "game": "ffx2",
           "gameNote": "FFX-2 only: the Leblanc encounter (ffx2-leblanc, Chateau Leblanc in Guadosalam) is FFX-2's Chapter VI, its cast is the Gullwings against the Leblanc Syndicate, and FFX is not touched (AGENTS.md rule 14).",
           "note": "The Art Room's proposal p_14df3754, version 7, critic score 8.7, copied here as a JPEG from the Art Room's work folder. The other options of the round, all in docs/concepts/exp-leblanc/options-sheet.jpg: A Rose-Gold Vault 8.6 (p_f0734dc5, version 6), C Candlelit Low Angle 8.3 (p_90654951, version 3), D Lavender Dusk 8.4 (p_2737d600, version 2). The delegation (D-494) lets the driver pick for the experimental chapter, so this pick is not a property Bailey named; if he prefers another option or a mix, the pick is redone for this area only (AGENTS.md rule 9). The target and the build are reported side by side from here on.",
@@ -1945,17 +1945,21 @@
             "mustChange": [],
             "undecided": [
               "whether he likes B, prefers A, C or D, or wants a mix: he has not seen the sheet",
-              "which painting method the chapter's other art follows beyond \"ChatGPT Images 2.5, Flare for mockups, Sunburst for what ships\" (D-489): an explicit Sunburst needs his own API key and billing"
+              "an explicit Sunburst repaint of the chapter's art (it needs his own API key and billing): settled for the live hidden build by D-509 (ship as is); it can be reopened if the chapter ever becomes visible"
             ],
             "named": [
               "the experimental chapter is the Leblanc preview, a separate additional chapter, Chapter VI kept (D-488)",
               "the chapter's art is ChatGPT Images 2.5: Flare for mockups, Sunburst for anything that ships, Flare when Sunburst is not available (D-489)",
-              "the driver makes the selections for him as far as this chapter goes (D-494)"
+              "the driver makes the selections for him as far as this chapter goes (D-494)",
+              "the chapter goes in the live build, hidden until a word is typed at the main menu, like FF7's \"limit\" door (D-507)",
+              "the word is \"leblanc\" (D-508)",
+              "the chapter's art ships as it is, today's ChatGPT Images 2.5 paintings, with no paid Sunburst repaint (D-509)"
             ],
             "inferred": [
               "every pick on this tile is the driver's, under D-494's delegation, not a property Bailey named; he can swap any of them",
               "mockup B Moonlit Blue Hall over A Rose-Gold Vault, C Candlelit Low Angle and D Lavender Dusk: the highest critic score of the four (8.7 against 8.6, 8.3 and 8.4) and the blue and violet palette of the game's own paintings with warm light at the sources",
-              "the full-cast framing (three girls on the left from behind, the three Syndicate members facing them) as the chapter's target composition"
+              "the full-cast framing (three girls on the left from behind, the three Syndicate members facing them) as the chapter's target composition",
+              "the driver's delegated picks since the target (D-499, D-502, D-503, D-504 and D-512 to D-516): the arena plate and the five fiends' idles, the girls' idles, Leblanc's hurt, which surfaces and poses to paint, Brother's portrait version 7, Paine's pause plate p_98c6b3ac over its facing redo, Power Break kept at 8.0, Yuna's item redo, and the room graded toward mockup B with an experiment-only HUD ink rule; each is his to overturn"
             ]
           }
         }
