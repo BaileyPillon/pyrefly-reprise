@@ -1,0 +1,84 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 488.9,
+   "swaps": 442,
+   "snapsPerMinute": 0.98,
+   "maxHeadJumpPct": 12.1,
+   "maxFeetShiftPx": 1,
+   "worstJerkPx": 317.4,
+   "strips": 24,
+   "worstSwapStrips": [
+    "seymour-flux-win-on/continuity/strips/swap-012-yuna-idle-ko.jpg",
+    "seymour-flux-win-on/continuity/strips/swap-061-tidus-hurt-ko.jpg",
+    "seymour-flux-win-on/continuity/strips/swap-197-tidus-idle-ko.jpg",
+    "seymour-flux-win-on/continuity/strips/swap-067-tidus-ko-idle.jpg",
+    "seymour-flux-win-on/continuity/strips/swap-252-yuna-hurt-critical.jpg",
+    "seymour-flux-win-on/continuity/strips/swap-006-yuna-critical-hurt.jpg",
+    "seymour-flux-win-on/continuity/strips/swap-036-kimahri-idle-ready.jpg",
+    "seymour-flux-win-on/continuity/strips/swap-263-yuna-ko-idle.jpg",
+    "seymour-flux-win-on/continuity/strips/swap-131-auron-attack-follow.jpg",
+    "seymour-flux-win-on/continuity/strips/swap-057-yuna-ready-item.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 488.9,
+ "counted": 442,
+ "swaps": 468,
+ "size": {
+  "judged": 433,
+  "costumeSwaps": 0,
+  "sameArtSwaps": 9,
+  "costumeWorstHeadPct": 0,
+  "costumeWorstFeetPx": 0,
+  "maxHeadJumpPct": 12.1,
+  "maxHeadJumpPctRegistration": 0.4,
+  "headOverTolerance": 0,
+  "maxFeetShiftPx": 1,
+  "feetOverTolerance": 0,
+  "headMeasured": 433,
+  "headRegistration": 247,
+  "headSilhouette": 186,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 8,
+  "snapsPerMinute": 0.98,
+  "hardCuts": 11,
+  "hardCutsPerMinute": 1.35,
+  "ghostSwaps": 418,
+  "ghostFrames": 1752,
+  "worstGhostSeverity": 0.405,
+  "ghostOverFail": 1,
+  "jerks": 73,
+  "worstJerkPx": 317.4,
+  "jerksOverFail": 37,
+  "lowestIou": 0.078,
+  "maxCentroidShiftPx": 167.8
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "PASS",
+   "reasons": [],
+   "note": "247 of 433 measured swaps had a registered head (tolerance 3 percent); 186 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "0.98 snaps per minute is over 0.25",
+    "37 jerk(s) of 40 px or more in one frame (worst 317.4 px)",
+    "1 swap(s) show a double image of severity 0.4 or more (worst 0.405)"
+   ]
+  }
+ },
+ "base": "http://127.0.0.1:5190/",
+ "date": "2026-10-07T18:12:48.507Z"
+}
