@@ -13,6 +13,10 @@
 //   npm run build && PYREFLY_BROWSER=gpu node tools/audio/music-v2-browser-proof.mjs [OUT.json] [SHOT_DIR]
 //   (PYREFLY_PROOF_PORT picks the preview port, default 8853; the server is stopped by PID at the end;
 //    PYREFLY_PROOF_ONLY=id,id limits the chapters)
+// A Cloudflare build (BASE_PATH=/, the release candidate dist-gate) is served the way vite.config.ts serves it: the page's base is BASE_PATH as vite reads it
+// (default /pyrefly-reprise/) and PYREFLY_PROOF_OUTDIR names the build folder the preview serves (default dist). Set BASE_PATH from PowerShell, not Git Bash:
+// bash turns BASE_PATH=/ into C:/Program Files/Git/.
+//   $env:BASE_PATH='/'; $env:PYREFLY_PROOF_OUTDIR='dist-gate'; $env:PYREFLY_BROWSER='gpu'; node tools/audio/music-v2-browser-proof.mjs OUT.json [SHOT_DIR]
 import { spawn } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -24,7 +28,9 @@ const { chromium } = await imp(join(ROOT, 'node_modules/playwright/index.mjs'));
 const { currentChromiumArgs } = await imp(join(ROOT, 'tools/browser-mode.mjs'));
 const { parseChapterCueMap } = await imp(join(ROOT, 'tools/audio/chapter-cue-map.mjs'));
 const PORT = Number(process.env.PYREFLY_PROOF_PORT ?? 8853);
-const BASE = `http://127.0.0.1:${PORT}/pyrefly-reprise/`;
+const BASE_PATH = process.env.BASE_PATH ?? '/pyrefly-reprise/'; // the same default as PROD_BASE in vite.config.ts, which the preview child reads from this environment
+const OUTDIR = process.env.PYREFLY_PROOF_OUTDIR; // vite preview --outDir; unset serves dist
+const BASE = `http://127.0.0.1:${PORT}${BASE_PATH}`;
 const OUT = process.argv[2] ?? 'docs/audio/music-v2-2026-09-30-browser.json';
 const SHOTS = process.argv[3];
 const OLD = process.env.PYREFLY_PROOF_OLD;
@@ -99,8 +105,8 @@ async function measureCues(list) {
   return out;
 }
 
-const server = spawn(process.execPath, [join(ROOT, 'node_modules/vite/bin/vite.js'), 'preview', '--port', String(PORT), '--strictPort', '--host', '127.0.0.1'], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
-const result = { when: new Date().toISOString(), serverPid: server.pid, base: BASE, cues: {}, old: {}, live: [], chapters: [], console: [], pageErrors: [], failedRequests: [] };
+const server = spawn(process.execPath, [join(ROOT, 'node_modules/vite/bin/vite.js'), 'preview', '--port', String(PORT), '--strictPort', '--host', '127.0.0.1', ...(OUTDIR ? ['--outDir', OUTDIR] : [])], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+const result = { when: new Date().toISOString(), serverPid: server.pid, base: BASE, outDir: OUTDIR ?? 'dist', cues: {}, old: {}, live: [], chapters: [], console: [], pageErrors: [], failedRequests: [] };
 try {
   await new Promise((ok, bad) => {
     const t = setTimeout(() => bad(new Error('preview did not start')), 30000);
@@ -121,6 +127,7 @@ try {
   }
   await page.goto(BASE, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 60000 });
+  result.bundle = await page.evaluate(() => document.querySelector('script[type="module"][src]')?.getAttribute('src') ?? null); // which build was proven
 
   // 1. Every cue, as the page fetches and decodes it.
   const list = Object.entries(manifest.music).map(([key, m]) => ({ key, url: `audio/${m.file}`, duration: m.duration, loopStart: m.loopStart, loopEnd: m.loopEnd }));
