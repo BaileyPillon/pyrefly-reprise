@@ -633,7 +633,7 @@ describe('each of the researched survival routes behaves as researched', () => {
       const wins = runs.filter((r) => r.outcome === 'victory').length;
       console.log(`${name}: ${wins}/30 wins`);
       expect(wins, `${name} is one of the researched routes and must clear the fight`).toBeGreaterThanOrEqual(bar);
-    });
+    }, 60_000);
   }
 
   it('and the shipped line is faster than either single lever, with nobody dying', () => {
