@@ -93,20 +93,27 @@ export const DEF_AFTER_ULTIMA = 150;
 /**
  * **The reset cycle after Ultima: Fire → Water → Ice → Thunder** (O-11,
  * GameFAQs' explicit order; the wiki's list reads Fire, Ice, Water, Thunder).
- * **B8 = b: built as GameFAQs says, labelled, and the chapter stays unlisted
- * until Bailey confirms it** (B8 = a, then).
+ * **B8 = b: built as GameFAQs says and labelled.** The game's own script cycles Ice, Water,
+ * Thunder, Fire, the {@link DISC_RING} order (O-11, 2026-10-07): left alone on purpose, the
+ * ring was fixed first and this waits for the boss-rules batch.
  */
 export const OMNIS_RESET_CYCLE: readonly Element4[] = ['fire', 'water', 'ice', 'lightning'];
 
 /**
- * **The colour order around one disc, clockwise: Fire, Water, Ice, Thunder.**
- * **Our estimate, twice over** (O-7 is unsourced; B8 = b draws GameFAQs' reset
- * cycle as the physical ring, the option sheets' reading). A spell turns a
- * disc clockwise, which brings the section **before** the facing one round to
- * face him (Fire → Thunder, as the O-4 sheet shows); a blow turns it
- * counter-clockwise (Fire → Water).
+ * **The colour ring around one disc: Fire → Ice → Water → Thunder → Fire.**
+ * **Sourced (2026-10-07, research O-7):** the game's own battle AI script (Steam HD
+ * Remaster build 25501027) steps a disc along it, **forward for a magic hit, back for
+ * a physical one**. It replaces the 2026-09-25 estimate (Fire, Water, Ice, Thunder:
+ * GameFAQs' reset cycle drawn as the ring, B8 = b), which had Ice and Water swapped.
+ * The painted disc turns clockwise for a spell (`src/scenes/garden-of-pain-discs.ts`).
  */
-export const DISC_RING: readonly Element4[] = ['fire', 'water', 'ice', 'lightning'];
+export const DISC_RING: readonly Element4[] = ['fire', 'ice', 'water', 'lightning'];
+
+/** What a disc shows after one turn: a spell (`'right'`) steps forward along the ring, a blow (`'left'`) back; `turnDisc` and the advisor both call it. */
+export function discAfterTurn(now: Element4, direction: 'left' | 'right'): Element4 {
+  const at = DISC_RING.indexOf(now);
+  return at < 0 ? now : (DISC_RING[(at + (direction === 'right' ? 1 : DISC_RING.length - 1)) % DISC_RING.length] as Element4);
+}
 
 /**
  * Opposite pairs for the four-of-a-kind weakness: **Fire ↔ Ice** (all-Fire
@@ -218,15 +225,13 @@ function facings(discs: readonly Element4[]): Record<CombatantId, Element4> {
   return out;
 }
 
-/** Turn disc `index` one quarter [§4.3; the ring is {@link DISC_RING}, our estimate]. */
+/** Turn disc `index` one quarter [§4.3; along {@link DISC_RING}, O-7: a spell forward, a blow back]. */
 export function turnDisc(ctx: Ctx, index: number, direction: 'left' | 'right'): void {
   const omnis = tryActor(ctx, OMNIS_ID);
   const discs = omnisDiscs(ctx.state);
   const now = discs[index];
   if (!omnis || now === undefined) return;
-  const at = DISC_RING.indexOf(now);
-  const step = direction === 'right' ? -1 : 1;
-  discs[index] = DISC_RING[(at + step + DISC_RING.length) % DISC_RING.length] as Element4;
+  discs[index] = discAfterTurn(now, direction);
   writeDiscs(ctx, discs);
   const affinities = applyAffinities(ctx, omnis);
   ctx.emit({

@@ -45,16 +45,21 @@ import {
  * on three or four [§4.1, verified: 4 sources], one per living member plus one
  * [single source: wiki], the first discs keeping theirs (`planOmnisVolley`).
  *
- * **The colour order is our estimate** (B8: the ring and the reset cycle,
- * `seymour-omnis-rules.ts#DISC_RING`, `#OMNIS_RESET_CYCLE`); the widget prints
- * {@link COLOUR_ORDER_NOTE} beside every strip, and nothing here restates the
- * order (it reads the facings the engine turned, never the ring).
+ * **The colour order is only half sourced** (B8): the ring, Fire, Ice, Water,
+ * Thunder, is the game's own (its AI script, 2026-10-07;
+ * `seymour-omnis-rules.ts#DISC_RING`), but the reset cycle after Ultima is still
+ * GameFAQs' order, our estimate (`#OMNIS_RESET_CYCLE`). The widget prints
+ * {@link COLOUR_ORDER_NOTE} beside every strip, and nothing here restates
+ * either order (it reads the facings the engine turned, never the ring).
  */
 
 /** The strip's words for the four elements. */
 export const ELEMENT_NAME: Readonly<Record<Element4, string>> = { fire: 'Fire', ice: 'Ice', lightning: 'Thunder', water: 'Water' };
 
-/** The label B8 asks for wherever the colour order is shown (our words). */
+/**
+ * The label B8 asks for wherever the colour order is shown (our words). It
+ * stays while the reset cycle is an estimate; the ring itself is sourced now.
+ */
 export const COLOUR_ORDER_NOTE = 'Colour order: our estimate';
 
 /**
@@ -103,6 +108,7 @@ export interface OmnisReadoutInput {
   weakBefore: Element4 | null;
 }
 
+/** The order the strip lists elements in (rows, tied counts). A display order, **not the disc ring**: that lives in the rules, and this file never reads it. */
 const ORDER: readonly Element4[] = ['fire', 'ice', 'lightning', 'water'];
 const LABEL: Readonly<Partial<Record<string, AffinityLabel>>> = { absorb: 'Absorbs', immune: 'Immune', resist: 'Halves', weak: 'Weak' };
 const ROWS: readonly AffinityLabel[] = ['Absorbs', 'Immune', 'Halves', 'Weak'];
