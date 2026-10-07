@@ -55,7 +55,7 @@ what that does to a hero's body, is section 5a.)
 | Tidus | `c001` | 18.15 | 1.000 | 1.000 |
 | Yuna | `c002` | 16.53 | 0.911 | 0.911 |
 | Auron | `c003` | 19.28 | 1.062 | 1.062 |
-| Kimahri | `c004` | 21.98 | 1.211 | 1.211 |
+| Kimahri | `c004` | 21.98 | 1.211 | 1.304 |
 | Wakka | `c005` | 21.80 | 1.201 | 1.201 |
 | Lulu | `c006` | 17.97 | 0.990 | 0.990 |
 | Rikku | `c007` | 16.54 | 0.911 | 0.911 |
@@ -63,7 +63,17 @@ what that does to a hero's body, is section 5a.)
 
 The ratios are `top / 18.15`, rounded to three places (checked by `tests/unit/ffx-party-stature.test.ts`). The
 table the build reads is `src/data/ffx/party-stature.ts`; **it is the only place these numbers live**, so a better
-measurement is a change to that table and nothing else.
+measurement is a change to that table and nothing else. The last column is what the build draws: the same as the
+ratio for six heroes, and for Kimahri the factor explained next.
+
+**Why Kimahri is applied at 1.304 and not at his datamined 1.211** (Bailey, 2026-10-07, "Row 3: real body height"): the
+build multiplies the whole approved idle painting, and Kimahri's idle is cropped at his **spear tip**, which stands 8.2
+percent of the painting above his mane. The datamined number is the height of the hero himself (hair and horn, no
+weapon), so a plain 1.211 would leave his mane at 1.124 of Tidus's hair. 1.304 = 1.211 x 0.9749 / 0.9052 (Tidus's body
+share of his own painting over Kimahri's, section 5a) puts his **body** at 1.211 of Tidus's. The other six are applied as
+measured: their paintings are cropped at the hair, and their bodies land within 1.3 percent of the datamined numbers.
+In the table the build reads, Kimahri's row carries both numbers: `ratio: 1.304` (what is drawn) and `datamined: 1.211`
+(what was measured, which the typo guard on `top` checks).
 
 ## 4. Comparison with the wiki's published heights `[single source]`
 
@@ -93,6 +103,16 @@ lane did not separate hair from body.
    a few percent, differently for each hero. Another agent is checking these bind-pose ratios against the heroes'
    live in-battle idle heights in PCSX2 (the PS2 build). **If the two disagree, the battle-stance ratio is the one
    the player sees, and it replaces the table's number** (the table is built to be refined that way).
+   **That reading exists and is the next refinement, not applied here** `[measured: PCSX2 RAM, the PS2 build, battle idle,
+   one reader]` (the PCSX2 lane's `D:/Tools/pcsx2-ffx/re/FINDINGS.md` section 2, outside the repo): the head point in
+   battle idle against the bind-pose top is **Tidus 0.85** (he crouches: 15.42 against 18.15), **Kimahri 0.89** (he
+   hunches, swinging 1.2 units over a 5.3 s loop: 19.50 against 21.98) and **Auron 0.95** (18.37 against 19.28). The
+   other four heroes were read only as reserve actors in their default pose (about 0.96 to 1.0), so they are not
+   battle-idle readings yet. That lane's own arithmetic: the head-point ratios to Tidus are Auron 1.19 and Kimahri 1.26,
+   against the bind-top ratios of 1.06 and 1.21 in the table. Applying it is a change to the `ratio`s and to
+   `FFX_STATURE_BASIS` (`'battle-stance'`) and to section 3 here, nothing else, and it has to be read against what our
+   paintings draw (they are not the models' stances; section 5a), so it waits for the other four heroes' battle-idle
+   readings and for Bailey.
 2. **One reader, one pose.** The numbers were read once, by one tool, with no second implementation.
 3. **Our paintings are not the models.** The approved paintings show each hero in the painter's own stance; the
    ratio sets the painted silhouette's height, not its pose. And the painting's height is its topmost painted
@@ -122,9 +142,12 @@ So the plain multiply of the whole painting puts six bodies within 1.3 percent o
 1.1 percent taller than his hair, which is why the rest read a hair high) and **leaves Kimahri's body 7 percent short**:
 his painting is the tallest of the seven, but 8.2 percent of it is a spear leaning above his mane, so his mane stands
 at 1.124 of Tidus's hair, not 1.211 (his spear tip stands at 1.211 of Tidus's pommel). If the table's number is to be
-the **body's** ratio, Kimahri's applied value is 1.304 (the last column; set `ratio` in `party-stature.ts` and say so
-in the basis), at the price of a painting 30 percent taller than Tidus's (his spear tip near the top of the frame, and a
-figure 30 percent wider). The build applies the table as it stands, per the brief, and reports this as a decision.
+the **body's** ratio, Kimahri's applied value is 1.304 (the last column), at the price of a painting 30 percent taller
+than Tidus's (his spear tip near the top of the frame, and a figure 30 percent wider). **Applied:** Kimahri's row is
+1.304 (Bailey, 2026-10-07: "Row 3: real body height (Recommended)"); the other six rows stay at the datamined numbers,
+their bodies landing within 1.3 percent of them (the "plain multiply" column). The measured cost of 1.304 on the
+framing, before the framing was told to ignore it (section 6), was a flipped plan in Chapter X (BOSS SCALE off, Natus
+360 to 209 px); `docs/handoff/r3941-heights.md` has the numbers.
 
 ## 6. What the build does with them (FFX only)
 
@@ -136,6 +159,14 @@ ground line, and every pose of a hero uses the same factor, so the per-pose regi
 side: FFX-2's Yuna and Rikku share the ids but not the game, and are untouched. A height a scene names for a
 combatant itself (`SceneStaging.figureHeights`) is taken as given. Enemies, aeons and bosses are not touched.
 `?stature=off` plays the old, equal heights for same-build before and after captures.
+
+**The camera and the bosses stay as they were** (Bailey, 2026-10-07, "Keep camera and bosses as before"). CHAPTER
+FRAMING and BOSS SCALE read the figures' live quads (today's party height, the floor under it, the menu clearance's
+candidates, a colossus's size as a multiple of the party's mean), so a taller party would have moved the planned camera
+and re-sized the colossi. The stage records the factor it drew a hero by on the actor, and the planners are handed
+each hero scaled back about his feet to the party's shared height (`src/engine/fx/mix/planFig.ts`): the same boxes, so
+the same plan, camera and boss as with `?stature=off`. Only the plan is blind to the stature; the drawing, the HUD's
+anchors and the held shots read the real figure.
 
 ## 7. Not covered, and why
 

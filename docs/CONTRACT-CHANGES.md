@@ -17,6 +17,12 @@ Branch `r3941-heights`. No file in the contract list changed; recorded because t
 - `src/engine/BattlePresenterStage.ts`: `add` sizes a combatant through `figureHeight`. For every figure that is not a hero in an FFX battle the numbers are the old ones bit for bit (`tests/unit/engine/party-stature.test.ts`); a height a scene names
   (`SceneStaging.figureHeights`) or an arrival director hands `add` is the figure's own and carries no ratio. `src/scenes/via-purifico.ts` names Yuna (its `partyHeight` is her own 1.68), so Chapter XIV is unchanged.
 - No port, event or `PaintedActor` member changes: the actor already sizes every plane, mark and motion from the `worldHeight` it is given.
+- **Round 2 (Bailey's picks of the same day: "Row 3: real body height" and "Keep camera and bosses as before"; additive).** Kimahri's applied `ratio` is 1.304 (his datamined 1.211 stays in the row as `datamined`, with a `note`: both optional fields of
+  `PartyStature`, absent on the other six). The stage records the factor it drew a hero by on the actor (`PartyStature.STATURE_KEY`, `userData`; set only when it is not 1; `figureHeight` also returns `stature`), and every reader that decides where the
+  camera or a fiend stands reads the party at the shared height through the new `src/engine/SharedHeight.ts` (`statureOf`, `backToShared`): CHAPTER FRAMING and BOSS SCALE (`src/engine/fx/mix/planFig.ts`, new; `framing.ts` `visible(actors, planned)` and
+  `staging.ts` `planScale` use `planFigOf`), the phone's A-12 refit (`FrameFit.FitSubject.shared`, new optional field, set by `ShotRules.fitPhone`; carried on the `fitSlice` port types in `BattlePresenterPorts.ts` and `BattleCamera.ts`, which forward the subject as they always did), and the formation relaxation
+  (`PaintedStage.projectRect(id, cam, shared)` and `screenRects(shared)`, new optional parameters, default off). Without a key every one of them returns what it returned before, bit for bit. `src/scenes/cavern-stolen-fayth-rigs.ts`:
+  `cavernPartySlots(slots, aspect)` and `CAVERN_PHONE_PARTY_STEP` (the party's slots nearer the lens on a phone only; the published 16:9 slots are unchanged), called from `cavern-stolen-fayth.ts`.
 
 ## 2026-10-06 (later) — The experimental Leblanc chapter is hidden: no board card, reached by its word (FFX-2 only; behaviour, no type changes)
 

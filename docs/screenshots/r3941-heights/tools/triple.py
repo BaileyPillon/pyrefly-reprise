@@ -11,6 +11,8 @@ ap.add_argument('--b', default='frames-k1304')
 ap.add_argument('--chapter', required=True)
 ap.add_argument('--vp', required=True)
 ap.add_argument('--label', default='OPTION')
+ap.add_argument('--mid-label', default='AS BUILT: Kimahri 1.211 of Tidus')
+ap.add_argument('--first-label', default='BEFORE (?stature=off): all equal')
 ap.add_argument('--box', default='')
 ap.add_argument('--out', required=True)
 ap.add_argument('--scale', type=float, default=1.0)
@@ -23,8 +25,8 @@ def font(size):
     return ImageFont.load_default()
 
 paths = [
-    (os.path.join(a.a, f'{a.chapter}-{a.vp}-before.png'), 'BEFORE (?stature=off): all equal'),
-    (os.path.join(a.a, f'{a.chapter}-{a.vp}-after.png'), 'AS BUILT: Kimahri 1.211 of Tidus'),
+    (os.path.join(a.a, f'{a.chapter}-{a.vp}-before.png'), a.first_label),
+    (os.path.join(a.a, f'{a.chapter}-{a.vp}-after.png'), a.mid_label),
     (os.path.join(a.b, f'{a.chapter}-{a.vp}-after.png'), 'OPTION: ' + a.label),
 ]
 ims = []
