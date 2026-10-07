@@ -290,6 +290,10 @@ describe('every figure and the backdrop resolve to the experimental namespace', 
     const installed = existsSync(join(REPO, 'docs', 'target', 'exp-leblanc', 'installed.json'))
       ? (JSON.parse(readFileSync(join(REPO, 'docs', 'target', 'exp-leblanc', 'installed.json'), 'utf8')) as Record<string, Record<string, unknown>>)
       : {};
+    // The 2026-10-07 art repairs (D-462) replaced 225 of Chapter VI's paintings, and the hidden chapter is frozen at release 39.3 for its placeholder poses (the driver's
+    // decision (b) of that day: those rare poses stay exactly as shipped). So a placeholder is compared with the hash its file had in 39.3, which ch6-art-pre-repair.json
+    // records for every file the repairs changed, and with Chapter VI's present hash (ch6-art.json) for every file they did not.
+    const frozen = (JSON.parse(readFileSync(join(REPO, 'tests', 'fixtures', 'exp-leblanc', 'ch6-art-pre-repair.json'), 'utf8')) as { files: Record<string, string> }).files;
     for (const base of [...snap.girls, ...snap.enemies]) {
       const mine = manifest.subjects[nsId(base)];
       expect(mine, `manifest row of ${nsId(base)}`).toBeDefined();
@@ -300,8 +304,8 @@ describe('every figure and the backdrop resolve to the experimental namespace', 
         const json = join(ART, 'characters', nsId(base), `${state}.json`);
         expect(existsSync(png) && existsSync(json), `${nsId(base)}/${state}`).toBe(true);
         if (!installed[base]?.[state]) {
-          // A placeholder: today's painting, byte for byte, as a real copy (never a link to the release file).
-          expect(sha(png), `${base}/${state}`).toBe(snap.subjects[base].files[`${state}.png`]);
+          // A placeholder: the painting as release 39.3 shipped it, byte for byte, as a real copy (never a link to the release file).
+          expect(sha(png), `${base}/${state}`).toBe(frozen[`${base}/${state}.png`] ?? snap.subjects[base].files[`${state}.png`]);
         }
       }
     }
