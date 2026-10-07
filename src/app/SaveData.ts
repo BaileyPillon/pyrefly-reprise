@@ -61,6 +61,10 @@ export interface Settings extends FxLookSettings, FxPartSettings {
   musicVolume: number;
   sfxVolume: number;
   sfxBalanceMigrated?: boolean; // set once D-293's one-time migration ran (`saveSfxBalance.ts`); absent = older
+  /** VOICE-OVER: the recorded lines in the dialogue box (FFX chapters, Tidus / Yuna / Auron today). Defaults ON; off, or a VOICE level of 0, is text only. A save older than the setting reads ON. */
+  voiceOn: boolean;
+  /** VOICE level, 0..1 (the voice bus; stepped like the other sliders). */
+  voiceVolume: number;
   /** Battle message speed multiplier; 1 = normal. */
   textSpeed: number;
   /** Skip cutscenes already seen. */
@@ -189,6 +193,7 @@ export function defaultSettings(): Settings {
     masterVolume: 0.8,
     musicVolume: 0.7,
     sfxVolume: SFX_DEFAULT_VOLUME, sfxBalanceMigrated: true, // D-293 (refines D-210): balance b, 0.35 +6 dB
+    voiceOn: true, voiceVolume: 0.9, // the recorded voice-over defaults ON (Bailey, 2026-10-07)
     textSpeed: 1,
     skipSeenCutscenes: false,
     lowEffects: false, ...defaultFxLooks(), ...defaultFxParts(), // eye-candy D's looks and D-317's parts, all ON
@@ -273,6 +278,8 @@ export function migrate(raw: Partial<SaveData> & { version?: number }): SaveData
   const settings: Settings = { ...base.settings, ...(raw.settings ?? {}) };
   if (!hadCoach && veteran) settings.battleHelp = false;
   if (typeof settings.battleHelp !== 'boolean') settings.battleHelp = base.settings.battleHelp;
+  if (typeof settings.voiceOn !== 'boolean') settings.voiceOn = base.settings.voiceOn; // VOICE-OVER: a save older than the setting, or a malformed one, reads ON
+  if (typeof settings.voiceVolume !== 'number' || !Number.isFinite(settings.voiceVolume)) settings.voiceVolume = base.settings.voiceVolume;
   migrateComfort(settings, base.settings, raw.settings); // + D-317: a missing part takes its look's value
   migrateFfx2Atb(settings, raw.settings);
   migrateSfxBalance(settings, raw.settings); // D-293: an untouched 0.35 follows the new default, once

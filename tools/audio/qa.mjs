@@ -473,8 +473,9 @@ async function main() {
   // Audition candidates are unlisted on purpose and never ship: the build prunes
   // them (tools/dist-filter.mjs, PR-0100), so they are not orphans of the game.
   const { isUnshippedPublicFile } = await import('../dist-filter.mjs');
+  // The recorded voice-over has its own folder, manifests and budget line (audited below), so it is not an orphan of the music manifest.
   const disk = (await filesOnDisk(AUDIO_DIR)).filter(
-    (f) => f !== 'manifest.json' && !isUnshippedPublicFile(`audio/${f}`),
+    (f) => f !== 'manifest.json' && !f.startsWith('voice/') && !isUnshippedPublicFile(`audio/${f}`),
   );
   const listed = new Set(Object.values(manifest.music).map((m) => m.file));
   for (const s of [manifest.sfx, manifest.sfxV2]) if (s) listed.add(s.file);
@@ -492,6 +493,11 @@ async function main() {
       `shipped audio is ${(report.totalBytes / 1e6).toFixed(2)} MB, over the ${AUDIO_BUDGET_BYTES / 1e6} MB budget`,
     );
   }
+  const { auditVoiceDir } = await import('./voice-audit.mjs');
+  const { VOICE_BUDGET_BYTES } = await import('./manifest-io.mjs');
+  const voiceAudit = auditVoiceDir(path.join(AUDIO_DIR, 'voice'));
+  for (const p of voiceAudit.problems) report.manifest.problems.push(`voice: ${p}`);
+  if (voiceAudit.present) log(`voice-over: ${voiceAudit.totals.files} recordings in ${voiceAudit.totals.chapters} chapter manifests, ${(voiceAudit.totals.bytes / 1e6).toFixed(2)} MB of the ${VOICE_BUDGET_BYTES / 1e6} MB voice budget`);
   if (report.manifest.problems.length > 0) {
     log('');
     for (const p of report.manifest.problems) log(`manifest: ${p}`);

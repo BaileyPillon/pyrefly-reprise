@@ -259,6 +259,15 @@ export const LOOP_DECIMALS = 6;
  */
 export const AUDIO_BUDGET_BYTES = 90e6;
 
+/**
+ * The recorded voice-over's own budget line, beside {@link AUDIO_BUDGET_BYTES} (which stays 90 MB for music and the sfx sprites,
+ * and stood at 88.49 MB with 1.5 MB to spare when the voice work began). PROPOSED, awaiting Bailey's decision:
+ * docs/audio/voice-integration-design.md section 2 sizes the whole game's voice at about 15 MB (mono, 24 kHz, 64 kbps) and proposes a
+ * separate 20 MB line, loaded lazily per chapter and never at first load. Pass 1 (Tidus, Yuna and Auron, FFX only) is a fraction of it
+ * (docs/handoff/r395-voice.md has the measured size). `tools/audio/voice-audit.mjs` enforces it; qa.mjs (the deploy preflight) and the audio-voice-shipped test call that.
+ */
+export const VOICE_BUDGET_BYTES = 20e6;
+
 export function secondsAtSample(sample, sampleRate) {
   return Number((sample / sampleRate).toFixed(LOOP_DECIMALS));
 }

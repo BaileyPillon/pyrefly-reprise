@@ -542,6 +542,31 @@ instead. Playback uses `AudioBufferSourceNode` with `loop`, `loopStart` and
 `loopEnd` taken from the rendered sample offsets, so loops are seamless and free.
 Call `audio.preload(['battle-ffx'])` during a cutscene to hide the render cost.
 
+## Voice-over (recorded speech; FFX only so far)
+
+Not synthesised and not part of the music/SFX manifest: recorded lines (ElevenLabs, Bailey's picked voices) that play beside the
+dialogue box. First pass, 2026-10-07: **Tidus, Yuna and Auron in the FFX chapters**; every other speaker, and FFX-2 Yuna, stay text only
+until Bailey picks (`story/voice/voiceManifest.ts#GAMES_WITH_VOICE` is the one list to extend). The design is
+[`audio/voice-integration-design.md`](audio/voice-integration-design.md); what was built and how to run it is
+[`handoff/r395-voice.md`](handoff/r395-voice.md); the lines are [`audio/voice-ffx-plan.md`](audio/voice-ffx-plan.md).
+
+| Step | Command | Writes |
+|---|---|---|
+| Inventory (ids, hashes) | `node tools/audio/voice-inventory.mjs` (`--check` is a unit test) | `docs/audio/voice-line-inventory.{json,md}` |
+| Record (paid; dry run by default) | `node tools/audio/voice-generate.mjs --yes --max-credits N` | `D:/Tools/elevenlabs/candidates/voice-ffx-2026-10-07/<line id>.mp3` |
+| Check, then install | `node tools/audio/voice-ship.mjs --dir <candidates> [--install]` | `public/audio/voice/<chapter>/<id>.mp3`, `<chapter>.json`, `index.json`, `docs/audio/voice-ffx-ship-report.json` |
+
+- **Shipped format and level:** mono, 24 kHz, 64 kbps MP3 (about 8 KB a second), trimmed to a 35 ms head and 90 ms tail, at -19 LUFS integrated
+  measured **dual mono** (how a mono buffer plays through the stereo graph; the music is -16 LUFS stereo), true peak at most -1 dBTP. `--target-lufs`
+  moves it and a rerun is byte-identical otherwise. Agents cannot hear: the level and the voices are Bailey's call.
+- **Where it lives:** `public/audio` is tracked in git (unlike `public/art`), so the recordings and manifests are committed like the music. The voice
+  has **its own budget line**, `VOICE_BUDGET_BYTES` (20 MB, the design's proposal, awaiting Bailey), beside `AUDIO_BUDGET_BYTES` (90 MB, music and the
+  sfx sprites, untouched at 88.49 MB). `tools/audio/voice-audit.mjs` enforces it and `qa.mjs --strict` (the deploy preflight) runs it.
+- **At runtime:** `audio/voice/` (`VoiceBank` caches decoded lines, `VoiceRun` plays one, `VoiceDirector` is the port the box, the mid-battle runner
+  and the results screen use). A line is found by `lineKey(speaker, text)`, so an edited line is silent until re-recorded and the inventory is regenerated.
+  The voice bus feeds `master`, not the music's duck bus; the music drops 3.5 dB under a line and returns 400 ms after the last one.
+  `audio.debug().voice` shows the chapter, the cache and the last plays.
+
 ## Music keys
 
 `MUSIC_KEYS` in `tracks/index.ts` is the final list (CONTRACT-CHANGES §8). Every

@@ -85,7 +85,7 @@ describe.each([
     for (const look of off) expect((parsed.settings as unknown as Record<string, unknown>)[look], look).toBe(false);
   });
 
-  it('keeps everything it had, verbatim; the only additions are the nine parts', () => {
+  it('keeps everything it had, verbatim; the only additions are the nine parts and the VOICE-OVER pair', () => {
     const before = JSON.parse(raw) as SaveData;
     const store = new SaveStore(SAVE_KEY, slotWith(raw));
     const after = store.snapshot();
@@ -100,7 +100,8 @@ describe.each([
     for (const [k, v] of Object.entries(before.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     for (const [k, v] of Object.entries(fixture.expect.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     const added = Object.keys(after.settings).filter((k) => !(k in before.settings)).sort();
-    expect(added).toEqual([...PART_FIELDS].sort());
+    // ...plus the recorded voice-over's two settings, which every save older than them gains at their defaults (ON, 0.9).
+    expect(added).toEqual([...PART_FIELDS, 'voiceOn', 'voiceVolume'].sort());
   });
 
   it('the parts of a look it had OFF come up OFF, every other part ON', () => {

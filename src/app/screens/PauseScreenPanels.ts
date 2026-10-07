@@ -63,6 +63,9 @@ export function optionRows(settings: Readonly<Settings>, game: GameId = 'ffx'): 
     { id: 'masterVolume', label: 'MASTER VOLUME', value: pct(settings.masterVolume), ratio: settings.masterVolume },
     { id: 'musicVolume', label: 'MUSIC', value: pct(settings.musicVolume), ratio: settings.musicVolume },
     { id: 'sfxVolume', label: 'SOUND EFFECTS', value: pct(settings.sfxVolume), ratio: settings.sfxVolume },
+    // The recorded voice-over (FFX chapters; `optionsColumns` drops both rows where a game has none, rule 14): a level, and a mute.
+    { id: 'voiceVolume', label: 'VOICE', value: pct(settings.voiceVolume), ratio: settings.voiceVolume },
+    { id: 'voiceOn', label: 'VOICE-OVER', value: settings.voiceOn ? 'ON' : 'OFF', ratio: null },
     {
       id: 'textSpeed',
       label: 'TEXT SPEED',

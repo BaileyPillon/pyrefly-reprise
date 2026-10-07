@@ -29,7 +29,7 @@ import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlowStubs.ts';
 import { clearTimeMs } from '../../ui/common/resultsMath.ts';
 import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
-import { runBriefingIfDue } from './raiseBriefing.ts'; import { sfxChapter } from '../sfxGame.ts';
+import { runBriefingIfDue } from './raiseBriefing.ts'; import { sfxChapter } from '../sfxGame.ts'; import { voiceChapter } from '../voiceChapter.ts';
 import { preloadBattle } from './battlePreload.ts';
 import { holdIdleLane } from '../imageWarm.ts';
 import { entryCardWait } from './entryCard.ts';
@@ -304,7 +304,7 @@ export class GameFlow {
    * no menu to return to, so it reports the defeat and stops.
    */
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
-    const release = sfxChapter(id, holdIdleLane()); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice
+    const release = sfxChapter(id, voiceChapter(id, holdIdleLane())); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; the recorded voice-over (FFX only)
     // PR-0283: RESTART ENCOUNTER replays inside this run, and r34fix-quit: QUIT TO TITLE exits it (`runWithRestarts`), one owner each.
     return runWithRestarts(this, (o) => this.playChapter(id, o), opts, () => { [this.handedOver, this.step] = [true, 'title']; return this.app.goto('title'); }).finally(release);
   }
