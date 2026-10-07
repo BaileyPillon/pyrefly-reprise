@@ -4,7 +4,7 @@
     python -s tools/posescale/measure.py tiles tidus [yuna ...] [--poses a,b] --out DIR   the review sheets (ruler tiles, 6 poses each)
     python -s tools/posescale/measure.py pairs yuna-gunner [...] [--poses ready] --out DIR   idle beside each pose at the current scale (a quick same-size check)
     python -s tools/posescale/measure.py measure tidus [yuna ...] [--out DIR] [--write]   the table; --write merges docs/target/pose-measure.json
-    python -s tools/posescale/measure.py table                                            records -> src/data/art/poseRegistration*.ts
+    python -s tools/posescale/measure.py table                                            records -> src/data/art/poseRegistration*.ts (scale, stance, feet row, upright and, since r394, each pose's head box as fractions of its painting: src/engine/HeadLock.ts holds it to the idle's size on screen under any stage camera)
 
 The head. The reference is the idle's head box (`head` in subjects.json: the hair or headgear mass and the face, hair top to
 chin, outer side to side, thin tassels and hairpins left out), read off the painting by eye. A pose's head is judged against
@@ -53,7 +53,7 @@ KO_PROJECTION = 0.978
 # camera and by the pose's own height: a victory pose whose head sits a third of a figure lower than the idle's is drawn smaller by a close victory camera (Macalania: Yuna x0.948 to 0.953, Rikku
 # x0.967 to 0.970 of their idle's head; x0.986 to 0.996 in the far cameras). The record keeps the head box and the reading as they are (what the painting is), `allow` rides beside them, and the table
 # multiplies it in: the head on screen is the idle's to within the tolerance in every chapter measured, not at one camera. It is not a way to pass a check: pose-scale-check.mjs wants the reason and a
-# factor within 10 percent, and no factor is written for a KO, whose head against the standing one spreads wider than the tolerance between stages (Yuna: x0.972 in Chapter I, x1.033 in Chapter XVII).
+# factor within 10 percent, and no factor is written for a KO, whose head against the standing one spreads wider than the tolerance between stages (Yuna: x0.972 in Chapter I, x1.033 in Chapter XVII). r394 (D-510): the engine now holds the head on screen instead (src/engine/HeadLock.ts, from the head boxes this script emits), so a KO needs no allowance and the ones written here are starting points the lock moves off.
 # poses-0930's stature gate (D-298): a bent, hunched, kneeling or lunging pose may not be drawn smaller than this fraction of the idle's height, whatever its head says
 STATURE_GATE = 0.60
 ANCHORS_JSON = HERE / "anchors.json"
@@ -346,6 +346,7 @@ def cmd_table() -> None:
         if not idle:
             continue
         idle_stance = idle.get("stance")
+        face = [float(v) for v in (sub.get("idleHead") or [])] not in ([], [0.0, 0.0, 1.0, 1.0])  # a foe with no face box has the 1 px stand-in [0, 0, 1, 1] as its idle's head: no head to register
         rows: dict = {}
         for pose, r in sorted(poses.items()):
             if r.get("skip"):
@@ -366,6 +367,9 @@ def cmd_table() -> None:
                     row["feetRow"] = round(st["row"], 1)
             if r["prone"] and r.get("standing") and pose != "ko":
                 row["upright"] = True
+            head, size = r.get("head"), r.get("size")
+            if face and head and size and size[0] > 0 and size[1] > 0:  # r394 (D-510): the pose's head box as fractions of its painting (what the harness reads), no new measuring: HeadLock.ts holds it to the idle's size on screen
+                row["head"] = [round(head[0] / size[0], 4), round(head[1] / size[1], 4), round(head[2] / size[0], 4), round(head[3] / size[1], 4)]
             if row:
                 rows[pose] = row
         if rows:
