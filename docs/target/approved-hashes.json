@@ -1123,8 +1123,8 @@
     }
    },
    "public/art/characters/evrae/idle.png": {
-    "sha256": "6d0372f62f31feda1c3fbb5c743c80ea84af4b5a12bf88ff0528375904c1699d",
-    "mtime": "2026-10-07T12:33:36.076Z",
+    "sha256": "f4d167f413bd278664b90e91c59d267e485c988d5078bd46b2152403f3ca0b31",
+    "mtime": "2026-10-07T13:04:52.167Z",
     "approved": "2026-10-07",
     "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
     "supersedes": {
@@ -1138,7 +1138,8 @@
       "mtime": "2026-09-22T20:39:50.946Z",
       "backup": "D:/Tools/pyrefly-art-backup/approved/2026-10-03-evrae-e1h/replaced/characters/evrae/idle.png"
      }
-    }
+    },
+    "note": "2026-10-07, the driver's decision on the twin test (tests/unit/chapters/evrae-e1h-slot.test.ts): idle.png is again a byte twin of idle-near.png, as it was before the repairs. The repairs first installed idle.png as its own repaired candidate (sha256 6d0372f62f31feda1c3fbb5c743c80ea84af4b5a12bf88ff0528375904c1699d, still in D:/Tools/pyrefly-art-backup/candidates/2026-10-06-repairs/characters/evrae/idle.png); idle-near's repaired candidate was then copied over it, at 1x, 3x and 4x. The 2x masters were never twins and are not touched."
    }
   },
   "chapter:leblanc-goons:2026-09-24": {
@@ -7342,8 +7343,8 @@
    "decision": "D-360",
    "note": "Bailey, 2026-10-03 ~16:25 EDT, in chat, answering the driver's recommendation, verbatim \"I'll go with all your recommendations\": option E1-H of the Evrae mockup round that D-353 asked for, Evrae's approved idle repainted with the neck arch lengthened about 165 px so the head stays and the coil sits right (tail loop dropped); party, camera and Evrae's scale unchanged. Installed 2026-10-04 in release 38 together with its code lane r38-evrae (RANGE_STAGING.near.evrae pinned, the aspect stand-back, the phone's refit leaving Evrae out), because the slot value assumes this canvas (package D:/Tools/pyrefly-art-backup/candidates/2026-10-03-day/evrae-restage/install-ready/, manifest.json; docs/handoff/r38-evrae.md): the six replaced paintings idle, idle-near (a byte twin of idle), idle@2x, attack, hurt and breath-charge, with their six sidecars; 8258316 bytes installed against 9514318 replaced (-1256002); the originals are backed up in D:/Tools/pyrefly-art-backup/approved/2026-10-03-evrae-e1h/replaced/characters/evrae/. idle-far, idle-far@2x and ko are untouched; the optional ko and the not-installed cast are not installed. FFX only, Chapter VIII (evrae-airship).",
    "public/art/characters/evrae/idle.png": {
-    "sha256": "6d0372f62f31feda1c3fbb5c743c80ea84af4b5a12bf88ff0528375904c1699d",
-    "mtime": "2026-10-07T12:33:36.076Z",
+    "sha256": "f4d167f413bd278664b90e91c59d267e485c988d5078bd46b2152403f3ca0b31",
+    "mtime": "2026-10-07T13:04:52.167Z",
     "approved": "2026-10-07",
     "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
     "supersedes": {
@@ -7351,7 +7352,8 @@
      "mtime": "2026-10-04T13:16:07.350Z",
      "approved": "2026-10-03",
      "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/evrae/idle.png"
-    }
+    },
+    "note": "2026-10-07, the driver's decision on the twin test (tests/unit/chapters/evrae-e1h-slot.test.ts): idle.png is again a byte twin of idle-near.png, as it was before the repairs. The repairs first installed idle.png as its own repaired candidate (sha256 6d0372f62f31feda1c3fbb5c743c80ea84af4b5a12bf88ff0528375904c1699d, still in D:/Tools/pyrefly-art-backup/candidates/2026-10-06-repairs/characters/evrae/idle.png); idle-near's repaired candidate was then copied over it, at 1x, 3x and 4x. The 2x masters were never twins and are not touched."
    },
    "public/art/characters/evrae/idle-near.png": {
     "sha256": "f4d167f413bd278664b90e91c59d267e485c988d5078bd46b2152403f3ca0b31",

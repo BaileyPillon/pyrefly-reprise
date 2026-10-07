@@ -19,7 +19,7 @@ export const POSE_REGISTRATION_FFX: PoseRegistrationTable = {
     attack: { stanceX: 833.5, upright: true, head: [0.0277, 0.2423, 0.1384, 0.3827] },
     'breath-charge': { stanceX: 770.9, upright: true, head: [0.0132, 0.1084, 0.1364, 0.2487] },
     hurt: { stanceX: 770.3, upright: true, head: [0.0088, 0.1259, 0.132, 0.2517] },
-    idle: { stanceX: 771.1, upright: true, head: [0.0088, 0.0702, 0.132, 0.2105] },
+    idle: { stanceX: 770.9, upright: true, head: [0.0088, 0.0702, 0.132, 0.2105] },
     'idle-near': { stanceX: 770.9, upright: true, head: [0.0088, 0.1339, 0.132, 0.2742] },
   },
   kimahri: {

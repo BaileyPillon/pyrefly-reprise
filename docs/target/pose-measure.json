@@ -1336,7 +1336,7 @@
      "prone": true,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "6d0372f62f31feda1c3fbb5c743c80ea84af4b5a12bf88ff0528375904c1699d",
+     "sha": "f4d167f413bd278664b90e91c59d267e485c988d5078bd46b2152403f3ca0b31",
      "size": [
       1136,
       784
@@ -1344,7 +1344,7 @@
      "stance": {
       "row": 768.0,
       "src": "mass",
-      "x": 771.1,
+      "x": 770.9,
       "x0": 0.0,
       "x1": 1120.0
      },
