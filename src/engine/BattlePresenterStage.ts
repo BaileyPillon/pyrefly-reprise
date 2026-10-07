@@ -32,6 +32,7 @@ import { bodyFacingOption, figureLightOf, poseScalingOf, stageCamera } from './S
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
 import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
+import { holdHeads } from './HeadLockStage.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { figureBloomMasked } from './BloomMask.ts';
 import { cutRigsOf } from './motion/CutRig.ts';
@@ -835,6 +836,9 @@ export class PaintedStage implements BattleStage {
       this.opts.battleCamera,
       pinned,
     );
+    // D-510: every shown plane's head held to the idle's on screen, under this frame's camera (HeadLockStage.ts). After `layProneFigures`, which slides a body along
+    // the floor on the very frame it lies down: the lock reads the plane where it will be drawn.
+    holdHeads(figures, this.opts.camera);
     const paced = dt * paceRate('action'); // the pacing option (`pace.ts`): sparks and spell effects keep step with the actors
     this.hits.update(paced, this.opts.camera);
     this.spellFx.update(paced);
