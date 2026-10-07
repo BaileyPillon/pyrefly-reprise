@@ -22,6 +22,9 @@
  *           minute.
  *
  * To swap the stereo variant:  install --variant=narrow, then measure, then correct the THEMES.md rows.
+ * To swap in a re-cut loop: add it to the cue's `variants` in the record (`dir` of its staging folder, `sha256`, `bytes`,
+ *   `manifestEntry`, `stereo`, and `file` when the staged file is not named like the cue's `install.stageFile`), then
+ *   install --cue=<cue> --variant=<its name>, then measure, then correct the THEMES.md row.
  * To add a cue (the title, say): add its entry to the record by hand, then install and measure.
  *
  * Game case: both (shared plumbing; the record says which cue is which game's).
@@ -55,7 +58,7 @@ async function install(variant, only) {
     if (only && !only.includes(cue.cue)) continue;
     const v = cue.variants[variant];
     if (!v) throw new Error(`${cue.cue}: the record has no "${variant}" variant`);
-    const staged = join(cue.install.dir, v.dir, 'music', cue.install.stageFile);
+    const staged = join(cue.install.dir, v.dir, 'music', v.file ?? cue.install.stageFile);
     if (statSync(staged).size !== v.bytes || sha256(staged) !== v.sha256) {
       throw new Error(`${staged} is not the ${variant} file the record names (sha256 ${v.sha256}, ${v.bytes} bytes)`);
     }
