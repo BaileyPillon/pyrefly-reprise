@@ -5,7 +5,7 @@ import { LightRig, makeLightPool } from '../engine/Lighting.ts';
 import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
-import { CAVERN_WIDE_RIGS, cavernRigsFor, viewportAspect } from './cavern-stolen-fayth-rigs.ts';
+import { CAVERN_WIDE_RIGS, cavernPartySlots, cavernRigsFor, viewportAspect } from './cavern-stolen-fayth-rigs.ts';
 import type { SceneSlots } from './index.ts';
 import { ArrivalWait, SakuraArrival, sakuraArrivalAt, softDiscTexture, SAKURA_ARRIVAL_MS } from './cavern-stolen-fayth-arrival.ts';
 import { CAVERN_IDS, findFigure, victoryStruck, type StagedFigure } from './cavern-stolen-fayth-cast.ts';
@@ -215,7 +215,8 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
   });
   group.add(lights.group);
 
-  const pools = PARTY_SLOTS.slice(0, 3).map((s) => {
+  const partySlots = cavernPartySlots(PARTY_SLOTS, viewportAspect()); // nearer the lens on a phone (r3941-heights, FFX only)
+  const pools = partySlots.slice(0, 3).map((s) => {
     const pool = makeLightPool({ color: 0xcfe2f2, radius: 0.95, opacity: 0.1 });
     pool.position.set(s[0], 0.02, s[2]);
     group.add(pool);
@@ -361,7 +362,7 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
     particles,
     pixelScaled: [glow],
     rigs,
-    partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
+    partySlots: partySlots.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     partyHeight: CAVERN_ACTOR_HEIGHTS.party,
     enemyHeight: CAVERN_ACTOR_HEIGHTS.yojimbo,

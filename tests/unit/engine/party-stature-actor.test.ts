@@ -109,8 +109,9 @@ describe('the head lock (CHK-026) at each hero\'s height', () => {
           const key = `${from}>${to}`;
           if (id === 'tidus') locks.set(key, lock);
           // Nearly the same factor: the height cancels. Not to the digit, because the camera is fixed and a taller figure spans more of it, so the
-          // perspective the lock removes (the head's own) is a little stronger: Kimahri's asks 0.7 percent more than Tidus's at the strongest camera (1.04).
-          else expect(Math.abs(lock - locks.get(key)!), `${id} ${key}: the lock's factor against Tidus's`).toBeLessThan(0.01);
+          // perspective the lock removes (the head's own) is a little stronger: Kimahri's (x1.304 since 2026-10-07, his body at his datamined height) asks 1.05 percent
+          // more than Tidus's at the strongest camera (1.04), 0.7 percent at his old 1.211; the band is 0.9 to 1.1, so he sits a tenth of the way in.
+          else expect(Math.abs(lock - locks.get(key)!), `${id} ${key}: the lock's factor against Tidus's`).toBeLessThan(0.015);
           expect(lock, `${id} ${key}: inside the band`).toBeGreaterThan(HEAD_BAND[0]);
           expect(lock, `${id} ${key}: inside the band`).toBeLessThan(HEAD_BAND[1]);
           expect(a.headLock.clamped, `${id} ${key}: the band did not bite`).toBe(0);

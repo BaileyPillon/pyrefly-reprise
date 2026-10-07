@@ -27,7 +27,7 @@ describe('partyStature: who is scaled', () => {
   it('gives each of the seven heroes the ratio of the table in an FFX battle, on the party side', () => {
     for (const id of CHARACTER_IDS) expect(partyStature('ffx', 'party', id), id).toBe(FFX_PARTY_STATURE[id].ratio);
     expect(partyStature('ffx', 'party', 'tidus')).toBe(1);
-    expect(partyStature('ffx', 'party', 'kimahri')).toBeCloseTo(1.211, 12);
+    expect(partyStature('ffx', 'party', 'kimahri')).toBeCloseTo(1.304, 12); // applied: his body, not his spear tip (note section 5a)
   });
 
   it("leaves FFX-2 alone: Yuna and Rikku share ids with FFX's and are not scaled; nobody else is either", () => {
@@ -108,7 +108,7 @@ describe('figureHeight: how the party stands', () => {
   });
 
   it("takes a director's height as given too", () => {
-    const f = figureHeight({ shared: 1.82, given: 2.5, stature: 1.211 });
+    const f = figureHeight({ shared: 1.82, given: 2.5, stature: 1.304 });
     expect(f.height).toBe(2.5);
     expect(f.ringScale).toBe(1);
   });
@@ -163,15 +163,15 @@ describe('sizing about the feet: computePoseScale at the scaled world height', (
     }
   });
 
-  it("makes a standing Kimahri 21 percent taller than Tidus and a standing Yuna 9 percent shorter, about the same feet", () => {
+  it("makes a standing Kimahri 30 percent taller than Tidus's painting (his body 21 percent taller than Tidus) and a standing Yuna 9 percent shorter, about the same feet", () => {
     const tidus = computePoseScale(FRAMES.idle, { worldHeight: BASE * 1, reference: FRAMES.idle });
     const kimahri = computePoseScale(FRAMES.idle, { worldHeight: BASE * FFX_PARTY_STATURE.kimahri.ratio, reference: FRAMES.idle });
     const yuna = computePoseScale(FRAMES.idle, { worldHeight: BASE * FFX_PARTY_STATURE.yuna.ratio, reference: FRAMES.idle });
-    expect(kimahri.topY / tidus.topY).toBeCloseTo(1.211, 6);
+    expect(kimahri.topY / tidus.topY).toBeCloseTo(1.304, 6);
     expect(yuna.topY / tidus.topY).toBeCloseTo(0.911, 6);
     // The standing figure's painted top (the idle's first painted row, 16 px below the PNG's top) keeps the same share of the height.
     const topRow = (s: ReturnType<typeof computePoseScale>): number => rowY(s, 16);
-    expect(topRow(kimahri) / topRow(tidus)).toBeCloseTo(1.211, 6);
+    expect(topRow(kimahri) / topRow(tidus)).toBeCloseTo(1.304, 6);
   });
 
   it('is the identical plane at a ratio of 1 (Tidus, and every figure outside the table)', () => {

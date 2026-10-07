@@ -120,9 +120,10 @@ export interface CameraPort {
   /**
    * A-12, option A's phone rule: dolly `rig` straight back until these figures
    * fit a slice `slice` wide (0..1 of the frame). True when it moved the rig.
-   * Optional and additive; without it the phone keeps the desktop rigs.
+   * Optional and additive; without it the phone keeps the desktop rigs. `shared` (r3941-heights): read the figure at the party's shared height,
+   * not the height the stage drew it (`SharedHeight.ts`), so the refit places the camera where it did before the heroes stood at their own.
    */
-  fitSlice?(rig: string, slice: number, subjects: ReadonlyArray<{ actor: ActorHandle; min: number }>, top?: number): boolean;
+  fitSlice?(rig: string, slice: number, subjects: ReadonlyArray<{ actor: ActorHandle; min: number; shared?: boolean }>, top?: number): boolean;
   /**
    * Register (or refresh) a rig that stands `t` (0..1) of the way from rig `from` to rig `to` (position, aim and lens) and answer its name; null
    * when either rig is missing. Optional and additive (release 39.1, B5): the FFX-2 boss reveal asks for the furthest push on the boss that still

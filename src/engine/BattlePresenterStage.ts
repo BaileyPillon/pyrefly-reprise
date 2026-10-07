@@ -11,7 +11,8 @@
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
 import { artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
-import { figureHeight, partyStature } from './PartyStature.ts';
+import { figureHeight, partyStature, STATURE_KEY } from './PartyStature.ts';
+import { backToShared, statureOf } from './SharedHeight.ts';
 import { inArtNamespace } from '../data/art/artNamespace.ts';
 import { paintedPoses } from './EnemyActionPose.ts';
 import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresenterPorts.ts';
@@ -130,6 +131,7 @@ export class PaintedStage implements BattleStage {
   private readonly actors = new Map<CombatantId, StagedActor>();
   private readonly hits: HitEffects;
   private readonly scratch = new Vector3();
+  private readonly ground = new Vector3();
   private readonly paintScratch = new Vector3();
   private readonly quad: [Vector3, Vector3, Vector3, Vector3] = [
     new Vector3(),
@@ -359,6 +361,7 @@ export class PaintedStage implements BattleStage {
         opacity: kind === 'party' ? 0.85 : 0.7,
       },
     });
+    if (size.stature !== 1) actor.userData[STATURE_KEY] = size.stature; // the framing plans the party at the shared height, as before (`fx/mix/planFig.ts`)
 
     const spots = kind === 'party' ? this.opts.slots.party : this.opts.slots.enemy;
     const pin = kind === 'enemy' ? this.opts.slots.enemySpots?.[c.id] : undefined;
@@ -455,14 +458,23 @@ export class PaintedStage implements BattleStage {
    * makes the 25%-coverage rule in the task mean what it says.
    *
    * Null for a combatant that is not staged, or while the canvas has no size.
+   *
+   * `shared` (r3941-heights): a hero the stage drew at his own height is read at the party's shared one (`SharedHeight.ts`), the figure the
+   * formation relaxation has always settled the fiends against, so a taller or shorter party does not walk a fiend (and with it the phone's
+   * camera fit and the colossi) off the place it stood. The default is the figure as drawn, which is what everything that shows it reads.
    */
-  projectRect(id: CombatantId, cam: PerspectiveCamera = this.opts.camera): DepthRect | null {
+  projectRect(id: CombatantId, cam: PerspectiveCamera = this.opts.camera, shared = false): DepthRect | null {
     const staged = this.actors.get(id);
     if (!staged) return null;
     const rect = this.opts.canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return null;
 
     const corners = staged.anchor ? this.anchoredQuad(staged) : staged.actor.contentQuad(this.quad);
+    const k = shared && !staged.anchor ? statureOf(staged.actor) : 1;
+    if (k !== 1) {
+      staged.actor.getWorldPosition(this.ground);
+      for (const c of corners) backToShared(c, this.ground, k);
+    }
     let minX = Infinity;
     let minY = Infinity;
     let maxX = -Infinity;
@@ -482,16 +494,17 @@ export class PaintedStage implements BattleStage {
     // yawed 30 degrees differ by most of a unit, and a tie-break on one of them
     // flips which of two neighbours counts as "in front".
     staged.actor.centerPoint(this.scratch);
+    if (k !== 1) backToShared(this.scratch, this.ground, k); // the centre of the figure at the shared height too: who stands in front of whom is read as it always was
     const depth = this.scratch.distanceTo(cam.position);
 
     return { x: minX, y: minY, w: maxX - minX, h: maxY - minY, depth };
   }
 
-  /** Every staged combatant's screen rectangle, keyed by id. */
-  screenRects(): Map<CombatantId, DepthRect> {
+  /** Every staged combatant's screen rectangle, keyed by id (`shared`: the heroes at the party's shared height, see {@link projectRect}). */
+  screenRects(shared = false): Map<CombatantId, DepthRect> {
     const out = new Map<CombatantId, DepthRect>();
     for (const id of this.actors.keys()) {
-      const r = this.projectRect(id);
+      const r = this.projectRect(id, this.opts.camera, shared);
       if (r) out.set(id, r);
     }
     return out;
@@ -613,7 +626,7 @@ export class PaintedStage implements BattleStage {
     if (this.actors.size < 2) return true;
     const field = {
       actors: relaxActorsOf(this.actors),
-      rects: () => this.screenRects(),
+      rects: () => this.screenRects(true), // the fiends settle against the party at the shared height, as they always did (r3941-heights)
       panels: this.panels,
       camera: this.opts.camera,
       canvasW: rect.width,

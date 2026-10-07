@@ -21,6 +21,11 @@ import type { GameId, Side } from '../battle/common/types.ts';
  * The lookup is **FFX only**: FFX-2's Yuna and Rikku share the ids, not the game (AGENTS.md rule 14), and an aeon, a fiend or a
  * part is not on the party's side. A height a scene or an arrival director names for a combatant is that figure's own and is taken
  * as given, with no ratio on top.
+ *
+ * **The camera and the bosses stay as they were** (Bailey, 2026-10-07): CHAPTER FRAMING and BOSS SCALE read the live figures, so a
+ * taller party would have moved the planned camera and re-sized the colossi. The stage records the factor on the actor
+ * ({@link STATURE_KEY}) and `fx/mix/planFig.ts` hands the planners each hero at the shared height, exactly as they saw him before;
+ * everything that shows the figure (the drawing, the HUD's anchors, the held shots) reads the real one.
  */
 
 // ------------------------------------------------------------------ the kill switch
@@ -73,6 +78,8 @@ export interface FigureHeight {
    * multiplied by: a scene-named height over the shared one (the Cavern's Daigoro), times the stature. 1 for everyone else.
    */
   ringScale: number;
+  /** The factor the shared height was multiplied by: the stature of a figure that stands at the party's shared height, else 1. */
+  stature: number;
 }
 
 /**
@@ -84,5 +91,15 @@ export interface FigureHeight {
 export function figureHeight(i: FigureHeightIn): FigureHeight {
   const stature = i.given !== undefined || i.own !== undefined ? 1 : i.stature;
   const sceneScale = i.own !== undefined && !i.given ? i.own / i.shared : 1;
-  return { height: (i.given ?? i.own ?? i.shared) * stature, ringScale: sceneScale * stature };
+  return { height: (i.given ?? i.own ?? i.shared) * stature, ringScale: sceneScale * stature, stature };
 }
+
+// ------------------------------------------------------------------ what the framing reads
+
+/**
+ * Where the stage records the factor it drew a figure by (`Object3D.userData`), so CHAPTER FRAMING and BOSS SCALE can plan the party
+ * at its shared height, as they always have, whatever the heroes' own heights (`fx/mix/planFig.ts`: the camera and every boss stay
+ * exactly where they were: Bailey, 2026-10-07, "Keep camera and bosses as before"). Set only on a figure whose stature is not 1, so a
+ * figure with no key (FFX-2, FF7, an aeon, a fiend, `?stature=off`) is read as 1: nothing else in the game sees it.
+ */
+export const STATURE_KEY = 'pyreflyStature';

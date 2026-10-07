@@ -8,7 +8,7 @@
  *   `game`; every FFX-2 chapter (IV, V, VI, XI, XIII, XV, XVI), the hidden Leblanc experiment and the hidden FF7 one get exactly the
  *   height their scene gave them before this change, whoever stands in them (FFX-2's Yuna and Rikku share two ids with FFX's);
  * - in an FFX chapter every hero stands at his scene's party height times the table's ratio, so Tidus stands at the party height itself and
- *   Kimahri is 21 percent over him, with one exception: a scene that names a hero's height keeps it (Chapter XIV's Yuna), and no other FFX
+ *   Kimahri's painting is 30 percent over his (his body 21 percent), with one exception: a scene that names a hero's height keeps it (Chapter XIV's Yuna), and no other FFX
  *   scene names a hero.
  *
  * **Game case: FFX only** [AGENTS.md rule 14].
@@ -76,12 +76,12 @@ describe('party stature against the shipped chapters', () => {
     }
   });
 
-  it('puts Kimahri 21 percent over Tidus and Yuna 9 percent under him in every FFX chapter whose scene does not name them', () => {
+  it("puts Kimahri's painting 30 percent over Tidus's (his body 21 percent) and Yuna 9 percent under him in every FFX chapter whose scene does not name them", () => {
     for (const id of FFX_CHAPTERS) {
       const c = ALL.find((x) => x.id === id)!;
       const { partyHeight, figureHeights } = slotsOf(c);
       const h = (hero: string): number => figureHeight({ shared: partyHeight, own: figureHeights[hero], stature: partyStature(c.game, 'party', hero) }).height;
-      if (!figureHeights['kimahri']) expect(h('kimahri') / h('tidus'), `${id} kimahri`).toBeCloseTo(1.211, 12);
+      if (!figureHeights['kimahri']) expect(h('kimahri') / h('tidus'), `${id} kimahri`).toBeCloseTo(1.304, 12);
       if (!figureHeights['yuna']) expect(h('yuna') / h('tidus'), `${id} yuna`).toBeCloseTo(0.911, 12);
     }
   });

@@ -3,6 +3,7 @@ import type { Object3D, PerspectiveCamera } from 'three';
 import { boxesOf, clearBoxes, downsOf, fitClear, limitsFor, type Field, type Fit, type Gate, type Limit, type PartyRule } from './clearance.ts';
 import { cardBox, fitPinned, pinFor, pinnedExcess, pinOverride, PINNED_SCORE, setPinOverride, SizeWatch, textSizeKey, windowKey, type ColossusPin, type PinOverride } from './colossusPin.ts';
 import { cameraAt, figOf, stillActor, subjectId, type Actor, type Box, type Fig, type Pose } from './geometry.ts';
+import { planFigOf } from './planFig.ts';
 import { advisorReserve, battleCanvas, fieldOf, hudPanels, menuOpen, noteMenuPanels, phoneBattle, predictedPanels, rememberedMenuPanels, sensorSlab } from './hudPanels.ts';
 import { classify, keepsToday, scaleTarget } from './masters.ts';
 import { colossusExcess, gateNote, plateExcess, plateMiss, plateOf, restGap, shifted } from './plate.ts';
@@ -207,9 +208,10 @@ export class Framing {
     }
   }
 
-  private visible(actors: readonly Actor[]): { figs: Fig[]; vis: Actor[] } {
+  /** The figures as the plan reads them: the party at the shared height (`planFig.ts`: the camera and the bosses stay as they were); `planned: false`, as drawn. */
+  private visible(actors: readonly Actor[], planned = true): { figs: Fig[]; vis: Actor[] } {
     const vis = actors.filter((a) => a.visible);
-    return { figs: vis.map(figOf), vis };
+    return { figs: vis.map(planned ? planFigOf : figOf), vis };
   }
 
   /**
@@ -383,7 +385,7 @@ export class Framing {
     const canvas = battleCanvas();
     if (!canvas) return null;
     const field = this.field(canvas);
-    const { figs } = this.visible(actors);
+    const { figs } = this.visible(actors, false);
     return { field, figs, boxes: boxesOf(this.cam, figs, field) };
   }
 
