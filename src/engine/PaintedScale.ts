@@ -23,6 +23,7 @@
  */
 
 import type { GroundHull } from './PaintedRest.ts';
+import type { HeadBox } from '../data/art/poseRegistrationTypes.ts';
 
 /**
  * The tight box painted content occupies inside a PNG, in source pixels.
@@ -75,6 +76,11 @@ export interface PoseFrame {
    * the measured table (`PoseRegistration.ts`); a KO is never marked.
    */
   upright?: boolean;
+  /**
+   * Where the pose's head is, as fractions of the painting (`PoseRegistration.ts`; r394, D-510): what `HeadLock.ts` holds to the idle's
+   * size on screen under the stage camera. Not used by the sizing maths itself.
+   */
+  head?: HeadBox;
 }
 
 export interface PoseScaleOptions {

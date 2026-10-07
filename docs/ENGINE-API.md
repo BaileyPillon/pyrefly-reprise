@@ -380,6 +380,7 @@ down to the top of the actual plane, so damage numerals land over the body.
 | `setBrightness(m)`, `setTint(c)`, `setRimLight(c, s, dir?)`, `setBounceLight(c, s)` | Drive the look from the scene's light rig. |
 | `headPoint(out?)`, `centerPoint(out?)`, `height` | Anchors for VFX and damage numerals. Both follow the pose: over a prone body they aim at the plane's top, not at where the head used to be. |
 | `isProne`, `poseSize` | Whether the pose on screen is a downed painting, and its `[width, height]` in world units. |
+| `holdHead(view)`, `headLock` | D-510 (r394): **the engine keeps the head steady.** The battle stage calls `holdHead` once a frame, after `update`, with the camera's view-projection (`HeadLockStage.holdHeads`); every plane that shows, and whose painting has a registered head box (`PoseRegistration.ts` `head`), is scaled about the feet so that head is as big on screen as the idle's is under the same camera (`HeadLock.ts`), within 0.9 to 1.1 of the table's scale. An actor never handed a view (a cutscene, a portrait) is never touched, and neither is a pose with no head box. `headLock` counts what it did and every time the band bit (`headLock.snapshot()`); `?headlock=off` switches it off for A/B captures. |
 | `subject` | What `PaintedArt.load` found, or `null`. |
 | `shadow`, `tweens`, `dispose()` | |
 

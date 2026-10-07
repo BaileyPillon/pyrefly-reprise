@@ -172,8 +172,12 @@ describe.skipIf(!haveArt)('the installed files on this disk (public/art is gitig
       return new Response(readFileSync(file, 'utf8'), { status: 200 });
     }) as unknown as typeof fetch;
     const set = lockedSet();
+    // 2026-10-07 (art repairs, D-462): three of these hurts were replaced a second time. A pin keeps what it replaced in its `supersedes`
+    // (and that record's own `supersedes` below it), so the D-327 record is the pin itself or the one directly under it.
+    type Pin = { sha256: string; replacedBy?: string; supersedes?: Pin };
+    const d327Record = (pin: Pin): Pin => (/^bailey:2026-10-02-art \(D-327/.test(pin.replacedBy ?? '') ? pin : (pin.supersedes ?? pin));
     for (const key of Object.keys(REPLACED_1002)) {
-      const rec = set[fileOf(key)] as { sha256: string; replacedBy?: string; supersedes?: { sha256: string } };
+      const rec = d327Record(set[fileOf(key)] as Pin);
       expect(rec.replacedBy, key).toMatch(/^bailey:2026-10-02-art \(D-327/);
       expect(rec.supersedes?.sha256, key).toBe(REPLACED_1002[key]);
       const side = JSON.parse(readFileSync(path.join(ART, 'characters', `${key}.json`), 'utf8')) as Record<string, unknown>;

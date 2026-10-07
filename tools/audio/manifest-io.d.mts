@@ -83,3 +83,20 @@ export declare function updateManifest(
 export declare function secondsAtSample(sample: number, sampleRate: number): number;
 
 export declare function musicEntry(input: MusicEntryInput): ManifestMusicEntry;
+
+/**
+ * Replace one music entry's block in the manifest's text, leaving every other byte as it was (line endings, the
+ * `-16.0` float style, the other entries). Throws when the entry is missing. Callers hold the manifest lock.
+ */
+export declare function setMusicEntryText(
+  text: string,
+  name: string,
+  entry: { file: string; [key: string]: string | number | undefined },
+): string;
+
+/**
+ * The `source` an entry names when its MP3 was made outside the score (the ElevenLabs takes of 2026-10-07), else
+ * `null`. Such an entry is exempt from the freshness checks against the score in `qa.mjs` and
+ * `audio-shipped-files.test.ts`; the game ignores the field.
+ */
+export declare function externalSource(entry: { source?: unknown } | null | undefined): string | null;
