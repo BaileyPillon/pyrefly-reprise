@@ -576,7 +576,13 @@
  },
  "yunalesca-1": {
   "game": "foe",
-  "rowFromBaseline": true
+  "rowFromBaseline": true,
+  "face": [
+   306,
+   115,
+   432,
+   250
+  ]
  },
  "yunalesca-2": {
   "game": "foe",

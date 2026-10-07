@@ -1,0 +1,16 @@
+# Ch I, baseline capture raw-before/seymour-flux (live 39.1 table), Yuna hurt to idle with a KO cutting in: the exact frames (feet and head are the registered stance and head box through each plane, px at 1600 wide)
+#11 yuna hurt->idle swap frame n=3210; head {"fromPx":29.4,"toPx":29.8,"ratio":1.0134,"source":"registration","metric":"head"} feet {"dx":0,"dy":-0.2,"px":0.2,"standing":true,"source":"registration"} cause null
+  3204   cam 0.0,0.0 slot0  yuna/critical k9   fade 0.00 vis0 head  29.3 feet   997.9,  764.8 quad 215x408 | slot1* yuna/hurt     k10  fade 1.00 vis1 head  29.4 feet   997.9,  765.7 quad 240x299
+  3205   cam 0.0,0.0 slot0: - | slot1* yuna/hurt     k10  fade 1.00 vis1 head  29.4 feet   997.9,  765.7 quad 240x299
+  3206   cam 0.0,0.0 slot0* yuna/idle     k1   fade 0.03 vis1 head  29.8 feet   998.3,  765.1 quad 305x388 | slot1  yuna/hurt     k10  fade 0.97 vis1 head  29.4 feet   998.3,  765.5 quad 240x299
+  3207   cam 0.0,0.0 slot0* yuna/idle     k1   fade 0.11 vis1 head  29.8 feet   998.7,  764.9 quad 305x388 | slot1  yuna/hurt     k10  fade 0.89 vis1 head  29.4 feet   998.6,  765.2 quad 240x299
+  3208   cam 0.0,0.0 slot0* yuna/idle     k1   fade 0.24 vis1 head  29.8 feet   999.0,  764.7 quad 305x388 | slot1  yuna/hurt     k10  fade 0.76 vis1 head  29.4 feet   999.0,  765.0 quad 240x299
+  3209   cam 0.0,0.0 slot0* yuna/idle     k1   fade 0.43 vis1 head  29.8 feet   999.3,  764.5 quad 305x389 | slot1  yuna/hurt     k10  fade 0.57 vis1 head  29.4 feet   999.3,  764.7 quad 240x299
+  3210 > cam 0.0,0.0 slot0  yuna/idle     k1   fade 0.65 vis1 head  29.8 feet  1003.3,  762.6 quad 305x389 | slot1* yuna/ko       k12  fade 0.35 vis1 head  29.0 feet   979.9,  758.8 quad 235x153
+  3211   cam 0.0,0.0 slot0  yuna/idle     k1   fade 0.99 vis1 head  29.8 feet  1001.1,  767.3 quad 305x389 | slot1* yuna/ko       k12  fade 0.01 vis1 head  29.1 feet   978.0,  762.7 quad 235x153
+  3212   cam 0.0,0.0 slot0  yuna/idle     k1   fade 1.00 vis1 head  29.8 feet  1001.3,  768.4 quad 305x389 | slot1* yuna/ko       k12  fade 0.00 vis0 head  29.1 feet   978.3,  763.5 quad 235x152
+  3213   cam 0.0,0.0 slot0  yuna/idle     k1   fade 1.00 vis1 head  29.8 feet  1001.6,  769.3 quad 305x389 | slot1* yuna/ko       k12  fade 0.00 vis0 head  29.1 feet   978.7,  764.2 quad 235x152
+  3214   cam 0.0,0.0 slot0  yuna/idle     k1   fade 1.00 vis1 head  29.8 feet  1002.0,  770.4 quad 305x389 | slot1* yuna/ko       k12  fade 0.00 vis0 head  29.1 feet   979.1,  765.0 quad 235x152
+  3215   cam 0.0,0.0 slot0  yuna/idle     k1   fade 1.00 vis1 head  29.8 feet  1002.3,  771.5 quad 305x389 | slot1* yuna/ko       k12  fade 0.00 vis0 head  29.1 feet   979.5,  765.7 quad 236x152
+  3216   cam 0.0,0.0 slot0  yuna/idle     k1   fade 1.00 vis1 head  29.8 feet  1002.5,  772.7 quad 305x389 | slot1* yuna/ko       k12  fade 0.00 vis0 head  29.1 feet   979.9,  766.5 quad 236x152
+

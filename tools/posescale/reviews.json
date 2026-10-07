@@ -347,5 +347,11 @@
   "item": 1.126,
   "ko": 0.864,
   "victory": 1.286
+ },
+ "yunalesca-1": {
+  "hurt": 0.67,
+  "attack": 0.7,
+  "cast": 0.77,
+  "ko": "keep"
  }
 }

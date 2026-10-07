@@ -62,7 +62,7 @@ export const POSE_REGISTRATION_FFX: PoseRegistrationTable = {
     ready: { scale: 1.1, stanceX: 319.5 },
     sleep: { stanceX: 221.0 },
     steal: { scale: 1.1, stanceX: 258.0 },
-    victory: { stanceX: 166.5 },
+    victory: { scale: 1.015, stanceX: 166.5 },
   },
   tidus: {
     attack: { scale: 0.952, stanceX: 558.0 },
@@ -95,7 +95,7 @@ export const POSE_REGISTRATION_FFX: PoseRegistrationTable = {
   yuna: {
     attack: { scale: 0.761, stanceX: 462.0 },
     cast: { scale: 0.92, stanceX: 497.0 },
-    critical: { scale: 0.967, stanceX: 332.5 },
+    critical: { scale: 0.977, stanceX: 332.5 },
     follow: { scale: 1.074, stanceX: 344.5, upright: true },
     hurt: { scale: 0.804, stanceX: 221.0 },
     idle: { stanceX: 424.0 },
@@ -104,6 +104,6 @@ export const POSE_REGISTRATION_FFX: PoseRegistrationTable = {
     ready: { scale: 1.245, stanceX: 287.0 },
     sleep: { stanceX: 354.5 },
     summon: { scale: 0.604, stanceX: 579.5 },
-    victory: { scale: 0.784, stanceX: 241.0 },
+    victory: { scale: 0.804, stanceX: 241.0 },
   },
 };

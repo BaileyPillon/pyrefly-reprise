@@ -7045,6 +7045,10 @@
      "stature": 1.031
     },
     "victory": {
+     "allow": {
+      "scale": 1.015,
+      "why": "r392 camera allowance, from the harness's on-screen heads (round 23 and the r392 runs): her victory head sits well below her idle's (about a tenth of a figure), so the close victory camera at Macalania draws it x0.967 to x0.970 of the idle's (the only FFX chapter that showed her victory in those runs); the far cameras draw a lower head 2 to 4 percent bigger (Yuna's and Auron's victory heads at Macalania against the other chapters), so 1.015 brings Macalania to x0.981 to x0.984 and a far camera to about x1.01 to x1.02, 3 percent allowed both ways. Seen in one chapter: the far-camera end is inferred from Yuna's and Auron's"
+     },
      "anchor": [
       357.0,
       185.0
@@ -13184,6 +13188,10 @@
      "stature": 1.04
     },
     "critical": {
+     "allow": {
+      "scale": 1.0103,
+      "why": "r392 recentring: her critical head reads x0.983 to x0.998 of her idle's in the seven chapters that show it (I, III, VII, IX, X, XII, XVII), all on the small side, so a swap between her critical and her victory (x1.0255 above) would read up to x1.028 bigger (critical to victory x0.9996 to x1.0027 before this change); 1.0103 (table 0.967 to 0.977) centres the critical against the idle (x0.993 to x1.008) and keeps critical to victory at x1.015 to x1.018"
+     },
      "anchor": [
       356.0,
       487.0
@@ -13462,6 +13470,10 @@
      "stature": 0.704
     },
     "victory": {
+     "allow": {
+      "scale": 1.0255,
+      "why": "r392 camera allowance, from the heads the continuity harness measures on screen (round 23 on live 39.1 and the r392 runs on the same table): her victory head sits about a third of a figure lower than her idle's head, so the stage camera's perspective moves it against the idle's. Idle to victory reads x0.948 to x0.953 where the camera converges strongly (Macalania, the close victory camera of Seymour and Anima: the plane's top edge 17 to 23 percent longer than its bottom, five runs), x0.985 to x0.996 in the gentle cameras (I, III, IX, X, XII: 1 to 5 percent), and about x1.00 in a flat or rising one (Chapter XVII's Sin core, 0.99 to 1.004: Tidus, Wakka and Lulu read x0.997 to x1.006 there; Yuna's victory was not seen in it, her value is the fitted line's, x0.9987 at 1.00 and x1.0016 at 0.99). 1.0255 (table 0.784 to 0.804) centres the window: Macalania x0.972 to 0.977, the gentle cameras x1.011 to 1.021, a rising camera x1.027, about a quarter of a percent inside the 3 percent tolerance at both ends; the factor may not fall under 1.0235 (Macalania) or pass 1.0284 (the rising camera)"
+     },
      "anchor": [
       202.0,
       272.0
@@ -16067,23 +16079,31 @@
   },
   "yunalesca-1": {
    "game": "foe",
-   "headsComplete": false,
+   "headsComplete": true,
    "idleHead": [
-    0.0,
-    0.0,
-    1.0,
-    1.0
+    306.0,
+    115.0,
+    432.0,
+    250.0
    ],
    "poses": {
     "attack": {
      "anchor": [
-      834.2,
-      398.5
+      935.0,
+      571.0
      ],
      "baseline": 1416.0,
+     "current": 1.0,
+     "head": [
+      845.0,
+      474.6,
+      1025.0,
+      667.4
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.7,
+     "scale": 0.7,
+     "scaleSrc": "reviewed",
      "sha": "8b8980f7b2fa8e542a62ec02119577afc5013c966b7792245a45b56ad2111905",
      "size": [
       1392,
@@ -16096,17 +16116,26 @@
       "x0": 508.0,
       "x1": 776.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.836
     },
     "cast": {
      "anchor": [
-      1151.1,
-      374.2
+      683.0,
+      231.0
      ],
      "baseline": 1207.0,
+     "current": 1.0,
+     "head": [
+      601.2,
+      143.3,
+      764.8,
+      318.7
+     ],
      "prone": true,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.77,
+     "scale": 0.77,
+     "scaleSrc": "reviewed",
      "sha": "2962e6cafbb104ef6a5306ec62ae7d30a06623d72bdbadd8f9aa3f69353e1670",
      "size": [
       1430,
@@ -16123,13 +16152,21 @@
     },
     "hurt": {
      "anchor": [
-      602.6,
-      262.5
+      640.0,
+      304.0
      ],
      "baseline": 1185.0,
+     "current": 1.0,
+     "head": [
+      546.0,
+      203.3,
+      734.0,
+      404.7
+     ],
      "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
+     "reading": 0.67,
+     "scale": 0.67,
+     "scaleSrc": "reviewed",
      "sha": "001d578033ff308552ad4f3aa54be76fb053be82e59ea628ee6eaa7fb7a1148a",
      "size": [
       1316,
@@ -16142,19 +16179,20 @@
       "x0": 371.0,
       "x1": 555.0
      },
-     "standing": true
+     "standing": true,
+     "stature": 0.681
     },
     "idle": {
      "anchor": [
-      0.5,
-      0.5
+      369.0,
+      182.5
      ],
      "baseline": 1168.0,
      "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
+      306.0,
+      115.0,
+      432.0,
+      250.0
      ],
      "prone": false,
      "scale": 1.0,
@@ -16182,7 +16220,7 @@
      "baseline": 832.0,
      "prone": true,
      "scale": null,
-     "scaleSrc": "unreviewed",
+     "scaleSrc": "kept",
      "sha": "c40380f99f0235f54f3a420dc2a7243d84c85c9891257bffe1aeb60af13a4679",
      "size": [
       1216,

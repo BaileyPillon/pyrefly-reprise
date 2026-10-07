@@ -1,0 +1,434 @@
+[
+ {
+  "capture": "raw-before/seymour-flux",
+  "swap": 11,
+  "figure": "yuna",
+  "pair": "hurt to idle",
+  "frame": 3210,
+  "oldReading": {
+   "feetPx": 4.4,
+   "headRatio": 1.0137,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.2,
+   "headRatio": 1.0134,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.571,
+   "newPlaneFade": 0.429,
+   "oldFeet": [
+    999.34,
+    764.7
+   ],
+   "newFeet": [
+    999.32,
+    764.46
+   ],
+   "planesApartPx": 0.24,
+   "oldHeadPx": 29.42,
+   "newHeadPx": 29.81
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "yuna/ko at fade 0.35",
+   "newFeet": [
+    1003.25,
+    762.6
+   ],
+   "survivingPlaneMovedPx": 4.35,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 4.44
+ },
+ {
+  "capture": "raw-before/seymour-flux",
+  "swap": 287,
+  "figure": "yuna",
+  "pair": "hurt to idle",
+  "frame": 19971,
+  "oldReading": {
+   "feetPx": 4.4,
+   "headRatio": 1.014,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.3,
+   "headRatio": 1.0133,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.571,
+   "newPlaneFade": 0.429,
+   "oldFeet": [
+    995.5,
+    766.53
+   ],
+   "newFeet": [
+    995.43,
+    766.25
+   ],
+   "planesApartPx": 0.29,
+   "oldHeadPx": 29.4,
+   "newHeadPx": 29.79
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "yuna/ko at fade 0.35",
+   "newFeet": [
+    999.34,
+    764.43
+   ],
+   "survivingPlaneMovedPx": 4.31,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 4.37
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "swap": 11,
+  "figure": "yuna",
+  "pair": "hurt to idle",
+  "frame": 2839,
+  "oldReading": {
+   "feetPx": 4.7,
+   "headRatio": 1.0138,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.3,
+   "headRatio": 1.0132,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.759,
+   "newPlaneFade": 0.241,
+   "oldFeet": [
+    994.98,
+    765.69
+   ],
+   "newFeet": [
+    995.01,
+    765.41
+   ],
+   "planesApartPx": 0.28,
+   "oldHeadPx": 29.38,
+   "newHeadPx": 29.77
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "yuna/ko at fade 0.35",
+   "newFeet": [
+    999.32,
+    763.96
+   ],
+   "survivingPlaneMovedPx": 4.54,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 4.67
+ },
+ {
+  "capture": "raw-f2/seymour-flux",
+  "swap": 198,
+  "figure": "tidus",
+  "pair": "hurt to idle",
+  "frame": 11537,
+  "oldReading": {
+   "feetPx": 3.2,
+   "headRatio": 1.0129,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.3,
+   "headRatio": 1.0126,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.759,
+   "newPlaneFade": 0.241,
+   "oldFeet": [
+    723.03,
+    804.45
+   ],
+   "newFeet": [
+    723.04,
+    804.15
+   ],
+   "planesApartPx": 0.3,
+   "oldHeadPx": 33.63,
+   "newHeadPx": 34.06
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "tidus/ko at fade 0.19",
+   "newFeet": [
+    726.21,
+    804.81
+   ],
+   "survivingPlaneMovedPx": 3.24,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 3.2
+ },
+ {
+  "capture": "raw-final/seymour-omnis",
+  "swap": 575,
+  "figure": "wakka",
+  "pair": "hurt to idle",
+  "frame": 28317,
+  "oldReading": {
+   "feetPx": 3.7,
+   "headRatio": 1.0067,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.5,
+   "headRatio": 1.0063,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.572,
+   "newPlaneFade": 0.428,
+   "oldFeet": [
+    690.92,
+    731.62
+   ],
+   "newFeet": [
+    690.97,
+    731.1
+   ],
+   "planesApartPx": 0.52,
+   "oldHeadPx": 26.09,
+   "newHeadPx": 26.25
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "wakka/ko at fade 0.35",
+   "newFeet": [
+    694.06,
+    729.61
+   ],
+   "survivingPlaneMovedPx": 3.43,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 3.73
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "swap": 11,
+  "figure": "yuna",
+  "pair": "hurt to idle",
+  "frame": 3094,
+  "oldReading": {
+   "feetPx": 4.2,
+   "headRatio": 1.0131,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.2,
+   "headRatio": 1.0127,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.572,
+   "newPlaneFade": 0.428,
+   "oldFeet": [
+    992.85,
+    749.26
+   ],
+   "newFeet": [
+    992.8,
+    749.02
+   ],
+   "planesApartPx": 0.24,
+   "oldHeadPx": 27.75,
+   "newHeadPx": 28.1
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "yuna/ko at fade 0.35",
+   "newFeet": [
+    996.55,
+    747.26
+   ],
+   "survivingPlaneMovedPx": 4.14,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 4.2
+ },
+ {
+  "capture": "raw/seymour-flux",
+  "swap": 2,
+  "figure": "yuna",
+  "pair": "hurt to idle",
+  "frame": 616,
+  "oldReading": {
+   "feetPx": 3.8,
+   "headRatio": 1.0131,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.3,
+   "headRatio": 1.0129,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.572,
+   "newPlaneFade": 0.428,
+   "oldFeet": [
+    824.02,
+    759.05
+   ],
+   "newFeet": [
+    824.03,
+    758.78
+   ],
+   "planesApartPx": 0.27,
+   "oldHeadPx": 24.39,
+   "newHeadPx": 24.7
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "yuna/ko at fade 0.35",
+   "newFeet": [
+    827.32,
+    757.15
+   ],
+   "survivingPlaneMovedPx": 3.67,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 3.81
+ },
+ {
+  "capture": "raw/seymour-flux",
+  "swap": 6,
+  "figure": "yuna",
+  "pair": "hurt to idle",
+  "frame": 790,
+  "oldReading": {
+   "feetPx": 3.7,
+   "headRatio": 1.012,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.2,
+   "headRatio": 1.012,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.571,
+   "newPlaneFade": 0.429,
+   "oldFeet": [
+    823.77,
+    753.41
+   ],
+   "newFeet": [
+    823.79,
+    753.17
+   ],
+   "planesApartPx": 0.23,
+   "oldHeadPx": 24.21,
+   "newHeadPx": 24.5
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "yuna/ko at fade 0.35",
+   "newFeet": [
+    826.97,
+    751.51
+   ],
+   "survivingPlaneMovedPx": 3.59,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 3.72
+ },
+ {
+  "capture": "raw/seymour-flux",
+  "swap": 10,
+  "figure": "yuna",
+  "pair": "hurt to idle",
+  "frame": 964,
+  "oldReading": {
+   "feetPx": 3.7,
+   "headRatio": 1.0116,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.3,
+   "headRatio": 1.0112,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.572,
+   "newPlaneFade": 0.428,
+   "oldFeet": [
+    821.1,
+    746.98
+   ],
+   "newFeet": [
+    821.07,
+    746.69
+   ],
+   "planesApartPx": 0.29,
+   "oldHeadPx": 24.06,
+   "newHeadPx": 24.33
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "yuna/ko at fade 0.36",
+   "newFeet": [
+    824.28,
+    745.09
+   ],
+   "survivingPlaneMovedPx": 3.59,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 3.7
+ }
+]

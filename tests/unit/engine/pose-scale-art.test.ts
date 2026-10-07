@@ -93,6 +93,32 @@ describe('checkPoseScale (what the art lane runs on a new key)', () => {
     rmSync(join(tmp, 'characters', 'hero', 'ko.png'));
   });
 
+  it('carries a camera allowance over the reading, with its reason, and fails a table that forgot it (r392)', () => {
+    const why = 'the close victory camera draws a head that sits lower than the idle head smaller';
+    const withAllow = records({ allow: { scale: 1.03, why } });
+    // the reading is 1.25; the table says 1.25 x 1.03 = 1.288, and the head check still reads the reading's scale
+    const good = { hero: { ...table.hero, ready: { scale: 1.288, stanceX: 80 } } };
+    expect(checkPoseScale({ records: withAllow, table: good, artDir: tmp, subjects: ['hero'] }).failures).toEqual([]);
+    const forgot = checkPoseScale({ records: withAllow, table, artDir: tmp, subjects: ['hero'] }).failures.join(' | ');
+    expect(forgot).toContain("the table's scale (1.25) is not the record's (1.25 times its camera allowance 1.03)");
+    // a pose that keeps its own scale (noise) gets a row of its own once it carries an allowance
+    const noise = records({ scaleSrc: 'noise', scale: 1.0, current: 1.0, reading: 1.0, allow: { scale: 1.015, why }, head: box(100, 100) });
+    const own = { hero: { idle: { stanceX: 100 }, ready: { scale: 1.015, stanceX: 80 } } };
+    expect(checkPoseScale({ records: noise, table: own, artDir: tmp, subjects: ['hero'] }).failures).toEqual([]);
+    // no reason, or a factor that is not a small one, is refused
+    expect(checkPoseScale({ records: records({ allow: { scale: 1.03 } }), table: good, artDir: tmp, subjects: ['hero'] }).failures.join(' | ')).toMatch(/needs a reason/);
+    expect(checkPoseScale({ records: records({ allow: { scale: 1.3, why } }), table: good, artDir: tmp, subjects: ['hero'] }).failures.join(' | ')).toMatch(/between 0\.9 and 1\.1/);
+  });
+
+  it('gives a KO its allowance on top of the projection', () => {
+    const koSha = paint('hero', 'ko', 'ko-bytes');
+    const rec = records() as { subjects: Record<string, any>; koProjection?: number };
+    rec.subjects.hero.poses.ko = { sha: koSha, prone: true, standing: false, scaleSrc: 'reviewed', scale: 0.5, head: box(100, 200), stance: null, allow: { scale: 0.99, why: 'the stage cameras span 0.975 to 1.03' } };
+    rec.koProjection = 0.978;
+    expect(checkPoseScale({ records: rec, table: { hero: { ...table.hero, ko: { scale: 0.506 } } }, artDir: tmp, subjects: ['hero'] }).failures).toEqual([]); // 0.5 / 0.978 x 0.99
+    rmSync(join(tmp, 'characters', 'hero', 'ko.png'));
+  });
+
   it('fails a standing pose wider than tall that the table does not mark upright', () => {
     const r = checkPoseScale({ records: records({ prone: true, standing: true }), table, artDir: tmp, subjects: ['hero'] });
     expect(r.failures.join('\n')).toMatch(/must be marked upright/);
