@@ -44,10 +44,10 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     victory: { stanceX: 232.5, head: [0.2912, 0.2215, 0.5873, 0.2971] },
   },
   'paine-samurai': {
-    cast: { scale: 0.817, stanceX: 520.0, head: [0.476, 0.0636, 0.6109, 0.1464] },
+    cast: { scale: 0.817, stanceX: 519.0, head: [0.476, 0.0636, 0.6109, 0.1464] },
     follow: { scale: 1.061, stanceX: 347.5, head: [0.4814, 0.1171, 0.5873, 0.2167] },
     idle: { stanceX: 373.0, head: [0.4906, 0.1399, 0.6312, 0.2073] },
-    item: { scale: 1.157, stanceX: 268.0, head: [0.3602, 0.0759, 0.4955, 0.1534] },
+    item: { scale: 1.157, stanceX: 265.5, feetRow: 826.0, head: [0.3602, 0.0759, 0.4955, 0.1534] },
     ready: { scale: 1.115, stanceX: 262.5, head: [0.3855, 0.1681, 0.5074, 0.2399] },
   },
   'paine-songstress': {
@@ -74,7 +74,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
   'paine-warrior': {
     attack: { scale: 1.042, stanceX: 350.0, head: [0.4057, 0.1033, 0.5122, 0.1776] },
     cast: { scale: 1.185, stanceX: 354.5, head: [0.4908, 0.2004, 0.6404, 0.2574] },
-    critical: { scale: 0.908, stanceX: 352.5, head: [0.4917, 0.3442, 0.6552, 0.4156] },
+    critical: { scale: 0.908, stanceX: 352.0, head: [0.4917, 0.3442, 0.6552, 0.4156] },
     follow: { scale: 0.986, stanceX: 271.5, head: [0.5922, 0.4115, 0.7664, 0.4679] },
     idle: { stanceX: 167.5, head: [0.3186, 0.1068, 0.5735, 0.1619] },
     item: { scale: 1.035, stanceX: 253.5, head: [0.4558, 0.1105, 0.6105, 0.1831] },
@@ -100,7 +100,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     victory: { scale: 1.266, stanceX: 161.0, head: [0.4937, 0.1369, 0.6824, 0.1895] },
   },
   'rikku-berserker': {
-    cast: { stanceX: 274.5, feetRow: 1024.0, head: [0.4675, 0.0934, 0.6192, 0.1398] },
+    cast: { stanceX: 275.0, feetRow: 1024.0, head: [0.4675, 0.0934, 0.6192, 0.1398] },
     follow: { scale: 1.04, stanceX: 70.5, feetRow: 988.0, head: [0.4374, 0.286, 0.5805, 0.3373] },
     idle: { stanceX: 280.0, head: [0.3982, 0.1309, 0.5784, 0.1753] },
     item: { scale: 1.184, stanceX: 159.0, head: [0.2276, 0.1608, 0.4127, 0.2113] },
@@ -119,7 +119,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     attack: { stanceX: 133.0, head: [0.5244, 0.2759, 0.6491, 0.3309] },
     cast: { stanceX: 228.0, head: [0.2259, 0.3317, 0.4632, 0.3733] },
     follow: { stanceX: 340.5, head: [0.4219, 0.4497, 0.5537, 0.4895] },
-    hurt: { stanceX: 250.5, head: [0.1806, 0.1233, 0.3502, 0.1912] },
+    hurt: { stanceX: 251.0, head: [0.1806, 0.1233, 0.3502, 0.1912] },
     idle: { stanceX: 302.5, feetRow: 1184.0, head: [0.2872, 0.1253, 0.4269, 0.1734] },
     item: { stanceX: 169.0, head: [0.3082, 0.1118, 0.531, 0.17] },
     ko: { scale: 0.869, head: [0.7959, 0.4222, 0.9034, 0.5398] },
@@ -160,7 +160,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
   },
   'rikku-thief': {
     cast: { scale: 1.305, stanceX: 346.0, head: [0.5044, 0.1318, 0.6534, 0.184] },
-    critical: { stanceX: 379.0, head: [0.5698, 0.2296, 0.7066, 0.3047] },
+    critical: { stanceX: 376.5, head: [0.5698, 0.2296, 0.7066, 0.3047] },
     follow: { scale: 1.113, stanceX: 327.0, head: [0.4592, 0.1179, 0.5896, 0.1894] },
     hurt: { stanceX: 315.5, head: [0.1838, 0.1423, 0.361, 0.2069] },
     idle: { stanceX: 286.5, head: [0.448, 0.2417, 0.6559, 0.2929] },
@@ -173,7 +173,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
   'rikku-warrior': {
     attack: { scale: 0.817, stanceX: 63.0, head: [0.2874, 0.1994, 0.4363, 0.2597] },
     cast: { scale: 1.115, stanceX: 166.0, head: [0.2959, 0.2915, 0.5659, 0.3406] },
-    follow: { scale: 1.357, stanceX: 349.0, head: [0.5016, 0.1114, 0.6184, 0.1723] },
+    follow: { scale: 1.357, stanceX: 350.0, head: [0.5016, 0.1114, 0.6184, 0.1723] },
     hurt: { stanceX: 220.0, head: [0.2534, 0.1319, 0.4669, 0.1894] },
     idle: { stanceX: 480.5, head: [0.6049, 0.1301, 0.7762, 0.1787] },
     item: { scale: 1.382, stanceX: 155.5, head: [0.2653, 0.1832, 0.4464, 0.23] },
@@ -208,7 +208,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     item: { scale: 1.212, stanceX: 275.5, head: [0.5075, 0.331, 0.6128, 0.3756] },
     ko: { scale: 0.885, head: [0.74, 0.4493, 0.8225, 0.6078] },
     ready: { scale: 1.255, stanceX: 303.0, feetRow: 1016.0, head: [0.2279, 0.3707, 0.336, 0.416] },
-    victory: { scale: 1.248, stanceX: 204.5, feetRow: 1164.0, head: [0.51, 0.3386, 0.6614, 0.3822] },
+    victory: { scale: 1.248, stanceX: 205.0, feetRow: 1164.0, head: [0.51, 0.3386, 0.6614, 0.3822] },
   },
   'yuna-gunner': {
     attack: { stanceX: 421.0, head: [0.433, 0.1401, 0.556, 0.2111] },

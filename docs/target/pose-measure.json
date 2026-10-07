@@ -15,14 +15,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      284.2,
+      283.9,
       304.5
      ],
      "baseline": 1248.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "00f010033ed6a1c9f461dcf1b05e3e9374a63ec39cc5c9879024ca28acd9df70",
+     "sha": "b84b8992facf150439311265685533eb8d16f376b8b8a0e123e1dc839ad10fd3",
      "size": [
       852,
       1264
@@ -38,14 +38,14 @@
     },
     "cast": {
      "anchor": [
-      330.6,
+      330.7,
       186.5
      ],
      "baseline": 1187.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "44aa8adcd58ec9aef3b6c6ec5abbf37e0c81d39370e4958a808ff587fbf9c1a5",
+     "sha": "603d1223bbe5a2620d4b959db1601ca03710271413a4f107b043f77d142d4296",
      "size": [
       733,
       1203
@@ -61,14 +61,14 @@
     },
     "hurt": {
      "anchor": [
-      375.0,
+      374.7,
       184.5
      ],
      "baseline": 1073.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "594df2ce16c7c3f0afde92b70113f7a409bff640266c311818d864e07ac90eb6",
+     "sha": "d2a5056860a107a87f7ca604793f6d9b2c6d7a81b025998f52f0bbb41d8dd000",
      "size": [
       750,
       1090
@@ -76,9 +76,9 @@
      "stance": {
       "row": 1073.0,
       "src": "silhouette",
-      "x": 406.0,
+      "x": 405.5,
       "x0": 268.0,
-      "x1": 544.0
+      "x1": 543.0
      },
      "standing": true
     },
@@ -88,16 +88,10 @@
       0.5
      ],
      "baseline": 1187.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "9a91c5cf4545b0f1010d9c7d61a9356862e81c276685b2656de3b528b887dba9",
+     "sha": "5bb12f8d9ca5bc1def4d18af71aa4b1c0f33c75eb85f57f32ea724f9d01cca18",
      "size": [
       733,
       1203
@@ -137,14 +131,14 @@
     },
     "overdrive": {
      "anchor": [
-      325.3,
+      325.1,
       120.5
      ],
      "baseline": 1172.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "b619046beee12fcc92c8ecab7d41c7f8a126349f18dba7a9c199f236fb1d10a7",
+     "sha": "64f8fe952002dc390dce0189224051b33d3fc11b6ad9a0ccdc9769f75b912d16",
      "size": [
       806,
       1188
@@ -187,7 +181,7 @@
      "reading": 0.69,
      "scale": 0.69,
      "scaleSrc": "reviewed",
-     "sha": "3bb3ef518317f275a851f7559c83da58c24d5be8c4acdfd1a213bba89f9186c5",
+     "sha": "bd450e3cf4331f4353064a2385c672c28bc35f34936dfee181fd3ae8310acbbd",
      "size": [
       776,
       1215
@@ -195,9 +189,9 @@
      "stance": {
       "row": 1206.0,
       "src": "silhouette",
-      "x": 414.0,
+      "x": 413.5,
       "x0": 186.0,
-      "x1": 642.0
+      "x1": 641.0
      },
      "standing": true,
      "stature": 0.701
@@ -219,7 +213,7 @@
      "reading": 0.9,
      "scale": 0.9,
      "scaleSrc": "reviewed",
-     "sha": "11a31f7d23efafc397d967f48a5198a77268bd52b2e3e327ac37ae8218740d0a",
+     "sha": "3dfd193dbe1f7bbd749e118ae35fbdf8af10fc2bbcb6fd31cd5c9248b23fe55c",
      "size": [
       824,
       1216
@@ -251,7 +245,7 @@
      "reading": 0.64,
      "scale": 0.64,
      "scaleSrc": "noise",
-     "sha": "e03472b268104a5b59581a3eb9c886c80aac10c8223bd851cd51f21f5d2b2311",
+     "sha": "be889ea3e3ad7afaa5691ee91b83dc14decf8a3631af587b5c7db452b7270ab6",
      "size": [
       832,
       1116
@@ -314,7 +308,7 @@
      "reading": 0.75,
      "scale": 0.75,
      "scaleSrc": "reviewed",
-     "sha": "46753884a92a8c4fe7a1a08de5308f89dab2aafc112b8d23de2a8a196ef7dadc",
+     "sha": "d655e724120abb22f07b433828299bac4ca3ae18f8d602a37c3e6332b73eae4c",
      "size": [
       817,
       1168
@@ -327,7 +321,7 @@
       "x1": 505.0
      },
      "standing": true,
-     "stature": 0.727
+     "stature": 0.726
     },
     "idle": {
      "anchor": [
@@ -344,7 +338,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "4ddf2f4e0297f0e40b94cf0a790e09230226c435db7fa56598e5352387dc4f1f",
+     "sha": "8fde073945aa78fcd6c6cebc937b852a7ed310006c9fa2db8a68333595186113",
      "size": [
       799,
       1204
@@ -376,7 +370,7 @@
      "reading": 0.69,
      "scale": 0.69,
      "scaleSrc": "reviewed",
-     "sha": "33d9683be0574b526ea6e86eb2d4cf83c6e62fdfb96a040d582e991c866a4f93",
+     "sha": "ee92dae45369a2d1f2082971043ad7dc6ff2d48b2c9a78d70e35cee7d173f1f3",
      "size": [
       832,
       1205
@@ -408,7 +402,7 @@
      "reading": 0.45,
      "scale": 0.45,
      "scaleSrc": "noise",
-     "sha": "b243426aee0c67940a2b861ad8f59dfc99071d0af8f57d68ff32bf3cd47c4226",
+     "sha": "52ffd6dd1ca60078cddc17bf0c15759b9e815f60996151ba358c29c2255d2147",
      "size": [
       1216,
       807
@@ -433,7 +427,7 @@
      "reading": 0.77,
      "scale": 0.77,
      "scaleSrc": "reviewed",
-     "sha": "ec154ef54c192e98efe09193b3a3d6d545e453d163b41a575a7c92ecc714c128",
+     "sha": "18f8fde2454ace8aba2b877213694b60dd321f6ec52e61927c79a7d4e1a180e1",
      "size": [
       769,
       1186
@@ -465,7 +459,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "4a8805c65b4230fe5bc91ad31f4012ac44090af3842c140a0e301d78b5727a66",
+     "sha": "35c7f1996132b4cd558e5f0bc9e0225fdb307679ebf332815bd3da507ef8d628",
      "size": [
       629,
       856
@@ -497,7 +491,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "4ac7cf854ee4576f0b6487e14fb77aa81bca6a83cc9cec49c2c41e507430ae8f",
+     "sha": "fe427515e2e973bd0a0828594f02fd6893ec52bab894a6a06fb70f0b2b730637",
      "size": [
       653,
       1199
@@ -526,14 +520,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      555.1,
+      555.3,
       22.5
      ],
      "baseline": 989.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "75f27572318a8f80f55dc231a83e5ab4a73c551f11a14f5f3c412db6a0ebb46d",
+     "sha": "2331f25b981b4a801b0acfcd80b44c03c6d3314a71d2f7cf1522bb4b0c8454a9",
      "size": [
       912,
       1007
@@ -542,8 +536,8 @@
       "row": 989.0,
       "src": "silhouette",
       "x": 486.5,
-      "x0": 157.0,
-      "x1": 816.0
+      "x0": 158.0,
+      "x1": 815.0
      },
      "standing": true
     },
@@ -552,17 +546,17 @@
       699.5,
       58.5
      ],
-     "baseline": 949.0,
+     "baseline": 948.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "ee83f78da5e5eba1a82db424bc30861aa83a0733972e0074d3370422bb6b6594",
+     "sha": "41b126727543fcc5931fc97742279afd58d655ee3cf9802c0398018d8cda167d",
      "size": [
       989,
       966
      ],
      "stance": {
-      "row": 949.0,
+      "row": 948.0,
       "src": "silhouette",
       "x": 486.5,
       "x0": 155.0,
@@ -579,7 +573,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "dd74fdf3e2b853ef47021a6b557bf0beaf15306e5152af2d36242577acf9b175",
+     "sha": "540b273bebd2dc5ebb8746b4f9f5a943bd73e1c990275732b8ccbe2bb573bc5f",
      "size": [
       1004,
       904
@@ -598,23 +592,17 @@
       0.5,
       0.5
      ],
-     "baseline": 949.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
+     "baseline": 948.0,
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "431bc106cab91eb4913f498531f22aa0369b5efc88502b11738562cd017bab95",
+     "sha": "d97fb80b62cfecbf38877bd694a71c7b9b6b4c563dc227d51bee44ab9b8dd976",
      "size": [
       989,
       966
      ],
      "stance": {
-      "row": 949.0,
+      "row": 948.0,
       "src": "silhouette",
       "x": 486.5,
       "x0": 155.0,
@@ -625,14 +613,14 @@
     },
     "ko": {
      "anchor": [
-      563.2,
-      58.5
+      566.3,
+      60.5
      ],
      "baseline": 721.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "9cbe54ef1e4c14d7fb5f40b37ca693f65f53bd7bb4dc035f113d0e52d2531438",
+     "sha": "3b9df9d96ae6d32899b1c24943656bd34df111fed9313a84df54900133f13f90",
      "size": [
       851,
       743
@@ -788,14 +776,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      538.6,
+      538.3,
       88.5
      ],
      "baseline": 962.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "309bd38e869c96d5f0a49776454bc5982901c43e56b22dab87a2ea0fbfce0c8e",
+     "sha": "eb137f181edc35e50e83211e2369659f74ca8761ecf5e548a019900e212aaeef",
      "size": [
       1056,
       979
@@ -811,14 +799,14 @@
     },
     "cast": {
      "anchor": [
-      502.7,
+      503.0,
       102.5
      ],
      "baseline": 967.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "7ba2b065774197e7b5cb8a0d454b961b01b05d3dcc02dd191cb2f0f06ca2959b",
+     "sha": "7a5ada68e909070f225b1e1ef91947b4467aebb05876db54f28e2bcac10d3e1b",
      "size": [
       1005,
       983
@@ -834,14 +822,14 @@
     },
     "hurt": {
      "anchor": [
-      549.0,
+      549.1,
       106.5
      ],
      "baseline": 1004.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "78dca3eff8b6656ef1930000d2cae71b6cf49b582e0ee6bc2f956a999e5c0b0d",
+     "sha": "7879fe4f047b207df3ae659b0fe3785d55fe6998a86c5719010f7be663395db9",
      "size": [
       961,
       1019
@@ -861,16 +849,10 @@
       0.5
      ],
      "baseline": 936.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "eb2f7d7f274ba5f8de4bacdb9102e696f00d0ec6123d1756911c68196183f8ee",
+     "sha": "cd49a7060b0455e89c330306595b59e1c24ef6ef7134c0ae377d093e84abc606",
      "size": [
       1004,
       953
@@ -878,8 +860,8 @@
      "stance": {
       "row": 936.0,
       "src": "silhouette",
-      "x": 373.5,
-      "x0": 79.0,
+      "x": 373.0,
+      "x0": 78.0,
       "x1": 668.0
      },
      "standing": true,
@@ -887,14 +869,14 @@
     },
     "ko": {
      "anchor": [
-      1045.8,
+      1039.0,
       234.5
      ],
      "baseline": 756.0,
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "5157b5eb69255d05067b3bdfcacb7d87d33ede6074c8c819245a021d7c0d3f77",
+     "sha": "1e332940ddc7e9fa9649b3650d0424049042a0a7ea90216c4e88a5f6beb14586",
      "size": [
       1216,
       772
@@ -923,7 +905,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "e60c566ca5664f410381b483a4433d08baa02226b951376c8750d3bb7c212069",
+     "sha": "79b023df9be5a62c5b0d953ef102aa6bbf2b1e64672990aaa63ad0b4806911ea",
      "size": [
       957,
       895
@@ -946,7 +928,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "913ccbc2db1d26714a0f0c199a82e8609cf29e924651347b87983606b7c9e6e9",
+     "sha": "9973223ad568b91dd55dd883947ed7a59ca73ea07fb4b906a25975f692a39ddb",
      "size": [
       915,
       951
@@ -962,14 +944,14 @@
     },
     "hurt": {
      "anchor": [
-      459.2,
-      88.5
+      457.4,
+      86.5
      ],
      "baseline": 903.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "4ee9ee0e8b994fb8b6271083f62b43becbecdcc0d668e842c27b12d76b5cfb8f",
+     "sha": "5e6f7f47ffec4e00a86b40b6efdb794be4c0b5378091ea4f55684378b14deb7c",
      "size": [
       904,
       919
@@ -989,16 +971,10 @@
       0.5
      ],
      "baseline": 888.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "c84bb3ba8d57da0ed178c0a5dcb2a813956bba708b89b5c31c6e41160ffd61a9",
+     "sha": "07b7faeaa0b7790041e596f77f2bca732b1de0ffb5cb27881816f13978097a6f",
      "size": [
       982,
       904
@@ -1006,9 +982,9 @@
      "stance": {
       "row": 888.0,
       "src": "silhouette",
-      "x": 385.0,
-      "x0": 53.0,
-      "x1": 717.0
+      "x": 428.5,
+      "x0": 139.0,
+      "x1": 718.0
      },
      "standing": true,
      "stature": 1.0
@@ -1022,7 +998,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "af2a4ff1ccfc06fe6634ad1385c72405b8e209f4fbc08356d7d2eb2cce4505b2",
+     "sha": "f88bb3795b6b251b8c3b96120ceeade7fac0f53aca858c0e2bcf4d0279eddce7",
      "size": [
       983,
       887
@@ -1045,7 +1021,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "f22e274945056bb7e3e20cc66ff79650b8ee56005f05d72986a702a354679246",
+     "sha": "5496475185475b09b33362f970ccee2fc727a0c4e4d389ca58011f9660e65bd1",
      "size": [
       1123,
       799
@@ -1080,7 +1056,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "e04104fc42c7f6ce746fbdf8274d9657399d53d2cb638dd25819cee00c8d790a",
+     "sha": "adc7bbacd1fbcc6416607273f9be0a4669139cfd8df526f4ccdf5ac1a2799881",
      "size": [
       531,
       1044
@@ -1088,9 +1064,9 @@
      "stance": {
       "row": 1028.0,
       "src": "silhouette",
-      "x": 380.5,
+      "x": 382.0,
       "x0": 313.0,
-      "x1": 448.0
+      "x1": 451.0
      },
      "standing": true
     },
@@ -1126,7 +1102,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "e492ea80bbf9bb3064745bdb71d85404843a2be7aaaf2514f8eb6e66d6c4e381",
+     "sha": "960e64711d09e352dc1ea74ac7cacac559b2d19f8a163c583f33457a29a16540",
      "size": [
       419,
       1054
@@ -1146,12 +1122,6 @@
       0.5
      ],
      "baseline": 1048.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
@@ -1179,7 +1149,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "9f5d2aca101655b999557de14158f6dbd658394724bd805eb3c7d215241a0334",
+     "sha": "9df1c52afc4e94b753c00d48e163f237a31350c1ef8ec0a91fdf9ce44877c70f",
      "size": [
       1063,
       489
@@ -1201,14 +1171,14 @@
    "poses": {
     "cast": {
      "anchor": [
-      171.8,
+      172.2,
       44.5
      ],
      "baseline": 880.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "97a32c4f2d6c39d7bbb569b2cdeb74f7514a0799b845b90a9ada7c04dda5ba60",
+     "sha": "1ebac5f7cd922f1275c969e0fe88c80eb37cbf10f5de7b2844f9bb7284cb8e5c",
      "size": [
       853,
       897
@@ -1217,8 +1187,8 @@
       "row": 880.0,
       "src": "silhouette",
       "x": 458.5,
-      "x0": 197.0,
-      "x1": 720.0
+      "x0": 198.0,
+      "x1": 719.0
      },
      "standing": true
     },
@@ -1228,16 +1198,10 @@
       0.5
      ],
      "baseline": 880.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "b9d952d377c6a2d015edc919e91f4d9176e0e868324a19a1cefdc6805b6e49c8",
+     "sha": "b04ebae5b3c541850109a3e012b174054ba6a11c27dfb2ada4f1584dcd8fb9f6",
      "size": [
       853,
       897
@@ -1246,8 +1210,8 @@
       "row": 880.0,
       "src": "silhouette",
       "x": 458.5,
-      "x0": 197.0,
-      "x1": 720.0
+      "x0": 198.0,
+      "x1": 719.0
      },
      "standing": true,
      "stature": 1.0
@@ -1312,7 +1276,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "1b1e12977f49b7d66de69e43ac8fbdfa33536fa8df99b7b30a9a5afed3b47fa4",
+     "sha": "e1b53cc87862bb6bf2de1aa2ec731093ebe71a424ae111b5e26b85b619ca1629",
      "size": [
       1136,
       784
@@ -1320,7 +1284,7 @@
      "stance": {
       "row": 768.0,
       "src": "mass",
-      "x": 770.8,
+      "x": 770.9,
       "x0": 0.0,
       "x1": 1120.0
      },
@@ -1343,7 +1307,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "02c22daaf1a0c359da8074a7034d28588bdffb4fc4d3c3582ec605c81f72c401",
+     "sha": "d742ab942064240f429408eeef086bca1e45e77958f8aaa7e1436cd3d474beba",
      "size": [
       1136,
       874
@@ -1372,7 +1336,7 @@
      "prone": true,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "4911670ae7afc54d64f1bf8e1d2224f68bb59467e1aa1100fd8d1608dd01f00b",
+     "sha": "6d0372f62f31feda1c3fbb5c743c80ea84af4b5a12bf88ff0528375904c1699d",
      "size": [
       1136,
       784
@@ -1380,16 +1344,16 @@
      "stance": {
       "row": 768.0,
       "src": "mass",
-      "x": 770.8,
+      "x": 771.1,
       "x0": 0.0,
       "x1": 1120.0
      },
      "standing": true
     },
     "idle-far": {
-     "baseline": 460.0,
+     "baseline": 459.0,
      "prone": true,
-     "sha": "108a32522361529ff12baa11bb1a1f63c049402fc6b6260421d8cea5a0588f3e",
+     "sha": "40e636c72943f8c4d655cc17af6082fb560c3a23196eaf408c641d98d0f30ddc",
      "size": [
       1024,
       477
@@ -1413,7 +1377,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "4911670ae7afc54d64f1bf8e1d2224f68bb59467e1aa1100fd8d1608dd01f00b",
+     "sha": "f4d167f413bd278664b90e91c59d267e485c988d5078bd46b2152403f3ca0b31",
      "size": [
       1136,
       784
@@ -1421,7 +1385,7 @@
      "stance": {
       "row": 768.0,
       "src": "mass",
-      "x": 770.8,
+      "x": 770.9,
       "x0": 0.0,
       "x1": 1120.0
      },
@@ -1430,7 +1394,7 @@
     "ko": {
      "baseline": 688.0,
      "prone": false,
-     "sha": "3023533ecea57187ea7e8a569bb02df5df848b036ea9dccfbea30ca29c1e2e1c",
+     "sha": "5d8c8d5913dbab0311585c2d9a095453c9cc5924cf590e74390cb3ca9ae6b3d9",
      "size": [
       550,
       704
@@ -1458,7 +1422,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "12f7b8dabb47bbce57b40763b104b8db4a58cb2425e2ed77addb74a73584396d",
+     "sha": "f20eeef2235baafade410f3f218077d80b257b192ddf688e63cc5b1f224c7976",
      "size": [
       1097,
       948
@@ -1481,7 +1445,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "bf69b073fe32b2f86f7d09b1fe965e6568c74e2540ba2eaa43ce4ab8e6690b18",
+     "sha": "e2ab446c0c7ff02f615054bcaa1dd8bebb472c859b371aa0cd7a0dea07d9de6e",
      "size": [
       1214,
       1016
@@ -1504,7 +1468,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "d0f497b4b778c42cc450094e519e6ddd2f04f285b10ce75bf18ea9825c08ee2a",
+     "sha": "cd2d46369f5776005a19822a516913b4d744b7cbe44814f9682f98902b0f950a",
      "size": [
       1041,
       1010
@@ -1524,16 +1488,10 @@
       0.5
      ],
      "baseline": 1008.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "b9dc4b8fd821f41f1a67e046a8941136a4748867badcf0ec37eb37ba2311be6c",
+     "sha": "d5a1c4bcd99f6851f0d9f724b6d7206237f2c1c0e76f63229cf4f3f6f76bdb24",
      "size": [
       1024,
       1024
@@ -1550,14 +1508,14 @@
     },
     "ko": {
      "anchor": [
-      636.0,
+      635.9,
       16.5
      ],
      "baseline": 988.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "ac40ddc3fd0b3ca61cc41299fe11bf7fd5a785c36ae2d40af38a468730655026",
+     "sha": "fc4a212803dbc8dbdefaa619ac3a741a6bbca2a7b961fbbf5efd4e40d033584e",
      "size": [
       1110,
       1004
@@ -1603,7 +1561,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "09efce83b76dabf97ed40ecd5f75196e31899870b8fd79560b0af62f9256c20e",
+     "sha": "3e2da8e74ad0d8adfa6c04433acc1ba52363a1db02d6a6eaf6b6259490513e15",
      "size": [
       1144,
       952
@@ -1631,14 +1589,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      414.8,
+      414.7,
       18.5
      ],
      "baseline": 1149.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "f08c6ae16a4fc4f66e82389cdad3166181573d570a794d732da3cf7de5667cb5",
+     "sha": "6e569762bc82d56fac05a836e63a387070f264a7d07cbdb052d97607b517c6c0",
      "size": [
       611,
       1165
@@ -1661,7 +1619,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "8a5151479e738b6b1ad38f9b31bdd2a03b65cecd82fbe875929a4201109c8e74",
+     "sha": "ec933f79803c063c9af4f9fbb4e725e6b6dfa107a70035d700afc0a81780acfd",
      "size": [
       631,
       1166
@@ -1681,16 +1639,10 @@
       0.5
      ],
      "baseline": 1137.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "f01f1e0583d286544491f4aa12381b43866e433c6fdbcf6388271352bd5d23ad",
+     "sha": "e4c7a5b073a1b9703e2c3cffeb787c673659591515d0fd8a530e5eb58f14e2c9",
      "size": [
       541,
       1153
@@ -1714,7 +1666,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "a70296ef4d3c6325e4ae109e7e1a1e6296ede120348a99b2582f3a2c6de97457",
+     "sha": "ab4fd8b1a5ccd66fc81d24bbff7de7d6df04927c70b3c1028badcb00b781302f",
      "size": [
       1194,
       741
@@ -1736,14 +1688,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      289.2,
+      289.1,
       16.5
      ],
      "baseline": 1025.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "ac406cddfca14921af7c8ad0b645eafd658bb3b13881111befde1960c15a6b78",
+     "sha": "4cb589948972c3e8c595e3081bd5530450227e7a108b6ba7b6df34b2c79cb018",
      "size": [
       400,
       1041
@@ -1759,14 +1711,14 @@
     },
     "hurt": {
      "anchor": [
-      98.9,
+      98.8,
       16.5
      ],
      "baseline": 1015.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "8dce2e4829f5e5612385840909cdb37c18b4fdb8b71273f7a98176774fe3e5b1",
+     "sha": "cbe358be2f8817843eb8d517ce43062fb52f5eca6ce27017f580761e086e076d",
      "size": [
       364,
       1031
@@ -1786,16 +1738,10 @@
       0.5
      ],
      "baseline": 1038.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "151b35dc0986738044641838fc61a58e2f8d4caa84a2ebba25eb471a2a99fc24",
+     "sha": "96e9c1df626043f08f1c63bb787459ecbbc2d50435e90ca1715be30ef26d3777",
      "size": [
       261,
       1054
@@ -1819,7 +1765,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "9860ec460c43a7cebf0c1200bf2e9a7d0b3b25aa8d73556bd26defc6aad49db8",
+     "sha": "11346022d4aafdecd88d9b8e1a627a1a9b3a490bc1a82b43aa1c7bcf099ad9d9",
      "size": [
       1025,
       425
@@ -2019,12 +1965,6 @@
       0.5
      ],
      "baseline": 1059.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
@@ -2069,7 +2009,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "780b689239b529bff2cf1b2680f2193a217246f225c7866c18f462436cda4f66",
+     "sha": "c7ca2753345134c8628a501343fb96e3180381c467661528370b43cb57107743",
      "size": [
       1076,
       1137
@@ -2104,7 +2044,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "9c7930fca598fd4971a74cd0970d461a7d6db271c96cb59c37ace46ea53e9d96",
+     "sha": "f8f8d2967b51e0ee352f54630966a7e5396658ba16f940c4af4c6229c46854c9",
      "size": [
       826,
       1153
@@ -2120,14 +2060,14 @@
     },
     "hurt": {
      "anchor": [
-      398.6,
+      398.5,
       30.5
      ],
      "baseline": 1150.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "974c8d4412cb3e1c25c210c17553a8ea5a6874ec5e874406b1d403d937a17a40",
+     "sha": "ba682d2c2226caa588d0b0a793bbaa9788393ab455b052d7c4c4fca8fe30f597",
      "size": [
       763,
       1166
@@ -2147,16 +2087,10 @@
       0.5
      ],
      "baseline": 1137.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "963b58eee9206443b108d4b9f1a3710beba382255529db3ec7c0fac3cbbb88ab",
+     "sha": "246490150ff8281b56c82d5f21bc6dcff32b1ec1e4e7c42eb70ff8325b341ede",
      "size": [
       826,
       1153
@@ -2185,14 +2119,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      382.5,
+      382.8,
       40.5
      ],
      "baseline": 903.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "600cbd3be7652fad66af359c4299b8d55e5a1810475ca58b6bd540324042f81f",
+     "sha": "2fdace641ccba787e630a3267dd1ab0049827015b9b5ccecde854fffae71879e",
      "size": [
       1013,
       921
@@ -2208,14 +2142,14 @@
     },
     "cast": {
      "anchor": [
-      394.1,
+      394.8,
       20.5
      ],
      "baseline": 1000.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "89322552a53cbf7237edb355899188017fabb040e772cd18e939e86f57a61250",
+     "sha": "0f625414fafb45a8a6c61cd0ecb38817b385272091aff14e4e3b2cbe1f2a2fa5",
      "size": [
       975,
       1018
@@ -2231,14 +2165,14 @@
     },
     "hurt": {
      "anchor": [
-      419.2,
+      419.1,
       20.5
      ],
      "baseline": 1021.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "36a210126d06cf37d1ab0d6248c715e084d0560f6f04f30ff1f198c2b08dded1",
+     "sha": "6c8ca6249095bb6089f4dd910e592365a85c2dc422fdb9574cfa972cb40383a5",
      "size": [
       970,
       1039
@@ -2258,16 +2192,10 @@
       0.5
      ],
      "baseline": 1000.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "8a2a121ae3f18c68f0fe77b9e765da757f24951d53237163ccf2d23279670f5d",
+     "sha": "09a7e94eb6c6285c65cf0ace83497ef2b8d3202515db338fd791717e68c6ed80",
      "size": [
       975,
       1018
@@ -2291,7 +2219,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "7e8a6c91d6abd0754bfbd93da06bf5c104c0078bff204cd35906ef8b0707cf7f",
+     "sha": "c87fbc315bdc8fb45bae44782e7ff2f120b9563b7071d95395b1b0b0a535e334",
      "size": [
       1000,
       741
@@ -2301,14 +2229,14 @@
     },
     "overdrive": {
      "anchor": [
-      305.4,
+      305.0,
       78.5
      ],
      "baseline": 997.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "ef985e51230f47b8be67cc9fc3a92d874a806f9931a909e754aa3ab6066e4dc3",
+     "sha": "3fbcc4e4e1326bbaf53a0b75deaa5b0becad6fcabddd6af7eead673e48baef02",
      "size": [
       956,
       1017
@@ -2340,16 +2268,10 @@
       0.5
      ],
      "baseline": 1172.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "c290bedc3f6fe743b9c778736aa2a50ef0ac28bd4030161dbcc69dea87e81945",
+     "sha": "796d0ce9a371dd48ff674568f89c86cc76ae09af0083c5027ed86fa602d459ea",
      "size": [
       744,
       1188
@@ -2366,14 +2288,14 @@
     },
     "kneel": {
      "anchor": [
-      180.4,
+      180.5,
       20.5
      ],
      "baseline": 746.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "48db5d9874ab49a856fb3ddf8537574879c5bccf2d54d3bf05c668ae12d98dc8",
+     "sha": "365f711fb5bb7c598fdc1e123870879bd49459f910bbf905065d97be99831861",
      "size": [
       715,
       762
@@ -2408,7 +2330,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "845b84c18ff7a5c069b6871e345207e9e252d29b5f0627b3b033877633982a7d",
+     "sha": "53c03825404632e150b70ea6180df9e33b7f8fc896caf44b4789eb74fbdb4135",
      "size": [
       789,
       1146
@@ -2424,14 +2346,14 @@
     },
     "hurt": {
      "anchor": [
-      203.9,
+      203.8,
       40.5
      ],
      "baseline": 1179.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "ad59be7965a363e1b125195f9a5e495bb467d9057fa1abbc925e19d397ef812f",
+     "sha": "f47ff74e80783fc1b9e2bf8a207e2e62f932814445126cf2b0ceb50909ba9464",
      "size": [
       688,
       1179
@@ -2451,16 +2373,10 @@
       0.5
      ],
      "baseline": 1170.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "a7335602f656027941b6ac789200ea1676cf7e3510a15a6288415e241512d650",
+     "sha": "c8db30b9024cd14365d878373bac51a3f1bd034d6b15fb66049924d9f9721fd9",
      "size": [
       432,
       1186
@@ -2468,8 +2384,8 @@
      "stance": {
       "row": 1170.0,
       "src": "silhouette",
-      "x": 200.5,
-      "x0": 114.0,
+      "x": 200.0,
+      "x0": 113.0,
       "x1": 287.0
      },
      "standing": true,
@@ -2478,13 +2394,13 @@
     "ko": {
      "anchor": [
       952.5,
-      163.0
+      163.7
      ],
      "baseline": 505.0,
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "44db679e7c967d55abbb19e5ee8a8ab46bdce4727aeb67900df6ff7a6e66cba7",
+     "sha": "3d70c9160992a6ac7fa1f2901874213c42e23ce209adcc699d003219986f8fa2",
      "size": [
       1121,
       522
@@ -2494,14 +2410,14 @@
     },
     "talk": {
      "anchor": [
-      208.3,
+      207.6,
       24.5
      ],
      "baseline": 1145.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "d4d75a54d557d74ffdb98b9eda7cec4eadaa5d01b00d0b1a758b2c07b2a50673",
+     "sha": "8fc96c18dcbe545f26bcc83b2953261881c85c67cf89f29fe975c3d9972f06e7",
      "size": [
       418,
       1161
@@ -2524,7 +2440,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "d66a27b04188f874165a01f5669f67a079b0191a8652610520a77ce6d9e97ace",
+     "sha": "40de630bb5fb444018e5efb83974be90778ec5f33c8190fef765d3a57e1a8468",
      "size": [
       664,
       1097
@@ -2567,7 +2483,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "fc2915463695fe98664e1d7f840872d9809491567613498fbdfbfd12bd36e134",
+     "sha": "da733380c2cc4509b02c9e145ce57346d8336288b01471f6f3a4c876587a7659",
      "size": [
       832,
       1172
@@ -2599,20 +2515,20 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "46b62d3972164031c987b3d68d4787678def50ffa5f13288e4e5cb6165439655",
+     "sha": "76cf4bc83aae47d2935ee665bbc67b0132a4a8e4dad0ddc01b13a32aa9412cca",
      "size": [
       814,
       1212
      ],
      "stance": {
-      "row": 1208.0,
+      "row": 1206.0,
       "src": "silhouette",
-      "x": 318.0,
+      "x": 317.5,
       "x0": 164.0,
-      "x1": 472.0
+      "x1": 471.0
      },
      "standing": true,
-     "stature": 1.024
+     "stature": 1.023
     },
     "critical": {
      "anchor": [
@@ -2631,7 +2547,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "a35f7c8e13ca4b622b0f068a7a4bb6b2357681a72cad24d2646edf14d1fe96fc",
+     "sha": "45fd72d161d48b6a3d477a90398e6700daddf35a8ef0314e749f8ae174f24080",
      "size": [
       799,
       1153
@@ -2663,7 +2579,7 @@
      "reading": 1.35,
      "scale": 1.35,
      "scaleSrc": "noise",
-     "sha": "d5fe6643e651ce2af2c496d60e6f7214a05d6b1c0cc1104754ee97a6bd2a4ba2",
+     "sha": "0fed7a05a22409d435dda72bcb699a98e9dcb4676f91ebbef55ff964d831586c",
      "size": [
       832,
       1007
@@ -2695,7 +2611,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "785ee8df73aebe1d8e79dd26c9f0b3e51733a2fae96b459fa40d733f5fbd809c",
+     "sha": "c2cd2a4e642da8b43dd9cc969dc0f5ab4b47e2224cea08e11ff91c1718d2e127",
      "size": [
       827,
       1173
@@ -2725,7 +2641,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "49978b5df299461ce66202c2309d1339af98af693f1bd63525f9b7e36e7d160e",
+     "sha": "ea206624b0d350ab5e5e649d38a41dd9ab37b2a3d33b862718edafebcaa16100",
      "size": [
       768,
       1198
@@ -2757,7 +2673,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "da6d895aa23d70cb7f33881cebb31ca66f409be8c47b44e3ac55dbef4d75933b",
+     "sha": "de99b020ee2a3c3a6c39a59ed28a5341c25f0de7dd2f84775b4350def24fc468",
      "size": [
       734,
       1178
@@ -2789,7 +2705,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "84701cfeb65e8f3c1f396218e948339dd445b3dc49e47624da9ba5645a641d81",
+     "sha": "22ef7ecfaf938d9398193542c1adea8aae1949d5d7bd249135e32c553b9c2b16",
      "size": [
       723,
       1090
@@ -2821,7 +2737,7 @@
      "reading": 0.58,
      "scale": 0.58,
      "scaleSrc": "noise",
-     "sha": "7a797ceacfad678b211d9524298f61aef79a32231f0506f3c377b622bf5cbeb8",
+     "sha": "5938bac969407e34e2e72de691a58530eaf3d2126919d55f6a02802e503da200",
      "size": [
       1216,
       799
@@ -2846,7 +2762,7 @@
      "reading": 1.2,
      "scale": 1.2,
      "scaleSrc": "noise",
-     "sha": "4c62f0cb06f479a40aeffa857d49c21b99321304580ab9dd3a50d1f960f6506f",
+     "sha": "d5ef2deaefaf1c564202ac7a109f03ee55c63c56b070c1cb5e26adefa2ca362d",
      "size": [
       832,
       974
@@ -2878,7 +2794,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "29c80c17d4126bc3f0be85e6d19555c10831dda2e72040cecaf1c56dd884418f",
+     "sha": "ed0a10678e089f8b91ce972a20a68566126b48976342f57636f7b157cc7149c6",
      "size": [
       781,
       1191
@@ -2891,7 +2807,7 @@
       "x1": 750.0
      },
      "standing": true,
-     "stature": 0.997
+     "stature": 0.996
     },
     "victory": {
      "anchor": [
@@ -2910,7 +2826,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "3c3638e28b95831ba19c2a00b91ddb9afeac77b4325ef6cd73e4f2186a453f64",
+     "sha": "9d9a7116b658e34b33165db9d0c29087a76c70491d88004d4f79f9b62769ec9b",
      "size": [
       533,
       1207
@@ -2939,14 +2855,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      289.2,
+      289.3,
       16.5
      ],
      "baseline": 1093.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "147aad37f688f8fab08e023bbf165b66413b477e79dfaf9e05170586d0081474",
+     "sha": "33be2a3339621fb10f520318c5f7bb6b39f02563cb3d9c412d7765fe706c0c9a",
      "size": [
       611,
       1109
@@ -2969,7 +2885,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "772661a5d09f5b56e2d4961d4485894dcb58b1ccd417f247bcd1a25e3df3013e",
+     "sha": "81d3c045a21e67d28c5ed3530d798fe13685100086ecd5d8ccc7595aebc1a814",
      "size": [
       625,
       1203
@@ -2977,9 +2893,9 @@
      "stance": {
       "row": 1187.0,
       "src": "silhouette",
-      "x": 372.0,
-      "x0": 172.0,
-      "x1": 572.0
+      "x": 371.5,
+      "x0": 167.0,
+      "x1": 576.0
      },
      "standing": true
     },
@@ -2992,7 +2908,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "91e3f44e86e59dbf0d02cbe9c1c592ad51fd83008ef89c4f8e792a2d7f0e9f9e",
+     "sha": "309488604c58d43ec9ba7e61fd305de1d2a784f0f899a481130b21f9106c0e48",
      "size": [
       671,
       1096
@@ -3012,16 +2928,10 @@
       0.5
      ],
      "baseline": 1102.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "77192c23501957c6172b351dac7aa525341faef56b77d648f48a10fc4fabe248",
+     "sha": "154486616e6809eaa11cca57b29baa26f573a23baefa9ebfe062cdc0932d489d",
      "size": [
       591,
       1118
@@ -3057,7 +2967,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "b9961fc7d1254bc9e8e3f984d23ab6021d05ba55c8cfb3c3db11db0a12419cde",
+     "sha": "6cf1f0b1256b40e8057c8656662776c4379c33931fce3428187c0dc04291f398",
      "size": [
       679,
       1170
@@ -3065,8 +2975,8 @@
      "stance": {
       "row": 1154.0,
       "src": "silhouette",
-      "x": 315.5,
-      "x0": 245.0,
+      "x": 316.0,
+      "x0": 246.0,
       "x1": 386.0
      },
      "standing": true
@@ -3080,7 +2990,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "47974fc74c5168cad53b21730cff3227eb9d091d7a78752994aedc0c31789f49",
+     "sha": "5f44b722f5b674fc9d38f1b9c4db1cf1295a72a2ffe596c234f977d6a7f425ed",
      "size": [
       494,
       1143
@@ -3096,14 +3006,14 @@
     },
     "hurt": {
      "anchor": [
-      520.7,
+      520.9,
       16.5
      ],
      "baseline": 890.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "44e6b283c68320b0e4600493e9bbc4969cdae68680c8e302bb162ec770fd3215",
+     "sha": "d7e3c6028eb10473d71cfc28f7d46aec41fbb1ef2220a058652e31667a29d1ad",
      "size": [
       653,
       906
@@ -3123,16 +3033,10 @@
       0.5
      ],
      "baseline": 1144.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "7aa37e8b2873caef7ff0f85db9f267045ec70ee62e289b4692e264e25e6c45e3",
+     "sha": "34706a285202aa3bf934abea046b9fdff180bc8b7662f331028ecb1d649dbf53",
      "size": [
       604,
       1160
@@ -3176,7 +3080,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "9e66f42b64f16d2bd22a27efd7901a20180e1654c9793d9ae367b104de1535c3",
+     "sha": "aa8675eaa9cf2e73f1a8525d50a7036771b120877c25343f057c541ea13b3915",
      "size": [
       695,
       1124
@@ -3245,7 +3149,7 @@
      "reading": 0.533,
      "scale": 0.533,
      "scaleSrc": "reviewed",
-     "sha": "586b11ffab4339dab3d140a2fbeabbadb894ed08cf7c4472df9684c7ebf8de27",
+     "sha": "01b736ed8dd54544f29728a6e396e43ddf6f6514948328daf0af202bd23ce424",
      "size": [
       647,
       1192
@@ -3277,7 +3181,7 @@
      "reading": 0.792,
      "scale": 0.792,
      "scaleSrc": "reviewed",
-     "sha": "f2cf5dffea1ec99037883cbf6250dc788001a75aeda6510ce3ec9c89a5f8d1f0",
+     "sha": "683c884bc5c6f6529ba43d47692fd48948e7b4ff7b2f9273a28f44cb8c786749",
      "size": [
       636,
       1139
@@ -3309,7 +3213,7 @@
      "reading": 0.667,
      "scale": 0.667,
      "scaleSrc": "reviewed",
-     "sha": "3406ea72ddbe47ae0ac6502f8028e0da8120a5cbcf7efac6e89fe0063b8caf1e",
+     "sha": "34fc093a2614027a8e1e5556b19435a32da5baf296d9dd086f2c594387580818",
      "size": [
       800,
       1152
@@ -3339,7 +3243,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "62b64f6ca26c8011d3134865315c9ecc83f17c33bac87449e54440c21f96f377",
+     "sha": "43730e6830a52070ccb8205ac6ff137be24a6c096b4d290aa94dc8a7d464925b",
      "size": [
       485,
       1165
@@ -3371,7 +3275,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "a619f0527cbfc3c7ae189e388a70b3bdb23036c62d8ed308530b1ec148afd145",
+     "sha": "8e78061ad02e16752f79bbf9f33cbe9f1cd57df6b80dc063e0c1d6db39ed7bc8",
      "size": [
       732,
       1170
@@ -3428,7 +3332,7 @@
      "reading": 1.182,
      "scale": 1.182,
      "scaleSrc": "reviewed",
-     "sha": "e13caa64aaa5060894691382f1ff02e63e098a7151cfcb8fbf4cc35e8f743e7a",
+     "sha": "49f9fbfdaaa9ae8872f1681dfa751813eb8ab6860df888349fea9dc936fced0f",
      "size": [
       580,
       933
@@ -3460,7 +3364,7 @@
      "reading": 0.96,
      "scale": 0.96,
      "scaleSrc": "reviewed",
-     "sha": "7f0eb69e3cfbc7a6c9070593afd7b72d92495b6aa7f7b345e8ed7ca980a3c523",
+     "sha": "5d0eaa0bbf08bfec1a1ae1ac06a0586efff2deec6e217b9998999eae545876d1",
      "size": [
       658,
       1076
@@ -3492,7 +3396,7 @@
      "reading": 0.727,
      "scale": 0.727,
      "scaleSrc": "reviewed",
-     "sha": "83787dad6e8f1446f1d66a6b970ed6b1b4915b874fe26b15f2377cfca7e0674a",
+     "sha": "3bc5f34c2cd841c3ae67fcdbdfb34ff0466adaf550af2066b1bfff106cc5bfc5",
      "size": [
       742,
       1006
@@ -3505,7 +3409,7 @@
       "x1": 676.0
      },
      "standing": true,
-     "stature": 0.625
+     "stature": 0.624
     },
     "victory": {
      "anchor": [
@@ -3560,7 +3464,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "fe2204472e2958e7ef2fc2134df8e957a0d5567c83b368d9df386fd7f77f1339",
+     "sha": "019b477f97596893fe631ed733a5c35ef0343f49d85cac283a2bbcaf7ce7b65a",
      "size": [
       583,
       1128
@@ -3583,7 +3487,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "1c616017b08b06a09be4a922de0f63f703b5709c7b31705d724b1a76a2e6cb66",
+     "sha": "2f7016af8f294e946e88f3daeb66c6cc340c79f8d6d136c7710da748c6b6289c",
      "size": [
       697,
       1124
@@ -3603,16 +3507,10 @@
       0.5
      ],
      "baseline": 1112.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "f8296e2af4f5b5864c50508d2d20a3300ba44734c59582039f8859a224f8461e",
+     "sha": "988f7ee6f22b9421e41925d582fdfed0f9adffdf1510e309ba02134f4f49897f",
      "size": [
       568,
       1128
@@ -3636,7 +3534,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "64beeb7a5ecc1fd05a875731f6d4e348968812bdf3f72b48c03d0c76babf49c6",
+     "sha": "90e85af50b7cc75667ecf7da8f3672798fd94609e0137c83d1bf539d0e6844e9",
      "size": [
       1094,
       783
@@ -3665,7 +3563,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "6eca08135e68e73e59c646648faa00a03c457a6273370641da7cb362b53f5dbd",
+     "sha": "09b53cbcf6ed7e5df98eb460d2365007c6c5b6e92878d066fdeca93419b86cb5",
      "size": [
       998,
       1006
@@ -3688,7 +3586,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "97d19f455b6135f162fb2d992cd9f382af71160853aefc905791365310c172aa",
+     "sha": "839362dabd31f357fbca3fc0e6b171206cfdb3ba4218aa59c1105de1c1eacf9d",
      "size": [
       945,
       984
@@ -3704,14 +3602,14 @@
     },
     "hurt": {
      "anchor": [
-      112.3,
+      112.4,
       82.5
      ],
      "baseline": 965.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "88b68fdcb47d97ceb367d62986d0797edc65cfcbf9ba87c93216732bc6038efa",
+     "sha": "1240af6b579bf9988eaadc57220863128c04a396cfee4616b5d3aeddc9d5ead3",
      "size": [
       860,
       981
@@ -3731,16 +3629,10 @@
       0.5
      ],
      "baseline": 967.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "20b012ade63e04802114b28e6ef025ecb1b28fbe74aab96ed302cc60e9b88416",
+     "sha": "01b31d49f0db4b29891e84d9fe938b7b74605a18477f8c1869efd5ca4e2051a5",
      "size": [
       945,
       984
@@ -3769,7 +3661,7 @@
    "poses": {
     "attack": {
      "anchor": [
-      1021.3,
+      1020.5,
       235.6
      ],
      "baseline": 748.0,
@@ -3778,7 +3670,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "c7e49ebf37c90ac684a3904144b2dd2db17713814368c9096b77a9912a92cd46",
+     "sha": "2541b951b6b57e10ed5be7a698d9d1ddb01df8f24386f29cc11aceaedf753711",
      "size": [
       1201,
       764
@@ -3797,7 +3689,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "0da10b2d5633f7bc4d0446ca2344d0b85de5a253294343a6f1e6a63686420d84",
+     "sha": "9fc210709efd0f0d261278d0e8a3f92a630106e0e1b2a928083cd85c5ea60649",
      "size": [
       1088,
       718
@@ -3816,7 +3708,7 @@
      "reading": 1.3,
      "scale": 1.3,
      "scaleSrc": "reviewed",
-     "sha": "5c4ca91ac38663bcdbbdfa32aa6cb57f1967811e174b276ecbaa1e32df0a1905",
+     "sha": "27288696dfc6bc1f65f0a28c75967a175a8974ab31f5019b16b6390d632542fd",
      "size": [
       881,
       741
@@ -3833,7 +3725,7 @@
      "prone": true,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "863632fadc63f012c06f598c4567079e9f7eaa7e2da786e5d9eb3223fa1eb46f",
+     "sha": "f8e6c326c3f592afca8758b6e2932b17b3d3eca47ebb5501be087e2bcfcfb3f8",
      "size": [
       1201,
       829
@@ -3843,7 +3735,7 @@
     },
     "ko": {
      "anchor": [
-      542.9,
+      542.7,
       196.5
      ],
      "baseline": 826.0,
@@ -3852,7 +3744,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "d9d0d1f64e4b2b06d0040220b73e7bcc2eaa2f86d4fa2e5987376e58005a4f5c",
+     "sha": "c594c3d6da05d7e073a862b1265cf7c79246bcbd5c677b0a6d7633af4397b0e9",
      "size": [
       825,
       830
@@ -4036,16 +3928,10 @@
       0.5
      ],
      "baseline": 1173.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "521ca575c6de1288efef64a9059aa288ac217f75f3f569e0f22da8c2cfd5fe47",
+     "sha": "3988222302f94e15561f61bed423795f91c8223674b073578659d1144862ab70",
      "size": [
       489,
       1189
@@ -4089,7 +3975,7 @@
      "reading": 1.039,
      "scale": 1.039,
      "scaleSrc": "reviewed",
-     "sha": "944f89be4420cafdfa3f92ecdce346c2f00e59cb68f5bb267fa866013550ea88",
+     "sha": "046d3388d87955c7f7f3f8c186899eb76a40c46ba666a2d2468a80a379fb8d1b",
      "size": [
       991,
       1016
@@ -4121,7 +4007,7 @@
      "reading": 0.946,
      "scale": 0.946,
      "scaleSrc": "reviewed",
-     "sha": "e8f7200bc0bb52a6c35dc42baa6428fe81a67da21f4d47fc4ce36664df0fc66f",
+     "sha": "395376f1bc26383a29eb87386b1787919032cbf1571bfe46688d7a4eda0485db",
      "size": [
       563,
       1212
@@ -4183,7 +4069,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "a373c1186e5e52a7261d49d7240891d51efd6be97e9236524fa6204ea48f5063",
+     "sha": "585835c14ba0cc49c96226eaa63e91e3236338120e4c0a1b738e1836d6ff05dd",
      "size": [
       567,
       1151
@@ -4247,7 +4133,7 @@
      "reading": 0.769,
      "scale": 0.769,
      "scaleSrc": "reviewed",
-     "sha": "43125f4667b195a7a9a40250dfb9287c342574834675067c6f3438a99d55949b",
+     "sha": "86233e14fd1d2a7cb32a6109935bd28a9bc03bfd35fd0e2550fc83f735156812",
      "size": [
       1239,
       409
@@ -4272,7 +4158,7 @@
      "reading": 1.08,
      "scale": 1.08,
      "scaleSrc": "reviewed",
-     "sha": "34f4533dd819bd134069a4d827502f14b89e9018b9c9d7fe7d7fea0b24bed284",
+     "sha": "89213f2917ffce5ceb9900f108de61121424931f8427623d4805e61effd9050c",
      "size": [
       522,
       1201
@@ -4290,7 +4176,7 @@
     "twirl-end": {
      "baseline": 1140.0,
      "prone": false,
-     "sha": "0c92c504591e2dfd25f8d0abbe05ea3faddd51282bf7a4cb9e84fbe0943cc4f3",
+     "sha": "2fe094ba204e2921ac2072dfac4a16ae226af933b1a99838982daee5054e575c",
      "size": [
       733,
       1156
@@ -4300,7 +4186,7 @@
     "twirl-forming": {
      "baseline": 1157.0,
      "prone": false,
-     "sha": "f301b258d8b50eb47c8542c3db4808a5cd07e4541d9a1b5810cd6a38b25799be",
+     "sha": "3fcbbc8327473d766ff208a00c0cd8bf812b6ecb47e8c4147feaf951e04d3f7f",
      "size": [
       727,
       1171
@@ -4320,7 +4206,7 @@
     "twirl-start": {
      "baseline": 955.0,
      "prone": false,
-     "sha": "03e1cdcde20217b823daf2df375633280658addca24104fb3bf1d641a297666a",
+     "sha": "a19ec48e2485e5243e625c97b41d739176ea5cc3200bd75799a08345b637436f",
      "size": [
       569,
       967
@@ -4344,7 +4230,7 @@
      "reading": 1.117,
      "scale": 1.117,
      "scaleSrc": "reviewed",
-     "sha": "5f416dfbe414927c73c63098aa853c3d64fdd46a6d1d7d81631113a2efb575ed",
+     "sha": "5ac55b2c24d6df8e1110fbd9ef58db10f841b41774b31e18363711dec981c3c8",
      "size": [
       731,
       1211
@@ -4388,7 +4274,7 @@
      "reading": 0.996,
      "scale": 0.996,
      "scaleSrc": "reviewed",
-     "sha": "e2ab3af4cb132e93290f8b4d75eefd6293f86d7f26b65efd978796705967b5f4",
+     "sha": "a816db7c0372cf58498f246cabea91af9fcb26dce10ca1f9cea5bb8a6b6c0429",
      "size": [
       867,
       1206
@@ -4420,7 +4306,7 @@
      "reading": 1.119,
      "scale": 1.119,
      "scaleSrc": "reviewed",
-     "sha": "84e0fc47c5f27902903c7cd584e3da3476396c9904c4abbde890f4bcf2a8425b",
+     "sha": "b72047fdcdb523a57b37599d3ec03c747a64fa43df8a2e6ede77f3dbb606aa27",
      "size": [
       542,
       927
@@ -4452,7 +4338,7 @@
      "reading": 1.2,
      "scale": 1.2,
      "scaleSrc": "noise",
-     "sha": "5ccbe8d06d6d90add5077daf06a43fa557ac73177366b89ae108d9e50afcd546",
+     "sha": "e7355cc42bf1486078ed4e3d53dff10fe65df834fee07ae1669f7b4610d820bb",
      "size": [
       795,
       1013
@@ -4465,7 +4351,7 @@
       "x1": 553.0
      },
      "standing": true,
-     "stature": 1.01
+     "stature": 1.007
     },
     "hurt": {
      "anchor": [
@@ -4484,7 +4370,7 @@
      "reading": 0.994,
      "scale": 0.994,
      "scaleSrc": "reviewed",
-     "sha": "d0f450e055f76bf0eaa0c91fbcdc22630331f35a6d7ff1b0dd9fb383b2fb8be3",
+     "sha": "4275d7d7dad0f3211f96183c2ea056d52a5aad820386ba9f75f465a01c02c592",
      "size": [
       824,
       831
@@ -4497,7 +4383,7 @@
       "x1": 287.0
      },
      "standing": true,
-     "stature": 0.675
+     "stature": 0.674
     },
     "idle": {
      "anchor": [
@@ -4514,7 +4400,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "3b5dc62fbc5928b55ba831273ba3ed6e4ac59378692711c6b84ee708905ae2ab",
+     "sha": "dbcd4467b6d5de8edfac15d3e10b7e07b85e98e118bf3fed7c6d0b7c7bf26cee",
      "size": [
       609,
       1208
@@ -4546,7 +4432,7 @@
      "reading": 1.055,
      "scale": 1.055,
      "scaleSrc": "reviewed",
-     "sha": "6c0101b02347961eb1d35713f15ab8644907135aa03a0b519f5170ea303512a7",
+     "sha": "b0403cf6a402bac2b7473e13d66d6e92d1d8a3d13ade69055e610d12a7d0a58f",
      "size": [
       699,
       860
@@ -4578,7 +4464,7 @@
      "reading": 0.844,
      "scale": 0.844,
      "scaleSrc": "reviewed",
-     "sha": "b2e2c52e573f878ab649e67f0fbc6f43fab3cd6698d8a5e0f538e750ca8b7821",
+     "sha": "e7940b8f953e65f7636fd626dff1e260f7626459764564ed463c21969e76ae15",
      "size": [
       1311,
       369
@@ -4603,7 +4489,7 @@
      "reading": 1.15,
      "scale": 1.15,
      "scaleSrc": "noise",
-     "sha": "3bcfeea0a8cfd343b4031f13844599cc40fc31919fb13933843023bad5863322",
+     "sha": "3a42dd24c817fb5bc8b71b22653df2db16f3fefc5a8d36da6f9269644b1f1f04",
      "size": [
       713,
       1206
@@ -4621,7 +4507,7 @@
     "twirl-end": {
      "baseline": 1202.0,
      "prone": false,
-     "sha": "460fe1f048c84324159f129b6ebf5bc3e8ec169e0141e306d7b152f2204dd0ea",
+     "sha": "32fbd9217a734149c539f32fb41878e2f32ee6a7679acd34e4329bd64b09da43",
      "size": [
       609,
       1214
@@ -4631,7 +4517,7 @@
     "twirl-forming": {
      "baseline": 1189.0,
      "prone": false,
-     "sha": "20fbece03690056a1c04c545685cfef9303307fc1a0f7eeaafc203e3505ba24b",
+     "sha": "82e9c2164d130acd272cf0ed4c7e15fbad5150bac45d92ad60ceb2374205003f",
      "size": [
       519,
       1206
@@ -4641,7 +4527,7 @@
     "twirl-going": {
      "baseline": 915.0,
      "prone": false,
-     "sha": "2045e49bf62e556c10e76cc8d3a3e4e2804a7c8891a19ac97372eb5052961778",
+     "sha": "2c56a161dacac4dd3026538de55a0f519116c032654d73665febbf13a0020cf6",
      "size": [
       670,
       915
@@ -4651,7 +4537,7 @@
     "twirl-start": {
      "baseline": 917.0,
      "prone": false,
-     "sha": "f9124e51595729e5c8d2b7c592c5a7fbe6bc151721f171df3d9cc83d84fff7fb",
+     "sha": "a7e23e8863434f1452c56f095cfbb377656f7ee57724b9ddef662fa25e93fcea",
      "size": [
       666,
       917
@@ -4675,7 +4561,7 @@
      "reading": 0.95,
      "scale": 0.95,
      "scaleSrc": "noise",
-     "sha": "2a80924549b1db74b7b681543faa20d7292f004029f1a8b3a874dff748cf1c97",
+     "sha": "7e17833b7c1a9ed52c9bbfd1046c27101e66f35770023ba60732fbfc0b9d80ed",
      "size": [
       816,
       1143
@@ -4719,7 +4605,7 @@
      "reading": 0.845,
      "scale": 0.845,
      "scaleSrc": "reviewed",
-     "sha": "fe4ce87f9912ef6bf76cd4a71a2b7c805cbb9cef38f9f77afd410e6ca542edcc",
+     "sha": "95e6b0a09017f785e07b1a877d0fa2f42e15d0b5955d39d55680e4ed9bb12c22",
      "size": [
       638,
       878
@@ -4732,7 +4618,7 @@
       "x1": 495.0
      },
      "standing": true,
-     "stature": 0.648
+     "stature": 0.647
     },
     "idle": {
      "anchor": [
@@ -4749,7 +4635,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "cb68fd76ea6ac649b6a5dd3434aca3d6f91405b5179477a12af04b200baa234f",
+     "sha": "46ffeb18419a30b6eaf6c1aada04af96b57a29a02f08d04c0cac6b892c5b2aeb",
      "size": [
       493,
       1136
@@ -4781,7 +4667,7 @@
      "reading": 1.133,
      "scale": 1.133,
      "scaleSrc": "reviewed",
-     "sha": "7fb8a1b954346ef7707677108965102e8286b46355608ce68be807619d776e8c",
+     "sha": "9124937b6bfe5115d0e4181d798bf0ecd6440811bbb21326adf08dfa824ca474",
      "size": [
       377,
       854
@@ -4813,7 +4699,7 @@
      "reading": 1.096,
      "scale": 1.1,
      "scaleSrc": "noise",
-     "sha": "67bb980319bc9a80e14a5b6857ca5d7a2850bd20808b1b52068092e59d141f8d",
+     "sha": "e214a1714bc6933acd802f9e581a14fcb689baea82d8121a679463800d0bb42b",
      "size": [
       496,
       935
@@ -4831,7 +4717,7 @@
     "twirl-end": {
      "baseline": 883.0,
      "prone": false,
-     "sha": "d381e14b484cbc21d9236446da30a160e8f1d7174313bbf6ed21874c3df4138a",
+     "sha": "59d543006906b32f6406eadf471a8b9f95763a857ed12a19b244a3c7920515f0",
      "size": [
       408,
       899
@@ -4841,7 +4727,7 @@
     "twirl-forming": {
      "baseline": 890.0,
      "prone": false,
-     "sha": "d15f39600222cec3eaec82b10dc3c1209fa12723b3c0e69734f3431df5d45fec",
+     "sha": "bfa8e07c8297ac99182568a1c6da3e798f6a52f0c7ea574e43b0295c17227149",
      "size": [
       407,
       907
@@ -4861,7 +4747,7 @@
     "twirl-mid": {
      "baseline": 1208.0,
      "prone": false,
-     "sha": "a02f211ff2a59948aa3cebaac711effcf23e2a82c52eb01fe87d20cb5327d518",
+     "sha": "f4d455e4b1ef710d825d36e21d5e3b0b7eaaccbd322c52f8ff91ac53acf7bb30",
      "size": [
       790,
       1216
@@ -4871,7 +4757,7 @@
     "twirl-start": {
      "baseline": 951.0,
      "prone": false,
-     "sha": "323ac9821c815922fc5fd8eba2ceac75c10f6a178961f947c091c53a50428ee9",
+     "sha": "cf70d01c32f704b69b35e864f75d89f051b86fe0c6f3fabb6435f4d5d6e416a9",
      "size": [
       544,
       967
@@ -4895,7 +4781,7 @@
      "reading": 1.189,
      "scale": 1.189,
      "scaleSrc": "reviewed",
-     "sha": "49651347b0103d09a112cfeb01d4780f5c1b4fdbac4b392b1b44dd3f0f399a74",
+     "sha": "baac06eb803fa4fce681e303d8eb11a57d2b842dfde807d5c5a58456a03b99d3",
      "size": [
       334,
       1155
@@ -4939,7 +4825,7 @@
      "reading": 0.942,
      "scale": 0.942,
      "scaleSrc": "reviewed",
-     "sha": "fdca27ee9e7fd16a736e5d34e02fd3308090c06cf6a9b3b9ab63c2e1d5b38428",
+     "sha": "99bf2083f2140f227ce0c8fea67fbf7cf2849547125092f9089a7a0a44e408eb",
      "size": [
       684,
       1010
@@ -4971,7 +4857,7 @@
      "reading": 1.299,
      "scale": 1.3,
      "scaleSrc": "noise",
-     "sha": "74f33bf295c75ebbc2a1e4640ac7658aa932927e4a895cc78874eb9ce1bb1354",
+     "sha": "f6dd0161b574337203be131696570ce65162c477950508edb67a2dff7007f078",
      "size": [
       471,
       1012
@@ -5003,7 +4889,7 @@
      "reading": 1.611,
      "scale": 1.611,
      "scaleSrc": "reviewed",
-     "sha": "4426a83fbdce1958355983bacee37ba61da65fc5da558c886642a118a25320ae",
+     "sha": "a68c2c1dc64d7623b10545e0187b12b1ecae772176c04169ab33722d8cde0b91",
      "size": [
       697,
       768
@@ -5035,7 +4921,7 @@
      "reading": 1.3,
      "scale": 1.3,
      "scaleSrc": "noise",
-     "sha": "37b2e5d6e110d3737ba140164829ba71b8514470c7d6b399ef590ba15d17f8c7",
+     "sha": "68685265e295e9dd1f40f83d2324fa20d93fb08e4d174b29d6b45fb42ccadcad",
      "size": [
       531,
       816
@@ -5065,7 +4951,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "2c07c5c2fa0c38bc256c717aae7f23f323f30055619cede12bed4ad60b871894",
+     "sha": "71524953bb32b9838453653b0fd74e09ac612c2ca2002b4f98775eec46b2b6a3",
      "size": [
       495,
       1216
@@ -5097,7 +4983,7 @@
      "reading": 1.302,
      "scale": 1.302,
      "scaleSrc": "reviewed",
-     "sha": "72962ec13ad346632497ec023a2d069a8744dc0bf00fc4a586ebeaf0a30f6d83",
+     "sha": "e80e7273c174569bc8dbab21bf09370462eef90b3900696f9acf9652382f37c1",
      "size": [
       453,
       912
@@ -5129,7 +5015,7 @@
      "reading": 1.2,
      "scale": 1.2,
      "scaleSrc": "noise",
-     "sha": "314cda41ae63fa78aed10b2a6385488b65991dc1a7d27629a1b7b01d9ecca73a",
+     "sha": "bc27feab42a16904055e570d0dc9261956e063d20e566c346f599c4fb39ad0d2",
      "size": [
       1151,
       441
@@ -5154,7 +5040,7 @@
      "reading": 1.298,
      "scale": 1.298,
      "scaleSrc": "reviewed",
-     "sha": "94017f80592a9edfa01fb8f1beeaa08625822d3eacd572e6be8a6516b5861632",
+     "sha": "4d66f3bb15b70bfafb93b6c4ca11de93572c5e1155f47119b21eb50f7fde7659",
      "size": [
       682,
       1062
@@ -5186,7 +5072,7 @@
      "reading": 1.298,
      "scale": 1.298,
      "scaleSrc": "reviewed",
-     "sha": "94017f80592a9edfa01fb8f1beeaa08625822d3eacd572e6be8a6516b5861632",
+     "sha": "4d66f3bb15b70bfafb93b6c4ca11de93572c5e1155f47119b21eb50f7fde7659",
      "size": [
       682,
       1062
@@ -5218,7 +5104,7 @@
      "reading": 1.585,
      "scale": 1.585,
      "scaleSrc": "reviewed",
-     "sha": "8716329fe452741c5233d9eaca9dc2ca2f910e942cb233eb5fd98f4a1fe3634e",
+     "sha": "5fc7330933c3b4cab5e7be0cd3ee8d00b3fa7dcf81253e96a7c1045db4151c22",
      "size": [
       496,
       845
@@ -5236,7 +5122,7 @@
     "twirl-end": {
      "baseline": 895.0,
      "prone": false,
-     "sha": "9056ff32385a5af3ec75d3654c1123537dde16d632a4f1322ac5b5ae926ab6eb",
+     "sha": "904a901ab9f074339bafc5912a5ad6c6f9f8a702d8d3559523c13253b55601f3",
      "size": [
       521,
       911
@@ -5246,7 +5132,7 @@
     "twirl-forming": {
      "baseline": 901.0,
      "prone": false,
-     "sha": "f6336e02f9c8d356e18750a657f98f307c13086f0c134df2e7f7cc84a74ae50a",
+     "sha": "b5aa075e94b4347780d031a1c09af7aedfd73c5a6cee7c35b4448b338b3892dc",
      "size": [
       527,
       914
@@ -5256,7 +5142,7 @@
     "twirl-going": {
      "baseline": 946.0,
      "prone": false,
-     "sha": "45b8dc852b23c9583496b4649bcd6c02e6f72929cdcd073c36706d17dfd6a669",
+     "sha": "26073e588f7f04a669961d5ba4424a8f1f24d67b5913de4052d65b46941ae513",
      "size": [
       600,
       946
@@ -5266,7 +5152,7 @@
     "twirl-start": {
      "baseline": 941.0,
      "prone": false,
-     "sha": "b5313dfc332ef685527bab8c9ef3274edb9f2085476835a4dbe97daa7609520e",
+     "sha": "309d241edd944e21fea0d97d3a08960a2226b24ab6bc195228886e8b8efac78c",
      "size": [
       603,
       947
@@ -5290,7 +5176,7 @@
      "reading": 1.1,
      "scale": 1.1,
      "scaleSrc": "noise",
-     "sha": "024f0fe20098dca8e3b8fbeacae26c99f101895e4715b2550152088c443f4954",
+     "sha": "2c080f946f232c9f69efbf6dd231a31dfb396f565ace131f0f2df2b33ea6d5ab",
      "size": [
       387,
       1211
@@ -5334,7 +5220,7 @@
      "reading": 0.817,
      "scale": 0.817,
      "scaleSrc": "reviewed",
-     "sha": "e95991ecf640b6febcef40f576dd8a217bc51591b9d0c00a3fa601fef325be89",
+     "sha": "4ec783c4c257603a026707d3343276e180865939e3a2bb9318cd473589e3a327",
      "size": [
       817,
       1124
@@ -5342,12 +5228,12 @@
      "stance": {
       "row": 1124.0,
       "src": "silhouette",
-      "x": 520.0,
-      "x0": 330.0,
-      "x1": 710.0
+      "x": 519.0,
+      "x0": 318.0,
+      "x1": 720.0
      },
      "standing": true,
-     "stature": 0.825
+     "stature": 0.826
     },
     "follow": {
      "anchor": [
@@ -5366,7 +5252,7 @@
      "reading": 1.061,
      "scale": 1.061,
      "scaleSrc": "reviewed",
-     "sha": "e47574ff182332db0bb1bdffe1cf60637b3591b89669c318f5bc38298a7974ab",
+     "sha": "2b3aacd2f9db14d6b31a655915f4a417bbe01af88e4e14b2e0d56229b175d1e3",
      "size": [
       801,
       719
@@ -5379,7 +5265,7 @@
       "x1": 612.0
      },
      "standing": true,
-     "stature": 0.675
+     "stature": 0.676
     },
     "idle": {
      "anchor": [
@@ -5396,7 +5282,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "122069df90fafe04c09461312508d3878dbb495455026a4dd0f2ce2622535042",
+     "sha": "248b3b8d5cc133c3512b17de17227d87b4c9ba192d44f94df65dd8ced6b0e42d",
      "size": [
       640,
       1129
@@ -5428,17 +5314,17 @@
      "reading": 1.157,
      "scale": 1.157,
      "scaleSrc": "reviewed",
-     "sha": "4b9c9c07f751680e1f9f7b8fbd5a0f3d77da707926c265e96bb123ab0a2b1337",
+     "sha": "d6617752ad3417da86dfefbbf464877aa85bab8977421643bc99d7a0d1249c36",
      "size": [
       575,
       846
      ],
      "stance": {
-      "row": 830.0,
+      "row": 826.0,
       "src": "silhouette",
-      "x": 268.0,
-      "x0": 154.0,
-      "x1": 382.0
+      "x": 265.5,
+      "x0": 153.0,
+      "x1": 378.0
      },
      "standing": true,
      "stature": 0.859
@@ -5460,7 +5346,7 @@
      "reading": 1.115,
      "scale": 1.115,
      "scaleSrc": "reviewed",
-     "sha": "6b67d6fc5ec63bc7ea1f8faf98dbef139d13f7bb486bb8789b6d06ad1d6b44a5",
+     "sha": "8a93ceacf2647d2d1f077eab5d53fa9c9404b68d898b021cbf3e2810e1386e78",
      "size": [
       663,
       951
@@ -5504,7 +5390,7 @@
      "reading": 1.152,
      "scale": 1.152,
      "scaleSrc": "reviewed",
-     "sha": "99ddf3db584c9a9891ea55594082ba4056d7d966048c9891535b68da3c685eb4",
+     "sha": "a1e090262055d570f64a0fef8d201c344e7e606ab862c122931821fb2aac567e",
      "size": [
       695,
       882
@@ -5536,7 +5422,7 @@
      "reading": 1.033,
      "scale": 1.033,
      "scaleSrc": "reviewed",
-     "sha": "a7660c3602818168c6abe899f3745f72345cd32d38d1ca7d821af832e74652e6",
+     "sha": "98b78b45ad5a339ecb790ca700704c10de58e404ab4c29ee7a3ef3f25effb400",
      "size": [
       309,
       953
@@ -5568,7 +5454,7 @@
      "reading": 0.911,
      "scale": 0.911,
      "scaleSrc": "reviewed",
-     "sha": "e4b1b955ac11c5ad643642d395ef5e63681eed70c0a46f820a6f0b87800d0cba",
+     "sha": "084036165df91056e7427acbdef01e2a0cb2dbd792f2add11c8ec5c5dec58d8a",
      "size": [
       672,
       1190
@@ -5581,14 +5467,14 @@
       "x1": 444.0
      },
      "standing": true,
-     "stature": 0.908
+     "stature": 0.907
     },
     "hurt": {
      "anchor": [
       606.0,
       300.0
      ],
-     "baseline": 1078.0,
+     "baseline": 1076.0,
      "current": 0.66,
      "gate": {
       "reading": 0.646,
@@ -5604,7 +5490,7 @@
      "reading": 0.646,
      "scale": 0.657,
      "scaleSrc": "gated",
-     "sha": "c8fcb8f5370fe77aea90b355e81df364366078acbcd3be4cd997365324d07ff8",
+     "sha": "052bcd7d51c168daf4f847cce145ebbf92e5b231d805be02e32d48be4b3be98e",
      "size": [
       823,
       1078
@@ -5634,7 +5520,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "c163b7191230cc80c446475e6ce721ca53363d08f2e1804a464d58a450c6d406",
+     "sha": "ce91be16be4b983a1aea2429446bd083be7b384f3ff2b878e4cea4aa288798b8",
      "size": [
       344,
       1194
@@ -5666,7 +5552,7 @@
      "reading": 0.988,
      "scale": 0.988,
      "scaleSrc": "reviewed",
-     "sha": "ce42cfeba40c7b8aaef4b288f708c42589389e40c2266a37416cf80fccd2b08c",
+     "sha": "95fda356b6f24eedcf31666e79192d8b383ec1ed4ce6e0cb74683d2d96d9314b",
      "size": [
       434,
       973
@@ -5698,7 +5584,7 @@
      "reading": 0.994,
      "scale": 0.994,
      "scaleSrc": "reviewed",
-     "sha": "ef94d717b09a52489bd20aba78a8edff4dad57ff02aaf732f90c8191afe5cec6",
+     "sha": "7528db924183639cdcc7ac3e73c3ef78bcbfc2ea714d21e00fc25ace282dbbce",
      "size": [
       1216,
       335
@@ -5709,7 +5595,7 @@
     "twirl-end": {
      "baseline": 1114.0,
      "prone": false,
-     "sha": "1f10b248fe8c35b97ba06105fe641098844e5926a4842a1b4bae6019568b6370",
+     "sha": "75838123c0ff61f244e0ba82e8e9e22eee723aed7273aee1d23d7d624f12da30",
      "size": [
       527,
       1128
@@ -5719,7 +5605,7 @@
     "twirl-forming": {
      "baseline": 1117.0,
      "prone": false,
-     "sha": "73c2ce3ebf298dbdc7c7ecdeef4e101ca66ac7d8ae4696e75e181a3c27a04f35",
+     "sha": "8711befb99fe7cc73e339e5fed41e946339717c2611b4193bbfaa1777a43ba33",
      "size": [
       508,
       1126
@@ -5763,7 +5649,7 @@
      "reading": 1.024,
      "scale": 1.024,
      "scaleSrc": "reviewed",
-     "sha": "94feef4e1d67bd05cf703c6c1c7d6b07029601836e2e4d29c49c46895481bd26",
+     "sha": "3218768bfbfb7cbe392b745411c03883fdb977b3ff05cdce6ddaeb21ebcc5124",
      "size": [
       596,
       1087
@@ -5776,7 +5662,7 @@
       "x1": 502.0
      },
      "standing": true,
-     "stature": 0.93
+     "stature": 0.931
     }
    }
   },
@@ -5807,7 +5693,7 @@
      "reading": 0.906,
      "scale": 0.906,
      "scaleSrc": "reviewed",
-     "sha": "ab693d110c993553bfb0f9cf2df451387058d9bc435e360bcf015d02aaabb25d",
+     "sha": "2571bc4279e03a61ed1a6488f81b7da10a697150636bcd3589cae08219fe5a2d",
      "size": [
       751,
       858
@@ -5839,7 +5725,7 @@
      "reading": 1.165,
      "scale": 1.165,
      "scaleSrc": "reviewed",
-     "sha": "f66b21dca335d29d7d67f18ecbd90e3f15674c70ac451e8032832946d314c0b6",
+     "sha": "8c5109070d8c1b6d1e23d857cbf4575651754f324ecfa96c17128a14bfc263ef",
      "size": [
       426,
       1155
@@ -5871,7 +5757,7 @@
      "reading": 1.066,
      "scale": 1.066,
      "scaleSrc": "reviewed",
-     "sha": "5f4f5543a0b8720acd6e54ac5c6f93b20e1e860c2c2543e5619692802b7c9e15",
+     "sha": "14b271f41d47adbbeda19e0fcfb30d7e7ec47e6866f6c974316cbbeeb4092c7a",
      "size": [
       749,
       800
@@ -5903,7 +5789,7 @@
      "reading": 1.127,
      "scale": 1.127,
      "scaleSrc": "reviewed",
-     "sha": "e2fe3ee8ea254fad7e5d6460479ec4f47e55b557b435362e8c8f7bad9b1aa14d",
+     "sha": "3adf172394e92db66b41c9d727878bf1a5759e118828030ae8e6cc2c953a4c13",
      "size": [
       567,
       812
@@ -5933,7 +5819,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "e7b73d268f81a5486c40af70bc4753226e32c2cf4b101e94003793cff71fa035",
+     "sha": "5cc74d35de72c2e724e0f46ecc34fa4c8f98e7dadc459888abe67210c7d870cb",
      "size": [
       735,
       1181
@@ -5965,7 +5851,7 @@
      "reading": 0.933,
      "scale": 0.933,
      "scaleSrc": "reviewed",
-     "sha": "b724198eefe4b51c5b626d055f5226a042eca34cd297b3fa3f21b3e0d47f3c09",
+     "sha": "1a2a6f070a002292ae070ff736f4284aa55fcf8c3b501d8380b95b14ac0e9802",
      "size": [
       553,
       958
@@ -5997,7 +5883,7 @@
      "reading": 0.987,
      "scale": 0.987,
      "scaleSrc": "reviewed",
-     "sha": "6af0cf2758a914cda09195074913ac7a827170b52fe7267541e9d0e3dbd0f0e9",
+     "sha": "2adddf3fb80e8f69230e189ec6740881432b14df8e45dd341a444e406128339b",
      "size": [
       1170,
       391
@@ -6022,7 +5908,7 @@
      "reading": 0.962,
      "scale": 0.962,
      "scaleSrc": "reviewed",
-     "sha": "c58c56ee4f85290db48c18f8ec7187fa98e64bc4fefe086b410ab36cd09b9127",
+     "sha": "0e1f751e438d817319f796c948afb35ec8a695c5a99cab5f51bb26ea68e7ed95",
      "size": [
       593,
       798
@@ -6040,7 +5926,7 @@
     "twirl-end": {
      "baseline": 988.0,
      "prone": false,
-     "sha": "7dd99f3e4cb481330837dd6e53e9fa9d76fc529c47c3d4fdfd1611d472040a81",
+     "sha": "44b3b99427cc719ae65cc4b15b754279e648ca62102c2c256072c1433a98a039",
      "size": [
       639,
       997
@@ -6050,7 +5936,7 @@
     "twirl-forming": {
      "baseline": 981.0,
      "prone": false,
-     "sha": "66e16f94831cb3eb400e231043c419c68cba6712c252dd1ab5eacd2545177fd6",
+     "sha": "3d78158d4088f3e170736362e6b48706e9d6d6233799013a790389e18d8f55d9",
      "size": [
       631,
       991
@@ -6060,7 +5946,7 @@
     "twirl-going": {
      "baseline": 974.0,
      "prone": false,
-     "sha": "daaa38ca913799f81240fe4e70a7d6e198ca7d774847f07150fed853d701c1b9",
+     "sha": "6d9185b5acada1a3ece79bd40b7dbed7770c18f7dd13c2b4766831aff0c88128",
      "size": [
       571,
       974
@@ -6070,7 +5956,7 @@
     "twirl-start": {
      "baseline": 967.0,
      "prone": false,
-     "sha": "d1febf0d666c3a203f37a5c8f706b5c11f71355adfa0f86dd322214ca76017fa",
+     "sha": "b1dfdaaeb9513e033f2ae6dfe731975fdb62ec81195b3754df53aee0cdad7bb3",
      "size": [
       575,
       975
@@ -6094,7 +5980,7 @@
      "reading": 1.159,
      "scale": 1.159,
      "scaleSrc": "reviewed",
-     "sha": "827c3322959306cdbd4ad646b928c2efcc3521aa26e226cf7bf00634eb9c6886",
+     "sha": "086e4af3906679bc6a01d149141341984b1039eeab854d406e51ab0b3dcf20ff",
      "size": [
       346,
       889
@@ -6138,7 +6024,7 @@
      "reading": 1.042,
      "scale": 1.042,
      "scaleSrc": "reviewed",
-     "sha": "19079342ab7685542eba798cc105d34c1120417c69c8b4a72c28a923d13913d2",
+     "sha": "682cc7cb7a9f5e358f0e732a36258aada55be14620f47fa76734030a60a3a60c",
      "size": [
       937,
       840
@@ -6170,7 +6056,7 @@
      "reading": 1.185,
      "scale": 1.185,
      "scaleSrc": "reviewed",
-     "sha": "3a0dde295dcb9764b23a20b3367b6d3c9f7cb69f317fe140ab369521bdd7e0dd",
+     "sha": "c3442ba9930a238b5634cab47b6bf167b9457bb00786aae252e051b629fc3bc2",
      "size": [
       587,
       961
@@ -6202,7 +6088,7 @@
      "reading": 0.908,
      "scale": 0.908,
      "scaleSrc": "reviewed",
-     "sha": "a6f76d9a71035d14cd8c164a00af519290e5ce2b6a48db733178f0e8491948a4",
+     "sha": "f23f998b5fd3f242e3aed39ca4ed9bde099040235a4a8d4fcc1b2f82bde7edf4",
      "size": [
       701,
       1003
@@ -6210,8 +6096,8 @@
      "stance": {
       "row": 988.0,
       "src": "silhouette",
-      "x": 352.5,
-      "x0": 37.0,
+      "x": 352.0,
+      "x0": 36.0,
       "x1": 668.0
      },
      "standing": true,
@@ -6234,7 +6120,7 @@
      "reading": 0.986,
      "scale": 0.986,
      "scaleSrc": "reviewed",
-     "sha": "45814afa4ce141aa317c852d0949a06f586c2ca144f6b879ef33082d20d8222c",
+     "sha": "f4cdb5d65bef20ae3991ef12f8b6b3136ed3f0df3e3a77739f4bec69647f03c1",
      "size": [
       605,
       1169
@@ -6264,7 +6150,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "bc1d95e3f81a8a635e94ec67d53e97fe6acbe3c6b7383e8086992199cd963d46",
+     "sha": "6b2565786c85283f2e7bd29b910b6a874f6fcc7a106ea41ec752c2f6e9bfa8f9",
      "size": [
       408,
       1180
@@ -6296,7 +6182,7 @@
      "reading": 1.035,
      "scale": 1.035,
      "scaleSrc": "reviewed",
-     "sha": "47418824bc4d9c25bfe8b91a9b2727a9e11142ed16cf9f013b431ef4f9db0bea",
+     "sha": "06b68c4a7f615a1107f5343d0efceb5dd387398c9d751fb6792769376fad6727",
      "size": [
       649,
       865
@@ -6328,7 +6214,7 @@
      "reading": 1.042,
      "scale": 1.042,
      "scaleSrc": "reviewed",
-     "sha": "87ff28e2c69338ff5e8c0ff973449eeed475cdff777caccf2ae8af56ebe81bc4",
+     "sha": "745b015ce9525b6ea935ee94fe080252ad87fa9ab79d797b8dd8577e4d9153fa",
      "size": [
       875,
       842
@@ -6360,7 +6246,7 @@
      "reading": 1.042,
      "scale": 1.042,
      "scaleSrc": "reviewed",
-     "sha": "87ff28e2c69338ff5e8c0ff973449eeed475cdff777caccf2ae8af56ebe81bc4",
+     "sha": "745b015ce9525b6ea935ee94fe080252ad87fa9ab79d797b8dd8577e4d9153fa",
      "size": [
       875,
       842
@@ -6392,7 +6278,7 @@
      "reading": 1.154,
      "scale": 1.15,
      "scaleSrc": "noise",
-     "sha": "7b86fbfac490aa2332255d02c2dae868f50de8dae200af09a61c7ba681a57936",
+     "sha": "b00ac22583e9d75c29ad51d248b2b1bf2b3d7574ea0ae1d48275599f44639a02",
      "size": [
       769,
       1098
@@ -6424,7 +6310,7 @@
      "reading": 0.87,
      "scale": 0.87,
      "scaleSrc": "reviewed",
-     "sha": "ca8053448ed3cd6d102d0b1e1fa962ce842061e18a13fdf6cfa167a0f6ce1c33",
+     "sha": "a66a52b9b69e88cfb66f500b49d4720fa6bd9ad692fefe8a8b1e3a7c2090893c",
      "size": [
       446,
       1197
@@ -6442,7 +6328,7 @@
     "twirl-end": {
      "baseline": 1172.0,
      "prone": false,
-     "sha": "1a56c99c4a095ed1b29e908f1133916e3f6900ebc88b0eda8380d4a1a12816e3",
+     "sha": "e0c0682d44bbe3a424a8898c570ee5d1788f343b9771673aa37f76128061c55d",
      "size": [
       327,
       1188
@@ -6452,7 +6338,7 @@
     "twirl-forming": {
      "baseline": 1163.0,
      "prone": false,
-     "sha": "7ca64e6529ab1dd3a2b74f8611ed6566acd3faeda44ebd22d65be131f6b825c6",
+     "sha": "da8290ed7a3b2107bb0dbe07285ac6a89ea56a989f0226784eaef905d367229f",
      "size": [
       327,
       1180
@@ -6462,7 +6348,7 @@
     "twirl-going": {
      "baseline": 950.0,
      "prone": false,
-     "sha": "dc0693cf53783a0d2f154739e95b1121e1a5794f9df4735b3017500fc3a3032e",
+     "sha": "7cd76c55339977143e63bcfd72ef5b6ee4c0ecbb200432f9f5bc9546936ba7ea",
      "size": [
       511,
       961
@@ -6472,7 +6358,7 @@
     "twirl-start": {
      "baseline": 952.0,
      "prone": false,
-     "sha": "6d6c3852ef064f87edc2e22ba7ace2ca086734a0d1a3849f2fac90fae5686f9e",
+     "sha": "6517f283c2abe79d5afa5d9f355a1624648845cac3fdd4f7fc66e2f6690adadb",
      "size": [
       518,
       965
@@ -6496,7 +6382,7 @@
      "reading": 1.027,
      "scale": 1.027,
      "scaleSrc": "reviewed",
-     "sha": "cb8a42412bbfdc6f495f53e266e170b442ee0bd76cac59ea896a6def2c637d60",
+     "sha": "031424726fbebe653a602c8d96e88b27c1bbf1acac644e970058cf832c5ce22a",
      "size": [
       556,
       1203
@@ -6540,7 +6426,7 @@
      "reading": 1.133,
      "scale": 1.133,
      "scaleSrc": "reviewed",
-     "sha": "e0f127e9305feac4856eed4f2dad971c2536953362f385f2161925c9315c9279",
+     "sha": "4e15b46b001dae462b8f43de246c093596d7d654fc50a72431c0ebdd4f9454ee",
      "size": [
       700,
       1120
@@ -6572,7 +6458,7 @@
      "reading": 1.283,
      "scale": 1.283,
      "scaleSrc": "reviewed",
-     "sha": "1566e4551d0f111f4452905cf2590512fccb144c9abec0d20c81b74196a08aec",
+     "sha": "01cf83747b9ad25d95e3bb2758e67a06750bcf12173e3b0417146bbe5c154f7f",
      "size": [
       801,
       776
@@ -6602,7 +6488,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "b3b533d24a05f23b9dc70e22852aa2944c627b524390fd4c101b4b012e9a941a",
+     "sha": "391084382d681f3e5577c0198f382c4efa763710413b6934feefb135f030d0ba",
      "size": [
       820,
       1140
@@ -6634,7 +6520,7 @@
      "reading": 1.226,
      "scale": 1.226,
      "scaleSrc": "reviewed",
-     "sha": "f8da14196bddada76b378aa5d22f05ac0918960c17819535edddc5c2441dacd3",
+     "sha": "12b4554d375751b4a35e9a966c98aad01a01a1d655ad38b22fbe41a6c431fb8b",
      "size": [
       719,
       876
@@ -6647,12 +6533,12 @@
       "x1": 413.0
      },
      "standing": true,
-     "stature": 0.934
+     "stature": 0.933
     },
     "twirl-end": {
      "baseline": 1161.0,
      "prone": false,
-     "sha": "e46060f777f2f6ce160b112c76522817e1affbdac33ab1fd52f65a7f2769e788",
+     "sha": "c8a3cf7b18b62057bfc4aaa943a92614b249ff08dbeb72d809c3697eed5ee7b3",
      "size": [
       769,
       1177
@@ -6662,7 +6548,7 @@
     "twirl-forming": {
      "baseline": 1171.0,
      "prone": false,
-     "sha": "fa396f34a4e5a72b97964726e4f008b2b07e3deb3e5a88c1e55e6816c60a69c0",
+     "sha": "07557613d34493903af5815e7e7326246df56b9a1838fd1e8b7a66a0b1a55510",
      "size": [
       710,
       1188
@@ -6672,7 +6558,7 @@
     "twirl-going": {
      "baseline": 910.0,
      "prone": false,
-     "sha": "f86146a0e633848a8e5b7c822bc449a893cde85043b51e52d940eaed459538e5",
+     "sha": "b6d33301c8d2e83ccb63c5790b164bee1afec95865c7f4fb4b1dfb15688283ac",
      "size": [
       508,
       910
@@ -6682,7 +6568,7 @@
     "twirl-start": {
      "baseline": 895.0,
      "prone": false,
-     "sha": "84e9fa851817bc20cf551cee89aeea2759e7bf036fee4d7215514fb472f7efb3",
+     "sha": "2a7f8ad66d2dd68e29f2c8bc36a0970f1e1330e2b8023f95e1e492fa8cfc5339",
      "size": [
       501,
       912
@@ -6718,7 +6604,7 @@
      "reading": 0.734,
      "scale": 0.734,
      "scaleSrc": "reviewed",
-     "sha": "26875750ee0df24d5407af5d86fdb72da6c132f878b605b63504ddebb6ae004d",
+     "sha": "309579372678765ad7e3751fd0d66b7cd7d922bc2552fae114a0eb3f745000ee",
      "size": [
       772,
       1204
@@ -6750,7 +6636,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "870f496eed3f57dc946ac6384f5970abdfb9e0b8b776eb36b6126d659b2055da",
+     "sha": "6bd1104d72747b835f6c5ce87088cbfa232893f86e9e04641eb31d528997a960",
      "size": [
       475,
       1069
@@ -6758,8 +6644,8 @@
      "stance": {
       "row": 1054.0,
       "src": "silhouette",
-      "x": 195.5,
-      "x0": 66.0,
+      "x": 196.0,
+      "x0": 67.0,
       "x1": 325.0
      },
      "standing": true,
@@ -6782,7 +6668,7 @@
      "reading": 0.759,
      "scale": 0.759,
      "scaleSrc": "reviewed",
-     "sha": "429211ffa043e1c46596da46c9b0871455b3cd90b4e39ed53963c6b0e0be3eeb",
+     "sha": "b45a8569879442ccc9d656e79c134ea59a18767c02b3715f7923f20b8748d068",
      "size": [
       476,
       1158
@@ -6814,7 +6700,7 @@
      "reading": 0.754,
      "scale": 0.754,
      "scaleSrc": "reviewed",
-     "sha": "4fefb6aa5d829d5674981a8cbdebe9a63abbac20ccfa88a2526ca8e5b7132c26",
+     "sha": "3ff4e27fd004d79fc7958a602f3d6e87aa8395b80fe615028e9efbefef118678",
      "size": [
       711,
       911
@@ -6822,8 +6708,8 @@
      "stance": {
       "row": 900.0,
       "src": "silhouette",
-      "x": 73.5,
-      "x0": 27.0,
+      "x": 74.0,
+      "x0": 28.0,
       "x1": 120.0
      },
      "standing": true,
@@ -6846,7 +6732,7 @@
      "reading": 0.9,
      "scale": 0.9,
      "scaleSrc": "reviewed",
-     "sha": "ee531b67e359a2e3425137aee7f56c9790d84eeb77e1b6f426ba00ccc4000582",
+     "sha": "5abd43967067da358b2225df9f6ebe56e51e182e2df4b2e4fa57f99ca333d040",
      "size": [
       419,
       1151
@@ -6876,7 +6762,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "79b1864e6ff2a5af8d5f1ad7890f38074ff950d50f187c28403541dfc7644b80",
+     "sha": "05160289d4124f02ee7a58fd3b796a499797fa7bb90a16bd636bf8de8043fc43",
      "size": [
       648,
       1120
@@ -6908,7 +6794,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "04ed0b6484cdf05350a36e4d2357e7598cde2653d75a5db588cc356bd95887e0",
+     "sha": "ac9179da5b4db40fbfd7eeff05c73a19ba6dc2febf9103335e3710b47c787d25",
      "size": [
       400,
       1159
@@ -6940,7 +6826,7 @@
      "reading": 0.56,
      "scale": 0.56,
      "scaleSrc": "noise",
-     "sha": "91256f0fdb249115b21425f412b5be304bf34687f9e9a90dfc20c4f17328e7a1",
+     "sha": "18dc14821119c5d33a2f626410d46ce118a01a21323b545fb5e5da4d42521854",
      "size": [
       1216,
       467
@@ -6965,7 +6851,7 @@
      "reading": 1.1,
      "scale": 1.1,
      "scaleSrc": "reviewed",
-     "sha": "67ecd532e81a7cec50de96b2c38a0c4fea7a12f9a5521cd3c3e99de6fe3229cf",
+     "sha": "3885a2e7e1a956b41e3b30175695b05ec4674db8a29628d00e02f30b4dc00941",
      "size": [
       592,
       1155
@@ -6997,7 +6883,7 @@
      "reading": 0.8,
      "scale": 0.8,
      "scaleSrc": "noise",
-     "sha": "cab78a3de17182c18bbe1a1226def5ddc6d60666d4e96b9ce653a7131128ccb7",
+     "sha": "847466dd3de15257909917be89792571ed245396a525ac55e368210835820eea",
      "size": [
       463,
       1192
@@ -7029,7 +6915,7 @@
      "reading": 1.1,
      "scale": 1.1,
      "scaleSrc": "reviewed",
-     "sha": "6458bc3ed6bdb9b3a006b3ad42ffa99c7d0b5afe6789eac9c3cbf3d4f0b50c08",
+     "sha": "6c752a06c0c0b79eb629c1d874565cc81b9fb13b4937854486c58f3a9dbbc73c",
      "size": [
       627,
       1052
@@ -7065,7 +6951,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "06b19d16a74e11612a1840403ba2712423392e795f78e31cabf3b310a37a7a5b",
+     "sha": "f18615fa52d690dbac1016862d23bbe547e8439c454caaa4f12943347078cee2",
      "size": [
       665,
       1006
@@ -7109,7 +6995,7 @@
      "reading": 1.08,
      "scale": 1.08,
      "scaleSrc": "reviewed",
-     "sha": "b61577f33e2474924bf80342fbbbf0c76922ff06c980aed7191c3d36949b2aa4",
+     "sha": "c1b00b676cdbaa0a2da54e4c9c55b455d596ed6fe17b6f8589621d857b8d0f65",
      "size": [
       748,
       941
@@ -7141,7 +7027,7 @@
      "reading": 1.039,
      "scale": 1.039,
      "scaleSrc": "reviewed",
-     "sha": "1bc78194168d9e45223bc4bc96f243b383e0545831a860bf6caca61c13b735bc",
+     "sha": "64e6c3fd607a7aeedc4358253c899c402d885df9fdebd5452645e7dafd1d5456",
      "size": [
       439,
       1186
@@ -7173,7 +7059,7 @@
      "reading": 1.08,
      "scale": 1.08,
      "scaleSrc": "noise",
-     "sha": "cdbf864aaee28dd7c6f8add5f49445c477c9dccac0355f98ce95c765a1ec7cc8",
+     "sha": "7cce23a451cddf6bbb67b56afba0081f7bc27b6b6f0ec4787ed64b4c7eb6944e",
      "size": [
       541,
       798
@@ -7203,7 +7089,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "9175e5b7d9d961900e51888721b501b7228b2d9322a3979016753da5f4632b63",
+     "sha": "c0b29b8bb773d8c6459badfb8e85d47ca8ebbdbc62a5e10bb35d8959f4cda202",
      "size": [
       541,
       1194
@@ -7235,7 +7121,7 @@
      "reading": 1.223,
      "scale": 1.223,
      "scaleSrc": "reviewed",
-     "sha": "7ed0cd7b2616e2ede9dec2e4fd5fce5aa9e167da35dc9ae5def976e554063359",
+     "sha": "2b64256ad7b6e233aa0a65614be4657869b8242037eacafc32a747b5d48970ad",
      "size": [
       464,
       934
@@ -7267,7 +7153,7 @@
      "reading": 1.303,
      "scale": 1.303,
      "scaleSrc": "reviewed",
-     "sha": "6a484e93f6e18682d0941b3b7190ed035bd884d1b0974813b8b59920a0bf4f51",
+     "sha": "a800fb1dbca2481b1f19bfb016676102f8a2cb6422212d15a86147e7fa5c0c1b",
      "size": [
       496,
       869
@@ -7285,7 +7171,7 @@
     "twirl-end": {
      "baseline": 1174.0,
      "prone": false,
-     "sha": "c54e74c696cfba437f8ca240902f7d4fda2dbecb49b9b0588ebd2b95404f0039",
+     "sha": "4b85d74f26da1c76ceb1012d79c8275d356c3c2af90a5acce0487ed16153ed90",
      "size": [
       514,
       1190
@@ -7295,7 +7181,7 @@
     "twirl-forming": {
      "baseline": 1178.0,
      "prone": false,
-     "sha": "6ef40775681af2f9a6b7a19200dc83c1a943d01c83a493544800fb9a2b0f7fda",
+     "sha": "08a1c8dc7fc3e4afce532217f002e57a9c81f72ed31c79ba5e9dbea4f2bca569",
      "size": [
       515,
       1195
@@ -7305,7 +7191,7 @@
     "twirl-going": {
      "baseline": 880.0,
      "prone": false,
-     "sha": "7daca39c50f1e35b414a0c629514aaa5a1b4a71ac25aeed3c5bdb6b6246e6bc0",
+     "sha": "4036c84b4cb38900b21934a167bbfd5c6dadcb380ade11c9b21cc2e0ffad4e44",
      "size": [
       598,
       898
@@ -7315,7 +7201,7 @@
     "twirl-start": {
      "baseline": 869.0,
      "prone": false,
-     "sha": "017849aedd0c76f8dbb04b5ea809cc58dcfa94ff55830cae4b746fd38ee19366",
+     "sha": "289b499d74c7204a2e631785b87b37b44093013d375d16f2aae4063e3cc815fc",
      "size": [
       601,
       885
@@ -7339,7 +7225,7 @@
      "reading": 1.266,
      "scale": 1.266,
      "scaleSrc": "reviewed",
-     "sha": "2c3ab09b02485b7593cfebe715a93659b2bb101e16fad3e7aba227b585f6a925",
+     "sha": "cd0ba18d6ff8493dfba4f1e2267cfd6d0b38a6314a1fb844d4e481bcf5ebc039",
      "size": [
       318,
       870
@@ -7383,7 +7269,7 @@
      "reading": 1.1,
      "scale": 1.1,
      "scaleSrc": "noise",
-     "sha": "ab2fa9e7e1b6a81fd492ad781e9e3efd95a3f0e89446045565f4ea202a609962",
+     "sha": "b9daa0eeea462b3b28d97ba7dfb09bd8cfb7b1a1e0732dc1b0cc0a24a3dd149f",
      "size": [
       600,
       1055
@@ -7391,8 +7277,8 @@
      "stance": {
       "row": 1024.0,
       "src": "silhouette",
-      "x": 274.5,
-      "x0": 137.0,
+      "x": 275.0,
+      "x0": 138.0,
       "x1": 412.0
      },
      "standing": true,
@@ -7415,7 +7301,7 @@
      "reading": 1.04,
      "scale": 1.04,
      "scaleSrc": "reviewed",
-     "sha": "abbaa7329360da0404fd2b6938af8d64e7ce217535ed2e8ff9f405802574fc6d",
+     "sha": "860376979ce8b05023422de284a598fb379c316345269e15c982d24262239aa8",
      "size": [
       672,
       1014
@@ -7428,7 +7314,7 @@
       "x1": 121.0
      },
      "standing": true,
-     "stature": 0.865
+     "stature": 0.864
     },
     "idle": {
      "anchor": [
@@ -7445,7 +7331,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "762909ab40e2fa74b1b8d935e841d5b6f38a3ca603ad49e797347c9c8152ee0c",
+     "sha": "1652fe2a56b28fbe75804f6b2745dc9813d78056084d26cae2958ea6ae0f78ad",
      "size": [
       555,
       1215
@@ -7477,7 +7363,7 @@
      "reading": 1.184,
      "scale": 1.184,
      "scaleSrc": "reviewed",
-     "sha": "39bc005267f9890461db166f04c5e7f130f4be31814f34516d17a7e585498e69",
+     "sha": "7b106f4c8b1f1ea4cd9d0f246f21895503be052b268863019833b06195045462",
      "size": [
       456,
       903
@@ -7514,7 +7400,7 @@
      "reading": 0.573,
      "scale": 0.573,
      "scaleSrc": "reviewed",
-     "sha": "e2c3f9dbf35eb1bbdefe3e83074bb313d85b80eabafe6dc229491bb85fb2202b",
+     "sha": "f63f31abd14072d812131d7b68c67a3a98ef0cdee1b1706f9751552c418785df",
      "size": [
       832,
       1106
@@ -7558,7 +7444,7 @@
      "reading": 1.255,
      "scale": 1.26,
      "scaleSrc": "noise",
-     "sha": "b896affad1f3fc4fe69951369270d8c173eac4c167fbe0ca0d2089509fc4194b",
+     "sha": "25445b09aa73ab8dce7ab2fb5c27a8ddadbafb6d4ae77e0e96664ec73a90f4e1",
      "size": [
       954,
       983
@@ -7590,7 +7476,7 @@
      "reading": 1.04,
      "scale": 1.04,
      "scaleSrc": "noise",
-     "sha": "a1007f9b73912bacc4785ddf190a0502acea1f4880c946656d1eb9aa1b9deb91",
+     "sha": "5090d504649ec001f59a450bc10f6973384559c2453afd3f7a7b963f2b8a734e",
      "size": [
       583,
       1216
@@ -7622,7 +7508,7 @@
      "reading": 1.205,
      "scale": 1.205,
      "scaleSrc": "reviewed",
-     "sha": "a6f2f0f651dffc86b1cff1b1bf372e96e418a7b6e9f783a0171c468f804b976d",
+     "sha": "d6684b0d79413ab25e9f0e8d8ada08afdb52a62b8a7a4c7d37ad6f641116d373",
      "size": [
       653,
       1215
@@ -7652,7 +7538,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "852ae4f8ca4c4cae164ab8852e8b2551ce106c33aaeea2e54458b8ad1e5a3eea",
+     "sha": "fbe93a4f88ecf63585aa6c4a20edb33eb1ba0c8f453a41af720eb240f44072d0",
      "size": [
       683,
       1190
@@ -7684,7 +7570,7 @@
      "reading": 1.097,
      "scale": 1.097,
      "scaleSrc": "reviewed",
-     "sha": "88bac3942f7b29f8c54f2d3a1bcc0910914e40b8a3359503922ce5eaad30216c",
+     "sha": "dc7b5271343c79331cbcff220ac8f22f28502f2921d3e0d43d43d203f17bf5d1",
      "size": [
       608,
       1074
@@ -7716,7 +7602,7 @@
      "reading": 1.15,
      "scale": 1.15,
      "scaleSrc": "noise",
-     "sha": "d3f9cc048d0666fafe71d342831257d7fc2a200e401aedb99ce719444c2cf2f9",
+     "sha": "1cc4bd5ebb3154dabdf3f3bbc4b8139abbf0a3835a9270b3dc91bdce9f53ea8d",
      "size": [
       1138,
       428
@@ -7741,7 +7627,7 @@
      "reading": 1.249,
      "scale": 1.249,
      "scaleSrc": "reviewed",
-     "sha": "afc9053cfb8e0252d696670fde507cb35f13b957e487ef33762e7bdbb29f9d6e",
+     "sha": "86584c3369a1d1a798cf4dfffe3c5fe6020a6c2291c39a084f80a0a9484c5e4f",
      "size": [
       787,
       1122
@@ -7759,7 +7645,7 @@
     "twirl-end": {
      "baseline": 1190.0,
      "prone": false,
-     "sha": "717b5538c723f282e4d245cec1865386c7426d9d5ee6f7d9c0fb60b95913f8dc",
+     "sha": "8ec59c077524d7e5137355f9833f5cfcdeec286306d9516db015ae2a19d8c6e7",
      "size": [
       754,
       1207
@@ -7769,7 +7655,7 @@
     "twirl-forming": {
      "baseline": 1197.0,
      "prone": false,
-     "sha": "611c624fa0890355c5a120eb3d2659fc9a908382fce50b66e39e57dca6e7edc9",
+     "sha": "d0bfc090687ccec173c7de8aaa05aac33f4feef390607c0d9d35bed087f49a7c",
      "size": [
       740,
       1214
@@ -7779,7 +7665,7 @@
     "twirl-going": {
      "baseline": 1088.0,
      "prone": false,
-     "sha": "456a61e62221756ce5aec8b6f72364b09455c309dd3286ac1cbc251e8f296763",
+     "sha": "f2426809856be532d3d07e3c767b28b2ba221c064ba9fbd122ca122d0f8645df",
      "size": [
       821,
       1088
@@ -7789,7 +7675,7 @@
     "twirl-start": {
      "baseline": 1075.0,
      "prone": false,
-     "sha": "e779b3a5fccc9c8a6fc3ac12c9017cbd082a8043e04084fa4dbad8a68c21b4d1",
+     "sha": "7d3926cb9eaf30ee860de48a7db85eafbf0aea9df7eaa0d87a8074517ed6e737",
      "size": [
       818,
       1089
@@ -7825,7 +7711,7 @@
      "reading": 0.9,
      "scale": 0.9,
      "scaleSrc": "noise",
-     "sha": "be6402a00eefb82d8864e3d0d2684c321892b7cc4a455086c17e35ce652a75be",
+     "sha": "a8d9cee74a8a8fd57cbbf031c347630f1061fd60b0db15fffa76f3d6a9c9a137",
      "size": [
       980,
       1170
@@ -7857,7 +7743,7 @@
      "reading": 1.2,
      "scale": 1.2,
      "scaleSrc": "noise",
-     "sha": "112e316ab68a2ead3d51db5e4242a820d82b1091dfcee85de4e8e89b22ff630f",
+     "sha": "ce9ecdef063c56e9aa8905e0d86fe2ab4a7ea0fdf0ce8484b48f824f13c77219",
      "size": [
       386,
       1163
@@ -7889,7 +7775,7 @@
      "reading": 1.2,
      "scale": 1.2,
      "scaleSrc": "noise",
-     "sha": "1ee97fab022609c47dc00ebe0bfab745973230d5b129da382234117ee4510d23",
+     "sha": "97899f5b1d2686111ef84ddbc7fb472e3a0928c3dee309ecc087ea344581b2e2",
      "size": [
       695,
       1216
@@ -7921,7 +7807,7 @@
      "reading": 1.05,
      "scale": 1.05,
      "scaleSrc": "noise",
-     "sha": "0307f60cfca3343dc0d15fe468dbe1419994a933bd03238fdcd0688870f8b19f",
+     "sha": "1bddb997ffb4b20a5d28009989bef629b2401ecb3fe09952b4aaa4470bb3a431",
      "size": [
       618,
       814
@@ -7929,12 +7815,12 @@
      "stance": {
       "row": 798.0,
       "src": "silhouette",
-      "x": 250.5,
-      "x0": 37.0,
+      "x": 251.0,
+      "x0": 38.0,
       "x1": 464.0
      },
      "standing": true,
-     "stature": 0.7
+     "stature": 0.699
     },
     "idle": {
      "anchor": [
@@ -7951,7 +7837,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "3a731db4c7b80d274e8c5c2866e3833fd5f0b63b9c92288a37f99fd997c5c75a",
+     "sha": "3c40c2d7cb45f8409b1f3dd883eb49deff5c1df11e6c9890b7dc8279ef3ccf59",
      "size": [
       787,
       1205
@@ -7983,7 +7869,7 @@
      "reading": 1.15,
      "scale": 1.15,
      "scaleSrc": "noise",
-     "sha": "185a6b25e6735742c0322bb494bc1b7a746b2588156e71a82eb163e41af8b96a",
+     "sha": "94def74a2fbe487925a84c040ca5cbdb61e25bc88e944d93ecd89f6b382a2d2c",
      "size": [
       429,
       866
@@ -8015,7 +7901,7 @@
      "reading": 0.85,
      "scale": 0.85,
      "scaleSrc": "noise",
-     "sha": "86717e715f347c6b3f848577814a4e838b6d37185ff39963e068a4c3778bb1d1",
+     "sha": "26d12305db94687c879912e1e41566c3a4342c0015a0d6fbd093073b1ae27c10",
      "size": [
       1204,
       580
@@ -8040,7 +7926,7 @@
      "reading": 1.35,
      "scale": 1.35,
      "scaleSrc": "noise",
-     "sha": "c9bd3ae7a2cf90a7cc2d51b8dde30277671d48423738e5bfff9f22b94a892916",
+     "sha": "cb246aa5fa2e3728d089e3c2e5fb286ded6886846f87b82a07d82b6e8be886d8",
      "size": [
       652,
       940
@@ -8058,7 +7944,7 @@
     "twirl-end": {
      "baseline": 1193.0,
      "prone": false,
-     "sha": "4bde1a2fe9450b70093b58ab5eae581036c0e6ae83ca5dd720d5affd25381059",
+     "sha": "4e8eac974ee31a6901371beb6ff26ac2aaaff6208f0eb9778a64e98c82c94497",
      "size": [
       482,
       1209
@@ -8068,7 +7954,7 @@
     "twirl-forming": {
      "baseline": 1184.0,
      "prone": false,
-     "sha": "99321107adeb163d03401c1dc3821bc280ba93a064860faf7ecbe022f4aa4a8c",
+     "sha": "c567ae32cb009d98ccdb67dcedb56ee010b273c94e0284dffbf9fb9f33acc35d",
      "size": [
       480,
       1200
@@ -8078,7 +7964,7 @@
     "twirl-going": {
      "baseline": 899.0,
      "prone": false,
-     "sha": "748227f8ca0e4bd04c48e6bc9279d0edeea1dc71f8bfc33ac1226c99c9159683",
+     "sha": "08275eb109419a53422fef45195e2271c3bb1ddb638f12df0f071921b240982c",
      "size": [
       562,
       917
@@ -8088,7 +7974,7 @@
     "twirl-start": {
      "baseline": 889.0,
      "prone": false,
-     "sha": "cd3fe83254cfdf2bdb6048fa508118f89baa6db3aab8a8f7edd817e61dcaadbd",
+     "sha": "15976b8bb0a1a3aeaffddfbf339b8f6e8b002a7b72804ba50afe7c612bded14e",
      "size": [
       568,
       905
@@ -8112,7 +7998,7 @@
      "reading": 1.15,
      "scale": 1.15,
      "scaleSrc": "noise",
-     "sha": "d23039c689eb609003f102f2897e156897d07d268d2c32dc1c03412bea031183",
+     "sha": "d4e61c69483aa47b1cc43128051c4d0516bb51c1fcbb0b3dad9d4a8aad404620",
      "size": [
       428,
       1119
@@ -8156,7 +8042,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "448f9c942b4d2402adb71533f65da6de9e05053becca541a92d5ea2e1acb8c68",
+     "sha": "8273894ce5c3c0708c0a6fb06d078a3492a4b1185542799ee4ceb5d41ec20ab5",
      "size": [
       670,
       891
@@ -8188,7 +8074,7 @@
      "reading": 0.954,
      "scale": 0.954,
      "scaleSrc": "reviewed",
-     "sha": "41953bc670d7b30b8837cac54f1d0143e9d7082cc58fdd16933e68662d1a0af7",
+     "sha": "1d48868f96a8f14a2c00a7e1c76af3455168948ea4d8aaeecd84a786c01114f6",
      "size": [
       382,
       1044
@@ -8218,7 +8104,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "96b60c05f9c1e50930e581c143762c012070435d6ede5be1e261a98adb8e5719",
+     "sha": "cd03d69b5e692f89d8c1c27fa0e1e81438d45ca7a6d5afa084efc6029decd7b5",
      "size": [
       364,
       1062
@@ -8250,7 +8136,7 @@
      "reading": 0.92,
      "scale": 0.92,
      "scaleSrc": "noise",
-     "sha": "2f0302605de77bd52a4cbc5355afe22718b74ddab1e276071b2bcaa42f3265ef",
+     "sha": "8acb9721ba15c38bb2f922f66fdf1e95c693d99fd2f4ae8ae5c7563d1069d55a",
      "size": [
       502,
       984
@@ -8282,7 +8168,7 @@
      "reading": 0.83,
      "scale": 0.83,
      "scaleSrc": "noise",
-     "sha": "c1b975d41a0fbd285272137fa4882f4ae9e62d514f1cb29d9c267aa5cb3fb8e3",
+     "sha": "ea2a11599e7653b4c49515cd777becc0c6a48f5970ea71cc9b352cf6782c4dba",
      "size": [
       1049,
       262
@@ -8311,7 +8197,7 @@
      "reading": 0.65,
      "scale": 0.666,
      "scaleSrc": "gated",
-     "sha": "9da2f0bc503ebf87e368b168e69bf71b58b444003d0d8c343fe1742fe2b072ee",
+     "sha": "6422fb6ce162671bbbdf69710c081b95ac8f86643cee2c8456354c0c652b849a",
      "size": [
       532,
       961
@@ -8329,7 +8215,7 @@
     "twirl-end": {
      "baseline": 870.0,
      "prone": false,
-     "sha": "0ec1f05147ecbfb79609bc6ad6defa886029ded0b6cb6b7785df659872846ce9",
+     "sha": "f34ceae8792cd2813f32c76078cf6e407eb68143a4d3016b6f7f9f1a02010142",
      "size": [
       448,
       886
@@ -8339,7 +8225,7 @@
     "twirl-forming": {
      "baseline": 888.0,
      "prone": false,
-     "sha": "623ebcd4895e4ad47f7b7ac6df5c64a644ca8d08cdc62b80db43fee13985631f",
+     "sha": "17ea4f1fc3db913bb20ec1d056126d463f47911d2e2405136387fbe53b69410b",
      "size": [
       447,
       907
@@ -8349,7 +8235,7 @@
     "twirl-going": {
      "baseline": 927.0,
      "prone": false,
-     "sha": "2dca7e22632f7cbd679bbeaec82a8b137b2e450f89e1f489ed9d346228c73f22",
+     "sha": "e56e0a5b4a22e85e82c6508aacb5d583bc35058f3dfca5b0ab9ff2b16b855011",
      "size": [
       538,
       944
@@ -8359,7 +8245,7 @@
     "twirl-mid": {
      "baseline": 1200.0,
      "prone": false,
-     "sha": "2b50ee21945e31bfa4e571b702ebe5d6405836c614c38c376298c89f5d1403ae",
+     "sha": "189a7b033157f4e105ac479ad58e9dbff6f2cd8db2ec088a2f77bbb6f6956efc",
      "size": [
       784,
       1212
@@ -8369,7 +8255,7 @@
     "twirl-start": {
      "baseline": 952.0,
      "prone": false,
-     "sha": "f4b5b80a53321322dc063ea42eac2492e6309f1a02459861f97a59c83939e835",
+     "sha": "71ecd2334949e578b08a021355bc44c117121e3b6d9155d7a90d5073d796a356",
      "size": [
       539,
       968
@@ -8393,7 +8279,7 @@
      "reading": 0.8,
      "scale": 0.8,
      "scaleSrc": "reviewed",
-     "sha": "274ea60c1c847aed9494dd49cfad92c09272a2a3715652e6847377b7364b7914",
+     "sha": "dccc92628a59988a8dd83ec60d0c5384e9ab90a36e92888bb3c96153f1f88c87",
      "size": [
       327,
       976
@@ -8437,7 +8323,7 @@
      "reading": 0.86,
      "scale": 0.86,
      "scaleSrc": "reviewed",
-     "sha": "759b8dff6f31265d03f73ffc2e36766985a7794f23bded74ee2b74a82c3a6a16",
+     "sha": "d5597754986d92ab78c5216ac673640d804cf013b2dc87c0ee91ecbcbd4d1226",
      "size": [
       633,
       983
@@ -8469,7 +8355,7 @@
      "reading": 1.296,
      "scale": 1.296,
      "scaleSrc": "reviewed",
-     "sha": "e81bf5ebecb5a025c0f28ea532189e798fa1b753c6497e10325061c91fe33899",
+     "sha": "725dbfd2cb39e763cc7d1a5eebc7be01ce922088cf3e820b495a8a57f9ec48d0",
      "size": [
       327,
       974
@@ -8501,7 +8387,7 @@
      "reading": 1.45,
      "scale": 1.45,
      "scaleSrc": "noise",
-     "sha": "b1110888dfc94697300bb78c32ce6ec1c20aa0b84e11377b6b630f238c666179",
+     "sha": "0e5d5f8f4349de2b96ad75bc74ffcdb61368fc021ccc9545c82c87cdfe68bba3",
      "size": [
       566,
       812
@@ -8533,7 +8419,7 @@
      "reading": 1.1,
      "scale": 1.1,
      "scaleSrc": "noise",
-     "sha": "01942d1f6c8e17ead34cfdac9dcb7537142a6db0002299579d5ba975b14ed9cd",
+     "sha": "924e8c1a9d48ebe461b5d8d11f8eb45cd975781a0dabcf6b13e3c23c825242ab",
      "size": [
       522,
       836
@@ -8563,7 +8449,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "6c4f140894c9b8a44a22e2e315a949e13cbb102343ce658e0df8bbc786c717c3",
+     "sha": "5876011b0357876069718f5227e51264191c7d9e05b44c4fc4b084941edc01ae",
      "size": [
       337,
       1174
@@ -8595,7 +8481,7 @@
      "reading": 1.007,
      "scale": 1.007,
      "scaleSrc": "reviewed",
-     "sha": "8fbbfe0bc03dec3d32571274bfdf3fd433dd2139c266a4893c3742ab204498d6",
+     "sha": "6dc59c578f2cc1652e45a3f3bf76acae27b1ae1388195ce14a5c0e25d33036c1",
      "size": [
       464,
       994
@@ -8627,7 +8513,7 @@
      "reading": 0.55,
      "scale": 0.55,
      "scaleSrc": "noise",
-     "sha": "885bc174244798a3ec8e42d582450e9396bd89b525653a126b32b28d1720d675",
+     "sha": "241a60a5005903166211fb967b9a26cff0c2e2070c5495724c8c733936c451b9",
      "size": [
       1206,
       375
@@ -8652,7 +8538,7 @@
      "reading": 1.352,
      "scale": 1.352,
      "scaleSrc": "reviewed",
-     "sha": "c9791ecb826be844d7ad860c0fbc312c41d38d4d343c4262f2b11c7b2e5067b8",
+     "sha": "a7c972aeda8274bb637be4c8f941ab20b1c18cc3ad7fd876bd2f98d53aac1e58",
      "size": [
       668,
       919
@@ -8684,7 +8570,7 @@
      "reading": 1.352,
      "scale": 1.352,
      "scaleSrc": "reviewed",
-     "sha": "c9791ecb826be844d7ad860c0fbc312c41d38d4d343c4262f2b11c7b2e5067b8",
+     "sha": "a7c972aeda8274bb637be4c8f941ab20b1c18cc3ad7fd876bd2f98d53aac1e58",
      "size": [
       668,
       919
@@ -8716,7 +8602,7 @@
      "reading": 1.216,
      "scale": 1.216,
      "scaleSrc": "reviewed",
-     "sha": "07358030235bf58662e0aa73d588bf8de5c9239ea6abba85cd0e6d4331d8dcb3",
+     "sha": "d42b0b040f6d4c315fc6bace920a5097326eaf61e70767dfb1937b8ca8da4010",
      "size": [
       564,
       1009
@@ -8734,7 +8620,7 @@
     "twirl-end": {
      "baseline": 919.0,
      "prone": false,
-     "sha": "f0f124d6fba7404fb369e8e7b847e997c71877c7966a68a61bc49a2084a123e2",
+     "sha": "fd33451365fdfa7b529d7874faee6ea99b2cf2fb7f2efddf2f11d2ae485e48e3",
      "size": [
       640,
       935
@@ -8744,7 +8630,7 @@
     "twirl-forming": {
      "baseline": 897.0,
      "prone": false,
-     "sha": "d8eaf8f8171552c61208d1ecc993bdd873b411def4bbaddef4c15506e8d45cff",
+     "sha": "c47c8e4919164bf6d1f8aedc083651571a4b85c0c928afe245abc1c9d131b643",
      "size": [
       590,
       914
@@ -8754,7 +8640,7 @@
     "twirl-going": {
      "baseline": 1001.0,
      "prone": false,
-     "sha": "a985b9fd99c993e32c37a86a71acfc49480f318e27fb21e1aa59583995d5b17d",
+     "sha": "87d81f887d04c96c3421d4f5648b676a0a3dc5b7819c140743e7093508b38d74",
      "size": [
       575,
       1001
@@ -8764,7 +8650,7 @@
     "twirl-start": {
      "baseline": 993.0,
      "prone": false,
-     "sha": "1e217cf4382802e85aa2c2e40c29036586a6bd6272b0a5404c68a7ef464d16fb",
+     "sha": "9644d4d8b40d0717c9cdd920ee740bd77821c980636424005d18222d78f61480",
      "size": [
       576,
       1002
@@ -8788,7 +8674,7 @@
      "reading": 1.05,
      "scale": 1.05,
      "scaleSrc": "noise",
-     "sha": "c2409c2d7e38a574a8949c9ae6505efa11574ed79e08e9f0ca84c574a38a9d49",
+     "sha": "fc745f44e0a52da229eeb9a26bcdd2a8c0b7b6171d129c053ee9b04080dbe371",
      "size": [
       592,
       950
@@ -8832,7 +8718,7 @@
      "reading": 1.257,
      "scale": 1.257,
      "scaleSrc": "reviewed",
-     "sha": "438e878339243ea9b3544ab3fe66d97fe36e09fa0b2e4abc870e01ac0c8710b6",
+     "sha": "67ac3a26e6111c4bb9cf306c0b126b6c4b2e34cd3ecc76d102759e3ca4b39c03",
      "size": [
       693,
       957
@@ -8864,7 +8750,7 @@
      "reading": 1.15,
      "scale": 1.15,
      "scaleSrc": "noise",
-     "sha": "55f6ebf891c265f170819d887a580fc631589ecdc2c94125a02686fed6bb9283",
+     "sha": "cffa22fcfa27f19da5285cd94b5bbf47afebd8d350878334483136de3570a562",
      "size": [
       432,
       1047
@@ -8896,7 +8782,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "f18c8a000140425ed50e86a9f762789309c010ace7b445248681bcf3fdd85fbb",
+     "sha": "4b3a1d9df1579f2c61b034cdd299e79c7dd49146e0ddaf4bafb0a48a99ead145",
      "size": [
       757,
       1173
@@ -8928,7 +8814,7 @@
      "reading": 1.25,
      "scale": 1.25,
      "scaleSrc": "noise",
-     "sha": "e9e10d9bf37ab3c23720db0e39c8f57538096d50aa59972c9d6c8f7fb264404f",
+     "sha": "fec78e2124c5e0b7f6874dcefc3123aec52b3740c6c2b4a485dcb05e61feba90",
      "size": [
       571,
       888
@@ -8958,7 +8844,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "c64931aef02719a4242cd850fa36a2b40e43cc2cd3c2291cfbe3c11ae66e576b",
+     "sha": "f16fb4f4b55c826926819b111741a845602bdb1b70af2de94a6c187c5089b5d4",
      "size": [
       574,
       1179
@@ -8990,7 +8876,7 @@
      "reading": 1.15,
      "scale": 1.15,
      "scaleSrc": "noise",
-     "sha": "ff26db1f9257cb70429a8f14d53694e61d54a4f1db28a2ea3021b6c4ea76e5ce",
+     "sha": "0a1fefcc01927cf69bd847524221a29debabefb2d942d32305f6aa9005290b2d",
      "size": [
       490,
       1023
@@ -9022,7 +8908,7 @@
      "reading": 1.1,
      "scale": 1.1,
      "scaleSrc": "noise",
-     "sha": "4c23936f79d98cb5f379684d4be3d132653ed1605ba3c60381d39c7018945198",
+     "sha": "17f4f7ede4856a4e393a54075bd73231f4af7f9f4052f500c171810f1318ba5f",
      "size": [
       1216,
       475
@@ -9033,7 +8919,7 @@
     "twirl-end": {
      "baseline": 1069.0,
      "prone": false,
-     "sha": "5536bf594004ac3da668f51faf94a53218979eb6bf4f12218005fa177ac37e15",
+     "sha": "77226d09cedc6e4c3bfd9db45deda7ab3bc87445cccd49998a6728cd571b383d",
      "size": [
       634,
       1085
@@ -9043,7 +8929,7 @@
     "twirl-forming": {
      "baseline": 1064.0,
      "prone": false,
-     "sha": "b67b6ec64509ba41b1c77204bc7f2cf92b63deaedd9297f5b522c35b41ccc69e",
+     "sha": "453eac1e63ba162793850d041f30f3d8e13e229f346ea6b842109111d84e3f72",
      "size": [
       633,
       1081
@@ -9053,7 +8939,7 @@
     "twirl-going": {
      "baseline": 943.0,
      "prone": false,
-     "sha": "c47de0e664a3795b6275763cd831e9298522ecbf5d92ea606b06895e1bca30de",
+     "sha": "51c81f0e753a3a75d6c8585119f89773801844a722337a612c9b696266caa9fe",
      "size": [
       545,
       962
@@ -9063,7 +8949,7 @@
     "twirl-start": {
      "baseline": 942.0,
      "prone": false,
-     "sha": "1ccc76f6247b786f083a7d743dac7f967f07de4f1d90c2b22afee492554396a7",
+     "sha": "c438ce86bb6f68c3d3019fdccda3ad8c3ed3bad2acd0fb11dc7a10a112ce6af2",
      "size": [
       546,
       958
@@ -9087,7 +8973,7 @@
      "reading": 1.05,
      "scale": 1.05,
      "scaleSrc": "noise",
-     "sha": "d508bef7dc3fa7f1e90dd527eba4f2f95f8e56d2db8bff0e7fb95b2525bafd1f",
+     "sha": "1cdad88c5857ee0f93aa3957e0defe27a103e5795e08d6e36a34b32f720bf926",
      "size": [
       724,
       1204
@@ -9131,7 +9017,7 @@
      "reading": 1.305,
      "scale": 1.305,
      "scaleSrc": "reviewed",
-     "sha": "28b86aca845f51911e1ca4ece12024beb33f1511860e89b7e71cf567688a3825",
+     "sha": "720409176e0ee584c250e7bbe90dd6154cd2100e11a4a0da796c24ee6c2a172c",
      "size": [
       596,
       912
@@ -9163,7 +9049,7 @@
      "reading": 1.05,
      "scale": 1.05,
      "scaleSrc": "noise",
-     "sha": "0567783ac69ffb61e85fe2865da06326bc2888e3c676bfe2b00faf9c11a49565",
+     "sha": "66fe7b56f05366330c63d3f049bab3d1f481a0b3ba3b9f13f74308c0013955e1",
      "size": [
       807,
       786
@@ -9171,9 +9057,9 @@
      "stance": {
       "row": 770.0,
       "src": "silhouette",
-      "x": 379.0,
+      "x": 376.5,
       "x0": 35.0,
-      "x1": 723.0
+      "x1": 718.0
      },
      "standing": true,
      "stature": 0.671
@@ -9195,7 +9081,7 @@
      "reading": 1.113,
      "scale": 1.113,
      "scaleSrc": "reviewed",
-     "sha": "734961f13f8845da2591ad3c9443ebd8edd7dadc82e9e7f49dfef6a059ac3d5b",
+     "sha": "8e9ed6cb4e22eb3ba59b840d1f42e07f88ce01c7d01c339a34ddf71c9184706b",
      "size": [
       799,
       781
@@ -9208,7 +9094,7 @@
       "x1": 574.0
      },
      "standing": true,
-     "stature": 0.715
+     "stature": 0.714
     },
     "hurt": {
      "anchor": [
@@ -9227,7 +9113,7 @@
      "reading": 1.15,
      "scale": 1.15,
      "scaleSrc": "noise",
-     "sha": "60aef5ccc4556df084762fbcb5816bcbca3c5e55e811e7bebf882124916c7ee6",
+     "sha": "5e2fc453e070990a30ee1b648ccef25dc6038436935641ec1d756a90c23d44d9",
      "size": [
       569,
       836
@@ -9257,7 +9143,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "09ca3b42939109791f49f181b39a1af0a6eca211ff93fa4233e14d1c8120208a",
+     "sha": "861535fc71ce5fe8e8a34599112e34fa88844866b2409b6ba1594148aae7d3ae",
      "size": [
       558,
       1212
@@ -9289,7 +9175,7 @@
      "reading": 1.25,
      "scale": 1.25,
      "scaleSrc": "noise",
-     "sha": "fd98514546e05b8a80660e68659a6a028faa776f914ab9d4072d024671d36117",
+     "sha": "32736415afc521ba6e9c7901cbe640cfb978d78fd89bc9fdb908a682600f74fb",
      "size": [
       461,
       896
@@ -9321,7 +9207,7 @@
      "reading": 1.31,
      "scale": 1.31,
      "scaleSrc": "noise",
-     "sha": "8d0b011167985a0abc2b73061f510e976b8e9def1070b411d12cc37de09e2444",
+     "sha": "cad3cd1289cbf5f499041ef787c4a8563549ac3f494f8b69d3c011e377f64a9e",
      "size": [
       1113,
       525
@@ -9346,7 +9232,7 @@
      "reading": 1.126,
      "scale": 1.126,
      "scaleSrc": "reviewed",
-     "sha": "63f44a322544a57d04628bb1d562c722f7d7bc4bdf02982c60e01bdbcdcb3750",
+     "sha": "b06b0e6f165156a0166fefce1be19afb6d3f01ddd09b0ccd7ab63d5c09417867",
      "size": [
       548,
       801
@@ -9378,7 +9264,7 @@
      "reading": 1.05,
      "scale": 1.05,
      "scaleSrc": "noise",
-     "sha": "1134d988e2a2bec79bae5cd82fdfe5b30526239ae175f8351e78942410ee7f06",
+     "sha": "ff087a43ae1d28c9604be7060da30074b3fd7a4bbf405195b2c518f9ca883370",
      "size": [
       435,
       1134
@@ -9396,7 +9282,7 @@
     "twirl-end": {
      "baseline": 1096.0,
      "prone": false,
-     "sha": "b9b9b919280ef0cb84b98bf158a3593d9e37c9b3f99271b645df26982cbf885d",
+     "sha": "99dc2b4598da754dbf8c67ecbfc7b4ff6f713f7bfe0b01caf30675019c809b9f",
      "size": [
       518,
       1112
@@ -9406,7 +9292,7 @@
     "twirl-forming": {
      "baseline": 1067.0,
      "prone": false,
-     "sha": "4d2aa255cd09d67384ac0dca92cb25da7fd23323205a650740e7d4af3099ce6d",
+     "sha": "61bc3a9b9d3826701c05141bef1941b0610bbb7498f960f1fb00f4775ae79b15",
      "size": [
       514,
       1084
@@ -9416,7 +9302,7 @@
     "twirl-going": {
      "baseline": 969.0,
      "prone": false,
-     "sha": "eaa3f6a38b05bb1286f672aa3cffed2277a0e7d34b85acbcd05b08d5abed0bf3",
+     "sha": "f9113fcab0d1f97ff49f318cc09d19abddebff371f24b0a600cb9593243061bf",
      "size": [
       465,
       985
@@ -9426,7 +9312,7 @@
     "twirl-start": {
      "baseline": 961.0,
      "prone": false,
-     "sha": "dc8afe15843c81bb09353b8f1b03069933271cfff8fa8d37ea1278050b50ec1e",
+     "sha": "5f43626a5bea7ebf8d713b9e1b9ff0009d2157cb6ccde976db66dda6887a12d3",
      "size": [
       486,
       977
@@ -9450,7 +9336,7 @@
      "reading": 1.21,
      "scale": 1.21,
      "scaleSrc": "noise",
-     "sha": "80821d5b064a40891cf847f0bf5e024bd40fb43374dfd07cbff38020d757e536",
+     "sha": "f74c8a97039ef9dfb6681d30c85bff133c9c0fbfea2281ceabc682f981780677",
      "size": [
       399,
       959
@@ -9494,7 +9380,7 @@
      "reading": 0.817,
      "scale": 0.817,
      "scaleSrc": "reviewed",
-     "sha": "c157ef0ae15984039ef532156923f7eb86eb915ee2b02a161ebfaf51a6051f94",
+     "sha": "bc26df9bbbfb2a5ab5ca261477c405fa358089d6d28ca33663cb4dd3a5c264c0",
      "size": [
       912,
       1198
@@ -9526,7 +9412,7 @@
      "reading": 1.115,
      "scale": 1.115,
      "scaleSrc": "reviewed",
-     "sha": "f0db3cb5eaf9b5bc12007fb7bc5bbbcd0e1f4f98c69e45cbcea9156036c20ae0",
+     "sha": "75a950a642411f4b418fa1a8e983b02abd24f4fa0bd252490bd0e3d7a68952db",
      "size": [
       369,
       1079
@@ -9558,7 +9444,7 @@
      "reading": 1.357,
      "scale": 1.357,
      "scaleSrc": "reviewed",
-     "sha": "7612e300e02c31e666b97ab6083d826be6e152df9d58ca77b8b301b459366f99",
+     "sha": "5cbce718248c07620231c28f76663f925d36368b36abec77ba19faa8915dafa7",
      "size": [
       700,
       712
@@ -9566,8 +9452,8 @@
      "stance": {
       "row": 708.0,
       "src": "silhouette",
-      "x": 349.0,
-      "x0": 24.0,
+      "x": 350.0,
+      "x0": 26.0,
       "x1": 674.0
      },
      "standing": true,
@@ -9590,7 +9476,7 @@
      "reading": 0.95,
      "scale": 0.95,
      "scaleSrc": "noise",
-     "sha": "0e0358342cb13e30c47b7121d53ae5c3a73d4fb38f54aa47c44b9e6af0d9743d",
+     "sha": "060ed5607af0f60292bd4d6d0157f0c61ff32ed46a790b5b6aa6835417c993d7",
      "size": [
       547,
       1083
@@ -9620,7 +9506,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "dca036d47cbab26f494777c937aedb24d1eef2390ac02751f27342a73c5ba3ad",
+     "sha": "25f02e43a4212763fc4c9e1c5e641d90975cf1cfe20580bd4ddb921c6eff45d9",
      "size": [
       648,
       1214
@@ -9652,7 +9538,7 @@
      "reading": 1.382,
      "scale": 1.382,
      "scaleSrc": "reviewed",
-     "sha": "8e1561687435f36f750921caa26d4da4c295f07ad1dd0de2deae46a385b7f15e",
+     "sha": "5f45158d733e5496342fde71bcec789fb92144874c6db6377a6d53fcc59ea606",
      "size": [
       444,
       910
@@ -9684,7 +9570,7 @@
      "reading": 0.931,
      "scale": 0.931,
      "scaleSrc": "reviewed",
-     "sha": "b0afb0fecbf98115b47a60415787b8a9c6c9d1e544ac8a560bfbb0102dce75ed",
+     "sha": "06910c5d261d041b06acdff67f89938703f76f3179a8b2b923aadde9b0f8d64b",
      "size": [
       1194,
       433
@@ -9709,7 +9595,7 @@
      "reading": 1.019,
      "scale": 1.019,
      "scaleSrc": "reviewed",
-     "sha": "6312f07d0c4a6b2f081e3fce698da5fc7e3c6f1dee52129802a4817feb7e4e3f",
+     "sha": "4fd1f457820b28acd5118fcda74a0a4657881b987e3a01ebabebdb351700c5cf",
      "size": [
       606,
       934
@@ -9727,7 +9613,7 @@
     "twirl-end": {
      "baseline": 910.0,
      "prone": false,
-     "sha": "9d79194a30d3f6a89e5009b3b29d42437dcaa500e9d622542b79353c15a81753",
+     "sha": "baaa9ee89a47b2d6bce7bbee07c3c29ca53f218b16d22b722bcd83649ef09aaf",
      "size": [
       746,
       926
@@ -9737,7 +9623,7 @@
     "twirl-start": {
      "baseline": 908.0,
      "prone": false,
-     "sha": "2f73b0ffae29594d19b1f678989e134f34f41f8af65ab6fd34fcc25ad6211e06",
+     "sha": "9519f1fe920c4a1ed999fe34606b6cf6613479b06d2314468cc37a56af9db58b",
      "size": [
       568,
       924
@@ -9761,7 +9647,7 @@
      "reading": 1.211,
      "scale": 1.211,
      "scaleSrc": "reviewed",
-     "sha": "a2e6f1ae0e5f4dc44a95429988e2dad4a001e2a88f672f6513109737693670f1",
+     "sha": "115f18eb95c6950844494816bab20c884f7ed105534eb378849d310644152de5",
      "size": [
       681,
       920
@@ -9805,7 +9691,7 @@
      "reading": 0.925,
      "scale": 0.925,
      "scaleSrc": "reviewed",
-     "sha": "ed917bde87bb9ad59458397019210509a5d1bc45cb2606046fa75e5791d5cd08",
+     "sha": "d89831aecff1544c1a5a17eb20b609d482a4e2ca8964f3e575f42e4a0094727c",
      "size": [
       952,
       1180
@@ -9837,7 +9723,7 @@
      "reading": 1.22,
      "scale": 1.22,
      "scaleSrc": "reviewed",
-     "sha": "159bff34350c80f72404ad028cd5533998b38b2e9efbf64d57e7311d79eecccf",
+     "sha": "0de1fd4e004088906f121607b57f4e4b81ef613e9277ca021e90d29d0adb7b7f",
      "size": [
       727,
       1208
@@ -9869,7 +9755,7 @@
      "reading": 1.15,
      "scale": 1.15,
      "scaleSrc": "noise",
-     "sha": "135169a1c847427603dd29a0325b2dd134d46ade7634108d65fb31eebee5b9a2",
+     "sha": "3d2ac6f1f7e08c78ea2eb732693ebf7bc797e0d1831376920942263a46564fa0",
      "size": [
       599,
       1168
@@ -9899,7 +9785,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "eeef6c50570e8ce47fba713e5b764d21b84cd633ec8f8f73e1ffc3790345f4cf",
+     "sha": "c021d5ef0971d97b0a235bae8c86f02968465ab81f1197d43b4f955b97e7b32f",
      "size": [
       626,
       1213
@@ -9931,7 +9817,7 @@
      "reading": 1.15,
      "scale": 1.15,
      "scaleSrc": "noise",
-     "sha": "b9e2659b3c71dd7ed2a6853e58c7ee41ea19870837bd8b6c0716333b3f4c9da3",
+     "sha": "83a413618d5655c63b9d0ea00d3b495e95b9646e809c16b8854907c25ba5e338",
      "size": [
       707,
       908
@@ -9949,7 +9835,7 @@
     "twirl-end": {
      "baseline": 767.0,
      "prone": false,
-     "sha": "bf0d716ca8e7b4d8ef96e5a7d425f6569e1e0f2b6e250bea382926153bac74ea",
+     "sha": "67e759168743955dff492eddd6f5ba971b9cf42fa5ecdface6c0dff5f1947c7f",
      "size": [
       479,
       783
@@ -9959,7 +9845,7 @@
     "twirl-forming": {
      "baseline": 650.0,
      "prone": false,
-     "sha": "d4100e2269b771ec67100751db1924943738f1cc665f810a4d189c32d5a52651",
+     "sha": "c53a43eccbee1841466e381c5fc9b16b17601f425b11216dcc517beb4e0cc343",
      "size": [
       459,
       669
@@ -9969,7 +9855,7 @@
     "twirl-start": {
      "baseline": 973.0,
      "prone": false,
-     "sha": "67b441d2530c9110c1304d4ee862f7841d365fe88438cd45ce23ddc9416012e1",
+     "sha": "0876ec6ad4222388e31b456231bd23c8552e0dc691d3fa89c051a7c76328b4c1",
      "size": [
       615,
       989
@@ -9993,7 +9879,7 @@
      "reading": 1.1,
      "scale": 1.1,
      "scaleSrc": "noise",
-     "sha": "b3ffdac925dc221d8a7a5ce9ad60d820c353b6386aa2ad45b7c506a0c1f5e6b6",
+     "sha": "2c513010289c03c5242f24047082da17775649bf9051a3025b9a8b68e75972e9",
      "size": [
       365,
       1168
@@ -10006,7 +9892,7 @@
       "x1": 285.0
      },
      "standing": true,
-     "stature": 1.055
+     "stature": 1.054
     }
    }
   },
@@ -10022,14 +9908,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      127.3,
+      127.6,
       94.5
      ],
      "baseline": 1129.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "42646e50005582e4a26b0403d70ac7032743ea16dd6c6f0ae441acd40ab14c66",
+     "sha": "3fc23dc874f77fbd11f0eb20243e32951eb54dcc7b012d4caa3f204ab3015a3f",
      "size": [
       776,
       1145
@@ -10052,7 +9938,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "85a695d47166a6c2f3d54d18d817cd7f541cd66ac1877eda9b2e8291397726fb",
+     "sha": "4ade655c305acf2556ac08a93114b414422c7fab41297851a6db31d3bcad57b0",
      "size": [
       707,
       1152
@@ -10068,14 +9954,14 @@
     },
     "hurt": {
      "anchor": [
-      207.8,
+      208.2,
       96.5
      ],
      "baseline": 1120.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "6571aaaecc24f227ad050e56b63e4d858d3fab7da48304bdc748e53b42b260b5",
+     "sha": "07986d912b1ba024a663eb5f4702c2f81175f112c6cc39c8559bd90403d51af0",
      "size": [
       476,
       1136
@@ -10095,16 +9981,10 @@
       0.5
      ],
      "baseline": 1136.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "80d6990c9ffd70392ab85db74846d8e65f5258653a47af490668e8657e43c037",
+     "sha": "edba1b452c204dfbb2a7b3123e8ab325f1c866ea2b064bff1905bb78532b9d50",
      "size": [
       489,
       1152
@@ -10128,7 +10008,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "d17d847880a11e2a8489d8b491e543d95274b0f06b6445c8f93085b798c5d63b",
+     "sha": "0181c5e1b25393ece8347e5172fe9f311b8716313062413ec094e1a68b58dc20",
      "size": [
       1130,
       529
@@ -10150,14 +10030,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      442.3,
+      442.4,
       48.5
      ],
      "baseline": 1219.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "e228d28b8f9784752390e03da99cef6ef56321bc587aa300a78557695de8b713",
+     "sha": "fc3b8ef9f0eb20951c2c57d39f7192ac774931beda57876bcd6e0fd182e1f794",
      "size": [
       805,
       1235
@@ -10180,7 +10060,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "8814e76ad6ca70fe6a1ee7a1154499f4ba7d94fde14f84d04247b3a4e19e6490",
+     "sha": "329bbd2ccedfc468340036734b6d1a51eee834a927f9c91a3aaa8cb7c0504e60",
      "size": [
       772,
       1208
@@ -10203,7 +10083,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "b385dea68d517581fa834b68c83d450bd3e54d7d50a3d87d8fe0f499d6ea0595",
+     "sha": "6a2c8234faf9cd11bcff433b9b8dffab61ed37f89885020c665f7407f8590b91",
      "size": [
       823,
       1139
@@ -10223,16 +10103,10 @@
       0.5
      ],
      "baseline": 1196.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "b004f85c879f7260ef08086e723ed8f1e330441ddbf6959e7d4a08358f611088",
+     "sha": "06c416a771d192ce1fc86f6c79a0f38fca46346968bcd758150cf725031e67be",
      "size": [
       750,
       1211
@@ -10240,8 +10114,8 @@
      "stance": {
       "row": 1196.0,
       "src": "silhouette",
-      "x": 316.0,
-      "x0": 159.0,
+      "x": 315.5,
+      "x0": 158.0,
       "x1": 473.0
      },
      "standing": true,
@@ -10256,7 +10130,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "8a89ef15cd08a84e63d224546d843496a51021a46dff7d6de8a8a0059018e05c",
+     "sha": "33930c70dd7de5cf7bcfbdf6b7849beed142010081c0d7e8086a8d3390bc190b",
      "size": [
       724,
       1185
@@ -10272,14 +10146,14 @@
     },
     "telegraph": {
      "anchor": [
-      725.7,
+      726.0,
       42.5
      ],
      "baseline": 1049.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "348136a4e0944b2b5f0fd2c00ed7e0f464a701db4eb27ff44ae53aef2d05a964",
+     "sha": "929cb0eec9e680c2497fb53ee026582828ac0697ea5b357efc0f887f31be0681",
      "size": [
       992,
       1066
@@ -10307,14 +10181,14 @@
    "poses": {
     "cast": {
      "anchor": [
-      330.4,
-      20.5
+      330.7,
+      22.5
      ],
      "baseline": 1175.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "6f40f101a6d5da45c48408fff4ed2c9636e163fda8a9a020cb762c0033f9f1e1",
+     "sha": "eb27c8f7599ff317093414a4b821470c4a1e58176f5eb0b87e8400357a521ded",
      "size": [
       804,
       1191
@@ -10330,14 +10204,14 @@
     },
     "hurt": {
      "anchor": [
-      476.1,
+      476.3,
       32.5
      ],
      "baseline": 1175.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "5b16020259c5fea35385ec5ee4be78d65f49f4bd83c3add61cd418d733a8d441",
+     "sha": "4b707ad7c8f326e75881ba00a0292dbab610f1f65857a26b316580bfd1bc094b",
      "size": [
       804,
       1191
@@ -10357,16 +10231,10 @@
       0.5
      ],
      "baseline": 1175.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "edb8a444172244a0ebdbb691dd9273e8bd6339fae28c151fc78f719cc34eb721",
+     "sha": "62dd84ea20e0751a0f6fb06cc5065f064b77f3c3d1904487b995838d46ab0b9e",
      "size": [
       804,
       1191
@@ -10374,9 +10242,9 @@
      "stance": {
       "row": 1175.0,
       "src": "silhouette",
-      "x": 521.0,
+      "x": 520.5,
       "x0": 289.0,
-      "x1": 753.0
+      "x1": 752.0
      },
      "standing": true,
      "stature": 1.0
@@ -10390,7 +10258,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "ea12023a8f7a2ca0be9cb1d74b21b3712fa45c14fdfd6a689d8a9e0999ed45ca",
+     "sha": "084f7f933cb8b79222e858f6bc6df8f99287c4f9da1050c187ac140177a7125c",
      "size": [
       681,
       651
@@ -10407,13 +10275,13 @@
     "ko": {
      "anchor": [
       1586.4,
-      147.7
+      149.1
      ],
      "baseline": 454.0,
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "46a76e254c173092cf214fd4d608e525027641e7c95b5f78c2e3d36afa9c5e37",
+     "sha": "e362d51a3afacfbcc9d1f5d7a9c165521544f60409a2984f33b27d14c223be3d",
      "size": [
       1858,
       471
@@ -10442,7 +10310,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "975fd8fd3cb1e4640234999a25a8889d7e72ec446a311715469c5023a584a419",
+     "sha": "ae4b1f9e5b5cd6dbe255df3c191ac203dfc9df65ce3573de30cbc92417f7fd55",
      "size": [
       796,
       1165
@@ -10458,14 +10326,14 @@
     },
     "hurt": {
      "anchor": [
-      252.6,
+      252.9,
       32.5
      ],
      "baseline": 1114.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "b2a1938d113d54a26350f8bf9d42d5bbf5b46050cb51e2e1897005cd3462f03f",
+     "sha": "1adc23f26a3b068669e36bc38cd1eea5f487db5bef57f1a5362ce9ddbfc00556",
      "size": [
       708,
       1133
@@ -10474,8 +10342,8 @@
       "row": 1114.0,
       "src": "silhouette",
       "x": 291.5,
-      "x0": 87.0,
-      "x1": 496.0
+      "x0": 86.0,
+      "x1": 497.0
      },
      "standing": true
     },
@@ -10485,16 +10353,10 @@
       0.5
      ],
      "baseline": 1147.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "c53d22c1cea6ad918570f033d8236ef29e574f32be7127bb6856e53b6c6ddcc4",
+     "sha": "46635c1567196fecaca25dd04f51976ddec6e903e1b8b91cc51a26dc95591a54",
      "size": [
       693,
       1165
@@ -10502,9 +10364,9 @@
      "stance": {
       "row": 1147.0,
       "src": "silhouette",
-      "x": 306.0,
-      "x0": 98.0,
-      "x1": 514.0
+      "x": 305.0,
+      "x0": 94.0,
+      "x1": 516.0
      },
      "standing": true,
      "stature": 1.0
@@ -10518,7 +10380,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "0b3bc5ee4cb05bc4c211d0022468008d3fc5b82e55df5a90fe92d912bc4fe51e",
+     "sha": "5e6d7d7b869ac183dbc54ac341cc27dd3bc25de05412f3f982dcc5ea08932bbc",
      "size": [
       1174,
       494
@@ -10570,7 +10432,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "ee727b880b856fbe9539dd5736403f20d6c71124e459f2642f46edc0af4da847",
+     "sha": "8781c573aed8fd68f3ba36fd4ea240e59104f7bb1e416397ad9cb42e8deee6bc",
      "size": [
       987,
       1261
@@ -10590,12 +10452,6 @@
       0.5
      ],
      "baseline": 1212.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
@@ -10628,14 +10484,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      306.8,
+      306.9,
       134.5
      ],
      "baseline": 1193.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "ee6a6b53061621b2740bea78bbb65073337184c8ef05c109ab8ee081f86c2541",
+     "sha": "caa014a70ebe80887486f21de955721e8988e7d28f7a02e6ac22d4221054bcb4",
      "size": [
       754,
       1209
@@ -10644,21 +10500,21 @@
       "row": 1193.0,
       "src": "silhouette",
       "x": 337.0,
-      "x0": 141.0,
-      "x1": 533.0
+      "x0": 142.0,
+      "x1": 532.0
      },
      "standing": true
     },
     "cast": {
      "anchor": [
-      266.7,
+      266.8,
       36.5
      ],
      "baseline": 1131.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "5dbb8e0aab852662e48a28ad20648d23308dd2df41cef0724dd9428c6e96cf7e",
+     "sha": "c9332bdf0e5e5162b7b94b79efb5825e99d357666b4ecbfbbe943b745ab8c655",
      "size": [
       574,
       1147
@@ -10674,14 +10530,14 @@
     },
     "hurt": {
      "anchor": [
-      319.4,
+      319.6,
       18.5
      ],
      "baseline": 1025.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "acd61c1df01f78749fd1b28974469a893e7ed06c4a10ddaa20ba2c8981441c11",
+     "sha": "f24d19c5bd0a2a3ce8e2d49c15c85d881f109614ff6f57ed171c40ce1eb0b658",
      "size": [
       590,
       1042
@@ -10701,16 +10557,10 @@
       0.5
      ],
      "baseline": 1131.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "beb7ffbaff3c2291720b8299266b1c40b4fb29f4f31f237dc8d9ecd3344bec52",
+     "sha": "b24f08beda1fb89a4a6d1493aa29a52f4dba9d58e823b5aa71a0f51b3392be9e",
      "size": [
       574,
       1147
@@ -10734,7 +10584,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "452a56930464d498b488c486f0830239d2690715dd2396e9dfe861d7729db04d",
+     "sha": "1e972da956654d5fd42e31718834d6016ecf53525285095121b4b789a3944314",
      "size": [
       1143,
       570
@@ -10744,14 +10594,14 @@
     },
     "overdrive": {
      "anchor": [
-      320.9,
+      319.0,
       66.5
      ],
      "baseline": 1205.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "de08ba712f473cd1f030a75bba629fcc2001278cd37e1ce0191120096a9f3a19",
+     "sha": "afaff7d545a7d663c85f3f393d2b291af3af5e3bb7494a4c8a0c6f0c21786e0d",
      "size": [
       832,
       1216
@@ -10779,14 +10629,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      327.7,
+      327.6,
       62.5
      ],
      "baseline": 1123.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "de4763187836163a148960a1a7072b9f431767f03379755ff3c93d2a496fd2c0",
+     "sha": "ff683cdf83508bcb79339cb07108ee3bebe6d5119bf66ba26eee97280cdb403a",
      "size": [
       829,
       1139
@@ -10809,7 +10659,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "58d362b729bb617bd1148e12016b8a2e43907f63819d41428cdcdd5a833e9a0b",
+     "sha": "32fa606d6fe87378049f115f8b3371e0e6db92d2e49a20292d8541113795a17b",
      "size": [
       694,
       1136
@@ -10832,7 +10682,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "323648b5bd4ac351d5a9ea5f92173aaf3c9d985a74dd9b476189a0f4bd10bb64",
+     "sha": "b73fc8f526e6e235778f717fc6d71cde60fbbdee6f6bf7ca12aeeba3f2cc510d",
      "size": [
       774,
       1109
@@ -10852,16 +10702,10 @@
       0.5
      ],
      "baseline": 1120.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "5425e3aeea63e0390215b2a7a066e2511e2e8be8dbd0a558399b4acae5ff0c11",
+     "sha": "0509473708ec83a1411baf04d46216b6aeeb770aa4dce3f35b23c73204b21dcd",
      "size": [
       694,
       1136
@@ -10885,7 +10729,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "f6e10565a1ed1028365e2a07aa84acb3b15f096eba39fbc9b838977abe3fec4f",
+     "sha": "fa1c0d496b7c174a9ea62c8649cc94ec1f55c92c5ea354ae4864daa760f16dd8",
      "size": [
       724,
       675
@@ -10908,7 +10752,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "aa76ee9c29b4684a47249d3d52808629cf8f17e47b9a0753be2bd57c0fb58c61",
+     "sha": "29104d1e10c8d9f40b33b4e8c28a10008ab0308881e9d311b382423960ea7496",
      "size": [
       918,
       1213
@@ -11370,7 +11214,7 @@
      "reading": 0.952,
      "scale": 0.952,
      "scaleSrc": "reviewed",
-     "sha": "75bde03cb2c5b7377632b814262cee95aaafc7ff5373b2fb7f939927f54d11b4",
+     "sha": "33058a4e6a06af512a0707c14302a72e5b71d4fed2d1215c24ab108d0598f7a0",
      "size": [
       816,
       1135
@@ -11402,7 +11246,7 @@
      "reading": 0.957,
      "scale": 0.957,
      "scaleSrc": "reviewed",
-     "sha": "cf0b2115e292cdea6541f31f1c44750b869b686fae38e3ff53e9219a5eb2a49c",
+     "sha": "55ac162539ef1b74ca82c2f0ffbebd2efcb01ed387900ff2e124cb34d390b164",
      "size": [
       709,
       1132
@@ -11434,7 +11278,7 @@
      "reading": 0.967,
      "scale": 0.967,
      "scaleSrc": "reviewed",
-     "sha": "672f798da91deae7d072b9714c42496b89bdd835074e3c26f820688133722b86",
+     "sha": "514e60d3c83c3e5f3e441563bbce72d8029f1db6da5708908aa75ea3a4c29894",
      "size": [
       620,
       1190
@@ -11466,7 +11310,7 @@
      "reading": 1.306,
      "scale": 1.306,
      "scaleSrc": "reviewed",
-     "sha": "f77b87944faac8ae0df226ff9dead540111184e07ade1bdebdc2582169caaffc",
+     "sha": "a66ec4e9ac2ea21490c04eb81ac9e6818a552e763021a7cf84296b2eef470f74",
      "size": [
       795,
       686
@@ -11497,7 +11341,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "4e8e82c3b72de1a218a26d2aca242cfea778faace58b1bd66d234ea6aca7e5e5",
+     "sha": "29864fe381d602510cfb419b1b8b0f497dd2900bd3c770d82f908bedb34a4ad8",
      "size": [
       651,
       1216
@@ -11510,7 +11354,7 @@
       "x1": 471.0
      },
      "standing": true,
-     "stature": 1.086
+     "stature": 1.085
     },
     "idle": {
      "anchor": [
@@ -11527,7 +11371,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "8a630b88b416a07dfa0e63a6a96ac6fd993c02c10d8c86d9d8c3f568ed110750",
+     "sha": "1527518099547c0527095cbecebc3d7c9f47f87005c394a225e0d56fc272f6cf",
      "size": [
       730,
       1132
@@ -11559,7 +11403,7 @@
      "reading": 0.92,
      "scale": 0.92,
      "scaleSrc": "reviewed",
-     "sha": "132d7f7697bc27e47d39ee37958ca9d5f7a4596ab0cfd4f21d69b8be02be7dae",
+     "sha": "0aa4b25023ef72592a3c46e4e86c09eb7110318f41b64191395c9e89bdaec959",
      "size": [
       752,
       1141
@@ -11572,7 +11416,7 @@
       "x1": 399.0
      },
      "standing": true,
-     "stature": 0.928
+     "stature": 0.927
     },
     "ko": {
      "anchor": [
@@ -11591,7 +11435,7 @@
      "reading": 0.85,
      "scale": 0.85,
      "scaleSrc": "reviewed",
-     "sha": "a9addeb356d27080a24e68009861f2c6cd0539836848b47b68286e05bac74c28",
+     "sha": "f14bad6052a9e8d0a82417ae75568748f4ee711ab59b1c553327eda195e4f0d6",
      "size": [
       1164,
       480
@@ -11616,7 +11460,7 @@
      "reading": 0.866,
      "scale": 0.866,
      "scaleSrc": "reviewed",
-     "sha": "7bef180f80fcb49097f8989a410b63b748684a99b9efa4f877250897a921ffc0",
+     "sha": "adc711bbf7ee3af341a8825c89a42eac3d58db82800f4a38c4c499696abcc3ae",
      "size": [
       692,
       1216
@@ -11648,7 +11492,7 @@
      "reading": 1.088,
      "scale": 1.088,
      "scaleSrc": "reviewed",
-     "sha": "6e4f0f7d54161e16d9c662f4b67d6d8110bb487acf553caba81e4d8e4a98280b",
+     "sha": "b1bfd5d3f20167fa056d079a6acb03ba2ce6e6d18d982c2f8bb3b26d803de1ac",
      "size": [
       780,
       847
@@ -11661,7 +11505,7 @@
       "x1": 691.0
      },
      "standing": true,
-     "stature": 0.806
+     "stature": 0.805
     },
     "ready": {
      "anchor": [
@@ -11680,7 +11524,7 @@
      "reading": 1.293,
      "scale": 1.293,
      "scaleSrc": "reviewed",
-     "sha": "0b651de8e4b720a5fdddeae3e1c2fef5a7ef3b4ddca94c5216218f6b0949df31",
+     "sha": "a4c04da6d9bef52a1cd1a6575d5028f25fe89cf8493e9b58d142e49ea29b758d",
      "size": [
       673,
       766
@@ -11712,7 +11556,7 @@
      "reading": 0.966,
      "scale": 0.966,
      "scaleSrc": "reviewed",
-     "sha": "d55e3997d09afbdebf4ba577e149312fb939fc72d53c11ff793f56e029bc4fee",
+     "sha": "4b7c3a4f6f9f07117a1b3c555a5f86560b506f73b31defa4a43553d7a632ebc3",
      "size": [
       606,
       889
@@ -11720,12 +11564,12 @@
      "stance": {
       "row": 888.0,
       "src": "silhouette",
-      "x": 160.5,
+      "x": 160.0,
       "x0": 62.0,
-      "x1": 259.0
+      "x1": 258.0
      },
      "standing": true,
-     "stature": 0.767
+     "stature": 0.766
     },
     "victory": {
      "anchor": [
@@ -11744,7 +11588,7 @@
      "reading": 1.585,
      "scale": 1.585,
      "scaleSrc": "reviewed",
-     "sha": "3a7823beb13fcdc280ce46edb22fd2b9534a31946b746b1ddc83df7055ab3cd3",
+     "sha": "80a96514650b1ef2a7ba90f9807351cb2a323f32358713a7531c205ad11a7f3a",
      "size": [
       461,
       1137
@@ -11773,14 +11617,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      250.0,
+      249.7,
       60.5
      ],
      "baseline": 1162.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "a5fb96fc61a0fe3c3a4299e75fb44cd5e02a36bca9eb60f0d9de2a4fa3966683",
+     "sha": "82ef14f66ccbc889e9ccb2d4530bc12a165c20f10387b5af92fc4551fbf06ff4",
      "size": [
       846,
       1173
@@ -11803,7 +11647,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "744cc1501f8e98be8f46974d162b4d0a1d48e957864b716161be87c50493e506",
+     "sha": "14d21a7cfdcc710bf1bc336816e87064c1420559d39d7ee4566455517f7e0fcd",
      "size": [
       816,
       1167
@@ -11819,14 +11663,14 @@
     },
     "hurt": {
      "anchor": [
-      588.9,
+      589.0,
       54.5
      ],
      "baseline": 1156.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "6f4819d65277d8499f5c894d9731dfaf437882f6253f34f363ada102f934c557",
+     "sha": "e61895a35fcc1205ca487c58af3c0290086d92b8ed8eb3b7b79cd24895447547",
      "size": [
       794,
       1172
@@ -11834,9 +11678,9 @@
      "stance": {
       "row": 1156.0,
       "src": "silhouette",
-      "x": 657.0,
+      "x": 657.5,
       "x0": 563.0,
-      "x1": 751.0
+      "x1": 752.0
      },
      "standing": true
     },
@@ -11846,16 +11690,10 @@
       0.5
      ],
      "baseline": 1144.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "77b4cba2eb4b99fb803f678ac526d0685efd31704136f0bdc8fe7de0300f0903",
+     "sha": "3896c07b8d64c97d0f26cfe6e6fd10b8bc8a19f3f0411d31c758af546cf2d3d3",
      "size": [
       816,
       1167
@@ -11884,14 +11722,14 @@
    "poses": {
     "cast": {
      "anchor": [
-      304.2,
+      304.3,
       28.5
      ],
      "baseline": 1158.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "f9407f0184156cd4615ef51a0233cd3da138dd0d777cf9141d8648b282aae615",
+     "sha": "9f33df829c98fb8e79e205351820c4d61ede1f7ae9dd76efa717aa74d593306f",
      "size": [
       777,
       1175
@@ -11907,14 +11745,14 @@
     },
     "hurt": {
      "anchor": [
-      332.9,
+      333.1,
       22.5
      ],
      "baseline": 1160.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "40538756be322e730621a03159fd0b500ca5e0b85958ca7fd21f95d184dd334e",
+     "sha": "aaae38d8e979a894a1f3acbb390f8b9cdf8016a244a07042af653ce30f795b8e",
      "size": [
       727,
       1177
@@ -11934,16 +11772,10 @@
       0.5
      ],
      "baseline": 1158.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "1914ff4903326866091c32d3232821b9798b4be3caf3cfc693e4154e5020ba24",
+     "sha": "35770135859a0e32839f0813f404bdf8f01daa0ef66acd27925ea989d2d39a57",
      "size": [
       777,
       1175
@@ -11960,14 +11792,14 @@
     },
     "ko": {
      "anchor": [
-      446.3,
+      445.8,
       18.5
      ],
      "baseline": 1112.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "7c676eb634ec25fd9b57db7d6e498c3dfe720bab6fd0cb899a4a0b543682f926",
+     "sha": "a063eece55fd0265ee552c7ce1397d137cb9fcf88b012cb74109aad1421497a5",
      "size": [
       855,
       1131
@@ -12010,7 +11842,7 @@
      "reading": 1.05,
      "scale": 1.05,
      "scaleSrc": "reviewed",
-     "sha": "39a49d0fe6702b854b9783b66914eece040086248b815b13cf62d3ed61c747b2",
+     "sha": "e7ccb9864922e42392f61b71ab558909bb3ee29a34f8f6b800153f68303d6fc1",
      "size": [
       806,
       1199
@@ -12042,7 +11874,7 @@
      "reading": 1.09,
      "scale": 1.09,
      "scaleSrc": "reviewed",
-     "sha": "1763c45d644fb8e7768d1d5234a57de4632d845399bddb999bacd69a78fcd204",
+     "sha": "b4ee8c936c026f4d326b9111975b152643a5c392200ab28c3b800b23d462c911",
      "size": [
       764,
       1216
@@ -12074,7 +11906,7 @@
      "reading": 1.05,
      "scale": 1.05,
      "scaleSrc": "noise",
-     "sha": "7e7ee5374aba2f36b61384d49554c59f39776724f5fc80d620f0b15c0b17abb2",
+     "sha": "3640c23d6c4bf21e7dbdda9c4e8465f28d109669414c7fe22343e5626f1b157f",
      "size": [
       704,
       1197
@@ -12106,7 +11938,7 @@
      "reading": 1.25,
      "scale": 1.25,
      "scaleSrc": "reviewed",
-     "sha": "56a530813f2695e7c82e096aa26882610bfe55f29f7f4a25190d6cad54605110",
+     "sha": "713a8078b95313b9aa833aa2b7dfd841b3a750e5b5a095965fd9c7dae519a0ce",
      "size": [
       671,
       807
@@ -12168,7 +12000,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "84e6b4933bc8e6999c185fee138eeba6198c7b2b227ac293a6ed3220a8bb1482",
+     "sha": "a478be05b860f8e7d8ada4c1fbe519330dea68ffdec92f23538bef3be5e859c0",
      "size": [
       685,
       1188
@@ -12200,7 +12032,7 @@
      "reading": 0.95,
      "scale": 0.95,
      "scaleSrc": "reviewed",
-     "sha": "efeecbcbf2a4c10500bebfcab2bd523b8b5eb8ba29e94a76df67028e35757ded",
+     "sha": "f03fc9270092e217c03ca23e2d3e1b96cf71c215f80565c7e0385961000c4fcf",
      "size": [
       786,
       1084
@@ -12232,7 +12064,7 @@
      "reading": 0.55,
      "scale": 0.55,
      "scaleSrc": "reviewed",
-     "sha": "a325a0ecb5828443a7fbe88e9d3140db7e24ec623984915fd9aafeeb1876d199",
+     "sha": "eb8c7c784b9c7e39af0c9416a835fd3134ba0715b8b39993bd0efc527fcd57cb",
      "size": [
       1212,
       832
@@ -12257,7 +12089,7 @@
      "reading": 1.5,
      "scale": 1.5,
      "scaleSrc": "reviewed",
-     "sha": "ae8ee70d91201a5bab8b0132f39444baa3430a97a81cc00479aa31a61e484d5a",
+     "sha": "2f358457a47f997ed64b5b4bde74ebc7f7d5fdb60e2b3e79f92fa272db05d403",
      "size": [
       487,
       924
@@ -12289,7 +12121,7 @@
      "reading": 1.0,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "3838d88727027fed630239506db8c953c6a736f0dedafc79ec872fde99f0e042",
+     "sha": "26208c8c07c34142754cead5a4e49c4f27cad43cf73b70862f99929f3313def1",
      "size": [
       435,
       1146
@@ -12321,7 +12153,7 @@
      "reading": 0.88,
      "scale": 0.88,
      "scaleSrc": "reviewed",
-     "sha": "2c7c8538e119bad3bed2be04b9ae6ffac80d92bb3c633a8805db484aae7d8261",
+     "sha": "5236a1d82c6dfb1894e58e89367957a1eaced22299b6d14d88777b67429670d0",
      "size": [
       563,
       1201
@@ -12658,14 +12490,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      390.4,
+      390.5,
       88.5
      ],
      "baseline": 1125.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "79f828754310d9ae7b96c989003e217986b0825a3fb97a7d1b327dde9285fd75",
+     "sha": "bbdfe4934dda3b67f60ada8cebe26288ea334045293e1c48c3836906f81a0fe4",
      "size": [
       747,
       1141
@@ -12685,16 +12517,10 @@
       0.5
      ],
      "baseline": 1164.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "2781916b19023439e9b97620b38bdd72be71bcd1c52b69a340d469f3b408373d",
+     "sha": "387c1b5b63d994a207f7de7c6f7b1dff5eb5a512373fc2a929642f6083a18bb2",
      "size": [
       823,
       1180
@@ -12711,14 +12537,14 @@
     },
     "overdrive": {
      "anchor": [
-      350.9,
-      32.5
+      350.6,
+      36.5
      ],
      "baseline": 1137.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "1ec51698a9e725273055465eb4288dd22a09ba67350f74fdbddc608cb1420b20",
+     "sha": "dbd91ad9824f764075bea07b37fe09453a7e9238e049ba85434af6257c90789c",
      "size": [
       770,
       1153
@@ -12753,7 +12579,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "7a88b922e81de8c21544cabb26e705a55e75321242eae691d16dab88ef33d873",
+     "sha": "a8c5d93b51f777fdc422aa87ef4c6171b15aa9a95a145b45a299d62625c9c916",
      "size": [
       947,
       814
@@ -12769,14 +12595,14 @@
     },
     "cast": {
      "anchor": [
-      358.1,
+      358.2,
       18.5
      ],
      "baseline": 1077.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "cc044fc04ab9cd93fe86bb7b2856a948d2377a9853fa49f63db6a89be17bd695",
+     "sha": "d8031793974178091d89b7b580eb388060db8b2dd94dabbf049da1e486004113",
      "size": [
       730,
       1093
@@ -12792,14 +12618,14 @@
     },
     "hurt": {
      "anchor": [
-      449.0,
+      448.9,
       58.5
      ],
      "baseline": 834.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "02aee5bf1f6941d868626752779fd59be7ff40d114a494e28bf38e7612c4cb5b",
+     "sha": "2f0fb7b6563a4d3badc0a8faabdd0344e697b2293356881cbc250e6cc42af5db",
      "size": [
       582,
       850
@@ -12819,16 +12645,10 @@
       0.5
      ],
      "baseline": 1077.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "bc8f5c1ecc8fb0a0cfa0c5a20e6ec12f3f3de71678c91ce44584050525866c1f",
+     "sha": "d19850e3896770488f25d4a33790d2a8e17d5f971df287847baeac24fbf91e87",
      "size": [
       730,
       1093
@@ -12836,9 +12656,9 @@
      "stance": {
       "row": 1077.0,
       "src": "silhouette",
-      "x": 489.5,
+      "x": 489.0,
       "x0": 293.0,
-      "x1": 686.0
+      "x1": 685.0
      },
      "standing": true,
      "stature": 1.0
@@ -12864,7 +12684,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "4ffb23aa10b36390db71651959d730adafb2d6a157fc540e4466bc5e5d683b8b",
+     "sha": "c785b339f0dfd30c4867c9c637d9d13ea8f0759648d5a240d2945065dddf3343",
      "size": [
       613,
       887
@@ -12880,14 +12700,14 @@
     },
     "cast": {
      "anchor": [
-      232.7,
+      232.8,
       128.5
      ],
      "baseline": 921.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "22a7905a6de8f653e492987b0d6dc6a01842c3a1db39b506552cb8d07ae3ae54",
+     "sha": "3f23c90f20753127ed25c324b11fe0b1b26f99240ba85a02a4aa60b10e6ca89f",
      "size": [
       570,
       938
@@ -12910,7 +12730,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "cdf81ca775766e0fc65c0635ae0a26dbdbf51b51577b96075bb55bbec267e478",
+     "sha": "719adf2981f8415df1270dce23e8b99f4f35f47c87661166e99c8d2678102fe8",
      "size": [
       553,
       910
@@ -12918,9 +12738,9 @@
      "stance": {
       "row": 894.0,
       "src": "silhouette",
-      "x": 62.5,
+      "x": 62.0,
       "x0": 44.0,
-      "x1": 81.0
+      "x1": 80.0
      },
      "standing": true
     },
@@ -12930,16 +12750,10 @@
       0.5
      ],
      "baseline": 904.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "c794e3f17bce0d0935edd9bc9fcb3274dd5ee5e116833e90223aa2400bca8b3b",
+     "sha": "9a46ce403d70dfb602bdf7c63192e99309b323a25674035c122e9504e89f9bdd",
      "size": [
       602,
       920
@@ -12947,23 +12761,23 @@
      "stance": {
       "row": 904.0,
       "src": "silhouette",
-      "x": 224.0,
+      "x": 223.5,
       "x0": 35.0,
-      "x1": 413.0
+      "x1": 412.0
      },
      "standing": true,
      "stature": 1.0
     },
     "ko": {
      "anchor": [
-      212.9,
+      212.8,
       60.5
      ],
      "baseline": 616.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "8f078afa9b81702d37f1fc4e24a4e77663f790bd051ac4c076f6088622a68c44",
+     "sha": "ed5d28c1bbdbc28f9bf9e8f80b90cf6c90adf809e5592f3b8d4abfcba1197d7a",
      "size": [
       713,
       632
@@ -12998,7 +12812,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "54e894ea655006d0f0872ca1873fd23113f6a6f13334ed82cc30f7ef577200f2",
+     "sha": "7e06dca563818e0a76404ece789b0ed3b7f1d5eb7d6fd1a35f66f6c4f38c69cf",
      "size": [
       1384,
       1018
@@ -13021,7 +12835,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "1ec7e5fefd75b2622a5cb1e2c0c38112890fcdbfac588fc16d2565c5dc9edb55",
+     "sha": "caec74e69e990e645632dd0b8544d6a876b00c8b6671686401ef13e282a28cd6",
      "size": [
       1384,
       1002
@@ -13044,7 +12858,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "cd2c64961ec95aa293d532bf47b63efc3f389714bf0f82315476e8a04d1b53ed",
+     "sha": "851df042c09b55c0844f76737ae06310d78a08b6b8969080662fabc8f5f4c920",
      "size": [
       1384,
       1004
@@ -13064,16 +12878,10 @@
       0.5
      ],
      "baseline": 958.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "c7a425ccd2de809906f9f364f12d73a742c35491ad468369f908e8eb984842b6",
+     "sha": "d7c374b4203490d016dc95be218514687f8f4685191ddf4028d2aa11073257e2",
      "size": [
       1100,
       975
@@ -13097,7 +12905,7 @@
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "c2c3acd0f5f241dd7d0387b761e853f0bfec5e43f7ac52e8433c835c2c248a89",
+     "sha": "923d921a0629e6b8982241c81141a8b477a2739ab106275a499e3870a55c099e",
      "size": [
       987,
       1021
@@ -13140,7 +12948,7 @@
      "reading": 0.761,
      "scale": 0.761,
      "scaleSrc": "reviewed",
-     "sha": "74f3467202682f2c90847298658b7066b70af7eb28fdf9a96801e7c777fa88b2",
+     "sha": "2a643c14421b6e9fedffbcf09b39039ccbf30621c243aec544514a060d945376",
      "size": [
       813,
       1216
@@ -13172,7 +12980,7 @@
      "reading": 0.92,
      "scale": 0.92,
      "scaleSrc": "reviewed",
-     "sha": "6088f249b0d76ed456506258ba0ae9bfee54dc213a3bd817c4fae4bf0a9d94d3",
+     "sha": "15890fc92ea80414969e9e064fcda20513863d35dc76139f7bb8613831b1d2f7",
      "size": [
       815,
       1212
@@ -13208,7 +13016,7 @@
      "reading": 0.967,
      "scale": 0.967,
      "scaleSrc": "reviewed",
-     "sha": "4f74ca07ca559d4833698f9aafdef5bb51d039d9aef4c96f6d62f2f2ed7f9365",
+     "sha": "e1ad0dac5025fc34a8faef021d0ab65a82f31c4d5a970a732bb56b7b439e51f9",
      "size": [
       585,
       1164
@@ -13240,7 +13048,7 @@
      "reading": 1.074,
      "scale": 1.074,
      "scaleSrc": "reviewed",
-     "sha": "a51861243506745d249fe6e3489f06916deea7bbeef4a6c9873e33da7f6fa6f5",
+     "sha": "45aa62ea6d05f07ef92297c177dbeab9443751cc78650064fc50c2928618c023",
      "size": [
       815,
       673
@@ -13271,7 +13079,7 @@
      "reading": 0.804,
      "scale": 0.804,
      "scaleSrc": "reviewed",
-     "sha": "101c79151448e67975860cde240eeffd58b151eb87c672b4a30d0d8232b036b2",
+     "sha": "8b1ff43235f8b039a6fdd970b4046ecc0cfb40c89a284867c16dd1213b0dc556",
      "size": [
       791,
       1037
@@ -13301,7 +13109,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "43d81943db4cf4145c1f61850e07db634afb91681057ef3a33800d3cb3576d61",
+     "sha": "56583be4b6bda818aa091e90f924051c755267b1519127ffc85dbd4130fbd90c",
      "size": [
       803,
       1075
@@ -13333,7 +13141,7 @@
      "reading": 0.752,
      "scale": 0.752,
      "scaleSrc": "reviewed",
-     "sha": "df46dc0e3ceda08dc962ad9b9e4bf68e6147a03aac8a2e4dec915945a7a0ea35",
+     "sha": "d57e0b71c071c4c0dab559a756b7fc12c63b29de5e6dfb9a9f8c9c5543d06f27",
      "size": [
       827,
       1164
@@ -13365,7 +13173,7 @@
      "reading": 0.517,
      "scale": 0.517,
      "scaleSrc": "reviewed",
-     "sha": "6c5b43f6d3d9406e3a4d1cd282bf6a3950abcfc6d6ade076ca2daefd3f894def",
+     "sha": "4c0092651f1a149bd239deea66d5f96da92960a25f8662599bfc0cbe7cb0d854",
      "size": [
       1216,
       816
@@ -13390,7 +13198,7 @@
      "reading": 1.245,
      "scale": 1.245,
      "scaleSrc": "reviewed",
-     "sha": "7dd0f38367bef3b68357e6b3a55153f007ecb695cad52a5e5b3879fea4fb0258",
+     "sha": "3d2a6e256e65827a9b9fe94ded13163c80ba3b63837233a4c548eb449b56d2f4",
      "size": [
       708,
       911
@@ -13422,7 +13230,7 @@
      "reading": 0.8,
      "scale": 0.8,
      "scaleSrc": "noise",
-     "sha": "68b429abe4e1d3a08ab64c3944f7ab0d534e7f2766126ef434c2008b6e19d34c",
+     "sha": "1cf4028e6b7745e1274100bbc43e9377cf411df01d389256e9fe07892ec105d7",
      "size": [
       765,
       913
@@ -13430,9 +13238,9 @@
      "stance": {
       "row": 898.0,
       "src": "silhouette",
-      "x": 354.5,
+      "x": 354.0,
       "x0": 264.0,
-      "x1": 445.0
+      "x1": 444.0
      },
      "standing": true,
      "stature": 0.675
@@ -13454,7 +13262,7 @@
      "reading": 0.604,
      "scale": 0.604,
      "scaleSrc": "reviewed",
-     "sha": "e6da79539089c536022bb4c0a7625549fed034dbb7cb860cbb5d114787ec2f4e",
+     "sha": "29e073b7e01d823715c6674e58db657ab302948c35f7f9389b360523fb88194c",
      "size": [
       792,
       1216
@@ -13462,9 +13270,9 @@
      "stance": {
       "row": 1216.0,
       "src": "silhouette",
-      "x": 579.5,
+      "x": 573.0,
       "x0": 388.0,
-      "x1": 771.0
+      "x1": 758.0
      },
      "standing": true,
      "stature": 0.704
@@ -13490,7 +13298,7 @@
      "reading": 0.784,
      "scale": 0.784,
      "scaleSrc": "reviewed",
-     "sha": "962c0daad0d578a7101fcdef3b5849b7f19238f519b38669c7245e3e3bf0d61b",
+     "sha": "5de64604c11dcfc2eb7bb26c10a9dd7791d0fb623cdf55270ff0b8633b65d80a",
      "size": [
       537,
       1195
@@ -13534,7 +13342,7 @@
      "reading": 0.994,
      "scale": 0.994,
      "scaleSrc": "reviewed",
-     "sha": "857355f3128d2c150333cd20af9591154a50b060b8b7aa5b13deb8eb90f1c3d1",
+     "sha": "8f044f65e5606f697d534b91953f2db12685dc32f2ed0954c2024261bb0588de",
      "size": [
       794,
       1196
@@ -13566,7 +13374,7 @@
      "reading": 0.972,
      "scale": 0.972,
      "scaleSrc": "reviewed",
-     "sha": "686c3f1e646f3453d87fd848ee8f97c1bf6a58d671bfbd838e6e368e4d8cc837",
+     "sha": "796eec370deb9860c5148f26014ebee1d4c28d8f934c5def05edd88dce422e82",
      "size": [
       766,
       1195
@@ -13630,7 +13438,7 @@
      "reading": 1.029,
      "scale": 1.029,
      "scaleSrc": "reviewed",
-     "sha": "d145d75ca72f14a202da7fca018bc614fc8a835ab9a2eba44d2eaf78b91db51b",
+     "sha": "0a815102b38fa0a88b49e9b7ec5b7bc10deacf1e528fcd5665eef6e1472aff17",
      "size": [
       832,
       1198
@@ -13660,7 +13468,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "c8d97145de77bf5a027beb4c4186b2e6bf26bff6f6567c18cddbab8b2f6ddfbc",
+     "sha": "71b3ea9fc1f07dbe263ed4add6811d878bcae5a5105ac8b9ffb5698ce7f6aca5",
      "size": [
       782,
       1149
@@ -13692,7 +13500,7 @@
      "reading": 1.369,
      "scale": 1.369,
      "scaleSrc": "reviewed",
-     "sha": "cbd4f7c0889026731fbf34be10e1008afab139f5caca00cb44175b9431d423b5",
+     "sha": "60d1393cd6dd16f9f702c493a40a19641133825ce645652b19efbf8fa35e095a",
      "size": [
       804,
       907
@@ -13724,7 +13532,7 @@
      "reading": 0.643,
      "scale": 0.643,
      "scaleSrc": "reviewed",
-     "sha": "cfcadf04c28ba584f75e49400c13281c4cf419341a768ff18f251d93fff4da54",
+     "sha": "686f55540e3e15331a5088e093ac08799edb302f8eb9ea2320f20d4adea585df",
      "size": [
       1216,
       832
@@ -13749,7 +13557,7 @@
      "reading": 1.211,
      "scale": 1.211,
      "scaleSrc": "reviewed",
-     "sha": "562ba7caef2af097e251c8eec6d9cb7915019149c1ff12f689108f3079c3e286",
+     "sha": "7dae23b989ffa054f5bdcfb72db3cae07da039d41cbc1a2f9c1b5c65cbee452c",
      "size": [
       803,
       983
@@ -13767,7 +13575,7 @@
     "twirl-end": {
      "baseline": 1196.0,
      "prone": false,
-     "sha": "2fe0588624332b4f932ffd7a134a739cd25014f3ad36711ad803177955424552",
+     "sha": "737f81723273ff6bbb111b342271e26b1c044d4fa96a5143713c974835c48222",
      "size": [
       673,
       1209
@@ -13777,7 +13585,7 @@
     "twirl-forming": {
      "baseline": 1209.0,
      "prone": false,
-     "sha": "379680875bab99e9c9e19defcc8854c6d7f744a22746655cf468c038b1afe582",
+     "sha": "99c122886a2766462dbe0967d6ade6556274e9fa698eb123e9b5f4c8f4c143a2",
      "size": [
       672,
       1209
@@ -13787,7 +13595,7 @@
     "twirl-going": {
      "baseline": 1053.0,
      "prone": false,
-     "sha": "edae56c21817f771d8f9546bcf2f1a46979596c4a570a4c36220fff5518ea9a2",
+     "sha": "23bbddd0ebb7959309ef29b68cfd94c329cd08a1f374f82987fedb1552187dcb",
      "size": [
       693,
       1069
@@ -13797,7 +13605,7 @@
     "twirl-start": {
      "baseline": 1032.0,
      "prone": false,
-     "sha": "fa033410a127677318827e9d67529d925e7125f603669d8563075d53b514bf0a",
+     "sha": "aa31255fa56d8352c1e20f0437e9f490639fba3a42d4f6c33ac20ed80dbd5868",
      "size": [
       682,
       1048
@@ -13821,7 +13629,7 @@
      "reading": 1.001,
      "scale": 1.0,
      "scaleSrc": "noise",
-     "sha": "031c343a27476c784da1682c5b317749f646afbe6ee356061c1aa4ad00689b88",
+     "sha": "900316270c826bfa4db6f262f2c3007269f18ae47d760c6f437c1b438adb0f9a",
      "size": [
       642,
       1162
@@ -13865,7 +13673,7 @@
      "reading": 1.02,
      "scale": 1.02,
      "scaleSrc": "reviewed",
-     "sha": "c2e55c0526c788c4a29585651f8c04aac6563d539f2b60df8040f876762702da",
+     "sha": "ea687a030d471da8f43dab573177f4f42d0897570c5d5bc6448725c1ae99a5e8",
      "size": [
       885,
       1216
@@ -13897,7 +13705,7 @@
      "reading": 1.202,
      "scale": 1.202,
      "scaleSrc": "reviewed",
-     "sha": "c2859937773460aa84560543de1794004324da6ad788a9f827a756e4223a7294",
+     "sha": "6db0460ee0f262e889f14c5ad23fcd312e79479b0f3b41c7b97cf8175d176dd6",
      "size": [
       399,
       1214
@@ -13929,7 +13737,7 @@
      "reading": 1.222,
      "scale": 1.222,
      "scaleSrc": "reviewed",
-     "sha": "a04b86b9d79953bca21e50e6a252c69f05f5ba01cbde765fb573d05c8db2beb9",
+     "sha": "1e19e83bf241dba8933d7832a206e7b4f1d755dfd9b0688c38872bb473d06b90",
      "size": [
       743,
       863
@@ -13959,7 +13767,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "f850fa173c18fab876f73dfd94003ad26a4024491c9fefc05311ce0358a0831b",
+     "sha": "52627efebfe63a12510e8b13080c337080c886bc921c24b69d5cc2aeab987924",
      "size": [
       549,
       1195
@@ -13991,7 +13799,7 @@
      "reading": 1.212,
      "scale": 1.212,
      "scaleSrc": "reviewed",
-     "sha": "3ded70e817c241e06960223d14d3975cf9315f6efa2d236d8ff3c071cc1e287d",
+     "sha": "d2c23a99e208fec332d839f5df3ea56f199a3e3b71a7eb2b53166352cc57273b",
      "size": [
       682,
       1203
@@ -14023,7 +13831,7 @@
      "reading": 0.866,
      "scale": 0.866,
      "scaleSrc": "reviewed",
-     "sha": "7b42021a1adc4896eb346d2bc1ac234f3c172e073b82f327a0721fc53a80c9a6",
+     "sha": "e44066b1fd6441af94485031c238a1aa8a0a9a8f784c960d8a19062b1db7a186",
      "size": [
       1216,
       473
@@ -14048,7 +13856,7 @@
      "reading": 1.255,
      "scale": 1.255,
      "scaleSrc": "reviewed",
-     "sha": "b47db018305d6c0109039b97e344a4ad9efb6fba2dfc76ef3ccf609d9fdde7d2",
+     "sha": "2bfea499ea68ee0a36402601951be19e69d487f4dddfec021f778b3d3fc151d3",
      "size": [
       642,
       1144
@@ -14061,12 +13869,12 @@
       "x1": 530.0
      },
      "standing": true,
-     "stature": 1.2
+     "stature": 1.199
     },
     "twirl-end": {
      "baseline": 1164.0,
      "prone": false,
-     "sha": "cf833fc3d9a6249f0b212211abd2126b21d80335b213946ee813e6e3d4cbb0e8",
+     "sha": "37245014f9be8c7b8ebacb89b0527ff5fb70f8090e418cd1846bb2eda7e01d97",
      "size": [
       623,
       1180
@@ -14076,7 +13884,7 @@
     "twirl-forming": {
      "baseline": 1171.0,
      "prone": false,
-     "sha": "c3dca1b744ba7b32520529e86fa8179f1c0c71e37286a493f277a7c102795083",
+     "sha": "e7d64c298e5a087ce6be86ce1a4758cc0d0b53de5d657fb8c417d2e6b7af1c12",
      "size": [
       658,
       1187
@@ -14096,7 +13904,7 @@
     "twirl-start": {
      "baseline": 968.0,
      "prone": false,
-     "sha": "43e702862f33e2aa303a4dde9c9ec075872ed100dc9acbc2b49a9a21f9903a8f",
+     "sha": "fc1242d2ba245360327fa4578f329144592955861d438715349ca625224be47f",
      "size": [
       598,
       974
@@ -14120,7 +13928,7 @@
      "reading": 1.248,
      "scale": 1.248,
      "scaleSrc": "reviewed",
-     "sha": "6e1268444dfabbfd8c7dfebee3ec30a83c5a9498b85ab74753bcfa7d9b1a71a4",
+     "sha": "b4fefadc00499d1cb62447c03346cc288c29a96fdd09d4d3728c44eacf1182d1",
      "size": [
       461,
       1193
@@ -14128,8 +13936,8 @@
      "stance": {
       "row": 1164.0,
       "src": "silhouette",
-      "x": 204.5,
-      "x0": 57.0,
+      "x": 205.0,
+      "x0": 58.0,
       "x1": 352.0
      },
      "standing": true,
@@ -14228,7 +14036,7 @@
      "reading": 1.076,
      "scale": 1.076,
      "scaleSrc": "reviewed",
-     "sha": "bf0f6a115f00f6f9da22697d7b328d6af3ef5076b49d53298c19256ca0c4fdc6",
+     "sha": "b34ccf661e8cdd118beed4b3c5c7ead99055d29affeea7d3e1ce4c97f60879b0",
      "size": [
       723,
       738
@@ -14290,7 +14098,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "56918c5b104b005b943b0668b5fc29b908a341fc7a9cbf877c20f1e6b2de4a90",
+     "sha": "f711e68f661ebbfb45ce785202e2778defffe0c60e59e2a0d87cc509373e6134",
      "size": [
       460,
       1194
@@ -14322,7 +14130,7 @@
      "reading": 1.128,
      "scale": 1.128,
      "scaleSrc": "reviewed",
-     "sha": "993a53574c2623ebb79ae76031f954210ac66582e4ae0c4d0de5f9396b03b7a1",
+     "sha": "28bb30232f347d0204c229250faa04e8c5dd160f2de74702ae37d528fc8fd903",
      "size": [
       521,
       961
@@ -14379,7 +14187,7 @@
      "reading": 1.352,
      "scale": 1.352,
      "scaleSrc": "reviewed",
-     "sha": "61a17ea24fa8565a2c4a6fe9c245a798e15cc176f12adcc1945c409333593f3e",
+     "sha": "4f3aa00f3fa739c9f378bfcf93f48ccf462c3eb1093de89387ccdc8956265697",
      "size": [
       543,
       962
@@ -14429,7 +14237,7 @@
     "twirl-end": {
      "baseline": 818.0,
      "prone": false,
-     "sha": "b0fa46e1e694872c677e6eeed070c4c8eb4c62e4106817aff7c68ca7307ed38c",
+     "sha": "765b0f8f1b149c2d23b45af8754a55a6fb4f4a43c640b8863dff43e44bc461ad",
      "size": [
       591,
       834
@@ -14439,7 +14247,7 @@
     "twirl-forming": {
      "baseline": 832.0,
      "prone": false,
-     "sha": "0ceea6616c86fac5c551015b14c5561c3e60357330ac7fa5c2ed573151a86006",
+     "sha": "dafc3aaa5e4a795ddc607717eaf84acd04dbb06a211ec1a2a6456409f666dd72",
      "size": [
       600,
       849
@@ -14449,7 +14257,7 @@
     "twirl-going": {
      "baseline": 915.0,
      "prone": false,
-     "sha": "e8813b2d74e008da73bea708bfb91bb73073c762ce578390860fb26cdc001dd8",
+     "sha": "52c42f1a917ff7fe75c66a36a8e6c9a4e2d7900e3fbea032b2cf5d76c28ed7b8",
      "size": [
       567,
       915
@@ -14459,7 +14267,7 @@
     "twirl-mid": {
      "baseline": 1203.0,
      "prone": false,
-     "sha": "822505d8a615bf2efed562c25c4632b3cd817828cfb4514d3c8b4c26500ef891",
+     "sha": "e7950a99c0ce57686fb80c9772a5ae04aa5313fb18dedb34ccf43be3bfae0641",
      "size": [
       768,
       1207
@@ -14469,7 +14277,7 @@
     "twirl-start": {
      "baseline": 891.0,
      "prone": false,
-     "sha": "7d468442eb54a78e8527581eccc14aac612aef87e791afec3c5fabce9f12ce01",
+     "sha": "01e2e0559cb0603051e47a84b7ee23daf1b965645f828039d654a8fe51b3f370",
      "size": [
       569,
       907
@@ -14537,7 +14345,7 @@
      "reading": 1.274,
      "scale": 1.274,
      "scaleSrc": "reviewed",
-     "sha": "59a2933dc2c9e7a02a855265d2aab6932749f2737ed41983f46b038e564ba8ee",
+     "sha": "7bdcc75f3fbfd22710ed9cd7d0874c029a50ec172216ab3369b6e79a5af70f03",
      "size": [
       597,
       833
@@ -14550,7 +14358,7 @@
       "x1": 434.0
      },
      "standing": true,
-     "stature": 0.901
+     "stature": 0.9
     },
     "cast": {
      "anchor": [
@@ -14569,7 +14377,7 @@
      "reading": 1.314,
      "scale": 1.314,
      "scaleSrc": "reviewed",
-     "sha": "18c21904e8e053e38571b8fcc2fb745de99d5d4262d530c8450aa5cc80d07a3c",
+     "sha": "f7661bb5ebdf3bbeac2f9c4e5549cab8538ca614693d4199a66c08e08cc13d45",
      "size": [
       312,
       955
@@ -14601,7 +14409,7 @@
      "reading": 1.021,
      "scale": 1.021,
      "scaleSrc": "reviewed",
-     "sha": "b4a515887e20afa0191874702b99656bf6c2f87ab14a91ef425a4f21a7a79976",
+     "sha": "a4d62de999f708f36d8bfaf1862a3939bd7e5551e70986b3318d9157669b8237",
      "size": [
       624,
       1101
@@ -14633,7 +14441,7 @@
      "reading": 1.05,
      "scale": 1.05,
      "scaleSrc": "noise",
-     "sha": "614758d2697b9acf42aa8ad73cf0aaed1bf15e6fca12a8a28af9a8ebeabbad1d",
+     "sha": "3327cf3b9285a594787c39e55bc57c196624142281e292161f703017d4406754",
      "size": [
       515,
       793
@@ -14663,7 +14471,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "11eec3300da84056b0a8581a07c4cd736f44f14770e115189a6c3085b0e154ad",
+     "sha": "5a64561bf4245d9a8c54dc34125a6dbe6c5d52f3cd2df5bd6f1f5f5525ef42da",
      "size": [
       443,
       1164
@@ -14695,7 +14503,7 @@
      "reading": 1.338,
      "scale": 1.338,
      "scaleSrc": "reviewed",
-     "sha": "02b5669ac2888c38191da6f43698275eea00b0f08337fd1ea7bc06d5445fe3e5",
+     "sha": "c62397c763af44a7146269d07ef4e8b769ff3d23dc82a7c10933de1ef3f858e5",
      "size": [
       426,
       883
@@ -14727,7 +14535,7 @@
      "reading": 0.8,
      "scale": 0.8,
      "scaleSrc": "noise",
-     "sha": "3f146357ab7f2c8f81c7f3c994a64d39b8b336f44d37a85c52663b574c4c5fa8",
+     "sha": "3da210a2b66d73f2baeba25b287a0dca83f6246ad1e97d15fc2f43fc68c27d5d",
      "size": [
       1040,
       323
@@ -14752,7 +14560,7 @@
      "reading": 0.863,
      "scale": 0.863,
      "scaleSrc": "reviewed",
-     "sha": "0585cd14247d5190887168cd7e1bd1d774c8c2bffad0337943fc051dc4ab1a02",
+     "sha": "f94499d6842718898f0ccbaa02ce99294ab5408405b318d6eb0933ab2ce054a2",
      "size": [
       796,
       1107
@@ -14784,7 +14592,7 @@
      "reading": 0.863,
      "scale": 0.863,
      "scaleSrc": "reviewed",
-     "sha": "0585cd14247d5190887168cd7e1bd1d774c8c2bffad0337943fc051dc4ab1a02",
+     "sha": "f94499d6842718898f0ccbaa02ce99294ab5408405b318d6eb0933ab2ce054a2",
      "size": [
       796,
       1107
@@ -14816,7 +14624,7 @@
      "reading": 1.2,
      "scale": 1.2,
      "scaleSrc": "noise",
-     "sha": "a6a5223666fa1fe49e7813ba376913e688e79f02c3f4945f998d38787eb18608",
+     "sha": "02d780070ed39e65a0c37f8d1878ba8de88cd9beb499dad69f9fbee61134e6ff",
      "size": [
       505,
       879
@@ -14834,7 +14642,7 @@
     "twirl-end": {
      "baseline": 817.0,
      "prone": false,
-     "sha": "08942ba437e10e50313fe0118aa3b180a0f64032038d77beff226ed460dda5e6",
+     "sha": "1c179bd8fc9be17d35bb7d48610409026d9c33700d29722240e6687699aed806",
      "size": [
       529,
       834
@@ -14844,7 +14652,7 @@
     "twirl-forming": {
      "baseline": 810.0,
      "prone": false,
-     "sha": "01222e47abb7031eeb392224adc5adb5488610a6e8acf00136278b5fab11ca88",
+     "sha": "c3b35d2378e3bb6fe9db94cf8eb33036eff8e230a57b4b9077ae62aa50629712",
      "size": [
       529,
       826
@@ -14854,7 +14662,7 @@
     "twirl-going": {
      "baseline": 924.0,
      "prone": false,
-     "sha": "5ffbe476f6e0ff1fdd0c912d8569e025f10c25ecf0b29289e48c37abd79e7b05",
+     "sha": "9b6bb6f1f83a1e92164ede2bc2ef9695533e3953dc1e26c614c19f18626dabee",
      "size": [
       523,
       928
@@ -14864,7 +14672,7 @@
     "twirl-start": {
      "baseline": 907.0,
      "prone": false,
-     "sha": "96316d730001a7daee0bf7ce6cf44e00b692698fab5a904e644c2b0d834fb93c",
+     "sha": "5e93545064f90298e9dc6fff3937d2fd08ef2d672f37cfb411351264bd92fc6c",
      "size": [
       525,
       923
@@ -14888,7 +14696,7 @@
      "reading": 1.071,
      "scale": 1.071,
      "scaleSrc": "reviewed",
-     "sha": "df8154029699f70203d47089717c4676114e6558e89306eba7f36715bb9f4786",
+     "sha": "b1ac9381d57557db5dafd3a9077817206d3a58c6ef3d993ee182183977193e18",
      "size": [
       530,
       774
@@ -14932,7 +14740,7 @@
      "reading": 1.086,
      "scale": 1.086,
      "scaleSrc": "reviewed",
-     "sha": "5dc3e5af25b363c1cdbdb69aa766ef6bed07e1aa38faf961a83383e03f109a17",
+     "sha": "d00a2bfa1c579ebbadc2fd4db704364db4fed86ad0d986a36e01807c8306bc45",
      "size": [
       829,
       1145
@@ -14964,7 +14772,7 @@
      "reading": 1.165,
      "scale": 1.165,
      "scaleSrc": "reviewed",
-     "sha": "e5c3cd2730220371d3a8348b831f9836c049d4f1210e3143cd9b0ac910d8bee4",
+     "sha": "3656c7cf9a26da485042a6919fd5c8d07036594afa437eef5f69b9b5885a49f9",
      "size": [
       286,
       1016
@@ -14996,7 +14804,7 @@
      "reading": 1.054,
      "scale": 1.054,
      "scaleSrc": "reviewed",
-     "sha": "0da2878fead5c062384059ac32eb5c005f7e8796b8d9b00c587cfbafda885a24",
+     "sha": "d1048baad2366629524d06a362245e3158b25e63b839a6e152eba5814aca82e7",
      "size": [
       729,
       1125
@@ -15026,7 +14834,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "690a2cec6e26ea9cbd3df7264e13f787b88c98e6c4111ffd6e24a2e94050bd58",
+     "sha": "1a810b499d50fb6c61744986603d690406aed55a2a25eb5d7cd6010f27b1b459",
      "size": [
       655,
       1116
@@ -15058,7 +14866,7 @@
      "reading": 1.295,
      "scale": 1.295,
      "scaleSrc": "reviewed",
-     "sha": "4114bd7edabd7c5504d9fb09d53108a71135e65349a2a1beda45d148d1f061be",
+     "sha": "028b8e2a2f45c4b73fe1be8ff9e64bf1e54816e66e6b9830a8684fa6747febe2",
      "size": [
       573,
       849
@@ -15091,7 +14899,7 @@
      "reading": 0.85,
      "scale": 0.85,
      "scaleSrc": "noise",
-     "sha": "ae343a1c154e16992cdba7d23fae704fee049bed08d562f1eef3b721ca5e4f09",
+     "sha": "bf77d230abf08a74412f4a4a548aa4b06e8bf26a5068067a31ef50bddb03945f",
      "size": [
       1136,
       344
@@ -15102,7 +14910,7 @@
     "twirl-end": {
      "baseline": 844.0,
      "prone": false,
-     "sha": "51793b4966050c8ff350bbd51c7f3438651588300067025068cbc63459e4bb30",
+     "sha": "7d77226f0d5270e0710c1e755737dea27c3b3b33e5cd20a685aa2564a948400f",
      "size": [
       521,
       860
@@ -15112,7 +14920,7 @@
     "twirl-forming": {
      "baseline": 856.0,
      "prone": false,
-     "sha": "b82427c10a894d5fa371c2c770fdd223da946bc02c2d8017cfdf8e9a8f892eb3",
+     "sha": "ab4a75feeba6689ebd7fe6b177f8c86957ad18e96a364d156cdb2de55135125c",
      "size": [
       538,
       868
@@ -15120,9 +14928,9 @@
      "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
     },
     "twirl-going": {
-     "baseline": 950.0,
+     "baseline": 939.0,
      "prone": false,
-     "sha": "a454630d2907783cb4aa2e591fc2d6ea440334448273dec55c7d7e71b9d6b0ea",
+     "sha": "364dcd43cb6eca16c91d686c4ac3862f0b4e5f2a96621cc9b4897e1c67648828",
      "size": [
       572,
       950
@@ -15132,7 +14940,7 @@
     "twirl-start": {
      "baseline": 929.0,
      "prone": false,
-     "sha": "94c74833290522918f4d3d4a5440846651e8aa11e9d226099fdcd4276a0e9da6",
+     "sha": "2314eac3346be59f18283523a52612d615216fca7b3ef0e4c5fd213526324b51",
      "size": [
       576,
       945
@@ -15156,7 +14964,7 @@
      "reading": 1.243,
      "scale": 1.243,
      "scaleSrc": "reviewed",
-     "sha": "1c59e895373d3d26f156be097658dec659bc62f814744b37c356703418e1900e",
+     "sha": "141ad01b0aedec2ddd0b49cc414600166da1dacf51663bbaab61090b5c0bcede",
      "size": [
       406,
       920
@@ -15200,7 +15008,7 @@
      "reading": 1.083,
      "scale": 1.083,
      "scaleSrc": "reviewed",
-     "sha": "6beaace6942db92f260d98450a25917c753f3dbd5c5600f82b24e7ecbe7b9880",
+     "sha": "83c7d56e6b624c7e604e4ac8475c23bce70d7dca256abb120ec9aa2803997566",
      "size": [
       694,
       839
@@ -15232,7 +15040,7 @@
      "reading": 1.474,
      "scale": 1.474,
      "scaleSrc": "reviewed",
-     "sha": "4c5970e3ab2e58b79a75f7803138df4b255751cb48c818607765db639f759b0e",
+     "sha": "1e79bd510c81b90907286594879d94cc8a64417896e89c1755975e228b97d0a1",
      "size": [
       432,
       1071
@@ -15245,7 +15053,7 @@
       "x1": 360.0
      },
      "standing": true,
-     "stature": 1.343
+     "stature": 1.34
     },
     "follow": {
      "anchor": [
@@ -15264,7 +15072,7 @@
      "reading": 1.515,
      "scale": 1.515,
      "scaleSrc": "reviewed",
-     "sha": "d0c9be00d9c8b280e3e2a0ddb06c4034ae8c6e9bda02b312ab2ee443ccd2d801",
+     "sha": "8aebfb7281f55da1fb8d75f56512a15b1ea7dd4717c4596c52bed7083f9bb492",
      "size": [
       666,
       721
@@ -15296,7 +15104,7 @@
      "reading": 1.449,
      "scale": 1.449,
      "scaleSrc": "reviewed",
-     "sha": "0ec32055f9b9970c48c599f8f7faa4802f371fa2983067a8018413660d174b56",
+     "sha": "f25f7fe9a7349891463131d3d479ec66aa64cc90c7b82ca24572ccdf4bce999f",
      "size": [
       696,
       770
@@ -15326,7 +15134,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "7dc088e492ef022df9beb68f9a105f5185424405be4d23b5083f4bfed56b10d7",
+     "sha": "c842f9dacf4ec58f172ffb3c049921dbd309a435258cbb1b59cd356900782b96",
      "size": [
       767,
       1176
@@ -15358,7 +15166,7 @@
      "reading": 1.378,
      "scale": 1.378,
      "scaleSrc": "reviewed",
-     "sha": "9be9d426c9f1e4c39dd170cd7a72f9b173d6d7506eb994f8d10957fb0b96bdfb",
+     "sha": "7e26ab41dd5cee43a89365748110cc71d09406c1d4324e21559ebef765a6c557",
      "size": [
       539,
       857
@@ -15390,7 +15198,7 @@
      "reading": 1.4,
      "scale": 1.4,
      "scaleSrc": "noise",
-     "sha": "8b84f9e1be6d81b2e6a313034254356ef4fca50226d2d28586a0c4a90d20ceba",
+     "sha": "86ef37afe05a35dca668ea5a193ed784b3f7f2580198e0f590bd9dd9a5affc90",
      "size": [
       1185,
       399
@@ -15415,7 +15223,7 @@
      "reading": 1.579,
      "scale": 1.579,
      "scaleSrc": "reviewed",
-     "sha": "8b8c7f16390551f78663c2cc27c6af9d077c43c1d6b379fc25ec1c8f93a10866",
+     "sha": "125d94446891071a6e26e6ddaafe79c231747be2d5cc92eac5dc6143db69e866",
      "size": [
       585,
       761
@@ -15433,7 +15241,7 @@
     "twirl-end": {
      "baseline": 1010.0,
      "prone": false,
-     "sha": "6137ef5be5342616f706980f12b6a29c217865559e37153a55efee4b7c2f2588",
+     "sha": "74366ed5bccefa10d0ecfe2414b5d7f224650c0096611beec57beb832a8bed2f",
      "size": [
       754,
       1026
@@ -15443,7 +15251,7 @@
     "twirl-forming": {
      "baseline": 1025.0,
      "prone": false,
-     "sha": "67c524374fd513f9444ad5e69e287497207bf1f40e114cd250794369728df445",
+     "sha": "c6fc3fbea10d37a257795d0f0cc3b704d411e0ed60fde441ac9f73af5a62fae8",
      "size": [
       710,
       1032
@@ -15453,7 +15261,7 @@
     "twirl-going": {
      "baseline": 913.0,
      "prone": false,
-     "sha": "938672eb8fc86b7916bfe4cbfe63e7ac0a757f7585eeabdb8f8e81a6b6739c9a",
+     "sha": "b4e542e3c5284b14ca73d7ae4a3d98c2924a888e51fa00efcce0bd030eada7f5",
      "size": [
       611,
       913
@@ -15463,7 +15271,7 @@
     "twirl-start": {
      "baseline": 897.0,
      "prone": false,
-     "sha": "d8b3808b9ad81483917291a5dc9a17b8d15d337ab41679905685b7fd07a300fa",
+     "sha": "4af52e6eea7900fd332b6add786065a89b0b382b359326161ab64a6869c7432f",
      "size": [
       613,
       913
@@ -15487,7 +15295,7 @@
      "reading": 0.926,
      "scale": 0.926,
      "scaleSrc": "reviewed",
-     "sha": "00d5fdc882287ae4dd223a0478d94ec9de8ebb457f3e2f63b0194abea990370f",
+     "sha": "ef45971aa42fed035ab8804d46face0ea40fefa2f9e08460e84830c6f115f9cd",
      "size": [
       604,
       1150
@@ -15531,7 +15339,7 @@
      "reading": 1.15,
      "scale": 1.15,
      "scaleSrc": "noise",
-     "sha": "5806cf5dffac3c65ba799e379e2d97961f0c7d669640dfe835908f2492e7a7f8",
+     "sha": "9f3ba907abe97c30cd8c877660defaea38177b42191df90669337f791634754c",
      "size": [
       445,
       1180
@@ -15563,7 +15371,7 @@
      "reading": 1.547,
      "scale": 1.547,
      "scaleSrc": "reviewed",
-     "sha": "5dc11cb4f128d648ce6be6528265f103273218164f9f6dcb3a728e3c1a7e3852",
+     "sha": "898c8b83a8f9c9acf7e4a22ee4a3ca6b621f4ec06f469da2ae0d3b644b6774d5",
      "size": [
       717,
       736
@@ -15595,7 +15403,7 @@
      "reading": 1.093,
      "scale": 1.093,
      "scaleSrc": "reviewed",
-     "sha": "d1f522154217b8022168d3fa8d1382b64287456e70b259ca3c6ca55c517ab42b",
+     "sha": "59432b041511fc535bfbd7b088f55ac150481036536de45a1fe0f2f0406efc14",
      "size": [
       754,
       789
@@ -15625,7 +15433,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "bbff25d842d54246eafb5ebf6774c9e9a6554d1d073f39511453329b139b4ab8",
+     "sha": "a23f69f3a87c6153e670082298c10ee12f988847468694c84e0498c30913c090",
      "size": [
       728,
       1183
@@ -15657,7 +15465,7 @@
      "reading": 1.181,
      "scale": 1.181,
      "scaleSrc": "reviewed",
-     "sha": "6a49e9d16e33f6cb1a83769f18510409dd3e115e854603ffe2cf6354ada461ca",
+     "sha": "3e4f1417d103fb69b8419a82bef2d05847f3d84dd10d4b3b2f1073e532575824",
      "size": [
       637,
       843
@@ -15689,7 +15497,7 @@
      "reading": 1.261,
      "scale": 1.261,
      "scaleSrc": "reviewed",
-     "sha": "1c19b00d9c1c806637ec73acf7fe700f89ee565ab4ef84380a0efb35633e5c96",
+     "sha": "29fcc07025c057699f82c00b668bbc6463d6a3e5a2733816d1931bd7624ef1f0",
      "size": [
       670,
       875
@@ -15707,7 +15515,7 @@
     "twirl-end": {
      "baseline": 1141.0,
      "prone": false,
-     "sha": "9993172eecc45b90ff10b73bcf9af3e70b23308e522d3d4a9b9d9d00bad1aafc",
+     "sha": "ed572641dceadada922936c9871af26c1c8a68aa512b5903f2cd06e61a7f0e29",
      "size": [
       673,
       1149
@@ -15717,7 +15525,7 @@
     "twirl-forming": {
      "baseline": 1149.0,
      "prone": false,
-     "sha": "734cd2c56395927098a422d870333580c017b98715af4716ecee4c1de929063f",
+     "sha": "0eedfd7385c65a644923e3c945d35b3bdb41ac6cfae28c4cda58c686badbd2f1",
      "size": [
       687,
       1149
@@ -15725,9 +15533,9 @@
      "skip": "a dressphere-change key: staged by fx/mix/twirl.ts with its own scale rule (keyRescale), not a battle pose"
     },
     "twirl-going": {
-     "baseline": 981.0,
+     "baseline": 971.0,
      "prone": false,
-     "sha": "0b31d5a29644fdd4d4296ed40e783847647c3ec7eff530cfe67c24ccd6cfd1c7",
+     "sha": "2794e202f2d1ab8afc7e26f89c3930ca6ff570bd3e08e6e3b4cc3b2d8c02c2cb",
      "size": [
       589,
       981
@@ -15737,7 +15545,7 @@
     "twirl-start": {
      "baseline": 982.0,
      "prone": false,
-     "sha": "0aa903bb78a576034e8df8528ec06d40027beead5855d7c99d05fc5960480b5f",
+     "sha": "89c730f41db8d6b0155d948123fb7ae40d6f2e7e51fb86aa1139e5b35ecce04b",
      "size": [
       572,
       982
@@ -15761,7 +15569,7 @@
      "reading": 1.255,
      "scale": 1.255,
      "scaleSrc": "reviewed",
-     "sha": "2b846f54059e4568a754ca15e199a493c95cc48539a0c272c3a2c4f14f48f05a",
+     "sha": "b30143954d4d168c8ec857431027112aff2e25ea1012d9ddfa6ad2852d22201d",
      "size": [
       490,
       1213
@@ -15901,7 +15709,7 @@
      "reading": 1.603,
      "scale": 1.6,
      "scaleSrc": "noise",
-     "sha": "5fe8e4c3c8c7cd3a6d01d3830d226846c0f2c3c2d95f030230d03f59e9ab5490",
+     "sha": "3001a910ef0a7b64dba0b8264bbff92f516b2813c1c8a7d5bf3babf7e6d70485",
      "size": [
       758,
       752
@@ -15931,7 +15739,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "b29c7add1f68be432c022ca0e89c383091ce2c12634192986a42ef0dae7f1d5a",
+     "sha": "63d483f581cd56d2ce57bf2e871bad6add03126091802aa5a59adfb4a0ef3577",
      "size": [
       581,
       1183
@@ -15995,7 +15803,7 @@
      "reading": 0.864,
      "scale": 0.864,
      "scaleSrc": "reviewed",
-     "sha": "bf859d072d61d85d534a1d9eb3018605bf65a39ad93a4e2ae027fde778d30cd2",
+     "sha": "4f428ed869edd8a3c7ef07d3fa3b16dcf7bb325abb8cbf60d84bf82f3855cde9",
      "size": [
       1102,
       396
@@ -16006,7 +15814,7 @@
     "twirl-end": {
      "baseline": 867.0,
      "prone": false,
-     "sha": "4993e0598e8a75adfb89559d7e28e5bde1e1b00b2ae677785bd47df3d8fa4fb1",
+     "sha": "be34ba2bd8eb68f6a067911e79aebe5a2515ba6e0c37d145835b4346864983bf",
      "size": [
       655,
       883
@@ -16016,7 +15824,7 @@
     "twirl-forming": {
      "baseline": 889.0,
      "prone": false,
-     "sha": "111ad9d250002700f9979fc0285f4e8f4eb908e4c4cee439860d93373b739928",
+     "sha": "39d68f7a4ec12be540cf91881566ae001d1081599854b62bac5a29e57e524afe",
      "size": [
       645,
       889
@@ -16026,7 +15834,7 @@
     "twirl-going": {
      "baseline": 998.0,
      "prone": false,
-     "sha": "909c906b4ecc66ba8e7ec406c0a63dd9ea4d9b36f1a4e4389e7f9ccd7450e7e4",
+     "sha": "221e63f94cd55ac8ea919f95c2db2539bfe0c77709b6a4f98171f967d6421d24",
      "size": [
       587,
       998
@@ -16036,7 +15844,7 @@
     "twirl-start": {
      "baseline": 999.0,
      "prone": false,
-     "sha": "22dd9ee030713fa982fca82fc44729b660739b53883cefab7d78f1837e3ab017",
+     "sha": "673e195c5e6cada1f74d9d3ca8c0aaa9101ae4c129903337e373615f287a35f0",
      "size": [
       601,
       999
@@ -16060,7 +15868,7 @@
      "reading": 1.286,
      "scale": 1.286,
      "scaleSrc": "reviewed",
-     "sha": "68aa7652a575c68dfa6010ade653d40be7246fd198e4bad9358d2ca144e70ed2",
+     "sha": "56d409e2611d9d44fdcbd28afcee7af47ad54df152d8645447e6325fb13e7ce5",
      "size": [
       810,
       951
@@ -16104,7 +15912,7 @@
      "reading": 0.7,
      "scale": 0.7,
      "scaleSrc": "reviewed",
-     "sha": "8b8980f7b2fa8e542a62ec02119577afc5013c966b7792245a45b56ad2111905",
+     "sha": "ce94756c54a9ab247c7a542b1ff93411fe8a19798f6d85fd49199a0e8d0b1d83",
      "size": [
       1392,
       1416
@@ -16136,7 +15944,7 @@
      "reading": 0.77,
      "scale": 0.77,
      "scaleSrc": "reviewed",
-     "sha": "2962e6cafbb104ef6a5306ec62ae7d30a06623d72bdbadd8f9aa3f69353e1670",
+     "sha": "f2c1f9bdac0788986346804baabe16151b7fd850974949760b7400e288922675",
      "size": [
       1430,
       1213
@@ -16167,7 +15975,7 @@
      "reading": 0.67,
      "scale": 0.67,
      "scaleSrc": "reviewed",
-     "sha": "001d578033ff308552ad4f3aa54be76fb053be82e59ea628ee6eaa7fb7a1148a",
+     "sha": "abe048e12db20e0c6c6de92cf51749910235d8864113a61f64170843404d08c0",
      "size": [
       1316,
       1203
@@ -16197,7 +16005,7 @@
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "4c91abb93387ccaeba0c5e549fd79332e7d2a5bcae5cb348bf2413077f47b94f",
+     "sha": "2092c9b8060c5108b1ff4821799c68488876d9ca8c894f74fd21f41eba57b3db",
      "size": [
       823,
       1184
@@ -16221,7 +16029,7 @@
      "prone": true,
      "scale": null,
      "scaleSrc": "kept",
-     "sha": "c40380f99f0235f54f3a420dc2a7243d84c85c9891257bffe1aeb60af13a4679",
+     "sha": "2c27b6d81d1d859b2b62b6135d61e10b0593f99814c0e33b4b688fa923d5295e",
      "size": [
       1216,
       832
@@ -16243,14 +16051,14 @@
    "poses": {
     "attack": {
      "anchor": [
-      508.6,
-      98.5
+      537.3,
+      154.5
      ],
      "baseline": 1340.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "3fdddd181ff15cdd10147de47893ec04509491de0a492c3c6184d4b048758ba3",
+     "sha": "3877b16e5433b6eb018a7a9fa49e0433ab00bba52cd0c39c2725271ff06af8d9",
      "size": [
       1191,
       1346
@@ -16258,22 +16066,22 @@
      "stance": {
       "row": 1340.0,
       "src": "silhouette",
-      "x": 709.5,
+      "x": 710.0,
       "x0": 446.0,
-      "x1": 973.0
+      "x1": 974.0
      },
      "standing": true
     },
     "cast": {
      "anchor": [
-      493.7,
+      493.6,
       18.5
      ],
      "baseline": 1196.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "6cf4368abecd52169fc713a17d68dcb7f81e6d8e6907bec85e83c77b5dc57008",
+     "sha": "a87e771a2f64cbd6a7f3649f1b395788401c93d0520d04fc6fa92a767926ada9",
      "size": [
       832,
       1212
@@ -16289,14 +16097,14 @@
     },
     "hurt": {
      "anchor": [
-      489.5,
+      489.4,
       18.5
      ],
      "baseline": 1197.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "e3457d8562c2cc9a6e3d170260bed6a035d6750dffdb7142b511b5776302dec2",
+     "sha": "be08132a587f5d0ff1c5ae769d759adfb5c8794030f5d040ace3bc09093f42d2",
      "size": [
       832,
       1213
@@ -16316,16 +16124,10 @@
       0.5
      ],
      "baseline": 1376.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "ef65b7b9b37b051da976b4869533aff35a4bfa1e370d633d8c6d80a31f975aa9",
+     "sha": "1d16001bf599f7f0df3cb5aaad8749bf0dc684579dedb4cc8ab799ab468b3dfd",
      "size": [
       1232,
       1376
@@ -16342,14 +16144,14 @@
     },
     "ko": {
      "anchor": [
-      438.2,
+      438.4,
       90.5
      ],
      "baseline": 862.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "fbaa085e817106daf7d124d1b3c6636d3f022cd0ca70583abd1d027276349946",
+     "sha": "a1e921908c2916e637e056e2aec4f034a34a007fd685cbacba532e951e2acc16",
      "size": [
       781,
       878
