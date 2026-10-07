@@ -1,0 +1,27 @@
+# Ch VII (Macalania), baseline capture raw-before/seymour-anima-macalania: Yuna idle to victory, the exact frames
+#383 yuna idle->victory swap frame n=20256; head {"fromPx":41.7,"toPx":39.5,"ratio":0.9477,"source":"registration","metric":"head"} feet {"dx":0,"dy":0.3,"px":0.3,"standing":true,"source":"registration"} cause null
+ 20252   cam 0.0,0.0 slot0* yuna/idle     k1   fade 1.00 vis1 head  41.5 feet     9.7, 1116.7 quad 482x468 | slot1: -
+ 20253   cam 0.0,0.0 slot0* yuna/idle     k1   fade 1.00 vis1 head  41.5 feet     9.7, 1116.7 quad 482x468 | slot1: -
+ 20254   cam 0.2,-0.3 slot0  yuna/idle     k1   fade 0.97 vis1 head  41.5 feet    10.4, 1116.2 quad 482x468 | slot1* yuna/victory  k59  fade 0.03 vis1 head  39.3 feet    10.5, 1116.4 quad 246x392
+ 20255   cam 3.5,-4.2 slot0  yuna/idle     k1   fade 0.57 vis1 head  41.7 feet    11.5, 1097.8 quad 483x473 | slot1* yuna/victory  k59  fade 0.43 vis1 head  39.5 feet    11.6, 1098.0 quad 247x395
+ 20256 > cam 2.1,-2.5 slot0  yuna/idle     k1   fade 0.35 vis1 head  41.7 feet    12.8, 1090.7 quad 482x474 | slot1* yuna/victory  k59  fade 0.65 vis1 head  39.5 feet    12.9, 1090.9 quad 247x396
+ 20257   cam 2.6,-3.0 slot0  yuna/idle     k1   fade 0.19 vis1 head  41.7 feet    14.6, 1083.3 quad 482x474 | slot1* yuna/victory  k59  fade 0.81 vis1 head  39.6 feet    14.7, 1083.6 quad 246x397
+ 20258   cam 3.1,-3.5 slot0  yuna/idle     k1   fade 0.07 vis1 head  41.7 feet    16.9, 1075.6 quad 481x475 | slot1* yuna/victory  k59  fade 0.93 vis1 head  39.6 feet    17.0, 1075.9 quad 246x397
+ 20259   cam 3.5,-4.1 slot0  yuna/idle     k1   fade 0.01 vis1 head  41.7 feet    19.8, 1067.6 quad 479x475 | slot1* yuna/victory  k59  fade 0.99 vis1 head  39.5 feet    19.9, 1067.9 quad 245x398
+ 20260   cam 4.0,-4.5 slot0  yuna/idle     k1   fade 0.00 vis0 head  41.6 feet    23.1, 1059.4 quad 478x475 | slot1* yuna/victory  k59  fade 1.00 vis1 head  39.5 feet    23.2, 1059.7 quad 244x398
+
+#384 rikku idle->victory swap frame n=20256; head {"fromPx":53.9,"toPx":52.1,"ratio":0.9667,"source":"registration","metric":"head"} feet {"dx":0.1,"dy":0.4,"px":0.4,"standing":true,"source":"registration"} cause null
+ 20252   cam 0.0,0.0 slot0* rikku/idle     k2   fade 1.00 vis1 head  54.2 feet   597.3, 1211.2 quad 377x456 | slot1: -
+ 20253   cam 0.0,0.0 slot0* rikku/idle     k2   fade 1.00 vis1 head  54.2 feet   597.3, 1211.2 quad 377x456 | slot1: -
+ 20254   cam 0.1,-0.3 slot0  rikku/idle     k2   fade 0.97 vis1 head  54.2 feet   597.9, 1210.6 quad 377x456 | slot1* rikku/victory  k60  fade 0.03 vis1 head  52.3 feet   597.9, 1210.9 quad 377x400
+ 20255   cam 1.7,-4.7 slot0  rikku/idle     k2   fade 0.57 vis1 head  54.0 feet   601.3, 1205.1 quad 376x455 | slot1* rikku/victory  k60  fade 0.43 vis1 head  52.2 feet   601.3, 1205.5 quad 375x400
+ 20256 > cam 1.0,-2.8 slot0  rikku/idle     k2   fade 0.35 vis1 head  53.9 feet   602.8, 1202.1 quad 375x455 | slot1* rikku/victory  k60  fade 0.65 vis1 head  52.1 feet   602.9, 1202.5 quad 375x400
+ 20257   cam 1.3,-3.4 slot0  rikku/idle     k2   fade 0.19 vis1 head  53.8 feet   604.6, 1198.5 quad 374x455 | slot1* rikku/victory  k60  fade 0.81 vis1 head  52.0 feet   604.6, 1198.9 quad 374x400
+ 20258   cam 1.5,-3.9 slot0  rikku/idle     k2   fade 0.07 vis1 head  53.7 feet   606.6, 1194.4 quad 372x454 | slot1* rikku/victory  k60  fade 0.93 vis1 head  51.9 feet   606.5, 1194.7 quad 372x399
+ 20259   cam 1.7,-4.5 slot0  rikku/idle     k2   fade 0.01 vis1 head  53.5 feet   608.8, 1189.6 quad 371x454 | slot1* rikku/victory  k60  fade 0.99 vis1 head  51.8 feet   608.8, 1190.0 quad 371x399
+ 20260   cam 1.9,-5.1 slot0  rikku/idle     k2   fade 0.00 vis0 head  53.4 feet   611.1, 1184.3 quad 369x453 | slot1* rikku/victory  k60  fade 1.00 vis1 head  51.6 feet   611.1, 1184.7 quad 369x398
+
+
+# plane perspective at the swap frame (top edge / bottom edge of the idle plane, and where the registered head box sits in each painting)
+slot0 yuna/idle fade 0.35  top edge 482.4  bottom edge 412.7  left 473.5  right 444.5  top/bottom 1.1687  head box t 0.064..0.126 (centre 0.095)
+slot1 yuna/victory fade 0.65  top edge 246.5  bottom edge 215.7  left 396.1  right 383.7  top/bottom 1.1430  head box t 0.192..0.263 (centre 0.228)

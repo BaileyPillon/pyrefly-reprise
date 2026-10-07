@@ -1,0 +1,146 @@
+[
+ {
+  "capture": "raw/seymour-flux",
+  "swap": 2,
+  "figure": "yuna",
+  "pair": "hurt to idle",
+  "frame": 616,
+  "oldReading": {
+   "feetPx": 3.8,
+   "headRatio": 1.0131,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.3,
+   "headRatio": 1.0129,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.572,
+   "newPlaneFade": 0.428,
+   "oldFeet": [
+    824.02,
+    759.05
+   ],
+   "newFeet": [
+    824.03,
+    758.78
+   ],
+   "planesApartPx": 0.27,
+   "oldHeadPx": 24.39,
+   "newHeadPx": 24.7
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "yuna/ko at fade 0.35",
+   "newFeet": [
+    827.32,
+    757.15
+   ],
+   "survivingPlaneMovedPx": 3.67,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 3.81
+ },
+ {
+  "capture": "raw/seymour-flux",
+  "swap": 6,
+  "figure": "yuna",
+  "pair": "hurt to idle",
+  "frame": 790,
+  "oldReading": {
+   "feetPx": 3.7,
+   "headRatio": 1.012,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.2,
+   "headRatio": 1.012,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.571,
+   "newPlaneFade": 0.429,
+   "oldFeet": [
+    823.77,
+    753.41
+   ],
+   "newFeet": [
+    823.79,
+    753.17
+   ],
+   "planesApartPx": 0.23,
+   "oldHeadPx": 24.21,
+   "newHeadPx": 24.5
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "yuna/ko at fade 0.35",
+   "newFeet": [
+    826.97,
+    751.51
+   ],
+   "survivingPlaneMovedPx": 3.59,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 3.72
+ },
+ {
+  "capture": "raw/seymour-flux",
+  "swap": 10,
+  "figure": "yuna",
+  "pair": "hurt to idle",
+  "frame": 964,
+  "oldReading": {
+   "feetPx": 3.7,
+   "headRatio": 1.0116,
+   "failFeet": true,
+   "failHead": false
+  },
+  "newReading": {
+   "feetPx": 0.3,
+   "headRatio": 1.0112,
+   "failFeet": false,
+   "failHead": false
+  },
+  "frameBefore": {
+   "oldPlaneFade": 0.572,
+   "newPlaneFade": 0.428,
+   "oldFeet": [
+    821.1,
+    746.98
+   ],
+   "newFeet": [
+    821.07,
+    746.69
+   ],
+   "planesApartPx": 0.29,
+   "oldHeadPx": 24.06,
+   "newHeadPx": 24.33
+  },
+  "swapFrame": {
+   "oldPaintingsPlanePresent": false,
+   "itsSlotNowShows": "yuna/ko at fade 0.36",
+   "newFeet": [
+    824.28,
+    745.09
+   ],
+   "survivingPlaneMovedPx": 3.59,
+   "cameraShiftPx": [
+    0,
+    0
+   ]
+  },
+  "oldReadingWasPx": 3.7
+ }
+]

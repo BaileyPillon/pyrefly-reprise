@@ -1,0 +1,98 @@
+[
+ {
+  "capture": "raw-before/seymour-flux",
+  "persp": 1.0438,
+  "live": 0.9852,
+  "captured": 0.9852
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "persp": 1.0443,
+  "live": 0.985,
+  "captured": 0.985
+ },
+ {
+  "capture": "raw-bstrip/seymour-anima-macalania",
+  "persp": 1.1618,
+  "live": 0.9491,
+  "captured": 0.9491
+ },
+ {
+  "capture": "raw-before/seymour-anima-macalania",
+  "persp": 1.1687,
+  "live": 0.9477,
+  "captured": 0.9477
+ },
+ {
+  "capture": "raw-after/seymour-anima-macalania",
+  "persp": 1.1626,
+  "live": 0.9528,
+  "captured": 0.9808
+ },
+ {
+  "capture": "raw-f2/seymour-anima-macalania",
+  "persp": 1.1625,
+  "live": 0.9522,
+  "captured": 0.9765
+ },
+ {
+  "capture": "raw-f2/seymour-flux",
+  "persp": 1.0444,
+  "live": 0.9858,
+  "captured": 1.0109
+ },
+ {
+  "capture": "raw-final/braskas-final-aeon",
+  "persp": 1.014,
+  "live": 0.9957,
+  "captured": 1.0211
+ },
+ {
+  "capture": "raw-final/braskas-final-aeon",
+  "persp": 1.0178,
+  "live": 0.9946,
+  "captured": 1.02
+ },
+ {
+  "capture": "raw-final/braskas-final-aeon",
+  "persp": 1.0144,
+  "live": 0.9956,
+  "captured": 1.021
+ },
+ {
+  "capture": "raw-final/braskas-final-aeon",
+  "persp": 1.0178,
+  "live": 0.9942,
+  "captured": 1.0196
+ },
+ {
+  "capture": "raw-r392/seymour-anima-macalania",
+  "persp": 1.1671,
+  "live": 0.9526,
+  "captured": 0.9805
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "persp": 1.0412,
+  "live": 0.9876,
+  "captured": 1.0166
+ },
+ {
+  "capture": "raw-r392b/seymour-anima-macalania",
+  "persp": 1.1672,
+  "live": 0.9521,
+  "captured": 0.9764
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "persp": 1.0405,
+  "live": 0.9874,
+  "captured": 1.0126
+ },
+ {
+  "capture": "raw-big-before/seymour-anima-macalania",
+  "persp": 1.1677,
+  "live": 0.9482,
+  "captured": 0.9482
+ }
+]
