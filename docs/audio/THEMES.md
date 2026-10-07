@@ -585,6 +585,8 @@ actually matters — **the one thing the cue must leave behind**.
 
 - `boss-seymour` (FFX only: Chapter I, and Chapter XII as its stand-in): take A, brief `boss-seymour-a`. D minor at about 132 bpm in 4/4; the score is C# minor at 132. Bailey called its loop jump "perfect".
 
+- `boss-seymour-macalania` (FFX only: Chapter VII, and Chapter X): take C, brief `boss-seymour-c`, sent as a composition plan. D minor at about 132 bpm in 4/4; the score is C# minor at 126. **Bailey called its loop jump not smooth**; three re-cut loops of the same take are being made for him to pick, so this cue may be replaced. The project's tempo estimator misreads it (88.25 bpm, folded 176.5); the beat grid, the attacks and the chord changes all say 132.
+
 - `chapter-select` (both games): take B, brief `chapter-select-b`. D major at 72 bpm in 4/4; the score is B minor in 3/4 at 84. Bailey called its loop jump "perfect". From 40.0 s it carries a flat noise-like floor from 3 kHz to 12 kHz, 41 dB under the mix: listen to the second half on a menu screen.
 
 - `title` (both games: the title screen and the attract demo): the `title` brief, take 1. D minor at 58 bpm in 4/4; the score is A minor at 58. A flute line plays once for about 33 s, then a piano loop of 12 bars (49.7 s) runs from the piano's first chord to the end of the held last chord, so the wrap passes through that chord's decay: about two seconds near -45 dBFS, the one place a listener could call a gap. **The piano now enters 33 s after the cue starts, where the old file had it at 8 s.** The first 1.9 s of the raw take were silence and were cut. The whole file passes the stereo gate only just (0.6021, -6.011, -0.971 unrounded against 0.60, -6, -1), because the 33 s of flute is nearly mono; the piano loop alone misses all three. Bailey was still to hear its loop jump when this was installed.
@@ -596,7 +598,7 @@ actually matters — **the one thing the cue must leave behind**.
 | `boss-evrae` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.704 | -7.5 | -0.7 |
 | `boss-ffx2-aeon` | FFX-2 | **route N2** (ACE-Step 1.5 turbo, denoise 0.3, seed 505, 8 steps) | 0.643 | -6.6 | -0.9 |
 | `boss-jecht` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.718 | -7.5 | -0.7 |
-| `boss-seymour-macalania` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
+| `boss-seymour-macalania` | FFX | **ElevenLabs** (Music `music_v2_5`, brief `boss-seymour-c` take 1, a composition plan; AI; the stereo gate fails, the narrow variant passes) | 0.127 | -1.1 | -2.5 |
 | `boss-seymour` | FFX | **ElevenLabs** (Music `music_v2_5`, brief `boss-seymour-a` take 1; AI; the stereo gate fails, the narrow variant passes) | 0.293 | -2.6 | -1.9 |
 | `boss-shuyin` | FFX-2 | **route N2** (ACE-Step 1.5 xl, denoise 0.25, seed 505, 8 steps) | 0.65 | -6.7 | -0.8 |
 | `boss-vegnagun` | FFX-2 | **route S band render** (N2 fallback: no take kept structure fidelity 0.80) | 0.694 | -7.4 | -0.7 |
