@@ -126,7 +126,7 @@ describe('the fixed list', () => {
     const rig = mount();
     const before = cards(rig);
     const ids = cardIds(rig);
-    expect(ids).toHaveLength(19); // the eighteen, then the Leblanc preview (2026-10-06)
+    expect(ids).toHaveLength(18); // the eighteen: the Leblanc preview (2026-10-06) is hidden, with no card
     const moves = ['ArrowRight', 'ArrowRight', 'ArrowDown', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowLeft'];
     for (const code of moves) {
       rig.key(code);
@@ -146,7 +146,7 @@ describe('the fixed list', () => {
   it('puts Chapter VII in number order, between III and VIII, and it is playable since its unlock (D-278)', () => {
     const rig = mount();
     const numerals = cards(rig).map((c) => c.querySelector('.fe-card__num')?.textContent);
-    expect(numerals).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV', 'XVII', 'XVIII', 'IV', 'V', 'VI', 'XI', 'XIII', 'XV', 'XVI', 'EXP']);
+    expect(numerals).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV', 'XVII', 'XVIII', 'IV', 'V', 'VI', 'XI', 'XIII', 'XV', 'XVI']);
     const vii = card(rig, 'seymour-anima-macalania');
     expect(vii.classList.contains('fe-card--coming')).toBe(false);
     expect(vii.getAttribute('data-action')).toBeTruthy();
@@ -193,7 +193,7 @@ describe('the progress strip', () => {
     expect(rig.screen.snapshot()['total']).toBe(18);
     expect(rig.root.querySelector('.cs-strip__count b')?.textContent).toBe('0');
     expect(rig.root.querySelector('.cs-strip__of')?.textContent).toBe('of 18 beaten');
-    expect(rig.root.querySelectorAll('.cs-pip')).toHaveLength(19); // the Leblanc preview has a pip (EXP) but is no part of "of 18"
+    expect(rig.root.querySelectorAll('.cs-pip')).toHaveLength(18); // no pip for the Leblanc preview: it is hidden
     expect(rig.root.querySelectorAll('.cs-pip.is-lit')).toHaveLength(0);
     expect(rig.root.querySelectorAll('.cs-pip.is-coming')).toHaveLength(0);
   });

@@ -22,8 +22,10 @@
  * **It is an experiment, not a listed chapter.** `experimental: true` sends its attempts, clears and play time to the
  * experiments' own store (`../app/experiments/experimentRecords.ts`), never to the save (`pyrefly-reprise:save:v1`), so it is out of
  * the board's "N of 18", the veteran check and total play time. It is not in `CHAPTERS` or `CHAPTER_IDS` (every chapter-generic
- * suite and count stays the eighteen); `EXPERIMENT_CHAPTERS` in `./encounters.ts` lists it, `getChapter` finds it, and chapter
- * select shows its card after the eighteen. It ships to the Cloudflare PREVIEW worker only, never to production.
+ * suite and count stays the eighteen); `EXPERIMENT_CHAPTERS` in `./encounters.ts` lists it and `getChapter` finds it. **It is hidden**
+ * (Bailey, 2026-10-06: "put the experimental new chapter in the live build but make it hidden like you did with ff7 how i had to type
+ * limit at the main menu"; the word "leblanc"): chapter select has no card for it and shows only the eighteen; typing the word on the board
+ * opens it, as "limit" opens FF7's (`../app/screens/frontend/leblancDoor.ts`).
  *
  * The record is derived from Chapter VI's by a function, because `./encounters.ts` owns `FFX2_LEBLANC` and this file may import only
  * the `Chapter` type from it (a value import would be a cycle).

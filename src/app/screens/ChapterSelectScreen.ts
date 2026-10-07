@@ -19,7 +19,8 @@ import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts'
 import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
 import { BoardWarmer } from './frontend/boardWarm.ts';
 import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts';
-import { SecretDoor } from './frontend/secretDoor.ts';
+import { SecretDoor, WordDoor } from './frontend/secretDoor.ts';
+import { EXP_LEBLANC_DOOR_CHAPTER, EXP_LEBLANC_DOOR_WORD } from './frontend/leblancDoor.ts';
 import { ff7ExperimentReady } from '../experiments/ff7Flag.ts';
 import { experimentRecord } from '../experiments/experimentRecords.ts';
 
@@ -107,6 +108,8 @@ export class ChapterSelectScreen extends Screen {
   private confirming = false;
   /** The secret door (Bailey's approved option A); fed by keys, taps and pad buttons, shows nothing. */
   private door = new SecretDoor();
+  private leblancDoor = new WordDoor(EXP_LEBLANC_DOOR_WORD); // the second door, to the hidden Leblanc experiment (`frontend/leblancDoor.ts`): its word, typed; shows nothing either
+  private wordKey = false; // a later letter of that word was just typed: the board leaves this frame's presses alone (the A of "leblanc" is `left`)
   private eyebrow: HTMLElement | null = null;
   /** A-3: the focused chapter's battle starts loading while its card is read. */
   private readonly warmer = new BoardWarmer();
@@ -167,6 +170,7 @@ export class ChapterSelectScreen extends Screen {
     // The door reads edges without consuming them, so the board below sees every press as before.
     for (const button of BUTTONS) if (input.justPressed(button) && this.door.feedButton(button, now()) === 'open') this.openDoor();
     if (this.confirming) return;
+    if (this.wordKey) { this.wordKey = false; for (const b of ['left', 'right', 'up', 'down', 'confirm', 'cancel'] as const) input.consume(b); } // a letter of the word is not a board press
 
     if (input.consume('left')) this.move(-1);
     else if (input.consume('right')) this.move(1);
@@ -290,6 +294,7 @@ export class ChapterSelectScreen extends Screen {
    */
   private armDoor(): void {
     this.door = new SecretDoor();
+    this.leblancDoor = new WordDoor(EXP_LEBLANC_DOOR_WORD);
     window.addEventListener('keydown', this.onDoorKey);
     this.eyebrow = this.root.querySelector<HTMLElement>('.fe-cselect__eyebrow');
     this.eyebrow?.addEventListener('click', this.onDoorTap);
@@ -303,7 +308,10 @@ export class ChapterSelectScreen extends Screen {
 
   private readonly onDoorKey = (e: KeyboardEvent): void => {
     if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || this.confirming) return;
-    if (this.door.feedKey(e.key, now()) === 'open') this.openDoor();
+    const at = now();
+    if (this.door.feedKey(e.key, at) === 'open') this.openDoor();
+    if (this.leblancDoor.feedKey(e.key, at) === 'open') this.openDoor(EXP_LEBLANC_DOOR_CHAPTER);
+    if (this.leblancDoor.continued) this.wordKey = true;
   };
 
   private readonly onDoorTap = (): void => {
@@ -311,19 +319,19 @@ export class ChapterSelectScreen extends Screen {
   };
 
   /**
-   * Through the door. With `FF7_EXPERIMENT_READY` off (the default until the FF7
+   * Through a door (FF7's by default; the Leblanc word's passes its chapter, always open, and does exactly the same). With `FF7_EXPERIMENT_READY` off (the default until the FF7
    * engine and HUD exist) nothing happens at all. With it on, the board settles
    * on the hidden chapter **without** `rememberBoardChapter`, so the board never
    * reopens on an id it has no card for, and with no sound or sign (the success
    * flash is Bailey's pick, plan §2.2).
    */
-  private openDoor(): void {
-    if (this.confirming || !ff7ExperimentReady()) return;
+  private openDoor(id: ChapterId = SECRET_CHAPTER): void {
+    if (this.confirming || (id === SECRET_CHAPTER && !ff7ExperimentReady())) return;
     this.confirming = true;
-    (this.opts.onSelect ?? defaultOnSelect)(SECRET_CHAPTER);
+    (this.opts.onSelect ?? defaultOnSelect)(id);
     // No reset: the FF7 swirl now holds this frozen board while the fight loads (r29 PR-0222), and a key
     // pressed then must not move the cursor or start a card's preload under it. The flow replaces the board.
-    this.settle(SECRET_CHAPTER);
+    this.settle(id);
   }
 
   private settle(id: ChapterId | null): void {

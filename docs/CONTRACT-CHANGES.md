@@ -6,6 +6,12 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-06 (later) — The experimental Leblanc chapter is hidden: no board card, reached by its word (FFX-2 only; behaviour, no type changes)
+
+Branch `exp-leblanc`. `src/data/encounters.ts` (a contract file) changes in comments only: `EXPERIMENT_CHAPTERS` still lists the experiment and `getChapter` still finds it, but chapter select no longer builds a card for it
+(`chapterGrid.ts`'s `experiments` registry defaults to none), so the board is the eighteen again; typing the word on the board opens it, as "limit" opens FF7's (`app/screens/frontend/leblancDoor.ts`,
+the shared `WordDoor` of `secretDoor.ts`). Bailey: "put the experimental new chapter in the live build but make it hidden like you did with ff7"; the word "leblanc". Tests: `tests/unit/exp-leblanc-door.test.ts`.
+
 ## 2026-10-06 — The experimental Leblanc chapter: `ChapterId` 'exp-leblanc', `Chapter.number` 19, `EXPERIMENT_CHAPTERS`, `SceneStaging.artNamespace` (FFX-2 only; additive)
 
 Branch `exp-leblanc` (never merged, never deployed to production; the Cloudflare PREVIEW worker only). `src/data/encounters.ts` (a contract file) gains: `'exp-leblanc'` in `ChapterId` (and out of

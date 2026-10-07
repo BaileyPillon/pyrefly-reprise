@@ -27,7 +27,7 @@ import {
 import type { BattleScreenOptions, BattleScreenResult } from '../../src/app/screens/BattleScreen.ts';
 import { buildChapterTiles, groupChapterTiles } from '../../src/app/screens/frontend/chapterGrid.ts';
 import { boardProgress } from '../../src/app/screens/frontend/chapterProgress.ts';
-import { CHAPTERS, CHAPTER_IDS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS, getChapter } from '../../src/data/encounters.ts';
+import { CHAPTERS, CHAPTER_IDS, UNLISTED_CHAPTERS, getChapter } from '../../src/data/encounters.ts';
 import { setFf7ExperimentReadyForTests } from '../../src/app/experiments/ff7Flag.ts';
 import { EXPERIMENTS_KEY, experimentRecord } from '../../src/app/experiments/experimentRecords.ts';
 
@@ -71,7 +71,7 @@ describe('the board (invariant I2)', () => {
   it('has eighteen tiles in two groups, none of them FF7, even with a record in the experiments store', () => {
     localStorage.setItem(EXPERIMENTS_KEY, JSON.stringify({ [ID]: { attempts: 3, clears: 2 } }));
     const tiles = buildChapterTiles(new SaveStore());
-    expect(tiles).toHaveLength(18 + EXPERIMENT_CHAPTERS.length); // the eighteen, then the Leblanc preview (an FFX-2 experiment with a card)
+    expect(tiles).toHaveLength(18); // the eighteen: the Leblanc preview is hidden too (its word, `exp-leblanc-door.test.ts`)
     expect(tiles.some((t) => t.id === ID || (t.game as string) === 'ff7')).toBe(false);
     expect(groupChapterTiles(tiles).map((g) => g.game)).toEqual(['ffx', 'ffx2']);
     expect(boardProgress(tiles, 0).beaten).toBe(0);

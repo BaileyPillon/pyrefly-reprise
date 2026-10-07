@@ -77,11 +77,11 @@ afterEach(() => {
 const selectedId = (rig: Rig): unknown => rig.screen.snapshot()['selectedId'];
 
 describe('the board on screen', () => {
-  it('draws the hero plus all eighteen cards, and the Leblanc preview after them, in two game groups, the selected one included (D-183)', () => {
+  it('draws the hero plus all eighteen cards, and nothing after them (the Leblanc preview is hidden), in two game groups, the selected one included (D-183)', () => {
     const { root } = mount();
     expect(root.querySelectorAll('.fe-hero')).toHaveLength(1);
-    expect(root.querySelectorAll('.fe-card')).toHaveLength(19); // the eighteen, then the FFX-2 experiment (2026-10-06)
-    expect(root.querySelector('.fe-card:last-of-type')?.getAttribute('data-card')).toBe('exp-leblanc');
+    expect(root.querySelectorAll('.fe-card')).toHaveLength(18); // the eighteen; the FFX-2 experiment (2026-10-06) has no card, only its word
+    expect(root.querySelector('[data-card="exp-leblanc"]')).toBeNull();
     expect(root.querySelectorAll('.fe-card--sel')).toHaveLength(1);
     const groups = [...root.querySelectorAll('.fe-rail__group')].map((g) => g.textContent?.trim());
     expect(groups).toEqual(['Final Fantasy X', 'Final Fantasy X-2']);
@@ -161,10 +161,10 @@ describe('the keyboard', () => {
   it('wraps left from the first card to the last playable one', () => {
     const rig = mount();
     rig.key('ArrowLeft');
-    // The Leblanc preview since 2026-10-06 (after the eighteen in the FFX-2 group); Ixion at Djose (Chapter XVI, listed 2026-09-27) is the one before it.
-    expect(selectedId(rig)).toBe('exp-leblanc');
-    rig.key('ArrowLeft');
+    // Ixion at Djose (Chapter XVI, listed 2026-09-27) is the last card; the Leblanc preview has none.
     expect(selectedId(rig)).toBe('ffx2-ixion-djose');
+    rig.key('ArrowLeft');
+    expect(selectedId(rig)).toBe('ffx2-den-of-woe');
   });
 
   it('crosses between the two games with up and down', () => {

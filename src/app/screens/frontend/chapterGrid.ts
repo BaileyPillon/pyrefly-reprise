@@ -18,7 +18,7 @@
 
 import type { GameId } from '../../../battle/common/types.ts';
 import type { FfxFamilyGame } from '../../../battle/common/game.ts';
-import { CHAPTERS, EXPERIMENT_CHAPTERS, type Chapter } from '../../../data/encounters.ts';
+import { CHAPTERS, type Chapter } from '../../../data/encounters.ts';
 import { artNamespaceOfScene, inArtNamespace } from '../../../data/art/artNamespace.ts';
 import { experimentRecord } from '../../experiments/experimentRecords.ts';
 import { chapterNumeral, romanNumeral } from '../../../ui/common/roman.ts';
@@ -155,7 +155,7 @@ export interface ChapterRegistries {
   readonly coming?: readonly ComingChapter[];
   /** Registered chapters still shown as COMING. Defaults to `LOCKED_CHAPTER_IDS`. */
   readonly locked?: ReadonlySet<string>;
-  /** Experiments with a card after the numbered ones (the FFX-2 Leblanc preview). Defaults to `EXPERIMENT_CHAPTERS`. */
+  /** Experiments with a card after the numbered ones. Defaults to none: the Leblanc preview is hidden, reached by its word (`./leblancDoor.ts`), never by a card; a test hands it in. */
   readonly experiments?: readonly Chapter[];
 }
 
@@ -191,7 +191,7 @@ export function buildChapterTiles(
     for (const chapter of chapters) {
       if (chapter.game === game) own.push(tileForChapter(chapter, save));
     }
-    for (const chapter of registries.experiments ?? EXPERIMENT_CHAPTERS) {
+    for (const chapter of registries.experiments ?? []) {
       if (chapter.game === game) own.push(tileForChapter(chapter, save)); // number 19: sorts after the eighteen
     }
     for (const row of coming) {

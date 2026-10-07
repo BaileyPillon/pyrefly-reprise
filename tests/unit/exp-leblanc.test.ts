@@ -462,6 +462,8 @@ describe('the scene registry: the same room over its own plate and namespace', (
 });
 
 describe('an experiment, not a chapter: the board, the store, the save', () => {
+  /** The board has no experiment card (it is hidden behind its word, `exp-leblanc-door.test.ts`); these tests hand the experiment in to read what its card would be. */
+  const WITH_CARD = { experiments: EXPERIMENT_CHAPTERS } as const;
   let save: SaveStore;
   let store: Record<string, string>;
   beforeEach(() => {
@@ -472,8 +474,9 @@ describe('an experiment, not a chapter: the board, the store, the save', () => {
   });
   afterAll(() => setExperimentStorageForTests(undefined));
 
-  it('is the last card of the FFX-2 group, after the eighteen, labelled EXP', () => {
-    const tiles = buildChapterTiles(save);
+  it('has no card by default; handed in, it is the last card of the FFX-2 group, after the eighteen, labelled EXP', () => {
+    expect(buildChapterTiles(save)).toHaveLength(18);
+    const tiles = buildChapterTiles(save, WITH_CARD);
     const last = tiles[tiles.length - 1]!;
     expect(last.id).toBe('exp-leblanc');
     expect(last.numeral).toBe('EXP');
@@ -497,19 +500,19 @@ describe('an experiment, not a chapter: the board, the store, the save', () => {
   });
 
   it('its card shows the cleared ribbon from the experiments\' store, never from the save', () => {
-    expect(buildChapterTiles(save).at(-1)!.cleared).toBe(false);
+    expect(buildChapterTiles(save, WITH_CARD).at(-1)!.cleared).toBe(false);
     recordExperimentClear('exp-leblanc', 99_000);
-    expect(buildChapterTiles(save).at(-1)!.cleared).toBe(true);
+    expect(buildChapterTiles(save, WITH_CARD).at(-1)!.cleared).toBe(true);
     expect(save.isCleared('exp-leblanc')).toBe(false);
   });
 
   it('has a pip on the progress strip but is no part of "N of M": that stays the eighteen', () => {
-    let progress = boardProgress(buildChapterTiles(save), 0);
+    let progress = boardProgress(buildChapterTiles(save, WITH_CARD), 0);
     expect(progress.total).toBe(18);
     expect(progress.pips).toHaveLength(19);
     expect(progress.pips.at(-1)).toMatchObject({ id: 'exp-leblanc', numeral: 'EXP', lit: false });
     recordExperimentClear('exp-leblanc', 99_000);
-    progress = boardProgress(buildChapterTiles(save), 0);
+    progress = boardProgress(buildChapterTiles(save, WITH_CARD), 0);
     expect(progress.beaten).toBe(0);
     expect(progress.total).toBe(18);
     expect(progress.pips.at(-1)!.lit).toBe(true);
