@@ -46,14 +46,44 @@
     "Not a render of the score. The score of each cue stays in src/audio/tracks as the synth fallback when the MP3 cannot load, and TRACK_NOTES and the cue map in docs/audio/THEMES.md still describe that score (its key, tempo and themes), not the take. No claim is made here that a take carries a motif of the thematic bible.",
     "No resemblance check against existing music was run on any take (agents cannot hear, rule 13). The prompts name no composer, franchise, character or melody.",
     "What Bailey said of each cue's loop jump is in its `pick`; no agent has heard anything.",
-    "Not yet run on a production build: tools/audio/music-v2-browser-proof.mjs needs a built dist, so the release runs it on the candidate. The install notes record a headless Chromium 153 decode of each staged file equal to ffmpeg's (the sample counts in `after.decodedSamples`)."
+    "Run on the release candidate's production build (dist-gate, BASE_PATH=/) on 2026-10-07: docs/audio/music-elevenlabs-2026-10-07-browser.json, summarised in `gates.browserProof`. The install notes record a headless Chromium 153 decode of each staged file equal to ffmpeg's (the sample counts in `after.decodedSamples`)."
   ],
   "supersedes": "For each cue, the older record that last pinned its file: docs/audio/music-v2-2026-09-30.json (the FFX cues) or docs/audio/music-o1-2026-09-30.json (chapter-select). Their tests step aside for a cue this record lists, and the cue's `before` here is the file they pinned.",
   "rollback": "A cue's `before.manifestEntry` is its old manifest entry and `git show <base>:public/audio/music/<cue>.mp3` its old file (copies in D:/Tools/elevenlabs/install/<cue>/old/).",
   "gates": {
     "qaStrictFindings": 0,
-    "browserProof": "owed: tools/audio/music-v2-browser-proof.mjs on the release candidate build (it needs a built dist); not run in this branch"
+    "browserProof": "run on the 39.4 candidate on 2026-10-07 (r394-int 4d282a62, production build dist-gate with BASE_PATH=/, bundle index-DBDUO1LL.js, vite preview, headless Chromium on the GPU): docs/audio/music-elevenlabs-2026-10-07-browser.json. All 26 cues answer 200 and decode to their manifest length within 2 samples; no loop click (worst wrap error 0.49 of the local step) and no loop-added level jump (worst 0.08 dB); the title and the board play from the files; Chapters I and XII play boss-seymour from its file and Chapters VII and X boss-seymour-macalania from the unchanged 39.3 file; 17 of 18 chapters play every cue the chapter map expects through the real flow, and Chapter XIII (Trema) did not reach its results screen because the debug strategy lost four seeds, as in the 2026-09-30 record; 0 console errors, 0 page errors, 0 failed requests. It proves loading, routing and the loop seam numbers only; nobody hears it (rule 13)."
   },
+  "heldOut": [
+    {
+      "cue": "boss-seymour-macalania",
+      "game": "FFX",
+      "chapters": "VII (Seymour and Anima, Macalania Temple) and X (Seymour Natus)",
+      "take": "C, the organ take (brief boss-seymour-c, take 1)",
+      "status": "Not shipped in 39.4. Chapters VII and X keep the file they had in 39.3 (public/audio/music/boss-seymour-macalania.mp3, 3,774,749 bytes, sha256 7b48e0b040c9dea82578001d31ee9a102f0d82195e848bc19e89eec5c9bbe447). The install commit 8cef9ecd is reverted by 4d282a62, which also took this cue out of the cue list below, THEMES.md and CREDITS.md.",
+      "said": [
+        {
+          "who": "Bailey",
+          "when": "2026-10-07",
+          "said": "Split: C early, A late (Recommended)",
+          "of": "take C (organ) for Chapters VII and X, take A (epic orchestral) for Chapters I and XII"
+        },
+        {
+          "who": "Bailey",
+          "when": "2026-10-07",
+          "said": "this is the only one that isnt smooth, the other 2 are perfect",
+          "of": "the loop jumps of the three new loops (Seymour A, Seymour C, chapter-select B); C is the one that is not smooth (relayed by the driver)"
+        }
+      ],
+      "reworkStopped": "The rework of C (three re-cut loops) was stopped by Bailey from the app on 2026-10-07; the driver's brief for the 39.4 candidate says C stays out of 39.4. Do not restart it unless Bailey asks.",
+      "kept": {
+        "rawSha256": "22a34bb0681aade87c90e0f147fea372c87efae0f1cacdae6139e6fda0f46ead",
+        "installedWideSha256": "89a3e78e271b494afcb68ada5ca4d31bbb492cc7a910722a7e9c3cf4b560faf3",
+        "installedWideBytes": 2820923,
+        "where": "D:/Tools/elevenlabs/install/boss-seymour-macalania; the cue's full measured entry (both stereo variants, the composition plan as sent) is in git at 8cef9ecd"
+      }
+    }
+  ],
   "cues": [
     {
       "cue": "boss-seymour",
