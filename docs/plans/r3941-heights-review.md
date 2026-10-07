@@ -73,8 +73,17 @@ No file of `docs/CONTRACTS.md`'s list is touched; one entry is written in `CONTR
 Any boss, aeon or fiend size; BOSS SCALE; the framing; the staging table; the scene `partyHeight`s; the camera rigs; the pose registration, `KoPoseScale`, the head lock and its band; CHK-026 and its tolerances; any
 game number; FFX-2; FF7.
 
+## What the build found that this plan did not say (the measured account is `docs/handoff/r3941-heights.md`)
+
+- **The paintings' tops are not all the heroes' tops.** The approved idles are cropped at their topmost pixel (row 16 in all seven): the hero's hair for Yuna, Auron, Wakka, Lulu and Rikku, Tidus's sword pommel and **Kimahri's spear tip, 8.2 percent above his mane**. The plain multiply of step 2 therefore puts six bodies within 1.3 percent of the table and Kimahri's body 7 percent short
+  (1.124 of Tidus's hair, not 1.211); his body at 1.211 would be 1.304 in his row. Applied as briefed, reported (`research/ffx-character-heights.md` section 5a).
+- **The framing's knock-ons were real, not just a risk:** in 5 of 18 cases the planned camera moved and Tidus's size on screen with it (Chapter I +4.8 percent, XII -4.1), the sized colossi follow the party's mean (Yojimbo +3.7 percent, Natus +2.9), the framing's own menu rule counts Chapter I's Yuna at 8 percent under a panel (limit 6), and Kimahri's head goes deeper behind
+  Chapter IX's Zanmato gauge on the phone (16 to 31 percent of his box). Nothing clips the frame and no new panel overlap appears. Options in the handoff; none built.
+- **The head lock's factor is not exactly the same at every height** (a taller figure spans more of the camera: Kimahri's asks 0.7 percent more than Tidus's at the strongest stage camera), so the real-actor test holds every swap to x1.00 and the factor to within 0.01 of Tidus's rather than to the digit.
+
 ## Open questions for the driver
 
 1. **Boss size follows the party's mean** in the colossus chapters (BOSS SCALE is a multiple of it). The measured drift is in the handoff; keeping the boss where it was is a small change to the framing (divide each figure's
    height by its ratio before the mean is taken), left for the driver because bosses are not to be touched here.
 2. **Anything that clips or collides** (a taller Kimahri or Wakka against the top of the frame or a HUD panel) is in the handoff with pictures and two or three options; none was picked.
+3. **Kimahri's number**: 1.211 as briefed (his spear tip at 1.211 of Tidus's pommel, his mane at 1.124 of Tidus's hair), or 1.304 in his row (his mane at 1.211; a painting 30 percent taller and wider than Tidus's)? A table-only change either way; the effect of 1.304 on the three Kimahri chapters is measured in the handoff.

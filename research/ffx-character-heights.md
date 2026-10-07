@@ -21,11 +21,12 @@ data, no extracted text (AGENTS.md rule 8; the REA lane's own rule, "facts only"
 ## 1. What this settles
 
 Our build drew all seven FFX heroes the same height. The engine sizes a figure as `worldHeight` over the idle
-painting's feet row (`src/engine/PaintedScale.ts`), the stage gives the whole party one `partyHeight`
+painting's feet row (`src/engine/PaintedScale.ts`), the stage gave the whole party one `partyHeight`
 (`src/engine/BattlePresenterStage.ts`), and every approved idle is cropped the same way, so the painted top sits
 the same 98.5 percent of the way up for all seven (measured on the approved idles, 0.9849 to 0.9865; the
 2026-10-07 inventory, `re-questions.md` H1). The painting came from a diffusion model with no height control.
-Bailey named "heights of characters". These ratios are the correction.
+Bailey named "heights of characters". These ratios are the correction. (What sets the top of each painting, and
+what that does to a hero's body, is section 5a.)
 
 ## 2. Method
 
@@ -41,9 +42,11 @@ Bailey named "heights of characters". These ratios are the correction.
 - **Measure.** The model's **silhouette top**, hair and horn included, in the engine's model units, in the
   **bind pose** (the rig's rest pose in the file). Each is then divided by Tidus's top, 18.15 units. Only the
   ratio is used; the unit is the engine's and means nothing here.
-- **Why the top, hair and horn included.** Our painted figures are cropped to their silhouette top, hair, horn and
-  all (the approved idles measure from the first painted row to the feet row), so the model's silhouette top is the
-  quantity the paintings stand for.
+- **Why the top, hair and horn included.** The approved idles are cropped to their topmost painted pixel and the
+  engine sizes each from that row to the feet (`PaintedScale.ts`). For five of the seven heroes the topmost pixel is
+  the hero's own hair, so the model's silhouette top (hair and horn included) is the quantity the painting stands
+  for. For two it is not: it is a prop (Tidus's sword pommel, 1.1 percent above his hair, and Kimahri's spear tip,
+  8.2 percent above his mane). Section 5a has the measurement and what it does to Kimahri.
 
 ## 3. The numbers `[datamined: FFX HD Remaster build 25501027, bind pose, one reader]`
 
@@ -91,10 +94,37 @@ lane did not separate hair from body.
    live in-battle idle heights in PCSX2 (the PS2 build). **If the two disagree, the battle-stance ratio is the one
    the player sees, and it replaces the table's number** (the table is built to be refined that way).
 2. **One reader, one pose.** The numbers were read once, by one tool, with no second implementation.
-3. **Our paintings are not the models.** The approved paintings show each hero in the painter's own stance, with
-   the same painted-top margin (section 1); the ratio sets the painted silhouette's height, not its pose.
+3. **Our paintings are not the models.** The approved paintings show each hero in the painter's own stance; the
+   ratio sets the painted silhouette's height, not its pose. And the painting's height is its topmost painted
+   pixel, which is not always the hero (section 5a).
 4. **Heights are not widths.** The build scales a figure uniformly about its feet, so a 21 percent taller Kimahri
    is also 21 percent wider than he was. The models' widths were not measured.
+
+## 5a. What sets the top of each approved painting, and what the multiply does to a body `[measured: the approved idles, 2026-10-07, alpha above 128]`
+
+The build multiplies a figure's **whole painting**, because the engine sizes a painting from its feet row to its top
+row. The datamined ratios are of the **hero's own top** (hair and horn, no weapon). Those are the same row for five of
+the seven heroes (the painting is cropped at the hair), and not for two (`public/art/characters/<hero>/idle.png`,
+the painting's top row is row 16 in all seven; the hero's own top is the highest opaque pixel of his hair, horn or
+mane, found by eye on a crop and by the highest opaque pixel over the face box's columns widened by 35 percent each side):
+
+| Hero | Baseline (px) | What sets the painting's top row (16 px) | Hero's own top (row) | Body over feet-row height | Body next to Tidus's, plain multiply (table) | Factor that puts the body at the table |
+|---|---|---|---|---|---|---|
+| Tidus | 1116 | his sword pommel (beside his head) | 28 | 0.9749 | 1.000 (1.000) | 1.000 |
+| Yuna | 1060 | her hair | 16 | 0.9849 | 0.920 (0.911) | 0.902 |
+| Auron | 1188 | his hair | 16 | 0.9865 | 1.075 (1.062) | 1.049 |
+| Kimahri | 1182 | his spear tip (far left) | 112 | 0.9052 | **1.124 (1.211)** | **1.304** |
+| Wakka | 1178 | his hair crest | 16 | 0.9864 | 1.215 (1.201) | 1.187 |
+| Lulu | 1149 | the blue tip of her hairpin (her hair bun tops out near row 43) | 16 | 0.9861 | 1.001 (0.990) | 0.979 |
+| Rikku | 1104 | her hair | 16 | 0.9855 | 0.921 (0.911) | 0.901 |
+
+So the plain multiply of the whole painting puts six bodies within 1.3 percent of the table (Tidus's own painting is
+1.1 percent taller than his hair, which is why the rest read a hair high) and **leaves Kimahri's body 7 percent short**:
+his painting is the tallest of the seven, but 8.2 percent of it is a spear leaning above his mane, so his mane stands
+at 1.124 of Tidus's hair, not 1.211 (his spear tip stands at 1.211 of Tidus's pommel). If the table's number is to be
+the **body's** ratio, Kimahri's applied value is 1.304 (the last column; set `ratio` in `party-stature.ts` and say so
+in the basis), at the price of a painting 30 percent taller than Tidus's (his spear tip near the top of the frame, and a
+figure 30 percent wider). The build applies the table as it stands, per the brief, and reports this as a decision.
 
 ## 6. What the build does with them (FFX only)
 

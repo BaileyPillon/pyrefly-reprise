@@ -26,8 +26,13 @@ describe('FFX party stature: the table', () => {
     expect(CHARACTER_IDS).toHaveLength(7);
   });
 
-  it("is the datamined ratios, to the digit, with Tidus at exactly 1 so his size is the party's shared height", () => {
+  // While the basis is the bind pose the table must still be the brief's datamined numbers. A refinement that changes the basis (the live battle-stance
+  // readings from PCSX2) changes the table, `FFX_STATURE_BASIS` and the note's table together, and this one pin steps aside; every other test below stays.
+  it.runIf(FFX_STATURE_BASIS === 'bind-pose')("is the datamined ratios, to the digit, while the basis is the bind pose", () => {
     for (const id of CHARACTER_IDS) expect(FFX_PARTY_STATURE[id].ratio, id).toBe(DATAMINED[id]);
+  });
+
+  it("has Tidus at exactly 1, whatever the basis, so his size is the party's shared height", () => {
     expect(FFX_PARTY_STATURE.tidus.ratio).toBe(1);
     expect(ffxPartyStature('tidus')).toBe(1);
   });
@@ -42,8 +47,7 @@ describe('FFX party stature: the table', () => {
     }
   });
 
-  it("is the model-unit top over Tidus's while the basis is the bind pose (a typo in either number fails here)", () => {
-    expect(FFX_STATURE_BASIS).toBe('bind-pose');
+  it.runIf(FFX_STATURE_BASIS === 'bind-pose')("is the model-unit top over Tidus's while the basis is the bind pose (a typo in either number fails here)", () => {
     expect(FFX_PARTY_STATURE.tidus.top).toBe(TIDUS_TOP);
     for (const id of CHARACTER_IDS) expect(Math.abs(FFX_PARTY_STATURE[id].top / TIDUS_TOP - FFX_PARTY_STATURE[id].ratio), id).toBeLessThan(0.0006);
   });
