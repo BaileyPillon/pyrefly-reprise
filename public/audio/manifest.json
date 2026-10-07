@@ -61,13 +61,13 @@
     },
     "boss-seymour-macalania": {
       "file": "music/boss-seymour-macalania.mp3",
-      "loopStart": 14.386077,
-      "loopEnd": 94.397506,
-      "duration": 97.3975,
-      "bytes": 2820923,
+      "loopStart": 7.619048,
+      "loopEnd": 121.904762,
+      "duration": 124.9048,
+      "bytes": 3774749,
       "lufs": -16.0,
-      "truePeakDb": -2.5,
-      "source": "elevenlabs-music_v2_5"
+      "truePeakDb": -1.5,
+      "score": "90c06f737af9686a"
     },
     "boss-shuyin": {
       "file": "music/boss-shuyin.mp3",

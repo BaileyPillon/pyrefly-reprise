@@ -253,22 +253,6 @@ sent (`music_length_ms` 98000, `force_instrumental` false):
 Gothic orchestral battle music at 132 BPM in C-sharp minor. A low pipe organ and double basses carry a slow, courteous, sinister six-note figure; staccato low strings and timpani drive a steady pulse; dark brass answers in long chords; a sustained wordless choir sings open vowels only, no words and no rhythmic chanting. It builds in three waves from a quiet organ and tolling bell to a full orchestra, with a hushed organ-only passage in the middle, and ends on a held tense chord. Elegant, menacing contempt, never frantic. Steady tempo, no tempo changes, no fade-out, no final cadence.
 ```
 
-#### `boss-seymour-macalania` (FFX only: Chapter VII, and Chapter X): take C
-
-Brief `boss-seymour-c`, take 1; generated 2026-10-07 12:48 UTC (1,470 credits). The raw take is an MP3 at
-128 kbps, 98.04 s, SHA-256 `22a34bb0681aade87c90e0f147fea372c87efae0f1cacdae6139e6fda0f46ead`. This one was sent as a composition plan, not a text
-prompt: 6 sections of 7, 22, 24, 12, 22, 11 seconds (98000 ms in all), each with its
-positive and negative styles. The plan, as sent, one section per line:
-
-```
-{"text":"","duration_ms":7000,"positive_styles":["gothic orchestral battle music","132 BPM","C-sharp minor","pipe organ","double basses","strings","brass","timpani","aristocratic","menacing","steady tempo","quiet pedal organ","tolling bell","sparse","slow build"],"negative_styles":["vocals","lyrics","chanting","pop","electronic drums","tempo change","fade out","final cadence","drums"]}
-{"text":"","duration_ms":22000,"positive_styles":["gothic orchestral battle music","132 BPM","C-sharp minor","pipe organ","double basses","strings","brass","timpani","aristocratic","menacing","steady tempo","low staccato strings pulse","organ under","dark brass chords","restrained"],"negative_styles":["vocals","lyrics","chanting","pop","electronic drums","tempo change","fade out","final cadence","loud"]}
-{"text":"","duration_ms":24000,"positive_styles":["gothic orchestral battle music","132 BPM","C-sharp minor","pipe organ","double basses","strings","brass","timpani","aristocratic","menacing","steady tempo","full orchestra","timpani","brass","sustained wordless choir vowels"],"negative_styles":["vocals","lyrics","chanting","pop","electronic drums","tempo change","fade out","final cadence","words"]}
-{"text":"","duration_ms":12000,"positive_styles":["gothic orchestral battle music","132 BPM","C-sharp minor","pipe organ","double basses","strings","brass","timpani","aristocratic","menacing","steady tempo","organ alone","eerie","bare"],"negative_styles":["vocals","lyrics","chanting","pop","electronic drums","tempo change","fade out","final cadence","drums","brass"]}
-{"text":"","duration_ms":22000,"positive_styles":["gothic orchestral battle music","132 BPM","C-sharp minor","pipe organ","double basses","strings","brass","timpani","aristocratic","menacing","steady tempo","building strings and brass","second climax","timpani roll"],"negative_styles":["vocals","lyrics","chanting","pop","electronic drums","tempo change","fade out","final cadence","resolution"]}
-{"text":"","duration_ms":11000,"positive_styles":["gothic orchestral battle music","132 BPM","C-sharp minor","pipe organ","double basses","strings","brass","timpani","aristocratic","menacing","steady tempo","timpani roll","held tense dominant chord"],"negative_styles":["vocals","lyrics","chanting","pop","electronic drums","tempo change","fade out","final cadence","final cadence","fade out"]}
-```
-
 #### `chapter-select` (both games): take B
 
 Brief `chapter-select-b`, take 1; generated 2026-10-07 13:05 UTC (1,200 credits). The raw take is an MP3 at
