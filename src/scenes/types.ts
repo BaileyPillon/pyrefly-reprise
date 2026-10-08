@@ -236,6 +236,14 @@ export interface SceneStaging {
    * (FFX-2 only) is the one user; omitted everywhere else, where every id resolves exactly as it always did.
    */
   readonly artNamespace?: string;
+  /**
+   * The most height, in HUD grid px (the 640x360 stage the FFX-2 chrome is laid out on), FFX-2's move-advisor card may take in this
+   * scene. The card hangs from the bottom band of the frame; a scene whose fiends stand low enough to reach that band gives it less
+   * room so it prints fewer lines and its top edge stays below their feet (Chapter VI's fiends, bigger since the real-stature table,
+   * `data/ffx2/syndicate-stature.ts`). It rides the card's own cap (`FFX2BattleHud`, `advisorLane.ts`: a cap only tightens). Omitted
+   * everywhere else: the card keeps the stylesheet's 104. FFX-2 only: the FFX HUD places its card through `ffx/hudSafeZones.ts`.
+   */
+  readonly advisorCap?: number;
 }
 
 /** The staging switches a build set, and only those. */
@@ -256,6 +264,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.restPoses === false) out.restPoses = false;
   if (build.figureLight) out.figureLight = build.figureLight;
   if (build.artNamespace) out.artNamespace = build.artNamespace;
+  if (build.advisorCap !== undefined) out.advisorCap = build.advisorCap;
   return out;
 }
 

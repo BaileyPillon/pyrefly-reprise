@@ -6,6 +6,16 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-07 — A scene may cap the FFX-2 move-advisor card: `SceneStaging.advisorCap`, `createHud`'s fifth argument (Chapter VI only; FFX-2 only; additive)
+
+Branch `r3941-stage` (real sizes for the fiends, Bailey's "Option 3: bosses forward"; handoff: [r3941-stage](handoff/r3941-stage.md)). No file on the contract list changed; recorded because the scene staging type gains an optional field and one shared wiring function an optional argument.
+
+- `src/scenes/types.ts`: `SceneStaging.advisorCap?: number` (copied by `stagingOf` when set): the most height, in HUD grid px, the FFX-2 move-advisor card may take in that scene. Chapter VI's fiends, bigger and nearer, stand down to the band the card hangs from (y 651 at its full height at 1600x900);
+  its cap (`LEBLANC_ADVISOR_CAP`, 46) lowers the card's top to y 742 so it prints fewer lines and passes under their feet, as it already passes under the girls'.
+- `src/app/screens/BattleScreenWiring.ts`: `createHud(game, field?, engine?, artNamespace?, advisorCap?)` hands it to `new FFX2BattleHud({ advisorCap })`; `BattleScreen` passes `scene.slots.advisorCap`. `FFX2BattleHud` starts every decision from the scene's cap (`resetAdvisorCap`) instead of from none;
+  `advisorLane.ts` is untouched (a cap only tightens within a decision, as before).
+- Absent everywhere but Chapter VI's room (`tests/unit/ffx2-advisor-scene-cap.test.ts` pins that no other scene file names it), so every other chapter's card is exactly as it was. The FFX HUD takes the argument and ignores it. The hidden experimental Leblanc chapter reuses the room and so reads the same cap.
+
 ## 2026-10-06 (later) — The experimental Leblanc chapter is hidden: no board card, reached by its word (FFX-2 only; behaviour, no type changes)
 
 Branch `exp-leblanc`. `src/data/encounters.ts` (a contract file) changes in comments only: `EXPERIMENT_CHAPTERS` still lists the experiment and `getChapter` still finds it, but chapter select no longer builds a card for it
