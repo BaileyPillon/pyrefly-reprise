@@ -22,6 +22,8 @@ import { CREDITS_CLOSE_ACTION, CreditsPanel } from './creditsPanel.ts';
 import type { GameId } from '../../../battle/common/types.ts';
 import { prefersReducedMotion } from '../../../ui/common/transitions/reduceMotion.ts';
 import { EYE_CANDY_CLOSE_ACTION, EyeCandyPage } from './eyeCandyPage.ts';
+import { PRESENTATION_CLOSE_ACTION, PresentationPage } from './presentationPage.ts';
+import type { PauseRowPage } from './actions.ts';
 
 export interface PauseOverlayHost {
   app: App;
@@ -35,7 +37,7 @@ export interface PauseOverlayHost {
   setBaselineVisible: (on: boolean) => void;
   /** Redraw after the briefing: "never show this again" flips a row. */
   refresh: () => void;
-  /** The player backed out of a page: put the cursor back on the row that opened it (`credits`, `eyeCandy`). */
+  /** The player backed out of a page: put the cursor back on the row that opened it (`credits`, `eyeCandy`, `presentation`). */
   pageClosed?: (rowId: string) => void;
 }
 
@@ -45,6 +47,7 @@ export class PauseOverlays {
   private briefing: Briefing | null = null;
   private credits: CreditsPanel | null = null;
   private eyeCandy: EyeCandyPage | null = null;
+  private presentation: PresentationPage | null = null;
   /** Screen roots hidden for the duration of photo mode. */
   private hiddenUnder: HTMLElement[] = [];
 
@@ -161,9 +164,16 @@ export class PauseOverlays {
     return this.credits !== null;
   }
 
+  /** The page an OPTIONS row opens (`actions.ts`): CREDITS, EYE CANDY (`game`: whose chapter) or PRESENTATION. */
+  openPage(page: PauseRowPage, game: GameId): void {
+    if (page === 'credits') this.openCredits();
+    else if (page === 'eyeCandy') this.openEyeCandy(game);
+    else this.openPresentation();
+  }
+
   openCredits(): void {
     const root = this.host.root();
-    if (this.credits || this.eyeCandy || !root) return;
+    if (this.credits || this.eyeCandy || this.presentation || !root) return;
     this.credits = new CreditsPanel(root, () => this.host.app.save.settings.reduceMotion);
   }
 
@@ -202,10 +212,6 @@ export class PauseOverlays {
     return true;
   }
 
-  creditsSnapshot(): Record<string, unknown> | null {
-    return this.credits?.snapshot() ?? null;
-  }
-
   // -------------------------------------------------------------- eye candy
 
   /**
@@ -214,7 +220,7 @@ export class PauseOverlays {
    */
   openEyeCandy(game: GameId): void {
     const root = this.host.root();
-    if (this.eyeCandy || this.credits || !root || game === 'ff7') return;
+    if (this.eyeCandy || this.credits || this.presentation || !root || game === 'ff7') return;
     this.eyeCandy = new EyeCandyPage(root, { save: this.host.app.save, game, reduceMotion: () => prefersReducedMotion() });
   }
 
@@ -229,35 +235,59 @@ export class PauseOverlays {
     this.host.root()?.querySelector<HTMLElement>('[data-row="eyeCandy"]')?.focus({ preventScroll: true });
   }
 
+  // ----------------------------------------------------------- presentation
+
+  /** The PRESENTATION page (Bailey, 2026-10-08, "go with C"): TITLE SCREEN and CHAPTER MUSIC, both games. */
+  openPresentation(): void {
+    const root = this.host.root();
+    if (this.presentation || this.eyeCandy || this.credits || !root) return;
+    this.presentation = new PresentationPage(root, this.host.app.save);
+  }
+
+  /** As {@link closeEyeCandy}: a back puts the cursor and the DOM focus on the PRESENTATION row. */
+  closePresentation(back = true): void {
+    if (!this.presentation) return;
+    this.presentation.dispose();
+    this.presentation = null;
+    if (!back) return;
+    audio.playSfx('cancel');
+    this.host.pageClosed?.('presentation');
+    this.host.root()?.querySelector<HTMLElement>('[data-row="presentation"]')?.focus({ preventScroll: true });
+  }
+
   /** A tab change: close whichever page is up, leaving the cursor where the new tab puts it. */
   closePages(): void {
     this.closeCredits(false);
     this.closeEyeCandy(false);
+    this.closePresentation(false);
   }
 
   /**
-   * One frame of input while a page (CREDITS or EYE CANDY) is up. True when the page took the frame;
+   * One frame of input while a page (CREDITS, EYE CANDY or PRESENTATION) is up. True when the page took the frame;
    * false when none is up, or when L1 / R1 closed it so the screen can go on to change tab. Esc, X,
    * Backspace, the pad's Circle and Start, and the `Esc BACK` prompt go back to the row that opened it.
    */
   pageInput(input: InputSnapshot, took: (b: Button) => boolean): boolean {
     if (this.credits) return this.creditsInput(input, took);
-    const page = this.eyeCandy;
+    const page = this.eyeCandy ?? this.presentation;
     if (!page) return false;
+    const close = this.eyeCandy ? EYE_CANDY_CLOSE_ACTION : PRESENTATION_CLOSE_ACTION;
     if (took('l1') || took('r1')) {
-      this.closeEyeCandy(false);
+      this.closePages();
       return false;
     }
-    if (input.actions.includes(EYE_CANDY_CLOSE_ACTION) || input.justPressed('cancel') || took('start')) {
-      this.closeEyeCandy();
+    if (input.actions.includes(close) || input.justPressed('cancel') || took('start')) {
+      if (this.eyeCandy) this.closeEyeCandy();
+      else this.closePresentation();
       return true;
     }
     page.input(input);
     return true;
   }
 
-  eyeCandySnapshot(): Record<string, unknown> | null {
-    return this.eyeCandy?.snapshot() ?? null;
+  /** What each page shows (`null` while it is not up), for the pause's debug snapshot. */
+  pagesSnapshot(): { credits: Record<string, unknown> | null; eyeCandy: Record<string, unknown> | null; presentation: Record<string, unknown> | null } {
+    return { credits: this.credits?.snapshot() ?? null, eyeCandy: this.eyeCandy?.snapshot() ?? null, presentation: this.presentation?.snapshot() ?? null };
   }
 
   dispose(): void {
@@ -265,6 +295,8 @@ export class PauseOverlays {
     this.credits = null;
     this.eyeCandy?.dispose();
     this.eyeCandy = null;
+    this.presentation?.dispose();
+    this.presentation = null;
     this.photo?.dispose();
     this.photo = null;
     // A briefing left up would outlive the screen that owns its input.

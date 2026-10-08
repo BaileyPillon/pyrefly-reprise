@@ -102,6 +102,17 @@ export function chapterSelectCue(v: unknown): string {
   return CHAPTER_SELECT_CUES[chapterSelectMusicOf(v)];
 }
 
+// ------------------------------------------------------- the PRESENTATION row
+
+/**
+ * What the OPTIONS list's PRESENTATION row reads (Bailey, 2026-10-08, "go with C": one row opens the page that holds the two
+ * choices above): the title screen, then the chapter-select track's letter, e.g. `THE ECHO · A`. Invalid stored values read as
+ * the defaults, as everywhere else in this module.
+ */
+export function presentationSummary(settings: Readonly<Pick<Settings, 'titleArt' | 'chapterSelectMusic'>>): string {
+  return `${TITLE_ART_LABELS[titleArtOf(settings.titleArt)]} · ${chapterSelectMusicOf(settings.chapterSelectMusic).toUpperCase()}`;
+}
+
 // ------------------------------------------------------------------- stepping
 
 /** The next entry of `list` after `current`, wrapping at the ends; an unknown `current` counts as the first. Left, Right and Confirm all land here. */

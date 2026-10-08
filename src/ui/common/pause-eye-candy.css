@@ -29,8 +29,9 @@
   margin-right: -16px;
 }
 
-/* EYE CANDY opens a page: an accent glyph where the bar would be, right after the label (frame a1). */
-.pause__col .pause__row[data-row='eyeCandy'] .pause__bar::before {
+/* EYE CANDY and PRESENTATION open a page: an accent glyph where the bar would be, right after the label (frame a1). */
+.pause__col .pause__row[data-row='eyeCandy'] .pause__bar::before,
+.pause__col .pause__row[data-row='presentation'] .pause__bar::before {
   content: '\25B8';
   position: absolute;
   left: 2px;
@@ -44,7 +45,8 @@
 }
 
 @media (min-width: 621px) {
-  .pause--mirror .pause__col .pause__row[data-row='eyeCandy'] .pause__bar::before { left: auto; right: 2px; }
+  .pause--mirror .pause__col .pause__row[data-row='eyeCandy'] .pause__bar::before,
+  .pause--mirror .pause__col .pause__row[data-row='presentation'] .pause__bar::before { left: auto; right: 2px; }
 }
 
 /* ---------------------------------------------------------------- the page swaps in */
@@ -185,7 +187,8 @@
 /* DOM focus follows the cursor (a screen reader hears the switch); the dot and the bright text are the
    focus mark the frames draw, so the browser's ring is not drawn on top of them. */
 .pause__ec-col .pause__ec-row:focus,
-.pause__col .pause__row[data-row='eyeCandy']:focus { outline: none; }
+.pause__col .pause__row[data-row='eyeCandy']:focus,
+.pause__col .pause__row[data-row='presentation']:focus { outline: none; }
 
 .pause__ec-rule {
   flex: none;
@@ -277,6 +280,11 @@
 
   .pause__ec-cols { flex-direction: column; gap: 0; }
   .pause__ec-col { width: 100%; min-width: 0; }
+
+  /* A word row's bar is 0 wide on a phone (`pause-phone.css`), which left the page glyph on the first letter of the value
+     (`▸ALL ON`, seen in the 39.5 layout round): the two rows that open a page give it 12px of their own. */
+  .pause__col .pause__row[data-row='eyeCandy'] .pause__bar,
+  .pause__col .pause__row[data-row='presentation'] .pause__bar { width: 12px; margin: 0; }
 
   /* The page has the whole height, so its rows are touch size: 40px, not the 20px of a five-row window. */
   .pause__ec-col .pause__ec-row { height: 40px; }

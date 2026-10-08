@@ -109,7 +109,7 @@ export class PauseScreen extends Screen {
         if (on) this.view?.setBare(this.panelsHidden);
       },
       refresh: () => this.refresh(),
-      pageClosed: (rowId) => this.focusRow('options', rowId), // CREDITS or EYE CANDY
+      pageClosed: (rowId) => this.focusRow('options', rowId), // CREDITS, EYE CANDY or PRESENTATION
     });
     // "The active party member first": the leading tab is the first member on
     // the field, and it is the one the menu opens on.
@@ -282,7 +282,7 @@ export class PauseScreen extends Screen {
         onChapterSelect: this.opts.onChapterSelect,
         onQuitToTitle: this.opts.onQuitToTitle,
         extraRows: this.opts.extraRows,
-        openCredits: () => this.overlays?.openCredits(), openEyeCandy: () => this.overlays?.openEyeCandy(this.opts.chapter.game),
+        openPage: (page) => this.overlays?.openPage(page, this.opts.chapter.game),
       },
       id,
       dir, press,
@@ -376,7 +376,7 @@ export class PauseScreen extends Screen {
       rows: this.rows().map((r) => r.id),
       panelsHidden: this.panelsHidden,
       photo: this.overlays?.photoSnapshot() ?? null,
-      credits: this.overlays?.creditsSnapshot() ?? null, eyeCandy: this.overlays?.eyeCandySnapshot() ?? null,
+      ...(this.overlays?.pagesSnapshot() ?? { credits: null, eyeCandy: null, presentation: null }),
       playTimeMs: this.app.save.playTime(this.opts.chapter.id),
       ...(this.view?.snapshot(this.at) ?? {}),
     };

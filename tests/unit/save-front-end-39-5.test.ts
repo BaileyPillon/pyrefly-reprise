@@ -33,6 +33,7 @@ import {
   cycle,
   isChapterSelectMusic,
   isTitleArt,
+  presentationSummary,
   titleArtOf,
 } from '../../src/app/saveFrontend.ts';
 import { optionRows } from '../../src/app/screens/PauseScreenPanels.ts';
@@ -190,29 +191,40 @@ describe('a value that is not on the list never reaches the title screen or the 
 describe('the OPTIONS rows', () => {
   const store = (): SaveStore => new SaveStore(SAVE_KEY, slotWith());
 
-  it('print the choice in words, for every game', () => {
+  it('show ONE PRESENTATION row that reads both choices, for every game (Bailey, 2026-10-08, "go with C")', () => {
     for (const game of ['ffx', 'ffx2', 'ff7'] as const) {
       const rows = optionRows(defaultSettings(), game);
-      expect(rows.find((r) => r.id === 'titleArt'), game).toMatchObject({ label: 'TITLE SCREEN', value: 'FARPLANE', ratio: null });
-      expect(rows.find((r) => r.id === 'chapterSelectMusic'), game).toMatchObject({ label: 'CHAPTER MUSIC', value: 'B  PIANO', ratio: null });
+      expect(rows.find((r) => r.id === 'presentation'), game).toMatchObject({ label: 'PRESENTATION', value: 'FARPLANE · B', ratio: null });
+      // the two choices live on the page the row opens (`pause/presentationPage.ts`), not on the list
+      expect(rows.map((r) => r.id), game).not.toContain('titleArt');
+      expect(rows.map((r) => r.id), game).not.toContain('chapterSelectMusic');
       const settings = optionsColumns({ settings: defaultSettings(), battleHelpOn: true, canRestart: true, canChapterSelect: true, canQuit: true, extraRows: [], game }).find((c) => c.id === 'settings')!;
       const ids = settings.rows.map((r) => r.id);
-      expect(ids, `${game} shows both rows`).toEqual(expect.arrayContaining(['titleArt', 'chapterSelectMusic']));
-      expect(settings.rows.find((r) => r.id === 'titleArt')?.selectable).toBe(true);
-      expect(settings.rows.find((r) => r.id === 'chapterSelectMusic')?.selectable).toBe(true);
-      // BATTLE HELP stays under STRATEGY GUIDE, which it belongs with; the front-end rows follow them.
+      expect(ids, `${game} shows the one row`).toContain('presentation');
+      expect(settings.rows.find((r) => r.id === 'presentation')?.selectable).toBe(true);
+      // BATTLE HELP stays under STRATEGY GUIDE, which it belongs with; PRESENTATION is the last row of the list.
       expect(ids.indexOf('battleHelp')).toBe(ids.indexOf('guideVisible') + 1);
-      expect(ids.indexOf('titleArt')).toBeGreaterThan(ids.indexOf('battleHelp'));
+      expect(ids.indexOf('presentation')).toBe(ids.length - 1);
     }
   });
 
-  it('read the label of whatever is stored', () => {
-    expect(optionRows({ ...defaultSettings(), titleArt: 'echo' }).find((r) => r.id === 'titleArt')?.value).toBe(TITLE_ART_LABELS.echo);
+  it('the list is thirteen rows in both games, so every row fits without scrolling at 1600x900 (measured: docs/screenshots/r395-int/options-c)', () => {
+    const count = (game: 'ffx' | 'ffx2'): number =>
+      optionsColumns({ settings: defaultSettings(), battleHelpOn: true, canRestart: true, canChapterSelect: true, canQuit: true, extraRows: [], game }).find((c) => c.id === 'settings')!.rows.length;
+    expect(count('ffx')).toBe(13); // VOICE and VOICE-OVER are FFX's (the recordings are FFX only, rule 14)
+    expect(count('ffx2')).toBe(13); // X-2 BATTLE and ATB SPEED are FFX-2's
+  });
+
+  it('read the choice of whatever is stored', () => {
+    expect(presentationSummary({ titleArt: 'echo', chapterSelectMusic: 'a' })).toBe('THE ECHO · A');
+    expect(optionRows({ ...defaultSettings(), titleArt: 'echo' }).find((r) => r.id === 'presentation')?.value).toBe(`${TITLE_ART_LABELS.echo} · B`);
     for (const m of CHAPTER_SELECT_MUSICS) {
-      expect(optionRows({ ...defaultSettings(), chapterSelectMusic: m }).find((r) => r.id === 'chapterSelectMusic')?.value).toBe(CHAPTER_SELECT_LABELS[m]);
+      const value = optionRows({ ...defaultSettings(), chapterSelectMusic: m }).find((r) => r.id === 'presentation')?.value;
+      expect(value).toBe(`FARPLANE · ${m.toUpperCase()}`);
+      expect(CHAPTER_SELECT_LABELS[m].startsWith(m.toUpperCase())).toBe(true); // the letter is the page's label's first letter
     }
-    // a bad stored value prints the default's label, as it plays the default
-    expect(optionRows({ ...defaultSettings(), titleArt: 'x' as never }).find((r) => r.id === 'titleArt')?.value).toBe('FARPLANE');
+    // a bad stored value prints the default, as it plays the default
+    expect(presentationSummary({ titleArt: 'x' as never, chapterSelectMusic: 'y' as never })).toBe('FARPLANE · B');
   });
 
   it('step through the lists on Right, Left and Confirm, and write the choice to the save', () => {
