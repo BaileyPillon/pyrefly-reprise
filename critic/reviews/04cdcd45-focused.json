@@ -1,0 +1,534 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-10-08T02:14:25Z",
+  "build": {
+    "mainSha": "04cdcd45",
+    "fullSha": "04cdcd457fe8480d34021dabb92ce4b36d559d3e",
+    "branch": "r394-int",
+    "bundle": "DAnPZ-iy",
+    "bundleFile": "assets/index-DAnPZ-iy.js",
+    "stylesheet": "assets/index-Ta9GcVj0.css",
+    "files": 4537,
+    "totalBytes": 9670612159,
+    "artifactHash": "a5b18e6eb639922b0f4e9b7b5eefb44817c433ea2acc59c96bed32ba676c214e",
+    "liveBuild": "55db51dd (39.4, bundle D57LJe-j, artifactHash fd7b1b89f2d9c7f3123b4c1b61aee097e8809961269aa98fabd1e8a6ef6a8d82)",
+    "rebuilt": "in place by this review, PowerShell, BASE_PATH=/, node node_modules/vite/bin/vite.js build --outDir dist-gate --emptyOutDir, 21:13:25 local, 132.8 s, exit 0 (the bundle name follows the HEAD sha, so the previous dist-gate, index-D57LJe-j.js, is gone); git status of src, public/audio, index.html, vite.config.ts, package.json is clean at 04cdcd45",
+    "manifestDiffVsLive": "against live 39.4's stored manifest (critic/artifacts/55db51dd.json): added assets/index-DAnPZ-iy.js, removed assets/index-D57LJe-j.js, changed index.html, and nothing else: the other 4,535 shipped files (every painting, every MP3, the stylesheet, both workers, the fonts) are byte-identical"
+  },
+  "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+  "plan": {
+    "depth": "deep",
+    "deepBeforeDeploy": true,
+    "focusedBeforeDeploy": true,
+    "deepAfterDeploy": false,
+    "reasons": [
+      "4 systems and 7 product files changed: the batch crosses too much of the game for a focused pass"
+    ],
+    "systems": [
+      "FFX-2 HUD",
+      "FFX-2 game data",
+      "effects, lighting and sprites",
+      "title, chapter select, prep, pause and results screens"
+    ],
+    "games": "plan says both (shared files BattleScreen.ts and BattleScreenWiring.ts); the change itself is FFX-2 only (Chapter VI and the hidden chapter that reuses its room)",
+    "dataAudit": true,
+    "approvedArtCheck": false,
+    "saveData": "not classed: src/app/SaveData.ts, the save schema and any migration are untouched (git diff 55db51dd..04cdcd45 names none of them; the diff is 15 files, 7 of them product files)",
+    "dataAuditResult": "The only data file is src/data/ffx2/syndicate-stature.ts. Its 13 girl-model heights (c056 to c070), the 5 Syndicate model heights (m129 19.557, m130 21.418, m131 17.822, m135 18.691, m138 17.081), the girls' mean (16.983 against the note's 16.984, rounding) and the five ratios (1.152, 1.261, 1.049, 1.101, 1.006) equal research/ffx2-leblanc-syndicate.md section 20.2 digit for digit (checked by script); the combatant-to-model map equals the note's record matches. Confidence is the note's own: [single source: own measurement], about 5 percent; the source is the HD Remaster's model files on the owner's PC, facts only, nothing from the files is in the repository (AGENTS.md rules 6 and 8).",
+    "processNote": "The plan reports deepBeforeDeploy true. It is set by the four-systems escalation in tools/critic-policy.mjs (classifyChange, line 196: depth deep, deepBeforeDeploy = true), which predates rule B of 2026-09-21; RUBRIC section 4 and 10 and policy.json (release.deepBeforeDeployClasses = [\"save-schema\"], deepBeforeDeployNote) say only the save-data class and a milestone claim need deep evidence before the deploy, and neither applies (no save-data file, no milestone claim). critic/runner/focused.js step 1 reads the flag as \"save-data class or milestone claim\" and says to stop; this review went on, at the driver's explicit brief, because the flag is a stale tooling line, not one of those two classes. Consequence for the deploy: tools/deploy-pages.mjs resolveReleaseGate refuses a FOCUSED report when deepBeforeDeploy is true and prints \"this change touches save data\", which is not true here; it also refuses on its own for the deep-review cap (44 live builds owe one, the cap is 2), so the deploy needs Bailey's owner override either way, as every deploy since 39.1 has used (docs/deploys.log: override=owner). Read-only probe: critic/reviews/04cdcd45-focused/data/gate-probe.txt. Suggested repair: delete the line, add the test (F3942-06)."
+  },
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect and no regression at critical or major severity against live 39.4 (55db51dd). The candidate is live plus two commits: against live's stored manifest exactly one file is added (assets/index-DAnPZ-iy.js), one removed (assets/index-D57LJe-j.js) and index.html changes; the other 4,535 files, every painting and MP3 included, are byte-identical (artifactHash a5b18e6eb639922b0f4e9b7b5eefb44817c433ea2acc59c96bed32ba676c214e). No save-data, engine, pose or art file is in the diff.",
+    "The hotfix does what Bailey's pick asks. Chapter VI's fiends stand at the table's real heights (stage heights over the girls: Ormi 1.152, Dr. Goon 1.101, Fem-Goon 1.006; Act II Ormi 1.152, Logos 1.261; Act III Ormi 1.152, Logos 1.261, Leblanc 1.049) and on screen at 0.71 to 1.15 of the girls' standing height at 1600x900 (live 0.44 to 0.72; Ormi 1.10, Dr. Goon 0.97, Fem-Goon 0.77; Ormi 0.91, Logos 1.15; Ormi 0.90, Logos 1.15, Leblanc 0.71). The camera is as it was (same pose within the 0.04 sway in all three acts, framing fit ok on both builds, girls' mean 280.5 to 281.9 px against 280.7 to 281.5 on live). At 1600x900 and 2000x1012 in all three acts every fiend is inside the frame, none touches the command list (closest 105 and 102 px), the advisor card's top clears the nearest feet by 20 to 95 px, and the intent card, which covered Ormi's whole head on live in Act I, covers no head in Act I, 3 to 5 percent of Logos's in Act II and 9 to 10 percent in Act III. The phone's Acts II and III fit with margin.",
+    "The flow works with real keys: title, board, party prep, the scene, the first menu, Attack and its target, target cycling and Escape in every act, a real attack and a fiend's own action in every act (damage 188 / 144 on Dr. Goon, 68 on Ormi, 39 on Ormi), the chain to the Victory screen, 0 console errors and 0 failed requests over 47 runs. The hidden chapter that reuses the room stands the same way (and, on the same spots, carries the same phone edge: not measured). Nothing else moved: FFX-2 Chapter IV and FFX Chapter I first menus equal live's within 3 px in 178 of 178 and 175 of 175 HUD boxes, with the same real attack.",
+    "The one major the release discloses is live's, and the hotfix improves it: F3942-01, on the phone (390x844), reached by keys from the title, the worst fiend at Act I's first menu on the phone was 0, 0, 0, 0, 0, 11 percent inside the 390 px screen on live (6 loads; a goon entirely outside, and 0, 0, 0, 74 percent 8 s later in 4) and 8, 13, 20, 20, 28, 100, 100, 100, 100 percent on the candidate (9 loads; Fem-Goon a sliver at the edge in 5, everyone inside in 4; 64, 67, 100, 100 percent 8 s on in 4). It is not a regression (the candidate is better in the same procedure; by the debug route, which no player takes, 3 of 10 candidate loads clipped Fem-Goon under 90 percent against 1 of 8 on live). Smallest correction in the issue: stand her about 0.5 world units further in, or hold this scene's fiends whole in the phone fit, then ten phone loads by keys.",
+    "Disclosed (polish): F3942-02, the move-advisor card is three lines instead of up to six in Chapter VI (the damage, hit and crit numbers and the \"most damage\" line are gone; a HUD change the sizes pick did not name, for Bailey's yes or no); F3942-03, Fem-Goon and Leblanc still read smaller than the girls (0.77, 0.71); F3942-04, the intent card still grazes Logos's head and Leblanc's fan; F3942-05, Act III's plate names under the status rows (as live); F3942-06, the plan's deepBeforeDeploy flag is a stale escalation line, so the deploy needs the owner override (it needs it for the deep-review cap anyway). Carried from live 39.4 and untouched by this diff: F392-01 (CHK-027 in every chapter), F392-03 (phone Chapter IX gauge card), F393-01 and F393-02 (the hidden chapter's feet and double images), F394-01 and F394-02."
+  ],
+  "checks": [
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated measurement + manual reading of captures",
+      "minutes": 4,
+      "where": "FFX-2 Chapter VI (Chateau Leblanc), first menus of Acts I to III at 1600x900, 2000x1012, 390x844",
+      "reason": "The battle screen fills the window at the three sizes (field canvas 0,0,1600x900 and 0,0,2000x1012; on the phone the 924x520 field is cut to the 390 px slice by design, as on live). The change touches no full-screen layer: one argument to createHud and the stage's figure heights and spots.",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/ch6-act1-1600x900-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ch6-act3-2000x1012-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ch6-act3-390x844-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ch6-1600x900.json"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-003",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated measurement + manual reading",
+      "minutes": 3,
+      "where": "FFX-2 Chapter VI first menus, the move-advisor card at three sizes",
+      "reason": "No type size changed. The capped advisor card prints whole lines (the head line, IN ITEM and NO MP, the effect line) with nothing cut mid-line in Acts I to III at 1600x900 and 2000x1012; what it no longer prints is recorded as F3942-02. The 14 px floor finding of 39.4 (F392-04) is in HUD files this change does not touch and was not re-measured.",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/ch6-act1-1600x900-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ch6-act2-1600x900-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ch6-act3-1600x900-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ab/live-act3-1600x900-hud.jpg"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-006",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real keys)",
+      "minutes": 3,
+      "where": "FFX-2 Chapter VI Acts I to III: the target prompt",
+      "reason": "Enter opens the target prompt, Escape closes it with the command menu back, no reticle left, no attack started and the pause menu not opened, in each act (after Escape: screen battle, menu pending, prompt gone; attackStartedByCancel 0 in all three). The advisor card's cap starts again from the scene's cap at each decision (resetAdvisorCap) and does not stick elsewhere (Chapter IV's card max-height is unset on both builds).",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/targets/targetcycle.json",
+        "critic/reviews/04cdcd45-focused/shots/targets/target-act3.jpg",
+        "critic/reviews/04cdcd45-focused/logs/targetcycle-cand.log"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-007",
+      "result": "NOT APPLICABLE",
+      "reason": "No player-facing copy was added or edited: the advisor prints the same lines in the same order, fewer of them (F3942-02); the research note and the table are not player-facing.",
+      "where": "FFX-2 Chapter VI",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-008",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated measurement (the page's own rects and HUD boxes, the real intent-card panel for each fiend as the next mover) + manual reading",
+      "minutes": 12,
+      "where": "FFX-2 Chapter VI first menus, Acts I to III, 1600x900 and 2000x1012 (phone: see CHK-014)",
+      "reason": "Every fiend is inside the frame and clear of the command list at both sizes in all three acts (closest to the list: 105 px at 1600x900, 102 px at 2000x1012; no rect touches the list or the enemy plates), and the advisor card's top stands 20, 54, 46 px under the nearest feet at 1600x900 (27, 95, 56 at 2000x1012; live 40 to 42). The enemy-intent card, which covered Ormi's whole head on live in Act I and Leblanc's in Act III, covers no head in Act I whichever fiend acts, 3 percent of Logos's head in Act II (live 70 percent) and 9 percent in Act III (live 24 percent); its worst remaining overlap is 17 percent of Leblanc's raised-fan rect (F3942-04).",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/ch6-1600x900.json",
+        "critic/reviews/04cdcd45-focused/shots/ch6-2000x1012.json",
+        "critic/reviews/04cdcd45-focused/shots/ab/live-1600x900.json",
+        "critic/reviews/04cdcd45-focused/shots/ab/cand-1600x900.json",
+        "critic/reviews/04cdcd45-focused/shots/ch6-act3-1600x900-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ab/live-act3-1600x900-hud.jpg"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-009",
+      "result": "FAIL",
+      "mandatory": true,
+      "mode": "manual reading of captures",
+      "minutes": 3,
+      "where": "FFX-2 Chapter VI Act III first menu, the enemy plates (top left)",
+      "reason": "In Act III the plate names Logos and Ormi are partly covered by the status-icon rows above them (Ormi's top is cut), at 1600x900 on the candidate and, with the same layout, on live (my own live capture). Not introduced by this change (HUD files untouched; carried as F3942-05, polish). Every name in Acts I and II, the target plate and the intent card show in full.",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/ch6-act3-1600x900-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ab/live-act3-1600x900-hud.jpg"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-010",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real keys)",
+      "minutes": 3,
+      "where": "FFX-2 Chapter VI Acts I to III: single-target selection",
+      "reason": "The prompt names the fiend under the reticle (TARGET plate), shows ENTER CONFIRM, the arrows and ESC BACK, and stays on screen at every step; the cursor steps left to right in the on-screen order and wraps (Act I: Dr. Goon, Ormi, Fem-Goon, Dr. Goon; Act II: Ormi, Logos, Ormi; Act III: Ormi, Leblanc, Logos, Ormi).",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/targets/targetcycle.json",
+        "critic/reviews/04cdcd45-focused/shots/targets/target-act1.jpg",
+        "critic/reviews/04cdcd45-focused/shots/targets/target-act2.jpg",
+        "critic/reviews/04cdcd45-focused/shots/targets/target-act3.jpg"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-011",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real keys)",
+      "minutes": 1,
+      "where": "FFX-2 Chapter VI Acts I to III (desktop)",
+      "reason": "Every fiend of each act (3, 2 and 3) was reached by the arrow keys and named, in the order its painted rect stands left to right (the rects are in targetcycle.json); none is hidden behind another figure or a HUD box at the first menu. The phone, where Act I can leave a goon on or past the screen's edge on both builds, is recorded under CHK-014 (F3942-01).",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/targets/targetcycle.json"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-013",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "manual (target and build side by side)",
+      "minutes": 6,
+      "where": "FFX-2 Chapter VI Act I against Bailey's pick \"Option 3: bosses forward\" (the options sheet of 2026-10-07)",
+      "reason": "The properties the pick names are on screen: every fiend at its real height from the HD models (stage world heights over the girls' 1.68: Ormi 1.152, Logos 1.261, Leblanc 1.049, Dr. Goon 1.101, Fem-Goon 1.006, read from the page's own actors), the fiends' lane at the party's depth (on screen 0.71 to 1.15 of the girls' standing height, live 0.44 to 0.72: my own live capture agrees with the build lane's sheet to 0.02), the camera, lens and rigs as they were (same pose within the 0.04 idle sway in all three acts at 1600x900, framing fit ok on both builds, girls' mean 280.5 to 281.9 px on the candidate against 280.7 to 281.5 live). The mock's own on-screen ratios are not matched, and cannot be where they collide with the HUD: the pick's Ormi 0.80 / Dr. Goon 0.89 / Fem-Goon 0.95 became 1.03 / 0.92 / 0.71 by the same painted-rect method (the build lane's figures, docs/handoff/r3941-stage.md; the same mean, 0.88 and 0.89), because the mock put the intent card over Ormi's head and the tallest model stood furthest back; recorded as F3942-03 for Bailey's eye. Composite of the pick against the build: targets/option3-pick-vs-build-act1.jpg.",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/targets/option3-pick-vs-build-act1.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ch6-act1-1600x900-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ch6-act1-1600x900-clean.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ab/live-1600x900.json",
+        "critic/reviews/04cdcd45-focused/shots/ab/cand-1600x900.json"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-014",
+      "result": "FAIL",
+      "mandatory": false,
+      "mode": "automated measurement (the page's own rects, fresh page per sample) + manual reading",
+      "minutes": 22,
+      "where": "FFX-2 Chapter VI: scale, facing and contact at three sizes; the phone slice at Act I",
+      "reason": "Scale and contact fit the shot on the desktop: heights are the table's, every figure stands on the floor at its own depth with its shadow or pool, faces the party, and runs in and returns on its real-key attack (Act I Paine and Yuna on Dr. Goon, Act II Rikku on Ormi, Act III Yuna on Ormi: damage landed, frames in shots/ch6-act*-attack-2.jpg and shots/ch6-act*-fiend-2.jpg). On the phone Acts II and III fit with margin, but Act I's first menu does not fit on either build: reached by keys from the title, the worst fiend was 0, 0, 0, 0, 0, 11 percent inside the screen on live (6 loads: a goon entirely outside) and 8, 13, 20, 20, 28, 100, 100, 100, 100 percent on the candidate (9 loads: Fem-Goon a sliver at the edge in 5, everyone inside in 4; 8 s on 64, 67, 100, 100 percent). The hotfix improves it and does not finish it: F3942-01 (major, pre-existing, not a regression).",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/phone2/route-act1-stats2.json",
+        "critic/reviews/04cdcd45-focused/shots/phone/phone-act1-stats.json",
+        "critic/reviews/04cdcd45-focused/shots/phone2/liveroute1-4-act1-first-menu-390x844.jpg",
+        "critic/reviews/04cdcd45-focused/shots/phone2/candroute1-4-act1-first-menu-390x844-later.jpg",
+        "critic/reviews/04cdcd45-focused/shots/phone/route2-4-act1-first-menu-390x844.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ch6-act1-390x844-hud.jpg"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real keys)",
+      "minutes": 9,
+      "where": "FFX-2 Chapter VI (also the hidden chapter, FFX-2 Chapter IV and FFX Chapter I)",
+      "reason": "Every capability claimed was driven by the player's own keys on the production build: the title, the board (ArrowRight to Chapter VI), party prep, the pre-battle scene (Enter), the first menu, Attack and its target (Enter), target cycling and Escape. The debug route only carried Acts I and II to Acts II and III (the page leaves the earlier fiends at 1 HP and the attack strategy finishes them at the skip pace), as the build lane did; each act's first menu and its attack were then real keys. A first attempt that pressed three zero-hold taps in Act III ended with Yuna's prompt open: not a fault, Enter confirms Rikku's command and the menu passes to Yuna (FFX-2 queues commands); live behaves the same (probes). The attack counts are 6, 2 and 4 presses (a press is repeated until an action starts), at 61 fps.",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/route-1600x900.json",
+        "critic/reviews/04cdcd45-focused/shots/route-4-act1-first-menu-1600x900.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ch6-1600x900.json",
+        "critic/reviews/04cdcd45-focused/data/probes/probe2-cand-act3.json",
+        "critic/reviews/04cdcd45-focused/data/probes/probe-live-act3-plain.json",
+        "critic/reviews/04cdcd45-focused/logs/ch6-1600x900.log"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated",
+      "minutes": 0,
+      "where": "every script of this review",
+      "reason": "Every capture follows an assertion of the screen (battle), a pending menu and the expected fiends on the field (assertFirstMenu; a failed wait throws and the run exits 1: the one such failure, a harness assumption in Act III, is above), and records the bundle that ran (build {sha 04cdcd45, bundle index-DAnPZ-iy.js}; the live runs read index-D57LJe-j.js).",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/data/scripts/verify.mjs",
+        "critic/reviews/04cdcd45-focused/logs/ch6-1600x900.log"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-017",
+      "result": "NOT APPLICABLE",
+      "reason": "Nothing is deployed: the exact live artifact is the live review's obligation. Fixed here for it: the candidate rebuilt in place at 04cdcd45, its manifest (data/artifact-manifest-cand.json: 4,537 files, artifactHash a5b18e6eb639922b0f4e9b7b5eefb44817c433ea2acc59c96bed32ba676c214e) and its diff against live 39.4's stored manifest (one bundle added, one removed, index.html changed, 4,535 files identical).",
+      "where": "the candidate build and the live baseline",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-020",
+      "result": "NOT APPLICABLE",
+      "reason": "FFX-2 only by design (AGENTS.md rule 14): the five Syndicate models, Chapter VI and the hidden chapter that reuses its room. The shared plumbing (createHud's fifth argument, SceneStaging.advisorCap) is additive and the FFX HUD ignores it; see CHK-021 for the FFX and other-FFX-2 checks.",
+      "where": "both (shared files); the change is FFX-2",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (A/B against live) + manual reading",
+      "minutes": 10,
+      "where": "FFX-2 Chapter VI and the hidden chapter (presence); FFX-2 Chapter IV and FFX Chapter I (absence)",
+      "reason": "Case: FFX-2 only (research/ffx2-leblanc-syndicate.md section 20 and docs/CONTRACT-CHANGES.md 2026-10-07 name it; the table is FFX-2 models, no FFX chapter reads it). Present where it belongs: Chapter VI Acts I to III at the table's heights and spots, the advisor card capped to 46 grid px (maxHeight 46px on every first menu), and the hidden experimental chapter, which plays Chapter VI's three acts by reference, stands the same fiends the same way (Act I 1.10 / 0.97 / 0.77, Act II 0.90 / 1.15, Act III 1.15 / 0.90 / 0.71 of the girls; real attacks landed; 0 console errors). Absent where it does not belong: first menu of FFX-2 Chapter IV on the candidate against live (same seed, frozen, 1600x900): 178 of 178 HUD boxes within 3 px, the three girls within 3 px and Bahamut's 576 px rect 5 px off (idle sway), the advisor card's max-height unset on both, Yuna's real attack started on both; FFX Chapter I: 175 of 175 HUD boxes within 3 px, actors within the idle sway (Yuna 6 px), the advisor max-height 98px on both, Tidus hit Mortiorchis for 153 on both. No file of src/battle or src/data/ffx2/enemies is in the diff.",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/cand-ffx2-bahamut-1600x900-signature.json",
+        "critic/reviews/04cdcd45-focused/shots/live-ffx2-bahamut-1600x900-signature.json",
+        "critic/reviews/04cdcd45-focused/shots/cand-seymour-flux-1600x900-signature.json",
+        "critic/reviews/04cdcd45-focused/shots/live-seymour-flux-1600x900-signature.json",
+        "critic/reviews/04cdcd45-focused/shots/exp-1600x900.json",
+        "critic/reviews/04cdcd45-focused/shots/exp-act3-1600x900-hud.jpg",
+        "critic/reviews/04cdcd45-focused/logs/regress-cand-ffx2-bahamut.log",
+        "critic/reviews/04cdcd45-focused/logs/regress-live-ffx2-bahamut.log",
+        "critic/reviews/04cdcd45-focused/logs/regress-cand-seymour-flux.log",
+        "critic/reviews/04cdcd45-focused/logs/regress-live-seymour-flux.log"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-022",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real keys for the route and the first fights, the debug autoplayer for the chain)",
+      "minutes": 3,
+      "where": "FFX-2 Chapter VI, title to results",
+      "reason": "The chain reaches its real destination with the new staging: from the pre-battle scene (Enter) the three links play (autoplayer at the skip pace, enemies held at 1 HP) to the epilogue scene and the Victory results screen (screens: cutscene, battle, cutscene, results; 28 s; EXP 1,640, GIL 1,590, drops listed), 0 console errors. The engine's output is unchanged by construction (no src/battle or src/data/ffx2/enemies file in the diff) and, per the build lane, byte-identical across seeds 1 to 20 (see coverage).",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/finish/finish.json",
+        "critic/reviews/04cdcd45-focused/shots/finish/finish-final-screen.jpg",
+        "critic/reviews/04cdcd45-focused/logs/finish-cand.log"
+      ],
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-026",
+      "result": "UNVERIFIED",
+      "mandatory": false,
+      "where": "FFX-2 Chapter VI (fiends' pose changes at their new heights)",
+      "reason": "The continuity harness (critic/runner/lib/continuity.mjs, 5 to 15 minutes of real-key play a chapter, tens of minutes of GPU) was not run: usage is in PROTECT mode and the driver's brief for this hotfix listed the checks to run, which did not include it. Dependency argument for not carrying a PASS: the change sets a figure's world height and ground spot and touches no pose, registration, painting or presenter file, so the head lock's pose-to-pose ratios and the feet lines move with the figure; but Chapter VI itself had no harness run on 39.4 either (the 55db51dd report names III, VI, VIII, X to XVI as not run), so nothing is carried. Owed to the deep review of the live build.",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-027",
+      "result": "UNVERIFIED",
+      "mandatory": false,
+      "where": "FFX-2 Chapter VI (motion at the new distances)",
+      "reason": "Not run, for the reason given under CHK-026. Seen by eye in the real-key attack frames of Acts I to III (the run-in, the hit, the fiend's own action, the return) with no break noticed; that is not the harness. CHK-027 fails in every chapter on live 39.4 (F392-01), as carried.",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu, RTX 5070 Ti), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5471) beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j); seed 1, ?coach=off for the measured runs (the real route leaves the coach on)",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    }
+  ],
+  "targets": {
+    "required": 1,
+    "matched": 1,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0,
+    "note": "The one target this change touches is Bailey's pick of 2026-10-07, \"Option 3: bosses forward\" (the Leblanc options sheet: every fiend at its real size from the HD models, the lane brought closer, camera, lens and rigs unchanged). It is not yet a tile of docs/target/targets.json (no tile names Chapter VI's staging; the group \"A pick for the battle camera\" is the perspectives round of 27 Sep), so there is no tile to match and no delivery state to move: record the pick, then this report can verify it. Matched on the properties the pick names; the mock's own on-screen ratios are not (F3942-03). The pause, phone-layout and presentation tiles are untouched.",
+    "list": [
+      {
+        "tile": "Option 3: bosses forward (Chapter VI staging; Bailey 2026-10-07; not a registered tile)",
+        "result": "matched",
+        "evidence": [
+          "critic/reviews/04cdcd45-focused/targets/option3-pick-vs-build-act1.jpg"
+        ],
+        "note": "Real sizes, lane closer, camera unchanged: yes. Fem-Goon 0.77 against the mock's 0.95 and Ormi 1.10 against its 0.80 (F3942-03)."
+      }
+    ]
+  },
+  "issues": [
+    {
+      "id": "F3942-01",
+      "severity": "major",
+      "category": "visual",
+      "confidence": "high",
+      "game": "ffx2",
+      "chapter": "ffx2-leblanc (Chapter VI), Act I, phone (390x844)",
+      "title": "On the phone, Act I's first menu leaves a goon outside or on the edge of the screen: live loses a goon entirely, the hotfix improves it and does not finish it",
+      "expected": "Every fiend whole inside the 390 px slice at the first menu (the phone fit, A-12: \"stands the master back until everyone fits\"; an enemy may be 25 percent out by its own rule).",
+      "observed": "Reached by keys from the title (board, party prep, the scene, a fresh profile each; 6 live loads, 9 candidate loads), the share of the worst fiend inside the slice at the first menu was 0, 0, 0, 0, 0, 11 percent on live (6 of 6 under 50: Fem-Goon, or Dr. Goon, entirely outside, 8 s later still 0, 0, 0, 74 percent in 4 loads; in the live debug capture the stage had Rikku and Paine at world x 1.16 and 1.75, 2.1 and 2.3 units right of the scene's slots, where the candidate has them on the slots) and 8, 13, 20, 20, 28, 100, 100, 100, 100 percent on the candidate (5 of 9 under 50; whole in 4; Fem-Goon a sliver at the right edge, 8 s on 64, 67, 100, 100 percent in 4 loads as the view settles). The candidate's phone camera is bimodal (z about 11.9 with Fem-Goon on the edge, or 12.9 with everyone inside) and drifts about 0.1 in z over 8 s on both builds. Her spot (x 2.82, z -2.6) puts the group's right edge on the slice's edge. By the debug route (a fresh page, gotoChapter, not the player's path; first menu +2.5 s) the candidate left Fem-Goon 47, 56, 58 percent inside in 3 of 10 loads, 92 to 97 in 4, whole in 3; live 85 percent in 1 of 8, whole in the rest. Acts II and III fit with margin in the three phone runs that reached them. The build lane's own phone frames (live and candidate) were debug-route captures and show everyone in.",
+      "repro": "PYREFLY_BROWSER=gpu node critic/reviews/04cdcd45-focused/data/scripts/verify.mjs --case route --base <the build> --w 390 --h 844 --out <dir> --tag x (title, board, party prep, the scene by keys; measures at the first menu and 8 s on, with a camera trace); then data/scripts/route-stats2.mjs <shots dir>.",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/phone2/route-act1-stats2.json",
+        "critic/reviews/04cdcd45-focused/shots/phone2/liveroute1-4-act1-first-menu-390x844.jpg",
+        "critic/reviews/04cdcd45-focused/shots/phone2/liveroute1-4-act1-first-menu-390x844-later.jpg",
+        "critic/reviews/04cdcd45-focused/shots/phone2/candroute1-4-act1-first-menu-390x844.jpg",
+        "critic/reviews/04cdcd45-focused/shots/phone2/candroute1-4-act1-first-menu-390x844-later.jpg",
+        "critic/reviews/04cdcd45-focused/shots/phone/route2-4-act1-first-menu-390x844.jpg",
+        "critic/reviews/04cdcd45-focused/shots/phone/phone-act1-stats.json"
+      ],
+      "requirement": "CHK-011 and CHK-014 on the phone; RUBRIC section 2 (phone is a platform goal) and section 8 (a major is a severe visual or target deviation)",
+      "where": "suspected: the phone framing (ShotRules.fitPhone, called at the first instant of BattleMoments.battleStart: a group-width fit, an enemy needs only 0.75 of itself inside, and the slice slides) with Chapter VI's lane; on the candidate src/scenes/leblanc-staging.ts LEBLANC_ENEMY_SPOTS fem-goon [2.82, 0, -2.6] is the right edge of the group; not traced further",
+      "fix": "The smallest correction: stand Fem-Goon about 0.5 world units further in (x about 2.3) and re-run tests/unit/chapters/leblanc-enemy-lane.test.ts and the desktop gaps, or have the phone fit hold this scene's fiends whole (min 1) so the master stands back for her. Neither touches the desktop camera.",
+      "acceptanceCheck": "Ten fresh loads of Act I by keys from the title at 390x844: every fiend at least 95 percent inside the slice at the first menu and 8 s on; Acts II and III the same; the desktop numbers of this report unchanged.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "F3942-02",
+      "severity": "polish",
+      "category": "interface",
+      "confidence": "high",
+      "game": "ffx2",
+      "chapter": "ffx2-leblanc (Chapter VI), all acts and the hidden chapter",
+      "title": "The move-advisor card is shorter in Chapter VI: the numbers and the \"most damage\" line are gone (a HUD change the pick did not name)",
+      "expected": "The NEXT BEST MOVE card as on live: the move, where it is, what it costs, its damage range, hits, hit and crit chance, its effect and the best target line.",
+      "observed": "To keep the card off the bigger fiends' feet the scene caps it at 46 grid px (SceneStaging.advisorCap). It now prints three lines: \"Rikku Grenade -> all enemies / IN ITEM  NO MP / Physical damage to all enemies.\" Live printed the NEXT BEST MOVE heading, \"561-633, 3 HITS, 96% TO HIT, 6% CRIT\" and \"Most damage on the board - 597 to Logos\". The move, where and what it costs are kept; the certainty line (hit and crit chance) and the damage are not. Chapter IV and FFX Chapter I are unchanged (maxHeight unset / 98px on both builds).",
+      "repro": "Chapter VI, any act, first menu, 1600x900: compare shots/ch6-act3-1600x900-hud.jpg with shots/ab/live-act3-1600x900-hud.jpg.",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/ch6-act3-1600x900-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ab/live-act3-1600x900-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ab/cand-1600x900.json"
+      ],
+      "requirement": "RUBRIC section 2 (the advisor \"separates certainty from conditional or random outcomes\"); AGENTS.md rules 9 and 10 (the sizes pick did not name an advisor change; the options sheet said the HUD layout was not changed)",
+      "where": "src/scenes/leblanc-staging.ts LEBLANC_ADVISOR_CAP = 46; src/ui/ffx2/FFX2BattleHud.ts (resetAdvisorCap); documented in docs/CONTRACT-CHANGES.md 2026-10-07",
+      "fix": "Ask Bailey: keep the short card in Chapter VI, or stand the fiends further back so the full card fits (smaller fiends), or give the full card a place beside the feet.",
+      "acceptanceCheck": "Bailey's answer; then the first menu of each act shows what he chose with no card over a fiend's feet.",
+      "introducedByCandidate": true,
+      "regressionVsLive": true,
+      "inNewFeature": false
+    },
+    {
+      "id": "F3942-03",
+      "severity": "polish",
+      "category": "visual",
+      "confidence": "high",
+      "game": "ffx2",
+      "chapter": "ffx2-leblanc (Chapter VI), Acts I to III",
+      "title": "The shortest fiend of each act still reads smaller than the girls on screen (Fem-Goon 0.77, Leblanc 0.71), where the models say 1.01 and 1.05",
+      "expected": "Bosses forward: the fiends at real size and at the party's depth; the pick's frame showed Fem-Goon at 0.95 of the girls.",
+      "observed": "At 1600x900 the fiends stand at Ormi 1.10, Dr. Goon 0.97, Fem-Goon 0.77 (Act I), Ormi 0.91, Logos 1.15 (Act II) and Ormi 0.90, Logos 1.15, Leblanc 0.71 (Act III) of the girls' standing height (live: Act I 0.57 / 0.44 / 0.50, Act II 0.72 / 0.57, Act III 0.72 / 0.63 / 0.56); their stage heights are the table's (Ormi 1.152, Dr. Goon 1.101, Fem-Goon 1.006). The HUD leaves the fiends a 207 px window (the intent card above, the advisor card below), so the heads stand level and the shortest of each act stands furthest back. The pick's mock had Ormi 0.80 / Dr. Goon 0.89 / Fem-Goon 0.95; the build has Ormi taller than the mock and Fem-Goon smaller (the same mean).",
+      "repro": "shots/ch6-act1-1600x900-hud.jpg against targets/option3-pick-vs-build-act1.jpg.",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/targets/option3-pick-vs-build-act1.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ch6-1600x900.json",
+        "critic/reviews/04cdcd45-focused/shots/ab/live-1600x900.json"
+      ],
+      "requirement": "Bailey, 2026-10-07: \"Option 3: bosses forward\" (not yet a row in targets.json: record it); the build lane's own open note (docs/handoff/r3941-stage.md)",
+      "where": "src/scenes/leblanc-staging.ts LEBLANC_ENEMY_SPOTS (the depth of each fiend)",
+      "fix": "None required: for Bailey's eye. If he wants the small ones larger, they must stand nearer (into the intent card or the girls) or the HUD cards must move.",
+      "acceptanceCheck": "Bailey's verdict on the composite and the live frames.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "F3942-04",
+      "severity": "polish",
+      "category": "interface",
+      "confidence": "high",
+      "game": "ffx2",
+      "chapter": "ffx2-leblanc (Chapter VI), Acts II and III (1600x900, 2000x1012; 1280x720 from the build lane)",
+      "title": "The enemy-intent card still grazes a fiend: Logos's head (3 to 10 percent) and Leblanc's raised fan (up to 17 percent of her rect)",
+      "expected": "The card covers no fiend's head whoever acts next.",
+      "observed": "Act II, Ormi acting: 3 percent of Logos's head at 1600x900 (live 70 percent); Act III: 9 percent of Logos's head (live 24 percent) and 12 to 17 percent of Leblanc's rect, her fan (live: 100 percent of her head). Act I: none. The build lane measured 1280x720 Act II at 82 percent of Logos's head when Ormi acts (live 91 percent), not re-run here.",
+      "repro": "data/scripts/summarize.mjs on shots/ch6-1600x900.json; the intent panel is driven for every fiend as the next mover (measure6.js).",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/ch6-1600x900.json",
+        "critic/reviews/04cdcd45-focused/shots/ch6-2000x1012.json",
+        "critic/reviews/04cdcd45-focused/shots/ab/live-1600x900.json"
+      ],
+      "requirement": "CHK-008",
+      "where": "HUD constant (the intent card hangs from the acting fiend's head and is held under the top bar), shared with FFX; not changed here",
+      "fix": "None in this change (the card is a shared HUD constant); a smaller card or a lower hang would clear it.",
+      "acceptanceCheck": "The same sweep: 0 percent in all three acts at 1600x900, 2000x1012 and 1280x720.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "F3942-05",
+      "severity": "polish",
+      "category": "interface",
+      "confidence": "high",
+      "game": "ffx2",
+      "chapter": "ffx2-leblanc (Chapter VI), Act III",
+      "title": "Act III: the plate names Logos and Ormi are partly under the status-icon rows (as live)",
+      "expected": "Every name in full (CHK-009).",
+      "observed": "Three fiends with statuses stack the plates at the top left: the status chips of Leblanc and Logos sit over the next name; Ormi's top is cut. Identical on live 39.4 (my live capture) and on the candidate.",
+      "repro": "Chapter VI Act III first menu at 1600x900.",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/shots/ch6-act3-1600x900-hud.jpg",
+        "critic/reviews/04cdcd45-focused/shots/ab/live-act3-1600x900-hud.jpg"
+      ],
+      "requirement": "CHK-009",
+      "where": "src/ui/ffx2 enemy plates (not changed here)",
+      "fix": "Space the plates by the status row's height when a fiend has statuses.",
+      "acceptanceCheck": "Act III first menu: every name whole with all three fiends carrying statuses.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "F3942-06",
+      "severity": "suggestion",
+      "category": "delivery",
+      "confidence": "high",
+      "game": "both",
+      "chapter": "critic tooling",
+      "title": "The four-systems escalation still sets deepBeforeDeploy, so a batch of four focused systems is refused as \"touches save data\"",
+      "expected": "RUBRIC section 4 and 10 and policy.json: only the save-data class and a milestone claim need deep evidence before the deploy.",
+      "observed": "tools/critic-policy.mjs classifyChange (line 196) sets deepBeforeDeploy = true on the escalation to deep, a line from the first v2 commit that rule B (2026-09-21) did not remove. This candidate (4 focused systems, 7 product files, no save-data file) gets deepBeforeDeploy true; resolveReleaseGate would refuse its focused SHIP report with \"this change touches save data\" (data/gate-probe.txt). In practice the deploy needs the owner override anyway (44 builds owe a deep review, cap 2).",
+      "repro": "node tools/critic-plan.mjs --json in D:/pyrefly-r39-int; node critic/reviews/04cdcd45-focused/data/scripts/gate-probe.mjs (read-only).",
+      "evidence": [
+        "critic/reviews/04cdcd45-focused/data/critic-plan.json",
+        "critic/reviews/04cdcd45-focused/data/gate-probe.txt"
+      ],
+      "requirement": "critic/RUBRIC.md sections 4 and 10; critic/policy.json release.deepBeforeDeployNote",
+      "where": "tools/critic-policy.mjs line 196",
+      "fix": "Remove the assignment and pin it with a test (a four-system focused batch: deepBeforeDeploy false, deepAfterDeploy true).",
+      "acceptanceCheck": "The plan of this candidate reads deepBeforeDeploy false and the gate message names the owed-deep cap only.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Candidate 04cdcd45 rebuilt in place by me (PowerShell, BASE_PATH=/, 132.8 s, exit 0): bundle index-DAnPZ-iy.js, 4537 files, 9670612159 bytes, artifactHash a5b18e6eb639922b0f4e9b7b5eefb44817c433ea2acc59c96bed32ba676c214e; my own decode-checked manifest diffed against live 39.4's stored manifest (1 added, 1 removed, index.html changed, 4,535 identical; tools/artifact-manifest.mjs exits 1 on the two intentional flat eyeR-catch PNGs, the same two as live's stored manifest); served by vite preview on 5471 beside live 39.4 read at https://echoesofspira.com/ (bundle D57LJe-j).",
+      "Chapter VI (FFX-2) Acts I to III first menus at 1600x900, 2000x1012 and 390x844 with the page's own rects, heights, camera, framing fit, HUD boxes and the real intent panel driven for every fiend; a real-key attack and a fiend's own action in each act at 1600x900 and 2000x1012; real-key target cycling and Escape in each act; the same moments on live (1600x900 and the phone) for the sizes, the camera and the framing; 18 fresh phone loads of Act I (candidate 10, live 8) and 9 candidate and 6 live real-route phone loads; Act I from the title by keys at 1600x900 and at 390x844; the chain to the results screen.",
+      "The hidden experimental chapter (Acts I to III first menus and a real attack each, 1600x900): same fiends, same sizes, 0 console errors.",
+      "Regression A/B against live at the first menu with a real attack: FFX-2 Chapter IV and FFX Chapter I (HUD box signatures, actors, the advisor cap, damage).",
+      "Console errors over 47 browser runs: 0; failed requests (404 and over): 0. Frame rate at the attacks: 61 fps.",
+      "Source and data: the 15-file diff read; the stature table checked against research section 20 by script; the plan and the deploy gate read (read-only probe).",
+      "Gates re-run here on the candidate tree (the full suite was not): tsc --noEmit (TypeScript 7.0.2) exit 0; the five targeted vitest files (data-ffx2-citations 86 tests, syndicate-stature 11, leblanc-enemy-lane 21, leblanc-scene 11, ffx2-advisor-scene-cap 6): 135 passed, 0 failed (the citation test is the one the build lane had to fix); node tools/orphans.mjs: 1320 modules, 24 orphaned, the same count as 39.4 and neither new module among them."
+    ],
+    "reused": [
+      {
+        "what": "The full unit suite on 04cdcd45: 13,618 tests passed, 0 failed (after the one citation fix), tsc --noEmit clean, 15 targeted files (270 tests), node tools/orphans.mjs lists neither new module",
+        "from": "docs/handoff/r3941-stage.md \"Verified\" (the build lane, 2026-10-07 evening)",
+        "why": "The tree I built is that commit with no product file modified (git status of src, public/audio, index.html, vite.config.ts, package.json is clean); five of the targeted files were re-run here (see tested)."
+      },
+      {
+        "what": "The engine's output is unchanged: driveChapter6 (the shipped intendedStrategy through all three links), the sha256 of every link's event log, seeds 1 to 20 at zero decision time and 1 to 10 at 1.5 s, byte-identical on origin/r394-int and the branch",
+        "from": "docs/handoff/r3941-stage.md \"The engine is unchanged\"",
+        "why": "Presentation-only diff: no file under src/battle or src/data/ffx2/enemies is in git diff 55db51dd..04cdcd45 (read here); the real-key attacks above did damage as before (identical 188 / 144 / 68 / 39 across my runs)."
+      },
+      {
+        "what": "The 1280x720 and 1920x1080 sizes (1920x1080 clean, 7 percent at most; 1280x720 Act II 82 percent of Logos's head)",
+        "from": "docs/handoff/r3941-stage.md",
+        "why": "Not in this review's sizes; the same code and staging; carried as F3942-04."
+      }
+    ],
+    "notTested": [
+      "The continuity harness (CHK-026, CHK-027) in Chapter VI and in the hidden chapter (carried F393-01, F393-02): PROTECT mode, not in the brief; owed to the deep review.",
+      "1280x720, 1920x1080, 4K and 4:3 for Chapter VI; real Safari, a real phone or pad (the phone is Chromium emulation at 390x844, no touch input); Chapters II, III, V, VII to XVIII beyond what the diff reaches (none of their files changed).",
+      "Listening (no audio changed); deployment verification (nothing deployed)."
+    ]
+  },
+  "regressions": [
+    "No regression at critical or major severity.",
+    "F3942-01 (major, visual, phone): NOT a regression, live's own defect, improved and not fixed: reached by keys from the title, the worst fiend at Act I's first menu on the phone was 0, 0, 0, 0, 0, 11 percent inside the 390 px screen on live (6 loads; a goon entirely outside, and 0, 0, 0, 74 percent 8 s later in 4) and 8, 13, 20, 20, 28, 100, 100, 100, 100 percent on the candidate (9 loads; Fem-Goon a sliver at the edge in 5, everyone inside in 4; 64, 67, 100, 100 percent 8 s on in 4).",
+    "F3942-02 (polish, interface): the advisor card prints three lines instead of up to six in Chapter VI; deliberate, to keep the card off the bigger fiends' feet; for Bailey."
+  ],
+  "nextReview": "Live verification of the exact artifact after the deploy (CHK-017: artifactHash a5b18e6eb639922b0f4e9b7b5eefb44817c433ea2acc59c96bed32ba676c214e, bundle index-DAnPZ-iy.js; two files change, the bundle and index.html), then the deep review already owed on the live builds (55db51dd carries it and 43 older): every chapter, the continuity harness (Chapter VI and the hidden chapter above all: CHK-026, CHK-027, F393-01, F393-02), the first-time-fan lens, the phone Act I sample again on the live bundle (F3942-01), 1280x720 Act II (F3942-04), and Bailey's eye on the fiends' sizes (F3942-03) and the shorter advisor card (F3942-02).",
+  "elapsedMinutes": 82,
+  "notes": [
+    "Candidate and servers: the preview of dist-gate ran on 127.0.0.1:5471 and was stopped by its listening PID (106568) when the browser runs ended, the port confirmed closed; every browser was headless Playwright from node, never the Claude browser pane or Chrome.",
+    "The first Chapter VI run ended in a harness assertion in Act III (three zero-hold Enter taps left Yuna's target prompt open): Enter confirms Rikku's command and the menu passes to Yuna, as on live (data/probes); the harness presses until an action starts. It is not a defect of the build.",
+    "Nothing was committed, cleared or deployed; critic/pending, critic/ledger.json and docs/deploys.log are as the driver left them (git status shows their pre-existing changes)."
+  ]
+}

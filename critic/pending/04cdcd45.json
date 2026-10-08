@@ -1,31 +1,20 @@
 {
-  "mainSha": "55db51dd",
-  "bundle": "D57LJe-j",
-  "deployedAt": "2026-10-07T18:54:12.989Z",
+  "mainSha": "04cdcd45",
+  "bundle": "DAnPZ-iy",
+  "deployedAt": "2026-10-08T02:33:53.502Z",
   "liveUrl": "https://echoesofspira.com/",
   "artFiles": 3947,
   "policyVersion": 2,
-  "artifactHash": "fd7b1b89f2d9c7f3123b4c1b61aee097e8809961269aa98fabd1e8a6ef6a8d82",
+  "artifactHash": "a5b18e6eb639922b0f4e9b7b5eefb44817c433ea2acc59c96bed32ba676c214e",
   "review": "deep",
   "reasons": [
-    "public/audio/manifest.json: asset loader and manifests is a shared system",
-    "src/data/art/poseRegistrationFfx.ts: unclassified product path is a shared system",
-    "src/data/art/poseRegistrationFfx2.ts: unclassified product path is a shared system",
-    "src/data/art/poseRegistrationFoes.ts: unclassified product path is a shared system",
-    "src/data/art/poseRegistrationTypes.ts: unclassified product path is a shared system",
-    "src/engine/BattlePresenterStage.ts: battle presenter and lifecycle is a shared system",
-    "src/engine/PaintedArt.ts: asset loader and manifests is a shared system",
-    "src/ui/coach/coachState.ts: unclassified product path is a shared system"
+    "4 systems and 7 product files changed: the batch crosses too much of the game for a focused pass"
   ],
   "systems": [
-    "FF7 experiment: data, flow, its own store, the secret door, its HUD and scene",
-    "asset loader and manifests",
-    "battle presenter and lifecycle",
+    "FFX-2 HUD",
+    "FFX-2 game data",
     "effects, lighting and sprites",
-    "music and sound files",
-    "painted artwork",
-    "title, chapter select, prep, pause and results screens",
-    "unclassified product path"
+    "title, chapter select, prep, pause and results screens"
   ],
   "chapters": [
     "seymour-flux",
@@ -48,33 +37,26 @@
     "sin-face"
   ],
   "checks": [
-    "CHK-001",
     "CHK-002",
     "CHK-003",
     "CHK-006",
+    "CHK-007",
     "CHK-008",
     "CHK-009",
-    "CHK-012",
+    "CHK-010",
     "CHK-013",
-    "CHK-014",
     "CHK-015",
     "CHK-016",
     "CHK-017",
-    "CHK-018",
-    "CHK-019",
     "CHK-020",
     "CHK-021",
-    "CHK-022",
-    "CHK-023",
-    "CHK-025",
     "CHK-026",
-    "CHK-027",
-    "CHK-B1"
+    "CHK-027"
   ],
   "liveArtifact": {
     "result": "PASS",
-    "checked": 2114,
-    "at": "2026-10-07T18:54:12.989Z"
+    "checked": 46,
+    "at": "2026-10-08T02:33:53.502Z"
   },
   "obligations": [
     {
@@ -82,16 +64,16 @@
       "status": "done",
       "requires": "exact-artifact verification and real-input smoke on the live URL",
       "result": "PASS",
-      "settledBy": "critic/reviews/55db51dd-live.json",
-      "settledAt": "2026-10-07T21:41:39.504Z"
+      "settledBy": "critic/reviews/04cdcd45-live.json",
+      "settledAt": "2026-10-08T03:13:36.738Z"
     },
     {
       "kind": "focused",
       "status": "done",
       "requires": "acceptance of the changed area",
       "result": "FAIL",
-      "settledBy": "critic/reviews/55db51dd-focused.json",
-      "settledAt": "2026-10-07T18:32:48Z"
+      "settledBy": "critic/reviews/04cdcd45-focused.json",
+      "settledAt": "2026-10-08T02:14:25Z"
     },
     {
       "kind": "deep",
@@ -140,14 +122,15 @@
         "816d80f9",
         "d3fe9fe5",
         "002928c4",
-        "b80f772f"
+        "b80f772f",
+        "55db51dd"
       ]
     }
   ],
   "ownerOverride": {
-    "words": "yes deploy 39.4",
-    "date": "2026-10-07T18:54:12.989Z",
-    "report": "critic/reviews/55db51dd-focused.json",
+    "words": "Push a hotfix for the sizing and perspective problem please",
+    "date": "2026-10-08T02:33:53.502Z",
+    "report": "critic/reviews/04cdcd45-focused.json",
     "changedArea": null
   }
 }
