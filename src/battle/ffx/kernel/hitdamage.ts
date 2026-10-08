@@ -202,7 +202,7 @@ export function calcHitDamage(inp: HitInput, io: HitIo): HitOutput {
   let outcome: HitOutcome = 'hit';
   let outcomeByte = 0;
   let damage: Triple = [0, 0, 0];
-  let nul = record.nul;
+  let nul = { ...record.nul };
 
   const nulCheck = nulElementCheck(src.element, record.nul);
   if (nulCheck.nullified) {
