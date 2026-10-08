@@ -74,6 +74,7 @@ import {
 } from '../../story/runner/CutsceneRunner.ts';
 import { MID_LINE_HOLD_MS, midBattleDeadlineMs } from '../../story/registry.ts';
 import { createShowCounter } from '../../story/showCaps.ts';
+import { gatedVoice, type VoicePort } from '../../story/voice/voicePort.ts';
 import { fadeMsToSec } from '../../audio/AudioManager.ts';
 import { DialogueBox } from '../../ui/common/DialogueBox.ts';
 import { typingDurationMs } from '../../ui/common/typewriter.ts';
@@ -95,6 +96,11 @@ export interface MidBattleCutsceneOptions {
   textSpeed?: number;
   /** The scene's art namespace (the experimental Leblanc chapter): a speaker it has repainted shows its own portrait (`portraitNamespace.ts`). */
   artNamespace?: string;
+  /**
+   * The recorded voice (`audio/voice`). A spoken line is held until its voice is done and the beat's budget and each line's deadline are
+   * re-costed with the recording; `'skip'` playback and a skipped beat speak nothing. Absent: text only, exactly as before.
+   */
+  voice?: VoicePort;
   /**
    * Wall-clock sleep hook, so a skipped or fast-forwarded battle stays
    * responsive and a test can own the clock.
@@ -170,11 +176,14 @@ export function resetMidBattleOverrunLog(): void {
  */
 export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBattleCutscenes {
   const realWait = opts.sleep ?? sleepMs;
+  // Silent in `'skip'` playback and once a beat is skipped (the runner keeps calling `say` after a skip; none of those may speak).
+  const voicePort = opts.voice ? gatedVoice(opts.voice, () => mode === 'instant' || runner.skipped) : undefined;
   const box = new DialogueBox({
     root: opts.root,
     ...(opts.game ? { game: opts.game } : {}),
     ...(opts.textSpeed !== undefined ? { textSpeed: opts.textSpeed } : {}),
     ...(opts.artNamespace ? { artNamespace: opts.artNamespace } : {}),
+    ...(voicePort ? { voice: voicePort } : {}),
   });
   box.mount();
   // The box only belongs on screen while a beat is actually playing.
@@ -268,9 +277,25 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
   const timed = <T extends SayStep | NarrateStep>(step: T): T =>
     step.auto === undefined ? { ...step, auto: MID_LINE_HOLD_MS } : step;
 
-  /** Worst case for one line, if the frame loop keeps running. */
+  /** How long a line is held for its recording (recording plus tail), or 0 when it will not be spoken: text only, voice off, audio asleep. */
+  const spokenMs = (step: SayStep | NarrateStep): number => {
+    try {
+      return voicePort?.spokenMs({ who: step.type === 'say' ? step.who : 'narrator', text: step.text, ...(step.type === 'say' && step.voiceKey ? { voiceKey: step.voiceKey } : {}) }) ?? 0;
+    } catch {
+      return 0; // a voice that cannot answer is a line with no voice
+    }
+  };
+
+  /**
+   * The longest voice a step could have: its written speaker or any authored stand-in (who speaks depends on the party on the field,
+   * decided line by line when the beat plays). The beat's deadline is costed on this so a stand-in's recording is never cut off.
+   */
+  const worstSpokenMs = (step: SayStep | NarrateStep): number =>
+    step.type === 'say' ? Math.max(spokenMs(step), ...(step.fallback ?? []).map((alt) => spokenMs({ ...step, who: alt.who, text: alt.text ?? step.text }))) : spokenMs(step);
+
+  /** Worst case for one line, if the frame loop keeps running; a spoken line is allowed to run to the end of its voice. */
   const lineDeadlineMs = (step: SayStep | NarrateStep): number =>
-    typingDurationMs(step.text, opts.textSpeed ?? 1) + (step.auto ?? MID_LINE_HOLD_MS) + LINE_GRACE_MS;
+    Math.max(typingDurationMs(step.text, opts.textSpeed ?? 1) + (step.auto ?? MID_LINE_HOLD_MS), spokenMs(step)) + LINE_GRACE_MS;
 
   /**
    * Play a line, but never wait on it longer than it can honestly take.
@@ -408,7 +433,7 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
       box.el.hidden = mode === 'instant';
       // The HUD stays where it is; the scene behind the line just dims.
       if (playOpts?.midBattle !== false) opts.root.classList.add(MIDBEAT_CLASS);
-      const deadline = midBattleDeadlineMs(script);
+      const deadline = midBattleDeadlineMs(script, voicePort ? worstSpokenMs : undefined); // voiced beats are re-costed with their recordings
       // The budget outlives a beat that finishes early — its stall-guard timer
       // has no cancel — so it is fenced by the beat it was started for. Without
       // the fence, beat A's leftover timer would skip beat B mid-sentence.

@@ -1,0 +1,140 @@
+{
+ "version": 1,
+ "chapter": "seymour-anima-macalania",
+ "game": "ffx",
+ "lines": {
+  "1f5eb2f9f76581": {
+   "id": "seymour-anima-macalania.pre.006",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.pre.006.mp3",
+   "ms": 2277,
+   "bytes": 18836,
+   "who": "tidus"
+  },
+  "0f24cefa475f72": {
+   "id": "seymour-anima-macalania.pre.011",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.pre.011.mp3",
+   "ms": 1496,
+   "bytes": 12692,
+   "who": "tidus"
+  },
+  "0d0f343e2f2fc5": {
+   "id": "seymour-anima-macalania.pre.016",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.pre.016.mp3",
+   "ms": 2206,
+   "bytes": 18260,
+   "who": "auron"
+  },
+  "1a12f19d326e24": {
+   "id": "seymour-anima-macalania.pre.023",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.pre.023.mp3",
+   "ms": 1240,
+   "bytes": 10580,
+   "who": "yuna"
+  },
+  "134e481e798553": {
+   "id": "seymour-anima-macalania.pre.027",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.pre.027.mp3",
+   "ms": 788,
+   "bytes": 6932,
+   "who": "yuna"
+  },
+  "10ca428f3a1766": {
+   "id": "seymour-anima-macalania.pre.029",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.pre.029.mp3",
+   "ms": 1713,
+   "bytes": 14420,
+   "who": "auron"
+  },
+  "104a3b838124ec": {
+   "id": "seymour-anima-macalania.post.003",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.post.003.mp3",
+   "ms": 840,
+   "bytes": 7316,
+   "who": "tidus"
+  },
+  "07111739738ed0": {
+   "id": "seymour-anima-macalania.post.004",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.post.004.mp3",
+   "ms": 1614,
+   "bytes": 13652,
+   "who": "auron"
+  },
+  "1fdb28ce0992a4": {
+   "id": "seymour-anima-macalania.post.008",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.post.008.mp3",
+   "ms": 3975,
+   "bytes": 32468,
+   "who": "yuna"
+  },
+  "092fa009615f23": {
+   "id": "seymour-anima-macalania.post.013",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.post.013.mp3",
+   "ms": 1373,
+   "bytes": 11732,
+   "who": "yuna"
+  },
+  "13ae2f7d398203": {
+   "id": "seymour-anima-macalania.post.016",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.post.016.mp3",
+   "ms": 3047,
+   "bytes": 24980,
+   "who": "auron"
+  },
+  "08b603450b559b": {
+   "id": "seymour-anima-macalania.mid-mac-anima-summon.001",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.mid-mac-anima-summon.001.mp3",
+   "ms": 3153,
+   "bytes": 25940,
+   "who": "yuna"
+  },
+  "17712b24f9f437": {
+   "id": "seymour-anima-macalania.mid-mac-first-boost.002.fb1",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.mid-mac-first-boost.002.fb1.mp3",
+   "ms": 3087,
+   "bytes": 25364,
+   "who": "tidus"
+  },
+  "0082dbc5d875d7": {
+   "id": "seymour-anima-macalania.mid-mac-seymour-restored.001.fb1",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.mid-mac-seymour-restored.001.fb1.mp3",
+   "ms": 3039,
+   "bytes": 24980,
+   "who": "tidus"
+  },
+  "0124821fd74141": {
+   "id": "seymour-anima-macalania.mid-mac-seymour-restored.002",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.mid-mac-seymour-restored.002.mp3",
+   "ms": 2554,
+   "bytes": 21140,
+   "who": "auron"
+  },
+  "01a9dc5f8b34ba": {
+   "id": "seymour-anima-macalania.mid-mac-seymour-restored.002.fb1",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.mid-mac-seymour-restored.002.fb1.mp3",
+   "ms": 2753,
+   "bytes": 22676,
+   "who": "yuna"
+  },
+  "1b3ffeef634932": {
+   "id": "seymour-anima-macalania.quip-tidus.001",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.quip-tidus.001.mp3",
+   "ms": 1356,
+   "bytes": 11540,
+   "who": "tidus"
+  },
+  "0a1e0d8fa726ac": {
+   "id": "seymour-anima-macalania.quip-yuna.001",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.quip-yuna.001.mp3",
+   "ms": 1514,
+   "bytes": 12884,
+   "who": "yuna"
+  },
+  "18a7cd0b125b1a": {
+   "id": "seymour-anima-macalania.quip-auron.001",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.quip-auron.001.mp3",
+   "ms": 1365,
+   "bytes": 11540,
+   "who": "auron"
+  }
+ }
+}

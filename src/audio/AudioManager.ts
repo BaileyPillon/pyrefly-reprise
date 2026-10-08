@@ -89,6 +89,11 @@ export class AudioManager {
   private musicBus: GainNode | null = null;
   private duckBus: GainNode | null = null;
   private sfxBus: GainNode | null = null;
+  /** Recorded voice-over: into `master`, not through `duckBus`, so ducking the music never ducks a line (voice-integration-design.md section 3). */
+  private voiceBus: GainNode | null = null;
+  private voiceVolume = 0.9;
+  private voiceOn = true;
+  private voiceDebug: (() => unknown) | null = null;
   private sfxDry: GainNode | null = null;
   private sfxSend: GainNode | null = null;
   private convolver: ConvolverNode | null = null;
@@ -172,6 +177,9 @@ export class AudioManager {
     this.musicBus.connect(this.duckBus);
     this.duckBus.connect(this.master);
     this.sfxBus.connect(this.master);
+    this.voiceBus = ctx.createGain();
+    this.voiceBus.gain.value = this.voiceGain();
+    this.voiceBus.connect(this.master);
 
     this.buildSfxReverb(ctx);
 
@@ -570,10 +578,49 @@ export class AudioManager {
    * setters at all, so a saved mute or a lowered volume never reached the
    * mixer until the player opened pause.
    */
-  applySettings(settings: { masterVolume: number; musicVolume: number; sfxVolume: number }): void {
+  applySettings(settings: { masterVolume: number; musicVolume: number; sfxVolume: number; voiceVolume?: number; voiceOn?: boolean }): void {
     this.setMasterVolume(settings.masterVolume);
     this.setMusicVolume(settings.musicVolume);
     this.setSfxVolume(settings.sfxVolume);
+    if (typeof settings.voiceVolume === 'number' && Number.isFinite(settings.voiceVolume)) this.setVoiceVolume(settings.voiceVolume);
+    if (typeof settings.voiceOn === 'boolean') this.setVoiceOn(settings.voiceOn);
+  }
+
+  // ---------------------------------------------------------------- voice ---
+
+  private voiceGain(): number {
+    return this.voiceOn ? this.voiceVolume : 0;
+  }
+
+  setVoiceVolume(value: number): void {
+    this.voiceVolume = Math.max(0, Math.min(1, value));
+    if (this.voiceBus) this.voiceBus.gain.value = this.voiceGain();
+  }
+
+  /** The VOICE-OVER switch (OPTIONS): off keeps the voice bus silent and `voiceEnabled` false, so no line starts. */
+  setVoiceOn(on: boolean): void {
+    this.voiceOn = on;
+    if (this.voiceBus) this.voiceBus.gain.value = this.voiceGain();
+  }
+
+  /** True when a recorded line would be heard: the switch is on and the voice slider is above zero. */
+  get voiceEnabled(): boolean {
+    return this.voiceOn && this.voiceVolume > 0;
+  }
+
+  /** Where a voice run connects (`null` until the context exists). Not through the duck bus. */
+  get voiceDestination(): AudioNode | null {
+    return this.voiceBus;
+  }
+
+  /** The base the manifest and every file resolve against (`resolveAudioUrl`). */
+  get audioBaseUrl(): string {
+    return this.baseUrl;
+  }
+
+  /** The voice director registers its block for `debug()` here (the hook-up is provable without ears). */
+  setVoiceDebug(provider: (() => unknown) | null): void {
+    this.voiceDebug = provider;
   }
 
   setMuted(muted: boolean): void {
@@ -592,6 +639,10 @@ export class AudioManager {
     playing: string | null;
     muted: boolean;
     volumes: { master: number; music: number; sfx: number };
+    /** The voice bus level in force (0 when VOICE-OVER is off), beside `volumes`, whose shape tests pin. */
+    voiceVolume: number;
+    /** The voice director's block: chapter, cache, the last plays (`audio/voice/VoiceDirector.ts`); `null` until it registers. */
+    voice: unknown;
     /** The `?sfxmix=` option in force and the SFX bus gain it gives (fb-0929-sfx). */
     sfxMix: { option: string; trim: number; busGain: number };
     /**
@@ -614,6 +665,8 @@ export class AudioManager {
       playing: this.currentMusic,
       muted: this.muted,
       volumes: { master: this.masterVolume, music: this.musicVolume, sfx: this.sfxVolume },
+      voiceVolume: this.voiceGain(),
+      voice: this.voiceDebug?.() ?? null,
       sfxMix: { option: this.sfxMix.option, trim: this.sfxMix.trim, busGain: sfxBusGain(this.sfxVolume, this.sfxMix) },
       music: {
         current: this.current ? { name: this.current.name, gain: this.current.gain.gain.value } : null,
@@ -654,6 +707,8 @@ export class AudioManager {
     this.convolver?.disconnect();
     this.sfxSend?.disconnect();
     this.sfxDry?.disconnect();
+    this.voiceBus?.disconnect();
+    this.voiceBus = null;
     this.limiter?.disconnect();
     void this.ctx?.close();
     this.ctx = null;

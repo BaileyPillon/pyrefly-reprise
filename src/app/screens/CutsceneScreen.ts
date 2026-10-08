@@ -3,6 +3,8 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import { fadeMsToSec } from '../../audio/AudioManager.ts';
+import { voice } from '../../audio/voice/index.ts';
+import { gatedVoice } from '../../story/voice/voicePort.ts';
 import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { battleStart, beat, camera, fx, music, narrate, say, type SpeakerId, type StoryScript } from '../../story/dsl.ts';
@@ -192,9 +194,12 @@ export class CutsceneScreen extends Screen {
     this.stage = new CutsceneStage(this.root, { wait: (ms) => this.waitGate(ms), skipping: () => this.runner?.skipped === true, ...(artNamespace ? { artNamespace } : {}) });
     this.stage.mount();
     this.stage.prepare(this.opts.script ?? DEMO_CUTSCENE_SCRIPT);
+    voice.prefetchScript(this.opts.script ?? DEMO_CUTSCENE_SCRIPT); // the next few spoken lines are decoded before the box reaches them
 
     this.dialogueBox = new DialogueBox({
       root: this.stage.shakeEl,
+      // Silent while skipping: the runner keeps calling `say` after a skip, and a held Confirm advances a line per frame; none of those may speak.
+      voice: gatedVoice(voice, () => this.runner?.skipped === true || this.confirmHeldMs >= HOLD_TO_SKIP_MS),
       ...(chapter?.game === 'ffx' || chapter?.game === 'ffx2' ? { game: chapter.game } : {}),
       ...(this.opts.nameFor ? { nameFor: this.opts.nameFor } : {}),
       ...(this.opts.portraitFor ? { portraitFor: this.opts.portraitFor } : {}),
@@ -229,6 +234,7 @@ export class CutsceneScreen extends Screen {
     this.pauseScreen = null;
     this.pKey?.dispose();
     this.hint?.unmount();
+    voice.stop();
     this.dialogueBox?.unmount();
     this.stage?.unmount();
     this.eyebrowEl?.remove();
@@ -298,6 +304,7 @@ export class CutsceneScreen extends Screen {
         this.setScriptPaused(paused);
         // Same hush as the battle's pause menu — see `ui/common/pauseMusic.ts`.
         setPauseMusic(audio, paused);
+        voice.setPaused(paused); // a line freezes where it is and carries on when the menu closes
       },
       onResume: () => void this.closePause(),
       onChapterSelect: () => void this.app.goto('chapter-select'),
@@ -373,6 +380,7 @@ export class CutsceneScreen extends Screen {
   private skipByPlayer(): void {
     this.hurried = true;
     this.runner?.skip();
+    voice.stop(); // the line in flight stops at once; the runner's later `say` calls are gated by `runner.skipped`
   }
 
   override trigger(name: string): boolean {

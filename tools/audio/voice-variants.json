@@ -1,0 +1,22 @@
+{
+  "about": "The two variants of the FFX voice recordings (Tidus, Yuna, Auron), read by tools/audio/voice-variant.mjs. Bailey has not picked between them (2026-10-07). Folders live outside the repo; a variant is staged as hard links so voice-ship.mjs sees <id>.mp3.",
+  "default": "tight",
+  "variants": {
+    "tight": {
+      "label": "pauses shortened",
+      "about": "The 203 recordings with the 81 over-long inner pauses shortened (<id>.tight.mp3 in the listening folder); the other 122 are the originals. The only variant that passes the ship gate by itself.",
+      "dir": "D:/Tools/elevenlabs/candidates/voice-ffx-2026-10-07",
+      "overlay": "D:/Tools/elevenlabs/candidates/2026-10-07/voices-ffx",
+      "suffix": ".tight.mp3",
+      "staging": "D:/Tools/elevenlabs/candidates/voice-staging-tight"
+    },
+    "recorded": {
+      "label": "as recorded",
+      "about": "The 203 recordings exactly as returned. 81 of them hold a pause over 400 ms, which the ship gate fails; this variant installs them with those findings accepted (the ids are listed under accepted in the ship report).",
+      "dir": "D:/Tools/elevenlabs/candidates/voice-ffx-2026-10-07",
+      "staging": "D:/Tools/elevenlabs/candidates/voice-staging-recorded",
+      "acceptPausesOf": "tight"
+    }
+  },
+  "mute": ["braskas-final-aeon.mid-valefor-enters.005", "braskas-final-aeon.mid-valefor-enters.011", "braskas-final-aeon.mid-valefor-enters.007.fb1"]
+}

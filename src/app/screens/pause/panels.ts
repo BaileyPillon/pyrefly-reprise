@@ -20,6 +20,7 @@ import type { ChapterMeta } from '../../../data/chapter-meta.ts';
 import type { Settings } from '../../SaveData.ts';
 import type { EncounterProgress, ObjectiveStatus } from '../../../ui/common/chapterObjectives.ts';
 import { formatPlayTime } from '../../../ui/common/chapterObjectives.ts';
+import { gameHasVoice } from '../../../story/voice/voiceManifest.ts';
 import { optionRows } from '../PauseScreenPanels.ts';
 
 /** One row in a tab body. */
@@ -107,6 +108,13 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
     // FF7 draws no eye candy (`EyeCandy.ts` callers check the game), so its EYE CANDY page would switch nothing.
     const at = settings.findIndex((s) => s.id === 'eyeCandy');
     if (at >= 0) settings.splice(at, 1);
+  }
+  if (!gameHasVoice(ctx.game ?? 'ffx')) { // no game context reads as FFX, as `optionRows` does
+    // The recorded voice-over is FFX's alone for now (Bailey picked the FFX voices); FFX-2 and FF7 have none, so their VOICE rows would switch nothing (rule 14).
+    for (const id of ['voiceVolume', 'voiceOn']) {
+      const at = settings.findIndex((s) => s.id === id);
+      if (at >= 0) settings.splice(at, 1);
+    }
   }
   if (ctx.game !== 'ffx2') {
     // X-2 BATTLE (ACTIVE / WAIT) is FFX-2's Config ATB Mode (§1.5), read by

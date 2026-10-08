@@ -2,6 +2,8 @@ import './dialogue-box.css';
 import type { InputSnapshot } from '../../app/Input.ts';
 import type { ChoiceStep, NarrateStep, SayStep, SpeakerId } from '../../story/dsl.ts';
 import type { DialoguePort } from '../../story/runner/CutsceneRunner.ts';
+import type { VoicePort } from '../../story/voice/voicePort.ts';
+import { LineVoice } from './dialogueVoice.ts';
 import { dialogueObjectPosition, portraitImgHtml } from './portrait.ts';
 import { portraitIdIn } from './portraitNamespace.ts';
 import { FARPLANE_VOICE_ROLE, isFarplaneVoice, speakerRole } from './speaker-roles.ts';
@@ -49,6 +51,8 @@ export interface DialogueBoxOptions {
   textSpeed?: number;
   /** Start in "auto mode" (advances without input once each line finishes typing). */
   autoMode?: boolean;
+  /** The recorded voice (`audio/voice`): a line with a recording speaks beside its text and is held until the voice is done. Absent: text only. */
+  voice?: VoicePort;
 }
 
 type TypingState = 'idle' | 'typing' | 'waiting';
@@ -93,10 +97,12 @@ export class DialogueBox implements DialoguePort {
   private autoDeadline: number | null = null;
   private resolveAdvance: (() => void) | null = null;
   private choiceState: ChoiceState | null = null;
+  private readonly voice: LineVoice;
 
   constructor(private readonly opts: DialogueBoxOptions) {
     this.textSpeed = opts.textSpeed ?? 1;
     this.autoModeOn = opts.autoMode ?? false;
+    this.voice = new LineVoice(opts.voice);
 
     this.el = document.createElement('div');
     this.el.className = 'dbox';
@@ -130,6 +136,7 @@ export class DialogueBox implements DialoguePort {
   }
 
   unmount(): void {
+    this.voice.stop();
     if (!this.mounted) return;
     this.el.remove();
     this.mounted = false;
@@ -156,6 +163,7 @@ export class DialogueBox implements DialoguePort {
 
   /** Hide immediately and drop any in-flight advance/choice (used by skip-scene teardown). */
   hide(): void {
+    this.voice.stop();
     this.el.classList.remove('dbox--visible', 'dbox--waiting', 'dbox--narrate', 'dbox--choice', 'dbox--no-portrait');
     this.typingState = 'idle';
     this.autoDeadline = null;
@@ -179,13 +187,7 @@ export class DialogueBox implements DialoguePort {
   // --------------------------------------------------------- DialoguePort
 
   say(step: SayStep): Promise<void> {
-    return this.beginLine({
-      who: step.who,
-      text: step.text,
-      portrait: step.portrait,
-      auto: step.auto,
-      narrate: false,
-    });
+    return this.beginLine({ who: step.who, text: step.text, portrait: step.portrait, auto: step.auto, voiceKey: step.voiceKey, narrate: false });
   }
 
   narrate(step: NarrateStep): Promise<void> {
@@ -193,6 +195,7 @@ export class DialogueBox implements DialoguePort {
   }
 
   choice(step: ChoiceStep): Promise<string | number | boolean> {
+    this.voice.stop();
     this.typingState = 'idle';
     this.resolveAdvance = null;
     this.el.classList.remove('dbox--narrate', 'dbox--waiting');
@@ -287,7 +290,8 @@ export class DialogueBox implements DialoguePort {
       this.renderRevealed();
       if (isFullyRevealed(this.fullText, this.elapsedMs, this.textSpeed)) this.enterWaiting();
     } else if (this.typingState === 'waiting') {
-      if (this.autoDeadline !== null && performance.now() >= this.autoDeadline) this.completeAdvance();
+      // A spoken line is never cut by its own timer: the hold lasts until its voice is done (or fails; a voice failure is never a wait).
+      if (this.autoDeadline !== null && performance.now() >= this.autoDeadline && !this.voice.holding()) this.completeAdvance();
     }
   }
 
@@ -298,6 +302,7 @@ export class DialogueBox implements DialoguePort {
     text: string;
     portrait?: string;
     auto?: number;
+    voiceKey?: string;
     narrate: boolean;
   }): Promise<void> {
     this.fullText = opts.text;
@@ -305,6 +310,8 @@ export class DialogueBox implements DialoguePort {
     this.explicitAutoMs = opts.auto;
     this.typingState = 'typing';
     this.autoDeadline = null;
+    // The recording starts with the text, at the same instant; the text does not wait for it and it does not wait for the text.
+    this.voice.begin({ who: opts.who, text: opts.text, ...(opts.voiceKey ? { voiceKey: opts.voiceKey } : {}) });
 
     this.el.classList.remove('dbox--waiting', 'dbox--choice');
     this.el.classList.toggle('dbox--narrate', opts.narrate);
@@ -369,6 +376,7 @@ export class DialogueBox implements DialoguePort {
   }
 
   private completeAdvance(): void {
+    this.voice.stop(); // Confirm (or the timer) moved on: the line's voice fades out; a line never talks over the next
     this.typingState = 'idle';
     this.autoDeadline = null;
     this.el.classList.remove('dbox--waiting');

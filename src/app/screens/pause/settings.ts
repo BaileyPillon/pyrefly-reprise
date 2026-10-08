@@ -14,6 +14,7 @@
  */
 
 import { audio } from '../../../audio/index.ts';
+import { voice } from '../../../audio/voice/index.ts';
 import type { GameId } from '../../../battle/common/types.ts';
 import type { SaveStore } from '../../SaveData.ts';
 import { isFxLookField } from '../../fxLooks.ts';
@@ -59,6 +60,21 @@ export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1, press = 
       const value = clamp01(settings.sfxVolume + dir * VOLUME_STEP);
       save.setSettings({ sfxVolume: value });
       audio.setSfxVolume(value);
+      return true;
+    }
+    case 'voiceVolume': {
+      const value = clamp01(settings.voiceVolume + dir * VOLUME_STEP);
+      save.setSettings({ voiceVolume: value });
+      audio.setVoiceVolume(value);
+      if (value === 0) voice.stop(); // a VOICE of 0 is text only: a line already speaking stops with it
+      return true;
+    }
+    case 'voiceOn': {
+      // VOICE-OVER flips whichever way you push it (Confirm works on it as on the other toggles); off stops a line already speaking.
+      const on = !settings.voiceOn;
+      save.setSettings({ voiceOn: on });
+      audio.setVoiceOn(on);
+      if (!on) voice.stop();
       return true;
     }
     case 'textSpeed': {

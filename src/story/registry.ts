@@ -50,6 +50,7 @@
 
 import type { ChapterScripts, Step, StoryScript } from './dsl.ts';
 import { typingDurationMs } from '../ui/common/typewriter.ts';
+import { VOICED_EXTEND_MS, VOICED_EXTEND_SEAM_MS, type SpokenMsFor } from './voice/voiceBudget.ts';
 import { seymourFluxScripts } from './scripts/seymour-flux.ts';
 import { yunalescaScripts } from './scripts/yunalesca.ts';
 import { braskasFinalAeonScripts } from './scripts/braskas-final-aeon.ts';
@@ -231,11 +232,16 @@ export const OVERRUN_GRACE_MS = 1_500;
  * Both stay under the presenter's own abandon budget
  * ({@link PRESENTER_BUDGET_MS}), which is the backstop for a runner that has
  * died outright rather than a pacing control.
+ *
+ * `spokenMs` re-costs the script with recorded voice: a beat whose spoken lines outlast the 8 s budget gets its voiced
+ * length plus the grace instead of cutting a sentence off, never past the allowance in `voice/voiceBudget.ts`. Absent, or 0
+ * for every line (voice off), the answer is exactly what it always was.
  */
-export function midBattleDeadlineMs(script: StoryScript): number {
+export function midBattleDeadlineMs(script: StoryScript, spokenMs?: SpokenMsFor): number {
   const authored = scriptDurationMs(script, MID_LINE_HOLD_MS);
-  if (authored <= MID_SCRIPT_BUDGET_MS) return MID_SCRIPT_BUDGET_MS;
-  return Math.min(authored, SEAM_BUDGET_MS) + OVERRUN_GRACE_MS;
+  const voiced = spokenMs ? scriptDurationMs(script, MID_LINE_HOLD_MS, spokenMs) : authored;
+  if (authored > MID_SCRIPT_BUDGET_MS) return Math.min(voiced, SEAM_BUDGET_MS + (voiced > authored ? VOICED_EXTEND_SEAM_MS : 0)) + OVERRUN_GRACE_MS;
+  return voiced <= MID_SCRIPT_BUDGET_MS ? MID_SCRIPT_BUDGET_MS : Math.min(voiced, MID_SCRIPT_BUDGET_MS + VOICED_EXTEND_MS) + OVERRUN_GRACE_MS;
 }
 
 // ---------------------------------------------------------------------------
@@ -319,32 +325,26 @@ const DEFAULT_ACTOR_FADE_MS = 300;
  * input), or {@link MID_LINE_HOLD_MS} when modelling what the mid-battle runner
  * will really do with it.
  */
-function stepDurationMs(step: Step, untimedLineMs: number): number {
+function stepDurationMs(step: Step, untimedLineMs: number, spokenMs?: SpokenMsFor): number {
   switch (step.type) {
     case 'say':
-    case 'narrate':
-      // The box types the line out first, then holds for `auto`.
-      return typingDurationMs(step.text) + (step.auto ?? untimedLineMs);
+    case 'narrate': { // the box types the line out first, then holds for `auto`; a spoken line is held until its voice is done
+      const typed = typingDurationMs(step.text) + (step.auto ?? untimedLineMs);
+      return spokenMs ? Math.max(typed, spokenMs(step)) : typed;
+    }
     case 'choice':
       // A menu waits on the player, full stop. Never legal mid-battle.
       return BLOCKING_LINE_MS;
-    case 'wait':
-    case 'move':
-    case 'camera':
-    case 'flash':
-    case 'shake':
-    case 'fade':
+    case 'wait': case 'move': case 'camera': case 'flash': case 'shake': case 'fade':
       return step.ms;
-    case 'showActor':
-    case 'hideActor':
+    case 'showActor': case 'hideActor':
       return step.ms ?? DEFAULT_ACTOR_FADE_MS;
-    case 'parallel':
-      // The runner continues when the longest finishes.
-      return step.steps.reduce((longest, inner) => Math.max(longest, stepDurationMs(inner, untimedLineMs)), 0);
+    case 'parallel': // the runner continues when the longest finishes
+      return step.steps.reduce((longest, inner) => Math.max(longest, stepDurationMs(inner, untimedLineMs, spokenMs)), 0);
     case 'ifFlag':
       return Math.max(
-        step.then.reduce((sum, inner) => sum + stepDurationMs(inner, untimedLineMs), 0),
-        (step.else ?? []).reduce((sum, inner) => sum + stepDurationMs(inner, untimedLineMs), 0),
+        step.then.reduce((sum, inner) => sum + stepDurationMs(inner, untimedLineMs, spokenMs), 0),
+        (step.else ?? []).reduce((sum, inner) => sum + stepDurationMs(inner, untimedLineMs, spokenMs), 0),
       );
     // `fx` resolves as soon as the effect is handed to the stage; `music`,
     // `sfx`, `setPose`, `setFlag`, `label`, `jump`, `battleStart` and
@@ -365,9 +365,10 @@ function stepDurationMs(step: Step, untimedLineMs: number): number {
  * `untimedLineMs` defaults to {@link BLOCKING_LINE_MS}, which is the audit's
  * view of an untimed line; {@link midBattleDeadlineMs} passes
  * {@link MID_LINE_HOLD_MS} instead, which is the runner's.
+ * `spokenMs` costs a spoken line at its recording plus the tail; the line takes the longer of that and its typed length.
  */
-export function scriptDurationMs(script: StoryScript, untimedLineMs: number = BLOCKING_LINE_MS): number {
-  return script.reduce((total, step) => total + stepDurationMs(step, untimedLineMs), 0);
+export function scriptDurationMs(script: StoryScript, untimedLineMs: number = BLOCKING_LINE_MS, spokenMs?: SpokenMsFor): number {
+  return script.reduce((total, step) => total + stepDurationMs(step, untimedLineMs, spokenMs), 0);
 }
 
 /** Every mid-battle script in a chapter with its worst-case length. */

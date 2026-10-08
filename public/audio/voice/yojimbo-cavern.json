@@ -1,0 +1,77 @@
+{
+ "version": 1,
+ "chapter": "yojimbo-cavern",
+ "game": "ffx",
+ "lines": {
+  "085b25bde012bb": {
+   "id": "yojimbo-cavern.pre.004",
+   "file": "yojimbo-cavern/yojimbo-cavern.pre.004.mp3",
+   "ms": 872,
+   "bytes": 7700,
+   "who": "tidus"
+  },
+  "13170d79e81b7a": {
+   "id": "yojimbo-cavern.pre.007",
+   "file": "yojimbo-cavern/yojimbo-cavern.pre.007.mp3",
+   "ms": 4556,
+   "bytes": 37076,
+   "who": "auron"
+  },
+  "0b235a79133840": {
+   "id": "yojimbo-cavern.pre.012",
+   "file": "yojimbo-cavern/yojimbo-cavern.pre.012.mp3",
+   "ms": 834,
+   "bytes": 7316,
+   "who": "tidus"
+  },
+  "0f2db4407643d5": {
+   "id": "yojimbo-cavern.pre.015",
+   "file": "yojimbo-cavern/yojimbo-cavern.pre.015.mp3",
+   "ms": 1693,
+   "bytes": 14228,
+   "who": "yuna"
+  },
+  "0881385ce14e5e": {
+   "id": "yojimbo-cavern.pre.016",
+   "file": "yojimbo-cavern/yojimbo-cavern.pre.016.mp3",
+   "ms": 2351,
+   "bytes": 19412,
+   "who": "auron"
+  },
+  "07a0a1c7325847": {
+   "id": "yojimbo-cavern.post.001",
+   "file": "yojimbo-cavern/yojimbo-cavern.post.001.mp3",
+   "ms": 3013,
+   "bytes": 24788,
+   "who": "yuna"
+  },
+  "0a40c400377443": {
+   "id": "yojimbo-cavern.post.008",
+   "file": "yojimbo-cavern/yojimbo-cavern.post.008.mp3",
+   "ms": 1893,
+   "bytes": 15764,
+   "who": "tidus"
+  },
+  "0ddc4e29d7980b": {
+   "id": "yojimbo-cavern.post.010",
+   "file": "yojimbo-cavern/yojimbo-cavern.post.010.mp3",
+   "ms": 1202,
+   "bytes": 10388,
+   "who": "auron"
+  },
+  "02bc8a46b2d36c": {
+   "id": "yojimbo-cavern.mid-yojimbo-zanmato-next.001",
+   "file": "yojimbo-cavern/yojimbo-cavern.mid-yojimbo-zanmato-next.001.mp3",
+   "ms": 2973,
+   "bytes": 24404,
+   "who": "auron"
+  },
+  "13282852eca827": {
+   "id": "yojimbo-cavern.mid-yojimbo-aeon-takes-zanmato.001",
+   "file": "yojimbo-cavern/yojimbo-cavern.mid-yojimbo-aeon-takes-zanmato.001.mp3",
+   "ms": 1905,
+   "bytes": 15956,
+   "who": "yuna"
+  }
+ }
+}

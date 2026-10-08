@@ -77,11 +77,12 @@ describe('a release-29 save upgrades (CHK-024, D-285)', () => {
     // CANDY page's nine parts (D-317, `fxParts.ts`: this save has no look OFF, so all ON; `save-fx-parts.test.ts`).
     for (const [k, v] of Object.entries(before.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     for (const [k, v] of Object.entries(fixture.expect.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
-    // ...plus D-293's one-time SFX balance marker (`saveSfxBalance.ts`); this save's 0.6 is kept above; and, since
-    // release 39.5, the two front-end choices at their defaults (`saveFrontend.ts`, `save-front-end-39-5.test.ts`).
+    // ...plus D-293's one-time SFX balance marker (`saveSfxBalance.ts`); this save's 0.6 is kept above; since release
+    // 39.5, the two front-end choices at their defaults (`saveFrontend.ts`, `save-front-end-39-5.test.ts`); and the
+    // recorded voice-over's pair (ON, 0.9).
     expect(Object.keys(after.settings).filter((k) => !(k in before.settings)).sort()).toEqual([
       'chapterSelectMusic', 'fxBreath', 'fxDof', 'fxEdges', 'fxFog', 'fxFraming', 'fxHero', 'fxKo', 'fxLight', 'fxLiving', 'fxSpectacle', 'fxSphere', 'fxSplash',
-      'sfxBalanceMigrated', 'textSize', 'titleArt',
+      'sfxBalanceMigrated', 'textSize', 'titleArt', 'voiceOn', 'voiceVolume',
     ]);
     expect(after.settings.textSize).toBe(1);
   });

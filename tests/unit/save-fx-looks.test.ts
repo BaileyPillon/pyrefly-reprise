@@ -72,7 +72,7 @@ describe.each(FIXTURES)('a %s save upgrades with every look ON', (file, release)
     expect(parsed.version).toBe(SAVE_VERSION);
   });
 
-  it('keeps everything else it had, verbatim; the only additions are the looks, their parts and TEXT SIZE', () => {
+  it('keeps everything else it had, verbatim; the only additions are the looks, their parts, TEXT SIZE and the VOICE-OVER pair', () => {
     const before = JSON.parse(raw) as SaveData;
     const store = new SaveStore(SAVE_KEY, slotWith(raw));
     const after = store.snapshot();
@@ -89,7 +89,8 @@ describe.each(FIXTURES)('a %s save upgrades with every look ON', (file, release)
     const added = Object.keys(after.settings).filter((k) => !(k in before.settings)).sort();
     // D-317's nine parts arrive too (`fxParts.ts`): no look of these saves is OFF, so every part comes in ON.
     // (and, since 39.5, the two front-end choices at their defaults: `saveFrontend.ts`)
-    expect(added).toEqual([...FX_PARTS.map((p) => p.field), 'fxLight', 'fxLiving', 'fxSpectacle', 'sfxBalanceMigrated', 'textSize', 'titleArt', 'chapterSelectMusic'].sort());
+    // ...and the recorded voice-over's two settings (`voiceOn` ON, `voiceVolume` 0.9: a save older than the setting reads the defaults, Bailey 2026-10-07).
+    expect(added).toEqual([...FX_PARTS.map((p) => p.field), 'fxLight', 'fxLiving', 'fxSpectacle', 'sfxBalanceMigrated', 'textSize', 'titleArt', 'chapterSelectMusic', 'voiceOn', 'voiceVolume'].sort());
     for (const f of LOOKS) expect(after.settings[f], f).toBe(true);
     for (const p of FX_PARTS) expect(after.settings[p.field], p.field).toBe(true);
   });
