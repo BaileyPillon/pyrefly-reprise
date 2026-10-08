@@ -10,6 +10,9 @@
  * on); the girls' own models are `c056` to `c070`. A height is only ever used as a **ratio to the girls' mean**, which is what the
  * stage needs: its party figures stand at one world height (`partyHeight`) and every fiend stands at that height times its ratio.
  *
+ * Confidence: `[single source: own measurement]`, as §20.2 tags the table: one reader and one build of the HD files, good to about 5 percent
+ * (§20.3). A ratio here is "a head taller than the girls", not an exact figure.
+ *
  * What was **not** found in the files (so nothing here claims it): an engine scale for these five models (the formation table's
  * per-monster size column reads 100, unscaled, for each of them), where each side stands in a battle, and the battle camera. The
  * distances and the camera of this game's stage are ours (`scenes/leblanc-last-room.ts`), and the table carries no stand position.
