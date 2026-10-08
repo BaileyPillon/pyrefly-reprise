@@ -6,6 +6,16 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-08 — A scene may hang the FFX-2 enemy-intent slab over the highest enemy's head: `SceneStaging.intentRoof`, `createHud`'s sixth argument (Chapter VI only; FFX-2 only; additive)
+
+Branch `r3941-spacing` (the Leblanc Syndicate at its real sizes on 39.4's spots, Bailey's "Old spacing, real sizes"; handoff: [r3941-spacing](handoff/r3941-spacing.md)). No file on the contract list changed; recorded because the scene staging type gains an optional field and the shared wiring function an optional argument, as for `advisorCap` below.
+
+- `src/scenes/types.ts`: `SceneStaging.intentRoof?: boolean` (copied by `stagingOf` when `true`): the FFX-2 enemy-intent slab hangs over the **highest** living enemy's head (at the acting enemy's x) instead of the acting enemy's own, so it covers no head it can clear when the fiends stand at different depths and real heights.
+- `src/app/screens/BattleScreenWiring.ts`: `createHud(game, field?, engine?, artNamespace?, advisorCap?, intentRoof?)` hands it to `new FFX2BattleHud({ intentRoof })`; `BattleScreen` passes `scene.slots.intentRoof`. `FFX2BattleHud.intentHead` is the one projector the slab and its placement solver read (`intentBoard.highestEnemyHead` is the roof); the placement solver is untouched.
+- `src/ui/common/EnemyIntent.ts` (shared with the FFX HUD): `EnemyIntentMountOptions.maxHeight?: () => number | null`, the most height in viewport px the whole panel may take now. `FFX2BattleHud.intentMaxHeight` answers it (`intentBoard.intentRoom`: the room between the lowest top the solver allows and the roof) only for a scene with `intentRoof`, and null otherwise; the panel then folds its body, in steps of 4 grid px and never under 36, until it fits, its MORE row counting what is hidden, a held J still lifting every cap. Absent, or null: the panel is exactly as it was (`tests/unit/ui-enemy-intent-fold.test.ts`; the FFX HUD never passes it).
+- Absent everywhere but Chapter VI's room (`tests/unit/ffx2-intent-roof.test.ts` pins that no other scene file names it), so every other chapter's slab is exactly as it was. The FFX HUD takes the argument and ignores it. The hidden experimental Leblanc chapter reuses the room and so reads it too.
+- Chapter VI's room **no longer names an `advisorCap`** (the entry below stays true for the field and its wiring, which the wave-2 rooms use): the fiends stand back where 39.4 stood them, 40 px above the card at its full height, so there is nothing to cap.
+
 ## 2026-10-08 — The FFX-2 giants play their own camera and size: `engine/fx/mix/giants.ts`, `FFX2_GIANT_SHARE`, the painted rectangle in `fighterBoxes`, `RigWatch.install`'s `close` flag (Chapters IV, XI and XIII; FFX-2 only; additive)
 
 Branch `r3942-stage` (real sizes for the fiends, wave 2: the giants; handoff: [r3942-stage](handoff/r3942-stage.md)). No file on the contract list changed and no type was narrowed; recorded because shared presentation plumbing gains optional fields and arguments, all of them inert for every fight but Bahamut (Chapter IV), Paragon and Oversoul (XIII) and Anima (XI):

@@ -49,7 +49,7 @@ import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { currentWideTextScale } from '../common/hudTextSize.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
-import { BODY_HALF_WIDTH, boardRects, fighterBoxes, keyFeatureObstacles, slabPanels, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
+import { BODY_HALF_WIDTH, boardRects, fighterBoxes, highestEnemyHead, intentRoom, keyFeatureObstacles, slabPanels, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
 import { advisorFolds, solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { INTENT_NARROW_CLASS, IntentWidth } from './intentWidth.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
@@ -308,14 +308,18 @@ export class FFX2BattleHud implements HudPort {
   /** The scene's art namespace (the experimental Leblanc chapter, `data/art/artNamespace.ts`): the party rows' heads come from its paintings. */
   private readonly artNamespace: string | undefined;
 
-  /** The scene's cap on the advisor card's height in grid px (`SceneStaging.advisorCap`, Chapter VI): every decision starts from it; `null` is the stylesheet's own. */
+  /** The scene's cap on the advisor card's height in grid px (`SceneStaging.advisorCap`): every decision starts from it; `null` is the stylesheet's own. */
   private readonly sceneAdvisorCap: number | null;
 
-  constructor(opts: { engine?: InFlightSource | null; artNamespace?: string; advisorCap?: number } = {}) {
+  /** `SceneStaging.intentRoof` (Chapter VI): the intent slab hangs over the highest living enemy's head, not the acting one's (`intentHead`). */
+  private readonly sceneIntentRoof: boolean;
+
+  constructor(opts: { engine?: InFlightSource | null; artNamespace?: string; advisorCap?: number; intentRoof?: boolean } = {}) {
     this.inFlight = opts.engine ?? null;
     this.artNamespace = opts.artNamespace;
     this.sceneAdvisorCap = opts.advisorCap ?? null;
     this.advisorCap = this.sceneAdvisorCap;
+    this.sceneIntentRoof = opts.intentRoof === true;
   }
   /** PR-0104 (FFX-2 only): the chip naming a girl's queued command from the confirm on (`QueuedChips.ts`). */
   private readonly queued = new QueuedChips();
@@ -425,8 +429,9 @@ export class FFX2BattleHud implements HudPort {
     this.intent.mount(this.overlay, {
       host: this.el,
       scale: () => this.stageScale,
-      project: (id, anchor) => (this.labelsAtRest() && this.layoutProject ? this.layoutProject : this.project)(id, anchor), // fb2-0929 option
+      project: (id, anchor) => this.intentHead(id, anchor), // fb2-0929 option; a scene with `intentRoof` (Chapter VI) hangs it over the highest head
       avoid: () => this.intentAvoidRects(),
+      maxHeight: () => this.intentMaxHeight(), // a scene with `intentRoof`: the slab folds to the room above the highest head
       // Judgment call K (round 21, FFX-2 only): at TEXT SIZE 115 / 130 % the grown panels leave no free spot for the full
       // read-out, so it prints its brief density (as FFX's does) and the solver finds the free band it fits.
       density: () => (currentWideTextScale() > 1 ? 'brief' : 'full'),
@@ -582,6 +587,42 @@ export class FFX2BattleHud implements HudPort {
   }
 
   /**
+   * The point the intent slab hangs over: `project(id, anchor)` through the projector the labels use (the live one, or the rest pose's while the camera
+   * moves, fb2-0929). In a scene with `SceneStaging.intentRoof` (Chapter VI, FFX-2 only) the slab's **head** is the highest living enemy's head at the
+   * acting enemy's x: Logos and Ormi, at their real sizes, stand higher on the screen than a near, shorter fiend that acts, and a slab hung over that one's
+   * head lay across theirs (`highestEnemyHead`). Every other scene, and every other anchor, is the plain projection.
+   */
+  private intentHead(id: CombatantId, anchor?: 'head' | 'chest' | 'feet'): { x: number; y: number } | null {
+    const project = this.labelsAtRest() && this.layoutProject ? this.layoutProject : this.project;
+    const p = project(id, anchor);
+    if (!p || anchor !== 'head' || !this.sceneIntentRoof) return p;
+    const roof = highestEnemyHead(this.lastState, project);
+    return roof === null || roof >= p.y ? p : { x: p.x, y: roof };
+  }
+
+  /**
+   * The most height, in viewport px, the intent slab may take (`EnemyIntentMountOptions.maxHeight`): in a scene with `SceneStaging.intentRoof`, the room between the
+   * lowest top the placement solver allows it and the roof (`intentBoard.intentRoom`), so the slab, hung over the roof, ends above every head and folds its text
+   * (the MORE row says how much) rather than lying across one. `null` everywhere else, with the slab down, or on the upright phone, whose strip is docked by its own sheet.
+   */
+  private intentMaxHeight(): number | null {
+    if (!this.sceneIntentRoof || !this.intent.isVisible || document.documentElement.dataset['phoneBattle']) return null;
+    const view = this.intent.view();
+    if (!view) return null;
+    const head = this.intentHead(view.enemyId, 'head');
+    const layer = this.overlay.getBoundingClientRect();
+    if (!head || layer.width <= 0 || layer.height <= 0) return null;
+    const bandIn = this.bandInput();
+    return intentRoom({
+      roof: head.y,
+      layerTop: layer.top,
+      scale: this.stageScale || 1,
+      chipHeight: this.el.querySelector<HTMLElement>('.eint__toggle')?.getBoundingClientRect().height ?? 0,
+      bandTop: battleHelpOn() ? bandReserve(bandGeometry(bandIn), bandIn) : 0,
+    });
+  }
+
+  /**
    * Reproduce the slab's natural position, solve for a free one, and express
    * the answer as avoid rectangles. `null` means "cannot reproduce it".
    *
@@ -595,7 +636,7 @@ export class FFX2BattleHud implements HudPort {
     if (!view) return null;
     const layer = this.overlay.getBoundingClientRect();
     if (layer.width <= 0 || layer.height <= 0) return null;
-    const head = (this.labelsAtRest() && this.layoutProject ? this.layoutProject : this.project)(view.enemyId, 'head');
+    const head = this.intentHead(view.enemyId, 'head');
     if (!head) return null;
 
     const chip = this.el.querySelector<HTMLElement>('.eint__toggle');
