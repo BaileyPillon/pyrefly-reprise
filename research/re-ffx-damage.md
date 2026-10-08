@@ -40,7 +40,8 @@ own words: no game code and no game text is reproduced here.
    nullified hits and the like. A mutation check confirmed the vectors can tell the order of the steps apart: swapping
    the crit and Shield steps, Boost and Shield, the percent bonus and the element, the element and Armored, using floor
    instead of truncating division, a fixed 9999 cap, or taking the un-varied base before the hit reduces the running
-   totals, each made hundreds to thousands of the 120,000 vectors fail.
+   totals, each made between 55 and 4,400 of the 120,000 vectors fail (swapping steps that are the same operation, such as Berserk and
+   Magic Booster, or the two halvings, changes nothing, as it should).
 3. The vector files and the scripts that make them are outside the repo (`D:\Tools\ffx-parity\kernel-check\`, with
    the generator specs in `specs\` and `reduce_vectors.py`). `tests/fixtures/parity/ffx/` holds stratified subsets of at
    most ~300 KB each (`base_damage.json` 551 vectors, `calc_hit.json` 212, `element_mod.json` 1,070, `small_mods.json`
@@ -304,19 +305,49 @@ Open questions:
 
 ## 9. How the shipped engine differs today
 
-As read at commit 157562f8 (2026-10-08), `src/battle/ffx/formulas.ts`, `math.ts`, `elements.ts`, `equipment.ts`. The engine
-was compared with the kernels over the grids in the `re-parity` slice report; this table is the summary. Delete it when the
-wiring lands.
+As read at commit 157562f8 (2026-10-08): `src/battle/ffx/formulas.ts`, `math.ts`, `elements.ts`, `equipment.ts`. The engine
+and the kernels were run on the same inputs over broad grids (scripts `div_*.ts` in `D:\Tools\ffx-parity\kernel-check\scripts`);
+this is the summary. Delete it when the wiring lands.
 
-* **Equal.** The base formulas for STR, MAG, piercing, special magic and healing agree bit for bit with no stacks over
-  2.3 million comparisons (every STR x DEF pair from 1 to 255, MAG against 86 MDF values, five powers, five variance rolls). Single modifiers (Shield, Boost, Protect, Shell,
-  Defend, Sentinel, Power/Magic Break, Berserk on the plain attack, Magic Booster, Alchemy on formula 6/8 items, a single
-  weak/resist/null/absorb element, a Zombie target on a heal, the caps and Break Damage Limit) agree.
-* **Different, and why it matters.** A natural DEF/MDF of 0 is raised to 1 (formulas.ts:117, 122); target Cheer/Focus
-  reduce piercing, special-magic and healing results in the engine only (formulas.ts:134-146, 253); multi-element commands
-  use "strongest affinity" and a single x2.25 for two weaknesses (elements.ts:25-44); a Boost/Shield/crit/element order
-  that differs (formulas.ts:296-355, rows 1 to 10 of §4 above); the engine's `damage-9999` fires when the TARGET has it
-  (formulas.ts:372-377) where the game checks the user's buff; Armored is physical-only in the engine (formulas.ts:335-342);
-  Berserk multiplies every physical command (formulas.ts:313); Magic Booster and Alchemy are keyed by damage type and item
-  category rather than command type byte and formula; formulas 0xa, 0xb, 0xc, 0xe, 0x11 to 0x14 and 0x16 do not exist in the
-  engine.
+**Equal.** The base formulas for STR, MAG, piercing, special magic and healing agree bit for bit with no stacks over 2.3
+million comparisons (every STR x DEF pair from 1 to 255, MAG against 86 MDF values, five powers, five variance rolls). So do
+the single modifiers Shield, Boost, Protect, Shell, Defend, Sentinel, Power/Magic Break, Berserk on the plain attack,
+Magic Booster, Alchemy on formula 6/8 items, one weak/resist/null/absorb element, a Zombie target on a heal, the caps and
+Break Damage Limit, and the user's 9999 buff.
+
+**Different** (engine result / game-code result on the example; the engine lines are at 157562f8):
+
+| # | Difference | Engine | Example | How often |
+|---:|---|---|---|---|
+| 1 | a natural DEF or MDF of 0 is raised to 1 | formulas.ts:117, 122 | Attack STR 4, power 4, DEF 0: 6 / 7; STR 20, power 16, DEF 0: 278 / 280 | every hit on such a target; 28% of sampled physical and 42% of magic stat points |
+| 2 | the target's Cheer/Focus reduce formulas 2, 4, 0xf and 7, which have no such term | formulas.ts:134-146, 253 | Cure power 24, MAG 40, target Focus 5: -512 / -768; piercing-magic power 16, MAG 10, Focus 1: 111 / 120 | every hit with at least one stack |
+| 3 | multi-element rule: strongest affinity and one x2.25, against weak > neutral bit > resist > null > absorb and 3/2 per bit | elements.ts:25-44, formulas.ts:303-307 | fire+ice, STR 40: [resist, none] 878 / 1757; [weak, absorb] -1757 / 2635; [absorb, resist] -1757 / 878; [absorb, null] -1757 / 0; [weak, weak] 3953 / 3952; a 5-point hit with two weaknesses 11 / 10 | 33 of 50 two-element and 212 of 250 three-element affinity combinations; two weak elements change 21% of Attack hits by 1 |
+| 4 | order of the chain: crit first, Boost before Shield, element before Protect/Shell, percent bonuses after the element | formulas.ts:296-355 | on a 7-point hit crit + Shield 3 / 2, Shield + Boost 2 / 1; Shell + weak on 3: 2 / 1; +10% dealt + weak on 9: 14 / 13 | an ordinary mix of hits (10% crits, 10% Protect/Shell, 35% elemental): 3.2% of Attack, 3.7% of black magic, 0.3% of Cure and Demi, 0% of Potion; 98 to 99% of them by exactly 1 |
+| 5 | Armored only for physical damage; the game looks at the command's pierce bit | formulas.ts:335-342 | magic power 12, MAG 8, MDF 1 on an Armored target: 60 / 20; with the bit set on the command 60 / 60 | the shipped data sets the bit on 24 of the 25 party spells, so only commands without it (Requiem) |
+| 6 | `damage-9999` fires when the TARGET carries it | formulas.ts:372-377 | STR 8, DEF 5 on such a target: 9999 / 41 | every hit on such a target |
+| 7 | Berserk multiplies every physical command of the user | formulas.ts:313 | a non-default command: 363 / 242 | only when a Berserk user acts outside the forced attack |
+| 8 | Magic Booster for every magical ability; Alchemy for every healing item | formulas.ts:319, 325 | a magical command of type 0: 1242 / 828 | spells outside types 1 and 2; the CTB feathers (formula 0xd) |
+| 9 | formulas 0xa, 0xb, 0xc, 0xe, 0x11 to 0x14 and 0x16 do not exist | formulas.ts:208-250 | Karma (two monster commands) | |
+
+Not compared as numbers: the engine's `percent-current` reads the target's HP, the game the running value that falls hit by
+hit; the engine has no un-varied base, no Chr+0x6e4 copies and no result word; the Overdrive timing bonus is the same
+sum in integers where the game truncates a float product.
+
+## 10. What the engine has to supply to call the kernels
+
+The kernels take plain numbers named after the game's fields. Today's engine does not hold most of them, so the wiring
+step (a separate, reviewed batch) has to build them:
+
+* the **hit record**: the target's permanent and extra status words as they were when the action started, the Shell,
+  Protect and four Nul counters, refreshed as statuses land;
+* the target's **running HP, MP and CTB**, reduced after every hit of the action (the kernel returns the new values),
+  which formulas 5, 0xc and 0xd read;
+* the **command record bits**: the damage class, the type byte, the element byte, the absorb, Delay Attack/Buster,
+  pierce-armor and weapon-properties bits of `Cmd+0x1c`, and the heal, crit, equipment-crit-bonus and 9999/99999 bits of
+  `Cmd+0x20`;
+* on the user: the id of the command being executed and of the default attack, the Auto-Life flag, the weapon's formula,
+  power and element, auto-ability words A and B (Magic Booster, Alchemy, Pierce, Break Damage Limit), the buff flag
+  for "every hit deals 9999", and the timing floats;
+* the party percent bytes and the target's tick speed (from the CTB table);
+* the result of the status infliction as a `StatusOutcome`, and callbacks for the three random inputs
+  (`draw`, `hit`, `crit`) so the draws come in the order of §3.
