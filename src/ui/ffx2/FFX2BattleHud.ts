@@ -308,9 +308,14 @@ export class FFX2BattleHud implements HudPort {
   /** The scene's art namespace (the experimental Leblanc chapter, `data/art/artNamespace.ts`): the party rows' heads come from its paintings. */
   private readonly artNamespace: string | undefined;
 
-  constructor(opts: { engine?: InFlightSource | null; artNamespace?: string } = {}) {
+  /** The scene's cap on the advisor card's height in grid px (`SceneStaging.advisorCap`, Chapter VI): every decision starts from it; `null` is the stylesheet's own. */
+  private readonly sceneAdvisorCap: number | null;
+
+  constructor(opts: { engine?: InFlightSource | null; artNamespace?: string; advisorCap?: number } = {}) {
     this.inFlight = opts.engine ?? null;
     this.artNamespace = opts.artNamespace;
+    this.sceneAdvisorCap = opts.advisorCap ?? null;
+    this.advisorCap = this.sceneAdvisorCap;
   }
   /** PR-0104 (FFX-2 only): the chip naming a girl's queued command from the confirm on (`QueuedChips.ts`). */
   private readonly queued = new QueuedChips();
@@ -734,10 +739,10 @@ export class FFX2BattleHud implements HudPort {
     if (card.style.maxHeight !== want) card.style.maxHeight = want;
   }
 
-  /** A new (or no) decision: the cap starts over with the card's full text. */
+  /** A new (or no) decision: the cap starts over with the card's full text (the scene's cap, where it names one: `SceneStaging.advisorCap`). */
   private resetAdvisorCap(): void {
     this.advisorFolded = false;
-    this.applyAdvisorCap(null, this.stage?.querySelector<HTMLElement>('.mad__card') ?? null);
+    this.applyAdvisorCap(this.sceneAdvisorCap, this.stage?.querySelector<HTMLElement>('.mad__card') ?? null);
   }
 
   /**
