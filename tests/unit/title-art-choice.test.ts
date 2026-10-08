@@ -253,7 +253,7 @@ describe('title-echo.css: the layout rules', () => {
   it('draws the picture in a box of its own aspect on a portrait window: 192 vw on a phone, 140 vw on a tablet', () => {
     // 1682 / 932, the picture's own ratio
     expect(1682 / 932).toBeCloseTo(1.8047, 4);
-    const portrait = /@media \(max-aspect-ratio: 4 \/ 5\)\s*\{([\s\S]*?)\n\}\n@media/.exec(code)?.[1] ?? '';
+    const portrait = /@media \(max-aspect-ratio: 4 \/ 5\)\s*\{([\s\S]*?)\r?\n\}\r?\n@media/.exec(code)?.[1] ?? '';
     expect(portrait).toContain('--echo-w: 140vw');
     expect(portrait).toMatch(/left:\s*calc\(50% - var\(--echo-w\) \/ 2\)/);
     expect(portrait).toMatch(/height:\s*calc\(var\(--echo-w\) \/ 1\.8047\)/);
