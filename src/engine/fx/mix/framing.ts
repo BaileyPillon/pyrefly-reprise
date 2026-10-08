@@ -234,7 +234,7 @@ export class Framing {
     const beforeSide = this.staging.side;
     this.staging.release();
     const stand = readStand(this.game, actors, base, onPhone());
-    this.windowWatch.plannedFor(stand.colossus ? windowKey() : ''); // watched only under a table row's pin
+    this.windowWatch.plannedFor(stand.colossus || giantRow(this.game, actors) ? windowKey() : ''); // watched under a table row's pin and under a giant's camera (proved for the window shapes `giants.ts` names)
     const cr = canvas.getBoundingClientRect();
     const pin = this.report.colossusFight && !phoneBattle() ? pinFor(stand.colossus, cr.width / Math.max(1, cr.height)) : null; // the table's colossus master for this window shape, else the search below
     const key = scaleKey(actors, base, phaseLayout(this.layoutKey(canvas), pin !== null));

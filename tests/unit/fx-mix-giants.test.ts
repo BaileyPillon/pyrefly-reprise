@@ -267,6 +267,36 @@ describe('Bahamut through Framing (Chapter IV, FFX-2, a 16:9 desktop)', () => {
     expect(c.f.report.giant ?? null).toBeNull();
   });
 
+  it('re-plans when the window is resized to a shape with no camera proved, and again when it comes back (a drag asks once, when it stops)', () => {
+    const s = bevelle();
+    const { f } = framingFor();
+    run(f, s.actors, 2);
+    expect(f.report.giant).toMatchObject({ id: 'bahamut' });
+    const plans = f.report.plans;
+    W = 900;
+    H = 900; // a square window: no view proved
+    stubDom();
+    run(f, s.actors, 2);
+    expect(f.report.plans).toBeGreaterThan(plans);
+    expect(f.report.giant ?? null).toBeNull();
+    expect(standing(s.boss)).toBeLessThan(7.5); // BOSS SCALE's own size, not the giant's
+    W = 1600;
+    H = 900;
+    stubDom();
+    run(f, s.actors, 2);
+    expect(f.report.giant).toMatchObject({ id: 'bahamut' });
+    expect(standing(s.boss)).toBeCloseTo(9.147, 2);
+  });
+
+  it('keeps its plan while the window stays the size it was planned at (a window that stays the same asks for nothing)', () => {
+    const s = bevelle();
+    const { f } = framingFor();
+    run(f, s.actors, 2);
+    const plans = f.report.plans;
+    run(f, s.actors, 5);
+    expect(f.report.plans).toBe(plans);
+  });
+
   it('releases the size and the camera when the switch goes off mid-fight', () => {
     const s = bevelle();
     const { f, cam } = framingFor();

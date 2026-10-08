@@ -6,6 +6,18 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-08 — The FFX-2 giants play their own camera and size: `engine/fx/mix/giants.ts`, `FFX2_GIANT_SHARE`, the painted rectangle in `fighterBoxes`, `RigWatch.install`'s `close` flag (Chapters IV, XI and XIII; FFX-2 only; additive)
+
+Branch `r3942-stage` (real sizes for the fiends, wave 2: the giants; handoff: [r3942-stage](handoff/r3942-stage.md)). No file on the contract list changed and no type was narrowed; recorded because shared presentation plumbing gains optional fields and arguments, all of them inert for every fight but Bahamut (Chapter IV), Paragon and Oversoul (XIII) and Anima (XI):
+
+- `src/data/ffx2/fiend-stature.ts`: three rows (`bahamut`, `paragon`, `x2-anima`), the girls' mean of Chapter IV (`ffx2-bahamut`, 17.48), `FFX2_GIANT_SHARE` (Bailey's pick: how much of its real height each giant stands at on a desktop and on a phone) and `ffx2GiantHeight`. Vegnagun and its parts are not in the table.
+- `src/engine/fx/mix/giants.ts` (new): the table of the three cameras, the giant exception to CHAPTER FRAMING's party-height floor (`GIANT_FLOOR` 0.45 of today's party height against 0.9, the overlap and cover limits widened to 0.4, for these three bosses on a desktop window only), and `decideGiant`. `Decision.giant?` and `FramingReport.giant?` (optional) say a plan plays a giant; the live check never swaps it; a resized window re-plans it (`SizeWatch` also watches a giant's fight).
+- `src/engine/fx/mix/rigWatch.ts`: `install(pose, on, close = true)`; a giant's camera leaves the close rigs (party, enemy, action) as the scene authored them.
+- `src/engine/ShotRules.ts`: on the upright phone the slice fit (A-12) holds a giant whole (`min` 1) and reserves `GIANT_PHONE_TOP` of the frame under the boss gauge and the intent strip; FFX (CTB) and every other fiend keep 0.75 and no reserve.
+- `src/ui/ffx2/intentBoard.ts`: `fighterBoxes(state, project, painted?)`, an optional third argument; for the three giants the enemy-intent card avoids the painted silhouette (`TargetingPort.rect`) in place of the head-to-feet estimate. `FFX2BattleHud` passes it. The FFX HUD does not call it.
+- Scenes: `scenes/giant-stage.ts` (new, `giantPhoneHeights`) publishes the giant in `SceneStaging.figureHeights` (an existing field) only when the phone battle HUD takes the window, and Chapter IV has a phone idle rig (`BEVELLE_PHONE_GIANT_IDLE`) and Chapter XI a phone camera for Anima's link (`ROAD_PHONE_ANIMA`). A desktop publishes nothing for them.
+- Pinned by `tests/unit/fx-mix-giants.test.ts`, `ffx2-fiend-stature.test.ts`, `giants-card-and-phone-fit.test.ts`, `chapters/giants-phone-scenes.test.ts` and `chapters/road-phone-camera.test.ts`. Chapter IX (`cavern-stolen-fayth-rigs.ts` and the rest of Yojimbo's room) is untouched by this wave.
+
 ## 2026-10-08 — Three more FFX-2 rooms name `SceneStaging.advisorCap`: `src/scenes/advisor-cap.ts` `FORWARD_FIEND_ADVISOR_CAP` (Chapters XI, XIII and XV; FFX-2 only; additive)
 
 Branch `r3942-stage` (real sizes for the fiends, wave 1; handoff: [r3942-stage](handoff/r3942-stage.md)). No file on the contract list changed and no type changed: the field `SceneStaging.advisorCap` and its wiring are the 2026-10-07 entry's below, and what is new is who names it.

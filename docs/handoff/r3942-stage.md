@@ -1,4 +1,4 @@
-# r3942-stage: real sizes for the fiends, wave 1 (branch `r3942-stage`, from `origin/r394-int` 04cdcd45)
+# r3942-stage: real sizes for the fiends, wave 1 (branch `r3942-stage`, from `origin/r394-int` 04cdcd45); **wave 2, the FFX-2 giants, is the last section** (Bahamut, Paragon and Oversoul, Anima)
 
 Bailey, 2026-10-07: "I'll go with your recommendations full speed" (real game sizes for heroes **and** bosses together, giant bosses keep their special framing, FFX and FFX-2 each by their own numbers); for the Leblanc chapter "Option 3: bosses forward" (shipped live as 39.4.1); 2026-10-08, going to bed: "please get a lot of work done ... i trust you." This note is the method, the per-chapter results and what stopped. The pattern is the Leblanc fix's (`docs/handoff/r3941-stage.md`): a sourced size table, the stand positions, the camera unchanged.
 
@@ -110,3 +110,72 @@ Presentation only: the diff of this lane's commits has no `src/battle`, `src/dat
 2. Wire it through `SceneStaging.figureHeights`; bring the fiends to where their heads stay on the live line and no HUD box covers them (the intent card for every fiend as the next mover, the move-advisor card, the command list, the Sensor plate where it exists); measure with the planned camera, not the frame-by-frame one.
 3. A boss sized by BOSS SCALE (`masters.ts` `scaleTarget`) keeps that size; say so, or retire it with the pick.
 4. The captures: headless Playwright from node, `PYREFLY_BROWSER=gpu`, seed 1; wait for the enemy to rest and the camera to settle, then freeze the clocks and measure (FFX-2's ATB is Active: a fiend acts while the menu is open and a capture mid-action is wrong); a later link through the real chain (`want` ids, the earlier fiends left at 1 HP in the page, the `intended` strategy for the Via Purifico duel). Scripts: `D:/Tools/pyrefly-scratch/2026-10-08/r3942-stage/` (`cap.mjs`, `an.mjs`, `proj.mjs`, `numbers.mjs`, `make-sheet.mjs`, `make-options.mjs`, `runall.sh`), a dev server on 5192 that does not watch the art.
+
+---
+
+# Wave 2: the FFX-2 giants (Bahamut of IV, Paragon and Oversoul of XIII, Anima of XI)
+
+**Game case: FFX-2 only** (rule 14). These are FFX-2's own models and chapters (`research/ffx2-bahamut.md` §9, `ffx2-fallen-aeons.md` §13, `ffx2-trema.md` §15); FFX's Bahamut (Chapter XIV's Spathi), FFX's Anima (Chapter III) and every FFX chapter are other models in the other game's files and are untouched. Vegnagun and its parts: no change (parity measured below). Presentation only: no `src/battle/**`, no enemy data, no golden file.
+
+**Bailey, 2026-10-08:** "go with your recommendations and restart the art run" (the picks, ~12:05) and "go with C and restart the giants build" (~13:10). The picks (the giants study, `D:/Tools/pyrefly-scratch/2026-10-08/giants/`): **Bahamut and Paragon/Oversoul: option 3 on a desktop** (the real size with the colossus camera that holds the whole boss with no more painting edge than today: Bahamut 1.8 times as far and 2.9 higher, Paragon 1.9 times as far and 2.4 higher) **and option 4 on the phone** (70 percent of real); **Anima: option 4** (70 percent of real) on desktop and phone; Vegnagun, Yojimbo, Spathi, Shiva: no change. The build lane that began this was interrupted; its work was saved as `r3942-giants-wip` (1422b78b, 6d8672bb on top of 0284bf85) and this lane finished it: **kept** (everything below except the four changes listed under "Changed from the WIP"), because it was read line by line and measured.
+
+## What it is
+
+| Piece | File | What |
+|---|---|---|
+| The real heights and the picks | `src/data/ffx2/fiend-stature.ts` | rows `bahamut` 87.85 (m168), `paragon` 94.29 (m152), `x2-anima` 136.59 (m169); Chapter IV's girls 17.48; `FFX2_GIANT_SHARE` (Bahamut and Paragon 1 on a desktop and 0.7 on a phone, Anima 0.7 on both) and `ffx2GiantHeight` |
+| CHAPTER FRAMING's giant plan and the **giant exception** | `src/engine/fx/mix/giants.ts` (new), `framing.ts` | the three cameras as a table by window shape (not a search: `colossusPin.ts`'s lesson), `decideGiant`, the exception below; a plan that fails a rule or the painting-edge gate plays the fight as it was |
+| The phone | `scenes/giant-stage.ts` (new), `bevelle-underground.ts`, `cloister-100.ts`, `road-to-the-farplane.ts`, `road-to-the-farplane-phone.ts`, `ShotRules.ts` | on the upright phone the scene publishes the 0.7 height in `figureHeights`; Chapter IV has the options sheet's own phone idle rig, Anima's link her own phone camera; the A-12 slice fit holds a giant whole below the gauge (`GIANT_PHONE_TOP`) |
+| The card | `src/ui/ffx2/intentBoard.ts`, `FFX2BattleHud.ts` | for the three giants the enemy-intent card avoids the painted silhouette (`TargetingPort.rect`), not the head-to-feet estimate |
+| Close rigs | `rigWatch.ts` | a giant's camera leaves the close rigs (party, enemy, action) as the scene authored them |
+
+**The giant exception to the 90 percent party floor** (`giants.ts`; the rule everywhere else stays 0.9): for these three bosses **on a desktop window only**, the party may stand down to `GIANT_FLOOR` = 0.45 of today's height (the picks measure 56, 51 and 61 percent at 1600x900), a member may be covered by the boss up to `GIANT_COVER_MAX` 0.4 and by a nearer girl up to `GIANT_OVERLAP_MAX` 0.4 (seen from three times as far the three girls stand in a column); everything else holds (every figure in view, clear of the panels, no more painting edge than today's rig shows, the plate's wings counted). It is pinned by `tests/unit/fx-mix-giants.test.ts` (18 tests: only the three ids, FFX-2 only, a camera for 4:3 to 2.45 and none outside it, the floor values, the phone and an FFX stage and the switch off play no giant, the live check never swaps it, a resize re-plans it and back, the staging is put back when a plan fails).
+
+## The numbers (first command menu, seed 1, headless real-GPU Chromium, live = echoesofspira.com 39.4.1, after = this branch)
+
+"ratio" = the boss's standing height over the girls' mean on screen; girls = their mean standing height, px; the study columns are the options Bailey picked (`giants/numbers.txt`). Card = the enemy-intent card over the boss's painted rectangle (the study's own box measure) and, in brackets, over the boss's own visible pixels (a frame with every enemy hidden subtracted: it counts the boss's glow and aura too, so it overstates). Sheet: `docs/screenshots/r3942-stage/giants-x2-before-after.jpg`.
+
+| | ratio live / study / built | girls px live / study / built | boss px live / study / built | card over the boss live / study / built |
+|---|---|---|---|---|
+| Bahamut 1600x900 | 1.93 / 3.83 / **3.82** | 289 / 162 / **161** (56 %) | 559 / 619 / **617** | 17 % (15.5 %) / 20 % / **0 % (0.3 %)** |
+| Bahamut 390x844 | 1.57 / 2.56 / **2.66** | 130 / 107 / **97** (75 %) | 203 / 274 / **258** | 15 % (4.4 %) / 8 % / **12 % (4.6 %)** |
+| Paragon 1600x900 | 1.12 / 4.24 / **4.24** | 277 / 143 / **142** (51 %) | 310 / 608 / **604** | 0 % / 7 % / **0 % (0.0 %)** |
+| Paragon 390x844 | 1.22 / 2.87 / **2.97** | 124 / 91 / **83** (67 %) | 152 / 262 / **247** | 0 % / 0 % / **0 % (0.2 %)** |
+| Anima 1600x900 | 1.17 / 3.77 / **3.77** | 285 / 175 / **175** (61 %) | 332 / 660 / **660** | 0 % / 35 % / **1 % (1.1 %)** |
+| Anima 390x844 | 1.36 / 3.91 / **3.91** | 104 / 86 / **86** (83 %) | 142 / 336 / **336** | 0 % / 8 % / **8 % (6.3 %)** |
+
+World heights: Bahamut 9.147 desktop and 6.403 phone (live 5.686 and 4.100), Paragon 9.447 and 6.613 (live 3.1), Anima 9.6 on both (live 3.4). Nothing is cut by the screen edge in any of the six pictures. The three desktop pictures match the study's option 3 / 4 numbers to within 1 percent. **The phone differs from the study's option 4 picture for Bahamut and Paragon**: the girls 97 and 83 px (study 107 and 91), the boss 258 and 247 px (274 and 262): the slice fit with the gauge reserve (`GIANT_PHONE_TOP` 0.19) stands the camera back a little more than the study's hand-set picture; Anima's phone is the study's to the pixel.
+
+**The camera** (planned pose at the first menu, `framing.giant` in the report): Bahamut (1.89, 4.99, 16.17) against live (0.12, 2.07, 9.31), Paragon (-1.11, 5.53, 18.74) against (-0.48, 3.11, 9.69), Anima (2.29, 2.05, 16.39) against (-0.03, 2.72, 9.80); the camera drifts about 0.1 with its idle sway.
+
+## The enemy-intent card ("the next-move card")
+
+The study found the card on 20 percent of Bahamut and 42 percent of Anima in option 3. **Fixed on a 16:9 desktop**: the card now avoids the giant's painted silhouette, so it stands in the free band at the right (Bahamut 0.3 percent of his pixels, Paragon 0.0, Anima 1.1 percent, a few chain wisps; live 15.5, 1.5 and 0). Other window shapes, the same capture (pixels of the boss under the card, live then built): 1920x1080 and 2560x1440: Bahamut 0.2 / 0.0 %, Paragon 0.0 / 0.0 %, Anima 0.6 / 1.3 %; **1440x900 (16:10): Bahamut 51.9 % then 18.5 %, Anima 6.4 % then 2.5 %, Paragon 1.4 % then 0.0 %; 1024x768: Bahamut 48.5 % then 20.2 %**. So at 16:10 and 4:3 the card still lands on Bahamut's right wing (a third of what it covered, not zero): the guide column, the card and the command stack cannot stand side by side with a colossus of that width in a window that narrow, and the card may not cover the command stack (it ranks chrome above a painting). Left for Bailey's pick, not built (a new rule): a shorter card for giants (a tighter height cap), or a farther camera below 16:10.
+**The phone:** the card is a strip across the top of the field (its second line ends at y 130 at 390 wide). Bahamut's crown (4.6 percent of his pixels, live 4.4) and the tips of Anima's horns (6.3 percent counting her glow, live 0 at her old size) still stand under it, and Paragon's top clears it: the gauge reserve cannot go higher without the girls going under Chapter IV's guide card (Yuna 40 percent hidden at the built 0.19, 60 at 0.26, 77 at 0.31), and the picked picture has it so. For Anima I tried lifting her phone camera 0.6 on its pedestal (the girls' feet stand at y 473, the plates at 487): the menu clearance answered with a 21 px lens shift, her head stayed at y 100 and the girls went 11 px lower, so it was **reverted**. At 360 wide the strip is three lines and covers 13 to 16 percent of each giant, at 430 wide 0 to 0.5 percent.
+
+## Window shapes and the checks beside the picks
+
+- 1600x900, 1665x900, 1710x900, 1800x900 and 1920x1080: Bahamut and Anima play the giant (617 to 740 px, 2000x1012 and 2560x1080 too); 1440x900 and 1024x768: the same, the girls 122 to 175 px, by the window's height; every window from 1.2 to 2.45 for Bahamut and Anima, **1.2 to 1.79 for Paragon** (Chapter XIII's plate has no wings and shows its edge past 1.79: 1620x900 plays today's size, as before wave 2). A square or ultrawide window plays the fight as it did; a window resized across those limits re-plans once it has stood still for 0.4 s.
+- Phones: 360x740, 390x844 and 430x932 each hold the giant whole (Bahamut 207, 258 and 302 px, Paragon 219, 247 and 274 px, Anima 268, 336 and 392 px).
+- **Close shots** (the girls and the boss in play at 1600x900, 40 s of each fight with the menu left open): Bahamut's `action~calm` shot stands at (1.2, 3.8, 12.5) with the girls and most of him in frame; Paragon and Anima stayed on the master (Paragon "does nothing", Anima's Stare); no camera inside a giant.
+- **Parity**: Vegnagun's tail link on this branch against live: the same world heights (22.96, 15.99, the girls 1.82), standing px within the idle sway (843 against 846 at 1600x900); Chapter IX (Yojimbo) reads the numbers of wave 1's table (254, 118 and 64 px at 1600x900; 128, 67 and 37 at 390x844). Chapter IX is untouched by this wave: `src/scenes/cavern-stolen-fayth-rigs.ts` is **not** in the diff of `0284bf85..` (the lane brief listed it: the file is only imported by `bevelle-underground.ts` for `viewportAspect`, as before, and carries the heights lane's Kimahri phone step from wave 1, merged with `r3941-heights`, nothing of the giants').
+- A faint horizontal haze (the Farplane light planes) crosses Anima's robe at her new size; it is in the scene at the old size too and not this wave's.
+
+## Changed from the WIP
+
+1. `framing.ts`: a giant's window is now watched (`SizeWatch`), so a resize re-plans it (a plan made at 16:9 stayed after a drag to a square window); two tests, the first mutation-checked (it fails without the line).
+2. `ShotRules.ts` and `road-to-the-farplane-phone.ts`: the comments of `GIANT_PHONE_TOP` and `ROAD_PHONE_ANIMA` said "the whole figure below the intent strip", which the pictures do not show (the numbers stay the WIP's, kept after measuring 0.26 and 0.31 for the reserve and a 0.6 lift for Anima's camera); they now say what 0.19 costs and buys.
+3. New tests the WIP lacked: `giants-card-and-phone-fit.test.ts` (12: the card avoids a giant's silhouette and nobody else's; the phone fit holds the three giants whole with the reserve, and FFX or another fiend not) and `chapters/giants-phone-scenes.test.ts` (7: the three scenes publish the phone height and Bahamut's phone rig, and nothing on a desktop; Trema's, Shiva's and the Sisters' heights kept).
+Read and kept as built: the stature rows, `giants.ts` (the cameras, the exception, the plate-with-wings gate, the report), `intentBoard`/`FFX2BattleHud` painted rectangle, `rigWatch` close flag, the three scenes' phone heights, Bahamut's phone rig.
+
+## Verified
+
+- `tsc --noEmit` clean; `fx-mix-giants` 18, `ffx2-fiend-stature` 13, `road-phone-camera` 8, `giants-card-and-phone-fit` 12 and `giants-phone-scenes` 7 pass; **the full unit suite once, `--testTimeout=60000`, on the tree one comment-and-number revert (Anima's phone camera) before the commit, the 13 files that import the reverted files re-run after it (142 tests, green): 933 files, 926 passed and 5 skipped, 13,773 tests passed (46 skipped, 1 todo); two files timed out under load (836 s for the suite against 333 s on wave 1's run, ComfyUI on the GPU): `ffx2-ability-flags` (30 s) and `strategy-ffx2-bahamut` (60 s), both long engine simulations that no wave 2 file touches; re-run alone with `--testTimeout=120000` they pass (22 tests, 53 s).**
+- Pictures: headless Playwright from node on the real GPU, a dev server on 5197 (`D:/Tools/pyrefly-scratch/2026-10-08/giants-build/`, `cap2.mjs`, `cover.mjs`, `make-final-sheet.mjs`), stopped at the end. The live pictures are from echoesofspira.com, same seed and moment.
+- Not run: the deploy, a review workflow (`critic-plan`: a presentation change to combat framing in three chapters of one game needs a focused review before a deploy), the PCSX2 check.
+
+## Open and disclosed (wave 2)
+
+- **For Bailey's pick:** (1) the card on Bahamut at 16:10 and 4:3 (18 to 20 percent of him, down from 50), and at 360 wide on a phone (16 percent of each giant): a shorter card for giants or a farther camera there; (2) Bahamut's phone crown and the tips of Anima's horns under the intent strip against Yuna under Chapter IV's guide card (the 0.19 / 0.26 / 0.31 trade above); (3) Paragon above 1.79 (an ultrawide window) plays his old size until his plate has wings.
+- The phone's girls are 9 to 10 percent smaller than the study's option 4 picture for Bahamut and Paragon (97 and 83 px against 107 and 91).
+- Commit trailers say `Claude Sonnet 5.5` (the agent that wrote them), as the earlier lane's did, not the `Opus 5.5` line in the lane brief.

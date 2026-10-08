@@ -48,7 +48,12 @@ export const ROAD_LINK_ORDER: readonly RoadLink[] = ['shiva', 'sisters', 'anima'
  */
 export const ROAD_PHONE_IDLE_Z: Readonly<Record<RoadLink, number>> = { shiva: 13.2, sisters: 15.5, anima: 19.49 };
 
-/** The rest of Anima's phone camera: where it stands (x, y) and what it looks at, solved with the options sheet's picture at 390x844: the whole figure below the intent strip, the girls at the left. */
+/**
+ * The rest of Anima's phone camera: where it stands (x, y) and what it looks at, solved with the options sheet's picture at 390x844 (option 4): the girls at the left (86 px), the
+ * whole figure in the frame with her horns' tips under the intent strip's second line (its bottom at y 130 of the 520 px field; her top is at y 101). Lifting the picture 0.6 on its
+ * pedestal to clear them was measured and does not hold: the menu clearance puts it back with a lens shift of 21 px (the girls' feet stand at y 473, the party plates at y 487), and the
+ * girls only go 11 px lower.
+ */
 export const ROAD_PHONE_ANIMA = { x: -0.1, y: 2.35, lookAt: [0.19, 3.35, 9.55] } as const;
 
 /** Which combatant ids field each link (the scene's `ROAD_IDS`, passed in to keep the import one-way). */

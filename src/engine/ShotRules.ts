@@ -29,9 +29,12 @@ import { REVEAL_PARTY_MIN, ffx2Push, ffx2RevealSubjects, ffx2Shot, fittedPush } 
 export const PHONE_FIT_KEY = 'phoneFit';
 
 /**
- * r3942-stage wave 2 (FFX-2 only): the share of the phone frame's height a giant's top stays under: the boss gauge and the enemy-intent strip that sit across the top of the
- * FFX-2 phone HUD (about 100 of the field's 520 px). The FFX-2 phone HUD reports no top band of its own (`phoneTop`), so a giant 0.7 of its real height filled the frame up to its
- * edge, its wings behind the strip (15 percent of the figure at 390x844); with this the rig rises and stands back until the whole figure is below it, as FFX's does for its band.
+ * r3942-stage wave 2 (FFX-2 only): the share of the phone frame's height a giant's top stays under: the boss gauge and the first line of the enemy-intent strip that sit across
+ * the top of the FFX-2 phone HUD (about 100 of the field's 520 px at 390 wide; the strip's second line, when its text wraps, ends at y 130). The FFX-2 phone HUD reports no top band of
+ * its own (`phoneTop`), so a giant 0.7 of its real height filled the frame up to its edge, its wings behind the gauge (15 percent of the figure at 390x844); with this the rig rises and
+ * stands back until the whole figure is below it, as FFX's does for its band. It is the value of the picture Bailey picked (the options sheet's option 4): a larger one pushes the girls
+ * under Chapter IV's guide card (Yuna 60 percent hidden at 0.26, 77 at 0.31, against 40 at 0.19), so Bahamut's crown and the tips of Anima's horns may stand under the strip's second line
+ * (about 5 percent of their pixels; Paragon's top stays clear of it).
  */
 export const GIANT_PHONE_TOP = 0.19;
 
