@@ -21,6 +21,7 @@
  * `VOICE_BUDGET_BYTES` (a separate line beside the 90 MB audio cap, proposed in the design, awaiting Bailey).
  * Other flags: --out public/audio/voice  --report docs/audio/voice-ffx-ship-report.json  --partial (lines with no candidate stay silent)
  *   --bitrate 64k  --target-lufs -19  --clean (delete voice files this run does not name)  --include-unserved-quips
+ *   --variant <name>  (the report records which variant of the recordings this was; `voice-variant.mjs` passes it)
  * Game case: FFX only (see voice-lib.mjs).
  */
 
@@ -181,7 +182,7 @@ mkdirSync(path.dirname(REPORT), { recursive: true });
 writeFileSync(REPORT, json({
   about: 'Written by tools/audio/voice-ship.mjs. Measurements of the shipped files (agents cannot hear: Bailey judges by ear). Do not edit by hand.',
   encode: S.ENCODE, targetLufs: opts.targetLufs, ceilingDbtp: opts.ceilingDb, voiceBudgetBytes: VOICE_BUDGET_BYTES, totals: index.totals,
-  muted: [...mute], accepted: [...accept], missing,
+  variant: text('variant') ?? null, muted: [...mute], accepted: [...accept], missing,
   recordings: [...results.values()].filter((r) => !r.error).map((r) => ({ id: r.rec.id, voice: r.rec.voice, chars: r.rec.chars, ms: r.ms, bytes: r.bytes.length, sha256: r.sha256, lufs: r.after.lufs, truePeakDb: r.after.truePeakDb, gainDb: r.gainDb, limited: r.limited, innerSilenceMs: r.innerSilenceMs, take: V.pickedTake(picks, r.rec.id), warn: r.warn })),
   beats,
 }));

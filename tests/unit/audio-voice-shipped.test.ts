@@ -60,6 +60,14 @@ describe.skipIf(!present)('the installed voice', () => {
     expect(auditVoiceDir(VOICE_DIR).problems).toEqual([]);
   });
 
+  it('records which variant of the recordings is installed, the lines kept as text only, and what the gate accepted', () => {
+    const config = JSON.parse(readFileSync(path.join(ROOT, 'tools/audio/voice-variants.json'), 'utf8')) as { variants: Record<string, { acceptPausesOf?: string }>; mute: string[] };
+    expect(Object.keys(config.variants), 'docs/audio/voice-ffx-ship-report.json names a variant voice-variants.json does not define').toContain(report.variant);
+    expect([...report.muted].sort()).toEqual([...config.mute].sort());
+    // a variant that passes the ship gate by itself accepts nothing; one that does not lists every line it let through
+    if (!config.variants[report.variant]?.acceptPausesOf) expect(report.accepted).toEqual([]);
+  });
+
   it('has manifests for FFX chapters only, each parsing as the game reads it', () => {
     expect(manifests.length).toBeGreaterThan(0);
     for (const [chapter, raw] of manifests) {
