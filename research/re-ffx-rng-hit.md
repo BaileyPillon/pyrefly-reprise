@@ -251,9 +251,9 @@ So on one stream, the variance draw comes **before** the critical draw.
 
 ## 8. Differences found against the engine (at main 157562f8, `accuracy.ts` and friends)
 
-Each row was run on both sides with identical inputs (a temporary test, deleted after use). "Engine" is
-`src/battle/ffx/accuracy.ts` unless another file is named; "game" is the kernel. These are the changes the wiring
-batch has to make; none has been made.
+Rows 1 to 6 were run on both sides with identical inputs (a temporary test, deleted after use); rows 7 to 12 are
+read from the code. "Engine" is `src/battle/ffx/accuracy.ts` unless another file is named; "game" is the kernel.
+These are the changes the wiring batch has to make; none has been made.
 
 | # | What | Where in the engine | Example (engine / game) |
 |---|---|---|---|
