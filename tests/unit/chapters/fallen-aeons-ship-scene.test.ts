@@ -68,9 +68,12 @@ describe('the Road to the Farplane — tables', () => {
   });
 
   it('the Sisters at the concepts README\'s heights: Sandy tallest, Mindy smallest and hovering', () => {
-    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.sandy]).toBe(2.3);
-    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.cindy]).toBe(1.7);
-    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.mindy]).toBe(1.2);
+    // r3942-stage: the game's own HD models over the girls' 1.78 (`data/ffx2/fiend-stature.ts`): Sandy 1.29, Cindy 0.83, Mindy 0.71, Shiva 1.94 (was 2.3, 1.7, 1.2 and the boss height 3.4)
+    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.sandy]).toBe(2.297);
+    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.cindy]).toBe(1.48);
+    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.mindy]).toBe(1.26);
+    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.shiva]).toBe(3.453);
+    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.anima]).toBeUndefined(); // a giant: keeps the scene's boss height
     expect(ROAD_SPOTS[ROAD_IDS.mindy]![1]).toBeGreaterThan(0);
     for (const id of [ROAD_IDS.shiva, ROAD_IDS.sandy, ROAD_IDS.cindy, ROAD_IDS.anima]) expect(ROAD_SPOTS[id]![1], id).toBe(0);
   });
@@ -148,7 +151,7 @@ describe('the Road to the Farplane — the real factory', () => {
     loaded.push(scene);
     expect(scene.placeholder).toBe(false);
     expect(scene.slots.enemySpots?.[ROAD_IDS.shiva]).toEqual(ROAD_SPOTS[ROAD_IDS.shiva]);
-    expect(scene.slots.figureHeights?.[ROAD_IDS.mindy]).toBe(1.2);
+    expect(scene.slots.figureHeights?.[ROAD_IDS.mindy]).toBe(1.26);
     expect(scene.slots.holdParty).toBe(true);
     expect(() => scene.update(0.016)).not.toThrow();
   });

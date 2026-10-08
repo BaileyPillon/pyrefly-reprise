@@ -418,3 +418,26 @@ What `docs/target/approved-hashes.json` records and what is on disk in `public/a
 | 11 | Elements | SinirothX vs wiki vs guides | agree except F-5 (two Overdrive elements) and Anima's Gravity (immune vs absorb) |
 | 12 | Music "Aeons" in aeon battles | wiki OST page | single source |
 | 13 | Shiva approved; Anima not hash-recorded; Sisters unpainted | `approved-hashes.json`, `public/art/characters/` listing | as §8 |
+
+## 12. Research addendum (2026-10-08): how tall Shiva and the Magus Sisters really stand (the HD models)
+
+**FFX-2 only** (rule 14: these are FFX-2's models). Asked because Chapter XI drew Shiva at the scene's boss height (3.4) and the Sisters at the concepts README's estimates (Sandy 2.3, Cindy 1.7, Mindy 1.2) against girls of 1.78, and the build is moving to real sizes (Bailey, 2026-10-07: "I'll go with your recommendations full speed": real game sizes for everyone, heroes and bosses together, the camera unchanged). This section is the measurement behind the Chapter XI rows of `src/data/ffx2/fiend-stature.ts`; it carries **no camera or stand-position fact** (see 12.4). Anima is a giant (136.6 tall, 385 wide) and is not in the table.
+
+**12.1 Method.** The Steam *FINAL FANTASY X/X-2 HD Remaster* files on this PC, FFX-2 build 25501027, read with the project's own reverse-engineering lane (`D:/Tools/rea`, outside the repository; facts only: no game file, model, text or decompiled code is in this repository). The engine's size law, read from the game's model loader and its world-matrix builder: **a model's world size is its mesh size in the HD files times the engine scale `C` (a float in the params block of the model's `.chr`) times the AI script's scale vector** (1 for every fiend here). Shiva and the three Sisters are summoned beasts and carry `C = 4`. In FFX-2 the model number equals the monster id for almost every boss. `[single source: own measurement]`
+
+**12.2 The table** (game units; the girls' side is the mean of the three dresspheres the chapter's party wears, White Mage Yuna `c018` 16.77, Dark Knight Rikku `c033` 18.54 and Dark Knight Paine `c053` 17.87 from the game's own job table, **17.73**):
+
+| Fiend | Model | Raw mesh height | C | Height (raw x C) | Engine height E (a design height) | Over the girls |
+|---|---|---|---|---|---|---|
+| Shiva | `m167` | 8.596 | 4 | **34.384** | 20 | **1.94** |
+| Sandy | `m172` | 5.719 | 4 | **22.876** | 18 | **1.29** |
+| Cindy | `m171` | 3.686 | 4 | **14.744** | 13 | **0.83** |
+| Mindy | `m173` | 3.136 | 4 | **12.544** | 16 | **0.71** |
+
+Check: Shiva's idle-pose bones span 31.5 units, which agrees with the static 34.4 (8 percent under) and not with her stored engine height (20). `[single source: own measurement]`
+
+**12.3 The caveat that goes with every number: about 5 percent, more for a figure that spreads.** Bind-pose silhouettes, hair and ornaments included, one reader, one build. Shiva's arms and hair spread in the default pose, so her standing figure is a little under 34.4 (the idle-bone span says 8 percent); the Sisters hover in battle (the wiki's profile: "hovers during battle") and the table says nothing of how high. The ratio is between *models*; the stage draws a painting, which stands at the world height the scene gives it.
+
+**12.4 Not found, and so not claimed.** (a) **Where each side stands.** The game's formations for these fights are `ikai09_229` (Shiva), `ikai09_228` (the Sisters) and `ikai09_227` (Anima); their position chunks hold no stand positions for the girls or the fiends (the engine falls back to a battle-map default that was not found). So the distances between the girls and the fiends are ours (`src/scenes/road-to-the-farplane.ts`). (b) **The battle camera.** Not in the files that were read. (c) An idle-pose height for the Sisters.
+
+**12.5 What the build does with it.** Chapter XI draws Shiva at 1.94, Sandy at 1.29, Cindy at 0.83 and Mindy at 0.71 of the girls' standing height (1.78): 3.453, 2.297, 1.480 and 1.260 world units, in place of 3.4, 2.3, 1.7 and 1.2; Anima keeps the boss height. Where each stands is the scene's own and is set against the HUD (`docs/handoff/r3942-stage.md`). Presentation only: the battle engine's output is unchanged.
