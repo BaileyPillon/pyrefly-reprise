@@ -80,14 +80,14 @@ describe('the intent line says what the frames say (O-4 C), from the real engine
     expect(v.intent.filter((r) => r.bold).map((r) => r.text)).toEqual(['Fire', 'Firaga', 'weak to Ice']);
   });
 
-  it("a turned disc (c-iii): Lulu's Blizzara turns the upper-left disc to Thunder; the line and the strip follow the event", () => {
+  it("a turned disc (c-iii): Wakka's blow turns the upper-left disc to Thunder (a blow steps back along the game's ring, Fire to Thunder); the line and the strip follow the event", () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     const { readout, stage } = mountReadout();
     readout.sync(e.state() as BattleState);
-    inputFor(e, 'lulu');
+    inputFor(e, 'wakka');
     readout.sync(e.state() as BattleState);
-    const events = e.submit({ kind: 'ability', id: 'blizzara', targets: ['mortiphasm-1'] });
+    const events = e.submit({ kind: 'attack', targets: ['mortiphasm-1'] });
     for (const ev of events) readout.onEvent(ev);
     const v = readout.view()!;
     expect(intentText(v.intent)).toBe(FRAME_III);
@@ -101,14 +101,14 @@ describe('the intent line says what the frames say (O-4 C), from the real engine
     expect(intentText(readout.view()!.intent)).toBe('The discs show three Fire and one Thunder: three Firaga and one Thundara next.');
   });
 
-  it("Wakka's blow turns a disc left, to Water (B8's ring, our estimate): Watera, and Ice no longer hurts him extra", () => {
+  it("Lulu's Blizzara turns a disc right, to Ice (a spell steps forward along the game's ring, Fire to Ice): Blizzara, and Ice no longer hurts him extra", () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     const { readout } = mountReadout();
     readout.sync(e.state() as BattleState);
-    inputFor(e, 'wakka');
-    for (const ev of e.submit({ kind: 'attack', targets: ['mortiphasm-1'] })) readout.onEvent(ev);
-    expect(intentText(readout.view()!.intent)).toBe('One disc turned to Water: three Firaga and one Watera next. Ice no longer hurts him extra.');
+    inputFor(e, 'lulu');
+    for (const ev of e.submit({ kind: 'ability', id: 'blizzara', targets: ['mortiphasm-1'] })) readout.onEvent(ev);
+    expect(intentText(readout.view()!.intent)).toBe('One disc turned to Ice: three Firaga and one Blizzara next. Ice no longer hurts him extra.');
   });
 
   it('the glow (c-ii): six attacks fill the counter; the line names Dispel, then Ultima; then Ultima alone; then the reset', () => {
@@ -178,7 +178,7 @@ describe('the strip (O-2 B)', () => {
     expect(COLOUR_ORDER_NOTE).toMatch(/our estimate/);
     const src = readFileSync(join(ROOT, 'src/ui/ffx/omnisReadoutModel.ts'), 'utf8');
     expect(src).not.toMatch(/import[^;]*(DISC_RING|OMNIS_RESET_CYCLE)/); // the single constant stays in the rules
-    expect(DISC_RING).toEqual(['fire', 'water', 'ice', 'lightning']);
+    expect(DISC_RING).toEqual(['fire', 'ice', 'water', 'lightning']);
   });
 
   it('landscape: the frame space (1600x900) scaled 0.4 into the grid; phone: into the HUD root, marked for the rail', () => {

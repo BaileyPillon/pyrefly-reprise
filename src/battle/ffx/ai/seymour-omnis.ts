@@ -56,8 +56,8 @@ export * from './seymour-omnis-rules.ts';
  * place for the review, the tests and the guide.
  */
 export const OMNIS_ASSUMPTIONS = {
-  ringOrder: 'our estimate (O-7), GameFAQs reset cycle drawn as the ring (B8 = b); unlisted until confirmed',
-  resetCycle: 'single source (GameFAQs, O-11), built per B8 = b; unlisted until confirmed',
+  ringOrder: "sourced, no longer an assumption (O-7, 2026-10-07): the game's own battle AI script steps a disc Fire, Ice, Water, Thunder, forward for a spell and back for a blow",
+  resetCycle: "single source (GameFAQs, O-11), built per B8 = b, and known to differ: the game's own script cycles Ice, Water, Thunder, Fire (the ring's order); left for the boss-rules batch; unlisted until confirmed",
   thunderWaterOpposite: 'standard FFX pair, no Omnis source (O-5)',
   discTurns: 'our estimate (B22 = a): the discs take no turns of their own',
   whatTurnsADisc: 'our estimate (B10 = a): a single-target physical hit (left) or damaging spell (right); all-target actions and items turn nothing',

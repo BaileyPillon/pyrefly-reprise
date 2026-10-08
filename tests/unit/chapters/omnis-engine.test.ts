@@ -138,8 +138,8 @@ describe('the volley planner (§4.1; B12 = a)', () => {
   });
 });
 
-describe('turning the discs (§4.3; the ring is our estimate, B8 = b)', () => {
-  it('Wakka reaches a disc and his hit turns it left (Fire -> Water); the disc takes 0 and stands', () => {
+describe("turning the discs (§4.3; along the game's own ring, O-7: a blow steps back, a spell forward)", () => {
+  it('Wakka reaches a disc and his hit turns it left (Fire -> Thunder); the disc takes 0 and stands', () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     const d = inputFor(e, 'wakka');
@@ -148,21 +148,21 @@ describe('turning the discs (§4.3; the ring is our estimate, B8 = b)', () => {
     const events = e.submit({ kind: 'attack', targets: ['mortiphasm-2'] });
     const hit = events.find((ev) => ev.type === 'damage' && ev.targetId === 'mortiphasm-2');
     expect(hit && hit.type === 'damage' ? hit.amount : -1).toBe(0);
-    expect(discs(e)).toEqual(['fire', 'water', 'fire', 'fire']);
+    expect(discs(e)).toEqual(['fire', 'lightning', 'fire', 'fire']);
     expect(actor(e, 'mortiphasm-2').hp).toBe(1);
     const change = events.find((ev) => ev.type === 'affinity-change');
     expect(change).toMatchObject({ targetId: OMNIS, cause: 'part-turn', partId: 'mortiphasm-2', direction: 'left' });
-    // three Fire discs absorb Fire, one Water disc halves Water; no weakness any more
-    expect(actor(e, OMNIS).affinities).toEqual({ fire: 'absorb', water: 'resist' });
+    // three Fire discs absorb Fire, one Thunder disc halves Thunder; no weakness any more
+    expect(actor(e, OMNIS).affinities).toEqual({ fire: 'absorb', lightning: 'resist' });
   });
 
-  it("Lulu's Blizzara turns a disc right (Fire -> Thunder)", () => {
+  it("Lulu's Blizzara turns a disc right (Fire -> Ice)", () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     inputFor(e, 'lulu');
     e.submit({ kind: 'ability', id: 'blizzara', targets: ['mortiphasm-4'] });
-    expect(discs(e)).toEqual(['fire', 'fire', 'fire', 'lightning']);
-    expect(actor(e, OMNIS).affinities).toEqual({ fire: 'absorb', lightning: 'resist' });
+    expect(discs(e)).toEqual(['fire', 'fire', 'fire', 'ice']);
+    expect(actor(e, OMNIS).affinities).toEqual({ fire: 'absorb', ice: 'resist' });
   });
 
   it('Tidus and Auron cannot reach a disc; their menus offer only Omnis', () => {

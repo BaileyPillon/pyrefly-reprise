@@ -73,6 +73,22 @@ Omnis* page, its concept art of Omnis, its concept art of the reels, and one HD 
   the wiki's prose lists. This is one frame, read by us. It is evidence for B8, not a confirmation. The
   installed disc keeps the estimate, as briefed. The observed order exists only as a scratch render
   (sheet panel 6) and costs one script run to install if Bailey confirms it.
+
+  **Update 2026-10-07: the ring is confirmed, and the installed masters are unchanged.** The game's own
+  battle AI script settled it as Fire, Ice, Water, Thunder, a spell one step forward and a blow one
+  step back (`research/ffx-seymour-omnis.md` O-7), which is the frame's order read the other way, as
+  this paragraph found. `mortiphasm/idle.png` and the approved 2x master (`idle@2x.png`, a GPU upscale,
+  D-315) still hold Fire, Water, Ice, Thunder clockwise from screen right, because their opposite
+  colours are other pairs than the game's, so no turn or mirror of them gives the ring. The scene does
+  not wait for a repaint: `src/scenes/garden-of-pain-discs.ts` draws each disc as four quarter
+  triangles whose texture coordinates move the painted quarters to where the ring puts them (the
+  pixels are moved, never resampled), so the screen shows Fire, Thunder, Water, Ice clockwise and a
+  spell turns the disc clockwise. `DISC_PAINTED_RING` says what the files hold and
+  `tests/unit/chapters/omnis-ring.test.ts` reads both masters' pixels against it. To paint the order
+  directly instead, run `production/scripts/disc_build.py fire,thunder,water,ice` (no GPU) for the 1x, turn the 2x
+  master's quarters to match, install both with their own locks (the old hashes kept as superseded,
+  `docs/target/judge-locked-hashes.json`), and set `DISC_PAINTED_RING` to `DISC_RING_ON_SCREEN`:
+  every quarter turn is then zero.
 - **The staves** are tall, slender, ornamented poles with a jewel on top, standing along the platform
   edges. The installed plate has none (the options drew none). If Bailey wants them, they can be added
   as scene props rather than paint.

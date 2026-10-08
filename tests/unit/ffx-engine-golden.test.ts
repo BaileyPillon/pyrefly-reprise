@@ -84,6 +84,12 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * the killed enemy's item drops (research ffx-vs-ffx2-presentation §9; `results.ts#OVERKILL_DROP_MULTIPLIER`).
  * The line overkills a Guado Guardian on both seeds, so the victory event's drops change and nothing else:
  * with the multiplier stubbed to 1 this file is 18/18 on the old values, and the other 16 digests never moved.
+ * Chapter XII (Seymour Omnis) re-pinned 2026-10-07 by r3941-omnis (FFX only, Bailey: "go ahead and fix the omnis disc
+ * order too"): the disc ring is the game's own, Fire, Ice, Water, Thunder, a spell one step forward and a blow one step
+ * back (research O-7), where it was Fire, Water, Ice, Thunder with a spell at -1. The line turns discs, so exactly the
+ * two seymour-omnis digests move (seed 1 354e0ace -> 18304bd, seed 7 ac28e23c -> 9bd433ce); both are still victories.
+ * Proved by setting the ring back to the old transitions (Fire, Thunder, Ice, Water read at +1 for a spell): both old
+ * digests return, and the other 16 never moved.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': 'd5fd8bf4:defeat',
@@ -100,8 +106,8 @@ const GOLDEN: Record<string, string> = {
   'yojimbo-cavern#7': '13a3322e:victory',
   'seymour-natus#1': '6fe6bbe1:defeat',
   'seymour-natus#7': '4be27cc4:defeat',
-  'seymour-omnis#1': '354e0ace:victory',
-  'seymour-omnis#7': 'ac28e23c:victory',
+  'seymour-omnis#1': '18304bd:victory',
+  'seymour-omnis#7': '9bd433ce:victory',
   'isaaru-via-purifico#1': 'a9b7568a:victory 5be7c9ed:victory 32b8ae86:victory',
   'isaaru-via-purifico#7': 'cc3291bd:victory a32106b5:victory 3c5d0bb6:victory',
 };
