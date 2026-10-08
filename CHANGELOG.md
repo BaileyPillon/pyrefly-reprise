@@ -1,13 +1,94 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 56 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 57 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-07 · Release 39.4.1 on echoesofspira.com
+
+Address: https://echoesofspira.com (main 04cdcd45, bundle DAnPZ-iy)
+
+- **FFX-2:** a hotfix for Chapter VI, the Leblanc Syndicate: every fiend is drawn at its real size
+  from the game's HD models, against the three girls. Ormi is 1.15 times the girls' height, Logos
+  1.26, Leblanc 1.05, Dr. Goon 1.10 and Fem-Goon 1.01. Before, the goons were drawn at 70 percent of
+  the party's height and the real sizes of Logos and Ormi had never been used; the fiends stand well
+  behind the girls, so on screen they read as about half a girl. At 1600x900 the fiends stood 0.44 to
+  0.72 of the girls' height on screen and now stand 0.71 to 1.15: in Act I Ormi goes from 0.57 to
+  1.10, Dr. Goon from 0.44 to 0.97 and Fem-Goon from 0.50 to 0.77; in Act II Ormi from 0.72 to 0.91
+  and Logos from 0.57 to 1.15; in Act III Logos from 0.63 to 1.15, Ormi from 0.72 to 0.90 and Leblanc
+  from 0.56 to 0.71. This is Bailey's pick of the Leblanc options, "Option 3: bosses forward", after
+  he wrote that the characters looked huge and the bosses tiny.
+- **FFX-2:** the fiends stand closer to the party, level with each other at the head, so a taller
+  fiend stands nearer instead of further back. The camera is unchanged on desktop (the same pose
+  within 0.04 units at 1600x900 in all three acts, the same lens), and on a phone it steps back a
+  little so the bigger fiends still fit.
+- **FFX-2:** the enemy-intent card no longer covers Ormi's head. In Act I it covered all of it (and
+  in Act III all of Leblanc's); now it covers none of Ormi's, at most 4 percent of Logos's head in Act
+  II and 9 to 10 percent in Act III (Leblanc's own card). No fiend touches the command list or the
+  plates at 1600x900 or 2000x1012, and every fiend is inside the frame. The cost: the move-advisor
+  card is capped in this chapter so it clears the bigger fiends' feet, which makes it three lines
+  instead of up to six (it drops the damage, hit and crit numbers and the "most damage" line there).
+  Whether Bailey wants that is his call (F3942-02).
+- **FFX-2:** the hidden experimental chapter (the word `leblanc`) plays Chapter VI's room and fiends
+  by reference, so it has the same sizes and spots.
+- **Both:** nothing else moved. The fight itself is unchanged: the engine's event logs for all three
+  acts of Chapter VI are byte for byte the same as on 39.4 over seeds 1 to 20 (and 1 to 10 with a
+  1.5-second decision time), and no battle-engine or enemy-data file is in the change. FFX-2's Chapter
+  IV and FFX's Chapter I first menus match 39.4 to within 3 pixels in 178 of 178 and 175 of 175 HUD
+  boxes, with the same real attack landing. Against 39.4 the build differs in two files: the bundle
+  (index-D57LJe-j.js out, index-DAnPZ-iy.js in) and index.html.
+- **Disclosed, FFX-2:** on a phone, Act I's first menu can still start with a goon partly off the
+  edge of the screen (F3942-01, major, a defect 39.4 already had: it lost a goon there entirely; the
+  hotfix improves it and does not finish it). The intent card still grazes Logos's head, up to 10
+  percent (F3942-04). Leblanc (0.71) and Fem-Goon (0.77) still read smaller than their real sizes
+  (1.05 and 1.01), because the HUD leaves the fiends a window of about 207 px at 1600x900 and the
+  shortest fiend of each act stands furthest back (F3942-03). In Act III the plate names sit under the
+  status rows, as on 39.4 (F3942-05).
+- **Still open, as on 39.4:** the carried disclosures F392-01 (pose changes snap in every chapter),
+  F392-03 (the Zanmato gauge card on a phone in Chapter IX), F393-01 and F393-02 (the hidden chapter's
+  feet and head sizes), F394-01 (Auron's coat in three repaired poses) and F394-02 (a first menu
+  downloads about 10 percent more art). The deep review is owed on this build: it carries 44 earlier
+  builds. Not in this release: the FFX heroes' real heights (alone they would make the heroes taller
+  while the FFX bosses stay small, so they wait for the boss sizes) and the Omnis disc order (it
+  changes battle rules, so it waits for a deep review); the sizes of the other fiends follow chapter
+  by chapter.
+- **Deploy notes:** it shipped under Bailey's owner override ("Push a hotfix for the sizing and
+  perspective problem please") because 44 builds already owe a deep review and the deploy gate read
+  the change as needing one first (no save-data file is in it; F3942-06). The deploy ran with the
+  preflight tests skipped and the dirty tree allowed; three files were uploaded (4,535 were already
+  there) and the Worker version is 1d742335. docs/deploys.log records 2026-10-08T02:33:53Z, which is
+  22:33 EDT on 2026-10-07. The same evening Bailey also asked for 39.4 on the preview address,
+  https://echoes-of-spira-preview.baileypillon.workers.dev/, so the old and the new sizes can be
+  compared side by side: it was published there (version bec5819e, 39.4's bundle D57LJe-j) and the
+  address served that bundle at the last check; 39.3 and 39.2 are queued for two more preview
+  addresses.
+- **How it was checked:** on the candidate (r394-int at 04cdcd45, dist-gate bundle
+  index-DAnPZ-iy.js, 4,537 files): tsc clean; the Leblanc tests, the two new test files and the tests
+  the diff touches (15 files, 270 tests) green; the full unit suite once with 60-second timeouts: 919
+  files and 13,618 tests passed, after one failure was fixed (the new size table lacked the confidence
+  tag the citation test wants in every FFX-2 data file). A focused review of the exact build (82
+  minutes) said SHIP, changed area FAIL (the phone's Act I framing, which 39.4 already had, and
+  polish): Chapter VI's Acts I to III at 1600x900, 2000x1012 and 390x844 by real keys (the first menu,
+  target cycling, Escape, a real attack and a fiend's own action in each act), the chain to the
+  Victory screen, 18 fresh phone loads, 47 runs with 0 console errors and 0 failed requests, 61 frames
+  a second. The deploy compared 46 files byte for byte on both addresses. The live check (40 minutes)
+  compared 4,537 of 4,537 files byte for byte, played Chapter VI's Act I by real keys from the title
+  (fiends read 1.152, 1.101 and 1.006 of the girls' height from the page's own actors; on screen 1.10,
+  0.97 and 0.77), the cancel path, pause and hide, a real attack and a fiend's own action, then FFX's
+  Chapter I to its first menu, a real attack, an options change and a reload, with 0 console errors
+  and 0 responses of 400 or more, and said PASS.
+
+![Chapter VI, the Leblanc Syndicate: first menu of each act, release 39.4 against 39.4.1](docs/screenshots/r3941-stage/leblanc-before-after.jpg)
+
+*FFX-2, Chapter VI: the first command menu of Acts I, II and III at 1600x900 and on a phone (390x844),
+the live 39.4 on the left of each pair and the hotfix on the right, with each fiend's on-screen height
+over the girls' beside the real size from the game's models. The camera is the same; the fiends are
+at their real size and stand nearer, and the intent card no longer covers Ormi's head.*
 
 ## 2026-10-07 · Release 39.4 on echoesofspira.com
 
