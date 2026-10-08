@@ -58,7 +58,14 @@ export class NatusRing {
   private texture: Texture | null = null;
   private angle = 0;
 
-  constructor(private readonly figureHeight: number) {
+  /**
+   * `followScale` (r3942-giants-ffx, off by default: the ring as it always was): the ring takes the group scale a plan puts on him (BOSS SCALE grows a colossus about his feet) as well as
+   * his height, so it keeps its proportion to him; off, it stays the size of a figure of `figureHeight` while a plan grows him (on a desktop it has been about 40 percent too small).
+   */
+  constructor(
+    private readonly figureHeight: number,
+    private readonly followScale = false,
+  ) {
     this.material = new MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, side: DoubleSide, fog: false });
     this.mesh = new Mesh(new PlaneGeometry(1, 1), this.material);
     this.mesh.name = 'natus-ring';
@@ -77,9 +84,8 @@ export class NatusRing {
   }
 
   /**
-   * Follow Natus under `root` (the three.js scene the stage parents actors in): his place, his alpha and his size. **His size** is the group scale the stage or CHAPTER FRAMING put on
-   * him (BOSS SCALE grows a colossus about his feet): the ring is drawn at the idle's own proportion to the figure (974 of its 1148 px), so it grows with him, as it never did
-   * (r3942-giants-ffx: with the figure at his real 4.455 the ring would otherwise stay the size of a 2.43-unit one when a plan scales him).
+   * Follow Natus under `root` (the three.js scene the stage parents actors in): his place and his alpha, and with `followScale` his size too: the group scale the stage or CHAPTER FRAMING
+   * put on him, the ring being drawn at the idle's own proportion to the figure (974 of its 1148 px).
    */
   update(dt: number, root: Object3D | null): void {
     const natus = findFigure(root, NATUS_FIGURE_ID) as Faded | null;
@@ -88,9 +94,11 @@ export class NatusRing {
     if (!natus || !this.mesh.visible) return;
     this.angle = (this.angle + dt * NATUS_RING.turnPerSecond) % (Math.PI * 2);
     this.mesh.rotation.z = this.angle;
-    const grown = Math.abs(natus.scale.y) || 1;
-    const d = NATUS_RING.plane * this.figureHeight * grown;
-    this.mesh.scale.set(d, d, 1);
+    const grown = this.followScale ? Math.abs(natus.scale.y) || 1 : 1;
+    if (this.followScale) {
+      const d = NATUS_RING.plane * this.figureHeight * grown;
+      this.mesh.scale.set(d, d, 1);
+    }
     this.mesh.position.set(
       natus.position.x,
       natus.position.y + NATUS_RING.centreY * this.figureHeight * grown,

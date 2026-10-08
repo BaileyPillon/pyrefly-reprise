@@ -18,6 +18,8 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { getScene, getSceneFactory, isPlaceholderScene, loadScene, type LoadedScene } from '../../../src/scenes/index.ts';
 import {
   HIGHBRIDGE_ACTOR_HEIGHTS,
+  HIGHBRIDGE_REAL_SIZE,
+  highbridgeHeights,
   HIGHBRIDGE_ENEMY_SLOT,
   HIGHBRIDGE_PLATE,
   HIGHBRIDGE_RIGS,
@@ -47,11 +49,15 @@ describe('the Highbridge — tables', () => {
     expect(HIGHBRIDGE_SLOTS.enemySpots?.['seymour-natus']).toEqual(HIGHBRIDGE_SLOTS.enemy[HIGHBRIDGE_ENEMY_SLOT.natus]);
     expect(HIGHBRIDGE_SLOTS.enemySpots?.['mortibody']).toEqual(HIGHBRIDGE_SLOTS.enemy[HIGHBRIDGE_ENEMY_SLOT.mortibody]);
     expect(HIGHBRIDGE_SLOTS.holdParty).toBe(true);
-    // r3942-giants-ffx (FFX only; was O-1's 1.3 times Chapter VII Seymour's 1.87 = 2.43): Natus at his real size, 46.2 game units over Tidus's 18.15 against the party's 1.75, and Mortibody with him.
-    expect(HIGHBRIDGE_ACTOR_HEIGHTS.natus).toBe(giantHeight('seymour-natus', HIGHBRIDGE_ACTOR_HEIGHTS.party));
-    expect(HIGHBRIDGE_ACTOR_HEIGHTS.natus).toBe(4.455);
-    expect(HIGHBRIDGE_ACTOR_HEIGHTS.mortibody).toBe(1.912);
-    expect(HIGHBRIDGE_SLOTS.figureHeights).toEqual({ 'seymour-natus': 4.455, mortibody: 1.912 });
+    // O-1 staging: Natus at 1.3 times Chapter VII Seymour's 1.87, the heights the scene has always drawn. r3942-giants-ffx built his REAL size (46.2 game units over Tidus's 18.15 against the
+    // party's 1.75: 4.455, and Mortibody with him, 1.912) behind HIGHBRIDGE_REAL_SIZE, which is off until the framing engine's BOSS SCALE entry for him is retired (docs/handoff/r3942-giants-ffx.md).
+    expect(HIGHBRIDGE_REAL_SIZE).toBe(false);
+    expect(HIGHBRIDGE_ACTOR_HEIGHTS.natus).toBeCloseTo(1.87 * 1.3, 2);
+    expect(HIGHBRIDGE_ACTOR_HEIGHTS.mortibody).toBe(1.7);
+    expect(HIGHBRIDGE_SLOTS.figureHeights).toEqual({ 'seymour-natus': 2.43, mortibody: 1.7 });
+    expect(highbridgeHeights(true)).toEqual({ party: 1.75, natus: giantHeight('seymour-natus', 1.75), mortibody: giantHeight('mortibody', 1.75) });
+    expect(highbridgeHeights(true).natus).toBe(4.455);
+    expect(highbridgeHeights(true).mortibody).toBe(1.912);
   });
 
   it('the party stands in front of the enemy line, Mortibody at Natus\'s screen-left (O-2 A)', () => {
@@ -132,9 +138,25 @@ describe("Natus's ring", () => {
   });
 });
 
-describe("Natus's ring follows the size a plan puts on him (r3942-giants-ffx)", () => {
-  it("draws at the idle's proportion to the figure at his own height and grows with the group scale BOSS SCALE gives him, about his feet", () => {
+describe("Natus's ring can follow the size a plan puts on him (r3942-giants-ffx, with the real size; off by default)", () => {
+  it("by default it is the ring it always was: sized once for the figure's height, whatever group scale a plan puts on him", () => {
     const ring = new NatusRing(HIGHBRIDGE_ACTOR_HEIGHTS.natus);
+    (ring as unknown as { texture: object }).texture = { dispose: () => undefined };
+    const root = new Object3D();
+    const natus = new Object3D() as Object3D & { alpha: number; setAlpha(a: number): void };
+    natus.name = NATUS_FIGURE_ID;
+    natus.alpha = 1;
+    natus.setAlpha = (v: number) => (natus.alpha = v);
+    natus.scale.setScalar(1.63); // BOSS SCALE on a desktop, live
+    root.add(natus);
+    ring.update(0.016, root);
+    expect(ring.mesh.scale.x).toBeCloseTo(NATUS_RING.plane * HIGHBRIDGE_ACTOR_HEIGHTS.natus, 6);
+    expect(ring.mesh.position.y).toBeCloseTo(NATUS_RING.centreY * HIGHBRIDGE_ACTOR_HEIGHTS.natus, 6);
+    ring.dispose();
+  });
+
+  it("with followScale it draws at the idle's proportion to the figure at his own height and grows with the group scale BOSS SCALE gives him, about his feet", () => {
+    const ring = new NatusRing(HIGHBRIDGE_ACTOR_HEIGHTS.natus, true);
     (ring as unknown as { texture: object }).texture = { dispose: () => undefined };
     const root = new Object3D();
     const natus = new Object3D() as Object3D & { alpha: number; setAlpha(a: number): void };

@@ -397,7 +397,7 @@ export const DREAMS_END_PARTY_HEIGHT = 1.82;
  * **Where they stand is a pin** (`enemySpots`), because the formation solver spreads figures by their heights and a taller group would be re-laid in front of him. CHAPTER FRAMING's row for this
  * chapter (`fx/mix/stageTable.ts` CHAPTER_III, option 1, 2026-10-04) then moves each figure on a desktop with CHAPTER FRAMING on, as it always did: the aeon (2.612, -0.915), the left pagoda
  * (1.095, -2.247) and the right one (2.377, -2.028), world x and z along the screen's own axes from today's resting rig (these are for the `idle` rig below; the row reads the rig's yaw).
- * The pins carry those shifts off, so that on a desktop the group ends in the game's arrangement, the aeon at (4.753, -8.497), and the picture is the study's; on a phone, where the row does
+ * The pins carry those shifts off, so that on a desktop the group ends in the game's arrangement, the aeon at (4.753, -8.947), and the picture is the study's; on a phone, where the row does
  * not play, the pins are where the figures stand.
  * `tests/unit/ffx-giant-stature.test.ts` reads the row and the rig and fails if either moves under these numbers.
  */
@@ -407,8 +407,12 @@ export const DREAMS_END_ROW_SHIFT = {
   'yu-pagoda-right': [2.377, -2.028],
 } as const;
 
-/** The aeon's own pin: its spot before the row's shift: the one the solver found for a 4.1-unit aeon (live: (4.642, -8.915) less the row's move of that day, 2.612 and -0.915). */
-export const DREAMS_END_BFA_PIN: [number, number, number] = [2.03, 0, -8.0];
+/**
+ * The aeon's own pin: its spot before the row's shift. Live stood him at (4.642, -8.915) on a desktop (the solver's (2.03, -8.0) plus the row's move of that day, 2.612 and -0.915) and at
+ * (2.386, -8.0) on a phone. **He stands no nearer the party than that** (Bailey, 2026-10-08, "original spacing, real sizes"): at (2.03, -8.45) he is 9.46 from Auron on a desktop
+ * (live 9.42) and 7.93 on a phone (live 7.69), and the party's centre 10.9 and 9.5 away (live 10.85 and 9.24).
+ */
+export const DREAMS_END_BFA_PIN: [number, number, number] = [2.03, 0, -8.45];
 
 /** A pagoda's pin: the aeon's final place, the game's stand behind it, less what the row will add to that pagoda. */
 function pagodaPin(id: 'yu-pagoda-left' | 'yu-pagoda-right'): [number, number, number] {

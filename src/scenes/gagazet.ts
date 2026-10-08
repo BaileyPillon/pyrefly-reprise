@@ -198,11 +198,13 @@ export const GAGAZET_PARTY_HEIGHT = 1.82;
  * r3942-giants-ffx (Bailey, 2026-10-08, "all of your recommendations"; FFX only, Chapter I): **Seymour Flux stands at 0.6 of his real height** (the live PS2 game draws him 100 units
  * tall, 5.29 times the party; `data/ffx/fiend-stature.ts` `FFX_GIANT_STATURE`, `research/ffx-seymour-flux.md` section 13): 6.017 units against the 4.1 he stood at, and **Mortiorchis
  * grows with him** (3.309 against 2.255: the model has no mesh to measure, so it keeps its 0.55 of him). The camera backs off for him (`RIGS.idle`). The spots move with the size:
- * Flux stays where live pinned him; Mortiorchis keeps its place against him, so its offset from him (2.51 left, 1.01 up) grows by the same 1.47 times: (1.03, 1.01) to (-0.143, 1.482).
+ * Flux stays where live pinned him; Mortiorchis keeps its place against him, so its offset from him (2.51 left, 1.01 up) grows by the same 1.47 times: (1.03, 1.01) to (-0.143, 1.482),
+ * and 0.22 further back, to z -7.82: **no boss or part stands nearer the party than on live** (Bailey, 2026-10-08, "original spacing, real sizes"), and the step left alone would have put
+ * it 0.19 nearer Kimahri (6.57 against 6.75 units); at z -7.82 it is 6.79.
  */
 export const GAGAZET_STAGING = {
   holdParty: true,
-  enemySpots: { 'seymour-flux': [3.54, 0, -7.6] as Spot3, mortiorchis: [-0.143, 1.482, -7.6] as Spot3 },
+  enemySpots: { 'seymour-flux': [3.54, 0, -7.6] as Spot3, mortiorchis: [-0.143, 1.482, -7.82] as Spot3 },
   figureHeights: giantFigureHeights(['seymour-flux', 'mortiorchis'], GAGAZET_PARTY_HEIGHT),
 };
 

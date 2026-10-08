@@ -20,7 +20,7 @@ import { TIDUS_TOP } from '../../src/data/ffx/party-stature.ts';
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../src/engine/ArtManifest.ts';
 import { loadScene, resolveSceneHeights, type LoadedScene } from '../../src/scenes/index.ts';
 import { GAGAZET_PARTY_HEIGHT, GAGAZET_STAGING } from '../../src/scenes/gagazet.ts';
-import { HIGHBRIDGE_ACTOR_HEIGHTS, HIGHBRIDGE_SLOTS } from '../../src/scenes/highbridge.ts';
+import { HIGHBRIDGE_ACTOR_HEIGHTS, HIGHBRIDGE_REAL_SIZE, HIGHBRIDGE_SLOTS, highbridgeHeights } from '../../src/scenes/highbridge.ts';
 import { DREAMS_END_BFA_PIN, DREAMS_END_PARTY_HEIGHT, DREAMS_END_RIGS, DREAMS_END_ROW_SHIFT, DREAMS_END_STAGING } from '../../src/scenes/dreams-end.ts';
 import { ALL_ROWS, sideShift } from '../../src/engine/fx/mix/stageTable.ts';
 
@@ -85,14 +85,16 @@ describe("Chapter I stands Flux and Mortiorchis from the table, and the camera b
   it('the scene names both heights from the table over the stage default party height, and pins Mortiorchis against him', () => {
     expect(GAGAZET_PARTY_HEIGHT).toBe(resolveSceneHeights({}).partyHeight);
     expect(GAGAZET_STAGING.figureHeights).toEqual({ 'seymour-flux': 6.017, mortiorchis: 3.309 });
-    // Flux stays where live pinned him; Mortiorchis's offset from him (2.51 left, 1.01 up) grew by the same factor as he did (6.017 / 4.1)
+    // Flux stays where live pinned him; Mortiorchis's offset from him (2.51 left, 1.01 up) grew by the same factor as he did (6.017 / 4.1), and it stands 0.22 further back than live so that
+    // it is no nearer the party than live (Bailey, 2026-10-08, "original spacing, real sizes"): the nearest member, Kimahri (-0.61, -1.05), is 6.79 away against live's 6.75
     const grow = 6.017 / 4.1;
     const [fx, fy, fz] = GAGAZET_STAGING.enemySpots['seymour-flux'];
     const [mx, my, mz] = GAGAZET_STAGING.enemySpots.mortiorchis;
     expect([fx, fy, fz]).toEqual([3.54, 0, -7.6]);
     expect(mx - fx).toBeCloseTo(-2.51 * grow, 2);
     expect(my - fy).toBeCloseTo(1.01 * grow, 2);
-    expect(mz).toBe(fz);
+    expect(mz).toBeLessThan(fz);
+    expect(Math.hypot(mx - -0.61, mz - -1.05)).toBeGreaterThanOrEqual(Math.hypot(1.03 - -0.61, -7.6 - -1.05));
   });
 });
 
@@ -133,7 +135,7 @@ describe("Chapter III: Braska's Final Aeon and the two Yu Pagodas at 0.75 of the
     expect(DREAMS_END_STAGING.holdParty).toBe(true);
     expect(DREAMS_END_STAGING.figureHeights).toEqual({ 'braskas-final-aeon': 6.919, 'yu-pagoda-left': 5.701, 'yu-pagoda-right': 6.31 });
     expect(Object.keys(DREAMS_END_STAGING.enemySpots).sort()).toEqual(['braskas-final-aeon', 'yu-pagoda-left', 'yu-pagoda-right']);
-    expect(DREAMS_END_STAGING.enemySpots['braskas-final-aeon']).toEqual([2.03, 0, -8]);
+    expect(DREAMS_END_STAGING.enemySpots['braskas-final-aeon']).toEqual([2.03, 0, -8.45]);
   });
 
   it("CHAPTER FRAMING's Chapter III row moves each figure on a desktop by the numbers the pins carry off (read from the row and this scene's idle rig, so a change to either fails here)", () => {
@@ -181,12 +183,14 @@ describe('Chapter X: Seymour Natus at his real size, and Mortibody with him', ()
     expect(1.7 / 3.96).toBeCloseTo(0.4293, 3); // what it stood at against the 3.96 BOSS SCALE gave him on a desktop
   });
 
-  it("the scene's heights come from the table over its own party height, and the slots publish them", () => {
-    expect(HIGHBRIDGE_ACTOR_HEIGHTS.party).toBe(1.75);
-    expect(HIGHBRIDGE_ACTOR_HEIGHTS.natus).toBe(4.455);
-    expect(HIGHBRIDGE_ACTOR_HEIGHTS.mortibody).toBe(1.912);
-    expect(HIGHBRIDGE_SLOTS.figureHeights).toEqual({ 'seymour-natus': 4.455, mortibody: 1.912 });
-    expect(HIGHBRIDGE_SLOTS.enemyHeight).toBe(4.455);
+  it("the scene's real-size heights come from the table over its own party height, and are switched OFF until the framing engine's BOSS SCALE entry for him is retired", () => {
+    expect(highbridgeHeights(true)).toEqual({ party: 1.75, natus: 4.455, mortibody: 1.912 });
+    expect(highbridgeHeights(false)).toEqual({ party: 1.75, natus: 2.43, mortibody: 1.7 });
+    // Bailey, 2026-10-08, "original spacing, real sizes": built and off, since on a desktop it would stand him 0.8 nearer the party than live while BOSS SCALE still names him
+    expect(HIGHBRIDGE_REAL_SIZE).toBe(false);
+    expect(HIGHBRIDGE_ACTOR_HEIGHTS).toEqual(highbridgeHeights(false));
+    expect(HIGHBRIDGE_SLOTS.figureHeights).toEqual({ 'seymour-natus': 2.43, mortibody: 1.7 });
+    expect(HIGHBRIDGE_SLOTS.enemyHeight).toBe(2.43);
   });
 
   // The one thing in the way of his picture on a desktop is a line in a folder this lane does not own (docs/handoff/r3942-giants-ffx.md, "What needs the framing engine").
@@ -233,12 +237,12 @@ describe('the real factory publishes the heights (jsdom, a no-op 2D context, an 
     expect(scene.slots.enemySpots?.mortiorchis).toEqual(GAGAZET_STAGING.enemySpots.mortiorchis);
   });
 
-  it("Chapter X: the loaded Highbridge scene publishes Natus's and Mortibody's heights, at its own party height", async () => {
+  it("Chapter X: the loaded Highbridge scene publishes Natus's and Mortibody's heights as the switch has them, at its own party height", async () => {
     const scene = await loadScene('bevelle-highbridge', new PerspectiveCamera());
     loaded.push(scene);
     expect(scene.slots.partyHeight).toBe(HIGHBRIDGE_ACTOR_HEIGHTS.party);
-    expect(scene.slots.figureHeights).toEqual({ 'seymour-natus': 4.455, mortibody: 1.912 });
-    expect(scene.slots.enemyHeight).toBe(4.455);
+    expect(scene.slots.figureHeights).toEqual({ 'seymour-natus': HIGHBRIDGE_ACTOR_HEIGHTS.natus, mortibody: HIGHBRIDGE_ACTOR_HEIGHTS.mortibody });
+    expect(scene.slots.enemyHeight).toBe(HIGHBRIDGE_ACTOR_HEIGHTS.natus);
   });
 
   it("Chapter III: the loaded Dream's End scene publishes the aeon's and the pagodas' heights and pins, at the stage's own party height", async () => {

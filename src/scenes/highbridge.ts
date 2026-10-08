@@ -91,14 +91,26 @@ export const HIGHBRIDGE_ENEMY_SLOT = { natus: 0, mortibody: 1 } as const;
 /**
  * World heights. The party at the FFX chapters' 1.75 (this scene publishes it: `partyHeight`).
  *
- * **r3942-giants-ffx (Bailey, 2026-10-08, "all of your recommendations"; FFX only, Chapter X): Natus stands at his real size, 4.455 units** (`data/ffx/fiend-stature.ts`
- * `FFX_GIANT_STATURE`: the live PS2 game draws his body 46.2 units tall, 2.45 times Chapter X's party, `research/ffx-seymour-natus-highbridge.md` section 13), from the
- * presentation estimate 2.43 (1.3 times Chapter VII Seymour's 1.87, the O-1 staging Bailey picked, "Natus at 1.3x"), which BOSS SCALE then grew to about 3.96 on a desktop and
- * left at 2.43 on a phone. **Mortibody grows with him**, to 1.912 from 1.7 (the model has no size of its own: it keeps the 0.43 of him it stood at on a desktop).
+ * **r3942-giants-ffx (Bailey, 2026-10-08, "all of your recommendations"; FFX only, Chapter X): Natus at his real size, 4.455 units** (`data/ffx/fiend-stature.ts` `FFX_GIANT_STATURE`: the
+ * live PS2 game draws his body 46.2 units tall, 2.45 times Chapter X's party, `research/ffx-seymour-natus-highbridge.md` section 13), from the presentation estimate 2.43 (1.3 times Chapter VII
+ * Seymour's 1.87, the O-1 staging Bailey picked, "Natus at 1.3x"), which BOSS SCALE then grows to about 3.96 on a desktop (a phone keeps 2.43), and **Mortibody with him**, 1.912 from 1.7 (the model
+ * has no size of its own: it keeps the 0.43 of him it stood at on a desktop). **It is built and switched OFF** ({@link HIGHBRIDGE_REAL_SIZE}), because on a desktop it cannot play yet without
+ * standing him nearer the party than on live, which Bailey has ruled out (his standing preference of 2026-10-08, "original spacing, real sizes": no boss or part stands nearer the party than
+ * today): CHAPTER FRAMING's pinned colossus master is what stands him 1.15 and Mortibody 0.75 units further from the party than this scene's pins, and at his real size the master is not played
+ * while BOSS SCALE still names him (`fx/mix/masters.ts`, a file the FFX-2 giants lane owns), so the plan falls back to the scene's rig with the figures on their pins, 0.8 nearer the party
+ * (`docs/handoff/r3942-giants-ffx.md`, "What needs the framing engine"). Turn it on with that one-line change; `highbridgeHeights(true)` is the whole of it, and the ring follows his size.
  */
 const HIGHBRIDGE_PARTY_HEIGHT = 1.75;
-const HIGHBRIDGE_GIANTS = giantFigureHeights(['seymour-natus', 'mortibody'], HIGHBRIDGE_PARTY_HEIGHT);
-export const HIGHBRIDGE_ACTOR_HEIGHTS = { party: HIGHBRIDGE_PARTY_HEIGHT, natus: HIGHBRIDGE_GIANTS['seymour-natus']!, mortibody: HIGHBRIDGE_GIANTS['mortibody']! } as const;
+export const HIGHBRIDGE_REAL_SIZE = false;
+
+/** The two fiends' heights: the presentation estimates the scene has always drawn (`real` false) or their real sizes from the table (`real` true). */
+export function highbridgeHeights(real: boolean): { party: number; natus: number; mortibody: number } {
+  if (!real) return { party: HIGHBRIDGE_PARTY_HEIGHT, natus: 2.43, mortibody: 1.7 };
+  const g = giantFigureHeights(['seymour-natus', 'mortibody'], HIGHBRIDGE_PARTY_HEIGHT);
+  return { party: HIGHBRIDGE_PARTY_HEIGHT, natus: g['seymour-natus']!, mortibody: g['mortibody']! };
+}
+
+export const HIGHBRIDGE_ACTOR_HEIGHTS = highbridgeHeights(HIGHBRIDGE_REAL_SIZE);
 
 /** Each enemy stays on its spot; the party is held on its slots. */
 const HIGHBRIDGE_STAGING = {
@@ -201,7 +213,7 @@ export const buildHighbridgeScene: SceneFactory = async (opts: SceneBuildOptions
   motes.position.set(0.8, 2.2, -2.4);
   group.add(motes);
 
-  const ring = new NatusRing(HIGHBRIDGE_ACTOR_HEIGHTS.natus);
+  const ring = new NatusRing(HIGHBRIDGE_ACTOR_HEIGHTS.natus, HIGHBRIDGE_REAL_SIZE);
   group.add(ring.mesh);
   void ring.load();
 
