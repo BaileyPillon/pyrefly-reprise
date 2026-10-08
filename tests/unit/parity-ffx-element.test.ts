@@ -164,13 +164,13 @@ describe('Threaten, Petrified, delay immunity and newly-dead overrides', () => {
   });
 
   it('a target Petrified before and after (no Eject) takes nothing of any class', () => {
-    expect(petrifiedNoDamage(4, 4, 0, [100, 20, 5])).toEqual([0, 0, 0]);
+    expect(petrifiedNoDamage(4, 4, 0, [100, 20, 5])).toEqual({ damage: [0, 0, 0], applied: true });
   });
 
   it('...but not one that has just been petrified, has been shattered out of Petrify, or carries Eject (extra bit 8)', () => {
-    expect(petrifiedNoDamage(0, 4, 0, [100, 20, 5])).toEqual([100, 20, 5]);
-    expect(petrifiedNoDamage(4, 0, 0, [100, 20, 5])).toEqual([100, 20, 5]);
-    expect(petrifiedNoDamage(4, 4, 0x100, [100, 20, 5])).toEqual([100, 20, 5]);
+    expect(petrifiedNoDamage(0, 4, 0, [100, 20, 5])).toEqual({ damage: [100, 20, 5], applied: false });
+    expect(petrifiedNoDamage(4, 0, 0, [100, 20, 5])).toEqual({ damage: [100, 20, 5], applied: false });
+    expect(petrifiedNoDamage(4, 4, 0x100, [100, 20, 5])).toEqual({ damage: [100, 20, 5], applied: false });
   });
 
   it('delay immunity zeroes CTB damage when flag 4 is on, unless Threaten set the bypass flag', () => {

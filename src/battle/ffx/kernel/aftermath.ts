@@ -75,11 +75,18 @@ export function noStatusOutcome(snapshotPerm: number, snapshotExtra: number): St
 /**
  * 0x78ba30. A target that was Petrified before the hit and still is, and does
  * not carry the Eject bit (extra bit 8) afterwards, takes no damage of any
- * class.
+ * class; the live-class word is cleared too (`applied`).
  */
-export function petrifiedNoDamage(permBefore: number, permAfter: number, extraAfter: number, damage: Triple): Triple {
-  if ((permAfter & 4) !== 0 && (permBefore & 4) !== 0 && ((extraAfter >> 8) & 1) === 0) return [0, 0, 0];
-  return damage;
+export function petrifiedNoDamage(
+  permBefore: number,
+  permAfter: number,
+  extraAfter: number,
+  damage: Triple,
+): { damage: Triple; applied: boolean } {
+  if ((permAfter & 4) !== 0 && (permBefore & 4) !== 0 && ((extraAfter >> 8) & 1) === 0) {
+    return { damage: [0, 0, 0], applied: true };
+  }
+  return { damage, applied: false };
 }
 
 /**

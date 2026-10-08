@@ -133,7 +133,10 @@ export interface HitOutput {
   nul: NulCounters;
   /** The user's Chr+0x5ca after the Magic Booster step. */
   bonusFlag: number;
-  /** The live damage classes and the immunity count (see HitFlags). */
+  /**
+   * Bookkeeping the game keeps in locals for its reaction code (presentation only; not compared with emulator
+   * vectors): the damage classes still live, how often an immunity cancelled the damage, whether Armored divided it.
+   */
   classLeft: number;
   immunityCount: number;
   /** 1 when the Armored step divided the damage. */

@@ -183,14 +183,14 @@ function tailSteps(
   const threaten = threatenIgnoresDelay(record.perm, delay.mask, classLeft, delay.ctbDamage);
   const maskAfterStatus = delay.mask | status.maskBits;
   const ctb = status.ctbDamage ?? threaten.ctbDamage;
-  const unpetrified = petrifiedNoDamage(record.perm, status.permAfter, status.extraAfter, [damage[0], damage[1], ctb]);
+  const petrified = petrifiedNoDamage(record.perm, status.permAfter, status.extraAfter, [damage[0], damage[1], ctb]);
   const settled: Triple = [
-    unpetrified[0],
-    unpetrified[1],
-    delayImmunity(target.delayImmune, maskAfterStatus, status.ctbFlag, unpetrified[2]),
+    petrified.damage[0],
+    petrified.damage[1],
+    delayImmunity(target.delayImmune, maskAfterStatus, status.ctbFlag, petrified.damage[2]),
   ];
   const dead = deathHitNoDamage(record.perm, status.permAfter, maskAfterStatus, settled);
-  return { damage: dead.damage, mask: dead.mask, classLeft: threaten.classLeft };
+  return { damage: dead.damage, mask: dead.mask, classLeft: petrified.applied ? 0 : threaten.classLeft };
 }
 
 /** Compute one hit. See the file header for the order of the random draws. */
