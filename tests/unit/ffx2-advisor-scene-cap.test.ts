@@ -18,10 +18,6 @@ import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
 import { createHud } from '../../src/app/screens/BattleScreenWiring.ts';
 import { LEBLANC_LAST_ROOM_SLOTS } from '../../src/scenes/leblanc-last-room.ts';
-import { FORWARD_FIEND_ADVISOR_CAP } from '../../src/scenes/advisor-cap.ts';
-import { CLOISTER_100_SLOTS } from '../../src/scenes/cloister-100.ts';
-import { DEN_OF_WOE_SLOTS } from '../../src/scenes/den-of-woe.ts';
-import { ROAD_TO_THE_FARPLANE_SLOTS } from '../../src/scenes/road-to-the-farplane.ts';
 import { stagingOf } from '../../src/scenes/types.ts';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
 
@@ -74,25 +70,17 @@ describe('SceneStaging.advisorCap, through to the FFX-2 HUD', () => {
   });
 });
 
-describe('Chapter VI\'s room names no cap (r3941-spacing: the card is as 39.4 had it); the three rooms r3942-stage brought fiends forward in name the shared one', () => {
+describe('Chapter VI\'s room names no cap (r3941-spacing: the card is as 39.4 had it)', () => {
   it('the Last Room publishes none', () => {
     expect(LEBLANC_LAST_ROOM_SLOTS.advisorCap).toBeUndefined();
   });
 
-  it('r3942-stage: the Road to the Farplane, the Cloister and the Den of Woe name the shared cap', () => {
-    expect(FORWARD_FIEND_ADVISOR_CAP).toBeGreaterThan(36);
-    expect(FORWARD_FIEND_ADVISOR_CAP).toBeLessThan(104);
-    expect(ROAD_TO_THE_FARPLANE_SLOTS.advisorCap).toBe(FORWARD_FIEND_ADVISOR_CAP);
-    expect(CLOISTER_100_SLOTS.advisorCap).toBe(FORWARD_FIEND_ADVISOR_CAP);
-    expect(DEN_OF_WOE_SLOTS.advisorCap).toBe(FORWARD_FIEND_ADVISOR_CAP);
-  });
-
-  it('no other scene file sets advisorCap: the type and its copier, the shared cap and the three rooms that name it', () => {
+  it('no scene file in this branch sets advisorCap: only the type and its copier name it', () => {
     const dir = join(here, '../../src/scenes');
     const users = readdirSync(dir)
       .filter((f) => f.endsWith('.ts'))
       .filter((f) => /advisorCap/.test(readFileSync(join(dir, f), 'utf8')))
       .sort();
-    expect(users).toEqual(['advisor-cap.ts', 'cloister-100.ts', 'den-of-woe.ts', 'road-to-the-farplane.ts', 'types.ts']);
+    expect(users).toEqual(['types.ts']);
   });
 });

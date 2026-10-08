@@ -78,6 +78,17 @@ describe('the Road to the Farplane — tables', () => {
     for (const id of [ROAD_IDS.shiva, ROAD_IDS.sandy, ROAD_IDS.cindy, ROAD_IDS.anima]) expect(ROAD_SPOTS[id]![1], id).toBe(0);
   });
 
+  it("Shiva, the Sisters and Anima stand on the spots release 39.4.1 stood them on (r3942-stage keeps only the real heights), and the room names no advisor cap", () => {
+    expect(ROAD_SPOTS).toEqual({
+      [ROAD_IDS.shiva]: [1.12, 0, -5.0],
+      [ROAD_IDS.sandy]: [0.95, 0, -4.9],
+      [ROAD_IDS.cindy]: [1.85, 0, -2.7],
+      [ROAD_IDS.mindy]: [3.0, 0.55, -4.0],
+      [ROAD_IDS.anima]: [1.0, 0, -6.2],
+    });
+    expect(ROAD_TO_THE_FARPLANE_SLOTS.advisorCap).toBeUndefined();
+  });
+
   it('every fighter stands right of and behind the party, and in frame at the idle rig (16:9)', () => {
     const rig = ROAD_RIGS['idle']!;
     const cam = new PerspectiveCamera(rig.fov, 16 / 9, 0.1, 200);

@@ -69,11 +69,13 @@ export const VIA_AEON_SPOT: [number, number, number] = [1.9, 0, -4.0];
  * well **nearer the camera** than it, so Pterya's wing (the widest of the three
  * paintings, which covered him at the options round's x +2.2) ends short of
  * him, and his raised arm stays below the CTB list. Our placement, solved in
- * the engine at 1600x900 (INSTALLED.md "Owed"). r3942-stage: from (3.7, -0.2) to (3.7, 0.4), nearer Yuna's depth (z 1.6), at his real height: he reads 0.98 of Yuna on screen at 1600x900 instead of 0.88 (real at the same
- * distance 1.13), his right edge at x 1342 against the CTB list's at 1408 and his feet at y 732 above Yuna's status row (801), and CHAPTER FRAMING plans the same camera as before
- * (nearer than z 0.5 the plan changes: a lens shift of 64 px instead of standing back 0.5, which the picture does not ask for).
+ * the engine at 1600x900 (INSTALLED.md "Owed").
+ *
+ * **r3942-stage, Bailey 2026-10-08 ("Yes, original spacing"): this is the place release 39.4.1 stood him, again** (3.7, -0.2). Wave 1 had brought him to (3.7, 0.4), nearer Yuna's
+ * depth (z 1.6), at his real height; he picked the old spacing with the real size, so only the height ({@link VIA_ACTOR_HEIGHTS}, 1.899 against 1.8) is new. (Nearer than z 0.5
+ * CHAPTER FRAMING plans another camera, a lens shift of 64 px instead of standing back 0.5; at -0.2 it plans the live pose, as it did on 39.4.1.)
  */
-export const VIA_ISAARU_SPOT: [number, number, number] = [3.7, 0, 0.4];
+export const VIA_ISAARU_SPOT: [number, number, number] = [3.7, 0, -0.2];
 
 const ENEMY_SLOTS: Array<[number, number, number]> = [VIA_ISAARU_SPOT, VIA_AEON_SPOT, [3.4, 0, -4.4]];
 

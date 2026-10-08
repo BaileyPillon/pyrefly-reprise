@@ -72,7 +72,7 @@ describe('the Den of Woe — tables', () => {
     expect(Math.abs(DEN_FIGURE_HEIGHTS[DEN_IDS.gippal]! - DEN_FIGURE_HEIGHTS[DEN_IDS.baralai]!) / DEN_FIGURE_HEIGHTS[DEN_IDS.baralai]!).toBeLessThan(0.01);
   });
 
-  it("every shade stands right of the party, beside it and not nearer than its front girl, and in frame at the idle rig (16:9)", () => {
+  it("every shade stands right of and behind the party, where 39.4.1 stood it (r3942-stage: Bailey's \"Yes, original spacing\"), and in frame at the idle rig (16:9)", () => {
     const idle = DEN_RIGS['idle']!;
     const cam = new PerspectiveCamera(idle.fov, 16 / 9, 0.1, 200);
     cam.position.set(...(idle.position as [number, number, number]));
@@ -80,15 +80,18 @@ describe('the Den of Woe — tables', () => {
     cam.updateMatrixWorld();
     for (const [id, spot] of Object.entries(DEN_SPOTS)) {
       expect(spot[0], id).toBeGreaterThan(DEN_OF_WOE_SLOTS.party[2]![0]);
-      // r3942-stage: beside the party (between Rikku's depth and Paine's), not behind Paine as the far-back spot was
-      expect(spot[2], id).toBeLessThan(DEN_OF_WOE_SLOTS.party[1]![2]);
-      expect(spot[2], id).toBeLessThan(DEN_OF_WOE_SLOTS.party[0]![2]);
+      expect(spot[2], id).toBeLessThan(DEN_OF_WOE_SLOTS.party[2]![2]);
       for (const y of [0, DEN_FIGURE_HEIGHTS[id]!]) {
         const p = new Vector3(spot[0], y, spot[2]).project(cam);
         expect(Math.abs(p.x), `${id} x at y ${y}`).toBeLessThan(1);
         expect(Math.abs(p.y), `${id} y at y ${y}`).toBeLessThan(1);
       }
     }
+  });
+
+  it("the shades stand on the spots release 39.4.1 stood them on (r3942-stage keeps only the real heights), and the room names no advisor cap", () => {
+    expect(DEN_SPOTS).toEqual({ [DEN_IDS.baralai]: [1.12, 0, -5.0], [DEN_IDS.gippal]: [1.12, 0, -5.0], [DEN_IDS.nooj]: [1.05, 0, -5.4] });
+    expect(DEN_OF_WOE_SLOTS.advisorCap).toBeUndefined();
   });
 
   it("frames the plate as Chapter V frames its own (the same horizon-over-floor layout)", () => {

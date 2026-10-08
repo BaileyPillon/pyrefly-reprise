@@ -12,7 +12,6 @@ import { giantPhoneHeights } from './giant-stage.ts';
 import { RoadPhoneCamera, roadOnPhone, type RoadLinkIds } from './road-to-the-farplane-phone.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
-import { FORWARD_FIEND_ADVISOR_CAP } from './advisor-cap.ts';
 
 // ---------------------------------------------------------------------------
 // The Road to the Farplane (FFX-2)
@@ -110,12 +109,16 @@ export const ROAD_LINK_IDS: RoadLinkIds = {
  * spot, a little deeper for her size. Every number is staging, solved at
  * 1600x900 against the FFX-2 HUD (the boss gauges top left, the command list
  * from 0.745 of the width, the party plates bottom right).
+ *
+ * **r3942-stage, Bailey 2026-10-08 ("Yes, original spacing"): these are the places release 39.4.1 stood them, again.** Wave 1 had brought Shiva and the Sisters nearer the
+ * girls at their real heights (Shiva 1.25, -2.2; Sandy 0.75, -2.6; Cindy 1.5, -3.4; Mindy 2.9, -2.0); he picked the old spacing with the real sizes, so only the heights
+ * below are new (what they read on screen from these spots, against 39.4.1, is in `docs/handoff/r3942-stage.md`).
  */
 export const ROAD_SPOTS: Readonly<Record<string, [number, number, number]>> = {
-  [ROAD_IDS.shiva]: [1.25, 0, -2.2],
-  [ROAD_IDS.sandy]: [0.75, 0, -2.6],
-  [ROAD_IDS.cindy]: [1.5, 0, -3.4],
-  [ROAD_IDS.mindy]: [2.9, 0.55, -2.0],
+  [ROAD_IDS.shiva]: [1.12, 0, -5.0],
+  [ROAD_IDS.sandy]: [0.95, 0, -4.9],
+  [ROAD_IDS.cindy]: [1.85, 0, -2.7],
+  [ROAD_IDS.mindy]: [3.0, 0.55, -4.0],
   [ROAD_IDS.anima]: [1.0, 0, -6.2],
 };
 
@@ -140,7 +143,7 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
   [-0.5, 0, -6.6],
 ];
 
-const ROAD_STAGING = { holdParty: true, enemySpots: ROAD_SPOTS, figureHeights: ROAD_FIGURE_HEIGHTS, advisorCap: FORWARD_FIEND_ADVISOR_CAP } as const;
+const ROAD_STAGING = { holdParty: true, enemySpots: ROAD_SPOTS, figureHeights: ROAD_FIGURE_HEIGHTS } as const;
 
 /** The published slots, the same shape every other scene exports. */
 export const ROAD_TO_THE_FARPLANE_SLOTS: SceneSlots = {

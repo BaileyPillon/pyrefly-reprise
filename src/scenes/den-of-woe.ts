@@ -9,7 +9,6 @@ import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import { addPlateWings, paintPlateWings } from './plateWings.ts';
 import type { SceneSlots } from './index.ts';
-import { FORWARD_FIEND_ADVISOR_CAP } from './advisor-cap.ts';
 import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
 
 // ---------------------------------------------------------------------------
@@ -77,16 +76,18 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
 export const DEN_IDS = { baralai: 'shade-baralai', gippal: 'shade-gippal', nooj: 'shade-nooj' } as const;
 
 /**
- * The boss spot, one shade a link (r3942-stage: real sizes, nearer the girls). It was Chapter V's Shiva spot (`farplane-parts.ts`, x 1.12, z -5.0), far back, where the
- * shades read 0.96 of a girl at 2.6 tall and would read 0.71 at their real 1.95; at (1.5, -0.4) a shade stands beside the party, right of Paine and between Rikku's depth
- * and hers, and reads 1.0 of a girl at 1600x900 (real at the same distance: 1.09, Nooj 1.18) with its head on the line it had, its right edge at x 1030 (the command
- * list starts at 1246) and its feet at y 680 above the move advisor's card (y 705). x 2.0 read the same on the desktop but made the phone's slice fit stand the camera back by
- * 1.9 to 3.4 (the party 17 percent smaller); at 1.5 it stands back by 0.2. Nooj, the tallest, stands a little deeper. Staging, ours.
+ * The boss spot, one shade a link: Chapter V's Shiva spot (`farplane-parts.ts`), which clears the
+ * boss gauges top left, the command list from 0.745 of the width and the party plates bottom
+ * right at 1600x900. Nooj, the tallest, stands a little deeper. Staging, ours.
+ *
+ * **r3942-stage, Bailey 2026-10-08 ("Yes, original spacing"): these are the places release 39.4.1 stood them, again.** Wave 1 had brought the shades beside the party
+ * (1.5, -0.4; Nooj 1.5, -0.8) at their real heights; he picked the old spacing with the real sizes, so only the heights below are new (what they read on screen from
+ * these spots, against 39.4.1, is in `docs/handoff/r3942-stage.md`).
  */
 export const DEN_SPOTS: Readonly<Record<string, [number, number, number]>> = {
-  [DEN_IDS.baralai]: [1.5, 0, -0.4],
-  [DEN_IDS.gippal]: [1.5, 0, -0.4],
-  [DEN_IDS.nooj]: [1.5, 0, -0.8],
+  [DEN_IDS.baralai]: [1.12, 0, -5.0],
+  [DEN_IDS.gippal]: [1.12, 0, -5.0],
+  [DEN_IDS.nooj]: [1.05, 0, -5.4],
 };
 
 /** The girls' world height (the FFX-2 chapters' 1.78, Chapter V's). */
@@ -107,7 +108,7 @@ export const DEN_FIGURE_HEIGHTS: Readonly<Record<string, number>> = ffx2FiendFig
 
 const ENEMY_SLOTS: Array<[number, number, number]> = [DEN_SPOTS[DEN_IDS.baralai]!, [2.3, 0, -8.0], [-0.5, 0, -6.6]];
 
-const DEN_STAGING = { holdParty: true, enemySpots: DEN_SPOTS, figureHeights: DEN_FIGURE_HEIGHTS, advisorCap: FORWARD_FIEND_ADVISOR_CAP } as const;
+const DEN_STAGING = { holdParty: true, enemySpots: DEN_SPOTS, figureHeights: DEN_FIGURE_HEIGHTS } as const;
 
 /** The published slots, the same shape every other scene exports. */
 export const DEN_OF_WOE_SLOTS: SceneSlots = {

@@ -58,8 +58,8 @@ describe('the plates: the recommended options, provisional until Bailey picks, o
     }
     expect(DJOSE_BACKDROP).toBe(DJOSE_PLATE_FRAMES[DJOSE_CHAMBER_PLATE]);
     // Measured headless at 1600x900, 2000x1012 and 390x844 against a gridded copy of C2 (handoff): staging, ours. r3942-stage: Ixion (real height 3.175, `data/ffx2/fiend-stature.ts`)
-    // steps from (4.2, -6.0) to (3.2, -3.8), nearer the girls, so he reads 1.25 over them instead of 1.16; his hooves still meet the lit floor right of the pit (1600x900 and 390x844 pictures).
-    expect(DJOSE_PLATE_FRAMES['djose-chamber-provisional']!.ixion).toEqual([3.2, 0, -3.8]);
+    // stands where 39.4.1 stood him, (4.2, -6.0), his hooves on the lit floor right of the pit (wave 1's (3.2, -3.8), nearer the girls, is withdrawn: Bailey's "Yes, original spacing").
+    expect(DJOSE_PLATE_FRAMES['djose-chamber-provisional']!.ixion).toEqual([4.2, 0, -6.0]);
     expect(DJOSE_SPOTS[DJOSE_IXION_ID]).toEqual(DJOSE_BACKDROP.ixion ?? DJOSE_IXION_SPOT);
     // The other plates keep the standard spot.
     expect(DJOSE_PLATE_FRAMES['ffx2-djose-chamber-provisional']!.ixion).toBeUndefined();
@@ -71,7 +71,7 @@ describe('the plates: the recommended options, provisional until Bailey picks, o
     // Measured headless at 390x844 (handoff fixes-r28): the phone's idle camera stands at z about 23.
     expect(djoseCentreY(true, c2)).toBe(-2.2);
     expect(djoseCentreY(false, c2)).toBe(2.3);
-    expect(c2.ixion).toEqual([3.2, 0, -3.8]); // the same spot on both
+    expect(c2.ixion).toEqual([4.2, 0, -6.0]); // the same spot on both
     // A plate without a phone row keeps its own centre on the phone.
     const c1 = DJOSE_PLATE_FRAMES['ffx2-djose-chamber-provisional']!;
     expect(djoseCentreY(true, c1)).toBe(c1.centreY);
