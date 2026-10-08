@@ -18,6 +18,7 @@ import {
   LEBLANC_ENEMY_SLOTS,
   LEBLANC_ENEMY_SPOTS,
   LEBLANC_FIGURE_HEIGHTS,
+  LEBLANC_INTENT_ROOF,
   LEBLANC_PARTY_HEIGHT,
   LEBLANC_TRIO_POOL,
 } from './leblanc-staging.ts';
@@ -137,6 +138,7 @@ export const LEBLANC_LAST_ROOM_SLOTS: SceneSlots = {
   enemyLaneX: LEBLANC_ENEMY_LANE_X,
   figureHeights: LEBLANC_FIGURE_HEIGHTS,
   enemySpots: LEBLANC_ENEMY_SPOTS,
+  intentRoof: LEBLANC_INTENT_ROOF,
 };
 
 /**
@@ -351,6 +353,7 @@ async function buildLastRoom(plate: LeblancPlate, opts: SceneBuildOptions): Prom
     // Every Syndicate fiend stands at its real height (39.4.1's table) and at the spot it stood at in 39.4 (`./leblanc-staging.ts`).
     figureHeights: LEBLANC_FIGURE_HEIGHTS,
     enemySpots: LEBLANC_ENEMY_SPOTS,
+    intentRoof: LEBLANC_INTENT_ROOF,
     ...(plate.artNamespace ? { artNamespace: plate.artNamespace } : {}),
     palette: {
       ...(look.palette ?? ScenePalettes.chateauLeblanc),

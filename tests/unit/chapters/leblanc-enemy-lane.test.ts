@@ -187,10 +187,10 @@ describe('the tables the stage reads', () => {
     expect(LEBLANC_LAST_ROOM_SLOTS.enemyHeight).toBe(LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc);
   });
 
-  it('the room names no move-advisor cap, and no staging switch beyond the heights and the spots', () => {
+  it('the room names no move-advisor cap, and no staging switch beyond the heights, the spots and the intent roof', () => {
     const slots = LEBLANC_LAST_ROOM_SLOTS as unknown as Record<string, unknown>;
     expect(slots['advisorCap']).toBeUndefined();
-    expect(Object.keys(slots).sort()).toEqual(['enemy', 'enemyHeight', 'enemyLaneX', 'enemySpots', 'figureHeights', 'party', 'partyHeight']);
+    expect(Object.keys(slots).sort()).toEqual(['enemy', 'enemyHeight', 'enemyLaneX', 'enemySpots', 'figureHeights', 'intentRoof', 'party', 'partyHeight']);
   });
 });
 

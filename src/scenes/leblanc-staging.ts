@@ -79,3 +79,15 @@ export const LEBLANC_ENEMY_LANE_X: [number, number] = [1.0, 3.0];
 
 /** Where the shared magenta pool lies under the trio, **as in 39.4**: Leblanc's slot, a unit nearer the camera. `[x, z]`. */
 export const LEBLANC_TRIO_POOL: [number, number] = [1.1, -4.0];
+
+/**
+ * `SceneStaging.intentRoof`: the enemy-intent slab hangs over the **highest** living fiend's head, not the acting one's, and folds its body to the room above it
+ * (FFX-2 only; `FFX2BattleHud.intentHead` and `intentMaxHeight`, `EnemyIntentMountOptions.maxHeight`). The fiends stand in three ranks (z -3.2, -5.0, -6.8) at their
+ * real heights, so the far, tall ones (Logos 2.119, Ormi 1.935) hold their heads higher on the screen than the near, shorter one (Fem-Goon 1.690, Ormi in Act II) and a
+ * slab hung over a near fiend's head lay across a far one's (Act III's first card, Leblanc's, cut Logos's cap; Act II's, with Ormi next, covered 68 percent of Logos's
+ * head at 1600x900); and a tall slab held under the top bar reached them all (Act I's Blizzard card hid Ormi's head and half of Dr. Goon's, as in 39.4; at 1280x720 every
+ * card is clamped there, Act II's hid Ormi's head, 31 percent at 39.4). Measured on the real HUD at 1280x720, 1600x900 and 1920x1080 the slab covers no head in any act,
+ * whichever fiend acts; its text folds (the MORE row: Act I's Blizzard card prints its damage to Yuna and Rikku and folds Paine's row and the odds, `J` holds it open).
+ * Bailey, 2026-10-08: "fix it with the card, not by moving the fiends".
+ */
+export const LEBLANC_INTENT_ROOF = true;
