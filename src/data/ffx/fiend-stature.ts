@@ -132,14 +132,19 @@ export const FFX_GIANT_STATURE: Readonly<Record<string, GiantStature>> = {
   // above the floor (the game's own roots stand 45 above it, the aeon's 20): ours, not read.
   'yu-pagoda-left': { model: 'm174', name: "Yu Pagoda, left (the game's x -60)", height: 75.8, read: [75.2, 76.3], lowerBound: true, staticLaw: 34.7, engine: 90, confidence: 'low-medium', share: 0.75, stand: { of: 'braskas-final-aeon', dx: -60, dy: 12.8, dz: 70 } },
   'yu-pagoda-right': { model: 'm173', name: "Yu Pagoda, right (the game's x +60)", height: 83.9, read: [82.3, 85.6], lowerBound: true, staticLaw: 50.2, engine: 90, confidence: 'low-medium', share: 0.75, stand: { of: 'braskas-final-aeon', dx: 60, dy: 12.8, dz: 70 } },
+  // Chapter X. Seymour Natus: the silhouette of the body reads 46.2 (N = 20 only, where the thin scythe and chain tip is a separate blob); with the tip the median is 52.2 (50.6 to 57.1, three frames,
+  // 8.25 px per unit from Tidus markers 45 units either side). The static law says 42.0 (raw 10.5 x C 4; width 34) and E 40; the idle bones give only 12.5, not trusted. m127 adds nothing to the silhouette.
+  'seymour-natus': { model: 'm126', name: 'Seymour Natus', height: 46.2, read: [46.2, 52.2], lowerBound: false, staticLaw: 42.0, engine: 40, confidence: 'medium', share: 1 },
 };
 
 /**
  * A fiend that has no model of its own to measure and so grows with the boss it belongs to, at the share of the boss's drawn height it stood at in the build before:
- * Mortiorchis, Flux's mount (the game's `m143` has no mesh), 0.55 of him.
+ * Mortiorchis, Flux's mount (the game's `m143` has no mesh), 0.55 of him, and Mortibody, Natus's, 0.43.
  */
 export const FFX_GIANT_FOLLOWER: Readonly<Record<string, { readonly of: string; readonly share: number }>> = {
   mortiorchis: { of: 'seymour-flux', share: 0.55 },
+  // Mortibody (m127, which adds nothing to his silhouette) has no size of its own: it keeps the 0.43 of Natus it stood at on a desktop before (1.7 against the 3.96 BOSS SCALE gave him).
+  mortibody: { of: 'seymour-natus', share: 0.4293 },
 };
 
 const mm = (v: number): number => Math.round(v * 1000) / 1000;

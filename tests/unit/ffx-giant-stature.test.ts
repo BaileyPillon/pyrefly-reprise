@@ -20,6 +20,7 @@ import { TIDUS_TOP } from '../../src/data/ffx/party-stature.ts';
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../src/engine/ArtManifest.ts';
 import { loadScene, resolveSceneHeights, type LoadedScene } from '../../src/scenes/index.ts';
 import { GAGAZET_PARTY_HEIGHT, GAGAZET_STAGING } from '../../src/scenes/gagazet.ts';
+import { HIGHBRIDGE_ACTOR_HEIGHTS, HIGHBRIDGE_SLOTS } from '../../src/scenes/highbridge.ts';
 import { DREAMS_END_BFA_PIN, DREAMS_END_PARTY_HEIGHT, DREAMS_END_RIGS, DREAMS_END_ROW_SHIFT, DREAMS_END_STAGING } from '../../src/scenes/dreams-end.ts';
 import { ALL_ROWS, sideShift } from '../../src/engine/fx/mix/stageTable.ts';
 
@@ -164,6 +165,34 @@ describe("Chapter III: Braska's Final Aeon and the two Yu Pagodas at 0.75 of the
   });
 });
 
+describe('Chapter X: Seymour Natus at his real size, and Mortibody with him', () => {
+  it('Natus is m126: the body reads 46.2 on the PS2 screen (with the scythe tip 52.2), the static law 42.0, E 40; Bailey took the whole of it', () => {
+    const r = FFX_GIANT_STATURE['seymour-natus']!;
+    expect([r.model, r.height, r.read, r.lowerBound, r.staticLaw, r.engine, r.share, r.confidence]).toEqual(['m126', 46.2, [46.2, 52.2], false, 42.0, 40, 1, 'medium']);
+    // 2.45 times Chapter X's party (Tidus 18.15, Yuna 16.53, Kimahri 21.98), 2.55 over Tidus
+    expect(46.2 / ((18.15 + 16.53 + 21.98) / 3)).toBeCloseTo(2.45, 2);
+    expect(46.2 / 18.15).toBeCloseTo(2.55, 2);
+    expect(Math.abs(r.staticLaw! - r.height) / r.height).toBeLessThan(0.1);
+  });
+
+  it('the heights over the party\'s 1.75: Natus 4.455 (from 2.43) and Mortibody 1.912 (from 1.7), 0.43 of him as on a desktop before', () => {
+    expect(giantFigureHeights(['seymour-natus', 'mortibody'], 1.75)).toEqual({ 'seymour-natus': 4.455, mortibody: 1.912 });
+    expect(FFX_GIANT_FOLLOWER['mortibody']).toEqual({ of: 'seymour-natus', share: 0.4293 });
+    expect(1.7 / 3.96).toBeCloseTo(0.4293, 3); // what it stood at against the 3.96 BOSS SCALE gave him on a desktop
+  });
+
+  it("the scene's heights come from the table over its own party height, and the slots publish them", () => {
+    expect(HIGHBRIDGE_ACTOR_HEIGHTS.party).toBe(1.75);
+    expect(HIGHBRIDGE_ACTOR_HEIGHTS.natus).toBe(4.455);
+    expect(HIGHBRIDGE_ACTOR_HEIGHTS.mortibody).toBe(1.912);
+    expect(HIGHBRIDGE_SLOTS.figureHeights).toEqual({ 'seymour-natus': 4.455, mortibody: 1.912 });
+    expect(HIGHBRIDGE_SLOTS.enemyHeight).toBe(4.455);
+  });
+
+  // The one thing in the way of his picture on a desktop is a line in a folder this lane does not own (docs/handoff/r3942-giants-ffx.md, "What needs the framing engine").
+  it.todo("masters.ts scaleTarget no longer names seymour-natus (BOSS SCALE retired): the chapter's pinned colossus master then plays at his real size, as the options study pictured it");
+});
+
 describe('the real factory publishes the heights (jsdom, a no-op 2D context, an empty art manifest)', () => {
   const loaded: LoadedScene[] = [];
 
@@ -204,6 +233,14 @@ describe('the real factory publishes the heights (jsdom, a no-op 2D context, an 
     expect(scene.slots.enemySpots?.mortiorchis).toEqual(GAGAZET_STAGING.enemySpots.mortiorchis);
   });
 
+  it("Chapter X: the loaded Highbridge scene publishes Natus's and Mortibody's heights, at its own party height", async () => {
+    const scene = await loadScene('bevelle-highbridge', new PerspectiveCamera());
+    loaded.push(scene);
+    expect(scene.slots.partyHeight).toBe(HIGHBRIDGE_ACTOR_HEIGHTS.party);
+    expect(scene.slots.figureHeights).toEqual({ 'seymour-natus': 4.455, mortibody: 1.912 });
+    expect(scene.slots.enemyHeight).toBe(4.455);
+  });
+
   it("Chapter III: the loaded Dream's End scene publishes the aeon's and the pagodas' heights and pins, at the stage's own party height", async () => {
     const scene = await loadScene('dreams-end', new PerspectiveCamera());
     loaded.push(scene);
@@ -228,6 +265,14 @@ describe('the table is pure data, cites its sources and says how sure it is', ()
     expect(src).toContain('[datamined: FFX HD Remaster build 25501027, bind pose, one reader]');
     expect(src).toContain('research/ffx-seymour-flux.md');
     expect(src).toContain('section 13');
+  });
+
+  it("Chapter X's research section exists and names the body and the tip", () => {
+    const doc = read('research/ffx-seymour-natus-highbridge.md');
+    expect(doc).toMatch(/## 13\. Research addendum \(2026-10-08\): how tall Seymour Natus stands/);
+    expect(doc).toContain('[single source: own measurement]');
+    expect(doc).toMatch(/46\.2/);
+    expect(doc).toMatch(/52\.2/);
   });
 
   it("Chapter III's research section exists and says the aeon's and the pagodas' numbers are floors", () => {
