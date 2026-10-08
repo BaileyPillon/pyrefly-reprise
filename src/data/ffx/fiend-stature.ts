@@ -3,7 +3,8 @@
  *
  * **Game case: FFX only** (AGENTS.md rule 14). These models are FFX's: Yojimbo, Daigoro and Lady Ginnem of Chapter IX (the Cavern of the Stolen Fayth) and
  * Isaaru and his three aeons of Chapter XIV (the Via Purifico). Nothing here is read by an FFX-2 chapter (`data/ffx2/fiend-stature.ts` is that game's table),
- * and no giant is in it: Bahamut, Anima, Evrae, Braska's Final Aeon, Natus, Flux, Omnis, Yunalesca and Sin keep their own framing.
+ * and no giant is in `FFX_FIEND_STATURE`: Bahamut, Anima, Evrae, Omnis, Yunalesca and Sin's Fins and head keep their own framing, and the four chapters whose giants were
+ * given real sizes in wave 2 (Flux, Braska's Final Aeon, Natus, Genais and the Core) have their own table at the foot of this file, `FFX_GIANT_STATURE`.
  *
  * **The scale law** (`D:/Tools/rea/FINDINGS-sizes.md` section 1, outside the repo): a model's world size is its mesh size in the HD files times the engine scale `C`
  * (a float in the model's `.chr` params block, +0x0C) times the AI script's scale vector (1 for every row here). So `height` below is `raw x C`, the default-pose
@@ -70,6 +71,85 @@ export function fiendFigureHeights(ids: readonly string[], partyHeight: number, 
   for (const id of ids) {
     const row = FFX_FIEND_STATURE[id];
     if (row) out[id] = Math.round(partyHeight * (row.height / refTop) * 1000) / 1000;
+  }
+  return out;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+// THE GIANTS (r3942-giants-ffx, wave 2; FFX only)
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/**
+ * **A giant's size is what the live PS2 game draws, not the default pose of a model.** The wave-1 table above is `raw x C`, the HD mesh in its default pose, and it is
+ * right for a figure that stands upright (Yojimbo, Ginnem). A giant spreads in that pose (Braska's Final Aeon reads 204.7 by the law and 92 on the PS2 screen; Genais
+ * 80.3 and 49), so these rows are **silhouettes read off the PS2 game's own picture** (PCSX2 v2.8.2, the NTSC-U disc SLUS-20312, the sizes lane's second pass of
+ * 2026-10-08: `D:/Tools/pcsx2-ffx/re/dumps/boss-sizes.json`, outside the repo): a ruler of Tidus markers at the part's own depth gives pixels per game unit, and the part's
+ * silhouette gives rows over it, on the same scale as Tidus's 18.15. The static law (`raw x C x the script's scale vector`, `D:/Tools/rea/FINDINGS-sizes.md` section 4)
+ * and the engine height field `E` stay in each row for comparison only; neither is drawn.
+ * Tags: `[single source: own measurement]` for every `height` here (one lane, one disc, a handful of reloaded frames each) and `[datamined: FFX HD Remaster build 25501027,
+ * bind pose, one reader]` for `staticLaw`. The method, the model ids, the ranges and what an independent check said of each are `research/ffx-seymour-flux.md` section 13,
+ * `research/ffx-bfa-yu-yevon.md` section 9, `research/ffx-seymour-natus-highbridge.md` section 13 and `research/ffx-sin.md` section 13.
+ *
+ * **`share` is Bailey's pick** (2026-10-08, after the giants options study, "I'll go with all of your recommendations"): the share of the live height the build draws.
+ * Flux 0.6 and Braska's Final Aeon with the two Yu Pagodas 0.75 (a whole figure in the frame, the party kept near its size); Natus and Sinspawn Genais and the Core 1 (real
+ * size at today's spots). The Fins, Yunalesca, Evrae, Omnis, Overdrive Sin's head and Yojimbo are not here: no pick, nothing built.
+ *
+ * Presentation data, not battle data (hard rule 1): no engine reads it, no stat or hit rule depends on it.
+ */
+export interface GiantStature {
+  /** The PS2 model(s): `mNNN` a monster mesh. */
+  readonly model: string;
+  readonly name: string;
+  /** The live silhouette, game units on the scale where Tidus is 18.15: the number `share` is a share of. */
+  readonly height: number;
+  /** The lowest and the highest height the reads covered, game units (what the figure does as it moves, and the reads' own spread). */
+  readonly read: readonly [low: number, high: number];
+  /** True: a floor, not a measure. The silhouette ran into the frame's edge (the HELP banner over the top, the command panel under the bottom), so the figure is at least this tall. */
+  readonly lowerBound: boolean;
+  /** `raw x C x script scale`, the default-pose silhouette of the HD mesh (comparison only), or null where the lane records none. */
+  readonly staticLaw: number | null;
+  /** The engine height field `E` (a design height; comparison only). */
+  readonly engine: number;
+  /** How sure the live number is. */
+  readonly confidence: 'medium' | 'medium-low' | 'low-medium';
+  /** Bailey's pick: the share of `height` the build draws (1 = the real size). */
+  readonly share: number;
+  /** Where the game stands it against another giant of the fight, game units (a part that stands behind its figure: the Yu Pagodas behind the aeon). */
+  readonly stand?: { readonly of: string; readonly dx: number; readonly dy: number; readonly dz: number };
+}
+
+/** The giants of Chapters I, III, X and XVII by combatant id (`data/ffx/enemies/*.ts`). */
+export const FFX_GIANT_STATURE: Readonly<Record<string, GiantStature>> = {
+  // Chapter I. The figure breathes: 91.1 to 103 in the five reloaded frames (100.6, 103, 100, 93.7, 91.1), up to 132 with the lance raised. The scale (4.55 to 4.6 px per unit) is
+  // read off Tidus alone and an independent check judged it shaky, 10 percent or more: medium-low. The static law 100.5 agrees with the typical pose; the idle bones span 86.
+  'seymour-flux': { model: 'm142', name: 'Seymour Flux', height: 100, read: [91.1, 103], lowerBound: false, staticLaw: 100.5, engine: 45, confidence: 'medium-low', share: 0.6 },
+};
+
+/**
+ * A fiend that has no model of its own to measure and so grows with the boss it belongs to, at the share of the boss's drawn height it stood at in the build before:
+ * Mortiorchis, Flux's mount (the game's `m143` has no mesh), 0.55 of him.
+ */
+export const FFX_GIANT_FOLLOWER: Readonly<Record<string, { readonly of: string; readonly share: number }>> = {
+  mortiorchis: { of: 'seymour-flux', share: 0.55 },
+};
+
+const mm = (v: number): number => Math.round(v * 1000) / 1000;
+
+/** The world height of a giant (or of a follower) on a stage whose reference hero stands `partyHeight` tall: `partyHeight x height x share / refTop`, to the millimetre; undefined for any other id. */
+export function giantHeight(id: string, partyHeight: number, refTop: number = TIDUS_TOP): number | undefined {
+  const row = FFX_GIANT_STATURE[id];
+  if (row) return mm(partyHeight * ((row.height * row.share) / refTop));
+  const follow = FFX_GIANT_FOLLOWER[id];
+  const boss = follow && FFX_GIANT_STATURE[follow.of];
+  return follow && boss ? mm(partyHeight * ((boss.height * boss.share) / refTop) * follow.share) : undefined;
+}
+
+/** A `SceneStaging.figureHeights` table for the giants named in `ids` (an id this table does not know is left out). */
+export function giantFigureHeights(ids: readonly string[], partyHeight: number, refTop: number = TIDUS_TOP): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const id of ids) {
+    const h = giantHeight(id, partyHeight, refTop);
+    if (h !== undefined) out[id] = h;
   }
   return out;
 }

@@ -34,7 +34,7 @@ describe('the table is raw mesh height times the engine scale', () => {
     expect(models).toEqual({ yojimbo: 's008', daigoro: 's023', ginnem: 'k014', isaaru: 'k004', grothia: 's002', pterya: 's001', spathi: 's006' });
   });
 
-  it('holds no giant: Bahamut, Anima, Evrae, Braska\'s Final Aeon, Natus, Flux, Omnis, Yunalesca and Sin keep their own framing', () => {
+  it('holds no giant: Bahamut, Anima, Evrae, Braska\'s Final Aeon, Natus, Flux, Omnis, Yunalesca and Sin are not raw mesh x C (the wave-2 giants have their own table, ffx-giant-stature.test.ts)', () => {
     for (const id of ['bahamut', 'anima', 'evrae', 'braskas-final-aeon', 'seymour-natus', 'seymour-flux', 'seymour-omnis', 'yunalesca', 'sin']) {
       expect(FFX_FIEND_STATURE[id], id).toBeUndefined();
     }
