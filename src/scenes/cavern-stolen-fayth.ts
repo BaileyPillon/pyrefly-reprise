@@ -93,19 +93,14 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
 export const CAVERN_ENEMY_SLOT = { ginnem: 0, yojimbo: 1, daigoro: 2 } as const;
 
 /**
- * World heights (r3942-stage, FFX only). The party's 1.75 is Tidus's (`partyHeight`; each hero stands at his own ratio to it, `data/ffx/party-stature.ts`)
- * and each fiend stands at that height times its model's ratio to Tidus's 18.15, from the game's own HD models (`data/ffx/fiend-stature.ts`,
- * `research/ffx-yojimbo.md` section 12): Yojimbo 27.1 (1.49 times Tidus) is 2.613, Daigoro 8.0 (0.44) is 0.769 and Lady Ginnem 17.3 (0.95) is 1.670.
- * They were presentation estimates (2.55, 0.73 and, by the stage's rule for a non-boss fiend, 0.7 of the boss: 1.785). Every fiend is named in
- * `figureHeights` below, so that rule is never used here, and each one's shadow and turn ring follow its height.
+ * World heights (r3942-stage, FFX only): the party's 1.75 is Tidus's (the heroes stand at their own ratio to it, `data/ffx/party-stature.ts`) and each fiend stands at that height
+ * times its model's ratio to Tidus's 18.15 (`data/ffx/fiend-stature.ts`, `research/ffx-yojimbo.md` section 12): Yojimbo 27.1 is 2.613, Daigoro 8.0 is 0.769, Lady Ginnem 17.3 is 1.670 (they
+ * were estimates: 2.55, 0.73 and the stage's 0.7-of-boss rule, 1.785). Every fiend is named in `figureHeights`. **Yojimbo's size on screen is still BOSS SCALE's** (`fx/mix/masters.ts`
+ * `scaleTarget`, Bailey's 1.15 times the party): it grows this base by 1.135 at the first menu (it grew 2.55 by 1.178), so he is drawn about 2.97; his real 1.44 over the heroes becomes about 1.0
+ * at the six units he stands behind them. Where he stands is the corridor between Yuna and the Sensor plate, the enemy shot's frame and these tests (`docs/handoff/r3942-stage.md`).
  */
 const FIEND_HEIGHTS = fiendFigureHeights(['yojimbo', 'daigoro', 'ginnem'], 1.75);
-export const CAVERN_ACTOR_HEIGHTS = {
-  party: 1.75,
-  yojimbo: FIEND_HEIGHTS['yojimbo']!,
-  daigoro: FIEND_HEIGHTS['daigoro']!,
-  ginnem: FIEND_HEIGHTS['ginnem']!,
-} as const;
+export const CAVERN_ACTOR_HEIGHTS = { party: 1.75, yojimbo: FIEND_HEIGHTS['yojimbo']!, daigoro: FIEND_HEIGHTS['daigoro']!, ginnem: FIEND_HEIGHTS['ginnem']! } as const;
 
 /** Each enemy stays on its spot; the party is held on its slots; every fiend stands at its own real height. */
 const CAVERN_STAGING = {
@@ -115,11 +110,7 @@ const CAVERN_STAGING = {
     [CAVERN_IDS.yojimbo]: ENEMY_SLOTS[CAVERN_ENEMY_SLOT.yojimbo]!,
     [CAVERN_IDS.daigoro]: ENEMY_SLOTS[CAVERN_ENEMY_SLOT.daigoro]!,
   },
-  figureHeights: {
-    [CAVERN_IDS.yojimbo]: CAVERN_ACTOR_HEIGHTS.yojimbo,
-    [CAVERN_IDS.daigoro]: CAVERN_ACTOR_HEIGHTS.daigoro,
-    [CAVERN_IDS.ginnem]: CAVERN_ACTOR_HEIGHTS.ginnem,
-  },
+  figureHeights: { [CAVERN_IDS.yojimbo]: CAVERN_ACTOR_HEIGHTS.yojimbo, [CAVERN_IDS.daigoro]: CAVERN_ACTOR_HEIGHTS.daigoro, [CAVERN_IDS.ginnem]: CAVERN_ACTOR_HEIGHTS.ginnem },
 } as const;
 
 /** The published slots, same shape every other scene exports. */

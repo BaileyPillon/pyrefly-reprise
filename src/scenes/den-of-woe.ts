@@ -78,14 +78,15 @@ export const DEN_IDS = { baralai: 'shade-baralai', gippal: 'shade-gippal', nooj:
 
 /**
  * The boss spot, one shade a link (r3942-stage: real sizes, nearer the girls). It was Chapter V's Shiva spot (`farplane-parts.ts`, x 1.12, z -5.0), far back, where the
- * shades read 0.96 of a girl at 2.6 tall and would read 0.71 at their real 1.95; at (2.0, -0.4) a shade stands beside the party, right of Paine and between Rikku's depth
- * and hers, and reads 1.0 of a girl at 1600x900 (real at the same distance: 1.09, Nooj 1.18) with its head on the line it had, its right edge at x 1100 (the command
- * list starts at 1246) and its feet at y 675 above the move advisor's card (y 705). Nooj, the tallest, stands a little deeper. Staging, ours.
+ * shades read 0.96 of a girl at 2.6 tall and would read 0.71 at their real 1.95; at (1.5, -0.4) a shade stands beside the party, right of Paine and between Rikku's depth
+ * and hers, and reads 1.0 of a girl at 1600x900 (real at the same distance: 1.09, Nooj 1.18) with its head on the line it had, its right edge at x 1030 (the command
+ * list starts at 1246) and its feet at y 680 above the move advisor's card (y 705). x 2.0 read the same on the desktop but made the phone's slice fit stand the camera back by
+ * 1.9 to 3.4 (the party 17 percent smaller); at 1.5 it stands back by 0.2. Nooj, the tallest, stands a little deeper. Staging, ours.
  */
 export const DEN_SPOTS: Readonly<Record<string, [number, number, number]>> = {
-  [DEN_IDS.baralai]: [2.0, 0, -0.4],
-  [DEN_IDS.gippal]: [2.0, 0, -0.4],
-  [DEN_IDS.nooj]: [2.0, 0, -0.8],
+  [DEN_IDS.baralai]: [1.5, 0, -0.4],
+  [DEN_IDS.gippal]: [1.5, 0, -0.4],
+  [DEN_IDS.nooj]: [1.5, 0, -0.8],
 };
 
 /** The girls' world height (the FFX-2 chapters' 1.78, Chapter V's). */

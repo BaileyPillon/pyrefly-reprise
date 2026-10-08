@@ -113,8 +113,8 @@ export const ROAD_LINK_IDS: RoadLinkIds = {
 export const ROAD_SPOTS: Readonly<Record<string, [number, number, number]>> = {
   [ROAD_IDS.shiva]: [1.25, 0, -2.2],
   [ROAD_IDS.sandy]: [0.75, 0, -2.6],
-  [ROAD_IDS.cindy]: [1.95, 0, -1.9],
-  [ROAD_IDS.mindy]: [3.1, 0.55, -2.7],
+  [ROAD_IDS.cindy]: [1.5, 0, -3.4],
+  [ROAD_IDS.mindy]: [2.9, 0.55, -2.0],
   [ROAD_IDS.anima]: [1.0, 0, -6.2],
 };
 
