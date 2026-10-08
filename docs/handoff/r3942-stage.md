@@ -248,7 +248,7 @@ The check's frames were right: after the title card the master is whole, but the
 
 ## 4. Parity (nothing else moved)
 
-The check's parity set on the repaired head against the pre-repair head (`cmp3.mjs`, 11 captures, first command menu, seed 1): Leblanc, Vegnagun, Chapter XI's first link (Shiva), Yojimbo (desktop and phone) and the four FFX chains (Anima/Macalania, Seymour Flux, Braska's Final Aeon, Isaaru/Via Purifico): **all the same** (every camera within 0.15, every figure within 3 px); the one number that moved is Braska's `todayPx`, 309 to 308 (the sway). The six first menus of the giants read the wave-2 numbers again (Bahamut 1600x900 161 px girls and 617 boss, 390x844 97 and 259; Paragon 144 and 612 at a later turn, phone 83 and 248; Anima 175 and 659, phone 86 and 335).
+The check's parity set on the repaired head against the pre-repair head (`cmp3.mjs`, 11 captures, first command menu, seed 1): Leblanc, Vegnagun, Chapter XI's first link (Shiva), Yojimbo (desktop and phone) and the four FFX chains (Anima/Macalania, Seymour Flux, Braska's Final Aeon, Isaaru/Via Purifico): **all the same** (every camera within 0.15, every figure within 3 px); the one number that moved is Braska's `todayPx`, 309 to 308 (the sway). These captures were taken before the last edit of `ShotRules.opening` (the blend and the room), which acts on the three giants only; the giants' own first menus and Trema's link 2 were captured again on the final code. The six first menus of the giants read the wave-2 numbers again (Bahamut 1600x900 161 px girls and 617 boss, 390x844 97 and 259; Paragon 144 and 612 at a later turn, phone 83 and 248; Anima 175 and 659, phone 86 and 335).
 
 ## 5. Tests and checks
 
