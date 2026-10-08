@@ -135,6 +135,13 @@ export const FFX_GIANT_STATURE: Readonly<Record<string, GiantStature>> = {
   // Chapter X. Seymour Natus: the silhouette of the body reads 46.2 (N = 20 only, where the thin scythe and chain tip is a separate blob); with the tip the median is 52.2 (50.6 to 57.1, three frames,
   // 8.25 px per unit from Tidus markers 45 units either side). The static law says 42.0 (raw 10.5 x C 4; width 34) and E 40; the idle bones give only 12.5, not trusted. m127 adds nothing to the silhouette.
   'seymour-natus': { model: 'm126', name: 'Seymour Natus', height: 46.2, read: [46.2, 52.2], lowerBound: false, staticLaw: 42.0, engine: 40, confidence: 'medium', share: 1 },
+  // Chapter XVII, link 3 (Sin's back). Sinspawn Genais: the silhouette over its animation, four reloaded shots (50.1, 52.0, 47.5, 44.2 at 9.3 px per unit, Tidus 55 units either side, the camera
+  // pulling out 9.6 to 7.9 across them; the claws spread to 100 wide late in the cycle). The static law 80.3 is the default pose (raw 25.1 x C 4 x script scale 0.8, mesh m102) and the lane's
+  // first number, 77.6, was the maximum of one joint over the loop: both are withdrawn. The joint's mean over the loop (52.7) and E (40) bracket the silhouette.
+  'sinspawn-genais': { model: 'm139', name: 'Sinspawn Genais', height: 49, read: [44.2, 52], lowerBound: false, staticLaw: 80.3, engine: 40, confidence: 'medium', share: 1 },
+  // The Core (m138, "Sin" in the monster table): the shell with its spikes, three shots (30.2, 30.9, 31.7 at 8.7 px per unit, the scale raised 5 percent for the left and right gradient seen
+  // at Genais's depth because Tidus could be put on one side only). It floats: the joints run 30 to 57 above the floor, a bone span of 27, not a height above the floor. Static law 27.2, E 16.
+  'sin-core': { model: 'm138', name: "Sin's Core (the shell)", height: 30, read: [28.7, 31.7], lowerBound: false, staticLaw: 27.2, engine: 16, confidence: 'medium', share: 1 },
 };
 
 /**

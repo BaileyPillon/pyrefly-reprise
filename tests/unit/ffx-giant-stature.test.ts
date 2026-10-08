@@ -20,6 +20,7 @@ import { TIDUS_TOP } from '../../src/data/ffx/party-stature.ts';
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../src/engine/ArtManifest.ts';
 import { loadScene, resolveSceneHeights, type LoadedScene } from '../../src/scenes/index.ts';
 import { GAGAZET_PARTY_HEIGHT, GAGAZET_STAGING } from '../../src/scenes/gagazet.ts';
+import { SIN_BEVELLE_PLATE, SIN_FLIGHT_PLATE, SIN_GENAIS_CORE_STAGING, SIN_PARTY_HEIGHT } from '../../src/scenes/evrae-airship-sin.ts';
 import { HIGHBRIDGE_ACTOR_HEIGHTS, HIGHBRIDGE_REAL_SIZE, HIGHBRIDGE_SLOTS, highbridgeHeights } from '../../src/scenes/highbridge.ts';
 import { DREAMS_END_BFA_PIN, DREAMS_END_PARTY_HEIGHT, DREAMS_END_RIGS, DREAMS_END_ROW_SHIFT, DREAMS_END_STAGING } from '../../src/scenes/dreams-end.ts';
 import { ALL_ROWS, sideShift } from '../../src/engine/fx/mix/stageTable.ts';
@@ -197,6 +198,32 @@ describe('Chapter X: Seymour Natus at his real size, and Mortibody with him', ()
   it.todo("masters.ts scaleTarget no longer names seymour-natus (BOSS SCALE retired): the chapter's pinned colossus master then plays at his real size, as the options study pictured it");
 });
 
+describe("Chapter XVII, link 3: Sinspawn Genais and Sin's Core at their real sizes, at today's spots", () => {
+  it('Genais is m139 (mesh m102, script scale 0.8): 49 on the PS2 screen (44.2 to 52), the static law 80.3 is the default pose; the Core is m138: 30 (28.7 to 31.7), static 27.2, E 16; both medium, whole', () => {
+    const g = FFX_GIANT_STATURE['sinspawn-genais']!;
+    const c = FFX_GIANT_STATURE['sin-core']!;
+    expect([g.model, g.height, g.read, g.lowerBound, g.staticLaw, g.engine, g.share, g.confidence]).toEqual(['m139', 49, [44.2, 52], false, 80.3, 40, 1, 'medium']);
+    expect([c.model, c.height, c.read, c.lowerBound, c.staticLaw, c.engine, c.share, c.confidence]).toEqual(['m138', 30, [28.7, 31.7], false, 27.2, 16, 1, 'medium']);
+    // 2.72 and 1.67 times Chapter XVII's party (Tidus 18.15, Yuna 16.53, Auron 19.28: mean 17.99)
+    expect(49 / ((18.15 + 16.53 + 19.28) / 3)).toBeCloseTo(2.72, 2);
+    expect(30 / ((18.15 + 16.53 + 19.28) / 3)).toBeCloseTo(1.67, 2);
+  });
+
+  it('the heights over the deck\'s party height 1.82: Genais 4.913 (+20 percent from the stage\'s 4.1) and the Core 3.008 (-27 percent)', () => {
+    expect(SIN_PARTY_HEIGHT).toBe(resolveSceneHeights({}).partyHeight);
+    expect(giantFigureHeights(['sinspawn-genais', 'sin-core'], SIN_PARTY_HEIGHT)).toEqual({ 'sinspawn-genais': 4.913, 'sin-core': 3.008 });
+    expect(4.913 / 4.1 - 1).toBeCloseTo(0.2, 2);
+    expect(3.008 / 4.1 - 1).toBeCloseTo(-0.27, 2);
+  });
+
+  it("the Sin flight plate names both and pins them at the spots they stood on, so the solver cannot swap them; no other plate on the deck names either", () => {
+    expect(SIN_GENAIS_CORE_STAGING.figureHeights).toEqual({ 'sinspawn-genais': 4.913, 'sin-core': 3.008 });
+    expect(SIN_GENAIS_CORE_STAGING.enemySpots).toEqual({ 'sinspawn-genais': [-0.93, 0, -4.1], 'sin-core': [5.89, 0, -5.3] });
+    expect(SIN_FLIGHT_PLATE).toBe('sin-fahrenheit-flight');
+    expect(SIN_BEVELLE_PLATE).toBe('sin-fahrenheit-bevelle');
+  });
+});
+
 describe('the real factory publishes the heights (jsdom, a no-op 2D context, an empty art manifest)', () => {
   const loaded: LoadedScene[] = [];
 
@@ -245,6 +272,20 @@ describe('the real factory publishes the heights (jsdom, a no-op 2D context, an 
     expect(scene.slots.enemyHeight).toBe(HIGHBRIDGE_ACTOR_HEIGHTS.natus);
   });
 
+  it("Chapter XVII: the loaded Sin flight plate hands the stage Genais's and the Core's heights and pins on top of the deck's own; the head's plate and Evrae's deck do not", async () => {
+    const flight = await loadScene(SIN_FLIGHT_PLATE, new PerspectiveCamera());
+    loaded.push(flight);
+    expect(flight.slots.figureHeights).toEqual({ 'sinspawn-genais': 4.913, 'sin-core': 3.008 });
+    expect(flight.slots.enemySpots?.['sinspawn-genais']).toEqual([-0.93, 0, -4.1]);
+    expect(flight.slots.enemySpots?.['sin-core']).toEqual([5.89, 0, -5.3]);
+    expect(Object.keys(flight.slots.enemySpots ?? {}).sort()).toEqual(['cid', 'evrae', 'sin-core', 'sinspawn-genais']); // the deck's own pins stay
+    expect(flight.slots.holdParty).toBe(true);
+    const head = await loadScene(SIN_BEVELLE_PLATE, new PerspectiveCamera());
+    loaded.push(head);
+    expect(head.slots.figureHeights).toBeUndefined();
+    expect(Object.keys(head.slots.enemySpots ?? {}).sort()).toEqual(['cid', 'evrae']);
+  });
+
   it("Chapter III: the loaded Dream's End scene publishes the aeon's and the pagodas' heights and pins, at the stage's own party height", async () => {
     const scene = await loadScene('dreams-end', new PerspectiveCamera());
     loaded.push(scene);
@@ -277,6 +318,14 @@ describe('the table is pure data, cites its sources and says how sure it is', ()
     expect(doc).toContain('[single source: own measurement]');
     expect(doc).toMatch(/46\.2/);
     expect(doc).toMatch(/52\.2/);
+  });
+
+  it("Chapter XVII's research section exists and says the Fins are not built", () => {
+    const doc = read('research/ffx-sin.md');
+    expect(doc).toMatch(/## 13\. Research addendum \(2026-10-08\): how tall Sinspawn Genais and Sin's Core stand/);
+    expect(doc).toContain('[single source: own measurement]');
+    expect(doc).toMatch(/Fins and the head are not here/);
+    expect(doc).toMatch(/4\.913/);
   });
 
   it("Chapter III's research section exists and says the aeon's and the pagodas' numbers are floors", () => {

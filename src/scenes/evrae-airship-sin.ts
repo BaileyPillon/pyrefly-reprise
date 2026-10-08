@@ -25,6 +25,7 @@ import type { SceneEntry, SceneSlots } from './index.ts';
 import type { SceneFactory } from './types.ts';
 import { buildDemoScene } from './demo.ts';
 import { EVRAE_AIRSHIP_DECK_SLOTS, makeAirshipDeckScene } from './evrae-airship-deck.ts';
+import { giantFigureHeights } from '../data/ffx/fiend-stature.ts';
 
 /** Chapter XVII's plate (links I and II; link III too, see the header). */
 export const SIN_FLIGHT_PLATE = 'sin-fahrenheit-flight';
@@ -39,9 +40,26 @@ export const SIN_FLIGHT_ROLL = 0;
 
 const SLOTS: SceneSlots = EVRAE_AIRSHIP_DECK_SLOTS;
 
+/**
+ * The party's shared world height on this deck: Tidus's 1.82, the stage's own default (the deck publishes no `partyHeight`: `resolveSceneHeights`), which the giants' heights are read against.
+ */
+export const SIN_PARTY_HEIGHT = 1.82;
+
+/**
+ * **r3942-giants-ffx (Bailey, 2026-10-08, "all of your recommendations"; FFX only, Chapter XVII link 3): Sinspawn Genais and Sin's Core stand at their real sizes, at today's spots.** The live PS2
+ * game draws Genais about 49 units tall and the Core 30 (`data/ffx/fiend-stature.ts` `FFX_GIANT_STATURE`, `research/ffx-sin.md` section 13), 2.72 and 1.67 times the party; the build drew both at the stage's
+ * boss height, 4.1 (Genais 20 percent too small, the Core 37 percent too big). At the party's 1.82 that is 4.913 and 3.008 (Genais +20 percent, the Core -27 percent). **The Fins do not change** (the
+ * options study's pick: they stand about 1,200 units off and read as mountains already), and neither does the head of Chapter XVIII or Evrae: these are two combatant ids no other chapter has.
+ * They are pinned at the spots they stood on (-0.93, -4.1) and (5.89, -5.3), because the formation solver spreads figures by their heights and would otherwise swap and move them.
+ */
+export const SIN_GENAIS_CORE_STAGING = {
+  figureHeights: giantFigureHeights(['sinspawn-genais', 'sin-core'], SIN_PARTY_HEIGHT),
+  enemySpots: { 'sinspawn-genais': [-0.93, 0, -4.1] as [number, number, number], 'sin-core': [5.89, 0, -5.3] as [number, number, number] },
+};
+
 /** The two factories, keyed as `SCENE_FACTORIES` wants them (`./index.ts`). */
 export const SIN_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> = {
-  [SIN_FLIGHT_PLATE]: makeAirshipDeckScene({ key: SIN_FLIGHT_PLATE, roll: SIN_FLIGHT_ROLL }),
+  [SIN_FLIGHT_PLATE]: makeAirshipDeckScene({ key: SIN_FLIGHT_PLATE, roll: SIN_FLIGHT_ROLL, staging: SIN_GENAIS_CORE_STAGING }),
   [SIN_BEVELLE_PLATE]: makeAirshipDeckScene({ key: SIN_BEVELLE_PLATE }),
 };
 

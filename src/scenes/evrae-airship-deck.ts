@@ -221,6 +221,11 @@ export const EVRAE_DECK_PLATE = 'evrae-airship-deck';
 export interface DeckPlate {
   readonly key: string;
   readonly roll?: number;
+  /**
+   * Fiends this plate's chapter stands at their own heights and spots, added to the deck's own pins (`SceneStaging.figureHeights` and `enemySpots`; r3942-giants-ffx: Chapter XVII's Genais
+   * and Core, `evrae-airship-sin.ts`). By combatant id, so a chapter that has none of these fiends (Evrae's) is untouched. Omitted: the deck as it was.
+   */
+  readonly staging?: { readonly figureHeights?: Readonly<Record<string, number>>; readonly enemySpots?: Readonly<Record<string, [number, number, number]>> };
 }
 
 /**
@@ -365,6 +370,8 @@ async function buildDeck(plate: DeckPlate, opts: SceneBuildOptions): Promise<Sce
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     ...EVRAE_AIRSHIP_DECK_STAGING,
+    ...(plate.staging?.enemySpots ? { enemySpots: { ...EVRAE_AIRSHIP_DECK_STAGING.enemySpots, ...plate.staging.enemySpots } } : {}),
+    ...(plate.staging?.figureHeights ? { figureHeights: plate.staging.figureHeights } : {}),
     palette: { ...EVRAE_AIRSHIP_DECK_PALETTE },
     update(dt: number): void {
       backdrop.update(dt);
