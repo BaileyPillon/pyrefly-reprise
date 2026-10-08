@@ -119,6 +119,24 @@ describe('checkPoseScale (what the art lane runs on a new key)', () => {
     rmSync(join(tmp, 'characters', 'hero', 'ko.png'));
   });
 
+  it('wants the table to carry the record\'s head box as fractions of the painting, and to carry none the record lacks (r394, D-510: the engine holds it to the idle\'s size on screen)', () => {
+    // the record's head box is [60, 0, 140, 80] on a 200 x 400 painting: 0.3, 0, 0.7, 0.2
+    const sized = records({ size: [200, 400] });
+    const good = { hero: { idle: { stanceX: 100 }, ready: { scale: 1.25, stanceX: 80, head: [0.3, 0, 0.7, 0.2] } } };
+    expect(checkPoseScale({ records: sized, table: good, artDir: tmp, subjects: ['hero'] }).failures).toEqual([]);
+    // a table generated before the head boxes, and a box that is not the record's
+    expect(checkPoseScale({ records: sized, table, artDir: tmp, subjects: ['hero'] }).failures.join(' | ')).toMatch(/hero\/ready: the table's head box \(none\) is not the record's \(0\.3000, 0\.0000, 0\.7000, 0\.2000\); run measure\.py table/);
+    const off = { hero: { ...good.hero, ready: { ...good.hero.ready, head: [0.3, 0, 0.7, 0.25] } } };
+    expect(checkPoseScale({ records: sized, table: off, artDir: tmp, subjects: ['hero'] }).failures.join(' | ')).toMatch(/the table's head box \(0\.3, 0, 0\.7, 0\.25\) is not the record's/);
+    // a record with a painting size and no head (a pose whose head was never read) may not have one in the table
+    const bare = records({ size: [200, 400], head: undefined });
+    expect(checkPoseScale({ records: bare, table: good, artDir: tmp, subjects: ['hero'] }).failures.join(' | ')).toMatch(/the table has a head box \(0\.3, 0, 0\.7, 0\.2\) that the record does not/);
+    // a foe with no face box has the 1 px stand-in for an idle head, which registers nothing
+    const foe = records({ size: [200, 400], head: [0, 0, 1, 1] }) as { subjects: Record<string, { idleHead: number[] }> };
+    foe.subjects['hero']!.idleHead = [0, 0, 1, 1];
+    expect(checkPoseScale({ records: foe, table: { hero: { idle: { stanceX: 100 }, ready: { scale: 1.25, stanceX: 80 } } }, artDir: tmp, subjects: ['hero'] }).failures.join(' | ')).not.toMatch(/head box/);
+  });
+
   it('fails a standing pose wider than tall that the table does not mark upright', () => {
     const r = checkPoseScale({ records: records({ prone: true, standing: true }), table, artDir: tmp, subjects: ['hero'] });
     expect(r.failures.join('\n')).toMatch(/must be marked upright/);

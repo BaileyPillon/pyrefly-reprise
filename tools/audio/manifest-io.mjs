@@ -310,6 +310,70 @@ export function scoreFingerprint(track) {
   return createHash('sha256').update(shape).digest('hex').slice(0, 16);
 }
 
+/**
+ * Where a music entry's MP3 came from when it is not a render of the score in the repo.
+ *
+ * Every entry `musicEntry()` writes is a render of `src/audio/tracks/<cue>.ts`, and `qa.mjs` and
+ * `tests/unit/audio-shipped-files.test.ts` hold it to that score: loop points that match the score's, and a
+ * fingerprint of the notes. A file made somewhere else and installed under a cue's name (the ElevenLabs takes of
+ * 2026-10-07, `docs/audio/music-elevenlabs-2026-10-07.json`) has no score behind it, so both checks would call
+ * it a stale render. It says what it is with `source`, and that one field is what exempts it from them.
+ *
+ * The game ignores the field (`parseManifest` reads only the keys it knows). The score stays in the repo as the
+ * synth fallback for when the MP3 cannot load, and re-rendering the cue writes a fresh entry without `source`,
+ * which ends the exemption by itself. `tests/unit/audio-music-elevenlabs.test.ts` pins which entries carry it, so
+ * a `source` cannot be added to an entry without a record that says where the file came from.
+ */
+export function externalSource(entry) {
+  return typeof entry?.source === 'string' && entry.source.length > 0 ? entry.source : null;
+}
+
+/** The keys of a music entry, in the order the manifest writes them; anything else follows in the order given. */
+const ENTRY_KEY_ORDER = ['file', 'loopStart', 'loopEnd', 'duration', 'bytes', 'lufs', 'truePeakDb', 'score', 'source'];
+
+/**
+ * A number the way the stored manifest prints it. The two level fields are floats whatever their value, so they
+ * always carry a decimal point (`"lufs": -16.0`); every other number prints plainly (`"loopEnd": 80` for a loop
+ * that ends on a whole second, as three entries on disk do).
+ */
+function entryNumberText(key, value) {
+  if ((key === 'lufs' || key === 'truePeakDb') && Number.isInteger(value)) return value.toFixed(1);
+  return String(value);
+}
+
+/**
+ * Replace one music entry's block in the manifest's text and leave every other byte exactly as it was.
+ *
+ * `JSON.stringify` cannot do this. The manifest on disk keeps the line endings the checkout gave it (CRLF on this
+ * machine) and writes its floats Python-style (`"lufs": -16.0`), so a parse and a stringify rewrites every entry
+ * and turns a three-cue change into a whole-file diff that conflicts with every other branch that touches one
+ * cue. This finds the block by its own opening line, writes the new one in the same shape, and keeps the closing
+ * line (with or without its comma) as it was. Used by `music-elevenlabs.mjs install`; callers take the manifest
+ * lock around it (`withManifestLock`) the way every other writer here does.
+ */
+export function setMusicEntryText(text, name, entry) {
+  const eol = text.includes('\r\n') ? '\r\n' : '\n';
+  const lines = text.split(eol);
+  const start = lines.indexOf(`    "${name}": {`);
+  if (start < 0) throw new Error(`the manifest has no music entry "${name}"`);
+  let end = start + 1;
+  while (end < lines.length && !/^ {4}},?$/.test(lines[end])) end++;
+  if (end >= lines.length) throw new Error(`the manifest entry "${name}" never closes`);
+
+  const keys = [
+    ...ENTRY_KEY_ORDER.filter((k) => entry[k] !== undefined),
+    ...Object.keys(entry).filter((k) => !ENTRY_KEY_ORDER.includes(k) && entry[k] !== undefined),
+  ];
+  const body = keys.map((key, i) => {
+    const value = entry[key];
+    if (typeof value !== 'string' && typeof value !== 'number') throw new Error(`entry "${name}": "${key}" must be a string or a number`);
+    const printed = typeof value === 'string' ? JSON.stringify(value) : entryNumberText(key, value);
+    return `      "${key}": ${printed}${i < keys.length - 1 ? ',' : ''}`;
+  });
+  lines.splice(start, end - start + 1, `    "${name}": {`, ...body, lines[end]);
+  return lines.join(eol);
+}
+
 /** Build one music entry, with every field rounded where it should be. */
 export function musicEntry({ name, loopStartSample, loopEndSample, totalSamples, sampleRate, bytes, lufs, truePeakDb, score }) {
   return {

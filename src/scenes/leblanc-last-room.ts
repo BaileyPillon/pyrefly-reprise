@@ -13,6 +13,18 @@ import type {
   SceneRigName,
 } from './types.ts';
 import type { SceneSlots } from './index.ts';
+import {
+  LEBLANC_ADVISOR_CAP,
+  LEBLANC_ENEMY_LANE_X,
+  LEBLANC_ENEMY_SLOTS,
+  LEBLANC_ENEMY_SPOTS,
+  LEBLANC_FIGURE_HEIGHTS,
+  LEBLANC_PARTY_HEIGHT,
+  LEBLANC_TRIO_POOL,
+} from './leblanc-staging.ts';
+
+// The staging numbers (heights, spots, lane, pool, advisor cap) live in `./leblanc-staging.ts`; Chapter VI's tests read them from here.
+export { LEBLANC_ENEMY_LANE_X, LEBLANC_ENEMY_SPOTS, LEBLANC_FIGURE_HEIGHTS };
 
 // ---------------------------------------------------------------------------
 // Chateau Leblanc — the Last Room (FFX-2 Ch.2, "Faking and Entering", Act III)
@@ -92,57 +104,25 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
 ];
 
 /**
- * The trio: Leblanc centre-back, Ormi and Logos flanking (see the class doc
- * above). Slot **index** matches `leblanc-syndicate.ts`'s `slot` field
- * (0 Leblanc, 1 Logos, 2 Ormi) so a formation built from that file's
- * `EnemyGroupDef` lands its members on the geometry their canon size implies.
- *
- * **Solved against the HUD safe area** (`docs/ENGINE-API.md#hud-safe-area`;
- * the FFX-2 rail is 0.72 of the canvas). These three are human-sized, not a
- * boss the scale of Bahamut or Vegnagun's tail, so all three sit closer to
- * camera than either chapter's single boss slot — checked at `idle`/`action`
- * in the browser pass this track ran and adjusted once (Logos moved 0.4 units
- * left) when his silhouette crossed the rail; see the handoff for the numbers.
+ * The trio's enemy slot table, in `leblanc-syndicate.ts`'s slot order (0 Leblanc, 1 Logos, 2 Ormi): Act III's standing spots, Leblanc centre-back with
+ * Ormi and Logos flanking her in front, as the first design had it. The whole staging, act by act, with the numbers and the reasons, is
+ * `./leblanc-staging.ts`: every fiend of the three acts has a spot there, so these slots are the table a fiend added later would start from.
  */
-const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [1.1, 0, -5.0], // Leblanc — centre-back, the fight's focal point
-  [2.2, 0, -6.2], // Logos — tall and slim, flanks right and further back
-  [-0.3, 0, -3.8], // Ormi — short and stout, flanks left and closer to camera
-];
+const ENEMY_SLOTS: Array<[number, number, number]> = LEBLANC_ENEMY_SLOTS.map((s) => [...s] as [number, number, number]);
 
 /**
- * The enemy lane's x edges (FFX-2 only, Chapter 6). The lane the stage derives
- * from `ENEMY_SLOTS` runs from x -1.7, and the formation solver spreads a
- * three-figure act across it centre-out, so in Act I Dr. Goon (the left flank)
- * stood at x -0.39: on screen at x 648..707 of 1600, one step right of Paine
- * (552..632), the Syndicate side crowding the party. Pinning the lane to 0.0..2.4
- * packs the row and moves it right: measured at 1600x900 (GPU, seed 1, first
- * menu), Dr. Goon stands at 729..786, about 100 px clear of Paine; Ormi at
- * 804..867 stays just left of the enemy-intent card (868); Fem-Goon ends at
- * 989, inside the FFX-2 HUD rail (0.72 of the canvas, 1152). Staging only,
- * not game data.
- *
- * PR-0136 (round 13, FFX-2 only): 100 px was still one file behind the party.
- * The lane moves to 1.0..3.0, so the opposing sides stand apart across the
- * floor: measured at 1600x900 (GPU, seed 1, real keys to each link's first
- * menu, 2026-09-26), the nearest fiend is 205 px from Paine in Act I (Dr. Goon
- * 837..893), 225 px in Act II and 162 px in Act III (Logos 810..900); every
- * fiend starts right of the frame's centre, ends by 1073 (inside the rail) and
- * stands below the enemy-intent card rather than behind it.
+ * Canonical world heights for the cast that fights here. The girls' are presentation estimates (Yuna's stands for all three: the stage gives the party one
+ * height); the three Syndicate bosses' are **sourced**: the girls' height times each model's ratio to the girls (`data/ffx2/syndicate-stature.ts`,
+ * `research/ffx2-leblanc-syndicate.md` §20), which replaces the first estimates (Ormi 1.5 "short and stout", Logos 1.95) the models contradict.
  */
-export const LEBLANC_ENEMY_LANE_X: [number, number] = [1.0, 3.0];
-
-/** Canonical world heights for the cast that fights here (presentation estimates, not sourced game data — see AGENTS.md rule 6; the stat block in `leblanc-syndicate.ts` carries no physical height). */
-export const LEBLANC_LAST_ROOM_ACTOR_HEIGHTS = {
-  yuna: 1.68,
+export const LEBLANC_LAST_ROOM_ACTOR_HEIGHTS: Readonly<Record<'yuna' | 'rikku' | 'paine' | 'leblanc' | 'logos' | 'ormi', number>> = {
+  yuna: LEBLANC_PARTY_HEIGHT,
   rikku: 1.6,
   paine: 1.72,
-  leblanc: 1.66,
-  /** "Tall and slim" [options.json cast_logos]. */
-  logos: 1.95,
-  /** "Short and stout" [options.json cast_ormi]. */
-  ormi: 1.5,
-} as const;
+  leblanc: LEBLANC_FIGURE_HEIGHTS['leblanc']!,
+  logos: LEBLANC_FIGURE_HEIGHTS['logos']!,
+  ormi: LEBLANC_FIGURE_HEIGHTS['ormi']!,
+};
 
 /**
  * The trio's paintings are ordinary `--composition full` standing figures
@@ -155,6 +135,10 @@ export const LEBLANC_LAST_ROOM_SLOTS: SceneSlots = {
   enemy: ENEMY_SLOTS.map((s) => [...s] as [number, number, number]),
   partyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna,
   enemyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc,
+  enemyLaneX: LEBLANC_ENEMY_LANE_X,
+  figureHeights: LEBLANC_FIGURE_HEIGHTS,
+  enemySpots: LEBLANC_ENEMY_SPOTS,
+  advisorCap: LEBLANC_ADVISOR_CAP,
 };
 
 /**
@@ -317,11 +301,10 @@ async function buildLastRoom(plate: LeblancPlate, opts: SceneBuildOptions): Prom
       return pool;
     }),
     (() => {
-      // One shared magenta pool under the trio, centred on Leblanc's own
-      // slot — the picture's own floor spotlight is already there.
+      // One shared magenta pool under the trio, in the middle of the fiends'
+      // spots (`LEBLANC_TRIO_POOL`) — the picture's own floor spotlight is already there.
       const pool = makeLightPool({ color: look.pools?.trio?.color ?? 0xff8fd6, radius: 3.1, opacity: look.pools?.trio?.opacity ?? 0.2 });
-      const s = ENEMY_SLOTS[0]!;
-      pool.position.set(s[0], 0.018, s[2] + 1.0);
+      pool.position.set(LEBLANC_TRIO_POOL[0], 0.018, LEBLANC_TRIO_POOL[1]);
       pool.name = 'trio-pool';
       return pool;
     })(),
@@ -359,18 +342,18 @@ async function buildLastRoom(plate: LeblancPlate, opts: SceneBuildOptions): Prom
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     // PR-0093: the trio is human-sized, not a boss the scale of Bahamut or
-    // Vegnagun's tail (`LEBLANC_LAST_ROOM_SLOTS` above already documented this,
-    // but nothing published it to `fromSceneBuild` in `src/scenes/index.ts`,
-    // which staged every enemy here at the 4.1-unit Gagazet-boss fallback —
-    // "short and stout" Ormi included). Leblanc's own sourced height stands in
-    // for the enemy side the same way it already does in `LEBLANC_LAST_ROOM_SLOTS`;
-    // a single scalar cannot give Ormi and Logos their own distinct heights
-    // (every Syndicate member is `isBoss`, so `worldHeightFor` scales all three
-    // off this one number) — that would need `BattlePresenterStage.ts` to read
-    // a per-slot height table, which is out of this fix's scope.
+    // Vegnagun's tail, so it must not stage at the 4.1-unit Gagazet-boss fallback
+    // (`fromSceneBuild` in `src/scenes/index.ts`). `enemyHeight` is the stage's
+    // default for a fiend with no height of its own, and Leblanc's own height
+    // stands in for it; every Syndicate fiend has one below (`figureHeights`),
+    // so the default only sizes a fiend's ring and shadow against it.
     partyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna,
     enemyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc,
     enemyLaneX: LEBLANC_ENEMY_LANE_X,
+    // Every Syndicate fiend stands at its real height, at its own spot, and the move advisor's card leaves room under their feet (`./leblanc-staging.ts`).
+    figureHeights: LEBLANC_FIGURE_HEIGHTS,
+    enemySpots: LEBLANC_ENEMY_SPOTS,
+    advisorCap: LEBLANC_ADVISOR_CAP,
     ...(plate.artNamespace ? { artNamespace: plate.artNamespace } : {}),
     palette: {
       ...(look.palette ?? ScenePalettes.chateauLeblanc),

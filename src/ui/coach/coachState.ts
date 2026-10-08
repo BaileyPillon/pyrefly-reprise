@@ -13,7 +13,9 @@
  *    in-memory blob that is thrown away on navigation, which would replay the
  *    briefing on every page load. The module-level {@link sessionSeen} set
  *    means it plays **once per session** instead
- *    (`docs/plans/onboarding-review.md` REQUIRED 7, last sentence).
+ *    (`docs/plans/onboarding-review.md` REQUIRED 7, last sentence). The same set
+ *    is the whole memory of an experimental chapter's run, on purpose: a hidden
+ *    chapter never writes the save (`app/experiments/experimentRun.ts`, CHK-025).
  * 3. **Suppressed outright**, by `?coach=off` in the URL or by
  *    `__pyrefly.setCoaching(false)`. Playwright specs, `tools/screenshot.mjs`,
  *    the art-watch gallery and every Part C composite boot on a fresh browser
@@ -26,6 +28,7 @@
  */
 
 import { activeSave, readSetting } from '../../app/SaveData.ts';
+import { experimentRunActive } from '../../app/experiments/experimentRun.ts';
 import { waitSplitInForce } from '../../app/waitSplitSwitch.ts';
 import { ALL_COACH_IDS, type CoachMarkId, type Ffx2CoachClock } from './coachCopy.ts';
 import { FIRST_RUN_IDS } from './firstRunCopy.ts';
@@ -169,10 +172,16 @@ export function setBattleHelp(on: boolean): void {
   activeSave()?.setSettings({ battleHelp: on });
 }
 
-/** Has this surface already been shown to this player? */
+/**
+ * Has this surface already been shown to this player?
+ *
+ * Inside an experimental chapter's run ({@link experimentRunActive}) the answer is the save's **or** this session's: what the run showed was kept off the save
+ * ({@link markSeen}), so the session set is what stops it repeating inside the run. Outside a run the save alone answers, as ever, so a hint a hidden run showed
+ * is still shown in the real chapter.
+ */
 export function hasSeen(id: CoachMarkId | string): boolean {
   const save = activeSave();
-  if (save) return save.hasSeenCoach(id);
+  if (save) return save.hasSeenCoach(id) || (experimentRunActive() && sessionSeen.has(id));
   return sessionSeen.has(id);
 }
 
@@ -182,10 +191,14 @@ export function hasSeen(id: CoachMarkId | string): boolean {
  * Always writes to the session set as well as the save, so a store whose
  * `localStorage.setItem` throws (quota, a locked-down profile) still does not
  * repeat itself inside one session.
+ *
+ * **Not the save, inside an experimental chapter's run** (`app/experiments/experimentRun.ts`): a hidden chapter leaves
+ * `pyrefly-reprise:save:v1` byte-identical (CHK-025), and a first-time player who found its door first must still meet the real chapters' hints. The run's hints are
+ * remembered for the session only (release 39.3's focused review, F393-05: six coach hints and a timestamp had gone into the save).
  */
 export function markSeen(id: CoachMarkId | string): void {
   sessionSeen.add(id);
-  activeSave()?.markCoachSeen(id);
+  if (!experimentRunActive()) activeSave()?.markCoachSeen(id);
 }
 
 /**

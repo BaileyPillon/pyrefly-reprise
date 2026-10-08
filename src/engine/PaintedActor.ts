@@ -5,10 +5,12 @@ import {
   Color,
   DoubleSide,
   Group,
+  Matrix4,
   Mesh,
   MeshBasicMaterial,
   MeshDepthMaterial,
   PlaneGeometry,
+  Quaternion,
   RGBADepthPacking,
   ShaderMaterial,
   Vector2,
@@ -46,7 +48,8 @@ import {
 } from './PaintedArt.ts';
 import { computePoseScale, contactBandFor, type PoseScale } from './PaintedScale.ts';
 import { placePlane } from './PaintedRest.ts';
-import { stanceShift } from './PoseRegistration.ts';
+import { stanceShift, subjectOfPainting } from './PoseRegistration.ts';
+import { HEAD_BAND, HeadLockStats, projectedHeadSize, scaledPose, solveHeadFactor, type HeadBox } from './HeadLock.ts'; // D-510: the engine keeps the head steady
 import { LIE_FLAT_TILT, lieOffset } from './LieFlat.ts';
 import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
@@ -266,10 +269,23 @@ interface PlaneSlot {
   fade: number;
   pose: string;
   meta: PoseMeta;
-  /** What {@link computePoseScale} worked out for this slot's pose. */
+  /** What {@link computePoseScale} worked out for this slot's pose, with the head lock's factor on it (`HeadLock.ts`). */
   scale: PoseScale;
   /** The painting this plane draws (release 39: `ArtGovernor` reads which master its texture holds). */
   painted: PaintedTexture | null;
+  /** D-510: the pose's scale as the table gives it, before the head lock; `scale` is this times `lock`. */
+  base: PoseScale;
+  /** D-510: the factor the head lock holds on the table's scale (1 = none: no head box, no camera yet, or the idle itself). */
+  lock: number;
+  /** D-510: the art subject of `painted` (`yuna`, `exp-leblanc-yuna`), so the lock only compares planes of one figure. */
+  subject: string | null;
+}
+
+/** D-510: what every other pose's head is held to: the idle's head box, its sizing and its art subject (`PaintedActor.headRefOf`). */
+interface HeadRef {
+  head: HeadBox;
+  scale: PoseScale;
+  subject: string | null;
 }
 
 /** A pose that has not been sized yet: 1x1, upright, no footprint. */
@@ -356,6 +372,13 @@ export function isInterimYawEnabled(): boolean {
 /** Scratch for the per-frame camera azimuth. Read and dropped inside one call. */
 const yawScratchA = new Vector3();
 const yawScratchB = new Vector3();
+
+/** Scratch for the head lock (D-510): a plane's local matrix, and the matrix that takes a head box to clip space. Read and dropped inside one call. */
+const lockLocal = new Matrix4();
+const lockMvp = new Matrix4();
+const lockPos = new Vector3();
+const lockScale = new Vector3();
+const lockQuat = new Quaternion();
 
 /** Where a hit tints the painting for a moment — a warm, bruised red. */
 const HURT_TINT = 0xff9f8e;
@@ -461,6 +484,16 @@ export class PaintedActor extends Group {
   private readonly referencePose: string;
   private readonly sizeFromReference: boolean;
   private readonly extents: { maxExtent: number; minExtent: number; proneAspect: number };
+  /**
+   * D-510 (`HeadLock.ts`): the idle's head box, its sizing and its art subject: what every other pose's head is held to on screen.
+   * Null when there is nothing to hold it to (no registered head on the idle, a reference that lies down, a per-pose pixel shift).
+   */
+  private headRef: HeadRef | null = null;
+  /** The view-projection `holdHead` last saw, so a plane re-pointed between two frames is sized at once and never drawn unlocked. */
+  private readonly headView = new Matrix4();
+  private headViewed = false;
+  /** What the head lock did, and every time its band bit (`holdHead`; read by the harness and the tests). */
+  readonly headLock = new HeadLockStats();
 
   /** World facing: which way this fighter is turned. Never mirrors on its own. */
   private facing: 1 | -1 = 1;
@@ -804,6 +837,9 @@ export class PaintedActor extends Group {
       meta: { width: 1, height: 1, baselineY: 1 },
       scale: UNSIZED,
       painted: null,
+      base: UNSIZED,
+      lock: 1,
+      subject: null,
     };
   }
 
@@ -1031,15 +1067,16 @@ export class PaintedActor extends Group {
       reference,
       ...this.extents,
     });
-    slot.scale = scale;
+    slot.base = scale;
+    slot.lock = 1;
+    slot.subject = subjectOfPainting(tex.url);
 
     // The plane itself never rotates — mirroring is a negative scale.x, and the
     // pose's own orientation is painted into the texture; a prone one is only
     // rolled to rest on the floor (`PaintedRest.placePlane`, PR-0022). (The KO fall
     // tilts the *inner group*, which carries both planes together.)
-    slot.mesh.scale.set(scale.width * this.mirrorOf(tex.meta), scale.height, 1);
-    this.placeSlot(slot);
-    slot.material.uniforms['contactBand']!.value = contactBandFor(scale.height);
+    this.sizeSlot(slot, scale);
+    this.lockHead(slot); // D-510: from the last frame's view, so a plane put up between two frames is never drawn at the table's scale
 
     if (scale.clamped) {
       console.warn(
@@ -1058,9 +1095,21 @@ export class PaintedActor extends Group {
    */
   private pickReference(): void {
     this.reference = this.chooseReference();
-    this.referenceUpp = this.reference
-      ? computePoseScale(this.reference, { worldHeight: this.worldHeight, reference: this.reference, ...this.extents }).unitsPerPixel
-      : 0;
+    const own = this.reference
+      ? computePoseScale(this.reference, { worldHeight: this.worldHeight, reference: this.reference, ...this.extents })
+      : null;
+    this.referenceUpp = own ? own.unitsPerPixel : 0;
+    this.headRef = own ? this.headRefOf(this.reference!, own) : null;
+  }
+
+  /**
+   * D-510: what every other pose's head is held to: the reference's head box, sizing and subject. Nothing when the reference has no registered
+   * head, lies down, or the actor shifts its poses by hand (FF7's Film set); a placeholder never has a head.
+   */
+  private headRefOf(ref: PoseMeta, scale: PoseScale): HeadRef | null {
+    if (!ref.head || scale.prone || this.poseShiftPx) return null;
+    for (const p of this.poses.values()) if (p.meta === ref && !p.placeholder) return { head: ref.head, scale, subject: subjectOfPainting(p.url) };
+    return null;
   }
 
   private chooseReference(): PoseMeta | null {
@@ -1081,6 +1130,88 @@ export class PaintedActor extends Group {
       if (tex) this.applyPose(this.slots.indexOf(slot), slot.pose, tex);
     }
     this.syncOpacity();
+  }
+
+  /** Put a plane at `scale`: its size, where it stands (`placeSlot`) and the contact ramp that follows its height. The one place a plane's `scale` is written after `computePoseScale`. */
+  private sizeSlot(slot: PlaneSlot, scale: PoseScale): void {
+    slot.scale = scale;
+    slot.mesh.scale.set(scale.width * this.mirrorOf(slot.meta), scale.height, 1);
+    this.placeSlot(slot);
+    slot.material.uniforms['contactBand']!.value = contactBandFor(scale.height);
+  }
+
+  /**
+   * D-510 (`HeadLock.ts`): called by the stage once a frame, after `update`, with this frame's view-projection (`HeadLockStage.holdHeads`). Every plane
+   * that shows is scaled about the figure's feet so its registered head is as big on screen as the idle's is, under this camera; a plane put up between
+   * two frames is held at once from the view kept here. Nothing happens for an actor with no registered idle head, and an actor never handed a view
+   * (a cutscene, a portrait) is never touched.
+   */
+  holdHead(view: Matrix4): void {
+    this.headView.copy(view);
+    this.headViewed = true;
+    if (!this.headRef || !this.showFigure) return;
+    for (const slot of this.slots) if (slot.fade > 0.001 && slot.mesh.visible) this.lockHead(slot);
+  }
+
+  /**
+   * Hold one plane's head to the idle's, through the view {@link holdHead} last saw. A plane that cannot be held (no registered head, no view yet, the
+   * reference itself, a stand-in, another subject's painting, a degenerate frame) has the table's scale, exactly what it had before the lock; a plane the
+   * lock held before and cannot now is put back at it.
+   */
+  private lockHead(slot: PlaneSlot): void {
+    const ref = this.headRef;
+    const head = slot.meta.head;
+    if (!ref || !head || !this.headViewed || !this.showFigure || slot.meta === this.reference || !slot.painted || slot.painted.placeholder || ref.subject === null || slot.subject !== ref.subject) {
+      if (slot.lock !== 1) {
+        slot.lock = 1;
+        this.sizeSlot(slot, slot.base);
+      }
+      return;
+    }
+    const want = this.referenceHeadSize(ref);
+    const res = solveHeadFactor((f) => {
+      this.sizeSlot(slot, scaledPose(slot.base, f));
+      slot.mesh.updateMatrix();
+      return this.headSizeThrough(slot.mesh.matrix, head);
+    }, want);
+    if (!res.skipped && Math.abs(res.factor - res.evaluated) > 1e-9) this.sizeSlot(slot, scaledPose(slot.base, res.factor));
+    slot.lock = res.skipped ? 1 : res.factor;
+    if (this.headLock.note(slot.pose, res)) {
+      console.warn(`[headlock] "${this.name}" pose "${slot.pose}": its head needs x${res.raw.toFixed(3)} of the table's scale; held to x${res.factor.toFixed(2)} (the band is ${HEAD_BAND[0]} to ${HEAD_BAND[1]}).`);
+    }
+  }
+
+  /** How big a head box is on screen through `local` (a plane's matrix in the inner group) under the view in hand: NDC units, NaN when degenerate. */
+  private headSizeThrough(local: Matrix4, head: HeadBox): number {
+    lockMvp.multiplyMatrices(this.headView, this.inner.matrixWorld).multiply(local);
+    return projectedHeadSize(lockMvp.elements, head);
+  }
+
+  /** The idle's head on screen: its plane as `placeSlot` puts it (centred on the actor, its anchor row on the ground), under the figure's transform of this frame. */
+  private referenceHeadSize(ref: HeadRef): number {
+    this.inner.updateWorldMatrix(true, false);
+    lockLocal.compose(lockPos.set(0, ref.scale.offsetY, 0), lockQuat.identity(), lockScale.set(ref.scale.width * this.mirrorOf(this.reference!), ref.scale.height, 1));
+    return this.headSizeThrough(lockLocal, ref.head);
+  }
+
+  /**
+   * D-510: `scale` (a pose's table scale, `computePoseScale`) with the factor the head lock would hold the pose at if it stood now, for a pose that is not
+   * on a plane (`poseShape`: the strike solver's look at the pose a blow lands in, which must be the plane the stage will draw, not the table's). Reads the
+   * view the last frame saw and changes nothing; `scale` itself when the pose could not be held.
+   */
+  private heldScale(painted: PaintedTexture, scale: PoseScale, mirror: 1 | -1): PoseScale {
+    const ref = this.headRef;
+    const head = painted.meta.head;
+    if (!ref || !head || !this.headViewed || !this.showFigure || painted.meta === this.reference || painted.placeholder || subjectOfPainting(painted.url) !== ref.subject) return scale;
+    const want = this.referenceHeadSize(ref);
+    const res = solveHeadFactor((f) => {
+      const s = scaledPose(scale, f);
+      // where `placeSlot` would put it: slid across so its stance is the idle's, its anchor row on the ground
+      const x = this.registrationShift({ meta: painted.meta, scale: s, mesh: { scale: { x: s.width * mirror } } } as unknown as PlaneSlot);
+      lockLocal.compose(lockPos.set(x, s.offsetY, 0), lockQuat.identity(), lockScale.set(s.width * mirror, s.height, 1));
+      return this.headSizeThrough(lockLocal, head);
+    }, want);
+    return res.skipped ? scale : scaledPose(scale, res.factor);
   }
 
   private syncOpacity(): void {
@@ -1369,9 +1500,10 @@ export class PaintedActor extends Group {
     const resolved = resolvePoseName(name, (p) => this.poses.has(p));
     const painted = resolved ? this.poses.get(resolved) : undefined;
     if (!resolved || !painted || painted.placeholder) return null;
-    const scale = computePoseScale(painted.meta, { worldHeight: this.worldHeight, reference: this.reference, ...this.extents });
-    if (scale.prone) return null;
+    const table = computePoseScale(painted.meta, { worldHeight: this.worldHeight, reference: this.reference, ...this.extents });
+    if (table.prone) return null;
     const mirror = this.mirrorOf(painted.meta);
+    const scale = this.heldScale(painted, table, mirror); // D-510: the plane as the stage will draw it, held to the idle's head, not the table's
     const sx = scale.width * mirror;
     // where `placeSlot` puts the plane across: the sidecar's shift, then the registration that stands the pose's feet where the idle's are
     let px = 0;

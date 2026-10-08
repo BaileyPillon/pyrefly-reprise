@@ -189,6 +189,7 @@ export async function tryLoadMeta(imageUrl: string): Promise<PoseMeta | null> {
       ...(anchorY !== undefined ? { anchorY } : {}),
       ...(reg?.stanceX !== undefined ? { stanceX: reg.stanceX } : {}),
       ...(reg?.upright ? { upright: true } : {}),
+      ...(reg?.head ? { head: reg.head } : {}), // r394 (D-510): where the head is, for `HeadLock.ts`
       ...(parseArtFacing(raw.facing) ? { facing: parseArtFacing(raw.facing)! } : {}),
       ...(raw.seed !== undefined ? { seed: raw.seed } : {}),
       ...(raw.prompt !== undefined ? { prompt: raw.prompt } : {}),
@@ -329,6 +330,7 @@ async function preparePainting(
       ...(meta?.anchorY !== undefined && !stale ? { anchorY: meta.anchorY } : {}),
       ...(meta?.stanceX !== undefined ? { stanceX: meta.stanceX } : {}),
       ...(meta?.upright ? { upright: true } : {}),
+      ...(meta?.head ? { head: meta.head } : {}), // r394 (D-510)
       // Facing is a per-*pose* question: it decides whether the plane is
       // mirrored, and one old frontal `cast.png` can sit in a right-facing set.
       ...(meta?.facing !== undefined ? { facing: meta.facing } : {}),

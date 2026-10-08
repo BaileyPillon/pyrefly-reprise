@@ -997,6 +997,7 @@ No script published.
 20. `D:/Final Fantasy/research/ffx2-bahamut.md` — §1.5 (Break stack mechanics), §1.6 (steal-rate scale derivation), §4.2 (Lv 20–28 dressphere stat tables), §4.3–4.7 (Chapter 2 party model, adapted).
 21. `D:/Final Fantasy/research/writing-bible.md` §1.14–1.16 — YRP voice guides, used unchanged.
 22. `D:/Final Fantasy/research/visual-bible.md` §2.4 — location-sheet template referenced for §10.2.
+23. The Steam *FINAL FANTASY X/X-2 HD Remaster* model files on this PC (FFX-2 build 25501027): own measurement of the Syndicate's and the girls' model heights, 2026-10-07 — §20 (facts only; nothing from the files is in the repository).
 
 **Access note.** `finalfantasy.fandom.com` returned HTTP 402 to the WebFetch tool throughout this pass. All wiki content above was retrieved as **raw wikitext via the MediaWiki API** (`action=parse&prop=wikitext`) using a standard browser user-agent, which is the same underlying data the rendered pages display and is in fact *more* reliable — the infobox templates expose per-variant fields that the rendered tables collapse. `strategywiki.org` returned HTTP 403 and was not used.
 
@@ -1089,3 +1090,28 @@ Rows are left as written above; these notes override them (same precedent as §1
 **19.4 Two more facts from the same entry** (SinirothX), recorded for `ffx2-combat-core.md` §10.1: her normal attack is marked "does not stagger while hit", and No Love Lost makes all three of them Invincible while it plays. `[single source]`
 
 **What the engine should do (recommendation only):** (a) make the failsafe fire once, on turn 25 + uses, and name the reading and this section in the comment and the test name (PR-0106's second fix option); (b) change basic-pattern step 5 from Not-So-Mighty Guard to Fan Slap, labelled. Both make Act III slightly easier (fewer Protect, Shell and Regen recasts), so measure Chapter VI Act III before and after and put the change to Bailey once, as the house rule for sourced boss-side fixes says. No number changes.
+
+## 20. Research addendum (2026-10-07): how tall the Syndicate really stands (the HD models)
+
+**FFX-2 only** (rule 14: these five models are FFX-2's). Asked because Chapter VI drew the girls at one height and every fiend at 0.7 to 1.0 of a boss slot, so on screen the bosses read as 0.42 to 0.53 of a girl while the game's own models say 1.0 to 1.26. Bailey, 2026-10-07, after the options sheet: "Option 3: bosses forward (Recommended)". This section is the measurement behind the table in `src/data/ffx2/syndicate-stature.ts`; it carries **no engine, camera or stand-position fact** (see 20.4).
+
+**20.1 Method.** The Steam *FINAL FANTASY X/X-2 HD Remaster* files on this PC, FFX-2 build 25501027, read with the project's own `.dae.phyre` mesh reader (the REA lane, `D:/Tools/rea/tools/phyre.mjs` and `size-table.mjs`; facts only: no game file, text or code is in this repository). A model's height is the vertical extent of its bind-pose mesh bounds over every mesh segment of its model. The game's monster records name the model each fiend uses (the record's `model` field, offset 0x92): the records below were matched to this document's stat blocks by level, HP and Defense (Ormi Act I Lv 19, 1,640 HP, Def 120 is the game's record 243 = bestiary #220; Act II 1,840 HP, Def 121 is 244 = #221; Act III 1,344 HP, Def 84 is 245 = #222; Logos Act II 1,432 HP, Def 4 is 249 = #227; Act III 989 HP is 250 = #228; Leblanc 1,380 HP is 253 = #231; Dr. Goon 232 HP is 135; Fem-Goon 167 HP is 138). `[single source: own measurement]`
+
+**20.2 The table** (model units; the HD folder `chr/mon/<model>/`, `chr/pc/<model>/`):
+
+| Fiend | Acts | Model | Bind-pose height | Over the girls' mean |
+|---|---|---|---|---|
+| Ormi | I, II, III | `m129` (record `model` 0x1081, all seven Ormi records) | 19.557 | **1.152** |
+| Logos | II, III | `m130` (0x1082, all six Logos records) | 21.418 | **1.261** |
+| Leblanc | III | `m131` (0x1083) | 17.822 | **1.049** |
+| Dr. Goon | I | `m135` (0x1087) | 18.691 | **1.101** |
+| Fem-Goon | I | `m138` (0x108A) | 17.081 | **1.006** |
+| the girls | the party | `c056` to `c070`, 13 usable | mean **16.984** (16.263 to 17.697) | 1.000 |
+
+The two girl models left out are `c060` (a 44-unit mesh that is not a body) and `c067` (no mesh). The thirteen are `c056` 17.120, `c057` 17.648, `c058` 17.130, `c059` 17.697, `c061` 16.263, `c062` 17.222, `c063` 16.598, `c064` 16.263, `c065` 17.222, `c066` 16.598, `c068` 16.464, `c069` 17.433, `c070` 17.127. **Which model is which girl in which dressphere was not mapped**, so the table is "the Syndicate against the girls on average", not against one girl. `[single source: own measurement]`
+
+**20.3 The caveat that goes with every number: about 5 percent.** These are bind-pose bounds, hair and topknot included, one reader, one build. Treat a ratio as good to roughly one twentieth: Ormi 1.15 is "a head taller than the girls" and not "exactly 1.152". The ratio is between *models*; the stage draws a painting, and a painting stands at the world height the scene gives it, so the table sets a figure's standing height and says nothing about a raised fan or a gun held overhead in a pose. It also corrects a presentation estimate of ours: the scene's first constants made Ormi "short and stout" at 1.5 against the girls' 1.68 and Logos 1.95, which were never sourced and which the models contradict (Ormi's model is wider than it is tall, 21.2 against 19.6, and is taller than the girls).
+
+**20.4 Not found, and so not claimed.** (a) **An engine scale for these five models.** The game's formation table carries a per-monster column that precedes the monster symbol and reads 100 for each of the five (other monsters' rows read other values, such as 85); read as a size percent, 100 is unscaled. The model bounds are therefore used as they are, with no scale applied. `[single source: own reading of the table]` (b) **Where each side stands in a battle**, and (c) **the default battle camera** (the engine's own auto camera): the files hold position records and camera columns that carry no labels. So the distances between the girls and the fiends, and the camera and lens, are ours (`src/scenes/leblanc-last-room.ts`), not the game's, and no "real distance" is shown anywhere. `[unsourced]`
+
+**20.5 What the build does with it.** Chapter VI (and the hidden experimental chapter, which plays Chapter VI's three acts by reference) draws every fiend at the girls' standing height times its ratio above, in all three acts, in place of the stage's rule that gave a boss the scene's boss height and any other fiend 0.7 of it; the lane the fiends stand in is brought closer to the party (Bailey's option 3); the camera and its rigs are as they were. Presentation only: the battle engine's output is unchanged. The same method applies to the other chapters whose fiends are human-sized (XIV Isaaru, FFX; XV Den of Woe, FFX-2) once their models are measured; see `docs/handoff/r3941-stage.md`.
