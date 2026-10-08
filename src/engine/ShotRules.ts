@@ -16,6 +16,7 @@
 
 import type { CombatantId } from '../battle/common/types.ts';
 import type { BattleStage, MomentsPort } from './BattlePresenterPorts.ts';
+import { FFX2_GIANT_SHARE } from '../data/ffx2/fiend-stature.ts';
 import { cameraPresetFor } from './CameraPreset.ts';
 import { REVEAL_PARTY_MIN, ffx2Push, ffx2RevealSubjects, ffx2Shot, fittedPush } from './ShotFit.ts';
 
@@ -26,6 +27,13 @@ import { REVEAL_PARTY_MIN, ffx2Push, ffx2RevealSubjects, ffx2Shot, fittedPush } 
  * channel as the scenes' other presenter hints (`StageArrivals`, the airship range director): a plain `userData` key.
  */
 export const PHONE_FIT_KEY = 'phoneFit';
+
+/**
+ * r3942-stage wave 2 (FFX-2 only): the share of the phone frame's height a giant's top stays under: the boss gauge and the enemy-intent strip that sit across the top of the
+ * FFX-2 phone HUD (about 100 of the field's 520 px). The FFX-2 phone HUD reports no top band of its own (`phoneTop`), so a giant 0.7 of its real height filled the frame up to its
+ * edge, its wings behind the strip (15 percent of the figure at 390x844); with this the rig rises and stands back until the whole figure is below it, as FFX's does for its band.
+ */
+export const GIANT_PHONE_TOP = 0.19;
 
 export class ShotRules {
   /** A-1: set by the presenter for an engine with an ATB clock (FFX-2); FFX's CTB keeps its cuts. */
@@ -140,13 +148,15 @@ export class ShotRules {
       .filter(({ actor }) => (actor as { userData?: Record<string, unknown> }).userData?.[PHONE_FIT_KEY] !== false)
       // The party whole; an enemy whole too, unless it is a part wider than the slice (FrameFit).
       // r3941-heights: read at the party's shared height, so the master stands where it did before the heroes stood at their own (`SharedHeight.ts`).
-      .map(({ actor, enemy }) => ({ actor, min: enemy ? 0.75 : 1, shared: true }));
+      // r3942-stage wave 2 (FFX-2 only): a giant (Bahamut, Paragon, Anima, at 0.7 of its real height on the phone) is whole too, or the fit would leave it out for being wider than the slice and stand the camera where the girls fit alone.
+      .map(({ actor, enemy }) => ({ actor, min: enemy && !(this.ffx2Framing && FFX2_GIANT_SHARE[(actor as { name?: string }).name ?? ''] !== undefined) ? 0.75 : 1, shared: true }));
     let top = 0;
     try {
       top = this.overlay()?.phoneTop?.() ?? 0; // FOC23-01: keep heads below the phone HUD's top band
     } catch {
       top = 0;
     }
+    if (subjects.some((s) => s.min === 1 && this.stage.sideOf((s.actor as { name?: string }).name ?? '') === 'enemy')) top = Math.max(top, GIANT_PHONE_TOP); // a giant (whole, above): below the gauge and the intent strip
     cam.fitSlice('idle', this.phone, subjects, top);
   }
 }

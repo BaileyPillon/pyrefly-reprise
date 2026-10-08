@@ -8,6 +8,7 @@ import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
 import type { SceneSlots } from './index.ts';
 import { FORWARD_FIEND_ADVISOR_CAP } from './advisor-cap.ts';
 import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
+import { giantPhoneHeights } from './giant-stage.ts';
 import { CLOISTER_CAMERA_REF, CLOISTER_LINK_RIG, CLOISTER_WIDE_RIGS, cloisterRenderAspect, cloisterRigsFor } from './cloister-100-rigs.ts';
 import { CloisterLink } from './cloister-100-link.ts';
 
@@ -249,6 +250,8 @@ export const buildCloister100Scene: SceneFactory = async (opts: SceneBuildOption
     partyHeight: CLOISTER_ACTOR_HEIGHTS.party,
     enemyHeight: CLOISTER_ACTOR_HEIGHTS.paragon,
     ...CLOISTER_STAGING,
+    // r3942-stage wave 2 (FFX-2 only): on the upright phone Paragon stands at 0.7 of his real height (`giant-stage.ts`); a desktop publishes none (CHAPTER FRAMING, `fx/mix/giants.ts`).
+    figureHeights: { ...CLOISTER_STAGING.figureHeights, ...giantPhoneHeights([CLOISTER_IDS.paragon], 'ffx2-trema', CLOISTER_ACTOR_HEIGHTS.party) },
     palette: { ...CLOISTER_100_PALETTE },
     update(dt: number): void {
       backdrop.update(dt);

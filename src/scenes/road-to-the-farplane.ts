@@ -8,6 +8,7 @@ import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
+import { giantPhoneHeights } from './giant-stage.ts';
 import { RoadPhoneCamera, roadOnPhone, type RoadLinkIds } from './road-to-the-farplane-phone.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
@@ -308,6 +309,8 @@ export const buildRoadToTheFarplaneScene: SceneFactory = async (opts: SceneBuild
     partyHeight: ROAD_TO_THE_FARPLANE_SLOTS.partyHeight!,
     enemyHeight: ROAD_TO_THE_FARPLANE_SLOTS.enemyHeight!,
     ...ROAD_STAGING,
+    // r3942-stage wave 2 (FFX-2 only): on the upright phone Anima stands at 0.7 of her real height (`giant-stage.ts`); a desktop publishes none (CHAPTER FRAMING, `fx/mix/giants.ts`).
+    figureHeights: { ...ROAD_FIGURE_HEIGHTS, ...giantPhoneHeights([ROAD_IDS.anima], 'ffx2-fallen-aeons', ROAD_PARTY_HEIGHT) },
     palette: { ...ROAD_TO_THE_FARPLANE_PALETTE },
     ...(phoneCamera ? { bindCamera: (camera: BattleCamera | null): void => phoneCamera.bind(camera) } : {}),
     update(dt: number): void {

@@ -108,8 +108,11 @@ export class RigWatch {
     return this.n.moves + this.n.snaps;
   }
 
-  /** Register the master as the resting rig and re-author the close rigs from it; `on` false puts today's back. */
-  install(m: Pose, on: boolean): void {
+  /**
+   * Register the master as the resting rig and re-author the close rigs from it; `on` false puts today's back. `close` false (a giant's own camera, `giants.ts`) leaves the close rigs
+   * as the scene authored them: a camera 1.8 times as far and 2.9 higher would carry them with it and turn every close shot into a long one.
+   */
+  install(m: Pose, on: boolean, close = true): void {
     if (!this.installedOnce) {
       for (const name of this.bc.rigNames) {
         const r = this.bc.getRig(name);
@@ -123,7 +126,7 @@ export class RigWatch {
     for (const [name, r] of this.orig) {
       if (on && name === 'idle') {
         this.bc.addRig('idle', { position: m.pos.clone(), lookAt: m.look.clone(), fov: m.fov, ...(r.sway !== undefined ? { sway: r.sway } : {}) });
-      } else if (on && base && CLOSE.includes(name)) {
+      } else if (on && close && base && CLOSE.includes(name)) {
         const fov = r.fov ?? this.cam.fov;
         this.bc.addRig(name, { position: m.pos.clone().add(v(r.position).sub(base.pos)), lookAt: v(r.lookAt), fov: fov + (m.fov - base.fov), ...(r.sway !== undefined ? { sway: r.sway } : {}) });
       } else {

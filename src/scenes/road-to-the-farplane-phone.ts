@@ -27,7 +27,7 @@ import { findFigure } from './cavern-stolen-fayth-cast.ts';
 // the height, the fov and every other rig stay as they are; so do the
 // formation, the painting and the slide. These are the values the option's
 // frames were made with in the running renderer (the README, "How these were
-// made"). Staging, not game data.
+// made"). Staging, not game data. (Anima's, since r3942-stage wave 2, is her own: see `ROAD_PHONE_IDLE_Z` and `ROAD_PHONE_ANIMA`.)
 //
 // How. The scene builds one of these when the battle HUD is the phone's; the
 // loaded scene binds the battle camera (`SceneBuild.bindCamera`), and the
@@ -41,14 +41,22 @@ import { findFigure } from './cavern-stolen-fayth-cast.ts';
 export type RoadLink = 'shiva' | 'sisters' | 'anima';
 export const ROAD_LINK_ORDER: readonly RoadLink[] = ['shiva', 'sisters', 'anima'];
 
-/** How far back the phone's idle camera stands on each link (world z). Option A's frames. */
-export const ROAD_PHONE_IDLE_Z: Readonly<Record<RoadLink, number>> = { shiva: 13.2, sisters: 15.5, anima: 13.2 };
+/**
+ * How far back the phone's idle camera stands on each link (world z). Option A's frames for Shiva and the Sisters. **Anima's (r3942-stage wave 2, FFX-2 only, Bailey 2026-10-08,
+ * "go with your recommendations", option 4 of the giants options sheet): she stands at 0.7 of her real height, 9.6 world units on the phone (`data/ffx2/fiend-stature.ts`), so
+ * her camera stands at z 19.49 and looks up the figure ({@link ROAD_PHONE_ANIMA}); at 3.4 and z 13.2 she was the scene's boss height.**
+ */
+export const ROAD_PHONE_IDLE_Z: Readonly<Record<RoadLink, number>> = { shiva: 13.2, sisters: 15.5, anima: 19.49 };
+
+/** The rest of Anima's phone camera: where it stands (x, y) and what it looks at, solved with the options sheet's picture at 390x844: the whole figure below the intent strip, the girls at the left. */
+export const ROAD_PHONE_ANIMA = { x: -0.1, y: 2.35, lookAt: [0.19, 3.35, 9.55] } as const;
 
 /** Which combatant ids field each link (the scene's `ROAD_IDS`, passed in to keep the import one-way). */
 export type RoadLinkIds = Readonly<Record<RoadLink, readonly string[]>>;
 
-/** The phone's idle rig for `link`: the desktop's, dollied straight back to that link's z. */
+/** The phone's idle rig for `link`: the desktop's, dollied straight back to that link's z (Anima's own: {@link ROAD_PHONE_ANIMA}). */
 export function roadPhoneIdle(idle: CameraRig, link: RoadLink): CameraRig {
+  if (link === 'anima') return { ...idle, position: [ROAD_PHONE_ANIMA.x, ROAD_PHONE_ANIMA.y, ROAD_PHONE_IDLE_Z.anima], lookAt: [...ROAD_PHONE_ANIMA.lookAt] };
   const p = idle.position;
   const [x, y] = Array.isArray(p) ? p : [p.x, p.y];
   return { ...idle, position: [x as number, y as number, ROAD_PHONE_IDLE_Z[link]] };

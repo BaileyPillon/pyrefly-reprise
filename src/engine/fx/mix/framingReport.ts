@@ -29,6 +29,8 @@ export interface FramingReport {
   stand: { chapter: string; party: [number, number]; enemy: [number, number]; by?: [string, number, number][]; byParty?: [string, number, number][] } | null;
   /** The table's pinned colossus master when the plan plays it (`colossusPin.ts`: the one answer and where the Sensor card stands), else null. */
   pin: ColossusPin | null;
+  /** The giant the plan plays (`giants.ts`, FFX-2 desktop): its combatant id, the group factor it stands at and the window shape; null otherwise. */
+  giant?: { id: string; k: number; aspect: number } | null;
   /** The tallest enemy's box in the chosen pose (CSS px): how big the boss draws. */
   bossPx: number;
   /** How long the last plan took on the main thread (ms): the prototype of option N took about 2 s, the table well under 100. */
