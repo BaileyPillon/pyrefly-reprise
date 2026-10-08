@@ -16,7 +16,7 @@ node tools/audio/voice-variant.mjs <name> --check    # measure and print, write 
 node tools/audio/voice-variant.mjs --list        # what each variant is
 ```
 
-It stages the variant as hard links in `D:/Tools/elevenlabs/candidates/voice-staging-<name>/` (`<id>.mp3` is the file `voice-ship` reads; the sources are never touched), runs `voice-ship --install --clean` with the mute list and `--variant <name>`, and the report records `variant`, `muted` and `accepted`. The two source folders, the staging folders and the mute list are data in `tools/audio/voice-variants.json`. After a switch run the voice tests and `node tools/audio/qa.mjs --strict`, and commit `public/audio/voice/` and `docs/audio/voice-ffx-ship-report.json`. Both directions were exercised: `tight` installed and committed, `recorded --check` passes (200 files, 80 accepted, 3.69 MB).
+It stages the variant as hard links in `D:/Tools/elevenlabs/candidates/voice-staging-<name>/` (`<id>.mp3` is the file `voice-ship` reads; the sources are never touched), runs `voice-ship --install --clean` with the mute list and `--variant <name>`, and the report records `variant`, `muted` and `accepted`. The two source folders, the staging folders and the mute list are data in `tools/audio/voice-variants.json`. After a switch run the voice tests and `node tools/audio/qa.mjs --strict`, and commit `public/audio/voice/` and `docs/audio/voice-ffx-ship-report.json`. Both directions were run for real: `recorded` installed (200 files, 3.69 MB, the report says `variant: recorded` and lists 81 accepted ids; 93 paths differ from the committed tree), then `tight` again, which returned the tree to **zero** diff (byte-identical files, manifests and report).
 
 ## Merge: conflicts and how they were resolved
 
@@ -58,7 +58,7 @@ With the voice, `braskas-final-aeon.mid-valefor-enters` (a seam beat) ran **29.2
 - The voice, audio and save test files together (26 files, 331 tests, all green): the 14 voice files plus the three save-upgrade lists, `audio-voice-shipped` (now running for real: its 5 installed-voice checks passed against the real install, plus one new check that the report's `variant` and `muted` match the config), the new `voice-variant.test.ts` (9 tests: the plan, the staging, the arguments, the config), `audio-manifest-io`, `audio-shipped-files`, the music files.
 - `node tools/audio/qa.mjs --strict` (the deploy preflight): green; voice-over 200 recordings, 3.60 MB of 20 MB; total music and effects 87.09 of 90 MB.
 - `node tools/orphans.mjs`: none of the voice modules is an orphan.
-- Full suite: see "Full suite" at the end.
+- **Full suite, once, on the merged tree** (`node node_modules/vitest/vitest.mjs run`, 437 s): **934 files: 928 passed, 5 skipped, 1 failed; 13,802 tests passed, 1 failed, 46 skipped.** The one failure is `ui-ffx2-atbmode.test.ts > a mounted FFX HUD has no Active/Wait chip in its DOM`, a 15 s timeout while the whole suite ran in parallel; alone it passes in 5.3 s (all 6 tests; it timed out under load in r395-voice's run too). It reads nothing this branch touches. No art-hash failures this time: r394-int re-recorded the pins and this tree's `public/art` is the release tree's.
 - Browser: see below.
 
 ## Headless browser proof (no ears needed)
