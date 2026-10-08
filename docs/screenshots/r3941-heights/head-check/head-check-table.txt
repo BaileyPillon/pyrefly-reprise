@@ -1,0 +1,40 @@
+CHK-026 on the stature build (r3941-heights), the continuity harness (critic/runner/lib/continuity.mjs): real keys, headless Chromium on the GPU, seed 1, 1600x900, the chapter won.
+'stature on' is the default; 'stature off' is the same build with ?stature=off (the same-build control). 'worst% reg' is the worst head-size jump at a pose swap among the swaps whose head box is registered (tolerance 3 percent).
+CHK-027 (motion continuity) fails in every row for reasons that are not this lane's (snaps at a knock-out cut, jerks, PR-0378 and PR-0379); the 39.4 baseline fails it the same way (docs/screenshots/r394-headlock/table.txt).
+
+chapter                   stature CHK-026  CHK-027  swaps  regd  KO regd worst% reg worst% KO >1%  overTol feet px fps   battle s 
+seymour-flux              off     PASS     FAIL     441    246   14      0.35       0.35      0    0       1       -     494.7    
+seymour-flux              on      PASS     FAIL     442    247   12      0.36       0.36      0    0       1       -     488.9    
+sin-fins-core             on      PASS     FAIL     1516   1151  16      0.28       0.27      0    0       1       -     1109.3   
+yojimbo-cavern            off     PASS     FAIL     119    72    2       0.3        0.3       0    0       0.9     -     126.2    
+yojimbo-cavern            on      PASS     FAIL     119    72    2       0.23       0.23      0    0       0.8     -     125.9    
+
+seymour-flux (stature off) KO swaps with a registered head, by figure:
+  tidus hurt->ko               n 2   ratio 1.0025 to 1.0035
+  tidus idle->ko               n 1   ratio 1.0007 to 1.0007
+  tidus ko->idle               n 3   ratio 0.9989 to 0.9996
+  yuna idle->ko                n 3   ratio 0.9997 to 0.9999
+  yuna ko->idle                n 5   ratio 1.0002 to 1.0005
+
+seymour-flux (stature on) KO swaps with a registered head, by figure:
+  tidus hurt->ko               n 2   ratio 1.0027 to 1.0036
+  tidus idle->ko               n 1   ratio 1.0010 to 1.0010
+  tidus ko->idle               n 3   ratio 0.9991 to 0.9994
+  yuna idle->ko                n 3   ratio 0.9995 to 1.0000
+  yuna ko->idle                n 3   ratio 1.0004 to 1.0011
+
+sin-fins-core (stature on) KO swaps with a registered head, by figure:
+  auron hurt->ko               n 3   ratio 1.0023 to 1.0027
+  auron idle->ko               n 1   ratio 1.0000 to 1.0000
+  auron ko->idle               n 5   ratio 0.9999 to 1.0006
+  yuna hurt->ko                n 1   ratio 1.0002 to 1.0002
+  yuna idle->ko                n 2   ratio 0.9994 to 0.9996
+  yuna ko->idle                n 4   ratio 0.9999 to 1.0005
+
+yojimbo-cavern (stature off) KO swaps with a registered head, by figure:
+  lulu hurt->ko                n 1   ratio 1.0030 to 1.0030
+  lulu ko->critical            n 1   ratio 1.0002 to 1.0002
+
+yojimbo-cavern (stature on) KO swaps with a registered head, by figure:
+  lulu hurt->ko                n 1   ratio 1.0023 to 1.0023
+  lulu ko->critical            n 1   ratio 1.0009 to 1.0009

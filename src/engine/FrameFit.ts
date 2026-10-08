@@ -17,6 +17,7 @@
  */
 
 import { PerspectiveCamera, Vector3 } from 'three';
+import { backToShared, statureOf, type Staged } from './SharedHeight.ts';
 
 type Quad = [Vector3, Vector3, Vector3, Vector3];
 
@@ -26,9 +27,15 @@ type Quad = [Vector3, Vector3, Vector3, Vector3];
  * (defaults to `floor`; `floor` defaults to `min`).
  */
 export interface FitSubject {
-  actor: { contentQuad?(out?: Quad): Quad };
+  actor: { contentQuad?(out?: Quad): Quad } & Staged;
   min: number;
   floor?: number;
+  /**
+   * Read the figure at the party's shared height, not at the height the stage drew it (`SharedHeight.ts`, r3941-heights): the A-12 phone
+   * refit places the camera, and the camera stays where it was before the heroes stood at their own heights. Off by default: a push that
+   * must not cut a head (A-11) reads the figure as drawn.
+   */
+  shared?: boolean;
 }
 
 export interface FrameVerdict {
@@ -149,11 +156,20 @@ const SLICE_MARGIN = 0.04;
 
 type Box = { x0: number; x1: number; y0: number; y1: number };
 
+const ground = new Vector3();
+
 /** One subject's screen box (NDC) from `cam`; null with no painted quad, a huge box behind the lens. */
-function boxOf(cam: PerspectiveCamera, subject: FitSubject['actor']): Box | null {
-  if (typeof subject.contentQuad !== 'function') return null;
+function boxOf(cam: PerspectiveCamera, subject: FitSubject): Box | null {
+  const { actor } = subject;
+  if (typeof actor.contentQuad !== 'function') return null;
   let box: Box | null = null;
-  for (const c of subject.contentQuad(quad)) {
+  const q = actor.contentQuad(quad);
+  const k = subject.shared ? statureOf(actor) : 1;
+  if (k !== 1 && actor.getWorldPosition) {
+    actor.getWorldPosition(ground);
+    for (const v of q) backToShared(v, ground, k);
+  }
+  for (const c of q) {
     tmp.copy(c).applyMatrix4(cam.matrixWorldInverse);
     if (tmp.z >= -cam.near) return { x0: -9, x1: 9, y0: -9, y1: 9 };
     tmp.applyMatrix4(cam.projectionMatrix);
@@ -197,7 +213,7 @@ export function fitRigToSlice(live: PerspectiveCamera, rig: FitRig, slice: numbe
     const cam = pose(live, r, 0);
     let b: Box | null = null;
     for (const s of subjects) {
-      const o = boxOf(cam, s.actor);
+      const o = boxOf(cam, s);
       // A figure that need not be whole (min < 1) and is wider than the slice at
       // this distance is a colossus part that fills the frame by design: it
       // cannot be fitted, and standing back for it would shrink everyone else.

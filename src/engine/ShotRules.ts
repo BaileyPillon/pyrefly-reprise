@@ -139,7 +139,8 @@ export class ShotRules {
       // A scene's own marker (`PHONE_FIT_KEY`): a colossus that fills the field by design stays out of the refit.
       .filter(({ actor }) => (actor as { userData?: Record<string, unknown> }).userData?.[PHONE_FIT_KEY] !== false)
       // The party whole; an enemy whole too, unless it is a part wider than the slice (FrameFit).
-      .map(({ actor, enemy }) => ({ actor, min: enemy ? 0.75 : 1 }));
+      // r3941-heights: read at the party's shared height, so the master stands where it did before the heroes stood at their own (`SharedHeight.ts`).
+      .map(({ actor, enemy }) => ({ actor, min: enemy ? 0.75 : 1, shared: true }));
     let top = 0;
     try {
       top = this.overlay()?.phoneTop?.() ?? 0; // FOC23-01: keep heads below the phone HUD's top band
