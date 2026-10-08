@@ -263,6 +263,30 @@ sent (`music_length_ms` 80000, `force_instrumental` true):
 Warm, cinematic and hopeful menu theme at 72 BPM in D major, 4/4. A solo grand piano opens with a gentle, singing melody over soft sustained strings; a warm cello answers; then the full string section swells softly with a light harp and a distant French horn, like the calm morning before a long journey. Emotional but restrained, spacious, beautifully recorded. No drums, no percussion, no vocals, no electronic sounds. Loops cleanly: no final chord, no fade-out.
 ```
 
+#### `chapter-select-a` (both games; a selectable alternate in OPTIONS, CHAPTER MUSIC = A): take A
+
+Brief `chapter-select`, take 1; generated 2026-10-07 13:04 UTC (1,095 credits). The raw take is an MP3 at
+128 kbps, 73.04 s, SHA-256 `966af4fb31ff5c762b4bdf8647baca86ee6a1d7dee701f8a591d797e4dee4303`. The prompt, as
+sent (`music_length_ms` 73000, `force_instrumental` true):
+
+```
+Unhurried chamber waltz in 3/4 at 84 BPM in B minor. A solo flute plays four slow notes alone, then a pause; then harp and celesta begin an oom-pah-pah waltz under a gentle melody, and a string quartet joins and doubles the tune. Warm, calm, spacious, French-impressionist colour. No drums, no vocals. Loops cleanly: no final chord, no fade-out.
+```
+
+Bailey chose it as a selectable alternate to the board's default (take B above; Bailey, 2026-10-07: "and A as a selectable alternate as well"). It is a new cue that replaces no file. **Unlike the other takes it is encoded at LAME V4, not V0**, because the shipping cap was not raised and V0 would not fit (the record, `alternates[].master.why`). It is mastered with one gain to -16 LUFS and the loop cut, like the others; the loop starts at bar 13 of the take and ends at bar 33.
+
+#### `chapter-select-c` (both games; a selectable alternate in OPTIONS, CHAPTER MUSIC = C): take C
+
+Brief `chapter-select-c`, take 1; generated 2026-10-07 13:05 UTC (1,200 credits). The raw take is an MP3 at
+128 kbps, 80.04 s, SHA-256 `5c02c3af5eecad6b907b6f1961ad9fab839b4a16fe59e6f9137d22011ff46c66`. The prompt, as
+sent (`music_length_ms` 80000, `force_instrumental` false):
+
+```
+Ethereal, dreamlike menu theme at 66 BPM in E minor, 3/4. A concert harp plays slow rippling arpeggios; soft glass bells and a celesta sparkle above like drifting lights over still water; a wordless solo soprano sings a long, calm, floating melody on open vowels only, no words; a low warm string pad underneath. Serene, luminous, a little sad, very spacious with natural hall reverb. No drums, no lyrics, no electronic beats. Loops cleanly: no final chord, no fade-out.
+```
+
+Bailey chose it as a selectable alternate to the board's default (take B above; Bailey, 2026-10-07: "but C as a selectable alternate"). It is a new cue that replaces no file, encoded at LAME V4 like take A. The prompt asks for a wordless solo soprano, so the take carries an **AI-generated voice** singing open vowels, no words; the credits' AI-music disclosure covers it. It is mastered with one gain to -16 LUFS and the loop cut; the loop starts at bar 9 of the take and ends at bar 29.
+
 #### `title` (both games: the title screen, and the painted-scene demo where M toggles it)
 
 Brief `title`, take 1; generated 2026-10-07 13:36 UTC (1,365 credits). The raw take is an MP3 at

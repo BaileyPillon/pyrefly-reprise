@@ -67,6 +67,8 @@ interface Cue {
 }
 interface ElevenLabsRecord {
   source: string;
+  /** Release 39.5: cues added beside `cues` (they replace no file); pinned by `audio-chapter-select-alternates.test.ts`. */
+  alternates?: { cue: string; after: { bytes: number } }[];
   gates: { qaStrictFindings: number };
   stereoGate: { thresholds: { corr: [number, number]; sideMid: [number, number]; monoLossMin: number } };
   cues: Cue[];
@@ -118,7 +120,7 @@ describe('ElevenLabs music: the record', () => {
       .filter(([, entry]) => externalSource(entry) !== null)
       .map(([name]) => name)
       .sort();
-    expect(exempt).toEqual(record.cues.map((c) => c.cue));
+    expect(exempt).toEqual([...record.cues.map((c) => c.cue), ...(record.alternates ?? []).map((c) => c.cue)].sort());
     for (const name of exempt) expect(manifest.music[name]!.source, name).toBe(record.source);
   });
 });
@@ -212,7 +214,7 @@ describe.each(record.cues.map((c) => [c.cue, c] as const))('ElevenLabs music: %s
 describe('ElevenLabs music: the whole', () => {
   it('moved the music total by exactly the bytes these cues changed, from the total music v2 pinned', () => {
     const total = Object.values(manifest.music).reduce((sum, e) => sum + e.bytes, 0);
-    const moved = record.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
+    const moved = record.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0) + (record.alternates ?? []).reduce((sum, c) => sum + c.after.bytes, 0);
     expect(total).toBe(v2.totals.musicBytesAfter + moved);
   });
 

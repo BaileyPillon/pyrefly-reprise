@@ -20,6 +20,8 @@ import type { Chapter, ChapterId } from '../../data/encounters.ts';
 import { CHAPTERS, getChapter } from '../../data/encounters.ts';
 import type { StoryScript } from '../../story/dsl.ts';
 import { audio } from '../../audio/index.ts';
+import { readSetting } from '../SaveData.ts';
+import { chapterSelectCue } from '../saveFrontend.ts';
 import { BattleScreen, type BattleScreenOptions, type BattleScreenResult } from './BattleScreen.ts';
 import { PartyPrepScreen } from './PartyPrepScreen.ts';
 // Type-only: erased at build time, so this adds no runtime edge to the screen.
@@ -287,7 +289,9 @@ export class GameFlow {
   /** Show chapter select and resolve with the player's pick. */
   async chapterSelect(): Promise<ChapterId | null> {
     this.step = 'chapter-select';
-    void audio.playMusic('chapter-select', { fade: 1.2 }).catch(() => {
+    // 39.5 (Bailey, 2026-10-07; both games): B is the default, A and C are selectable (CHAPTER MUSIC in OPTIONS). An
+    // unknown value plays B (`saveFrontend.ts`); a cue whose file cannot load plays B's score through its stand-in.
+    void audio.playMusic(chapterSelectCue(readSetting('chapterSelectMusic')), { fade: 1.2 }).catch(() => {
       /* the track may not be composed yet */
     });
     const screen = await boardWhenWarm(this.app, makeChapterSelect); // PR-0065: no grey busts on arrival

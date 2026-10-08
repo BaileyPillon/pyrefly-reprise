@@ -26,6 +26,8 @@
  *   `manifestEntry`, `stereo`, and `file` when the staged file is not named like the cue's `install.stageFile`), then
  *   install --cue=<cue> --variant=<its name>, then measure, then correct the THEMES.md row.
  * To add a cue (the title, say): add its entry to the record by hand, then install and measure.
+ * `alternates` (release 39.5: chapter-select-a and chapter-select-c, selectable in OPTIONS) is the same shape without `before`,
+ *   because those cues replace no file; install and measure treat both lists alike (`--cue=` names a cue from either).
  *
  * Game case: both (shared plumbing; the record says which cue is which game's).
  */
@@ -38,6 +40,7 @@ import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { AUDIO_BUDGET_BYTES, setMusicEntryText, withManifestLock } from './manifest-io.mjs';
+import { insertMusicEntryText } from './manifest-insert.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const AUDIO = join(ROOT, 'public/audio');
@@ -52,9 +55,12 @@ const readRecord = () => JSON.parse(readFileSync(RECORD, 'utf8'));
 const writeRecord = (record) => writeFileSync(RECORD, `${JSON.stringify(record, null, 2)}\n`);
 const inRange = (x, [low, high]) => x >= low && x <= high;
 
+/** Every cue the record holds: the ones that replaced a file, then the added alternates. */
+const allCues = (record) => [...record.cues, ...(record.alternates ?? [])];
+
 async function install(variant, only) {
   const record = readRecord();
-  for (const cue of record.cues) {
+  for (const cue of allCues(record)) {
     if (only && !only.includes(cue.cue)) continue;
     const v = cue.variants[variant];
     if (!v) throw new Error(`${cue.cue}: the record has no "${variant}" variant`);
@@ -66,7 +72,9 @@ async function install(variant, only) {
     // The manifest is edited as text under its lock, like every other writer: one entry changes and no other byte does.
     await withManifestLock(AUDIO, () => {
       const entry = { file: `music/${cue.cue}.mp3`, ...v.manifestEntry, source: record.source };
-      const next = setMusicEntryText(readFileSync(MANIFEST, 'utf8'), cue.cue, entry);
+      const text = readFileSync(MANIFEST, 'utf8');
+      // A cue that replaces a file has its block already; an added alternate gets a new one, after the cue it names (`insertAfter`).
+      const next = text.includes(`    "${cue.cue}": {`) ? setMusicEntryText(text, cue.cue, entry) : insertMusicEntryText(text, cue.insertAfter, cue.cue, entry);
       const temp = `${MANIFEST}.tmp-${process.pid}`;
       writeFileSync(temp, next);
       renameSync(temp, MANIFEST);
@@ -87,7 +95,7 @@ function measure() {
     const qa = JSON.parse(readFileSync(qaPath, 'utf8'));
 
     // quality-measure.py on the record's files: stereo, loudness range, rise time, the encoder wall.
-    const files = record.cues.map((cue) => join(AUDIO, manifest.music[cue.cue].file));
+    const files = allCues(record).map((cue) => join(AUDIO, manifest.music[cue.cue].file));
     const qualityPath = join(temp, 'quality.json');
     execFileSync(PY, [join(ROOT, 'tools/audio/quality-measure.py'), ...files, '--json', qualityPath], {
       stdio: ['ignore', 'ignore', 'inherit'],
@@ -95,7 +103,7 @@ function measure() {
     const quality = JSON.parse(readFileSync(qualityPath, 'utf8'));
 
     const gate = record.stereoGate.thresholds;
-    for (const cue of record.cues) {
+    for (const cue of allCues(record)) {
       const file = join(AUDIO, manifest.music[cue.cue].file);
       const row = qa.cues.find((r) => r.name === cue.cue);
       const q = quality.find((r) => r.file === basename(file));
@@ -148,7 +156,7 @@ function measure() {
     console.log(`wrote ${RECORD}`);
     console.log(`qa findings ${record.gates.qaStrictFindings}; music ${musicBytes} bytes, shipped audio ${shippedBytes} of ${AUDIO_BUDGET_BYTES}`);
     console.log('\nThe THEMES.md "How each cue ships" rows must show:');
-    for (const cue of record.cues) {
+    for (const cue of allCues(record)) {
       const m = cue.after.measure;
       const failed = Object.entries(cue.themesStereoGate).filter(([, ok]) => !ok).map(([name]) => name);
       console.log(

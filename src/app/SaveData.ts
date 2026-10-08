@@ -13,6 +13,7 @@ import { defaultFxLooks, defaultFxParts, migrateComfort, type FxLookSettings, ty
 import { applyComfort } from './applyComfort.ts';
 import { writeMerged } from './saveMerge.ts';
 import { migrateSfxBalance, SFX_DEFAULT_VOLUME } from './saveSfxBalance.ts';
+import { DEFAULT_CHAPTER_SELECT_MUSIC, DEFAULT_TITLE_ART, migrateFrontend, type ChapterSelectMusic, type TitleArt } from './saveFrontend.ts';
 
 export const SAVE_VERSION = 1;
 export const SAVE_KEY = 'pyrefly-reprise:save:v1';
@@ -161,6 +162,17 @@ export interface Settings extends FxLookSettings, FxPartSettings {
    * be coached on his own game.
    */
   battleHelp: boolean;
+  /**
+   * Which title screen is drawn: `'farplane'` (today's Gullwings painting, the default) or `'echo'` (Yuna in still
+   * water, with its own painted lettering, so the HTML "Echoes of Spira" is left out). A list, so a third can be
+   * added. Absent before release 39.5: reads `'farplane'` (`saveFrontend.ts`; Bailey, 2026-10-07).
+   */
+  titleArt: TitleArt;
+  /**
+   * Which chapter-select track plays on the board: `'b'` (the default), `'a'` or `'c'`, the three ElevenLabs takes
+   * Bailey heard (`chapter-select`, `chapter-select-a`, `chapter-select-c`). Absent before release 39.5: reads `'b'`.
+   */
+  chapterSelectMusic: ChapterSelectMusic;
 }
 
 export interface SaveData {
@@ -200,6 +212,8 @@ export function defaultSettings(): Settings {
     ffx2AtbMigrated: true,
     pausePanelsHidden: false,
     battleHelp: true,
+    titleArt: DEFAULT_TITLE_ART, // 39.5: today's painting stays the default
+    chapterSelectMusic: DEFAULT_CHAPTER_SELECT_MUSIC, // 39.5: "B as the default"
     reduceMotion:
       typeof window !== 'undefined' &&
       typeof window.matchMedia === 'function' &&
@@ -276,6 +290,7 @@ export function migrate(raw: Partial<SaveData> & { version?: number }): SaveData
   migrateComfort(settings, base.settings, raw.settings); // + D-317: a missing part takes its look's value
   migrateFfx2Atb(settings, raw.settings);
   migrateSfxBalance(settings, raw.settings); // D-293: an untouched 0.35 follows the new default, once
+  migrateFrontend(settings); // 39.5: a title screen or a chapter-select track that is not on the list reads as the default
   const out: SaveData = {
     ...base,
     ...raw,

@@ -23,10 +23,26 @@
  */
 
 import './title-reveal.css';
+import type { TitleArt } from '../../saveFrontend.ts';
 
 /** `public/art/title/keyart.png` at 32 x 18 (mean luma 0.54 before the far plane's grade; the 2026-09-21 plate was 0.46). */
 export const TITLE_PLACEHOLDER =
   'data:image/webp;base64,UklGRkoBAABXRUJQVlA4ID4BAACwBwCdASogABIAPm0ulUakIqIhKAqogA2JaACdMoR7ToM6zgk9FGFS6YBvPJtAVTGcwNImDRTo8ayYWo+l+NOCGeL9dxKAAP5rXz3LHknAuE2/ir0EyRJrJLA7qydm2JPCDozTL4gzvxLHE2jswQciKo/o2scLaWWikxDK4mycl99PElE/SxiSO+JAEr+iO7dP7W3WHMfs/IVFQVAjQt7+YeodnEy4Zxyx4MuezOVpKr1CbQMrHUgKLj5YEvDjhQQ+Ggh61xRTAKBu3PSUVvfsb4Wyho7xKD3vuaoqbvrkG+wKRwcfcbbdCyh/GJc/N23QLIv2ykEfzpR2mif/pjpDtam/+IkXuGohgCnItt1PMxbg0nOII/BPKQsekhAVcbdO5LMnX8FXqVhZnrYhpITOCNgZ1iTmzs+f42AAAAA=';
+
+/**
+ * `public/art/title/echo.png` (The Echo, the selectable alternate of 39.5; both games) at 32 x 18: Lanczos, lossy WebP
+ * quality 80, 252 bytes. The picture is almost all black, so the placeholder is nearly black (mean luma 0.11) with Yuna's
+ * glow in the middle: the first frame is the picture's own dark ground rather than the page's. Regenerate it from the
+ * plate when the plate changes (`D:/Tools/pyrefly-art-staging/title-echo/placeholder.b64.txt` is where it came from).
+ */
+export const TITLE_PLACEHOLDER_ECHO =
+  'data:image/webp;base64,UklGRvQAAABXRUJQVlA4IOgAAACwBQCdASogABIAPm0sk0akIiGhMBgIAIANiWcAyNXcC3zTei4L0PLBNoPZocEXFAXGO7D+owAA/v4niXK/5wqv2sUAJyh6eh/S6AlobTCfoCaOjdG7Y53iWWuKiD2VWf2B/HGQmfyc2vcac4NodxRU+7+zbhM+ol1z9hiko5UGd3wINnuGJnoWzU/q3Du1t73ypIdchCncZ9Q3wb3NkWL74uSRwupT5+yU4DMg1q67JhD2R4jY3aiSZsPXs0zfHyAkfhhb6fpUMiesIE5jBaC0K60UWCiKlUqdJL2Re1f3pwK5CVHAAAAA';
+
+/** The placeholder under each title screen's far plane (`Settings.titleArt`, `saveFrontend.ts`). */
+export const TITLE_PLACEHOLDERS: Readonly<Record<TitleArt, string>> = {
+  farplane: TITLE_PLACEHOLDER,
+  echo: TITLE_PLACEHOLDER_ECHO,
+};
 
 /** Longest the reveal waits for decoding before it shows the layers anyway. */
 export const TITLE_DECODE_CAP_MS = 2500;
@@ -38,6 +54,8 @@ export function titleLayers(root: ParentNode): HTMLImageElement[] {
 
 export interface TitleRevealOptions {
   capMs?: number;
+  /** The 32 px picture under the far plane: the screen's own (`TITLE_PLACEHOLDERS`). Omitted, the Farplane one. */
+  placeholder?: string;
   /** Injectable timer, for the unit test. */
   wait?: (ms: number) => Promise<void>;
 }
@@ -49,7 +67,7 @@ export interface TitleRevealOptions {
  * the dusk gradient (`data-art="missing"`), which is not black either.
  */
 export async function revealTitleWhenDecoded(root: HTMLElement, opts: TitleRevealOptions = {}): Promise<'decoded' | 'capped'> {
-  root.style.setProperty('--fe-title-ph', `url("${TITLE_PLACEHOLDER}")`);
+  root.style.setProperty('--fe-title-ph', `url("${opts.placeholder ?? TITLE_PLACEHOLDER}")`);
   root.classList.add('fe-title--decoding');
   const wait = opts.wait ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
   const settle = (img: HTMLImageElement): Promise<void> =>

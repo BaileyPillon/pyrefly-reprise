@@ -40,10 +40,14 @@ const record = read('docs/audio/music-v2-2026-09-30.json') as {
 };
 const later = read('docs/audio/music-elevenlabs-2026-10-07.json') as {
   cues: { cue: string; before: { bytes: number }; after: { bytes: number } }[];
+  /** Release 39.5: cues ADDED beside these (the two selectable chapter-select alternates): they replace no file. */
+  alternates?: { cue: string; after: { bytes: number } }[];
 };
-/** Cues a later record replaced, and the bytes it moved the music total by. */
+/** Cues a later record replaced or added, and the bytes it moved the music total by. */
 const replacedLater = new Set(later.cues.map((c) => c.cue));
-const movedLater = later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
+const addedLater = new Set((later.alternates ?? []).map((c) => c.cue));
+const movedLater =
+  later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0) + (later.alternates ?? []).reduce((sum, c) => sum + c.after.bytes, 0);
 const proof = read('docs/audio/music-v2-2026-09-30-browser.json') as {
   cues: Record<string, { status: number; frameDiff: number; click: { wrapErrorOverP99: number }; level: { loopAddedJumpDb: number } }>;
   live: { label: string; ok: boolean }[];
@@ -64,7 +68,7 @@ const themesGame = new Map(
 describe('music v2: route S for FFX, N2 for FFX-2', () => {
   it('replaces every FFX and FFX-2 cue and leaves the shared cues alone', () => {
     expect(record.cues.map((c) => c.cue).sort()).toEqual(
-      Object.keys(manifest.music).filter((k) => !record.unchanged.includes(k)).sort(),
+      Object.keys(manifest.music).filter((k) => !record.unchanged.includes(k) && !addedLater.has(k)).sort(),
     );
     expect(record.unchanged.sort()).toEqual(['chapter-select', 'pause', 'title']);
     for (const k of record.unchanged) expect(themesGame.get(k), k).toBe('both');
@@ -114,7 +118,7 @@ describe('music v2: route S for FFX, N2 for FFX-2', () => {
 
   it('passed the headless proof on a production build (for the files it played: not the cues a later record replaced)', () => {
     for (const k of Object.keys(manifest.music)) {
-      if (replacedLater.has(k)) continue; // the proof played the file this record measured; the release proves the new one
+      if (replacedLater.has(k) || addedLater.has(k)) continue; // the proof played the file this record measured; the release proves the new one
       const c = proof.cues[k]!;
       expect(c.status, k).toBe(200);
       expect(Math.abs(c.frameDiff), `${k} decoded length`).toBeLessThanOrEqual(2); // the manifest's 4 decimals

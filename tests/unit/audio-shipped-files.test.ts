@@ -23,7 +23,7 @@ import { readFileSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import { parseManifest } from '../../src/audio/manifest.ts';
-import { getTrack, trackNames } from '../../src/audio/tracks/index.ts';
+import { getTrack, hasTrack, trackNames } from '../../src/audio/tracks/index.ts';
 import { sfxNames } from '../../src/audio/sfx/index.ts';
 import { tempoCurveOf } from '../../src/audio/tempo.ts';
 // @ts-expect-error -- the render tooling is plain .mjs with no declarations.
@@ -92,9 +92,10 @@ describe('the shipped audio manifest', () => {
   });
 
   it('lists nothing the game cannot play', () => {
-    const tracks = new Set(trackNames());
     for (const name of Object.keys(manifest!.music)) {
-      expect(tracks.has(name), `manifest lists "${name}", which is not a track`).toBe(true);
+      // `hasTrack`, not `trackNames()`: a cue may be a stand-in for another cue's score (the two selectable chapter-select
+      // alternates of 39.5, `audio/tracks/index.ts`), which `trackNames()` leaves out so previews never duplicate.
+      expect(hasTrack(name), `manifest lists "${name}", which is not a track`).toBe(true);
     }
     const effects = new Set(sfxNames());
     for (const name of Object.keys(manifest!.sfx!.cues)) {

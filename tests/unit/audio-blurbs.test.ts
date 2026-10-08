@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { toMidi, type Track } from '../../src/audio/score.ts';
-import { TRACKS, TRACK_BLURBS, TRACK_NOTES } from '../../src/audio/tracks/index.ts';
+import { TRACKS, TRACK_BLURBS, TRACK_NOTES, trackNames } from '../../src/audio/tracks/index.ts';
 
 const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url));
 const THEMES_MD = join(REPO_ROOT, 'docs', 'audio', 'THEMES.md');
@@ -136,11 +136,13 @@ const NOTE_ENTRIES = Object.entries(TRACK_NOTES);
 
 describe('TRACK_NOTES covers the score', () => {
   it('has exactly one note per composed track', () => {
-    expect(Object.keys(TRACK_NOTES).sort()).toEqual(Object.keys(TRACKS).sort());
+    // `trackNames()`: the keys with a composition of their own. A stand-in (`chapter-select-a` and `-c`, the 39.5 alternates,
+    // ElevenLabs takes that fall back to B's score) has no score, so no note and no row.
+    expect(Object.keys(TRACK_NOTES).sort()).toEqual(trackNames().sort());
   });
 
   it('parsed the cue map — 21 rows, one per cue', () => {
-    expect([...CUE_MAP.keys()].sort()).toEqual(Object.keys(TRACKS).sort());
+    expect([...CUE_MAP.keys()].sort()).toEqual(trackNames().sort());
   });
 });
 

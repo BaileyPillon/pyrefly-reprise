@@ -125,6 +125,26 @@
       "truePeakDb": -1.7,
       "source": "elevenlabs-music_v2_5"
     },
+    "chapter-select-a": {
+      "file": "music/chapter-select-a.mp3",
+      "loopStart": 27.02449,
+      "loopEnd": 69.825714,
+      "duration": 72.8257,
+      "bytes": 1328956,
+      "lufs": -16.0,
+      "truePeakDb": -2.1,
+      "source": "elevenlabs-music_v2_5"
+    },
+    "chapter-select-c": {
+      "file": "music/chapter-select-c.mp3",
+      "loopStart": 22.774739,
+      "loopEnd": 77.307302,
+      "duration": 80.3073,
+      "bytes": 1408783,
+      "lufs": -16.0,
+      "truePeakDb": -3.0,
+      "source": "elevenlabs-music_v2_5"
+    },
     "ending-ffx": {
       "file": "music/ending-ffx.mp3",
       "loopStart": 33.642358,

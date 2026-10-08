@@ -24,6 +24,7 @@ import { describe, expect, it } from 'vitest';
 
 import { CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
 import { TRACKS, hasTrack } from '../../src/audio/tracks/index.ts';
+import { CHAPTER_SELECT_CUES } from '../../src/app/saveFrontend.ts';
 import type { ChapterScripts, Step, StoryScript } from '../../src/story/dsl.ts';
 
 const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url));
@@ -124,6 +125,12 @@ function referencedCues(): Map<string, string[]> {
   const fromScreens = new Set<string>();
   collectFromScreens(fromScreens);
   for (const key of fromScreens) note(key, 'screen');
+
+  // The chapter-select board asks for its cue through the player's choice (39.5, `Settings.chapterSelectMusic`):
+  // `BattleScreenFlow.chapterSelect` plays `chapterSelectCue(...)`, not a literal, so the three cues the choice can name
+  // are walked from the one table that names them. That the board really plays the chosen one is pinned by
+  // `audio-chapter-select-alternates.test.ts`.
+  for (const cue of Object.values(CHAPTER_SELECT_CUES)) note(cue, 'chapter select (the CHAPTER MUSIC choice)');
 
   return sources;
 }

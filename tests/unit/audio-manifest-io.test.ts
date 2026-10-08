@@ -18,6 +18,7 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import type { ManifestMusicEntry } from '../../tools/audio/manifest-io.mjs';
+import { insertMusicEntryText } from '../../tools/audio/manifest-insert.mjs';
 import {
   LOOP_DECIMALS,
   externalSource,
@@ -337,6 +338,56 @@ describe('setMusicEntryText and externalSource', () => {
     for (const [name, entry] of Object.entries(music)) {
       expect(setMusicEntryText(lf, name, entry), `${name} does not round-trip (LF)`).toBe(lf);
     }
+  });
+
+  // Release 39.5: two cues that replace no file (the chapter-select alternates) are ADDED to the manifest as new blocks.
+  it.each([
+    ['LF', '\n'],
+    ['CRLF', '\r\n'],
+  ])('adds a new block after the entry it names and changes nothing else, with %s line endings', (_name, eol) => {
+    const before = fixture(eol);
+    const added = { ...replacement, file: 'music/beta-two.mp3' };
+    const after = insertMusicEntryText(before, 'beta', 'beta-two', added);
+    const a = before.split(eol);
+    const b = after.split(eol);
+    // Every line of the original is still there, in order; the only new lines are the ten of the block, right after beta's.
+    expect(b.length).toBe(a.length + 10);
+    const at = a.indexOf('    },', a.indexOf('    "beta": {')) + 1;
+    expect([...b.slice(0, at), ...b.slice(at + 10)]).toEqual(a);
+    expect(b[at]).toBe('    "beta-two": {');
+    expect(after.replace(/\r\n/g, '\n').includes('\r')).toBe(false);
+    const parsed = JSON.parse(after) as { music: Record<string, Record<string, unknown>> };
+    expect(Object.keys(parsed.music)).toEqual(['alpha', 'beta', 'beta-two', 'gamma']);
+    expect(parsed.music['beta-two']).toEqual(added);
+    expect(parsed.music.beta).toEqual(JSON.parse(before).music.beta);
+    expect(after).toContain('"lufs": -16.0,');
+    // the block is closed with a comma (a neighbour follows it), as is the one above it
+    expect(b[b.indexOf('    "gamma": {') - 1]).toBe('    },');
+    expect(b[b.indexOf('    "beta-two": {') - 1]).toBe('    },');
+  });
+
+  it('refuses a name that is already there, an entry to insert after that is missing, and the last entry (no comma to give)', () => {
+    const text = fixture('\n');
+    expect(() => insertMusicEntryText(text, 'beta', 'alpha', replacement)).toThrow(/already has a music entry "alpha"/);
+    expect(() => insertMusicEntryText(text, 'delta', 'epsilon', replacement)).toThrow(/no music entry "delta"/);
+    expect(() => insertMusicEntryText(text, 'gamma', 'epsilon', replacement)).toThrow(/is the last one/);
+  });
+
+  it('puts a shipped entry back as the very same text: take chapter-select-a out by hand, insert it after its neighbour, get the file', () => {
+    const text = readFileSync(new URL('../../public/audio/manifest.json', import.meta.url), 'utf8');
+    const music = (JSON.parse(text) as { music: Record<string, { file: string }> }).music;
+    const names = Object.keys(music);
+    const name = 'chapter-select-a';
+    expect(names).toContain(name);
+    const after = names[names.indexOf(name) - 1]!;
+    const eol = text.includes('\r\n') ? '\r\n' : '\n';
+    const lines = text.split(eol);
+    const start = lines.indexOf(`    "${name}": {`);
+    let end = start;
+    while (!/^ {4}},?$/.test(lines[end]!)) end++;
+    const removed = [...lines.slice(0, start), ...lines.slice(end + 1)].join(eol);
+    expect((JSON.parse(removed) as { music: Record<string, unknown> }).music[name]).toBeUndefined();
+    expect(insertMusicEntryText(removed, after, name, music[name] as never)).toBe(text);
   });
 
   it('names a source only when the entry has a non-empty string for it', () => {
