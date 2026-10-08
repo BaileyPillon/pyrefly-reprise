@@ -424,3 +424,23 @@ It is where FFX-2 turns: Yuna meets the face she has been hunting for, and it is
 | 14 | Rikku's battle line | SinirothX quote pattern vs agent_0042 | agree |
 | 15 | Samurai in Chapter 3 at Kilika | wiki *Dressphere*, ffx2-fallen-aeons.md, nemes1ss | agree |
 | 16 | Music "Aeons" in the battle | wiki OST | single source |
+
+## 12. Research addendum (2026-10-08): how tall Ixion really stands (the HD model)
+
+**FFX-2 only** (rule 14: this is FFX-2's model of Ixion; the FFX chapter that fields him is not touched). Asked because Chapter XVI drew Ixion at the scene's boss height (3.4, Chapter XI's aeons) against girls of 1.78, and the build is moving to real sizes (Bailey, 2026-10-07: "I'll go with your recommendations full speed": real game sizes for everyone, heroes and bosses together, the camera unchanged). This section is the measurement behind Ixion's row in `src/data/ffx2/fiend-stature.ts`; it carries **no camera or stand-position fact** (see 12.4).
+
+**12.1 Method.** The Steam *FINAL FANTASY X/X-2 HD Remaster* files on this PC, FFX-2 build 25501027, read with the project's own reverse-engineering lane (`D:/Tools/rea`, outside the repository; facts only: no game file, model, text or decompiled code is in this repository). The engine's size law, read from the game's model loader and its world-matrix builder: **a model's world size is its mesh size in the HD files times the engine scale `C` (a float in the params block of the model's `.chr`) times the AI script's scale vector** (1 here). Ixion is a summoned beast and carries `C = 4`; the monster records for Ixion (12,380 HP in the Djose fight; the later 56,000 HP record) name the same model, `m166`. `[single source: own measurement]`
+
+**12.2 The table** (game units; the girls' side is the mean of the three dresspheres the chapter's party wears, White Mage Yuna `c018` 16.77, Dark Knight Rikku `c033` 18.54 and Dark Knight Paine `c053` 17.87 from the game's own job table, **17.73**):
+
+| Fiend | Model | Raw mesh height | C | Height (raw x C) | Engine height E (a design height) | Over the girls |
+|---|---|---|---|---|---|---|
+| Ixion | `m166` | 7.905 | 4 | **31.620** | 32 | **1.78** |
+
+The mesh is long as well as tall: 5.592 wide and 13.255 deep raw, 22.4 by 53.0 at `C = 4` (a quadruped seen from its side). The stored engine height (32) agrees with the mesh to 1.2 percent, the closest of any fiend measured. `[single source: own measurement]`
+
+**12.3 The caveat that goes with the number: about 5 percent.** A bind-pose silhouette with the horn included, one reader, one build. The painting we draw is Ixion in a three-quarter view with his head raised (`public/art/characters/x2-ixion`), so its pixel height and the model's silhouette height are two measures of one creature, not the same line: the table sets his standing height next to the girls and says nothing of the painting's own proportions.
+
+**12.4 Not found, and so not claimed.** (a) **Where each side stands.** The game's formation for the Djose fight has Ixion at (0, 0, 26) and the girls at (0, 0, -27), (-12, 0, -25) and (12, 0, -25) in game units (y up-negative), 52 units, or about five world units, between them; the files hold no lens or camera that would say how big he reads on screen. So the distance and the camera in `src/scenes/djose-chamber.ts` are ours. `[single source: own measurement]` (b) An idle-pose height.
+
+**12.5 What the build does with it.** Chapter XVI draws Ixion at 1.78 of the girls' standing height (1.78): 3.175 world units, in place of 3.4, and he stands nearer the girls (x 3.2, z -3.8, from x 4.2, z -6.0) so he reads 1.25 over them on screen instead of 1.16, his hooves still on the lit floor right of the pit (the plate is Bailey's pick, D-273). The real ratio at the same distance is 1.78: the command list takes his hindquarters at x 1246, so he cannot come nearer. Presentation only: the battle engine's output is unchanged.

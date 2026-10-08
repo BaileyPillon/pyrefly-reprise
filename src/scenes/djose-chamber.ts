@@ -10,6 +10,7 @@ import { DJOSE_CHAMBER_PLATE } from '../data/ixion-plates.ts';
 import { RoadPhoneCamera, roadOnPhone } from './road-to-the-farplane-phone.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
+import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
 
 // ---------------------------------------------------------------------------
 // Djose Temple, the Chamber of the Fayth (FFX-2)
@@ -77,7 +78,8 @@ export const DJOSE_IXION_SPOT: [number, number, number] = [1.0, 0, -6.0];
  * - Option C2 is seen from above, with the pit (and its raised rim) in the middle of the painting, 38 % of its
  *   width. Ixion's hooves must land on solid floor, not the rim (the judge's C2 fault), and the party slots are
  *   fixed, so the painting is 150 wide, slid 27 left (its right edge still covers the enemy and intro rigs at
- *   2000x1012) and raised to 2.3, and Ixion stands at x 4.2: his hooves on the lit floor right of the pit, the pit
+ *   2000x1012) and raised to 2.3, and Ixion stands at x 4.2 (z -6.0; since r3942-stage x 3.2, z -3.8, nearer the girls at his real height, see
+ *   {@link DJOSE_FIGURE_HEIGHTS}): his hooves on the lit floor right of the pit, the pit
  *   open between him and the party. Measured headless against a gridded copy of C2 at 1600x900, 2000x1012 and
  *   390x844, every rig. Disclosed: the party stands at the pit's near rim (no framing clears both).
  *   On an upright phone the idle camera stands at z about 23, and from there his hooves fell on the dark slab right
@@ -88,7 +90,7 @@ export const DJOSE_IXION_SPOT: [number, number, number] = [1.0, 0, -6.0];
 export const DJOSE_PLATE_FRAMES: Readonly<Record<string, DjosePlateFrame>> = {
   'ffx2-djose-chamber-standin': { width: 88, distance: -48, centreY: -0.5, horizon: [0.42, 0.48], groundBand: [0.8, 0.97], floor: false },
   'ffx2-djose-chamber-provisional': { width: 130, distance: -48, centreY: 22.4, horizon: [0.72, 0.78], groundBand: [0.84, 0.98], floor: false },
-  'djose-chamber-provisional': { width: 150, distance: -48, centreY: 2.3, shiftX: -27, horizon: [0.36, 0.42], groundBand: [0.6, 0.95], floor: false, ixion: [4.2, 0, -6.0], phoneCentreY: -2.2 },
+  'djose-chamber-provisional': { width: 150, distance: -48, centreY: 2.3, shiftX: -27, horizon: [0.36, 0.42], groundBand: [0.6, 0.95], floor: false, ixion: [3.2, 0, -3.8], phoneCentreY: -2.2 },
 };
 
 /** The frame for the plate the chapter shows now. */
@@ -134,7 +136,13 @@ export const DJOSE_ENEMY_HEIGHT = 3.4;
 
 const ENEMY_SLOTS: Array<[number, number, number]> = [DJOSE_SPOTS[DJOSE_IXION_ID]!, [2.3, 0, -8.0], [-0.5, 0, -6.6]];
 
-const DJOSE_STAGING = { holdParty: true, enemySpots: DJOSE_SPOTS } as const;
+/**
+ * Ixion's world height (r3942-stage, FFX-2 only): the girls' {@link DJOSE_PARTY_HEIGHT} times his model's ratio to them, from the game's own HD model
+ * (`data/ffx2/fiend-stature.ts`, `research/ffx2-ixion-djose.md` §12): 31.6 over the girls' 17.73 is 1.78, so 3.175 (the scene's boss height was 3.4, Chapter XI's).
+ */
+export const DJOSE_FIGURE_HEIGHTS: Readonly<Record<string, number>> = ffx2FiendFigureHeights([DJOSE_IXION_ID], 'ffx2-ixion-djose', DJOSE_PARTY_HEIGHT);
+
+const DJOSE_STAGING = { holdParty: true, enemySpots: DJOSE_SPOTS, figureHeights: DJOSE_FIGURE_HEIGHTS } as const;
 
 /** The published slots, the same shape every other scene exports. */
 export const DJOSE_CHAMBER_SLOTS: SceneSlots = {
