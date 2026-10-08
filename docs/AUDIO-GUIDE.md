@@ -548,13 +548,14 @@ Not synthesised and not part of the music/SFX manifest: recorded lines (ElevenLa
 dialogue box. First pass, 2026-10-07: **Tidus, Yuna and Auron in the FFX chapters**; every other speaker, and FFX-2 Yuna, stay text only
 until Bailey picks (`story/voice/voiceManifest.ts#GAMES_WITH_VOICE` is the one list to extend). The design is
 [`audio/voice-integration-design.md`](audio/voice-integration-design.md); what was built and how to run it is
-[`handoff/r395-voice.md`](handoff/r395-voice.md); the lines are [`audio/voice-ffx-plan.md`](audio/voice-ffx-plan.md).
+[`handoff/r395-voice.md`](handoff/r395-voice.md) and, for the installed recordings and the variant switch, [`handoff/r395-voice2.md`](handoff/r395-voice2.md); the lines are [`audio/voice-ffx-plan.md`](audio/voice-ffx-plan.md).
 
 | Step | Command | Writes |
 |---|---|---|
 | Inventory (ids, hashes) | `node tools/audio/voice-inventory.mjs` (`--check` is a unit test) | `docs/audio/voice-line-inventory.{json,md}` |
 | Record (paid; dry run by default) | `node tools/audio/voice-generate.mjs --yes --max-credits N` | `D:/Tools/elevenlabs/candidates/voice-ffx-2026-10-07/<line id>.mp3` |
 | Check, then install | `node tools/audio/voice-ship.mjs --dir <candidates> [--install]` | `public/audio/voice/<chapter>/<id>.mp3`, `<chapter>.json`, `index.json`, `docs/audio/voice-ffx-ship-report.json` |
+| Install a variant (one command) | `node tools/audio/voice-variant.mjs [tight or recorded] [--check]` (default `tight`, "pauses shortened"; `recorded` is "as recorded" and installs its 81 over-long pauses as accepted findings) | the same files, plus `variant`, `muted` and `accepted` in the report; the folders and the muted lines are in `tools/audio/voice-variants.json` |
 
 - **Shipped format and level:** mono, 24 kHz, 64 kbps MP3 (about 8 KB a second), trimmed to a 35 ms head and 90 ms tail, at -19 LUFS integrated
   measured **dual mono** (how a mono buffer plays through the stereo graph; the music is -16 LUFS stereo), true peak at most -1 dBTP. `--target-lufs`
