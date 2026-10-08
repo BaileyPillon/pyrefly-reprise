@@ -94,6 +94,12 @@ export declare function setMusicEntryText(
   entry: { file: string; [key: string]: string | number | undefined },
 ): string;
 
+/** The first and last line of a music entry's block in the manifest's text (split into lines). Throws when it is missing. */
+export declare function musicEntryLines(lines: string[], name: string): { start: number; end: number };
+
+/** The key lines of a music entry's block, in the manifest's order. */
+export declare function musicEntryBody(name: string, entry: { [key: string]: string | number | undefined }): string[];
+
 /**
  * The `source` an entry names when its MP3 was made outside the score (the ElevenLabs takes of 2026-10-07), else
  * `null`. Such an entry is exempt from the freshness checks against the score in `qa.mjs` and

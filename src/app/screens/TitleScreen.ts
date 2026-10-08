@@ -9,8 +9,10 @@ import { onboardingLive } from '../../ui/coach/coachState.ts';
 import { ParallaxField, normalisePointer } from './frontend/parallax.ts';
 import { MoteField } from './frontend/motes.ts';
 import { titleMarkup, upgradeTitlePlanes } from './frontend/titleMarkup.ts';
-import { revealTitleWhenDecoded } from './frontend/titleReveal.ts';
+import { TITLE_PLACEHOLDERS, revealTitleWhenDecoded } from './frontend/titleReveal.ts';
+import './frontend/title-echo.css';
 import { readSetting } from '../SaveData.ts';
+import { titleArtOf, type TitleArt } from '../saveFrontend.ts';
 import { holdForNextScreen, warmFrontEnd } from './frontendWarm.ts';
 import { briefingDue } from './raiseBriefing.ts';
 
@@ -53,6 +55,8 @@ import { briefingDue } from './raiseBriefing.ts';
  */
 export class TitleScreen extends Screen {
   readonly name = 'title';
+  /** Which title screen is up: read from the save on every `enter` (`Settings.titleArt`, `saveFrontend.ts`). */
+  private art: TitleArt = 'farplane';
   private advancing = false;
   private stage: HTMLElement | null = null;
   private parallax: ParallaxField | null = null;
@@ -91,14 +95,18 @@ export class TitleScreen extends Screen {
     installInkGoldStyles();
     this.reduceMotion = prefersReducedMotion() || readSetting('reduceMotion') === true;
 
-    this.root.className = 'screen fe fe-title ig';
-    this.root.innerHTML = titleMarkup({ briefingChip: onboardingLive() });
+    // 39.5 (Bailey, 2026-10-07): the player's choice of title screen. The default is today's Farplane painting; The Echo
+    // is one plane with its lettering painted in, so the markup leaves the HTML wordmark out (`titleMarkup`'s `art`).
+    this.art = titleArtOf(readSetting('titleArt'));
+    this.root.className = `screen fe fe-title ig${this.art === 'echo' ? ' fe-title--echo' : ''}`;
+    this.root.innerHTML = titleMarkup({ briefingChip: onboardingLive(), art: this.art });
     this.stage = this.root;
     // A-16: the placeholder first, every layer in once decoded (`frontend/titleReveal.ts`).
-    void revealTitleWhenDecoded(this.root);
+    void revealTitleWhenDecoded(this.root, { placeholder: TITLE_PLACEHOLDERS[this.art] });
     // The 2688px master, once the manifest says it is on disk. Never awaited:
     // the 1x plate is already decoding and the screen is correct without it.
-    void upgradeTitlePlanes(this.root);
+    // The Echo has no 2x master (its markup is never offered one), so there is nothing to upgrade.
+    if (this.art === 'farplane') void upgradeTitlePlanes(this.root);
     // The briefing's and the board's paintings, while the title waits for a key (PR-0065).
     warmFrontEnd(this.app, briefingDue(this.app));
 
@@ -123,6 +131,9 @@ export class TitleScreen extends Screen {
       near instanceof HTMLElement ? { el: near, depth: 1, scale: 1.06 } : null,
       cast instanceof HTMLElement ? { el: cast, depth: 1.35, scale: 1 } : null,
     ].filter((l): l is { el: HTMLElement; depth: number; scale: number } => l !== null);
+    // The Echo's picture is black at its edges and the ground behind it is the same black, so its one plane needs no
+    // overscan to hide the drift: it is held at scale 1, which keeps the painted lettering where the picture put it.
+    if (this.art === 'echo') for (const layer of layers) layer.scale = 1;
     this.parallax = new ParallaxField({ layers, reduceMotion: this.reduceMotion });
 
     window.addEventListener('resize', this.onResize, { passive: true });
@@ -220,6 +231,7 @@ export class TitleScreen extends Screen {
     return {
       advancing: this.advancing,
       skin: 'ink-and-gold',
+      art: this.art,
       reduceMotion: this.reduceMotion,
       reveal: this.root.dataset['titleReveal'] ?? 'pending',
       motes: this.motes?.size ?? 0,

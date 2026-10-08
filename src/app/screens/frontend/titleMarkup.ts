@@ -35,6 +35,7 @@ import { artManifest, loadArtManifest, title2xUrlFor } from '../../../engine/Art
 import { logicalArtUrl } from '../../../engine/ArtShipped.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
 import { movedNoticeHtml } from './movedNotice.ts';
+import { TITLE_ART_PLATES, type TitleArt } from '../../saveFrontend.ts';
 
 /**
  * Where the two on the shore stand, in fractions of the frame.
@@ -110,6 +111,16 @@ export interface TitleMarkupOptions {
   /** The `B` briefing chip, when onboarding is live. */
   readonly briefingChip: boolean;
   /**
+   * Which title screen (`Settings.titleArt`, `saveFrontend.ts`; Bailey, 2026-10-07). Omitted it is `'farplane'`, today's
+   * painting, so every caller that does not know about the choice draws exactly what it drew before.
+   * `'echo'` draws `art/title/echo.png` as ONE plane (its own picture, no flower band to cut a near plane from, no scrim,
+   * no bloom) and leaves out the HTML wordmark: the lettering "Echoes of Spira" is painted into the picture, and
+   * "once selected it hides echoes of spira since it's already in the image itself. it will look neater that way."
+   * The picture's `alt` carries those words for a screen reader instead. The eyebrow, the chip, the strap and the hint
+   * row are unchanged.
+   */
+  readonly art?: TitleArt;
+  /**
    * The hostname the page is served from, for the "we've moved" note (`movedNotice.ts`): the note is drawn
    * only for the old GitHub Pages address. Omitted, it is this page's own `location.hostname`; a test names one.
    */
@@ -127,17 +138,25 @@ export interface TitleMarkupOptions {
  * served without `public/art` still has a title screen.
  */
 export function titleMarkup(opts: TitleMarkupOptions): string {
-  const painting = artUrl(TITLE_PLATE);
+  const echo = opts.art === 'echo';
+  const painting = artUrl(echo ? TITLE_ART_PLATES.echo : TITLE_PLATE);
   // When the manifest is already in hand — the usual case, since it is
   // prefetched at bundle init and the title mounts after the app has booted —
   // the candidate list goes in with the element. Emitting `src` alone and
   // upgrading afterwards makes the browser start the 1x plate and then abort
   // it, which is a wasted megabyte and a red line in the network panel.
-  const candidates = titleSrcsetNow();
+  // The Echo ships its 1x plate alone (no 2x master tonight), so it is never offered one: a candidate for a file
+  // the manifest does not list is a 404 on the one image the screen is.
+  const candidates = echo ? '' : titleSrcsetNow();
   const plane = (mod: string): string =>
     `<div class="fe-title__plane fe-title__plane--${mod}">` +
-    `<img src="${painting}" ${candidates} alt="" draggable="false" ` +
+    `<img src="${painting}" ${candidates} alt="${echo ? 'Echoes of Spira' : ''}" draggable="false" ` +
     `onerror="this.closest('.fe-title__plane')?.setAttribute('data-art','missing')"></div>`;
+  // The Farplane screen's wordmark. Not drawn over The Echo, whose picture has it painted in.
+  const wordmark = echo
+    ? ''
+    : `<div class="fe-title__name">Echoes</div>
+      <div class="fe-title__name">of Spira</div>`;
 
   const briefing = opts.briefingChip
     ? `<span data-action="title:briefing" role="button" tabindex="0"><b>B</b> Briefing</span>`
@@ -155,20 +174,24 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
   // or mouse player is never told to tap and a touch player is never told
   // to press a key that is not there.
   const cast = castHtml();
-  return `
-    <div class="fe-title__tap" data-action="confirm">
-    ${plane('far')}
+  // The Echo is one plane: the far one, with the motes over it. The Farplane screen is the far plane, the bloom (off),
+  // the near plane cut to the flower band, the shore's pair (off) and the scrim.
+  const layers = echo
+    ? plane('far')
+    : `${plane('far')}
     <div class="fe-title__bloom"></div>
     ${plane('near')}
     ${cast ? `<div class="fe-title__cast">${cast}</div>` : ''}
-    <div class="fe-title__grade"></div>
+    <div class="fe-title__grade"></div>`;
+  return `
+    <div class="fe-title__tap" data-action="confirm"${echo ? ' data-title-art="echo"' : ''}>
+    ${layers}
     <div class="fe-title__motes"></div>
 
     <div class="fe-title__slab">
       <div class="fe-title__grain"></div>
       <div class="fe-title__eyebrow">An unofficial fan tribute</div>
-      <div class="fe-title__name">Echoes</div>
-      <div class="fe-title__name">of Spira</div>
+      ${wordmark}
       <div class="fe-title__rule"></div>
       <span class="fe-title__chip" data-action="confirm" role="button" tabindex="0"><i></i
         ><span class="fe-title__chip-label fe-title__chip-label--key">Press Enter</span

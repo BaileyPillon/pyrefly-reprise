@@ -19,6 +19,7 @@ import type { SaveStore } from '../../SaveData.ts';
 import { isFxLookField } from '../../fxLooks.ts';
 import { fxLookOnPatch, isFxSwitchField } from '../../fxParts.ts';
 import { stepTextSize, wrapTextSize } from '../../saveComfort.ts';
+import { CHAPTER_SELECT_MUSICS, TITLE_ARTS, cycle } from '../../saveFrontend.ts';
 import { TEXT_SPEEDS, VOLUME_STEP } from '../PauseScreenPanels.ts';
 
 /** FFX-2's Config ATB speeds, slowest first (`research/ffx2-combat-core.md` §1.2). */
@@ -91,6 +92,14 @@ export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1, press = 
     }
     case 'guideVisible':
       save.setSettings({ guideVisible: !settings.guideVisible });
+      return true;
+    case 'titleArt':
+      // 39.5: the title screens in a list; Left, Right and Confirm step and wrap. It shows the next time the title is drawn.
+      save.setSettings({ titleArt: cycle(TITLE_ARTS, settings.titleArt, dir) });
+      return true;
+    case 'chapterSelectMusic':
+      // 39.5: B, A, C in a list, B first (the default); steps and wraps. The board plays it the next time it opens.
+      save.setSettings({ chapterSelectMusic: cycle(CHAPTER_SELECT_MUSICS, settings.chapterSelectMusic, dir) });
       return true;
     default:
       return false;

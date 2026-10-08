@@ -15,6 +15,7 @@ import type { GameId } from '../../battle/common/types.ts';
 import type { Settings } from '../SaveData.ts';
 import { fxSummary } from '../fxParts.ts';
 import { TEXT_SIZES, textSizeLabel } from '../saveComfort.ts';
+import { CHAPTER_SELECT_LABELS, TITLE_ART_LABELS, chapterSelectMusicOf, titleArtOf } from '../saveFrontend.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 
 // ------------------------------------------------------------------ options
@@ -55,7 +56,8 @@ export const TEXT_SPEED_MAX: (typeof TEXT_SPEEDS)[5] = 2;
  * godspeed"), where eye-candy D's three look rows were: one row that opens the EYE CANDY page
  * (`pause/eyeCandyPage.ts`) and reads ALL ON, ALL OFF or `n OF 11` for `game` (`fxParts.ts`); the
  * pause drops it in FF7, which draws no eye candy.
- * `skipSeenCutscenes` stays off the menu.
+ * `skipSeenCutscenes` stays off the menu. Last, TITLE SCREEN and CHAPTER MUSIC (39.5, `saveFrontend.ts`): the two front-end
+ * choices Bailey asked to be selectable, each stepping through its list and wrapping.
  */
 export function optionRows(settings: Readonly<Settings>, game: GameId = 'ffx'): OptionRow[] {
   const pct = (v: number): string => `${Math.round(v * 100)}`;
@@ -80,6 +82,9 @@ export function optionRows(settings: Readonly<Settings>, game: GameId = 'ffx'): 
     { id: 'eyeCandy', label: 'EYE CANDY', value: fxSummary(settings, game), ratio: null },
     { id: 'ffx2Atb', label: 'X-2 BATTLE', value: settings.ffx2Atb === 'wait' ? 'WAIT' : 'ACTIVE', ratio: null },
     { id: 'guideVisible', label: 'STRATEGY GUIDE', value: settings.guideVisible ? 'ON' : 'OFF', ratio: null },
+    // 39.5 (Bailey, 2026-10-07; both games): which title screen is drawn, and which chapter-select track plays on the board.
+    { id: 'titleArt', label: 'TITLE SCREEN', value: TITLE_ART_LABELS[titleArtOf(settings.titleArt)], ratio: null },
+    { id: 'chapterSelectMusic', label: 'CHAPTER MUSIC', value: CHAPTER_SELECT_LABELS[chapterSelectMusicOf(settings.chapterSelectMusic)], ratio: null },
   ];
 }
 

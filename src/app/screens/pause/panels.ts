@@ -123,7 +123,9 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
     settings.splice(at < 0 ? settings.length : at + 1, 0, row('ffx2AtbSpeed', 'ATB SPEED', speed.toUpperCase(), { selectable: true }));
   }
   if (ctx.battleHelpOn !== null) {
-    settings.push(row('battleHelp', 'BATTLE HELP', ctx.battleHelpOn ? 'ON' : 'OFF', { selectable: true }));
+    // Under STRATEGY GUIDE, which it belongs with; the two front-end rows (39.5) follow.
+    const at = settings.findIndex((r) => r.id === 'guideVisible');
+    settings.splice(at < 0 ? settings.length : at + 1, 0, row('battleHelp', 'BATTLE HELP', ctx.battleHelpOn ? 'ON' : 'OFF', { selectable: true }));
   }
 
   const encounter: PanelRow[] = [];

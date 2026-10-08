@@ -95,9 +95,16 @@ const COMPOSED: Record<string, Track> = {
  * Keys whose own track has not landed yet play an existing composition instead.
  * A key listed in COMPOSED always wins, so registering a real track retires its
  * stand-in automatically; delete the line here when it does. Empty now that
- * every key has its own composition — kept so a future key can land early.
+ * every key has its own composition except the two selectable chapter-select
+ * alternates (ElevenLabs takes, whose score fallback is the board's own).
  */
-const STAND_INS: Record<string, string> = {};
+const STAND_INS: Record<string, string> = {
+  // The two selectable alternates of the chapter-select board (39.5; Bailey, 2026-10-07: "C as a selectable alternate",
+  // "and A as a selectable alternate as well"; both games). Each plays an ElevenLabs take from its own file; with no score
+  // of their own they fall back to the board's composition, which `trackNames()` (COMPOSED only) lists once, not three times.
+  'chapter-select-a': 'chapter-select',
+  'chapter-select-c': 'chapter-select',
+};
 
 export const TRACKS: Record<string, Track> = { ...COMPOSED };
 for (const [key, target] of Object.entries(STAND_INS)) {

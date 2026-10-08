@@ -1,0 +1,36 @@
+{
+  "what": "Real-input checks of release 39.5's two settings, run 2026-10-08 in headless Chromium (SwiftShader) against this branch's dev server and its production build (BASE_PATH=/). Playwright keys and clicks, no debug shortcuts for the checked step.",
+  "commit": "see the branch head in docs/handoff/r395-settings.md",
+  "titleAndBoard": {
+    "how": "a save with the stated settings is put in localStorage before load; the title is waited for; Enter is pressed; the board is waited for; the music files the page fetched are listed",
+    "devServer": [
+      { "saved": {}, "title": { "echoClass": false, "wordmarkElements": 2, "plate": "/art/title/keyart.png" }, "musicFetched": ["200 chapter-select.mp3"], "errors": [] },
+      { "saved": { "music": "b", "art": "farplane" }, "title": { "echoClass": false, "wordmarkElements": 2, "plate": "/art/title/keyart.png" }, "musicFetched": ["200 chapter-select.mp3"], "errors": [] },
+      { "saved": { "music": "a", "art": "echo" }, "title": { "echoClass": true, "wordmarkElements": 0, "plate": "/art/title/echo.png" }, "musicFetched": ["200 chapter-select-a.mp3"], "errors": [] },
+      { "saved": { "music": "c", "art": "farplane" }, "title": { "echoClass": false, "wordmarkElements": 2, "plate": "/art/title/keyart.png" }, "musicFetched": ["200 chapter-select-c.mp3"], "errors": [] },
+      { "saved": { "music": "zzz", "art": "zzz" }, "title": { "echoClass": false, "wordmarkElements": 2, "plate": "/art/title/keyart.png" }, "musicFetched": ["200 chapter-select.mp3"], "errors": [] }
+    ],
+    "productionBuild": [
+      { "saved": {}, "title": { "echoClass": false, "wordmarkElements": 2, "plate": "/art/title/keyart.webp" }, "musicFetched": ["200 music/title.mp3", "200 music/chapter-select.mp3"], "errors": [] },
+      { "saved": { "music": "b", "art": "farplane" }, "title": { "echoClass": false, "wordmarkElements": 2, "plate": "/art/title/keyart.webp" }, "musicFetched": ["200 music/chapter-select.mp3"], "errors": [] },
+      { "saved": { "music": "a", "art": "echo" }, "title": { "echoClass": true, "wordmarkElements": 0, "plate": "/art/title/echo.webp" }, "musicFetched": ["200 music/title.mp3", "200 music/chapter-select-a.mp3"], "errors": [] },
+      { "saved": { "music": "c", "art": "farplane" }, "title": { "echoClass": false, "wordmarkElements": 2, "plate": "/art/title/keyart.webp" }, "musicFetched": ["200 music/title.mp3", "200 music/chapter-select-c.mp3"], "errors": [] },
+      { "saved": { "music": "zzz", "art": "zzz" }, "title": { "echoClass": false, "wordmarkElements": 2, "plate": "/art/title/keyart.webp" }, "musicFetched": ["200 music/title.mp3", "200 music/chapter-select.mp3"], "errors": [] }
+    ],
+    "note": "the production build derives art/title/echo.png to a lossless echo.webp like every other master (art-derive verify PASS, 3298 masters, 3115 pixel-compared; art-browser-load PASS in Chromium and WebKit, 3347 of 3347 images); a value that is not on the list plays B and draws the Farplane screen"
+  },
+  "optionsRows": {
+    "how": "the real flow: Enter on the title, the board, select a chapter, begin, Esc over the opening, the OPTIONS tab, then a click (a tap) on the TITLE SCREEN row and two on the CHAPTER MUSIC row",
+    "ffxChapter1_1600x900": { "rowsRead": ["...", "STRATEGY GUIDE=ON", "BATTLE HELP=ON", "TITLE SCREEN=FARPLANE", "CHAPTER MUSIC=B  PIANO"], "afterClicks": { "titleArt": "echo", "chapterSelectMusic": "c" }, "storedInLocalStorage": { "titleArt": "echo", "chapterSelectMusic": "c" }, "errors": [] },
+    "ffx2Chapter4_1600x900": { "rowsRead": ["...", "X-2 BATTLE=WAIT", "ATB SPEED=NORMAL", "STRATEGY GUIDE=ON", "BATTLE HELP=ON", "TITLE SCREEN=FARPLANE", "CHAPTER MUSIC=B  PIANO"], "afterClicks": { "titleArt": "echo", "chapterSelectMusic": "c" }, "storedInLocalStorage": { "titleArt": "echo", "chapterSelectMusic": "c" }, "errors": [] },
+    "ffx2Chapter4_390x844": { "afterClicks": { "titleArt": "echo", "chapterSelectMusic": "c" }, "storedInLocalStorage": { "titleArt": "echo", "chapterSelectMusic": "c" }, "errors": [] }
+  },
+  "titleGeometry": {
+    "1600x900_echo": { "fit": "cover, anchor 50% 65%", "plane": [-3, 0, 1600, 900], "slab": [-70, 24, 521, 153], "hintRow": [51, 849, 631, 38], "wordmarkElements": 0 },
+    "390x844_echo": { "fit": "box 192vw wide, middle 52% shown", "plane": [-182, 214, 749, 415], "slab": [-44, 26, 249, 183], "hintRow": [10, 804, 369, 31], "wordmarkElements": 0 },
+    "2000x1012_echo": { "fit": "contain (1.976:1 is past 1.9:1)", "hintRow": [57, 954, 710, 43], "wordmarkElements": 0 },
+    "2560x1080_echo": { "fit": "contain", "wordmarkElements": 0 },
+    "1600x900_farplane": { "planes": 2, "wordmarkElements": 2, "slab": [-86, 24, 554, 305], "hintRow": [51, 833, 631, 38] },
+    "390x844_farplane": { "planes": 2, "wordmarkElements": 2 }
+  }
+}

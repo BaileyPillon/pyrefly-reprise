@@ -7975,6 +7975,15 @@
      "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/paine-lady-luck/od-x2-lady-luck-magic-reels.png"
     }
    }
+  },
+  "title:echo": {
+   "public/art/title/echo.png": {
+    "sha256": "1f719a6f1168bb6da64c59b4348a8d79fc416d603885d1c7d1538a5daa559a41",
+    "mtime": "2026-10-08T06:12:49.579Z",
+    "approved": "2026-10-07",
+    "words": "go with this as a new selectable title screen, and once selected it hides echoes of spira since it's already in the image itself. it will look neater that way. current title screen is still the default.",
+    "note": "Bailey, 2026-10-07, in chat with a screenshot of the picture: the selectable ALTERNATE title screen (OPTIONS > TITLE SCREEN, Settings.titleArt 'echo'; the Gullwings painting title/keyart stays the default), both games. The picture is concept A, The Echo, of Art Room chain c_fa4811d6 (ChatGPT Images 2.5 by Codex): a candidate of its v7 round that was never put forward as one of the chain's seven proposals, C:/Users/Administrator/.codex/generated_images/01a116a7-1f6b-76a1-9ea0-07a1a6078869/exec-e45457ae-527c-4237-ab38-af089af52f2e.png, 1688x932 RGB, sha256 48996fab5a17336f8a21430bcfa8a5e019f196a82f83a6893a7a243b33e7fae9 (copy: D:/Tools/pyrefly-scratch/2026-10-07/title-echo/echo-bailey-pick.png). echo.png is that picture with its leftmost 6 pixel columns taken off (a flat grey capture border, x 0 to 5, RGB about 30) and nothing else changed: 1682x932, lossless, no resampling, no upscaling; there is no 2x master (the GPU was busy overnight and an AI upscale was not started). Backup: D:/Tools/pyrefly-art-backup/approved/2026-10-08-title-echo/ (the pick as received, the staged files, SHA256SUMS.txt); the private art repo's current/title/. Release 39.5, branch r395-settings; docs/handoff/r395-settings.md."
+   }
   }
  }
 }

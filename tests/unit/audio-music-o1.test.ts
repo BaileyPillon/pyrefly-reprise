@@ -37,13 +37,18 @@ const v2 = read('docs/audio/music-v2-2026-09-30.json') as { totals: { musicBytes
 const replacedByV2 = new Set(v2.cues.map((c) => c.cue));
 const later = read('docs/audio/music-elevenlabs-2026-10-07.json') as {
   cues: { cue: string; before: { bytes: number }; after: { bytes: number } }[];
+  /** Release 39.5: cues ADDED beside the 26 (the two selectable chapter-select alternates, at LAME V4: they replace no file). */
+  alternates?: { cue: string; after: { bytes: number } }[];
 };
 const replacedLater = new Set(later.cues.map((c) => c.cue));
-const movedLater = later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
+const addedLater = new Set((later.alternates ?? []).map((c) => c.cue));
+const movedLater =
+  later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0) + (later.alternates ?? []).reduce((sum, c) => sum + c.after.bytes, 0);
 
 describe('music O1: every cue at LAME V0', () => {
   it('records every shipped cue, each reproduced byte for byte before the re-encode', () => {
-    expect(report.cues.map((c) => c.cue).sort()).toEqual(Object.keys(manifest.music).sort());
+    // (the 39.5 alternates are cues this record never saw: they were never at q5, and have their own record and test)
+    expect(report.cues.map((c) => c.cue).sort()).toEqual(Object.keys(manifest.music).filter((k) => !addedLater.has(k)).sort());
     for (const c of report.cues) expect(c.q5ReproducesShipped, `${c.cue} twin`).toBe(true);
   });
 
@@ -57,6 +62,9 @@ describe('music O1: every cue at LAME V0', () => {
 
   it('has not slipped back to q5: at least 200 kbps average, no encoder wall', () => {
     for (const [cue, m] of Object.entries(manifest.music)) {
+      // The two 39.5 alternates are the one exception: LAME V4 so that both fit the unchanged 90 MB cap (their record's
+      // `master.why`; `audio-chapter-select-alternates.test.ts` holds them to a 128 kbps floor, the rate their takes came in at).
+      if (addedLater.has(cue)) continue;
       expect((m.bytes * 8) / m.duration, `${cue} average bitrate`).toBeGreaterThan(200_000);
     }
     for (const c of report.cues) {

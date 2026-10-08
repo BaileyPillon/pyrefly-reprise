@@ -345,24 +345,33 @@ function entryNumberText(key, value) {
 export function setMusicEntryText(text, name, entry) {
   const eol = text.includes('\r\n') ? '\r\n' : '\n';
   const lines = text.split(eol);
+  const { start, end } = musicEntryLines(lines, name);
+  lines.splice(start, end - start + 1, `    "${name}": {`, ...musicEntryBody(name, entry), lines[end]);
+  return lines.join(eol);
+}
+
+/** The first and last line of a music entry's block. */
+export function musicEntryLines(lines, name) {
   const start = lines.indexOf(`    "${name}": {`);
   if (start < 0) throw new Error(`the manifest has no music entry "${name}"`);
   let end = start + 1;
   while (end < lines.length && !/^ {4}},?$/.test(lines[end])) end++;
   if (end >= lines.length) throw new Error(`the manifest entry "${name}" never closes`);
+  return { start, end };
+}
 
+/** The key lines of a music entry's block, in the manifest's order. */
+export function musicEntryBody(name, entry) {
   const keys = [
     ...ENTRY_KEY_ORDER.filter((k) => entry[k] !== undefined),
     ...Object.keys(entry).filter((k) => !ENTRY_KEY_ORDER.includes(k) && entry[k] !== undefined),
   ];
-  const body = keys.map((key, i) => {
+  return keys.map((key, i) => {
     const value = entry[key];
     if (typeof value !== 'string' && typeof value !== 'number') throw new Error(`entry "${name}": "${key}" must be a string or a number`);
     const printed = typeof value === 'string' ? JSON.stringify(value) : entryNumberText(key, value);
     return `      "${key}": ${printed}${i < keys.length - 1 ? ',' : ''}`;
   });
-  lines.splice(start, end - start + 1, `    "${name}": {`, ...body, lines[end]);
-  return lines.join(eol);
 }
 
 /** Build one music entry, with every field rounded where it should be. */
