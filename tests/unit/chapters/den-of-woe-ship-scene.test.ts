@@ -59,16 +59,20 @@ describe('the Den of Woe — tables', () => {
     for (const g of groups) expect(g.enemies, g.id).toHaveLength(1);
   });
 
-  it('each shade stands over a girl at the size of the options frames, Nooj the tallest (bible 188 cm), Gippal the shortest', () => {
+  it("each shade stands at its model's real height over the girls (r3942-stage: Baralai 1.09, Gippal 1.09, Nooj 1.18; `data/ffx2/fiend-stature.ts`), Nooj the tallest (bible 188 cm)", () => {
+    expect(DEN_FIGURE_HEIGHTS[DEN_IDS.baralai]!).toBe(1.943);
+    expect(DEN_FIGURE_HEIGHTS[DEN_IDS.gippal]!).toBe(1.949);
+    expect(DEN_FIGURE_HEIGHTS[DEN_IDS.nooj]!).toBe(2.1);
     for (const id of Object.values(DEN_IDS)) {
-      expect(DEN_FIGURE_HEIGHTS[id]!, id).toBeGreaterThan(DEN_PARTY_HEIGHT * 1.3);
-      expect(DEN_FIGURE_HEIGHTS[id]!, id).toBeLessThan(DEN_PARTY_HEIGHT * 1.7);
+      expect(DEN_FIGURE_HEIGHTS[id]!, id).toBeGreaterThan(DEN_PARTY_HEIGHT * 1.05);
+      expect(DEN_FIGURE_HEIGHTS[id]!, id).toBeLessThan(DEN_PARTY_HEIGHT * 1.25);
     }
     expect(DEN_FIGURE_HEIGHTS[DEN_IDS.nooj]!).toBeGreaterThan(DEN_FIGURE_HEIGHTS[DEN_IDS.baralai]!);
-    expect(DEN_FIGURE_HEIGHTS[DEN_IDS.baralai]!).toBeGreaterThan(DEN_FIGURE_HEIGHTS[DEN_IDS.gippal]!);
+    // Gippal and Baralai are one height to the measurement's accuracy (0.3 percent apart)
+    expect(Math.abs(DEN_FIGURE_HEIGHTS[DEN_IDS.gippal]! - DEN_FIGURE_HEIGHTS[DEN_IDS.baralai]!) / DEN_FIGURE_HEIGHTS[DEN_IDS.baralai]!).toBeLessThan(0.01);
   });
 
-  it('every shade stands right of and behind the party, and in frame at the idle rig (16:9)', () => {
+  it("every shade stands right of the party, beside it and not nearer than its front girl, and in frame at the idle rig (16:9)", () => {
     const idle = DEN_RIGS['idle']!;
     const cam = new PerspectiveCamera(idle.fov, 16 / 9, 0.1, 200);
     cam.position.set(...(idle.position as [number, number, number]));
@@ -76,7 +80,9 @@ describe('the Den of Woe — tables', () => {
     cam.updateMatrixWorld();
     for (const [id, spot] of Object.entries(DEN_SPOTS)) {
       expect(spot[0], id).toBeGreaterThan(DEN_OF_WOE_SLOTS.party[2]![0]);
-      expect(spot[2], id).toBeLessThan(DEN_OF_WOE_SLOTS.party[2]![2]);
+      // r3942-stage: beside the party (between Rikku's depth and Paine's), not behind Paine as the far-back spot was
+      expect(spot[2], id).toBeLessThan(DEN_OF_WOE_SLOTS.party[1]![2]);
+      expect(spot[2], id).toBeLessThan(DEN_OF_WOE_SLOTS.party[0]![2]);
       for (const y of [0, DEN_FIGURE_HEIGHTS[id]!]) {
         const p = new Vector3(spot[0], y, spot[2]).project(cam);
         expect(Math.abs(p.x), `${id} x at y ${y}`).toBeLessThan(1);

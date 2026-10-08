@@ -9,6 +9,7 @@ import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import { addPlateWings, paintPlateWings } from './plateWings.ts';
 import type { SceneSlots } from './index.ts';
+import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
 
 // ---------------------------------------------------------------------------
 // The Den of Woe (FFX-2)
@@ -75,29 +76,32 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
 export const DEN_IDS = { baralai: 'shade-baralai', gippal: 'shade-gippal', nooj: 'shade-nooj' } as const;
 
 /**
- * The boss spot, one shade a link: Chapter V's Shiva spot (`farplane-parts.ts`), which clears the
- * boss gauges top left, the command list from 0.745 of the width and the party plates bottom
- * right at 1600x900. Nooj, the tallest, stands a little deeper. Staging, ours.
+ * The boss spot, one shade a link (r3942-stage: real sizes, nearer the girls). It was Chapter V's Shiva spot (`farplane-parts.ts`, x 1.12, z -5.0), far back, where the
+ * shades read 0.96 of a girl at 2.6 tall and would read 0.71 at their real 1.95; at (2.0, -0.4) a shade stands beside the party, right of Paine and between Rikku's depth
+ * and hers, and reads 1.0 of a girl at 1600x900 (real at the same distance: 1.09, Nooj 1.18) with its head on the line it had, its right edge at x 1100 (the command
+ * list starts at 1246) and its feet at y 675 above the move advisor's card (y 705). Nooj, the tallest, stands a little deeper. Staging, ours.
  */
 export const DEN_SPOTS: Readonly<Record<string, [number, number, number]>> = {
-  [DEN_IDS.baralai]: [1.12, 0, -5.0],
-  [DEN_IDS.gippal]: [1.12, 0, -5.0],
-  [DEN_IDS.nooj]: [1.05, 0, -5.4],
+  [DEN_IDS.baralai]: [2.0, 0, -0.4],
+  [DEN_IDS.gippal]: [2.0, 0, -0.4],
+  [DEN_IDS.nooj]: [2.0, 0, -0.8],
 };
 
 /** The girls' world height (the FFX-2 chapters' 1.78, Chapter V's). */
 export const DEN_PARTY_HEIGHT = 1.78;
 
 /**
- * World heights, ours: the options frames' factors over 3.4 (`INSTALLED.md` "Frames"), so each
- * shade stands as large as in the pictures Bailey picked from. Nooj tallest, as the bible's 188 cm
- * against Baralai's 176 cm `[single source]` has him.
+ * World heights (r3942-stage, FFX-2 only): the girls' {@link DEN_PARTY_HEIGHT} times each shade's model's ratio to them, from the game's own HD models
+ * (`data/ffx2/fiend-stature.ts`, `research/ffx2-gippal-den-of-woe.md` §12): Baralai 19.35 and Gippal 19.41 over the girls' 17.73 are 1.09, Nooj 20.91 is 1.18, so
+ * 1.943, 1.949 and 2.100. They were the options frames' factors over 3.4 (2.61, 2.57 and 2.79, 1.47 to 1.57 times the girls): taller than the models, and they stood
+ * far back, so they read about 0.96 of a girl on screen. Nooj is the tallest, as the bible's 188 cm against Baralai's 176 cm `[single source]` has him; Gippal and
+ * Baralai are one height to the measurement's accuracy (0.3 percent apart).
  */
-export const DEN_FIGURE_HEIGHTS: Readonly<Record<string, number>> = {
-  [DEN_IDS.baralai]: 2.61,
-  [DEN_IDS.gippal]: 2.57,
-  [DEN_IDS.nooj]: 2.79,
-};
+export const DEN_FIGURE_HEIGHTS: Readonly<Record<string, number>> = ffx2FiendFigureHeights(
+  [DEN_IDS.baralai, DEN_IDS.gippal, DEN_IDS.nooj],
+  'ffx2-den-of-woe',
+  DEN_PARTY_HEIGHT,
+);
 
 const ENEMY_SLOTS: Array<[number, number, number]> = [DEN_SPOTS[DEN_IDS.baralai]!, [2.3, 0, -8.0], [-0.5, 0, -6.6]];
 

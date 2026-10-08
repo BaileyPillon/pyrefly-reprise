@@ -361,3 +361,25 @@ Nothing was generated for this file.
 | 11 | Supreme Light for clearing the Den | wiki Garment Grid, GamerGuides | agree |
 | 12 | Music | wiki OST, Den of Woe, Crimson Squad, Shuyin | one wiki; the shades' battle theme unsourced |
 | 13 | Art on disk | `public/art/characters/` listing, D-043 | Gippal and Baralai absent; Nooj portrait only |
+
+## 12. Research addendum (2026-10-08): how tall the three shades really stand (the HD models)
+
+**FFX-2 only** (rule 14: these are FFX-2's models of Gippal, Baralai and Nooj as the Den of Woe shades). Asked because Chapter XV drew the shades at the options frames' sizes (2.61, 2.57 and 2.79 against girls of 1.78, 1.47 to 1.57 times them, taller than the models) far back, so they read about 0.96 of a girl on screen, and the build is moving to real sizes (Bailey, 2026-10-07: "I'll go with your recommendations full speed": real game sizes for everyone, heroes and bosses together, the camera unchanged; and, of the Leblanc fix: "The same fix then goes to XIV Isaaru (FFX) and XV Den of Woe (FFX-2)"). This section is the measurement behind the three shade rows of `src/data/ffx2/fiend-stature.ts`; it carries **no camera or stand-position fact** (see 12.4).
+
+**12.1 Method.** The Steam *FINAL FANTASY X/X-2 HD Remaster* files on this PC, FFX-2 build 25501027, read with the project's own reverse-engineering lane (`D:/Tools/rea`, outside the repository; facts only: no game file, model, text or decompiled code is in this repository). The engine's size law, read from the game's model loader and its world-matrix builder: **a model's world size is its mesh size in the HD files times the engine scale `C` (a float in the params block of the model's `.chr`) times the AI script's scale vector** (1 for all three). The shades are human-sized monsters and carry `C = 1`. In FFX-2 the model number equals the monster id for almost every boss; the shade fights' records name `m177` (Gippal, 14,800 HP), `m176` (Baralai, 12,220 HP) and `m258` (Nooj, 23,800 HP). `[single source: own measurement]`
+
+**12.2 The table** (game units; the girls' side is the mean of the three dresspheres the chapter's party wears, White Mage Yuna `c018` 16.77, Dark Knight Rikku `c033` 18.54 and Dark Knight Paine `c053` 17.87 from the game's own job table, **17.73**):
+
+| Fiend | Model | Raw mesh height | C | Height (raw x C) | Engine height E (a design height) | Over the girls |
+|---|---|---|---|---|---|---|
+| Gippal (shade) | `m177` | 19.414 | 1 | **19.414** | 18 | **1.09** |
+| Baralai (shade) | `m176` | 19.349 | 1 | **19.349** | 16 | **1.09** |
+| Nooj (shade) | `m258` | 20.913 | 1 | **20.913** | 19 | **1.18** |
+
+Gippal and Baralai are 0.3 percent apart, one height to the measurement's accuracy; Nooj stands 8 percent above them. The bible's 188 cm against Baralai's 176 cm `[single source]` puts Nooj above Baralai by 7 percent, in agreement. The later, stronger records for the same three (125,000 to 178,000 HP) name their own model files (`m321` to `m323`), of identical size. `[single source: own measurement]`
+
+**12.3 The caveat that goes with every number: about 5 percent.** Bind-pose silhouettes with the hair and the weapons' tips included, one reader, one build; the shades' painting is translucent and our own, so the table sets how tall each stands next to a girl and says nothing of the painting's proportions.
+
+**12.4 Not found, and so not claimed.** (a) **Where each side stands.** The files hold no stand positions for the Den of Woe fights (the position chunk is empty; the battle-map default was not found). So the distances and the camera in `src/scenes/den-of-woe.ts` are ours. (b) An idle-pose height.
+
+**12.5 What the build does with it.** Chapter XV draws the shades at 1.09, 1.09 and 1.18 of the girls' standing height (1.78): 1.943, 1.949 and 2.100 world units, in place of 2.61, 2.57 and 2.79, and they stand beside the party (x 2.0, z -0.4, Nooj z -0.8), right of Paine, instead of far back (x 1.1, z -5.0), so they read 1.01, 1.02 and 1.05 over the girls on screen at 1600x900 (0.96, 0.94 and 1.00 live; real at the same distance 1.09, 1.09, 1.18). Presentation only: the battle engine's output is unchanged; the camera is the same pose.
