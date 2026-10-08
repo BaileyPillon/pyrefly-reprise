@@ -1,6 +1,6 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { TweenGroup, damp, type EasingFn, type EasingName } from './Tween.ts';
-import { fitRigToSlice, frameFit, type FitRig, type FitSubject, type FrameVerdict } from './FrameFit.ts';
+import { LinkFits, frameFit, type FitRig, type FitSubject, type FrameVerdict } from './FrameFit.ts';
 
 export interface CameraRig {
   /** Camera world position. */
@@ -42,6 +42,7 @@ export class BattleCamera {
   private readonly fx = new TweenGroup();
 
   private readonly rigs = new Map<string, ResolvedRig>();
+  private readonly linkFits = new LinkFits();
   private readonly swayAmplitude: number;
   private readonly swaySpeed: number;
 
@@ -119,10 +120,10 @@ export class BattleCamera {
     return r ? frameFit(this.camera, r, push, subjects as readonly FitSubject[], lens) : null;
   }
 
-  /** A-12: dolly `rig` back until these figures fit a phone slice (`FrameFit.fitRigToSlice`). */
-  fitSlice(rig: string, slice: number, subjects: ReadonlyArray<{ actor: unknown; min: number; shared?: boolean }>, top = 0): boolean {
+  /** A-12: dolly `rig` back until these figures fit a phone slice (`FrameFit.fitRigToSlice`; a giant's fit is its link's own, `LinkFits`). */
+  fitSlice(rig: string, slice: number, subjects: ReadonlyArray<{ actor: unknown; min: number; shared?: boolean; giant?: boolean }>, top = 0): boolean {
     const r = this.rigs.get(rig);
-    return !!r && fitRigToSlice(this.camera, r, slice, subjects as readonly FitSubject[], top);
+    return !!r && this.linkFits.fit(this.camera, r, rig, slice, subjects as readonly FitSubject[], top);
   }
 
   /** A rig as the camera holds it, to pose a scratch camera on (`FrameFit.rigPose`). Read-only. */

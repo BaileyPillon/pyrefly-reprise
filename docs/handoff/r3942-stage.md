@@ -150,14 +150,14 @@ World heights: Bahamut 9.147 desktop and 6.403 phone (live 5.686 and 4.100), Par
 
 ## The enemy-intent card ("the next-move card")
 
-The study found the card on 20 percent of Bahamut and 42 percent of Anima in option 3. **Fixed on a 16:9 desktop**: the card now avoids the giant's painted silhouette, so it stands in the free band at the right (Bahamut 0.3 percent of his pixels, Paragon 0.0, Anima 1.1 percent, a few chain wisps; live 15.5, 1.5 and 0). Other window shapes, the same capture (pixels of the boss under the card, live then built): 1920x1080 and 2560x1440: Bahamut 0.2 / 0.0 %, Paragon 0.0 / 0.0 %, Anima 0.6 / 1.3 %; **1440x900 (16:10): Bahamut 51.9 % then 18.5 %, Anima 6.4 % then 2.5 %, Paragon 1.4 % then 0.0 %; 1024x768: Bahamut 48.5 % then 20.2 %**. So at 16:10 and 4:3 the card still lands on Bahamut's right wing (a third of what it covered, not zero): the guide column, the card and the command stack cannot stand side by side with a colossus of that width in a window that narrow, and the card may not cover the command stack (it ranks chrome above a painting). Left for Bailey's pick, not built (a new rule): a shorter card for giants (a tighter height cap), or a farther camera below 16:10.
+The study found the card on 20 percent of Bahamut (his pick, option 3) and 35 percent of Anima (her pick, option 4; the 42 percent was her real size, option 3, which was not picked). **Fixed on a 16:9 desktop**: the card now avoids the giant's painted silhouette, so it stands in the free band at the right (Bahamut 0.3 percent of his pixels, Paragon 0.0, Anima 1.1 percent, a few chain wisps; live 15.5, 1.5 and 0). Other window shapes, the same capture (pixels of the boss under the card, live then built): 1920x1080 and 2560x1440: Bahamut 0.2 / 0.0 %, Paragon 0.0 / 0.0 %, Anima 0.6 / 1.3 %; **1440x900 (16:10): Bahamut 51.9 % then 18.5 %, Anima 6.4 % then 2.5 %, Paragon 1.4 % then 0.0 %; 1024x768: Bahamut 48.5 % then 20.2 %**. So at 16:10 and 4:3 the card still lands on Bahamut's right wing (a third of what it covered, not zero): the guide column, the card and the command stack cannot stand side by side with a colossus of that width in a window that narrow, and the card may not cover the command stack (it ranks chrome above a painting). Left for Bailey's pick, not built (a new rule): a shorter card for giants (a tighter height cap), or a farther camera below 16:10.
 **The phone:** the card is a strip across the top of the field (its second line ends at y 130 at 390 wide). Bahamut's crown (4.6 percent of his pixels, live 4.4) and the tips of Anima's horns (6.3 percent counting her glow, live 0 at her old size) still stand under it, and Paragon's top clears it: the gauge reserve cannot go higher without the girls going under Chapter IV's guide card (Yuna 40 percent hidden at the built 0.19, 60 at 0.26, 77 at 0.31), and the picked picture has it so. For Anima I tried lifting her phone camera 0.6 on its pedestal (the girls' feet stand at y 473, the plates at 487): the menu clearance answered with a 21 px lens shift, her head stayed at y 100 and the girls went 11 px lower, so it was **reverted**. At 360 wide the strip is three lines and covers 13 to 16 percent of each giant, at 430 wide 0 to 0.5 percent.
 
 ## Window shapes and the checks beside the picks
 
 - 1600x900, 1665x900, 1710x900, 1800x900 and 1920x1080: Bahamut and Anima play the giant (617 to 740 px, 2000x1012 and 2560x1080 too); 1440x900 and 1024x768: the same, the girls 122 to 175 px, by the window's height; every window from 1.2 to 2.45 for Bahamut and Anima, **1.2 to 1.79 for Paragon** (Chapter XIII's plate has no wings and shows its edge past 1.79: 1620x900 plays today's size, as before wave 2). A square or ultrawide window plays the fight as it did; a window resized across those limits re-plans once it has stood still for 0.4 s.
 - Phones: 360x740, 390x844 and 430x932 each hold the giant whole (Bahamut 207, 258 and 302 px, Paragon 219, 247 and 274 px, Anima 268, 336 and 392 px).
-- **Close shots** (the girls and the boss in play at 1600x900, 40 s of each fight with the menu left open): Bahamut's `action~calm` shot stands at (1.2, 3.8, 12.5) with the girls and most of him in frame; Paragon and Anima stayed on the master (Paragon "does nothing", Anima's Stare); no camera inside a giant.
+- **Close shots** (the girls and the boss in play at 1600x900, 40 s of each fight with the menu left open): Bahamut's `action~calm` shot stood at (1.2, 3.8, 12.5) with the girls and most of him in frame (0.78 of him inside, his head above the frame); Paragon and Anima stayed on the master (Paragon "does nothing", Anima's Stare); no camera inside a giant. **Superseded by the repair round below:** the wait shots now keep a giant whole (A-1), so the close rigs fall back to the master for all three; the one close shot left is the authored Mega Flare countdown beat of Chapter IV.
 - **Parity**: Vegnagun's tail link on this branch against live: the same world heights (22.96, 15.99, the girls 1.82), standing px within the idle sway (843 against 846 at 1600x900); Chapter IX (Yojimbo) reads the numbers of wave 1's table (254, 118 and 64 px at 1600x900; 128, 67 and 37 at 390x844). Chapter IX is untouched by this wave: `src/scenes/cavern-stolen-fayth-rigs.ts` is **not** in the diff of `0284bf85..` (the lane brief listed it: the file is only imported by `bevelle-underground.ts` for `viewportAspect`, as before, and carries the heights lane's Kimahri phone step from wave 1, merged with `r3941-heights`, nothing of the giants').
 - A faint horizontal haze (the Farplane light planes) crosses Anima's robe at her new size; it is in the scene at the old size too and not this wave's.
 
@@ -176,6 +176,90 @@ Read and kept as built: the stature rows, `giants.ts` (the cameras, the exceptio
 
 ## Open and disclosed (wave 2)
 
-- **For Bailey's pick:** (1) the card on Bahamut at 16:10 and 4:3 (18 to 20 percent of him, down from 50), and at 360 wide on a phone (16 percent of each giant): a shorter card for giants or a farther camera there; (2) Bahamut's phone crown and the tips of Anima's horns under the intent strip against Yuna under Chapter IV's guide card (the 0.19 / 0.26 / 0.31 trade above); (3) Paragon above 1.79 (an ultrawide window) plays his old size until his plate has wings.
+- **For Bailey's pick:** (1) the card on Bahamut at 16:10 and 4:3 (18 to 20 percent of him, down from 50), and at 360 wide on a phone (16 percent of each giant): a shorter card for giants or a farther camera there; (2) Bahamut's phone crown and the tips of Anima's horns under the intent strip against Yuna under Chapter IV's guide card (the 0.19 / 0.26 / 0.31 trade above; **re-measured in the repair round: the cure-hint card hides about 48 percent of Yuna's pixels and 13 percent of Rikku's at 0.19, live 14.9 and 0**; the wave's first note said 40 percent for Yuna; the independent check and this round's capture agree on 48 to 49); (3) Paragon above 1.79 (an ultrawide window) plays his old size until his plate has wings.
 - The phone's girls are 9 to 10 percent smaller than the study's option 4 picture for Bahamut and Paragon (97 and 83 px against 107 and 91).
 - Commit trailers say `Claude Sonnet 5.5` (the agent that wrote them), as the earlier lane's did, not the `Opus 5.5` line in the lane brief.
+
+---
+
+# Wave 2, repair round (after the independent check of 2026-10-08)
+
+**Game case: FFX-2 only** (rule 14). Everything below is keyed to the three giants of `FFX2_GIANT_SHARE` (Bahamut, Paragon, Anima) on an FFX-2 engine (`ShotRules.ffx2Framing`); FFX (CTB) and every other FFX-2 fiend play exactly as before (the parity run below). Presentation only: no `src/battle/**`, no enemy data, no golden file. Branch `r3942-giants-wip`, then `r3942-stage` (fast-forward). Commit trailers say `Claude Sonnet 5.5` (the model that wrote them), as the lane before did, not the `Opus 5.5` line in the lane brief.
+
+An independent check (same seed, live 04cdcd45 and the wave-1 head 0284bf85 as baselines) found one major and one moderate issue, a gap in what was disclosed, a nit, and a list of what nobody had covered. This round fixed the first two, measured the rest and corrected the notes.
+
+| Finding | Cause | Change | Result |
+|---|---|---|---|
+| **MAJOR** Chapter XIII, link 2 (Trema), upright phone: the girls 35 percent smaller than live | the slice fit only stands back, from the rig it is given; CHAPTER FRAMING re-registers `idle` as a copy after every fit, so the next link starts where the last fit left the camera: Paragon's giant fit (18.17) | `FrameFit.LinkFits` and two fits at a giant's battle start | camera z 18.17 to 11.48; the girls 90/84/77 to 152/135/119 px (live 139/124/111) |
+| **MODERATE** the opening crops the giants for 2 to 3 s | the scenes' `intro` and `enemy` rigs were authored for the figure each room was built for | `ShotRules.reveal`, `ShotRules.opening` and the A-1 wait shots hold a giant whole | cropped time per opening 3.0 to 4.7 s down to 0 ms, all three giants on a desktop, Anima on a phone |
+| **MINOR** Chapter IV phone: the cure-hint card over Yuna and Rikku | the picked 0.19 reserve | measured and disclosed, not changed | Yuna about 48 percent, Rikku 13 (live 14.9 and 0) |
+| **NIT** "42 percent of Anima" | that was her real size (option 3); her pick is option 4 | text corrected (handoff, `intentBoard.ts`, the test header) | 35 percent |
+| not covered: Anima's reveal, the close rigs | never occurred in a 500-frame auto-battle | forced through the real moments | below |
+
+## 1. Trema's link on the phone (the major)
+
+**The probe** (the check's, and `probe-trema.mjs` here): at link 2's battle start `ShotRules.fitPhone` runs with the three girls and Trema staged (Paragon gone), and the idle rig it is handed is a **new object** (`sameObj: false`) at Paragon's pose, (-0.12, 5.57, 18.17), which the fit leaves where it is.
+
+**The mechanism.** `fitRigToSlice` remembers the authored rig per rig object (`bases`, a `WeakMap`) and only ever stands back from it. CHAPTER FRAMING's `RigWatch.install` re-registers the resting rig as a copy after every plan (`addRig`), so the memory is lost and the next link's fit starts from wherever the last fit left the camera. Before wave 2 that was invisible (both Cloister links need the same 12.45 on the phone); Paragon at 0.7 of his real height, held whole under the boss gauge, stands the camera at 18.17, and Trema inherited it. It is a quirk of every multi-link chapter on a phone (wave 1 saw it in Chapter XV: "part of it is the state each link starts in"); this round does **not** change it for any fight with no giant.
+
+**The change.** `FrameFit.LinkFits` (new, held by `BattleCamera`; `FitSubject.giant?` and the port's subject type gain one optional flag): a fit that holds a giant is its link's own. `ShotRules.fitPhone` fits the figures as every fight did first (a giant at 0.75 and wider than the slice is left out, the girls decide), and then, where a giant is staged, the giant's own fit (`min` 1, `GIANT_PHONE_TOP`, `giant: true`). `LinkFits` remembers the rig as it stood between the two (the girls' fit) and where the giant's fit left it, and the next fit puts it back to the first when it still stands on the second. Anything the scene re-registered in between (the Road's per-link camera) is not put back; a fit with no giant in the chain is `fitRigToSlice` exactly as it was.
+
+**The numbers** (390x844, first menu, seed 1, the check's `v.mjs`: every actor hidden in turn, standing height in px; `docs/screenshots/r3942-stage/giants-x2-repair-trema-link2-phone.jpg`):
+
+| Trema's link, phone | camera (x, y, z) | girls (Yuna / Rikku / Paine) | Trema |
+|---|---|---|---|
+| live, wave-1 head 0284bf85 | -0.16, 3.35, 12.45 | 139 / 124 / 111 | 120 |
+| head ffc5e8d4, before this round | -0.24, 5.53, 18.17 | 90 / 84 / 77 | 82 |
+| **after** | **-0.16, 3.21, 11.48** | **152 / 135 / 119** | **129** |
+
+On a desktop the link is untouched (camera z 9.60, 9.58, 9.57; the girls 323 / 279 / 241 and Trema 264 in all three).
+
+**Disclosed: after is not exactly live.** Live's link 2 inherited link 1's fit for Paragon at his old 3.1 (his width, x -1.14 to 3.27 beside the girls, is what asked for 12.45); Trema's own formation fits from the authored rig at 11.5 (measured at the real call: 11.52). With the giant at 0.7 of his real height he is left out of the girls' fit for being wider than the slice, so the chain no longer carries him and Trema's link fits its own figures: the girls and Trema **8 to 10 percent larger than live**, everyone whole in the slice (the ratio of Trema to the girls is the same, 0.96). Exact parity would read the giant at his old height in the girls' fit (a table of the three old heights, or a record the stage keeps); not built. Say so if Bailey wants live's 12.45.
+
+## 2. The opening (the moderate)
+
+The check's frames were right: after the title card the master is whole, but the opening was not. Measured here with a per-frame sampler through the live camera (lens shift and sway included): the share of the boss's painted quad inside the frame, from the first cut off the authored idle to the first menu; for Anima's third link the opening is replayed through `BattleMoments.battleStart` (the harness plays a link seam at the skip pace; the replay reproduced Bahamut's real opening rig for rig). `docs/screenshots/r3942-stage/giants-x2-repair-reveal-before-after.jpg` and `giants-x2-repair-anima-phone-reveal.jpg`.
+
+| Opening | before: time under 98 percent inside | worst share, highest top (NDC) | after: time under 98 percent | worst share, highest top |
+|---|---|---|---|---|
+| Bahamut 1600x900 | 4698 ms of 9.3 s | 0.792, 1.38 | **0 ms** | 1.000, 0.97 |
+| Paragon 1600x900 | 4485 ms | 0.806, 1.36 | **0 ms** | 1.000, 0.98 |
+| Anima 1600x900 (replay) | 3548 ms of 6.7 s | 0.746, 1.48 | **0 ms** | 1.000, 0.96 |
+| Anima 390x844 (replay) | 2990 ms of 6.7 s | 0.743, 1.48 | **0 ms** | 1.000, 0.96 |
+| Bahamut 390x844 | 0 ms | 1.000, 0.90 | 0 ms (same rigs) | 1.000, 0.90 |
+| Paragon 390x844 | 0 ms | 1.000, 0.92 | 0 ms (same rigs) | 1.000, 0.89 |
+
+(A top over 1 is the head or horns above the frame: 1.38 is 19 percent of the frame's height.) The phone's Bahamut and Paragon were whole already (they stand back for the slice): by the painted-quad measure they stay 0.89 to 0.92 NDC, and their rigs are the same as before.
+
+**What changed** (`ShotRules.ts`, `ShotFit.ts`; FFX-2 only, any window):
+1. `reveal`: where the boss in play is a giant it is held whole with the girls, as whole as the master keeps it (never under `GIANT_WHOLE_MIN`, 0.97), with room (`REVEAL_GIANT_ROOM`, 0.1: the shot still holds it whole with the camera a tenth of its distance nearer, so the sway and the push never put the crown on the frame's edge); the furthest blend toward the enemy rig that does is played, the master where none does. Where the played rig already holds the giant whole nothing changes. B5 itself stays desktop only; the giant's rule is on a phone too.
+2. `opening` (new; `BattleMoments.battleStart` asks it): the first shot is the scene's `intro` unless it cuts the giant (0.95, 0.84 and 0.75 inside for Bahamut, Paragon and Anima; the phone's Bahamut and Paragon hold); then the furthest blend from the master toward it that holds him whole with room (Bahamut 8 percent of the way, Paragon 14, Anima 4; her phone 28), else the master.
+3. A-1 (`ffx2Subjects`): an enemy that is a giant is in play only whole, where every other fiend keeps its 75 percent, so a wait shot that would cut one (Bahamut's `action`, 0.78 inside) falls back to the master.
+
+**What the reveal is now.** A giant that fills the frame has no room to push in, so the reveal is a small move on the master (a blend of 4 to 10 percent toward the enemy rig; Anima's phone 29) with the name plate on: the camera barely moves and the boss is whole. If Bailey wants a close-up reveal back, that is a new rig per giant and needs a mockup first (rules 9 and 10): not built.
+
+**Not changed, disclosed: the authored story beat.** Bahamut's Mega Flare countdown (`src/story/scripts/ffx2-bahamut.ts`, the `first-mega-flare-countdown` mid script) is authored `camera('action', 400)` ... `camera('idle', 400)`: a writers' cut, not the shot grammar, played through `BattleScreenCutscenes`. It is the `action~calm` cut-in the check saw (turn 20): (1.27, 3.75, 12.02), the boss 0.78 inside, the head above the frame, for the beat's two lines. The pre- and post-battle scripts' `camera('action')` are no-ops (the cutscene screen has no camera). Giving the beat the same whole-giant blend is one small change in `BattleScreenCutscenes`'s camera port; it is an authored cut, so it waits for a yes.
+
+**The cases nobody had covered** (`closeshots.mjs`, `probe-od.mjs`, `probe-fit.mjs`: the real presenter's moments forced at the first menu, 1600x900, hold released): for all three giants `actionOpen` by the boss (an attack and a cast), by a girl, an attack landing on the boss and on a girl (`impact`), a telegraph and an Overdrive play on the master with the boss at 1.000 (Paragon and Anima never left the master, before or after; Bahamut's telegraph went to `action~calm` before A-1 and now stays). On a phone `ShotRules.fit` always answers `idle`, so no close rig plays there. Anima's reveal: above.
+
+## 3. The Chapter IV phone guide card (the minor)
+
+`.sthint`, the cure-hint card of Chapter IV, hides **about 48 percent of Yuna's pixels (48.2 and 48.6 in two captures) and 13 percent of Rikku's** at the picked 0.19 reserve (this round's `v.mjs`; the check read 48 and 13.1), against 14.9 and 0 on live. The first note said 40 percent for Yuna; the check and this round agree on 48 to 49. It is the picture Bailey picked: `BEVELLE_PHONE_GIANT_IDLE` says Yuna's legs stand under the card as in that picture (the card starts at y 407, her feet are at 445), and a larger reserve (0.26, 0.31) puts her further under it. The other ways out are Bailey's: the card shorter or lower on this fight's first menu, or a smaller reserve with the crown of Bahamut's horns under the intent strip. Not changed.
+
+## 4. Parity (nothing else moved)
+
+The check's parity set on the repaired head against the pre-repair head (`cmp3.mjs`, 11 captures, first command menu, seed 1): Leblanc, Vegnagun, Chapter XI's first link (Shiva), Yojimbo (desktop and phone) and the four FFX chains (Anima/Macalania, Seymour Flux, Braska's Final Aeon, Isaaru/Via Purifico): **all the same** (every camera within 0.15, every figure within 3 px); the one number that moved is Braska's `todayPx`, 309 to 308 (the sway). The six first menus of the giants read the wave-2 numbers again (Bahamut 1600x900 161 px girls and 617 boss, 390x844 97 and 259; Paragon 144 and 612 at a later turn, phone 83 and 248; Anima 175 and 659, phone 86 and 335).
+
+## 5. Tests and checks
+
+- New (40 tests, each mutation-checked by switching the rule off and watching it fail): `frame-fit-link.test.ts` (8: `LinkFits` through `BattleCamera`, the rig re-registered as CHAPTER FRAMING does; a fit with no giant is exactly as before; a retry; a rig some other hand moved is not put back), `giants-phone-link.test.ts` (4: the whole chain, `battleStart` to `fitRigToSlice`, on the real classes: Trema's link equals the fit of a camera that never saw a giant), `giants-reveal.test.ts` (21: the reveal, the room, the master as the last resort, a phone, FFX and other fiends unchanged; the opening and its blends), `giants-wait-shots.test.ts` (7: A-1).
+- Changed: `giants-card-and-phone-fit.test.ts` (a giant's battle start is two fits: the girls' then the giant's own); `r392-reveal-push.test.ts` (its stand-in boss was Bahamut, a giant since wave 2; it is now a fiend that is no giant, so those girls-whole mechanics read as they were).
+- `tsc --noEmit` clean; the full unit suite once with `--testTimeout=60000` on the final code: 937 files, 932 passed and 5 skipped, 13,816 tests passed (46 skipped, 1 todo), no timeout (527 s); `node tools/orphans.mjs` lists no module this round touched. The first menus, Trema's link 2 and the link probe were captured again on the final code (the numbers above).
+- Tools (outside the repo): `D:/Tools/pyrefly-scratch/2026-10-08/giants-repair/` (`probe-trema.mjs`, `reveal2.mjs` and `reveal3.mjs` for the openings, `closeshots.mjs`, `tracesum.mjs`, `cmp3.mjs`, `makesheets.mjs`). The dev servers on ports 5203 and 5204 were stopped at the end.
+
+## 6. Open after the repair
+
+- Trema's link is 8 to 10 percent larger than live on the phone (section 1); exact parity needs the giant's old height in the girls' fit.
+- The authored Mega Flare beat still shows Bahamut at 0.78 (section 2); a close-up reveal needs new rigs and a mockup.
+- The cure-hint card over Yuna and Rikku (section 3), and everything under "Open and disclosed (wave 2)" above.
+- Still owed before any deploy: a focused review (`node tools/critic-plan.mjs`); the PCSX2 check. Nothing was deployed.

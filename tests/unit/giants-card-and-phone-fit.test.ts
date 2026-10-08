@@ -2,7 +2,7 @@
  * r3942-stage wave 2, **FFX-2 only** (AGENTS.md rule 14; Bailey, 2026-10-08, "go with C and restart the giants build"): the two pieces of the giants that live outside CHAPTER FRAMING.
  *
  * 1. **The enemy-intent card stands clear of a giant.** `intentBoard.ts` `fighterBoxes` takes a giant's body for the slab as its whole painted silhouette (the options study found
- *    the head-to-feet estimate left the card on 20 percent of Bahamut and 42 percent of Anima); every other fighter keeps the estimate.
+ *    the head-to-feet estimate left the card on 20 percent of Bahamut (his pick, option 3) and 35 percent of Anima (her pick, option 4; 42 at her real size)); every other fighter keeps the estimate.
  * 2. **The upright phone's slice fit holds a giant whole, below the boss gauge and the intent strip.** `ShotRules.fitPhone` (A-12) reads a giant at `min` 1 (an enemy otherwise
  *    0.75, and left out when wider than the slice) and reserves {@link GIANT_PHONE_TOP} of the frame's height under the strip; FFX (CTB) and every other fiend are unchanged.
  */
@@ -70,7 +70,7 @@ describe('the intent card avoids a giant as its whole painted silhouette (FFX-2 
 });
 
 describe('the phone slice fit (A-12) holds a giant whole and below the strip (FFX-2 only)', () => {
-  type Subject = { actor: unknown; min: number; shared?: boolean };
+  type Subject = { actor: unknown; min: number; shared?: boolean; giant?: boolean };
   function phoneSetup(enemy: string, ffx2: boolean) {
     const stage = new FakeStage(['yuna', 'rikku'], [enemy]);
     (stage.actors.get(enemy) as unknown as { name: string }).name = enemy; // a stage actor is named by its combatant id (`PaintedActor`)
@@ -90,10 +90,23 @@ describe('the phone slice fit (A-12) holds a giant whole and below the strip (FF
   it.each(['bahamut', 'paragon', 'x2-anima'])('%s is fitted whole (min 1) and the fit keeps its head below the gauge and the strip', async (giant) => {
     const { stage, moments, fitted } = phoneSetup(giant, true);
     await moments.battleStart({ partyIds: ['yuna', 'rikku'] });
-    expect(fitted).toHaveLength(1);
-    expect(minOf(fitted[0]!.subjects, stage, giant)).toBe(1);
-    expect(minOf(fitted[0]!.subjects, stage, 'yuna')).toBe(1);
-    expect(fitted[0]!.top).toBeGreaterThanOrEqual(GIANT_PHONE_TOP);
+    // The fit every fight had before the giants first (the next link starts from it: `FrameFit.LinkFits`), then the giant's own.
+    expect(fitted).toHaveLength(2);
+    const [ordinary, own] = fitted as [typeof fitted[number], typeof fitted[number]];
+    expect(minOf(ordinary.subjects, stage, giant)).toBe(0.75);
+    expect(ordinary.subjects.some((s) => s.giant === true)).toBe(false);
+    expect(ordinary.top).toBe(0);
+    expect(minOf(own.subjects, stage, giant)).toBe(1);
+    expect(own.subjects.find((s) => s.actor === stage.actors.get(giant))?.giant).toBe(true);
+    expect(minOf(own.subjects, stage, 'yuna')).toBe(1);
+    expect(own.subjects.find((s) => s.actor === stage.actors.get('yuna'))?.giant).toBeUndefined();
+    expect(own.top).toBeGreaterThanOrEqual(GIANT_PHONE_TOP);
+  });
+
+  it('the girls are the same figures in both fits, whole and read at the shared height', async () => {
+    const { stage, moments, fitted } = phoneSetup('paragon', true);
+    await moments.battleStart({ partyIds: ['yuna', 'rikku'] });
+    for (const f of fitted) for (const id of ['yuna', 'rikku']) expect(f.subjects.find((s) => s.actor === stage.actors.get(id))).toMatchObject({ min: 1, shared: true });
   });
 
   it('GIANT_PHONE_TOP is the share the options sheet\'s phone picture keeps: the figure\'s top about 100 px down a 520 px field, under the gauge and the strip\'s first line', () => {
@@ -104,17 +117,21 @@ describe('the phone slice fit (A-12) holds a giant whole and below the strip (FF
     expect(GIANT_PHONE_TOP * 520).toBeLessThan(130); // the strip's bottom at two lines: the picture the pick was made on keeps the crown under it
   });
 
-  it('another fiend of FFX-2 keeps its 0.75 and the fit reserves nothing', async () => {
+  it('another fiend of FFX-2 keeps its 0.75 and the fit reserves nothing, in one fit', async () => {
     const { stage, moments, fitted } = phoneSetup('x2-shiva', true);
     await moments.battleStart({ partyIds: ['yuna', 'rikku'] });
+    expect(fitted).toHaveLength(1);
     expect(minOf(fitted[0]!.subjects, stage, 'x2-shiva')).toBe(0.75);
+    expect(fitted[0]!.subjects.some((s) => s.giant === true)).toBe(false);
     expect(fitted[0]!.top).toBe(0);
   });
 
   it('the same ids on an FFX stage (CTB, no FFX-2 framing) are no giants: FFX\'s own Bahamut keeps 0.75 and nothing is reserved', async () => {
     const { stage, moments, fitted } = phoneSetup('bahamut', false);
     await moments.battleStart({ partyIds: ['yuna', 'rikku'] });
+    expect(fitted).toHaveLength(1);
     expect(minOf(fitted[0]!.subjects, stage, 'bahamut')).toBe(0.75);
+    expect(fitted[0]!.subjects.some((s) => s.giant === true)).toBe(false);
     expect(fitted[0]!.top).toBe(0);
   });
 });

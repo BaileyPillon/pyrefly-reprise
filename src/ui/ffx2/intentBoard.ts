@@ -152,7 +152,7 @@ export type PaintedRectFn = (id: CombatantId) => { x: number; y: number; w: numb
 /**
  * The giants of FFX-2 (r3942-stage wave 2; Bailey, 2026-10-08, "go with your recommendations": Bahamut, Paragon and Anima stand at their real size, three to four times a girl on
  * screen): the combatants whose body the slab avoids as their whole painted silhouette. The head-to-feet estimate ({@link BODY_HALF_WIDTH}) is a box a quarter of a giant's width and a
- * third of its height around the head point, which left the slab free to land on the rest of him: 20 percent of Bahamut's painting and 42 percent of Anima's in the options study.
+ * third of its height around the head point, which left the slab free to land on the rest of him: 20 percent of Bahamut's painting (his pick, option 3) and 35 percent of Anima's (her pick, option 4; 42 percent at her real size, option 3) in the options study.
  * The slab is still soft against it (`placeSlab`, tiered): where a giant fills the frame it may still sit on him, covering the least it can, but where the frame has room beside him
  * (the right of Bahamut's wing, the right of Anima's robe) it stands there. FFX-2 HUD only; the ids are this game's (`data/ffx2/fiend-stature.ts` `FFX2_GIANT_SHARE`).
  */
