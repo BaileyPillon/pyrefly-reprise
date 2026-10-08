@@ -409,8 +409,8 @@ export const DREAMS_END_ROW_SHIFT = {
 
 /**
  * The aeon's own pin: its spot before the row's shift. Live stood him at (4.642, -8.915) on a desktop (the solver's (2.03, -8.0) plus the row's move of that day, 2.612 and -0.915) and at
- * (2.386, -8.0) on a phone. **He stands no nearer the party than that** (Bailey, 2026-10-08, "original spacing, real sizes"): at (2.03, -8.45) he is 9.46 from Auron on a desktop
- * (live 9.42) and 7.93 on a phone (live 7.69), and the party's centre 10.9 and 9.5 away (live 10.85 and 9.24).
+ * (2.386, -8.0) on a phone. **He stands no nearer the party than that** (Bailey, 2026-10-08, "original spacing, real sizes"): at (2.03, -8.45) he is 9.55 from Auron on a desktop
+ * (live 9.42) and 7.97 on a phone (live 7.69), and the party's centre 11.0 and 9.6 away (live 10.85 and 9.24).
  */
 export const DREAMS_END_BFA_PIN: [number, number, number] = [2.03, 0, -8.45];
 
