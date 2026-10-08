@@ -34,6 +34,7 @@ import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import { rng } from '../engine/ProceduralArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
+import { giantFigureHeights, giantStand } from '../data/ffx/fiend-stature.ts';
 import type {
   SceneBuild,
   SceneBuildOptions,
@@ -69,8 +70,13 @@ import type {
  * The camera the parallax stack and the backdrop framing are solved for —
  * identical to the `idle` rig's position. See "Framing the backdrop" in
  * `docs/ENGINE-API.md`.
+ *
+ * **r3942-giants-ffx (FFX only, Chapter III): the idle rig is the colossus masters' look, low and a little left** ([0, 2.75, 9.8] to here: 1.55 lower, 1.65 left, aimed about 2 degrees
+ * above level where it looked 4.3 down), for Braska's Final Aeon at 0.75 of his real height (6.919 units, from 4.1) with the Yu Pagodas behind him (`DREAMS_END_STAGING`). CHAPTER
+ * FRAMING tries the colossus master for a boss like this one and, at this size, it fails every step (a member stands inside his painted silhouette at rest, Yuna and a pagoda under panels),
+ * so the plan plays this rig: the options study's picture 4 (`docs/handoff/r3942-giants-ffx.md`). The parallax stack follows it.
  */
-const CAMERA_REF: [number, number, number] = [0, 2.75, 9.8];
+const CAMERA_REF: [number, number, number] = [-1.65, 1.2, 9.85];
 
 /** World z of the painting plane, and the plane's world width. */
 const BACKDROP_DISTANCE = -50;
@@ -107,7 +113,7 @@ const BACKDROP_CENTRE_Y = 1.23;
  * units at the plane's depth and `victory` swings the view axis out to
  * x = -8.1 — both inside the 80 x 45.7 plane.
  */
-const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
+export const DREAMS_END_RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
   /**
    * The establishing shot: wide, low and **tilted up** — the one rig in the
    * game that looks at the sky. It frames the whole burning eye and the cloud
@@ -120,7 +126,7 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
    * budget this reveal has, and it is why `BACKDROP_CENTRE_Y` is what it is.
    */
   intro: { position: [0.1, 2.35, 13.2], lookAt: [0.3, 3.6, -4.5], fov: 30, sway: 1.4 },
-  idle: { position: CAMERA_REF, lookAt: [0.15, 1.9, -1.4], fov: 32 },
+  idle: { position: CAMERA_REF, lookAt: [0.26, 1.57, -1.3], fov: 32 },
   /**
    * Pushed in for an ability beat. Solved so the attacker (slot 0, and x ≈ 1.4
    * mid-lunge) and the boss (x 2.9) are both well inside the frame — an action
@@ -128,10 +134,13 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
    * being hit. It was slid 0.16-0.18 left to keep party slot 1 (then at
    * x -3.0) whole at the left edge; since PR-0002 A that slot stands
    * front-right, so every party slot is well inside this frame.
+   *
+   * r3942-giants-ffx (FFX only): with the aeon at 6.919 units and the pagodas behind him at 5.7 and 6.3 (from 4.1 and 2.255), `action` and `enemy` aim higher and stand lower, like
+   * `idle`, so that his head and both pagodas stay in the shot (the old ones, [0.08, 2.55, 9.1] and [1.4, 2.7, 5.9] aimed at y 1.95 and 2.1, cut his head by 4 and 14 percent of the frame).
    */
-  action: { position: [0.08, 2.55, 9.1], lookAt: [0.8, 1.95, -1.2], fov: 32, sway: 0.7 },
+  action: { position: [0.6, 1.6, 8.7], lookAt: [0, 2.2, -1.2], fov: 32, sway: 0.7 },
   party: { position: [0.0, 2.15, 8.0], lookAt: [-0.8, 1.25, 0.5], fov: 32, sway: 0.7 },
-  enemy: { position: [1.4, 2.7, 5.9], lookAt: [2.9, 2.1, -2.3], fov: 32, sway: 0.7 },
+  enemy: { position: [2.4, 1.8, 8.5], lookAt: [2.7, 2.3, -2.3], fov: 32, sway: 0.7 },
   victory: { position: [-0.2, 2.1, 8.2], lookAt: [-0.8, 1.3, 0.9], fov: 32, sway: 1.2 },
 };
 
@@ -371,6 +380,55 @@ export const DREAMS_END_ACTOR_HEIGHTS = {
   /** Stand-in while the Final Aeon art is still being generated. */
   seymourFlux: 2.7,
 } as const;
+
+/**
+ * The party's shared world height on this stage: Tidus's 1.82, the stage's own default (this scene publishes no `partyHeight`: `resolveSceneHeights`). The giants' heights are read against
+ * it (`giantFigureHeights`: a fiend stands at the party's height times its game height over Tidus's 18.15).
+ */
+export const DREAMS_END_PARTY_HEIGHT = 1.82;
+
+/**
+ * **r3942-giants-ffx (Bailey, 2026-10-08, "all of your recommendations"; FFX only, Chapter III, and every link that has the Yu Pagodas): Braska's Final Aeon stands at 0.75 of his real
+ * height with the two Yu Pagodas at 0.75 of theirs, in the game's own arrangement behind him.** The live PS2 game draws him about 92 units tall (a floor: his top ran under the frame's
+ * HELP banner), 5.11 times the party, and the pagodas 75.8 and 83.9 (floors too), 60 units either side of him and 70 behind (`data/ffx/fiend-stature.ts` `FFX_GIANT_STATURE`,
+ * `research/ffx-bfa-yu-yevon.md` section 9). The build drew him at 4.1 world units and the pagodas at 2.255, in front of him. At 0.75 of real, over the party's 1.82: 6.919 and 5.701 and
+ * 6.31 (the options study's picture 4), the whole group scaled together (spacing included: 4.51 either side and 5.26 behind), so it reads as the game's group at three quarters.
+ *
+ * **Where they stand is a pin** (`enemySpots`), because the formation solver spreads figures by their heights and a taller group would be re-laid in front of him. CHAPTER FRAMING's row for this
+ * chapter (`fx/mix/stageTable.ts` CHAPTER_III, option 1, 2026-10-04) then moves each figure on a desktop with CHAPTER FRAMING on, as it always did: the aeon (2.612, -0.915), the left pagoda
+ * (1.095, -2.247) and the right one (2.377, -2.028), world x and z along the screen's own axes from today's resting rig (these are for the `idle` rig below; the row reads the rig's yaw).
+ * The pins carry those shifts off, so that on a desktop the group ends in the game's arrangement, the aeon at (4.753, -8.497), and the picture is the study's; on a phone, where the row does
+ * not play, the pins are where the figures stand.
+ * `tests/unit/ffx-giant-stature.test.ts` reads the row and the rig and fails if either moves under these numbers.
+ */
+export const DREAMS_END_ROW_SHIFT = {
+  'braskas-final-aeon': [2.723, -0.497],
+  'yu-pagoda-left': [1.095, -2.247],
+  'yu-pagoda-right': [2.377, -2.028],
+} as const;
+
+/** The aeon's own pin: its spot before the row's shift: the one the solver found for a 4.1-unit aeon (live: (4.642, -8.915) less the row's move of that day, 2.612 and -0.915). */
+export const DREAMS_END_BFA_PIN: [number, number, number] = [2.03, 0, -8.0];
+
+/** A pagoda's pin: the aeon's final place, the game's stand behind it, less what the row will add to that pagoda. */
+function pagodaPin(id: 'yu-pagoda-left' | 'yu-pagoda-right'): [number, number, number] {
+  const stand = giantStand(id, DREAMS_END_PARTY_HEIGHT)!;
+  const boss = DREAMS_END_ROW_SHIFT['braskas-final-aeon'];
+  const row = DREAMS_END_ROW_SHIFT[id];
+  const round = (v: number): number => Math.round(v * 1000) / 1000;
+  return [round(DREAMS_END_BFA_PIN[0] + boss[0] - row[0] + stand.dx), stand.dy, round(DREAMS_END_BFA_PIN[2] + boss[1] - row[1] - stand.dz)];
+}
+
+/** What this scene stages: the party held on its slots (PR-0002 A, D-041) and, from the table, the aeon and the pagodas (heights and pins). */
+export const DREAMS_END_STAGING = {
+  holdParty: true,
+  enemySpots: {
+    'braskas-final-aeon': DREAMS_END_BFA_PIN,
+    'yu-pagoda-left': pagodaPin('yu-pagoda-left'),
+    'yu-pagoda-right': pagodaPin('yu-pagoda-right'),
+  },
+  figureHeights: giantFigureHeights(['braskas-final-aeon', 'yu-pagoda-left', 'yu-pagoda-right'], DREAMS_END_PARTY_HEIGHT),
+};
 
 /**
  * The scene's default cut-out protection for a painted actor parked on
@@ -1627,10 +1685,10 @@ export const buildDreamsEndScene: SceneFactory = async (
     },
     lights,
     particles,
-    rigs: RIGS,
+    rigs: DREAMS_END_RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
-    holdParty: true, // PARTY_SLOTS is the composition (PR-0002 A, D-041)
+    ...DREAMS_END_STAGING, // holdParty (PARTY_SLOTS is the composition, PR-0002 A, D-041) and the aeon and the pagodas at the game's sizes and arrangement (r3942-giants-ffx)
     palette: { ...PALETTE },
     update(dt: number): void {
       clock += dt;

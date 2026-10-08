@@ -123,6 +123,15 @@ export const FFX_GIANT_STATURE: Readonly<Record<string, GiantStature>> = {
   // Chapter I. The figure breathes: 91.1 to 103 in the five reloaded frames (100.6, 103, 100, 93.7, 91.1), up to 132 with the lance raised. The scale (4.55 to 4.6 px per unit) is
   // read off Tidus alone and an independent check judged it shaky, 10 percent or more: medium-low. The static law 100.5 agrees with the typical pose; the idle bones span 86.
   'seymour-flux': { model: 'm142', name: 'Seymour Flux', height: 100, read: [91.1, 103], lowerBound: false, staticLaw: 100.5, engine: 45, confidence: 'medium-low', share: 0.6 },
+  // Chapter III. Braska's Final Aeon: three live methods give 79 to 96 (94.4 at 6.58 px per unit with its top row under the HELP banner, so a floor; 79 to 85 when the part is moved
+  // 12 units and its scale re-read; the first pass 96.2). The static law 204.7 is more than twice too big (the model is read with its parts spread); E 90 agrees with the live number.
+  'braskas-final-aeon': { model: 'm132', name: "Braska's Final Aeon", height: 92, read: [79, 95], lowerBound: true, staticLaw: 204.7, engine: 90, confidence: 'medium', share: 0.75 },
+  // The two Yu Pagodas stand behind him in the game's own formation: 60 units either side of him and 70 behind (boss (0, 0, 40), pagodas (-60, 0, 110) and (60, 0, 110)), hung off the
+  // floor. Left (the game's x -60) is m174, right (+60) is m173; the twins differ by 10 percent. Read by moving each part 12 units (the move method reads about 5 percent high on a part
+  // that drifts back) with the top and the bottom of both near the frame's edges, so both are floors; no Tidus marker can be put at their depth. `dy` (12.8) is the options study's hang
+  // above the floor (the game's own roots stand 45 above it, the aeon's 20): ours, not read.
+  'yu-pagoda-left': { model: 'm174', name: "Yu Pagoda, left (the game's x -60)", height: 75.8, read: [75.2, 76.3], lowerBound: true, staticLaw: 34.7, engine: 90, confidence: 'low-medium', share: 0.75, stand: { of: 'braskas-final-aeon', dx: -60, dy: 12.8, dz: 70 } },
+  'yu-pagoda-right': { model: 'm173', name: "Yu Pagoda, right (the game's x +60)", height: 83.9, read: [82.3, 85.6], lowerBound: true, staticLaw: 50.2, engine: 90, confidence: 'low-medium', share: 0.75, stand: { of: 'braskas-final-aeon', dx: 60, dy: 12.8, dz: 70 } },
 };
 
 /**
@@ -142,6 +151,18 @@ export function giantHeight(id: string, partyHeight: number, refTop: number = TI
   const follow = FFX_GIANT_FOLLOWER[id];
   const boss = follow && FFX_GIANT_STATURE[follow.of];
   return follow && boss ? mm(partyHeight * ((boss.height * boss.share) / refTop) * follow.share) : undefined;
+}
+
+/**
+ * Where the game stands a part against the figure it stands behind, in world units on a stage whose reference hero is `partyHeight` tall, at the part's own share: `dx` to the screen's
+ * right, `dy` up from the floor, `dz` away from the party (behind the figure). Null for any id with no stand (Braska's Yu Pagodas have one).
+ */
+export function giantStand(id: string, partyHeight: number, refTop: number = TIDUS_TOP): { dx: number; dy: number; dz: number } | null {
+  const row = FFX_GIANT_STATURE[id];
+  const s = row?.stand;
+  if (!row || !s) return null;
+  const k = (partyHeight * row.share) / refTop;
+  return { dx: mm(s.dx * k), dy: mm(s.dy * k), dz: mm(s.dz * k) };
 }
 
 /** A `SceneStaging.figureHeights` table for the giants named in `ids` (an id this table does not know is left out). */
