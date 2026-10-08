@@ -164,11 +164,11 @@ describe('leblanc-last-room — PR-0093: the trio stages at human scale, not the
     expect(scene.slots.enemyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_SLOTS.enemyHeight!, 5);
   }, 60_000);
 
-  it('loadScene publishes the real heights of the Syndicate, their standing spots and the advisor cap to the stage (every fiend of the three acts, no 0.7 rule)', async () => {
+  it('loadScene publishes the real heights of the Syndicate and the spots 39.4 stood them on to the stage (every fiend of the three acts, no 0.7 rule), and no advisor cap', async () => {
     const scene = await stage('leblanc-last-room');
     expect(scene.slots.figureHeights).toEqual(LEBLANC_LAST_ROOM_SLOTS.figureHeights);
     expect(scene.slots.enemySpots).toEqual(LEBLANC_LAST_ROOM_SLOTS.enemySpots);
-    expect(scene.slots.advisorCap).toBe(LEBLANC_LAST_ROOM_SLOTS.advisorCap);
+    expect(scene.slots.advisorCap).toBeUndefined(); // the nearest fiend's feet stand 40 px above the card at its full height: nothing to cap (r3941-spacing)
     expect(scene.slots.enemyLaneX).toEqual(LEBLANC_LAST_ROOM_SLOTS.enemyLaneX);
     for (const act of [LEBLANC_ACT_I, LEBLANC_ACT_II, LEBLANC_ACT_III]) {
       for (const e of ENEMY_GROUPS_BY_ID[act]!.enemies) {

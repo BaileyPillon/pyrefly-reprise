@@ -14,7 +14,6 @@ import type {
 } from './types.ts';
 import type { SceneSlots } from './index.ts';
 import {
-  LEBLANC_ADVISOR_CAP,
   LEBLANC_ENEMY_LANE_X,
   LEBLANC_ENEMY_SLOTS,
   LEBLANC_ENEMY_SPOTS,
@@ -23,7 +22,7 @@ import {
   LEBLANC_TRIO_POOL,
 } from './leblanc-staging.ts';
 
-// The staging numbers (heights, spots, lane, pool, advisor cap) live in `./leblanc-staging.ts`; Chapter VI's tests read them from here.
+// The staging numbers (heights, spots, lane, pool) live in `./leblanc-staging.ts`; Chapter VI's tests read them from here.
 export { LEBLANC_ENEMY_LANE_X, LEBLANC_ENEMY_SPOTS, LEBLANC_FIGURE_HEIGHTS };
 
 // ---------------------------------------------------------------------------
@@ -104,9 +103,9 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
 ];
 
 /**
- * The trio's enemy slot table, in `leblanc-syndicate.ts`'s slot order (0 Leblanc, 1 Logos, 2 Ormi): Act III's standing spots, Leblanc centre-back with
- * Ormi and Logos flanking her in front, as the first design had it. The whole staging, act by act, with the numbers and the reasons, is
- * `./leblanc-staging.ts`: every fiend of the three acts has a spot there, so these slots are the table a fiend added later would start from.
+ * The trio's enemy slot table, in `leblanc-syndicate.ts`'s slot order (0 Leblanc, 1 Logos, 2 Ormi): Leblanc centre-back with Ormi and Logos flanking
+ * her, as the first design had it and as 39.4 stood them. The whole staging, act by act, with the numbers and the reasons, is `./leblanc-staging.ts`:
+ * every fiend of the three acts has a spot there, so these slots are the table the stage reads the lane's depth from and a fiend added later would start from.
  */
 const ENEMY_SLOTS: Array<[number, number, number]> = LEBLANC_ENEMY_SLOTS.map((s) => [...s] as [number, number, number]);
 
@@ -138,7 +137,6 @@ export const LEBLANC_LAST_ROOM_SLOTS: SceneSlots = {
   enemyLaneX: LEBLANC_ENEMY_LANE_X,
   figureHeights: LEBLANC_FIGURE_HEIGHTS,
   enemySpots: LEBLANC_ENEMY_SPOTS,
-  advisorCap: LEBLANC_ADVISOR_CAP,
 };
 
 /**
@@ -350,10 +348,9 @@ async function buildLastRoom(plate: LeblancPlate, opts: SceneBuildOptions): Prom
     partyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna,
     enemyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc,
     enemyLaneX: LEBLANC_ENEMY_LANE_X,
-    // Every Syndicate fiend stands at its real height, at its own spot, and the move advisor's card leaves room under their feet (`./leblanc-staging.ts`).
+    // Every Syndicate fiend stands at its real height (39.4.1's table) and at the spot it stood at in 39.4 (`./leblanc-staging.ts`).
     figureHeights: LEBLANC_FIGURE_HEIGHTS,
     enemySpots: LEBLANC_ENEMY_SPOTS,
-    advisorCap: LEBLANC_ADVISOR_CAP,
     ...(plate.artNamespace ? { artNamespace: plate.artNamespace } : {}),
     palette: {
       ...(look.palette ?? ScenePalettes.chateauLeblanc),
