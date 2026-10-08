@@ -551,3 +551,26 @@ The **mirror lock** turns the three links into a resource puzzle: which aeon spe
 | 14 | Mirror lock | wiki Grothia, Spathi, Isaaru, Pterya + Jegged + the lore line on wiki *Aeon (FFX)* | agree |
 | 15 | Art on disk and its verdicts | `public/art/characters/`, `approved-hashes.json`, `targets.json`, D-089 | only Shiva board-approved; no Isaaru art anywhere |
 | 16 | "A Contest Of Aeons" track use | wiki OST + track page | Yu Yevon's aeons and Penance; not Isaaru |
+
+## 14. Research addendum (2026-10-08): how tall Isaaru and his three aeons really stand (the HD models)
+
+**FFX only** (rule 14: these are FFX's models: Isaaru, and the models of Ifrit, Valefor and Bahamut that his three aeons wear). Asked because Chapter XIV drew Isaaru at 1.8 (Seymour's sourced 187 cm less a little) against Yuna's 1.68, far from the game's own models, and the build is moving to real sizes (Bailey, 2026-10-07: "I'll go with your recommendations full speed": real game sizes for everyone, heroes and bosses together, the camera unchanged; of the Leblanc fix: "The same fix then goes to XIV Isaaru (FFX)"). This section is the measurement behind the Isaaru and aeon rows of `src/data/ffx/fiend-stature.ts`; it carries **no camera or stand-position fact** (see 14.4).
+
+**14.1 Method.** The Steam *FINAL FANTASY X/X-2 HD Remaster* files on this PC, FFX build 25501027, read with the project's own reverse-engineering lane (`D:/Tools/rea`, outside the repository; facts only: no game file, model, text or decompiled code is in this repository). The engine's size law, read from the game's model loader and its world-matrix builder: **a model's world size is its mesh size in the HD files times the engine scale `C` (a float in the params block of the model's `.chr`) times the AI script's scale vector** (1 for all of these). Isaaru is a human-sized monster (`C = 1`, monster 248, skeleton group `k004` with mesh `m248`); the aeons are summon models (`s0nn`, `C = 4`). The monster records name the models: Grothia (the HD files call it "Fist"; 8,000 HP) wears Ifrit's `s002`, Pterya ("Wing"; 12,000 HP) Valefor's `s001` and Spathi ("Sword"; 20,000 HP) Bahamut's `s006`. `[datamined: FFX HD Remaster build 25501027, bind pose, one reader]`
+
+**14.2 The table** (game units; Tidus's own model is 18.15 and Yuna's 16.53 on the same scale, `src/data/ffx/party-stature.ts`):
+
+| Figure | Model | Raw mesh height | C | Height (raw x C) | Engine height E (a design height) | Over Yuna | Over Tidus |
+|---|---|---|---|---|---|---|---|
+| Isaaru | `m248` (via `k004`) | 18.680 | 1 | **18.680** | 18 | **1.13** | 1.03 |
+| Grothia (Ifrit) | `s002` | 7.799 | 4 | **31.198** | 25 | **1.89** | 1.72 |
+| Pterya (Valefor) | `s001` | 12.802 | 4 | **51.209** | 36 | **3.10** | 2.82 |
+| Spathi (Bahamut) | `s006` | 21.962 | 4 | **87.848** | 55 | **5.31** | 4.84 |
+
+The mesh's other extents, at `C = 4`: Grothia 65.3 wide and 20.0 deep, Pterya 60.2 wide and 29.3 deep, Spathi 100.8 wide and 49.1 deep. `[datamined: build 25501027]`
+
+**14.3 The caveat that goes with every number: about 5 percent, and for the aeons much more.** Isaaru is a man in a robe and the table sets his standing height next to Yuna's. The aeons are not: **a model's default pose spreads**, and the three aeon silhouettes above are the default pose with the wings (Valefor, Bahamut) or the arms (Ifrit) out; the idle-bone span of Bahamut is 58 against the default's 87.8, and no idle number was read for Valefor or Ifrit. Our paintings are of the aeons at rest with the wings out sideways, whose head-to-feet height is not the model's wing-up silhouette. So only Ifrit's row (31.2: 3.17 in this room against the scene's own 3.2) is usable as a standing height; Pterya's and Spathi's rows are recorded and **not applied**. `[datamined: build 25501027; the idle-bone span of Bahamut also read]`
+
+**14.4 Not found, and so not claimed.** (a) **Where each side stands and the lens.** The files read hold no stand positions for the Via Purifico fight and no camera; the room's distances and rigs are ours (`src/scenes/via-purifico.ts`). (b) An idle-pose height for Valefor and Ifrit.
+
+**14.5 What the build does with it.** Chapter XIV draws Isaaru at 1.13 of Yuna's standing height (her own 1.68, this scene's `partyHeight`): 1.899 world units, in place of 1.8, and he stands nearer her depth (x 3.7, z 0.4, from z -0.2), so he reads 0.98 of Yuna on screen at 1600x900 instead of 0.88 (real at the same distance 1.13) and 1.02 on the phone (0.92 live), the camera planned as before. The aeons keep the scene's 3.2 on both sides (a mirror pair reads as one creature; Grothia's 3.17 agrees). Pterya at her default-pose 5.2 fills the frame (849 px across at 1600x900) and Spathi at his 8.9 stands 932 px tall in a 900 px frame; the options are in `docs/handoff/r3942-stage.md`. Presentation only: the battle engine's output is unchanged.

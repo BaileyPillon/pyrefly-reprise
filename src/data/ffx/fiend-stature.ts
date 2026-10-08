@@ -48,6 +48,8 @@ export const FFX_FIEND_STATURE: Readonly<Record<string, FiendStature>> = {
   daigoro: { model: 's023', name: 'Daigoro', raw: 1.993, scale: 4, height: 7.972, engine: 8 },
   ginnem: { model: 'k014', name: 'Lady Ginnem (monster 249, mesh m249)', raw: 17.321, scale: 1, height: 17.321, engine: 16 },
   isaaru: { model: 'k004', name: 'Isaaru (monster 248, mesh m248)', raw: 18.68, scale: 1, height: 18.68, engine: 18 },
+  // The three aeons: recorded, and applied by no scene but as a check (Chapter XIV keeps its aeons at 3.2 on both sides): Grothia's 31.2 agrees with that to 1 percent; Pterya's and
+  // Spathi's are default-pose silhouettes with the wings spread, which the paintings do not stand in (`research/ffx-isaaru-bevelle.md` section 14.3).
   grothia: { model: 's002', name: 'Grothia, Isaaru\'s Ifrit (the HD name "Fist")', raw: 7.799, scale: 4, height: 31.198, engine: 25 },
   pterya: { model: 's001', name: 'Pterya, Isaaru\'s Valefor (the HD name "Wing")', raw: 12.802, scale: 4, height: 51.209, engine: 36 },
   spathi: { model: 's006', name: 'Spathi, Isaaru\'s Bahamut (the HD name "Sword")', raw: 21.962, scale: 4, height: 87.848, engine: 55 },

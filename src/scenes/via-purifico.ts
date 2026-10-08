@@ -6,6 +6,7 @@ import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts'
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
+import { fiendFigureHeights } from '../data/ffx/fiend-stature.ts';
 import { holdWidth } from './cavern-stolen-fayth-rigs.ts';
 import { PHONE_BATTLE_QUERY } from '../ui/common/phoneBattle.ts';
 
@@ -68,28 +69,36 @@ export const VIA_AEON_SPOT: [number, number, number] = [1.9, 0, -4.0];
  * well **nearer the camera** than it, so Pterya's wing (the widest of the three
  * paintings, which covered him at the options round's x +2.2) ends short of
  * him, and his raised arm stays below the CTB list. Our placement, solved in
- * the engine at 1600x900 (INSTALLED.md "Owed").
+ * the engine at 1600x900 (INSTALLED.md "Owed"). r3942-stage: from (3.7, -0.2) to (3.7, 0.4), nearer Yuna's depth (z 1.6), at his real height: he reads 0.98 of Yuna on screen at 1600x900 instead of 0.88 (real at the same
+ * distance 1.13), his right edge at x 1342 against the CTB list's at 1408 and his feet at y 732 above Yuna's status row (801), and CHAPTER FRAMING plans the same camera as before
+ * (nearer than z 0.5 the plan changes: a lens shift of 64 px instead of standing back 0.5, which the picture does not ask for).
  */
-export const VIA_ISAARU_SPOT: [number, number, number] = [3.7, 0, -0.2];
+export const VIA_ISAARU_SPOT: [number, number, number] = [3.7, 0, 0.4];
 
 const ENEMY_SLOTS: Array<[number, number, number]> = [VIA_ISAARU_SPOT, VIA_AEON_SPOT, [3.4, 0, -4.4]];
 
 /** Combatant ids this scene stages by name (`src/data/ffx/enemies/isaaru.ts`). */
 export const VIA_IDS = { isaaru: 'isaaru', grothia: 'grothia', pterya: 'pterya', spathi: 'spathi' } as const;
 
+/**
+ * Isaaru's world height (r3942-stage, FFX only): Yuna's own 1.68 (this scene's `partyHeight`, her model's 16.53) times his model's ratio to hers, from the game's own HD
+ * model (`data/ffx/fiend-stature.ts`, `research/ffx-isaaru-bevelle.md` §14): 18.68 over 16.53 is 1.13, so 1.898. It was an estimate of 1.8 (Seymour's sourced 187 cm less a little).
+ */
+const ISAARU_HEIGHT = fiendFigureHeights(['isaaru'], 1.68, 16.53)['isaaru']!;
+
 /** Yuna's five aeons (`src/data/ffx/builds/via-purifico.ts`), staged at the enemy aeons' height. */
 const YUNA_AEONS = ['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut'] as const;
 
 /**
- * World heights, presentation estimates, none game data (rule 6). Yuna is the
- * FFX chapters' 1.68 (`macalania-temple.ts`). Isaaru is a man: Seymour's
- * sourced 187 cm less a little, our estimate. The six aeons on both sides
- * stand at one height, so a mirror pair (his Ifrit and hers) reads as the same
- * creature: the sources give no visual difference between them (research
- * §10.2). Yuna's aeons are one step nearer the camera, so they read a little
- * larger, as the party side does in every FFX frame.
+ * World heights. Yuna is the FFX chapters' 1.68 (`macalania-temple.ts`). Isaaru is a man and stands at his model's real height over hers
+ * ({@link ISAARU_HEIGHT}, r3942-stage). The six aeons on both sides stand at one height, our estimate (rule 6), so a mirror pair (his Ifrit and hers) reads as the
+ * same creature: the sources give no visual difference between them (research §10.2). The game's models agree for the Ifrit (Grothia 31.2 over Yuna's 16.53
+ * is 1.89, 3.17 here against 3.2) and **not applied** for the other two: Pterya's Valefor model is 51.2 and Spathi's Bahamut model 87.8 in the default pose,
+ * wings spread, which our paintings do not stand in (`data/ffx/fiend-stature.ts`, `research/ffx-isaaru-bevelle.md` §14: at 5.2 and 8.9 they would fill or leave the
+ * frame of this room's camera, so the real height waits for Bailey's pick among the options in `docs/handoff/r3942-stage.md`). Yuna's aeons are one step nearer
+ * the camera, so they read a little larger, as the party side does in every FFX frame.
  */
-export const VIA_ACTOR_HEIGHTS = { yuna: 1.68, isaaru: 1.8, aeon: 3.2 } as const;
+export const VIA_ACTOR_HEIGHTS = { yuna: 1.68, isaaru: ISAARU_HEIGHT, aeon: 3.2 } as const;
 
 const VIA_STAGING = {
   holdParty: true,

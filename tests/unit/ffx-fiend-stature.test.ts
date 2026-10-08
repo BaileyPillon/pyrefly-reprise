@@ -16,6 +16,7 @@ import { describe, expect, it } from 'vitest';
 import { FFX_FIEND_STATURE, fiendFigureHeights, fiendOverTidus } from '../../src/data/ffx/fiend-stature.ts';
 import { TIDUS_TOP } from '../../src/data/ffx/party-stature.ts';
 import { CAVERN_ACTOR_HEIGHTS, CAVERN_STOLEN_FAYTH_SLOTS } from '../../src/scenes/cavern-stolen-fayth.ts';
+import { VIA_ACTOR_HEIGHTS, VIA_AEON_SPOT, VIA_ISAARU_SPOT, VIA_PURIFICO_SLOTS } from '../../src/scenes/via-purifico.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (rel: string): string => readFileSync(join(here, '../..', rel), 'utf8');
@@ -75,6 +76,25 @@ describe('the stage heights come from the table', () => {
     expect(CAVERN_STOLEN_FAYTH_SLOTS.figureHeights).toEqual({ yojimbo: 2.613, daigoro: 0.769, ginnem: 1.67 });
     // Yojimbo 1.49 over Tidus; the old estimate was 1.457 (2.55 over 1.75)
     expect(CAVERN_ACTOR_HEIGHTS.yojimbo / CAVERN_ACTOR_HEIGHTS.party).toBeCloseTo(fiendOverTidus('yojimbo'), 2);
+  });
+});
+
+describe("Chapter XIV stands Isaaru at his real height over Yuna's own, and keeps the aeons where they were", () => {
+  it("Isaaru is 18.68 over Yuna's 16.53 (1.13) times her 1.68: 1.899; the aeons stay at 3.2 on both sides (Grothia's table height 3.17 agrees; Pterya's and Spathi's default-pose wings are not applied)", () => {
+    expect(VIA_ACTOR_HEIGHTS.yuna).toBe(1.68);
+    expect(VIA_ACTOR_HEIGHTS.isaaru).toBe(1.899);
+    expect(VIA_ACTOR_HEIGHTS.isaaru / VIA_ACTOR_HEIGHTS.yuna).toBeCloseTo(18.68 / 16.53, 2);
+    expect(VIA_ACTOR_HEIGHTS.aeon).toBe(3.2);
+    expect(VIA_PURIFICO_SLOTS.figureHeights?.['isaaru']).toBe(1.899);
+    for (const id of ['grothia', 'pterya', 'spathi']) expect(VIA_PURIFICO_SLOTS.figureHeights?.[id], id).toBeUndefined(); // the stage's boss rule: 3.2
+    expect(VIA_PURIFICO_SLOTS.enemyHeight).toBe(3.2);
+    expect(Math.abs(fiendFigureHeights(['grothia'], 1.68, 16.53)['grothia']! - 3.2) / 3.2).toBeLessThan(0.01);
+  });
+
+  it("he stands nearer Yuna's depth (z 0.4 from -0.2, x 3.7), still right of his aeon and in front of it", () => {
+    expect(VIA_ISAARU_SPOT).toEqual([3.7, 0, 0.4]);
+    expect(VIA_PURIFICO_SLOTS.enemySpots?.['isaaru']).toEqual(VIA_ISAARU_SPOT);
+    expect(VIA_ISAARU_SPOT[2] - VIA_AEON_SPOT[2]).toBeGreaterThanOrEqual(3);
   });
 });
 
