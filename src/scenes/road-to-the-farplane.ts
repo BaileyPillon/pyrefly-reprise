@@ -11,6 +11,7 @@ import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
 import { RoadPhoneCamera, roadOnPhone, type RoadLinkIds } from './road-to-the-farplane-phone.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
+import { FORWARD_FIEND_ADVISOR_CAP } from './advisor-cap.ts';
 
 // ---------------------------------------------------------------------------
 // The Road to the Farplane (FFX-2)
@@ -138,7 +139,7 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
   [-0.5, 0, -6.6],
 ];
 
-const ROAD_STAGING = { holdParty: true, enemySpots: ROAD_SPOTS, figureHeights: ROAD_FIGURE_HEIGHTS } as const;
+const ROAD_STAGING = { holdParty: true, enemySpots: ROAD_SPOTS, figureHeights: ROAD_FIGURE_HEIGHTS, advisorCap: FORWARD_FIEND_ADVISOR_CAP } as const;
 
 /** The published slots, the same shape every other scene exports. */
 export const ROAD_TO_THE_FARPLANE_SLOTS: SceneSlots = {

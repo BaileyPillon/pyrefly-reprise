@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-08 — Three more FFX-2 rooms name `SceneStaging.advisorCap`: `src/scenes/advisor-cap.ts` `FORWARD_FIEND_ADVISOR_CAP` (Chapters XI, XIII and XV; FFX-2 only; additive)
+
+Branch `r3942-stage` (real sizes for the fiends, wave 1; handoff: [r3942-stage](handoff/r3942-stage.md)). No file on the contract list changed and no type changed: the field `SceneStaging.advisorCap` and its wiring are the 2026-10-07 entry's below, and what is new is who names it.
+
+- `src/scenes/advisor-cap.ts` (new, one constant): `FORWARD_FIEND_ADVISOR_CAP = 52` grid px (130 px at 1600x900: the card's top at y 705, its usual two-line place; Chapter VI's `LEBLANC_ADVISOR_CAP` is 46, y 742, for feet at y 723). The Road to the Farplane (`road-to-the-farplane.ts`), the Cloister (`cloister-100.ts`) and the Den of Woe (`den-of-woe.ts`) put it in their staging, so their slots and the scene each builds publish it; the fiends of those rooms now stand beside the girls at their real height, with feet down to y 690, where the card at its full height (top y 588: a long recommendation, a downed girl) would have covered them.
+- Chapter XVI's Djose chamber (Ixion's feet at y 575) and every FFX scene name none; `tests/unit/ffx2-advisor-scene-cap.test.ts` pins the list of scene files that name the field.
+- Side effect, disclosed: in these three rooms the card prints fewer lines when its text is long (it keeps the head line, the move and its target), in every link of the room, the giants' included (Anima, Paragon and Oversoul).
+
 ## 2026-10-07 — A scene may cap the FFX-2 move-advisor card: `SceneStaging.advisorCap`, `createHud`'s fifth argument (Chapter VI only; FFX-2 only; additive)
 
 Branch `r3941-stage` (real sizes for the fiends, Bailey's "Option 3: bosses forward"; handoff: [r3941-stage](handoff/r3941-stage.md)). No file on the contract list changed; recorded because the scene staging type gains an optional field and one shared wiring function an optional argument.

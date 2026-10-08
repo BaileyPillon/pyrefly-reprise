@@ -9,6 +9,7 @@ import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import { addPlateWings, paintPlateWings } from './plateWings.ts';
 import type { SceneSlots } from './index.ts';
+import { FORWARD_FIEND_ADVISOR_CAP } from './advisor-cap.ts';
 import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
 
 // ---------------------------------------------------------------------------
@@ -105,7 +106,7 @@ export const DEN_FIGURE_HEIGHTS: Readonly<Record<string, number>> = ffx2FiendFig
 
 const ENEMY_SLOTS: Array<[number, number, number]> = [DEN_SPOTS[DEN_IDS.baralai]!, [2.3, 0, -8.0], [-0.5, 0, -6.6]];
 
-const DEN_STAGING = { holdParty: true, enemySpots: DEN_SPOTS, figureHeights: DEN_FIGURE_HEIGHTS } as const;
+const DEN_STAGING = { holdParty: true, enemySpots: DEN_SPOTS, figureHeights: DEN_FIGURE_HEIGHTS, advisorCap: FORWARD_FIEND_ADVISOR_CAP } as const;
 
 /** The published slots, the same shape every other scene exports. */
 export const DEN_OF_WOE_SLOTS: SceneSlots = {

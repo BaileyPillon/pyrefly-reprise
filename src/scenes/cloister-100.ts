@@ -6,6 +6,8 @@ import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts'
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
 import type { SceneSlots } from './index.ts';
+import { FORWARD_FIEND_ADVISOR_CAP } from './advisor-cap.ts';
+import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
 import { CLOISTER_CAMERA_REF, CLOISTER_LINK_RIG, CLOISTER_WIDE_RIGS, cloisterRenderAspect, cloisterRigsFor } from './cloister-100-rigs.ts';
 import { CloisterLink } from './cloister-100-link.ts';
 
@@ -76,22 +78,35 @@ export const CLOISTER_BOSS_SPOT: [number, number, number] = [1.05, 0, -5.8];
 /** Where the old man appears in the kill link: right of Paragon, clear of the command list. */
 export const CLOISTER_LINK_SIDE_SPOT: [number, number, number] = [4.3, 0, -4.2];
 
+/**
+ * Trema's own spot (r3942-stage, FFX-2 only): the old man stands beside the girls, right of Paine, at his real height (1.02 over them), where the beast's spot (far back,
+ * {@link CLOISTER_BOSS_SPOT}) had him read 0.80 of a girl at 2.2 tall and would read 0.64 at his real 1.78. At (1.3, -0.6) he reads 0.94 of a girl at 1600x900 (real at the same
+ * distance: 1.02), his feet on y 680, above the move-advisor card the scene caps (`./advisor-cap.ts`). The link's prop walks to it (`cloister-100-link.ts`); both Paragon
+ * links keep the beast's spot.
+ */
+export const CLOISTER_TREMA_SPOT: [number, number, number] = [1.3, 0, -0.6];
+
 const ENEMY_SLOTS: Array<[number, number, number]> = [CLOISTER_BOSS_SPOT, [3.5, 0, -5.4], [-1.1, 0, -6.6]];
 
 /**
- * World heights, presentation estimates, both ours (`INSTALLED.md` "Sizes":
- * Trema at 0.72 of Paragon). Paragon is a little under Chapter IV's boss
- * height, so the whole beast fits the band the FFX-2 HUD leaves open. The
- * party takes the FFX-2 chapters' 1.75.
+ * Trema's world height (r3942-stage, FFX-2 only): the girls' 1.75 times his model's ratio to them, from the game's own HD model (`data/ffx2/fiend-stature.ts`,
+ * `research/ffx2-trema.md` §14): 17.8 over the girls' 17.47 (Dark Knight, Alchemist, Dark Knight) is 1.02, so 1.784 (it was an estimate of 2.23, 0.72 of Paragon).
  */
-export const CLOISTER_ACTOR_HEIGHTS = { party: 1.75, paragon: 3.1, trema: 2.23 } as const;
+const TREMA_HEIGHT = ffx2FiendFigureHeights(['trema'], 'ffx2-trema', 1.75)['trema']!;
+
+/**
+ * World heights: Trema's is the table's ({@link TREMA_HEIGHT}). Paragon is a giant (the game's Paragon and Oversoul model is 94 tall) and keeps our estimate, a little
+ * under Chapter IV's boss height, so the whole beast fits the band the FFX-2 HUD leaves open. The party takes the FFX-2 chapters' 1.75.
+ */
+export const CLOISTER_ACTOR_HEIGHTS = { party: 1.75, paragon: 3.1, trema: TREMA_HEIGHT } as const;
 
 /** Combatant ids this scene stages specially (`src/data/ffx2/enemies/{paragon,trema}.ts`). */
 export const CLOISTER_IDS = { paragon: 'paragon', trema: 'trema' } as const;
 
 const CLOISTER_STAGING = {
   holdParty: true,
-  enemySpots: { [CLOISTER_IDS.paragon]: CLOISTER_BOSS_SPOT, [CLOISTER_IDS.trema]: CLOISTER_BOSS_SPOT },
+  enemySpots: { [CLOISTER_IDS.paragon]: CLOISTER_BOSS_SPOT, [CLOISTER_IDS.trema]: CLOISTER_TREMA_SPOT },
+  advisorCap: FORWARD_FIEND_ADVISOR_CAP,
   figureHeights: { [CLOISTER_IDS.trema]: CLOISTER_ACTOR_HEIGHTS.trema },
 } as const;
 
@@ -195,7 +210,7 @@ export const buildCloister100Scene: SceneFactory = async (opts: SceneBuildOption
   const linkRig = new Vector3().copy(Array.isArray(linkPos) ? new Vector3(...linkPos) : linkPos);
   const link = new CloisterLink(group, {
     sideSpot: CLOISTER_LINK_SIDE_SPOT,
-    bossSpot: CLOISTER_BOSS_SPOT,
+    bossSpot: CLOISTER_TREMA_SPOT,
     tremaHeight: CLOISTER_ACTOR_HEIGHTS.trema,
     cameraAt: [linkRig.x, linkRig.y, linkRig.z],
     paragonIds: [CLOISTER_IDS.paragon],
