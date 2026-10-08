@@ -1,0 +1,154 @@
+{
+ "version": 1,
+ "chapter": "sin-fins-core",
+ "game": "ffx",
+ "lines": {
+  "0d45bb332da3e7": {
+   "id": "sin-fins-core.pre.010",
+   "file": "sin-fins-core/sin-fins-core.pre.010.mp3",
+   "ms": 3344,
+   "bytes": 27476,
+   "who": "tidus"
+  },
+  "1cd3994bbb57c4": {
+   "id": "sin-fins-core.pre.011",
+   "file": "sin-fins-core/sin-fins-core.pre.011.mp3",
+   "ms": 2618,
+   "bytes": 21716,
+   "who": "tidus"
+  },
+  "0e8d0e8f516b10": {
+   "id": "yunalesca.post.014",
+   "file": "yunalesca/yunalesca.post.014.mp3",
+   "ms": 626,
+   "bytes": 5780,
+   "who": "auron"
+  },
+  "1b59271f19437c": {
+   "id": "sin-fins-core.pre.015",
+   "file": "sin-fins-core/sin-fins-core.pre.015.mp3",
+   "ms": 1373,
+   "bytes": 11732,
+   "who": "tidus"
+  },
+  "1ed7df175b5165": {
+   "id": "sin-fins-core.post.002",
+   "file": "sin-fins-core/sin-fins-core.post.002.mp3",
+   "ms": 3080,
+   "bytes": 25364,
+   "who": "yuna"
+  },
+  "070f47c97d9082": {
+   "id": "sin-fins-core.post.003",
+   "file": "sin-fins-core/sin-fins-core.post.003.mp3",
+   "ms": 2801,
+   "bytes": 23060,
+   "who": "tidus"
+  },
+  "09607ba06a6a72": {
+   "id": "sin-fins-core.mid-fin-core-glows.001.fb1",
+   "file": "sin-fins-core/sin-fins-core.mid-fin-core-glows.001.fb1.mp3",
+   "ms": 2592,
+   "bytes": 21332,
+   "who": "tidus"
+  },
+  "0697e2115d5059": {
+   "id": "sin-fins-core.mid-fin-core-glows.002",
+   "file": "sin-fins-core/sin-fins-core.mid-fin-core-glows.002.mp3",
+   "ms": 1814,
+   "bytes": 15188,
+   "who": "auron"
+  },
+  "00a07b61baf641": {
+   "id": "sin-fins-core.mid-order-tidus-in.001",
+   "file": "sin-fins-core/sin-fins-core.mid-order-tidus-in.001.mp3",
+   "ms": 1937,
+   "bytes": 16148,
+   "who": "tidus"
+  },
+  "164f41e0c9e250": {
+   "id": "sin-fins-core.mid-order-tidus-out.001",
+   "file": "sin-fins-core/sin-fins-core.mid-order-tidus-out.001.mp3",
+   "ms": 2036,
+   "bytes": 16916,
+   "who": "tidus"
+  },
+  "0f3c31388094fa": {
+   "id": "sin-fins-core.mid-left-fin-down.003.fb2",
+   "file": "sin-fins-core/sin-fins-core.mid-left-fin-down.003.fb2.mp3",
+   "ms": 2723,
+   "bytes": 22484,
+   "who": "tidus"
+  },
+  "135c0c3c68217b": {
+   "id": "sin-fins-core.mid-right-fin-down.003",
+   "file": "sin-fins-core/sin-fins-core.mid-right-fin-down.003.mp3",
+   "ms": 2162,
+   "bytes": 18068,
+   "who": "tidus"
+  },
+  "1c80e787dc42c5": {
+   "id": "sin-fins-core.mid-right-fin-down.004",
+   "file": "sin-fins-core/sin-fins-core.mid-right-fin-down.004.mp3",
+   "ms": 2522,
+   "bytes": 20948,
+   "who": "tidus"
+  },
+  "0c41a6f040b411": {
+   "id": "sin-fins-core.mid-right-fin-down.005.fb1",
+   "file": "sin-fins-core/sin-fins-core.mid-right-fin-down.005.fb1.mp3",
+   "ms": 1878,
+   "bytes": 15764,
+   "who": "auron"
+  },
+  "138ca178fd604b": {
+   "id": "sin-fins-core.mid-genais-guards.001.fb1",
+   "file": "sin-fins-core/sin-fins-core.mid-genais-guards.001.fb1.mp3",
+   "ms": 2502,
+   "bytes": 20756,
+   "who": "auron"
+  },
+  "02317ee3e87ee8": {
+   "id": "sin-fins-core.mid-genais-shells.001.fb1",
+   "file": "sin-fins-core/sin-fins-core.mid-genais-shells.001.fb1.mp3",
+   "ms": 3149,
+   "bytes": 25940,
+   "who": "yuna"
+  },
+  "14f9fd18692e76": {
+   "id": "sin-fins-core.mid-genais-falls.001",
+   "file": "sin-fins-core/sin-fins-core.mid-genais-falls.001.mp3",
+   "ms": 1730,
+   "bytes": 14612,
+   "who": "auron"
+  },
+  "08126e93028ccd": {
+   "id": "sin-fins-core.mid-genais-falls.001.fb1",
+   "file": "sin-fins-core/sin-fins-core.mid-genais-falls.001.fb1.mp3",
+   "ms": 1783,
+   "bytes": 14996,
+   "who": "tidus"
+  },
+  "126171651fbfc2": {
+   "id": "seymour-flux.quip-tidus.001",
+   "file": "seymour-flux/seymour-flux.quip-tidus.001.mp3",
+   "ms": 1387,
+   "bytes": 11732,
+   "who": "tidus"
+  },
+  "0142b0715873a8": {
+   "id": "sin-fins-core.quip-yuna.001",
+   "file": "sin-fins-core/sin-fins-core.quip-yuna.001.mp3",
+   "ms": 1349,
+   "bytes": 11540,
+   "who": "yuna"
+  },
+  "124a22c590bdd7": {
+   "id": "seymour-flux.quip-auron.001",
+   "file": "seymour-flux/seymour-flux.quip-auron.001.mp3",
+   "ms": 1327,
+   "bytes": 11348,
+   "who": "auron"
+  }
+ }
+}

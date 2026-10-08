@@ -1,0 +1,77 @@
+{
+ "version": 1,
+ "chapter": "seymour-natus",
+ "game": "ffx",
+ "lines": {
+  "055ed5260cfbfe": {
+   "id": "seymour-natus.pre.011",
+   "file": "seymour-natus/seymour-natus.pre.011.mp3",
+   "ms": 3117,
+   "bytes": 25556,
+   "who": "yuna"
+  },
+  "1d9fa4994b61cb": {
+   "id": "seymour-natus.pre.013",
+   "file": "seymour-natus/seymour-natus.pre.013.mp3",
+   "ms": 765,
+   "bytes": 6740,
+   "who": "auron"
+  },
+  "144524ff4a8747": {
+   "id": "seymour-natus.pre.017",
+   "file": "seymour-natus/seymour-natus.pre.017.mp3",
+   "ms": 3004,
+   "bytes": 24788,
+   "who": "tidus"
+  },
+  "0fba0744b0cb94": {
+   "id": "seymour-natus.pre.020",
+   "file": "seymour-natus/seymour-natus.pre.020.mp3",
+   "ms": 1444,
+   "bytes": 12308,
+   "who": "auron"
+  },
+  "019295fa47e441": {
+   "id": "seymour-natus.pre.022",
+   "file": "seymour-natus/seymour-natus.pre.022.mp3",
+   "ms": 1520,
+   "bytes": 12884,
+   "who": "yuna"
+  },
+  "17c8c1fa9cceb1": {
+   "id": "seymour-natus.pre.023",
+   "file": "seymour-natus/seymour-natus.pre.023.mp3",
+   "ms": 2290,
+   "bytes": 19028,
+   "who": "tidus"
+  },
+  "0e8d0e8f516b10": {
+   "id": "yunalesca.post.014",
+   "file": "yunalesca/yunalesca.post.014.mp3",
+   "ms": 626,
+   "bytes": 5780,
+   "who": "auron"
+  },
+  "13dc7ce175b247": {
+   "id": "seymour-natus.mid-natus-talk-tidus.001",
+   "file": "seymour-natus/seymour-natus.mid-natus-talk-tidus.001.mp3",
+   "ms": 2969,
+   "bytes": 24404,
+   "who": "tidus"
+  },
+  "045794d7bbf10e": {
+   "id": "seymour-natus.mid-natus-talk-auron.001",
+   "file": "seymour-natus/seymour-natus.mid-natus-talk-auron.001.mp3",
+   "ms": 3365,
+   "bytes": 27668,
+   "who": "auron"
+  },
+  "083e8a0a84fed8": {
+   "id": "seymour-natus.mid-natus-talk-yuna.001",
+   "file": "seymour-natus/seymour-natus.mid-natus-talk-yuna.001.mp3",
+   "ms": 3026,
+   "bytes": 24980,
+   "who": "yuna"
+  }
+ }
+}
