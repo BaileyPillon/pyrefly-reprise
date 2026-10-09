@@ -545,6 +545,8 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
           extraMask: mergeExtraStatusWord(rec.extra ?? 0, 0, usesWeapon),
         };
         step = inflictStatuses(input, drawStatus);
+        // A Threaten that landed decays the target's live Threaten byte (to 70 percent, never below 1); the next hit of the action reads it.
+        resist[11] = step.resist[11] as number;
         return step.outcome;
       },
     });

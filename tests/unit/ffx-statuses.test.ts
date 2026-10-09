@@ -24,6 +24,7 @@ import {
   FFXContentRegistry,
   onTurnEnd,
   onTurnStart,
+  removeStatus,
   resolveAbility,
 } from '../../src/battle/ffx/index.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
@@ -314,6 +315,39 @@ describe('Poison (§4.2)', () => {
     expect(tidus.hp).toBe(2000);
     onTurnEnd(ctx, tidus, true);
     expect(tidus.hp).toBe(1500);
+  });
+});
+
+describe('Double HP and Double MP (VA 0x0078d270)', () => {
+  it('cap at 9,999 and 999 without the Break limits, and removing the flags brings the stored base back', () => {
+    const { ctx } = makeCtx();
+    const tidus = at(ctx, 'tidus');
+    tidus.stats.maxHp = 6000;
+    tidus.hp = 6000;
+    tidus.stats.maxMp = 700;
+    tidus.mp = 700;
+    expect(inflict(ctx, at(ctx, 'yuna'), tidus, { status: 'max-hp-x2', chance: 255, duration: 254 })).toBe(true);
+    expect(inflict(ctx, at(ctx, 'yuna'), tidus, { status: 'max-mp-x2', chance: 255, duration: 254 })).toBe(true);
+    expect([tidus.stats.maxHp, tidus.stats.maxMp]).toEqual([9999, 999]); // 12,000 and 1,400 without the equipment
+    tidus.statuses['max-hp-x2'] && removeStatus(ctx, tidus, 'max-hp-x2', 'expired');
+    removeStatus(ctx, tidus, 'max-mp-x2', 'expired');
+    expect([tidus.stats.maxHp, tidus.stats.maxMp]).toEqual([6000, 700]); // the stored base comes back
+  });
+
+  it('removing one flag leaves the other doubled maximum alone: with Break MP Limit a doubled 800 stays 1,600', () => {
+    const { ctx } = makeCtx();
+    const tidus = at(ctx, 'tidus');
+    tidus.equipment!.armor.autoAbilities = [...tidus.equipment!.armor.autoAbilities, 'break-mp-limit'];
+    tidus.stats.maxHp = 2000;
+    tidus.stats.maxMp = 800;
+    tidus.mp = 800;
+    expect(inflict(ctx, at(ctx, 'yuna'), tidus, { status: 'max-hp-x2', chance: 255, duration: 254 })).toBe(true);
+    expect(inflict(ctx, at(ctx, 'yuna'), tidus, { status: 'max-mp-x2', chance: 255, duration: 254 })).toBe(true);
+    expect([tidus.stats.maxHp, tidus.stats.maxMp]).toEqual([4000, 1600]);
+    removeStatus(ctx, tidus, 'max-hp-x2', 'expired');
+    // The Double MP flag is still on and the function was handed the byte already in force: "already doubled", nothing is recomputed (the table of
+    // research/re-ffx-ctb-status.md section 7), so the 1,600 the limit allowed is not cut back to the 999 of a wearer without it.
+    expect([tidus.stats.maxHp, tidus.stats.maxMp]).toEqual([2000, 1600]);
   });
 });
 

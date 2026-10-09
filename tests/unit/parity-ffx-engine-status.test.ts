@@ -87,11 +87,11 @@ describe('the engine rolls statuses and writes them back as the kernels do, on g
     expect(POOL.some((a) => a.id === 'phoenix-down' || a.id === 'life')).toBe(true);
   });
 
-  it('1500 situations: the same draws, words, flags and pools', () => {
+  it('5000 situations: the same draws, words, flags and pools', () => {
     const rng = makeRng(20261009);
     let skipped = 0;
     const seen = { changed: 0, cleanse: 0, killed: 0, revived: 0, ejected: 0, threaten: 0, stacks: 0, pools: 0, ctb: 0, regenLanded: 0, kinds: new Set<string>() };
-    for (let i = 0; i < 1500; i++) {
+    for (let i = 0; i < 5000; i++) {
       const sit = randomStatusSituation(rng, POOL);
       const hits = sit.hits;
       const kernels = oracleRun(sit, hits);
@@ -117,7 +117,7 @@ describe('the engine rolls statuses and writes them back as the kernels do, on g
       // A Regen that landed on a holder whose tick counter was running: the write-back resets the counter (VA 0x0078f060).
       if (sit.regenTicks !== 0 && kernels.regenTicks === 0) seen.regenLanded++;
     }
-    expect(skipped).toBeLessThan(150);
+    expect(skipped).toBeLessThan(500); // a target that dies or leaves before the last hit of an action is not compared
     // The sample is wide enough to have exercised each branch.
     expect(seen.changed).toBeGreaterThan(500);
     expect(seen.cleanse).toBeGreaterThan(50);
