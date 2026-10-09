@@ -973,6 +973,8 @@ export interface EnemyFields {
   doomTurns?: number;
   /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
   zanmatoLevel?: number;
+  /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
+  plainAttack?: FFXPlainAttack;
   /** A part that revives on a CTB-tick timer instead of staying dead. See {@link EnemyDef.reviveRule}. */
   reviveRule?: PartReviveRule;
   /** FFX-2 only: enemy level, feeding step 1 of the X-2 damage flowchart. Range 1–99. */
@@ -1352,6 +1354,23 @@ export interface FFXCommandRecord {
   flagsDamage: number;
   /** Record byte 0x23: the damage classes, 1 HP, 2 MP, 4 CTB. */
   damageClass: number;
+}
+
+/**
+ * An enemy's plain Attack as the game's monster table has it (re-parity W1; **FFX only**).
+ *
+ * The engine has one generic `attack` command for every actor, and its record is the party's (0x3000: accuracy
+ * formula 3, which reads the user's Accuracy stat). A monster never uses that record: it attacks with a
+ * monster-side one. Where the game says which, the enemy carries it here and the FFX engine resolves its
+ * `attack` command on it; an enemy with none keeps the engine's own reading of the plain Attack (always hits,
+ * can crit), derived from the ability's flags. Source: `research/re-ffx-commands.md` section 6.
+ */
+export interface FFXPlainAttack {
+  record: FFXCommandRecord;
+  /** Record byte 0x29, the base of accuracy formulas 1 and 2. */
+  accuracy: number;
+  /** Record byte 0x27, the crit bonus byte (read when the record does not take the equipment's bonus). */
+  critBonus: number;
 }
 
 /**
@@ -2583,6 +2602,8 @@ export interface EnemyDef {
   doomTurns?: number;
   /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
   zanmatoLevel?: number;
+  /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
+  plainAttack?: FFXPlainAttack;
   /**
    * A part that **cannot be permanently killed**: it comes back on a timer.
    *

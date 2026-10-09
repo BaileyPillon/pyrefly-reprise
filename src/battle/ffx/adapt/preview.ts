@@ -25,14 +25,14 @@ function previewRequest(actor: FFXCombatant, target: FFXCombatant, row: AbilityD
  */
 export function hitChancePercent(actor: FFXCombatant, target: FFXCombatant, def: AbilityDef): number | null {
   const req = previewRequest(actor, target, def);
-  const plan = hitPlan(hitCheckInputOf(req, resolveCommand(def, actor.side)));
+  const plan = hitPlan(hitCheckInputOf(req, resolveCommand(def, actor)));
   return plan.rolls ? plan.percent : null;
 }
 
 /** The percent chance of a critical hit, or 0 for a command that cannot crit. Not clamped. */
 export function critChancePercent(actor: FFXCombatant, target: FFXCombatant, def: AbilityDef): number {
   const req = previewRequest(actor, target, def);
-  return critChanceOf(critCheckInputOf(req, resolveCommand(def, actor.side))) ?? 0;
+  return critChanceOf(critCheckInputOf(req, resolveCommand(def, actor))) ?? 0;
 }
 
 /**

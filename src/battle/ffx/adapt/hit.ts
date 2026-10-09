@@ -24,14 +24,7 @@ import { calcHitDamage, type HitIo, type HitInput, type HitOutcome } from '../ke
 import { equipmentCrit, hasAuto, weaponElements } from '../equipment.ts';
 import { stacks } from '../predicates.ts';
 import { affinityLabel } from './affinity.ts';
-import {
-  DEFAULT_ATTACK_COMMAND,
-  accuracyByteOf,
-  critByteOf,
-  isDefaultAttack,
-  resolveCommand,
-  type ResolvedCommand,
-} from './command.ts';
+import { DEFAULT_ATTACK_COMMAND, accuracyByteOf, resolveCommand, type ResolvedCommand } from './command.ts';
 import type { HitDraws } from './draws.ts';
 import {
   affinityMasks,
@@ -115,7 +108,7 @@ export function hitCheckInputOf(req: HitRequest, command: ResolvedCommand): HitC
   const { actor, target, row } = req;
   const status = permWord(target);
   return {
-    cmd: { flagsMisc: command.flagsMisc, accuracy: accuracyByteOf(row, command) },
+    cmd: { flagsMisc: command.flagsMisc, accuracy: accuracyByteOf(row.id, command) },
     user: {
       acc: actor.stats.acc,
       luck: actor.stats.luck,
@@ -137,9 +130,9 @@ export function hitCheckInputOf(req: HitRequest, command: ResolvedCommand): HitC
 
 /** The critical check's inputs (`kernel/crit.ts`). */
 export function critCheckInputOf(req: HitRequest, command: ResolvedCommand): CritCheckInput {
-  const { actor, target, row } = req;
+  const { actor, target } = req;
   return {
-    cmd: { flagsDamage: command.record.flagsDamage, critBonus: critByteOf(row) },
+    cmd: { flagsDamage: command.record.flagsDamage, critBonus: command.critBonus },
     user: {
       luck: actor.stats.luck,
       luckStack: stacks(actor, 'luck'),
@@ -179,7 +172,7 @@ export function hitInputOf(req: HitRequest, command: ResolvedCommand): HitInput 
       autoB: autoWordB(u),
       buffFlags: buffFlags(u),
       defaultAttack: DEFAULT_ATTACK_COMMAND,
-      currentCommand: isDefaultAttack(row) ? DEFAULT_ATTACK_COMMAND : record.id,
+      currentCommand: command.currentCommand,
       // Only command 0x311f (the game's own Auto-Life revival) consumes it, and no ability of ours is that record.
       bonusFlag: 0,
       // A weapon command takes its formula and power from the weapon; every one of the 23 such records carries the
@@ -260,7 +253,7 @@ function execute(req: HitRequest, command: ResolvedCommand, io: HitIo): HitRepor
  * the draws, and only when the game's own rules call for a draw.
  */
 export function resolveHit(req: HitRequest, draws: HitDraws): HitReport {
-  const command = resolveCommand(req.row, req.actor.side);
+  const command = resolveCommand(req.row, req.actor);
   const hitInput = hitCheckInputOf(req, command);
   const critInput = critCheckInputOf(req, command);
   return execute(req, command, {
@@ -273,5 +266,5 @@ export function resolveHit(req: HitRequest, draws: HitDraws): HitReport {
 /** The same hit with its three random inputs fixed: a variance roll, a critical decision, and a hit that lands. */
 export function fixedHit(req: HitRequest, varianceRoll: number, crit: boolean): HitReport {
   const landed: HitResult = HIT;
-  return execute(req, resolveCommand(req.row, req.actor.side), { draw: () => varianceRoll, hit: landed, crit });
+  return execute(req, resolveCommand(req.row, req.actor), { draw: () => varianceRoll, hit: landed, crit });
 }

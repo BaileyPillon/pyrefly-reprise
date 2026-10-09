@@ -19,13 +19,13 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { AbilityDef, ElementId, FFXCombatant } from '../../src/battle/common/types.ts';
+import type { AbilityDef, ElementId, FFXCombatant, FFXPlainAttack } from '../../src/battle/common/types.ts';
 import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
 import { CORE_ABILITIES, computeDamage, critChance, hitChance, resolveAbility } from '../../src/battle/ffx/index.ts';
 import { critCheck, critChanceOf } from '../../src/battle/ffx/kernel/crit.ts';
 import { hitCheck, hitPlan } from '../../src/battle/ffx/kernel/hit.ts';
 import { calcHitDamage, type HitOutput } from '../../src/battle/ffx/kernel/hitdamage.ts';
-import { resolveCommand } from '../../src/battle/ffx/adapt/command.ts';
+import { accuracyFormulaOf, resolveCommand } from '../../src/battle/ffx/adapt/command.ts';
 import {
   ScriptedRng,
   combatantOf,
@@ -71,6 +71,7 @@ function viaEngine(sit: Situation, hits?: number): Run {
   const rng = new ScriptedRng(sit.raws);
   const targetSide = sit.def.targeting === 'single-ally' ? sit.userSide : sit.userSide === 'party' ? 'enemy' : 'party';
   const user = combatantOf(sit.user, 'u', sit.userSide);
+  if (sit.plainAttack) user.enemy = { plainAttack: sit.plainAttack } as unknown as FFXCombatant['enemy'];
   const target = combatantOf(sit.target, 't', targetSide);
   const { ctx, events } = contextOf(user, target, rng, sit.target.ctb);
   resolveAbility(ctx, user, sit.def, [target.id], {
@@ -227,27 +228,98 @@ describe('an ability with no game record runs on a derived one', () => {
   };
 
   it('derives the words the engine always read from the flags', () => {
-    const r = resolveCommand(derived, 'party').record;
+    const r = resolveCommand(derived, { side: 'party' }).record;
     expect(r.flagsDamage).toBe(0x0d); // physical, can crit, crit bonus from equipment
     expect(r.flagsMisc).toBe((3 << 3) | 0x40); // the old rule gave a player physical skill the table formula, and Darkness applies
     expect(r.damageClass).toBe(1);
     expect(r.type).toBe(0);
-    expect(resolveCommand({ ...derived, accuracy: 80 }, 'enemy').record.flagsMisc >> 3 & 7).toBe(2); // an accuracy byte: formula 2
-    expect(resolveCommand({ ...derived, canMiss: false }, 'party').record.flagsMisc >> 3 & 7).toBe(0); // canMiss false: always hits
-    expect(resolveCommand(derived, 'enemy').record.flagsMisc >> 3 & 7).toBe(0); // an enemy action with no byte: always hits
-    expect(resolveCommand({ ...derived, damageType: 'magical', flags: ['heals'] }, 'party').record.flagsDamage).toBe(0x12);
-    expect(resolveCommand({ ...derived, flags: ['drains'] }, 'party').record.flagsMisc & 0x100).toBe(0x100);
-    expect(resolveCommand({ ...derived, flags: ['ignores-armored'] }, 'party').record.flagsMisc & 0x10000).toBe(0x10000);
+    expect(resolveCommand({ ...derived, accuracy: 80 }, { side: 'enemy' }).record.flagsMisc >> 3 & 7).toBe(2); // an accuracy byte: formula 2
+    expect(resolveCommand({ ...derived, canMiss: false }, { side: 'party' }).record.flagsMisc >> 3 & 7).toBe(0); // canMiss false: always hits
+    expect(resolveCommand(derived, { side: 'enemy' }).record.flagsMisc >> 3 & 7).toBe(0); // an enemy action with no byte: always hits
+    expect(resolveCommand({ ...derived, damageType: 'magical', flags: ['heals'] }, { side: 'party' }).record.flagsDamage).toBe(0x12);
+    expect(resolveCommand({ ...derived, flags: ['drains'] }, { side: 'party' }).record.flagsMisc & 0x100).toBe(0x100);
+    expect(resolveCommand({ ...derived, flags: ['ignores-armored'] }, { side: 'party' }).record.flagsMisc & 0x10000).toBe(0x10000);
   });
 
   it('is exactly the ability with those words written out as its record, on the same draws', () => {
     const rng = makeRng(31);
     for (let i = 0; i < 60; i++) {
       const sit = randomSituation(rng, [derived]);
-      const written = viaEngine({ ...sit, def: { ...derived, record: resolveCommand(derived, 'party').record } }, 1);
+      const written = viaEngine({ ...sit, def: { ...derived, record: resolveCommand(derived, { side: 'party' }).record } }, 1);
       const unwritten = viaEngine({ ...sit, def: derived }, 1);
       expect(unwritten).toEqual(written);
     }
+  });
+});
+
+describe('an enemy\'s plain Attack is not the party\'s record', () => {
+  const attack = CORE_ABILITIES.find((a) => a.id === 'attack') as AbilityDef;
+  // The possessed aeons' Attack, record 0x6000 (research/re-ffx-ai-yunalesca-bfa.md section 5.5): accuracy formula 2 on a
+  // byte of 90, physical, no critical hit.
+  const possessed: FFXPlainAttack = { record: { id: 0x6000, type: 0, flagsMisc: 0x52, flagsDamage: 0x01, damageClass: 1 }, accuracy: 90, critBonus: 0 };
+
+  it('the party and an aeon keep the party\'s Attack record, 0x3000, accuracy formula 3', () => {
+    for (const side of ['party', 'aeon'] as const) {
+      const r = resolveCommand(attack, { side });
+      expect(r.record.id).toBe(0x3000);
+      expect(accuracyFormulaOf(r)).toBe(3);
+      expect(r.currentCommand).toBe(0x3000);
+      expect(r.derived).toBe(false);
+    }
+  });
+
+  it('an enemy with the game\'s record attacks on it: its formula, its byte, its flags', () => {
+    const r = resolveCommand(attack, { side: 'enemy', enemy: { plainAttack: possessed } });
+    expect(r.record).toEqual(possessed.record);
+    expect(accuracyFormulaOf(r)).toBe(2);
+    expect(r.accuracy).toBe(90);
+    expect(r.critBonus).toBe(0);
+    expect(r.record.flagsDamage & 4).toBe(0); // cannot crit
+    expect(r.currentCommand).toBe(0x6000);
+  });
+
+  it('an enemy with none keeps the engine\'s own reading, derived from the flags: always hits, can crit', () => {
+    const r = resolveCommand(attack, { side: 'enemy' });
+    expect(r.derived).toBe(true);
+    expect(accuracyFormulaOf(r)).toBe(0);
+    expect(r.record.flagsDamage & 4).toBe(4);
+    expect(r.currentCommand).toBe(0x3000); // Berserk still multiplies it
+  });
+
+  it('the engine runs the possessed Attack exactly as the kernels run that record: hit roll, variance, no critical draw', () => {
+    const written: AbilityDef = { ...attack, id: 'written-plain-attack', record: possessed.record, accuracy: possessed.accuracy, bonusCrit: possessed.critBonus };
+    const rng = makeRng(2026);
+    const draws = new Set<string>();
+    for (let i = 0; i < 80; i++) {
+      const sit = randomSituation(rng, [written]);
+      sit.userSide = 'enemy';
+      sit.user.luck = 1;
+      const viaRecord = viaEngine({ ...sit, def: written }, 1); // the ability carrying the record itself
+      const viaEnemy = viaEngine({ ...sit, def: attack, plainAttack: possessed }, 1); // the generic Attack of an enemy that carries it
+      expect(viaEnemy).toEqual(viaRecord);
+      const kernels = viaKernels({ ...sit, def: written, currentCommand: 0x6000 }, 1);
+      const { died: _died, ...plain } = viaEnemy;
+      expect(plain).toEqual(kernels);
+      draws.add(viaEnemy.kinds);
+    }
+    // a miss stops after the hit roll; a hit adds the variance; a sleeping or petrified target is struck with no roll at all; never a critical roll
+    expect([...draws].sort()).toEqual(['P', 'PV', 'V']);
+  });
+
+  it('the previews print what the engine rolls for it', () => {
+    const neutral = (side: 'party' | 'enemy', over: Partial<ReturnType<typeof randomSituation>['user']>): FFXCombatant => {
+      const spec = randomSituation(makeRng(9), [attack]).user;
+      Object.assign(spec, { darkness: false, aim: 0, reflex: 0, luckStack: 0, jinx: 0, sleep: false, petrify: false, ...over });
+      return combatantOf(spec, side === 'enemy' ? 'u' : 't', side);
+    };
+    const user = neutral('enemy', { luck: 1 });
+    user.enemy = { plainAttack: possessed } as unknown as FFXCombatant['enemy'];
+    const target = neutral('party', { eva: 22, luck: 18 });
+    // accuracy formula 2: the command's byte less the target's Evasion, plus the user's Luck, less the target's
+    expect(hitChance(user, target, attack)).toBe(90 - 22 + 1 - 18);
+    expect(critChance(user, target, attack)).toBe(0); // the record cannot crit
+    const plainUser = neutral('enemy', { luck: 1 });
+    expect(hitChance(plainUser, target, attack)).toBeNull(); // no record of its own: always hits, as before
   });
 });
 

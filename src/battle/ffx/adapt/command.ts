@@ -14,11 +14,16 @@
  *   accuracy rule (`canMiss`, the accuracy byte, the user's side). The kernels then run on that derived command,
  *   so such an ability keeps today's inputs and the game's arithmetic.
  *
+ * - **An enemy's plain Attack** is not the party's record (0x3000, accuracy formula 3, which reads the user's Accuracy
+ *   stat): a monster attacks with a monster-side record. The enemy carries the game's own where it is known
+ *   ({@link FFXPlainAttack}, the possessed aeons' 0x6000); an enemy with none keeps today's reading, derived from the
+ *   ability's flags (always hits, can crit).
+ *
  * An input the ability cannot supply is an error, never a default: a record with accuracy formula 1 or 2 needs
  * the ability's accuracy byte.
  */
 
-import type { AbilityDef, FFXCommandRecord, FormulaKey, Side } from '../../common/types.ts';
+import type { AbilityDef, FFXCommandRecord, FFXPlainAttack, FormulaKey, Side } from '../../common/types.ts';
 import { CMD_AFFECTED_BY_DARKNESS, CMD_ACCURACY_FORMULA_SHIFT, CMD_NO_EFFECT_ON_LIVING } from '../kernel/hit.ts';
 import { CMD_CAN_CRIT, CMD_CRIT_BONUS_FROM_EQUIPMENT } from '../kernel/crit.ts';
 import { elementMask } from './words.ts';
@@ -66,6 +71,12 @@ const ITEM_COMMAND_BASE = 0x2000;
 /** The party's default attack command (what Berserk multiplies). */
 export const DEFAULT_ATTACK_COMMAND = 0x3000;
 
+/** The part of a combatant the reading of a command depends on: its side, and an enemy's own plain Attack record. */
+export interface CommandUser {
+  side: Side;
+  enemy?: { plainAttack?: FFXPlainAttack | undefined } | undefined;
+}
+
 /** One ability as the kernels read it: the record words (the game's or derived) and the ability's numbers. */
 export interface ResolvedCommand {
   record: FFXCommandRecord;
@@ -77,6 +88,12 @@ export interface ResolvedCommand {
   formula: number;
   /** `Cmd+0x2d`: the element bits. */
   element: number;
+  /** `Cmd+0x29`: the accuracy byte, when the command has one (an enemy's own Attack record brings its own). */
+  accuracy: number | undefined;
+  /** `Cmd+0x27`: the crit bonus byte. */
+  critBonus: number;
+  /** The id the pipeline sees as the command being run: the party's Attack for a generic Attack, else the record's own. */
+  currentCommand: number;
 }
 
 /**
@@ -131,39 +148,40 @@ function deriveRecord(def: AbilityDef, userSide: Side): FFXCommandRecord {
   };
 }
 
-/** The kernels' view of one ability used by a user on `userSide`. */
-export function resolveCommand(def: AbilityDef, userSide: Side): ResolvedCommand {
-  const derived = def.record === undefined;
-  const record = def.record ?? deriveRecord(def, userSide);
+/**
+ * The kernels' view of one ability used by `user`. The generic Attack used by an enemy never reads the party's
+ * record: it takes the enemy's own plain-Attack record when the game says which, else the record derived from the
+ * ability's flags (the engine's reading before the wiring).
+ */
+export function resolveCommand(def: AbilityDef, user: CommandUser): ResolvedCommand {
+  const plain = isDefaultAttack(def) && user.side === 'enemy';
+  const own = plain ? user.enemy?.plainAttack : undefined;
+  const record = own?.record ?? (plain ? deriveRecord(def, user.side) : (def.record ?? deriveRecord(def, user.side)));
   return {
     record,
-    derived,
+    derived: own === undefined && (plain || def.record === undefined),
     flagsMisc: record.flagsMisc & ~(MISC_DELAY_ATTACK | MISC_DELAY_BUSTER),
     formula: FORMULA_NUMBER[def.formula],
     element: elementMask(def.element),
+    accuracy: own?.accuracy ?? def.accuracy,
+    critBonus: own?.critBonus ?? def.bonusCrit ?? 0,
+    currentCommand: isDefaultAttack(def) && own === undefined ? DEFAULT_ATTACK_COMMAND : record.id,
   };
 }
-
 /** The accuracy formula of a command, bits 3 to 5 of `Cmd+0x1c`. */
 export function accuracyFormulaOf(command: ResolvedCommand): number {
   return (command.flagsMisc >>> CMD_ACCURACY_FORMULA_SHIFT) & 7;
 }
 
-/** `Cmd+0x29`: the accuracy byte formulas 1 and 2 read. The ability must carry it for those; no other formula reads it. */
-export function accuracyByteOf(def: AbilityDef, command: ResolvedCommand): number {
+/** `Cmd+0x29`: the accuracy byte formulas 1 and 2 read. The command must carry it for those; no other formula reads it. */
+export function accuracyByteOf(abilityId: string, command: ResolvedCommand): number {
   const formula = accuracyFormulaOf(command);
-  if (formula !== 1 && formula !== 2) return def.accuracy ?? 0;
-  if (def.accuracy === undefined) {
-    throw new Error(`FFX hit kernel: ability '${def.id}' has accuracy formula ${formula} but no accuracy byte`);
+  if (formula !== 1 && formula !== 2) return command.accuracy ?? 0;
+  if (command.accuracy === undefined) {
+    throw new Error(`FFX hit kernel: ability '${abilityId}' has accuracy formula ${formula} but no accuracy byte`);
   }
-  return def.accuracy;
+  return command.accuracy;
 }
-
-/** `Cmd+0x27`: the crit bonus byte (used when the command does not take the equipment's bonus). */
-export function critByteOf(def: AbilityDef): number {
-  return def.bonusCrit ?? 0;
-}
-
 /** True when this command is the one Berserk multiplies: the generic Attack. */
 export function isDefaultAttack(def: AbilityDef): boolean {
   return def.id === 'attack';

@@ -9,7 +9,19 @@
  * own number differs from the game's; the differences are listed in research/re-ffx-commands.md section 4.
  */
 
-import type { FFXCommandRecord } from '../../../battle/common/types.ts';
+import type { FFXCommandRecord, FFXPlainAttack } from '../../../battle/common/types.ts';
+
+/**
+ * The possessed aeons' plain Attack: monster-magic-2 record 0x6000 "Attack" (accuracy formula 2 on a byte of 90, formula 1,
+ * power 16, physical, cannot crit, no shatter). The aeons' scripts (m163 to m167, Valefor to Bahamut) attack with exactly this
+ * command in the half of their turns where they do not use their special (research/re-ffx-ai-yunalesca-bfa.md section 5.5);
+ * the party's own Attack record (0x3000) is the party's. research/re-ffx-commands.md section 6.
+ */
+export const POSSESSED_PLAIN_ATTACK: FFXPlainAttack = {
+  record: { id: 0x6000, type: 0, flagsMisc: 0x52, flagsDamage: 0x1, damageClass: 1 },
+  accuracy: 90,
+  critBonus: 0,
+};
 
 export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>> = {
   'lance-of-atrophy': { id: 0x6078, type: 0, flagsMisc: 0x6, flagsDamage: 0x1, damageClass: 1 }, // Lance of Atrophy (our numbers differ: section 4)

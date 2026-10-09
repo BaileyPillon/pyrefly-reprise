@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-08 — `FFXPlainAttack`, `EnemyDef.plainAttack`, `EnemyFields.plainAttack`: an enemy's plain Attack on the game's own record (re-parity W1; FFX only; additive)
+
+Branch `re-parity`. `src/battle/common/types.ts` gains the interface `FFXPlainAttack` (`record: FFXCommandRecord`, `accuracy`, `critBonus`) and the optional member `plainAttack` on `EnemyDef`
+(the data) and on `EnemyFields` (the combatant's copy, made in `src/battle/ffx/setup.ts`). The FFX engine has one generic `attack` command for every actor; the party's record for it (0x3000) reads the user's
+Accuracy stat and is not a monster's. An enemy that carries a `plainAttack` resolves its generic Attack on that record; an enemy without one keeps the reading it always had (always hits, can crit). The five possessed
+aeons carry the game's monster-side Attack, 0x6000 (`src/data/ffx/command-records/enemies.ts#POSSESSED_PLAIN_ATTACK`). FFX-2 and FF7 data never set the member and no code of theirs reads it.
+Handoff: [re-parity-w1](handoff/re-parity-w1.md). Game case: FFX only.
+
 ## 2026-10-08 — The FFX engine rolls hits, critical hits and damage through the proven kernels: `src/battle/ffx` exports lose nine names and `critChance` loses a parameter (re-parity W1; FFX only; no shared contract file changed)
 
 Branch `re-parity`. No file in the contract list changed (`AbilityDef.record` is the entry below); recorded because the FFX engine's public helpers change shape and the order in which an action draws its random numbers changes. Handoff:

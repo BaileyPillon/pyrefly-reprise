@@ -16,6 +16,8 @@ layer already uses for the same ability).
 | §2 how an ability was matched to a record | `src/data/ffx/command-records/` (the five fields attached to each ability) |
 | §3 the table, ability to record | `tests/unit/data-ffx-command-records.test.ts` pins it against the fixture |
 | §4 where our numbers and flags differ from the game's | the same test pins the number list |
+| §5 inputs the records do not carry | `src/battle/ffx/equipment.ts`, `tests/unit/data-ffx-command-records.test.ts` |
+| §6 an enemy's plain Attack | `EnemyDef.plainAttack`, `src/data/ffx/command-records/enemies.ts` |
 
 ## 1. The records, and how they were read
 
@@ -620,13 +622,45 @@ spheres do not carry the "never breaks the limit" bit** (the data had it on 48);
 a different accuracy formula than the old rule gave them** (the aeon specials and the Magus Sisters' attacks always hit;
 the six aeon Attack records use the user's Accuracy times 2.5 or 1.5, which the data carried as dead `extra` fields).
 
-## 5. Open points
+## 5. Inputs the records do not carry, and how each is settled
 
-- The monsters' own equipment crit byte (`Chr+0x5d8`) was not read; the wiring supplies 0 for every enemy and aeon, which
-  is what the engine always did (no equipment).
-- The weapon's formula and power (`Chr+0x5c1`, `+0x5c7`) are not in the data layer; every one of the 23 weapon commands
-  carries Strength 16 in its record, which is what the ability data carries too, and a test pins it.
+Two inputs of the damage pipeline sit outside the command record. Both were checked in the live exe's code on 2026-10-08
+(Ghidra, FFX.exe build 25501027; the 1,614 functions of the battle module, VA 0x780000 to 0x7c0000, were searched for the offsets):
+
+- **The user's equipment crit bonus (`Chr+0x5d8`) is 0 for every monster.** `pp_BtlInitChr` zero-fills the whole 0x1ec-byte
+  block that starts at `Chr+0x540` and its monster branch writes only `Chr+0x5d9` onward; the one function that ever writes
+  `Chr+0x5d8` is the party-stats function (VA 0x0079c5f0), which zeroes it and adds the two equipped items' crit bytes. So a
+  command with the equipment-bonus bit (flag word 2, bit 3) gives a monster no bonus at all, whatever its own crit byte says:
+  Daigoro's attack (record 0x40b1, flag word 2 = 0xd, crit byte 20) has only the Luck terms, and the wiring supplies 0
+  for every enemy and aeon (`src/battle/ffx/equipment.ts#equipmentCrit` returns 0 for a combatant with no equipment). The
+  old engine read the byte instead, so that attack lost its 17% critical rate (a measured change, in the handoff).
+- **The weapon command is Strength 16 for everyone.** `Chr+0x5c1` (the weapon formula) and `Chr+0x5c7` (its power) are set
+  to 1 and 0x10 by the party-stats function and by the monster branch of `pp_BtlInitChr` alike, so a command that takes
+  its formula and power from the weapon (record bit 18, 23 commands) always runs Strength 16, which is what the ability data
+  carries; `tests/unit/data-ffx-command-records.test.ts` pins it.
+
+Still open:
+
 - Delay Attack and Delay Buster (bits 13 and 14) stay with the turn queue until batch W2: the wiring clears those bits
   from the word the kernels read, so no delay is charged twice. The records' delay bits differ from the data's
   `weak-delay` and `strong-delay` flags on 4 abilities (see §4.2).
 - Formula 0x16 (a save-record counter, two monster commands) is in no ability of ours.
+- The six aeon Attack records (0x30cb to 0x30db: accuracy formulas 5 and 6, powers 14 and 16) are attached to the
+  `*-attack` abilities of the aeon files, but the engine has one generic `attack` command for every actor and an aeon's
+  plain Attack runs on the party's record (0x3000), as it did before the wiring. Routing it to the aeon's own record is a
+  separate, game-visible change (Valefor's and Shiva's Attack would drop from power 16 to 14) and is left for Bailey.
+
+## 6. An enemy's plain Attack
+
+The engine has one generic `attack` command, and its record is the party's (0x3000: accuracy formula 3, which reads the
+user's Accuracy stat). A monster never attacks with that record; it has a monster-side one with an accuracy byte of its
+own (the ordinary monsters' Attack, 0x4000, is formula 2 on a byte of 90 and can crit by equipment, which for a monster
+is nothing). Where the game says which record an enemy of ours uses, the enemy carries it (`EnemyDef.plainAttack`):
+
+| Enemy | Record | Source |
+|---|---|---|
+| the five possessed aeons (Valefor, Ifrit, Ixion, Shiva, Bahamut) | monster magic 2, 0x6000 Attack: formula 1, power 16, accuracy formula 2 on a byte of 90, physical, cannot crit, no shatter | `research/re-ffx-ai-yunalesca-bfa.md` section 5.5 ("else Attack 0x6000") and the record itself |
+
+Any other enemy that attacks with the generic command (a confused boss, an enemy whose script is not registered) keeps the
+reading the engine had before the wiring, derived from the ability's flags: it always hits and can crit. No sourced record is
+attached to those, so none is invented. In the shipped chapters only the possessed aeons use it.

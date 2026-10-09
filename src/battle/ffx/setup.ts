@@ -208,6 +208,7 @@ function enemyToCombatant(e: EnemyDef, isPart: boolean): FFXCombatant {
       ...(e.poisonTickPercent !== undefined ? { poisonTickPercent: e.poisonTickPercent } : {}),
       ...(e.doomTurns !== undefined ? { doomTurns: e.doomTurns } : {}),
       ...(e.zanmatoLevel !== undefined ? { zanmatoLevel: e.zanmatoLevel } : {}),
+      ...(e.plainAttack !== undefined ? { plainAttack: { ...e.plainAttack, record: { ...e.plainAttack.record } } } : {}),
       // A Yu Pagoda "cannot be permanently killed" [ffx-bfa-yu-yevon §1.4].
       ...(e.reviveRule !== undefined ? { reviveRule: { ...e.reviveRule } } : {}),
     },

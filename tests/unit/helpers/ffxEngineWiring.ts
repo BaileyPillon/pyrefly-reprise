@@ -16,6 +16,7 @@ import type {
   ElementId,
   EquipmentDef,
   FFXCombatant,
+  FFXPlainAttack,
   StatusId,
   StatusInstance,
 } from '../../../src/battle/common/types.ts';
@@ -79,6 +80,10 @@ export interface Situation {
   power?: number;
   gilSpent?: number;
   timing?: { timeRemainingMs: number; timerMs: number };
+  /** The user is an enemy with this plain-Attack record of its own (the generic Attack resolves on it). */
+  plainAttack?: FFXPlainAttack;
+  /** The command id the pipeline should see as the one being run, when it is not the record's own. */
+  currentCommand?: number;
 }
 
 const ELEMENTS: ReadonlyArray<readonly [ElementId, number]> = [
@@ -292,7 +297,7 @@ export function oracleInputs(sit: Situation, live: Live): { hit: HitCheckInput; 
         hp: user.hp, mp: user.mp, perm: permOf(user),
         autoA: (user.magicBooster ? 0x40 : 0) | (user.alchemy ? 0x200 : 0) | (user.pierce ? 0x2000 : 0),
         autoB: user.breakLimit ? 0x800 : 0, buffFlags: user.dmg9999 ? 0x08 : 0, defaultAttack: 0x3000,
-        currentCommand: def.id === 'attack' ? 0x3000 : rec.id, bonusFlag: 0,
+        currentCommand: sit.currentCommand ?? rec.id, bonusFlag: 0,
         weapon: { formula: FORMULA[def.formula] as number, power, element: usesWeapon ? user.weaponElement : 0 },
         partyDealt: { phys: user.offPhys, mag: user.offMag },
         scale: timer > 0 ? { a: Math.min(sit.timing!.timeRemainingMs, timer), b: timer } : null,

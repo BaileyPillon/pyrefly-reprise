@@ -94,14 +94,19 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * the game's record), seymour-omnis#1 victory -> defeat, seymour-natus#1 and #7 defeat -> victory; the other 14 keep
  * their outcome. The per-chapter causes are in docs/handoff/re-parity-w1.md. The old values are in git history (the
  * commit before the one that moved them).
+ * Chapter III re-baselined a second time the same day, same track (FFX only): the five possessed aeons' plain Attack runs
+ * on the game's monster-side record 0x6000 (accuracy formula 2 on a byte of 90, physical, cannot crit) and not on the
+ * party's Attack record, so about half of it misses, as the record says (the old engine never missed). That moves the
+ * digests of the links where a possessed aeon attacks (seed 1: links 5 to 7; seed 7: links 3 to 7); every outcome is still
+ * victory and no other digest moved.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '28692f2c:defeat',
   'seymour-flux#7': 'f923eb10:defeat',
   'yunalesca#1': '2327f640:victory',
   'yunalesca#7': '4225415d:victory',
-  'braskas-final-aeon#1': '567c3bf4:victory ea51a558:victory ba4a14f2:victory 509fbd2:victory 51794163:victory d24a132a:victory 8c3f3ba4:victory',
-  'braskas-final-aeon#7': '2b85c492:victory f82347e2:victory 6f22884e:victory 2af5447c:victory 45aad3c7:victory aef3a842:victory 6f2d99cd:victory',
+  'braskas-final-aeon#1': '567c3bf4:victory ea51a558:victory ba4a14f2:victory 509fbd2:victory 1ebf8f7c:victory da4942b3:victory e84aa63:victory',
+  'braskas-final-aeon#7': '2b85c492:victory f82347e2:victory 42bd9a74:victory 48d2e753:victory 86304bae:victory 7e4d660e:victory cddd0f5d:victory',
   'seymour-anima-macalania#1': '15ecc081:victory',
   'seymour-anima-macalania#7': '86868cbf:victory',
   'evrae-airship#1': '14674509:victory',

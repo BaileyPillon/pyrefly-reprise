@@ -21,6 +21,8 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { ALL_ABILITIES, ITEMS } from '../../src/data/ffx/index.ts';
 import { COMMAND_RECORDS, NO_COMMAND_RECORD } from '../../src/data/ffx/command-records/index.ts';
+import { POSSESSED_PLAIN_ATTACK } from '../../src/data/ffx/command-records/enemies.ts';
+import { possessedAeonGroups } from '../../src/data/ffx/enemies/braskas-final-aeon.ts';
 import { FORMULA_NUMBER, engineDamageClass } from '../../src/battle/ffx/adapt/command.ts';
 import { elementMask } from '../../src/battle/ffx/adapt/words.ts';
 
@@ -187,6 +189,28 @@ describe('what the adapter assumes of the data', () => {
 
   it('no ability uses a formula the adapter cannot supply an input for (0x16 reads a save counter)', () => {
     for (const a of ALL_ABILITIES) expect(FORMULA_NUMBER[a.formula], a.id).not.toBe(0x16);
+  });
+
+  it("the possessed aeons' plain Attack is the game's monster-side record 0x6000, word for word", () => {
+    const row = GAME.get(0x6000)!;
+    const p = POSSESSED_PLAIN_ATTACK;
+    expect(p.record.id).toBe(0x6000);
+    expect(p.record.type).toBe(field(row, 'type'));
+    expect(p.record.flagsMisc).toBe(field(row, 'flagsMisc'));
+    expect(p.record.flagsDamage).toBe(field(row, 'flagsDamage'));
+    expect(p.record.damageClass).toBe(field(row, 'damageClass'));
+    expect(p.accuracy).toBe(field(row, 'accuracy'));
+    expect(p.critBonus).toBe(field(row, 'critBonus'));
+    // The generic Attack the engine resolves on it deals the same formula and power the record does.
+    expect(field(row, 'formula')).toBe(1);
+    expect(field(row, 'power')).toBe(16);
+    expect((p.record.flagsMisc >>> 3) & 7).toBe(2); // accuracy formula 2: the byte less the target's Evasion
+    expect(p.record.flagsDamage & 4).toBe(0); // cannot crit
+  });
+
+  it('the five possessed aeons that end a turn on the plain Attack carry it, and no other enemy does', () => {
+    const carried = possessedAeonGroups.flatMap((g) => g.enemies).filter((e) => e.plainAttack !== undefined).map((e) => e.id);
+    expect([...new Set(carried)].sort()).toEqual(['possessed-bahamut', 'possessed-ifrit', 'possessed-ixion', 'possessed-shiva', 'possessed-valefor']);
   });
 
   it("a record with accuracy formula 1 or 2 comes with the ability's accuracy byte", () => {
