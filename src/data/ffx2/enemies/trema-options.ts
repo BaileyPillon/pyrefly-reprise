@@ -13,6 +13,7 @@ import type { AbilityDef, EnemyDef, EnemyGroupDef } from '../../../battle/common
 import { paragonOversoul } from './paragon-oversoul.ts';
 import { tremaAbilities } from './trema-abilities.ts';
 import { CLOISTER_ACTION_TIME, CLOISTER_TREMA, cloisterParagonGroup, cloisterTremaGroup, trema } from './trema.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 export const CLOISTER_PARAGON_OVERSOUL = 'ffx2-cloister-paragon-oversoul';
 export const CLOISTER_TREMA_ARENA = 'ffx2-cloister-trema-arena';
@@ -83,3 +84,6 @@ export const cloisterTremaArenaGroup: EnemyGroupDef = {
 };
 
 export const tremaOptionGroups: readonly EnemyGroupDef[] = [cloisterParagonOversoulGroup, cloisterTremaArenaGroup];
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [cloisterParagonOversoulGroup, cloisterTremaArenaGroup]) attachMonsterRecords(group);

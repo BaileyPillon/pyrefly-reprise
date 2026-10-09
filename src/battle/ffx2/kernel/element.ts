@@ -3,7 +3,8 @@
  *
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69), function
  * 0x618780 (the older copy of the exe has it at 0x6187a0). Spec: `research/re-ffx2-damage.md` section 3.
- * Not wired into the engine: `../formulas.ts` `resolveAffinity` does a different (float, non-bitwise) job.
+ * The engine's hand-written float ladder (`formulas.ts` `resolveAffinity`) is gone: `./pipeline.ts` runs this one,
+ * and `resolve-strike.ts` re-reads {@link elementLadder} for the affinity label of the event.
  *
  * The attack carries an element mask byte (the command's element byte, OR-ed with the weapon element when the
  * command uses the character's own properties). The target has four mask bytes, one bit per element (bit 0

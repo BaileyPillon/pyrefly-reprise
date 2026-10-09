@@ -12,6 +12,7 @@
 
 import type { EnemyGroupDef } from '../../../battle/common/types.ts';
 import { STANDARD_AILMENT_IMMUNITY } from './vegnagun-shared.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 export const shuyinGroup: EnemyGroupDef = {
   id: 'shuyin',
@@ -100,5 +101,8 @@ export const shuyinGroup: EnemyGroupDef = {
   // FFX-2 only.
   checkpointOnEntry: true,
 };
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [shuyinGroup]) attachMonsterRecords(group);
 
 export default shuyinGroup;

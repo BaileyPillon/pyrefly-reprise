@@ -27,11 +27,10 @@
  *
  * ## Chain
  *
- * The chain multiplier is read off the *cloned* target, so a preview taken
- * while a chain is live quotes the chained figure — which is the number the
- * player is about to get. `registerHit` then advances the clone's chain as the
- * previewed hits land, exactly as the real resolution would, so a multi-hit
- * action's later hits compound inside the estimate.
+ * The chain counter is read off the *cloned* target, so a preview taken while a
+ * chain is live quotes the chained figure — the number the player is about to
+ * get — and `bumpChain` raises it as the previewed hits land, exactly as the real
+ * resolution does, so a multi-hit action's later hits compound in the estimate.
  */
 
 import type {
@@ -47,7 +46,7 @@ import type { AbilityRegistry, EventDraft, Ffx2Unit, ItemRegistry } from './inte
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { chainMultiplier } from './chain.ts';
 import { resolveAbility, type ResolveContext } from './resolve.ts';
-import { critPercent, hitPercent } from './formulas.ts';
+import { critPercent, hitPercent } from './hit.ts';
 import { rollTriggerHappy } from './minigames.ts';
 import { SeededRng } from '../common/rng.ts';
 import { aimedPick } from '../common/intentTargets.ts';
@@ -89,7 +88,7 @@ export class RollPolicyRng extends SeededRng {
     const hi = Math.floor(Math.max(min, max));
     if (hi <= lo) return lo;
     const median = lo + Math.floor((hi - lo) / 2);
-    if (lo === 0 && (hi === 100 || hi === 99 || hi === 255)) return median;
+    if (lo === 0 && (hi === 100 || hi === 99 || hi === 255 || hi === 254 || hi === 127 || hi === 1023)) return median; // branch rolls (hit, crit, status, steal)
     if (this.policy === 'min') return lo;
     if (this.policy === 'max') return hi;
     return median;
@@ -264,9 +263,10 @@ export function simulateFFX2Command(
     abilities,
     rng: new RollPolicyRng(options.roll ?? 'mid', options.aim),
     emit,
-    // Same read as `FFX2Engine.resolveCtx`: the flag is cached on the girl when
-    // her gate bonuses were last recomputed, and the clone carries it.
+    // Same read as `FFX2Engine.resolveCtx`: cached on the girl at her last gate recompute; the clone carries it.
     breaksDamageLimit: (unit) => unit.aiMemory?.['bdl'] === true,
+    state: clone, // a stolen item or gil lands in the copy's flags, never the live battle's
+    ...(options.items ? { items: options.items } : {}),
   };
 
   const hitsOverride = expectedMinigameHits(ability, options.roll ?? 'mid');

@@ -264,7 +264,10 @@ describe('#05 (X-2) a spin does what it paid [engine-level]', () => {
         const partyHits = damageTo(own, run.partyIds).filter((h) => h.amount > 0);
         if (partyHits.length === run.partyIds.length) duds++;
         else wins++;
-        const did = own.some((e) => ['damage', 'miss', 'status-add', 'status-remove', 'mp-damage', 'heal', 'ko'].includes(e.type));
+        // A spin names the payload it fired (`message`): Esuna on a party with nothing to cure changes no status, and that is a
+        // spin that did something, not one that vanished (re-parity W3: the hit, status and Esuna rolls draw in the game's order,
+        // so seed 6's Magic Reels now lands on exactly that payload).
+        const did = own.some((e) => ['damage', 'miss', 'status-add', 'status-remove', 'mp-damage', 'heal', 'ko', 'message'].includes(e.type));
         expect(did, `seed ${seed} ${reel}: a full-charge action that emitted nothing`).toBe(true);
       }
     }

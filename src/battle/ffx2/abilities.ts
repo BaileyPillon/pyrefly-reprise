@@ -15,8 +15,10 @@ import type { AbilityRegistry } from './internal.ts';
 import { CORE_ABILITIES } from './abilities-core.ts';
 import { VEGNAGUN_ABILITIES } from './abilities-vegnagun.ts';
 import { SHUYIN_ABILITIES } from './abilities-shuyin.ts';
+import { withFallbackRecords } from './fallback-records.ts';
 
-const LIST: AbilityDef[] = [...CORE_ABILITIES, ...VEGNAGUN_ABILITIES, ...SHUYIN_ABILITIES];
+/** The fallback table with the game's own command row laid on each ability that has one (re-parity W3). */
+const LIST: AbilityDef[] = withFallbackRecords([...CORE_ABILITIES, ...VEGNAGUN_ABILITIES, ...SHUYIN_ABILITIES]);
 
 const BY_ID = new Map<AbilityId, AbilityDef>(LIST.map((a) => [a.id, a]));
 

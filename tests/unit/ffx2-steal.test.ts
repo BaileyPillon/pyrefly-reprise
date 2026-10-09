@@ -10,6 +10,13 @@
  * [ffx2-combat-core §3.2, §8.3]; Pilfer Gil takes the enemy's stolen-gil figure
  * once and deals no damage [§3.2, §8.3]; Leblanc 1,500 gil, steal byte 192
  * [ffx2-leblanc-syndicate §3.1, §6.3].
+ *
+ * **Re-parity W3 (FFX-2 only; reason "game-code parity").** Steal, Pilfer Gil and Bribe run inside the strike
+ * (`resolve-strike.ts`, `steal.ts`) on the proven theft kernels (`kernel/steal.ts`, `research/re-ffx2-hit-status.md`
+ * section 5): the item roll is `draw % 255 < byte` on fixed stream 10 and the slot roll `draw & 0xff < 32` on stream 11 (the
+ * rare slot, one in eight); Pilfer Gil is a success roll and then an amount roll, `floor(floor((s + 100) * gil / 200) *
+ * 255 / 255)`, so it takes between half and all of the enemy's figure, once. The enemy's steal byte and figure are the game's
+ * monster row (`src/data/ffx2/monster-records/`): the goons' byte is 255, not 191. `resolveTheft` is gone.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -21,7 +28,8 @@ import {
   garmentGridRegistryFrom,
   itemRegistryFrom,
 } from '../../src/battle/ffx2/index.ts';
-import { resolveTheft, stealByte } from '../../src/battle/ffx2/steal.ts';
+import { applyPilferGil, applyStealItem, stealByte, type TheftEnv } from '../../src/battle/ffx2/steal.ts';
+import { resolveCommand } from '../../src/battle/ffx2/adapt/command.ts';
 import { buildResult } from '../../src/battle/ffx2/results.ts';
 import type { Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
 import * as data from '../../src/data/ffx2/index.ts';
@@ -81,35 +89,39 @@ function theftFixture(rng: Rng) {
   const units = (engine as unknown as { units: Ffx2Unit[] }).units;
   const state: BattleState = engine.state();
   const events: unknown[] = [];
-  const env = { units, state, rng, emit: (e: unknown) => events.push(e), items: itemRegistryFrom(Object.values(data.ITEMS)) };
+  const env: TheftEnv & { units: Ffx2Unit[] } = { units, state, rng, emit: (e) => events.push(e), items: itemRegistryFrom(Object.values(data.ITEMS)) };
   const rikku = units.find((u) => u.id === 'rikku')!;
   const leblanc = units.find((u) => u.enemy && u.name === 'Leblanc')!;
   return { env, rikku, leblanc, state, events };
 }
 
+/** The Steal row's theft on `target`, as the strike runs it after the hit determination. */
+function steal(f: ReturnType<typeof theftFixture>, abilityId: string, target: Ffx2Unit): void {
+  const ability = data.ABILITIES[abilityId]!;
+  applyStealItem(f.env, resolveCommand(ability, f.rikku), f.rikku, target);
+}
+
 describe('Steal (FFX-2)', () => {
   it('rolls the steal byte out of 255: Leblanc 192 succeeds on 191 and fails on 192', () => {
     expect(stealByte(data.ENEMY_GROUPS_BY_ID[LEBLANC_ACT_III]!.enemies.find((e) => e.name === 'Leblanc')!.rewards.steal!)).toBe(192);
-    const steal = data.ABILITIES['x2-thief-steal']!;
 
     const hit = theftFixture(scripted([191, 3]));
-    expect(resolveTheft(hit.env as never, hit.rikku, steal, [hit.leblanc.id])).toBe(true);
+    steal(hit, 'x2-thief-steal', hit.leblanc);
     expect(hit.state.flags['inventory:x2-elixir']).toBe((chateauBuild.inventory.find((i) => i.itemId === 'x2-elixir')?.count ?? 0) + 1);
 
     const miss = theftFixture(scripted([192]));
     const before = miss.state.flags['inventory:x2-elixir'];
-    resolveTheft(miss.env as never, miss.rikku, steal, [miss.leblanc.id]);
+    steal(miss, 'x2-thief-steal', miss.leblanc);
     expect(miss.state.flags['inventory:x2-elixir']).toBe(before);
     expect(miss.leblanc.stolenFrom).toBeFalsy();
   });
 
   it('takes the rare slot 1 time in 8 (the second draw is 0)', () => {
-    const steal = data.ABILITIES['x2-thief-steal']!;
     const f = theftFixture(scripted([0, 0]));
     const logos = f.env.units.find((u) => u.enemy && u.name === 'Logos')!;
     const rareBefore = f.state.flags['inventory:x2-elixir'];
     const commonBefore = f.state.flags['inventory:x2-mega-potion'];
-    resolveTheft(f.env as never, f.rikku, steal, [logos.id]);
+    steal(f, 'x2-thief-steal', logos);
     expect(f.state.flags['inventory:x2-elixir']).toBe(Number(rareBefore ?? 0) + 1); // Logos rare = Elixir
     expect(f.state.flags['inventory:x2-mega-potion']).toBe(commonBefore);
   });
@@ -132,10 +144,9 @@ describe('Steal (FFX-2)', () => {
       expect((engine.state().flags['inventory:x2-budget-grenade'] as number | undefined ?? 0) +
         Number(engine.state().flags['inventory:x2-grenade'])).toBe(held);
     }
-    // The Dr. Goon's rate is the record's 75 % (191/255 on the byte scale): 60 seeds land ~45.
-    console.log(`Dr. Goon first-try steals: ${firstTry}/60`);
-    expect(firstTry).toBeGreaterThan(35);
-    expect(firstTry).toBeLessThan(55);
+    // The Dr. Goon's steal byte is the game row's 255 (it was the wiki's 191, 75 %): `draw % 255 < 255` never fails, so
+    // every one of the 60 seeds lands on the first try.
+    expect(firstTry).toBe(60);
   });
 });
 
@@ -146,19 +157,24 @@ describe('Pilfer Gil (FFX-2)', () => {
     const mpBefore = engine.state().combatants['rikku']!.mp;
     const hpBefore = engine.state().combatants[leblanc]!.hp;
     const events = rikkuDoes(engine, 'x2-thief-pilfer-gil', leblanc);
-    expect(messages(events)).toEqual(['Rikku pilfered 1,500 gil!']);
+    // The game's amount roll takes half to all of the figure: floor((s + 100) * 1500 / 200), s = 0..100 -> 750..1500.
+    const text = messages(events);
+    expect(text).toHaveLength(1);
+    const taken = Number(/^Rikku pilfered ([0-9,]+) gil!$/.exec(text[0]!)?.[1]?.replace(/,/g, ''));
+    expect(taken).toBeGreaterThanOrEqual(750);
+    expect(taken).toBeLessThanOrEqual(1500);
     expect(events.some((e) => e.type === 'damage' || e.type === 'chain')).toBe(false);
     expect(engine.state().combatants[leblanc]!.hp).toBe(hpBefore);
     expect(engine.state().combatants['rikku']!.mp).toBe(mpBefore - 2);
-    expect(engine.state().flags['stolenGil']).toBe(1500);
+    expect(engine.state().flags['stolenGil']).toBe(taken);
 
     expect(messages(rikkuDoes(engine, 'x2-thief-pilfer-gil', leblanc))).toEqual(['Leblanc has no gil to take']);
-    expect(engine.state().flags['stolenGil']).toBe(1500);
+    expect(engine.state().flags['stolenGil']).toBe(taken);
   });
 
   it('adds pilfered gil to the result, except on a defeat', () => {
-    const f = theftFixture(scripted([]));
-    resolveTheft(f.env as never, f.rikku, data.ABILITIES['x2-thief-pilfer-gil']!, [f.leblanc.id]);
+    const f = theftFixture(scripted([0, 100])); // success, then the top amount roll: floor(200 * 1500 / 200) = 1,500
+    applyPilferGil(f.env, f.rikku, f.leblanc);
     const units = f.env.units;
     const dropGil = units.filter((u) => u.enemy).reduce((s, u) => s + (u.enemy?.rewards.gil ?? 0), 0);
     expect(buildResult(units, f.state, 'victory', 0).gil).toBe(dropGil + 1500);
@@ -166,9 +182,14 @@ describe('Pilfer Gil (FFX-2)', () => {
     expect(buildResult(units, f.state, 'defeat', 0).gil).toBe(0);
   });
 
-  it('Act I and II records carry no stolen gil (published for Act III only)', () => {
+  it('every enemy of Acts I and II carries the game row figure too (the wiki published it for Act III only)', () => {
+    // The game's monster rows hold a figure for every monster, and the gil chance byte is 255 for all of them
+    // (research/re-ffx2-ai-leblanc-den-ixion.md 1.9): Pilfer Gil works from the first room.
     for (const id of [LEBLANC_ACT_I, 'ffx2-leblanc-logos-room']) {
-      for (const e of data.ENEMY_GROUPS_BY_ID[id]!.enemies) expect(e.rewards.stolenGil).toBeUndefined();
+      for (const e of data.ENEMY_GROUPS_BY_ID[id]!.enemies) {
+        expect(e.ffx2Record?.stealGil, e.id).toBeGreaterThan(0);
+        expect(e.rewards.stolenGil, e.id).toBe(e.ffx2Record?.stealGil);
+      }
     }
   });
 });
@@ -180,7 +201,7 @@ describe('Redoubt steal and stolen gil (FFX-2, ffx2-vegnagun-shuyin §13.2 S1-S2
     for (const r of redoubts) {
       expect(r.rewards.steal).toEqual({
         baseChance: 50,
-        stealRate: 128,
+        stealRate: 128, // the game row's byte, which equals the authored one here
         common: { itemId: 'x2-phoenix-down', count: 1 },
         rare: { itemId: 'x2-mega-phoenix', count: 1 },
       });

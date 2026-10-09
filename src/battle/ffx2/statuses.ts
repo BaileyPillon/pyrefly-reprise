@@ -145,42 +145,6 @@ function durationRate(c: FFX2Combatant): number {
   return 1;
 }
 
-/** §2.6a "Status 1" — the linear chance most ordinary riders use. */
-export function statusChanceLinear(
-  userLevel: number,
-  power: number,
-  targetLevel: number,
-  resist: number,
-): number {
-  return Math.max(0, Math.min(100, userLevel * 5 + power - (targetLevel * 5 + resist)));
-}
-
-/**
- * §2.6a "Status 2" — the quartic-over-resist used by the Eject and instant
- * Death families. The `(resist + 5)^2` denominator is why every X-2 boss is
- * functionally immune to instant death.
- */
-export function statusChanceQuartic(
-  userLevel: number,
-  power: number,
-  targetLevel: number,
-  resist: number,
-): number {
-  const lv = Math.max(1, targetLevel);
-  let t = Math.floor(Math.floor((100 * userLevel * userLevel * power * power) / lv) / lv);
-  const d = resist + 5;
-  t = Math.floor(Math.floor(t / d) / d) - 1;
-  return Math.max(0, Math.min(100, (t / 128) * 100));
-}
-
-/** §2.6a "Status 3" — the sextic used by Zantetsu. */
-export function statusChanceSextic(userLevel: number, targetLevel: number, resist: number): number {
-  const lv = Math.max(1, targetLevel);
-  const denominator = lv ** 3 * (resist + 10) ** 2 * Math.floor(resist / 20 + 1);
-  if (denominator <= 0) return 0;
-  return Math.max(0, Math.min(100, (Math.floor(userLevel ** 6 / denominator) / 1024) * 100));
-}
-
 /**
  * Apply one status. Returns the instance when it landed, `null` when it did
  * not. Re-applying a non-stacking status already present displays "MISS" in

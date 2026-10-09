@@ -31,7 +31,10 @@ class Stop extends Error {
 }
 
 const CHAPTERS = ['ffx2-vegnagun-shuyin', 'ffx2-leblanc', 'ffx2-fallen-aeons', 'ffx2-den-of-woe'];
-const SEEDS = 12;
+// Re-parity W3 (FFX-2 only; reason "game-code parity"): 24 seeds, not 12. The Mega-Potion case needs two girls under 75 % at one menu, and
+// with the game's draw order and damage numbers the first such board in this scan comes later (it is found within 20 seeds); the cases
+// stop at the first board they find, so the larger bound costs nothing where the board is early.
+const SEEDS = 24;
 const HEALS = ['Potion', 'Hi-Potion', 'X-Potion', 'Cure', 'Cura', 'Curaga'];
 const BUFFS = ['Light Curtain', 'Lunar Curtain', 'Protect', 'Shell', 'Haste', 'Hastega', 'Reflect'];
 

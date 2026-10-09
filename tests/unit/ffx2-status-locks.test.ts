@@ -72,7 +72,10 @@ describe('FFX-2 turn-denying statuses run on the clock, not on turns (§2.8)', (
 
   it('a slept unit in a real battle takes a turn again', () => {
     const engine = new FFX2Engine({ minigames: false });
-    engine.init(bahamutSetup(31));
+    // Re-parity W3: the pinned seed moved from 31 to 1. The fixture Bahamut now hits with the monster row's Accuracy 95 (the old
+    // engine used an invented baseline of 104 only when the stat was 0) and the game's draw order moved every seed: seed 31 now
+    // ends in a party defeat about 80 decisions in, before the 51 s sleep wears off (21 of the first 40 seeds do); seed 1 does not.
+    engine.init(bahamutSetup(1));
 
     const first = engine.state().activeIds[0];
     expect(first).toBeDefined();

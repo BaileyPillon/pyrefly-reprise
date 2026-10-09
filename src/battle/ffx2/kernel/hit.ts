@@ -6,9 +6,9 @@
  * `src/battle/ffx/kernel/hit.ts`). Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69),
  * function 0x00641500 (callees: the stream selector 0x0061adb0, the generator 0x0061e270, `pp_is_aided_chr`
  * 0x00624bc0, the 64-bit CRT helpers and the float-to-int helper). Spec:
- * `research/re-ffx2-hit-status.md` section 2. Pure, no DOM, no engine types (AGENTS.md rule 1); not wired
- * into the engine. Randomness comes from a `draw(stream)` callback (see `./rng.ts`); the arithmetic of the
- * eight formulas is in `./hitFormulas.ts`.
+ * `research/re-ffx2-hit-status.md` section 2. Pure, no DOM, no engine types (AGENTS.md rule 1). The engine
+ * runs it once per action (`resolve-strike.ts`, inputs from `adapt/inputs.ts`). Randomness comes from a
+ * `draw(stream)` callback (see `./rng.ts`); the arithmetic of the eight formulas is in `./hitFormulas.ts`.
  *
  * What the function does for each target `t` in the action's target mask, visited in ascending slot
  * order, with `f` = the command's accuracy formula (command row +0x14, bits 3 to 5):

@@ -60,35 +60,37 @@ describe('carriesMenuCancel reads the sourced rows (no row is flagged here)', ()
 describe('the default is ON; the option `false` replays release 17\'s logs, byte for byte', () => {
   // Release 17's rule, from `d0d53cb4` (one row re-pinned for PR-0145, below), before the switch existed (`ffx2ChapterDrive`, human pace:
   // Active 1.5 s a menu, and the Wait split 1.5 s / 0.5 s on the top list).
+  // **Re-pinned 2026-10-09 for re-parity W3 (FFX-2 only; reason "game-code parity").** The kernels decide every hit in the game's draw order,
+  // so every log moved, and `immuneHitsSkipChain: false` is no longer read (the game's chain byte rises only on a positive HP number, so an
+  // immune hit never opens a chain). These eighteen are therefore NOT release 17's logs any more: they are the current engine with the
+  // three release-17 options forced off (any damaging hit closes an open menu), pinned so that rule stays reproducible and distinct from the
+  // default. The old hashes are in git at 029d49c7. Chapter VI's split run of seed 3 moved once more (here and in ON below) when the monster
+  // rows by fight went in (`FFX2MonsterRecord.commands`: Ormi's Concussive Shock, power 4, in the first room; the Fem-Goon's own Attack row).
   const PINNED: Record<string, string> = {
-    'IV|active|1': 'd059f64cfe4afce9', 'IV|split|1': 'c9ed16c44755cdd7',
-    'IV|active|2': 'f6f806a146e9e13a', 'IV|split|2': 'eee3244f250d5099',
-    'IV|active|3': 'f83208beb680732e', 'IV|split|3': '7261df9d93c54c46',
-    'V|active|1': 'cccd73412d81d111', 'V|split|1': '36d75afe39f7487e',
-    'V|active|2': 'bfedb9c944b8d128', // re-pinned 2026-09-26, PR-0145 (iter2-b1): Rikku falls with Yuna and Paine petrified, now a Game Over at once (was 1248968158cd4baa)
-    'V|split|2': '172b35bec210c2b2',
-    'V|active|3': '31ebf80e1112a172', 'V|split|3': '488b65aa589d1d7b',
-    'VI|active|1': '2479ed7e82b3f22d', 'VI|split|1': 'e3a104259dcaae53',
-    'VI|active|2': '8f610b1001a7c91d', 'VI|split|2': '2dced3deffa86083',
-    'VI|active|3': '89fde8982efe7a14', 'VI|split|3': '5d55feb0039ead09',
+    'IV|active|1': 'aa5dec90f7063d16', 'IV|split|1': '0fa2f4a8edb1be5b',
+    'IV|active|2': '6721ef99da65b770', 'IV|split|2': '13763da259186065',
+    'IV|active|3': '35678eca69be555b', 'IV|split|3': '0fc033783a4abb68',
+    'V|active|1': '9cfe461ad465c311', 'V|split|1': '437c85e81ea08054',
+    'V|active|2': 'e7b90b74c53c5a16', 'V|split|2': '94119b09f8fb5da3',
+    'V|active|3': 'b84d244db178ad3e', 'V|split|3': 'e70d65bbd193fc3d',
+    'VI|active|1': '12d69326e68d09f2', 'VI|split|1': 'cd51b9dbeab47115',
+    'VI|active|2': '0eff8835d726e853', 'VI|split|2': '66d3ab577d1b1bcc',
+    'VI|active|3': 'b2cfa25eb31ec05a', 'VI|split|3': '6a75d9deb02fa7cf',
   };
-  // Switch on (the default since 2026-09-26), recorded on branch `r20-menu-cancel` the same way.
+  // Switch on (the default since 2026-09-26), recorded on branch `r20-menu-cancel` the same way; re-pinned 2026-10-09 for re-parity W3
+  // (same cause as above; old hashes at 029d49c7).
   // All eighteen differ from release 17's: at human pace a plain hit lands on an open menu in each of
   // these runs. `ffx2-atb-golden.test.ts` holds the matching Active re-pin (same first two per chapter).
   const ON: Record<string, string> = {
-    'IV|active|1': 'f7184d7b87948e2c', 'IV|split|1': '9890214268abe440',
-    'IV|active|2': 'e162970a86a2268f', 'IV|split|2': '898a6077addce590',
-    'IV|active|3': 'fc6c4f4b8b7cb240', 'IV|split|3': '1632f82e2a3ce9e3',
-    'V|active|1': '6be1a4346ecdd543', 'V|split|1': 'e628082551af56ff',
-    'V|active|2': 'd87ae9b34cf3f68c', 'V|split|2': 'bf0e82af326cd75c',
-    'V|active|3': '0f23aa5c24c2e101', 'V|split|3': '65d1ac6fe36018f8',
-    // Chapter VI's six re-pinned 2026-09-27 for PR-0106 (D-242, FFX-2 only): Leblanc's script as SinirothX
-    // prints it (failsafe once, turn 5 Fan Slap) is the default now. IV and V do not move (IC-1 changes
-    // nothing on these seeds). Was 1e6d2254c421cf97 / 5a15ae3d9a79c6c3 / 0bf6ef40005301d3 (PR-0145) /
-    // cdb3630f1780026d / 4fb96e507ba8ac03 / a8af26bfad0124a1.
-    'VI|active|1': '413e9acc6ea29f0b', 'VI|split|1': '432a8207584a9ae3',
-    'VI|active|2': 'c7313d74bb9b30e2', 'VI|split|2': 'c780441012c456a5',
-    'VI|active|3': '18d80f928c25021a', 'VI|split|3': '34c00bc638a6450d',
+    'IV|active|1': '5b34258bf8580c9e', 'IV|split|1': 'c66739aca2d893be',
+    'IV|active|2': 'a752fe90d9c63afa', 'IV|split|2': '8217379e6a255129',
+    'IV|active|3': 'd5c988b268bebc0e', 'IV|split|3': 'ef0bc0517cc943f8',
+    'V|active|1': 'fe7ab95d0fbae673', 'V|split|1': '88e40db9940ac6e0',
+    'V|active|2': '086e107f235fc649', 'V|split|2': 'a621da560e50e1e9',
+    'V|active|3': '0e5f385c8dca4fa7', 'V|split|3': 'ec68335b5d29e5b9',
+    'VI|active|1': 'a77a0b4b1dcba113', 'VI|split|1': 'ca1c8bcd80dbf334',
+    'VI|active|2': '55c7f457cfc62c2a', 'VI|split|2': 'cad662e72aec12e9',
+    'VI|active|3': 'a4912c4e9de351d3', 'VI|split|3': '7c5a4a6680191cd7',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 
@@ -96,7 +98,7 @@ describe('the default is ON; the option `false` replays release 17\'s logs, byte
     expect(MENU_CANCEL_ONLY_DELAY_ABILITIES).toBe(true);
   });
 
-  it('Chapters IV, V and VI at human pace: `false` replays the pre-switch logs; the default and `true` play the re-pinned ones', () => {
+  it('Chapters IV, V and VI at human pace: `false` plays release 17\'s rule (any damaging hit closes a menu); the default and `true` play the re-pinned ones', () => {
     for (const [name, drive] of Object.entries(DRIVES)) {
       for (let seed = 1; seed <= 3; seed++) {
         // Release 17 also predates D-242 (2026-09-27): IC-1 and PR-0106 were off, so they are forced off here.

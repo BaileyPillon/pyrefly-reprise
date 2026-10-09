@@ -54,9 +54,8 @@ function fallback(d: Extract<Decision, { kind: 'player-input' }>): Command {
   return { ...row.command, targets: target ? [target] : [] } as Command;
 }
 
-/** The chain, seed 1, intended strategy, to link 5's (Shuyin's) first menu. */
-function link5(): { engine: FFX2Engine; decision: Extract<Decision, { kind: 'player-input' }> } {
-  const seed = 1;
+/** The chain, intended strategy (seed 1 unless named), to link 5's (Shuyin's) first menu. */
+function link5(seed = 1): { engine: FFX2Engine; decision: Extract<Decision, { kind: 'player-input' }> } {
   const engine = new FFX2Engine(options());
   const first = ffx2Data.ENEMY_GROUPS_BY_ID[VEGNAGUN_CHAIN_ORDER[0]!]!;
   let setup: BattleSetup = { game: 'ffx2', party: farplaneBuild, enemies: first, triggers: [], seed, condition: 'normal', canEscape: false };
@@ -87,6 +86,24 @@ function link5(): { engine: FFX2Engine; decision: Extract<Decision, { kind: 'pla
   throw new Error('never reached link 5');
 }
 
+/**
+ * Re-parity W3 (FFX-2 only; reason "game-code parity"): the first seed of 1 to 40 whose link-5 first menu finds Shuyin with Terror of
+ * Zanarkand already on the charge bar. Seed 1 was that board; the game's draw order moved the stream, so on seed 1 the first menu now
+ * finds a different Shuyin (the case needs the board, not the number). A seed whose chain does not reach link 5 is passed over.
+ */
+function committedSeed(): number {
+  for (let seed = 1; seed <= 40; seed++) {
+    try {
+      const { engine } = link5(seed);
+      const shuyin = engine.state().combatants['shuyin'] as unknown as { atb: { charging: { commandRef: Command } | null } };
+      if ((shuyin.atb.charging?.commandRef as { id?: string } | undefined)?.id === 'terror-of-zanarkand') return seed;
+    } catch {
+      // the chain stopped before link 5 on this seed
+    }
+  }
+  throw new Error('no seed of 1 to 40 reaches link 5 with the cast on the bar');
+}
+
 const live: EnemyIntentPanel[] = [];
 afterEach(() => {
   while (live.length) live.pop()!.unmount();
@@ -104,9 +121,9 @@ function render(view: IntentView | null): HTMLElement {
   return overlay;
 }
 
-describe('PR-0123: Chapter V link 5, seed 1, first menu (FFX-2)', () => {
+describe('PR-0123: Chapter V link 5, first menu (FFX-2)', () => {
   it('names the move already on the charge bar, and the guide WATCH line agrees', () => {
-    const { engine, decision } = link5();
+    const { engine, decision } = link5(committedSeed());
     const shuyin = engine.state().combatants['shuyin'] as unknown as { atb: { charging: { commandRef: Command } | null } };
     expect(shuyin.atb.charging?.commandRef).toMatchObject({ id: 'terror-of-zanarkand' });
 

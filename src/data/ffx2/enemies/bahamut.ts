@@ -23,6 +23,7 @@
  */
 
 import type { EnemyGroupDef } from '../../../battle/common/types.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 export const bahamutGroup: EnemyGroupDef = {
   id: 'ffx2-bahamut',
@@ -120,5 +121,8 @@ export const bahamutGroup: EnemyGroupDef = {
     { at: 'start', track: 'boss-ffx2-aeon', fadeMs: 800 },
   ],
 };
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [bahamutGroup]) attachMonsterRecords(group);
 
 export default bahamutGroup;

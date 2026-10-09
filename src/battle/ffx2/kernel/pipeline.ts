@@ -6,7 +6,8 @@
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69), function
  * 0x6172c0 (the older copy has it at 0x6172e0), with the base formula 0x61b910 ({@link baseDamage}), the
  * critical roll 0x617210, the element step 0x618780 ({@link elementMod}) and the aid scale 0x616e40. Spec:
- * `research/re-ffx2-damage.md` section 2. Not wired into the engine.
+ * `research/re-ffx2-damage.md` section 2. The engine runs it for every strike (`resolve-strike.ts`, inputs from
+ * `adapt/inputs.ts`; the table of every input and its source is `docs/handoff/re-parity-w3.md` section 1).
  *
  * ORDER of the HP class, as the instructions run it (each step feeds the next):
  *

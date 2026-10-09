@@ -119,9 +119,19 @@ describe('(a) what still rolls', () => {
     expect(hitPercent(worstAttacker(girl), dodgiest(foe), attack)).toBeLessThan(100);
   });
 
-  it('a numeric accuracy is still the flat override §2.9 says it is', () => {
-    const firaga = data.ABILITIES['x2-black-mage-firaga']!;
-    expect(hitPercent(girl, foe, { ...firaga, accuracy: 70 })).toBe(70);
+  // Re-parity W3 (FFX-2 only; reason "game-code parity"). The old engine read a numeric `accuracy` as a flat percentage that
+  // beat every other rule (`hit.ts`: "§2.9 calls it a flat override"). The game has no flat percentage: a row's accuracy byte
+  // is the BASE of accuracy formula 1's race, `LCK_a + base - LCK_t - EVA_t + 5 * (stage terms)`, rolled against `draw % 101`
+  // (research/re-ffx2-hit-status.md §2.1). So a row that carries a game record rolls the record's formula (Fira's is 0:
+  // never), the ability's own `accuracy` is not read, and an ability with NO game row (its row is derived from its fields,
+  // `adapt/command.ts deriveRecord`) that opts in to rolling with a byte races on that byte.
+  it("a row with a game record ignores a stray numeric accuracy; a derived row races on its byte (the base of formula 1)", () => {
+    const fira = data.ABILITIES['x2-black-mage-fira']!; // a chapter-reachable spell, so it carries its game row
+    expect(fira.ffx2Record).toBeDefined();
+    expect(hitPercent(girl, foe, { ...fira, accuracy: 70 })).toBe(100); // the record: formula 0, magic never rolls
+    const derived: AbilityDef = { ...fira, ffx2Record: undefined, canMiss: true, accuracy: 70 };
+    const base = 70 + girl.stats.luck - foe.stats.luck - foe.stats.eva; // no stages on either side
+    expect(hitPercent(girl, foe, derived)).toBeCloseTo((100 * Math.max(0, Math.min(101, base))) / 101, 6);
   });
 });
 

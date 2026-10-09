@@ -15,6 +15,7 @@
 
 import type { EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
 import { STANDARD_AILMENT_IMMUNITY } from './vegnagun-shared.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 /** All seven stats' Up AND Down, 255 each — no Break of any kind lands on the Head or the Redoubts. */
 const ALL_STAT_MOD_IMMUNITY = {
@@ -161,5 +162,8 @@ export const vegnagunHeadGroup: EnemyGroupDef = {
   parts: [redoubt('redoubt-r', 'Right Redoubt', 1, 133, 0), redoubt('redoubt-l', 'Left Redoubt', 2, 0, 133)],
   musicCues: [{ at: 'start', track: 'boss-vegnagun', fadeMs: 600 }],
 };
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [vegnagunHeadGroup]) attachMonsterRecords(group);
 
 export default vegnagunHeadGroup;

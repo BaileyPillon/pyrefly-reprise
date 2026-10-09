@@ -163,10 +163,11 @@ describe('#11 Charon costs the caster the battle [ffx2-combat-core §2.3, §3.12
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
+// Re-parity W3 (FFX-2 only): `adapt/command.ts deriveRecord` now reads `adds-equipment-crit` (it keeps the row's crit byte from
+// replacing the Luck rule) and `inherits-weapon-properties` (the row's "uses the character's properties" bit, 0x10000), so
+// neither is unread any more; the engine still has no weapon to take an element or a status from (`adapt/inputs.ts`).
 const UNREAD_ON_PURPOSE: Record<string, string> = {
   'long-range': "its one sourced reader is the Nodes' reach rule [ffx2-vegnagun-shuyin §3.2], a Chapter 5 mechanic nobody has built",
-  'adds-equipment-crit': 'an FFX weapon rule; X-2 has no weapons and §2.5 has no equipment term in a crit',
-  'inherits-weapon-properties': 'an FFX weapon rule; X-2 has no weapons to inherit from',
 };
 
 describe('every X-2 ability flag has a reader in the X-2 engine', () => {

@@ -37,7 +37,8 @@ describe('data, carried from research §3 (rule 6)', () => {
     expect([x2Shiva.stats.maxHp, sandy.stats.maxHp, cindy.stats.maxHp, mindy.stats.maxHp, x2Anima.stats.maxHp])
       .toEqual([14800, 10330, 12240, 9788, 36000]);
     expect([x2Shiva.level, sandy.level, cindy.level, mindy.level, x2Anima.level]).toEqual([41, 45, 46, 44, 43]);
-    expect(x2Shiva.stats).toMatchObject({ str: 69, mag: 58, def: 74, mdef: 183, agi: 119, eva: 58, luck: 6, acc: 0 });
+    // Re-parity W3: `acc` is 95, the game's monster row (the research prints none, so the data carried 0); the plain Attack reads it.
+    expect(x2Shiva.stats).toMatchObject({ str: 69, mag: 58, def: 74, mdef: 183, agi: 119, eva: 58, luck: 6, acc: 95 });
     expect(cindy.stats).toMatchObject({ def: 172, mdef: 133, eva: 4 });
     expect(mindy.stats).toMatchObject({ eva: 76, luck: 4 });
     expect(x2Anima.stats).toMatchObject({ str: 32, mag: 33, def: 84, mdef: 42, agi: 133, eva: 0, luck: 5 });
@@ -52,7 +53,9 @@ describe('data, carried from research §3 (rule 6)', () => {
       expect(e.immunities['str-down']).toBe(255);
       expect(e.immunities['mdef-down']).toBe(255);
       expect(e.immunities.slow).toBe(255);
-      expect(e.immunities.reflect).toBe(255);
+      // Re-parity W3: the Sisters' and Anima's game rows resist Slow, Stop and the stat stages (255) but not Reflect, so the
+      // authored Reflect immunity is gone (research/re-ffx2-commands.md §7).
+      expect(e.immunities.reflect).toBeUndefined();
     }
     expect(x2Anima.affinities).toMatchObject({ fire: 'resist', ice: 'resist', lightning: 'resist', water: 'resist', holy: 'weak' });
   });
@@ -106,13 +109,16 @@ describe('registration: registered, reachable, listed (2026-09-26)', () => {
 });
 
 describe('FA-G1 and FA-G2: the two new effects', () => {
-  it('Delta Attack leaves every girl at exactly 1 HP and 0 MP, and cannot kill', () => {
+  // Re-parity W3 (FFX-2 only; reason "game-code parity"). The game's row for Delta Attack (0x40a9) is the "leave 1 HP" formula
+  // on the HP class alone: nothing touches MP. The wiki's "and MP to 0" (single source, F-9) is not in the row, so a girl keeps
+  // her MP; the old `extra.setMpTo` rule went with `aeon-effects.ts`.
+  it('Delta Attack leaves every girl at exactly 1 HP, keeps her MP, and cannot kill', () => {
     const party = girlsAt(3000, 200);
     party[2]!.hp = 1;
     const user = aiUnit('sandy', 'enemy');
     const { ctx, events } = ctxFor([user, ...party]);
     resolveAbility(ctx, user, ability('x2-magus-delta-attack'), []);
-    expect(party.map((g) => [g.hp, g.mp, g.alive])).toEqual([[1, 0, true], [1, 0, true], [1, 0, true]]);
+    expect(party.map((g) => [g.hp, g.mp, g.alive])).toEqual([[1, 200, true], [1, 200, true], [1, 200, true]]);
     const dmg = events.filter((e) => e.type === 'damage') as Array<Extract<BattleEvent, { type: 'damage' }>>;
     expect(dmg.map((e) => e.amount)).toEqual([2999, 2999, 0]);
     expect(events.some((e) => e.type === 'ko')).toBe(false);

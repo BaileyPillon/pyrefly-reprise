@@ -10,7 +10,7 @@
 import { describe, expect, it } from 'vitest';
 import type { BattleEvent } from '../../../src/battle/common/types.ts';
 import { resolveAbility } from '../../../src/battle/ffx2/resolve.ts';
-import { computeDamage } from '../../../src/battle/ffx2/formulas.ts';
+import { computeDamage } from '../helpers/ffx2Damage.ts';
 import { aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import * as ffxData from '../../../src/data/ffx/index.ts';
@@ -37,7 +37,8 @@ describe('data, carried from research §3 (rule 6)', () => {
   it('ships every §3 headline number exactly', () => {
     expect([shadeBaralai.stats.maxHp, shadeGippal.stats.maxHp, shadeNooj.stats.maxHp]).toEqual([12220, 14800, 23800]);
     expect([shadeBaralai.level, shadeGippal.level, shadeNooj.level]).toEqual([52, 56, 63]);
-    expect(shadeGippal.stats).toMatchObject({ mp: 235, str: 73, mag: 55, def: 68, mdef: 33, agi: 118, eva: 23, luck: 6, acc: 0 });
+    // Re-parity W3: `acc` is 95, the game's monster row (the research prints none, so the data carried 0); the plain Attack reads it.
+    expect(shadeGippal.stats).toMatchObject({ mp: 235, str: 73, mag: 55, def: 68, mdef: 33, agi: 118, eva: 23, luck: 6, acc: 95 });
     expect(shadeBaralai.stats).toMatchObject({ mp: 720, str: 68, mag: 67, def: 67, mdef: 26, agi: 112, eva: 12, luck: 6 });
     expect(shadeNooj.stats).toMatchObject({ mp: 720, str: 75, mag: 101, def: 144, mdef: 103, agi: 121, eva: 0, luck: 8 });
   });
@@ -237,13 +238,15 @@ describe('the shades\' actions (§4)', () => {
 
   it('Greedy Aura takes exactly 3/16 of max HP and max MP from every girl, and does not heal him (G-7)', () => {
     const party = girlsAt(4000, 200);
-    party.forEach((g, i) => { g.stats.maxHp = [2488, 5652, 5862][i]!; g.stats.maxMp = [320, 160, 16][i]!; });
+    // Re-parity W3: each girl starts at full MP. The game's MP application is clamp(MP - n, 0, max MP), so the old setup (200 MP on
+    // girls whose max is 160 and 16) was a state the game clamps; the 3/16 of MAX MP that comes off is what this pins.
+    party.forEach((g, i) => { g.stats.maxHp = [2488, 5652, 5862][i]!; g.stats.maxMp = [320, 160, 16][i]!; g.mp = g.stats.maxMp; });
     const nooj = aiUnit('shade-nooj', 'enemy', 23800);
     nooj.hp = 10000;
     const { ctx, events } = ctxFor([nooj, ...party], 4);
     resolveAbility(ctx, nooj, ability('x2-den-nooj-greedy-aura'), []);
     expect(damages(events).map((e) => e.amount)).toEqual([466, 1059, 1099]);
-    expect(party.map((g) => g.mp)).toEqual([200 - 60, 200 - 30, 200 - 3]);
+    expect(party.map((g) => g.mp)).toEqual([320 - 60, 160 - 30, 16 - 3]);
     expect(nooj.hp).toBe(10000);
   });
 

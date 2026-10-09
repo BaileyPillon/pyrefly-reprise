@@ -6,12 +6,14 @@
  * mid-battle triggers, every link of its chain, minigames auto-resolved, the same wiring the app's battle screen
  * builds its FFX-2 engine with) on a range of seeds. Per chapter it reports wins (every link won), losses, the mean
  * number of party turns (decisions the strategy was asked for), the mean engine turn count, the mean game time in
- * minutes and the mean number of party KOs, over the whole chain, plus how many seeds won the FIRST link. **Measure,
+ * minutes and the mean number of party KOs, over the whole chain, plus how many seeds won the FIRST link (the rows also carry
+ * `perSeed`, one letter per seed, and the `sums` behind the means, so runs of a few hundred seeds can be split across processes
+ * and merged exactly). **Measure,
  * never tune**: nothing here changes a boss or a party number, and a chapter whose wins move by 2 or more of 12
  * between two commits is reported to Bailey with the cause (found by ablation, as batch W1 did).
  *
  * Runs only with `PYREFLY_MEASURE=1`. `PYREFLY_MEASURE_SEEDS=<n>` plays seeds 1 to n (default 12, the plan's
- * sample; 500 is the second pass), `PYREFLY_MEASURE_OUT=<file>` writes the rows as JSON, and
+ * sample; 500 is the second pass) and `<a>-<b>` plays seeds a to b, `PYREFLY_MEASURE_OUT=<file>` writes the rows as JSON, and
  * `PYREFLY_MEASURE_CHAPTERS=<id,id>` narrows the run. `PYREFLY_MEASURE_USAGE=<file>` also writes, per ability id, how
  * many hits, misses, crits and the average damage it produced over the whole run (the per-ability old-against-new
  * table of the handoff note). By default the file is skipped, so the full suite pays nothing.
@@ -31,7 +33,10 @@ import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts'
 const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
 const OUT = process.env['PYREFLY_MEASURE_OUT'];
 const USAGE_OUT = process.env['PYREFLY_MEASURE_USAGE'];
-const SEED_COUNT = Number(process.env['PYREFLY_MEASURE_SEEDS'] ?? 12);
+const SEED_SPEC = process.env['PYREFLY_MEASURE_SEEDS'] ?? '12';
+const SEED_RANGE = /^(\d+)-(\d+)$/.exec(SEED_SPEC);
+const FIRST_SEED = SEED_RANGE ? Number(SEED_RANGE[1]) : 1;
+const LAST_SEED = SEED_RANGE ? Number(SEED_RANGE[2]) : Number(SEED_SPEC);
 const ONLY = process.env['PYREFLY_MEASURE_CHAPTERS']?.split(',');
 const MAX_STEPS = 60_000;
 const MAX_LINKS = 12;
@@ -41,6 +46,12 @@ type Input = Extract<Decision, { kind: 'player-input' }>;
 interface Row {
   chapter: string;
   seeds: number;
+  /** The first seed played; the seeds are contiguous. */
+  firstSeed: number;
+  /** One letter a seed: W won the whole chain, L lost, U unresolved. */
+  perSeed: string;
+  /** The totals the means are made of, so split runs merge exactly. */
+  sums: { partyTurns: number; engineTurns: number; minutes: number; partyKos: number };
   wins: number;
   losses: number;
   unresolved: number;
@@ -171,10 +182,18 @@ describe.skipIf(!MEASURE)('RE parity, FFX-2: the intended line in every FFX-2 ch
     for (const chapter of CHAPTERS.filter((c) => c.game === 'ffx2')) {
       if (ONLY && !ONLY.includes(chapter.id)) continue;
       const runs: One[] = [];
-      for (let seed = 1; seed <= SEED_COUNT; seed += 1) runs.push(await playChain(chapter, seed, usage));
+      for (let seed = FIRST_SEED; seed <= LAST_SEED; seed += 1) runs.push(await playChain(chapter, seed, usage));
       rows.push({
         chapter: chapter.id,
         seeds: runs.length,
+        firstSeed: FIRST_SEED,
+        perSeed: runs.map((r) => (r.outcome === 'victory' ? 'W' : r.outcome === 'defeat' ? 'L' : 'U')).join(''),
+        sums: {
+          partyTurns: runs.reduce((a, r) => a + r.partyTurns, 0),
+          engineTurns: runs.reduce((a, r) => a + r.engineTurns, 0),
+          minutes: runs.reduce((a, r) => a + r.minutes, 0),
+          partyKos: runs.reduce((a, r) => a + r.partyKos, 0),
+        },
         wins: runs.filter((r) => r.outcome === 'victory').length,
         losses: runs.filter((r) => r.outcome === 'defeat').length,
         unresolved: runs.filter((r) => r.outcome !== 'victory' && r.outcome !== 'defeat').length,
@@ -196,6 +215,7 @@ describe.skipIf(!MEASURE)('RE parity, FFX-2: the intended line in every FFX-2 ch
           hits: u.hits,
           misses: u.misses,
           crits: u.crits,
+          total: u.total,
           avg: u.hits === 0 ? 0 : Math.round((u.total / u.hits) * 10) / 10,
         }));
       writeFileSync(USAGE_OUT, JSON.stringify(table, null, 2));

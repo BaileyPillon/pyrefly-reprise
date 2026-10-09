@@ -62,6 +62,7 @@
  */
 
 import type { EnemyDef, EnemyGroupDef, StatBlock, StatusId } from '../../../battle/common/types.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 /** Group ids, exported so the tests and the debug API do not spell them by hand. */
 export const LEBLANC_ACT_I = 'ffx2-leblanc-entrance';
@@ -315,5 +316,8 @@ export const leblancLastRoomGroup: EnemyGroupDef = {
   // group ships no `musicCues` rather than naming a key the registry lacks.
   musicCues: [],
 };
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [leblancLastRoomGroup]) attachMonsterRecords(group);
 
 export default leblancLastRoomGroup;

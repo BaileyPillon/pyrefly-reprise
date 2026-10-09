@@ -222,7 +222,9 @@ describe('Active ATB — the clock runs under an open command menu (FFX-2 only)'
   });
 
   it('advances Chapter 5 the same way, parts and all', async () => {
-    const engine = newEngine('vegnagun-leg', 7, farplaneBuild);
+    // Re-parity W3: seed 1, not 7. With the game's draw order seed 7 has a Leg move land inside the 2 s and close the open menu
+    // ('invalidated' at 4,766 ticks); the other 19 of the first 20 seeds settle, which is what this case is about.
+    const engine = newEngine('vegnagun-leg', 1, farplaneBuild);
     const actorId = runToInput(engine);
     const before = engine.state().ticks;
 

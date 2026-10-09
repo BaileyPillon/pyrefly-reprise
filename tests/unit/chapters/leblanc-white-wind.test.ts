@@ -31,7 +31,7 @@ import {
 } from '../../../src/battle/ffx2/index.ts';
 import { resolveAbility } from '../../../src/battle/ffx2/resolve.ts';
 import type { ResolveContext } from '../../../src/battle/ffx2/resolve.ts';
-import { computeDamage } from '../../../src/battle/ffx2/formulas.ts';
+import { computeDamage } from '../helpers/ffx2Damage.ts';
 import { aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import type { Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 import { applyStatus } from '../../../src/battle/ffx2/statuses.ts';

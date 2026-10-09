@@ -5,9 +5,10 @@
  * `src/battle/ffx/kernel/`). Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69):
  * 0x00619c10 `steal_item`, 0x00619d10 `steal_gil`, 0x00616fb0 `bribe` (the reward half; whether a bribe
  * works is accuracy formula 6 in `./hit.ts`), and the three `*_apply` steps 0x0061aac0, 0x0061aa60,
- * 0x0061aa10 described below. Spec: `research/re-ffx2-hit-status.md` section 6. Pure, no DOM, no engine
- * types; not wired into the engine. Randomness comes from a `draw(stream)` callback (see `./rng.ts`);
- * all three use FIXED streams (10 and 11), not the thief's own.
+ * 0x0061aa10 described below. Spec: `research/re-ffx2-hit-status.md` section 5. Pure, no DOM, no engine
+ * types. The engine runs the three inside a strike, after the status rolls (`resolve-strike.ts`), and does
+ * the state changes below itself (`src/battle/ffx2/steal.ts`). Randomness comes from a `draw(stream)`
+ * callback (see `./rng.ts`); all three use FIXED streams (10 and 11), not the thief's own.
  *
  * What the "apply" steps do with a result (state change, not modelled here; the kernels return the
  * numbers the apply steps read):

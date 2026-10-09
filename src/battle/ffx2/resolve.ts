@@ -1,23 +1,21 @@
 /**
  * Action resolution — turning one `Command` into an ordered list of events.
  *
- * Draw order is fixed and must stay fixed: for each hit we roll **hit, then
- * crit, then the step-7 randomiser**, then the status riders in ability order.
- * Reordering a draw changes every replay at the same seed, so a new roll goes
- * at the *end* of its step (`docs/CONTRACTS.md`, engine agents).
+ * Since re-parity W3 (FFX-2 only) the hits, critical hits, damage, elements, chain, all-target halving, statuses,
+ * Steal, Pilfer Gil and Bribe all run through the kernels proven against FFX-2.exe, in the game's order and with its
+ * draws (`resolve-strike.ts` says how; `docs/handoff/re-parity-w3.md` has the table of every input). This file keeps
+ * what is not a hit: the MP and HP costs, the reveals, Charon's cost, a sequence of stages and the counter event.
  */
 
 import type { AbilityDef, CombatantId } from '../common/types.ts';
 import type { Ffx2Unit } from './internal.ts';
-import { cannotEvade, chainMultiplier, peekChainCount, registerHit } from './chain.ts';
-import { computeDamage, critPercent, hitPercent, randomiserRoll } from './formulas.ts';
+import { pickVariant, resolveCommand } from './adapt/command.ts';
 import { resolveSensor, sensorKind } from './sensor.ts';
 import { hpCostFor, resolveTargets } from './targeting.ts';
-import { IMMUNE_HITS_SKIP_CHAIN, NAMED_TARGETS_ONLY } from './constants.ts';
-import { applyMpFraction, mpOnlyTaken, resolveSetTo, setsPoolsTo } from './aeon-effects.ts';
+import { NAMED_TARGETS_ONLY } from './constants.ts';
 
-import { applyHpDelta, heal, revive, type ResolveContext } from './resolve-hp.ts';
-import { applyRiders, targetForHit } from './resolve-targets.ts';
+import { applyHpDelta, type ResolveContext } from './resolve-hp.ts';
+import { runStrikes } from './resolve-strike.ts';
 
 export { applyHpDelta, heal, revive, type ResolveContext } from './resolve-hp.ts';
 
@@ -30,7 +28,7 @@ export function resolveAbility(
   user: Ffx2Unit,
   ability: AbilityDef,
   requested: readonly CombatantId[],
-  options: { multiTarget?: boolean; isCounter?: boolean; hitsOverride?: number; inSequence?: boolean } = {},
+  options: { isCounter?: boolean; hitsOverride?: number; gilSpent?: number; inSequence?: boolean } = {},
 ): number {
   const all = resolveTargets(ctx.units, user, ability, requested, ctx.rng);
   // `extra.namedTargetsOnly` (`abilities-shuyin.ts`, Acta Est Fabula): an all-target row whose
@@ -61,25 +59,6 @@ export function resolveAbility(
     });
   }
 
-  // MP restoratives. `extra.restoresMp` is the whole effect of an Ether (100)
-  // or a Turbo Ether (500); `extra.alsoRestoresMp` rides on top of the Elixir
-  // and Megalixir's full HP heal — "up to 9999 HP **and 999 MP**"
-  // [ffx2-combat-core §5.5 items table]. Both fields were written by the data
-  // layer and read by nothing, so every MP restorative in X-2 was inert and the
-  // Chapter 5 bag's six Turbo Ethers could not refill a single spell.
-  const mpGain = ability.extra?.['restoresMp'] ?? ability.extra?.['alsoRestoresMp'];
-  if (typeof mpGain === 'number' && mpGain > 0) {
-    for (const target of pool) {
-      if (!target.alive) continue;
-      const before = target.mp;
-      target.mp = Math.min(target.stats.maxMp, target.mp + mpGain);
-      const gained = target.mp - before;
-      if (gained > 0) {
-        ctx.emit({ type: 'mp-heal', targetId: target.id, sourceId: user.id, amount: gained });
-      }
-    }
-  }
-
   // Scan / Libra / Ma'at's Feather leave here: a reveal is pure information,
   // so it never rolls to hit, never registers a chain, and never touches the
   // seeded RNG. See `sensor.ts` for what counts as one. §3.7
@@ -89,153 +68,15 @@ export function resolveAbility(
     return 0;
   }
 
-  // A minigame outcome (Trigger Happy's presses, a reel's hit total) replaces
-  // the ability's own hit count. `docs/CONTRACTS.md`, "Minigame protocol".
-  const strikes = Math.max(1, options.hitsOverride ?? ability.hits);
-  const hitCount = strikes * (ability.targeting.startsWith('all') ? pool.length : 1);
-  const perTarget = ability.targeting.startsWith('all') ? pool.length : 1;
-  let total = 0;
-  let index = 0;
-
-  for (let strike = 0; strike < strikes; strike++) {
-    for (let t = 0; t < perTarget; t++) {
-      const target = targetForHit(ability, pool, ability.targeting.startsWith('all') ? t : strike, ctx.rng);
-      if (!target) continue;
-
-      // Revival effects: a `misses-if-target-alive` heal on a living target fails.
-      if (ability.flags.includes('misses-if-target-alive')) {
-        if (target.alive) {
-          ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'wrong-state' });
-        } else {
-          revive(ctx, target, ability.power / 16, ability.id);
-        }
-        index += 1;
-        continue;
-      }
-
-      // Step 0 — the hit check. A chained target cannot evade. §2.6
-      const accuracy = cannotEvade(target) ? 100 : hitPercent(user, target, ability);
-      if (accuracy < 100 && ctx.rng.int(0, 99) >= accuracy) {
-        ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'evaded' });
-        index += 1;
-        continue;
-      }
-
-      const crit = ability.flags.includes('crit-eligible')
-        ? ctx.rng.int(0, 99) < critPercent(user, target, ability)
-        : false;
-      const randomRoll = randomiserRoll(ctx.rng);
-
-      if (setsPoolsTo(ability)) { // Delta Attack (XI, no riders), Looming Glacier + Stop (XV)
-        total += resolveSetTo(ctx, user, target, ability, index, hitCount);
-        applyRiders(ctx, user, target, ability);
-        index += 1;
-        continue;
-      }
-
-      if (ability.formula === 'none') {
-        applyRiders(ctx, user, target, ability);
-        index += 1;
-        continue;
-      }
-
-      // A **restorative** action is not a hit, and must not touch the chain.
-      //
-      // The Chain is built by landed hits on a target and does three things to
-      // it: raises the damage of the next hit, removes its evasion, and locks
-      // it out of starting an action while the window is open
-      // [ffx2-combat-core §1.7; ffx2-vegnagun-shuyin §1.1 step 13]. Registering
-      // a Cure or a Pray as a "hit" therefore turned the party's own healer
-      // into the boss's best weapon: measured on the Tail, seed 7, Yuna's Pray
-      // opened a 2 s window on all three girls and the Noli Me Tangere 107
-      // ticks later landed at x1.45 for **1,869 / 1,812 / 1,741** against the
-      // sourced band of **1,171-1,323** (§1.2), one-shotting the White Mage;
-      // the same window also froze whoever had just been healed. `heals` is
-      // spelled exactly as `formulas.ts` spells it (`flags 'heals'` or the
-      // `healing` formula), so the two cannot drift apart. Revives already
-      // skipped this block above.
-      //
-      // `extra.noChain` is the same carve-out for the one damaging effect that is nobody's attack:
-      // Lady Luck's **Dud** is "75% of current HP" [ffx2-combat-core §2.3, §3.12], and a girl still
-      // inside the window of the boss's last hit took 75% x 1.45 (measured, Rikku 4,605 off 4,407),
-      // so a penalty the source says cannot kill, killed.
-      const restorative =
-        ability.flags.includes('heals') || ability.formula === 'healing' || ability.extra?.['noChain'] === true;
-      // IC-1's switch (`constants.ts` IMMUNE_HITS_SKIP_CHAIN, ON since D-242 = GameFAQs' reading, our estimate, §10.1): on, the count is
-      // peeked and only a non-immune result registers. `computeDamage` is pure, so the chain event
-      // still precedes the damage event and a non-immune hit's log is unchanged.
-      const skipImmune = !restorative && (ctx.immuneHitsSkipChain ?? IMMUNE_HITS_SKIP_CHAIN);
-      const chainCount = restorative ? 0 : skipImmune ? peekChainCount(target) : registerHit(target, crit);
-
-      const result = computeDamage({
-        user,
-        target,
-        ability,
-        chainCount,
-        crit,
-        randomRoll,
-        multiTarget: options.multiTarget === true,
-        breaksDamageLimit: ctx.breaksDamageLimit(user),
-      });
-
-      if (!restorative && !(skipImmune && result.immune)) {
-        if (skipImmune) registerHit(target, crit);
-        ctx.emit({ type: 'chain', targetId: target.id, count: chainCount, multiplier: chainMultiplier(chainCount) });
-      }
-
-      if (result.immune) {
-        ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'immune' });
-        index += 1;
-        continue;
-      }
-
-      const mpOnly = ability.extra?.['mpOnly'] === true;
-      if (mpOnly) {
-        const drained = Math.min(target.mp, mpOnlyTaken(ability, target, result.amount)); // Waning Moon: `aeon-effects.ts`
-        target.mp -= drained;
-        ctx.emit({ type: 'mp-damage', targetId: target.id, sourceId: user.id, amount: drained });
-        if (ability.flags.includes('drains-mp')) {
-          user.mp = Math.min(user.stats.maxMp, user.mp + drained);
-          ctx.emit({ type: 'mp-heal', targetId: user.id, sourceId: target.id, amount: drained });
-        }
-        index += 1;
-        continue;
-      }
-
-      const element = ability.element.find((e) => e !== 'none') ?? 'none';
-      ctx.emit({
-        type: 'damage',
-        targetId: target.id,
-        sourceId: user.id,
-        amount: result.amount,
-        element,
-        affinity: result.affinity,
-        crit,
-        hitIndex: index,
-        hitCount,
-        ...(result.capped ? { capped: true } : {}),
-      });
-      applyHpDelta(ctx, target, result.amount, user.id);
-      total += result.amount;
-
-      if (ability.flags.includes('drains') && result.amount > 0) {
-        heal(ctx, user, result.amount, 'drain');
-      }
-      if (ability.flags.includes('drains-mp')) {
-        const drained = Math.min(target.mp, Math.max(0, Math.floor(Math.abs(result.amount) / 4)));
-        if (drained > 0) {
-          target.mp -= drained;
-          ctx.emit({ type: 'mp-damage', targetId: target.id, sourceId: user.id, amount: drained });
-          user.mp = Math.min(user.stats.maxMp, user.mp + drained);
-          ctx.emit({ type: 'mp-heal', targetId: user.id, sourceId: target.id, amount: drained });
-        }
-      }
-
-      applyMpFraction(ctx, user, target, ability, result.amount); // Heavenly Strike, Absorb, Soul Spring (`aeon-effects.ts`)
-      applyRiders(ctx, user, target, ability);
-      index += 1;
-    }
-  }
+  // A minigame outcome (Trigger Happy's presses, a reel's hit total) replaces the ability's own hit count
+  // (`docs/CONTRACTS.md`, "Minigame protocol"); the game's row says the rest (`adapt/command.ts`).
+  const hitsOverride = options.hitsOverride ?? 0;
+  const variant = pickVariant(ability, ctx.rng); // Russian Roulette: the script's pick of one of its five rows
+  const command = resolveCommand(ability, user, hitsOverride, variant);
+  let total = runStrikes(ctx, user, ability, command, pool, {
+    ...(hitsOverride > 0 ? { hitsOverride } : {}),
+    ...(options.gilSpent !== undefined ? { gilSpent: options.gilSpent } : {}),
+  });
 
   // **`destroys-user`** [ffx2-combat-core §2.3, §3.12 row "Charon"].
   //
@@ -275,8 +116,7 @@ export function resolveAbility(
 
   // **`extra.sequence`** — one action, several stages, one turn.
   //
-  // A documented one-off key (`docs/CONTRACTS.md`, as for `statusRollOneOf`
-  // above): the named abilities resolve in order from the same user,
+  // A documented one-off key (`docs/CONTRACTS.md`): the named abilities resolve in order from the same user,
   // immediately, as part of this action. Its only caller is the Leblanc
   // Syndicate's **No Love Lost**, which §4.5 of
   // `research/ffx2-leblanc-syndicate.md` describes as one loud, timed,
@@ -286,7 +126,7 @@ export function resolveAbility(
   // set piece.
   //
   // `inSequence` is the recursion guard: a `sequence` on a sequenced ability is
-  // ignored. `chain.ts::registerHit()` is target-keyed, so each stage's
+  // ignored. The chain counter is target-keyed (`chain.ts`), so each stage's
   // chaining is already correct without further work. FFX-2 only — no FFX
   // ability sets the key and no FFX code path reads it.
   const sequence = options.inSequence ? undefined : ability.extra?.['sequence'];
