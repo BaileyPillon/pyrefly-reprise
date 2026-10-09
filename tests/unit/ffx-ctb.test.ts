@@ -6,7 +6,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BattleEvent, BattleSetup } from '../../src/battle/common/types.ts';
 import {
-  applyDelay,
   baseCtb,
   buildBattle,
   type Ctx,
@@ -14,8 +13,11 @@ import {
   nextActor,
   predictTurnOrder,
   recoveryTicks,
-  normalise,
+  resolveAbility,
 } from '../../src/battle/ffx/index.ts';
+import { advance } from '../../src/battle/ffx/turnQueue.ts';
+import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
+import { ScriptedRng } from './helpers/ffxEngineWiring.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
 import { enemy, member, party, setup } from './ffx-fixtures.test.ts';
 import { giveStatus, inflict } from './helpers/ffxStatus.ts';
@@ -127,24 +129,32 @@ describe('a Haste or Slow status landing does not move the current counter (§1.
 });
 
 describe('Delay (§1.5)', () => {
-  it('weak delay adds floor(base*3/2), strong adds base*3, using the target base', () => {
-    const ctx = makeCtx({
+  /** A battle whose rolls are scripted (a raw draw of 0 lands every hit), and the real Delay abilities. */
+  function delayCtx(over: Partial<BattleSetup> = {}): Ctx {
+    const s = setup(over);
+    return buildBattle(s, new ScriptedRng([0]), new FFXContentRegistry(), () => undefined);
+  }
+  const abilityOf = (id: string) => ALL_ABILITIES.find((a) => a.id === id)!;
+
+  it('weak delay adds floor(tick*3/2), strong adds tick*3, using the target\'s own tick speed (inside the hit, VA 0x0078e0f0)', () => {
+    const ctx = delayCtx({
       enemies: {
         id: 'g',
         game: 'ffx',
         enemies: [enemy({ id: 'dummy', stats: { ...enemy({ id: 'x' }).stats, agi: 20 } })],
       },
     });
-    normalise(ctx);
+    const tidus = ctx.state.combatants['tidus'] as never;
     const before = ctbOf(ctx, 'dummy');
-    applyDelay(ctx, 'dummy', 'weak');
-    expect(ctbOf(ctx, 'dummy')).toBe(before + Math.floor((10 * 3) / 2));
-    applyDelay(ctx, 'dummy', 'strong');
+    resolveAbility(ctx, tidus, abilityOf('delay-attack'), ['dummy']);
+    // The dummy's Agility 20 is a tick speed of 10: 10 * 3 / 2 = 15.
+    expect(ctbOf(ctx, 'dummy')).toBe(before + 15);
+    resolveAbility(ctx, tidus, abilityOf('delay-buster'), ['dummy']);
     expect(ctbOf(ctx, 'dummy')).toBe(before + 15 + 30);
   });
 
   it('does nothing to an immune-to-delay enemy', () => {
-    const ctx = makeCtx({
+    const ctx = delayCtx({
       enemies: {
         id: 'g',
         game: 'ffx',
@@ -152,8 +162,16 @@ describe('Delay (§1.5)', () => {
       },
     });
     const before = ctbOf(ctx, 'dummy');
-    expect(applyDelay(ctx, 'dummy', 'strong')).toBe(false);
+    resolveAbility(ctx, ctx.state.combatants['tidus'] as never, abilityOf('delay-buster'), ['dummy']);
     expect(ctbOf(ctx, 'dummy')).toBe(before);
+  });
+
+  it('is clamped to the byte: a counter near 255 stops there', () => {
+    const ctx = delayCtx();
+    const rt = ctx.rt.actors.get('dummy')!;
+    rt.ctb = 250;
+    resolveAbility(ctx, ctx.state.combatants['tidus'] as never, abilityOf('delay-buster'), ['dummy']);
+    expect(rt.ctb).toBe(255);
   });
 });
 
@@ -225,13 +243,18 @@ describe('predictTurnOrder (§1.6, visual-bible §3.2)', () => {
   });
 });
 
-describe('normalisation keeps counters small', () => {
-  it('subtracts the field minimum and reports it as elapsed ticks', () => {
+describe('the clock (VA 0x00790fb0)', () => {
+  it('counts every counter down together until the first reaches 0, and reports the ticks that took', () => {
     const ctx = makeCtx();
     for (const [, rt] of ctx.rt.actors) rt.ctb += 100;
-    const elapsed = normalise(ctx);
+    const onField = ['tidus', 'yuna', 'auron', 'dummy'];
+    const before = new Map(onField.map((id) => [id, ctbOf(ctx, id)]));
+    const elapsed = advance(ctx);
     expect(elapsed).toBeGreaterThan(0);
-    const min = Math.min(...[...ctx.rt.actors.values()].map((r) => r.ctb));
-    expect(min).toBe(0);
+    // Everybody on the field lost exactly the elapsed ticks, and the lowest is at 0.
+    for (const id of onField) expect(ctbOf(ctx, id)).toBe((before.get(id) as number) - elapsed);
+    expect(Math.min(...onField.map((id) => ctbOf(ctx, id)))).toBe(0);
+    // Somebody is ready now, so the clock does not move again.
+    expect(advance(ctx)).toBe(0);
   });
 });

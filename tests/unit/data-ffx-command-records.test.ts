@@ -20,7 +20,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { ALL_ABILITIES, ITEMS } from '../../src/data/ffx/index.ts';
-import { COMMAND_RECORDS, NO_COMMAND_RECORD } from '../../src/data/ffx/command-records/index.ts';
+import { COMMAND_RECORDS, NO_COMMAND_RECORD, RANK_CHANGES } from '../../src/data/ffx/command-records/index.ts';
 import { POSSESSED_PLAIN_ATTACK } from '../../src/data/ffx/command-records/enemies.ts';
 import { possessedAeonGroups } from '../../src/data/ffx/enemies/braskas-final-aeon.ts';
 import { CORE_ABILITIES } from '../../src/battle/ffx/registry.ts';
@@ -383,5 +383,22 @@ describe("the status bytes of the attached records are the game's table (re-pari
 
   it("the statuses an ability's own data inflicts or removes differ from its record only where this list says so", () => {
     expect(statusDifferences().sort()).toEqual([...KNOWN_STATUS_DIFFERENCES].sort());
+  });
+
+  /**
+   * The CTB rank of an ability is its record's rank byte (`attachCommandRecords`): the number the exe charges the recovery of. These are
+   * the abilities whose own rank differed (a raw 0 counts as 3, the game's rule); `research/re-ffx-commands.md` section 7.3. The six
+   * aeon Attack rows and `fury` (the menu marker) are never charged: the generic Attack serves every aeon, and the marker resolves to
+   * one of the spells.
+   */
+  it('the abilities whose rank the record replaced are these 17, with ours and the exe\'s', () => {
+    expect(RANK_CHANGES.map((c) => `${c.abilityId}: ${c.ours} -> ${c.game}`).sort()).toEqual(
+      [
+        'element-reels: 3 -> 4', 'attack-reels: 3 -> 4', 'status-reels: 3 -> 4', 'aurochs-reels: 3 -> 4', 'fury: 5 -> 3',
+        'valefor-attack: 1 -> 3', 'ifrit-attack: 1 -> 3', 'ixion-attack: 1 -> 3', 'shiva-attack: 1 -> 3', 'bahamut-attack: 1 -> 3',
+        'anima-attack: 1 -> 3', 'cindy-attack: 5 -> 3', 'sandy-attack: 5 -> 3', 'mindy-attack: 5 -> 3',
+        'passado: 3 -> 5', 'mix: 6 -> 5', 'natus-flare: 5 -> 3',
+      ].sort(),
+    );
   });
 });

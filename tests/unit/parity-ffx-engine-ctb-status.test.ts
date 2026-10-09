@@ -232,13 +232,29 @@ describe('the Haste and Slow commands, Delay Attack and Buster, through the engi
 });
 
 describe('the turn forecast', () => {
-  it('predictTurnOrder lists the ready characters in the game\'s key order and adds each one\'s recovery', () => {
+  it('predictTurnOrder plays the game\'s rule forward: the lowest counter first, ties by the key, each one\'s rank-3 recovery added', () => {
     const rng = makeRng(31);
-    for (let i = 0; i < 100; i++) {
+    let ties = 0;
+    for (let i = 0; i < 300; i++) {
       const field = randomField(rng);
+      // Equal counters are where the key lives: make many of them.
+      const live = field.members.filter((m) => !m.dead && !m.petrified && !m.removed && !m.ordersOnly && !(m.side === 'party' && field.aeonOut !== null) && !(m.side === 'aeon' && field.aeonOut !== m.id));
+      if (live.length >= 2 && chance(rng, 0.7)) for (const m of live) if (chance(rng, 0.6)) m.ctb = (live[0] as typeof m).ctb;
       const { ctx } = contextOfField(field, makeRng(1));
-      const rows = predictTurnOrder(ctx, 6);
-      for (let r = 1; r < rows.length; r++) expect(rows[r]!.tickValue).toBeGreaterThanOrEqual(rows[r - 1]!.tickValue);
+      const rows = predictTurnOrder(ctx, 8);
+      // The oracle: the same field written in the game's terms.
+      const counters = new Map(live.map((m) => [m.id, m.ctb]));
+      const keyOf = (m: (typeof live)[number]): number => (m.side === 'enemy' ? m.slot + 0x10000 : (255 - m.agi) * 256 + m.slot);
+      const want: Array<[string, number]> = [];
+      for (let r = 0; r < 8 && live.length > 0; r++) {
+        const best = [...live].sort((a, b) => (counters.get(a.id)! - counters.get(b.id)!) || keyOf(a) - keyOf(b))[0]!;
+        const tick = counters.get(best.id)!;
+        want.push([best.id, tick]);
+        counters.set(best.id, tick + delayForRank(best.agi, 3, best.haste, best.slow));
+      }
+      expect(rows.map((r) => [r.actorId, r.tickValue]), JSON.stringify(field.members.map((m) => [m.id, m.slot, m.agi, m.ctb]))).toEqual(want);
+      if (new Set(live.map((m) => m.ctb)).size < live.length) ties++;
     }
+    expect(ties).toBeGreaterThan(100);
   });
 });

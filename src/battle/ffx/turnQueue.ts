@@ -9,8 +9,7 @@
  */
 
 import type { Command, CombatantId, FFXCombatant, StatusId, TurnPreview } from '../common/types.ts';
-import { tieKey, subCtb } from './kernel/ctb.ts';
-import { delayAttackCtb, threatenIgnoresDelay } from './kernel/aftermath.ts';
+import { tieKey } from './kernel/ctb.ts';
 import { letterTagsOf } from './letterTags.ts';
 import {
   advanceClock,
@@ -19,10 +18,8 @@ import {
   openingCtb,
   recoveryOf,
   reviveCounter,
-  tickSpeedOf,
 } from './adapt/ctb.ts';
 import { slotOf } from './adapt/slots.ts';
-import { permWord } from './adapt/words.ts';
 import {
   type Ctx,
   commandAbility,
@@ -49,10 +46,11 @@ export function tieBreakRank(ctx: Ctx, c: FFXCombatant): number {
  * Actors currently in the CTB queue.
  *
  * Membership is {@link inTurnQueue}, **not** {@link canAct}: §1.1's rule is
- * "living, non-Eject, non-Petrify". A sleeping or Threatened actor still owns a
- * counter and still reaches the front of the queue — it just loses the turn
- * when it gets there, which is the only place Sleep's duration is paid
- * [ffx-combat-core §1.1, §4.1].
+ * "living, non-Eject, non-Petrify". A sleeping actor still owns a counter and
+ * still reaches the front of the queue — it just loses the turn when it gets
+ * there, which is the only place Sleep's duration is paid [ffx-combat-core §1.1,
+ * §4.1]. (A Threatened one loses nothing: its counter was moved when the Threaten
+ * landed, and the pair is released at the start of the next turn of either end.)
  *
  * An actor marked `ActorRuntime.ordersOnly` is **on the field but owns no
  * counter**: Yojimbo's dog acts only when Yojimbo's own turn orders it
@@ -78,9 +76,6 @@ export function advance(ctx: Ctx): number {
   return advanceClock(ctx);
 }
 
-/** @deprecated the old name of {@link advance}. */
-export const normalise = advance;
-
 /** The actor whose turn is next: the first ready character in the game's order. */
 export function nextActor(ctx: Ctx): FFXCombatant | undefined {
   return nextReady(ctx);
@@ -91,24 +86,6 @@ export function chargeTurn(ctx: Ctx, id: CombatantId, rank: number): void {
   const c = tryActor(ctx, id);
   if (!c) return;
   charge(ctx, c, rank);
-}
-
-/**
- * Delay Attack and Delay Buster, for the debug API and tests: the game applies them inside the hit
- * (`kernel/aftermath.ts#delayAttackCtb`, VA 0x0078e0f0), which `hit-apply.ts` does now. Same rules here: a delay-immune
- * target and a Threatened one ignore it.
- */
-export function applyDelay(ctx: Ctx, targetId: CombatantId, strength: 'weak' | 'strong'): boolean {
-  const c = tryActor(ctx, targetId);
-  if (!c) return false;
-  if (c.immunityFlags.includes('immune-to-delay')) return false;
-  const flags = strength === 'weak' ? 0x2000 : 0x4000;
-  const delay = delayAttackCtb(flags, tickSpeedOf(c), 0, 0);
-  const kept = threatenIgnoresDelay(permWord(c), delay.mask, 4, delay.ctbDamage);
-  if (kept.ctbDamage === 0) return false;
-  const rt = rtOf(ctx, targetId);
-  rt.ctb = subCtb(rt.ctb, kept.ctbDamage);
-  return true;
 }
 
 /** A revived character re-enters with the counter stored at battle start [VA 0x0078d530]. */

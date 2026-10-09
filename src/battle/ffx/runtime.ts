@@ -169,7 +169,7 @@ export interface FFXRuntime {
    * Destroyed parts waiting on their {@link EnemyDef.reviveRule} timer.
    *
    * `atTicks` is a value of `state.ticks`, the field-wide CTB clock the engine
-   * advances by `normalise()`'s elapsed count every turn — not a turn count,
+   * advances by `advance()`'s elapsed count every turn — not a turn count,
    * because a dead Pagoda takes no turns of its own
    * [ffx-bfa-yu-yevon §1.4].
    */

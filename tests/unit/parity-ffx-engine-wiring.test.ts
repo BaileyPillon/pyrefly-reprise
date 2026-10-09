@@ -248,6 +248,9 @@ describe('an ability with no game record runs on a derived one', () => {
     expect(resolveCommand({ ...derived, damageType: 'magical', flags: ['heals'] }, { side: 'party' }).record.flagsDamage).toBe(0x12);
     expect(resolveCommand({ ...derived, flags: ['drains'] }, { side: 'party' }).record.flagsMisc & 0x100).toBe(0x100);
     expect(resolveCommand({ ...derived, flags: ['ignores-armored'] }, { side: 'party' }).record.flagsMisc & 0x10000).toBe(0x10000);
+    // Delay Attack and Delay Buster are bits of the record's flag word (0x2000, 0x4000): the hit kernel applies them (re-parity W2).
+    expect(resolveCommand({ ...derived, flags: ['weak-delay'] }, { side: 'party' }).record.flagsMisc & 0x6000).toBe(0x2000);
+    expect(resolveCommand({ ...derived, flags: ['strong-delay'] }, { side: 'party' }).record.flagsMisc & 0x6000).toBe(0x4000);
   });
 
   it('is exactly the ability with those words written out as its record, on the same draws', () => {

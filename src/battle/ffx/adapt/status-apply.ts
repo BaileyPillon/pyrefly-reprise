@@ -185,7 +185,7 @@ export function applyStatusStep(
   const deathNow = (after.perm & PermBit.Death) !== 0 && (before.record.perm & PermBit.Death) === 0;
   if (ejectNow && onField(target)) {
     if (target.side === 'aeon') banishAeon(ctx, target.id);
-    else ejectActor(ctx, target, (after.perm & PermBit.Petrify) !== 0 ? 'shatter' : 'eject');
+    else ejectActor(ctx, target, (after.perm & PermBit.Petrify) !== 0 ? 'shatter' : 'eject', true);
     out.ejected = true;
   } else if (deathNow && target.alive) {
     koActor(ctx, target, user.id);

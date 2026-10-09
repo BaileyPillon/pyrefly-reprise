@@ -46,8 +46,6 @@ export type { BonusFamily, EquipmentBearer } from './equipment.ts';
 export {
   recoveryTicks,
   predictTurnOrder,
-  applyDelay,
-  normalise,
   nextActor,
   seedInitialCtb,
   tieBreakRank,
