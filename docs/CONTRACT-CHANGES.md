@@ -6,6 +6,15 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-08 — `AbilityDef.record`, `FFXCommandRecord`: the game's own command record on every FFX ability (re-parity W1; FFX only; additive)
+
+Branch `re-parity`. `src/battle/common/types.ts` gains the interface `FFXCommandRecord` (`id`, `type`, `flagsMisc`, `flagsDamage`, `damageClass`: the fields of the game's
+command record that the FFX parity kernels read and an ability's other fields do not carry) and the optional member `AbilityDef.record?: FFXCommandRecord`.
+`src/data/ffx/command-records/` holds the records (451 abilities; 3 of ours have none), `src/data/ffx/index.ts` attaches them in place where the ability catalog is assembled, and
+`research/re-ffx-commands.md` says how each was matched and where our numbers differ from the game's. FFX-2 and FF7 data never set the member and no code of theirs reads it. An
+ability without a record keeps working: the FFX engine derives the same fields from the ability's own flags (`src/battle/ffx/adapt/command.ts`). Handoff:
+[re-parity-w1](handoff/re-parity-w1.md). Game case: FFX only.
+
 ## 2026-10-05 — The strike reaches its target in every fight: `StageMotionPort.shape`, `ActionMotionPort.reachFor`, `EventCtx.burst`, `PaintedActor.poseShape` (release 39.1; both games; additive)
 
 Branch `r391-reach`. No file in the contract list changed; recorded because four shared surfaces gain an optional member and one registry goes. Handoff: [r391-reach](handoff/r391-reach.md).
