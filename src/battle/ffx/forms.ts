@@ -10,7 +10,6 @@
 
 import type { FFXCombatant } from '../common/types.ts';
 import { type Ctx, rtOf } from './state.ts';
-import { normalise } from './turnQueue.ts';
 
 /**
  * Advance to the next form, if there is one. Returns true when the combatant
@@ -41,8 +40,7 @@ export function advanceForm(ctx: Ctx, enemy: FFXCombatant): boolean {
   // member is pushed back one tick, so nobody acts between the transformation
   // and its entry action [ffx-yunalesca §1.3 step A].
   rtOf(ctx, enemy.id).ctb = 0;
-  for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb += 1;
-  normalise(ctx);
+  for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb = Math.min(255, rtOf(ctx, id).ctb + 1);
 
   // Both cycle counters reset on a transition.
   const mem = rtOf(ctx, enemy.id).ai;
@@ -93,7 +91,6 @@ export function revealEnemy(ctx: Ctx, enemy: FFXCombatant, slot?: number): void 
   delete enemy.statuses['ko'];
 
   rtOf(ctx, enemy.id).ctb = 0;
-  normalise(ctx);
 
   const event: Parameters<Ctx['emit']>[0] = { type: 'part-restored', partId: enemy.id, hp: enemy.hp };
   if (enemy.flags.partOf !== undefined) event.ownerId = enemy.flags.partOf;

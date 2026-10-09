@@ -12,6 +12,7 @@ import { type Ctx, has, isAlive, rtOf, statusOf, tryActor } from './state.ts';
 import { clearStatusesOnKo, refreshCriticalStatus, removeStatus } from './statuses.ts';
 import { onRevived } from './turnQueue.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
+import { releaseThreatenLink } from './adapt/threaten.ts';
 
 /** Metadata for a `damage` event. */
 export interface DamageEventInfo {
@@ -182,6 +183,10 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
   // every form and the script overwrites HP wholesale.
   if (hasNextForm(target) && advanceForm(ctx, target)) return;
 
+  // The death handler dissolves the Threaten pair the dying character is an end of (VA 0x0078c740 -> 0x0078e410), before
+  // Auto-Life can stand it up again [re-parity W2].
+  releaseThreatenLink(ctx, target);
+
   const autoLife = statusOf(target, 'auto-life');
   if (autoLife && !target.flags.noRevive) {
     // A **permanent** Auto-Life is the fayth's, and it is non-consumable:
@@ -255,6 +260,8 @@ export function reviveActor(ctx: Ctx, target: FFXCombatant, hp: number, cause: s
  */
 export function ejectActor(ctx: Ctx, target: FFXCombatant, cause: 'eject' | 'shatter' | 'banish'): void {
   if (cause !== 'banish' && (target.immunities['eject'] ?? 0) >= 255) return;
+  // The function that takes a character off the field also dissolves its Threaten pair (VA 0x0078e410) [re-parity W2].
+  releaseThreatenLink(ctx, target);
   target.statuses['eject'] = {
     id: 'eject',
     turnsRemaining: null,

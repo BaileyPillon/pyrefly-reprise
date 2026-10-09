@@ -18,12 +18,18 @@
 import { damageRng, percentRoll } from '../../common/rng.ts';
 import type { Rng } from '../../common/types.ts';
 
-/** The two kinds of draw the hit pipeline takes, each already reduced the way the game reduces it. */
+/** The kinds of draw the hit pipeline takes, each already reduced the way the game reduces it. */
 export interface HitDraws {
   /** The damage variance: a draw whose low five bits are the roll, 0..31 (`dmg * (roll + 240) / 256`). */
   variance(): number;
   /** The hit and critical rolls: a draw whose remainder modulo 101 is the roll, 0..100. */
   percent(): number;
+  /**
+   * A draw the kernel reduces modulo `modulus` (re-parity W2: the status rolls, `% 101`, and Threaten's `% 100`; the shatter
+   * roll, `% 101`; the opening counters, `% (bonus + 1)` and `% 11`): one engine draw already in `0..modulus - 1`, which the
+   * kernel's own `%` leaves alone. `modulus` 101 is {@link percent}'s draw exactly.
+   */
+  modulus(modulus: number): number;
 }
 
 /** The draws of a battle's seeded stream. */
@@ -31,5 +37,6 @@ export function drawsOf(rng: Rng): HitDraws {
   return {
     variance: () => damageRng(rng),
     percent: () => percentRoll(rng),
+    modulus: (modulus) => (modulus === 101 ? percentRoll(rng) : rng.int(0, modulus - 1)),
   };
 }

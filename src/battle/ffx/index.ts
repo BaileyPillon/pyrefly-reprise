@@ -53,21 +53,7 @@ export {
   tieBreakRank,
   statusIconsFor,
 } from './turnQueue.ts';
-export {
-  applyStatus,
-  removeStatus,
-  removeStatuses,
-  rollStatus,
-  rollThreaten,
-  consumeNulCharges,
-  tickDurationStatuses,
-  refreshCriticalStatus,
-  bouncesOffReflect,
-  DURATION_STATUSES,
-  ESUNA_CURES,
-  DISPEL_REMOVES,
-  SURVIVES_KO,
-} from './statuses.ts';
+export { removeStatus, refreshCriticalStatus, bouncesOffReflect, SURVIVES_KO } from './statuses.ts';
 export { dealDamage, healOutsideChain, koActor, reviveActor, ejectActor, restorePart } from './hp.ts';
 export { resolveAbility, mpCostFor, blockedBySilence } from './abilities.ts';
 export type { ResolveOptions } from './abilities.ts';
@@ -99,7 +85,7 @@ export { availableCommands } from './commands.ts';
 // --- sensor / scan ---------------------------------------------------------
 export { partyHasSensor, revealForSensorAuto, revealTarget, sensorKind, weaknessesOf } from './sensor.ts';
 export type { SensorKind } from './sensor.ts';
-export { payRegen, onTurnStart, onTurnEnd, collectReactions } from './ticks.ts';
+export { onTurnStart, onTurnEnd, collectReactions } from './ticks.ts';
 export { evaluateTriggers, collectSignals } from './triggers.ts';
 export type { TriggerSignals } from './triggers.ts';
 export { buildBattle } from './setup.ts';

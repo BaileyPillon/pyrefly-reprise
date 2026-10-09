@@ -20,7 +20,8 @@ import type {
   StatusId,
   StatusInstance,
 } from '../../../src/battle/common/types.ts';
-import { FFXContentRegistry, baseCtb } from '../../../src/battle/ffx/index.ts';
+import { FFXContentRegistry } from '../../../src/battle/ffx/index.ts';
+import { tickSpeed as baseCtb } from '../../../src/battle/ffx/kernel/ctb.ts';
 import { makeActorRuntime, type Ctx, type FFXRuntime } from '../../../src/battle/ffx/state.ts';
 import type { CritCheckInput } from '../../../src/battle/ffx/kernel/crit.ts';
 import type { HitCheckInput } from '../../../src/battle/ffx/kernel/hit.ts';
@@ -46,9 +47,9 @@ export class ScriptedRng extends SeededRng {
     throw new Error('the FFX hit pipeline must draw through int()');
   }
 
-  /** The kind of each draw: V a damage variance (0..31), P a percent roll (0..100). */
+  /** The kind of each draw: V a damage variance (0..31), P a percent roll (0..100), T Threaten's roll (0..99). */
   kinds(): string {
-    return this.calls.map((c) => (c.max === 31 ? 'V' : c.max === 100 ? 'P' : `?${c.min}-${c.max}`)).join('');
+    return this.calls.map((c) => (c.max === 31 ? 'V' : c.max === 100 ? 'P' : c.max === 99 ? 'T' : `?${c.min}-${c.max}`)).join('');
   }
 }
 
@@ -269,7 +270,7 @@ export function oracleInputs(sit: Situation, live: Live): { hit: HitCheckInput; 
   const { def, user, target } = sit;
   const rec = def.record;
   if (!rec) throw new Error(`the oracle needs the game's record for ${def.id}`);
-  const flagsMisc = rec.flagsMisc & ~0x6000;
+  const flagsMisc = rec.flagsMisc; // Delay Attack and Buster included: the hit kernel applies them (re-parity W2)
   const power = sit.power ?? def.power;
   const usesWeapon = (flagsMisc & 0x40000) !== 0;
   const elementOf = (els: readonly ElementId[]): number => els.reduce((m, e) => m | (ELEMENTS.find(([n]) => n === e)?.[1] ?? 0), 0);
@@ -325,7 +326,14 @@ export function oracleInputs(sit: Situation, live: Live): { hit: HitCheckInput; 
   };
 }
 
-/** The abilities a random situation may use: recorded, damaging, single-target, nothing scripted, no revival. */
+/**
+ * The abilities a random situation may use: recorded, damaging, single-target, nothing scripted, no revival.
+ *
+ * This pool is the DAMAGE oracle's (W1): each copy keeps the game's record words but not its status payload (the chance, duration,
+ * extra-word, stage and buff bytes) or a shatter chance, so a hit's only draws are the hit roll, the variances and the critical roll.
+ * The statuses of a hit are proven in `parity-ffx-engine-status.test.ts`. (A Petrified target still costs the status step's one
+ * shatter draw, which the damage test's oracle spends as well.)
+ */
 export function wiringPool(all: readonly AbilityDef[]): AbilityDef[] {
   return all
     .filter(
@@ -343,13 +351,21 @@ export function wiringPool(all: readonly AbilityDef[]): AbilityDef[] {
         a.hits >= 1 &&
         a.hits <= 3,
     )
-    .map((a) => ({
-      ...a,
-      statusEffects: [],
-      removesStatuses: [],
-      flags: a.flags.filter((f) => f !== 'removes-statuses' && f !== 'shatter' && f !== 'weak-delay' && f !== 'strong-delay'),
-      ...(a.extra?.['restoresPool'] !== undefined ? { extra: { restoresPool: a.extra['restoresPool'] } } : { extra: {} }),
-    }));
+    .map((a) => {
+      const copy: AbilityDef = {
+        ...a,
+        statusEffects: [],
+        removesStatuses: [],
+        flags: a.flags.filter((f) => f !== 'removes-statuses' && f !== 'shatter' && f !== 'weak-delay' && f !== 'strong-delay'),
+        ...(a.extra?.['restoresPool'] !== undefined ? { extra: { restoresPool: a.extra['restoresPool'] } } : { extra: {} }),
+      };
+      delete copy.shatterChance;
+      if (a.record) {
+        const { id, type, flagsMisc, flagsDamage, damageClass, rank } = a.record;
+        copy.record = { id, type, flagsMisc, flagsDamage, damageClass, ...(rank !== undefined ? { rank } : {}) };
+      }
+      return copy;
+    });
 }
 
 /** A random situation for one ability of the pool. */

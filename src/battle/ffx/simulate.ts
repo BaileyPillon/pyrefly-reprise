@@ -314,6 +314,8 @@ function runtimeFor(state: BattleState, command: Command): FFXRuntime {
     const c = raw as FFXCombatant;
     const actorRt = makeActorRuntime(c);
     actorRt.abilityIds = [...c.learnedAbilityIds];
+    // The Threaten byte an enemy starts the battle with (the infliction step reads it as the success percent; setup.ts sets it the same way).
+    if (c.enemy?.threatenChance !== undefined) actorRt.threatenChance = c.enemy.threatenChance;
     rt.actors.set(id, actorRt);
     if (c.side === 'aeon') rt.aeonRoster.set(id, c);
   }

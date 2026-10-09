@@ -65,15 +65,15 @@ export interface InitCtbResult {
   minimum: number;
 }
 
-function startValue(startType: number, partySide: boolean, base: number, draw: () => number, bonus: number): number {
+function startValue(startType: number, partySide: boolean, base: number, draw: (modulus: number) => number, bonus: number): number {
   if (partySide) {
     if (startType === StartType.Preemptive) return 0;
     if (startType === StartType.Ambush) return base;
-    return base - (draw() % (bonus + 1));
+    return base - (draw(bonus + 1) % (bonus + 1));
   }
   if (startType === StartType.Preemptive) return base;
   if (startType === StartType.Ambush) return 0;
-  const v = Math.trunc((base * 100) / (100 - (draw() % 11)));
+  const v = Math.trunc((base * 100) / (100 - (draw(11) % 11)));
   return v < 0 ? 0 : v;
 }
 
@@ -81,11 +81,15 @@ function startValue(startType: number, partySide: boolean, base: number, draw: (
  * `pp_BtlInitCtb(startType)`. `slots` has 31 entries (index = chr id). `draw(stream)` returns the raw 31-bit value of
  * the game's RNG for that stream (the kernel masks it to 31 bits). `startType` is 0 normal, 1 preemptive, 2 ambush;
  * any other number behaves as normal, like the exe's `mode == 1`, `mode == 2` tests.
+ *
+ * The callback is also told the modulus the kernel is about to apply (`bonus + 1` for a party member or aeon, 11 for a
+ * monster). The game ignores it (its draw is the raw value); a caller whose generator is not the game's can draw a value
+ * already in range, which the kernel's own `%` then leaves alone.
  */
 export function initialCtb(
   startType: number,
   slots: readonly InitCtbSlot[],
-  draw: (stream: number) => number,
+  draw: (stream: number, modulus: number) => number,
 ): InitCtbResult {
   const base: number[] = [];
   const ctb: number[] = [];
@@ -100,7 +104,7 @@ export function initialCtb(
     const s = slots[i] as InitCtbSlot;
     const stream = rngStreamIndex(i, 0, s.isAeon);
     const bonus = icvBonus(s.agi);
-    const raw = startValue(startType, partySide, base[i] as number, () => draw(stream) & 0x7fffffff, bonus);
+    const raw = startValue(startType, partySide, base[i] as number, (modulus) => draw(stream, modulus) & 0x7fffffff, bonus);
     const firstStrike = (s.autoA & AUTO_FIRST_STRIKE) !== 0;
     const value = hasteSlow(firstStrike ? 0 : raw, s.haste, s.slow);
     ctb[i] = value;

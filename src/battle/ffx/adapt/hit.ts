@@ -16,7 +16,7 @@
  */
 
 import type { AbilityDef, Affinity, ElementId, FFXCombatant } from '../../common/types.ts';
-import { damageCap } from '../kernel/aftermath.ts';
+import { damageCap, type StatusOutcome } from '../kernel/aftermath.ts';
 import { critCheck, type CritCheckInput } from '../kernel/crit.ts';
 import type { NulCounters } from '../kernel/element.ts';
 import { hitCheck, HIT, type HitCheckInput, type HitResult } from '../kernel/hit.ts';
@@ -62,7 +62,7 @@ export interface HitRequest {
   gilSpent?: number;
   /** The target's CTB counter: what the CTB class and formula 0xd read as the running CTB. */
   targetCtb: number;
-  /** The target's tick speed (the engine's cached `ICV_BASE` for its Agility). */
+  /** The target's tick speed for its CURRENT Agility (Delay Attack and Buster add a multiple of it). */
   targetTick: number;
   /** True for a counter-attack: a counter never meets Evade & Counter. */
   isCounter: boolean;
@@ -76,6 +76,8 @@ export interface HitRequest {
 /** What one hit came to. */
 export interface HitReport {
   outcome: HitOutcome;
+  /** The result word the game writes to the hit record: the classes that are live (1 HP, 2 MP, 4 CTB, and 4 again for a Delay Attack), crit 0x100, overkill 0x80. */
+  resultMask: number;
   /** HP, MP and CTB amounts after the clamp. Positive damages (and delays CTB), negative restores. */
   amounts: [number, number, number];
   /** The damage classes this command touches: 1 HP, 2 MP, 4 CTB (the record's `Cmd+0x23`). */
@@ -239,6 +241,7 @@ function execute(req: HitRequest, command: ResolvedCommand, io: HitIo): HitRepor
   const cap = damageCap(command.record.flagsDamage, input.user.autoB);
   return {
     outcome: out.outcome,
+    resultMask: out.resultMask,
     amounts: [out.amounts[0], out.amounts[1], out.amounts[2]],
     classes: command.record.damageClass,
     crit: (out.resultMask & RESULT_CRIT) !== 0,
@@ -251,8 +254,14 @@ function execute(req: HitRequest, command: ResolvedCommand, io: HitIo): HitRepor
 /**
  * One hit as the engine takes it: the hit and critical rolls and the variance are drawn in the game's order from
  * the draws, and only when the game's own rules call for a draw.
+ *
+ * `status` (re-parity W2) is the status step of the hit, made lazily so that its draws come after the damage classes' (the game's
+ * order: hit roll, HP variance, critical roll, MP variance, CTB variance, the 25 statuses, then the shatter roll). It is called
+ * once, only for a hit that lands, with the command as the kernels read it, and returns the record words after the step
+ * (`adapt/status.ts#runStatusStep` makes them); the hit pipeline needs them for Delay, Threaten, the Petrified and newly-dead
+ * "no damage" steps. The caller keeps the full step result for carrying it out.
  */
-export function resolveHit(req: HitRequest, draws: HitDraws): HitReport {
+export function resolveHit(req: HitRequest, draws: HitDraws, status?: (command: ResolvedCommand) => StatusOutcome): HitReport {
   const command = resolveCommand(req.row, req.actor);
   const hitInput = hitCheckInputOf(req, command);
   const critInput = critCheckInputOf(req, command);
@@ -260,6 +269,7 @@ export function resolveHit(req: HitRequest, draws: HitDraws): HitReport {
     draw: draws.variance,
     hit: () => hitCheck(hitInput, draws.percent),
     crit: () => critCheck(critInput, 0, draws.percent).crit,
+    ...(status ? { status: () => status(command) } : {}),
   });
 }
 

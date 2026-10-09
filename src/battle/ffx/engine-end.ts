@@ -112,7 +112,8 @@ export function afterAction(
     }
   }
 
-  onTurnEnd(ctx, actor);
+  // Poison only follows an action whose results were applied: a passed turn (a sleeper's) passes `command` undefined.
+  onTurnEnd(ctx, actor, command !== undefined);
   rtOf(ctx, actor.id).turnsTaken += 1;
   if (actor.side === 'enemy') ctx.rt.lastEnemyActorId = actor.id;
   ctx.rt.currentActorId = null;

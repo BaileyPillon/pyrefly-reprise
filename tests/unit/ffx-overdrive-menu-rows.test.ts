@@ -52,6 +52,10 @@ function newEngine(groupId: string, seed: number, party: FFXPartyBuild): Engine 
  * Wakka and Lulu are on the bench in every shipped preset, and their Overdrives
  * are exactly the two that were broken — which is most of why nothing caught
  * this. The mutation is the same one a Switch performs.
+ *
+ * A Switch also hands the incoming member the outgoing member's CTB counter (`execute.ts`, `case 'switch'`). The engine now
+ * seeds EVERY party slot's opening counter the way the game does (the bench's too, unreduced by the field's minimum: a
+ * bench member has a real wait of its own, where the old engine left it at 0), so the mutation does the handover as well.
  */
 function frontWithFullGauge(engine: Engine, who: string, overdriveIds?: string[]): void {
   const state = engine.state() as unknown as {
@@ -73,6 +77,10 @@ function frontWithFullGauge(engine: Engine, who: string, overdriveIds?: string[]
     if (leaving) leaving.removed = true;
     c.removed = false;
     c.slot = 0;
+    const rt = (engine as unknown as { ctx: { rt: { actors: Map<string, { ctb: number }> } } }).ctx.rt.actors;
+    const incoming = rt.get(who);
+    const outgoing = rt.get(out);
+    if (incoming && outgoing) incoming.ctb = outgoing.ctb;
   }
 }
 
@@ -372,10 +380,14 @@ describe('every offered row is submittable as offered', () => {
    * no events produces no feedback either.
    */
   function assertEveryRowDoesSomething(groupId: string, build: FFXPartyBuild, front: string[]): void {
+    // Seed 4, not 3 (re-parity W2): the opening counters are the game's 26 fixed draws now, so the seeds moved. With everybody but
+    // `who` defending, the question is only whether `who` gets a turn before the Chapter 1 board kills the front three; on seed 3
+    // Kimahri does not (Seymour Flux zombifies and kills him first), on seed 4 all five members used here do.
+    const seed = 4;
     for (const who of front) {
       // One engine per row: submitting a row changes the board, and the point
       // is what each row does from the same starting position.
-      const probe = newEngine(groupId, 3, build);
+      const probe = newEngine(groupId, seed, build);
       frontWithFullGauge(probe, who);
       const offered: AvailableCommand[] = turnFor(probe, who).commands.filter((c) => c.enabled);
 
@@ -385,7 +397,7 @@ describe('every offered row is submittable as offered', () => {
         // is not a Zombie legitimately does nothing, and the menu cannot know
         // in advance. Every *action* row has to do something.
         if (row.command.kind === 'item') continue;
-        const engine = newEngine(groupId, 3, build);
+        const engine = newEngine(groupId, seed, build);
         frontWithFullGauge(engine, who);
         const decision = turnFor(engine, who);
         const live = decision.commands.find((c) => c.label === row.label && c.enabled);

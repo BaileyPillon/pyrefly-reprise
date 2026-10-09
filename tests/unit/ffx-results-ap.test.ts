@@ -83,9 +83,16 @@ function attackCommand(d: PlayerInput): Command {
   return { kind: 'attack', targets: [target] };
 }
 
-/** tidus/yuna/auron active, kimahri reserve; a 200 HP dummy that eats 50 per fixed hit. */
+/**
+ * tidus/yuna/auron active, kimahri reserve; a 200 HP dummy that eats 50 per fixed hit.
+ *
+ * A PREEMPTIVE start (re-parity W2): the party's counters are all 0 and the dummy's is its base, so the order is the game's tie key
+ * (equal Agility, so slot order: tidus, yuna, auron) whatever the opening draws are. The fixtures' default `'scripted'` start is a normal
+ * one now, with the game's 26 fixed opening draws and their jitter, which would make "tidus, yuna, auron" a property of the seed.
+ */
 function chapterOneShapedSetup() {
   return setup({
+    condition: 'preemptive',
     party: party({
       members: [
         member({ id: 'tidus' }),
@@ -308,6 +315,7 @@ describe('PR-0003: FFX results rows survive a real defeat and a real KO at the e
     const engine = createFFXEngine({ content: content() });
     engine.init(
       setup({
+        condition: 'preemptive',
         party: party({
           members: [member({ id: 'tidus' }), member({ id: 'yuna' }), member({ id: 'kimahri', hp: 0 })],
           activeSlots: ['tidus', 'yuna', 'kimahri'],
@@ -373,8 +381,11 @@ describe('PR-0003: FFX results rows survive a real defeat and a real KO at the e
    *
    * Seed 7 -> 4 on 2026-10-08 (re-parity W1, FFX only): the engine now draws hit, variance and critical in the game's
    * order and Cross Cleave always hits, so seed 7's line no longer brings Auron in before the wipe; seed 4 does.
+   *
+   * Seed 4 -> 2 on 2026-10-09 (re-parity W2, FFX only): the opening counters are the game's 26 fixed draws and statuses roll through
+   * the game's infliction step, so the draws moved again; seed 4's line wins without Auron, seed 2's brings him in (10 turns) and loses.
    */
-  it.each([12, 4, 3])(
+  it.each([12, 2, 3])(
     'a reserve member (Auron) who switched in and took turns gets a row, even KO\'d at the end (seed %i)',
     (seed) => {
       const result = runSeymourFlux(seed);

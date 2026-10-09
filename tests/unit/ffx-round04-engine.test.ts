@@ -17,9 +17,12 @@
  *   Pagodas die and revive repeatedly, so the tile relabelled repeatedly.
  * - **PR-0040 (polish)** — `state.ts` crossed the 400-line house limit
  *   (AGENTS.md hard rule 7) when the Threaten/Sleep repair landed.
- * - **PR-0025 (polish)** — the rank-3 recovery a denied turn is charged is not
- *   stated by any section the code cites, so it must read as an `[estimate]`
- *   with its reason (AGENTS.md hard rule 6).
+ * - **PR-0025 (polish)** — the rank-3 recovery a denied turn is charged was not
+ *   stated by any section the code cited, so it read as an `[estimate]` with
+ *   its reason (AGENTS.md hard rule 6). It is the game's own number since
+ *   re-parity W2 (the scheduler resets the rank to 3, VA 0x00790fb0;
+ *   `research/re-ffx-ctb-status.md` section 14.4), and the check below pins that
+ *   the comment says so instead.
  *
  * ## Which game
  *
@@ -302,15 +305,16 @@ describe('PR-0040 — the house 400-line limit [AGENTS.md hard rule 7]', () => {
   });
 });
 
-describe('PR-0025 — the denied-turn recovery is labelled [estimate] [AGENTS.md hard rule 6]', () => {
-  it('the rank-3 charge in the pass path carries an [estimate] marker and its reason', () => {
+describe('PR-0025 — the denied-turn recovery is the exe\'s own rank 3 [AGENTS.md hard rule 6]', () => {
+  it('the rank-3 charge in the pass path cites where the game gets it, and is no longer an estimate', () => {
     const engine = src('battle/ffx/engine.ts');
     const at = engine.indexOf('chargeForAction(ctx, actor.id, 3)');
     expect(at, 'the denied-turn branch moved; re-point this check').toBeGreaterThan(0);
     // The comment block immediately above the charge.
     const preamble = engine.slice(Math.max(0, at - 1600), at);
-    expect(preamble).toContain('[estimate]');
-    expect(preamble.toLowerCase()).toContain('default action rank');
+    expect(preamble).toContain('re-ffx-ctb-status.md');
+    expect(preamble).toContain('0x00790fb0');
+    expect(preamble).toContain('was an `[estimate]` before');
   });
 });
 

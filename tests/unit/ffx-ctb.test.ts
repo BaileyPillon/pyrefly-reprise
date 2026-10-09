@@ -7,7 +7,6 @@ import { describe, expect, it } from 'vitest';
 import type { BattleEvent, BattleSetup } from '../../src/battle/common/types.ts';
 import {
   applyDelay,
-  applyStatus,
   baseCtb,
   buildBattle,
   type Ctx,
@@ -19,6 +18,7 @@ import {
 } from '../../src/battle/ffx/index.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
 import { enemy, member, party, setup } from './ffx-fixtures.test.ts';
+import { giveStatus, inflict } from './helpers/ffxStatus.ts';
 
 function makeCtx(overrides: Partial<BattleSetup> = {}): Ctx {
   const s = setup(overrides);
@@ -82,43 +82,45 @@ describe('recovery is linear in rank (§1.3)', () => {
     const target = hasted.state.combatants['tidus'];
     if (!target) throw new Error('fixture');
     const plain = recoveryTicks(target as never, 3);
-    applyStatus(hasted, undefined, target as never, { status: 'haste', chance: 255, duration: 254 });
+    inflict(hasted, undefined, target as never, { status: 'haste', chance: 255, duration: 254 });
     expect(recoveryTicks(target as never, 3)).toBe(Math.floor(plain / 2));
 
     const slowed = makeCtx();
     const other = slowed.state.combatants['tidus'];
     if (!other) throw new Error('fixture');
-    applyStatus(slowed, undefined, other as never, { status: 'slow', chance: 255, duration: 254 });
+    inflict(slowed, undefined, other as never, { status: 'slow', chance: 255, duration: 254 });
     expect(recoveryTicks(other as never, 3)).toBe(plain * 2);
   });
 });
 
-describe('Haste and Slow move the current counter on application (§1.4)', () => {
-  it('Haste halves the pending wait, Slow doubles it', () => {
+describe('a Haste or Slow status landing does not move the current counter (§1.4)', () => {
+  // The game has no such code (research/re-ffx-ctb-status.md §5): the rescale is the CAST's own CTB damage, formula 0xd, which the
+  // hit applies; a status that arrives any other way (equipment, a monster move with no CTB class) leaves the counter alone.
+  // The cast itself is proven in parity-ffx-engine-ctb-status.test.ts.
+  it('Haste and Slow leave a pending wait of 30 at 30', () => {
     const ctx = makeCtx();
     const tidus = ctx.state.combatants['tidus'];
     if (!tidus) throw new Error('fixture');
-    // After normalisation the leading actor sits at 0, so give him a real wait.
     const tidusRt = ctx.rt.actors.get('tidus');
     if (tidusRt) tidusRt.ctb = 30;
-    applyStatus(ctx, undefined, tidus as never, { status: 'haste', chance: 255, duration: 254 });
-    expect(ctbOf(ctx, 'tidus')).toBe(15);
+    inflict(ctx, undefined, tidus as never, { status: 'haste', chance: 255, duration: 254 });
+    expect(ctbOf(ctx, 'tidus')).toBe(30);
 
     const ctx2 = makeCtx();
     const yuna = ctx2.state.combatants['yuna'];
     if (!yuna) throw new Error('fixture');
     const yunaRt = ctx2.rt.actors.get('yuna');
     if (yunaRt) yunaRt.ctb = 30;
-    applyStatus(ctx2, undefined, yuna as never, { status: 'slow', chance: 255, duration: 254 });
-    expect(ctbOf(ctx2, 'yuna')).toBe(60);
+    inflict(ctx2, undefined, yuna as never, { status: 'slow', chance: 255, duration: 254 });
+    expect(ctbOf(ctx2, 'yuna')).toBe(30);
   });
 
   it('Haste and Slow are mutually exclusive', () => {
     const ctx = makeCtx();
     const tidus = ctx.state.combatants['tidus'];
     if (!tidus) throw new Error('fixture');
-    applyStatus(ctx, undefined, tidus as never, { status: 'slow', chance: 255, duration: 254 });
-    applyStatus(ctx, undefined, tidus as never, { status: 'haste', chance: 255, duration: 254 });
+    inflict(ctx, undefined, tidus as never, { status: 'slow', chance: 255, duration: 254 });
+    inflict(ctx, undefined, tidus as never, { status: 'haste', chance: 255, duration: 254 });
     expect(tidus.statuses['slow']).toBeUndefined();
     expect(tidus.statuses['haste']).toBeDefined();
   });
@@ -216,7 +218,7 @@ describe('predictTurnOrder (§1.6, visual-bible §3.2)', () => {
     const tidus = ctx.state.combatants['tidus'];
     if (!tidus) throw new Error('fixture');
     for (const status of ['poison', 'silence', 'darkness', 'slow', 'protect'] as const) {
-      applyStatus(ctx, undefined, tidus as never, { status, chance: 255, duration: 254 });
+      giveStatus(tidus as never, status);
     }
     const row = predictTurnOrder(ctx, 8).find((r) => r.actorId === 'tidus');
     expect(row?.statusIcons.length).toBe(3);

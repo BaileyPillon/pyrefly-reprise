@@ -4,7 +4,8 @@
  * **Game case: FFX only** (FFX-2 times its statuses with its own gauge in its own exe). Source: FFX.exe, Steam build
  * 25501027, SHA-256 0537B2A1...686D. Spec: `research/re-ffx-ctb-status.md` section 14. Pure and deterministic, no random
  * draw anywhere in these functions. Each function below is proven against the machine code run in the emulator
- * (`tests/unit/parity-ffx-turn-ticks.test.ts`, vectors in `tests/fixtures/parity/ffx/turn_ticks.json`).
+ * (`tests/unit/parity-ffx-turn-ticks.test.ts`, vectors in `tests/fixtures/parity/ffx/turn_ticks.json`); the engine runs
+ * them through `src/battle/ffx/adapt/ticks.ts` (re-parity W2).
  *
  * Exe addresses (all FFX.exe):
  * - 0x007af390  end of a holder's own turn: the counters whose behaviour byte has bit 4 count down by one
@@ -13,9 +14,7 @@
  * - 0x007afab0  Poison, after an action whose results were applied
  * - 0x00799cd0  Doom countdown at the doomed character's own turn start
  * - 0x0078e410 / 0x0078e460  the Threaten link: both ends carry the Threaten bit and name each other
- *
- * Notation: `Chr+0xNNN` is an offset into the battle character structure (stride 0xF90, ids 0..0x1e). A slot is a
- * character id. The thirteen temporal counters are `Chr+0x608..0x614` in the order of `TemporalSlot`.
+ *               (`./turn-ticks-link.ts`; the shapes and constants are in `./turn-ticks-types.ts`)
  *
  * What these functions do NOT model is presentation: the animation requests (a wake-up pose, the Regen glow, the
  * damage numbers) and the Sin-style scripted hit-point floors (two special scenes). Death handling after the hit
@@ -26,88 +25,30 @@
 import { ctbAfterAction, delayForRank } from './ctb.ts';
 import { mul, udiv } from './int32.ts';
 import { TEMPORAL_STATUS_FLAGS, TemporalSlot } from './status-types.ts';
+import {
+  EVENT_AT_END,
+  EVENT_AT_START,
+  EXTRA_BOOST,
+  EXTRA_DEFEND,
+  EXTRA_DOOM,
+  EXTRA_GUARD,
+  EXTRA_SENTINEL,
+  EXTRA_SHIELD,
+  PERM_POISON,
+  PERM_ZOMBIE,
+  TICK_AT_END,
+  TICK_AT_START,
+  TICK_SLOTS,
+  type TickChr,
+  byte,
+  checkSlot,
+  cloneTickChr,
+  subHp,
+} from './turn-ticks-types.ts';
+import { releaseThreaten } from './turn-ticks-link.ts';
 
-/** Behaviour bits of the temporal table (byte 3 of each 4-byte record, VA 0x00c42464). */
-const TICK_AT_START = 0x01;
-const EVENT_AT_START = 0x02;
-const TICK_AT_END = 0x04;
-const EVENT_AT_END = 0x08;
-
-/** Permanent-word bits this file reads. */
-const PERM_ZOMBIE = 0x0002;
-const PERM_POISON = 0x0008;
-const PERM_THREATEN = 0x0800;
-
-/** Extra-word bits the stance clears and Doom read. */
-const EXTRA_SHIELD = 0x0040;
-const EXTRA_BOOST = 0x0080;
-const EXTRA_DEFEND = 0x0800;
-const EXTRA_GUARD = 0x1000;
-const EXTRA_SENTINEL = 0x2000;
-const EXTRA_DOOM = 0x4000;
-
-/** The number of character slots the exe walks (ids 0..0x1e) and the "no partner" byte of a Threaten link. */
-export const TICK_SLOTS = 31;
-export const NO_PARTNER = 0xff;
-
-/** The command the Doom countdown queues when it runs out: the Doom kill, record 0x3120 (VA 0x00ff3120). */
-export const DOOM_KILL_COMMAND = 0x3120;
-
-/** One character as the tick functions read and write it. Offsets are `Chr+...`. */
-export interface TickChr {
-  /** 0xdc8: on the field. */
-  inBattle: boolean;
-  /** 0xdcc: dead (the death handler has run). */
-  dead: boolean;
-  /** 0xdce: Petrified, as of the last time a hit record was copied back (`perm >> 2 & 1`). */
-  petrified: boolean;
-  /** 0xdcb: the silent flag that stops the status-tick event (set while a character is leaving or arriving). */
-  silent: boolean;
-  /** 0x716: the turn is being re-entered (a refused command or a hand-off); the start-of-turn tick is skipped. */
-  reentered: boolean;
-  /** 0x5d0 (s32) and 0x594 (s32). */
-  hp: number;
-  maxHp: number;
-  /** 0x606 (u16): permanent statuses. */
-  perm: number;
-  /** 0x608..0x614: the thirteen temporal counters. */
-  counters: number[];
-  /** 0x616 (u16): extra statuses; 0x62e (u16): the extra statuses given by equipment. */
-  extra: number;
-  autoExtra: number;
-  /** 0x6d2: ticks since the last Regen payout (saturates at 255). */
-  tickCounter: number;
-  /** 0x5c5: who threatened this character (0xff none); 0x5c6: whom this character threatened (0xff none). */
-  threatenedBy: number;
-  threatening: number;
-  /** 0x5c8: the Doom countdown. */
-  doomCounter: number;
-  /** 0x5ba: the Poison tick percentage of maximum HP. */
-  poisonPercent: number;
-}
-
-export function cloneTickChr(c: TickChr): TickChr {
-  return { ...c, counters: c.counters.slice() };
-}
-
-const byte = (v: number): number => v & 0xff;
-
-/** `pp_Clamp(v, 0, hi)` as the exe writes it: raise to 0 first, then lower to `hi` (so `hi` wins when it is below 0). */
-function clampHp(v: number, hi: number): number {
-  let x = v | 0;
-  if (x < 0) x = 0;
-  if (hi < x) x = hi;
-  return x;
-}
-
-/** `pp_BtlSubHp`'s hit-point part: `HP = clamp(HP - amount, 0, maxHP)` in 32-bit arithmetic. */
-export function subHp(hp: number, amount: number, maxHp: number): number {
-  return clampHp((hp - amount) | 0, maxHp | 0);
-}
-
-function checkSlot(slot: number): void {
-  if (!Number.isInteger(slot) || slot < 0 || slot >= TICK_SLOTS) throw new RangeError(`FFX tick kernel: slot ${slot} is outside 0..${TICK_SLOTS - 1}`);
-}
+export * from './turn-ticks-types.ts';
+export { releaseThreaten, threatProcess } from './turn-ticks-link.ts';
 
 // ---------------------------------------------------------------------------------------------- end of turn (0x7af390)
 
@@ -159,69 +100,6 @@ export function endOfTurnTick(chr: Pick<TickChr, 'inBattle' | 'silent' | 'counte
     reaction = 'ended';
   }
   return { counters, ticked, events, reaction };
-}
-
-// -------------------------------------------------------------------------------------------- Threaten link (0x78e460)
-
-/**
- * `fh_MsThreatProcess` (0x0078e460, Fahrenheit's name) for the character `id`, called with the link already changed.
- *
- * - With the character's Threaten bit SET (a Threaten has just landed on it): `Chr+0x5c5` names the user. The user
- *   gets the Threaten bit as well and `Chr+0x5c6` := this character, so both ends of the pair carry the bit and name
- *   each other. A user byte of 0xff makes no link.
- * - With the bit CLEAR (it has been cleared): the partner is `Chr+0x5c5`, or `Chr+0x5c6` when that is 0xff. This
- *   character's two link bytes become 0xff; the partner, when there is one, loses its Threaten bit and its two link
- *   bytes as well.
- *
- * The id bytes are character ids 0..0x1e or 0xff; the exe would index memory outside the character array for any
- * other byte, which the game never writes, so a byte outside that range is refused. The input is not modified.
- */
-export function threatProcess(chrs: readonly TickChr[], id: number): TickChr[] {
-  checkSlot(id);
-  const out = chrs.map(cloneTickChr);
-  const me = out[id] as TickChr;
-  let partnerId = me.threatenedBy & 0xff;
-  if ((me.perm & PERM_THREATEN) !== 0) {
-    if (partnerId !== NO_PARTNER) {
-      checkSlot(partnerId);
-      const partner = out[partnerId] as TickChr;
-      partner.perm = (partner.perm | PERM_THREATEN) & 0xffff;
-      partner.threatening = id;
-    }
-    return out;
-  }
-  if (partnerId === NO_PARTNER) partnerId = me.threatening & 0xff;
-  me.threatenedBy = NO_PARTNER;
-  me.threatening = NO_PARTNER;
-  if (partnerId !== NO_PARTNER) {
-    checkSlot(partnerId);
-    const partner = out[partnerId] as TickChr;
-    partner.perm = partner.perm & ~PERM_THREATEN & 0xffff;
-    partner.threatenedBy = NO_PARTNER;
-    partner.threatening = NO_PARTNER;
-  }
-  return out;
-}
-
-/**
- * `FUN_0078e410` (0x0078e410): release the Threaten link a character is part of. A character with the Threaten bit
- * and a recorded "I threatened" partner (`Chr+0x5c6`) is the USER of a pair; one with the bit and no such partner is
- * the TARGET. In both cases the bit leaves BOTH ends and both link bytes are reset; a character without the bit
- * changes nothing. It runs at the end of every start-of-turn tick, so a pair is dissolved at the start of whichever
- * end's turn comes first, and the death handler and the leave-the-field function run it for the character that dies
- * or leaves.
- */
-export function releaseThreaten(chrs: readonly TickChr[], id: number): TickChr[] {
-  checkSlot(id);
-  const me = chrs[id] as TickChr;
-  if ((me.perm & PERM_THREATEN) === 0) return chrs.map(cloneTickChr);
-  const partnerId = me.threatening & 0xff;
-  const at = partnerId !== NO_PARTNER ? partnerId : id;
-  checkSlot(at);
-  const next = chrs.map(cloneTickChr);
-  const cleared = next[at] as TickChr;
-  cleared.perm = cleared.perm & ~PERM_THREATEN & 0xffff;
-  return threatProcess(next, at);
 }
 
 // --------------------------------------------------------------------------------------------- start of turn (0x7af4f0)
@@ -354,17 +232,27 @@ export interface ActionDoneResult {
 }
 
 /**
+ * The Poison marker of `pp_BtlActionDone` (0x007b20e0): set to the actor when the action's results were applied
+ * (`resultsApplied`: a normal action; a passed turn, a sleeper's, calls the function with 0) and the actor is
+ * Poisoned, on the field, not dead and not leaving the field (`skipPoison`, `Chr+0xdf8`).
+ */
+export function poisonMarked(
+  c: Pick<ActionDoneChr, 'perm' | 'dead' | 'inBattle'> & { skipPoison?: boolean },
+  resultsApplied: boolean,
+): boolean {
+  return resultsApplied && (c.perm & PERM_POISON) !== 0 && !c.dead && c.inBattle && c.skipPoison !== true;
+}
+
+/**
  * The turn-ending entry of `pp_BtlActionDone` (0x007b20e0), in the game's order: the recovery is added to the CTB
  * counter using the Haste and Slow counters AS THEY STAND (so the Haste that ends in the tick below still halved this
- * recovery), then the end-of-turn tick, then the costs (MP and Overdrive, not modelled), and last the Poison marker:
- * set when the action's results were applied (`resultsApplied`: a normal action; a passed turn, a sleeper's, calls
- * the function with 0) and the actor is Poisoned, on the field, not dead and not leaving.
+ * recovery), then the end-of-turn tick, then the costs (MP and Overdrive, not modelled), and last the Poison marker
+ * ({@link poisonMarked}).
  */
 export function actionDone(c: ActionDoneChr, resultsApplied: boolean): ActionDoneResult {
   const recovery = delayForRank(c.agi, c.rank, c.counters[TemporalSlot.Haste] as number, c.counters[TemporalSlot.Slow] as number);
   const end = endOfTurnTick(c);
-  const poisonMarked = resultsApplied && (c.perm & PERM_POISON) !== 0 && !c.dead && c.inBattle && !c.skipPoison;
-  return { ctb: ctbAfterAction(c.ctb, recovery), recovery, end, poisonMarked };
+  return { ctb: ctbAfterAction(c.ctb, recovery), recovery, end, poisonMarked: poisonMarked(c, resultsApplied) };
 }
 
 // ------------------------------------------------------------------------------------------------------- Poison (0x7afab0)

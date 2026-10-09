@@ -173,14 +173,16 @@ function ctbClass(inp: HitInput, io: HitIo, src: Source): number {
  */
 function tailSteps(
   inp: HitInput,
+  io: HitIo,
   damage: Triple,
   mask: number,
   classLeft: number,
 ): { damage: Triple; mask: number; classLeft: number } {
   const { cmd, target, record } = inp;
-  const status = inp.status ?? noStatusOutcome(record.perm, record.extra);
   const delay = delayAttackCtb(cmd.flagsMisc, target.tickSpeed, damage[2], mask);
   const threaten = threatenIgnoresDelay(record.perm, delay.mask, classLeft, delay.ctbDamage);
+  // The status step runs here, after Delay and Threaten and before the "no damage" overrides: its draws follow the damage classes'.
+  const status = io.status !== undefined ? io.status() : (inp.status ?? noStatusOutcome(record.perm, record.extra));
   const maskAfterStatus = delay.mask | status.maskBits;
   const ctb = status.ctbDamage ?? threaten.ctbDamage;
   const petrified = petrifiedNoDamage(record.perm, status.permAfter, status.extraAfter, [damage[0], damage[1], ctb]);
@@ -242,7 +244,7 @@ export function calcHitDamage(inp: HitInput, io: HitIo): HitOutput {
   let mask = f.resultMask;
   let classLeft = f.classLeft;
   if (outcome === 'hit') {
-    const tail = tailSteps(inp, damage, mask, classLeft);
+    const tail = tailSteps(inp, io, damage, mask, classLeft);
     damage = tail.damage;
     mask = tail.mask;
     classLeft = tail.classLeft;

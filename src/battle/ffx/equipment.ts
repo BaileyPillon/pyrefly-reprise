@@ -166,33 +166,39 @@ export function weaponElements(c: FFXCombatant): ElementId[] {
  * Weapon status strikes and touches [ffx-combat-core §4.1].
  * Touch = chance 50, Strike = chance 100; both on one weapon stack additively
  * to 150, which is why the table sums rather than picking a winner.
+ *
+ * The third number is the chance byte and the fourth the duration byte, both read from the game's auto-ability table
+ * (`a_ability.bin`, record bytes 22 to 46 and 47 to 59; re-parity W2): Sleep, Silence and Darkness last 3 turns, Slow is
+ * 255 (given for the battle, never counted down), and the statuses of the permanent group have no duration.
  */
-const STATUS_STRIKES: ReadonlyArray<readonly [AutoAbilityId, StatusId, number]> = [
-  ['stonestrike', 'petrify', 100],
-  ['deathstrike', 'ko', 100],
-  ['zombiestrike', 'zombie', 100],
-  ['poisonstrike', 'poison', 100],
-  ['sleepstrike', 'sleep', 100],
-  ['silencestrike', 'silence', 100],
-  ['darkstrike', 'darkness', 100],
-  ['slowstrike', 'slow', 100],
-  ['stonetouch', 'petrify', 50],
-  ['deathtouch', 'ko', 50],
-  ['zombietouch', 'zombie', 50],
-  ['poisontouch', 'poison', 50],
-  ['sleeptouch', 'sleep', 50],
-  ['silencetouch', 'silence', 50],
-  ['darktouch', 'darkness', 50],
-  ['slowtouch', 'slow', 50],
+const STATUS_STRIKES: ReadonlyArray<readonly [AutoAbilityId, StatusId, number, number]> = [
+  ['stonestrike', 'petrify', 100, 0],
+  ['deathstrike', 'ko', 100, 0],
+  ['zombiestrike', 'zombie', 100, 0],
+  ['poisonstrike', 'poison', 100, 0],
+  ['sleepstrike', 'sleep', 100, 3],
+  ['silencestrike', 'silence', 100, 3],
+  ['darkstrike', 'darkness', 100, 3],
+  ['slowstrike', 'slow', 100, 255],
+  ['stonetouch', 'petrify', 50, 0],
+  ['deathtouch', 'ko', 50, 0],
+  ['zombietouch', 'zombie', 50, 0],
+  ['poisontouch', 'poison', 50, 0],
+  ['sleeptouch', 'sleep', 50, 3],
+  ['silencetouch', 'silence', 50, 3],
+  ['darktouch', 'darkness', 50, 3],
+  ['slowtouch', 'slow', 50, 255],
 ];
 
-/** Weapon status riders, as `status -> summed chance byte`. */
-export function weaponStatusStrikes(c: FFXCombatant): Array<{ status: StatusId; chance: number }> {
-  const sums = new Map<StatusId, number>();
-  for (const [id, status, chance] of STATUS_STRIKES) {
-    if (hasAuto(c, id)) sums.set(status, (sums.get(status) ?? 0) + chance);
+/** Weapon status riders, as `status -> summed chance byte` (clamped to the byte) and the duration byte the weapon gives it. */
+export function weaponStatusStrikes(c: FFXCombatant): Array<{ status: StatusId; chance: number; duration: number }> {
+  const sums = new Map<StatusId, { chance: number; duration: number }>();
+  for (const [id, status, chance, duration] of STATUS_STRIKES) {
+    if (!hasAuto(c, id)) continue;
+    const have = sums.get(status);
+    sums.set(status, { chance: Math.min(255, (have?.chance ?? 0) + chance), duration: Math.max(have?.duration ?? 0, duration) });
   }
-  return [...sums.entries()].map(([status, chance]) => ({ status, chance }));
+  return [...sums.entries()].map(([status, v]) => ({ status, chance: v.chance, duration: v.duration }));
 }
 
 /** Ribbon's protected list [ffx-combat-core §9]. Note it does NOT cover the Breaks or Death. */

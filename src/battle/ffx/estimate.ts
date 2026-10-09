@@ -21,8 +21,8 @@
  * The only thing it adds is {@link statusOdds}, and only because the simulation
  * cannot supply it: a preview resolves each status roll at its *median*, so it
  * reports a status as landed or not landed. A player being told Mega Death is
- * coming needs the percentage, and the percentage is a pure function of the
- * chance byte and the target's resistance [ffx-combat-core §4.1].
+ * coming needs the percentage, and the percentage is the game's own landing rule
+ * counted over every roll (`adapt/status-odds.ts`) [ffx-combat-core §4.1].
  *
  * If `simulate.ts` moves or renames, this file is the one place that has to
  * change — which is the whole reason it exists as a seam rather than as calls
@@ -50,6 +50,8 @@ import type {
   Targeting,
 } from '../common/types.ts';
 import { has } from './state.ts';
+import { landingPercent, regularNumber, statusPercentOf } from './adapt/status-odds.ts';
+import { resistBytesWith } from './adapt/status.ts';
 import { resolveAffinity, resolveElements } from './formulas.ts';
 import { weaponElements } from './equipment.ts';
 import type { FFXContentRegistry } from './registry.ts';
@@ -115,35 +117,35 @@ export interface ActionEstimate {
 /**
  * The odds one status application lands on one target, as a percentage.
  *
- * Mirrors `statuses.ts`'s `rollStatus` branch for branch, minus the draw
- * [ffx-combat-core §4.1]:
+ * **This is the game's rule, not a copy of it** (re-parity W2): the percentage is the kernel's landing predicate
+ * (`kernel/status-inflict.ts#statusLanding`, the exe's `pp_BtlInflictStatus` rule, VA 0x0078ae00) counted over every roll the
+ * game can draw, through `adapt/status-odds.ts` [ffx-combat-core §4.1]:
  *
  * ```
- * chance >= 255           -> 100, immunity ignored
- * resistance >= 255       -> 0
- * chance === 254          -> 100
- * otherwise               -> chance - resistance, over a `rng % 101` draw
+ * chance 255              -> always, immunity ignored
+ * resistance 255          -> never
+ * chance 254              -> always
+ * otherwise               -> the rolls 0..100 below chance - resistance
  * ```
  *
- * `chance - resistance` and not a ratio: the draw is uniform over 0–100 and the
- * test is `>`, so a net 40 lands 40 times in 101. Rounding that to 40% is the
- * honest reading and the one the research quotes.
+ * Given the ability and its user, the chance byte is the one the engine rolls (the game's command record, merged with the
+ * wielder's weapon for a weapon command); without them it is the application's own byte.
  *
- * The Zombie branch matters more than any other line in this file. A living
- * Zombie's resistance to ordinary instant death is raised to 255, so Mega Death
- * — chance 100 — simply fails against them. That is the whole of Chapter 2's
- * strategy, and it is why the panel prints "Death 0% (blocked)" rather than a
- * generic "may inflict Death" [ffx-combat-core §4.2, ffx-yunalesca §7.1].
+ * The Zombie branch matters more than any other line in this file. Death against a living Zombie uses a resistance of 254, so
+ * Mega Death (chance 100) fails whatever the roll and only a chance of 254 or 255 gets through. That is the whole of Chapter 2's
+ * strategy, and it is why the panel prints "Death 0% (blocked)" rather than a generic "may inflict Death" [ffx-combat-core §4.2,
+ * ffx-yunalesca §7.1].
  */
-export function statusOdds(target: FFXCombatant, app: StatusApplication): StatusOdds {
-  const chance = app.chance;
-  if (chance >= 255) return { status: app.status, percent: 100, blocked: false };
-  let resistance = target.immunities[app.status] ?? 0;
-  if (app.status === 'ko' && has(target, 'zombie') && target.alive) resistance = 255;
-  if (resistance >= 255) return { status: app.status, percent: 0, blocked: true };
-  if (chance === 254) return { status: app.status, percent: 100, blocked: false };
-  const net = Math.max(0, Math.min(100, chance - resistance));
-  return { status: app.status, percent: net, blocked: net <= 0 };
+export function statusOdds(target: FFXCombatant, app: StatusApplication, def?: AbilityDef, user?: FFXCombatant): StatusOdds {
+  if (def !== undefined) {
+    const odds = statusPercentOf(user, target, def, app.status);
+    return { status: app.status, percent: odds?.percent ?? 0, blocked: odds?.blocked ?? true };
+  }
+  const number = regularNumber(app.status);
+  if (number < 0) return { status: app.status, percent: app.chance >= 255 ? 100 : app.chance === 254 ? 100 : 0, blocked: app.chance < 254 };
+  const resist = resistBytesWith(target, target.enemy?.threatenChance ?? 100)[number] as number;
+  const odds = landingPercent(number, app.chance, resist, has(target, 'zombie') && target.alive);
+  return { status: app.status, percent: odds.percent, blocked: odds.blocked };
 }
 
 /** Which combatants a simulation actually touched, in state order. */
@@ -212,7 +214,7 @@ export function estimateCommand(
     const target = state.combatants[id] as FFXCombatant | undefined;
     if (!target) continue;
     const amount = mid.hpDelta[id] ?? 0;
-    const statuses = resolved.statusEffects.map((app) => statusOdds(target, app));
+    const statuses = resolved.statusEffects.map((app) => statusOdds(target, app, resolved, user));
     perTarget.push({
       targetId: id,
       targetName: target.name,

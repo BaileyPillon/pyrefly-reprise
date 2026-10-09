@@ -16,11 +16,11 @@ import {
   chooseAiCommand,
   type Ctx,
   FFXContentRegistry,
-  applyStatus,
   resolveTargets,
 } from '../../src/battle/ffx/index.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
 import { ability, enemy, setup } from './ffx-fixtures.test.ts';
+import { giveStatus } from './helpers/ffxStatus.ts';
 
 const BOSS_ABILITY_IDS = [
   'lance-of-atrophy',
@@ -139,7 +139,7 @@ describe('Seymour Flux (§4)', () => {
   it('Full-Life prefers a zombified member, and whiffs on a living one', () => {
     const { ctx } = seymourCtx();
     const tidus = at(ctx, 'tidus');
-    applyStatus(ctx, undefined, tidus, { status: 'zombie', chance: 255, duration: 254 });
+    giveStatus(tidus, 'zombie');
     // Advance the shared counter to the mount's Full-Life step.
     ctx.state.flags['seymour.p1Step'] = 1;
     ctx.state.flags['seymour.lastEnemyActor'] = 'seymour-flux';
@@ -201,7 +201,7 @@ describe('Seymour Flux (§4)', () => {
     const { ctx } = seymourCtx();
     const seymour = at(ctx, 'seymour-flux');
     seymour.hp = 30000; ctx.state.flags['seymour.phase'] = 2; // phase 2 is stored, not read from HP (§4.3)
-    applyStatus(ctx, undefined, seymour, { status: 'reflect', chance: 255, duration: 254 });
+    giveStatus(seymour, 'reflect');
     const step = (): Command | null => {
       ctx.state.flags['seymour.lastEnemyActor'] = 'mortiorchis';
       return chooseAiCommand(ctx, seymour);
@@ -285,7 +285,7 @@ describe('Yunalesca (§5)', () => {
     const { ctx } = yunalescaCtx(1);
     const boss = at(ctx, 'yunalesca');
     for (const id of ['tidus', 'yuna', 'auron']) {
-      applyStatus(ctx, undefined, at(ctx, id), { status: 'zombie', chance: 255, duration: 254 });
+      giveStatus(at(ctx, id), 'zombie');
     }
     ctx.rt.actors.get('yunalesca')!.ai['priv0004'] = 2;
     const picked = new Set<string>();
@@ -310,7 +310,7 @@ describe('Yunalesca (§5)', () => {
     ctx.rt.actors.get('yunalesca')!.ai['priv0004'] = 2;
     for (const id of ['tidus', 'yuna', 'auron']) {
       const c = at(ctx, id);
-      applyStatus(ctx, undefined, c, { status: 'zombie', chance: 255, duration: 254 });
+      giveStatus(c, 'zombie');
     }
     // KO one of them outright; the Zombie stays on the slot.
     const downed = at(ctx, 'auron');

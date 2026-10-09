@@ -44,9 +44,11 @@
  * 14]:
  *
  *  * **FFX** reuses `src/battle/ffx/estimate.ts`'s `statusOdds` — already
- *    shipped, already the enemy-intent panel's source, and already the mirror
- *    of `statuses.ts#rollStatus` [ffx-combat-core §4.1]. Two panels reading two
- *    derivations of one number is the worst outcome available, so there is one.
+ *    shipped, already the enemy-intent panel's source, and since re-parity W2
+ *    the game's own landing rule counted over every roll
+ *    (`adapt/status-odds.ts`, the kernel's `statusLanding`) [ffx-combat-core
+ *    §4.1]. Two panels reading two derivations of one number is the worst
+ *    outcome available, so there is one.
  *  * **FFX-2** mirrors `src/battle/ffx2/resolve.ts#applyRiders` — resistance
  *    255 blocks, a chance byte of 254 or more always lands, and everything else
  *    is `statusChanceLinear(userLevel, chance, targetLevel, resist)`
@@ -70,7 +72,7 @@ import { statusOdds } from '../../battle/ffx/estimate.ts';
 import { statusChanceLinear } from '../../battle/ffx2/statuses.ts';
 import { STAT_STACK_MAX } from '../../battle/ffx2/constants.ts';
 
-/** FFX's ceiling for the six stacking buffs: `ffx/statuses.ts#applyStatus` adds a level only below five. */
+/** FFX's ceiling for the six stacking buffs: the stage-buff step (`kernel/status-extra.ts#applyStageBuffs`) clamps a stack to five. */
 const FFX_STACK_MAX = 5;
 import { changesNothing } from './advisor-guard.ts';
 
@@ -211,9 +213,9 @@ export function statusChances(
     if (!target) continue;
     for (const app of def.statusEffects) {
       // **A status already on the target cannot land, whatever the odds byte
-      // says.** Both engines' `applyStatus` refuse a non-stacking status that
-      // is present (FFX `statuses.ts#applyStatus`; FFX-2 returns `null` and the
-      // caller emits X-2's own MISS), so no roll is ever taken.
+      // says.** Both engines refuse a non-stacking status that is present
+      // (FFX: the infliction step fails it, `kernel/status-inflict.ts`; FFX-2
+      // returns `null` and the caller emits X-2's own MISS).
       //
       // Measured, and it is the whole of Chapter 2's half of this repair: Shell,
       // Protect, Regen and the four Nul- spells carry a chance byte of 254,
@@ -225,7 +227,7 @@ export function statusChances(
       const existing = (target.statuses as Record<string, { stacks?: number } | undefined>)[app.status];
       const stacking = app.stacks !== undefined && app.stacks > 0;
       // …and **a stacking buff already at its ceiling cannot take another
-      // level**: FFX's `applyStatus` stops at five (Cheer/Aim/…, ffx-combat-core
+      // level**: FFX's stage-buff step stops at five (Cheer/Aim/…, ffx-combat-core
       // §2.9 table: "at 5 stacks"), FFX-2's at `STAT_STACK_MAX` (§2.8). Priced
       // at its 254 byte, Aim on a capped party topped Evrae's card 208 to 272
       // times a fight (`tests/unit/chapters/evrae-advisor.test.ts`).
@@ -238,7 +240,7 @@ export function statusChances(
         state.game === 'ffx2'
           ? ffx2StatusPercent(user, target, app)
           : (() => {
-              const o = statusOdds(target as FFXCombatant, app);
+              const o = statusOdds(target as FFXCombatant, app, def, user as FFXCombatant);
               return { percent: o.percent, blocked: o.blocked };
             })();
       out.push({
