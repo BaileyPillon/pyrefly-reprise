@@ -171,10 +171,10 @@ An input the engine cannot supply is an error, never a default. "Constant": the 
 ## 3. Engine code replaced and deleted
 
 No parallel path is left. Deleted: `applyStatus`, `removeStatuses`, `rollStatus`, `rollThreaten`, `consumeNulCharges`,
-`tickDurationStatuses`, `DURATION_STATUSES`, `ESUNA_CURES`, `DISPEL_REMOVES`, `clearUntilNextTurnStatuses`, `inflictStatus` and its
-kin, the scripted death roll of `scripted.ts`, `normalise`, `applyDelay`, `onHasteApplied`, `onSlowApplied`, `ICV_VARIANCE` and the
-hand-built `ICV_BASE` (now the kernel's `tickSpeed`), `payRegen`, the `estimate.ts` copy of the landing rule, and the engine's own
-Double HP / Double MP code. `turnQueue.ts` 350 -> 243 lines, `statuses.ts` 397 -> 173, `ticks.ts` 236 -> 183, `state.ts` 398 -> 230,
+`tickDurationStatuses`, `DURATION_STATUSES`, `ESUNA_CURES`, `DISPEL_REMOVES`, `STACKING_BUFFS`, `MIX_FLAGS`, `NUL_BY_ELEMENT`,
+`clearUntilNextTurnStatuses`, the scripted death roll of `scripted.ts`, `normalise`, `applyDelay`, `onHasteApplied`, `onSlowApplied`, the
+hand-built `ICV_BASE` and `ICV_VARIANCE` tables (they remain as read-only views of the kernel's `tickSpeed` and `icvBonus`), `payRegen`, the
+`estimate.ts` copy of the landing rule, and the engine's own Double HP / Double MP code. `turnQueue.ts` 350 -> 243 lines, `statuses.ts` 397 -> 173, `ticks.ts` 236 -> 183, `state.ts` 398 -> 230,
 `math.ts` 108 -> 43. The removed exports of `src/battle/ffx/index.ts` and the new `ActorRuntime` fields are in `docs/CONTRACT-CHANGES.md`.
 
 Mirrors: `ffx/estimate.ts#statusOdds` is the kernel's landing predicate counted over every roll the game can draw
