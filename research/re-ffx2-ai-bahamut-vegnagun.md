@@ -13,7 +13,7 @@ Shuyin), checked against the compiled package next to each one (`_mNNN/mNNN.bin`
 `battle/kernel/monmagic.bin` and `command.bin`; stats are rows of `monster.bin` (the JP and US copies of all three are
 numerically identical, and the stat record inside each compiled package equals the kernel row). Engine behaviour is read
 from FFX-2.exe in Ghidra 12.1.4 (the older copy; every function cited was compared instruction by instruction with the
-live build and is the same) and, for four functions, run in an x86 emulator on the live executable. Everything is written in
+live build and is the same) and, for five functions, run in an x86 emulator on the live executable. Everything is written in
 our own words: no script text, no game text and no decompiled code is reproduced here.
 
 ## Main findings in one screen
@@ -46,10 +46,10 @@ our own words: no script text, no game text and no decompiled code is reproduced
   constants, thresholds and command ids as the source text. Nodes B and C differ from Node A only in the lines the text diff
   shows (start colour, height). Source line ranges are cited as `m168.src:85-90`.
 - **Engine.** Call numbers of the script VM were recovered from the exe's own call table (battle group = the order of the
-  game's header `btlatel.ath`) and each handler read. Four engine functions were run on the live exe with synthetic
+  game's header `btlatel.ath`) and each handler read. Five engine functions were run on the live exe with synthetic
   characters (only the random generator scripted): the group-mask builder (VA 0x6117b0), the target-search filter chain
-  (VA 0x634e40), the weighted target pick (VA 0x634fd0, four geometries, exact match with the model in 1.4) and the thinking
-  delay (VA 0x634170).
+  (VA 0x634e40), the weighted target pick (VA 0x634fd0, four geometries, exact match with the model in 1.4), the thinking
+  delay (VA 0x634170) and the base damage formula (VA 0x61b910, for the Mega Flare table in 2.3).
 - **Confidence tags.** [H] source and binary agree and the engine part was read; [M] read from the code but not run or
   partly inferred; [L] open.
 - **Notation.** A "poll" is one call of a monster's action entry. A "step" is one battle logic step. "Girl" is a party
@@ -78,9 +78,9 @@ Haste (x21/20) and Slow (/2) change the speed of gauges but not whether a ready 
 
 After a command ends, recovery is `cost_atb x 10000 / (AGI + 1)` units (the command's own cost, the monster's AGI byte),
 then thinking: `(draw mod T) + T/4` with T the monster record's thinking byte (0 for every actor here, so none) plus
-exactly 30 steps for every party member who is dead or petrified (run on the live exe: 0, 30, 90 for none, one, three down). Charge time is `cost_cast x 10000 / (AGI + 1)`
-units. Gauges fall by 95 units per step at Normal speed (Slow 70, Fast 120), halved while the monster is charging or in hit
-reaction. Cadence of each actor's moves is in section 8.
+exactly 30 steps for every party member who is dead or petrified (run on the live exe: 0, 30, 90 for none, one, three down).
+Charge time is `cost_cast x 10000 / (AGI + 1)` units. Gauges fall by 95 units per step at Normal speed (Slow 70, Fast 120),
+halved while the monster is charging or in hit reaction. Cadence of each actor's moves is in section 8.
 
 ### 1.2 What a command from a script is [H]
 
@@ -214,13 +214,15 @@ Lv 20:
 | 14 (table) | 381-430 | 366-413 | 353-399 | 311-351 | 195-220 |
 | 24 (our constant) | 1125-1270 | 1079-1218 | 1041-1176 | 916-1035 | 574-648 |
 
-No other multiplier was found in the damage path for a scripted, non-crit, non-elemental magic hit. The two published
-reports our constant was fitted to ("about 500 to 1,000", "around 1,000") do not match the table value. They may describe
-several hits together (two Impulses take 61% of full HP before it); the one place a different level or MAG could enter, the
-step that copies an enemy's stats into the battle character, was not traced [L]. Recommendation: use 14 and confirm with one
-measured Mega Flare on a girl whose MDEF is known.
+Both rows were produced by the live base-damage function with the scripted draw at its two ends. The step that copies an
+enemy's stats into its battle character (VA 0x6281c0 in the live build, same code as the older copy) takes level and MAG
+straight from the record (a zero stat becomes 1), so nothing scales them; no other multiplier exists in the damage path for a
+scripted, non-crit, non-elemental magic hit. The two published reports our constant was fitted to ("about 500 to 1,000",
+"around 1,000") do not match the table value. They may describe several hits together (two Impulses take 61% of full HP
+before it) [L]. Recommendation: use 14, and confirm with one measured Mega Flare on a girl whose MDEF is known.
 
-**Death:** Bahamut's death command is queued when a death reaction is allowed (not for a Doom, blow-away, bribe or steal-motivation death).
+**Death:** Bahamut's death command is queued when a death reaction is allowed (not for a Doom, blow-away, bribe or
+steal-motivation death).
 
 ## 3. Link 1: Vegnagun Tail (m282; scene wegn01_229)
 
@@ -246,8 +248,9 @@ Cadence at AGI 115: Beam charge 10,344 units (109 steps), recovery 8,620 (91 ste
 
 ### 4.1 Leg (m283) [H]
 
-Record: HP 18,220, Lv 38, STR 13, DEF 13, MAG 18, MDEF 17, AGI 34, LCK 3. Only the Leg should have to die: the Nodes' existence
-flag is off [M, inferred from the flag]. Action entry m283.src:59-226.
+Record: HP 18,220, Lv 38, STR 13, DEF 13, MAG 18, MDEF 17, AGI 34, LCK 3. Init (m283.src:30-52) attaches the model parts and sets
+presentation and movement flags only: no stat is changed. Only the Leg should have to die: the Nodes' existence flag is off
+[M, inferred from the flag]. Action entry m283.src:59-226.
 
 | # | Condition | Action | Chance / RNG | Source |
 |---|---|---|---|---|
@@ -294,7 +297,8 @@ The change itself happens on the Node's next poll once the counter is 5 or more.
 
 ### 5.1 Body (m287) [H]
 
-Record: HP 33,040, Lv 43, STR 54, DEF 98, MAG 42, MDEF 108, AGI 35, LCK 4. Action entry m287.src:65-236.
+Record: HP 33,040, Lv 43, STR 54, DEF 98, MAG 42, MDEF 108, AGI 35, LCK 4. Init (m287.src:36-63) makes it fly and sets effect and
+damage-number placement and movement flags: no stat is changed. Action entry m287.src:65-236.
 
 | # | Condition | Action | Source |
 |---|---|---|---|
@@ -477,8 +481,8 @@ hit reaction and the Haste, Slow factors are in 1.1. "Dialogue" rows are the spe
 
 ## 9. Open items, and what could not be decoded
 
-- **Mega Flare against the anecdotes** [L]: the table says 14; see 2.3. The step that copies enemy stats into the battle
-  character was not traced.
+- **Mega Flare against the anecdotes** [L]: the table and the engine say 14 (2.3); why two published reports read two to three
+  times higher is not explained. One measured cast settles it.
 - **Logic rate** [L]: 30 or 60 steps per second; the pacing code and the scene comment point to 30/s.
 - **Battle-local flags between the five links** [M]: assumed zero at each battle start.
 - **Whether the number windows pause the clock** [M]: the gating flags were read; none is set by message windows, but this was
@@ -507,7 +511,7 @@ Row key: *game* = this note; *ours* = file:line in `src/battle/ffx2/`.
 | T2 | Tail Beam target | near-weighted (m282.src:158) | uniform (`ai/vegnagun.ts:15-18,59`) | |
 | L1 | Leg status move | Break 25, Berserk 25, Slow 50 (m283.src:184-224) | one third each (`ai/vegnagun.ts:82-88`) | Slow twice as often |
 | L2 | Leg target | near-weighted among girls lacking the status; fallback Absorb on any living (m283.src:188-224) | uniform among eligible (`ai/vegnagun.ts:90-94`) | |
-| N1 | Node colour counter | change when the counter reaches 5 on a poll, that poll attacks nothing; hits count only if they deal HP damage (m284.src:63-92,165-173) | change at 4 and the same turn still attacks with the old colour; any hit counts (`ai/vegnagun.ts:139-148,193-196`) | colour changes too early and too often |
+| N1 | Node colour counter | change when the counter reaches 5 on a poll, that poll attacks nothing; hits count only if they deal HP damage (m284.src:63-92,165-173) | change at 4 and the same turn still attacks with the old colour; any hit counts (`ai/vegnagun.ts:139-148,193-196`); the research file also says 4 (research/ffx2-vegnagun-shuyin.md:272-274) | with hits, colours cycle faster in ours (4 events instead of 5, flipped at once instead of on the next poll, hits that deal no HP damage also count); with none, both give four attacks per colour, but ours flips the immunity one action earlier |
 | N2 | Starting colours | A red, B green, C yellow (m284-m286.src:41-46) | all start red (`ai/vegnagun.ts:130-132`) | |
 | N3 | Green support | Regen 20, Shell 20, Protect 20, Cura 40 (m284.src:111-129) | 25 each (`ai/vegnagun.ts:186`) | |
 | C1 | Core voices | seven voice polls interleave (m287.src:103-203) | none | pacing |
@@ -520,12 +524,12 @@ Row key: *game* = this note; *ours* = file:line in `src/battle/ffx2/`.
 | H4 | Nemo thresholds | strict below; one Nemo per band, skipped bands are not paid back (m290.src:360-445) | `<=` fractions, one Nemo per crossed band in order (`ai/vegnagun-head.ts:39,72-78`) | |
 | H5 | Hit counter | every applied HP-damaging result in phase 2 (m290.src:467-477) | per damage event (`ai/vegnagun-head.ts:166-168`) | check per-hit |
 | H6 | Pallida Mors target | one living girl, uniform (m290.src:145-146) | passes no target (`ai/vegnagun-head.ts:110`) | check how the engine fills an empty target for a single-target ability |
-| R1 | Redoubt cycle | Right: Break, HP beam, Blind, Flare (m291.src:76-113) | Right starts with the HP beam, Break last (`ai/vegnagun-head.ts:179-181`) | cycle phase off by one |
+| R1 | Redoubt cycle | Right: Break, HP beam, Blind, Flare, and the first phase-2 action is Break (m291.src:74-113); Left: MP beam, Slow, Dispel, Demi (m292.src:74-104) | Right starts with the HP beam, Break last (`ai/vegnagun-head.ts:179-181`), as the research file does (research/ffx2-vegnagun-shuyin.md:778-781); the Left order matches | the Right's first action is wrong, the cycle is the same four moves shifted by one |
 | R2 | Redoubt picks | status moves prefer a girl lacking the status (m291.src:77-107, m292.src:82-92) | uniform (`ai/vegnagun-head.ts:205`) | |
-| R3 | Redoubt turn counter | advances on revive turns too; death resets it to 1 (Right) or 0 (Left) (m291.src:68,190) | advances only on attacks (`ai/vegnagun-head.ts:199-201`) | |
+| R3 | Redoubt turn counter | advances on the revive poll too, so a revive uses up one place of the four (the Flare place is only delayed one poll); death resets it to 1 (Right) or 0 (Left) (m291.src:68,190, m292.src:68,169) | a revive does not advance the rotation and death does not reset it (`ai/vegnagun-head.ts:199-201`); the research file already says the step is skipped unless it is Flare or Demi (research/ffx2-vegnagun-shuyin.md:782-783) | rotation after a revive or a death differs from the game and from the research file |
 | R4 | Phase 1 idle | no command: polled every step, revive reacts within one step (m291.src:53-64) | null turn spends a normal turn (`ai/vegnagun-head.ts:188-189`) | revive latency |
-| S1 | Shuyin target rule | the girl in her Special 1 dressphere, Terror turn only; all other picks near-weighted or uniform (m260.src:276-293) | Yuna whenever she is alive, every move (`ai/shuyin.ts:53-60`) | wrong target bias |
-| S2 | Line interrupts | 50% attempt every other poll, pools of 5 and 7 one-shot lines (m260.src:107-266) | 1-in-10 and 1-in-14 per turn (`ai/shuyin.ts:45-48,62-79`) | |
+| S1 | Shuyin target rule | the girl in her Special 1 dressphere, Terror turn only; all other picks near-weighted or uniform (m260.src:276-293) | Yuna whenever she is alive, every move (`ai/shuyin.ts:53-60`); the research file calls this the original PS2 behaviour and says the International and HD versions target any girl (research/ffx2-vegnagun-shuyin.md:804-809, one source) | wrong target bias; the Steam build's script has no unconditional Yuna rule: Yuna is picked only when she wears her Special 1 dressphere on the Terror turn |
+| S2 | Line interrupts | 50% attempt every other poll, pools of 5 and 7 one-shot lines (m260.src:107-266) | 1-in-10 and 1-in-14 per turn in total (`ai/shuyin.ts:45-48,62-79`); the research file gives the same two odds as per-turn chances (research/ffx2-vegnagun-shuyin.md:800-802) | the game's 1/10 and 1/14 are per line (1/2 of the polls where the gate is open x 1/5 or 1/7 for the pool slot, and a used line falls through to the attack); a speaking poll costs a command, so Shuyin talks far more often than ours until the pools are spent |
 | A1 | Impulse damage type | no physical and no magical bit (row 0x409b): Shell and Protect never apply | `damageType: 'magical'` (`data/ffx2/enemies/bahamut-abilities.ts:74-81`, `abilities-core.ts:85`) | Shell halves it in ours |
 | A2 | Vita Brevis | physical bit only (row 0x4131; it uses the magic-stat formula): Protect halves, Shell does not | magical (`data/ffx2/enemies/vegnagun-abilities.ts:57`) | wrong halving buff |
 | A3 | Noli Me Tangere, Left Lacrimosa | physical bit (rows 0x412f, 0x413f): Protect halves | 'other' (`vegnagun-abilities.ts:38`, `shuyin-abilities.ts:194`) | Protect would not halve them in ours |
