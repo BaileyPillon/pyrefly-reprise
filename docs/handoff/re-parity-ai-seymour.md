@@ -310,6 +310,13 @@ death check (`pp_BtlApplyHitRecords`, 0x78f060: each call applies one record and
 5. Goldens: this lane re-baselined eight digests (seeds 1 and 7 of Chapters I, VII, X, XII), the other two (Chapter III seeds 1 and 7): disjoint chapters. Re-run `ffx-engine-golden`, every `parity-ffx-ai-*` and `re-parity-ai-*` file, the strategy tests of Chapters I, II, III, VII, X, XII and the measurement after the merge,
    and re-baseline once ("game-script parity"); every digest outside the two lanes' chapters should not move.
 
+**The seed pins will move again at the merge.** W2 (`re-parity-w2`) also re-pinned seven of the files this lane re-pinned (`advisor-note`, `advisor-v4-card`, `ffx-engine-golden`, `ffx-overdrive-menu-rows`,
+`ffx-results-ap`, `guide-advisor-target-agreement`, `strategy-seymour-flux`), and its opening CTB, status and tick wiring changes the draws every seeded board rests on, so expect textual conflicts there and, once they
+are resolved, re-derive each seed from the rule it stands for and not from the numbers in this note: `advisor-note`'s screenshot board (in the first sixteen decisions a Poison Fang card whose note says "Leave Yuna down",
+the raise refused because she is a Zombie, Holy Water cards, the Phoenix Down with its Zombie warning) and its "take it first, then raise them" board (a body on the floor that is not a Zombie while a party-wide payload is
+next; rare on the shipped line, 3 seeds of the first 520 here), `advisor-v4-card`'s three first menus, `ffx-overdrive-menu-rows` (a seed on which Kimahri, Wakka and Lulu all get a turn while everyone else Defends),
+`guide-advisor-target-agreement` (a seed whose first Holy Water names one character) and the goldens. `fb0929-zombie-warning` searches seeds for its board and `ffx-results-ap` only needs a party that Defends to lose, so neither pins a seed's outcome.
+
 ## Open items and decisions for Bailey
 
 1. **Chapter I's difficulty (26 % -> 100 %)** is one sourced row (D-08, the CTB counter copy); accepting it, asking for measured options, or holding D-08 back is his call (the lane never tunes).
