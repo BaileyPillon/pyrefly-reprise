@@ -47,7 +47,10 @@ function wasteful(commands: readonly AvailableCommand[]): Command | null {
 describe('the card takes over a fight that was already going badly', () => {
   for (const chapterId of CHAPTER_IDS) {
     it(`${chapterId} (${gameOf(chapterId)}): answers every turn and resolves`, () => {
-      const { engine, options } = harnessFor(chapterId, 5);
+      // Chapter 1 runs seed 11, the rest seed 5 (2026-10-08, re-parity W1, FFX only): the engine now draws hit, variance and
+      // critical in the game's order and Cross Cleave always hits, so seed 5's Chapter 1 is over inside the five wasteful turns
+      // (seed 11 is the first of seeds 1 to 15 that survives them).
+      const { engine, options } = harnessFor(chapterId, chapterId === 'seymour-flux' ? 11 : 5);
       // Five, not ten: Chapter 1 is lost outright in six decisions of wasteful
       // play, and a prefix that ends the fight before the card is consulted is
       // not a recovery test.

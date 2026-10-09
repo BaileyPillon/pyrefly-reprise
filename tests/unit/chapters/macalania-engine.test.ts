@@ -454,7 +454,9 @@ describe('Macalania — act three', () => {
    * which is exactly what C-3 recommends, for free.
    */
   it('A-8: Anima at 0 restores him to 6,000 at Magic 32, and Multi- lands twice', () => {
-    const engine = newEngine(2);
+    // Seed 2 -> 1 on 2026-10-08 (re-parity W1, FFX only): the engine now draws hit, variance and critical in the
+    // game's order, so seed 2's act three shows only one Multi- hit before the fight ends; seed 1 shows two.
+    const engine = newEngine(1);
     driveIntended(engine, () => engine.state().flags['macalania.act'] === 3);
     expect(engine.state().flags['macalania.act']).toBe(3);
 

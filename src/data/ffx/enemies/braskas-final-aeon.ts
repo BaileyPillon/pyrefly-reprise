@@ -34,6 +34,7 @@
 import type { AeonId, BraskasFinalAeonEnemyId } from '../ids.ts';
 import { MANDATORY_AEON_IDS, POSSESSED_AEON_ORDER } from '../ids.ts';
 import type { EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
+import { POSSESSED_PLAIN_ATTACK } from '../command-records/enemies.ts';
 
 // ---------------------------------------------------------------------------
 // Yu Pagodas
@@ -277,6 +278,12 @@ const POSSESSED_AEON_ABILITY_IDS: Record<BraskasFinalAeonEnemyId, string[]> = {
 };
 
 /** Sensor lines, our own wording, inspired by the possessed aeons' short in-game lines [§2.2, verified: 2 sources]. */
+/**
+ * The aeons whose script ends a turn with the plain Attack: the game's record for it is {@link POSSESSED_PLAIN_ATTACK}.
+ * Anima and Yojimbo never use it there (`research/re-ffx-ai-yunalesca-bfa.md` section 5.5), so they carry none.
+ */
+const POSSESSED_PLAIN_ATTACKERS: readonly string[] = ['possessed-valefor', 'possessed-ifrit', 'possessed-ixion', 'possessed-shiva', 'possessed-bahamut'];
+
 const POSSESSED_AEON_SENSOR_TEXT: Partial<Record<BraskasFinalAeonEnemyId, string>> = {
   'possessed-valefor': 'Strike true. It wants this to end.',
   'possessed-ifrit': 'The fire remembers you. It still obeys.',
@@ -335,6 +342,7 @@ function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): E
     aiScriptId: 'possessed-aeon',
     rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 99999, drops: [] }, // §2.3 — no AP/gil for these
     abilityIds: POSSESSED_AEON_ABILITY_IDS[aeonId],
+    ...(POSSESSED_PLAIN_ATTACKERS.includes(aeonId) ? { plainAttack: POSSESSED_PLAIN_ATTACK } : {}),
     flags: { isBoss: true, noRevive: true }, // §2.3 [verified: 3 sources] — permanent Auto-Life on the PARTY, but a defeated possessed aeon is gone for good
     threatenChance: 0,
     sensorText: POSSESSED_AEON_SENSOR_TEXT[aeonId] ?? 'Possessed. It used to be an ally.',

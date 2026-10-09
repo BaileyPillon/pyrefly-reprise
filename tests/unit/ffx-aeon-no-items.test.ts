@@ -99,8 +99,11 @@ describe('PR-0155: FFX aeons are offered no Item rows (FFX only)', () => {
   it('a summoned aeon in Chapter I has no Item row, and an Item command for it is refused', () => {
     const chapter = FFX_CHAPTERS.find((c) => c.id === 'seymour-flux')!;
     const engine: BattleEngine = new FFXEngine({ autoResolveMinigames: true });
-    engine.setSeed(1);
-    engine.init(setupForChapter(chapter, 1));
+    // Seed 1 -> 2 on 2026-10-08 (re-parity W1, FFX only): the engine now draws hit, variance and critical in the game's
+    // order and Cross Cleave always hits (the game's record), so seed 1's Chapter I opening is a different fight (a wipe
+    // before any summon). Seed 2 is the first that summons, which is all this test needs.
+    engine.setSeed(2);
+    engine.init(setupForChapter(chapter, 2));
     let summoned = 0;
     for (let i = 0; i < 4000 && summoned < 3; i++) {
       const d = engine.nextDecision();

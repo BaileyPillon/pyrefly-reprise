@@ -1,85 +1,30 @@
 /**
- * Hit chance and critical chance [ffx-combat-core §2.11, §2.12].
+ * Hit chance and critical chance, from the game's own kernels (re-parity W1; **FFX only**).
  *
- * Two things here are routinely got wrong:
- * - **Only 40% of Accuracy counts**, and it indexes a nine-entry table rather
- *   than feeding a percentage directly.
- * - **Enemy Accuracy is never used.** Every enemy action carries its own
- *   `accuracy` byte and takes the `USE_ACTION_ACCURACY` branch.
+ * The arithmetic is `kernel/hit.ts` (the exe's hit check, nine-entry table, per-command accuracy formula 0 to 7,
+ * Darkness on flagged commands, raw target Luck, Aim, Reflex, Luck and Jinx stacks) and `kernel/crit.ts` (the exe's
+ * critical check: Luck, the target's Luck, Luck and Jinx stacks at one point each, the command's crit byte or the
+ * equipment's bonus). Spec: `research/re-ffx-rng-hit.md` sections 4 and 5. These two functions are the engine's
+ * read-only view of them for the advisor, the intent panel and the tests; the rolls themselves run in `adapt/hit.ts`.
  */
 
 import type { AbilityDef, FFXCombatant } from '../common/types.ts';
-import { HIT_CHANCE_TABLE, idiv, ifloor } from './math.ts';
-import { has, stacks } from './state.ts';
+import { critChancePercent, hitChancePercent } from './adapt/preview.ts';
 
 /**
- * Hit chance in percentage points; the action lands when `chance > rng % 101`.
+ * Hit chance in percentage points; the action lands when `roll < chance` with the roll 0 to 100.
  *
- * Returns `null` when the action always hits — `canMiss: false`, or a Sleeping
- * or Petrified target, both of which are struck unconditionally.
+ * Returns `null` when the game rolls no hit for it: the command always hits (its accuracy formula is 0, as for every
+ * spell, item and Overdrive), the target is asleep or petrified, or the command has no effect on this target.
  */
 export function hitChance(user: FFXCombatant, target: FFXCombatant, def: AbilityDef): number | null {
-  if (def.canMiss === false) return null;
-  if (has(target, 'sleep') || has(target, 'petrify')) return null;
-
-  let base: number;
-  if (def.accuracy !== undefined) {
-    // USE_ACTION_ACCURACY: the action carries its own accuracy byte.
-    base = def.accuracy - target.stats.eva;
-  } else if (user.side === 'enemy') {
-    // Enemy Accuracy is **never** read [§2.11]. An enemy action with no
-    // accuracy byte uses the ALWAYS hit formula. Rolling the table here would
-    // run Yunalesca (ACC 0) at base 25 and make Absorb, Mind Blast and Mega
-    // Death land about one time in four.
-    return null;
-  } else if (def.damageType !== 'physical') {
-    // The table is only for `uses_hit_chance_table` actions — physical weapon
-    // attacks. Magic, items, healing, revival and Overdrives use ALWAYS; a
-    // Cure or a Phoenix Down never whiffs [§2.11].
-    return null;
-  } else {
-    const raw = ifloor(user.stats.acc * 0.4);
-    const idx = Math.max(0, Math.min(8, raw - target.stats.eva + 10));
-    base = HIT_CHANCE_TABLE[idx] ?? 25;
-  }
-
-  if (def.flags.includes('affected-by-darkness') && has(user, 'darkness')) {
-    // `base = floor(base * 0.4) // 4`, i.e. base/10 — unless the attacker's
-    // Luck exceeds the target's by 90 or more, which cancels Darkness.
-    if (user.stats.luck - Math.max(target.stats.luck, 1) < 90) {
-      base = idiv(ifloor(base * 0.4), 4);
-    }
-  }
-
-  return (
-    base +
-    user.stats.luck -
-    Math.max(target.stats.luck, 1) +
-    stacks(user, 'luck') +
-    stacks(target, 'jinx') +
-    10 * (stacks(user, 'aim') - stacks(target, 'reflex'))
-  );
+  return hitChancePercent(user, target, def);
 }
 
 /**
- * Critical chance in percentage points; a crit lands when `rng % 101 < chance`.
- *
- * `equipCrit` is the weapon's plus the armour's `bonusCrit`, used only when the
- * action carries `adds-equipment-crit`; otherwise the action's own `bonusCrit`
- * byte applies. The decompile gives Luck stacks **+10 crit each**, not the +1
- * the wiki prints [ffx-combat-core §2.12, §11 C6].
+ * Critical chance in percentage points; a crit lands when `roll < chance` with the roll 0 to 100. 0 for a command
+ * that cannot crit.
  */
-export function critChance(
-  user: FFXCombatant,
-  target: FFXCombatant,
-  def: AbilityDef,
-  equipCrit: number,
-): number {
-  const bonus = def.flags.includes('adds-equipment-crit') ? equipCrit : (def.bonusCrit ?? 0);
-  return (
-    user.stats.luck +
-    10 * stacks(user, 'luck') +
-    bonus -
-    (Math.max(target.stats.luck, 1) - 10 * stacks(target, 'jinx'))
-  );
+export function critChance(user: FFXCombatant, target: FFXCombatant, def: AbilityDef): number {
+  return critChancePercent(user, target, def);
 }

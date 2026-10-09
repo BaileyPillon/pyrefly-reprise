@@ -67,14 +67,14 @@ const SEED = 42;
 
 // --------------------------------------------------------------- fixtures
 
-function newFfxEngine(groupId: string, party: FFXPartyBuild): { engine: FFXEngine; content: FFXContentRegistry } {
+function newFfxEngine(groupId: string, party: FFXPartyBuild, seed = SEED): { engine: FFXEngine; content: FFXContentRegistry } {
   const content = new FFXContentRegistry();
   content.addAbilities(ALL_ABILITIES);
   content.addItems(Object.values(ITEMS));
   const group = ENEMY_GROUPS_BY_ID[groupId];
   if (!group) throw new Error(`${groupId} group missing from the data layer`);
   const engine = createFFXEngine({ content, autoResolveMinigames: true });
-  engine.init({ game: 'ffx', party, enemies: group, triggers: [], seed: SEED, condition: 'normal', canEscape: false });
+  engine.init({ game: 'ffx', party, enemies: group, triggers: [], seed, condition: 'normal', canEscape: false });
   return { engine, content };
 }
 
@@ -265,8 +265,11 @@ describe('the guide and the advisor never disagree about who a command hits', ()
   it('a single-target command still names the character, on both panels', () => {
     // Chapter 1's very first player decision (seed 42) is Holy Water on Tidus
     // himself — single-ally, so both panels must keep his name rather than
-    // scoping it (raw index 3 of 6).
-    const { engine, content } = newFfxEngine('seymour-flux', gagazetBuild);
+    // scoping it (raw index 3 of 6). Seed 42 -> 9 on 2026-10-08 (re-parity W1, FFX only):
+    // the engine now draws hit, variance and critical in the game's order and Cross Cleave
+    // always hits, so seed 42's opening no longer reaches the Holy Water inside six decisions;
+    // seed 9's does (the first of seeds 1 to 15 that does).
+    const { engine, content } = newFfxEngine('seymour-flux', gagazetBuild, 9);
     const watch: Watch = { id: 'holy-water', seenLabel: null };
     const result = walkFfx(engine, content, 6, watch);
     expect(result.decisions).toBeGreaterThan(0);

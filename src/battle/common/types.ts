@@ -973,6 +973,8 @@ export interface EnemyFields {
   doomTurns?: number;
   /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
   zanmatoLevel?: number;
+  /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
+  plainAttack?: FFXPlainAttack;
   /** A part that revives on a CTB-tick timer instead of staying dead. See {@link EnemyDef.reviveRule}. */
   reviveRule?: PartReviveRule;
   /** FFX-2 only: enemy level, feeding step 1 of the X-2 damage flowchart. Range 1–99. */
@@ -1328,6 +1330,50 @@ export interface StatusApplication {
 }
 
 /**
+ * The fields of the game's own command record that the FFX parity kernels read and an
+ * {@link AbilityDef}'s other fields do not carry (re-parity W1; **FFX only**).
+ *
+ * Source: the Steam HD build's battle kernel tables (item, command, monster magic 1 and 2),
+ * `research/re-ffx-commands.md` section 1; `src/data/ffx/command-records/` holds one record per ability.
+ * The record's formula, power, element, hit count, accuracy byte, crit byte and shatter chance are NOT
+ * repeated here: the ability's own fields keep carrying them, and `research/re-ffx-commands.md`
+ * section 4 lists where they differ from the game's.
+ */
+export interface FFXCommandRecord {
+  /** The record id: 0x2000 + n (item table), 0x3000 + n (command), 0x4000 + n (monster magic 1), 0x6000 + n (monster magic 2). */
+  id: number;
+  /** Record byte 0x17: the command type (1 black magic, 2 white magic, 4 the Overdrive family; Magic Booster boosts 1 and 2). */
+  type: number;
+  /**
+   * Record word 0x1c (u32), the bits the kernels read: bits 3 to 5 the accuracy formula (0 always hits), 6 Darkness
+   * applies, 8 absorb (a drain's sign), 13 and 14 Delay Attack and Delay Buster, 16 pierces Armored, 18 uses the
+   * weapon's properties, 23 no effect on the living.
+   */
+  flagsMisc: number;
+  /** Record word 0x20 (u16): bits 0 and 1 the damage type (1 physical, 2 magical), 2 can crit, 3 crit bonus from equipment, 4 heals, 6 cap 9999, 7 cap 99999. */
+  flagsDamage: number;
+  /** Record byte 0x23: the damage classes, 1 HP, 2 MP, 4 CTB. */
+  damageClass: number;
+}
+
+/**
+ * An enemy's plain Attack as the game's monster table has it (re-parity W1; **FFX only**).
+ *
+ * The engine has one generic `attack` command for every actor, and its record is the party's (0x3000: accuracy
+ * formula 3, which reads the user's Accuracy stat). A monster never uses that record: it attacks with a
+ * monster-side one. Where the game says which, the enemy carries it here and the FFX engine resolves its
+ * `attack` command on it; an enemy with none keeps the engine's own reading of the plain Attack (always hits,
+ * can crit), derived from the ability's flags. Source: `research/re-ffx-commands.md` section 6.
+ */
+export interface FFXPlainAttack {
+  record: FFXCommandRecord;
+  /** Record byte 0x29, the base of accuracy formulas 1 and 2. */
+  accuracy: number;
+  /** Record byte 0x27, the crit bonus byte (read when the record does not take the equipment's bonus). */
+  critBonus: number;
+}
+
+/**
  * One action record — the unit of everything a combatant can do.
  *
  * Numbers come from `research/*.md`; data files MUST cite the section in a
@@ -1406,6 +1452,12 @@ export interface AbilityDef {
   messageTemplate?: string;
   /** Which timed-input overlay this ability opens, if any. `null`/absent = no minigame. */
   minigame?: MinigameKind | null;
+  /**
+   * **FFX only** (re-parity W1): the game's own command record for this ability, attached by
+   * `src/data/ffx/index.ts` from `src/data/ffx/command-records/`. Absent for an ability with no game record
+   * (one of ours): the FFX engine then derives the same fields from the ability's own flags, as it always read them.
+   */
+  record?: FFXCommandRecord;
   /**
    * Escape hatch for one-off scripted rules that do not deserve a schema field:
    * Mega Death's "kills everything not Zombie", Jecht Beam's petrify-and-then
@@ -2550,6 +2602,8 @@ export interface EnemyDef {
   doomTurns?: number;
   /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
   zanmatoLevel?: number;
+  /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
+  plainAttack?: FFXPlainAttack;
   /**
    * A part that **cannot be permanently killed**: it comes back on a timer.
    *

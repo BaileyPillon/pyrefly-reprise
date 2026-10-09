@@ -239,7 +239,12 @@ describe('an ally on the floor always gets an answer — Chapter 1, the board Ba
     // The critic's replay of the same chapter found 166 across twelve seeds.
     // Anything in this range means the walk is looking at the fight Bailey
     // played, not at a battle that ended before anyone fell over.
-    expect(seen.withSomebodyDown).toBeGreaterThan(100);
+    // 2026-10-08 (re-parity W1, FFX only): 120 -> 86 with the hit, critical and damage rolls through the game's kernels,
+    // floor 100 -> 60. The fights end sooner on these twelve seeds (Cross Cleave, unevadable in the game's own record,
+    // wipes Chapter I earlier: the measured count is 68 with only that one formula put back, so it is the walk's length,
+    // not the number of boards worth looking at, that moved); the checks below it (no silent card, no unfollowable
+    // sentence, no anonymous one) are unchanged and still hold on every board that is in the sample.
+    expect(seen.withSomebodyDown).toBeGreaterThan(60);
   });
 
   it('is never silent while an ally is on the floor', () => {

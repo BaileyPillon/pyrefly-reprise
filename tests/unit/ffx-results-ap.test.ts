@@ -370,8 +370,11 @@ describe('PR-0003: FFX results rows survive a real defeat and a real KO at the e
    * Seed 8 -> 7 on 2026-09-25 (PR-0155, FFX only): with aeons no longer throwing
    * the party's Gems, seed 8's line never brings Auron in; seed 7 does (3 turns,
    * KO'd at the end), the same shape the verifier reproduced.
+   *
+   * Seed 7 -> 4 on 2026-10-08 (re-parity W1, FFX only): the engine now draws hit, variance and critical in the game's
+   * order and Cross Cleave always hits, so seed 7's line no longer brings Auron in before the wipe; seed 4 does.
    */
-  it.each([12, 7, 3])(
+  it.each([12, 4, 3])(
     'a reserve member (Auron) who switched in and took turns gets a row, even KO\'d at the end (seed %i)',
     (seed) => {
       const result = runSeymourFlux(seed);

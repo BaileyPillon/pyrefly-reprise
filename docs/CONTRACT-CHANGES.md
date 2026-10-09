@@ -6,6 +6,36 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-08 — `FFXPlainAttack`, `EnemyDef.plainAttack`, `EnemyFields.plainAttack`: an enemy's plain Attack on the game's own record (re-parity W1; FFX only; additive)
+
+Branch `re-parity`. `src/battle/common/types.ts` gains the interface `FFXPlainAttack` (`record: FFXCommandRecord`, `accuracy`, `critBonus`) and the optional member `plainAttack` on `EnemyDef`
+(the data) and on `EnemyFields` (the combatant's copy, made in `src/battle/ffx/setup.ts`). The FFX engine has one generic `attack` command for every actor; the party's record for it (0x3000) reads the user's
+Accuracy stat and is not a monster's. An enemy that carries a `plainAttack` resolves its generic Attack on that record; an enemy without one keeps the reading it always had (always hits, can crit). The five possessed
+aeons carry the game's monster-side Attack, 0x6000 (`src/data/ffx/command-records/enemies.ts#POSSESSED_PLAIN_ATTACK`). FFX-2 and FF7 data never set the member and no code of theirs reads it.
+Handoff: [re-parity-w1](handoff/re-parity-w1.md). Game case: FFX only.
+
+## 2026-10-08 — The FFX engine rolls hits, critical hits and damage through the proven kernels: `src/battle/ffx` exports lose nine names and `critChance` loses a parameter (re-parity W1; FFX only; no shared contract file changed)
+
+Branch `re-parity`. No file in the contract list changed (`AbilityDef.record` is the entry below); recorded because the FFX engine's public helpers change shape and the order in which an action draws its random numbers changes. Handoff:
+[re-parity-w1](handoff/re-parity-w1.md). Game case: FFX only (FFX-2 and FF7 do not import these modules; `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- `src/battle/ffx/index.ts` no longer exports `baseDamage`, `damageSkeleton`, `offensiveStat`, `defensiveStat`, `poolOf`, `DamagePool`, `ifloor`, `mulDivFloor` or `mitigation` (the old hand-written damage chain, replaced by
+  `kernel/` through `adapt/` and `hit-apply.ts`); it keeps `idiv`, `baseCtb`, `icvVariance`, `ICV_BASE`, `ICV_VARIANCE`, `computeDamage`, `estimatedDamage`, `hitChance`, `critChance`, `resolveAffinity` and the types `DamageInput`,
+  `DamageResult`, `TimingBonus`. `critChance(...)` no longer takes the fourth (equipment bonus) argument: the kernel reads the bonus from the ability's own flags. Nothing outside `src/battle/ffx` and its tests imported the removed names.
+- Draw order of one action (the engine's seeded stream; `BattleEvent` shape unchanged): per target, per hit, the hit roll, then the damage variance, then the critical roll (only for a command that can crit), as the game's damage routine does;
+  targets are the outer loop and hits the inner one. A random-target multi-hit action (`random-enemy`, `random-ally`) still picks its target hit by hit. Every seed-pinned FFX expectation downstream (goldens, strategy and chapter
+  tests) moved with it and was re-pinned in the same commit with its cause; the draw adapter (`src/battle/ffx/adapt/draws.ts`) takes one engine draw per kernel draw, so the advisor's roll policy (`engine/tactics/advisor-roll.ts`) keeps working.
+  Adopting the game's own random number generator is a separate decision and is not made here.
+
+## 2026-10-08 — `AbilityDef.record`, `FFXCommandRecord`: the game's own command record on every FFX ability (re-parity W1; FFX only; additive)
+
+Branch `re-parity`. `src/battle/common/types.ts` gains the interface `FFXCommandRecord` (`id`, `type`, `flagsMisc`, `flagsDamage`, `damageClass`: the fields of the game's
+command record that the FFX parity kernels read and an ability's other fields do not carry) and the optional member `AbilityDef.record?: FFXCommandRecord`.
+`src/data/ffx/command-records/` holds the records (451 abilities; 3 of ours have none), `src/data/ffx/index.ts` attaches them in place where the ability catalog is assembled, and
+`research/re-ffx-commands.md` says how each was matched and where our numbers differ from the game's. FFX-2 and FF7 data never set the member and no code of theirs reads it. An
+ability without a record keeps working: the FFX engine derives the same fields from the ability's own flags (`src/battle/ffx/adapt/command.ts`). Handoff:
+[re-parity-w1](handoff/re-parity-w1.md). Game case: FFX only.
+
 ## 2026-10-08 — A scene may hang the FFX-2 enemy-intent slab over the highest enemy's head: `SceneStaging.intentRoof`, `createHud`'s sixth argument (Chapter VI only; FFX-2 only; additive)
 
 Branch `r3941-spacing` (the Leblanc Syndicate at its real sizes on 39.4's spots, Bailey's "Old spacing, real sizes"; handoff: [r3941-spacing](handoff/r3941-spacing.md)). No file on the contract list changed; recorded because the scene staging type gains an optional field and the shared wiring function an optional argument, as for `advisorCap` below.
