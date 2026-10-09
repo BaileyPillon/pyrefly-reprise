@@ -24,6 +24,9 @@ Commits (all on `re-parity-w2`; nothing pushed):
 | `717ed360` | The shatter chance is the command record's byte 0x2c |
 | `9bd5b576` | A Regen that lands resets its holder's tick counter (found by the cause tally) |
 | `214d8915` | The cause tally and its compare tool |
+| `6171dedb` | The status oracle runs 5,000 hits and carries a landed Threaten's decay to the next hit; Double HP / MP cases |
+| `939f0eb8` | `natus-bench`: the old midpoint party compares with "not behind" |
+| `e070c72a` | This note |
 
 ## What the engine does now
 
