@@ -440,4 +440,25 @@ Check: Shiva's idle-pose bones span 31.5 units, which agrees with the static 34.
 
 **12.4 Not found, and so not claimed.** (a) **Where each side stands.** The game's formations for these fights are `ikai09_229` (Shiva), `ikai09_228` (the Sisters) and `ikai09_227` (Anima); their position chunks hold no stand positions for the girls or the fiends (the engine falls back to a battle-map default that was not found). So the distances between the girls and the fiends are ours (`src/scenes/road-to-the-farplane.ts`). (b) **The battle camera.** Not in the files that were read. (c) An idle-pose height for the Sisters.
 
-**12.5 What the build does with it.** Chapter XI draws Shiva at 1.94, Sandy at 1.29, Cindy at 0.83 and Mindy at 0.71 of the girls' standing height (1.78): 3.453, 2.297, 1.480 and 1.260 world units, in place of 3.4, 2.3, 1.7 and 1.2; Anima keeps the boss height. Where each stands is the scene's own and is set against the HUD (`docs/handoff/r3942-stage.md`). Presentation only: the battle engine's output is unchanged.
+**12.5 What the build does with it.** Chapter XI draws Shiva at 1.94, Sandy at 1.29, Cindy at 0.83 and Mindy at 0.71 of the girls' standing height (1.78): 3.453, 2.297, 1.480 and 1.260 world units, in place of 3.4, 2.3, 1.7 and 1.2; Anima keeps the boss height. Where each stands is where 39.4.1 stood them (Shiva x 1.12, z -5.0; Sandy 0.95, -4.9; Cindy 1.85, -2.7; Mindy 3.0, hover 0.55, -4.0; wave 1 had brought them nearer the girls, which Bailey withdrew on 2026-10-08 with "Yes, original spacing", the real sizes staying), so at 1600x900 they read 1.28, 0.85, 0.63 and 0.49 of a girl (1.26, 0.85, 0.73 and 0.47 live; `docs/handoff/r3942-stage.md`). Presentation only: the battle engine's output is unchanged.
+
+
+## 13. Research addendum (2026-10-08): how tall Anima really stands (the HD model)
+
+**FFX-2 only** (rule 14: this is FFX-2's Anima, `m169`, the third link of Chapter XI; FFX's Anima is a different model in another game's files, Chapter III of this game). Asked because Chapter XI drew Anima at the scene's boss height (3.4, 1.9 times a girl of 1.78, 1.17 on screen) and §12 above left her out of the table as a giant. Bailey took the giants options round of 2026-10-08 (option 4, 0.7 of her real height, on a desktop and on the phone: "go with your recommendations"). This section is the measurement behind Anima's row in `src/data/ffx2/fiend-stature.ts`; it carries **no camera or stand-position fact** (see 12.4: the formation has none).
+
+**13.1 Method.** As 12.1: the HD files of FFX-2 build 25501027, the engine's size law (mesh height times the engine scale `C` times the AI script's scale, 1 here), Anima a summoned beast with `C = 4`. `[single source: own measurement]`
+
+**13.2 The table** (game units; the girls' side is Chapter XI's, **17.73**, as 12.2):
+
+| Fiend | Model | Raw mesh height | C | Height (raw x C) | Engine height E (a design height) | Over the girls |
+|---|---|---|---|---|---|---|
+| Anima | `m169` | 34.148 | 4 | **136.59** (385 wide, 324 deep) | 138 | **7.71** |
+
+The stored engine height (138) agrees with the mesh (136.6) to 1 percent: high confidence for the height. `[single source: own measurement]`
+
+**13.3 The caveat.** The width: 385 units, wider than she is tall, in the default pose (the painting we draw is the figure standing, our own, and narrow). About 5 percent, one reader, one build. 7.71 times a girl is a **tower**: at the girls' standing 1.78 she would be 13.7 world units, taller than the room's plate is high.
+
+**13.4 Not found, and so not claimed.** As 12.4: no stand positions (`ikai09_227` stores none) and no lens.
+
+**13.5 What the build does with it.** Chapter XI link 3, FFX-2 only: Anima stands at **0.7 of her real height**, 9.6 world units (5.4 times the girls; she was 3.4), on a desktop (CHAPTER FRAMING's `giants.ts`: the colossus camera 1.7 times as far from the girls, the girls 175 px of 286) and on the phone (the Road's own phone camera, `ROAD_PHONE_ANIMA`: the girls 86 px of 104), 3.77 and 3.91 times the girls on screen. The enemy-intent card stands beside her (the slab avoids her whole painted silhouette, `intentBoard.ts` `GIANT_BODY_RECT`). Presentation only.

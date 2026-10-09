@@ -244,6 +244,14 @@ export interface SceneStaging {
    * everywhere else: the card keeps the stylesheet's 104. FFX-2 only: the FFX HUD places its card through `ffx/hudSafeZones.ts`.
    */
   readonly advisorCap?: number;
+  /**
+   * The FFX-2 enemy-intent slab hangs over the **highest** living enemy's head instead of the acting one's (at the acting one's x), and folds its body to the room
+   * above it. A scene whose fiends stand at different depths and real heights (Chapter VI: Logos and Ormi, far back and tall, stand higher on the screen than a
+   * near, shorter fiend) would otherwise have the slab lie across the taller one's head. `true` or omitted: the plain head and the body's own cap. FFX-2 only: the
+   * FFX HUD's panel is mounted without it (`FFX2BattleHud.intentHead` and `intentMaxHeight`, `intentBoard.highestEnemyHead` and `intentRoom`,
+   * `EnemyIntentMountOptions.maxHeight`).
+   */
+  readonly intentRoof?: boolean;
 }
 
 /** The staging switches a build set, and only those. */
@@ -265,6 +273,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.figureLight) out.figureLight = build.figureLight;
   if (build.artNamespace) out.artNamespace = build.artNamespace;
   if (build.advisorCap !== undefined) out.advisorCap = build.advisorCap;
+  if (build.intentRoof === true) out.intentRoof = true;
   return out;
 }
 

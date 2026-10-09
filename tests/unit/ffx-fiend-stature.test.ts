@@ -91,8 +91,8 @@ describe("Chapter XIV stands Isaaru at his real height over Yuna's own, and keep
     expect(Math.abs(fiendFigureHeights(['grothia'], 1.68, 16.53)['grothia']! - 3.2) / 3.2).toBeLessThan(0.01);
   });
 
-  it("he stands nearer Yuna's depth (z 0.4 from -0.2, x 3.7), still right of his aeon and in front of it", () => {
-    expect(VIA_ISAARU_SPOT).toEqual([3.7, 0, 0.4]);
+  it("he stands where release 39.4.1 stood him (3.7, -0.2; Bailey's \"Yes, original spacing\", r3942-stage keeps only the real height), right of his aeon and in front of it", () => {
+    expect(VIA_ISAARU_SPOT).toEqual([3.7, 0, -0.2]);
     expect(VIA_PURIFICO_SLOTS.enemySpots?.['isaaru']).toEqual(VIA_ISAARU_SPOT);
     expect(VIA_ISAARU_SPOT[2] - VIA_AEON_SPOT[2]).toBeGreaterThanOrEqual(3);
   });

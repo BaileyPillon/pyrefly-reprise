@@ -6,8 +6,8 @@ import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts'
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
 import type { SceneSlots } from './index.ts';
-import { FORWARD_FIEND_ADVISOR_CAP } from './advisor-cap.ts';
 import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
+import { giantPhoneHeights } from './giant-stage.ts';
 import { CLOISTER_CAMERA_REF, CLOISTER_LINK_RIG, CLOISTER_WIDE_RIGS, cloisterRenderAspect, cloisterRigsFor } from './cloister-100-rigs.ts';
 import { CloisterLink } from './cloister-100-link.ts';
 
@@ -72,19 +72,15 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * the party, above the party plates. The enemy-move slab hangs over its head
  * by that panel's own design (`src/ui/common/EnemyIntent.ts`, "the slab's
  * whole habit is to hang over a head"); it is a toggle (E), not a fixed band.
+ *
+ * **Trema stands here too, as he did on 39.4.1** (r3942-stage, FFX-2 only; Bailey, 2026-10-08, "Yes, original spacing"). Wave 1 had given him a spot of his own beside the
+ * girls (1.3, -0.6) so that his real height read as a girl's; he picked the old spacing with the real sizes, so the old man keeps this far-back spot and only his height
+ * ({@link CLOISTER_ACTOR_HEIGHTS}, 1.784 against the estimate of 2.23) is new. The kill link's prop walks to it (`cloister-100-link.ts`).
  */
 export const CLOISTER_BOSS_SPOT: [number, number, number] = [1.05, 0, -5.8];
 
 /** Where the old man appears in the kill link: right of Paragon, clear of the command list. */
 export const CLOISTER_LINK_SIDE_SPOT: [number, number, number] = [4.3, 0, -4.2];
-
-/**
- * Trema's own spot (r3942-stage, FFX-2 only): the old man stands beside the girls, right of Paine, at his real height (1.02 over them), where the beast's spot (far back,
- * {@link CLOISTER_BOSS_SPOT}) had him read 0.80 of a girl at 2.2 tall and would read 0.64 at his real 1.78. At (1.3, -0.6) he reads 0.94 of a girl at 1600x900 (real at the same
- * distance: 1.02), his feet on y 680, above the move-advisor card the scene caps (`./advisor-cap.ts`). The link's prop walks to it (`cloister-100-link.ts`); both Paragon
- * links keep the beast's spot.
- */
-export const CLOISTER_TREMA_SPOT: [number, number, number] = [1.3, 0, -0.6];
 
 const ENEMY_SLOTS: Array<[number, number, number]> = [CLOISTER_BOSS_SPOT, [3.5, 0, -5.4], [-1.1, 0, -6.6]];
 
@@ -105,8 +101,7 @@ export const CLOISTER_IDS = { paragon: 'paragon', trema: 'trema' } as const;
 
 const CLOISTER_STAGING = {
   holdParty: true,
-  enemySpots: { [CLOISTER_IDS.paragon]: CLOISTER_BOSS_SPOT, [CLOISTER_IDS.trema]: CLOISTER_TREMA_SPOT },
-  advisorCap: FORWARD_FIEND_ADVISOR_CAP,
+  enemySpots: { [CLOISTER_IDS.paragon]: CLOISTER_BOSS_SPOT, [CLOISTER_IDS.trema]: CLOISTER_BOSS_SPOT },
   figureHeights: { [CLOISTER_IDS.trema]: CLOISTER_ACTOR_HEIGHTS.trema },
 } as const;
 
@@ -210,7 +205,7 @@ export const buildCloister100Scene: SceneFactory = async (opts: SceneBuildOption
   const linkRig = new Vector3().copy(Array.isArray(linkPos) ? new Vector3(...linkPos) : linkPos);
   const link = new CloisterLink(group, {
     sideSpot: CLOISTER_LINK_SIDE_SPOT,
-    bossSpot: CLOISTER_TREMA_SPOT,
+    bossSpot: CLOISTER_BOSS_SPOT,
     tremaHeight: CLOISTER_ACTOR_HEIGHTS.trema,
     cameraAt: [linkRig.x, linkRig.y, linkRig.z],
     paragonIds: [CLOISTER_IDS.paragon],
@@ -249,6 +244,8 @@ export const buildCloister100Scene: SceneFactory = async (opts: SceneBuildOption
     partyHeight: CLOISTER_ACTOR_HEIGHTS.party,
     enemyHeight: CLOISTER_ACTOR_HEIGHTS.paragon,
     ...CLOISTER_STAGING,
+    // r3942-stage wave 2 (FFX-2 only): on the upright phone Paragon stands at 0.7 of his real height (`giant-stage.ts`); a desktop publishes none (CHAPTER FRAMING, `fx/mix/giants.ts`).
+    figureHeights: { ...CLOISTER_STAGING.figureHeights, ...giantPhoneHeights([CLOISTER_IDS.paragon], 'ffx2-trema', CLOISTER_ACTOR_HEIGHTS.party) },
     palette: { ...CLOISTER_100_PALETTE },
     update(dt: number): void {
       backdrop.update(dt);

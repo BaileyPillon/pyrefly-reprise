@@ -656,4 +656,25 @@ Trema's stored engine height (17) is 5 percent under the mesh, as it is for most
 
 **14.4 Not found, and so not claimed.** (a) **The lens.** The game's formation for this fight has Trema at (-25, 0, 0) and the girls at (30, 0, 0), (25, 0, 18) and (25, 0, -18) in game units (y up-negative: 55 units, or about five and a half world units, between him and the girls, on one line), `[datamined: build 25501027]`; the files hold no camera that would say how big he reads on screen, so the distance and the camera in `src/scenes/cloister-100.ts` are ours. (b) An idle-pose height.
 
-**14.5 What the build does with it.** Chapter XIII draws Trema at 1.02 of the girls' standing height (1.75): 1.784 world units, in place of 2.23, and he stands beside the girls instead of far behind them: the old man at x 1.3, z -0.6 (from x 1.05, z -5.8, the beast's spot), so he reads 0.94 of a girl at 1600x900 (0.80 live; real at the same distance 1.02) and 0.96 on the phone (0.87 live), his feet at y 680 above the move-advisor card, which the room caps (`src/scenes/advisor-cap.ts`, the Chapter VI mechanism). Both Paragon links keep the beast's spot and height. Presentation only: the battle engine's output is unchanged; the camera is the same pose.
+**14.5 What the build does with it.** Chapter XIII draws Trema at 1.02 of the girls' standing height (1.75): 1.784 world units, in place of 2.23, and he stands where 39.4.1 stood him, on the beast's spot (x 1.05, z -5.8; wave 1 had brought him beside the girls at x 1.3, z -0.6, which Bailey withdrew on 2026-10-08 with "Yes, original spacing", the real sizes staying), so he reads 0.63 of a girl at 1600x900 (0.80 live; real at the same distance 1.02) and 0.65 on the phone (0.87 live). Both Paragon links keep the beast's spot and height. Presentation only: the battle engine's output is unchanged; the camera is the same pose at 1600x900 (on the phone the slice fit stands nearer than live's, the girls 154 px against 125, because this link no longer inherits Paragon's old fit: `docs/handoff/r3942-stage.md`).
+
+
+## 15. Research addendum (2026-10-08): how tall Paragon and Oversoul really stand (the HD model)
+
+**FFX-2 only** (rule 14: this is FFX-2's Paragon, and Oversoul Paragon, which is the same model, `m152`, link 1 of Chapter XIII). Asked because Chapter XIII drew Paragon at 3.1 against girls of 1.75 (1.77 times a girl, 1.12 on screen), a number that §14 above left alone ("Paragon and Oversoul are giants and are not in the table"), and Bailey took the giants options round of 2026-10-08 (option 3 on a desktop, option 4 on the phone: "go with your recommendations"). This section is the measurement behind Paragon's row in `src/data/ffx2/fiend-stature.ts`.
+
+**15.1 Method.** As 14.1: the HD files of FFX-2 build 25501027, the engine's size law, Paragon a beast with `C = 4`. Paragon and Oversoul Paragon are one model (`m152`), so one row serves both forms. `[single source: own measurement]`
+
+**15.2 The table** (game units; the girls' side is Chapter XIII's, **17.47**, as 14.2):
+
+| Fiend | Model | Raw mesh height | C | Height (raw x C) | Engine height E (a design height) | Over the girls |
+|---|---|---|---|---|---|---|
+| Paragon and Oversoul | `m152` | 23.573 | 4 | **94.29** (298 wide, 215 deep) | 90 | **5.40** |
+
+The stored engine height (90) is 5 percent under the mesh: high confidence. `[single source: own measurement]`
+
+**15.3 The caveat.** About 5 percent, one reader, one build; the default pose is spread (the beast stands crouched on all fours in our painting, which reads about as wide as it is tall).
+
+**15.4 Not found, and so not claimed.** The camera. The formation has Paragon at (25, 0, 0) and the girls at (-71, 0, 0), (-71, 0, 21) and (-71, 0, -21) in game units (`[datamined: build 25501027]`: 96 units, about ten world units, between them on one line, farther than the scene's 7 behind the girls' centre); the build keeps the scene's own spot (1.05, -5.8).
+
+**15.5 What the build does with it.** Chapter XIII link 1, FFX-2 only: Paragon stands at his **real height** on a desktop, 9.447 world units over the girls' 1.75 (5.40; he was 3.1), held by the colossus camera of `giants.ts` (option 3: 1.9 times as far and 2.4 higher): 4.24 times a girl on screen, 604 px tall at 1600x900, whole, with the girls 142 px of 279; and at **0.7** of it on the phone, 6.613 (2.98 on screen, the girls 83 px of 125). Link 2's Trema is not a giant and keeps wave 1's spot and height (the plan changes camera when the giant leaves the stage). The enemy-intent card stands clear of him. Presentation only.

@@ -122,8 +122,10 @@ export interface CameraPort {
    * fit a slice `slice` wide (0..1 of the frame). True when it moved the rig.
    * Optional and additive; without it the phone keeps the desktop rigs. `shared` (r3941-heights): read the figure at the party's shared height,
    * not the height the stage drew it (`SharedHeight.ts`), so the refit places the camera where it did before the heroes stood at their own.
+   * `giant` (r3942-stage wave 2 repair, FFX-2 only): a fit that holds one of the giants whole is its link's own: the next fit of the rig starts from the scene's own rig, whatever CHAPTER FRAMING did to
+   * the rig since (`FrameFit.LinkFits`, `BattleCamera.addRig`'s `continues`), so the fight after a giant is fitted as the first link of a chapter is.
    */
-  fitSlice?(rig: string, slice: number, subjects: ReadonlyArray<{ actor: ActorHandle; min: number; shared?: boolean }>, top?: number): boolean;
+  fitSlice?(rig: string, slice: number, subjects: ReadonlyArray<{ actor: ActorHandle; min: number; shared?: boolean; giant?: boolean }>, top?: number): boolean;
   /**
    * Register (or refresh) a rig that stands `t` (0..1) of the way from rig `from` to rig `to` (position, aim and lens) and answer its name; null
    * when either rig is missing. Optional and additive (release 39.1, B5): the FFX-2 boss reveal asks for the furthest push on the boss that still

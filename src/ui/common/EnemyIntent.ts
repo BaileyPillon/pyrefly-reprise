@@ -208,6 +208,13 @@ export interface EnemyIntentMountOptions {
    * the button; our extra moves.
    */
   padToggle?: { index: number; label: string };
+  /**
+   * The most height, in viewport px, the whole panel may take at this moment: the room a scene leaves it above the fiends' heads (FFX-2 Chapter VI,
+   * `SceneStaging.intentRoof`; the HUD works it out from the highest head and the band the slab keeps under). The body folds, as it does at its own cap
+   * ({@link MAX_HEIGHT_FRACTION}), until the panel fits, a few grid px at a time and never under {@link MIN_FOLDED_BODY}; its MORE row says what is hidden and a held
+   * key still lifts every cap. Omitted, or `null`: the body's own cap alone, as every other chapter has it.
+   */
+  maxHeight?: () => number | null;
 }
 
 /** Standard-gamepad button 3 (Triangle / Y); see `INTENT_HINT_ITEM`. */
@@ -237,6 +244,12 @@ const EDGE_MARGIN = 4;
  * 45 px of room at 1600x900 and 33 at 1280x720.
  */
 const MAX_HEIGHT_FRACTION = 0.3;
+
+/** What a scene's `maxHeight` folds the body by, in grid px at a time: the cap does not flicker with the camera's sway, nor the MORE row's count with it. */
+const FOLD_STEP = 4;
+
+/** The shortest the body folds to under a scene's `maxHeight`, in grid px: the enemy's name line, the move and a line of what it does. */
+export const MIN_FOLDED_BODY = 36;
 
 // ---------------------------------------------------------------------------
 // The E key, and the pause it collides with
@@ -294,6 +307,9 @@ export class EnemyIntentPanel {
   private lastPoint: { id: CombatantId; x: number; y: number } | null = null;
   /** Signature of the last render, so a per-frame tick does not re-write the DOM. */
   private lastSignature = '';
+  /** What the last fold to a scene's `maxHeight` was solved for, and the body cap (grid px) it settled on: {@link foldToFit}. */
+  private foldKey = '';
+  private foldCap = 0;
 
   constructor(opts: EnemyIntentOptions) {
     this.opts = opts;
@@ -517,6 +533,30 @@ export class EnemyIntentPanel {
   }
 
   /**
+   * Fold the body until the panel is no taller than `room` viewport px: the cap that makes it fit is read off the panel's own measured chrome (its padding, its
+   * MORE row once it shows), so one or two passes settle it. A step of {@link FOLD_STEP} grid px keeps it still while the camera sways; the floor is
+   * {@link MIN_FOLDED_BODY} (a room smaller than that is not obeyed: the slab would read as a strip). `scale` is the letterbox factor, `room` is in viewport px.
+   */
+  private foldToFit(room: number, scale: number, baseCap: number, key: string): void {
+    // Solved once for what it depends on (the room, the body's own cap, the text), then left standing: the layout runs every frame and the camera sways.
+    this.foldKey = key;
+    this.foldCap = baseCap;
+    for (let pass = 0; pass < 3; pass++) {
+      const panelH = this.panelEl.getBoundingClientRect().height;
+      if (panelH <= 0) { this.foldKey = ''; return; } // not laid out yet: solved again next frame
+      if (panelH <= room + 0.5) return;
+      const bodyH = this.bodyEl.getBoundingClientRect().height;
+      const step = FOLD_STEP * scale;
+      const want = Math.max(MIN_FOLDED_BODY * scale, Math.floor((bodyH - (panelH - room)) / step) * step);
+      if (want >= bodyH - 0.5) return;
+      this.foldCap = want / scale;
+      this.bodyEl.style.maxHeight = `${this.foldCap.toFixed(1)}px`;
+      this.bodyEl.classList.add('eint__body--clipped');
+      this.overflow.sync(this.bodyEl, this.foldCap, true, this.padConnected());
+    }
+  }
+
+  /**
    * Pin the slab over the enemy's head, then slide it clear of the chrome.
    *
    * Three steps, in this order, because each one depends on the last:
@@ -547,7 +587,11 @@ export class EnemyIntentPanel {
     // In the body's own unscaled px, because the panel's transform multiplies
     // it with everything else — and on the *body*, so the tail notch that hangs
     // below the panel is not clipped away. See MAX_HEIGHT_FRACTION.
-    const cap = (layer.height * MAX_HEIGHT_FRACTION) / scale;
+    const baseCap = (layer.height * MAX_HEIGHT_FRACTION) / scale;
+    // A scene's room above the fiends' heads (FFX-2 Chapter VI, `maxHeight`): the cap an earlier frame folded to stands while its room, its cap and its text do.
+    const room = this.visible && !this.overflow.expanded ? (opts.maxHeight?.() ?? null) : null;
+    const foldKey = room === null ? '' : `${Math.round(room / (FOLD_STEP * scale))}|${baseCap.toFixed(1)}|${this.lastSignature}`;
+    const cap = foldKey !== '' && foldKey === this.foldKey ? Math.min(baseCap, this.foldCap) : baseCap;
     const overflowing = this.bodyEl.scrollHeight > cap + 0.5;
     // PR-0010: held key/pad lifts the cap so the body reaches its natural
     // height; `cap` itself stays the collapsed value so `overflow.sync` keeps
@@ -555,6 +599,9 @@ export class EnemyIntentPanel {
     this.bodyEl.style.maxHeight = this.overflow.expanded ? 'none' : `${cap.toFixed(1)}px`;
     this.bodyEl.classList.toggle('eint__body--clipped', overflowing && !this.overflow.expanded);
     this.overflow.sync(this.bodyEl, cap, overflowing, this.padConnected());
+    // ...and the first frame of a new room, cap or text folds the body a little further, until the whole panel fits the room.
+    if (room !== null && foldKey !== this.foldKey) this.foldToFit(room, scale, baseCap, foldKey);
+    else if (room === null) this.foldKey = '';
 
     // Panel off, and the owner named a rail to park the chip on: nothing here
     // is anchored to the boss any more, so the projection and the dodge below

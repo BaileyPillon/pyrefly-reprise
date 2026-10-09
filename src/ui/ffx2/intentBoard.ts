@@ -1,4 +1,5 @@
 import type { BattleState, CombatantId } from '../../battle/common/types.ts';
+import { FFX2_GIANT_SHARE } from '../../data/ffx2/fiend-stature.ts';
 import {
   pickSlabWidth,
   placeSlab,
@@ -145,6 +146,18 @@ export function reticleBoxes(root: HTMLElement): IntentAvoidRect[] {
 
 export type ProjectFn = (id: CombatantId, anchor?: 'head' | 'chest' | 'feet') => { x: number; y: number } | null;
 
+/** A combatant's painted silhouette box on screen, viewport px (`TargetingPort.rect`). */
+export type PaintedRectFn = (id: CombatantId) => { x: number; y: number; w: number; h: number } | null;
+
+/**
+ * The giants of FFX-2 (r3942-stage wave 2; Bailey, 2026-10-08, "go with your recommendations": Bahamut, Paragon and Anima stand at their real size, three to four times a girl on
+ * screen): the combatants whose body the slab avoids as their whole painted silhouette. The head-to-feet estimate ({@link BODY_HALF_WIDTH}) is a box a quarter of a giant's width and a
+ * third of its height around the head point, which left the slab free to land on the rest of him: 20 percent of Bahamut's painting (his pick, option 3) and 35 percent of Anima's (her pick, option 4; 42 percent at her real size, option 3) in the options study.
+ * The slab is still soft against it (`placeSlab`, tiered): where a giant fills the frame it may still sit on him, covering the least it can, but where the frame has room beside him
+ * (the right of Bahamut's wing, the right of Anima's robe) it stands there. FFX-2 HUD only; the ids are this game's (`data/ffx2/fiend-stature.ts` `FFX2_GIANT_SHARE`).
+ */
+export const GIANT_BODY_RECT: ReadonlySet<string> = new Set(Object.keys(FFX2_GIANT_SHARE));
+
 /**
  * Every living fighter's body box, in viewport pixels.
  *
@@ -154,12 +167,18 @@ export type ProjectFn = (id: CombatantId, anchor?: 'head' | 'chest' | 'feet') =>
  * for the girls and deliberately narrow for a spread dragon: a box that
  * claimed Bahamut's whole wingspan would leave the slab nowhere to stand.
  */
-export function fighterBoxes(state: BattleState | null, project: ProjectFn): IntentAvoidRect[] {
+export function fighterBoxes(state: BattleState | null, project: ProjectFn, painted?: PaintedRectFn): IntentAvoidRect[] {
   if (!state) return [];
   const out: IntentAvoidRect[] = [];
   for (const id of Object.keys(state.combatants)) {
     const c = state.combatants[id];
     if (!c || c.hp <= 0) continue;
+    // r3942-stage wave 2 (FFX-2 only): a giant's body box is its painted silhouette, not the head-to-feet estimate (see `GIANT_BODY_RECT`).
+    const body = c.side !== 'party' && GIANT_BODY_RECT.has(id) ? painted?.(id) : null;
+    if (body && body.w > 0 && body.h > 0) {
+      out.push({ left: body.x, right: body.x + body.w, top: body.y, bottom: body.y + body.h, soft: true, party: false });
+      continue;
+    }
     const head = project(id, 'head');
     const feet = project(id, 'feet');
     if (!head || !feet) continue;
@@ -323,4 +342,35 @@ export function chooseSlabWidth(input: SlabSolveInput, sizes: { wide: SlabSize; 
   const sw = score(sizes.wide, false);
   const sn = score(sizes.narrow, true);
   return pickSlabWidth(current, sw, sn, sizes.wide.width * sizes.wide.height);
+}
+
+/**
+ * The y, in viewport px, of the highest living enemy's head: the **roof** a scene with `SceneStaging.intentRoof` hangs the intent slab under (Chapter VI, FFX-2 only;
+ * `FFX2BattleHud.intentHead`). Release 39.4's fiends stood at the heights of a boss and its 0.7 goons and the slab, hung over the acting one's head, cleared the
+ * others'; at their real sizes the far-back tall ones (Logos, Ormi) stand higher on the screen than a near, shorter acting one, and a slab hung over that one's head
+ * lay across theirs. Hanging it over the roof instead keeps it clear of every head it can clear. `null` with no state or no enemy projected.
+ */
+export function highestEnemyHead(state: BattleState | null, project: ProjectFn): number | null {
+  if (!state) return null;
+  let roof: number | null = null;
+  for (const id of state.enemyIds) {
+    const c = state.combatants[id];
+    if (!c || c.removed || c.flags.hidden || c.hp <= 0) continue;
+    const head = project(id, 'head');
+    if (head && (roof === null || head.y < roof)) roof = head.y;
+  }
+  return roof;
+}
+
+/**
+ * The most height, in viewport px, the intent slab may take under a scene's `intentRoof`: from the lowest top the placement solver allows it (`slabProblem`: the
+ * frame's edge margin, the room for its own `E HIDE` chip and the BATTLE HELP band above) down to `HEAD_GAP` over the roof. `EnemyIntentPanel` folds its body
+ * until the panel fits it (`EnemyIntentMountOptions.maxHeight`); it may come out smaller than the slab can be (the panel's own floor, `MIN_FOLDED_BODY`).
+ * `chipHeight` is the chip's laid-out height, 0 or unmeasured meaning the grid's 8 px; `bandTop` the viewport y the help band reserves down to (0 with BATTLE HELP off).
+ */
+export function intentRoom(input: { roof: number; layerTop: number; scale: number; chipHeight: number; bandTop: number }): number {
+  const { roof, layerTop, scale, bandTop } = input;
+  const chipRoom = (input.chipHeight || 8 * scale) + scale;
+  const minTop = layerTop + INTENT_EDGE_MARGIN * scale + chipRoom + Math.max(0, bandTop - layerTop);
+  return roof - INTENT_HEAD_GAP * scale - minTop;
 }

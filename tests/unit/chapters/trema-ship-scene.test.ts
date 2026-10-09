@@ -20,7 +20,6 @@ import {
   CLOISTER_BOSS_SPOT,
   CLOISTER_IDS,
   CLOISTER_LINK_SIDE_SPOT,
-  CLOISTER_TREMA_SPOT,
 } from '../../../src/scenes/cloister-100.ts';
 import {
   CLOISTER_LINK_RIG,
@@ -30,7 +29,6 @@ import {
   cloisterRigsFor,
 } from '../../../src/scenes/cloister-100-rigs.ts';
 import { CloisterLink, LINK_MS, LINK_TOTAL_MS, PYREFLY_GREEN, linkAt } from '../../../src/scenes/cloister-100-link.ts';
-import { FORWARD_FIEND_ADVISOR_CAP } from '../../../src/scenes/advisor-cap.ts';
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { HELD_MARK } from '../../../src/engine/BattlePresenterDepartures.ts';
 import { getChapter } from '../../../src/data/encounters.ts';
@@ -44,23 +42,22 @@ describe('Cloister 100 — tables', () => {
     expect(getChapter('ffx2-trema')?.sceneKey).toBe('via-infinito');
   });
 
-  it('three party slots in the lower left, the beast\'s spot far back and right of them, Trema beside them', () => {
+  it('three party slots in the lower left, the beast\'s spot far back and right of them, Trema on it at his real height', () => {
     expect(CLOISTER_100_SLOTS.party).toHaveLength(3);
     for (const p of CLOISTER_100_SLOTS.party) {
       expect(p[0]).toBeLessThan(CLOISTER_BOSS_SPOT[0]);
       expect(p[2]).toBeGreaterThan(CLOISTER_BOSS_SPOT[2]);
     }
     expect(CLOISTER_100_SLOTS.enemySpots?.[CLOISTER_IDS.paragon]).toEqual(CLOISTER_BOSS_SPOT);
-    // r3942-stage: Trema stands at his own spot, beside the girls (right of the party, nearer than the beast's spot), at his real height
-    expect(CLOISTER_100_SLOTS.enemySpots?.[CLOISTER_IDS.trema]).toEqual(CLOISTER_TREMA_SPOT);
-    expect(CLOISTER_TREMA_SPOT[0]).toBeGreaterThan(Math.max(...CLOISTER_100_SLOTS.party.map((p) => p[0])));
-    expect(CLOISTER_TREMA_SPOT[2]).toBeGreaterThan(CLOISTER_BOSS_SPOT[2]);
+    // r3942-stage, Bailey 2026-10-08 ("Yes, original spacing"): Trema stands where 39.4.1 stood him, on the beast's spot, far back (wave 1's own spot beside the girls is withdrawn), at his real height
+    expect(CLOISTER_100_SLOTS.enemySpots?.[CLOISTER_IDS.trema]).toEqual(CLOISTER_BOSS_SPOT);
+    expect(CLOISTER_100_SLOTS.enemySpots?.[CLOISTER_IDS.trema]).toEqual([1.05, 0, -5.8]);
     expect(CLOISTER_100_SLOTS.figureHeights?.[CLOISTER_IDS.trema]).toBe(CLOISTER_ACTOR_HEIGHTS.trema);
     // `data/ffx2/fiend-stature.ts`: 17.8 over the girls' 17.47 is 1.02 (research/ffx2-trema.md §14); it was INSTALLED.md "Sizes": 0.72 of Paragon (2.23)
     expect(CLOISTER_ACTOR_HEIGHTS.trema).toBe(1.784);
     expect(CLOISTER_ACTOR_HEIGHTS.trema / CLOISTER_ACTOR_HEIGHTS.party).toBeCloseTo(1.02, 2);
-    // the beast beside the move-advisor card's room: the scene caps the card (`scenes/advisor-cap.ts`)
-    expect(CLOISTER_100_SLOTS.advisorCap).toBe(FORWARD_FIEND_ADVISOR_CAP);
+    // the fiend is where it was on 39.4.1, well above the move-advisor card: the room names no cap (the card is as it was)
+    expect(CLOISTER_100_SLOTS.advisorCap).toBeUndefined();
   });
 
   it('every rig set has the four the contract needs, plus the link rig', () => {

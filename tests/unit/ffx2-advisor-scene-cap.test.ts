@@ -1,11 +1,14 @@
 // @vitest-environment jsdom
 /**
- * **A scene may cap the FFX-2 move-advisor card's height (Chapter VI, FFX-2 only; branch r3941-stage).**
+ * **A scene may cap the FFX-2 move-advisor card's height (the plumbing; FFX-2 only; branch r3941-stage, kept by r3941-spacing).**
  *
- * Bailey's "Option 3: bosses forward" (2026-10-07) stands every Syndicate fiend at its real size, nearer the party, and the nearest fiends' feet then reach the
- * band the move-advisor card hangs from (y 651 at its full height at 1600x900). `SceneStaging.advisorCap` is the scene's own cap on the card, in HUD grid px; the
- * card prints fewer lines and its top edge stays under their feet (`docs/handoff/r3941-stage.md`). Every decision starts from it (`FFX2BattleHud.resetAdvisorCap`),
- * and a scene that names none leaves the card as it always was.
+ * Release 39.4.1's "bosses forward" lane stood the Syndicate's feet in the band the move-advisor card hangs from (y 651 at its full height at 1600x900), and
+ * `SceneStaging.advisorCap` is the scene's own cap on the card, in HUD grid px: the card prints fewer lines and its top edge stays under the feet
+ * (`docs/handoff/r3941-stage.md`). Every decision starts from it (`FFX2BattleHud.resetAdvisorCap`), and a scene that names none leaves the card as it always was.
+ *
+ * **Chapter VI no longer names one** (Bailey, 2026-10-08, "Old spacing, real sizes": the fiends stand where 39.4 stood them, 40 px or more above the card at its
+ * full height, so there is nothing to cap, `docs/handoff/r3941-spacing.md`). The field, `stagingOf`'s copy of it and the HUD's reading of it stay: the
+ * wave-2 rooms (`r3942-stage`) name caps of their own, and a room that stood a fiend low would need it again.
  *
  * The scene -> HUD wiring is `BattleScreen` -> `createHud(game, field, engine, artNamespace, advisorCap)` -> `new FFX2BattleHud({ advisorCap })`.
  */
@@ -15,11 +18,6 @@ import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
 import { createHud } from '../../src/app/screens/BattleScreenWiring.ts';
 import { LEBLANC_LAST_ROOM_SLOTS } from '../../src/scenes/leblanc-last-room.ts';
-import { LEBLANC_ADVISOR_CAP } from '../../src/scenes/leblanc-staging.ts';
-import { FORWARD_FIEND_ADVISOR_CAP } from '../../src/scenes/advisor-cap.ts';
-import { CLOISTER_100_SLOTS } from '../../src/scenes/cloister-100.ts';
-import { DEN_OF_WOE_SLOTS } from '../../src/scenes/den-of-woe.ts';
-import { ROAD_TO_THE_FARPLANE_SLOTS } from '../../src/scenes/road-to-the-farplane.ts';
 import { stagingOf } from '../../src/scenes/types.ts';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
 
@@ -72,29 +70,17 @@ describe('SceneStaging.advisorCap, through to the FFX-2 HUD', () => {
   });
 });
 
-describe("only Chapter VI's room and the three rooms r3942-stage brought fiends forward in name a cap (FFX chapters and every other FFX-2 room are as they were)", () => {
-  it('the Last Room publishes LEBLANC_ADVISOR_CAP', () => {
-    expect(LEBLANC_LAST_ROOM_SLOTS.advisorCap).toBe(LEBLANC_ADVISOR_CAP);
-    expect(LEBLANC_ADVISOR_CAP).toBeGreaterThan(36); // `MIN_UNDER_ROOM`: under that the card is a strip of names
-    expect(LEBLANC_ADVISOR_CAP).toBeLessThan(104); // the stylesheet's own cap: a cap that is not lower is no cap
+describe('Chapter VI\'s room names no cap (r3941-spacing: the card is as 39.4 had it)', () => {
+  it('the Last Room publishes none', () => {
+    expect(LEBLANC_LAST_ROOM_SLOTS.advisorCap).toBeUndefined();
   });
 
-  it('r3942-stage: the Road to the Farplane, the Cloister and the Den of Woe name the shared cap, in their slots and in the scene they build', () => {
-    expect(FORWARD_FIEND_ADVISOR_CAP).toBeGreaterThan(36);
-    expect(FORWARD_FIEND_ADVISOR_CAP).toBeLessThan(104);
-    expect(ROAD_TO_THE_FARPLANE_SLOTS.advisorCap).toBe(FORWARD_FIEND_ADVISOR_CAP);
-    expect(CLOISTER_100_SLOTS.advisorCap).toBe(FORWARD_FIEND_ADVISOR_CAP);
-    expect(DEN_OF_WOE_SLOTS.advisorCap).toBe(FORWARD_FIEND_ADVISOR_CAP);
-    expect(FORWARD_FIEND_ADVISOR_CAP).toBeGreaterThan(LEBLANC_ADVISOR_CAP); // milder than Chapter VI's 46: its feet reach y 723, these rooms' y 690 at most
-  });
-
-  it('no other scene file sets advisorCap (Chapter XVI\'s Ixion stands high and takes none; every FFX scene none)', () => {
+  it('no scene file in this branch sets advisorCap: only the type and its copier name it', () => {
     const dir = join(here, '../../src/scenes');
     const users = readdirSync(dir)
       .filter((f) => f.endsWith('.ts'))
       .filter((f) => /advisorCap/.test(readFileSync(join(dir, f), 'utf8')))
       .sort();
-    // the type and its copier, the scene's staging and the room that reads it (Chapter VI), the shared cap and the three rooms that name it (r3942-stage)
-    expect(users).toEqual(['advisor-cap.ts', 'cloister-100.ts', 'den-of-woe.ts', 'leblanc-last-room.ts', 'leblanc-staging.ts', 'road-to-the-farplane.ts', 'types.ts']);
+    expect(users).toEqual(['types.ts']);
   });
 });

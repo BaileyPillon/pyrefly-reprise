@@ -1,5 +1,7 @@
 # r3941-stage: real sizes for the fiends, chapter by chapter (branch `r3941-stage`, from `origin/r394-int` 55db51dd)
 
+> **2026-10-08, in part withdrawn:** Chapter VI's *places* (the lane brought level with the girls, "Option 3: bosses forward") read as "right next to each other" on the live build 39.4.1, and Bailey picked "Old spacing, real sizes" instead: the fiends stand where 39.4 stood them, at the real sizes below, the advisor cap taken out of Chapter VI. **The sizes, the table and the method in this note stand; the lane, the spots and the cap described below do not**: read [r3941-spacing](r3941-spacing.md) for what is built now.
+
 Bailey, 2026-10-07: the characters look huge and the bosses look tiny. His pick from the Leblanc options sheet (`D:/Tools/pyrefly-scratch/2026-10-07/leblanc-camera/options-sheet.jpg`):
 **"Option 3: bosses forward"**: every fiend at its **real size** from the game's HD models, the fiends' lane brought **closer to the party**, the **camera, lens and rigs unchanged**.
 This note is the method and the per-chapter results. Chapter VI is done; the next chapters follow the same steps (the list at the end).
