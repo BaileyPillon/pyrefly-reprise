@@ -247,13 +247,17 @@ describe('AP/Sphere-Level eligibility follows who actually took a turn, not who 
  * `tests/unit/strategy-seymour-flux.test.ts`'s `KNOWN_LOSSES`), never a
  * hand-built fixture, so the row set is read off a genuine full-party wipe.
  *
+ * **2026-10-09 (re-parity AI-Seymour, FFX only):** Seymour Flux and the Mortiorchis follow the game's own scripts and the shipped
+ * line wins every one of seeds 1 to 500, so there is no documented loss left (`KNOWN_LOSSES` is empty). The wipe is now a party
+ * that only Defends (`runSeymourFlux(seed, true)`): still the real engine, the real build and a genuine full-party wipe.
+ *
  * **Case: FFX only.** The row set is `build.activeSlots` union reserve
  * members who acted (research/ffx-combat-core.md §10.1's AP rule, which is
  * an FFX switch/reserve mechanic); the FFX-2 branch a few tests up is
  * untouched and asserted separately.
  */
 describe('PR-0003: FFX results rows survive a real defeat and a real KO at the end', () => {
-  function runSeymourFlux(seed: number): BattleResult {
+  function runSeymourFlux(seed: number, defendOnly = false): BattleResult {
     const content = new FFXContentRegistry();
     content.addAbilities(ALL_ABILITIES);
     content.addItems(Object.values(ITEMS));
@@ -273,7 +277,7 @@ describe('PR-0003: FFX results rows survive a real defeat and a real KO at the e
       const d = engine.nextDecision();
       if (d.kind === 'battle-over') return d.result;
       if (d.kind === 'player-input') {
-        const cmd = intendedStrategy(d.actorId, d.commands, engine);
+        const cmd = defendOnly ? ({ kind: 'defend', targets: [] } as Command) : intendedStrategy(d.actorId, d.commands, engine);
         const row = d.commands.find((c) => c.command.kind === 'attack' && c.enabled);
         const fallback: Command = { kind: 'attack', targets: row?.validTargets[0] ? [row.validTargets[0]] : [] };
         engine.submit(cmd ?? fallback);
@@ -282,8 +286,8 @@ describe('PR-0003: FFX results rows survive a real defeat and a real KO at the e
     throw new Error(`seed ${seed} never reached battle-over within the decision budget`);
   }
 
-  it('a real Chapter 1 defeat (seed 1, a documented loss) still lists every member who started active', () => {
-    const result = runSeymourFlux(1);
+  it('a real Chapter 1 defeat (seed 1, a party that only Defends) still lists every member who started active', () => {
+    const result = runSeymourFlux(1, true);
     expect(result.outcome).toBe('defeat');
 
     const chapter = getChapter('seymour-flux');
