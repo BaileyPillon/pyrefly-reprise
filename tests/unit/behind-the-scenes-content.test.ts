@@ -157,10 +157,13 @@ describe('the facts, against the repository where it can answer', () => {
     expect((themes.match(/\*\*ElevenLabs\*\* \(Music/g) ?? []).length).toBe(FACTS.elevenLabsTracks);
   });
 
-  it.skipIf(!existsSync(resolve(REPO, 'public/art/manifest.json')))('counts the painted poses from the art manifest', () => {
+  // public/art is local, gitignored and shared between worktrees (a junction here), and it grows whenever
+  // Bailey's art picks are installed. The page states the count as of FACTS_AS_OF, so the check is a floor:
+  // the page may be behind the manifest, never ahead of it.
+  it.skipIf(!existsSync(resolve(REPO, 'public/art/manifest.json')))('never claims more painted poses than the art manifest holds', () => {
     const subjects = json('public/art/manifest.json').subjects as Record<string, { states: string[] }>;
     const poses = Object.values(subjects).reduce((n, s) => n + s.states.length, 0);
-    expect(poses).toBe(FACTS.poses);
+    expect(poses).toBeGreaterThanOrEqual(FACTS.poses);
   });
 
   it('is the critic’s real record: the first headline, the first scores and the latest scores come from its own reports', () => {
