@@ -133,8 +133,10 @@ describe("the attached records are the game's table", () => {
   });
 
   it('the ability counts the record table was built for', () => {
-    expect(ALL_ABILITIES).toHaveLength(454);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(451);
+    // 454 and 451 until re-parity AI lane C added the first-turn Summon dummies: Yojimbo's (0x4090) and one per Isaaru aeon
+    // (0x408c, 0x408b, 0x408f).
+    expect(ALL_ABILITIES).toHaveLength(458);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(455);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(3);
   });
 });

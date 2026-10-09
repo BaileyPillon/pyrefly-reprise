@@ -49,6 +49,9 @@
 import type { AbilityDef } from '../../../battle/common/types.ts';
 
 /** Ids, mirrored by `src/battle/ffx/ai/isaaru-rules.ts` (the tests pin them equal). */
+export const GROTHIA_SUMMON = 'grothia-summon';
+export const PTERYA_SUMMON = 'pterya-summon';
+export const SPATHI_SUMMON = 'spathi-summon';
 export const GROTHIA_ATTACK = 'grothia-attack';
 export const GROTHIA_ATTACK_YUNA = 'grothia-attack-yuna';
 export const GROTHIA_FIRA = 'grothia-fira';
@@ -59,6 +62,37 @@ export const PTERYA_SONIC_WINGS = 'pterya-sonic-wings';
 export const PTERYA_ENERGY_RAY = 'pterya-energy-ray';
 export const SPATHI_COUNTDOWN = 'spathi-countdown';
 export const SPATHI_MEGA_FLARE = 'spathi-mega-flare';
+
+/**
+ * The first turn of each aeon: "Summon", aimed at Isaaru (re-parity D-17, `research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` 4.3 to 4.5).
+ * No damage, one hit record, and no other change; the records are the game's (monster magic 1: 0x408C Grothia, 0x408B Pterya,
+ * 0x408F Spathi). Aimed at an ally so that the hit lands on Isaaru, the bystander, and not on the aeon itself.
+ */
+function summonRow(id: string): AbilityDef {
+  return {
+    id,
+    name: 'Summon',
+    game: 'ffx',
+    category: 'enemy',
+    mpCost: 0,
+    rank: 3, // the default of a command with no rank byte (note 1.4)
+    power: 0,
+    formula: 'none',
+    damageType: 'other',
+    element: ['none'],
+    targeting: 'single-ally',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [],
+    flags: [],
+    canMiss: false,
+    messageTemplate: '{user} uses {ability}',
+  };
+}
+
+export const grothiaSummon = summonRow(GROTHIA_SUMMON);
+export const pteryaSummon = summonRow(PTERYA_SUMMON);
+export const spathiSummon = summonRow(SPATHI_SUMMON);
 
 /**
  * Row **4:0**, "Attack Aeon": his attack on an aeon. Strength **DC 16**,
@@ -78,7 +112,7 @@ function attackAeon(id: string): AbilityDef {
     formula: 'strength',
     damageType: 'physical',
     element: ['none'],
-    targeting: 'random-enemy',
+    targeting: 'single-enemy', // the script picks the victim (a draw only with two or more standing) and aims the row
     hits: 1,
     statusEffects: [],
     removesStatuses: [],
@@ -109,7 +143,7 @@ export const grothiaAttackYuna: AbilityDef = {
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
-  targeting: 'random-enemy',
+  targeting: 'single-enemy', // the script picks the victim (a draw only with two or more standing) and aims the row
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
@@ -136,7 +170,7 @@ export const grothiaFira: AbilityDef = {
   formula: 'magic',
   damageType: 'magical',
   element: ['fire'],
-  targeting: 'random-enemy',
+  targeting: 'single-enemy', // the script picks the victim (a draw only with two or more standing) and aims the row
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
@@ -192,7 +226,7 @@ export const pteryaAttackYuna: AbilityDef = {
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
-  targeting: 'random-enemy',
+  targeting: 'single-enemy', // the script picks the victim (a draw only with two or more standing) and aims the row
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
@@ -218,7 +252,7 @@ export const pteryaSonicWings: AbilityDef = {
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
-  targeting: 'random-enemy',
+  targeting: 'single-enemy', // the script picks the victim (a draw only with two or more standing) and aims the row
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
@@ -310,6 +344,9 @@ export const spathiMegaFlare: AbilityDef = {
 
 /** Every row this file ships, keyed by id, for `src/data/ffx/index.ts`. */
 export const ISAARU_ABILITIES: Record<string, AbilityDef> = {
+  [grothiaSummon.id]: grothiaSummon,
+  [pteryaSummon.id]: pteryaSummon,
+  [spathiSummon.id]: spathiSummon,
   [grothiaAttack.id]: grothiaAttack,
   [grothiaAttackYuna.id]: grothiaAttackYuna,
   [grothiaFira.id]: grothiaFira,

@@ -112,6 +112,12 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * character the fayth revives acts next, and Yu Yevon casts Gravija on every turn after his first, on the front line and
  * himself. Both digests move (braskas-final-aeon#1 seven victories -> a defeat on link 1, #7 seven victories again); no other
  * chapter's digest moved.
+ * Chapters VIII, IX and XIV re-baselined 2026-10-09 by re-parity AI lane C ("game-script parity", FFX only): Evrae and Cid, Yojimbo
+ * and Isaaru's three aeons run the game's own scripts (research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md sections 2 to 4) through the
+ * same hit events. Evrae's counter is filled by the command's formula byte and his Haste starts under 10,666; Cid acts every 42
+ * ticks, not 36; Yojimbo's first turn is a Summon, his odds are the script's, Zanmato leaves the gauge at 2 and the +3 is a hit
+ * event; every aeon of the contest opens with a Summon and fills its gauge from every attack at Yuna; the aeon opens at CTB 0
+ * and the party one tick later. All six digests move and every outcome is still a victory; no other chapter's digest moved.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '28692f2c:defeat',
@@ -122,16 +128,16 @@ const GOLDEN: Record<string, string> = {
   'braskas-final-aeon#7': '4d03bcf:victory ecf9d5ca:victory 73095ebb:victory 7da3a6c6:victory 769c43e:victory 56db843f:victory 4a48b320:victory',
   'seymour-anima-macalania#1': '15ecc081:victory',
   'seymour-anima-macalania#7': '86868cbf:victory',
-  'evrae-airship#1': '14674509:victory',
-  'evrae-airship#7': '3c97dd63:victory',
-  'yojimbo-cavern#1': 'fce6b795:victory',
-  'yojimbo-cavern#7': 'c3a419df:victory',
+  'evrae-airship#1': 'f57a4639:victory',
+  'evrae-airship#7': '551512c6:victory',
+  'yojimbo-cavern#1': 'a8bfe256:victory',
+  'yojimbo-cavern#7': '1e3f39eb:victory',
   'seymour-natus#1': 'd4682a0e:victory',
   'seymour-natus#7': '2133d3d8:victory',
   'seymour-omnis#1': 'b7b53dbe:defeat',
   'seymour-omnis#7': '1a2a42df:victory',
-  'isaaru-via-purifico#1': 'd916c9d0:victory bc11f7e3:victory 42ea7beb:victory',
-  'isaaru-via-purifico#7': 'b073037f:victory 584e6881:victory e0f5e2d6:victory',
+  'isaaru-via-purifico#1': '8d821114:victory 6894473d:victory 57e66da:victory',
+  'isaaru-via-purifico#7': '70244c57:victory f901bf84:victory e9573bc6:victory',
 };
 
 describe('FFX engine goldens (every FFX chapter, the line, whole chain)', () => {
