@@ -71,7 +71,7 @@ reproduced here, only formulas, offsets, numbers and addresses.
    stratified subsets (at most ~280 KB a file) that its tests replay: `od_add.json` 1,233 vectors, `od_events.json` 412,
    `od_hp_change.json` 301, `od_misc.json` 1,007, `steal_item.json` 726, `steal_gil_bribe.json` 778, `drops_small.json` 1,481,
    `drops_rolls.json` 252, `drops_gear.json` 247, `aeon_stats.json` 429, `aeon_summon.json` 316, `aeon_party.json` 220,
-   `aeon_settle.json` 86, `aeon_unavailable.json` 598: 7,486 vectors. Each stored answer is the machine's own.
+   `aeon_settle.json` 86, `aeon_unavailable.json` 598: 8,086 vectors. Each stored answer is the machine's own.
 3. **Mutation check of the aeon kernels.** 81 single changes were made to the three aeon kernels, one at a time (a divisor, a
    clamp, a bit mask, a flag, an off-by-one, a swapped field, a removed line), and the two aeon test files run against each. All 81
    are caught. One survivor appeared in the first pass (the final counter reset of a Switch is redundant with the first one unless
