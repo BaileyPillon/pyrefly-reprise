@@ -8000,7 +8000,7 @@
   "bailey:2026-10-09-picks-ffx": {
    "words": "I'll go with all your recommendations. Scenes not screens.",
    "decision": "2026-10-09 picks (the driver records the D-row)",
-   "note": "Bailey, 2026-10-09 about 11:30 EDT, verbatim \"I'll go with all your recommendations. Scenes not screens.\", accepting the driver's recommendation \"install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.\": pick 1 of every slot on the Overnight Art Review page (https://claude.ai/artifact/GDvRiJ5HPUcmaaePUbjUoh) except RIKKU-DK-ko, RIKKU-SS-follow and RIKKU-SS-defend. 6 paintings of the FFX heroes (defend, one per hero; FFX only), each from a local ComfyUI candidate (Animagine XL 4.0 Opt, IP-Adapter on the approved idle, OpenPose), cut out by rembg isnet-anime, installed byte for byte as the candidate (sidecar, @2x, @3x, @4x beside it); Kimahri's defend carries the approved idle's broken horn stub (run 3's repaint of the same pick). Installed in the release art tree D:/pyrefly-r39-int/public/art by D:/Tools/pyrefly-scratch/2026-10-09/picks-install/install_picks.mjs; the 1x paintings are copied to D:/Tools/pyrefly-art-backup/approved/2026-10-09-picks and the private art repo current/.",
+   "note": "Bailey, 2026-10-09 about 11:30 EDT, verbatim \"I'll go with all your recommendations. Scenes not screens.\", accepting the driver's recommendation \"install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.\": pick 1 of every slot on the Overnight Art Review page (https://claude.ai/artifact/GDvRiJ5HPUcmaaePUbjUoh) except RIKKU-DK-ko, RIKKU-SS-follow and RIKKU-SS-defend. 6 paintings of the FFX heroes (defend, one per hero; FFX only), each from a local ComfyUI candidate (Animagine XL 4.0 Opt, IP-Adapter on the approved idle, OpenPose), cut out by rembg isnet-anime, installed byte for byte as the candidate (sidecar, @2x, @3x, @4x beside it); Kimahri's defend carries the approved idle's broken horn stub (run 3's repaint of the same pick). Installed in the release art tree D:/pyrefly-r39-int/public/art by D:/Tools/pyrefly-scratch/2026-10-09/picks-install/install_picks.mjs; the 1x paintings are copied to D:/Tools/pyrefly-art-backup/approved/2026-10-09-picks and the private art repo current/. HELD ON 2026-10-09 (the driver): YUNA-FFX-defend and RIKKU-FFX-defend stand taller than the ready painting they replace for Defend, so they are held out of release 39.5 (files in D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend); their pins here keep the hash as heldSha256 and carry the reason.",
    "public/art/characters/tidus/defend.png": {
     "sha256": "207ba99591ce3768018706e37fb1ea3cac736e2edcd129209f20dababc1ed80d",
     "mtime": "2026-10-09T15:41:04.615Z",
@@ -8022,12 +8022,16 @@
     "approved": "2026-10-09"
    },
    "public/art/characters/yuna/defend.png": {
-    "sha256": "a9cbfb00c833a8a37ce2a6fe762b78e1b84331fd228a79c8e87b523d5cb89dc5",
+    "held": "HELD out of release 39.5 by the driver on 2026-10-09: this Defend painting stands 1.64x Yuna's idle (1.55x her ready painting), so Defend would grow the figure mid-fight (the size jump CHK-026 flags); live plays the ready painting for Defend today and so does the game with this painting held. Files moved (not deleted) to D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/; sizing to be fixed with options in the next visual and feel pass.",
+    "heldSha256": "a9cbfb00c833a8a37ce2a6fe762b78e1b84331fd228a79c8e87b523d5cb89dc5",
+    "heldFiles": "D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/characters/yuna/ (defend.png, defend.json, defend@2x.png, defend@3x.png, defend@4x.png)",
     "mtime": "2026-10-09T15:41:04.768Z",
     "approved": "2026-10-09"
    },
    "public/art/characters/rikku/defend.png": {
-    "sha256": "6e67a769c32a7663ddb29e6be46f7445c97d794e18671598b94d4c0d2885e590",
+    "held": "HELD out of release 39.5 by the driver on 2026-10-09: this Defend painting stands 1.31x Rikku's idle (1.16x her ready painting), so Defend would grow the figure mid-fight (the size jump CHK-026 flags); live plays the ready painting for Defend today and so does the game with this painting held. Files moved (not deleted) to D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/; sizing to be fixed with options in the next visual and feel pass.",
+    "heldSha256": "6e67a769c32a7663ddb29e6be46f7445c97d794e18671598b94d4c0d2885e590",
+    "heldFiles": "D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/characters/rikku/ (defend.png, defend.json, defend@2x.png, defend@3x.png, defend@4x.png)",
     "mtime": "2026-10-09T15:41:04.800Z",
     "approved": "2026-10-09"
    }

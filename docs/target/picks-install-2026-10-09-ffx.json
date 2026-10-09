@@ -455,6 +455,14 @@
      "alpha_islands": 0
     },
     "seconds": 79.5
+   },
+   "held": {
+    "at": "2026-10-09",
+    "by": "the driver",
+    "reason": "HELD out of release 39.5 by the driver on 2026-10-09: this Defend painting stands 1.64x Yuna's idle (1.55x her ready painting), so Defend would grow the figure mid-fight (the size jump CHK-026 flags); live plays the ready painting for Defend today and so does the game with this painting held. Files moved (not deleted) to D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/; sizing to be fixed with options in the next visual and feel pass.",
+    "statureOfIdle": 1.638,
+    "statureVsReady": 1.548,
+    "filesNow": "D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/characters/yuna/ (defend.png, defend.json, defend@2x.png, defend@3x.png, defend@4x.png)"
    }
   },
   {
@@ -545,7 +553,26 @@
      "alpha_islands": 1
     },
     "seconds": 78.6
+   },
+   "held": {
+    "at": "2026-10-09",
+    "by": "the driver",
+    "reason": "HELD out of release 39.5 by the driver on 2026-10-09: this Defend painting stands 1.31x Rikku's idle (1.16x her ready painting), so Defend would grow the figure mid-fight (the size jump CHK-026 flags); live plays the ready painting for Defend today and so does the game with this painting held. Files moved (not deleted) to D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/; sizing to be fixed with options in the next visual and feel pass.",
+    "statureOfIdle": 1.314,
+    "statureVsReady": 1.158,
+    "filesNow": "D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/characters/rikku/ (defend.png, defend.json, defend@2x.png, defend@3x.png, defend@4x.png)"
    }
   }
- ]
+ ],
+ "held": {
+  "at": "2026-10-09",
+  "by": "the driver (message to the lane, 2026-10-09 evening): hold the oversized Defend paintings out of the release candidate",
+  "slots": [
+   "YUNA-FFX-defend",
+   "RIKKU-FFX-defend"
+  ],
+  "folder": "D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend",
+  "installedNow": 4,
+  "note": "Their rows above stay as the record of what was installed and moved; their pins in docs/target/approved-hashes.json keep the hash as heldSha256; docs/target/pose-measure.json marks their records skip, so the registration table has no row for them and the game plays the ready painting for Defend, as live does."
+ }
 }
