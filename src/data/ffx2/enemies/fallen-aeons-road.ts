@@ -24,6 +24,7 @@
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
 import { STANDARD_AILMENT_IMMUNITY, STAT_MOD_IMMUNITY_5, DEF_MDEF_MOD_IMMUNITY } from './vegnagun-shared.ts';
 import { sandy, cindy, mindy } from './magus-sisters.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 export const ROAD_SHIVA = 'ffx2-road-shiva';
 export const ROAD_SISTERS = 'ffx2-road-magus-sisters';
@@ -197,3 +198,6 @@ export const roadAnimaGroup: EnemyGroupDef = {
 };
 
 export const fallenAeonsGroups: readonly EnemyGroupDef[] = [roadShivaGroup, roadSistersGroup, roadAnimaGroup];
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [roadShivaGroup, roadSistersGroup, roadAnimaGroup]) attachMonsterRecords(group);

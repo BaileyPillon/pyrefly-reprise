@@ -25,16 +25,15 @@ import {
   REGEN_FRACTION,
   POISON_FRACTION,
   statLevel,
-  statusChanceLinear,
-  statusChanceQuartic,
-  statusChanceSextic,
+  hitProbability,
+  statusProbability,
   STATUS_TICK_INTERVAL_TICKS,
   TICKS_PER_DURATION_UNIT,
   ticksUntilStatusEvent,
 } from '../../src/battle/ffx2/index.ts';
 import type { EventDraft, Ffx2Unit } from '../../src/battle/ffx2/index.ts';
 import { bahamutSetup } from '../../src/battle/ffx2/fixtures.ts';
-import type { BattleEvent } from '../../src/battle/common/types.ts';
+import type { AbilityDef, BattleEvent } from '../../src/battle/common/types.ts';
 
 function unit(maxHp = 1000): Ffx2Unit {
   return {
@@ -205,26 +204,69 @@ describe('application rules', () => {
   });
 });
 
-describe('the status-infliction formulas [§2.6a]', () => {
-  it('Status 1 is linear in level and power', () => {
-    expect(statusChanceLinear(20, 100, 24, 0)).toBe(80);
-    expect(statusChanceLinear(20, 100, 24, 50)).toBe(30);
-    expect(statusChanceLinear(20, 0, 99, 0)).toBe(0);
+describe('the status-infliction rule [§2.6a], the game’s own (re-parity W3; reason "game-code parity")', () => {
+  // The engine used to compute three hand-written percentages (statusChanceLinear / Quartic / Sextic). The game has one
+  // landing rule for every rider (kernel/statusTypes.ts statusLands: a chance byte of 255 always lands, then a resist of
+  // 255 never does, 254 always, else the roll 0..100 is below chance + 5 * (attacker level - target level) - resist), and
+  // the instant Death / Petrify / Eject / Zantetsu rows are decided by an accuracy formula (3 to 5 and 7) first.
+  it('a rider lands when the roll (0 to 100) is below chance + 5 per level of lead - resist', () => {
+    expect(statusProbability(100, 0, 20, 24)).toBeCloseTo(80 / 101, 9); // 100 - 20 levels of deficit
+    expect(statusProbability(100, 50, 20, 24)).toBeCloseTo(30 / 101, 9);
+    expect(statusProbability(100, 0, 99, 1)).toBe(1); // a lead of 98 levels: certain
+    expect(statusProbability(20, 0, 1, 99)).toBe(0); // a deficit of 98 levels: impossible
+    expect(statusProbability(0, 0, 99, 1)).toBe(0); // a chance byte of 0 is not a status at all
   });
 
-  it('Status 2’s (resist+5)^2 denominator is why every boss shrugs off Death', () => {
-    // Same caster, same power, same target level — only the resistance moves.
-    // SinirothX prints exactly this kind of figure: `Resistant- Eject (12)`.
-    const noResist = statusChanceQuartic(50, 5, 57, 0);
-    const resist12 = statusChanceQuartic(50, 5, 57, 12);
-    expect(noResist).toBeGreaterThan(50);
-    expect(resist12).toBeLessThan(10);
-    expect(statusChanceQuartic(50, 5, 57, 255)).toBe(0);
+  it('255 beats a resist of 255, 254 does not, and 100 still fails one roll in 101', () => {
+    expect(statusProbability(255, 255, 1, 99)).toBe(1);
+    expect(statusProbability(254, 255, 99, 1)).toBe(0);
+    expect(statusProbability(254, 254, 1, 99)).toBe(1);
+    expect(statusProbability(100, 0, 24, 24)).toBeCloseTo(100 / 101, 9);
   });
 
-  it('Status 3 (Zantetsu) collapses against a resistance of 255', () => {
-    expect(statusChanceSextic(50, 57, 255)).toBe(0);
-    expect(statusChanceSextic(50, 20, 0)).toBeGreaterThan(0);
+  /** An instant-effect row: accuracy formula `accuracyFormula` (3 Eject, 4 Death, 5 Petrify, 7 Zantetsu), power `power`, not a spell. */
+  function instant(accuracyFormula: number, power: number): AbilityDef {
+    return {
+      id: 'x2-test-instant', name: 'Instant', game: 'ffx2', category: 'skill', mpCost: 0, power: 0, formula: 'none',
+      damageType: 'other', element: [], targeting: 'single-enemy', hits: 1, statusEffects: [], removesStatuses: [], flags: [],
+      ffx2Record: { id: 0x3087, category: 9, flagsTarget: 0x433, flagsMisc: 0x6 | (accuracyFormula << 3), flagsDamage: 0x0, damageClass: 0, formula: 0, critByte: 0, accuracy: 0, power, hits: 1, shatter: 0, element: 0, killer: 0, status1: { 0: 254 } },
+    };
+  }
+
+  it('Death’s accuracy formula (4) is why every boss shrugs off Death: (resist+5)^2 in the denominator', () => {
+    // Same caster, same power, same target level — only the resistance moves. SinirothX prints exactly this kind of
+    // figure: `Resistant- Eject (12)`. Level 50 against 57, power 5, over the 128 values of (draw & 0x7f).
+    const user = unit();
+    user.level = 50;
+    const target = (resist: number): Ffx2Unit => {
+      const t = unit();
+      t.side = 'enemy';
+      t.level = 57;
+      if (resist > 0) t.immunities['ko'] = resist;
+      return t;
+    };
+    const death = instant(4, 5);
+    expect(hitProbability(user, target(0), death)).toBeGreaterThan(0.5);
+    expect(hitProbability(user, target(12), death)).toBeLessThan(0.1);
+    expect(hitProbability(user, target(255), death)).toBe(0);
+  });
+
+  it('Zantetsu (accuracy formula 7, level to the sixth power) collapses against a resist of 255', () => {
+    const user = unit();
+    user.level = 50;
+    const target = (zantetsu: number, level: number): Ffx2Unit => {
+      const t = unit();
+      t.side = 'enemy';
+      t.level = level;
+      t.enemy = {
+        aiScriptId: '', formIndex: 0, forms: [], rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 0, drops: [] },
+        ffx2Record: { row: 0, table: 1, acc: 95, resist1: {}, resist2: {}, special: 0, species: 0, zantetsu, stealByte: 0, stealGil: 0, steal: [0, 0, 0, 0], bribe: [0, 0, 0, 0] },
+      };
+      return t;
+    };
+    const zantetsu = instant(7, 0);
+    expect(hitProbability(user, target(255, 57), zantetsu)).toBeLessThan(0.01);
+    expect(hitProbability(user, target(0, 20), zantetsu)).toBe(1);
   });
 });
 

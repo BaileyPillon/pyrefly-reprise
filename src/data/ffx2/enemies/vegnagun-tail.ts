@@ -8,6 +8,7 @@
 
 import type { EnemyGroupDef } from '../../../battle/common/types.ts';
 import { STANDARD_AILMENT_IMMUNITY, STAT_MOD_IMMUNITY_5 } from './vegnagun-shared.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 export const vegnagunTailGroup: EnemyGroupDef = {
   id: 'vegnagun-tail',
@@ -65,5 +66,8 @@ export const vegnagunTailGroup: EnemyGroupDef = {
   ],
   musicCues: [{ at: 'start', track: 'boss-vegnagun', fadeMs: 600 }],
 };
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [vegnagunTailGroup]) attachMonsterRecords(group);
 
 export default vegnagunTailGroup;

@@ -73,7 +73,7 @@ function enemyStats(partial: Partial<StatBlock>): StatBlock {
     agi: 50,
     luck: 1,
     eva: 0,
-    acc: 0,
+    acc: 95, // every monster row of the seven chapters carries ACC 95 (research/re-ffx2-commands.md §7); a plain Attack reads it
     maxHp: 100,
     maxMp: 0,
     ...partial,
@@ -127,7 +127,7 @@ export function bahamutEnemy(): EnemyDef {
       agi: 86,
       luck: 3,
       eva: 0,
-      acc: 0,
+      acc: 95, // the monster row's ACC (research/re-ffx2-commands.md §7); the research table prints no Accuracy
       maxHp: 8400,
       maxMp: 9999,
     },
@@ -181,7 +181,7 @@ export function aiUnit(id: string, side: 'party' | 'enemy', maxHp = 1000, slot =
     spriteKey: id,
     stats: {
       hp: maxHp, mp: 999, str: 50, def: 30, mag: 40, mdef: 30,
-      agi: 40, luck: 3, eva: 0, acc: 0, maxHp, maxMp: 999,
+      agi: 40, luck: 3, eva: 0, acc: 95, maxHp, maxMp: 999, // ACC 95: the monster rows' value, a placeholder for a girl
     },
     hp: maxHp,
     mp: 999,

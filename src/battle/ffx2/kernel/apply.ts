@@ -4,8 +4,11 @@
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69): the HP
  * application 0x61b750 (the older copy: 0x61b770), the MP application 0x61b830 (0x61b850), the per-step
  * character update 0x643d80 (0x643db0) and the test it calls, 0x631300 (0x631320). Spec:
- * `research/re-ffx2-damage.md` section 4. Not wired into the engine: `../chain.ts` keeps its own count and a
- * time window; the game keeps a byte counter on the target and resets it when the target's hit reaction ends.
+ * `research/re-ffx2-damage.md` section 4. The engine's `../chain.ts` keeps the byte counter this way (read before
+ * the hit, raised by one when a positive HP number lands, capped at 99; `chainAdjusted` is the multiplier the
+ * pipeline uses). What it cannot keep is the reset: the game clears the counter when the target's hit reaction
+ * ends, and the engine has no hit-reaction state, so a 2 s window (3 s after a critical) stands in for it
+ * (`docs/handoff/re-parity-w3.md`, open items).
  *
  * THE CHAIN. The counter is a byte on the TARGET (Chr+0x5ad). Applying a positive HP number to a character
  * adds 1 to it (stopping at 99) and keeps the best value seen in Chr+0x5ae. The damage orchestrator reads the

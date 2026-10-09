@@ -123,13 +123,18 @@ describe('IC-1: an immune hit and the chain (unsourced, §9.2): a named switch, 
     expect(girl.chainWindowTicks).toBe(0);
   });
 
-  it('switched off (the engine before D-242): an immune hit still registers', () => {
+  // Re-parity W3 (FFX-2 only; reason "game-code parity"). The switch is no longer read. The game's chain counter is a byte on
+  // the target that rises only when a POSITIVE HP number is applied to it (`kernel/apply.ts applyHpDamage`, research/
+  // re-ffx2-damage.md §4), so an immune hit (zero damage) can never open or extend a chain: the "registers" side of IC-1
+  // has no counterpart in the exe. D-242 shipped the same answer; the option stays so callers compile, and this test pins
+  // that setting it to `false` changes nothing.
+  it('the option is dead: switched off, an immune hit still opens no window (the game raises the chain on a positive HP number only)', () => {
     const { user, girl } = invincibleGirl();
     const { ctx, events } = ctxFor([user, girl], { immuneHitsSkipChain: false });
     resolveAbility(ctx, user, ability('x2-shared-ultima'), []);
     expect(events.some((e) => e.type === 'miss' && (e as { reason?: string }).reason === 'immune')).toBe(true);
-    expect(events.some((e) => e.type === 'chain')).toBe(true);
-    expect(girl.chainWindowTicks).toBeGreaterThan(0);
+    expect(events.some((e) => e.type === 'chain')).toBe(false);
+    expect(girl.chainWindowTicks).toBe(0);
   });
 
   it('switched on: an immune hit opens no window and emits no chain; a damaging hit still does', () => {
@@ -148,7 +153,7 @@ describe('IC-1: an immune hit and the chain (unsourced, §9.2): a named switch, 
     expect(girl.chainWindowTicks).toBeGreaterThan(0);
   });
 
-  it('switched on, a hit landing inside an open window still counts up the chain (the peek matches registerHit)', () => {
+  it('a hit landing inside an open window counts up the chain: the event carries the counter the hit read, the target the counter after it', () => {
     const user = aiUnit('nooj', 'enemy', 50000, 0);
     const girl = aiUnit('yuna', 'party', 50000, 0);
     const a = ctxFor([user, girl], { immuneHitsSkipChain: true });
@@ -156,8 +161,8 @@ describe('IC-1: an immune hit and the chain (unsourced, §9.2): a named switch, 
     const b = ctxFor([user, girl], { immuneHitsSkipChain: true });
     resolveAbility(b.ctx, user, ability('x2-shared-ultima'), []);
     const chain = b.events.find((e) => e.type === 'chain') as { count: number } | undefined;
-    expect(chain?.count).toBe(1);
-    expect(girl.chainCount).toBe(1);
+    expect(chain?.count).toBe(1); // the second hit read a counter of 1 (x29/20)
+    expect(girl.chainCount).toBe(2); // two landed hits: the game's byte after the second (`bumpChain`)
   });
 });
 

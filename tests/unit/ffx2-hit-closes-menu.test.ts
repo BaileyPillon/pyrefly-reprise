@@ -217,15 +217,14 @@ describe('closesOpenMenu: what counts as a hit (our reading, preflight §3)', ()
 describe('zero decision time is untouched (every golden and D = 0 bench)', () => {
   // Pinned from the build before this change: the 40-seed bench's D = 0 aggregate hashes were
   // identical before and after (preflight §7), so these per-seed hashes are the pre-change logs.
+  // **Re-pinned 2026-10-09 for re-parity W3 (FFX-2 only; reason "game-code parity").** The hit, critical, damage, status and theft
+  // kernels now decide every hit, in the game's draw order, so every D = 0 log moved (all nine are still victories and no menu is
+  // closed). Chapters IV and V equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 again and Chapter VI equals
+  // `chapters/den-of-woe-carry.test.ts` ch6. The old hashes are in git at 029d49c7 (Chapters V and VI earlier: ea05f877, PR-0106).
   const PINNED = [
-    ['373c0af61dfb8aae', 'd0e49a7271c07e2b', '802486af811c9d6b'],
-    // Chapter V all three and Chapter VI seed 3 re-pinned 2026-09-26 for IC-2 (a target KO'd inside an
-    // all-target action is skipped, not wrapped) and Acta Est Fabula's target (the Redoubts only);
-    // `ffx2-atb-golden.test.ts` has the measurement. Old hashes in git at ea05f877.
-    ['7a91c483c3dd8d2c', '054c5f01b9f23ffe', '678d9b991119fa5a'],
-    // Chapter VI re-pinned 2026-09-27 for PR-0106 (D-242, FFX-2 only): Leblanc's SinirothX script (failsafe
-    // once, turn 5 Fan Slap) is the default. Was 0aadde1f8d3aff80 / 995cb5ec3f5834e0 / d86662749c9fb7e1.
-    ['ff75b7a41d90dd0d', '8a604a6a1de93b29', 'edaa14f94ca3e923'],
+    ['e4b265695a0e944c', '06a563cf00381651', '56bcb7393bf9332b'],
+    ['88a170d44b71a764', 'c93b226ef0d2fd71', '6bda191adef38912'],
+    ['ad3e5b13a4b416a2', 'ea6f77082eed6c19', 'a8449e5542467682'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {

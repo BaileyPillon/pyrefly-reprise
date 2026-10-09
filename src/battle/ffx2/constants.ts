@@ -192,74 +192,16 @@ export const AUTO_LIFE_REVIVE_FRACTION = 0.25;
 export const STAT_STACK_MAX = 10;
 
 // ---------------------------------------------------------------------------
-// Damage pipeline (§2.1, §2.4)
+// Damage pipeline and accuracy (§2.1 to §2.6) — moved to the kernels
 // ---------------------------------------------------------------------------
 
-/** Step 7 randomiser: `prev * rand(240..271) / 256`. §2.1 `[verified: 2 sources]` */
-export const RANDOM_MIN = 240;
-export const RANDOM_MAX = 271;
-export const RANDOM_DIVISOR = 256;
-
-/** Step 3 defense term numerator: `(270 - Def) / 255`. §2.1 */
-export const DEFENSE_NUMERATOR = 270;
-export const DEFENSE_DIVISOR = 255;
-
-/** Steps 4/5 Up-Down denominator: `(12 +/- level) / 12`. §2.1 */
-export const UPDOWN_DIVISOR = 12;
-
-/** Step 9 critical multiplier. §2.5 `[verified: 2 sources]` */
-export const CRIT_MULTIPLIER = 2;
-
-/** Step 10 — the attacker is Berserked. **x1.25 in X-2, not FFX's x1.5.** §2.2 */
-export const BERSERK_MULTIPLIER = 1.25;
-
-/** Step 11 back attack. Not reachable in our scripted boss fights. §2.5 */
-export const BACK_ATTACK_MULTIPLIER = 2;
-
-/** Step 15: player Black/White magic cast on *all* targets. §2.1 */
-export const MULTI_TARGET_MULTIPLIER = 0.5;
-
-/**
- * Step 15 is scoped to the *player's* spell categories in the source. If a
- * future decompile shows enemy party-wide magic is halved too, flip this and
- * double the Mega Flare constant to 34 [ffx2-bahamut §2.3].
+/*
+ * Re-parity W3 (FFX-2 only): the damage flowchart's and the hit check's constants (the randomiser 240..271 / 256, the defense term
+ * (270 - Def) / 255, the Up/Down 12ths, the critical x2, Berserk x5/4, Protect and Shell halves, the all-target 1/2, the 9999 snap
+ * and the caps, the back attack x2, the 64 / 128 / 16 / 1024 divisors, Darkness /4 and the 10 / 10 / 5 points of ACCU, EVA and LUCK stages) are the
+ * kernels' own integer operations now (`kernel/damage.ts`, `pipeline.ts`, `settle.ts`, `hit.ts`, `crit.ts`), proven against
+ * the exe; the hand-written float chain that read these names is gone.
  */
-export const ENEMY_MULTI_TARGET_MAGIC_IS_HALVED = false;
-
-/** Steps 16. Protect / Shell each halve their reducible class. §2.1 */
-export const PROTECT_MULTIPLIER = 0.5;
-export const SHELL_MULTIPLIER = 0.5;
-
-/** Step 18: the 9999-damage status (Cat Nip) floors any 1..9998 to 9999. §2.1 */
-export const DAMAGE_9999 = 9999;
-
-/** Step 19 caps. §2.4 `[verified: 2 sources]` */
-export const DAMAGE_CAP = 9999;
-export const DAMAGE_CAP_BROKEN = 99999;
-
-/** Step 1 magic base uses `Lv * 2 + Mag`; the constant lands at step 2. §2.1 */
-export const MAGIC_CONSTANT_DIVISOR = 64;
-export const MAGIC_RECOVERY_CONSTANT_DIVISOR = 128;
-
-/** Step 6 physical / special-magic constant: `prev * C / 16`. §2.1 */
-export const PHYSICAL_CONSTANT_DIVISOR = 16;
-
-/** Step 1 physical/special-magic base divisor: `(Lv + Str) * Lv * Str / 1024`. §2.1 */
-export const BASE_CUBIC_DIVISOR = 1024;
-
-// ---------------------------------------------------------------------------
-// Accuracy (§2.6)
-// ---------------------------------------------------------------------------
-
-/** Darkness divides Accuracy by 4 — it does not subtract. §2.6 `[single source]` */
-export const DARKNESS_ACCURACY_DIVISOR = 4;
-
-/** ACCU / EVA Up-Down are worth flat points in the hit check. §2.8 `[verified: 2 sources]` */
-export const ACCU_POINTS_PER_LEVEL = 10;
-export const EVA_POINTS_PER_LEVEL = 10;
-
-/** LUCK Up-Down is worth 5 flat points in the hit check. §2.8 */
-export const LUCK_POINTS_PER_LEVEL = 5;
 
 // ---------------------------------------------------------------------------
 // Encounter-specific
@@ -275,24 +217,11 @@ export const MEGA_FLARE_CONSTANT = 24;
 export const ENEMY_ATTACK_CONSTANT = 16;
 
 /**
- * Accuracy an enemy action uses when the enemy's own Accuracy stat is 0.
- *
- * **Recorded conflict, resolved here.** [ffx2-bahamut §1.1] establishes that
- * Accuracy is genuinely *absent* from the Bevelle Bahamut's record and should
- * be implemented as 0 — then quotes a superseded, Luck-blind hit model
- * (`0.90 + (acc - eva)/200`) to derive an 80–89% band. §2.6 of the core doc
- * later *decoded* the real equation, and it is a flat additive points race that
- * consumes **Luck on both sides**. Under the decoded equation an enemy at
- * Accuracy 0 literally never connects, which contradicts every description of
- * the fight, so enemy actions get a baseline instead.
- *
- * 104 is the value that reproduces the dossier's own Gunner row exactly
- * (`104 + 3 luck - (4 eva + 15 luck) = 88%`). The Thief comes out dodgier than
- * the dossier's Luck-blind estimate because her Luck 26 counts — which is the
- * dossier's own design read ("the only dressphere that meaningfully dodges
- * him"), just with more teeth. `[estimate]`
+ * (Removed in re-parity W3.) `ENEMY_BASE_ACCURACY = 104` was an `[estimate]` the engine used for an enemy whose Accuracy stat
+ * was 0 because the FAQs print none for Bahamut (ffx2-bahamut §1.1). The game's own monster rows carry it: every monster of
+ * the seven chapters has ACC 95 (`src/data/ffx2/monster-records/`, `research/re-ffx2-commands.md` §7), and accuracy formula 2
+ * (the plain Attack of every monster) reads that stat in the race of `kernel/hit.ts`. Nothing reads a baseline any more.
  */
-export const ENEMY_BASE_ACCURACY = 104;
 
 /**
  * The Vegnagun head's cannon fail clock, counted in combined resolved turns of

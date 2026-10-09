@@ -21,6 +21,7 @@
 
 import type { EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
 import { CLOISTER_BOSS_IMMUNITY, paragon } from './paragon.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 export const CLOISTER_PARAGON = 'ffx2-cloister-paragon';
 export const CLOISTER_TREMA = 'ffx2-cloister-trema';
@@ -131,3 +132,6 @@ export const cloisterTremaGroup: EnemyGroupDef = {
 };
 
 export const tremaGroups: readonly EnemyGroupDef[] = [cloisterParagonGroup, cloisterTremaGroup];
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [cloisterParagonGroup, cloisterTremaGroup]) attachMonsterRecords(group);

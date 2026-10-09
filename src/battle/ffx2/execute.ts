@@ -32,7 +32,6 @@ import type {
 } from './internal.ts';
 import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { performSpherechange } from './spherechange.ts';
-import { resolveTheft } from './steal.ts';
 import { attachedResult, hitsFromOutcome, requestLayout, rollDefault } from './minigames.ts';
 import { shapeLadyLuckSpin } from './reels.ts';
 import { beginCharge, beginRecovery, chargeTicksFor, extraRecoveryTicks } from './gauges.ts';
@@ -278,21 +277,14 @@ export function performCommand(
   if (actor.side === 'party') env.state.flags['lastAttackClass'] = attackClass(fired);
   performed.set(actor, ability.id); // `AiScript.onPartyAction` (engine-internal, not state)
 
-  // Step 15's halving is scoped to the *player's* Black/White Magic cast on
-  // all — enemy party-wide moves are not halved. §2.1
-  const multiTarget =
-    actor.side === 'party' &&
-    (fired.category === 'blackmagic' || fired.category === 'whitemagic') &&
-    (fired.targeting === 'all-enemies' || fired.targeting === 'all-allies');
-
-  // Steal and Pilfer Gil are thefts, not hits (`steal.ts`); everything else resolves normally.
-  const theft = { units: env.units, state: env.state, rng: env.rng, emit: (e: EventDraft) => env.emit(e), ...(env.items ? { items: env.items } : {}) };
-  if (!resolveTheft(theft, actor, fired, targets)) {
-    resolveAbility(env.resolveCtx(), actor, fired, targets, {
-      multiTarget,
-      ...(hits !== null ? { hitsOverride: hits } : {}),
-    });
-  }
+  // The all-target halving (`ActionRec+0x27`) is the *player's* choice of "all" on a command that can target all; an
+  // enemy's scripted multi-target move is never halved (`resolve-strike.ts`). Steal, Pilfer Gil and Bribe run inside
+  // the strike (`steal.ts`), after the hit determination, like every other command.
+  const gilSpent = 'gilSpent' in command ? command.gilSpent : undefined;
+  resolveAbility(env.resolveCtx(), actor, fired, targets, {
+    ...(hits !== null ? { hitsOverride: hits } : {}),
+    ...(gilSpent !== undefined ? { gilSpent } : {}),
+  });
 
   const recoveryValue = ability.flags.includes('2xrt')
     ? ATB_DOUBLE_RECOVERY_VALUE

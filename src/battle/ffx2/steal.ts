@@ -1,69 +1,43 @@
 /**
- * Steal and Pilfer Gil — the Thief's two theft commands.
+ * Steal, Pilfer Gil and Bribe — the engine side of the theft kernels (re-parity W3; **FFX-2 only** [AGENTS.md hard
+ * rule 14]: FFX's Steal is a different roll with a halving counter, `battle/ffx/steal.ts`).
  *
- * **FFX-2 only** [AGENTS.md hard rule 14]. FFX's Steal is a different roll with
- * a halving counter (`battle/ffx/steal.ts`); nothing here is shared with it.
+ * The rolls and the arithmetic are `kernel/steal.ts` (`stealItem`, `stealGil`, `bribeReward`), proven against the exe;
+ * this module is what the engine does with their answers: the stolen item goes straight into the party inventory
+ * (`inventory:<id>` flags, the convention `setup.ts` and `BattleScreenSetup.carryInventory` already use, so an Act I
+ * steal is still in the bag for Act III), stolen gil accumulates in `flags.stolenGil` (which `results.ts` adds to the
+ * battle's gil), and a line of text says what happened. The three run INSIDE the damage strike
+ * (`resolve-strike.ts`), after the status rolls, exactly where `pp_dmg_calc_target` calls them, so a Steal command
+ * is hit-determined first like any other command and a missed one steals nothing.
  *
- * Why this file exists: Chapter 6 (live since release 09) gives Rikku
- * `x2-thief-steal` and `x2-thief-pilfer-gil`, and until now neither did
- * anything. Run on the real engine, Steal emitted `action-start` then
- * `action-end` with nothing between (the `formula: 'none'` branch of
- * `resolve.ts` rolled a hit, a crit and a randomiser, and had no rider to
- * apply), and Pilfer Gil emitted a 0-damage hit that also opened a chain
- * (`formula: 'gil'` fell through to the damage pipeline). No item and no gil
- * ever changed hands (docs/plans/questions-for-bailey-2026-09-23.md Q5).
+ * What the game says (`research/re-ffx2-hit-status.md` section 5):
  *
- * The sourced rules:
- *
- * - **Steal.** Success is `enemy steal byte / 255`; a success takes the rare
- *   slot 12.5 % of the time (1 in 8) and the common slot otherwise
- *   [`ffx2-bahamut.md` §1.6, verified: 2 sources — the byte and the split are
- *   forced by Jegged's published 43.9 % / 6.3 %]. **One successful steal per
- *   enemy per battle** [ffx2-combat-core §3.2; FF Wiki *Steal* rev 4035497,
- *   §8.3: "A successful steal can be performed once on an enemy"]. Sticky
- *   Fingers skips the success roll, Master Thief forces the rare slot
- *   (§3.2 rows, `extra.stealAttempt` in `data/ffx2/abilities/thief.ts`).
- * - **Pilfer Gil.** Takes the enemy's own stolen-gil figure, once per enemy
- *   [§3.2 "steal gil; once per enemy"; §8.3, SinirothX "Stolen Gil: [Gil you
- *   can steal from monster]"]. It is an `ACT` gil theft, not an attack: no
- *   source gives it damage, so it deals none and opens no chain. No source
- *   prints a success roll for it either, so it always takes the figure.
- * - The **Oversoul reset** both rules mention has nothing to reset here: no
- *   enemy in this project Oversouls.
- *
- * A stolen item goes straight into the party inventory (`inventory:<id>`
- * flags, the convention `setup.ts` and `BattleScreenSetup.carryInventory`
- * already use), so an Act I steal is still in the bag for Act III. Stolen gil
- * accumulates in `flags.stolenGil`, which `results.ts` adds to the battle's gil.
- *
- * RNG: only a Steal that reaches its roll draws — one draw for success, one for
- * the slot. Pilfer Gil never draws. No existing replay (chapters 4 and 5 have
- * no Thief ability learned) moves.
+ * - **Steal.** One draw from fixed stream 10 against the target's steal byte (`rewards.steal`, corrected from the
+ *   monster row); on success one draw from stream 11 picks the rare slot when it is below 32 (one in eight) and the
+ *   rare slot is populated. Sticky Fingers (command 0x30c4) always succeeds, Master Thief (0x30c5) always takes the
+ *   rare slot. A successful steal clears the target's steal byte: **one successful steal per enemy per battle**.
+ * - **Pilfer Gil.** A draw against the target's gil byte (255 for every monster, so it always lands) and a second draw
+ *   for the share: between half and all of the enemy's own gil figure. A success clears the gil byte: once per enemy.
+ * - **Bribe.** Whether it works is accuracy formula 6 (`kernel/hit.ts`); the reward is three draws and a square root
+ *   of the threshold the accuracy stored.
  */
 
-import type { AbilityDef, BattleState, ItemDrop, Rng } from '../common/types.ts';
+import type { BattleState, ItemDrop, Rng } from '../common/types.ts';
 import type { Emit, Ffx2Unit, ItemRegistry } from './internal.ts';
-import { resolveTargets } from './targeting.ts';
+import type { ResolvedCommand } from './adapt/command.ts';
+import { bribeRewardDraw, pilferGilDraw, stealItemDraw } from './adapt/draws.ts';
+import { bribeReward, stealGil, stealItem } from './kernel/steal.ts';
 
 /** The steal byte is out of 255 [`ffx2-bahamut.md` §1.6]. */
 const STEAL_RATE_SCALE = 255;
-/** 1 in 8 successful steals takes the rare slot (12.5 %) [§1.6]. */
-const RARE_SLOT_ONE_IN = 8;
+/** The gil chance byte of every monster (`research/re-ffx2-ai-leblanc-den-ixion.md` section 1.9). */
+const GIL_CHANCE_BYTE = 255;
 
-/** What kind of theft an ability is, or `null` for everything else. */
-export function theftKind(ability: AbilityDef): 'item' | 'gil' | null {
-  if (ability.extra?.['stealsGil'] === true) return 'gil';
-  // Only a *pure* steal is handled here. Mug (`x2-shared-mug`) also carries
-  // `stealAttempt` but is an attack first; it is on no shipped build.
-  if (ability.formula === 'none' && typeof ability.extra?.['stealAttempt'] === 'string') return 'item';
-  return null;
-}
-
+/** What a theft needs from the engine. */
 export interface TheftEnv {
-  units: Ffx2Unit[];
-  state: BattleState;
+  state: BattleState | undefined;
   rng: Rng;
-  items?: ItemRegistry;
+  items: ItemRegistry | undefined;
   emit: Emit;
 }
 
@@ -93,28 +67,45 @@ export function stealByte(table: { baseChance: number; stealRate?: number }): nu
   return Math.max(0, Math.min(STEAL_RATE_SCALE, raw));
 }
 
-function stealItem(env: TheftEnv, user: Ffx2Unit, target: Ffx2Unit, mode: string): void {
+function addToInventory(env: TheftEnv, itemId: string, count: number): void {
+  if (env.state === undefined) return;
+  const key = `inventory:${itemId}`;
+  const held = env.state.flags[key];
+  env.state.flags[key] = (typeof held === 'number' ? held : 0) + count;
+}
+
+/** Steal (an item): `steal_item` on the target, then the inventory and the text. */
+export function applyStealItem(env: TheftEnv, command: ResolvedCommand, user: Ffx2Unit, target: Ffx2Unit): void {
   const table = target.enemy?.rewards.steal;
-  if (!table) {
-    env.emit({ type: 'message', text: `Nothing to steal from ${target.name}`, kind: 'system' });
+  const result = stealItem(
+    {
+      stealCommand: true,
+      commandId: command.record.id,
+      chance: target.stolenFrom === true || table === undefined ? 0 : stealByte(table),
+      commonItem: table === undefined ? 0 : 1,
+      commonQuantity: table === undefined ? 0 : Math.max(1, table.common.count),
+      rareItem: table !== undefined && table.rare.itemId !== '' ? 1 : 0,
+      rareQuantity: table === undefined ? 0 : Math.max(1, table.rare.count),
+    },
+    stealItemDraw(env.rng),
+  );
+  if (!result.active) return;
+  if (result.quantity === 0) {
+    env.emit({
+      type: 'message',
+      text: target.stolenFrom === true ? `${target.name} has nothing left to steal` : `Nothing to steal from ${target.name}`,
+      kind: 'system',
+    });
     return;
   }
-  if (target.stolenFrom) {
-    env.emit({ type: 'message', text: `${target.name} has nothing left to steal`, kind: 'system' });
-    return;
-  }
-  const guaranteed = mode === 'guaranteed';
-  if (!guaranteed && !(env.rng.int(0, STEAL_RATE_SCALE - 1) < stealByte(table))) {
+  if (!result.success || table === undefined) {
     env.emit({ type: 'message', text: 'Nothing was stolen!', kind: 'system' });
     return;
   }
-  const rare = mode === 'force-rare' || env.rng.int(0, RARE_SLOT_ONE_IN - 1) === 0;
-  const drop = rare ? table.rare : table.common;
-  const count = Math.max(1, drop.count);
-  target.stolenFrom = true;
-  const key = `inventory:${drop.itemId}`;
-  const held = env.state.flags[key];
-  env.state.flags[key] = (typeof held === 'number' ? held : 0) + count;
+  const drop = result.rare ? table.rare : table.common;
+  const count = Math.max(1, result.quantity);
+  target.stolenFrom = true; // the game clears the target's steal byte
+  addToInventory(env, drop.itemId, count);
   const name = itemName(env, drop);
   env.emit({
     type: 'message',
@@ -123,36 +114,50 @@ function stealItem(env: TheftEnv, user: Ffx2Unit, target: Ffx2Unit, mode: string
   });
 }
 
-function pilferGil(env: TheftEnv, user: Ffx2Unit, target: Ffx2Unit): void {
+/** Pilfer Gil: `steal_gil` on the target, then the party's gil and the text. */
+export function applyPilferGil(env: TheftEnv, user: Ffx2Unit, target: Ffx2Unit): void {
   const gil = Math.max(0, target.enemy?.rewards.stolenGil ?? 0);
-  if (gil === 0 || target.gilPilfered) {
+  const result = stealGil(
+    { stealsGil: true, chance: target.gilPilfered === true ? 0 : GIL_CHANCE_BYTE, gil },
+    pilferGilDraw(env.rng),
+  );
+  if (!result.active) return;
+  if (result.amount < 0) {
     env.emit({ type: 'message', text: `${target.name} has no gil to take`, kind: 'system' });
     return;
   }
-  target.gilPilfered = true;
-  const before = env.state.flags['stolenGil'];
-  env.state.flags['stolenGil'] = (typeof before === 'number' ? before : 0) + gil;
-  env.emit({ type: 'message', text: `${user.name} pilfered ${gil.toLocaleString('en-US')} gil!`, kind: 'system' });
+  if (!result.success) {
+    env.emit({ type: 'message', text: 'Nothing was stolen!', kind: 'system' });
+    return;
+  }
+  target.gilPilfered = true; // the game clears the target's gil byte (its own figure stays)
+  if (env.state !== undefined) {
+    const before = env.state.flags['stolenGil'];
+    env.state.flags['stolenGil'] = (typeof before === 'number' ? before : 0) + result.amount;
+  }
+  env.emit({ type: 'message', text: `${user.name} pilfered ${result.amount.toLocaleString('en-US')} gil!`, kind: 'system' });
 }
 
-/**
- * Resolve a theft ability. Returns false when `ability` is not one, so the
- * caller runs the normal pipeline instead. Pays the MP cost itself (Pilfer Gil
- * is 2 MP [§3.2]; Spellspring waives it, as in `resolve.ts`).
- */
-export function resolveTheft(
-  env: TheftEnv,
-  user: Ffx2Unit,
-  ability: AbilityDef,
-  requested: readonly string[],
-): boolean {
-  const kind = theftKind(ability);
-  if (!kind) return false;
-  const target = resolveTargets(env.units, user, ability, requested, env.rng)[0];
-  if (!target) return true;
-  const mpCost = user.statuses.spellspring ? 0 : ability.mpCost;
-  if (mpCost > 0) user.mp = Math.max(0, user.mp - mpCost);
-  if (kind === 'gil') pilferGil(env, user, target);
-  else stealItem(env, user, target, String(ability.extra?.['stealAttempt']));
-  return true;
+/** The reward of a Bribe that landed: `bribe` on the target's slot (`rewards.bribe`, one item), then the bag and the text. */
+export function applyBribeReward(env: TheftEnv, target: Ffx2Unit): void {
+  const item = target.enemy?.rewards.bribe?.item;
+  const result = bribeReward(
+    {
+      bribeCommand: true,
+      slots: [
+        { item: item === undefined ? 0 : 1, quantity: item?.count ?? 0 },
+        { item: 0, quantity: 0 },
+      ],
+      threshold: target.bribeThreshold ?? 0,
+    },
+    bribeRewardDraw(env.rng),
+  );
+  if (!result.active || result.itemId === 0 || result.quantity <= 0 || item === undefined) return;
+  addToInventory(env, item.itemId, result.quantity);
+  const name = itemName(env, item);
+  env.emit({
+    type: 'message',
+    text: result.quantity > 1 ? `${target.name} hands over ${name} x${result.quantity}!` : `${target.name} hands over ${name}!`,
+    kind: 'system',
+  });
 }

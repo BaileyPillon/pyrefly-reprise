@@ -6,6 +6,32 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-09 — The FFX-2 engine rolls hits, critical hits, damage, statuses and theft through the proven kernels: `FFX2CommandRecord`, `FFX2MonsterRecord`, `AbilityDef.ffx2Record`, `EnemyDef.ffx2Record`, `EnemyFields.ffx2Record`, `AbilityCommand.gilSpent`, and the `src/battle/ffx2` exports that left (re-parity W3; FFX-2 only; additive for the contract file)
+
+Branch `re-parity`. `src/battle/common/types.ts` gains the interfaces `FFX2CommandRecord` (the game's own command row for one FFX-2 ability: the 14 fields the kernels read, the
+three status tables, and `pickOne` for a command that is several game rows of which the script picks one per cast) and `FFX2MonsterRecord` (the game's monster row: Accuracy, the
+two resist tables, the special-flag word, the species mask, the level^6 resist byte, the steal byte, the Pilfer Gil figure, the steal items, the Bribe slots, the monster's own
+Attack row and the rows it runs in place of an ability's own, `commands`), and the optional members `AbilityDef.ffx2Record`, `EnemyDef.ffx2Record` (the data) and `EnemyFields.ffx2Record` (the combatant's copy, made in `src/battle/ffx2/setup.ts`),
+and `AbilityCommand.gilSpent` (the gil a Lady Luck Bribe offers, `ActionRec+0xb0`). `src/data/ffx2/command-records/` holds the 240 records, `src/data/ffx2/monster-records/` the 33 monster rows (the 32 enemies and parts of the seven chapters and the first Paragon form),
+`src/battle/ffx2/fallback-records.ts` the 44 of the fallback table, and `research/re-ffx2-commands.md` says how each was matched and where our numbers differ. FFX and FF7 data never set
+the members and no code of theirs reads them. An ability without a record keeps working: the FFX-2 engine derives the same fields from the ability's own flags (`src/battle/ffx2/adapt/command.ts`).
+Handoff: [re-parity-w3](handoff/re-parity-w3.md). Game case: FFX-2 only (`ffx-engine-golden` and `ff7-golden` are unchanged).
+
+- `src/battle/ffx2/index.ts` no longer exports `computeDamage`, `defenseTerm`, `magicBase`, `physicalBase`, `randomiserRoll`, `resolveAffinity`, `specialMagicBase` (the old float chain, `formulas.ts`,
+  deleted), `registerHit`, `cannotEvade` (`chain.ts`), `statusChanceLinear`, `statusChanceQuartic`, `statusChanceSextic` (`statuses.ts`) or the types `DamageContext` and `DamageResult`;
+  `critPercent` and `hitPercent` came back from `hit.ts` with the same signatures (now the kernels' odds); it gains `bumpChain`, `chainBefore`, `isRestorative`, `critProbability`,
+  `hitProbability`, `statusProbability` and `statusProbabilityBetween`. `src/battle/ffx2/aeon-effects.ts` and `resolve-targets.ts` are deleted, and so are the constants of the old
+  damage chain and hit check in `constants.ts` (and `ENEMY_BASE_ACCURACY`). Nothing outside `src/battle/ffx2`, `src/engine/tactics/advisor-roll.ts` and the tests imported the removed names.
+- `ResolveContext` (the FFX-2 resolver's context, `src/battle/ffx2/resolve-hp.ts`) gains optional `state` and `items`, so a Steal, Pilfer Gil or Bribe puts the item and the gil in the battle's flags;
+  `FFX2Engine` and the move simulator pass them. `Ffx2EngineOptions.immuneHitsSkipChain` is no longer read (the game's chain byte rises only when a positive HP number is applied, so an immune hit never
+  opens a window); it stays so callers compile.
+- The combatant's `chainCount` is the game's byte (the number of landed hits in the current chain, one higher than before for the same hit); the `chain` event still carries the counter the hit read, so
+  the HUD flourish is unchanged. The pause screen's "Chain xN" reads the byte.
+- Draw order of one FFX-2 action (the engine's seeded stream; `BattleEvent` shape unchanged): every target's hit roll first, then per strike, per target in ascending slot order, the variance, the critical roll
+  (only for a row that can crit), the MP and ATB variances, one status roll per status with a chance byte, the shatter roll (a Petrified target only), the theft rolls; `src/battle/ffx2/adapt/draws.ts` takes
+  one engine draw per kernel draw, so the advisor's roll policy (`src/battle/ffx2/simulate.ts`, `engine/tactics/advisor-roll.ts`) keeps working. Every seed-pinned FFX-2 expectation downstream (goldens, strategy
+  and chapter tests) moved with it and was re-pinned in the same commit with its cause. Adopting the game's own generator is a separate decision (plan P3) and is not made here.
+
 ## 2026-10-08 — `FFXPlainAttack`, `EnemyDef.plainAttack`, `EnemyFields.plainAttack`: an enemy's plain Attack on the game's own record (re-parity W1; FFX only; additive)
 
 Branch `re-parity`. `src/battle/common/types.ts` gains the interface `FFXPlainAttack` (`record: FFXCommandRecord`, `accuracy`, `critBonus`) and the optional member `plainAttack` on `EnemyDef`

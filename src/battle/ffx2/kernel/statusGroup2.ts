@@ -4,7 +4,8 @@
  *
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69),
  * function 0x00619700. Spec: `research/re-ffx2-hit-status.md` section 4. Pure, no DOM, no engine types;
- * not wired into the engine. Randomness comes from a `draw(stream)` callback (see `./rng.ts`).
+ * the engine runs it through `./status.ts` (`resolve-strike.ts`). Randomness comes from a `draw(stream)`
+ * callback (see `./rng.ts`).
  *
  * It runs after group 1 and uses the same landing test (one draw per status with a chance byte, from the
  * attacker's purpose-2 stream, unless the command is a cleanse). What a landed roll does depends on the

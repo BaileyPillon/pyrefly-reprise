@@ -5,10 +5,12 @@
  * **Game case: FFX-2 only** (FFX has its own generator, its own tables and its own stream map; see
  * `src/battle/ffx/kernel/rng.ts`). Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69),
  * image base 0x400000. Spec: `research/re-ffx2-hit-status.md` section 1. Pure, deterministic, no DOM,
- * no engine types (AGENTS.md rule 1). Not wired into the engine: the engine still draws from
- * `common/rng.ts` (mulberry32). Every kernel in this folder takes a `draw(stream)` callback that returns
- * the raw 31-bit value the game's generator would return for that stream, so wiring can feed them
- * either generator.
+ * no engine types (AGENTS.md rule 1). The generator itself is not wired into the engine: the engine keeps
+ * its one seeded stream (`common/rng.ts`, mulberry32) until Bailey decides to adopt the game's own (plan P3),
+ * and `adapt/draws.ts` takes one engine draw per kernel draw. Every kernel in this folder takes a
+ * `draw(stream)` callback that returns the raw 31-bit value the game's generator would return for that
+ * stream, so the engine feeds them either generator; the fixed streams (5, 10, 11) tell the callback which
+ * roll it is answering.
  *
  * Exe addresses (live build):
  * - 0x0061e270  next value of one of 68 streams

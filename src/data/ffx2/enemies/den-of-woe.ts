@@ -31,6 +31,7 @@
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
 import { STANDARD_AILMENT_IMMUNITY } from './vegnagun-shared.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 export const DEN_BARALAI = 'ffx2-den-baralai';
 export const DEN_GIPPAL = 'ffx2-den-gippal';
@@ -254,3 +255,6 @@ const denNoojLink: EnemyGroupDef = {
 export const denNoojGroup: EnemyGroupDef = DEN_OF_WOE_RETRY_FROM_LINK ? withRetryFromLink(denNoojLink) : denNoojLink;
 
 export const denOfWoeGroups: readonly EnemyGroupDef[] = [denBaralaiGroup, denGippalGroup, denNoojGroup];
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [denBaralaiGroup, denGippalGroup, denNoojGroup]) attachMonsterRecords(group);

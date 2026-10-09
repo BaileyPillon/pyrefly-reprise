@@ -117,7 +117,10 @@ describe('NEW-C1: the lone White Mage in Chapter IV (FFX-2)', () => {
     for (const seed of [1, 2, 3, 4, 5, 6]) {
       const { outcome, turns } = run(seed, seed % 2 === 0);
       expect(outcome, `seed ${seed}`).toBeDefined();
-      const after = turns.slice(turns.findIndex((t) => t.kind === 'spherechange') + 1);
+      // Re-parity W3: a seed can end before she changes at all (seed 5 now curses her, she spends her one turn on Esuna, and
+      // Bahamut wipes the lone girl): then there is no "after" to check, where `findIndex` = -1 used to make it every turn.
+      const change = turns.findIndex((t) => t.kind === 'spherechange');
+      const after = change < 0 ? [] : turns.slice(change + 1);
       for (const t of after) {
         expect(t.sphere, `seed ${seed}`).not.toBe('white-mage');
         expect(HEALS).not.toContain(t.label);

@@ -26,7 +26,7 @@ import { aiHarness, aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import type { Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 import type { ResolveContext } from '../../../src/battle/ffx2/resolve.ts';
 import { applyStatus } from '../../../src/battle/ffx2/statuses.ts';
-import { hitPercent } from '../../../src/battle/ffx2/formulas.ts';
+import { hitPercent } from '../../../src/battle/ffx2/hit.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { chateauBuild } from '../../../src/data/ffx2/builds/chateau.ts';
 import {
@@ -120,16 +120,17 @@ describe('the data the research fixes', () => {
     expect(logosII?.stats).toMatchObject({ hp: 1432, def: 4, eva: 38 });
   });
 
-  it('G1: no Syndicate stat block or action carries an Accuracy byte [§5.1, E-G1]', () => {
+  // Re-parity W3 (FFX-2 only; reason "game-code parity"). E-G1 / gap G1: the research printed no Accuracy for the Syndicate, so
+  // the data carried 0 and the engine filled in an `[estimate]` baseline of 104. The game's monster rows carry it: every one of the
+  // trio and their henchmen is ACC 95 (research/re-ffx2-commands.md §7), and the plain Attack's accuracy formula 2 reads that
+  // stat. No action of theirs carries an Accuracy byte of its own, as before.
+  it("G1: every Syndicate stat block carries the game row's Accuracy 95; no action carries a byte of its own [§5.1, E-G1]", () => {
     for (const id of LEBLANC_CHAIN_ORDER) {
       for (const e of data.ENEMY_GROUPS_BY_ID[id]?.enemies ?? []) {
-        expect(e.stats.acc, `${e.id} stat block`).toBe(0);
+        expect(e.stats.acc, `${e.id} stat block`).toBe(95);
       }
     }
     for (const a of SYNDICATE_ABILITIES) {
-      // An explicit byte short-circuits the ENEMY_BASE_ACCURACY fallback and
-      // makes the action never connect — the exact Chapter 4 defect §5 Q6
-      // records. Leaving it undefined is what routes it to the baseline.
       expect(a.accuracy, `${a.id}`).toBeUndefined();
     }
   });
@@ -137,7 +138,9 @@ describe('the data the research fixes', () => {
   it('Leblanc alone is Break-immune where the boys are not [§3.1]', () => {
     const group = data.ENEMY_GROUPS_BY_ID[LEBLANC_ACT_III];
     const by = Object.fromEntries((group?.enemies ?? []).map((e) => [e.id, e]));
-    for (const s of ['str-down', 'def-down', 'luck-down'] as StatusId[]) {
+    // Re-parity W3: the game's row for Leblanc resists the STR, DEF and ACCURACY stages (group 2 slots 7, 9 and 11), not Luck
+    // (slot 13); the authored list said Luck (research/re-ffx2-commands.md §7).
+    for (const s of ['str-down', 'def-down', 'accu-down'] as StatusId[]) {
       expect(by['leblanc']?.immunities[s]).toBe(255);
       expect(by['logos']?.immunities[s] ?? 0).toBe(0);
       expect(by['ormi']?.immunities[s] ?? 0).toBe(0);
@@ -180,46 +183,51 @@ describe('A4 — Huggles reproduces the published band', () => {
 
 // ---------------------------------------------------------------------------
 
-describe('Supercollider rolls a hit check and Darkness quarters it [verifier finding, §4.2, §5.1]', () => {
-  it('is not Physical [§4.2 types it "Fractional + Delay"] but still rolls, and Darkness on Ormi quarters the roll', () => {
+// Re-parity W3 (FFX-2 only; reason "game-code parity"). This block pinned that Ormi's Supercollider rolls a hit check which
+// Darkness quarters (the verifier's finding against the old engine's baseline accuracy). The game's row for Supercollider (0x40e5)
+// is accuracy formula 0: it never rolls, so Darkness cannot touch it. What the verifier's finding really protects is the plain
+// Attack (Shield Bash, the row every henchman strikes with): accuracy formula 2 with the Darkness bit, so Darkness on the user
+// divides the Accuracy base by four. Both are pinned below.
+describe("Darkness quarters the Syndicate's rolled attacks, and Supercollider never rolls [verifier finding, §4.2, §5.1]", () => {
+  it("the plain Attack rolls, Darkness on Ormi quarters its Accuracy base; Supercollider (the game's row) never rolls", () => {
     const ormi = aiUnit('ormi', 'enemy', 1344);
     ormi.level = 19;
-    // Matches the shipped record: acc: 0 routes to ENEMY_BASE_ACCURACY [G1].
     const girl = aiUnit('yuna', 'party', 9999);
     girl.stats = { ...girl.stats, eva: 4, luck: 15 };
+    const bash = ability('x2-ormi-shield-bash');
     const supercollider = ability('x2-ormi-supercollider');
 
-    // It is Fractional, not Physical: the Defense term is skipped either way
-    // (damageType 'other'), but that is a damage-formula fact, not a hit-check
-    // one — `formula: 'percent-current'` is not `'none'` and the row carries
-    // no `canMiss: false`, so it still rolls [`formulas.ts::hitPercent`].
-    const bareHit = hitPercent(ormi, girl, supercollider);
+    const bareHit = hitPercent(ormi, girl, bash);
     expect(bareHit).toBeGreaterThan(0);
     expect(bareHit).toBeLessThan(100);
+    expect(hitPercent(ormi, girl, supercollider)).toBe(100);
 
-    // Darkness on the user (Ormi) — the party's canonical Darkness Dance
-    // opener — must quarter it, the same as it does his Shield Bash, because
-    // §5.1's one settled fact is stated for the trio's hit-checked actions in
-    // general, not only their normal attacks.
     applyStatus(ormi, { status: 'darkness', chance: 255, duration: 255 });
-    const darkHit = hitPercent(ormi, girl, supercollider);
+    const darkHit = hitPercent(ormi, girl, bash);
     expect(darkHit).toBeLessThan(bareHit);
+    expect(hitPercent(ormi, girl, supercollider)).toBe(100); // no roll, so nothing for Darkness to quarter
   });
 
-  it('the real engine: over 200 seeds under Darkness, Supercollider now misses some of the time', () => {
+  it('the real engine: over 200 seeds under Darkness the plain Attack misses some of the time; Supercollider never does', () => {
     const ormi = aiUnit('ormi', 'enemy', 1344);
     ormi.level = 19;
     applyStatus(ormi, { status: 'darkness', chance: 255, duration: 255 });
-    let misses = 0;
+    let bashMisses = 0;
+    let colliderMisses = 0;
     for (let seed = 1; seed <= 200; seed++) {
-      const girl = aiUnit('yuna', 'party', 9999);
-      girl.stats = { ...girl.stats, eva: 4, luck: 15 };
-      const { ctx, events } = ctxFor([ormi, girl], seed);
-      resolveAbility(ctx, ormi, ability('x2-ormi-supercollider'), [girl.id]);
-      if (!events.some((e) => e.type === 'damage')) misses += 1;
+      for (const [id, tally] of [['x2-ormi-shield-bash', 'bash'], ['x2-ormi-supercollider', 'collider']] as const) {
+        const girl = aiUnit('yuna', 'party', 9999);
+        girl.stats = { ...girl.stats, eva: 4, luck: 15 };
+        const { ctx, events } = ctxFor([ormi, girl], seed);
+        resolveAbility(ctx, ormi, ability(id), [girl.id]);
+        if (!events.some((e) => e.type === 'damage')) {
+          if (tally === 'bash') bashMisses += 1;
+          else colliderMisses += 1;
+        }
+      }
     }
-    // Before this fix Supercollider ignored Darkness entirely (0/200 misses).
-    expect(misses).toBeGreaterThan(0);
+    expect(bashMisses).toBeGreaterThan(0);
+    expect(colliderMisses).toBe(0);
   });
 });
 
@@ -289,6 +297,10 @@ describe('A5 — No Love Lost', () => {
 
   it('E5 — one action, three stages, resolved from one turn [preflight E5]', () => {
     const leblanc = aiUnit('leblanc', 'enemy', 1380);
+    // Re-parity W3: the game's No Love Lost rows are the piercing physical formula (rows 0x40f6 to 0x40f8), not constants, so they
+    // scale with the caster: Leblanc is Lv 23, Str 33 (the data's own block), not the harness unit's Lv 48, Str 50.
+    leblanc.level = 23;
+    leblanc.stats.str = 33;
     const party = [aiUnit('yuna', 'party', 900), aiUnit('rikku', 'party', 900, 1), aiUnit('paine', 'party', 900, 2)];
     const { ctx, events } = ctxFor([leblanc, ...party], 7);
     resolveAbility(ctx, leblanc, ability('x2-nll-1'), []);
@@ -315,20 +327,30 @@ describe('A5 — No Love Lost', () => {
     // exactly two damage events fire — the number the guard actually caps
     // it at, not "the array I forgot to wire up stayed at its initial 0".
     const leblanc = aiUnit('leblanc', 'enemy', 1380);
+    // Re-parity W3: the stage runs on its game row (0x40f7, the piercing physical formula at power 22), so the damage follows the
+    // caster: Leblanc is Lv 23, Str 33. Two resolutions (the second inside the girl's chain window, x29/20) take about 260; the
+    // bound below only has to tell that from "infinite".
+    leblanc.level = 23;
+    leblanc.stats.str = 33;
     const girl = aiUnit('yuna', 'party', 9999);
-    const looping: AbilityDef = { ...ability('x2-nll-2'), extra: { flat: 106, sequence: ['x2-nll-2'] } };
+    const looping: AbilityDef = { ...ability('x2-nll-2'), extra: { sequence: ['x2-nll-2'] } };
     const { ctx, events } = ctxFor([leblanc, girl], 3);
     resolveAbility(ctx, leblanc, looping, [girl.id]);
     const hits = events.filter((e) => e.type === 'damage');
     expect(hits.length).toBe(2); // depth 1, depth 2, then the guard stops it
-    expect(girl.hp).toBeGreaterThan(9999 - 300); // two resolutions at most, not infinite
+    expect(girl.hp).toBeGreaterThan(9999 - 600); // two resolutions at most, not infinite
   });
 });
 
 // ---------------------------------------------------------------------------
 
 describe('A6 / A7 — Russian Roulette and Eject', () => {
-  const SIX: StatusId[] = ['ko', 'eject', 'petrify', 'silence', 'curse', 'poison'];
+  // Re-parity W3 (FFX-2 only; reason "game-code parity"). The research read Russian Roulette as six outcomes, one of them
+  // Eject, of which exactly one always lands. The game's script picks ONE of five command rows per cast (1 in 5) and rolls that
+  // row's single status: Death 30, Petrify 30, Silence 100, Poison 100, Curse 100 (the chance bytes of research/re-ffx2-commands.md
+  // §3), so a cast lands at most one of them and Death or Petrify (chance 30) often land nothing. There is no Eject row. The
+  // draw that picks the row is the cast's first (`adapt/command.ts pickVariant`).
+  const SIX: StatusId[] = ['ko', 'petrify', 'silence', 'curse', 'poison'];
 
   function roulette(seed: number): StatusId[] {
     const logos = aiUnit('logos', 'enemy', 989);
@@ -341,22 +363,30 @@ describe('A6 / A7 — Russian Roulette and Eject', () => {
       .filter((s) => SIX.includes(s));
   }
 
-  it('lands exactly one of the six, never zero and never two, over 200 rolls [§4.3]', () => {
+  it('picks one of five rows per cast: never two statuses, and all five are reachable, over 200 rolls [§4.3]', () => {
     const seen = new Set<StatusId>();
+    let landedNothing = 0;
     for (let seed = 1; seed <= 200; seed++) {
       const landed = roulette(seed);
-      expect(landed.length, `seed ${seed}`).toBe(1);
-      seen.add(landed[0] as StatusId);
+      expect(landed.length, `seed ${seed}`).toBeLessThanOrEqual(1);
+      if (landed.length === 0) landedNothing += 1;
+      else seen.add(landed[0] as StatusId);
     }
-    // All six are reachable — it is a roulette, not a coin.
+    // All five are reachable — it is a roulette, not a coin.
     expect([...seen].sort()).toEqual([...SIX].sort());
+    // Death and Petrify carry a chance of 30 on a level-matched girl, so a cast that picks one of them often lands nothing
+    // (2 rows in 5, 70 % of the time: about 28 % of casts); the three 100s almost never fail.
+    expect(landedNothing).toBeGreaterThan(20);
+    expect(landedNothing).toBeLessThan(90);
   });
 
   it('A7 — an ejected girl leaves the battle: untargetable, no cure, gauge stopped', () => {
     const logos = aiUnit('logos', 'enemy', 989);
     const girl = aiUnit('yuna', 'party', 9999);
+    // A derived ability (no game row): the game's roulette has no Eject row, and this test is about what Eject does.
     const ejectOnly: AbilityDef = {
       ...ability('x2-logos-russian-roulette'),
+      ffx2Record: undefined,
       statusEffects: [{ status: 'eject', chance: 254, duration: 0 }],
       extra: { flat: 200 },
     };

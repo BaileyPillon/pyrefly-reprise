@@ -61,27 +61,17 @@ export {
 export {
   advanceChainWindows,
   breakChain,
-  cannotEvade,
+  bumpChain,
+  chainBefore,
   chainMultiplier,
   isActionLocked,
   isChained,
-  registerHit,
   ticksUntilChainBreak,
 } from './chain.ts';
 
-// --- formulas --------------------------------------------------------------
-export {
-  computeDamage,
-  critPercent,
-  defenseTerm,
-  hitPercent,
-  magicBase,
-  physicalBase,
-  randomiserRoll,
-  resolveAffinity,
-  specialMagicBase,
-} from './formulas.ts';
-export type { DamageContext, DamageResult } from './formulas.ts';
+// --- hits, damage, statuses: the kernels' odds (re-parity W3) -----------------
+export { critPercent, hitPercent, isRestorative } from './hit.ts';
+export { critProbability, hitProbability, statusProbability, statusProbabilityBetween } from './adapt/preview.ts';
 
 // --- statuses --------------------------------------------------------------
 export {
@@ -96,9 +86,6 @@ export {
   PERSISTS_AFTER_BATTLE,
   removeStatus,
   statLevel,
-  statusChanceLinear,
-  statusChanceQuartic,
-  statusChanceSextic,
   ticksUntilStatusEvent,
 } from './statuses.ts';
 

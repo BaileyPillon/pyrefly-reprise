@@ -231,7 +231,10 @@ describe('the two shapes FFX-2 does not have (AGENTS.md rule 14 absence tests)',
         },
       ] as never;
       expect(metaRowFor(syntheticRows, 'actor-x', synthetic)).not.toBeNull();
-      expect(decisions).toBeGreaterThan(10);
+      // Re-parity W3 (FFX-2 only; reason "game-code parity"): the floor guards that the loop ran, not how long the party lasts. With the
+      // game's draw order and damage numbers the menu-mashing driver's party is wiped after 10 decisions (27.7 s) on the Vegnagun chain's
+      // seed 1 (it ran past 10 before), so the floor is 5.
+      expect(decisions).toBeGreaterThan(5);
     }, 60_000);
   }
 });

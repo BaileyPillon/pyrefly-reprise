@@ -210,8 +210,10 @@ export class Ffx2EngineCore {
       emit: (e) => this.emit(e),
       breaksDamageLimit: (unit) => unit.aiMemory?.['bdl'] === true, // cached at her last gate recompute
       timedAilmentDefaults: this.battleState.flags['timedAilmentDefaults'] === true, // `setup.ts`, from the group
-      ...(this.options.immuneHitsSkipChain !== undefined ? { immuneHitsSkipChain: this.options.immuneHitsSkipChain } : {}), // IC-1 switch
+      ...(this.options.immuneHitsSkipChain !== undefined ? { immuneHitsSkipChain: this.options.immuneHitsSkipChain } : {}), // IC-1 switch (no longer read)
       ...(this.options.namedTargetsOnly !== undefined ? { namedTargetsOnly: this.options.namedTargetsOnly } : {}), // Acta switch
+      state: this.battleState, // a stolen item goes to `inventory:<id>`, stolen gil to `stolenGil` (`steal.ts`)
+      ...(this.options.items ? { items: this.options.items } : {}),
     };
   }
 

@@ -25,6 +25,7 @@ import { FFX2_ITEMS, ALL_FFX2_ITEMS, itemEffectAbilities } from './items/index.t
 import { STANDARD_DRESSPHERES, SPECIAL_DRESSPHERES, statsAtLevel, statAtLevel } from './dresspheres/index.ts';
 import { GARMENT_GRIDS, ALL_GARMENT_GRIDS } from './garment-grids/index.ts';
 import { ENEMY_GROUPS, ENEMY_GROUPS_BY_ID, ALL_BOSS_ABILITIES } from './enemies/index.ts';
+import { attachFfx2CommandRecords } from './command-records/index.ts';
 import { bevelleBuild } from './builds/bevelle.ts';
 import { farplaneBuild } from './builds/farplane.ts';
 // Chapter XIII's kit-option items (Soul Spring, Three / Twin Stars, Stamina Tonic), kept out of `items/index.ts`.
@@ -32,6 +33,8 @@ import { cloisterEffectAbilities, cloisterItems } from './items/cloister.ts';
 
 /** Every AbilityDef this project ships (standard/special dresspheres, shared, item effects, and bosses), keyed by id. */
 export const ALL_ABILITIES: readonly AbilityDef[] = [...STANDARD_ABILITY_LIST, ...itemEffectAbilities, ...cloisterEffectAbilities, ...ALL_BOSS_ABILITIES];
+// The game's own command row on every reachable ability (re-parity W3; in place, once, where the catalog is assembled).
+attachFfx2CommandRecords(ALL_ABILITIES);
 export const ABILITIES: Record<AbilityId, AbilityDef> = {
   ...STANDARD_ABILITIES,
   ...Object.fromEntries(itemEffectAbilities.map((a) => [a.id, a])),

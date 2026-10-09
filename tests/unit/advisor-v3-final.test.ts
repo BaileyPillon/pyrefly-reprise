@@ -73,7 +73,10 @@ async function heldBoard(chapter: string, seed: number, itemId: string): Promise
 describe('advisor v3 final fix (FFX-2 only)', () => {
   for (const [chapter, seed, item] of [
     ['ffx2-vegnagun-shuyin', 59, 'x2-mega-phoenix'],
-    ['ffx2-den-of-woe', 62, 'x2-phoenix-down'],
+    // Re-parity W3 (FFX-2 only; reason "game-code parity"): the Den of Woe board was seed 62; the game's draw order (hit rolls first, then
+    // the variance and the critical per strike) is a different replay of every seed, so the board was searched again over the seeds in
+    // order and is now seed 4 (the first on which the engine holds a Phoenix Down the chapter line picks again). Same board, same rule.
+    ['ffx2-den-of-woe', 4, 'x2-phoenix-down'],
   ] as const) {
     it(`C2-B1: a held ${item} is not the NEXT the advisor borrows (${chapter} seed ${seed})`, async () => {
       const found = await heldBoard(chapter, seed, item);
@@ -151,10 +154,10 @@ describe('advisor v3 final fix (FFX-2 only)', () => {
     expect(standing(ctx, top(now)!, girl)).toBeGreaterThanOrEqual(standing(ctx, top(before)!, girl));
   }, 600_000);
 
-  it('C2-M1: a heal held for a chain lock covers nobody; the save stays (Vegnagun seed 52)', async () => {
+  it('C2-M1: a heal held for a chain lock covers nobody; the save stays (Vegnagun seed 15)', async () => {
     let found: { now: AdvisorView | null; before: AdvisorView | null } | null = null;
     try {
-      await runChapter(chapterById('ffx2-vegnagun-shuyin'), 52, (ctx) => {
+      await runChapter(chapterById('ffx2-vegnagun-shuyin'), 15, (ctx) => {
         const { now, before } = cards(ctx);
         const held = (ctx.engine as unknown as FFX2Engine).heldCommand();
         if (held && idOf(held.command) === 'x2-megalixir' && idOf(top(before)) === 'x2-mega-potion') throw new Stop({ now, before });
@@ -164,8 +167,10 @@ describe('advisor v3 final fix (FFX-2 only)', () => {
       if (!(e instanceof Stop)) throw e;
       found = e.value as typeof found;
     }
-    expect(found, "the check's board: Paine's Megalixir held, Yuna at 401 HP, the card's Mega-Potion").not.toBeNull();
-    // Measured with the held command counted: X-Potion on Paine, and Yuna fell in 4 of 8 futures.
+    expect(found, "the check's board: Paine's Megalixir held, a girl the held heal would not save, the card's Mega-Potion").not.toBeNull();
+    // Re-parity W3 (FFX-2 only; reason "game-code parity"): seed 52 under the old draw order, seed 15 under the game's (the first seed whose
+    // board is this one: Paine's Megalixir held, the card's Mega-Potion without the rule). On the old board, measured with the held command
+    // counted: X-Potion on Paine, and Yuna (at 401 HP) fell in 4 of 8 futures.
     expect(idOf(top(found!.now))).toBe('x2-mega-potion');
   }, 600_000);
 });

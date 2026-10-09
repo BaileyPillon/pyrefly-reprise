@@ -4,8 +4,9 @@
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69):
  * `pp_status_roll_g1` 0x00619230 (`./statusGroup1.ts`), `pp_status_roll_g2` 0x00619700
  * (`./statusGroup2.ts`), and the shatter roll that follows them inside the damage orchestrator
- * 0x006172c0. Spec: `research/re-ffx2-hit-status.md` section 4. Pure, no DOM, no engine types; not wired
- * into the engine. Randomness comes from a `draw(stream)` callback (see `./rng.ts`).
+ * 0x006172c0. Spec: `research/re-ffx2-hit-status.md` section 4. Pure, no DOM, no engine types. The engine
+ * rolls a strike's statuses and the shatter through it (`resolve-strike.ts`) and reconciles its own statuses
+ * with the result buffer (`resolve-status.ts`). Randomness comes from a `draw(stream)` callback (see `./rng.ts`).
  *
  * The landing rule, the same in both groups: for every status the command gives a chance `c` (a byte;
  * the larger of the command's and the weapon's when the command uses character properties), unless the

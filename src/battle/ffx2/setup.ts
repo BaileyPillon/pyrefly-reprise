@@ -165,6 +165,7 @@ function buildEnemy(enemy: EnemyDef, isPart: boolean): Ffx2Unit {
       rewards: enemy.rewards,
       ...(enemy.level !== undefined ? { level: enemy.level } : {}),
       ...(enemy.thinkingPeriod !== undefined ? { thinkingPeriod: enemy.thinkingPeriod } : {}),
+      ...(enemy.ffx2Record !== undefined ? { ffx2Record: enemy.ffx2Record } : {}), // the game's monster row (re-parity W3)
     },
   };
   applyAutoStatuses(unit, enemy.autoStatuses);

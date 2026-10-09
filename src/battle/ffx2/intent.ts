@@ -39,6 +39,7 @@ import type {
   ElementId,
   FFX2Combatant,
   PortraitKey,
+  StatusId,
 } from '../common/types.ts';
 import { SeededRng } from '../common/rng.ts';
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit, ItemRegistry } from './internal.ts';
@@ -49,6 +50,7 @@ import { previewHitChance, simulateFFX2Command, type RollPolicy, type SimOutcome
 import type { RandomTarget } from '../common/intentTargets.ts';
 import { ffx2RandomTarget } from './intentRandom.ts';
 import { inertLead, setToLead } from './intentLead.ts';
+import { rolledChance, rollsStatus, statusProbability, statusProbabilityBetween } from './adapt/preview.ts';
 
 /** See the FFX twin: enough samples to catch a real branch, few enough to cache. */
 export const SAMPLE_COUNT = 24;
@@ -366,19 +368,27 @@ export interface ActionEstimate {
 /**
  * The odds one status lands, without rolling for it.
  *
- * X-2's status model is a plain percentage against the target's own resistance
- * table rather than FFX's 0-255 chance byte with subtractive resistance
- * [ffx2-combat-core §4]. Same shape on the panel, different arithmetic — which
- * is exactly the split CONTRACTS.md asks engine agents to keep.
+ * It is the game's landing rule (`kernel/statusTypes.ts statusLands`, re-parity W3): a chance byte of 255 always
+ * lands, then a resist byte of 255 never, then 254 always, else the roll `0..100 < chance + 5 * (attacker level -
+ * target level) - resist`. `user` is the one who would inflict it; without one the two levels are taken as equal.
+ * Same shape on the panel as FFX's, different arithmetic — which is exactly the split CONTRACTS.md asks engine
+ * agents to keep.
  */
 export function statusOddsFFX2(
   target: FFX2Combatant,
   app: { status: string; chance: number },
+  user?: FFX2Combatant,
+  ability?: AbilityDef,
 ): StatusOdds {
   const resistance = (target.immunities as Record<string, number | undefined>)[app.status] ?? 0;
-  if (resistance >= 255 || resistance >= 100) return { status: app.status, percent: 0, blocked: true };
-  const net = Math.max(0, Math.min(100, app.chance - resistance));
-  return { status: app.status, percent: net, blocked: net <= 0 };
+  // With the ability in hand the chance byte is the one the engine rolls (the game's command row, which a pick-one
+  // command shares between its rows), not the ability's authored list.
+  const rolled = user && ability ? rolledChance(ability, user, app.status as StatusId) : undefined;
+  const chance = rolled?.chance ?? app.chance;
+  const share = rolled?.share ?? 1;
+  const p = share * (user ? statusProbabilityBetween(user, target, app.status, chance) : statusProbability(chance, resistance, 1, 1));
+  const percent = Math.round(100 * p);
+  return { status: app.status, percent, blocked: p <= 0 };
 }
 
 /** Which combatants a simulation actually touched, in formation order. */
@@ -415,6 +425,7 @@ export function estimateFFX2Command(
   const hi = at('max') ?? mid;
   const resolved = mid.ability ?? def;
 
+  const actor = state.combatants[actorId] as FFX2Combatant | undefined;
   const perTarget: TargetEstimate[] = [];
   for (const id of touchedFFX2(state, mid)) {
     const target = state.combatants[id] as FFX2Combatant | undefined;
@@ -429,7 +440,9 @@ export function estimateFFX2Command(
       hitChancePercent: previewHitChance(state, actorId, id, resolved),
       hpFraction: target.hp > 0 ? Math.max(0, amount) / target.hp : 0,
       lethal: mid.kills.includes(id),
-      statuses: resolved.statusEffects.map((app) => statusOddsFFX2(target, app)),
+      statuses: resolved.statusEffects
+        .filter((app) => !actor || rollsStatus(resolved, actor, app.status))
+        .map((app) => statusOddsFFX2(target, app, actor, resolved)),
     });
   }
 
@@ -636,7 +649,8 @@ export function predictFFX2EnemyIntent(
       const victim = env.state.combatants[t.targetId] as FFX2Combatant | undefined;
       if (!victim) continue;
       for (const app of statusSource.statusEffects) {
-        const odds = statusOddsFFX2(victim, app);
+        if (!rollsStatus(statusSource, unit, app.status)) continue; // the game's row carries no chance for it: the engine never rolls it
+        const odds = statusOddsFFX2(victim, app, unit, statusSource);
         const label = `${statusWord(odds.status)} ${odds.percent}%${odds.blocked ? ' (blocked)' : ''}`;
         if (seen.has(label)) continue;
         seen.add(label);

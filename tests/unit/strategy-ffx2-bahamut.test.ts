@@ -608,6 +608,15 @@ describe('damage without mitigation stays a losing tactic', () => {
  * | **Magic Break x5** | "Everyone survives trivially" | 30/30 with **no Shell and no cure spell** |
  * | **Heal only** | not enough for a 917-HP Alchemist | 25/30 — the marginal route |
  *
+ * **Re-measured for re-parity W3 (FFX-2 only; reason "game-code parity"), seeds 1-30:** Shell 25/30, Magic Break 2/30, Heal
+ * only 14/30. The shipped line (Shell and the Breaks together) still wins 40 of 40. What moved, each from the game's rows
+ * (research/re-ffx2-commands.md §4): Impulse (6/16 of current HP) is an untyped move in the game's row, so Shell no longer halves
+ * it and a lowered Magic stat no longer scales it, so the engine's old reading of "Magic Break shrinks both Mega Flare and Impulse"
+ * is not the exe's. Measured per hit (seeds 1-30): Impulse averaged about 191 under Shell before and about 292 now (it is no longer halved);
+ * on the Magic Break route the party, with no Shell and no cure, is ground down by the Attack (about 186 a hit) and Impulse and the
+ * fight is decided against it on 28 of 30 seeds (Mega Flare itself still shrinks: about 96 a hit). §2.4's "survives trivially" for the
+ * Magic Break route is therefore the FAQs' claim, not the exe's.
+ *
  * This is deliberately asserted rather than footnoted. The first round shipped
  * a handoff note claiming Shell was the *unique* answer; it is not — not in the
  * research and not in the engine — and pinning the real shape here stops the
@@ -617,14 +626,18 @@ describe('damage without mitigation stays a losing tactic', () => {
  */
 describe('each of the researched survival routes behaves as researched', () => {
   const routes: ReadonlyArray<readonly [string, Line, number]> = [
-    ['Shell route (no Breaks at all)', lever({ shell: true, heal: true, breaks: false, darkness: true }), 28],
-    ['Magic Break route (no Shell, no cure spells)', lever({ shell: false, heal: false, breaks: true, darkness: true }), 28],
+    // Re-parity W3: bars moved to the re-measured wins (25, 2 and 14 of 30). The Magic Break route no longer clears the fight
+    // (an upper bar, see the comment above the table): the old floor of 28 was the FAQs' "survives trivially".
+    ['Shell route (no Breaks at all)', lever({ shell: true, heal: true, breaks: false, darkness: true }), 20],
+    ['Magic Break route (no Shell, no cure spells)', lever({ shell: false, heal: false, breaks: true, darkness: true }), 0],
     // Re-measured 2026-09-26 for IC-2: 27/30 -> 1/30. Its wins were the all-target wrap: Mega Flare
     // killed Rikku, wrapped its third hit onto Yuna and never touched Paine, so the Warrior was left
     // to finish him. Each girl now takes Mega Flare once and the White Mage is the one left, with no
     // Attack row (this harness allows no spherechange): 27 of 30 stop undecided. §2.4 calls this
     // route marginal; the shipped line (Shell + Breaks) is unaffected. Flagged for Bailey in the plan.
-    ['heal-only route (no Shell, no Breaks)', lever({ shell: false, heal: true, breaks: false, darkness: true }), 1],
+    // Re-measured again for W3: 1/30 -> 14/30. The old 27 undecided seeds were a stalemate (the Attack and Impulse could not
+    // finish the party, Vigor could not finish Bahamut); with the game's numbers the fight is decided on 30 of 30.
+    ['heal-only route (no Shell, no Breaks)', lever({ shell: false, heal: true, breaks: false, darkness: true }), 8],
   ];
 
   for (const [name, line, bar] of routes) {
@@ -632,7 +645,11 @@ describe('each of the researched survival routes behaves as researched', () => {
       const runs = Array.from({ length: 30 }, (_, i) => runLine(i + 1, line));
       const wins = runs.filter((r) => r.outcome === 'victory').length;
       console.log(`${name}: ${wins}/30 wins`);
-      expect(wins, `${name} is one of the researched routes and must clear the fight`).toBeGreaterThanOrEqual(bar);
+      if (name.startsWith('Magic Break')) {
+        expect(wins, `${name}: the exe's rows do not support the FAQs' "survives trivially"`).toBeLessThanOrEqual(6);
+      } else {
+        expect(wins, `${name} is one of the researched routes and must clear the fight`).toBeGreaterThanOrEqual(bar);
+      }
     });
   }
 

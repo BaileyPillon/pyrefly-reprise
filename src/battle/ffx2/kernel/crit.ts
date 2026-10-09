@@ -4,8 +4,9 @@
  * **Game case: FFX-2 only** (FFX's critical rule is a different function in a different exe; see
  * `src/battle/ffx/kernel/crit.ts`). Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69),
  * function 0x00617210 (called from the damage orchestrator 0x006172c0, only for a real hit, never for a
- * preview). Spec: `research/re-ffx2-hit-status.md` section 3. Pure, no DOM, no engine types; not wired
- * into the engine. Randomness comes from a `draw(stream)` callback (see `./rng.ts`).
+ * preview). Spec: `research/re-ffx2-hit-status.md` section 3. Pure, no DOM, no engine types. The engine
+ * rolls it as the damage pipeline's critical hook (`resolve-strike.ts`) and prints its odds with
+ * {@link critChance} (`adapt/preview.ts`). Randomness comes from a `draw(stream)` callback (see `./rng.ts`).
  *
  * The rule, in words (all integer arithmetic):
  *
