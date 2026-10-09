@@ -5,7 +5,8 @@
  * page shows the critic's REAL scores; it names the AI tools (ElevenLabs Music and voices, ChatGPT Images, local
  * ComfyUI/Animagine); it credits the community sources; and where it says something was measured the words are exactly
  * "measured from the real game on Bailey's own copy", nothing more. Not decided, so not built in: his own quotes (NONE of
- * them appear; the draft's "look terrible" is gone) and the page's name (one constant, `BTS_TITLE`).
+ * them appear; the draft's "look terrible" is gone). The page's name is settled: "Behind the Scenes" (Bailey, 2026-10-09
+ * 11:30 EDT: "Scenes not screens"), kept in one constant, `BTS_TITLE`.
  * Public-safety rules: no PII, no account names, no PC or security details, no hidden chapters.
  *
  * This file checks the words and the numbers against the repository where the repository can answer (the chapters, the

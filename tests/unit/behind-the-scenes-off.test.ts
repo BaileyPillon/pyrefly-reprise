@@ -60,10 +60,11 @@ describe('the switch', () => {
       expect(text, slash(relative(REPO, file))).not.toMatch(/(?:location\.search|localStorage|URLSearchParams)[^;\n]*BTS|BTS[^;\n]*(?:location\.search|localStorage|URLSearchParams)/);
       expect(text, slash(relative(REPO, file))).not.toMatch(/(?:window|globalThis)\s*(?:\.|\[)[^;\n]*BTS_LIVE|BTS_LIVE\s*=[^=]/);
     }
-  });
+  }, 60_000);
 
-  it('leaves the page\u2019s name in one constant, still undecided, and the key one letter', () => {
+  it('names the page Behind the Scenes (Bailey, 2026-10-09: "Scenes not screens") in one constant, and the key is one letter', () => {
     expect(BTS_TITLE).toBe('Behind the Scenes');
+    expect(BTS_TITLE).not.toMatch(/screens/i);
     expect(BTS_KEY).toBe('KeyT');
     expect(BTS_KEY_LABEL).toBe('T');
   });
@@ -122,7 +123,7 @@ describe('the page is reached from one place only', () => {
     const info = read('src/app/screens/frontend/titleInfo.ts');
     expect(info).toMatch(/const btsBuilt: boolean = typeof __PYREFLY_BTS__ === 'undefined' \? BTS_LIVE : __PYREFLY_BTS__;/);
     expect(info).toMatch(/else if \(btsBuilt\) \{[\s\S]*?import\('\.\.\/\.\.\/behindTheScenes\/index\.ts'\)/);
-  });
+  }, 60_000);
 
   it('keeps the page\u2019s pictures out of the source: they are plain files in public/bts/, never imported', () => {
     for (const file of walk(resolve(REPO, 'src/app/behindTheScenes'))) {

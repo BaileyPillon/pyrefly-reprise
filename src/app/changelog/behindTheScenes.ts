@@ -1,5 +1,5 @@
 /**
- * THE BEHIND THE SCENES SWITCH, and the two words on it that are still Bailey's to settle.
+ * THE BEHIND THE SCENES SWITCH, and the page's name.
  *
  * Bailey, 2026-10-08: "Also include a behind the screens button of how the game was made but I need to approve of it
  * before it is public facing and is actually included in the game." Then, to the options and the recommendations:
@@ -26,11 +26,10 @@
 export const BTS_LIVE = false;
 
 /**
- * What the entry, the page's heading and the credits line call it.
- *
- * Still undecided: Bailey wrote "behind the screens"; the drafts said "Screens", and "Scenes" is the film phrase. The
- * recommendation was left open and he did not pick (decisions item 31). It is one constant so that settling it is one
- * edit: the entry, the page and its header all read it, and nothing else spells the name.
+ * What the entry, the page's heading and the credits line call it. Settled: Bailey first wrote "behind the screens" and the
+ * drafts followed him; on the recommendation he wrote, on 2026-10-09 at 11:30 EDT, "I'll go with all your recommendations.
+ * Scenes not screens." So the page is BEHIND THE SCENES. It stays one constant, so the entry, the page and its header all
+ * read it and nothing else spells the name.
  */
 export const BTS_TITLE = 'Behind the Scenes';
 

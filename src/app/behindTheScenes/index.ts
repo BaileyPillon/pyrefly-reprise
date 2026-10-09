@@ -9,8 +9,9 @@
  *
  * The format is Bailey's pick: option A, a story in six chapters, opening with option C's five cards as the two-minute
  * summary (`content.ts`). The critic's real scores, the AI tools by name and the community sources are on it (`facts.ts`);
- * where it says something was measured it says `MEASURED_WORDING`; none of Bailey's own words are quoted. What he has not
- * decided is the page's name (`BTS_TITLE`, one constant) and which of his quotes, if any, may appear.
+ * where it says something was measured it says `MEASURED_WORDING`; none of Bailey's own words are quoted. Its name is
+ * settled (`BTS_TITLE`: "Scenes not screens", Bailey, 2026-10-09). What he has not decided is which of his own quotes, if
+ * any, may appear.
  *
  * Game case: both.
  */
