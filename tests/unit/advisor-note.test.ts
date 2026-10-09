@@ -253,8 +253,12 @@ function walk(chapterId: string, seeds: readonly number[], want: number, collect
 
 // ------------------------------------------------- the gate's own reproduction
 
-describe('Chapter 1 at seed 1 — the board the gate reported', () => {
-  const seen = walk('seymour-flux', [1], 16, true);
+// Re-pinned 2026-10-08 (re-parity W1, FFX only): the gate's board was seed 1's first sixteen decisions. The engine now draws hit,
+// variance and critical in the game's order and Cross Cleave always hits, so seed 1's Chapter 1 is a three-decision wipe. The
+// same board (Yuna down and a Zombie, the raise refused, the Poison Fang and Holy Water cards) is seed 18's six decisions, and
+// seed 2 supplies the other ten of the sixteen; `walk` continues on the next seed when a battle ends early, as it always did.
+describe('Chapter 1, the board the gate reported (seed 18, then seed 2 for the rest)', () => {
+  const seen = walk('seymour-flux', [18, 2], 16, true);
 
   it('walks the decisions the gate named', () => {
     expect(seen.decisions).toBe(16);
@@ -342,11 +346,11 @@ describe('Chapter 1 at seed 1 — the board the gate reported', () => {
     // one such sentence per 479 Chapter 1 decisions [critic, fix-3 pass 3,
     // F-B]. Two universal assertions instead of one existential one:
     //
-    //   1. on the sixteen decisions of seed 1 — the original scope — every
+    //   1. on the sixteen decisions of the gate's board (seed 1 originally) — every
     //      board with a body on the floor is answered, through `noteFault`;
     //   2. across the wide walk, the timing sentence still reaches the player
     //      through the **note** on its own, with no warning-channel escape.
-    expect(seen.faults, 'seed 1, decision by decision').toEqual([]);
+    expect(seen.faults, 'seeds 18 and 2, decision by decision').toEqual([]);
     const wide = walk('seymour-flux', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 240, true);
     expect(wide.faults, 'twelve seeds, decision by decision').toEqual([]);
     const inNote = wide.cards.filter((c) => /note="[^"]*then raise/.test(c));

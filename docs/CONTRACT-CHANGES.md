@@ -6,6 +6,19 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-08 — The FFX engine rolls hits, critical hits and damage through the proven kernels: `src/battle/ffx` exports lose nine names and `critChance` loses a parameter (re-parity W1; FFX only; no shared contract file changed)
+
+Branch `re-parity`. No file in the contract list changed (`AbilityDef.record` is the entry below); recorded because the FFX engine's public helpers change shape and the order in which an action draws its random numbers changes. Handoff:
+[re-parity-w1](handoff/re-parity-w1.md). Game case: FFX only (FFX-2 and FF7 do not import these modules; `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- `src/battle/ffx/index.ts` no longer exports `baseDamage`, `damageSkeleton`, `offensiveStat`, `defensiveStat`, `poolOf`, `DamagePool`, `ifloor`, `mulDivFloor` or `mitigation` (the old hand-written damage chain, replaced by
+  `kernel/` through `adapt/` and `hit-apply.ts`); it keeps `idiv`, `baseCtb`, `icvVariance`, `ICV_BASE`, `ICV_VARIANCE`, `computeDamage`, `estimatedDamage`, `hitChance`, `critChance`, `resolveAffinity` and the types `DamageInput`,
+  `DamageResult`, `TimingBonus`. `critChance(...)` no longer takes the fourth (equipment bonus) argument: the kernel reads the bonus from the ability's own flags. Nothing outside `src/battle/ffx` and its tests imported the removed names.
+- Draw order of one action (the engine's seeded stream; `BattleEvent` shape unchanged): per target, per hit, the hit roll, then the damage variance, then the critical roll (only for a command that can crit), as the game's damage routine does;
+  targets are the outer loop and hits the inner one. A random-target multi-hit action (`random-enemy`, `random-ally`) still picks its target hit by hit. Every seed-pinned FFX expectation downstream (goldens, strategy and chapter
+  tests) moved with it and was re-pinned in the same commit with its cause; the draw adapter (`src/battle/ffx/adapt/draws.ts`) takes one engine draw per kernel draw, so the advisor's roll policy (`engine/tactics/advisor-roll.ts`) keeps working.
+  Adopting the game's own random number generator is a separate decision and is not made here.
+
 ## 2026-10-08 — `AbilityDef.record`, `FFXCommandRecord`: the game's own command record on every FFX ability (re-parity W1; FFX only; additive)
 
 Branch `re-parity`. `src/battle/common/types.ts` gains the interface `FFXCommandRecord` (`id`, `type`, `flagsMisc`, `flagsDamage`, `damageClass`: the fields of the game's

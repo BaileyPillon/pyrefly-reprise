@@ -92,7 +92,12 @@ import { MAX_DECISIONS, SEEDS, WINDOWS, attack, newEngine, runIntended } from '.
 // the aeons carry research/ffx-combat-core.md §6.4.3's Gagazet rows (Bahamut 1,398 -> 2,935 HP), so
 // seeds 7 and 20260916 now win (each measured under 'shipped' and under a, nothing else changed) and
 // leave the list; seed 1 still loses (43,187 left at turn 38). Nothing on the boss was touched.
-const KNOWN_LOSSES: readonly number[] = [1];
+// 2026-10-08, re-parity W1 (FFX only): the hit, variance and critical rolls come in the game's order and Cross Cleave —
+// party-wide, accuracy formula 0 in the game's own command record (0x6074), never rolled — always hits, where our data
+// had it on an accuracy byte of 100 marked [estimate]. Seeds 1, 7 and 42 now lose (7 and 1 inside the opening cycles,
+// at turns 11 and 9 with Seymour untouched; 42 at turn 50) and 20260916 still wins. Nothing on the boss or the party was
+// tuned; restoring only Cross Cleave's old accuracy formula gives 17 of seeds 1-40 again (measured on the same tree).
+const KNOWN_LOSSES: readonly number[] = [1, 7, 42];
 
 /**
  * ### 2026-09-19, the release-prep pass — read this before trusting the list above
@@ -156,10 +161,11 @@ describe('the shipped intended strategy beats Chapter 1', () => {
         // Still an assertion with teeth: it must reach a real outcome, and it
         // must not be losing because it went after the mount (§2.2).
         expect(r.outcome).toBe('defeat');
-        // Still an assertion with teeth: the line must have been playing the
-        // fight it is meant to play, i.e. it got him past his first threshold
-        // rather than wiping to the opening cycle.
-        expect(r.bossHp, 'a documented loss is still a fight, not a turn-4 wipe').toBeLessThan(52_500);
+        // Still an assertion with teeth: the line must have lasted into the first full cycle of the
+        // fight (battle turn 8 or later) rather than wiping on the opening Lance of Atrophy. Since
+        // 2026-10-08 (re-parity W1) the bound is on the turn, not on Seymour's HP: with Cross Cleave
+        // always landing, two of the three documented losses end with Seymour untouched.
+        expect(r.turns, 'a documented loss is still a fight, not a turn-4 wipe').toBeGreaterThanOrEqual(8);
         return;
       }
       expect(r.outcome).toBe('victory');
@@ -202,7 +208,7 @@ describe('the shipped intended strategy beats Chapter 1', () => {
    * Gems on their one turn: 23 -> 17 of these forty, measured with nothing else changed (26 -> 17
    * against live a999d133, both fixes together). 17/40 is under half: this is a floor, not a promise.
    */
-  it('keeps at least fifteen wins in forty contiguous seeds (measured 18)', () => {
+  it('keeps at least eight wins in forty contiguous seeds (measured 10)', () => {
     const results = Array.from({ length: 40 }, (_, i) => runIntended(i + 1));
     const wins = results.filter((r) => r.outcome === 'victory').length;
     const lost = results
@@ -211,8 +217,12 @@ describe('the shipped intended strategy beats Chapter 1', () => {
       .map((x) => `${x.seed}: ${x.r.outcome} with ${x.r.bossHp} left at turn ${x.r.turns}`);
     console.log(`seeds 1-40: ${wins} wins; losses: ${lost.join(', ') || 'none'}`);
 
-    // 17/40 on 2026-09-25 (PR-0155); 18/40 under PR-0179 arm a (D-243, 2026-09-27). The floor stays.
-    expect(wins, 'Chapter 1 fell below its 15/40 floor (18/40 measured 2026-09-27, arm a)').toBeGreaterThanOrEqual(15);
+    // 17/40 on 2026-09-25 (PR-0155); 18/40 under PR-0179 arm a (D-243, 2026-09-27). The floor stayed at 15.
+    // 18 -> 10 on 2026-10-08 (re-parity W1, FFX only; floor 15 -> 8): the game's own record makes Cross Cleave
+    // unevadable (accuracy formula 0), where our data rolled it on an accuracy byte of 100 marked [estimate]. Restoring
+    // only that one formula gives 17/40 on the same tree, so the whole move is that sourced answer. Nothing on the
+    // boss or the party was tuned; the difficulty it implies is Bailey's call (docs/handoff/re-parity-w1.md).
+    expect(wins, 'Chapter 1 fell below its 8/40 floor (10/40 measured 2026-10-08, re-parity W1)').toBeGreaterThanOrEqual(8);
   }, 120_000);
 
   /**
@@ -223,7 +233,7 @@ describe('the shipped intended strategy beats Chapter 1', () => {
    * the floor sits five wins below it. At most two losses before battle turn 10 (measured 1: seed 20
    * at turn 8), and a battle turn is the engine's, not a player's. Nothing on the boss was tuned.
    */
-  it('keeps at least 73 wins over the four standard windows (measured 79 of 160)', () => {
+  it('keeps at least 40 wins over the four standard windows (measured 45 of 160)', () => {
     const perWindow: number[] = [];
     let early = 0;
     for (const [a, b] of WINDOWS) {
@@ -239,9 +249,11 @@ describe('the shipped intended strategy beats Chapter 1', () => {
     console.log(`four windows: ${perWindow.join(' / ')} = ${total} of 160; losses before battle turn 10: ${early}`);
 
     // 17 / 17 / 19 / 25 = 78 on 2026-09-25 (PR-0008); 18 / 19 / 21 / 21 = 79 under PR-0179 arm a
-    // (D-243, 2026-09-27; one loss before turn 10 either way). The floor stays.
-    expect(total, 'Chapter 1 fell below its 73/160 floor (79/160 measured 2026-09-27, arm a)').toBeGreaterThanOrEqual(73);
-    expect(early, 'a loss before battle turn 10 is a wipe, not a fight').toBeLessThanOrEqual(2);
+    // (D-243, 2026-09-27; one loss before turn 10 either way). The floor stayed at 73 and the early losses at 2.
+    // 79 -> 45 on 2026-10-08 (re-parity W1, FFX only; floor 73 -> 40, early losses 2 -> 12 with 9 measured): the same
+    // sourced answer as the forty-seed window above, Cross Cleave always landing. Nothing was tuned.
+    expect(total, 'Chapter 1 fell below its 40/160 floor (45/160 measured 2026-10-08, re-parity W1)').toBeGreaterThanOrEqual(40);
+    expect(early, 'a loss before battle turn 10 is a wipe, not a fight').toBeLessThanOrEqual(12);
   }, 240_000);
 
   /**

@@ -13,8 +13,8 @@ import {
   estimatedDamage,
   furyCastsFor,
   furyTierOf,
-  mitigation,
 } from '../../src/battle/ffx/index.ts';
+import { defTerm } from '../../src/battle/ffx/kernel/damage.ts';
 import { ability, attackAbility, fighter, stats } from './ffx-fixtures.test.ts';
 
 /** `damageRNG = 16` is exactly x1.0 — the value the tables are computed at. */
@@ -34,7 +34,9 @@ function hit(userStats: Partial<ReturnType<typeof stats>>, targetStats: Partial<
 
 describe('MITIGATION (DefNum)', () => {
   // §2.3 reference row. The published `floor((Def - 280.4)^2 / 110) + 16`
-  // approximation is off by one for 26 of the 256 inputs; this is the chain.
+  // approximation is off by one for 26 of the 256 inputs; this is the chain. Since the re-parity
+  // wiring (W1) the defence term is the game's own kernel function (`kernel/damage.ts#defTerm`,
+  // proved against the exe in parity-ffx-damage.test.ts); the research table is unchanged.
   it.each([
     [0, 730],
     [1, 725],
@@ -51,7 +53,7 @@ describe('MITIGATION (DefNum)', () => {
     [200, 74],
     [255, 21],
   ])('Def %i -> %i', (def, expected) => {
-    expect(mitigation(def)).toBe(expected);
+    expect(defTerm(def)).toBe(expected);
   });
 });
 
@@ -81,9 +83,12 @@ describe('physical Attack (§2.5 worked table, rng 16)', () => {
     expect(hit({ str: 20 }, { def: 20 }, piercing)).toBe(280);
   });
 
-  it('floors natural Defense at 1, so DEF 0 is not the Armor Break case', () => {
-    // max(DEF,1) -> MITIGATION 725, not 730 [§2.3].
-    expect(hit({ str: 20 }, { def: 0 })).toBe(278);
+  it('does NOT raise a natural Defense of 0 to 1: the exe reads the byte as it is (game-code parity, W1)', () => {
+    // The old engine floored DEF at 1 (MITIGATION 725 -> 278), a rule from a community guide. The exe's
+    // base-damage function (0x789bf0) reads the defence byte unchanged, so a natural DEF 0 uses the term for
+    // 0, 730, exactly like Armor Break: STR 20, power 16, variance 16 -> 280 (research/re-ffx-damage.md
+    // section 9, difference 1).
+    expect(hit({ str: 20 }, { def: 0 })).toBe(280);
   });
 });
 

@@ -84,26 +84,36 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * the killed enemy's item drops (research ffx-vs-ffx2-presentation §9; `results.ts#OVERKILL_DROP_MULTIPLIER`).
  * The line overkills a Guado Guardian on both seeds, so the victory event's drops change and nothing else:
  * with the multiplier stubbed to 1 this file is 18/18 on the old values, and the other 16 digests never moved.
+ * All 18 digests re-baselined 2026-10-08 by re-parity W1 ("game-code parity", FFX only): the hit roll, the damage
+ * variance, the critical roll and the damage chain now come from the kernels proven against FFX.exe
+ * (src/battle/ffx/kernel/), through src/battle/ffx/adapt/ and hit-apply.ts, drawn in the game's order (hit, variance,
+ * critical; targets outer, hits inner) and fed the game's own command flags (src/data/ffx/command-records/). Every
+ * log moves because the draw order and the formulas moved, which is the point, and
+ * tests/unit/parity-ffx-engine-wiring.test.ts is the proof that the engine computes what the kernels compute. Four
+ * outcomes moved, all on seeds that were not tuned: seymour-flux#7 victory -> defeat (Cross Cleave never misses in
+ * the game's record), seymour-omnis#1 victory -> defeat, seymour-natus#1 and #7 defeat -> victory; the other 14 keep
+ * their outcome. The per-chapter causes are in docs/handoff/re-parity-w1.md. The old values are in git history (the
+ * commit before the one that moved them).
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': 'd5fd8bf4:defeat',
-  'seymour-flux#7': '420e8126:victory',
-  'yunalesca#1': 'b20edebb:victory',
-  'yunalesca#7': '2b4ba8df:victory',
-  'braskas-final-aeon#1': 'ca3f7569:victory e41be697:victory 128fa095:victory d57abcc1:victory 4c3a1fd4:victory 2ec2be2f:victory 2e29d25c:victory',
-  'braskas-final-aeon#7': 'c1e3482:victory 90fc8d41:victory 918adb39:victory ad58d940:victory abbc417b:victory 9621c0d7:victory 3bcdda13:victory',
-  'seymour-anima-macalania#1': 'fb27d3f2:victory',
-  'seymour-anima-macalania#7': 'ab704669:victory',
-  'evrae-airship#1': 'ebf9b7c4:victory',
-  'evrae-airship#7': '73022786:victory',
-  'yojimbo-cavern#1': '354ac345:victory',
-  'yojimbo-cavern#7': '13a3322e:victory',
-  'seymour-natus#1': '6fe6bbe1:defeat',
-  'seymour-natus#7': '4be27cc4:defeat',
-  'seymour-omnis#1': '354e0ace:victory',
-  'seymour-omnis#7': 'ac28e23c:victory',
-  'isaaru-via-purifico#1': 'a9b7568a:victory 5be7c9ed:victory 32b8ae86:victory',
-  'isaaru-via-purifico#7': 'cc3291bd:victory a32106b5:victory 3c5d0bb6:victory',
+  'seymour-flux#1': '28692f2c:defeat',
+  'seymour-flux#7': 'f923eb10:defeat',
+  'yunalesca#1': '2327f640:victory',
+  'yunalesca#7': '4225415d:victory',
+  'braskas-final-aeon#1': '567c3bf4:victory ea51a558:victory ba4a14f2:victory 509fbd2:victory 51794163:victory d24a132a:victory 8c3f3ba4:victory',
+  'braskas-final-aeon#7': '2b85c492:victory f82347e2:victory 6f22884e:victory 2af5447c:victory 45aad3c7:victory aef3a842:victory 6f2d99cd:victory',
+  'seymour-anima-macalania#1': '15ecc081:victory',
+  'seymour-anima-macalania#7': '86868cbf:victory',
+  'evrae-airship#1': '14674509:victory',
+  'evrae-airship#7': '3c97dd63:victory',
+  'yojimbo-cavern#1': 'fce6b795:victory',
+  'yojimbo-cavern#7': 'c3a419df:victory',
+  'seymour-natus#1': 'd4682a0e:victory',
+  'seymour-natus#7': '2133d3d8:victory',
+  'seymour-omnis#1': 'b7b53dbe:defeat',
+  'seymour-omnis#7': '1a2a42df:victory',
+  'isaaru-via-purifico#1': 'd916c9d0:victory bc11f7e3:victory 42ea7beb:victory',
+  'isaaru-via-purifico#7': 'b073037f:victory 584e6881:victory e0f5e2d6:victory',
 };
 
 describe('FFX engine goldens (every FFX chapter, the line, whole chain)', () => {

@@ -198,7 +198,9 @@ describe('no game prints the other game\'s term (rule 14 absence tests)', () => 
    */
   for (const chapterId of ['ffx2-bahamut', 'ffx2-vegnagun-shuyin', 'seymour-flux'] as const) {
     it(`${chapterId}: no tempo claim without a provider`, () => {
-      const { engine, options } = harnessFor(chapterId, 1);
+      // Chapter 1 runs seed 2, the rest seed 1 (2026-10-08, re-parity W1, FFX only): the engine now draws hit, variance and
+      // critical in the game's order and Cross Cleave always hits, so seed 1's Chapter 1 is over after three decisions.
+      const { engine, options } = harnessFor(chapterId, chapterId === 'seymour-flux' ? 2 : 1);
       let decisions = 0;
       for (let i = 0; i < MAX_STEPS && decisions < 30; i += 1) {
         const d: Decision = engine.nextDecision();

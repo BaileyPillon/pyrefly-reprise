@@ -88,7 +88,7 @@ function follow(seed: number): Run {
 }
 
 describe('Chapter I, forty seeds of the card (PR-0131)', () => {
-  it('wins at least 19 of 40, and reports every raise led into a re-kill the forecast telegraphed', () => {
+  it('wins at least 11 of 40, and reports every raise led into a re-kill the forecast telegraphed', () => {
     const runs = Array.from({ length: 40 }, (_, i) => follow(i + 1));
     const wins = runs.filter((r) => r.win).length;
     const raises = runs.reduce((n, r) => n + r.raises, 0);
@@ -102,7 +102,12 @@ describe('Chapter I, forty seeds of the card (PR-0131)', () => {
     // 18 -> 19 on 2026-09-27 at the merge of advisor-v3 (D-271) onto arm a, re-measured on the merged
     // tree: v3 on (the default) 19/40, 85 raises led; the same tree with `v3: false` 18/40, 76 raises
     // led (arm a alone, as above). The move is v3's revive priority, the only v3 rule FFX reads.
-    expect(wins).toBeGreaterThanOrEqual(19);
+    // 19 -> 12 on 2026-10-08 (re-parity W1, FFX only; floor 19 -> 11): the hit, critical and damage rolls come through the
+    // game's kernels, and the game's own record makes Cross Cleave (party-wide, our data had it on an accuracy of 100
+    // marked [estimate]) unevadable. Measured on the same tree with only that one formula put back: 18/40, so the move
+    // is that sourced answer and not the card (the intended line moves 18 -> 10 of seeds 1-40 for the same reason, see
+    // strategy-seymour-flux.test.ts). Nothing on the boss or the party was tuned.
+    expect(wins).toBeGreaterThanOrEqual(11);
     expect(raises).toBeGreaterThan(0);
     // The measuring stick for the open half of PR-0131 (docs/handoff/t1-b3a.md,
     // stopped for a method check): on this branch the card still leads with

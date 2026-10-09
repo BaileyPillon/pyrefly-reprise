@@ -140,6 +140,12 @@ describe('advisor v4 on the card (FFX)', () => {
       picks.push(`${d.actorId}: ${top.label} -> ${top.targetName ?? '-'}`);
     }
     // Measured 2026-09-28: the prototype's census move (12 of 12 seeds there), through the worker.
-    expect(picks).toEqual(['tidus: Slow -> Seymour Flux', 'tidus: Slow -> Seymour Flux', 'tidus: Slow -> Seymour Flux']);
+    // Seed 3 moved on 2026-10-08 (re-parity W1, FFX only: hit, critical and damage rolls through the game's kernels). Its
+    // first menu is a Zombie board either way (Lance of Atrophy lands on Yuna and the Zombie with it: 761 damage and a
+    // pick of Slow before; 792 damage, Yuna on 708 of 1500 and a pick of Holy Water now). The card's own rule says the
+    // same as the search now does ("While Yuna is a Zombie the next Full-Life is a kill, not a heal: clear it now").
+    // Restoring only Cross Cleave's old accuracy formula leaves the seed-3 pick unchanged, so it is the whole wired
+    // engine's numbers and not one change; seeds 1 and 2 open on an untouched board and still pick Slow.
+    expect(picks).toEqual(['tidus: Slow -> Seymour Flux', 'tidus: Slow -> Seymour Flux', 'tidus: Holy Water -> Yuna']);
   }, 600_000);
 });

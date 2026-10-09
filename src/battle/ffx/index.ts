@@ -35,20 +35,9 @@ export {
 } from './registry.ts';
 
 // Mechanics, exported so tests and the debug API can pin them directly.
-export { ifloor, idiv, mulDivFloor, mitigation, baseCtb, icvVariance, ICV_BASE, ICV_VARIANCE } from './math.ts';
-export {
-  computeDamage,
-  baseDamage,
-  damageSkeleton,
-  estimatedDamage,
-  hitChance,
-  critChance,
-  resolveAffinity,
-  offensiveStat,
-  defensiveStat,
-  poolOf,
-} from './formulas.ts';
-export type { DamageInput, DamageResult, DamagePool, TimingBonus } from './formulas.ts';
+export { idiv, baseCtb, icvVariance, ICV_BASE, ICV_VARIANCE } from './math.ts';
+export { computeDamage, estimatedDamage, hitChance, critChance, resolveAffinity } from './formulas.ts';
+export type { DamageInput, DamageResult, TimingBonus } from './formulas.ts';
 export type { FuryTier } from './fury.ts';
 export { effectiveStats, effectivePool } from './effectiveStats.ts';
 export type { EffectiveStats, EffectiveStatRow, EffectiveStatKey, StatBonusKind, StatsBearer } from './effectiveStats.ts';

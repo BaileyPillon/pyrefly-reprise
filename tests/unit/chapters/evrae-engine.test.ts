@@ -608,7 +608,9 @@ describe('Evrae — FFX only [rule 14]', () => {
       party: gagazetBuild,
       enemies: group,
       triggers: [],
-      seed: 7,
+      // Seed 7 -> 4 on 2026-10-08 (re-parity W1, FFX only): the engine now draws hit, variance and critical in the
+      // game's order and Cross Cleave always hits, so seed 7's Chapter 1 is over after five decisions; seed 4 gives the eight.
+      seed: 4,
       condition: 'normal',
       canEscape: false,
     });
