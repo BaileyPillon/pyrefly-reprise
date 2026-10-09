@@ -55,6 +55,7 @@ function viaEngine(sit: StatusSituation, hits: number): Outcome {
   const { ctx } = contextOf(user, target, rng, sit.target.ctb);
   ctx.rt.actors.get(user.id)!.ctb = sit.userCtb;
   if (sit.targetMonster) ctx.rt.actors.get(target.id)!.threatenChance = sit.threatenChance;
+  ctx.rt.actors.get(target.id)!.regenTicks = sit.regenTicks;
   resolveAbility(ctx, user, sit.def, [target.id], {
     hits,
     ...(sit.power !== undefined ? { power: sit.power } : {}),
@@ -74,6 +75,7 @@ function viaEngine(sit: StatusSituation, hits: number): Outcome {
     maxHp: ejected ? 0 : target.stats.maxHp,
     maxMp: ejected ? 0 : target.stats.maxMp,
     doom: !dead && !ejected ? (target.statuses['doom']?.turnsRemaining ?? null) : null,
+    regenTicks: ctx.rt.actors.get(target.id)!.regenTicks,
     early: false,
   };
 }
@@ -88,7 +90,7 @@ describe('the engine rolls statuses and writes them back as the kernels do, on g
   it('1500 situations: the same draws, words, flags and pools', () => {
     const rng = makeRng(20261009);
     let skipped = 0;
-    const seen = { changed: 0, cleanse: 0, killed: 0, revived: 0, ejected: 0, threaten: 0, stacks: 0, pools: 0, ctb: 0, kinds: new Set<string>() };
+    const seen = { changed: 0, cleanse: 0, killed: 0, revived: 0, ejected: 0, threaten: 0, stacks: 0, pools: 0, ctb: 0, regenLanded: 0, kinds: new Set<string>() };
     for (let i = 0; i < 1500; i++) {
       const sit = randomStatusSituation(rng, POOL);
       const hits = sit.hits;
@@ -112,6 +114,8 @@ describe('the engine rolls statuses and writes them back as the kernels do, on g
       if ((sit.def.record!.stage?.[0] ?? 0) !== 0) seen.stacks++;
       if (((sit.def.record!.buff ?? 0) & 3) !== 0) seen.pools++;
       if (kernels.ctb !== sit.target.ctb) seen.ctb++;
+      // A Regen that landed on a holder whose tick counter was running: the write-back resets the counter (VA 0x0078f060).
+      if (sit.regenTicks !== 0 && kernels.regenTicks === 0) seen.regenLanded++;
     }
     expect(skipped).toBeLessThan(150);
     // The sample is wide enough to have exercised each branch.
@@ -124,6 +128,7 @@ describe('the engine rolls statuses and writes them back as the kernels do, on g
     expect(seen.stacks).toBeGreaterThan(15);
     expect(seen.pools).toBeGreaterThan(2);
     expect(seen.ctb).toBeGreaterThan(60);
+    expect(seen.regenLanded).toBeGreaterThan(8);
     expect(seen.kinds.size).toBeGreaterThan(10);
   });
 });

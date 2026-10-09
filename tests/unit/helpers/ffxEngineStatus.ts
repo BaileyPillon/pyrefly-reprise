@@ -83,6 +83,8 @@ export interface StatusExtras {
   targetMonster: boolean;
   /** An enemy target's Doom countdown (the monster record's byte); a party member's is 5. */
   doomTurns: number;
+  /** The target's Regen tick counter when the action begins (`Chr+0x6d2`): a Regen that lands resets it. */
+  regenTicks: number;
   /** The user's clock: counter, Haste and Slow counters (0 off, 1 to 253, 254, 255 permanent), and its weapon's status strikes. */
   userCtb: number;
   userHaste: number;
@@ -254,6 +256,7 @@ export function randomStatusSituation(rng: SeededRng, pool: readonly AbilityDef[
     regenFlag: chance(rng, 0.1),
     targetMonster,
     doomTurns: rng.int(1, 9),
+    regenTicks: pickOf(rng, [0, 3, 40, 255]),
     userCtb: chance(rng, 0.6) ? 0 : rng.int(0, 60),
     userHaste: chance(rng, 0.12) ? pickOf(rng, [1, 5, 254, 255]) : 0,
     userSlow: 0,
@@ -410,6 +413,8 @@ export interface Outcome {
   maxMp: number;
   /** The Doom countdown on the target, when it has one. */
   doom: number | null;
+  /** The target's Regen tick counter afterwards: reset to 0 by a hit that takes its Regen counter from 0 to something (VA 0x0078f060). */
+  regenTicks: number;
   /** The target died or left before the last hit: the engine keeps hitting it, the oracle stops, so the situation is not compared. */
   early: boolean;
 }
@@ -452,6 +457,7 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
   let early = false;
   // The engine's own instance of a Doom that was already there counts 254; a Doom that lands is made with the step's countdown.
   let doomCounter = (w.autoExtra & 0x4000) !== 0 ? 255 : 254;
+  let regenTicks = sit.regenTicks;
 
   const rank = !def.rank || def.rank <= 0 ? 3 : def.rank;
   const usesWeapon = (rec.flagsMisc & 0x40000) !== 0;
@@ -556,6 +562,7 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
     const before = record;
     record = step.record;
     if (step.doomCounter !== null) doomCounter = step.doomCounter;
+    if ((before.counters[10] as number) === 0 && (record.counters[10] as number) !== 0) regenTicks = 0;
     const wasDead = (before.perm & 1) !== 0;
     const nowDead = (record.perm & 1) !== 0;
     const revived = wasDead && !nowDead;
@@ -622,5 +629,5 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
     : null;
   // The maxima of a character that left the field are never read again, and what the exe's Eject does to them is not established
   // (a KO runs the status reset and puts them back; this note does not claim Eject does): they are not compared.
-  return { kinds, words, dead: dead && !ejected, ejected, hp, mp, ctb, maxHp: ejected ? 0 : maxHp, maxMp: ejected ? 0 : maxMp, doom: words !== null && (finalExtra & 0x4000) !== 0 ? doomCounter : null, early };
+  return { kinds, words, dead: dead && !ejected, ejected, hp, mp, ctb, maxHp: ejected ? 0 : maxHp, maxMp: ejected ? 0 : maxMp, doom: words !== null && (finalExtra & 0x4000) !== 0 ? doomCounter : null, regenTicks, early };
 }

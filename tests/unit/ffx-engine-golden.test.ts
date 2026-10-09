@@ -111,12 +111,16 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * isaaru-via-purifico#1 (its third link) victory -> defeat; the other 15 keep their outcome. One seed is one sample of a chapter
  * whose win rate is well away from 0 and 100, so a flipped seed is not a change of difficulty: the 500-seed rates, before and
  * after, are in docs/handoff/re-parity-w2.md. The old values are in git history (the commit before the one that moved them).
+ * Chapter II (Yunalesca) re-baselined a second time the same day, same track (FFX only): a Regen that lands resets its holder's own tick
+ * counter (the exe's hit-record write-back, VA 0x0078f060), so a fresh Regen pays the ticks since the cast and not the 255 the counter had
+ * saturated at (a Zombie took maxHP + 100 from it). That moves the two Yunalesca digests (Regen is her party's and her own spell);
+ * every outcome is still victory and no other digest moved.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': 'd6d988d5:defeat',
   'seymour-flux#7': '8aa995a1:defeat',
-  'yunalesca#1': '2e674006:victory',
-  'yunalesca#7': '19d2b287:victory',
+  'yunalesca#1': 'c290c94e:victory',
+  'yunalesca#7': 'bf24ebdd:victory',
   'braskas-final-aeon#1': '1c226807:victory 67153004:victory 4a4b7aa4:victory 2093256d:victory 4252bff8:victory 9210c50b:victory c12e2c6e:victory',
   'braskas-final-aeon#7': 'a1681a38:victory 36c3ca08:victory f02a6c2f:victory e461cd79:victory 3ea598fa:victory 10aeab6a:victory 1e1df139:victory',
   'seymour-anima-macalania#1': '50d1cb36:victory',

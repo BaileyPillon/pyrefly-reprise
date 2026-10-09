@@ -244,6 +244,28 @@ describe('Regen (§4.3)', () => {
     expect(tidus.hp).toBe(200);
   });
 
+  it('a Regen that lands resets its holder\'s tick counter: a fresh Regen pays +100, not a full maxHP (VA 0x0078f060)', () => {
+    // The counter saturates at 255 long before anybody casts Regen; the write-back of the hit record puts it back to 0 when the Regen
+    // counter goes from 0 to something, so the first payout counts the ticks since the cast. Without the reset it was 255 * 2000 >> 8 + 100.
+    const { ctx } = makeCtx();
+    const tidus = at(ctx, 'tidus');
+    const regen = { status: 'regen', chance: 255, duration: 10 } as const;
+    tidus.hp = 500;
+    ctx.rt.actors.get('tidus')!.regenTicks = 255;
+    expect(inflict(ctx, at(ctx, 'yuna'), tidus, regen)).toBe(true);
+    expect(ctx.rt.actors.get('tidus')!.regenTicks).toBe(0);
+    onTurnStart(ctx, at(ctx, 'yuna'));
+    expect(tidus.hp).toBe(500 + 100);
+    // The same Zombie: the fresh Regen costs it 100, it does not drop it from full to nothing.
+    const yuna = at(ctx, 'yuna');
+    giveStatus(yuna, 'zombie');
+    const yunaHp = yuna.hp;
+    ctx.rt.actors.get('yuna')!.regenTicks = 255;
+    expect(inflict(ctx, tidus, yuna, regen)).toBe(true);
+    onTurnStart(ctx, tidus);
+    expect(yuna.hp).toBe(yunaHp - 100);
+  });
+
   it('counts down at the START of its holder\'s own turn, and not at the end', () => {
     const { ctx } = makeCtx();
     const tidus = at(ctx, 'tidus');
