@@ -1,0 +1,77 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-09T01:59:00.491Z",
+  "build": {
+    "mainSha": "a021787a",
+    "bundle": "cUSnFK7q",
+    "artifactHash": "713f2d21ab944898044c1c90d44fc39fda12ad4f93494d6e426af220a13f55ca"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "critic/reviews/a021787a-live/data/verify-live-full.json: node tools/artifact-manifest.mjs verify-live --manifest <critic/artifacts/a021787a.json> --url https://echoesofspira.com/ --changed-from <critic/artifacts/04cdcd45.json> --full: result PASS, liveManifest match, checked 4,539 of 4,539 files, mismatched 0, missing 0, wrongType 0, errors 0; 34.4 minutes (2026-10-09T01:11:02Z to 2026-10-09T01:45:24Z), 4,541 fetch calls, 0 non-200 answers",
+        "critic/reviews/a021787a-live/data/verify-live-default.json: the default pass (the page, assets/, what differs from live 39.4.1 and an even sample of 40): result PASS, 50 files, liveManifest match",
+        "the page's own account in both browser sessions (critic/reviews/a021787a-live/data/results-S1.json, results-S2.json): window.__pyrefly.build() {sha \"a021787a\", bundle \"index-cUSnFK7q.js\"}; document.scripts /assets/index-cUSnFK7q.js; stylesheet /assets/index-Ta9GcVj0.css; fetch(\"/artifact-manifest.json\") artifactHash 713f2d21ab944898044c1c90d44fc39fda12ad4f93494d6e426af220a13f55ca, count 4539, totalBytes 9671976245; 1 script[data-cf-beacon] in the DOM; the art index it fetched lists title [\"echo\",\"keyart\"] and title2x [\"keyart\"] (generatedAt 2026-10-09T00:44:33.622Z)",
+        "critic/reviews/a021787a-live/data/results-H.json: paths that are not shipped answer a real 404 with 0 bytes, never the single-page fallback: art/does-not-exist-r3942.png 404; nope-r3942.js 404; audio/music/nope-r3942.mp3 404; assets/index-DAnPZ-iy.js 404; assets/index-D57LJe-j.js 404; pyrefly-reprise/ 404; art/title/echo.png 404; art/title/echo.webp 200 image/webp 1,357,744 bytes (the inert painting of F3943-03, fetchable by URL); art/title/keyart.2x.webp 200",
+        "critic/reviews/a021787a-live/data/results-S1.json, results-S2.json: 674 responses in the two sessions, 0 at 400 or more, 0 images or audio answered as text/html, only echoesofspira.com and Cloudflare's beacon as hosts, every music file 200 audio/mpeg",
+        "critic/reviews/a021787a-live/data/results-L.json and results-L-first.json: first load to the first rendered frame, a new browser and an empty cache each time: 6.92, 6.05, 4.57 s (first set, machine busy: CPU 52 percent from other jobs) and 2.78, 2.68, 2.68 s (second set, CPU 43 percent), 0 console errors and 0 responses >= 400 in the second set; the edge answers the 3,950,356-byte bundle (1,905 bytes more than 39.4.1's) with the first byte in 0.13 to 0.25 s and the whole in 1.0 to 1.45 s"
+      ],
+      "reason": "Every one of the 4,539 files of the stored manifest was downloaded from the live address and compared byte for byte and by content type (0 differ), and the live site's own artifact-manifest.json names 713f2d21ab944898044c1c90d44fc39fda12ad4f93494d6e426af220a13f55ca, the deploy's hash. The page a browser receives equals the artifact's index.html once Cloudflare's one Web Analytics beacon (366 bytes and the line feed after it) is cut out, as in releases 38 to 39.4.1. First load under 5 seconds: 2.78, 2.68, 2.68 s in the calmer set, 6.92, 6.05, 4.57 s in the busy one (two of those three read over 5 s with the machine at 52 percent CPU from other jobs; the build adds 1,905 bytes of bundle and no asset to a first load, so it is the shared machine and link, not this build)."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "critic/reviews/a021787a-live/data/results-S1.json (14 frames), results-S2.json (8 frames): before every frame the harness read the screen, the pending menu and its actor, the fiends on the field, the target prompt, the pause--bare class and the stale roots (#ui > [data-screen]) from the page and THREW on a mismatch: 22 of 22 asserted, 0 failed",
+        "critic/reviews/a021787a-live/data/ch6-*/ and logs/: verify.mjs --case ch6 asserted \"screen battle, a menu pending, the act's fiends on the field\" before each first-menu capture of Acts I to III, 4 runs, 0 failed",
+        "the actions of the attacks follow the game's own event log: who acted and what damage landed (Act 1: paine 188 on dr-goon, yuna 144 on dr-goon; Act 2: rikku 68 on ormi-logos-room; Act 3: yuna 57 on logos)"
+      ],
+      "reason": "Every capture was asserted against the page's own state before it was taken, on the intended screen, chapter, act and menu."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": [
+        "critic/reviews/a021787a-live/data/results-S2.json: Chapter I (FFX), a fresh profile; after a real attack the master volume was lowered by the pause screen's OPTIONS tab with the arrow keys (tab strip member:tidus > member:yuna > member:kimahri > chapter > guide > options, the cursor on \"MASTER VOLUME 80\", ArrowLeft x2: masterVolume 0.8 to 0.6); progress on record: chapters.seymour-flux attempts 1, cleared false, playTimeMs 21732.6; seenCoach 6 ids",
+        "after page.reload and window.__pyreflyReady: the save under pyrefly-reprise:save:v1 (the only localStorage key) reads masterVolume 0.6, chapters.seymour-flux attempts 1 and playTimeMs 21732.6, the same seenCoach; the mixer itself reads master 0.6 (the setting is applied at boot); the page runs a021787a / index-cUSnFK7q.js"
+      ],
+      "reason": "Persistence is untouched by this hotfix (no save-data file in the diff); this is the light reload check every live pass carries. The full upgrade matrix is not part of this pass and is listed under notTested."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Exact artifact: the stored manifest of this build (4,539 files, 9,671,976,245 bytes, 713f2d21ab944898) against https://echoesofspira.com/ by tools/artifact-manifest.mjs verify-live, default and --full (every file downloaded and byte-compared), plus the page's own account of its build, the not-shipped paths and the inert echo plate.",
+      "Chapter VI (FFX-2) Acts I to III first menus at 1600x900 on the live bundle by the focused review's own harness (verify.mjs --case ch6), 4 runs, and once on release 39.4's preview worker for the places: the fiends' world positions against 39.4's (largest difference 0.01 in x and 0 in z over every comparison), their real heights, the on-screen ratios to the girls, the gaps to the command list and the frame, the intent card and advisor card boxes, a real attack in each act (real keys) and a fiend's own action in each act.",
+      "Chapter VI Act I from the title by real keys (S1): board, party prep, the scene, the first menu, the sizes read from the page's actors, the cancel path, Escape and P pause and resume, H hide and restore, a real attack, a fiend's own action, prerendered music.",
+      "Another chapter (S2, FFX Chapter I): the first menu, its first-time coach card, a real attack, an options change by keys and a reload.",
+      "Console, network and hosting for the whole pass: 0 console and page errors and 0 responses of 400 or more in the 9 live sessions that tracked them (6 game sessions and 3 cold loads; the 3 loads of the first timing set tracked nothing), 0 requests for art/title/echo.*; the 39.4 reference run: 0 errors."
+    ],
+    "reused": [],
+    "corroboration": [
+      "The focused review's numbers for this code on the candidate (critic/reviews/a021787a-focused.json) are compared with the live captures only as a cross-check: places equal 39.4's, ratios within 0.01 of the candidate's, the intent card covers no head in any act and 6 percent of Leblanc's body in Act III when Logos or Ormi acts next, on the candidate and in all four live runs alike. They are not counted as evidence of this pass."
+    ],
+    "notTested": [
+      "the full CHK-024 upgrade matrix (fresh and returning players, a 39.4.1 save migrating forward, truncated storage, the reset flow); no save-data file is in this diff",
+      "Chapter VI Acts II and III reached by real keys from the title (they are reached through the debug route chain, as the focused review reached them; their first menus and attacks are real keys), the win, loss and retry paths, the results screen and the hidden chapter on live (the focused review covered them on the candidate)",
+      "the other 16 chapters on live; Chapter IV (FFX-2) and the FFX chapters beyond Chapter I",
+      "the continuity harness (CHK-026, CHK-027), art quality beyond the frames I looked at, and any music by ear (no agent listened: the checks read the mixer and the files)",
+      "the phone at 390x844, 1280x720, 2000x1012, 4K, Safari and Firefox, a real controller, a slow or cold connection (the focused review measured the phone and 1280x720 on the candidate: F3943-01, F3943-02, F3942-01)",
+      "www to apex and http to https redirects, the old GitHub Pages address (a legacy host)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 55,
+  "notes": "No critical or major finding in this pass; nothing here is a regression. The deployed build behaves live exactly as the focused review measured it on the candidate; the reconcile of the artifact hash is in critic/reviews/a021787a-focused-addendum.json.\n\nLV3942-1 (method, informational; the first capture is superseded and kept): the frame at a first menu is not always the at-rest frame. The chapter-framing fit (src/engine/fx/mix/framing.ts: it moves the camera to keep the figures clear of the HUD boxes) was ENGAGED when run 1 captured Acts II and III (Act II lens [-64, 0], back 1.04, advisor card 598 px wide; Act III lens [0, 0], back 1.04, advisor card 462 px wide, z 9.691 and 9.691, the girls 268.9 and 268.4 px), and it was at rest in runs 2, 3, 4 (lens [0, 0], back 1, z 9.241 / 9.265 / 9.271; 9.242 / 9.269 / 9.245; 9.273 / 9.249 / 9.274), as in the captures of release 39.4 and live 39.4.1. The focused review's own candidate capture of Acts II and III was engaged as well (Act II lens [-64, 0], back 1, advisor card 532 px wide; Act III lens [-64, -36], back 1, advisor card 598 px wide), which is why it read 288 and 227 px from the nearest fiend to the command list where the at-rest frame on live reads 222 to 224 and 159 to 163 px (release 39.4 at rest: 234 and 170; the 64 px lens shift accounts for the difference, 163 + 64 = 227 in Act III): every fiend is clear of the command list in every frame, and the world positions and the ratios to the girls are the same in all of them. So it is neither the live host nor the full download that made the frame differ (the candidate's capture, on a local preview, shows it too); in the engaged captures the advisor card was wider (532 and 598 px in Act II against the usual 469), and what widens it (the advisor's suggestion at that moment) I did not establish, nor how long an engaged fit takes to ease back beyond that run 2 found it at rest after 10 s. The framing code is not in this change's diff. All readings: run 1 (attacks on, 2.5 s settle, beside the full download): z 9.245 / 9.691 / 9.691, the girls' mean 281.6 / 268.9 / 268.4 px, fit at rest / ENGAGED (lens [-64, 0], back 1.04, advisor card 598 px wide) / ENGAGED (lens [0, 0], back 1.04, advisor card 462 px wide); run 2 (no attack, 10 s settle): z 9.241 / 9.265 / 9.271, the girls' mean 281.2 / 280.9 / 280.5 px, fit at rest / at rest / at rest; run 3 (no attack, 2.5 s settle, after the download): z 9.242 / 9.269 / 9.245, the girls' mean 281.8 / 280.6 / 281.3 px, fit at rest / at rest / at rest; run 4 (no attack, 2.5 s settle, after the download): z 9.273 / 9.249 / 9.274, the girls' mean 280.8 / 281.5 / 280.8 px, fit at rest / at rest / at rest.\n\nLV3942-2 (informational, F3943-03 carried; introducedByCandidate false, regressionVsLive false): the art index the live page fetches names the unreleased title painting under \"title\" ([\"echo\", \"keyart\"]; the deploy regenerates the index, see the focused addendum) and art/title/echo.webp answers 200 (1,357,744 bytes), but nothing loads it: 0 requests for art/title/echo.* in the two real-key sessions, and the title is the Gullwings key art (art/title/keyart) as on live 39.4.1.\n\nLV3942-3 (load time, informational): two sets of three cold loads (a new browser with an empty cache each) read 6.92, 6.05, 4.57 s (first set: the machine was busy, CPU 52 percent from other jobs) and 2.78, 2.68, 2.68 s (second set, CPU 43 percent, 0 console errors, 0 responses >= 400) to the first rendered frame (the CHK-017 bar is 5 s); the two session loads read 7.72 and 4.13 s beside the full-artifact download. The edge answers the new bundle (3,950,356 bytes, 1,905 more than 39.4.1's) in 0.13 to 0.25 s to the first byte and 1.0 to 1.45 s whole, and index.html in 0.13 s, so the readings track the machine and the link, as in the 39.4.1 pass; I could not get a quiet machine (other agents' browsers and servers were running), and the second set is the better reading of the build.\n\nLV3942-4 (hosting, carried LV3941-3; introducedByCandidate false, regressionVsLive false): the Cloudflare Web Analytics beacon is still injected into the page a browser receives (366 bytes plus a line feed); the verifier tolerates exactly it and nothing else.\n\nLV3942-5 (informational): the first menu of a real route opens inside the battle's own opening (the girls read 274.4 px at that moment against 281.2 px at rest), so the on-screen sizes of the real-route capture are a little smaller than the rest-state ones; the ratios to the girls (Ormi 0.67, Dr. Goon 0.72, Fem-Goon 0.74) agree with the rest-state ones (0.66, 0.71, 0.73). The first-time coach card was on screen at the Act I first menu and fades on its own; the cancel path opened and closed the target step on its first try.\n\nDisclosed by the focused report and not re-tested here: F3943-01 (the folded intent card at 1280x720 and in Act I at 1600x900), F3943-02 and F3942-01 (the phone), F3942-03 (the fiends read 0.60 to 0.85 of the girls: the pick's price), F3942-05 (Act III plate names). The obligation marker (critic/pending/a021787a.json) lists live, focused and deep as pending; this report settles the live obligation only.\n\nEvidence folder: critic/reviews/a021787a-live (scripts, data, logs, five frames); the bulk frames are in D:/Tools/pyrefly-scratch/2026-10-08/r3942-live (not in the tree)."
+}

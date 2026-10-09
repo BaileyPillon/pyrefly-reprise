@@ -1,19 +1,22 @@
 {
-  "mainSha": "04cdcd45",
-  "bundle": "DAnPZ-iy",
-  "deployedAt": "2026-10-08T02:33:53.502Z",
+  "mainSha": "a021787a",
+  "bundle": "cUSnFK7q",
+  "deployedAt": "2026-10-09T01:03:34.683Z",
   "liveUrl": "https://echoesofspira.com/",
   "artFiles": 3947,
   "policyVersion": 2,
-  "artifactHash": "a5b18e6eb639922b0f4e9b7b5eefb44817c433ea2acc59c96bed32ba676c214e",
+  "artifactHash": "713f2d21ab944898044c1c90d44fc39fda12ad4f93494d6e426af220a13f55ca",
   "review": "deep",
   "reasons": [
-    "4 systems and 7 product files changed: the batch crosses too much of the game for a focused pass"
+    "src/ui/common/EnemyIntent.ts: global layout, input and boot is a shared system",
+    "public/art/manifest.json: asset loader and manifests is a shared system"
   ],
   "systems": [
     "FFX-2 HUD",
-    "FFX-2 game data",
+    "asset loader and manifests",
     "effects, lighting and sprites",
+    "global layout, input and boot",
+    "painted artwork",
     "title, chapter select, prep, pause and results screens"
   ],
   "chapters": [
@@ -44,10 +47,14 @@
     "CHK-008",
     "CHK-009",
     "CHK-010",
+    "CHK-012",
     "CHK-013",
+    "CHK-014",
     "CHK-015",
     "CHK-016",
     "CHK-017",
+    "CHK-018",
+    "CHK-019",
     "CHK-020",
     "CHK-021",
     "CHK-026",
@@ -55,8 +62,8 @@
   ],
   "liveArtifact": {
     "result": "PASS",
-    "checked": 46,
-    "at": "2026-10-08T02:33:53.502Z"
+    "checked": 50,
+    "at": "2026-10-09T01:03:34.683Z"
   },
   "obligations": [
     {
@@ -64,16 +71,16 @@
       "status": "done",
       "requires": "exact-artifact verification and real-input smoke on the live URL",
       "result": "PASS",
-      "settledBy": "critic/reviews/04cdcd45-live.json",
-      "settledAt": "2026-10-08T03:13:36.738Z"
+      "settledBy": "critic/reviews/a021787a-live.json",
+      "settledAt": "2026-10-09T01:59:00.491Z"
     },
     {
       "kind": "focused",
       "status": "done",
       "requires": "acceptance of the changed area",
       "result": "FAIL",
-      "settledBy": "critic/reviews/04cdcd45-focused.json",
-      "settledAt": "2026-10-08T02:14:25Z"
+      "settledBy": "critic/reviews/a021787a-focused-addendum.json",
+      "settledAt": "2026-10-09T01:58:21.088Z"
     },
     {
       "kind": "deep",
@@ -123,14 +130,15 @@
         "d3fe9fe5",
         "002928c4",
         "b80f772f",
-        "55db51dd"
+        "55db51dd",
+        "04cdcd45"
       ]
     }
   ],
   "ownerOverride": {
-    "words": "Push a hotfix for the sizing and perspective problem please",
-    "date": "2026-10-08T02:33:53.502Z",
-    "report": "critic/reviews/04cdcd45-focused.json",
+    "words": "So have you corrected the Leblanc chapter the way I wanted you to? Push it live now please if it's done ... As a hotfix",
+    "date": "2026-10-09T01:03:34.683Z",
+    "report": "critic/reviews/a021787a-focused.json",
     "changedArea": null
   }
 }
