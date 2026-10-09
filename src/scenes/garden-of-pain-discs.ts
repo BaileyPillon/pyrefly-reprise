@@ -28,7 +28,12 @@ import { OMNIS_FACING_KEY } from '../engine/OmnisDiscTap.ts';
 // its (figure-less) actor by the FFX HUD tap (`src/engine/OmnisDiscTap.ts`) as
 // the presenter plays the fight; this module turns the painting to match.
 
-/** The ring, clockwise on screen from screen right. Mirrored from `seymour-omnis-rules.ts#DISC_RING` (a test pins it). */
+/**
+ * The painting's ring, clockwise on screen from screen right. It is **not** the script's ring any more: the game's
+ * scripts turn a disc Fire -> Ice -> Water -> Thunder (`seymour-omnis-rules.ts#DISC_RING`, re-parity D-25), and this
+ * art was drawn to the earlier estimate. The colour that faces him is what `discAngleFor` turns the painting to,
+ * so it is right; a script turn of one step can read as a half turn on screen. A test pins both rings.
+ */
 export const DISC_RING_ON_SCREEN = ['fire', 'water', 'ice', 'lightning'] as const;
 
 /** The painting's pixels: its size and the disc's radius (`mortiphasm/idle.json`). */

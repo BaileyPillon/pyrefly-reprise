@@ -25,9 +25,9 @@
 
 import type { Command, FFXCombatant } from '../../common/types.ts';
 import { hasAuto } from '../equipment.ts';
-import { type HitEvent, registerHitScript } from '../hit-hooks.ts';
 import { type Ctx, rtOf } from '../state.ts';
 import { frontLine, gameMod, randomLiving } from './game-rolls.ts';
+import { type HitEvent, registerHitScript } from './hit-script.ts';
 import { type AiContext, num, registerAiScript, use } from './types.ts';
 
 /** The aeon's Overdrive gauge, in its actor memory: an enemy has no Overdrive block. */

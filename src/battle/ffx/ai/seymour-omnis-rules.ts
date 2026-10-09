@@ -1,57 +1,51 @@
 /**
- * **Chapter XII — Seymour Omnis and the four Mortiphasms: the fight's rules.**
+ * **Chapter XII — Seymour Omnis and the four Mortiphasms: the fight's state and rules.**
  *
- * Source: `research/ffx-seymour-omnis.md` §4 (the discs, the affinity ladder,
- * the attack counter, Dispel → Ultima, the reset) and the §4.7 reference
- * pseudocode; `docs/plans/chapter-omnis-review.md` §4.2 (the engine gaps
- * O-G1 to O-G7) and its Review corrections; Bailey's answers to B8-B13, B22
- * and B23 (2026-09-25, "I'll go with all your recommendations").
+ * Source (re-parity): the game's own scripts, `research/re-ffx-ai-seymour.md` section 5 (m131 Omnis, m106 the discs,
+ * the `sins03_00` formation script; D-24 to D-33). This replaces the authored version built from the wiki and
+ * `research/ffx-seymour-omnis.md`, with Bailey's B8-B13, B22 and B23 answers of 2026-09-25 ("I'll go with all your
+ * recommendations") and D-184 (the GameFAQs ring kept as "our estimate"). Those were estimates for what no source
+ * settled; the scripts settle the ring, the reset order, the cast order and targets, the hit count and when his
+ * affinity changes. The decisions they replace are listed in `docs/handoff/re-parity-ai-seymour.md`.
  *
- * **Game case: FFX only** [AGENTS.md rule 14]. Every key below lives under
- * `omnis.` on `BattleState.flags`, and every hook is a no-op unless the Omnis
- * formation set those keys at setup, so no other chapter changes.
+ * **Game case: FFX only** [AGENTS.md rule 14]. Every key below lives under `omnis.` on `BattleState.flags`, and every
+ * hook is a no-op unless the Omnis formation set those keys at setup, so no other chapter changes.
  *
  * ## The discs are state, and they decide everything
  *
- * `omnis.discs` holds what each disc shows him, left to right. From it:
+ * `omnis.discs` holds what each disc shows him, left to right. From it: his **affinity** (`./omnis-affinity.ts`) and his
+ * **four spells** (the cast order, and -ra or -ga by how many discs show the element). **A hit that reaches a disc turns
+ * it by the hit's damage type alone**: magical +1, physical -1, any other type nothing, on the ring
+ * **Fire -> Ice -> Water -> Thunder -> Fire** (the +1 direction). No target mode, item or spell is looked at.
  *
- * - **his affinity** ({@link omnisAffinities}): per element, 1 disc = half,
- *   2 = immune, 3 = absorb, 4 = absorb **and** weak to the opposite
- *   [§4.2, verified: 5 sources]; Holy is never touched;
- * - **his spells** (`seymour-omnis.ts`, the volley planner): one per disc, of
- *   its element, **-ra** if the element shows on 1-2 discs, **-ga** on 3-4
- *   [§4.1, verified: 4 sources].
+ * ## When his affinity changes
  *
- * A **landed** hit on a disc turns it 90°: a physical hit **left**, a spell
- * **right** [§4.3, verified: 6 sources]. A disc takes no damage (it is
- * `immune-to-damage`), and the engine still emits the hit's `damage` event
- * with `amount: 0` (`abilities.ts`, "a connecting hit that computes to zero
- * is still a hit"): that event is the "hit landed" signal (plan O-G1). Misses,
- * Nul charges and bounces emit no `damage`, so they turn nothing.
+ * Only when one of two routines runs: his own pre-turn (outside his glow / Dispel / Ultima / reset turns) and the
+ * pre-turn the formation script gives **every party member and aeon**, i.e. at the start of each actor's turn
+ * ({@link refreshOmnisAffinities}, registered as a formation pre-turn handler in `./seymour-omnis.ts`). A disc turned during an
+ * action is seen at the next turn start, not inside the same action: a Doublecast's second spell meets the old affinity.
  *
- * ## The attack counter (O-G5)
+ * ## The attack counter
  *
- * **6** attacks on Seymour (**3** once his HP is **below 20,000**) and he
- * **glows red**; his next turn is **Dispel** on the party (his Defense drops to
- * 100), the turn after is **Ultima** (Defense 150), and the discs then reset
- * to the next colour of the cycle [§4.4, verified: 4-5 sources; the Defense
- * values single source: wiki]. Counters and **his own reflected spells**
- * count [single source: wiki]. The count is read off the turn's events at
- * the turn's end (`ticks.ts#onTurnEnd`), so a Magic Counter or a spell
- * bounced off a Reflected member mid-volley counts like any other hit.
+ * His `onHit`: below 20,000 HP the threshold latches at 2 (it never goes back to 5). While he is in his normal state
+ * each action that reaches him adds one to the counter, a miss, a heal and a status-only move included; a counter
+ * above the threshold (the 6th hit, or the 3rd once latched) zeroes it and **glows** him red. Hits during the glow,
+ * the Dispel, the Ultima and the reset turn are ignored.
  */
 
 import type {
-  AbilityDef,
-  Affinity,
   BattleState,
   CombatantId,
   ElementalAffinities,
   FFXCombatant,
 } from '../../common/types.ts';
 import type { ActorRuntime } from '../state.ts';
-import { type Ctx, abilityOf, isAlive, tryActor } from '../state.ts';
-import { OMNIS_CALLOUTS as SAY, omnisCalloutOnce } from './seymour-omnis-callouts.ts';
+import { type Ctx, tryActor } from '../state.ts';
+import { OMNIS_CALLOUTS as SAY, omnisCalloutAfter, omnisCalloutOnce } from './seymour-omnis-callouts.ts';
+import { type Element4, OPPOSITE, omnisAffinities } from './omnis-affinity.ts';
+
+export { type Element4, OPPOSITE, omnisAffinities };
+export { aimsAtSlots, countDiscs, layoutKey, omnisCastOrder } from './omnis-affinity.ts';
 
 /** Ids mirrored from `src/data/ffx/enemies/seymour-omnis.ts` (the tests pin them equal). */
 export const OMNIS_ID = 'seymour-omnis';
@@ -59,7 +53,6 @@ export const OMNIS_SCRIPT = 'seymour-omnis';
 export const MORTIPHASM_SCRIPT = 'mortiphasm';
 export const MORTIPHASM_IDS: readonly CombatantId[] = ['mortiphasm-1', 'mortiphasm-2', 'mortiphasm-3', 'mortiphasm-4'];
 
-export type Element4 = 'fire' | 'ice' | 'lightning' | 'water';
 export type OmnisState = 'normal' | 'red' | 'dispelled' | 'reset-due';
 
 // ---------------------------------------------------------------------------
@@ -68,67 +61,42 @@ export type OmnisState = 'normal' | 'red' | 'dispelled' | 'reset-due';
 
 /** What each disc shows him, left to right, comma-separated: `'fire,fire,fire,fire'`. */
 export const OMNIS_DISCS = 'omnis.discs';
-/** Index into {@link OMNIS_RESET_CYCLE} of the colour the discs last reset to. */
+/** The script's reset counter: it moves on at each reset, and the colour is `OMNIS_RESET_CYCLE[counter mod 4]`. */
 export const OMNIS_CYCLE = 'omnis.cycle';
-/** Attacks on Seymour since the last Ultima. */
+/** Attacks on Seymour since the last glow. */
 export const OMNIS_HITS = 'omnis.hits';
-/** `normal` → `red` (glowing) → `dispelled` → `reset-due` → `normal`. */
+/** `normal` -> `red` (glowing) -> `dispelled` -> `reset-due` -> `normal`: the script's St 0 to 3. */
 export const OMNIS_STATE = 'omnis.state';
-/** How far into `state.log` the turn-end scan has read. */
-export const OMNIS_SCANNED = 'omnis.scannedTo';
+/** True once his HP has been under a quarter: the glow threshold is then 3 for good. */
+export const OMNIS_LOW = 'omnis.lowLatched';
 
 // ---------------------------------------------------------------------------
-// Constants, each with its source or its label
+// Constants, each with its source
 // ---------------------------------------------------------------------------
 
-/** §4.4 [verified: 5 sources]. */
+/** The glow comes on the 6th hit; the 3rd once his HP has been under a quarter (`counter > threshold`, 5 then 2). */
 export const ATTACKS_TO_GLOW = 6;
-/** §4.4 [verified: 4 sources]: below this HP the counter drops to {@link ATTACKS_TO_GLOW_LOW}. */
 export const LOW_HP_BELOW = 20_000;
 export const ATTACKS_TO_GLOW_LOW = 3;
-/** §1.1 / §4.4 [single source: wiki]. */
+/** Set by his Dispel turn and his Ultima turn, and never restored to the 180 he opens with. */
 export const DEF_AFTER_DISPEL = 100;
 export const DEF_AFTER_ULTIMA = 150;
 
 /**
- * **The reset cycle after Ultima: Fire → Water → Ice → Thunder** (O-11,
- * GameFAQs' explicit order; the wiki's list reads Fire, Ice, Water, Thunder).
- * **B8 = b: built as GameFAQs says, labelled, and the chapter stays unlisted
- * until Bailey confirms it** (B8 = a, then).
+ * **The ring, in the direction a spell turns a disc: Fire -> Ice -> Water -> Thunder -> Fire** (m106 @0x1842 to
+ * 0x1b28, the disc scenes; the research note section 5.2). A physical hit turns a disc the other way. This is **not**
+ * the painting's ring (`garden-of-pain-discs.ts`): the disc art was drawn to the earlier estimate and still has its
+ * quarters as Fire, Water, Ice, Thunder, so a turn can read as a half turn on screen; the colour facing him is right.
  */
-export const OMNIS_RESET_CYCLE: readonly Element4[] = ['fire', 'water', 'ice', 'lightning'];
+export const DISC_RING: readonly Element4[] = ['fire', 'ice', 'water', 'lightning'];
 
 /**
- * **The colour order around one disc, clockwise: Fire, Water, Ice, Thunder.**
- * **Our estimate, twice over** (O-7 is unsourced; B8 = b draws GameFAQs' reset
- * cycle as the physical ring, the option sheets' reading). A spell turns a
- * disc clockwise, which brings the section **before** the facing one round to
- * face him (Fire → Thunder, as the O-4 sheet shows); a blow turns it
- * counter-clockwise (Fire → Water).
+ * **What the reset turns the discs to**: the counter starts at 0 and moves on first, so the order of resets is
+ * **Ice, Water, Thunder, Fire** (index 1, 2, 3, 0), then Ice again.
  */
-export const DISC_RING: readonly Element4[] = ['fire', 'water', 'ice', 'lightning'];
+export const OMNIS_RESET_CYCLE: readonly Element4[] = ['fire', 'ice', 'water', 'lightning'];
 
-/**
- * Opposite pairs for the four-of-a-kind weakness: **Fire ↔ Ice** (all-Fire
- * opens weak to Ice, verified: 3 sources) and **Thunder ↔ Water** (the
- * standard FFX pair; no Omnis source names it, O-5).
- */
-export const OPPOSITE: Readonly<Record<Element4, Element4>> = { fire: 'ice', ice: 'fire', lightning: 'water', water: 'lightning' };
-
-/**
- * **B9 = faithful: the two-Water bug.** With exactly two Water discs he
- * becomes immune to **Fire**, not Water [§4.2, single source: wiki, "persists
- * across all versions"]. One constant; the guide's notes disclose it.
- */
-export const TWO_WATER_BUG = true;
-
-/** **B23 = a**: the discs reset on his next turn after Ultima (wiki *Mortiphasm* + GamerGuides, 2 against 1). */
-export const RESET_ON_NEXT_TURN = true;
-
-/** **B11 = no** (our estimate): hits on a disc do not count toward the 6 / 3 (the sources say "attacks on Seymour"). */
-export const DISC_HITS_COUNT = false;
-
-/** His -ra and -ga rows per element [§3.1]. */
+/** His -ra and -ga rows per element. */
 export const OMNIS_RA: Readonly<Record<Element4, string>> = {
   fire: 'omnis-fira',
   ice: 'omnis-blizzara',
@@ -146,12 +114,10 @@ export const OMNIS_ULTIMA_ID = 'omnis-ultima';
 export const OMNIS_VOLLEY_ID = 'omnis-volley';
 
 // ---------------------------------------------------------------------------
-// The discs and the affinity ladder
+// The discs
 // ---------------------------------------------------------------------------
 
 const ELEMENTS: readonly Element4[] = ['fire', 'ice', 'lightning', 'water'];
-const LADDER: readonly Affinity[] = ['normal', 'resist', 'immune', 'absorb', 'absorb'];
-const RANK: Readonly<Record<Affinity, number>> = { normal: 0, resist: 1, weak: 2, immune: 3, absorb: 4 };
 
 function isElement4(v: string): v is Element4 {
   return (ELEMENTS as readonly string[]).includes(v);
@@ -178,35 +144,21 @@ export function discIndex(id: CombatantId): number {
   return MORTIPHASM_IDS.indexOf(id);
 }
 
-/**
- * His four elemental affinities for a disc layout [§4.2]. Pure. Holy and every
- * other element are not in the result: the discs never touch them.
- */
-export function omnisAffinities(discs: readonly Element4[], twoWaterBug = TWO_WATER_BUG): ElementalAffinities {
-  const out: Record<Element4, Affinity> = { fire: 'normal', ice: 'normal', lightning: 'normal', water: 'normal' };
-  const raise = (e: Element4, a: Affinity): void => {
-    if (RANK[a] > RANK[out[e]]) out[e] = a;
-  };
-  for (const e of ELEMENTS) {
-    const n = discs.filter((d) => d === e).length;
-    if (n === 0) continue;
-    // B9: exactly two Water discs make him immune to Fire, and leave Water alone.
-    if (twoWaterBug && e === 'water' && n === 2) {
-      raise('fire', 'immune');
-      continue;
-    }
-    raise(e, LADDER[Math.min(n, 4)] as Affinity);
-    if (n === 4) raise(OPPOSITE[e], 'weak');
-  }
-  return out;
+/** The affinities he has now, with the four disc elements replaced by what `discs` give (other elements stay). */
+function withDiscAffinities(omnis: FFXCombatant, discs: readonly Element4[]): ElementalAffinities {
+  const next: ElementalAffinities = { ...omnis.affinities, ...omnisAffinities(discs) };
+  for (const e of ELEMENTS) if (next[e] === 'normal') delete next[e];
+  return next;
 }
 
-/** Write the disc-driven affinities onto Omnis, keeping every other element. */
-function applyAffinities(ctx: Ctx, omnis: FFXCombatant): ElementalAffinities {
-  const next = { ...omnis.affinities, ...omnisAffinities(omnisDiscs(ctx.state)) };
-  for (const e of ELEMENTS) if (next[e] === 'normal') delete next[e];
-  omnis.affinities = next;
-  return { ...next };
+/**
+ * **His pre-turn routine**: set his affinities from the discs as they are now. Run by the formation's turn-start
+ * handler for every actor, and by his own pre-turn outside his glow / Dispel / Ultima / reset turns.
+ */
+export function refreshOmnisAffinities(ctx: Ctx): void {
+  const omnis = tryActor(ctx, OMNIS_ID);
+  if (!omnis || !omnisPresent(ctx)) return;
+  omnis.affinities = withDiscAffinities(omnis, omnisDiscs(ctx.state));
 }
 
 function facings(discs: readonly Element4[]): Record<CombatantId, Element4> {
@@ -218,21 +170,24 @@ function facings(discs: readonly Element4[]): Record<CombatantId, Element4> {
   return out;
 }
 
-/** Turn disc `index` one quarter [§4.3; the ring is {@link DISC_RING}, our estimate]. */
+/**
+ * Turn disc `index` one quarter: a spell (`'right'`) moves it +1 on the ring, a blow (`'left'`) -1. The state changes
+ * now; his affinity follows at the next turn start. The event names what the layout makes him (the readout and the
+ * Sensor redraw from it), which is what the next refresh will write.
+ */
 export function turnDisc(ctx: Ctx, index: number, direction: 'left' | 'right'): void {
   const omnis = tryActor(ctx, OMNIS_ID);
   const discs = omnisDiscs(ctx.state);
   const now = discs[index];
   if (!omnis || now === undefined) return;
   const at = DISC_RING.indexOf(now);
-  const step = direction === 'right' ? -1 : 1;
+  const step = direction === 'right' ? 1 : -1;
   discs[index] = DISC_RING[(at + step + DISC_RING.length) % DISC_RING.length] as Element4;
   writeDiscs(ctx, discs);
-  const affinities = applyAffinities(ctx, omnis);
   ctx.emit({
     type: 'affinity-change',
     targetId: OMNIS_ID,
-    affinities,
+    affinities: withDiscAffinities(omnis, discs),
     cause: 'part-turn',
     partId: MORTIPHASM_IDS[index] as CombatantId,
     direction,
@@ -240,18 +195,17 @@ export function turnDisc(ctx: Ctx, index: number, direction: 'left' | 'right'): 
   });
 }
 
-/** Every disc to the next colour of the cycle [§4.4; the cycle is O-11, B8 = b]. */
+/** Every disc to one colour, by the reset counter (his reset turn). */
 export function resetDiscs(ctx: Ctx): void {
   const omnis = tryActor(ctx, OMNIS_ID);
   if (!omnis) return;
   const prev = ctx.state.flags[OMNIS_CYCLE];
-  const cycle = (typeof prev === 'number' ? prev : 0) + 1;
+  const cycle = ((typeof prev === 'number' ? prev : 0) + 1) % 4;
   ctx.state.flags[OMNIS_CYCLE] = cycle;
-  const colour = OMNIS_RESET_CYCLE[cycle % OMNIS_RESET_CYCLE.length] as Element4;
+  const colour = OMNIS_RESET_CYCLE[cycle] as Element4;
   const discs = MORTIPHASM_IDS.map(() => colour);
   writeDiscs(ctx, discs);
-  const affinities = applyAffinities(ctx, omnis);
-  ctx.emit({ type: 'affinity-change', targetId: OMNIS_ID, affinities, cause: 'reset', facings: facings(discs) });
+  ctx.emit({ type: 'affinity-change', targetId: OMNIS_ID, affinities: withDiscAffinities(omnis, discs), cause: 'reset', facings: facings(discs) });
   omnisCalloutOnce(ctx, 'reset', SAY.reset); // the first reset's line (B15)
 }
 
@@ -273,82 +227,31 @@ export function omnisHits(ctx: Pick<Ctx, 'state'>): number {
   return typeof v === 'number' ? v : 0;
 }
 
-/** 6, or 3 once his HP is below 20,000 [§4.4]. */
-export function glowThreshold(ctx: Ctx): number {
-  const omnis = tryActor(ctx, OMNIS_ID);
-  return omnis && omnis.hp < LOW_HP_BELOW ? ATTACKS_TO_GLOW_LOW : ATTACKS_TO_GLOW;
+/** 6, or 3 once his HP has been under a quarter (latched). */
+export function glowThreshold(ctx: Pick<Ctx, 'state'>): number {
+  return ctx.state.flags[OMNIS_LOW] === true ? ATTACKS_TO_GLOW_LOW : ATTACKS_TO_GLOW;
 }
 
 /**
- * Which way a landed hit of `def` turns a disc, or `null` (B10 = a, our
- * estimate): a single-target physical action turns it **left**, a
- * single-target damaging spell **right**; all-target actions, items and
- * status-only rows turn nothing.
+ * **His `onHit`**: one action reached him (after its last hit record on him, before the death check). Latch the low
+ * threshold under a quarter; in the normal state count it, and glow when the counter passes the threshold.
  */
-export function discTurnFor(def: AbilityDef | undefined): 'left' | 'right' | null {
-  if (!def || def.category === 'item') return null;
-  if (def.targeting !== 'single-enemy' && def.targeting !== 'single-any') return null;
-  if (def.damageType === 'physical') return 'left';
-  if (def.damageType === 'magical' && def.formula !== 'none' && !def.flags.includes('heals')) return 'right';
-  return null;
-}
-
-/**
- * **The turn-end hook** (`ticks.ts#onTurnEnd`): read the events this turn
- * added, count the attacks that landed on Seymour, turn the discs that were
- * hit, then light the glow when the count is due. A no-op in every battle but
- * Chapter XII.
- */
-export function runOmnisTurnEnd(ctx: Ctx): void {
-  if (!omnisPresent(ctx)) return;
-  const log = ctx.state.log;
-  const from = ctx.state.flags[OMNIS_SCANNED];
-  let def: AbilityDef | undefined;
-  let counted = false;
-  let hits = omnisHits(ctx);
-  let by: CombatantId | undefined;
-  const turns: Array<{ index: number; direction: 'left' | 'right'; by?: CombatantId }> = [];
-  for (let i = typeof from === 'number' ? from : 0; i < log.length; i++) {
-    const e = log[i];
-    if (!e) continue;
-    if (e.type === 'action-start') {
-      def = e.abilityId !== undefined ? abilityOf(ctx, e.abilityId) : undefined;
-      by = e.actorId;
-      counted = false;
-      continue;
-    }
-    if (e.type !== 'damage' || e.sourceId === undefined) continue;
-    if (e.targetId === OMNIS_ID) {
-      if (!counted && !(def?.flags.includes('heals') ?? false)) {
-        hits += 1;
-        counted = true;
-      }
-      continue;
-    }
-    const index = discIndex(e.targetId);
-    if (index < 0) continue;
-    if (DISC_HITS_COUNT && !counted) {
-      hits += 1;
-      counted = true;
-    }
-    const direction = discTurnFor(def);
-    if (direction) turns.push({ index, direction, ...(by === undefined ? {} : { by }) });
+export function recordOmnisHit(ctx: Ctx, omnis: FFXCombatant): void {
+  if (omnis.hp < Math.floor(omnis.stats.maxHp / 4)) {
+    ctx.state.flags[OMNIS_LOW] = true;
+    omnisCalloutAfter(ctx, 'low', SAY.low);
   }
-  ctx.state.flags[OMNIS_HITS] = hits;
-  for (const t of turns) turnDisc(ctx, t.index, t.direction);
-  const first = turns[0]; // the first disc a member turns: Wakka's line if it was his (B15)
-  if (first) omnisCalloutOnce(ctx, 'turned', first.by === 'wakka' ? SAY.turnedWakka : SAY.turned, first.by);
-
-  const omnis = tryActor(ctx, OMNIS_ID);
-  if (omnis && isAlive(omnis) && omnis.hp < LOW_HP_BELOW) omnisCalloutOnce(ctx, 'low', SAY.low);
-  if (omnis && isAlive(omnis) && omnisState(ctx) === 'normal' && hits >= glowThreshold(ctx)) {
-    setOmnisState(ctx, 'red');
-    // The game's only telegraph is the red glow [§4.4, §7]; placeholder copy
-    // for the log until the glow itself is drawn (O-8).
-    ctx.emit({ type: 'message', text: 'Seymour Omnis glows red', kind: 'telegraph' });
-    omnisCalloutOnce(ctx, 'glow', SAY.glow);
+  if (omnisState(ctx) !== 'normal') return;
+  const hits = omnisHits(ctx) + 1;
+  if (hits < glowThreshold(ctx)) {
+    ctx.state.flags[OMNIS_HITS] = hits;
+    return;
   }
-  ctx.state.flags[OMNIS_SCANNED] = log.length;
+  ctx.state.flags[OMNIS_HITS] = 0;
+  setOmnisState(ctx, 'red');
+  // The game's only telegraph is the red glow; placeholder copy for the log until the glow itself is drawn (O-8).
+  ctx.emit({ type: 'message', text: 'Seymour Omnis glows red', kind: 'telegraph' });
+  omnisCalloutAfter(ctx, 'glow', SAY.glow);
 }
 
 // ---------------------------------------------------------------------------
@@ -356,9 +259,9 @@ export function runOmnisTurnEnd(ctx: Ctx): void {
 // ---------------------------------------------------------------------------
 
 /**
- * The opening state [§4.1 "all four discs show Fire", verified: 3 sources]:
- * four Fire discs, so he opens absorbing Fire and weak to Ice. Nothing is
- * emitted (setup events never reach the presenter; it reads the state).
+ * The opening state: the formation script's opening scene turns the discs so that **all four show Fire** (verified:
+ * 3 sources), so he opens absorbing Fire and weak to Ice. Nothing is emitted (setup events never reach the
+ * presenter; it reads the state).
  */
 export function applyOmnisSetup(ctx: Ctx): void {
   const omnis = tryActor(ctx, OMNIS_ID);
@@ -367,20 +270,17 @@ export function applyOmnisSetup(ctx: Ctx): void {
   ctx.state.flags[OMNIS_CYCLE] = 0;
   ctx.state.flags[OMNIS_HITS] = 0;
   ctx.state.flags[OMNIS_STATE] = 'normal';
-  ctx.state.flags[OMNIS_SCANNED] = ctx.state.log.length;
-  applyAffinities(ctx, omnis);
+  ctx.state.flags[OMNIS_LOW] = false;
+  refreshOmnisAffinities(ctx);
   markOmnisRuntime(ctx.state, ctx.rt.actors);
-  // §4.5 [verified: 2 sources]: Ifrit drinks his Fire, Ixion his Thunder and
-  // Shiva his Ice. Nothing to set here: all three eaters are their default
-  // armour in every FFX battle (`setup.ts` AEON_INNATE_AFFINITIES, rule 14).
+  // Ifrit drinks his Fire, Ixion his Thunder and Shiva his Ice (verified: 2 sources): all three are their default
+  // armour in every FFX battle (`setup.ts` AEON_INNATE_AFFINITIES, rule 14), so there is nothing to set here.
 }
 
 /**
- * The runtime mark this encounter needs — the discs own no CTB slot (B22 = a,
- * the Daigoro seam `ActorRuntime.ordersOnly`) — read off the published state
- * alone, so a rebuilt runtime can re-apply it (the `markEvraeRuntime` lesson).
- * The one-command preview's rebuild (`simulate.ts#runtimeFor`) does not call
- * it: a preview never reads the turn order, so the mark changes nothing there.
+ * The runtime mark this encounter needs — the discs own no CTB slot — read off the published state alone, so a
+ * rebuilt runtime can re-apply it. The one-command preview's rebuild (`simulate.ts#runtimeFor`) does not call it:
+ * a preview never reads the turn order, so the mark changes nothing there.
  */
 export function markOmnisRuntime(state: Readonly<BattleState>, actors: ReadonlyMap<CombatantId, ActorRuntime>): void {
   if (typeof state.flags[OMNIS_DISCS] !== 'string') return;

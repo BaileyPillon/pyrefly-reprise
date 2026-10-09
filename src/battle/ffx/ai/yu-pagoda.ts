@@ -23,10 +23,10 @@
 
 import type { Command, FFXCombatant } from '../../common/types.ts';
 import { koActor, scheduleRevivalAt } from '../hp.ts';
-import { type HitEvent, registerHitScript } from '../hit-hooks.ts';
 import { type Ctx, has, isAlive, rtOf, tryActor } from '../state.ts';
 import { recoveryTicks } from '../turnQueue.ts';
 import { gameMod, randomLiving } from './game-rolls.ts';
+import { type HitEvent, registerHitScript } from './hit-script.ts';
 import { type AiContext, num, registerAiScript, use } from './types.ts';
 
 /** The pool absorbed in the current life (v7). The maximum HP is the pool of the life in hand (v8). */

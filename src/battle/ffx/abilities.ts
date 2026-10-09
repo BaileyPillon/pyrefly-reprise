@@ -22,12 +22,13 @@ import type { TimingBonus } from './adapt/hit.ts';
 import { drawsOf } from './adapt/draws.ts';
 import { resolveElements } from './elements.ts';
 import { hasAuto, weaponElements } from './equipment.ts';
-import { ejectActor } from './hp.ts';
-import { isPerHitRandom, nextHitTargets, resolveTargets } from './targeting.ts';
+import { ejectActor, settleDeferredDeath } from './hp.ts';
+import { listensToHit, runOnHit, runOnTargeted } from './ai/hooks.ts';
+import { resolveCommand } from './adapt/command.ts';
+import { aimedTargetForHit, aimedTargets, isPerHitRandom, nextHitTargets, resolveTargets, scriptAimsAt } from './targeting.ts';
 import { onTargeted } from './overdrive.ts';
 import { revealTarget, sensorKind } from './sensor.ts';
 import { type HitScope, resolveOneHit } from './hit-apply.ts';
-import { runHitEvents } from './hit-event.ts';
 
 /** Knobs the caller can override per resolution. */
 export interface ResolveOptions {
@@ -88,6 +89,26 @@ function elementFor(elements: readonly ElementId[]): ElementId {
 }
 
 /**
+ * The targets the hit records have landed on are done: each one's script hears of the action once
+ * (`onHit`), **before** its death is decided, and a lethal hit that nothing saved then kills (re-parity,
+ * `research/re-ffx-ai-seymour.md` section 1.1; FFX only). Inert for a target with no script hooks.
+ * Targets are visited in the order of their **last** hit record, as the game applies them.
+ */
+function finishTouched(scope: HitScope): void {
+  const { ctx, user, def } = scope;
+  const done = [...scope.touched.values()].sort((a, b) => a.last - b.last);
+  scope.touched.clear();
+  for (const { target, hpBefore, lastDamage } of done) {
+    // A follow-up row (Blitz Ace's Last Hit) is part of the action its main row already announced: one `onHit` per action.
+    if (scope.options.followUp !== true && listensToHit(target)) {
+      const affectsHp = (resolveCommand(def, user).record.damageClass & 1) !== 0;
+      runOnHit(ctx, { def, user }, target, { hpBefore, lostHp: target.hp < hpBefore, lastDamage, affectsHp });
+    }
+    settleDeferredDeath(ctx, target, user.id);
+  }
+}
+
+/**
  * Resolve one action end to end.
  *
  * Returns the total HP damage dealt (positive) so callers can drive Overdrive
@@ -104,12 +125,16 @@ export function resolveAbility(
   const perHitRandom = isPerHitRandom(def.targeting);
   const elements = resolveElements(user, def, weaponElements(user));
 
-  let targets = resolveTargets(ctx, user, def, chosenTargets);
+  // A row the script aims (`extra.scriptAims`, re-parity) goes where the command names, hit by hit; no pick is drawn for it.
+  const aimed = perHitRandom && scriptAimsAt(def) && chosenTargets.length > 0;
+  let targets = aimed ? aimedTargets(ctx, def, chosenTargets) : resolveTargets(ctx, user, def, chosenTargets);
   if (targets.length === 0 && def.targeting !== 'self') return 0;
 
   // A gauge that fills on **being targeted** (a heal or a debuff counts) is paid here, once per action and
   // not again for a follow-up row, before any hit resolves. Inert unless `gaugePerTargeting` is set [overdrive.ts].
   if (options.followUp !== true) for (const t of targets) onTargeted(ctx, t, user);
+  // The targets' scripts hear the command named them (`onTargeted`), before any damage. A follow-up row is the same action.
+  if (options.followUp !== true) runOnTargeted(ctx, { def, user }, targets);
 
   const scope: HitScope = {
     ctx,
@@ -125,20 +150,18 @@ export function resolveAbility(
   };
 
   if (perHitRandom) {
+    // A fresh random target for every hit: the hit records of the whole action are in before any target's script hears of it.
     for (let h = 0; h < hitCount; h++) {
-      targets = nextHitTargets(ctx, user, def, h, targets);
+      targets = aimed ? aimedTargetForHit(ctx, def, chosenTargets, h) : nextHitTargets(ctx, user, def);
       for (const target of targets) resolveOneHit(scope, target);
     }
+    finishTouched(scope);
   } else {
     for (const target of targets) {
       for (let h = 0; h < hitCount; h++) resolveOneHit(scope, target);
+      finishTouched(scope);
     }
   }
-
-  // The game's onHit, once per target this sub-action reached, before any death check (`hit-event.ts`). A no-op for
-  // every target whose script registered no hook, so only Chapters II and III (Yunalesca, Braska's Final Aeon and
-  // what stands with it) change.
-  runHitEvents(ctx, user, def, scope.touched);
 
   // Scan opens the info panel. It is emitted **after** the hits, so the whole of it is pure
   // information: a reveal rolls nothing and therefore cannot move the seeded RNG by one draw

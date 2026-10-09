@@ -296,14 +296,10 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
   },
 
   mid: [
-    {
-      // Act one -> two. He summons at 3,000 of 6,000 [§5.2; the engine's own
-      // SUMMON_HP_THRESHOLD], so the fraction is exactly 0.5.
-      id: 'mac-anima-summon',
-      when: { type: 'hp-below', who: SEYMOUR, fraction: 0.5 },
-      once: true,
-      script: 'mac-anima-summon',
-    },
+    // Act one -> two is not a trigger here: the summon's `script-trigger` `mac-anima-summon` is emitted by the
+    // engine itself, from Seymour's summon (`battle/ffx/ai/macalania-acts.ts`; re-parity). The game writes his
+    // HP back to 6,000 in the same breath, so an `hp-below` condition read after the action would never see him
+    // under half.
     {
       // Act two. The first Boost — somebody reads the window out loud, once.
       id: 'mac-first-boost',

@@ -123,10 +123,9 @@ function ctxFromState(state: Readonly<BattleState>, content: FFXContentRegistry)
     actors: new Map(),
     currentActorId: null,
     elapsedTicks: 0,
-    lastEnemyActorId:
-      typeof state.flags['seymour.lastEnemyActor'] === 'string'
-        ? (state.flags['seymour.lastEnemyActor'] as CombatantId)
-        : null,
+    // Seymour's two actors no longer keep a "who acted last" memory (re-parity: they read one shared cycle state in
+    // `state.flags`), so there is nothing to rebuild here.
+    lastEnemyActorId: null,
     pendingMinigame: null,
     elapsedMs: 0,
     finished: false,

@@ -194,7 +194,12 @@ describe('fb-0929 options, off by default (FFX only)', () => {
   it('guard on: a click on a non-Zombie ally still confirms at once', async () => {
     window.history.replaceState({}, '', '/?zombiewarn=guard');
     const { hud, pick } = openHiPotion();
-    menuOf(hud).tryConfirmTargetById('yuna');
+    // The living, non-Zombie ally is read off the board: since the Seymour scripts (re-parity AI-Seymour, 2026-10-09, FFX only)
+    // the first board found has Yuna on the floor (a Zombie and KO'd), so she is no longer a legal target for a Hi-Potion.
+    const { decision } = zombieKimahriBoard();
+    const ally = decision.commands.find((c) => c.label === 'Hi-Potion' && c.enabled)!.validTargets.find((id) => id !== 'kimahri')!;
+    expect(ally).toBeTruthy();
+    menuOf(hud).tryConfirmTargetById(ally);
     expect(await settled(pick)).toBe(true);
   });
 

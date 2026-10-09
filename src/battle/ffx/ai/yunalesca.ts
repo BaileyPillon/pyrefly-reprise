@@ -25,12 +25,11 @@
 
 import type { Command } from '../../common/types.ts';
 import { advanceForm } from '../forms.ts';
-import { damageTypeOf } from '../hit-event.ts';
-import { type HitEvent, queueReaction, registerHitScript } from '../hit-hooks.ts';
 import { has, tryActor } from '../state.ts';
 import {
   canQueue, frontLine, gameMod, highestHpLiving, randomLiving, zombieSlots,
 } from './game-rolls.ts';
+import { type HitEvent, damageTypeOf, queueCounter, registerHitScript } from './hit-script.ts';
 import { type AiContext, aiContextFor, num, registerAiScript, use } from './types.ts';
 
 const CYCLE = 'priv0004';
@@ -196,7 +195,7 @@ function yunalescaHit(event: HitEvent): void {
   if (attacker.id === boss.id) return;
   const ai = aiContextFor(ctx, boss);
   const command = yunalescaCounter(ai, attacker.id, damageTypeOf(def, attacker));
-  if (command && canQueue(boss)) queueReaction(ctx, { actorId: boss.id, targetId: attacker.id, command, cause: 'script' });
+  if (command && canQueue(boss)) queueCounter(ctx, { actorId: boss.id, targetId: attacker.id, command });
 }
 
 registerAiScript('yunalesca', yunalescaAi);

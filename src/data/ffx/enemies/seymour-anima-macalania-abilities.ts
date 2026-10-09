@@ -31,14 +31,17 @@
  * ~140 %. `tests/unit/chapters/macalania-engine.test.ts` pins
  * `anima-pain-boss.power === 28` and asserts it differs from `pain.power`.
  *
- * ## Act three's two hits are one record
+ * ## Act three's two hits are one record, aimed by the script
  *
- * The decompile carries `Multi-X` **and** `Multi-X 2nd Hit` as separate rows.
- * The engine's `resolveAbility` re-resolves targets *per hit* for a
- * `random-enemy` action and consumes Nul charges *inside* the hit loop, so a
- * single record with `hits: 2` gives exactly what §12 **C-3** recommends —
- * two independent random picks, and one Nul charge absorbs one hit — with no
- * engine change at all. One record, two hits.
+ * The decompile carries `Multi-X` **and** `Multi-X 2nd Hit` as separate rows, and the script queues them as two
+ * commands at two **different party slots** whenever two or more members stand (re-parity,
+ * `research/re-ffx-ai-seymour.md` section 3.4). One record with `hits: 2` and `extra.scriptAims` keeps the one
+ * cast the presenter plays: hit 1 lands on the first target the command names, hit 2 on the second, and a Nul
+ * charge still absorbs one hit (§12 **C-3**: the halves are separate commands, so one charge never meets both
+ * unless a single member is left).
+ *
+ * `extra.scriptAims` is on every spell of this fight: the scripts pick the victim themselves and queue the spell at
+ * it, so the record's own "Random Character" does not decide who is hit (`targeting.ts#aimedTargetForHit`).
  *
  * ## Accuracy
  *
@@ -77,6 +80,7 @@ function raSpell(id: string, name: string, element: 'ice' | 'lightning' | 'water
     shatterChance: 10, // §4.1 [decompiled] "shatter 10"
     canReflect: true,
     canMiss: false,
+    extra: { scriptAims: true }, // his script picks the victim and queues the spell at it (re-parity)
     messageTemplate: `{user} casts ${name}`,
   };
 }
@@ -115,6 +119,8 @@ function multiSpell(id: string, name: string, element: 'ice' | 'lightning' | 'wa
     flags: ['reflectable'],
     canReflect: true,
     canMiss: false,
+    // Two commands in the game, one at each of two party slots: hit 1 goes to the first named, hit 2 to the second.
+    extra: { scriptAims: true },
     messageTemplate: `{user} casts ${name}`,
   };
 }
@@ -133,30 +139,6 @@ export const macMultiBlizzara = multiSpell('mac-multi-blizzara', 'Multi-Blizzara
 export const macMultiThundara = multiSpell('mac-multi-thundara', 'Multi-Thundara', 'lightning');
 export const macMultiWatera = multiSpell('mac-multi-watera', 'Multi-Watera', 'water');
 export const macMultiFira = multiSpell('mac-multi-fira', 'Multi-Fira', 'fire');
-
-/**
- * "Special 1" — Seymour's only scheduled action while Anima is on the field:
- * a zero-hit no-op aimed at her slot [§4.1 `[decompiled]`, §5.3].
- */
-export const macSeymourIdle: AbilityDef = {
-  id: 'mac-seymour-idle',
-  name: 'Wait',
-  game: 'ffx',
-  category: 'enemy',
-  mpCost: 0,
-  rank: 3,
-  power: 0,
-  formula: 'none',
-  damageType: 'other',
-  element: ['none'],
-  targeting: 'self',
-  hits: 0,
-  statusEffects: [],
-  removesStatuses: [],
-  flags: [],
-  canMiss: false,
-  messageTemplate: '{user} watches',
-};
 
 // ---------------------------------------------------------------------------
 // Guado Guardian (m141) — §4.2 [decompiled]
@@ -182,6 +164,7 @@ function guardianSpell(id: string, name: string, element: 'ice' | 'lightning'): 
     shatterChance: 10, // §4.2 [decompiled]
     canReflect: true,
     canMiss: false,
+    extra: { scriptAims: true }, // the Guardian's script picks the victim (re-parity)
     messageTemplate: `{user} casts ${name}`,
   };
 }
@@ -196,12 +179,9 @@ export const guardianThunder = guardianSpell('guardian-thunder', 'Thunder', 'lig
  * Disabled by one **successful** Steal, which the engine gives for free —
  * `ActorRuntime.stealCount > 0` is `!hasPotions` [§2.4].
  *
- * **Trigger scope is an owner-approved assumption, not canon** (C-11): the
- * wiki contradicts itself on one page ("whenever they take damage" vs
- * "whenever they are hit with a physical attack"). We ship **any damage**
- * behind `AUTO_POTION_ON_ANY_DAMAGE` in
- * `src/battle/ffx/ai/seymour-anima-macalania.ts`; the other branch is one
- * line away.
+ * **Trigger scope is the script's** (re-parity; C-11 is answered): the Guardian's `onHit` queues it after any
+ * action that took HP from it, physical or magical, unless it was asleep when targeted, is Threatened, or has been
+ * stolen from (`src/battle/ffx/ai/macalania-guardian.ts`).
  */
 export const guardianAutoPotion: AbilityDef = {
   id: 'guardian-auto-potion',
@@ -317,6 +297,7 @@ export const guardianShremedy: AbilityDef = {
   removesStatuses: [],
   flags: [],
   canMiss: false,
+  extra: { scriptAims: true }, // the Guardian's script picks the victim (re-parity)
   messageTemplate: '{user} throws Shremedy at {target}',
 };
 
@@ -353,7 +334,6 @@ export const SEYMOUR_ANIMA_MACALANIA_ABILITIES: Record<string, AbilityDef> = {
   [macMultiThundara.id]: macMultiThundara,
   [macMultiWatera.id]: macMultiWatera,
   [macMultiFira.id]: macMultiFira,
-  [macSeymourIdle.id]: macSeymourIdle,
   [guardianBlizzard.id]: guardianBlizzard,
   [guardianThunder.id]: guardianThunder,
   [guardianAutoPotion.id]: guardianAutoPotion,

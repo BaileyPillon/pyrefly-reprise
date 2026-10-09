@@ -20,10 +20,10 @@
  */
 
 import type { Command, FFXCombatant } from '../../common/types.ts';
-import { type HitEvent, queueReaction, registerHitScript } from '../hit-hooks.ts';
 import { isAlive, rtOf } from '../state.ts';
 import { removeStatus } from '../statuses.ts';
 import { canQueue, frontLine } from './game-rolls.ts';
+import { type HitEvent, queueCounter, registerHitScript } from './hit-script.ts';
 import { type AiContext, num, registerAiScript, use } from './types.ts';
 
 const FIRST_DONE = 'yy.firstDone';
@@ -67,7 +67,7 @@ function yuYevonHit(event: HitEvent): void {
   memory[COUNTER] = num(memory, COUNTER, 0) + 1;
   if (!canQueue(boss)) return;
   const ai: AiContext = { ctx, self: boss, memory };
-  queueReaction(ctx, { actorId: boss.id, targetId: boss.id, command: use(ai, 'curaga', [boss.id]), cause: 'script' });
+  queueCounter(ctx, { actorId: boss.id, targetId: boss.id, command: use(ai, 'curaga', [boss.id]) });
 }
 
 registerAiScript('yu-yevon', yuYevonAi);

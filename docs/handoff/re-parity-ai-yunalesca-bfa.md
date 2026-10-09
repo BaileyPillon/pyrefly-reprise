@@ -1,5 +1,7 @@
 # Re-parity AI lane B: Yunalesca, Braska's Final Aeon, the Yu Pagodas, the possessed aeons and Yu Yevon follow the game's own scripts
 
+> **Release candidate 1 note (2026-10-09):** merged with AI-Seymour, the engine has ONE `onHit` runner (`ai/hooks.ts`); `hit-hooks.ts`, `hit-event.ts` and `FFXRuntime.reactions` described below no longer exist, and `registerHitScript` / `queueCounter` live in `ai/hit-script.ts`. The scripts and their rules are as written here. See [re-parity-rc1](re-parity-rc1.md).
+
 Status: **built and committed on branch `re-parity-ai-ffx-b`, not merged, not deployed** (2026-10-09). Track `re-parity`
 ([plan](../plans/re-parity.md), [paper preflight](../plans/re-parity-ai-review.md) section 2, row "FFX Yunalesca, Braska's Final Aeon,
 Yu Pagodas, Yu Yevon"). Owner: Bailey. **Game case: FFX only** (AGENTS.md rule 14): Chapters II and III. Nothing here is shared with FFX-2

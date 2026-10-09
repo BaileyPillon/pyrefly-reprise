@@ -26,7 +26,6 @@ export const COMMAND_RECORDS: Readonly<Record<string, FFXCommandRecord>> = {
 /** The abilities that have no game record, and why. They are our own: nothing in the game's tables is theirs. */
 export const NO_COMMAND_RECORD: Readonly<Record<string, string>> = {
   'close-in': 'an Evrae chapter Trigger Command (ours)',
-  'mac-seymour-idle': 'a scripted idle line of the Macalania Seymour (ours)',
   'omnis-volley': "the engine's volley wrapper for Seymour Omnis's four disc spells (ours); the four spells have their own records",
 };
 

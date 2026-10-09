@@ -28,10 +28,10 @@ import {
   summonAeon,
 } from '../../src/battle/ffx/index.ts';
 import { yunalescaCounter } from '../../src/battle/ffx/ai/index.ts';
-import { damageTypeOf } from '../../src/battle/ffx/hit-event.ts';
+import { damageTypeOf } from '../../src/battle/ffx/ai/hit-script.ts';
 import { executeCommand } from '../../src/battle/ffx/execute.ts';
 import { ability } from './ffx-fixtures.test.ts';
-import { type LiveBattle, ScriptedRng, groupOf, liveBattle } from './helpers/aiScript.ts';
+import { type LiveBattle, ScriptedRng, groupOf, liveBattle, queuedCounters } from './helpers/aiScript.ts';
 
 /** A battle in which the boss is in the given form with the entry turn already taken. */
 function bossIn(form: number): LiveBattle & { mem: Record<string, number | string | boolean>; boss: FFXCombatant; rng: ScriptedRng } {
@@ -267,8 +267,8 @@ describe('Yunalesca’s onHit through the engine (hit events)', () => {
     const t = bossIn(0);
     t.rng.feed(0);
     resolveAbility(t.ctx, t.at('tidus'), t.ctx.content.ability('attack')!, ['yunalesca']);
-    expect(t.ctx.rt.reactions).toHaveLength(1);
-    const [reaction] = t.ctx.rt.reactions!;
+    expect(queuedCounters(t.ctx)).toHaveLength(1);
+    const [reaction] = queuedCounters(t.ctx);
     expect([reaction?.actorId, reaction?.targetId, reaction ? idOf(reaction.command) : '']).toEqual(['yunalesca', 'tidus', 'blind-counter']);
   });
 
@@ -279,28 +279,28 @@ describe('Yunalesca’s onHit through the engine (hit events)', () => {
     resolveAbility(missed.ctx, missed.at('auron'), missed.ctx.content.ability('attack')!, ['yunalesca']);
     expect(missed.events.some((e) => e.type === 'miss')).toBe(true);
     expect(missed.events.some((e) => e.type === 'damage')).toBe(false);
-    expect(missed.ctx.rt.reactions?.map((r) => idOf(r.command))).toEqual(['blind-counter']);
+    expect(queuedCounters(missed.ctx).map((r) => idOf(r.command))).toEqual(['blind-counter']);
 
     const nothing = bossIn(0);
     const status = ability({ id: 'poke', name: 'poke', category: 'skill', targeting: 'single-enemy', canMiss: false });
     resolveAbility(nothing.ctx, nothing.at('yuna'), status, ['yunalesca']);
-    expect(nothing.ctx.rt.reactions?.map((r) => idOf(r.command))).toEqual(['sleep-counter']);
+    expect(queuedCounters(nothing.ctx).map((r) => idOf(r.command))).toEqual(['sleep-counter']);
   });
 
   it('queues nothing for her own action, while a reaction is resolving, or when she cannot act', () => {
     const own = bossIn(0);
     resolveAbility(own.ctx, own.boss, own.ctx.content.ability('cura')!, ['yunalesca']);
-    expect(own.ctx.rt.reactions ?? []).toEqual([]);
+    expect(queuedCounters(own.ctx)).toEqual([]);
 
     const chained = bossIn(0);
     chained.ctx.rt.inReaction = true;
     resolveAbility(chained.ctx, chained.at('tidus'), chained.ctx.content.ability('attack')!, ['yunalesca']);
-    expect(chained.ctx.rt.reactions ?? []).toEqual([]);
+    expect(queuedCounters(chained.ctx)).toEqual([]);
 
     const stopped = bossIn(0);
     stopped.boss.statuses['threaten'] = { id: 'threaten', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
     resolveAbility(stopped.ctx, stopped.at('tidus'), stopped.ctx.content.ability('attack')!, ['yunalesca']);
-    expect(stopped.ctx.rt.reactions ?? []).toEqual([]);
+    expect(queuedCounters(stopped.ctx)).toEqual([]);
   });
 
   it('discards the rest of a multi-hit action when a form falls, and changes form once, after the last hit', () => {
@@ -314,7 +314,7 @@ describe('Yunalesca’s onHit through the engine (hit events)', () => {
     const changes = t.events.filter((e) => e.type === 'form-change');
     expect(changes).toHaveLength(1);
     expect(changes[0]!.seq).toBeGreaterThan(hits[11]!.seq);
-    expect(t.ctx.rt.reactions ?? [], 'the blow that ends a form is not countered').toEqual([]);
+    expect(queuedCounters(t.ctx), 'the blow that ends a form is not countered').toEqual([]);
   });
 
   it('kills her for real when the last form falls, after the action’s hits (the hook leaves 0 HP alone)', () => {

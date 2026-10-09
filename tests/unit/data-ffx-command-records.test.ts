@@ -133,9 +133,11 @@ describe("the attached records are the game's table", () => {
   });
 
   it('the ability counts the record table was built for', () => {
-    expect(ALL_ABILITIES).toHaveLength(454);
+    // 453 and 2 since the Seymour re-parity: the zero-hit "Wait" that Seymour spent in Anima's act is gone (the game
+    // takes his turns away instead), and it was one of the rows without a record.
+    expect(ALL_ABILITIES).toHaveLength(453);
     expect(Object.keys(COMMAND_RECORDS)).toHaveLength(451);
-    expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(3);
+    expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(2);
   });
 });
 

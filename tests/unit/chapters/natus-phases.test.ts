@@ -115,6 +115,9 @@ describe('Phase 3 — Flare and Cura [§4.1, §4.3]', () => {
     const engine = newEngine(12);
     makeInvincible(engine);
     flags(engine)[rules.NATUS_PHASE] = 3;
+    // Re-parity (D-20, D-23): every action that reaches him runs his `onHit`, Mortibody's Cura included, and under
+    // 24,000 with no Protect it queues his one Protect. This case is about Flare and Cura, so the one is spent.
+    flags(engine)[rules.NATUS_PROTECT_FIRED] = true;
     actor(engine, NATUS).hp = 10_000;
     drive(engine, defend, (e) => actions(e.state().log, NATUS).length >= 2 && actions(e.state().log, MORT).length >= 2);
     const log = engine.state().log;
@@ -247,10 +250,17 @@ describe('Banish, Desperado and Talk [§4.3, §6.2]', () => {
 // ---------------------------------------------------------------------------
 
 describe('FFX only: nothing here reaches another chapter or FFX-2', () => {
-  it('only Natus’s Multi-ra carries distinct targets per hit; no other formation runs a Natus script', () => {
-    const distinct = ALL_ABILITIES.filter((a) => a.extra?.['distinctTargetsPerHit'] === true).map((a) => a.id).sort();
-    expect(distinct).toEqual(['natus-multi-blizzara', 'natus-multi-fira', 'natus-multi-thundara', 'natus-multi-watera']);
-    expect(FFX2_ABILITIES.some((a) => a.extra?.['distinctTargetsPerHit'] !== undefined)).toBe(false);
+  it("only the Seymour fights' rows are script-aimed (re-parity `scriptAims`); no other formation runs a Natus script", () => {
+    const aimed = ALL_ABILITIES.filter((a) => a.extra?.['scriptAims'] === true).map((a) => a.id);
+    // Natus's seven: the four Multi-ra, Break and Flare (a random member, picked by the script) and Mortibody's Claw.
+    expect(aimed.filter((id) => id.startsWith('natus-') || id.startsWith('mortibody-')).sort()).toEqual([
+      'mortibody-shattering-claw', 'natus-break', 'natus-flare',
+      'natus-multi-blizzara', 'natus-multi-fira', 'natus-multi-thundara', 'natus-multi-watera',
+    ]);
+    // ...and nothing outside Chapters VII and X carries the key: it is how those two scripts name their victims.
+    for (const id of aimed) expect(/^(natus-|mortibody-|mac-|guardian-|anima-pain-boss$)/.test(id), id).toBe(true);
+    expect(ALL_ABILITIES.some((a) => a.extra?.['distinctTargetsPerHit'] !== undefined)).toBe(false); // the old key is gone
+    expect(FFX2_ABILITIES.some((a) => a.extra?.['scriptAims'] !== undefined)).toBe(false);
     for (const [id, group] of Object.entries(ENEMY_GROUPS_BY_ID)) {
       if (id === GROUP_ID) continue;
       for (const e of group.enemies) expect(rules.isNatusScript(e.aiScriptId), `${id}/${e.id}`).toBe(false);

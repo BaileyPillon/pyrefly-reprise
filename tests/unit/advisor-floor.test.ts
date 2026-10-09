@@ -244,7 +244,11 @@ describe('an ally on the floor always gets an answer — Chapter 1, the board Ba
     // wipes Chapter I earlier: the measured count is 68 with only that one formula put back, so it is the walk's length,
     // not the number of boards worth looking at, that moved); the checks below it (no silent card, no unfollowable
     // sentence, no anonymous one) are unchanged and still hold on every board that is in the sample.
-    expect(seen.withSomebodyDown).toBeGreaterThan(60);
+    // 2026-10-09 (re-parity AI-Seymour, FFX only): 86 -> 45, floor 60 -> 30. Flux and the Mortiorchis follow the game's own scripts
+    // (research/re-ffx-ai-seymour.md D-01 to D-08), the party wins every one of seeds 1 to 500 and loses 0.6 members a battle
+    // (was 4.4), so far fewer boards have anybody down; again it is the number of boards that moved, and the three checks below
+    // are untouched and hold on every board that is in the sample.
+    expect(seen.withSomebodyDown).toBeGreaterThan(30);
   });
 
   it('is never silent while an ally is on the floor', () => {

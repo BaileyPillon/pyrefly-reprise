@@ -8,12 +8,12 @@
  */
 
 import type { BattleEvent, BattleResult, Command, FFXCombatant } from '../common/types.ts';
-import { type Ctx, type EventInput, canAct, commandAbility, has, isAlive, rtOf, tryActor } from './state.ts';
+import { type Ctx, type EventInput, commandAbility, has, isAlive, rtOf, tryActor } from './state.ts';
 import { executeCommand } from './execute.ts';
-import { drainReactions } from './hit-hooks.ts';
 import { collectReactions, onTurnEnd } from './ticks.ts';
 import { collectSignals, evaluateTriggers } from './triggers.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
+import { drainScriptReactions } from './ai/reaction-drain.ts';
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
 import { runEvraePhaseHooks } from './ai/evrae-counters.ts';
 import { counterInputs } from './counter-inputs.ts';
@@ -70,23 +70,11 @@ export function afterAction(
   // Evrae's 1/3-HP self-Haste: a hook, so Guided Missiles trip it too [§5.4]. No-op elsewhere.
   runEvraePhaseHooks(ctx);
 
-  // Free actions the onHit hooks queued (`hit-hooks.ts`: Yunalesca's counters, Yu Yevon's Curaga), then the older
-  // boss counters and the equipment reactions. A hit one of them lands queues nothing further.
+  // From here to the end of the turn every free action is a reaction: the boss scripts' queued reactions (`ai/hooks.ts`,
+  // drained below), the older boss counters and the equipment reactions. A script that keeps the engine's old rule, a
+  // counter never triggers another counter (AI lane B's Yunalesca and Yu Yevon: `ai/hit-script.ts#queueCounter`), asks for
+  // nothing while this is set; the scripts of the other lane chain on purpose and never read it.
   ctx.rt.inReaction = true;
-  for (const reaction of drainReactions(ctx)) {
-    const reactor = tryActor(ctx, reaction.actorId);
-    const aimed = tryActor(ctx, reaction.targetId);
-    // The game's queue refuses an actor that cannot act and a dead target; the scripts do not test for either.
-    if (!reactor || !aimed || !isAlive(reactor) || !isAlive(aimed) || !canAct(reactor)) continue;
-    h.push({
-      type: 'counter',
-      actorId: reaction.actorId,
-      targetId: reaction.targetId,
-      abilityId: reaction.command.kind === 'ability' ? reaction.command.id : 'attack',
-      cause: reaction.cause,
-    });
-    executeCommand(ctx, reactor, reaction.command, true);
-  }
 
   // Boss counters fire from the hit hook and cost no turn.
   if (command) {
@@ -105,6 +93,8 @@ export function afterAction(
         executeCommand(ctx, counterActor, counter.command, true);
       }
     }
+    // The reactions the boss scripts' hooks queued while the action resolved (re-parity, `ai/hooks.ts`), oldest first.
+    drainScriptReactions(h);
 
     // Equipment reactions: Counterattack, Auto-Potion, Auto-Med, Auto-Phoenix.
     if (def) {
@@ -131,9 +121,10 @@ export function afterAction(
     }
   }
 
+  drainScriptReactions(h); // what the equipment reactions set off
   ctx.rt.inReaction = false;
-
   onTurnEnd(ctx, actor);
+  drainScriptReactions(h); // what the turn's poison tick set off (a postPoison hook)
   rtOf(ctx, actor.id).turnsTaken += 1;
   if (actor.side === 'enemy') ctx.rt.lastEnemyActorId = actor.id;
   ctx.rt.currentActorId = null;

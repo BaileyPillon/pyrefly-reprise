@@ -9,7 +9,6 @@ import {
   OMNIS_COMBATANT,
   hasOmnisDiscs,
   intentText,
-  livingPartyOf,
   omnisReadoutView,
   omnisStateOf,
   weaknessOf,
@@ -123,7 +122,6 @@ export class OmnisReadout {
   private mode: OmnisReadoutMode = 'landscape';
   private discs: Element4[] = [];
   private state: OmnisState = 'normal';
-  private living = 3;
   private turned: number[] = [];
   private weakBefore: Element4 | null = null;
   private live = false;
@@ -195,7 +193,6 @@ export class OmnisReadout {
     this.live = true;
     this.discs = discs;
     this.state = omnisStateOf(state);
-    this.living = livingPartyOf(state);
     this.paint();
   }
 
@@ -223,7 +220,7 @@ export class OmnisReadout {
   }
 
   private input(): Parameters<typeof omnisReadoutView>[0] {
-    return { discs: this.discs, state: this.state, living: this.living, turned: this.turned, weakBefore: this.weakBefore };
+    return { discs: this.discs, state: this.state, turned: this.turned, weakBefore: this.weakBefore };
   }
 
   private paint(): void {

@@ -30,9 +30,9 @@
 
 import type { Command, FFXCombatant } from '../../common/types.ts';
 import { advanceForm } from '../forms.ts';
-import { type HitEvent, registerHitScript } from '../hit-hooks.ts';
 import { type Ctx, has, rtOf } from '../state.ts';
 import { frontLine, gameMod, livingFrontLine, pickActor, randomLiving } from './game-rolls.ts';
+import { type HitEvent, registerHitScript } from './hit-script.ts';
 import { type AiContext, num, registerAiScript, use } from './types.ts';
 
 const TALK_PENDING = 'bfa.talkPending';

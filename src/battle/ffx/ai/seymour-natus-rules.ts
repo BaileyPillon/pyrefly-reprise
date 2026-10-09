@@ -1,39 +1,29 @@
 /**
- * **Chapter X — Seymour Natus and Mortibody: the rules the two scripts share.**
+ * **Chapter X — Seymour Natus and Mortibody: the numbers and the state the two scripts share.**
  *
- * Source: `research/ffx-seymour-natus-highbridge.md` §4 (the AI script),
- * `docs/plans/chapter-natus-review.md` §4.2 (the engine gaps N-G1 to N-G5)
- * and its Review section's corrections, and Bailey's answers to B6-B10
- * (2026-09-24, "I'll go with your recommendations for all").
+ * Source (re-parity): the game's own scripts, `research/re-ffx-ai-seymour.md` section 4 (m126 Natus, m127
+ * Mortibody; D-19 to D-23, with D-06 for the mount's revive). This replaces the authored version built from the wiki
+ * and `research/ffx-seymour-natus-highbridge.md` and Bailey's B6-B10 answers of 2026-09-24 ("I'll go with your
+ * recommendations for all"): those adopted estimates for what no source then settled (the element order, who moves
+ * first, a Desperado ladder "not built", his own reflected spells), and the scripts now settle all of it. The list of
+ * decisions the scripts replace is in `docs/handoff/re-parity-ai-seymour.md`.
  *
- * **Game case: FFX only** [AGENTS.md rule 14]. Every key below lives under
- * `natus.` on `BattleState.flags`, and every function is a no-op unless the
- * Natus formation is on the board, so no other chapter changes.
+ * **Game case: FFX only** [AGENTS.md rule 14]. Every key below lives under `natus.` or `mortibody.` on
+ * `BattleState.flags`, so the advisor's forecast (which rebuilds a runtime from the state alone) sees it, and every
+ * function is a no-op unless the Natus formation is on the board.
  *
- * ## The phase is state, not HP (N-G2)
+ * ## The phase is recomputed from his HP at every hit, and can go back down
  *
- * `natus.phase` is stored, and only two things move it: **damage from an
- * action** (the counter collector, `reactions.ts`) and **Mortibsorption**
- * (the drain hook below). A Poison tick is neither, so Poison carrying him
- * past a line changes nothing until he is next hit — the rule that makes
- * "Poison and wait" a strategy [§4.2, verified: 2 sources for Poison, single
- * source for the drain half]. The scripts read the stored phase and never HP.
- *
- * - Phase 2 begins when his HP is **below 24,000**, phase 3 **below 12,000**:
- *   the wiki's word on both pages is "below" (the review corrected the
- *   research's `<=`).
- * - One action can cross both lines; both steps apply and the Protect counter
- *   fires **once**, on the first crossing [§4.6 `[estimate]`].
- * - **B8 = a (our estimate):** damage from *any* action moves the phase,
- *   including his own spells bounced back by Reflect (the Provoke + Reflect
- *   line). The wiki's rule is "direct damage"; the engine's other bosses
- *   answer the party only, so this is the one exception, and it is Natus's.
+ * His `onHit` (once per action per target, after the last hit record, before the death check) sets the phase from his
+ * HP: **below 24,000: phase 1** (Break) and, if he has no Protect and has not cast his one, a Protect on himself;
+ * **below the third-phase line** (12,000; 18,000 once it has been reached): **phase 2** (Flare); 24,000 or more:
+ * **phase 0**, again. It does not matter who hit him: his own spell bounced by a Reflect, the Mortibsorption drain.
+ * A Poison tick does not reach it (no `postPoison` hook), so Poison carrying him past a line changes nothing until
+ * the next real hit. The flag below stores the phase the way this project always has, 1 to 3: the game's 0 to 2 plus 1.
  */
 
-import type { Command, CombatantId, ElementId, FFXCombatant } from '../../common/types.ts';
-import { type Ctx, has, isAlive, tryActor } from '../state.ts';
-import type { AiContext } from './types.ts';
-import { use } from './types.ts';
+import type { CombatantId, ElementId, FFXCombatant } from '../../common/types.ts';
+import { type Ctx, has, tryActor } from '../state.ts';
 
 /** Ids mirrored from `src/data/ffx/enemies/seymour-natus.ts` (the tests pin them equal). */
 export const NATUS_ID = 'seymour-natus';
@@ -41,32 +31,33 @@ export const MORTIBODY_ID = 'mortibody';
 export const NATUS_SCRIPT = 'seymour-natus';
 export const MORTIBODY_SCRIPT = 'mortibody';
 
-/** §4.1 + the review: phase 2 below this, phase 3 below {@link PHASE_3_BELOW}. */
-export const PHASE_2_BELOW = 24_000;
-export const PHASE_3_BELOW = 12_000;
+/** The lines, from his max HP of 36,000: `floor(max / 3) * 2`, `floor(max / 3)`, `floor(max / 2)`. */
+export const PHASE_1_BELOW = 24_000;
+export const PHASE_2_BELOW = 12_000;
+/** Once phase 2 has been reached, its line moves here: he stays in it until he is back at 18,000. */
+export const PHASE_2_BELOW_AFTER = 18_000;
 
-/** Battle-scoped state, on `BattleState.flags` so a story trigger can read it. */
+/** Mortibody's first revive value (the script's private variable at battle start). */
+export const MORTIBODY_FIRST_REVIVE_HP = 4000;
+
+/** Battle-scoped state, on `BattleState.flags`. */
 export const NATUS_PHASE = 'natus.phase';
-/** Mortibody's place in the element rotation — its own key, not Macalania's `MAC_ELEMENT_STEP`. */
+/** The spell-set index, 0 to 3: **Natus** casts the set at the index and advances it; Mortibody reads it. */
 export const NATUS_ELEMENT_STEP = 'natus.elementStep';
-/** The element Mortibody cast last: the combo Natus answers (N-G3). */
-export const NATUS_LAST_ELEMENT = 'natus.lastElement';
-/** Set once the 24,000 Protect counter has fired. */
+/** The phase-2 line: 12,000 at first, 18,000 after it has been reached. */
+export const NATUS_PHASE_2_LINE = 'natus.phase2Line';
+/** Set once his one Protect has been queued. */
 export const NATUS_PROTECT_FIRED = 'natus.protectCountered';
+export const MORTIBODY_REVIVE_HP = 'mortibody.reviveHp';
 /** Count of Talk lines spent, per character: `natus.talked.<id>`. */
 const TALKED = 'natus.talked.';
 
 type Element4 = Extract<ElementId, 'fire' | 'ice' | 'lightning' | 'water'>;
 
-/**
- * **The phase-1 element order: Ice → Thunder → Water → Fire**, repeating
- * [§4.1 `[single source: GameFAQs]`, N-2]. Jegged says only "rotating through
- * each element". Built that way and labelled, per B7 = a; it is also Chapter
- * VII's sourced cycle.
- */
+/** The spell sets, in the script's index order: **Ice, Thunder, Water, Fire**. */
 export const NATUS_ELEMENT_ORDER: readonly Element4[] = ['ice', 'lightning', 'water', 'fire'];
 
-/** Mortibody's tier-1 row per element [§3.2]. */
+/** Mortibody's tier-1 row per element. */
 export const MORTIBODY_TIER_ONE: Readonly<Record<Element4, string>> = {
   ice: 'mortibody-blizzard',
   lightning: 'mortibody-thunder',
@@ -74,7 +65,7 @@ export const MORTIBODY_TIER_ONE: Readonly<Record<Element4, string>> = {
   fire: 'mortibody-fire',
 };
 
-/** Natus's Multi-ra row per element [§3.1]. */
+/** Natus's Multi-ra row per element. */
 export const NATUS_MULTI_RA: Readonly<Record<Element4, string>> = {
   ice: 'natus-multi-blizzara',
   lightning: 'natus-multi-thundara',
@@ -88,26 +79,8 @@ export const MORTIBODY_CLAW_ID = 'mortibody-shattering-claw';
 export const MORTIBODY_DESPERADO_ID = 'mortibody-desperado';
 export const MORTIBODY_CURA_ID = 'mortibody-cura';
 
-/**
- * Every assumption this chapter's engine makes that no source settles, in one
- * place for the review and the tests. Each is labelled "our estimate" where a
- * player could read it.
- */
-export const NATUS_ASSUMPTIONS = {
-  /** N-2 / B7: the rotation order above is GameFAQs only. */
-  elementOrder: 'single source (GameFAQs), built per B7 = a',
-  /**
-   * N-1 / B7: if Natus acts before Mortibody has cast in phase 1, he casts the
-   * element the rotation is on (the one Mortibody would cast next).
-   */
-  natusFirst: 'our estimate (B7 = a)',
-  /** B8 = a: his own reflected spells move his phase. */
-  reflectedDamageMovesPhase: 'our estimate (B8 = a)',
-  /** B6 = a: Desperado on Haste-on-all-three only; the buff-count ladder is not built. */
-  desperadoTrigger: 'Haste on all three active members [verified: 3 sources]; ladder not built (B6 = a)',
-  /** §4.1 special case (one spell when two are up and the left slot is KO'd): single source, not built. */
-  oneSpellSpecialCase: 'not built (single source: wiki)',
-} as const;
+/** The statuses Mortibody's Desperado test counts, one point each per active slot (Protect and Regen are not counted). */
+export const DESPERADO_COUNTED = ['shell', 'haste', 'reflect', 'nultide', 'nulblaze', 'nulshock', 'nulfrost'] as const;
 
 // ---------------------------------------------------------------------------
 // State
@@ -118,107 +91,59 @@ export function natusPresent(ctx: Ctx): boolean {
   return tryActor(ctx, NATUS_ID) !== undefined && ctx.state.enemyIds.includes(NATUS_ID);
 }
 
-/** The stored phase: 1 until an action (or the drain) moves it. Never read from HP. */
-export function natusPhase(ctx: Ctx): 1 | 2 | 3 {
+/** The stored phase, 1 to 3 (the game's 0 to 2 plus 1). */
+export function natusPhase(ctx: Pick<Ctx, 'state'>): 1 | 2 | 3 {
   const v = ctx.state.flags[NATUS_PHASE];
   return v === 2 || v === 3 ? v : 1;
 }
 
+/** The game's phase variable, 0 to 2: what both scripts switch on. */
+export function natusScriptPhase(ctx: Pick<Ctx, 'state'>): 0 | 1 | 2 {
+  return (natusPhase(ctx) - 1) as 0 | 1 | 2;
+}
+
+/** The spell-set index (0 to 3). */
+export function natusElementStep(ctx: Pick<Ctx, 'state'>): number {
+  const v = ctx.state.flags[NATUS_ELEMENT_STEP];
+  return typeof v === 'number' ? ((v % 4) + 4) % 4 : 0;
+}
+
+/** The element at the index, without moving it: what Mortibody casts now and what Natus casts next. */
+export function rotationElement(ctx: Pick<Ctx, 'state'>): Element4 {
+  return NATUS_ELEMENT_ORDER[natusElementStep(ctx)] as Element4;
+}
+
+/** Natus's step: the element at the index, **then** the index moves on. */
+export function castRotationElement(ctx: Pick<Ctx, 'state'>): Element4 {
+  const step = natusElementStep(ctx);
+  ctx.state.flags[NATUS_ELEMENT_STEP] = (step + 1) % 4;
+  return NATUS_ELEMENT_ORDER[step] as Element4;
+}
+
+/** The phase-2 line in force. */
+export function phase2Line(ctx: Pick<Ctx, 'state'>): number {
+  const v = ctx.state.flags[NATUS_PHASE_2_LINE];
+  return typeof v === 'number' ? v : PHASE_2_BELOW;
+}
+
 /**
- * Move the stored phase after damage from an action or the drain. Returns the
- * counter it owes: **Protect on himself** the first time he crosses 24,000
- * [§4.1, §4.3, verified: 3 sources + the decompile's "Counter Self" target].
+ * Mortibody's **Desperado test** (m127 @0x1ab to 0x429), the ladder that D-082 left unbuilt while no source named
+ * it. Each of the three active slots scores one point for each of Shell, Haste, Reflect and the four Nul spells it
+ * wears (Protect and Regen do not count). The threshold is `GetRandomValue() mod 4 + 4` (4 to 7), one lower in
+ * Natus's phase 2, and **0 when all three slots have Haste**. Desperado when the total reaches it. The draw is
+ * spent every turn this runs, before the Haste override.
  */
-export function stepNatusPhase(ctx: Ctx): Command[] {
-  const natus = tryActor(ctx, NATUS_ID);
-  if (!natus) return [];
-  const out: Command[] = [];
-  let phase = natusPhase(ctx);
-  if (phase === 1 && natus.hp < PHASE_2_BELOW) {
-    phase = 2;
-    if (ctx.state.flags[NATUS_PROTECT_FIRED] !== true && isAlive(natus)) {
-      ctx.state.flags[NATUS_PROTECT_FIRED] = true;
-      out.push({ kind: 'ability', id: 'protect', targets: [natus.id] });
-    }
+export function desperadoScore(ctx: Ctx): { total: number; allHasted: boolean } {
+  let total = 0;
+  let hasted = 0;
+  for (let i = 0; i < 3; i++) {
+    const id = ctx.state.activeIds[i];
+    const c = id === undefined ? undefined : tryActor(ctx, id);
+    if (!c) continue;
+    for (const status of DESPERADO_COUNTED) if (has(c, status)) total += 1;
+    if (has(c, 'haste')) hasted += 1;
   }
-  if (phase === 2 && natus.hp < PHASE_3_BELOW) phase = 3;
-  ctx.state.flags[NATUS_PHASE] = phase;
-  return out;
-}
-
-/**
- * The counters one action owes Natus (the Protect at 24,000), for
- * `reactions.ts#collectBossCounters`. Empty unless the action actually damaged
- * him. Called before that collector's player-side guard, because B8 = a lets
- * his own reflected spells move the phase too.
- */
-export function natusActionCounters(
-  ctx: Ctx,
-  damagedEnemyIds: readonly CombatantId[],
-): { actorId: CombatantId; command: Command; cause: string }[] {
-  if (!damagedEnemyIds.includes(NATUS_ID)) return [];
-  return stepNatusPhase(ctx).map((command) => ({ actorId: NATUS_ID, command, cause: 'script' }));
-}
-
-// ---------------------------------------------------------------------------
-// The combo, Desperado, Banish
-// ---------------------------------------------------------------------------
-
-/** The element the rotation is on: what Mortibody casts next [N-2]. */
-export function rotationElement(ctx: Ctx): Element4 {
-  const step = ctx.state.flags[NATUS_ELEMENT_STEP];
-  const i = typeof step === 'number' ? step : 0;
-  return NATUS_ELEMENT_ORDER[i % NATUS_ELEMENT_ORDER.length] as Element4;
-}
-
-/** Mortibody casts the rotation's element and steps it; Natus will answer in kind. */
-export function castRotationElement(ctx: Ctx): Element4 {
-  const e = rotationElement(ctx);
-  const step = ctx.state.flags[NATUS_ELEMENT_STEP];
-  ctx.state.flags[NATUS_ELEMENT_STEP] = (typeof step === 'number' ? step : 0) + 1;
-  ctx.state.flags[NATUS_LAST_ELEMENT] = e;
-  return e;
-}
-
-/**
- * The element Natus's Multi-ra uses: Mortibody's last spell (the combo,
- * [verified: 3 sources]); before Mortibody has cast, the rotation's current
- * element (N-1, our estimate).
- */
-export function comboElement(ctx: Ctx): Element4 {
-  const last = ctx.state.flags[NATUS_LAST_ELEMENT];
-  if (typeof last === 'string' && (NATUS_ELEMENT_ORDER as readonly string[]).includes(last)) return last as Element4;
-  return rotationElement(ctx);
-}
-
-/**
- * **Desperado is due** when all three active party members are Hasted
- * [§4.3, verified: 3 sources — wiki Mortibody, GameFAQs, Jegged]. B6 = a:
- * the wiki's 4-7-buff ladder (single source, what it counts unstated) is not
- * built. While an aeon holds the field the party is off-stage, so the rule
- * waits for them to return (our reading).
- */
-export function desperadoDue(ctx: Ctx): boolean {
-  if (ctx.state.aeonId) return false;
-  const active = ctx.state.activeIds.map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => c !== undefined);
-  return active.length === 3 && active.every((c) => isAlive(c) && has(c, 'haste'));
-}
-
-/**
- * **Banish** once the aeon on the field has had its **one** turn [§4.3,
- * verified: 4 sources; the Chapter I gate `turnsTaken >= 1`]. Before that, he
- * takes a normal turn (aimed at the aeon, the only one standing).
- */
-export function banishDue(ai: AiContext): string | null {
-  const aeonId = ai.ctx.state.aeonId;
-  if (!aeonId) return null;
-  const rt = ai.ctx.rt.actors.get(aeonId);
-  return rt && rt.turnsTaken >= 1 ? aeonId : null;
-}
-
-/** Build a command for one of this chapter's rows. */
-export function natusUse(ai: AiContext, id: string, targets: CombatantId[] = []): Command {
-  return use(ai, id, targets);
+  return { total, allHasted: hasted === 3 };
 }
 
 // ---------------------------------------------------------------------------
@@ -230,7 +155,7 @@ export function natusUse(ai: AiContext, id: string, targets: CombatantId[] = [])
  * each, for the battle. Natus-only: Macalania is Tidus / Yuna / Wakka and Flux
  * is Kimahri / Yuna — "do not share one table" (research §6.2). Stat points,
  * not a status, for the reason `seymour-flux.ts` gives (the cubic Strength
- * term reads real points).
+ * term reads real points). The formation script has no turn-start toggling for Natus.
  */
 export const NATUS_TALK_BONUS: Readonly<Record<string, { readonly stat: 'str' | 'mdef'; readonly amount: number; readonly label: string }>> = {
   tidus: { stat: 'str', amount: 10, label: 'Strength' },
@@ -244,7 +169,7 @@ export function isNatusScript(script: string): boolean {
 }
 
 /** Who still has a Talk line left, for the menu. */
-export function natusTalkAvailable(ctx: Ctx, talkerId: string): boolean {
+export function natusTalkAvailable(ctx: Ctx, talkerId: CombatantId): boolean {
   if (!(talkerId in NATUS_TALK_BONUS)) return false;
   return ctx.state.flags[`${TALKED}${talkerId}`] !== true;
 }

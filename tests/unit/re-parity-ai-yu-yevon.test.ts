@@ -15,11 +15,10 @@
 import { describe, expect, it } from 'vitest';
 import type { AbilityDef, BattleEvent, Command, FFXCombatant } from '../../src/battle/common/types.ts';
 import { chooseAiCommand, dealDamage, resolveAbility } from '../../src/battle/ffx/index.ts';
-import { drainReactions } from '../../src/battle/ffx/hit-hooks.ts';
 import { executeCommand } from '../../src/battle/ffx/execute.ts';
 import { rtOf } from '../../src/battle/ffx/state.ts';
 import { ability } from './ffx-fixtures.test.ts';
-import { type LiveBattle, ScriptedRng, liveBattle } from './helpers/aiScript.ts';
+import { type LiveBattle, ScriptedRng, liveBattle, queuedCounters, takeQueuedCounters } from './helpers/aiScript.ts';
 
 const BOSS = 'yu-yevon';
 const idOf = (command: Command | null): string => (command === null ? 'pass' : command.kind === 'ability' ? command.id : command.kind);
@@ -109,7 +108,7 @@ describe('his turn (V1 to V3; m176 f2 @0x0107)', () => {
 });
 
 describe('his reaction (V4, V5; m176 f3 @0x01AF)', () => {
-  const reactions = (t: Fight) => t.ctx.rt.reactions ?? [];
+  const reactions = (t: Fight) => queuedCounters(t.ctx);
 
   it('answers an action that damaged him with a Curaga on himself, and counts it', () => {
     const t = fight();
@@ -193,7 +192,7 @@ describe('his reaction (V4, V5; m176 f3 @0x01AF)', () => {
     expect(t.boss.hp, 'the heal was inverted into damage').toBe(38_500);
     expect(t.boss.statuses['zombie'], 'and the Zombie is stripped by his own hook').toBeUndefined();
     expect(t.mem[COUNTER]).toBe(1);
-    const [reaction] = drainReactions(t.ctx);
+    const [reaction] = takeQueuedCounters(t.ctx);
     expect(reaction && idOf(reaction.command)).toBe('curaga');
     t.ctx.rt.inReaction = true;
     executeCommand(t.ctx, t.boss, reaction!.command, true);

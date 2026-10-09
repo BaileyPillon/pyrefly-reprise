@@ -4,7 +4,8 @@
  * shipped data with the engine's own event log. **FFX only.**
  */
 
-import type { BattleEvent, EnemyGroupDef, FFXCombatant, FFXPartyBuild } from '../../../src/battle/common/types.ts';
+import type { BattleEvent, Command, EnemyGroupDef, FFXCombatant, FFXPartyBuild } from '../../../src/battle/common/types.ts';
+import { peekReactions, takeReaction } from '../../../src/battle/ffx/ai/hooks.ts';
 import { SeededRng } from '../../../src/battle/common/rng.ts';
 import { type Ctx, FFXContentRegistry, buildBattle } from '../../../src/battle/ffx/index.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/index.ts';
@@ -108,4 +109,25 @@ export function liveBattle(
   );
   holder.ctx = ctx;
   return { ctx, events, at: (id) => ctx.state.combatants[id] as FFXCombatant };
+}
+
+/** A counter a lane B script queued, in the shape its tests read: who performs it, who it is aimed at, the command. */
+export interface QueuedCounter {
+  actorId: string;
+  targetId: string;
+  command: Command;
+}
+
+/** The commands waiting in the engine's one reaction queue (`ai/hooks.ts`), oldest first, without taking them. */
+export function queuedCounters(ctx: Ctx): QueuedCounter[] {
+  return peekReactions(ctx).flatMap((r) => (r.kind === 'command' ? [{ actorId: r.ownerId, targetId: r.byId, command: r.command }] : []));
+}
+
+/** Take every waiting command off the queue, oldest first (what the old per-battle list's drain did). */
+export function takeQueuedCounters(ctx: Ctx): QueuedCounter[] {
+  const out: QueuedCounter[] = [];
+  for (let r = takeReaction(ctx); r !== undefined; r = takeReaction(ctx)) {
+    if (r.kind === 'command') out.push({ actorId: r.ownerId, targetId: r.byId, command: r.command });
+  }
+  return out;
 }

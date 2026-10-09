@@ -2,26 +2,20 @@
  * Boss reactions — the counters that fire from the *hit hook* rather than from
  * a scheduled turn.
  *
- * All of these cost **0 CTB ticks** and never consult a rank: Seymour's
- * threshold Protect/Reflect and his Slowga punish [ffx-seymour-flux §4.3, §4.6]
- * and the rest below. Yunalesca's counters and Yu Yevon's Curaga left this file
- * for the engine's hit events (`hit-hooks.ts`, `ai/yunalesca.ts`,
- * `ai/yu-yevon.ts`), which run for every sub-action that reached them.
+ * All of these cost **0 CTB ticks** and never consult a rank. What this collector still answers is what the engine
+ * had before the boss scripts' own hooks: Evrae's three counters and Sin's. Every other boss answers from its
+ * script's `onHit` hook (`ai/hooks.ts`, run once per action per target before the death check): Seymour Flux and
+ * the Mortiorchis, Macalania's Seymour and the Guado Guardians, Natus and Mortibody (`ai/seymour-*.ts`,
+ * `ai/macalania-*.ts`), and Yunalesca and Yu Yevon (`ai/yunalesca.ts`, `ai/yu-yevon.ts`, registered through
+ * `ai/hit-script.ts`), which run for every sub-action that reached them.
  *
  * A counter never triggers another counter.
  */
 
 import type { AbilityDef, Command, CombatantId, FFXCombatant } from '../../common/types.ts';
 import { type Ctx, isAlive, rtOf, tryActor } from '../state.ts';
-import { mortibsorption } from '../scripted.ts';
-import { activeScriptId } from './index.ts';
-import { aiContextFor } from './types.ts';
-import { seymourDelayCounter, seymourThresholdCounters, stepFluxPhase } from './seymour-flux.ts';
-import { GUADO_GUARDIAN_SCRIPT, macalaniaGuardianCounter } from './seymour-anima-macalania.ts';
 import { collectEvraeCounters } from './evrae-counters.ts';
 import { collectSinCounters, runSinLivenessHooks } from './sin-counters.ts';
-import { MORTIBODY_ID, NATUS_ID, natusActionCounters, stepNatusPhase } from './seymour-natus-rules.ts';
-import { executeCommand } from '../execute.ts';
 
 /** One queued free action. */
 export interface BossCounter {
@@ -55,63 +49,15 @@ export function collectBossCounters(
   const out: BossCounter[] = [];
   if (def.flags.includes('is-counter')) return out;
 
-  // **Chapter X, Seymour Natus** (FFX only): his stored phase moves on damage
-  // from *any* action — B8 = a, our estimate, so his own spells bounced back
-  // by Reflect count too — which is why this runs above the player-side guard
-  // below. Empty unless the action damaged Natus, so every other battle is
-  // untouched [docs/plans/chapter-natus-review.md N-G2, B8].
-  for (const c of natusActionCounters(ctx, damagedEnemyIds)) {
-    if (canCounter(ctx, c.actorId)) out.push(c);
-  }
+  // Chapter X (Seymour Natus and Mortibody) answers from `onHit` hooks now (`ai/seymour-natus.ts`): his phase follows
+  // every hit, his own reflected spells included, and Mortibody's revive and drain are a hook and a queued reaction.
 
   // **Only a player-side action provokes the counters collected below.** (Yunalesca's and Yu Yevon's, which the game
   // raises for an enemy-side hit too, are hit events now.)
   if (attacker.side === 'enemy') return out;
 
-  for (const id of damagedEnemyIds) {
-    const enemy = tryActor(ctx, id);
-    if (!enemy || enemy.side !== 'enemy') continue;
-    if (enemy.id === attacker.id) continue;
-    // Chapter I: a direct hit moves Seymour Flux's **stored** phase, Threatened
-    // or not; a Poison tick never reaches this collector [ffx-seymour-flux §4.3].
-    if (activeScriptId(enemy) === 'seymour-flux') stepFluxPhase(ctx);
-    // **Threaten stops the counter, not just the turn** [ffx-combat-core §4.2:
-    // "Target cannot act **or counterattack**"]. {@link canCounter} has always
-    // encoded that sentence; until round 04 nothing called it, so a Threatened
-    // Yunalesca kept countering (round 04 PR-0004, observed twice at runtime).
-    // FFX only: Threaten is an FFX ability and the ATB engine has no equivalent
-    // status, so FFX-2 is untouched — this collector is FFX-side only.
-    if (!canCounter(ctx, enemy.id)) continue;
-    const script = activeScriptId(enemy);
-    const ai = aiContextFor(ctx, enemy);
-
-    if (script === 'seymour-flux' || script === 'mortiorchis') {
-      // Attempting to Delay either actor fails (both are immune-to-delay) AND
-      // is punished with party-wide Slowga [ffx-seymour-flux §4.6].
-      if (def.flags.includes('weak-delay') || def.flags.includes('strong-delay')) {
-        const host = tryActor(ctx, 'seymour-flux');
-        if (host && isAlive(host)) {
-          out.push({ actorId: host.id, command: seymourDelayCounter(aiContextFor(ctx, host)), cause: 'script' });
-        }
-      }
-      if (script !== 'seymour-flux') continue;
-      for (const command of seymourThresholdCounters(ai, false)) {
-        out.push({ actorId: enemy.id, command, cause: 'script' });
-      }
-      continue;
-    }
-    // **The Guado Guardians' Auto-Potion** [ffx-seymour-anima-macalania §2.3]:
-    // a counter on being damaged, +1,000 HP, disabled by one successful Steal.
-    // Nothing here reuses `ticks.ts`'s Auto-Potion, which is the *character
-    // equipment* path (HP < 50%, `hasAuto`) and a different rule entirely.
-    // Trigger scope — any damage vs physical only — is the owner-approved
-    // assumption C-11, held behind one constant in the script file.
-    if (script === GUADO_GUARDIAN_SCRIPT) {
-      const command = macalaniaGuardianCounter(ai);
-      if (command) out.push({ actorId: enemy.id, command, cause: 'script' });
-      continue;
-    }
-  }
+  // The per-enemy loop that used to answer here is gone with its last two users: Flux, the Mortiorchis, the Guado
+  // Guardians and Natus (AI-Seymour) and Yunalesca and Yu Yevon (AI lane B) all answer from `onHit` hooks now.
 
   // **Evrae answers three different things**, and only one of them is "you hurt
   // me": the Stone Gaze aggro counter reads the damage set, the counter-Haste
@@ -136,70 +82,13 @@ export function collectBossCounters(
 }
 
 /**
- * The Mortiorchis's death trigger [ffx-seymour-flux §2.2].
- *
- * A reaction, not a scheduled turn: it consumes no CTB, does not advance the
- * charge ladder and does not trip the alternation guard. It fires even when the
- * drain is lethal to Seymour.
+ * What `afterAction` runs first. Both mounts are hooks now (`ai/seymour-flux-hooks.ts`, `ai/seymour-natus.ts`): their
+ * revive and their drain run from `onHit` and the reaction queue (`ai/mount-revive.ts`, `ai/reaction-drain.ts`).
+ * What is left is Sin's liveness marks.
  */
 export function runMortibsorptionIfDown(ctx: Ctx): boolean {
   runSinLivenessHooks(ctx); // Sin link 3 (FFX): the Genais/Core marks follow isAlive, every action (sin-counters.ts)
-  if (runNatusMortibsorption(ctx)) return true;
-  const mount = tryActor(ctx, 'mortiorchis');
-  const host = tryActor(ctx, 'seymour-flux');
-  if (!mount || !host) return false;
-  if (mount.hp > 0 && isAlive(mount)) return false;
-  mortibsorption(ctx, mount, host);
-  // Mortibsorption damage DOES trigger Seymour's HP-threshold reactions
-  // [ffx-seymour-flux §2.2, §4.3, verified: 2 sources], and they are **run**,
-  // not dropped (combat-fixes-0924 (b), FFX only). Computing them and then
-  // discarding them left the phase flag at 2 with no Reflect up, so his next
-  // Flare detonated on himself (1,639 on seed 3). Executed exactly as Chapter
-  // X's pair below: a `counter` event, then the command at no CTB cost. A later
-  // player-side collector in the same action sees Protect/Reflect already up
-  // and adds nothing, so nothing doubles.
-  stepFluxPhase(ctx);
-  runDrainCounters(ctx, host, mount, seymourThresholdCounters(aiContextFor(ctx, host), false));
-  return true;
-}
-
-/** Run the counters a Mortibsorption drain owes its host, each at no CTB cost. */
-function runDrainCounters(ctx: Ctx, host: FFXCombatant, mount: FFXCombatant, commands: readonly Command[]): void {
-  for (const command of commands) {
-    if (!canCounter(ctx, host.id)) continue;
-    ctx.emit({
-      type: 'counter',
-      actorId: host.id,
-      targetId: mount.id,
-      abilityId: command.kind === 'ability' ? command.id : 'attack',
-      cause: 'script',
-    });
-    executeCommand(ctx, host, command, true);
-  }
-}
-
-/**
- * **Mortibody's** death trigger — Chapter X's own pair, not Chapter I's
- * (`docs/plans/chapter-natus-review.md` N-G1). The same drain
- * (`scripted.ts#mortibsorption`: its current max HP into Natus, back at the
- * next 1,000 down, floor 1,000; it fires even when the drain is lethal)
- * [ffx-seymour-natus-highbridge §4.4, verified: 4 sources].
- *
- * As in Chapter I's branch above, the counters the drain owes are **run**,
- * not dropped: Mortibsorption moves Natus's stored phase and, on the first
- * crossing of 24,000, fires his Protect counter [§4.2, single source: wiki].
- * Executed here, as the engine's counter loop does (a `counter` event, then
- * the command at no CTB cost), so `engine.ts` does not grow. A no-op in every
- * other battle.
- */
-function runNatusMortibsorption(ctx: Ctx): boolean {
-  const mount = tryActor(ctx, MORTIBODY_ID);
-  const host = tryActor(ctx, NATUS_ID);
-  if (!mount || !host) return false;
-  if (mount.hp > 0 && isAlive(mount)) return false;
-  mortibsorption(ctx, mount, host);
-  runDrainCounters(ctx, host, mount, stepNatusPhase(ctx));
-  return true;
+  return false;
 }
 
 /** Whether a combatant is still able to fire a counter at all. */

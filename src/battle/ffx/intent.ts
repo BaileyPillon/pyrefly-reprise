@@ -59,7 +59,8 @@ import type {
 import { SeededRng } from '../common/rng.ts';
 import type { Ctx, EventInput, FFXRuntime } from './state.ts';
 import { abilityOf, commandAbility, has, isAlive, onField, rtOf, tryActor } from './state.ts';
-import { activeScriptId, chooseAiCommand, fluxPhase } from './ai/index.ts';
+import { activeScriptId, chooseAiCommand } from './ai/index.ts';
+import { fluxLine } from './ai/seymour-flux-rules.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
 import { predictTurnOrder } from './turnQueue.ts';
 import { type ActionEstimate, type TargetEstimate, estimateCommand } from './estimate.ts';
@@ -375,18 +376,17 @@ export function countersFor(ctx: Ctx, enemy: FFXCombatant): string[] {
   }
 
   if (script === 'seymour-flux' || script === 'mortiorchis') {
-    out.push('A Delay attempt on either of them fails and is punished with party-wide Slowga [ffx-seymour-flux §4.6]');
+    out.push('Delay Attack or Delay Buster on the Mortiorchis is punished with party-wide Slowga; no other delay is [re-ffx-ai-seymour §2.5]');
     const host = tryActor(ctx, 'seymour-flux');
     if (host && isAlive(host)) {
-      if (host.hp * 4 >= host.stats.maxHp * 3) {
-        out.push('Below 75% HP Seymour answers with Protect [ffx-seymour-flux §4.3]');
-      }
-      if (host.hp * 2 >= host.stats.maxHp || fluxPhase(ctx) === 1) { // Poison below 50% leaves it pending [§4.3]
-        out.push('Below 50% HP Seymour answers with Reflect and phase 2 opens [ffx-seymour-flux §4.3]');
+      // Each line answers once: the line is spent when it fires, so a later Dispel is never answered by it [§2.5].
+      if (fluxLine(ctx, host, 'protect') !== 0) out.push('Under 75% HP Seymour answers with Protect, one time only [re-ffx-ai-seymour §2.5]');
+      if (fluxLine(ctx, host, 'reflect') !== 0) { // Poison below 50% leaves it pending until the next real hit [§2.5]
+        out.push('Under 50% HP Seymour answers with Reflect and phase 2 opens, one time only [re-ffx-ai-seymour §2.5]');
       }
     }
     if (ctx.state.aeonId) {
-      out.push('Banish deletes your aeon the moment it has taken one turn [ffx-seymour-flux §4.5]');
+      out.push('Banish deletes your aeon on his next turn, whatever it has done [re-ffx-ai-seymour §2.3]');
     }
   }
 

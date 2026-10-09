@@ -14,8 +14,8 @@ import { clearUntilNextTurnStatuses, refreshCriticalStatus, removeStatus, tickDu
 import { hasAuto } from './equipment.ts';
 import { onTurnStartGauge } from './overdrive.ts';
 import { ATTACK_ABILITY_ID } from './registry.ts';
-import { runOmnisTurnEnd } from './ai/seymour-omnis-rules.ts';
 import { runSinLivenessHooks } from './ai/sin-counters.ts';
+import { runPostPoison, runPreTurn } from './ai/hooks.ts';
 
 /** Potions Auto-Potion reaches for, weakest first [ffx-combat-core §9]. */
 const AUTO_POTION_ORDER: readonly ItemId[] = ['potion', 'hi-potion', 'x-potion'];
@@ -77,6 +77,9 @@ export function payRegen(ctx: Ctx, elapsedTicks: number): void {
 
 /** Everything that happens as a combatant's turn opens. */
 export function onTurnStart(ctx: Ctx, actor: FFXCombatant, elapsedTicks: number): void {
+  // The preTurn hooks run at every turn start, before Doom and the action request: the formation's for
+  // everybody, then the actor's own script (re-parity, FFX only; `ai/hooks.ts`). Inert with none registered.
+  runPreTurn(ctx, actor);
   payRegen(ctx, elapsedTicks);
   clearUntilNextTurnStatuses(ctx, actor);
   refreshCriticalStatus(ctx, actor);
@@ -131,9 +134,6 @@ function releaseThreatenFrom(ctx: Ctx, user: FFXCombatant): void {
 
 /** Everything that happens as a combatant's turn closes. */
 export function onTurnEnd(ctx: Ctx, actor: FFXCombatant): void {
-  // Chapter XII: count the hits on Seymour Omnis and turn the discs this turn
-  // landed on (a no-op in every other battle) [ai/seymour-omnis-rules.ts].
-  runOmnisTurnEnd(ctx);
   tickDurationStatuses(ctx, actor);
 
   // Poison: `maxHP // 4` for characters; enemies use their own percentage.
@@ -143,6 +143,7 @@ export function onTurnEnd(ctx: Ctx, actor: FFXCombatant): void {
       percent !== undefined ? idiv(actor.stats.maxHp * percent, 100) : idiv(actor.stats.maxHp, 4);
     if (amount > 0) {
       dealDamage(ctx, actor, amount, { element: 'none', crit: false, hitIndex: 0, hitCount: 1 });
+      runPostPoison(ctx, actor); // the monster's postPoison hook, right after its own tick (Macalania's Seymour only)
     }
   }
   // Sin link 3 (FFX): once more after the counters and the tick, so a Genais KO inside the counter phase (Zombie +

@@ -6,6 +6,38 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-09 — One `onHit` runner for both AI lanes: `ai/hooks.ts` is the registry, the reaction queue and the only runner; `hit-hooks.ts` and `hit-event.ts` are gone; `registerHitScript` is an adapter (release candidate 1; FFX only; no shared contract file changed)
+
+Branch `re-parity-rc1`. No file in the contract list changed. Recorded because the next two entries (AI-Seymour's and AI lane B's) each describe a hook of their own and, merged, there is one. Handoff:
+[re-parity-rc1](handoff/re-parity-rc1.md). Game case: FFX only (FFX-2 and FF7 do not import these modules; `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- The runner is `ai/hooks.ts#runOnHit`, called from `abilities.ts#finishTouched` over the tally `hit-apply.ts` keeps: once per action per target, after the target's last hit record and before the death check; each
+  target hears it right after its own hits, a follow-up row is not a second event, and a lethal hit on a script that `holdsDeath` waits for its hook (`hp.ts#dealDamage`'s `holdKo`, finished by `settleDeferredDeath`). The four
+  differences the lanes' handoffs list were settled in AI-Seymour's favour, as its handoff recommends; lane B's own runner told every target after the last one, which moves one seeded digest (Chapter III seed 7, link 5).
+- `src/battle/ffx/hit-hooks.ts` and `src/battle/ffx/hit-event.ts` are removed. `src/battle/ffx/index.ts` exports `registerScriptHooks` with the types `ScriptHooks`, `UsedCommand` and `HitReport`, and `registerHitScript` with the types
+  `HitEvent` and `HitHook` (`ai/hit-script.ts`: the shape AI lane B's five scripts were written against, registered on the same runner; `managesHp` is `holdsDeath`); it no longer exports `queueReaction`, `drainReactions` or the type
+  `Reaction`. Reactions are `ai/hooks.ts`'s one first-in-first-out queue (`queueReaction`, drained by `ai/reaction-drain.ts`); a reaction may carry `requiresAlive` (the game's queue refuses a command aimed at a combatant that is gone:
+  AI lane B's counters aim at the attacker), and `peekReactions` and `registeredHookScriptIds` are read-only views for the tests.
+- `FFXRuntime` (`state.ts`) loses `reactions` and `HitRuntime` and keeps `inReaction` and `formDiedAtSeq`. `inReaction` is set by `engine-end.ts#afterAction` for the whole reaction phase (the queued reactions, the older boss
+  counters, the equipment reactions): Yunalesca's and Yu Yevon's counters keep the engine's old rule that a counter never triggers another counter (`ai/hit-script.ts#queueCounter`); AI-Seymour's scripts chain on purpose and never read it.
+- `DamageEventInfo.deferKo` is `holdKo` (one name). A held KO the script is certain to refill, a form change or a part with a `reviveRule`, is not an overkill of anything (`hp.ts`, AI lane B's rule, which no AI-Seymour target meets).
+- Nothing else in the lanes' entries changes: `AbilityDef.extra.groupTarget` and `scriptAims` stay two different mechanisms, and the draw helpers stay two (`ai/game-rolls.ts` and `ai/script-random.ts`: the same two shapes, one draw of 16 bits
+  and the picker over the living and targetable in ascending actor order, mapped to the engine's one stream differently) until the game's own generators are adopted.
+
+## 2026-10-09 — `AbilityDef.extra.scriptAims` replaces `distinctTargetsPerHit`; three Chapter VII runtime fields go and `ActorRuntime.guardMark` arrives; the FFX boss-script hook registry (re-parity AI-Seymour; FFX only)
+
+Branch `re-parity-ai-ffx`. No file in the contract list changed; recorded for the same reason as the entries below. `AbilityDef.extra` gains one documented key, `scriptAims: true`
+(`src/battle/ffx/scripted.ts` table), and loses `distinctTargetsPerHit`: a per-hit random row that carries it sends hit `h` to the `h`-th target the command names (the last
+when it names fewer), and a hit whose target is fallen or hidden is lost, as the exe's queue refuses the command (`targeting.ts#aimedTargetForHit`). It is how the compiled scripts
+aim: they pick the victim and queue the spell at it. Natus's four Multi-ra rows carried the old key and carry the new one, with Break, Flare and the Claw, Seymour's and the Guardians'
+Chapter VII spells and Anima's Pain; every other record resolves as before. `ActorRuntime` (`src/battle/ffx/state.ts`) loses `damageCapPerHit`, `hpFloor` and `coversAllyId`
+(Chapter VII's cap, floor and first-Guardian cover, which the game's script does not have) and gains `guardMark?: boolean` (the Guard status an enemy's script puts on an ally, read by
+`targeting.ts#coverOf`). New module `src/battle/ffx/ai/hooks.ts`: the registry of the game's script hooks (`onTargeted`, `onHit` once per action per target before the death check,
+`postPoison`, `preTurn`) and the reaction queue. The `onHit` report (`HitReport`) carries `hpBefore`, `lostHp` and, with the same definitions as the AI lane B hit event
+(`re-parity-ai-ffx-b`, `hit-hooks.ts#HitEvent`), `lastDamage` (`LastDamageTakenHP`: the action's HP results on the owner after the cap and before the clamp, overkill counted, a heal negative)
+and `affectsHp` (the command's HP class bit), so a script written for either lane's hook runs on the other's. `BattleEvent` shape unchanged; FFX-2 and FF7 never import any of it
+(`ffx2-atb-golden` and `ff7-golden` unchanged). Handoff: [re-parity-ai-seymour](handoff/re-parity-ai-seymour.md). Game case: FFX only.
+
 ## 2026-10-09 — The FFX engine raises the game's `onHit` once per target per sub-action, and the boss AI of Chapters II and III follows the game's scripts (re-parity AI lane B; FFX only; no shared contract file changed)
 
 Branch `re-parity-ai-ffx-b`. No file in the contract list changed. Recorded because the engine's public surface and the order in which a boss's events arrive change. Handoff:

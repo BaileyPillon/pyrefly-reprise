@@ -257,8 +257,15 @@ function walk(chapterId: string, seeds: readonly number[], want: number, collect
 // variance and critical in the game's order and Cross Cleave always hits, so seed 1's Chapter 1 is a three-decision wipe. The
 // same board (Yuna down and a Zombie, the raise refused, the Poison Fang and Holy Water cards) is seed 18's six decisions, and
 // seed 2 supplies the other ten of the sixteen; `walk` continues on the next seed when a battle ends early, as it always did.
-describe('Chapter 1, the board the gate reported (seed 18, then seed 2 for the rest)', () => {
-  const seen = walk('seymour-flux', [18, 2], 16, true);
+//
+// Re-pinned again 2026-10-09 (re-parity AI-Seymour, FFX only): Seymour Flux and the Mortiorchis now follow the game's own scripts
+// (D-01 to D-08 of research/re-ffx-ai-seymour.md), the party no longer wipes in the opening cycles (it wins every one of seeds 1 to
+// 500; 0.6 KOs a battle, was 4.4) and seed 18 is a 49-decision victory without the gate's board. The same board (Yuna down and a
+// Zombie, the raise refused, the Poison Fang card with "Leave Yuna down", the Holy Water cards on Kimahri and on Yuna, the Phoenix
+// Down with its Zombie warning) is the first sixteen decisions of seed 7 (the Poison Fang card is also decision 4 of seeds 21, 43
+// and 51). Nothing about the advisor changed: only which seed reaches the board.
+describe('Chapter 1, the board the gate reported (seed 7)', () => {
+  const seen = walk('seymour-flux', [7], 16, true);
 
   it('walks the decisions the gate named', () => {
     expect(seen.decisions).toBe(16);
@@ -350,10 +357,16 @@ describe('Chapter 1, the board the gate reported (seed 18, then seed 2 for the r
     //      board with a body on the floor is answered, through `noteFault`;
     //   2. across the wide walk, the timing sentence still reaches the player
     //      through the **note** on its own, with no warning-channel escape.
-    expect(seen.faults, 'seeds 18 and 2, decision by decision').toEqual([]);
+    expect(seen.faults, 'seed 7, decision by decision').toEqual([]);
     const wide = walk('seymour-flux', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 240, true);
     expect(wide.faults, 'twelve seeds, decision by decision').toEqual([]);
-    const inNote = wide.cards.filter((c) => /note="[^"]*then raise/.test(c));
+    // 2026-10-09 (re-parity AI-Seymour, FFX only): the timing sentence needs a body on the floor that is not a Zombie while a
+    // party-wide payload is next, and the party now rarely falls (0.6 KOs a battle, was 4.4): none of seeds 1 to 12, and only
+    // seeds 218, 494 and 500 of the first 520, each at its eighteenth decision. The existence check therefore reads seed 218's
+    // first twenty decisions ("Ready To Annihilate lands first - take the hit, then raise Tidus"), which is fault free too.
+    const timing = walk('seymour-flux', [218], 20, true);
+    expect(timing.faults, 'seed 218, decision by decision').toEqual([]);
+    const inNote = timing.cards.filter((c) => /note="[^"]*then raise/.test(c));
     expect(inNote.length, 'a refused revive says when to spend it, in the note').toBeGreaterThan(0);
   });
 

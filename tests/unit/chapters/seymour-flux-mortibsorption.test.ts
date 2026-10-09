@@ -106,14 +106,17 @@ describe('Chapter I: Mortibsorption runs the threshold counters it owes [ffx-sey
     }
   });
 
-  it('a Threatened Seymour cannot counter the drain [ffx-combat-core §4.2]', () => {
+  it('the lines queue FORCED commands, so a Threatened Seymour still answers the drain (m142 @0x575 to 0x623; re-parity D-04)', () => {
+    // Threaten stops an actor's turn and the counters it would choose [ffx-combat-core §4.2]; the game's Protect and Reflect
+    // rows are forcePerformCommand, which is not gated on the owner's state. Seymour is Threaten-immune in our data, so this
+    // is reachable only by setting the status by hand, as here.
     const engine = newEngine(3);
     nextInput(engine);
     actor(engine, SEYMOUR).statuses.threaten = status('threaten');
     const after = drainAcrossHalf(engine);
     expect(after.some((e) => e.type === 'heal' && e.cause === 'mortibsorption')).toBe(true);
-    expect(after.filter((e) => e.type === 'counter' && e.actorId === SEYMOUR)).toHaveLength(0);
-    expect(actor(engine, SEYMOUR).statuses.reflect).toBeUndefined();
+    expect(after.filter((e) => e.type === 'counter' && e.actorId === SEYMOUR)).toHaveLength(2);
+    expect(actor(engine, SEYMOUR).statuses.reflect).toBeDefined();
   });
 
   it('a drain that stays above both thresholds fires nothing', () => {

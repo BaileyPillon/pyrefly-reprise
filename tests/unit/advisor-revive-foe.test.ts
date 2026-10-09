@@ -40,18 +40,35 @@ function badRevive(state: Readonly<BattleState>, s: MoveSuggestion): string | nu
   return null;
 }
 
-/** Follow the card; when it says Petrify Grenade, swing at a Guardian instead (the phone route of round 16). */
+/**
+ * Follow the card; when it says Petrify Grenade, swing at a Guardian instead (the phone route of round 16).
+ *
+ * Since the Seymour re-parity (2026-10-09, FFX only) the swing no longer puts a Guardian down by itself: the Guardian's script answers every
+ * hit that takes HP with an Auto-Potion (+1,000) until it has been stolen from, and a plain swing does 30 to 150, so a driver that only
+ * swings now meets no KO'd-Guardian board in 90 turns. The board is therefore built the way the phone route ends up with it: Guardian A
+ * is put down at the first decision (the engine's own KO state), and the sweep follows the card from there.
+ */
 function playChapterVII(seed: number, v3: boolean): { bad: string[]; koBoards: number } {
   clearAdvisorCache();
   const { engine, options } = harnessFor('seymour-anima-macalania', seed);
   const bad: string[] = [];
   let koBoards = 0;
+  let guardianDown = false;
   for (let i = 0; i < 4000; i++) {
     const d = engine.nextDecision();
     if (d.kind === 'battle-over') break;
     if (d.kind !== 'player-input') continue;
     const state = engine.state();
     if (state.turn > 90) break;
+    if (!guardianDown) {
+      guardianDown = true;
+      const a = state.combatants['guado-guardian-a'];
+      if (a) {
+        a.hp = 0;
+        a.alive = false;
+        a.statuses['ko'] = { id: 'ko', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+      }
+    }
     const guardians = ['guado-guardian-a', 'guado-guardian-b'].map((id) => state.combatants[id]);
     if (guardians.some((g) => g && !g.alive && !g.removed)) koBoards++;
     const view = buildAdvisorView(state, { actorId: d.actorId, commands: d.commands }, { ...options, planner: true, v3 });
