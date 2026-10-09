@@ -138,9 +138,9 @@ command that hit her; v10 its damage type; v11 aeon flag; v12 pending transforma
 | Condition | Action | Then |
 |---|---|---|
 | an aeon is in battle, v3 = 0 | Absorb on a random living actor (the aeon if alone) | v3 := 255, **v2 += 1** |
-| an aeon is in battle, v3 ≠ 0 | Hellbiter (0x60D1) on the front line | v3 := 0, **v2 += 1** |
+| an aeon is in battle, v3 not 0 | Hellbiter (0x60D1) on the front line | v3 := 0, **v2 += 1** |
 | no aeon, v2 = 0 (the turn after the entry turn) | random living target; Cura if `GetRandomValue mod 100 > 50` (48.97%) else Regen (51.03%) | v2 := 1 then +1, so **2** |
-| no aeon, v2 ≠ 0 | Z = how many of Character #1 to #3 carry Zombie (alive or not, in battle or not). Pick the random living target first. Heal if `GetRandomValue mod 100 < 30 x Z + 10`: **10.01%, 40.03%, 70.02%, 100% for Z = 0, 1, 2, 3**; a heal is Cura if a second draw `mod 100 > 50` else Regen. Otherwise Hellbiter on the front line (the target draw is already spent) | v2 += 1, no wrap |
+| no aeon, v2 not 0 | Z = how many of Character #1 to #3 carry Zombie (alive or not, in battle or not). Pick the random living target first. Heal if `GetRandomValue mod 100 < 30 x Z + 10`: **10.01%, 40.03%, 70.02%, 100% for Z = 0, 1, 2, 3**; a heal is Cura if a second draw `mod 100 > 50` else Regen. Otherwise Hellbiter on the front line (the target draw is already spent) | v2 += 1, no wrap |
 
 The aeon branch does **not** freeze v2: both aeon actions fall into the same join (@0x0426) that adds 1.
 
@@ -399,6 +399,13 @@ immune to Scan, Eject, Auto-Life, Doom, Slice and Bribe; Poison 25%. The Overdri
 - The Pagodas are chr 23 and 24; the Power Wave rule is in §4.2. How Sandy and Mindy become un-hidden (scene 2 sets all
   monsters' property 174 to 0) was not traced to its trigger (§7).
 
+**5.7 Helper actors** [run]. Nishida (m274, actor 23; 24 in `sins07_06`, 25 in `sins07_07`) is a dummy: its init sets
+"must be killed for battle end" := 0, "visible on CTB" := 0, "gets turns" := 0 and Targetable := 0, and its AI function is
+empty. It is the actor named as "summoner" and as the caster of the no-effect Summon action in every possession battle
+except Ifrit's, whose script names actor 20 (himself). In `sins07_06` actor 23 is a Sinscale model (m116) used as a stand-in
+for Daigoro; the script hides it after Yojimbo's first turn (postTurn) and has a Daigoro branch that the `mod 2` roll can
+never reach.
+
 ## 6. Yu Yevon (m176, `sins07_10`)
 
 **6.1 Record.** HP 99,999, MP 1, STR 1, DEF 0, MAG 200, MDF 0, AGI 44, LCK 0, EVA 0, ACC 0; overkill 99,999; no affinities. Immune
@@ -440,7 +447,10 @@ events (V4). The mock world is not the engine: anything that depends on how the 
 
 **Not decoded.**
 
-1. The CTB charged for a turn on which a program queues nothing (the Pagodas' hidden turns, Yu Yevon's first turn).
+1. The CTB charged for a turn on which a program queues nothing (the Pagodas' hidden turns, Yu Yevon's first turn). Most
+   likely a rank-3 recovery: the scheduler (`FUN_00790fb0`) stores rank 3 in the actor each time its counter reaches 0 and
+   `pp_BtlActionDone` pays `tick speed x stored rank`, which would make three Pagoda turns the 63 (AGI 40) or 72 (AGI 30)
+   ticks our data already assumes. That the engine calls action-done for an empty turn was not traced.
 2. Whether the second cast of a Doublecast raises its own onHit event (the executor keys the pending slot by sub-action
    index, which suggests yes) and the exact counter in §2.11.
 3. What un-hides Sandy and Mindy (scene 2 does it, but no AI function queues that scene).
