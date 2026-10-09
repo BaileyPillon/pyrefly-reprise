@@ -105,7 +105,7 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * the shared cycle state, the hooks that run once per action per target before the death check, the revive values, the
  * formation start hooks, the Desperado ladder, the disc ring and the affinity timing. These eight digests (seeds 1 and 7 of
  * those four chapters) move because every enemy turn and every hook of those fights moved; the other ten (Chapters II, III,
- * VIII, IX and XIV) are byte for byte what they were. Four outcomes moved on seeds nobody tuned: seymour-flux#1 and #7
+ * VIII, IX and XIV) are byte for byte what they were. Five outcomes moved on seeds nobody tuned: seymour-flux#1 and #7
  * defeat -> victory, seymour-natus#7 victory -> defeat, seymour-omnis#1 defeat -> victory and #7 victory -> defeat; the
  * 500-seed tables and their causes are in docs/handoff/re-parity-ai-seymour.md. Nothing on the boss or the party was tuned.
  */
