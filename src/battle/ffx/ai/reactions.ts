@@ -18,7 +18,6 @@ import { activeScriptId } from './index.ts';
 import { aiContextFor } from './types.ts';
 import { seymourDelayCounter, seymourThresholdCounters, stepFluxPhase } from './seymour-flux.ts';
 import { GUADO_GUARDIAN_SCRIPT, macalaniaGuardianCounter } from './seymour-anima-macalania.ts';
-import { collectEvraeCounters } from './evrae-counters.ts';
 import { collectSinCounters, runSinLivenessHooks } from './sin-counters.ts';
 import { MORTIBODY_ID, NATUS_ID, natusActionCounters, stepNatusPhase } from './seymour-natus-rules.ts';
 import { executeCommand } from '../execute.ts';
@@ -37,20 +36,15 @@ export interface BossCounter {
  * healing an ally, buffing, summoning or a party-targeted Overdrive provokes
  * nothing [ffx-yunalesca §14.11].
  *
- * `statusAddedEnemyIds` is every enemy the action landed a **status** on, and
- * it is a separate list on purpose. Evrae answers **Slow landing** while it is
- * already Hasted [ffx-evrae-airship §5.5, verified: 2 sources], and Slow's
- * `ctb` formula may or may not emit a `damage` event on the same action — so a
- * counter keyed off the damage set would fire or not fire by seed. Every boss
- * that shipped before this parameter existed ignores it, which is what keeps
- * Chapters 1-3's event logs byte-identical.
+ * (Evrae's and Sin's answers are not collected here any more: they are the
+ * engine's hit events, `hit-hooks.ts`, which see a hit that missed, a heal and a
+ * status-only action too.)
  */
 export function collectBossCounters(
   ctx: Ctx,
   attacker: FFXCombatant,
   def: AbilityDef,
   damagedEnemyIds: readonly CombatantId[],
-  statusAddedEnemyIds: readonly CombatantId[] = [],
 ): BossCounter[] {
   const out: BossCounter[] = [];
   if (def.flags.includes('is-counter')) return out;
@@ -111,18 +105,6 @@ export function collectBossCounters(
       if (command) out.push({ actorId: enemy.id, command, cause: 'script' });
       continue;
     }
-  }
-
-  // **Evrae answers three different things**, and only one of them is "you hurt
-  // me": the Stone Gaze aggro counter reads the damage set, the counter-Haste
-  // reads the status set, and Swooping Scythe reads *being targeted at all*
-  // [ffx-evrae-airship §5.3, §5.5, §4.5]. Collected once for the encounter
-  // rather than once per damaged enemy, because two of the three do not have a
-  // damaged enemy to hang off. A no-op in every other battle.
-  for (const c of collectEvraeCounters(ctx, def, damagedEnemyIds, statusAddedEnemyIds)) {
-    const evrae = tryActor(ctx, c.actorId);
-    if (!evrae || !canCounter(ctx, c.actorId)) continue;
-    out.push({ actorId: c.actorId, command: { kind: 'ability', id: c.abilityId, targets: [] }, cause: c.cause });
   }
 
   // **Sin** (FFX only): Overdrive Sin's Gaze [ffx-sin §5.4], the Fins' counters [§5.1] and link 3's [§5.3], once

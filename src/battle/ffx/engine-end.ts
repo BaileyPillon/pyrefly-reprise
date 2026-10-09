@@ -15,7 +15,6 @@ import { collectReactions, onTurnEnd } from './ticks.ts';
 import { collectSignals, evaluateTriggers } from './triggers.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
-import { runEvraePhaseHooks } from './ai/evrae-counters.ts';
 import { counterInputs } from './counter-inputs.ts';
 import { aeonDuelLost, dismissAeon } from './aeons.ts';
 import { buildBattleResult, scriptedGameOver } from './results.ts';
@@ -56,7 +55,7 @@ export function afterAction(
   void damageDealt;
 
   // Who this action damaged, landed a status on, or pushed into a new form.
-  const { damaged, counterable, statusCounterable } = counterInputs(actor.id, actionEvents);
+  const { damaged, counterable } = counterInputs(actor.id, actionEvents);
 
   // The Mortiorchis never dies; it drains Seymour and comes back smaller.
   runMortibsorptionIfDown(ctx);
@@ -66,9 +65,6 @@ export function afterAction(
   // moment hers reaches 0 [ffx-seymour-anima-macalania §5.2, §5.3]. A no-op
   // in every other battle.
   runMacalaniaPhaseHooks(ctx);
-
-  // Evrae's 1/3-HP self-Haste: a hook, so Guided Missiles trip it too [§5.4]. No-op elsewhere.
-  runEvraePhaseHooks(ctx);
 
   // Free actions the onHit hooks queued (`hit-hooks.ts`: Yunalesca's counters, Yu Yevon's Curaga), then the older
   // boss counters and the equipment reactions. A hit one of them lands queues nothing further.
@@ -92,7 +88,7 @@ export function afterAction(
   if (command) {
     const def = commandAbility(ctx, command);
     if (def) {
-      for (const counter of collectBossCounters(ctx, actor, def, counterable, statusCounterable)) {
+      for (const counter of collectBossCounters(ctx, actor, def, counterable)) {
         const counterActor = tryActor(ctx, counter.actorId);
         if (!counterActor || !isAlive(counterActor)) continue;
         h.push({

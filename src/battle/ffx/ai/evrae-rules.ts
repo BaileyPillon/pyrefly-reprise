@@ -35,17 +35,31 @@
  * and is executed on CID'S NEXT TURN instead of a volley. Last order wins.
  * One course change therefore costs one party turn + one Cid turn + one volley.
  *
- * phase 2 at HP < 10,667: Evrae Hastes itself (recovery 30 -> 15 AND the
- *       pending counter halved), stops using Stone Gaze, and answers being
- *       targeted at FAR with Swooping Scythe, which drags it back to NEAR.
+ * phase 2 at HP < 10,666 (the Haste phase, `v9` in his script): Evrae Hastes
+ *       itself (recovery 30 -> 15 AND the pending counter halved), stops
+ *       counting toward Stone Gaze, answers a hit while FAR with Swooping
+ *       Scythe, which drags it back to NEAR, and on its own FAR turn Scythes
+ *       instead of spraying.
  * ```
  *
  * **§4.5 is the encounter's best rule.** In phase 2 the Poison Breath dodge
- * fails *because you attacked*: targeting Evrae at all while FAR makes it Swoop
- * and close, so the breath resolves. The correct play is to do nothing, on
- * purpose.
+ * fails *because you hit him*: any action that reaches him while FAR makes him
+ * Swoop and close, so the breath resolves. The correct play is to do nothing,
+ * on purpose.
  *
- * ## Owner-approved decisions carried by this file
+ * ## Game-script parity (re-parity, AI lane C)
+ *
+ * His turn and his `onHit` are `research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md`
+ * section 2.3 and 2.5 (m119, run in the note's interpreter): the counters live in
+ * `./evrae-counters.ts` as the engine's hit event (`hit-hooks.ts`), once per
+ * action per target before the death check, for every hit including Cid's and a
+ * party counter-attack's (D-34). What the old rules built on estimates and the
+ * script now settles: the Haste line is 10,666 strict (D-01), the Gaze counter
+ * is filled by the command's damage-formula byte (D-03), it keeps firing after
+ * the Haste phase starts (D-04), and the Haste phase has Scythe turns of its own
+ * (D-05, D-06, D-07).
+ *
+ * ## Owner decisions carried by this file
  *
  * Bailey, 2026-09-21 ("Yes to all recommendations", "Yes to these too"). Each is
  * **AUTHORED**, not canon, and each is one line from being flipped. See
@@ -54,11 +68,9 @@
  * | # | Decision | Switch |
  * |---|---|---|
  * | C-7 / G-1 | A Trigger Command is rank 3 | {@link ORDER_RANK} |
- * | C-7 / G-2 | A redundant order still burns Cid's turn | {@link REDUNDANT_ORDER_BURNS_TURN} |
- * | C-12 / G-5 | Swooping Scythe is phase 2 only | {@link SWOOP_PHASE_TWO_ONLY} |
- * | C-1 / G-3 | Aggro counter 6, +1 magic / +2 physical, resets on fire, once per action | {@link GAZE_THRESHOLD} and friends |
+ * | C-7 / G-2 | A redundant order still burns Cid's turn (the game offers none: needs Bailey's yes, a menu change, row D-08) | {@link REDUNDANT_ORDER_BURNS_TURN} |
  * | C-14 / G-8 | **Keep** the Reflected self-Haste — it lands on a random party member | {@link KEEP_REFLECTED_SELF_HASTE} |
- * | C-13 / G-7 | **Do not** ship "delaying Evrae advances the Haste phase" | {@link DELAY_ADVANCES_HASTE_PHASE} |
+ * | C-13 / G-7 | **Do not** ship "delaying Evrae advances the Haste phase" (the script has it: row D-02, kept off) | {@link DELAY_ADVANCES_HASTE_PHASE} |
  * | C-4 | Threaten defaults to immune | `threatenChance: 0` in the data file |
  *
  * The two order ids are `'pull-back'` and `'close-in'`, exactly as the owner
@@ -99,8 +111,12 @@ export const RANGED_WEAPON_ACTORS: readonly CombatantId[] = ['wakka'];
 
 /** §1.1 [verified: 2 sources]. */
 export const EVRAE_MAX_HP = 32_000;
-/** §5.4 [verified: 2 sources] — 1/3 of the bar; the wiki states the figure itself. */
-export const HASTE_THRESHOLD = 10_667;
+/**
+ * The Haste line (D-01): `maxHP / 3` with integer division, 10,666, and the test is strict (`HP < 10,666`), so the Haste
+ * phase starts on the first hit event that leaves him at 10,665 or less. The script computes it in its init and tests it
+ * in its hit hook (m119 @0x1cd, @0x4f5; the note's section 2.5, run in its interpreter).
+ */
+export const HASTE_THRESHOLD = 10_666;
 /** §4.6 [verified: 2 sources] — three volleys, then an announcement, then silence. */
 export const MISSILE_COUNT = 3;
 /** §4.4 — Attack, Attack, Inhale, Poison Breath [verified: 2 sources]. */
@@ -138,26 +154,13 @@ export const ORDER_RANK = 3;
 export const REDUNDANT_ORDER_BURNS_TURN = true;
 
 /**
- * **AUTHORED (C-12 / G-5).** Swooping Scythe is **phase 2 only**. The wiki
- * frames it as phase-2 behaviour, GamerGuides lists it unqualified. §5.4's own
- * reasoning is the tie-breaker: phase-2-only gives the phase change a distinct
- * silhouette.
- */
-export const SWOOP_PHASE_TWO_ONLY = true;
-
-/**
- * **AUTHORED (C-1 / G-3).** The Stone Gaze aggro counter is `[single source:
- * wiki]` for the threshold and the increments, and the wiki says nothing at all
- * about the other three rules. All four are surfaced here rather than buried,
- * because §5.3's derived consequence — *fighting at range also slows the
- * petrify clock*, because FAR is magic-and-Wakka only, i.e. +1 a turn instead
- * of +2 — is only legible if the counter is visible.
+ * **The Stone Gaze counter** (C-1, now the script's own, rows D-03 and D-04): Evrae's `onHit` adds 2 for a command whose
+ * damage-formula byte is 1 and 1 for one whose byte is 3 (`./command-formula.ts`), once per action that reaches him, a
+ * miss included; his Attack slot becomes a Stone Gaze when the counter is **above 5** (`> 5`, so 6 and more), and firing
+ * zeroes it. After the Haste phase starts the counter stops counting, **but a value above 5 still fires once** at the
+ * next Attack slot. {@link GAZE_THRESHOLD} is the smallest counter that fires.
  */
 export const GAZE_THRESHOLD = 6;
-export const GAZE_PHYSICAL = 2;
-export const GAZE_MAGIC = 1;
-export const GAZE_RESETS_ON_FIRE = true;
-export const GAZE_COUNTS_MULTI_HIT_ONCE = true;
 
 /**
  * **OWNER DECISION (C-14 / G-8), 2026-09-21: keep it.**
@@ -173,33 +176,30 @@ export const GAZE_COUNTS_MULTI_HIT_ONCE = true;
 export const KEEP_REFLECTED_SELF_HASTE = true;
 
 /**
- * **OWNER DECISION (C-13 / G-7), 2026-09-21: do not implement.**
+ * **OWNER DECISION (C-13 / G-7), 2026-09-21: do not implement** (D-020/q7, Bailey: "Yes to all recommendations").
  *
  * The wiki claims that delaying Evrae before 1/3 makes it enter the Haste phase
  * sooner, with the mechanism unstated. §5.6 is unambiguous that an invisible
  * penalty on the player's tempo tool "is a trap, not a decision". Evrae remains
  * the only boss in the anthology that can be delayed, and delaying it is purely
- * good for the player. Recorded, not shipped.
+ * good for the player. **The script has it** (re-parity row D-02; the note's
+ * section 2.5, rows 5 to 7: Delay Attack adds 1 and Delay Buster 3 to a counter,
+ * and 3 or more starts the Haste phase with no HP lost), and the owner decision
+ * stands over it: the rule is built in `./evrae-counters.ts` and kept off here.
+ * Bailey may turn it on by flipping this constant (a bench or a test sets
+ * `state.flags[AIRSHIP_DELAY_SWITCH]` to override it for one battle).
  */
 export const DELAY_ADVANCES_HASTE_PHASE = false;
 
-/**
- * **AUTHORED (C-1).** What counts as a "regular attack" for the aggro counter.
- * §5.3's own recommendation: "regular" most naturally excludes Cid's script
- * action and the utility commands, so Lancet, Steal, the Breaks and every
- * status-only command are out. Cid is excluded for free — `collectBossCounters`
- * returns early on an enemy-side attacker.
- */
-export const REGULAR_ATTACK_CATEGORIES: readonly string[] = ['attack', 'blackmagic', 'skill', 'overdrive'];
+/** `state.flags` key a bench or a test sets to override {@link DELAY_ADVANCES_HASTE_PHASE} for one battle. */
+export const AIRSHIP_DELAY_SWITCH = 'airship.delayAdvancesHaste';
 
 /** The decisions, as data, so the guide and the end-state board can print them. */
 export const EVRAE_ASSUMPTIONS = [
   { id: 'C-7', claim: 'A Trigger Command is rank 3', value: ORDER_RANK },
-  { id: 'C-7b', claim: "A redundant order still burns Cid's turn", value: REDUNDANT_ORDER_BURNS_TURN },
-  { id: 'C-12', claim: 'Swooping Scythe is phase 2 only', value: SWOOP_PHASE_TWO_ONLY },
-  { id: 'C-1', claim: 'Stone Gaze aggro: 6, +1 magic / +2 physical, resets on fire, once per action', value: GAZE_THRESHOLD },
+  { id: 'C-7b', claim: "A redundant order still burns Cid's turn (the game offers none)", value: REDUNDANT_ORDER_BURNS_TURN },
   { id: 'C-14', claim: 'Reflect turns the self-Haste into a free party Haste', value: KEEP_REFLECTED_SELF_HASTE },
-  { id: 'C-13', claim: 'Delaying Evrae does NOT advance the Haste phase', value: DELAY_ADVANCES_HASTE_PHASE },
+  { id: 'C-13', claim: 'Delaying Evrae does NOT advance the Haste phase (the script does)', value: DELAY_ADVANCES_HASTE_PHASE },
 ] as const;
 
 // ---------------------------------------------------------------------------
@@ -213,12 +213,15 @@ export const AIRSHIP_ORDER = 'airship.order';
 export const AIRSHIP_MISSILES = 'airship.missilesLeft';
 export const AIRSHIP_OUT_OF_AMMO = 'airship.outOfAmmoAnnounced';
 export const AIRSHIP_BREATH_CHARGED = 'airship.breathCharged';
+/** 1 before the Haste phase, 2 from the hit event that starts it (the script's `v9` = 255; it is never cleared). */
 export const AIRSHIP_PHASE = 'airship.phase';
-export const AIRSHIP_HASTED = 'airship.hasted';
+/** The Stone Gaze counter (`v8`). */
 export const AIRSHIP_GAZE = 'airship.gazeCounter';
 export const AIRSHIP_NEAR_STEP = 'airship.nearStep';
-/** How many player actions have named Evrae, mirrored for the tactic and the HUD. */
-export const AIRSHIP_TARGETINGS = 'airship.targetings';
+/** The one-event guard (`v11`): set when the Haste phase starts, it swallows the hit event of the Haste itself. */
+export const AIRSHIP_HASTE_GUARD = 'airship.hasteGuard';
+/** Delay Attack and Delay Buster, counted toward the Haste phase (`v12`: +1 and +3). */
+export const AIRSHIP_DELAY_COUNT = 'airship.delayCount';
 
 export type Range = 'near' | 'far';
 
@@ -258,11 +261,10 @@ export function isEvraeBattle(ctx: Ctx): boolean {
  * - **Wakka's blitzball is a ranged weapon** — a character property, not an
  *   action flag, so it lives on his runtime and is read only inside
  *   `targeting.ts#reachesAtRange` [§4.3, E-3].
- * - **Evrae counts being targeted**, which is what §4.5's Swooping Scythe
- *   reaction keys on. A miss and a status-only command both count; damage is
- *   not required.
  *
- * §4.1 `[single source: Jegged]` — the battle **opens at NEAR**.
+ * §4.1 `[single source: Jegged]` — the battle **opens at NEAR**; the note
+ * (section 2.1) confirms it: Evrae's init never writes his distance, and the
+ * formation has no start hook, so the ordinary opening applies.
  */
 export function applyEvraeSetup(ctx: Ctx): void {
   const evrae = tryActor(ctx, EVRAE_ID);
@@ -274,10 +276,10 @@ export function applyEvraeSetup(ctx: Ctx): void {
   ctx.state.flags[AIRSHIP_OUT_OF_AMMO] = false;
   ctx.state.flags[AIRSHIP_BREATH_CHARGED] = false;
   ctx.state.flags[AIRSHIP_PHASE] = 1;
-  ctx.state.flags[AIRSHIP_HASTED] = false;
   ctx.state.flags[AIRSHIP_GAZE] = 0;
   ctx.state.flags[AIRSHIP_NEAR_STEP] = 0;
-  ctx.state.flags[AIRSHIP_TARGETINGS] = 0;
+  ctx.state.flags[AIRSHIP_HASTE_GUARD] = false;
+  ctx.state.flags[AIRSHIP_DELAY_COUNT] = 0;
 
   for (const id of [EVRAE_ID, CID_ID, ...RANGED_WEAPON_ACTORS]) if (tryActor(ctx, id)) rtOf(ctx, id);
   if (tryActor(ctx, CID_ID)) rtOf(ctx, CID_ID).ai['missilesLeft'] = MISSILE_COUNT;
@@ -285,9 +287,10 @@ export function applyEvraeSetup(ctx: Ctx): void {
 }
 
 /**
- * The three runtime marks this encounter needs (Evrae counts being targeted,
- * Cid is a non-combatant, Wakka's blitzball reaches), read off the published
- * state alone so **a rebuilt runtime gets them too**.
+ * The two runtime marks this encounter needs (Cid is a non-combatant, Wakka's
+ * blitzball reaches), read off the published state alone so **a rebuilt runtime
+ * gets them too**. (Evrae's third mark, "counts being targeted", is gone: his
+ * counters are hit events now, `./evrae-counters.ts`.)
  *
  * `simulate.ts#runtimeFor` rebuilds the runtime a preview runs on from
  * `BattleState`, which does not carry `ActorRuntime`. Before this was shared,
@@ -302,9 +305,7 @@ export function markEvraeRuntime(
   actors: ReadonlyMap<CombatantId, ActorRuntime>,
 ): void {
   if (flags[AIRSHIP_RANGE] === undefined) return;
-  const evrae = actors.get(EVRAE_ID);
-  if (evrae) evrae.countsPartyTargetings = true;
-  // Overdrive Sin reuses the gap and names its own counted foe (`overdrive-sin-rules.ts`, FFX only).
+  // Sin's Fins, Genais, the Core and Overdrive Sin still count the party's targetings (their lane-C commit replaces this).
   const counted = flags['airship.countsTargetings'];
   const other = typeof counted === 'string' ? actors.get(counted) : undefined;
   if (other) other.countsPartyTargetings = true;

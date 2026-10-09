@@ -60,9 +60,9 @@
  *   *and* let the player find out it is a lie — that is a better beat than
  *   quietly correcting it." The Scan text also lies about Magic Defence, which
  *   is 0/1; same treatment.
- * - **C-6** — Cid's Agility: decompiled **16**, wiki 11. We ship 16 (recovery
- *   36 rather than 42). It materially changes how often the ship can turn, so
- *   it is on the playtest list.
+ * - **C-6** — Cid's Agility: the kernel record says **16**, the wiki 11. The
+ *   script settles it (re-parity D-09): his init writes 11 over the record, so
+ *   he acts every 42 ticks, not 36.
  * - **C-18** — equipment-drop ability rolls: decompiled **1 always**, wiki 2.
  *   Not modelled; this project has no equipment-drop roller.
  *
@@ -85,8 +85,11 @@ export const EVRAE_GROUP_ID = 'evrae-airship';
 export const EVRAE_SCRIPT = 'evrae';
 export const CID_SCRIPT = 'cid-fahrenheit';
 
-/** §5.4 [verified: 2 sources] — 1/3 of 32,000; the wiki states the figure itself. */
-export const EVRAE_HASTE_THRESHOLD = 10_667;
+/**
+ * D-01 (re-parity): `maxHP / 3` with integer division is 10,666 and the script's test is strict (`HP < 10,666`), read from his
+ * init and hit hook (m119 @0x1cd, @0x4f5). The wiki's 10,667 put the Haste one point early.
+ */
+export const EVRAE_HASTE_THRESHOLD = 10_666;
 
 /**
  * Evrae — `m119`, bestiary #097.
@@ -204,9 +207,9 @@ const evrae: EnemyDef = {
  *
  * Strength 1 / Magic 0 / Defense 0 / Magic Defense 0 all clamp to 1 in the
  * formulas and none of them is ever read: his one action is `Fixed`, which
- * ignores every stat on both sides. **Agility 16 is the only number of his that
- * matters** (C-6) — base 12 ticks, rank-3 recovery 36 — because it is how often
- * the ship can change its mind.
+ * ignores every stat on both sides. **Agility 11 is the only number of his that
+ * matters** (C-6, D-09) — base 14 ticks, rank-3 recovery 42 — because it is how
+ * often the ship can change its mind.
  */
 const cid: EnemyDef = {
   id: CID_ID,
@@ -221,7 +224,7 @@ const cid: EnemyDef = {
     def: 0,
     mag: 1, // §2.1 — the decompiled 0 clamps to 1 in the formula
     mdef: 0,
-    agi: 16, // §2.1 C-6 [decompiled]; the wiki says 11. Recovery 36 vs 42
+    agi: 11, // D-09 (re-parity): his init writes Agility := 11 (m149 @0x015), over the kernel record's 16 (C-6); recovery 42, not 36
     luck: 1,
     eva: 0,
     acc: 1,

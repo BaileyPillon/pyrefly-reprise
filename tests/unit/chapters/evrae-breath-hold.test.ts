@@ -7,8 +7,9 @@
  * Swoop in and breathe anyway.
  *
  * Run on the engine, seeds 1-5, the card's top row pressed every turn. Those
- * seeds rarely meet the board on their own (seed 6 of the card-follower does,
- * which is the board win-23 shows), so every real decision is also asked the
+ * seeds rarely meet the board on their own (seed 8 of the card-follower does;
+ * it was seed 6 until Evrae followed his own script, re-parity AI lane C, which
+ * moved every seeded draw), so every real decision is also asked the
  * question with the breath charged and the ship FAR written onto its flags:
  * the same party, bench, items and boss, the §4.5 board.
  *
@@ -88,9 +89,9 @@ describe('Evrae: a charged breath at FAR is never answered by naming Evrae (§4.
     void held;
   }, 300_000);
 
-  it('seed 6, following the card, meets the real board and answers it with the line', () => {
+  it('seed 8, following the card, meets the real board and answers it with the line', () => {
     clearAdvisorCache();
-    const engine = newEngine(6);
+    const engine = newEngine(8);
     let held = 0;
     const bad: string[] = [];
     for (let i = 0; i < 60_000; i++) {
