@@ -346,9 +346,14 @@ describe(`Seymour Natus — win rates across ${SEEDS} seeds (measured, not tuned
     expect(results['poison-wait'].phase3).toBe(0);
   });
 
-  it('the intended line beats the credibly wrong one, on the shipped preset and at the old midpoint', () => {
+  it('the intended line beats the credibly wrong one on the shipped preset, and is not behind it at the old midpoint', () => {
     expect(results.intended.wins).toBeGreaterThan(results.wrong.wins);
-    expect(mid.intended.wins).toBeGreaterThan(mid.wrong.wins);
+    // Re-parity W2 (2026-10-09, FFX only): Natus's Flare is rank 3 in the game's command record (0x6079), where the data carried 5, so it comes about
+    // 5.2 times a fight and not 2.9 (research/re-ffx-commands.md section 7.3). The old midpoint party (not shipped, measured beside the preset)
+    // went from 5 wins of 200 to none, and the credibly wrong line has never won, so "intended beats wrong" is 0 against 0 there. Measured on this
+    // file at the change: shipped preset intended 119 -> 110 of 200, drain-farm 66 -> 0, midpoint intended 5 -> 0; with the old ranks put back
+    // the same engine gives 113, 58 and 13. Nothing was retuned (the rule of this file): the strict comparison stays on the shipped preset.
+    expect(mid.intended.wins).toBeGreaterThanOrEqual(mid.wrong.wins);
   });
 
   it('the two added sourced lines do what they say: Provoke + Reflect bounces his spells onto him, the farm drains him', () => {
