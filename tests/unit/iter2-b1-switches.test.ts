@@ -179,10 +179,14 @@ describe('Acta F4 guard: both Acta Est Fabula rows hit only the ids named, the t
 });
 
 describe('PR-0069 (FFX only): the possessed aeon keeps its own data file\'s affinities', () => {
-  it('research/ffx-bfa-yu-yevon.md §2 is silent on affinities, so none are mirrored from the player\'s aeon', () => {
-    const src = readFileSync('src/battle/ffx/setup.ts', 'utf8');
-    expect(src).toContain('Affinities are **not** mirrored (PR-0069)');
+  // Re-parity AI lane B (2026-10-09): the mirror moved to `ai/possession-setup.ts`, and the data file now carries what the
+  // game's kernel records add (Ifrit absorbs Fire, Ixion Thunder, Shiva Ice; research/re-ffx-ai-yunalesca-bfa.md section 5.4).
+  // Still nothing is copied from the player's aeon: the affinities are the possessed aeon's own data.
+  it('none are mirrored from the player\'s aeon: the possessed aeon\'s own data file decides', () => {
+    const src = readFileSync('src/battle/ffx/ai/possession-setup.ts', 'utf8');
+    expect(src).toContain('Its affinities, status resistances and moves are its own data');
     expect(src).not.toContain('Affinities are mirrored too');
+    expect(readFileSync('src/battle/ffx/setup.ts', 'utf8')).not.toContain('Affinities are mirrored too');
   });
 });
 

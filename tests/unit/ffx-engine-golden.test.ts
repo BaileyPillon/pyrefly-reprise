@@ -105,14 +105,21 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * anti-aeon Mind Blast and Osmose land on the aeon on the field, Form II's counter advances on aeon turns, and a pick draws
  * only with two or more candidates. Both digests move (yunalesca#1 victory -> defeat, #7 still a victory); no other
  * chapter's digest moved.
+ * Chapter III re-baselined 2026-10-09 by re-parity AI lane B ("game-script parity", FFX only): Braska's Final Aeon, the Yu
+ * Pagodas, the five possessed aeons and Yu Yevon run the game's own scripts (research/re-ffx-ai-yunalesca-bfa.md sections 3
+ * to 6) through the same hit events. His gauge is the script's fixed arithmetic, his moves its tables, a Pagoda returns with
+ * the damage it absorbed after two or three of its own turns, a possessed aeon aims and rolls as its script says, a
+ * character the fayth revives acts next, and Yu Yevon casts Gravija on every turn after his first, on the front line and
+ * himself. Both digests move (braskas-final-aeon#1 seven victories -> a defeat on link 1, #7 seven victories again); no other
+ * chapter's digest moved.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '28692f2c:defeat',
   'seymour-flux#7': 'f923eb10:defeat',
   'yunalesca#1': '92593bcc:defeat',
   'yunalesca#7': 'a986c071:victory',
-  'braskas-final-aeon#1': '567c3bf4:victory ea51a558:victory ba4a14f2:victory 509fbd2:victory 1ebf8f7c:victory da4942b3:victory e84aa63:victory',
-  'braskas-final-aeon#7': '2b85c492:victory f82347e2:victory 42bd9a74:victory 48d2e753:victory 86304bae:victory 7e4d660e:victory cddd0f5d:victory',
+  'braskas-final-aeon#1': '8e66e41a:defeat',
+  'braskas-final-aeon#7': '4d03bcf:victory ecf9d5ca:victory 73095ebb:victory 7da3a6c6:victory 769c43e:victory 56db843f:victory 4a48b320:victory',
   'seymour-anima-macalania#1': '15ecc081:victory',
   'seymour-anima-macalania#7': '86868cbf:victory',
   'evrae-airship#1': '14674509:victory',

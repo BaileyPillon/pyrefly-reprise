@@ -129,6 +129,14 @@ async function playChapter(chapter: Chapter, speed: PlaybackSpeed, seed = 1) {
   return { ...result, sleeps: count(), music: audio.music };
 }
 
+/**
+ * The seed Chapter 3 is walked on where a test needs it to reach its later links. It was 1 until re-parity AI lane B
+ * (2026-10-09, research/re-ffx-ai-yunalesca-bfa.md section 3): Braska's Final Aeon runs the game's own script (fixed gauge
+ * arithmetic, the game's move tables) and the Yu Pagodas return with the damage they absorbed, and the shipped line now
+ * loses seed 1's first link (as it loses seeds 18 and 23 of the first forty; 37 of 40 win). A seed pin that moved with the rules.
+ */
+const CHAPTER_III_SEED = 7;
+
 describe('every chapter reaches an outcome — critic round 02 #01', () => {
   // `'normal'` and `'fast'` differ from `'skip'` only in the multiplier applied
   // to a sleep that is already instant here, so the speeds that matter for
@@ -160,7 +168,7 @@ describe('every chapter reaches an outcome — critic round 02 #01', () => {
   // proves, is that the loop always **reaches** an outcome.
 
   it('walks Chapter 3 and Chapter 5 through every link of their chains', async () => {
-    const ch3 = await playChapter(CHAPTERS[2]!, 'skip');
+    const ch3 = await playChapter(CHAPTERS[2]!, 'skip', CHAPTER_III_SEED);
     const ch5 = await playChapter(CHAPTERS[4]!, 'skip');
     expect(ch3.links, "Braska's Final Aeon -> possessed aeons -> Yu Yevon").toBeGreaterThan(1);
     expect(ch5.links, 'Vegnagun tail -> leg -> body -> head -> Shuyin').toBeGreaterThan(1);
@@ -188,7 +196,7 @@ describe('each boss fight is scored with its own cue — critic round 02 #02', (
     // No scripts run in this harness: the chain's own cues only. Possessed
     // Valefor's and Shuyin's links start nothing (`track: null`); their entrance
     // scenes start boss-yu-yevon and boss-shuyin (audio-chain-entrance-owner.test.ts).
-    const ch3 = await playChapter(CHAPTERS[2]!, 'skip');
+    const ch3 = await playChapter(CHAPTERS[2]!, 'skip', CHAPTER_III_SEED);
     const ch5 = await playChapter(CHAPTERS[4]!, 'skip');
     expect(ch3.music[0]).toBe('boss-jecht');
     expect(ch3.music).toContain('boss-yu-yevon');

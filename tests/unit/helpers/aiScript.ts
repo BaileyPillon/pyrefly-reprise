@@ -18,6 +18,11 @@ import { zanarkandBuild } from '../../../src/data/ffx/builds/zanarkand.ts';
  */
 export class ScriptedRng extends SeededRng {
   readonly calls: Array<[number, number]> = [];
+  /**
+   * Answers to the next `GetRandomValue()` draws (`int(0, 65535)`), taken before the general queue and only by that range:
+   * a test can set the roll of a hook that runs after an action's own damage draws without counting those.
+   */
+  readonly wide: number[] = [];
   private readonly queue: number[];
 
   constructor(values: readonly number[] = [], private readonly fallback = 0) {
@@ -31,7 +36,8 @@ export class ScriptedRng extends SeededRng {
 
   override int(min: number, max: number): number {
     this.calls.push([min, max]);
-    const raw = this.queue.length > 0 ? (this.queue.shift() as number) : this.fallback;
+    const wide = min === 0 && max === 0xffff && this.wide.length > 0;
+    const raw = wide ? (this.wide.shift() as number) : this.queue.length > 0 ? (this.queue.shift() as number) : this.fallback;
     return Math.max(min, Math.min(max, raw));
   }
 
