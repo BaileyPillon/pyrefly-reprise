@@ -486,13 +486,14 @@ reward globals before and after each operation:
   recovery counter and its value, "can be summoned";
 * character bytes it does not model: the formation position (`Chr+0x4fc` to `+0x4fe`, `+0x509` to `+0x50b`, `+0x511`: the newcomer takes
   the leaver's position), the direction-change and appear-motion flags (`+0x41c`, `+0x43d`), and the action-queue bookkeeping
-  (`+0xde6`, `+0xde7`, `+0x716`); the leaver's **queued actions are finished** when it leaves (VA 0x007b20b0 runs the action-done step
-  for every queued action of the leaver), which an empty queue hides;
+  (`+0xde6`, `+0xde7`, `+0x716`); the leaver's **queued actions are completed without being executed** when it leaves (VA 0x007b20b0 runs the
+  action-done step, VA 0x007b20e0, for every queued action of the leaver except the one it is performing: each is taken off the queue and
+  charged its recovery and costs; read, not run, because the vectors' queue is empty);
 * globals not modelled: the queue itself (VA 0x0112aa80 and 0x0112ac70 on), the queue counters (0x0112bde0, 0x0112bde1) and a "party
   changed" flag (0x0112c9f5).
 
 None of those decides a number, a status or a turn in a boss fight, but a wiring must remember that **the queued actions of a
-character that leaves a fight are cancelled**.
+character that leaves a fight are completed without being executed** (recovery and costs charged).
 
 ## 5. Differences against the engine today (worktree `re-parity` at 029d49c7)
 
@@ -546,7 +547,7 @@ has been changed; these are what a wiring batch has to settle. All rows are **FF
 | A4 | **Aeon equipment is missing**: crit bonus +6 on aeon commands (engine 0), Pierce on nine of ten aeons (none), Break Damage Limit on Bahamut, Anima and the Magus Sisters (none), Break HP and MP Limit (none). The elemental absorbs are modelled (`AEON_INNATE_AFFINITIES`), through a table in `setup.ts` | `setup.ts` 94 to 142 | an Ifrit Attack against a Luck-15 monster: crit chance 2 / 8 percent points; a Bahamut hit that computes above 9,999: 9,999 / the full amount | every aeon physical hit; Pierce matters against Armored enemies |
 | A5 | **Identical:** the immunities. The engine's 22 (Death, Zombie, Petrify, Poison, the four Breaks, Confuse, Berserk, Provoke, Threaten, Sleep, Silence, Darkness, Slow, Doom, Eject, Scan, Defend, Guard, Sentinel) are exactly the game's effective 22 (16 resistance bytes of 255 or, for Threaten, of 0 percent, and six extra-status bits); the only difference is the four Distill statuses, which the engine does not have. Curse and Delay are open in both | `setup.ts` 94 to 117 | | |
 | A6 | **The summon is one instant**: the engine freezes the party and sets the aeon's counter to 0 at once; the game parks the party first and takes it out of the turn list when the arrival action starts. The effect is the same for one aeon; the Magus Sisters (three at once, `ctx.state.aeonId` a single id; their joint Delta Attack handing the other two the costs and the rank's recovery, §4.7) cannot be represented | `aeons.ts` 64 to 88 | | the Sisters are in no shipped build |
-| A7 | **Dismiss**: the game revives a fallen member of the dismissed list to 1 HP (the Magus Sisters case), the engine does not; the queued actions of the leavers are cancelled in the game | `aeons.ts` 96 to 115 | | the Sisters only |
+| A7 | **Dismiss**: the game revives a fallen member of the dismissed list to 1 HP (the Magus Sisters case), the engine does not; the queued actions of the leavers (not the current one) are completed without being executed in the game, their recovery and costs charged (read) | `aeons.ts` 96 to 115 | | the Sisters only |
 | A8 | `aeonEntryDelay` (exported, never called) says a freshly summoned aeon enters with a rank-3 delay; the game's counter for it is 0 | `aeons.ts` 138 to 141 | `baseCtb(agi) * 3` / 0 | dead code |
 | A9 | **Identical:** a KO'd aeon's gauge is zeroed (and only an aeon's), a wipe returns the party and is not a Game Over, HP and MP persist between battles, the aeon acts next after arrival, the Grand Summon's temporary gauge and the restore of the held one | | | |
 
@@ -587,7 +588,7 @@ Grid's bonus record and a battle counter do not exist in the engine today.
 3. The per-boss loot records (gil, AP, overkill AP, the two item slots and the overkill lists, the steal chance and items, the gear
    chance) of the engine's boss groups were not read; R1, R2 and R4 have no size until they are. The engine's boss steal tables all
    say "byte 255".
-4. The aeons' **queued-action cancellation** when they leave (VA 0x007b20b0) and the formation positions were left out of the kernels
+4. The **queued-action completion** of a character that leaves (VA 0x007b20b0, §4.9) and the formation positions were left out of the kernels
    (§4.9).
 5. VA 0x007a89c0 (a script command that re-initialises a set of characters from their save records, revives them and sets the
    counter and its stored base to three times the tick speed) was run once in the emulator for a party slot, with the presentation calls

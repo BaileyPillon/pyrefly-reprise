@@ -12,14 +12,16 @@
  * The game keeps the result in the party save record (maximum HP and MP at +0x24 and +0x28, the eight stats at
  * +0x2f..+0x36) and rebuilds all ten aeons after every battle (`FUN_00785fc0`, which runs right after the AP settle) and
  * whenever Yuna's own stats change. At battle start `FUN_0079c5f0` copies those bytes into the battle character, adding the
- * character's equipment-bonus bytes (`Chr+0x5b0..0x5b7`, 0 unless something sets them).
+ * character's equipment-bonus bytes (`Chr+0x5b0..0x5b7`, 0 unless something sets them), and sums the effect of its two pieces
+ * of gear (the crit bonus, the element bytes, the auto-ability words, the resistance bytes: note section 4.6, which is NOT
+ * modelled here; an aeon's gear shows up in this kernel only through the percents and words of {@link AbilityEffect}).
  */
 
 import { clamp } from './ap-award.ts';
 import { delayForRank } from './ctb.ts';
 import { mul, sdiv, udiv } from './int32.ts';
 
-/** First aeon slot (Valefor) and the number of aeon slots (Valefor, Ifrit, Ramuh, Shiva, Bahamut, Anima, Yojimbo, then the three Magus Sisters). */
+/** First aeon slot (Valefor) and the number of aeon slots (Valefor, Ifrit, Ixion, Shiva, Bahamut, Anima, Yojimbo, then the three Magus Sisters). */
 export const AEON_FIRST_SLOT = 8;
 export const AEON_SLOT_COUNT = 10;
 /** The battle counter is divided by this to give the tier. */

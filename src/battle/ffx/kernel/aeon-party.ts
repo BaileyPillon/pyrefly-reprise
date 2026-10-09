@@ -12,17 +12,19 @@
  * | {@link swapMember} | 0x007adae0 | the Switch command (0x3002), the summon, and the return of the party |
  * | {@link summon} | 0x007adf90 | the Summon commands 0x3117 and 0x3118 and the Magus Sisters command 0x30ff |
  * | {@link swapLists} | 0x007ade10 | the arrival action's first step (and, once, the end of `summon`) |
- * | {@link dismiss} | 0x007aef20 | the Dismiss commands 0x3056 and 0x3057, and the aeon leaving after the wipe |
+ * | {@link dismiss} | 0x007aef20 | the Dismiss commands 0x3056 and 0x3057 (with the revive of a fallen member), and the aeon leaving after the wipe (without it) |
  * | {@link restoreLists} | 0x007aeec0 | `dismiss`, and the end-of-battle save |
  * | {@link returnParty} | 0x007adf10 | `dismiss` |
  * | {@link aeonWipe} | 0x0078e0a0 | the battle-end state when every aeon out is down |
  * | {@link aeonUnavailable} | 0x0079a080 | the summon menu |
  *
  * What it adds up to. A character takes turns, ticks its counters and counts as being in the fight only while its
- * `inBattle` byte (`Chr+0xdc8`) is set. Summoning clears that byte for the summoner and everybody else in the active
- * party list and sets it for the aeon (for all three Magus Sisters, whichever one was asked for); the party is not
- * removed from the fight, it is parked: its counters, statuses and HP stay exactly as they were, frozen, until the aeon
- * leaves and the lists come back.
+ * `inBattle` byte (`Chr+0xdc8`) is set. A summon is two steps. {@link summon} parks the party's lists and bytes and ends by
+ * queueing the arrival action, which leaves the party's own bytes in force; the arrival action's start ({@link startArrival})
+ * is what clears that byte for the summoner and everybody else in the active party list and sets it for the aeon (for all
+ * three Magus Sisters, whichever one was asked for). The party is not removed from the fight, it is parked: its counters,
+ * statuses and HP stay exactly as they were, frozen, until the aeon leaves and the lists come back. The aeon's own counter
+ * becomes 0 inside {@link swapMember} (it acts next); the summoner keeps the recovery she was charged for the Summon.
  *
  * Presentation-only effects (models, animation records, event starts, the queue of the arrival action) are left out; the
  * summon code is run in the vectors with those calls replaced by recorders and the action queue empty.
