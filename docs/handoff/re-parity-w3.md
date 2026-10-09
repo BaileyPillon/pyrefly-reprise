@@ -339,8 +339,9 @@ XIII 5.3 and 3.3 / 7.3 and 2.2 / 4.8 and 3.4; XV 1.6 and 2.3 / 1.4 and 2.5 / 1.5
   a resist of 255 where our 75 did not (-30 wins), the Mega Phoenix row (-19), the Leg's Slow (-10). The new critical rule and the chain bonus on the
   party's own hits help it (+15 and +22).
 - **XI Fallen Aeons, 430 -> 490 (real), 4.2 -> 2.6 minutes.** Also the rows: with our numbers back it is 437 wins and 3.9 minutes. The Dark Knight's
-  Darkness is most of it (+39 wins): the row never rolls to hit and keeps the piercing formula's 270/255 term, so it deals 3,806 a hit where
-  ours dealt 2,449; Shiva falls sooner and acts half as often (her Kick 2,339 -> 1,355 uses).
+  Darkness is most of it (+39 wins): the row never rolls to hit, where our number rolled the girl's Accuracy against the target's Evasion. (The old engine
+  also dropped the piercing formula's 270/255 term, so a hit was 2,449 then and is 3,806 now; that part is the integer chain, not the row.) Shiva
+  falls sooner and acts half as often (her Kick 2,339 -> 1,355 uses).
 - **XIII Paragon and Trema, 36 -> 213 (real).** Two causes that overlap: the critical rule (old chance back: 106) and the rows (our numbers back: 90).
   Alone, Final Impact (the row types it physical, so Protect halves it: 1,734 -> 888 a hit) is worth +95 wins and Soul Spring (the row hits HP and
   MP and drains both: about 1,007 a hit) +84. With all three put back it is 59, still above the old 36, which leaves the integer chain and the
@@ -349,8 +350,8 @@ XIII 5.3 and 3.3 / 7.3 and 2.2 / 4.8 and 3.4; XV 1.6 and 2.3 / 1.4 and 2.5 / 1.5
   the exe's integer formula and the rows' critical bytes the shades hit 5 to 12 % harder per hit (Nooj's Attack 269 -> 301, Baralai's 231 -> 251,
   Gippal's 223 -> 236) and 5 to 10 % of those hits are critical (none were), while the party's Darkness gains 6 % and healing is equal. The
   chain bonus on the girls the shades hit several times costs the party 75 wins (309 without it). No single row explains it; the largest are
-  Baralai's Glint (+22), Gippal's Grinder (+16), the Dark Knight's Darkness (+15), Looming Glacier (+14) and Nooj's Attack (-12, a hit that now misses
-  17.6 % and crits 10.5 %).
+  Baralai's Glint (+22), Gippal's Grinder (+16), the Dark Knight's Darkness (+15), Looming Glacier (+14) and Nooj's Attack (-12: the row's critical byte of 10 makes
+  his hits critical 10.5 % of the time).
 - **Leblanc, Ixion, Bahamut:** no mover. Mega Flare at the row's power 14 changes nothing the intended line sees in Chapter IV (500 of 500 either
   way, no KO; 68.7 a hit at 24, 22.8 at 14 with Shell up).
 
@@ -626,6 +627,11 @@ one ability's; the old invented Accuracy 104; the old critical chance; the chain
 enemies never critical; `megaflare14` puts the row's Mega Flare power in) so a mover can be attributed to a cause. The generator,
 runners and merge tools are scratch outside the repo (`D:\Tools\ffx-parity\w3-logs\make-ablate.mjs`, `D:\Tools\ffx-parity\w3-final\`
 `run-after.mjs`, `run-abl.mjs`, `run-each.mjs`, `summarize-*.mjs`); the numbers they produced are in section 5.
+
+The before side: export the old tree into an empty folder (`git archive 37cd5348 src tests package.json tsconfig.json vitest.config.ts vite.config.ts |
+tar -x -C <folder>`) and run the same command in it with `PYREFLY_MEASURE_SEEDS=500` (that commit's harness takes a count, not a range); the
+vitest and typescript binaries are the main tree's, by path. The old rows are kept in `D:Toolsfx-parityw3-measureefore-12.json`, `before-500.json`
+and `before-500-usage.json`.
 
 To read a row: `tests/fixtures/parity/ffx2/command_rows.json` (by id), the table of ability to row in `research/re-ffx2-commands.md` section 3,
 and the ability's record in `src/data/ffx2/command-records/` or `src/battle/ffx2/fallback-records.ts`. To see why an ability differs from
