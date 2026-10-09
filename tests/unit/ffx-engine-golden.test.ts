@@ -100,7 +100,7 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * digests of the links where a possessed aeon attacks (seed 1: links 5 to 7; seed 7: links 3 to 7); every outcome is still
  * victory and no other digest moved.
  * Chapter II re-baselined 2026-10-08 by re-parity AI lane B ("game-script parity", FFX only): Yunalesca runs the game's own
- * script (research/re-ffx-ai-yunalesca-bfa.md section 2) through the engine's new hit events (hit-hooks.ts, hit-event.ts).
+ * script (research/re-ffx-ai-yunalesca-bfa.md section 2) through the engine's new hit events (hit-hooks.ts and hit-event.ts then; `ai/hooks.ts` and `ai/hit-script.ts` since release candidate 1).
  * Her counters follow every action that reaches her, a form changes after the last hit of the action that ended it, her
  * anti-aeon Mind Blast and Osmose land on the aeon on the field, Form II's counter advances on aeon turns, and a pick draws
  * only with two or more candidates. Both digests move (yunalesca#1 victory -> defeat, #7 still a victory); no other

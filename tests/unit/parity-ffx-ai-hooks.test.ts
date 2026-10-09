@@ -164,7 +164,7 @@ describe('the reaction queue (sections 1.1 and 1.2)', () => {
 });
 
 /**
- * **The hit event** (section 1.1), the contract both AI lanes share (this lane's `ai/hooks.ts`, AI lane B's `hit-hooks.ts`):
+ * **The hit event** (section 1.1), the contract both AI lanes share (this lane's `ai/hooks.ts`; AI lane B's own `hit-hooks.ts` is gone since release candidate 1, its scripts register through `ai/hit-script.ts` on the same runner):
  * once per action per target, after the last of the action's hit records on that target and before the death check,
  * for a hit, a heal and a status-only move alike; `lastDamage` is the HP results after the cap and before the clamp (overkill
  * counts, a heal is negative); `affectsHp` is the command's HP class bit. A follow-up row is part of its main row's action.
