@@ -19,6 +19,7 @@ import {
   targetable,
   tryActor,
 } from './state.ts';
+import { isReachZero } from './reach.ts';
 
 /**
  * **Reach — the airship range gate.** FFX only.
@@ -72,6 +73,8 @@ export function reachesFoesAtRange(ctx: Ctx, user: FFXCombatant, def: AbilityDef
   if (def.category === 'blackmagic' || def.category === 'whitemagic') return true;
   if (def.formula === 'lancet') return true;
   if (def.damageType === 'physical' && ctx.rt.actors.get(user.id)?.rangedWeapon === true) return true;
+  // Overdrive Sin after his second pull (BattleDistance 1, re-parity D-32): only the reach-0 commands stay out of range.
+  if (ctx.state.flags['airship.distance'] === 1) return !isReachZero(def);
   return false;
 }
 

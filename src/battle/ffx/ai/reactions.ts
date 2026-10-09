@@ -18,7 +18,7 @@ import { activeScriptId } from './index.ts';
 import { aiContextFor } from './types.ts';
 import { seymourDelayCounter, seymourThresholdCounters, stepFluxPhase } from './seymour-flux.ts';
 import { GUADO_GUARDIAN_SCRIPT, macalaniaGuardianCounter } from './seymour-anima-macalania.ts';
-import { collectSinCounters, runSinLivenessHooks } from './sin-counters.ts';
+import { runSinLivenessHooks } from './sin-counters.ts';
 import { MORTIBODY_ID, NATUS_ID, natusActionCounters, stepNatusPhase } from './seymour-natus-rules.ts';
 import { executeCommand } from '../execute.ts';
 
@@ -107,13 +107,6 @@ export function collectBossCounters(
     }
   }
 
-  // **Sin** (FFX only): Overdrive Sin's Gaze [ffx-sin §5.4], the Fins' counters [§5.1] and link 3's [§5.3], once
-  // per action as Evrae's are (`sin-counters.ts`). A counter may name its aim: Waterga goes to the caster [§3.2,
-  // verified: 4 sources]; unset, the engine resolves it as before. A no-op in every other battle.
-  for (const c of collectSinCounters(ctx, attacker, def, damagedEnemyIds)) {
-    if (!canCounter(ctx, c.actorId)) continue;
-    out.push({ actorId: c.actorId, command: { kind: 'ability', id: c.abilityId, targets: c.targets ?? [] }, cause: c.cause });
-  }
   return out;
 }
 

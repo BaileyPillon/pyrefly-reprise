@@ -50,7 +50,7 @@ export const drawnToSin: AbilityDef = {
   damageType: 'other',
   element: ['none'],
   targeting: 'self',
-  hits: 1,
+  hits: 0, // the game's record has no hit record (re-parity AI lane C): the pull raises no hit event on Sin
   statusEffects: [],
   removesStatuses: [],
   flags: [],

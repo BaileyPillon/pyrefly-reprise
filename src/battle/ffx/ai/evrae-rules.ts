@@ -305,10 +305,6 @@ export function markEvraeRuntime(
   actors: ReadonlyMap<CombatantId, ActorRuntime>,
 ): void {
   if (flags[AIRSHIP_RANGE] === undefined) return;
-  // Sin's Fins, Genais, the Core and Overdrive Sin still count the party's targetings (their lane-C commit replaces this).
-  const counted = flags['airship.countsTargetings'];
-  const other = typeof counted === 'string' ? actors.get(counted) : undefined;
-  if (other) other.countsPartyTargetings = true;
   const cid = actors.get(CID_ID);
   if (cid) cid.nonCombatant = true;
   for (const id of RANGED_WEAPON_ACTORS) {

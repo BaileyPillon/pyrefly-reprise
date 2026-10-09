@@ -74,19 +74,19 @@ afterEach(() => {
 // ------------------------------------------------------------------ the clock
 
 describe('the link 4 clock reads the engine flags (M1-A)', () => {
-  it('opens at 13 turns left, mouth shut, 3 + 9 + 1 segments, nothing lit, the S-1 line on', () => {
+  // Re-parity (AI lane C, D-31): the script fires Giga-Graviton on Sin's 12th turn, so the clock opens at 12 and the S-1 estimate line is off.
+  it('opens at 12 turns left, mouth shut, 3 + 8 + 1 segments, nothing lit, no estimate line (S-1 is settled)', () => {
     const v = sinClockView(stateOf(newEngine(1)))!;
     expect(v).not.toBeNull();
     expect(v.total).toBe(GIGA_GRAVITON_TURN);
     expect(v.turn).toBe(0);
-    expect(v.left).toBe(13);
+    expect(v.left).toBe(12);
     expect(v.stage).toBe(0);
     expect(v.stageWord).toBe('Mouth shut');
-    expect(v.segments.map((s) => s.kind)).toEqual([...Array(3).fill('pull'), ...Array(9).fill('window'), 'last']);
+    expect(v.segments.map((s) => s.kind)).toEqual([...Array(3).fill('pull'), ...Array(8).fill('window'), 'last']);
     expect(v.segments.some((s) => s.lit)).toBe(false);
     expect(v.alarm).toBe(false);
-    expect(v.estimate?.desk).toBe("Giga-Graviton on Sin's 13th turn: our estimate (the sources say 12 or 13)");
-    expect(v.estimate?.phone).toBe('13th turn: our estimate (12 or 13)');
+    expect(v.estimate).toBeNull();
     expect(v.gaze).toEqual({ count: 0, threshold: GAZE_THRESHOLD, left: GAZE_THRESHOLD });
   });
 
@@ -103,7 +103,7 @@ describe('the link 4 clock reads the engine flags (M1-A)', () => {
       expect(v.segments.filter((s) => s.now).map((s) => s.index)).toEqual([k]);
       seen.push(v.left);
     }
-    expect(seen).toEqual([12, 11, 10, 9, 8, 7]);
+    expect(seen).toEqual([11, 10, 9, 8, 7, 6]);
   });
 
   it('pulses the last segment and turns the numeral red from one turn left', () => {
@@ -118,11 +118,11 @@ describe('the link 4 clock reads the engine flags (M1-A)', () => {
     expect(html).toMatch(/ffx-sinclock__seg--last[^"]*is-alarm/);
   });
 
-  it("follows S-1's other reading: a 12-turn clock is 3 + 8 + 1 and its line says 12th", () => {
-    const v = sinClockView(stateOf(newEngine(1, 12)))!;
-    expect(v.total).toBe(12);
-    expect(v.segments.map((s) => s.kind).filter((k) => k === 'window')).toHaveLength(8);
-    expect(v.estimate?.desk).toContain("Sin's 12th turn");
+  it("a bench's other length still draws: a 13-turn clock is 3 + 9 + 1, and carries no estimate line either", () => {
+    const v = sinClockView(stateOf(newEngine(1, 13)))!;
+    expect(v.total).toBe(13);
+    expect(v.segments.map((s) => s.kind).filter((k) => k === 'window')).toHaveLength(9);
+    expect(v.estimate).toBeNull();
   });
 
   it('reads the Gaze count toward six', () => {
@@ -185,7 +185,7 @@ describe('mount, layout and unmount', () => {
     expect(hud.el.hidden).toBe(false);
     expect(hud.el.parentElement).toBe(stage);
     expect(host.hasAttribute('data-sin-hud')).toBe(true);
-    expect(hud.clockEl.querySelectorAll('.ffx-sinclock__seg')).toHaveLength(13);
+    expect(hud.clockEl.querySelectorAll('.ffx-sinclock__seg')).toHaveLength(12);
     expect(hud.clockEl.textContent).toContain('TURNS LEFT');
     expect(hud.gazeEl.textContent).toContain('Gaze in 6');
     expect(hud.finEl.hidden).toBe(true); // Overdrive Sin has a range, but no Fin
@@ -195,7 +195,7 @@ describe('mount, layout and unmount', () => {
     expect(hud.layoutMode).toBe('phone');
     expect(hud.el.parentElement).toBe(host);
     expect(hud.el.classList.contains('ffx-sinhud--phone')).toBe(true);
-    expect(hud.clockEl.textContent).toContain('GIGA-GRAVITON IN 13');
+    expect(hud.clockEl.textContent).toContain('GIGA-GRAVITON IN 12');
     expect(hud.clockEl.textContent).toContain('Shut');
 
     hud.dispose();

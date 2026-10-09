@@ -201,7 +201,7 @@ describe('the clock and the plate follow the flags event by event (the ring said
     const { hud, sin } = tappedHud();
     const e = newEngine(1);
     hud.sync(e.state() as BattleState, []);
-    expect(sin.view().clock?.left).toBe(13);
+    expect(sin.view().clock?.left).toBe(12); // re-parity (AI lane C, D-31): Giga-Graviton is Sin's 12th turn, so the clock opens at 12
     let checked = false;
     for (let i = 0; i < 400 && !checked; i++) {
       const before = e.state().flags['sin.turnsLeft'];
