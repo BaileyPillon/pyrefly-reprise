@@ -1,10 +1,63 @@
 # r3942-stage: real sizes for the fiends, wave 1 (branch `r3942-stage`, from `origin/r394-int` 04cdcd45); **wave 2, the FFX-2 giants, is the last section** (Bahamut, Paragon and Oversoul, Anima)
 
+> **2026-10-08, later, in part withdrawn.** Wave 1's *places* (Shiva and the Sisters, Trema, the Den of Woe shades, Ixion and Isaaru brought nearer the girls so that they read as big as the models say) read as "right next to each other", the complaint Bailey made about the Leblanc chapter, and for wave 1 he picked **"Yes, original spacing (Recommended)"**: "Real sizes stay, but every fiend stands where it stood before; no 'right next to each other'". **The sizes (both stature tables, every height below), the method and the research stand; every spot, the shared move-advisor card cap and every "nearer the girls" number in the older sections below do not.** The next section says what is built now; the older text is kept as the record of what wave 1 tried (the notes by chapter further down are marked).
+
+## Original spacing (Bailey, 2026-10-08, "Yes, original spacing")
+
+**Game case: both games, each by its own chapters** (rule 14): FFX-2 Chapters XI (Shiva, the Magus Sisters), XIII (Trema), XV (the three shades) and XVI (Ixion); FFX Chapter XIV (Isaaru). **Not part of this change:** Chapter IX (Yojimbo, Daigoro, Lady Ginnem: no spot ever moved there, and Yojimbo's BOSS SCALE is untouched), the giants (Bahamut, Paragon, Anima, Vegnagun: their framing is wave 2's) and Chapter VI's Leblanc Syndicate (its own branch, `r3941-spacing`, merged in first as `4330c216`). Presentation only: no `src/battle/**`, no enemy data, no golden file.
+
+**What is built.** Every wave-1 fiend whose stand position moved is back on the spot release 39.4.1 (04cdcd45, the live build) stands it on, at the real height wave 1 gave it:
+
+| Chapter | fiend | stands (x, z), wave 1 to now (now = 39.4.1's) | height (wave 1's, unchanged) |
+|---|---|---|---|
+| XI Road to the Farplane, link 1 | Shiva | (1.25, -2.2) to (1.12, -5.0) | 3.453 |
+| XI link 2, the Magus Sisters | Sandy, Cindy, Mindy | (0.75, -2.6), (1.5, -3.4), (2.9, -2.0) to (0.95, -4.9), (1.85, -2.7), (3.0, -4.0); Mindy still hovers 0.55 | 2.297, 1.480, 1.260 |
+| XIII Via Infinito, link 2 | Trema | (1.3, -0.6) to (1.05, -5.8), the beast's spot; the kill link's prop walks there | 1.784 |
+| XIV Via Purifico | Isaaru | (3.7, 0.4) to (3.7, -0.2) | 1.899 |
+| XV Den of Woe | Baralai, Gippal, Nooj | (1.5, -0.4), (1.5, -0.4), (1.5, -0.8) to (1.12, -5.0), (1.12, -5.0), (1.05, -5.4) | 1.943, 1.949, 2.100 |
+| XVI Djose | Ixion | (3.2, -3.8) to (4.2, -6.0) | 3.175 |
+
+Also out: **the shared move-advisor card cap** of Chapters XI, XIII and XV (`src/scenes/advisor-cap.ts`, `FORWARD_FIEND_ADVISOR_CAP` 52 grid px, deleted). It existed to keep the card off feet that stood low; at the old spots the feet stand at y 516 to 608 against the card's top at y 588 to 705 (live, the card at its usual size), so the card is exactly as 39.4.1 had it and prints its full text again. `docs/CONTRACT-CHANGES.md` records the withdrawal; no scene names `advisorCap` any more (the field and its wiring stay). The picture's cap side effect disclosed under wave 1 ("the card prints fewer lines in those three rooms") is gone with it.
+
+**The numbers on screen** (first command menu, seed 1, headless real-GPU Chromium, clocks frozen). LIVE is echoesofspira.com 39.4.1, the earlier capture of the same bundle (`index-DAnPZ-iy.js`); a re-capture of the Trema link today read the same (222 px at 1600x900, 109 px on the phone). NOW is this branch on a dev server. "Wave 1" is what this note's older table gave. The ratio is the fiend's standing height over the party's mean standing height on screen; real is the model's own ratio at one distance. Sheet: `docs/screenshots/r3942-stage/wave1-original-spacing.jpg` (every touched link, live against now, 1600x900 and the phone).
+
+| 1600x900 | ratio live / wave 1 / **now** | real | standing px live / now | HUD over the fiend live / now | card on its head live / now | planned camera live / now |
+|---|---|---|---|---|---|---|
+| XI Shiva | 1.26 / 1.57 / **1.28** | 1.94 | 359 / 364 | 0% / 0% | 0% / 0% | 0.04, 2.73, 9.79 / -0.02, 2.68, 9.81 |
+| XI Sandy | 0.85 / 1.00 / **0.85** | 1.29 | 242 / 242 | 0% / 0% | 0% / 0% | -0.03, 2.71, 9.80 / 0.05, 2.67, 9.82 |
+| XI Cindy | 0.73 / 0.60 / **0.63** | 0.83 | 208 / 181 | 0% / 0% | 0% / 0% | (same link) |
+| XI Mindy | 0.47 / 0.57 / **0.49** | 0.71 | 134 / 140 | 0% / 0% | 0% / 0% | (same link) |
+| XIII Trema | 0.80 / 0.94 / **0.63** | 1.02 | 222 / 177 | 0% / 0% | 53% / 43% | -0.33, 2.90, 9.72 / -0.28, 2.87, 9.70 |
+| XIV Isaaru (links 1, 2, 3) | 0.88, 0.88, 0.89 / 0.98, 0.98, 0.99 / **0.93, 0.93, 0.93** | 1.13 | 240, 245, 249 / 254, 258, 260 | 0% / 0% | 0% / 0% | -0.43, 2.25, 11.23 / -0.35, 2.23, 11.24 (link 1) |
+| XV Baralai | 0.95 / 1.01 / **0.71** | 1.09 | 276 / 204 | 0% / 0% | 11% / 0% | 0.01, 2.54, 9.72 / -0.06, 2.60, 9.74 |
+| XV Gippal | 0.95 / 1.01 / **0.71** | 1.09 | 267 / 201 | 0% / 0% | 2% / 0% | 0.00, 2.81, 9.93 / -0.38, 2.63, 9.94 |
+| XV Nooj | 1.00 / 1.05 / **0.75** | 1.18 | 285 / 212 | 0% / 0% | 0% / 0% | 0.03, 2.68, 9.82 / -0.37, 2.64, 9.94 |
+| XVI Ixion | 1.16 / 1.25 / **1.08** | 1.78 | 330 / 309 | 9% / 10% | 31% / 31% | -0.30, 2.77, 9.85 / -0.32, 2.73, 9.80 |
+
+| 390x844 | ratio live / wave 1 / **now** | party mean px live / now | camera z live / now |
+|---|---|---|---|
+| XI Shiva | 1.38 / 1.65 / **1.40** | 123 / 122 | 13.18 / 13.21 |
+| XI Sandy, Cindy, Mindy | 0.97, 0.80, 0.53 / 1.09, 0.67, 0.62 / **0.97, 0.70, 0.56** | 104 / 104 | 15.50 / 15.51 |
+| XIII Trema | 0.87 / 0.96 / **0.65** | 125 / 154 | 12.46 / 10.10 |
+| XIV Isaaru (links 1, 2, 3) | 0.92 / 1.02 / **0.97** | 124 / 124 | 13.81, 13.73, 13.65 / 13.90, 13.85, 13.82 |
+| XV Baralai, Gippal, Nooj | 0.99, 1.00, 1.05 / 1.03, 1.04, 1.09 / **0.72, 0.75, 0.79** | 148, 139, 145 / 158, 142, 141 | 10.88, 11.64, 11.05 / 10.21, 11.36, 11.45 |
+| XVI Ixion | 1.48 / 1.47 / **1.35** | 77 / 83 | 20.88 / 19.38 |
+
+What it reads like: **a fiend reads as large as its real height over its distance says, and the old spots are far**, so where wave 1 bought a fiend its real ratio by walking it up to the girls, the old spot gives it less: Trema 0.63 of a girl (real 1.02; live 0.80, because the old guess was 2.23 tall), the shades 0.71 to 0.75 (real 1.09 to 1.18; live 0.95 to 1.00), Cindy 0.63 and Mindy 0.49. Where the real height is the old one the picture is live's: Shiva 1.28 (live 1.26), Sandy 0.85 (0.85). Isaaru is 5 percent taller than live at the same place (0.93 against 0.88). Ixion reads 1.08 against live's 1.16 because his real height is 6.6 percent under the old estimate.
+
+**No new collision.** At 1600x900 and on the phone no fiend has HUD on it except Ixion's hindquarters under the command list (9 percent on live, 10 now: the same spot, as live). The enemy-intent card over a fiend's head is the same as live or less (Baralai 11 to 0, Gippal 2 to 0; Trema's 53 to 43 and Ixion's 31 are the fiend's own card, whose tail points at its own head, and Sandy's 72 on the phone is live's, unchanged). The planned camera at 1600x900 is live's pose in every link (within the idle sway of 0.4). Isaaru's right edge stands at x 1308 against the CTB list's 1408, and the move-advisor card needs no cap (above).
+
+**Disclosed.** (1) **Trema's link on the phone:** the girls are 154 px against live's 125 (23 percent larger), the camera at z 10.10 against 12.46: since wave 2's repair that link fits its own figures (live's inherited Paragon's old fit for his 3.1), and a smaller Trema far back lets the fit stand nearer still (the repair measured the girls 8 to 10 percent larger than live with him beside them). Everyone standing is whole in the slice (Trema's painted rectangle ends at x 384 of 390); in the capture's state Yuna is knocked out and lies at the left edge, and her wider lying pose is cropped by 32 px of its 166 (19 percent; live's camera stood back far enough to show it whole). Not retuned: it is the slice fit's (shared, wave 2's), and exact parity needs the giant's old height in the girls' fit, as the repair note says. (2) The Den of Woe's phone: Baralai's link stands the camera 0.67 nearer than live's (the party 7 percent larger), Gippal's and Nooj's within 0.4; Ixion's phone camera 1.5 nearer (the party 8 percent larger). (3) The older notes below (XI, XIII, XIV, XV, XVI and the card cap) are kept as written and marked.
+
+**Verified.** `tsc --noEmit` clean; the merged branch's tests, the 99 test files for the touched scenes, the stature tables, the giants, the Leblanc room and the intent cards (1,154 tests) green after the restoration; **the full unit suite once with `--testTimeout=60000`, on the code head 725136ea plus these records: 939 files, 934 passed and 5 skipped; 13,838 tests passed (46 skipped, 1 todo); no failure and no timeout (271 s).** The pictures: headless Playwright from node on the real GPU, `cap.mjs` of this lane (`D:/Tools/pyrefly-scratch/2026-10-08/spacing2/w1/`: `cap.mjs`, `runlinks.sh`, `table-w1.mjs`, `make-sheet-orig.mjs`), a dev server on 5232 (no production build; stopped at the end). Not run: the deploy, a review workflow, the PCSX2 check.
+
 Bailey, 2026-10-07: "I'll go with your recommendations full speed" (real game sizes for heroes **and** bosses together, giant bosses keep their special framing, FFX and FFX-2 each by their own numbers); for the Leblanc chapter "Option 3: bosses forward" (shipped live as 39.4.1); 2026-10-08, going to bed: "please get a lot of work done ... i trust you." This note is the method, the per-chapter results and what stopped. The pattern is the Leblanc fix's (`docs/handoff/r3941-stage.md`): a sourced size table, the stand positions, the camera unchanged.
 
 **Head:** the code is 10a76c10; the branch tip is the commit that adds this note and the pictures (`git log -1 r3942-stage`), pushed as `origin/r3942-stage`. **Merges:** `origin/r3941-heights` (09ba165a) and `origin/r3941-omnis` (b5f0d26b) merged no-ff onto 04cdcd45 (commits 2d32653f and 5f97c4dd): both clean but for `docs/CONTRACT-CHANGES.md` (two entries at the top, both kept). tsc and the 17 test files they touch (218 tests) green after the merges. Nothing in `src/battle/**`, `src/data/**/enemies/**` or `tests/unit/*golden*` changed in this lane's own commits.
 
 ## What changed, by chapter (one commit each; the game case is in every commit)
+
+*Withdrawn in part (2026-10-08, "Original spacing" above): every spot, "nearer the girls", the shared card cap and the "own spot" for Trema in this table. The heights, the two stature tables, the research sections and the size tests stand.*
 
 | Chapter | Game | Commit | What |
 |---|---|---|---|
@@ -18,6 +71,8 @@ Bailey, 2026-10-07: "I'll go with your recommendations full speed" (real game si
 New data: `src/data/ffx/fiend-stature.ts` and `src/data/ffx2/fiend-stature.ts` (raw mesh height x the engine scale C = the game's size; `fiendFigureHeights`, `ffx2FiendFigureHeights`; the FFX-2 table is read over the girls' mean in each chapter's own party, 17.73 for White Mage, Dark Knight, Dark Knight and 17.47 for Chapter XIII's). Research sections (method, build 25501027, model ids, the 5 percent caveat, what was not found, tag `[datamined: ...]` or `[single source: own measurement]`): `research/ffx-yojimbo.md` section 12, `ffx-isaaru-bevelle.md` section 14, `ffx2-fallen-aeons.md` section 12, `ffx2-trema.md` section 14, `ffx2-gippal-den-of-woe.md` section 12, `ffx2-ixion-djose.md` section 12. Tests: `tests/unit/ffx-fiend-stature.test.ts` (11), `tests/unit/ffx2-fiend-stature.test.ts` (8), and the scene tests the new numbers moved (cavern-scene, stage-figure-heights, fallen-aeons-ship-scene, den-of-woe-ship-scene, trema-ship-scene, ixion-listed, ffx2-advisor-scene-cap). Giants are in neither table.
 
 ## The numbers, on screen (first command menu, seed 1, headless real-GPU Chromium, clocks frozen; LIVE = echoesofspira.com, release 39.4.1)
+
+*Wave 1 as first built (the fiends nearer the girls). What stands now, at the original spots, is the table in "Original spacing" at the top; the "after" columns below are the withdrawn numbers.*
 
 "ratio" is a fiend's standing height (feet to feet plus world height, projected through the live camera; a raised weapon does not count) over the party's mean standing height on screen (Kimahri counted by his body, 1.211, not his spear tip); "real" is the model's own ratio over the same party at one distance (the research sections; FFX chapter IX over the three heroes' mean, Chapter XIV over Yuna). The planned camera is CHAPTER FRAMING's pose at that menu (the frame-by-frame camera adds an idle drift of up to 0.5). Sheets: `docs/screenshots/r3942-stage/wave1-before-after.jpg` (every link) and `ch09-yojimbo-`, `ch11-fallen-aeons-`, `ch13-trema-`, `ch14-isaaru-`, `ch15-den-of-woe-`, `ch16-ixion-before-after.jpg`; the options: `options-sheet.jpg`.
 
@@ -68,6 +123,8 @@ New data: `src/data/ffx/fiend-stature.ts` and `src/data/ffx2/fiend-stature.ts` (
 | XVI | x2-ixion | 3.400 to 3.175 | 114 to 128 | 1.48 to 1.47 | 1.78 | 0% to 0% | 0% to 0% | -0.26, 3.36, 20.88 | -0.18, 3.15, 18.45 |
 
 ## Notes by chapter
+
+*Where these notes give a spot, a "nearer" or the move-advisor card cap (XI, XIII, XIV, XV, XVI), they describe wave 1 as first built and are withdrawn (2026-10-08, "Original spacing" above); the sizes, the research and the other findings stand.*
 
 **IX (FFX).** *Yojimbo's size on screen is still BOSS SCALE's.* `scaleTarget('yojimbo')` (Bailey, 2026-10-06, "About 1.15x the party", held "until a real FFX screenshot settles his size") grows his drawn height until he reads 1.15 over the party at Tidus's height, in every plan: on the live build that is 2.55 x 1.18 = 3.0, on this branch 2.613 x 1.135 = 2.97 (it ends about where it was; the heroes grew with the stature table, he did not, so his ratio over the party reads 1.13 against 1.19). His real ratio, 1.49 over Tidus (1.44 over the heroes), becomes about 1.0 at the six world units he stands behind them, so BOSS SCALE's 1.15 and the files agree within the perspective. **Retiring BOSS SCALE for him** (one line in `fx/mix/masters.ts`, plus the BOSS SCALE tests that use Yojimbo as their held boss) shows the real height at his depth: 223 px, 1.00 over the party, 15 percent smaller than live. That is option D on the sheet. *Where he can stand:* nearer than z -1.5 he meets the Sensor plate's resting place (x 1071 to 1359, y 415 to 595, open seven seconds on every reveal), Yuna's box, or the enemy shot's frame at 1280x720; the cavern scene's own tests pin all three. Options B and C on the sheet are those moves. *Daigoro and Lady Ginnem* (not sized by BOSS SCALE) show their real heights from far back: 0.29 and 0.53 of the heroes on screen (real at one distance 0.42 and 0.92). *The phone party step* (`CAVERN_PHONE_PARTY_STEP`, 2.0) is **kept**: measured at 390x844 with Yojimbo at real size, Kimahri's box behind the Zanmato gauge is 7,985 px squared of him (32 percent; Lulu 4 percent) with no step and 2,124 px squared (7 percent; nobody else) with the step of 2.0. On the phone Yojimbo (and Daigoro and Lady Ginnem) stand behind the Zanmato gauge in the live build and still do (94 to 100 percent): not a regression, not this lane's.
 

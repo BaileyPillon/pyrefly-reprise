@@ -6,6 +6,13 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-08 (later) — Wave 1's three rooms no longer name `SceneStaging.advisorCap`: `src/scenes/advisor-cap.ts` is removed (Chapters XI, XIII and XV; FFX-2 only; a withdrawal, nothing narrowed)
+
+Branch `r3942-stage` (Bailey's "Yes, original spacing": wave 1's fiends back on release 39.4.1's spots at the real sizes; handoff: [r3942-stage](handoff/r3942-stage.md), "Original spacing"). No file on the contract list changed and no type changed.
+
+- The entry "Three more FFX-2 rooms name `SceneStaging.advisorCap`" below is **withdrawn**: the Road to the Farplane, the Cloister and the Den of Woe stand their fiends where 39.4.1 did, at feet y 516 to 608 against the card's top at y 588 to 705 (the card at its usual size; measured on the live captures), so there is nothing to cap and the card prints what it always did. `src/scenes/advisor-cap.ts` and `FORWARD_FIEND_ADVISOR_CAP` are deleted.
+- `SceneStaging.advisorCap`, `stagingOf`'s copy of it, `createHud`'s fifth argument and the HUD's reading stay (additive, unchanged); no scene file names the field now (`tests/unit/ffx2-advisor-scene-cap.test.ts` pins that, as on `r3941-spacing`).
+
 ## 2026-10-08 — A scene may hang the FFX-2 enemy-intent slab over the highest enemy's head: `SceneStaging.intentRoof`, `createHud`'s sixth argument (Chapter VI only; FFX-2 only; additive)
 
 Branch `r3941-spacing` (the Leblanc Syndicate at its real sizes on 39.4's spots, Bailey's "Old spacing, real sizes"; handoff: [r3941-spacing](handoff/r3941-spacing.md)). No file on the contract list changed; recorded because the scene staging type gains an optional field and the shared wiring function an optional argument, as for `advisorCap` below.
@@ -33,7 +40,7 @@ Branch `r3942-stage` (real sizes for the fiends, wave 2: the giants; handoff: [r
   - `src/engine/ShotFit.ts`: `GIANT_WHOLE_MIN` (0.97), `REVEAL_GIANT_ROOM` (0.1), `giantWholeSubject`; A-1's `ffx2Subjects` holds an enemy that is one of the giants to `GIANT_WHOLE_MIN` where every other fiend keeps 0.75, so a wait shot that would cut one falls back to the master.
   - Pinned by `tests/unit/frame-fit-link.test.ts`, `giants-phone-link.test.ts` and `giants-reveal.test.ts` (all mutation-checked), `giants-card-and-phone-fit.test.ts` (two fits at a giant's battle start) and `r392-reveal-push.test.ts` (its stand-in boss is now a fiend that is no giant).
 
-## 2026-10-08 — Three more FFX-2 rooms name `SceneStaging.advisorCap`: `src/scenes/advisor-cap.ts` `FORWARD_FIEND_ADVISOR_CAP` (Chapters XI, XIII and XV; FFX-2 only; additive)
+## 2026-10-08 — (withdrawn the same day, see the entry above) Three more FFX-2 rooms name `SceneStaging.advisorCap`: `src/scenes/advisor-cap.ts` `FORWARD_FIEND_ADVISOR_CAP` (Chapters XI, XIII and XV; FFX-2 only; additive)
 
 Branch `r3942-stage` (real sizes for the fiends, wave 1; handoff: [r3942-stage](handoff/r3942-stage.md)). No file on the contract list changed and no type changed: the field `SceneStaging.advisorCap` and its wiring are the 2026-10-07 entry's below, and what is new is who names it.
 
