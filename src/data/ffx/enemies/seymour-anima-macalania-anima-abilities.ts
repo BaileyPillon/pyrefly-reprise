@@ -75,7 +75,7 @@ export const animaPainBoss: AbilityDef = {
   removesStatuses: [],
   flags: ['ignores-armored'],
   canMiss: false,
-  extra: { notPlayerAeonPain: 'monmagic2 #222 (DmgCon 28); the aeon row `pain` is #220 (DmgCon 20)' },
+  extra: { notPlayerAeonPain: 'monmagic2 #222 (DmgCon 28); the aeon row `pain` is #220 (DmgCon 20)', scriptAims: true },
   messageTemplate: '{user} uses Pain on {target}',
 };
 

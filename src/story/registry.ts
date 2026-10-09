@@ -125,12 +125,13 @@ export const CHAPTER_KEYS = Object.keys(STORY_CHAPTERS) as ChapterKey[];
  * - `battle/ffx2/ai/shuyin.ts` — `shuyin-taunt` above half HP, `shuyin-desperate` below it.
  *
  * - `battle/ffx/ai/seymour-omnis-callouts.ts` — Chapter XII's nine callouts
- *   (`OMNIS_CALLOUTS`, mirrored as `OMNIS_STORY_TRIGGERS`), the one FFX emitter.
+ *   (`OMNIS_CALLOUTS`, mirrored as `OMNIS_STORY_TRIGGERS`).
+ * - `battle/ffx/ai/macalania-acts.ts` — Chapter VII's `mac-anima-summon`, at Seymour's summon.
  */
 export const AI_EMITTED_TRIGGERS: Readonly<Record<ChapterKey, readonly string[]>> = {
   'seymour-flux': [], yunalesca: [], 'braskas-final-aeon': [], 'ffx2-bahamut': [],
   'ffx2-leblanc': [], // No LeBlanc AI emits one: every beat goes through `mid` (`ko`/`ability-used`).
-  'seymour-anima-macalania': [], // No Macalania AI emits one: its three beats go through `mid` [docs/handoff/chapter-macalania-script.md].
+  'seymour-anima-macalania': ['mac-anima-summon'], // The summon (`battle/ffx/ai/macalania-acts.ts`); the other two beats go through `mid` [docs/handoff/chapter-macalania-script.md].
   'evrae-airship': [], // No Evrae AI emits one: its five beats go through `mid` [docs/handoff/chapter-evrae-script.md].
   'yojimbo-cavern': [],
   'seymour-natus': [], // No Natus AI emits one; the three Talk exchanges go through `mid` (PR-0204, D-203).

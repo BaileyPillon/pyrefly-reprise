@@ -6,6 +6,7 @@
 
 import type { CombatantId, FFXCombatant } from '../../common/types.ts';
 import type { Ctx } from '../state.ts';
+import { has, isAlive } from '../state.ts';
 
 /**
  * **This chapter's own Talk table — Tidus, Yuna, Wakka** [§5.5, verified: 2
@@ -31,19 +32,39 @@ const MACALANIA_TALK_BONUS: Readonly<
 
 const MAC_TALKED = 'macalania.talked.';
 
+/** Seymour's summon takes the command away from all three (`removeCommand` in his summon row): act one only. */
+function actOne(ctx: Ctx): boolean {
+  const act = ctx.state.flags['macalania.act'];
+  return act === undefined || act === 1;
+}
+
+/**
+ * **Talk is switched by status** (re-parity, `research/re-ffx-ai-seymour.md` section 3.1; the formation script's
+ * turn-start handlers). At the start of its turn the command is enabled for Tidus and for Yuna only while that
+ * character is present without Death, Petrify, Sleep or Silence, and disabled otherwise. **Wakka's handler tests
+ * Wakka and toggles Yuna's command** (a slip in the script), so Wakka's own Talk is never switched off by his
+ * state; Yuna's own handler runs at the start of her own turn and decides what her menu shows, so the slip never
+ * reaches a menu.
+ */
+function statusAllows(talker: FFXCombatant): boolean {
+  if (talker.id === 'wakka') return true;
+  return isAlive(talker) && !has(talker, 'petrify') && !has(talker, 'sleep') && !has(talker, 'silence');
+}
+
 /** Who still has a Talk line left, for the menu and the intent panel. */
-export function macalaniaTalkAvailable(ctx: Ctx, talkerId: CombatantId): boolean {
-  if (!(talkerId in MACALANIA_TALK_BONUS)) return false;
-  return ctx.state.flags[`${MAC_TALKED}${talkerId}`] !== true;
+export function macalaniaTalkAvailable(ctx: Ctx, talker: FFXCombatant | CombatantId): boolean {
+  const who = typeof talker === 'string' ? ctx.state.combatants[talker] as FFXCombatant | undefined : talker;
+  if (!who || !(who.id in MACALANIA_TALK_BONUS)) return false;
+  if (!actOne(ctx)) return false;
+  if (ctx.state.flags[`${MAC_TALKED}${who.id}`] === true) return false;
+  return statusAllows(who);
 }
 
 /** Spend `talker`'s one Talk line. Returns false when there is nothing to say. */
 export function consumeMacalaniaTalk(ctx: Ctx, talker: FFXCombatant): boolean {
   const bonus = MACALANIA_TALK_BONUS[talker.id];
-  if (!bonus) return false;
-  const key = `${MAC_TALKED}${talker.id}`;
-  if (ctx.state.flags[key] === true) return false;
-  ctx.state.flags[key] = true;
+  if (!bonus || !macalaniaTalkAvailable(ctx, talker)) return false;
+  ctx.state.flags[`${MAC_TALKED}${talker.id}`] = true;
   talker.stats[bonus.stat] += bonus.amount;
   ctx.emit({ type: 'message', text: `${talker.name}: +${bonus.amount} ${bonus.label}`, kind: 'story' });
   return true;
