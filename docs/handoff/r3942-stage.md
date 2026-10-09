@@ -2,6 +2,8 @@
 
 > **2026-10-08, later, in part withdrawn.** Wave 1's *places* (Shiva and the Sisters, Trema, the Den of Woe shades, Ixion and Isaaru brought nearer the girls so that they read as big as the models say) read as "right next to each other", the complaint Bailey made about the Leblanc chapter, and for wave 1 he picked **"Yes, original spacing (Recommended)"**: "Real sizes stay, but every fiend stands where it stood before; no 'right next to each other'". **The sizes (both stature tables, every height below), the method and the research stand; every spot, the shared move-advisor card cap and every "nearer the girls" number in the older sections below do not.** The next section says what is built now; the older text is kept as the record of what wave 1 tried (the notes by chapter further down are marked).
 
+> **2026-10-08, night: Chapter IV's phone hint card is one row** (FFX-2 only). The second repair round's section 5 left "the hint card over Yuna and Rikku" for Bailey's pick among options (a) to (d); the driver took (a), a one-line card, on Bailey's "I'll go with all your recommendations", and it is built: **the last section of this note** has the words, the numbers against live, the other rooms, the fit proof and what stays open.
+
 ## Original spacing (Bailey, 2026-10-08, "Yes, original spacing")
 
 **Game case: both games, each by its own chapters** (rule 14): FFX-2 Chapters XI (Shiva, the Magus Sisters), XIII (Trema), XV (the three shades) and XVI (Ixion); FFX Chapter XIV (Isaaru). **Not part of this change:** Chapter IX (Yojimbo, Daigoro, Lady Ginnem: no spot ever moved there, and Yojimbo's BOSS SCALE is untouched), the giants (Bahamut, Paragon, Anima, Vegnagun: their framing is wave 2's) and Chapter VI's Leblanc Syndicate (its own branch, `r3941-spacing`, merged in first as `4330c216`). Presentation only: no `src/battle/**`, no enemy data, no golden file.
@@ -404,6 +406,102 @@ The card is where it always was (`.sthint--phone`, docked just above the party c
 ## 7. Open after the second repair
 
 - Trema's link is 105 to 126 percent of live from 360x740 up, and 96 percent at 320x568 (section 4); exact parity needs the giants' old heights in the presenter's first fit, and a rule in the plan for the narrowest window. Bailey's call.
-- The hint card over Yuna and Rikku (section 5): a pick between options (a) to (d).
+- The hint card over Yuna and Rikku (section 5): a pick between options (a) to (d). **Closed 2026-10-08, night: (a) is built** (the last section, "The Chapter IV phone hint card: one row"); (b) to (d) were not mocked.
 - Anima's camera on a 360x740 phone when the Road is played through (section 4).
 - Everything under "Open and disclosed (wave 2)" and "Open after the repair" above that this round did not touch.
+
+---
+
+# The Chapter IV phone hint card: one row (Bailey, 2026-10-08, night)
+
+**Game case: FFX-2 only** (rule 14). The card is the cure-hint card (`.sthint`, `src/ui/common/statusHintCard.ts`) and the change is keyed to `game === 'ffx2'` on the upright phone, so FFX's phone card (FFX's own words and cure table) and every desktop card of either game keep their sentences; the browser shows it: FFX's Seymour Flux card reads and measures the same before and after ("GUIDE CURSE Tidus is cursed: Holy Water cures it.", 53 px). It applies to **every FFX-2 room**, not only Chapter IV, because one component draws the card in all of them; the other rooms are measured below. Presentation only: no `src/battle/**`, no enemy data, no golden file, no camera or figure code. Branch `r3942-stage` from `d674a9e2`.
+
+**Bailey's pick** (2026-10-08, about 22:00 EDT, as the driver relayed it: "I'll go with all your recommendations"): the driver's recommendation was option (a) of section 5 above, a one-line card. The mock round for the other three (the card docked to the right half, a smaller top reserve, keep it as picked) was stopped when he decided, so (b) to (d) were never pictured and no scratch worktree was made.
+
+## What it is
+
+| Piece | File | What |
+|---|---|---|
+| The words | `src/ui/common/statusWords.ts` | `CureHint.line` and `HintRow.line` (both optional): FFX-2's sleep, silence and curse rows each carry a one-row form, the *whole* cure list the sentence names (PR-0290) and none of its prose; FFX's rows have none |
+| The card | `src/ui/common/statusHintCard.ts` | `oneLineCard(game, hints, phone)` (FFX-2, a phone, a hint with a row); `hintCardHtml(hints, phone, oneLine = false)` (the third parameter is additive; the desktop's compact one-sentence form passes none); the card keeps its game and sets `sthint--line` before it docks, so the dock measures the one-row height |
+| The look | `src/ui/common/status-o3.css` | four rules, all `.sthint--phone.sthint--line`: a flex row (gap 6, padding 6 8 6 10), the chip's letter spacing 0.12em and padding 1 4, the body `flex: 1 1 auto; min-width: 0`. It sets no font size (the 14.2 px floor and the TEXT SIZE rules stand), no position (the dock is the same, 6 px above the party chips) and nothing that clips |
+| Tests | `tests/unit/status-hint-one-line.test.ts` | 14 tests (under "Verified") |
+
+The words. The cure lists are the sentences' own (`research/ffx2-combat-core.md` §2.8 and its cure table; nothing new is stated):
+
+| Status | The phone card said | The phone card says |
+|---|---|---|
+| Curse | `GUIDE [CURSE]` over "Paine is cursed: Holy Water, Esuna or a Remedy cures it." | `[CURSE] Paine: Holy Water, Esuna, Remedy` |
+| Silence | `GUIDE [SILENCE]` over "Rikku is silenced: Echo Screen, Esuna or a Remedy cures it." | `[SILENCE] Rikku: Echo Screen, Esuna, Remedy` |
+| Sleep | `GUIDE [SLEEP]` over "Yuna is asleep: gauge frozen, no turns. A hit, Esuna or a Remedy wakes her." | `[SLEEP] Yuna: a hit, Esuna, Remedy` |
+
+The word GUIDE is gone from the phone card (the red chip is its label, and a row has no room for both at 14.2 px). A hint with no row (an older literal; every FFX hint) keeps its sentence under GUIDE. The longest row, "Rikku: Echo Screen, Esuna, Remedy" (33 characters), is the budget the test pins.
+
+## The numbers: Chapter IV (Bahamut), first command menu, seed 1
+
+Share of each girl's own painted pixels under the card (the actor hidden on the clean, frozen frame; a control pair masks what moves by itself), mean of three runs with the range. **Live** is echoesofspira.com (bundle `cUSnFK7q`, 39.4.2); **before** is this branch at `d674a9e2`, served by a second dev server that takes the three changed files as HEAD has them; **after** is this change. Headless Playwright from node on the real GPU, the same moment and the same measure for all three. Paine starts cursed in this fight, so the card is up at the first menu.
+
+| window | card, px tall and top to bottom: live and before / after | Yuna: live / before / **after** | Rikku | Paine |
+|---|---|---|---|---|
+| 390x844 | 73, y407-480 / 31, y449-480 | 8 / 52 [48-55] / **6** [4-11] | 0 / 15 [13-15] / **0** | 0 / 0 / **0** |
+| 360x740 | 73, y303-376 / 31, y345-376 | 39 / 76 [75-77] / **21** [20-22] | 10 / 44 [41-46] / **0** | 0 / 15 [13-17] / **0** |
+| 375x667 | 73, y230-303 / 31, y272-303 | 65 / 98 [95-100] / **38** [34-42] | 34 / 84 [80-87] / **8** [6-10] | 11 / 55 [50-62] / **0** |
+| 430x932 | 53, y515-568 / 31, y537-568 | 0 / 20 [19-20] / **0** | 0 / 0 / **0** | 0 / 0 / **0** |
+
+Under the new card the girls are covered **less than on live at all four windows**, though they are smaller than live's (the picked 70 percent). Bahamut under the card: 0 on live and after; before, 1 percent at 360x740 and 6 at 375x667. Run to run the figures move a few points because the girls idle. **Nothing else moved**: the planned idle camera is identical to three decimals in all four windows before and after (-0.320, 4.655, 16.479 looking at -0.058, 3.704, 6.528, fov 32), the actors' world positions are within 0.002 and their world heights identical (two runs each). Text: 14.2 px on the card, the chip, the head and the body in every capture (CHK-003's 14 px floor holds).
+
+Where the card still touches them: the girls' feet stand 6 to 27 px below the new card's top edge, because the card is docked 6 px above the party chips (Yuna's feet at y 455 against the card's top at y 449 at 390x844, y 362 against 345 at 360x740, y 298 against 272 at 375x667). Clearing them would take a figure or camera move (not part of this pick) or a different dock (options (b) to (d)).
+
+Sheets: `docs/screenshots/r3942-stage/hint-card-one-row-before-after.jpg` (live | before | after, the four windows, one capture each) and `hint-card-one-row-target-step.jpg` (below).
+
+## The other FFX-2 rooms
+
+The card is the same component in every room, so each room's first link was measured with a Curse forced on Paine (the clocks frozen first: a status poked into the state is the HUD's view only until the next sync, about 1.5 s, unless the clocks are stopped). Yuna / Rikku / Paine, percent of each girl under the card, before then after; the foe is the largest share of any fiend under the card where it was not 0:
+
+| room (first link) | 390x844 | 360x740 | 375x667 |
+|---|---|---|---|
+| V Vegnagun (the tail) | 10/5/1 then 0/0/0 | 43/32/47 then 0/0/0 | 79/70/89 then 6/1/0 (Vegnagun 8 then 0) |
+| VI Leblanc (Ormi and the goons) | 25/6/0 then 3/0/0 | 29/13/0 then 3/0/0 | 54/39/36 then 12/16/0 (Fem-Goon 43 then 0) |
+| XI Road to the Farplane (Shiva) | 0/0/0 then 0/0/0 | 20/0/0 then 0/0/0 | 43/8/1 then 0/0/0 |
+| XIII Cloister (Paragon) | 34/21/0 then 0/0/0 | 85/69/50 then 38/24/0 | 67/97/95 then 57/40/16 (Paragon 13 then 0) |
+| XV Den of Woe (Baralai) | 24/0/0 then 1/0/0 | 31/9/0 then 3/0/0 | 59/26/12 then 24/0/0 |
+| XVI Djose (Ixion) | 0/0/0 then 0/0/0 | 0/0/0 then 0/0/0 | 30/10/0 then 0/0/0 |
+
+Every cell is lower after than before; none is higher. The cells still above 20 percent are the short phones in the rooms where the girls stand lowest: Chapter XIII's Paragon link (Yuna 38 and Rikku 24 at 360x740; Yuna 57, Rikku 40 and Paine 16 at 375x667), Chapter IV at 375x667 (Yuna 38) and the Den of Woe at 375x667 (Yuna 24). Chapter XI's Anima link and Chapter XIII's Trema link (later links) were not surveyed.
+
+## The fit: one row from 360 px
+
+Each status on each girl through the real HUD (a status forced with the clocks frozen), the card's rows and its slack at the end of the row, the least over Yuna, Rikku and Paine (px to spare; 2 rows = the body wrapped, 50.3 px tall):
+
+| window | Sleep | Silence | Curse |
+|---|---|---|---|
+| 320x568 | 1 row, 38 | 2 rows | 2 rows |
+| 360x740 | 1 row, 78 | 1 row, **8** | 1 row, 29 |
+| 375x667 | 1 row, 93 | 1 row, 23 | 1 row, 44 |
+| 390x844 | 1 row, 108 | 1 row, 38 | 1 row, 59 |
+| 430x932 | 1 row, 148 | 1 row, 78 | 1 row, 99 |
+| 480x854 | 1 row, 198 | 1 row, 128 | 1 row, 149 |
+
+Silence at 360 px is the tight one ("Echo Screen" is the longest name): in the in-page prototype, before the padding was trimmed, the list written with "or" ("Rikku: Echo Screen, Esuna or Remedy") ran 11 px over at 360 px and the sentence "...cures it" ran 49 px over for Curse; the commas are why the final rows fit. **WebKit** (iOS) gives the same numbers as Chromium for the real `StatusHintCard`, the real stylesheet and the real fonts (Silence at 360: 12 / 9 / 8 for Yuna / Rikku / Paine). The card never clips: a window too narrow for the row (320 px) or the wide TEXT SIZE setting (FFX-2's `data-text-size-wide`, off today) wraps the body under the chip to a second row (50 to 62 px), checked by rendering both. **Firefox could not be launched on this machine** (the installed build fails to spawn), so it is untested.
+
+## The target step (a side effect, and the better one)
+
+At the target step the card docks under the target card when it fits above the tap line (`dockPhone`, PR-0303). The 73 px sentence card fitted on none of 390x844, 360x740 and 375x667 and stayed above the party chips, over the girls; the 31 px row fits on all three: 390x844 y675-706 (the target card ends y671, the tap line starts y727), 360x740 y571-602, 375x667 y498-529. No code was written for it: the dock's own rule meets a shorter card. Real touch taps (Playwright's touchscreen: ITEM, then Remedy), no state pokes, no errors; sheet `docs/screenshots/r3942-stage/hint-card-one-row-target-step.jpg`.
+
+## Verified
+
+- `tsc --noEmit` clean. `node tools/orphans.mjs` names nothing this change added; files all under 400 lines.
+- **`tests/unit/status-hint-one-line.test.ts`, 14 tests, mutation-checked**: 12 mutations, each switching one rule off in the source and put back byte for byte (hash-checked), all 12 killed (the card never gets the class; the class stays on a hidden card; the row keeps GUIDE; the desktop's compact form takes the row; the curse list loses Esuna; the silence row runs past the 33-character budget; FFX gets a row; the CSS clips with `overflow: hidden`; the CSS sets a 13 px size; the CSS loses its phone qualifier; `cureHint` drops the row; `oneLineCard` ignores the game). The first pass left one alive, the game check, because FFX data carries no row anyway; a test with an FFX hint that does carry one was added and kills it. The three older test files for the card (`status-o3-hint-place` 20, `status-o3-mapping` 18, `r35-ui-splash-hint` 5) are green and unchanged.
+- **The full unit suite once, `--testTimeout=60000`, on the final code** (the machine was busy with other sessions' browsers, 546 s): 941 files, 935 passed, 5 skipped and **1 failed**; 13,872 tests passed, 46 skipped, 1 todo, **1 failed**. The one failure is `tests/unit/audio-manifest-io.test.ts` "serialises writers: no lock holder sees another inside its critical section": `EPERM: operation not permitted` opening its own temp `manifest.json.lock` in `tools/audio/manifest-io.mjs`, a Windows file-lock race under load that has nothing near the card; **the same file re-run alone with the same flags passes, 16 of 16** (101 s). Nothing else failed and nothing timed out.
+- Browser: headless Playwright from node on the real GPU, seed 1, clocks frozen, the first command menu; live is the production site read-only. The real-input check is the real taps above. The two dev servers (5281 on this tree, 5282 on HEAD's three files) were stopped by port; no production build, no deploy, no review workflow was run.
+- `node tools/critic-plan.mjs --paths` on the three source files: DEEP (global layout, the build already owes it), a focused review of the production candidate before any deploy; checks CHK-002, 003, 008, 009, 015, 016, 017, 020, 021. Still owed before a deploy.
+- Tools and evidence (outside the repo): `D:/Tools/pyrefly-scratch/2026-10-08/hintcard/` (`cover2.mjs`, `survey.mjs`, `probe-real.mjs`, `probe-line.mjs`, `engine-fit.mjs`, `realinput.mjs`, `wrap-probe.mjs`, `mutate.mjs`, `table.mjs`, `survey-table.mjs`, `makesheet.mjs`, `makesheet-target.mjs`, `dev.config.mjs`, `dev-before.config.mjs`, `out/`); the sheets are also there as `before-after-sheet.jpg` and `target-step-sheet.jpg`.
+
+## Disclosed
+
+- **The word GUIDE is gone** from FFX-2's phone card, and the sentences are trimmed to the cure lists: Sleep loses "gauge frozen, no turns" and "wakes her", the three rows use commas where the sentences said "or a". If Bailey wants other words they are one line each in `statusWords.ts`, and each must keep fitting 360 px (Silence has 8 px to spare).
+- **Short phones still overlap** in the rooms and windows named above; that is the dock, not the text.
+- **FFX's phone card has the same kind of overlap** and was not touched (FFX is not part of this pick): Seymour Flux at 390x844 with a forced Curse, Tidus 28, Yuna 41 and Kimahri 16 percent under its 53 px card, identical before and after (not measured on live).
+- Chapter XI's Anima link and Chapter XIII's Trema link were not surveyed; Firefox was not testable.
+- No ledger row (D-, A-), no NOW.md and no CHANGELOG entry were written by this lane: the decision and the build are the driver's to record.
+- The commit trailer says `Claude Sonnet 5.5` (the model that wrote it), as the earlier lanes' did, not the `Opus 5.5` line in this lane's brief.

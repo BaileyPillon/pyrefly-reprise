@@ -62,6 +62,16 @@ html[data-phone-battle='ffx'][data-text-size] .sthint--phone .sthint__head,
 html[data-phone-battle='ffx2'][data-text-size-wide] .sthint--phone,
 html[data-phone-battle='ffx2'][data-text-size-wide] .sthint--phone .sthint__head { font-size: calc(14.2px * var(--pyr-ts, 1)); }
 
+/* R3942 (FFX-2 phone only, Bailey 2026-10-08, the Chapter IV card pick, option 1): the card is ONE row, the status chip then the rule
+   ("Paine: Holy Water, Esuna, Remedy"; `statusHintCard.ts` sets `sthint--line`). It is 31 px tall where the sentence card was 73, so at the
+   giants' real sizes it no longer sits on the girls' legs. The type is the phone card's own 14.2 px (the floors above are untouched: this
+   block sets no font size), the dock is the same (6 px above the party chips, `dockPhone`), and nothing is clipped: from 360 px wide every
+   rule fits the row, and a window too narrow for it (320 px) wraps the body to a second row rather than cutting a cure list short. */
+.sthint--phone.sthint--line { display: flex; align-items: baseline; gap: 6px; padding: 6px 8px 6px 10px; }
+.sthint--phone.sthint--line .sthint__head { flex: none; margin: 0; letter-spacing: 0.12em; }
+.sthint--phone.sthint--line .sthint__head i { padding: 1px 4px; }
+.sthint--phone.sthint--line .sthint__body { flex: 1 1 auto; min-width: 0; }
+
 /* ---- FFX: the Zombie forecast over the figure (viewport px) ------------------------------------ */
 .stfore-layer { position: absolute; inset: 0; pointer-events: none; z-index: 25; }
 .stfore {
