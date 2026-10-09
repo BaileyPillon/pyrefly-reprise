@@ -69,8 +69,8 @@ export const CORE_ABILITIES: readonly AbilityDef[] = [
     flags: ['crit-eligible', 'adds-equipment-crit', 'inherits-weapon-properties', 'affected-by-darkness'],
     // The game's own record 0x3000 (command table), the one the data-layer records cannot reach because this
     // ability lives here (re-parity W1; research/re-ffx-commands.md section 1): type 0, accuracy formula 3,
-    // Darkness, uses the weapon; physical, can crit, crit bonus from equipment; damage class HP.
-    record: { id: 0x3000, type: 0, flagsMisc: 0x1104005a, flagsDamage: 0x0d, damageClass: 1, rank: 3 },
+    // Darkness, uses the weapon; physical, can crit, crit bonus from equipment; damage class HP; shatter chance 30 (re-parity W2).
+    record: { id: 0x3000, type: 0, flagsMisc: 0x1104005a, flagsDamage: 0x0d, damageClass: 1, shatter: 30, rank: 3 },
     messageTemplate: '{user} attacks',
   }),
   // Rank 2 [ffx-combat-core §1.3]. Halves physical damage until the user's next

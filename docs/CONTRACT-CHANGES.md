@@ -28,6 +28,10 @@ Branch `re-parity-w2`. FFX-2 and FF7 import none of the modules below. Event sha
   doubled ceiling travelled and was halved back, which the cap (9,999 HP, 999 MP, or 99,999 and 9,999 with Break HP / MP Limit) makes impossible.
 - Doc comments only in `src/battle/common/types.ts`: `StatusInstance.turnsRemaining` (which statuses tick, and when), the `regen` entry of `StatusId`, the `turn-start`
   event's `elapsedTicks`.
+- `FFXCommandRecord` (`src/battle/common/types.ts`) gains the optional `shatter` (record byte 0x2c, only non-zero bytes stored; additive). The shatter chance is one of the
+  status step's inputs, and the engine now reads the RECORD's byte for every recorded command and `AbilityDef.shatterChance` only for an ability with no game record. Where
+  the two differed (7 abilities of ours with a chance the record does not have, 148 recorded abilities and the party's Attack with a chance our data never authored) the
+  record wins; `tests/unit/data-ffx-command-records.test.ts` pins the list. The doc comment that said the shatter chance was not repeated in the record is corrected.
 
 ## 2026-10-08 — `FFXCommandRecord` gains the status bytes: `rank`, `chances`, `durations`, `extra`, `stage`, `buff` (re-parity W2; FFX only; additive)
 

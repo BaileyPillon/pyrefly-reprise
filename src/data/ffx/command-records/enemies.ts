@@ -24,7 +24,7 @@ export const POSSESSED_PLAIN_ATTACK: FFXPlainAttack = {
 };
 
 export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>> = {
-  'lance-of-atrophy': { id: 0x6078, type: 0, flagsMisc: 0x6, flagsDamage: 0x1, damageClass: 1, rank: 3, chances: [[1, 100]] }, // Lance of Atrophy (our numbers differ: section 4)
+  'lance-of-atrophy': { id: 0x6078, type: 0, flagsMisc: 0x6, flagsDamage: 0x1, damageClass: 1, shatter: 30, rank: 3, chances: [[1, 100]] }, // Lance of Atrophy (our numbers differ: section 4)
   'full-life': { id: 0x60f5, type: 0, flagsMisc: 0x4800086, flagsDamage: 0x32, damageClass: 1, rank: 3, chances: [[0, 254]] }, // Full Life
   'cross-cleave': { id: 0x6074, type: 0, flagsMisc: 0x4006, flagsDamage: 0x1, damageClass: 1, rank: 3 }, // Cross Cleave (our numbers differ: section 4)
   'total-annihilation': { id: 0x6075, type: 0, flagsMisc: 0x6, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Total Annihilation
@@ -44,8 +44,8 @@ export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>>
   'sleep-counter': { id: 0x6071, type: 0, flagsMisc: 0x20086, flagsDamage: 0x0, damageClass: 0, rank: 3, chances: [[12, 100]], durations: [[0, 3]] }, // Sleep
   'metamorphosis-1': { id: 0x607e, type: 0, flagsMisc: 0x2, flagsDamage: 0x0, damageClass: 0, rank: 3 }, // Metamorphosis (same fields as 0x607f)
   'metamorphosis-2': { id: 0x607e, type: 0, flagsMisc: 0x2, flagsDamage: 0x0, damageClass: 0, rank: 3 }, // Metamorphosis (same fields as 0x607f)
-  'left-arm-strike': { id: 0x60c6, type: 0, flagsMisc: 0x2042, flagsDamage: 0x8d, damageClass: 1, rank: 3 }, // Left Arm Strike (our numbers differ: section 4)
-  'left-arm-strike-2': { id: 0x60c7, type: 0, flagsMisc: 0x2042, flagsDamage: 0x8d, damageClass: 1, rank: 3 }, // Left Arm Strike 2 (picked by hand)
+  'left-arm-strike': { id: 0x60c6, type: 0, flagsMisc: 0x2042, flagsDamage: 0x8d, damageClass: 1, shatter: 100, rank: 3 }, // Left Arm Strike (our numbers differ: section 4)
+  'left-arm-strike-2': { id: 0x60c7, type: 0, flagsMisc: 0x2042, flagsDamage: 0x8d, damageClass: 1, shatter: 100, rank: 3 }, // Left Arm Strike 2 (picked by hand)
   'jecht-beam': { id: 0x6084, type: 0, flagsMisc: 0x6, flagsDamage: 0x6, damageClass: 1, rank: 3, chances: [[2, 100]] }, // Jecht Beam (our numbers differ: section 4)
   'triumphant-grasp': { id: 0x6085, type: 0, flagsMisc: 0x6, flagsDamage: 0x44, damageClass: 1, rank: 3, chances: [[1, 100]] }, // Triumphant Grasp
   'triumphant-grasp-2': { id: 0x60c9, type: 0, flagsMisc: 0x6, flagsDamage: 0x8c, damageClass: 1, rank: 3 }, // Triumphant Grasp
@@ -72,20 +72,20 @@ export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>>
   'possessed-bahamut-mega-flare': { id: 0x60dd, type: 0, flagsMisc: 0x44010006, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Mega Flare (picked by hand)
   'possessed-anima-pain': { id: 0x60de, type: 0, flagsMisc: 0x4010006, flagsDamage: 0x2, damageClass: 1, rank: 3, chances: [[0, 100]] }, // Pain (our numbers differ: section 4)
   'possessed-anima-oblivion': { id: 0x60df, type: 0, flagsMisc: 0x44010006, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Oblivion (our numbers differ: section 4)
-  'possessed-yojimbo-daigoro': { id: 0x40b1, type: 0, flagsMisc: 0x6, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Daigoro (picked by hand)
+  'possessed-yojimbo-daigoro': { id: 0x40b1, type: 0, flagsMisc: 0x6, flagsDamage: 0xd, damageClass: 1, shatter: 10, rank: 3 }, // Daigoro (picked by hand)
   'possessed-yojimbo-zanmato': { id: 0x60e2, type: 0, flagsMisc: 0x44010006, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Zanmato
   'possessed-cindy-camisade': { id: 0x60e3, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Camisade (our numbers differ: section 4)
   'possessed-cindy-delta-attack': { id: 0x60e6, type: 0, flagsMisc: 0x44010006, flagsDamage: 0xc, damageClass: 1, rank: 3 }, // Delta Attack (our numbers differ: section 4)
   'possessed-sandy-razzia': { id: 0x60e4, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Razzia (our numbers differ: section 4)
   'possessed-mindy-passado': { id: 0x60e5, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Passado
-  'mac-blizzara': { id: 0x3046, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Blizzara
-  'mac-thundara': { id: 0x3047, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Thundara
-  'mac-watera': { id: 0x3048, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Watera
-  'mac-fira': { id: 0x3045, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Fira
-  'mac-blizzaga': { id: 0x304a, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Blizzaga
-  'mac-thundaga': { id: 0x304b, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Thundaga
-  'mac-waterga': { id: 0x304c, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Waterga
-  'mac-firaga': { id: 0x3049, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Firaga
+  'mac-blizzara': { id: 0x3046, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Blizzara
+  'mac-thundara': { id: 0x3047, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Thundara
+  'mac-watera': { id: 0x3048, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Watera
+  'mac-fira': { id: 0x3045, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Fira
+  'mac-blizzaga': { id: 0x304a, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Blizzaga
+  'mac-thundaga': { id: 0x304b, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Thundaga
+  'mac-waterga': { id: 0x304c, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Waterga
+  'mac-firaga': { id: 0x3049, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Firaga
   'mac-multi-blizzara': { id: 0x60ad, type: 0, flagsMisc: 0x4020086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Multi Blizzara
   'mac-multi-thundara': { id: 0x60af, type: 0, flagsMisc: 0x4020086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Multi Thundara
   'mac-multi-watera': { id: 0x60b1, type: 0, flagsMisc: 0x4020086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Multi Watera
@@ -100,8 +100,8 @@ export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>>
   'anima-boost': { id: 0x3055, type: 0, flagsMisc: 0x806, flagsDamage: 0x0, damageClass: 0, rank: 3, extra: 0x80 }, // Boost
   'anima-pain-boss': { id: 0x60de, type: 0, flagsMisc: 0x4010006, flagsDamage: 0x2, damageClass: 1, rank: 3, chances: [[0, 100]] }, // Pain
   'anima-oblivion': { id: 0x60df, type: 0, flagsMisc: 0x44010006, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Oblivion
-  'evrae-attack': { id: 0x407f, type: 0, flagsMisc: 0x52, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Attack (same fields as 0x4098, 0x409b, 0x409d, 0x409f)
-  'evrae-swooping-scythe': { id: 0x605b, type: 0, flagsMisc: 0x16, flagsDamage: 0x1, damageClass: 1, rank: 3 }, // Swooping Scythe
+  'evrae-attack': { id: 0x407f, type: 0, flagsMisc: 0x52, flagsDamage: 0xd, damageClass: 1, shatter: 10, rank: 3 }, // Attack (same fields as 0x4098, 0x409b, 0x409d, 0x409f)
+  'evrae-swooping-scythe': { id: 0x605b, type: 0, flagsMisc: 0x16, flagsDamage: 0x1, damageClass: 1, shatter: 50, rank: 3 }, // Swooping Scythe
   'evrae-poison-breath': { id: 0x6061, type: 0, flagsMisc: 0x6, flagsDamage: 0x2, damageClass: 1, rank: 3, chances: [[3, 100]] }, // Poison Breath
   'evrae-stone-gaze': { id: 0x6062, type: 0, flagsMisc: 0x6, flagsDamage: 0x2, damageClass: 4, rank: 3, chances: [[2, 100], [24, 255]], durations: [[12, 100]] }, // Stone Gaze (picked by its status bytes, re-parity W2)
   'evrae-photon-spray': { id: 0x6063, type: 0, flagsMisc: 0x8006, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Photon Spray
@@ -113,7 +113,7 @@ export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>>
   'yojimbo-kozuka': { id: 0x4082, type: 0, flagsMisc: 0x6, flagsDamage: 0x1, damageClass: 1, rank: 3 }, // Kozuka
   'yojimbo-wakizashi': { id: 0x4083, type: 0, flagsMisc: 0x6, flagsDamage: 0x1, damageClass: 1, rank: 3 }, // Wakizashi
   'yojimbo-zanmato': { id: 0x4085, type: 0, flagsMisc: 0x40000006, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Zanmato
-  'daigoro-attack': { id: 0x40b1, type: 0, flagsMisc: 0x6, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Daigoro
+  'daigoro-attack': { id: 0x40b1, type: 0, flagsMisc: 0x6, flagsDamage: 0xd, damageClass: 1, shatter: 10, rank: 3 }, // Daigoro
   'natus-multi-fira': { id: 0x60ab, type: 0, flagsMisc: 0x4020086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Multi Fira
   'natus-multi-blizzara': { id: 0x60ad, type: 0, flagsMisc: 0x4020086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Multi Blizzara
   'natus-multi-thundara': { id: 0x60af, type: 0, flagsMisc: 0x4020086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Multi Thundara
@@ -124,24 +124,24 @@ export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>>
   'mortibody-blizzard': { id: 0x603a, type: 0, flagsMisc: 0x20086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Blizzard
   'mortibody-thunder': { id: 0x603b, type: 0, flagsMisc: 0x20086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Thunder
   'mortibody-water': { id: 0x603c, type: 0, flagsMisc: 0x20086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Water
-  'mortibody-shattering-claw': { id: 0x6076, type: 0, flagsMisc: 0x16, flagsDamage: 0x1, damageClass: 1, rank: 3 }, // Shattering Claw
+  'mortibody-shattering-claw': { id: 0x6076, type: 0, flagsMisc: 0x16, flagsDamage: 0x1, damageClass: 1, shatter: 90, rank: 3 }, // Shattering Claw
   'mortibody-desperado': { id: 0x605e, type: 0, flagsMisc: 0x6, flagsDamage: 0x20, damageClass: 1, rank: 3, chances: [[15, 255], [16, 255], [17, 255], [18, 255], [19, 255], [20, 255], [21, 255], [22, 255], [23, 255]], durations: [[3, 254], [4, 254], [5, 254], [6, 254], [7, 254], [8, 254], [9, 254], [10, 254], [11, 254]] }, // Desperado
   'mortibody-cura': { id: 0x302c, type: 2, flagsMisc: 0x15030087, flagsDamage: 0x12, damageClass: 1, rank: 3 }, // Cura
-  'omnis-fira': { id: 0x3045, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Fira
-  'omnis-blizzara': { id: 0x3046, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Blizzara
-  'omnis-thundara': { id: 0x3047, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Thundara
-  'omnis-watera': { id: 0x3048, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Watera
-  'omnis-firaga': { id: 0x3049, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Firaga
-  'omnis-blizzaga': { id: 0x304a, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Blizzaga
-  'omnis-thundaga': { id: 0x304b, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Thundaga
-  'omnis-waterga': { id: 0x304c, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Waterga
+  'omnis-fira': { id: 0x3045, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Fira
+  'omnis-blizzara': { id: 0x3046, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Blizzara
+  'omnis-thundara': { id: 0x3047, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Thundara
+  'omnis-watera': { id: 0x3048, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Watera
+  'omnis-firaga': { id: 0x3049, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Firaga
+  'omnis-blizzaga': { id: 0x304a, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Blizzaga
+  'omnis-thundaga': { id: 0x304b, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Thundaga
+  'omnis-waterga': { id: 0x304c, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Waterga
   'omnis-dispel': { id: 0x303d, type: 2, flagsMisc: 0x15030006, flagsDamage: 0x32, damageClass: 0, rank: 3, chances: [[4, 254], [5, 254], [6, 254], [7, 254], [15, 254], [16, 254], [17, 254], [18, 254], [19, 254], [20, 254], [21, 254], [22, 254], [23, 254]], durations: [[3, 254], [4, 254], [5, 254], [6, 254], [7, 254], [8, 254], [9, 254], [10, 254], [11, 254]], extra: 0x400 }, // Dispel
   'omnis-ultima': { id: 0x60f0, type: 0, flagsMisc: 0x6, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Ultima
-  'grothia-attack': { id: 0x4000, type: 0, flagsMisc: 0x52, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Attack
-  'grothia-attack-yuna': { id: 0x407f, type: 0, flagsMisc: 0x52, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Attack (picked by hand)
-  'grothia-fira': { id: 0x3045, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Fira
+  'grothia-attack': { id: 0x4000, type: 0, flagsMisc: 0x52, flagsDamage: 0xd, damageClass: 1, shatter: 10, rank: 3 }, // Attack
+  'grothia-attack-yuna': { id: 0x407f, type: 0, flagsMisc: 0x52, flagsDamage: 0xd, damageClass: 1, shatter: 10, rank: 3 }, // Attack (picked by hand)
+  'grothia-fira': { id: 0x3045, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Fira
   'grothia-hellfire': { id: 0x405e, type: 0, flagsMisc: 0x40000006, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Hellfire (same fields as 0x40e6)
-  'pterya-attack': { id: 0x4000, type: 0, flagsMisc: 0x52, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Attack
+  'pterya-attack': { id: 0x4000, type: 0, flagsMisc: 0x52, flagsDamage: 0xd, damageClass: 1, shatter: 10, rank: 3 }, // Attack
   'pterya-attack-yuna': { id: 0x405c, type: 0, flagsMisc: 0x52, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Attack
   'pterya-sonic-wings': { id: 0x405d, type: 0, flagsMisc: 0x2006, flagsDamage: 0x1, damageClass: 1, rank: 3 }, // Sonic Wings
   'pterya-energy-ray': { id: 0x403d, type: 0, flagsMisc: 0x40000006, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Energy Ray
@@ -164,7 +164,7 @@ export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>>
   'sin-genais-venom': { id: 0x6097, type: 0, flagsMisc: 0x6, flagsDamage: 0xd, damageClass: 1, rank: 3, chances: [[3, 100]] }, // Venom
   'sin-genais-thrashing': { id: 0x6098, type: 0, flagsMisc: 0x6, flagsDamage: 0x5, damageClass: 1, rank: 3, durations: [[0, 1]] }, // Thrashing
   'sin-genais-sigh': { id: 0x6096, type: 0, flagsMisc: 0x6, flagsDamage: 0x2, damageClass: 1, rank: 3, chances: [[14, 100]], durations: [[2, 3]] }, // Sigh
-  'sin-genais-waterga': { id: 0x304c, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, rank: 3 }, // Waterga
+  'sin-genais-waterga': { id: 0x304c, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Waterga
   'sin-genais-cura': { id: 0x302c, type: 2, flagsMisc: 0x15030087, flagsDamage: 0x12, damageClass: 1, rank: 3 }, // Cura
   'sin-genais-shell-in': { id: 0x609a, type: 0, flagsMisc: 0x2, flagsDamage: 0x0, damageClass: 0, rank: 3 }, // Enters shell.
   'sin-genais-shell-out': { id: 0x6099, type: 0, flagsMisc: 0x2, flagsDamage: 0x0, damageClass: 0, rank: 3 }, // Exits shell.

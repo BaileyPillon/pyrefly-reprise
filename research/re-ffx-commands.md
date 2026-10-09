@@ -676,6 +676,7 @@ commands carry theirs in `src/battle/ffx/registry.ts`).
 | Offset | Meaning | Read by |
 |---|---|---|
 | 0x24 | the CTB rank (0 means 3) | the recovery after an action, Threaten's delay (`research/re-ffx-ctb-status.md` section 2) |
+| 0x2c | the shatter chance, in percent, against a Petrified record (section 7.4) | the extra-status step (section 7 of that note) |
 | 0x2e to 0x46 | the chance byte of each of the 25 regular statuses | the status infliction step (section 6 of that note) |
 | 0x47 to 0x53 | the duration byte of each of the 13 temporal statuses | the same |
 | 0x54 (u16) | the extra-status bits wanted (Distill 2/4/8/0x20, Shield 0x40, Boost 0x80, Eject 0x100, Auto-Life 0x200, Curse 0x400, Defend 0x800, Guard 0x1000, Sentinel 0x2000, Doom 0x4000, Scan 1) | the extra-status step (section 7 of that note) |
@@ -725,3 +726,18 @@ The engine now takes the record's bytes (they are the exe's inputs); `tests/unit
 The game's rank differs from the rank our ability data carries on 17 abilities (the generic Attack, Defend and the aeons' Shield and Boost agree):
 the four Wakka reels (ours 3, game 4), `fury` (the marker: 5 against 0, which is 3), the six aeon Attack rows (ours 1 or 5, game 3: unreachable, the generic Attack serves every aeon),
 `passado` (3 against 5), `mix` (6 against 5; the shaped Mix has its own record), and `natus-flare` (5 against 3). The wiring takes the game's rank for every ability that has a record.
+
+### 7.4 Shatter
+
+Byte 0x2c of a record is the chance that a hit with this command shatters a target that is already Petrified (the status step draws once for a Petrified
+record whatever the command, and shatters it when `draw % 101 < byte`; `research/re-ffx-ctb-status.md` section 7). 182 of the 452 records in the three data
+files (and the party's Attack, which lives in the registry) carry a non-zero byte (all the Black Magic from Fira up and the Furies 10, the status Skills and most items 30 to 70, the Specials, Blitz Ace
+and the Shooting Stars 100, the reels and the Mixes 50, the party's Attack 30, Left Arm Strike 100) and the engine reads it from the record
+(`AbilityDef.record.shatter`); an ability with no record keeps its own `shatterChance`.
+
+W1 left this byte with the ability's own data and said section 4 would list where they differ. They differ on 155 abilities, and the list was not made, which is why
+the record is the source now. 148 abilities (and the party's Attack, 30) had a chance in the game's record that our data never authored. Nearly all are
+commands the party aims at an enemy, and a Petrified enemy is shattered by the Petrify itself, so they reach no shipped fight; the two enemy commands among them,
+the possessed Yojimbo's Daigoro (10) and Grothia's attack (10), can hit a Petrified party member. Seven abilities of ours carried a chance the game's record does not have (Guardian
+Blizzard and Thunder, Natus's Flare and the four Mortibody elemental casts, all 10 in ours and 0 in the game); they no longer shatter a Petrified member.
+`tests/unit/data-ffx-command-records.test.ts` pins both lists.

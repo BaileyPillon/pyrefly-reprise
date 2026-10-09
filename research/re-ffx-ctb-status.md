@@ -676,6 +676,7 @@ Everything below is the engine's behaviour, proved against the kernels on genera
 | S8 | `adapt/status.ts#doomStart` | Doom starts from 5 for every party slot and from the monster record's byte (`EnemyDef.doomTurns`) for a monster; only a Doom that lands asks for it, and an enemy that can be Doomed without carrying one is an error |
 | S9 | the pool kernel | Double HP and Double MP cap at 9,999 and 999, at 99,999 and 9,999 with Break HP Limit and Break MP Limit (the equipment abilities set `Chr+0x6be` bits 9 and 10), and removing the flag restores the stored base. A chain's later link hands the base maxima on with the status and the next battle rebuilds the doubled ones, as the party-stats builder does at battle start (the third argument "no new byte") |
 | S10 | none needed | the same in both |
+| S11 | the record's byte 0x2c | the shatter chance of a Petrified record's roll is the command record's byte (`FFXCommandRecord.shatter`), not the ability's own `shatterChance`, which only an ability with no record uses (`research/re-ffx-commands.md` section 7.4) |
 | T1 | the start-of-turn kernel | Regen pays every holder `(its own tick counter * maxHP >> 8) + 100` |
 | T2 | the start-of-turn kernel | Regen counts down at the start of its holder's turn, after the payouts |
 | T3 | the end-of-turn kernel | the eight ticking counters of §14.1 |

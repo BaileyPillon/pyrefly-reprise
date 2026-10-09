@@ -335,7 +335,7 @@ describe("the status bytes of the attached records are the game's table (re-pari
     expect(statusFixture.rows).toHaveLength(979);
   });
 
-  it('every attached record carries its rank, chances, durations, extra word, stage buffs and buff flags word for word', () => {
+  it('every attached record carries its rank, chances, durations, extra word, stage buffs, buff flags and shatter chance word for word', () => {
     const wrong: string[] = [];
     const check = (name: string, record: NonNullable<(typeof ALL_ABILITIES)[number]['record']>): void => {
       const row = STATUS.get(record.id);
@@ -350,6 +350,8 @@ describe("the status bytes of the attached records are the game's table (re-pari
       if ((record.extra ?? 0) !== extra) wrong.push(`${name}: extra`);
       if ((record.stage?.[0] ?? 0) !== stageMask || (record.stage?.[1] ?? 0) !== (stageMask === 0 ? 0 : stageAmount)) wrong.push(`${name}: stage buffs`);
       if ((record.buff ?? 0) !== buff) wrong.push(`${name}: buff`);
+      const game = GAME.get(record.id);
+      if (game && (record.shatter ?? 0) !== field(game, 'shatter')) wrong.push(`${name}: shatter ${record.shatter ?? 0}, table ${field(game, 'shatter')}`);
     };
     for (const [abilityId, record] of Object.entries(COMMAND_RECORDS)) check(abilityId, record);
     check('possessed plain Attack', POSSESSED_PLAIN_ATTACK.record);
@@ -370,8 +372,39 @@ describe("the status bytes of the attached records are the game's table (re-pari
       expect(record.rank, id).toBe(rank);
       expect(record.extra ?? 0, id).toBe(extra);
       expect([record.stage?.[0] ?? 0, record.buff ?? 0, record.chances ?? [], record.durations ?? []], id).toEqual([stageMask, buff, chances, durations]);
+      expect(record.shatter ?? 0, id).toBe(field(row, 'shatter')); // the party's Attack shatters a Petrified target 30 times in 100
       expect(a!.rank, id).toBe(rank === 0 ? 3 : rank); // the ability's own rank is the record's
     }
+  });
+
+  /**
+   * The shatter chance (record byte 0x2c) is read from the record for every recorded command, as the other status bytes are
+   * (`adapt/status.ts#commandStatus`); `AbilityDef.shatterChance` is read only by an ability with no game record. Where the ability's own
+   * number differs from the record's: 7 abilities of ours carry a chance the game's record does not (it is 0 there), and 148 more (and the
+   * party's own Attack, 30, which lives in the registry) have a chance in the game's record that our data never authored. Only the first group can change a fight that ships: a Petrified party member
+   * is hit by enemy commands, and the enemy rows of the second group are the possessed Yojimbo's Daigoro (10) and Grothia's attack (10).
+   */
+  it("the shatter chance an ability's own data carries differs from its record's on these rows, and the record's is the one the engine reads", () => {
+    const overridden: string[] = [];
+    let added = 0;
+    for (const a of ALL_ABILITIES) {
+      if (!a.record) continue;
+      const ours = a.shatterChance ?? 0;
+      const game = a.record.shatter ?? 0;
+      if (ours === game) continue;
+      if (ours !== 0) overridden.push(`${a.id}: ${ours} -> ${game}`);
+      else added += 1;
+    }
+    expect(overridden.sort()).toEqual([
+      'guardian-blizzard: 10 -> 0',
+      'guardian-thunder: 10 -> 0',
+      'mortibody-blizzard: 10 -> 0',
+      'mortibody-fire: 10 -> 0',
+      'mortibody-thunder: 10 -> 0',
+      'mortibody-water: 10 -> 0',
+      'natus-flare: 10 -> 0',
+    ]);
+    expect(added).toBe(148);
   });
 
   it('the stage-buff mask has no bits above the six stacks, and an amount whenever it is set', () => {

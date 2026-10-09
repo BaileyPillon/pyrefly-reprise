@@ -1336,9 +1336,9 @@ export interface StatusApplication {
  *
  * Source: the Steam HD build's battle kernel tables (item, command, monster magic 1 and 2),
  * `research/re-ffx-commands.md` section 1; `src/data/ffx/command-records/` holds one record per ability.
- * The record's formula, power, element, hit count, accuracy byte, crit byte and shatter chance are NOT
- * repeated here: the ability's own fields keep carrying them, and `research/re-ffx-commands.md`
- * section 4 lists where they differ from the game's.
+ * The record's formula, power, element, hit count, accuracy byte and crit byte are NOT repeated here: the
+ * ability's own fields keep carrying them, and `research/re-ffx-commands.md` section 4 lists where they differ
+ * from the game's. The shatter chance is repeated (`shatter`, re-parity W2): it is one of the status step's inputs.
  */
 export interface FFXCommandRecord {
   /** The record id: 0x2000 + n (item table), 0x3000 + n (command), 0x4000 + n (monster magic 1), 0x6000 + n (monster magic 2). */
@@ -1376,6 +1376,12 @@ export interface FFXCommandRecord {
   stage?: readonly [mask: number, amount: number];
   /** Record byte 0x5a: the buff flags the command sets (Double HP 1, Double MP 2, no MP cost 4, always 9999 8, always critical 0x10, Overdrive x1.5 0x20, Overdrive x2 0x40). */
   buff?: number;
+  /**
+   * Record byte 0x2c: the chance, in percent, that a hit with this command shatters a Petrified target (re-parity W2; **FFX only**). The
+   * status step draws once for a Petrified record whatever the command and shatters it when `draw % 101 < shatter`. Absent means 0, and
+   * only a non-zero byte is stored. An ability with no game record keeps its own `AbilityDef.shatterChance`.
+   */
+  shatter?: number;
 }
 
 /**

@@ -46,39 +46,39 @@ export const COMMAND_RECORDS_ITEMS: Readonly<Record<string, FFXCommandRecord>> =
   'mana-distiller': { id: 0x2011, type: 0, flagsMisc: 0x10006, flagsDamage: 0x40, damageClass: 0, rank: 2, extra: 0x4 }, // Mana Distiller
   'speed-distiller': { id: 0x2012, type: 0, flagsMisc: 0x10006, flagsDamage: 0x40, damageClass: 0, rank: 2, extra: 0x8 }, // Speed Distiller
   'ability-distiller': { id: 0x2013, type: 0, flagsMisc: 0x10006, flagsDamage: 0x40, damageClass: 0, rank: 2, extra: 0x20 }, // Ability Distiller
-  'grenade': { id: 0x2023, type: 0, flagsMisc: 0x10406, flagsDamage: 0x44, damageClass: 1, rank: 2 }, // Grenade
-  'frag-grenade': { id: 0x2024, type: 0, flagsMisc: 0x10406, flagsDamage: 0x44, damageClass: 1, rank: 2, chances: [[6, 254]] }, // Frag Grenade
-  'sleeping-powder': { id: 0x2025, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2, chances: [[12, 254]], durations: [[0, 5]] }, // Sleeping Powder
-  'dream-powder': { id: 0x2026, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2, chances: [[12, 254]], durations: [[0, 8]] }, // Dream Powder
-  'silence-grenade': { id: 0x2027, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2, chances: [[13, 254]], durations: [[1, 8]] }, // Silence Grenade
-  'smoke-bomb': { id: 0x2028, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2, chances: [[14, 254]], durations: [[2, 8]] }, // Smoke Bomb
+  'grenade': { id: 0x2023, type: 0, flagsMisc: 0x10406, flagsDamage: 0x44, damageClass: 1, shatter: 50, rank: 2 }, // Grenade
+  'frag-grenade': { id: 0x2024, type: 0, flagsMisc: 0x10406, flagsDamage: 0x44, damageClass: 1, shatter: 50, rank: 2, chances: [[6, 254]] }, // Frag Grenade
+  'sleeping-powder': { id: 0x2025, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 30, rank: 2, chances: [[12, 254]], durations: [[0, 5]] }, // Sleeping Powder
+  'dream-powder': { id: 0x2026, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 30, rank: 2, chances: [[12, 254]], durations: [[0, 8]] }, // Dream Powder
+  'silence-grenade': { id: 0x2027, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 30, rank: 2, chances: [[13, 254]], durations: [[1, 8]] }, // Silence Grenade
+  'smoke-bomb': { id: 0x2028, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 30, rank: 2, chances: [[14, 254]], durations: [[2, 8]] }, // Smoke Bomb
   'petrify-grenade': { id: 0x2031, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 0, rank: 2, chances: [[2, 254]] }, // Petrify Grenade
-  'poison-fang': { id: 0x202d, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2, chances: [[3, 254]] }, // Poison Fang
-  'antarctic-wind': { id: 0x2017, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Antarctic Wind
-  'bomb-fragment': { id: 0x201a, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Bomb Fragment
-  'electro-marble': { id: 0x201d, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Electro Marble
-  'fish-scale': { id: 0x2020, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Fish Scale
-  'arctic-wind': { id: 0x2018, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Arctic Wind
-  'bomb-core': { id: 0x201b, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Bomb Core
-  'lightning-marble': { id: 0x201e, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Lightning Marble
-  'dragon-scale': { id: 0x2021, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Dragon Scale
-  'ice-gem': { id: 0x2019, type: 0, flagsMisc: 0x18406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Ice Gem
-  'fire-gem': { id: 0x201c, type: 0, flagsMisc: 0x18406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Fire Gem
-  'lightning-gem': { id: 0x201f, type: 0, flagsMisc: 0x18406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Lightning Gem
-  'water-gem': { id: 0x2022, type: 0, flagsMisc: 0x18406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Water Gem
-  'shadow-gem': { id: 0x2029, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Shadow Gem
-  'shining-gem': { id: 0x202a, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Shining Gem
-  'blessed-gem': { id: 0x202b, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Blessed Gem
-  'supreme-gem': { id: 0x202c, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Supreme Gem
-  'purifying-salt': { id: 0x203f, type: 0, flagsMisc: 0x10406, flagsDamage: 0x60, damageClass: 1, rank: 2, chances: [[15, 254], [16, 254], [17, 254], [18, 254], [19, 254], [20, 254], [21, 254], [22, 254], [23, 254]], durations: [[3, 254], [4, 254], [5, 254], [6, 254], [7, 254], [8, 254], [9, 254], [10, 254], [11, 254]] }, // Purifying Salt
+  'poison-fang': { id: 0x202d, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 60, rank: 2, chances: [[3, 254]] }, // Poison Fang
+  'antarctic-wind': { id: 0x2017, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 30, rank: 2 }, // Antarctic Wind
+  'bomb-fragment': { id: 0x201a, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 30, rank: 2 }, // Bomb Fragment
+  'electro-marble': { id: 0x201d, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 30, rank: 2 }, // Electro Marble
+  'fish-scale': { id: 0x2020, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 30, rank: 2 }, // Fish Scale
+  'arctic-wind': { id: 0x2018, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 50, rank: 2 }, // Arctic Wind
+  'bomb-core': { id: 0x201b, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 50, rank: 2 }, // Bomb Core
+  'lightning-marble': { id: 0x201e, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 50, rank: 2 }, // Lightning Marble
+  'dragon-scale': { id: 0x2021, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 50, rank: 2 }, // Dragon Scale
+  'ice-gem': { id: 0x2019, type: 0, flagsMisc: 0x18406, flagsDamage: 0x40, damageClass: 1, shatter: 70, rank: 2 }, // Ice Gem
+  'fire-gem': { id: 0x201c, type: 0, flagsMisc: 0x18406, flagsDamage: 0x40, damageClass: 1, shatter: 70, rank: 2 }, // Fire Gem
+  'lightning-gem': { id: 0x201f, type: 0, flagsMisc: 0x18406, flagsDamage: 0x40, damageClass: 1, shatter: 70, rank: 2 }, // Lightning Gem
+  'water-gem': { id: 0x2022, type: 0, flagsMisc: 0x18406, flagsDamage: 0x40, damageClass: 1, shatter: 70, rank: 2 }, // Water Gem
+  'shadow-gem': { id: 0x2029, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 50, rank: 2 }, // Shadow Gem
+  'shining-gem': { id: 0x202a, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 100, rank: 2 }, // Shining Gem
+  'blessed-gem': { id: 0x202b, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 100, rank: 2 }, // Blessed Gem
+  'supreme-gem': { id: 0x202c, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 1, shatter: 100, rank: 2 }, // Supreme Gem
+  'purifying-salt': { id: 0x203f, type: 0, flagsMisc: 0x10406, flagsDamage: 0x60, damageClass: 1, shatter: 10, rank: 2, chances: [[15, 254], [16, 254], [17, 254], [18, 254], [19, 254], [20, 254], [21, 254], [22, 254], [23, 254]], durations: [[3, 254], [4, 254], [5, 254], [6, 254], [7, 254], [8, 254], [9, 254], [10, 254], [11, 254]] }, // Purifying Salt
   'silver-hourglass': { id: 0x202e, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 4, rank: 2, chances: [[24, 254]], durations: [[12, 254]] }, // Silver Hourglass
-  'gold-hourglass': { id: 0x202f, type: 0, flagsMisc: 0x12406, flagsDamage: 0x40, damageClass: 1, rank: 2, chances: [[24, 254]], durations: [[12, 254]] }, // Gold Hourglass
+  'gold-hourglass': { id: 0x202f, type: 0, flagsMisc: 0x12406, flagsDamage: 0x40, damageClass: 1, shatter: 70, rank: 2, chances: [[24, 254]], durations: [[12, 254]] }, // Gold Hourglass
   'farplane-shadow': { id: 0x2032, type: 0, flagsMisc: 0x10406, flagsDamage: 0x40, damageClass: 0, rank: 2, chances: [[0, 100]] }, // Farplane Shadow
   'farplane-wind': { id: 0x2033, type: 0, flagsMisc: 0x18406, flagsDamage: 0x40, damageClass: 0, rank: 2, chances: [[0, 100]] }, // Farplane Wind
-  'mana-spring': { id: 0x203c, type: 0, flagsMisc: 0x10506, flagsDamage: 0x40, damageClass: 2, rank: 2 }, // Mana Spring
-  'stamina-spring': { id: 0x203d, type: 0, flagsMisc: 0x10506, flagsDamage: 0x40, damageClass: 1, rank: 2 }, // Stamina Spring
-  'soul-spring': { id: 0x203e, type: 0, flagsMisc: 0x10506, flagsDamage: 0x40, damageClass: 3, rank: 2 }, // Soul Spring
-  'dark-matter': { id: 0x2035, type: 0, flagsMisc: 0x10406, flagsDamage: 0x80, damageClass: 1, rank: 2 }, // Dark Matter
+  'mana-spring': { id: 0x203c, type: 0, flagsMisc: 0x10506, flagsDamage: 0x40, damageClass: 2, shatter: 10, rank: 2 }, // Mana Spring
+  'stamina-spring': { id: 0x203d, type: 0, flagsMisc: 0x10506, flagsDamage: 0x40, damageClass: 1, shatter: 10, rank: 2 }, // Stamina Spring
+  'soul-spring': { id: 0x203e, type: 0, flagsMisc: 0x10506, flagsDamage: 0x40, damageClass: 3, shatter: 10, rank: 2 }, // Soul Spring
+  'dark-matter': { id: 0x2035, type: 0, flagsMisc: 0x10406, flagsDamage: 0x80, damageClass: 1, shatter: 10, rank: 2 }, // Dark Matter
   'hp-sphere': { id: 0x2055, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // HP Sphere
   'return-sphere': { id: 0x2060, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Return Sphere
   'mp-sphere': { id: 0x2056, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // MP Sphere

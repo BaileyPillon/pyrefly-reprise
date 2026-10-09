@@ -211,6 +211,8 @@ function fuzzRecord(rng: SeededRng, rec: FFXCommandRecord): FFXCommandRecord {
   if (extra !== 0) out.extra = extra;
   if (chance(rng, 0.15)) out.stage = [rng.int(1, 0x3f), pickOf(rng, [1, 1, 2, 5])];
   if (chance(rng, 0.15)) out.buff = pickOf(rng, [1, 2, 3, 4, 8, 0x10, 0x20, 0x40]);
+  // Part of the record now (the engine reads this byte, never `AbilityDef.shatterChance`, for a recorded command).
+  if (chance(rng, 0.3)) out.shatter = pickOf(rng, [10, 30, 50, 100]);
   return out;
 }
 
@@ -220,7 +222,8 @@ export function randomStatusSituation(rng: SeededRng, pool: readonly AbilityDef[
   // A revival effect keeps its real record most of the time: it is the one command whose Death byte the engine's revival path reads.
   if (base.def.record && chance(rng, base.def.flags.includes('can-target-dead') ? 0.2 : 0.45)) {
     base.def = { ...base.def, record: fuzzRecord(rng, base.def.record) };
-    if (chance(rng, 0.3)) base.def.shatterChance = pickOf(rng, [10, 50, 100]);
+    // The ability's own number is a decoy: it differs from the record's byte and the engine must not read it.
+    if (chance(rng, 0.5)) base.def.shatterChance = pickOf(rng, [10, 50, 100]);
   }
   const def = base.def;
   const canTargetDead = def.flags.includes('can-target-dead');
@@ -500,7 +503,7 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
             type: rec.type,
             flagsMisc: rec.flagsMisc,
             flagsDamage: rec.flagsDamage,
-            shatter: def.shatterChance ?? 0,
+            shatter: rec.shatter ?? 0,
             chances: baseChances,
             durations: baseDurations,
           },

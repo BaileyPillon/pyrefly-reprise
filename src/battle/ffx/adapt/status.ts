@@ -257,7 +257,8 @@ export function commandStatus(def: AbilityDef, command: ResolvedCommand): Comman
       type: r.type,
       flagsMisc: command.flagsMisc,
       flagsDamage: cleanse ? r.flagsDamage | 0x20 : r.flagsDamage & ~0x20,
-      shatter: def.shatterChance ?? 0,
+      // The shatter chance is the record's byte 0x2c (the status step's input like the others); an ability with no game record keeps its own.
+      shatter: command.derived ? (def.shatterChance ?? 0) : (r.shatter ?? 0),
       chances,
       durations,
     },
