@@ -102,13 +102,15 @@ describe('Sin, links 1 -> 2 -> 3: statuses carry (§1.2 [verified: 3 sources])',
       const tonic = d.commands.find((c) => c.enabled && c.command.kind === 'item' && 'id' in c.command && c.command.id === 'stamina-tonic');
       e1.submit(tonic && tonic.validTargets.includes('auron') ? ({ ...tonic.command, targets: ['auron'] } as Command) : { kind: 'defend', targets: [] });
     }
-    expect(live(e1, 'auron').stats.maxHp).toBe(base * 2);
+    // Doubled under the game's cap (re-parity W2, FFX only): 6,492 doubles to 9,999, not 12,984; Auron's build wears no Break HP Limit.
+    const doubledMax = Math.min(base * 2, 9_999);
+    expect(live(e1, 'auron').stats.maxHp).toBe(doubledMax);
     const state = structuredClone(e1.state()) as BattleState;
     (state.combatants['auron'] as FFXCombatant).hp = base + 500; // above the base ceiling, under the doubled one
     const next = setupForNextLink(first, ENEMY_GROUPS_BY_ID['sin-right-fin']!, state, 2);
     const e2 = engineOn(next);
     expect(live(e2, 'auron').statuses['max-hp-x2']).toBeDefined();
-    expect(live(e2, 'auron').stats.maxHp).toBe(base * 2);
+    expect(live(e2, 'auron').stats.maxHp).toBe(doubledMax);
     expect(live(e2, 'auron').hp).toBe(base + 500);
   });
 

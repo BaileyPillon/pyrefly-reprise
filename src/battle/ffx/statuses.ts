@@ -103,6 +103,43 @@ export function applyPoolFlags(ctx: Ctx, target: FFXCombatant, oldFlags: number,
 }
 
 /**
+ * Every party-side combatant that arrives with Double HP or Double MP already on (a chain's later links carry the party's statuses,
+ * `BattleScreenSetup.ts#carriedFfxState`) gets its maxima rebuilt the way the game's party-stats builder does at battle start:
+ * `pp_BtlApplyDoubleHpMp` called with no new byte (VA 0x0078d270 from VA 0x0079c5f0, `research/re-ffx-ctb-status.md` section 7). The
+ * combatant's `stats` arrive as the BASE maxima, which become the runtime's stored base, and the status doubles them under the cap
+ * (9,999 and 999, or 99,999 and 9,999 with Break HP and MP Limit); the HP and MP it carries are clamped under the new maxima.
+ */
+export function rebuildCarriedPools(ctx: Ctx): void {
+  for (const c of Object.values(ctx.state.combatants)) {
+    if (c === undefined || c.side === 'enemy') continue;
+    const flags = poolFlagsOf(c as FFXCombatant);
+    if (flags === 0) continue;
+    const target = c as FFXCombatant;
+    const rt = rtOf(ctx, target.id);
+    rt.poolBaseHp = target.stats.maxHp;
+    rt.poolBaseMp = target.stats.maxMp;
+    const next = applyDoubleHpMp(
+      {
+        buffFlags: flags,
+        baseMaxHp: target.stats.maxHp,
+        baseMaxMp: target.stats.maxMp,
+        maxHp: target.stats.maxHp,
+        maxMp: target.stats.maxMp,
+        hp: target.hp,
+        mp: target.mp,
+        autoB: autoWordB(target),
+      },
+      -1,
+    );
+    target.stats.maxHp = next.maxHp;
+    target.stats.maxMp = next.maxMp;
+    target.hp = next.hp;
+    target.mp = next.mp;
+    refreshCriticalStatus(ctx, target);
+  }
+}
+
+/**
  * Keep the dynamic `critical` (SOS) status in sync: automatic while HP is below
  * 50% of max [ffx-combat-core §4.2].
  */

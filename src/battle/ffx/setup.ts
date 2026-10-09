@@ -26,7 +26,7 @@ import { cloneData } from '../common/clone.ts';
 import type { FFXContentRegistry } from './registry.ts';
 import { type Ctx, type FFXRuntime, makeActorRuntime } from './state.ts';
 import { applyEquipmentToCombatant, AUTO_STATUS_ABILITIES, hasAuto } from './equipment.ts';
-import { refreshCriticalStatus } from './statuses.ts';
+import { rebuildCarriedPools, refreshCriticalStatus } from './statuses.ts';
 import { seedInitialCtb } from './turnQueue.ts';
 import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
 import { applyEvraeSetup } from './ai/evrae-rules.ts';
@@ -389,6 +389,7 @@ export function buildBattle(
     }
     refreshCriticalStatus(ctx, c);
   }
+  rebuildCarriedPools(ctx); // a chain's later links arrive with Double HP / Double MP on: their stats are the base maxima
 
   seedInitialCtb(ctx, setup.condition ?? 'normal');
   // Per-encounter scripted setup, each a no-op in every battle but its own. Macalania's opening is "a scripted pre-turn sequence" [ffx-seymour-anima-macalania §5.2]: Protect and Shell here.
