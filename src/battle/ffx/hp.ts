@@ -22,6 +22,12 @@ export interface DamageEventInfo {
   hitIndex: number;
   hitCount: number;
   capped?: boolean;
+  /**
+   * A lethal hit leaves the KO pending (re-parity, FFX only): the game runs the target's `onHit` before
+   * its death check, so a script that puts HP back stops the death. `hit-apply.ts` sets it for a target
+   * whose script {@link ../ai/hooks.ts ScriptHooks.holdsDeath}; `abilities.ts` settles it afterwards.
+   */
+  holdKo?: boolean;
 }
 
 /**
@@ -43,21 +49,11 @@ export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info:
   const wasAlive = isAlive(target);
   const hpBefore = target.hp;
 
-  // **A scripted per-hit cap and HP floor**, both engine-internal and both
-  // absent on every actor that does not set them
-  // [`ActorRuntime.damageCapPerHit` / `.hpFloor`]. This is the single funnel
-  // for every HP change from the damage chain, so a boss who "cannot be killed
-  // before he summons" is enforced here once rather than in each caller.
-  let applied = amount;
-  let capped = info.capped === true;
-  if (applied > 0) {
-    const rt = ctx.rt.actors.get(target.id);
-    if (rt?.damageCapPerHit !== undefined && applied > rt.damageCapPerHit) {
-      applied = rt.damageCapPerHit;
-      capped = true;
-    }
-    if (rt?.hpFloor !== undefined) applied = Math.min(applied, Math.max(0, hpBefore - rt.hpFloor));
-  }
+  // This is the single funnel for every HP change from the damage chain. Macalania's Seymour no longer gets a
+  // per-hit cap and an HP floor from here: the game lets a lethal hit through and his own `onHit` puts him back on
+  // his feet (`ai/macalania-seymour.ts`), which is what `info.holdKo` below waits for.
+  const applied = amount;
+  const capped = info.capped === true;
 
   applyHpDelta(target, applied);
 
@@ -84,14 +80,32 @@ export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info:
   if (capped) event.capped = true;
   ctx.emit(event);
 
-  if (overkill && !ctx.rt.overkilled.includes(target.id)) ctx.rt.overkilled.push(target.id);
+  // A target whose death waits for its `onHit` is marked overkilled only if it dies (`settleDeferredDeath`).
+  if (overkill && info.holdKo !== true && !ctx.rt.overkilled.includes(target.id)) ctx.rt.overkilled.push(target.id);
   refreshCriticalStatus(ctx, target);
   if (target.hp === 0 && wasAlive) {
+    if (info.holdKo === true) return; // the death check waits for the target's onHit (`settleDeferredDeath`)
     koActor(ctx, target, info.sourceId);
     // The killing blow is the only place the *excess* is knowable, so the
     // revive timer is armed here rather than inside `koActor`.
     if (applied > 0) schedulePartRevival(ctx, target, Math.max(0, applied - hpBefore));
   }
+}
+
+/**
+ * The death check a lethal hit left pending ({@link DamageEventInfo.holdKo}): after the target's
+ * `onHit` ran, a target still at 0 HP and still standing dies now. A no-op for anyone else.
+ */
+export function settleDeferredDeath(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId): void {
+  if (target.hp !== 0 || !target.alive || has(target, 'ko')) return;
+  // The lethal hit's overkill mark, which `dealDamage` held back: the latest damage event on this target says it.
+  for (let i = ctx.state.log.length - 1; i >= 0; i--) {
+    const e = ctx.state.log[i];
+    if (e?.type !== 'damage' || e.targetId !== target.id) continue;
+    if (e.overkill === true && !ctx.rt.overkilled.includes(target.id)) ctx.rt.overkilled.push(target.id);
+    break;
+  }
+  koActor(ctx, target, sourceId);
 }
 
 /**

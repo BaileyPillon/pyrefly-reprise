@@ -40,12 +40,11 @@ import './isaaru.ts';
 import './sin-scripts.ts';
 
 export * from './types.ts';
-export { seymourDelayCounter, seymourThresholdCounters, consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';
+export { consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';
 export { yunalescaCounter, yunalescaEntryAction } from './yunalesca.ts';
 export { bfaTalkCharges, consumeBfaTalk } from './braskas-final-aeon.ts';
 export { yuYevonCounter, YU_YEVON_CURAGA_THRESHOLD } from './yu-yevon.ts';
 export {
-  MACALANIA_ASSUMPTIONS,
   MAC_ACT,
   MAC_ANIMA_SUMMONED,
   MAC_ELEMENT_STEP,
@@ -53,7 +52,6 @@ export {
   applyMacalaniaSetup,
   consumeMacalaniaTalk,
   macalaniaAct,
-  macalaniaGuardianCounter,
   macalaniaNextElement,
   macalaniaTalkAvailable,
   runMacalaniaPhaseHooks,

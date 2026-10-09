@@ -77,7 +77,9 @@ export function advanceForm(ctx: Ctx, enemy: FFXCombatant): boolean {
  * off-field arrival never blocks victory and never grants a false one. All that
  * was missing is the six lines below.
  *
- * The CTB surgery is `advanceForm`'s: the arrival takes the next turn.
+ * The CTB surgery is `advanceForm`'s: the arrival takes the next turn. `partyDelay` is what the arrival's script
+ * adds to each active party member's counter (Anima's: 1, `research/re-ffx-ai-seymour.md` section 3.6), so she acts
+ * before any of them even when one stood at 0.
  *
  * **Presenter note.** This emits `part-restored`, the only shipped event that
  * means "a combatant that was off the field is on it, with this much HP". Its
@@ -85,7 +87,7 @@ export function advanceForm(ctx: Ctx, enemy: FFXCombatant): boolean {
  * holds — see `docs/handoff/chapter-macalania-engine.md` for the one presenter
  * change the arrival still needs.
  */
-export function revealEnemy(ctx: Ctx, enemy: FFXCombatant, slot?: number): void {
+export function revealEnemy(ctx: Ctx, enemy: FFXCombatant, slot?: number, partyDelay = 0): void {
   enemy.removed = false;
   enemy.flags.hidden = false;
   if (slot !== undefined) enemy.slot = slot;
@@ -93,6 +95,7 @@ export function revealEnemy(ctx: Ctx, enemy: FFXCombatant, slot?: number): void 
   delete enemy.statuses['ko'];
 
   rtOf(ctx, enemy.id).ctb = 0;
+  if (partyDelay !== 0) for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb += partyDelay;
   normalise(ctx);
 
   const event: Parameters<Ctx['emit']>[0] = { type: 'part-restored', partId: enemy.id, hp: enemy.hp };

@@ -9,7 +9,8 @@
  * rolls and the turn queue are batch W2).
  */
 
-import type { AbilityDef, ElementId, FFXCombatant, StatusId } from '../common/types.ts';
+import type { AbilityDef, CombatantId, ElementId, FFXCombatant, StatusId } from '../common/types.ts';
+import { holdsDeathForHook } from './ai/hooks.ts';
 import { idiv } from './math.ts';
 import { type Ctx, has, hasFlag, isAlive, onField, rtOf } from './state.ts';
 import { type HitDraws } from './adapt/draws.ts';
@@ -48,6 +49,12 @@ export interface HitScope {
   hitIndex: number;
   /** Total HP damage dealt so far (positive only). */
   totalDealt: number;
+  /**
+   * The targets the hit records have landed on since their scripts last heard of it, with their HP before the
+   * first record and the index of the last one: `resolveAbility` runs each one's `onHit` hook once its hits are
+   * in (re-parity).
+   */
+  touched: Map<CombatantId, { target: FFXCombatant; hpBefore: number; last: number }>;
 }
 
 /** Statuses this action tries to land, including weapon strikes. */
@@ -96,6 +103,11 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
     onFlatTrigger(ctx, target, 'rook', 'rook');
     target = bounced;
   }
+  // The record lands on `target` (a miss included): its script hears of it after the last one (`onHit`, once per action).
+  const seen = scope.touched.get(target.id);
+  if (seen) seen.last = scope.hitIndex;
+  else scope.touched.set(target.id, { target, hpBefore: target.hp, last: scope.hitIndex });
+  const holdKo = holdsDeathForHook(target) ? { holdKo: true as const } : {};
 
   const row = options.rowFor?.(target) ?? def; // this target's row: DmgCon and rider (od5); draws nothing
   const targetRt = rtOf(ctx, target.id);
@@ -172,6 +184,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
         crit: false,
         hitIndex: scope.hitIndex,
         hitCount: scope.totalHits,
+        ...holdKo,
       });
       scope.totalDealt += lethal;
     }
@@ -198,6 +211,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
         hitIndex: scope.hitIndex,
         hitCount: scope.totalHits,
         ...(report.capped ? { capped: true } : {}),
+        ...holdKo,
       });
       if (hpAmount > 0) {
         // A physical hit WAKES a sleeper [ffx-combat-core §4.2; the shipped
@@ -244,6 +258,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
         crit,
         hitIndex: scope.hitIndex,
         hitCount: scope.totalHits,
+        ...holdKo,
       });
     }
   }

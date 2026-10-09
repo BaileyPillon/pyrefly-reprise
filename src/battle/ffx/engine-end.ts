@@ -13,6 +13,7 @@ import { executeCommand } from './execute.ts';
 import { collectReactions, onTurnEnd } from './ticks.ts';
 import { collectSignals, evaluateTriggers } from './triggers.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
+import { drainScriptReactions } from './ai/reaction-drain.ts';
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
 import { runEvraePhaseHooks } from './ai/evrae-counters.ts';
 import { counterInputs } from './counter-inputs.ts';
@@ -86,6 +87,8 @@ export function afterAction(
         executeCommand(ctx, counterActor, counter.command, true);
       }
     }
+    // The reactions the boss scripts' hooks queued while the action resolved (re-parity, `ai/hooks.ts`), oldest first.
+    drainScriptReactions(h);
 
     // Equipment reactions: Counterattack, Auto-Potion, Auto-Med, Auto-Phoenix.
     if (def) {
@@ -112,7 +115,9 @@ export function afterAction(
     }
   }
 
+  drainScriptReactions(h); // what the equipment reactions set off
   onTurnEnd(ctx, actor);
+  drainScriptReactions(h); // what the turn's poison tick set off (a postPoison hook)
   rtOf(ctx, actor.id).turnsTaken += 1;
   if (actor.side === 'enemy') ctx.rt.lastEnemyActorId = actor.id;
   ctx.rt.currentActorId = null;
