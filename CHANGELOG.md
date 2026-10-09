@@ -9,6 +9,84 @@ picture, before and after where both exist. Engineering detail lives in `docs/ha
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
 
+## 2026-10-09 · Release candidate 1: Final Fantasy X battles from the game's own code (not live)
+
+Address: none yet (branch re-parity-rc1 on main 00fc1bbf, release 39.4.2; not pushed, not deployed, no review run)
+
+- **FFX:** every attack, spell, item and Overdrive now decides whether it hits, whether it is a
+  critical hit and how much damage it does the way the game's own program does, read from Bailey's
+  Steam copy and checked against it: the game's accuracy formula for each command, its order of
+  steps, its random draws in its order. Spells, items, Overdrives, aeon specials and several boss
+  attacks have no hit roll in the game and never miss (Seymour's Cross Cleave is one; the party
+  could dodge it before). Only the commands the game marks can land a critical hit: no spell does
+  any more (Lulu's Firaga and Thundaga lose their small chance), a few physical skills do
+  (Kimahri's Jump), and Daigoro's attack and Braska's Final Aeon's Triumphant Grasp do not. Luck
+  counts one point a stack in the critical sum, not ten. Damage follows the game's order of steps
+  (3 to 4 percent of ordinary hits were a point off), a natural Defense of 0 is no longer raised to
+  1, a petrified target takes no damage (Mortibody's Shattering Claw does nothing to a stoned party
+  member), the party's percent bonuses reach heals, and the five possessed aeons' plain attack
+  misses about half the time against the party's Evasion, as the game's record says.
+- **FFX, Chapter I:** Seymour Flux and the Mortiorchis follow the game's own script. One shared
+  cycle runs the pair, Flux Banishes an aeon on his next turn, his Protect and Reflect come once
+  each at 52,500 and 35,000 HP, and the Mortiorchis comes back at 4,000, 3,000, 2,000, 1,000 and
+  1,000 HP and takes Flux's turn counter after each of its turns, so Full-Life follows the Lance of
+  Atrophy far less often. With Cross Cleave unable to miss, the shipped auto-battle line wins all 500
+  test seeds (it won 267 of 500 on release 39.4.2).
+- **FFX, Chapter II:** Yunalesca follows her script. Her counters follow every action that reaches
+  her, a miss included; a form changes after the last hit of the blow that ended it and the rest of
+  a multi-hit blow is discarded; against a summoned aeon her Mind Blast and Osmose land on the aeon
+  on the field; Form II's counter advances on aeon turns. Harder: the shipped line wins 483 of 500
+  seeds (498 before) and loses 55 percent more party members.
+- **FFX, Chapter III:** Braska's Final Aeon, the Yu Pagodas, the five possessed aeons and Yu Yevon
+  follow their scripts. His Overdrive runs on a fixed gauge (+2 or +3 a turn, +5 a hit, +20 a
+  Power Wave) and fires the turn after it reads 100; Talk clears it when his next turn starts; Jecht
+  Beam comes a third of the time in his first and third phases. A destroyed Pagoda comes back after
+  two or three of its own turns (one if Slowed) carrying the damage it absorbed. A possessed aeon's
+  special lands on one actor (Bahamut's Impulse on all, Anima always Pain), a character the fayth
+  revives acts next, and Yu Yevon casts Gravija on every turn after his first, on the front line and
+  himself but not his Pagodas; his seventh damaging hit makes his next turn Osmose on each of the
+  three, then Ultima. A party that swings at him with a Zombie weapon now wins in about 24 turns, not
+  hundreds. The chapter still wins 486 of 500 seeds (487 before).
+- **FFX, Chapter VII:** Seymour, the Guado Guardians and Anima follow the script. Seymour's Shell and
+  the Guardians' Protect are real first turns, a Guardian drinks an Auto-Potion (+1,000 HP) when it
+  is damaged (not after a steal), Guard cover shields a Guardian from single-target blows, Anima's
+  gauge fills +5 a Pain and +5 an action that reaches her, a lethal blow before the summon lands
+  whole and Seymour is put back on 6,000 as Anima comes, and in act three he casts two spells at two
+  party slots (the Anima summon line is now triggered by the summon itself). The shipped line wins
+  443 of 500 seeds (482 before).
+- **FFX, Chapter X:** Natus owns the element order, his phase follows his HP down and back up,
+  Mortibody's Desperado ladder scores Shell, Haste, Reflect and the four Nuls, an aeon is Banished at
+  once, and Natus loses half of a Multi-ra when the third party slot is down. The shipped line, which
+  Hastes two and Shells three, now calls Desperado about half the time Mortibody checks. 386 of 500
+  seeds (393 before).
+- **FFX, Chapter XII:** Seymour Omnis and the Mortiphasm discs follow the script. The discs turn Fire,
+  Ice, Water, Thunder and reset Ice, Water, Thunder, Fire; he always casts four spells, in the
+  order the disc layout fixes; the reset turn casts nothing; hits during the glow are ignored. The
+  readout strip names four spells. Easier: 427 of 500 seeds (281 before).
+- **Both:** nothing else moved for the player. FFX-2 and FF7 are unchanged: their engine logs are
+  byte for byte the same, and no file their engines or data can reach changed except one shared type
+  file, whose additions are types only. No art, audio or saves changed; the only interface edits are
+  the Omnis readout strip and the enemy-intent previews' texts.
+- **Disclosed, FFX:** Chapter I is now won by the shipped line on every test seed (one sourced rule,
+  the Mortiorchis copying Flux's turn counter, is the whole move) and Chapter XII by 85 percent; the
+  painted Omnis discs still run the old colour order, so a one-step turn can read as a half turn on
+  screen, and the strip still prints "colour order: our estimate"; the strategy guides, the advisor
+  card and the auto-battle line for Chapters I, III and X still describe the old fights; the
+  Chapter VII, X and XII readouts, the Anima summon line and the enemy-intent previews had no
+  real-input check in a browser yet.
+- **Still the old rules, FFX:** turn order, status infliction and durations, Delay and the per-turn
+  ticks; the Overdrive gauge, Steal, Pilfer Gil, rewards, drops and the aeons' own stats; the boss
+  scripts of Chapters VIII, IX, XIV, XVII and XVIII; the game's own random number generators. Every
+  FFX-2 chapter is exactly release 39.4.2's.
+- **How it was checked:** tsc clean; the FFX engine's whole-chain logs on 18 pinned seeds match
+  each lane's own record except one chain link whose two damage numbers moved with the merged hook
+  order (explained and proved in docs/handoff/re-parity-rc1.md); the FFX-2 and FF7 logs pass
+  unchanged; the full unit suite once on the exact tree (970 files, 15,095 tests, 3 failures that
+  also fail on the untouched 39.4.2 tree: art installed after that release and not yet registered);
+  500 seeds a chapter through every FFX chain; a production build of the candidate (bundle
+  index-BcR9TGJ3.js). Details, the conflicts of the three merges and the decisions still open:
+  docs/handoff/re-parity-rc1.md.
+
 ## 2026-10-08 · Release 39.4.2 on echoesofspira.com
 
 Address: https://echoesofspira.com (main a021787a, bundle cUSnFK7q)
