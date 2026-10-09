@@ -99,24 +99,33 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * party's Attack record, so about half of it misses, as the record says (the old engine never missed). That moves the
  * digests of the links where a possessed aeon attacks (seed 1: links 5 to 7; seed 7: links 3 to 7); every outcome is still
  * victory and no other digest moved.
+ * Chapters I, VII, X and XII re-baselined 2026-10-09 by re-parity AI-Seymour ("game-script parity", FFX only): Seymour
+ * Flux and the Mortiorchis, Seymour with the Guado Guardians and Anima, Seymour Natus with Mortibody, and Seymour Omnis
+ * with the Mortiphasm discs now follow the game's own compiled scripts (research/re-ffx-ai-seymour.md, rows D-01 to D-33):
+ * the shared cycle state, the hooks that run once per action per target before the death check, the revive values, the
+ * formation start hooks, the Desperado ladder, the disc ring and the affinity timing. These eight digests (seeds 1 and 7 of
+ * those four chapters) move because every enemy turn and every hook of those fights moved; the other ten (Chapters II, III,
+ * VIII, IX and XIV) are byte for byte what they were. Four outcomes moved on seeds nobody tuned: seymour-flux#1 and #7
+ * defeat -> victory, seymour-natus#7 victory -> defeat, seymour-omnis#1 defeat -> victory and #7 victory -> defeat; the
+ * 500-seed tables and their causes are in docs/handoff/re-parity-ai-seymour.md. Nothing on the boss or the party was tuned.
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': '28692f2c:defeat',
-  'seymour-flux#7': 'f923eb10:defeat',
+  'seymour-flux#1': '2c90f3e4:victory',
+  'seymour-flux#7': 'b4e09b07:victory',
   'yunalesca#1': '2327f640:victory',
   'yunalesca#7': '4225415d:victory',
   'braskas-final-aeon#1': '567c3bf4:victory ea51a558:victory ba4a14f2:victory 509fbd2:victory 1ebf8f7c:victory da4942b3:victory e84aa63:victory',
   'braskas-final-aeon#7': '2b85c492:victory f82347e2:victory 42bd9a74:victory 48d2e753:victory 86304bae:victory 7e4d660e:victory cddd0f5d:victory',
-  'seymour-anima-macalania#1': '15ecc081:victory',
-  'seymour-anima-macalania#7': '86868cbf:victory',
+  'seymour-anima-macalania#1': 'd6364844:victory',
+  'seymour-anima-macalania#7': 'f5b75fc0:victory',
   'evrae-airship#1': '14674509:victory',
   'evrae-airship#7': '3c97dd63:victory',
   'yojimbo-cavern#1': 'fce6b795:victory',
   'yojimbo-cavern#7': 'c3a419df:victory',
-  'seymour-natus#1': 'd4682a0e:victory',
-  'seymour-natus#7': '2133d3d8:victory',
-  'seymour-omnis#1': 'b7b53dbe:defeat',
-  'seymour-omnis#7': '1a2a42df:victory',
+  'seymour-natus#1': 'c2522add:victory',
+  'seymour-natus#7': '514b6086:defeat',
+  'seymour-omnis#1': 'e6d67f23:victory',
+  'seymour-omnis#7': '9b077938:defeat',
   'isaaru-via-purifico#1': 'd916c9d0:victory bc11f7e3:victory 42ea7beb:victory',
   'isaaru-via-purifico#7': 'b073037f:victory 584e6881:victory e0f5e2d6:victory',
 };

@@ -28,9 +28,25 @@ import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts'
 
 const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
 const OUT = process.env['PYREFLY_MEASURE_OUT'];
-const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const;
 const MAX_STEPS = 200_000;
 const MAX_LINKS = 12;
+
+/**
+ * Seeds: `PYREFLY_MEASURE_SEEDS` is a range `1-500` or a list `1,7,42`; the default is 1 to 12 (the table in
+ * the W1 handoff). Chapters: `PYREFLY_MEASURE_CHAPTERS` is a comma list of chapter ids; the default is every
+ * FFX chapter. Added for the boss-AI parity batches, which measure four chapters over 12 and 500 seeds.
+ */
+function parseSeeds(spec: string | undefined): number[] {
+  if (!spec) return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const range = /^(\d+)-(\d+)$/.exec(spec);
+  if (range) {
+    const [from, to] = [Number(range[1]), Number(range[2])];
+    return Array.from({ length: to - from + 1 }, (_, i) => from + i);
+  }
+  return spec.split(',').map((s) => Number(s.trim())).filter((n) => Number.isFinite(n));
+}
+const SEEDS = parseSeeds(process.env['PYREFLY_MEASURE_SEEDS']);
+const ONLY = (process.env['PYREFLY_MEASURE_CHAPTERS'] ?? '').split(',').map((s) => s.trim()).filter((s) => s !== '');
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
 
@@ -44,6 +60,11 @@ interface Row {
   meanPartyTurns: number;
   meanEngineTurns: number;
   meanPartyKos: number;
+  /** One letter per seed, in seed order: W won every link, L lost, U unresolved (for paired before and after comparisons). */
+  perSeed: string;
+  seedList: string;
+  /** Every seed's own numbers, so a 12-seed table and a 500-seed table come from one run (and two runs can be paired). */
+  detail: Array<One & { seed: number }>;
 }
 
 interface One {
@@ -116,7 +137,7 @@ describe.skipIf(!MEASURE)('RE parity, FFX: the intended line in every FFX chapte
   it('measures wins, losses, party turns and party KOs over each chapter\'s whole chain', async () => {
     await registerBattleContent();
     const rows: Row[] = [];
-    for (const chapter of CHAPTERS.filter((c) => c.game === 'ffx')) {
+    for (const chapter of CHAPTERS.filter((c) => c.game === 'ffx' && (ONLY.length === 0 || ONLY.includes(c.id)))) {
       const runs: One[] = [];
       for (const seed of SEEDS) runs.push(await playChain(chapter, seed));
       rows.push({
@@ -129,9 +150,12 @@ describe.skipIf(!MEASURE)('RE parity, FFX: the intended line in every FFX chapte
         meanPartyTurns: mean(runs.map((r) => r.partyTurns)),
         meanEngineTurns: mean(runs.map((r) => r.engineTurns)),
         meanPartyKos: mean(runs.map((r) => r.partyKos)),
+        perSeed: runs.map((r) => (r.outcome === 'victory' ? 'W' : r.outcome === 'defeat' ? 'L' : 'U')).join(''),
+        seedList: SEEDS.length > 24 ? `${SEEDS[0]}-${SEEDS[SEEDS.length - 1]}` : SEEDS.join(','),
+        detail: runs.map((r, i) => ({ seed: SEEDS[i] as number, ...r })),
       });
     }
-    for (const row of rows) console.log(JSON.stringify(row));
+    for (const row of rows) console.log(JSON.stringify({ ...row, detail: undefined, perSeed: SEEDS.length > 60 ? `(${row.perSeed.length} seeds, see the JSON)` : row.perSeed }));
     if (OUT) writeFileSync(OUT, JSON.stringify(rows, null, 2));
-  }, 900_000);
+  }, 7_200_000);
 });
