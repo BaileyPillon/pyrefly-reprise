@@ -114,7 +114,7 @@ export const STATUSES_CORE: Record<string, FFXStatusDef> = {
     durationModel: 'battle-254',
     defaultTurns: 254,
     tickEffect:
-      'At the end of the victim\'s own turn, loses maxHP // 4 (25%) for characters; enemies use a per-monster percentage (EnemyFields.poisonTickPercent). Applies even while asleep or otherwise skipping a turn.',
+      'After each action the victim takes (its turn, once the action\'s results are applied), loses maxHP * percent / 100: 25% for characters and aeons, the monster record\'s own percentage for an enemy (EnemyFields.poisonTickPercent). A turn that is passed (a sleeper\'s) charges none (research/re-ffx-ctb-status.md §14.4).',
     curedBy: ['Antidote', 'Esuna', 'Remedy', 'Panacea'],
     clearedByKo: true,
     clearedByPetrify: true,
@@ -141,7 +141,7 @@ export const STATUSES_CORE: Record<string, FFXStatusDef> = {
     name: 'Sleep',
     durationModel: 'turns',
     tickEffect:
-      'Cannot act. Attacks against a sleeper always hit (bypasses the normal hit-chance table). Physical damage wakes the sleeper; magic damage does not. Poison and Doom still tick while asleep.',
+      'Cannot act. Attacks against a sleeper always hit (bypasses the normal hit-chance table). Physical damage wakes the sleeper; magic damage does not. Doom still counts down while asleep (it ticks at the start of the turn, before the Sleep check); Poison does not, because a passed turn charges none (research/re-ffx-ctb-status.md §14.4, §14.6).',
     curedBy: ['Esuna', 'Remedy', 'any physical hit (wakes, does not "cure" in the item sense)'],
     clearedByKo: true,
     clearedByPetrify: true,
@@ -358,7 +358,7 @@ export const STATUSES_CORE: Record<string, FFXStatusDef> = {
     durationModel: 'turns',
     defaultTurns: 10,
     tickEffect:
-      'At the START of ANY unit\'s turn (not only the carrier\'s), the carrier gains floor(elapsedTicks * maxHP / 256) + 100 HP. The +100 is an unconditional addend, not a clamp or minimum-only floor — it is paid at every boundary regardless of the tick term, which is why Regen is disproportionately strong on fast, low-HP actors. A carrier that is also Zombie takes this as DAMAGE instead (sign flips). The cast turn itself does not tick — the first payout lands at the very next turn boundary after casting.',
+      'At the START of ANY unit\'s turn (not only the carrier\'s), every Regen carrier on the field gains floor(ticks * maxHP / 256) + 100 HP, where ticks is the carrier\'s OWN tick counter: the clock ticks it has seen since its last payout or since its Regen began (at most 255). The +100 is an unconditional addend, not a clamp or minimum-only floor — it is paid at every boundary regardless of the tick term, which is why Regen is disproportionately strong on fast, low-HP actors. A carrier that is also Zombie takes this as DAMAGE instead (sign flips). The Regen counter counts down at the start of the carrier\'s OWN turns, after that turn\'s payout (a Regen of 10 pays at ten of the carrier\'s own turn starts and at every other unit\'s turn start in between); the first payout lands at the very next turn start after the cast (research/re-ffx-ctb-status.md §14.2).',
     curedBy: ['Dispel', 'Aerospark', 'Purifying Salt', 'Condemn (enemy removal effect)', 'Desperado (enemy removal effect)', "Dark Bahamut's Mega Flare (enemy removal effect)", "Dark Anima's Oblivion (enemy removal effect)"],
     notCuredBy: ['Auto-Regen cannot be removed by anything, including Dispel.'],
     clearedByKo: true,

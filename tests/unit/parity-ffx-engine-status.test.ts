@@ -21,7 +21,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { AbilityDef, FFXCommandRecord, StatusApplication, StatusId } from '../../src/battle/common/types.ts';
+import type { AbilityDef, FFXCombatant, FFXCommandRecord, StatusApplication, StatusId } from '../../src/battle/common/types.ts';
 import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
 import { CORE_ABILITIES, resolveAbility } from '../../src/battle/ffx/index.ts';
 import { resolveCommand } from '../../src/battle/ffx/adapt/command.ts';
@@ -71,8 +71,8 @@ function viaEngine(sit: StatusSituation, hits: number): Outcome {
     hp: target.hp,
     mp: target.mp,
     ctb: ctx.rt.actors.get(target.id)!.ctb,
-    maxHp: target.stats.maxHp,
-    maxMp: target.stats.maxMp,
+    maxHp: ejected ? 0 : target.stats.maxHp,
+    maxMp: ejected ? 0 : target.stats.maxMp,
     doom: !dead && !ejected ? (target.statuses['doom']?.turnsRemaining ?? null) : null,
     early: false,
   };
@@ -228,6 +228,29 @@ describe('rules the generator cannot reach', () => {
     resolveAbility(ctx, user, by('banish'), ['t']);
     expect(aeon.removed).toBe(true);
     expect(aeon.statuses['eject']).toBeDefined();
+  });
+
+  /** A party caster, and an enemy whose data carries no Doom countdown (Braska's Final Aeon, the Yu Pagodas are such), with Doom proof or not. */
+  function doomCase(doomProof: boolean) {
+    const rng = makeRng(7);
+    const user = combatantOf(randomSide(rng, true), 'yuna', 'party');
+    const foe = combatantOf(randomSide(rng, false), 'enemy-t', 'enemy');
+    if (doomProof) foe.immunities['doom'] = 255;
+    foe.enemy = { rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 0x7fffffff, drops: [] }, forms: [] } as unknown as FFXCombatant['enemy'];
+    const { ctx } = contextOf(user, foe, new ScriptedRng([7]), 0);
+    const doom = ability({ id: 'doom-test', formula: 'none', canMiss: false, targeting: 'single-enemy', statusEffects: [{ status: 'doom', chance: 255, duration: 5 }] });
+    return { ctx, user, foe, doom };
+  }
+
+  it('a Doom command against a Doom-proof enemy that carries no countdown resolves and lands nothing: only a Doom that lands asks for the countdown', () => {
+    const { ctx, user, foe, doom } = doomCase(true);
+    expect(() => resolveAbility(ctx, user, doom, ['enemy-t'])).not.toThrow();
+    expect(foe.statuses['doom']).toBeUndefined();
+  });
+
+  it('a Doom that lands on an enemy that carries no countdown is an error, not a guess', () => {
+    const { ctx, user, doom } = doomCase(false);
+    expect(() => resolveAbility(ctx, user, doom, ['enemy-t'])).toThrow(/doomTurns/);
   });
 
   it('an ordinary Eject against that aeon is refused by its immunity', () => {

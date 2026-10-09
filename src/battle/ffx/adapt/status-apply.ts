@@ -35,6 +35,7 @@ import {
   stackBytes,
   type StatusStepOutput,
 } from './status.ts';
+import { autoWordB } from './words.ts';
 
 /** What a combatant's statuses were when the hit began: the words the record started from, the stacks and the buff flags. */
 export interface Before {
@@ -101,7 +102,7 @@ export function applyStatusStep(
     const now = (after.perm & bit) !== 0;
     if (!was && now) {
       if (quiet(id)) continue;
-      add(ctx, target, id, instanceOf(id, {}, id === 'provoke' || id === 'threaten' ? source : source), false);
+      add(ctx, target, id, instanceOf(id, {}, source), false);
       out.added.push(id);
       if (id === 'threaten') rtOf(ctx, target.id).threatenChance = step.result.resist[11] as number;
     } else if (was && !now) {
@@ -208,8 +209,8 @@ function applyPools(ctx: Ctx, target: FFXCombatant, oldFlags: number, newFlags: 
     maxMp: target.stats.maxMp,
     hp: target.hp,
     mp: target.mp,
-    // The auto-abilities that lift the caps (Break HP Limit, Break MP Limit) are not in our equipment data.
-    autoB: 0,
+    // Break HP Limit and Break MP Limit (the equipment) lift the 9,999 and 999 ceilings.
+    autoB: autoWordB(target),
   };
   const next = applyDoubleHpMp(state, newFlags);
   target.stats.maxHp = next.maxHp;

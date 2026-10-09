@@ -136,9 +136,16 @@ export function autoWordA(c: FFXCombatant): number {
   return word;
 }
 
-/** `Chr+0x6be`: 0x800 Break Damage Limit. */
+/**
+ * `Chr+0x6be`: 0x200 Break HP Limit (the Double HP ceiling goes from 9,999 to 99,999), 0x400 Break MP Limit (999 to 9,999),
+ * 0x800 Break Damage Limit (the damage cap). `research/re-ffx-ctb-status.md` section 7.
+ */
 export function autoWordB(c: FFXCombatant): number {
-  return hasAuto(c, 'break-damage-limit') ? 0x800 : 0;
+  let word = 0;
+  if (hasAuto(c, 'break-hp-limit')) word |= 0x200;
+  if (hasAuto(c, 'break-mp-limit')) word |= 0x400;
+  if (hasAuto(c, 'break-damage-limit')) word |= 0x800;
+  return word;
 }
 
 /** `Chr+0x640`: 8 "every hit deals exactly 9999" (Trio of 9999, Quartet of 9), 0x10 "always critical" (Hero and Miracle Drink). */

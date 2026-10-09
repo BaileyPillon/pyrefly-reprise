@@ -92,6 +92,9 @@ export interface StatusExtras {
   hits: number;
   /** Extra statuses whose immunity byte is 254: NOT immune (the threshold is 255). */
   extraNear: number;
+  /** A party target wears Break HP Limit / Break MP Limit: the Double HP and Double MP ceilings rise from 9,999 and 999 to 99,999 and 9,999. */
+  breakHp: boolean;
+  breakMp: boolean;
 }
 
 export type StatusSituation = Situation & StatusExtras;
@@ -256,6 +259,9 @@ export function randomStatusSituation(rng: SeededRng, pool: readonly AbilityDef[
     // woken by the next): both are the engine's own business around a hit.
     hits: def.flags.includes('reflectable') || def.damageType === 'physical' ? 1 : rng.int(1, 3),
     extraNear: EXTRA_IDS.reduce((m, [, bit]) => ((extraImmune & bit) === 0 && chance(rng, 0.1) ? m | bit : m), 0),
+    // Monsters have no equipment, so no auto-ability block (the exe zeroes it); a party target may wear the two.
+    breakHp: !targetMonster && chance(rng, 0.3),
+    breakMp: !targetMonster && chance(rng, 0.3),
   };
   if (sit.userHaste === 0 && chance(rng, 0.12)) sit.userSlow = pickOf(rng, [1, 5, 254, 255]);
   if (base.userSide === 'party' && chance(rng, 0.5)) {
@@ -329,6 +335,13 @@ export function targetCombatant(sit: StatusSituation, id: string, side: 'party' 
     else if ((sit.extraNear & bit) !== 0) c.immunities[status] = 254;
   }
   if (sit.lifeImmune) c.immunityFlags.push('immune-to-life');
+  if (c.equipment && (sit.breakHp || sit.breakMp)) {
+    c.equipment.armor.autoAbilities = [
+      ...c.equipment.armor.autoAbilities,
+      ...(sit.breakHp ? ['break-hp-limit' as const] : []),
+      ...(sit.breakMp ? ['break-mp-limit' as const] : []),
+    ];
+  }
   if (sit.targetMonster) {
     c.enemy = {
       rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 0x7fffffff, drops: [] },
@@ -430,6 +443,7 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
   let hp = sit.target.hp, mp = sit.target.mp, ctb = sit.target.ctb;
   let maxHp = sit.target.maxHp, maxMp = sit.target.maxMp;
   const baseHp = sit.target.maxHp, baseMp = sit.target.maxMp; // the maxima before any Double HP or Double MP
+  const limitBits = (sit.breakHp ? 0x200 : 0) | (sit.breakMp ? 0x400 : 0); // `Chr+0x6be`: Break HP Limit, Break MP Limit
   let dead = dead0;
   let ejected = false;
   let early = false;
@@ -570,7 +584,7 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
     if (dead || ejected) {
       // The KO path puts the maxima back (the status reset drops the two flags).
       if ((buff & 3) !== 0) {
-        const pool = applyDoubleHpMp({ buffFlags: buff, baseMaxHp: baseHp, baseMaxMp: baseMp, maxHp, maxMp, hp, mp, autoB: 0 }, 0);
+        const pool = applyDoubleHpMp({ buffFlags: buff, baseMaxHp: baseHp, baseMaxMp: baseMp, maxHp, maxMp, hp, mp, autoB: limitBits }, 0);
         maxHp = pool.maxHp; maxMp = pool.maxMp; hp = pool.hp; mp = pool.mp;
       }
     } else {
@@ -579,7 +593,7 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
       if ((rec.buff ?? 0) !== 0 && (record.perm & 4) === 0) {
         const flags = buff | (rec.buff as number);
         if (((flags & ~buff) & 3) !== 0) {
-          const pool = applyDoubleHpMp({ buffFlags: buff, baseMaxHp: baseHp, baseMaxMp: baseMp, maxHp, maxMp, hp, mp, autoB: 0 }, flags);
+          const pool = applyDoubleHpMp({ buffFlags: buff, baseMaxHp: baseHp, baseMaxMp: baseMp, maxHp, maxMp, hp, mp, autoB: limitBits }, flags);
           maxHp = pool.maxHp; maxMp = pool.maxMp; hp = pool.hp; mp = pool.mp;
         }
         buff = flags;
@@ -603,5 +617,7 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
         buff,
       }
     : null;
-  return { kinds, words, dead: dead && !ejected, ejected, hp, mp, ctb, maxHp, maxMp, doom: words !== null && (finalExtra & 0x4000) !== 0 ? doomCounter : null, early };
+  // The maxima of a character that left the field are never read again, and what the exe's Eject does to them is not established
+  // (a KO runs the status reset and puts them back; this note does not claim Eject does): they are not compared.
+  return { kinds, words, dead: dead && !ejected, ejected, hp, mp, ctb, maxHp: ejected ? 0 : maxHp, maxMp: ejected ? 0 : maxMp, doom: words !== null && (finalExtra & 0x4000) !== 0 ? doomCounter : null, early };
 }

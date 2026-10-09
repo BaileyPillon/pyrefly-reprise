@@ -240,7 +240,7 @@ export type FFXStatusId =
   | 'shell'
   /** Bounces one single-target Blk/Wht spell. Not party-wide spells, Dispel, items, Overdrives or Mixes. */
   | 'reflect'
-  /** At the start of ANY unit's turn: `HP += floor(elapsedTicks * maxHP / 256) + 100` [ffx-combat-core §4.3]. Sign flips on a Zombie. */
+  /** At the start of ANY unit's turn: `HP += floor(ownTicks * maxHP / 256) + 100`, `ownTicks` the holder's own tick counter [ffx-combat-core §4.3; research/re-ffx-ctb-status.md §14.2]. Sign flips on a Zombie. */
   | 'regen'
   /** Nullifies one Fire attack (one charge). Beats Absorb. */
   | 'nulblaze'
@@ -398,11 +398,12 @@ export type StatusId = FFXStatusId | FFX2StatusId;
 export interface StatusInstance {
   id: StatusId;
   /**
-   * FFX: remaining duration in the **victim's own turns**, for the five
-   * ticking statuses (Sleep, Silence, Darkness, Slow, Regen) and for Doom's
-   * countdown. `254` = until the end of battle. `255` = permanent /
-   * undispellable. `null` when the status has no turn duration.
-   * [ffx-combat-core §4.1]
+   * FFX: remaining duration in the **victim's own turns**, for the nine
+   * ticking statuses (Sleep, Silence, Darkness, Shell, Protect, Reflect, Haste
+   * and Slow count down at the END of the holder's turn, Regen at the START of
+   * it) and for Doom's countdown. `254` = until the end of battle. `255` =
+   * permanent / undispellable. `null` when the status has no turn duration.
+   * [ffx-combat-core §4.1; research/re-ffx-ctb-status.md §14]
    */
   turnsRemaining: number | null;
   /**
@@ -1857,13 +1858,13 @@ interface BattleEventBase {
  * snapshot them.
  */
 export type BattleEvent =
-  /** A combatant's turn begins. FFX also reports the tick clock so Regen can pay out. */
+  /** A combatant's turn begins. FFX also reports the ticks the clock ran to reach it (presentation; Regen pays from each holder's own tick counter). */
   | (BattleEventBase & {
       type: 'turn-start';
       actorId: CombatantId;
       /** Battle turn counter, 1-based. */
       turn: number;
-      /** CTB ticks elapsed since the previous turn boundary. Feeds the Regen tick. */
+      /** CTB ticks elapsed since the previous turn boundary. */
       elapsedTicks: number;
     })
   /** A command has been chosen and is about to resolve. The presenter plays the wind-up here. */

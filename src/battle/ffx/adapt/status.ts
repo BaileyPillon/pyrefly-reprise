@@ -158,14 +158,16 @@ export function resistBytesWith(c: FFXCombatant, threatenChance: number): number
   return bytes;
 }
 
-/** `Chr+0x5c9`: the Doom countdown a new Doom starts from: 5 for every party slot, the monster record's byte for a monster. */
+/** `Chr+0x5c9`: the Doom countdown a new Doom starts from: 5 for every party slot, the monster record's byte for a monster (undefined when the data carries none). */
+function doomStartOf(c: FFXCombatant): number | undefined {
+  return c.side === 'enemy' ? c.enemy?.doomTurns : 5;
+}
+
+/** {@link doomStartOf}, as an error for an enemy that carries no countdown: a Doom that lands on it has nothing to start from. */
 export function doomStart(c: FFXCombatant): number {
-  if (c.side === 'enemy') {
-    const turns = c.enemy?.doomTurns;
-    if (turns === undefined) throw new Error(`FFX engine: enemy '${c.id}' can be Doomed but carries no doomTurns (the monster record's Doom countdown)`);
-    return turns;
-  }
-  return 5;
+  const turns = doomStartOf(c);
+  if (turns === undefined) throw new Error(`FFX engine: enemy '${c.id}' can be Doomed but carries no doomTurns (the monster record's Doom countdown)`);
+  return turns;
 }
 
 /** The pairs `[index, byte]` of a sparse record list, as a dense array of `length` bytes. */
@@ -311,6 +313,9 @@ export function runStatusStep(input: StatusStepInput, draw: (modulus: number) =>
   const none = { chances: new Array<number>(REGULAR_STATUS_COUNT).fill(0), durations: new Array<number>(TEMPORAL_STATUS_COUNT).fill(0) };
   const weapon = usesWeapon && user?.side === 'party' ? weaponBytes(user) : none;
   const sameActor = user !== undefined && user.id === target.id;
+  // The exe reads the Doom countdown only when a Doom lands, so only a landed Doom needs one: a Doom-proof boss with no
+  // `doomTurns` in its data (Braska's Final Aeon, the Yu Pagodas) is a valid target of a Doom command that cannot land.
+  const doomInitial = (status.extra & ExtraBit.Doom) !== 0 ? doomStartOf(target) : undefined;
   // The exe compares the two ids only (a self-cast); the engine's ids are names, so the kernel gets 0 for the user and 0 or 1 for the target.
   const kernelUser: InflictAllInput['user'] = user
     ? {
@@ -342,8 +347,8 @@ export function runStatusStep(input: StatusStepInput, draw: (modulus: number) =>
       extraImmune: extraImmuneWord(target, def),
       special: specialWord(target),
       ctb: rtOf(ctx, target.id).ctb & 0xff,
-      // Read only when a Doom lands: an enemy that can be Doomed must carry the countdown of its monster record (an error otherwise).
-      doomInitial: (status.extra & ExtraBit.Doom) !== 0 ? doomStart(target) : 0,
+      // Read only when a Doom lands (checked after the step): an enemy that can be Doomed must carry its monster record's countdown.
+      doomInitial: doomInitial ?? 0,
     },
     record,
     mask: 0,
@@ -351,6 +356,7 @@ export function runStatusStep(input: StatusStepInput, draw: (modulus: number) =>
     extraMask: mergeExtraStatusWord(status.extra, 0, usesWeapon),
   };
   const result = inflictStatuses(kernelInput, draw);
+  if (result.doomCounter !== null && doomInitial === undefined) doomStart(target); // a Doom landed with no countdown to start from: throws
   return { result, outcome: result.outcome, status };
 }
 

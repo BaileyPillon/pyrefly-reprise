@@ -10,6 +10,7 @@
 
 import type { AbilityDef, FFXCombatant, StatusId, StatusInstance } from '../common/types.ts';
 import { applyDoubleHpMp } from './kernel/status-pool.ts';
+import { autoWordB } from './adapt/words.ts';
 import { type Ctx, has, rtOf, statusOf } from './state.ts';
 
 /**
@@ -75,7 +76,7 @@ export function poolFlagsOf(c: FFXCombatant): number {
  * and the current HP or MP is clamped under the new maximum. The base is the maximum the combatant had before the flag first
  * went on, kept in `ActorRuntime.poolBaseHp` / `poolBaseMp` (a runtime a preview rebuilt from the public state does not carry
  * it: then the base of a doubled maximum is taken as half of it, rounded up, which is only ever read to put the maximum back).
- * Break HP Limit and Break MP Limit, which lift the caps, are not in our equipment data.
+ * The caps rise to 99,999 and 9,999 for a wearer of Break HP Limit and Break MP Limit (`adapt/words.ts#autoWordB`).
  */
 export function applyPoolFlags(ctx: Ctx, target: FFXCombatant, oldFlags: number, newFlags: number): void {
   const rt = rtOf(ctx, target.id);
@@ -90,7 +91,7 @@ export function applyPoolFlags(ctx: Ctx, target: FFXCombatant, oldFlags: number,
       maxMp: target.stats.maxMp,
       hp: target.hp,
       mp: target.mp,
-      autoB: 0,
+      autoB: autoWordB(target),
     },
     newFlags,
   );
