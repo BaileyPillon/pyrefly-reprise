@@ -144,15 +144,16 @@ export function applyAtbConfig(engine: BattleEngine | null): void {
  * sources). The wrapper is transparent when coaching is off, already seen, or
  * suppressed with `?coach=off`, so every capture harness sees the bare HUD.
  */
-export function createHud(game: GameId, field?: () => (OversoulField & StatusField) | null, engine?: BattleEngine | null, artNamespace?: string, advisorCap?: number): HudPort {
+export function createHud(game: GameId, field?: () => (OversoulField & StatusField) | null, engine?: BattleEngine | null, artNamespace?: string, advisorCap?: number, intentRoof?: boolean): HudPort {
   // FF7 gets its own HUD: Bailey's option A made more faithful (docs/plans/ff7-hud-faithful-a-spec.md).
   // Never the FFX-2 HUD, never a coach, never the shared phone rail: it draws FF7's own phone band (FF7 only).
   // The Item list's counts come from the engine's bag (the HUD holds no numbers of its own).
   if (game === 'ff7') return new Ff7BattleHud(engine instanceof Ff7Engine ? { itemCount: (id) => engine.inventory()[id] } : {});
   // The upright-phone layout, option B (Bailey, 2026-09-25; `ui/common/phoneBattle.ts`).
   // The FFX-2 HUD: the engine (advisor v3), and the scene's art namespace (the experimental Leblanc chapter's party heads come from its own paintings).
-  // `advisorCap`: the scene's cap on the advisor card's height (`SceneStaging.advisorCap`; Chapter VI's low-standing fiends), unset everywhere else.
-  const ffx2Options = { engine: engine instanceof FFX2Engine ? engine : null, ...(artNamespace ? { artNamespace } : {}), ...(advisorCap !== undefined ? { advisorCap } : {}) };
+  // `advisorCap`: the scene's cap on the advisor card's height (`SceneStaging.advisorCap`; a room whose fiends stand low), unset where none does.
+  // `intentRoof`: the scene hangs the enemy-intent slab over the highest enemy's head (`SceneStaging.intentRoof`; Chapter VI), unset everywhere else.
+  const ffx2Options = { engine: engine instanceof FFX2Engine ? engine : null, ...(artNamespace ? { artNamespace } : {}), ...(advisorCap !== undefined ? { advisorCap } : {}), ...(intentRoof ? { intentRoof } : {}) };
   const hud: HudPort = game === 'ffx'
     ? withSinHud(withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud)))
     : withPhoneLayout(new FFX2BattleHud(ffx2Options), installFfx2PhoneHud); // advisor v3
