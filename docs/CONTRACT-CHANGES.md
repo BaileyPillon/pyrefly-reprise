@@ -6,6 +6,23 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-09 — The FFX engine raises the game's `onHit` once per target per sub-action, and the boss AI of Chapters II and III follows the game's scripts (re-parity AI lane B; FFX only; no shared contract file changed)
+
+Branch `re-parity-ai-ffx-b`. No file in the contract list changed. Recorded because the engine's public surface and the order in which a boss's events arrive change. Handoff:
+[re-parity-ai-yunalesca-bfa](handoff/re-parity-ai-yunalesca-bfa.md). Game case: FFX only (FFX-2 and FF7 do not import these modules; `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- `src/battle/ffx/index.ts` exports `registerHitScript`, `queueReaction`, `drainReactions` and the types `HitEvent`, `HitHook`, `Reaction` (`hit-hooks.ts`); `FFXRuntime` gains the optional members `reactions`, `inReaction` and
+  `formDiedAtSeq` (through `HitRuntime`). A boss's AI script registers an `onHit` hook under its script id; nothing else reads them, so a combatant whose script registers none behaves exactly as before.
+- The hook runs once per target per sub-action, after the action's last hit record on that target and before the death check (`hit-event.ts`, called from `abilities.ts#resolveAbility`). A target whose script `managesHp` is held at
+  0 HP while the hits land (`DamageEventInfo.deferKo`, set by `hit-apply.ts`), so the script decides refill or death. The free actions a hook asks for (counters) are run by `engine-end.ts#afterAction` once the action is done; a hit a
+  reaction lands queues nothing further. A Doublecast is two sub-actions, so two events.
+- `ai/index.ts` no longer exports `yuYevonCounter`, and `ai/reactions.ts#collectBossCounters` no longer answers for Yunalesca or Yu Yevon: both answer from their hooks (`ai/yunalesca.ts`, `ai/yu-yevon.ts`), for every action that
+  reached them, a miss included, and for an enemy-side attacker too (a Yu Pagoda's Power Wave on a Zombie Yu Yevon).
+- `AbilityDef.extra.groupTarget` (a recognised key, documented in `data/ffx/enemies/braskas-final-aeon-abilities.ts`): exactly the combatants the script named, whatever the row's own single or multi flag says
+  (`targeting.ts#resolveTargets`). Set on Gravija (the front line and himself, not his Pagodas) and Osmose.
+- Draw order: a boss pick (`findMatchingChr`) draws only with two or more candidates, a roll is `GetRandomValue` (sixteen bits) reduced by the script's own `mod`; the engine's one seeded stream still supplies both. Adopting the
+  game's own generators is a separate decision (plan P3). Every seed-pinned Chapter II and III expectation downstream (the two goldens, the strategy and chapter tests) moved with it and was re-pinned with its cause.
+
 ## 2026-10-08 — `FFXPlainAttack`, `EnemyDef.plainAttack`, `EnemyFields.plainAttack`: an enemy's plain Attack on the game's own record (re-parity W1; FFX only; additive)
 
 Branch `re-parity`. `src/battle/common/types.ts` gains the interface `FFXPlainAttack` (`record: FFXCommandRecord`, `accuracy`, `critBonus`) and the optional member `plainAttack` on `EnemyDef`
