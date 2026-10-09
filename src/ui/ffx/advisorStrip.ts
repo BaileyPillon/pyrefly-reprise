@@ -18,9 +18,13 @@
  * third pass tries the same solve with a lower height floor. It runs only in the
  * Sin fights, and only when both of `advisorZone`'s passes decline, so no other
  * chapter's card changes.
+ *
+ * **After it, for every fight, comes the tip** (r3942-giants-ffx, `./advisorTip.ts`): one row of the card on whatever thin clear ground is left, for the frames the strip
+ * cannot serve either (Chapters I and III at Bailey's giants' sizes: their clear ground is 28 to 40 grid px tall, and the strip needs 45).
  */
 
 import { roomier } from './advisorRoomy.ts';
+import { tipZone } from './advisorTip.ts';
 import {
   ADVISOR_CHIP_RESERVE,
   MAX_ADVISOR_HEIGHT,
@@ -40,15 +44,23 @@ import {
 export const STRIP_MIN_HEIGHT = 34;
 
 /**
- * `advisorZone`, then (only when `strip` is set) the strip; `null` when even a
- * strip has no clear ground. The HUD sets `strip` in the two Sin fights alone
- * (their state carries `sin.*` flags): a declined card elsewhere is a designed
- * answer that tests pin (a read-out opened with E takes the band), so no other
- * chapter's card can move.
+ * `advisorZone`, then (only when `strip` is set) the strip, then (only when `tip` is set) the
+ * one-row tip (`advisorTip.ts`); `null` when even a tip has no clear ground. The HUD sets `strip` in
+ * the two Sin fights alone (their state carries `sin.*` flags), and `tip` in every fight but while the
+ * enemy-move read-out is open: a read-out opened with E takes the band, and the card with it, as a
+ * designed answer that tests pin. No chapter whose card the designed passes place can move: the
+ * strip and the tip are asked only of a board they all declined.
  */
-export function advisorZone(input: AdvisorZoneInput, strip = false): AdvisorZone | null {
+export function advisorZone(input: AdvisorZoneInput, strip = false, tip = false): AdvisorZone | null {
   const designed = roomier(input, solveDesigned(input)); // PR-0330: a compact answer is improved first
-  if (designed || !strip) return designed;
+  if (designed) return designed;
+  const stripped = strip ? stripZone(input) : null;
+  if (stripped || !tip) return stripped;
+  return tipZone(input);
+}
+
+/** The Sin fights' strip: the designed solve with a lower height floor (34), or `null`. */
+function stripZone(input: AdvisorZoneInput): AdvisorZone | null {
   const reserve = Math.max(ADVISOR_CHIP_RESERVE, input.chipReserve ?? 0);
   const box = solveBox(obstaclesOf(input), {
     minWidth: MIN_ADVISOR_WIDTH + SKEW * STRIP_MIN_HEIGHT,

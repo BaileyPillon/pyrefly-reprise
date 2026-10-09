@@ -281,6 +281,18 @@ export interface AdvisorZoneInput {
    */
   enemies?: readonly Rect[];
   chipReserve?: number; // measured chip height + gap, grid px (floor: ADVISOR_CHIP_RESERVE)
+  /**
+   * The small key chips along the top of the stage that only the one-row tip needs to keep off (`advisorTip.ts`): the strategy guide's G and scroll chips and the PAUSE chip. They are
+   * not obstacles to the designed card (its boxes never reach them at 100 percent text), so no other pass reads this field. Absent: none.
+   */
+  keepOff?: readonly Rect[];
+  /**
+   * The same list as {@link enemies}, with each painted silhouette taken to where the camera's shot comes to rest (`FFXBattleHud.enemySpriteRectsAtRest`), for the one-row tip only
+   * (`advisorTip.ts`). `enemies` follows the live silhouette so the designed card keeps clear of the gold target bracket drawn on it, and a camera that is still gliding in the first
+   * seconds of a decision carries that box 25 to 30 grid px over the top row, which the tip has 3 to 4 px of slack above: it stood on the top row only when the solve happened to land
+   * after the glide (r3942-giants-ffx). Absent: the tip reads `enemies`.
+   */
+  enemiesAtRest?: readonly Rect[];
 }
 
 /** Where the advisor card's box goes. `bottom` is distance from the stage's bottom edge. */
@@ -292,7 +304,9 @@ export interface AdvisorZone {
    * Tallest the card may grow before it would reach whatever is above it.
    *
    * Never less than {@link MIN_ADVISOR_HEIGHT}: a box that cannot offer that
-   * much is not returned at all.
+   * much is not returned at all. (Two kinds are the exceptions, and say so: the
+   * Sin fights' strip, 34, `advisorStrip.ts`, and the one-row tip, 18,
+   * `advisorTip.ts`: both are the last resort of a frame with no room for a card.)
    */
   maxHeight: number;
   /**
@@ -301,7 +315,7 @@ export interface AdvisorZone {
    * rather than chosen first — that is the whole change from the round-02
    * build, where the name came first and the geometry was bent to reach it.
    */
-  kind: 'shelf' | 'pocket' | 'open' | 'compact';
+  kind: 'shelf' | 'pocket' | 'open' | 'compact' | 'tip';
 }
 
 /**

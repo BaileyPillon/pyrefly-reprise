@@ -46,7 +46,7 @@ import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { withOverdriveFocus } from './overdriveFocus.ts';
 import { showOverdrivePlate } from './overdrivePlate.ts';
-import { INTENT_AVOID_SELECTORS, ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR, chipObstacleEls, chipReserveOf, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
+import { INTENT_AVOID_SELECTORS, ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR, chipObstacleEls, chipReserveOf, rectsOf, topChipEls, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey, unionOf } from './hudPlacementKeys.ts';
 import { doomNoteOf } from './DoomCounters.ts';
 import { zombieTargetNote } from './zombieTargetNote.ts';
@@ -63,6 +63,7 @@ import {
   type Rect,
 } from './hudSafeZones.ts';
 import { advisorZone } from './advisorStrip.ts';
+import { TIP_BADGE } from './advisorTip.ts';
 import { intentChipDockAt } from './intentChipDock.ts';
 
 export { intentChipDockAt } from './intentChipDock.ts';
@@ -1216,6 +1217,7 @@ export class FFXBattleHud implements HudPort {
         this.clearAdvisorBox(card, chip);
       }
       card.hidden = true;
+      this.advisor.el.classList.remove('mad--tip');
       if (chip) {
         const dock = this.heldAdvisorChipDock;
         if (dock) {
@@ -1254,12 +1256,15 @@ export class FFXBattleHud implements HudPort {
       delete card.dataset['zone'];
       this.appliedAdvisorBox = '';
     }
+    // The tip (`advisorTip.ts`): the chip is the bar's badge, on its left in the same row, key only (`move-advisor-tip.css`, `.mad--tip`).
+    const tip = zone.kind === 'tip';
+    this.advisor.el.classList.toggle('mad--tip', tip && cardUp);
     if (chip) {
       // With the card up the chip rides just above it; with the player's `N`
       // holding the card down it takes the zone's own bottom edge, rather than
       // the stylesheet anchor in the middle of the party.
-      chip.style.left = `${zone.left.toFixed(2)}px`;
-      const bottom = cardUp ? zone.bottom + card.offsetHeight + ADVISOR_CHIP_GAP : zone.bottom;
+      chip.style.left = `${(tip ? zone.left - TIP_BADGE : zone.left).toFixed(2)}px`;
+      const bottom = cardUp ? (tip ? zone.bottom + Math.max(0, card.offsetHeight - chip.offsetHeight) / 2 : zone.bottom + card.offsetHeight + ADVISOR_CHIP_GAP) : zone.bottom;
       chip.style.bottom = `${bottom.toFixed(2)}px`;
     }
   }
@@ -1346,6 +1351,8 @@ export class FFXBattleHud implements HudPort {
     // Outwards, never inwards, so a snapped obstacle is never smaller than the
     // panel it stands for. The intent slab gets a coarser quantum because it is
     // the only input that moves *every frame*.
+    // Yojimbo's Zanmato gauge and banner (FFX, Chapter IX only) and Omnis's disc strip and intent line (Chapter XII only): ink, as solid as a boss.
+    const inkRects = [...this.zanmato.obstacleEls(), ...chipObstacleEls(this.el), ...this.el.querySelectorAll<HTMLElement>([...ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR].join())].flatMap((e) => growToGrid(this.stageRect(e), 1) ?? []);
     const input = {
       // `.ig-cmd-stack` and the breadcrumb, **not** `.ffx-cmd-area`'s union
       // with the help slab. The union's top edge was the slab's — y 131 in
@@ -1375,8 +1382,10 @@ export class FFXBattleHud implements HudPort {
       // card was printed 773 grid px² deep into Seymour Flux and 1 626 into
       // Braska's Final Aeon: the only fighters the solver had ever been told
       // about were the party's.
-      // Plus Yojimbo's Zanmato gauge and banner (FFX, Chapter IX only) and Omnis's disc strip and intent line (Chapter XII only): ink, as solid as a boss.
-      enemies: [...this.enemySpriteRects().map((r) => growToGrid(r, 4)!), ...[...this.zanmato.obstacleEls(), ...chipObstacleEls(this.el), ...this.el.querySelectorAll<HTMLElement>([...ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR].join())].flatMap((e) => growToGrid(this.stageRect(e), 1) ?? [])],
+      // Plus the ink (`inkRects`, above).
+      enemies: [...this.enemySpriteRects().map((r) => growToGrid(r, 4)!), ...inkRects],
+      // What only the one-row tip reads (`advisorTip.ts`): the small chips along the top, the guide's G and scroll chips and the PAUSE chip.
+      keepOff: topChipEls(this.el).flatMap((e) => growToGrid(this.stageRect(e), 1) ?? []),
     };
     const key = [
       this.advisorDecisionSeq,
@@ -1394,6 +1403,7 @@ export class FFXBattleHud implements HudPort {
       // solve on the frame they land.
       input.sprites.length,
       input.enemies.length, input.chipReserve,
+      input.keepOff.map(rectKey).join(';'),
     ].join('|');
 
     const held = this.heldAdvisor;
@@ -1423,7 +1433,10 @@ export class FFXBattleHud implements HudPort {
     const panels = panelPresence(input);
     const stale = this.advisorFree;
     const holdFree = stale !== null && stale.seq === this.advisorDecisionSeq && stale.panels === panels;
-    const zone = holdFree ? null : advisorZone(input, Object.keys(this.lastState?.flags ?? {}).some((k) => k.startsWith('sin.'))); // F3: the strip is for the Sin fights
+    // F3: the strip is for the Sin fights; the one-row tip (`advisorTip.ts`, r3942-giants-ffx) is for any fight whose frame is too full for the card, but not while the enemy-move read-out is open: it takes the band.
+    // The tip also reads the fighters where the camera's shot comes to rest (`enemiesAtRest`), which only a fresh solve needs, so it is not built for every frame's key.
+    const solveInput = holdFree ? input : { ...input, enemiesAtRest: [...this.enemySpriteRectsAtRest().map((r) => growToGrid(r, 4)!), ...inkRects] };
+    const zone = holdFree ? null : advisorZone(solveInput, Object.keys(this.lastState?.flags ?? {}).some((k) => k.startsWith('sin.')), input.intent === null);
     this.advisorFree = zone ? null : { seq: this.advisorDecisionSeq, panels };
     const solved: HeldAdvisorPlacement = {
       key,
@@ -1511,6 +1524,26 @@ export class FFXBattleHud implements HudPort {
     return this.spriteRects(
       state.enemyIds.filter((id) => state.combatants[id]?.alive !== false),
       (rect, id, toGrid) => enemyObstacleRect(rect, id, state, this.targeting?.rect(id) ?? null, toGrid),
+    );
+  }
+
+  /**
+   * {@link enemySpriteRects} with each painted silhouette carried to where the camera's shot comes to rest (the head point's way from where it is drawn to where it settles), for the
+   * one-row tip (`advisorTip.ts`, `AdvisorZoneInput.enemiesAtRest`): the estimate is already the resting one, the live box is what a camera still gliding in the first seconds of a
+   * decision carries 25 to 30 grid px over the top row. At rest the two lists are the same.
+   */
+  private enemySpriteRectsAtRest(): Rect[] {
+    const state = this.lastState;
+    if (!state) return [];
+    return this.spriteRects(
+      state.enemyIds.filter((id) => state.combatants[id]?.alive !== false),
+      (rect, id, toGrid) => {
+        const real = this.targeting?.rect(id) ?? null;
+        const live = real ? this.project(id, 'head') : null;
+        const rest = live ? this.layoutProject?.(id, 'head') : null;
+        const settled = real && live && rest ? { ...real, x: real.x + rest.x - live.x, y: real.y + rest.y - live.y } : real;
+        return enemyObstacleRect(rect, id, state, settled, toGrid);
+      },
     );
   }
 

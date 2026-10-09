@@ -760,14 +760,18 @@ function wallProjector(): (id: string, anchor: string) => { x: number; y: number
 }
 
 /**
- * Three sprites shoulder to shoulder across the frame from grid y 60 down.
+ * Three sprites shoulder to shoulder across the frame from grid y 26 down.
  *
  * `wallProjector` covers the stage outright, which is the right board for
  * "declines rather than invent a box" and the wrong one for "and then docks
- * the chip" — there is nowhere to dock it either. This leaves the top 54 grid
- * px clear: too short for a card (which needs `MIN_ADVISOR_HEIGHT` plus its
- * chip's reserve, 83) and roomy for a 56 x 11 chip. See `partySpriteRects` for
- * the reconstruction these two points are solved backwards from.
+ * the chip" — there is nowhere to dock it either. This leaves the top 14 grid
+ * px clear (the stage's 6 px margin to the sprites' top less their 6 px of
+ * clearance): too short for a card (which needs `MIN_ADVISOR_HEIGHT` plus its
+ * chip's reserve, 83), for the Sin strip (45) and for the one-row tip
+ * (`advisorTip.ts`, 16: a band of 54 grid px, which this fixture was until
+ * r3942-giants-ffx, holds a tip), and roomy for a 56 x 11 chip. See
+ * `partySpriteRects` for the reconstruction these two points are solved
+ * backwards from.
  */
 function floorWallProjector(): (id: string, anchor: string) => { x: number; y: number } {
   const xs = new Map<string, number>();
@@ -775,7 +779,7 @@ function floorWallProjector(): (id: string, anchor: string) => { x: number; y: n
   return (id, anchor) => {
     if (!xs.has(id)) xs.set(id, columns[xs.size % columns.length]!);
     const x = xs.get(id)!;
-    return anchor === 'head' ? { x, y: -133.6 } : { x, y: 283.8 };
+    return anchor === 'head' ? { x, y: -188 } : { x, y: 229.4 };
   };
 }
 
@@ -897,8 +901,8 @@ describe('the FFX HUD applying the advisor zone', () => {
       expect(chip.style.left).not.toBe('');
       expect(chip.style.bottom).not.toBe('');
       expect(parseFloat(chip.style.left)).not.toBeCloseTo(196, 1);
-      // In the clear band above the party's heads, which is grid y 6..54 here.
-      expect(360 - parseFloat(chip.style.bottom)).toBeLessThanOrEqual(54);
+      // In the clear band above the party's heads, which is grid y 6..20 here.
+      expect(360 - parseFloat(chip.style.bottom)).toBeLessThanOrEqual(20);
     });
 
     it('takes a measured zone again at the next decision', () => {
