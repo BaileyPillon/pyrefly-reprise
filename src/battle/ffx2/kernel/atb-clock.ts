@@ -167,6 +167,7 @@ export function atbSpeeds(i: Ffx2SpeedInput): Ffx2AtbSpeeds {
   if (i.slowed && s > 1) s = sdiv(s, 2);
   const awake = (i.stopState & ~Ffx2StopBit.Asleep) !== 0 ? 0 : s;
   const active = i.stopState !== 0 ? 0 : awake;
+  // Live game, 2026-10-09 (research/re-ffx2-timing-measured.md): Chr+0xd65 stayed 0 in all 7 charge countdowns, so in play only the hit reaction halves.
   const halved = i.charging || (!i.hitReactionExempt && i.hitReaction);
   const tick = halved && active > 1 ? sdiv(active, 2) : active;
   return { raw: s, awake, active, tick };

@@ -3,7 +3,9 @@
 **Game case: FFX-2 only.** FFX has its own scripts and its own engine; they have their own notes. This note covers three FFX-2
 chapters: `ffx2-leblanc` (Act I the Chateau entrance, Act II Logos' room, Act III the Last Room), `ffx2-den-of-woe` (Baralai,
 Gippal, Nooj) and `ffx2-ixion-djose` (Ixion). Part of the `re-parity` track ([docs/plans/re-parity.md](../docs/plans/re-parity.md)),
-P6 (boss AI follows the scripts). Drafted 2026-10-08. Research only: no engine or AI code is changed by this note. It continues
+P6 (boss AI follows the scripts). Drafted 2026-10-08; the clock during effects (1.10, E1), the charge tick (1.4, section 6) and the
+logic rate corrected on 2026-10-09 from the live measurement ([re-ffx2-timing-measured.md](re-ffx2-timing-measured.md)). Research only:
+no engine or AI code is changed by this note. It continues
 [re-ffx2-ai-bahamut-vegnagun.md](re-ffx2-ai-bahamut-vegnagun.md); that note's section 1 (polls, random sources, the weighted target
 pick, the inert time-out block) applies here unchanged, and section 1 below adds only what these scripts need beyond it.
 
@@ -53,8 +55,9 @@ written in our own words: no script text, no game text and no decompiled code is
    is not what the script does. The Attack:Thundara split is 3:1 (`% 4`), as in the research's choice. Recharge heals him 200
    HP and 200 MP (HP+MP class, fixed) and nothing in his script ever looks at MP.
 10. **Pace is set by each move's own rest and charge numbers** (section 6): the three shades' special moves have rest 0, so
-    they follow one another after their charge and animation only; Ormi's Supercollider charges for 296 steps at AGI 63. While
-    any command's effect plays, every gauge in the battle stands still, the party's included.
+    they follow one another after their charge and animation only; Ormi's Supercollider charges for 296 steps at AGI 63. On the
+    running game (2026-10-09) no gauge stood still while the effect of an Attack, a Fire or a monster cast played; only the Wait flag
+    stopped the clock (1.10).
 11. **The authored values in our data are replaced by the files' numbers** (section 2): every actor has ACC 95 (we have 0); the
     two goons are Lv 14 and Lv 16 with DEF 6 and 5 (we author 30 and 20); Acts I and II Ormi and Act II Logos carry their
     own STR/AGI (63 AGI for both Ormi, 90 for Logos); steals are 255/255 for the goons, 192/255 for the trio and 128/255
@@ -79,8 +82,8 @@ written in our own words: no script text, no game text and no decompiled code is
   run, or partly inferred; [L] open.
 - **Notation.** A "poll" is one call of a monster's action entry, a "step" one battle logic step, a "unit" one count of a gauge
   (95 units fall per step at Normal speed). "Girl" is a party member (Yuna slot 0, Rikku 1, Paine 2). "Slot 1 to 3" are the
-  formation's monster slots. Numbers are written as the files have them. Seconds are shown as "at 30/s" and "at 60/s" because
-  the PC logic rate is not settled (the previous note's section 0 gives the evidence, which favours 30/s).
+  formation's monster slots. Numbers are written as the files have them. Seconds are at the measured 29.97 steps a
+  second (one step is 0.033367 s; the logic rate was measured on the running game, 2026-10-09).
 - **Rows.** A command id is a row of `monmagic.bin` (4xxx) or `command.bin` (3xxx). Section 3.2 explains how to read the
   formula, class and damage-type columns.
 
@@ -147,8 +150,12 @@ record's own thinking byte (30 for the two goons) is read by nothing here. A mon
 dead or petrified**, added to its recovery each time a command ends ([re-ffx2-atb-status.md](re-ffx2-atb-status.md) section
 3.4). The first gauge is 25% to 74% of `70 x 10000 / (AGI + 1)` units, drawn once at battle start (section 6 gives the windows).
 The tick of a monster whose special word has bit 1 set (Ormi, Logos, Leblanc, the shades and Ixion: words 0x183 and 0x3c3)
-is **not** halved while it charges or is in hit reaction; the two goons (word 0x98) are, so a goon's charge takes twice as
-long as the units suggest.
+is not halved while it is in hit reaction; the two goons (word 0x98) are. Whether the bit also exempts a charge no longer matters in
+play: the charging flag stayed 0 through every charge countdown measured on the running game (a girl's Fire and six monster casts,
+all at the full 95 units a step), so a charge falls the full tick for the actors measured and is expected to for every other actor, a
+goon's included (the goons were not among the monsters measured). The earlier remark that a goon's charge takes twice as long as the
+units suggest is withdrawn. (The ATB note and the kernel read the bit as exempting only a hit reaction; the difference is moot while
+the flag stays 0.)
 
 ### 1.5 Death patterns and the death entry [H for the entries, M for the effect]
 
@@ -192,11 +199,19 @@ successes when it holds an item, and a success clears the chance (one steal per 
 time and pays `floor((draw % 101 + 100) x figure / 200)`, which is **50% to 100% of the record's figure (75% on average)**,
 and is then spent.
 
-### 1.10 The clock stands still while a command's effect plays [H]
+### 1.10 The clock does not stand still while a command's effect plays [measured; which commands stop it, if any, is L]
 
-While a command's effect sequence plays, every gauge, the charge countdown and the group-2 status clocks stand still, in
-Active and in Wait mode, for the whole battle ([re-ffx2-atb-status.md](re-ffx2-atb-status.md) section 2). The length is the
-animation's, which was not read. This is the whole of the game's "action time"; section 8 row E1 compares it with ours.
+The code reading ([re-ffx2-atb-status.md](re-ffx2-atb-status.md) section 2) was that while a command's effect sequence plays every
+gauge, the charge countdown and the group-2 status clocks stand still. **On the running game this did not happen**
+([re-ffx2-timing-measured.md](re-ffx2-timing-measured.md) section 7, 2026-10-09): the action-executing flag was 1 for 552 steps,
+covering the effects of Paine's Fire and four monster casts, and every gauge and a charge countdown went on falling through them
+at the full tick (a monster's recovery fell 75 times during Fire's 75-step effect; a 188-step countdown ran through 77 steps of
+another monster's effect); plain Attacks never raised the flag. Only the Wait flag stopped the clock (719 steps). So the command
+check's first output stayed 0 for those commands. Which commands raise it, if any, is open, and no command of this note was
+measured. The group-2 status clocks, which the code has wait while an action is executing, were not sampled. What the game does
+have is the actor's own time: a command keeps its user in the executing state before its recovery starts (the Iron Giant's Attack
+took 57 steps = 1.9 s from the end of its recovery to the start of the next; Paine's Fire 100 steps of countdown plus 75 of
+effect). Section 8 row E1 compares it with ours.
 
 ### 1.11 Formula glossary (own words; the bases are validated in the damage notes)
 
@@ -580,9 +595,9 @@ M, rest 100, charge 120): magic on all party, **no element byte** (so Lightning 
 
 ## 6. Cadence reference (units from the rows; steps at Normal speed, no Haste or Slow)
 
-Recovery = `cost_atb x 10000 / (AGI + 1)`, charge = `cost_cast x 10000 / (AGI + 1)`; 95 units fall per step; divide steps by 30
-or by 60 for seconds (the rate is unsettled). A goon's charge takes twice the steps shown (1.4). The thinking wait of 1.4
-(30 steps per fallen girl) is added after every command.
+Recovery = `cost_atb x 10000 / (AGI + 1)`, charge = `cost_cast x 10000 / (AGI + 1)`; 95 units fall per step, for a charge as well as a
+recovery (1.4); divide steps by 29.97 for seconds (the measured rate). The thinking wait of 1.4 (30 steps per fallen girl) is added
+after every command.
 
 | Actor (AGI) | Move | Charge units (steps) | Rest units (steps) |
 |---|---|---|---|
@@ -627,7 +642,7 @@ or by 60 for seconds (the rate is unsettled). A goon's charge takes twice the st
 | | No Love Lost (each of three) | 0 | 0 |
 | Dr. Goon (56) | Attack | 0 | 17,543 (185) |
 | Fem-Goon (62) | Attack | 0 | 15,873 (167) |
-| | any of the eight spells | 11,111 (117, so about 234 with the goon's halved tick) | 0 |
+| | any of the eight spells | 11,111 (117) | 0 |
 
 **First polls.** The first gauge runs 25% to 74% of `70 x 10000 / (AGI + 1)` units: Ixion 1,258 to 3,736 units (13 to 39
 steps), Baralai 16 to 48, Gippal 16 to 46, Nooj 15 to 45, Ormi 29 to 85 (Acts I and II) or 43 to 127 (Act III), Logos 20 to 60
@@ -648,8 +663,9 @@ Huggles' three hits applies it was not traced [M].
   edge cases are not.
 - **The third Roulette row** [M]: labelled Slow by the script, built as group-1 slot 3 (Silence).
 - **Animation lengths, effect reach (the arcs of Bullseye and Mortar, the 5 m of Glint), and the length of "action time"** [L]: not
-  in the scripts; the freeze itself is read (1.10).
-- **Logic rate** [L]: 30 or 60 steps per second.
+  in the scripts; no freeze was seen on the running game (1.10), where a few effect lengths were measured (Fire 75 steps, monster
+  casts 84 to 114).
+- **Logic rate**: settled, 29.97 steps a second (measured on the running game, 2026-10-09).
 - **Near-weighted odds in practice** [L]: positions and facing at each poll; only Ixion's start positions are known.
 - **Per-hit application of Delay for Huggles** [M].
 - Dialogue, camera and message text were not extracted, and the scripts contain none of the speech that the Vegnagun fight has.
@@ -701,7 +717,7 @@ Row key: *game* = this note (source file and lines); *ours* = file:line in `src/
 | I5 | Action time | see E1 | `DJOSE_ACTION_TIME_SECONDS = 3` on Ixion's own gauge (`ixion-djose.ts:43-46`) | see E1 |
 | H1 | Hit rolls and Darkness | only the plain Attacks (ACC 95 or byte 95) and the 1H Pistol (byte 140) roll to hit, and Darkness cuts those; Grinder, Mortar, Glint, Chain Attack, Drill Shot, Supercollider, Huggles, Hail of Bullets, Mach Fan and every spell and grenade never roll, and Supercollider and Huggles ignore Darkness (rows, misc bits) | Grinder, Mortar, Glint and the Triple Attack roll to hit (no `canMiss: false`, `den-of-woe-abilities.ts:60-66,74-79,92-104,152-171`); Supercollider rolls and is affected by Darkness (`leblanc-syndicate-abilities.ts:155-185`); Huggles is authored "accuracy checked" and affected by Darkness (`:91,212`) | ours can miss with moves that never miss, and Darkness blunts two moves it cannot touch in the game |
 | H2 | Delay size | Supercollider and Mach Fan carry the weak Delay (4,000 units, 42 steps), Huggles the strong one (8,000 units, 84 steps) (rows, [re-ffx2-atb-status.md](re-ffx2-atb-status.md) section 1) | all three `weak-delay`, magnitude a named constant (`leblanc-syndicate-abilities.ts:185,212`, `leblanc-syndicate-leblanc-abilities.ts:143`; research ffx2-leblanc-syndicate.md:447) | Huggles delays twice as much in the game |
-| E1 | Action time | every gauge in the battle stands still while a command's effect plays, in both modes; the length is the animation's (1.10) | a flat 1.5 s (3 s in the Road, Cloister and Djose links) added to the **actor's own** recovery while the other gauges keep filling (`action-time.ts:1-20,54-82`) | in the game the party gets no gauge time during a boss animation; in ours it does |
+| E1 | Action time | no gauge stops while a command's effect plays: measured on the running game for Attack, Fire and four monster casts (only the Wait flag stopped the clock); the actor spends the command's own time executing, then its recovery (a monster cast: its countdown, then an effect of 84 to 114 steps; the Iron Giant's Attack 57 steps) (1.10) | a flat 1.5 s (3 s in the Road, Cloister and Djose links) added to the **actor's own** recovery while the other gauges keep filling (`action-time.ts:1-20,54-82`) | the other gauges keep running in both; what differs is the actor's own time, a flat 1.5 s in ours against the command's own length in the game |
 | E2 | Pace | per-move rest and charge (section 6); the shades' special moves have rest 0 | tier estimates (charge 0 / 16 / 26 / 39, rest baseline 70) (`constants.ts:79,100-103`, research/ffx2-leblanc-syndicate.md:429-447) | the real turn lengths differ per move |
 | E3 | Thinking | 0 plus 30 steps per fallen girl; the record's thinking byte (30 on the goons) is unused (1.4) | `thinkingTicks` is set to 0 at setup and nothing raises it (`setup.ts:160`, `active.ts:135`) | none while the party stands; see [re-ffx2-atb-status.md](re-ffx2-atb-status.md) row 13 |
 | E4 | Damage-type bits | Supercollider and Drill Shot are physical-only (Protect halves them); Hail of Bullets physical; Mortar, Grinder, Glint, Chain Attack physical; Thundara, Thor's Hammer, Rippling Chroma magical; Aerospark, Huggles, Concussive Blast, Bullseye, Greedy Aura, Lightfall, No Love Lost, Roulette none | Supercollider, Drill Shot, Hail 'other' (`leblanc-syndicate-abilities.ts:172-182`, `den-of-woe-abilities.ts:189-198`) | Protect would not halve them in ours |
