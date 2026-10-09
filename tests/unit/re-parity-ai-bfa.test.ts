@@ -280,6 +280,18 @@ describe('the gauge through hit events (m132 f6 @0x05FF)', () => {
     expect(idOf(chooseAiCommand(t.ctx, t.boss))).toBe('triumphant-grasp');
   });
 
+  it('a Power Wave on a Zombie Braska’s Final Aeon is 1,500 damage that strips the Zombie, and still pays the +20', () => {
+    // The strategy line keeps Zombie on him so the Pagodas hurt their own boss (the heal is inverted); the gauge is paid
+    // by the hit event either way, since his hook does not look at the HP result of a Power Wave.
+    const t = bfa();
+    t.boss.hp = 40_000;
+    t.boss.statuses['zombie'] = { id: 'zombie', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+    wave(t);
+    expect(t.boss.hp).toBe(38_500);
+    expect(t.boss.statuses['zombie']).toBeUndefined();
+    expect(gaugeOf(t)).toBe(20);
+  });
+
   it('does not touch the gauge for an action that never reached him', () => {
     const t = bfa();
     resolveAbility(t.ctx, t.at('tidus'), t.ctx.content.ability('attack')!, ['yu-pagoda-left']);
