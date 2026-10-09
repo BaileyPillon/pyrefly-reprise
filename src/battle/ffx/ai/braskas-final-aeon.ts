@@ -1,295 +1,212 @@
 /**
- * Chapter 3, part 1 — Braska's Final Aeon and the Yu Pagodas
- * [ffx-bfa-yu-yevon §1.4, §1.6].
+ * Chapter 3, part 1: Braska's Final Aeon, his turn and his `onHit` (`research/re-ffx-ai-yunalesca-bfa.md` section 3, m132 in
+ * `sins06_00`; **FFX only**). The Yu Pagodas are `yu-pagoda.ts`, the possessed aeons `possessed-aeons.ts`, Yu Yevon `yu-yevon.ts`.
  *
- * One monster entry serves both forms; the battle script overrides HP and
- * Strength on transformation. His Overdrive gauge is a first-class visible
- * resource fed mostly by the two Pagodas, and the **Talk** trigger zeroes it and
- * costs him his next turn — an exhaustible panic button with two charges,
- * battle-wide rather than two per form.
+ * One monster entry serves both forms; the battle script overwrites HP and Strength on transformation. His Overdrive gauge is
+ * a first-class visible resource and the script does all its arithmetic with fixed numbers, no randomness:
+ *
+ * | Input | Gain |
+ * |---|---|
+ * | his own turn, phase 0 | +2 |
+ * | his own turn, phases 1 and 2 | +3 |
+ * | every hit event (any command that is not a Power Wave, or a Power Wave when the gauge is already full) | +5 |
+ * | a Yu Pagoda's Power Wave on him | +20 |
+ *
+ * The Overdrive test reads the gauge as it stood when his last hook finished, so the turn the gauge reaches 100 is not an
+ * Overdrive turn and the next one is (row B5); the turn's own gain is added after the test. A hit that carries it past 100
+ * clamps it to 100. The Overdrive then replaces that turn's move and zeroes the gauge, whatever it had just gained.
+ *
+ * The script keeps two numbers: its own running gauge (`v11`) and the Overdrive property the game tests and draws. Every
+ * hook ends by copying the first into the second, except two: the hit that ends his first form and the hit that first leaves
+ * the second form below half (the transformation and the phase-2 latch return before the copy). That hit's gain therefore
+ * stays in `v11` only, and the test of his next turn still reads the older property. {@link scriptGauge} is the running
+ * number, `bfa.gauge` the property.
+ *
+ * **Talk** sets a flag when it resolves and does nothing else then (row B7): the gauge is cleared, the pending Overdrive
+ * cancelled and the turn spent on an empty action when his next turn starts. Two charges, battle-wide; the third is text.
+ *
+ * Phase 0 is the first form, phase 1 the second, and phase 2 latches once a hit leaves him below 60,000 (row B3).
  */
 
 import type { Command, FFXCombatant } from '../../common/types.ts';
-import { type Ctx, isAlive, livingEnemies, rtOf, tryActor } from '../state.ts';
+import { advanceForm } from '../forms.ts';
+import { type HitEvent, registerHitScript } from '../hit-hooks.ts';
+import { type Ctx, has, rtOf } from '../state.ts';
+import { frontLine, gameMod, livingFrontLine, pickActor, randomLiving } from './game-rolls.ts';
 import { type AiContext, num, registerAiScript, use } from './types.ts';
 
 const TALK_PENDING = 'bfa.talkPending';
 const FORM2_OPENED = 'bfa.form2Opened';
+const PHASE_2 = 'bfa.phase2';
 
-/**
- * His Overdrive gauge, 0-100, kept on the battle's own flag bag
- * [ffx-bfa-yu-yevon §1.6, §7.2 checklist item 2].
- *
- * **Why it lives here and not on the combatant.** `setup.ts` builds an
- * `overdrive` block for party members and for aeons and for nobody else, so
- * `ai.self.overdrive` on an enemy is `undefined` — which meant the gauge check
- * in this script could never be true and **Braska's Final Aeon never used a
- * single Overdrive in either form**. Measured before this: 200 battles, zero
- * Triumphant Grasps, zero Ultimate Jecht Shots, zero Jecht Bombers, and the
- * Talk trigger command inert (`execute.ts` zeroes `boss.overdrive.gauge`, which
- * does not exist). That is the encounter's signature mechanic and the entire
- * reason the Trigger Command exists, so it is restored here rather than left to
- * a wider engine change: `ctx.state.flags` is already the shared bag this
- * script uses for `bfa.talkPending`, both Pagodas and `consumeBfaTalk` can
- * reach it, and no other chapter's data or engine path is touched.
- *
- * Inputs, per §1.6:
- *
- * | Input | Gain | Confidence |
- * |---|---|---|
- * | A Yu Pagoda's Power Wave lands on him | **+20**, flat | [verified: 2 sources] |
- * | He is targeted by a damaging **action** (not per hit) | 0-10, mean 5 | [estimate] |
- * | He takes a turn, including the scripted `Draws sword.` | 0-10, mean 5 | [estimate] |
- * | Reaches 100 | spent on his **next** turn, then reset to 0 | [verified: 2 sources] |
- * | Talk | set to 0, and he loses his next turn entirely | [verified: 2 sources] |
- *
- * The gauge **carries across the form transition** and is not reset (§1.6,
- * §1.7: one `m132` monster entry, one battle-wide pool of two Talk charges).
- */
+/** His Overdrive gauge, 0 to 100, on the battle's flag bag: an enemy has no Overdrive block of its own. */
 const GAUGE = 'bfa.gauge';
-/** A possessed aeon's own Overdrive gauge, in its actor memory [§2.3]. */
-const AEON_GAUGE = 'aeon.gauge';
-/** How far into `state.log` the "was he targeted" scan has already read. */
-const LOG_SEEN = 'bfa.logSeen';
+/** The script's running gauge (`v11`), kept in his actor memory only while a hit has left it ahead of the property copy. */
+const AHEAD = 'bfa.v11';
 
-/**
- * Read the gauge.
- *
- * The higher of the flag and whatever `boss.overdrive` holds, so that an
- * `EnemyDef` or a future `setup.ts` that *does* build an `overdrive` block for
- * an enemy keeps working and wins: the flag is the fallback, not an override.
- */
+/** The gauge the Overdrive test and the HUD read: the higher of the flag and whatever `boss.overdrive` holds. */
 export function bfaGauge(ctx: Ctx, boss: FFXCombatant): number {
   const flag = ctx.state.flags[GAUGE];
   return Math.max(typeof flag === 'number' ? flag : 0, boss.overdrive?.gauge ?? 0);
 }
 
-/** Add to the gauge, clamped to 0-100, mirrored onto the boss, and told to the HUD. */
-export function addBfaGauge(ctx: Ctx, boss: FFXCombatant, amount: number, cause: string): void {
+/** The script's running gauge: what its next addition starts from. It equals {@link bfaGauge} unless a hit left it ahead. */
+export function scriptGauge(ctx: Ctx, boss: FFXCombatant): number {
+  const ahead = rtOf(ctx, boss.id).ai[AHEAD];
+  return typeof ahead === 'number' ? ahead : bfaGauge(ctx, boss);
+}
+
+/** Write the property copy (clamped to 0 to 100) from the script's gauge, mirror it onto the boss and tell the HUD. */
+export function setBfaGauge(ctx: Ctx, boss: FFXCombatant, to: number, cause: string): void {
   const from = bfaGauge(ctx, boss);
-  const to = Math.max(0, Math.min(100, from + amount));
-  ctx.state.flags[GAUGE] = to;
-  if (boss.overdrive) boss.overdrive.gauge = to;
-  if (to === from) return;
-  ctx.emit({ type: 'overdrive-gauge', who: boss.id, from, to, cause });
+  const next = Math.max(0, Math.min(100, to));
+  delete rtOf(ctx, boss.id).ai[AHEAD]; // the copy is written, so the two numbers agree again
+  ctx.state.flags[GAUGE] = next;
+  if (boss.overdrive) boss.overdrive.gauge = next;
+  if (next !== from) ctx.emit({ type: 'overdrive-gauge', who: boss.id, from, to: next, cause });
+}
+
+/** The phase (0, 1, 2); 2 latches once he is below half of the second form's pool. */
+function phaseOf(ctx: Ctx, boss: FFXCombatant): number {
+  const form = boss.enemy?.formIndex ?? 0;
+  if (form === 0) return 0;
+  const mem = rtOf(ctx, boss.id).ai;
+  const half = Math.floor((boss.enemy?.forms[1]?.hp ?? boss.stats.maxHp) / 2);
+  if (mem[PHASE_2] === true || boss.hp < half) {
+    mem[PHASE_2] = true;
+    return 2;
+  }
+  return 1;
+}
+
+interface Move {
+  id: string;
+  targets: string[];
+  gain: number;
 }
 
 /**
- * How many player-side **actions** have damaged him since his last turn.
- *
- * Per *action*, not per hit — the same counting rule §3.4.1 spells out for Yu
- * Yevon's Curaga counter — so a multi-hit Overdrive pays once. `hitIndex === 0`
- * is the first hit of an action, which makes the count without needing a hook
- * anywhere else in the engine.
+ * The phase table of section 3.4. The roll is drawn first and the target pick after it, only in the branches that pick one
+ * (Blade Blitz aims at the front line and draws nothing); the form-II opener still takes both draws and then overrides.
  */
-function damagingActionsSinceLastTurn(ai: AiContext): number {
-  const log = ai.ctx.state.log;
-  const from = num(ai.memory, LOG_SEEN, 0);
-  let seen = 0;
-  for (let i = from; i < log.length; i++) {
-    const ev = log[i];
-    if (ev === undefined || ev.type !== 'damage') continue;
-    if (ev.targetId !== ai.self.id || ev.amount <= 0 || ev.hitIndex !== 0) continue;
-    const source = ev.sourceId !== undefined ? tryActor(ai.ctx, ev.sourceId) : undefined;
-    if (source && source.side !== 'enemy') seen++;
+function phaseMove(ai: AiContext, phase: number, opener: boolean): Move {
+  const ctx = ai.ctx;
+  const front = frontLine(ctx).map((c) => c.id);
+  const pick = (): string[] => {
+    const target = randomLiving(ctx);
+    return target ? [target.id] : [];
+  };
+  if (phase === 0) {
+    const roll = gameMod(ctx, 3);
+    return { id: roll === 0 ? 'jecht-beam' : 'left-arm-strike', targets: pick(), gain: 2 };
   }
-  ai.memory[LOG_SEEN] = log.length;
-  return seen;
-}
-
-/** BFA's own weighted turn table. Authored weights [ffx-bfa-yu-yevon §1.6, estimate]. */
-function weightedTurn(ai: AiContext, form: number, belowHalf: boolean): Command {
-  const party = ai.ctx.state.activeIds.slice();
-  if (form === 0) {
-    return ai.ctx.rng.int(0, 99) < 75
-      ? use(ai, 'left-arm-strike', [])
-      : use(ai, 'jecht-beam', []);
+  if (phase === 1) {
+    const roll = gameMod(ctx, 5);
+    const move: Move =
+      roll === 0
+        ? { id: 'jecht-beam', targets: pick(), gain: 3 }
+        : roll === 2 || roll === 4
+          ? { id: 'blade-blitz', targets: front, gain: 3 }
+          : { id: 'left-arm-strike-2', targets: pick(), gain: 3 };
+    return opener ? { id: 'blade-blitz', targets: front, gain: 3 } : move;
   }
-  const roll = ai.ctx.rng.int(0, 99);
-  if (belowHalf) {
-    // Blade Blitz absorbs the whole Left-Arm Strike share below 50%.
-    return roll < 25 ? use(ai, 'jecht-beam', []) : use(ai, 'blade-blitz', party);
-  }
-  if (roll < 60) return use(ai, 'left-arm-strike-2', []);
-  if (roll < 85) return use(ai, 'jecht-beam', []);
-  return use(ai, 'blade-blitz', party);
+  const roll = gameMod(ctx, 3);
+  return roll === 0 ? { id: 'jecht-beam', targets: pick(), gain: 3 } : { id: 'blade-blitz', targets: front, gain: 3 };
 }
 
 /**
- * Which Overdrive the full gauge spends on, checked in this order
- * [ffx-bfa-yu-yevon §1.6].
+ * The Overdrive he spends when the stored gauge is full (section 3.4, the common tail): Jecht Bomber, or its second-form
+ * twin, on one random living actor while an aeon is on the field; otherwise by phase, Triumphant Grasp (two forms of it) on a
+ * random living actor who is not petrified, or Ultimate Jecht Shot on the front line.
  */
-function overdriveBranch(ai: AiContext, form: number, belowHalf: boolean): Command {
-  if (ai.ctx.state.aeonId) {
-    return use(ai, form === 0 ? 'jecht-bomber' : 'jecht-bomber-2', []);
+function overdriveMove(ai: AiContext, phase: number): Command {
+  const ctx = ai.ctx;
+  if (ctx.state.aeonId) {
+    const target = randomLiving(ctx);
+    return use(ai, phase === 0 ? 'jecht-bomber' : 'jecht-bomber-2', target ? [target.id] : []);
   }
-  if (form === 1 && belowHalf) return use(ai, 'ultimate-jecht-shot', ai.ctx.state.activeIds.slice());
-  if (form === 1) return use(ai, 'triumphant-grasp-2', []);
-  return use(ai, 'triumphant-grasp', []);
+  if (phase === 2) return use(ai, 'ultimate-jecht-shot', frontLine(ctx).map((c) => c.id));
+  const target = pickActor(ctx, livingFrontLine(ctx).filter((c) => !has(c, 'petrify')));
+  return use(ai, phase === 0 ? 'triumphant-grasp' : 'triumphant-grasp-2', target ? [target.id] : []);
 }
 
-/**
- * Turn resolution in precedence order:
- * Talk -> full gauge -> the form-2 opener -> the weighted roll.
- *
- * The research states the opener "outranks the gauge check" in prose (§1.7) but
- * lists it *below* the gauge in the numbered, implementation-facing order
- * (§1.6, restated in §7.12). We implement §1.6.
- */
+/** His turn: the phase move, then the Overdrive that replaces it, then a pending Talk that cancels both. */
 export const braskasFinalAeonAi = (ai: AiContext): Command | null => {
-  const form = ai.self.enemy?.formIndex ?? 0;
-  const belowHalf = ai.self.hp * 2 <= ai.self.stats.maxHp;
+  const { ctx, self: boss } = ai;
+  const phase = phaseOf(ctx, boss);
+  const stored = bfaGauge(ctx, boss); // the Overdrive test reads the property copy
 
-  // Everything the party did to him since his last turn pays into the gauge
-  // before he chooses, at 0-10 per damaging action [§1.6, estimate].
-  const targeted = damagingActionsSinceLastTurn(ai);
-  for (let i = 0; i < targeted; i++) addBfaGauge(ai.ctx, ai.self, ai.ctx.rng.int(0, 10), 'targeted');
+  let opener = false;
+  if (phase === 1 && ctx.state.flags[FORM2_OPENED] !== true) {
+    ctx.state.flags[FORM2_OPENED] = true;
+    opener = true;
+  }
+  const move = phaseMove(ai, phase, opener);
+  let command: Command = use(ai, move.id, move.targets);
+  let gauge = scriptGauge(ctx, boss) + move.gain; // the turn's gain goes onto the script's own running number
 
-  if (ai.ctx.state.flags[TALK_PENDING] === true) {
-    ai.ctx.state.flags[TALK_PENDING] = false;
-    ai.ctx.emit({ type: 'message', text: `${ai.self.name} hesitates`, kind: 'telegraph' });
+  if (stored >= 100) {
+    command = overdriveMove(ai, phase);
+    gauge = 0;
+  }
+
+  if (ctx.state.flags[TALK_PENDING] === true) {
+    ctx.state.flags[TALK_PENDING] = false;
+    setBfaGauge(ctx, boss, 0, 'talk');
+    ctx.emit({ type: 'message', text: `${boss.name} hesitates`, kind: 'telegraph' });
     return null;
   }
 
-  if (bfaGauge(ai.ctx, ai.self) >= 100) {
-    addBfaGauge(ai.ctx, ai.self, -100, 'spend');
-    return overdriveBranch(ai, form, belowHalf);
-  }
-
-  // Acting is itself worth 0-10 [§1.6, estimate].
-  addBfaGauge(ai.ctx, ai.self, ai.ctx.rng.int(0, 10), 'acting');
-
-  if (form === 1 && ai.ctx.state.flags[FORM2_OPENED] !== true) {
-    ai.ctx.state.flags[FORM2_OPENED] = true;
-    return use(ai, 'blade-blitz', ai.ctx.state.activeIds.slice());
-  }
-
-  return weightedTurn(ai, form, belowHalf);
+  setBfaGauge(ctx, boss, gauge, stored >= 100 ? 'spend' : 'acting');
+  return command;
 };
 
 /**
- * The Yu Pagodas.
- *
- * While **both** are up they only ever Power Wave the boss — 1 500 fixed, no
- * variance, plus a status strip and +20% to his gauge. The moment one is down
- * the survivor switches to attacking the party, which is why "kill both or
- * neither" is the correct guidance [§1.4].
+ * His `onHit` (m132 f6 @0x05FF, then the transformation @0x06E3), once per sub-action that reached him: the gauge, then the
+ * change of form when a hit leaves the first form at 0 HP (the engine settles a death in the second). A Power Wave pays +20
+ * while the gauge is below 100, a different count only if no Pagoda has taken a turn since the last revival, which cannot
+ * happen (a Pagoda's Power Wave is always preceded by its turn start) [note section 3.5]; any other hit pays +5.
  */
-export const yuPagodaAi = (ai: AiContext): Command | null => {
-  const siblings = livingEnemies(ai.ctx).filter((c) => c.flags.isPart && c.id !== ai.self.id);
-  const bossId = ai.self.flags.partOf;
-  const boss = bossId ? tryActor(ai.ctx, bossId) : livingEnemies(ai.ctx).find((c) => !c.flags.isPart);
-
-  if (siblings.length > 0 && boss && isAlive(boss)) {
-    // Two Power Wave records: the BFA-fight version (`mm2 #139`) strips the
-    // full Zombie/Poison/Silence/Dark/Slow/Breaks list and pays +20% to his
-    // gauge; the aeon / Yu Yevon version (`mm2 #210`) strips only
-    // Poison/Zombie/Reflect and grants no gauge [ffx-bfa-yu-yevon §1.4, §2.3].
-    const bfaFight = boss.id === 'braskas-final-aeon';
-    // The BFA-fight record also pays a flat **+20 %** into his gauge
-    // [§1.6, verified: 2 sources]. The aeon / Yu Yevon record grants none.
-    if (bfaFight) addBfaGauge(ai.ctx, boss, 20, 'power-wave');
-    // The aeon / Yu Yevon record pays **15-30 %** into a possessed aeon's own
-    // gauge instead [§2.3, verified: 2 sources].
-    else {
-      const bossAi = rtOf(ai.ctx, boss.id).ai;
-      bossAi[AEON_GAUGE] = num(bossAi, AEON_GAUGE, 0) + ai.ctx.rng.int(15, 30);
-    }
-    return use(ai, bfaFight ? 'power-wave-bfa' : 'power-wave-aeon', [boss.id]);
+function braskasHit(event: HitEvent): void {
+  const { ctx, target: boss, def } = event;
+  const mem = rtOf(ctx, boss.id).ai;
+  const running = scriptGauge(ctx, boss);
+  const powerWave = def.id === 'power-wave-bfa' && running < 100;
+  const next = Math.min(100, running + (powerWave ? 20 : 5));
+  const form = boss.enemy?.formIndex ?? 0;
+  const half = Math.floor((boss.enemy?.forms[1]?.hp ?? boss.stats.maxHp) / 2);
+  const spent = boss.hp === 0;
+  const latches = form === 1 && mem[PHASE_2] !== true && boss.hp < half;
+  if (spent && form === 0) advanceForm(ctx, boss);
+  if (latches) mem[PHASE_2] = true;
+  // The transformation and the phase-2 latch return before the script copies its gauge into the property (m132 f7 @0x06F8,
+  // @0x077E): the gain stays in the running number and the tested copy is the older one until his next hook. A Power Wave
+  // branch copies it itself, so it is the one hit that still shows.
+  if ((spent || latches) && !powerWave) {
+    mem[AHEAD] = next;
+    return;
   }
+  setBfaGauge(ctx, boss, next, powerWave ? 'power-wave' : 'hit');
+}
 
-  // Solo: Pagoda A prioritises Curse, Pagoda B prioritises Osmose.
-  const party = ai.ctx.state.activeIds.filter((id) => {
-    const c = tryActor(ai.ctx, id);
-    return c !== undefined && isAlive(c);
-  });
-  if (party.length === 0) return null;
-  const target = [ai.ctx.rng.pick(party)];
-  const prefersCurse = ai.self.slot % 2 === 0;
-  return use(ai, prefersCurse ? 'yu-pagoda-curse' : 'osmose', target);
-};
-
-/**
- * A possessed aeon [ffx-bfa-yu-yevon §2.2].
- *
- * Every one of them opens with the scripted non-action "Possessed by Yu
- * Yevon!", then attacks, uses its special, and spends a full gauge on its own
- * Overdrive. Their stats are a live mirror of the player's aeon, so there is no
- * table here to get wrong.
- */
-export const possessedAeonAi = (ai: AiContext): Command | null => {
-  if (num(ai.memory, 'opened', 0) === 0) {
-    ai.memory['opened'] = 1;
-    ai.ctx.emit({ type: 'message', text: 'Possessed by Yu Yevon!', kind: 'telegraph' });
-    return null;
-  }
-
-  // Its own gauge, kept in its actor memory for the same reason BFA's is kept
-  // on the state flags: `setup.ts` builds no `overdrive` block for an enemy.
-  // Rates are the only *quantified* enemy-gauge figures published anywhere
-  // [ffx-bfa-yu-yevon §2.3, verified: 2 sources]: **15-30 %** per Yu Pagoda
-  // Power Wave, **0-10 %** when targeted by an attack or when it acts.
-  ai.memory[AEON_GAUGE] =
-    num(ai.memory, AEON_GAUGE, 0) +
-    damagingActionsSinceLastTurn(ai) * ai.ctx.rng.int(0, 10) +
-    ai.ctx.rng.int(0, 10);
-
-  // §2.2 gives each possessed aeon "Attack, <special>, <Overdrive>", and the
-  // Overdrive is an Overdrive: it is spent on a full gauge, not rolled as an
-  // ordinary turn. The data layer flattens the moveset into one `abilityIds`
-  // list, so the split is made here off the ability's own `category` — which
-  // was the difference between Shiva opening with Heavenly Strike and Shiva
-  // opening with a 9,999 party-wide Diamond Dust on turn 9.
-  const abilities = rtOf(ai.ctx, ai.self.id).abilityIds;
-  const overdrives = abilities.filter((id) => ai.ctx.content.ability(id)?.category === 'overdrive');
-  const ordinary = abilities.filter((id) => ai.ctx.content.ability(id)?.category !== 'overdrive');
-
-  if (num(ai.memory, AEON_GAUGE, 0) >= 100 && overdrives[0] !== undefined) {
-    ai.memory[AEON_GAUGE] = 0;
-    return use(ai, overdrives[0], ai.ctx.state.activeIds.slice());
-  }
-  if (ordinary.length > 0 && ai.ctx.rng.int(0, 99) < 50) {
-    return use(ai, ai.ctx.rng.pick(ordinary), []);
-  }
-  return { kind: 'attack', targets: [] };
-};
-
-/**
- * The Talk trigger command [ffx-bfa-yu-yevon §1.6, §7.3].
- *
- * Zeroes his gauge now and makes him lose his **next** turn. Two charges,
- * battle-wide; the command is offered a third time and is deliberately inert.
- */
+/** Talk charges used so far: two, battle-wide. */
 export function bfaTalkCharges(ai: AiContext): number {
   return num(ai.ctx.state.flags as AiContext['memory'], 'bfa.talkUsed', 0);
 }
 
-/** Mark the Talk trigger as consumed. Returns false once both charges are spent. */
+/**
+ * The Talk trigger command (section 3.6): the first two resolve into a flag the next turn answers; the third is dialogue only
+ * and returns false so the executor says so. Nothing happens to the gauge now.
+ */
 export function consumeBfaTalk(ai: AiContext): boolean {
   const used = bfaTalkCharges(ai);
   ai.ctx.state.flags['bfa.talkUsed'] = used + 1;
   if (used >= 2) return false;
   ai.ctx.state.flags[TALK_PENDING] = true;
-  // Zero the gauge this script actually reads. `execute.ts` zeroes
-  // `boss.overdrive.gauge`, which no enemy has — see {@link GAUGE}.
-  addBfaGauge(ai.ctx, ai.self, -100, 'talk');
   return true;
 }
 
-registerAiScript('bfa-form-1', braskasFinalAeonAi);
-registerAiScript('bfa-form-2', braskasFinalAeonAi);
-registerAiScript('braskas-final-aeon', braskasFinalAeonAi);
-registerAiScript('yu-pagoda', yuPagodaAi);
-// The data layer names the two Pagoda rotations by *context*, because the two
-// Power Wave records differ: `#139` in the BFA fight (strips the full
-// Zombie/Poison/Silence/Dark/Slow/Breaks list and pays +20% to his Overdrive
-// gauge) and `#210` in the aeon / Yu Yevon fights (strips only
-// Poison/Zombie/Reflect) [ffx-bfa-yu-yevon §1.4, §2.3]. `yuPagodaAi` already
-// picks between them from the boss on the field, but neither id was registered,
-// so `chooseAiCommand` fell through to its plain-Attack fallback and **no Yu
-// Pagoda in the chapter ever cast Power Wave**: the boss was never healed, never
-// cleansed, and his gauge never got its +20%. Registering the two ids the data
-// actually ships is the whole fix.
-registerAiScript('yu-pagoda-bfa', yuPagodaAi);
-registerAiScript('yu-pagoda-aeon', yuPagodaAi);
-registerAiScript('possessed-aeon', possessedAeonAi);
+for (const id of ['bfa-form-1', 'bfa-form-2', 'braskas-final-aeon']) {
+  registerAiScript(id, braskasFinalAeonAi);
+  registerHitScript(id, braskasHit, { managesHp: true });
+}

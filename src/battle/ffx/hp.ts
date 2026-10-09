@@ -8,7 +8,7 @@
 
 import type { Affinity, CombatantId, ElementId, FFXCombatant } from '../common/types.ts';
 import { idiv } from './math.ts';
-import { type Ctx, has, isAlive, statusOf, tryActor } from './state.ts';
+import { type Ctx, has, isAlive, rtOf, statusOf, tryActor } from './state.ts';
 import { clearStatusesOnKo, refreshCriticalStatus, removeStatus } from './statuses.ts';
 import { onRevived } from './turnQueue.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
@@ -148,7 +148,14 @@ export function resolveDuePartRevivals(ctx: Ctx): void {
   const due = pending.filter((p) => p.atTicks <= ctx.state.ticks);
   if (due.length === 0) return;
   ctx.rt.pendingPartRevivals = pending.filter((p) => p.atTicks > ctx.state.ticks);
-  for (const p of due) restorePart(ctx, p.id, p.maxHp);
+  for (const p of due) {
+    restorePart(ctx, p.id, p.maxHp);
+    // The clock only moves between turns, so a return is found `late` ticks after it was due. The rank-3 delay it pays on
+    // rising is counted from the moment it was due, so its first action lands where the Pagoda's own script puts it
+    // (the revival is its own turn, which it ends with the recovery of an empty one).
+    const late = ctx.state.ticks - p.atTicks;
+    if (late > 0) rtOf(ctx, p.id).ctb = Math.max(0, rtOf(ctx, p.id).ctb - late);
+  }
 }
 
 /** Restoration that never went through the damage chain (Regen, Auto-Potion, Mortibsorption). */
@@ -221,10 +228,16 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
     ctx.emit({ type: 'revive', targetId: target.id, hp, cause: everlasting ? 'fayth' : 'auto-life' });
     refreshCriticalStatus(ctx, target);
     // A revived character re-enters with a rank-3 delay, and loses its buffs
-    // (§2.3, "KO revival loses buffs") — but not the fayth's gift.
+    // (§2.3, "KO revival loses buffs") — but not the fayth's gift. The fayth's revival is the game's own command 0x311F
+    // in the possession fights, and the party's script answers it by zeroing that character's CTB, so the one who rose acts
+    // next [re-ffx-ai-yunalesca-bfa §5.2; the seven party workers of sins07_*, @0x027f to @0x0327].
     clearStatusesOnKo(ctx, target);
-    if (everlasting) target.statuses['auto-life'] = { ...autoLife };
-    onRevived(ctx, target.id);
+    if (everlasting) {
+      target.statuses['auto-life'] = { ...autoLife };
+      rtOf(ctx, target.id).ctb = 0;
+    } else {
+      onRevived(ctx, target.id);
+    }
     return;
   }
 

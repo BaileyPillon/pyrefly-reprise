@@ -13,7 +13,7 @@
  *   zero-damage action never provoked one (the game's hook runs for those too).
  *
  * This module is the registry and the shapes. The runner is `hit-event.ts` (called from `abilities.ts#resolveAbility`
- * after the hits); the scripts that register here are `ai/yunalesca.ts`, `ai/bfa-hit.ts`, `ai/yu-pagoda.ts`,
+ * after the hits); the scripts that register here are `ai/yunalesca.ts`, `ai/braskas-final-aeon.ts`, `ai/yu-pagoda.ts`,
  * `ai/possessed-aeons.ts` and `ai/yu-yevon.ts`. It imports types only, so an AI script can register at load time
  * without pulling the damage chain behind it into an import cycle.
  *
