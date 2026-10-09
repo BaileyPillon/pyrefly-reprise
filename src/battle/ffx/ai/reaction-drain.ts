@@ -70,7 +70,7 @@ function runDrain(h: ReactionHost, mountId: string, hostId: string): void {
   const host = tryActor(ctx, hostId);
   if (!mount || !host) return;
   const hpBefore = host.hp;
-  mortibsorption(ctx, mount, host);
+  const transfer = mortibsorption(ctx, mount, host); // the mount's max HP, before the clamp to the HP the host had left
   const def = abilityOf(ctx, 'mortibsorption');
-  if (def) runOnHit(ctx, { def, user: mount }, host, { hpBefore, lostHp: host.hp < hpBefore });
+  if (def) runOnHit(ctx, { def, user: mount }, host, { hpBefore, lostHp: host.hp < hpBefore, lastDamage: transfer, affectsHp: true });
 }

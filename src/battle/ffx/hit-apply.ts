@@ -51,10 +51,19 @@ export interface HitScope {
   totalDealt: number;
   /**
    * The targets the hit records have landed on since their scripts last heard of it, with their HP before the
-   * first record and the index of the last one: `resolveAbility` runs each one's `onHit` hook once its hits are
-   * in (re-parity).
+   * first record, the index of the last one and the running `LastDamageTakenHP` (the HP-class results after the cap
+   * and before the clamp, overkill included, a heal negative): `resolveAbility` runs each one's `onHit` hook once
+   * its hits are in (re-parity).
    */
-  touched: Map<CombatantId, { target: FFXCombatant; hpBefore: number; last: number }>;
+  touched: Map<CombatantId, Touched>;
+}
+
+/** What an action has done to one target so far, for the target's `onHit` (`abilities.ts#finishTouched`). */
+export interface Touched {
+  target: FFXCombatant;
+  hpBefore: number;
+  last: number;
+  lastDamage: number;
 }
 
 /** Statuses this action tries to land, including weapon strikes. */
@@ -104,9 +113,12 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
     target = bounced;
   }
   // The record lands on `target` (a miss included): its script hears of it after the last one (`onHit`, once per action).
-  const seen = scope.touched.get(target.id);
+  let seen = scope.touched.get(target.id);
   if (seen) seen.last = scope.hitIndex;
-  else scope.touched.set(target.id, { target, hpBefore: target.hp, last: scope.hitIndex });
+  else {
+    seen = { target, hpBefore: target.hp, last: scope.hitIndex, lastDamage: 0 };
+    scope.touched.set(target.id, seen);
+  }
   const holdKo = holdsDeathForHook(target) ? { holdKo: true as const } : {};
 
   const row = options.rowFor?.(target) ?? def; // this target's row: DmgCon and rider (od5); draws nothing
@@ -203,6 +215,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
 
     // The HP class.
     if ((report.classes & 1) !== 0 && hpAmount !== 0) {
+      seen.lastDamage += hpAmount; // LastDamageTakenHP: after the cap, before the clamp to the HP that was left
       dealDamage(ctx, target, hpAmount, {
         sourceId: user.id,
         element: scope.primaryElement,

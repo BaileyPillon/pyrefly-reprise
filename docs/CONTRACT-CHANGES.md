@@ -6,6 +6,20 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-09 — `AbilityDef.extra.scriptAims` replaces `distinctTargetsPerHit`; three Chapter VII runtime fields go and `ActorRuntime.guardMark` arrives; the FFX boss-script hook registry (re-parity AI-Seymour; FFX only)
+
+Branch `re-parity-ai-ffx`. No file in the contract list changed; recorded for the same reason as the entries below. `AbilityDef.extra` gains one documented key, `scriptAims: true`
+(`src/battle/ffx/scripted.ts` table), and loses `distinctTargetsPerHit`: a per-hit random row that carries it sends hit `h` to the `h`-th target the command names (the last
+when it names fewer), and a hit whose target is fallen or hidden is lost, as the exe's queue refuses the command (`targeting.ts#aimedTargetForHit`). It is how the compiled scripts
+aim: they pick the victim and queue the spell at it. Natus's four Multi-ra rows carried the old key and carry the new one, with Break, Flare and the Claw, Seymour's and the Guardians'
+Chapter VII spells and Anima's Pain; every other record resolves as before. `ActorRuntime` (`src/battle/ffx/state.ts`) loses `damageCapPerHit`, `hpFloor` and `coversAllyId`
+(Chapter VII's cap, floor and first-Guardian cover, which the game's script does not have) and gains `guardMark?: boolean` (the Guard status an enemy's script puts on an ally, read by
+`targeting.ts#coverOf`). New module `src/battle/ffx/ai/hooks.ts`: the registry of the game's script hooks (`onTargeted`, `onHit` once per action per target before the death check,
+`postPoison`, `preTurn`) and the reaction queue. The `onHit` report (`HitReport`) carries `hpBefore`, `lostHp` and, with the same definitions as the AI lane B hit event
+(`re-parity-ai-ffx-b`, `hit-hooks.ts#HitEvent`), `lastDamage` (`LastDamageTakenHP`: the action's HP results on the owner after the cap and before the clamp, overkill counted, a heal negative)
+and `affectsHp` (the command's HP class bit), so a script written for either lane's hook runs on the other's. `BattleEvent` shape unchanged; FFX-2 and FF7 never import any of it
+(`ffx2-atb-golden` and `ff7-golden` unchanged). Handoff: [re-parity-ai-seymour](handoff/re-parity-ai-seymour.md). Game case: FFX only.
+
 ## 2026-10-08 — `FFXPlainAttack`, `EnemyDef.plainAttack`, `EnemyFields.plainAttack`: an enemy's plain Attack on the game's own record (re-parity W1; FFX only; additive)
 
 Branch `re-parity`. `src/battle/common/types.ts` gains the interface `FFXPlainAttack` (`record: FFXCommandRecord`, `accuracy`, `critBonus`) and the optional member `plainAttack` on `EnemyDef`

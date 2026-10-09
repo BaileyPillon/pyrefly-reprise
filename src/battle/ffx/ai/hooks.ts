@@ -43,6 +43,15 @@ export interface HitReport {
   readonly hpBefore: number;
   /** True when the action took HP from it (a heal, a miss and a zero-damage action did not). */
   readonly lostHp: boolean;
+  /**
+   * `LastDamageTakenHP` (the scripts' property 166): the sum of the action's HP results on the owner, each after the 9,999
+   * cap (99,999 with Break Damage Limit) and **before** the clamp to the HP it had left, so overkill counts. Negative for a
+   * heal (a heal on a Zombie is already damage here). 0 for a miss and for an action with no HP class. The same definition
+   * as the AI lane B hook (`HitEvent.lastDamage` in its `hit-hooks.ts`), so a script written against either runs on this one.
+   */
+  readonly lastDamage: number;
+  /** The command's damage class includes HP (`readCommandProperty(cmd, affectHP)`): the same as AI lane B's `HitEvent.affectsHp`. */
+  readonly affectsHp: boolean;
 }
 
 /** One script's hooks. */
@@ -82,6 +91,11 @@ export function scriptIdOf(c: FFXCombatant): string | undefined {
 export function hooksOf(c: FFXCombatant): ScriptHooks | undefined {
   const id = scriptIdOf(c);
   return id === undefined ? undefined : SCRIPT_HOOKS.get(id);
+}
+
+/** True when `c`'s script listens to `onHit` (the resolver works out the report's costlier fields only for those). */
+export function listensToHit(c: FFXCombatant): boolean {
+  return hooksOf(c)?.onHit !== undefined;
 }
 
 /** True when a lethal hit on `c` must wait for its `onHit` before the KO is decided. */

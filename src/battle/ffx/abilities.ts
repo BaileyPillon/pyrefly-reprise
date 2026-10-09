@@ -23,7 +23,8 @@ import { drawsOf } from './adapt/draws.ts';
 import { resolveElements } from './elements.ts';
 import { hasAuto, weaponElements } from './equipment.ts';
 import { ejectActor, settleDeferredDeath } from './hp.ts';
-import { runOnHit, runOnTargeted } from './ai/hooks.ts';
+import { listensToHit, runOnHit, runOnTargeted } from './ai/hooks.ts';
+import { resolveCommand } from './adapt/command.ts';
 import { aimedTargetForHit, aimedTargets, isPerHitRandom, nextHitTargets, resolveTargets, scriptAimsAt } from './targeting.ts';
 import { onTargeted } from './overdrive.ts';
 import { revealTarget, sensorKind } from './sensor.ts';
@@ -97,9 +98,12 @@ function finishTouched(scope: HitScope): void {
   const { ctx, user, def } = scope;
   const done = [...scope.touched.values()].sort((a, b) => a.last - b.last);
   scope.touched.clear();
-  for (const { target, hpBefore } of done) {
+  for (const { target, hpBefore, lastDamage } of done) {
     // A follow-up row (Blitz Ace's Last Hit) is part of the action its main row already announced: one `onHit` per action.
-    if (scope.options.followUp !== true) runOnHit(ctx, { def, user }, target, { hpBefore, lostHp: target.hp < hpBefore });
+    if (scope.options.followUp !== true && listensToHit(target)) {
+      const affectsHp = (resolveCommand(def, user).record.damageClass & 1) !== 0;
+      runOnHit(ctx, { def, user }, target, { hpBefore, lostHp: target.hp < hpBefore, lastDamage, affectsHp });
+    }
     settleDeferredDeath(ctx, target, user.id);
   }
 }

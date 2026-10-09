@@ -12,7 +12,16 @@
 import { describe, expect, it } from 'vitest';
 import { macalaniaBuild } from '../../src/data/ffx/builds/macalania.ts';
 import { drainScriptReactions } from '../../src/battle/ffx/ai/reaction-drain.ts';
-import { canQueueCommand, hasReactions, queueEmit, queueReaction } from '../../src/battle/ffx/ai/hooks.ts';
+import {
+  type HitReport,
+  canQueueCommand,
+  hasReactions,
+  listensToHit,
+  queueEmit,
+  queueReaction,
+  registerScriptHooks,
+} from '../../src/battle/ffx/ai/hooks.ts';
+import { resolveAbility } from '../../src/battle/ffx/index.ts';
 import {
   COIN_TRUE_COUNT,
   SCRIPT_VALUES,
@@ -25,7 +34,7 @@ import {
   scriptMod,
   scriptValue,
 } from '../../src/battle/ffx/ai/script-random.ts';
-import { at, realCtx, status, withRng } from './helpers/seymourParity.ts';
+import { act, at, exactHit, realCtx, status, withRng } from './helpers/seymourParity.ts';
 
 const fresh = (group = 'seymour-anima-macalania') => realCtx(group, 1, macalaniaBuild);
 
@@ -151,5 +160,151 @@ describe('the reaction queue (sections 1.1 and 1.2)', () => {
     expect(events.some((e) => e.type === 'script-trigger')).toBe(false);
     drainScriptReactions({ ctx, push: ctx.emit });
     expect(events.filter((e) => e.type === 'script-trigger').map((e) => (e as { name: string }).name)).toEqual(['later']);
+  });
+});
+
+/**
+ * **The hit event** (section 1.1), the contract both AI lanes share (this lane's `ai/hooks.ts`, AI lane B's `hit-hooks.ts`):
+ * once per action per target, after the last of the action's hit records on that target and before the death check,
+ * for a hit, a heal and a status-only move alike; `lastDamage` is the HP results after the cap and before the clamp (overkill
+ * counts, a heal is negative); `affectsHp` is the command's HP class bit. A follow-up row is part of its main row's action.
+ */
+describe('the hit event: once per action per target, after the last record, before the death check', () => {
+  interface Call {
+    id: string;
+    user: string;
+    def: string;
+    hp: number;
+    other: number;
+    report: HitReport;
+  }
+  const calls: Call[] = [];
+  const PROBE = 'zz-hit-probe';
+  const HOLD = 'zz-hit-probe-hold';
+  const HOLD_NO_SAVE = 'zz-hit-probe-hold-nosave';
+  registerScriptHooks(PROBE, {
+    onHit: (ctx, self, used, report) => {
+      const other = self.id === 'guado-guardian-a' ? 'guado-guardian-b' : 'guado-guardian-a';
+      calls.push({ id: self.id, user: used.user.id, def: used.def.id, hp: self.hp, other: ctx.state.combatants[other]?.hp ?? -1, report });
+    },
+  });
+  registerScriptHooks(HOLD, {
+    holdsDeath: true,
+    onHit: (_ctx, self, used, report) => {
+      calls.push({ id: self.id, user: used.user.id, def: used.def.id, hp: self.hp, other: -1, report });
+      if (self.hp === 0) self.hp = 777; // a script that puts HP back stops the death (Mortiorchis, Mortibody, Macalania's Seymour)
+    },
+  });
+  registerScriptHooks(HOLD_NO_SAVE, {
+    holdsDeath: true,
+    onHit: (_ctx, self, used, report) => {
+      calls.push({ id: self.id, user: used.user.id, def: used.def.id, hp: self.hp, other: -1, report });
+    },
+  });
+
+  function probed(scriptId = PROBE) {
+    calls.length = 0;
+    const { ctx, events } = fresh();
+    for (const id of ['guado-guardian-a', 'guado-guardian-b']) {
+      const c = at(ctx, id);
+      c.enemy = { ...c.enemy!, aiScriptId: scriptId, forms: [] };
+      c.statuses = {};
+      c.stats.maxHp = 5_000;
+      c.hp = 5_000;
+    }
+    return { ctx, events };
+  }
+
+  it('three hits on one target are one event, with every record already applied and the three results summed', () => {
+    const { ctx } = probed();
+    act(ctx, 'tidus', exactHit('probe-3', 100, { hits: 3 }), ['guado-guardian-a']);
+    expect(calls).toHaveLength(1);
+    const call = calls[0]!;
+    expect(call.id).toBe('guado-guardian-a');
+    expect(call.user).toBe('tidus');
+    expect(call.def).toBe('probe-3');
+    expect(call.hp).toBe(4_700); // all three records are in before the hook runs
+    expect(call.report).toEqual({ hpBefore: 5_000, lostHp: true, lastDamage: 300, affectsHp: true });
+  });
+
+  it('overkill counts: the result is the blow, not the HP that was left; a hook that puts HP back stops the death', () => {
+    const { ctx } = probed(HOLD);
+    at(ctx, 'guado-guardian-a').hp = 50;
+    act(ctx, 'tidus', exactHit('probe-big', 400), ['guado-guardian-a']);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]!.report).toEqual({ hpBefore: 50, lostHp: true, lastDamage: 400, affectsHp: true });
+    expect(calls[0]!.hp).toBe(0); // the KO is pending while the hook runs...
+    expect(at(ctx, 'guado-guardian-a').hp).toBe(777); // ...and a hook that puts HP back stops it
+    expect(at(ctx, 'guado-guardian-a').alive).toBe(true);
+  });
+
+  it('a hold that nothing saves ends in the death once the hook has run', () => {
+    const { ctx } = probed(HOLD_NO_SAVE);
+    const g = at(ctx, 'guado-guardian-a');
+    g.hp = 50;
+    act(ctx, 'tidus', exactHit('probe-big', 400), ['guado-guardian-a']);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]!.hp).toBe(0);
+    expect(g.alive).toBe(false);
+    expect(g.statuses['ko']).toBeDefined();
+  });
+
+  it('a script that does not hold the death sees the body already down', () => {
+    const { ctx } = probed();
+    const g = at(ctx, 'guado-guardian-a');
+    g.hp = 50;
+    act(ctx, 'tidus', exactHit('probe-big', 400), ['guado-guardian-a']);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]!.report.lastDamage).toBe(400);
+    expect(g.alive).toBe(false);
+  });
+
+  it('a heal is one event with a negative result and no loss of HP', () => {
+    const { ctx } = probed();
+    at(ctx, 'guado-guardian-a').hp = 1_000;
+    const cure = exactHit('probe-heal', 300, { flags: ['heals', 'always-break-damage-limit'], targeting: 'single-ally' });
+    act(ctx, 'guado-guardian-b', cure, ['guado-guardian-a']);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]!.report.lostHp).toBe(false);
+    expect(calls[0]!.report.lastDamage).toBe(-300);
+    expect(calls[0]!.report.affectsHp).toBe(true);
+    expect(at(ctx, 'guado-guardian-a').hp).toBe(1_300);
+  });
+
+  it('a status-only move still raises the event, with no HP result and no HP class', () => {
+    const { ctx } = probed();
+    const slow = exactHit('probe-status', 0, {
+      formula: 'none',
+      power: 0,
+      statusEffects: [{ status: 'slow', chance: 255, duration: 3 }],
+    });
+    act(ctx, 'tidus', slow, ['guado-guardian-a']);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]!.report).toEqual({ hpBefore: 5_000, lostHp: false, lastDamage: 0, affectsHp: false });
+  });
+
+  it('an all-target action: each target hears of it right after its own last record, before the next target is touched', () => {
+    const { ctx } = probed();
+    act(ctx, 'tidus', exactHit('probe-all', 100, { hits: 2, targeting: 'all-enemies' }), ['guado-guardian-a']);
+    expect(calls.map((c) => c.id)).toEqual(['guado-guardian-a', 'guado-guardian-b']);
+    expect(calls[0]!.other).toBe(5_000); // the second target has not been touched when the first one's hook runs
+    expect(calls[1]!.other).toBe(4_800); // the first target's two records are in when the second one's runs
+    expect(calls.map((c) => c.report.lastDamage)).toEqual([200, 200]);
+  });
+
+  it('a follow-up row is part of the action its main row announced: no second event', () => {
+    const { ctx } = probed();
+    resolveAbility(ctx, at(ctx, 'tidus'), exactHit('probe-main', 100), ['guado-guardian-a']);
+    resolveAbility(ctx, at(ctx, 'tidus'), exactHit('probe-last-hit', 50), ['guado-guardian-a'], { followUp: true });
+    expect(calls).toHaveLength(1);
+    expect(at(ctx, 'guado-guardian-a').hp).toBe(4_850); // the follow-up still landed
+  });
+
+  it('only the owner of the script is told, and only when an action reaches it', () => {
+    const { ctx } = probed();
+    expect(listensToHit(at(ctx, 'guado-guardian-a'))).toBe(true);
+    expect(listensToHit(at(ctx, 'tidus'))).toBe(false);
+    act(ctx, 'tidus', exactHit('probe-elsewhere', 100), ['guado-guardian-b']);
+    expect(calls.map((c) => c.id)).toEqual(['guado-guardian-b']);
   });
 });
