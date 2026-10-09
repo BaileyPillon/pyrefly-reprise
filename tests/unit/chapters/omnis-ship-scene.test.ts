@@ -43,11 +43,17 @@ describe('the Garden of Pain — tables', () => {
     expect(getChapter('seymour-omnis')?.sceneKey).toBe('garden-of-pain');
   });
 
-  it('mirrors the engine ids and the ring order (B8: our estimate, one constant each side)', () => {
+  // Re-parity (D-25, FFX only): the script's ring is Fire -> Ice -> Water -> Thunder (+1 for a spell), but the painted
+  // discs were drawn to the earlier estimate and are approved art, so their quarters still run Fire, Water, Ice, Thunder
+  // (`garden-of-pain-discs.ts`). The colour that faces him is the script's; a turn on screen can read as a half turn.
+  // Whether to repaint the quarters is Bailey's call (handoff `re-parity-ai-seymour.md`).
+  it('mirrors the engine ids; the painted ring has the same four colours as the script\'s, in the painting\'s older order', () => {
     expect(GARDEN_IDS.omnis).toBe(OMNIS_ID);
     expect([...GARDEN_IDS.discs]).toEqual([...MORTIPHASM_IDS]);
     expect([...OMNIS_DISC_IDS]).toEqual([...MORTIPHASM_IDS]);
-    expect([...DISC_RING_ON_SCREEN]).toEqual([...DISC_RING]);
+    expect([...DISC_RING_ON_SCREEN].sort()).toEqual([...DISC_RING].sort());
+    expect([...DISC_RING_ON_SCREEN]).toEqual(['fire', 'water', 'ice', 'lightning']);
+    expect([...DISC_RING]).toEqual(['fire', 'ice', 'water', 'lightning']);
   });
 
   it('three party slots in the lower left; Seymour pinned right of them and further back; one slot per disc', () => {

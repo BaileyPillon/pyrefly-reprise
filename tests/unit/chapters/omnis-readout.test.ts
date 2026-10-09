@@ -38,10 +38,15 @@ import { OMNIS, actor, drive, flags, inputFor, lineUp, makeInvincible, newEngine
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..');
 
-/** The three sentences on the picked frames (`scripts/gen_mock.py` STATES), word for word. */
+/**
+ * The three sentences on the picked frames (`scripts/gen_mock.py` STATES), word for word, with one change since the
+ * game's scripts settled the ring (re-parity D-25): frame III was drawn for the earlier estimate, where Lulu's Blizzara
+ * turns the Fire disc to Thunder; on the script's ring (Fire -> Ice -> Water -> Thunder) a spell turns it to Ice, so the
+ * same play reads as below. The picked frame itself is listed as stale in `docs/handoff/re-parity-ai-seymour.md`.
+ */
 const FRAME_I = 'Every disc shows Fire: four Firaga next. He absorbs Fire and is weak to Ice.';
 const FRAME_II = 'He glows red: Dispel on the party, then Ultima. After it, every disc turns to the next element.';
-const FRAME_III = 'One disc turned to Thunder: three Firaga and one Thundara next. Ice no longer hurts him extra.';
+const FRAME_III = 'One disc turned to Ice: three Firaga and one Blizzara next. Ice no longer hurts him extra.';
 
 function hitUntil(e: BattleEngine, stop: (e: BattleEngine) => boolean): void {
   drive(e, () => ({ kind: 'ability', id: 'test-hit-500', targets: [OMNIS] }), stop);
@@ -80,7 +85,7 @@ describe('the intent line says what the frames say (O-4 C), from the real engine
     expect(v.intent.filter((r) => r.bold).map((r) => r.text)).toEqual(['Fire', 'Firaga', 'weak to Ice']);
   });
 
-  it("a turned disc (c-iii): Lulu's Blizzara turns the upper-left disc to Thunder; the line and the strip follow the event", () => {
+  it("a turned disc (c-iii): Lulu's Blizzara turns the upper-left disc to Ice (+1 on the script's ring); the line and the strip follow the event", () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     const { readout, stage } = mountReadout();
@@ -91,24 +96,24 @@ describe('the intent line says what the frames say (O-4 C), from the real engine
     for (const ev of events) readout.onEvent(ev);
     const v = readout.view()!;
     expect(intentText(v.intent)).toBe(FRAME_III);
-    // Upper-left chip, outlined (the frame's white outline); the strip's rows say absorbs Fire, halves Thunder.
-    expect(v.chips[0]).toMatchObject({ index: 0, name: 'Thunder', turned: true });
-    expect(v.affinity).toEqual([{ label: 'Absorbs', elements: ['fire'] }, { label: 'Halves', elements: ['lightning'] }]);
+    // Upper-left chip, outlined (the frame's white outline); the strip's rows say absorbs Fire, halves Ice.
+    expect(v.chips[0]).toMatchObject({ index: 0, name: 'Ice', turned: true });
+    expect(v.affinity).toEqual([{ label: 'Absorbs', elements: ['fire'] }, { label: 'Halves', elements: ['ice'] }]);
     expect(stage.querySelectorAll('.ffx-omr__chip--turned').length).toBe(1);
     expect(stage.querySelector('.ffx-omr__strip')?.textContent).toContain('Halves');
     // His next turn spends the lesson: the line stops saying "turned".
     readout.onEvent({ seq: 0, type: 'action-start', actorId: OMNIS, command: { kind: 'ability', id: 'omnis-volley', targets: [] }, abilityId: 'omnis-volley', targets: [] } as BattleEvent);
-    expect(intentText(readout.view()!.intent)).toBe('The discs show three Fire and one Thunder: three Firaga and one Thundara next.');
+    expect(intentText(readout.view()!.intent)).toBe('The discs show three Fire and one Ice: three Firaga and one Blizzara next.');
   });
 
-  it("Wakka's blow turns a disc left, to Water (B8's ring, our estimate): Watera, and Ice no longer hurts him extra", () => {
+  it("Wakka's blow turns a disc left, to Thunder (-1 on the script's ring): Thundara, and Ice no longer hurts him extra", () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     const { readout } = mountReadout();
     readout.sync(e.state() as BattleState);
     inputFor(e, 'wakka');
     for (const ev of e.submit({ kind: 'attack', targets: ['mortiphasm-1'] })) readout.onEvent(ev);
-    expect(intentText(readout.view()!.intent)).toBe('One disc turned to Water: three Firaga and one Watera next. Ice no longer hurts him extra.');
+    expect(intentText(readout.view()!.intent)).toBe('One disc turned to Thunder: three Firaga and one Thundara next. Ice no longer hurts him extra.');
   });
 
   it('the glow (c-ii): six attacks fill the counter; the line names Dispel, then Ultima; then Ultima alone; then the reset', () => {
@@ -135,17 +140,18 @@ describe('the intent line says what the frames say (O-4 C), from the real engine
     const all: string[] = [];
     for (const state of ['normal', 'red', 'dispelled', 'reset-due'] as const) {
       for (const discs of [['fire', 'fire', 'fire', 'fire'], ['water', 'fire', 'ice', 'lightning'], ['water', 'water', 'fire', 'fire']] as const) {
-        for (const turned of [[], [0], [0, 2]]) all.push(intentText(omnisIntent({ discs, state, living: 3, turned, weakBefore: 'ice' })));
+        for (const turned of [[], [0], [0, 2]]) all.push(intentText(omnisIntent({ discs, state, turned, weakBefore: 'ice' })));
       }
     }
     for (const s of all) expect(s).not.toMatch(names);
   });
 
-  it('the volley counts one spell per living member plus one; the first discs keep theirs (planOmnisVolley)', () => {
-    expect(volleyOf(['fire', 'fire', 'fire', 'fire'], 3)).toEqual([['Firaga', 4]]);
-    expect(volleyOf(['fire', 'fire', 'fire', 'fire'], 1)).toEqual([['Firaga', 2]]); // an aeon holds the field
-    expect(volleyOf(['lightning', 'fire', 'fire', 'fire'], 2)).toEqual([['Firaga', 2], ['Thundara', 1]]);
-    expect(volleyOf(['water', 'water', 'ice', 'lightning'], 3)).toEqual([['Watera', 2], ['Blizzara', 1], ['Thundara', 1]]);
+  // Re-parity (D-26, D-33): always four spells, in the order his layout fixes, whoever is standing and aeon or not.
+  it('the volley is always four spells, grouped, in the order his layout fixes (planOmnisVolley)', () => {
+    expect(volleyOf(['fire', 'fire', 'fire', 'fire'])).toEqual([['Firaga', 4]]);
+    expect(volleyOf(['lightning', 'fire', 'fire', 'fire'])).toEqual([['Firaga', 3], ['Thundara', 1]]);
+    expect(volleyOf(['water', 'water', 'ice', 'lightning'])).toEqual([['Watera', 2], ['Blizzara', 1], ['Thundara', 1]]);
+    expect(volleyOf(['fire', 'water', 'ice', 'lightning'])).toEqual([['Fira', 1], ['Blizzara', 1], ['Watera', 1], ['Thundara', 1]]);
   });
 
   it("two Water discs make him immune to Fire, not Water (B9, faithful): the strip says so", () => {
@@ -178,7 +184,7 @@ describe('the strip (O-2 B)', () => {
     expect(COLOUR_ORDER_NOTE).toMatch(/our estimate/);
     const src = readFileSync(join(ROOT, 'src/ui/ffx/omnisReadoutModel.ts'), 'utf8');
     expect(src).not.toMatch(/import[^;]*(DISC_RING|OMNIS_RESET_CYCLE)/); // the single constant stays in the rules
-    expect(DISC_RING).toEqual(['fire', 'water', 'ice', 'lightning']);
+    expect(DISC_RING).toEqual(['fire', 'ice', 'water', 'lightning']); // the script's ring (D-25); the label above is still Bailey's wording (D-184)
   });
 
   it('landscape: the frame space (1600x900) scaled 0.4 into the grid; phone: into the HUD root, marked for the rail', () => {
