@@ -11,12 +11,12 @@
 import { describe, expect, it } from 'vitest';
 import type { BattleEvent, BattleSetup, Command, FFXCombatant } from '../../src/battle/common/types.ts';
 import {
-  aiContextFor,
   buildBattle,
   chooseAiCommand,
   type Ctx,
   FFXContentRegistry,
   applyStatus,
+  resolveAbility,
   resolveTargets,
 } from '../../src/battle/ffx/index.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
@@ -409,11 +409,14 @@ describe("Braska's Final Aeon (§1.6)", () => {
     expect(['left-arm-strike-2', 'jecht-beam', 'blade-blitz']).toContain(second);
   });
 
-  it('loses the turn after Talk, with the gauge already zeroed', () => {
+  it('loses the turn after Talk, and the gauge is cleared when that turn starts (not when Talk is used)', () => {
     const { ctx, boss } = bfaCtx(0);
     ctx.state.flags['bfa.talkPending'] = true;
+    ctx.state.flags['bfa.gauge'] = 70;
     expect(chooseAiCommand(ctx, boss)).toBeNull();
     expect(ctx.state.flags['bfa.talkPending']).toBe(false);
+    // Re-parity AI lane B, research/re-ffx-ai-yunalesca-bfa.md 3.4 and 3.6: the script clears the gauge in the lost turn.
+    expect(ctx.state.flags['bfa.gauge']).toBe(0);
   });
 
   it('never rolls a Left-Arm Strike below half HP in form 2', () => {
@@ -434,7 +437,7 @@ describe("Braska's Final Aeon (§1.6)", () => {
 // ---------------------------------------------------------------------------
 
 describe('Yu Yevon (§3.4)', () => {
-  it('alternates a scripted no-op with Gravija, which also hits himself', async () => {
+  it('passes his very first turn, then casts Gravija on every turn, on the front line and himself', async () => {
     const { ctx } = makeCtx({
       enemies: {
         id: 'yy',
@@ -450,35 +453,29 @@ describe('Yu Yevon (§3.4)', () => {
         ],
       },
     });
-    const reg = new FFXContentRegistry();
-    reg.addAbilities(['gravija', 'curaga', 'osmose', 'ultima'].map((id) => ability({ id, name: id, category: 'enemy' })));
     ctx.content.addAbilities(['gravija', 'curaga', 'osmose', 'ultima'].map((id) => ability({ id, name: id, category: 'enemy' })));
     const boss = at(ctx, 'yu-yevon');
-    expect(chooseAiCommand(ctx, boss)).toBeNull();
+    expect(chooseAiCommand(ctx, boss), 'only his very first turn is idle (re-ffx-ai-yunalesca-bfa.md 6.2)').toBeNull();
     const gravija = chooseAiCommand(ctx, boss);
     expect(idOf(gravija)).toBe('gravija');
 
-    // §3.3: Gravija "removes exactly 75% of current HP from **every target on
-    // the field** — including Yu Yevon himself" `[verified: 2 sources]`. The
-    // script used to hand-build that list as party-plus-self, which quietly
-    // left his two Yu Pagodas out of his own blast (round 03 blocker #16a). It
-    // now submits an empty list and lets `targeting.ts` expand the shipped
-    // record's `targeting: 'all'` over the whole field, so the reach is
-    // asserted on the resolved targets and on the record, not on the command.
-    expect(gravija?.targets, 'the script must defer to the record').toEqual([]);
-    const { gravija: gravijaDef } = await import(
-      '../../src/data/ffx/enemies/braskas-final-aeon-abilities.ts'
-    );
+    // §3.3 said "every target on the field", and the old script handed the engine an empty list so the shipped record
+    // (`targeting: 'all'`) took in his two Yu Pagodas too. The game's script builds a matching group, the front line plus
+    // himself (`addToMatchingGroup(20)`), and `performCommand(group, ...)` hits exactly that group, so the Pagodas are not
+    // in it (re-ffx-ai-yunalesca-bfa.md 6.2 and 1.4, row V2). The command names the group; the record says it is honoured.
+    expect(gravija?.targets).toEqual([...ctx.state.activeIds, 'yu-yevon']);
+    const { gravija: gravijaDef } = await import('../../src/data/ffx/enemies/braskas-final-aeon-abilities.ts');
     expect(gravijaDef.targeting).toBe('all');
     expect(gravijaDef.extra?.['includesUser']).toBe(true);
+    expect(gravijaDef.extra?.['groupTarget']).toBe(true);
     const reach = resolveTargets(ctx, boss, gravijaDef, gravija?.targets ?? []).map((c) => c.id);
     expect(reach, 'Gravija must catch Yu Yevon himself').toContain('yu-yevon');
+    expect(reach.sort(), 'and exactly the group the script named').toEqual([...ctx.state.activeIds, 'yu-yevon'].sort());
 
-    expect(chooseAiCommand(ctx, boss)).toBeNull();
+    expect(idOf(chooseAiCommand(ctx, boss)), 'there is no alternating no-op').toBe('gravija');
   });
 
-  it('queues Osmose then Ultima after seven counter-Curagas', async () => {
-    const { yuYevonCounter } = await import('../../src/battle/ffx/ai/index.ts');
+  it('queues Osmose then Ultima after seven hit events that dealt him damage', async () => {
     const { ctx } = makeCtx({
       enemies: {
         id: 'yy',
@@ -490,9 +487,14 @@ describe('Yu Yevon (§3.4)', () => {
       ['gravija', 'curaga', 'osmose', 'ultima'].map((id) => ability({ id, name: id, category: 'enemy' })),
     );
     const boss = at(ctx, 'yu-yevon');
-    const ai = aiContextFor(ctx, boss);
-    for (let i = 0; i < 7; i++) expect(idOf(yuYevonCounter(ai))).toBe('curaga');
+    expect(chooseAiCommand(ctx, boss)).toBeNull();
+    // The counter is the game's own `onHit` (re-ffx-ai-yunalesca-bfa.md 6.3): one per sub-action that dealt him HP damage.
+    const blow = ability({ id: 'blow', name: 'blow', category: 'skill', formula: 'fixed-no-variance', power: 1, damageType: 'physical', canMiss: false });
+    for (let i = 0; i < 6; i++) resolveAbility(ctx, at(ctx, 'tidus'), blow, ['yu-yevon']);
+    expect(idOf(chooseAiCommand(ctx, boss)), 'six are not enough').toBe('gravija');
+    resolveAbility(ctx, at(ctx, 'tidus'), blow, ['yu-yevon']);
     expect(idOf(chooseAiCommand(ctx, boss))).toBe('osmose');
     expect(idOf(chooseAiCommand(ctx, boss))).toBe('ultima');
+    expect(idOf(chooseAiCommand(ctx, boss)), 'and the count starts again').toBe('gravija');
   });
 });

@@ -216,7 +216,7 @@ describe('CHK-023 (a) — the Yu Yevon link reaches the HUD, in order', () => {
     for (const seq of seqs) expect(logged.has(seq), `seq ${seq} was never in the engine log`).toBe(true);
   });
 
-  it("Gravija reaches the HUD hitting the whole field, Yu Yevon included [§3.3]", async () => {
+  it("Gravija reaches the HUD hitting the front line and Yu Yevon himself, and not his Pagodas [§3.3; m176, row V2]", async () => {
     const { hud } = await play(20260920);
 
     // Find each Gravija cast and read the damage burst that followed it, up to
@@ -235,11 +235,13 @@ describe('CHK-023 (a) — the Yu Yevon link reaches the HUD, in order', () => {
     }
 
     expect(casts, 'Yu Yevon never cast Gravija in this run').toBeGreaterThan(0);
-    // §3.3: "every target on the field — including Yu Yevon himself". The
-    // Pagodas are the two the old hand-built list left out.
+    // §3.3 read "every target on the field — including Yu Yevon himself" off the wiki and put the two Pagodas in the
+    // blast. His own script (re-parity AI lane B, research/re-ffx-ai-yunalesca-bfa.md 6.2) builds a matching group from
+    // the front line plus himself (addToMatchingGroup(20)) and casts Gravija on that group, so the Pagodas are not in it.
     expect([...targets], 'Gravija did not reach Yu Yevon himself').toContain('yu-yevon');
+    for (const id of ['tidus', 'yuna', 'auron']) expect([...targets], `Gravija did not reach ${id}`).toContain(id);
     for (const id of ['yu-pagoda-left', 'yu-pagoda-right']) {
-      expect([...targets], `Gravija did not reach ${id}`).toContain(id);
+      expect([...targets], `Gravija must not reach ${id}`).not.toContain(id);
     }
   });
 
@@ -252,17 +254,29 @@ describe('CHK-023 (a) — the Yu Yevon link reaches the HUD, in order', () => {
     );
 
     // Walk the stream: every counter must be preceded, inside the action it
-    // answers, by an `action-start` from a party-side actor. An enemy-side row
-    // — Gravija's self-damage, a Pagoda's Power Wave, or the counter's own
-    // Zombie-inverted damage — scores 0 Curagas in §3.4.1's table.
-    const enemySide = new Set<CombatantId>(['yu-yevon', 'yu-pagoda-left', 'yu-pagoda-right']);
+    // answers, by an `action-start` from a party-side actor — or by a Yu Pagoda's
+    // Power Wave, which the game counts when it lands on a Zombie Yu Yevon (the
+    // heal is inverted into 1,500 damage; re-parity AI lane B, research/re-ffx-ai-yunalesca-bfa.md
+    // 6.3, row V5). His own Gravija and his own Curaga never provoke one: those rows
+    // still score 0 in §3.4.1's table.
+    const own = new Set<CombatantId>(['yu-yevon']);
+    const pagodas = new Set<CombatantId>(['yu-pagoda-left', 'yu-pagoda-right']);
     const offenders: string[] = [];
     let provoker: CombatantId | null = null;
+    let zombie = false; // whether Yu Yevon carries Zombie right now
+    let zombieAtStart = false; // ... when the provoking action began
     for (const e of hud.seen) {
-      if (e.type === 'action-start') provoker = e.actorId;
+      if (e.type === 'status-add' && e.targetId === 'yu-yevon' && e.status === 'zombie') zombie = true;
+      if (e.type === 'status-remove' && e.targetId === 'yu-yevon' && e.status === 'zombie') zombie = false;
+      if (e.type === 'action-start') {
+        provoker = e.actorId;
+        zombieAtStart = zombie;
+      }
       if (e.type === 'counter' && e.actorId === 'yu-yevon') {
-        if (provoker === null || enemySide.has(provoker)) {
-          offenders.push(`Curaga countered ${provoker ?? 'nothing'} — an enemy-side action`);
+        if (provoker === null || own.has(provoker)) {
+          offenders.push(`Curaga countered ${provoker ?? 'nothing'} — his own action`);
+        } else if (pagodas.has(provoker) && !zombieAtStart) {
+          offenders.push(`Curaga countered ${provoker} without a Zombie Yu Yevon to damage`);
         }
       }
     }

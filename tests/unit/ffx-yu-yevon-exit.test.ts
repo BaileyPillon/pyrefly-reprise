@@ -183,7 +183,14 @@ describe('#17 Yu Yevon ends [ffx-bfa-yu-yevon §3.5]', () => {
     // never in danger, so calling it one would be a lie about what happened.
     expect(run.outcome).toBe('escape');
     // He is left exactly as canon leaves him — at the Pagoda equilibrium, not
-    // conveniently weakened.
-    expect(run.bossHp).toBeGreaterThan(1_000);
+    // conveniently weakened. Re-parity AI lane B (2026-10-09, row V1): the script
+    // has him cast Gravija on every turn after his first, not on alternate ones, so
+    // the equilibrium between his Gravija (75% of what he has, 9,999 at most) and
+    // the Pagodas' 1,500 per Power Wave sits lower than the 6,001 the alternating
+    // reading parked him at: he cycles between a few hundred and about a thousand HP
+    // (his Pagodas are not in his Gravija, so they stay whole and keep healing). He is
+    // alive, and well under the 99,999 he started with.
+    expect(run.bossHp).toBeGreaterThan(0);
+    expect(run.bossHp).toBeLessThan(10_000);
   });
 });

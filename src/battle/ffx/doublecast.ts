@@ -81,7 +81,11 @@ export function resolveDoublecast(
       if (actor.mp < cost) break;
       applyMpDelta(ctx, actor, cost, actor.id);
     }
+    const seqBefore = ctx.state.nextSeq;
     dealt += resolveAbility(ctx, actor, spell, at);
+    // Yunalesca (FFX only): a form dying in the first cast cancels the second, which would otherwise hit the next form
+    // (`pp_BtlSubHp` marks it and `pp_BtlExecuteAction` drops the sub-action; research/re-ffx-ai-yunalesca-bfa.md 2.11).
+    if ((ctx.rt.formDiedAtSeq ?? -1) >= seqBefore) break;
   }
   ctx.emit({ type: 'action-end', actorId: actor.id });
   return { rank: rankOf(def), damageDealt: dealt, def: spell };

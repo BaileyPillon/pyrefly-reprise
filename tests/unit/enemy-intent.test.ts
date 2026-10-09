@@ -419,6 +419,9 @@ describe('the written half', () => {
     expect(counters).toContain('Silence');
     expect(counters).toContain('Sleep');
     expect(counters).toContain('ffx-yunalesca §5.1');
+    // Re-parity, AI lane B: her counters follow every action that reaches her, a miss too (research/re-ffx-ai-yunalesca-bfa.md §2.9).
+    expect(counters).toContain('a miss too');
+    expect(counters).toContain('re-ffx-ai-yunalesca-bfa §2.9');
   });
 
   it("lists Seymour's Delay punish, and his Banish only while an aeon is out", () => {
@@ -446,6 +449,25 @@ describe('the written half', () => {
     const intent = predictEnemyIntent(ctx, 'braskas-final-aeon');
     expect(intent).not.toBeNull();
     expect(intent!.notes.join(' ')).toContain('Overdrive 80/100');
+  });
+
+  it('says a full gauge is spent on his NEXT turn and that Talk clears it then (re-ffx-ai-yunalesca-bfa §3.4, §3.6)', () => {
+    const { ctx } = realCtx('braskas-final-aeon', 4, zanarkandBuild);
+    ctx.state.flags['bfa.gauge'] = 100;
+    const notes = predictEnemyIntent(ctx, 'braskas-final-aeon')!.notes.join(' ');
+    expect(notes).toContain('Overdrive 100/100 — his next turn is Triumphant Grasp');
+    expect(notes).toContain('the gauge clears when it starts');
+    ctx.state.flags['bfa.gauge'] = 60;
+    expect(predictEnemyIntent(ctx, 'braskas-final-aeon')!.notes.join(' ')).toContain('the turn after it fills');
+  });
+
+  it('lists Yu Yevon’s counter as the game’s own hook: every action that damages him, the seventh makes Osmose then Ultima (§6.3)', () => {
+    const { ctx } = realCtx('yu-yevon', 4, zanarkandBuild);
+    const counters = predictEnemyIntent(ctx, 'yu-yevon')!.counters.join(' ');
+    expect(counters).toContain('Curaga on himself');
+    expect(counters).toContain('from anyone but himself');
+    expect(counters).toContain('the seventh makes his next turn Osmose, then Ultima');
+    expect(counters).toContain('re-ffx-ai-yunalesca-bfa §6.3');
   });
 });
 

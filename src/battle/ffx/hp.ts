@@ -22,6 +22,12 @@ export interface DamageEventInfo {
   hitIndex: number;
   hitCount: number;
   capped?: boolean;
+  /**
+   * Hold the KO a hit at 0 HP would cause: the target's script settles it once the action's hits are all applied
+   * (`hit-event.ts`; the game's `onHit` runs before its death check). Set by `hit-apply.ts` for a target whose script
+   * registered a hook that `managesHp`; absent for every other hit.
+   */
+  deferKo?: boolean;
 }
 
 /**
@@ -62,10 +68,13 @@ export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info:
   applyHpDelta(target, applied);
 
   const enemyDef = target.enemy;
+  // A held KO that the script is certain to refill (a form change, a Yu Pagoda) is not an overkill of anything.
+  const survives = info.deferKo === true && (hasNextForm(target) || enemyDef?.reviveRule !== undefined);
   const overkill =
     applied > 0 &&
     target.hp === 0 &&
     wasAlive &&
+    !survives &&
     enemyDef !== undefined &&
     applied >= enemyDef.rewards.overkillThreshold;
 
@@ -87,6 +96,7 @@ export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info:
   if (overkill && !ctx.rt.overkilled.includes(target.id)) ctx.rt.overkilled.push(target.id);
   refreshCriticalStatus(ctx, target);
   if (target.hp === 0 && wasAlive) {
+    if (info.deferKo === true) return; // `hit-event.ts#runHitEvents` settles it after the hook
     koActor(ctx, target, info.sourceId);
     // The killing blow is the only place the *excess* is knowable, so the
     // revive timer is armed here rather than inside `koActor`.
@@ -117,7 +127,17 @@ export function schedulePartRevival(ctx: Ctx, target: FFXCombatant, excess: numb
 }
 
 /**
- * Stand up every part whose {@link schedulePartRevival} timer has run out.
+ * Arm a destroyed part's return at an exact clock reading with an exact pool: the Yu Pagodas' own script decides both
+ * (`ai/yu-pagoda.ts`: the pool it absorbed in the life that just ended, back after two or three of its own turns).
+ */
+export function scheduleRevivalAt(ctx: Ctx, partId: CombatantId, atTicks: number, maxHp: number): void {
+  const pending = ctx.rt.pendingPartRevivals;
+  if (pending.some((p) => p.id === partId)) return;
+  pending.push({ id: partId, atTicks, maxHp });
+}
+
+/**
+ * Stand up every part whose revive timer ({@link schedulePartRevival}, {@link scheduleRevivalAt}) has run out.
  *
  * Called once per turn from the engine's `advance()`, straight after the CTB
  * clock moves, so a Pagoda re-enters the queue before the next actor is picked.
@@ -128,7 +148,14 @@ export function resolveDuePartRevivals(ctx: Ctx): void {
   const due = pending.filter((p) => p.atTicks <= ctx.state.ticks);
   if (due.length === 0) return;
   ctx.rt.pendingPartRevivals = pending.filter((p) => p.atTicks > ctx.state.ticks);
-  for (const p of due) restorePart(ctx, p.id, p.maxHp);
+  for (const p of due) {
+    restorePart(ctx, p.id, p.maxHp);
+    // The clock only moves between turns, so a return is found `late` ticks after it was due. The rank-3 delay it pays on
+    // rising is counted from the moment it was due, so its first action lands where the Pagoda's own script puts it
+    // (the revival is its own turn, which it ends with the recovery of an empty one).
+    const late = ctx.state.ticks - p.atTicks;
+    if (late > 0) rtOf(ctx, p.id).ctb = Math.max(0, rtOf(ctx, p.id).ctb - late);
+  }
 }
 
 /** Restoration that never went through the damage chain (Regen, Auto-Potion, Mortibsorption). */
@@ -201,10 +228,16 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
     ctx.emit({ type: 'revive', targetId: target.id, hp, cause: everlasting ? 'fayth' : 'auto-life' });
     refreshCriticalStatus(ctx, target);
     // A revived character re-enters with a rank-3 delay, and loses its buffs
-    // (§2.3, "KO revival loses buffs") — but not the fayth's gift.
+    // (§2.3, "KO revival loses buffs") — but not the fayth's gift. The fayth's revival is the game's own command 0x311F
+    // in the possession fights, and the party's script answers it by zeroing that character's CTB, so the one who rose acts
+    // next [re-ffx-ai-yunalesca-bfa §5.2; the seven party workers of sins07_*, @0x027f to @0x0327].
     clearStatusesOnKo(ctx, target);
-    if (everlasting) target.statuses['auto-life'] = { ...autoLife };
-    onRevived(ctx, target.id);
+    if (everlasting) {
+      target.statuses['auto-life'] = { ...autoLife };
+      rtOf(ctx, target.id).ctb = 0;
+    } else {
+      onRevived(ctx, target.id);
+    }
     return;
   }
 
@@ -276,8 +309,9 @@ export function ejectActor(ctx: Ctx, target: FFXCombatant, cause: 'eject' | 'sha
 }
 
 /**
- * Restore a destroyed part. The Yu Pagodas come back with
- * `5000 + excess damage from the killing blow` [ffx-bfa-yu-yevon §1.4].
+ * Restore a destroyed part with the pool it was armed with. The Yu Pagodas come back with the damage they took in the
+ * life that just ended (`ai/yu-pagoda.ts`; the data's `reviveRule` is the older fixed rule, used only when something
+ * other than a hit destroys a part). Its AI memory carries over, as the script's private variables do.
  */
 export function restorePart(ctx: Ctx, partId: CombatantId, maxHp: number): void {
   const part = tryActor(ctx, partId);
@@ -291,5 +325,4 @@ export function restorePart(ctx: Ctx, partId: CombatantId, maxHp: number): void 
   if (part.flags.partOf !== undefined) event.ownerId = part.flags.partOf;
   ctx.emit(event);
   onRevived(ctx, partId);
-  rtOf(ctx, partId).ai = {};
 }

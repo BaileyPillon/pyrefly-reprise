@@ -12,6 +12,13 @@ import type { FFXCombatant } from '../common/types.ts';
 import { type Ctx, rtOf } from './state.ts';
 import { normalise } from './turnQueue.ts';
 
+/** Braska's Final Aeon's AI script ids (`ai/braskas-final-aeon.ts`). */
+function isBraskaScript(enemy: FFXCombatant): boolean {
+  const fields = enemy.enemy;
+  const id = fields?.forms[fields.formIndex]?.aiScriptId ?? fields?.aiScriptId ?? '';
+  return id.startsWith('bfa') || id === 'braskas-final-aeon';
+}
+
 /**
  * Advance to the next form, if there is one. Returns true when the combatant
  * transformed rather than dying.
@@ -37,18 +44,21 @@ export function advanceForm(ctx: Ctx, enemy: FFXCombatant): boolean {
   enemy.removed = false;
   delete enemy.statuses['ko'];
 
-  // CTB surgery: the boss acts next unconditionally and every active party
-  // member is pushed back one tick, so nobody acts between the transformation
-  // and its entry action [ffx-yunalesca §1.3 step A].
-  rtOf(ctx, enemy.id).ctb = 0;
-  for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb += 1;
-  normalise(ctx);
+  // Yunalesca's script rewrites the turn order at both changes: the boss acts next and every active party member is
+  // pushed back one tick, so nobody acts between the transformation and its entry action [ffx-yunalesca §1.3 step A;
+  // re-ffx-ai-yunalesca-bfa §2.10]. Braska's Final Aeon's transformation script writes no CTB at all (§3.7), so his
+  // order is left as it was and he returns to his turn when it comes.
+  if (!isBraskaScript(enemy)) {
+    rtOf(ctx, enemy.id).ctb = 0;
+    for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb += 1;
+    normalise(ctx);
 
-  // Both cycle counters reset on a transition.
-  const mem = rtOf(ctx, enemy.id).ai;
-  mem['priv0004'] = 0;
-  mem['priv0008'] = 0;
-  mem['priv002C'] = nextIndex;
+    // Both cycle counters reset on a transition, and the entry turn is pending.
+    const mem = rtOf(ctx, enemy.id).ai;
+    mem['priv0004'] = 0;
+    mem['priv0008'] = 0;
+    mem['priv002C'] = nextIndex;
+  }
 
   const event: Parameters<Ctx['emit']>[0] = {
     type: 'form-change',

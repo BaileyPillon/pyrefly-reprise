@@ -17,6 +17,8 @@ import { engineDamageClass } from './adapt/command.ts';
 import { resolveHit } from './adapt/hit.ts';
 import { weaponStatusStrikes } from './equipment.ts';
 import { applyMpDelta, dealDamage, ejectActor, healOutsideChain, koActor, reviveActor } from './hp.ts';
+import { managesHp } from './hit-hooks.ts';
+import { type TouchedMap, touch } from './hit-event.ts';
 import { banishAeon } from './aeons.ts';
 import { applyStatus, bouncesOffReflect, removeStatus, removeStatuses, rollStatus } from './statuses.ts';
 import { applyDelay } from './turnQueue.ts';
@@ -48,6 +50,8 @@ export interface HitScope {
   hitIndex: number;
   /** Total HP damage dealt so far (positive only). */
   totalDealt: number;
+  /** The targets the action's hits reached so far, each with its running `LastDamageTakenHP` (`hit-event.ts`). */
+  touched: TouchedMap;
 }
 
 /** Statuses this action tries to land, including weapon strikes. */
@@ -97,6 +101,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
     target = bounced;
   }
 
+  const seen = touch(scope.touched, target); // the game's onHit hook runs for every target a hit record reached (hit-event.ts)
   const row = options.rowFor?.(target) ?? def; // this target's row: DmgCon and rider (od5); draws nothing
   const targetRt = rtOf(ctx, target.id);
   const report = resolveHit(
@@ -190,6 +195,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
 
     // The HP class.
     if ((report.classes & 1) !== 0 && hpAmount !== 0) {
+      seen.hp += hpAmount; // LastDamageTakenHP: after the cap, before the clamp to the HP that was left
       dealDamage(ctx, target, hpAmount, {
         sourceId: user.id,
         element: scope.primaryElement,
@@ -198,6 +204,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
         hitIndex: scope.hitIndex,
         hitCount: scope.totalHits,
         ...(report.capped ? { capped: true } : {}),
+        ...(managesHp(target) ? { deferKo: true } : {}),
       });
       if (hpAmount > 0) {
         // A physical hit WAKES a sleeper [ffx-combat-core §4.2; the shipped

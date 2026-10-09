@@ -163,7 +163,11 @@ describe('the engine draws and decides what the kernels do, on generated situati
       if ((sit.def.record!.damageClass & 4) !== 0) seen.ctb++;
       seen.kinds.add(kernels.kinds);
     }
-    expect(skipped).toBeLessThan(25);
+    // A bound on a seeded sample, not a rule of the game: about 6 percent of the situations end with the target dead and are
+    // set aside. It was 25 until re-parity AI lane B (2026-10-09) made the four possessed aeons' specials single-target rows
+    // like the player's own (Sonic Wings, Meteor Strike, Aerospark, Heavenly Strike), which put them in the pool and moved the
+    // sample: 27 of 400 set aside, 373 compared.
+    expect(skipped).toBeLessThan(35);
     // The sample is wide enough to have exercised each branch.
     expect(seen.hit).toBeGreaterThan(150);
     expect(seen.miss).toBeGreaterThan(5);

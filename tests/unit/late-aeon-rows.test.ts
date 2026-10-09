@@ -93,7 +93,10 @@ describe('Chapters II and III: research §6.4.3 rows (FFX only)', () => {
 });
 
 describe("Chapter III's possessed aeons mirror the inside-Sin rows (run on the engine, FFX only)", () => {
-  it('each possessed aeon stands up with its §6.4.3 row, Luck forced to 1 (ffx-bfa-yu-yevon.md §2.2)', async () => {
+  // Re-parity AI lane B (2026-10-09): the game's init copies Strength, Defense, Magic, Magic Defense, Agility, Evasion,
+  // Accuracy and maximum HP from the player's aeon; Luck stays the monster record's 0 and MP its 1
+  // (research/re-ffx-ai-yunalesca-bfa.md section 5.4, read from m163 to m169). The wiki's "Luck 1" is overruled.
+  it('each possessed aeon stands up with its §6.4.3 row, Luck 0 and MP 1 (re-ffx-ai-yunalesca-bfa.md §5.4)', async () => {
     const { FFXContentRegistry, createFFXEngine } = await import('../../src/battle/ffx/index.ts');
     const { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } = await import('../../src/data/ffx/index.ts');
     for (const id of AEONS) {
@@ -105,7 +108,7 @@ describe("Chapter III's possessed aeons mirror the inside-Sin rows (run on the e
       engine.init({ game: 'ffx', party: dreamsEndBuild, enemies: group, triggers: [], seed: 1, condition: 'normal', canEscape: false });
       const c = engine.state().combatants[`possessed-${id}`]!;
       const row = INSIDE_SIN_SOURCED_ROWS[id]!;
-      expect(c.stats, id).toEqual({ ...row, luck: 1, maxHp: row.hp, maxMp: row.mp });
+      expect(c.stats, id).toEqual({ ...row, luck: 0, mp: 1, maxHp: row.hp, maxMp: 1 });
       expect(c.hp, id).toBe(row.hp);
     }
   });

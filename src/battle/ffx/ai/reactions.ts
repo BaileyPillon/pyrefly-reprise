@@ -2,10 +2,11 @@
  * Boss reactions — the counters that fire from the *hit hook* rather than from
  * a scheduled turn.
  *
- * All of these cost **0 CTB ticks** and never consult a rank: Yunalesca's
- * Blind/Silence/Sleep and Dispelling Slap [ffx-yunalesca §5.1, §14.8],
- * Seymour's threshold Protect/Reflect and his Slowga punish
- * [ffx-seymour-flux §4.3, §4.6], and Yu Yevon's Curaga [ffx-bfa-yu-yevon §3.4.1].
+ * All of these cost **0 CTB ticks** and never consult a rank: Seymour's
+ * threshold Protect/Reflect and his Slowga punish [ffx-seymour-flux §4.3, §4.6]
+ * and the rest below. Yunalesca's counters and Yu Yevon's Curaga left this file
+ * for the engine's hit events (`hit-hooks.ts`, `ai/yunalesca.ts`,
+ * `ai/yu-yevon.ts`), which run for every sub-action that reached them.
  *
  * A counter never triggers another counter.
  */
@@ -19,8 +20,6 @@ import { seymourDelayCounter, seymourThresholdCounters, stepFluxPhase } from './
 import { GUADO_GUARDIAN_SCRIPT, macalaniaGuardianCounter } from './seymour-anima-macalania.ts';
 import { collectEvraeCounters } from './evrae-counters.ts';
 import { collectSinCounters, runSinLivenessHooks } from './sin-counters.ts';
-import { yunalescaCounter } from './yunalesca.ts';
-import { yuYevonCounter } from './yu-yevon.ts';
 import { MORTIBODY_ID, NATUS_ID, natusActionCounters, stepNatusPhase } from './seymour-natus-rules.ts';
 import { executeCommand } from '../execute.ts';
 
@@ -65,19 +64,8 @@ export function collectBossCounters(
     if (canCounter(ctx, c.actorId)) out.push(c);
   }
 
-  // **Only a player-side action provokes a counter.**
-  //
-  // `ffx-bfa-yu-yevon §3.4.1` states the rule as "at most one Curaga per
-  // **player-side action** that deals him damage", and its own table scores the
-  // enemy-side rows at **0** Curagas: "Yu Yevon's Curaga counter" excludes
-  // "Gravija's self-damage", "Yu Pagoda Power Wave" and the counter's own
-  // Zombie-inverted damage. Without this guard a Pagoda's Power Wave on Yu
-  // Yevon fired his 9,999 Curaga on the boss's own behalf — round 03 blocker
-  // #15 measured one Curaga per Power Wave, against the research's 0 — and the
-  // free healing is what made his attrition route unreachable.
-  //
-  // `ffx-yunalesca §14.11` draws the same line for her counters: they answer
-  // what the *party* did.
+  // **Only a player-side action provokes the counters collected below.** (Yunalesca's and Yu Yevon's, which the game
+  // raises for an enemy-side hit too, are hit events now.)
   if (attacker.side === 'enemy') return out;
 
   for (const id of damagedEnemyIds) {
@@ -120,17 +108,6 @@ export function collectBossCounters(
     // assumption C-11, held behind one constant in the script file.
     if (script === GUADO_GUARDIAN_SCRIPT) {
       const command = macalaniaGuardianCounter(ai);
-      if (command) out.push({ actorId: enemy.id, command, cause: 'script' });
-      continue;
-    }
-    if (script?.startsWith('yunalesca')) {
-      if (!isAlive(enemy)) continue; // the killing blow of each form is never countered
-      const command = yunalescaCounter(ai, attacker.id, def.damageType);
-      if (command) out.push({ actorId: enemy.id, command, cause: 'script' });
-      continue;
-    }
-    if (script === 'yu-yevon') {
-      const command = yuYevonCounter(ai);
       if (command) out.push({ actorId: enemy.id, command, cause: 'script' });
       continue;
     }

@@ -8,8 +8,9 @@
  */
 
 import type { BattleEvent, BattleResult, Command, FFXCombatant } from '../common/types.ts';
-import { type Ctx, type EventInput, commandAbility, has, isAlive, rtOf, tryActor } from './state.ts';
+import { type Ctx, type EventInput, canAct, commandAbility, has, isAlive, rtOf, tryActor } from './state.ts';
 import { executeCommand } from './execute.ts';
+import { drainReactions } from './hit-hooks.ts';
 import { collectReactions, onTurnEnd } from './ticks.ts';
 import { collectSignals, evaluateTriggers } from './triggers.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
@@ -69,6 +70,24 @@ export function afterAction(
   // Evrae's 1/3-HP self-Haste: a hook, so Guided Missiles trip it too [§5.4]. No-op elsewhere.
   runEvraePhaseHooks(ctx);
 
+  // Free actions the onHit hooks queued (`hit-hooks.ts`: Yunalesca's counters, Yu Yevon's Curaga), then the older
+  // boss counters and the equipment reactions. A hit one of them lands queues nothing further.
+  ctx.rt.inReaction = true;
+  for (const reaction of drainReactions(ctx)) {
+    const reactor = tryActor(ctx, reaction.actorId);
+    const aimed = tryActor(ctx, reaction.targetId);
+    // The game's queue refuses an actor that cannot act and a dead target; the scripts do not test for either.
+    if (!reactor || !aimed || !isAlive(reactor) || !isAlive(aimed) || !canAct(reactor)) continue;
+    h.push({
+      type: 'counter',
+      actorId: reaction.actorId,
+      targetId: reaction.targetId,
+      abilityId: reaction.command.kind === 'ability' ? reaction.command.id : 'attack',
+      cause: reaction.cause,
+    });
+    executeCommand(ctx, reactor, reaction.command, true);
+  }
+
   // Boss counters fire from the hit hook and cost no turn.
   if (command) {
     const def = commandAbility(ctx, command);
@@ -111,6 +130,8 @@ export function afterAction(
       }
     }
   }
+
+  ctx.rt.inReaction = false;
 
   onTurnEnd(ctx, actor);
   rtOf(ctx, actor.id).turnsTaken += 1;
