@@ -116,9 +116,14 @@ true unless the attacker is the monster itself or the monster is stopped, asleep
 Poison and Regen ticks are applied with the same id for attacker and target (the call passes the id twice), so they never
 pass the guard, but they **do overwrite `chr_reaction` with the monster's own slot**. The HP and MP that a drain (Baralai's
 Absorb, Leblanc's Osmose) hands back to its user is applied to the user as a result of the user's own, so it should behave
-the same way, failing the guard and writing the user's own slot [M: this reading is the sibling note's, who followed the
+the same way, failing the guard and writing the user's own slot [M: this reading is the sibling note's, which followed the
 pending-result list to the applier but not the consumer; I did not repeat the trace]. Results applied by the monster's
 allies pass the guard.
+
+This is the model of FINDINGS B1 (the reaction only records, the next poll answers), and in these fights it holds without
+exception: the reaction entries of Baralai (a burst counter, with the attacker's slot read back by his next Drill Shot) and
+Ixion (his action counter) issue no command; Ormi, Logos, Leblanc, Gippal, Nooj and the goons have no reaction code at all. The
+only commands issued outside a poll are the death commands (1.5).
 
 ### 1.3 More on target searches [H]
 
