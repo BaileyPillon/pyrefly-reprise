@@ -112,6 +112,11 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * character the fayth revives acts next, and Yu Yevon casts Gravija on every turn after his first, on the front line and
  * himself. Both digests move (braskas-final-aeon#1 seven victories -> a defeat on link 1, #7 seven victories again); no other
  * chapter's digest moved.
+ * Release candidate 1, 2026-10-09 (re-parity W1 and AI lane B merged onto release 39.4.2, "game-code and game-script parity
+ * merged onto 39.4.2", FFX only): checked, and nothing was re-pinned. The merged tree reproduces all 18 digests below byte
+ * for byte. Releases 39.2 to 39.4.2 changed no FFX battle code or data (their battle-side changes are FFX-2's Trema data, the
+ * Leblanc preview's chapter registry and `types.ts`'s `hopelessRetry`), and the two lanes' files are disjoint after they forked
+ * at a563e1d8, so the lanes' own pins carry over. A digest that moves from here on is a change to explain.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '28692f2c:defeat',
