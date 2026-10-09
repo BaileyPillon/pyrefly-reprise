@@ -161,7 +161,7 @@ describe('what the planners compute: the equal-height party, whatever the heroes
     for (const frac of [1, 0.7, 0.35]) {
       const factor = (real: boolean): number => {
         const { actors, yojimbo } = cavern(real);
-        yojimbo.name = 'seymour-natus';
+        yojimbo.name = 'evrae'; // a sized colossus (Natus's BOSS SCALE entry is retired: r3942-giants-ffx)
         const staging = new Staging();
         staging.planScale(actors, IDLE.pos, scaleTarget, frac);
         return staging.plan.get(yojimbo)?.k ?? 1;

@@ -64,15 +64,15 @@ const size = (staging: Staging, actors: readonly Actor[], pose: Pose, W: number,
 // ---- the numbers ---------------------------------------------------------------------------------------------------------------------------------
 
 describe('BOSS SCALE targets (FFX Chapter IX only for Yojimbo)', () => {
-  it("Yojimbo's is 1.15 (Bailey's pick); every other boss keeps the target it had", () => {
+  it("Yojimbo's is 1.15 (Bailey's pick); Evrae and Bahamut keep the target they had; Natus and Braska's Final Aeon have none any more", () => {
     expect(scaleTarget('yojimbo')).toBe(1.15);
     expect(scaleTarget('yojimbo-cavern')).toBe(1.15);
-    expect(scaleTarget('seymour-natus')).toBe(2.2);
-    expect(scaleTarget('braskas-final-aeon')).toBe(2.2);
     expect(scaleTarget('evrae')).toBe(2.4);
     expect(scaleTarget('bahamut')).toBe(2.0);
     expect(scaleTarget('ffx2-bahamut')).toBe(2.0);
-    for (const id of ['yunalesca', 'seymour-flux', 'vegnagun-tail', 'overdrive-sin', 'mortibody', 'daigoro', 'ginnem', 'isaaru']) expect(scaleTarget(id)).toBeNull();
+    // r3942-giants-ffx (FFX only, Chapters X and III; Bailey, 2026-10-08, "all of your recommendations"): their scenes draw them at the sizes he picked (Natus 4.455, the aeon 6.919), which BOSS SCALE
+    // no longer grows (it was 2.2 for both): `docs/handoff/r3942-giants-ffx.md`, "What needs the framing engine".
+    for (const id of ['seymour-natus', 'braskas-final-aeon', 'yunalesca', 'seymour-flux', 'vegnagun-tail', 'overdrive-sin', 'mortibody', 'daigoro', 'ginnem', 'isaaru']) expect(scaleTarget(id)).toBeNull();
   });
 
   it('only Yojimbo is held: the colossi keep their steps', () => {
@@ -136,13 +136,13 @@ describe('Yojimbo holds 1.15 times the party mean on screen (Chapter IX\'s stage
       staging.planScale(s.actors, IDLE.pos, scaleTarget, frac, { held: scaleHeld, view: viewOf(IDLE, { width: 1600, height: 900 }) });
       expect(staging.plan.get(s.yojimbo)!.k).toBeCloseTo(1.15, 1);
     }
-    const natus = [...s.party, actor('seymour-natus', -1, 2.75, -2.0, 2.55)];
+    const evrae = [...s.party, actor('evrae', -1, 2.75, -2.0, 2.55)]; // a sized colossus that is not held (Natus was this case's colossus until his entry was retired, r3942-giants-ffx)
     const full = new Staging();
-    full.planScale(natus, IDLE.pos, scaleTarget, 1, { held: scaleHeld });
+    full.planScale(evrae, IDLE.pos, scaleTarget, 1, { held: scaleHeld });
     const half = new Staging();
-    half.planScale(natus, IDLE.pos, scaleTarget, 0.45, { held: scaleHeld });
-    expect(full.plan.get(natus[3]!)!.k).toBeGreaterThan(2);
-    expect(half.plan.get(natus[3]!)!.k).toBeCloseTo(1 + (full.plan.get(natus[3]!)!.k - 1) * 0.45, 6);
+    half.planScale(evrae, IDLE.pos, scaleTarget, 0.45, { held: scaleHeld });
+    expect(full.plan.get(evrae[3]!)!.k).toBeCloseTo(2.44, 2); // measured on this stage: Evrae's 2.4 target takes his 2.55 drawn height to 2.44 times it
+    expect(half.plan.get(evrae[3]!)!.k).toBeCloseTo(1 + (full.plan.get(evrae[3]!)!.k - 1) * 0.45, 6);
   });
 });
 
@@ -237,11 +237,11 @@ describe('a boss is sized once per phase of a link (the lock)', () => {
   it('a boss locked at the drawn scale stays at it (no growth later), and a boss the lock does not name is sized as ever', () => {
     const party = [actor('tidus', 1, -1.1, 5, 1.75)];
     const boss = actor('ffx2-bahamut', -1, 2, 0, 5);
-    const other = actor('seymour-natus', -1, 3, -3, 5);
+    const other = actor('evrae', -1, 3, -3, 5); // another sized colossus (Natus's entry is retired: r3942-giants-ffx)
     const st = new Staging();
     st.planScale([...party, boss, other], new Vector3(0, 2, 9.3), scaleTarget, 1, { locked: new Map([['ffx2-bahamut', 1]]) });
     expect(st.plan.has(boss)).toBe(false);
-    expect(st.plan.get(other)!.k).toBeGreaterThan(1.5);
+    expect(st.plan.get(other)!.k).toBeCloseTo(2.21, 2); // measured: Evrae's 2.4 target on a 5-unit figure at this stage
   });
 
   it('stepsFor: a held boss takes one step; a phase with a lock plays the step it has (none after today\'s rig); otherwise every step, as ever', () => {
@@ -293,7 +293,8 @@ describe('a boss is sized once per phase of a link (the lock)', () => {
     expect(scaleKey(yoj, IDLE, 'ffx|false|1600x900')).toBe(a);
     expect(scaleKey(yoj, IDLE, 'ffx|false|2560x1440')).not.toBe(a); // a resized window
     expect(scaleKey(yoj, { ...IDLE, pos: new Vector3(0, 5.1, 14) }, 'ffx|false|1600x900')).not.toBe(a); // the scene re-registered its rig (Evrae's range)
-    expect(scaleKey([...yoj, actor('seymour-natus', -1, 3, -3, 5)], IDLE, 'ffx|false|1600x900')).not.toBe(a); // another sized boss arrived
+    expect(scaleKey([...yoj, actor('evrae', -1, 3, -3, 5)], IDLE, 'ffx|false|1600x900')).not.toBe(a); // another sized boss arrived
+    expect(scaleKey([...yoj, actor('seymour-natus', -1, 3, -3, 5)], IDLE, 'ffx|false|1600x900')).toBe(a); // Natus is not sized any more (r3942-giants-ffx): his arrival is no new phase
     expect(scaleKey([...yoj, actor('daigoro', -1, 3, -3, 0.7)], IDLE, 'ffx|false|1600x900')).toBe(a); // an unsized fiend does not make a new phase
     expect(scaleKey([actor('tidus', 1, 0, 5, 1.75), actor('vegnagun-tail', -1, 0, 0, 8)], IDLE, 'x')).toBeNull();
     expect(scaleKey([actor('tidus', 1, 0, 5, 1.75)], IDLE, 'x')).toBeNull();
@@ -332,9 +333,9 @@ describe('holdEarly: a held boss takes its size before the first plan lands', ()
     const staging = new Staging();
     expect(holdEarly(staging, s.actors, IDLE, rect, 'L', null, false)).toBeNull();
     expect(s.yojimbo.scale.y).toBe(1);
-    const natus = [...s.party, actor('seymour-natus', -1, 2.75, -2, 2.55)];
-    expect(holdEarly(staging, natus, IDLE, rect, 'L', null, true)).toBeNull(); // sized, not held: the plan decides
-    expect(natus[3]!.scale.y).toBe(1);
+    const evrae = [...s.party, actor('evrae', -1, 2.75, -2, 2.55)];
+    expect(holdEarly(staging, evrae, IDLE, rect, 'L', null, true)).toBeNull(); // sized, not held: the plan decides
+    expect(evrae[3]!.scale.y).toBe(1);
     const other = [...s.party, actor('mortibody', -1, 2.75, -2, 2.55)];
     expect(holdEarly(staging, other, IDLE, rect, 'L', null, true)).toBeNull();
     expect(other[3]!.scale.y).toBe(1);

@@ -262,7 +262,11 @@ export class Framing {
     // with the party stepped toward the enemies (out from under the command menu on the left): the first
     // that passes, else the least bad (today's rig is among the candidates, so the result is never worse).
     const today0: Try = { frac: -1, colossus: false, partyDx: 0 };
-    const steps = stand.side && !stand.colossus ? [] : [0.35, 0.7].map((partyDx): Try => ({ frac: -1, colossus: false, partyDx })); // a chapter's table places its own party: no step toward the fiends (Natus's row only pins a master)
+    // A chapter's table places its own party: no step toward the fiends (Natus's row only pins a master). **r3942-giants-ffx: where that row has no master to play (a window shape the table has not
+    // proved: 1440x900, 1024x768), the party takes today's 0.35 step and never the 0.7 one.** At his real size (4.455, from 2.43) the two candidates came out a hair apart (worst 0.17 and 0.17: at 0.35 Kimahri and Natus
+    // 17 percent under panels, at 0.7 Tidus 17 percent), the plan flipped between them from one run to the next (it can, with the advisor card on one side and the plan on the
+    // other), and 0.7 stands the party 0.35 nearer him than live's 0.35 does (0.12 from Natus, 0.06 from Mortibody at 1440x900), which Bailey's standing preference (2026-10-08: no figure nearer than live) rules out.
+    const steps = stand.side && !stand.colossus ? [] : (stand.colossus ? [0.35] : [0.35, 0.7]).map((partyDx): Try => ({ frac: -1, colossus: false, partyDx }));
     // The table's colossus master (`colossusPin.ts`) is the one candidate when it is pinned: today's rig stays behind it for a window it fails.
     const tries: Try[] = [...(pin ? [{ frac: pin.frac, colossus: true, partyDx: 0, pin }] : colossus ? stepsFor(lock, actors).map((frac) => ({ frac, colossus: true, partyDx: 0 })) : []), today0, ...steps];
     let chosen: { fit: Fit; frac: number; gap: number; bossPx: number; plan: Map<Actor, { k: number; dx: number }>; pin: ColossusPin | null } | null = null;

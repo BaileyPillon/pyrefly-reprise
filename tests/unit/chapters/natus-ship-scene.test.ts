@@ -49,15 +49,16 @@ describe('the Highbridge — tables', () => {
     expect(HIGHBRIDGE_SLOTS.enemySpots?.['seymour-natus']).toEqual(HIGHBRIDGE_SLOTS.enemy[HIGHBRIDGE_ENEMY_SLOT.natus]);
     expect(HIGHBRIDGE_SLOTS.enemySpots?.['mortibody']).toEqual(HIGHBRIDGE_SLOTS.enemy[HIGHBRIDGE_ENEMY_SLOT.mortibody]);
     expect(HIGHBRIDGE_SLOTS.holdParty).toBe(true);
-    // O-1 staging: Natus at 1.3 times Chapter VII Seymour's 1.87, the heights the scene has always drawn. r3942-giants-ffx built his REAL size (46.2 game units over Tidus's 18.15 against the
-    // party's 1.75: 4.455, and Mortibody with him, 1.912) behind HIGHBRIDGE_REAL_SIZE, which is off until the framing engine's BOSS SCALE entry for him is retired (docs/handoff/r3942-giants-ffx.md).
-    expect(HIGHBRIDGE_REAL_SIZE).toBe(false);
-    expect(HIGHBRIDGE_ACTOR_HEIGHTS.natus).toBeCloseTo(1.87 * 1.3, 2);
-    expect(HIGHBRIDGE_ACTOR_HEIGHTS.mortibody).toBe(1.7);
-    expect(HIGHBRIDGE_SLOTS.figureHeights).toEqual({ 'seymour-natus': 2.43, mortibody: 1.7 });
+    // r3942-giants-ffx: his REAL size (46.2 game units over Tidus's 18.15 against the party's 1.75: 4.455, and Mortibody with him, 1.912) is what the scene draws (HIGHBRIDGE_REAL_SIZE on, since
+    // the framing engine's BOSS SCALE entry for him is retired: docs/handoff/r3942-giants-ffx.md). O-1 staging, the heights it drew before: Natus at 1.3 times Chapter VII Seymour's 1.87, 2.43.
+    expect(HIGHBRIDGE_REAL_SIZE).toBe(true);
+    expect(HIGHBRIDGE_ACTOR_HEIGHTS.natus).toBe(4.455);
+    expect(HIGHBRIDGE_ACTOR_HEIGHTS.mortibody).toBe(1.912);
+    expect(HIGHBRIDGE_SLOTS.figureHeights).toEqual({ 'seymour-natus': 4.455, mortibody: 1.912 });
+    expect(HIGHBRIDGE_SLOTS.enemyHeight).toBe(4.455);
     expect(highbridgeHeights(true)).toEqual({ party: 1.75, natus: giantHeight('seymour-natus', 1.75), mortibody: giantHeight('mortibody', 1.75) });
-    expect(highbridgeHeights(true).natus).toBe(4.455);
-    expect(highbridgeHeights(true).mortibody).toBe(1.912);
+    expect(highbridgeHeights(false).natus).toBeCloseTo(1.87 * 1.3, 2);
+    expect(highbridgeHeights(false).mortibody).toBe(1.7);
   });
 
   it('the party stands in front of the enemy line, Mortibody at Natus\'s screen-left (O-2 A)', () => {

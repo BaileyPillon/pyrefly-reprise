@@ -24,6 +24,7 @@ import { SIN_BEVELLE_PLATE, SIN_FLIGHT_PLATE, SIN_GENAIS_CORE_STAGING, SIN_PARTY
 import { HIGHBRIDGE_ACTOR_HEIGHTS, HIGHBRIDGE_REAL_SIZE, HIGHBRIDGE_SLOTS, highbridgeHeights } from '../../src/scenes/highbridge.ts';
 import { DREAMS_END_BFA_PIN, DREAMS_END_PARTY_HEIGHT, DREAMS_END_RIGS, DREAMS_END_ROW_SHIFT, DREAMS_END_STAGING } from '../../src/scenes/dreams-end.ts';
 import { ALL_ROWS, sideShift } from '../../src/engine/fx/mix/stageTable.ts';
+import { scaleTarget } from '../../src/engine/fx/mix/masters.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (rel: string): string => readFileSync(join(here, '../..', rel), 'utf8');
@@ -184,18 +185,23 @@ describe('Chapter X: Seymour Natus at his real size, and Mortibody with him', ()
     expect(1.7 / 3.96).toBeCloseTo(0.4293, 3); // what it stood at against the 3.96 BOSS SCALE gave him on a desktop
   });
 
-  it("the scene's real-size heights come from the table over its own party height, and are switched OFF until the framing engine's BOSS SCALE entry for him is retired", () => {
+  it("the scene's real-size heights come from the table over its own party height, and are ON: the framing engine's BOSS SCALE entry for him is retired", () => {
     expect(highbridgeHeights(true)).toEqual({ party: 1.75, natus: 4.455, mortibody: 1.912 });
     expect(highbridgeHeights(false)).toEqual({ party: 1.75, natus: 2.43, mortibody: 1.7 });
-    // Bailey, 2026-10-08, "original spacing, real sizes": built and off, since on a desktop it would stand him 0.8 nearer the party than live while BOSS SCALE still names him
-    expect(HIGHBRIDGE_REAL_SIZE).toBe(false);
-    expect(HIGHBRIDGE_ACTOR_HEIGHTS).toEqual(highbridgeHeights(false));
-    expect(HIGHBRIDGE_SLOTS.figureHeights).toEqual({ 'seymour-natus': 2.43, mortibody: 1.7 });
-    expect(HIGHBRIDGE_SLOTS.enemyHeight).toBe(2.43);
+    // Bailey, 2026-10-08, "original spacing, real sizes": it waited, built and off, while BOSS SCALE still named him (on a desktop the plan then fell back to the scene's rig and stood him 0.8
+    // nearer the party than live); on since the repair of that day, with the entry gone (below) and the chapter's pinned master playing as it always did.
+    expect(HIGHBRIDGE_REAL_SIZE).toBe(true);
+    expect(HIGHBRIDGE_ACTOR_HEIGHTS).toEqual(highbridgeHeights(true));
+    expect(HIGHBRIDGE_SLOTS.figureHeights).toEqual({ 'seymour-natus': 4.455, mortibody: 1.912 });
+    expect(HIGHBRIDGE_SLOTS.enemyHeight).toBe(4.455);
   });
 
-  // The one thing in the way of his picture on a desktop is a line in a folder this lane does not own (docs/handoff/r3942-giants-ffx.md, "What needs the framing engine").
-  it.todo("masters.ts scaleTarget no longer names seymour-natus (BOSS SCALE retired): the chapter's pinned colossus master then plays at his real size, as the options study pictured it");
+  // What his picture on a desktop waited on: a line in the framing engine (docs/handoff/r3942-giants-ffx.md, "What needs the framing engine"). Retired: BOSS SCALE names neither Natus nor the aeon.
+  it("masters.ts scaleTarget no longer names seymour-natus or braskas-final-aeon (BOSS SCALE retired): the chapter's pinned colossus master plays at his real size, as the options study pictured it", () => {
+    expect(scaleTarget('seymour-natus')).toBeNull();
+    expect(scaleTarget('braskas-final-aeon')).toBeNull();
+    expect(scaleTarget('evrae')).toBe(2.4); // the other colossi keep theirs
+  });
 });
 
 describe("Chapter XVII, link 3: Sinspawn Genais and Sin's Core at their real sizes, at today's spots", () => {
