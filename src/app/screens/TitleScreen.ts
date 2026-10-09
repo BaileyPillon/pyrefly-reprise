@@ -15,6 +15,9 @@ import { readSetting } from '../SaveData.ts';
 import { titleArtOf, type TitleArt } from '../saveFrontend.ts';
 import { holdForNextScreen, warmFrontEnd } from './frontendWarm.ts';
 import { briefingDue } from './raiseBriefing.ts';
+import { BTS_KEY, BTS_LIVE } from '../changelog/behindTheScenes.ts';
+import { TitleInfo } from './frontend/titleInfo.ts';
+import { BTS_ACTION, CHANGELOG_ACTION, CHANGELOG_KEY } from './frontend/titleInfoHtml.ts';
 
 /**
  * The title card, in the approved "Ink & Gold" presentation and now moving.
@@ -64,6 +67,8 @@ export class TitleScreen extends Screen {
   private reduceMotion = false;
   /** Auron's briefing, while it is being replayed from here. */
   private briefing: Briefing | null = null;
+  /** The CHANGELOG panel (and, behind its switch, BEHIND THE SCENES) over the title. */
+  private info: TitleInfo | null = null;
 
   private readonly onResize = (): void => this.layout();
 
@@ -82,13 +87,23 @@ export class TitleScreen extends Screen {
    * `app/Input.ts` and adding one there for a single screen would put a global
    * binding in a file thirty agents import — the same reasoning the pause
    * screen's `H` is written down under. Mouse and touch use the chip.
+   *
+   * `L` opens the CHANGELOG panel and `T` BEHIND THE SCENES, which exists only while its switch is on (Bailey, 2026-10-08;
+   * `frontend/titleInfo.ts`). They are handled here for the same reason as `B`: no abstract button, and no global binding.
    */
   private readonly onKey = (e: KeyboardEvent): void => {
+    if (e.ctrlKey || e.metaKey || e.altKey || this.advancing) return;
+    // `L` opens the changelog, and `T` BEHIND THE SCENES while its switch is on (Bailey, 2026-10-08). A held key opens once.
+    if (e.code === CHANGELOG_KEY) {
+      if (!e.repeat) this.info?.open('changelog');
+      return;
+    }
+    if (BTS_LIVE && e.code === BTS_KEY) {
+      if (!e.repeat) this.info?.open('bts');
+      return;
+    }
     // Dark launch: no chip, no key (`ui/coach/coachState.ts` ONBOARDING_LIVE).
-    if (!onboardingLive()) return;
-    if (e.code !== 'KeyB' || e.ctrlKey || e.metaKey || e.altKey) return;
-    if (this.advancing) return;
-    void this.replayBriefing();
+    if (e.code === 'KeyB' && onboardingLive()) void this.replayBriefing();
   };
 
   override enter(): void {
@@ -101,6 +116,7 @@ export class TitleScreen extends Screen {
     this.root.className = `screen fe fe-title ig${this.art === 'echo' ? ' fe-title--echo' : ''}`;
     this.root.innerHTML = titleMarkup({ briefingChip: onboardingLive(), art: this.art });
     this.stage = this.root;
+    this.info = new TitleInfo(this.root, this.app, () => this.reduceMotion, () => this.advancing);
     // A-16: the placeholder first, every layer in once decoded (`frontend/titleReveal.ts`).
     void revealTitleWhenDecoded(this.root, { placeholder: TITLE_PLACEHOLDERS[this.art] });
     // The 2688px master, once the manifest says it is on disk. Never awaited:
@@ -158,6 +174,8 @@ export class TitleScreen extends Screen {
     this.parallax = null;
     this.briefing?.skip();
     this.briefing = null;
+    this.info?.dispose();
+    this.info = null;
     this.stage = null;
   }
 
@@ -197,6 +215,9 @@ export class TitleScreen extends Screen {
     // pointer / stick / time" and costs nothing when the stick is at rest.
     if (!this.reduceMotion) this.parallax?.setStick(input.axis.x, input.axis.y);
     if (input.actions.includes('title:briefing')) return void this.replayBriefing();
+    // The hint row's entries (a click or a tap on one resolves to its own action, never to the plate's confirm).
+    if (!this.advancing && input.actions.includes(CHANGELOG_ACTION)) return void this.info?.open('changelog');
+    if (BTS_LIVE && !this.advancing && input.actions.includes(BTS_ACTION)) return void this.info?.open('bts');
     if (this.advancing) return;
     if (input.justPressed('confirm') || input.justPressed('start')) return void this.advance();
     if (input.actions.includes('confirm')) void this.advance();
@@ -236,6 +257,7 @@ export class TitleScreen extends Screen {
       reveal: this.root.dataset['titleReveal'] ?? 'pending',
       motes: this.motes?.size ?? 0,
       parallax: this.parallax?.offset() ?? null,
+      info: this.info?.snapshot() ?? null,
     };
   }
 }

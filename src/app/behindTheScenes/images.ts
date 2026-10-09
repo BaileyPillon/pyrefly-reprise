@@ -7,13 +7,17 @@
  * deploy refuses one that still carries it, so the pictures cost a public build nothing and cannot be fetched from it.
  * Each is a screenshot or a painting made for this project (none is a frame from the games), checked by eye for anything
  * that should not be public: no address bar, no name, no path, nothing from a hidden chapter.
+ *
+ * The address is made by `artUrl`, the one place the base path is read for the project's pictures
+ * (`tests/unit/art-url-sources.test.ts`); a URL outside `art/` comes back from it unchanged.
  */
+
+import { artUrl } from '../../engine/PaintedArt.ts';
 
 /** The folder under the site's base that holds them (`tools/dist-filter.mjs` names the same one). */
 export const BTS_IMAGE_DIR = 'bts';
 
 /** The address of one picture: the site's own base (`/` on echoesofspira.com), then `bts/`, then the file. */
 export function btsImageUrl(file: string): string {
-  const base = (typeof import.meta.env !== 'undefined' && import.meta.env.BASE_URL) || '/';
-  return `${base.replace(/\/+$/, '')}/${BTS_IMAGE_DIR}/${file}`;
+  return artUrl(`${BTS_IMAGE_DIR}/${file}`);
 }

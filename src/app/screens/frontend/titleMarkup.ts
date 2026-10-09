@@ -36,6 +36,8 @@ import { logicalArtUrl } from '../../../engine/ArtShipped.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
 import { movedNoticeHtml } from './movedNotice.ts';
 import { TITLE_ART_PLATES, type TitleArt } from '../../saveFrontend.ts';
+import { buildTagHtml, type BuildInfo } from '../../changelog/buildInfo.ts';
+import { infoEntriesHtml } from './titleInfoHtml.ts';
 
 /**
  * Where the two on the shore stand, in fractions of the frame.
@@ -125,6 +127,12 @@ export interface TitleMarkupOptions {
    * only for the old GitHub Pages address. Omitted, it is this page's own `location.hostname`; a test names one.
    */
   readonly host?: string;
+  /**
+   * The numbers on the build number chip (`changelog/buildInfo.ts`; Bailey, 2026-10-08). Omitted, they are read from this build's
+   * own defines (the release the deploy stamped, the commit): a dev server shows the commit alone, a vitest run shows no chip.
+   * A test names a build.
+   */
+  readonly build?: BuildInfo;
 }
 
 /**
@@ -202,8 +210,9 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
     <div class="fe-title__strap">Final Fantasy X and X-2</div>
 
     <div class="fe-hint">
-      <span class="fe-hint__key"><b>Arrows / WASD</b> move</span><span class="fe-hint__key"><b>Enter</b> confirm</span><span class="fe-hint__key"><b>Esc</b> cancel</span><span class="fe-hint__tap"><b>Tap</b> begin</span>${briefing}
+      <span class="fe-hint__key"><b>Arrows / WASD</b> move</span><span class="fe-hint__key"><b>Enter</b> confirm</span><span class="fe-hint__key"><b>Esc</b> cancel</span><span class="fe-hint__tap"><b>Tap</b> begin</span>${briefing}${infoEntriesHtml()}
     </div>
+    ${buildTagHtml(opts.build)}
     </div>
     ${movedNoticeHtml(opts.host)}
   `;
