@@ -5,8 +5,9 @@
  * pattern change** | The check only fires on direct attacks and on Mortibsorption" `[verified: 2
  * sources]`. The AI read its phase from HP, so a Poison tick below 35,000 started the Flare loop with
  * no Reflect up and the first Flare hit Seymour himself (14 of 200 intended runs). The phase is now
- * stored and only a real hit moves it (`seymour-flux.ts#stepFluxPhase`). Proved on the real engine and
- * the real Chapter I data (hard rule 3). Plan: `docs/plans/combat-fixes-0924-review.md` §8.
+ * stored and only a real hit moves it (re-parity: Flux's `onHit` hook, `seymour-flux-hooks.ts`; Flux has no
+ * `postPoison` hook, so a tick never reaches it, `research/re-ffx-ai-seymour.md` §2.5). Proved on the real
+ * engine and the real Chapter I data (hard rule 3). Plan: `docs/plans/combat-fixes-0924-review.md` §8.
  *
  * **Game case: FFX only** [AGENTS.md rule 14]: Seymour Flux and the Mortiorchis are FFX's.
  */
@@ -140,7 +141,10 @@ describe('Chapter I: Poison never moves Seymour Flux\'s phase; the next real hit
     }
   });
 
-  it('a Threatened Seymour cannot counter the hit, but the hit still moves the stored phase (Threaten stops actions, not the pattern)', () => {
+  it('the Reflect line queues a FORCED Reflect, so even a Threatened Seymour answers the hit (m142 @0x5c8 to 0x623; re-parity D-04)', () => {
+    // The game's rows queue the line's Protect and Reflect with forcePerformCommand, which is not gated on the owner's
+    // state; the old collector skipped a Threatened enemy. Seymour is Threaten-immune in our data, so this is reachable only
+    // by setting the status by hand, as here.
     const engine = newEngine(3);
     poisonAcrossHalf(engine);
     nextInput(engine);
@@ -148,7 +152,7 @@ describe('Chapter I: Poison never moves Seymour Flux\'s phase; the next real hit
     const from = engine.state().log.length;
     engine.submit({ kind: 'ability', id: PROBE.id, targets: [SEYMOUR] });
     const hit = engine.state().log.slice(from);
-    expect(hit.filter((e) => e.type === 'counter' && e.actorId === SEYMOUR)).toHaveLength(0);
+    expect(hit.filter((e) => e.type === 'counter' && e.actorId === SEYMOUR).map((e) => (e as { abilityId: string }).abilityId)).toEqual(['reflect']);
     expect(engine.state().flags[PHASE]).toBe(2);
   });
 

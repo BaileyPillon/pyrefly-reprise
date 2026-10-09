@@ -168,7 +168,7 @@ describe('a dry run never touches the live battle', () => {
     const before = fingerprint(ctx);
     const { ctx: clone, events } = cloneCtx(ctx);
 
-    clone.state.flags['seymour.p1Step'] = 5;
+    clone.state.flags['seymour.cycle'] = 5;
     clone.rt.actors.get('seymour-flux')!.ai['scribble'] = 1;
     (clone.state.combatants['tidus'] as FFXCombatant).hp = 1;
     clone.rng.int(0, 99);
@@ -196,20 +196,21 @@ describe('the predicted opener matches the shipped rotation', () => {
     expect(intent?.confidence).toBe('scripted');
   });
 
-  it('the Mortiorchis opens on its own parity with Full-Life [ffx-seymour-flux §4.2]', () => {
-    // The mount owns the odd steps, and `stepFor` snaps the shared counter to
-    // the actor's own parity — which is the fix that stopped it opening with
-    // Cross Cleave on every turn.
+  it('the Mortiorchis answers on the even steps: nothing at step 1, Full-Life at step 2 [m142 @0x438, D-01]', () => {
+    // The game's shared state: an actor whose turn comes on the other parity wastes it (the panel says so),
+    // and the mount's first useful turn is its Full-Life at s = 2.
     const { ctx } = realCtx('seymour-flux', 5);
+    expect(predictEnemyIntent(ctx, 'mortiorchis')?.kind).toBe('pass');
+    ctx.state.flags['seymour.cycle'] = 2;
     const intent = predictEnemyIntent(ctx, 'mortiorchis');
     expect(intent?.abilityId).toBe('full-life');
   });
 
-  it('Seymour reaches Dispel on step 4 and the mount reaches Cross Cleave on step 5', () => {
+  it('Seymour reaches Dispel at step 5 and the mount reaches Cross Cleave at step 6', () => {
     const { ctx } = realCtx('seymour-flux', 5);
-    ctx.state.flags['seymour.p1Step'] = 4;
+    ctx.state.flags['seymour.cycle'] = 5;
     expect(predictEnemyIntent(ctx, 'seymour-flux')?.abilityId).toBe('dispel');
-    ctx.state.flags['seymour.p1Step'] = 5;
+    ctx.state.flags['seymour.cycle'] = 6;
     expect(predictEnemyIntent(ctx, 'mortiorchis')?.abilityId).toBe('cross-cleave');
   });
 
@@ -270,55 +271,56 @@ describe('the predicted opener matches the shipped rotation', () => {
 // ---------------------------------------------------------------------------
 
 describe('charge countdowns', () => {
-  /** Phase 2, no aeon: the mount is on the Total Annihilation ladder [§4.4.2]. */
-  function phaseTwo(seed = 9): Ctx {
+  /**
+   * The second cycle, no aeon (re-parity, `research/re-ffx-ai-seymour.md` §2.4 and D-03): Flux Flare (s 1), the mount's
+   * "ready" notice (s 2), Flux's Reflect or nothing (s 3), the mount's Total Annihilation (s 4). There is no separate
+   * charge counter; the notice IS the mount's Special 1 turn.
+   */
+  function phaseTwo(cycle: number, seed = 9): Ctx {
     const { ctx } = realCtx('seymour-flux', seed);
     const host = ctx.state.combatants['seymour-flux'] as FFXCombatant;
     host.hp = Math.floor(host.stats.maxHp / 4); // below 50% -> phase 2
     ctx.state.flags['seymour.phase'] = 2;
+    ctx.state.flags['seymour.cycle'] = cycle;
     return ctx;
   }
 
-  it('the first Total Annihilation costs two charge turns, and the panel counts them down', () => {
-    const ctx = phaseTwo();
-    // Turn one of the ladder: `required` 2, `turns` 0 -> one turn still owed.
-    const first = predictEnemyIntent(ctx, 'mortiorchis');
-    expect(first?.kind).toBe('charge');
-    expect(first?.charge).toEqual(
-      expect.objectContaining({ name: 'Auto-Attack Mode', turnsLeft: 1, stage: 1 }),
-    );
-    expect(first?.charge?.payloadName).toBe('Total Annihilation');
-    expect(first?.moveName).toBe('Total Annihilation');
-
-    // Turn two: the second charge turn, stage 2, and the payload lands next.
-    ctx.state.flags['seymour.chargeTurns'] = 1;
-    const second = predictEnemyIntent(ctx, 'mortiorchis');
-    expect(second?.charge).toEqual(
+  it('the mount\'s turn at step 2 is the ready notice, and the panel counts it down to the payload', () => {
+    const ctx = phaseTwo(2);
+    const ready = predictEnemyIntent(ctx, 'mortiorchis');
+    expect(ready?.kind).toBe('charge');
+    expect(ready?.charge).toEqual(
       expect.objectContaining({ name: 'Ready To Annihilate', turnsLeft: 0, stage: 2 }),
     );
+    expect(ready?.charge?.payloadName).toBe('Total Annihilation');
+    expect(ready?.moveName).toBe('Total Annihilation');
 
-    // Ladder full: the move itself.
-    ctx.state.flags['seymour.chargeTurns'] = 2;
+    // The notice that was already on screen (the phase change's) wins over the one this turn announces.
+    ctx.rt.actors.get('mortiorchis')!.charge = { name: 'Auto-Attack Mode', turnsLeft: 1, stage: 1 };
+    expect(predictEnemyIntent(ctx, 'mortiorchis')?.charge).toEqual(
+      expect.objectContaining({ name: 'Auto-Attack Mode', turnsLeft: 1, stage: 1 }),
+    );
+
+    // Step 4: the move itself.
+    ctx.state.flags['seymour.cycle'] = 4;
     const fires = predictEnemyIntent(ctx, 'mortiorchis');
     expect(fires?.kind).toBe('action');
     expect(fires?.abilityId).toBe('total-annihilation');
   });
 
-  it('every later Total Annihilation costs one charge turn, not two [§4.4.2]', () => {
-    const ctx = phaseTwo();
-    ctx.state.flags['seymour.hasAnnihilated'] = true;
-    ctx.state.flags['seymour.chargeRequired'] = 1;
-    ctx.state.flags['seymour.chargeTurns'] = 0;
-    const intent = predictEnemyIntent(ctx, 'mortiorchis');
-    expect(intent?.charge?.turnsLeft).toBe(0);
-    expect(intent?.charge?.stage).toBe(2);
+  it('a mount turn on a step that is not its own is a wasted turn, not a charge', () => {
+    for (const s of [1, 3, 5, 6]) {
+      const intent = predictEnemyIntent(phaseTwo(s), 'mortiorchis');
+      expect(intent?.kind, `step ${s}`).toBe('pass');
+      expect(intent?.charge, `step ${s}`).toBeNull();
+    }
   });
 
   it('prices what the countdown lands on, not the dead turn it is spending', () => {
     // "This turn does nothing" is the least useful thing the panel could say
-    // with Total Annihilation two turns out, so a charge turn describes and
-    // costs the **payload** against the board the player is standing on.
-    const ctx = phaseTwo();
+    // with Total Annihilation next, so a notice turn describes and costs the
+    // **payload** against the board the player is standing on.
+    const ctx = phaseTwo(2);
     const intent = predictEnemyIntent(ctx, 'mortiorchis');
     expect(intent?.kind).toBe('charge');
     expect(intent?.abilityId).toBe('total-annihilation');
@@ -327,15 +329,14 @@ describe('charge countdowns', () => {
     for (const row of intent!.estimate!.perTarget) expect(row.amount).toBeGreaterThan(0);
   });
 
-  it('an aeon on the field holds the ladder — the charge is postponed, not lost', () => {
-    const ctx = phaseTwo();
-    const before = ctx.state.flags['seymour.chargeTurns'];
+  it('an aeon on the field freezes the cycle: the mount passes and the state does not move (D-02)', () => {
+    const ctx = phaseTwo(4);
     ctx.state.aeonId = 'valefor';
     // With no aeon actually built into this fixture the mount still refuses to
-    // charge, which is the mechanic: summoning stalls it.
+    // act, which is the mechanic: summoning stalls it.
     const intent = predictEnemyIntent(ctx, 'mortiorchis');
     expect(intent?.kind).not.toBe('action');
-    expect(ctx.state.flags['seymour.chargeTurns']).toBe(before);
+    expect(ctx.state.flags['seymour.cycle']).toBe(4);
   });
 });
 
@@ -348,7 +349,7 @@ describe('the damage estimate', () => {
       const host = c.state.combatants['seymour-flux'] as FFXCombatant;
       host.hp = Math.floor(host.stats.maxHp / 4);
       c.state.flags['seymour.phase'] = 2;
-      c.state.flags['seymour.chargeTurns'] = 2;
+      c.state.flags['seymour.cycle'] = 4; // the mount's Total Annihilation step
       return c;
     })();
 

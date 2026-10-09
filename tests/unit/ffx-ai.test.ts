@@ -110,8 +110,10 @@ function seymourCtx() {
   });
 }
 
-describe('Seymour Flux (§4)', () => {
-  it('runs the shared 6-step phase-1 cycle, alternating the two actors', () => {
+// Re-parity (FFX only): both actors read one cycle state `s`, as the game's scripts do
+// (`research/re-ffx-ai-seymour.md` section 2; the full decision table is in `parity-ffx-ai-flux.test.ts`).
+describe('Seymour Flux (§4, as the game runs it)', () => {
+  it('runs the shared 6-step first cycle, alternating the two actors', () => {
     const { ctx } = seymourCtx();
     const order: string[] = [];
     const actors = ['seymour-flux', 'mortiorchis'];
@@ -129,97 +131,80 @@ describe('Seymour Flux (§4)', () => {
     ]);
   });
 
-  it('does nothing on a second consecutive turn (§4.1 alternation guard)', () => {
+  it('an actor whose turn arrives on the other parity wastes it and leaves the cycle alone (m142 @0x2bf, D-01)', () => {
     const { ctx } = seymourCtx();
     const seymour = at(ctx, 'seymour-flux');
-    expect(idOf(chooseAiCommand(ctx, seymour))).toBe('lance-of-atrophy');
-    expect(chooseAiCommand(ctx, seymour)).toBeNull();
+    expect(idOf(chooseAiCommand(ctx, seymour))).toBe('lance-of-atrophy'); // s 1 -> 2
+    expect(chooseAiCommand(ctx, seymour)).toBeNull(); // s = 2 is the mount's step: nothing, s stays 2
+    expect(ctx.state.flags['seymour.cycle']).toBe(2);
+    // The mount going first at the start wastes its turn too: no last-actor memory snaps it onto its own parity.
+    const fresh = seymourCtx().ctx;
+    expect(chooseAiCommand(fresh, at(fresh, 'mortiorchis'))).toBeNull();
+    expect(fresh.state.flags['seymour.cycle'] ?? 1).toBe(1);
   });
 
   it('Full-Life prefers a zombified member, and whiffs on a living one', () => {
     const { ctx } = seymourCtx();
     const tidus = at(ctx, 'tidus');
     applyStatus(ctx, undefined, tidus, { status: 'zombie', chance: 255, duration: 254 });
-    // Advance the shared counter to the mount's Full-Life step.
-    ctx.state.flags['seymour.p1Step'] = 1;
-    ctx.state.flags['seymour.lastEnemyActor'] = 'seymour-flux';
+    // The shared state at the mount's Full-Life step.
+    ctx.state.flags['seymour.cycle'] = 2;
     const command = chooseAiCommand(ctx, at(ctx, 'mortiorchis'));
     expect(idOf(command)).toBe('full-life');
     expect(command?.targets).toEqual(['tidus']);
   });
 
-  it('holds the Total Annihilation ladder while an aeon is on the field (§4.4.2)', () => {
+  it('with an aeon on the field the mount passes and Flux banishes at once, the cycle frozen (D-02)', () => {
     const { ctx } = seymourCtx();
-    at(ctx, 'seymour-flux').hp = 30000; ctx.state.flags['seymour.phase'] = 2; // phase 2 is stored, not read from HP (§4.3)
-    ctx.state.aeonId = 'valefor';
-    ctx.state.flags['seymour.lastEnemyActor'] = 'seymour-flux';
-    expect(chooseAiCommand(ctx, at(ctx, 'mortiorchis'))).toBeNull();
-    expect(ctx.state.flags['seymour.chargeTurns'] ?? 0).toBe(0);
-  });
-
-  it('charges twice for the first Total Annihilation and once thereafter', () => {
-    const { ctx, events } = seymourCtx();
-    at(ctx, 'seymour-flux').hp = 30000; ctx.state.flags['seymour.phase'] = 2; // phase 2 is stored, not read from HP (§4.3)
-    const mount = at(ctx, 'mortiorchis');
-    const step = (): string => {
-      ctx.state.flags['seymour.lastEnemyActor'] = 'seymour-flux';
-      return idOf(chooseAiCommand(ctx, mount));
-    };
-    expect(step()).toBe('pass'); // Auto-Attack Mode
-    expect(step()).toBe('pass'); // Ready To Annihilate
-    expect(step()).toBe('total-annihilation');
-    // It stays in Auto-Attack Mode, so the next use costs only one charge turn.
-    expect(step()).toBe('pass');
-    expect(step()).toBe('total-annihilation');
-
-    const charges = events.filter((e) => e.type === 'charge');
-    expect(charges).toHaveLength(3);
-    if (charges[0]?.type === 'charge') {
-      expect(charges[0].name).toBe('Auto-Attack Mode');
-      expect(charges[0].stage).toBe(1);
-    }
-    if (charges[1]?.type === 'charge') {
-      expect(charges[1].name).toBe('Ready To Annihilate');
-      expect(charges[1].stage).toBe(2);
-    }
-  });
-
-  it('Banishes an aeon only after it has taken one turn (§4.5)', () => {
-    const { ctx } = seymourCtx();
+    at(ctx, 'seymour-flux').hp = 30000; ctx.state.flags['seymour.phase'] = 2;
+    ctx.state.flags['seymour.cycle'] = 4;
     ctx.state.aeonId = 'valefor';
     ctx.state.combatants['valefor'] = at(ctx, 'tidus');
-    const seymour = at(ctx, 'seymour-flux');
-    // The aeon has not acted yet: he takes a normal turn instead.
-    expect(idOf(chooseAiCommand(ctx, seymour))).not.toBe('banish');
-    const aeonRt = ctx.rt.actors.get('valefor');
-    if (aeonRt) aeonRt.turnsTaken = 1;
-    ctx.state.flags['seymour.lastEnemyActor'] = 'mortiorchis';
-    expect(idOf(chooseAiCommand(ctx, seymour))).toBe('banish');
+    expect(chooseAiCommand(ctx, at(ctx, 'mortiorchis'))).toBeNull();
+    // No count of the aeon's turns: the aeon has not acted and Flux banishes it on his next turn.
+    expect(idOf(chooseAiCommand(ctx, at(ctx, 'seymour-flux')))).toBe('banish');
+    expect(ctx.state.flags['seymour.cycle']).toBe(4);
   });
 
-  it('loops Flare -> wait -> Flare while Reflect holds, and it is flare-self (§4.4.1)', () => {
+  it('the second cycle is four steps: Flare, the mount\'s ready notice, Reflect, Total Annihilation (D-03)', () => {
+    const { ctx, events } = seymourCtx();
+    const seymour = at(ctx, 'seymour-flux');
+    seymour.hp = 30000; ctx.state.flags['seymour.phase'] = 2; ctx.state.flags['seymour.cycle'] = 1;
+    const mount = at(ctx, 'mortiorchis');
+    const seen = [
+      idOf(chooseAiCommand(ctx, seymour)), // s 1: Flare at himself
+      idOf(chooseAiCommand(ctx, mount)), // s 2: Special 1, the notice that it is ready
+      idOf(chooseAiCommand(ctx, seymour)), // s 3: Reflect (he has none)
+      idOf(chooseAiCommand(ctx, mount)), // s 4: Total Annihilation
+      idOf(chooseAiCommand(ctx, seymour)), // s 1 again
+    ];
+    expect(seen).toEqual(['flare-self', 'pass', 'reflect', 'total-annihilation', 'flare-self']);
+    const charges = events.filter((e) => e.type === 'charge');
+    expect(charges).toHaveLength(1); // the ready notice; the first notice belongs to the phase change itself (the hooks)
+    if (charges[0]?.type === 'charge') {
+      expect(charges[0].name).toBe('Ready To Annihilate');
+      expect(charges[0].stage).toBe(2);
+    }
+  });
+
+  it('loops Flare -> (mount) -> wait while Reflect holds, and Flare is flare-self (§4.4.1)', () => {
     const { ctx } = seymourCtx();
     const seymour = at(ctx, 'seymour-flux');
-    seymour.hp = 30000; ctx.state.flags['seymour.phase'] = 2; // phase 2 is stored, not read from HP (§4.3)
+    const mount = at(ctx, 'mortiorchis');
+    seymour.hp = 30000; ctx.state.flags['seymour.phase'] = 2; ctx.state.flags['seymour.cycle'] = 1;
     applyStatus(ctx, undefined, seymour, { status: 'reflect', chance: 255, duration: 254 });
-    const step = (): Command | null => {
-      ctx.state.flags['seymour.lastEnemyActor'] = 'mortiorchis';
-      return chooseAiCommand(ctx, seymour);
-    };
     // The encounter's own record, not the player's Blk Magic `flare`: power 80,
     // `self`, `extra.selfTargetBounce`. Casting the player's row measured 927
     // on Yuna against §5.2's 1,900-2,100 band and made §5.3's self-damage case
     // unreachable.
-    const flare = step();
+    const flare = chooseAiCommand(ctx, seymour);
     expect(idOf(flare)).toBe('flare-self');
     expect(flare?.targets).toEqual(['seymour-flux']);
-    // §4.4.1: one free turn on the turn he would recast Reflect — and then the
-    // loop restarts. It used to stop here for ever: ten phase-2 turns on seed 1
-    // contained exactly one Flare and nine threshold counters / waits.
-    expect(step()).toBeNull(); // "Seymour waits"
-    expect(idOf(step())).toBe('flare-self');
-    expect(step()).toBeNull();
-    expect(idOf(step())).toBe('flare-self');
+    chooseAiCommand(ctx, mount); // s 2
+    // s 3: he already holds Reflect, so the turn is a caption only; then the mount's Total Annihilation and the loop restarts.
+    expect(chooseAiCommand(ctx, seymour)).toBeNull();
+    expect(idOf(chooseAiCommand(ctx, mount))).toBe('total-annihilation');
+    expect(idOf(chooseAiCommand(ctx, seymour))).toBe('flare-self');
   });
 });
 

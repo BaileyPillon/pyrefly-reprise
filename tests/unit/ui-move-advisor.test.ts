@@ -729,8 +729,7 @@ describe('the FFX HUD’s own card, on a real Chapter 1 board', () => {
         const state = structuredClone(engine.state()) as BattleState;
         state.combatants['yuna']!.hp = 0;
         state.combatants['yuna']!.alive = false;
-        state.flags['seymour.p1Step'] = p1Step;
-        state.flags['seymour.lastEnemyActor'] = 'nobody';
+        state.flags['seymour.cycle'] = p1Step + 1; // re-parity: the game's shared state `s` is the old 0-based step plus 1
         return { state, actorId: d.actorId, commands: d.commands };
       }
       const row = d.commands.find((c) => c.enabled)!;
