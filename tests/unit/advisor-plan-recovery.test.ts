@@ -50,7 +50,10 @@ describe('the card takes over a fight that was already going badly', () => {
       // Chapter 1 runs seed 11, the rest seed 5 (2026-10-08, re-parity W1, FFX only): the engine now draws hit, variance and
       // critical in the game's order and Cross Cleave always hits, so seed 5's Chapter 1 is over inside the five wasteful turns
       // (seed 11 is the first of seeds 1 to 15 that survives them).
-      const { engine, options } = harnessFor(chapterId, chapterId === 'seymour-flux' ? 11 : 5);
+      // Chapter 1 runs seed 1 now (2026-10-09, re-parity W2, FFX only): the opening counters are the game's 26 fixed draws, so seed 11 is over
+      // inside the five wasteful turns (4 decisions). Seed 1 is the first of seeds 1 to 30 that survives them (9 decisions); only seeds 2
+      // and 10 besides do, which is how hard the chapter punishes five wasted turns.
+      const { engine, options } = harnessFor(chapterId, chapterId === 'seymour-flux' ? 1 : 5);
       // Five, not ten: Chapter 1 is lost outright in six decisions of wasteful
       // play, and a prefix that ends the fight before the card is consulted is
       // not a recovery test.

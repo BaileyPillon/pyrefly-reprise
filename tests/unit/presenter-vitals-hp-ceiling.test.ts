@@ -11,7 +11,7 @@
  * drew 632 + 1000 until the next burst re-seeded it.
  *
  * Case 1 replays that exact opening through the real engine, the real
- * `BattlePresenter` and a recording `HudPort`: Chapter VIII, seed 1, the four
+ * `BattlePresenter` and a recording `HudPort`: Chapter VIII, seed 3 (seed 1 until re-parity W2, see `evraeEngine`), the four
  * party commands the evidence log recorded. Case 2 runs the shared projection
  * on a real state from each game. **Game case: both** — the projection is
  * shared playback plumbing (AGENTS.md rule 14, CHK-020); the defect was seen in
@@ -49,7 +49,10 @@ function evraeEngine() {
     party: chapter.buildRef,
     enemies: chapter.enemyGroupRef,
     triggers: [],
-    seed: 1,
+    // Seed 1 -> 3 on 2026-10-09 (re-parity W2, FFX only): the opening counters are the game's 26 fixed draws, so seed 1 no longer opens
+    // tidus, rikku, wakka with Tidus down. Seed 3 is the first of seeds 1 to 80 where the four recorded commands are asked of the same
+    // actors in the same order and the Phoenix Down revives Tidus at 632 before the Al Bhed Potion's 1000 (checked by running the engine).
+    seed: 3,
     condition: 'normal',
     canEscape: false,
   } as never);
@@ -80,7 +83,7 @@ const OPENING: Array<{ actorId: CombatantId; command: Command }> = [
 ];
 
 describe('PR-0156: the party row never reads HP above maximum', () => {
-  it('Chapter VIII seed 1, revive then Al Bhed Potion: no row over its maximum, through the real presenter', async () => {
+  it('Chapter VIII seed 3, revive then Al Bhed Potion: no row over its maximum, through the real presenter', async () => {
     const engine = evraeEngine();
     const drawn: string[] = [];
     let peakTidus = 0;

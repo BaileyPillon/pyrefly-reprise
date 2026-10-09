@@ -456,7 +456,11 @@ describe('Macalania — act three', () => {
   it('A-8: Anima at 0 restores him to 6,000 at Magic 32, and Multi- lands twice', () => {
     // Seed 2 -> 1 on 2026-10-08 (re-parity W1, FFX only): the engine now draws hit, variance and critical in the
     // game's order, so seed 2's act three shows only one Multi- hit before the fight ends; seed 1 shows two.
-    const engine = newEngine(1);
+    // Seed 1 -> 3 on 2026-10-09 (re-parity W2, FFX only): the opening counters are the game's 26 fixed draws and statuses roll through the
+    // game's infliction step, so the draws moved again; on seed 1 a Nul charge absorbs the first hit of both Multi- casts it sees and the
+    // fight ends before one cast has landed both hits. Seed 3 is the first of seeds 1 to 30 whose act three has such a cast (checked by
+    // running the engine; seeds 3 to 9, 11, 16, 18 to 21, 23, 25, 28 and 29 do).
+    const engine = newEngine(3);
     driveIntended(engine, () => engine.state().flags['macalania.act'] === 3);
     expect(engine.state().flags['macalania.act']).toBe(3);
 
@@ -471,19 +475,23 @@ describe('Macalania — act three', () => {
       .log.some((e: BattleEvent) => e.type === 'heal' && e.targetId === SEYMOUR && e.cause === 'seymour-restored');
     expect(restored).toBe(true);
 
-    // Let him take a few act-three turns and count the hits per action.
-    driveIntended(engine, () => {
-      const multi = engine
+    // Let him take act-three turns until one action has landed BOTH of its hits: hit 0, then hit 1, in a row. (Re-parity W2: a hit that
+    // a Nul charge absorbs leaves no damage event, so the first two Multi- damage events can be the second hit of two different actions;
+    // the claim is that one action lands twice, so the test waits for one that did.)
+    const hitIndexes = (): number[] =>
+      engine
         .state()
-        .log.filter((e: BattleEvent) => e.type === 'damage' && e.sourceId === SEYMOUR && e.hitCount === 2);
-      return multi.length >= 2;
-    });
-    const multi = engine
-      .state()
-      .log.filter((e: BattleEvent) => e.type === 'damage' && e.sourceId === SEYMOUR && e.hitCount === 2);
-    expect(multi.length).toBeGreaterThanOrEqual(2);
+        .log.filter((e: BattleEvent) => e.type === 'damage' && e.sourceId === SEYMOUR && e.hitCount === 2)
+        .map((e) => (e.type === 'damage' ? e.hitIndex : -1));
+    const fullActions = (): number => {
+      const idx = hitIndexes();
+      let n = 0;
+      for (let i = 0; i + 1 < idx.length; i++) if (idx[i] === 0 && idx[i + 1] === 1) n++;
+      return n;
+    };
+    driveIntended(engine, () => fullActions() >= 1);
     // Two hits, indices 0 and 1, out of one action.
-    expect(multi.map((e) => (e.type === 'damage' ? e.hitIndex : -1)).slice(0, 2)).toEqual([0, 1]);
+    expect(fullActions()).toBeGreaterThanOrEqual(1);
   });
 });
 

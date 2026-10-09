@@ -97,7 +97,12 @@ import { MAX_DECISIONS, SEEDS, WINDOWS, attack, newEngine, runIntended } from '.
 // had it on an accuracy byte of 100 marked [estimate]. Seeds 1, 7 and 42 now lose (7 and 1 inside the opening cycles,
 // at turns 11 and 9 with Seymour untouched; 42 at turn 50) and 20260916 still wins. Nothing on the boss or the party was
 // tuned; restoring only Cross Cleave's old accuracy formula gives 17 of seeds 1-40 again (measured on the same tree).
-const KNOWN_LOSSES: readonly number[] = [1, 7, 42];
+// 2026-10-09, re-parity W2 (FFX only): the opening counters are the game's 26 fixed draws, statuses roll through the game's infliction
+// step (one draw per status with a chance byte, the 255 / 254 rules, the exclusions, Petrify's wipe) and the per-turn ticks are the
+// game's (Regen from each holder's own tick counter, Poison only after an action, Doom from 5), so every seeded line moved again.
+// Seeds 1 (turn 43) and 7 (turn 11) still lose; seed 42 now WINS (turn 80) and 20260916 now LOSES (turn 19, Seymour at 48,662).
+// Nothing on the boss or the party was tuned; the wide-window floors below did not need to move (10 of 40, 48 of 160 measured).
+const KNOWN_LOSSES: readonly number[] = [1, 7, 20260916];
 
 /**
  * ### 2026-09-19, the release-prep pass — read this before trusting the list above
@@ -222,7 +227,8 @@ describe('the shipped intended strategy beats Chapter 1', () => {
     // unevadable (accuracy formula 0), where our data rolled it on an accuracy byte of 100 marked [estimate]. Restoring
     // only that one formula gives 17/40 on the same tree, so the whole move is that sourced answer. Nothing on the
     // boss or the party was tuned; the difficulty it implies is Bailey's call (docs/handoff/re-parity-w1.md).
-    expect(wins, 'Chapter 1 fell below its 8/40 floor (10/40 measured 2026-10-08, re-parity W1)').toBeGreaterThanOrEqual(8);
+    // 10/40 again on 2026-10-09 (re-parity W2, FFX only): the same count from a different set of seeds.
+    expect(wins, 'Chapter 1 fell below its 8/40 floor (10/40 measured 2026-10-09, re-parity W2)').toBeGreaterThanOrEqual(8);
   }, 120_000);
 
   /**
@@ -233,7 +239,7 @@ describe('the shipped intended strategy beats Chapter 1', () => {
    * the floor sits five wins below it. At most two losses before battle turn 10 (measured 1: seed 20
    * at turn 8), and a battle turn is the engine's, not a player's. Nothing on the boss was tuned.
    */
-  it('keeps at least 40 wins over the four standard windows (measured 45 of 160)', () => {
+  it('keeps at least 40 wins over the four standard windows (measured 48 of 160)', () => {
     const perWindow: number[] = [];
     let early = 0;
     for (const [a, b] of WINDOWS) {
@@ -252,7 +258,8 @@ describe('the shipped intended strategy beats Chapter 1', () => {
     // (D-243, 2026-09-27; one loss before turn 10 either way). The floor stayed at 73 and the early losses at 2.
     // 79 -> 45 on 2026-10-08 (re-parity W1, FFX only; floor 73 -> 40, early losses 2 -> 12 with 9 measured): the same
     // sourced answer as the forty-seed window above, Cross Cleave always landing. Nothing was tuned.
-    expect(total, 'Chapter 1 fell below its 40/160 floor (45/160 measured 2026-10-08, re-parity W1)').toBeGreaterThanOrEqual(40);
+    // 45 -> 48 on 2026-10-09 (re-parity W2, FFX only): 10 / 12 / 10 / 16, 9 losses before turn 10. Floor and bound unchanged.
+    expect(total, 'Chapter 1 fell below its 40/160 floor (48/160 measured 2026-10-09, re-parity W2)').toBeGreaterThanOrEqual(40);
     expect(early, 'a loss before battle turn 10 is a wipe, not a fight').toBeLessThanOrEqual(12);
   }, 240_000);
 

@@ -295,8 +295,11 @@ async function playChapter(game: 'ffx' | 'ffx2', seed: number): Promise<Run> {
 
 // ------------------------------------------------------------------ the case
 
+// Chapter 1 runs seed 20260921 (2026-10-09, re-parity W2, FFX only): the opening counters are the game's 26 fixed draws, so seed 20260920's
+// fight is over after nine damage events and the case wants more than ten to be a sample of the claim. 20260921 is the next seed and has
+// them (seeds 20260921 to 20260928 all do).
 const CHAPTERS: Array<{ label: string; game: 'ffx' | 'ffx2'; seed: number }> = [
-  { label: 'Chapter 1 — Seymour Flux (FFX, CTB)', game: 'ffx', seed: 20260920 },
+  { label: 'Chapter 1 — Seymour Flux (FFX, CTB)', game: 'ffx', seed: 20260921 },
   { label: 'Chapter 4 — Bahamut (FFX-2, ATB)', game: 'ffx2', seed: 20260920 },
 ];
 

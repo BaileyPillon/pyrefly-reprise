@@ -154,7 +154,9 @@ export const natusFlare: AbilityDef = {
   game: 'ffx',
   category: 'enemy',
   mpCost: 0,
-  rank: 5, // §3.1 [decompiled]
+  // Our reading was rank 5 (§3.1 [decompiled], the wiki's "delays his next turn"). The game's own command record for Flare (0x6079) carries rank 3,
+  // and the data layer replaces this value with the record's (re-parity W2, research/re-ffx-commands.md section 7.3): the engine charges rank 3.
+  rank: 5,
   power: 60, // §3.1 [verified: 2 sources]
   formula: 'magic',
   damageType: 'magical',

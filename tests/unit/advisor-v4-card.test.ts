@@ -146,6 +146,10 @@ describe('advisor v4 on the card (FFX)', () => {
     // same as the search now does ("While Yuna is a Zombie the next Full-Life is a kill, not a heal: clear it now").
     // Restoring only Cross Cleave's old accuracy formula leaves the seed-3 pick unchanged, so it is the whole wired
     // engine's numbers and not one change; seeds 1 and 2 open on an untouched board and still pick Slow.
-    expect(picks).toEqual(['tidus: Slow -> Seymour Flux', 'tidus: Slow -> Seymour Flux', 'tidus: Holy Water -> Yuna']);
+    // Seed 3 moved back on 2026-10-09 (re-parity W2, FFX only: the opening counters are the game's 26 fixed draws, so the turns before
+    // the first menu changed). Its first menu is still a Zombie board, but it is Kimahri's (1,542 of 2,310 after the Lance of Atrophy,
+    // Tidus at 2,420 and Yuna at 1,500 untouched) and not Yuna's, the healer, whose Zombie the card's rule says to clear at once; the
+    // search takes the prototype's census move there, as on the other two boards. The card's Zombie rule is pinned by its own tests.
+    expect(picks).toEqual(['tidus: Slow -> Seymour Flux', 'tidus: Slow -> Seymour Flux', 'tidus: Slow -> Seymour Flux']);
   }, 600_000);
 });

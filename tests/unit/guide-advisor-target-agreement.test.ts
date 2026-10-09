@@ -269,7 +269,10 @@ describe('the guide and the advisor never disagree about who a command hits', ()
     // the engine now draws hit, variance and critical in the game's order and Cross Cleave
     // always hits, so seed 42's opening no longer reaches the Holy Water inside six decisions;
     // seed 9's does (the first of seeds 1 to 15 that does).
-    const { engine, content } = newFfxEngine('seymour-flux', gagazetBuild, 9);
+    // Seed 9 -> 10 on 2026-10-09 (re-parity W2, FFX only): the opening counters are the game's 26 fixed draws, so the order of the
+    // opening turns moved again; seed 10 is the first of seeds 1 to 60 whose opening reaches the Holy Water on Tidus (seeds 2, 3 and
+    // 16 open on one aimed at another member, most seeds on another move).
+    const { engine, content } = newFfxEngine('seymour-flux', gagazetBuild, 10);
     const watch: Watch = { id: 'holy-water', seenLabel: null };
     const result = walkFfx(engine, content, 6, watch);
     expect(result.decisions).toBeGreaterThan(0);
