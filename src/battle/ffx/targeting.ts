@@ -195,6 +195,15 @@ export function resolveTargets(
   const randomFoes = foes.filter(randomPickable);
   const mates = alliesOf(ctx, user).filter((c) => targetable(c) && (def.flags.includes('can-target-dead') || isAlive(c)));
 
+  // A scripted group (the game's `performCommand(group, command)`): exactly the combatants the script named, whatever the
+  // row's own single or multi flag says [re-ffx-ai-yunalesca-bfa §1.4]. Only rows with `extra.groupTarget`: Yu Yevon's
+  // Gravija (the front line and himself, not his Pagodas), his and the Pagodas' Osmose, and the possessed aeons' specials
+  // the script aims at one actor or at the whole front line. It comes before the switch because the multi rows
+  // ('all', 'all-enemies') would otherwise ignore the list.
+  if (def.extra?.['groupTarget'] === true && chosen.length > 0) {
+    return chosen.map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => c !== undefined && onField(c) && isAlive(c));
+  }
+
   switch (def.targeting) {
     case 'self':
       return [user];
