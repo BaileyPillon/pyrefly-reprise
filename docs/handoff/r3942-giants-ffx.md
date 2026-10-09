@@ -1,8 +1,227 @@
 # r3942-giants-ffx: real sizes for the FFX giants, wave 2 (branch `r3942-giants-ffx`, from `origin/r3942-stage` 0284bf85)
 
-**Game case: FFX only** (Chapters I, III, X and XVII; FFX-2 has none of these fiends, and nothing here touches an FFX-2 file). Bailey, 2026-10-08 (~13:55 EDT), after the giants options study: **"I'll go with all of your recommendations"**, which took the study's pick for each chapter (below). Bailey, 2026-10-08 (~14:30 EDT, a standing preference, relayed by the coordinator mid-lane): **"The way the battles are framed now being right next to each other is kinda dumb ... it looked way better before."** He chose **original spacing, real sizes**, everywhere: real sizes and Flux's camera nudge stand, no boss or part may stand nearer the party than it does on live today, the Yu Pagodas behind the aeon are further back and so fine, and a pick that only works by bringing a figure nearer stops and is reported. One pick does (Natus on a desktop): it is built, switched off, and reported in "What needs the framing engine".
+**Game case: FFX only** (Chapters I, III, X and XVII; FFX-2 has none of these fiends, and nothing here touches an FFX-2 file). Bailey, 2026-10-08 (~13:55 EDT), after the giants options study: **"I'll go with all of your recommendations"**, which took the study's pick for each chapter (below). Bailey, 2026-10-08 (~14:30 EDT, a standing preference, relayed by the coordinator mid-lane): **"The way the battles are framed now being right next to each other is kinda dumb ... it looked way better before."** He chose **original spacing, real sizes**, everywhere: real sizes and Flux's camera nudge stand, no boss or part may stand nearer the party than it does on live today, the Yu Pagodas behind the aeon are further back and so fine, and a pick that only works by bringing a figure nearer stops and is reported. One pick does (Natus on a desktop): it is built, switched off, and reported in "What needs the framing engine". **(Superseded by the repair of 2026-10-08, below: the one line was applied, the switch is on, and Natus plays at his real size with no figure nearer than live.)**
 
-**Head:** the code head is `006a2a40`; the branch tip is the commit that adds this note, the masters patch and the sheet (`git log -1 r3942-giants-ffx`), pushed as `origin/r3942-giants-ffx`. **Merge check:** `git merge-tree --write-tree` of the branch against `origin/r3942-stage` (`b8aa906f`, the FFX-2 giants lane's commits on top of 0284bf85): clean, tree `942fb8dfc097bb4b4c52c6c4d9cd91b300b0eed9` (computed at the code head; the note, the patch and the sheet are new files). **Not touched:** `src/battle/**`, `src/data/**/enemies/**`, any golden test, `src/engine/fx/mix/**` and `src/data/ffx2/**` (the FFX-2 giants lane owns them), `docs/handoff/NOW.md`, `DECISIONS.md`, `ACTIONS.md` (the driver records the rows).
+**Head:** after the repair of 2026-10-08 the code head is `0976af98` and the branch tip is the commit that adds the repair's section and sheet (`git log -1 r3942-giants-ffx`), pushed as `origin/r3942-giants-ffx`; the lane's own, before the repair, were `006a2a40` (code) and `b8f01e2e` (tip). **Merge check (the lane's, at its own code head; the repair's is in its section below):** `git merge-tree --write-tree` of the branch against `origin/r3942-stage` (`b8aa906f`, the FFX-2 giants lane's commits on top of 0284bf85): clean, tree `942fb8dfc097bb4b4c52c6c4d9cd91b300b0eed9` (computed at the code head; the note, the patch and the sheet are new files). **Not touched:** `src/battle/**`, `src/data/**/enemies/**`, any golden test, `src/engine/fx/mix/**` and `src/data/ffx2/**` (the FFX-2 giants lane owns them; the repair, on the brief of 2026-10-08, changes `masters.ts` and `framing.ts`: section 2 of the repair, below), `docs/handoff/NOW.md`, `DECISIONS.md`, `ACTIONS.md` (the driver records the rows).
+
+## Repair of 2026-10-08 (after the independent check of b8f01e2e; FFX only, Chapters I, III, X and XVII)
+
+An independent verifier (evidence: `D:/Tools/pyrefly-scratch/2026-10-08/verify-x/`) found one regression the branch introduced, one pick it had not delivered, one number it had quoted for the wrong thing, and four nits. This section says what each came to. The sections below it are the lane's own, kept as written; where the repair overturned a statement, the statement is marked **(superseded by the repair)** and says so. **Game case: FFX only** throughout (Chapters I, III, X and XVII; the advisor tip and the framing engine's one line are FFX paths: FFX-2's HUD never withholds its card and plays its giants under `giants.ts`; no FFX-2 file is touched and `git merge-tree` against `origin/r3942-stage` is clean). One shared file is touched: `src/ui/common/MoveAdvisor.ts` (FFX and FFX-2 both import it), so `node tools/critic-plan.mjs` classes the change **DEEP, games both** (obligations live + focused + deep); its new branch is taken only for `data-zone="tip"`, which only the FFX HUD writes, so FFX-2's card is unchanged by construction, and the FFX-2 suites pass. **Nothing is deployed and no review has been run** (`deploy + review owed`).
+
+**How it was measured.** Headless Playwright from node on the real GPU, seed 1, the first command menu of Chapters I, III, X and XVII (link 3), at 1600x900, 1440x900, 1024x768 and 390x844, against the live build (`https://echoesofspira.com`, `a021787a`, bundle `index-cUSnFK7q.js`, unchanged from the first capture to the last) and this branch on a dev server, **with the Sensor card up, as a player has it** (the lane's captures hid it, which is why its tables could not see what follows). Scripts, outside the repo: `D:/Tools/pyrefly-scratch/2026-10-08/giants-ffx-fix/` (`cap-final.mjs` the capture, `report.mjs` the tables below, `make-sheet-fix.mjs` the sheet, `probe-solves.mjs` the advisor's solver input at every fresh solve, `solve-solves.mjs` and `free-boxes.mjs` the real solver run offline on it). The sheet: `docs/screenshots/r3942-giants-ffx/repair-before-after.jpg`. The dev server (port 5301) is stopped. Two environment notes: the worktree has no `public/fx` (the gitignored depth plates), so the final captures and the final browser runs were taken with a temporary junction to the main tree's `public/fx` (removed afterwards; without it Chapters I and III draw no depth parallax, which moves no figure and no number below); and the repo's `playwright.config.ts` previews a production build, which this repair did not make, so the e2e file was run from a copy of that config without its web server, aimed at the dev server (`D:/Tools/pyrefly-scratch/2026-10-08/giants-ffx-fix/playwright.dev-5301.config.ts`, which belongs in `tools/` to resolve its paths).
+
+### 1. MAJOR, introduced by the branch: the NEXT BEST MOVE card and its N chip were gone in Chapters I and III
+
+**What was wrong.** At the first menu of both chapters, at every desktop shape (the verifier's 16 of 16 captures; mine, 14 of 14 at seven shapes before the fix), `advisorZone` found no box and `FFXBattleHud.placeAdvisor` took the card down, and the chip with it (`advisorChipFollow`): no advice at all on a default setting. The code's own comment called the case unreachable ("never withheld"). The cause is arithmetic, measured on the page's own solver input (`probe-adv.mjs`, the real solver run offline on it by `free-boxes.mjs`): the strategy guide holds the top left, and the sky between its rail and the fight, where the card stood on live (164 x 70 grid px at 1600x900), is the fight's now (Flux 6.0 and Mortiorchis 3.3 units; the aeon 6.9 and two pagodas at 5.7 and 6.3). The largest clear boxes left on Chapter I at 1600x900 are 344 x 32 and 190 x 40 along the top, 62 x 109 between the guide and Mortiorchis and 84 x 45 under the turn list; the designed card needs 147 x 83 (its 132 and the shear, plus 11 for its chip), the short card 145 x 71, the compact 95 x 83, the Sin strip 140 x 45. Nothing the lane's checks measured could say so: its harness hid the Sensor card and measured the fiends, the party and the intent card, not the advisor, and the unit suite asserts arithmetic on boards somebody wrote down.
+
+**Staging the figures could not fix it, so the solver's rules did.** Moving Mortiorchis right until a card fits (the real solver, the page's boards): a compact 80-wide card needs +34 grid px at 1600x900 (about one world unit: close to live's own x, 1.03), +66 at 1440x900, +50 at 1024x768; the designed card needs +86, +118 and +102 (2.6 world units at 1600x900: Mortiorchis at x 2.5, nearly on Flux, whose x is 3.54). Chapter III's left pagoda would need +66 to +106 grid px (2.5 to 4 world units) for a compact card and the whole group +118 to +158 for the designed one. Those are not stagings Bailey picked, and a figure 2.6 units sideways is a different composition.
+
+**What was built: the tip.** One row of the card, on whatever clear ground is left: `NEXT  Tidus  Hastega -> the party  IN WHITE MAGIC  30 MP`, with the `N` chip as a key-only badge on its left. It is the bare rung of the card's density ladder laid out as a row (`src/ui/common/move-advisor-tip.css`), 13.2 grid px tall at 1600x900, 13.7 at 1024x768, 16.0 with TEXT SIZE 130 on that window (measured; the solver allows 18). It prints the lead move only: the runner-up, the effect, the reason, the warning and the board's note are the full card's. The move is rigid and the target gives way with an ellipsis; what does not fit comes off whole, never cut through a word or a glyph: the chips first (last first), then the actor's name, then the arrow and the target together (`MoveAdvisor.fitTipRow`; found on the 4:3 picture of Chapter III, where the bar read "Tidus Stamina Tonic -" with its arrow clipped to a dash). `src/ui/ffx/advisorTip.ts` solves the box with the designed card's own clearances and keeps off the guide's G and scroll chips and the PAUSE chip too (`AdvisorZoneInput.keepOff`, which no other pass reads); `advisorStrip.advisorZone(input, strip, tip)` runs it after the designed passes and the Sin strip decline, so no chapter whose card is placed today can move. The HUD asks for it in every fight **except while the enemy-move read-out (E) is open**: a read-out that takes the band takes the card with it, as the tests that pin it say. When the player folds the guide with G, or in a frame with room, the full card returns as ever (the card's ladder starts over when it leaves the tip: tested). N puts the bar away (the chip then reads "N best move" where the badge was) and brings it back.
+
+**Where the tip stands, and why it does not move.** The first answer (the clear box nearest the command stack) put the bar on the top of the stage, in the left column or on the deck depending on the submenu and on where the party had stepped, so it jumped from keypress to keypress. It now stands on **the top row of the stage whenever that row is wide enough for the whole bar** (160 grid px): the highest such box, the leftmost of those; failing one, the widest (Chapter III at 1024x768, whose top is 144 wide beside the left pagoda, stands on the deck under the party). The command stack is solved as if it were always at its fullest (`COMMAND_STACK_AT_REST`), so the ground a submenu frees is not the bar's. And **it reads the fighters where the camera's shot comes to rest** (`FFXBattleHud.enemySpriteRectsAtRest`, `AdvisorZoneInput.enemiesAtRest`, read by the tip alone): for the first seconds of a decision the camera is still gliding to the menu shot, a fighter's live painted box is 25 to 30 grid px higher than it settles (Mortiorchis's top at y 24 against 52), and the top row is 21 tall, so a solve in that moment found the row blocked and the held placement put the bar in the bottom right **for the whole decision at some turns**. Found by watching the second and third decisions of Chapter I (the solver's input recorded at every fresh solve: `probe-solves.mjs`); fixed by solving against the live silhouette carried by its head's way to where it rests, which is the live box exactly once the camera has settled. The designed card's input, the key and the snapping are untouched.
+
+**The numbers** (table A below): the tip is on screen in Chapters I and III at every desktop shape (1600x900 to 1024x768; the pictures are on the sheet), where live has the full card; the same pass gives a card to Chapter XVII link 3 at 1440x900 and 1024x768, where **live has none** (measured: 31 of 33 first menus of the 11 FFX chapters at three shapes show a card on live; the two without are these). Tests: `tests/unit/ui-ffx-advisor-tip.test.ts` (30 tests: eight measured boards with the page's own held zones pinned, the second decision of Chapter I as the camera comes to rest, the top row and the stability cases, the read-out case, a board the designed passes serve unchanged, a wall, the chips, the HUD placing the tip and reading the resting fighters, N, and the card printing the bare rung at the next decision, leaving the tip, dropping what does not fit); one fixture of `ui-ffx-hud-safe-zones.test.ts` (the 54-px clear band that "docks the chip" held a tip) was lowered to a 14-px band; and **`tests/e2e/advisor-present.spec.ts`** (39 browser tests: every FFX chapter at 1600x900, 1440x900 and 1024x768, the card and its chip up at the first menu, clear of every panel and fighter, N away and back; the two tip chapters again at the next decision, one row and **where it was**). Run against a dev server: **39 passed in 18.1 minutes on the committed code (`0976af98`)**, the next-decision tests included; the run before the fitting ladder's last pass and the lazy resting list passed 39 of 39 too (19.5 minutes).
+
+**What it costs, said plainly.** In Chapters I and III the player has a one-row bar, not the card, and the bar's look is the repair's own (inferred, not picked: it is on the sheet for Bailey's reaction). The full card is one keypress away (G folds the guide and it returns, as before). **An alternative, not built** because it changes a panel Bailey did not mention: fold the guide to its tab (the machinery exists: `StrategyGuide`'s squeezed state, PR-0389, which does it in FFX-2 at large text) and give the card the guide's rail, about 64 tall and 130 to 200 wide at every shape (measured offline on the page's boards); it would put the guide off by default at the first menu of two chapters and change `tests/e2e/guide-sheet.spec.ts`'s FFX case. Bailey's call; the picture would be a one-step mockup first (AGENTS.md rule 9).
+
+### 2. The pick not delivered: Natus at his real size
+
+`HIGHBRIDGE_REAL_SIZE` is **true** and BOSS SCALE's 2.2 entry for `seymour-natus` and `braskas-final-aeon` in `src/engine/fx/mix/masters.ts` is **retired** (the one line of `docs/handoff/r3942-giants-ffx-masters.patch`, applied; the file is kept as the record). For Braska's chapter it changes nothing (BOSS SCALE was not played there: his colossus master fails every step of the plan at his size; the aeon and both pagodas read the same, 540, 362 and 382 px on a desktop); it also closes the standing risk that the entry grew him past Bailey's 75 percent in some plan. The eight tests that failed (exactly the lane's count: six BOSS SCALE cases in `fx-mix-boss-scale`, `fx-mix-fail-closed` and `fx-mix-party-stature`, and the lane's two) now say what is measured: Natus and the aeon have no target (null), Evrae (2.4, measured k 2.44 at the cases' stage, 2.21 at the lock case's) is the sized colossus the cases use, the switch is on (4.455 and 1.912 from `giantFigureHeights`), and the old `it.todo` is a test that `scaleTarget` names neither. **The framing engine needed one more line, which the lane could not see with the switch off** (`src/engine/fx/mix/framing.ts`): at 1440x900 and 1024x768 the pinned colossus master is not proved (`NATUS_PIN`'s aspects are [1.7, 2.45]), so the plan plays today's rig and then tries the party stepped toward the fiends, 0.35 and 0.7 world units, and takes the first that passes or else the least bad. On live the 0.35 step plays; with Natus at his real size neither passed cleanly (the worst of the two came out a hair apart, 0.17 and 0.17), the pick flipped from one run to the next, and when it was the larger step it stood the party 0.35 nearer his side than live's step does: **0.12 nearer to Natus and 0.06 to Mortibody at 1440x900**. A fight whose table row pins a colossus master now tries the 0.35 step only (the search for every other fight, and the pinned master at the shapes the table proves, are as they were); Chapter X is the one FFX chapter with such a row, so it is the one chapter whose plan reaches that line, and no `fx-mix-*` pin says anything of it (measured below: 0.00 at all four shapes, three runs at the two unproved shapes). **Measured (tables B and C):** Natus 4.455 on every shape; reads **1.63 at 1600x900 (the study's 1.63 to the hundredth)**, 1.67 at 1440x900, 1.70 at 1024x768, 1.68 on the phone (study 1.64), 387, 376, 311 and 214 px; Mortibody 0.71 to 0.74 (study 0.72). **Spacing is unchanged: the ground distance to the nearest member and to the party's centre is the same as live's to the hundredth for both fiends at all four shapes (8 rows, +0.00)**: 8.23 and 6.74 at 1600x900, 7.57 and 6.36 at 1440x900 and 1024x768, 7.70 and 6.44 on the phone. Nothing is cut and no panel or intent card is over him. **A finding the lane could not make: live's Natus is 2.43 units at 1440x900, 1024x768 and on the phone** (BOSS SCALE grows him to 3.98 only at 1600x900, where the pin's table has proved the shape), so the real size is 1.83 times as tall at those three and +12 percent at 1600x900.
+
+### 3. Chapter I's party: 91 percent, 85 percent, and why both are right
+
+The pick quoted "party 91 percent of live". That is the study's measure: the mean standing height of the three heroes, **Kimahri counted by his body**, over the same mean on live. It is 91 percent at 1600x900 on this branch (the Sensor card up; the lane's 92 had it hidden), 88 at 1440x900, 85 at 1024x768 and 79 on the phone. But the heroes' own heights differ in this build (Yuna 1.658 and Kimahri 2.373 against 1.82 all round on live: the heights lane), so the mean is not one figure shrunk. **Tidus, whose height is 1.82 in both builds, is the clean measure: 85 percent at 1600x900, 82 at 1440x900, 79 at 1024x768, 73 on the phone** (the verifier's 86 and 73). That is what the study's own camera gives: it stands 1.15 times as far from the party, one over 1.15 being 87 percent. Flux's top is 49 px under the frame's top at 1600x900 (60 at 1440x900, 59 at 1024x768); a camera tweak could use some of that and win a few points at the price of his head grazing the frame and a re-run of the lane's rig search at every shape, so it is **disclosed, not tweaked**: nobody stands nearer the party either way (a camera moves nobody in the world), and the pick's picture is the one built.
+
+### 4. The nits
+
+- **Genais nearer at 16:10 and 4:3: fixed.** Live's formation solver puts him at x -0.915 (1600x900), -1.109 (1440x900), -1.300 (1024x768), -0.820 (phone), all at z -4.1, and a pin is one spot: the lane's (-0.93, -4.1) stood 0.02 to 0.04 nearer the party than live at the last two. **The pin is (-0.93, -4.3)**: 0.2 further back, which is the one move that is no nearer at any shape and the smallest on screen (his height 4.913 and the spot's x are the lane's; at 1600x900 he reads 2.09 over the party, the study 2.12). Measured (table C): the ground distance from his feet to the nearest member is **1.80 against live's 1.60, 1.61, 1.64 and 1.61** at 1600x900, 1440x900, 1024x768 and the phone (+0.20, +0.19, +0.16, +0.19), and to the party's centre **3.30 against 3.12, 3.20, 3.30 and 3.07** (+0.19, +0.10, +0.00, +0.23): no shape has him nearer. The Core's pin moved from x 5.89 to **5.90** because it stood 0.008 nearer Auron than live's at 16:10 and 4:3 (live's x is 5.87 to 5.90 by shape, 5.75 on a phone); it is now no nearer anywhere (table C: the nearest member +0.02, +0.00, +0.00 and +0.11, the party's centre +0.02, +0.00, +0.00 and +0.12). `evrae-airship-sin.ts` says why; two tests name the pins.
+- **The Core nearly off the right edge on phones: disclosed.** 94 percent of it is outside the phone's slice (80 percent on live, table E): its spot is a world position, and any move that brings it into the slice brings it nearer the party (the nearest member, Auron, is 4.76 away; the party's centre 6.76), which is the one thing Bailey ruled out. The slice is `phoneFraming.ts`'s.
+- **The pagodas dwarf the 4.1-unit aeons in Chapter III's links 2 to 4: disclosed, a decision for Bailey.** The pagodas (5.7 and 6.3) keep their pins and sizes in every link; the possessed aeons and Yu Yevon keep 4.1, no pick (`research/ffx-bfa-yu-yevon.md` 9.5: their real sizes and formations were not read). Scaling them needs a measurement and Bailey's yes.
+- **`gagazet.ts` and `dreams-end.ts` over 400 lines: the lane's growth removed, the files not split.** They were 876 and 1,701 lines before this branch (the house rule was already broken) and 908 and 1,763 with it. The lane's additions that are data (`GAGAZET_PARTY_HEIGHT` and `GAGAZET_STAGING`; `DREAMS_END_PARTY_HEIGHT`, `_ROW_SHIFT`, `_BFA_PIN`, `_STAGING` and the pagodas' pins) are in `src/scenes/gagazet-giants.ts` (33 lines) and `dreams-end-giants.ts` (61), re-exported by the scenes so no importer changed; what stays in the scenes is the rigs and their comments. They are 888 and 1,714 lines now (12 and 13 over their base). A split to 400 lines would be a refactor of 888 and 1,714 lines of painting code for no change on screen: not practical here, and not what the check found wrong.
+
+- **The designed card's zone can still vary from run to run: disclosed, not changed.** Chapter XVII link 3's card at 1440x900 came out a designed compact card in one capture and a tip in another (table A shows the later). The held placement is solved whenever a panel's rect changes (the party panel slides, the Sensor card folds, the turn list moves), and for the first seconds of a decision the camera is still gliding, so the fighters' live boxes it reads are not where they settle; only the tip reads them where the shot rests. Live's HIDDEN rows in this chapter are the same effect. Shared placement plumbing for both games, so not touched here; the e2e asks only that a card is up.
+
+### Verified (the repair)
+
+- `node node_modules/typescript/bin/tsc --noEmit` clean, and `-p tsconfig.e2e.json` clean (the e2e file). `node tools/orphans.mjs`: the same 24 old orphans, none new.
+- Touched tests: `ui-ffx-advisor-tip` 30, `ui-ffx-hud-safe-zones` 64 and a todo, `ffx-giant-stature`, `chapters/natus-ship-scene`, the three `fx-mix-*` files, all green. A mutation check: with `enemySpriteRectsAtRest` made to return the live list, exactly the HUD wiring test fails.
+- **The full unit suite** (`--testTimeout=60000`): the first run, while two capture runs and another agent's workers shared the machine, had 9 timeouts in tooling tests (`artifact-manifest`, `audio-manifest-io`, `critic-*`, `exp-art-sync`, `r39-hires-install`, `verify-live-beacon`); the second, on a quieter one, **925 files passed, 2 failed (an audio-manifest write race and a 30-battle FFX-2 Bahamut bench that timed out at 60 s: 13,795 tests passed, 2 failed, 46 skipped, 1 todo, 473 s)**, and both pass alone in 21 s (35 of 35). Neither is near a file this repair touched.
+- `tests/e2e/advisor-present.spec.ts`: **39 passed in 18.1 minutes** against the dev server on the committed code (`0976af98`): every FFX chapter at 1600x900, 1440x900 and 1024x768, and the two tip chapters at their next decision with the tip where it was (the assertion is in this run). The run before the fitting ladder's last pass and the lazy resting list passed 39 of 39 too (19.5 minutes).
+- `git merge-tree --write-tree origin/r3942-stage <head>`: clean (the stage tip moved from `d674a9e2` to `5a5e8710` during the repair; the second check is the last).
+- Servers: the one dev server of the repair (port 5301) is stopped; no other server, preview or headless browser of mine is left.
+
+### The tables (the repair's measured set; the live build `a021787a`; "wu" world units)
+
+#### A. The advisor card at the first menu (live -> after)
+
+| chapter | shape | live card | after card |
+|---|---|---|---|
+| I Flux | 1600x900 | shown shelf 410x175 px, chip up | shown tip 572x33 px, chip up |
+| I Flux | 1440x900 | shown compact 255x214 px, chip up | shown tip 515x31 px, chip up |
+| I Flux | 1024x768 | shown compact 172x138 px, chip up | shown tip 287x22 px, chip up |
+| I Flux | 390x844 | shown open 374x44 px, chip DOWN | shown open 374x44 px, chip DOWN |
+| III Braska | 1600x900 | shown shelf 386x196 px, chip up | shown tip 540x33 px, chip up |
+| III Braska | 1440x900 | shown shelf 359x188 px, chip up | shown tip 313x30 px, chip up |
+| III Braska | 1024x768 | shown shelf 292x128 px, chip up | shown tip 229x22 px, chip up |
+| III Braska | 390x844 | shown open 374x44 px, chip DOWN | shown open 374x44 px, chip DOWN |
+| X Natus | 1600x900 | shown shelf 457x151 px, chip up | shown shelf 457x151 px, chip up |
+| X Natus | 1440x900 | shown shelf 332x165 px, chip up | shown shelf 353x165 px, chip up |
+| X Natus | 1024x768 | shown shelf 243x106 px, chip up | shown shelf 248x106 px, chip up |
+| X Natus | 390x844 | shown compact 374x44 px, chip DOWN | shown free 374x44 px, chip DOWN |
+| XVII Genais | 1600x900 | shown compact 585x94 px, chip up | shown compact 248x214 px, chip up |
+| XVII Genais | 1440x900 | HIDDEN (zone free), chip down | shown compact 223x200 px, chip up |
+| XVII Genais | 1024x768 | HIDDEN (zone free), chip down | shown tip 366x22 px, chip up |
+| XVII Genais | 390x844 | shown open 374x44 px, chip DOWN | shown open 374x44 px, chip DOWN |
+
+#### B. Ratios over the party (the study's definition: standing px over the party's mean, Kimahri by his body), world heights and px
+
+| chapter | fiend | shape | height live -> after (wu) | standing px live -> after | ratio live -> after | the pick (study) |
+|---|---|---|---|---|---|---|
+| I Flux | seymour-flux | 1600x900 | 4.100 -> 6.017 | 366 -> 500 | 1.28 -> 1.93 | 1.94 |
+| I Flux | mortiorchis | 1600x900 | 2.255 -> 3.309 | 203 -> 273 | 0.71 -> 1.05 | 1.07 |
+| I Flux | seymour-flux | 1440x900 | 4.100 -> 6.017 | 363 -> 486 | 1.29 -> 1.96 |  |
+| I Flux | mortiorchis | 1440x900 | 2.255 -> 3.309 | 202 -> 266 | 0.72 -> 1.07 |  |
+| I Flux | seymour-flux | 1024x768 | 4.100 -> 6.017 | 310 -> 404 | 1.29 -> 1.99 |  |
+| I Flux | mortiorchis | 1024x768 | 2.255 -> 3.309 | 172 -> 221 | 0.72 -> 1.09 |  |
+| I Flux | seymour-flux | 390x844 | 4.100 -> 6.017 | 187 -> 230 | 1.41 -> 2.19 | 2.26 |
+| I Flux | mortiorchis | 390x844 | 2.255 -> 3.309 | 103 -> 126 | 0.78 -> 1.20 |  |
+| III Braska | braskas-final-aeon | 1600x900 | 4.100 -> 6.919 | 337 -> 540 | 1.14 -> 1.82 | 1.83 |
+| III Braska | yu-pagoda-left | 1600x900 | 2.255 -> 5.701 | 199 -> 362 | 0.67 -> 1.22 | 1.22 |
+| III Braska | yu-pagoda-right | 1600x900 | 2.255 -> 6.310 | 188 -> 382 | 0.64 -> 1.29 | 1.29 |
+| III Braska | braskas-final-aeon | 1440x900 | 4.100 -> 6.919 | 329 -> 540 | 1.16 -> 1.82 |  |
+| III Braska | yu-pagoda-left | 1440x900 | 2.255 -> 5.701 | 194 -> 362 | 0.69 -> 1.22 |  |
+| III Braska | yu-pagoda-right | 1440x900 | 2.255 -> 6.310 | 184 -> 382 | 0.65 -> 1.29 |  |
+| III Braska | braskas-final-aeon | 1024x768 | 4.100 -> 6.919 | 288 -> 461 | 1.14 -> 1.82 |  |
+| III Braska | yu-pagoda-left | 1024x768 | 2.255 -> 5.701 | 170 -> 309 | 0.67 -> 1.22 |  |
+| III Braska | yu-pagoda-right | 1024x768 | 2.255 -> 6.310 | 161 -> 326 | 0.64 -> 1.29 |  |
+| III Braska | braskas-final-aeon | 390x844 | 4.100 -> 6.919 | 168 -> 252 | 1.37 -> 2.34 | 2.54 |
+| III Braska | yu-pagoda-left | 390x844 | 2.255 -> 5.701 | 107 -> 186 | 0.87 -> 1.73 | 1.74 |
+| III Braska | yu-pagoda-right | 390x844 | 2.255 -> 6.310 | 100 -> 194 | 0.81 -> 1.80 | 1.91 |
+| X Natus | seymour-natus | 1600x900 | 3.980 -> 4.455 | 345 -> 387 | 1.55 -> 1.63 | 1.63 |
+| X Natus | mortibody | 1600x900 | 1.700 -> 1.912 | 151 -> 170 | 0.68 -> 0.71 | 0.72 |
+| X Natus | seymour-natus | 1440x900 | 2.430 -> 4.455 | 202 -> 376 | 0.96 -> 1.67 |  |
+| X Natus | mortibody | 1440x900 | 1.700 -> 1.912 | 146 -> 164 | 0.69 -> 0.73 |  |
+| X Natus | seymour-natus | 1024x768 | 2.430 -> 4.455 | 166 -> 311 | 0.97 -> 1.70 |  |
+| X Natus | mortibody | 1024x768 | 1.700 -> 1.912 | 120 -> 135 | 0.70 -> 0.74 |  |
+| X Natus | seymour-natus | 390x844 | 2.430 -> 4.455 | 120 -> 214 | 0.94 -> 1.68 | 1.64 |
+| X Natus | mortibody | 390x844 | 1.700 -> 1.912 | 87 -> 93 | 0.68 -> 0.73 |  |
+| XVII Genais | sinspawn-genais | 1600x900 | 4.100 -> 4.913 | 451 -> 532 | 1.76 -> 2.09 | 2.12 |
+| XVII Genais | sin-core | 1600x900 | 4.100 -> 3.008 | 393 -> 289 | 1.53 -> 1.14 | 1.11 |
+| XVII Genais | sinspawn-genais | 1440x900 | 4.100 -> 4.913 | 452 -> 532 | 1.76 -> 2.09 |  |
+| XVII Genais | sin-core | 1440x900 | 4.100 -> 3.008 | 393 -> 288 | 1.53 -> 1.14 |  |
+| XVII Genais | sinspawn-genais | 1024x768 | 4.100 -> 4.913 | 386 -> 454 | 1.77 -> 2.09 |  |
+| XVII Genais | sin-core | 1024x768 | 4.100 -> 3.008 | 335 -> 246 | 1.53 -> 1.14 |  |
+| XVII Genais | sinspawn-genais | 390x844 | 4.100 -> 4.913 | 205 -> 243 | 1.83 -> 2.18 | 2.25 |
+| XVII Genais | sin-core | 390x844 | 4.100 -> 3.008 | 204 -> 151 | 1.82 -> 1.35 | 1.38 |
+
+#### C. Spacing: ground distance (x, z) from each fiend's feet to the nearest party member and to the party's centre, live -> after
+
+| chapter | fiend | shape | nearest member | party centre | verdict (nearer = shrinks by more than 0.01) |
+|---|---|---|---|---|---|
+| I Flux | seymour-flux | 1600x900 | 7.75 -> 7.75 (+0.00) | 9.07 -> 9.07 (+0.00) | not nearer |
+| I Flux | mortiorchis | 1600x900 | 6.75 -> 6.79 (+0.03) | 8.25 -> 8.33 (+0.08) | not nearer |
+| I Flux | seymour-flux | 1440x900 | 7.40 -> 7.57 (+0.17) | 8.78 -> 8.92 (+0.14) | not nearer |
+| I Flux | mortiorchis | 1440x900 | 6.62 -> 6.77 (+0.15) | 8.15 -> 8.32 (+0.17) | not nearer |
+| I Flux | seymour-flux | 1024x768 | 7.40 -> 7.75 (+0.35) | 8.78 -> 9.07 (+0.29) | not nearer |
+| I Flux | mortiorchis | 1024x768 | 6.62 -> 6.79 (+0.17) | 8.15 -> 8.33 (+0.18) | not nearer |
+| I Flux | seymour-flux | 390x844 | 7.75 -> 7.75 (+0.00) | 9.07 -> 9.07 (+0.00) | not nearer |
+| I Flux | mortiorchis | 390x844 | 6.75 -> 6.79 (+0.03) | 8.25 -> 8.33 (+0.08) | not nearer |
+| III Braska | braskas-final-aeon | 1600x900 | 9.42 -> 9.55 (+0.14) | 10.85 -> 10.98 (+0.13) | not nearer |
+| III Braska | yu-pagoda-left | 1600x900 | 6.99 -> 13.29 (+6.30) | 8.59 -> 15.00 (+6.41) | not nearer |
+| III Braska | yu-pagoda-right | 1600x900 | 9.59 -> 16.45 (+6.86) | 10.94 -> 17.80 (+6.86) | not nearer |
+| III Braska | braskas-final-aeon | 1440x900 | 9.42 -> 9.55 (+0.14) | 10.85 -> 10.98 (+0.13) | not nearer |
+| III Braska | yu-pagoda-left | 1440x900 | 6.99 -> 13.29 (+6.30) | 8.59 -> 15.00 (+6.41) | not nearer |
+| III Braska | yu-pagoda-right | 1440x900 | 9.59 -> 16.45 (+6.86) | 10.94 -> 17.80 (+6.86) | not nearer |
+| III Braska | braskas-final-aeon | 1024x768 | 9.42 -> 9.55 (+0.14) | 10.85 -> 10.98 (+0.13) | not nearer |
+| III Braska | yu-pagoda-left | 1024x768 | 6.99 -> 13.29 (+6.30) | 8.59 -> 15.00 (+6.41) | not nearer |
+| III Braska | yu-pagoda-right | 1024x768 | 9.59 -> 16.45 (+6.86) | 10.94 -> 17.80 (+6.86) | not nearer |
+| III Braska | braskas-final-aeon | 390x844 | 7.68 -> 7.97 (+0.29) | 9.23 -> 9.56 (+0.33) | not nearer |
+| III Braska | yu-pagoda-left | 390x844 | 4.18 -> 10.96 (+6.78) | 5.88 -> 12.68 (+6.80) | not nearer |
+| III Braska | yu-pagoda-right | 390x844 | 7.60 -> 13.57 (+5.97) | 8.80 -> 14.96 (+6.15) | not nearer |
+| X Natus | seymour-natus | 1600x900 | 8.23 -> 8.23 (+0.00) | 8.58 -> 8.58 (+0.00) | not nearer |
+| X Natus | mortibody | 1600x900 | 6.74 -> 6.74 (+0.00) | 7.02 -> 7.02 (+0.00) | not nearer |
+| X Natus | seymour-natus | 1440x900 | 7.57 -> 7.57 (+0.00) | 7.85 -> 7.85 (+0.00) | not nearer |
+| X Natus | mortibody | 1440x900 | 6.36 -> 6.36 (+0.00) | 6.69 -> 6.69 (+0.00) | not nearer |
+| X Natus | seymour-natus | 1024x768 | 7.57 -> 7.57 (+0.00) | 7.85 -> 7.85 (+0.00) | not nearer |
+| X Natus | mortibody | 1024x768 | 6.36 -> 6.36 (+0.00) | 6.69 -> 6.69 (+0.00) | not nearer |
+| X Natus | seymour-natus | 390x844 | 7.70 -> 7.70 (+0.00) | 7.97 -> 7.97 (+0.00) | not nearer |
+| X Natus | mortibody | 390x844 | 6.44 -> 6.44 (+0.00) | 6.76 -> 6.76 (+0.00) | not nearer |
+| XVII Genais | sinspawn-genais | 1600x900 | 1.60 -> 1.80 (+0.20) | 3.12 -> 3.30 (+0.19) | not nearer |
+| XVII Genais | sin-core | 1600x900 | 4.74 -> 4.76 (+0.02) | 6.74 -> 6.76 (+0.02) | not nearer |
+| XVII Genais | sinspawn-genais | 1440x900 | 1.61 -> 1.80 (+0.19) | 3.20 -> 3.30 (+0.10) | not nearer |
+| XVII Genais | sin-core | 1440x900 | 4.76 -> 4.76 (+0.00) | 6.76 -> 6.76 (+0.00) | not nearer |
+| XVII Genais | sinspawn-genais | 1024x768 | 1.64 -> 1.80 (+0.16) | 3.30 -> 3.30 (+0.00) | not nearer |
+| XVII Genais | sin-core | 1024x768 | 4.76 -> 4.76 (+0.00) | 6.76 -> 6.76 (+0.00) | not nearer |
+| XVII Genais | sinspawn-genais | 390x844 | 1.61 -> 1.80 (+0.19) | 3.07 -> 3.30 (+0.23) | not nearer |
+| XVII Genais | sin-core | 390x844 | 4.65 -> 4.76 (+0.11) | 6.64 -> 6.76 (+0.12) | not nearer |
+
+36 rows, 0 nearer.
+
+#### D. The party's size on screen, live -> after (Tidus alone: his world height is the same in both builds; the mean counts Kimahri by his body, the study's definition)
+
+| chapter | shape | Tidus standing px | Tidus share | mean px (study definition) | mean share |
+|---|---|---|---|---|---|
+| I Flux | 1600x900 | 322 -> 274 | 85% | 285 -> 260 | 91% |
+| I Flux | 1440x900 | 317 -> 261 | 82% | 281 -> 248 | 88% |
+| I Flux | 1024x768 | 271 -> 213 | 79% | 240 -> 203 | 85% |
+| I Flux | 390x844 | 147 -> 108 | 73% | 133 -> 105 | 79% |
+| III Braska | 1600x900 | 320 -> 330 | 103% | 296 -> 296 | 100% |
+| III Braska | 1440x900 | 305 -> 330 | 108% | 283 -> 296 | 105% |
+| III Braska | 1024x768 | 273 -> 281 | 103% | 253 -> 253 | 100% |
+| III Braska | 390x844 | 131 -> 116 | 88% | 123 -> 108 | 87% |
+| X Natus | 1600x900 | 229 -> 229 | 100% | 222 -> 238 | 107% |
+| X Natus | 1440x900 | 218 -> 218 | 100% | 210 -> 225 | 107% |
+| X Natus | 1024x768 | 177 -> 177 | 100% | 171 -> 183 | 107% |
+| X Natus | 390x844 | 133 -> 123 | 93% | 128 -> 127 | 100% |
+| XVII Genais | 1600x900 | 316 -> 316 | 100% | 256 -> 254 | 99% |
+| XVII Genais | 1440x900 | 316 -> 315 | 100% | 256 -> 254 | 99% |
+| XVII Genais | 1024x768 | 269 -> 269 | 100% | 219 -> 217 | 99% |
+| XVII Genais | 390x844 | 131 -> 131 | 100% | 112 -> 112 | 99% |
+
+#### E. The frame and the HUD over each fiend (cut by the screen edge / HUD panels over its painted box / the enemy-intent card on it), live -> after
+
+| chapter | fiend | shape | cut by the frame | HUD over it | intent card on it |
+|---|---|---|---|---|---|
+| I Flux | seymour-flux | 1600x900 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| I Flux | mortiorchis | 1600x900 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| I Flux | seymour-flux | 1440x900 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| I Flux | mortiorchis | 1440x900 | 0% -> 0% | 1% -> 1% | 0% -> 0% |
+| I Flux | seymour-flux | 1024x768 | 0% -> 0% | 17% -> 16% | 0% -> 0% |
+| I Flux | mortiorchis | 1024x768 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| I Flux | seymour-flux | 390x844 | 0% -> 0% | 0% -> 0% | 13% -> 8% |
+| I Flux | mortiorchis | 390x844 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| III Braska | braskas-final-aeon | 1600x900 | 0% -> 0% | 16% -> 0% | 0% -> 0% |
+| III Braska | yu-pagoda-left | 1600x900 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| III Braska | yu-pagoda-right | 1600x900 | 0% -> 0% | 5% -> 0% | 0% -> 0% |
+| III Braska | braskas-final-aeon | 1440x900 | 0% -> 0% | 30% -> 5% | 0% -> 0% |
+| III Braska | yu-pagoda-left | 1440x900 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| III Braska | yu-pagoda-right | 1440x900 | 0% -> 0% | 48% -> 19% | 0% -> 0% |
+| III Braska | braskas-final-aeon | 1024x768 | 0% -> 0% | 37% -> 16% | 0% -> 0% |
+| III Braska | yu-pagoda-left | 1024x768 | 0% -> 0% | 0% -> 2% | 0% -> 0% |
+| III Braska | yu-pagoda-right | 1024x768 | 0% -> 0% | 90% -> 56% | 0% -> 0% |
+| III Braska | braskas-final-aeon | 390x844 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| III Braska | yu-pagoda-left | 390x844 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| III Braska | yu-pagoda-right | 390x844 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| X Natus | seymour-natus | 1600x900 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| X Natus | mortibody | 1600x900 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| X Natus | seymour-natus | 1440x900 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| X Natus | mortibody | 1440x900 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| X Natus | seymour-natus | 1024x768 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| X Natus | mortibody | 1024x768 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| X Natus | seymour-natus | 390x844 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| X Natus | mortibody | 390x844 | 0% -> 0% | 0% -> 0% | 0% -> 0% |
+| XVII Genais | sinspawn-genais | 1600x900 | 0% -> 0% | 19% -> 18% | 0% -> 0% |
+| XVII Genais | sin-core | 1600x900 | 0% -> 0% | 17% -> 10% | 0% -> 0% |
+| XVII Genais | sinspawn-genais | 1440x900 | 0% -> 0% | 25% -> 23% | 0% -> 0% |
+| XVII Genais | sin-core | 1440x900 | 9% -> 0% | 16% -> 16% | 0% -> 0% |
+| XVII Genais | sinspawn-genais | 1024x768 | 0% -> 0% | 33% -> 27% | 0% -> 0% |
+| XVII Genais | sin-core | 1024x768 | 29% -> 19% | 24% -> 26% | 0% -> 0% |
+| XVII Genais | sinspawn-genais | 390x844 | 0% -> 0% | 0% -> 0% | 0% -> 20% |
+| XVII Genais | sin-core | 390x844 | 80% -> 94% | 0% -> 0% | 0% -> 0% |
+
+**Merge check (against the stage branch as it stands, `origin/r3942-stage` `5a5e8710`):** **clean** at the code head `0976af98`: `git merge-tree --write-tree origin/r3942-stage 0976af98` exits 0, tree `45e9e0c3425c9fe5bb247605978e9b95c481250a`; the commit that adds this section and the sheet changes no code. (The stage branch moved from `d674a9e2` to `5a5e8710`, the FFX-2 phone cure-hint card, while the repair ran; the first check was clean too.) The repair touches one folder the FFX-2 giants lane also works in, `src/engine/fx/mix/`: `masters.ts` (one hunk, a line the stage branch does not change) and `framing.ts` (one line and its comment, between two hunks the stage branch changes, the comment above `today0` and the plate lines below `tries`, with unchanged lines on both sides: no conflict).
+
+---
 
 ## What was picked and what was built (one commit per chapter, the game case in every one)
 
@@ -10,7 +229,7 @@
 |---|---|---|---|---|
 | I Gagazet (Seymour Flux, Mortiorchis) | FFX only | 104137e2, spacing in 7c12ef1c | Flux at **60 percent** of his real size (real 100 units, 5.29 times the party; study 1.94 over the party, party 91 percent); Mortiorchis scales with him; the study's camera nudge | Flux 6.017 world units (was 4.1) at his own spot; Mortiorchis 3.309 (was 2.255, 0.55 of him) 0.22 further back; the `idle` rig 1.0 left, 0.62 higher, 1.75 back (7.6 degrees down, was 9.0), the `action` and `enemy` rigs back with it |
 | III Dream's End (Braska's Final Aeon, the Yu Pagodas) | FFX only | e77a59c5, spacing in 7c12ef1c | the aeon at **75 percent** of his real size (live 92, a lower bound), the two Yu Pagodas in the game's own arrangement behind him (60 either side, 70 behind) at real sizes (about 76 and 84, lower bounds); retire or re-point his BOSS SCALE entry (study 1.83 over the party, party 101 percent) | the aeon 6.919 (was 4.1), the pagodas 5.701 and 6.31 (were 2.255), 4.51 either side and 5.26 behind him, hung 0.96; the low colossus camera; the aeon's pin 0.45 further back; **no engine change needed** (BOSS SCALE is not played here, below; the masters patch retires the aeon's entry too, so that nothing can ever grow him past 75 percent) |
-| X Highbridge (Seymour Natus, Mortibody) | FFX only | b77fbd47, switched off in 7c12ef1c | Natus at **real size** (46.2 units, 2.45 times the party) at today's camera and spot (study 1.63 desktop, 0.94 to 1.64 phone); retire or re-point his BOSS SCALE entry | the real size is **built and switched off** (`HIGHBRIDGE_REAL_SIZE = false`): 4.455 and Mortibody 1.912 (`highbridgeHeights(true)`), his turning ring follows his size; on a desktop it cannot play without the framing engine's one line, or it stands him nearer the party than live |
+| X Highbridge (Seymour Natus, Mortibody) | FFX only | b77fbd47, switched off in 7c12ef1c | Natus at **real size** (46.2 units, 2.45 times the party) at today's camera and spot (study 1.63 desktop, 0.94 to 1.64 phone); retire or re-point his BOSS SCALE entry | the real size is **built and switched off** (`HIGHBRIDGE_REAL_SIZE = false`): 4.455 and Mortibody 1.912 (`highbridgeHeights(true)`), his turning ring follows his size; on a desktop it cannot play without the framing engine's one line, or it stands him nearer the party than live **(superseded by the repair: the line is applied and the switch is on)** |
 | XVII link 3 (Sinspawn Genais, Sin's Core) | FFX only | 7fa12c97, file length in c8daf7aa | Genais **+20 percent** and the Core **-27 percent** to real size at today's spots; the Fins unchanged | Genais 4.913 and the Core 3.008 (both were 4.1), pinned at the spots they stood on; the Fins and the head have no row |
 | Not built (no pick) | | | Yunalesca, Evrae, Seymour Omnis, Overdrive Sin's head, Yojimbo, anything FFX-2 | nothing |
 
@@ -22,7 +241,7 @@ Beyond the four chapter commits the lane has three, where the brief asked for on
 
 ## The numbers, on screen
 
-First command menu of each chapter (Sin: link 3's), seed 1, headless real-GPU Chromium, clocks frozen; LIVE = https://echoesofspira.com (release 39.4.1), AFTER = this branch on a dev server. "Ratio" is a fiend's standing height (feet to feet plus world height, projected through the camera) over the party's mean standing height on screen (Kimahri counted by his body, x 0.9287): the options study's own definition (`D:/Tools/pyrefly-scratch/2026-10-08/giants/ffx/analyze.mjs`); "party px" is that mean, and the percentage is the party's size against live's. "Real" is the model's own ratio over the same party at one distance (the research sections). The Chapter X rows are twice: the branch as it stands (the switch off: as the base branch, whose party is 107 percent of live's from the heights lane) and the **end state** (the switch on and the one BOSS SCALE line retired in a scratch copy, below). The sheet: `docs/screenshots/r3942-giants-ffx/before-after.jpg` (its Chapter X "after" is the end state).
+First command menu of each chapter (Sin: link 3's), seed 1, headless real-GPU Chromium, clocks frozen; LIVE = https://echoesofspira.com (release 39.4.1), AFTER = this branch on a dev server. "Ratio" is a fiend's standing height (feet to feet plus world height, projected through the camera) over the party's mean standing height on screen (Kimahri counted by his body, x 0.9287): the options study's own definition (`D:/Tools/pyrefly-scratch/2026-10-08/giants/ffx/analyze.mjs`); "party px" is that mean, and the percentage is the party's size against live's. "Real" is the model's own ratio over the same party at one distance (the research sections). The Chapter X rows are twice: the branch as it stands (the switch off: as the base branch, whose party is 107 percent of live's from the heights lane) and the **end state** (the switch on and the one BOSS SCALE line retired in a scratch copy, below). **(Superseded by the repair: the end state is the build's now, and the repair's own tables, below, are the measured set; this lane's tables are kept as it wrote them.)** The sheet: `docs/screenshots/r3942-giants-ffx/before-after.jpg` (its Chapter X "after" is the end state).
 
 
 #### 1600x900
@@ -95,7 +314,7 @@ At these two shapes none is nearer (Genais is 0.01 nearer the nearest member on 
 | 1920x1080 | 1.29 to 1.93 | 338 to 312 (92%) | +0.00 | 1.14 to 1.82 | 1.22 and 1.29 | 100% | 16% and 5% to 0% and 0% | +0.13 | no |
 | 2560x1080 | 1.26 to 1.93 | 354 to 312 (88%) | +0.11 | 1.11 to 1.78 | 1.18 and 1.25 | 100% | 2% and 0% to 0% and 0% | +0.13 | no |
 
-**Chapter XVII link 3 (Genais and the Core) at 1280x720, 1024x768 and 2560x1080: nothing is nearer at 1280x720 and 2560x1080, and at 1024x768 (4:3) Genais is 0.04 nearer the nearest member and 0.18 nearer the party's centre than live.** The party does not move with the window in this chapter (Tidus (0.10, 0.90), Yuna (-0.95, -2.50) and Auron (2.20, -2.30) at every shape, live and branch), but live's solver places Genais per shape (x -0.88 at 1600x900, -0.92 at 1280x720 and 2560x1080, -0.80 on the phone, **-1.30 at 1024x768**) and a pin is one spot: the branch's -0.93 is within 0.01 of live's nearest-member distance at every shape but the 4:3 one. A pin at -1.30 would be no nearer anywhere, and 0.4 units further left than live at the common shapes (the nearest member 1.64 and the party's centre 3.30 against live's 1.60 and 3.10); it is not done, because it changes the common shapes to fix an uncommon one. Say if Bailey wants it the other way. The Core is no nearer at any shape (+0.01 to +0.12) and at 1024x768 the frame cuts 19 percent of it (live 29).
+**(Superseded by the repair: Genais's pin is (-0.93, -4.3) and the Core's x is 5.90, and nothing is nearer at any of the four shapes of the repair's proof; the lane's text follows as it wrote it.)** **Chapter XVII link 3 (Genais and the Core) at 1280x720, 1024x768 and 2560x1080: nothing is nearer at 1280x720 and 2560x1080, and at 1024x768 (4:3) Genais is 0.04 nearer the nearest member and 0.18 nearer the party's centre than live.** The party does not move with the window in this chapter (Tidus (0.10, 0.90), Yuna (-0.95, -2.50) and Auron (2.20, -2.30) at every shape, live and branch), but live's solver places Genais per shape (x -0.88 at 1600x900, -0.92 at 1280x720 and 2560x1080, -0.80 on the phone, **-1.30 at 1024x768**) and a pin is one spot: the branch's -0.93 is within 0.01 of live's nearest-member distance at every shape but the 4:3 one. A pin at -1.30 would be no nearer anywhere, and 0.4 units further left than live at the common shapes (the nearest member 1.64 and the party's centre 3.30 against live's 1.60 and 3.10); it is not done, because it changes the common shapes to fix an uncommon one. Say if Bailey wants it the other way. The Core is no nearer at any shape (+0.01 to +0.12) and at 1024x768 the frame cuts 19 percent of it (live 29).
 
 | window | Genais ratio live to after | Core ratio live to after | party share | Genais: change in distance to the nearest member, to the party centre | Core: the same | Core cut by the frame live to after | verdict |
 |---|---|---|---|---|---|---|---|
@@ -104,6 +323,8 @@ At these two shapes none is nearer (Genais is 0.01 nearer the nearest member on 
 | 2560x1080 | 1.76 to 2.12 | 1.53 to 1.14 | 99% | -0.00, +0.00 | +0.01, +0.01 | 0% to 0% | none nearer |
 
 ## What needs the framing engine (Chapter X, Natus on a desktop)
+
+**(Done by the repair of 2026-10-08, section 2 above: the patch is applied, the six BOSS SCALE cases and the lane's two are re-pointed to measured values, `HIGHBRIDGE_REAL_SIZE` is true, and the framing engine's party-step search needed one more line the lane could not see with the switch off. What follows is the lane's text, kept for the reasoning.)**
 
 **The pick cannot play without `src/engine/fx/mix/masters.ts`, a file the FFX-2 giants lane owns.** `scaleTarget` names `seymour-natus` and `braskas-final-aeon` for BOSS SCALE 2.2. On live Natus is drawn 2.43 and BOSS SCALE grows him to about 3.96 on a desktop; at his real size (4.455) the pinned colossus master (CHAPTER FRAMING's `NATUS_PIN`, the row's step apart of 0.75 and his own 0.4) fails: BOSS SCALE grows a master's Natus a further 1.14 (to about 5.07), the Sensor card pinned above him then covers 17 percent of his painted pixels against the 5 percent the pin allows, the plan falls back to the scene's own idle rig with the figures on the scene's pins, and the row's step apart is lost. Measured on the final code with the switch on and `masters.ts` untouched (a scratch server on port 5233 that swaps the one constant at serve time; the captures are `switch-only/`): on a desktop BOSS SCALE is not played (the framing record's scale is -1), the chapter row's pin is lost (his dx 1.15 and Mortibody's 0.75 are gone from the staging, the party takes 0.7 to the right instead of 0.22 to the left), the camera stands higher (y 5.24 against 3.66), and he stands at x 2.90 against live's 4.05 and Mortibody at 1.35 against 2.10: 1.15 and 0.75 units nearer along the screen, **0.79 and 0.43 nearer the nearest party member** (8.23 to 7.45 and 6.74 to 6.31; 0.83 and 0.38 nearer the party's centre), with Kimahri in front of his lower robes. That is the nearness Bailey ruled out, so `HIGHBRIDGE_REAL_SIZE` is `false` and the chapter is as live (the capture shows 0.00 differences). On a phone neither BOSS SCALE nor the pin plays (the phone keeps the scene's rig and its own fit), so the real size reads 1.68 there in either state of the engine.
 
@@ -125,9 +346,9 @@ It retires BOSS SCALE for both. For Braska it changes nothing (BOSS SCALE is not
 
 **III (FFX only).** The group stands in the game's arrangement under the study's low colossus camera (`idle` at [-1.65, 1.2, 9.85]); CHAPTER FRAMING's Chapter III row (2026-10-04, option 1: the boss 2.6 right and 0.95 back at the menus) still plays on a desktop and its moves are read from `stageTable.ts` by the test, which fails if the row or the rig moves under the pins. The aeon's pin is (2.03, 0, -8.45); the pagodas' are the aeon's final place plus the game's stand less what the row adds to each. **Links 2 to 4** (the possessed aeons, Yu Yevon) are the same scene: the pagodas keep their size and pins, the fiend in front of them keeps its 4.1 (no pick), so Yu Yevon and a possessed Valefor now read small beside the pagodas (the pictures are `link2/` in the scratch folder; the group is whole, the left pagoda's base stands behind the party's heads in them). The pagodas' hang (0.96) is the study's, ours and not read.
 
-**X (FFX only).** Built, off, and what it needs is above. With the switch on the heights are `highbridgeHeights(true)` = 4.455 and 1.912 (Mortibody 0.4293 of him, the share it stood at on a desktop before: 1.7 against the 3.96 BOSS SCALE gave him).
+**X (FFX only).** Built, off, and what it needs is above. **(Superseded by the repair: on.)** With the switch on the heights are `highbridgeHeights(true)` = 4.455 and 1.912 (Mortibody 0.4293 of him, the share it stood at on a desktop before: 1.7 against the 3.96 BOSS SCALE gave him).
 
-**XVII (FFX only).** Link 3's deck is at NEAR in both builds, as in the study; the harness puts it there for both (the range a run arrives with depends on the last Fin and the dev server's timing, and the Framing's stale plan can leave the camera at FAR). Genais and the Core are pinned at (-0.93, -4.1) and (5.89, -5.3): the formation solver spreads figures by height and would otherwise put the taller Genais between and the Core on his left. The Fins and Overdrive Sin's head are not in the table; the Evrae deck and the head's plate publish nothing new. **Disclosed:** on a phone the Core stands at the right edge of the slice, 79 percent outside it on the live build and 95 percent now that it is smaller (its spot is today's); and the intent card covers 17 percent of Genais's box on a phone (3 percent live, the bigger box under the same card).
+**XVII (FFX only).** Link 3's deck is at NEAR in both builds, as in the study; the harness puts it there for both (the range a run arrives with depends on the last Fin and the dev server's timing, and the Framing's stale plan can leave the camera at FAR). Genais and the Core are pinned at (-0.93, -4.1) and (5.89, -5.3) **(superseded by the repair: (-0.93, -4.3) and (5.90, -5.3), see section 4)**: the formation solver spreads figures by height and would otherwise put the taller Genais between and the Core on his left. The Fins and Overdrive Sin's head are not in the table; the Evrae deck and the head's plate publish nothing new. **Disclosed:** on a phone the Core stands at the right edge of the slice, 79 percent outside it on the live build and 95 percent now that it is smaller (its spot is today's); and the intent card covers 17 percent of Genais's box on a phone (3 percent live, the bigger box under the same card).
 
 ## Method and harness
 
@@ -178,10 +399,10 @@ if (process.argv[1] && process.argv[1].endsWith('near.mjs')) {
 
 ## Open and disclosed
 
-- **For the driver and Bailey:** Chapter X's real size waits for the one line in `masters.ts` (the FFX-2 giants lane's folder). Say when the patch may be applied and the switch turned on; the numbers it gives are in the tables.
+- **For the driver and Bailey:** Chapter X's real size waits for the one line in `masters.ts` (the FFX-2 giants lane's folder). Say when the patch may be applied and the switch turned on; the numbers it gives are in the tables. **(Superseded by the repair: applied and on, by the brief of 2026-10-08 that asked for it; `masters.ts` is one hunk the FFX-2 lane's branch does not touch.)**
 - **Judge the sizes by eye:** the aeon and the pagodas are floors, Flux's scale is 10 percent or more uncertain, the pagodas' hang and Mortiorchis's and Mortibody's shares are ours.
 - **Links 2 to 4 of Chapter III:** the pagodas now tower over the possessed aeons and Yu Yevon (4.1 units, no pick). Whether those fiends scale is a decision for Bailey.
-- **Chapter XVII at a 4:3 window (1024x768) is the one place anything stands nearer than live:** Genais, 0.04 nearer the nearest member and 0.18 nearer the party's centre, because live's solver puts him at x -1.30 there and a pin is one spot (-0.93). The other four shapes tested for this chapter (1600x900, 1280x720, 2560x1080 and the phone) are within 0.01 of live by the nearest member or further. The alternative, a pin at -1.30, is in the audit section; not done. Bailey's call.
+- **(Superseded by the repair: fixed by the pin at -4.3.)** **Chapter XVII at a 4:3 window (1024x768) is the one place anything stands nearer than live:** Genais, 0.04 nearer the nearest member and 0.18 nearer the party's centre, because live's solver puts him at x -1.30 there and a pin is one spot (-0.93). The other four shapes tested for this chapter (1600x900, 1280x720, 2560x1080 and the phone) are within 0.01 of live by the nearest member or further. The alternative, a pin at -1.30, is in the audit section; not done. Bailey's call.
 - **Phone, Chapter XVII:** the Core stands 95 percent outside the slice (79 percent live), and the intent card covers 17 percent of Genais's box (3 percent live).
 - **Numbers corrected after the commits:** the Chapter III scene comment and research text gave the aeon's distance from Auron as 9.46 (desktop) and 7.93 (phone); the captures say 9.55 and 7.97 (live 9.42 and 7.69). The Chapter I research text gave the `idle` rig as 0.65 higher, 2.0 back and 9.6 degrees before; the code says 0.62, 1.75 and 9.0. The commit message of e77a59c5 says 1.86 and 2.41 for the aeon (measured before the pin moved 0.45 back; 7c12ef1c has the final 1.82 and 2.34).
 - **Commit trailers** say `Claude Sonnet 5.5` (the agent that wrote them), not the `Opus 5.5` line in the brief.
