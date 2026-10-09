@@ -28,7 +28,11 @@ import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts'
 
 const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
 const OUT = process.env['PYREFLY_MEASURE_OUT'];
-const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const;
+/** Seeds 1 to N: 12 by default; `PYREFLY_MEASURE_SEEDS=500` is the wide run that tells noise from a real move. */
+const SEED_COUNT = Math.max(1, Number(process.env['PYREFLY_MEASURE_SEEDS'] ?? '12') || 12);
+const SEEDS: readonly number[] = Array.from({ length: SEED_COUNT }, (_, i) => i + 1);
+/** `PYREFLY_MEASURE_CHAPTERS=a,b` limits the run to those chapter ids (all FFX chapters by default). */
+const ONLY =(process.env['PYREFLY_MEASURE_CHAPTERS'] ?? '').split(',').filter((s) => s.length > 0);
 const MAX_STEPS = 200_000;
 const MAX_LINKS = 12;
 
@@ -116,7 +120,7 @@ describe.skipIf(!MEASURE)('RE parity, FFX: the intended line in every FFX chapte
   it('measures wins, losses, party turns and party KOs over each chapter\'s whole chain', async () => {
     await registerBattleContent();
     const rows: Row[] = [];
-    for (const chapter of CHAPTERS.filter((c) => c.game === 'ffx')) {
+    for (const chapter of CHAPTERS.filter((c) => c.game === 'ffx' && (ONLY.length === 0 || ONLY.includes(c.id)))) {
       const runs: One[] = [];
       for (const seed of SEEDS) runs.push(await playChain(chapter, seed));
       rows.push({
