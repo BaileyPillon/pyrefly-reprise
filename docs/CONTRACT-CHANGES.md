@@ -6,6 +6,16 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-09 — A scene may name a height for one FORM of a boss: `SceneStaging.formHeights`, `PaintedActor.setWorldHeight`, `PartyStature.sceneOwnHeight` (Chapter II only; FFX only; additive)
+
+Branch `r3943-int` (Bailey, 2026-10-09 14:10 EDT, "go with 3 for Yunalesca": Lady Yunalesca's first form at her wing tips, picture 3 of the giants options study). No file on the contract list changed; recorded because the scene staging and the shared actor are read by every stage.
+
+- `src/scenes/types.ts`: `SceneStaging.formHeights?: Readonly<Record<string, number>>` (copied by `stagingOf`): a world height for one form of a boss, keyed by the art id the stage draws (`yunalesca-1`; `BattlePresenterArt.artIdFor` is `<combatant id>-<form index + 1>`), while that painting is up. A form with no entry stands at the stage's rule, a scene that names none gets what it always got, and `figureHeights` (per combatant) wins where both name one. Only `zanarkand-dome.ts` sets it (`zanarkand-dome-giants.ts`, from `data/ffx/form-stature.ts`).
+- `src/engine/PartyStature.ts`: `sceneOwnHeight(slots, id, artId)`, the one rule for "the scene's own height for this figure": `figureHeights[id]`, else `formHeights[artId]`, else undefined.
+- `src/engine/BattlePresenterStage.ts`: `add` reads it for the painting it stages; `setArt` (the form-change beat's call) calls the new private `fitFormHeight` before the poses load, **only when the scene names a height for the painting going out or the one coming in**, so every other swap (a spherechange, Braska's Final Aeon's second form, any form whose scene names none) is untouched. The numbers are `add`'s own (`figureHeight`, and the shadow and ring at 1.5 and 1.7 times `ringScale` for a fiend), so a form that goes back to the shared boss height gets today's height and radii bit for bit.
+- `src/engine/PaintedActor.ts`: `setWorldHeight(height, radii?)`. `worldHeight`, `shadowBaseRadius` and `ringBaseRadius` lose `readonly`; the method sets them, recomputes the head reference and the planes of the poses it holds, and does nothing for a height equal to the current one.
+- Pinned by `tests/unit/ffx-form-stature.test.ts` (13: the row, the arithmetic, the scene, the rule), `tests/unit/engine/stage-form-heights.test.ts` (10: the stage at staging and at the swap, bit for bit, and what stays as it was) and `tests/unit/engine/painted-actor-set-height.test.ts` (4: the real actor, the planes, the marks, the round trip).
+
 ## 2026-10-08 (night) — A giant's phone fit stays its link's own by the rig's line, not by where the rig stands: `BattleCamera.addRig`'s `continues`, `LinkFits.registered`, `BattleCameraLike.addRig` (Chapter XIII's Trema link; FFX-2 only in effect; additive)
 
 Branch `r3942-stage` (the verifier's finding on the repair of `b130ecf2`: on small phones Trema's link still stood the girls at 54 to 68 percent of live; handoff: [r3942-stage](handoff/r3942-stage.md), "Second repair"). No file on the contract list changed and nothing was narrowed; recorded because three shared engine signatures gain an optional argument or method.

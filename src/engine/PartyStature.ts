@@ -94,6 +94,35 @@ export function figureHeight(i: FigureHeightIn): FigureHeight {
   return { height: (i.given ?? i.own ?? i.shared) * stature, ringScale: sceneScale * stature, stature };
 }
 
+/**
+ * The scene's own world height for the figure `id` drawing the painting `artId`, if it names one: the figure's per-combatant height (`SceneStaging.figureHeights`), else the height of the
+ * **form** this painting is (`SceneStaging.formHeights`, keyed by the art id: Chapter II's Lady Yunalesca, first form), else undefined. Undefined is the stage's own rule, exactly as before.
+ */
+export function sceneOwnHeight(
+  slots: { readonly figureHeights?: Readonly<Record<string, number>> | undefined; readonly formHeights?: Readonly<Record<string, number>> | undefined },
+  id: string,
+  artId: string,
+): number | undefined {
+  return slots.figureHeights?.[id] ?? slots.formHeights?.[artId];
+}
+
+/**
+ * The factor a figure drawn at a **form height** (`SceneStaging.formHeights`) is recorded by ({@link STATURE_KEY}): its height over the stage's shared one, so the framing reads it at the shared
+ * boss height, exactly as it always did (Bailey, 2026-10-09: "today's spot and camera are unchanged"; Chapter II's Lady Yunalesca, first form). 1 for a figure whose height does not come from
+ * `formHeights`: a per-combatant height (`figureHeights`) or a director's (`given`) is the figure's own and is not planned back, and nor is the stage's rule.
+ */
+export function formPlanScale(
+  slots: { readonly figureHeights?: Readonly<Record<string, number>> | undefined; readonly formHeights?: Readonly<Record<string, number>> | undefined },
+  id: string,
+  artId: string,
+  shared: number,
+  given?: number,
+): number {
+  if (given !== undefined || slots.figureHeights?.[id] !== undefined) return 1;
+  const own = slots.formHeights?.[artId];
+  return own === undefined ? 1 : own / shared;
+}
+
 // ------------------------------------------------------------------ what the framing reads
 
 /**

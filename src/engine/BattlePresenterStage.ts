@@ -11,7 +11,7 @@
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
 import { artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
-import { figureHeight, partyStature, STATURE_KEY } from './PartyStature.ts';
+import { figureHeight, formPlanScale, partyStature, sceneOwnHeight, STATURE_KEY } from './PartyStature.ts';
 import { backToShared, statureOf } from './SharedHeight.ts';
 import { inArtNamespace } from '../data/art/artNamespace.ts';
 import { paintedPoses } from './EnemyActionPose.ts';
@@ -320,7 +320,7 @@ export class PaintedStage implements BattleStage {
     const { artId } = art;
     const poses = departurePoses(c.id, art.poses); // D-031 Evrae
     const heights = { party: this.opts.slots.partyHeight ?? 1.82, enemy: this.opts.slots.enemyHeight ?? 4.1 };
-    const own = this.opts.slots.figureHeights?.[c.id]; // a scene's per-combatant height; ring and shadow follow it
+    const own = sceneOwnHeight(this.opts.slots, c.id, artId); // a scene's per-combatant height, else the height of the form this painting is (`SceneStaging.formHeights`); ring and shadow follow it
     // r3941-heights (FFX only): a hero stands at his own height next to Tidus's (`PartyStature.ts`); the shadow and the ring follow it.
     const size = figureHeight({ shared: worldHeightFor(c, heights), own, given: worldHeight, stature: partyStature(this.lastState?.game, c.side, c.id) });
     const k = size.ringScale;
@@ -361,7 +361,8 @@ export class PaintedStage implements BattleStage {
         opacity: kind === 'party' ? 0.85 : 0.7,
       },
     });
-    if (size.stature !== 1) actor.userData[STATURE_KEY] = size.stature; // the framing plans the party at the shared height, as before (`fx/mix/planFig.ts`)
+    const planned = size.stature !== 1 ? size.stature : formPlanScale(this.opts.slots, c.id, artId, worldHeightFor(c, heights), worldHeight); // a figure at a scene's form height is planned at the shared one too
+    if (planned !== 1) actor.userData[STATURE_KEY] = planned; // the framing plans the party at the shared height, as before (`fx/mix/planFig.ts`)
 
     const spots = kind === 'party' ? this.opts.slots.party : this.opts.slots.enemy;
     const pin = kind === 'enemy' ? this.opts.slots.enemySpots?.[c.id] : undefined;
@@ -640,10 +641,32 @@ export class PaintedStage implements BattleStage {
     const artId = inArtNamespace(this.opts.slots.artNamespace, baseArtId); // a spherechange stays inside the scene's art namespace
     const staged = this.actors.get(id);
     if (!staged || staged.artId === artId) return;
+    const before = staged.artId;
     staged.artId = artId;
     const poses = await resolvePoseMap(artId, staged.kind);
     staged.painted = paintedPoses(artId, poses, characterUrl);
+    this.fitFormHeight(id, staged, before, artId); // before the poses load, so their scale is solved at the new height
     await staged.actor.loadPoses(poses, 'idle');
+  }
+
+  /**
+   * The figure's height for the painting that has just replaced another (`SceneStaging.formHeights`): Yunalesca's first form stands at her wing tips and her second and third at the shared
+   * boss height. Only a scene that names a height for the painting going out or the one coming in is touched; every other swap (a spherechange, a form whose scene names none) is left exactly as
+   * it was. The numbers are `add`'s own (`figureHeight`, the ring and the shadow at the same radii for the same `ringScale`), so a form that goes back to the shared height gets today's bit for bit.
+   */
+  private fitFormHeight(id: CombatantId, staged: StagedActor, fromArt: string, toArt: string): void {
+    const forms = this.opts.slots.formHeights;
+    const c = this.lastState?.combatants[id];
+    if (!forms || !c || staged.anchor || (forms[fromArt] === undefined && forms[toArt] === undefined)) return;
+    const heights = { party: this.opts.slots.partyHeight ?? 1.82, enemy: this.opts.slots.enemyHeight ?? 4.1 };
+    const size = figureHeight({ shared: worldHeightFor(c, heights), own: sceneOwnHeight(this.opts.slots, id, toArt), given: undefined, stature: partyStature(this.lastState?.game, c.side, id) });
+    const k = size.ringScale;
+    const party = staged.kind === 'party';
+    staged.actor.setWorldHeight(size.height, { shadow: (party ? 0.62 : 1.5) * k, ring: (party ? 0.78 : 1.7) * k });
+    // and the framing keeps reading her at the shared height while she stands at the form's: the key is set for her first painting and gone for the others, as `add` writes it
+    const planned = size.stature !== 1 ? size.stature : formPlanScale(this.opts.slots, id, toArt, worldHeightFor(c, heights));
+    if (planned !== 1) staged.actor.userData[STATURE_KEY] = planned;
+    else delete staged.actor.userData[STATURE_KEY];
   }
 
   async addCombatant(

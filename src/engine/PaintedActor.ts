@@ -457,7 +457,7 @@ export class PaintedActor extends Group {
    */
   private readonly owned = new Set<Texture>();
 
-  private readonly worldHeight: number;
+  private worldHeight: number;
   private readonly crossfadeMs: number;
   private readonly poseShiftPx: Readonly<Record<string, number>> | undefined;
   private readonly placeholderFactory: () => HTMLCanvasElement;
@@ -469,7 +469,7 @@ export class PaintedActor extends Group {
   private accentHalo = false;
   private readonly hoverBobAmp: number;
   private readonly hoverBobSpeed: number;
-  private readonly shadowBaseRadius: number;
+  private shadowBaseRadius: number;
   private readonly shadowBaseOpacity: number;
   private readonly shadowSquash: number;
 
@@ -586,7 +586,7 @@ export class PaintedActor extends Group {
   /** Suppresses the `hurt` life state re-entering its own flinch. */
   private flinching = false;
   private readonly turnRing: Mesh | null;
-  private readonly ringBaseRadius: number;
+  private ringBaseRadius: number;
   private readonly ringBaseOpacity: number;
   /** Hand control of the ring, or null to leave it to the life layer. */
   private ringOverride: number | null = null;
@@ -2011,6 +2011,24 @@ export class PaintedActor extends Group {
 
   get height(): number {
     return this.worldHeight;
+  }
+
+  /**
+   * A new world height for the figure this actor draws: a boss whose painting changes with its form and whose form is named a height by the scene (`SceneStaging.formHeights`, Chapter II's Lady
+   * Yunalesca). Every size the actor holds is a multiple of `worldHeight` read when it is needed, but the pose scales, which are solved when the poses load: this recomputes the head reference and
+   * the planes of the poses it holds, and the stage calls it **before** `loadPoses` at a form change so the new painting is solved at the new height. `radii` are the contact shadow's and the turn
+   * ring's, which the stage authors at a fixed radius times the figure's `ringScale`; they are given, not scaled, so a figure that goes back to its first height gets its first radii bit for bit.
+   * A height equal to the current one changes nothing.
+   */
+  setWorldHeight(height: number, radii?: { shadow?: number; ring?: number }): void {
+    if (radii?.shadow !== undefined && this.shadow) this.shadowBaseRadius = radii.shadow;
+    if (radii?.ring !== undefined && this.turnRing) this.ringBaseRadius = radii.ring;
+    if (height === this.worldHeight) return;
+    this.worldHeight = height;
+    if (this.poses.size > 0) {
+      this.pickReference();
+      this.resize();
+    }
   }
 
   /** True while the pose on screen is a downed (wider-than-tall) painting. */

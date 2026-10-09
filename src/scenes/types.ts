@@ -170,6 +170,13 @@ export interface SceneStaging {
    */
   readonly figureHeights?: Readonly<Record<string, number>>;
   /**
+   * A world height for one **form** of a boss, keyed by the art id the stage draws (`yunalesca-1`: `BattlePresenterArt.artIdFor`, `<combatant id>-<form index + 1>`), overriding the stage's
+   * rule (`worldHeightFor`) while that painting is up. The painting swaps with the form (`PaintedStage.setArt`) and the model the game draws is a different mesh per form, so a height is
+   * true of one form only: a form with no entry stands at the shared boss height, exactly as before, and a scene that names none gets what it always got. `figureHeights` (per combatant) wins
+   * where both name one. For Chapter II's first form, Lady Yunalesca at her wing tips (FFX only: `data/ffx/form-stature.ts`).
+   */
+  readonly formHeights?: Readonly<Record<string, number>>;
+  /**
    * Which way each side's bodies turn, overriding the house rule (party and
    * aeons toward +x, enemies toward -x, `facingForSide`). For FF7, whose party
    * stands on the right facing left and whose enemies face right
@@ -263,6 +270,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.holdParty) out.holdParty = true;
   if (build.enemySpots) out.enemySpots = build.enemySpots;
   if (build.figureHeights) out.figureHeights = build.figureHeights;
+  if (build.formHeights) out.formHeights = build.formHeights;
   if (build.sideFacing) out.sideFacing = build.sideFacing;
   if (build.fixedCamera) out.fixedCamera = true;
   if (build.turnRings === false) out.turnRings = false;

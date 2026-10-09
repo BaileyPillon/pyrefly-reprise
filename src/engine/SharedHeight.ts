@@ -10,7 +10,9 @@ import { STATURE_KEY } from './PartyStature.ts';
  * Bailey picked "Keep camera and bosses as before" (2026-10-07), so those read each hero scaled back about his feet by his stature: the
  * quad they were always handed. Everything that SHOWS the figure (the drawing, the HUD's anchors, the held shots, the pushes that must
  * not cut a head) still reads the real one. The factor is read off the actor, not looked up again, so a figure the stage did not scale
- * (a scene-named height, an arrival director's, another game, `?stature=off`) carries none and is never scaled back.
+ * (a scene-named height, an arrival director's, another game, `?stature=off`) carries none and is never scaled back. **One figure that is not a hero carries one**: Chapter II's Lady Yunalesca in her
+ * first form (r3943-int, `SceneStaging.formHeights`: the stage draws her at her wing tips, 2.577 units, and records 2.577 over the shared boss height 4.1), so that the camera is planned as if she stood
+ * at the 4.1 she always did (Bailey, 2026-10-09: "today's spot and camera are unchanged"); her second and third forms carry none.
  *
  * Pure maths on copies; nothing is written to an actor. Game case: FFX only in effect (only the stage's FFX heroes carry a stature).
  */
