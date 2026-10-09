@@ -9,7 +9,7 @@ picture, before and after where both exist. Engineering detail lives in `docs/ha
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
 
-## 2026-10-09 · Release candidate 1: Final Fantasy X battles from the game's own code (not live)
+## 2026-10-09 · Release candidate 1: Final Fantasy X and X-2 battles from the game's own code (not live)
 
 Address: none yet (branch re-parity-rc1 on main 00fc1bbf, release 39.4.2; not pushed, not deployed, no review run)
 
@@ -63,10 +63,84 @@ Address: none yet (branch re-parity-rc1 on main 00fc1bbf, release 39.4.2; not pu
   Ice, Water, Thunder and reset Ice, Water, Thunder, Fire; he always casts four spells, in the
   order the disc layout fixes; the reset turn casts nothing; hits during the glow are ignored. The
   readout strip names four spells. Easier: 427 of 500 seeds (281 before).
-- **Both:** nothing else moved for the player. FFX-2 and FF7 are unchanged: their engine logs are
-  byte for byte the same, and no file their engines or data can reach changed except one shared type
-  file, whose additions are types only. No art, audio or saves changed; the only interface edits are
-  the Omnis readout strip and the enemy-intent previews' texts.
+- **FFX-2:** every attack, spell, item and enemy move now decides whether it hits, whether it is a
+  critical hit, how much damage it does, which status it inflicts and whether it steals the way the
+  game's own program does, read from Bailey's Steam copy of FFX-2 and checked against it. Each move
+  runs on the game's own row for it (accuracy rule, power, critical chance, element, number of hits,
+  statuses) and each action is worked out in the game's order, with its random draws in that order.
+  Moves the game never rolls to hit for never miss: nearly every item and spell, and several boss
+  moves that used to miss about one time in ten (Vegnagun's Tail Beam and Noli Me Tangere, Ormi's
+  Supercollider, the Dark Knight's Darkness). A physical hit counts both sides' Luck, Evasion and
+  Accuracy as the game does: Shiva, Sandy and Ixion miss two to three times as often as before,
+  Nooj and Ormi's Shield Bash a third to a half more often, and the Paragon's Attack never touches a
+  girl who wears the Rabite's Foot. Critical hits follow the game's rule: the girls' Attack lands a
+  critical hit on about 44 of every 100 hits that land (11 before), enemies land them where their
+  row says (Nooj's Attack about one hit in ten), and a spell crits only if its row says so. Damage
+  follows the game's whole-number steps (about 70 percent of ordinary physical hits were a few
+  points off, up to 27), the chain bonus comes before the element, Shell halves what the row types
+  as magic and Protect what it types as physical (Bahamut's Impulse is neither; Noli Me Tangere,
+  Final Impact and the Grenade are physical), and a number applied to MP can no longer take a girl
+  above her maximum. Statuses land by the game's one rule; Logos' Russian Roulette is five different
+  results, one picked at random; Delta Attack leaves MP alone; Pilfer Gil takes between half and all
+  of a fiend's gil (it took all of it before), and Chapter VI's fiends now carry some. The hit,
+  critical and status chances the battle menu and the move advisor print come from the same rules.
+- **FFX-2, Chapter IV:** Bahamut's Impulse is untyped in the game's row, so Shell no longer halves it
+  and lowering his Magic no longer shrinks it (about 292 a hit under Shell, 191 before). The shipped
+  line still wins every one of 500 seeds. Of the researched routes (30 seeds each): Shell without the
+  Breaks wins 25 (at least 28 before), healing alone 14 (1 before), and the Magic Break route alone
+  only 2 (at least 28 before), because with no Shell and no cure the party is ground down.
+- **FFX-2, Chapter V:** harder. The shipped line wins 430 of 500 seeds (474 before) and loses 5.5
+  party members a run (3.1). The cause is three of the game's rows that differ from the numbers we
+  had: the Leg's Berserk (a chance of 255 that lands even through the Leg's full resistance, where
+  the old number did not), Mega Phoenix and the Leg's Slow. At a human pace (1.5 seconds a menu) the
+  shipped line wins 2 of 10 seeds; it won 4.
+- **FFX-2, Chapter VI:** the Grenade is a physical move in the game's row, so Leblanc's Protect
+  halves the shipped line's workhorse; Logos lives past Leblanc's third turn and No Love Lost fires on
+  11 of 20 seeds (2 before). The shipped line wins 491 of 500 seeds (488). Careless menu-mashing now
+  wins the three acts on 22 of 40 seeds with no decision time (it lost 12 of 12); at a human pace it
+  still loses every seed.
+- **FFX-2, Chapter XI:** easier, 490 of 500 seeds (430 before). The Dark Knight's Darkness never
+  misses (the game's row has no hit roll; it missed 11 times in 100) and hits harder by the game's
+  whole-number steps (3,806 a hit, 2,449 before), so Shiva falls sooner and acts half as often.
+- **FFX-2, Chapter XIII:** much easier, 213 of 500 seeds (36 before; 43 percent against 7). Two
+  causes that overlap: the game's critical rule and the game's rows. Final Impact is a physical move
+  in its row, so Protect halves it (1,734 a hit to 888), and Soul Spring hits HP and MP and drains
+  both (about 1,000 a hit). The Paragon's Attack now misses a girl who wears the Rabite's Foot every
+  time (it missed half of the time before) and no longer makes her Itchy; Trema's Beguiling Mire and
+  Choking Mist miss 71 to 84 times in 100 (68 to 70 before).
+- **FFX-2, Chapter XV:** harder, 234 of 500 seeds (274 before). The shades hit 5 to 12 percent
+  harder per hit under the game's whole-number damage (Nooj's Attack 269 to 301, Baralai's 231 to
+  251, Gippal's 223 to 236), 5 to 10 percent of their hits are now critical (none were), and the
+  chain bonus builds on the girls they hit several times (without it the chapter would win 309).
+- **FFX-2, Chapter XVI:** unchanged, 500 of 500 seeds (497 before). Ixion misses 14 of every 100
+  Attacks against the party's Evasion, as the game's rule has it (5 before).
+- **What changes in difficulty, FFX** (the shipped auto-battle line, 500 test seeds a chapter;
+  release 39.4.2 in brackets): Chapter I is much easier, 500 (267), because Seymour's mount now takes
+  its turns in step with him, as the game's script has it, which more than pays for Cross Cleave no
+  longer being able to miss. Chapter XII is easier, 427 (281), because Omnis always casts four spells
+  in the order the discs fix and his reset turn casts nothing. Chapter VII is a little harder, 443
+  (482), because Seymour's first turn is a real Shell. Chapter II is a little harder, 483 (498), and
+  the party loses 55 percent more members, because Yunalesca's counters follow every action that
+  reaches her, a miss included, and her Mind Blast and Osmose land on the summoned aeon. Sin's face
+  is a little harder, 124 (151), because no spell can land a critical hit in the game. Chapters III,
+  VIII, IX, X, XIV and XVII moved by 11 seeds or fewer, inside the sampling noise.
+- **What changes in difficulty, FFX-2** (the same line and seeds; release 39.4.2 in brackets):
+  Chapter XIII is much easier, 213 (36), because of the game's real critical rule (the girls' hits are
+  critical about four times as often) and the game's ability rows (Final Impact is a physical move,
+  so Protect halves it; Soul Spring drains HP and MP). Chapter XI is easier, 490 (430), because the
+  Dark Knight's Darkness never misses and hits harder. Chapter V is harder, 430 (474), because three
+  of the game's rows differ from the numbers we had (the Leg's Berserk lands through the Leg's full
+  resistance, Mega Phoenix, the Leg's Slow). Chapter XV is harder, 234 (274), because the shades hit
+  5 to 12 percent harder, a tenth of Nooj's hits are critical, and the chain bonus builds on the
+  girls they hit several times. Chapters IV (500), VI (491; 488) and XVI (500; 497) do not move.
+- **Bailey's choices behind this candidate:** Chapter I stays 1:1 with the game's script ("Keep 1:1",
+  his answer twice, Cross Cleave never missing among it), and where the game's script and one of his
+  earlier Seymour decisions that rested on an estimate disagree, the script stands ("Script wins").
+- **Both:** nothing else moved for the player. FF7 is unchanged: its engine logs are byte for byte
+  the same, and no file its engine or data can reach changed except one shared type file, whose
+  additions are types only; the FFX engine reaches none of the FFX-2 batch's files either. No art,
+  audio or saves changed; the only interface edits are the Omnis readout strip, the enemy-intent
+  previews' texts, and the chances the FFX-2 battle menu and move advisor print.
 - **Disclosed, FFX:** Chapter I is now won by the shipped line on every test seed (one sourced rule,
   the Mortiorchis copying Flux's turn counter, is the whole move) and Chapter XII by 85 percent; the
   painted Omnis discs still run the old colour order, so a one-step turn can read as a half turn on
@@ -74,18 +148,38 @@ Address: none yet (branch re-parity-rc1 on main 00fc1bbf, release 39.4.2; not pu
   card and the auto-battle line for Chapters I, III and X still describe the old fights; the
   Chapter VII, X and XII readouts, the Anima summon line and the enemy-intent previews had no
   real-input check in a browser yet.
+- **Disclosed, FFX-2:** every printed chance is the game's rule applied to our own stat tables for
+  the girls (every stat but HP differs from the game's stat builder in 334 of 576 sample cells,
+  mostly higher in ours), so the shipped line's Attack crits 44 times in 100 hits; the chain's reset
+  still uses the old 2-second window (3 after a critical hit) in place of the game's hit reaction,
+  and a target inside it is always hit; no auto-ability but Break Damage Limit is modelled, so
+  Chapter XIII's build is harder than the game's by the Protect and Shell Adamantite gives; Mega
+  Flare still hits at our power 24 where the game's row says 14, and eleven moves keep their
+  authored "breaks the damage limit" flag where their rows cap at 9,999; monsters' levels, HP and
+  stat bytes stay as authored (seven enemies differ from their rows); no guide text was rewritten;
+  the printed chances, the Pilfer Gil banner and the pause screen's chain count had no real-input
+  check in a browser yet.
 - **Still the old rules, FFX:** turn order, status infliction and durations, Delay and the per-turn
   ticks; the Overdrive gauge, Steal, Pilfer Gil, rewards, drops and the aeons' own stats; the boss
-  scripts of Chapters VIII, IX, XIV, XVII and XVIII; the game's own random number generators. Every
-  FFX-2 chapter is exactly release 39.4.2's.
+  scripts of Chapters VIII, IX, XIV, XVII and XVIII; the game's own random number generators.
+- **Still the old rules, FFX-2:** the ATB gauge, charge, recovery and interruption, the status
+  timers, Poison and Regen; the girls' stat tables (the game's stat builder is not wired);
+  auto-abilities, weapon elements and statuses, back attacks, Confusion's all-target flip and the
+  Reflect bounce; the boss scripts of every FFX-2 chapter (Bahamut, Vegnagun and Shuyin, the Leblanc
+  Syndicate, Fallen Aeons, Paragon and Trema, Den of Woe, Ixion); the game's own random number
+  generators.
 - **How it was checked:** tsc clean; the FFX engine's whole-chain logs on 18 pinned seeds match
   each lane's own record except one chain link whose two damage numbers moved with the merged hook
-  order (explained and proved in docs/handoff/re-parity-rc1.md); the FFX-2 and FF7 logs pass
-  unchanged; the full unit suite once on the exact tree (970 files, 15,095 tests, 3 failures that
-  also fail on the untouched 39.4.2 tree: art installed after that release and not yet registered);
-  500 seeds a chapter through every FFX chain; a production build of the candidate (bundle
-  index-BcR9TGJ3.js). Details, the conflicts of the three merges and the decisions still open:
-  docs/handoff/re-parity-rc1.md.
+  order (explained and proved in docs/handoff/re-parity-rc1.md), and the FFX-2 batch moves none of
+  them; the FF7 logs pass unchanged; the FFX-2 engine's four golden logs (137 pinned replays) were
+  re-baselined by its batch, with their outcomes listed in docs/handoff/re-parity-w3.md, and
+  reproduce on the merged tree; the full unit suite once on the exact tree (973 files, 15,142 tests,
+  3 failures that also fail on the untouched 39.4.2 tree: art installed after that release and not
+  yet registered); 500 seeds a chapter through every FFX and every FFX-2 chain (the FFX rows equal
+  the FFX-only candidate's; the FFX-2 rows equal the FFX-2 batch's own run seed by seed); a
+  production build of the candidate before the FFX-2 batch was merged (bundle index-BcR9TGJ3.js; the
+  final build is cut after the next merge). Details, the conflicts of the four merges and the
+  decisions still open: docs/handoff/re-parity-rc1.md.
 
 ## 2026-10-08 · Release 39.4.2 on echoesofspira.com
 
