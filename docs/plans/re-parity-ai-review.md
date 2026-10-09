@@ -45,7 +45,11 @@ Not done here because another batch owns it: damage-type bits and per-move power
 command records attached in W1 and W3 already carry the game's values); FFX-2 timing in seconds
 (polls, recovery and charge per move, the "every gauge freezes while an effect plays" rule, Ixion's
 action time) waits for W4 and the real-game timing check — until then AI timers stay in their current
-units and only the decision logic changes.
+units and only the decision logic changes. (Corrected by the 2026-10-09 measurement,
+`research/re-ffx2-timing-measured.md`: the real-game timing check is done. The logic rate is 29.97 steps a
+second, a charge falls at the full tick, and the "every gauge freezes while an effect plays" rule did not
+hold for Attack, Fire or four monster casts; only the Wait flag stopped the clock, and which commands stop
+it, if any, is open. W4 still owns the wiring, so the AI timers stay in their current units until then.)
 
 ## 3. Structural changes — wait for Bailey
 
@@ -53,9 +57,12 @@ units and only the decision logic changes.
   Yojimbo included, and the Magus Sisters are one battle (`re-ffx-ai-yunalesca-bfa.md`, A rows).
   Ours is a fixed seven-link chain.
 - Mega Flare's power: the files say 14, our constant is 24; two published reports fit 24. One measured
-  cast in Bailey's copy settles it (the timing session).
+  cast in Bailey's copy settles it (the timing session of 2026-10-09 measured timing only and never
+  reached Bahamut, so it is still open).
 - Any rule that only makes sense once FFX-2's logic rate is known (the Vegnagun Head clock and the
-  Oversoul idle limit in seconds).
+  Oversoul idle limit in seconds). The rate is now measured, 29.97 steps a second (corrected by the
+  2026-10-09 measurement: 1,200 Oversoul idle polls are 40.04 s of running clock); moving the engine's
+  timers onto it is still a structural change that waits for Bailey.
 
 ## 4. Acceptance cases
 

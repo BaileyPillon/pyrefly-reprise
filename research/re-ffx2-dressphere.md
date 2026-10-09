@@ -2,7 +2,8 @@
 
 **Game case: FFX-2 only.** FFX has no dresspheres, garment grids or dress changes; its characters grow on the Sphere Grid and
 its equipment is armour and weapons (see `research/re-ffx-commands.md` and the other `re-ffx-*` notes). Part of the `re-parity`
-track ([docs/plans/re-parity.md](../docs/plans/re-parity.md)). Drafted 2026-10-08.
+track ([docs/plans/re-parity.md](../docs/plans/re-parity.md)). Drafted 2026-10-08; the step rate (4.4 and open question 5)
+settled on 2026-10-09 from the live measurement ([re-ffx2-timing-measured.md](re-ffx2-timing-measured.md)).
 
 **Source note (applies to every statement below unless a line says otherwise):** FFX-2.exe Steam build 25501027 (SHA-256
 6EA7F142...CD69), the HD Remaster's 32-bit executable, image base 0x00400000; every address below is the virtual address in THAT
@@ -395,7 +396,7 @@ The opener runs once per command (flag `Chr+0x664`) when the command arms a wind
 to the HUD: **180, 220 or 260 in hundredths of a second** (the HUD shows `S:CC`). The countdown runs once per logic step from the HUD update (0x0075e110, inside 0x0061e440): each step adds 30 to a
 hundredths accumulator and 1 to the elapsed count, up to four times, until the accumulator passes 99 (then it keeps the remainder), so a step advances the elapsed count by 3 or 4 and every three
 steps by 10. The window ends on the first step whose elapsed count passes the total, or one step earlier when the walk lands exactly on the total and the display jitter (0 to 3) draws 0: **54 to 55, 66 to
-67 and 78 to 79 steps** from an accumulator of 0 (1.80 to 1.83 s, 2.20 to 2.23 s, 2.60 to 2.63 s at 30 steps a second; the step rate of play, 30 or 60, is not settled, `research/re-ffx2-atb-status.md` §1).
+67 and 78 to 79 steps** from an accumulator of 0 (1.80 to 1.84 s, 2.20 to 2.24 s, 2.60 to 2.64 s at the measured 29.97 steps a second, one step being 0.033367 s; corrected by the 2026-10-09 measurement, which closed the 30-or-60 question and replaced "1.80 to 1.83 s, 2.20 to 2.23 s, 2.60 to 2.63 s at 30 steps a second": `research/re-ffx2-timing-measured.md` section 3, `research/re-ffx2-atb-status.md` §1).
 
 ### 4.5 Other readers worth knowing
 
@@ -449,6 +450,6 @@ counter" 0x0061c270. Those belong to the **Oversoul** mechanism, not to a dress 
    emulation; whether the pods' and the main unit's records hold the plate that the scale reads when the form is active was not traced (the initial pod rows hold grid 0, 6 nodes). Needs a live look.
 3. **Where the walk resets between battles** for a girl not wearing a Special: only the Special case (2.5) was found.
 4. **Invulnerability** during the dress animation: nothing in the exe sets it; the motion scripts were not read.
-5. **The step rate** (30 or 60 a second) decides the seconds of the rapid-shot window and every other timer.
+5. **The step rate** is settled: 29.97 a second (60 / 1.001 / 2), measured on the running game on 2026-10-09 (`research/re-ffx2-timing-measured.md` section 3), so the rapid-shot window is 1.80 to 1.84, 2.20 to 2.24 and 2.60 to 2.64 s and every other timer is steps x 0.033367 s. (This entry used to read "30 or 60 a second".)
 6. **What the community stat tables measured:** the engine anchors differ from the raw growth by a small positive offset on most stats (Gunner MDEF +9 to +11 at Lv 20 to 50); a loadout (grid, accessories, bonus bytes) may explain it.
 7. **Butterfingers** and the third reward value (4.1); the player-side monsters' branch of `CalculateStats` and the bonus block; the command-table rebuild on a change.

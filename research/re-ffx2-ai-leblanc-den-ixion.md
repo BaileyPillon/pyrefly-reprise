@@ -4,8 +4,9 @@
 chapters: `ffx2-leblanc` (Act I the Chateau entrance, Act II Logos' room, Act III the Last Room), `ffx2-den-of-woe` (Baralai,
 Gippal, Nooj) and `ffx2-ixion-djose` (Ixion). Part of the `re-parity` track ([docs/plans/re-parity.md](../docs/plans/re-parity.md)),
 P6 (boss AI follows the scripts). Drafted 2026-10-08; the clock during effects (1.10, E1), the charge tick (1.4, section 6) and the
-logic rate corrected on 2026-10-09 from the live measurement ([re-ffx2-timing-measured.md](re-ffx2-timing-measured.md)). Research only:
-no engine or AI code is changed by this note. It continues
+logic rate corrected on 2026-10-09 from the live measurement ([re-ffx2-timing-measured.md](re-ffx2-timing-measured.md)), and the
+step counts rounded up on the same day (section 6 and the inline counts: the game's counter needs the next whole step). Research
+only: no engine or AI code is changed by this note. It continues
 [re-ffx2-ai-bahamut-vegnagun.md](re-ffx2-ai-bahamut-vegnagun.md); that note's section 1 (polls, random sources, the weighted target
 pick, the inert time-out block) applies here unchanged, and section 1 below adds only what these scripts need beyond it.
 
@@ -55,7 +56,7 @@ written in our own words: no script text, no game text and no decompiled code is
    is not what the script does. The Attack:Thundara split is 3:1 (`% 4`), as in the research's choice. Recharge heals him 200
    HP and 200 MP (HP+MP class, fixed) and nothing in his script ever looks at MP.
 10. **Pace is set by each move's own rest and charge numbers** (section 6): the three shades' special moves have rest 0, so
-    they follow one another after their charge and animation only; Ormi's Supercollider charges for 296 steps at AGI 63. On the
+    they follow one another after their charge and animation only; Ormi's Supercollider charges for 297 steps at AGI 63. On the
     running game (2026-10-09) no gauge stood still while the effect of an Attack, a Fire or a monster cast played; only the Wait flag
     stopped the clock (1.10).
 11. **The authored values in our data are replaced by the files' numbers** (section 2): every actor has ACC 95 (we have 0); the
@@ -514,8 +515,8 @@ re-validation leaves a self target alone (1.12, run on the live exe) and the dam
 with the "immune to percentage-HP formulas" bit, which Baralai has, as 0, so that turn does nothing [M: the damage step was
 read, not run]. Death entry: empty.
 
-**Pace.** First poll in 16 to 48 steps; then a poll every (charge + animation + rest) of the last command: Glint 186 steps
-of charge with no rest, Looming Glacier 130, Silence 56 + 56, Attack 93 of rest, Chain Attack 0, Drill Shot 93 (section 6).
+**Pace.** First poll in 17 to 49 steps; then a poll every (charge + animation + rest) of the last command: Glint 187 steps
+of charge with no rest, Looming Glacier 131, Silence 56 + 56, Attack 94 of rest, Chain Attack 0, Drill Shot 94 (section 6).
 
 ### 4.3 Gippal (m177) [H]
 
@@ -536,7 +537,7 @@ of charge with no rest, Looming Glacier 130, Silence 56 + 56, Attack 93 of rest,
 | | 5 (counter back to 0) | Bullseye on all party | | 187-191 |
 
 No reaction, menu or death code. The counter keeps its value across the two HP regimes (only the cycle branch touches it).
-Pace: Attack has rest 88, every other move rest 0 with charge 71 to 106 steps (section 6).
+Pace: Attack has rest 89, every other move rest 0 with charge 71 to 107 steps (section 6).
 
 ### 4.4 Nooj (m258) [H]
 
@@ -549,8 +550,8 @@ Pace: Attack has rest 88, every other move rest 0 with charge 71 to 106 steps (s
 | 2 | otherwise, by cycle counter 0, 1, 2, 3, 4 (then 0) | Attack, Attack, Rippling Chroma on one girl, Attack, Greedy Aura on all party | | 105-143 and 145-185 (two copies, identical) |
 
 No reaction, menu or death code. The two copies of the cycle are the same table; Lightfall simply interrupts it once, when
-his HP first goes under 3,000. Pace: Attack rest 86; Rippling Chroma and Greedy Aura charge 104 steps with no rest; Lightfall
-charge 138.
+his HP first goes under 3,000. Pace: Attack rest 87; Rippling Chroma and Greedy Aura charge 104 steps with no rest; Lightfall
+charge 139.
 
 ## 5. Ixion at Djose (m166, scene djyt08_229) [H]
 
@@ -593,11 +594,14 @@ M, rest 100, charge 120): magic on all party, **no element byte** (so Lightning 
 (-12, -25), (12, -25) for slots 0, 1, 2) and the model of the previous note: facing the party, the odds are about 41.9, 29.1 and
 29.0 percent for slots 0, 1, 2; facing away, about 32, 34 and 34. Positions and facing at each poll decide the real odds.
 
-## 6. Cadence reference (units from the rows; steps at Normal speed, no Haste or Slow)
+## 6. Cadence reference (units from the rows; steps at Normal speed, no Haste or Slow, rounded up)
 
 Recovery = `cost_atb x 10000 / (AGI + 1)`, charge = `cost_cast x 10000 / (AGI + 1)`; 95 units fall per step, for a charge as well as a
 recovery (1.4); divide steps by 29.97 for seconds (the measured rate). The thinking wait of 1.4 (30 steps per fallen girl) is added
-after every command.
+after every command. Steps are the units divided by 95 and **rounded up**, because the game's counter has to reach 0 or less
+and so needs the next whole step (corrected by the 2026-10-09 measurement: the first draft rounded to the nearest step and
+printed, for example, 164 for the 15,625 units of Ormi's Attack rest, which take 165; a 16,666-unit refill took 176 steps on
+the running game).
 
 | Actor (AGI) | Move | Charge units (steps) | Rest units (steps) |
 |---|---|---|---|
@@ -605,50 +609,51 @@ after every command.
 | | Thundara | 5,035 (53) | 0 |
 | | Aerospark | 7,194 (76) | 5,755 (61) |
 | | Recharge, Thor's Hammer | 8,633 (91) | 7,194 (76) |
-| Baralai (112) | Attack | 0 | 8,849 (93) |
-| | Glint | 17,699 (186) | 0 |
+| Baralai (112) | Attack | 0 | 8,849 (94) |
+| | Glint | 17,699 (187) | 0 |
 | | Chain Attack (each of three) | 0 | 0 |
-| | Looming Glacier | 12,389 (130) | 0 |
+| | Looming Glacier | 12,389 (131) | 0 |
 | | Silence | 5,309 (56) | 5,309 (56) |
-| | Absorb | 8,849 (93) | 3,539 (37) |
+| | Absorb | 8,849 (94) | 3,539 (38) |
 | | Regen | 5,309 (56) | 0 |
 | | Not-So-Mighty Guard | 10,619 (112) | 7,079 (75) |
-| | Drill Shot | 8,849 (93) | 0 |
-| Gippal (118) | Attack | 0 | 8,403 (88) |
-| | Grinder, Bullseye, Mortar | 10,084 (106) | 0 |
+| | Drill Shot | 8,849 (94) | 0 |
+| Gippal (118) | Attack | 0 | 8,403 (89) |
+| | Grinder, Bullseye, Mortar | 10,084 (107) | 0 |
 | | Flash Bomb, Hush Grenade | 6,722 (71) | 0 |
-| | Potion Plus | 8,403 (88) | 0 |
-| Nooj (121) | Attack | 0 | 8,196 (86) |
+| | Potion Plus | 8,403 (89) | 0 |
+| Nooj (121) | Attack | 0 | 8,196 (87) |
 | | Rippling Chroma, Greedy Aura | 9,836 (104) | 0 |
-| | Lightfall | 13,114 (138) | 0 |
-| Ormi, Acts I and II (63) | Attack | 0 | 15,625 (164) |
-| | Supercollider | 28,125 (296) | 0 |
-| | Huggles | 9,375 (99) | 15,625 (164) |
+| | Lightfall | 13,114 (139) | 0 |
+| Ormi, Acts I and II (63) | Attack | 0 | 15,625 (165) |
+| | Supercollider | 28,125 (297) | 0 |
+| | Huggles | 9,375 (99) | 15,625 (165) |
 | Ormi, Act III (42) | Attack | 0 | 23,255 (245) |
 | | Supercollider | 41,860 (441) | 0 |
 | | Huggles | 13,953 (147) | 23,255 (245) |
 | | Concussive Blast | 18,604 (196) | 0 |
-| Logos, Act II (90) | 1H Pistol | 0 | 4,395 (46) |
+| Logos, Act II (90) | 1H Pistol | 0 | 4,395 (47) |
 | | Russian Roulette | 10,989 (116) | 16,483 (174) |
-| Logos, Act III (49) | 1H Pistol | 0 | 8,000 (84) |
+| Logos, Act III (49) | 1H Pistol | 0 | 8,000 (85) |
 | | Hail of Bullets | 24,000 (253) | 0 |
 | | Russian Roulette | 20,000 (211) | 30,000 (316) |
 | Leblanc (53; 254 during No Love Lost) | Attack, Love Tap | 0 | 18,518 (195) |
-| | Fira, Thundara, Blizzara, Watera | 12,962 (136) | 0 |
-| | Osmose | 16,666 (175) | 0 |
+| | Fira, Thundara, Blizzara, Watera | 12,962 (137) | 0 |
+| | Osmose | 16,666 (176) | 0 |
 | | Not-So-Mighty Guard, White Wind | 22,222 (234) | 14,814 (156) |
 | | Mach Fan | 25,925 (273) | 0 |
 | | Flash Bomb, Hush Grenade | 14,814 (156) | 0 |
 | | No Love Lost (each of three) | 0 | 0 |
 | Dr. Goon (56) | Attack | 0 | 17,543 (185) |
-| Fem-Goon (62) | Attack | 0 | 15,873 (167) |
+| Fem-Goon (62) | Attack | 0 | 15,873 (168) |
 | | any of the eight spells | 11,111 (117) | 0 |
 
-**First polls.** The first gauge runs 25% to 74% of `70 x 10000 / (AGI + 1)` units: Ixion 1,258 to 3,736 units (13 to 39
-steps), Baralai 16 to 48, Gippal 16 to 46, Nooj 15 to 45, Ormi 29 to 85 (Acts I and II) or 43 to 127 (Act III), Logos 20 to 60
-(Act II) or 37 to 109 (Act III), Leblanc 34 to 101, Dr. Goon 32 to 96, Fem-Goon 29 to 87. Delay (Supercollider and Mach
-Fan weak, Huggles strong) pushes a girl's gauge back by 4,000 or 8,000 units (42 or 84 steps) per application; whether each of
-Huggles' three hits applies it was not traced [M].
+**First polls.** The first gauge runs 25% to 74% of `70 x 10000 / (AGI + 1)` units: Ixion 1,258 to 3,736 units (14 to 40
+steps), Baralai 17 to 49, Gippal 16 to 46, Nooj 16 to 45, Ormi 29 to 86 (Acts I and II) or 43 to 128 (Act III), Logos 21 to 61
+(Act II) or 37 to 110 (Act III), Leblanc 35 to 102, Dr. Goon 33 to 96, Fem-Goon 30 to 87 (rounded up, before the opening trim).
+Delay (Supercollider and Mach Fan weak, Huggles strong) pushes a girl's gauge back by 4,000 or 8,000 units (43 or 85 steps from
+a standing start, as for a girl whose menu was open; 42.1 or 84.2 steps of extra wait on a counter already running) per
+application; whether each of Huggles' three hits applies it was not traced [M].
 
 ## 7. Open items, and what could not be decoded
 
@@ -716,7 +721,7 @@ Row key: *game* = this note (source file and lines); *ours* = file:line in `src/
 | I4 | Targets | Attack and Aerospark near-weighted (m166.src:104,117) | random (`:78,83`) | |
 | I5 | Action time | see E1 | `DJOSE_ACTION_TIME_SECONDS = 3` on Ixion's own gauge (`ixion-djose.ts:43-46`) | see E1 |
 | H1 | Hit rolls and Darkness | only the plain Attacks (ACC 95 or byte 95) and the 1H Pistol (byte 140) roll to hit, and Darkness cuts those; Grinder, Mortar, Glint, Chain Attack, Drill Shot, Supercollider, Huggles, Hail of Bullets, Mach Fan and every spell and grenade never roll, and Supercollider and Huggles ignore Darkness (rows, misc bits) | Grinder, Mortar, Glint and the Triple Attack roll to hit (no `canMiss: false`, `den-of-woe-abilities.ts:60-66,74-79,92-104,152-171`); Supercollider rolls and is affected by Darkness (`leblanc-syndicate-abilities.ts:155-185`); Huggles is authored "accuracy checked" and affected by Darkness (`:91,212`) | ours can miss with moves that never miss, and Darkness blunts two moves it cannot touch in the game |
-| H2 | Delay size | Supercollider and Mach Fan carry the weak Delay (4,000 units, 42 steps), Huggles the strong one (8,000 units, 84 steps) (rows, [re-ffx2-atb-status.md](re-ffx2-atb-status.md) section 1) | all three `weak-delay`, magnitude a named constant (`leblanc-syndicate-abilities.ts:185,212`, `leblanc-syndicate-leblanc-abilities.ts:143`; research ffx2-leblanc-syndicate.md:447) | Huggles delays twice as much in the game |
+| H2 | Delay size | Supercollider and Mach Fan carry the weak Delay (4,000 units, 43 steps from a standing start), Huggles the strong one (8,000 units, 85 steps) (rows, [re-ffx2-atb-status.md](re-ffx2-atb-status.md) section 1) | all three `weak-delay`, magnitude a named constant (`leblanc-syndicate-abilities.ts:185,212`, `leblanc-syndicate-leblanc-abilities.ts:143`; research ffx2-leblanc-syndicate.md:447) | Huggles delays twice as much in the game |
 | E1 | Action time | no gauge stops while a command's effect plays: measured on the running game for Attack, Fire and four monster casts (only the Wait flag stopped the clock); the actor spends the command's own time executing, then its recovery (a monster cast: its countdown, then an effect of 84 to 114 steps; the Iron Giant's Attack 57 steps) (1.10) | a flat 1.5 s (3 s in the Road, Cloister and Djose links) added to the **actor's own** recovery while the other gauges keep filling (`action-time.ts:1-20,54-82`) | the other gauges keep running in both; what differs is the actor's own time, a flat 1.5 s in ours against the command's own length in the game |
 | E2 | Pace | per-move rest and charge (section 6); the shades' special moves have rest 0 | tier estimates (charge 0 / 16 / 26 / 39, rest baseline 70) (`constants.ts:79,100-103`, research/ffx2-leblanc-syndicate.md:429-447) | the real turn lengths differ per move |
 | E3 | Thinking | 0 plus 30 steps per fallen girl; the record's thinking byte (30 on the goons) is unused (1.4) | `thinkingTicks` is set to 0 at setup and nothing raises it (`setup.ts:160`, `active.ts:135`) | none while the party stands; see [re-ffx2-atb-status.md](re-ffx2-atb-status.md) row 13 |
