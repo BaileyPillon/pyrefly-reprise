@@ -16,20 +16,20 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1090 decisions in all: 633 registry rows, 250 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 690 of the written decisions record a blanket yes.
+1092 decisions in all: 635 registry rows, 250 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 690 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1020 |
+| adopted | 1022 |
 | proposed | 14 |
 | deferred | 5 |
 | rejected | 11 |
 | superseded | 40 |
-| **All** | **1090** |
+| **All** | **1092** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 75 |
+| combat | 76 |
 | art | 258 |
 | visuals | 80 |
 | camera | 55 |
@@ -40,20 +40,20 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | guide | 28 |
 | release | 40 |
 | hosting | 17 |
-| process | 88 |
+| process | 89 |
 | critic | 32 |
 | data | 7 |
 | tech | 8 |
 | site | 17 |
-| **All** | **1090** |
+| **All** | **1092** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 504 |
+| both games | 506 |
 | FFX only | 317 |
 | FFX-2 only | 252 |
 | FF7 hidden experiment | 17 |
-| **All** | **1090** |
+| **All** | **1092** |
 
 ## Standing rules in force
 
@@ -4747,7 +4747,7 @@ Wednesday · 69 decisions
 
 ### 2026-10-08
 
-Thursday · 46 decisions
+Thursday · 48 decisions
 
 - <a id="d-588"></a>**D-588** — Work continues at full speed on his fourth Claude account: usage mode NORMAL by his word, the paused lanes resume (both games)
   - Bailey: “Continue on from where you left off please, full speed ahead on my fourth account here with full usage”
@@ -4979,3 +4979,13 @@ Thursday · 46 decisions
   - What changed: The driver's 22:45:03 message lists them as the items his blanket yes does not decide: (1) the page's name, "Behind the Scenes" or "Behind the Screens" (he wrote "screens"; "Scenes" for now and one word changes it); (2) his own quotes: none are in for now, and lines such as "look terrible" about the pixel art and "too arcade-y" about the first music stay out unless he names one he is happy to show; (3) Yunalesca's first form, real size or today's (D-607); (4) the art picks: the Overnight Art Review page (A-0577; 118 slots and 354 picks); the driver's recommendation, made in that same message: install pick 1 for every pose except the three weak Rikku rows (RIKKU-DK-ko, RIKKU-SS-follow, RIKKU-SS-defend), which get a re-render tonight; he says "install pick 1" or gives codes; (5) his ear on the two chapter-select loop clips, A and C (D:/Tools/elevenlabs/candidates/2026-10-07/loops.html, also served by the driver at localhost:5197/loops.html while its server runs; A fails the stereo gate as picked, D-582). Nothing is built or installed for any of them.
   - area process · both games · proposed · nothing to build · see [D-582](#d-582), [D-607](#d-607), [D-617](#d-617), [D-626](#d-626)
   - Source: Bailey, 2026-10-08 22:42:45 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "I’ll go with all your recommendations". …
+- <a id="d-634"></a>**D-634** — Reverse engineer and decompile FFX's and FFX-2's battle mechanics from the Steam HD Remaster with rea and ghidra-mcp until our engines match the games' code 1:1, each game by its own code (both games)
+  - Bailey: “use this https://github.com/morluto/rea and https://github.com/bethington/ghidra-mcp to reverse engineer and decompile final fantasy x/x-2 battle mechanics. I have it installed in my pc with steam. it's the x/x-2 remaster. It needs to be a 1:1 parity. this is very useful for our project.”
+  - What changed: A new track, re-parity, on its own branch (re-parity, worktree .claude/worktrees/re-parity): not merged, not live, nothing deployed (A-0586 to A-0597). The RE-parity chat's main session plans, reviews and validates; Sonnet lanes read the executables, emulate their functions, port them and test them. What 1:1 was taken to mean (docs/plans/re-parity.md): any input gives the integer the game's function gives (operand widths, truncation, clamps), the same random draws in the same order, optionally the game's own generator and stream map, timing in the game's own units, every number from the game's tables, and boss behaviour from the compiled scripts. Animation, camera, audio and art timing are out of scope, and so is anything he chose on purpose: it stays until he says otherwise. Each mechanic is proven in its own game's executable and recorded as FFX only or FFX-2 only (rule 14). Method: both executables are read in Ghidra through ghidra-mcp (anchor maps of 125 and 91 functions), each function is run on generated inputs in an emulator on the real machine code with only the random generator scripted, and a pure TypeScript kernel is accepted only when it matches every vector (zero differences so far); the engine then calls the kernel, in measured batches W1 to W4 behind paper preflights. Where it stands at 2026-10-08 ~23:30 EDT: the kernels for FFX hit, critical, damage, turn order, status and Overdrive and for FFX-2 hit, critical, damage, status, theft and the ATB clocks are proven; FFX hit, critical and damage are wired into the FFX engine (W1) with its goldens re-baselined; the boss AI of all 18 chapters is read from the games' own scripts; two living Claude Docs hold the notes (D-635). Five questions wait for him (NOW.md, RE parity): the game's own random streams, Chapter I's difficulty after parity, the aeon Attack, a timing session in FFX-2 on his screen and the boss-AI structure differences. The rule of D-564 stands: only our own wording, exe addresses as citations and numbers (reduced test vectors, the command-record table) are committed, never game code, text or assets. His standing permission for downloads on D: (D-565) covered the tools fetched for this.
+  - area combat · both games · adopted · delivery in progress · see [D-564](#d-564), [D-565](#d-565), [D-569](#d-569), [D-635](#d-635)
+  - Source: Bailey, 2026-10-08 14:11:22 EDT, the first message of the RE-parity chat, a Claude Code chat separate from the driver's (the times are the session …
+- <a id="d-635"></a>**D-635** — Keep detailed notes of every aspect of FFX's battle mechanics and of FFX-2's battle mechanics as the decompilation progresses, in two living Claude Docs (both games)
+  - Bailey: “As the decompilation progresses give me detailed notes of every aspect of ffx’s battle mechanics and every aspect of ffx-2’s battle mechanics”
+  - What changed: The main session answered with two living Claude Docs, one per game because each game's mechanics are its own: "FFX Battle Mechanics — from the game code" https://claude.ai/code/artifact/622cd701-c5d7-49e9-81fe-20314324e811 and "FFX-2 Battle Mechanics — from the game code" https://claude.ai/code/artifact/c19aef4f-cfae-495c-a702-02817d1abbfa (A-0596). Two Sonnet lanes wrote them from 19:50 to 20:43 EDT, one section per mechanic (one action from start to finish with a drawn diagram, the random numbers, turn order or the ATB, hit and evasion, critical hits, base damage, the modifiers, elements, status, Overdrive or dresspheres, healing, counters, steal, range, aeons, escape, enemy AI, where our engine differs, open questions), in our own words with formulas as maths and no game code or text; every rule is labelled Proven (run against the game's machine code), Read (read from the decompile) or Open. Update passes launched at 21:33, 22:05 and 22:41 keep them in step with the research notes (revisions 123 and 133 at 22:40), and each new batch of the decompilation updates them. The FFX doc carries one comment thread for him (20:44 EDT, on the "68 independent random streams" paragraph): whether the engine should adopt the game's 68 streams so seeded fights roll exactly as FFX does, or keep our generator with the game's roll formulas. It is unanswered at this record.
+  - area process · both games · adopted · delivery in progress · see [D-634](#d-634)
+  - Source: Bailey, 2026-10-08 19:43:58 EDT, in the RE-parity chat (the times are the session transcript's), verbatim: "As the decompilation progresses give me …
