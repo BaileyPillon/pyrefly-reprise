@@ -6,6 +6,29 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-09 — The FFX engine takes its turn order, status infliction and per-turn ticks from the game's kernels: exports removed, runtime fields, two data requirements, one carry rule (re-parity W2; FFX only)
+
+Branch `re-parity-w2`. FFX-2 and FF7 import none of the modules below. Event shapes are unchanged.
+
+- `src/battle/ffx/index.ts` no longer exports `applyDelay` and `normalise` (the turn queue), `applyStatus`, `removeStatuses`, `rollStatus`, `rollThreaten`,
+  `consumeNulCharges`, `tickDurationStatuses`, `DURATION_STATUSES`, `ESUNA_CURES`, `DISPEL_REMOVES` (statuses) and `payRegen` (ticks): they were the engine's own
+  formulas, which the game's kernels replace (`adapt/ctb.ts`, `adapt/status.ts`, `adapt/status-apply.ts`, `adapt/ticks.ts`). Every caller in the tree moved (the tests that
+  gave a combatant a status use `tests/unit/helpers/ffxStatus.ts`). Still exported: `removeStatus`, `refreshCriticalStatus`, `bouncesOffReflect`, `SURVIVES_KO`,
+  `recoveryTicks`, `predictTurnOrder`, `nextActor`, `seedInitialCtb`, `tieBreakRank`, `statusIconsFor`, `collectReactions`. `onTurnStart(ctx, actor)` no longer takes the
+  elapsed ticks and `onTurnEnd(ctx, actor, resultsApplied = true)` gained the flag the Poison marker needs (false for a passed turn).
+- `ActorRuntime` (engine-private; moved to `src/battle/ffx/runtime.ts` because `state.ts` crossed 400 lines, re-exported from `state.ts`) gains `icv` (the base counter stored
+  at battle start, which a revival restores), `regenTicks` (the holder's own Regen tick counter) and `poolBaseHp` / `poolBaseMp` (the maxima before Double HP / Double MP).
+- The draw order of a hit is W1's (hit roll, HP variance, critical roll), then the damage classes' variances, then one `% 101` draw per status with a chance byte (Threaten
+  `% 100`), then one for the shatter of a Petrified record. An ability with a game record rolls the record's bytes; its `statusEffects` and `removesStatuses` are read only
+  for an ability with no record. The opening counters are the game's 26 fixed draws (none for a preemptive or ambush start).
+- Two data requirements, optional fields that are now errors where they bite: a Poisoned enemy needs `EnemyDef.poisonTickPercent`, an enemy a Doom lands on needs
+  `EnemyDef.doomTurns`. Every shipped enemy carries them or is immune (Ginnem and Daigoro take no turns).
+- The chain carry (`BattleScreenSetup.ts#carriedFfxState`, Sin links 2 and 3): a member that carries `max-hp-x2` or `max-mp-x2` is handed on with its BASE maxima in
+  `FFXMemberBuild.stats` / `AeonBuild.stats` (no shape change) and the next link's engine doubles them under the game's cap (`statuses.ts#rebuildCarriedPools`). Before, the
+  doubled ceiling travelled and was halved back, which the cap (9,999 HP, 999 MP, or 99,999 and 9,999 with Break HP / MP Limit) makes impossible.
+- Doc comments only in `src/battle/common/types.ts`: `StatusInstance.turnsRemaining` (which statuses tick, and when), the `regen` entry of `StatusId`, the `turn-start`
+  event's `elapsedTicks`.
+
 ## 2026-10-08 — `FFXCommandRecord` gains the status bytes: `rank`, `chances`, `durations`, `extra`, `stage`, `buff` (re-parity W2; FFX only; additive)
 
 Branch `re-parity-w2`. `src/battle/common/types.ts`: `FFXCommandRecord` (the game's own command record on an FFX ability, `AbilityDef.record`) gains six optional members, all read from
