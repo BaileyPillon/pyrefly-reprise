@@ -257,8 +257,12 @@ function walk(chapterId: string, seeds: readonly number[], want: number, collect
 // variance and critical in the game's order and Cross Cleave always hits, so seed 1's Chapter 1 is a three-decision wipe. The
 // same board (Yuna down and a Zombie, the raise refused, the Poison Fang and Holy Water cards) is seed 18's six decisions, and
 // seed 2 supplies the other ten of the sixteen; `walk` continues on the next seed when a battle ends early, as it always did.
-describe('Chapter 1, the board the gate reported (seed 18, then seed 2 for the rest)', () => {
-  const seen = walk('seymour-flux', [18, 2], 16, true);
+// Re-pinned again 2026-10-09 (re-parity W2, FFX only): the opening counters are the game's 26 fixed draws and statuses roll through the
+// game's infliction step, so the draws moved once more. Seed 8's eleven decisions hold the whole board (Yuna down and a Zombie with the
+// raise refused, the Poison Fang card that says "Leave Yuna down", the revive's caution, the Holy Water card), and seed 1 supplies the
+// other five of the sixteen (checked by running the engine over seeds 1 to 60: seed 8 is the first with all four patterns).
+describe('Chapter 1, the board the gate reported (seed 8, then seed 1 for the rest)', () => {
+  const seen = walk('seymour-flux', [8, 1], 16, true);
 
   it('walks the decisions the gate named', () => {
     expect(seen.decisions).toBe(16);
