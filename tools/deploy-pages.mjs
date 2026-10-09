@@ -6,9 +6,15 @@
  *   node tools/deploy-pages.mjs [--skip-tests] [--allow-dirty] [--dry-run]
  *                              [--message="text"] [--owner-override="words"]
  *                              [--host=cloudflare|github] [--kind=workers|pages] [--preview]
- *                              [--create-project] [--full-verify]
+ *                              [--create-project] [--full-verify] --release=<name>
  *
  * Flags:
+ *   --release=     REQUIRED for every deploy that is not a --preview: the release's name (39.5, 39.4.2),
+ *                  stamped on the title screen's build number ("Release 39.5 · <commit>") and written to
+ *                  docs/deploys.log as release=. The deploy REFUSES unless that name is the newest entry of the
+ *                  player notes (src/app/changelog/releaseNotes.ts: three to six lines in player words, written and
+ *                  committed BEFORE the deploy) and the notes are valid (tools/release-notes.mjs). A --preview is
+ *                  stamped "Preview", needs no note and ignores the flag. Bailey, 2026-10-08.
  *   --host=        where to publish: cloudflare (the default, the game's permanent address
  *                  https://echoesofspira.com/; docs/handoff/cf-switch.md) or github (the OLD address:
  *                  a LEGACY deploy that carries the "we've moved" note and is logged in
@@ -93,6 +99,7 @@ import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import { RELEASE_ENV } from './build-stamp.mjs';
 import { formatLoadReport, verifyArtLoads } from './art-browser-load.mjs';
 import { auditArtReferences, formatAudit, verifyShippedArt } from './art-verify.mjs';
 import { MANIFEST_NAME, buildManifest, diffManifests, verifyLive } from './artifact-manifest.mjs';
@@ -112,6 +119,7 @@ import {
   parseHostArgs,
 } from './deploy-host.mjs';
 import { resolveWranglerBin } from './deploy-wrangler.mjs';
+import { checkReleaseForDeploy } from './release-notes.mjs';
 import { SOURCEMAP_DIR_ENV, findSourceMapReferences, findUnshipped } from './dist-filter.mjs';
 import {
   archiveMarker,
@@ -333,14 +341,16 @@ function releaseGateFor(plan, mainSha) {
  * `override=owner` field so a build shipped past the deep-review gate is
  * visible in the log itself, not only in `critic/pending/<sha>.json`. A
  * `host` (github or cloudflare, since r39-cloudflare) appends a last
- * `host=<name>` field; without one the line is exactly what it always was.
+ * `host=<name>` field; without one the line is exactly what it always was. A `release` (the name the build was
+ * stamped with, `--release=`, since 2026-10-08) is a last `release=<name>` field after it.
  * Readers (critic-plan, critic-status) match `\tstatus=ok` and `\tmain=` and
  * ignore every field they do not know.
  */
-export function formatDeployLogLine({ isoNow, mainSha, bundleHash, artFileCount, status, overrideUsed = false, host = null }) {
+export function formatDeployLogLine({ isoNow, mainSha, bundleHash, artFileCount, status, overrideUsed = false, host = null, release = null }) {
   const base = `${isoNow}\tmain=${mainSha}\tbundle=${bundleHash}\tartFiles=${artFileCount}\tstatus=${status}`;
   const withOverride = overrideUsed ? `${base}\toverride=owner` : base;
-  return `${host ? `${withOverride}\thost=${host}` : withOverride}\n`;
+  const withHost = host ? `${withOverride}\thost=${host}` : withOverride;
+  return `${release ? `${withHost}\trelease=${release}` : withHost}\n`;
 }
 
 /** The release rules in one line: what has to happen before this deploy, and what after it. */
@@ -475,11 +485,11 @@ function countFiles(dir) {
  */
 function recordDeploy({
   host, liveUrl, isoNow, mainSha, bundleHash, artFileCount, manifest, plan, liveArtifact,
-  ownerOverrideUsed, ownerOverrideReportPath, ownerOverrideChangedArea,
+  ownerOverrideUsed, ownerOverrideReportPath, ownerOverrideChangedArea, release,
 }) {
   // ---- 6. Log and summarize ---------------------------------------------
   const status = 'ok';
-  const logLine = formatDeployLogLine({ isoNow, mainSha, bundleHash, artFileCount, status, overrideUsed: ownerOverrideUsed, host });
+  const logLine = formatDeployLogLine({ isoNow, mainSha, bundleHash, artFileCount, status, overrideUsed: ownerOverrideUsed, host, release });
   mkdirSync(dirname(LOG_PATH), { recursive: true });
   if (!existsSync(LOG_PATH)) {
     writeFileSync(
@@ -489,7 +499,7 @@ function recordDeploy({
   }
   writeFileSync(LOG_PATH, logLine, { flag: 'a' });
 
-  const summary = `Deployed main ${mainSha} (bundle ${bundleHash}, ${artFileCount} art files) to ${liveUrl} at ${isoNow}`;
+  const summary = `Deployed release ${release} (main ${mainSha}, bundle ${bundleHash}, ${artFileCount} art files) to ${liveUrl} at ${isoNow}`;
   log(summary);
   console.log(summary);
 
@@ -551,10 +561,10 @@ function recordDeploy({
  * docs/deploys.log line, no critic marker, no ledger entry, no stored manifest. The live build is the
  * default host's, and the critic's obligations stay with it.
  */
-function recordLegacyDeploy({ host, liveUrl, isoNow, mainSha, bundleHash, artFileCount, ownerOverrideUsed }) {
+function recordLegacyDeploy({ host, liveUrl, isoNow, mainSha, bundleHash, artFileCount, ownerOverrideUsed, release }) {
   mkdirSync(dirname(LEGACY_LOG_PATH), { recursive: true });
   appendFileSync(LEGACY_LOG_PATH, formatLegacyLogLine({
-    isoNow, mainSha, bundleHash, artFileCount, host, url: liveUrl, overrideUsed: ownerOverrideUsed,
+    isoNow, mainSha, bundleHash, artFileCount, host, url: liveUrl, overrideUsed: ownerOverrideUsed, release,
   }));
   const home = HOSTS[DEFAULT_HOST];
   const summary = `LEGACY deploy of main ${mainSha} (bundle ${bundleHash}, ${artFileCount} art files) to the old address ${liveUrl} at ${isoNow}`;
@@ -577,6 +587,15 @@ async function main() {
   if (HOST.name === 'github' && !existsSync(GH_EXE)) fail(`gh CLI not found at ${GH_EXE}`);
   for (const line of describeHostPlan(HOST, { kind: KIND, preview: PREVIEW, fullVerify: FULL_VERIFY, createProject: CREATE_PROJECT, legacy: LEGACY })) log(line);
   if (HOST_REFUSAL) log(`NOTE (dry run only): a real run would refuse this — ${HOST_REFUSAL}`);
+  // The release name and its player note (Bailey, 2026-10-08): answered in seconds, before the preflight and the build take minutes.
+  const releaseCheck = await checkReleaseForDeploy({ root: ROOT, requested: args.release, preview: PREVIEW });
+  if (!releaseCheck.ok) {
+    if (!DRY_RUN) fail(releaseCheck.error);
+    log(`NOTE (dry run only): a real run would refuse this — ${releaseCheck.error}`);
+  } else {
+    log(releaseCheck.line);
+  }
+  const RELEASE = releaseCheck.ok ? releaseCheck.release : null;
   // Cloudflare: no login, no deploy. The answer comes in seconds, before the preflight and the
   // build take minutes. A dry run asks nothing of Cloudflare.
   if (HOST.name === 'cloudflare' && !DRY_RUN) checkCloudflareLogin({ root: ROOT, deps: { log, fail } });
@@ -676,7 +695,8 @@ async function main() {
   // /pyrefly-reprise/. A BASE_PATH left in the shell by an earlier run can no longer decide it.
   const hostEnv = hostBuildEnv(HOST);
   log(`building: npx vite build --outDir dist-release --emptyOutDir with BASE_PATH=${HOST.base} (source maps are kept in ${sourceMapDir}, none ship)`);
-  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir'], { env: { ...process.env, ...hostEnv, [SOURCEMAP_DIR_ENV]: sourceMapDir } }).status !== 0) {
+  // PYREFLY_RELEASE is set explicitly for every build, so a value left in the shell cannot decide the title's build number.
+  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir'], { env: { ...process.env, ...hostEnv, [RELEASE_ENV]: RELEASE, [SOURCEMAP_DIR_ENV]: sourceMapDir } }).status !== 0) {
     fail('vite build failed — see output above');
   }
 
@@ -803,7 +823,7 @@ async function main() {
       mkdirSync(dirname(PREVIEW_LOG_PATH), { recursive: true });
       appendFileSync(PREVIEW_LOG_PATH, formatPreviewLogLine({
         isoNow, mainSha, bundleHash, artFileCount, host: HOST.name, kind: published.kind, site: published.siteName, url: published.liveUrl,
-        overrideUsed: ownerOverrideUsed,
+        overrideUsed: ownerOverrideUsed, release: RELEASE,
       }));
       const summary = `PREVIEW of main ${mainSha} (bundle ${bundleHash}, ${artFileCount} art files) is at ${published.liveUrl} (${published.liveArtifact.checked} files compared byte for byte) at ${isoNow}`;
       log(summary);
@@ -818,7 +838,7 @@ async function main() {
     }
     recordDeploy({
       host: HOST.name, liveUrl: published.liveUrl, isoNow, mainSha, bundleHash, artFileCount, manifest, plan,
-      liveArtifact: published.liveArtifact, ownerOverrideUsed, ownerOverrideReportPath, ownerOverrideChangedArea,
+      liveArtifact: published.liveArtifact, ownerOverrideUsed, ownerOverrideReportPath, ownerOverrideChangedArea, release: RELEASE,
     });
     return;
   }
@@ -961,13 +981,13 @@ async function main() {
   // Since the switch GitHub Pages is the OLD address: a deploy there records no live build, marker, ledger entry or artifact.
   if (LEGACY) {
     recordLegacyDeploy({
-      host: HOST.name, liveUrl: GITHUB_LIVE_URL, isoNow, mainSha, bundleHash, artFileCount, ownerOverrideUsed,
+      host: HOST.name, liveUrl: GITHUB_LIVE_URL, isoNow, mainSha, bundleHash, artFileCount, ownerOverrideUsed, release: RELEASE,
     });
     return;
   }
   recordDeploy({
     host: HOST.name, liveUrl: GITHUB_LIVE_URL, isoNow, mainSha, bundleHash, artFileCount, manifest, plan, liveArtifact,
-    ownerOverrideUsed, ownerOverrideReportPath, ownerOverrideChangedArea,
+    ownerOverrideUsed, ownerOverrideReportPath, ownerOverrideChangedArea, release: RELEASE,
   });
 }
 

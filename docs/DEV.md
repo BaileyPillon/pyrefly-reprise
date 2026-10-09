@@ -139,7 +139,7 @@ schtasks /Create /SC ONLOGON /TN PyreflyArtWatch /TR "node \"D:\Final Fantasy\to
 ### Deploy
 
 ```
-npm run deploy -- [--skip-tests] [--allow-dirty] [--dry-run] [--message="text"]
+npm run deploy -- --release=<name> [--skip-tests] [--allow-dirty] [--dry-run] [--message="text"]
 ```
 
 `tools/deploy-pages.mjs` does the whole release in one command: type-check +
@@ -160,6 +160,16 @@ or `tools/zz-*.tmp.*` during the preflight. Those fleet paths are printed as a
 warning and the deploy continues; the rules live in `tools/deploy-classify.mjs`
 and are pinned by `tests/unit/deploy-dirty-classify.test.ts`.
 
+- `--release=<name>` (**required** for every deploy that is not a `--preview`; Bailey, 2026-10-08) names the
+  release, `39.5`, `39.4.2`. The name is stamped on the title screen's build number ("Release 39.5 · <commit>"):
+  the tool hands it to `vite build` as `PYREFLY_RELEASE`, `vite.config.ts` defines `__PYREFLY_RELEASE__` from it
+  (`tools/build-stamp.mjs`), and `docs/deploys.log` gets a trailing `release=`. The deploy **refuses** unless that name
+  is the newest entry of the player notes (`src/app/changelog/releaseNotes.ts`: three to six lines in player words, each
+  tagged FFX, FFX-2 or Both, newest first, written and committed BEFORE the deploy) and the notes are valid
+  (`tools/release-notes.mjs`, pinned by `tests/unit/release-notes.test.ts` and `tests/unit/deploy-release-gate.test.ts`).
+  The check runs first, before the Cloudflare login and before anything is built; a `--dry-run` prints it as a note.
+  A `--preview` is stamped `Preview` (the title shows "Preview · <commit>"), needs no note and ignores the flag. A dev
+  server or a hand-run build sets nothing and the title shows the commit alone.
 - `--skip-tests` skips the `tsc`/`vitest` preflight.
 - `--allow-dirty` deploys even when a build-relevant path is dirty
   (the dirty files are still printed); without it, such a tree aborts.

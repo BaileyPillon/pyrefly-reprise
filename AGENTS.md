@@ -177,6 +177,10 @@ encounter through its real flow, every required target in `docs/target/targets.j
 matched, the exact artifact verified live). An old score never certifies a new build;
 rounds 02 and 03 are rubric v1 history.
 
+- `npm run deploy -- --release=<name>` (since 2026-10-08, Bailey) names the release for the title screen's build number
+  and **refuses** unless that release's player note is the newest in `src/app/changelog/releaseNotes.ts`: write the note
+  (three to six lines, player words, tagged FFX / FFX-2 / Both, never a hidden chapter or a secret word) and commit it first.
+  A `--preview` is stamped `Preview` and needs none ([DEV.md](docs/DEV.md) "Deploy").
 - `npm run deploy` builds locally (the art is only on this disk), deploys the Worker
   `echoes-of-spira` to Cloudflare (the default host; Custom Domain `echoesofspira.com`) and
   appends to `docs/deploys.log`; `--host=github` publishes the old GitHub Pages address as a

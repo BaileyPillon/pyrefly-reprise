@@ -121,6 +121,8 @@ export declare function formatPreviewLogLine(input: {
   site: string;
   url: string;
   overrideUsed?: boolean;
+  /** What the build was stamped with (`Preview`); a last `release=<name>` field. */
+  release?: string | null;
 }): string;
 
 export declare function formatLegacyLogLine(input: {
@@ -131,6 +133,8 @@ export declare function formatLegacyLogLine(input: {
   host: string;
   url: string;
   overrideUsed?: boolean;
+  /** What the build was stamped with (the release name); a last `release=<name>` field. */
+  release?: string | null;
 }): string;
 
 export declare function describeHostPlan(

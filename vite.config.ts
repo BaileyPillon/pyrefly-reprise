@@ -1,7 +1,9 @@
 import { execSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
+import { BTS_LIVE } from './src/app/changelog/behindTheScenes.ts';
 import { pyreflyArtDerive } from './tools/art-derive-plugin.mjs';
+import { releaseFromEnv } from './tools/build-stamp.mjs';
 import { SOURCEMAP_DIR_ENV, keepSourceMaps, pruneUnshipped } from './tools/dist-filter.mjs';
 import { pyreflyArtAtSign } from './tools/vite-art-at.mjs';
 
@@ -66,6 +68,15 @@ function buildSha(): string {
   }
 }
 
+/**
+ * The release name this build is stamped with, for the title screen's build number (`src/app/changelog/buildInfo.ts`,
+ * Bailey, 2026-10-08). `npm run deploy -- --release=39.5` sets `PYREFLY_RELEASE`; a dev server or a hand-run build sets
+ * nothing and the title shows the commit alone. A value that is not a release name stops the build (`tools/build-stamp.mjs`).
+ */
+function releaseName(): string {
+  return releaseFromEnv(process.env);
+}
+
 export default defineConfig(({ command, isPreview }) => {
   const base = command === 'build' || isPreview ? PROD_BASE : '/';
   // PR-0328, D-335: no source map ever ships. The variable SOURCEMAP_DIR_ENV names
@@ -77,7 +88,13 @@ export default defineConfig(({ command, isPreview }) => {
 
   return {
     base,
-    define: { __PYREFLY_BUILD_SHA__: JSON.stringify(buildSha()) },
+    define: {
+      __PYREFLY_BUILD_SHA__: JSON.stringify(buildSha()),
+      __PYREFLY_RELEASE__: JSON.stringify(releaseName()),
+      // BEHIND THE SCENES (Bailey, 2026-10-08): the page's switch, from the one source constant, so a build with it off sees a
+      // literal `false` at the page's single dynamic import and ships none of the page (src/app/screens/frontend/titleInfo.ts).
+      __PYREFLY_BTS__: JSON.stringify(BTS_LIVE),
+    },
     // Release 38 (r38-bytes): a production build ships the painted art as lossless WebP, derived from the PNG masters, which
     // stay in public/art untouched (`tools/art-derive.mjs`; `PYREFLY_ART_WEBP=off` ships the PNGs as before). Dev serves PNG.
     // Release 39: the game asks for a master as `idle%402x.png` (ArtShipped.ts); dev and preview serve it from `idle@2x.png` (tools/vite-art-at.mjs).
