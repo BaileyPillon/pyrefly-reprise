@@ -83,7 +83,9 @@ function viaEngine(sit: Situation, hits?: number): Run {
   const tokens: string[] = [];
   for (const e of events) {
     if (e['type'] === 'miss') tokens.push(`miss:${e['reason']}`);
-    if (e['type'] === 'damage' && e['amount'] !== 0) tokens.push(`dmg:${e['amount']}:${e['crit']}:${e['affinity'] ?? ''}`);
+    // Only what lands on the target is compared: a drain's second event is the heal on the user (re-parity lane C: the pool shifted when
+    // the Evrae, Yojimbo and Sin rows became single-target, and the seeded sample then reached Stamina Spring).
+    if (e['type'] === 'damage' && e['amount'] !== 0 && e['targetId'] === target.id) tokens.push(`dmg:${e['amount']}:${e['crit']}:${e['affinity'] ?? ''}`);
   }
   const nul = (['nulblaze', 'nulfrost', 'nulshock', 'nultide'] as const).map((s) => {
     const inst = target.statuses[s];
