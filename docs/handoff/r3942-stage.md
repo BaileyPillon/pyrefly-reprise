@@ -320,3 +320,90 @@ The check's parity set on the repaired head against the pre-repair head (`cmp3.m
 - The authored Mega Flare beat still shows Bahamut at 0.78 (section 2); a close-up reveal needs new rigs and a mockup.
 - The cure-hint card over Yuna and Rikku (section 3), and everything under "Open and disclosed (wave 2)" above.
 - Still owed before any deploy: a focused review (`node tools/critic-plan.mjs`); the PCSX2 check. Nothing was deployed.
+---
+
+# Wave 2, second repair round (the verifier's finding on the first repair, 2026-10-08 night)
+
+**Game case: FFX-2 only in effect** (rule 14). Everything below is keyed to the three giants of `FFX2_GIANT_SHARE` (Bahamut, Paragon, Anima) on an FFX-2 engine; FFX (CTB) and every other FFX-2 fiend play exactly as before (the parity run below). Presentation only: no `src/battle/**`, no enemy data, no golden file. Branch `r3942-stage` from `b0dd935e`. Commit trailer says `Claude Sonnet 5.5` (the model that wrote it, as the harness asks and as the first repair's did), not the `Opus 5.5` line in the lane brief.
+
+**Bailey's pick** (decision item 23 g of `D:/Tools/pyrefly-scratch/2026-10-07/decisions-to-record.md`): Paragon and Bahamut at real size with the colossus framing on a desktop, 70 percent on the phone; and the girls never shrunk by a later link's camera.
+
+**This round supersedes** section 1 of the first repair round ("Trema's link on the phone": the `LinkFits` that put the rig back only while it stood where the giant's fit left it, and the note that the link is 8 to 10 percent larger than live).
+
+**The finding** (independent verifier, evidence `D:/Tools/pyrefly-scratch/2026-10-08/verify-x/`): at `b0dd935e` Chapter XIII's second link (Trema) on a small upright phone still stood the girls at 57 to 66 percent of live (41, 57, 76, 65 and 100 px at 320x568, 360x640, 360x740, 375x667 and 480x854; the camera at z 15.7 against live's 10.7 at 360x740). The first repair (`b130ecf2`) fixed 390x844 and some taller windows only.
+
+## 1. What was wrong (measured with `probe-early.mjs` and `probe-seq.mjs`, rig registrations logged from the first frame)
+
+Two layers, both visible in the 360x740 and 320x568 logs:
+
+1. **The restore compared poses.** `LinkFits.fit` put the rig back only while it stood within a thousandth of where the giant's fit left it. CHAPTER FRAMING never leaves it there. At 360x740, link 1 (Paragon): the first fit gives z 10.04, the giant's own fit 15.05 (y 5.69), CHAPTER FRAMING's master 15.70 (0.65 further back); when the giant has gone and Trema stands, `Framing` plans again (it re-plans whenever a giant arrives or leaves) and registers a master at 16.36, 1.32 from the giant's fit. Trema's fit then found the rig 1.32 away, put nothing back, and only ever stands back: z 15.7 (the verifier's numbers).
+2. **The pose it would have put back was not the chapter's own fit.** The presenter's first fit counts the giant too (0.75, unless wider than the slice), and a 6.6-unit Paragon pulls the camera back and up on a narrow slice: at 320x568 z 10.04 to 10.93 and y 3.06 to 4.10 before the giant's own fit. Putting that pose back (my first attempt, kept in `out/fix-T1`) stood Trema's link at z 11.9 and the girls at 59 px against live's 75 (79 percent). **Live's Trema link starts from the scene's own rig**: at 320x568 CHAPTER FRAMING's master for it in live is exactly the authored `(0, 3, 9.6)`.
+
+## 2. The change: a giant's fit belongs to its link by the rig's line, not by where the rig stands
+
+- `BattleCamera.addRig(name, rig, continues = false)` (`src/engine/BattleCamera.ts`, 398 lines): every registration says whether it is the rig `name` going on or the scene's own camera for the link it stages. A registration that is not a continuation is recorded as the scene's own rig (`LinkFits.registered`: a copy per name) and ends what was kept of a giant's fit for that name.
+- `RigWatch.put` (`src/engine/fx/mix/rigWatch.ts`): CHAPTER FRAMING registers its master, the close rigs it re-authors from it, today's rigs put back with CHAPTER FRAMING off, and the put-back in `dispose`, all with `continues`. `BattleCameraLike.addRig` gains the optional argument; a fake camera whose `addRig` takes two ignores it.
+- `LinkFits.fit` (`src/engine/FrameFit.ts`): while a giant's fit is outstanding on a rig and no scene rig has been registered since, the next fit of that rig (a link without a giant, or the giant's own link again after a defeat) starts from the scene's own rig, whatever CHAPTER FRAMING did in between. A scene's own rig for the next link (the Road's per-link idle) ends the memory and is fitted as it stands. A standalone `LinkFits` that never saw a scene rig falls back to the pose before the giant's fit. A fit with no giant in the chain is `fitRigToSlice` exactly as before; the desktop never reaches it (`fitPhone` returns early).
+- `docs/CONTRACT-CHANGES.md` has the entry; comments in `FrameFit.ts` and `BattlePresenterPorts.ts` say the new target.
+
+## 3. The numbers (first command menu, seed 1, headless Playwright, real GPU, clocks frozen; girls = mean standing height in px)
+
+Four builds, same harness, same seed: **live** (echoesofspira.com, 39.4.1), **wave-1 head** (`0284bf85`, no giant code at all, a `git archive` served by a scratch server: it tracks live at 99 to 100 percent everywhere, so it is the picture of "no giant before the link"), **before** (`b0dd935e`) and **after** (this repair). Three repeats of the three smallest windows were identical to 0.3 px, so the numbers are not noise.
+
+**Trema's link (link 2)**, girls px (percent of live's Trema link):
+
+| window | live | wave-1 head | before | after |
+|---|---|---|---|---|
+| 320x568 | 75 | 75 (100 %) | 41 (54 %) | 72 (96 %) |
+| 360x640 | 89 | 89 (100 %) | 57 (64 %) | 97 (109 %) |
+| 360x740 | 115 | 115 (99 %) | 76 (66 %) | 128 (111 %) |
+| 375x667 | 97 | 97 (100 %) | 64 (67 %) | 106 (109 %) |
+| 390x844 | 125 | 123 (99 %) | 153 (123 %) | 157 (126 %) |
+| 393x852 | 137 | 135 (99 %) | 149 (108 %) | 152 (111 %) |
+| 412x915 | 144 | 142 (99 %) | 167 (116 %) | 167 (116 %) |
+| 430x932 | 150 | 148 (99 %) | 174 (117 %) | 174 (117 %) |
+| 480x854 | 155 | 153 (99 %) | 100 (64 %) | 163 (105 %) |
+| 540x960 | 173 | 172 (99 %) | 118 (68 %) | 196 (113 %) |
+| 844x390 (landscape) | 122 | 120 (99 %) | 120 (99 %) | 120 (99 %) |
+
+The camera's `idle` rig z (live / before / after): 9.60 / 17.12 / 10.04 at 320x568; 10.47 / 15.85 / 9.60 at 360x640; 10.67 / 15.70 / 9.60 at 360x740; 10.47 / 15.21 / 9.60 at 375x667; 12.38 / 10.04 / 9.76 at 390x844; 10.18 / 15.21 / 9.60 at 480x854. Against the verifier's own live readings (implied by its percentages: 72, 97, 115, 107 and 154 px; they sit close to live's first-link girls, 73, 98, 117, 107 and 156) the five windows of the finding read 100, 101, 111, 99 and 106 percent.
+
+**Paragon's own link (link 1) is untouched**: before and after are the same to the pixel at every window (girls 41, 57, 76, 65, 83, 84, 87, 91, 100, 118 px at 320x568 to 540x960, 121 px at 844x390; Paragon 121 to 340 px), because nothing is kept before the first fit. The picked framing holds: the girls 56 to 68 percent of live on the phone, Paragon whole.
+
+**The desktop giants are unchanged** (before and after, 1600x900; live in brackets): Bahamut girls 162.6 px, boss 617 (live 294.9 and 566); Paragon girls 143.3, boss 612 (live 281.0 and 314), at 1440x900 143.3 and 612; Anima girls 174.6, boss 659 (live 285.8 and 333). Trema's link on a desktop is the same in both: 283 px at 1600x900 and 255 at 1440x900 (live 275 and 248; Trema is 1.78 units since wave 1, live 2.23). **The landscape phone (844x390)** is by design the desktop's plan (the window is in the giants' aspect table): Bahamut girls 70 px (live 127: the 55 percent the verifier saw, the same share as the desktop's 56 percent, Bailey's item 23 j), Anima 76 (61 percent), Paragon 121 (99 percent: his table stops at 1.79, so he plays his old size), Trema 120 (99 percent). None of these moved.
+
+**Nothing else moved.** First menus of five chapters with no giant, 390x844 and 1600x900, before against after: Leblanc, the Den of Woe, Isaaru (FFX), Yojimbo (FFX) and Braska's Final Aeon (FFX): ten captures, every figure within 1 px and every camera within 0.01 (the idle sway). The Road's three links on the phone (Shiva, the Sisters, Anima) at 390x844 and 360x740: six captures, before and after identical (the Road registers its own rig per link: the path `registered` exists for). A retry of Paragon's link (`ShotRules.fitPhone` run again on the same camera, three times, with CHAPTER FRAMING planning in between): the rig after the retry is within 0.013 of the first run's fit (360x740: 15.061 against 15.048; 390x844: 18.157 against 18.169), the same every time, no creep.
+
+## 4. Why Trema's link is not exactly live's, and what is disclosed
+
+- **Larger than live from 360x740 up (105 to 126 percent).** Live's Trema link inherits Paragon's old 3.1-unit width: either through CHAPTER FRAMING adopting the first link's fit as its base (360x740, 390x844 to 430x932, 480x854 and 540x960: z 10.2 to 12.4, the rig live's Paragon link ends on) or through a plan made while the dying Paragon is still counted (360x640 and 375x667: z 10.47 where the first link stayed at 9.6). Trema's link now fits its own figures from the scene's rig, as the first link of a chapter does. Exact parity would read the giant at his old height (3.1, 4.1 and 3.4) in the presenter's first fit; not built, it is a table of three numbers and a new reading in `boxOf` (the first repair's note read "8 to 10 percent" at 390x844 on an earlier head, before wave 1's fiends went back to their old spots; the figures above are this head's). At 390x844 the closer camera makes CHAPTER FRAMING shift the picture 74 px (live 0), and with Yuna down at the seam her lying body is cut at the left edge in this seed; the same at the tip (it was there before this repair).
+- **320x568 is 96 percent of live's Trema link (72 against 75), every run.** That is CHAPTER FRAMING's own plan for Trema's real figures, now made after the giant has gone (`back` 1.04, `ok`), where live's plan for this link is made while Paragon still stands and stays at the authored distance (`back` 1, `ok` false). The wave-1 head, which has no such re-plan, gives 75. It is not the fit's memory (the fit hands CHAPTER FRAMING the authored rig, which is what live's plan started from too); against the verifier's reference (73) it is 99 percent. Say so if Bailey wants a window this narrow held at live's number: the plan, not the fit, would need a rule.
+- **Anima's link on a 360x740 phone depends on the path** (found on the way, identical before and after, not this repair's): reached directly the camera stands at z 19.49 (girls 69 px, Anima 268); reached by playing the Road's three links, with their menus opened, it stands at 22.97 (girls 58 px, Anima 236); at 390x844 and wider the two agree (85.7 px). The probe (`probe-early.mjs`, `logs/probe-early-anima-360x740-fix.log`) shows why the fit is not what places her: the Road registers her own rig (z 19.49) 2 ms after the presenter's two fits, overwriting them, and CHAPTER FRAMING's master from that rig then stands at 22.97 when it knows the menus' panels. The picked picture (item 23 h, 70 percent) was solved at 390x844.
+
+## 5. The Chapter IV phone hint card (verdict: not the card's placement; reported, not changed)
+
+Measured on the girls' own pixels (the actor hidden on the clean frame, a control pair masking the idle motion; `cover.mjs`), at the first menu, the share of each girl under the guide card (`.sthint`); live / before / after:
+
+| window | card | Yuna | Rikku | Paine |
+|---|---|---|---|---|
+| 390x844 | y 407 to 480, x 8 to 382 | 6 / 48 / 54 % | 0 / 13 / 15 % | 0 / 0 / 0 % |
+| 430x932 | y 515 to 568 | 0 / 20 / 20 % | 0 / 0 / 0 % | 0 / 0 / 0 % |
+| 360x740 | y 303 to 376 | 39 / 80 / 75 % | 10 / 46 / 41 % | 0 / 14 / 16 % |
+| 375x667 | y 230 to 303 | 65 / 99 / 99 % | 36 / 87 / 85 % | 11 / 61 / 60 % |
+
+The card is where it always was (`.sthint--phone`, docked just above the party chips, the same top and height in live and after). What changed is the girls: the picked 70 percent and the 0.19 reserve under the boss gauge stand them smaller and lower, and the options sheet's own picked frame (option 4) already shows their legs behind the same card. On short phones the card covered them in live too (Yuna 39 percent at 360x740, 65 at 375x667), because the chips sit high and the field is short; it is a placement problem of the card against the field that the giants only deepen. No placement frees them without covering something else (the strip above, Bahamut's body, the chips), so nothing was built: it is a perceivable change (rule 9). Options for a pick, each cheap to mock: (a) a one-line card for this fight (saves about 40 px: at 390x844 the feet at y 445 clear it; short phones still overlap), (b) the card docked to the right half, clear of the girls and over Bahamut's tail, (c) a smaller `GIANT_PHONE_TOP` (the girls rise, Bahamut's horns go further under the intent strip), (d) keep the pick as it is.
+
+## 6. Tests and checks
+
+- New and changed (all in `tests/unit`): `frame-fit-link.test.ts` (20: the measured drift of 0.65 per plan and 1.32 at the seam, several plans in a row from a hair to 7 units, a retry, the next link after a giant starting from the scene's rig, the pose between the two fits not being the target (a slim giant), two giants in a row, the Road's own rig ending the memory, a standalone `LinkFits`), `giants-phone-link.test.ts` (8: the real `RigWatch` between the links at five phone slices, the giant's own link untouched, a retry with no creep, FFX unchanged), `rigwatch-continues.test.ts` (5: the master, the close rigs, the put-back and `dispose` pass `continues`; a two-argument camera works).
+- **Mutation-checked** (`mutate.mjs`, each rule switched off, then the file put back): CHAPTER FRAMING registering without `continues` fails 8; restoring the pose between the fits fails 8; never recording the scene's rig fails 8; a scene's rig not ending the memory fails 1; the memory not consumed by the next fit fails 2; the first repair's rule (the equality) failed 12 of the earlier set.
+- `tsc --noEmit` clean; touched files under 400 lines; `node tools/orphans.mjs` lists nothing this round added. The full unit suite once with `--testTimeout=60000` on the final code: 940 files, 935 passed and 5 skipped, 13,859 tests passed (46 skipped, 1 todo), no failure and no timeout (155 s).
+- `node tools/critic-plan.mjs --paths` on the three engine files: DEEP (the build already owes it: 43 substantial checkpoints since the last deep review); before any deploy a focused review of the candidate. Not run: the deploy, a review workflow, the PCSX2 check. Nothing was deployed and no production build was made.
+- Tools and evidence (outside the repo): `D:/Tools/pyrefly-scratch/2026-10-08/linkfit-repair/` (`cap.mjs`, `cover.mjs`, `probe-early.mjs`, `probe-seq.mjs`, `probe-retry.mjs`, `probe-plan.mjs`, `mutate.mjs`, `makesheet.mjs`, `out/{live,base,tip,fix,fix-T1,cover,var,par}`, `logs/`). The dev servers on 5251, 5252 and 5253 were stopped at the end. The proof sheet: `docs/screenshots/r3942-stage/giants-x2-repair2-trema-link2-phones.jpg` (live, before, after at 320x568, 360x740 and 375x667).
+
+## 7. Open after the second repair
+
+- Trema's link is 105 to 126 percent of live from 360x740 up, and 96 percent at 320x568 (section 4); exact parity needs the giants' old heights in the presenter's first fit, and a rule in the plan for the narrowest window. Bailey's call.
+- The hint card over Yuna and Rikku (section 5): a pick between options (a) to (d).
+- Anima's camera on a 360x740 phone when the Road is played through (section 4).
+- Everything under "Open and disclosed (wave 2)" and "Open after the repair" above that this round did not touch.

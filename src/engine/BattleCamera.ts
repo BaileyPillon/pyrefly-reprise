@@ -105,13 +105,14 @@ export class BattleCamera {
 
   get rigNames(): string[] { return [...this.rigs.keys()]; }
 
-  addRig(name: string, rig: CameraRig): void {
-    this.rigs.set(name, {
-      position: toVec(rig.position),
-      lookAt: toVec(rig.lookAt),
-      fov: rig.fov,
-      sway: rig.sway ?? 1,
-    });
+  /**
+   * Register (or replace) a rig. `continues`: it is the rig `name` going on (CHAPTER FRAMING's master planned from the fitted rig, and its put-back, `fx/mix/rigWatch.ts`), not the scene's own
+   * camera for the link it stages: the scene's own rig is what a link after a giant starts from, and ends the memory of the giant's phone fit; a continuation keeps it (`FrameFit.LinkFits`).
+   */
+  addRig(name: string, rig: CameraRig, continues = false): void {
+    const r: ResolvedRig = { position: toVec(rig.position), lookAt: toVec(rig.lookAt), fov: rig.fov, sway: rig.sway ?? 1 };
+    this.rigs.set(name, r);
+    if (!continues) this.linkFits.registered(name, r);
   }
 
   /** How a rig, pushed in by `push`, frames these figures (`FrameFit.ts`; A-11, A-1). */

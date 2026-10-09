@@ -38,7 +38,7 @@ export interface FitSubject {
   shared?: boolean;
   /**
    * r3942-stage wave 2 repair (FFX-2 only): this figure is one of the giants (Bahamut, Paragon, Anima) the phone fit holds whole under the HUD's top strip. A fit that holds a giant
-   * is its link's own: {@link LinkFits} puts the rig back to what it was before that fit when the next link is fitted, so a fight that follows a giant starts where it always did.
+   * is its link's own: {@link LinkFits} starts the next fit of the rig from the scene's own rig, whatever CHAPTER FRAMING did to it since, so a fight that follows a giant is fitted as the first link of a chapter is.
    */
   giant?: boolean;
 }
@@ -274,20 +274,38 @@ export function fitRigToSlice(live: PerspectiveCamera, rig: FitRig, slice: numbe
 type Pose = { position: Vector3; lookAt: Vector3 };
 
 const poseOf = (r: FitRig): Pose => ({ position: r.position.clone(), lookAt: r.lookAt.clone() });
-const stands = (r: FitRig, p: Pose): boolean => r.position.distanceToSquared(p.position) < 1e-6 && r.lookAt.distanceToSquared(p.lookAt) < 1e-6;
+const sameAs = (r: FitRig, p: Pose): boolean => r.position.distanceToSquared(p.position) < 1e-8 && r.lookAt.distanceToSquared(p.lookAt) < 1e-8;
 
 /**
  * r3942-stage wave 2 repair (the independent check of 2026-10-08: Chapter XIII's second link, Trema, on an upright phone stood 35 percent smaller): {@link fitRigToSlice} starts at
  * the rig it is given and only stands back, and CHAPTER FRAMING re-registers the resting rig as a copy after every fit (`fx/mix/rigWatch.ts`), so the base the fit remembers for the
- * rig (`bases`) is lost and the next link starts from wherever the last fit left the camera. Before the giants that was the girls' own fit and the same distance in both links of a
- * chapter; Paragon's fit (the whole figure, 0.7 of his real height, under the boss gauge) stands the camera 1.5 times as far, and Trema's link inherited it.
+ * rig (`bases`) is lost and the next link starts from wherever the last fit left the camera. Before the giants that was invisible; Paragon's fit (the whole figure, 0.7 of his real
+ * height, under the boss gauge) stands the camera 1.5 times as far, and Trema's link inherited it.
  *
- * A fit that holds a giant (a subject marked `giant`) is therefore its link's own: this remembers the rig as it stood just before that fit (the presenter fits the figures without the
- * giant's treatment first, so that is the fit every link had before the giants) and where the fit left it. The next fit of the rig puts it back to the first pose when it still stands
- * on the second, and fits from there as it always did. Fights with no giant never reach this memory, so every other chapter's camera is exactly as it was.
+ * A fit that holds a giant (a subject marked `giant`) is therefore its link's own. Fights with no giant never reach this memory, so every other chapter's camera is exactly as it was.
+ *
+ * **Second repair (the verifier's, the same day): the rig's line, and where the next link starts.** The first version put the rig back to the pose between the presenter's two fits, and only
+ * while it still stood within a thousandth of where the giant's fit left it. Both were wrong. CHAPTER FRAMING moves the rig: a master 0.65 further back on a 360x740 phone, and 1.32 further
+ * once the giant has gone and the next link's figures stand, so Trema's link found it far off and nothing was put back (the girls 57 to 66 percent of live on small phones). And the pose
+ * between the two fits is not the chapter's own fit: the first fit holds the giant too, at 0.75, and a 6.6-unit Paragon pulls the camera back and up on a narrow slice (z 9.6 to 11.9 at
+ * 320x568, the girls 79 percent of live), where live's Trema link starts from the scene's own rig.
+ *
+ * Now the memory is the rig's line, by identity. Every registration says whether it is the rig going on (`BattleCamera.addRig`'s `continues`: CHAPTER FRAMING's master and its put-back,
+ * however far it has moved) or the scene's own rig for the link it stages. This keeps a copy of the scene's own rig for each name ({@link LinkFits.registered}); while a giant's fit is
+ * outstanding on a rig and no scene rig has been registered since, the next fit of that rig, a link without a giant or the giant's own link again after a defeat, starts from the scene's
+ * own rig, whatever drift happened in between. A scene's own rig for the next link (the Road's per-link idle) ends the memory and is fitted as it stands.
  */
 export class LinkFits {
-  private readonly kept = new Map<string, { before: Pose; after: Pose }>();
+  /** Per rig name, a giant's fit is outstanding on it; the pose it had just before that fit, for a rig no scene registered (a standalone use). */
+  private readonly kept = new Map<string, Pose>();
+  /** Per rig name, a copy of the scene's own rig: the last registration that was not the rig going on. */
+  private readonly own = new Map<string, Pose>();
+
+  /** A rig called `name` was registered that is not that rig going on (the scene's own camera, for the link it now stages): it is the rig a later link starts from, and a giant's fit is not its line. */
+  registered(name: string, rig: FitRig): void {
+    this.own.set(name, poseOf(rig));
+    this.kept.delete(name);
+  }
 
   /** {@link fitRigToSlice} for the rig called `name`, with a giant's fit kept to its own link. True when the rig moved. */
   fit(live: PerspectiveCamera, rig: FitRig, name: string, slice: number, subjects: readonly FitSubject[], top = 0): boolean {
@@ -295,16 +313,15 @@ export class LinkFits {
     const was = this.kept.get(name);
     if (was) {
       this.kept.delete(name);
-      if (stands(rig, was.after)) {
-        rig.position.copy(was.before.position);
-        rig.lookAt.copy(was.before.lookAt);
-        moved = true;
-      }
+      const home = this.own.get(name) ?? was;
+      moved = !sameAs(rig, home);
+      rig.position.copy(home.position);
+      rig.lookAt.copy(home.lookAt);
     }
-    const own = subjects.some((s) => s.giant === true);
-    const before = own ? poseOf(rig) : null;
+    const holds = subjects.some((s) => s.giant === true);
+    const before = holds ? poseOf(rig) : null;
     moved = fitRigToSlice(live, rig, slice, subjects, top) || moved;
-    if (before) this.kept.set(name, { before, after: poseOf(rig) });
+    if (before) this.kept.set(name, before);
     return moved;
   }
 }
