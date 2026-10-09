@@ -99,26 +99,38 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * party's Attack record, so about half of it misses, as the record says (the old engine never missed). That moves the
  * digests of the links where a possessed aeon attacks (seed 1: links 5 to 7; seed 7: links 3 to 7); every outcome is still
  * victory and no other digest moved.
+ * All 18 digests re-baselined again 2026-10-09 by re-parity W2 ("game-code parity", FFX only): the turn order and the statuses
+ * now come from the kernels proven against FFX.exe too. The opening counters are the game's 26 fixed draws (the party's, the aeons'
+ * and the monsters' own streams, empty slots included), the clock counts a byte counter per slot down one point per tick and picks the
+ * next actor by the game's tie key, recovery is HasteSlow(tickSpeed * max(rank, 1)) with the game's command ranks, every hit that lands
+ * runs the infliction step (one draw per status with a chance byte, % 101, the game's chance and duration bytes), and Regen, Poison,
+ * Doom and the end-of-turn counters tick the way the game's tick functions do. Every log moves because the draw order, the draw count
+ * and the numbers moved, which is the point, and tests/unit/parity-ffx-engine-ctb-status.test.ts, parity-ffx-engine-status.test.ts
+ * and parity-ffx-engine-ticks.test.ts are the proof that the engine computes what the kernels compute. Three outcomes moved, all on
+ * seeds that were not tuned: seymour-anima-macalania#7 victory -> defeat, seymour-omnis#7 victory -> defeat and
+ * isaaru-via-purifico#1 (its third link) victory -> defeat; the other 15 keep their outcome. One seed is one sample of a chapter
+ * whose win rate is well away from 0 and 100, so a flipped seed is not a change of difficulty: the 500-seed rates, before and
+ * after, are in docs/handoff/re-parity-w2.md. The old values are in git history (the commit before the one that moved them).
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': '28692f2c:defeat',
-  'seymour-flux#7': 'f923eb10:defeat',
-  'yunalesca#1': '2327f640:victory',
-  'yunalesca#7': '4225415d:victory',
-  'braskas-final-aeon#1': '567c3bf4:victory ea51a558:victory ba4a14f2:victory 509fbd2:victory 1ebf8f7c:victory da4942b3:victory e84aa63:victory',
-  'braskas-final-aeon#7': '2b85c492:victory f82347e2:victory 42bd9a74:victory 48d2e753:victory 86304bae:victory 7e4d660e:victory cddd0f5d:victory',
-  'seymour-anima-macalania#1': '15ecc081:victory',
-  'seymour-anima-macalania#7': '86868cbf:victory',
-  'evrae-airship#1': '14674509:victory',
-  'evrae-airship#7': '3c97dd63:victory',
-  'yojimbo-cavern#1': 'fce6b795:victory',
-  'yojimbo-cavern#7': 'c3a419df:victory',
-  'seymour-natus#1': 'd4682a0e:victory',
-  'seymour-natus#7': '2133d3d8:victory',
-  'seymour-omnis#1': 'b7b53dbe:defeat',
-  'seymour-omnis#7': '1a2a42df:victory',
-  'isaaru-via-purifico#1': 'd916c9d0:victory bc11f7e3:victory 42ea7beb:victory',
-  'isaaru-via-purifico#7': 'b073037f:victory 584e6881:victory e0f5e2d6:victory',
+  'seymour-flux#1': 'd6d988d5:defeat',
+  'seymour-flux#7': '8aa995a1:defeat',
+  'yunalesca#1': '2e674006:victory',
+  'yunalesca#7': '19d2b287:victory',
+  'braskas-final-aeon#1': '1c226807:victory 67153004:victory 4a4b7aa4:victory 2093256d:victory 4252bff8:victory 9210c50b:victory c12e2c6e:victory',
+  'braskas-final-aeon#7': 'a1681a38:victory 36c3ca08:victory f02a6c2f:victory e461cd79:victory 3ea598fa:victory 10aeab6a:victory 1e1df139:victory',
+  'seymour-anima-macalania#1': '50d1cb36:victory',
+  'seymour-anima-macalania#7': '3a5e47f6:defeat',
+  'evrae-airship#1': 'c3c29c19:victory',
+  'evrae-airship#7': 'a42e3add:victory',
+  'yojimbo-cavern#1': '955b4cb:victory',
+  'yojimbo-cavern#7': '5dd41cd1:victory',
+  'seymour-natus#1': 'ba205c84:victory',
+  'seymour-natus#7': '4dab376e:victory',
+  'seymour-omnis#1': 'dfa46cb6:defeat',
+  'seymour-omnis#7': '421c74e9:defeat',
+  'isaaru-via-purifico#1': '70c30985:victory 70d6e055:victory a372f3f0:defeat',
+  'isaaru-via-purifico#7': '36047a9f:victory f5fb7559:victory 87a76d9b:victory',
 };
 
 describe('FFX engine goldens (every FFX chapter, the line, whole chain)', () => {
