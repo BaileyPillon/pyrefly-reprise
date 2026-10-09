@@ -1,0 +1,830 @@
+/*
+ * The BEHIND THE SCENES page, part two: the six chapters (a painted band, the prose, the figures) and the parts the cards
+ * share with them (the framed plates, the then-and-now split, the tiles, the critic's chart). Part one is
+ * behind-the-scenes.css; see its header for the rules both follow (the grid, the 14 px floor, one gold accent).
+ */
+
+/* ------------------------------------------------------------------ a chapter */
+
+.bts__chap {
+  padding: calc(34 * var(--fe-k)) 0 calc(70 * var(--fe-k));
+}
+.bts__band {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: calc(190 * var(--fe-k));
+  margin-bottom: calc(30 * var(--fe-k));
+  background-size: cover;
+  background-position: center 38%;
+  border-top: 1px solid var(--bts-gold-line);
+  border-bottom: 1px solid rgba(227, 185, 74, 0.2);
+}
+.bts__band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(11, 10, 18, 0.96) 0%, rgba(11, 10, 18, 0.72) 46%, rgba(11, 10, 18, 0.35) 100%),
+    linear-gradient(0deg, rgba(11, 10, 18, 0.9), rgba(11, 10, 18, 0) 70%);
+}
+.bts__bandin {
+  position: relative;
+  padding: 0 calc(28 * var(--fe-k)) calc(24 * var(--fe-k));
+}
+.bts__bandh {
+  margin: calc(8 * var(--fe-k)) 0 0;
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: max(var(--fe-fs-floor), calc(66 * var(--fe-k)));
+  line-height: 0.96;
+  letter-spacing: -0.012em;
+  text-shadow: 0 3px 24px rgba(0, 0, 0, 0.6);
+}
+.bts__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: calc(52 * var(--fe-k));
+  align-items: start;
+}
+.bts__prose {
+  display: grid;
+  gap: calc(16 * var(--fe-k));
+  max-width: 37em;
+}
+.bts__prose--wide {
+  max-width: 44em;
+}
+.bts__prose p {
+  margin: 0;
+  color: rgba(244, 241, 232, 0.84);
+}
+.bts__prose .bts__lead {
+  font-family: var(--ig-font-serif);
+  font-weight: 500;
+  font-size: max(var(--fe-fs-floor), calc(27 * var(--fe-k)));
+  line-height: 1.28;
+  color: var(--ig-paper);
+}
+.bts__prose b {
+  color: var(--ig-paper);
+}
+.bts__hl {
+  color: var(--ig-gold);
+  font-weight: 600;
+}
+.bts__figs {
+  display: grid;
+  gap: calc(26 * var(--fe-k));
+  min-width: 0;
+}
+.bts__fig {
+  margin: 0;
+}
+.bts__fig figcaption {
+  margin-top: calc(10 * var(--fe-k));
+  font-family: var(--ig-font-display);
+  font-size: var(--bts-label);
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.66);
+}
+.bts__fig figcaption em {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-size: max(var(--fe-fs-floor), calc(18 * var(--fe-k)));
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgba(244, 241, 232, 0.84);
+}
+
+/* ------------------------------------------------------------------ the framed painting: a double gold line, as on the chapter select */
+
+.bts__plate {
+  position: relative;
+  padding: 7px;
+  background: rgba(11, 10, 18, 0.55);
+  border: 2px solid var(--ig-gold);
+}
+.bts__plate::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--bts-gold-line);
+  pointer-events: none;
+}
+.bts__plate img {
+  width: 100%;
+  height: auto;
+}
+.bts__tag {
+  position: absolute;
+  top: 14px;
+  padding: 5px 9px 4px;
+  background: rgba(11, 10, 18, 0.85);
+  font-family: var(--ig-font-display);
+  font-weight: 600;
+  font-size: var(--bts-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ig-paper);
+}
+.bts__tag--l {
+  left: 14px;
+}
+.bts__tag--r {
+  right: 14px;
+  color: var(--ig-gold);
+}
+.bts__split {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+.bts__split img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.bts__split .bts__now {
+  clip-path: polygon(46% 0, 100% 0, 100% 100%, 38% 100%);
+}
+.bts__edge {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(104deg, transparent calc(42% - 1.5px), var(--ig-gold) calc(42% - 1.5px), var(--ig-gold) calc(42% + 1.5px), transparent calc(42% + 1.5px));
+  pointer-events: none;
+}
+.bts__dirs {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 12px;
+  align-items: end;
+}
+.bts__dir {
+  position: relative;
+}
+.bts__dir img {
+  border: 1px solid var(--bts-line);
+  filter: grayscale(0.7) brightness(0.62);
+}
+.bts__dir--pick img {
+  border: 2px solid var(--ig-gold);
+  filter: none;
+}
+.bts__dir span {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  padding: 5px 7px 4px;
+  background: var(--ig-ink);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: var(--bts-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.62);
+}
+.bts__dir--pick span {
+  background: var(--ig-gold);
+  color: var(--ig-ink);
+}
+.bts__duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ------------------------------------------------------------------ counts, steps, the callout */
+
+.bts__bigcount {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: calc(14 * var(--fe-k));
+  padding: calc(18 * var(--fe-k)) calc(22 * var(--fe-k));
+  background: rgba(11, 10, 18, 0.6);
+  border: 1px solid var(--bts-gold-line);
+}
+.bts__bn {
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(60 * var(--fe-k)));
+  line-height: 0.9;
+}
+.bts__arrow {
+  font-family: var(--ig-font-numeral);
+  font-size: max(var(--fe-fs-floor), calc(34 * var(--fe-k)));
+  color: var(--ig-gold);
+}
+.bts__bt {
+  flex: 1 1 14em;
+  color: rgba(244, 241, 232, 0.84);
+}
+.bts__tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.bts__tile {
+  padding: calc(14 * var(--fe-k)) calc(16 * var(--fe-k));
+  background: rgba(11, 10, 18, 0.55);
+  border: 1px solid var(--bts-line);
+  border-top: 2px solid var(--bts-gold-line);
+}
+.bts__tn {
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(40 * var(--fe-k)));
+  line-height: 1;
+}
+.bts__tl {
+  margin-top: 6px;
+  font-family: var(--ig-font-display);
+  font-weight: 500;
+  font-size: var(--bts-label);
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ig-gold);
+}
+.bts__ts {
+  margin-top: 4px;
+  font-size: max(var(--fe-fs-floor), calc(13.5 * var(--fe-k)));
+  line-height: 1.45;
+  color: rgba(244, 241, 232, 0.66);
+}
+.bts__steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin: 0 0 calc(34 * var(--fe-k));
+  padding: 0;
+  list-style: none;
+  counter-reset: bts-step;
+}
+.bts__step {
+  padding: calc(16 * var(--fe-k)) calc(14 * var(--fe-k)) calc(16 * var(--fe-k)) calc(16 * var(--fe-k));
+  background: rgba(18, 16, 27, 0.9);
+  border: 1px solid var(--bts-line);
+  border-top: 2px solid var(--bts-gold-line);
+}
+.bts__step:last-child {
+  border-top-color: var(--ig-gold);
+  background: linear-gradient(180deg, rgba(227, 185, 74, 0.1), rgba(18, 16, 27, 0.9));
+}
+.bts__step::before {
+  counter-increment: bts-step;
+  content: counter(bts-step);
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(30 * var(--fe-k)));
+  line-height: 1;
+  color: var(--ig-gold);
+}
+.bts__step b {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--ig-font-display);
+  font-weight: 600;
+  font-size: var(--bts-label);
+  line-height: 1.3;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.bts__step span {
+  font-size: max(var(--fe-fs-floor), calc(14 * var(--fe-k)));
+  line-height: 1.5;
+  color: rgba(244, 241, 232, 0.66);
+}
+.bts__callout {
+  margin: 0;
+  padding: calc(18 * var(--fe-k)) calc(22 * var(--fe-k)) calc(18 * var(--fe-k)) calc(26 * var(--fe-k));
+  background: rgba(227, 185, 74, 0.07);
+  border-left: 3px solid var(--ig-gold);
+  color: rgba(244, 241, 232, 0.84);
+}
+.bts__callout b {
+  color: var(--ig-gold);
+}
+
+/* ------------------------------------------------------------------ the listening card: an illustration, not a screenshot */
+
+.bts__listen {
+  display: grid;
+  gap: calc(14 * var(--fe-k));
+}
+.bts__lis-art {
+  padding: calc(22 * var(--fe-k));
+  background: var(--ig-paper);
+  border-left: 5px solid var(--ig-gold);
+  color: var(--ig-ink);
+}
+.bts__player {
+  display: flex;
+  align-items: center;
+  gap: calc(16 * var(--fe-k));
+}
+.bts__play {
+  flex: 0 0 auto;
+  width: 0;
+  height: 0;
+  border-left: calc(22 * var(--fe-k)) solid var(--ig-ink);
+  border-top: calc(14 * var(--fe-k)) solid transparent;
+  border-bottom: calc(14 * var(--fe-k)) solid transparent;
+}
+.bts__ptrack {
+  flex: 1 1 auto;
+  height: calc(6 * var(--fe-k));
+  background: rgba(11, 10, 18, 0.18);
+}
+.bts__ptrack i {
+  display: block;
+  width: 14%;
+  height: 100%;
+  background: var(--ig-ink);
+}
+.bts__ptime {
+  font-family: var(--ig-font-numeral);
+  font-weight: 600;
+  font-size: max(var(--fe-fs-floor), calc(18 * var(--fe-k)));
+  color: rgba(11, 10, 18, 0.7);
+}
+.bts__score {
+  display: flex;
+  align-items: center;
+  gap: calc(14 * var(--fe-k));
+  margin-top: calc(18 * var(--fe-k));
+}
+.bts__score span {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: var(--bts-label);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ig-gold-on-paper);
+}
+.bts__score ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.bts__score li {
+  display: grid;
+  place-items: center;
+  width: calc(36 * var(--fe-k));
+  min-width: 28px;
+  height: calc(36 * var(--fe-k));
+  min-height: 28px;
+  border: 1px solid rgba(11, 10, 18, 0.35);
+  font-family: var(--ig-font-numeral);
+  font-weight: 600;
+  font-size: max(var(--fe-fs-floor), calc(16 * var(--fe-k)));
+}
+.bts__score li.is-on {
+  background: var(--ig-ink);
+  color: var(--ig-gold);
+}
+.bts__lis-rows {
+  display: grid;
+  gap: calc(8 * var(--fe-k));
+}
+.bts__lis-row {
+  display: flex;
+  align-items: baseline;
+  gap: calc(14 * var(--fe-k));
+  padding: calc(8 * var(--fe-k)) calc(16 * var(--fe-k));
+  background: rgba(11, 10, 18, 0.6);
+  border-left: 3px solid var(--ig-gold);
+}
+.bts__lis-row b {
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(30 * var(--fe-k)));
+  line-height: 1;
+}
+.bts__lis-row span {
+  color: rgba(244, 241, 232, 0.78);
+}
+
+/* ------------------------------------------------------------------ the critic's chart: first score to latest, per category */
+
+.bts__chart {
+  padding: calc(22 * var(--fe-k)) calc(24 * var(--fe-k)) calc(18 * var(--fe-k));
+  background: rgba(11, 10, 18, 0.72);
+  border: 1px solid var(--bts-gold-line);
+}
+.bts__charthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: calc(14 * var(--fe-k));
+}
+.bts__chartt {
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: max(var(--fe-fs-floor), calc(26 * var(--fe-k)));
+  line-height: 1.1;
+}
+.bts__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-family: var(--ig-font-display);
+  font-size: var(--bts-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.66);
+}
+.bts__legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 7px;
+  border-radius: 50%;
+  vertical-align: -1px;
+}
+.bts__lg-a i {
+  border: 2px solid rgba(244, 241, 232, 0.4);
+}
+.bts__lg-b i {
+  background: var(--ig-gold);
+}
+.bts__rows {
+  position: relative;
+  padding-top: calc(20 * var(--fe-k));
+}
+.bts__axis {
+  position: absolute;
+  top: 0;
+  bottom: 2px;
+  left: 9em;
+  right: 3.4em;
+  pointer-events: none;
+}
+.bts__ln {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed;
+}
+.bts__ln--floor {
+  left: calc((9 - 4) / 6 * 100%);
+  border-color: rgba(244, 241, 232, 0.45);
+}
+.bts__ln--gate {
+  left: calc((9.6 - 4) / 6 * 100%);
+  border-color: var(--ig-gold);
+}
+.bts__ln span {
+  position: absolute;
+  top: calc(-4 * var(--fe-k));
+  white-space: nowrap;
+  font-family: var(--ig-font-display);
+  font-weight: 600;
+  font-size: var(--bts-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.66);
+}
+.bts__ln--floor span {
+  right: 6px;
+}
+.bts__ln--gate span {
+  left: 6px;
+  color: var(--ig-gold);
+}
+.bts__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 9em 1fr 3.4em;
+  align-items: center;
+  min-height: calc(40 * var(--fe-k));
+}
+.bts__nm {
+  font-family: var(--ig-font-display);
+  font-weight: 500;
+  font-size: var(--bts-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.84);
+}
+.bts__tr {
+  position: relative;
+  height: 100%;
+  min-height: calc(40 * var(--fe-k));
+}
+.bts__tr::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 1px solid var(--bts-line);
+}
+.bts__line {
+  position: absolute;
+  top: 50%;
+  height: 3px;
+  margin-top: -1.5px;
+  left: calc((var(--a) - 4) / 6 * 100%);
+  width: calc((var(--b) - var(--a)) / 6 * 100%);
+  background: linear-gradient(90deg, rgba(244, 241, 232, 0.4), var(--ig-gold));
+}
+.bts__pa,
+.bts__pb {
+  position: absolute;
+  top: 50%;
+  width: 13px;
+  height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+  border-radius: 50%;
+}
+.bts__pa {
+  left: calc((var(--a) - 4) / 6 * 100%);
+  background: var(--ig-ink);
+  border: 2px solid rgba(244, 241, 232, 0.4);
+}
+.bts__pb {
+  left: calc((var(--b) - 4) / 6 * 100%);
+  background: var(--ig-gold);
+  box-shadow: 0 0 0 3px rgba(227, 185, 74, 0.18);
+}
+.bts__pb--ok {
+  box-shadow: 0 0 0 3px rgba(227, 185, 74, 0.35), 0 0 14px rgba(227, 185, 74, 0.6);
+}
+.bts__va {
+  position: absolute;
+  top: 0;
+  left: calc((var(--a) - 4) / 6 * 100%);
+  transform: translateX(-50%);
+  font-family: var(--ig-font-numeral);
+  font-weight: 600;
+  font-size: max(var(--fe-fs-floor), calc(14 * var(--fe-k)));
+  color: rgba(244, 241, 232, 0.55);
+}
+.bts__vb {
+  text-align: right;
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(22 * var(--fe-k)));
+}
+.bts__row--na .bts__tr::before {
+  border-top-style: dashed;
+}
+.bts__why {
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-size: max(var(--fe-fs-floor), calc(16 * var(--fe-k)));
+  line-height: 1.2;
+  color: rgba(244, 241, 232, 0.66);
+}
+.bts__chartfoot {
+  margin: calc(14 * var(--fe-k)) 0 0;
+  font-size: max(var(--fe-fs-floor), calc(13.5 * var(--fe-k)));
+  line-height: 1.5;
+  color: rgba(244, 241, 232, 0.66);
+}
+.bts__first {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: calc(22 * var(--fe-k));
+  align-items: center;
+  padding: calc(20 * var(--fe-k)) calc(40 * var(--fe-k)) calc(20 * var(--fe-k)) calc(26 * var(--fe-k));
+  background: var(--ig-paper);
+  color: var(--ig-ink);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 26px) 100%, 0 100%);
+}
+.bts__fn {
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(92 * var(--fe-k)));
+  line-height: 0.8;
+}
+.bts__fn small {
+  margin-left: 4px;
+  font-size: max(var(--fe-fs-floor), calc(22 * var(--fe-k)));
+  color: rgba(11, 10, 18, 0.56);
+}
+.bts__first p {
+  margin: 0;
+}
+.bts__fq {
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: max(var(--fe-fs-floor), calc(30 * var(--fe-k)));
+  line-height: 1.1;
+}
+.bts__fby {
+  margin-top: 8px !important;
+  font-family: var(--ig-font-display);
+  font-size: var(--bts-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(11, 10, 18, 0.62);
+}
+
+/* ------------------------------------------------------------------ the thanks, the numbers, the small print */
+
+.bts__sources {
+  padding: calc(22 * var(--fe-k)) calc(26 * var(--fe-k));
+  background: rgba(11, 10, 18, 0.62);
+  border: 1px solid var(--bts-gold-line);
+  border-left: 3px solid var(--ig-gold);
+}
+.bts__sources h3 {
+  margin: 0 0 calc(8 * var(--fe-k));
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: max(var(--fe-fs-floor), calc(26 * var(--fe-k)));
+  line-height: 1.1;
+}
+.bts__sources p {
+  margin: 0 0 calc(10 * var(--fe-k));
+  color: rgba(244, 241, 232, 0.78);
+}
+.bts__sources ul {
+  margin: 0 0 calc(10 * var(--fe-k));
+  padding: 0;
+  list-style: none;
+}
+.bts__sources li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  padding: calc(7 * var(--fe-k)) 0;
+  border-top: 1px solid var(--bts-line);
+}
+.bts__sources li b {
+  color: var(--ig-gold);
+}
+.bts__sources li span {
+  color: rgba(244, 241, 232, 0.72);
+}
+.bts__numbers {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid var(--bts-line);
+}
+.bts__numbers .bts__tile {
+  padding: calc(24 * var(--fe-k)) calc(22 * var(--fe-k)) calc(22 * var(--fe-k)) 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--bts-line);
+}
+.bts__numbers .bts__tn {
+  font-size: max(var(--fe-fs-floor), calc(56 * var(--fe-k)));
+}
+.bts__card .bts__numbers {
+  grid-template-columns: repeat(3, 1fr);
+}
+.bts__card .bts__numbers .bts__tile {
+  padding: calc(12 * var(--fe-k)) calc(12 * var(--fe-k)) calc(12 * var(--fe-k)) 0;
+}
+.bts__card .bts__numbers .bts__tn {
+  font-size: max(var(--fe-fs-floor), calc(38 * var(--fe-k)));
+}
+.bts__fine {
+  display: grid;
+  gap: 10px;
+  max-width: 70em;
+  margin-top: calc(34 * var(--fe-k));
+  padding-top: calc(20 * var(--fe-k));
+  border-top: 1px solid rgba(227, 185, 74, 0.2);
+}
+.bts__fine p {
+  margin: 0;
+  font-size: max(var(--fe-fs-floor), calc(14 * var(--fe-k)));
+  line-height: 1.6;
+  color: rgba(244, 241, 232, 0.66);
+}
+.bts__fine b {
+  color: rgba(244, 241, 232, 0.9);
+}
+.bts__card .bts__fine {
+  margin-top: calc(14 * var(--fe-k));
+  padding-top: calc(12 * var(--fe-k));
+}
+
+/* ------------------------------------------------------------------ phone: one column */
+
+@media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  .bts__chap {
+    padding: 18px 0 40px;
+  }
+  .bts__band {
+    min-height: 150px;
+    margin-bottom: 20px;
+  }
+  .bts__bandin {
+    padding: 0 16px 16px;
+  }
+  .bts__bandh {
+    font-size: max(var(--fe-fs-floor), 36px);
+  }
+  .bts__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .bts__prose .bts__lead {
+    font-size: max(var(--fe-fs-floor), 21px);
+  }
+  .bts__steps {
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 22px;
+  }
+  .bts__step:last-child {
+    grid-column: 1 / -1;
+  }
+  .bts__dirs {
+    grid-template-columns: 1fr 1fr;
+  }
+  .bts__dir--pick {
+    grid-column: 1 / -1;
+  }
+  .bts__tiles {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .bts__tn {
+    font-size: max(var(--fe-fs-floor), 28px);
+  }
+  .bts__ts {
+    display: none;
+  }
+  .bts__bn {
+    font-size: max(var(--fe-fs-floor), 44px);
+  }
+  .bts__chart {
+    padding: 16px 14px 14px;
+  }
+  .bts__axis {
+    left: 0;
+    right: 0;
+  }
+  .bts__row {
+    grid-template-columns: 1fr 3.2em;
+    grid-template-rows: auto 28px;
+    min-height: 0;
+  }
+  .bts__nm {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .bts__tr {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-height: 28px;
+  }
+  .bts__vb {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .bts__va {
+    display: none;
+  }
+  .bts__first {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .bts__fn {
+    font-size: max(var(--fe-fs-floor), 60px);
+  }
+  .bts__numbers,
+  .bts__card .bts__numbers {
+    grid-template-columns: 1fr 1fr;
+  }
+  .bts__numbers .bts__tn {
+    font-size: max(var(--fe-fs-floor), 36px);
+  }
+  .bts__score li {
+    width: 30px;
+    height: 30px;
+  }
+  /* two tags do not fit side by side on a narrow picture: the second goes to the foot */
+  .bts__split .bts__tag--r {
+    top: auto;
+    bottom: 14px;
+  }
+}

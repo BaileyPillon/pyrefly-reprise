@@ -1,0 +1,507 @@
+/*
+ * The BEHIND THE SCENES page, part one: the shell (backdrop, header, tabs, footer), the two-minute summary and its five
+ * cards. Part two, the six chapters and their figures, is behind-the-scenes-story.css. Both are loaded as text and
+ * installed by `styles.ts` only when the page is opened; the page itself exists only while its switch is on
+ * (`changelog/behindTheScenes.ts`), so a public build carries neither sheet.
+ *
+ * It lives inside the title's overlay (`.fe-info--bts`, title-info.css), so `--fe-k` and `--fe-fs-floor` are the title's:
+ * every number is a 1440x810 grid unit times `--fe-k`, and every type size is max(var(--fe-fs-floor), N * --fe-k), which
+ * never goes under the game's 14 px floor (the drafts used 9 to 12 px labels; those are gone). Tokens are Ink & Gold's.
+ * One accent, gold. A phone gets one column and 44 px targets.
+ */
+
+.fe-info--bts {
+  color: var(--ig-paper);
+}
+
+.bts {
+  --bts-pad: calc(56 * var(--fe-k));
+  --bts-label: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
+  --bts-line: rgba(244, 241, 232, 0.14);
+  --bts-gold-line: rgba(227, 185, 74, 0.5);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  background: var(--ig-ink);
+  font-family: var(--ig-font-text);
+  font-size: max(15px, calc(16 * var(--fe-k)));
+  line-height: 1.6;
+  color: var(--ig-paper);
+}
+.bts *,
+.bts *::before,
+.bts *::after {
+  box-sizing: border-box;
+}
+.bts img {
+  display: block;
+  max-width: 100%;
+}
+.bts b {
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ the painted backdrop, dimmed like the pause screen */
+
+.bts__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--ig-ink);
+}
+.bts__bg {
+  position: absolute;
+  inset: -2%;
+  background-size: cover;
+  background-position: center 35%;
+  filter: saturate(0.85) brightness(0.5);
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+.bts__bg.is-on {
+  opacity: 1;
+}
+.bts--still .bts__bg {
+  transition: none;
+}
+.bts__stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(11, 10, 18, 0.95) 0%, rgba(11, 10, 18, 0.84) 42%, rgba(11, 10, 18, 0.62) 100%),
+    radial-gradient(120% 100% at 50% 40%, transparent 45%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+/* ------------------------------------------------------------------ the header: name, close, section tabs, read progress */
+
+.bts__head,
+.bts__scroll,
+.bts__keys {
+  position: relative;
+  z-index: 2;
+}
+.bts__head {
+  padding: calc(18 * var(--fe-k)) var(--bts-pad) 0;
+  background: rgba(11, 10, 18, 0.93);
+  border-bottom: 1px solid rgba(227, 185, 74, 0.18);
+}
+.bts__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(16 * var(--fe-k));
+}
+.bts__label {
+  font-family: var(--ig-font-display);
+  font-weight: 500;
+  font-size: var(--bts-label);
+  line-height: 1.4;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ig-gold);
+}
+.bts__label--rule {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(14 * var(--fe-k));
+}
+.bts__label--rule::before {
+  content: '';
+  width: calc(44 * var(--fe-k));
+  height: 2px;
+  background: var(--ig-gold);
+}
+.bts__tabs {
+  display: flex;
+  gap: 0 calc(30 * var(--fe-k));
+  margin-top: calc(8 * var(--fe-k));
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.bts__tabs::-webkit-scrollbar {
+  display: none;
+}
+.bts__tab {
+  appearance: none;
+  flex: 0 0 auto;
+  min-height: calc(40 * var(--fe-k));
+  padding: calc(8 * var(--fe-k)) 0 calc(9 * var(--fe-k));
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  font-family: var(--ig-font-display);
+  font-weight: 500;
+  font-size: var(--bts-label);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(244, 241, 232, 0.62);
+  cursor: pointer;
+}
+.bts__tab i {
+  margin-right: 0.7em;
+  font-style: normal;
+  color: var(--ig-gold);
+}
+.bts__tab:hover {
+  color: var(--ig-paper);
+}
+.bts__tab[aria-current='true'] {
+  color: var(--ig-paper);
+  border-bottom-color: var(--ig-gold);
+}
+.bts__progress {
+  height: 2px;
+  margin: 0 calc(-1 * var(--bts-pad));
+  background: var(--bts-line);
+}
+.bts__progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--ig-gold);
+}
+
+/* ------------------------------------------------------------------ the scroll */
+
+.bts__scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bts-gold-line) transparent;
+  outline: none;
+}
+.bts__col {
+  width: min(100% - 2 * var(--bts-pad), calc(1320 * var(--fe-k)));
+  margin-inline: auto;
+  padding-bottom: calc(60 * var(--fe-k));
+}
+.bts__keys {
+  display: flex;
+  gap: calc(22 * var(--fe-k));
+  justify-self: start;
+  margin: 0 0 calc(12 * var(--fe-k)) var(--bts-pad);
+  padding: calc(9 * var(--fe-k)) calc(18 * var(--fe-k));
+  background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
+  border-left: calc(3 * var(--fe-k)) solid var(--ig-gold);
+  font-family: var(--ig-font-display);
+  font-size: var(--bts-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.72);
+}
+.bts__keys b {
+  color: var(--ig-gold);
+}
+.bts__keys span {
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ the opening: what it is, then five cards */
+
+.bts__intro {
+  padding: calc(16 * var(--fe-k)) 0 calc(16 * var(--fe-k));
+}
+.bts__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: calc(48 * var(--fe-k));
+  align-items: end;
+}
+.bts__title {
+  margin: calc(8 * var(--fe-k)) 0 0;
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: max(var(--fe-fs-floor), calc(58 * var(--fe-k)));
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+  text-shadow: 0 3px 24px rgba(0, 0, 0, 0.7);
+}
+.bts__lead2 {
+  margin: calc(6 * var(--fe-k)) 0 calc(8 * var(--fe-k));
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: max(var(--fe-fs-floor), calc(26 * var(--fe-k)));
+  line-height: 1.1;
+}
+.bts__t {
+  margin: 0;
+  max-width: 40em;
+  color: rgba(244, 241, 232, 0.84);
+}
+.bts__deckhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(16 * var(--fe-k));
+  margin: calc(18 * var(--fe-k)) 0 calc(12 * var(--fe-k));
+  padding-top: calc(12 * var(--fe-k));
+  border-top: 1px solid var(--bts-gold-line);
+}
+.bts__asof {
+  font-family: var(--ig-font-display);
+  font-size: var(--bts-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.62);
+}
+.bts__card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: calc(40 * var(--fe-k));
+  align-items: center;
+  animation: bts-in 0.45s ease both;
+}
+.bts--still .bts__card {
+  animation: none;
+}
+@keyframes bts-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.bts__vis,
+.bts__txt {
+  min-width: 0;
+}
+.bts__kick {
+  display: flex;
+  align-items: center;
+  gap: calc(14 * var(--fe-k));
+}
+.bts__kn {
+  padding: calc(2 * var(--fe-k)) calc(10 * var(--fe-k));
+  background: var(--ig-gold);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: var(--bts-label);
+  letter-spacing: 0.12em;
+  color: var(--ig-ink);
+}
+.bts__h {
+  margin: calc(10 * var(--fe-k)) 0 calc(12 * var(--fe-k));
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: max(var(--fe-fs-floor), calc(40 * var(--fe-k)));
+  line-height: 1;
+  text-shadow: 0 3px 20px rgba(0, 0, 0, 0.6);
+}
+.bts__big {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: calc(12 * var(--fe-k));
+  margin: 0 0 calc(12 * var(--fe-k));
+}
+.bts__big b {
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(60 * var(--fe-k)));
+  line-height: 0.9;
+}
+.bts__big span {
+  color: var(--ig-gold);
+  font-family: var(--ig-font-display);
+  font-size: var(--bts-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.bts__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(10 * var(--fe-k));
+  margin: calc(16 * var(--fe-k)) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.bts__chips li {
+  display: flex;
+  flex-direction: column;
+  padding: calc(8 * var(--fe-k)) calc(16 * var(--fe-k));
+  background: rgba(11, 10, 18, 0.6);
+  border: 1px solid var(--bts-gold-line);
+}
+.bts__chips b {
+  font-family: var(--ig-font-numeral);
+  font-size: max(var(--fe-fs-floor), calc(26 * var(--fe-k)));
+  line-height: 1.1;
+}
+.bts__chips span {
+  font-family: var(--ig-font-display);
+  font-size: var(--bts-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.7);
+}
+.bts__credit {
+  margin: calc(14 * var(--fe-k)) 0 0;
+  max-width: 40em;
+  color: rgba(244, 241, 232, 0.72);
+}
+.bts__deckbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(16 * var(--fe-k));
+  margin-top: calc(10 * var(--fe-k));
+}
+.bts__dots {
+  display: flex;
+}
+.bts__dot {
+  appearance: none;
+  position: relative;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.bts__dot::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: var(--bts-line);
+  border: 1px solid var(--bts-gold-line);
+}
+.bts__dot[aria-current='true']::before {
+  background: var(--ig-gold);
+  box-shadow: 0 0 10px rgba(227, 185, 74, 0.55);
+}
+.bts__deckbtns {
+  display: flex;
+  gap: calc(10 * var(--fe-k));
+}
+.bts__nbtn {
+  appearance: none;
+  min-width: calc(120 * var(--fe-k));
+  min-height: calc(40 * var(--fe-k));
+  padding: calc(8 * var(--fe-k)) calc(24 * var(--fe-k));
+  background: var(--ig-gold);
+  border: 0;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: var(--bts-label);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ig-ink);
+  cursor: pointer;
+}
+.bts__nbtn--ghost {
+  background: rgba(11, 10, 18, 0.7);
+  color: var(--ig-gold);
+  box-shadow: inset 0 0 0 1px var(--bts-gold-line);
+}
+.bts__nbtn[disabled] {
+  opacity: 0.4;
+  cursor: default;
+}
+.bts__storyhead {
+  margin: calc(40 * var(--fe-k)) 0 0;
+  padding-top: calc(14 * var(--fe-k));
+  border-top: 1px solid var(--bts-gold-line);
+  font-weight: 400;
+}
+
+/* ------------------------------------------------------------------ touch: targets of 44 px, the key hints mean nothing */
+
+@media (pointer: coarse) {
+  .bts__tab,
+  .bts__nbtn {
+    min-height: 44px;
+  }
+  .bts__dot {
+    width: 44px;
+    height: 44px;
+  }
+  .bts__keys,
+  .fe-info--bts .fe-info__close b {
+    display: none;
+  }
+  .fe-info--bts .fe-info__close {
+    min-height: 44px;
+  }
+}
+
+/* ------------------------------------------------------------------ phone: one column */
+
+@media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  .bts {
+    --bts-pad: 16px;
+  }
+  .bts__head {
+    padding-top: 12px;
+  }
+  .bts__keys {
+    display: none;
+  }
+  .bts__tabs {
+    gap: 0 22px;
+    margin-top: 4px;
+  }
+  .bts__intro {
+    padding: 14px 0 16px;
+  }
+  .bts__hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  .bts__title {
+    font-size: max(var(--fe-fs-floor), 40px);
+  }
+  .bts__lead2 {
+    font-size: max(var(--fe-fs-floor), 24px);
+  }
+  .bts__card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    min-height: 0;
+    align-items: start;
+  }
+  .bts__h {
+    font-size: max(var(--fe-fs-floor), 32px);
+  }
+  .bts__big b {
+    font-size: max(var(--fe-fs-floor), 52px);
+  }
+  .bts__chips b {
+    font-size: max(var(--fe-fs-floor), 22px);
+  }
+  .bts__deckhead {
+    margin-top: 22px;
+    flex-wrap: wrap;
+  }
+  /* the dots and the two buttons do not fit side by side in 358 px: the dots centre on a row, the buttons share the next */
+  .bts__deckbar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .bts__deckbtns {
+    flex: 1 1 100%;
+  }
+  .bts__nbtn {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}

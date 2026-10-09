@@ -15,6 +15,11 @@
  *   them and `src/` names none (CHK-018); their sidecars only mention such
  *   paths as provenance strings.
  *
+ * - `bts/**` (while the page's switch is off): the pictures of the BEHIND THE SCENES page. Bailey, 2026-10-08: the
+ *   page is built and not public until he approves it (`src/app/changelog/behindTheScenes.ts`, `BTS_LIVE`), so its
+ *   sixteen pictures in `public/bts/` stay on disk and out of every build until the switch is turned on; with it on,
+ *   this rule is gone and they ship. The page's code and words are kept out of the bundle by the same constant.
+ *
  * Source maps are the fourth kind (PR-0328, adopted by Bailey 2026-10-03 as
  * D-335): the three `.js.map` files of release 36 weighed 22,775,896 bytes,
  * nobody in the game or the critic's tooling ever requests them, and the site
@@ -33,6 +38,8 @@
 import { copyFileSync, lstatSync, mkdirSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { dirname, extname, join, relative, sep } from 'node:path';
 
+import { BTS_LIVE } from '../src/app/changelog/behindTheScenes.ts';
+
 /**
  * The environment variable that asks a build to keep its source maps off to the
  * side (a folder path). Unset: the build makes none. `vite.config.ts` reads it;
@@ -44,6 +51,7 @@ export const SOURCEMAP_DIR_ENV = 'PYREFLY_SOURCEMAP_DIR';
 export function isUnshippedPublicFile(rel) {
   const p = rel.split(sep).join('/').replace(/^\/+/, '');
   if (p === 'audio/candidates' || p.startsWith('audio/candidates/')) return true;
+  if (!BTS_LIVE && (p === 'bts' || p.startsWith('bts/'))) return true;
   if (!p.startsWith('art/')) return false;
   if (/\.raw\.png$/i.test(p)) return true;
   return /\.[0-9]+\.(png|json)$/i.test(p);
@@ -132,14 +140,15 @@ export function keepSourceMaps(root, dest) {
 export function pruneUnshipped(root) {
   const removed = findUnshipped(root);
   for (const rel of removed) rmSync(join(root, rel), { force: true });
-  // The candidates folder itself goes too, so no empty directory ships (only
-  // when it is a real, now empty folder).
-  const folder = join(root, 'audio', 'candidates');
-  try {
-    const st = lstatSync(folder);
-    if (st.isDirectory() && !st.isSymbolicLink() && readdirSync(folder).length === 0) rmSync(folder, { recursive: true });
-  } catch {
-    /* no such folder */
+  // The candidates folder (and the page's picture folder while its switch is off) goes too, so no
+  // empty directory ships (only when it is a real, now empty folder).
+  for (const folder of [join(root, 'audio', 'candidates'), join(root, 'bts')]) {
+    try {
+      const st = lstatSync(folder);
+      if (st.isDirectory() && !st.isSymbolicLink() && readdirSync(folder).length === 0) rmSync(folder, { recursive: true });
+    } catch {
+      /* no such folder */
+    }
   }
   return removed;
 }
