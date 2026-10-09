@@ -20,6 +20,7 @@ import type {
   Side,
 } from '../common/types.ts';
 import type { SeededRng } from '../common/rng.ts';
+import type { HitRuntime } from './hit-hooks.ts';
 import type { FFXContentRegistry } from './registry.ts';
 import { baseCtb } from './math.ts';
 import { isAlive, onField, targetable } from './predicates.ts';
@@ -129,8 +130,7 @@ export interface ActorRuntime {
    * {@link gaugePerTargeting} answers "was I targeted" with a gauge; this with a
    * number a script compares against its own last reading. Evrae's Swooping
    * Scythe fires on *being targeted* at range [§4.5], which includes a miss and
-   * a status-only command, so neither the damage nor the status set expresses
-   * it. Bumped by `onTargeted`, once per action.
+   * a status-only command, so neither damage nor status expresses it. Bumped by `onTargeted`, once per action.
    */
   countsPartyTargetings?: boolean;
   partyTargetings?: number;
@@ -139,7 +139,7 @@ export interface ActorRuntime {
 }
 
 /** Battle-level engine bookkeeping. */
-export interface FFXRuntime {
+export interface FFXRuntime extends HitRuntime {
   actors: Map<CombatantId, ActorRuntime>;
   /** Whose turn is currently open. `null` between turns. */
   currentActorId: CombatantId | null;

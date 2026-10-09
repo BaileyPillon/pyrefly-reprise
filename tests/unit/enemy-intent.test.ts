@@ -419,6 +419,9 @@ describe('the written half', () => {
     expect(counters).toContain('Silence');
     expect(counters).toContain('Sleep');
     expect(counters).toContain('ffx-yunalesca §5.1');
+    // Re-parity, AI lane B: her counters follow every action that reaches her, a miss too (research/re-ffx-ai-yunalesca-bfa.md §2.9).
+    expect(counters).toContain('a miss too');
+    expect(counters).toContain('re-ffx-ai-yunalesca-bfa §2.9');
   });
 
   it("lists Seymour's Delay punish, and his Banish only while an aeon is out", () => {

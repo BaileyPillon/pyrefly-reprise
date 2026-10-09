@@ -72,6 +72,8 @@ export { dealDamage, healOutsideChain, koActor, reviveActor, ejectActor, restore
 export { resolveAbility, mpCostFor, blockedBySilence } from './abilities.ts';
 export type { ResolveOptions } from './abilities.ts';
 export { advanceForm, hasNextForm } from './forms.ts';
+export { registerHitScript, queueReaction, drainReactions } from './hit-hooks.ts';
+export type { HitEvent, HitHook, Reaction } from './hit-hooks.ts';
 export { summonAeon, dismissAeon, banishAeon, availableAeons, AEON_REVIVE_BATTLES } from './aeons.ts';
 export {
   addGauge,

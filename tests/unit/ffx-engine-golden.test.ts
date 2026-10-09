@@ -99,12 +99,18 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * party's Attack record, so about half of it misses, as the record says (the old engine never missed). That moves the
  * digests of the links where a possessed aeon attacks (seed 1: links 5 to 7; seed 7: links 3 to 7); every outcome is still
  * victory and no other digest moved.
+ * Chapter II re-baselined 2026-10-08 by re-parity AI lane B ("game-script parity", FFX only): Yunalesca runs the game's own
+ * script (research/re-ffx-ai-yunalesca-bfa.md section 2) through the engine's new hit events (hit-hooks.ts, hit-event.ts).
+ * Her counters follow every action that reaches her, a form changes after the last hit of the action that ended it, her
+ * anti-aeon Mind Blast and Osmose land on the aeon on the field, Form II's counter advances on aeon turns, and a pick draws
+ * only with two or more candidates. Both digests move (yunalesca#1 victory -> defeat, #7 still a victory); no other
+ * chapter's digest moved.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '28692f2c:defeat',
   'seymour-flux#7': 'f923eb10:defeat',
-  'yunalesca#1': '2327f640:victory',
-  'yunalesca#7': '4225415d:victory',
+  'yunalesca#1': '92593bcc:defeat',
+  'yunalesca#7': 'a986c071:victory',
   'braskas-final-aeon#1': '567c3bf4:victory ea51a558:victory ba4a14f2:victory 509fbd2:victory 1ebf8f7c:victory da4942b3:victory e84aa63:victory',
   'braskas-final-aeon#7': '2b85c492:victory f82347e2:victory 42bd9a74:victory 48d2e753:victory 86304bae:victory 7e4d660e:victory cddd0f5d:victory',
   'seymour-anima-macalania#1': '15ecc081:victory',

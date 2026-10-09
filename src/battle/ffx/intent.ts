@@ -365,12 +365,12 @@ export function countersFor(ctx: Ctx, enemy: FFXCombatant): string[] {
   if (script.startsWith('yunalesca')) {
     const form = enemy.enemy?.formIndex ?? 0;
     if (form === 0) {
-      out.push('Answers a physical hit with Blind, a magical one with Silence, anything else with Sleep [ffx-yunalesca §5.1]');
-      out.push('Her Blind/Silence gate reads the target she last picked, not your attacker — keep one member Blinded and the Blind counter never fires [ffx-yunalesca §5.1]');
+      out.push('Answers every action that reaches her, a miss too: Blind to a physical one, Silence to a magical one, Sleep to one that is neither [ffx-yunalesca §5.1, re-ffx-ai-yunalesca-bfa §2.9]');
+      out.push('Her Blind/Silence gate reads the target she last picked, not your attacker (Tidus before her first move) — keep that one Blinded and the Blind counter never fires [ffx-yunalesca §5.1, re-ffx-ai-yunalesca-bfa §2.9]');
     } else if (form === 1) {
-      out.push('49% chance to answer any hit with Dispelling Slap [ffx-yunalesca §5.2]');
+      out.push('49% chance to answer any action that reaches her, a miss too, with Dispelling Slap [ffx-yunalesca §5.1, re-ffx-ai-yunalesca-bfa §2.9]');
     } else {
-      out.push('Answers every hit with Dispelling Slap [ffx-yunalesca §5.3]');
+      out.push('Answers every action that reaches her, a miss too, with Dispelling Slap [ffx-yunalesca §5.1, re-ffx-ai-yunalesca-bfa §2.9]');
     }
   }
 

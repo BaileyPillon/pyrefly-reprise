@@ -19,7 +19,6 @@ import { seymourDelayCounter, seymourThresholdCounters, stepFluxPhase } from './
 import { GUADO_GUARDIAN_SCRIPT, macalaniaGuardianCounter } from './seymour-anima-macalania.ts';
 import { collectEvraeCounters } from './evrae-counters.ts';
 import { collectSinCounters, runSinLivenessHooks } from './sin-counters.ts';
-import { yunalescaCounter } from './yunalesca.ts';
 import { yuYevonCounter } from './yu-yevon.ts';
 import { MORTIBODY_ID, NATUS_ID, natusActionCounters, stepNatusPhase } from './seymour-natus-rules.ts';
 import { executeCommand } from '../execute.ts';
@@ -123,12 +122,8 @@ export function collectBossCounters(
       if (command) out.push({ actorId: enemy.id, command, cause: 'script' });
       continue;
     }
-    if (script?.startsWith('yunalesca')) {
-      if (!isAlive(enemy)) continue; // the killing blow of each form is never countered
-      const command = yunalescaCounter(ai, attacker.id, def.damageType);
-      if (command) out.push({ actorId: enemy.id, command, cause: 'script' });
-      continue;
-    }
+    // Yunalesca's counters are her onHit hook now (`ai/yunalesca.ts`, `hit-hooks.ts`): they run for every sub-action that
+    // reached her, whether it damaged or not, and a form's killing blow changes her form instead.
     if (script === 'yu-yevon') {
       const command = yuYevonCounter(ai);
       if (command) out.push({ actorId: enemy.id, command, cause: 'script' });

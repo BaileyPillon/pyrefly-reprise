@@ -27,6 +27,7 @@ import { isPerHitRandom, nextHitTargets, resolveTargets } from './targeting.ts';
 import { onTargeted } from './overdrive.ts';
 import { revealTarget, sensorKind } from './sensor.ts';
 import { type HitScope, resolveOneHit } from './hit-apply.ts';
+import { runHitEvents } from './hit-event.ts';
 
 /** Knobs the caller can override per resolution. */
 export interface ResolveOptions {
@@ -120,6 +121,7 @@ export function resolveAbility(
     totalHits: perHitRandom ? hitCount : hitCount * Math.max(1, targets.length),
     hitIndex: 0,
     totalDealt: 0,
+    touched: new Map(),
   };
 
   if (perHitRandom) {
@@ -132,6 +134,11 @@ export function resolveAbility(
       for (let h = 0; h < hitCount; h++) resolveOneHit(scope, target);
     }
   }
+
+  // The game's onHit, once per target this sub-action reached, before any death check (`hit-event.ts`). A no-op for
+  // every target whose script registered no hook, so only Chapters II and III (Yunalesca, Braska's Final Aeon and
+  // what stands with it) change.
+  runHitEvents(ctx, user, def, scope.touched);
 
   // Scan opens the info panel. It is emitted **after** the hits, so the whole of it is pure
   // information: a reveal rolls nothing and therefore cannot move the seeded RNG by one draw
