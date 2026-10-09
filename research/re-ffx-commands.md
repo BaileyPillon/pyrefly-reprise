@@ -724,7 +724,7 @@ The engine now takes the record's bytes (they are the exe's inputs); `tests/unit
 ### 7.3 Rank
 
 The game's rank differs from the rank our ability data carries on 17 abilities (the generic Attack, Defend and the aeons' Shield and Boost agree):
-the four Wakka reels (ours 3, game 4), `fury` (the marker: 5 against 0, which is 3), the six aeon Attack rows (ours 1 or 5, game 3: unreachable, the generic Attack serves every aeon),
+the four Wakka reels (ours 3, game 4), `fury` (the marker: 5 against 0, which is 3), the nine aeon Attack rows (the six aeons' ours 1, the three Magus Sisters' ours 5, game 3: unreachable, the generic Attack serves every aeon),
 `passado` (3 against 5), `mix` (6 against 5; the shaped Mix has its own record), and `natus-flare` (5 against 3). The wiring takes the game's rank for every ability that has a record.
 
 ### 7.4 Shatter
