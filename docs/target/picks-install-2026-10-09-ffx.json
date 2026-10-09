@@ -1,0 +1,551 @@
+{
+ "what": "Bailey's 2026-10-09 art picks installed in the release art tree (D:/pyrefly-r39-int/public/art): pick 1 of every slot on the Overnight Art Review page except RIKKU-DK-ko, RIKKU-SS-follow and RIKKU-SS-defend",
+ "words": "I'll go with all your recommendations. Scenes not screens.",
+ "recommendation": "install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.",
+ "gameCase": "FFX only",
+ "poses": 6,
+ "tierRecipe": "RealESRGAN_x4plus_anime_6B on the CPU (tiles 384, overlap 24), alpha by Lanczos; tools/gen/hires-alpha-fix/alphafix.py repair(ka 0.4, d0 2.0, d1 3.5, feather 1.0, ring 6); 2x = reduce_half of the repaired 4x; 3x derived by tools/hires-install.mjs derive3; no SDXL refine pass",
+ "library": "D:/Tools/pyrefly-art-backup/hires-picks-2026-10-09",
+ "rows": [
+  {
+   "slot": "TIDUS-defend",
+   "pick": "TIDUS-defend-1",
+   "subject": "tidus",
+   "pose": "defend",
+   "game": "FFX",
+   "replacesApproved": false,
+   "playedBefore": "ready",
+   "candidate": {
+    "night": "2026-10-08",
+    "key": "x2-106",
+    "grade": "good",
+    "path": "D:/pyrefly-overnight-art/2026-10-08/tidus/defend/t8-x2-cand-106.png",
+    "sha256": "207ba99591ce3768018706e37fb1ea3cac736e2edcd129209f20dababc1ed80d",
+    "heightVsIdle": 1.025
+   },
+   "size": [
+    791,
+    1160
+   ],
+   "files": {
+    "1x": {
+     "bytes": 521205,
+     "sha256": "207ba99591ce3768018706e37fb1ea3cac736e2edcd129209f20dababc1ed80d"
+    },
+    "json": {
+     "bytes": 4080,
+     "sha256": "57a55a62b829972a042b2b623e4d5b9e7084f6d754093161a0045df04daf6cab"
+    },
+    "2x": {
+     "bytes": 1617023,
+     "sha256": "b23b2051c3836082c5d8e20240aad99852f572f530556f9e2401748bc01eb49a"
+    },
+    "3x": {
+     "bytes": 4256248,
+     "sha256": "86b910a01863d99c7840530debd7fe36c4a95eb3514cc51bf09da42dfec7983d"
+    },
+    "4x": {
+     "bytes": 4754110,
+     "sha256": "f743cf7c0fbbebcfc077977482bc032e9ceb74e655f2bc0c88e4c19659dd5fac"
+    }
+   },
+   "registration": {
+    "reading": 1.0,
+    "scale": 1.0,
+    "gatedToStatureFloor": null,
+    "stature": 1.025,
+    "headCentre": [
+     405.2,
+     198.2
+    ],
+    "headBox": [
+     350.2,
+     161.7,
+     460.2,
+     234.7
+    ],
+    "headTop": null,
+    "scaleSrc": "noise",
+    "stance": {
+     "row": 1144.0,
+     "src": "silhouette",
+     "x": 397.0,
+     "x0": 147.0,
+     "x1": 647.0
+    }
+   },
+   "tiers": {
+    "model": "RealESRGAN_x4plus_anime_6B.pth",
+    "qc": {
+     "alpha_iou": 0.9994206762069283,
+     "alpha_mad": 0.29428380727767944,
+     "ssim_gray": 0.9858180863500557,
+     "ssim_vis": 0.9569503958274799,
+     "rim_bias": 0.38046252727508545,
+     "rim_mad": 5.236584186553955,
+     "rim_specks": 0,
+     "alpha_islands": 1
+    },
+    "qcBeforeRepair": {
+     "alpha_iou": 0.9999950833890735,
+     "ssim_gray": 0.9843169760898928,
+     "rim_bias": -1.7892491817474365,
+     "rim_mad": 7.865254878997803,
+     "rim_specks": 98,
+     "alpha_islands": 1
+    },
+    "seconds": 92.3
+   }
+  },
+  {
+   "slot": "WAKKA-defend",
+   "pick": "WAKKA-defend-1",
+   "subject": "wakka",
+   "pose": "defend",
+   "game": "FFX",
+   "replacesApproved": false,
+   "playedBefore": "ready",
+   "candidate": {
+    "night": "2026-10-08",
+    "key": "fix-106",
+    "grade": "good",
+    "path": "D:/pyrefly-overnight-art/2026-10-08/wakka/defend/t8-fix-cand-106.png",
+    "sha256": "30c1b107f47d9f2f0e2e5ab31a79711ac66f8f749d8e20bb6add31dc4fc6d4b6",
+    "heightVsIdle": 0.86
+   },
+   "size": [
+    428,
+    1022
+   ],
+   "files": {
+    "1x": {
+     "bytes": 416841,
+     "sha256": "30c1b107f47d9f2f0e2e5ab31a79711ac66f8f749d8e20bb6add31dc4fc6d4b6"
+    },
+    "json": {
+     "bytes": 4078,
+     "sha256": "8eaa19e0d6560c1b9bf4a495205c060fe41b6debac538bf8d1c54af65ae432a4"
+    },
+    "2x": {
+     "bytes": 1382410,
+     "sha256": "7969904e1dafa73c99524de37409cbf23525d69bdee13b37bae864bef439a06e"
+    },
+    "3x": {
+     "bytes": 3961243,
+     "sha256": "9ec0d1c6f77b621e59e50b4429545c4717e42ab387e75cd4a86656b4be537079"
+    },
+    "4x": {
+     "bytes": 4234497,
+     "sha256": "239088af8a6cf5236988a76ca472bf6a6d3a9133efd82a9c327b8a275e918b8a"
+    }
+   },
+   "registration": {
+    "reading": 1.389,
+    "scale": 1.389,
+    "gatedToStatureFloor": null,
+    "stature": 1.183,
+    "headCentre": [
+     199.6,
+     164.5
+    ],
+    "headBox": [
+     160.7,
+     131.7,
+     238.5,
+     197.3
+    ],
+    "headTop": null,
+    "scaleSrc": "noise",
+    "stance": {
+     "row": 1006.0,
+     "src": "silhouette",
+     "x": 209.5,
+     "x0": 21.0,
+     "x1": 398.0
+    }
+   },
+   "tiers": {
+    "model": "RealESRGAN_x4plus_anime_6B.pth",
+    "qc": {
+     "alpha_iou": 0.9993889546849668,
+     "alpha_mad": 0.42873290181159973,
+     "ssim_gray": 0.9837871337363566,
+     "ssim_vis": 0.9680933574619796,
+     "rim_bias": 0.1829260140657425,
+     "rim_mad": 5.197231292724609,
+     "rim_specks": 1,
+     "alpha_islands": 1
+    },
+    "qcBeforeRepair": {
+     "alpha_iou": 0.9999965661152368,
+     "ssim_gray": 0.9799278552800494,
+     "rim_bias": -2.2625577449798584,
+     "rim_mad": 8.83082389831543,
+     "rim_specks": 86,
+     "alpha_islands": 1
+    },
+    "seconds": 80.5
+   }
+  },
+  {
+   "slot": "LULU-defend",
+   "pick": "LULU-defend-1",
+   "subject": "lulu",
+   "pose": "defend",
+   "game": "FFX",
+   "replacesApproved": false,
+   "playedBefore": "ready",
+   "candidate": {
+    "night": "2026-10-08",
+    "key": "ffxdef-109",
+    "grade": "good",
+    "path": "D:/pyrefly-overnight-art/2026-10-08/lulu/defend/t8-ffxdef-cand-109.png",
+    "sha256": "8305e5fced2e77de0969ea03f7e9d1efa3911535d49b0baac1f45ed14626c21a",
+    "heightVsIdle": 0.972
+   },
+   "size": [
+    716,
+    1132
+   ],
+   "files": {
+    "1x": {
+     "bytes": 570061,
+     "sha256": "8305e5fced2e77de0969ea03f7e9d1efa3911535d49b0baac1f45ed14626c21a"
+    },
+    "json": {
+     "bytes": 6159,
+     "sha256": "651963922e3c481016fb616a00f28a318c0c4bf6cf7ceb9be9fb0abc8734c5c5"
+    },
+    "2x": {
+     "bytes": 1673751,
+     "sha256": "67a45f68ccf24b8f2cebc128a336536cf714721f3bea65fbc98ba98b121c5cb2"
+    },
+    "3x": {
+     "bytes": 4732458,
+     "sha256": "ed2dfe8cba69ca7a61bc7ece067f431863629afedb28435a12b4d06be1083a18"
+    },
+    "4x": {
+     "bytes": 5178873,
+     "sha256": "f2e0e6a5f1a5c571f48eb2c47a374c62131f4a7532a09ad73ebb6b8bd8ee4b99"
+    }
+   },
+   "registration": {
+    "reading": 1.176,
+    "scale": 1.176,
+    "gatedToStatureFloor": null,
+    "stature": 1.142,
+    "headCentre": [
+     354.5,
+     215.5
+    ],
+    "headBox": [
+     319.2,
+     193.0,
+     389.8,
+     238.0
+    ],
+    "headTop": null,
+    "scaleSrc": "noise",
+    "stance": {
+     "row": 1116.0,
+     "src": "silhouette",
+     "x": 374.5,
+     "x0": 105.0,
+     "x1": 644.0
+    }
+   },
+   "tiers": {
+    "model": "RealESRGAN_x4plus_anime_6B.pth",
+    "qc": {
+     "alpha_iou": 0.9996210054943157,
+     "alpha_mad": 0.23892010748386383,
+     "ssim_gray": 0.9651496388359735,
+     "ssim_vis": 0.9126400359014831,
+     "rim_bias": 0.4646720290184021,
+     "rim_mad": 4.135644912719727,
+     "rim_specks": 0,
+     "alpha_islands": 0
+    },
+    "qcBeforeRepair": {
+     "alpha_iou": 0.9999955805810732,
+     "ssim_gray": 0.9630493793667255,
+     "rim_bias": -1.1208791732788086,
+     "rim_mad": 8.83581256866455,
+     "rim_specks": 40,
+     "alpha_islands": 0
+    },
+    "seconds": 65.3
+   }
+  },
+  {
+   "slot": "KIMAHRI-defend",
+   "pick": "KIMAHRI-defend-1",
+   "subject": "kimahri",
+   "pose": "defend",
+   "game": "FFX",
+   "replacesApproved": false,
+   "playedBefore": "ready",
+   "candidate": {
+    "night": "2026-10-08",
+    "key": "kimF-120",
+    "grade": "good",
+    "path": "D:/pyrefly-overnight-art/2026-10-09/kimahri/defend/t9-stub-cand-105.png",
+    "sha256": "028a37ad0078362b3e50f99948a595d6fe73b09f5538a61742e201e8fc59320c",
+    "heightVsIdle": 0.952
+   },
+   "size": [
+    606,
+    1140
+   ],
+   "files": {
+    "1x": {
+     "bytes": 524358,
+     "sha256": "028a37ad0078362b3e50f99948a595d6fe73b09f5538a61742e201e8fc59320c"
+    },
+    "json": {
+     "bytes": 4123,
+     "sha256": "0c7987b8bf1c66cbe6c5035f97b641a0156ae30d2c63f861bdbb96d76c80330c"
+    },
+    "2x": {
+     "bytes": 1500703,
+     "sha256": "efa3ac5e225f4a9d3462b86594aa90a8b9c6c82451d9250f751440b1e37c4d1c"
+    },
+    "3x": {
+     "bytes": 4368325,
+     "sha256": "269cac464188bc04e10aa13555924ba096ec2b3135187d626f6b5c1ab629f4a3"
+    },
+    "4x": {
+     "bytes": 4429226,
+     "sha256": "d104e06975a8c5e51dac8cf96b2bec915fbdba91fddbeeb313f48c45859a1314"
+    }
+   },
+   "registration": {
+    "reading": 1.087,
+    "scale": 1.087,
+    "gatedToStatureFloor": null,
+    "stature": 1.033,
+    "headCentre": [
+     351.0,
+     263.5
+    ],
+    "headBox": [
+     270.5,
+     216.1,
+     431.5,
+     310.9
+    ],
+    "headTop": null,
+    "scaleSrc": "noise",
+    "stance": {
+     "row": 1120.0,
+     "src": "silhouette",
+     "x": 308.5,
+     "x0": 172.0,
+     "x1": 445.0
+    }
+   },
+   "tiers": {
+    "model": "RealESRGAN_x4plus_anime_6B.pth",
+    "qc": {
+     "alpha_iou": 0.9995516166115731,
+     "alpha_mad": 0.3618086874485016,
+     "ssim_gray": 0.9855972078289666,
+     "ssim_vis": 0.9693797615732354,
+     "rim_bias": 0.27496740221977234,
+     "rim_mad": 4.904719829559326,
+     "rim_specks": 18,
+     "alpha_islands": 0
+    },
+    "qcBeforeRepair": {
+     "alpha_iou": 0.9999955783432305,
+     "ssim_gray": 0.983192204559968,
+     "rim_bias": -1.8085185289382935,
+     "rim_mad": 7.9023590087890625,
+     "rim_specks": 66,
+     "alpha_islands": 0
+    },
+    "seconds": 73.2
+   }
+  },
+  {
+   "slot": "YUNA-FFX-defend",
+   "pick": "YUNA-FFX-defend-1",
+   "subject": "yuna",
+   "pose": "defend",
+   "game": "FFX",
+   "replacesApproved": false,
+   "playedBefore": "ready",
+   "candidate": {
+    "night": "2026-10-08",
+    "key": "x2-107",
+    "grade": "good",
+    "path": "D:/pyrefly-overnight-art/2026-10-08/yuna/defend/t8-x2-cand-107.png",
+    "sha256": "a9cbfb00c833a8a37ce2a6fe762b78e1b84331fd228a79c8e87b523d5cb89dc5",
+    "heightVsIdle": 1.064
+   },
+   "size": [
+    571,
+    1144
+   ],
+   "files": {
+    "1x": {
+     "bytes": 434868,
+     "sha256": "a9cbfb00c833a8a37ce2a6fe762b78e1b84331fd228a79c8e87b523d5cb89dc5"
+    },
+    "json": {
+     "bytes": 4031,
+     "sha256": "0eba4ab735d674723b5e5b34bf535a20b978aaa085276404b727ceeae682f2d9"
+    },
+    "2x": {
+     "bytes": 1380396,
+     "sha256": "f2b6f2088ef6fbc813ab6758c1410bd21bad6bdd2be857ba5a6bf833ecf0960e"
+    },
+    "3x": {
+     "bytes": 3754901,
+     "sha256": "3a499bbf4b72ec6faaba626d96b3186ed76dad25f77ebe88a3986d6e4e7697ba"
+    },
+    "4x": {
+     "bytes": 3980442,
+     "sha256": "341422f50f6627a26f7e94d306270e5d8a4a35835f43a7c5cf428e4090ce8936"
+    }
+   },
+   "registration": {
+    "reading": 1.538,
+    "scale": 1.538,
+    "gatedToStatureFloor": null,
+    "stature": 1.638,
+    "headCentre": [
+     315.6,
+     317.4
+    ],
+    "headBox": [
+     284.7,
+     295.9,
+     346.5,
+     338.9
+    ],
+    "headTop": null,
+    "scaleSrc": "noise",
+    "stance": {
+     "row": 1128.0,
+     "src": "silhouette",
+     "x": 296.5,
+     "x0": 140.0,
+     "x1": 453.0
+    }
+   },
+   "tiers": {
+    "model": "RealESRGAN_x4plus_anime_6B.pth",
+    "qc": {
+     "alpha_iou": 0.9994649752012258,
+     "alpha_mad": 0.3398545980453491,
+     "ssim_gray": 0.9899132619849786,
+     "ssim_vis": 0.9778918828613271,
+     "rim_bias": 0.32487449049949646,
+     "rim_mad": 5.230655670166016,
+     "rim_specks": 1,
+     "alpha_islands": 0
+    },
+    "qcBeforeRepair": {
+     "alpha_iou": 0.9999988284430594,
+     "ssim_gray": 0.9871676531529745,
+     "rim_bias": -2.7458155155181885,
+     "rim_mad": 8.7693452835083,
+     "rim_specks": 236,
+     "alpha_islands": 0
+    },
+    "seconds": 79.5
+   }
+  },
+  {
+   "slot": "RIKKU-FFX-defend",
+   "pick": "RIKKU-FFX-defend-1",
+   "subject": "rikku",
+   "pose": "defend",
+   "game": "FFX",
+   "replacesApproved": false,
+   "playedBefore": "ready",
+   "candidate": {
+    "night": "2026-10-07",
+    "key": "L4",
+    "grade": "good",
+    "path": "D:/pyrefly-overnight-art/2026-10-07/rikku/defend/ffx-defend-cand-4.png",
+    "sha256": "6e67a769c32a7663ddb29e6be46f7445c97d794e18671598b94d4c0d2885e590",
+    "heightVsIdle": 0.896
+   },
+   "size": [
+    437,
+    1003
+   ],
+   "files": {
+    "1x": {
+     "bytes": 332479,
+     "sha256": "6e67a769c32a7663ddb29e6be46f7445c97d794e18671598b94d4c0d2885e590"
+    },
+    "json": {
+     "bytes": 4274,
+     "sha256": "fe58165aa2f17493840c30488c5c1ea78ed12501a8d1dd079f64d4776cd8270a"
+    },
+    "2x": {
+     "bytes": 1201289,
+     "sha256": "0deb211d20e779be1b89254718938aab0f8a881aa77e77d04bff8022ec13bbfa"
+    },
+    "3x": {
+     "bytes": 3345808,
+     "sha256": "1e8eb5eb93efe3ddaac8c1cc561ddb7c7380dbdab44b23673dfa513460ff9f3b"
+    },
+    "4x": {
+     "bytes": 3515793,
+     "sha256": "429bf019774e3ea4b757d038ed670e07c556935660aeaed2fe60c4241fd21cf5"
+    }
+   },
+   "registration": {
+    "reading": 1.471,
+    "scale": 1.471,
+    "gatedToStatureFloor": null,
+    "stature": 1.314,
+    "headCentre": [
+     193.6,
+     161.3
+    ],
+    "headBox": [
+     151.5,
+     129.3,
+     235.7,
+     193.3
+    ],
+    "headTop": null,
+    "scaleSrc": "noise",
+    "stance": {
+     "row": 988.0,
+     "src": "silhouette",
+     "x": 216.0,
+     "x0": 23.0,
+     "x1": 409.0
+    }
+   },
+   "tiers": {
+    "model": "RealESRGAN_x4plus_anime_6B.pth",
+    "qc": {
+     "alpha_iou": 0.9990461556046206,
+     "alpha_mad": 0.5757643580436707,
+     "ssim_gray": 0.9898234282678128,
+     "ssim_vis": 0.97652242554241,
+     "rim_bias": 0.39440426230430603,
+     "rim_mad": 4.836700916290283,
+     "rim_specks": 1,
+     "alpha_islands": 1
+    },
+    "qcBeforeRepair": {
+     "alpha_iou": 0.999993154821824,
+     "ssim_gray": 0.9784321836466399,
+     "rim_bias": -1.9485334157943726,
+     "rim_mad": 10.176371574401855,
+     "rim_specks": 314,
+     "alpha_islands": 1
+    },
+    "seconds": 78.6
+   }
+  }
+ ]
+}

@@ -23,6 +23,7 @@
   "attack": "=",
   "cast": "=",
   "critical": "=",
+  "defend": 1.087,
   "follow": "=",
   "hurt": "=",
   "item": "=",
@@ -36,6 +37,7 @@
   "attack": 1.0,
   "cast": 1.053,
   "critical": 0.533,
+  "defend": 1.176,
   "follow": 0.792,
   "hurt": 0.667,
   "item": 1.0,
@@ -134,6 +136,7 @@
   "attack": 0.734,
   "cast": 1.0,
   "critical": 0.759,
+  "defend": 1.471,
   "follow": 0.754,
   "hurt": 0.9,
   "item": 1.0,
@@ -236,6 +239,7 @@
   "attack": 0.952,
   "cast": 0.957,
   "critical": 0.967,
+  "defend": 1.0,
   "follow": 1.306,
   "hurt": 1.0,
   "item": 0.92,
@@ -250,6 +254,7 @@
   "attack": 1.05,
   "cast": 1.09,
   "critical": "=",
+  "defend": 1.389,
   "follow": 1.25,
   "hurt": 1.05,
   "item": 0.95,
@@ -262,6 +267,7 @@
   "attack": 0.761,
   "cast": 0.92,
   "critical": 0.967,
+  "defend": 1.538,
   "follow": 1.074,
   "hurt": 0.804,
   "item": 0.752,
@@ -349,9 +355,9 @@
   "victory": 1.286
  },
  "yunalesca-1": {
-  "hurt": 0.67,
   "attack": 0.7,
   "cast": 0.77,
+  "hurt": 0.67,
   "ko": "keep"
  }
 }
