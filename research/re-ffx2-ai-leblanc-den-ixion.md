@@ -40,9 +40,10 @@ written in our own words: no script text, no game text and no decompiled code is
    poll rolls 25%; on a hit he queues Regen (or Absorb below 60 MP) and then **also** queues that poll's normal move, so he acts
    twice in one turn. The branch "cast Not-So-Mighty Guard" is taken only when Baralai himself has Reflect, which nothing in
    the fight gives him; the research files' "if he already has Regen" is not what the script tests.
-6. **Baralai's counter and Ixion's action counter both count every result another character applies to them**, one per hit
-   per target, misses and no-effect results included, never their own Regen or Poison ticks. A multi-hit action adds once
-   per hit. Baralai's Drill Shot target is whoever applied the last result (which can be his own Regen tick, 4.2).
+6. **Baralai's counter and Ixion's action counter both count every result another character applies to them**: one per
+   landing hit, one for a miss (however many strikes the command had left) and one for a no-effect result, never their own
+   Regen or Poison ticks. A multi-hit action that lands adds once per hit. Baralai's Drill Shot target is whoever applied the
+   last result, which can be his own Regen tick or, unproved [M], the transfer of his own Absorb (4.2).
 7. **Baralai's Triple Attack has fixed targets**: with all three girls alive it strikes Yuna, then Rikku, then Paine, once each;
    with one down the missing girl's strike goes to the next girl in a fixed order (4.2). It is not three random hits.
 8. **Gippal's low-HP Attack goes to the girl with the lowest current HP**; his one-third line is `HP < max / 3` in integer
@@ -104,13 +105,20 @@ was not traced [M].
 ### 1.2 What a reaction sees [H]
 
 The reaction entry is run from inside the routine that applies a result to a character, after HP, MP and statuses are
-applied: once per result, so once per hit per target. It also runs for results that change nothing: a physical attack that
-misses reaches the same routine at its hit frame with an empty result (so does a "no effect" result), whereas the earlier
-dodge-animation event does not apply a result and so does not reach it. The routine stores the **attacker's slot on the target**
-(`chr_reaction`) before the entry runs. The guard `getreaction` is true unless the attacker is the monster itself or the
-monster is stopped, asleep, petrified, confused, berserk or ejected. Poison and Regen ticks are applied with the same id
-for attacker and target (the call passes the id twice), so they never pass the guard, but they **do overwrite `chr_reaction`
-with the monster's own slot**. Results applied by the monster's allies pass the guard.
+applied: once per result. Each strike that lands is one result (a three-hit command that lands is three). It also runs for
+results that change nothing: a command that misses reaches the same routine at its hit frame with an empty result, and
+**a miss resolves all the remaining strikes on that target at once, so it is one result**; a "no effect" result is one too.
+The earlier dodge-animation event does not apply a result and so does not reach the entry. (The sibling note
+[re-ffx2-ai-fallen-trema.md](re-ffx2-ai-fallen-trema.md) section 1.2 reads the same.)
+
+The routine stores the **attacker's slot on the target** (`chr_reaction`) before the entry runs. The guard `getreaction` is
+true unless the attacker is the monster itself or the monster is stopped, asleep, petrified, confused, berserk or ejected.
+Poison and Regen ticks are applied with the same id for attacker and target (the call passes the id twice), so they never
+pass the guard, but they **do overwrite `chr_reaction` with the monster's own slot**. The HP and MP that a drain (Baralai's
+Absorb, Leblanc's Osmose) hands back to its user is applied to the user as a result of the user's own, so it should behave
+the same way, failing the guard and writing the user's own slot [M: this reading is the sibling note's, who followed the
+pending-result list to the applier but not the consumer; I did not repeat the trace]. Results applied by the monster's
+allies pass the guard.
 
 ### 1.3 More on target searches [H]
 
@@ -476,10 +484,12 @@ strike 1 on Yuna, else Paine, else Rikku; strike 2 on Rikku, else Paine, else Yu
 Rikku. With all three alive that is one strike each, Yuna, Rikku, Paine; with Yuna down: Paine, Rikku, Paine; with Rikku down:
 Yuna, Paine, Paine; with Paine down: Yuna, Rikku, Yuna. The three commands have rest 0 and charge 0.
 
-**Reaction (246-253).** If `getreaction` holds, the burst counter gains 1: once per result applied to him by anyone but himself,
-hit, miss or no effect, once per hit (1.2). Poison or Regen ticks do not count. The counter is only read on his next poll,
+**Reaction (246-253).** If `getreaction` holds, the burst counter gains 1: once per result applied to him by anyone but
+himself, that is each landing hit, each miss (one for the whole command) and each no-effect result (1.2). Poison or Regen
+ticks do not count. The counter is only read on his next poll,
 and Drill Shot resets it to 0 (hits beyond the eighth are lost). The target is the attacker slot of the **latest** result, not
-of the eighth. If his own Regen tick was the latest result, the slot is his own and the Drill Shot is aimed at himself: the
+of the eighth. If his own Regen tick was the latest result (or, unproved [M], the transfer of his own Absorb, 1.2), the slot is
+his own and the Drill Shot is aimed at himself: the
 re-validation leaves a self target alone (1.12, run on the live exe) and the damage routine gives formula-7 damage on a target
 with the "immune to percentage-HP formulas" bit, which Baralai has, as 0, so that turn does nothing [M: the damage step was
 read, not run]. Death entry: empty.
@@ -538,8 +548,9 @@ The test of AC comes first on every poll and uses the value before this poll's o
 rows 1 and 2**, so after Thor's Hammer the cycle carries on from where it was: with no hits taken AC reaches 100 right after an
 Aerospark (the counter is 0), but with hits it can come mid-cycle and the cycle then resumes at the step that was next.
 
-**Reaction (125-132):** if `getreaction` holds, AC gains 5, for every result applied to him by anyone but himself, hit, miss or
-no effect, once per hit (1.2): a two-hit move adds 10, a three-hit move 15. A girl's Steal and status moves count as results;
+**Reaction (125-132):** if `getreaction` holds, AC gains 5, for every result applied to him by anyone but himself: each landing
+hit, each miss and each no-effect result (1.2). A two-hit move that lands adds 10, a three-hit move 15, and a miss adds 5
+whatever its hit count. A girl's Steal and status moves count as results;
 his own Recharge (attacker = himself) and any tick do not; neither do the Recharge and Thor's Hammer rows add to AC. Hits taken
 **after** the Hammer's poll count towards the next cycle (AC was reset at the poll); hits taken between Recharge and
 Hammer are lost with the reset.
@@ -668,7 +679,7 @@ Row key: *game* = this note (source file and lines); *ours* = file:line in `src/
 | R2 | Accuracy | ACC 95 on every actor, Attack formula 2 | `acc: 0` on all (`leblanc-syndicate.ts:141,213,257`, `den-of-woe.ts:65,120,172`, `ixion-djose.ts:69`) routed to the enemy baseline | physical hits use 95 in the game |
 | D1 | Baralai's low-HP move | tests Reflect (not Regen); Guard only if he has Reflect, else Absorb (MP below 60) or Regen; **in addition to** the poll's normal command (m176.src:100-124 then 126-242) | tests Regen: with Regen on it casts Not-So-Mighty Guard; replaces the turn (`ai/den-of-woe.ts:163-167`) | ours casts the Guard (Shell, Protect and Regen on himself) that the game casts only if he has Reflect; ours loses the normal command on those turns |
 | D2 | Order inside the poll | HP move, then Drill Shot or the cycle step (m176.src) | Drill Shot first and returns, then the HP move (`:156-167`) | on a poll where both apply, the game does both |
-| D3 | The counter | +1 per result applied by anyone but himself: per hit, misses and no-effect results included, ticks excluded (m176.src:246-253, 1.2) | +1 per action that damages him, and +1 per Regen payout (`:63-70,182-189`) | multi-hit and missed attacks count in the game; his Regen ticks do not |
+| D3 | The counter | +1 per result applied by anyone but himself: per landing hit, once per miss, once per no-effect result, ticks excluded (m176.src:246-253, 1.2) | +1 per action that damages him, and +1 per Regen payout (`:63-70,182-189`) | multi-hit attacks count per hit and missed ones count once in the game; his Regen ticks do not |
 | D4 | Drill Shot target | the latest result's attacker slot, own slot possible (m176.src:128-131) | the last damaging attacker (`:158-160`) | an own-Regen tick can redirect it in the game |
 | D5 | Triple Attack | three Chain Attacks with fixed targets Yuna, Rikku, Paine and fallbacks (m176.src:161-218) | `triple-attack` with three random hits (`data/ffx2/enemies/den-of-woe-abilities.ts:152-157`) | with all alive each girl takes one strike |
 | D6 | Looming Glacier target | highest MP among girls not in Stop, ties near; with all in Stop the target is "nothing", which the engine turns into the nearest living girl (m176.src:220-224, 1.12) | highest MP not in Stop, falling back to the highest-MP girl (`:93-100,177`) | edge case |
@@ -678,7 +689,7 @@ Row key: *game* = this note (source file and lines); *ours* = file:line in `src/
 | D10 | Target rules | Baralai's Attack and Looming Glacier ties: near; Gippal, Nooj: uniform | uniform everywhere (`randomGirl`) | Baralai's Attack favours the nearer girl |
 | D11 | Nooj | cycle A, A, Rippling Chroma, A, Greedy Aura; Lightfall once below 3,000 (m258.src) | the same (`:201-213`) | none |
 | D12 | Steal rates | 128/255 = 50.2% for all three shades and Ixion; Pilfer Gil 50% to 100% of the figure | `baseChance: 50`, flagged estimate (`den-of-woe.ts:86,139,191`, `ixion-djose.ts:90`); fixed Pilfer figures | rate confirmed; Pilfer pays 75% on average |
-| I1 | What adds to AC | +5 per result applied to him by anyone but himself, per hit, misses included (m166.src:125-132) | +5 once per party action that targets him (`ai/fallen-aeons.ts:47-56`, `engineHooks.ts:153-188`) | multi-hit moves fill the counter faster in the game |
+| I1 | What adds to AC | +5 per result applied to him by anyone but himself: per landing hit, once per miss or no-effect result (m166.src:125-132) | +5 once per party action that targets him (`ai/fallen-aeons.ts:47-56`, `engineHooks.ts:153-188`) | multi-hit moves that land fill the counter faster in the game |
 | I2 | Cycle after Thor's Hammer | the cycle counter is untouched, so it continues (m166.src:83-121) | restarts at step 1 (`ai/ixion.ts:65`, labelled an estimate) | different next move when AC passes 100 mid-cycle |
 | I3 | Attack / Thundara split | `% 4`: 3 Attack : 1 Thundara (m166.src:110) | 3/4 : 1/4 default, 2/3 : 1/3 behind a flag (`:81`) | the default is right; the wiki flag is wrong |
 | I4 | Targets | Attack and Aerospark near-weighted (m166.src:104,117) | random (`:78,83`) | |
