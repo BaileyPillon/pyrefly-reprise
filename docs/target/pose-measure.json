@@ -9707,6 +9707,7 @@
       457,
       1166
      ],
+     "skip": "HELD out of release 39.5 by the driver on 2026-10-09: this Defend painting stands 1.42x Rikku Dark Knight's idle (1.36x her ready painting), so Defend would grow the figure mid-fight (the size jump CHK-026 flags); live plays the ready painting for Defend today and so does the game with this painting held. Files moved (not deleted) to D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/; sizing to be fixed with options in the next visual and feel pass.",
      "stance": {
       "row": 1138.0,
       "src": "silhouette",

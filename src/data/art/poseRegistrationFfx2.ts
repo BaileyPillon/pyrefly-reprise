@@ -176,7 +176,6 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     attack: { stanceX: 133.0, head: [0.5244, 0.2759, 0.6491, 0.3309] },
     cast: { stanceX: 228.0, head: [0.2259, 0.3317, 0.4632, 0.3733] },
     critical: { stanceX: 318.5, head: [0.6174, 0.3425, 0.7843, 0.4062] },
-    defend: { stanceX: 228.0, feetRow: 1138.0, head: [0.4346, 0.2473, 0.5982, 0.281] },
     follow: { stanceX: 340.5, head: [0.4219, 0.4497, 0.5537, 0.4895] },
     hurt: { stanceX: 429.5, head: [0.1906, 0.1163, 0.3271, 0.1681] },
     idle: { stanceX: 302.5, feetRow: 1184.0, head: [0.2872, 0.1253, 0.4269, 0.1734] },
