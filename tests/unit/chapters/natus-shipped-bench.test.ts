@@ -126,11 +126,14 @@ describe(`Chapter X as shipped: the registered tactic on the chapter record, ${S
     expect(none.unfinished).toBe(0);
   }, 900_000);
 
-  it('the shipped line Hastes two and never calls Desperado; Hasting all three calls it; nobody Hasting never does', () => {
+  // Re-parity (D-21, FFX only): the game's Desperado test adds up every Shell, Haste, Reflect and Nul on the three
+  // active slots, so Haste on two members plus Shell on all three is a total of 5 (a threshold of 4 to 7: Desperado
+  // half the time he checks), not the safe line the guides call it. Measured here, never tuned.
+  it('the shipped line (Haste on two, all three Shelled) calls Desperado; Hasting all three calls it most; nobody Hasting calls it least', () => {
     expect(intended.wins).toBeGreaterThan(0);
-    expect(intended.desperados).toBe(0);
-    expect(wrong.desperados).toBeGreaterThan(0);
-    expect(none.desperados).toBe(0);
+    expect(intended.desperados).toBeGreaterThan(0);
+    expect(wrong.desperados).toBeGreaterThan(intended.desperados);
+    expect(none.desperados).toBeLessThan(intended.desperados);
     expect(intended.banishes).toBeGreaterThan(0);
   });
 });

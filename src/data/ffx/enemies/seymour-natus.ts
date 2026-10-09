@@ -157,7 +157,7 @@ const natus: EnemyDef = {
  * Mortibody — `m127` [§2, `[decompiled]` + wiki; HP / Def / Agi / Overkill
  * verified: 3 sources]. A part of Natus (`isPart`), like Chapter I's
  * Mortiorchis: it has no death state of its own, it drains him and comes back
- * (`ai/seymour-natus-rules.ts#runNatusMortibsorption`), and the battle ends
+ * (its `onHit` in `ai/seymour-natus.ts`, `ai/mount-revive.ts`), and the battle ends
  * when **Natus** dies (§4.5, N-10 `[derived]`).
  */
 const mortibody: EnemyDef = {
