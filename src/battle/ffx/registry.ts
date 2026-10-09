@@ -70,7 +70,7 @@ export const CORE_ABILITIES: readonly AbilityDef[] = [
     // The game's own record 0x3000 (command table), the one the data-layer records cannot reach because this
     // ability lives here (re-parity W1; research/re-ffx-commands.md section 1): type 0, accuracy formula 3,
     // Darkness, uses the weapon; physical, can crit, crit bonus from equipment; damage class HP.
-    record: { id: 0x3000, type: 0, flagsMisc: 0x1104005a, flagsDamage: 0x0d, damageClass: 1 },
+    record: { id: 0x3000, type: 0, flagsMisc: 0x1104005a, flagsDamage: 0x0d, damageClass: 1, rank: 3 },
     messageTemplate: '{user} attacks',
   }),
   // Rank 2 [ffx-combat-core §1.3]. Halves physical damage until the user's next
@@ -82,6 +82,8 @@ export const CORE_ABILITIES: readonly AbilityDef[] = [
     rank: 2,
     targeting: 'self',
     statusEffects: [{ status: 'defend', chance: 255, duration: 1 }],
+    // The game's Defend, record 0x3021 (re-parity W2): accuracy formula 0, rank 2, the Defend stance (extra bit 0x800).
+    record: { id: 0x3021, type: 14, flagsMisc: 0x11100002, flagsDamage: 0x0, damageClass: 0, rank: 2, extra: 0x800 },
     messageTemplate: '{user} defends',
   }),
   // Aeon stances, rows 84/85, rank 3 [ffx-combat-core §6.2].
@@ -92,6 +94,8 @@ export const CORE_ABILITIES: readonly AbilityDef[] = [
     rank: 3,
     targeting: 'self',
     statusEffects: [{ status: 'shield', chance: 255, duration: 1 }],
+    // The game's Shield, record 0x3054 (re-parity W2): rank 3, the Shield stance (extra bit 0x40).
+    record: { id: 0x3054, type: 0, flagsMisc: 0x806, flagsDamage: 0x0, damageClass: 0, rank: 3, extra: 0x40 },
     messageTemplate: '{user} raises a shield',
   }),
   def({
@@ -101,6 +105,8 @@ export const CORE_ABILITIES: readonly AbilityDef[] = [
     rank: 3,
     targeting: 'self',
     statusEffects: [{ status: 'boost', chance: 255, duration: 1 }],
+    // The game's Boost, record 0x3055 (re-parity W2): rank 3, the Boost stance (extra bit 0x80).
+    record: { id: 0x3055, type: 0, flagsMisc: 0x806, flagsDamage: 0x0, damageClass: 0, rank: 3, extra: 0x80 },
     messageTemplate: '{user} boosts',
   }),
 ];

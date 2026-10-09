@@ -6,6 +6,16 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-08 — `FFXCommandRecord` gains the status bytes: `rank`, `chances`, `durations`, `extra`, `stage`, `buff` (re-parity W2; FFX only; additive)
+
+Branch `re-parity-w2`. `src/battle/common/types.ts`: `FFXCommandRecord` (the game's own command record on an FFX ability, `AbilityDef.record`) gains six optional members, all read from
+the same kernel tables as the five W1 fields: `rank` (record byte 0x24, the CTB rank), `chances` (bytes 0x2e to 0x46, the chance byte of each of the 25 regular statuses, non-zero ones as `[status, byte]`),
+`durations` (0x47 to 0x53, the 13 temporal statuses), `extra` (word 0x54, the extra-status bits), `stage` (word 0x56 and byte 0x59, the stage buffs) and `buff` (byte 0x5a, Double HP / Double MP /
+Spellspring / the 9999 hit / always-critical / the two Overdrive multipliers). `src/data/ffx/command-records/` regenerates all 452 records with them (`rank` always, the rest when non-zero); the engine's
+four core abilities (`attack`, `defend`, `aeon-shield`, `aeon-boost`) carry theirs inline in `src/battle/ffx/registry.ts`. Six abilities of ours were attached to a record of the same name that did not carry their
+status payload and are re-attached by their status bytes (`evrae-stone-gaze` 0x6062, the three Sin gazes 0x609d/0x609e/0x609f, `power-wave-aeon` 0x60d2, `mind-blast-aeon` 0x60f6;
+`research/re-ffx-commands.md` section 7). FFX-2 and FF7 data never set the members and no code of theirs reads them. Game case: FFX only.
+
 ## 2026-10-08 — `FFXPlainAttack`, `EnemyDef.plainAttack`, `EnemyFields.plainAttack`: an enemy's plain Attack on the game's own record (re-parity W1; FFX only; additive)
 
 Branch `re-parity`. `src/battle/common/types.ts` gains the interface `FFXPlainAttack` (`record: FFXCommandRecord`, `accuracy`, `critBonus`) and the optional member `plainAttack` on `EnemyDef`

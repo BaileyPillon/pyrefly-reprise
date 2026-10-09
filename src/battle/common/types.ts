@@ -1354,6 +1354,27 @@ export interface FFXCommandRecord {
   flagsDamage: number;
   /** Record byte 0x23: the damage classes, 1 HP, 2 MP, 4 CTB. */
   damageClass: number;
+  /**
+   * Record byte 0x24: the CTB rank (re-parity W2; **FFX only**). 0 means "no rank byte": the game then uses 3. The
+   * data layer's `attachCommandRecords` copies it onto the ability's own `rank`, which stays the engine's one source.
+   */
+  rank?: number;
+  /**
+   * Record bytes 0x2e to 0x46 (re-parity W2): the chance byte of each of the 25 regular statuses, as `[status number,
+   * byte]` pairs for the non-zero ones only. Status numbers: 0 Death, 1 Zombie, 2 Petrify, 3 Poison, 4 to 7 the four
+   * Breaks, 8 Confuse, 9 Berserk, 10 Provoke, 11 Threaten, 12 Sleep, 13 Silence, 14 Darkness, 15 Shell, 16 Protect,
+   * 17 Reflect, 18 to 21 Nul-Tide, Nul-Blaze, Nul-Shock, Nul-Frost, 22 Regen, 23 Haste, 24 Slow (`research/re-ffx-ctb-status.md`
+   * section 6). 255 always lands, 254 lands unless immune; on a cleansing command a byte means "remove this".
+   */
+  chances?: ReadonlyArray<readonly [number, number]>;
+  /** Record bytes 0x47 to 0x53: the duration byte of each of the 13 temporal statuses (slot 0 Sleep to slot 12 Slow), non-zero ones only. 254 means until removed. */
+  durations?: ReadonlyArray<readonly [number, number]>;
+  /** Record word 0x54: the extra-status bits the command inflicts (or, on a cleansing command, removes): Scan 1, Distill 2/4/8/0x20, Shield 0x40, Boost 0x80, Eject 0x100, Auto-Life 0x200, Curse 0x400, Defend 0x800, Guard 0x1000, Sentinel 0x2000, Doom 0x4000. */
+  extra?: number;
+  /** Record word 0x56 (the six low bits: Cheer, Aim, Focus, Reflex, Luck, Jinx) and byte 0x59 (the stacks added): the stage buffs. */
+  stage?: readonly [mask: number, amount: number];
+  /** Record byte 0x5a: the buff flags the command sets (Double HP 1, Double MP 2, no MP cost 4, always 9999 8, always critical 0x10, Overdrive x1.5 0x20, Overdrive x2 0x40). */
+  buff?: number;
 }
 
 /**
