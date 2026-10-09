@@ -27,7 +27,7 @@ import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import { noiseCanvas, radialCanvas, rng } from '../engine/ProceduralArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
-import { giantFigureHeights } from '../data/ffx/fiend-stature.ts';
+import { GAGAZET_STAGING } from './gagazet-giants.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 
 // ---------------------------------------------------------------------------
@@ -184,29 +184,9 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
   [1.8, 1.85, -7.0], // high float    -> x 0.487..0.700, y 0.108..0.358
   [3.35, 0, -6.6], // ground, back-right
 ];
-// R13-02 (FFX only): the bosses pinned where live e3b8c2a3's relax stood them (measured 1600x900 and 2000x1012), so Mortiorchis's
-// bracket leaves the NEXT BEST MOVE card its band. A pin is never prone-slid, so Mortiorchis's spot carries his old -1.52 slide.
-type Spot3 = [number, number, number];
-
-/**
- * The party's shared world height on this stage: Tidus's 1.82, the stage's own default (this scene publishes no `partyHeight`: `resolveSceneHeights`), which the giants' heights
- * are read against (`giantFigureHeights`: a fiend stands at the party's height times its game height over Tidus's 18.15).
- */
-export const GAGAZET_PARTY_HEIGHT = 1.82;
-
-/**
- * r3942-giants-ffx (Bailey, 2026-10-08, "all of your recommendations"; FFX only, Chapter I): **Seymour Flux stands at 0.6 of his real height** (the live PS2 game draws him 100 units
- * tall, 5.29 times the party; `data/ffx/fiend-stature.ts` `FFX_GIANT_STATURE`, `research/ffx-seymour-flux.md` section 13): 6.017 units against the 4.1 he stood at, and **Mortiorchis
- * grows with him** (3.309 against 2.255: the model has no mesh to measure, so it keeps its 0.55 of him). The camera backs off for him (`RIGS.idle`). The spots move with the size:
- * Flux stays where live pinned him; Mortiorchis keeps its place against him, so its offset from him (2.51 left, 1.01 up) grows by the same 1.47 times: (1.03, 1.01) to (-0.143, 1.482),
- * and 0.22 further back, to z -7.82: **no boss or part stands nearer the party than on live** (Bailey, 2026-10-08, "original spacing, real sizes"), and the step left alone would have put
- * it 0.19 nearer Kimahri (6.57 against 6.75 units); at z -7.82 it is 6.79.
- */
-export const GAGAZET_STAGING = {
-  holdParty: true,
-  enemySpots: { 'seymour-flux': [3.54, 0, -7.6] as Spot3, mortiorchis: [-0.143, 1.482, -7.82] as Spot3 },
-  figureHeights: giantFigureHeights(['seymour-flux', 'mortiorchis'], GAGAZET_PARTY_HEIGHT),
-};
+// r3942-giants-ffx: Seymour Flux's and Mortiorchis's pins and heights (and the party height they are read against) live in `./gagazet-giants.ts`, out of this file (house style: under
+// 400 lines; this scene was 876 before the giants), and are re-exported here, so every importer is unchanged.
+export { GAGAZET_PARTY_HEIGHT, GAGAZET_STAGING } from './gagazet-giants.ts';
 
 /**
  * One wind-blown snow drift, as an **alpha mask**.

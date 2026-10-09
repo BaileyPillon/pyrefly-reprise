@@ -222,9 +222,9 @@ describe("Chapter XVII, link 3: Sinspawn Genais and Sin's Core at their real siz
     expect(3.008 / 4.1 - 1).toBeCloseTo(-0.27, 2);
   });
 
-  it("the Sin flight plate names both and pins them at the spots they stood on, so the solver cannot swap them; no other plate on the deck names either", () => {
+  it("the Sin flight plate names both and pins them (the Core at 5.9, Genais 0.2 further back: no shape has either nearer than live), so the solver cannot swap them; no other plate on the deck names either", () => {
     expect(SIN_GENAIS_CORE_STAGING.figureHeights).toEqual({ 'sinspawn-genais': 4.913, 'sin-core': 3.008 });
-    expect(SIN_GENAIS_CORE_STAGING.enemySpots).toEqual({ 'sinspawn-genais': [-0.93, 0, -4.1], 'sin-core': [5.89, 0, -5.3] });
+    expect(SIN_GENAIS_CORE_STAGING.enemySpots).toEqual({ 'sinspawn-genais': [-0.93, 0, -4.3], 'sin-core': [5.9, 0, -5.3] });
     expect(SIN_FLIGHT_PLATE).toBe('sin-fahrenheit-flight');
     expect(SIN_BEVELLE_PLATE).toBe('sin-fahrenheit-bevelle');
   });
@@ -282,8 +282,8 @@ describe('the real factory publishes the heights (jsdom, a no-op 2D context, an 
     const flight = await loadScene(SIN_FLIGHT_PLATE, new PerspectiveCamera());
     loaded.push(flight);
     expect(flight.slots.figureHeights).toEqual({ 'sinspawn-genais': 4.913, 'sin-core': 3.008 });
-    expect(flight.slots.enemySpots?.['sinspawn-genais']).toEqual([-0.93, 0, -4.1]);
-    expect(flight.slots.enemySpots?.['sin-core']).toEqual([5.89, 0, -5.3]);
+    expect(flight.slots.enemySpots?.['sinspawn-genais']).toEqual([-0.93, 0, -4.3]);
+    expect(flight.slots.enemySpots?.['sin-core']).toEqual([5.9, 0, -5.3]);
     expect(Object.keys(flight.slots.enemySpots ?? {}).sort()).toEqual(['cid', 'evrae', 'sin-core', 'sinspawn-genais']); // the deck's own pins stay
     expect(flight.slots.holdParty).toBe(true);
     const head = await loadScene(SIN_BEVELLE_PLATE, new PerspectiveCamera());

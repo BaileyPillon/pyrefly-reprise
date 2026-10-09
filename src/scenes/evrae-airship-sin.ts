@@ -50,11 +50,15 @@ export const SIN_PARTY_HEIGHT = 1.82;
  * game draws Genais about 49 units tall and the Core 30 (`data/ffx/fiend-stature.ts` `FFX_GIANT_STATURE`, `research/ffx-sin.md` section 13), 2.72 and 1.67 times the party; the build drew both at the stage's
  * boss height, 4.1 (Genais 20 percent too small, the Core 37 percent too big). At the party's 1.82 that is 4.913 and 3.008 (Genais +20 percent, the Core -27 percent). **The Fins do not change** (the
  * options study's pick: they stand about 1,200 units off and read as mountains already), and neither does the head of Chapter XVIII or Evrae: these are two combatant ids no other chapter has.
- * They are pinned at the spots they stood on (-0.93, -4.1) and (5.89, -5.3), because the formation solver spreads figures by their heights and would otherwise swap and move them.
+ * They are pinned (the formation solver spreads figures by their heights and would otherwise swap and move them): the Core at (5.90, -5.3), live's spot at the wider windows (5.87 at 1600x900, 5.90 at 1440x900
+ * and 1024x768, 5.75 on a phone; 5.89 stood 0.008 nearer Auron than live's at 16:10 and 4:3), and Genais at (-0.93, -4.3), the
+ * spot he stood on at the common window shapes (-0.93, -4.1) **0.2 further back** (repair of 2026-10-08, after the independent check). Live's formation solver places him per window shape, from x -0.80
+ * on a phone to -1.30 at 1024x768, and a pin is one spot: at -4.1 he stood 0.02 to 0.04 nearer the party than live at 16:10 and 4:3, which Bailey's standing preference (no figure nearer than live,
+ * 2026-10-08) rules out. At z -4.3 his ground distance to the nearest member (Yuna) is 1.80 against live's 1.60 to 1.64 at every shape, and to the party's centre 3.30, the 4:3 shape's own: no shape has him nearer.
  */
 export const SIN_GENAIS_CORE_STAGING = {
   figureHeights: giantFigureHeights(['sinspawn-genais', 'sin-core'], SIN_PARTY_HEIGHT),
-  enemySpots: { 'sinspawn-genais': [-0.93, 0, -4.1] as [number, number, number], 'sin-core': [5.89, 0, -5.3] as [number, number, number] },
+  enemySpots: { 'sinspawn-genais': [-0.93, 0, -4.3] as [number, number, number], 'sin-core': [5.9, 0, -5.3] as [number, number, number] },
 };
 
 /** The two factories, keyed as `SCENE_FACTORIES` wants them (`./index.ts`). */
