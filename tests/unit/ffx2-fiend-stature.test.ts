@@ -4,8 +4,9 @@
  * `src/data/ffx2/fiend-stature.ts` is sourced data: the default-pose heights of the FFX-2 HD Remaster's models, raw mesh height times the engine scale `C`, over the girls'
  * mean in each chapter (`research/ffx2-fallen-aeons.md` §12, `research/ffx2-trema.md` §14, `research/ffx2-gippal-den-of-woe.md` §12, `research/ffx2-ixion-djose.md` §12). These
  * tests pin the arithmetic (`raw x C`), the ratios the build was asked for (Shiva 1.94, Ixion 1.78, Trema 1.02, the shades 1.09 / 1.09 / 1.18, the Sisters 1.29 / 0.83 / 0.71;
- * wave 2, the giants: Bahamut 5.03, Paragon 5.40, Anima 7.71), the giants' picks (Bailey, 2026-10-08: real size on a desktop for Bahamut and Paragon, 0.7 of it for Anima and on
- * the phone) and the heights they stand at, that Vegnagun's parts are not in the table, and that the module stays pure data.
+ * wave 2, the giants: Bahamut 5.03, Paragon 5.40, Anima 7.71), the giants' picks (Bailey, 2026-10-08: real size on a desktop for Paragon, 0.7 of it for Anima and on the phone;
+ * 2026-10-10: Bahamut at his in-battle size, 0.66, on a desktop and on the phone) and the heights they stand at, that Vegnagun's parts are not in the table, and that the module
+ * stays pure data.
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14].
  */
@@ -90,22 +91,32 @@ describe('the giants (wave 2): real height over the girls, and what Bailey picke
     expect(fiendOverGirls('x2-anima', 'ffx2-fallen-aeons')).toBeCloseTo(7.71, 2);
   });
 
-  it('the picks: Bahamut and Paragon real on a desktop and 0.7 on the phone, Anima 0.7 on both', () => {
-    expect(FFX2_GIANT_SHARE).toEqual({ bahamut: { desktop: 1, phone: 0.7 }, paragon: { desktop: 1, phone: 0.7 }, 'x2-anima': { desktop: 0.7, phone: 0.7 } });
+  it('the picks: Bahamut at his in-battle size 0.66 on both (Bailey, 2026-10-10), Paragon real on a desktop and 0.7 on the phone, Anima 0.7 on both', () => {
+    expect(FFX2_GIANT_SHARE).toEqual({ bahamut: { desktop: 0.66, phone: 0.66 }, paragon: { desktop: 1, phone: 0.7 }, 'x2-anima': { desktop: 0.7, phone: 0.7 } });
   });
 
   it('the heights they stand at, to the millimetre, over the girls of each room (1.82, 1.75, 1.78)', () => {
-    expect(ffx2GiantHeight('bahamut', 'ffx2-bahamut', 1.82, false)).toBeCloseTo(9.147, 3);
-    expect(ffx2GiantHeight('bahamut', 'ffx2-bahamut', 1.82, true)).toBeCloseTo(6.403, 3);
+    expect(ffx2GiantHeight('bahamut', 'ffx2-bahamut', 1.82, false)).toBeCloseTo(6.037, 3); // 3.3 times the girls, not 5.03 (9.147)
+    expect(ffx2GiantHeight('bahamut', 'ffx2-bahamut', 1.82, true)).toBeCloseTo(6.037, 3);
     expect(ffx2GiantHeight('paragon', 'ffx2-trema', 1.75, false)).toBeCloseTo(9.447, 3);
     expect(ffx2GiantHeight('paragon', 'ffx2-trema', 1.75, true)).toBeCloseTo(6.613, 3);
     expect(ffx2GiantHeight('x2-anima', 'ffx2-fallen-aeons', 1.78, false)).toBeCloseTo(9.6, 2);
     expect(ffx2GiantHeight('x2-anima', 'ffx2-fallen-aeons', 1.78, true)).toBeCloseTo(9.6, 2);
   });
 
-  it("Bahamut's phone height is 0.7 of his real one, also his idle-bone height (58 of 87.8, 0.66) to within 6 percent", () => {
-    expect(ffx2GiantHeight('bahamut', 'ffx2-bahamut', 1.82, true)! / ffx2GiantHeight('bahamut', 'ffx2-bahamut', 1.82, false)!).toBeCloseTo(0.7, 3);
-    expect(Math.abs(0.7 - 58 / 87.8) / 0.7).toBeLessThan(0.06);
+  it("Bahamut's pick is his idle-bone height: 58 of 87.852 (0.66), the same on a desktop and on the phone, 3.3 times the girls", () => {
+    const real = FFX2_FIEND_STATURE['bahamut']!.height;
+    expect(real).toBeCloseTo(87.852, 3);
+    expect(FFX2_GIANT_SHARE['bahamut']!.desktop).toBe(FFX2_GIANT_SHARE['bahamut']!.phone);
+    expect(Math.abs(FFX2_GIANT_SHARE['bahamut']!.desktop - 58 / real)).toBeLessThan(0.001); // 0.6602 against the pick's 0.66
+    expect(real * FFX2_GIANT_SHARE['bahamut']!.desktop).toBeCloseTo(58, 0);
+    expect(fiendOverGirls('bahamut', 'ffx2-bahamut') * FFX2_GIANT_SHARE['bahamut']!.desktop).toBeCloseTo(3.3, 1);
+    expect(ffx2GiantHeight('bahamut', 'ffx2-bahamut', 1.82, true)! / 1.82).toBeCloseTo(3.32, 2);
+  });
+
+  it('keeps the picks of Paragon (real on a desktop, 0.7 on the phone) and Anima (0.7) exactly as Bailey made them on 2026-10-08', () => {
+    expect(FFX2_GIANT_SHARE['paragon']).toEqual({ desktop: 1, phone: 0.7 });
+    expect(FFX2_GIANT_SHARE['x2-anima']).toEqual({ desktop: 0.7, phone: 0.7 });
   });
 
   it('says nothing for a combatant that is no giant of the table', () => {

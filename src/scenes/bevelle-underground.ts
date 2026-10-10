@@ -169,13 +169,15 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
 export const BEVELLE_UNDERGROUND_RIGS = RIGS;
 
 /**
- * Bahamut's idle camera on the upright phone (r3942-stage wave 2, **FFX-2 only**; Bailey, 2026-10-08, "go with your recommendations": option 4 of the giants options sheet, Bahamut at
- * 0.7 of his real height, `data/ffx2/fiend-stature.ts` `FFX2_GIANT_SHARE`). Solved at 390x844 with the options sheet's own solver for the figures where the phone stands them: the
- * whole figure, head and wings, below the boss gauge and the enemy-intent strip (his top at y 104 of the field's 520), the girls as large as the frame leaves them with their feet on
- * y 445 (the cure-hint card of this fight, `.sthint`, starts at 407: Yuna's legs are under it, as in the picture Bailey picked), no painting edge past today's (0 percent of the frame
- * beyond the plate). The A-12 slice fit (`ShotRules.fitPhone`) leaves it as it is: everyone already fits one slice and the frame. The desktop keeps {@link RIGS}.`idle`.
+ * Bahamut's idle camera on the upright phone (r3942-stage wave 2, **FFX-2 only**). Bailey, 2026-10-08: option 4 of the giants options sheet, 0.7 of his real height; **re-fit 2026-10-10
+ * ("yes please fix for all i mentioned")** for his in-battle size, 0.66 (`data/ffx2/fiend-stature.ts` `FFX2_GIANT_SHARE`: the bones of his idle span about 58 of 87.852, 3.3 times the
+ * girls; medium confidence), the same on a desktop and on the phone. Solved at 390x844 with the options sheet's own solver (a pose within 4 degrees of the live one and 1.5
+ * units of slide) for the figures where the phone stands them: the whole figure, head and wings, below the boss gauge and the enemy-intent strip (his top at y 104 of the field's 520), the
+ * girls as large as the frame leaves them with their feet on y 445 (the cure-hint card of this fight, `.sthint`, starts at 407: Yuna's legs are under it, as in the picture Bailey picked), no
+ * painting edge past today's (0 percent of the frame beyond the plate). He is 6 percent shorter than at 0.7, so the girls grow about 8 percent (the 0.7 rig, (-0.3201, 4.6555, 16.479), stood
+ * them at 97 px). The A-12 slice fit (`ShotRules.fitPhone`) leaves it as it is when everyone already fits one slice and the frame. The desktop keeps {@link RIGS}.`idle`.
  */
-export const BEVELLE_PHONE_GIANT_IDLE: CameraRig = { position: [-0.3201, 4.6555, 16.479], lookAt: [-0.058, 3.7037, 6.5279], fov: 32 };
+export const BEVELLE_PHONE_GIANT_IDLE: CameraRig = { position: [0.3648, 3.4456, 15.3405], lookAt: [0.5283, 3.0071, 5.3515], fov: 32 };
 
 /**
  * Three active slots in the FFX arc, front to back and staggered into the lower
