@@ -382,8 +382,8 @@ FF7, an aeon, a fiend or `?stature=off`.
 
 | Member | Meaning |
 | --- | --- |
-| `update(dt)` | **Every frame**, seconds. Drives tweens and every motion layer. |
-| `setPose(name, { immediate?, force? })`, `pose`, `poseNames` | Crossfade between poses — **and enter the matching life state**. See [Life](#life-the-pose-name-is-also-a-state). |
+| `update(dt, realDt = dt)` | **Every frame**, seconds. Drives tweens and every motion layer on `dt`; the pose crossfade runs on `realDt` (the unscaled frame time: a hit-stop that holds the field never freezes it, the pacing option never stretches it). |
+| `setPose(name, { immediate?, force? })`, `pose`, `poseNames`, `blending` | Crossfade between poses — **and enter the matching life state**. See [Life](#life-the-pose-name-is-also-a-state). One owned blend at a time (`src/engine/PoseBlend.ts`): a request in mid-blend keeps the stronger painting going out and re-points only the weaker plane, from 0. |
 | `lifeState` | What the body is doing: `idle \| ready \| act \| guard \| hurt \| down \| victory`. |
 | `adoptPoses(map, initial?)` | Take already-loaded textures (a stand-in borrowing another actor's painting). Borrowed textures are never disposed by this actor. |
 | `reloadPose(name, url?)` | Re-read one pose from disk; used by the dev hot-swap. |

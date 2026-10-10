@@ -56,6 +56,7 @@ import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralA
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
+import { PoseBlend } from './PoseBlend.ts';
 import { cutoutShadow } from './ShadowCutout.ts';
 
 /** One painted pose: a URL now, a texture once it has loaded. */
@@ -447,6 +448,8 @@ export class PaintedActor extends Group {
   private readonly inner = new Group();
   private readonly slots: [PlaneSlot, PlaneSlot];
   private active = 0;
+  /** FB-1: the one pose blend this actor owns (`PoseBlend.ts`); it writes both planes' fades on the real clock (`update`'s `realDt`). */
+  private readonly blend: PoseBlend;
 
   private readonly poses = new Map<string, PaintedTexture>();
   readonly poseUrls: PoseMap = {};
@@ -680,6 +683,7 @@ export class PaintedActor extends Group {
     this.shadowAlphaTest = opts.shadowAlphaTest ?? 0.4;
     this.bloomMasked = opts.bloomMask !== false;
     this.slots = [this.makeSlot(renderOrder), this.makeSlot(renderOrder)];
+    this.blend = new PoseBlend(this.slots);
     for (const s of this.slots) this.inner.add(s.mesh);
     this.add(this.inner);
 
@@ -942,6 +946,11 @@ export class PaintedActor extends Group {
     return this.slots[this.active]!.pose;
   }
 
+  /** True while a pose crossfade runs (it is no tween in {@link PaintedActor.tweens}, so `stillActor` asks here). */
+  get blending(): boolean {
+    return this.blend.blending;
+  }
+
   /**
    * Release 39 (`ArtGovernor.ts`): every real painting this actor holds, once each (a pose that fell back to idle shares idle's), and
    * whether a plane is drawing it right now. A stand-in is left out: it has no master to swap in.
@@ -1006,10 +1015,10 @@ export class PaintedActor extends Group {
     if (already && !opts?.force) return;
 
     const from = this.active;
-    const to = from === 0 ? 1 : 0;
-    this.applyPose(to, resolved, next);
-
     if (opts?.immediate || this.crossfadeMs <= 0) {
+      const to = from === 0 ? 1 : 0;
+      this.blend.cancel();
+      this.applyPose(to, resolved, next);
       this.slots[to]!.fade = 1;
       this.slots[from]!.fade = 0;
       this.active = to;
@@ -1017,18 +1026,12 @@ export class PaintedActor extends Group {
       return;
     }
 
-    this.active = to;
-    const fromStart = this.slots[from]!.fade;
-    const toStart = this.slots[to]!.fade;
-    this.tweens.to(0, 1, {
-      durationMs: this.crossfadeMs,
-      easing: 'quadInOut',
-      onUpdate: (t) => {
-        this.slots[to]!.fade = toStart + (1 - toStart) * t;
-        this.slots[from]!.fade = fromStart * (1 - t);
-        this.syncOpacity();
-      },
-    });
+    // FB-1 (`PoseBlend.ts`): the blend is owned, not a loose tween. A request in mid-blend keeps the stronger plane going out and re-points only the weaker.
+    const plan = this.blend.request(resolved, this.crossfadeMs, from === 0 ? 0 : 1);
+    if (plan.same) return;
+    if (!plan.reversed) this.applyPose(plan.to, resolved, next);
+    this.active = plan.to;
+    this.syncOpacity();
   }
 
   /**
@@ -2078,9 +2081,13 @@ export class PaintedActor extends Group {
 
   // ------------------------------------------------------------------- update
 
-  /** @param dt seconds. Must be called every frame. */
-  update(dt: number): void {
+  /**
+   * @param dt seconds. Must be called every frame.
+   * @param realDt the same frame's unscaled seconds (default `dt`): the pose blend runs on it, so neither a hit-stop that holds the field (`dt` 0) nor the pacing option stretches or freezes a crossfade (FB-1).
+   */
+  update(dt: number, realDt: number = dt): void {
     this.tweens.update(dt * paceRate('action')); // the pacing option (`pace.ts`): one-shot moves only, never the idle
+    if (this.blend.advance(realDt * 1000)) this.syncOpacity(); // FB-1: the pose blend, on the real clock
     for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0, this.bloomMasked);
     this.clock += dt;
 
@@ -2225,6 +2232,7 @@ export class PaintedActor extends Group {
 
   override dispose(): void {
     this.tweens.killAll();
+    this.blend.cancel();
     for (const slot of this.slots) {
       slot.mesh.geometry.dispose();
       slot.material.dispose();

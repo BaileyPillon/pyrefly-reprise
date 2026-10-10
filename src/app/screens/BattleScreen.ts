@@ -753,7 +753,7 @@ export class BattleScreen extends Screen {
     // nothing can be projected yet, so a slow first frame simply retries.
     this.settleFormation(dt);
     this.airship?.sync(this.engine?.state());
-    this.stage?.update(fieldDt);
+    this.stage?.update(fieldDt, dt); // the pose blends run on the real frame time: a hit-stop holds the field, never a half-mixed crossfade (FB-1)
     this.spectacle?.update(dt);
     // The HUD ticks on the same clock as the field, so its damage numerals
     // stop dead with everything else when a capture calls `App.stop()`.
