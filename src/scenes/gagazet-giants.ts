@@ -30,4 +30,6 @@ export const GAGAZET_STAGING = {
   holdParty: true,
   enemySpots: { 'seymour-flux': [3.54, 0, -7.6] as Spot3, mortiorchis: [-0.143, 1.482, -7.82] as Spot3 },
   figureHeights: giantFigureHeights(['seymour-flux', 'mortiorchis'], GAGAZET_PARTY_HEIGHT),
+  // r3943-int (FFX only; Bailey's "A2", 2026-10-09): the fight starts with the guide folded and the full NEXT BEST MOVE card in its place; G opens the guide and the card is the tip while it is open.
+  guideFolded: true as const,
 };

@@ -14,8 +14,12 @@
  * differently and the fight takes more of it. `advisorZone` and the one-row tip (`advisorTip.ts`) are pinned on measured boards of both chapters in
  * `tests/unit/ui-ffx-advisor-tip.test.ts`; nothing there can say what the browser draws.
  *
- * The two chapters whose card is the one-row tip are asked again at the **next decision**: the tip is still one row (not the full card's rows squeezed into it), and it is **where it was**. The camera is
- * still gliding to the menu shot for the first seconds of a decision, and a tip solved against the fighters mid-glide stood in the bottom right for the whole decision at some turns.
+ * The two giants' chapters (I and III) start their fights with the strategy guide **folded** to its `G` chip and the full card standing in the guide's place (r3943-int, Bailey's "A2" of 2026-10-09; FFX only):
+ * the card and its `N` chip, which parks beside the `G` chip, are asked to be clear of the `G` chip, the scroll chip and the PAUSE chip at every shape (the first picture of this, A2 as the options sheet
+ * built it, stood on the `G` chip in all six frames), `G` opens the guide and the card is then the one-row tip, and `G` again folds it back to the card where it was. The designed card is asked again
+ * at the **next decision**: still the card, **where it was** (the same left and bottom edge: a card that dropped to a box above the command stack at a decision whose actor has a shorter stack was seen once).
+ * The tip's own placement (the one-row bar) is asked at the next decision with the guide open, as before: still one row, and where it was; the camera is still gliding to the menu shot for the first seconds
+ * of a decision, and a tip solved against the fighters mid-glide stood in the bottom right for the whole decision at some turns.
  *
  * **Game case: FFX only** [AGENTS.md rule 14]: FFX-2's HUD places its card by its own lane (`ffx2/advisorLane.ts`) and never takes it down.
  *
@@ -45,6 +49,9 @@ const SHAPES = [
   { width: 1024, height: 768 },
 ] as const;
 
+/** Chapters I and III: the guide starts folded and the full card stands in its place (`SceneStaging.guideFolded`). */
+const FOLDED_GUIDE = ['seymour-flux', 'braskas-final-aeon'] as const;
+
 /** Panels the card may not touch (their boxes are painted shapes inside the box the browser reports, so a box test is the conservative one). */
 const PANELS = ['.ig-cmd-stack', '.ffx-cmd-info', '.ig-stat-list', '.ig-ctb', '.eint__panel', '.ffx-sensor', '.sgd__panel'] as const;
 
@@ -67,11 +74,20 @@ interface Probe {
   cardBox: Box | null;
   zone: string | null;
   chipUp: boolean;
+  chipBox: Box | null;
   chipText: string;
+  /** The guide's sheet is up (not hidden). */
+  guideUp: boolean;
+  /** The player's saved answer for the guide (`Settings.guideVisible`), null when the snapshot does not carry it. */
+  guideSetting: boolean | null;
+  /** The card and every element in it, in the card's own pixels (`advisor-zone.spec.ts`'s measure: nothing may be taller than its own box). Empty while the card is away. */
+  overflow: Array<{ tag: string; scrollH: number; clientH: number }>;
   text: string;
   panels: Record<string, Box | null>;
   /** Party and enemy rects as the HUD hands them to the solver, in viewport px. */
   fighters: Array<{ side: 'party' | 'enemy'; box: Box }>;
+  /** The same, with the enemies where the camera's shot comes to rest: what the one-row tip is solved against (a floating enemy's live box swings 11 grid px either way of it). */
+  restFighters: Array<{ side: 'party' | 'enemy'; box: Box }>;
   viewport: { width: number; height: number };
   /** The HUD stage's scale: one grid px in viewport px. */
   scale: number;
@@ -114,6 +130,7 @@ async function probe(page: Page): Promise<Probe> {
       hudScale(): number;
       partySpriteRects(): B[];
       enemySpriteRects(): B[];
+      enemySpriteRectsAtRest(): B[];
     };
     const boxOf = (el: Element | null): B | null => {
       if (!el) return null;
@@ -136,12 +153,22 @@ async function probe(page: Page): Promise<Probe> {
       cardBox: up(card) ? boxOf(card) : null,
       zone: root?.dataset['zone'] ?? null,
       chipUp: up(chip),
+      chipBox: up(chip) ? boxOf(chip) : null,
       chipText: chip?.innerText.replace(/\s+/g, ' ').trim() ?? '',
+      guideUp: up(document.querySelector<HTMLElement>('.sgd__panel')),
+      overflow: up(card)
+        ? [card!, ...Array.from(card!.querySelectorAll<HTMLElement>('*'))].map((el) => ({ tag: `${el.tagName.toLowerCase()}.${el.className || '-'}`, scrollH: el.scrollHeight, clientH: el.clientHeight }))
+        : [],
+      guideSetting: ((w.__pyrefly as unknown as { snapshotState(): { save?: { settings?: Record<string, unknown> } } }).snapshotState().save?.settings?.['guideVisible'] as boolean | undefined) ?? null,
       text: card?.innerText.replace(/\s+/g, ' ').trim() ?? '',
       panels,
       fighters: [
         ...ffx.partySpriteRects().map((r) => ({ side: 'party' as const, box: toViewport(r) })),
         ...ffx.enemySpriteRects().map((r) => ({ side: 'enemy' as const, box: toViewport(r) })),
+      ],
+      restFighters: [
+        ...ffx.partySpriteRects().map((r) => ({ side: 'party' as const, box: toViewport(r) })),
+        ...ffx.enemySpriteRectsAtRest().map((r) => ({ side: 'enemy' as const, box: toViewport(r) })),
       ],
       viewport: { width: innerWidth, height: innerHeight },
       scale,
@@ -194,12 +221,67 @@ async function nextDecision(page: Page): Promise<boolean> {
 
 const overlap = (a: Box, b: Box): boolean => a.left < b.right - 0.5 && a.right > b.left + 0.5 && a.top < b.bottom - 0.5 && a.bottom > b.top + 0.5;
 
+/**
+ * Chapters I and III at the first menu (the guide folded, the full card in its place): the guide is folded, the card is the card and not the tip, and **neither the card nor the `N` chip stands
+ * on the `G` chip, the scroll chip or the PAUSE chip** (the first picture of this stood on the `G` chip in all six frames, 17 to 100 percent of it), nor does the chip stand on the card.
+ */
+function clearOfTheGuideChip(p: Probe, where: string): void {
+  expect(p.guideUp, `${where}: the guide starts folded to its chip`).toBe(false);
+  expect(p.zone, `${where}: and the full card stands in its place, not the tip`).not.toBe('tip');
+  expect(p.panels['.sgd__toggle'], `${where}: the G chip is on the screen`).not.toBeNull();
+  expect(p.chipBox, `${where}: and so is the N chip`).not.toBeNull();
+  for (const sel of TIP_CHIPS) {
+    const box = p.panels[sel];
+    if (!box) continue;
+    expect(overlap(p.cardBox!, box), `${where}: the card must not stand on ${sel}`).toBe(false);
+    expect(overlap(p.chipBox!, box), `${where}: the N chip must not stand on ${sel}`).toBe(false);
+  }
+  expect(overlap(p.chipBox!, p.cardBox!), `${where}: the N chip must not stand on the card`).toBe(false);
+  // The rail is 66 to 70 grid px tall: whatever the card prints fits it (`MoveAdvisor.fitCard`), and nothing in it is cut off at the foot, by the measure `advisor-zone.spec.ts` holds every card to.
+  for (const el of p.overflow) expect(el.scrollH, `${where}: ${el.tag} is clipped vertically (scrollHeight ${el.scrollH}, clientHeight ${el.clientH})`).toBeLessThanOrEqual(el.clientH + 1);
+}
+
+/** The one-row tip is one row (18 grid px at most) and stands clear of every panel, fighter and chip, its `N` badge included. */
+function tipIsClear(p: Probe, where: string): void {
+  expect(p.zone, `${where}: the tip`).toBe('tip');
+  expect(p.cardBox!.bottom - p.cardBox!.top, `${where}: one row`).toBeLessThanOrEqual(18 * p.scale + 1);
+  expect(p.chipUp, `${where}: with its chip`).toBe(true);
+  for (const [sel, box] of Object.entries(p.panels)) if (box) expect(overlap(p.cardBox!, box), `${where}: the tip must not touch ${sel}`).toBe(false);
+  // Against the fighters where the shot comes to rest: that is what the tip is solved against (`enemiesAtRest`); a floating enemy's live box swings past it by a few grid px at the top of its hover.
+  for (const [i, f] of p.restFighters.entries()) expect(overlap(p.cardBox!, f.box), `${where}: the tip must not touch ${f.side} ${i} (at rest)`).toBe(false);
+  for (const sel of TIP_CHIPS) {
+    const box = p.panels[sel];
+    if (box) expect(overlap(p.chipBox!, box), `${where}: the N chip must not stand on ${sel}`).toBe(false);
+  }
+}
+
+/** The card's layout-box left edge: the bounding box's left is the painted bottom-left corner, which the shear (`--ig-skew`, 0.212557) moves left by half the card's height times the skew, and the height is the text it holds. */
+const layoutLeft = (b: Box): number => b.left + (0.212557 * (b.bottom - b.top)) / 2;
+
+/** Where the card stands, to compare two decisions: its left edge and its bottom edge (both to a grid px), and the chip. The right edge follows the room beside it, which differs by a few grid px with where the party stands. */
+function sameStand(a: Probe, b: Probe, where: string): void {
+  expect(Math.abs(layoutLeft(a.cardBox!) - layoutLeft(b.cardBox!)), `${where}: the card's left edge is where it was`).toBeLessThanOrEqual(a.scale + 1);
+  expect(Math.abs(a.cardBox!.bottom - b.cardBox!.bottom), `${where}: and its bottom edge`).toBeLessThanOrEqual(a.scale + 1);
+  expect(Math.abs(a.chipBox!.left - b.chipBox!.left), `${where}: and the N chip's left edge`).toBeLessThanOrEqual(a.scale + 1);
+  expect(Math.abs(a.chipBox!.top - b.chipBox!.top), `${where}: and its top edge`).toBeLessThanOrEqual(a.scale + 1);
+}
+
+/** A few frames of the engine's own clock, then a moment for the HUD's placement to land. */
+async function settleFrames(page: Page): Promise<void> {
+  await page.waitForTimeout(900);
+  await page.evaluate(async () => {
+    const api = (window as unknown as { __pyrefly: { frame(): Promise<void> } }).__pyrefly;
+    for (let i = 0; i < 60; i++) await api.frame();
+  });
+  await page.waitForTimeout(500);
+}
+
 for (const shape of SHAPES) {
   test.describe(`the advisor card at ${shape.width}x${shape.height}`, () => {
     test.use({ viewport: shape });
 
     for (const chapter of CHAPTERS) {
-      test(`${chapter}: the card and its chip are up at the first menu, clear of every panel and fighter, and N puts it away and brings it back`, async ({ page }) => {
+      test(`${chapter}: the card and its chip are up at the first menu, clear of every panel and fighter, and N puts it away and brings it back${(FOLDED_GUIDE as readonly string[]).includes(chapter) ? '; the guide starts folded, G opens it (the card is the tip) and G folds it again (the card is where it was)' : ''}`, async ({ page }) => {
         test.setTimeout(420_000);
         const errors: string[] = [];
         page.on('pageerror', (e) => errors.push(String(e)));
@@ -222,6 +304,10 @@ for (const shape of SHAPES) {
         for (const [i, f] of p.fighters.entries()) {
           expect(overlap(card, f.box), `${where}: the card must not touch ${f.side} ${i}`).toBe(false);
         }
+        if ((FOLDED_GUIDE as readonly string[]).includes(chapter)) {
+          clearOfTheGuideChip(p, where);
+          expect(p.guideSetting, `${where}: the folded start is not the player's answer: the saved preference is still on (nothing was written)`).not.toBe(false);
+        }
 
         // N puts it away (the chip then offers it back) and brings it back to the same place.
         await page.keyboard.press('KeyN');
@@ -236,14 +322,32 @@ for (const shape of SHAPES) {
         expect(back.cardUp, `${where}: N brings the card back`).toBe(true);
         expect(back.zone, `${where}: in the zone it had`).toBe(p.zone);
 
+        if ((FOLDED_GUIDE as readonly string[]).includes(chapter)) {
+          // G opens the guide and the card is the one-row tip while it is open; G again and the card is where it was, the G chip clear throughout.
+          await page.keyboard.press('KeyG');
+          await settleFrames(page);
+          const open = await probe(page);
+          expect(open.guideUp, `${where}: G opens the guide`).toBe(true);
+          expect(open.cardUp, `${where}: the card is still up`).toBe(true);
+          tipIsClear(open, `${where}, guide open`);
+          await page.keyboard.press('KeyG');
+          await settleFrames(page);
+          const again = await probe(page);
+          expect(again.guideUp, `${where}: G folds the guide again`).toBe(false);
+          expect(again.zone, `${where}: and the card is the card again`).toBe(p.zone);
+          clearOfTheGuideChip(again, `${where}, folded again`);
+          sameStand(p, again, `${where}, folded again`);
+        }
+
         expect(errors, 'no page errors').toEqual([]);
       });
     }
 
-    // The two giants' chapters are the ones whose card is the one-row tip (`advisorTip.ts`): it must be the same row at the NEXT decision, not the full card's rows squeezed into it.
-    for (const chapter of ['seymour-flux', 'braskas-final-aeon'] as const) {
-      test(`${chapter}: at the next decision the card is up again, and a tip is still one row`, async ({ page }) => {
-        test.setTimeout(600_000);
+    // The two giants' chapters start with the guide folded and the full card in its place: at the NEXT decision it is the card again, where it was, with the N chip beside the G chip; and with the guide
+    // then OPENED (G) the card is the one-row tip (`advisorTip.ts`), which at the decision after must be the same row, not the full card's rows squeezed into it, and where it was.
+    for (const chapter of FOLDED_GUIDE) {
+      test(`${chapter}: at the next decision the card is up again, still the card, where it was, and the G chip is clear; with the guide opened the tip is still one row and where it was`, async ({ page }) => {
+        test.setTimeout(900_000);
         const errors: string[] = [];
         page.on('pageerror', (e) => errors.push(String(e)));
         await openFirstMenu(page, chapter);
@@ -251,20 +355,47 @@ for (const shape of SHAPES) {
         const where = `${chapter} at ${shape.width}x${shape.height}`;
         const first = await probe(page);
         expect(first.cardUp, `${where}: the card is up at the first menu`).toBe(true);
+        clearOfTheGuideChip(first, `${where}, first menu`);
         expect(await nextDecision(page), `${where}: a turn passed`).toBe(true);
         const next = await probe(page);
         expect(next.cardUp, `${where}: the card is up at the next decision`).toBe(true);
         expect(next.chipUp, `${where}: and its chip`).toBe(true);
         expect(next.zone, `${where}: placed, not left on its own anchor`).not.toBe('free');
         if (next.zone === 'tip') {
-          const rowPx = next.cardBox!.bottom - next.cardBox!.top;
-          expect(rowPx, `${where}: the tip is one row (18 grid px at most, ${(18 * next.scale).toFixed(0)} px here), not the full card's rows (${rowPx.toFixed(0)} px)`).toBeLessThanOrEqual(18 * next.scale + 1);
+          // The card did not fit the guide's rail even printed bare at this decision (a long board note, at the 4:3 type floor): a card cut off at its foot hides the move, so the HUD measured it and the tip stands in
+          // for the decision (`FFXBattleHud.guardFoldedCard`). It is the folded guide's tip all the same: one row, and clear of the G chip.
+          expect(next.guideUp, `${where}: the guide is still folded`).toBe(false);
+          tipIsClear(next, `${where}, next decision (the card did not fit the rail)`);
+        } else {
+          clearOfTheGuideChip(next, `${where}, next decision`);
+          sameStand(first, next, `${where}, next decision`);
+          for (const [sel, box] of Object.entries(next.panels)) {
+            if (box && !(TIP_CHIPS as readonly string[]).includes(sel)) expect(overlap(next.cardBox!, box), `${where}: the card must not touch ${sel}`).toBe(false);
+          }
+          for (const [i, f] of next.fighters.entries()) expect(overlap(next.cardBox!, f.box), `${where}: the card must not touch ${f.side} ${i}`).toBe(false);
+        }
+
+        // The guide opened with G: the tip, at this decision and at the one after it.
+        await page.keyboard.press('KeyG');
+        await settleFrames(page);
+        const opened = await probe(page);
+        expect(opened.guideUp, `${where}: the guide is open`).toBe(true);
+        expect(opened.zone, `${where}: and the card is the tip`).toBe('tip');
+        expect(await nextDecision(page), `${where}: another turn passed`).toBe(true);
+        const later = await probe(page);
+        expect(later.guideUp, `${where}: the guide is still open`).toBe(true);
+        expect(later.cardUp, `${where}: the card is up at the decision after`).toBe(true);
+        expect(later.chipUp, `${where}: and its chip`).toBe(true);
+        expect(later.zone, `${where}: placed, not left on its own anchor`).not.toBe('free');
+        if (later.zone === 'tip') {
+          const rowPx = later.cardBox!.bottom - later.cardBox!.top;
+          expect(rowPx, `${where}: the tip is one row (18 grid px at most, ${(18 * later.scale).toFixed(0)} px here), not the full card's rows (${rowPx.toFixed(0)} px)`).toBeLessThanOrEqual(18 * later.scale + 1);
           // And it is where it was: the camera is still gliding to the menu shot for the first seconds of a decision, and a tip solved against the fighters mid-glide stood in the bottom right
           // for the whole decision (the placement is held), a bar the eye has to find again at every turn. It is solved against the fighters where the shot comes to rest (`enemiesAtRest`).
-          if (first.zone === 'tip') {
-            const slack = 2 * next.scale;
-            expect(Math.abs(next.cardBox!.left - first.cardBox!.left), `${where}: the tip's left edge is where it was at the first menu`).toBeLessThanOrEqual(slack);
-            expect(Math.abs(next.cardBox!.top - first.cardBox!.top), `${where}: and its top edge`).toBeLessThanOrEqual(slack);
+          if (opened.zone === 'tip') {
+            const slack = 2 * later.scale;
+            expect(Math.abs(later.cardBox!.left - opened.cardBox!.left), `${where}: the tip's left edge is where it was at the decision before`).toBeLessThanOrEqual(slack);
+            expect(Math.abs(later.cardBox!.top - opened.cardBox!.top), `${where}: and its top edge`).toBeLessThanOrEqual(slack);
           }
         }
         expect(errors, 'no page errors').toEqual([]);

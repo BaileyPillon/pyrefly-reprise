@@ -177,6 +177,12 @@ export interface SceneStaging {
    */
   readonly formHeights?: Readonly<Record<string, number>>;
   /**
+   * This scene's fights start with the strategy guide **folded** to its chip, and `G` opens it (FFX only: Chapters I and III; Bailey's pick "A2" of 2026-10-09: the full NEXT BEST MOVE card stands in the
+   * guide's place, and while the guide is open the card is the one-row tip). A starting state for the fight, not a setting: nothing is written to `Settings.guideVisible`, so the player's saved preference
+   * is never overwritten by the chapter and a player who has the guide off sees no difference. Not on the upright phone, which keeps its own guide sheet. Omitted everywhere else.
+   */
+  readonly guideFolded?: boolean;
+  /**
    * Which way each side's bodies turn, overriding the house rule (party and
    * aeons toward +x, enemies toward -x, `facingForSide`). For FF7, whose party
    * stands on the right facing left and whose enemies face right
@@ -271,6 +277,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.enemySpots) out.enemySpots = build.enemySpots;
   if (build.figureHeights) out.figureHeights = build.figureHeights;
   if (build.formHeights) out.formHeights = build.formHeights;
+  if (build.guideFolded === true) out.guideFolded = true;
   if (build.sideFacing) out.sideFacing = build.sideFacing;
   if (build.fixedCamera) out.fixedCamera = true;
   if (build.turnRings === false) out.turnRings = false;

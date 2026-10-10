@@ -58,4 +58,6 @@ export const DREAMS_END_STAGING = {
     'yu-pagoda-right': pagodaPin('yu-pagoda-right'),
   },
   figureHeights: giantFigureHeights(['braskas-final-aeon', 'yu-pagoda-left', 'yu-pagoda-right'], DREAMS_END_PARTY_HEIGHT),
+  // r3943-int (FFX only; Bailey's "A2", 2026-10-09): the fights start with the guide folded and the full NEXT BEST MOVE card in its place; G opens the guide and the card is the tip while it is open.
+  guideFolded: true as const,
 };

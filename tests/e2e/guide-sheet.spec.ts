@@ -93,9 +93,11 @@ async function unstamp(page: Page): Promise<void> {
   });
 }
 
+// `foldedStart`: Chapters I and III start their fights with the guide folded to its chip and the full NEXT BEST MOVE card in its place (`SceneStaging.guideFolded`; r3943-int, Bailey's "A2" of 2026-10-09; FFX only),
+// so the sheet opens with the player's first G, which writes the player's answer as it always did.
 const CASES = [
-  { id: 'seymour-flux', game: 'FFX', boss: 'Seymour Flux', status: 'zombie', who: 'kimahri' },
-  { id: 'ffx2-bahamut', game: 'FFX-2', boss: 'Bahamut', status: 'curse', who: 'paine' },
+  { id: 'seymour-flux', game: 'FFX', boss: 'Seymour Flux', status: 'zombie', who: 'kimahri', foldedStart: true },
+  { id: 'ffx2-bahamut', game: 'FFX-2', boss: 'Bahamut', status: 'curse', who: 'paine', foldedStart: false },
 ] as const;
 
 for (const c of CASES) {
@@ -103,6 +105,10 @@ for (const c of CASES) {
     test.beforeEach(async ({ page }) => {
       await enterBattle(page, c.id);
       await settle(page, 20);
+      if (c.foldedStart) {
+        await page.waitForFunction(() => (document.querySelector('.sgd__panel') as HTMLElement | null)?.hidden === true);
+        await page.keyboard.press('g');
+      }
       await page.waitForFunction(() => document.querySelector('.sgd__panel') !== null && !(document.querySelector('.sgd__panel') as HTMLElement).hidden);
       await page.waitForTimeout(600);
     });

@@ -482,6 +482,12 @@ export class MoveAdvisor {
       }
       if (!kept) this.cardEl.innerHTML = cardHtml(this.cached, density, false);
     }
+    // A tight effect kept where the box was wider is taken off again when the box turned out narrower and the line no longer fits. The fit `render` runs measures the card at the anchors' width and the FFX HUD writes
+    // its own box after it, and the loop above never re-renders a card that is already on the last rung, so the line stayed, cut off at the foot, for the whole decision (the folded guide's rail at 1024x768,
+    // Chapter III: 79 grid px of card in a box of 66, `advisorFolded.ts`).
+    if (this.cardEl.scrollHeight > cap + 1 && this.cardEl.querySelector('.mad__effect--tight')) {
+      this.cardEl.innerHTML = cardHtml(this.cached, this.density, false);
+    }
   }
 
   /**

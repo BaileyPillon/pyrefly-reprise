@@ -23,6 +23,7 @@
  * cannot serve either (Chapters I and III at Bailey's giants' sizes: their clear ground is 28 to 40 grid px tall, and the strip needs 45).
  */
 
+import { foldedGuideZone, underTheChipRow } from './advisorFolded.ts';
 import { roomier } from './advisorRoomy.ts';
 import { tipZone } from './advisorTip.ts';
 import {
@@ -52,7 +53,15 @@ export const STRIP_MIN_HEIGHT = 34;
  * strip and the tip are asked only of a board they all declined.
  */
 export function advisorZone(input: AdvisorZoneInput, strip = false, tip = false): AdvisorZone | null {
-  const designed = roomier(input, solveDesigned(input)); // PR-0330: a compact answer is improved first
+  // Chapters I and III with the guide folded (`advisorFolded.ts`): the full card under the chip row with the N chip beside the G chip; failing that, the designed passes against the same band (the chip above the card).
+  // The HUD measured that the card does not fit the guide's rail at this decision (`foldedFallback`, which only means something with the folded chip): no card of any box, the tip.
+  const fallback = !!input.guideChip && input.foldedFallback === true;
+  if (input.guideChip && !fallback) {
+    const folded = foldedGuideZone(input);
+    if (folded) return folded;
+  }
+  const guarded = underTheChipRow(input);
+  const designed = fallback ? null : roomier(guarded, solveDesigned(guarded)); // PR-0330: a compact answer is improved first
   if (designed) return designed;
   const stripped = strip ? stripZone(input) : null;
   if (stripped || !tip) return stripped;

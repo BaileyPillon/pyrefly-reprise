@@ -23,7 +23,7 @@ import { openMinigame as dispatchMinigame } from './minigames/index.ts';
 import { PartyStatusWindow } from './PartyStatusWindow.ts';
 import { SensorPanel } from './SensorPanel.ts';
 import { bannerSpeaker } from './bannerSpeaker.ts';
-import { MoveAdvisor } from '../common/MoveAdvisor.ts';
+import { MAX_DENSITY, MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
@@ -47,7 +47,7 @@ import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { withOverdriveFocus } from './overdriveFocus.ts';
 import { showOverdrivePlate } from './overdrivePlate.ts';
 import { INTENT_AVOID_SELECTORS, ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR, chipObstacleEls, chipReserveOf, rectsOf, topChipEls, type ViewportRect } from './hudAvoidSelectors.ts';
-import { growToGrid, panelPresence, rectKey, unionOf } from './hudPlacementKeys.ts';
+import { growToGrid, panelPresence, rectKey, sizeKey, unionOf } from './hudPlacementKeys.ts';
 import { doomNoteOf } from './DoomCounters.ts';
 import { zombieTargetNote } from './zombieTargetNote.ts';
 import { enemyObstacleRect } from './enemyObstacleRect.ts';
@@ -63,6 +63,8 @@ import {
   type Rect,
 } from './hudSafeZones.ts';
 import { advisorZone } from './advisorStrip.ts';
+import { NChipMeter } from './advisorChipSizes.ts';
+import { underTheChipRow } from './advisorFolded.ts';
 import { TIP_BADGE } from './advisorTip.ts';
 import { intentChipDockAt } from './intentChipDock.ts';
 
@@ -73,6 +75,8 @@ const PANEL_PUBLISH_MS = 250;
 
 /** Clearance between the advisor card's top edge and its chip, in grid px. */
 const ADVISOR_CHIP_GAP = 2;
+/** Frames in a row the folded guide's card may stay taller than its rail on the last rung before the tip takes its place for the decision (`guardFoldedCard`). */
+const FOLDED_STUCK_FRAMES = 4;
 
 /**
  * The top of the fixed slot the command window's help slab is parked in.
@@ -280,6 +284,14 @@ export class FFXBattleHud implements HudPort {
    */
   private advisorFree: { seq: number; panels: string } | null = null;
   private heldAdvisor: HeldAdvisorPlacement | null = null;
+  /** Chapters I and III (`SceneStaging.guideFolded`): this fight started with the strategy guide folded, and the card stands in its place while the guide stays folded (`advisorFolded.ts`). */
+  private guideStartsFolded = false;
+  /** The advisor's N chip at both of its sizes, for the dock beside the folded guide's G chip (`advisorChipSizes.ts`). */
+  private readonly nChipMeter = new NChipMeter();
+  /** The decision (`advisorDecisionSeq`) whose card did not fit the folded guide's rail even printed bare, so the tip stands in for it; -1: none (`guardFoldedCard`). */
+  private foldedClipped = -1;
+  /** Frames in a row the folded card has been taller than its rail on the last rung. */
+  private foldedStuck = 0;
   /** The box last written to the card, so a new one can be fitted on arrival. */
   private appliedAdvisorBox = '';
   private readonly onResize = (): void => {
@@ -738,6 +750,12 @@ export class FFXBattleHud implements HudPort {
   /** The guide rail, for tests and the debug snapshot. */
   get strategyGuide(): StrategyGuide {
     return this.guide;
+  }
+
+  /** This fight starts with the guide folded to its chip and the card in its place (`SceneStaging.guideFolded`; Chapters I and III). Called once, before the HUD is mounted. */
+  startGuideFolded(): void {
+    this.guideStartsFolded = true;
+    this.guide.startFolded();
   }
 
   /** The move-advisor card, for tests and the debug snapshot. */
@@ -1256,17 +1274,40 @@ export class FFXBattleHud implements HudPort {
       delete card.dataset['zone'];
       this.appliedAdvisorBox = '';
     }
+    this.guardFoldedCard(card, zone, cardUp);
     // The tip (`advisorTip.ts`): the chip is the bar's badge, on its left in the same row, key only (`move-advisor-tip.css`, `.mad--tip`).
     const tip = zone.kind === 'tip';
-    this.advisor.el.classList.toggle('mad--tip', tip && cardUp);
+    // The folded guide's dock can be the badge's (`zone.chip.badge`: the whole label did not fit in the chip row): with the card up the chip is the badge there; with the card put away it reads in full where the card stood.
+    const badgeDock = zone.chip?.badge === true;
+    this.advisor.el.classList.toggle('mad--tip', (tip || badgeDock) && cardUp);
     if (chip) {
       // With the card up the chip rides just above it; with the player's `N`
       // holding the card down it takes the zone's own bottom edge, rather than
       // the stylesheet anchor in the middle of the party.
-      chip.style.left = `${(tip ? zone.left - TIP_BADGE : zone.left).toFixed(2)}px`;
-      const bottom = cardUp ? (tip ? zone.bottom + Math.max(0, card.offsetHeight - chip.offsetHeight) / 2 : zone.bottom + card.offsetHeight + ADVISOR_CHIP_GAP) : zone.bottom;
+      // A zone that parks the chip itself (beside the folded guide's G chip, in the chip row: `advisorFolded.ts`) keeps it there whether the card is up or put away with N; a badge dock only while the card is up.
+      const dock = badgeDock && !cardUp ? undefined : zone.chip;
+      chip.style.left = `${(dock ? dock.left : tip ? zone.left - TIP_BADGE : zone.left).toFixed(2)}px`;
+      const bottom = dock ? dock.bottom : cardUp ? (tip ? zone.bottom + Math.max(0, card.offsetHeight - chip.offsetHeight) / 2 : zone.bottom + card.offsetHeight + ADVISOR_CHIP_GAP) : zone.bottom;
       chip.style.bottom = `${bottom.toFixed(2)}px`;
     }
+  }
+
+  /**
+   * The card in the folded guide's rail, measured: when even the last rung of the density ladder is taller than the rail for {@link FOLDED_STUCK_FRAMES} frames in a row, the card would be cut off at its foot
+   * and hide the move (the board's note alone is 87 grid px at the second decision of Chapter I at 1024x768, in a rail of 66), so the tip stands in for the rest of the decision, and the card is tried again at
+   * the next one. A few frames, because the ladder settles over the first one or two of a decision.
+   */
+  private guardFoldedCard(card: HTMLElement, zone: AdvisorZone, cardUp: boolean): void {
+    if (!cardUp || !zone.chip || zone.kind === 'tip' || this.foldedClipped === this.advisorDecisionSeq) {
+      this.foldedStuck = 0;
+      return;
+    }
+    const stuck = this.advisor.printedDensity >= MAX_DENSITY && card.scrollHeight > zone.maxHeight + 1;
+    this.foldedStuck = stuck ? this.foldedStuck + 1 : 0;
+    if (this.foldedStuck < FOLDED_STUCK_FRAMES) return;
+    this.foldedClipped = this.advisorDecisionSeq;
+    this.foldedStuck = 0;
+    this.heldAdvisor = null; // the next frame solves the tip (`AdvisorZoneInput.foldedFallback`)
   }
 
   /** The four inline values `placeAdvisor` writes, in one statement. */
@@ -1353,6 +1394,10 @@ export class FFXBattleHud implements HudPort {
     // the only input that moves *every frame*.
     // Yojimbo's Zanmato gauge and banner (FFX, Chapter IX only) and Omnis's disc strip and intent line (Chapter XII only): ink, as solid as a boss.
     const inkRects = [...this.zanmato.obstacleEls(), ...chipObstacleEls(this.el), ...this.el.querySelectorAll<HTMLElement>([...ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR].join())].flatMap((e) => growToGrid(this.stageRect(e), 1) ?? []);
+    // Chapters I and III while the guide is folded: its G chip and the N chip's size, for the card that stands in the guide's place (`advisorFolded.ts`); null in every other fight and while the guide is open.
+    const foldedGuide = this.guideStartsFolded && !this.guide.isVisible && !document.documentElement.dataset['phoneBattle']; // the upright phone keeps its own guide sheet and card
+    const guideChip = foldedGuide ? growToGrid(this.stageRect(this.el.querySelector<HTMLElement>('.sgd__toggle')), 1) : null;
+    const nChip = foldedGuide ? this.nChipMeter.measure(this.advisor.el.querySelector<HTMLElement>('[data-role="move-advisor-toggle"]'), (e) => this.stageRect(e), this.hudScale()) : null;
     const input = {
       // `.ig-cmd-stack` and the breadcrumb, **not** `.ffx-cmd-area`'s union
       // with the help slab. The union's top edge was the slab's — y 131 in
@@ -1386,6 +1431,10 @@ export class FFXBattleHud implements HudPort {
       enemies: [...this.enemySpriteRects().map((r) => growToGrid(r, 4)!), ...inkRects],
       // What only the one-row tip reads (`advisorTip.ts`): the small chips along the top, the guide's G and scroll chips and the PAUSE chip.
       keepOff: topChipEls(this.el).flatMap((e) => growToGrid(this.stageRect(e), 1) ?? []),
+      guideChip,
+      chipSize: guideChip && nChip ? nChip.full : null,
+      badgeSize: guideChip && nChip ? nChip.badge : null,
+      foldedFallback: guideChip !== null && this.foldedClipped === this.advisorDecisionSeq,
     };
     const key = [
       this.advisorDecisionSeq,
@@ -1404,6 +1453,10 @@ export class FFXBattleHud implements HudPort {
       input.sprites.length,
       input.enemies.length, input.chipReserve,
       input.keepOff.map(rectKey).join(';'),
+      rectKey(input.guideChip),
+      sizeKey(input.chipSize),
+      sizeKey(input.badgeSize),
+      input.foldedFallback ? 'tip' : '-',
     ].join('|');
 
     const held = this.heldAdvisor;
@@ -1441,7 +1494,7 @@ export class FFXBattleHud implements HudPort {
     const solved: HeldAdvisorPlacement = {
       key,
       zone,
-      chipDock: zone ? null : advisorChipDock(input),
+      chipDock: zone ? null : advisorChipDock(underTheChipRow(input)),
     };
     this.heldAdvisor = solved;
     return solved;
