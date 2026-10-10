@@ -368,6 +368,8 @@ test.describe('The Experiment (hidden, FFX-2 only): the typed word, both acts, t
         await page.waitForTimeout(1500);
         expect((await page.evaluate(() => document.body.innerText)).toLowerCase(), 'the prep names the hidden chapter').toContain('the experiment');
         await shoot(page, '01-prep-after-the-word');
+        // The first-play coach cards (prep, then the battle's) are marked seen from here, so the frames of the fight are the fight's (the debug API writes the save, as a returning player has).
+        await page.evaluate(() => window.__pyrefly!.markCoachSeen());
         await confirm(page, input, input === 'touch' ? '.prep__start' : undefined);
 
         // The opening scene, by confirm presses, until the fight.
