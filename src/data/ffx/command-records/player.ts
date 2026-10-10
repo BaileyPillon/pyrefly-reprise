@@ -11,7 +11,7 @@
 import type { FFXCommandRecord } from '../../../battle/common/types.ts';
 
 export const COMMAND_RECORDS_PLAYER: Readonly<Record<string, FFXCommandRecord>> = {
-  'requiem': { id: 0x30e3, type: 4, flagsMisc: 0x4001006, flagsDamage: 0xe, damageClass: 1, rank: 4 }, // Requiem (Seymour's Overdrive, the Sinspawn Gui chapter's guest: record rank 4, `research/re-ffx-ai-gui.md` section 5; no pierce bit on the command, but his staff's Piercing exempts everything he casts from Armored, kernel/modifiers.ts#armoredMod)
+  'requiem': { id: 0x30e3, type: 4, flagsMisc: 0x4001006, flagsDamage: 0xe, damageClass: 1, shatter: 30, rank: 4 }, // Requiem (Seymour's Overdrive, the Sinspawn Gui chapter's guest: record rank 4, `research/re-ffx-ai-gui.md` section 5; no pierce bit on the command, but his staff's Piercing exempts everything he casts from Armored, kernel/modifiers.ts#armoredMod)
   'cure': { id: 0x302b, type: 2, flagsMisc: 0x15130087, flagsDamage: 0x12, damageClass: 1, rank: 3 }, // Cure
   'cura': { id: 0x302c, type: 2, flagsMisc: 0x15030087, flagsDamage: 0x12, damageClass: 1, rank: 3 }, // Cura
   'curaga': { id: 0x302d, type: 2, flagsMisc: 0x15230087, flagsDamage: 0x12, damageClass: 1, rank: 3 }, // Curaga
