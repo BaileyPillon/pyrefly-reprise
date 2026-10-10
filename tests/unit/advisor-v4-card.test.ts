@@ -153,6 +153,11 @@ describe('advisor v4 on the card (FFX)', () => {
     // was Slow (seed 5 and 6 open the same way). Seed 3's first menu is a Zombie board either way, with Lance of Atrophy now
     // landing on Kimahri instead of Yuna: the pick is Holy Water on the Zombie, the card's own rule. Nothing on the advisor, the
     // boss or the party was tuned; the guide's wording on the opening is listed in docs/handoff/re-parity-ai-seymour.md.
-    expect(picks).toEqual(['tidus: Hastega -> the party', 'tidus: Hastega -> the party', 'tidus: Holy Water -> Kimahri']);
+    // Seed 3 moved again on 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only: the opening counters are the game's 26 fixed
+    // draws and statuses roll through the game's infliction step, so the turns before the first menu changed; seeds 1 and 2 open on an untouched
+    // board and still pick Hastega). Its first menu is a Zombie board either way, and the Zombie is Yuna's now (she is the healer): the pick
+    // is Holy Water on her, which is the card's own rule (while Yuna is a Zombie the next Full-Life is a kill, not a heal: clear it now).
+    // Nothing on the advisor, the boss or the party was tuned.
+    expect(picks).toEqual(['tidus: Hastega -> the party', 'tidus: Hastega -> the party', 'tidus: Holy Water -> Yuna']);
   }, 600_000);
 });

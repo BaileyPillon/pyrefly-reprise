@@ -52,6 +52,10 @@ function newEngine(groupId: string, seed: number, party: FFXPartyBuild): Engine 
  * Wakka and Lulu are on the bench in every shipped preset, and their Overdrives
  * are exactly the two that were broken — which is most of why nothing caught
  * this. The mutation is the same one a Switch performs.
+ *
+ * A Switch also hands the incoming member the outgoing member's CTB counter (`execute.ts`, `case 'switch'`). The engine now
+ * seeds EVERY party slot's opening counter the way the game does (the bench's too, unreduced by the field's minimum: a
+ * bench member has a real wait of its own, where the old engine left it at 0), so the mutation does the handover as well.
  */
 function frontWithFullGauge(engine: Engine, who: string, overdriveIds?: string[]): void {
   const state = engine.state() as unknown as {
@@ -73,6 +77,10 @@ function frontWithFullGauge(engine: Engine, who: string, overdriveIds?: string[]
     if (leaving) leaving.removed = true;
     c.removed = false;
     c.slot = 0;
+    const rt = (engine as unknown as { ctx: { rt: { actors: Map<string, { ctb: number }> } } }).ctx.rt.actors;
+    const incoming = rt.get(who);
+    const outgoing = rt.get(out);
+    if (incoming && outgoing) incoming.ctb = outgoing.ctb;
   }
 }
 

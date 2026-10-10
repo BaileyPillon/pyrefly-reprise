@@ -20,7 +20,6 @@ import type { AbilityDef, Command, FFXCombatant } from '../../src/battle/common/
 import {
   advanceForm,
   aiContextFor,
-  applyStatus,
   chooseAiCommand,
   resolveAbility,
   summonAeon,
@@ -30,6 +29,7 @@ import { scriptGauge } from '../../src/battle/ffx/ai/braskas-final-aeon.ts';
 import { rtOf } from '../../src/battle/ffx/state.ts';
 import { ability } from './ffx-fixtures.test.ts';
 import { type LiveBattle, ScriptedRng, liveBattle } from './helpers/aiScript.ts';
+import { giveStatus } from './helpers/ffxStatus.ts';
 
 const BOSS = 'braskas-final-aeon';
 const idOf = (command: Command | null): string => (command === null ? 'pass' : command.kind === 'ability' ? command.id : command.kind);
@@ -187,7 +187,7 @@ describe('the Overdrive branch (m132 @0x046A) and the stored gauge (B5, B6)', ()
 
   it('never picks a petrified actor for Triumphant Grasp (the Not-Petrify search), with no draw for the lone survivor', () => {
     const t = bfa();
-    for (const id of ['tidus', 'yuna']) applyStatus(t.ctx, undefined, t.at(id), { status: 'petrify', chance: 255, duration: 254 });
+    for (const id of ['tidus', 'yuna']) giveStatus(t.at(id), 'petrify');
     t.ctx.state.flags['bfa.gauge'] = 100;
     t.rng.feed(1, 0);
     const command = chooseAiCommand(t.ctx, t.boss);
@@ -249,7 +249,7 @@ describe('the gauge through hit events (m132 f6 @0x05FF)', () => {
     wave(t, 'yu-pagoda-right');
     expect(gaugeOf(t)).toBe(45);
     t.rng.set(100, 100, 100, 100); // every percent roll is 100: the hit misses
-    applyStatus(t.ctx, undefined, t.at('tidus'), { status: 'darkness', chance: 255, duration: 3 });
+    giveStatus(t.at('tidus'), 'darkness', { turnsRemaining: 3 });
     hit(t);
     expect(t.events.some((e) => e.type === 'miss'), 'the swing missed').toBe(true);
     expect(gaugeOf(t), 'a miss is still a hit event').toBe(50);

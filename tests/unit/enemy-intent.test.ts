@@ -378,7 +378,10 @@ describe('the damage estimate', () => {
     const victim = ctx.state.combatants[ctx.state.activeIds[0]!] as FFXCombatant;
     const megaDeath = ALL_ABILITIES.find((a) => a.id === 'mega-death')!;
     const app = megaDeath.statusEffects[0]!;
-    expect(statusOdds(victim, app)).toEqual({ status: 'ko', percent: 100, blocked: false });
+    // 99, not 100 (re-parity W2, FFX only): the odds are the game's landing rule counted over every roll it can draw (a draw from 0 to
+    // 100 against chance 100 fails on the one roll of 100), where this panel used to print the bare chance byte. The row is still
+    // lethal ("not blocked") for a living character, which is what the case is about.
+    expect(statusOdds(victim, app)).toEqual({ status: 'ko', percent: 99, blocked: false });
 
     victim.statuses['zombie'] = {
       id: 'zombie',

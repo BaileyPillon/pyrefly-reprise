@@ -20,7 +20,6 @@ import { SeededRng } from '../../src/battle/common/rng.ts';
 import {
   advanceForm,
   aiContextFor,
-  applyStatus,
   chooseAiCommand,
   dismissAeon,
   registerHitScript,
@@ -32,6 +31,7 @@ import { damageTypeOf } from '../../src/battle/ffx/ai/hit-script.ts';
 import { executeCommand } from '../../src/battle/ffx/execute.ts';
 import { ability } from './ffx-fixtures.test.ts';
 import { type LiveBattle, ScriptedRng, groupOf, liveBattle, queuedCounters } from './helpers/aiScript.ts';
+import { giveStatus } from './helpers/ffxStatus.ts';
 
 /** A battle in which the boss is in the given form with the entry turn already taken. */
 function bossIn(form: number): LiveBattle & { mem: Record<string, number | string | boolean>; boss: FFXCombatant; rng: ScriptedRng } {
@@ -111,7 +111,7 @@ describe('Yunalesca Form II (m130 @0x02F2)', () => {
   it('weighs Hellbiter against a heal as 30 x Zombie slots + 10 percent, target first, spell second (note 2.8)', () => {
     const t = bossIn(1);
     t.mem['priv0004'] = 2;
-    applyStatus(t.ctx, undefined, t.at('tidus'), { status: 'zombie', chance: 255, duration: 254 });
+    giveStatus(t.at('tidus'), 'zombie');
     // One Zombie slot: the heal wins below 40 and Hellbiter from 40.
     t.rng.feed(1, 39, 51);
     const heal = chooseAiCommand(t.ctx, t.boss);
@@ -129,7 +129,7 @@ describe('Yunalesca Form II (m130 @0x02F2)', () => {
   it('counts Zombie on the three SLOTS, so a KO’d Zombie still suppresses Hellbiter', () => {
     const t = bossIn(1);
     t.mem['priv0004'] = 2;
-    for (const id of PARTY) applyStatus(t.ctx, undefined, t.at(id), { status: 'zombie', chance: 255, duration: 254 });
+    for (const id of PARTY) giveStatus(t.at(id), 'zombie');
     t.at('auron').alive = false;
     t.rng.feed(0, 99, 0); // the highest roll still heals: 99 < 30 x 3 + 10
     expect(idOf(chooseAiCommand(t.ctx, t.boss))).toBe('regen');
@@ -164,7 +164,7 @@ describe('Yunalesca Form III (m130 @0x043A)', () => {
     ]);
     expect(t.mem['priv0004']).toBe(0);
 
-    applyStatus(t.ctx, undefined, t.at('tidus'), { status: 'zombie', chance: 255, duration: 254 });
+    giveStatus(t.at('tidus'), 'zombie');
     t.rng.set(0, 29, 51); // one Zombie slot: the heal wins below 30
     expect(idOf(chooseAiCommand(t.ctx, t.boss))).toBe('curaga');
     t.rng.set(0, 30);
@@ -218,12 +218,12 @@ describe('Yunalesca counters (m130 @0x05EE)', () => {
 
   it('Form I: the gate reads the target she picked last turn, Tidus before she has picked anyone (Y4)', () => {
     const t = bossIn(0);
-    applyStatus(t.ctx, undefined, t.at('tidus'), { status: 'darkness', chance: 255, duration: 3 });
+    giveStatus(t.at('tidus'), 'darkness', { turnsRemaining: 3 });
     expect(yunalescaCounter(ai(t), 'auron', 1), 'Tidus (actor 0) is blind, so no Blind counter').toBeNull();
     expect(idOf(yunalescaCounter(ai(t), 'auron', 2))).toBe('silence-counter');
     t.mem['priv000C'] = 'yuna'; // she last aimed at Yuna, who is not blind
     expect(idOf(yunalescaCounter(ai(t), 'auron', 1))).toBe('blind-counter');
-    applyStatus(t.ctx, undefined, t.at('yuna'), { status: 'silence', chance: 255, duration: 3 });
+    giveStatus(t.at('yuna'), 'silence', { turnsRemaining: 3 });
     expect(yunalescaCounter(ai(t), 'auron', 2), 'Yuna is silenced').toBeNull();
     expect(idOf(yunalescaCounter(ai(t), 'auron', 0)), 'Sleep has no gate').toBe('sleep-counter');
   });
@@ -274,7 +274,7 @@ describe('Yunalesca’s onHit through the engine (hit events)', () => {
 
   it('counters a hit that misses and a hit that does nothing, which the damage-event collector never saw (Y5)', () => {
     const missed = bossIn(0);
-    applyStatus(missed.ctx, undefined, missed.at('auron'), { status: 'darkness', chance: 255, duration: 3 });
+    giveStatus(missed.at('auron'), 'darkness', { turnsRemaining: 3 });
     missed.rng.feed(100, 100, 100); // every percent roll 100: the Darkness-reduced chance never gets there
     resolveAbility(missed.ctx, missed.at('auron'), missed.ctx.content.ability('attack')!, ['yunalesca']);
     expect(missed.events.some((e) => e.type === 'miss')).toBe(true);
@@ -379,7 +379,7 @@ describe('the interpreter’s tallies and the exact odds of the weighted step', 
   /** How often the weighted step of a form heals, over all 65,536 values of the 16-bit draw. */
   function healShare(form: 1 | 2, zombies: number): number {
     const t = bossIn(form);
-    for (const id of PARTY.slice(0, zombies)) applyStatus(t.ctx, undefined, t.at(id), { status: 'zombie', chance: 255, duration: 254 });
+    for (const id of PARTY.slice(0, zombies)) giveStatus(t.at(id), 'zombie');
     const first = form === 1 ? 2 : 0; // a weighted turn
     let heals = 0;
     for (let r = 0; r <= 0xffff; r++) {
@@ -403,7 +403,7 @@ describe('the interpreter’s tallies and the exact odds of the weighted step', 
 
   it('reproduces the interpreter’s Form II tally with one Zombie (40.31 percent, exact 40.03) on the engine’s own stream', () => {
     const t = bossIn(1);
-    applyStatus(t.ctx, undefined, t.at('tidus'), { status: 'zombie', chance: 255, duration: 254 });
+    giveStatus(t.at('tidus'), 'zombie');
     t.ctx.rng = new SeededRng(20261008);
     const n = 40000;
     let heals = 0;

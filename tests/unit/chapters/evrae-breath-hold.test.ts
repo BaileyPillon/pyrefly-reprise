@@ -89,9 +89,13 @@ describe('Evrae: a charged breath at FAR is never answered by naming Evrae (§4.
     void held;
   }, 300_000);
 
-  it('seed 8, following the card, meets the real board and answers it with the line', () => {
+  it('seed 3, following the card, meets the real board and answers it with the line', () => {
+    // Seed 8 -> 3 on 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only): the opening counters are the game's 26 fixed draws and
+    // statuses roll through the game's infliction step, so the draws moved and seed 8's battle no longer holds for a charged breath at all (0 of
+    // its menus). Seed 3 is the first of seeds 1 to 14 that meets the board (12 menus; seed 7 meets it on 10), with nothing wrong on it. The rule
+    // (the card answers that board with the line and never names Evrae) is the card's, unchanged.
     clearAdvisorCache();
-    const engine = newEngine(8);
+    const engine = newEngine(3);
     let held = 0;
     const bad: string[] = [];
     for (let i = 0; i < 60_000; i++) {

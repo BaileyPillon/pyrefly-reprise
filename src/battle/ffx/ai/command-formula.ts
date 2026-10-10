@@ -76,6 +76,7 @@ export const FORMULA_BYTE_OVERRIDES: Readonly<Record<number, number>> = {
   0x6041: 3, // Shremedy
   0x604f: 3, // Break
   0x6050: 3, // Banish
+  0x6062: 3, // Stone Gaze (Evrae's own record, which re-parity W2 attached to the ability by its status bytes; 0x4038 is the Petrify-50 record of the same name)
   0x606e: 3, // Silence
   0x6070: 3, // Blind
   0x6071: 3, // Sleep

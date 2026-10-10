@@ -14,7 +14,9 @@
  *
  * Draws: one per visited status on the inflicting path, none on the cleansing path. All come from the USER's mode 2
  * stream: `draw() % 101` for every status but Threaten, `draw() % 100` for Threaten; the draw is spent before the
- * chance bytes are looked at, so a chance of 255 or a resistance of 255 still costs one.
+ * chance bytes are looked at, so a chance of 255 or a resistance of 255 still costs one. The callback is told the
+ * modulus (101 or 100); the game ignores it, and a caller whose generator is not the game's can return a value
+ * already in range, which the kernel's own `%` then leaves alone.
  */
 
 import type { StatusOutcome } from './aftermath.ts';
@@ -205,6 +207,32 @@ function temporalStep(i: number, cleanse: boolean, w: Work, inp: InflictInput, u
   return 'added';
 }
 
+/**
+ * Does status `i` land for this roll, on the inflicting path? `roll` is the reduced draw (`draw % 100` for Threaten, `draw % 101`
+ * for every other status); `chance` is the chance byte and `resist` the target's resistance byte; `recordHasZombie` is the
+ * Zombie bit of the HIT RECORD (not the live word). Also returns the resistance the rest of the step works with: a Threaten
+ * that misses against a byte of 0 counts as immune (255), and Death against a Zombie record uses 254.
+ *
+ * Exported so that the advisor's odds are this predicate counted over every roll, not a second copy of it
+ * (`src/battle/ffx/estimate.ts#statusOdds`).
+ */
+export function statusLanding(
+  i: number,
+  roll: number,
+  chance: number,
+  resist: number,
+  recordHasZombie: boolean,
+  debugAlwaysHit = false,
+): { landed: boolean; res: number } {
+  if (i === Status.Threaten) {
+    const landed = roll < resist;
+    return { landed, res: !landed && resist === 0 ? 0xff : resist };
+  }
+  const res = i === Status.Death && recordHasZombie ? 0xfe : resist;
+  const landed = chance === 0xff || (res !== 0xff && (chance === 0xfe || roll < chance - res || debugAlwaysHit));
+  return { landed, res };
+}
+
 /** The pop-up bits an immune target adds to the result word, and the immune count. */
 function markImmune(i: number, w: Work): void {
   const bit = 1 << i;
@@ -234,7 +262,7 @@ function markImmune(i: number, w: Work): void {
  * - A status that does not land counts as failed, or as immune when the resistance byte is 255 (adding the
  *   pop-up bits to the result word).
  */
-export function inflictStatus(input: InflictInput, draw: () => number): InflictResult {
+export function inflictStatus(input: InflictInput, draw: (modulus: number) => number): InflictResult {
   const { cmd, user, target } = input;
   const flags = input.flags ?? {};
   const cleanse = (cmd.flagsDamage & CMD_CLEANSE) !== 0;
@@ -255,7 +283,7 @@ export function inflictStatus(input: InflictInput, draw: () => number): InflictR
   };
   const roll = (modulus: number): number => {
     w.draws += 1;
-    return (draw() & 0x7fffffff) % modulus;
+    return (draw(modulus) & 0x7fffffff) % modulus;
   };
 
   for (let i = 0; i < REGULAR_STATUS_COUNT; i++) {
@@ -268,13 +296,12 @@ export function inflictStatus(input: InflictInput, draw: () => number): InflictR
     let landed: boolean;
     if (cleanse) {
       landed = true;
-    } else if (i === Status.Threaten) {
-      landed = roll(100) < res;
-      if (!landed && res === 0) res = 0xff;
     } else {
-      const r = roll(101);
-      if (i === Status.Death && (w.record.perm & PermBit.Zombie) !== 0) res = 0xfe;
-      landed = chance === 0xff || (res !== 0xff && (chance === 0xfe || r < chance - res || flags.debugAlwaysHit === true));
+      // One draw per visited status, spent before the bytes are looked at.
+      const rolled = roll(i === Status.Threaten ? 100 : 101);
+      const outcome = statusLanding(i, rolled, chance, res, (w.record.perm & PermBit.Zombie) !== 0, flags.debugAlwaysHit === true);
+      landed = outcome.landed;
+      res = outcome.res;
     }
 
     let step: Step = 'none';
@@ -327,7 +354,7 @@ export interface InflictAllResult extends InflictResult {
 }
 
 /** Run {@link inflictStatus} then {@link inflictExtraStatus} on the same record, counters and draw stream. */
-export function inflictStatuses(input: InflictAllInput, draw: () => number): InflictAllResult {
+export function inflictStatuses(input: InflictAllInput, draw: (modulus: number) => number): InflictAllResult {
   const first = inflictStatus(input, draw);
   const second = inflictExtraStatus(
     {

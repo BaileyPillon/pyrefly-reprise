@@ -6,6 +6,23 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-10 — The FFX turn order, status step and per-turn ticks (re-parity W2) meet the game-script lanes: byte counters under the scripts' openings, hooks around the ticks, and the game's can-act test in two (release candidate 2 base; FFX only; no shared contract file changed in shape)
+
+Branch `re-parity-w2`, merge of `origin/re-parity-rc1` (`931613a8`). Recorded because the entries below describe the same engine files from two sides and neither is right alone. `src/battle/common/types.ts`
+auto-merged (interfaces and optional members only: W2's `FFXCommandRecord` members, W1's plain-attack members, W3's FFX-2 records and `hopelessRetry`). Handoff: [re-parity-w2](handoff/re-parity-w2.md), "Merged onto release candidate 1". Game case: FFX only.
+
+- `ActorRuntime` and `FFXRuntime` (engine-private, `src/battle/ffx/runtime.ts`) are the union of both sides: W2's `icv`, `regenTicks`, `poolBaseHp`, `poolBaseMp` and the meaning of `ctb` (the game's byte, 0 to 255, counted down by the clock), the scripts'
+  `guardMark` (which replaces `damageCapPerHit`, `hpFloor` and `coversAllyId`) and `FFXRuntime.inReaction` and `formDiedAtSeq`.
+- `HitScope` (`hit-apply.ts`) carries W2's `rank` and `records` and the scripts' `touched`; a scope built by hand needs all three (`tests/unit/helpers/ffxStatus.ts` does).
+- `ticks.ts`: `onTurnStart(ctx, actor)` runs the start-of-turn tick, then the scripts' pre-turn hooks (`runPreTurn`), then Doom: the game's order (VA 0x00792a90 calls the tick, requests the scripts' pre-turn entry, then Doom's tick); the release-candidate line ran the hooks ahead of Regen's payout. `onTurnEnd(ctx, actor, resultsApplied = true)` runs a monster's `postPoison` hook right after a Poison tick that took
+  HP (`adapt/ticks.ts#endOfTurn` returns whether it did, a passed turn and a Poison byte of 0 included). The old turn queue's `normalise` stays gone: the scripts' opening writes (`ai/opening.ts`, `ai/possession-setup.ts`, `ai/macalania-rules.ts`) go on the byte
+  counters as they are, a counter pushed back is clamped at 255, and nothing is rebased afterwards (the old rebase only shifted every counter by the same amount, so it never changed an order; the boss sits at 0 in all of those fights but Yu Yevon's, where the clock now runs the extra ticks itself and counts them).
+- New `canQueueAction` (`predicates.ts`, re-exported from `state.ts`): the game's `pp_BtlCanAct` with the not-Threatened flag that every caller in the exe passes (counter queue, Cover, range check, Auto-Potion, Auto-Med, Auto-Phoenix). The boss scripts' `canQueue`,
+  the enemy Cover (`targeting.ts#coverOf`) and the orders (`orders.ts`) use it. `canAct`, the turn gate, stays W2's and does not refuse a Threatened character (the pair is released as its turn opens).
+- `adapt/status-apply.ts`: a Regen that lands in the hit that also kills its holder resets the holder's tick counter (the write-back runs before the death handler); the status itself is still never added to a dead target.
+- `ai/command-formula.ts#FORMULA_BYTE_OVERRIDES` gains record 0x6062 (Evrae's own Stone Gaze, which W2 attached to the ability by its status bytes); `tests/fixtures/parity/ffx/evrae-gaze-classes.json` gains the five records W2 moved (0x6062, 0x609e, 0x609f, 0x60d2, 0x60f6; numbers only).
+- The measurement harnesses read `PYREFLY_MEASURE_SEEDS` one way: a range `1-500` or a list `1,7,42`, default 1 to 12 (a bare number is that one seed, not a count), in `ffx-parity-measure.test.ts` and `ffx-parity-cause.test.ts`.
+
 ## 2026-10-09 (late) — The release line and release candidate 1 in one tree: Omnis's discs are stepped by the one pure `discAfterTurn` on the game's ring, and the reset order, the affinity timing and the four spells stay the game's script (release candidate 1 folded into r3943-int; FFX only; no shared contract file changed)
 
 Branch `re-parity-rc1`, merge of `a74b2b8e` (the release driver's final content, `origin/r3943-int`). No file in the contract list changed by the merge. Recorded because the entries below describe the same Omnis module from two sides and neither is
@@ -129,6 +146,33 @@ Chapter VII spells and Anima's Pain; every other record resolves as before. `Act
 and `affectsHp` (the command's HP class bit), so a script written for either lane's hook runs on the other's. `BattleEvent` shape unchanged; FFX-2 and FF7 never import any of it
 (`ffx2-atb-golden` and `ff7-golden` unchanged). Handoff: [re-parity-ai-seymour](handoff/re-parity-ai-seymour.md). Game case: FFX only.
 
+## 2026-10-09 — The FFX engine takes its turn order, status infliction and per-turn ticks from the game's kernels: exports removed, runtime fields, two data requirements, one carry rule (re-parity W2; FFX only)
+
+Branch `re-parity-w2`. FFX-2 and FF7 import none of the modules below. Event shapes are unchanged.
+
+- `src/battle/ffx/index.ts` no longer exports `applyDelay` and `normalise` (the turn queue), `applyStatus`, `removeStatuses`, `rollStatus`, `rollThreaten`,
+  `consumeNulCharges`, `tickDurationStatuses`, `DURATION_STATUSES`, `ESUNA_CURES`, `DISPEL_REMOVES` (statuses) and `payRegen` (ticks): they were the engine's own
+  formulas, which the game's kernels replace (`adapt/ctb.ts`, `adapt/status.ts`, `adapt/status-apply.ts`, `adapt/ticks.ts`). Every caller in the tree moved (the tests that
+  gave a combatant a status use `tests/unit/helpers/ffxStatus.ts`). Still exported: `removeStatus`, `refreshCriticalStatus`, `bouncesOffReflect`, `SURVIVES_KO`,
+  `recoveryTicks`, `predictTurnOrder`, `nextActor`, `seedInitialCtb`, `tieBreakRank`, `statusIconsFor`, `collectReactions`. `onTurnStart(ctx, actor)` no longer takes the
+  elapsed ticks and `onTurnEnd(ctx, actor, resultsApplied = true)` gained the flag the Poison marker needs (false for a passed turn).
+- `ActorRuntime` (engine-private; moved to `src/battle/ffx/runtime.ts` because `state.ts` crossed 400 lines, re-exported from `state.ts`) gains `icv` (the base counter stored
+  at battle start, which a revival restores), `regenTicks` (the holder's own Regen tick counter) and `poolBaseHp` / `poolBaseMp` (the maxima before Double HP / Double MP).
+- The draw order of a hit is W1's (hit roll, HP variance, critical roll), then the damage classes' variances, then one `% 101` draw per status with a chance byte (Threaten
+  `% 100`), then one for the shatter of a Petrified record. An ability with a game record rolls the record's bytes; its `statusEffects` and `removesStatuses` are read only
+  for an ability with no record. The opening counters are the game's 26 fixed draws (none for a preemptive or ambush start).
+- Two data requirements, optional fields that are now errors where they bite: a Poisoned enemy needs `EnemyDef.poisonTickPercent`, an enemy a Doom lands on needs
+  `EnemyDef.doomTurns`. Every shipped enemy carries them or is immune (Ginnem and Daigoro take no turns).
+- The chain carry (`BattleScreenSetup.ts#carriedFfxState`, Sin links 2 and 3): a member that carries `max-hp-x2` or `max-mp-x2` is handed on with its BASE maxima in
+  `FFXMemberBuild.stats` / `AeonBuild.stats` (no shape change) and the next link's engine doubles them under the game's cap (`statuses.ts#rebuildCarriedPools`). Before, the
+  doubled ceiling travelled and was halved back, which the cap (9,999 HP, 999 MP, or 99,999 and 9,999 with Break HP / MP Limit) makes impossible.
+- Doc comments only in `src/battle/common/types.ts`: `StatusInstance.turnsRemaining` (which statuses tick, and when), the `regen` entry of `StatusId`, the `turn-start`
+  event's `elapsedTicks`.
+- `FFXCommandRecord` (`src/battle/common/types.ts`) gains the optional `shatter` (record byte 0x2c, only non-zero bytes stored; additive). The shatter chance is one of the
+  status step's inputs, and the engine now reads the RECORD's byte for every recorded command and `AbilityDef.shatterChance` only for an ability with no game record. Where
+  the two differed (7 abilities of ours with a chance the record does not have, 148 recorded abilities and the party's Attack with a chance our data never authored) the
+  record wins; `tests/unit/data-ffx-command-records.test.ts` pins the list. The doc comment that said the shatter chance was not repeated in the record is corrected.
+
 ## 2026-10-09 — The FFX engine raises the game's `onHit` once per target per sub-action, and the boss AI of Chapters II and III follows the game's scripts (re-parity AI lane B; FFX only; no shared contract file changed)
 
 Branch `re-parity-ai-ffx-b`. No file in the contract list changed. Recorded because the engine's public surface and the order in which a boss's events arrive change. Handoff:
@@ -145,6 +189,16 @@ Branch `re-parity-ai-ffx-b`. No file in the contract list changed. Recorded beca
   (`targeting.ts#resolveTargets`). Set on Gravija (the front line and himself, not his Pagodas) and Osmose.
 - Draw order: a boss pick (`findMatchingChr`) draws only with two or more candidates, a roll is `GetRandomValue` (sixteen bits) reduced by the script's own `mod`; the engine's one seeded stream still supplies both. Adopting the
   game's own generators is a separate decision (plan P3). Every seed-pinned Chapter II and III expectation downstream (the two goldens, the strategy and chapter tests) moved with it and was re-pinned with its cause.
+
+## 2026-10-08 — `FFXCommandRecord` gains the status bytes: `rank`, `chances`, `durations`, `extra`, `stage`, `buff` (re-parity W2; FFX only; additive)
+
+Branch `re-parity-w2`. `src/battle/common/types.ts`: `FFXCommandRecord` (the game's own command record on an FFX ability, `AbilityDef.record`) gains six optional members, all read from
+the same kernel tables as the five W1 fields: `rank` (record byte 0x24, the CTB rank), `chances` (bytes 0x2e to 0x46, the chance byte of each of the 25 regular statuses, non-zero ones as `[status, byte]`),
+`durations` (0x47 to 0x53, the 13 temporal statuses), `extra` (word 0x54, the extra-status bits), `stage` (word 0x56 and byte 0x59, the stage buffs) and `buff` (byte 0x5a, Double HP / Double MP /
+Spellspring / the 9999 hit / always-critical / the two Overdrive multipliers). `src/data/ffx/command-records/` regenerates all 452 records with them (`rank` always, the rest when non-zero); the engine's
+four core abilities (`attack`, `defend`, `aeon-shield`, `aeon-boost`) carry theirs inline in `src/battle/ffx/registry.ts`. Six abilities of ours were attached to a record of the same name that did not carry their
+status payload and are re-attached by their status bytes (`evrae-stone-gaze` 0x6062, the three Sin gazes 0x609d/0x609e/0x609f, `power-wave-aeon` 0x60d2, `mind-blast-aeon` 0x60f6;
+`research/re-ffx-commands.md` section 7). FFX-2 and FF7 data never set the members and no code of theirs reads them. Game case: FFX only.
 
 ## 2026-10-08 (night) — A giant's phone fit stays its link's own by the rig's line, not by where the rig stands: `BattleCamera.addRig`'s `continues`, `LinkFits.registered`, `BattleCameraLike.addRig` (Chapter XIII's Trema link; FFX-2 only in effect; additive)
 

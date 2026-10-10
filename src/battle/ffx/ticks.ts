@@ -4,13 +4,17 @@
  * Regen pays out at the **start of any unit's turn** — not only the carrier's —
  * which is what makes the `+100` addend matter and what the Yunalesca fight
  * weaponises against Zombied party members [ffx-combat-core §4.3].
+ *
+ * **The tick rules are the game's** (re-parity W2; FFX only): the start-of-turn tick (Regen's payout from each holder's own tick
+ * counter, Regen's countdown, the stances, the Threaten pair), Doom's countdown, the end-of-turn counters and Poison are the
+ * kernels of `kernel/turn-ticks.ts`, reached through `./adapt/ticks.ts`. What stays here is what the kernels do not model: the
+ * Overdrive gauge's turn hooks, the Omnis and Sin hooks and the equipment reactions.
  */
 
 import type { AbilityDef, CombatantId, FFXCombatant, ItemId } from '../common/types.ts';
-import { idiv } from './math.ts';
-import { type Ctx, allCombatants, has, isAlive, livingFriendlies, onField, rtOf, spendItem, statusOf, tryActor } from './state.ts';
-import { dealDamage, healOutsideChain, koActor } from './hp.ts';
-import { clearUntilNextTurnStatuses, refreshCriticalStatus, removeStatus, tickDurationStatuses } from './statuses.ts';
+import { type Ctx, has, isAlive, livingFriendlies, onField, spendItem, tryActor } from './state.ts';
+import { refreshCriticalStatus } from './statuses.ts';
+import { doomTurn, endOfTurn, startOfTurn } from './adapt/ticks.ts';
 import { hasAuto } from './equipment.ts';
 import { onTurnStartGauge } from './overdrive.ts';
 import { ATTACK_ABILITY_ID } from './registry.ts';
@@ -59,93 +63,41 @@ const REMEDY_CURES: readonly string[] = [
 ];
 
 /**
- * Regen's payout: `HP += floor(elapsedTicks * maxHP / 256) + 100`, for every
- * unit carrying it, at the start of any unit's turn. The sign flips on a
- * Zombie, which is the attrition engine of the Yunalesca fight.
+ * Everything that happens as a combatant's turn opens, in the game's order (`pp_BtlTurnStart`, VA 0x00792a90): the start-of-turn
+ * tick, then the scripts' pre-turn hooks, then Doom, then the actor's own gauge hooks.
+ *
+ * The tick (VA 0x007af4f0): Regen pays every holder on the field `(its own tick counter * maxHP >> 8) + 100` (a Zombie takes it
+ * as damage), the actor's Regen counter counts down, Defend, Guard, Sentinel, Shield and Boost end on the actor unless equipment
+ * gives them, and the Threaten pair the actor belongs to is released. Doom's countdown (VA 0x00799cd0) goes down one; at 0 the
+ * actor dies and its turn is over, which the caller sees as a dead actor.
  */
-export function payRegen(ctx: Ctx, elapsedTicks: number): void {
-  for (const c of allCombatants(ctx)) {
-    if (!has(c, 'regen') || !isAlive(c)) continue;
-    const amount = idiv(elapsedTicks * c.stats.maxHp, 256) + 100;
-    if (has(c, 'zombie')) {
-      dealDamage(ctx, c, amount, { element: 'none', crit: false, hitIndex: 0, hitCount: 1 });
-    } else {
-      healOutsideChain(ctx, c, amount, 'regen');
-    }
-  }
-}
-
-/** Everything that happens as a combatant's turn opens. */
-export function onTurnStart(ctx: Ctx, actor: FFXCombatant, elapsedTicks: number): void {
-  // The preTurn hooks run at every turn start, before Doom and the action request: the formation's for
-  // everybody, then the actor's own script (re-parity, FFX only; `ai/hooks.ts`). Inert with none registered.
+export function onTurnStart(ctx: Ctx, actor: FFXCombatant): void {
+  startOfTurn(ctx, actor);
+  // The scripts' preTurn hooks run at every turn start, after the start-of-turn tick and before Doom and the action request: the formation's
+  // for everybody, then the actor's own script (re-parity, FFX only; `ai/hooks.ts`). Inert with none registered. That is the game's order:
+  // its turn start calls the tick (VA 0x007af4f0), then requests the pre-turn entry of the scripts (VA 0x00792a90), then Doom's tick
+  // (VA 0x00799cd0). The release-candidate line ran the hooks ahead of Regen's payout, before the tick was the game's.
   runPreTurn(ctx, actor);
-  payRegen(ctx, elapsedTicks);
-  clearUntilNextTurnStatuses(ctx, actor);
   refreshCriticalStatus(ctx, actor);
 
   // Doom counts down on the victim's own turn, even while asleep or skipping.
-  const doom = statusOf(actor, 'doom');
-  if (doom && doom.turnsRemaining !== null) {
-    doom.turnsRemaining -= 1;
-    ctx.emit({ type: 'status-tick', targetId: actor.id, status: 'doom', remaining: doom.turnsRemaining });
-    if (doom.turnsRemaining <= 0) {
-      removeStatus(ctx, actor, 'doom', 'expired');
-      koActor(ctx, actor, actor.id);
-      return;
-    }
-  }
+  if (doomTurn(ctx, actor)) return;
 
   const soleSurvivor = actor.side !== 'enemy' && livingFriendlies(ctx).length === 1;
   onTurnStartGauge(ctx, actor, soleSurvivor);
-
-  releaseThreatenFrom(ctx, actor);
-
-  // A Threaten whose user has left the field (KO'd, dismissed, ejected) can
-  // never reach the release above, so it is released here instead — §4.2's
-  // "KO-ing the user removes Threaten", generalised to any way of leaving.
-  const own = statusOf(actor, 'threaten');
-  if (own) {
-    const user = own.sourceId === undefined ? undefined : tryActor(ctx, own.sourceId);
-    if (!user || !isAlive(user)) removeStatus(ctx, actor, 'threaten', 'expired');
-  }
 }
 
 /**
- * Threaten "lasts until the **user's** next turn, and the target's next turn is
- * then scheduled **immediately after** the user's" [ffx-combat-core §4.2].
- *
- * So the release is keyed to the *user* opening a turn, not to the target
- * reaching one — the target reaching one is precisely what Threaten prevents.
- * `StatusInstance.sourceId` exists for this rule. The reschedule is modelled by
- * dropping the freed target's counter to the field minimum, which after the
- * caller's `normalise()` is the acting user's own 0: the user finishes its
- * action, its counter grows by its recovery, and the target is then the lowest
- * on the field.
+ * Everything that happens as a combatant's turn closes: the end-of-turn tick (VA 0x007af390: Sleep, Silence, Darkness, Shell,
+ * Protect, Reflect, Haste and Slow count down one) and Poison, which only follows an action whose results were applied.
+ * `resultsApplied` is false for a passed turn (a sleeper's), which takes no Poison damage (VA 0x007b20e0).
  */
-function releaseThreatenFrom(ctx: Ctx, user: FFXCombatant): void {
-  for (const c of allCombatants(ctx)) {
-    const threaten = statusOf(c, 'threaten');
-    if (!threaten || threaten.sourceId !== user.id) continue;
-    removeStatus(ctx, c, 'threaten', 'expired');
-    rtOf(ctx, c.id).ctb = 0;
-  }
-}
-
-/** Everything that happens as a combatant's turn closes. */
-export function onTurnEnd(ctx: Ctx, actor: FFXCombatant): void {
-  tickDurationStatuses(ctx, actor);
-
-  // Poison: `maxHP // 4` for characters; enemies use their own percentage.
-  if (has(actor, 'poison') && isAlive(actor)) {
-    const percent = actor.enemy?.poisonTickPercent;
-    const amount =
-      percent !== undefined ? idiv(actor.stats.maxHp * percent, 100) : idiv(actor.stats.maxHp, 4);
-    if (amount > 0) {
-      dealDamage(ctx, actor, amount, { element: 'none', crit: false, hitIndex: 0, hitCount: 1 });
-      runPostPoison(ctx, actor); // the monster's postPoison hook, right after its own tick (Macalania's Seymour only)
-    }
-  }
+export function onTurnEnd(ctx: Ctx, actor: FFXCombatant, resultsApplied = true): void {
+  // (Nothing of Omnis's runs at a turn's end any more: his discs turn from the script's `onHit` and his affinity is
+  // refreshed by the formation's pre-turn hook, `ai/seymour-omnis.ts`.)
+  // The monster's postPoison hook runs right after its own Poison tick (Macalania's Seymour only): `endOfTurn` says
+  // whether the tick damaged the actor.
+  if (endOfTurn(ctx, actor, resultsApplied)) runPostPoison(ctx, actor);
   // Sin link 3 (FFX): once more after the counters and the tick, so a Genais KO inside the counter phase (Zombie +
   // its own Cura) frees the Core before the next menu, not an action later (CHECK 2 finding 2). A no-op elsewhere.
   runSinLivenessHooks(ctx);

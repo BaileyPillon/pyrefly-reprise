@@ -159,26 +159,53 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * presentation (scenes, HUDs, statures, art) and reach no battle log. Nothing on the boss or the party was tuned.
  * Releases 39.2 to 39.4.2 changed no FFX battle code or data (their battle-side changes are FFX-2's Trema data, the Leblanc
  * preview's chapter registry and `types.ts`'s `hopelessRetry`). A digest that moves from here on is a change to explain.
+ * All 18 digests re-baselined again 2026-10-09 by re-parity W2 on its own branch, before the merge below ("game-code parity", FFX only): the turn order and the statuses
+ * now come from the kernels proven against FFX.exe too. The opening counters are the game's 26 fixed draws (the party's, the aeons'
+ * and the monsters' own streams, empty slots included), the clock counts a byte counter per slot down one point per tick and picks the
+ * next actor by the game's tie key, recovery is HasteSlow(tickSpeed * max(rank, 1)) with the game's command ranks, every hit that lands
+ * runs the infliction step (one draw per status with a chance byte, % 101, the game's chance and duration bytes), and Regen, Poison,
+ * Doom and the end-of-turn counters tick the way the game's tick functions do. Every log moves because the draw order, the draw count
+ * and the numbers moved, which is the point, and tests/unit/parity-ffx-engine-ctb-status.test.ts, parity-ffx-engine-status.test.ts
+ * and parity-ffx-engine-ticks.test.ts are the proof that the engine computes what the kernels compute. Three outcomes moved, all on
+ * seeds that were not tuned: seymour-anima-macalania#7 victory -> defeat, seymour-omnis#7 victory -> defeat and
+ * isaaru-via-purifico#1 (its third link) victory -> defeat; the other 15 keep their outcome. One seed is one sample of a chapter
+ * whose win rate is well away from 0 and 100, so a flipped seed is not a change of difficulty: the 500-seed rates, before and
+ * after, are in docs/handoff/re-parity-w2.md. The old values are in git history (the commit before the one that moved them).
+ * Chapter II (Yunalesca) re-baselined a second time the same day, same track (FFX only): a Regen that lands resets its holder's own tick
+ * counter (the exe's hit-record write-back, VA 0x0078f060), so a fresh Regen pays the ticks since the cast and not the 255 the counter had
+ * saturated at (a Zombie took maxHP + 100 from it). That moves the two Yunalesca digests (Regen is her party's and her own spell);
+ * every outcome is still victory and no other digest moved.
+ * Release candidate 2, 2026-10-10 (re-parity RC2-W2: W2 merged onto release candidate 1, "game-code parity" for the turn order, the status step and the
+ * per-turn ticks on top of the game-script lanes, FFX only; docs/handoff/re-parity-w2.md, "Merged onto release candidate 1"). The merged tree was run
+ * against release candidate 1's table above: ALL 18 digests move, and that is the point of the merge and not an accident of it. W2 changes how many
+ * draws a battle spends and in which order (the opening is the game's 26 fixed draws, a hit that lands runs the infliction step with its one draw per
+ * status, the clock counts a byte per slot and picks by the game's tie key, the ticks are the game's), so every log differs from its first turn. The
+ * scripts on top are unchanged: the 24 AI parity files and tests/unit/re-parity-ai-merged-hooks.test.ts pass on the merged tree (their setup lines now
+ * read the game's byte counters), and tests/unit/re-parity-w2-rc1-merge.test.ts pins the seams of the merge. Five outcomes moved on seeds nobody tuned:
+ * yunalesca#1 defeat -> victory, braskas-final-aeon#1 link 1 defeat -> seven victories, seymour-natus#7 defeat -> victory, seymour-omnis#7 defeat ->
+ * victory and isaaru-via-purifico#1 link 3 victory -> defeat; the other 13 keep their outcome. One seed is one sample, not a change of difficulty: the
+ * 500-seed rates are in the handoff, and the one chapter whose rate moved by more than sampling is Chapter X (386 -> 302 of 500, Natus's Flare at the
+ * game's rank 3; with rank 5 put back the merged tree wins 386, release candidate 1's number). Nothing on the boss or the party was tuned.
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': '2c90f3e4:victory',
-  'seymour-flux#7': 'b4e09b07:victory',
-  'yunalesca#1': '92593bcc:defeat',
-  'yunalesca#7': 'a986c071:victory',
-  'braskas-final-aeon#1': '8e66e41a:defeat',
-  'braskas-final-aeon#7': '4d03bcf:victory ecf9d5ca:victory 73095ebb:victory 7da3a6c6:victory 35dd0a26:victory 56db843f:victory 4a48b320:victory',
-  'seymour-anima-macalania#1': 'd6364844:victory',
-  'seymour-anima-macalania#7': 'f5b75fc0:victory',
-  'evrae-airship#1': 'f57a4639:victory',
-  'evrae-airship#7': '551512c6:victory',
-  'yojimbo-cavern#1': 'a8bfe256:victory',
-  'yojimbo-cavern#7': '1e3f39eb:victory',
-  'seymour-natus#1': 'c2522add:victory',
-  'seymour-natus#7': '514b6086:defeat',
-  'seymour-omnis#1': 'e6d67f23:victory',
-  'seymour-omnis#7': '9b077938:defeat',
-  'isaaru-via-purifico#1': '8d821114:victory 6894473d:victory 57e66da:victory',
-  'isaaru-via-purifico#7': '70244c57:victory f901bf84:victory e9573bc6:victory',
+  'seymour-flux#1': 'f43e6425:victory',
+  'seymour-flux#7': 'b3b5dc89:victory',
+  'yunalesca#1': 'e4fa5b5:victory',
+  'yunalesca#7': 'e8ac709e:victory',
+  'braskas-final-aeon#1': '2a9963a1:victory 7ce233c2:victory b87824d1:victory 54b637e9:victory 7050e863:victory 79dafd3d:victory e705f669:victory',
+  'braskas-final-aeon#7': '84ded0fc:victory 3f923603:victory ff619cfa:victory 42a858b4:victory 9423d5cf:victory 8177bb67:victory d34a326:victory',
+  'seymour-anima-macalania#1': '717af44e:victory',
+  'seymour-anima-macalania#7': '24c905b1:victory',
+  'evrae-airship#1': '7cbbc0a9:victory',
+  'evrae-airship#7': 'a6f3a8cd:victory',
+  'yojimbo-cavern#1': '31e2df5d:victory',
+  'yojimbo-cavern#7': 'a4d2201f:victory',
+  'seymour-natus#1': '3d2c375e:victory',
+  'seymour-natus#7': 'a6ddf6a4:victory',
+  'seymour-omnis#1': '24b9763c:victory',
+  'seymour-omnis#7': 'f4692070:victory',
+  'isaaru-via-purifico#1': '93bb6988:victory 99f47fed:victory b0b4e114:defeat',
+  'isaaru-via-purifico#7': '65881ea:victory 90bccf93:victory f4940447:victory',
 };
 
 describe('FFX engine goldens (every FFX chapter, the line, whole chain)', () => {

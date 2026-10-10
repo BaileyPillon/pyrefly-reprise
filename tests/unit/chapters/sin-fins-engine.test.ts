@@ -423,19 +423,28 @@ describe('Negation (§5.1.3, S-12: the script\'s score)', () => {
 
   it('NEAR Negation strips both sides, records what it took, and leaves Auto-Life, Doom and a permanent status', () => {
     const e = engineOn('sin-left-fin', 12, 'near');
+    // Re-parity W2 (FFX only): a Poisoned enemy must carry the Poison byte of its monster record (the tick is an error without it), and the
+    // Fin's data has none, being Poison-proof in play. The Fin here carries Poison because the test forces every status on, and since it no
+    // longer carries Sleep (below) it takes its turn and so a tick; this test is about what Negation takes, so the byte is scaffolding.
+    who(e, 'left-fin').enemy!.poisonTickPercent = 10;
     const party: StatusId[] = [...NEGATION_REMOVES];
     // Petrify would shatter a struck monster, and Threaten, Sleep, Confuse and Berserk stop its counter (the game's
     // isCounterattackAllowed, re-parity D-18): the Fin carries the other 19.
     const blocks: StatusId[] = ['petrify', 'threaten', 'sleep', 'confuse', 'berserk'];
     const onFin = party.filter((s) => !blocks.includes(s));
+    // Re-parity W2 (FFX only): Petrify stands alone in the game, and the game's cleanse works on a Petrified record only for Petrify itself
+    // (research/re-ffx-ctb-status.md section 12, correction 4), so a member who carried both would keep the Zombie the cleanse reaches
+    // first (status 1 comes before Petrify's 2). Petrify goes on Auron, the other 23 on Tidus.
+    const onTidus = party.filter((s) => s !== 'petrify');
     let checked = false;
     for (let i = 0; i < 3000 && !checked; i++) {
       invincible(e, 'left-fin');
       const tidus = who(e, 'tidus');
-      for (const s of party) tidus.statuses[s] = inst(s);
+      for (const s of onTidus) tidus.statuses[s] = inst(s);
       tidus.statuses['auto-life'] = inst('auto-life');
       tidus.statuses['doom'] = inst('doom');
       who(e, 'auron').statuses['regen'] = inst('regen', true);
+      who(e, 'auron').statuses['petrify'] = inst('petrify');
       for (const s of onFin) who(e, 'left-fin').statuses[s] = inst(s);
       const d = e.nextDecision();
       if (d.kind === 'battle-over') break;
@@ -443,7 +452,8 @@ describe('Negation (§5.1.3, S-12: the script\'s score)', () => {
       const before = e.state().log.length;
       e.submit(attackAt(d, 'left-fin') ?? defend());
       if (!e.state().log.slice(before).some((ev) => ev.type === 'counter' && ev.abilityId === 'sin-fin-negation')) continue;
-      for (const s of party) expect(tidus.statuses[s], s).toBeUndefined();
+      for (const s of onTidus) expect(tidus.statuses[s], s).toBeUndefined();
+      expect(who(e, 'auron').statuses['petrify'], 'petrify').toBeUndefined();
       for (const s of onFin) expect(who(e, 'left-fin').statuses[s], s).toBeUndefined();
       expect(tidus.statuses['auto-life']).toBeDefined();
       expect(tidus.statuses['doom']).toBeDefined();
@@ -454,8 +464,9 @@ describe('Negation (§5.1.3, S-12: the script\'s score)', () => {
       const gone = (id: string): StatusId[] =>
         after.flatMap((ev) => (ev.type === 'status-remove' && ev.reason === 'dispelled' && ev.targetId === id ? [ev.status] : [])).sort();
       const taken = readNegationTaken(flags(e));
-      expect([...taken['tidus']!].sort()).toEqual([...party].sort());
-      expect(gone('tidus')).toEqual([...party].sort());
+      expect([...taken['tidus']!].sort()).toEqual([...onTidus].sort());
+      expect(gone('tidus')).toEqual([...onTidus].sort());
+      expect(gone('auron')).toEqual(['petrify']);
       expect([...taken['left-fin']!].sort()).toEqual(gone('left-fin'));
       expect(gone('left-fin')).toContain('mental-break');
       expect(taken['auron'] ?? []).not.toContain('regen');

@@ -14,11 +14,13 @@
 
 import type { CombatantId } from '../../common/types.ts';
 import { type Ctx, rtOf, tryActor } from '../state.ts';
-import { normalise } from '../turnQueue.ts';
 
-/** Write the start hook's counters, after `seedInitialCtb` has run: the boss at 0, every party slot one tick later. */
+/**
+ * Write the start hook's counters, after `seedInitialCtb` has run (the game's 26 fixed opening draws, re-parity W2): the boss at
+ * 0, every party slot one tick later. The counters are the game's bytes (0..255) and the clock counts each of them down, so the
+ * script's writes stand as they are: nothing is rebased, and a counter pushed back is clamped at 255.
+ */
 export function applyBossOpening(ctx: Ctx, bossIds: readonly CombatantId[]): void {
   for (const id of bossIds) if (tryActor(ctx, id) !== undefined) rtOf(ctx, id).ctb = 0;
-  for (const id of [...ctx.state.activeIds, ...ctx.state.reserveIds]) rtOf(ctx, id).ctb += 1;
-  normalise(ctx);
+  for (const id of [...ctx.state.activeIds, ...ctx.state.reserveIds]) rtOf(ctx, id).ctb = Math.min(255, rtOf(ctx, id).ctb + 1);
 }

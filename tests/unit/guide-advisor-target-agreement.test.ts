@@ -273,12 +273,18 @@ describe('the guide and the advisor never disagree about who a command hits', ()
     // D-08), so the opening's draws and targets moved again: in seeds 1 to 40 no opening puts the first Holy Water on Tidus (it goes to
     // Kimahri on seeds 3, 9, 12, 25, 27, 36 and 40, to Yuna on 28 and 32). Seed 9 stays and the label it keeps is Kimahri's: the rule
     // pinned here is that a single-target command names the character on both panels, not which character.
-    const { engine, content } = newFfxEngine('seymour-flux', gagazetBuild, 9);
+    // 2026-10-09 on the W2 branch (re-parity W2, FFX only): the opening counters are the game's 26 fixed draws, so the order of the opening turns
+    // moved again; seed 10 was the first of seeds 1 to 60 whose opening reached the Holy Water on Tidus.
+    // 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only): the two sets of changes move the draws once more, and seed 2's opening
+    // puts the first Holy Water on Tidus himself again, the premise this test was written on (seeds 12 and 25 do too; it goes to Kimahri on seeds
+    // 10, 21, 24, 27, 36, 41, 49, 50 and 59 and to Yuna on seed 3; the other seeds of 1 to 60 reach none inside six steps). The label is the rule's
+    // witness, not the rule.
+    const { engine, content } = newFfxEngine('seymour-flux', gagazetBuild, 2);
     const watch: Watch = { id: 'holy-water', seenLabel: null };
     const result = walkFfx(engine, content, 6, watch);
     expect(result.decisions).toBeGreaterThan(0);
     expect(result.mismatches).toEqual([]);
-    expect(watch.seenLabel).toBe('Kimahri');
+    expect(watch.seenLabel).toBe('Tidus');
   });
 
   it('an all-enemies command reads "all enemies" on both panels (Chapter 5 opener)', () => {

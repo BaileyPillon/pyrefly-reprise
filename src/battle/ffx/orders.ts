@@ -29,7 +29,7 @@
  */
 
 import type { AbilityDef, Command, FFXCombatant } from '../common/types.ts';
-import { type Ctx, canAct, tryActor } from './state.ts';
+import { type Ctx, canQueueAction, tryActor } from './state.ts';
 
 /** `AbilityDef.extra` key: the combatant id this row orders to act. */
 export const ORDERS_ACTOR = 'ordersActor';
@@ -55,7 +55,7 @@ export function orderedAction(ctx: Ctx, orderer: FFXCombatant, def: AbilityDef):
   if (typeof who !== 'string' || typeof what !== 'string') return null;
   if (who === orderer.id) return null;
   const actor = tryActor(ctx, who);
-  if (!actor || actor.side !== orderer.side || !canAct(actor)) return null;
+  if (!actor || actor.side !== orderer.side || !canQueueAction(actor)) return null;
   if (!ctx.content.ability(what)) return null;
   return { actor, command: { kind: 'ability', id: what, targets: [] } };
 }

@@ -101,7 +101,7 @@ export interface HitInput {
   gilOffered?: number;
   /** True switches the variance off (every class uses the plain factor 256 and draws nothing). */
   noVariance?: boolean;
-  /** The result of the status infliction; the default is "nothing changed". */
+  /** The result of the status infliction, when it is already known; the default is "nothing changed". Overridden by {@link HitIo.status}. */
   status?: StatusOutcome;
 }
 
@@ -113,6 +113,12 @@ export interface HitIo {
   hit: HitRollResult | (() => HitRollResult);
   /** The critical decision, or a function that makes the roll (called only for a command that can crit). */
   crit: boolean | (() => boolean);
+  /**
+   * The status infliction step, made lazily so that its draws come AFTER the damage classes' (the game's order: hit roll,
+   * HP variance, critical roll, MP variance, CTB variance, then the 25 statuses, then the shatter roll). Called once, only for
+   * a hit that lands, at the point of the pipeline where the game runs the step; its result replaces {@link HitInput.status}.
+   */
+  status?: () => StatusOutcome;
 }
 
 export type HitOutcome = 'hit' | 'miss' | 'noEffect' | 'nullified';

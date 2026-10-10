@@ -100,6 +100,9 @@ import { MAX_DECISIONS, SEEDS, WINDOWS, attack, newEngine, runIntended } from '.
 // 2026-10-09, re-parity AI-Seymour (FFX only): Flux and the Mortiorchis now follow the game's own scripts (D-01 to D-08 of
 // research/re-ffx-ai-seymour.md). All four named seeds win, and so does every seed measured (see docs/handoff/re-parity-ai-seymour.md
 // for the 500-seed table and the ablation of what moved it). Nothing on the boss or the party was tuned.
+// 2026-10-10, re-parity W2 merged onto release candidate 1 (FFX only): the turn order, the status step and the per-turn ticks are the game's on top of
+// those scripts (the Mortiorchis is still charged the dummy Command 150's rank 3, tests/unit/re-parity-w2-rc1-merge.test.ts). All four named seeds still win
+// and seeds 1 to 40 are 40 of 40; the four windows are 158 of 160 (it was 160) and the shipped line wins 499 of seeds 1 to 500 (it won all 500).
 const KNOWN_LOSSES: readonly number[] = [];
 
 /**
@@ -211,7 +214,7 @@ describe('the shipped intended strategy beats Chapter 1', () => {
    * Gems on their one turn: 23 -> 17 of these forty, measured with nothing else changed (26 -> 17
    * against live a999d133, both fixes together). 17/40 is under half: this is a floor, not a promise.
    */
-  it('keeps at least 36 wins in forty contiguous seeds (measured 40 on 2026-10-09)', () => {
+  it('keeps at least 36 wins in forty contiguous seeds (measured 40 on 2026-10-09 and again on 2026-10-10)', () => {
     const results = Array.from({ length: 40 }, (_, i) => runIntended(i + 1));
     const wins = results.filter((r) => r.outcome === 'victory').length;
     const lost = results
@@ -229,7 +232,7 @@ describe('the shipped intended strategy beats Chapter 1', () => {
     // scripts. The ablation (docs/handoff/re-parity-ai-seymour.md) shows no single row decides it: reverting the seven rows
     // together gives 85 of 500 wins, any six of them leave it near 100 %. Nothing on the boss or the party was tuned; the
     // difficulty it implies is Bailey's call. The floor is the project's 90 % bar.
-    expect(wins, 'Chapter 1 fell below its 36/40 floor (40/40 measured 2026-10-09, re-parity AI-Seymour)').toBeGreaterThanOrEqual(36);
+    expect(wins, 'Chapter 1 fell below its 36/40 floor (40/40 measured 2026-10-09, re-parity AI-Seymour; 40/40 again with re-parity W2 merged, 2026-10-10)').toBeGreaterThanOrEqual(36);
   }, 120_000);
 
   /**
@@ -240,7 +243,7 @@ describe('the shipped intended strategy beats Chapter 1', () => {
    * the floor sits five wins below it. At most two losses before battle turn 10 (measured 1: seed 20
    * at turn 8), and a battle turn is the engine's, not a player's. Nothing on the boss was tuned.
    */
-  it('keeps at least 144 wins over the four standard windows (measured 160 of 160 on 2026-10-09)', () => {
+  it('keeps at least 144 wins over the four standard windows (measured 160 of 160 on 2026-10-09, 158 of 160 on 2026-10-10)', () => {
     const perWindow: number[] = [];
     let early = 0;
     for (const [a, b] of WINDOWS) {
@@ -261,7 +264,9 @@ describe('the shipped intended strategy beats Chapter 1', () => {
     // sourced answer as the forty-seed window above, Cross Cleave always landing. Nothing was tuned.
     // 45 -> 160 on 2026-10-09 (re-parity AI-Seymour, FFX only; floor 40 -> 144 = 90 %, early losses 12 -> 2, none measured): see the
     // forty-seed window above. Nothing was tuned.
-    expect(total, 'Chapter 1 fell below its 144/160 floor (160/160 measured 2026-10-09, re-parity AI-Seymour)').toBeGreaterThanOrEqual(144);
+    // 160 -> 158 on 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only; 40 / 40 / 39 / 39): two seeds of 160 lose now, none before turn 10;
+    // the 500-seed rate is 499 of 500 (docs/handoff/re-parity-w2.md). Floor and bound unchanged. Nothing was tuned.
+    expect(total, 'Chapter 1 fell below its 144/160 floor (160/160 measured 2026-10-09, re-parity AI-Seymour; 158/160 with re-parity W2 merged, 2026-10-10)').toBeGreaterThanOrEqual(144);
     expect(early, 'a loss before battle turn 10 is a wipe, not a fight').toBeLessThanOrEqual(2);
   }, 240_000);
 

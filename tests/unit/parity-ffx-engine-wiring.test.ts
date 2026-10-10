@@ -24,6 +24,8 @@ import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
 import { CORE_ABILITIES, computeDamage, critChance, hitChance, resolveAbility } from '../../src/battle/ffx/index.ts';
 import { critCheck, critChanceOf } from '../../src/battle/ffx/kernel/crit.ts';
 import { hitCheck, hitPlan } from '../../src/battle/ffx/kernel/hit.ts';
+import { noStatusOutcome } from '../../src/battle/ffx/kernel/aftermath.ts';
+import { subCtb } from '../../src/battle/ffx/kernel/ctb.ts';
 import { calcHitDamage, type HitOutput } from '../../src/battle/ffx/kernel/hitdamage.ts';
 import { accuracyFormulaOf, resolveCommand } from '../../src/battle/ffx/adapt/command.ts';
 import {
@@ -113,6 +115,12 @@ function viaKernels(sit: Situation, hits: number): Run {
       draw: next('V'),
       hit: () => hitCheck(inp.hit, next('P')),
       crit: () => critCheck(inp.crit, 0, next('P')).crit,
+      // The status step has nothing to inflict here, but a Petrified target costs it one shatter roll (VA 0x0078b4e0), spent
+      // whether or not the command has a shatter chance; none of this pool's abilities has one, so it changes nothing.
+      status: () => {
+        if (sit.target.petrify) next('P')();
+        return noStatusOutcome(inp.input.record.perm, inp.input.record.extra);
+      },
     });
     nul = [out.nul.blaze, out.nul.frost, out.nul.shock, out.nul.tide];
     if (out.outcome === 'nullified') { tokens.push('miss:nullified'); continue; }
@@ -121,7 +129,8 @@ function viaKernels(sit: Situation, hits: number): Run {
     const [a0, a1, a2] = out.amounts;
     const classes = sit.def.record!.damageClass;
     const maxHp = sit.target.maxHp, maxMp = sit.target.maxMp;
-    if ((classes & 4) !== 0) ctb = Math.max(0, ctb + a2);
+    // the live class bit 4 of the result word (a Delay Attack sets it too), applied as SubCtb does: clamp(counter + amount, 0, 255)
+    if ((out.resultMask & 4) !== 0 && a2 !== 0) ctb = subCtb(ctb, a2);
     if ((classes & 2) !== 0 && a1 !== 0) mp = Math.max(0, Math.min(maxMp, mp - a1));
     if ((classes & 1) !== 0 && a0 !== 0) {
       const usesWeapon = ((sit.def.record!.flagsMisc & 0x40000) !== 0);
@@ -245,6 +254,9 @@ describe('an ability with no game record runs on a derived one', () => {
     expect(resolveCommand({ ...derived, damageType: 'magical', flags: ['heals'] }, { side: 'party' }).record.flagsDamage).toBe(0x12);
     expect(resolveCommand({ ...derived, flags: ['drains'] }, { side: 'party' }).record.flagsMisc & 0x100).toBe(0x100);
     expect(resolveCommand({ ...derived, flags: ['ignores-armored'] }, { side: 'party' }).record.flagsMisc & 0x10000).toBe(0x10000);
+    // Delay Attack and Delay Buster are bits of the record's flag word (0x2000, 0x4000): the hit kernel applies them (re-parity W2).
+    expect(resolveCommand({ ...derived, flags: ['weak-delay'] }, { side: 'party' }).record.flagsMisc & 0x6000).toBe(0x2000);
+    expect(resolveCommand({ ...derived, flags: ['strong-delay'] }, { side: 'party' }).record.flagsMisc & 0x6000).toBe(0x4000);
   });
 
   it('is exactly the ability with those words written out as its record, on the same draws', () => {
@@ -308,8 +320,9 @@ describe('an enemy\'s plain Attack is not the party\'s record', () => {
       expect(plain).toEqual(kernels);
       draws.add(viaEnemy.kinds);
     }
-    // a miss stops after the hit roll; a hit adds the variance; a sleeping or petrified target is struck with no roll at all; never a critical roll
-    expect([...draws].sort()).toEqual(['P', 'PV', 'V']);
+    // a miss stops after the hit roll; a hit adds the variance; a sleeping target is struck with no roll at all (V), and so is a petrified
+    // one, except that the status step spends its one shatter roll on it (VP, re-parity W2); never a critical roll
+    expect([...draws].sort()).toEqual(['P', 'PV', 'V', 'VP']);
   });
 
   it('the previews print what the engine rolls for it', () => {

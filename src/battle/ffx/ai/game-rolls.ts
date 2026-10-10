@@ -18,7 +18,7 @@
  */
 
 import type { CombatantId, FFXCombatant } from '../../common/types.ts';
-import { type Ctx, canAct, friendlies, has, isAlive, targetable } from '../state.ts';
+import { type Ctx, canQueueAction, friendlies, has, isAlive, targetable } from '../state.ts';
 
 /**
  * The game's actor ids for the party and the aeons: party 0 to 7, aeons 8 to 17, monsters 20 and up in formation order
@@ -92,5 +92,5 @@ export function zombieSlots(ctx: Ctx): number {
 
 /** True when `performCommand` would queue for this actor (`pp_BtlCanAct`: not asleep, Threatened, Confused or Berserk). */
 export function canQueue(actor: FFXCombatant): boolean {
-  return canAct(actor) && !has(actor, 'confuse') && !has(actor, 'berserk');
+  return canQueueAction(actor) && !has(actor, 'confuse') && !has(actor, 'berserk');
 }

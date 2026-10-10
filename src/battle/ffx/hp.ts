@@ -12,6 +12,7 @@ import { type Ctx, has, isAlive, rtOf, statusOf, tryActor } from './state.ts';
 import { clearStatusesOnKo, refreshCriticalStatus, removeStatus } from './statuses.ts';
 import { onRevived } from './turnQueue.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
+import { releaseThreatenLink } from './adapt/threaten.ts';
 
 /** Metadata for a `damage` event. */
 export interface DamageEventInfo {
@@ -218,6 +219,10 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
   // every form and the script overwrites HP wholesale.
   if (hasNextForm(target) && advanceForm(ctx, target)) return;
 
+  // The death handler dissolves the Threaten pair the dying character is an end of (VA 0x0078c740 -> 0x0078e410), before
+  // Auto-Life can stand it up again [re-parity W2].
+  releaseThreatenLink(ctx, target);
+
   const autoLife = statusOf(target, 'auto-life');
   if (autoLife && !target.flags.noRevive) {
     // A **permanent** Auto-Life is the fayth's, and it is non-consumable:
@@ -295,8 +300,12 @@ export function reviveActor(ctx: Ctx, target: FFXCombatant, hp: number, cause: s
  * the aeon's innate Eject immunity** because it bypasses Aeon Ribbon rather
  * than rolling Eject [ffx-combat-core §6.1, ffx-seymour-flux §4.5, §7.7.1].
  */
-export function ejectActor(ctx: Ctx, target: FFXCombatant, cause: 'eject' | 'shatter' | 'banish'): void {
-  if (cause !== 'banish' && (target.immunities['eject'] ?? 0) >= 255) return;
+export function ejectActor(ctx: Ctx, target: FFXCombatant, cause: 'eject' | 'shatter' | 'banish', force = false): void {
+  // `force`: the infliction step has already decided (it checked the target's extra-status immunity itself, and a Petrify that lands
+  // on a monster puts Eject in the record whatever the monster's immunity says), so the old guard does not apply [re-parity W2].
+  if (!force && cause !== 'banish' && (target.immunities['eject'] ?? 0) >= 255) return;
+  // The function that takes a character off the field also dissolves its Threaten pair (VA 0x0078e410) [re-parity W2].
+  releaseThreatenLink(ctx, target);
   target.statuses['eject'] = {
     id: 'eject',
     turnsRemaining: null,

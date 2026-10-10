@@ -70,7 +70,7 @@ export function counterOf(c: FFXCombatant, status: StatusId): number {
   return has(c, status) ? 1 : 0;
 }
 
-/** The four Nul counters (`Chr+0x610` to `0x613`): 0 none, 0xff a permanent one (never ticks), else the charges left. */
+/** The four Nul counters (hit record +0x0d to +0x10, `Chr+0x60e` to `0x611`): 0 none, 0xff a permanent one (never ticks), else the charges left. */
 export function nulCounters(c: FFXCombatant): NulCounters {
   const one = (status: StatusId): number => {
     const inst = statusOf(c, status);
@@ -111,12 +111,16 @@ export function affinityMasks(c: FFXCombatant): ElementAffinity {
   return masks;
 }
 
-/** `Chr+0x5b8`: bit 1 Armored, bit 2 immune to fractional damage, 0x20 immune to physical, 0x40 to magical, 0x80 to everything. */
+/**
+ * `Chr+0x5b8`: 0x01 Armored, 0x02 immune to fractional damage, 0x04 immune to Life (the status step reads it: a Life on a Zombie
+ * kills it unless the target is immune to Life), 0x20 immune to physical, 0x40 to magical, 0x80 to everything.
+ */
 export function specialWord(c: FFXCombatant): number {
   const flags = c.immunityFlags;
   let word = 0;
   if (flags.includes('armored')) word |= 0x01;
   if (flags.includes('immune-to-percentage-damage')) word |= 0x02;
+  if (flags.includes('immune-to-life')) word |= 0x04;
   if (flags.includes('immune-to-physical-damage')) word |= 0x20;
   if (flags.includes('immune-to-magical-damage')) word |= 0x40;
   if (flags.includes('immune-to-damage')) word |= 0x80;
@@ -132,9 +136,16 @@ export function autoWordA(c: FFXCombatant): number {
   return word;
 }
 
-/** `Chr+0x6be`: 0x800 Break Damage Limit. */
+/**
+ * `Chr+0x6be`: 0x200 Break HP Limit (the Double HP ceiling goes from 9,999 to 99,999), 0x400 Break MP Limit (999 to 9,999),
+ * 0x800 Break Damage Limit (the damage cap). `research/re-ffx-ctb-status.md` section 7.
+ */
 export function autoWordB(c: FFXCombatant): number {
-  return hasAuto(c, 'break-damage-limit') ? 0x800 : 0;
+  let word = 0;
+  if (hasAuto(c, 'break-hp-limit')) word |= 0x200;
+  if (hasAuto(c, 'break-mp-limit')) word |= 0x400;
+  if (hasAuto(c, 'break-damage-limit')) word |= 0x800;
+  return word;
 }
 
 /** `Chr+0x640`: 8 "every hit deals exactly 9999" (Trio of 9999, Quartet of 9), 0x10 "always critical" (Hero and Miracle Drink). */
