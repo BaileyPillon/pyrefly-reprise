@@ -119,6 +119,10 @@ export function executeCommand(
       const outgoing = tryActor(ctx, outId);
       const incoming = tryActor(ctx, inId);
       if (!outgoing || !incoming) return NOTHING;
+      if (ctx.rt.noSwitch === true) {
+        ctx.emit({ type: 'message', text: 'Switch is disabled in this battle', kind: 'system' });
+        return { rank: 0, rejected: true, damageDealt: 0 };
+      }
       const slotIndex = ctx.state.activeIds.indexOf(outId);
       if (slotIndex < 0) return NOTHING;
       // The incoming member takes the turn happening right now [§1.7], so one

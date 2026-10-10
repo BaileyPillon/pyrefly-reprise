@@ -24,6 +24,7 @@ import { FFX2_FALLEN_AEONS_GUIDE } from './ffx2-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_GUIDE } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_GUIDE } from './seymour-natus.ts';
 import { ISAARU_GUIDE } from './ffx-isaaru.ts';
+import { SINSPAWN_GUI_GUIDE } from './sinspawn-gui.ts';
 import { SIN_FINS_CORE_GUIDE } from './sin-fins-core.ts';
 import { SIN_FACE_GUIDE } from './sin-face.ts';
 
@@ -55,6 +56,7 @@ export {
   SEYMOUR_OMNIS_GUIDE,
   SEYMOUR_NATUS_GUIDE,
   ISAARU_GUIDE,
+  SINSPAWN_GUI_GUIDE,
   SIN_FINS_CORE_GUIDE,
   SIN_FACE_GUIDE,
 };
@@ -88,6 +90,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   SEYMOUR_NATUS_GUIDE,
   // Chapter XIV (FFX only), listed 2026-09-25 as is (125/200 on the bench).
   ISAARU_GUIDE,
+  // The hidden Sinspawn Gui chapter (FFX only, `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  SINSPAWN_GUI_GUIDE,
   // Chapters XVII and XVIII (FFX only), listed 2026-09-29 with their chapters: the Fins and the Core, the Face.
   SIN_FINS_CORE_GUIDE,
   SIN_FACE_GUIDE,

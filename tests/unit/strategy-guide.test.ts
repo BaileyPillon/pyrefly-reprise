@@ -42,7 +42,7 @@ import {
   stateOnlyEngine,
 } from '../../src/engine/tactics/guide.ts';
 import { GUIDES, guideForChapter } from '../../src/data/guides/index.ts';
-import { getChapter } from '../../src/data/encounters.ts';
+import { CHAPTER_IDS, getChapter } from '../../src/data/encounters.ts';
 import { TACTICS } from '../../src/engine/tactics/index.ts';
 
 const MAX_DECISIONS = 4_000;
@@ -312,7 +312,8 @@ describe('phase notes', () => {
 
 describe('src/data/guides', () => {
   it('has one guide per chapter, and every chapter that ships a tactic has one', () => {
-    expect(GUIDES).toHaveLength(18);
+    // The listed chapters' guides; a hidden experiment's guide (the Experiment's, 'ffx2-masterpiece-theatre') rides in GUIDES beside them and is pinned by its own suite.
+    expect(GUIDES.filter((g) => (CHAPTER_IDS as readonly string[]).includes(g.id))).toHaveLength(18);
     for (const id of [
       'seymour-flux',
       'yunalesca',

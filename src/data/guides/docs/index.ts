@@ -25,6 +25,7 @@ import { FFX2_FALLEN_AEONS_DOC } from './ffx2-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_DOC } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_DOC } from './seymour-natus.ts';
 import { ISAARU_DOC } from './ffx-isaaru.ts';
+import { SINSPAWN_GUI_DOC } from './sinspawn-gui.ts';
 import { SIN_FINS_CORE_DOC } from './sin-fins-core.ts';
 import { SIN_FACE_DOC } from './sin-face.ts';
 
@@ -45,6 +46,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   SEYMOUR_OMNIS_DOC,
   SEYMOUR_NATUS_DOC,
   ISAARU_DOC,
+  SINSPAWN_GUI_DOC, // the hidden Sinspawn Gui chapter (FFX only)
   SIN_FINS_CORE_DOC,
   SIN_FACE_DOC,
 ];

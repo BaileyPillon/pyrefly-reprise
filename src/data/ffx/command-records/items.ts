@@ -85,6 +85,7 @@ export const COMMAND_RECORDS_ITEMS: Readonly<Record<string, FFXCommandRecord>> =
   'ability-sphere': { id: 0x2049, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0 }, // Ability Sphere
   'blk-magic-sphere': { id: 0x204f, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0 }, // Blk Magic Sphere
   'special-sphere': { id: 0x204c, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0 }, // Special Sphere
+  'lv-1-key-sphere': { id: 0x2051, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0 }, // Lv. 1 Key Sphere (the id 81 the Gui note names)
   'lv-3-key-sphere': { id: 0x2053, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0 }, // Lv. 3 Key Sphere
   'lv-4-key-sphere': { id: 0x2054, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0 }, // Lv. 4 Key Sphere
 };

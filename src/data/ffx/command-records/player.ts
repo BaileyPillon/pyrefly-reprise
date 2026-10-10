@@ -11,6 +11,7 @@
 import type { FFXCommandRecord } from '../../../battle/common/types.ts';
 
 export const COMMAND_RECORDS_PLAYER: Readonly<Record<string, FFXCommandRecord>> = {
+  'requiem': { id: 0x30e3, type: 4, flagsMisc: 0x4001006, flagsDamage: 0xe, damageClass: 1 }, // Requiem (Seymour's Overdrive; no pierce bit, so an Armored arm takes a third; research/re-ffx-ai-gui.md section 7.4)
   'cure': { id: 0x302b, type: 2, flagsMisc: 0x15130087, flagsDamage: 0x12, damageClass: 1 }, // Cure
   'cura': { id: 0x302c, type: 2, flagsMisc: 0x15030087, flagsDamage: 0x12, damageClass: 1 }, // Cura
   'curaga': { id: 0x302d, type: 2, flagsMisc: 0x15230087, flagsDamage: 0x12, damageClass: 1 }, // Curaga

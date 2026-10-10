@@ -42,6 +42,7 @@ const CHARACTER_PRIORITY: readonly string[] = [
   'wakka',
   'lulu',
   'rikku',
+  'seymour', // the guest of the hidden Sinspawn Gui chapter: the game's party actor 7, after Rikku (`research/re-ffx-ai-gui.md` section 5.7)
 ];
 
 const MAGUS_PRIORITY: readonly string[] = ['cindy', 'sandy', 'mindy'];

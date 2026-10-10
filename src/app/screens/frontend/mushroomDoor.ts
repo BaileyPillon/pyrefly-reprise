@@ -19,7 +19,7 @@
  *
  * Game case: FFX only (the chapter is FFX's); the board and the door are shared plumbing.
  */
-import { SINSPAWN_GUI_ID } from '../../../data/chapter-sinspawn-gui.ts';
+import { SINSPAWN_GUI_ID } from '../../../data/ffx/sinspawn-gui-ids.ts';
 
 /** THE WORD. Typed on chapter select, it opens the hidden Sinspawn Gui chapter. */
 export const MUSHROOM_DOOR_WORD = 'mushroom';

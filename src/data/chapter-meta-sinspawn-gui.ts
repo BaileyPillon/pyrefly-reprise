@@ -4,7 +4,8 @@
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
-import { SINSPAWN_GUI_ID, SINSPAWN_GUI_TEXT, MUSHROOM_ROCK_SCENE } from './chapter-sinspawn-gui.ts';
+import { SINSPAWN_GUI_TEXT } from './chapter-sinspawn-gui.ts';
+import { MUSHROOM_ROCK_SCENE, SINSPAWN_GUI_ID } from './ffx/sinspawn-gui-ids.ts';
 
 export const SINSPAWN_GUI_META: ChapterMeta = {
   id: SINSPAWN_GUI_ID,

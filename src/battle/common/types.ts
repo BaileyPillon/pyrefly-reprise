@@ -563,6 +563,13 @@ export interface CombatantFlags {
    * Mortiphasm discs [ffx-seymour-omnis §2, single source: GameFAQs].
    */
   neverRandomTarget?: boolean;
+  /**
+   * **The game's `BattleDistance`** (FFX; Sinspawn Gui's head, 1, `research/re-ffx-ai-gui.md` section 4): a command reaches this combatant only when its
+   * own reach (0 to 3, from its record: `battle/ffx/reach.ts`) is at least this number. 1 puts it out of reach of every reach-0 command (Attack and the melee
+   * skills, Tidus's and Auron's physical Overdrives, Steal, the Breaks) while every spell, Lancet, Scan, item and Requiem lands; a user whose weapon reaches
+   * (Wakka) lands his weapon commands too. Absent (0) for everyone else, so no other battle changes. Read by `targeting.ts#reachesTarget`.
+   */
+  battleDistance?: number;
 }
 
 /**
@@ -2774,6 +2781,20 @@ export interface MusicPhaseCue {
   fadeMs?: number;
 }
 
+/**
+ * What a formation does to the party's line-up (FFX only; `EnemyGroupDef.lineUp`).
+ * The roster is the chapter's build plus `joins`; the active three are `activeSlots` and everyone else on the roster waits on the bench, unless `noSwitch`
+ * closes the bench for this link (the forced trio has no reserve to swap with, and the Switch row is gone from every menu).
+ */
+export interface FFXLinkLineUp {
+  /** Members who join the party for this link only (a guest): added to the roster at setup, never part of the chapter's own build (so the prep screen and the earlier links never show them). */
+  joins?: FFXMemberBuild[];
+  /** The line-up this link opens on, in slot order, by id (members of the roster or of `joins`). */
+  activeSlots: [string, string, string] | [string, string] | [string];
+  /** Switch is disabled for the whole link: no bench row in any menu, and a Switch command is refused. */
+  noSwitch?: boolean;
+}
+
 /** One battle's enemy formation. */
 export interface EnemyGroupDef {
   /** Formation id, e.g. `'seymour-flux'`. */
@@ -2876,6 +2897,19 @@ export interface EnemyGroupDef {
    * first entry is never changed: it carries Paragon's state as the sources have it. Absent everywhere else.
    */
   hopelessRetry?: { standing: number; answer: 'restore' | 'chapter-start' };
+  /**
+   * **FFX, a link that changes the line-up** (the hidden Sinspawn Gui chapter's second fight: Yuna, Seymour and Auron, with Switch off; `research/re-ffx-ai-gui.md`
+   * section 2.1). Read by `battle/ffx/setup.ts#buildBattle` and by `commands.ts`; absent everywhere else, so no other chain changes.
+   * Every forced line-up so far was forced for the whole chapter; this one is a property of a **formation**, so a chain can open on the player's own three and
+   * continue on a trio the story chose.
+   */
+  lineUp?: FFXLinkLineUp;
+  /**
+   * **FFX, a chain whose last link pays every link's spoils** (Sinspawn Gui: "AP and Gil from battle 1 are paid with battle 2's"; GameFAQs, `[single source]`).
+   * Set on the LAST link; `app/screens/BattleChainSpoils.ts#chainSpoils` then sums the AP, gil and drops of the links before it into the result the
+   * results screen shows, as FFX-2's chains always did. Absent everywhere else, so every other FFX chain keeps its last result as before.
+   */
+  poolsChainSpoils?: boolean;
   /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema); FFX too, statuses only (Sin links 2 and 3; CONTRACT-CHANGES). */
   carriesPartyState?: boolean;
   timedAilmentDefaults?: boolean; // FFX-2: a duration-0 ailment row lasts §2.8's default, not until cured (Chapter XIII; CONTRACT-CHANGES)

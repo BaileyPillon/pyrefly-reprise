@@ -53,7 +53,7 @@ export function scriptCoin(ctx: Pick<Ctx, 'rng'>): boolean {
  * Tidus 0 .. Rikku 6, the aeons from 8, the monsters 20 and up in formation order.
  * (`research/re-ffx-ai-seymour.md` section 1.2.)
  */
-const PARTY_ORDER: readonly string[] = ['tidus', 'yuna', 'auron', 'kimahri', 'wakka', 'lulu', 'rikku'];
+const PARTY_ORDER: readonly string[] = ['tidus', 'yuna', 'auron', 'kimahri', 'wakka', 'lulu', 'rikku', 'seymour']; // Seymour is the game's party actor 7 (`ai/game-rolls.ts` ACTOR_ID): the guest of Mushroom Rock Road
 const AEON_ORDER: readonly string[] = [
   'valefor', 'ifrit', 'ixion', 'shiva', 'bahamut', 'anima', 'yojimbo', 'cindy', 'sandy', 'mindy',
 ];

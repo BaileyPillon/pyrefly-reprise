@@ -202,6 +202,8 @@ export function applyStatus(
 
   if (status === 'haste') removeStatus(ctx, target, 'slow', 'overwritten');
   if (status === 'slow') removeStatus(ctx, target, 'haste', 'overwritten');
+  // A Slow with no duration (the game's Venom, `research/re-ffx-ai-gui.md` section 4) strips Haste and slows no one; nothing else in the data carries one.
+  if (status === 'slow' && app.duration === 0) return true;
   if (status === 'provoke' || status === 'threaten') {
     removeStatus(ctx, target, 'berserk', 'overwritten');
     removeStatus(ctx, target, 'confuse', 'overwritten');

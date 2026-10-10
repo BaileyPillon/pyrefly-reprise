@@ -49,6 +49,9 @@ function collectRewards(ctx: Ctx): { ap: number; gil: number; drops: ItemDrop[] 
       }
     }
   }
+  // A part that grew back and fell again pays for every death (Sinspawn Gui's arms): the earlier ones were banked when it returned (`ai/sinspawn-gui-rules.ts#regrowArms`). Absent everywhere else.
+  ap += Number(ctx.state.flags['rewards.bankedAp'] ?? 0);
+  gil += Number(ctx.state.flags['rewards.bankedGil'] ?? 0);
   return { ap, gil, drops };
 }
 

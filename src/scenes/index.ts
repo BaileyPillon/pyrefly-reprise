@@ -37,6 +37,8 @@ import { buildDenOfWoeScene, DEN_OF_WOE_SLOTS } from './den-of-woe.ts';
 import { buildDjoseChamberScene, DJOSE_CHAMBER_SLOTS } from './djose-chamber.ts';
 import { DJOSE_CHAMBER_PLATE } from '../data/ixion-plates.ts';
 import { buildHighbridgeScene, HIGHBRIDGE_SLOTS } from './highbridge.ts';
+import { buildMushroomRockRoadScene, MUSHROOM_SLOTS } from './mushroom-rock-road.ts';
+import { MUSHROOM_ROCK_SCENE } from '../data/ffx/sinspawn-gui-ids.ts';
 import { buildViaPurificoScene, VIA_PURIFICO_SLOTS } from './via-purifico.ts';
 import { buildSector1ReactorScene, SECTOR1_SLOTS } from './sector1-reactor.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
@@ -218,6 +220,9 @@ SCENES.set('garden-of-pain', { key: 'garden-of-pain', title: 'Inside Sin — the
 /** The Highbridge of Bevelle (Chapter X, FFX only): real, `build` unreachable as for Leblanc [highbridge.ts]. */
 SCENES.set('bevelle-highbridge', { key: 'bevelle-highbridge', title: 'Highbridge of Bevelle — before the Main Gate',
   build: buildDemoScene, slots: HIGHBRIDGE_SLOTS, placeholder: false });
+/** Mushroom Rock Road (the hidden Sinspawn Gui chapter, FFX only, a provisional plate): real, `build` unreachable as for Leblanc [mushroom-rock-road.ts]. */
+SCENES.set(MUSHROOM_ROCK_SCENE, { key: MUSHROOM_ROCK_SCENE, title: "Mushroom Rock Road — Operation Mi'ihen",
+  build: buildDemoScene, slots: MUSHROOM_SLOTS, placeholder: false });
 /** The Via Purifico, the last chamber (Chapter XIV, FFX only): real, `build` unreachable as for Leblanc [via-purifico.ts]. */
 SCENES.set('via-purifico', { key: 'via-purifico', title: 'Via Purifico — the last chamber',
   build: buildDemoScene, slots: VIA_PURIFICO_SLOTS, placeholder: false });
@@ -274,6 +279,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'road-to-the-farplane': buildRoadToTheFarplaneScene,
   'garden-of-pain': buildGardenOfPainScene,
   'bevelle-highbridge': buildHighbridgeScene,
+  [MUSHROOM_ROCK_SCENE]: buildMushroomRockRoadScene, // the hidden Sinspawn Gui chapter (FFX only)
   'via-purifico': buildViaPurificoScene,
   'den-of-woe': buildDenOfWoeScene,
   [DJOSE_CHAMBER_PLATE]: buildDjoseChamberScene, // Chapter XVI (FFX-2 only); the provisional plate's key

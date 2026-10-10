@@ -22,6 +22,9 @@ import {
 } from './state.ts';
 import { isReachZero } from './reach.ts';
 
+/** `flagsMisc` bit 18: the command uses the weapon's properties (Wakka's weapon commands reach at range). */
+const MISC_USES_WEAPON_BIT = 0x40000;
+
 /**
  * **Reach — the airship range gate.** FFX only.
  *
@@ -96,6 +99,13 @@ export const REACHES_OUT_OF_MELEE: ReadonlySet<CombatantId> = new Set(['wakka', 
  * Chapter XII, so no other battle changes.
  */
 export function reachesTarget(ctx: Ctx, user: FFXCombatant, def: AbilityDef, target: FFXCombatant): boolean {
+  // The game's own rule (`CombatantFlags.battleDistance`, Sinspawn Gui's head): the command's reach, from its record, against the target's distance. At distance 1 only the
+  // reach-0 commands (Attack, the melee skills, the physical Overdrives) fall short; a user whose weapon reaches (Wakka's `rangedWeapon`) lands the commands that use the weapon too.
+  const distance = target.flags.battleDistance ?? 0;
+  if (distance > 0 && user.side !== target.side) {
+    if (!isReachZero(def)) return true;
+    return ctx.rt.actors.get(user.id)?.rangedWeapon === true && ((def.record?.flagsMisc ?? 0) & MISC_USES_WEAPON_BIT) !== 0;
+  }
   if (target.flags.outOfMeleeReach !== true || user.side === target.side) return true;
   if (def.damageType !== 'physical') return true;
   return REACHES_OUT_OF_MELEE.has(user.id) || ctx.rt.actors.get(user.id)?.rangedWeapon === true;

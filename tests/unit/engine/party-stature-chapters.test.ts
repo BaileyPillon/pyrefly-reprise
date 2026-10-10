@@ -37,12 +37,16 @@ const FFX_CHAPTERS = [
   'sin-face', // XVIII
 ] as const;
 
+/** The hidden FFX experiments: FFX chapters by their own `game`, so the rule reaches them, but not on the board (the first test counts the listed eleven). Sinspawn Gui (2026-10-10; `mushroom-door.test.ts`). */
+const HIDDEN_FFX_CHAPTERS = ['sinspawn-gui'] as const;
+const FFX_REACHED = [...FFX_CHAPTERS, ...HIDDEN_FFX_CHAPTERS];
+
 const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS];
 
-/** Every id a chapter's party may field: the build's members (FFX: the bench too; FFX-2: the girls). */
+/** Every id a chapter's party may field: the build's members (FFX: the bench too; FFX-2: the girls). A guest in the party (Seymour, `FFXGuestSpec`) is not one of the seven heroes of the table: his height is the scene's to name. */
 function membersOf(c: Chapter): string[] {
-  const build = c.buildRef as { members?: Array<{ id: string }> };
-  return (build.members ?? []).map((m) => m.id);
+  const build = c.buildRef as { members?: Array<{ id: string; guest?: unknown }> };
+  return (build.members ?? []).filter((m) => m.guest === undefined).map((m) => m.id);
 }
 
 function slotsOf(c: Chapter): { partyHeight: number; figureHeights: Readonly<Record<string, number>> } {
@@ -61,7 +65,7 @@ describe('party stature against the shipped chapters', () => {
   });
 
   it('stands every hero of an FFX chapter at his scene\'s party height times his ratio, Tidus at the party height itself', () => {
-    for (const id of FFX_CHAPTERS) {
+    for (const id of FFX_REACHED) {
       const c = ALL.find((x) => x.id === id)!;
       const { partyHeight, figureHeights } = slotsOf(c);
       const build = c.buildRef as FFXPartyBuild;
@@ -77,7 +81,7 @@ describe('party stature against the shipped chapters', () => {
   });
 
   it("puts Kimahri's painting 30 percent over Tidus's (his body 21 percent) and Yuna 9 percent under him in every FFX chapter whose scene does not name them", () => {
-    for (const id of FFX_CHAPTERS) {
+    for (const id of FFX_REACHED) {
       const c = ALL.find((x) => x.id === id)!;
       const { partyHeight, figureHeights } = slotsOf(c);
       const h = (hero: string): number => figureHeight({ shared: partyHeight, own: figureHeights[hero], stature: partyStature(c.game, 'party', hero) }).height;
@@ -87,7 +91,7 @@ describe('party stature against the shipped chapters', () => {
   });
 
   it('names no hero in any FFX scene but Chapter XIV\'s Yuna (the one scene whose party height is a hero\'s own)', () => {
-    for (const id of FFX_CHAPTERS) {
+    for (const id of FFX_REACHED) {
       const named = Object.keys(slotsOf(ALL.find((x) => x.id === id)!).figureHeights).filter((k) => (CHARACTER_IDS as readonly string[]).includes(k));
       expect(named, id).toEqual(id === 'isaaru-via-purifico' ? ['yuna'] : []);
     }
@@ -97,7 +101,7 @@ describe('party stature against the shipped chapters', () => {
   });
 
   it('leaves every FFX-2 chapter, the Leblanc experiment and the FF7 experiment at exactly the height their scene gave', () => {
-    const others = ALL.filter((c) => !(FFX_CHAPTERS as readonly string[]).includes(c.id));
+    const others = ALL.filter((c) => !(FFX_REACHED as readonly string[]).includes(c.id));
     expect(others.length).toBeGreaterThanOrEqual(9); // seven FFX-2, the hidden Leblanc, the hidden FF7
     for (const c of others) {
       const { partyHeight, figureHeights } = slotsOf(c);

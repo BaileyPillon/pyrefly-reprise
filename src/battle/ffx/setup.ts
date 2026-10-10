@@ -31,6 +31,8 @@ import { seedInitialCtb } from './turnQueue.ts';
 import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
 import { applyEvraeSetup } from './ai/evrae-rules.ts';
 import { applySinSetups } from './ai/sin-setup.ts';
+import { applyGuiSetup } from './ai/sinspawn-gui-rules.ts';
+import { applyLinkLineUp, restorePartyOnEntry } from './line-up.ts';
 import { applyYojimboSetup } from './ai/yojimbo-rules.ts';
 import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
 import { applyIsaaruSetup } from './ai/isaaru-rules.ts';
@@ -244,6 +246,8 @@ export function buildBattle(
   // See `src/battle/common/clone.ts` for the audit that found the leaks.
   const party = cloneData(setup.party) as FFXPartyBuild;
   const group = cloneData(setup.enemies);
+  applyLinkLineUp(party, group); // a link that changes the line-up (FFX only; `EnemyGroupDef.lineUp`): the guest joins, the forced trio opens, Switch may close
+  if (group.restoresPartyOnEntry === true) restorePartyOnEntry(party); // a hopeless retry (Sinspawn Gui's second fight): everyone up and full
 
   const state: BattleState = {
     game: 'ffx',
@@ -279,6 +283,7 @@ export function buildBattle(
     chained: setup.chained === true,
     overkilled: [],
     canEscape: (setup.canEscape ?? group.canEscape ?? false) === true,
+    ...(group.lineUp?.noSwitch === true ? { noSwitch: true } : {}),
     sensedIds: new Set(),
     pendingPartRevivals: [],
     progress: { bestEnemyHp: Number.POSITIVE_INFINITY, atTurn: 0 },
@@ -366,5 +371,6 @@ export function buildBattle(
   applyAeonDuelSetup(ctx, group); // Chapter XIV's mirror lock, "only aeons", the loss and the AP [aeon-duel.ts]
   applyIsaaruSetup(ctx); // Grothia's and Pterya's gauges, Spathi's count, Isaaru's no-turn [ffx-isaaru-bevelle §4]
   applySinSetups(ctx); // Sin: link 4's clock and pulls, then links 1-3 (the Fins, Genais and the Core) [ffx-sin §5]
+  applyGuiSetup(ctx); // Sinspawn Gui: the fight number, the body's acceleration line, the arms without turns, Wakka's reach [re-ffx-ai-gui §3, §5]
   return ctx;
 }

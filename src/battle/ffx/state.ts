@@ -154,6 +154,8 @@ export interface FFXRuntime {
   overkilled: CombatantId[];
   /** Whether Escape / Flee are legal at all. */
   canEscape: boolean;
+  /** Switch is disabled for this link (`EnemyGroupDef.lineUp.noSwitch`, the Sinspawn Gui trio): no bench row in any menu, and a Switch command is refused. Absent everywhere else. */
+  noSwitch?: boolean;
   /**
    * Enemies the passive **Sensor** auto-ability has already announced.
    *

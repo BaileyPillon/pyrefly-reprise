@@ -541,7 +541,7 @@ describe('nothing the chapter does reaches the save', () => {
   it('the chapter is an experiment: its records live in the experiments\' store, never the save', () => {
     const chapter = getChapter(GUI)!;
     expect(chapter.experimental).toBe(true);
-    expect(chapter.number).toBe(19);
+    expect(chapter.number).toBe(21); // 19 is the Leblanc preview's and 20 the FFX-2 experiment lane's (`chapter-numbers.test.ts`)
     expect(window.localStorage.getItem(SAVE_KEY)).toBeNull();
   });
 });

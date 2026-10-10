@@ -20,12 +20,9 @@ import type { Chapter } from './encounters.ts';
 import { mushroomRockBuild } from './ffx/builds/mushroom-rock.ts';
 import { sinspawnGuiGroup } from './ffx/enemies/sinspawn-gui.ts';
 import { sinspawnGuiScripts } from '../story/scripts/sinspawn-gui.ts';
+import { MUSHROOM_ROCK_SCENE, SINSPAWN_GUI_ID } from './ffx/sinspawn-gui-ids.ts';
 
-/** The hidden chapter's id: its key in the experiments' store and on the board. */
-export const SINSPAWN_GUI_ID = 'sinspawn-gui' as const;
-
-/** The chapter's scene key: the Mushroom Rock Road diorama (`../scenes/mushroom-rock-road.ts`, a provisional plate). */
-export const MUSHROOM_ROCK_SCENE = 'mushroom-rock-road';
+export { MUSHROOM_ROCK_SCENE, SINSPAWN_GUI_ID }; // the ids live in `./ffx/sinspawn-gui-ids.ts` (no imports), so the scene and the door can name them without this record's graph
 
 /** The card's words (the chapter record and the pause metadata, `./chapter-meta-sinspawn-gui.ts`, both read them). Our own words over the research's sourced beats. */
 export const SINSPAWN_GUI_TEXT = {
@@ -36,11 +33,14 @@ export const SINSPAWN_GUI_TEXT = {
     'Take the thing apart, and mind who is standing next to you while you do.',
 } as const;
 
-/** Chapter XIX in registration order, but no board number: the card says EXP, the eyebrow EXPERIMENTAL (`ui/common/roman.ts`). */
+/**
+ * Number 21: past the Leblanc preview's 19 and the FFX-2 experiment lane's 20, so no two chapters share a number (`tests/unit/chapter-numbers.test.ts`; the number is a display order and an
+ * identity in the registry). It is no board number: the card says EXP, the eyebrow EXPERIMENTAL (`ui/common/roman.ts`).
+ */
 export const SINSPAWN_GUI: Chapter = {
   id: SINSPAWN_GUI_ID,
   game: 'ffx',
-  number: 19,
+  number: 21,
   experimental: true,
   ...SINSPAWN_GUI_TEXT,
   location: "Mushroom Rock Road — Operation Mi'ihen",

@@ -40,6 +40,7 @@ import './seymour-natus.ts';
 import './seymour-omnis.ts';
 import './isaaru.ts';
 import './sin-scripts.ts';
+import './sinspawn-gui.ts'; // the hidden Sinspawn Gui chapter (FFX only): the body, the head and the arms
 
 export * from './types.ts';
 export { consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';
