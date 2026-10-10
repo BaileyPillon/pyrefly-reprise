@@ -70,7 +70,7 @@
  * | C-7 / G-1 | A Trigger Command is rank 3 | {@link ORDER_RANK} |
  * | C-7 / G-2 | A redundant order still burns Cid's turn (the game offers none: needs Bailey's yes, a menu change, row D-08) | {@link REDUNDANT_ORDER_BURNS_TURN} |
  * | C-14 / G-8 | **Keep** the Reflected self-Haste — it lands on a random party member | {@link KEEP_REFLECTED_SELF_HASTE} |
- * | C-13 / G-7 | **Do not** ship "delaying Evrae advances the Haste phase" (the script has it: row D-02, kept off) | {@link DELAY_ADVANCES_HASTE_PHASE} |
+ * | C-13 / G-7 | Delaying Evrae advances the Haste phase (the script's rule, row D-02). The 2026-09-21 decision was not to ship it; **Bailey turned it on, 2026-10-09 ("Turn it on (Recommended)")** | {@link DELAY_ADVANCES_HASTE_PHASE} |
  * | C-4 | Threaten defaults to immune | `threatenChance: 0` in the data file |
  *
  * The two order ids are `'pull-back'` and `'close-in'`, exactly as the owner
@@ -176,20 +176,16 @@ export const GAZE_THRESHOLD = 6;
 export const KEEP_REFLECTED_SELF_HASTE = true;
 
 /**
- * **OWNER DECISION (C-13 / G-7), 2026-09-21: do not implement** (D-020/q7, Bailey: "Yes to all recommendations").
- *
- * The wiki claims that delaying Evrae before 1/3 makes it enter the Haste phase
- * sooner, with the mechanism unstated. §5.6 is unambiguous that an invisible
- * penalty on the player's tempo tool "is a trap, not a decision". Evrae remains
- * the only boss in the anthology that can be delayed, and delaying it is purely
- * good for the player. **The script has it** (re-parity row D-02; the note's
- * section 2.5, rows 5 to 7: Delay Attack adds 1 and Delay Buster 3 to a counter,
- * and 3 or more starts the Haste phase with no HP lost), and the owner decision
- * stands over it: the rule is built in `./evrae-counters.ts` and kept off here.
- * Bailey may turn it on by flipping this constant (a bench or a test sets
- * `state.flags[AIRSHIP_DELAY_SWITCH]` to override it for one battle).
+ * **OWNER DECISION (C-13 / G-7): ON since 2026-10-09.** The 2026-09-21 decision (D-020/q7, Bailey: "Yes to all
+ * recommendations") was not to implement it, because the wiki's claim that delaying Evrae before 1/3 makes it enter the Haste
+ * phase sooner came with the mechanism unstated, and §5.6 is unambiguous that an invisible penalty on the player's tempo tool
+ * "is a trap, not a decision". **The script has it** (re-parity row D-02; the note's section 2.5, rows 5 to 7: Delay Attack adds
+ * 1 and Delay Buster 3 to a counter, and 3 or more starts the Haste phase with no HP lost; Delay stays purely good for the
+ * player, Evrae being the only boss in the anthology that can be delayed). Bailey, 2026-10-09, shown the script's rule and
+ * asked whether to turn it on: **"Turn it on (Recommended)"**. A bench or a test still sets
+ * `state.flags[AIRSHIP_DELAY_SWITCH]` (true or false) to override it for one battle.
  */
-export const DELAY_ADVANCES_HASTE_PHASE = false;
+export const DELAY_ADVANCES_HASTE_PHASE = true;
 
 /** `state.flags` key a bench or a test sets to override {@link DELAY_ADVANCES_HASTE_PHASE} for one battle. */
 export const AIRSHIP_DELAY_SWITCH = 'airship.delayAdvancesHaste';
@@ -199,7 +195,7 @@ export const EVRAE_ASSUMPTIONS = [
   { id: 'C-7', claim: 'A Trigger Command is rank 3', value: ORDER_RANK },
   { id: 'C-7b', claim: "A redundant order still burns Cid's turn (the game offers none)", value: REDUNDANT_ORDER_BURNS_TURN },
   { id: 'C-14', claim: 'Reflect turns the self-Haste into a free party Haste', value: KEEP_REFLECTED_SELF_HASTE },
-  { id: 'C-13', claim: 'Delaying Evrae does NOT advance the Haste phase (the script does)', value: DELAY_ADVANCES_HASTE_PHASE },
+  { id: 'C-13', claim: "Delaying Evrae advances the Haste phase (the script's rule: Delay Attack +1, Delay Buster +3, the phase starts at 3; on since 2026-10-09)", value: DELAY_ADVANCES_HASTE_PHASE },
 ] as const;
 
 // ---------------------------------------------------------------------------

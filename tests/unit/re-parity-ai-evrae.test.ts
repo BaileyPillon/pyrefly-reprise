@@ -6,7 +6,8 @@
  * check; only what a hook *queues* is filtered) and 1.3 (the reach of a command). Rows D-01 to D-09 and D-34 of its section 8:
  *
  *   D-01 the Haste line is 10,666 and strict (`HP < 10,666`)
- *   D-02 Delay Attack (+1) and Delay Buster (+3) start the Haste phase at 3: the owner decision C-13 keeps it OFF (a switch)
+ *   D-02 Delay Attack (+1) and Delay Buster (+3) start the Haste phase at 3: ON since Bailey's answer of 2026-10-09 (the owner
+ *        decision C-13 had it off; a switch, `airship.delayAdvancesHaste`, still overrides it for one battle)
  *   D-03 the Stone Gaze counter takes the command's damage-formula byte: 1 is +2, 3 is +1, the rest 0
  *   D-04 the counter keeps firing after the Haste phase starts (a value above 5 fires once at the next Attack slot)
  *   D-05 his own FAR turn in the Haste phase is a Swooping Scythe, then he is NEAR and the order is gone
@@ -238,27 +239,42 @@ describe('the Haste phase starts on the first hit event under 10,666 (D-01; rows
   });
 });
 
-describe('Delay toward the Haste phase (D-02, the owner decision C-13)', () => {
-  it('is off: three Delay Attacks and a Delay Buster start nothing', () => {
-    expect(EVRAE_ASSUMPTIONS.find((a) => a.id === 'C-13')?.value).toBe(false);
+describe('Delay toward the Haste phase (D-02; the owner decision C-13, turned on by Bailey on 2026-10-09)', () => {
+  it('is on: Delay Attack +1 and Delay Buster +3, three or more start the phase with no HP lost', () => {
+    expect(EVRAE_ASSUMPTIONS.find((a) => a.id === 'C-13')?.value).toBe(true);
+    const a = fight();
+    act(a, 'tidus', 'delay-attack');
+    act(a, 'tidus', 'delay-attack');
+    expect([a.flags['airship.delayCount'], a.flags['airship.phase'], queued(a)], 'two Delay Attacks are 2: nothing yet').toEqual([2, 1, []]);
+    act(a, 'tidus', 'delay-attack');
+    expect([a.flags['airship.delayCount'], a.flags['airship.phase'], queued(a)], 'the third makes 3').toEqual([3, 2, ['evrae-haste']]);
+    const b = fight();
+    act(b, 'tidus', 'delay-buster');
+    expect([b.flags['airship.delayCount'], b.flags['airship.phase'], b.boss.hp > 20_000, queued(b)], 'one Delay Buster is enough').toEqual([3, 2, true, ['evrae-haste']]);
+  });
+
+  it('counts a Delay Attack and a Delay Buster together (1 + 3)', () => {
     const t = fight();
+    act(t, 'tidus', 'delay-attack');
+    expect(t.flags['airship.phase']).toBe(1);
+    act(t, 'tidus', 'delay-buster');
+    expect([t.flags['airship.delayCount'], t.flags['airship.phase']]).toEqual([4, 2]);
+  });
+
+  it('stops counting in the Haste phase: later Delays move nothing', () => {
+    const t = fight();
+    act(t, 'tidus', 'delay-buster'); // the phase starts
+    const count = t.flags['airship.delayCount'];
+    act(t, 'tidus', 'delay-buster');
+    expect([t.flags['airship.delayCount'], t.flags['airship.phase']]).toEqual([count, 2]);
+  });
+
+  it('is still a switch: a bench that sets it false gets the old rule, where three Delay Attacks and a Delay Buster start nothing', () => {
+    const t = fight();
+    t.flags[AIRSHIP_DELAY_SWITCH] = false;
     for (let i = 0; i < 3; i++) act(t, 'tidus', 'delay-attack');
     act(t, 'tidus', 'delay-buster');
     expect([t.flags['airship.delayCount'], t.flags['airship.phase'], queued(t)]).toEqual([1 + 1 + 1 + 3, 1, []]);
-  });
-
-  it('is built behind the switch: Delay Attack +1 and Delay Buster +3, three or more start the phase with no HP lost', () => {
-    const a = fight();
-    a.flags[AIRSHIP_DELAY_SWITCH] = true;
-    act(a, 'tidus', 'delay-attack');
-    act(a, 'tidus', 'delay-attack');
-    expect(a.flags['airship.phase']).toBe(1);
-    act(a, 'tidus', 'delay-attack');
-    expect([a.flags['airship.phase'], queued(a)]).toEqual([2, ['evrae-haste']]);
-    const b = fight();
-    b.flags[AIRSHIP_DELAY_SWITCH] = true;
-    act(b, 'tidus', 'delay-buster');
-    expect([b.flags['airship.phase'], b.boss.hp > 20_000], 'one Delay Buster is enough').toEqual([2, true]);
   });
 });
 

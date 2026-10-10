@@ -15,7 +15,7 @@
  * 4. Haste phase otherwise: nothing.
  * 5. Phase 1: the Gaze counter takes the command's step (D-03); Delay Attack counts 1 and Delay Buster 3 toward `v12`.
  * 6. HP < 10,666 (strict): the Haste phase starts (`v9`, `v11` set) with a Haste on himself (D-01).
- * 7. Else `v12` >= 3: the same Haste (D-02, the owner decision C-13 keeps it off: `DELAY_ADVANCES_HASTE_PHASE`).
+ * 7. Else `v12` >= 3: the same Haste (D-02; on since Bailey's answer of 2026-10-09, `DELAY_ADVANCES_HASTE_PHASE`).
  *
  * The Haste and the Scythe are queued reactions: a Threatened or otherwise disabled Evrae, or a hit that is itself a
  * counter-attack, still moves `v9` and `v11` without the command running. The Haste is the player's own Haste command (0x3036)
@@ -60,7 +60,7 @@ export function spendStoneGazeCounter(ctx: Ctx): void {
   ctx.state.flags[AIRSHIP_GAZE] = 0;
 }
 
-/** Whether the Delay rule is on for this battle: the owner decision (off), or a bench's override. */
+/** Whether the Delay rule is on for this battle: the owner decision (on), or a bench's override. */
 function delayRuleOn(ctx: Ctx): boolean {
   const override = ctx.state.flags[AIRSHIP_DELAY_SWITCH];
   return typeof override === 'boolean' ? override : DELAY_ADVANCES_HASTE_PHASE;
