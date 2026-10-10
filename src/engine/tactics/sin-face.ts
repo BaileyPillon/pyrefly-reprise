@@ -15,6 +15,14 @@
  *    and Auron make way for Wakka and Lulu from the bench (a switch costs no turn).
  * 5. **In reach**: Auron comes back for Armor Break (then Mental Break for Lulu), the moment it is in range;
  *    everyone else swings, Lulu keeps casting, Yuna makes way.
+ * 6. **Lulu Doublecasts** (CH-XVIII, re-parity, Bailey 2026-10-09 "Ship 12, retune our line later"): every cast of
+ *    hers is a Doublecast Firaga while she can pay for two, and she drinks an Ether when she cannot. Doublecast
+ *    is an ability this party's preset already has: the Dream's End preset grants it to her by name
+ *    (`research/ffx-bfa-yu-yevon.md` §4.2 `[verified: 2 sources]`), and the Garden of Pain and Sin's presets are that
+ *    preset less the Inside Sin finds. Lulu is the party's biggest hitter here (`research/ffx-sin.md` §6.2: Firaga
+ *    2,832 against a Break-less Sin, 3,822 with Mental Break, at MAG 44). The line asked for one Firaga a turn from her
+ *    before; on the game's 12-turn clock that left Sin about 23,000 HP short on the seeds it lost
+ *    (`docs/handoff/re-parity-ch18.md`). The Ether branch also drinks the Turbo Ether first now: one drink fills her.
  *
  * Aeons are not used, as in the bench: the preset's aeon gauges are not full (said in the bench plan). The
  * clock is the script's own, the 12th turn (re-parity AI lane C, D-31); the tactic reads it from `sin.turnsLeft`. Nothing here changes a boss number.
@@ -30,6 +38,9 @@ export const SIN_FACE_BOSS_IDS: readonly CombatantId[] = [OVERDRIVE_SIN_ID];
 
 /** The bench's potion line: under this fraction of max HP. */
 const POTION_AT = 0.35;
+
+/** Firaga's MP, for when the menu has no Firaga row to read it from (the row's own `mpCost` is used when there is one). */
+const FIRAGA_MP = 16;
 
 const SIN = OVERDRIVE_SIN_ID;
 
@@ -84,11 +95,23 @@ export const sinFace: Tactic = (actorId, commands, engine) => {
   const od = commands.find((c) => c.enabled && c.command.kind === 'overdrive' && c.validTargets.includes(SIN));
   if (od) return aim(od, SIN);
 
-  // Lulu out of Firaga's MP drinks an Ether, then a Turbo Ether.
-  if (actorId === 'lulu' && me.mp < 16) {
-    const mp = at(commands, ['Ether', 'Turbo Ether'], actorId);
+  // Lulu casts through a Doublecast while she has it, so what she keeps in reserve is a pair of Firagas; out of
+  // that she drinks a Turbo Ether (one drink, one turn), then an Ether.
+  const doublecast = row(commands, ['Doublecast']);
+  const firagaCost = commands.find((c) => c.label === 'Firaga')?.mpCost ?? FIRAGA_MP;
+  if (actorId === 'lulu' && me.mp < (doublecast ? 2 : 1) * firagaCost) {
+    const mp = at(commands, ['Turbo Ether', 'Ether'], actorId);
     if (mp) return mp;
   }
+
+  /** Lulu's cast: a Doublecast Firaga when she can pay for two, else one Firaga (or Fira). */
+  const cast = (): Command | null => {
+    const firaga = row(commands, ['Firaga']);
+    if (doublecast && firaga && firaga.command.kind === 'ability' && me.mp >= 2 * firagaCost) {
+      return { kind: 'ability', id: 'doublecast', targets: [SIN], wrappedId: firaga.command.id };
+    }
+    return at(commands, ['Firaga', 'Fira'], SIN);
+  };
 
   const swing = (): Command | null => {
     const r = commands.find((c) => c.enabled && c.command.kind === 'attack' && c.validTargets.includes(SIN));
@@ -102,7 +125,7 @@ export const sinFace: Tactic = (actorId, commands, engine) => {
       return cheer ? aim(cheer, actorId) : null;
     }
     if (actorId === 'wakka') return swing();
-    if (actorId === 'lulu') return at(commands, ['Firaga', 'Fira'], SIN);
+    if (actorId === 'lulu') return cast();
     return bring(commands, engine, 'wakka') ?? bring(commands, engine, 'lulu');
   }
 
@@ -116,7 +139,7 @@ export const sinFace: Tactic = (actorId, commands, engine) => {
     if (!broken) return at(commands, ['Armor Break'], SIN);
     if (!has(sin, 'mental-break') && party.some((c) => c.id === 'lulu')) return at(commands, ['Mental Break'], SIN) ?? swing();
   }
-  if (actorId === 'lulu') return at(commands, ['Firaga'], SIN) ?? swing();
+  if (actorId === 'lulu') return cast() ?? swing();
   if (actorId === 'yuna') {
     for (const next of ['auron', 'wakka', 'lulu']) {
       const r = bring(commands, engine, next);

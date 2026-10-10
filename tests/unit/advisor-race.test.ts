@@ -10,6 +10,11 @@
  * The boards here are reached by the chapter's own line (`intendedStrategy`), which this change
  * does not touch, so the same board is read before and after the fix.
  *
+ * **CH-XVIII (re-parity, Bailey 2026-10-09 "Ship 12, retune our line later"):** the line now wins this
+ * chapter before Sin's last turn (500 of 500 seeds on the game's twelve), so the boards of the clock's end
+ * are reached by `heldBack`: the same line until Sin's fourth turn, then everyone Defends, a party that
+ * fell behind. Those are the boards the tests below read (`left` of 1 or 2); the earlier ones still come from the line itself.
+ *
  * Game case: FFX only (the Sin chapters); the last block pins that every other board is unchanged.
  */
 
@@ -28,11 +33,25 @@ import { simulateFFXCommand } from '../../src/battle/ffx/simulate.ts';
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
 
-/** Play `chapterId` on `seed` by the chapter's line until `stop` says so; the board and menu there. */
+/**
+ * The chapter's line until Sin's fourth turn, then Defend: a party that fell behind, so the clock runs to its end
+ * (the line itself wins before it, CH-XVIII).
+ */
+const heldBack: typeof intendedStrategy = (actorId, commands, engine) => {
+  const turn = engine.state().flags['sin.turn'];
+  if (typeof turn === 'number' && turn >= 4) {
+    const guard = commands.find((c) => c.enabled && c.command.kind === 'defend');
+    if (guard) return guard.command;
+  }
+  return intendedStrategy(actorId, commands, engine);
+};
+
+/** Play `chapterId` on `seed` by the chapter's line (or `strategy`) until `stop` says so; the board and menu there. */
 async function lineUntil(
   chapterId: string,
   seed: number,
   stop: (s: Readonly<BattleState>, d: Input, e: FFXEngine) => boolean,
+  strategy: typeof intendedStrategy = intendedStrategy,
 ): Promise<{ e: FFXEngine; d: Input } | null> {
   await registerBattleContent();
   const e = new FFXEngine({ autoResolveMinigames: true });
@@ -44,7 +63,7 @@ async function lineUntil(
     if (d.kind === 'battle-over') return null;
     if (d.kind !== 'player-input') continue;
     if (stop(e.state(), d, e)) return { e, d };
-    const pick = intendedStrategy(d.actorId, d.commands, e as never);
+    const pick = strategy(d.actorId, d.commands, e as never);
     if (!pick || e.submit(pick).length === 0) return null;
   }
   return null;
@@ -67,7 +86,7 @@ describe('Overdrive Sin: the clock (Chapter XVIII)', () => {
   it('Giga-Graviton is not a lethal hit to heal against: the last turn’s card deals damage', async () => {
     let checked = 0;
     for (const seed of [1, 2, 3, 5]) {
-      const at = await lineUntil('sin-face', seed, (s) => left(s) === 1 && hurt(s));
+      const at = await lineUntil('sin-face', seed, (s) => left(s) === 1 && hurt(s), heldBack);
       if (!at) continue;
       const s = at.e.state();
       const card = buildAdvisorView(s, { actorId: at.d.actorId, commands: at.d.commands }, {})!;
@@ -85,7 +104,7 @@ describe('Overdrive Sin: the clock (Chapter XVIII)', () => {
   });
 
   it('on Sin’s last turn a raise gives way to damage (the raised ally cannot act before Giga-Graviton)', async () => {
-    const at = await lineUntil('sin-face', 1, (s) => left(s) === 1);
+    const at = await lineUntil('sin-face', 1, (s) => left(s) === 1, heldBack);
     expect(at).not.toBeNull();
     const s = at!.e.state();
     const base = { hpDelta: {}, healingToAllies: 0, harmToAllies: 0, hits: 0, misses: 0, kills: [], statusChanges: [], mpSpent: 0, rejected: false, ability: null, events: [] };
@@ -146,7 +165,7 @@ describe('Overdrive Sin: the clock (Chapter XVIII)', () => {
 
   it('advisor v4: a lost future on the clock is worth the share of Sin it took, below any win', async () => {
     const root = await lineUntil('sin-face', 1, () => true);
-    const leaf = await lineUntil('sin-face', 1, (s) => (left(s) ?? 99) <= 2);
+    const leaf = await lineUntil('sin-face', 1, (s) => (left(s) ?? 99) <= 2, heldBack);
     const v = lostValue(root!.e.state(), leaf!.e.state(), { rootAhead: 0, leafAhead: 0 }, DEFAULT_WEIGHTS);
     expect(v).toBeGreaterThan(0);
     expect(v).toBeLessThan(DEFAULT_WEIGHTS.victory);
