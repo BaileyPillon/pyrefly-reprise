@@ -21,7 +21,7 @@ import { sinLeftFinGroup, sinRightFinGroup } from '../../../src/data/ffx/enemies
 import * as finData from '../../../src/data/ffx/enemies/sin-fins.ts';
 import * as coreData from '../../../src/data/ffx/enemies/sin-genais-core.ts';
 import { sinGenaisCoreGroup } from '../../../src/data/ffx/enemies/sin-genais-core.ts';
-import { sinFahrenheitBuild, sinFinsCoreBuild } from '../../../src/data/ffx/builds/sin-fahrenheit.ts';
+import { sinFaceBuild, sinFahrenheitBuild, sinFinsCoreBuild } from '../../../src/data/ffx/builds/sin-fahrenheit.ts';
 import * as ids from '../../../src/battle/ffx/ai/sin-ids.ts';
 import { NEGATION_MERCY, NEGATION_REMOVES, NEGATION_SPARES } from '../../../src/battle/ffx/ai/sin-negation.ts';
 import { SIN_FINS_ASSUMPTIONS } from '../../../src/battle/ffx/ai/sin-fins-rules.ts';
@@ -68,7 +68,8 @@ describe('the two records (D-270) and the rename (plan §1.4)', () => {
     expect(ch?.number).toBe(18);
     expect(ch?.title).toBe('Sin: the Face');
     expect(ch?.enemyGroupRef.id).toBe('overdrive-sin');
-    expect(ch?.buildRef).toBe(sinFahrenheitBuild);
+    // The rested party, re-equipped against Gaze for link 4 (CH-XVIII, re-parity); Chapter XVII keeps the build as it was.
+    expect(ch?.buildRef).toBe(sinFaceBuild);
     expect(getChapter('sin')).toBeUndefined();
   });
 

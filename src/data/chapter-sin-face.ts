@@ -26,6 +26,10 @@
  *
  * Listed as Chapter XVIII, after Chapter XVII, on **D-279** (Bailey delegated the picks to the driver and can
  * swap any of them later) and **D-280** (Giga-Graviton on Sin's 13th turn, our estimate, until a Steam check).
+ * D-280's estimate is answered: the game's own script fires it on Sin's **12th** turn
+ * (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` section 7.2; re-parity AI lane C, D-31), and Bailey's 2026-10-09
+ * answer, "Ship 12, retune our line later (Recommended)", is this chapter's line and party (`./ffx/builds/sin-fahrenheit.ts`
+ * `sinFaceBuild`, `../engine/tactics/sin-face.ts`; `docs/handoff/re-parity-ch18.md`).
  *
  * - `title` — D-270's working title (Q13). `subtitle`, `location`, `blurb` — our own summaries of research
  *   §1.1 and §9.1-§9.2 (no line is quoted).
@@ -40,7 +44,7 @@
 
 import type { Chapter } from './encounters.ts';
 import { sinFaceScripts } from '../story/scripts/sin-face.ts';
-import { sinFahrenheitBuild } from './ffx/builds/sin-fahrenheit.ts';
+import { sinFaceBuild } from './ffx/builds/sin-fahrenheit.ts';
 import { overdriveSinGroup } from './ffx/enemies/overdrive-sin.ts';
 
 /** Chapter XVIII, listed 2026-09-29 (`./encounters.ts` `CHAPTERS`). */
@@ -59,7 +63,7 @@ export const SIN_FACE: Chapter = {
     'so Cid flies the ship straight at its face, and the mouth begins to open.',
   sceneKey: 'sin-fahrenheit-bevelle', // D-279 (the driver's pick), see the file header
   thumbnailKey: 'chapter-sin-face',
-  buildRef: sinFahrenheitBuild, // D-264; rested after the save (§1.2)
+  buildRef: sinFaceBuild, // D-264; rested after the save (§1.2) and re-equipped against Gaze (§1.2, §8 row 9)
   enemyGroupRef: overdriveSinGroup,
   scriptsRef: sinFaceScripts,
   music: {

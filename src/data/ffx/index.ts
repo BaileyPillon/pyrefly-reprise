@@ -136,7 +136,7 @@ import { SIN_FINS_ABILITIES } from './enemies/sin-fins-abilities.ts';
 import { SIN_GENAIS_CORE_ABILITIES } from './enemies/sin-genais-core-abilities.ts';
 import { sinLeftFinGroup, sinRightFinGroup } from './enemies/sin-fins.ts';
 import { sinGenaisCoreGroup } from './enemies/sin-genais-core.ts';
-import { sinFahrenheitBuild } from './builds/sin-fahrenheit.ts';
+import { sinFahrenheitBuild, sinFaceBuild } from './builds/sin-fahrenheit.ts';
 import { seymourFluxGroup } from './enemies/seymour-flux.ts';
 import { yunalescaGroup } from './enemies/yunalesca.ts';
 import { seymourAnimaMacalaniaGroup } from './enemies/seymour-anima-macalania.ts';
@@ -371,6 +371,7 @@ export {
   gardenOfPainBuild,
   viaPurificoBuild,
   sinFahrenheitBuild,
+  sinFaceBuild,
 };
 
 export type { AeonCatalogDef, OverdriveModeDef, FFXStatusDef, FFXCharacterDef };
