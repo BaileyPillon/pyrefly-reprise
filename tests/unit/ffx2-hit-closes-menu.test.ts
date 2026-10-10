@@ -221,8 +221,11 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // kernels now decide every hit, in the game's draw order, so every D = 0 log moved (all nine are still victories and no menu is
   // closed). Chapters IV and V equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 again and Chapter VI equals
   // `chapters/den-of-woe-carry.test.ts` ch6. The old hashes are in git at 029d49c7 (Chapters V and VI earlier: ea05f877, PR-0106).
+  // **Chapter IV's row re-pinned again 2026-10-09 for Mega Flare at the game's power 14** (Bailey: "Use 14 from the files"; the first
+  // event that differs is Bahamut's first Mega Flare damage; see `ffx2-atb-golden.test.ts`, ninth re-pin); the old row is in git at
+  // 3663cd3a. Chapters V and VI did not move.
   const PINNED = [
-    ['e4b265695a0e944c', '06a563cf00381651', '56bcb7393bf9332b'],
+    ['a290220ed81a53d9', 'd9f53eb0ed928677', '43393d7597f35b57'],
     ['88a170d44b71a764', 'c93b226ef0d2fd71', '6bda191adef38912'],
     ['ad3e5b13a4b416a2', 'ea6f77082eed6c19', 'a8449e5542467682'],
   ];

@@ -119,7 +119,7 @@ export const CORE_ABILITIES: AbilityDef[] = [
   def({
     id: 'mega-flare',
     name: 'Mega Flare',
-    // C = 24, solved against both published damage reports. §2.3 `[estimate]`
+    // Power 14: the game's own row (0x409c), Bailey 2026-10-09 ("Use 14 from the files"); it replaced the authored 24 of §2.3.
     power: MEGA_FLARE_CONSTANT,
     formula: 'magic',
     damageType: 'magical',

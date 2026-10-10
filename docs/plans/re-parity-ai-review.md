@@ -58,7 +58,8 @@ it, if any, is open. W4 still owns the wiring, so the AI timers stay in their cu
   Ours is a fixed seven-link chain.
 - Mega Flare's power: the files say 14, our constant is 24; two published reports fit 24. One measured
   cast in Bailey's copy settles it (the timing session of 2026-10-09 measured timing only and never
-  reached Bahamut, so it is still open).
+  reached Bahamut, so it is still open). **Answered 2026-10-09: Bailey, "Use 14 from the files".** The
+  engine carries the row's 14 on the release-candidate-1 branch (`docs/handoff/re-parity-rc1.md`).
 - Any rule that only makes sense once FFX-2's logic rate is known (the Vegnagun Head clock and the
   Oversoul idle limit in seconds). The rate is now measured, 29.97 steps a second (corrected by the
   2026-10-09 measurement: 1,200 Oversoul idle polls are 40.04 s of running clock); moving the engine's

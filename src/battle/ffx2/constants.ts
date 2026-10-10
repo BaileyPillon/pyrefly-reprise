@@ -210,8 +210,15 @@ export const STAT_STACK_MAX = 10;
 /** Bahamut's deterministic 12-action loop. [ffx2-bahamut §2.1] `[verified: 2 sources]` */
 export const BAHAMUT_COUNTDOWN_START = 5;
 
-/** Mega Flare's solved damage constant. [ffx2-bahamut §2.3] `[estimate — reasoned]` */
-export const MEGA_FLARE_CONSTANT = 24;
+/**
+ * Mega Flare's power: **14, the game's own row** (the monster-magic table, command 0x409c, `power` 14;
+ * `research/re-ffx2-commands.md` section 3 and `tests/fixtures/parity/ffx2/command_rows.json`). Bailey, 2026-10-09, shown that
+ * the row says 14 where the engine held 24: "Use 14 from the files". The 24 was `[estimate — reasoned]` (ffx2-bahamut §2.3: a
+ * constant solved under the old hand-written damage chain against two published damage reports), held at W3 because a boss
+ * number waits for Bailey. The record in `fallback-records.ts` and the data ability's record carry the same 14, and the
+ * kernels read the record's power.
+ */
+export const MEGA_FLARE_CONSTANT = 14;
 
 /** Enemy basic Attack constant; 16 makes step 6 a no-op. [ffx2-bahamut §2.3] `[estimate]` */
 export const ENEMY_ATTACK_CONSTANT = 16;

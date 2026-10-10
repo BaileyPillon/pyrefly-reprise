@@ -5,8 +5,8 @@
  * ability the game's own command row, which the parity kernels read. This file pins:
  *
  *  - every attached record is the game's row, field for field: `tests/fixtures/parity/ffx2/command_rows.json` holds the
- *    205 rows the seven chapters can reach (numbers only; `research/re-ffx2-commands.md`); the three deliberate
- *    overrides are listed in {@link OVERRIDES};
+ *    205 rows the seven chapters can reach (numbers only; `research/re-ffx2-commands.md`); the deliberate
+ *    overrides (the two Triple Attacks) are listed in {@link OVERRIDES};
  *  - every ability the seven chapters can reach has a record or is on the short list of ours that have none;
  *  - the numbers an ability carries itself that differ from its record (the record wins in the engine) are a fixture,
  *    `ability_differences.json`: a new or fixed difference must change it (regenerate with PYREFLY_UPDATE_FIXTURES=1);
@@ -61,9 +61,8 @@ const rowOf = (id: number): Row | undefined => ROWS[`0x${id.toString(16)}`];
  * waits for Bailey (never tune a boss number), not a bug the wiring may fix.
  */
 const OVERRIDES: Readonly<Record<string, Partial<Row>>> = {
-  // Mega Flare: the row says power 14; the engine keeps its authored 24 (docs/plans/re-parity-ai-review.md section 3).
-  'x2-bahamut-mega-flare': { power: 24 },
-  'mega-flare': { power: 24 },
+  // (Mega Flare was held at the authored 24 over the row's 14 until Bailey, 2026-10-09: "Use 14 from the files". Both of its
+  // records carry the row's power now, so neither is an override any more; the Mega Flare test below pins the 14.)
   // Triple Attack: the game queues Chain Attack three times; the ability is one action with three hits.
   'x2-shiva-triple-attack': { hits: 3 },
   'x2-den-baralai-triple-attack': { hits: 3 },
@@ -170,6 +169,15 @@ function withRecord(id: string): AbilityDef | undefined {
 describe('FFX-2 command records are the game\'s rows', () => {
   it('every data-layer record equals its row', () => {
     for (const [id, record] of Object.entries(FFX2_COMMAND_RECORDS)) expectIsRow(id, record, OVERRIDES[id]);
+  });
+
+  it("Mega Flare is the game's power 14 in both of its ids, record and ability (Bailey, 2026-10-09: \"Use 14 from the files\")", () => {
+    expect(rowOf(0x409c)?.power, "the game's row").toBe(14);
+    expect(FFX2_COMMAND_RECORDS['x2-bahamut-mega-flare']?.power, "the data ability's record").toBe(14);
+    expect(FALLBACK_RECORDS['mega-flare']?.power, "the engine table's record").toBe(14);
+    expect(data.ABILITIES['x2-bahamut-mega-flare']?.power, 'the data ability').toBe(14);
+    expect(defaultAbilities.get('mega-flare')?.power, "the engine table's ability").toBe(14);
+    expect(OVERRIDES['x2-bahamut-mega-flare'] ?? OVERRIDES['mega-flare'], 'no override holds it back').toBeUndefined();
   });
 
   it('Russian Roulette is the game\'s five rows in the script\'s order, one picked per cast, not their union', () => {

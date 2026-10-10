@@ -66,10 +66,13 @@ describe('the default is ON; the option `false` replays release 17\'s logs, byte
   // three release-17 options forced off (any damaging hit closes an open menu), pinned so that rule stays reproducible and distinct from the
   // default. The old hashes are in git at 029d49c7. Chapter VI's split run of seed 3 moved once more (here and in ON below) when the monster
   // rows by fight went in (`FFX2MonsterRecord.commands`: Ormi's Concussive Shock, power 4, in the first room; the Fem-Goon's own Attack row).
+  // **Chapter IV's six hashes (here and in ON below) were re-pinned again 2026-10-09 for Mega Flare at the game's power 14** (Bailey: "Use
+  // 14 from the files"; the first event that differs is Bahamut's first Mega Flare damage, see `ffx2-atb-golden.test.ts`, ninth re-pin); the
+  // old ones are in git at 3663cd3a. Chapters V and VI did not move.
   const PINNED: Record<string, string> = {
-    'IV|active|1': 'aa5dec90f7063d16', 'IV|split|1': '0fa2f4a8edb1be5b',
-    'IV|active|2': '6721ef99da65b770', 'IV|split|2': '13763da259186065',
-    'IV|active|3': '35678eca69be555b', 'IV|split|3': '0fc033783a4abb68',
+    'IV|active|1': 'b69f4a3f1b9b6b0a', 'IV|split|1': 'eef141fb06ebe8cc',
+    'IV|active|2': '00b9babadbd69165', 'IV|split|2': '274ca68e176eacb7',
+    'IV|active|3': 'cf097303e237c157', 'IV|split|3': '9adf489e36ac32b5',
     'V|active|1': '9cfe461ad465c311', 'V|split|1': '437c85e81ea08054',
     'V|active|2': 'e7b90b74c53c5a16', 'V|split|2': '94119b09f8fb5da3',
     'V|active|3': 'b84d244db178ad3e', 'V|split|3': 'e70d65bbd193fc3d',
@@ -82,9 +85,9 @@ describe('the default is ON; the option `false` replays release 17\'s logs, byte
   // All eighteen differ from release 17's: at human pace a plain hit lands on an open menu in each of
   // these runs. `ffx2-atb-golden.test.ts` holds the matching Active re-pin (same first two per chapter).
   const ON: Record<string, string> = {
-    'IV|active|1': '5b34258bf8580c9e', 'IV|split|1': 'c66739aca2d893be',
-    'IV|active|2': 'a752fe90d9c63afa', 'IV|split|2': '8217379e6a255129',
-    'IV|active|3': 'd5c988b268bebc0e', 'IV|split|3': 'ef0bc0517cc943f8',
+    'IV|active|1': '9d0cc3eb2f311ebd', 'IV|split|1': '11409ed21ed0de22',
+    'IV|active|2': 'a6512b1f55386411', 'IV|split|2': 'a7f0ad20ed99bb4d',
+    'IV|active|3': 'eb36f5accfb59945', 'IV|split|3': '528f12fc8ccb5fc8',
     'V|active|1': 'fe7ab95d0fbae673', 'V|split|1': '88e40db9940ac6e0',
     'V|active|2': '086e107f235fc649', 'V|split|2': 'a621da560e50e1e9',
     'V|active|3': '0e5f385c8dca4fa7', 'V|split|3': 'ec68335b5d29e5b9',

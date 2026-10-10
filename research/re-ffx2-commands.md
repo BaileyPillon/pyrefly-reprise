@@ -236,7 +236,7 @@ of section 5.
 | `x2-shiva-heavenly-strike` | 0x4099 | Heavenly Strike | name, in the monster's command list | fallen-aeons:x2-shiva |
 | `x2-shiva-diamond-dust` | 0x409a | Diamond Dust | name, in the monster's command list | fallen-aeons:x2-shiva |
 | `x2-bahamut-impulse` | 0x409b | Impulse | name, in the monster's command list | bahamut:bahamut |
-| `x2-bahamut-mega-flare` | 0x409c | Mega Flare | name, in the monster's command list (override) | bahamut:bahamut |
+| `x2-bahamut-mega-flare` | 0x409c | Mega Flare | name, in the monster's command list (power 14, the row's, since 2026-10-09; held at 24 before) | bahamut:bahamut |
 | `x2-anima-stare` | 0x409d | Anima Attack | Anima Attack | fallen-aeons:x2-anima |
 | `x2-anima-pain` | 0x409e | Pain | name, in the monster's command list | fallen-aeons:x2-anima |
 | `x2-anima-oblivion` | 0x409f | Oblivion | name, in the monster's command list | fallen-aeons:x2-anima |
@@ -356,7 +356,7 @@ of section 5.
 | `full-life` | 0x4069 | Full,Life | the monster's own command list | engine table |
 | `leg-slow` | 0x406c | Slow | the monster's own command list | engine table |
 | `impulse` | 0x409b | Impulse | the monster's own command list | engine table |
-| `mega-flare` | 0x409c | Mega Flare | HELD at power 24 (the game row says 14; Bailey decides (override) | engine table |
+| `mega-flare` | 0x409c | Mega Flare | power 14, the row's (it was HELD at 24 until Bailey, 2026-10-09: "Use 14 from the files") | engine table |
 | `spin-cut` | 0x4118 | Spin Cut | the monster's own command list | engine table |
 | `run-and-slash` | 0x4119 | Hit <40> Run | the monster's own command list | engine table |
 | `force-rain` | 0x411a | Force Rain | the monster's own command list | engine table |
@@ -558,9 +558,12 @@ Five of them change how a chapter plays and are worth reading first:
 
 | Ability | Row says | The record carries | Why |
 |---|---|---|---|
-| `x2-bahamut-mega-flare`, `mega-flare` | power 14 (0x409c) | power 24 | `docs/plans/re-parity-ai-review.md` section 3: Mega Flare's power waits for Bailey (the AI batch decides it). The authored 24 stays until then; nothing was retuned. |
 | `x2-shiva-triple-attack`, `x2-den-baralai-triple-attack` | one Chain Attack (0x4100) | 3 hits | the script queues the row three times; the ability is one action |
 | `x2-logos-russian-roulette` | five rows (0x40e9, 0x40ea, 0x40eb, 0x40ee, 0x40ef) | the first row plus `pickOne` of all five | the script picks one row per cast; section 2 |
+
+*(Mega Flare was the first row of this table: its record carried the authored power 24 over the row's 14, held for Bailey's word by
+`docs/plans/re-parity-ai-review.md` section 3. **Resolved 2026-10-09: Bailey, "Use 14 from the files".** `x2-bahamut-mega-flare` and
+`mega-flare` now carry the row's 14, and neither is an override.)*
 
 ## 6. The party's Attack, row by dressphere
 

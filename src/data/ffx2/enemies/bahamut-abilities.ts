@@ -115,7 +115,7 @@ export const bahamutAbilities: AbilityDef[] = [
     game: 'ffx2',
     category: 'enemy',
     mpCost: 0,
-    power: 24, // [estimate, reasoned] solved band 22-26; 24 is an attested Lv.2-magic tier constant — see §2.3
+    power: 14, // the game's own row (0x409c), Bailey 2026-10-09 "Use 14 from the files"; replaced the authored 24 (§2.3, [estimate, reasoned])
     formula: 'magic',
     damageType: 'magical',
     element: ['none'],
@@ -126,8 +126,8 @@ export const bahamutAbilities: AbilityDef[] = [
     flags: ['always-break-damage-limit'],
     canMiss: false,
     messageTemplate: 'Bahamut casts Mega Flare',
-    // Structural uncertainty [§2.3]: if the engine applies multi-target halving to enemy party-wide magic,
-    // double this to 34 instead of retuning by hand. Kept false to match the documented reading.
+    // (§2.3's structural uncertainty, whether party-wide enemy magic is halved by multi-target, is answered by the game's own
+    // damage chain now: the kernels never halve it, and nothing reads this key. Kept as it was.)
     extra: { enemyMultiTargetMagicIsHalved: false },
   },
 ];

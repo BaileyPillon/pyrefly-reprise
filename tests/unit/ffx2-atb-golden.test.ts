@@ -110,6 +110,18 @@
  * all sixty hashes moved. Outcomes: chapter 4 D = 0 is still 20/20 and the Active D = 1500 arm still 10/10; chapter 5 D = 0 is still
  * 20/20 and its Active D = 1500 arm is 2/10 (seeds 4 and 7; it was 4/10). The Wait arm still equals the D = 0 arrays and the Wait
  * engine switched to Active still equals the Active arrays (both asserted below). The old hashes are in git at 029d49c7.
+ *
+ * **Re-pinned a ninth time, the Chapter 4 arrays only, for Mega Flare at the game's power 14** (release candidate 1, 2026-10-09, FFX-2
+ * only, reason "game-code parity"; Bailey: "Use 14 from the files", `research/re-ffx2-commands.md` section 5). The ability, the engine
+ * table's record and the data record carried the authored 24 over the game's row (0x409c) and now carry the row's 14. All twenty
+ * `CH4_D0` and all ten `CH4_D1500` hashes move; **every `CH5_D0` and `CH5_D1500` hash is unchanged** (recomputed, equal), and so is
+ * every Chapter 6 hash. Cause, found by diffing the full event logs of the twenty D = 0 seeds with the 24 and the 14 (the 24 put back
+ * for the run): in every seed the first event that differs is Bahamut's first Mega Flare damage event, and only its `amount` differs
+ * (42 to 47 on a girl under Shell before, 14 to 16 after); every event before it, and the random stream up to it, is identical. (Event
+ * payloads hold the engine's live status instances, so an early `status-add` of a Shell shows a different `ticksRemaining` at the end of
+ * the run: that is the later divergence showing through, not an earlier one.) Outcomes: D = 0 still 20/20 and the Active D = 1500 arm
+ * still 10/10. The old hashes are in git at 3663cd3a. The same Chapter 4 rows moved in `ffx2-hit-closes-menu.test.ts` and
+ * `ffx2-menu-cancel-delay.test.ts`.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -117,12 +129,12 @@ import { driveChapter4, driveChapter5, logHash } from './helpers/ffx2ChapterDriv
 
 const SEEDS = Array.from({ length: 20 }, (_, i) => i + 1);
 
-/** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. */
+/** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. */
 const CH4_D0 = [
-  'e4b265695a0e944c', '06a563cf00381651', '56bcb7393bf9332b', '1c96ffd8a7e20cb8', '2d31f77fd10529eb',
-  'd12cab8261a0df7e', '1df6b9b36783b5d8', 'd6c1b30c833921ea', 'c9a464737cc7ddbb', 'e3452cd455543d55',
-  'c6113b8fc9afed5f', 'd9c570a3c9873279', '678a50d360cb7b35', '8d9cfd4163d5785a', '7a112c378f98e820',
-  '49c664f0d93e646f', '9802ebd6547e434c', '68ce23f334a6aef5', 'bfa46ae161e64640', 'a0261012b9aa3c37',
+  'a290220ed81a53d9', 'd9f53eb0ed928677', '43393d7597f35b57', '8cdf72d78e13acac', '74aa901a0269b60c',
+  'f6ca4e8f1d4e17e9', 'de7d89150562ebfc', '6526987b853aa90b', '1b566511e2607e68', '80b7a34d0faf851d',
+  '83be46d662ffff0d', '300eef3110e142ee', '8d13369305102774', 'c8501122121e7f40', '3e1c64f4b60028f1',
+  '58ce81702003f8b8', '775fcf62cfea435d', 'ac201729bcfca0d0', '0401f0f78e5a6349', '5f5444cdb499810c',
 ];
 
 /** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. */
@@ -133,10 +145,10 @@ const CH5_D0 = [
   '1be7a7c703ab276c', '27861fbd7785c3ec', '1e6cb91c9aad13a1', '0de629f7406b7ae7', '8f11ee3a5c01b80b',
 ];
 
-/** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. */
+/** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. */
 const CH4_D1500 = [
-  '5b34258bf8580c9e', 'a752fe90d9c63afa', 'd5c988b268bebc0e', 'bd7e6e518587e9e0', 'c7bb24be7614cac3',
-  '20790720c6dc6485', 'b07701fa11ec5dce', '145c7c552bfb48d2', 'a932bc38b3bad483', '3c52ac73520da02a',
+  '9d0cc3eb2f311ebd', 'a6512b1f55386411', 'eb36f5accfb59945', 'a0c65dac5c5298c2', '828308635a6ea19a',
+  '1caae7994234f660', '0cd14edaad2850ea', '7a54e0aa051b05e6', '7089ea68fb09c627', 'f8f1a6a304ff81f8',
 ];
 /** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. */
 const CH5_D1500 = [
