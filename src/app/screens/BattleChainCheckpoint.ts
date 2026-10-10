@@ -36,6 +36,7 @@
  */
 
 import type { BattleResult, BattleSetup, EnemyGroupDef } from '../../battle/common/types.ts';
+import { partyForLink } from '../../battle/ffx/line-up.ts';
 
 /** Where a defeat in a chained encounter retries from. */
 export interface ChainCheckpoint {
@@ -66,16 +67,22 @@ export function checkpointAt(link: number, group: EnemyGroupDef, setup: BattleSe
   return { group, setup, link };
 }
 
-/** How many of the party stand in the state `setup` opens on: HP above 0 and no KO. A member with no `hp` is at the build's own full value. */
-export function standingIn(setup: BattleSetup): number {
-  const members = setup.party.members as ReadonlyArray<{ hp?: number; statuses?: Record<string, unknown> }>;
+/**
+ * How many of the party stand in the state `setup` opens on: HP above 0 and no KO. A member with no `hp` is at the build's own full value. For a link that changes the line-up (FFX's Sinspawn Gui,
+ * `EnemyGroupDef.lineUp`) only the three the link opens on count, and the guest who joins there stands (he joins fresh).
+ */
+export function standingIn(setup: BattleSetup, group?: EnemyGroupDef): number {
+  const lineUp = group?.lineUp;
+  const linked = lineUp && setup.party.game === 'ffx' ? partyForLink(setup.party, lineUp) : setup.party;
+  const roster = lineUp ? linked.members.filter((m) => lineUp.activeSlots.includes(m.id)) : linked.members;
+  const members = roster as ReadonlyArray<{ hp?: number; statuses?: Record<string, unknown> }>;
   return members.filter((m) => (m.hp ?? 1) > 0 && m.statuses?.['ko'] === undefined).length;
 }
 
 /** True when `group` names a hopeless retry (PR-0407, `EnemyGroupDef.hopelessRetry`) and fewer than its `standing` stand in `setup`. */
 export function hopelessAt(group: EnemyGroupDef, setup: BattleSetup): boolean {
   const rule = group.hopelessRetry;
-  return rule !== undefined && standingIn(setup) < rule.standing;
+  return rule !== undefined && standingIn(setup, group) < rule.standing;
 }
 
 /**

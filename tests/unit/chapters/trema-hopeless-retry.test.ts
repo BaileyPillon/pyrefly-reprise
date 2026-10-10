@@ -61,7 +61,8 @@ describe('what is shipped (PR-0407)', () => {
 
   it('no other formation, in either game, names the rule: every other chain retries exactly as it did', () => {
     const named = [...Object.values(FFX_GROUPS), ...Object.values(FFX2_GROUPS)].filter((g) => g.hopelessRetry !== undefined);
-    expect(named.map((g) => g.id)).toEqual([CLOISTER_TREMA]);
+    // Trema's link, and the one FFX user: the hidden Sinspawn Gui chapter's second fight (a hopeless retry restores the guest hour's three; FFX only, `ffx-gui-chain.test.ts`).
+    expect(named.map((g) => g.id).sort()).toEqual([CLOISTER_TREMA, 'sinspawn-gui-2'].sort());
   });
 
   it("'carry' is the absence of the rule", () => {

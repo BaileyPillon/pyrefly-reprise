@@ -260,6 +260,6 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
   }
 
   // FFX-2 only: the results show every battle's spoils, not the last link's (`BattleChainSpoils.ts`).
-  if (outcome.kind === 'victory') outcome = { kind: 'victory', result: chainSpoils(chapter.game, won, outcome.result) };
+  if (outcome.kind === 'victory') outcome = { kind: 'victory', result: chainSpoils(chapter.game, won, outcome.result, group.poolsChainSpoils === true) };
   return { outcome, links: Math.max(1, links), checkpoint };
 }

@@ -123,7 +123,9 @@ describe('the one runner calls the hook of every hooked enemy of the shipped dat
         original(...args);
       };
       try {
-        resolveAbility(live.ctx, live.at('tidus'), poke('rc1-poke'), [enemyId]);
+        // The attacker is Tidus, except in a link whose line-up leaves him out (the hidden Sinspawn Gui chapter's guest hour is Yuna, Seymour and Auron): then Yuna.
+        const attacker = live.ctx.state.combatants['tidus'] !== undefined ? 'tidus' : 'yuna';
+        resolveAbility(live.ctx, live.at(attacker), poke('rc1-poke'), [enemyId]);
       } finally {
         hooks.onHit = original;
       }

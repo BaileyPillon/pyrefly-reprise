@@ -120,6 +120,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   'garden-of-pain': { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-seymour-omnis.md §7: the arena rows name no particles' },
   'bevelle-highbridge': { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-seymour-natus-highbridge.md §7: the arena rows name no particles' },
   'via-purifico': { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-isaaru-bevelle.md §7: the arena rows name no particles' },
+  // The hidden Sinspawn Gui chapter (FFX only; `scenes/mushroom-rock-road.ts`): no source puts pyreflies in the air of Mushroom Rock Road (a fiend's own death is another matter: the stage's dissolve).
+  'mushroom-rock-road': { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-sinspawn-gui.md §7: the arena rows name no ambient particles' },
   // Ixion at Djose (Chapter XVI, FFX-2 only): the Chamber on its stand-in plate (the key is the plate's, `data/ixion-plates.ts`).
   [DJOSE_CHAMBER_PLATE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx2-ixion-djose.md §6.1: the arena rows name no particles' },
   // The Experiment at Djose (the hidden chapter, FFX-2 only): the Fayth Antechamber; the key is its plate's (`data/experiment-plates.ts`).

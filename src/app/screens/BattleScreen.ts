@@ -493,6 +493,11 @@ export class BattleScreen extends Screen {
         this.checkpoint = checkpoint ?? this.checkpoint;
         this.group = group;
         this.setup = setup;
+        // A link fought on another plate of the scene (the hidden Sinspawn Gui chapter's ruined camp): a white pulse covers the cut and the plate swaps under it (`EnemyGroupDef.plate`).
+        if (group.plate && this.scene?.swapBackdrop) {
+          this.stage?.screenFlash('#ffffff', 900);
+          void this.scene.swapBackdrop(group.plate);
+        }
         // A new formation has been staged — Yunalesca's second form, the next
         // Vegnagun part — so its lane owes its own settling window.
         this.formationSettleMs = SETTLE_WINDOW_MS;

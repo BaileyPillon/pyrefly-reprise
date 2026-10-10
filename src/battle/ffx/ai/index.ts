@@ -8,7 +8,7 @@
  */
 
 import type { Command, FFXCombatant } from '../../common/types.ts';
-import { type Ctx, isAlive, livingFriendlies, tryActor } from '../state.ts';
+import { type Ctx, isAlive, livingEnemies, livingFriendlies, tryActor } from '../state.ts';
 import { type AiContext, aiContextFor, getAiScript } from './types.ts';
 import { consumeSeymourTalk, seymourTalkAvailable } from './seymour-flux.ts';
 import { consumeBfaTalk } from './braskas-final-aeon.ts';
@@ -40,6 +40,7 @@ import './seymour-natus.ts';
 import './seymour-omnis.ts';
 import './isaaru.ts';
 import './sin-scripts.ts';
+import './sinspawn-gui.ts'; // the hidden Sinspawn Gui chapter (FFX only): the body, the head and the arms
 
 export * from './types.ts';
 export { consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';
@@ -229,10 +230,13 @@ export function registeredTriggerIds(): string[] {
   return Object.keys(TRIGGERS).sort();
 }
 
-/** The script id in force for this combatant right now. */
+/**
+ * The script id in force for this combatant right now. A guest in the party (`FFXGuestSpec`, FFX only) has no `enemy` block; his script
+ * is the one his build names.
+ */
 export function activeScriptId(self: FFXCombatant): string | undefined {
   const enemy = self.enemy;
-  if (!enemy) return undefined;
+  if (!enemy) return self.guest?.aiScriptId;
   const form = enemy.forms[enemy.formIndex];
   return form?.aiScriptId ?? enemy.aiScriptId;
 }
@@ -251,7 +255,8 @@ export function chooseAiCommand(ctx: Ctx, self: FFXCombatant): Command | null {
   if (script) return script(ai);
 
   // Confused actors attack a random target on either side; Berserk restricts to
-  // an auto-attack [ffx-combat-core §4.2].
-  const targets = livingFriendlies(ctx);
+  // an auto-attack [ffx-combat-core §4.2]. An enemy's fallback aims at the party's side, as it always did;
+  // a guest in the party (an AI guest with no script) aims at the enemy side, never at his own.
+  const targets = self.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx);
   return { kind: 'attack', targets: targets.length > 0 ? [ctx.rng.pick(targets).id] : [] };
 }

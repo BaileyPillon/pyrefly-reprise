@@ -33,6 +33,12 @@ export interface SceneBuild extends SceneStaging {
   /** The painting stack, its sampled palette and the 3D ground plane. */
   readonly backdrop: Backdrop;
 
+  /**
+   * Optional: put another plate of the same layout on the painting plane (`art/backdrops/<key>.png`) for a link of a chain fought in the same place after it has changed (the hidden Sinspawn Gui chapter's
+   * ruined camp, `EnemyGroupDef.plate`). Resolves once the new plate is in and the old one is disposed; the caller covers the cut. Omitted by every other scene.
+   */
+  swapBackdrop?(key: string): Promise<void>;
+
   /** Key / fill / rim / ambient plus the flickerable practical. */
   readonly lights: LightRig;
 

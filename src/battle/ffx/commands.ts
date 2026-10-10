@@ -243,7 +243,7 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
   // ever built and four of the seven guardians could never enter a battle.
   // §1.7's rule is that any reserve member may be swapped in; only one who
   // cannot take the handed-over turn — KO'd, petrified, ejected — may not.
-  if (user.side === 'party') {
+  if (user.side === 'party' && ctx.rt.noSwitch !== true) {
     for (const id of ctx.state.reserveIds) {
       const bench = tryActor(ctx, id);
       if (!bench || bench.removed === false || has(bench, 'eject')) continue;

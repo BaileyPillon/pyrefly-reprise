@@ -137,8 +137,9 @@ describe("the attached records are the game's table", () => {
     // 453 and 2 since the Seymour re-parity: the zero-hit "Wait" that Seymour spent in Anima's act is gone (the game
     // takes his turns away instead), and it was one of the rows without a record. 457 and 455 since re-parity AI lane C added
     // the first-turn Summon dummies: Yojimbo's (0x4090) and one per Isaaru aeon (0x408c, 0x408b, 0x408f), each with its record.
-    expect(ALL_ABILITIES).toHaveLength(457);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(455);
+    // 461 and 459 since the hidden Sinspawn Gui chapter (FFX only): Requiem (0x30e3), the Lv. 1 Key Sphere (0x2051), Gui's Special 1 (0x6001) and Venom (0x6031), each with its record (all four rows are in the game's fixtures).
+    expect(ALL_ABILITIES).toHaveLength(461);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(459);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(2);
   });
 });

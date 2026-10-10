@@ -7,8 +7,9 @@
  * order of the opening draws, the tie-break at equal CTB and whether a character counts as a monster. The engine keeps
  * its combatants by string id and a formation list; this module is the one place that maps one to the other.
  *
- * - Party: Tidus 0, Yuna 1, Auron 2, Kimahri 3, Wakka 4, Lulu 5, Rikku 6 (slot 7 is the game's eighth party slot, which
- *   no chapter of ours uses).
+ * - Party: Tidus 0, Yuna 1, Auron 2, Kimahri 3, Wakka 4, Lulu 5, Rikku 6, and Seymour 7: the game's eighth party slot, whose
+ *   one user in our chapters is the hidden Sinspawn Gui chapter's guest hour (his row of the party table is actor 7,
+ *   `research/re-ffx-ai-gui.md` section 5.7).
  * - Aeons, in the game's order: Valefor 8, Ifrit 9, Ixion 0xa, Shiva 0xb, Bahamut 0xc, Anima 0xd, Yojimbo 0xe, and the
  *   three Magus Sisters Cindy 0xf, Sandy 0x10, Mindy 0x11 (the death handler of the exe names 0xf to 0x11 as the sisters).
  * - Monsters: `0x14 + the index in the formation` (`BattleState.enemyIds`, which lists the enemies and then the parts).
@@ -29,6 +30,7 @@ export const PARTY_SLOT: Readonly<Record<string, number>> = {
   wakka: 4,
   lulu: 5,
   rikku: 6,
+  seymour: 7, // the guest of the hidden Sinspawn Gui chapter (FFX only): the game's party actor 7
 };
 
 /** Slots of the aeons, by engine id. */

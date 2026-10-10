@@ -677,6 +677,16 @@ a map row for a chapter that is not listed; the listing step moves it into the m
 
 ---
 
+## A hidden chapter's cues (outside the map: it is not listed)
+
+The cue map above holds listed chapters only (`tools/audio/themes-audit.mjs` and `tests/unit/themes-chapter-cue-map.test.ts` fail a map row for a chapter that is not listed). A chapter that ships hidden behind a typed word keeps its row here; the listing step moves it into the map.
+
+| Ch | Chapter | Game | Scene | Battle | Victory | Status | Owed cue and decision |
+|---|---|---|---|---|---|---|---|
+| EXP | `sinspawn-gui` Sinspawn Gui, Mushroom Rock Road (hidden; typed word `mushroom`; `ch-gui`, 2026-10-10) | FFX | `scene-gagazet` | fight 1 `boss-dread`, fight 2 `boss-seymour` | `victory-ffx` | **owed, stand-ins in use**: the dread theme for the Ridge, Seymour's own theme for the guest hour | two cues by role, never transcribed (rule 8): a tense, driving camp-under-threat battle cue for the first fight and an important-boss cue for the guest hour (research `ffx-sinspawn-gui.md` section 8.3 names the roles the original gives them); composed after the driver's pick and judged by ear (rules 9, 13) |
+
+---
+
 ## Harmonic language, by world
 
 ### FFX — Spira

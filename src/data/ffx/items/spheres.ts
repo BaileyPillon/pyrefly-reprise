@@ -132,6 +132,19 @@ export const ITEMS: Record<string, ItemDef> = {
     iconKey: 'icon-special-sphere',
     description: 'Activates nodes used by allies on Sphere Grid.',
   },
+  // The hidden Sinspawn Gui chapter's second body drops three (six on an Overkill) [research/re-ffx-ai-gui.md section 3.3: item 0x2051, chance 255]. Same class as the others: a Sphere Grid consumable.
+  'lv-1-key-sphere': {
+    id: 'lv-1-key-sphere',
+    name: 'Lv. 1 Key Sphere',
+    game: 'ffx',
+    effect: sphereGridEffect('lv-1-key-sphere', 'Lv. 1 Key Sphere'),
+    targeting: 'self',
+    usableInBattle: false,
+    usableInMenu: false,
+    price: 0, // no source lists a shop price for any Sphere Grid item
+    iconKey: 'icon-lv-1-key-sphere',
+    description: 'Opens Locks on Sphere Grid.',
+  },
   'lv-3-key-sphere': {
     id: 'lv-3-key-sphere',
     name: 'Lv. 3 Key Sphere',
