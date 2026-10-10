@@ -164,6 +164,11 @@ Neutral to Fire, Ice, Thunder, Water and Holy `[decompiled]`. The wiki and GameF
 
 **No physical attack.** Natus has no Strength-formula action at all. `[decompiled]`
 
+> **Update 2026-10-10 (re-parity W2, FFX only): Flare's rank is 3, not 5.** The game's own command record for Flare (0x6079) carries rank 3 (the same as every other spell of his), so
+> the "rank 5" in the Flare row above, and the "his turns come further apart" in §4.1 phase 3, are superseded: Natus casts Flare about every 30 ticks, which is about every third turn
+> of the party's, not every fifth. Measured on the shipped party: 7.3 Flares a fight, 5.3 of the 5.4 party KOs a fight (`docs/handoff/re-parity-chx-options.md`). The sourced damage
+> (§3.3) is unchanged. The strategy guide's phase-3 sentence for this cadence is drafted in that note.
+
 ### 3.2 Mortibody (`monster_actions.json` m127)
 
 | Row | Name | Target | Formula | DmgCon | Type | Rank | Notes | Confidence |
