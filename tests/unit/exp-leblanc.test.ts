@@ -294,11 +294,17 @@ describe('every figure and the backdrop resolve to the experimental namespace', 
     // decision (b) of that day: those rare poses stay exactly as shipped). So a placeholder is compared with the hash its file had in 39.3, which ch6-art-pre-repair.json
     // records for every file the repairs changed, and with Chapter VI's present hash (ch6-art.json) for every file they did not.
     const frozen = (JSON.parse(readFileSync(join(REPO, 'tests', 'fixtures', 'exp-leblanc', 'ch6-art-pre-repair.json'), 'utf8')) as { files: Record<string, string> }).files;
+    // The 2026-10-09 art picks gave Chapter VI's girls more poses; the hidden chapter stays at release 39.3's pose set (the same freeze, decision (b)), so those are skipped here and listed in a fixture.
+    const later = new Set((JSON.parse(readFileSync(join(REPO, 'tests', 'fixtures', 'exp-leblanc', 'ch6-art-added-after-393.json'), 'utf8')) as { states: string[] }).states);
     for (const base of [...snap.girls, ...snap.enemies]) {
       const mine = manifest.subjects[nsId(base)];
       expect(mine, `manifest row of ${nsId(base)}`).toBeDefined();
       const theirs = manifest.subjects[base]!;
       for (const state of theirs.states) {
+        if (later.has(`${base}/${state}`)) {
+          expect(mine!.states, `${nsId(base)}/${state} was added to Chapter VI after 39.3 and is not in the hidden chapter`).not.toContain(state);
+          continue;
+        }
         expect(mine!.states, `${nsId(base)} lacks ${state}`).toContain(state);
         const png = join(ART, 'characters', nsId(base), `${state}.png`);
         const json = join(ART, 'characters', nsId(base), `${state}.json`);

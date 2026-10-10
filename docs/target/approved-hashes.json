@@ -7009,27 +7009,41 @@
     "approved": "2026-10-03"
    },
    "public/art/characters/yuna-white-mage/hurt.png": {
-    "sha256": "3001a910ef0a7b64dba0b8264bbff92f516b2813c1c8a7d5bf3babf7e6d70485",
-    "mtime": "2026-10-07T12:33:58.386Z",
-    "approved": "2026-10-07",
-    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "sha256": "bb94d63c86dfb97df4e125e5c119e8a9742367e95610095b355cc7e088ac016b",
+    "mtime": "2026-10-09T15:41:04.958Z",
+    "approved": "2026-10-09",
+    "replacedBy": "bailey:2026-10-09 (picks install; Bailey 2026-10-09 ~11:30 EDT, verbatim \"I'll go with all your recommendations. Scenes not screens.\", accepting the driver's recommendation \"install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.\")",
     "supersedes": {
-     "sha256": "5fe8e4c3c8c7cd3a6d01d3830d226846c0f2c3c2d95f030230d03f59e9ab5490",
-     "mtime": "2026-10-04T11:21:07.318Z",
-     "approved": "2026-10-03",
-     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/yuna-white-mage/hurt.png"
+     "sha256": "3001a910ef0a7b64dba0b8264bbff92f516b2813c1c8a7d5bf3babf7e6d70485",
+     "mtime": "2026-10-07T12:33:58.386Z",
+     "approved": "2026-10-07",
+     "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+     "supersedes": {
+      "sha256": "5fe8e4c3c8c7cd3a6d01d3830d226846c0f2c3c2d95f030230d03f59e9ab5490",
+      "mtime": "2026-10-04T11:21:07.318Z",
+      "approved": "2026-10-03",
+      "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/yuna-white-mage/hurt.png"
+     },
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-09-picks-before-install/characters/yuna-white-mage/hurt.png (tiers and sidecar: D:/Tools/pyrefly-art-backup/replaced/2026-10-09-picks)"
     }
    },
    "public/art/characters/yuna-white-mage/ko.png": {
-    "sha256": "4f428ed869edd8a3c7ef07d3fa3b16dcf7bb325abb8cbf60d84bf82f3855cde9",
-    "mtime": "2026-10-07T12:33:58.480Z",
-    "approved": "2026-10-07",
-    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "sha256": "ad7ed8b6ae3a8f55aeea44d66516f6f60b65ebdd10c6a64b2c804723c7e23ed2",
+    "mtime": "2026-10-09T15:41:04.991Z",
+    "approved": "2026-10-09",
+    "replacedBy": "bailey:2026-10-09 (picks install; Bailey 2026-10-09 ~11:30 EDT, verbatim \"I'll go with all your recommendations. Scenes not screens.\", accepting the driver's recommendation \"install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.\")",
     "supersedes": {
-     "sha256": "bf859d072d61d85d534a1d9eb3018605bf65a39ad93a4e2ae027fde778d30cd2",
-     "mtime": "2026-10-04T11:21:07.318Z",
-     "approved": "2026-10-03",
-     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/yuna-white-mage/ko.png"
+     "sha256": "4f428ed869edd8a3c7ef07d3fa3b16dcf7bb325abb8cbf60d84bf82f3855cde9",
+     "mtime": "2026-10-07T12:33:58.480Z",
+     "approved": "2026-10-07",
+     "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+     "supersedes": {
+      "sha256": "bf859d072d61d85d534a1d9eb3018605bf65a39ad93a4e2ae027fde778d30cd2",
+      "mtime": "2026-10-04T11:21:07.318Z",
+      "approved": "2026-10-03",
+      "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/yuna-white-mage/ko.png"
+     },
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-09-picks-before-install/characters/yuna-white-mage/ko.png (tiers and sidecar: D:/Tools/pyrefly-art-backup/replaced/2026-10-09-picks)"
     }
    },
    "public/art/characters/braskas-final-aeon-2/telegraph.png": {
@@ -7206,15 +7220,22 @@
     }
    },
    "public/art/characters/rikku-dark-knight/hurt.png": {
-    "sha256": "1bddb997ffb4b20a5d28009989bef629b2401ecb3fe09952b4aaa4470bb3a431",
-    "mtime": "2026-10-07T12:33:45.342Z",
-    "approved": "2026-10-07",
-    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "sha256": "3dc49367216777e06011066cea659e6f9343342a6f67f5e131be66c2c4279b0f",
+    "mtime": "2026-10-09T15:41:06.333Z",
+    "approved": "2026-10-09",
+    "replacedBy": "bailey:2026-10-09 (picks install; Bailey 2026-10-09 ~11:30 EDT, verbatim \"I'll go with all your recommendations. Scenes not screens.\", accepting the driver's recommendation \"install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.\")",
     "supersedes": {
-     "sha256": "0307f60cfca3343dc0d15fe468dbe1419994a933bd03238fdcd0688870f8b19f",
-     "mtime": "2026-10-04T11:26:48.882Z",
-     "approved": "2026-10-03",
-     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/rikku-dark-knight/hurt.png"
+     "sha256": "1bddb997ffb4b20a5d28009989bef629b2401ecb3fe09952b4aaa4470bb3a431",
+     "mtime": "2026-10-07T12:33:45.342Z",
+     "approved": "2026-10-07",
+     "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+     "supersedes": {
+      "sha256": "0307f60cfca3343dc0d15fe468dbe1419994a933bd03238fdcd0688870f8b19f",
+      "mtime": "2026-10-04T11:26:48.882Z",
+      "approved": "2026-10-03",
+      "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/rikku-dark-knight/hurt.png"
+     },
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-09-picks-before-install/characters/rikku-dark-knight/hurt.png (tiers and sidecar: D:/Tools/pyrefly-art-backup/replaced/2026-10-09-picks)"
     }
    },
    "public/art/characters/rikku-dark-knight/ko.png": {
@@ -7974,6 +7995,582 @@
      "approved": "2026-10-03",
      "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/paine-lady-luck/od-x2-lady-luck-magic-reels.png"
     }
+   }
+  },
+  "bailey:2026-10-09-picks-ffx": {
+   "words": "I'll go with all your recommendations. Scenes not screens.",
+   "decision": "2026-10-09 picks (the driver records the D-row)",
+   "note": "Bailey, 2026-10-09 about 11:30 EDT, verbatim \"I'll go with all your recommendations. Scenes not screens.\", accepting the driver's recommendation \"install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.\": pick 1 of every slot on the Overnight Art Review page (https://claude.ai/artifact/GDvRiJ5HPUcmaaePUbjUoh) except RIKKU-DK-ko, RIKKU-SS-follow and RIKKU-SS-defend. 6 paintings of the FFX heroes (defend, one per hero; FFX only), each from a local ComfyUI candidate (Animagine XL 4.0 Opt, IP-Adapter on the approved idle, OpenPose), cut out by rembg isnet-anime, installed byte for byte as the candidate (sidecar, @2x, @3x, @4x beside it); Kimahri's defend carries the approved idle's broken horn stub (run 3's repaint of the same pick). Installed in the release art tree D:/pyrefly-r39-int/public/art by D:/Tools/pyrefly-scratch/2026-10-09/picks-install/install_picks.mjs; the 1x paintings are copied to D:/Tools/pyrefly-art-backup/approved/2026-10-09-picks and the private art repo current/. HELD ON 2026-10-09 (the driver): YUNA-FFX-defend and RIKKU-FFX-defend stand taller than the ready painting they replace for Defend, so they are held out of release 39.5 (files in D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend); their pins here keep the hash as heldSha256 and carry the reason.",
+   "public/art/characters/tidus/defend.png": {
+    "sha256": "207ba99591ce3768018706e37fb1ea3cac736e2edcd129209f20dababc1ed80d",
+    "mtime": "2026-10-09T15:41:04.615Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/wakka/defend.png": {
+    "sha256": "30c1b107f47d9f2f0e2e5ab31a79711ac66f8f749d8e20bb6add31dc4fc6d4b6",
+    "mtime": "2026-10-09T15:41:04.661Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/lulu/defend.png": {
+    "sha256": "8305e5fced2e77de0969ea03f7e9d1efa3911535d49b0baac1f45ed14626c21a",
+    "mtime": "2026-10-09T15:41:04.693Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/kimahri/defend.png": {
+    "sha256": "028a37ad0078362b3e50f99948a595d6fe73b09f5538a61742e201e8fc59320c",
+    "mtime": "2026-10-09T15:57:32.921Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna/defend.png": {
+    "held": "HELD out of release 39.5 by the driver on 2026-10-09: this Defend painting stands 1.64x Yuna's idle (1.55x her ready painting), so Defend would grow the figure mid-fight (the size jump CHK-026 flags); live plays the ready painting for Defend today and so does the game with this painting held. Files moved (not deleted) to D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/; sizing to be fixed with options in the next visual and feel pass.",
+    "heldSha256": "a9cbfb00c833a8a37ce2a6fe762b78e1b84331fd228a79c8e87b523d5cb89dc5",
+    "heldFiles": "D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/characters/yuna/ (defend.png, defend.json, defend@2x.png, defend@3x.png, defend@4x.png)",
+    "mtime": "2026-10-09T15:41:04.768Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku/defend.png": {
+    "held": "HELD out of release 39.5 by the driver on 2026-10-09: this Defend painting stands 1.31x Rikku's idle (1.16x her ready painting), so Defend would grow the figure mid-fight (the size jump CHK-026 flags); live plays the ready painting for Defend today and so does the game with this painting held. Files moved (not deleted) to D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/; sizing to be fixed with options in the next visual and feel pass.",
+    "heldSha256": "6e67a769c32a7663ddb29e6be46f7445c97d794e18671598b94d4c0d2885e590",
+    "heldFiles": "D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/characters/rikku/ (defend.png, defend.json, defend@2x.png, defend@3x.png, defend@4x.png)",
+    "mtime": "2026-10-09T15:41:04.800Z",
+    "approved": "2026-10-09"
+   }
+  },
+  "bailey:2026-10-09-picks-ffx2": {
+   "words": "I'll go with all your recommendations. Scenes not screens.",
+   "decision": "2026-10-09 picks (the driver records the D-row)",
+   "note": "Bailey, 2026-10-09 about 11:30 EDT, verbatim \"I'll go with all your recommendations. Scenes not screens.\", accepting the driver's recommendation \"install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.\": pick 1 of every slot on the Overnight Art Review page (https://claude.ai/artifact/GDvRiJ5HPUcmaaePUbjUoh) except RIKKU-DK-ko, RIKKU-SS-follow and RIKKU-SS-defend. 109 paintings of the FFX-2 dresspheres (FFX-2 only), each from a local ComfyUI candidate (Animagine XL 4.0 Opt, IP-Adapter on the approved idle, OpenPose), cut out by rembg isnet-anime, installed byte for byte as the candidate (sidecar, @2x, @3x, @4x beside it); YUNA-WM-hurt, YUNA-WM-ko and RIKKU-DK-hurt replace approved paintings (their entries in bailey:2026-10-03-picks move to the new hash, the old record inside supersedes). Installed in the release art tree D:/pyrefly-r39-int/public/art by D:/Tools/pyrefly-scratch/2026-10-09/picks-install/install_picks.mjs; the 1x paintings are copied to D:/Tools/pyrefly-art-backup/approved/2026-10-09-picks and the private art repo current/. HELD ON 2026-10-09 (the driver): RIKKU-DK-defend stand taller than the ready painting they replace for Defend, so they are held out of release 39.5 (files in D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend); their pins here keep the hash as heldSha256 and carry the reason.",
+   "public/art/characters/yuna-white-mage/ready.png": {
+    "sha256": "830f0c76860872d0a03dd2698c66029f8d69390df70a8062fae0e68cb0b6fcba",
+    "mtime": "2026-10-09T15:41:04.831Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-white-mage/critical.png": {
+    "sha256": "b8bc09a9e96f1510110d9a325d8754970118d8a771a13064a288b48f0c0a8352",
+    "mtime": "2026-10-09T15:41:04.863Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-white-mage/defend.png": {
+    "sha256": "b4ee085f43454a5fe234af3dcad67f7f00cbd20c51528377cfbdb77cf9b23dce",
+    "mtime": "2026-10-09T15:41:04.901Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-white-mage/sleep.png": {
+    "sha256": "ac884b792c4d79a2bfe67502f6a28692d31b51e590705e1db2f7a7a985413334",
+    "mtime": "2026-10-09T15:41:04.929Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-dark-knight/follow.png": {
+    "sha256": "ac7a1e0a7d69b2aab7212f6e4b468094e05a15992e07fbe41c72ee11dbef37e4",
+    "mtime": "2026-10-09T15:41:05.021Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-dark-knight/critical.png": {
+    "sha256": "d0eebdd3fe3f752aec73eab858ed3657afeef462849d29a07eb94279cbfca8bc",
+    "mtime": "2026-10-09T15:41:05.057Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-dark-knight/defend.png": {
+    "sha256": "bf55cdfc30869ea450e45c5db1027123129befd17a1aa9ed6a33a428c05156a8",
+    "mtime": "2026-10-09T15:41:05.093Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-dark-knight/sleep.png": {
+    "sha256": "4f7e9d825214600425fb8f500d7713bdeffe39f7bc068e4d3c48004b82484040",
+    "mtime": "2026-10-09T15:41:05.127Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-songstress/ready.png": {
+    "sha256": "e8b63a9bfe7cea1c1a24f7dc09ea7bfae35bf133af5a73ce782912aacce30d55",
+    "mtime": "2026-10-09T15:41:05.165Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-songstress/hurt.png": {
+    "sha256": "1969261880317c7d84979fde495ad2c2a44f4545765541965d34b618fb68dc3e",
+    "mtime": "2026-10-09T15:41:05.190Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-songstress/follow.png": {
+    "sha256": "bb2933c455bc8b7a06ce5d32a2512dc42949acb9d6ed903d5f37402b2e26892a",
+    "mtime": "2026-10-09T15:41:05.219Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-songstress/critical.png": {
+    "sha256": "b28eb040a5134200669db151123d26f39b5f1fcf7864eff6f42a2c04e198b2a2",
+    "mtime": "2026-10-09T15:41:05.248Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-songstress/defend.png": {
+    "sha256": "f39972c1db9df94fe1ed0198008cf19778085f1d98909ae4a25652bd27084c59",
+    "mtime": "2026-10-09T15:41:05.280Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-songstress/sleep.png": {
+    "sha256": "6564ead56652d80810b404a846838b05762bf5c95d763aa40a7ca40e7dae36f7",
+    "mtime": "2026-10-09T15:41:05.307Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-gunner/follow.png": {
+    "sha256": "3a2264047d6a412adfe03406e32a00020ba2d0945c61262285c7122a992d6cf5",
+    "mtime": "2026-10-09T15:41:05.337Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-gunner/defend.png": {
+    "sha256": "34d29042ddc91038230bac4fd83a5478357a843f8e3e7702ba3bf7136031f22a",
+    "mtime": "2026-10-09T15:41:05.369Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-warrior/attack.png": {
+    "sha256": "309ceac08bc6e39c78c6b26818bf819f057d68b41f7e1250e8cc6b9cae37af14",
+    "mtime": "2026-10-09T15:41:05.407Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-warrior/ko.png": {
+    "sha256": "e687bdb53f6aa5d7336b596fa1ab12f063cdcd9e7e40d9305209da94e8346701",
+    "mtime": "2026-10-09T15:41:05.444Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-warrior/critical.png": {
+    "sha256": "19803f9a5207fc9dff28df8939bbbece1339d6e9d49c5661809cd71575e8c7cb",
+    "mtime": "2026-10-09T15:41:05.475Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-warrior/defend.png": {
+    "sha256": "bbb173a0db01ae197111837654e1718eab6eb005fe451e6ffe4cf20bf4fe0896",
+    "mtime": "2026-10-09T15:41:05.511Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-warrior/sleep.png": {
+    "sha256": "541214f33028fcec9afa3572ddeb7b86eb2f5064bb241b1415a74cbe6c3b51a4",
+    "mtime": "2026-10-09T15:41:05.550Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-thief/critical.png": {
+    "sha256": "90fced4e3f153257941f605e750849c9ce36376f4aa8f66f5ce210bd41495312",
+    "mtime": "2026-10-09T15:41:05.583Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-thief/defend.png": {
+    "sha256": "f18bac34835f11ee056a11658f6d86341d3c7076ab2f3d24b7e1503c4302f158",
+    "mtime": "2026-10-09T15:41:05.613Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-thief/sleep.png": {
+    "sha256": "2da0c28afc9e25cc11605ff6901309d711e2f2429ff6732103d379f8ed1705fe",
+    "mtime": "2026-10-09T15:41:05.643Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-black-mage/critical.png": {
+    "sha256": "7b1f886d431eb136ccddfcf341959019803df74568169a3c83b3782705100ebc",
+    "mtime": "2026-10-09T15:41:05.672Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-black-mage/defend.png": {
+    "sha256": "e139e5135d4a6358c07f92c4b5407b385f34cc3140101e917a9899cf4af40f66",
+    "mtime": "2026-10-09T15:41:05.707Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/yuna-black-mage/sleep.png": {
+    "sha256": "ee136f841a635ddd6de5db1593e380ef4e528b7338e2b0134c6f83305590e733",
+    "mtime": "2026-10-09T15:41:05.745Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-alchemist/ko.png": {
+    "sha256": "170db99607bdff839b5593cc840eec962050a1f55a19daebeaab5e1ec200d135",
+    "mtime": "2026-10-09T15:41:05.779Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-alchemist/follow.png": {
+    "sha256": "d4174727fdffad8206069c0f3e56dcabaeddb2aec92715e9b87f9406f5518a34",
+    "mtime": "2026-10-09T15:41:05.817Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-alchemist/critical.png": {
+    "sha256": "1edba481b52e1bb3a786de9ecedd016d3f12ff4c1b327179d9367c7d306d4b3e",
+    "mtime": "2026-10-09T15:41:05.852Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-alchemist/defend.png": {
+    "sha256": "366cec955e65f1bbd6093723d97622a6c15373264eac5ea43104cdc223439a63",
+    "mtime": "2026-10-09T15:41:05.894Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-alchemist/sleep.png": {
+    "sha256": "a0c1cf0d325aa657d84d304cdfede18136ef48f1fbd40245a4e14ac0cfc38ca6",
+    "mtime": "2026-10-09T15:41:05.923Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-thief/attack.png": {
+    "sha256": "743bba8feb5cc6cf08bcc3dd590e3cdd87a557421e927dfb5790551b3dd8707a",
+    "mtime": "2026-10-09T15:41:05.957Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-thief/defend.png": {
+    "sha256": "9af816fda5e6be0268d83f10a1681cae9e646d7aa434e40b3dda5d8818171d5c",
+    "mtime": "2026-10-09T15:41:05.990Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-white-mage/ready.png": {
+    "sha256": "ed74be5605fb59e3963f50fa532f4589ca90f84b2ab07d16a7a2493d40600eae",
+    "mtime": "2026-10-09T15:41:06.022Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-white-mage/hurt.png": {
+    "sha256": "f6b0fef0152979a3fa92f6253c90fbe8ce9a4517523f38f4ba227a62d15e084c",
+    "mtime": "2026-10-09T15:41:06.057Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-white-mage/ko.png": {
+    "sha256": "39db706f2c0cb4bd3ec36666e84e040e94059ef648712bbd979e12e630198193",
+    "mtime": "2026-10-09T15:41:06.089Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-white-mage/critical.png": {
+    "sha256": "9ed675d02e986e2a0ba17023c134bbc46d586b3b87b88ebc112d3a24fd54c9c4",
+    "mtime": "2026-10-09T15:41:06.122Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-white-mage/defend.png": {
+    "sha256": "d6d4403b72ab97d7257ce328adfcee6271d04a10bdda23485a3bc9e6fd0a2396",
+    "mtime": "2026-10-09T15:41:06.158Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-white-mage/sleep.png": {
+    "sha256": "6193cd49e515744592be95e0d2830a06c3bd5a368c570701eb71c94447a24237",
+    "mtime": "2026-10-09T15:41:06.195Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-dark-knight/critical.png": {
+    "sha256": "ac8658584649386ab89e6500497336d163e31e51560d67c51bc8e5c5b2751b12",
+    "mtime": "2026-10-09T15:41:06.233Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-dark-knight/defend.png": {
+    "held": "HELD out of release 39.5 by the driver on 2026-10-09: this Defend painting stands 1.42x Rikku Dark Knight's idle (1.36x her ready painting), so Defend would grow the figure mid-fight (the size jump CHK-026 flags); live plays the ready painting for Defend today and so does the game with this painting held. Files moved (not deleted) to D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/; sizing to be fixed with options in the next visual and feel pass.",
+    "heldSha256": "2da1009c6b2a7ba89e2a5322843c45d533bbe257034bcd3bd5a0892b8c6c8d85",
+    "heldFiles": "D:/Tools/pyrefly-art-backup/held/2026-10-09-oversized-defend/characters/rikku-dark-knight/ (defend.png, defend.json, defend@2x.png, defend@3x.png, defend@4x.png)",
+    "mtime": "2026-10-09T15:41:06.268Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-dark-knight/sleep.png": {
+    "sha256": "10d136ed84bf637c1902764a9365a0c03b2886bb35ac410019715e7ed7eb505b",
+    "mtime": "2026-10-09T15:41:06.297Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-songstress/ready.png": {
+    "sha256": "4cd23d12d94261ed5fbf87dcc46bb61e646a9df2f5f940dca505918a357f1533",
+    "mtime": "2026-10-09T15:41:06.370Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-songstress/critical.png": {
+    "sha256": "97aaf03958e91d1486d1189ab657128ef3492aff94fdf55819fc615834f0e697",
+    "mtime": "2026-10-09T15:41:06.405Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-songstress/sleep.png": {
+    "sha256": "8d3b6f7ed50bc45f2e5b67ace7b5c4a51ee2018fc866ec5d83ad53bb65c3ff0f",
+    "mtime": "2026-10-09T15:41:06.440Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-black-mage/hurt.png": {
+    "sha256": "ef87fcb64ac63564d77e5813820a356d2cabdf3721aaa866298182426929ae41",
+    "mtime": "2026-10-09T15:41:06.470Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-black-mage/victory.png": {
+    "sha256": "0153f31d65e3b05b8b0c755b4d04560e288f78c069405e431db4d0ff6dd3d117",
+    "mtime": "2026-10-09T15:41:06.508Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-black-mage/critical.png": {
+    "sha256": "4516f29037ec4f5beaff879ca1fa8b5d5e0066d72c69aaa9f0d09145ca1429ad",
+    "mtime": "2026-10-09T15:41:06.544Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-black-mage/defend.png": {
+    "sha256": "ce8c50033c5c7166cab44345d1df854868ea5e1e37de74559997baa926f6e5d4",
+    "mtime": "2026-10-09T15:41:06.578Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-black-mage/sleep.png": {
+    "sha256": "c47cde3fa724e8594680d81b525af078282f652e6333794f2efad6fae0aa370b",
+    "mtime": "2026-10-09T15:41:06.613Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-berserker/attack.png": {
+    "sha256": "1b1e431c6161f84c8e2ffc250843cf2a26f4d42c4bba718271489ed66b8ca68e",
+    "mtime": "2026-10-09T15:41:06.648Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-berserker/hurt.png": {
+    "sha256": "7eddcf5b955f317e34a619bd978909ed5e7de52cf2c828b9d54b30a2de53543d",
+    "mtime": "2026-10-09T15:41:06.688Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-berserker/ko.png": {
+    "sha256": "5634504844f1969a97c0959e317cb96a6ac7ea38339feb820682186c6d43fa53",
+    "mtime": "2026-10-09T15:41:06.721Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-berserker/victory.png": {
+    "sha256": "d72477d5512f7f752c380b2a372266bb933a71509d87efe4b3f2f572a8ea86c1",
+    "mtime": "2026-10-09T15:41:06.758Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-berserker/critical.png": {
+    "sha256": "772dfeab59517c6d0aaa6cc733b0588b6018fe3994ec86a3d45877c3313d5660",
+    "mtime": "2026-10-09T15:41:06.788Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-berserker/defend.png": {
+    "sha256": "8aa6c56b99b728ec12f71e9b6ecd0aee20959ddc9f43c3ab17a2484ab10fb035",
+    "mtime": "2026-10-09T15:41:06.821Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-berserker/sleep.png": {
+    "sha256": "c05e84cf3053d2741f78198efbb595662c49a4507220631d85f0125c1ec82149",
+    "mtime": "2026-10-09T15:41:06.858Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-gunner/hurt.png": {
+    "sha256": "63cbd684da9a727036bc4ac0f90a8fcd3e83ca10e70a71ed898e896a25c8e9a6",
+    "mtime": "2026-10-09T15:41:06.892Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-gunner/follow.png": {
+    "sha256": "5d1871893aa376e25341ef1793d2f5e127567e67dba38361433081da3419e90c",
+    "mtime": "2026-10-09T15:41:06.921Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-gunner/critical.png": {
+    "sha256": "c0792fa439d5858d41e9a904866bd4de0abe07c8ea045d5ca6c35df59861b10d",
+    "mtime": "2026-10-09T15:41:06.956Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-gunner/defend.png": {
+    "sha256": "a86d7070b106504db1280135baea916d802d1db058b83ac2f655cfbafb20d2d3",
+    "mtime": "2026-10-09T15:41:06.991Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-gunner/sleep.png": {
+    "sha256": "fcfd5e7e5a2e736aeeaff446fc892295b078ee18ff4f1bdb4f4c942118b90156",
+    "mtime": "2026-10-09T15:41:07.019Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-warrior/critical.png": {
+    "sha256": "edcdfadc8f5e9c6ebeac70efba160d3ab589b1415eb75e2d6cdd5a11e27d78a2",
+    "mtime": "2026-10-09T15:41:07.051Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-warrior/defend.png": {
+    "sha256": "6de437dedb48f099745405f599a47d2debb19687a363cf1f0ef887ea17235ef0",
+    "mtime": "2026-10-09T15:41:07.091Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/rikku-warrior/sleep.png": {
+    "sha256": "0df66a7a927ae28608c08566da5557c02436682ce1199f9f91067812944458fb",
+    "mtime": "2026-10-09T15:41:07.123Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-warrior/hurt.png": {
+    "sha256": "e8463888a21030c32f2b674b4b61c213f0b8a523d6ceea840a5b1bfc1431d0ea",
+    "mtime": "2026-10-09T15:41:07.152Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-warrior/ko.png": {
+    "sha256": "8ef58b208bc5be24bfc5d62a2d24d55e5bd1b0fcbeb6673b8c282b05196c6a2e",
+    "mtime": "2026-10-09T15:41:07.173Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-warrior/defend.png": {
+    "sha256": "495e58e64cb6d2ac31423ced113032bd309425ed04b03e28d679168e0156b5ce",
+    "mtime": "2026-10-09T15:41:07.198Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-white-mage/ready.png": {
+    "sha256": "790dfcfecbcdfcbfd59735c4b1c316ec9706a4570de8ea0119f0ee29fff4ab20",
+    "mtime": "2026-10-09T15:41:07.231Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-white-mage/attack.png": {
+    "sha256": "fc604512e729d621bb37f457ee2e1b3d25b0a3e97643d1e002fb1886c21d2c42",
+    "mtime": "2026-10-09T15:41:07.276Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-white-mage/hurt.png": {
+    "sha256": "ae143676158453716c8e09986128a9e67bda392012e5a6c6dc73c6559cdcd99c",
+    "mtime": "2026-10-09T15:41:07.316Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-white-mage/ko.png": {
+    "sha256": "ca7da43a3dd1c23192165969e340f9d1b3a738cd215d63d148e21d746e1a1a2e",
+    "mtime": "2026-10-09T15:41:07.349Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-white-mage/victory.png": {
+    "sha256": "b1bd7f45322ad56ef45448e6ecc3df1eded85f931d5785c866af9b8736a155b9",
+    "mtime": "2026-10-09T15:41:07.387Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-white-mage/critical.png": {
+    "sha256": "57d9dc6fad068001e6d6f84418a8babb2dae92b02a32cfb252931db1e9b3dc9d",
+    "mtime": "2026-10-09T15:41:07.428Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-white-mage/defend.png": {
+    "sha256": "d70aa6f046cc8ae1c7d1881a31e358800854ced1d321e3e387fa6949d562aaa0",
+    "mtime": "2026-10-09T15:41:07.471Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-white-mage/sleep.png": {
+    "sha256": "a9b7c5760448676c407b7efb4b37da3915a3ffa360b2031ca405d312a4fae0c3",
+    "mtime": "2026-10-09T15:41:07.511Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-gunner/cast.png": {
+    "sha256": "5620d833343997a12876d52ac29d09248e27c03724f10db229f0cf681b7cdf27",
+    "mtime": "2026-10-09T15:41:07.549Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-gunner/hurt.png": {
+    "sha256": "1580f2e2a34c7b87521f6ee3ef559b9c68591d82bba1c43986292129cd08496d",
+    "mtime": "2026-10-09T15:41:07.578Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-gunner/ko.png": {
+    "sha256": "03c419065d0729fbdfb736984251f7c4462dbd57972b08ffea9552af411f69a2",
+    "mtime": "2026-10-09T15:41:07.611Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-gunner/follow.png": {
+    "sha256": "28d87e5cfddb6c36f855e88017d652c09f7d043c2883c0f5ffe2870c6dd27cc1",
+    "mtime": "2026-10-09T15:41:07.637Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-gunner/critical.png": {
+    "sha256": "9a2a924ea9012ae20a7e6a6599eb6531af85c3e6eb1ab152fdde405780fbbbac",
+    "mtime": "2026-10-09T15:41:07.675Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-gunner/defend.png": {
+    "sha256": "064518d3296c42f16877f7e24a8a659841f3931f2949158a314b9b8e5154690e",
+    "mtime": "2026-10-09T15:41:07.715Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-gunner/sleep.png": {
+    "sha256": "82f95ec352cb415e9b18a1b16ff09d5aa6c983916ef0a5177eb3ba9644805511",
+    "mtime": "2026-10-09T15:41:07.747Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-samurai/attack.png": {
+    "sha256": "4f2caba3398c5601438beb932fd3a7bc890897c36a774e8bc604bb5773acd966",
+    "mtime": "2026-10-09T15:41:07.790Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-samurai/hurt.png": {
+    "sha256": "56c68edaa2aaa4c28d6a1139883fbfa086bc52d0a0bb871c46680dde3af26373",
+    "mtime": "2026-10-09T15:41:07.831Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-samurai/ko.png": {
+    "sha256": "83bdb6f17abb17ecdf6d69cde2601f7aa6f293d03eb6f93aa74844c8bcdd0c0a",
+    "mtime": "2026-10-09T15:41:07.867Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-samurai/victory.png": {
+    "sha256": "faef4bced734a15920d1fed185d647d23fa274f046627d5d3dcd41c53186347a",
+    "mtime": "2026-10-09T15:41:07.908Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-samurai/critical.png": {
+    "sha256": "b872f893f3671a8dfaf5b36c086d2b2f254b578f5543ea4db21db90fba3787fa",
+    "mtime": "2026-10-09T15:41:07.974Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-samurai/defend.png": {
+    "sha256": "1f016f6398978a82b8b49961833d9da65b55ab08f96962e484a09cb5e0cff1a6",
+    "mtime": "2026-10-09T15:41:08.035Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-samurai/sleep.png": {
+    "sha256": "c6cff519672c2a6ea04213e5d30e406248f6a4835987b4c97f725b147d92e591",
+    "mtime": "2026-10-09T15:41:08.091Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-dark-knight/critical.png": {
+    "sha256": "8213ba41fa2aeed054717553fd57b977436f9a32813f6da88ccf24bd6fc30797",
+    "mtime": "2026-10-09T15:41:08.125Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-dark-knight/defend.png": {
+    "sha256": "fd4582f8e8014125c9f3d6c14d5d62e6760936154fa9b0287e5f612e4f0109ce",
+    "mtime": "2026-10-09T15:41:08.179Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-dark-knight/sleep.png": {
+    "sha256": "772633e414f7e6ec2f15c808c46ea28e18569c080ff9dc9d9307009bf4c15a7e",
+    "mtime": "2026-10-09T15:41:08.223Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-songstress/ready.png": {
+    "sha256": "87c4c6a960f51ec827eeb667c3ad28d3c02b6bb0c2732f41197e6b03455e12f4",
+    "mtime": "2026-10-09T15:41:08.264Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-songstress/follow.png": {
+    "sha256": "bb61f94d81281bcdacc768ea3e4d84dbe83acc8a5ebac9f60f47fd9530f59a28",
+    "mtime": "2026-10-09T15:41:08.308Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-songstress/critical.png": {
+    "sha256": "c690d8d07256312cdcd4a3ef58546a0cd5d293c34c6676982632036efe5fb27f",
+    "mtime": "2026-10-09T15:41:08.353Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-songstress/defend.png": {
+    "sha256": "d16ae5fc46732e0e72b7c499d5f8bd751400225e65389e0a5ed48de3d2fbb01d",
+    "mtime": "2026-10-09T15:41:08.392Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-songstress/sleep.png": {
+    "sha256": "994b154003544300615fd77b2d7fea51855fc25532fcd31b9c6ab382d8a7802e",
+    "mtime": "2026-10-09T15:41:08.449Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-black-mage/hurt.png": {
+    "sha256": "da9b2ae9f79b809695d443bafc093e79d7e2622b6f6b77cad464ccc95132d46b",
+    "mtime": "2026-10-09T15:41:08.560Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-black-mage/critical.png": {
+    "sha256": "4cb6889a7cb8fb7bbfb7a6742431541447abd65bc7c8294221c3b9cda40e0561",
+    "mtime": "2026-10-09T15:41:08.642Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-black-mage/defend.png": {
+    "sha256": "cba1e7e5d288dde99923705ff8ef1b6d7adcb2067ed97c3123e67cc53a672096",
+    "mtime": "2026-10-09T15:41:08.683Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-black-mage/sleep.png": {
+    "sha256": "53cfcc0fb48feb1bb58f48a0e3423390376ed07856d9fa08f73ea02bfa7de19d",
+    "mtime": "2026-10-09T15:41:08.724Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-thief/critical.png": {
+    "sha256": "33b4c2c922b882611a88f75b8f2ba86760e4a5ac796e9b32515e4799da34bc11",
+    "mtime": "2026-10-09T15:41:08.859Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-thief/defend.png": {
+    "sha256": "a08a8c3b4241aedcea55088af7b31ecacf09c045f19b63bc2ed93e2cd3a8d2df",
+    "mtime": "2026-10-09T15:41:08.923Z",
+    "approved": "2026-10-09"
+   },
+   "public/art/characters/paine-thief/sleep.png": {
+    "sha256": "63e098b75ba6410e50aeb59354acf0aad0fd0b259f554d85da813aae4bf993a8",
+    "mtime": "2026-10-09T15:41:08.977Z",
+    "approved": "2026-10-09"
    }
   }
  }
