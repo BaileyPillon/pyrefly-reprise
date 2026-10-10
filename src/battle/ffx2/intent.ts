@@ -45,6 +45,7 @@ import { SeededRng } from '../common/rng.ts';
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit, ItemRegistry } from './internal.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { aiScriptFor } from './ai/index.ts';
+import { BAHAMUT_COUNTDOWN_START } from './constants.ts';
 import { canAct } from './statuses.ts';
 import { previewHitChance, simulateFFX2Command, type RollPolicy, type SimOutcome } from './simulate.ts';
 import type { RandomTarget } from '../common/intentTargets.ts';
@@ -601,8 +602,14 @@ export function predictFFX2EnemyIntent(
   // charge is the count the *next* turn will announce, one lower — printing it
   // beside the guide's would put two countdowns for one move on screen.
   const loggedCharge = emittedCharge ? newestChargeFor(env.state, enemyId) : undefined;
-  const liveCharge = loggedCharge ?? emittedCharge;
   const script = unit.enemy?.aiScriptId ?? '';
+  // Bahamut's first countdown turn after the second Impulse is silent (the first step of the count shows no number, as in the game),
+  // so the dry run emits nothing; the panel still says Mega Flare is on its way (re-parity AI lane FFX-2 a, row B4).
+  const silentCount =
+    !def && !emittedCharge && script === 'ffx2-bahamut' && unit.aiMemory?.['megaArmed'] === 1
+      ? { name: '', turnsLeft: BAHAMUT_COUNTDOWN_START - (typeof unit.aiMemory['countdownTurn'] === 'number' ? unit.aiMemory['countdownTurn'] : 0), stage: 1 as const }
+      : undefined;
+  const liveCharge = loggedCharge ?? emittedCharge ?? silentCount;
   const payload = CHARGE_PAYLOAD[script];
   const charge: IntentCharge | null = liveCharge
     ? {

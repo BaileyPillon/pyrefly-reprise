@@ -104,6 +104,31 @@ function committedSeed(): number {
   throw new Error('no seed of 1 to 40 reaches link 5 with the cast on the bar');
 }
 
+/** The board with the committed cast taken away: the predictor now has to roll Shuyin's next decision. */
+function predictWithoutCast(engine: FFX2Engine) {
+  const state = structuredClone(engine.state());
+  (state.combatants['shuyin'] as unknown as { atb: { charging: unknown } }).atb.charging = null;
+  const rng = new SeededRng(state.seed);
+  rng.restoreState((engine as unknown as { rng: SeededRng }).rng?.saveState?.() ?? state.seed);
+  return predictFFX2EnemyIntent({ state, rng, abilities: options().abilities, items: options().items, snapshot: engine.gaugeSnapshot() }, 'shuyin');
+}
+
+/**
+ * Re-parity AI lane FFX-2 a (FFX-2 only; reason "game-script parity"): the first seed of 1 to 40 whose link-5 first menu, with the cast
+ * taken away, leaves Shuyin's next poll a real branch (a voice line against his next move). Shuyin's script rolls the voice gate with its
+ * own coin now, and a poll that follows a line never rolls, so on seed 1 the board no longer branches: the case needs the board, not the number.
+ */
+function branchingSeed(): number {
+  for (let seed = 1; seed <= 40; seed++) {
+    try {
+      if (predictWithoutCast(link5(seed).engine)?.confidence === 'likely') return seed;
+    } catch {
+      // the chain stopped before link 5 on this seed
+    }
+  }
+  throw new Error('no seed of 1 to 40 reaches link 5 with a branching next poll');
+}
+
 const live: EnemyIntentPanel[] = [];
 afterEach(() => {
   while (live.length) live.pop()!.unmount();
@@ -131,7 +156,10 @@ describe('PR-0123: Chapter V link 5, first menu (FFX-2)', () => {
     expect(intent?.enemyId).toBe('shuyin');
     expect(intent?.moveName).toBe('Terror of Zanarkand');
     expect(intent?.confidence).toBe('scripted');
-    expect(intent?.estimate?.perTarget.map((t) => t.targetId)).toContain('yuna');
+    // The cast on the bar already names its girl (the search's pick, or whoever wears a Special 1); the estimate prices that one.
+    const aimed = (shuyin.atb.charging?.commandRef as { targets?: string[] } | undefined)?.targets ?? [];
+    expect(aimed.length).toBe(1);
+    expect(intent?.estimate?.perTarget.map((t) => t.targetId)).toContain(aimed[0]);
 
     const guide = buildGuideView(engine.state(), { actorId: decision.actorId, commands: decision.commands }, 'wait');
     for (const w of guide?.watch ?? []) {
@@ -144,15 +172,11 @@ describe('PR-0123: Chapter V link 5, first menu (FFX-2)', () => {
   });
 
   it("once the cast is off the bar, the headline's percent is the rolled move's own Odds row", () => {
-    const { engine } = link5();
+    const { engine } = link5(branchingSeed());
     // The same board with the committed cast taken away: the predictor now has
     // to roll Shuyin's next decision, which is the split round 13 photographed
-    // (a flavour-line pass behind an Attack). Seed-1 stream position rolls the pass.
-    const state = structuredClone(engine.state());
-    (state.combatants['shuyin'] as unknown as { atb: { charging: unknown } }).atb.charging = null;
-    const rng = new SeededRng(state.seed);
-    rng.restoreState((engine as unknown as { rng: SeededRng }).rng?.saveState?.() ?? state.seed);
-    const intent = predictFFX2EnemyIntent({ state, rng, abilities: options().abilities, items: options().items, snapshot: engine.gaugeSnapshot() }, 'shuyin');
+    // (a flavour-line pass behind an Attack).
+    const intent = predictWithoutCast(engine);
     expect(intent?.confidence).toBe('likely');
 
     const overlay = render(intent as unknown as IntentView);

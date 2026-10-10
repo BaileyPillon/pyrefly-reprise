@@ -522,33 +522,42 @@ describe('FFX-2 intent', () => {
     return engine;
   }
 
-  it("names Bahamut's opener — Curse, step 1 of the fixed 12-action loop [ffx2-bahamut §2.1]", () => {
+  it("names Bahamut's opener — Curse, once, at his first action [ffx2-bahamut §2.1; the game's script]", () => {
     const engine = bahamutEngine();
     const intent = engine.intent();
     expect(intent?.enemyId).toBe('bahamut');
     expect(intent?.abilityId).toBe('bahamut-curse');
-    // No RNG branch anywhere in the loop: the panel may state it flatly.
+    // The command is the same on every roll (only the girl it lands on varies): the panel may state it flatly.
     expect(intent?.confidence).toBe('scripted');
   });
 
-  it('counts the five dead turns down to Mega Flare, and never as a clock', () => {
+  // Re-parity AI lane FFX-2 a: the countdown positions below are the script's own memory (`megaArmed`, `countdownTurn`);
+  // the old tests set an action counter that the six-action loop no longer has.
+  it('counts the countdown down to Mega Flare, and never as a clock', () => {
     const engine = bahamutEngine();
     const unit = engine.state().combatants['bahamut'] as Ffx2Unit;
 
-    // Step 7 is the first countdown turn: five dead turns, then Mega Flare.
-    unit.aiMemory = { actions: 6 };
+    // The first countdown turn shows no number (the first step of the count): the panel still says what it is counting to.
+    unit.aiMemory = { firstCurse: 1, megaArmed: 1, countdownTurn: 0 };
+    const silent = predictFFX2EnemyIntent(intentEnv(engine), 'bahamut');
+    expect(silent?.kind).toBe('charge');
+    expect(silent?.charge?.turnsLeft).toBe(5);
+    expect(silent?.charge?.payloadName).toBe('Mega Flare');
+    expect(silent?.moveName).toBe('Mega Flare');
+
+    // The second countdown turn shows the 5, four turns before the cast.
+    unit.aiMemory = { firstCurse: 1, megaArmed: 1, countdownTurn: 1 };
     const first = predictFFX2EnemyIntent(intentEnv(engine), 'bahamut');
     expect(first?.kind).toBe('charge');
-    expect(first?.charge?.turnsLeft).toBe(5);
+    expect(first?.charge?.turnsLeft).toBe(4);
     expect(first?.charge?.payloadName).toBe('Mega Flare');
-    expect(first?.moveName).toBe('Mega Flare');
 
-    // Step 11 is the last of them.
-    unit.aiMemory = { actions: 10 };
+    // The fifth turn shows the 2, one turn before the cast.
+    unit.aiMemory = { firstCurse: 1, megaArmed: 1, countdownTurn: 4 };
     expect(predictFFX2EnemyIntent(intentEnv(engine), 'bahamut')?.charge?.turnsLeft).toBe(1);
 
-    // Step 12 is the move itself.
-    unit.aiMemory = { actions: 11 };
+    // The sixth is the move itself, with the 1.
+    unit.aiMemory = { firstCurse: 1, megaArmed: 1, countdownTurn: 5 };
     const fires = predictFFX2EnemyIntent(intentEnv(engine), 'bahamut');
     expect(fires?.kind).toBe('action');
     expect(fires?.abilityId).toBe('mega-flare');
@@ -557,19 +566,19 @@ describe('FFX-2 intent', () => {
   it('never advances the loop by being asked', () => {
     const engine = bahamutEngine();
     const unit = engine.state().combatants['bahamut'] as Ffx2Unit;
-    unit.aiMemory = { actions: 3 };
+    unit.aiMemory = { firstCurse: 1, normalAttack: 2 };
     const before = JSON.stringify(engine.state());
 
     for (let i = 0; i < 10; i++) engine.intent();
 
     expect(JSON.stringify(engine.state())).toBe(before);
-    expect(unit.aiMemory['actions']).toBe(3);
+    expect(unit.aiMemory['normalAttack']).toBe(2);
   });
 
   it('prices Mega Flare while the countdown is still running', () => {
     const engine = bahamutEngine();
     const unit = engine.state().combatants['bahamut'] as Ffx2Unit;
-    unit.aiMemory = { actions: 6 }; // step 7: the first of five dead turns
+    unit.aiMemory = { firstCurse: 1, megaArmed: 1, countdownTurn: 1 }; // the first numbered turn
     const intent = predictFFX2EnemyIntent(intentEnv(engine), 'bahamut');
     expect(intent?.kind).toBe('charge');
     expect(intent?.abilityId).toBe('mega-flare');
@@ -578,7 +587,7 @@ describe('FFX-2 intent', () => {
     // One countdown, one number: the note carries the rule and not a second,
     // one-higher figure read off the last charge that actually fired.
     expect(intent!.notes.join(' ')).toContain('action counter, not a clock');
-    expect(intent!.notes.join(' ')).not.toMatch(/countdown at \d/);
+    expect(intent!.notes.join(' ')).not.toMatch(/countdown at d/);
   });
 
   it('prints the countdown the player can already see, not the one turn ahead', () => {
@@ -587,18 +596,18 @@ describe('FFX-2 intent', () => {
     // the failure this guards.
     const engine = bahamutEngine();
     const unit = engine.state().combatants['bahamut'] as Ffx2Unit;
-    unit.aiMemory = { actions: 7 }; // step 8 -> would announce 4
+    unit.aiMemory = { firstCurse: 1, megaArmed: 1, countdownTurn: 2 }; // the next turn shows the 4
     const state = engine.state() as { log: unknown[]; nextSeq: number };
-    state.log.push({ type: 'charge', enemyId: 'bahamut', name: '5', turnsLeft: 5, stage: 1, seq: state.nextSeq++ });
+    state.log.push({ type: 'charge', enemyId: 'bahamut', name: '5', turnsLeft: 4, stage: 1, seq: state.nextSeq++ });
 
     const intent = predictFFX2EnemyIntent(intentEnv(engine), 'bahamut');
-    expect(intent?.charge?.turnsLeft).toBe(5);
+    expect(intent?.charge?.turnsLeft).toBe(4);
   });
 
   it('estimates Impulse against every girl it reaches', () => {
     const engine = bahamutEngine();
     const unit = engine.state().combatants['bahamut'] as Ffx2Unit;
-    unit.aiMemory = { actions: 4 }; // step 5: Impulse, 3/8 of current HP, party-wide
+    unit.aiMemory = { firstCurse: 1, normalAttack: 3 }; // the next action is the first Impulse, 3/8 of current HP, party-wide
     const intent = predictFFX2EnemyIntent(intentEnv(engine), 'bahamut');
     expect(intent?.abilityId).toBe('impulse');
     expect(intent?.estimate?.perTarget.length).toBeGreaterThanOrEqual(1);
@@ -690,6 +699,8 @@ describe('PR-0123: the badge and the Odds table agree on the shipped rotation', 
     const sum = intent!.branches.reduce((n, b) => n + b.percent, 0);
     expect(sum).toBe(100);
     const match = intent!.branches.find((b) => b.label === intent!.moveName);
-    expect(match?.percent).toBe(29);
+    // Re-parity AI lane FFX-2 a: the Right Bulwark's idle spell is the script's random() % 4 (Shell 25, Protect 25, Regen 50 percent),
+    // so one sample in eight rolling Protect prints 12 percent where the old three-way pick printed 29.
+    expect(match?.percent).toBe(12);
   });
 });
