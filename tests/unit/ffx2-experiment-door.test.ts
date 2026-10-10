@@ -33,8 +33,10 @@ import { CHAPTERS, EXPERIMENT_CHAPTERS, getChapter } from '../../src/data/encoun
 
 const WORD = EXPERIMENT_DOOR_WORD;
 const LEBLANC = EXP_LEBLANC_DOOR_WORD;
+/** The third hidden word, the Sinspawn Gui chapter's (FFX, branch `ch-gui`; its constant is not on this branch, so the literal is pinned here): no word may begin with, end with or contain another. */
+const MUSHROOM = 'mushroom';
 const FF7 = 'ff7-guard-scorpion';
-const EXP = 'ffx2-experiment';
+const EXP = 'ffx2-masterpiece-theatre';
 const LEBLANC_CHAPTER = 'exp-leblanc';
 
 function typeWord(door: WordDoor, word: string, start = 0, step = 100): Array<'open' | null> {
@@ -58,9 +60,11 @@ describe('the word (pure)', () => {
   });
 
   it("stays clear of the other doors' words: neither begins the other or contains it", () => {
-    for (const other of [DOOR_WORD, LEBLANC]) {
+    for (const other of [DOOR_WORD, LEBLANC, MUSHROOM]) {
       expect(WORD.startsWith(other), other).toBe(false);
       expect(other.startsWith(WORD), other).toBe(false);
+      expect(WORD.endsWith(other), other).toBe(false);
+      expect(other.endsWith(WORD), other).toBe(false);
       expect(WORD.includes(other) || other.includes(WORD), other).toBe(false);
     }
   });
@@ -193,9 +197,9 @@ describe('hidden by default', () => {
   });
 
   it('the Experiment is registered beside the Leblanc preview, outside CHAPTERS and found by getChapter', () => {
-    expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toEqual([LEBLANC_CHAPTER, EXP]);
+    expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toEqual(expect.arrayContaining([LEBLANC_CHAPTER, EXP])); // beside the other hidden experiments: each is its own suite's
     expect(CHAPTERS.map((c) => c.id as string)).not.toContain(EXP);
-    expect(getChapter(EXP)).toBe(EXPERIMENT_CHAPTERS[1]);
+    expect(getChapter(EXP)).toBe(EXPERIMENT_CHAPTERS.find((c) => c.id === EXP));
     expect(getChapter(EXP)).toMatchObject({ game: 'ffx2', experimental: true });
   });
 
@@ -218,8 +222,8 @@ describe('hidden by default', () => {
   });
 
   it('a card can still be built when a test hands the experiments in (the data path is intact)', () => {
-    const tiles = buildChapterTiles(new SaveStore(), { experiments: EXPERIMENT_CHAPTERS });
-    expect(tiles).toHaveLength(20);
+    const tiles = buildChapterTiles(new SaveStore(), { experiments: EXPERIMENT_CHAPTERS.filter((c) => c.id === EXP) });
+    expect(tiles).toHaveLength(19);
     expect(tiles.at(-1)).toMatchObject({ id: EXP, numeral: 'EXP' });
   });
 });

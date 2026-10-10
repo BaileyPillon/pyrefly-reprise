@@ -4,12 +4,14 @@
  * **Game case: FFX-2 only** [AGENTS.md rule 14].
  *
  * - `title`, `subtitle`, `location` and `blurb` are the record's (one premise on the card and the prep).
- * - `numeral` is `EXP` like the other hidden chapter (the board has no card for it; the prep header and the pause screen say so).
- * - `handwritten` and `tip` are our own words over the sourced facts (`research/ffx2-experiment.md`): the three tracks, the parts decide what it does.
- * - `objectives`: the three that read the same at every level: bring it under three quarters, under half, and win.
- * - `heroArt` has no painting of its own yet: the card shows the figure's idle as `heroArtFallback` (PROVISIONAL, a stand-in until the art run's painting is installed).
- * - `snapshots`: the grounds' plate, the Experiment's idle and Rikku's FFX-2 portrait (approved).
- * - `musicKeys`: the field bed, the fight and the fanfare, as the record's.
+ * - `numeral` is `EXP` like the other hidden chapters (the board has no card for it; the prep header and the pause screen say so).
+ * - `handwritten` and `tip` are our own words over the sourced facts (`research/ffx2-experiment.md`): Act I is the first test, Act II the full weapon; Protect first; the Defense that stops
+ *   plain swings; a Phoenix Down for Lifeslicer. The prep CHAPTER tab is read-only text, so the levels' readout (Attack 1, Defense 1, Special 1, then 5, 5, 5) is told here and in the story,
+ *   never as a control: **there is no upgrade menu and no prep tab for it** (the driver's concept pick B: the game has none).
+ * - `objectives`: reach the rebuilt machine (win Act I), bring the full weapon under half, win.
+ * - `heroArt` has no painting of its own yet: the card shows the Overbuilt's idle as `heroArtFallback` (PROVISIONAL until the art run's painting is installed).
+ * - `snapshots`: the hall's plate, the Experiment's idle and Rikku's FFX-2 portrait (approved).
+ * - `musicKeys`: the field bed, Act I's cue, Act II's cue and the fanfare, as the record's.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
@@ -23,23 +25,23 @@ export const EXPERIMENT_META: ChapterMeta = {
   ...EXPERIMENT_TEXT,
   heroArt: 'pause/ffx2-experiment', // no painting yet: the fallback below shows
   heroArtFallback: 'characters/ffx2-experiment/idle.png',
-  quote: { text: "It's looking at us.", speaker: 'Yuna' },
-  handwritten: 'it does what its parts say',
+  quote: { text: 'Is it a statue? Please tell me it is a statue.', speaker: 'Rikku' },
+  handwritten: 'protect first. then something armor cannot stop',
   objectives: [
-    { id: 'experiment-below-three-quarters', label: 'Bring the Experiment under three quarters', rule: { kind: 'boss-hp-below', fraction: 0.75 } },
-    { id: 'experiment-below-half', label: 'Bring the Experiment under half', rule: { kind: 'boss-hp-below', fraction: 0.5 } },
+    { id: 'reach-the-rebuilt-machine', label: 'Break the first test and meet the rebuilt machine', rule: { kind: 'link-reached', link: 2 } },
+    { id: 'experiment-below-half', label: 'Bring the full weapon under half', rule: { kind: 'boss-hp-below', fraction: 0.5 } },
     { id: 'defeat-experiment', label: 'Defeat the Experiment', rule: { kind: 'victory' } },
   ],
   tip:
-    'Before the fight, choose its three parts on the EXPERIMENT tab: Attack, Defense and Special. ' +
-    'Defense is armor and Attack is bite; Special decides which attacks it knows.',
+    'Act I is only a first test: put Protect up and find your healing rhythm. ' +
+    'Act II is the full weapon. Plain swings barely scratch its armor, so use what ignores it, and keep a Phoenix Down ready for Lifeslicer.',
   snapshots: [
-    { image: `backdrops/${EXPERIMENT_GROUNDS_PLATE}.png`, caption: 'the machine faction at work' },
-    { image: 'characters/ffx2-experiment/idle.png', caption: 'built from spare parts' },
+    { image: `backdrops/${EXPERIMENT_GROUNDS_PLATE}.png`, caption: 'the faction at work' },
+    { image: 'characters/ffx2-experiment/idle.png', caption: 'souped up past stopping' },
     { image: 'portraits/rikku-x2.png', caption: 'is it a statue?' },
   ],
   focalCharacterId: 'yuna',
-  musicKeys: ['scene-bevelle-underground', 'boss-vegnagun', 'victory-ffx2'],
+  musicKeys: ['scene-bevelle-underground', 'boss-ffx2-aeon', 'boss-vegnagun', 'victory-ffx2'],
 };
 
 export default EXPERIMENT_META;

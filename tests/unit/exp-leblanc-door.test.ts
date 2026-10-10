@@ -240,7 +240,7 @@ describe('hidden by default', () => {
   });
 
   it('a card can still be built when a test hands the experiment in (the data path is intact)', () => {
-    const tiles = buildChapterTiles(new SaveStore(), { experiments: EXPERIMENT_CHAPTERS });
+    const tiles = buildChapterTiles(new SaveStore(), { experiments: EXPERIMENT_CHAPTERS.filter((c) => c.id === EXP) }); // the hidden FFX chapter (`mushroom-door.test.ts`) is another experiment, handed in by its own suite
     expect(tiles).toHaveLength(19);
     expect(tiles.at(-1)).toMatchObject({ id: EXP, numeral: 'EXP' });
   });
@@ -587,7 +587,7 @@ describe('Chapter VI is unchanged, and the experiment keeps its own store', () =
     const card = buildChapterTiles(new SaveStore()).find((t) => t.id === 'ffx2-leblanc')!;
     expect(card).toMatchObject({ numeral: 'VI', title: 'Leblanc', game: 'ffx2', playable: true });
     expect(card.chapter).toBe(FFX2_LEBLANC);
-    expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toEqual([EXP]);
+    expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toContain(EXP); // beside the other hidden experiments (Sinspawn Gui, FFX): each is its own suite's
   });
 
   it("the experiment's attempts land in the experiments' store and never in the save", () => {

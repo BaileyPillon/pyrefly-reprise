@@ -1,19 +1,19 @@
 /**
- * The Experiment's upgrade model (FFX-2 Chapter 5, Djose Temple; our hidden chapter "The Experiment"). **FFX-2 only** [AGENTS.md rule 14].
+ * The Experiment's upgrade model (FFX-2 Chapter 5, Djose Temple; our hidden chapter "The Experiment", mission Masterpiece Theatre). **FFX-2 only** [AGENTS.md rule 14].
  *
- * The Machine Faction's walking weapon has three upgrade tracks, each Level 1 to 5. In the game the levels come from "Assembly" pieces dug up in
- * Bikanel Desert; in this chapter the player picks the three levels before the fight (`../../../app/experiments/`, the prep tab). This file owns the
- * model and nothing else restates it: the levels, the point arithmetic, the stat each track sets, and the one default. It has no DOM and no state; the
- * session's choice lives in `./experiment-loadout.ts`.
+ * The Machine Faction's weapon has three upgrade tracks, each Level 1 to 5. In the game the levels come from the Assembly pieces dug up in the Bikanel Desert and the
+ * technician reads them out before the fight (`research/ffx2-experiment.md` §2; there is no upgrade menu). **The chapter is the game's own two-act Rematch** (the driver's
+ * pick, 2026-10-10, concept B): Act I is the machine at 1 / 1 / 1, Act II the full weapon at 5 / 5 / 5, with a seam and a retry checkpoint between them. So **there is no
+ * chosen-levels path and no prep tab**: this model is internal, and it is how the two acts are made (`./experiment.ts`). It has no DOM and no state.
  *
  * - **Attack** sets Strength and Magic.
  * - **Defense** sets Defense and Magic Defense.
- * - **Special** sets which actions the Experiment uses and in what order (`../../../battle/ffx2/ai/experiment.ts`).
+ * - **Special** sets which actions it uses and in what order (`../../../battle/ffx2/ai/experiment.ts`).
  * - HP, Agility and the rest of the row do not change with a level.
  *
- * Sources and tags (the tags are the research's, carried verbatim into the data, rule 6): `research/ffx2-experiment.md`.
- * `[public]` below means the FF Wiki page and Jegged's Chapter 5 Djose page, which agree to the number; `[game rows]` means the game's own table, read by the
- * reverse-engineering session (`research/re-ffx2-experiment.md`) and pinned by `tests/unit/chapters/experiment-engine.test.ts`.
+ * Sources and tags (carried verbatim, rule 6): `research/ffx2-experiment.md` §3. `[SinirothX]` is the GameFAQs enemy encyclopedia's dump; `[verified: 3 sources]` the tables agree in
+ * SinirothX, Jegged and the wiki (Attack 3's Strength is 155 there and 144 in KeyBlade999/GamerGuides: conflict G-1, the dump's 155 stands); `[game rows]` the game's own table, read by
+ * the reverse-engineering session (`research/re-ffx2-experiment.md`) and pinned by `tests/unit/chapters/experiment-engine.test.ts`.
  */
 
 /** The three tracks, in the order the game lists them (Attack, Defense, Special). */
@@ -24,80 +24,28 @@ export type UpgradeTrack = (typeof UPGRADE_TRACKS)[number];
 export type UpgradeLevel = 1 | 2 | 3 | 4 | 5;
 export const UPGRADE_LEVELS: readonly UpgradeLevel[] = [1, 2, 3, 4, 5] as const;
 
-/** One choice: a level on each track. */
+/** One state of the machine: a level on each track. */
 export interface ExperimentLevels {
   readonly attack: UpgradeLevel;
   readonly defense: UpgradeLevel;
   readonly special: UpgradeLevel;
 }
 
-/** True for 1 to 5. */
-export function isUpgradeLevel(n: unknown): n is UpgradeLevel {
-  return n === 1 || n === 2 || n === 3 || n === 4 || n === 5;
-}
+/** Act I: the first test, nothing dug yet (Jegged: "Attack Lv. 1, Defense Lv. 1, Special Lv. 1"). */
+export const ACT_I_LEVELS: ExperimentLevels = { attack: 1, defense: 1, special: 1 };
+/** Act II: the full weapon, all three at the maximum, the state the game's Episode Complete needs a win in. */
+export const ACT_II_LEVELS: ExperimentLevels = { attack: 5, defense: 5, special: 5 };
 
-/** Clamp any number to a level (a fractional or out-of-range value from a stray input never reaches the data). */
-export function toUpgradeLevel(n: number): UpgradeLevel {
-  const k = Math.min(5, Math.max(1, Math.round(Number.isFinite(n) ? n : 1)));
-  return k as UpgradeLevel;
-}
-
-/**
- * The choice the chapter opens on until the player changes it. Provisional: the first fight the game offers, every track at Level 1 (Jegged: "Attack Lv. 1, Defense
- * Lv. 1, Special Lv. 1"), which is one of the two fights the game itself has (the other is all 5). The driver's concept pick names the shipped default.
- */
-export const DEFAULT_EXPERIMENT_LEVELS: ExperimentLevels = { attack: 1, defense: 1, special: 1 };
-
-/** The weakest and the strongest fight the game offers. */
-export const MIN_EXPERIMENT_LEVELS: ExperimentLevels = { attack: 1, defense: 1, special: 1 };
-export const MAX_EXPERIMENT_LEVELS: ExperimentLevels = { attack: 5, defense: 5, special: 5 };
-
-/** A stable key for a choice, "a-d-s" (`"1-1-1"`): the memo key of the group and the id suffix tests print. */
+/** A stable key for a state, "a-d-s" (`"1-1-1"`): a memo key and the suffix tests print. */
 export function levelsKey(l: ExperimentLevels): string {
   return `${l.attack}-${l.defense}-${l.special}`;
-}
-
-/** Equal choices. */
-export function sameLevels(a: ExperimentLevels, b: ExperimentLevels): boolean {
-  return a.attack === b.attack && a.defense === b.defense && a.special === b.special;
-}
-
-/** A copy with one track changed. */
-export function withLevel(l: ExperimentLevels, track: UpgradeTrack, level: UpgradeLevel): ExperimentLevels {
-  return { ...l, [track]: level };
-}
-
-// ---------------------------------------------------------------------------
-// The Assembly points (the game's way to a level)
-// ---------------------------------------------------------------------------
-
-/** The three kinds of Assembly piece and what each is worth to its track `[public]`. */
-export const ASSEMBLY_POINTS = { Z: 5, S: 3, A: 1 } as const;
-export type AssemblyKind = keyof typeof ASSEMBLY_POINTS;
-
-/** The fewest points that make each level, Level 1 first `[public]`: 0-3 is Level 1, 4-9 Level 2, 10-19 Level 3, 20-37 Level 4, 38 and up Level 5. */
-export const LEVEL_MIN_POINTS: Readonly<Record<UpgradeLevel, number>> = { 1: 0, 2: 4, 3: 10, 4: 20, 5: 38 };
-
-/** The level a track's points make. */
-export function levelForPoints(points: number): UpgradeLevel {
-  const p = Number.isFinite(points) ? Math.max(0, Math.floor(points)) : 0;
-  let level: UpgradeLevel = 1;
-  for (const l of UPGRADE_LEVELS) if (p >= LEVEL_MIN_POINTS[l]) level = l;
-  return level;
-}
-
-/** The points of a set of pieces: `{ Z: 1, S: 3, A: 1 }` is 15 (the wiki's worked example). */
-export function pointsOf(pieces: Partial<Record<AssemblyKind, number>>): number {
-  let total = 0;
-  for (const kind of Object.keys(ASSEMBLY_POINTS) as AssemblyKind[]) total += ASSEMBLY_POINTS[kind] * Math.max(0, Math.floor(pieces[kind] ?? 0));
-  return total;
 }
 
 // ---------------------------------------------------------------------------
 // What each level sets
 // ---------------------------------------------------------------------------
 
-/** The Attack track: Strength and Magic by level `[public]`. */
+/** The Attack track: Strength and Magic by level `[verified: 3 sources]` (Attack 3's Strength 155: conflict G-1). */
 export const ATTACK_TRACK: Readonly<Record<UpgradeLevel, { readonly str: number; readonly mag: number }>> = {
   1: { str: 112, mag: 1 },
   2: { str: 130, mag: 20 },
@@ -106,7 +54,7 @@ export const ATTACK_TRACK: Readonly<Record<UpgradeLevel, { readonly str: number;
   5: { str: 215, mag: 100 },
 };
 
-/** The Defense track: Defense and Magic Defense by level `[public]`. */
+/** The Defense track: Defense and Magic Defense by level `[verified: 3 sources]`. */
 export const DEFENSE_TRACK: Readonly<Record<UpgradeLevel, { readonly def: number; readonly mdef: number }>> = {
   1: { def: 1, mdef: 1 },
   2: { def: 50, mdef: 50 },
@@ -128,11 +76,14 @@ export function experimentScriptId(special: UpgradeLevel): string {
   return `x2-experiment-special-${special}`;
 }
 
-/** The actions each Special level can use `[public]`: Level 1 only Attack; Level 2 adds the 4-hit Rocket Launcher; 3 the 6-hit; 4 the 8-hit and Lifeslicer; 5 the 10-hit, Lifeslicer and Annihilator. */
+/**
+ * The actions each Special level can use `[SinirothX, Jegged, wiki]`: Level 1 only Attack; Level 2 adds the 4-hit Rocket Launcher; 3 the 6-hit, and Lifeslicer through its HP triggers
+ * (single source, research G-7); 4 the 8-hit and Lifeslicer; 5 the 10-hit, Lifeslicer and Annihilator.
+ */
 export function experimentActionIds(special: UpgradeLevel): string[] {
   const ids: string[] = [EXPERIMENT_ACTIONS.attack];
   if (special >= 2) ids.push(EXPERIMENT_ACTIONS.rocketLauncher[special - 2]!);
-  if (special >= 4) ids.push(EXPERIMENT_ACTIONS.lifeslicer);
+  if (special >= 3) ids.push(EXPERIMENT_ACTIONS.lifeslicer);
   if (special >= 5) ids.push(EXPERIMENT_ACTIONS.annihilator);
   return ids;
 }

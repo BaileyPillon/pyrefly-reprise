@@ -1,0 +1,691 @@
+{
+ "source": "FFX-2 Steam build 25501027; kernel/monster.bin row 194 and kernel/monmagic.bin rows 0x41da, 0x4121 to 0x4126, read by the new-chapters reverse-engineering lane (research/re-ffx2-experiment.md). Numbers only.",
+ "record": {
+  "row": 194,
+  "level": 50,
+  "hp": 18324,
+  "mp": 0,
+  "agi": 68,
+  "acc": 95,
+  "eva": 0,
+  "luck": 0,
+  "specialWord": 1987,
+  "typeMask": 1,
+  "nullMask": 16,
+  "absorb": 0,
+  "half": 0,
+  "weak": 0,
+  "resistGroup1": [
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   0,
+   255,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   255,
+   255,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "resistGroup2": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "exp": 0,
+  "gil": 0,
+  "ap": 40,
+  "pilferGilFigure": 5000,
+  "stealChanceByte": 255,
+  "dropChanceByte": 255,
+  "zantetsuByte": 180,
+  "commands": [
+   16858,
+   16673,
+   16674,
+   16675,
+   16676,
+   16677,
+   16678,
+   16679
+  ],
+  "stealItem": {
+   "id": 8197,
+   "common": 1,
+   "rare": 2
+  },
+  "dropItem": {
+   "name": "Elixir",
+   "count": 1
+  }
+ },
+ "levels": {
+  "attack": [
+   {
+    "level": 1,
+    "str": 112,
+    "mag": 1
+   },
+   {
+    "level": 2,
+    "str": 130,
+    "mag": 20
+   },
+   {
+    "level": 3,
+    "str": 155,
+    "mag": 45
+   },
+   {
+    "level": 4,
+    "str": 180,
+    "mag": 72
+   },
+   {
+    "level": 5,
+    "str": 215,
+    "mag": 100
+   }
+  ],
+  "defense": [
+   {
+    "level": 1,
+    "def": 1,
+    "mdef": 1
+   },
+   {
+    "level": 2,
+    "def": 50,
+    "mdef": 50
+   },
+   {
+    "level": 3,
+    "def": 100,
+    "mdef": 100
+   },
+   {
+    "level": 4,
+    "def": 150,
+    "mdef": 150
+   },
+   {
+    "level": 5,
+    "def": 205,
+    "mdef": 205
+   }
+  ]
+ },
+ "points": [
+  4,
+  10,
+  20,
+  38
+ ],
+ "specialScenes": [
+  {
+   "special": 1,
+   "parts": 0,
+   "moves": [
+    16858
+   ]
+  },
+  {
+   "special": 2,
+   "parts": 2,
+   "moves": [
+    16858,
+    16673
+   ]
+  },
+  {
+   "special": 3,
+   "parts": 4,
+   "moves": [
+    16858,
+    16674,
+    16677
+   ]
+  },
+  {
+   "special": 4,
+   "parts": 6,
+   "moves": [
+    16858,
+    16675,
+    16677
+   ]
+  },
+  {
+   "special": 5,
+   "parts": 8,
+   "moves": [
+    16858,
+    16676,
+    16677,
+    16678
+   ]
+  }
+ ],
+ "rows": [
+  {
+   "id": 16858,
+   "name": "Attack",
+   "damageClass": 1,
+   "formula": 0,
+   "power": 16,
+   "hits": 1,
+   "accuracyFormula": 2,
+   "accuracyByte": 95,
+   "critByte": 5,
+   "shatter": 10,
+   "element": 0,
+   "costAtb": 100,
+   "costCast": 0,
+   "targetFlags": 51,
+   "miscFlags": 1610612818,
+   "damageFlags": 13,
+   "randomTarget": false,
+   "delayWeak": false,
+   "sequenceClass": 1,
+   "restUnits": 14492,
+   "chargeUnits": 0
+  },
+  {
+   "id": 16673,
+   "name": "Rocket Launcher",
+   "damageClass": 1,
+   "formula": 0,
+   "power": 4,
+   "hits": 4,
+   "accuracyFormula": 0,
+   "accuracyByte": 0,
+   "critByte": 10,
+   "shatter": 100,
+   "element": 0,
+   "costAtb": 100,
+   "costCast": 60,
+   "targetFlags": 23,
+   "miscFlags": 536887302,
+   "damageFlags": 13,
+   "randomTarget": true,
+   "delayWeak": false,
+   "sequenceClass": 31,
+   "restUnits": 14492,
+   "chargeUnits": 8695
+  },
+  {
+   "id": 16674,
+   "name": "Rocket Launcher",
+   "damageClass": 1,
+   "formula": 0,
+   "power": 3,
+   "hits": 6,
+   "accuracyFormula": 0,
+   "accuracyByte": 0,
+   "critByte": 10,
+   "shatter": 100,
+   "element": 0,
+   "costAtb": 100,
+   "costCast": 60,
+   "targetFlags": 23,
+   "miscFlags": 536887302,
+   "damageFlags": 13,
+   "randomTarget": true,
+   "delayWeak": false,
+   "sequenceClass": 31,
+   "restUnits": 14492,
+   "chargeUnits": 8695
+  },
+  {
+   "id": 16675,
+   "name": "Rocket Launcher",
+   "damageClass": 1,
+   "formula": 0,
+   "power": 3,
+   "hits": 8,
+   "accuracyFormula": 0,
+   "accuracyByte": 0,
+   "critByte": 10,
+   "shatter": 100,
+   "element": 0,
+   "costAtb": 100,
+   "costCast": 60,
+   "targetFlags": 23,
+   "miscFlags": 536887302,
+   "damageFlags": 13,
+   "randomTarget": true,
+   "delayWeak": false,
+   "sequenceClass": 31,
+   "restUnits": 14492,
+   "chargeUnits": 8695
+  },
+  {
+   "id": 16676,
+   "name": "Rocket Launcher",
+   "damageClass": 1,
+   "formula": 0,
+   "power": 3,
+   "hits": 10,
+   "accuracyFormula": 0,
+   "accuracyByte": 0,
+   "critByte": 10,
+   "shatter": 100,
+   "element": 0,
+   "costAtb": 100,
+   "costCast": 60,
+   "targetFlags": 23,
+   "miscFlags": 536887302,
+   "damageFlags": 13,
+   "randomTarget": true,
+   "delayWeak": false,
+   "sequenceClass": 31,
+   "restUnits": 14492,
+   "chargeUnits": 8695
+  },
+  {
+   "id": 16677,
+   "name": "Lifeslicer",
+   "damageClass": 1,
+   "formula": 7,
+   "power": 16,
+   "hits": 1,
+   "accuracyFormula": 0,
+   "accuracyByte": 0,
+   "critByte": 0,
+   "shatter": 100,
+   "element": 0,
+   "costAtb": 180,
+   "costCast": 100,
+   "targetFlags": 19,
+   "miscFlags": 536870918,
+   "damageFlags": 0,
+   "randomTarget": false,
+   "delayWeak": false,
+   "sequenceClass": 31,
+   "restUnits": 26086,
+   "chargeUnits": 14492
+  },
+  {
+   "id": 16678,
+   "name": "Annihilator",
+   "damageClass": 1,
+   "formula": 3,
+   "power": 20,
+   "hits": 1,
+   "accuracyFormula": 0,
+   "accuracyByte": 0,
+   "critByte": 0,
+   "shatter": 100,
+   "element": 0,
+   "costAtb": 100,
+   "costCast": 210,
+   "targetFlags": 23,
+   "miscFlags": 536875014,
+   "damageFlags": 2,
+   "randomTarget": false,
+   "delayWeak": true,
+   "sequenceClass": 31,
+   "restUnits": 14492,
+   "chargeUnits": 30434
+  },
+  {
+   "id": 16679,
+   "name": "Die",
+   "damageClass": 0,
+   "formula": 0,
+   "power": 0,
+   "hits": 0,
+   "accuracyFormula": 0,
+   "accuracyByte": 0,
+   "critByte": 0,
+   "shatter": 0,
+   "element": 0,
+   "costAtb": 0,
+   "costCast": 0,
+   "targetFlags": 65,
+   "miscFlags": 2,
+   "damageFlags": 0,
+   "randomTarget": false,
+   "delayWeak": false,
+   "sequenceClass": 33,
+   "restUnits": 0,
+   "chargeUnits": 0
+  }
+ ],
+ "firstGauge": {
+  "fullUnits": 10144,
+  "loUnits": 2536,
+  "hiUnits": 7528,
+  "loSteps": 27,
+  "hiSteps": 80
+ },
+ "attackBaseDamage": {
+  "defs": [
+   1,
+   50,
+   100,
+   150,
+   205
+  ],
+  "byAttackLevel": {
+   "1": [
+    [
+     985,
+     1112
+    ],
+    [
+     806,
+     910
+    ],
+    [
+     622,
+     702
+    ],
+    [
+     439,
+     496
+    ],
+    [
+     238,
+     268
+    ]
+   ],
+   "2": [
+    [
+     1257,
+     1419
+    ],
+    [
+     1028,
+     1161
+    ],
+    [
+     795,
+     897
+    ],
+    [
+     560,
+     633
+    ],
+    [
+     303,
+     342
+    ]
+   ],
+   "3": [
+    [
+     1686,
+     1904
+    ],
+    [
+     1379,
+     1557
+    ],
+    [
+     1065,
+     1203
+    ],
+    [
+     751,
+     848
+    ],
+    [
+     406,
+     459
+    ]
+   ],
+   "4": [
+    [
+     2175,
+     2456
+    ],
+    [
+     1779,
+     2009
+    ],
+    [
+     1375,
+     1552
+    ],
+    [
+     970,
+     1095
+    ],
+    [
+     525,
+     593
+    ]
+   ],
+   "5": [
+    [
+     2962,
+     3345
+    ],
+    [
+     2422,
+     2735
+    ],
+    [
+     1872,
+     2114
+    ],
+    [
+     1320,
+     1491
+    ],
+    [
+     715,
+     807
+    ]
+   ]
+  }
+ },
+ "rocketBaseDamage": {
+  "defs": [
+   1,
+   100,
+   205
+  ],
+  "p4": {
+   "1": [
+    [
+     245,
+     277
+    ],
+    [
+     155,
+     175
+    ],
+    [
+     59,
+     66
+    ]
+   ],
+   "2": [
+    [
+     314,
+     354
+    ],
+    [
+     198,
+     224
+    ],
+    [
+     75,
+     85
+    ]
+   ],
+   "3": [
+    [
+     420,
+     475
+    ],
+    [
+     266,
+     300
+    ],
+    [
+     101,
+     114
+    ]
+   ],
+   "4": [
+    [
+     543,
+     613
+    ],
+    [
+     343,
+     387
+    ],
+    [
+     131,
+     148
+    ]
+   ],
+   "5": [
+    [
+     740,
+     836
+    ],
+    [
+     467,
+     528
+    ],
+    [
+     178,
+     201
+    ]
+   ]
+  },
+  "p3": {
+   "1": [
+    [
+     184,
+     208
+    ],
+    [
+     116,
+     131
+    ],
+    [
+     44,
+     49
+    ]
+   ],
+   "2": [
+    [
+     235,
+     265
+    ],
+    [
+     149,
+     168
+    ],
+    [
+     56,
+     63
+    ]
+   ],
+   "3": [
+    [
+     315,
+     356
+    ],
+    [
+     199,
+     225
+    ],
+    [
+     75,
+     85
+    ]
+   ],
+   "4": [
+    [
+     407,
+     460
+    ],
+    [
+     257,
+     291
+    ],
+    [
+     98,
+     111
+    ]
+   ],
+   "5": [
+    [
+     555,
+     626
+    ],
+    [
+     350,
+     395
+    ],
+    [
+     134,
+     151
+    ]
+   ]
+  }
+ },
+ "annihilatorBaseDamage": {
+  "1": [
+   626,
+   707
+  ],
+  "2": [
+   744,
+   840
+  ],
+  "3": [
+   899,
+   1015
+  ],
+  "4": [
+   1066,
+   1204
+  ],
+  "5": [
+   1240,
+   1400
+  ]
+ }
+}

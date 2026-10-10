@@ -61,14 +61,14 @@ import { FFX2_EXPERIMENT } from './chapter-ffx2-experiment.ts'; // the Experimen
  */
 export type ChapterId =
   | 'ff7-guard-scorpion'
+  | 'ffx2-masterpiece-theatre' // the Experiment (mission Masterpiece Theatre) (2026-10-10), hidden like the others (FFX-2; no card, its word on chapter select, `app/screens/frontend/experimentDoor.ts`), never in `SaveData.chapters`
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern' | 'seymour-natus'
-  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face' | 'exp-leblanc'
-  | 'ffx2-experiment'; // the last two: the Leblanc preview (2026-10-06) and the Experiment (2026-10-10), hidden (no card; each has its word on chapter select, `app/screens/frontend/leblancDoor.ts` and `experimentDoor.ts`), never in `SaveData.chapters`
+  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face' | 'exp-leblanc'; // the last: the Leblanc preview (2026-10-06), hidden (no card; its word on chapter select, `app/screens/frontend/leblancDoor.ts`), never in `SaveData.chapters`
 
 /** Every id that can hold a place on the board: all but the hidden experiments. */
-export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion' | 'exp-leblanc' | 'ffx2-experiment'>;
+export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion' | 'exp-leblanc' | 'ffx2-masterpiece-theatre'>;
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -110,7 +110,7 @@ export interface Chapter {
   id: ChapterId;
   game: GameId;
   /** Display order on chapter select, 1–18 (XVI Ixion, listed 2026-09-27; XVII and XVIII, Sin, listed 2026-09-29); 0 = no place on the board (FF7 experiment). */
-  number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19;
+  number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; // 19 and 20: the hidden experiments after the eighteen (shown as EXP, `ui/common/roman.ts`)
   /** An experiment: its attempts, clears and time go to the experiments' store, never the save, and it is no part of any count. FF7's Guard Scorpion is hidden (no card; `BattleScreenExperiment`); the FFX-2 Leblanc preview is hidden too (no card; its word on chapter select, `./chapter-exp-leblanc.ts`) and plays through the chapters' own flow. */
   experimental?: true;
   /** Card title. The encounter's name. */

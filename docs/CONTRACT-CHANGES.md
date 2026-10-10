@@ -6,6 +6,21 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-10 — The Experiment, a hidden FFX-2 chapter (Djose Temple, FFX-2 Chapter 5; the mission Masterpiece Theatre), its typed word "experiment" and the game's own two-act Rematch (branch `ch-experiment`; FFX-2 only; additive)
+
+Branch `ch-experiment` (from `re-parity-rc1` 931613a8, the live build 39.4.3). Bailey, 2026-10-10: "I'll add in those 2 chapter recommendations", then "i want those chapters added in over night while im sleep ... also include the reverse engineered and decompiled game mechanics please. this is really important." The driver's reading, recorded as his delegation:
+the chapter ships hidden behind a typed word and listing it on the board waits for his word; **the driver's concept pick is B, the game's own two-act Rematch** (no upgrade dial, no prep tab: the game has no pre-battle upgrade menu, and Bailey's product brief puts "one more try" in the fight itself). One contract file
+changes, additively; every other change is in modules no other chapter imports. Plan: [ch-experiment-review](plans/ch-experiment-review.md). Game case: FFX-2 only (no FFX or FF7 file is touched; the FFX engine goldens, `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- `src/data/encounters.ts`: `ChapterId` gains `'ffx2-masterpiece-theatre'` (the mission's name: the project already means a hidden preview by the word experiment); `ListedChapterId` excludes it; `EXPERIMENT_CHAPTERS` lists it beside the other hidden experiments; `Chapter.number` gains `20` (the hidden experiments take 19 and 20 after the eighteen and wear `EXP`, `ui/common/roman.ts`).
+  `CHAPTERS` and `CHAPTER_IDS` stay the eighteen. It is `experimental: true`: its attempts, clears and time go to the experiments' store (`pyrefly-reprise:experiments:v1`), never the save, so there is no save change and no migration.
+- **Two formations chained by `nextGroupId`** (`data/ffx2/enemies/experiment.ts`): Act I the prototype at Attack 1, Defense 1, Special 1; Act II the full weapon at 5 / 5 / 5 with `restoresPartyOnEntry` (the party enters restored and a loss retries Act II: `app/screens/BattleChainCheckpoint.ts#checkpointAt`). The levels are internal data that make the two
+  acts (`experiment-levels.ts`); nothing reads a player's choice of levels, so there is no session store and the `Chapter` type is not widened beyond the number. The game's own rows (`research/re-ffx2-experiment.md`, the new-chapters RE lane) are laid by two additive map entries: `command-records/experiment.ts` into `FFX2_COMMAND_RECORDS` and
+  `monster-records/records-experiment.ts` into `MONSTER_RECORDS`; their numbers are pinned by `tests/unit/chapters/experiment-engine.test.ts` against `tests/fixtures/parity/ffx2/experiment_rows.json` (numbers only).
+- `app/screens/frontend/experimentDoor.ts` and `ChapterSelectScreen.ts`: a typed-word door, `experiment`, beside "limit" and "leblanc" (the board's `wordKey` guard already claims a later letter of any live match, which is what keeps the word's X, the board's CANCEL, from leaving the board). Pinned by
+  `tests/unit/ffx2-experiment-door.test.ts` with the real `Input`, board and party prep. No word may begin with, end with or contain another: limit, leblanc, mushroom (the Gui lane's), experiment.
+- Four lines in `tests/unit/exp-leblanc.test.ts` and `exp-leblanc-door.test.ts` assumed `EXPERIMENT_CHAPTERS` was exactly the Leblanc preview; they filter by id now, byte for byte as the `ch-gui` lane changed them.
+
 ## 2026-10-09 (late) — The release line and release candidate 1 in one tree: Omnis's discs are stepped by the one pure `discAfterTurn` on the game's ring, and the reset order, the affinity timing and the four spells stay the game's script (release candidate 1 folded into r3943-int; FFX only; no shared contract file changed)
 
 Branch `re-parity-rc1`, merge of `a74b2b8e` (the release driver's final content, `origin/r3943-int`). No file in the contract list changed by the merge. Recorded because the entries below describe the same Omnis module from two sides and neither is

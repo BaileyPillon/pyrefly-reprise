@@ -16,6 +16,10 @@ fight is ATB, dresspheres, FFX-2 items and the FFX-2 monster rows; nothing in it
 touched. The shared plumbing it needs (the hidden word on chapter select, one prep tab, the chapter registry) is "both"
 (CHK-020) and is written so that a chapter without it behaves exactly as before.
 
+> **Update 2026-10-10 ~01:15 (the driver's concept pick, after `research/ffx2-experiment.md` and the RE note landed).** The pick is **concept B, the game's own two-act Rematch**: the game has no pre-battle upgrade menu (research C-1), and Bailey's product brief puts "one more try" in the fight itself with no modifiers. So §3 below (the chosen-levels prep tab, the session-memory store and the accessor)
+> is **withdrawn and was never built beyond a first scaffold, which is deleted**; §2 stays as the internal model that makes the two acts. What is built instead: two formations chained by `nextGroupId` (Act I the prototype at 1 / 1 / 1; Act II the full weapon at 5 / 5 / 5, `restoresPartyOnEntry`, the retry checkpoint), a story seam between them,
+> the game's own monster and command rows from the RE note (pinned against a numbers-only fixture), the AI per Special level as the game's script has it, the chapter id `ffx2-masterpiece-theatre`, number 20. §4 (the word), §5, §6 (minus the prep tab), §7 and §8 stand; the risks about the accessor seam no longer apply. The "Verdict" below is superseded by the handoff `docs/handoff/ch-experiment.md`.
+
 ## 1. What the chapter is (summary; the numbers wait for the game's own rows)
 
 Read so far: the public sources the overnight research gathered (FF Wiki page, Jegged's Chapter 5 Djose page, GameFAQs boss

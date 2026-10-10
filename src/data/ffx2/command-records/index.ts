@@ -12,6 +12,7 @@
 
 import type { AbilityDef, FFX2CommandRecord } from '../../../battle/common/types.ts';
 import { COMMAND_RECORDS_ENEMIES } from './enemies.ts';
+import { COMMAND_RECORDS_EXPERIMENT } from './experiment.ts';
 import { COMMAND_RECORDS_ITEMS } from './items.ts';
 import { COMMAND_RECORDS_PARTY } from './party.ts';
 
@@ -20,6 +21,7 @@ export const FFX2_COMMAND_RECORDS: Readonly<Record<string, FFX2CommandRecord>> =
   ...COMMAND_RECORDS_ITEMS,
   ...COMMAND_RECORDS_PARTY,
   ...COMMAND_RECORDS_ENEMIES,
+  ...COMMAND_RECORDS_EXPERIMENT, // the hidden chapter's Experiment (new-chapters RE lane, 2026-10-10)
 };
 
 /** The reachable abilities that have no game row, and why. */

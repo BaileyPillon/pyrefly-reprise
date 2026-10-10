@@ -4,7 +4,7 @@ import type { BattleCamera } from '../engine/BattleCamera.ts';
 import { LightRig, makeLightPool } from '../engine/Lighting.ts';
 import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts';
 import { EXPERIMENT_GROUNDS_PLATE } from '../data/experiment-plates.ts';
-import { EXPERIMENT_ENEMY_ID } from '../data/ffx2/enemies/experiment.ts';
+import { EXPERIMENT_BODY_IDS } from '../data/ffx2/enemies/experiment.ts';
 import { DJOSE_CAMERA_REF, DJOSE_CHAMBER_PALETTE, DJOSE_CHAMBER_SLOTS, DJOSE_PARTY_HEIGHT, DJOSE_RIGS, type DjosePlateFrame, djoseCentreY } from './djose-chamber.ts';
 import { RoadPhoneCamera, roadOnPhone } from './road-to-the-farplane-phone.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
@@ -50,8 +50,8 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [EXPERIMENT_SPOT, [2.3, 0, 
 
 const STAGING = {
   holdParty: true,
-  enemySpots: { [EXPERIMENT_ENEMY_ID]: EXPERIMENT_SPOT },
-  figureHeights: { [EXPERIMENT_ENEMY_ID]: EXPERIMENT_FIGURE_HEIGHT },
+  enemySpots: Object.fromEntries(EXPERIMENT_BODY_IDS.map((id) => [id, EXPERIMENT_SPOT])), // both acts' bodies stand on the one spot
+  figureHeights: Object.fromEntries(EXPERIMENT_BODY_IDS.map((id) => [id, EXPERIMENT_FIGURE_HEIGHT])),
 } as const;
 
 /** The published slots, the same shape every other scene exports. */
@@ -116,7 +116,7 @@ export const buildExperimentGroundsScene: SceneFactory = async (opts: SceneBuild
     return pool;
   });
 
-  const phoneCamera = onPhone ? new RoadPhoneCamera(DJOSE_RIGS.idle, { shiva: [EXPERIMENT_ENEMY_ID], sisters: [], anima: [] }) : null;
+  const phoneCamera = onPhone ? new RoadPhoneCamera(DJOSE_RIGS.idle, { shiva: [...EXPERIMENT_BODY_IDS], sisters: [], anima: [] }) : null;
 
   const watchEnabled = opts.watchAssets ?? Boolean(import.meta.env.DEV);
   let watcher: AssetWatcher | null = null;
