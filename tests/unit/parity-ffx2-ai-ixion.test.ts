@@ -9,7 +9,10 @@
  * the reaction entry that adds 5 per result another character applies to him (and nothing for his own Recharge).
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+// Some tests walk all 65,536 roll values; on a loaded machine they need more than the default 5 seconds.
+vi.setConfig({ testTimeout: 60_000 });
 import { aiScriptFor } from '../../src/battle/ffx2/ai/index.ts';
 import { AC, acOf } from '../../src/battle/ffx2/ai/fallen-aeons.ts';
 import { IXION_HAMMER_NEXT, IXION_RECHARGE_TRIGGER, IXION_STEP } from '../../src/battle/ffx2/ai/ixion.ts';

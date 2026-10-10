@@ -9,7 +9,10 @@
  * Not-So-Mighty Guard on 1 and 29: `parity-ffx2-ai-leblanc-boss.test.ts`), and the exact residue counts of the scripts' `random() % n` over all 65,536 values.
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+// Some tests walk all 65,536 roll values; on a loaded machine they need more than the default 5 seconds.
+vi.setConfig({ testTimeout: 60_000 });
 import * as data from '../../src/data/ffx2/index.ts';
 import { aiScriptFor } from '../../src/battle/ffx2/ai/index.ts';
 import { mem, setMem } from '../../src/battle/ffx2/internal.ts';
@@ -265,7 +268,10 @@ describe('Dr. Goon (m135) and Fem-Goon (m138): rows K1 and K2', () => {
     expect([b.id(command), b.targets(command)]).toEqual(['x2-fem-goon-watera', ['rikku']]);
     b.girls[0]!.hp = 500; // exactly half is not below it: the ordinary rows
     b.rng.drain();
-    expect(b.id(b.poll(1, 0, 0, 0))).toBe('x2-fem-goon-fira'); // `% 2 = 0`: the girl first (index 0), then the spell
+    // `% 2 = 0`: the girl first (index 0 of the two living girls: Yuna), then the spell. Had the half line been inclusive,
+    // row 3 would have taken the weakest girl (Rikku) with the same spell, so the target is what tells them apart.
+    const ordinary = b.poll(1, 0, 0, 0);
+    expect([b.id(ordinary), b.targets(ordinary)]).toEqual(['x2-fem-goon-fira', ['yuna']]);
   });
 
   it('otherwise `% 2` picks one single-target spell on a uniform girl or one party-wide base spell (rows 4, 5)', () => {

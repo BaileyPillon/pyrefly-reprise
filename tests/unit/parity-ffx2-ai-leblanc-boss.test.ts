@@ -7,7 +7,10 @@
  * 3, 11, 19, 27 ..., Not-So-Mighty Guard on commands 1 and 29), and the exact residue counts of `random() % 5` over the 65,536 values.
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+// Some tests walk all 65,536 roll values; on a loaded machine they need more than the default 5 seconds.
+vi.setConfig({ testTimeout: 60_000 });
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import * as data from '../../src/data/ffx2/index.ts';

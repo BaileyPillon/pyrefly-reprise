@@ -11,7 +11,10 @@
  * strike on each named girl, and Absorb takes 3/16 of both HP and MP.
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+// Some tests walk all 65,536 roll values; on a loaded machine they need more than the default 5 seconds.
+vi.setConfig({ testTimeout: 60_000 });
 import * as data from '../../src/data/ffx2/index.ts';
 import { aiScriptFor } from '../../src/battle/ffx2/ai/index.ts';
 import { BARALAI_COUNT_SEVEN, DRILL_SHOT_AT, MEM, tripleAttackTargets } from '../../src/battle/ffx2/ai/den-of-woe.ts';
@@ -145,6 +148,21 @@ describe('Baralai (m176): rows D1 to D8, D10', () => {
     expect([poor.id(absorb), poor.targets(absorb)]).toEqual([B('absorb'), ['rikku']]);
     const edge = baralai(4000, 60);
     expect(edge.id(edge.poll(0, 0))).toBe(B('regen')); // 60 MP is not below 60
+  });
+
+  it('the low-HP roll is `% 4 = 0`: 4 takes it and 5 does not, and exactly 16,384 of the 65,536 values do (D1)', () => {
+    const b = baralai(4000);
+    const rolled = (v: number): boolean => {
+      setMem(b.self, MEM.cycle, 0);
+      setMem(b.self, MEM.queued, '');
+      b.rng.drain();
+      return b.id(b.poll(v, 0, 0)) === B('regen');
+    };
+    expect(rolled(4)).toBe(true); // 4 % 4 = 0, but 4 % 5 = 4
+    expect(rolled(5)).toBe(false); // 5 % 4 = 1, but 5 % 5 = 0
+    let taken = 0;
+    for (let v = 0; v <= 0xffff; v++) if (rolled(v)) taken += 1;
+    expect(taken).toBe(16384);
   });
 
   it('the burst counter counts results: +1 each; at 8 the next poll is the Drill Shot on the latest attacker and takes no cycle step (D3, D4)', () => {
