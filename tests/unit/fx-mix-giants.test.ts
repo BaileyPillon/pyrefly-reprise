@@ -156,12 +156,12 @@ describe('the giants table', () => {
 });
 
 describe('the size: the pick over the girls, as a group factor on the drawn boss', () => {
-  it('Bahamut 9.147 over girls of 1.82 (5.03), Paragon 9.447 over 1.75 (5.40), Anima 9.6 over 1.78 (0.7 of 7.71): the factor is that over the drawn height', () => {
+  it('Bahamut 6.037 over girls of 1.82 (3.3, his idle-bone height), Paragon 9.447 over 1.75 (5.40), Anima 9.6 over 1.78 (0.7 of 7.71): the factor is that over the drawn height', () => {
     const b = bevelle();
     const p = cloister();
     const r = road();
     expect(partyWorldHeight(b.actors)).toBeCloseTo(1.82, 6);
-    expect(giantFactor(giantRow('ffx2', b.actors)!.row, b.boss, 1.82)! * 4.1).toBeCloseTo(9.147, 2);
+    expect(giantFactor(giantRow('ffx2', b.actors)!.row, b.boss, 1.82)! * 4.1).toBeCloseTo(6.037, 2);
     expect(giantFactor(giantRow('ffx2', p.actors)!.row, p.boss, 1.75)! * 3.1).toBeCloseTo(9.447, 2);
     expect(giantFactor(giantRow('ffx2', r.actors)!.row, r.boss, 1.78)! * 3.4).toBeCloseTo(9.6, 2);
   });
@@ -186,15 +186,15 @@ describe('the exception to the party-height floor, as a rule', () => {
 });
 
 describe('Bahamut through Framing (Chapter IV, FFX-2, a 16:9 desktop)', () => {
-  it('stands at his real height, under his own camera, the girls spread and he stepped right as the colossus plan has always left them', () => {
+  it('stands at his in-battle height (0.66 of the model, 3.3 times the girls), under his own camera, the girls spread and he stepped right as the colossus plan has always left them', () => {
     const s = bevelle();
     const { f, cam } = framingFor();
     run(f, s.actors, 2);
     expect(f.report.plans).toBe(1);
     expect(f.report.giant).toMatchObject({ id: 'bahamut' });
-    expect(standing(s.boss)).toBeCloseTo(9.147, 2);
+    expect(standing(s.boss)).toBeCloseTo(6.037, 2);
     const row = GIANT_ROWS.find((r) => r.id === 'bahamut')!;
-    const pose = giantPose(row.views[0]!);
+    const pose = giantPose(giantView(row, W / H)!); // the row's view for a 16:9 window
     expect(f.masterPose!.pos.distanceTo(pose.pos)).toBeLessThan(1e-6);
     expect(f.masterPose!.look.distanceTo(pose.look)).toBeLessThan(1e-6);
     expect(f.lens).toEqual([0, 0]);
@@ -204,23 +204,64 @@ describe('Bahamut through Framing (Chapter IV, FFX-2, a 16:9 desktop)', () => {
     // the idle rig is the table's; the close rigs are as the scene authored them
     const idle = cam.getRig('idle')!;
     expect(new Vector3(...idle.position).distanceTo(pose.pos)).toBeLessThan(1e-6);
+    expect(pose.pos.toArray()).toEqual([0.8231, 2.1286, 9.6228]); // the 2026-10-10 re-fit, not the colossus camera of the 2026-10-08 pick (2.3, 4.8786, 16.0313)
     expect(cam.getRig('action')).toEqual(CLOSE);
     expect(cam.getRig('party')).toEqual(CLOSE);
     expect(cam.getRig('enemy')).toEqual(CLOSE);
   });
 
-  it('reads 3.8 times the girls on screen (real 5.03 at one distance), the girls at about half of what they were: under the exception, over its floor', () => {
+  it('reads about twice the girls on screen (3.3 at one distance, 2.06 where he stands back), the girls at about 97 percent of today\'s: no longer under the giant exception', () => {
     const s = bevelle();
     const { f } = framingFor();
     run(f, s.actors, 2);
     const r = ratioOn(s.actors, s.boss, f.masterPose!);
-    expect(r).toBeGreaterThan(3.3);
-    expect(r).toBeLessThan(4.3);
+    expect(r).toBeGreaterThan(1.9);
+    expect(r).toBeLessThan(2.3);
     const px = f.report.fit!.partyPx;
-    expect(px).toBeLessThan(0.9 * f.report.todayPx); // the rule every other fight keeps would hold this master
-    expect(px).toBeGreaterThanOrEqual(GIANT_FLOOR * f.report.todayPx); // the exception does not
-    expect(f.report.floorPx).toBe(Math.round(GIANT_FLOOR * f.report.todayPx));
+    expect(px).toBeGreaterThanOrEqual(0.9 * f.report.todayPx); // the rule every other fight keeps holds this master too: the colossus camera is gone
+    expect(px).toBeLessThanOrEqual(1.01 * f.report.todayPx); // never larger than the resting rig's girls
+    expect(f.report.floorPx).toBe(Math.round(GIANT_FLOOR * f.report.todayPx)); // the exception's floor is still the giant plan's rule, for the other two
     expect(f.report.fit!.ok).toBe(true);
+  });
+
+  it('is nowhere near the pulled-back camera of the 2026-10-08 pick: the idle rig plus under a unit back and under a unit up, where that pick stood 6.4 back and 1.9 up', () => {
+    const s = bevelle();
+    const { f } = framingFor();
+    run(f, s.actors, 2);
+    const idle = new Vector3(...IDLE.position);
+    expect(f.masterPose!.pos.z - idle.z).toBeLessThan(1);
+    expect(f.masterPose!.pos.y - idle.y).toBeLessThan(1);
+    expect(f.masterPose!.pos.z).toBeLessThan(11); // the 2026-10-08 camera stood at z 16.03 and y 4.88
+  });
+
+  it('has two views for Chapter IV (1.2 to 1.28 and 1.28 to 2.45), each of them a close camera, and a 5:4 window plays the narrow one with the girls whole', () => {
+    const row = GIANT_ROWS.find((r) => r.id === 'bahamut')!;
+    expect(row.views.map((v) => v.aspect)).toEqual([[1.2, 1.28], [1.28, 2.45]]);
+    for (const v of row.views) {
+      expect(v.pos[2]).toBeLessThan(11); // the 2026-10-08 colossus camera stood at z 16.03
+      expect(v.pos[1]).toBeLessThan(2.5); // and 4.88 high
+    }
+    expect(giantView(row, 1.25)).toBe(row.views[0]);
+    expect(giantView(row, 1.3)).toBe(row.views[1]);
+    expect(giantView(row, 2.45)).toBe(row.views[1]);
+    W = 1280;
+    H = 1024; // 5:4
+    stubDom();
+    const s = bevelle();
+    const { f } = framingFor();
+    run(f, s.actors, 2);
+    expect(f.report.giant).toMatchObject({ id: 'bahamut' });
+    expect(f.masterPose!.pos.distanceTo(giantPose(row.views[0]!).pos)).toBeLessThan(1e-6);
+    expect(f.report.fit!.ok).toBe(true);
+    expect(standing(s.boss)).toBeCloseTo(6.037, 2);
+  });
+
+  it('puts nobody nearer the party than before: Bahamut keeps the scene\'s depth (z -5.8), the girls theirs; only the colossus plan\'s sideways spread and step', () => {
+    const s = bevelle();
+    const { f } = framingFor();
+    run(f, s.actors, 2);
+    expect(s.boss.position.z).toBeCloseTo(-5.8, 9);
+    expect(s.party.map((a) => a.position.z)).toEqual([1.45, 0.1, -1.5]);
   });
 
   it('keeps the plan the table made at the first menu: a live check that finds a girl under a panel does not swap a giant\'s camera', () => {
@@ -234,7 +275,7 @@ describe('Bahamut through Framing (Chapter IV, FFX-2, a 16:9 desktop)', () => {
     expect([f.masterPose!.pos.x, f.masterPose!.pos.y, f.masterPose!.pos.z]).toEqual(before);
   });
 
-  it('plays as before in a window shape with no camera proved: BOSS SCALE (a boss sized by the colossus plan, not the giant\'s 2.23) and no giant in the report', () => {
+  it('plays as before in a window shape with no camera proved: BOSS SCALE (a boss sized by the colossus plan, not the giant\'s 3.3) and no giant in the report', () => {
     W = 900;
     H = 900; // a square window
     stubDom();
@@ -243,8 +284,9 @@ describe('Bahamut through Framing (Chapter IV, FFX-2, a 16:9 desktop)', () => {
     run(f, s.actors, 2);
     expect(f.report.plans).toBe(1);
     expect(f.report.giant ?? null).toBeNull();
-    expect(s.boss.scale.y).toBeLessThan(1.7); // BOSS SCALE's own growth for Bahamut (2.0 on screen), never the giant's 2.23
+    expect(s.boss.scale.y).toBeLessThan(1.7); // BOSS SCALE's own growth for Bahamut (2.0 on screen), never the giant's 1.47
     expect(standing(s.boss)).toBeLessThan(7.5);
+    expect(Math.abs(standing(s.boss) - 6.037)).toBeGreaterThan(0.01); // not the giant's height
   });
 
   it('plays no giant with CHAPTER FRAMING off, on the upright phone (the scene sizes him there), or on an FFX stage with the same painted id', () => {
@@ -280,12 +322,13 @@ describe('Bahamut through Framing (Chapter IV, FFX-2, a 16:9 desktop)', () => {
     expect(f.report.plans).toBeGreaterThan(plans);
     expect(f.report.giant ?? null).toBeNull();
     expect(standing(s.boss)).toBeLessThan(7.5); // BOSS SCALE's own size, not the giant's
+    expect(Math.abs(standing(s.boss) - 6.037)).toBeGreaterThan(0.01);
     W = 1600;
     H = 900;
     stubDom();
     run(f, s.actors, 2);
     expect(f.report.giant).toMatchObject({ id: 'bahamut' });
-    expect(standing(s.boss)).toBeCloseTo(9.147, 2);
+    expect(standing(s.boss)).toBeCloseTo(6.037, 2);
   });
 
   it('keeps its plan while the window stays the size it was planned at (a window that stays the same asks for nothing)', () => {
@@ -301,7 +344,7 @@ describe('Bahamut through Framing (Chapter IV, FFX-2, a 16:9 desktop)', () => {
     const s = bevelle();
     const { f, cam } = framingFor();
     run(f, s.actors, 2);
-    expect(standing(s.boss)).toBeGreaterThan(9);
+    expect(standing(s.boss)).toBeCloseTo(6.037, 2);
     run(f, s.actors, 0.5, false);
     expect(s.boss.scale.y).toBe(1);
     expect(new Vector3(...cam.getRig('idle')!.position).distanceTo(new Vector3(...IDLE.position))).toBeLessThan(1e-6);
