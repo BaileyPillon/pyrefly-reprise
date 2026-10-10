@@ -1,0 +1,5268 @@
+{
+ "guides": [
+  {
+   "id": "seymour-flux",
+   "title": "Seymour Flux",
+   "rules": [
+    {
+     "text": "Kill Seymour, not the mount. Mortiorchis has no death state — its max HP floors at 1,000 and it revives for ever, so every kill is a diminishing tap of HP drained out of Seymour and never a way to remove the adds.",
+     "short": "Kill Seymour, not the mount",
+     "cite": "ffx-seymour-flux §2.2, §6 row 17"
+    },
+    {
+     "text": "Poison him on turn one. 2% of 70,000 is 1,400 a turn, for ever; he never removes it and it does not trigger his HP-threshold reactions.",
+     "short": "Poison him on turn one — 1,400 a turn, for ever",
+     "cite": "ffx-seymour-flux §6 rows 5-6, §4.3"
+    },
+    {
+     "text": "Holy Water a Zombie before the mount acts. Lance of Atrophy sets Zombie, and the mount answers with Full-Life — on a living Zombie that is 100% of max HP as damage plus a guaranteed Death.",
+     "short": "Holy Water a Zombie before the mount acts",
+     "cite": "ffx-seymour-flux §6 row 4, §3.3"
+    },
+    {
+     "text": "Stand the party up before the hit, not after it. Dispel into Cross Cleave arrives with nothing in between, so the only defence is Protect, five Cheer stacks and full HP already being true.",
+     "short": "Buff before the Dispel, never after it",
+     "cite": "ffx-seymour-flux §4.2, §5.2, §5.5"
+    },
+    {
+     "text": "Provoke, the four Breaks and Delay Attack are all dead rows here — both actors are immune, and a Delay hit on the Mortiorchis is answered with party-wide Slowga.",
+     "short": "Provoke, Breaks and Delay are dead rows here",
+     "cite": "ffx-seymour-flux §6 rows 19-21; re-ffx-ai-seymour §2.4, §2.5"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Holy Water",
+       "Remedy"
+      ],
+      "targetHas": "zombie"
+     },
+     "text": "{target} is a Zombie and the Mortiorchis answers with Full-Life — cured first it whiffs outright, left alone it is 100% of max HP plus a Death",
+     "cite": "ffx-seymour-flux §6 row 4, §3.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Poison Fang"
+      ]
+     },
+     "text": "Poison on turn one is the largest single line in the damage budget: 1,400 a turn off 70,000, for ever, and he never cures it",
+     "cite": "ffx-seymour-flux §6 rows 5-6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Hastega",
+       "Haste"
+      ]
+     },
+     "text": "Haste roughly doubles your turns against theirs — the margin the Holy Water rhythm needs to beat the mount’s Full-Life",
+     "cite": "ffx-seymour-flux §6 row 10"
+    },
+    {
+     "when": {
+      "labels": [
+       "Cheer"
+      ]
+     },
+     "text": "Cheer to five: +1 Strength a stack and physical damage received x(15-stacks)/15, a third off every Cross Cleave, and it targets allies so it never provokes a counter",
+     "cite": "ffx-seymour-flux §5.5, §6 row 12"
+    },
+    {
+     "when": {
+      "labels": [
+       "Shell",
+       "Lunar Curtain"
+      ]
+     },
+     "text": "Total Annihilation is magical — Shell halves it, from ~3,300-4,145 to something the party survives",
+     "cite": "ffx-seymour-flux §5.2, §6 row 13"
+    },
+    {
+     "when": {
+      "labels": [
+       "Protect",
+       "Light Curtain"
+      ]
+     },
+     "text": "Cross Cleave is ~2,400 on all three against preset HP of 2,420 / 1,500 / 2,310 — unmitigated it is a wipe from full health, and Protect halves it",
+     "cite": "ffx-seymour-flux §5.2, §7.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Mighty Guard"
+      ]
+     },
+     "text": "Mighty Guard is Protect and Shell on the whole party in one turn — Kimahri learned it from Biran Ronso minutes ago, on this mountain",
+     "cite": "ffx-seymour-flux §6 row 13, §6.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Dispel"
+      ]
+     },
+     "text": "Strip his Reflect and the next Flare, which he aims at himself, lands on him for ~1,734 with nothing to bounce it. He casts Reflect again only on his own next Reflect turn, and no HP line answers a Dispel",
+     "cite": "ffx-seymour-flux §6 row 8; re-ffx-ai-seymour §2.3, §2.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Healing Water",
+       "Mega-Potion",
+       "Al Bhed Potion"
+      ]
+     },
+     "text": "Top the whole party up while there is a turn to spare — the Dispel into Cross Cleave pairing cannot be answered, so being full when it lands is the only defence",
+     "cite": "ffx-seymour-flux §4.2, §7.8"
+    },
+    {
+     "when": {
+      "labels": [
+       "Phoenix Down",
+       "Life",
+       "Mega Phoenix"
+      ]
+     },
+     "text": "Stand {target} back up: a downed member is a member the next Cross Cleave cannot be healed through, and KO clears their Haste and Cheer stacks",
+     "cite": "ffx-seymour-flux §4.2"
+    },
+    {
+     "when": {
+      "kinds": [
+       "summon"
+      ]
+     },
+     "text": "A summon is a shield before it is a burst — the party leaves the field with frozen counters, his answer is a zero-damage Banish, and his cycle stands still while the poison keeps ticking",
+     "cite": "ffx-seymour-flux §4.4.2, §6 row 15; re-ffx-ai-seymour §2.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Curaga",
+       "Cura",
+       "Cure",
+       "X-Potion",
+       "Hi-Potion",
+       "Potion"
+      ]
+     },
+     "text": "Heal {target} back over the line: Cross Cleave picks its victim and the only thing that saves them is having been full",
+     "cite": "ffx-seymour-flux §5.2"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ]
+     },
+     "text": "Swing at Seymour himself — piercing is the only way past Defense 40, and Auron’s katana and Kimahri’s spear already have it",
+     "cite": "ffx-seymour-flux §6 row 20"
+    }
+   ],
+   "watch": [
+    {
+     "name": "Auto-Attack Mode",
+     "payload": "Total Annihilation",
+     "advice": "Get Shell up — it is ~3,300-4,145 of magic across the party and Shell halves it. This first warning comes once, when he drops below 35,000; after it only the ready notice comes round",
+     "cite": "ffx-seymour-flux §5.2, §6 row 13; re-ffx-ai-seymour §2.3, §2.5"
+    },
+    {
+     "name": "Ready To Annihilate",
+     "payload": "Total Annihilation, next turn",
+     "advice": "Shell now (Defend only halves physical hits, so it will not cut this), and top up anyone who would not survive ~4,300 — a summon freezes his cycle outright",
+     "cite": "ffx-seymour-flux §4.4.2, §5.2; re-ffx-ai-seymour §2.4, §2.5"
+    }
+   ],
+   "phases": [
+    {
+     "aboveHpFraction": 0.5,
+     "label": "Phase 1",
+     "note": "Lance of Atrophy into Full-Life, then Dispel into Cross Cleave with nothing in between — the physical phase.",
+     "cite": "ffx-seymour-flux §4.2"
+    },
+    {
+     "belowHpFraction": 0.5,
+     "label": "Phase 2",
+     "note": "Cross Cleave is gone; from here it is a four-step cycle: his Flare, aimed at himself so it reaches you only by bouncing off his Reflect, the ready notice, his Reflect, then Total Annihilation. Shell replaces Protect.",
+     "cite": "ffx-seymour-flux §4.4; re-ffx-ai-seymour §2.3, §2.4"
+    }
+   ]
+  },
+  {
+   "id": "yunalesca",
+   "title": "Yunalesca",
+   "rules": [
+    {
+     "text": "Keep one Zombie. Form III opens with Mega Death, and a zombified member is immune to it — cure all three and the active party is wiped from full health.",
+     "short": "Keep one Zombie alive for Mega Death",
+     "cite": "ffx-yunalesca §10.1"
+    },
+    {
+     "text": "Never cure the last Zombie while a Mega Death is due. Cure, heal, then let the next Hellbiter re-apply it.",
+     "short": "Never cure the last Zombie with Mega Death due",
+     "cite": "ffx-yunalesca §10.2"
+    },
+    {
+     "text": "Dispel her Regen off your Zombies — healing damages a Zombie, so her Regen is a slow execution rather than a gift.",
+     "short": "Dispel her Regen off your Zombies",
+     "cite": "ffx-yunalesca §10.5, §7.1"
+    },
+    {
+     "text": "Form I is a Darkness fight: she answers every physical action that reaches her, a miss included, with Blind, unless the member she last picked is already blind; Darkness drops physical accuracy to base/10. Cure it or stop swinging.",
+     "short": "Form I answers every physical action with Blind",
+     "cite": "ffx-yunalesca §5.1, ffx-combat-core §4.2; re-ffx-ai-yunalesca-bfa §2.9"
+    },
+    {
+     "text": "Summon only in Form III, and Overdrive on arrival. Aeons postpone Mega Death rather than dying to it, but Mind Blast Curses them on step one and a Cursed aeon can never Overdrive.",
+     "short": "Summon only in Form III, Overdrive on arrival",
+     "cite": "ffx-yunalesca §10.6"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Holy Water",
+       "Remedy"
+      ],
+      "targetHas": "zombie"
+     },
+     "text": "Cure {target} now — but only because somebody else is still carrying the Zombie that survives Mega Death",
+     "cite": "ffx-yunalesca §10.1, §10.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Eye Drops"
+      ]
+     },
+     "text": "Blind is her Form I counter to every physical action that reaches her, a miss included, and it takes physical accuracy down to base/10 — the measured run blinded itself out of the fight, 18 hits to 21 misses",
+     "cite": "ffx-yunalesca §5.1; re-ffx-ai-yunalesca-bfa §2.9"
+    },
+    {
+     "when": {
+      "labels": [
+       "Dispel"
+      ]
+     },
+     "text": "Regen on a Zombie is damage, not healing — strip it before it ticks them down",
+     "cite": "ffx-yunalesca §10.5, §7.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Esuna"
+      ]
+     },
+     "text": "Clear the ailment: Esuna does not touch Zombie, so it can never strip the member who is meant to survive Mega Death",
+     "cite": "ffx-yunalesca §7.1, ffx-combat-core §4.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Reflect"
+      ]
+     },
+     "text": "Reflect on the actives nullifies her Form I Blind, Silence and Sleep counters outright, and bounces her Cura and Regen back at her",
+     "cite": "ffx-yunalesca §10.4, §8"
+    },
+    {
+     "when": {
+      "labels": [
+       "Hastega"
+      ]
+     },
+     "text": "Haste buys the turns the Holy Water rhythm needs: cure, heal, and still be standing when the next Hellbiter lands",
+     "cite": "ffx-yunalesca §10.2, §6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Defend"
+      ]
+     },
+     "text": "Hold the turn rather than spend it — the supporter is banking a Grand Summon for Form III, where an aeon Overdrive is worth most",
+     "cite": "ffx-yunalesca §10.6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Phoenix Down",
+       "Life",
+       "Mega Phoenix",
+       "Full-Life"
+      ]
+     },
+     "text": "Stand {target} up — and single-target only while anyone living is a Zombie, because a revival effect kills a living Zombie outright",
+     "cite": "ffx-yunalesca §7.1, §15.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Curaga",
+       "Cura",
+       "X-Potion",
+       "Hi-Potion"
+      ]
+     },
+     "text": "Heal {target} clear of the next Hellbiter — she opens Form III on Mega Death and a member at half HP never reaches it",
+     "cite": "ffx-yunalesca §5.3, §4.2"
+    },
+    {
+     "when": {
+      "kinds": [
+       "summon"
+      ]
+     },
+     "text": "An aeon is a Mega Death delay, not a Mega Death victim — her turn takes the aeon branch and the human step counter freezes where it stands",
+     "cite": "ffx-yunalesca §10.6"
+    },
+    {
+     "when": {
+      "kinds": [
+       "overdrive"
+      ]
+     },
+     "text": "Spend it now: Mind Blast is step one of her aeon cycle and it Curses, and a Cursed aeon can never Overdrive",
+     "cite": "ffx-yunalesca §10.6"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ]
+     },
+     "text": "Swing — she has no Defense trick, and the fight is decided by whether the party is still standing, not by the damage race",
+     "cite": "ffx-yunalesca §2.1"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "formIndex": 0,
+     "label": "Form I",
+     "note": "She answers every physical action that reaches her with Blind and every spell with Silence, misses included, and an item or special with Sleep; the Blind and the Silence are skipped while the member she last picked already has it. Cure the counter or stop swinging; summoning here is a net loss, because Absorb heals her.",
+     "cite": "ffx-yunalesca §5.1, §10.6; re-ffx-ai-yunalesca-bfa §2.9"
+    },
+    {
+     "formIndex": 1,
+     "label": "Form II",
+     "note": "Hellbiter is party-wide Zombie. Let it land on somebody and leave them zombified — that member is the one who survives the Mega Death that opens Form III.",
+     "cite": "ffx-yunalesca §5.2, §10.1"
+    },
+    {
+     "formIndex": 2,
+     "label": "Form III",
+     "note": "Mega Death opens the form and recurs on her cycle. Only a Zombie survives it. Aeons postpone it and Overdrive on arrival, before Mind Blast Curses them.",
+     "cite": "ffx-yunalesca §5.3, §10.6"
+    }
+   ]
+  },
+  {
+   "id": "braskas-final-aeon",
+   "title": "Braska's Final Aeon",
+   "rules": [
+    {
+     "text": "Talk is a panic button with two charges. It zeroes his Overdrive gauge and costs him his next turn — save both for form 2, where the Overdrive is Ultimate Jecht Shot or a limit-breaking Triumphant Grasp 2.",
+     "short": "Talk has two charges — spend both in form 2",
+     "cite": "ffx-bfa-yu-yevon §1.6"
+    },
+    {
+     "text": "Jecht Beam petrifies at 100%, and the next physical shatters the victim permanently — a shatter is not revivable. Carry a Soft, or a Remedy, and spend it before his next turn.",
+     "short": "Cure Petrify before the next physical shatters",
+     "cite": "ffx-bfa-yu-yevon §1.6"
+    },
+    {
+     "text": "The Yu Pagodas feed his gauge 20 a Power Wave, on top of 2 or 3 a turn of his own and 5 for every action that reaches him; the Overdrive comes the turn after it reads 100. Killing or slowing them is what makes the two Talk charges enough.",
+     "short": "Suppress the Pagodas; they feed his Overdrive",
+     "cite": "ffx-bfa-yu-yevon §1.6; re-ffx-ai-yunalesca-bfa §3.4, §3.5"
+    },
+    {
+     "text": "Aeons are explicitly allowed here — he has a dedicated anti-aeon Overdrive precisely because the designers expected them. Shield cuts Jecht Bomber to a quarter.",
+     "short": "Aeons are allowed — Shield quarters Jecht Bomber",
+     "cite": "ffx-bfa-yu-yevon §1.6"
+    },
+    {
+     "text": "Yu Yevon answers every damaging action with a 9,999 Curaga on himself, but his own Gravija takes 75% of his current HP on most turns, so he soon has little left: a blow worth more than that ends him before the Curaga lands, and so does Doom from a Candle of Life. Suppress the Pagodas, whose Power Wave heals him 1,500 a cast.",
+     "short": "Yu Yevon: Doom, or one blow bigger than his HP",
+     "cite": "ffx-bfa-yu-yevon §3.4.1, §3.5; re-ffx-ai-yunalesca-bfa §4.2, §6.2, §6.3"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Talk"
+      ]
+     },
+     "text": "Spend a Talk: his gauge is nearly full and the Overdrive it buys is party-wide — this resets it to zero and costs him the turn as well",
+     "cite": "ffx-bfa-yu-yevon §1.6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Soft",
+       "Remedy",
+       "Esuna"
+      ],
+      "targetHas": "petrify"
+     },
+     "text": "Unpetrify {target} before his next swing — Left-Arm Strike carries shatter chance 100, and a shattered character is gone for good",
+     "cite": "ffx-bfa-yu-yevon §1.6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Holy Water",
+       "Remedy"
+      ],
+      "targetHas": "zombie"
+     },
+     "text": "Triumphant Grasp left {target} zombified, and every heal aimed at a Zombie damages instead",
+     "cite": "ffx-bfa-yu-yevon §1.6, ffx-combat-core §4.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Haste",
+       "Hastega"
+      ]
+     },
+     "text": "Haste is the whole turn economy here: his Overdrive arrives on his clock, and the party only answers it by getting more turns in between",
+     "cite": "ffx-bfa-yu-yevon §1.6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Slow"
+      ]
+     },
+     "text": "Slow a Pagoda and its Power Wave stops feeding him 20% a turn — two slowed Pagodas roughly halve how often he Overdrives",
+     "cite": "ffx-bfa-yu-yevon §1.6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Protect"
+      ]
+     },
+     "text": "Blade Blitz is party-wide and physical, and it becomes his default action below half HP in form 2 — Protect halves every copy of it",
+     "cite": "ffx-bfa-yu-yevon §1.6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Cheer"
+      ]
+     },
+     "text": "Cheer is +1 Strength a stack and physical damage received x(15-stacks)/15, which is exactly the class of damage this fight deals",
+     "cite": "ffx-combat-core §2.9"
+    },
+    {
+     "when": {
+      "labels": [
+       "Curaga",
+       "Cura",
+       "Cure",
+       "X-Potion",
+       "Hi-Potion"
+      ]
+     },
+     "text": "Bank the HP before the Overdrive, not after — Ultimate Jecht Shot is ~3,300 on everyone and it arrives between the healer’s turns",
+     "cite": "ffx-bfa-yu-yevon §1.5, §1.6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Mega Phoenix",
+       "Phoenix Down",
+       "Life",
+       "Full-Life"
+      ]
+     },
+     "text": "Stand {target} up: a KO costs the Haste, the Protect and the Cheer stacks as well as the turn",
+     "cite": "ffx-bfa-yu-yevon §1.6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Ether",
+       "Turbo Ether",
+       "Elixir"
+      ]
+     },
+     "text": "Keep the healer’s MP up — this chain is seven battles long and the party carries its MP across every one of them",
+     "cite": "ffx-bfa-yu-yevon §1.7, §2.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Candle of Life"
+      ]
+     },
+     "text": "Doom kills him in three of his own turns and deals no damage at all, so it never arms the Curaga counter — and the Pagodas’ Power Wave cannot strip it",
+     "cite": "ffx-bfa-yu-yevon §3.2, §3.5"
+    },
+    {
+     "when": {
+      "bossId": "yu-yevon",
+      "labels": [
+       "Defend"
+      ]
+     },
+     "text": "Idle on purpose: Gravija can never KO anyone (75% of current HP), so with the Pagodas suppressed the party is refusing a race it cannot lose",
+     "cite": "ffx-bfa-yu-yevon §3.3, §3.5"
+    },
+    {
+     "when": {
+      "bossId": "yu-yevon",
+      "kinds": [
+       "attack"
+      ]
+     },
+     "text": "Keep the Pagodas down, not Yu Yevon — their Power Wave heals him 1,500 a cast, which is more than Gravija takes off him once he is low",
+     "cite": "ffx-bfa-yu-yevon §1.4, §3.5"
+    },
+    {
+     "when": {
+      "kinds": [
+       "summon"
+      ]
+     },
+     "text": "Summon freely: Yuna may summon throughout both forms, and Shield cuts the anti-aeon Jecht Bomber to a quarter",
+     "cite": "ffx-bfa-yu-yevon §1.6"
+    },
+    {
+     "when": {
+      "kinds": [
+       "overdrive"
+      ]
+     },
+     "text": "Spend the gauge — the possessed aeons mirror your own roster and the chain gives the gauge back between links",
+     "cite": "ffx-bfa-yu-yevon §2.2, §4.3"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ]
+     },
+     "text": "Swing at him rather than the Pagodas unless a Pagoda is the one feeding the gauge — form 2 starts at a fresh, full 120,000",
+     "cite": "ffx-bfa-yu-yevon §1.6, §1.7"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "bossId": "braskas-final-aeon",
+     "aboveHpFraction": 0.5,
+     "label": "Jecht",
+     "note": "Left-Arm Strike by default, Jecht Beam one turn in three (Petrify at 100%; one in five in his second form’s first half, where Blade Blitz also comes two turns in five). The Overdrive is Triumphant Grasp: two hits and a Zombie.",
+     "cite": "ffx-bfa-yu-yevon §1.6; re-ffx-ai-yunalesca-bfa §3.4"
+    },
+    {
+     "bossId": "braskas-final-aeon",
+     "belowHpFraction": 0.5,
+     "label": "Jecht, below half",
+     "note": "Blade Blitz replaces the normal attack outright, so the shatter follow-up now arrives as a party-wide swing, and the Overdrive becomes Ultimate Jecht Shot.",
+     "cite": "ffx-bfa-yu-yevon §1.6"
+    },
+    {
+     "bossId": "yu-yevon",
+     "label": "Yu Yevon",
+     "note": "Every damaging action he takes is answered by a 9,999 Curaga on himself, but his own Gravija takes 75% of his current HP on most turns, so a blow worth more than what he has left ends him. Doom and Zombie beat him too: a Zombie turns each Curaga into damage until a Pagoda’s Power Wave strips it.",
+     "cite": "ffx-bfa-yu-yevon §3.2, §3.4.1, §3.5; re-ffx-ai-yunalesca-bfa §4.2, §6.2, §6.3"
+    },
+    {
+     "bossId": "possessed-anima",
+     "label": "Possessed Anima",
+     "note": "Your own aeon, mirrored: the same moveset, the same Overdrive, and the same weaknesses you built it around.",
+     "cite": "ffx-bfa-yu-yevon §2.2"
+    }
+   ]
+  },
+  {
+   "id": "ffx2-bahamut",
+   "title": "Bahamut",
+   "rules": [
+    {
+     "text": "Darkness is the damage route. It ignores Defense 160, hits every enemy, costs HP rather than MP, and is free the moment the dressphere is picked up.",
+     "short": "Darkness is the damage route",
+     "cite": "ffx2-bahamut §3.2"
+    },
+    {
+     "text": "Magic Break is the strongest opening in the fight. Five casts cap Mega Flare at x0.167 and Impulse at 6.25% of current HP — it defuses the whole win condition.",
+     "short": "Five Magic Breaks defuse Mega Flare",
+     "cite": "ffx2-bahamut §3.3"
+    },
+    {
+     "text": "Shell before anything else if there is no Alchemist. Both Impulse and Mega Flare are magic, and Shell is the single action that turns a guaranteed wipe into a guaranteed survival.",
+     "short": "Shell first when there is no Alchemist",
+     "cite": "ffx2-bahamut §2.4, §3.3"
+    },
+    {
+     "text": "Physical attacks are the wrong route: Defense 160 floors them per hit, so Trigger Happy gains nothing from being multi-hit.",
+     "short": "Physicals are floored by Defense 160",
+     "cite": "ffx2-bahamut §3.3"
+    },
+    {
+     "text": "The countdown is five dead enemy actions. They are free party turns — bank healing and finish the Break ladder inside them.",
+     "short": "The countdown is five free party turns",
+     "cite": "ffx2-bahamut §2.2, §2.5"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Darkness"
+      ]
+     },
+     "text": "Darkness ignores his Defense 160 and hits everything — it is why the Dark Knight dressphere is hidden in this dungeon, immediately before this test",
+     "cite": "ffx2-bahamut §3.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Magic Break"
+      ]
+     },
+     "text": "Five Magic Breaks cap every spell he owns at x0.167: Mega Flare 1,152 becomes 192 and Impulse drops to 6.25% of current HP",
+     "cite": "ffx2-bahamut §3.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Mental Break"
+      ]
+     },
+     "text": "Mental Break is a flat x1.833 on all your magic and does not care that his Magic Defense is only 10 — it is the follow-up Magic Break has already paid for",
+     "cite": "ffx2-bahamut §1.5, §3.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Armor Break"
+      ]
+     },
+     "text": "Armor Break is x1.833 on physicals — worth having, but it multiplies the weaker route here, and it anti-synergises with Table-turner",
+     "cite": "ffx2-bahamut §3.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Shell"
+      ]
+     },
+     "text": "Shell halves Impulse and Mega Flare, the two biggest threats in the script, and stacks multiplicatively with Magic Break down to x0.083",
+     "cite": "ffx2-bahamut §3.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Protect"
+      ]
+     },
+     "text": "Only his turns 2-4 are physical, so Protect is the lesser buff — take it once Shell is up",
+     "cite": "ffx2-bahamut §2.3, §3.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Cure",
+       "Cura",
+       "Vigor",
+       "Hi-Potion",
+       "Potion"
+      ]
+     },
+     "text": "Heal into the countdown, not out of it — Mega Flare lands on the turn the number reaches zero and it hits everyone",
+     "cite": "ffx2-bahamut §2.2, §2.4"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ]
+     },
+     "text": "A plain swing is crushed by Defense 160; this is the row to take only when nothing better is charged",
+     "cite": "ffx2-bahamut §3.3"
+    }
+   ],
+   "watch": [
+    {
+     "name": "#",
+     "payload": "Mega Flare",
+     "advice": "Five dead enemy actions, then it lands on everyone — get Shell up, cap Magic Break, and be at full HP on zero",
+     "cite": "ffx2-bahamut §2.2, §2.4, §3.3"
+    }
+   ],
+   "phases": [
+    {
+     "label": "The 12-action loop",
+     "note": "Curse, three physicals, two Impulses, then five countdown turns and Mega Flare. The countdown turns are free; spend them on Breaks and healing.",
+     "cite": "ffx2-bahamut §2.1, §2.2"
+    }
+   ]
+  },
+  {
+   "id": "ffx2-vegnagun-shuyin",
+   "title": "Vegnagun",
+   "rules": [
+    {
+     "text": "Two Dark Knights on Darkness, one healer. Darkness ignores Defense, reaches the long-range Nodes, and hits every enemy at once — one action clears both Bulwarks or both Redoubts.",
+     "short": "Two Dark Knights on Darkness, one healer",
+     "cite": "ffx2-vegnagun-shuyin §7.1"
+    },
+    {
+     "text": "Ignore the Nodes and the Redoubts past the point they stop hurting: the Nodes hold 300,000 HP and the Redoubts revive. All the damage that matters goes into the limb.",
+     "short": "Ignore the Nodes and Redoubts — hit the limb",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    },
+    {
+     "text": "Against the Tail, raw max HP is the only defence — Tail Beam is a percentage of max HP and Noli Me Tangere is a flat constant, so buffs do nothing.",
+     "short": "Against the Tail, max HP is the only defence",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    },
+    {
+     "text": "Re-buff after Odi Et Amo. It strips every buff on the party, so Mighty Guard has to go back up before the next cycle.",
+     "short": "Re-buff after Odi Et Amo strips the party",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    },
+    {
+     "text": "Terror of Zanarkand ignores Defense and hunts one character. Protect still reduces it, armour does not, and one healer stays dedicated to whoever ate it.",
+     "short": "Terror of Zanarkand: Protect helps, armour does not",
+     "cite": "ffx2-vegnagun-shuyin §7.2, §3.5"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Darkness"
+      ]
+     },
+     "text": "Darkness ignores Defense, reaches every enemy including the long-range Nodes, and costs HP rather than MP — which Curaga pays for",
+     "cite": "ffx2-vegnagun-shuyin §7.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Lunar Curtain",
+       "Shell"
+      ]
+     },
+     "text": "Shell on all three: Vegnagun’s entire moveset is magic-type, so this is the half that matters most",
+     "cite": "ffx2-vegnagun-shuyin §7.2, §7.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Light Curtain",
+       "Protect"
+      ]
+     },
+     "text": "Protect is the one mitigation Terror of Zanarkand still respects — it ignores Defense, but it is Protect-reducible",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Megalixir",
+       "Mega Phoenix",
+       "Mega-Potion"
+      ]
+     },
+     "text": "A party-wide answer, because the hit that got here was party-wide — Nemo Ante Mortem Beatus fires at every 20% HP milestone the Head crosses",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Remedy",
+       "Esuna"
+      ]
+     },
+     "text": "Clear it now: Vita Brevis is party-wide with a guaranteed Delay, and a delayed girl is a girl who is not healing",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "X-Potion",
+       "Elixir",
+       "Curaga",
+       "Hi-Potion",
+       "Cura",
+       "Potion"
+      ]
+     },
+     "text": "Keep everyone above the constant — Noli Me Tangere is a flat 1,323 and nothing in the party’s kit reduces it",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Life",
+       "Full-Life",
+       "Phoenix Down"
+      ]
+     },
+     "text": "Stand {target} up before the next cycle — this chain does not stop between links and a downed girl carries into the next one",
+     "cite": "ffx2-vegnagun-shuyin §2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Black Sky"
+      ]
+     },
+     "text": "Magic routes around the Right Redoubt’s Magic Defense 0 while the physicals go at the Left",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Turbo Ether",
+       "Ether"
+      ]
+     },
+     "text": "MP is the chain’s real resource — five battles run on one pool and nothing refills it in between",
+     "cite": "ffx2-vegnagun-shuyin §6.8"
+    },
+    {
+     "when": {
+      "labels": [
+       "Pray"
+      ]
+     },
+     "text": "A free party heal when the MP has run out, which in a five-battle chain it eventually does",
+     "cite": "ffx2-vegnagun-shuyin §6.4"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ]
+     },
+     "text": "Physical damage belongs on the Left Redoubt (Defense 0) — everything else takes magic or Darkness",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    }
+   ],
+   "watch": [
+    {
+     "name": "Charge Core",
+     "payload": "Memento Mori",
+     "advice": "Three unimpeded Core turns and it fires — killing a Bulwark makes the Core waste its turn on Full-Life and stops the counter",
+     "cite": "ffx2-vegnagun-shuyin §4.1, §7.2"
+    },
+    {
+     "name": "Memento Mori",
+     "payload": "Memento Mori, now",
+     "advice": "It is landing this turn; heal through it and then break the charge by killing a Bulwark",
+     "cite": "ffx2-vegnagun-shuyin §4.1, §7.2"
+    },
+    {
+     "name": "Terror of Zanarkand",
+     "payload": "Terror of Zanarkand",
+     "advice": "Nine Defense-ignoring hits on one girl — Protect reduces them, armour does not, and the healer is hers for the next two turns",
+     "cite": "ffx2-vegnagun-shuyin §7.2, §5.5"
+    }
+   ],
+   "phases": [
+    {
+     "bossId": "vegnagun-tail",
+     "label": "Tail",
+     "note": "Buffs are near-useless: Tail Beam is a percentage of max HP and Noli Me Tangere a flat constant. Keep everyone above 1,323 HP and hit it.",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    },
+    {
+     "bossId": "vegnagun-leg",
+     "label": "Leg and Nodes",
+     "note": "All 18,220 HP of damage goes into the Leg; the Nodes hold 300,000 and are not the fight. Green Nodes heal and buff the Leg, which is immune to Reflect.",
+     "cite": "ffx2-vegnagun-shuyin §3.2, §7.2"
+    },
+    {
+     "bossId": "vegnagun-body",
+     "label": "Body and Bulwarks",
+     "note": "Two Darknesses clear both Bulwarks and chunk the Core. Do not hit a Bulwark twice with the same damage class — they mirror it back.",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    },
+    {
+     "bossId": "vegnagun-head",
+     "label": "Head and Redoubts",
+     "note": "Right Redoubt dies to magic, Left to physicals, then burn the Head. Odi Et Amo strips every buff; Nemo Ante Mortem Beatus fires at each 20% milestone.",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    },
+    {
+     "bossId": "shuyin",
+     "label": "Shuyin",
+     "note": "Protect and Shell on all three, Haste the attackers, and keep one healer free for whoever Terror of Zanarkand picks.",
+     "cite": "ffx2-vegnagun-shuyin §7.2"
+    }
+   ]
+  },
+  {
+   "id": "ffx2-leblanc",
+   "title": "Leblanc",
+   "rules": [
+    {
+     "text": "Kill order: Logos, then Ormi, then Leblanc. Either henchman dying switches off No Love Lost, and Ormi only reaches Huggles once he is the last one standing — so Leblanc dies last, not first.",
+     "short": "Kill order: Logos, then Ormi, then Leblanc",
+     "cite": "ffx2-leblanc-syndicate §5.4"
+    },
+    {
+     "text": "Dispel strips Not-So-Mighty Guard in one action — it is Protect, Shell and Regen on all three at once, and Dispel already removes all three statuses.",
+     "short": "Dispel strips Not-So-Mighty Guard in one action",
+     "cite": "ffx2-leblanc-syndicate §4.4"
+    },
+    {
+     "text": "Send magic at Ormi, not swords: his Defense 84 floors physicals but his Magic Defense is only 16, so a Black Mage's Fira does two and a half times what a Warrior's sword does.",
+     "short": "Magic through Ormi, not swords",
+     "cite": "ffx2-leblanc-syndicate §3.4, §6.2"
+    },
+    {
+     "text": "Bank a heal before Ormi crosses a quarter of his max HP — Concussive Blast hits the whole party for 281-317 and no Defense stat reduces it.",
+     "short": "Bank a heal before Ormi hits 25% HP",
+     "cite": "ffx2-leblanc-syndicate §5.4, §6.1"
+    },
+    {
+     "text": "Nothing in the bag cures Eject. Russian Roulette rolls exactly one of Death, Petrify, Eject or three lesser statuses, and Logos is the one throwing it — killing him first is the only defence.",
+     "short": "Nothing cures Eject — kill Logos first",
+     "cite": "ffx2-leblanc-syndicate §4.2, §4.3, §7.5"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Fira",
+       "Blizzara",
+       "Thundara",
+       "Watera",
+       "Fire",
+       "Blizzard",
+       "Thunder",
+       "Water"
+      ],
+      "targetId": "ormi"
+     },
+     "text": "Ormi's Magic Defense is only 16 against his Defense 84 — this is the route that actually hurts him",
+     "cite": "ffx2-leblanc-syndicate §3.4, §6.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Cheap Shot"
+      ]
+     },
+     "text": "Ignores Defense outright, so it does not care that Ormi's is 84",
+     "cite": "ffx2-leblanc-syndicate §6.2, §7.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Dispel"
+      ]
+     },
+     "text": "Strips Protect, Shell and Regen from every Syndicate member at once — the only counter-play the record names for Not-So-Mighty Guard",
+     "cite": "ffx2-leblanc-syndicate §4.4"
+    },
+    {
+     "when": {
+      "labels": [
+       "Armor Break"
+      ]
+     },
+     "text": "Dead on Leblanc (she is immune to DEF Down) but works on Logos and Ormi — the same swing, one target it never touches",
+     "cite": "ffx2-leblanc-syndicate §3.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Power Break"
+      ]
+     },
+     "text": "Dead on Leblanc (STR Down immune) but Ormi and Logos both take it",
+     "cite": "ffx2-leblanc-syndicate §3.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Cure",
+       "Cura",
+       "Vigor",
+       "Hi-Potion",
+       "Potion"
+      ]
+     },
+     "text": "Top up before Ormi drops under a quarter HP — Concussive Blast is a flat hit to everyone and no armor reduces it",
+     "cite": "ffx2-leblanc-syndicate §5.4, §6.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Soft"
+      ]
+     },
+     "text": "Cures the Petrify Russian Roulette can roll — Eject on the same roll has no cure at all, so keeping Logos' turns down matters more",
+     "cite": "ffx2-leblanc-syndicate §4.2, §4.3"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ],
+      "targetId": "logos"
+     },
+     "text": "Logos' Evasion 40 is the highest in the fight — a Warrior misses him over a third of the time; a Gunner or Thief lands close to nine in ten",
+     "cite": "ffx2-leblanc-syndicate §3.2, §6.2"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ],
+      "targetId": "leblanc"
+     },
+     "text": "Her Defense 10 against a Magic Defense of 62 makes the sword the right route on her — the opposite of Ormi",
+     "cite": "ffx2-leblanc-syndicate §3.1, §3.4"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "bossId": "ormi-entrance",
+     "label": "ACT I — Chateau Entrance",
+     "note": "Ormi's Defense 120 floors physicals and his Magic Defense 4 does the opposite — this act exists to teach that split before Act III asks for it under pressure.",
+     "cite": "ffx2-leblanc-syndicate §2"
+    },
+    {
+     "bossId": "logos-room",
+     "label": "ACT II — Logos’ Room",
+     "note": "Logos and Ormi together, the same opposite defensive shapes on the field at once, and Russian Roulette makes its first appearance — Death, Petrify or Eject on a random target.",
+     "cite": "ffx2-leblanc-syndicate §2"
+    },
+    {
+     "bossId": "leblanc",
+     "label": "ACT III — the Last Room",
+     "note": "All three at once. No Love Lost fires on Leblanc's 3rd, 11th and 19th turn while both henchmen are alive — kill either one first and it never triggers again.",
+     "cite": "ffx2-leblanc-syndicate §4.5, §5.3"
+    }
+   ]
+  },
+  {
+   "id": "seymour-anima-macalania",
+   "title": "Seymour and Anima",
+   "rules": [
+    {
+     "text": "Steal from each Guardian once. Until you do, every hit on one triggers a 1,000 HP Auto-Potion counter, and they hand Seymour another 1,000 whenever he drops below 4,800 — two turns of Steal removes more healing than most parties can out-damage.",
+     "short": "Steal from each Guardian — it kills their potions",
+     "cite": "ffx-seymour-anima-macalania §2.3, §7 row 1"
+    },
+    {
+     "text": "He cycles ice, lightning, water, fire, in that order, and it never varies. His own Scan text says so, which is the point: the matching Nul spell reduces a whole turn to nothing, and it costs 2 MP.",
+     "short": "Ice, lightning, water, fire — pre-cast the Nul",
+     "cite": "ffx-seymour-anima-macalania §5.2, §7 row 5"
+    },
+    {
+     "text": "Pain carries a 100% Death rider, so on a party member it is not 500 damage, it is a kill — and on an aeon it is only the 500. That asymmetry is the whole of the middle act: summon, and keep something on the field Anima cannot delete.",
+     "short": "Pain kills people and only hurts aeons — summon",
+     "cite": "ffx-seymour-anima-macalania §4.3, §7 row 11"
+    },
+    {
+     "text": "His HP bar is not a progress bar. Emptying it summons his aeon; beating his aeon gives him the whole bar back, stronger. Budget for roughly 27,000 damage, not 6,000.",
+     "short": "His bar comes back once — budget for 27,000",
+     "cite": "ffx-seymour-anima-macalania §5.2, §5.4"
+    },
+    {
+     "text": "Act one is the only stretch with turns to spare. Haste, Cheer and a stolen potion bought there are still on the board in act three, where two hits a turn land for roughly 1,700 each.",
+     "short": "Spend act one buying tempo, not damage",
+     "cite": "ffx-seymour-anima-macalania §6.4, §7 row 10"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Steal"
+      ]
+     },
+     "text": "Take the pouch off {target}: one successful Steal ends its 1,000 HP Auto-Potion counter and its Hi-Potions for Seymour — and nothing else, so it will still Remedy him",
+     "cite": "ffx-seymour-anima-macalania §2.3, §2.4"
+    },
+    {
+     "when": {
+      "labels": [
+       "NulFrost",
+       "NulShock",
+       "NulTide",
+       "NulBlaze"
+      ]
+     },
+     "text": "His next spell is already decided — the Nul that matches it takes the whole hit to zero, for 2 MP out of a bar of 180",
+     "cite": "ffx-seymour-anima-macalania §5.2, §7 row 5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Petrify Grenade",
+       "Stone Breath"
+      ]
+     },
+     "text": "The Guardians have no Petrify resistance at all, and a petrified monster shatters — it forfeits the overkill AP and it ends them in one throw",
+     "cite": "ffx-seymour-anima-macalania §2.2, §7 row 2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Poison Fang"
+      ]
+     },
+     "text": "Poison is 600 a turn on him, a tenth of his bar — but only once the Guardians are dead, because Steal never disabled their Remedy. His summon clears it, and so does his return",
+     "cite": "ffx-seymour-anima-macalania §1.1, §7 row 8; re-ffx-ai-seymour §3.5, §3.6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Banishing Blade",
+       "Magic Break"
+      ]
+     },
+     "text": "Break his Magic and his spells halve: Banishing Blade lands at a chance that ignores resistance outright and applies all four at once. His summon wipes the Break, and so does his return, so it counts in act three only if it lands after he is back",
+     "cite": "ffx-seymour-anima-macalania §1.3, §7 row 7; re-ffx-ai-seymour §3.5, §3.6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Haste"
+      ]
+     },
+     "text": "Tempo bought now is still there in act three, when he takes two turns of damage out of the party for every one of theirs",
+     "cite": "ffx-seymour-anima-macalania §6.4, §7 row 10"
+    },
+    {
+     "when": {
+      "labels": [
+       "Shield"
+      ]
+     },
+     "text": "Oblivion is sixteen hits across everything on the field — unshielded it is a wipe, and shielded an aeon walks out of it",
+     "cite": "ffx-seymour-anima-macalania §6.3, §7 row 12"
+    },
+    {
+     "when": {
+      "labels": [
+       "Diamond Dust",
+       "Thors Hammer",
+       "Hellfire",
+       "Energy Ray"
+      ]
+     },
+     "text": "Land it while she is Boosted: she takes half again as much, and the multiplier applies before the damage cap",
+     "cite": "ffx-seymour-anima-macalania §3.4, §7 row 14"
+    },
+    {
+     "when": {
+      "labels": [
+       "Shell"
+      ]
+     },
+     "text": "Shell halves every one of his spells for its whole duration, which is worth more than nullifying one of them once",
+     "cite": "ffx-seymour-anima-macalania §6.1, §6.4"
+    },
+    {
+     "when": {
+      "labels": [
+       "Aerospark"
+      ]
+     },
+     "text": "He casts Shell on his first turn and this Yuna has no Dispel — Aerospark is the free aeon sub-command that strips it and doubles every spell aimed at him",
+     "cite": "ffx-seymour-anima-macalania §8.5, §7 row 4; re-ffx-ai-seymour §3.4"
+    },
+    {
+     "when": {
+      "labels": [
+       "Talk"
+      ]
+     },
+     "text": "One line each from Tidus, Yuna and Wakka, once per battle: +10 Strength and +10 Magic Defense twice, for the whole fight",
+     "cite": "ffx-seymour-anima-macalania §5.5"
+    },
+    {
+     "when": {
+      "kinds": [
+       "summon"
+      ]
+     },
+     "text": "An aeon is the only body on this field that a 100% Death rider cannot delete, and while it holds the field the party is off-stage with frozen counters",
+     "cite": "ffx-seymour-anima-macalania §4.3, §7 row 11"
+    },
+    {
+     "when": {
+      "labels": [
+       "Phoenix Down",
+       "Life"
+      ]
+     },
+     "text": "Stand {target} back up — Pain does not damage a party member, it kills them, so this will keep happening until something else is on the field",
+     "cite": "ffx-seymour-anima-macalania §4.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "X-Potion",
+       "Cura",
+       "Cure",
+       "Hi-Potion",
+       "Potion"
+      ]
+     },
+     "text": "Top {target} up past the next hit: one of his spells is most of a bar in act one and all of one in act three",
+     "cite": "ffx-seymour-anima-macalania §6.1, §6.4"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ]
+     },
+     "text": "While a Guardian stands, a swing aimed at Seymour lands on the Guardian instead — magic is the only thing that reaches him",
+     "cite": "ffx-seymour-anima-macalania §2.3"
+    }
+   ],
+   "watch": [
+    {
+     "name": "Boost",
+     "payload": "half again as much damage taken, until her next turn",
+     "advice": "This is the window — spend the biggest thing the party has before she acts again",
+     "cite": "ffx-seymour-anima-macalania §3.4, §7 row 14"
+    },
+    {
+     "name": "#",
+     "payload": "Oblivion — sixteen hits across the field",
+     "advice": "Get Shield up. Her gauge gains 5 with each Pain and 5 with every action that reaches her; her own turns and Boost add nothing. It is a race, not something to eat twice",
+     "cite": "ffx-seymour-anima-macalania §3.4, §6.3; re-ffx-ai-seymour §3.6"
+    }
+   ],
+   "phases": [
+    {
+     "bossId": "anima-macalania",
+     "label": "Act 2 - Anima",
+     "note": "Seymour is on the field and doing nothing. She alternates Boost and Pain while a third clock fills toward Oblivion; an aeon is immune to the kill and only takes the damage.",
+     "cite": "ffx-seymour-anima-macalania §5.3"
+    },
+    {
+     "aboveHpFraction": 0.5,
+     "label": "Act 1 - the retinue",
+     "note": "Two Guardians cover him against anything physical and heal him on a counter. Steal first, end them second, and let the elemental order do the rest.",
+     "cite": "ffx-seymour-anima-macalania §5.2"
+    },
+    {
+     "belowHpFraction": 0.5,
+     "label": "Act 3 - alone",
+     "note": "Full health again, stronger magic, and the same spell twice in one turn. His order carries on from act one, so the matching Nul still answers it.",
+     "cite": "ffx-seymour-anima-macalania §5.4; re-ffx-ai-seymour §3.4"
+    }
+   ]
+  },
+  {
+   "id": "evrae-airship",
+   "title": "Evrae",
+   "rules": [
+    {
+     "text": "Cid can move the ship or fire the missiles, never both — pull back the moment the fight opens. FAR is the only range Cid can fire from, and one volley (~2,400) outdamages a whole turn of party swings for no party turn at all.",
+     "short": "Pull back — Cid does more than you do",
+     "cite": "ffx-evrae-airship §4.2, §7.4, §8 row 1"
+    },
+    {
+     "text": "The Al Bhed Potion is the only heal in this party — no Yuna, no White Magic. Rank 2, party-wide, exactly 1,000, and it cures Poison, Silence and Petrify in the same cast. A petrified member is one Swooping Scythe from being gone for good.",
+     "short": "Al Bhed Potion is your only heal — use it early",
+     "cite": "ffx-evrae-airship §6.4, §3.3 note 3, §8 row 2"
+    },
+    {
+     "text": "When Evrae inhales while the ship is FAR, do nothing that names it. Attacking now makes it Swoop in and breathe anyway — the dodge is refusing the bait, not landing a counter.",
+     "short": "Ship is FAR and it inhales — do not attack",
+     "cite": "ffx-evrae-airship §4.5, §8 row 8"
+    },
+    {
+     "text": "Once its bar drops under a third, everything it does gets worse at once: it goes berserk, and if it is still un-Reflected its next big turn is a self-cast Haste. Reflect denies the Haste and turns it into a free Haste on your own party instead.",
+     "short": "Under 1/3 HP: get Reflect up before the Haste",
+     "cite": "ffx-evrae-airship §5.4, §6.5, §8 row 11"
+    },
+    {
+     "text": "Slow only helps while it can still be applied — cast it before Reflect goes up, never after, because Slow is reflectable and a Reflected Evrae bounces it onto the party that cast it.",
+     "short": "Slow before Reflect, never after",
+     "cite": "ffx-evrae-airship §6.3, §6.5, §8 row 5"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Pull back",
+       "Pull Back"
+      ]
+     },
+     "text": "Cid pulls the ship out of reach — his melee, Stone Gaze and Poison Breath cannot land while it is FAR, and Cid's missiles only fire from out here",
+     "cite": "ffx-evrae-airship §4.1, §4.2; re-ffx-ai-evrae-yojimbo-isaaru-sin §2.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Close in",
+       "Close In"
+      ]
+     },
+     "text": "Bring the ship NEAR when nothing is charging — Wakka and Lulu can reach at either range, but the rest of the party needs this to swing at all",
+     "cite": "ffx-evrae-airship §4.3, §4.4"
+    },
+    {
+     "when": {
+      "labels": [
+       "Al Bhed Potion"
+      ]
+     },
+     "text": "Stand the party back up to 1,000 and clear Poison, Silence and Petrify in one cast — the only heal this party has without Yuna",
+     "cite": "ffx-evrae-airship §6.4"
+    },
+    {
+     "when": {
+      "labels": [
+       "Slow"
+      ]
+     },
+     "text": "Its recovery counter roughly doubles while Slow holds — cast this before Reflect, or a Reflected Evrae bounces it straight back onto {actor}'s own party",
+     "cite": "ffx-evrae-airship §6.3, §6.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Reflect"
+      ]
+     },
+     "text": "Deny the self-Haste it casts under a third HP — Reflected, that same cast lands as a free Haste on {actor}'s own party instead",
+     "cite": "ffx-evrae-airship §6.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Dark Buster",
+       "Dark Attack"
+      ]
+     },
+     "text": "Blinded, its Attack row goes out — Swooping Scythe still connects, so this only ever blunts half the NEAR-range melee, never all of it",
+     "cite": "ffx-evrae-airship §6.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Power Break"
+      ]
+     },
+     "text": "Halves both Attack and Swooping Scythe at once — the one debuff that touches the scythe limbs at all",
+     "cite": "ffx-evrae-airship §6.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Cheer"
+      ]
+     },
+     "text": "Stacks up to five and works at FAR — the range game is a setup zone, not a dead one, so bank this while the ship is pulled back",
+     "cite": "ffx-evrae-airship §4.3, §8 row 3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Haste"
+      ]
+     },
+     "text": "Tempo bought at FAR carries into the NEAR exchanges later — cast it on whoever can already reach from out here",
+     "cite": "ffx-evrae-airship §4.3, §8 row 3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Watera",
+       "Thundara",
+       "Blizzara",
+       "Fira",
+       "Water",
+       "Thunder",
+       "Blizzard",
+       "Fire"
+      ]
+     },
+     "text": "Every element is halved on this thing and holy is neutral — there is no weakness to aim for, only base power, and never into a Reflected Evrae",
+     "cite": "ffx-evrae-airship §1.2, §6.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Lancet"
+      ]
+     },
+     "text": "One of the three swings that reach at FAR, with Lulu's Blk Magic and Wakka's blitzball — and it drains HP and MP on the way",
+     "cite": "ffx-evrae-airship §4.3"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ]
+     },
+     "text": "A physical swing rolls to hit like any other — the only thing guaranteed here is Cid missiles and the boss magic, not this",
+     "cite": "ffx-evrae-airship §3.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Potion",
+       "Eye Drops",
+       "Echo Screen"
+      ],
+      "flags": {
+       "airship.breathCharged": true,
+       "airship.range": "far"
+      }
+     },
+     "text": "A turn spent on an ally names no enemy. It is the dodge whenever Evrae holds a breath with the ship FAR, because naming Evrae then makes it Swoop in and breathe anyway",
+     "cite": "ffx-evrae-airship §4.5"
+    }
+   ],
+   "watch": [
+    {
+     "name": "Inhale",
+     "payload": "Poison Breath — roughly 1,500 to all three active members at once",
+     "advice": "If the ship is already FAR, do nothing that names it. If it is NEAR, pull back now — the dodge is a race between two clocks",
+     "cite": "ffx-evrae-airship §3.3, §4.5, §8 row 8"
+    }
+   ],
+   "phases": [
+    {
+     "aboveHpFraction": 0.3334,
+     "label": "Phase 1 - the range game",
+     "note": "Pull back, farm the missile volleys, close in only to hit what does not reach from FAR. Stone Gaze's counter fills once per action that reaches Evrae: 2 for a weapon swing or Wakka's reels, 1 for most spells (damage, Lancet, Shell, Protect, Reflect, Dispel), nothing for Cure spells, Haste, Slow, Cheer or items. Above 5, his next Attack turn is a Stone Gaze and the count clears. Only a Gaze clears it, so it carries on through a retreat.",
+     "cite": "ffx-evrae-airship §5.2, §5.3; re-ffx-ai-evrae-yojimbo-isaaru-sin §2.3, §2.5"
+    },
+    {
+     "belowHpFraction": 0.3334,
+     "label": "Phase 2 - do not poke it from FAR",
+     "note": "Swooping Scythe is live: any attack made at FAR drags the ship back to NEAR on its own. Get Reflect up before its self-Haste lands, and stop re-ordering the ship out — the only order worth a turn from here is the Poison Breath dodge. The Stone Gaze count stops filling once he is Hasted, but anything above 5 still turns his next Attack into one more Gaze.",
+     "cite": "ffx-evrae-airship §4.5, §5.4, §5.5; re-ffx-ai-evrae-yojimbo-isaaru-sin §2.5"
+    }
+   ]
+  },
+  {
+   "id": "yojimbo-cavern",
+   "title": "Yojimbo",
+   "rules": [
+    {
+     "text": "This is a race. He has 33,000 HP, and every action aimed at him brings Zanmato closer, so each one has to count: spells, a healthy party, and an aeon ready.",
+     "short": "A race: 33,000 HP before his gauge fills",
+     "cite": "ffx-yojimbo §2.1, §4.1, §5.3 rows 2-4"
+    },
+    {
+     "text": "Every action that targets him adds 3 to his gauge, and every attack he makes adds 2. At 100 he uses Zanmato: 9,999 to each member of the party, fatal to all three.",
+     "short": "Each action aimed at him fills his gauge",
+     "cite": "ffx-yojimbo §4.1, §3.1, §3.3"
+    },
+    {
+     "text": "Defense 80 and Magic Defense 0: a sword lands at about half, a spell at full strength. Lulu is the best attacker in her own fight.",
+     "short": "Spells, not swords: Lulu hits hardest",
+     "cite": "ffx-yojimbo §2.1, §3.3, §5.3 row 4"
+    },
+    {
+     "text": "Once his gauge is high, put an aeon in front of him. Zanmato then hits the aeon, not the party.",
+     "short": "Gauge high: summon an aeon to take Zanmato",
+     "cite": "ffx-yojimbo §3.3, §5.3 row 3"
+    },
+    {
+     "text": "Lady Ginnem and Daigoro cannot be targeted. The dog bites only when Yojimbo orders it.",
+     "short": "Ginnem and Daigoro cannot be targeted",
+     "cite": "ffx-yojimbo §2.5; re-ffx-ai-evrae-yojimbo-isaaru-sin §3.1, §3.4"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Fira",
+       "Blizzara",
+       "Thundara",
+       "Watera"
+      ]
+     },
+     "text": "Magic Defense 0 takes a -ra spell at full strength, and one cast fills his gauge by one targeting, not one per hit",
+     "cite": "ffx-yojimbo §2.1, §3.3, §4.1"
+    },
+    {
+     "when": {
+      "kinds": [
+       "summon"
+      ]
+     },
+     "text": "His gauge is high: an aeon on the field takes Zanmato in place of the party",
+     "cite": "ffx-yojimbo §3.3, §5.3 row 3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Curaga",
+       "Cura",
+       "Cure"
+      ]
+     },
+     "text": "Keep the party up. A heal names no enemy, so it adds nothing to his gauge",
+     "cite": "ffx-yojimbo §4.1, §5.3 row 2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Life",
+       "Phoenix Down"
+      ]
+     },
+     "text": "Stand {target} back up. A revive aimed at the party adds nothing to his gauge",
+     "cite": "ffx-yojimbo §4.1"
+    },
+    {
+     "when": {
+      "kinds": [
+       "defend"
+      ]
+     },
+     "text": "Nothing to add this turn. Every action aimed at him fills his gauge, so a quiet turn keeps Zanmato further off",
+     "cite": "ffx-yojimbo §4.1"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ]
+     },
+     "text": "A physical hit lands at about half against Defense 80, and it still fills his gauge",
+     "cite": "ffx-yojimbo §2.1, §3.3, §4.1"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "label": "The Zanmato gauge",
+     "note": "Below 25 he only sends the dog. From 25 he adds Kozuka, one turn in four. From 50 Wakizashi joins it and each takes a fifth of his turns, the dog three fifths. From 80 each takes a quarter and the dog half. At 100, Zanmato.",
+     "cite": "ffx-yojimbo §4.1; re-ffx-ai-evrae-yojimbo-isaaru-sin §3.2"
+    }
+   ]
+  },
+  {
+   "id": "ffx2-trema",
+   "title": "Trema",
+   "rules": [
+    {
+     "text": "Nothing sticks to Trema: every status, every stat change, Gravity and Reflect fail on him. Only damage moves him.",
+     "short": "No status or Gravity lands on Trema",
+     "cite": "ffx2-trema §3.1"
+    },
+    {
+     "text": "When his HP falls below a half, and again below a quarter, Meteor comes down on the party. Below about a sixth comes Ultima. Heal before you cross each line.",
+     "short": "Heal before his HP crosses 1/2 and 1/4",
+     "cite": "ffx2-trema §4.2"
+    },
+    {
+     "text": "His spells need MP: drained early, he cannot pay for Demi, Flare or Ultima. One source says this still holds under his Spellspring; it is disputed, so keep the party healed either way.",
+     "short": "Drain his MP early (one source)",
+     "cite": "ffx2-trema §5, §10 T-5"
+    },
+    {
+     "text": "This Paragon has oversouled: it does nothing until it is hit, then answers each hit. A spell comes back at whoever cast it; anything else draws its Attack, which often misses. Left alone for long, it strikes on its own, Big Bang among its moves, so keep hitting it.",
+     "short": "Paragon waits, then answers every hit",
+     "cite": "ffx2-trema §12.2"
+    },
+    {
+     "text": "Nothing is healed and nothing can be changed between Paragon and Trema: his fight starts as Paragon left you.",
+     "short": "Trema starts where Paragon left you",
+     "cite": "ffx2-trema §1.1"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Target MP"
+      ]
+     },
+     "text": "Drain his MP first: without it he cannot pay for Demi, Flare or Ultima (disputed under Spellspring)",
+     "cite": "ffx2-trema §5, §10 T-5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Stamina Tonic"
+      ]
+     },
+     "text": "A Stamina Tonic doubles everyone's max HP for the battle; a Megalixir then fills it",
+     "cite": "ffx2-trema §5, §12.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Three Stars"
+      ]
+     },
+     "text": "Three Stars makes every MP cost 0 for the battle, Darkness's HP cost too",
+     "cite": "ffx2-combat-core §2.8"
+    },
+    {
+     "when": {
+      "labels": [
+       "Soul Spring"
+      ]
+     },
+     "text": "A Soul Spring drains his MP: without it he cannot pay for his spells (disputed under Spellspring)",
+     "cite": "ffx2-trema §5, §12.3"
+    },
+    {
+     "when": {
+      "kinds": [
+       "spherechange"
+      ],
+      "bossId": "trema"
+     },
+     "text": "Rikku changes dressphere: Gunner to drain his MP, then back to Alchemist once he is dry",
+     "cite": "ffx2-trema §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Darkness"
+      ]
+     },
+     "text": "Darkness is the damage line the clears use against Trema",
+     "cite": "ffx2-trema §5"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ],
+      "bossId": "paragon"
+     },
+     "text": "A plain Attack: it only answers with its own Attack, which often misses",
+     "cite": "ffx2-trema §12.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Lunar Curtain"
+      ],
+      "bossId": "paragon"
+     },
+     "text": "Shell for the party: Genesis is magic, and it strips the Shell once it lands",
+     "cite": "ffx2-trema §4.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Lunar Curtain"
+      ]
+     },
+     "text": "Shell ahead of Meteor, which the sources for this version call magical (disputed)",
+     "cite": "ffx2-trema §4.2, §10 T-3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Light Curtain"
+      ]
+     },
+     "text": "Protect against his three-turn physical chain",
+     "cite": "ffx2-trema §4.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Megalixir"
+      ]
+     },
+     "text": "Two girls are low: one Megalixir refills everyone",
+     "cite": "ffx2-trema §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Mega-Potion"
+      ]
+     },
+     "text": "Two girls are down a fifth: a Mega-Potion tops up everyone",
+     "cite": "ffx2-trema §12.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Remedy"
+      ]
+     },
+     "text": "Cure {target}: Confuse, Itchy and Stop all cost turns",
+     "cite": "ffx2-trema §4.1, §4.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Phoenix Down"
+      ]
+     },
+     "text": "Stand {target} back up",
+     "cite": "ffx2-trema §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "X-Potion",
+       "Elixir"
+      ]
+     },
+     "text": "Top {target} up from the stash",
+     "cite": "ffx2-trema §5"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "bossId": "paragon",
+     "aboveHpFraction": 0.4,
+     "label": "PARAGON",
+     "note": "It waits to be hit, then answers each hit. Trema waits behind it, and nothing is healed between.",
+     "cite": "ffx2-trema §1.1, §12.2"
+    },
+    {
+     "bossId": "paragon",
+     "aboveHpFraction": 0.1,
+     "label": "BELOW 4/10",
+     "note": "It still waits to be hit, but half its answers are now -aga spells on the whole party.",
+     "cite": "ffx2-trema §12.2"
+    },
+    {
+     "bossId": "paragon",
+     "label": "BELOW A TENTH",
+     "note": "Final Impact comes once; after it, any answer can be Ultima, Holy, Judgement, Genesis or Big Bang.",
+     "cite": "ffx2-trema §12.2"
+    },
+    {
+     "bossId": "trema",
+     "aboveHpFraction": 0.5,
+     "label": "TREMA",
+     "note": "Below half his HP, Meteor comes down.",
+     "cite": "ffx2-trema §4.2"
+    },
+    {
+     "bossId": "trema",
+     "aboveHpFraction": 0.25,
+     "label": "BELOW HALF",
+     "note": "One Meteor is spent; the next comes below a quarter.",
+     "cite": "ffx2-trema §4.2"
+    },
+    {
+     "bossId": "trema",
+     "aboveHpFraction": 0.16666666666666666,
+     "label": "BELOW A QUARTER",
+     "note": "Both Meteors are spent; Ultima comes below about a sixth.",
+     "cite": "ffx2-trema §4.2"
+    },
+    {
+     "bossId": "trema",
+     "label": "LAST STRETCH",
+     "note": "Ultima is spent: nothing new is coming.",
+     "cite": "ffx2-trema §4.2"
+    }
+   ]
+  },
+  {
+   "id": "ffx2-fallen-aeons",
+   "title": "Fallen Aeons",
+   "rules": [
+    {
+     "text": "Shiva: Fire hurts her and Ice heals her. Heavenly Strike halves a girl's HP and MP and can Stop her; a Remedy cures Stop.",
+     "short": "Shiva: a Remedy cures Stop, no Ice",
+     "cite": "ffx2-fallen-aeons §3.1, §4.1"
+    },
+    {
+     "text": "Delta Attack needs all three Sisters standing: bring any one of them down and it is gone for good. Dispel the guard Cindy puts on her sisters.",
+     "short": "Down one Sister and Delta Attack is gone",
+     "cite": "ffx2-fallen-aeons §4.2"
+    },
+    {
+     "text": "Anima's Pain brings Silence, Darkness and Itchy, and its stat losses stack. A Remedy clears the statuses; the losses stay for the fight.",
+     "short": "Anima: a Remedy after each Pain",
+     "cite": "ffx2-fallen-aeons §4.3"
+    },
+    {
+     "text": "Two Dark Knights on Darkness do the damage in all three fights, and Yuna keeps them standing.",
+     "short": "Two Dark Knights on Darkness, Yuna heals",
+     "cite": "ffx2-fallen-aeons §5"
+    },
+    {
+     "text": "A Save Sphere between the platforms restores HP and MP, and a loss starts again from the platform you lost on.",
+     "short": "HP and MP refill between platforms",
+     "cite": "ffx2-fallen-aeons §6.2, §9 F-1"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Remedy"
+      ],
+      "targetHas": "stop"
+     },
+     "text": "Cure {target}'s Stop: a stopped girl loses every turn until it wears off",
+     "cite": "ffx2-fallen-aeons §4.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Remedy"
+      ],
+      "bossId": "x2-anima"
+     },
+     "text": "Clear the Silence and Darkness Pain left on {target}",
+     "cite": "ffx2-fallen-aeons §4.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Dispel"
+      ]
+     },
+     "text": "Strip the Protect, Shell and Regen Cindy put on {target}",
+     "cite": "ffx2-fallen-aeons §4.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Darkness"
+      ],
+      "bossId": "x2-shiva"
+     },
+     "text": "Darkness is the damage line; Fire is her weakness, Ice would heal her",
+     "cite": "ffx2-fallen-aeons §3.1, §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Darkness"
+      ]
+     },
+     "text": "Darkness hits every enemy at once: the damage line the clears use",
+     "cite": "ffx2-fallen-aeons §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Shell"
+      ]
+     },
+     "text": "Shell for the party early, before the spells land",
+     "cite": "ffx2-fallen-aeons §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Protect"
+      ]
+     },
+     "text": "Protect for the party early, against the physical hits",
+     "cite": "ffx2-fallen-aeons §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Mega Phoenix"
+      ]
+     },
+     "text": "Two girls are down: one Mega Phoenix stands them both up",
+     "cite": "ffx2-fallen-aeons §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Phoenix Down",
+       "Life"
+      ]
+     },
+     "text": "Stand {target} back up",
+     "cite": "ffx2-fallen-aeons §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Megalixir"
+      ]
+     },
+     "text": "Two girls are near the floor: one Megalixir refills everyone",
+     "cite": "ffx2-fallen-aeons §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Mega-Potion"
+      ]
+     },
+     "text": "Two girls are down by half: a Mega-Potion tops up everyone",
+     "cite": "ffx2-fallen-aeons §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "X-Potion",
+       "Curaga"
+      ]
+     },
+     "text": "{target} is low: a big heal now",
+     "cite": "ffx2-fallen-aeons §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Cura"
+      ]
+     },
+     "text": "Top {target} up while nothing worse needs her",
+     "cite": "ffx2-fallen-aeons §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Turbo Ether"
+      ]
+     },
+     "text": "Yuna is low on MP: refill it before the next heal",
+     "cite": "ffx2-fallen-aeons §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Pray"
+      ]
+     },
+     "text": "Nothing needs her: Pray tops up the whole party",
+     "cite": "ffx2-fallen-aeons §5"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "bossId": "x2-shiva",
+     "label": "SHIVA",
+     "note": "Every blow on her brings Diamond Dust sooner. Keep the party healed.",
+     "cite": "ffx2-fallen-aeons §4.1"
+    },
+    {
+     "bossId": "sandy",
+     "label": "THE MAGUS SISTERS",
+     "note": "Delta Attack takes all three. Once one sister falls, it never comes.",
+     "cite": "ffx2-fallen-aeons §4.2"
+    },
+    {
+     "bossId": "cindy",
+     "label": "THE MAGUS SISTERS",
+     "note": "Delta Attack takes all three. Once one sister falls, it never comes.",
+     "cite": "ffx2-fallen-aeons §4.2"
+    },
+    {
+     "bossId": "mindy",
+     "label": "THE MAGUS SISTERS",
+     "note": "Delta Attack takes all three. Once one sister falls, it never comes.",
+     "cite": "ffx2-fallen-aeons §4.2"
+    },
+    {
+     "bossId": "x2-anima",
+     "aboveHpFraction": 0.5,
+     "label": "ANIMA",
+     "note": "A long fight: her Pain losses pile up, so answer each one.",
+     "cite": "ffx2-fallen-aeons §4.3"
+    },
+    {
+     "bossId": "x2-anima",
+     "label": "BELOW HALF",
+     "note": "Every blow on her still brings Oblivion sooner. Stay healed.",
+     "cite": "ffx2-fallen-aeons §4.3"
+    }
+   ]
+  },
+  {
+   "id": "ffx2-den-of-woe",
+   "title": "The Den of Woe",
+   "rules": [
+    {
+     "text": "Three shades, one after another, and nothing is healed between them: what one leaves you with, the next one meets.",
+     "short": "No rest between the three shades",
+     "cite": "ffx2-gippal-den-of-woe §2"
+    },
+    {
+     "text": "Two Dark Knights on Darkness do the damage, and Yuna keeps them standing. Protect goes up first.",
+     "short": "Darkness x2, Yuna heals, Protect first",
+     "cite": "ffx2-gippal-den-of-woe §5"
+    },
+    {
+     "text": "Baralai counts every blow. At eight, the last girl to hit him loses three quarters of her max HP; keep her healed.",
+     "short": "Baralai: at 8 hits, Drill Shot",
+     "cite": "ffx2-gippal-den-of-woe §4.2"
+    },
+    {
+     "text": "Near the end Nooj calls down Lightfall, 5,000 to everyone, once. Invincible is the answer: a Hero Drink just before it, for Yuna and for a Dark Knight at 5,000 HP or less.",
+     "short": "Nooj: Lightfall, 5,000 to all, once",
+     "cite": "ffx2-gippal-den-of-woe §4.3, §5"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Darkness"
+      ]
+     },
+     "text": "Darkness ignores Defense, even Nooj's 144, and costs HP, not MP",
+     "cite": "ffx2-gippal-den-of-woe §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Protect"
+      ]
+     },
+     "text": "Protect for the party before the staff, the Grinder and the Mortar land",
+     "cite": "ffx2-gippal-den-of-woe §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Shell"
+      ]
+     },
+     "text": "Shell for the party: Glint and Absorb are Baralai's magic",
+     "cite": "ffx2-gippal-den-of-woe §4.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Light Curtain"
+      ]
+     },
+     "text": "Protect on {target} from the bag while Yuna cannot cast",
+     "cite": "ffx2-gippal-den-of-woe §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Remedy"
+      ],
+      "bossId": "shade-baralai"
+     },
+     "text": "Cure {target}: Looming Glacier's Stop and his Silence both cost turns",
+     "cite": "ffx2-gippal-den-of-woe §4.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Remedy"
+      ]
+     },
+     "text": "Cure {target}",
+     "cite": "ffx2-gippal-den-of-woe §4.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Curaga",
+       "Cura",
+       "X-Potion"
+      ]
+     },
+     "text": "Top {target} up before the next hit",
+     "cite": "ffx2-gippal-den-of-woe §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Mega-Potion"
+      ]
+     },
+     "text": "Two girls are low: a Mega-Potion tops up everyone",
+     "cite": "ffx2-gippal-den-of-woe §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Megalixir"
+      ]
+     },
+     "text": "Two girls are near the floor: one Megalixir refills everyone",
+     "cite": "ffx2-gippal-den-of-woe §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Hero Drink"
+      ],
+      "bossId": "shade-nooj"
+     },
+     "text": "Invincible on {target} before Lightfall: 5,000 to everyone is coming",
+     "cite": "ffx2-gippal-den-of-woe §4.3, §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Mega Phoenix"
+      ],
+      "bossId": "shade-nooj"
+     },
+     "text": "Lightfall took more than one: stand everyone back up",
+     "cite": "ffx2-gippal-den-of-woe §4.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Phoenix Down",
+       "Mega Phoenix"
+      ]
+     },
+     "text": "Stand {target} back up",
+     "cite": "ffx2-gippal-den-of-woe §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Turbo Ether"
+      ]
+     },
+     "text": "Yuna needs MP for Curaga, and Greedy Aura takes it",
+     "cite": "ffx2-gippal-den-of-woe §4.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Pray"
+      ]
+     },
+     "text": "Nothing urgent: Pray keeps everyone ticking up",
+     "cite": "ffx2-gippal-den-of-woe §5"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "bossId": "shade-baralai",
+     "aboveHpFraction": 0.3333333333333333,
+     "label": "BARALAI",
+     "note": "Five steps, then round again: a strike, Glint, three blows, Looming Glacier, then Silence or Absorb.",
+     "cite": "ffx2-gippal-den-of-woe §4.2"
+    },
+    {
+     "bossId": "shade-baralai",
+     "label": "BARALAI, BELOW A THIRD",
+     "note": "He may Regen or raise his own guard now. Finish him before it pays for itself.",
+     "cite": "ffx2-gippal-den-of-woe §4.2"
+    },
+    {
+     "bossId": "shade-gippal",
+     "aboveHpFraction": 0.3333333333333333,
+     "label": "GIPPAL",
+     "note": "Grinder, a swing, Grinder, a swing, then Bullseye, which takes 9/16 of your HP but never kills.",
+     "cite": "ffx2-gippal-den-of-woe §4.1"
+    },
+    {
+     "bossId": "shade-gippal",
+     "label": "GIPPAL, BELOW A THIRD",
+     "note": "The pattern breaks: any of his moves can come, Mortar among them. Heal before you finish him; Nooj is next.",
+     "cite": "ffx2-gippal-den-of-woe §4.1, §2"
+    },
+    {
+     "bossId": "shade-nooj",
+     "aboveHpFraction": 0.12600840336134453,
+     "label": "NOOJ",
+     "note": "Two swings, a blow through Magic Defense, a swing, then Greedy Aura: 3/16 of everyone's max HP and MP.",
+     "cite": "ffx2-gippal-den-of-woe §4.3"
+    },
+    {
+     "bossId": "shade-nooj",
+     "label": "NOOJ, LAST STRETCH",
+     "note": "Lightfall comes once in here, 5,000 to everyone. After it, nothing new is coming.",
+     "cite": "ffx2-gippal-den-of-woe §4.3"
+    }
+   ]
+  },
+  {
+   "id": "ffx2-ixion-djose",
+   "title": "Ixion",
+   "rules": [
+    {
+     "text": "His loop never changes: two turns of Attack or Thundara on everyone, then Aerospark, which takes five eighths of one girl's current HP.",
+     "short": "Two attacks, then Aerospark",
+     "cite": "ffx2-ixion-djose §4.1, §4.2"
+    },
+    {
+     "text": "Every action and every blow he takes fills a hidden count. When it is full he casts Recharge, and Thor's Hammer on everyone comes next.",
+     "short": "Recharge means Thor's Hammer is next",
+     "cite": "ffx2-ixion-djose §4.2"
+    },
+    {
+     "text": "The moment you see Recharge, put Shell up and heal everyone high. Thor's Hammer is magic.",
+     "short": "After Recharge: Shell and heal",
+     "cite": "ffx2-ixion-djose §4.5"
+    },
+    {
+     "text": "Lightning heals him and Water hurts him. Two Dark Knights on Darkness do the damage while Yuna keeps them standing.",
+     "short": "Lightning heals him; Water hurts",
+     "cite": "ffx2-ixion-djose §3.1, §4.5"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Darkness"
+      ]
+     },
+     "text": "Darkness ignores his Defense of 106 and costs HP, not MP",
+     "cite": "ffx2-ixion-djose §3.1, §4.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Shell"
+      ]
+     },
+     "text": "Shell for the party: Thor's Hammer is magic, and it follows Recharge",
+     "cite": "ffx2-ixion-djose §4.2, §4.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Lunar Curtain"
+      ]
+     },
+     "text": "Shell on {target} from the bag before Thor's Hammer",
+     "cite": "ffx2-ixion-djose §4.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Protect"
+      ]
+     },
+     "text": "Protect for the party against his physical Attack",
+     "cite": "ffx2-ixion-djose §4.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Mega-Potion"
+      ]
+     },
+     "text": "Two girls are low: a Mega-Potion tops up everyone before the next Thundara",
+     "cite": "ffx2-ixion-djose §4.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Curaga",
+       "Cura",
+       "Hi-Potion"
+      ]
+     },
+     "text": "Top {target} up: Aerospark takes a share of what is left",
+     "cite": "ffx2-ixion-djose §4.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Phoenix Down",
+       "Life"
+      ]
+     },
+     "text": "Stand {target} back up",
+     "cite": "ffx2-ixion-djose §4.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Ether"
+      ]
+     },
+     "text": "Yuna needs MP for Shell and Curaga",
+     "cite": "ffx2-ixion-djose §4.5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Pray"
+      ]
+     },
+     "text": "Nothing urgent: Pray keeps everyone ticking up",
+     "cite": "ffx2-ixion-djose §4.5"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "label": "IXION",
+     "note": "Watch the top of the screen: the word Recharge is the only warning before Thor's Hammer.",
+     "cite": "ffx2-ixion-djose §4.2"
+    }
+   ]
+  },
+  {
+   "id": "seymour-omnis",
+   "title": "Seymour Omnis",
+   "rules": [
+    {
+     "text": "Every volley is four spells, one in the colour of each disc, however many of you are standing. A colour on three or four discs comes out as -ga; on one or two, as -ra. The quarter facing him is the one that counts.",
+     "short": "Each disc casts its colour; three of one is -ga",
+     "cite": "ffx-seymour-omnis §4.1; re-ffx-ai-seymour §5.3, §5.4"
+    },
+    {
+     "text": "Only Wakka can reach a disc with a blow, and it turns the disc a quarter one way; a spell turns it the other way. A disc takes no damage and never falls.",
+     "short": "Wakka’s blow or a spell turns a disc",
+     "cite": "ffx-seymour-omnis §2, §4.3"
+    },
+    {
+     "text": "Armor Break him first: at full Defense a sword barely scratches him. Nul the colour he shows most, and cast Hastega again after every Dispel.",
+     "short": "Armor Break, Nul his colour, re-cast Hastega",
+     "cite": "ffx-seymour-omnis §3.3, §5 rows 1, 3 and 9"
+    },
+    {
+     "text": "Six attacks on him and he glows red, three once he is below 20,000. Next turn he Dispels the party, the turn after he casts Ultima on everyone, then every disc changes colour. Heal everyone above 4,000 before Ultima; Shell does nothing against it.",
+     "short": "Glow, Dispel, Ultima: heal above 4,000 first",
+     "cite": "ffx-seymour-omnis §4.4, §5 row 6"
+    },
+    {
+     "text": "The colours he shows are what he resists: one disc halves that element, two stop it, three or four heal him, and four of one colour leave him weak to its opposite. A quirk kept from the original: with exactly two Water discs and no pair of Fire or Ice he stops Fire instead of Water.",
+     "short": "His colours resist; four of one open a weakness",
+     "cite": "ffx-seymour-omnis §4.2; re-ffx-ai-seymour §5.3"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Armor Break"
+      ]
+     },
+     "text": "At Defense 180 a sword lands for a few hundred; broken, the same blow lands for thousands",
+     "cite": "ffx-seymour-omnis §3.3, §5 row 1"
+    },
+    {
+     "when": {
+      "labels": [
+       "NulBlaze",
+       "NulFrost",
+       "NulShock",
+       "NulTide"
+      ]
+     },
+     "text": "A Nul cancels one spell of its element on each member. With three discs of one colour, it cancels all three -ga",
+     "cite": "ffx-seymour-omnis §3.3, §5 row 3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Hastega"
+      ]
+     },
+     "text": "Dispel strips Haste from everyone, so it goes back on after every Dispel",
+     "cite": "ffx-seymour-omnis §5 row 9"
+    },
+    {
+     "when": {
+      "labels": [
+       "Curaga"
+      ],
+      "flags": {
+       "omnis.state": "dispelled"
+      }
+     },
+     "text": "Ultima comes next, about 3,600 to everyone, and Shell does not soften it. Lift everyone above 4,000 now",
+     "cite": "ffx-seymour-omnis §3.3, §5 row 6"
+    },
+    {
+     "when": {
+      "labels": [
+       "Curaga"
+      ]
+     },
+     "text": "With three or four discs of one colour his first three spells go to the first, second and third member and the last to anyone; in every other layout all four land on anyone, so keep every member well above one -ga",
+     "cite": "ffx-seymour-omnis §3.3, §4.1; re-ffx-ai-seymour §5.4"
+    },
+    {
+     "when": {
+      "labels": [
+       "Life",
+       "Phoenix Down"
+      ]
+     },
+     "text": "Stand {target} back up before his next volley",
+     "cite": "ffx-seymour-omnis §4.1"
+    },
+    {
+     "when": {
+      "kinds": [
+       "switch"
+      ]
+     },
+     "text": "Wakka is the one member whose blow reaches a disc",
+     "cite": "ffx-seymour-omnis §2, §5 row 2"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ],
+      "actorId": "wakka"
+     },
+     "text": "A blow on a disc turns it a quarter. Turning one of three matching discs brings his -ga down to -ra",
+     "cite": "ffx-seymour-omnis §4.1, §4.3, §5 row 2"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ]
+     },
+     "text": "Every attack on him counts toward the red glow; after his Dispel his Defense drops to 100, the turn to hit hardest",
+     "cite": "ffx-seymour-omnis §4.4, §5 row 6"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "bossId": "seymour-omnis",
+     "aboveHpFraction": 0.25,
+     "label": "Six to the glow",
+     "note": "Six attacks on him light the red glow. Then Dispel, then Ultima, then every disc changes colour.",
+     "cite": "ffx-seymour-omnis §4.4"
+    },
+    {
+     "bossId": "seymour-omnis",
+     "belowHpFraction": 0.25,
+     "label": "Three to the glow",
+     "note": "Below 20,000 of his 80,000, three attacks are enough, so the glow comes sooner.",
+     "cite": "ffx-seymour-omnis §4.4"
+    }
+   ]
+  },
+  {
+   "id": "seymour-natus",
+   "title": "Seymour Natus",
+   "rules": [
+    {
+     "text": "Natus has no Defense and no Magic Defense: every point lands in full. The wall is his 36,000 HP, and the fight changes each time a hit carries him lower.",
+     "short": "No Defense: the wall is his 36,000 HP",
+     "cite": "ffx-seymour-natus-highbridge §1.1, §4.1"
+    },
+    {
+     "text": "Below 24,000 he starts to Break, turning a guardian to stone, and Mortibody’s Claw shatters a stone guardian nine times in ten. A shattered guardian is gone for the rest of the battle. Soften the stone at once.",
+     "short": "Stone? Soft it before the Claw lands",
+     "cite": "ffx-seymour-natus-highbridge §3, §4.1, §5"
+    },
+    {
+     "text": "Haste Tidus and Auron, never a third: a third Haste calls Desperado from Mortibody, about 500 to everyone, and it strips Shell, Protect, Reflect, Haste and Regen.",
+     "short": "Haste Tidus and Auron, never a third",
+     "cite": "ffx-seymour-natus-highbridge §3.2, §4.3, §6.3 row 7"
+    },
+    {
+     "text": "He Banishes an aeon after its first turn. Send one with a full gauge and let its Overdrive be that turn. Bahamut arrives full.",
+     "short": "An aeon gets one turn: make it an Overdrive",
+     "cite": "ffx-seymour-natus-highbridge §4.3, §6.3 row 3; B3"
+    },
+    {
+     "text": "Mortibody always comes back. Each time it falls it drains Natus for its own maximum HP, 4,000 first, then 3,000, 2,000 and 1,000.",
+     "short": "Felling Mortibody drains Natus",
+     "cite": "ffx-seymour-natus-highbridge §4.4"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "kinds": [
+       "overdrive"
+      ]
+     },
+     "text": "He Banishes an aeon after its one turn, so spend the full gauge now, into Defense 0",
+     "cite": "ffx-seymour-natus-highbridge §4.3, §6.3 rows 3 and 8"
+    },
+    {
+     "when": {
+      "kinds": [
+       "summon"
+      ]
+     },
+     "text": "The aeon gets one turn before he Banishes it; the relay sends them one at a time, Bahamut first",
+     "cite": "ffx-seymour-natus-highbridge §4.3, §6.3 row 3; B3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Soft"
+      ]
+     },
+     "text": "The Claw shatters a stone guardian nine times in ten, and a shattered guardian is gone for the battle",
+     "cite": "ffx-seymour-natus-highbridge §3, §5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Life",
+       "Phoenix Down"
+      ]
+     },
+     "text": "Stand {target} back up before his next spell",
+     "cite": "ffx-seymour-natus-highbridge §4.1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Cura",
+       "Hi-Potion"
+      ]
+     },
+     "text": "Multi-ra hits two guardians for about a thousand each, and Flare one for twice that: keep {target} out of reach",
+     "cite": "ffx-seymour-natus-highbridge §3.3"
+    },
+    {
+     "when": {
+      "kinds": [
+       "trigger"
+      ]
+     },
+     "text": "Talking to him is free power in this fight: +10 Strength for Tidus and Auron, +10 Magic Defense for Yuna",
+     "cite": "ffx-seymour-natus-highbridge §6.2, §3.3"
+    },
+    {
+     "when": {
+      "kinds": [
+       "switch"
+      ]
+     },
+     "text": "Auron brings a second heavy sword and his own Talk; against Defense 0 two swords win the race",
+     "cite": "ffx-seymour-natus-highbridge §3.3, §6.2, §6.3 row 4"
+    },
+    {
+     "when": {
+      "labels": [
+       "Shell"
+      ]
+     },
+     "text": "Shell halves every spell he and Mortibody cast",
+     "cite": "ffx-seymour-natus-highbridge §3.3, §6.3 row 4"
+    },
+    {
+     "when": {
+      "labels": [
+       "Haste"
+      ]
+     },
+     "text": "Haste {target}: never a third — a third Haste calls Desperado",
+     "cite": "ffx-seymour-natus-highbridge §4.3, §6.3 row 7"
+    },
+    {
+     "when": {
+      "kinds": [
+       "defend"
+      ]
+     },
+     "text": "Nothing to mend this turn; Yuna waits for the next heal",
+     "cite": "ffx-seymour-natus-highbridge §6.3 row 4"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ],
+      "targetId": "seymour-natus"
+     },
+     "text": "Defense 0: every point of the swing lands. Each line his HP crosses changes what he does next",
+     "cite": "ffx-seymour-natus-highbridge §1.1, §3.3, §4.1"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "aboveHpFraction": 0.6666666666666666,
+     "label": "Above 24,000",
+     "note": "Mortibody casts one element on everyone, then Natus casts the same element, stronger, on two of you.",
+     "cite": "ffx-seymour-natus-highbridge §4.1"
+    },
+    {
+     "aboveHpFraction": 0.3333333333333333,
+     "label": "Below 24,000",
+     "note": "Break turns a guardian to stone; the Claw shatters stone. His pattern moves only when an action hits him, never on a Poison tick.",
+     "cite": "ffx-seymour-natus-highbridge §4.1, §4.2"
+    },
+    {
+     "label": "Below 12,000",
+     "note": "Natus casts Flare; Mortibody Curas him for about 1,200.",
+     "cite": "ffx-seymour-natus-highbridge §3.3, §4.1"
+    }
+   ]
+  },
+  {
+   "id": "isaaru-via-purifico",
+   "title": "Isaaru",
+   "rules": [
+    {
+     "text": "Only an aeon can fight his aeons, and never the same one: while he has Ifrit out, yours will not come. Yuna can summon, heal herself and use items, nothing else.",
+     "short": "Only aeons fight here, never the mirror of his",
+     "cite": "ffx-isaaru-bevelle §1.2; B6 (our estimate for the greyed rows)"
+    },
+    {
+     "text": "Three aeons back to back with no healing between them. An aeon you lose stays down for the rest of the contest, and with none left to summon the contest is lost.",
+     "short": "No healing between links; a fallen aeon stays down",
+     "cite": "ffx-isaaru-bevelle §1.2"
+    },
+    {
+     "text": "Grothia opens with a full gauge, so his first move against an aeon is Hellfire, more than any of your aeons can take. Shield first: it quarters the blow.",
+     "short": "Grothia: Hellfire first. Shield before it lands",
+     "cite": "ffx-isaaru-bevelle §4.1, §5.2, §5.3"
+    },
+    {
+     "text": "Pterya is the weak one. Bahamut takes her hits and fills his gauge doing it.",
+     "short": "Pterya: let Bahamut take her hits",
+     "cite": "ffx-isaaru-bevelle §5.2, §6.3"
+    },
+    {
+     "text": "Spathi does not attack. He counts down from five, then Mega Flare hits the aeon on the field for more than it can take. Watch the turn order: Shield when the Flare will land before your next turn. Ifrit or Ixion, whichever has the fuller gauge, goes in first.",
+     "short": "Spathi: Shield before the count runs out",
+     "cite": "ffx-isaaru-bevelle §4.3, §5.2, §5.3; I-5"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Shield"
+      ]
+     },
+     "text": "His big move lands before this aeon acts again. Shield quarters it, and lasts until the aeon’s next turn",
+     "cite": "ffx-isaaru-bevelle §5.3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Grand Summon"
+      ]
+     },
+     "text": "Yuna’s gauge is full: the aeon arrives with its own gauge full, and its Overdrive is worth several turns of attacks",
+     "cite": "ffx-isaaru-bevelle §5.4, §6.2"
+    },
+    {
+     "when": {
+      "kinds": [
+       "overdrive"
+      ]
+     },
+     "text": "A full gauge: the Overdrive is worth several turns of attacks against HP this high",
+     "cite": "ffx-isaaru-bevelle §5.4"
+    },
+    {
+     "when": {
+      "kinds": [
+       "summon"
+      ]
+     },
+     "text": "Summon the aeon the sources suggest for this link. Its mirror stays greyed",
+     "cite": "ffx-isaaru-bevelle §1.3, §6.3"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ]
+     },
+     "text": "Nothing is about to land: hit his aeon",
+     "cite": "ffx-isaaru-bevelle §5.4"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "bossId": "grothia",
+     "label": "Link 1 of 3: Grothia",
+     "note": "His Ifrit. Hellfire first, then Attack or Fira; he absorbs Fire.",
+     "cite": "ffx-isaaru-bevelle §2.3, §4.1"
+    },
+    {
+     "bossId": "pterya",
+     "label": "Link 2 of 3: Pterya",
+     "note": "His Valefor. Attack or Sonic Wings, Energy Ray when her gauge fills.",
+     "cite": "ffx-isaaru-bevelle §4.2"
+    },
+    {
+     "bossId": "spathi",
+     "label": "Link 3 of 3: Spathi",
+     "note": "His Bahamut. Five, four, three, two, one, then Mega Flare, and again.",
+     "cite": "ffx-isaaru-bevelle §4.3"
+    }
+   ]
+  },
+  {
+   "id": "sin-fins-core",
+   "title": "Sin: the Fins and the Core",
+   "rules": [
+    {
+     "text": "Distance buys safety, not damage. Cid fires no missiles here, so FAR only keeps the Fin quiet and turns its Gravija aside; at FAR only Wakka and magic reach.",
+     "short": "FAR is safety, not damage",
+     "cite": "ffx-sin §4, §2.5 (S-19)"
+    },
+    {
+     "text": "When the core on the fin glows, Gravija follows on its next turn: three quarters of everyone's current HP. It cannot kill, but the next swing can. Pull back first, and only if Cid acts before the Fin does.",
+     "short": "Core glows: pull back if Cid acts first",
+     "cite": "ffx-sin §5.1.2, §3.1, §8 row 2"
+    },
+    {
+     "text": "Armor Break opens every link. Close in, Break, then pull back. Up close, a hit can set off Negation, which wipes your buffs and the Breaks. The game scores what is on you (Shell and Reflect 1 each per member; Haste 3, 4 or 5 for one, two or three members; Protect 1 on the first member, 2 on the third, nothing on the middle one), plus 2 for Armor Break and 1 for Mental Break on the Fin, takes off 3 and rolls the rest: 1 in 16 a point on the Left Fin, 1 in 12 on the Right.",
+     "short": "Break up close, then pull back",
+     "cite": "ffx-sin §8 rows 1 and 3, §5.1.3; re-ffx-ai-evrae-yojimbo-isaaru-sin §5.3, D-21, D-22"
+    },
+    {
+     "text": "Genais guards the Core: while it lives, blades cannot reach the Core, and while it is out of its shell, magic aimed at the Core is absorbed. It starts the fight shelled and comes out on its first turn. Hit it with physicals until it shells (a spell draws Waterga), then Fire into the shell. Healed above 12,000, it comes out again on its next turn.",
+     "short": "Genais first: physicals, then Fire",
+     "cite": "ffx-sin §5.3.1, §2.2, §8 row 4; re-ffx-ai-evrae-yojimbo-isaaru-sin §6.1, §6.2, §6.5, D-23, D-24"
+    },
+    {
+     "text": "Nothing heals between links. HP, MP and every status carry from the Left Fin to the Core, so heal before the kill, not after it.",
+     "short": "No rest between links: heal before the kill",
+     "cite": "ffx-sin §1.2"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Pull back",
+       "Pull Back"
+      ],
+      "flags": {
+       "sin.fin.charged": true
+      }
+     },
+     "text": "The core is charged: Cid pulls the ship out before the Fin acts, and the Gravija lands on empty air",
+     "cite": "ffx-sin §5.1.2, §8 row 2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Pull back",
+       "Pull Back"
+      ]
+     },
+     "text": "The Breaks are on: back out, where the Fin mostly sits still and Wakka and Lulu keep working",
+     "cite": "ffx-sin §5.1.1, §8 row 1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Close in",
+       "Close In"
+      ]
+     },
+     "text": "Bring the ship in for the Breaks: Armor Break and Mental Break do not reach from FAR",
+     "cite": "ffx-sin §4, §8 row 1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Armor Break"
+      ]
+     },
+     "text": "Every physical swing after this lands harder, and every link has the same answer",
+     "cite": "ffx-sin §2.3, §8 row 1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Mental Break"
+      ]
+     },
+     "text": "Opens it to Lulu's spells. At FAR a Mentally Broken Fin may cleanse itself, which only costs it the Breaks",
+     "cite": "ffx-sin §5.1.3, §8 row 1"
+    },
+    {
+     "when": {
+      "labels": [
+       "Protect"
+      ]
+     },
+     "text": "Protect on the middle member, where Negation does not count it",
+     "cite": "ffx-sin §5.1.3, §8 row 3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Haste"
+      ]
+     },
+     "text": "Haste on one member only: each Haste on the party raises the chance of Negation",
+     "cite": "ffx-sin §5.1.3, §8 row 3"
+    },
+    {
+     "when": {
+      "labels": [
+       "Firaga",
+       "Fira",
+       "Fire"
+      ],
+      "targetId": "sinspawn-genais",
+      "flags": {
+       "sin.genais.shelled": true
+      }
+     },
+     "text": "Genais is weak to Fire, and inside its shell it cannot answer a spell with Waterga",
+     "cite": "ffx-sin §2.2, §5.3.1"
+    },
+    {
+     "when": {
+      "kinds": [
+       "attack"
+      ],
+      "targetId": "sinspawn-genais"
+     },
+     "text": "Physicals only while Genais is out of its shell: every spell aimed at it draws Waterga on the caster",
+     "cite": "ffx-sin §5.3.1, §8 row 4"
+    },
+    {
+     "when": {
+      "labels": [
+       "Thundaga",
+       "Blizzaga",
+       "Firaga",
+       "Waterga",
+       "Thundara",
+       "Blizzara",
+       "Fira",
+       "Watera"
+      ]
+     },
+     "text": "Magic reaches at either range, and nothing on Sin is weak or resistant to it except Genais",
+     "cite": "ffx-sin §2.2, §4"
+    },
+    {
+     "when": {
+      "labels": [
+       "Curaga",
+       "Pray",
+       "Al Bhed Potion"
+      ]
+     },
+     "text": "Gravija and Thrashing hit everyone: bring the party back up before the next swing",
+     "cite": "ffx-sin §3.1, §3.2"
+    },
+    {
+     "when": {
+      "labels": [
+       "Soft",
+       "Esuna",
+       "Remedy"
+      ]
+     },
+     "text": "A member out of the fight costs more than one turn spent curing",
+     "cite": "ffx-sin §7.3 item 5"
+    }
+   ],
+   "watch": [
+    {
+     "name": "Core gathers energy.",
+     "payload": "Gravija: three quarters of everyone's current HP",
+     "advice": "Pull back if Cid acts before the Fin; otherwise heal after it lands",
+     "cite": "ffx-sin §5.1.2, §3.1"
+    },
+    {
+     "name": "Core gathers energy",
+     "payload": "Gravija: three quarters of everyone's current HP",
+     "advice": "Pull back if Cid acts before the Fin; otherwise heal after it lands",
+     "cite": "ffx-sin §5.1.2, §3.1"
+    }
+   ],
+   "phases": [
+    {
+     "bossId": "right-fin",
+     "belowHpFraction": 0.25,
+     "label": "LATCHED - IT SWINGS EVERY NEAR TURN",
+     "note": "Below 16,250 HP the Right Fin attacks on every NEAR turn, and at FAR after three hits. Healing it back does not undo it.",
+     "cite": "ffx-sin §5.2"
+    },
+    {
+     "bossId": "sinspawn-genais",
+     "belowHpFraction": 0.5,
+     "label": "GENAIS SHELLS ON ITS NEXT TURN",
+     "note": "At half HP it goes into its shell: armoured, Cura on every hit, and the Core wakes to charge Gravija.",
+     "cite": "ffx-sin §5.3.1, §5.3.2"
+    },
+    {
+     "bossId": "sin-core",
+     "label": "SIN'S CORE",
+     "note": "Killing the Core ends the fight, even with Genais still standing. Once Genais falls, the Core charges Gravija on its own.",
+     "cite": "ffx-sin §5.3.2"
+    }
+   ]
+  },
+  {
+   "id": "sin-face",
+   "title": "Sin: the Face",
+   "rules": [
+    {
+     "text": "Sin's turns are the clock. Three turns pulling the ship in, then the mouth opens, and when it is fully open Giga-Graviton ends the fight: no Auto-Life or aeon saves you. We use the 13th turn; the sources say 12th or 13th, and that is our estimate.",
+     "short": "Beat it before Sin's 13th turn (our estimate)",
+     "cite": "ffx-sin §5.4, §3.4, §10 S-1"
+    },
+    {
+     "text": "During the three pulls only Wakka and magic reach. Bring Wakka and Lulu in, and spend the other turns on Hastega and Cheer: they cost nothing the clock can take back.",
+     "short": "The pulls: Wakka and Lulu in, Hastega, Cheer",
+     "cite": "ffx-sin §5.4, §8 row 8"
+    },
+    {
+     "text": "Armor Break the moment it is in range, then everything at it: Overdrives too, since nothing is worth saving past the clock.",
+     "short": "Armor Break at once, then burst",
+     "cite": "ffx-sin §8 row 8"
+    },
+    {
+     "text": "Every sixth hit on it (every third from an aeon) draws Gaze, one status on the whole party at a 30% chance: Petrify, Confuse or Zombie. Any Ward blocks it completely.",
+     "short": "Gaze answers hits; Wards block it",
+     "cite": "ffx-sin §5.4, §8 row 9"
+    }
+   ],
+   "hints": [
+    {
+     "when": {
+      "labels": [
+       "Hastega",
+       "Haste"
+      ]
+     },
+     "text": "More party turns inside the same clock: the clock counts only Sin's turns",
+     "cite": "ffx-sin §5.4, §8 row 8"
+    },
+    {
+     "when": {
+      "labels": [
+       "Cheer"
+      ]
+     },
+     "text": "A pull turn nobody can swing in, spent on damage for the melee window",
+     "cite": "ffx-sin §8 row 8"
+    },
+    {
+     "when": {
+      "kinds": [
+       "switch"
+      ]
+     },
+     "text": "Only Wakka and magic reach during the pulls; in range, Auron brings the Breaks. A switch costs no turn",
+     "cite": "ffx-sin §5.4, §8 row 8"
+    },
+    {
+     "when": {
+      "labels": [
+       "Armor Break"
+      ]
+     },
+     "text": "It is in range now: one Break makes every swing left in the clock land harder",
+     "cite": "ffx-sin §8 row 8"
+    },
+    {
+     "when": {
+      "labels": [
+       "Mental Break"
+      ]
+     },
+     "text": "Opens it to Lulu's Firaga for the rest of the clock",
+     "cite": "ffx-sin §2.3, §8 row 8"
+    },
+    {
+     "when": {
+      "kinds": [
+       "overdrive"
+      ]
+     },
+     "text": "Nothing is worth holding past the clock",
+     "cite": "ffx-sin §8 row 8"
+    },
+    {
+     "when": {
+      "labels": [
+       "Firaga",
+       "Fira"
+      ]
+     },
+     "text": "Magic reaches through the pulls, and Sin has no element to avoid",
+     "cite": "ffx-sin §2.2, §5.4"
+    },
+    {
+     "when": {
+      "labels": [
+       "Soft",
+       "Remedy"
+      ]
+     },
+     "text": "Gaze took a member out, petrified or confused: bring them back before the clock runs further",
+     "cite": "ffx-sin §5.4, §7.3 item 5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Holy Water"
+      ]
+     },
+     "text": "Gaze zombified a member: healing would hurt them now",
+     "cite": "ffx-sin §5.4, §7.3 item 5"
+    },
+    {
+     "when": {
+      "labels": [
+       "X-Potion",
+       "Hi-Potion",
+       "Phoenix Down",
+       "Mega Phoenix"
+      ]
+     },
+     "text": "One member down or nearly down costs more of the clock than a turn spent on them",
+     "cite": "ffx-sin §5.4, §7.3 item 5"
+    },
+    {
+     "when": {
+      "labels": [
+       "Ether",
+       "Turbo Ether"
+      ]
+     },
+     "text": "Lulu's Firaga is the burst's steadiest damage; keep her casting",
+     "cite": "ffx-sin §8 row 8"
+    }
+   ],
+   "watch": [],
+   "phases": [
+    {
+     "label": "THE CLOCK",
+     "note": "Three pulls, then the mouth opens in stages. When it is fully open, Giga-Graviton is next.",
+     "cite": "ffx-sin §5.4"
+    }
+   ]
+  }
+ ],
+ "docs": [
+  {
+   "id": "seymour-flux",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Get ready before the next area, because a boss is waiting there. Buy Holy Water from Wantz: 30 of it, spent at the customize screen, puts Zombie Ward on a piece of armour, and this fight calls for that ward. Equip the armour."
+    },
+    {
+     "t": "p",
+     "text": "Bring about 30 Phoenix Downs to be safe. Anyone who struggled with the earlier bosses should fill every Overdrive gauge first, since this one is often called the hardest in the game."
+    },
+    {
+     "t": "p",
+     "text": "Yuna needs Dispel already learned, because it pays off here."
+    },
+    {
+     "t": "head",
+     "at": [
+      "seymour-flux",
+      "mortiorchis"
+     ],
+     "title": "Seymour Flux",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "In Game Description",
+     "value": "Seymour's attacks tell you what the Mortiorchis will do. Lance of Atrophy inflicts Zombie, Full-Life follows, and Total Annihilation caps it off."
+    },
+    {
+     "t": "field",
+     "label": "HP",
+     "value": "70,000"
+    },
+    {
+     "t": "p",
+     "text": "Seymour again, and this time Kimahri and Yuna can use Trigger Commands: Kimahri's gives +10 Strength and Yuna's gives +10 Magic Defense."
+    },
+    {
+     "t": "p",
+     "text": "He brings out the Mortiorchis, much like the helper that fought beside him at Bevelle."
+    },
+    {
+     "t": "p",
+     "text": "Lance of Atrophy can leave one of your party Zombified. Zombie Ward armour (see above) makes that less likely."
+    },
+    {
+     "t": "p",
+     "text": "Whoever turns Zombie needs a Holy Water, a Remedy or Esuna right away. Full-Life would normally refill a character to full HP, but Zombie flips healing around, so Seymour uses it to KO a Zombie on the spot."
+    },
+    {
+     "t": "p",
+     "text": "He banishes aeons as he did before, so summon them only as a last resort. Lulu should Bio him early, since the poison piles up a great deal of damage, and Hastega should stay up on the party."
+    },
+    {
+     "t": "p",
+     "text": "If Seymour puts Reflect or Protect on himself, Yuna should Dispel it so your hits stay worthwhile. Dispel his Reflect quickly enough and he may Flare himself."
+    },
+    {
+     "t": "p",
+     "text": "Total Annihilation is the dangerous one, and the game announces it. It wipes out a party that is not ready."
+    },
+    {
+     "t": "p",
+     "text": "Once Seymour is at about half his HP, the Mortiorchis switches to Auto-Attack Mode and then declares that it is Ready to Annihilate. The blast lands on its following turn, and it charges faster after the first one, so keep an eye on those messages all fight."
+    },
+    {
+     "t": "p",
+     "text": "On the warning, Yuna can cast Shell just before the blast lands, or Kimahri can use the Mighty Guard he learned from Biran, or Rikku can Mix up Mighty G, Super Mighty G, or the top-tier Hyper Mighty G."
+    },
+    {
+     "t": "p",
+     "text": "Defend will not help against this one: it only halves physical hits, and Total Annihilation is magic. Shell is what halves it."
+    },
+    {
+     "t": "p",
+     "text": "You can also call an aeon once Ready to Annihilate shows: standing on the field when the blast fires, it takes the whole hit for the party. Do it after Seymour's turn so he cannot Banish it before the attack."
+    },
+    {
+     "t": "p",
+     "text": "Otherwise, keep up the regular attacks and magic until he drops."
+    },
+    {
+     "t": "list",
+     "label": "Steal",
+     "items": [
+      "Elixir"
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Drops",
+     "items": [
+      "Lv. 4 Key Sphere"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "yunalesca",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "A fight that needs preparing for is ahead. Berserk is off the table now, so take off any armour with Berserk Ward or Berserkproof."
+    },
+    {
+     "t": "p",
+     "text": "What you will meet instead is Darkness, aimed at characters who attack normally, and Silence, aimed at spellcasters."
+    },
+    {
+     "t": "p",
+     "text": "Give the fighters (Tidus, Auron, Wakka and Kimahri) Dark Ward or Darkproof armour, and the casters (Yuna and Lulu) Silence Ward or Silenceproof."
+    },
+    {
+     "t": "head",
+     "at": [
+      "yunalesca#0"
+     ],
+     "title": "Yunalesca",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "Three phases, and a new form for each."
+    },
+    {
+     "t": "field",
+     "label": "In Game Description",
+     "value": "She heals Zombies with Curaga and Regen, and Holy Water is what cures Zombie. Her counters dispel buffs, and her Mind Blast puts a curse on aeons."
+    },
+    {
+     "t": "field",
+     "label": "Phase 1: HP",
+     "value": "24,000"
+    },
+    {
+     "t": "p",
+     "text": "Phase 1 gives her two counters. Hit her physically and the attacker is Blinded; hit her with magic and the caster is Silenced."
+    },
+    {
+     "t": "p",
+     "text": "Esuna handles both. Items work too: Blind yields to Eye Drops and Silence to Echo Screens, while a Remedy cures either. Rikku's Al Bhed Potions cure Silence and heal in one move."
+    },
+    {
+     "t": "field",
+     "at": [
+      "yunalesca#1"
+     ],
+     "label": "Phase 2: HP",
+     "value": "48,000"
+    },
+    {
+     "t": "p",
+     "text": "Now she uses Hellbiter to turn the whole party into Zombies, then casts healing spells that hurt Zombies. Your own healing spells and items hurt them too."
+    },
+    {
+     "t": "p",
+     "text": "Curing everyone just makes her cast Hellbiter again, so leave at least one character a Zombie at all times. Heal with Holy Water when needed, and let Yuna Dispel any Regen she puts on your party."
+    },
+    {
+     "t": "field",
+     "at": [
+      "yunalesca#2"
+     ],
+     "label": "Phase 3: HP",
+     "value": "60,000"
+    },
+    {
+     "t": "p",
+     "text": "Her new spell is Mega Death, which KOs anyone who is not a Zombie. That is one more reason never to cure the last Zombie."
+    },
+    {
+     "t": "lead",
+     "text": "More notes and tactics:"
+    },
+    {
+     "t": "p",
+     "text": "Holy hits her very hard, and Yuna is worth bringing for her Dispel and her healing. If Yuna knows Holy, have her blast away with it for a much easier fight."
+    },
+    {
+     "t": "p",
+     "text": "Yuna or Rikku can learn Holy at this point, using a Teleport Sphere or Return Sphere together with a Lv. 3 Key Sphere. It sits right along Rikku's usual route on the Sphere Grid."
+    },
+    {
+     "t": "p",
+     "text": "Reflect on your party bounces the Phase 1 status counters back at her, and her Regen too in Phase 2. If she Regens herself, Dispel it, or she will out-heal you."
+    },
+    {
+     "t": "p",
+     "text": "Dispelling Slap removes every beneficial status except Reflect, which makes Reflect the dependable one. Put it on Yuna first, and Yunalesca cannot silence her."
+    },
+    {
+     "t": "p",
+     "text": "Armour that blocks Silence, Darkness and Confuse is good, but think twice about blocking Zombie: you want at least one character to keep it."
+    },
+    {
+     "t": "list",
+     "label": "Steal",
+     "items": [
+      "Stamina Tablet (common)",
+      "Farplane Wind (rare)"
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Drops",
+     "items": [
+      "Lv. 3 Key Sphere"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "braskas-final-aeon",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Top the party up with potions and ethers if it needs it, and put on any gear that has Stone Ward or Stoneproof. Finish your preparations, then talk to Jecht when you are ready."
+    },
+    {
+     "t": "hint",
+     "kind": "hint",
+     "title": "Using Powerful Items",
+     "text": "The game ends here, so nothing is worth saving: X-Potions, Mega-Potions, Turbo Ethers, Elixirs, Megalixirs and Mega Phoenix are all fair game."
+    },
+    {
+     "t": "head",
+     "at": [
+      "braskas-final-aeon",
+      "possessed-valefor",
+      "possessed-ifrit",
+      "possessed-ixion",
+      "possessed-shiva",
+      "possessed-bahamut",
+      "possessed-anima",
+      "possessed-yojimbo",
+      "possessed-cindy",
+      "possessed-sandy",
+      "possessed-mindy"
+     ],
+     "title": "Braska's Final Aeon",
+     "tag": "Final Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "In Game Description",
+     "value": "It feeds on the Yu Pagodas and uses Overdrives whenever its gauge is full. Keep that gauge down: Tidus can Talk to lower it."
+    },
+    {
+     "t": "p",
+     "text": "The last fight is two battles, one against each form of Braska's Final Aeon. In the second form it draws a sword from its chest and sprouts wings."
+    },
+    {
+     "t": "h3",
+     "text": "Yu Pagodas"
+    },
+    {
+     "t": "p",
+     "text": "Two Yu Pagodas hover on either side of the aeon. Their Power Wave heals it and fills its Overdrive gauge, which is the black bar beside the boss. Destroying them is possible, but they come back a few turns later with extra HP."
+    },
+    {
+     "t": "p",
+     "text": "Each starts at 5,000 HP and returns with that plus your overkill. Knock one down with a 3,000 hit and then another 3,000 and it comes back with 6,000."
+    },
+    {
+     "t": "p",
+     "text": "Big hits are therefore a problem. Take both Pagodas down together: if only one falls, the other starts casting nasty spells, Curse included. Better still, leave them alone until the second phase."
+    },
+    {
+     "t": "p",
+     "text": "Use every helpful status you have; Hastega, Protect and Regen are all a big help."
+    },
+    {
+     "t": "p",
+     "text": "A petrified character needs a Soft or a Remedy at once. The aeon will Shatter a petrified character and remove them from the fight for good, and finishing the boss with two characters is extremely hard."
+    },
+    {
+     "t": "p",
+     "text": "Tidus's Talk, one of the Trigger Commands, drains the aeon's Overdrive gauge. Hold it for the second form, when the sword appears, because its Overdrives hit far harder from then on."
+    },
+    {
+     "t": "p",
+     "text": "Talk can empty the gauge completely, and you get two uses of it over the whole fight."
+    },
+    {
+     "t": "p",
+     "text": "Bio can poison it, though it may take a few casts to stick. The Break attacks (Armor Break, Power Break, Mental Break, or Full Break for all of them) also help bring its HP down faster."
+    },
+    {
+     "t": "p",
+     "at": [
+      "yu-yevon"
+     ],
+     "text": "A final fight against Yu Yevon follows, and it cannot be lost. If it drags, have Yuna cast Reflect on him. Then sit back and watch the ending cinematic!"
+    }
+   ]
+  },
+  {
+   "id": "ffx2-bahamut",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Dark Knight is among the strongest dresspheres in the game, with a slow but heavy attack and strong defense. Put one of your girls in it now."
+    },
+    {
+     "t": "p",
+     "text": "Save, and start one girl as a Thief so she can steal from the bosses ahead. A Ribbon on one party member is also worth having, to block nasty status effects."
+    },
+    {
+     "t": "head",
+     "at": [
+      "bahamut"
+     ],
+     "title": "Bahamut",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "Time to take on an aeon! Remember to Steal a Mute Shock off him before the battle ends."
+    },
+    {
+     "t": "p",
+     "text": "Bahamut cycles through one fixed attack pattern:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "“Curse” or an ordinary physical hit (Curse locks a girl into her current dressphere)",
+      "Ordinary physical hit",
+      "Ordinary physical hit",
+      "“Impulse” (takes 37.5% of HP)",
+      "“Impulse” again",
+      "“Countdown”",
+      "“Mega Flare”"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Then the cycle starts over. The first Impulse tells you Countdown is near, and Mega Flare hurts badly, so have everyone fully healed before it comes."
+    },
+    {
+     "t": "p",
+     "text": "Impulse cannot kill: it takes a percentage of HP, like Demi."
+    },
+    {
+     "t": "p",
+     "text": "With a pattern this simple there is little more to say. If you are struggling, grind some EXP by the Save Sphere to level up your Dark Knights."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Bahamut",
+       "hp": "8,400",
+       "steal": "Mute Shock",
+       "drop": "Gris-Gris Bag"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ffx2-vegnagun-shuyin",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Climbing Vegnagun is easy; you barely need a map to reach each fight in order. The Tail comes first and needs no preparation."
+    },
+    {
+     "t": "head",
+     "at": [
+      "vegnagun-tail"
+     ],
+     "title": "Vegnagun (Tail)",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "As said above, there is not much to prepare, and little strategy is needed. The Tail serves as a gateway and a check on your gear and levels for the battles ahead."
+    },
+    {
+     "t": "p",
+     "text": "If its attacks are too much for you to survive, reload an earlier save and level up a little first."
+    },
+    {
+     "t": "p",
+     "text": "It has just two attacks:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "“Tail Beam,” its ordinary attack, takes 31.25% of the target’s maximum HP",
+      "“Noli Me Tangere” does 1,250 damage to everyone"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "The Tail idles on its first turn, then opens with Noli Me Tangere and uses it once more below 25% HP. Survive those two and the fight is easy."
+    },
+    {
+     "t": "p",
+     "text": "Dark Knight dresspheres help: many Tail attacks take a percentage of HP, but a bigger HP pool gives whoever heals (White Mage or Alchemist) longer to respond."
+    },
+    {
+     "t": "p",
+     "text": "Dark Knights also hit hard with ordinary attacks and with Darkness."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Vegnagun (Tail)",
+       "hp": "34,200",
+       "steal": "X-Potion x4 (common), X-Potion x6 (rare)",
+       "drop": "Megalixir"
+      }
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Carry on up the path toward Vegnagun. Before the top, protect the party against Berserk with accessories such as Ribbons."
+    },
+    {
+     "t": "p",
+     "text": "Elemental affinity accessories (Tetra Guard, Tetra Bracelet, Tetra Band) also cut incoming damage. Ahead, the Leblanc Syndicate is already fighting Vegnagun’s Leg and its “nodes”."
+    },
+    {
+     "t": "head",
+     "at": [
+      "vegnagun-leg"
+     ],
+     "title": "Vegnagun (Leg) and Node A/B/C",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "Four targets here: the Leg, your main target, and three Nodes high up on the body. The Leg’s attacks:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "“Vita Brevis”: damage to every party member and a long delay on their next turns",
+      "“Break”: Petrification",
+      "“Berserk”: Berserk",
+      "“Slow”: Slow",
+      "“Absorb”: steals HP and MP from a target"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Now the Nodes (A, B and C). What a Node does depends on its colour, and it cycles through three colours in order as it acts or gets hit:"
+    },
+    {
+     "t": "lead",
+     "text": "Red:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "“Missile” hits one target twice",
+      "“Dies Irae” strikes all three girls at random, up to 9 hits"
+     ]
+    },
+    {
+     "t": "lead",
+     "text": "Green:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Cura, Regen, Shell or Protect on the Leg"
+     ]
+    },
+    {
+     "t": "lead",
+     "text": "Yellow:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Firaga, Blizzaga, Thundaga or Waterga on all targets",
+      "Flare, aimed at a single target"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Hitting the Nodes will not switch them off; it only changes their colour, and none is a good one for you: they either damage the party or heal the Leg. Put your effort into taking the Leg down fast."
+    },
+    {
+     "t": "p",
+     "text": "Protect and Shell on the party reduce damage, and a Dispel Tonic on the Leg clears the buffs a Green Node gives it."
+    },
+    {
+     "t": "p",
+     "text": "The Nodes have far too much HP to kill. This is a war of attrition: can you out-damage the Leg before four enemies’ damage overwhelms you?"
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Vegnagun (Leg)",
+       "hp": "18,220",
+       "steal": "Elixir (common), Elixir x2 (rare)",
+       "drop": "Mythril Bangle"
+      },
+      {
+       "enemy": "Node A/B/C",
+       "hp": "300,000",
+       "steal": "Megalixir (common), Megalixir x2 (rare)",
+       "drop": "Megalixir (common)"
+      }
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Keep climbing toward Ormi and Logos. Before the next fight, guard against Petrification and Poison. Past them you join Nooj, Gippal and Leblanc, who are already fighting Vegnagun’s Core."
+    },
+    {
+     "t": "head",
+     "at": [
+      "vegnagun-body"
+     ],
+     "title": "Vegnagun (Core) and Left/Right Bulwarks",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "Jecht’s voice explains the mechanic soon after the fight starts. The Bulwarks react to an attack on the Core depending on how it was made. Their replies:"
+    },
+    {
+     "t": "table",
+     "head": [
+      "Your Attack Type",
+      "Bulwark Response"
+     ],
+     "rows": [
+      [
+       "Physical",
+       "Damage worth 31.25% of a character’s maximum HP"
+      ],
+      [
+       "Magical",
+       "A drain of 18.75% of a character’s maximum MP"
+      ],
+      [
+       "Special",
+       "Both at once: 18.75% of maximum HP in damage, plus 18.75% of maximum MP drained"
+      ]
+     ]
+    },
+    {
+     "t": "lead",
+     "text": "Core:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "“Charge Core”: three charges must pass before “Memento Mori” becomes available",
+      "“Memento Mori”: heavy magic damage to the whole party",
+      "Full Life, used whenever a Bulwark has been KO’d"
+     ]
+    },
+    {
+     "t": "lead",
+     "text": "Bulwark Retaliation Attacks:"
+    },
+    {
+     "t": "p",
+     "text": "Those are the Bulwarks’ answers to attacks. They also act on their own turns:"
+    },
+    {
+     "t": "p",
+     "text": "The Left Bulwark casts harmful spells at your party:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Break",
+      "Bio",
+      "Doom",
+      "Dispel"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "The Right Bulwark buffs itself and its two allies, the Left Bulwark and the Core:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Regen",
+      "Shell",
+      "Protect"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "The easiest way to beat the Core is to take out both Bulwarks first and keep them down most of the fight. They have only 3,000 HP each, and multi-target attacks such as a Dark Knight’s Darkness make it easier."
+    },
+    {
+     "t": "p",
+     "text": "Protect or Shell on the party is pointless, since the Left Bulwark’s Dispel strips them, but a Warrior’s Armor Break on the Core raises the damage it takes over the fight."
+    },
+    {
+     "t": "p",
+     "text": "Memento Mori is the toughest attack. Ideally it never gets used."
+    },
+    {
+     "t": "p",
+     "text": "If it does, switch to a White Mage and have her quickly cast Shell on the party, to improve your odds against the heavy magic damage (assuming it is not dispelled first)."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Vegnagun (Core)",
+       "hp": "33,040",
+       "steal": "Turbo Ether",
+       "drop": "Megalixir"
+      },
+      {
+       "enemy": "Left Bulwark",
+       "hp": "3,000",
+       "steal": "Phoenix Down (common), L-Bomb (rare)",
+       "drop": "Mega-Potion (common), X-Potion (rare)"
+      },
+      {
+       "enemy": "Right Bulwark",
+       "hp": "3,000",
+       "steal": "Phoenix Down (common), L-Bomb (rare)",
+       "drop": "Mega-Potion (common), X-Potion (rare)"
+      }
+     ]
+    },
+    {
+     "t": "head",
+     "at": [
+      "vegnagun-head"
+     ],
+     "title": "Vegnagun (Head) and Right/Left Redoubts",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "A hidden timer runs this fight: once Shuyin has spoken seven times, the cannon goes off and the fight ends in a Game Over."
+    },
+    {
+     "t": "p",
+     "text": "There is plenty of time even for low-level characters, so the timer rarely matters."
+    },
+    {
+     "t": "p",
+     "text": "Here is what each of the three targets can do:"
+    },
+    {
+     "t": "lead",
+     "text": "Head:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "“Pallida Mors”: magic damage of roughly 1,200 on one target, used only while the Head is untargetable",
+      "“Nemo Ante Mortem Beatus”: roughly 1,490 to 1,685 magic damage",
+      "“Mors Certa”: 250 magic damage plus Silence, Darkness and Poison",
+      "“Odi Et Amo”: 16 hits spread across the party, about 1,000 in all, and it can strip buffs such as Shell, Protect, Reflect, Regen, Haste and stat boosts",
+      "“Acta Est Fabula”: revives both Redoubts at full HP"
+     ]
+    },
+    {
+     "t": "lead",
+     "text": "Right Redoubt:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "“Lacrimosa”: a physical hit of about 100 on one target",
+      "“Blind”: inflicts Darkness",
+      "“Break”: inflicts Petrification",
+      "“Flare”: magic damage to one target"
+     ]
+    },
+    {
+     "t": "lead",
+     "text": "Left Redoubt:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "“Lacrimosa”: drains one target’s MP",
+      "“Slow”: inflicts Slow",
+      "“Dispel”: strips the target of its buffs",
+      "“Demi”: hits each target for 25% of its current HP"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Two phases. In the first, the Head cannot be attacked until both Redoubts are down (do not let one revive the other)."
+    },
+    {
+     "t": "p",
+     "text": "The second phase starts when you first KO both: the Head uses Acta Est Fabula to bring them back, and from then on it can be targeted."
+    },
+    {
+     "t": "p",
+     "text": "In phase two, use attacks that hit every target, like a Dark Knight’s Darkness, since it pierces physical and magic defense alike. If you KO a Redoubt, the Head spends its turns reviving it instead of attacking."
+    },
+    {
+     "t": "p",
+     "text": "The Head/Shuyin uses Nemo Ante Mortem Beatus, its strongest attack, four times, at 80%, 60%, 40% and 20% HP. Each cast hits for roughly 1,490 to 1,685, so be ready to recover by keeping everyone above 1,685 HP, and keep a White Mage or Alchemist on hand."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Vegnagun (Head)",
+       "hp": "38,420",
+       "steal": "Megalixir",
+       "drop": "None"
+      },
+      {
+       "enemy": "Right Redoubt",
+       "hp": "2,500",
+       "steal": "Phoenix Down (common), Mega Phoenix (rare)",
+       "drop": "None"
+      },
+      {
+       "enemy": "Left Redoubt",
+       "hp": "2,500",
+       "steal": "Phoenix Down (common), Mega Phoenix (rare)",
+       "drop": "None"
+      }
+     ]
+    },
+    {
+     "t": "head",
+     "at": [
+      "shuyin"
+     ],
+     "title": "Shuyin",
+     "tag": "Final Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "The last fight of the game is more spectacle than strategy. His attacks look great and hit hard, and the job is to ride out the big ones while whittling his HP."
+    },
+    {
+     "t": "p",
+     "text": "His moves, many of them lifted from Tidus’s attacks in Final Fantasy X:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Normal attack",
+      "“Spinning Cut”",
+      "“Run & Slash”",
+      "“Terror of Zanarkand”",
+      "“Force Rain”"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "It is worth watching every one of them before you finish the fight."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Shuyin",
+       "hp": "23,850",
+       "steal": "Hero Drink",
+       "drop": "None"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ffx2-leblanc",
+   "blocks": [
+    {
+     "t": "head",
+     "at": [
+      "leblanc",
+      "logos",
+      "ormi",
+      "logos-room",
+      "ormi-logos-room",
+      "ormi-entrance",
+      "dr-goon",
+      "fem-goon"
+     ],
+     "title": "Hidden Passageway"
+    },
+    {
+     "t": "p",
+     "text": "Go into the Hidden Passageway. Ormi and some Syndicate members soon ambush you, but they are extremely easy to beat. Follow the passage to the Save Sphere and save."
+    },
+    {
+     "t": "p",
+     "text": "A second ambush, by Logos and Ormi, comes later, and they are extremely easy again; they seem not to have levelled while Yuna, Rikku and Paine earned all that EXP."
+    },
+    {
+     "t": "p",
+     "text": "The last fight is against Leblanc, Ormi and Logos. Like the Syndicate fights before it, it needs no elaborate strategy and is very easy."
+    },
+    {
+     "t": "hint",
+     "kind": "hint",
+     "title": "Charm Bangle",
+     "text": "It is easy to miss because it is a one-time fight, but Logos drops a very useful item: the Charm Bangle, which gives No Encounters and stops random battles."
+    },
+    {
+     "t": "p",
+     "text": "Using it this early is generally not advised, since your characters need the EXP, but now you have it in your toolkit."
+    },
+    {
+     "t": "p",
+     "text": "When the fight ends, the mission is over and Leblanc teams her Syndicate up with the Gullwings, who share a goal. You receive the Reassembled Sphere key item."
+    }
+   ]
+  },
+  {
+   "id": "seymour-anima-macalania",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Save your game and shop at O'aka's before the temple fight, because a boss is next."
+    },
+    {
+     "t": "head",
+     "at": [
+      "seymour-macalania",
+      "guado-guardian-a",
+      "guado-guardian-b"
+     ],
+     "title": "Seymour",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "In Game Description",
+     "value": "His spells run ice, lightning, water, fire in a fixed order, so Yuna should Nul each in turn: NulFrost, NulShock, NulTide, NulBlaze. Cornered, he summons."
+    },
+    {
+     "t": "field",
+     "label": "HP",
+     "value": "6,000"
+    },
+    {
+     "t": "p",
+     "text": "You face Maester Seymour and two Guado Guardians. The Guardians put Protect on themselves, and Seymour puts Shell on himself."
+    },
+    {
+     "t": "p",
+     "text": "Tidus, Yuna and Wakka all have Trigger Commands here: Tidus's Talk raises Seymour's Strength, while Yuna's and Wakka's raise their own Magic Defense."
+    },
+    {
+     "t": "p",
+     "text": "A physical attack on Seymour makes a Guardian step in front of him. The Guardians are hard to kill because of Auto-Potion: they heal themselves with a potion every time they are hit. There are two ways around it:"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "Rikku Steals from each Guardian, which leaves them without Hi-Potions.",
+      "Auron's Threaten stuns them, so they cannot act."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Kill both Guardians before turning to Seymour, and have Yuna cast the matching Nul spell (NulBlaze, NulShock, NulTide or NulFrost) ahead of each of his spells."
+    },
+    {
+     "t": "p",
+     "text": "The rest of this battle is covered below."
+    },
+    {
+     "t": "head",
+     "at": [
+      "anima-macalania"
+     ],
+     "title": "Anima",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "HP",
+     "value": "18,000"
+    },
+    {
+     "t": "p",
+     "text": "Tidus opens by suggesting that Yuna summon her new aeon, listed only as question marks. It is Shiva."
+    },
+    {
+     "t": "p",
+     "text": "Blizzara heals Shiva fully at any time: ice is her own element and she absorbs it, so the spell restores her HP rather than hurting her."
+    },
+    {
+     "t": "p",
+     "text": "Keep healing her until Diamond Dust, her Overdrive, is ready, fire it at Anima, and repeat until Anima falls."
+    },
+    {
+     "t": "p",
+     "text": "Diamond Dust does extra damage if you fire it while Anima is boosting."
+    },
+    {
+     "t": "p",
+     "text": "Shiva will probably be KO'd along the way, so back her up with regular attacks on Anima and keep party HP as high as you can. Anima's Overdrive is close to a guaranteed wipe, and her Pain move is an instant KO on one party member."
+    },
+    {
+     "t": "p",
+     "text": "After Anima falls, Auron can use Magic Break on Seymour, and Lulu can poison him with Bio if she has it."
+    },
+    {
+     "t": "list",
+     "label": "Steal",
+     "items": [
+      "Silence Grenade (common)",
+      "Farplane Shadow (rare)"
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Drops",
+     "items": [
+      "Ability Sphere"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "evrae-airship",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Most players find Evrae one of the most troublesome bosses in the game. Your levels and style matter, but it is worth preparing well regardless."
+    },
+    {
+     "t": "p",
+     "text": "Wear Stoneproof or Stone Ward armour and Poisonproof or Poison Ward armour if you have any. A proof ability removes the chance of that status entirely; a Ward only lowers it, so it can still land."
+    },
+    {
+     "t": "p",
+     "text": "You can add these wards to armour you own: 30 Softs from Rin give Stone Ward in an open slot, 30 Antidotes give Poison Ward, and armour with two open slots can take both."
+    },
+    {
+     "t": "p",
+     "text": "Make sure Wakka and Rikku are properly equipped, because they will carry this fight. Lulu is an option too if she is among your higher-level characters."
+    },
+    {
+     "t": "p",
+     "text": "In the final room (the one with the Save Sphere), talk to the Al Bhed standing on the left for four Al Bhed Potions, then go through the gates at the back to start."
+    },
+    {
+     "t": "head",
+     "at": [
+      "evrae"
+     ],
+     "title": "Evrae, Guardian Wyrm of Bevelle",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "In Game Description",
+     "value": "High Magic Defense and no elemental weakness. Repeated melee hits make it exhale Poison Breath. Have Cid move the ship away and he fires Guided Missiles."
+    },
+    {
+     "t": "field",
+     "label": "HP",
+     "value": "32,000"
+    },
+    {
+     "t": "lead",
+     "text": "How the fight works:"
+    },
+    {
+     "t": "p",
+     "text": "Evrae is a flying wyrm, and the fight takes place outside the Fahrenheit as you approach Bevelle. Cid takes your orders: on his turn the ship either moves closer to Evrae or pulls farther away."
+    },
+    {
+     "t": "p",
+     "text": "Up close, Evrae can use Stone Gaze, which may petrify, and Poison Breath, which may poison. That is why the armour above matters."
+    },
+    {
+     "t": "p",
+     "text": "While the ship is far off, Cid fires Guided Missiles (Salvos) on his own, at most 3 times in total."
+    },
+    {
+     "t": "lead",
+     "text": "The strategy:"
+    },
+    {
+     "t": "p",
+     "text": "Begin by pulling the ship away. Tidus uses Cheer to raise the team's Strength and Defense; it stacks up to 5 times, and there is plenty of time for that while the ship is distant."
+    },
+    {
+     "t": "p",
+     "text": "Wakka keeps attacking all fight long, because his shots reach Evrae from any distance."
+    },
+    {
+     "t": "p",
+     "text": "From far away Evrae hits weakly, so retreat whenever you need to catch your breath. It also gives Cid time for his Guided Missiles, which hurt a lot."
+    },
+    {
+     "t": "p",
+     "text": "Rikku's Use command with Al Bhed Potions heals the team and clears Poison and Petrify. Her Overdrive, Mix, can also produce Mighty G or Super Mighty G."
+    },
+    {
+     "t": "p",
+     "text": "Mighty G puts Protect and Shell on everyone, cutting all of Evrae's damage; Super Mighty G also grants Haste and Regen."
+    },
+    {
+     "t": "p",
+     "text": "Rikku is the best healer here, so field Wakka, Rikku and Tidus, and swap Lulu in for Tidus if you want more damage."
+    },
+    {
+     "t": "p",
+     "text": "Tidus can Slow or Slowga Evrae to get more turns. At 1/3 HP, though, Evrae starts casting Haste on itself, which cancels any Slow, and it casts Haste again at once if you re-Slow it."
+    },
+    {
+     "t": "p",
+     "text": "Cheer makes Wakka's ordinary attacks hit Evrae very hard. Keep at it until it goes down."
+    },
+    {
+     "t": "list",
+     "label": "Steal",
+     "items": [
+      "Water Gem"
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Drops",
+     "items": [
+      "Blk Magic Sphere"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "yojimbo-cavern",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "The Cavern of the Stolen Fayth can be done on your initial trip through the Calm Lands, but it is best to return when your characters are far stronger. The game is easy to finish without Yojimbo."
+    },
+    {
+     "t": "hint",
+     "kind": "hint",
+     "title": "Kimahri's Overdrive - Ronso Rage",
+     "text": "Use Lancet on a Ghost in this area and Kimahri can learn the Doom Ronso Rage."
+    },
+    {
+     "t": "head",
+     "at": [
+      "yojimbo"
+     ],
+     "title": "Yojimbo"
+    },
+    {
+     "t": "p",
+     "text": "In the next area an unsent summoner, Lady Ginnem, waits. Lulu once guarded her. She starts the fight and calls up Yojimbo."
+    },
+    {
+     "t": "p",
+     "text": "Yojimbo is not too hard to beat, and Yuna's aeons are there if you struggle. He has 33,000 HP."
+    }
+   ]
+  },
+  {
+   "id": "ffx2-trema",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "This is the lowest floor of the Via Infinito. Two bosses wait here: Paragon first, then Trema straight after with no break in between."
+    },
+    {
+     "t": "hint",
+     "kind": "hint",
+     "title": "Paragon Oversoul",
+     "text": "Trigger Paragon in its Oversouled form, which is recommended. If you have worked through the bestiary you may already have done so; otherwise it is not hard."
+    },
+    {
+     "t": "p",
+     "text": "Paragon belongs to the Weapon family with Ultima Weapon and Omega Weapon. Defeat ten of them in total, then flee from the next one when it triggers an Oversoul."
+    },
+    {
+     "t": "p",
+     "text": "Ultima Weapons turn up on floors 47 to 49 and Omega Weapons on floors 75 to 79."
+    },
+    {
+     "t": "p",
+     "text": "To prepare, level your characters well, have their best dresspheres (Mascot above all), and carry strong accessories (Invincible, Crystal Bangle, Rabite’s Foot, Shining Bracer, Defense Bracer)."
+    },
+    {
+     "t": "p",
+     "text": "Equipping the Higher Power Garment Grid is also recommended: it gives Break HP Limit, and pushing through each of its gates adds the Break Damage Limit Auto-Ability."
+    },
+    {
+     "t": "head",
+     "at": [
+      "paragon"
+     ],
+     "title": "Paragon",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "As noted above, face Paragon in its Oversoul form, which is actually easier. Until it falls under 40% HP it leaves you alone unless you provoke it."
+    },
+    {
+     "t": "p",
+     "text": "That leaves time to recover between hits, heal damage, and get Break Damage Limit going from the very first turn."
+    },
+    {
+     "t": "p",
+     "text": "In its normal form it uses:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "An ordinary attack (can inflict Poison, Itchy, Confusion, Ignore Defense or Absorb HP)",
+      "“Genesis”: cone-shaped magic damage that strips helpful statuses such as Auto-Life, Protect, Shell, Reflect, Regen and Haste",
+      "“Big Bang”: up to 25,000 damage, used only as a counter to special attacks that bypass Protect and Shell"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "In its Oversoul form it uses:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "An ordinary attack with no status effects",
+      "Demi, in reply to any healing ability you use",
+      "“Judgement”: magic damage to one party member",
+      "“Genesis” and “Big Bang” if 20 seconds pass without an attack from you (same effects as above)"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "The main point is to leave this fight ready for the harder battle with Trema. Using the Higher Power grid, cycle every girl through the dresspheres."
+    },
+    {
+     "t": "p",
+     "text": "Avoid magic, MP Absorb, Supernova and every Arcana except Black Sky: Paragon fires them straight back at whoever used them."
+    },
+    {
+     "t": "p",
+     "text": "You will probably just have to grind through it. A party of two Dark Knights and an Alchemist remains viable, as does one of three Mascots."
+    },
+    {
+     "t": "p",
+     "text": "You can also use the idle time at the start to drink Stamina Tonics, which lift HP for the remainder of the battle, and to put up status buffs."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Paragon",
+       "hp": "210,000",
+       "steal": "Supreme Gem (common), Supreme Gem x2 (rare)",
+       "drop": "Dark Matter"
+      }
+     ]
+    },
+    {
+     "t": "p",
+     "text": "A short cutscene follows Paragon’s defeat and leads straight into the next fight. Your party starts it in the condition it ended this one, so mind low HP or MP."
+    },
+    {
+     "t": "head",
+     "at": [
+      "trema"
+     ],
+     "title": "Trema",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "Trema has two hard things going for him: heavy damage output and a ridiculous HP pool, 999,999. It is a long fight however strong your attacks are."
+    },
+    {
+     "t": "p",
+     "text": "His attacks include:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "“Dying Star”: three physical hits on one target",
+      "“Falling Leaf”: three weak physical hits on one target, right after Dying Star",
+      "“Thundering Wave”: three physical hits on one target, right after Falling Leaf",
+      "“Choking Mist”: three attacks plus Poison",
+      "“Beguiling Mire”: three hits plus Stop",
+      "“Waning Moon”: drains MP",
+      "Demi",
+      "Flare",
+      "Meteor",
+      "Ultima"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "He picks at random, except that Falling Leaf and Thundering Wave always follow a Dying Star. He also casts Meteor at 50% HP and again at 25%, and Ultima once he is under 16%."
+    },
+    {
+     "t": "p",
+     "text": "It is nothing but an onslaught of damage, with no surprises and nothing complicated about the pattern."
+    },
+    {
+     "t": "p",
+     "text": "Have one girl heal the others all the time, use Stamina Tonic to keep everyone’s HP extra high, and use buffs such as Protect and Shell to cut damage."
+    },
+    {
+     "t": "p",
+     "text": "Mostly it is a level and gear check, with a bit of luck involved. If you are struggling, keep levelling your characters."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Trema",
+       "hp": "999,999",
+       "steal": "Ether (common), Turbo Ether x2 (rare)",
+       "drop": "Dark Matter"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ffx2-fallen-aeons",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Three aeons wait on the same three platforms whichever route you took down, and you only fight them once. Consider protecting the party against Stop, for example with a Ribbon."
+    },
+    {
+     "t": "head",
+     "at": [
+      "x2-shiva"
+     ],
+     "title": "Shiva",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "Shiva is the easiest of the three aeons on the Road to the Farplane. Her attacks:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Normal attack, about 400 HP",
+      "Triple attack on three random targets, about 400 HP each",
+      "“Heavenly Strike”: cuts one target’s current HP and MP to half, with a 30% chance of Stop",
+      "Blizzaga",
+      "“Diamond Dust”: about 1,000 HP to everyone"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Diamond Dust gets more frequent the faster her HP falls, but unless everyone is Stopped at once you should survive what she dishes out."
+    },
+    {
+     "t": "p",
+     "text": "She absorbs ice and is weak to fire."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Shiva",
+       "hp": "14,800",
+       "steal": "Snow Ring",
+       "drop": "Crystal Gloves"
+      }
+     ]
+    },
+    {
+     "t": "head",
+     "at": [
+      "sandy",
+      "cindy",
+      "mindy"
+     ],
+     "title": "The Magus Sisters",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "The three sisters dodge many physical attacks, so they can be harder than Shiva, but their moves are simple:"
+    },
+    {
+     "t": "lead",
+     "text": "Sandy:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Normal attack, 150 to 300",
+      "“Razzia”: a magic attack, 150 to 300"
+     ]
+    },
+    {
+     "t": "lead",
+     "text": "Mindy:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "“Passado”: 15 hits, each 6.25% of current HP (it cannot kill)",
+      "One of Firaga, Blizzaga, Thundaga or Waterga"
+     ]
+    },
+    {
+     "t": "lead",
+     "text": "Cindy:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "“Camisade”: a normal attack",
+      "“Demi”: 25% of every girl’s current HP",
+      "“Absorb”: drains a target’s HP and MP",
+      "Regen",
+      "“Not-So-Mighty Guard”: Shell, Protect and Regen on all three sisters",
+      "“White Highwind”: heals the sisters completely, but only while all three live and each is under a quarter HP",
+      "“Delta Attack”: drops your whole party to 1 HP, usable only while all three sisters live"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Delta Attack, their strongest, needs all three alive, so a quick kill stops it. Mindy is the weakest, but Cindy has the most irritating abilities, so take her down first."
+    },
+    {
+     "t": "p",
+     "text": "White Highwind also needs all three alive, so the worst plan is spreading damage evenly. Concentrate on one sister at a time."
+    },
+    {
+     "t": "p",
+     "text": "Sandy and Mindy have high evasion and are hard to hit physically. Specials such as a Lady Luck’s Four Dice or a Dark Knight’s Darkness get past it."
+    },
+    {
+     "t": "p",
+     "text": "If you are really stuck, a Samurai’s Spare Change can throw 75,000 Gil at one sister for 9,999 damage and nearly kill her outright."
+    },
+    {
+     "t": "p",
+     "text": "They carry good items to steal: Chaos Shock, White Cape and Potpourri are all worth taking before the fight ends."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Sandy",
+       "hp": "10,330",
+       "steal": "Potpourri",
+       "drop": "Pixie Dust"
+      },
+      {
+       "enemy": "Mindy",
+       "hp": "9,788",
+       "steal": "Chaos Shock",
+       "drop": "Faerie Earrings"
+      },
+      {
+       "enemy": "Cindy",
+       "hp": "12,240",
+       "steal": "White Cape",
+       "drop": "Faerie Earrings"
+      }
+     ]
+    },
+    {
+     "t": "head",
+     "at": [
+      "x2-anima"
+     ],
+     "title": "Anima",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "This fight lacks the flood of attacks the Sisters throw at you, and you will not have trouble hitting such a huge aeon. But Anima is strong, and uses:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "A normal attack for about 300 damage that also Poisons",
+      "“Pain”: about 300 damage to one target, plus Silence, Itchy and Poison, and it lowers stats",
+      "“Oblivion”: about 600 damage across roughly 16 hits"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Each Pain lowers the target’s stats further, so have a Remedy ready for anyone it hits more than once. Keep the party healed and you will be fine."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Anima",
+       "hp": "36,000",
+       "steal": "Fury Shock",
+       "drop": "Tetra Band"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ffx2-den-of-woe",
+   "blocks": [
+    {
+     "t": "hint",
+     "kind": "hint",
+     "title": "Gun Mage Blue Bullet",
+     "text": "Bosses here can teach Gun Mages the Blue Bullet abilities Mortar and Drill Shot. This is the only place in the story to learn Mortar, and your last chance at Drill Shot if you have not learned it yet."
+    },
+    {
+     "t": "lead",
+     "text": "Preparation:"
+    },
+    {
+     "t": "p",
+     "text": "Make sure the whole party is fully healed before starting. There is a lot of good loot to Steal or Mug from these bosses, so keep a Thief dressphere or the Treasure Hunt grid handy."
+    },
+    {
+     "t": "p",
+     "text": "Also consider setting up one girl on the Salvation Promised grid, assuming you own it."
+    },
+    {
+     "t": "head",
+     "at": [
+      "shade-baralai"
+     ],
+     "title": "Baralai",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "Baralai is tougher than Rikku or Paine, but they are back in your party to balance things. If you want every Blue Bullet, this is the fight where your Gun Mage should learn Drill Shot. His full move list:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Ordinary physical attack: up to three hits of about 300 each",
+      "“Glint”: can strike several targets standing close together (you cannot control that)",
+      "“Looming Glacier”: Stop, and every target’s MP falls to zero",
+      "“Drill Shot”: fires automatically once Baralai’s HP has changed 8 times, at whoever made the last change",
+      "Silence on the whole party, and Regen on himself",
+      "“Not-So-Mighty Guard”: Shell, Protect and Regen on himself",
+      "“Absorb”: takes HP and MP from one target"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "He has many high-damage attacks that hit several girls, and he drains your MP all fight long."
+    },
+    {
+     "t": "p",
+     "text": "To steer Drill Shot onto the right girl, have the right Gun Mage keep attacking him until he fires it, ideally without hitting hard enough to end the fight early."
+    },
+    {
+     "t": "p",
+     "text": "As in earlier fights, remember to Steal or Mug his Nature’s Lore accessory."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Baralai",
+       "hp": "12,220",
+       "steal": "Nature’s Lore",
+       "drop": "Crystal Ball"
+      }
+     ]
+    },
+    {
+     "t": "head",
+     "at": [
+      "shade-gippal"
+     ],
+     "title": "Gippal",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "The key task here is getting your Gun Mages to learn Mortar from Gippal if you plan on teaching them Blue Bullets. It is their only chance, and he does not use Mortar until he is below 33% HP."
+    },
+    {
+     "t": "p",
+     "text": "Besides Mortar, which hits a cone in front of him, he also uses:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "A normal attack, about 300 damage",
+      "“Grinder”: about 500 damage",
+      "“Bullseye”: removes 56.25% of every target’s remaining HP and can strike several girls",
+      "“Flash Bomb”: light damage, may inflict Darkness",
+      "“Hush Grenade”: light damage, may inflict Silence",
+      "“Potion Plus”: heals him for 600 HP"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Be ready to heal right after Bullseye, since it is easy for him to KO someone left low. You cannot dodge much of this either, because Grinder and Mortar ignore defense stats."
+    },
+    {
+     "t": "p",
+     "text": "Many of his attacks sweep an arc in front of him. You cannot position your girls, but you can spread them by moving a couple into ranged roles such as Gun Mage or Gunner."
+    },
+    {
+     "t": "p",
+     "text": "Heal up before the final blow, and be sure to steal his White Lore accessory."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Gippal",
+       "hp": "14,800",
+       "steal": "White Lore",
+       "drop": "Kaiser Knuckles"
+      }
+     ]
+    },
+    {
+     "t": "head",
+     "at": [
+      "shade-nooj"
+     ],
+     "title": "Nooj",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "This is the trickiest fight of all, though at least you need not bother teaching any Blue Bullets here. His attacks:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Normal attack: a single shot for about 500",
+      "“Rippling Chroma”: about 1,500 magic damage to one target, ignoring magic defense",
+      "“Greedy Aura”: takes 18.75% of every girl’s maximum HP and maximum MP",
+      "“Lightfall”: 5,000 damage to everyone, used once only, after his HP drops below 3,000"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "He hits hard, and Lightfall is tough to survive without some preparation. Here is how to get ready."
+    },
+    {
+     "t": "p",
+     "text": "Best: put one girl in the Dark Knight dressphere for tougher defenses and keep Protect and Shell on her against all other damage. That does not reduce Lightfall, but it keeps her HP high enough to survive it."
+    },
+    {
+     "t": "p",
+     "text": "Another way: let one girl work through the Salvation Promised Garment Grid for Auto-Life, which revives her after Lightfall. Mix can also help: a Dark Matter together with any potion gives brief party-wide immunity."
+    },
+    {
+     "t": "p",
+     "text": "With luck you may bring him from 3,000 HP straight to zero."
+    },
+    {
+     "t": "p",
+     "text": "Remember to Steal or Mug his Arcane Lore before the fight ends."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Nooj",
+       "hp": "23,800",
+       "steal": "Arcane Lore",
+       "drop": "Magical Dances, Vol. I"
+      }
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Completing the Den of Woe gives you the Magical Dances, Vol. I key item, besides each boss’s drops (Crystal Ball and Kaiser Knuckles)."
+    }
+   ]
+  },
+  {
+   "id": "ffx2-ixion-djose",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Your next boss fight is upstairs. Despite how it looks, only one of its attacks is lightning damage, which makes a Yellow Ring or NulShock Ring less useful than it sounds."
+    },
+    {
+     "t": "head",
+     "at": [
+      "x2-ixion"
+     ],
+     "title": "Ixion",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "p",
+     "text": "Be sure to Steal or Mug Ixion’s Sprint Shoes before the fight ends."
+    },
+    {
+     "t": "p",
+     "text": "Ixion follows a clear pattern. It casts Aerospark, which takes 62.5% of a girl’s current HP; it then recharges, healing some of its HP; then it casts Thor’s Hammer."
+    },
+    {
+     "t": "p",
+     "text": "Thor’s Hammer hurts your party quite a bit (about 700), so have everyone healed before it lands."
+    },
+    {
+     "t": "p",
+     "text": "Ixion absorbs lightning damage but is weak to water: Water, Watera, Waterga, Liquid Steel, or Water Gems made with Mix."
+    },
+    {
+     "t": "p",
+     "text": "Ixion, unlike Yojimbo, can be hit by Warrior Break abilities, which are useful if the fight drags on."
+    },
+    {
+     "t": "loot",
+     "rows": [
+      {
+       "enemy": "Ixion",
+       "hp": "12,380",
+       "steal": "Sprint Shoes",
+       "drop": "Soul of Thamasa"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "seymour-omnis",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "This fight is all magic, so put every character in any armour that guards against magic. That covers:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Fire Ward, Lightning Ward, Water Ward and Ice Ward",
+      "Fireproof, Lightningproof, Waterproof and Iceproof",
+      "SOS NulBlaze, SOS NulShock, SOS NulTide and SOS NulFrost",
+      "Magic Def+"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Strip off weapons with Firestrike, Lightningstrike, Waterstrike or Icestrike: hitting him with one could heal him."
+    },
+    {
+     "t": "head",
+     "at": [
+      "seymour-omnis"
+     ],
+     "title": "Seymour Omnis",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "In Game Description",
+     "value": "The four Mortiphasms behind him energise his spells, and where they point shapes his actions. Physical hits turn them left, magic turns them right."
+    },
+    {
+     "t": "field",
+     "label": "HP",
+     "value": "80,000"
+    },
+    {
+     "t": "p",
+     "text": "The discs hovering behind Omnis are the Mortiphasms. They turn as the fight goes on, and the colours nearest Seymour set the strength and element of his spells."
+    },
+    {
+     "t": "p",
+     "text": "Fire shows as orange or red, Lightning as yellow or green, Water as blue and Ice as purple."
+    },
+    {
+     "t": "p",
+     "text": "Seymour casts four spells a turn. If all four discs match, he casts the top-tier spell (Firaga, Thundaga, Waterga or Blizzaga) and absorbs that element when you cast it at him."
+    },
+    {
+     "t": "p",
+     "text": "He is also weak to the opposite element then. With three matching discs he still absorbs that element but is no longer weak to the opposite one; with two matching discs he is immune to it, and with one he resists it."
+    },
+    {
+     "t": "p",
+     "text": "Scan shows his elemental strengths and weaknesses."
+    },
+    {
+     "t": "p",
+     "text": "After six attacks on him, Seymour glows red, starts casting Dispel, and uses Ultima on the party. The glow ends once Ultima has been cast."
+    },
+    {
+     "t": "p",
+     "text": "This Ultima is much weaker than the Sphere Grid one but still does serious damage, roughly 4,000 HP per character. Heal before he casts it."
+    },
+    {
+     "t": "p",
+     "text": "Shield can help you survive it, and Lulu's Focus raises your resistance to it as well."
+    },
+    {
+     "t": "p",
+     "text": "Aeons work well here, which is rare against Seymour, because he does not banish them. Yuna's Nul spells also reduce the damage."
+    },
+    {
+     "t": "p",
+     "text": "Open with Hastega, Armor Break and Mental Break, and recast whatever Seymour dispels."
+    },
+    {
+     "t": "p",
+     "text": "Hitting the Mortiphasms turns them and makes his strongest spells less likely. Some sit in the back row, so use Wakka or Lulu to reach them."
+    },
+    {
+     "t": "list",
+     "label": "Steal",
+     "items": [
+      "Shining Gem (common)",
+      "Supreme Gem (rare)"
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Drops",
+     "items": [
+      "Lv. 3 Key Sphere (common)"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "seymour-natus",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Save and restock from O'aka, then run along the walkway to begin the fight with Maester Seymour. A second Save Sphere waits at the far end of the Highbridge."
+    },
+    {
+     "t": "p",
+     "text": "Fighting Seymour Natus gets far easier if Yuna has Reflect, so level her on the Highbridge against random fiends until she learns it."
+    },
+    {
+     "t": "p",
+     "text": "Wear any armour with Stone Ward or Stoneproof, and check that Lulu already has Bio."
+    },
+    {
+     "t": "head",
+     "at": [
+      "seymour-natus",
+      "mortibody"
+     ],
+     "title": "Seymour Natus",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "In Game Description",
+     "value": "Still elemental, but now in multi-casts. Weakened, he petrifies with Break and then uses the non-elemental Flare."
+    },
+    {
+     "t": "field",
+     "label": "HP",
+     "value": "36,000"
+    },
+    {
+     "t": "p",
+     "text": "Seymour Natus has two parts you can target, Natus and Mortibody. Natus is Seymour himself; Mortibody is the small alien arm on his left. The fight has three phases, each with its own pattern."
+    },
+    {
+     "t": "p",
+     "text": "Mortibody casts Desperado throughout, which strips helpful statuses (Haste, Protect, Shell, Reflect) from the party. It happens automatically when three of your party share one status, so spread statuses carefully."
+    },
+    {
+     "t": "lead",
+     "text": "Phase 1"
+    },
+    {
+     "t": "p",
+     "text": "In Phase 1 Mortibody only casts basic spells, cycling through the elements. Natus follows soon after with a Multi-cast double of the same element."
+    },
+    {
+     "t": "p",
+     "text": "Yuna's Nul spells (NulBlaze, NulShock, NulTide, NulFrost) could block that damage if cast between the two attacks, but fitting her turn there is tricky, even if it can be done."
+    },
+    {
+     "t": "p",
+     "text": "Just keep attacking until the phase ends, once you have dealt 24,000 damage."
+    },
+    {
+     "t": "lead",
+     "text": "Phase 2 (when Natus drops under 24,000 HP)"
+    },
+    {
+     "t": "p",
+     "text": "Natus starts the phase by putting Protect on himself, which Dispel removes if you have it. He also begins casting Break on single characters, which petrifies them."
+    },
+    {
+     "t": "p",
+     "text": "Mortibody's Shattering Claw destroys a petrified character it hits, removing them for good, so use a Soft or Yuna's Esuna on Petrify immediately."
+    },
+    {
+     "t": "lead",
+     "text": "Phase 3 (when Natus drops under 12,000 HP)"
+    },
+    {
+     "t": "p",
+     "text": "Now Seymour casts Flare at party members for about 2,500 HP apiece, and Mortibody starts casting Cura on Natus, which makes the last 12,000 HP a slog."
+    },
+    {
+     "t": "p",
+     "text": "Reflect on Natus sends those Cura spells onto one of your party instead, which makes the fight far easier."
+    },
+    {
+     "t": "lead",
+     "text": "Some additional notes:"
+    },
+    {
+     "t": "p",
+     "text": "Attacking Mortibody is an option. Each time you kill it, Mortibsorption takes 4,000 HP from Natus and revives it; the amount then drops to 3,000, then 2,000, and finally stays at 1,000."
+    },
+    {
+     "t": "p",
+     "text": "Taking Natus down in 1,000-HP slices still beats dealing with his Flare. If your characters have Reflect, attack Natus directly instead."
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Summoning an aeon does little, since Natus uses Banish at once. Yuna's Grand Summon can still give you a quick aeon Overdrive.",
+      "Yuna’s Talk, one of the Trigger Commands, raises her Magic Defense when used on Seymour, which helps a lot; Tidus and Auron can Talk to him too, for a Strength boost."
+     ]
+    },
+    {
+     "t": "lead",
+     "text": "Strategy:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Reflect on Yuna makes this fight much easier. If you have trouble, level her on the Highbridge until she learns it, and put Reflect on every character for the last phase.",
+      "Haste only two party members: Mortibody uses Desperado, which removes all positive statuses, whenever all three are Hasted. Do this before putting Reflect on the party, or the Haste will reflect onto Natus.",
+      "Have Lulu cast Bio on Seymour very early. The fight is slow, so the poison has time to add up.",
+      "Without Reflect, Shell should go on just two of the party, cast by Yuna.",
+      "Put Reflect (or Shell, if you lack it) on Natus himself so that Mortibody cannot heal him much with Cura.",
+      "Advanced: make sure every character lands at least one attack on Mortibody or Natus, so all of them earn AP."
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Steal",
+     "items": [
+      "Tetra Elemental (x2) (common)",
+      "Tetra Elemental (x3) (rare)"
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Drops",
+     "items": [
+      "None"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "isaaru-via-purifico",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "The next couple of battles are Yuna's alone. If you have not used her much, charge her Overdrive to full before walking down the hallway."
+    },
+    {
+     "t": "p",
+     "text": "At the end of the red-lit hallway a short cutscene begins: Yevon has ordered Isaaru to stop you, so he fights Yuna with his aeons."
+    },
+    {
+     "t": "head",
+     "at": [
+      "grothia"
+     ],
+     "title": "Isaaru's Aeons",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "Grothia (aka Ifrit): HP",
+     "value": "8,000"
+    },
+    {
+     "t": "p",
+     "text": "Isaaru opens by summoning Grothia, essentially Ifrit under a new name."
+    },
+    {
+     "t": "p",
+     "text": "If you charged Yuna's Grand Summon, use it to bring out Bahamut, then fire his Mega Flare Overdrive for big damage fast."
+    },
+    {
+     "t": "p",
+     "text": "Mega Flare might not finish Grothia, and then Grothia hits Bahamut with its Hellfire Overdrive."
+    },
+    {
+     "t": "field",
+     "at": [
+      "pterya"
+     ],
+     "label": "Pterya (aka Valefor): HP",
+     "value": "12,000"
+    },
+    {
+     "t": "p",
+     "text": "Bahamut is probably hurt by now. If he came through well and has another Overdrive charged, use it on Valefor."
+    },
+    {
+     "t": "p",
+     "text": "Otherwise summon Ixion and heal him with his own Thundara when he needs it: aeons absorb their own element, so lightning restores Ixion instead of hurting him."
+    },
+    {
+     "t": "p",
+     "text": "Pterya has 12,000 HP, so you need a bit more firepower to take it down."
+    },
+    {
+     "t": "field",
+     "at": [
+      "spathi"
+     ],
+     "label": "Spathi (aka Bahamut): HP",
+     "value": "20,000"
+    },
+    {
+     "t": "p",
+     "text": "Isaaru's final aeon is Spathi, a Bahamut clone, so you cannot summon Bahamut this time. Summon Shiva instead."
+    },
+    {
+     "t": "p",
+     "text": "Shiva suits this fight: she is fast, and she is your second-strongest aeon after Bahamut."
+    },
+    {
+     "t": "p",
+     "text": "Spathi counts down from 5 to 1 and then casts Mega Flare. Shiva's Shield, used just before, is the one way to survive it."
+    },
+    {
+     "t": "p",
+     "text": "Afterwards heal Shiva with Blizzara; Spathi starts another count right away."
+    },
+    {
+     "t": "p",
+     "text": "Spathi resists the slow from Heavenly Strike, and you want your MP for Blizzara, so use plain attacks to wear Spathi down."
+    },
+    {
+     "t": "p",
+     "text": "Beat Spathi and the fight with Isaaru is over."
+    }
+   ]
+  },
+  {
+   "id": "sin-fins-core",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "The next fights are against Sin itself. Its armour is very high, so make sure Auron (or someone else) has learned Armor Break. Levelling is easy: go back to the Zanarkand Ruins and fight fiends."
+    },
+    {
+     "t": "p",
+     "text": "The Left Fin and the Right Fin are the same fight, and you do it twice in a row."
+    },
+    {
+     "t": "head",
+     "at": [
+      "left-fin"
+     ],
+     "title": "Left Fin",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "HP",
+     "value": "65,000"
+    },
+    {
+     "t": "p",
+     "text": "This fight plays much like Evrae outside the airship. Order Cid, through the Trigger Commands, to pull the ship farther from Sin and the Fin attacks less often."
+    },
+    {
+     "t": "p",
+     "text": "The ship starts far away, so you must use Move In before you can attack."
+    },
+    {
+     "t": "p",
+     "text": "Before you close in, spend the spare time powering up with Tidus's Cheer, Rikku's Luck and similar abilities, which stack for up to five uses each."
+    },
+    {
+     "t": "p",
+     "text": "Cast Hastega early, but remember that Sin's Negation wipes every positive status from your party, so you will have to recast them."
+    },
+    {
+     "t": "p",
+     "text": "Sin's armour is fairly high, so Auron's Armor Break can speed things up. Negation also removes the Armor Break from Sin, so apply it again if that happens."
+    },
+    {
+     "t": "p",
+     "text": "When “Core Gathers Energy” appears, act at once with the Trigger Commands and get the ship out of range. Gravija follows shortly and takes about 3/4 of everyone's HP."
+    },
+    {
+     "t": "list",
+     "label": "Steal",
+     "items": [
+      "Mega-Potion (common)",
+      "Supreme Gem (rare)"
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Drops",
+     "items": [
+      "HP Sphere"
+     ]
+    },
+    {
+     "t": "head",
+     "at": [
+      "right-fin"
+     ],
+     "title": "Right Fin",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "In Game Description",
+     "value": "Once the core is energised it casts Gravija, cutting everyone's HP by 3/4, so have Cid back off. It uses Negation, and sometimes a physical attack on everyone."
+    },
+    {
+     "t": "p",
+     "text": "It plays by the same rules as the last fight."
+    },
+    {
+     "t": "list",
+     "label": "Steal",
+     "items": [
+      "X-Potion (common)",
+      "Shining Gem (rare)"
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Drops",
+     "items": [
+      "Lv. 3 Key Sphere"
+     ]
+    },
+    {
+     "t": "head",
+     "at": [
+      "sinspawn-genais"
+     ],
+     "title": "Sinspawn Genais",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "In Game Description",
+     "value": "Once its HP is halved it withdraws into its shell the turn after, heals itself with Cura if struck there, and comes out a turn later. Inside the shell Gravija cannot touch it."
+    },
+    {
+     "t": "field",
+     "label": "HP",
+     "value": "20,000"
+    },
+    {
+     "t": "p",
+     "text": "Begin by killing Sinspawn Genais, which sits in front of Sin's core and absorbs any magic aimed straight at Sin while it is out of its shell. This one starts inside its shell and spends its first turn coming out."
+    },
+    {
+     "t": "p",
+     "text": "Genais is weak to Fire. Below 50% HP it withdraws into its shell and starts healing itself with Cura. It has about 20,000 HP, so just keep hitting it until it falls."
+    },
+    {
+     "t": "p",
+     "text": "Slow, or Silence Buster, limits how often it can cast Cura."
+    },
+    {
+     "t": "list",
+     "label": "Steal",
+     "items": [
+      "Star Curtain (common)",
+      "Shining Gem (rare)"
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Drops",
+     "items": [
+      "Return Sphere"
+     ]
+    },
+    {
+     "t": "h3",
+     "at": [
+      "sin-core",
+      "-sinspawn-genais"
+     ],
+     "text": "Sin (Core)"
+    },
+    {
+     "t": "p",
+     "text": "This is just like the Left and Right Fin fights, except that you cannot dodge Gravija by moving the ship, and Sin answers regular attacks with low-level spells."
+    },
+    {
+     "t": "p",
+     "text": "It may Poison your party. Cure that with Rikku's Al Bhed Potion, Yuna's Esuna, or an Antidote or Remedy from anyone."
+    },
+    {
+     "t": "list",
+     "label": "Steal",
+     "items": [
+      "Stamina Spring (x3) (common)",
+      "Stamina Spring (x4) (rare)"
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Drops",
+     "items": [
+      "MP Sphere"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sin-face",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Level up on the Sphere Grid and refill whatever you've run low on. Before the next fight, put each character in armour with these abilities:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Stoneproof or Stone Ward",
+      "Confuseproof or Confuse Ward",
+      "Zombieproof or Zombie Ward"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Another option is customizing equipment with Auto-Med, which uses a Remedy automatically when a status ailment hits; it costs 20 Remedies."
+    },
+    {
+     "t": "p",
+     "text": "Also carry a stock of Remedies for use during the battle. It is optional, but it eases the fight a lot."
+    },
+    {
+     "t": "head",
+     "at": [
+      "overdrive-sin"
+     ],
+     "title": "Overdrive Sin (the Head)",
+     "tag": "Boss Battle"
+    },
+    {
+     "t": "field",
+     "label": "In Game Description",
+     "value": "It drags the airship in while it gathers its power for the ultimate terror, Giga-Graviton. Stop it before it wipes everyone out!"
+    },
+    {
+     "t": "field",
+     "label": "HP",
+     "value": "140,000"
+    },
+    {
+     "t": "p",
+     "text": "This battle runs on a clock: after about thirteen turns Sin uses its Overdrive, Giga-Graviton, an attack that ends the game on the spot."
+    },
+    {
+     "t": "p",
+     "text": "The bar above its head shows how near it is to firing. Summoning an aeon will not save you, so you must deal all 140,000 damage before then."
+    },
+    {
+     "t": "p",
+     "text": "Sin begins too far away to hit and slowly drifts into melee range. Spend the early turns buffing with Cheer, Luck and the like, and Tidus should put Hastega on everyone."
+    },
+    {
+     "t": "p",
+     "text": "Lulu or Wakka in the party can do damage even while Sin is distant."
+    },
+    {
+     "t": "p",
+     "text": "Auron should use Armor Break as soon as Sin is close enough. Rikku can get the same Armor Break by Mixing a pair of items (two Power Spheres, say, or two Ability Spheres) into a Frag Grenade."
+    },
+    {
+     "t": "p",
+     "text": "Once Sin is close to the ship it starts attacking, so be ready for Petrify, Confuse and Zombie."
+    },
+    {
+     "t": "list",
+     "label": "Steal",
+     "items": [
+      "Ether (common)",
+      "Supreme Gem (rare)"
+     ]
+    },
+    {
+     "t": "list",
+     "label": "Drops",
+     "items": [
+      "Lv. 3 Key Sphere"
+     ]
+    }
+   ]
+  }
+ ]
+}
