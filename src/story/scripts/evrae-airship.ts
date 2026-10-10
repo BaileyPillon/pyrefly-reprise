@@ -249,8 +249,11 @@ export const evraeAirshipScripts: ChapterScripts = {
       script: 'evrae-out-of-breath',
     },
     {
-      // Phase 2. Evrae self-Hastes at 1/3 HP (10,667 of 32,000) and the
-      // ship's tricks start failing [chapter-evrae-engine.md].
+      // Phase 2. Evrae self-Hastes below 1/3 HP and the ship's tricks start
+      // failing [chapter-evrae-engine.md]. The game's own line is HP below
+      // 10,666 of 32,000 (a third, rounded down, strict), so the Haste phase
+      // starts at 10,665; this trigger is `hp-below 1/3`, true from 10,666, and
+      // so can run one point early. It only places the story beat.
       id: 'evrae-haste-phase',
       when: { type: 'hp-below', who: 'evrae', fraction: 1 / 3 },
       once: true,
