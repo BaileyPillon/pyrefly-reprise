@@ -50,6 +50,14 @@ export const EXPERIMENT_REAL_HEIGHT = 50.78;
 export const EXPERIMENT_GIRLS_MEAN = (16.77 + 18.54 + 17.87) / 3;
 export const EXPERIMENT_FIGURE_HEIGHT = Math.round(DJOSE_PARTY_HEIGHT * (EXPERIMENT_REAL_HEIGHT / EXPERIMENT_GIRLS_MEAN) * 1000) / 1000;
 
+/**
+ * What the Experiment stands at on an upright phone, as a share of its real height: 0.7, the share Bailey picked for the giants on the phone (2026-10-08, `FFX2_GIANT_SHARE` in
+ * `data/ffx2/fiend-stature.ts`: "the phone cannot hold the girls smaller"), applied here by the same reasoning (a 2.86-times figure at its real height was cut by the phone's 390 px
+ * slice in the first browser run). Published only when the phone battle HUD takes the window (`roadOnPhone`); a desktop stands it at the real height. A staging pick, recorded in the handoff.
+ */
+export const EXPERIMENT_PHONE_SHARE = 0.7;
+export const EXPERIMENT_PHONE_FIGURE_HEIGHT = Math.round(EXPERIMENT_FIGURE_HEIGHT * EXPERIMENT_PHONE_SHARE * 1000) / 1000;
+
 const ENEMY_SLOTS: Array<[number, number, number]> = [EXPERIMENT_SPOT, [2.3, 0, -8.0], [-0.5, 0, -6.6]];
 
 const STAGING = {
@@ -150,8 +158,10 @@ export const buildExperimentGroundsScene: SceneFactory = async (opts: SceneBuild
     ),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     partyHeight: DJOSE_PARTY_HEIGHT,
-    enemyHeight: EXPERIMENT_FIGURE_HEIGHT,
     ...STAGING,
+    // The phone stands the machine at 0.7 of its real height (above); a desktop publishes the real one.
+    enemyHeight: onPhone ? EXPERIMENT_PHONE_FIGURE_HEIGHT : EXPERIMENT_FIGURE_HEIGHT,
+    figureHeights: onPhone ? Object.fromEntries(EXPERIMENT_BODY_IDS.map((id) => [id, EXPERIMENT_PHONE_FIGURE_HEIGHT])) : STAGING.figureHeights,
     palette: { ...DJOSE_CHAMBER_PALETTE, name: 'experiment-grounds' },
     ...(phoneCamera ? { bindCamera: (camera: BattleCamera | null): void => phoneCamera.bind(camera) } : {}),
     update(dt: number): void {

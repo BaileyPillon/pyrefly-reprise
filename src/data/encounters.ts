@@ -52,16 +52,14 @@ import { FFX2_IXION_DJOSE } from './chapter-ffx2-ixion-djose.ts';
 import { SIN_FINS_CORE } from './chapter-sin-fins-core.ts';
 import { SIN_FACE } from './chapter-sin-face.ts';
 import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
-import { experimentalLeblanc } from './chapter-exp-leblanc.ts'; // the Leblanc preview (FFX-2 only; below)
-import { FFX2_EXPERIMENT } from './chapter-ffx2-experiment.ts'; // the Experiment, a hidden chapter (FFX-2 only; below)
+import { experimentalLeblanc } from './chapter-exp-leblanc.ts'; import { FFX2_EXPERIMENT } from './chapter-ffx2-experiment.ts'; // the hidden FFX-2 experiments: the Leblanc preview and the Experiment (below)
 
 /**
  * Every registered chapter id (eighteen listed since 2026-09-29, plus the hidden FF7 experiment `'ff7-guard-scorpion'`, 2026-09-27,
  * which never writes `SaveData.chapters`: `app/experiments/`). Also the keys used in `SaveData.chapters`.
  */
 export type ChapterId =
-  | 'ff7-guard-scorpion'
-  | 'ffx2-masterpiece-theatre' // the Experiment (mission Masterpiece Theatre) (2026-10-10), hidden like the others (FFX-2; no card, its word on chapter select, `app/screens/frontend/experimentDoor.ts`), never in `SaveData.chapters`
+  | 'ff7-guard-scorpion' | 'ffx2-masterpiece-theatre' // the Experiment (mission Masterpiece Theatre) (2026-10-10), hidden like the others (FFX-2; no card, its word on chapter select, `app/screens/frontend/experimentDoor.ts`), never in `SaveData.chapters`
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern' | 'seymour-natus'

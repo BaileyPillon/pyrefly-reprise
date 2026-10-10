@@ -33,8 +33,8 @@ export const EXPERIMENT_META: ChapterMeta = {
     { id: 'defeat-experiment', label: 'Defeat the Experiment', rule: { kind: 'victory' } },
   ],
   tip:
-    'Act I is only a first test: put Protect up and find your healing rhythm. ' +
-    'Act II is the full weapon. Plain swings barely scratch its armor, so use what ignores it, and keep a Phoenix Down ready for Lifeslicer.',
+    'Act I is a warm-up: raise Protect and settle your healing. ' +
+    'Act II hits hard and shrugs off swings, so use Darkness and keep a Phoenix Down ready.',
   snapshots: [
     { image: `backdrops/${EXPERIMENT_GROUNDS_PLATE}.png`, caption: 'the faction at work' },
     { image: 'characters/ffx2-experiment/idle.png', caption: 'souped up past stopping' },

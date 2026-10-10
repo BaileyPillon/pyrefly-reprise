@@ -75,6 +75,9 @@ const sparse = (s: Readonly<Record<number, number>> | undefined): Sparse => {
 };
 
 function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial<Row> = {}): void {
+  // The hidden Experiment's seven rows are the new-chapters RE lane's, pinned field by field against their own numbers-only fixture (tests/fixtures/parity/ffx2/experiment_rows.json,
+  // tests/unit/chapters/experiment-engine.test.ts); this fixture holds the 205 rows the seven listed chapters can reach.
+  if (label.startsWith('x2-experiment-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;

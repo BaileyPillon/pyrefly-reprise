@@ -156,7 +156,11 @@ describe('the budgets (the seam plays with the player\'s hands off)', () => {
   it('the seam fits the seam budget with room, and the runner\'s deadline for it leaves headroom under the presenter\'s own', () => {
     const ms = scriptDurationMs(S.midScripts[EXPERIMENT_SEAM]!, MID_LINE_HOLD_MS);
     console.info(`[experiment story] the seam is ${Math.round(ms)} ms of ${SEAM_BUDGET_MS}`);
-    expect(ms).toBeLessThanOrEqual(SEAM_BUDGET_MS - 1000); // a second of margin, so a line added later does not tip it
+    // Short on purpose (see the comment on the seam in the script): the runner's deadline is the authored length plus 1.5 s at the default text speed, so a slower reader loses the tail, and the more
+    // typed characters the more tail. About 17 s and 340 typed characters; never back toward the 26 s cap.
+    expect(ms).toBeLessThanOrEqual(18_000);
+    const typed = saysOf(S.midScripts[EXPERIMENT_SEAM]!).reduce((n, s) => n + s.text.length, 0);
+    expect(typed).toBeLessThanOrEqual(360);
     expect(ms).toBeGreaterThan(MID_SCRIPT_BUDGET_MS); // it IS a seam: the runner gives it its own length, not the interrupt's cap
     expect(midBattleDeadlineMs(S.midScripts[EXPERIMENT_SEAM]!)).toBe(Math.min(ms, SEAM_BUDGET_MS) + OVERRUN_GRACE_MS);
     expect(midBattleDeadlineMs(S.midScripts[EXPERIMENT_SEAM]!)).toBeLessThan(PRESENTER_BUDGET_MS);
@@ -178,9 +182,9 @@ describe('the budgets (the seam plays with the player\'s hands off)', () => {
     }
   });
 
-  it('the seam brings the camera in and puts it back', () => {
+  it('the seam brings the camera in once and leaves the framing to the Act II set-up (a second move is a second line-card settle window)', () => {
     const cams = S.midScripts[EXPERIMENT_SEAM]!.filter((s) => s.type === 'camera').map((s) => (s as { rig: string }).rig);
-    expect(cams).toEqual(['action', 'idle']);
+    expect(cams).toEqual(['action']);
   });
 });
 

@@ -8,10 +8,10 @@
  * The beats are the public sources' (`research/ffx2-experiment.md` §2.5, `[verified: GameFAQs HD guide 82362, wiki, Jegged]`), in our own words:
  *
  * 1. **pre**: the Faction's boast and dare, the rules (its power rises with the parts dug up in the desert, it breaks when beaten and can be rebuilt), and the readout, 1 / 1 / 1.
- * 2. **the seam** (`act-one-broken`, a chain seam, a mid-battle script that plays at Act I's fall): the first win, the cheeky line Paine whispers and Yuna delivers in Al Bhed, the
- *    technician's delight, **the rest** (one plain narration line: there is no Save Sphere at Djose, so the flow plays no card there; the engine still restores the party on entry to Act II),
- *    **the rebuild** (our compression of the game's hours of digging: each piece is installed the moment it is found), the readout again, 5 / 5 / 5, and the
- *    confession that the Faction overbuilt it and cannot stop it. It must fit {@link SEAM_BUDGET_MS}: a seam plays with the player's hands off.
+ * 2. **the seam** (`act-one-broken`, a chain seam, a mid-battle script that plays at Act I's fall): the first win, the cheeky line Paine whispers and Yuna delivers in Al Bhed with the technician's
+ *    delight (one narration line), **the rest** (one plain narration line: there is no Save Sphere at Djose, so the flow plays no card there; the engine still restores the party on entry to Act II),
+ *    **the rebuild** (our compression of the game's hours of digging: each piece is installed the moment it is found) as the readout, 5 / 5 / 5, and the confession that the Faction overbuilt it and
+ *    cannot stop it, with Paine's flat last word. It must fit {@link SEAM_BUDGET_MS} and is kept to about 17 s for the reason in the seam's own comment: a seam plays with the player's hands off.
  * 3. **mid-battle callouts** in Act II (two, each a short interrupt): the first Lifeslicer and the first Annihilator, in Paine's and Rikku's voices, naming the answer without naming the button.
  * 4. **post**: the crew's callback to its first boast, and **Paine's one sincere beat** (who taught her Al Bhed, and what changed her), the chapter's emotional point, then the run and the chase.
  *
@@ -58,25 +58,26 @@ const PRE: StoryScript = [
 
 /**
  * The chain seam between the acts: Act I's fall to the full weapon's entrance. Written to fit {@link SEAM_BUDGET_MS} (the runner cuts a seam at its own authored length plus a
- * short grace, capped at that budget); every `say` carries its own `auto`, so no beat sits on a Confirm. 24.1 seconds as authored by `scriptDurationMs` (typing included), 1.9 s under the budget; `tests/unit/chapters/experiment-story.test.ts` holds it there.
+ * short grace, capped at that budget); every `say` carries its own `auto`, so no beat sits on a Confirm. **17.0 seconds as authored** by `scriptDurationMs` (typing included), about 340 typed characters.
+ *
+ * **Why it is short.** It was first written at 24.1 s, inside the 26 s cap, and a browser run showed what the cap hides: the runner's deadline is the AUTHORED length plus 1.5 s (typing at the
+ * default text speed), so a player on a slower text speed (the settings go down to 0.5) has the tail of the beat cut ("ran past its budget"); the more typed characters, the more tail. At 17.1 s
+ * and 343 characters a 0.75 reader loses about a second of the last hold, and only a 0.5 reader loses lines. The seam has one camera move in and none out (the Act II set-up re-frames the
+ * field itself, and a second move is a second line-card settle window). `tests/unit/chapters/experiment-story.test.ts` holds the length and the character count.
  */
 const SEAM: StoryScript = [
   camera('action', 400),
-  say('none', 'The machine folds in half. Smoke pours out.', { auto: 1200 }), // ours: it breaks
-  say('rikku-x2', 'We trashed it! Ta-daaa!', { auto: 800 }), // ours: Rikku sets up
-  say('none', 'Paine whispers. Yuna repeats it in Al Bhed, with a pose.', { auto: 1400 }), // ours: the cheeky line, stage direction only
-  say('none', 'The technician laughs. "I will build something stronger."', { auto: 1500 }), // ours: he likes the attitude
+  say('none', 'The machine folds in half. Smoke pours out.', { auto: 1100 }), // ours: it breaks
+  // The first win's gag, in one line (the sourced beat: Paine whispers a cheeky line, Yuna strikes a pose and says it in Al Bhed, the technician likes the attitude). Stage direction only: no invented Al Bhed.
+  say('none', 'Paine whispers. Yuna says it in Al Bhed. The technician grins: "I will build something stronger."', { auto: 1500 }),
   say('yuna-x2', 'He understood me?!', { auto: 800 }), // ours: Yuna is surprised
   flash(200, '#fff1b8'),
   // The rest between the acts, in one plain line (the driver, 2026-10-10: no Save Sphere card at Djose; the engine still restores the party on entry to Act II).
-  say('none', 'The girls rest while the Machine Faction rebuilds the Experiment.', { auto: 1400 }),
-  say('none', 'ATTACK 5. DEFENSE 5. SPECIAL 5.', { auto: 1200 }), // ours: the readout, 5 / 5 / 5 (our compression of the game's days of digging)
+  say('none', 'The girls rest while the Machine Faction rebuilds the Experiment.', { auto: 1200 }),
+  say('none', 'ATTACK 5. DEFENSE 5. SPECIAL 5.', { auto: 1000 }), // ours: the readout, 5 / 5 / 5 (our compression of the game's days of digging)
   shake(8, 300),
-  say('none', '"We, um, got carried away. It will not listen to us."', { auto: 1400 }), // ours: the confession (our words over the sourced beat)
-  say('paine', 'You built it. And cannot stop it?', { auto: 1200 }), // ours: Paine's flat reaction
-  say('rikku-x2', 'Shame on you!', { auto: 800 }), // ours: Rikku scolds
-  say('yuna-x2', 'There is only one thing to do.', { auto: 1100 }), // ours: Yuna's go-call
-  camera('idle', 400),
+  say('none', '"We, um, got carried away. It will not listen to us."', { auto: 1300 }), // ours: the confession (our words over the sourced beat)
+  say('paine', 'You built it. And cannot stop it?', { auto: 1100 }), // ours: Paine's flat reaction, the last word
 ];
 
 // --------------------------------------------------------------------------- mid
